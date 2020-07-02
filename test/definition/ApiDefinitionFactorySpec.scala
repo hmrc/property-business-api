@@ -56,9 +56,9 @@ class ApiDefinitionFactorySpec extends UnitSpec {
               )
             ),
             api = APIDefinition(
-              name = "#mtd-api# (MTD)",
-              description = "#desc#",
-              context = "mtd/template",
+              name = "property-business-api (MTD)",
+              description = "An API for providing property business data",
+              context = "property/business",
               categories = Seq("INCOME_TAX_MTD"),
               versions = Seq(
                 APIVersion(

@@ -42,7 +42,7 @@ class ApiDefinitionFactory @Inject()(appConfig: AppConfig) {
         )
       ),
       api = APIDefinition(
-        name = "property-business-api (MTD)",
+        name = "Property Business (MTD)",
         description = "An API for providing property business data",
         context = appConfig.apiGatewayContext,
         categories = Seq("INCOME_TAX_MTD"),

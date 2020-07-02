@@ -40,7 +40,7 @@ class DocumentationControllerISpec extends IntegrationBaseSpec {
     |   "api":{
     |      "name":"property-business-api (MTD)",
     |      "description":"An API for providing property business data",
-    |      "context":"individuals/property/business",
+    |      "context":"individuals/business/property",
     |      "categories":[
     |         "INCOME_TAX_MTD"
     |      ],

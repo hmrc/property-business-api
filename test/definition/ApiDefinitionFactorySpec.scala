@@ -58,7 +58,7 @@ class ApiDefinitionFactorySpec extends UnitSpec {
             api = APIDefinition(
               name = "property-business-api (MTD)",
               description = "An API for providing property business data",
-              context = "individuals/property/business",
+              context = "individuals/business/property",
               categories = Seq("INCOME_TAX_MTD"),
               versions = Seq(
                 APIVersion(

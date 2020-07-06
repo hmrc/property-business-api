@@ -19,3 +19,4 @@ package v1.models.request.createForeignProperty
 import uk.gov.hmrc.domain.Nino
 
 case class CreateForeignPropertyRequestData(nino: Nino, businessId: String, body: CreateForeignPropertyRequestBody)
+

@@ -54,6 +54,9 @@ object RuleBothExpensesSuppliedError
 object RuleToDateBeforeFromDateError
   extends MtdError("RULE_TO_DATE_BEFORE_FROM_DATE", "The To date cannot be earlier than the From date")
 
+object RuleCountryCodeError
+  extends MtdError("RULE_COUNTRY_CODE", "The country code is not a valid ISO 3166-1 alpha-3 country code")
+
 //Standard Errors
 object NotFoundError extends MtdError("MATCHING_RESOURCE_NOT_FOUND", "Matching resource not found")
 

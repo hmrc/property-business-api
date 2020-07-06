@@ -18,21 +18,17 @@ package v1.controllers.requestParsers.validators.validations
 
 import java.time.LocalDate
 
-import v1.models.errors.{FromDateFormatError, MtdError, ToDateFormatError}
+import v1.models.errors.{MtdError, RuleToDateBeforeFromDateError}
 
-import scala.util.{Failure, Success, Try}
+object ToDateBeforeFromDateValidation {
 
-object DateValidation {
+  def validate(from: String, to: String): List[MtdError] = {
 
-  def validate(field: String, isFromDate: Boolean): List[MtdError] = Try {
-    LocalDate.parse(field, dateFormat)
-  } match {
-    case Success(_) => NoValidationErrors
-    case Failure(_) => if (isFromDate) {
-      List(FromDateFormatError)
-    } else {
-      List(ToDateFormatError)
-    }
+    val fromDate = LocalDate.parse(from, dateFormat)
+    val toDate = LocalDate.parse(to, dateFormat)
+
+    if (toDate.isBefore(fromDate)) List(RuleToDateBeforeFromDateError) else Nil
+
   }
 
 }

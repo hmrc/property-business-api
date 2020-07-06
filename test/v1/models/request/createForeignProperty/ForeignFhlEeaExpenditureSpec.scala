@@ -57,10 +57,11 @@ class ForeignFhlEeaExpenditureSpec extends UnitSpec with JsonErrorValidators {
       |  "consolidatedExpensesAmount": 5000.99
       |}""".stripMargin)
 
+
   "reads" when {
     "passed a valid JSON" should {
       "return a valid model" in {
-        readsJson.as[ForeignFhlEeaExpenditure] shouldBe foreignFhlEeaExpenditure
+        readsJson.as[ForeignFhlEea] shouldBe foreignFhlEeaExpenditure
       }
     }
   }

@@ -14,29 +14,27 @@
  * limitations under the License.
  */
 
-package v1.models.errors
+package v1.controllers.requestParsers.validators.validations
 
-import play.api.libs.json.Json
-import support.UnitSpec
+import v1.models.errors.{ValueFormatError, MtdError}
 
-class MtdErrorSpec extends UnitSpec {
+object NumberValidation {
 
-  "writes" should {
-    "generate the correct JSON" in {
-      Json.toJson(MtdError("CODE", "some message")) shouldBe Json.parse(
-        """
-          |{
-          |   "code": "CODE",
-          |   "message": "some message"
-          |}
-        """.stripMargin
-      )
+  def validateOptional(field: Option[BigDecimal], path: String): List[MtdError] = {
+    field match {
+      case None => NoValidationErrors
+      case Some(value) => validate(value, path)
     }
   }
 
-  "MtdErrorWithCustomMessage.unapply" should {
-    "return the error code" in {
-      MtdErrorWithCustomMessage.unapply(MtdError("CODE", "message")) shouldBe Some("CODE")
+
+  private def validate(field: BigDecimal, path: String): List[MtdError] = {
+    if (field >= 0 && field < 100000000000.00 && field.scale <= 2) {
+      Nil
+    } else {
+      List(
+        ValueFormatError.copy(paths = Some(Seq(path)))
+      )
     }
   }
 }

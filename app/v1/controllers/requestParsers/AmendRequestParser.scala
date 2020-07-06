@@ -14,29 +14,17 @@
  * limitations under the License.
  */
 
-package v1.models.errors
+package v1.controllers.requestParsers
 
-import play.api.libs.json.Json
-import support.UnitSpec
+import javax.inject.Inject
+import uk.gov.hmrc.domain.Nino
+import v1.controllers.requestParsers.validators.AmendValidator
+import v1.models.request.amend.{AmendRawData, AmendRequestBody, AmendRequest}
 
-class MtdErrorSpec extends UnitSpec {
+class AmendRequestParser @Inject()(val validator: AmendValidator)
+  extends RequestParser[AmendRawData, AmendRequest] {
 
-  "writes" should {
-    "generate the correct JSON" in {
-      Json.toJson(MtdError("CODE", "some message")) shouldBe Json.parse(
-        """
-          |{
-          |   "code": "CODE",
-          |   "message": "some message"
-          |}
-        """.stripMargin
-      )
-    }
-  }
+  override protected def requestFor(data: AmendRawData): AmendRequest =
+    AmendRequest(Nino(data.nino), data.businessId, data.submissionId, data.body.as[AmendRequestBody])
 
-  "MtdErrorWithCustomMessage.unapply" should {
-    "return the error code" in {
-      MtdErrorWithCustomMessage.unapply(MtdError("CODE", "message")) shouldBe Some("CODE")
-    }
-  }
 }

@@ -14,29 +14,22 @@
  * limitations under the License.
  */
 
-package v1.models.errors
+package v1.controllers.requestParsers.validators.validations
 
-import play.api.libs.json.Json
 import support.UnitSpec
+import v1.models.errors.SubmissionIdFormatError
 
-class MtdErrorSpec extends UnitSpec {
-
-  "writes" should {
-    "generate the correct JSON" in {
-      Json.toJson(MtdError("CODE", "some message")) shouldBe Json.parse(
-        """
-          |{
-          |   "code": "CODE",
-          |   "message": "some message"
-          |}
-        """.stripMargin
-      )
+class SubmissionIdValidationSpec extends UnitSpec {
+  "validate" should {
+    "return no errors" when {
+      "a valid businessId is passed in" in {
+        SubmissionIdValidation.validate("12345678-1234-4123-9123-123456789012") shouldBe Nil
+      }
     }
-  }
-
-  "MtdErrorWithCustomMessage.unapply" should {
-    "return the error code" in {
-      MtdErrorWithCustomMessage.unapply(MtdError("CODE", "message")) shouldBe Some("CODE")
+    "return an error" when {
+      "an invalid businessId is passed in" in {
+        SubmissionIdValidation.validate("12345678-1234-4123-9123-1234567890123") shouldBe List(SubmissionIdFormatError)
+      }
     }
   }
 }

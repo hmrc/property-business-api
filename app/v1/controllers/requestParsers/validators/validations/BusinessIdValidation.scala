@@ -14,29 +14,13 @@
  * limitations under the License.
  */
 
-package v1.models.errors
+package v1.controllers.requestParsers.validators.validations
 
-import play.api.libs.json.Json
-import support.UnitSpec
+import v1.models.errors.{BusinessIdFormatError, MtdError}
 
-class MtdErrorSpec extends UnitSpec {
-
-  "writes" should {
-    "generate the correct JSON" in {
-      Json.toJson(MtdError("CODE", "some message")) shouldBe Json.parse(
-        """
-          |{
-          |   "code": "CODE",
-          |   "message": "some message"
-          |}
-        """.stripMargin
-      )
-    }
-  }
-
-  "MtdErrorWithCustomMessage.unapply" should {
-    "return the error code" in {
-      MtdErrorWithCustomMessage.unapply(MtdError("CODE", "message")) shouldBe Some("CODE")
-    }
+object BusinessIdValidation {
+  def validate(id: String): List[MtdError] = {
+    val idRegex = "^X[A-Z0-9]{1}IS[0-9]{11}$"
+    if(id.matches(idRegex)) NoValidationErrors else List(BusinessIdFormatError)
   }
 }

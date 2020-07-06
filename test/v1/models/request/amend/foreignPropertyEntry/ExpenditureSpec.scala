@@ -82,4 +82,10 @@ class ExpenditureSpec extends UnitSpec {
       }
     }
   }
+
+  "isEmpty" should {
+    "return true when no fields are provided" in {
+      Expenditure(None, None, None, None, None, None, None, None, None, None).isEmpty shouldBe true
+    }
+  }
 }

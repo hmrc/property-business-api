@@ -14,29 +14,25 @@
  * limitations under the License.
  */
 
-package v1.models.errors
+package v1.mocks.validators
 
-import play.api.libs.json.Json
-import support.UnitSpec
+import org.scalamock.handlers.CallHandler1
+import org.scalamock.scalatest.MockFactory
+import v1.controllers.requestParsers.validators.AmendValidator
+import v1.models.errors.MtdError
+import v1.models.request.amend.AmendRawData
 
-class MtdErrorSpec extends UnitSpec {
+class MockAmendValidator extends MockFactory {
 
-  "writes" should {
-    "generate the correct JSON" in {
-      Json.toJson(MtdError("CODE", "some message")) shouldBe Json.parse(
-        """
-          |{
-          |   "code": "CODE",
-          |   "message": "some message"
-          |}
-        """.stripMargin
-      )
+  val mockValidator: AmendValidator = mock[AmendValidator]
+
+  object MockAmendValidator {
+
+    def validate(data: AmendRawData): CallHandler1[AmendRawData, List[MtdError]] = {
+      (mockValidator
+        .validate(_: AmendRawData))
+        .expects(data)
     }
   }
 
-  "MtdErrorWithCustomMessage.unapply" should {
-    "return the error code" in {
-      MtdErrorWithCustomMessage.unapply(MtdError("CODE", "message")) shouldBe Some("CODE")
-    }
-  }
 }

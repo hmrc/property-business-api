@@ -41,7 +41,7 @@ class CreateForeignPropertyResponseSpec extends UnitSpec with JsonErrorValidator
   "writes" when {
     "passed valid model" should {
       "return valid JSON" in {
-        Json.toJson(CreateForeignPropertyResponse) shouldBe json
+        Json.toJson(createForeignPropertyResponse) shouldBe json
       }
     }
   }

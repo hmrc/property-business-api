@@ -16,8 +16,8 @@
 
 package v1.controllers.requestParsers.validators
 
-import v1.controllers.requestParsers.validators.validations.NinoValidation
-import v1.models.errors.MtdError
+import v1.controllers.requestParsers.validators.validations.{BusinessIdValidation, JsonFormatValidation, NinoValidation}
+import v1.models.errors.{MtdError, RuleIncorrectOrEmptyBodyError}
 
 class CreateForeignPropertyIncomeAndExpenditurePeriodSummaryValidator extends Validator[RawData???] {
 
@@ -26,24 +26,27 @@ class CreateForeignPropertyIncomeAndExpenditurePeriodSummaryValidator extends Va
   private def parameterFormatValidation: RawData??? => List[List[MtdError]] = (data: RawData???) => {
     List(
       NinoValidation.validate(data.nino),
-      TaxYearValidation.validate(data.taxYear)
+      BusinessIdValidation.validate(data.businessId)
     )
   }
 
   private def bodyFormatValidation: RawData??? => List[List[MtdError]] = { data =>
     List(
-      JsonFormatValidation.validate[AmendOtherDeductionsBody](data.body, RuleIncorrectOrEmptyBodyError)
+      JsonFormatValidation.validate[Body???](data.body, RuleIncorrectOrEmptyBodyError)
     )
   }
 
   private def bodyFieldFormatValidation: RawData??? => List[List[MtdError]] = { data =>
-    val body = data.body.as[AmendOtherDeductionsBody]
+    val body = data.body.as[Body???]
 
     List(flattenErrors(
       List(
         body.seafarers.map(_.zipWithIndex.flatMap {
           case (item, i) => validateSeafarers(item, i)
-        })
+        }),
+        body.vctSubscription.map(_.zipWithIndex.flatMap {
+          case (item, i) => validateVctSubscription(item, i)
+        }),
       ).map(_.getOrElse(NoValidationErrors).toList)
     ))
   }

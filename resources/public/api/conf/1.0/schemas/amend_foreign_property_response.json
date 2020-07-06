@@ -28,9 +28,9 @@
             "description": "A label for the endpoint, which describes how it is related to the current resource. The rel will be self where the action is retrieval of the same resource",
             "type": "string",
             "enum": [
-              "self",
+              "retrieve-property-period-summary",
               "amend-property-period-summary",
-              "retrieve-property-period-summary"
+              "self"
             ]
           }
         },

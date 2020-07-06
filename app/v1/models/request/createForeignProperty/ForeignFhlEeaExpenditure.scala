@@ -16,6 +16,7 @@
 
 package v1.models.request.createForeignProperty
 
+import play.api.libs.functional.syntax._
 import play.api.libs.json.{JsPath, Json, Reads, Writes}
 
 case class ForeignFhlEeaExpenditure(premisesRunningCosts: Option[BigDecimal],

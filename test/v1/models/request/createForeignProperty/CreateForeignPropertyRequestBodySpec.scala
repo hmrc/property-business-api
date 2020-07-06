@@ -68,7 +68,7 @@ class CreateForeignPropertyRequestBodySpec extends UnitSpec with JsonErrorValida
       |  "foreignFhlEea": {
       |    "income": {
       |      "rentAmount": 5000.99,
-      |      "taxDeducted": 5000.99,
+      |      "taxDeducted": 5000.99
       |    },
       |    "expenditure": {
       |      "premisesRunningCosts": 5000.99,
@@ -118,7 +118,7 @@ class CreateForeignPropertyRequestBodySpec extends UnitSpec with JsonErrorValida
       |  "foreignFhlEea": {
       |    "income": {
       |      "rentAmount": 5000.99,
-      |      "taxDeducted": 5000.99,
+      |      "taxDeducted": 5000.99
       |    },
       |    "expenditure": {
       |      "premisesRunningCostsAmount": 5000.99,

@@ -40,7 +40,7 @@ class ForeignFhlEeaSpec extends UnitSpec with JsonErrorValidators {
     """{
       |    "income": {
       |      "rentAmount": 5000.99,
-      |      "taxDeducted": 5000.99,
+      |      "taxDeducted": 5000.99
       |    },
       |    "expenditure": {
       |      "premisesRunningCosts": 5000.99,
@@ -58,7 +58,7 @@ class ForeignFhlEeaSpec extends UnitSpec with JsonErrorValidators {
     """{
       |    "income": {
       |      "rentAmount": 5000.99,
-      |      "taxDeducted": 5000.99,
+      |      "taxDeducted": 5000.99
       |    },
       |    "expenditure": {
       |      "premisesRunningCostsAmount": 5000.99,

@@ -187,7 +187,11 @@
                 "maximum": 99999999999.99,
                 "example": "5000.99"
               }
-            }
+            },
+            "required": [
+              "rentIncome",
+              "foreignTaxCreditRelief"
+            ]
           },
           "expenditure": {
             "type": "object",
@@ -278,8 +282,7 @@
         },
         "required": [
           "countryCode",
-          "income",
-          "foreignTaxCreditRelief"
+          "income"
         ]
       }
     }

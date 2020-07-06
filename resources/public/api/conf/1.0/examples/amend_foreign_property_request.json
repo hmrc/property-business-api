@@ -14,11 +14,10 @@
       "other": 567.67,
       "consolidatedExpenses": 456.98
     }
-
   },
   "foreignProperty": [
     {
-      "countryCode": "zzz",
+      "countryCode": "FRA",
       "income": {
         "rentIncome": {
           "rentAmount": 34456.30,

@@ -1,0 +1,19 @@
+{
+  "links":[
+    {
+      "href":"/Individuals/business/property/{nino}/{businessId}/period/{submissionId}",
+      "method":"GET",
+      "rel":"retrieve-property-period-summary"
+    },
+    {
+      "href":"/Individuals/business/property/{nino}/{businessId}/period/{submissionId}",
+      "method":"PUT",
+      "rel":"amend-property-period-summary"
+    },
+    {
+      "href":"/Individuals/business/property/{nino}/{businessId}/period",
+      "method":"GET",
+      "rel":"self"
+    }
+  ]
+}

@@ -14,13 +14,14 @@
  * limitations under the License.
  */
 
-package v1.controllers.requestParsers.validators
+package v1.controllers.requestParsers
 
-import java.time.format.DateTimeFormatter
+import javax.inject.Inject
+import v1.controllers.requestParsers.validators.CreateForeignPropertyIncomeAndExpenditurePeriodSummaryValidator
 
-package object validations {
+class CreateForeignPropertyIncomeAndExpenditurePeriodSummaryRequestParser @Inject()(val validator: CreateForeignPropertyIncomeAndExpenditurePeriodSummaryValidator)
+  extends RequestParser[RawData???, Request???] {
 
-  val dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd")
-  val NoValidationErrors = List()
-
+  override protected def requestFor(data: RawData???): Request??? =
+    Request???(Nino(data.nino), data.taxYear, data.body.as[AmendOtherDeductionsBody])
 }

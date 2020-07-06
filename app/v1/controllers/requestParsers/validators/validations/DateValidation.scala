@@ -14,13 +14,25 @@
  * limitations under the License.
  */
 
-package v1.controllers.requestParsers.validators
+package v1.controllers.requestParsers.validators.validations
 
-import java.time.format.DateTimeFormatter
+import java.time.LocalDate
 
-package object validations {
+import v1.models.errors.{FromDateFormatError, MtdError, ToDateFormatError}
 
-  val dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd")
-  val NoValidationErrors = List()
+import scala.util.{Failure, Success, Try}
+
+object DateValidation {
+
+  def validate(field: String, path: String, isFromDate: Boolean): List[MtdError] = Try {
+    LocalDate.parse(field, dateFormat)
+  } match {
+    case Success(_) => NoValidationErrors
+    case Failure(_) => if (isFromDate) {
+      List(FromDateFormatError.copy(paths = Some(Seq(path))))
+    } else {
+      List(ToDateFormatError.copy(paths = Some(Seq(path))))
+    }
+  }
 
 }

@@ -14,12 +14,27 @@
  * limitations under the License.
  */
 
-package v1.models.audit
+package v1.models.request.createForeignProperty
 
-import play.api.libs.json.{Json, OFormat}
+import play.api.libs.functional.syntax._
+import play.api.libs.json.{JsPath, Json, Reads, Writes}
 
-case class AuditError(errorCode: String)
+case class ForeignPropertyIncome(rentIncome: RentIncome,
+                                 foreignTaxCreditRelief: Boolean,
+                                 premiumOfLeaseGrant: Option[BigDecimal],
+                                 otherPropertyIncome: Option[BigDecimal],
+                                 foreignTaxTakenOff: Option[BigDecimal],
+                                 specialWithholdingTaxOrUKTaxPaid: Option[BigDecimal]
+                                )
 
-object AuditError {
-  implicit val format: OFormat[AuditError] = Json.format[AuditError]
+object ForeignPropertyIncome {
+  implicit val reads: Reads[ForeignPropertyIncome] = Json.reads[ForeignPropertyIncome]
+  implicit val writes: Writes[ForeignPropertyIncome] = (
+    (JsPath \ "rentIncome").write[RentIncome] and
+      (JsPath \ "foreignTaxCreditRelief").write[Boolean] and
+      (JsPath \ "premiumOfLeaseGrantAmount").writeNullable[BigDecimal] and
+      (JsPath \ "otherPropertyIncomeAmount").writeNullable[BigDecimal] and
+      (JsPath \ "foreignTaxTakenOff").writeNullable[BigDecimal] and
+      (JsPath \ "specialWithholdingTaxOrUKTaxPaid").writeNullable[BigDecimal]
+    )(unlift(ForeignPropertyIncome.unapply))
 }

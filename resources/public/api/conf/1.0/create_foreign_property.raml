@@ -1,0 +1,44 @@
+is:
+  - headers.acceptJson
+  - headers.contentTypeJson
+  - headers.testScenarioHeader
+  - errors.formatNino
+  - errors.formatBusinessId
+  - errors.formatFromDate
+  - errors.formatToDate
+  - errors.formatCountryCode
+  - errors.formatValue
+  - errors.incorrectOrEmptyBody
+  - errors.ruleBothExpensesSupplied
+  - errors.ruleToDateBeforeFromDate
+  - errors.ruleCountryCode
+  - errors.ruleOverlappingPeriod
+  - errors.ruleMisalignedPeriod
+  - errors.ruleNotContiguousPeriod
+  - errors.clientOrAgentNotAuthorised
+  - errors.notFound
+displayName: Create a Foreign Property Income & Expenditure Period [test only]
+description: This endpoint allows the developer to submit the income and expenditure for a foreign property business that occurred between two dates. This submission is for either or both of Furnished Holiday Lettings (FHL) in the European Economic Area (EEA) and all other foreign Property submissions. A National Insurance number and business ID are required.
+(annotations.sandboxData): !include scenarios/create_foreign_property.md
+(annotations.scope): "write:self-assessment"
+securedBy: [ sec.oauth_2_0: { scopes: [ "write:self-assessment" ] } ]
+body:
+  application/json:
+    type: !include schemas/create_foreign_property_request.json
+    examples:
+     example-1:
+      description: Default Example
+      value: !include examples/create_foreign_property_request.json
+responses:
+  201:
+    body:
+      application/json:
+        type: !include schemas/create_foreign_property_response.json
+        examples:
+          example-1:
+            description: Default Example
+            value: !include examples/create_foreign_property_response.json
+    headers:
+      X-CorrelationId:
+        example: c75f40a6-a3df-4429-a697-471eeec46435
+        description: Unique ID for operation tracking <br> String, 36 characters.

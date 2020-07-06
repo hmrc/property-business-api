@@ -103,6 +103,17 @@ traits:
                 description: The format of the supplied Country Code field is not valid.
                 value:
                   code: FORMAT_COUNTRY_CODE
+  ruleBothExpensesSupplied:
+      responses:
+        400:
+          body:
+            application/json:
+              type: types.errorResponse
+              examples:
+              ruleBothExpensesSupplied:
+                description: Both expenses and consolidatedExpenses can not be present at the same time.
+                value:
+                  code: RULE_BOTH_EXPENSES_SUPPLIED
   formatValue:
     responses:
       400:
@@ -114,6 +125,17 @@ traits:
                 description: The format of one or more monetary fields is not valid.
                 value:
                   code: FORMAT_VALUE
+  ruleToDateBeforeFromDate:
+      responses:
+        400:
+          body:
+            application/json:
+              type: types.errorResponse
+              examples:
+              ruleToDateBeforeFromDate:
+                description: The To date is earlier than the From date.
+                value:
+                  code: RULE_TO_DATE_BEFORE_FROM_DATE
   bothExpensesSupplied:
     responses:
       400:
@@ -147,6 +169,17 @@ traits:
                 description: The format of the supplied From date field is not valid.
                 value:
                   code: FORMAT_FROM_DATE
+  ruleOverlappingPeriod:
+      responses:
+        400:
+          body:
+            application/json:
+              type: types.errorResponse
+              examples:
+              ruleOverlappingPeriod:
+                description: Update period overlaps with any of the existing update periods.
+                value:
+                  code: RULE_OVERLAPPING_PERIOD
   formatToDate:
     responses:
       400:
@@ -158,6 +191,17 @@ traits:
                 description: The format of the supplied To date field is not valid.
                 value:
                   code: FORMAT_TO_DATE
+  ruleMisalignedPeriod:
+    responses:
+      400:
+        body:
+          application/json:
+            type: types.errorResponse
+            examples:
+              ruleMisalignedPeriod:
+                description: Update period is not within the accounting period.
+                value:
+                  code: RULE_MISALIGNED_PERIOD
   toDateBeforeFromDate:
     responses:
       400:
@@ -169,3 +213,14 @@ traits:
                 description: The To date is earlier than the From date.
                 value:
                   code: RULE_TO_DATE_BEFORE_FROM_DATE
+  ruleNotContiguousPeriod:
+    responses:
+      400:
+        body:
+          application/json:
+            type: types.errorResponse
+            examples:
+              ruleNotContiguousPeriod:
+                description: Update periods are not contiguous.
+                value:
+                  code: RULE_NOT_CONTIGUOUS_PERIOD

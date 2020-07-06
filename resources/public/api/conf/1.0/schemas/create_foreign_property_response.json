@@ -1,0 +1,47 @@
+
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "title": "Create a Foreign Property Income & Expenditure Period Summary",
+  "description": "This endpoint allows the developer to submit the income and expenditure for a foreign property business that occurred between two dates. This submission is for either or both of Furnished Holiday Lettings (FHL) in the European Economic Area (EEA) and all other foreign Property submissions. A National Insurance number and business ID are required.",
+  "type": "object",
+  "properties": {
+    "businessId": {
+      "description": "An identifier for the business, unique to the customer.",
+      "type": "string",
+      "pattern": "\t^X[A-Z0-9]{1}IS[0-9]{11}$",
+      "example": "XAIS12345678910"
+    },
+    "links": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "description": "A list of endpoint links that indicate possible actions related to the current resource",
+        "properties": {
+          "href": {
+            "description": "The relative url of the endpoint",
+            "type": "string",
+            "example": "/Individuals/business/property/{nino}/{businessId}/period"
+          },
+          "rel": {
+            "description": "A label for the endpoint, which describes how it is related to the current resource. The rel will be self where the action is retrieval of the same resource",
+            "type": "string",
+            "example": "self"
+          },
+          "method": {
+            "description": "The HTTP method type for the endpoint",
+            "type": "string",
+            "example": "GET"
+          }
+        },
+        "required": [
+          "href",
+          "rel",
+          "method"
+        ]
+      }
+    }
+  },
+  "required": [
+    "submissionId"
+  ]
+}

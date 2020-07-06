@@ -26,7 +26,7 @@ class CreateForeignPropertyRequestBodySpec extends UnitSpec with JsonErrorValida
     "2020-01-01",
     "2020-01-31",
     Some(ForeignFhlEea(
-      ForeignFhlEeaIncome(5000.99, 5000.99),
+      ForeignFhlEeaIncome(5000.99, Some(5000.99)),
       Some(ForeignFhlEeaExpenditure(
         Some(5000.99),
         Some(5000.99),
@@ -120,7 +120,7 @@ class CreateForeignPropertyRequestBodySpec extends UnitSpec with JsonErrorValida
       |      "rentAmount": 5000.99,
       |      "taxDeducted": 5000.99
       |    },
-      |    "expenditure": {
+      |    "expenses": {
       |      "premisesRunningCostsAmount": 5000.99,
       |      "repairsAndMaintenanceAmount": 5000.99,
       |      "financialCostsAmount": 5000.99,
@@ -142,10 +142,10 @@ class CreateForeignPropertyRequestBodySpec extends UnitSpec with JsonErrorValida
       |        "foreignTaxCreditRelief": false,
       |        "premiumOfLeaseGrantAmount": 5000.99,
       |        "otherPropertyIncomeAmount": 5000.99,
-      |        "foreignTaxTakenOff": 5000.99,
+      |        "foreignTaxPaidOrDeducted": 5000.99,
       |        "specialWithholdingTaxOrUKTaxPaid": 5000.99
       |      },
-      |      "expenditure": {
+      |      "expenses": {
       |        "premisesRunningCostsAmount": 5000.99,
       |        "repairsAndMaintenanceAmount": 5000.99,
       |        "financialCostsAmount": 5000.99,

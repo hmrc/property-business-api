@@ -18,7 +18,7 @@ package v1.models.request.createForeignProperty
 
 import play.api.libs.json.{Json, OFormat}
 
-case class ForeignFhlEeaIncome(rentAmount: BigDecimal, taxDeducted: BigDecimal)
+case class ForeignFhlEeaIncome(rentAmount: BigDecimal, taxDeducted: Option[BigDecimal])
 
 object ForeignFhlEeaIncome {
   implicit val format: OFormat[ForeignFhlEeaIncome] = Json.format[ForeignFhlEeaIncome]

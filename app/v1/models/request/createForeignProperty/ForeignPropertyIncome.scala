@@ -34,7 +34,7 @@ object ForeignPropertyIncome {
       (JsPath \ "foreignTaxCreditRelief").write[Boolean] and
       (JsPath \ "premiumOfLeaseGrantAmount").writeNullable[BigDecimal] and
       (JsPath \ "otherPropertyIncomeAmount").writeNullable[BigDecimal] and
-      (JsPath \ "foreignTaxTakenOff").writeNullable[BigDecimal] and
+      (JsPath \ "foreignTaxPaidOrDeducted").writeNullable[BigDecimal] and
       (JsPath \ "specialWithholdingTaxOrUKTaxPaid").writeNullable[BigDecimal]
     )(unlift(ForeignPropertyIncome.unapply))
 }

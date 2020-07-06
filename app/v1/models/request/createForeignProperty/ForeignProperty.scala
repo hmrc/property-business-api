@@ -16,10 +16,17 @@
 
 package v1.models.request.createForeignProperty
 
-import play.api.libs.json.{Json, OFormat}
+import play.api.libs.functional.syntax._
+import play.api.libs.json.{JsPath, Json, Reads, Writes}
 
-case class ForeignProperty (countryCode: String, income: ForeignPropertyIncome, expenditure: ForeignPropertyExpenditure)
+case class ForeignProperty(countryCode: String, income: ForeignPropertyIncome, expenditure: ForeignPropertyExpenditure)
 
 object ForeignProperty {
-  implicit val format: OFormat[ForeignProperty] = Json.format[ForeignProperty]
+  implicit val reads: Reads[ForeignProperty] = Json.reads[ForeignProperty]
+  implicit val writes: Writes[ForeignProperty] = (
+    (JsPath \ "countryCode").write[String] and
+      (JsPath \ "income").write[ForeignPropertyIncome] and
+      (JsPath \ "expenses").write[ForeignPropertyExpenditure]
+    )(unlift(ForeignProperty.unapply))
 }
+

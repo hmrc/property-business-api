@@ -85,10 +85,10 @@ class ForeignPropertySpec extends UnitSpec with JsonErrorValidators {
       |    "foreignTaxCreditRelief": false,
       |    "premiumOfLeaseGrantAmount": 5000.99,
       |    "otherPropertyIncomeAmount": 5000.99,
-      |    "foreignTaxTakenOff": 5000.99,
+      |    "foreignTaxPaidOrDeducted": 5000.99,
       |    "specialWithholdingTaxOrUKTaxPaid": 5000.99
       |  },
-      |  "expenditure": {
+      |  "expenses": {
       |    "premisesRunningCostsAmount": 5000.99,
       |    "repairsAndMaintenanceAmount": 5000.99,
       |    "financialCostsAmount": 5000.99,

@@ -16,6 +16,42 @@
 
 package v1.services
 
-class AmendForeignPropertyService {
+import cats.implicits._
+import cats.data.EitherT
+import javax.inject.{Inject, Singleton}
+import uk.gov.hmrc.http.HeaderCarrier
+import utils.Logging
+import v1.connectors.AmendForeignPropertyConnector
+import v1.controllers.EndpointLogContext
+import v1.models.errors._
+import v1.models.request.amendForeignProperty.AmendForeignPropertyRequest
+import v1.support.DesResponseMappingSupport
 
+import scala.concurrent.{ExecutionContext, Future}
+
+
+@Singleton
+class AmendForeignPropertyService @Inject()(connector: AmendForeignPropertyConnector) extends DesResponseMappingSupport with Logging {
+
+  def amend(request: AmendForeignPropertyRequest)(
+    implicit hc: HeaderCarrier,
+    ec: ExecutionContext,
+    logContext: EndpointLogContext): Future[AmendForeignPropertyServiceOutcome] = {
+
+    val result = for {
+      desResponseWrapper <- EitherT(connector.amendForeignProperty(request)).leftMap(mapDesErrors(desErrorMap))
+    } yield desResponseWrapper
+
+    result.value
+  }
+
+  private def desErrorMap =
+    Map(
+      "INVALID_TAXABLE_ENTITY_ID" -> NinoFormatError,
+      "INVALID_BUSINESS_ID" -> BusinessIdFormatError,
+      "SUBMISSION_ID_NOT_FOUND" -> SubmissionIdNotFoundError,
+      "NOT_FOUND" -> NotFoundError,
+      "SERVER_ERROR" -> DownstreamError,
+      "SERVICE_UNAVAILABLE" -> DownstreamError
+    )
 }

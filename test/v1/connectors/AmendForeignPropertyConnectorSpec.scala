@@ -20,9 +20,9 @@ import mocks.MockAppConfig
 import uk.gov.hmrc.domain.Nino
 import v1.mocks.MockHttpClient
 import v1.models.outcomes.ResponseWrapper
-import v1.models.request.amend.{AmendRequest, AmendRequestBody}
-import v1.models.request.amend.foreignFhlEea.{ForeignFhlEea, Expenditure => ForeignFhlEeaExpenditure, Income => ForeignFhlEeaIncome}
-import v1.models.request.amend.foreignPropertyEntry.{ForeignPropertyEntry, RentIncome, Expenditure => ForeignPropertyExpenditure, Income => ForeignPropertyIncome}
+import v1.models.request.amendForeignProperty.{AmendForeignPropertyRequest, AmendForeignPropertyRequestBody}
+import v1.models.request.amendForeignProperty.foreignFhlEea.{ForeignFhlEea, Expenditure => ForeignFhlEeaExpenditure, Income => ForeignFhlEeaIncome}
+import v1.models.request.amendForeignProperty.foreignPropertyEntry.{ForeignPropertyEntry, RentIncome, Expenditure => ForeignPropertyExpenditure, Income => ForeignPropertyIncome}
 
 import scala.concurrent.Future
 
@@ -69,12 +69,12 @@ class AmendForeignPropertyConnectorSpec extends ConnectorSpec {
     ))
   )
 
-  val body: AmendRequestBody = AmendRequestBody(
+  val body: AmendForeignPropertyRequestBody = AmendForeignPropertyRequestBody(
     foreignFhlEea = Some(foreignFhlEea),
     foreignProperty = Some(Seq(foreignProperty))
   )
 
-  val request = AmendRequest(nino, businessId, submissionId, body)
+  val request = AmendForeignPropertyRequest(nino, businessId, submissionId, body)
 
   val response = ()
 
@@ -99,7 +99,7 @@ class AmendForeignPropertyConnectorSpec extends ConnectorSpec {
         )
         .returns(Future.successful(outcome))
 
-      await(connector.createForeignProperty(request)) shouldBe outcome
+      await(connector.amendForeignProperty(request)) shouldBe outcome
 
     }
   }

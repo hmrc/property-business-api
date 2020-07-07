@@ -14,8 +14,13 @@
  * limitations under the License.
  */
 
-package v1.models.request.amend
+package v1.models.request.amendForeignProperty.foreignPropertyEntry
 
-import uk.gov.hmrc.domain.Nino
+import play.api.libs.json.{Json, Reads, Writes}
 
-case class AmendRequest(nino: Nino, businessId: String, submissionId: String, body: AmendRequestBody)
+case class RentIncome(rentAmount: BigDecimal, taxDeducted: BigDecimal)
+
+object RentIncome {
+  implicit val reads: Reads[RentIncome] = Json.reads[RentIncome]
+  implicit val writes: Writes[RentIncome] = Json.writes[RentIncome]
+}

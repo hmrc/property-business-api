@@ -14,22 +14,22 @@
  * limitations under the License.
  */
 
-package v1.models.request.amend
+package v1.models.request.amendForeignProperty
 
 import play.api.libs.json.{Json, Reads, Writes}
-import v1.models.request.amend.foreignFhlEea.ForeignFhlEea
-import v1.models.request.amend.foreignPropertyEntry.ForeignPropertyEntry
+import v1.models.request.amendForeignProperty.foreignFhlEea.ForeignFhlEea
+import v1.models.request.amendForeignProperty.foreignPropertyEntry.ForeignPropertyEntry
 
-case class AmendRequestBody(foreignFhlEea: Option[ForeignFhlEea], foreignProperty: Option[Seq[ForeignPropertyEntry]]) {
+case class AmendForeignPropertyRequestBody(foreignFhlEea: Option[ForeignFhlEea], foreignProperty: Option[Seq[ForeignPropertyEntry]]) {
   def isEmpty: Boolean = (foreignFhlEea.isEmpty && foreignProperty.isEmpty) ||
     foreignFhlEea.flatMap(_.expenditure.map(_.isEmpty)).getOrElse(false) ||
     foreignProperty.exists(_.isEmpty) ||
     foreignProperty.exists(_.exists(_.expenditure.exists(_.isEmpty)))
 }
 
-object AmendRequestBody {
-  implicit val reads: Reads[AmendRequestBody] = Json.reads[AmendRequestBody]
-  implicit val writes: Writes[AmendRequestBody] = Json.writes[AmendRequestBody]
+object AmendForeignPropertyRequestBody {
+  implicit val reads: Reads[AmendForeignPropertyRequestBody] = Json.reads[AmendForeignPropertyRequestBody]
+  implicit val writes: Writes[AmendForeignPropertyRequestBody] = Json.writes[AmendForeignPropertyRequestBody]
 }
 
 

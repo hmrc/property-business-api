@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-package v1.models.request.amend
+package v1.models.request.amendForeignProperty
 
 import play.api.libs.json.{JsValue, Json}
 import support.UnitSpec
-import v1.models.request.amend.foreignFhlEea.{ForeignFhlEea, Expenditure => ForeignFhlEeaExpenditure, Income => ForeignFhlEeaIncome}
-import v1.models.request.amend.foreignPropertyEntry.{ForeignPropertyEntry, RentIncome, Expenditure => ForeignPropertyExpenditure, Income => ForeignPropertyIncome}
+import v1.models.request.amendForeignProperty.foreignFhlEea.{ForeignFhlEea, Expenditure => ForeignFhlEeaExpenditure, Income => ForeignFhlEeaIncome}
+import v1.models.request.amendForeignProperty.foreignPropertyEntry.{ForeignPropertyEntry, RentIncome, Expenditure => ForeignPropertyExpenditure, Income => ForeignPropertyIncome}
 
-class AmendRequestBodySpec extends UnitSpec {
+class AmendForeignPropertyRequestBodySpec extends UnitSpec {
 
   val mtdJson: JsValue = Json.parse(
     s"""
@@ -111,7 +111,7 @@ class AmendRequestBodySpec extends UnitSpec {
     ))
   )
 
-  val model: AmendRequestBody = AmendRequestBody(
+  val model: AmendForeignPropertyRequestBody = AmendForeignPropertyRequestBody(
     foreignFhlEea = Some(foreignFhlEea),
     foreignProperty = Some(Seq(foreignProperty))
   )
@@ -170,7 +170,7 @@ class AmendRequestBodySpec extends UnitSpec {
   "reads" should {
     "read from JSON" when {
       "valid JSON is provided" in {
-        mtdJson.as[AmendRequestBody] shouldBe model
+        mtdJson.as[AmendForeignPropertyRequestBody] shouldBe model
       }
     }
   }

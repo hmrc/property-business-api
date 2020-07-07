@@ -18,15 +18,15 @@ package v1.controllers.requestParsers.validators
 
 import v1.controllers.requestParsers.validators.validations._
 import v1.models.errors._
-import v1.models.request.amend.foreignFhlEea.{Expenditure => ForeignFhlEeaExpenditure, _}
-import v1.models.request.amend.foreignPropertyEntry.{Expenditure => ForeignPropertyExpenditure, ForeignPropertyEntry}
-import v1.models.request.amend.{AmendRawData, AmendRequestBody}
+import v1.models.request.amendForeignProperty.foreignFhlEea.{Expenditure => ForeignFhlEeaExpenditure, _}
+import v1.models.request.amendForeignProperty.foreignPropertyEntry.{Expenditure => ForeignPropertyExpenditure, ForeignPropertyEntry}
+import v1.models.request.amendForeignProperty.{AmendForeignPropertyRawData, AmendForeignPropertyRequestBody}
 
-class AmendValidator extends Validator[AmendRawData] {
+class AmendForeignPropertyValidator extends Validator[AmendForeignPropertyRawData] {
 
   private val validationSet = List(parameterFormatValidation, bodyFormatValidation, bodyFieldValidation)
 
-  private def parameterFormatValidation: AmendRawData => List[List[MtdError]] = (data: AmendRawData) => {
+  private def parameterFormatValidation: AmendForeignPropertyRawData => List[List[MtdError]] = (data: AmendForeignPropertyRawData) => {
     List(
       NinoValidation.validate(data.nino),
       BusinessIdValidation.validate(data.businessId),
@@ -34,11 +34,11 @@ class AmendValidator extends Validator[AmendRawData] {
     )
   }
 
-  private def bodyFormatValidation: AmendRawData => List[List[MtdError]] = { data =>
-    val baseValidation = List(JsonFormatValidation.validate[AmendRequestBody](data.body, RuleIncorrectOrEmptyBodyError))
+  private def bodyFormatValidation: AmendForeignPropertyRawData => List[List[MtdError]] = { data =>
+    val baseValidation = List(JsonFormatValidation.validate[AmendForeignPropertyRequestBody](data.body, RuleIncorrectOrEmptyBodyError))
 
     val extraValidation: List[List[MtdError]] = {
-      data.body.asOpt[AmendRequestBody].map(_.isEmpty).map {
+      data.body.asOpt[AmendForeignPropertyRequestBody].map(_.isEmpty).map {
         case true => List(List(RuleIncorrectOrEmptyBodyError))
         case false => NoValidationErrors
       }.getOrElse(NoValidationErrors)
@@ -47,8 +47,8 @@ class AmendValidator extends Validator[AmendRawData] {
     baseValidation ++ extraValidation
   }
 
-  private def bodyFieldValidation: AmendRawData => List[List[MtdError]] = { data =>
-    val body = data.body.as[AmendRequestBody]
+  private def bodyFieldValidation: AmendForeignPropertyRawData => List[List[MtdError]] = { data =>
+    val body = data.body.as[AmendForeignPropertyRequestBody]
 
     List(flattenErrors(List(
       body.foreignFhlEea.map(validateForeignFhlEea).getOrElse(NoValidationErrors),
@@ -197,7 +197,7 @@ class AmendValidator extends Validator[AmendRawData] {
     )
   }
 
-  override def validate(data: AmendRawData): List[MtdError] = {
+  override def validate(data: AmendForeignPropertyRawData): List[MtdError] = {
     run(validationSet, data).distinct
   }
 }

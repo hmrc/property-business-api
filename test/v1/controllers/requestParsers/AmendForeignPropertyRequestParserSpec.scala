@@ -19,14 +19,14 @@ package v1.controllers.requestParsers
 import play.api.libs.json.Json
 import support.UnitSpec
 import uk.gov.hmrc.domain.Nino
-import v1.mocks.validators.MockAmendValidator
+import v1.mocks.validators.MockAmendForeignPropertyValidator
 import v1.models.errors._
-import v1.models.request.amend.foreignFhlEea.{ForeignFhlEea, Expenditure => ForeignFhlEeaExpenditure, Income => ForeignFhlEeaIncome}
-import v1.models.request.amend.foreignPropertyEntry.{ForeignPropertyEntry, RentIncome, Expenditure => ForeignPropertyExpenditure, Income => ForeignPropertyIncome}
-import v1.models.request.amend.{AmendRawData, AmendRequest, AmendRequestBody}
+import v1.models.request.amendForeignProperty.foreignFhlEea.{ForeignFhlEea, Expenditure => ForeignFhlEeaExpenditure, Income => ForeignFhlEeaIncome}
+import v1.models.request.amendForeignProperty.foreignPropertyEntry.{ForeignPropertyEntry, RentIncome, Expenditure => ForeignPropertyExpenditure, Income => ForeignPropertyIncome}
+import v1.models.request.amendForeignProperty.{AmendForeignPropertyRawData, AmendForeignPropertyRequest, AmendForeignPropertyRequestBody}
 
 
-class AmendRequestParserSpec extends UnitSpec {
+class AmendForeignPropertyRequestParserSpec extends UnitSpec {
   val nino = "AA123456B"
   val businessId = "XAIS12345678901"
   val submissionId = "12345678-1234-4123-9123-123456789012"
@@ -77,17 +77,17 @@ class AmendRequestParserSpec extends UnitSpec {
     """.stripMargin)
 
   val inputData =
-    AmendRawData(nino, businessId, submissionId, requestBodyJson)
+    AmendForeignPropertyRawData(nino, businessId, submissionId, requestBodyJson)
 
-  trait Test extends MockAmendValidator {
-    lazy val parser = new AmendRequestParser(mockValidator)
+  trait Test extends MockAmendForeignPropertyValidator {
+    lazy val parser = new AmendForeignPropertyRequestParser(mockValidator)
   }
 
   "parse" should {
 
     "return a request object" when {
       "valid request data is supplied" in new Test {
-        MockAmendValidator.validate(inputData).returns(Nil)
+        MockAmendForeignPropertyValidator.validate(inputData).returns(Nil)
 
         val foreignFhlEea: ForeignFhlEea = ForeignFhlEea(
           income = ForeignFhlEeaIncome(rentAmount = 567.83, taxDeducted = Some(4321.92)),
@@ -126,20 +126,20 @@ class AmendRequestParserSpec extends UnitSpec {
             consolidatedExpenses = None
           ))
         )
-        val model: AmendRequestBody = AmendRequestBody(
+        val model: AmendForeignPropertyRequestBody = AmendForeignPropertyRequestBody(
           foreignFhlEea = Some(foreignFhlEea),
           foreignProperty = Some(Seq(foreignProperty))
         )
 
         parser.parseRequest(inputData) shouldBe
-          Right(AmendRequest(Nino(nino), businessId, submissionId, model))
+          Right(AmendForeignPropertyRequest(Nino(nino), businessId, submissionId, model))
       }
     }
 
     "return an ErrorWrapper" when {
 
       "a single validation error occurs" in new Test {
-        MockAmendValidator.validate(inputData)
+        MockAmendForeignPropertyValidator.validate(inputData)
           .returns(List(NinoFormatError))
 
         parser.parseRequest(inputData) shouldBe
@@ -147,7 +147,7 @@ class AmendRequestParserSpec extends UnitSpec {
       }
 
       "multiple validation errors occur" in new Test {
-        MockAmendValidator.validate(inputData)
+        MockAmendForeignPropertyValidator.validate(inputData)
           .returns(List(NinoFormatError, BusinessIdFormatError))
 
         parser.parseRequest(inputData) shouldBe

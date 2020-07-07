@@ -14,9 +14,8 @@
  * limitations under the License.
  */
 
-package v1.models.request.amend
+package v1.models.request.amendForeignProperty
 
-import play.api.libs.json.JsValue
-import v1.models.request.RawData
+import uk.gov.hmrc.domain.Nino
 
-case class AmendRawData(nino: String, businessId: String, submissionId: String, body: JsValue) extends RawData
+case class AmendForeignPropertyRequest(nino: Nino, businessId: String, submissionId: String, body: AmendForeignPropertyRequestBody)

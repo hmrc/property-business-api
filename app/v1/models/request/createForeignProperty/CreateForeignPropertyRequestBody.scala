@@ -14,12 +14,15 @@
  * limitations under the License.
  */
 
-package v1.models.audit
+package v1.models.request.createForeignProperty
 
 import play.api.libs.json.{Json, OFormat}
 
-case class AuditError(errorCode: String)
+case class CreateForeignPropertyRequestBody(fromDate: String,
+                                            toDate: String,
+                                            foreignFhlEea: Option[ForeignFhlEea],
+                                            foreignProperty: Option[Seq[ForeignProperty]])
 
-object AuditError {
-  implicit val format: OFormat[AuditError] = Json.format[AuditError]
+object CreateForeignPropertyRequestBody {
+  implicit val format: OFormat[CreateForeignPropertyRequestBody] = Json.format[CreateForeignPropertyRequestBody]
 }

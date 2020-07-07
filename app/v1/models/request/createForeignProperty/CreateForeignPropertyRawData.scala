@@ -14,12 +14,9 @@
  * limitations under the License.
  */
 
-package v1.models.audit
+package v1.models.request.createForeignProperty
 
-import play.api.libs.json.{Json, OFormat}
+import play.api.libs.json.JsValue
+import v1.models.request.RawData
 
-case class AuditError(errorCode: String)
-
-object AuditError {
-  implicit val format: OFormat[AuditError] = Json.format[AuditError]
-}
+case class CreateForeignPropertyRawData(nino: String, businessId: String, body: JsValue) extends RawData

@@ -14,12 +14,18 @@
  * limitations under the License.
  */
 
-package v1.models.audit
+package v1.models.request.createForeignProperty
 
-import play.api.libs.json.{Json, OFormat}
+import play.api.libs.functional.syntax._
+import play.api.libs.json.{JsPath, Json, Reads, Writes}
 
-case class AuditError(errorCode: String)
+case class ForeignFhlEea(income: ForeignFhlEeaIncome, expenditure: Option[ForeignFhlEeaExpenditure])
 
-object AuditError {
-  implicit val format: OFormat[AuditError] = Json.format[AuditError]
+object ForeignFhlEea {
+  implicit val reads: Reads[ForeignFhlEea] = Json.reads[ForeignFhlEea]
+  implicit val writes: Writes[ForeignFhlEea] = (
+    (JsPath \ "income").write[ForeignFhlEeaIncome] and
+      (JsPath \ "expenses").writeNullable[ForeignFhlEeaExpenditure]
+    )(unlift(ForeignFhlEea.unapply))
 }
+

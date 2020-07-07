@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-package v1.models.audit
+package v1.models.response.create
 
 import play.api.libs.json.{Json, OFormat}
 
-case class AuditError(errorCode: String)
+case class CreateForeignPropertyResponse(submissionId: String)
 
-object AuditError {
-  implicit val format: OFormat[AuditError] = Json.format[AuditError]
+object CreateForeignPropertyResponse {
+  implicit val format: OFormat[CreateForeignPropertyResponse] = Json.format[CreateForeignPropertyResponse]
 }

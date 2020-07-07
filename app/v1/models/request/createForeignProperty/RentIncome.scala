@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-package v1.models.audit
+package v1.models.request.createForeignProperty
 
 import play.api.libs.json.{Json, OFormat}
 
-case class AuditError(errorCode: String)
+case class RentIncome(rentAmount: BigDecimal, taxDeducted: BigDecimal)
 
-object AuditError {
-  implicit val format: OFormat[AuditError] = Json.format[AuditError]
+object RentIncome {
+  implicit val format: OFormat[RentIncome] = Json.format[RentIncome]
 }

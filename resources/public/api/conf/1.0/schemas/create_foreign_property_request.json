@@ -113,7 +113,11 @@
                 "type": "number",
                 "example": "5000.99"
               }
-            }
+            },
+            "required": [
+              "rentIncome",
+              "foreignTaxCreditRelief"
+            ]
           },
           "expenditure": {
             "description": "Object holding the expenditure for the period.",

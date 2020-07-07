@@ -47,7 +47,7 @@ class CreateForeignPropertyRequestBodySpec extends UnitSpec with JsonErrorValida
         Some(5000.99),
         Some(5000.99)
       ),
-      ForeignPropertyExpenditure(
+      Some(ForeignPropertyExpenditure(
         Some(5000.99),
         Some(5000.99),
         Some(5000.99),
@@ -58,7 +58,7 @@ class CreateForeignPropertyRequestBodySpec extends UnitSpec with JsonErrorValida
         Some(5000.99),
         Some(5000.99),
         Some(5000.99)
-      )))
+      ))))
   ))
 
   val readsJson = Json.parse(

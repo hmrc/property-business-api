@@ -32,7 +32,7 @@ class ForeignPropertySpec extends UnitSpec with JsonErrorValidators {
       Some(5000.99),
       Some(5000.99)
     ),
-    ForeignPropertyExpenditure(
+    Some(ForeignPropertyExpenditure(
       Some(5000.99),
       Some(5000.99),
       Some(5000.99),
@@ -43,7 +43,7 @@ class ForeignPropertySpec extends UnitSpec with JsonErrorValidators {
       Some(5000.99),
       Some(5000.99),
       Some(5000.99)
-    )
+    ))
   )
 
   val readsJson = Json.parse(

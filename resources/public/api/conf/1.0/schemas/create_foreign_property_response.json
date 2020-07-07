@@ -20,7 +20,7 @@
           "href": {
             "description": "The relative url of the endpoint",
             "type": "string",
-            "example": "/Individuals/business/property/{nino}/{businessId}/period"
+            "example": "/Individuals/business/property/AA999999A/XAIS12345678910/period"
           },
           "rel": {
             "description": "A label for the endpoint, which describes how it is related to the current resource. The rel will be self where the action is retrieval of the same resource",

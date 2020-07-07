@@ -29,7 +29,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class AmendForeignPropertyConnector @Inject() (val http: HttpClient,
                                                 val appConfig: AppConfig) extends BaseDesConnector {
 
-  def createForeignProperty(request: AmendRequest)(
+  def amendForeignProperty(request: AmendRequest)(
     implicit hc: HeaderCarrier,
     ec: ExecutionContext): Future[DesOutcome[Unit]] = {
 

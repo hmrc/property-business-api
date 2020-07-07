@@ -16,6 +16,24 @@
 
 package v1.mocks.connectors
 
-class MockAmendForeignPropertyConnector {
+import org.scalamock.handlers.CallHandler
+import org.scalamock.scalatest.MockFactory
+import uk.gov.hmrc.http.HeaderCarrier
+import v1.connectors.{AmendForeignPropertyConnector, DesOutcome}
+import v1.models.request.amend.AmendRequest
 
+import scala.concurrent.{ExecutionContext, Future}
+
+class MockAmendForeignPropertyConnector extends MockFactory {
+
+  val mockAmendForeignPropertyConnector: AmendForeignPropertyConnector = mock[AmendForeignPropertyConnector]
+
+  object MockAmendForeignPropertyConnector {
+
+    def amendForeignProperty(requestData: AmendRequest): CallHandler[Future[DesOutcome[Unit]]] = {
+      (mockAmendForeignPropertyConnector
+        .amendForeignProperty(_: AmendRequest)(_: HeaderCarrier, _: ExecutionContext))
+        .expects(requestData, *, *)
+    }
+  }
 }

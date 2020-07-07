@@ -49,9 +49,12 @@ class CreateForeignPropertyValidator extends Validator[CreateForeignPropertyRawD
   private def bodyFieldFormatValidation: CreateForeignPropertyRawData => List[List[MtdError]] = { data =>
     val body = data.body.as[CreateForeignPropertyRequestBody]
 
-    List(flattenErrors(List(
+    val regularErrors = List(
       DateValidation.validate(body.fromDate, isFromDate = true),
-      DateValidation.validate(body.toDate, isFromDate = false),
+      DateValidation.validate(body.toDate, isFromDate = false)
+    )
+
+    val pathErrors = List(flattenErrors(List(
       body.foreignFhlEea.map(validateForeignFhlEea).getOrElse(NoValidationErrors),
       body.foreignProperty.map(_.zipWithIndex.toList.flatMap {
         case (entry, i) => validateForeignProperty(entry, i)
@@ -64,6 +67,8 @@ class CreateForeignPropertyValidator extends Validator[CreateForeignPropertyRawD
         }
       ).getOrElse(Nil).flatten
     )))
+
+    regularErrors ++ pathErrors
   }
 
   private def validateForeignFhlEea(foreignFhlEea: ForeignFhlEea): List[MtdError] = {

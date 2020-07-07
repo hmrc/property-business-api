@@ -23,13 +23,11 @@ class ToDateBeforeFromDateValidationSpec extends UnitSpec{
 
   val date1 = "2019-03-12"
   val date2 = "2020-01-01"
-  val path1 = "/fromDate"
-  val path2 = "/toDate"
 
   "validate" should {
     "return no errors" when {
       "fromDate is before toDate" in {
-        val validationResult = ToDateBeforeFromDateValidation.validate(date1, date2, path1, path2)
+        val validationResult = ToDateBeforeFromDateValidation.validate(date1, date2)
 
         validationResult.isEmpty shouldBe true
 
@@ -37,11 +35,11 @@ class ToDateBeforeFromDateValidationSpec extends UnitSpec{
     }
     "return a RangeToDateBeforeFromDateError" when {
       "toDate is before fromDate" in {
-        val validationResult = ToDateBeforeFromDateValidation.validate(date2, date1, path1, path2)
+        val validationResult = ToDateBeforeFromDateValidation.validate(date2, date1)
 
         validationResult.isEmpty shouldBe false
         validationResult.length shouldBe 1
-        validationResult.head shouldBe RuleToDateBeforeFromDateError.copy(paths = Some(Seq(path1, path2)))
+        validationResult.head shouldBe RuleToDateBeforeFromDateError
 
       }
     }

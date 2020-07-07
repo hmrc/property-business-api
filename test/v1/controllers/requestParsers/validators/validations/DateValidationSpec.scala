@@ -26,7 +26,7 @@ class DateValidationSpec extends UnitSpec {
       "when a valid fromDate is supplied" in {
 
         val validDate = "2020-01-01"
-        val validationResult = DateValidation.validate(validDate, "/fromDate" , isFromDate = true)
+        val validationResult = DateValidation.validate(validDate, isFromDate = true)
         validationResult.isEmpty shouldBe true
 
       }
@@ -34,7 +34,7 @@ class DateValidationSpec extends UnitSpec {
       "when a valid toDate is supplied" in {
 
         val validDate = "2020-03-12"
-        val validationResult = DateValidation.validate(validDate, "/toDate" , isFromDate = true)
+        val validationResult = DateValidation.validate(validDate, isFromDate = true)
         validationResult.isEmpty shouldBe true
 
       }
@@ -43,20 +43,20 @@ class DateValidationSpec extends UnitSpec {
       "when an invalid fromDate is supplied" in {
 
         val invalidBusinessId = "01-01-2020"
-        val validationResult = DateValidation.validate(invalidBusinessId, "/fromDate", isFromDate = true)
+        val validationResult = DateValidation.validate(invalidBusinessId, isFromDate = true)
         validationResult.isEmpty shouldBe false
         validationResult.length shouldBe 1
-        validationResult.head shouldBe FromDateFormatError.copy(paths = Some(Seq("/fromDate")))
+        validationResult.head shouldBe FromDateFormatError
 
       }
 
       "when an invalid toDate is supplied" in {
 
         val invalidBusinessId = "30-01-2020"
-        val validationResult = DateValidation.validate(invalidBusinessId, "/toDate", isFromDate = false)
+        val validationResult = DateValidation.validate(invalidBusinessId, isFromDate = false)
         validationResult.isEmpty shouldBe false
         validationResult.length shouldBe 1
-        validationResult.head shouldBe ToDateFormatError.copy(paths = Some(Seq("/toDate")))
+        validationResult.head shouldBe ToDateFormatError
 
       }
     }

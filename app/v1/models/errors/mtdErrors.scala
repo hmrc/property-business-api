@@ -46,8 +46,6 @@ object RuleIncorrectOrEmptyBodyError extends MtdError("RULE_INCORRECT_OR_EMPTY_B
 object RuleTaxYearRangeExceededError
   extends MtdError("RULE_TAX_YEAR_RANGE_EXCEEDED", "Tax year range exceeded. A tax year range of one year is required")
 
-object RuleCountryCodeError extends MtdError("RULE_COUNTRY_CODE", "The country code is not a valid ISO 3166-1 alpha-3 country code")
-
 object RuleBothExpensesSuppliedError
   extends MtdError("RULE_BOTH_EXPENSES_SUPPLIED", "Both expenses and consolidatedExpenses can not be present at the same time")
 

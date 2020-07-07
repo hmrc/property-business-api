@@ -8,7 +8,7 @@
     "businessId": {
       "description": "An identifier for the business, unique to the customer.",
       "type": "string",
-      "pattern": "\t^X[A-Z0-9]{1}IS[0-9]{11}$",
+      "pattern": "^X[A-Z0-9]{1}IS[0-9]{11}$",
       "example": "XAIS12345678910"
     },
     "links": {

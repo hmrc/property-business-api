@@ -41,8 +41,38 @@
           "description": "Object holding the expenditure for the period.",
           "type": "object",
           "properties": {
-            "consolidatedExpenses": {
-              "description": "The sum of all expenses for the specified period.",
+            "premisesRunningCosts": {
+              "description": "Rent, rates, insurance, ground rents and other costs.",
+              "type": "number",
+              "example": "5000.99"
+            },
+            "repairsAndMaintenance": {
+              "description": "Property repairs and maintenance.",
+              "type": "number",
+              "example": "5000.99"
+            },
+            "financialCosts": {
+              "description": "Loan interest and other financial costs.",
+              "type": "number",
+              "example": "5000.99"
+            },
+            "professionalFees": {
+              "description": "Legal, management and other professional fees.",
+              "type": "number",
+              "example": "5000.99"
+            },
+            "costsOfServices": {
+              "description": "Cost of services provided, including wages.",
+              "type": "number",
+              "example": "5000.99"
+            },
+            "travelCosts": {
+              "description": "Car, van and travel costs incurred in running a property business.",
+              "type": "number",
+              "example": "5000.99"
+            },
+            "other": {
+              "description": "Other allowable property expenses.",
               "type": "number",
               "example": "5000.99"
             }
@@ -119,6 +149,36 @@
             "description": "Object holding the expenditure for the period.",
             "type": "object",
             "properties": {
+              "premisesRunningCosts": {
+                "description": "Rent, rates, insurance, ground rents and other costs.",
+                "type": "number",
+                "example": "5000.99"
+              },
+              "repairsAndMaintenance": {
+                "description": "Property repairs and maintenance.",
+                "type": "number",
+                "example": "5000.99"
+              },
+              "financialCosts": {
+                "description": "Loan interest and other financial costs.",
+                "type": "number",
+                "example": "5000.99"
+              },
+              "professionalFees": {
+                "description": "Legal, management and other professional fees.",
+                "type": "number",
+                "example": "5000.99"
+              },
+              "costsOfServices": {
+                "description": "Cost of services provided, including wages.",
+                "type": "number",
+                "example": "5000.99"
+              },
+              "travelCosts": {
+                "description": "Car, van and travel costs incurred in running a property business.",
+                "type": "number",
+                "example": "5000.99"
+              },
               "residentialFinancialCost": {
                 "description": "The residential financial cost that can be deductible from rental income (tax relief).",
                 "type": "number",
@@ -129,8 +189,8 @@
                 "type": "number",
                 "example": "5000.99"
               },
-              "consolidatedExpenses": {
-                "description": "The sum of all expenses for the specified period.",
+              "other": {
+                "description": "Other allowable property expenses.",
                 "type": "number",
                 "example": "5000.99"
               }

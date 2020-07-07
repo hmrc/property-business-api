@@ -27,8 +27,11 @@ body:
     type: !include schemas/create_foreign_property_request.json
     examples:
      example-1:
-      description: Default Example
+      description: consolidated request
       value: !include examples/create_foreign_property_request.json
+     example-2:
+      description: unconsolidated request
+      value: !include examples/create_foreign_property_unconsolidated_request.json
 responses:
   201:
     body:

@@ -19,34 +19,30 @@
   },
   "foreignProperty": [
     {
-      "foreignPropertyEntry": [
-        {
-          "countryCode": "FRA",
-          "income": {
-            "rentIncome": {
-              "rentAmount": 5000.99,
-              "taxDeducted": 5000.99
-            },
-            "foreignTaxCreditRelief": false,
-            "premiumOfLeaseGrant": 5000.99,
-            "otherPropertyIncome": 5000.99,
-            "foreignTaxTakenOff": 5000.99,
-            "specialWithholdingTaxOrUKTaxPaid": 5000.99
-          },
-          "expenditure": {
-            "premisesRunningCosts": 5000.99,
-            "repairsAndMaintenance": 5000.99,
-            "financialCosts": 5000.99,
-            "professionalFees": 5000.99,
-            "costsOfServices": 5000.99,
-            "travelCosts": 5000.99,
-            "residentialFinancialCost": 5000.99,
-            "broughtFwdResidentialFinancialCost": 5000.99,
-            "other": 5000.99,
-            "consolidatedExpenses": 5000.99
-          }
-        }
-      ]
+      "countryCode": "FRA",
+      "income": {
+        "rentIncome": {
+          "rentAmount": 5000.99,
+          "taxDeducted": 5000.99
+        },
+        "foreignTaxCreditRelief": false,
+        "premiumOfLeaseGrant": 5000.99,
+        "otherPropertyIncome": 5000.99,
+        "foreignTaxTakenOff": 5000.99,
+        "specialWithholdingTaxOrUKTaxPaid": 5000.99
+      },
+      "expenditure": {
+        "premisesRunningCosts": 5000.99,
+        "repairsAndMaintenance": 5000.99,
+        "financialCosts": 5000.99,
+        "professionalFees": 5000.99,
+        "costsOfServices": 5000.99,
+        "travelCosts": 5000.99,
+        "residentialFinancialCost": 5000.99,
+        "broughtFwdResidentialFinancialCost": 5000.99,
+        "other": 5000.99,
+        "consolidatedExpenses": 5000.99
+      }
     }
   ]
 }

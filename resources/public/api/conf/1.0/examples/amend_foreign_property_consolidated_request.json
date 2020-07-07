@@ -1,0 +1,30 @@
+{
+  "foreignFhlEea": {
+    "income": {
+      "rentAmount": 643.59,
+      "taxDeducted": 3762.99
+    },
+    "expenditure": {
+      "consolidatedExpenses": 456.98
+    }
+  },
+  "foreignProperty": [
+    {
+      "countryCode": "ENG",
+      "income": {
+        "rentIncome": {
+          "rentAmount": 28972.56,
+          "taxDeducted": 5326.23
+        },
+        "foreignTaxCreditRelief": true,
+        "premiumOfLeaseGrant": 2823.44,
+        "otherPropertyIncome": 67481.90,
+        "foreignTaxTakenOff": 8552.46,
+        "specialWithholdingTaxOrUKTaxPaid": 622873.00
+      },
+      "expenditure": {
+        "consolidatedExpenses": 352.66
+      }
+    }
+  ]
+}

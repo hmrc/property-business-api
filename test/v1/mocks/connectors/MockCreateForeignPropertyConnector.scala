@@ -25,7 +25,7 @@ import v1.models.response.create.CreateForeignPropertyResponse
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class MockCreateForeignPropertyConnector extends MockFactory {
+trait MockCreateForeignPropertyConnector extends MockFactory {
 
   val mockCreateForeignPropertyConnector: CreateForeignPropertyConnector = mock[CreateForeignPropertyConnector]
 

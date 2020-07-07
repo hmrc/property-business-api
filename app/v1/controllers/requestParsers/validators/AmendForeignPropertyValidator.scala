@@ -184,14 +184,14 @@ class AmendForeignPropertyValidator extends Validator[AmendForeignPropertyRawDat
   }
 
   private def validateForeignFhlEeaConsolidatedExpenses(expenditure: ForeignFhlEeaExpenditure): List[MtdError] = {
-    ConsolidatedExpensesValidation.validate(
+    ConsolidatedExpensesValidation.validateAmend(
       expenditure = expenditure,
       path = s"/foreignFhlEea/expenditure"
     )
   }
 
   private def validateForeignPropertyConsolidatedExpenses(expenditure: ForeignPropertyExpenditure, index: Int): List[MtdError] = {
-    ConsolidatedExpensesValidation.validate(
+    ConsolidatedExpensesValidation.validateAmend(
       expenditure = expenditure,
       path = s"/foreignProperty/$index/expenditure"
     )

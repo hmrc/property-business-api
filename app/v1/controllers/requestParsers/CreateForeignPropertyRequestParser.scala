@@ -17,11 +17,13 @@
 package v1.controllers.requestParsers
 
 import javax.inject.Inject
-import v1.controllers.requestParsers.validators.CreateForeignPropertyIncomeAndExpenditurePeriodSummaryValidator
+import uk.gov.hmrc.domain.Nino
+import v1.controllers.requestParsers.validators.CreateForeignPropertyValidator
+import v1.models.request.createForeignProperty.{CreateForeignPropertyRawData, CreateForeignPropertyRequestBody, CreateForeignPropertyRequestData}
 
-class CreateForeignPropertyIncomeAndExpenditurePeriodSummaryRequestParser @Inject()(val validator: CreateForeignPropertyIncomeAndExpenditurePeriodSummaryValidator)
-  extends RequestParser[RawData???, Request???] {
+class CreateForeignPropertyRequestParser @Inject()(val validator: CreateForeignPropertyValidator)
+  extends RequestParser[CreateForeignPropertyRawData, CreateForeignPropertyRequestData] {
 
-  override protected def requestFor(data: RawData???): Request??? =
-    Request???(Nino(data.nino), data.taxYear, data.body.as[AmendOtherDeductionsBody])
+  override protected def requestFor(data: CreateForeignPropertyRawData): CreateForeignPropertyRequestData =
+    CreateForeignPropertyRequestData(Nino(data.nino), data.businessId, data.body.as[CreateForeignPropertyRequestBody])
 }

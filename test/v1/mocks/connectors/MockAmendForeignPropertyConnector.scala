@@ -24,7 +24,7 @@ import v1.models.request.amendForeignProperty.AmendForeignPropertyRequest
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class MockAmendForeignPropertyConnector extends MockFactory {
+trait MockAmendForeignPropertyConnector extends MockFactory {
 
   val mockAmendForeignPropertyConnector: AmendForeignPropertyConnector = mock[AmendForeignPropertyConnector]
 

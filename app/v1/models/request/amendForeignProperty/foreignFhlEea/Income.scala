@@ -14,17 +14,13 @@
  * limitations under the License.
  */
 
-package v1.models.request.amend
+package v1.models.request.amendForeignProperty.foreignFhlEea
 
 import play.api.libs.json.{Json, Reads, Writes}
-import v1.models.request.amend.foreignFhlEea.ForeignFhlEea
-import v1.models.request.amend.foreignPropertyEntry.ForeignPropertyEntry
 
-case class AmendRequestBody(foreignFhlEea: Option[ForeignFhlEea], foreignProperty: Option[Seq[ForeignPropertyEntry]])
+case class Income(rentAmount: BigDecimal, taxDeducted: Option[BigDecimal])
 
-object AmendRequestBody {
-  implicit val reads: Reads[AmendRequestBody] = Json.reads[AmendRequestBody]
-  implicit val writes: Writes[AmendRequestBody] = Json.writes[AmendRequestBody]
+object Income {
+  implicit val reads: Reads[Income] = Json.reads[Income]
+  implicit val writes: Writes[Income] = Json.writes[Income]
 }
-
-

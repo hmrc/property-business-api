@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package v1.models.request.amend.foreignFhlEea
+package v1.models.request.amendForeignProperty.foreignPropertyEntry
 
 import play.api.libs.functional.syntax._
 import play.api.libs.json.{JsPath, Json, Reads, Writes}
@@ -26,9 +26,22 @@ case class Expenditure(
                         professionalFees: Option[BigDecimal],
                         costsOfServices: Option[BigDecimal],
                         travelCosts: Option[BigDecimal],
+                        residentialFinancialCost: Option[BigDecimal],
+                        broughtFwdResidentialFinancialCost: Option[BigDecimal],
                         other: Option[BigDecimal],
                         consolidatedExpenses: Option[BigDecimal]
-                      )
+                      ) {
+  def isEmpty: Boolean = premisesRunningCosts.isEmpty &&
+    repairsAndMaintenance.isEmpty &&
+    financialCosts.isEmpty &&
+    professionalFees.isEmpty &&
+    costsOfServices.isEmpty &&
+    travelCosts.isEmpty &&
+    residentialFinancialCost.isEmpty &&
+    broughtFwdResidentialFinancialCost.isEmpty &&
+    other.isEmpty &&
+    consolidatedExpenses.isEmpty
+}
 
 object Expenditure {
   implicit val reads: Reads[Expenditure] = Json.reads[Expenditure]
@@ -40,6 +53,8 @@ object Expenditure {
       (JsPath \ "professionalFeesAmount").writeNullable[BigDecimal] and
       (JsPath \ "costsOfServicesAmount").writeNullable[BigDecimal] and
       (JsPath \ "travelCostsAmount").writeNullable[BigDecimal] and
+      (JsPath \ "residentialFinancialCostAmount").writeNullable[BigDecimal] and
+      (JsPath \ "broughtFwdResidentialFinancialCostAmount").writeNullable[BigDecimal] and
       (JsPath \ "otherAmount").writeNullable[BigDecimal] and
       (JsPath \ "consolidatedExpensesAmount").writeNullable[BigDecimal]
     ) (unlift(Expenditure.unapply))

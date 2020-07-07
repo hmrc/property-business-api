@@ -14,13 +14,22 @@
  * limitations under the License.
  */
 
-package v1.models.request.amend.foreignFhlEea
+package v1.controllers.requestParsers.validators.validations
 
-import play.api.libs.json.{Json, Reads, Writes}
+import support.UnitSpec
+import v1.models.errors.SubmissionIdFormatError
 
-case class Income(rentAmount: BigDecimal, taxDeducted: Option[BigDecimal])
-
-object Income {
-  implicit val reads: Reads[Income] = Json.reads[Income]
-  implicit val writes: Writes[Income] = Json.writes[Income]
+class SubmissionIdValidationSpec extends UnitSpec {
+  "validate" should {
+    "return no errors" when {
+      "a valid businessId is passed in" in {
+        SubmissionIdValidation.validate("12345678-1234-4123-9123-123456789012") shouldBe Nil
+      }
+    }
+    "return an error" when {
+      "an invalid businessId is passed in" in {
+        SubmissionIdValidation.validate("12345678-1234-4123-9123-1234567890123") shouldBe List(SubmissionIdFormatError)
+      }
+    }
+  }
 }

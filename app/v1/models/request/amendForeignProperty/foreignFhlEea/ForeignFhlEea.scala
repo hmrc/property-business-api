@@ -14,9 +14,18 @@
  * limitations under the License.
  */
 
-package v1.models.request.amend
+package v1.models.request.amendForeignProperty.foreignFhlEea
 
-import play.api.libs.json.JsValue
-import v1.models.request.RawData
+import play.api.libs.functional.syntax._
+import play.api.libs.json.{JsPath, Json, Reads, Writes}
 
-case class AmendRawData(nino: String, businessId: String, submissionId: String, body: JsValue) extends RawData
+case class ForeignFhlEea(income: Income, expenditure: Option[Expenditure])
+
+object ForeignFhlEea {
+  implicit val reads: Reads[ForeignFhlEea] = Json.reads[ForeignFhlEea]
+
+  implicit val writes: Writes[ForeignFhlEea] = (
+    (JsPath \ "income").write[Income] and
+      (JsPath \ "expenses").writeNullable[Expenditure]
+    ) (unlift(ForeignFhlEea.unapply))
+}

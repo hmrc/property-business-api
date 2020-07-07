@@ -14,29 +14,13 @@
  * limitations under the License.
  */
 
-package v1.models.errors
+package v1.models.request.amendForeignProperty.foreignPropertyEntry
 
-import play.api.libs.json.Json
-import support.UnitSpec
+import play.api.libs.json.{Json, Reads, Writes}
 
-class MtdErrorSpec extends UnitSpec {
+case class RentIncome(rentAmount: BigDecimal, taxDeducted: BigDecimal)
 
-  "writes" should {
-    "generate the correct JSON" in {
-      Json.toJson(MtdError("CODE", "some message")) shouldBe Json.parse(
-        """
-          |{
-          |   "code": "CODE",
-          |   "message": "some message"
-          |}
-        """.stripMargin
-      )
-    }
-  }
-
-  "MtdErrorWithCustomMessage.unapply" should {
-    "return the error code" in {
-      MtdErrorWithCustomMessage.unapply(MtdError("CODE", "message")) shouldBe Some("CODE")
-    }
-  }
+object RentIncome {
+  implicit val reads: Reads[RentIncome] = Json.reads[RentIncome]
+  implicit val writes: Writes[RentIncome] = Json.writes[RentIncome]
 }

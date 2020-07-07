@@ -14,18 +14,13 @@
  * limitations under the License.
  */
 
-package v1.models.request.amend.foreignFhlEea
+package v1.controllers.requestParsers.validators.validations
 
-import play.api.libs.functional.syntax._
-import play.api.libs.json.{JsPath, Json, Reads, Writes}
+import v1.models.errors.{BusinessIdFormatError, MtdError}
 
-case class ForeignFhlEea(income: Income, expenditure: Option[Expenditure])
-
-object ForeignFhlEea {
-  implicit val reads: Reads[ForeignFhlEea] = Json.reads[ForeignFhlEea]
-
-  implicit val writes: Writes[ForeignFhlEea] = (
-    (JsPath \ "income").write[Income] and
-      (JsPath \ "expenses").writeNullable[Expenditure]
-    ) (unlift(ForeignFhlEea.unapply))
+object BusinessIdValidation {
+  def validate(id: String): List[MtdError] = {
+    val idRegex = "^X[A-Z0-9]{1}IS[0-9]{11}$"
+    if(id.matches(idRegex)) NoValidationErrors else List(BusinessIdFormatError)
+  }
 }

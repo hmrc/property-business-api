@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package v1.models.request.amend.foreignFhlEea
+package v1.models.request.amendForeignProperty.foreignFhlEea
 
 import play.api.libs.json.{JsValue, Json}
 import support.UnitSpec

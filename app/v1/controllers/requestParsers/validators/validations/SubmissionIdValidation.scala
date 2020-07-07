@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-package v1.models.request.amend.foreignPropertyEntry
+package v1.controllers.requestParsers.validators.validations
 
-import play.api.libs.json.{Json, Reads, Writes}
+import v1.models.errors.{SubmissionIdFormatError, MtdError}
 
-case class RentIncome(rentAmount: BigDecimal, taxDeducted: BigDecimal)
-
-object RentIncome {
-  implicit val reads: Reads[RentIncome] = Json.reads[RentIncome]
-  implicit val writes: Writes[RentIncome] = Json.writes[RentIncome]
+object SubmissionIdValidation {
+  def validate(id: String): List[MtdError] = {
+    val idRegex = "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+    if(id.matches(idRegex)) NoValidationErrors else List(SubmissionIdFormatError)
+  }
 }

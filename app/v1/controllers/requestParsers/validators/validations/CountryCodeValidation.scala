@@ -14,29 +14,15 @@
  * limitations under the License.
  */
 
-package v1.models.errors
+package v1.controllers.requestParsers.validators.validations
 
-import play.api.libs.json.Json
-import support.UnitSpec
+import com.neovisionaries.i18n.CountryCode
+import v1.models.errors.{CountryCodeFormatError, RuleCountryCodeError, MtdError}
 
-class MtdErrorSpec extends UnitSpec {
-
-  "writes" should {
-    "generate the correct JSON" in {
-      Json.toJson(MtdError("CODE", "some message")) shouldBe Json.parse(
-        """
-          |{
-          |   "code": "CODE",
-          |   "message": "some message"
-          |}
-        """.stripMargin
-      )
-    }
-  }
-
-  "MtdErrorWithCustomMessage.unapply" should {
-    "return the error code" in {
-      MtdErrorWithCustomMessage.unapply(MtdError("CODE", "message")) shouldBe Some("CODE")
-    }
+object CountryCodeValidation {
+  def validate(field: String, path: String): List[MtdError] = (CountryCode.getByAlpha3Code(field), field) match {
+    case (_: CountryCode,_) => NoValidationErrors
+    case (_, code) if code.length == 3 => List(RuleCountryCodeError.copy(paths = Some(Seq(path))))
+    case _ => List(CountryCodeFormatError.copy(paths = Some(Seq(path))))
   }
 }

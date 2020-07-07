@@ -14,8 +14,22 @@
  * limitations under the License.
  */
 
-package v1.models.request.amend
+package v1.controllers.requestParsers.validators.validations
 
-import uk.gov.hmrc.domain.Nino
+import support.UnitSpec
+import v1.models.errors.BusinessIdFormatError
 
-case class AmendRequest(nino: Nino, businessId: String, submissionId: String, body: AmendRequestBody)
+class BusinessIdValidationSpec extends UnitSpec {
+  "validate" should {
+    "return no errors" when {
+      "a valid businessId is passed in" in {
+        BusinessIdValidation.validate("XAIS12345678901") shouldBe Nil
+      }
+    }
+    "return an error" when {
+      "an invalid businessId is passed in" in {
+        BusinessIdValidation.validate("XAIS123456789012") shouldBe List(BusinessIdFormatError)
+      }
+    }
+  }
+}

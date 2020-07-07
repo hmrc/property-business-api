@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package v1.models.request.amend.foreignPropertyEntry
+package v1.models.request.amendForeignProperty.foreignPropertyEntry
 
 import play.api.libs.json.{JsValue, Json}
 import support.UnitSpec
@@ -80,6 +80,12 @@ class ExpenditureSpec extends UnitSpec {
       "valid model is provided" in {
         Json.toJson(model) shouldBe desJson
       }
+    }
+  }
+
+  "isEmpty" should {
+    "return true when no fields are provided" in {
+      Expenditure(None, None, None, None, None, None, None, None, None, None).isEmpty shouldBe true
     }
   }
 }

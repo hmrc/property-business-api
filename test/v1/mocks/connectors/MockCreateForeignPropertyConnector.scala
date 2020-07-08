@@ -31,7 +31,7 @@ trait MockCreateForeignPropertyConnector extends MockFactory {
 
   object MockCreateForeignPropertyConnector {
 
-    def amend(requestData: CreateForeignPropertyRequestData): CallHandler[Future[DesOutcome[CreateForeignPropertyResponse]]] = {
+    def createForeignProperty(requestData: CreateForeignPropertyRequestData): CallHandler[Future[DesOutcome[CreateForeignPropertyResponse]]] = {
       (mockCreateForeignPropertyConnector
         .createForeignProperty(_: CreateForeignPropertyRequestData)(_: HeaderCarrier, _: ExecutionContext))
         .expects(requestData, *, *)

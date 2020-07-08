@@ -23,7 +23,7 @@ import v1.controllers.EndpointLogContext
 import v1.mocks.connectors.MockCreateForeignPropertyConnector
 import v1.models.errors._
 import v1.models.outcomes.ResponseWrapper
-import v1.models.request.createForeignProperty.{CreateForeignPropertyRequestBody, CreateForeignPropertyRequestData, ForeignFhlEea, ForeignFhlEeaExpenditure, ForeignFhlEeaIncome, ForeignProperty, ForeignPropertyExpenditure, ForeignPropertyIncome, RentIncome}
+import v1.models.request.createForeignProperty._
 import v1.models.response.create.CreateForeignPropertyResponse
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -31,11 +31,11 @@ import scala.concurrent.Future
 
 class CreateForeignPropertyServiceSpec extends UnitSpec {
 
-  val taxYear = "2018-04-06"
+  val businessId = "XAIS12345678910"
   val nino = Nino("AA123456A")
   private val correlationId = "X-123"
 
-  val body = CreateForeignPropertyRequestBody(
+  val regularExpensesBody = CreateForeignPropertyRequestBody(
     "2020-01-01",
     "2020-01-31",
     Some(ForeignFhlEea(
@@ -48,7 +48,7 @@ class CreateForeignPropertyServiceSpec extends UnitSpec {
         Some(5000.99),
         Some(5000.99),
         Some(5000.99),
-        Some(5000.99)
+        None
       ))
     )),
     Some(Seq(ForeignProperty("FRA",
@@ -70,13 +70,54 @@ class CreateForeignPropertyServiceSpec extends UnitSpec {
         Some(5000.99),
         Some(5000.99),
         Some(5000.99),
+        None
+      ))))
+    ))
+
+  val consolidatedExpensesBody = CreateForeignPropertyRequestBody(
+    "2020-01-01",
+    "2020-01-31",
+    Some(ForeignFhlEea(
+      ForeignFhlEeaIncome(5000.99, Some(5000.99)),
+      Some(ForeignFhlEeaExpenditure(
+        None,
+        None,
+        None,
+        None,
+        None,
+        None,
+        None,
+        Some(3653.35)
+      ))
+    )),
+    Some(Seq(ForeignProperty("FRA",
+      ForeignPropertyIncome(
+        RentIncome(5000.99, 5000.99),
+        false,
+        Some(5000.99),
+        Some(5000.99),
+        Some(5000.99),
         Some(5000.99)
+      ),
+      Some(ForeignPropertyExpenditure(
+        None,
+        None,
+        None,
+        None,
+        None,
+        None,
+        None,
+        None,
+        None,
+        Some(235324.23)
       ))))
     ))
 
   val response = CreateForeignPropertyResponse("4557ecb5-fd32-48cc-81f5-e6acd1099f3c")
 
-  private val requestData = CreateForeignPropertyRequestData(nino, taxYear, body)
+  private val regularExpensesRequestData = CreateForeignPropertyRequestData(nino, businessId, regularExpensesBody)
+
+  private val consolidatedExpensesRequestData = CreateForeignPropertyRequestData(nino, businessId, consolidatedExpensesBody)
 
   trait Test extends MockCreateForeignPropertyConnector {
     implicit val hc: HeaderCarrier = HeaderCarrier()
@@ -89,11 +130,17 @@ class CreateForeignPropertyServiceSpec extends UnitSpec {
 
   "service" should {
     "service call successful" when {
-      "return mapped result" in new Test {
-        MockCreateForeignPropertyConnector.amend(requestData)
+      "return mapped result for regular Expenses" in new Test {
+        MockCreateForeignPropertyConnector.createForeignProperty(regularExpensesRequestData)
           .returns(Future.successful(Right(ResponseWrapper(correlationId, response))))
 
-        await(service.createForeignProperty(requestData)) shouldBe Right(ResponseWrapper(correlationId, response))
+        await(service.createForeignProperty(regularExpensesRequestData)) shouldBe Right(ResponseWrapper(correlationId, response))
+      }
+      "return mapped result for consolidated Expenses" in new Test {
+        MockCreateForeignPropertyConnector.createForeignProperty(consolidatedExpensesRequestData)
+          .returns(Future.successful(Right(ResponseWrapper(correlationId, response))))
+
+        await(service.createForeignProperty(consolidatedExpensesRequestData)) shouldBe Right(ResponseWrapper(correlationId, response))
       }
     }
   }
@@ -104,10 +151,10 @@ class CreateForeignPropertyServiceSpec extends UnitSpec {
       def serviceError(desErrorCode: String, error: MtdError): Unit =
         s"a $desErrorCode error is returned from the service" in new Test {
 
-          MockCreateForeignPropertyConnector.amend(requestData)
+          MockCreateForeignPropertyConnector.createForeignProperty(regularExpensesRequestData)
             .returns(Future.successful(Left(ResponseWrapper(correlationId, DesErrors.single(DesErrorCode(desErrorCode))))))
 
-          await(service.createForeignProperty(requestData)) shouldBe Left(ErrorWrapper(Some(correlationId), error))
+          await(service.createForeignProperty(regularExpensesRequestData)) shouldBe Left(ErrorWrapper(Some(correlationId), error))
         }
 
       val input = Seq(

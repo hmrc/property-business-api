@@ -27,9 +27,10 @@ import scala.concurrent.Future
 
 class CreateForeignPropertyConnectorSpec extends ConnectorSpec {
 
-  val nino = Nino("AA123456A")
   val businessId = "XAIS12345678910"
-  val body = CreateForeignPropertyRequestBody(
+  val nino = Nino("AA123456A")
+
+  val regularExpensesBody = CreateForeignPropertyRequestBody(
     "2020-01-01",
     "2020-01-31",
     Some(ForeignFhlEea(
@@ -42,7 +43,7 @@ class CreateForeignPropertyConnectorSpec extends ConnectorSpec {
         Some(5000.99),
         Some(5000.99),
         Some(5000.99),
-        Some(5000.99)
+        None
       ))
     )),
     Some(Seq(ForeignProperty("FRA",
@@ -64,13 +65,54 @@ class CreateForeignPropertyConnectorSpec extends ConnectorSpec {
         Some(5000.99),
         Some(5000.99),
         Some(5000.99),
-        Some(5000.99)
+        None
       ))))
     ))
 
-  val request = CreateForeignPropertyRequestData(nino, businessId, body)
+  val consolidatedExpensesBody = CreateForeignPropertyRequestBody(
+    "2020-01-01",
+    "2020-01-31",
+    Some(ForeignFhlEea(
+      ForeignFhlEeaIncome(5000.99, Some(5000.99)),
+      Some(ForeignFhlEeaExpenditure(
+        None,
+        None,
+        None,
+        None,
+        None,
+        None,
+        None,
+        Some(3653.35)
+      ))
+    )),
+    Some(Seq(ForeignProperty("FRA",
+      ForeignPropertyIncome(
+        RentIncome(5000.99, 5000.99),
+        false,
+        Some(5000.99),
+        Some(5000.99),
+        Some(5000.99),
+        Some(5000.99)
+      ),
+      Some(ForeignPropertyExpenditure(
+        None,
+        None,
+        None,
+        None,
+        None,
+        None,
+        None,
+        None,
+        None,
+        Some(235324.23)
+      ))))
+    ))
 
   val response = CreateForeignPropertyResponse("4557ecb5-fd32-48cc-81f5-e6acd1099f3c")
+
+  private val regularExpensesRequestData = CreateForeignPropertyRequestData(nino, businessId, regularExpensesBody)
+
+  private val consolidatedExpensesRequestData = CreateForeignPropertyRequestData(nino, businessId, consolidatedExpensesBody)
 
   class Test extends MockHttpClient with MockAppConfig {
     val connector: CreateForeignPropertyConnector = new CreateForeignPropertyConnector(http = mockHttpClient, appConfig = mockAppConfig)
@@ -82,18 +124,33 @@ class CreateForeignPropertyConnectorSpec extends ConnectorSpec {
   }
 
   "connector" must {
-    "put a body and return 204 no body" in new Test {
+    "put a body with regular expenses and return 200 with submissionId" in new Test {
 
       val outcome = Right(ResponseWrapper(correlationId, response))
       MockedHttpClient
         .post(
           url = s"$baseUrl/business/property/${nino}/${businessId}/period",
-          body = body,
+          body = regularExpensesBody,
           requiredHeaders = "Environment" -> "des-environment", "Authorization" -> s"Bearer des-token"
         )
         .returns(Future.successful(outcome))
 
-      await(connector.createForeignProperty(request)) shouldBe outcome
+      await(connector.createForeignProperty(regularExpensesRequestData)) shouldBe outcome
+
+    }
+
+    "put a body with consolidated expenses and return 200 with submissionId" in new Test {
+
+      val outcome = Right(ResponseWrapper(correlationId, response))
+      MockedHttpClient
+        .post(
+          url = s"$baseUrl/business/property/${nino}/${businessId}/period",
+          body = consolidatedExpensesBody,
+          requiredHeaders = "Environment" -> "des-environment", "Authorization" -> s"Bearer des-token"
+        )
+        .returns(Future.successful(outcome))
+
+      await(connector.createForeignProperty(consolidatedExpensesRequestData)) shouldBe outcome
 
     }
   }

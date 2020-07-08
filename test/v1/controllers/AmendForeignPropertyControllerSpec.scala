@@ -32,6 +32,7 @@ import v1.models.request.amendForeignProperty.foreignFhlEea.{ForeignFhlEea, Expe
 import v1.models.request.amendForeignProperty.foreignPropertyEntry.{ForeignPropertyEntry, RentIncome, Expenditure => ForeignPropertyExpenditure, Income => ForeignPropertyIncome}
 import v1.models.response.AmendForeignPropertyHateoasData
 
+import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class AmendForeignPropertyControllerSpec

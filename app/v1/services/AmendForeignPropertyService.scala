@@ -33,7 +33,7 @@ import scala.concurrent.{ExecutionContext, Future}
 @Singleton
 class AmendForeignPropertyService @Inject()(connector: AmendForeignPropertyConnector) extends DesResponseMappingSupport with Logging {
 
-  def amend(request: AmendForeignPropertyRequest)(
+  def amendForeignProperty(request: AmendForeignPropertyRequest)(
     implicit hc: HeaderCarrier,
     ec: ExecutionContext,
     logContext: EndpointLogContext): Future[AmendForeignPropertyServiceOutcome] = {

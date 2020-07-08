@@ -1,0 +1,61 @@
+{
+  "fromDate": "2019-04-06",
+  "toDate": "2019-07-06",
+  "foreignFhlEea": {
+    "income": {
+      "rentAmount": 200.22,
+      "taxDeducted": 22.22
+    },
+    "expenditure": {
+      "premisesRunningCosts": 100.25,
+      "repairsAndMaintenance": 100.25,
+      "financialCosts": 100.25,
+      "professionalFees": 100.25,
+      "costOfServices": 100.25,
+      "travelCosts": 100.25,
+      "other": 100.25
+    }
+  },
+  "foreignProperty": [
+    {
+      "countryCode": "FRA",
+      "income": {
+        "rentIncome": {
+          "rentAmount": 200.22,
+          "taxDeducted": 22.22
+        },
+        "foreignTaxCreditRelief": true,
+        "premiumsOfLeaseGrant": 100.25,
+        "otherPropertyIncome": 100.25,
+        "foreignTaxTakenOff": 44.21,
+        "specialWitholdingTaxOrUkTaxPaid": 23.78
+      },
+      "expenditure": {
+        "premisesRunningCosts": 100.25,
+        "repairsAndMaintenance": 100.25,
+        "financialCosts": 200.25,
+        "professionalFees": 100.25,
+        "costOfServices": 100.25,
+        "travelCosts": 100.25,
+        "other": 100.25
+      }
+    }
+  ],
+  "links": [
+    {
+      "href": "/individuals/business/property/{nino}/{businessId}/period/{submissionId}",
+      "method": "PUT",
+      "rel": "amend-property-period-summary"
+    },
+    {
+      "href": "/individuals/business/property/{nino}/{businessId}/period/{submissionId}",
+      "method": "GET",
+      "rel": "self"
+    },
+    {
+      "href": "/individuals/business/property/{nino}/{businessId}/period",
+      "method": "GET",
+      "rel": "list-property-period-summaries"
+    }
+  ]
+}

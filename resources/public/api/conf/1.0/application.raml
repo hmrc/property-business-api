@@ -28,6 +28,7 @@ uses:
   types: https://developer.service.hmrc.gov.uk/api-documentation/assets/common/modules/types.raml
   errors: errors.raml
   headers: headers.raml
+  queryParameters: queryParameters.raml
 
 '/individuals/business/property':
   /{nino}:
@@ -41,6 +42,7 @@ uses:
         businessId:
           description: 'An identifier for the business, unique to the customer.<p>Must conform to the regular expression `^X[A-Z0-9]{1}IS[0-9]{11}$`'
           example: XAIS12345678910
+      get: !include foreign_property_list.raml
       /period:
         (annotations.group):
           name: Foreign Property Income & Expenditure Period Summary

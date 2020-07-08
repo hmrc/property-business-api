@@ -12,6 +12,12 @@
             <td><p>Simulate success response.</p></td>
         </tr>
     </tbody>
+     <tbody>
+        <tr>
+            <td><p>MULTIPLE</p></td>
+            <td><p>Simulate success response with multiple submissions.</p></td>
+        </tr>
+    </tbody>
     <tbody>
         <tr>
             <td><p>NOT_FOUND</p></td>

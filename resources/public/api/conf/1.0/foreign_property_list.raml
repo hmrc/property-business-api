@@ -22,9 +22,12 @@ responses:
       application/json:
         type: !include schemas/list_foreign_property_response.json
         examples:
-          example:
-            description: Default Example
+          example-1:
+            description: Example Response
             value: !include examples/list_foreign_property.json
+          example-2:
+            description: Example Response With Multiple Submissions
+            value: !include examples/list_foreign_property_multiple.json
     headers:
       X-CorrelationId:
         example: c75f40a6-a3df-4429-a697-471eeec46435

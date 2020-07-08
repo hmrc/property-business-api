@@ -17,13 +17,20 @@
 package v1.controllers
 
 import play.api.libs.json.Json
+import play.api.mvc.Result
 import uk.gov.hmrc.domain.Nino
 import uk.gov.hmrc.http.HeaderCarrier
 import v1.mocks.hateoas.MockHateoasFactory
-import v1.mocks.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService}
+import v1.mocks.requestParsers.MockAmendForeignPropertyRequestParser
+import v1.mocks.services.{MockAmendForeignPropertyService, MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService}
 import v1.models.errors._
-import v1.models.hateoas.Link
+import v1.models.hateoas.{HateoasWrapper, Link}
+import v1.models.hateoas.Method.GET
 import v1.models.outcomes.ResponseWrapper
+import v1.models.request.amendForeignProperty.{AmendForeignPropertyRawData, AmendForeignPropertyRequest, AmendForeignPropertyRequestBody}
+import v1.models.request.amendForeignProperty.foreignFhlEea.{ForeignFhlEea, Expenditure => ForeignFhlEeaExpenditure, Income => ForeignFhlEeaIncome}
+import v1.models.request.amendForeignProperty.foreignPropertyEntry.{ForeignPropertyEntry, RentIncome, Expenditure => ForeignPropertyExpenditure, Income => ForeignPropertyIncome}
+import v1.models.response.AmendForeignPropertyHateoasData
 
 import scala.concurrent.Future
 
@@ -53,41 +60,106 @@ class AmendForeignPropertyControllerSpec
   }
 
   private val nino = "AA123456A"
-  private val taxYear = "2019-20"
+  private val businessId = ""
+  private val submissionId = ""
   private val correlationId = "X-123"
 
-  private val testHateoasLink = Link(href = s"individuals/other/deductions/$nino/$taxYear", method = PUT, rel = "self")
+  private val testHateoasLink = Link(href = s"Individuals/business/property/$nino/$businessId/period", method = GET, rel = "self")
 
   private val requestJson = Json.parse(
-    """|
-       |{
-       |  "seafarers":[
-       |    {
-       |      "customerReference": "myRef",
-       |      "amountDeducted": 2342.22,
-       |      "nameOfShip": "Blue Bell",
-       |      "fromDate": "2018-08-17",
-       |      "toDate":"2018-10-02"
+    """|{
+       |  "foreignFhlEea": {
+       |    "income": {
+       |      "rentAmount": 567.83,
+       |      "taxDeducted": 4321.92
+       |      },
+       |    "expenditure": {
+       |      "premisesRunningCosts": 4567.98,
+       |      "repairsAndMaintenance": 98765.67,
+       |      "financialCosts": 4566.95,
+       |      "professionalFees": 23.65,
+       |      "costsOfServices": 4567.77,
+       |      "travelCosts": 456.77,
+       |      "other": 567.67,
+       |      "consolidatedExpenses": 456.98
+       |    }
+       |  },
+       |  "foreignProperty": [{
+       |      "countryCode": "zzz",
+       |      "income": {
+       |        "rentIncome": {
+       |          "rentAmount": 34456.30,
+       |          "taxDeducted": 6334.34
+       |        },
+       |        "foreignTaxCreditRelief": true,
+       |        "premiumOfLeaseGrant": 2543.43,
+       |        "otherPropertyIncome": 54325.30,
+       |        "foreignTaxTakenOff": 6543.01,
+       |        "specialWithholdingTaxOrUKTaxPaid": 643245.00
+       |      },
+       |      "expenditure": {
+       |        "premisesRunningCosts": 5635.43,
+       |        "repairsAndMaintenance": 3456.65,
+       |        "financialCosts": 34532.21,
+       |        "professionalFees": 32465.32,
+       |        "costsOfServices": 2567.21,
+       |        "travelCosts": 2345.76,
+       |        "residentialFinancialCost": 21235.22,
+       |        "broughtFwdResidentialFinancialCost": 12556.00,
+       |        "other": 2425.11,
+       |        "consolidatedExpenses": 352.66
+       |      }
        |    }
        |  ]
        |}
        |""".stripMargin
   )
 
-  private val requestBody = AmendForeignPropertyBody(
-    Some(Seq(Seafarers(
-      Some("myRef"),
-      2342.22,
-      "Blue Bell",
-      "2018-08-17",
-      "2018-10-02"
-    )))
+  private val foreignFhlEea: ForeignFhlEea = ForeignFhlEea(
+    income = ForeignFhlEeaIncome(rentAmount = 567.83, taxDeducted = Some(4321.92)),
+    expenditure = Some(ForeignFhlEeaExpenditure(
+      premisesRunningCosts = Some(4567.98),
+      repairsAndMaintenance = Some(98765.67),
+      financialCosts = Some(4566.95),
+      professionalFees = Some(23.65),
+      costsOfServices = Some(4567.77),
+      travelCosts = Some(456.77),
+      other = Some(567.67),
+      consolidatedExpenses = Some(456.98)
+    ))
   )
 
+  private val foreignProperty: ForeignPropertyEntry = ForeignPropertyEntry(
+    countryCode = "zzz",
+    income = ForeignPropertyIncome(
+      rentIncome = RentIncome(rentAmount = 34456.30, taxDeducted = 6334.34),
+      foreignTaxCreditRelief = true,
+      premiumOfLeaseGrant = Some(2543.43),
+      otherPropertyIncome = Some(54325.30),
+      foreignTaxTakenOff = Some(6543.01),
+      specialWithholdingTaxOrUKTaxPaid = Some(643245.00)
+    ),
+    expenditure = Some(ForeignPropertyExpenditure(
+      premisesRunningCosts = Some(5635.43),
+      repairsAndMaintenance = Some(3456.65),
+      financialCosts = Some(34532.21),
+      professionalFees = Some(32465.32),
+      costsOfServices = Some(2567.21),
+      travelCosts = Some(2345.76),
+      residentialFinancialCost = Some(21235.22),
+      broughtFwdResidentialFinancialCost = Some(12556.00),
+      other = Some(2425.11),
+      consolidatedExpenses = Some(352.66)
+    ))
+  )
 
+  val requestBody: AmendForeignPropertyRequestBody = AmendForeignPropertyRequestBody(
+    foreignFhlEea = Some(foreignFhlEea),
+    foreignProperty = Some(Seq(foreignProperty))
+  )
 
-  private val rawData = AmendForeignPropertyRawData(nino, taxYear, requestJson)
-  private val requestData = AmendForeignPropertyRequest(Nino(nino), taxYear, requestBody)
+  private val rawData = AmendForeignPropertyRawData(nino, businessId, submissionId, requestJson)
+  private val requestData = AmendForeignPropertyRequest(Nino(nino), businessId, submissionId, requestBody)
 
   "handleRequest" should {
     "return Ok" when {
@@ -102,10 +174,10 @@ class AmendForeignPropertyControllerSpec
           .returns(Future.successful(Right(ResponseWrapper(correlationId, ()))))
 
         MockHateoasFactory
-          .wrap((), AmendForeignPropertyHateoasData(nino, taxYear))
+          .wrap((), AmendForeignPropertyHateoasData(nino, businessId, submissionId))
           .returns(HateoasWrapper((), Seq(testHateoasLink)))
 
-        val result: Future[Result] = controller.handleRequest(nino, taxYear)(fakePostRequest(requestJson))
+        val result: Future[Result] = controller.handleRequest(nino, businessId, submissionId)(fakePostRequest(requestJson))
         status(result) shouldBe OK
         header("X-CorrelationId", result) shouldBe Some(correlationId)
       }
@@ -119,7 +191,7 @@ class AmendForeignPropertyControllerSpec
               .parseRequest(rawData)
               .returns(Left(ErrorWrapper(Some(correlationId), error, None)))
 
-            val result: Future[Result] = controller.handleRequest(nino, taxYear)(fakePostRequest(requestJson))
+            val result: Future[Result] = controller.handleRequest(nino, businessId, submissionId)(fakePostRequest(requestJson))
 
             status(result) shouldBe expectedStatus
             contentAsJson(result) shouldBe Json.toJson(error)
@@ -131,27 +203,10 @@ class AmendForeignPropertyControllerSpec
           (BadRequestError, BAD_REQUEST),
           (NinoFormatError, BAD_REQUEST),
           (TaxYearFormatError, BAD_REQUEST),
-          (RuleTaxYearRangeInvalidError, BAD_REQUEST),
           (ValueFormatError.copy(paths = Some(Seq(
             "seafarers/0/amountDeducted",
             "seafarers/1/amountDeducted"))), BAD_REQUEST),
-          (NameOfShipFormatError.copy(paths = Some(Seq(
-            "seafarers/0/nameOfShip",
-            "seafarers/1/nameOfShip"))), BAD_REQUEST),
-          (CustomerReferenceFormatError.copy(paths = Some(Seq(
-            "seafarers/0/customerReference",
-            "seafarers/1/customerReference"))), BAD_REQUEST),
-          (DateFormatError.copy(paths = Some(Seq(
-            "seafarers/0/fromDate",
-            "seafarers/0/toDate",
-            "seafarers/1/fromDate",
-            "seafarers/1/toDate"))), BAD_REQUEST),
-          (RuleIncorrectOrEmptyBodyError, BAD_REQUEST),
-          (RangeToDateBeforeFromDateError.copy(paths = Some(Seq(
-            "seafarers/0/fromDate",
-            "seafarers/0/toDate",
-            "seafarers/1/fromDate",
-            "seafarers/1/toDate"))), BAD_REQUEST)
+          (RuleIncorrectOrEmptyBodyError, BAD_REQUEST)
         )
 
         input.foreach(args => (errorsFromParserTester _).tupled(args))
@@ -169,7 +224,7 @@ class AmendForeignPropertyControllerSpec
               .amend(requestData)
               .returns(Future.successful(Left(ErrorWrapper(Some(correlationId), mtdError))))
 
-            val result: Future[Result] = controller.handleRequest(nino, taxYear)(fakePostRequest(requestJson))
+            val result: Future[Result] = controller.handleRequest(nino, businessId, submissionId)(fakePostRequest(requestJson))
 
             status(result) shouldBe expectedStatus
             contentAsJson(result) shouldBe Json.toJson(mtdError)

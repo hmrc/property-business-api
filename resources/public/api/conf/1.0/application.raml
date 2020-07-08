@@ -42,11 +42,11 @@ uses:
         businessId:
           description: 'An identifier for the business, unique to the customer.<p>Must conform to the regular expression `^X[A-Z0-9]{1}IS[0-9]{11}$`'
           example: XAIS12345678910
-      get: !include foreign_property_list.raml
       /period:
         (annotations.group):
           name: Foreign Property Income & Expenditure Period Summary
           description: Resources relating to an individual's foreign property income & expenditure period summary
+        get: !include foreign_property_list.raml
         /{submissionId}:
           uriParameters:
             submissionId:

@@ -24,7 +24,7 @@
           "properties": {
             "rentAmount": {
               "type": "number",
-              "description": "Total rents and other income from property.\n\nThe value must be greater than 0 and up to 99999999999.99.",
+              "description": "Total rents and other income from property.\n\nThe value must be between 0 and 99999999999.99.",
               "example": "5000.99"
             },
             "taxDeducted": {
@@ -96,7 +96,7 @@
         "properties": {
           "countryCode": {
             "type": "string",
-            "description": "A three-letter code that represents a country name.\n\nThe value must in a ISO 3166-1 Alpha-3 format.",
+            "description": "A three-letter code that represents a country name.\n\nThis must be an ISO 3166-1 Alpha-3 value.",
             "example": "FRA"
           },
           "income": {
@@ -109,7 +109,7 @@
                 "properties": {
                   "rentAmount": {
                     "type": "number",
-                    "description": "The total amount of rental income.\n\nThe value must be greater than 0 and up to 99999999999.99.",
+                    "description": "The total amount of rental income.\n\nThe value must be between 0 and 99999999999.99.",
                     "example": "5000.99"
                   },
                   "taxDeducted": {
@@ -119,8 +119,7 @@
                   }
                 },
                 "required": [
-                  "rentAmount",
-                  "taxDeducted"
+                  "rentAmount"
                 ]
               },
               "foreignTaxCreditRelief": {

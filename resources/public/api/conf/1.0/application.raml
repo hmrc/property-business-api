@@ -51,6 +51,7 @@ uses:
               description: 'An identifier for the income and expenditure period summary.<p>Must conform to the regular expression `^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$`'
               example: 4557ecb5-fd32-48cc-81f5-e6acd1099f3c
           get: !include foreignReliefs_retrieve.raml
+          put: !include foreign_property_amend.raml
     /{taxYear}:
       uriParameters:
         taxYear:
@@ -61,17 +62,3 @@ uses:
           name: Sample Endpoint
           description: This is a sample endpoint
         post: !include sample_post.raml
-    /{businessId}:
-      uriParameters:
-        businessId:
-          description: "An identifier for the business, unique to the customer. Must conform to the regular expression `^X[A-Z0-9]{1}IS[0-9]{11}$`"
-          type: string
-          example: "XAIS12345678910"
-      /period:
-        /{submissionId}:
-          uriParameters:
-            submissionId:
-              description: "An identifier for the income and expenditure period summary. Must conform to the regular expression `^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$`"
-              type: string
-              example: "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
-          put: !include foreign_property_amend.raml

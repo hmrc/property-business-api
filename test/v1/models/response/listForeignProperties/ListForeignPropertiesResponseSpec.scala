@@ -20,7 +20,7 @@ import mocks.MockAppConfig
 import play.api.libs.json.Json
 import support.UnitSpec
 import v1.models.hateoas.Link
-import v1.models.hateoas.Method.GET
+import v1.models.hateoas.Method.{GET, POST}
 
 class ListForeignPropertiesResponseSpec extends UnitSpec with MockAppConfig {
   "reads" should {
@@ -131,7 +131,8 @@ class ListForeignPropertiesResponseSpec extends UnitSpec with MockAppConfig {
       MockedAppConfig.apiGatewayContext.returns("my/context").anyNumberOfTimes
       ListForeignPropertiesResponse.LinksFactory.links(mockAppConfig, ListForeignPropertiesHateoasData(nino, businessId)) shouldBe
         Seq(
-          Link(s"/my/context/$nino/$businessId/period", GET, "self")
+          Link(s"/my/context/$nino/$businessId/period", GET, "self"),
+          Link(s"/my/context/$nino/$businessId/period", POST, "create-property-period-summary")
         )
     }
 

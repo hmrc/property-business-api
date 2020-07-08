@@ -41,8 +41,11 @@ trait HateoasLinks {
   def listForeignProperties(appConfig: AppConfig, nino: String, businessId: String, rel: String = SELF): Link =
     Link(href = foreignPropertyUri(appConfig, nino, businessId), method = GET, rel = rel)
 
+  def createForeignProperty(appConfig: AppConfig, nino: String, businessId: String): Link =
+    Link(href = foreignPropertyUri(appConfig, nino, businessId), method = POST, rel = CREATE_PROPERTY_PERIOD_SUMMARY)
+
   def amendForeignProperty(appConfig: AppConfig, nino: String, businessId: String, submissionId: String): Link =
-    Link(href = foreignPropertySubmissionUri(appConfig, nino, businessId, submissionId), method = PUT, rel = AMEND_FOREIGN_PERIOD_SUMMARY)
+    Link(href = foreignPropertySubmissionUri(appConfig, nino, businessId, submissionId), method = PUT, rel = AMEND_PROPERTY_PERIOD_SUMMARY)
 
   def retrieveForeignProperty(appConfig: AppConfig, nino: String, businessId: String, submissionId: String, rel: String = SELF): Link =
     Link(href = foreignPropertySubmissionUri(appConfig, nino, businessId, submissionId), method = GET, rel = rel)

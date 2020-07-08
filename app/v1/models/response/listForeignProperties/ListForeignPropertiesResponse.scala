@@ -34,7 +34,8 @@ object ListForeignPropertiesResponse extends HateoasLinks {
   implicit object LinksFactory extends HateoasListLinksFactory[ListForeignPropertiesResponse, SubmissionPeriod, ListForeignPropertiesHateoasData] {
     override def links(appConfig: AppConfig, data: ListForeignPropertiesHateoasData): Seq[Link] = {
       Seq(
-        listForeignProperties(appConfig, data.nino, data.businessId)
+        listForeignProperties(appConfig, data.nino, data.businessId),
+        createForeignProperty(appConfig, data.nino, data.businessId)
       )
     }
 

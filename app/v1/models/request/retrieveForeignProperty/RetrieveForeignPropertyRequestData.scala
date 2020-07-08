@@ -14,12 +14,8 @@
  * limitations under the License.
  */
 
-package v1.models.hateoas
+package v1.models.request.retrieveForeignProperty
 
-object RelType {
-  val SAMPLE_ENDPOINT_REL = "sample-rel"
+import uk.gov.hmrc.domain.Nino
 
-  val SELF = "self"
-  val AMEND_FOREIGN_PROPERTY = "amend-property-period-summary"
-  val RETRIEVE_FOREIGN_PROPERTY = "retrieve-property-period-summary"
-}
+case class RetrieveForeignPropertyRequestData(nino: Nino, businessId: String, submissionId: String)

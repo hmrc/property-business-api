@@ -14,12 +14,17 @@
  * limitations under the License.
  */
 
-package v1.models.hateoas
+package v1.models.response.retrieveForeignProperty.foreignFhlEea
 
-object RelType {
-  val SAMPLE_ENDPOINT_REL = "sample-rel"
+import play.api.libs.json.{JsPath, Json, Reads, Writes}
+import play.api.libs.functional.syntax._
 
-  val SELF = "self"
-  val AMEND_FOREIGN_PROPERTY = "amend-property-period-summary"
-  val RETRIEVE_FOREIGN_PROPERTY = "retrieve-property-period-summary"
+case class ForeignFhlEea(income: ForeignFhlEeaIncome, expenditure: Option[ForeignFhlEeaExpenditure])
+
+object ForeignFhlEea {
+  implicit val writes: Writes[ForeignFhlEea] = Json.writes[ForeignFhlEea]
+  implicit val reads: Reads[ForeignFhlEea] = (
+    (JsPath \ "income").read[ForeignFhlEeaIncome] and
+      (JsPath \ "expenses").readNullable[ForeignFhlEeaExpenditure]
+    )(ForeignFhlEea.apply _)
 }

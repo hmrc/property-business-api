@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-package v1.models.hateoas
+package v1.models.response.retrieveForeignProperty.foreignFhlEea
 
-object RelType {
-  val SAMPLE_ENDPOINT_REL = "sample-rel"
+import play.api.libs.json.{Json, OFormat}
 
-  val SELF = "self"
-  val AMEND_FOREIGN_PROPERTY = "amend-property-period-summary"
-  val RETRIEVE_FOREIGN_PROPERTY = "retrieve-property-period-summary"
+case class ForeignFhlEeaIncome(rentAmount: BigDecimal, taxDeducted: Option[BigDecimal])
+
+object ForeignFhlEeaIncome {
+  implicit val format: OFormat[ForeignFhlEeaIncome] = Json.format[ForeignFhlEeaIncome]
 }

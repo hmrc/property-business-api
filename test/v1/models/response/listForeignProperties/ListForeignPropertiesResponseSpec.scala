@@ -16,10 +16,13 @@
 
 package v1.models.response.listForeignProperties
 
+import mocks.MockAppConfig
 import play.api.libs.json.Json
 import support.UnitSpec
+import v1.models.hateoas.Link
+import v1.models.hateoas.Method.GET
 
-class ListForeignPropertiesResponseSpec extends UnitSpec {
+class ListForeignPropertiesResponseSpec extends UnitSpec with MockAppConfig {
   "reads" should {
     "read from a single item array" in {
       val desJson = Json.parse(
@@ -45,7 +48,7 @@ class ListForeignPropertiesResponseSpec extends UnitSpec {
         SubmissionPeriod("4557ecb5-fd32-48cc-81f5-e6acd1099f3c", "2020-06-22", "2020-06-22")
       ))
 
-      desJson.as[ListForeignPropertiesResponse] shouldBe model
+      desJson.as[ListForeignPropertiesResponse[SubmissionPeriod]] shouldBe model
     }
     "read from a multiple item array" in {
       val desJson = Json.parse(
@@ -80,7 +83,7 @@ class ListForeignPropertiesResponseSpec extends UnitSpec {
         SubmissionPeriod("4557ecb5-fd32-48cc-81f5-e6acd1099f3d", "2020-08-22", "2020-08-22")
       ))
 
-      desJson.as[ListForeignPropertiesResponse] shouldBe model
+      desJson.as[ListForeignPropertiesResponse[SubmissionPeriod]] shouldBe model
     }
     "read an empty array" in {
       val desJson = Json.parse(
@@ -92,7 +95,59 @@ class ListForeignPropertiesResponseSpec extends UnitSpec {
 
       val model = ListForeignPropertiesResponse(Seq())
 
-      desJson.as[ListForeignPropertiesResponse] shouldBe model
+      desJson.as[ListForeignPropertiesResponse[SubmissionPeriod]] shouldBe model
+    }
+  }
+
+  "writes" should {
+    "write to JSON" in {
+      val model = ListForeignPropertiesResponse(Seq(
+        SubmissionPeriod("4557ecb5-fd32-48cc-81f5-e6acd1099f3c", "2020-06-22", "2020-06-22")
+      ))
+
+      val mtdJson = Json.parse(
+        """
+          |{
+          |  "submissions": [
+          |    {
+          |      "submissionId": "4557ecb5-fd32-48cc-81f5-e6acd1099f3c",
+          |      "fromDate": "2020-06-22",
+          |      "toDate": "2020-06-22"
+          |    }
+          |  ]
+          |}
+          |""".stripMargin)
+
+      Json.toJson(model) shouldBe mtdJson
+    }
+  }
+
+  "Links Factory" should {
+    val nino = "mynino"
+    val businessId = "mysubmissionid"
+    val submissionId = "mysubmissionid"
+
+    "expose the correct top level links for list" in {
+      MockedAppConfig.apiGatewayContext.returns("my/context").anyNumberOfTimes
+      ListForeignPropertiesResponse.LinksFactory.links(mockAppConfig, ListForeignPropertiesHateoasData(nino, businessId)) shouldBe
+        Seq(
+          Link(s"/my/context/$nino/$businessId/period", GET, "self")
+        )
+    }
+
+    "expose the correct item level links for list" in {
+      MockedAppConfig.apiGatewayContext.returns("my/context").anyNumberOfTimes
+      ListForeignPropertiesResponse.LinksFactory.itemLinks(mockAppConfig, ListForeignPropertiesHateoasData(nino, businessId),
+        SubmissionPeriod(submissionId, "", "")) shouldBe
+        Seq(
+          Link(s"/my/context/$nino/$businessId/period/$submissionId", GET, "retrieve-property-period-summary")
+        )
+    }
+  }
+
+  "Response Functor" should {
+    "apply the map function" in {
+      ListForeignPropertiesResponse.ResponseFunctor.map(ListForeignPropertiesResponse(Seq(1)))(_.toString) shouldBe ListForeignPropertiesResponse(Seq("1"))
     }
   }
 }

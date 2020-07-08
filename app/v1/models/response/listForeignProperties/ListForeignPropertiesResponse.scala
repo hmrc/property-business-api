@@ -16,13 +16,36 @@
 
 package v1.models.response.listForeignProperties
 
+import cats.Functor
+import config.AppConfig
 import play.api.libs.json.{Json, Reads, Writes}
+import v1.hateoas.{HateoasLinks, HateoasListLinksFactory}
+import v1.models.hateoas.RelType.RETRIEVE_PROPERTY_PERIOD_SUMMARY
+import v1.models.hateoas.{HateoasData, Link}
 
-case class ListForeignPropertiesResponse(submissions: Seq[SubmissionPeriod])
+case class ListForeignPropertiesResponse[I](submissions: Seq[I])
 
-object ListForeignPropertiesResponse {
-  implicit def reads: Reads[ListForeignPropertiesResponse] =
+object ListForeignPropertiesResponse extends HateoasLinks {
+  implicit def reads: Reads[ListForeignPropertiesResponse[SubmissionPeriod]] =
     implicitly[Reads[Seq[SubmissionPeriod]]].map(ListForeignPropertiesResponse(_))
 
-  implicit val writes: Writes[ListForeignPropertiesResponse] = Json.writes[ListForeignPropertiesResponse]
+  implicit def writes[I: Writes]: Writes[ListForeignPropertiesResponse[I]] = Json.writes[ListForeignPropertiesResponse[I]]
+
+  implicit object LinksFactory extends HateoasListLinksFactory[ListForeignPropertiesResponse, SubmissionPeriod, ListForeignPropertiesHateoasData] {
+    override def links(appConfig: AppConfig, data: ListForeignPropertiesHateoasData): Seq[Link] = {
+      Seq(
+        listForeignProperties(appConfig, data.nino, data.businessId)
+      )
+    }
+
+    override def itemLinks(appConfig: AppConfig, data: ListForeignPropertiesHateoasData, item: SubmissionPeriod): Seq[Link] =
+      Seq(retrieveForeignProperty(appConfig, data.nino, data.businessId, item.submissionId, rel = RETRIEVE_PROPERTY_PERIOD_SUMMARY))
+  }
+
+  implicit object ResponseFunctor extends Functor[ListForeignPropertiesResponse] {
+    override def map[A, B](fa: ListForeignPropertiesResponse[A])(f: A => B): ListForeignPropertiesResponse[B] =
+      ListForeignPropertiesResponse(fa.submissions.map(f))
+  }
 }
+
+case class ListForeignPropertiesHateoasData(nino: String, businessId: String) extends HateoasData

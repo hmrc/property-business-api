@@ -100,4 +100,21 @@ class SubmissionPeriodSpec extends UnitSpec {
       desJson.as[SubmissionPeriod] shouldBe model
     }
   }
+
+  "writes" should {
+    "write to JSON" in {
+      val model = SubmissionPeriod("4557ecb5-fd32-48cc-81f5-e6acd1099f3c", "2020-06-22", "2020-06-22")
+
+      val mtdJson = Json.parse(
+        """
+          |{
+          |  "submissionId": "4557ecb5-fd32-48cc-81f5-e6acd1099f3c",
+          |  "fromDate": "2020-06-22",
+          |  "toDate": "2020-06-22"
+          |}
+          |""".stripMargin)
+
+      Json.toJson(model) shouldBe mtdJson
+    }
+  }
 }

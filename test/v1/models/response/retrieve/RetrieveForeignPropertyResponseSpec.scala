@@ -191,8 +191,8 @@ class RetrieveForeignPropertyResponseSpec extends UnitSpec with JsonErrorValidat
 
         RetrieveForeignPropertyResponse.RetrieveForeignPropertyLinksFactory.links(mockAppConfig, data) shouldBe Seq(
           Link(href = s"/my/context/${data.nino}/${data.businessId}/period/${data.submissionId}", method = Method.PUT, rel = "amend-property-period-summary"),
-          Link(href = s"/my/context/${data.nino}/${data.businessId}/period/${data.submissionId}", method = Method.GET, rel = "retrieve-property-period-summary"),
-          Link(href = s"/my/context/${data.nino}/${data.businessId}/period", method = Method.GET, rel = "self")
+          Link(href = s"/my/context/${data.nino}/${data.businessId}/period/${data.submissionId}", method = Method.GET, rel = "self"),
+          Link(href = s"/my/context/${data.nino}/${data.businessId}/period", method = Method.GET, rel = "list-property-period-summaries")
         )
       }
     }

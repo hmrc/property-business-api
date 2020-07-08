@@ -16,7 +16,10 @@
 
 package v1.models.response.retrieveForeignProperty
 
+import config.AppConfig
 import play.api.libs.json.{Json, OFormat}
+import v1.hateoas.{HateoasLinks, HateoasLinksFactory}
+import v1.models.hateoas.{HateoasData, Link}
 import v1.models.response.retrieveForeignProperty.foreignFhlEea.ForeignFhlEea
 import v1.models.response.retrieveForeignProperty.foreignProperty.ForeignProperty
 
@@ -25,6 +28,19 @@ case class RetrieveForeignPropertyResponse(fromDate: String,
                                            foreignFhlEea: Option[ForeignFhlEea],
                                            foreignProperty: Option[Seq[ForeignProperty]])
 
-object RetrieveForeignPropertyResponse {
+object RetrieveForeignPropertyResponse extends HateoasLinks {
   implicit val format: OFormat[RetrieveForeignPropertyResponse] = Json.format[RetrieveForeignPropertyResponse]
+
+  implicit object RetrieveForeignPropertyLinksFactory extends HateoasLinksFactory[RetrieveForeignPropertyResponse, RetrieveForeignPropertyHateoasData] {
+    override def links(appConfig: AppConfig, data: RetrieveForeignPropertyHateoasData): Seq[Link] = {
+      import data._
+      Seq(
+        amendForeignProperty(appConfig, nino, businessId, submissionId),
+        retrieveForeignProperty(appConfig, nino, businessId, submissionId),
+        listForeignProperty(appConfig, nino, businessId)
+      )
+    }
+  }
 }
+
+case class RetrieveForeignPropertyHateoasData(nino: String, businessId: String, submissionId: String) extends HateoasData

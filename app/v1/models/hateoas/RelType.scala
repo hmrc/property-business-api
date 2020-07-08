@@ -20,4 +20,6 @@ object RelType {
   val SAMPLE_ENDPOINT_REL = "sample-rel"
 
   val SELF = "self"
+  val AMEND_FOREIGN_PROPERTY = "amend-property-period-summary"
+  val RETRIEVE_FOREIGN_PROPERTY = "retrieve-property-period-summary"
 }

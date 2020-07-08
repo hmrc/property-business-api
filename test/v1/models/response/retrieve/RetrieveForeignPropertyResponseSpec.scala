@@ -16,14 +16,16 @@
 
 package v1.models.response.retrieve
 
+import mocks.MockAppConfig
 import play.api.libs.json.Json
 import support.UnitSpec
-import v1.models.response.retrieveForeignProperty.RetrieveForeignPropertyResponse
+import v1.models.hateoas.{Link, Method}
+import v1.models.response.retrieveForeignProperty.{RetrieveForeignPropertyHateoasData, RetrieveForeignPropertyResponse}
 import v1.models.response.retrieveForeignProperty.foreignFhlEea._
 import v1.models.response.retrieveForeignProperty.foreignProperty._
 import v1.models.utils.JsonErrorValidators
 
-class RetrieveForeignPropertyResponseSpec extends UnitSpec with JsonErrorValidators {
+class RetrieveForeignPropertyResponseSpec extends UnitSpec with JsonErrorValidators with MockAppConfig {
 
   val retrieveForeignPropertyResponseBody = RetrieveForeignPropertyResponse(
     "2020-01-01",
@@ -176,6 +178,22 @@ class RetrieveForeignPropertyResponseSpec extends UnitSpec with JsonErrorValidat
     "passed valid model" should {
       "return valid JSON" in {
         Json.toJson(retrieveForeignPropertyResponseBody) shouldBe writesJson
+      }
+    }
+  }
+
+  "LinksFactory" should {
+    "produce the correct links" when {
+      "called" in {
+        val data: RetrieveForeignPropertyHateoasData = RetrieveForeignPropertyHateoasData("myNino", "myBusinessId", "mySubmissionId")
+
+        MockedAppConfig.apiGatewayContext.returns("my/context").anyNumberOfTimes()
+
+        RetrieveForeignPropertyResponse.RetrieveForeignPropertyLinksFactory.links(mockAppConfig, data) shouldBe Seq(
+          Link(href = s"/my/context/${data.nino}/${data.businessId}/period/${data.submissionId}", method = Method.PUT, rel = "amend-property-period-summary"),
+          Link(href = s"/my/context/${data.nino}/${data.businessId}/period/${data.submissionId}", method = Method.GET, rel = "retrieve-property-period-summary"),
+          Link(href = s"/my/context/${data.nino}/${data.businessId}/period", method = Method.GET, rel = "self")
+        )
       }
     }
   }

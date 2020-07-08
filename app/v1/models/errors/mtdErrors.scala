@@ -32,6 +32,8 @@ object NinoFormatError extends MtdError("FORMAT_NINO", "The provided NINO is inv
 object TaxYearFormatError extends MtdError("FORMAT_TAX_YEAR", "The provided tax year is invalid")
 object BusinessIdFormatError extends MtdError("FORMAT_BUSINESS_ID", "The provided Business ID is invalid")
 object SubmissionIdFormatError extends MtdError("FORMAT_SUBMISSION_ID", "The provided Submission ID is invalid")
+object FromDateFormatError extends MtdError("FORMAT_FROM_DATE", "The provided From date is invalid")
+object ToDateFormatError extends MtdError("FORMAT_TO_DATE", "The provided To date is invalid")
 object CountryCodeFormatError extends MtdError("FORMAT_COUNTRY_CODE", "The provided Country code is invalid")
 object ValueFormatError extends MtdError("FORMAT_VALUE", "One or more monetary fields are invalid")
 
@@ -46,9 +48,13 @@ object RuleTaxYearRangeExceededError
   extends MtdError("RULE_TAX_YEAR_RANGE_EXCEEDED", "Tax year range exceeded. A tax year range of one year is required")
 
 object RuleBothExpensesSuppliedError
-  extends MtdError("RULE_BOTH_EXPENSES_SUPPLIED", "Both Expenses and Consolidated Expenses can not be present at the same time")
+  extends MtdError("RULE_BOTH_EXPENSES_SUPPLIED", "Both expenses and consolidatedExpenses can not be present at the same time")
 
-object RuleCountryCodeError extends MtdError("RULE_COUNTRY_CODE", "The country code is not a valid ISO 3166-1 alpha-3 country code")
+object RuleToDateBeforeFromDateError
+  extends MtdError("RULE_TO_DATE_BEFORE_FROM_DATE", "The To date cannot be earlier than the From date")
+
+object RuleCountryCodeError
+  extends MtdError("RULE_COUNTRY_CODE", "The country code is not a valid ISO 3166-1 alpha-3 country code")
 
 object RuleOverlappingPeriodError extends MtdError("RULE_OVERLAPPING_PERIOD", "Update period overlaps with any of the existing update periods")
 

@@ -18,9 +18,10 @@ package v1.controllers.requestParsers.validators.validations
 
 import v1.models.errors.{MtdError, RuleBothExpensesSuppliedError}
 import v1.models.request.amendForeignProperty._
+import v1.models.request.createForeignProperty._
 
 object ConsolidatedExpensesValidation {
-  def validate(expenditure: foreignPropertyEntry.Expenditure, path: String): List[MtdError] = {
+  def validateAmend(expenditure: foreignPropertyEntry.Expenditure, path: String): List[MtdError] = {
     expenditure.consolidatedExpenses match {
       case None => NoValidationErrors
       case Some(_) => expenditure match {
@@ -30,11 +31,31 @@ object ConsolidatedExpensesValidation {
     }
   }
 
-  def validate(expenditure: foreignFhlEea.Expenditure, path: String): List[MtdError] = {
+  def validateAmend(expenditure: foreignFhlEea.Expenditure, path: String): List[MtdError] = {
     expenditure.consolidatedExpenses match {
       case None => NoValidationErrors
       case Some(_) => expenditure match {
         case foreignFhlEea.Expenditure(None, None, None, None, None, None, None, Some(_)) => NoValidationErrors
+        case _ => List(RuleBothExpensesSuppliedError.copy(paths = Some(Seq(path))))
+      }
+    }
+  }
+
+  def validateCreate(expenditure: ForeignPropertyExpenditure, path: String): List[MtdError] = {
+    expenditure.consolidatedExpenses match {
+      case None => NoValidationErrors
+      case Some(_) => expenditure match {
+        case ForeignPropertyExpenditure(None, None, None, None, None, None, _, _, None, Some(_)) => NoValidationErrors
+        case _ => List(RuleBothExpensesSuppliedError.copy(paths = Some(Seq(path))))
+      }
+    }
+  }
+
+  def validateCreate(expenditure: ForeignFhlEeaExpenditure, path: String): List[MtdError] = {
+    expenditure.consolidatedExpenses match {
+      case None => NoValidationErrors
+      case Some(_) => expenditure match {
+        case ForeignFhlEeaExpenditure(None, None, None, None, None, None, None, Some(_)) => NoValidationErrors
         case _ => List(RuleBothExpensesSuppliedError.copy(paths = Some(Seq(path))))
       }
     }

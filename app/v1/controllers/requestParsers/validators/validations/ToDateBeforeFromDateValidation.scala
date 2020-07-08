@@ -14,13 +14,21 @@
  * limitations under the License.
  */
 
-package v1.controllers.requestParsers.validators
+package v1.controllers.requestParsers.validators.validations
 
-import java.time.format.DateTimeFormatter
+import java.time.LocalDate
 
-package object validations {
+import v1.models.errors.{MtdError, RuleToDateBeforeFromDateError}
 
-  val dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd")
-  val NoValidationErrors = List()
+object ToDateBeforeFromDateValidation {
+
+  def validate(from: String, to: String): List[MtdError] = {
+
+    val fromDate = LocalDate.parse(from, dateFormat)
+    val toDate = LocalDate.parse(to, dateFormat)
+
+    if (toDate.isBefore(fromDate)) List(RuleToDateBeforeFromDateError) else Nil
+
+  }
 
 }

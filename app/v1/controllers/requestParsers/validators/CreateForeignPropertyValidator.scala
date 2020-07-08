@@ -17,28 +17,27 @@
 package v1.controllers.requestParsers.validators
 
 import v1.controllers.requestParsers.validators.validations._
-import v1.models.errors._
-import v1.models.request.amendForeignProperty.foreignFhlEea.{Expenditure => ForeignFhlEeaExpenditure, _}
-import v1.models.request.amendForeignProperty.foreignPropertyEntry.{Expenditure => ForeignPropertyExpenditure, ForeignPropertyEntry}
-import v1.models.request.amendForeignProperty.{AmendForeignPropertyRawData, AmendForeignPropertyRequestBody}
+import v1.models.errors.{MtdError, RuleIncorrectOrEmptyBodyError}
+import v1.models.request.createForeignProperty.{ForeignFhlEeaExpenditure => ForeignFhlEeaExpenditure, _}
+import v1.models.request.createForeignProperty.{ForeignPropertyExpenditure => ForeignPropertyExpenditure, ForeignProperty}
+import v1.models.request.createForeignProperty.{CreateForeignPropertyRawData, CreateForeignPropertyRequestBody}
 
-class AmendForeignPropertyValidator extends Validator[AmendForeignPropertyRawData] {
+class CreateForeignPropertyValidator extends Validator[CreateForeignPropertyRawData] {
 
-  private val validationSet = List(parameterFormatValidation, bodyFormatValidation, bodyFieldValidation)
+  private val validationSet = List(parameterFormatValidation, bodyFormatValidation, bodyFieldFormatValidation, dateRangeValidation)
 
-  private def parameterFormatValidation: AmendForeignPropertyRawData => List[List[MtdError]] = (data: AmendForeignPropertyRawData) => {
+  private def parameterFormatValidation: CreateForeignPropertyRawData => List[List[MtdError]] = (data: CreateForeignPropertyRawData) => {
     List(
       NinoValidation.validate(data.nino),
-      BusinessIdValidation.validate(data.businessId),
-      SubmissionIdValidation.validate(data.submissionId)
+      BusinessIdValidation.validate(data.businessId)
     )
   }
 
-  private def bodyFormatValidation: AmendForeignPropertyRawData => List[List[MtdError]] = { data =>
-    val baseValidation = List(JsonFormatValidation.validate[AmendForeignPropertyRequestBody](data.body, RuleIncorrectOrEmptyBodyError))
+  private def bodyFormatValidation: CreateForeignPropertyRawData => List[List[MtdError]] = { data =>
+    val baseValidation = List(JsonFormatValidation.validate[CreateForeignPropertyRequestBody](data.body, RuleIncorrectOrEmptyBodyError))
 
     val extraValidation: List[List[MtdError]] = {
-      data.body.asOpt[AmendForeignPropertyRequestBody].map(_.isEmpty).map {
+      data.body.asOpt[CreateForeignPropertyRequestBody].map(_.isEmpty).map {
         case true => List(List(RuleIncorrectOrEmptyBodyError))
         case false => NoValidationErrors
       }.getOrElse(NoValidationErrors)
@@ -47,10 +46,15 @@ class AmendForeignPropertyValidator extends Validator[AmendForeignPropertyRawDat
     baseValidation ++ extraValidation
   }
 
-  private def bodyFieldValidation: AmendForeignPropertyRawData => List[List[MtdError]] = { data =>
-    val body = data.body.as[AmendForeignPropertyRequestBody]
+  private def bodyFieldFormatValidation: CreateForeignPropertyRawData => List[List[MtdError]] = { data =>
+    val body = data.body.as[CreateForeignPropertyRequestBody]
 
-    List(flattenErrors(List(
+    val regularErrors = List(
+      DateValidation.validate(body.fromDate, isFromDate = true),
+      DateValidation.validate(body.toDate, isFromDate = false)
+    )
+
+    val pathErrors = List(flattenErrors(List(
       body.foreignFhlEea.map(validateForeignFhlEea).getOrElse(NoValidationErrors),
       body.foreignProperty.map(_.zipWithIndex.toList.flatMap {
         case (entry, i) => validateForeignProperty(entry, i)
@@ -63,6 +67,8 @@ class AmendForeignPropertyValidator extends Validator[AmendForeignPropertyRawDat
         }
       ).getOrElse(Nil).flatten
     )))
+
+    regularErrors ++ pathErrors
   }
 
   private def validateForeignFhlEea(foreignFhlEea: ForeignFhlEea): List[MtdError] = {
@@ -110,94 +116,100 @@ class AmendForeignPropertyValidator extends Validator[AmendForeignPropertyRawDat
     ).flatten
   }
 
-  private def validateForeignProperty(foreignPropertyEntry: ForeignPropertyEntry, index: Int): List[MtdError] = {
+  private def validateForeignProperty(foreignProperty: ForeignProperty, index: Int): List[MtdError] = {
     List(
       CountryCodeValidation.validate(
-        field = foreignPropertyEntry.countryCode,
+        field = foreignProperty.countryCode,
         path = s"/foreignProperty/$index/countryCode"
       ),
       NumberValidation.validateOptional(
-        field = Some(foreignPropertyEntry.income.rentIncome.rentAmount),
+        field = Some(foreignProperty.income.rentIncome.rentAmount),
         path = s"/foreignProperty/$index/income/rentIncome/rentAmount"
       ),
       NumberValidation.validateOptional(
-        field = Some(foreignPropertyEntry.income.rentIncome.taxDeducted),
+        field = Some(foreignProperty.income.rentIncome.taxDeducted),
         path = s"/foreignProperty/$index/income/rentIncome/taxDeducted"
       ),
       NumberValidation.validateOptional(
-        field = foreignPropertyEntry.income.premiumOfLeaseGrant,
+        field = foreignProperty.income.premiumOfLeaseGrant,
         path = s"/foreignProperty/$index/income/premiumOfLeaseGrant"
       ),
       NumberValidation.validateOptional(
-        field = foreignPropertyEntry.income.otherPropertyIncome,
+        field = foreignProperty.income.otherPropertyIncome,
         path = s"/foreignProperty/$index/income/otherPropertyIncome"
       ),
       NumberValidation.validateOptional(
-        field = foreignPropertyEntry.income.foreignTaxTakenOff,
+        field = foreignProperty.income.foreignTaxTakenOff,
         path = s"/foreignProperty/$index/income/foreignTaxTakenOff"
       ),
       NumberValidation.validateOptional(
-        field = foreignPropertyEntry.income.specialWithholdingTaxOrUKTaxPaid,
+        field = foreignProperty.income.specialWithholdingTaxOrUKTaxPaid,
         path = s"/foreignProperty/$index/income/specialWithholdingTaxOrUKTaxPaid"
       ),
       NumberValidation.validateOptional(
-        field = foreignPropertyEntry.expenditure.flatMap(_.premisesRunningCosts),
+        field = foreignProperty.expenditure.flatMap(_.premisesRunningCosts),
         path = s"/foreignProperty/$index/expenditure/premisesRunningCosts"
       ),
       NumberValidation.validateOptional(
-        field = foreignPropertyEntry.expenditure.flatMap(_.repairsAndMaintenance),
+        field = foreignProperty.expenditure.flatMap(_.repairsAndMaintenance),
         path = s"/foreignProperty/$index/expenditure/repairsAndMaintenance"
       ),
       NumberValidation.validateOptional(
-        field = foreignPropertyEntry.expenditure.flatMap(_.financialCosts),
+        field = foreignProperty.expenditure.flatMap(_.financialCosts),
         path = s"/foreignProperty/$index/expenditure/financialCosts"
       ),
       NumberValidation.validateOptional(
-        field = foreignPropertyEntry.expenditure.flatMap(_.professionalFees),
+        field = foreignProperty.expenditure.flatMap(_.professionalFees),
         path = s"/foreignProperty/$index/expenditure/professionalFees"
       ),
       NumberValidation.validateOptional(
-        field = foreignPropertyEntry.expenditure.flatMap(_.costsOfServices),
+        field = foreignProperty.expenditure.flatMap(_.costsOfServices),
         path = s"/foreignProperty/$index/expenditure/costsOfServices"
       ),
       NumberValidation.validateOptional(
-        field = foreignPropertyEntry.expenditure.flatMap(_.travelCosts),
+        field = foreignProperty.expenditure.flatMap(_.travelCosts),
         path = s"/foreignProperty/$index/expenditure/travelCosts"
       ),
       NumberValidation.validateOptional(
-        field = foreignPropertyEntry.expenditure.flatMap(_.residentialFinancialCost),
+        field = foreignProperty.expenditure.flatMap(_.residentialFinancialCost),
         path = s"/foreignProperty/$index/expenditure/residentialFinancialCost"
       ),
       NumberValidation.validateOptional(
-        field = foreignPropertyEntry.expenditure.flatMap(_.broughtFwdResidentialFinancialCost),
+        field = foreignProperty.expenditure.flatMap(_.broughtFwdResidentialFinancialCost),
         path = s"/foreignProperty/$index/expenditure/broughtFwdResidentialFinancialCost"
       ),
       NumberValidation.validateOptional(
-        field = foreignPropertyEntry.expenditure.flatMap(_.other),
+        field = foreignProperty.expenditure.flatMap(_.other),
         path = s"/foreignProperty/$index/expenditure/other"
       ),
       NumberValidation.validateOptional(
-        field = foreignPropertyEntry.expenditure.flatMap(_.consolidatedExpenses),
+        field = foreignProperty.expenditure.flatMap(_.consolidatedExpenses),
         path = s"/foreignProperty/$index/expenditure/consolidatedExpenses"
       )
     ).flatten
   }
 
   private def validateForeignFhlEeaConsolidatedExpenses(expenditure: ForeignFhlEeaExpenditure): List[MtdError] = {
-    ConsolidatedExpensesValidation.validateAmend(
+    ConsolidatedExpensesValidation.validateCreate(
       expenditure = expenditure,
       path = s"/foreignFhlEea/expenditure"
     )
   }
 
   private def validateForeignPropertyConsolidatedExpenses(expenditure: ForeignPropertyExpenditure, index: Int): List[MtdError] = {
-    ConsolidatedExpensesValidation.validateAmend(
+    ConsolidatedExpensesValidation.validateCreate(
       expenditure = expenditure,
       path = s"/foreignProperty/$index/expenditure"
     )
   }
 
-  override def validate(data: AmendForeignPropertyRawData): List[MtdError] = {
+  private def dateRangeValidation: CreateForeignPropertyRawData => List[List[MtdError]] = { data =>
+    val body = data.body.as[CreateForeignPropertyRequestBody]
+
+    List(ToDateBeforeFromDateValidation.validate(body.fromDate, body.toDate))
+  }
+
+  override def validate(data: CreateForeignPropertyRawData): List[MtdError] = {
     run(validationSet, data).distinct
   }
 }

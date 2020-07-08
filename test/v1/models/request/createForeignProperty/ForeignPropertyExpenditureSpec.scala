@@ -78,4 +78,10 @@ class ForeignPropertyExpenditureSpec extends UnitSpec with JsonErrorValidators {
       }
     }
   }
+
+  "isEmpty" should {
+    "return true when no fields are provided" in {
+      ForeignPropertyExpenditure(None, None, None, None, None, None, None, None, None, None).isEmpty shouldBe true
+    }
+  }
 }

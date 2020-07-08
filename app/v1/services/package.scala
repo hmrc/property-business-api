@@ -28,4 +28,6 @@ package object services {
 
   type AmendForeignPropertyServiceOutcome = ServiceOutcome[Unit]
 
+  type RetrieveForeignPropertyServiceOutcome = ServiceOutcome[RetrieveForeignPropertyResponse]
+
 }

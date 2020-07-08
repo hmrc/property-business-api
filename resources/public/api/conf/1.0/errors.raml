@@ -59,6 +59,28 @@ traits:
                 description: The format of the supplied Business ID field is not valid.
                 value:
                   code: FORMAT_BUSINESS_ID
+  formatFromDate:
+    responses:
+      400:
+        body:
+          application/json:
+            type: types.errorResponse
+            examples:
+              formatFromDate:
+                description: The format of the supplied From date field is not valid.
+                value:
+                  code: FORMAT_FROM_DATE
+  formatToDate:
+    responses:
+      400:
+        body:
+          application/json:
+            type: types.errorResponse
+            examples:
+              formatToDate:
+                description: The format of the supplied To date field is not valid.
+                value:
+                  code: FORMAT_TO_DATE
   formatSubmissionId:
     responses:
       400:
@@ -110,10 +132,10 @@ traits:
             application/json:
               type: types.errorResponse
               examples:
-              ruleBothExpensesSupplied:
-                description: Both expenses and consolidatedExpenses can not be present at the same time.
-                value:
-                  code: RULE_BOTH_EXPENSES_SUPPLIED
+                ruleBothExpensesSupplied:
+                  description: Both expenses and consolidatedExpenses can not be present at the same time.
+                  value:
+                    code: RULE_BOTH_EXPENSES_SUPPLIED
   formatValue:
     responses:
       400:
@@ -132,10 +154,10 @@ traits:
             application/json:
               type: types.errorResponse
               examples:
-              ruleToDateBeforeFromDate:
-                description: The To date is earlier than the From date.
-                value:
-                  code: RULE_TO_DATE_BEFORE_FROM_DATE
+                ruleToDateBeforeFromDate:
+                  description: The To date is earlier than the From date.
+                  value:
+                    code: RULE_TO_DATE_BEFORE_FROM_DATE
   bothExpensesSupplied:
     responses:
       400:
@@ -158,39 +180,17 @@ traits:
                 description: Not a valid ISO 3166-1 alpha-3 country code.
                 value:
                   code: RULE_COUNTRY_CODE
-  formatFromDate:
+  ruleOverlappingPeriod:
     responses:
       400:
         body:
           application/json:
             type: types.errorResponse
             examples:
-              formatFromDate:
-                description: The format of the supplied From date field is not valid.
-                value:
-                  code: FORMAT_FROM_DATE
-  ruleOverlappingPeriod:
-      responses:
-        400:
-          body:
-            application/json:
-              type: types.errorResponse
-              examples:
               ruleOverlappingPeriod:
                 description: period summary overlaps with any of the existing period summaries.
                 value:
                   code: RULE_OVERLAPPING_PERIOD
-  formatToDate:
-    responses:
-      400:
-        body:
-          application/json:
-            type: types.errorResponse
-            examples:
-              formatToDate:
-                description: The format of the supplied To date field is not valid.
-                value:
-                  code: FORMAT_TO_DATE
   ruleMisalignedPeriod:
     responses:
       400:

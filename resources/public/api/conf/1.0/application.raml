@@ -47,6 +47,7 @@ uses:
           name: Foreign Property Income & Expenditure Period Summary
           description: Resources relating to an individual's foreign property income & expenditure period summary
         get: !include foreign_property_list.raml
+        post: !include create_foreign_property.raml
         /{submissionId}:
           uriParameters:
             submissionId:

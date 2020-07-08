@@ -1,0 +1,40 @@
+{
+  "submissions": [
+    {
+      "submissionId": "4557ecb5-fd32-48cc-81f5-e6acd1099f3c",
+      "fromDate": "2020-06-20",
+      "toDate": "2020-06-22",
+      "links": [
+        {
+          "href": "/individuals/business/property/TC663795B/XAIS12345678910/period/4557ecb5-fd32-48cc-81f5-e6acd1099f3c",
+          "method":"GET",
+          "rel":"retrieve-property-period-summary"
+        }
+      ]
+    },
+    {
+      "submissionId": "f2fb30e5-4ab6-4a29-b3c1-c7264259ff1c",
+      "fromDate": "2020-06-22",
+      "toDate": "2020-06-25",
+      "links": [
+        {
+          "href": "/individuals/business/property/TC663795B/XAIS12345678910/period/f2fb30e5-4ab6-4a29-b3c1-c7264259ff1c",
+          "method":"GET",
+          "rel":"retrieve-property-period-summary"
+        }
+      ]
+    }
+  ],
+  "links":[
+    {
+      "href":"/individuals/business/property/TC663795B/XAIS12345678910/period",
+      "method":"GET",
+      "rel":"self"
+    },
+    {
+      "href":"/individuals/business/property/TC663795B/XAIS12345678910/period",
+      "method":"POST",
+      "rel":"create-property-period-summary"
+    }
+  ]
+}

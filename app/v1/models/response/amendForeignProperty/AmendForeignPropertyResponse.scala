@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-package v1.models.response.amend
+package v1.models.response.amendForeignProperty
 
 import config.AppConfig
 import v1.hateoas.{HateoasLinks, HateoasLinksFactory}
 import v1.models.hateoas.{HateoasData, Link}
 
-class AmendForeignPropertyResponse extends HateoasLinks {
+object AmendForeignPropertyResponse extends HateoasLinks {
 
   implicit object AmendForeignPropertyLinksFactory extends HateoasLinksFactory[Unit, AmendForeignPropertyHateoasData] {
     override def links(appConfig: AppConfig, data: AmendForeignPropertyHateoasData): Seq[Link] = {

@@ -26,7 +26,8 @@ import v1.controllers.requestParsers.AmendForeignPropertyRequestParser
 import v1.hateoas.HateoasFactory
 import v1.models.errors._
 import v1.models.request.amendForeignProperty.AmendForeignPropertyRawData
-import v1.models.response.amend.AmendForeignPropertyHateoasData
+import v1.models.response.amendForeignProperty.AmendForeignPropertyHateoasData
+import v1.models.response.amendForeignProperty.AmendForeignPropertyResponse.AmendForeignPropertyLinksFactory
 import v1.services.{AmendForeignPropertyService, EnrolmentsAuthService, MtdIdLookupService}
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -69,16 +70,17 @@ class AmendForeignPropertyController  @Inject()(val authService: EnrolmentsAuthS
   private def errorResult(errorWrapper: ErrorWrapper) = {
 
     (errorWrapper.error: @unchecked) match {
-      case NinoFormatError |
+      case BadRequestError |
+           NinoFormatError |
            BusinessIdFormatError |
            SubmissionIdFormatError |
-           CountryCodeFormatError |
-           ValueFormatError |
+           MtdErrorWithCustomMessage(CountryCodeFormatError.code) |
+           MtdErrorWithCustomMessage(ValueFormatError.code) |
            RuleIncorrectOrEmptyBodyError |
            RuleBothExpensesSuppliedError |
-           RuleCountryCodeError => BadRequest(Json.toJson(errorWrapper))
+           MtdErrorWithCustomMessage(RuleCountryCodeError.code) => BadRequest(Json.toJson(errorWrapper))
       case DownstreamError => InternalServerError(Json.toJson(errorWrapper))
-      case NotFoundError => NotFound(Json.toJson(errorWrapper))
+      case NotFoundError | SubmissionIdNotFoundError => NotFound(Json.toJson(errorWrapper))
     }
   }
 }

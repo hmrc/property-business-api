@@ -97,7 +97,7 @@ class AmendForeignPropertyServiceSpec extends UnitSpec {
         MockAmendForeignPropertyConnector.amendForeignProperty(requestData)
           .returns(Future.successful(Right(ResponseWrapper(correlationId, ()))))
 
-        await(service.amend(requestData)) shouldBe Right(ResponseWrapper(correlationId, ()))
+        await(service.amendForeignProperty(requestData)) shouldBe Right(ResponseWrapper(correlationId, ()))
       }
     }
   }
@@ -111,7 +111,7 @@ class AmendForeignPropertyServiceSpec extends UnitSpec {
           MockAmendForeignPropertyConnector.amendForeignProperty(requestData)
             .returns(Future.successful(Left(ResponseWrapper(correlationId, DesErrors.single(DesErrorCode(desErrorCode))))))
 
-          await(service.amend(requestData)) shouldBe Left(ErrorWrapper(Some(correlationId), error))
+          await(service.amendForeignProperty(requestData)) shouldBe Left(ErrorWrapper(Some(correlationId), error))
         }
 
       val input = Seq(

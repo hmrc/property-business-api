@@ -30,7 +30,7 @@ import v1.models.outcomes.ResponseWrapper
 import v1.models.request.amendForeignProperty.{AmendForeignPropertyRawData, AmendForeignPropertyRequest, AmendForeignPropertyRequestBody}
 import v1.models.request.amendForeignProperty.foreignFhlEea.{ForeignFhlEea, Expenditure => ForeignFhlEeaExpenditure, Income => ForeignFhlEeaIncome}
 import v1.models.request.amendForeignProperty.foreignPropertyEntry.{ForeignPropertyEntry, RentIncome, Expenditure => ForeignPropertyExpenditure, Income => ForeignPropertyIncome}
-import v1.models.response.amend.AmendForeignPropertyHateoasData
+import v1.models.response.amendForeignProperty.AmendForeignPropertyHateoasData
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -81,8 +81,7 @@ class AmendForeignPropertyControllerSpec
        |      "professionalFees": 23.65,
        |      "costsOfServices": 4567.77,
        |      "travelCosts": 456.77,
-       |      "other": 567.67,
-       |      "consolidatedExpenses": 456.98
+       |      "other": 567.67
        |    }
        |  },
        |  "foreignProperty": [{
@@ -107,8 +106,7 @@ class AmendForeignPropertyControllerSpec
        |        "travelCosts": 2345.76,
        |        "residentialFinancialCost": 21235.22,
        |        "broughtFwdResidentialFinancialCost": 12556.00,
-       |        "other": 2425.11,
-       |        "consolidatedExpenses": 352.66
+       |        "other": 2425.11
        |      }
        |    }
        |  ]
@@ -126,7 +124,7 @@ class AmendForeignPropertyControllerSpec
       costsOfServices = Some(4567.77),
       travelCosts = Some(456.77),
       other = Some(567.67),
-      consolidatedExpenses = Some(456.98)
+      consolidatedExpenses = None
     ))
   )
 
@@ -150,7 +148,7 @@ class AmendForeignPropertyControllerSpec
       residentialFinancialCost = Some(21235.22),
       broughtFwdResidentialFinancialCost = Some(12556.00),
       other = Some(2425.11),
-      consolidatedExpenses = Some(352.66)
+      consolidatedExpenses = None
     ))
   )
 
@@ -203,11 +201,22 @@ class AmendForeignPropertyControllerSpec
         val input = Seq(
           (BadRequestError, BAD_REQUEST),
           (NinoFormatError, BAD_REQUEST),
-          (TaxYearFormatError, BAD_REQUEST),
+          (BusinessIdFormatError, BAD_REQUEST),
+          (SubmissionIdFormatError, BAD_REQUEST),
+          (CountryCodeFormatError.copy(paths = Some(Seq(
+            "foreignProperty/0/countryCode"))), BAD_REQUEST),
           (ValueFormatError.copy(paths = Some(Seq(
-            "seafarers/0/amountDeducted",
-            "seafarers/1/amountDeducted"))), BAD_REQUEST),
-          (RuleIncorrectOrEmptyBodyError, BAD_REQUEST)
+            "foreignFhlEea/income/rentAmount",
+            "foreignFhlEea/expenditure/repairsAndMaintenance",
+            "foreignFhlEea/expenditure/professionalFees",
+            "foreignFhlEea/expenditure/other",
+            "foreignProperty/income/rentIncome/rentAmount",
+            "foreignProperty/expenditure/professionalFees",
+            "foreignProperty/expenditure/other"))), BAD_REQUEST),
+          (RuleIncorrectOrEmptyBodyError, BAD_REQUEST),
+          (RuleBothExpensesSuppliedError, BAD_REQUEST),
+          (RuleCountryCodeError.copy(paths = Some(Seq(
+            "foreignProperty/0/countryCode"))), BAD_REQUEST)
         )
 
         input.foreach(args => (errorsFromParserTester _).tupled(args))
@@ -235,9 +244,10 @@ class AmendForeignPropertyControllerSpec
 
         val input = Seq(
           (NinoFormatError, BAD_REQUEST),
+          (BusinessIdFormatError, BAD_REQUEST),
+          (SubmissionIdNotFoundError, NOT_FOUND),
           (NotFoundError, NOT_FOUND),
-          (DownstreamError, INTERNAL_SERVER_ERROR),
-          (TaxYearFormatError, BAD_REQUEST)
+          (DownstreamError, INTERNAL_SERVER_ERROR)
         )
 
         input.foreach(args => (serviceErrors _).tupled(args))

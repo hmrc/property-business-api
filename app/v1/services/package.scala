@@ -18,7 +18,7 @@ package v1
 
 import v1.models.errors.ErrorWrapper
 import v1.models.outcomes.ResponseWrapper
-import v1.models.response.create.CreateForeignPropertyResponse
+import v1.models.response.createForeignProperty.CreateForeignPropertyResponse
 
 package object services {
 

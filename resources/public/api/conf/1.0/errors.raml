@@ -92,3 +92,47 @@ traits:
                 description: An empty or non-matching body was submitted.
                 value:
                   code: RULE_INCORRECT_OR_EMPTY_BODY_SUBMITTED
+  formatCountryCode:
+    responses:
+      400:
+        body:
+          application/json:
+            type: types.errorResponse
+            examples:
+              formatCountryCode:
+                description: The format of the supplied Country Code field is not valid.
+                value:
+                  code: FORMAT_COUNTRY_CODE
+  formatValue:
+    responses:
+      400:
+        body:
+          application/json:
+            type: types.errorResponse
+            examples:
+              formatValue:
+                description: The format of one or more monetary fields is not valid.
+                value:
+                  code: FORMAT_VALUE
+  bothExpensesSupplied:
+    responses:
+      400:
+        body:
+          application/json:
+            type: types.errorResponse
+            examples:
+              bothExpensesSupplied:
+                description: Both Expenses and Consolidated Expenses can not be present at the same time.
+                value:
+                  code: RULE_BOTH_EXPENSES_SUPPLIED
+  ruleCountryCode:
+    responses:
+      400:
+        body:
+          application/json:
+            type: types.errorResponse
+            examples:
+              ruleCountryCode:
+                description: Not a valid ISO 3166-1 alpha-3 country code.
+                value:
+                  code: RULE_COUNTRY_CODE

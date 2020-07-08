@@ -1,0 +1,44 @@
+{
+  "foreignFhlEea": {
+    "income": {
+      "rentAmount": 567.83,
+      "taxDeducted": 4321.92
+    },
+    "expenditure": {
+      "premisesRunningCosts": 4567.98,
+      "repairsAndMaintenance": 98765.67,
+      "financialCosts": 4566.95,
+      "professionalFees": 23.65,
+      "costsOfServices": 4567.77,
+      "travelCosts": 456.77,
+      "other": 567.67
+    }
+  },
+  "foreignProperty": [
+    {
+      "countryCode": "FRA",
+      "income": {
+        "rentIncome": {
+          "rentAmount": 34456.30,
+          "taxDeducted": 6334.34
+        },
+        "foreignTaxCreditRelief": true,
+        "premiumOfLeaseGrant": 2543.43,
+        "otherPropertyIncome": 54325.30,
+        "foreignTaxTakenOff": 6543.01,
+        "specialWithholdingTaxOrUKTaxPaid": 643245.00
+      },
+      "expenditure": {
+        "premisesRunningCosts": 5635.43,
+        "repairsAndMaintenance": 3456.65,
+        "financialCosts": 34532.21,
+        "professionalFees": 32465.32,
+        "costsOfServices": 2567.21,
+        "travelCosts": 2345.76,
+        "residentialFinancialCost": 21235.22,
+        "broughtFwdResidentialFinancialCost": 12556.00,
+        "other": 2425.11
+      }
+    }
+  ]
+}

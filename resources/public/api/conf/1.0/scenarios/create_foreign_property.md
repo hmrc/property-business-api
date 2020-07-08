@@ -17,7 +17,7 @@
          </tr>
         <tr>
             <td><p>OVERLAPPING</p></td>
-            <td><p>Simulates the scenario where the period summary overlaps with an existing period.</p></td>
+            <td><p>Simulates the scenario where the period summary overlaps with an existing period summary.</p></td>
          </tr>
         <tr>
             <td><p>MISALIGNED</p></td>

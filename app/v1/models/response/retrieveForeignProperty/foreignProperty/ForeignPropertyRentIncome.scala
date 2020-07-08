@@ -14,14 +14,12 @@
  * limitations under the License.
  */
 
-package v1.models.request.retrieveForeignProperty
+package v1.models.response.retrieveForeignProperty.foreignProperty
 
-case class ForeignFhlEea(income: ForeignFhlEeaIncome, expenditure: Option[ForeignFhlEeaExpenditure])
+import play.api.libs.json.{Json, OFormat}
 
-object ForeignFhlEea {
-  implicit val reads: Reads[ForeignFhlEea] = Json.reads[ForeignFhlEea]
-  implicit val writes: Writes[ForeignFhlEea] = (
-    (JsPath \ "income").write[ForeignFhlEeaIncome] and
-      (JsPath \ "expenses").writeNullable[ForeignFhlEeaExpenditure]
-    )(unlift(ForeignFhlEea.unapply))
+case class ForeignPropertyRentIncome(rentAmount: BigDecimal, taxDeducted: Option[BigDecimal])
+
+object ForeignPropertyRentIncome {
+  implicit val format: OFormat[ForeignPropertyRentIncome] = Json.format[ForeignPropertyRentIncome]
 }

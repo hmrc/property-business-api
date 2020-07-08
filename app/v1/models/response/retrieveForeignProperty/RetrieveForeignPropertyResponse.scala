@@ -17,6 +17,8 @@
 package v1.models.response.retrieveForeignProperty
 
 import play.api.libs.json.{Json, OFormat}
+import v1.models.response.retrieveForeignProperty.foreignFhlEea.ForeignFhlEea
+import v1.models.response.retrieveForeignProperty.foreignProperty.ForeignProperty
 
 case class RetrieveForeignPropertyResponse(fromDate: String,
                                            toDate: String,

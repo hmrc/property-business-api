@@ -30,7 +30,7 @@ import v1.models.outcomes.ResponseWrapper
 import v1.models.request.amendForeignProperty.{AmendForeignPropertyRawData, AmendForeignPropertyRequest, AmendForeignPropertyRequestBody}
 import v1.models.request.amendForeignProperty.foreignFhlEea.{ForeignFhlEea, Expenditure => ForeignFhlEeaExpenditure, Income => ForeignFhlEeaIncome}
 import v1.models.request.amendForeignProperty.foreignPropertyEntry.{ForeignPropertyEntry, RentIncome, Expenditure => ForeignPropertyExpenditure, Income => ForeignPropertyIncome}
-import v1.models.response.AmendForeignPropertyHateoasData
+import v1.models.response.amend.AmendForeignPropertyHateoasData
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future

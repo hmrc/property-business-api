@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package v1.models.response
+package v1.models.response.amend
 
 import config.AppConfig
 import v1.hateoas.{HateoasLinks, HateoasLinksFactory}

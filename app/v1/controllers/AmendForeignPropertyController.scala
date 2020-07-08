@@ -26,7 +26,7 @@ import v1.controllers.requestParsers.AmendForeignPropertyRequestParser
 import v1.hateoas.HateoasFactory
 import v1.models.errors._
 import v1.models.request.amendForeignProperty.AmendForeignPropertyRawData
-import v1.models.response.AmendForeignPropertyHateoasData
+import v1.models.response.amend.AmendForeignPropertyHateoasData
 import v1.services.{AmendForeignPropertyService, EnrolmentsAuthService, MtdIdLookupService}
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -42,7 +42,6 @@ class AmendForeignPropertyController  @Inject()(val authService: EnrolmentsAuthS
 
   implicit val endpointLogContext: EndpointLogContext =
     EndpointLogContext(controllerName = "AmendForeignPropertyController", endpointName = "amendForeignProperty")
-
   def handleRequest(nino: String, businessId: String, submissionId: String): Action[JsValue] =
     authorisedAction(nino).async(parse.json) { implicit request =>
       val rawData = AmendForeignPropertyRawData(nino, businessId, submissionId, request.body)

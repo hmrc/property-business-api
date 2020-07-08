@@ -5,12 +5,12 @@
   "type": "object",
   "properties": {
     "fromDate": {
-      "description": "The first day that the income and expenditure period summary covers.",
+      "description": "The first day that the income and expenditure period summary covers. Must conform to the format YYYY-MM-DD.",
       "type": "string",
       "example": "2018-04-06"
     },
     "toDate": {
-      "description": "The last day that the income and expenditure period summary covers.",
+      "description": "The last day that the income and expenditure period summary covers. Must conform to the format YYYY-MM-DD.",
       "type": "string",
       "example": "2019-04-06"
     },
@@ -23,12 +23,12 @@
           "type": "object",
           "properties": {
             "rentAmount": {
-              "description": "Total rent and other income from property.",
+              "description": "Total rent and other income from property. The value must be between 0 and 99999999999.99.",
               "type": "number",
               "example": "5000.99"
             },
             "taxDeducted": {
-              "description": "Tax taken off rental Income (applies to non-resident landlords only).",
+              "description": "Tax taken off rental Income (applies to non-resident landlords only). The value must be greater than 0 and up to 99999999999.99.",
               "type": "number",
               "example": "5000.99"
             }
@@ -42,7 +42,7 @@
           "type": "object",
           "properties": {
             "consolidatedExpenses": {
-              "description": "The sum of all expenses for the specified period.",
+              "description": "The sum of all expenses for the specified period. The value must be greater than 0 and up to 99999999999.99.",
               "type": "number",
               "example": "5000.99"
             }
@@ -60,7 +60,7 @@
         "type": "object",
         "properties": {
           "countryCode": {
-            "description": "A three-letter code that represents a country name.",
+            "description": "A three-letter code that represents a country name. This must be an ISO 3166-1 Alpha-3 value.",
             "type": "string",
             "example": "FRA"
           },
@@ -73,43 +73,42 @@
                 "type": "object",
                 "properties": {
                   "rentAmount": {
-                    "description": "The total amount of rental income.",
+                    "description": "The total amount of rental income. The value must be between 0 and 99999999999.99.",
                     "type": "number",
                     "example": "5000.99"
                   },
                   "taxDeducted": {
-                    "description": "Tax already taken off from the rental income.",
+                    "description": "Tax already taken off from the rental income. The value must be greater than 0 and up to 99999999999.99.",
                     "type": "number",
                     "example": "5000.99"
                   }
                 },
                 "required": [
-                  "rentAmount",
-                  "taxDeducted"
+                  "rentAmount"
                 ]
               },
               "foreignTaxCreditRelief": {
-                "description": "A boolean indicating whether Foreign Tax Credit Relief (FTCR) has been claimed.",
+                "description": "A boolean indicating whether Foreign Tax Credit Relief (FTCR) has been claimed. The value must be true or false.",
                 "type": "boolean",
                 "example": "true"
               },
               "premiumOfLeaseGrant": {
-                "description": "Premiums received for the grant of a lease and other lump sums to possess a property.",
+                "description": "Premiums received for the grant of a lease and other lump sums to possess a property. The value must be greater than 0 and up to 99999999999.99.",
                 "type": "number",
                 "example": "5000.99"
               },
               "otherPropertyIncome": {
-                "description": "Other income from property, such as rent charges and ground rents, income from letting others tip waste on your land, and income for the use of a caravan or houseboat at a fixed location.",
+                "description": "Other income from property, such as rent charges and ground rents, income from letting others tip waste on your land, and income for the use of a caravan or houseboat at a fixed location. The value must be greater than 0 and up to 99999999999.99.",
                 "type": "number",
                 "example": "5000.99"
               },
               "foreignTaxTakenOff": {
-                "description": "The total amount of foreign tax taken off your income.",
+                "description": "The total amount of foreign tax taken off your income. The value must be greater than 0 and up to 99999999999.99.",
                 "type": "number",
                 "example": "5000.99"
               },
               "specialWithholdingTaxOrUKTaxPaid": {
-                "description": "Tax withheld (in UK Pounds) on certain payments to UK residents or UK Tax taken off rental Income (applies to non-resident landlords only).",
+                "description": "Tax withheld (in UK Pounds) on certain payments to UK residents or UK Tax taken off rental Income (applies to non-resident landlords only). The value must be greater than 0 and up to 99999999999.99.",
                 "type": "number",
                 "example": "5000.99"
               }
@@ -124,17 +123,17 @@
             "type": "object",
             "properties": {
               "residentialFinancialCost": {
-                "description": "The residential financial cost that can be deductible from rental income (tax relief).",
+                "description": "The residential financial cost that can be deductible from rental income (tax relief). The value must be greater than 0 and up to 99999999999.99.",
                 "type": "number",
                 "example": "5000.99"
               },
               "broughtFwdResidentialFinancialCost": {
-                "description": "Amount of relief brought forward for restricted residential financial costs.",
+                "description": "Amount of relief brought forward for restricted residential financial costs. The value must be greater than 0 and up to 99999999999.99.",
                 "type": "number",
                 "example": "5000.99"
               },
               "consolidatedExpenses": {
-                "description": "The sum of all expenses for the specified period.",
+                "description": "The sum of all expenses for the specified period. The value must be greater than 0 and up to 99999999999.99.",
                 "type": "number",
                 "example": "5000.99"
               }

@@ -7,13 +7,13 @@
       "taxDeducted": 22.22
     },
     "expenditure": {
-      "premisesRunningCostsAmount": 100.25,
-      "repairsAndMaintenanceAmount": 100.25,
-      "financialCostsAmount": 100.25,
-      "professionalFeesAmount": 100.25,
-      "costOfServicesAmount": 100.25,
-      "travelCostsAmount": 100.25,
-      "otherAmount": 100.25
+      "premisesRunningCosts": 100.25,
+      "repairsAndMaintenance": 100.25,
+      "financialCosts": 100.25,
+      "professionalFees": 100.25,
+      "costOfServices": 100.25,
+      "travelCosts": 100.25,
+      "other": 100.25
     }
   },
   "foreignProperty": [

@@ -13,7 +13,7 @@
           "description": "Object holding the income details for the period.",
           "properties": {
             "rentAmount": {
-              "description": "Total rent and other income from property. The value must be greater than 0 and up to 99999999999.99.",
+              "description": "Total rent and other income from property. The value must be between 0 and 99999999999.99.",
               "type": "number",
               "multipleOf": 0.01,
               "minimum": 0.00,
@@ -115,7 +115,7 @@
         "description": "Array holding the income and expenses of the user's foreign property business - excluding Furnished Holiday Lettings (FHL) in the European Economic Area (EEA) - for the period.",
         "properties": {
           "countryCode": {
-            "description": "A three-letter code that represents a country name. The value must in a ISO 3166-1 Alpha-3 format.",
+            "description": "A three-letter code that represents a country name. This must be an ISO 3166-1 Alpha-3 value.",
             "type": "string",
             "pattern": "^[A-Z]{3}$",
             "example": "FRA"
@@ -129,7 +129,7 @@
                 "description": "An object containing the amount taken in rent and any tax deducted.",
                 "properties": {
                   "rentAmount": {
-                    "description": "The total amount of rental income. The value must be greater than 0 and up to 99999999999.99.",
+                    "description": "The total amount of rental income. The value must be between 0 and 99999999999.99.",
                     "type": "number",
                     "multipleOf": 0.01,
                     "minimum": 0.00,
@@ -146,8 +146,7 @@
                   }
                 },
                 "required": [
-                  "rentAmount",
-                  "taxDeducted"
+                  "rentAmount"
                 ]
               },
               "foreignTaxCreditRelief": {

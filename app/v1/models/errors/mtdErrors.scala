@@ -35,6 +35,7 @@ object SubmissionIdFormatError extends MtdError("FORMAT_SUBMISSION_ID", "The pro
 object CountryCodeFormatError extends MtdError("FORMAT_COUNTRY_CODE", "The provided Country code is invalid")
 object ValueFormatError extends MtdError("FORMAT_VALUE", "One or more monetary fields are invalid")
 
+
 // Rule Errors
 object RuleTaxYearNotSupportedError
   extends MtdError("RULE_TAX_YEAR_NOT_SUPPORTED", "Tax year not supported, because it precedes the earliest allowable tax year")
@@ -48,6 +49,12 @@ object RuleBothExpensesSuppliedError
   extends MtdError("RULE_BOTH_EXPENSES_SUPPLIED", "Both Expenses and Consolidated Expenses can not be present at the same time")
 
 object RuleCountryCodeError extends MtdError("RULE_COUNTRY_CODE", "The country code is not a valid ISO 3166-1 alpha-3 country code")
+
+object RuleOverlappingPeriodError extends MtdError("RULE_OVERLAPPING_PERIOD", "Update period overlaps with any of the existing update periods")
+
+object RuleMisalignedPeriodError extends MtdError("RULE_MISALIGNED_PERIOD", "Update period is not within the accounting period")
+
+object RuleNotContiguousPeriodError extends MtdError("RULE_NOT_CONTIGUOUS_PERIOD", "Update periods are not contiguous")
 
 //Standard Errors
 object NotFoundError extends MtdError("MATCHING_RESOURCE_NOT_FOUND", "Matching resource not found")

@@ -17,15 +17,15 @@
          </tr>
         <tr>
             <td><p>OVERLAPPING</p></td>
-            <td><p>Simulates the scenario where the update period overlaps with an existing period.</p></td>
+            <td><p>Simulates the scenario where the period summary overlaps with an existing period.</p></td>
          </tr>
         <tr>
             <td><p>MISALIGNED</p></td>
-            <td><p>Simulates the scenario where the update period isn't within the accounting period.</p></td>
+            <td><p>Simulates the scenario where the period summary isn't within the accounting period.</p></td>
          </tr>
         <tr>
             <td><p>NOT_CONTIGUOUS</p></td>
-            <td><p>Simulates the scenario where the update periods are not contiguous.</p></td>
+            <td><p>Simulates the scenario where the period summaries are not contiguous.</p></td>
          </tr>
     </tbody>
 </table>

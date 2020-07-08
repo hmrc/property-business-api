@@ -177,7 +177,7 @@ traits:
               type: types.errorResponse
               examples:
               ruleOverlappingPeriod:
-                description: Update period overlaps with any of the existing update periods.
+                description: period summary overlaps with any of the existing update periods.
                 value:
                   code: RULE_OVERLAPPING_PERIOD
   formatToDate:
@@ -199,7 +199,7 @@ traits:
             type: types.errorResponse
             examples:
               ruleMisalignedPeriod:
-                description: Update period is not within the accounting period.
+                description: period summary is not within the accounting period.
                 value:
                   code: RULE_MISALIGNED_PERIOD
   toDateBeforeFromDate:
@@ -221,6 +221,6 @@ traits:
             type: types.errorResponse
             examples:
               ruleNotContiguousPeriod:
-                description: Update periods are not contiguous.
+                description: period summaries are not contiguous.
                 value:
                   code: RULE_NOT_CONTIGUOUS_PERIOD

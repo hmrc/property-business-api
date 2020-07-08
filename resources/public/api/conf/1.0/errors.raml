@@ -81,6 +81,17 @@ traits:
                 description: The format of the supplied To date field is not valid.
                 value:
                   code: FORMAT_TO_DATE
+  formatValue:
+    responses:
+      400:
+        body:
+          application/json:
+            type: types.errorResponse
+            examples:
+              formatValue:
+                description: The format of one or more monetary fields is not valid.
+                value:
+                  code: FORMAT_VALUE
   formatSubmissionId:
     responses:
       400:
@@ -136,17 +147,6 @@ traits:
                   description: Both expenses and consolidatedExpenses can not be present at the same time.
                   value:
                     code: RULE_BOTH_EXPENSES_SUPPLIED
-  formatValue:
-    responses:
-      400:
-        body:
-          application/json:
-            type: types.errorResponse
-            examples:
-              formatValue:
-                description: The format of one or more monetary fields is not valid.
-                value:
-                  code: FORMAT_VALUE
   ruleToDateBeforeFromDate:
       responses:
         400:

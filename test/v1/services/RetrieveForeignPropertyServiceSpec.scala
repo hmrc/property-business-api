@@ -20,9 +20,15 @@ import support.UnitSpec
 import uk.gov.hmrc.domain.Nino
 import uk.gov.hmrc.http.HeaderCarrier
 import v1.controllers.EndpointLogContext
+import v1.mocks.connectors.MockRetrieveForeignPropertyConnector
 import v1.models.errors.{BusinessIdFormatError, DesErrorCode, DesErrors, DownstreamError, ErrorWrapper, MtdError, NinoFormatError, NotFoundError, SubmissionIdFormatError, SubmissionIdNotFoundError}
 import v1.models.outcomes.ResponseWrapper
+import v1.models.request.retrieveForeignProperty.RetrieveForeignPropertyRequestData
+import v1.models.response.retrieveForeignProperty.RetrieveForeignPropertyResponse
+import v1.models.response.retrieveForeignProperty.foreignFhlEea.{ForeignFhlEea, ForeignFhlEeaExpenditure, ForeignFhlEeaIncome}
+import v1.models.response.retrieveForeignProperty.foreignProperty.{ForeignProperty, ForeignPropertyExpenditure, ForeignPropertyIncome, ForeignPropertyRentIncome}
 
+import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class RetrieveForeignPropertyServiceSpec extends UnitSpec {
@@ -32,13 +38,52 @@ class RetrieveForeignPropertyServiceSpec extends UnitSpec {
   val submissionId = "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
   private val correlationId = "X-123"
 
-  private val requestData = RetrieveForeignPropertyRequest(nino, businessId, submissionId)
+  val response = RetrieveForeignPropertyResponse(
+    "2020-01-01",
+    "2020-01-31",
+    Some(ForeignFhlEea(
+      ForeignFhlEeaIncome(5000.99, Some(5000.99)),
+      Some(ForeignFhlEeaExpenditure(
+        Some(5000.99),
+        Some(5000.99),
+        Some(5000.99),
+        Some(5000.99),
+        Some(5000.99),
+        Some(5000.99),
+        Some(5000.99),
+        None
+      ))
+    )),
+    Some(Seq(ForeignProperty("FRA",
+      ForeignPropertyIncome(
+        ForeignPropertyRentIncome(5000.99, Some(5000.99)),
+        false,
+        Some(5000.99),
+        Some(5000.99),
+        Some(5000.99),
+        Some(5000.99)
+      ),
+      Some(ForeignPropertyExpenditure(
+        Some(5000.99),
+        Some(5000.99),
+        Some(5000.99),
+        Some(5000.99),
+        Some(5000.99),
+        Some(5000.99),
+        Some(5000.99),
+        Some(5000.99),
+        Some(5000.99),
+        None
+      ))))
+    ))
+
+  private val requestData = RetrieveForeignPropertyRequestData(nino, businessId, submissionId)
 
   trait Test extends MockRetrieveForeignPropertyConnector {
     implicit val hc: HeaderCarrier = HeaderCarrier()
     implicit val logContext: EndpointLogContext = EndpointLogContext("c", "ep")
 
-    val service = new AmendForeignPropertyService(
+    val service = new RetrieveForeignPropertyService(
       connector = mockRetrieveForeignPropertyConnector
     )
   }
@@ -47,9 +92,9 @@ class RetrieveForeignPropertyServiceSpec extends UnitSpec {
     "service call successful" when {
       "return mapped result" in new Test {
         MockRetrieveForeignPropertyConnector.retrieveForeignProperty(requestData)
-          .returns(Future.successful(Right(ResponseWrapper(correlationId, ()))))
+          .returns(Future.successful(Right(ResponseWrapper(correlationId, response))))
 
-        await(service.amend(requestData)) shouldBe Right(ResponseWrapper(correlationId, ()))
+        await(service.retrieveForeignProperty(requestData)) shouldBe Right(ResponseWrapper(correlationId, response))
       }
     }
   }
@@ -63,7 +108,7 @@ class RetrieveForeignPropertyServiceSpec extends UnitSpec {
           MockRetrieveForeignPropertyConnector.retrieveForeignProperty(requestData)
             .returns(Future.successful(Left(ResponseWrapper(correlationId, DesErrors.single(DesErrorCode(desErrorCode))))))
 
-          await(service.amend(requestData)) shouldBe Left(ErrorWrapper(Some(correlationId), error))
+          await(service.retrieveForeignProperty(requestData)) shouldBe Left(ErrorWrapper(Some(correlationId), error))
         }
 
       val input = Seq(

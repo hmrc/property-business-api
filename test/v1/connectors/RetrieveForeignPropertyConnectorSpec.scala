@@ -20,6 +20,10 @@ import mocks.MockAppConfig
 import uk.gov.hmrc.domain.Nino
 import v1.mocks.MockHttpClient
 import v1.models.outcomes.ResponseWrapper
+import v1.models.request.retrieveForeignProperty.RetrieveForeignPropertyRequestData
+import v1.models.response.retrieveForeignProperty.RetrieveForeignPropertyResponse
+import v1.models.response.retrieveForeignProperty.foreignFhlEea.{ForeignFhlEea, ForeignFhlEeaExpenditure, ForeignFhlEeaIncome}
+import v1.models.response.retrieveForeignProperty.foreignProperty.{ForeignProperty, ForeignPropertyExpenditure, ForeignPropertyIncome, ForeignPropertyRentIncome}
 
 import scala.concurrent.Future
 
@@ -29,9 +33,46 @@ class RetrieveForeignPropertyConnectorSpec extends ConnectorSpec {
   val businessId = "XAIS12345678910"
   val submissionId = "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
 
-  val request = RetrieveForeignPropertyRequest(nino, businessId, submissionId)
+  val request = RetrieveForeignPropertyRequestData(nino, businessId, submissionId)
 
-  val response = RetrieveForeignPropertyResponse()
+  val response = RetrieveForeignPropertyResponse(
+    "2020-01-01",
+    "2020-01-31",
+    Some(ForeignFhlEea(
+    ForeignFhlEeaIncome(5000.99, Some(5000.99)),
+    Some(ForeignFhlEeaExpenditure(
+      Some(5000.99),
+      Some(5000.99),
+      Some(5000.99),
+      Some(5000.99),
+      Some(5000.99),
+      Some(5000.99),
+      Some(5000.99),
+      None
+    ))
+  )),
+  Some(Seq(ForeignProperty("FRA",
+    ForeignPropertyIncome(
+      ForeignPropertyRentIncome(5000.99, Some(5000.99)),
+      false,
+      Some(5000.99),
+      Some(5000.99),
+      Some(5000.99),
+      Some(5000.99)
+    ),
+    Some(ForeignPropertyExpenditure(
+      Some(5000.99),
+      Some(5000.99),
+      Some(5000.99),
+      Some(5000.99),
+      Some(5000.99),
+      Some(5000.99),
+      Some(5000.99),
+      Some(5000.99),
+      Some(5000.99),
+      None
+    ))))
+  ))
 
   class Test extends MockHttpClient with MockAppConfig {
     val connector: RetrieveForeignPropertyConnector = new RetrieveForeignPropertyConnector(http = mockHttpClient, appConfig = mockAppConfig)
@@ -43,7 +84,7 @@ class RetrieveForeignPropertyConnectorSpec extends ConnectorSpec {
   }
 
   "connector" must {
-    "put a body and return 204 no body" in new Test {
+    "send a request and return a body" in new Test {
 
       val outcome = Right(ResponseWrapper(correlationId, response))
       MockedHttpClient

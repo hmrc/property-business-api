@@ -16,6 +16,7 @@
 
 package v1.services
 
+import cats.implicits._
 import cats.data.EitherT
 import javax.inject.{Inject, Singleton}
 import uk.gov.hmrc.http.HeaderCarrier
@@ -23,6 +24,7 @@ import utils.Logging
 import v1.connectors.RetrieveForeignPropertyConnector
 import v1.controllers.EndpointLogContext
 import v1.models.errors.{BusinessIdFormatError, DownstreamError, NinoFormatError, NotFoundError, SubmissionIdFormatError, SubmissionIdNotFoundError}
+import v1.models.request.retrieveForeignProperty.RetrieveForeignPropertyRequestData
 import v1.support.DesResponseMappingSupport
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -30,7 +32,7 @@ import scala.concurrent.{ExecutionContext, Future}
 @Singleton
 class RetrieveForeignPropertyService @Inject()(connector: RetrieveForeignPropertyConnector) extends DesResponseMappingSupport with Logging {
 
-  def createForeignProperty(request: RetrieveForeignPropertyRequestData)(
+  def retrieveForeignProperty(request: RetrieveForeignPropertyRequestData)(
     implicit hc: HeaderCarrier,
     ec: ExecutionContext,
     logContext: EndpointLogContext): Future[RetrieveForeignPropertyServiceOutcome] = {

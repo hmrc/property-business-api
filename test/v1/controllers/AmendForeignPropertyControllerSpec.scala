@@ -61,8 +61,8 @@ class AmendForeignPropertyControllerSpec
   }
 
   private val nino = "AA123456A"
-  private val businessId = ""
-  private val submissionId = ""
+  private val businessId = "XAIS12345678910"
+  private val submissionId = "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
   private val correlationId = "X-123"
 
   private val testHateoasLink = Link(href = s"Individuals/business/property/$nino/$businessId/period", method = GET, rel = "self")
@@ -245,6 +245,7 @@ class AmendForeignPropertyControllerSpec
         val input = Seq(
           (NinoFormatError, BAD_REQUEST),
           (BusinessIdFormatError, BAD_REQUEST),
+          (SubmissionIdFormatError, BAD_REQUEST),
           (SubmissionIdNotFoundError, NOT_FOUND),
           (NotFoundError, NOT_FOUND),
           (DownstreamError, INTERNAL_SERVER_ERROR)

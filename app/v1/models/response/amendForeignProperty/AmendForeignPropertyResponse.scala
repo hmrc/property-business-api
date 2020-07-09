@@ -19,6 +19,7 @@ package v1.models.response.amendForeignProperty
 import config.AppConfig
 import v1.hateoas.{HateoasLinks, HateoasLinksFactory}
 import v1.models.hateoas.{HateoasData, Link}
+import v1.models.hateoas.RelType._
 
 object AmendForeignPropertyResponse extends HateoasLinks {
 
@@ -28,7 +29,7 @@ object AmendForeignPropertyResponse extends HateoasLinks {
       Seq(
         amendForeignProperty(appConfig, nino, businessId, submissionId),
         retrieveForeignProperty(appConfig, nino, businessId, submissionId),
-        listForeignProperties(appConfig, nino, businessId)
+        listForeignProperties(appConfig, nino, businessId, LIST_PROPERTY_PERIOD_SUMMARIES)
       )
     }
   }

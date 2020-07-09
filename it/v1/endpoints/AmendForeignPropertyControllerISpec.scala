@@ -98,7 +98,7 @@ class AmendForeignPropertyControllerISpec extends IntegrationBaseSpec {
          |      {
          |         "href":"/individuals/business/property/$nino/$businessId/period",
          |         "method":"GET",
-         |         "rel":"self"
+         |         "rel":"list-property-period-summaries"
          |      }
          |   ]
          |}
@@ -464,6 +464,7 @@ class AmendForeignPropertyControllerISpec extends IntegrationBaseSpec {
           val input = Seq(
             (BAD_REQUEST, "INVALID_TAXABLE_ENTITY_ID", BAD_REQUEST, NinoFormatError),
             (BAD_REQUEST, "INVALID_BUSINESS_ID", BAD_REQUEST, BusinessIdFormatError),
+            (BAD_REQUEST, "INVALID_SUBMISSION_ID", BAD_REQUEST, SubmissionIdFormatError),
             (NOT_FOUND, "SUBMISSION_ID_NOT_FOUND", NOT_FOUND, SubmissionIdNotFoundError),
             (NOT_FOUND, "NOT_FOUND", NOT_FOUND, NotFoundError),
             (INTERNAL_SERVER_ERROR, "SERVER_ERROR", INTERNAL_SERVER_ERROR, DownstreamError),

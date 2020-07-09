@@ -117,6 +117,7 @@ class AmendForeignPropertyServiceSpec extends UnitSpec {
       val input = Seq(
         "INVALID_TAXABLE_ENTITY_ID" -> NinoFormatError,
         "INVALID_BUSINESS_ID" -> BusinessIdFormatError,
+        "INVALID_SUBMISSION_ID" -> SubmissionIdFormatError,
         "SUBMISSION_ID_NOT_FOUND" -> SubmissionIdNotFoundError,
         "NOT_FOUND" -> NotFoundError,
         "SERVER_ERROR" -> DownstreamError,

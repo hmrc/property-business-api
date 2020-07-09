@@ -20,6 +20,7 @@ import support.UnitSpec
 import uk.gov.hmrc.domain.Nino
 import v1.mocks.validators.MockRetrieveForeignPropertyValidator
 import v1.models.errors.{BadRequestError, BusinessIdFormatError, ErrorWrapper, NinoFormatError}
+import v1.models.request.retrieveForeignProperty.{RetrieveForeignPropertyRawData, RetrieveForeignPropertyRequestData}
 
 class RetrieveForeignPropertyRequestParserSpec extends UnitSpec {
   val nino = "AA123456B"
@@ -38,7 +39,7 @@ class RetrieveForeignPropertyRequestParserSpec extends UnitSpec {
       "valid request data is supplied" in new Test {
         MockRetrieveForeignPropertyValidator.validate(inputData).returns(Nil)
 
-        parser.parseRequest(inputData) shouldBe Right(RetrieveForeignPropertyRequest(Nino(nino), businessId, submissionId))
+        parser.parseRequest(inputData) shouldBe Right(RetrieveForeignPropertyRequestData(Nino(nino), businessId, submissionId))
       }
     }
     "return an ErrorWrapper" when {

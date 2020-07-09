@@ -18,12 +18,15 @@ package v1.controllers.requestParsers.validators
 
 import support.UnitSpec
 import v1.models.errors.{BusinessIdFormatError, NinoFormatError, SubmissionIdFormatError}
+import v1.models.request.retrieveForeignProperty.RetrieveForeignPropertyRawData
 
 class RetrieveForeignPropertyValidatorSpec extends UnitSpec {
 
   private val validNino = "AA123456A"
   private val validBusinessId = "XAIS12345678901"
   private val validSubmissionId = "12345678-1234-4123-9123-123456789012"
+
+  private val validator = new RetrieveForeignPropertyValidator
 
   "running a validation" should {
     "return no errors" when {

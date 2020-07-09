@@ -18,6 +18,7 @@ package v1.controllers.requestParsers.validators
 
 import v1.controllers.requestParsers.validators.validations.{BusinessIdValidation, NinoValidation, SubmissionIdValidation}
 import v1.models.errors.MtdError
+import v1.models.request.retrieveForeignProperty.RetrieveForeignPropertyRawData
 
 class RetrieveForeignPropertyValidator extends Validator[RetrieveForeignPropertyRawData] {
 

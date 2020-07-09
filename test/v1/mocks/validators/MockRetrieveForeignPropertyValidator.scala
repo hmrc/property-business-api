@@ -20,6 +20,7 @@ import org.scalamock.handlers.CallHandler1
 import org.scalamock.scalatest.MockFactory
 import v1.controllers.requestParsers.validators.RetrieveForeignPropertyValidator
 import v1.models.errors.MtdError
+import v1.models.request.retrieveForeignProperty.RetrieveForeignPropertyRawData
 
 class MockRetrieveForeignPropertyValidator extends MockFactory {
 

@@ -19,11 +19,12 @@ package v1.controllers.requestParsers
 import javax.inject.Inject
 import uk.gov.hmrc.domain.Nino
 import v1.controllers.requestParsers.validators.RetrieveForeignPropertyValidator
+import v1.models.request.retrieveForeignProperty.{RetrieveForeignPropertyRawData, RetrieveForeignPropertyRequestData}
 
 class RetrieveForeignPropertyRequestParser @Inject()(val validator: RetrieveForeignPropertyValidator)
-  extends RequestParser[RetrieveForeignPropertyRawData, RetrieveForeignPropertyRequest] {
+  extends RequestParser[RetrieveForeignPropertyRawData, RetrieveForeignPropertyRequestData] {
 
-  override protected def requestFor(data: RetrieveForeignPropertyRawData): RetrieveForeignPropertyRequest =
-    RetrieveForeignPropertyRequest(Nino(data.nino), data.businessId, data.submissionId)
+  override protected def requestFor(data: RetrieveForeignPropertyRawData): RetrieveForeignPropertyRequestData =
+    RetrieveForeignPropertyRequestData(Nino(data.nino), data.businessId, data.submissionId)
 
 }

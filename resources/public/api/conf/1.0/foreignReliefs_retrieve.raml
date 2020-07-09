@@ -9,21 +9,21 @@ is:
   - errors.submissionIdNotFound
 displayName: Retrieve a Foreign Property Income & Expenditure Period Summary [test only]
 description: This endpoint allows a developer to retrieve the income and expenditure for a foreign property business, that occurred between two dates using the submission ID.  A National Insurance number, business ID and submission ID are required.
-(annotations.sandboxData): !include scenarios/amendForeignReliefs_scenarios.md
+(annotations.sandboxData): !include scenarios/retrieveForeignReliefs_scenarios.md
 (annotations.scope): "read:self-assessment"
 securedBy: [ sec.oauth_2_0: { scopes: [ "read:self-assessment" ] } ]
 responses:
   200:
     body:
       application/json:
-        type: !include schemas/amendForeignReliefs_response.json
+        type: !include schemas/retrieveForeignReliefs_response.json
         examples:
           example-1:
             description: Example response with Expenditure
-            value: !include examples/amendForeignReliefs_expenditure.json
+            value: !include examples/retrieveForeignReliefs_expenditure.json
           example-2:
             description: Example response with Consolidated Expenditure
-            value: !include examples/amendForeignReliefs_consolidatedExpenditure.json
+            value: !include examples/retrieveForeignReliefs_consolidatedExpenditure.json
     headers:
       X-CorrelationId:
         example: c75f40a6-a3df-4429-a697-471eeec46435

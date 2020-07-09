@@ -28,6 +28,7 @@ uses:
   types: https://developer.service.hmrc.gov.uk/api-documentation/assets/common/modules/types.raml
   errors: errors.raml
   headers: headers.raml
+  queryParameters: queryParameters.raml
 
 '/individuals/business/property':
   /{nino}:
@@ -45,6 +46,7 @@ uses:
         (annotations.group):
           name: Foreign Property Income & Expenditure Period Summary
           description: Resources relating to an individual's foreign property income & expenditure period summary
+        get: !include foreign_property_list.raml
         /{submissionId}:
           uriParameters:
             submissionId:

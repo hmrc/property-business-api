@@ -17,7 +17,7 @@
 package v1.controllers.requestParsers.validators.validations
 
 import support.UnitSpec
-import v1.models.errors.RuleOnlyOneDateProvidedError
+import v1.models.errors.{MissingFromDateError, MissingToDateError}
 
 class FromDateAndToDateProvidedValidationSpec extends UnitSpec {
   "validation" should {
@@ -31,10 +31,10 @@ class FromDateAndToDateProvidedValidationSpec extends UnitSpec {
     }
     "return an error" when {
       "only fromDate is provided" in {
-        FromDateAndToDateProvidedValidation.validate(Some(""), None) shouldBe List(RuleOnlyOneDateProvidedError)
+        FromDateAndToDateProvidedValidation.validate(Some(""), None) shouldBe List(MissingToDateError)
       }
       "only toDate is provided" in {
-        FromDateAndToDateProvidedValidation.validate(None, Some("")) shouldBe List(RuleOnlyOneDateProvidedError)
+        FromDateAndToDateProvidedValidation.validate(None, Some("")) shouldBe List(MissingFromDateError)
       }
     }
   }

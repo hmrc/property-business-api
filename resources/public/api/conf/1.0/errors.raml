@@ -202,6 +202,28 @@ traits:
                 description: Period summary is not within the accounting period.
                 value:
                   code: RULE_MISALIGNED_PERIOD
+  missingFromDate:
+    responses:
+      400:
+        body:
+          application/json:
+            type: types.errorResponse
+            examples:
+              missingFromDate:
+                description: The From date parameter is missing.
+                value:
+                  code: MISSING_FROM_DATE
+  missingToDate:
+    responses:
+      400:
+        body:
+          application/json:
+            type: types.errorResponse
+            examples:
+              missingToDate:
+                description: The To date parameter is missing.
+                value:
+                  code: MISSING_TO_DATE
   toDateBeforeFromDate:
     responses:
       400:

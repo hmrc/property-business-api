@@ -55,10 +55,10 @@ class ListForeignPropertiesValidatorSpec extends UnitSpec {
         validator.validate(ListForeignPropertiesRawData(validNino, validBusinessId, Some("2020-08-06"), Some("2020-06-06"))) shouldBe List(RuleToDateBeforeFromDateError)
       }
       "only fromDate is provided" in {
-        validator.validate(ListForeignPropertiesRawData(validNino, validBusinessId, Some("2020-08-06"), None)) shouldBe List(RuleOnlyOneDateProvidedError)
+        validator.validate(ListForeignPropertiesRawData(validNino, validBusinessId, Some("2020-08-06"), None)) shouldBe List(MissingToDateError)
       }
       "only toDate is provided" in {
-        validator.validate(ListForeignPropertiesRawData(validNino, validBusinessId, None, Some("2020-08-06"))) shouldBe List(RuleOnlyOneDateProvidedError)
+        validator.validate(ListForeignPropertiesRawData(validNino, validBusinessId, None, Some("2020-08-06"))) shouldBe List(MissingFromDateError)
       }
       "multiple format errors are made" in {
         validator.validate(ListForeignPropertiesRawData("Walrus", "Beans", Some(validFromDate), Some(validToDate))) shouldBe List(NinoFormatError, BusinessIdFormatError)

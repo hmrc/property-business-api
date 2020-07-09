@@ -48,13 +48,14 @@ object RuleBothExpensesSuppliedError
   extends MtdError("RULE_BOTH_EXPENSES_SUPPLIED", "Both expenses and consolidatedExpenses can not be present at the same time")
 object RuleToDateBeforeFromDateError
   extends MtdError("RULE_TO_DATE_BEFORE_FROM_DATE", "The To date cannot be earlier than the From date")
-object RuleOnlyOneDateProvidedError
-  extends MtdError("RULE_ONLY_ONE_DATE_PROVIDED", "Either both dates or no dates must be provided")
 object RuleCountryCodeError
   extends MtdError("RULE_COUNTRY_CODE", "The country code is not a valid ISO 3166-1 alpha-3 country code")
 object RuleOverlappingPeriodError extends MtdError("RULE_OVERLAPPING_PERIOD", "Supplied period overlaps with any of the existing periods")
 object RuleMisalignedPeriodError extends MtdError("RULE_MISALIGNED_PERIOD", "Supplied period is not within the accounting period")
 object RuleNotContiguousPeriodError extends MtdError("RULE_NOT_CONTIGUOUS_PERIOD", "Supplied periods are not contiguous")
+
+object MissingFromDateError extends MtdError("MISSING_FROM_DATE", "The From date parameter is missing")
+object MissingToDateError extends MtdError("MISSING_TO_DATE", "The To date parameter is missing")
 
 //Standard Errors
 object NotFoundError extends MtdError("MATCHING_RESOURCE_NOT_FOUND", "Matching resource not found")

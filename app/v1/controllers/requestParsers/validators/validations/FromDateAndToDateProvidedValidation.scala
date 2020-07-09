@@ -16,13 +16,14 @@
 
 package v1.controllers.requestParsers.validators.validations
 
-import v1.models.errors.{MtdError, RuleOnlyOneDateProvidedError}
+import v1.models.errors.{MtdError, MissingFromDateError, MissingToDateError}
 
 object FromDateAndToDateProvidedValidation {
   def validate(fromDate: Option[String], toDate: Option[String]): List[MtdError] = {
     (fromDate, toDate) match {
-      case (Some(_), Some(_)) | (None, None) => NoValidationErrors
-      case _ => List(RuleOnlyOneDateProvidedError)
+      case (Some(_), None) => List(MissingToDateError)
+      case (None, Some(_)) => List(MissingFromDateError)
+      case _ => NoValidationErrors
     }
   }
 }

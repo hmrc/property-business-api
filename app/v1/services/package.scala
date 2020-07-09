@@ -18,6 +18,7 @@ package v1
 
 import v1.models.errors.ErrorWrapper
 import v1.models.outcomes.ResponseWrapper
+import v1.models.response.listForeignProperties.{ListForeignPropertiesResponse, SubmissionPeriod}
 import v1.models.response.createForeignProperty.CreateForeignPropertyResponse
 import v1.models.response.retrieveForeignProperty.RetrieveForeignPropertyResponse
 
@@ -31,5 +32,7 @@ package object services {
   type AmendForeignPropertyServiceOutcome = ServiceOutcome[Unit]
 
   type RetrieveForeignPropertyServiceOutcome = ServiceOutcome[RetrieveForeignPropertyResponse]
+
+  type ListForeignPropertiesServiceOutcome = ServiceOutcome[ListForeignPropertiesResponse[SubmissionPeriod]]
 
 }

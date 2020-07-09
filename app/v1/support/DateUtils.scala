@@ -14,8 +14,19 @@
  * limitations under the License.
  */
 
-package v1.models.request.listForeignPropertes
+package v1.support
 
-import uk.gov.hmrc.domain.Nino
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
-case class ListForeignPropertiesRequest(nino: Nino, businessId: String, fromDate: String, toDate: String)
+trait DateUtils {
+  lazy val currentDate: LocalDate = LocalDate.now()
+  private lazy val limit: LocalDate = LocalDate.parse(s"${currentDate.getYear}-04-06", DateTimeFormatter.ISO_DATE)
+
+  def currentTaxYearStart: String =
+    if(currentDate.isBefore(limit)) limit.minusYears(1).toString else limit.toString
+
+  def currentTaxYearEnd: String =
+    if(currentDate.isBefore(limit)) limit.minusDays(1).toString else limit.plusYears(1).minusDays(1).toString
+
+}

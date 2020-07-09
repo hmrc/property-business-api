@@ -19,6 +19,7 @@ package v1
 import v1.models.errors.ErrorWrapper
 import v1.models.outcomes.ResponseWrapper
 import v1.models.response.create.CreateForeignPropertyResponse
+import v1.models.response.retrieveForeignProperty.RetrieveForeignPropertyResponse
 
 package object services {
 
@@ -27,5 +28,7 @@ package object services {
   type CreateForeignPropertyServiceOutcome = ServiceOutcome[CreateForeignPropertyResponse]
 
   type AmendForeignPropertyServiceOutcome = ServiceOutcome[Unit]
+
+  type RetrieveForeignPropertyServiceOutcome = ServiceOutcome[RetrieveForeignPropertyResponse]
 
 }

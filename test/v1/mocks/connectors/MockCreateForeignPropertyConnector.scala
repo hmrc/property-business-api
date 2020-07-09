@@ -21,7 +21,7 @@ import org.scalamock.scalatest.MockFactory
 import uk.gov.hmrc.http.HeaderCarrier
 import v1.connectors.{CreateForeignPropertyConnector, DesOutcome}
 import v1.models.request.createForeignProperty.CreateForeignPropertyRequestData
-import v1.models.response.create.CreateForeignPropertyResponse
+import v1.models.response.createForeignProperty.CreateForeignPropertyResponse
 
 import scala.concurrent.{ExecutionContext, Future}
 

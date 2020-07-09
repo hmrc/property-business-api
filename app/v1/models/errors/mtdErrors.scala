@@ -56,11 +56,11 @@ object RuleToDateBeforeFromDateError
 object RuleCountryCodeError
   extends MtdError("RULE_COUNTRY_CODE", "The country code is not a valid ISO 3166-1 alpha-3 country code")
 
-object RuleOverlappingPeriodError extends MtdError("RULE_OVERLAPPING_PERIOD", "Update period overlaps with any of the existing update periods")
+object RuleOverlappingPeriodError extends MtdError("RULE_OVERLAPPING_PERIOD", "Supplied period overlaps with any of the existing periods")
 
-object RuleMisalignedPeriodError extends MtdError("RULE_MISALIGNED_PERIOD", "Update period is not within the accounting period")
+object RuleMisalignedPeriodError extends MtdError("RULE_MISALIGNED_PERIOD", "Supplied period is not within the accounting period")
 
-object RuleNotContiguousPeriodError extends MtdError("RULE_NOT_CONTIGUOUS_PERIOD", "Update periods are not contiguous")
+object RuleNotContiguousPeriodError extends MtdError("RULE_NOT_CONTIGUOUS_PERIOD", "Supplied periods are not contiguous")
 
 //Standard Errors
 object NotFoundError extends MtdError("MATCHING_RESOURCE_NOT_FOUND", "Matching resource not found")

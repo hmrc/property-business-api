@@ -24,7 +24,7 @@ import v1.mocks.connectors.MockCreateForeignPropertyConnector
 import v1.models.errors._
 import v1.models.outcomes.ResponseWrapper
 import v1.models.request.createForeignProperty._
-import v1.models.response.create.CreateForeignPropertyResponse
+import v1.models.response.createForeignProperty.CreateForeignPropertyResponse
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package v1.models.response.create
+package v1.models.response.createForeignProperty
 
 import play.api.libs.json.{Json, OFormat}
 

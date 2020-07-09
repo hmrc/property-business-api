@@ -21,7 +21,7 @@ import uk.gov.hmrc.domain.Nino
 import v1.mocks.MockHttpClient
 import v1.models.outcomes.ResponseWrapper
 import v1.models.request.createForeignProperty._
-import v1.models.response.create.CreateForeignPropertyResponse
+import v1.models.response.createForeignProperty.CreateForeignPropertyResponse
 
 import scala.concurrent.Future
 

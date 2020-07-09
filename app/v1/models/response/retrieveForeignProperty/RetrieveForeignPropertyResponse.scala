@@ -20,6 +20,7 @@ import config.AppConfig
 import play.api.libs.json.{Json, OFormat}
 import v1.hateoas.{HateoasLinks, HateoasLinksFactory}
 import v1.models.hateoas.{HateoasData, Link}
+import v1.models.hateoas.RelType.LIST_PROPERTY_PERIOD_SUMMARIES
 import v1.models.response.retrieveForeignProperty.foreignFhlEea.ForeignFhlEea
 import v1.models.response.retrieveForeignProperty.foreignProperty.ForeignProperty
 
@@ -37,7 +38,7 @@ object RetrieveForeignPropertyResponse extends HateoasLinks {
       Seq(
         amendForeignProperty(appConfig, nino, businessId, submissionId),
         retrieveForeignProperty(appConfig, nino, businessId, submissionId),
-        listForeignProperty(appConfig, nino, businessId)
+        listForeignProperties(appConfig, nino, businessId, rel = LIST_PROPERTY_PERIOD_SUMMARIES)
       )
     }
   }

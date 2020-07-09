@@ -11,7 +11,7 @@
       "repairsAndMaintenance": 100.25,
       "financialCosts": 100.25,
       "professionalFees": 100.25,
-      "costOfServices": 100.25,
+      "costsOfServices": 100.25,
       "travelCosts": 100.25,
       "other": 100.25
     }
@@ -25,17 +25,17 @@
           "taxDeducted": 22.22
         },
         "foreignTaxCreditRelief": true,
-        "premiumsOfLeaseGrant": 100.25,
+        "premiumOfLeaseGrant": 100.25,
         "otherPropertyIncome": 100.25,
         "foreignTaxTakenOff": 44.21,
-        "specialWitholdingTaxOrUkTaxPaid": 23.78
+        "specialWithholdingTaxOrUKTaxPaid": 23.78
       },
       "expenditure": {
         "premisesRunningCosts": 100.25,
         "repairsAndMaintenance": 100.25,
         "financialCosts": 200.25,
         "professionalFees": 100.25,
-        "costOfServices": 100.25,
+        "costsOfServices": 100.25,
         "travelCosts": 100.25,
         "other": 100.25
       }

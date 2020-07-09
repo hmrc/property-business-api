@@ -35,7 +35,7 @@ object ForeignFhlEeaExpenditure {
       (JsPath \ "repairsAndMaintenanceAmount").readNullable[BigDecimal] and
       (JsPath \ "financialCostsAmount").readNullable[BigDecimal] and
       (JsPath \ "professionalFeesAmount").readNullable[BigDecimal] and
-      (JsPath \ "costsOfServicesAmount").readNullable[BigDecimal] and
+      (JsPath \ "costOfServicesAmount").readNullable[BigDecimal] and
       (JsPath \ "travelCostsAmount").readNullable[BigDecimal] and
       (JsPath \ "otherAmount").readNullable[BigDecimal] and
       (JsPath \ "consolidatedExpensesAmount").readNullable[BigDecimal]

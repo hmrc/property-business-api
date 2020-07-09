@@ -19,10 +19,10 @@
           "taxDeducted": 22.22
         },
         "foreignTaxCreditRelief": true,
-        "premiumsOfLeaseGrant": 100.25,
+        "premiumOfLeaseGrant": 100.25,
         "otherPropertyIncome": 100.25,
         "foreignTaxTakenOff": 44.21,
-        "specialWitholdingTaxOrUkTaxPaid": 23.78
+        "specialWithholdingTaxOrUKTaxPaid": 23.78
       },
       "expenditure": {
         "residentialFinancialCost": 200.25,

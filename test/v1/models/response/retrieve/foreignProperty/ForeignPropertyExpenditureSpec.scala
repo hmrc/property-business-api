@@ -56,7 +56,7 @@ class ForeignPropertyExpenditureSpec extends UnitSpec with JsonErrorValidators {
       |  "repairsAndMaintenanceAmount": 5000.99,
       |  "financialCostsAmount": 5000.99,
       |  "professionalFeesAmount": 5000.99,
-      |  "costsOfServicesAmount": 5000.99,
+      |  "costOfServicesAmount": 5000.99,
       |  "travelCostsAmount": 5000.99,
       |  "residentialFinancialCostAmount": 5000.99,
       |  "broughtFwdResidentialFinancialCostAmount": 5000.99,

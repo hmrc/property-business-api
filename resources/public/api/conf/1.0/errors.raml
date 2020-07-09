@@ -34,7 +34,7 @@ traits:
             type: types.errorResponse
             examples:
               clientOrAgentNotAuthorised:
-                description: 'The client or agent is not authorised. This is because: the client is not subscribed to MTD, the agent is not subscribed to Agent Services, or the client has not authorised the agent to act on their behalf'
+                description: 'The client or agent is not authorised. This is because: the client is not subscribed to MTD, the agent is not subscribed to Agent Services, or the client has not authorised the agent to act on their behalf.'
                 value:
                   code: CLIENT_OR_AGENT_NOT_AUTHORISED
   formatNino:
@@ -59,6 +59,39 @@ traits:
                 description: The format of the supplied Business ID field is not valid.
                 value:
                   code: FORMAT_BUSINESS_ID
+  formatFromDate:
+    responses:
+      400:
+        body:
+          application/json:
+            type: types.errorResponse
+            examples:
+              formatFromDate:
+                description: The format of the supplied From date field is not valid.
+                value:
+                  code: FORMAT_FROM_DATE
+  formatToDate:
+    responses:
+      400:
+        body:
+          application/json:
+            type: types.errorResponse
+            examples:
+              formatToDate:
+                description: The format of the supplied To date field is not valid.
+                value:
+                  code: FORMAT_TO_DATE
+  formatValue:
+    responses:
+      400:
+        body:
+          application/json:
+            type: types.errorResponse
+            examples:
+              formatValue:
+                description: The format of one or more monetary fields is not valid.
+                value:
+                  code: FORMAT_VALUE
   formatSubmissionId:
     responses:
       400:
@@ -103,17 +136,28 @@ traits:
                 description: The format of the supplied Country Code field is not valid.
                 value:
                   code: FORMAT_COUNTRY_CODE
-  formatValue:
-    responses:
-      400:
-        body:
-          application/json:
-            type: types.errorResponse
-            examples:
-              formatValue:
-                description: The format of one or more monetary fields is not valid.
-                value:
-                  code: FORMAT_VALUE
+  ruleBothExpensesSupplied:
+      responses:
+        400:
+          body:
+            application/json:
+              type: types.errorResponse
+              examples:
+                ruleBothExpensesSupplied:
+                  description: Both expenses and consolidatedExpenses can not be present at the same time.
+                  value:
+                    code: RULE_BOTH_EXPENSES_SUPPLIED
+  ruleToDateBeforeFromDate:
+      responses:
+        400:
+          body:
+            application/json:
+              type: types.errorResponse
+              examples:
+                ruleToDateBeforeFromDate:
+                  description: The To date is earlier than the From date.
+                  value:
+                    code: RULE_TO_DATE_BEFORE_FROM_DATE
   bothExpensesSupplied:
     responses:
       400:
@@ -136,28 +180,28 @@ traits:
                 description: Not a valid ISO 3166-1 alpha-3 country code.
                 value:
                   code: RULE_COUNTRY_CODE
-  formatFromDate:
+  ruleOverlappingPeriod:
     responses:
       400:
         body:
           application/json:
             type: types.errorResponse
             examples:
-              formatFromDate:
-                description: The format of the supplied From date field is not valid.
+              ruleOverlappingPeriod:
+                description: period summary overlaps with any of the existing period summaries.
                 value:
-                  code: FORMAT_FROM_DATE
-  formatToDate:
+                  code: RULE_OVERLAPPING_PERIOD
+  ruleMisalignedPeriod:
     responses:
       400:
         body:
           application/json:
             type: types.errorResponse
             examples:
-              formatToDate:
-                description: The format of the supplied To date field is not valid.
+              ruleMisalignedPeriod:
+                description: Period summary is not within the accounting period.
                 value:
-                  code: FORMAT_TO_DATE
+                  code: RULE_MISALIGNED_PERIOD
   toDateBeforeFromDate:
     responses:
       400:
@@ -169,3 +213,14 @@ traits:
                 description: The To date is earlier than the From date.
                 value:
                   code: RULE_TO_DATE_BEFORE_FROM_DATE
+  ruleNotContiguousPeriod:
+    responses:
+      400:
+        body:
+          application/json:
+            type: types.errorResponse
+            examples:
+              ruleNotContiguousPeriod:
+                description: Period summaries are not contiguous.
+                value:
+                  code: RULE_NOT_CONTIGUOUS_PERIOD

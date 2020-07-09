@@ -27,17 +27,17 @@ import v1.hateoas.HateoasFactory
 import v1.models.errors._
 import v1.models.request.retrieveForeignProperty.RetrieveForeignPropertyRawData
 import v1.models.response.retrieveForeignProperty.RetrieveForeignPropertyHateoasData
-import v1.services.{EnrolmentsAuthService, MtdIdLookupService}
+import v1.services.{EnrolmentsAuthService, MtdIdLookupService, RetrieveForeignPropertyService}
 
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class RetrieveForeignPropertyControllerSpec @Inject()(val authService: EnrolmentsAuthService,
-                                                      val lookupService: MtdIdLookupService,
-                                                      parser: RetrieveForeignPropertyRequestParser,
-                                                      service: RetrieveForeignPropertyService,
-                                                      hateoasFactory: HateoasFactory,
-                                                      cc: ControllerComponents)(implicit ec: ExecutionContext)
+class RetrieveForeignPropertyController @Inject()(val authService: EnrolmentsAuthService,
+                                                  val lookupService: MtdIdLookupService,
+                                                  parser: RetrieveForeignPropertyRequestParser,
+                                                  service: RetrieveForeignPropertyService,
+                                                  hateoasFactory: HateoasFactory,
+                                                  cc: ControllerComponents)(implicit ec: ExecutionContext)
   extends AuthorisedController(cc) with BaseController with Logging {
 
   implicit val endpointLogContext: EndpointLogContext =
@@ -49,7 +49,7 @@ class RetrieveForeignPropertyControllerSpec @Inject()(val authService: Enrolment
       val result =
         for {
           parsedRequest <- EitherT.fromEither[Future](parser.parseRequest(rawData))
-          serviceResponse <- EitherT(service.retrieve(parsedRequest))
+          serviceResponse <- EitherT(service.retrieveForeignProperty(parsedRequest))
           vendorResponse <- EitherT.fromEither[Future](
             hateoasFactory.wrap(serviceResponse.responseData, RetrieveForeignPropertyHateoasData(nino, businessId, submissionId)).asRight[ErrorWrapper])
         } yield {

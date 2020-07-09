@@ -131,7 +131,7 @@ class RetrieveForeignPropertyResponseSpec extends UnitSpec with JsonErrorValidat
       |      "repairsAndMaintenanceAmount": 5000.99,
       |      "financialCostsAmount": 5000.99,
       |      "professionalFeesAmount": 5000.99,
-      |      "costsOfServicesAmount": 5000.99,
+      |      "costOfServicesAmount": 5000.99,
       |      "travelCostsAmount": 5000.99,
       |      "otherAmount": 5000.99,
       |      "consolidatedExpensesAmount": 5000.99
@@ -156,7 +156,7 @@ class RetrieveForeignPropertyResponseSpec extends UnitSpec with JsonErrorValidat
       |        "repairsAndMaintenanceAmount": 5000.99,
       |        "financialCostsAmount": 5000.99,
       |        "professionalFeesAmount": 5000.99,
-      |        "costsOfServicesAmount": 5000.99,
+      |        "costOfServicesAmount": 5000.99,
       |        "travelCostsAmount": 5000.99,
       |        "residentialFinancialCostAmount": 5000.99,
       |        "broughtFwdResidentialFinancialCostAmount": 5000.99,

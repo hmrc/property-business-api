@@ -7,15 +7,15 @@
     "fromDate": {
       "description": "The first day that the income and expenditure period summary covers. Must conform to the format YYYY-MM-DD.",
       "type": "string",
-      "example": "2018-04-06"
+      "example": "2020-01-01"
     },
     "toDate": {
       "description": "The last day that the income and expenditure period summary covers. Must conform to the format YYYY-MM-DD.",
       "type": "string",
-      "example": "2019-04-06"
+      "example": "2020-01-31"
     },
     "foreignFhlEea": {
-      "description": "Object holding the income and expenditure of the user's Furnished Holiday Lettings (FHL) in the European Economic Area (EEA) for the period",
+      "description": "Object holding the income and expenditure of the user's Furnished Holiday Lettings (FHL) in the European Economic Area (EEA) for the period.",
       "type": "object",
       "properties": {
         "income": {
@@ -123,7 +123,7 @@
                 ]
               },
               "foreignTaxCreditRelief": {
-                "description": "A boolean indicating whether Foreign Tax Credit Relief (FTCR) has been claimed. The value must be true or false",
+                "description": "A boolean indicating whether Foreign Tax Credit Relief (FTCR) has been claimed. The value must be true or false.",
                 "type": "boolean",
                 "example": "true"
               },

@@ -93,7 +93,7 @@ class AmendForeignPropertyControllerISpec extends IntegrationBaseSpec {
          |      {
          |         "href":"/individuals/business/property/$nino/$businessId/period/$submissionId",
          |         "method":"GET",
-         |         "rel":"retrieve-property-period-summary"
+         |         "rel":"self"
          |      },
          |      {
          |         "href":"/individuals/business/property/$nino/$businessId/period",
@@ -280,12 +280,6 @@ class AmendForeignPropertyControllerISpec extends IntegrationBaseSpec {
             |      },
             |    "expenditure": {
             |      "premisesRunningCosts": 4567.98,
-            |      "repairsAndMaintenance": 98765.67,
-            |      "financialCosts": 4566.95,
-            |      "professionalFees": 23.65,
-            |      "costsOfServices": 4567.77,
-            |      "travelCosts": 456.77,
-            |      "other": 567.67,
             |      "consolidatedExpenses": 456.98
             |    }
             |
@@ -304,15 +298,6 @@ class AmendForeignPropertyControllerISpec extends IntegrationBaseSpec {
             |        "specialWithholdingTaxOrUKTaxPaid": 643245.00
             |      },
             |      "expenditure": {
-            |        "premisesRunningCosts": 5635.43,
-            |        "repairsAndMaintenance": 3456.65,
-            |        "financialCosts": 34532.21,
-            |        "professionalFees": 32465.32,
-            |        "costsOfServices": 2567.21,
-            |        "travelCosts": 2345.76,
-            |        "residentialFinancialCost": 21235.22,
-            |        "broughtFwdResidentialFinancialCost": 12556.00,
-            |        "other": 2425.11,
             |        "consolidatedExpenses": 352.66
             |      }
             |    }
@@ -410,6 +395,13 @@ class AmendForeignPropertyControllerISpec extends IntegrationBaseSpec {
           ))
         )
 
+        val RuleBothExpensesSuppliedRequestError: MtdError = RuleBothExpensesSuppliedError.copy(
+          message = "Both expenses and consolidatedExpenses can not be present at the same time",
+          paths = Some(List(
+            "/foreignFhlEea/expenditure"
+          ))
+        )
+
 
         "validation error occurs" when {
           def validationErrorTest(requestNino: String,
@@ -432,7 +424,7 @@ class AmendForeignPropertyControllerISpec extends IntegrationBaseSpec {
               }
 
               val response: WSResponse = await(request().put(requestBodyJson))
-//              response.status shouldBe expectedStatus
+              response.status shouldBe expectedStatus
               response.json shouldBe Json.toJson(expectedBody)
             }
           }
@@ -443,7 +435,7 @@ class AmendForeignPropertyControllerISpec extends IntegrationBaseSpec {
             ("AA123456A", "XAIS12345678910", "4557ecb5-fd32-awefwaef48cc-81f5-e6acd1099f3c", validRequestBodyJson, BAD_REQUEST, SubmissionIdFormatError),
             ("AA123456A", "XAIS12345678910", "4557ecb5-fd32-48cc-81f5-e6acd1099f3c",
               Json.parse(s"""{"foreignFhlEea": 2342314}""".stripMargin), BAD_REQUEST, RuleIncorrectOrEmptyBodyError),
-            ("AA123456A", "XAIS12345678910", "4557ecb5-fd32-48cc-81f5-e6acd1099f3c", bothExpensesTypesProvidedJson, BAD_REQUEST, RuleBothExpensesSuppliedError),
+            ("AA123456A", "XAIS12345678910", "4557ecb5-fd32-48cc-81f5-e6acd1099f3c", bothExpensesTypesProvidedJson, BAD_REQUEST, RuleBothExpensesSuppliedRequestError),
             ("AA123456A", "XAIS12345678910", "4557ecb5-fd32-48cc-81f5-e6acd1099f3c", allInvalidValueRequestBodyJson, BAD_REQUEST, allInvalidValueRequestError),
             ("AA123456A", "XAIS12345678910", "4557ecb5-fd32-48cc-81f5-e6acd1099f3c",
               allInvalidCountryCodeRequestBodyJson, BAD_REQUEST, allInvalidCountryCodeRequestError)

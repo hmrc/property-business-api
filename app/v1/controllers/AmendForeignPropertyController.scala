@@ -77,7 +77,7 @@ class AmendForeignPropertyController  @Inject()(val authService: EnrolmentsAuthS
            MtdErrorWithCustomMessage(CountryCodeFormatError.code) |
            MtdErrorWithCustomMessage(ValueFormatError.code) |
            RuleIncorrectOrEmptyBodyError |
-           RuleBothExpensesSuppliedError |
+           MtdErrorWithCustomMessage(RuleBothExpensesSuppliedError.code) |
            MtdErrorWithCustomMessage(RuleCountryCodeError.code) => BadRequest(Json.toJson(errorWrapper))
       case DownstreamError => InternalServerError(Json.toJson(errorWrapper))
       case NotFoundError | SubmissionIdNotFoundError => NotFound(Json.toJson(errorWrapper))

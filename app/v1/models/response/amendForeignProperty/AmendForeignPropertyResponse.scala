@@ -26,9 +26,9 @@ object AmendForeignPropertyResponse extends HateoasLinks {
     override def links(appConfig: AppConfig, data: AmendForeignPropertyHateoasData): Seq[Link] = {
       import data._
       Seq(
-        amendPropertyPeriodSummary(appConfig, nino, businessId, submissionId),
-        retrievePropertyPeriodSummary(appConfig, nino, businessId, submissionId),
-        listPropertyPeriodSummary(appConfig, nino, businessId)
+        amendForeignProperty(appConfig, nino, businessId, submissionId),
+        retrieveForeignProperty(appConfig, nino, businessId, submissionId),
+        listForeignProperties(appConfig, nino, businessId)
       )
     }
   }

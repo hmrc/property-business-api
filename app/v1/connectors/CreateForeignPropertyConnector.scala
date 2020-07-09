@@ -22,7 +22,7 @@ import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
 import v1.connectors.httpparsers.StandardDesHttpParser._
 import v1.models.request.createForeignProperty.CreateForeignPropertyRequestData
-import v1.models.response.create.CreateForeignPropertyResponse
+import v1.models.response.createForeignProperty.CreateForeignPropertyResponse
 
 import scala.concurrent.{ExecutionContext, Future}
 

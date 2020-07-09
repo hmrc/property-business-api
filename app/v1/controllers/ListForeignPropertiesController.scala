@@ -25,8 +25,9 @@ import utils.Logging
 import v1.controllers.requestParsers.ListForeignPropertiesRequestParser
 import v1.hateoas.HateoasFactory
 import v1.models.errors._
-import v1.models.request.listForeignPropertes.ListForeignPropertiesRawData
+import v1.models.request.listForeignProperties.ListForeignPropertiesRawData
 import v1.models.response.listForeignProperties.ListForeignPropertiesHateoasData
+import v1.services.{EnrolmentsAuthService, ListForeignPropertiesService, MtdIdLookupService}
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -70,12 +71,7 @@ class ListForeignPropertiesController  @Inject()(val authService: EnrolmentsAuth
     (errorWrapper.error: @unchecked) match {
       case BadRequestError |
            NinoFormatError |
-           BusinessIdFormatError |
-           MtdErrorWithCustomMessage(CountryCodeFormatError.code) |
-           MtdErrorWithCustomMessage(ValueFormatError.code) |
-           RuleIncorrectOrEmptyBodyError |
-           MtdErrorWithCustomMessage(RuleBothExpensesSuppliedError.code) |
-           MtdErrorWithCustomMessage(RuleCountryCodeError.code) => BadRequest(Json.toJson(errorWrapper))
+           BusinessIdFormatError => BadRequest(Json.toJson(errorWrapper))
       case DownstreamError => InternalServerError(Json.toJson(errorWrapper))
       case NotFoundError => NotFound(Json.toJson(errorWrapper))
     }

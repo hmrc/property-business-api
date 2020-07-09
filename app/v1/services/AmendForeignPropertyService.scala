@@ -33,7 +33,7 @@ import scala.concurrent.{ExecutionContext, Future}
 @Singleton
 class AmendForeignPropertyService @Inject()(connector: AmendForeignPropertyConnector) extends DesResponseMappingSupport with Logging {
 
-  def amend(request: AmendForeignPropertyRequest)(
+  def amendForeignProperty(request: AmendForeignPropertyRequest)(
     implicit hc: HeaderCarrier,
     ec: ExecutionContext,
     logContext: EndpointLogContext): Future[AmendForeignPropertyServiceOutcome] = {
@@ -49,6 +49,7 @@ class AmendForeignPropertyService @Inject()(connector: AmendForeignPropertyConne
     Map(
       "INVALID_TAXABLE_ENTITY_ID" -> NinoFormatError,
       "INVALID_BUSINESS_ID" -> BusinessIdFormatError,
+      "INVALID_SUBMISSION_ID" -> SubmissionIdFormatError,
       "SUBMISSION_ID_NOT_FOUND" -> SubmissionIdNotFoundError,
       "NOT_FOUND" -> NotFoundError,
       "SERVER_ERROR" -> DownstreamError,

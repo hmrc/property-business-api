@@ -1,0 +1,34 @@
+{
+  "fromDate": "2018-04-06",
+  "toDate": "2019-04-06",
+  "foreignFhlEea": {
+    "income": {
+      "rentAmount": 5000.99,
+      "taxDeducted": 5000.99
+    },
+    "expenditure": {
+      "consolidatedExpenses": 5000.99
+    }
+  },
+  "foreignProperty": [
+    {
+      "countryCode": "FRA",
+      "income": {
+        "rentIncome": {
+          "rentAmount": 5000.99,
+          "taxDeducted": 5000.99
+        },
+        "foreignTaxCreditRelief": false,
+        "premiumOfLeaseGrant": 5000.99,
+        "otherPropertyIncome": 5000.99,
+        "foreignTaxTakenOff": 5000.99,
+        "specialWithholdingTaxOrUKTaxPaid": 5000.99
+      },
+      "expenditure": {
+        "residentialFinancialCost": 5000.99,
+        "broughtFwdResidentialFinancialCost": 5000.99,
+        "consolidatedExpenses": 5000.99
+      }
+    }
+  ]
+}

@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-package v1.models.request.listForeignPropertes
+package v1.models.request.listForeignProperties
 
-import v1.models.request.RawData
+import uk.gov.hmrc.domain.Nino
 
-case class ListForeignPropertiesRawData(nino: String, businessId: String, fromDate: Option[String], toDate: Option[String]) extends RawData
+case class ListForeignPropertiesRequest(nino: Nino, businessId: String, fromDate: String, toDate: String)

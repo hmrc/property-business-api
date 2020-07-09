@@ -22,6 +22,7 @@ import javax.inject.{Inject, Singleton}
 import play.api.libs.json.Json
 import play.api.mvc.{Action, AnyContent, ControllerComponents}
 import utils.Logging
+import v1.controllers.requestParsers.RetrieveForeignPropertyRequestParser
 import v1.hateoas.HateoasFactory
 import v1.models.errors._
 import v1.models.request.retrieveForeignProperty.RetrieveForeignPropertyRawData

@@ -48,9 +48,7 @@ class ListForeignPropertiesService @Inject()(connector: ListForeignPropertiesCon
     Map(
       "INVALID_TAXABLE_ENTITY_ID" -> NinoFormatError,
       "FORMAT_BUSINESS_ID" -> BusinessIdFormatError,
-      "FORMAT_SUBMISSION_ID" -> SubmissionIdFormatError,
       "NOT_FOUND" -> NotFoundError,
-      "SUBMISSION_ID_NOT_FOUND" -> SubmissionIdNotFoundError,
       "SERVER_ERROR" -> DownstreamError,
       "SERVICE_UNAVAILABLE" -> DownstreamError
     )

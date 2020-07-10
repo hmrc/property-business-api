@@ -14,27 +14,29 @@
  * limitations under the License.
  */
 
-package v1.models.request.createForeignProperty
+package v1.models.request.common.foreignPropertyEntry
 
 import play.api.libs.functional.syntax._
 import play.api.libs.json.{JsPath, Json, Reads, Writes}
 
-case class ForeignPropertyIncome(rentIncome: RentIncome,
-                                 foreignTaxCreditRelief: Boolean,
-                                 premiumOfLeaseGrant: Option[BigDecimal],
-                                 otherPropertyIncome: Option[BigDecimal],
-                                 foreignTaxTakenOff: Option[BigDecimal],
-                                 specialWithholdingTaxOrUKTaxPaid: Option[BigDecimal]
-                                )
+case class ForeignPropertyIncome(
+                                  rentIncome: ForeignPropertyRentIncome,
+                                  foreignTaxCreditRelief: Boolean,
+                                  premiumOfLeaseGrant: Option[BigDecimal],
+                                  otherPropertyIncome: Option[BigDecimal],
+                                  foreignTaxTakenOff: Option[BigDecimal],
+                                  specialWithholdingTaxOrUKTaxPaid: Option[BigDecimal]
+                 )
 
 object ForeignPropertyIncome {
   implicit val reads: Reads[ForeignPropertyIncome] = Json.reads[ForeignPropertyIncome]
+
   implicit val writes: Writes[ForeignPropertyIncome] = (
-    (JsPath \ "rentIncome").write[RentIncome] and
+    (JsPath \ "rentIncome").write[ForeignPropertyRentIncome] and
       (JsPath \ "foreignTaxCreditRelief").write[Boolean] and
       (JsPath \ "premiumOfLeaseGrantAmount").writeNullable[BigDecimal] and
       (JsPath \ "otherPropertyIncomeAmount").writeNullable[BigDecimal] and
       (JsPath \ "foreignTaxPaidOrDeducted").writeNullable[BigDecimal] and
       (JsPath \ "specialWithholdingTaxOrUKTaxPaid").writeNullable[BigDecimal]
-    )(unlift(ForeignPropertyIncome.unapply))
+    ) (unlift(ForeignPropertyIncome.unapply))
 }

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package v1.models.request.amendForeignProperty.foreignPropertyEntry
+package v1.models.request.common.foreignPropertyEntry
 
 import play.api.libs.json.{JsValue, Json}
 import support.UnitSpec
@@ -37,7 +37,7 @@ class ExpenditureSpec extends UnitSpec {
        |}
        |""".stripMargin)
 
-  val model: Expenditure = Expenditure(
+  val model: ForeignPropertyExpenditure = ForeignPropertyExpenditure(
     premisesRunningCosts = Some(5635.43),
     repairsAndMaintenance = Some(3456.65),
     financialCosts = Some(34532.21),
@@ -70,7 +70,7 @@ class ExpenditureSpec extends UnitSpec {
   "reads" should {
     "read from JSON" when {
       "valid JSON is provided" in {
-        mtdJson.as[Expenditure] shouldBe model
+        mtdJson.as[ForeignPropertyExpenditure] shouldBe model
       }
     }
   }
@@ -85,7 +85,7 @@ class ExpenditureSpec extends UnitSpec {
 
   "isEmpty" should {
     "return true when no fields are provided" in {
-      Expenditure(None, None, None, None, None, None, None, None, None, None).isEmpty shouldBe true
+      ForeignPropertyExpenditure(None, None, None, None, None, None, None, None, None, None).isEmpty shouldBe true
     }
   }
 }

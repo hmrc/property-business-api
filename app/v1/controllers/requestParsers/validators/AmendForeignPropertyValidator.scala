@@ -18,9 +18,9 @@ package v1.controllers.requestParsers.validators
 
 import v1.controllers.requestParsers.validators.validations._
 import v1.models.errors._
-import v1.models.request.amendForeignProperty.foreignFhlEea.{Expenditure => ForeignFhlEeaExpenditure, _}
-import v1.models.request.amendForeignProperty.foreignPropertyEntry.{Expenditure => ForeignPropertyExpenditure, ForeignPropertyEntry}
+import v1.models.request.common.foreignPropertyEntry.{ForeignPropertyEntry, ForeignPropertyExpenditure}
 import v1.models.request.amendForeignProperty.{AmendForeignPropertyRawData, AmendForeignPropertyRequestBody}
+import v1.models.request.common.foreignFhlEea.{ForeignFhlEea, ForeignFhlEeaExpenditure}
 
 class AmendForeignPropertyValidator extends Validator[AmendForeignPropertyRawData] {
 
@@ -184,14 +184,14 @@ class AmendForeignPropertyValidator extends Validator[AmendForeignPropertyRawDat
   }
 
   private def validateForeignFhlEeaConsolidatedExpenses(expenditure: ForeignFhlEeaExpenditure): List[MtdError] = {
-    ConsolidatedExpensesValidation.validateAmend(
+    ConsolidatedExpensesValidation.validate(
       expenditure = expenditure,
       path = s"/foreignFhlEea/expenditure"
     )
   }
 
   private def validateForeignPropertyConsolidatedExpenses(expenditure: ForeignPropertyExpenditure, index: Int): List[MtdError] = {
-    ConsolidatedExpensesValidation.validateAmend(
+    ConsolidatedExpensesValidation.validate(
       expenditure = expenditure,
       path = s"/foreignProperty/$index/expenditure"
     )

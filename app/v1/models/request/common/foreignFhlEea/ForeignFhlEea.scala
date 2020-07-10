@@ -14,19 +14,18 @@
  * limitations under the License.
  */
 
-package v1.models.request.createForeignProperty
+package v1.models.request.common.foreignFhlEea
 
 import play.api.libs.functional.syntax._
 import play.api.libs.json.{JsPath, Json, Reads, Writes}
 
-case class ForeignProperty(countryCode: String, income: ForeignPropertyIncome, expenditure: Option[ForeignPropertyExpenditure])
+case class ForeignFhlEea(income: ForeignFhlEeaIncome, expenditure: Option[ForeignFhlEeaExpenditure])
 
-object ForeignProperty {
-  implicit val reads: Reads[ForeignProperty] = Json.reads[ForeignProperty]
-  implicit val writes: Writes[ForeignProperty] = (
-    (JsPath \ "countryCode").write[String] and
-      (JsPath \ "income").write[ForeignPropertyIncome] and
-      (JsPath \ "expenses").writeNullable[ForeignPropertyExpenditure]
-    )(unlift(ForeignProperty.unapply))
+object ForeignFhlEea {
+  implicit val reads: Reads[ForeignFhlEea] = Json.reads[ForeignFhlEea]
+
+  implicit val writes: Writes[ForeignFhlEea] = (
+    (JsPath \ "income").write[ForeignFhlEeaIncome] and
+      (JsPath \ "expenses").writeNullable[ForeignFhlEeaExpenditure]
+    ) (unlift(ForeignFhlEea.unapply))
 }
-

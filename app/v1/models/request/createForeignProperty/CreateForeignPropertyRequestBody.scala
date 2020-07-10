@@ -17,8 +17,10 @@
 package v1.models.request.createForeignProperty
 
 import play.api.libs.json.{Json, OFormat}
+import v1.models.request.common.foreignFhlEea.ForeignFhlEea
+import v1.models.request.common.foreignPropertyEntry.ForeignPropertyEntry
 
-case class CreateForeignPropertyRequestBody(fromDate: String, toDate: String, foreignFhlEea: Option[ForeignFhlEea], foreignProperty: Option[Seq[ForeignProperty]]) {
+case class CreateForeignPropertyRequestBody(fromDate: String, toDate: String, foreignFhlEea: Option[ForeignFhlEea], foreignProperty: Option[Seq[ForeignPropertyEntry]]) {
   def isEmpty: Boolean = (foreignFhlEea.isEmpty && foreignProperty.isEmpty) ||
     foreignFhlEea.flatMap(_.expenditure.map(_.isEmpty)).getOrElse(false) ||
     foreignProperty.exists(_.isEmpty) ||

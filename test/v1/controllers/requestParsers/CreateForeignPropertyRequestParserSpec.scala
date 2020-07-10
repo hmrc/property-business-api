@@ -21,7 +21,9 @@ import support.UnitSpec
 import uk.gov.hmrc.domain.Nino
 import v1.mocks.validators.MockCreateForeignPropertyValidator
 import v1.models.errors.{BadRequestError, BusinessIdFormatError, ErrorWrapper, NinoFormatError}
-import v1.models.request.createForeignProperty.{CreateForeignPropertyRawData, CreateForeignPropertyRequestBody, CreateForeignPropertyRequestData, ForeignFhlEea, ForeignFhlEeaExpenditure, ForeignFhlEeaIncome, ForeignProperty, ForeignPropertyExpenditure, ForeignPropertyIncome, RentIncome}
+import v1.models.request.common.foreignFhlEea.{ForeignFhlEea, ForeignFhlEeaExpenditure, ForeignFhlEeaIncome}
+import v1.models.request.common.foreignPropertyEntry.{ForeignPropertyEntry, ForeignPropertyExpenditure, ForeignPropertyIncome, ForeignPropertyRentIncome}
+import v1.models.request.createForeignProperty.{CreateForeignPropertyRawData, CreateForeignPropertyRequestBody, CreateForeignPropertyRequestData}
 
 class CreateForeignPropertyRequestParserSpec extends UnitSpec {
   val nino = "AA123456B"
@@ -101,10 +103,10 @@ class CreateForeignPropertyRequestParserSpec extends UnitSpec {
           ))
         )
 
-        val foreignProperty: ForeignProperty = ForeignProperty(
+        val foreignProperty: ForeignPropertyEntry = ForeignPropertyEntry(
           countryCode = "GBR",
           income = ForeignPropertyIncome(
-            rentIncome = RentIncome(rentAmount = 34456.30, taxDeducted = 6334.34),
+            rentIncome = ForeignPropertyRentIncome(rentAmount = 34456.30, taxDeducted = 6334.34),
             foreignTaxCreditRelief = true,
             premiumOfLeaseGrant = Some(2543.43),
             otherPropertyIncome = Some(54325.30),

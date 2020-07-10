@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-package v1.models.request.amendForeignProperty.foreignPropertyEntry
+package v1.models.request.common.foreignPropertyEntry
 
 import play.api.libs.json.{JsValue, Json}
 import support.UnitSpec
 
-class RentIncomeSpec extends UnitSpec {
+class ForeignPropertyRentIncomeSpec extends UnitSpec {
 
   val mtdJson: JsValue = Json.parse(
     s"""
@@ -29,7 +29,7 @@ class RentIncomeSpec extends UnitSpec {
        |}
        |""".stripMargin)
 
-  val model: RentIncome = RentIncome(rentAmount = 34456.30, taxDeducted = 6334.34)
+  val model: ForeignPropertyRentIncome = ForeignPropertyRentIncome(rentAmount = 34456.30, taxDeducted = 6334.34)
 
   val desJson: JsValue = Json.parse(
     s"""
@@ -43,7 +43,7 @@ class RentIncomeSpec extends UnitSpec {
   "reads" should {
     "read from JSON" when {
       "valid JSON is provided" in {
-        mtdJson.as[RentIncome] shouldBe model
+        mtdJson.as[ForeignPropertyRentIncome] shouldBe model
       }
     }
   }

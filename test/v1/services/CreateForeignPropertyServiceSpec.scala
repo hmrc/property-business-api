@@ -23,6 +23,8 @@ import v1.controllers.EndpointLogContext
 import v1.mocks.connectors.MockCreateForeignPropertyConnector
 import v1.models.errors._
 import v1.models.outcomes.ResponseWrapper
+import v1.models.request.common.foreignFhlEea.{ForeignFhlEea, ForeignFhlEeaExpenditure, ForeignFhlEeaIncome}
+import v1.models.request.common.foreignPropertyEntry.{ForeignPropertyEntry, ForeignPropertyExpenditure, ForeignPropertyIncome, ForeignPropertyRentIncome}
 import v1.models.request.createForeignProperty._
 import v1.models.response.createForeignProperty.CreateForeignPropertyResponse
 
@@ -51,9 +53,9 @@ class CreateForeignPropertyServiceSpec extends UnitSpec {
         None
       ))
     )),
-    Some(Seq(ForeignProperty("FRA",
+    Some(Seq(ForeignPropertyEntry("FRA",
       ForeignPropertyIncome(
-        RentIncome(5000.99, 5000.99),
+        ForeignPropertyRentIncome(5000.99, 5000.99),
         false,
         Some(5000.99),
         Some(5000.99),
@@ -90,9 +92,9 @@ class CreateForeignPropertyServiceSpec extends UnitSpec {
         Some(3653.35)
       ))
     )),
-    Some(Seq(ForeignProperty("FRA",
+    Some(Seq(ForeignPropertyEntry("FRA",
       ForeignPropertyIncome(
-        RentIncome(5000.99, 5000.99),
+        ForeignPropertyRentIncome(5000.99, 5000.99),
         false,
         Some(5000.99),
         Some(5000.99),

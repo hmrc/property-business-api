@@ -20,6 +20,8 @@ import mocks.MockAppConfig
 import uk.gov.hmrc.domain.Nino
 import v1.mocks.MockHttpClient
 import v1.models.outcomes.ResponseWrapper
+import v1.models.request.common.foreignFhlEea.{ForeignFhlEea, ForeignFhlEeaExpenditure, ForeignFhlEeaIncome}
+import v1.models.request.common.foreignPropertyEntry.{ForeignPropertyEntry, ForeignPropertyExpenditure, ForeignPropertyIncome, ForeignPropertyRentIncome}
 import v1.models.request.createForeignProperty._
 import v1.models.response.createForeignProperty.CreateForeignPropertyResponse
 
@@ -46,9 +48,9 @@ class CreateForeignPropertyConnectorSpec extends ConnectorSpec {
         None
       ))
     )),
-    Some(Seq(ForeignProperty("FRA",
+    Some(Seq(ForeignPropertyEntry("FRA",
       ForeignPropertyIncome(
-        RentIncome(5000.99, 5000.99),
+        ForeignPropertyRentIncome(5000.99, 5000.99),
         false,
         Some(5000.99),
         Some(5000.99),
@@ -85,9 +87,9 @@ class CreateForeignPropertyConnectorSpec extends ConnectorSpec {
         Some(3653.35)
       ))
     )),
-    Some(Seq(ForeignProperty("FRA",
+    Some(Seq(ForeignPropertyEntry("FRA",
       ForeignPropertyIncome(
-        RentIncome(5000.99, 5000.99),
+        ForeignPropertyRentIncome(5000.99, 5000.99),
         false,
         Some(5000.99),
         Some(5000.99),

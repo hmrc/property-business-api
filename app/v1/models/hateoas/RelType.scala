@@ -17,7 +17,6 @@
 package v1.models.hateoas
 
 object RelType {
-  val SAMPLE_ENDPOINT_REL = "sample-rel"
   val RETRIEVE_PROPERTY_PERIOD_SUMMARY = "retrieve-property-period-summary"
   val SELF = "self"
   val AMEND_PROPERTY_PERIOD_SUMMARY = "amend-property-period-summary"

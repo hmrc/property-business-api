@@ -1,4 +1,2 @@
-POST       /:nino/:taxYear/sample-endpoint                  v1.controllers.SampleController.handleRequest(nino: String, taxYear: String)
-
 PUT        /:nino/:businessId/period/:submissionId           v1.controllers.AmendForeignPropertyController.handleRequest(nino: String, businessId: String, submissionId: String)
 GET        /:nino/:businessId/period/:submissionId          v1.controllers.RetrieveForeignPropertyController.handleRequest(nino: String, businessId: String, submissionId: String)

@@ -22,40 +22,74 @@ import play.api.http.Status
 import play.api.libs.json.{JsValue, Json}
 import play.api.libs.ws.{WSRequest, WSResponse}
 import support.IntegrationBaseSpec
-import v1.models.domain.DesTaxYear
 import v1.stubs.{AuditStub, AuthStub, DesStub, MtdIdLookupStub}
 
 class AuthISpec extends IntegrationBaseSpec {
 
   private trait Test {
-    val nino          = "AA123456A"
-    val taxYear       = "2017-18"
-    val data        = "someData"
-    val correlationId = "X-123"
+    val nino = "AA123456A"
+    val businessId = "XAIS12345678910"
+    val submissionId = "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
 
-    val requestJson: String =
+    val desResponseBody: JsValue = Json.parse(
       s"""
          |{
-         |"data": "$data"
+         |  "fromDate": "2019-04-06",
+         |  "toDate": "2019-07-06",
+         |  "foreignFhlEea": {
+         |        "income": {
+         |          "rentAmount": 200.22,
+         |          "taxDeducted": 22.22
+         |        },
+         |        "expenses": {
+         |          "premisesRunningCostsAmount": 100.25,
+         |          "repairsAndMaintenanceAmount": 100.25,
+         |          "financialCostsAmount": 100.25,
+         |          "professionalFeesAmount": 100.25,
+         |          "costOfServicesAmount": 100.25,
+         |          "travelCostsAmount": 100.25,
+         |          "otherAmount": 100.25
+         |        }
+         |      },
+         |  "foreignProperty": [
+         |      {
+         |        "countryCode": "FRA",
+         |        "income": {
+         |            "rentIncome": {
+         |                "rentAmount": 200.22,
+         |                "taxDeducted": 22.22
+         |            },
+         |          "foreignTaxCreditRelief": true,
+         |          "premiumOfLeaseGrantAmount": 100.25,
+         |          "otherPropertyIncomeAmount": 100.25,
+         |          "foreignTaxPaidOrDeducted": 44.21,
+         |          "specialWithholdingTaxOrUKTaxPaid": 23.78
+         |        },
+         |        "expenses": {
+         |          "premisesRunningCostsAmount": 100.25,
+         |          "repairsAndMaintenanceAmount": 100.25,
+         |          "financialCostsAmount": 200.25,
+         |          "professionalFeesAmount": 100.25,
+         |          "costOfServicesAmount": 100.25,
+         |          "travelCostsAmount": 100.25,
+         |          "otherAmount": 100.25
+         |         }
+         |      }
+         |    ]
          |}
-    """.stripMargin
+         |""".stripMargin)
+
+    def uri: String = s"/$nino/$businessId/period/$submissionId"
+
+    def desUri: String = s"/business/property/$nino/$businessId/period/$submissionId"
 
     def setupStubs(): StubMapping
 
     def request(): WSRequest = {
       setupStubs()
-      buildRequest(s"/$nino/$taxYear/sample-endpoint")
+      buildRequest(uri)
         .withHttpHeaders((ACCEPT, "application/vnd.hmrc.1.0+json"))
     }
-
-    def desUri: String = s"/income-tax/nino/$nino/taxYear/${DesTaxYear.fromMtd(taxYear)}/someService"
-
-    val desResponse: JsValue = Json.parse(
-      """
-        | {
-        | "responseData" : "someResponse"
-        | }
-    """.stripMargin)
   }
 
   "Calling the sample endpoint" when {
@@ -70,7 +104,7 @@ class AuthISpec extends IntegrationBaseSpec {
           MtdIdLookupStub.internalServerError(nino)
         }
 
-        val response: WSResponse = await(request().post(Json.parse(requestJson)))
+        val response: WSResponse = await(request().get())
         response.status shouldBe Status.INTERNAL_SERVER_ERROR
       }
     }
@@ -82,11 +116,11 @@ class AuthISpec extends IntegrationBaseSpec {
           AuditStub.audit()
           AuthStub.authorised()
           MtdIdLookupStub.ninoFound(nino)
-          DesStub.onSuccess(DesStub.POST, desUri, Status.OK, desResponse)
+          DesStub.onSuccess(DesStub.GET, desUri, Status.OK, desResponseBody)
         }
 
-        val response: WSResponse = await(request().post(Json.parse(requestJson)))
-        response.status shouldBe Status.CREATED
+        val response: WSResponse = await(request().get())
+        response.status shouldBe Status.OK
       }
     }
 
@@ -101,7 +135,7 @@ class AuthISpec extends IntegrationBaseSpec {
           AuthStub.unauthorisedNotLoggedIn()
         }
 
-        val response: WSResponse = await(request().post(Json.parse(requestJson)))
+        val response: WSResponse = await(request().get())
         response.status shouldBe Status.FORBIDDEN
       }
     }
@@ -117,7 +151,7 @@ class AuthISpec extends IntegrationBaseSpec {
           AuthStub.unauthorisedOther()
         }
 
-        val response: WSResponse = await(request().post(Json.parse(requestJson)))
+        val response: WSResponse = await(request().get())
         response.status shouldBe Status.FORBIDDEN
       }
     }

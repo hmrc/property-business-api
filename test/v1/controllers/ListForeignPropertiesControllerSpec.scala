@@ -75,50 +75,25 @@ class ListForeignPropertiesControllerSpec
 
   private val responseJson = Json.parse(
     """|{
-       |  "foreignFhlEea": {
-       |    "income": {
-       |      "rentAmount": 567.83,
-       |      "taxDeducted": 4321.92
-       |      },
-       |    "expenditure": {
-       |      "premisesRunningCosts": 4567.98,
-       |      "repairsAndMaintenance": 98765.67,
-       |      "financialCosts": 4566.95,
-       |      "professionalFees": 23.65,
-       |      "costsOfServices": 4567.77,
-       |      "travelCosts": 456.77,
-       |      "other": 567.67
-       |    }
-       |  },
-       |  "foreignProperty": [{
-       |      "countryCode": "zzz",
-       |      "income": {
-       |        "rentIncome": {
-       |          "rentAmount": 34456.30,
-       |          "taxDeducted": 6334.34
-       |        },
-       |        "foreignTaxCreditRelief": true,
-       |        "premiumOfLeaseGrant": 2543.43,
-       |        "otherPropertyIncome": 54325.30,
-       |        "foreignTaxTakenOff": 6543.01,
-       |        "specialWithholdingTaxOrUKTaxPaid": 643245.00
-       |      },
-       |      "expenditure": {
-       |        "premisesRunningCosts": 5635.43,
-       |        "repairsAndMaintenance": 3456.65,
-       |        "financialCosts": 34532.21,
-       |        "professionalFees": 32465.32,
-       |        "costsOfServices": 2567.21,
-       |        "travelCosts": 2345.76,
-       |        "residentialFinancialCost": 21235.22,
-       |        "broughtFwdResidentialFinancialCost": 12556.00,
-       |        "other": 2425.11
-       |      }
+       |  [
+       |    {
+       |      "": "4557ecb5-fd32-48cc-81f5-e6acd1099f3c",
+       |      "": "2020-06-22",
+       |      "": "2020-06-22"
+       |    },
+       |    {
+       |      "": "4557ecb5-fd32-48cc-81f5-e6acd1099f3d",
+       |      "": "2020-08-22",
+       |      "": "2020-08-22"
        |    }
        |  ]
        |}
        |""".stripMargin)
 
+  val serviceResponse = ListForeignPropertiesResponse(Seq(
+    SubmissionPeriod("4557ecb5-fd32-48cc-81f5-e6acd1099f3c", "2020-06-22", "2020-06-22"),
+    SubmissionPeriod("4557ecb5-fd32-48cc-81f5-e6acd1099f3d", "2020-08-22", "2020-08-22")
+  ))
 
   private val rawData = ListForeignPropertiesRawData(nino, businessId, fromDate, toDate)
   private val requestData = ListForeignPropertiesRequest(Nino(nino), businessId, fromDate, toDate)
@@ -132,14 +107,14 @@ class ListForeignPropertiesControllerSpec
           .returns(Right(requestData))
 
         MockListForeignPropertiesService
-          .amend(requestData)
-          .returns(Future.successful(Right(ResponseWrapper(correlationId, responseJson)))
+          .listForeignProperties(requestData)
+          .returns(Future.successful(Right(ResponseWrapper(correlationId, serviceResponse)))
 
         MockHateoasFactory
-          .wrap((), ListForeignPropertiesHateoasData(nino, businessId))
-          .returns(HateoasWrapper((), Seq(testHateoasLink)))
+          .wrap(serviceResponse, ListForeignPropertiesHateoasData(nino, businessId))
+          .returns(HateoasWrapper(serviceResponse, Seq(testHateoasLink)))
 
-        val result: Future[Result] = controller.handleRequest(nino, businessId, fromDate, toDate)(fakeGetRequest)
+        val result: Future[Result] = controller.handleRequest(nino, businessId, fromDate, toDate)(fakeRequest)
         status(result) shouldBe OK
         header("X-CorrelationId", result) shouldBe Some(correlationId)
       }
@@ -153,7 +128,7 @@ class ListForeignPropertiesControllerSpec
               .parseRequest(rawData)
               .returns(Left(ErrorWrapper(Some(correlationId), error, None)))
 
-            val result: Future[Result] = controller.handleRequest(nino, businessId, fromDate, toDate)(fakeGetRequest)
+            val result: Future[Result] = controller.handleRequest(nino, businessId, fromDate, toDate)(fakeRequest)
 
             status(result) shouldBe expectedStatus
             contentAsJson(result) shouldBe Json.toJson(error)
@@ -165,7 +140,11 @@ class ListForeignPropertiesControllerSpec
           (BadRequestError, BAD_REQUEST),
           (NinoFormatError, BAD_REQUEST),
           (BusinessIdFormatError, BAD_REQUEST),
-          ???
+          (FromDateFormatError, BAD_REQUEST),
+          (ToDateFormatError, BAD_REQUEST),
+          (RuleToDateBeforeFromDateError, BAD_REQUEST),
+          (MissingToDateError, BAD_REQUEST),
+          (MissingFromDateError, BAD_REQUEST)
         )
 
         input.foreach(args => (errorsFromParserTester _).tupled(args))
@@ -180,10 +159,10 @@ class ListForeignPropertiesControllerSpec
               .returns(Right(requestData))
 
             MockListForeignPropertiesService
-              .amend(requestData)
+              .listForeignProperties(requestData)
               .returns(Future.successful(Left(ErrorWrapper(Some(correlationId), mtdError))))
 
-            val result: Future[Result] = controller.handleRequest(nino, businessId, fromDate, toDate)(fakeGetRequest)
+            val result: Future[Result] = controller.handleRequest(nino, businessId, fromDate, toDate)(fakeRequest)
 
             status(result) shouldBe expectedStatus
             contentAsJson(result) shouldBe Json.toJson(mtdError)

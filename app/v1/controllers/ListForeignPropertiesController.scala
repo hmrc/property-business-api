@@ -20,7 +20,7 @@ import cats.data.EitherT
 import cats.implicits._
 import javax.inject.{Inject, Singleton}
 import play.api.libs.json.{JsValue, Json}
-import play.api.mvc.{Action, ControllerComponents}
+import play.api.mvc.{Action, AnyContent, ControllerComponents}
 import utils.Logging
 import v1.controllers.requestParsers.ListForeignPropertiesRequestParser
 import v1.hateoas.HateoasFactory
@@ -42,15 +42,18 @@ class ListForeignPropertiesController  @Inject()(val authService: EnrolmentsAuth
 
   implicit val endpointLogContext: EndpointLogContext =
     EndpointLogContext(controllerName = "ListForeignPropertiesController", endpointName = "listForeignProperties")
-  def handleRequest(nino: String, businessId: String, fromDate: Option[String], toDate: Option[String]): Action[JsValue] =
-    authorisedAction(nino).async(parse.json) { implicit request =>
+  def handleRequest(nino: String, businessId: String, fromDate: Option[String], toDate: Option[String]): Action[AnyContent] =
+    authorisedAction(nino).async { implicit request =>
       val rawData = ListForeignPropertiesRawData(nino, businessId, fromDate, toDate)
       val result =
         for {
           parsedRequest <- EitherT.fromEither[Future](parser.parseRequest(rawData))
           serviceResponse <- EitherT(service.listForeignProperties(parsedRequest))
           vendorResponse <- EitherT.fromEither[Future](
-            hateoasFactory.wrap(serviceResponse.responseData, ListForeignPropertiesHateoasData(nino, businessId)).asRight[ErrorWrapper])
+            hateoasFactory
+              .wrap(serviceResponse.responseData, ListForeignPropertiesHateoasData(nino, parsedRequest.businessId))
+              .asRight[ErrorWrapper]
+          )
         } yield {
           logger.info(
             s"[${endpointLogContext.controllerName}][${endpointLogContext.endpointName}] - " +
@@ -71,7 +74,12 @@ class ListForeignPropertiesController  @Inject()(val authService: EnrolmentsAuth
     (errorWrapper.error: @unchecked) match {
       case BadRequestError |
            NinoFormatError |
-           BusinessIdFormatError => BadRequest(Json.toJson(errorWrapper))
+           BusinessIdFormatError |
+           ToDateFormatError |
+           FromDateFormatError |
+           RuleToDateBeforeFromDateError |
+           MissingToDateError |
+           MissingFromDateError => BadRequest(Json.toJson(errorWrapper))
       case DownstreamError => InternalServerError(Json.toJson(errorWrapper))
       case NotFoundError => NotFound(Json.toJson(errorWrapper))
     }

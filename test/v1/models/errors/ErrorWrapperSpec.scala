@@ -18,6 +18,7 @@ package v1.models.errors
 
 import play.api.libs.json.Json
 import support.UnitSpec
+import v1.models.audit.AuditError
 
 class ErrorWrapperSpec extends UnitSpec {
 
@@ -62,7 +63,7 @@ class ErrorWrapperSpec extends UnitSpec {
       Some (
         Seq(
           NinoFormatError,
-          TaxYearFormatError
+          BusinessIdFormatError
         )
       )
     )
@@ -78,8 +79,8 @@ class ErrorWrapperSpec extends UnitSpec {
         |         "message": "The provided NINO is invalid"
         |       },
         |       {
-        |         "code": "FORMAT_TAX_YEAR",
-        |         "message": "The provided tax year is invalid"
+        |         "code": "FORMAT_BUSINESS_ID",
+        |         "message": "The provided Business ID is invalid"
         |       }
         |   ]
         |}
@@ -88,6 +89,17 @@ class ErrorWrapperSpec extends UnitSpec {
 
     "generate the correct JSON" in {
       Json.toJson(error) shouldBe json
+    }
+  }
+
+  "auditErrors" should {
+    "handle errors = None" in {
+      val errorWrapper = ErrorWrapper(None, BadRequestError, None)
+      errorWrapper.auditErrors shouldBe Seq(AuditError(BadRequestError.code))
+    }
+    "handle errors = Some(_)" in {
+      val errorWrapper = ErrorWrapper(None, BadRequestError, Some(Seq(NinoFormatError, BusinessIdFormatError)))
+      errorWrapper.auditErrors shouldBe Seq(AuditError(NinoFormatError.code), AuditError(BusinessIdFormatError.code))
     }
   }
 

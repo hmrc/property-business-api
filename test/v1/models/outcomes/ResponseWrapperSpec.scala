@@ -14,12 +14,15 @@
  * limitations under the License.
  */
 
-package v1.models.request.sample
+package v1.models.outcomes
 
-import play.api.libs.json.{Json, Reads}
+import support.UnitSpec
 
-case class SampleRequestBody(data: String)
-
-object SampleRequestBody {
-  implicit val reads: Reads[SampleRequestBody] = Json.reads[SampleRequestBody]
+class ResponseWrapperSpec extends UnitSpec {
+  "map" should {
+    "map on responseData" in {
+      val responseWrapper = ResponseWrapper("my id", "beans")
+      responseWrapper.map(_.toUpperCase) shouldBe ResponseWrapper("my id", "BEANS")
+    }
+  }
 }

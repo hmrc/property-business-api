@@ -500,31 +500,21 @@ class CreateForeignPropertyControllerISpec extends IntegrationBaseSpec {
   )
 
   val allInvalidCountryCodeRequestError: MtdError = CountryCodeFormatError.copy(
-    message = "The provided Country code is invalid",
     paths = Some(List(
       "/foreignProperty/0/countryCode"
     ))
   )
 
   val allRuleCountryCodeRequestError: MtdError = RuleCountryCodeError.copy(
-    message = "The country code is not a valid ISO 3166-1 alpha-3 country code",
     paths = Some(List(
       "/foreignProperty/0/countryCode"
     ))
   )
 
   val RuleBothExpensesSuppliedRequestError: MtdError = RuleBothExpensesSuppliedError.copy(
-    message = "Both expenses and consolidatedExpenses can not be present at the same time",
     paths = Some(List(
       "/foreignFhlEea/expenditure",
       "/foreignProperty/0/expenditure"
-    ))
-  )
-
-  val OverlappingPeriodError: MtdError = RuleOverlappingPeriodError.copy(
-    message = "Supplied period overlaps with any of the existing periods",
-    paths = Some(List(
-      ""
     ))
   )
 
@@ -694,9 +684,9 @@ class CreateForeignPropertyControllerISpec extends IntegrationBaseSpec {
           (Status.BAD_REQUEST, "NOT_FOUND", Status.NOT_FOUND, NotFoundError),
           (Status.BAD_REQUEST, "INVALID_TAXABLE_ENTITY_ID", Status.BAD_REQUEST, NinoFormatError),
           (Status.BAD_REQUEST, "FORMAT_BUSINESS_ID", Status.BAD_REQUEST, BusinessIdFormatError),
-          (Status.UNPROCESSABLE_ENTITY, "RULE_OVERLAPPING_PERIOD", Status.UNPROCESSABLE_ENTITY, OverlappingPeriodError),
-          (Status.UNPROCESSABLE_ENTITY, "RULE_MISALIGNED_PERIOD", Status.UNPROCESSABLE_ENTITY, RuleMisalignedPeriodError),
-          (Status.UNPROCESSABLE_ENTITY, "RULE_NOT_CONTIGUOUS_PERIOD", Status.UNPROCESSABLE_ENTITY, RuleNotContiguousPeriodError)
+          (Status.UNPROCESSABLE_ENTITY, "RULE_OVERLAPPING_PERIOD", Status.BAD_REQUEST, RuleOverlappingPeriodError),
+          (Status.UNPROCESSABLE_ENTITY, "RULE_MISALIGNED_PERIOD", Status.BAD_REQUEST, RuleMisalignedPeriodError),
+          (Status.UNPROCESSABLE_ENTITY, "RULE_NOT_CONTIGUOUS_PERIOD", Status.BAD_REQUEST, RuleNotContiguousPeriodError)
         )
 
         input.foreach(args => (serviceErrorTest _).tupled(args))

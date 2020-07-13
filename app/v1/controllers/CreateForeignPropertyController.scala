@@ -34,11 +34,11 @@ import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class CreateForeignPropertyController @Inject()(val authService: EnrolmentsAuthService,
-                                         val lookupService: MtdIdLookupService,
-                                         parser: CreateForeignPropertyRequestParser,
-                                         service: CreateForeignPropertyService,
-                                         hateoasFactory: HateoasFactory,
-                                         cc: ControllerComponents)(implicit ec: ExecutionContext)
+                                                val lookupService: MtdIdLookupService,
+                                                parser: CreateForeignPropertyRequestParser,
+                                                service: CreateForeignPropertyService,
+                                                hateoasFactory: HateoasFactory,
+                                                cc: ControllerComponents)(implicit ec: ExecutionContext)
   extends AuthorisedController(cc) with BaseController with Logging {
 
   implicit val endpointLogContext: EndpointLogContext =
@@ -53,7 +53,7 @@ class CreateForeignPropertyController @Inject()(val authService: EnrolmentsAuthS
           serviceResponse <- EitherT(service.createForeignProperty(parsedRequest))
           vendorResponse <- EitherT.fromEither[Future](
             hateoasFactory
-              .wrap(serviceResponse.responseData, CreateForeignPropertyHateoasData(nino,businessId, serviceResponse.responseData.submissionId))
+              .wrap(serviceResponse.responseData, CreateForeignPropertyHateoasData(nino, businessId, serviceResponse.responseData.submissionId))
               .asRight[ErrorWrapper]
           )
         } yield {
@@ -85,14 +85,13 @@ class CreateForeignPropertyController @Inject()(val authService: EnrolmentsAuthS
            MtdErrorWithCustomMessage(ValueFormatError.code) |
            MtdErrorWithCustomMessage(RuleBothExpensesSuppliedError.code) |
            RuleToDateBeforeFromDateError |
-           MtdErrorWithCustomMessage(RuleCountryCodeError.code) =>
+           MtdErrorWithCustomMessage(RuleCountryCodeError.code) |
+           RuleOverlappingPeriodError |
+           RuleMisalignedPeriodError |
+           RuleNotContiguousPeriodError |
+           RuleIncorrectOrEmptyBodyError =>
         BadRequest(Json.toJson(errorWrapper))
       case NotFoundError => NotFound(Json.toJson(errorWrapper))
-      case RuleOverlappingPeriodError |
-        MtdErrorWithCustomMessage(RuleMisalignedPeriodError.code) |
-        MtdErrorWithCustomMessage(RuleNotContiguousPeriodError.code) |
-        MtdErrorWithCustomMessage(RuleIncorrectOrEmptyBodyError.code) =>
-        BadRequest(Json.toJson(errorWrapper))
       case DownstreamError => InternalServerError(Json.toJson(errorWrapper))
     }
   }

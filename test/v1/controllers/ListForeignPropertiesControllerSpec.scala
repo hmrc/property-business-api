@@ -29,6 +29,7 @@ import v1.models.hateoas.{HateoasWrapper, Link}
 import v1.models.outcomes.ResponseWrapper
 import v1.models.request.listForeignProperties.{ListForeignPropertiesRawData, ListForeignPropertiesRequest}
 import v1.models.response.listForeignProperties.{ListForeignPropertiesHateoasData, ListForeignPropertiesResponse, SubmissionPeriod}
+import v1.models.hateoas.RelType.RETRIEVE_PROPERTY_PERIOD_SUMMARY
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -64,38 +65,51 @@ class ListForeignPropertiesControllerSpec
   val toDate = "2020-08-31"
   private val correlationId = "X-123"
 
-  val request = ListForeignPropertiesRequest(nino, businessId, fromDate, toDate)
+  val request = ListForeignPropertiesRequest(Nino(nino), businessId, fromDate, toDate)
+
+  val responseModel1 = SubmissionPeriod("4557ecb5-fd32-48cc-81f5-e6acd1099f3c", "2020-06-22", "2020-06-22")
+  val responseModel2 = SubmissionPeriod("4557ecb5-fd32-48cc-81f5-e6acd1099f3d", "2020-08-22", "2020-08-22")
 
   val response = ListForeignPropertiesResponse(Seq(
-    SubmissionPeriod("4557ecb5-fd32-48cc-81f5-e6acd1099f3c", "2020-06-22", "2020-06-22"),
-    SubmissionPeriod("4557ecb5-fd32-48cc-81f5-e6acd1099f3d", "2020-08-22", "2020-08-22")
+    responseModel1,
+    responseModel2
   ))
 
   private val testHateoasLink = Link(href = s"Individuals/business/property/$nino/$businessId/period", method = GET, rel = "self")
 
-  private val responseJson = Json.parse(
-    """|{
-       |  [
-       |    {
-       |      "": "4557ecb5-fd32-48cc-81f5-e6acd1099f3c",
-       |      "": "2020-06-22",
-       |      "": "2020-06-22"
-       |    },
-       |    {
-       |      "": "4557ecb5-fd32-48cc-81f5-e6acd1099f3d",
-       |      "": "2020-08-22",
-       |      "": "2020-08-22"
-       |    }
-       |  ]
-       |}
-       |""".stripMargin)
+  private val responseModel1TestHateoasLink = Link(
+    href = s"Individuals/business/property/$nino/$businessId/period/4557ecb5-fd32-48cc-81f5-e6acd1099f3c",
+    method = GET,
+    rel = RETRIEVE_PROPERTY_PERIOD_SUMMARY
+  )
+
+  private val responseModel2TestHateoasLink = Link(
+    href = s"Individuals/business/property/$nino/$businessId/period/4557ecb5-fd32-48cc-81f5-e6acd1099f3d",
+    method = GET,
+    rel = RETRIEVE_PROPERTY_PERIOD_SUMMARY
+  )
+
+  private val hateoasResponse = ListForeignPropertiesResponse(
+    Seq(
+      HateoasWrapper(responseModel1,
+        Seq(
+          responseModel1TestHateoasLink
+        )
+      ),
+      HateoasWrapper(responseModel2,
+        Seq(
+          responseModel2TestHateoasLink
+        )
+      )
+    )
+  )
 
   val serviceResponse = ListForeignPropertiesResponse(Seq(
     SubmissionPeriod("4557ecb5-fd32-48cc-81f5-e6acd1099f3c", "2020-06-22", "2020-06-22"),
     SubmissionPeriod("4557ecb5-fd32-48cc-81f5-e6acd1099f3d", "2020-08-22", "2020-08-22")
   ))
 
-  private val rawData = ListForeignPropertiesRawData(nino, businessId, fromDate, toDate)
+  private val rawData = ListForeignPropertiesRawData(nino, businessId, Some(fromDate), Some(toDate))
   private val requestData = ListForeignPropertiesRequest(Nino(nino), businessId, fromDate, toDate)
 
   "handleRequest" should {
@@ -108,13 +122,13 @@ class ListForeignPropertiesControllerSpec
 
         MockListForeignPropertiesService
           .listForeignProperties(requestData)
-          .returns(Future.successful(Right(ResponseWrapper(correlationId, serviceResponse)))
+          .returns(Future.successful(Right(ResponseWrapper(correlationId, serviceResponse))))
 
         MockHateoasFactory
-          .wrap(serviceResponse, ListForeignPropertiesHateoasData(nino, businessId))
-          .returns(HateoasWrapper(serviceResponse, Seq(testHateoasLink)))
+          .wrapList(serviceResponse, ListForeignPropertiesHateoasData(nino, businessId))
+          .returns(HateoasWrapper(hateoasResponse, Seq(testHateoasLink)))
 
-        val result: Future[Result] = controller.handleRequest(nino, businessId, fromDate, toDate)(fakeRequest)
+        val result: Future[Result] = controller.handleRequest(nino, businessId, Some(fromDate), Some(toDate))(fakeRequest)
         status(result) shouldBe OK
         header("X-CorrelationId", result) shouldBe Some(correlationId)
       }
@@ -128,7 +142,7 @@ class ListForeignPropertiesControllerSpec
               .parseRequest(rawData)
               .returns(Left(ErrorWrapper(Some(correlationId), error, None)))
 
-            val result: Future[Result] = controller.handleRequest(nino, businessId, fromDate, toDate)(fakeRequest)
+            val result: Future[Result] = controller.handleRequest(nino, businessId, Some(fromDate), Some(toDate))(fakeRequest)
 
             status(result) shouldBe expectedStatus
             contentAsJson(result) shouldBe Json.toJson(error)
@@ -162,7 +176,7 @@ class ListForeignPropertiesControllerSpec
               .listForeignProperties(requestData)
               .returns(Future.successful(Left(ErrorWrapper(Some(correlationId), mtdError))))
 
-            val result: Future[Result] = controller.handleRequest(nino, businessId, fromDate, toDate)(fakeRequest)
+            val result: Future[Result] = controller.handleRequest(nino, businessId, Some(fromDate), Some(toDate))(fakeRequest)
 
             status(result) shouldBe expectedStatus
             contentAsJson(result) shouldBe Json.toJson(mtdError)

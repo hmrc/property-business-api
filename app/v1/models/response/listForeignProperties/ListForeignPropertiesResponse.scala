@@ -18,7 +18,7 @@ package v1.models.response.listForeignProperties
 
 import cats.Functor
 import config.AppConfig
-import play.api.libs.json.{Json, Reads, Writes}
+import play.api.libs.json.{Json, OWrites, Reads, Writes}
 import v1.hateoas.{HateoasLinks, HateoasListLinksFactory}
 import v1.models.hateoas.RelType.RETRIEVE_PROPERTY_PERIOD_SUMMARY
 import v1.models.hateoas.{HateoasData, Link}
@@ -30,7 +30,7 @@ object ListForeignPropertiesResponse extends HateoasLinks {
   implicit def reads: Reads[ListForeignPropertiesResponse[SubmissionPeriod]] =
     implicitly[Reads[Seq[SubmissionPeriod]]].map(ListForeignPropertiesResponse(_))
 
-  implicit def writes[I: Writes]: Writes[ListForeignPropertiesResponse[I]] = Json.writes[ListForeignPropertiesResponse[I]]
+  implicit def writes[I: Writes]: OWrites[ListForeignPropertiesResponse[I]] = Json.writes[ListForeignPropertiesResponse[I]]
 
   implicit object LinksFactory extends HateoasListLinksFactory[ListForeignPropertiesResponse, SubmissionPeriod, ListForeignPropertiesHateoasData] {
 

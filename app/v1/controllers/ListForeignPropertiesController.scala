@@ -19,7 +19,7 @@ package v1.controllers
 import cats.data.EitherT
 import cats.implicits._
 import javax.inject.{Inject, Singleton}
-import play.api.libs.json.{JsValue, Json}
+import play.api.libs.json.Json
 import play.api.mvc.{Action, AnyContent, ControllerComponents}
 import utils.Logging
 import v1.controllers.requestParsers.ListForeignPropertiesRequestParser
@@ -51,7 +51,7 @@ class ListForeignPropertiesController  @Inject()(val authService: EnrolmentsAuth
           serviceResponse <- EitherT(service.listForeignProperties(parsedRequest))
           vendorResponse <- EitherT.fromEither[Future](
             hateoasFactory
-              .wrap(serviceResponse.responseData, ListForeignPropertiesHateoasData(nino, parsedRequest.businessId))
+              .wrapList(serviceResponse.responseData, ListForeignPropertiesHateoasData(nino, parsedRequest.businessId))
               .asRight[ErrorWrapper]
           )
         } yield {

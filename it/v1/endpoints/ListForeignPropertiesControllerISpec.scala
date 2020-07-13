@@ -211,9 +211,7 @@ class ListForeignPropertiesControllerISpec extends IntegrationBaseSpec {
           ("Walrus", "XAIS12345678910", "2020-05-22", "2020-09-22", Status.BAD_REQUEST, NinoFormatError),
           ("AA123456A", "203100", "2020-05-22", "2020-09-22", Status.BAD_REQUEST, BusinessIdFormatError),
           ("AA123456A", "XAIS12345678910", "20-20-2", "2020-09-22", Status.BAD_REQUEST, FromDateFormatError),
-//          ("AA123456A", "XAIS12345678910", "", "2020-09-22", Status.BAD_REQUEST, MissingFromDateError),
           ("AA123456A", "XAIS12345678910", "2020-05-22", "20-2-02", Status.BAD_REQUEST, ToDateFormatError),
-//          ("AA123456A", "XAIS12345678910", "2020-05-22", "", Status.BAD_REQUEST, MissingToDateError),
           ("AA123456A", "XAIS12345678910", "2020-05-22", "2020-04-22", Status.BAD_REQUEST, RuleToDateBeforeFromDateError)
 
         )

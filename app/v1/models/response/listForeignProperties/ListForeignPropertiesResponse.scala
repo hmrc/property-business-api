@@ -20,7 +20,6 @@ import cats.Functor
 import config.AppConfig
 import play.api.libs.json.{Json, OWrites, Reads, Writes}
 import v1.hateoas.{HateoasLinks, HateoasListLinksFactory}
-import v1.models.hateoas.RelType.RETRIEVE_PROPERTY_PERIOD_SUMMARY
 import v1.models.hateoas.{HateoasData, Link}
 
 case class ListForeignPropertiesResponse[I](submissions: Seq[I])
@@ -35,7 +34,7 @@ object ListForeignPropertiesResponse extends HateoasLinks {
   implicit object LinksFactory extends HateoasListLinksFactory[ListForeignPropertiesResponse, SubmissionPeriod, ListForeignPropertiesHateoasData] {
 
     override def itemLinks(appConfig: AppConfig, data: ListForeignPropertiesHateoasData, item: SubmissionPeriod): Seq[Link] =
-      Seq(retrieveForeignProperty(appConfig, data.nino, data.businessId, item.submissionId, rel = RETRIEVE_PROPERTY_PERIOD_SUMMARY))
+      Seq(retrieveForeignProperty(appConfig, data.nino, data.businessId, item.submissionId))
 
     override def links(appConfig: AppConfig, data: ListForeignPropertiesHateoasData): Seq[Link] = {
       Seq(

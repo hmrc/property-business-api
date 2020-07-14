@@ -29,7 +29,7 @@ import v1.models.hateoas.{HateoasWrapper, Link}
 import v1.models.outcomes.ResponseWrapper
 import v1.models.request.listForeignProperties.{ListForeignPropertiesRawData, ListForeignPropertiesRequest}
 import v1.models.response.listForeignProperties.{ListForeignPropertiesHateoasData, ListForeignPropertiesResponse, SubmissionPeriod}
-import v1.models.hateoas.RelType.RETRIEVE_PROPERTY_PERIOD_SUMMARY
+import v1.models.hateoas.RelType.SELF
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -80,13 +80,13 @@ class ListForeignPropertiesControllerSpec
   private val responseModel1TestHateoasLink = Link(
     href = s"Individuals/business/property/$nino/$businessId/period/4557ecb5-fd32-48cc-81f5-e6acd1099f3c",
     method = GET,
-    rel = RETRIEVE_PROPERTY_PERIOD_SUMMARY
+    rel = SELF
   )
 
   private val responseModel2TestHateoasLink = Link(
     href = s"Individuals/business/property/$nino/$businessId/period/4557ecb5-fd32-48cc-81f5-e6acd1099f3d",
     method = GET,
-    rel = RETRIEVE_PROPERTY_PERIOD_SUMMARY
+    rel = SELF
   )
 
   private val hateoasResponse = ListForeignPropertiesResponse(

@@ -141,7 +141,7 @@ class ListForeignPropertiesResponseSpec extends UnitSpec with MockAppConfig {
       ListForeignPropertiesResponse.LinksFactory.itemLinks(mockAppConfig, ListForeignPropertiesHateoasData(nino, businessId),
         SubmissionPeriod(submissionId, "", "")) shouldBe
         Seq(
-          Link(s"/my/context/$nino/$businessId/period/$submissionId", GET, "retrieve-property-period-summary")
+          Link(s"/my/context/$nino/$businessId/period/$submissionId", GET, "self")
         )
     }
   }

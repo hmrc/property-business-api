@@ -46,7 +46,7 @@ class ListForeignPropertiesControllerISpec extends IntegrationBaseSpec {
          |        {
          |          "href": "/individuals/business/property/$nino/$businessId/period/4557ecb5-fd32-48cc-81f5-e6acd1099f3c",
          |          "method": "GET",
-         |          "rel": "retrieve-property-period-summary"
+         |          "rel": "self"
          |        }
          |      ]
          |    },
@@ -58,7 +58,7 @@ class ListForeignPropertiesControllerISpec extends IntegrationBaseSpec {
          |        {
          |          "href": "/individuals/business/property/$nino/$businessId/period/4557ecb5-fd32-48cc-81f5-e6acd1099f3d",
          |          "method": "GET",
-         |          "rel": "retrieve-property-period-summary"
+         |          "rel": "self"
          |        }
          |      ]
          |    }

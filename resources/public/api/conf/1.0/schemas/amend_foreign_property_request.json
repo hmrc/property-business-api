@@ -31,7 +31,8 @@
           },
           "required" : [
             "rentAmount"
-          ]
+          ],
+          "additionalProperties": false
         },
         "expenditure": {
           "type": "object",
@@ -101,12 +102,14 @@
               "maximum": 99999999999.99,
               "example": "5000.99"
             }
-          }
+          },
+          "additionalProperties": false
         }
       },
       "required": [
         "income"
-      ]
+      ],
+      "additionalProperties": false
     },
     "foreignProperty": {
       "type": "array",
@@ -147,7 +150,8 @@
                 },
                 "required": [
                   "rentAmount"
-                ]
+                ],
+                "additionalProperties": false
               },
               "foreignTaxCreditRelief": {
                 "description": "A boolean indicating whether Foreign Tax Credit Relief (FTCR) has been claimed. The value must be true or false.",
@@ -190,7 +194,8 @@
             "required": [
               "rentIncome",
               "foreignTaxCreditRelief"
-            ]
+            ],
+            "additionalProperties": false
           },
           "expenditure": {
             "type": "object",
@@ -276,14 +281,17 @@
                 "maximum": 99999999999.99,
                 "example": "5000.99"
               }
-            }
+            },
+            "additionalProperties": false
           }
         },
         "required": [
           "countryCode",
           "income"
-        ]
+        ],
+        "additionalProperties": false
       }
     }
-  }
+  },
+  "additionalProperties": false
 }

@@ -28,8 +28,8 @@ import v1.models.hateoas.{HateoasWrapper, Link}
 import v1.models.hateoas.Method.GET
 import v1.models.outcomes.ResponseWrapper
 import v1.models.request.amendForeignProperty.{AmendForeignPropertyRawData, AmendForeignPropertyRequest, AmendForeignPropertyRequestBody}
-import v1.models.request.amendForeignProperty.foreignFhlEea.{ForeignFhlEea, Expenditure => ForeignFhlEeaExpenditure, Income => ForeignFhlEeaIncome}
-import v1.models.request.amendForeignProperty.foreignPropertyEntry.{ForeignPropertyEntry, RentIncome, Expenditure => ForeignPropertyExpenditure, Income => ForeignPropertyIncome}
+import v1.models.request.common.foreignFhlEea.{ForeignFhlEea, ForeignFhlEeaExpenditure, ForeignFhlEeaIncome}
+import v1.models.request.common.foreignPropertyEntry.{ForeignPropertyEntry, ForeignPropertyExpenditure, ForeignPropertyIncome, ForeignPropertyRentIncome}
 import v1.models.response.amendForeignProperty.AmendForeignPropertyHateoasData
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -131,7 +131,7 @@ class AmendForeignPropertyControllerSpec
   private val foreignProperty: ForeignPropertyEntry = ForeignPropertyEntry(
     countryCode = "zzz",
     income = ForeignPropertyIncome(
-      rentIncome = RentIncome(rentAmount = 34456.30, taxDeducted = 6334.34),
+      rentIncome = ForeignPropertyRentIncome(rentAmount = 34456.30, taxDeducted = 6334.34),
       foreignTaxCreditRelief = true,
       premiumOfLeaseGrant = Some(2543.43),
       otherPropertyIncome = Some(54325.30),

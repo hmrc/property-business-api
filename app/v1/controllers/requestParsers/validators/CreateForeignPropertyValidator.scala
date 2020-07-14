@@ -18,9 +18,9 @@ package v1.controllers.requestParsers.validators
 
 import v1.controllers.requestParsers.validators.validations._
 import v1.models.errors.{MtdError, RuleIncorrectOrEmptyBodyError}
-import v1.models.request.createForeignProperty.{ForeignFhlEeaExpenditure => ForeignFhlEeaExpenditure, _}
-import v1.models.request.createForeignProperty.{ForeignPropertyExpenditure => ForeignPropertyExpenditure, ForeignProperty}
+import v1.models.request.common.foreignPropertyEntry.{ForeignPropertyEntry, ForeignPropertyExpenditure}
 import v1.models.request.createForeignProperty.{CreateForeignPropertyRawData, CreateForeignPropertyRequestBody}
+import v1.models.request.common.foreignFhlEea.{ForeignFhlEea, ForeignFhlEeaExpenditure}
 
 class CreateForeignPropertyValidator extends Validator[CreateForeignPropertyRawData] {
 
@@ -116,7 +116,7 @@ class CreateForeignPropertyValidator extends Validator[CreateForeignPropertyRawD
     ).flatten
   }
 
-  private def validateForeignProperty(foreignProperty: ForeignProperty, index: Int): List[MtdError] = {
+  private def validateForeignProperty(foreignProperty: ForeignPropertyEntry, index: Int): List[MtdError] = {
     List(
       CountryCodeValidation.validate(
         field = foreignProperty.countryCode,
@@ -190,14 +190,14 @@ class CreateForeignPropertyValidator extends Validator[CreateForeignPropertyRawD
   }
 
   private def validateForeignFhlEeaConsolidatedExpenses(expenditure: ForeignFhlEeaExpenditure): List[MtdError] = {
-    ConsolidatedExpensesValidation.validateCreate(
+    ConsolidatedExpensesValidation.validate(
       expenditure = expenditure,
       path = s"/foreignFhlEea/expenditure"
     )
   }
 
   private def validateForeignPropertyConsolidatedExpenses(expenditure: ForeignPropertyExpenditure, index: Int): List[MtdError] = {
-    ConsolidatedExpensesValidation.validateCreate(
+    ConsolidatedExpensesValidation.validate(
       expenditure = expenditure,
       path = s"/foreignProperty/$index/expenditure"
     )

@@ -17,8 +17,8 @@
 package v1.models.request.amendForeignProperty
 
 import play.api.libs.json.{Json, Reads, Writes}
-import v1.models.request.amendForeignProperty.foreignFhlEea.ForeignFhlEea
-import v1.models.request.amendForeignProperty.foreignPropertyEntry.ForeignPropertyEntry
+import v1.models.request.common.foreignFhlEea.ForeignFhlEea
+import v1.models.request.common.foreignPropertyEntry.ForeignPropertyEntry
 
 case class AmendForeignPropertyRequestBody(foreignFhlEea: Option[ForeignFhlEea], foreignProperty: Option[Seq[ForeignPropertyEntry]]) {
   def isEmpty: Boolean = (foreignFhlEea.isEmpty && foreignProperty.isEmpty) ||

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package v1.models.request.amendForeignProperty.foreignFhlEea
+package v1.models.request.common.foreignFhlEea
 
 import play.api.libs.json.{JsValue, Json}
 import support.UnitSpec
@@ -34,7 +34,7 @@ class ExpenditureSpec extends UnitSpec {
        |}
        |""".stripMargin)
 
-  val model: Expenditure = Expenditure(
+  val model: ForeignFhlEeaExpenditure = ForeignFhlEeaExpenditure(
     premisesRunningCosts = Some(4567.98),
     repairsAndMaintenance = Some(98765.67),
     financialCosts = Some(4566.95),
@@ -63,7 +63,7 @@ class ExpenditureSpec extends UnitSpec {
   "reads" should {
     "read from JSON" when {
       "valid JSON is provided" in {
-        mtdJson.as[Expenditure] shouldBe model
+        mtdJson.as[ForeignFhlEeaExpenditure] shouldBe model
       }
     }
   }

@@ -18,6 +18,8 @@ package v1.models.request.createForeignProperty
 
 import play.api.libs.json.Json
 import support.UnitSpec
+import v1.models.request.common.foreignFhlEea.{ForeignFhlEea, ForeignFhlEeaExpenditure, ForeignFhlEeaIncome}
+import v1.models.request.common.foreignPropertyEntry.{ForeignPropertyEntry, ForeignPropertyExpenditure, ForeignPropertyIncome, ForeignPropertyRentIncome}
 import v1.models.utils.JsonErrorValidators
 
 class CreateForeignPropertyRequestBodySpec extends UnitSpec with JsonErrorValidators {
@@ -38,9 +40,9 @@ class CreateForeignPropertyRequestBodySpec extends UnitSpec with JsonErrorValida
         Some(5000.99)
       ))
     )),
-    Some(Seq(ForeignProperty("FRA",
+    Some(Seq(ForeignPropertyEntry("FRA",
       ForeignPropertyIncome(
-        RentIncome(5000.99, 5000.99),
+        ForeignPropertyRentIncome(5000.99, 5000.99),
         false,
         Some(5000.99),
         Some(5000.99),

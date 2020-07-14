@@ -14,15 +14,15 @@
  * limitations under the License.
  */
 
-package v1.models.request.amendForeignProperty.foreignPropertyEntry
+package v1.models.request.common.foreignPropertyEntry
 
 import play.api.libs.functional.syntax._
 import play.api.libs.json.{JsPath, Json, Reads, Writes}
 
 case class ForeignPropertyEntry(
                                  countryCode: String,
-                                 income: Income,
-                                 expenditure: Option[Expenditure]
+                                 income: ForeignPropertyIncome,
+                                 expenditure: Option[ForeignPropertyExpenditure]
                                )
 
 object ForeignPropertyEntry {
@@ -30,7 +30,7 @@ object ForeignPropertyEntry {
 
   implicit val writes: Writes[ForeignPropertyEntry] = (
     (JsPath \ "countryCode").write[String] and
-      (JsPath \ "income").write[Income] and
-      (JsPath \ "expenses").writeNullable[Expenditure]
+      (JsPath \ "income").write[ForeignPropertyIncome] and
+      (JsPath \ "expenses").writeNullable[ForeignPropertyExpenditure]
     ) (unlift(ForeignPropertyEntry.unapply))
 }

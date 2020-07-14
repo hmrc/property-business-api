@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package v1.models.request.amendForeignProperty.foreignFhlEea
+package v1.models.request.common.foreignFhlEea
 
 import play.api.libs.json.{JsValue, Json}
 import support.UnitSpec
@@ -42,8 +42,8 @@ class ForeignFhlEeaSpec extends UnitSpec {
        |""".stripMargin)
 
   val model: ForeignFhlEea = ForeignFhlEea(
-    income = Income(rentAmount = 567.83, taxDeducted = Some(4321.92)),
-    expenditure = Some(Expenditure(
+    income = ForeignFhlEeaIncome(rentAmount = 567.83, taxDeducted = Some(4321.92)),
+    expenditure = Some(ForeignFhlEeaExpenditure(
       premisesRunningCosts = Some(4567.98),
       repairsAndMaintenance = Some(98765.67),
       financialCosts = Some(4566.95),

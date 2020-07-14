@@ -18,6 +18,7 @@ package v1.connectors
 
 import config.AppConfig
 import javax.inject.{Inject, Singleton}
+import play.api.http.Status
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
 import v1.connectors.httpparsers.StandardDesHttpParser._
@@ -33,6 +34,8 @@ class CreateForeignPropertyConnector @Inject() (val http: HttpClient,
   def createForeignProperty(request: CreateForeignPropertyRequestData)(
     implicit hc: HeaderCarrier,
     ec: ExecutionContext): Future[DesOutcome[CreateForeignPropertyResponse]] = {
+
+    implicit val desSuccessCode: SuccessCode = SuccessCode(Status.CREATED)
 
     post(
       body = request.body,

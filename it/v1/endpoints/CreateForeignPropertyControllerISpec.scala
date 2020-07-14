@@ -579,7 +579,7 @@ class CreateForeignPropertyControllerISpec extends IntegrationBaseSpec {
           AuditStub.audit()
           AuthStub.authorised()
           MtdIdLookupStub.ninoFound(nino)
-          DesStub.onSuccess(DesStub.POST, desUri, Status.OK, desResponse)
+          DesStub.onSuccess(DesStub.POST, desUri, Status.CREATED, desResponse)
 
         }
 
@@ -594,7 +594,7 @@ class CreateForeignPropertyControllerISpec extends IntegrationBaseSpec {
           AuditStub.audit()
           AuthStub.authorised()
           MtdIdLookupStub.ninoFound(nino)
-          DesStub.onSuccess(DesStub.POST, desUri, Status.OK, desResponse)
+          DesStub.onSuccess(DesStub.POST, desUri, Status.CREATED, desResponse)
 
         }
 

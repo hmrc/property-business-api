@@ -28,7 +28,6 @@ trait HateoasLinks {
   private def foreignPropertyUri(appConfig: AppConfig, nino: String, businessId: String): String =
     s"/${appConfig.apiGatewayContext}/$nino/$businessId/period"
 
-
   private def foreignPropertySubmissionUri(appConfig: AppConfig, nino: String, businessId: String, submissionId: String): String =
     s"/${appConfig.apiGatewayContext}/$nino/$businessId/period/$submissionId"
 

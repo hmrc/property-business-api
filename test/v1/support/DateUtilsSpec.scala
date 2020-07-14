@@ -79,4 +79,13 @@ class DateUtilsSpec extends UnitSpec {
       }
     }
   }
+
+  "currentDate" should {
+    "return today" when {
+      "called" in {
+        val dateUtils = new DateUtils()
+        dateUtils.currentDate.atStartOfDay() shouldBe LocalDate.now().atStartOfDay()
+      }
+    }
+  }
 }

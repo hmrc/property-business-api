@@ -34,8 +34,10 @@ class ListForeignPropertiesConnector @Inject()(val http: HttpClient,
     implicit hc: HeaderCarrier,
     ec: ExecutionContext): Future[DesOutcome[ListForeignPropertiesResponse[SubmissionPeriod]]] = {
 
+    val desUri = s"business/property/${request.nino}/${request.businessId}/period?fromDate=${request.fromDate}&toDate=${request.toDate}"
+
     get(
-      uri = DesUri[ListForeignPropertiesResponse[SubmissionPeriod]](s"business/property/${request.nino}/${request.businessId}/period")
+      uri = DesUri[ListForeignPropertiesResponse[SubmissionPeriod]](desUri)
     )
   }
 }

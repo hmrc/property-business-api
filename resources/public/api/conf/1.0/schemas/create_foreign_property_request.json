@@ -35,7 +35,8 @@
           },
           "required": [
             "rentAmount"
-          ]
+          ],
+          "additionalProperties": false
         },
         "expenditure": {
           "description": "Object holding the expenditure for the period.",
@@ -81,12 +82,14 @@
               "description": "Sum of all expenses for the specified period.\n\nThe value must be greater than 0 and up to 99999999999.99.",
               "example": "5000.99"
             }
-          }
+          },
+          "additionalProperties": false
         }
       },
       "required": [
         "income"
-      ]
+      ],
+      "additionalProperties": false
     },
     "foreignProperty": {
       "description": "Array holding the income and expenses of the user's foreign property business - excluding Furnished Holiday Lettings (FHL) in the European Economic Area (EEA) - for the period.",
@@ -120,7 +123,8 @@
                 },
                 "required": [
                   "rentAmount"
-                ]
+                ],
+                "additionalProperties": false
               },
               "foreignTaxCreditRelief": {
                 "description": "A boolean indicating whether Foreign Tax Credit Relief (FTCR) has been claimed. The value must be true or false.",
@@ -151,7 +155,8 @@
             "required": [
               "rentIncome",
               "foreignTaxCreditRelief"
-            ]
+            ],
+            "additionalProperties": false
           },
           "expenditure": {
             "description": "Object holding the expenditure for the period.",
@@ -207,18 +212,21 @@
                 "description": "Sum of all expenses for the specified period.\n\nThe value must be greater than 0 and up to 99999999999.99.",
                 "example": "5000.99"
               }
-            }
+            },
+            "additionalProperties": false
           }
         },
         "required": [
           "countryCode",
           "income"
-        ]
+        ],
+        "additionalProperties": false
       }
     }
   },
   "required": [
     "fromDate",
     "toDate"
-  ]
+  ],
+  "additionalProperties": false
 }

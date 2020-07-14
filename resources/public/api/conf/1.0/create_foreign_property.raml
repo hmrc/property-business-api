@@ -24,7 +24,7 @@ description: This endpoint allows the developer to submit the income and expendi
 securedBy: [ sec.oauth_2_0: { scopes: [ "write:self-assessment" ] } ]
 body:
   application/json:
-    type: !include schemas/create_foreign_property_unconsolidated_request.json
+    type: !include schemas/create_foreign_property_request.json
     examples:
      example-1:
       description: consolidated request

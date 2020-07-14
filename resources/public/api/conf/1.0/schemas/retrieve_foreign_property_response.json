@@ -35,9 +35,10 @@
           },
           "required": [
             "rentAmount"
-          ]
+          ],
+          "additionalProperties": false
         },
-        "expenses": {
+        "expenditure": {
           "type": "object",
           "description": "Object holding the expenditure for the period.",
           "properties": {
@@ -81,12 +82,14 @@
               "description": "Sum of all expenses for the specified period.\n\nThe value must be greater than 0 and up to 99999999999.99.",
               "example": "5000.99"
             }
-          }
+          },
+          "additionalProperties": false
         }
       },
       "required": [
         "income"
-      ]
+      ],
+      "additionalProperties": false
     },
     "foreignProperty": {
       "type": "array",
@@ -120,7 +123,8 @@
                 },
                 "required": [
                   "rentAmount"
-                ]
+                ],
+                "additionalProperties": false
               },
               "foreignTaxCreditRelief": {
                 "type": "boolean",
@@ -151,7 +155,8 @@
             "required": [
               "rentIncome",
               "foreignTaxCreditRelief"
-            ]
+            ],
+            "additionalProperties": false
           },
           "expenditure": {
             "type": "object",
@@ -207,54 +212,58 @@
                 "description": "Sum of all expenses for the specified period.\n\nThe value must be greater than 0 and up to 99999999999.99.",
                 "example": "5000.99"
               }
-            }
-          },
-          "links": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "description": "A list of endpoint links that indicate possible actions related to the current resource.",
-              "properties": {
-                "href": {
-                  "description": "The relative url of the endpoint.",
-                  "type": "string",
-                  "example": "/individuals/business/property/CX897463D/XAIS12345678910/period/4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
-                },
-                "method": {
-                  "description": "The HTTP method type for the endpoint.",
-                  "type": "string",
-                  "enum": [
-                    "GET",
-                    "PUT"
-                  ]
-                },
-                "rel": {
-                  "description": "A label for the endpoint, which describes how it is related to the current resource\nThe rel will be self where the action is retrieval of the same resource.",
-                  "type": "string",
-                  "enum": [
-                    "self",
-                    "amend-property-period-summary",
-                    "list-property-period-summaries"
-                  ]
-                }
-              },
-              "required": [
-                "href",
-                "method",
-                "rel"
-              ]
-            }
+            },
+            "additionalProperties": false
           }
         },
         "required": [
           "countryCode",
           "income"
-        ]
+        ],
+        "additionalProperties": false
+      }
+    },
+    "links": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "description": "A list of endpoint links that indicate possible actions related to the current resource.",
+        "properties": {
+          "href": {
+            "description": "The relative url of the endpoint.",
+            "type": "string",
+            "example": "/individuals/business/property/CX897463D/XAIS12345678910/period/4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
+          },
+          "method": {
+            "description": "The HTTP method type for the endpoint.",
+            "type": "string",
+            "enum": [
+              "GET",
+              "PUT"
+            ]
+          },
+          "rel": {
+            "description": "A label for the endpoint, which describes how it is related to the current resource\nThe rel will be self where the action is retrieval of the same resource.",
+            "type": "string",
+            "enum": [
+              "self",
+              "amend-property-period-summary",
+              "list-property-period-summaries"
+            ]
+          }
+        },
+        "required": [
+          "href",
+          "method",
+          "rel"
+        ],
+        "additionalProperties": false
       }
     }
   },
   "required": [
     "fromDate",
     "toDate"
-  ]
+  ],
+  "additionalProperties": false
 }

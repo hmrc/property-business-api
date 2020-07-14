@@ -52,7 +52,8 @@
                 "href",
                 "rel",
                 "method"
-              ]
+              ],
+              "additionalProperties": false
             }
           }
         },
@@ -60,7 +61,8 @@
           "submissionId",
           "fromDate",
           "toDate"
-        ]
+        ],
+        "additionalProperties": false
       }
     },
     "links": {
@@ -95,11 +97,13 @@
           "href",
           "rel",
           "method"
-        ]
+        ],
+        "additionalProperties": false
       }
     }
   },
   "required": [
     "submissions"
-  ]
+  ],
+  "additionalProperties": false
 }

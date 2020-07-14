@@ -26,7 +26,7 @@ case class ForeignPropertyIncome(
                                   otherPropertyIncome: Option[BigDecimal],
                                   foreignTaxTakenOff: Option[BigDecimal],
                                   specialWithholdingTaxOrUKTaxPaid: Option[BigDecimal]
-                 )
+                                )
 
 object ForeignPropertyIncome {
   implicit val reads: Reads[ForeignPropertyIncome] = Json.reads[ForeignPropertyIncome]

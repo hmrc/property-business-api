@@ -17,24 +17,25 @@
 package v1.controllers.requestParsers.validators.validations
 
 import v1.models.errors.{MtdError, RuleBothExpensesSuppliedError}
-import v1.models.request.common.foreignFhlEea
+import v1.models.request.common.foreignFhlEea._
+import v1.models.request.common.foreignPropertyEntry._
 
 object ConsolidatedExpensesValidation {
-  def validate(expenditure: v1.models.request.common.foreignPropertyEntry.ForeignPropertyExpenditure, path: String): List[MtdError] = {
+  def validate(expenditure: ForeignPropertyExpenditure, path: String): List[MtdError] = {
     expenditure.consolidatedExpenses match {
       case None => NoValidationErrors
       case Some(_) => expenditure match {
-        case v1.models.request.common.foreignPropertyEntry.ForeignPropertyExpenditure(None, None, None, None, None, None, _, _, None, Some(_)) => NoValidationErrors
+        case ForeignPropertyExpenditure(None, None, None, None, None, None, _, _, None, Some(_)) => NoValidationErrors
         case _ => List(RuleBothExpensesSuppliedError.copy(paths = Some(Seq(path))))
       }
     }
   }
 
-  def validate(expenditure: foreignFhlEea.ForeignFhlEeaExpenditure, path: String): List[MtdError] = {
+  def validate(expenditure: ForeignFhlEeaExpenditure, path: String): List[MtdError] = {
     expenditure.consolidatedExpenses match {
       case None => NoValidationErrors
       case Some(_) => expenditure match {
-        case foreignFhlEea.ForeignFhlEeaExpenditure(None, None, None, None, None, None, None, Some(_)) => NoValidationErrors
+        case ForeignFhlEeaExpenditure(None, None, None, None, None, None, None, Some(_)) => NoValidationErrors
         case _ => List(RuleBothExpensesSuppliedError.copy(paths = Some(Seq(path))))
       }
     }

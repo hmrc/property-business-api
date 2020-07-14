@@ -54,7 +54,7 @@ class ListForeignPropertiesConnectorSpec extends ConnectorSpec {
       val outcome = Right(ResponseWrapper(correlationId, response))
       MockedHttpClient
         .get(
-          url = s"$baseUrl/business/property/${nino}/${businessId}/period",
+          url = s"$baseUrl/business/property/$nino/$businessId/period?fromDate=$fromDate&toDate=$toDate",
           requiredHeaders = "Environment" -> "des-environment", "Authorization" -> s"Bearer des-token"
         )
         .returns(Future.successful(outcome))

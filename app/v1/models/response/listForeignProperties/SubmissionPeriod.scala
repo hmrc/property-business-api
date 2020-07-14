@@ -16,7 +16,7 @@
 
 package v1.models.response.listForeignProperties
 
-import play.api.libs.json.{JsObject, JsPath, Json, Reads, Writes}
+import play.api.libs.json.{JsObject, JsPath, Json, OWrites, Reads}
 import play.api.libs.functional.syntax._
 
 case class SubmissionPeriod(submissionId: String, fromDate: String, toDate: String)
@@ -34,5 +34,5 @@ object SubmissionPeriod {
     }
   }
 
-  implicit val writes: Writes[SubmissionPeriod] = Json.writes[SubmissionPeriod]
+  implicit val writes: OWrites[SubmissionPeriod] = Json.writes[SubmissionPeriod]
 }

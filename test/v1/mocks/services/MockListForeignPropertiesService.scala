@@ -14,30 +14,32 @@
  * limitations under the License.
  */
 
-package v1.connectors
+package v1.mocks.services
 
-import config.AppConfig
-import javax.inject.{Inject, Singleton}
+import org.scalamock.handlers.CallHandler
+import org.scalamock.scalatest.MockFactory
 import uk.gov.hmrc.http.HeaderCarrier
-import uk.gov.hmrc.play.bootstrap.http.HttpClient
-import v1.connectors.httpparsers.StandardDesHttpParser._
+import v1.controllers.EndpointLogContext
+import v1.models.errors.ErrorWrapper
+import v1.models.outcomes.ResponseWrapper
 import v1.models.request.listForeignProperties.ListForeignPropertiesRequest
 import v1.models.response.listForeignProperties.{ListForeignPropertiesResponse, SubmissionPeriod}
+import v1.services.ListForeignPropertiesService
 
 import scala.concurrent.{ExecutionContext, Future}
 
-@Singleton
-class ListForeignPropertiesConnector @Inject()(val http: HttpClient,
-                                               val appConfig: AppConfig) extends BaseDesConnector {
+trait MockListForeignPropertiesService extends MockFactory {
 
-  def listForeignProperties(request: ListForeignPropertiesRequest)(
-    implicit hc: HeaderCarrier,
-    ec: ExecutionContext): Future[DesOutcome[ListForeignPropertiesResponse[SubmissionPeriod]]] = {
+  val mockService: ListForeignPropertiesService = mock[ListForeignPropertiesService]
 
-    val desUri = s"business/property/${request.nino}/${request.businessId}/period?fromDate=${request.fromDate}&toDate=${request.toDate}"
+  object MockListForeignPropertiesService {
 
-    get(
-      uri = DesUri[ListForeignPropertiesResponse[SubmissionPeriod]](desUri)
-    )
+    def listForeignProperties(requestData: ListForeignPropertiesRequest):
+    CallHandler[Future[Either[ErrorWrapper, ResponseWrapper[ListForeignPropertiesResponse[SubmissionPeriod]]]]] = {
+      (mockService
+        .listForeignProperties(_: ListForeignPropertiesRequest)(_: HeaderCarrier, _: ExecutionContext, _: EndpointLogContext))
+        .expects(requestData, *, *, *)
+    }
   }
+
 }

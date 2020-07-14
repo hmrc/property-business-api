@@ -18,10 +18,12 @@ package v1.support
 
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
+import javax.inject.Singleton
 
-trait DateUtils {
-  lazy val currentDate: LocalDate = LocalDate.now()
-  private lazy val limit: LocalDate = LocalDate.parse(s"${currentDate.getYear}-04-06", DateTimeFormatter.ISO_DATE)
+@Singleton
+class DateUtils {
+  def currentDate: LocalDate = LocalDate.now()
+  private def limit: LocalDate = LocalDate.parse(s"${currentDate.getYear}-04-06", DateTimeFormatter.ISO_DATE)
 
   def currentTaxYearStart: String =
     if(currentDate.isBefore(limit)) limit.minusYears(1).toString else limit.toString

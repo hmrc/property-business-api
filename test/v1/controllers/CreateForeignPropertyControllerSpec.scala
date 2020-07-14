@@ -27,6 +27,8 @@ import v1.models.errors._
 import v1.models.hateoas.Method.GET
 import v1.models.hateoas.{HateoasWrapper, Link}
 import v1.models.outcomes.ResponseWrapper
+import v1.models.request.common.foreignFhlEea.{ForeignFhlEea, ForeignFhlEeaExpenditure, ForeignFhlEeaIncome}
+import v1.models.request.common.foreignPropertyEntry.{ForeignPropertyEntry, ForeignPropertyExpenditure, ForeignPropertyIncome, ForeignPropertyRentIncome}
 import v1.models.request.createForeignProperty._
 import v1.models.response.createForeignProperty.{CreateForeignPropertyHateoasData, CreateForeignPropertyResponse}
 
@@ -182,8 +184,8 @@ class CreateForeignPropertyControllerSpec
       Some(2000.99)
     )))
 
-  private val foreignProperty = ForeignProperty("FRA", ForeignPropertyIncome(
-    RentIncome(2000.99, 2000.99), true, Some(2000.99), Some(2000.99), Some(2000.99), Some(2000.99)),
+  private val foreignProperty = ForeignPropertyEntry("FRA", ForeignPropertyIncome(
+    ForeignPropertyRentIncome(2000.99, 2000.99), true, Some(2000.99), Some(2000.99), Some(2000.99), Some(2000.99)),
   Some(ForeignPropertyExpenditure(Some(2000.99),
     Some(2000.99),
     Some(2000.99),

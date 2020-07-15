@@ -18,21 +18,21 @@ package v1
 
 import v1.models.errors.ErrorWrapper
 import v1.models.outcomes.ResponseWrapper
-import v1.models.response.listForeignProperties.{ListForeignPropertiesResponse, SubmissionPeriod}
-import v1.models.response.createForeignProperty.CreateForeignPropertyResponse
-import v1.models.response.retrieveForeignProperty.RetrieveForeignPropertyResponse
+import v1.models.response.listForeignPropertiesPeriodSummaries.{ListForeignPropertiesPeriodSummariesResponse, SubmissionPeriod}
+import v1.models.response.createForeignPropertyPeriodSummary.CreateForeignPropertyPeriodSummaryResponse
+import v1.models.response.retrieveForeignPropertyPeriodSummary.RetrieveForeignPropertyPeriodSummaryResponse
 
 
 package object services {
 
   private type ServiceOutcome[A] = Either[ErrorWrapper, ResponseWrapper[A]]
 
-  type CreateForeignPropertyServiceOutcome = ServiceOutcome[CreateForeignPropertyResponse]
+  type CreateForeignPropertyServicePeriodSummaryOutcome = ServiceOutcome[CreateForeignPropertyPeriodSummaryResponse]
 
-  type AmendForeignPropertyServiceOutcome = ServiceOutcome[Unit]
+  type AmendForeignPropertyServicePeriodSummaryOutcome = ServiceOutcome[Unit]
 
-  type RetrieveForeignPropertyServiceOutcome = ServiceOutcome[RetrieveForeignPropertyResponse]
+  type RetrieveForeignPropertyServicePeriodSummaryOutcome = ServiceOutcome[RetrieveForeignPropertyPeriodSummaryResponse]
 
-  type ListForeignPropertiesServiceOutcome = ServiceOutcome[ListForeignPropertiesResponse[SubmissionPeriod]]
+  type ListForeignPropertiesServicePeriodSummariesOutcome = ServiceOutcome[ListForeignPropertiesPeriodSummariesResponse[SubmissionPeriod]]
 
 }

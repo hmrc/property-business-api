@@ -25,22 +25,22 @@ trait HateoasLinks {
 
   //Domain URIs
 
-  private def foreignPropertyUri(appConfig: AppConfig, nino: String, businessId: String): String =
+  private def foreignPropertyPeriodSummaryUri(appConfig: AppConfig, nino: String, businessId: String): String =
     s"/${appConfig.apiGatewayContext}/$nino/$businessId/period"
 
-  private def foreignPropertySubmissionUri(appConfig: AppConfig, nino: String, businessId: String, submissionId: String): String =
+  private def foreignPropertyPeriodSummarySubmissionUri(appConfig: AppConfig, nino: String, businessId: String, submissionId: String): String =
     s"/${appConfig.apiGatewayContext}/$nino/$businessId/period/$submissionId"
 
   //API resource links
-  def listForeignProperties(appConfig: AppConfig, nino: String, businessId: String, rel: String = SELF): Link =
-    Link(href = foreignPropertyUri(appConfig, nino, businessId), method = GET, rel = rel)
+  def listForeignPropertiesPeriodSummaries(appConfig: AppConfig, nino: String, businessId: String, rel: String = SELF): Link =
+    Link(href = foreignPropertyPeriodSummaryUri(appConfig, nino, businessId), method = GET, rel = rel)
 
-  def createForeignProperty(appConfig: AppConfig, nino: String, businessId: String): Link =
-    Link(href = foreignPropertyUri(appConfig, nino, businessId), method = POST, rel = CREATE_PROPERTY_PERIOD_SUMMARY)
+  def createForeignPropertyPeriodSummary(appConfig: AppConfig, nino: String, businessId: String): Link =
+    Link(href = foreignPropertyPeriodSummaryUri(appConfig, nino, businessId), method = POST, rel = CREATE_PROPERTY_PERIOD_SUMMARY)
 
-  def amendForeignProperty(appConfig: AppConfig, nino: String, businessId: String, submissionId: String): Link =
-    Link(href = foreignPropertySubmissionUri(appConfig, nino, businessId, submissionId), method = PUT, rel = AMEND_PROPERTY_PERIOD_SUMMARY)
+  def amendForeignPropertyPeriodSummary(appConfig: AppConfig, nino: String, businessId: String, submissionId: String): Link =
+    Link(href = foreignPropertyPeriodSummarySubmissionUri(appConfig, nino, businessId, submissionId), method = PUT, rel = AMEND_PROPERTY_PERIOD_SUMMARY)
 
-  def retrieveForeignProperty(appConfig: AppConfig, nino: String, businessId: String, submissionId: String): Link =
-    Link(href = foreignPropertySubmissionUri(appConfig, nino, businessId, submissionId), method = GET, rel = SELF)
+  def retrieveForeignPropertyPeriodSummary(appConfig: AppConfig, nino: String, businessId: String, submissionId: String): Link =
+    Link(href = foreignPropertyPeriodSummarySubmissionUri(appConfig, nino, businessId, submissionId), method = GET, rel = SELF)
 }

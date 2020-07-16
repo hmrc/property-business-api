@@ -17,8 +17,8 @@
 package v1.controllers.requestParsers.validators.validations
 
 import v1.models.errors.{MtdError, RuleBothExpensesSuppliedError}
-import v1.models.request.foreignPropertyPeriodSummary.common.foreignFhlEea._
-import v1.models.request.foreignPropertyPeriodSummary.common.foreignPropertyEntry._
+import v1.models.request.common.foreignFhlEea._
+import v1.models.request.common.foreignPropertyEntry._
 
 object ConsolidatedExpensesValidation {
   def validate(expenditure: ForeignPropertyExpenditure, path: String): List[MtdError] = {

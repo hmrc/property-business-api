@@ -1,4 +1,4 @@
-GET        /:nino/:businessId/period                         v1.controllers.foreignPropertyPeriodSummary.ListForeignPropertiesPeriodSummariesController.handleRequest(nino: String, businessId: String, fromDate: Option[String], toDate: Option[String])
-POST       /:nino/:businessId/period                         v1.controllers.foreignPropertyPeriodSummary.CreateForeignPropertyPeriodSummaryController.handleRequest(nino: String, businessId: String)
-PUT        /:nino/:businessId/period/:submissionId           v1.controllers.foreignPropertyPeriodSummary.AmendForeignPropertyPeriodSummaryController.handleRequest(nino: String, businessId: String, submissionId: String)
-GET        /:nino/:businessId/period/:submissionId           v1.controllers.foreignPropertyPeriodSummary.RetrieveForeignPropertyPeriodSummaryController.handleRequest(nino: String, businessId: String, submissionId: String)
+GET        /:nino/:businessId/period                         v1.controllers.ListForeignPropertiesPeriodSummariesController.handleRequest(nino: String, businessId: String, fromDate: Option[String], toDate: Option[String])
+POST       /:nino/:businessId/period                         v1.controllers.CreateForeignPropertyPeriodSummaryController.handleRequest(nino: String, businessId: String)
+PUT        /:nino/:businessId/period/:submissionId           v1.controllers.AmendForeignPropertyPeriodSummaryController.handleRequest(nino: String, businessId: String, submissionId: String)
+GET        /:nino/:businessId/period/:submissionId           v1.controllers.RetrieveForeignPropertyPeriodSummaryController.handleRequest(nino: String, businessId: String, submissionId: String)

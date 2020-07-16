@@ -7,13 +7,7 @@
       "taxDeducted": 5000.99
     },
     "expenditure": {
-      "premisesRunningCosts": 5000.99,
-      "repairsAndMaintenance": 5000.99,
-      "financialCosts": 5000.99,
-      "professionalFees": 5000.99,
-      "costsOfServices": 5000.99,
-      "travelCosts": 5000.99,
-      "other": 5000.99
+      "consolidatedExpenses": 5000.99
     }
   },
   "foreignProperty": [
@@ -31,15 +25,9 @@
         "specialWithholdingTaxOrUKTaxPaid": 5000.99
       },
       "expenditure": {
-        "premisesRunningCosts": 5000.99,
-        "repairsAndMaintenance": 5000.99,
-        "financialCosts": 5000.99,
-        "professionalFees": 5000.99,
-        "costsOfServices": 5000.99,
-        "travelCosts": 5000.99,
         "residentialFinancialCost": 5000.99,
         "broughtFwdResidentialFinancialCost": 5000.99,
-        "other": 5000.99
+        "consolidatedExpenses": 5000.99
       }
     }
   ]

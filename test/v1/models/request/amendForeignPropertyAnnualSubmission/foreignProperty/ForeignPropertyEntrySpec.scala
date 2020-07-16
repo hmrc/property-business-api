@@ -1,0 +1,201 @@
+/*
+ * Copyright 2020 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package v1.models.request.amendForeignPropertyAnnualSubmission.foreignProperty
+
+import play.api.libs.json.Json
+import support.UnitSpec
+import v1.models.utils.JsonErrorValidators
+
+class ForeignPropertyEntrySpec extends UnitSpec with JsonErrorValidators{
+
+  val foreignProperty =
+    ForeignPropertyEntry(
+      "GER",
+      Some(Seq(ForeignPropertyAdjustments(
+        Some(100.25),
+        Some(100.25)
+      ))),
+      Some(ForeignPropertyAllowances(
+        Some(100.25),
+        Some(100.25),
+        Some(100.25),
+        Some(100.25),
+        Some(100.25),
+        Some(100.25),
+        Some(100.25)
+      ))
+    )
+
+  val foreignPropertyNoAdjustments =
+    ForeignPropertyEntry(
+      "GER",
+      None,
+      Some(ForeignPropertyAllowances(
+        Some(100.25),
+        Some(100.25),
+        Some(100.25),
+        Some(100.25),
+        Some(100.25),
+        Some(100.25),
+        Some(100.25)
+      ))
+    )
+
+  val foreignPropertyNoAllowances =
+    ForeignPropertyEntry(
+      "GER",
+      Some(Seq(ForeignPropertyAdjustments(
+        Some(100.25),
+        Some(100.25)
+      ))),
+      None
+    )
+
+  val foreignPropertyMultipleAdjustments =
+    ForeignPropertyEntry(
+      "GER",
+      Some(Seq(ForeignPropertyAdjustments(
+        Some(100.25),
+        Some(100.25)
+      ),
+        ForeignPropertyAdjustments(
+          Some(200.50),
+          Some(200.50)
+        ))),
+      Some(ForeignPropertyAllowances(
+        Some(100.25),
+        Some(100.25),
+        Some(100.25),
+        Some(100.25),
+        Some(100.25),
+        Some(100.25),
+        Some(100.25)
+      ))
+    )
+
+  val jsonBody = Json.parse(
+    """
+      |{
+      |   "countryCode":"GER",
+      |   "adjustments":[
+      |      {
+      |         "privateUseAdjustment":100.25,
+      |         "balancingCharge":100.25
+      |      }
+      |   ],
+      |   "allowances":{
+      |      "annualInvestmentAllowance":100.25,
+      |      "costOfReplacingDomesticItems":100.25,
+      |      "zeroEmissionsGoodsVehicleAllowance":100.25,
+      |      "propertyAllowance":100.25,
+      |      "otherCapitalAllowance":100.25,
+      |      "structureAndBuildingAllowance":100.25,
+      |      "electricChargePointAllowance":100.25
+      |   }
+      |}
+      |""".stripMargin)
+
+  val jsonBodyNoAdjustments = Json.parse(
+    """
+      |{
+      |   "countryCode":"GER",
+      |   "allowances":{
+      |      "annualInvestmentAllowance":100.25,
+      |      "costOfReplacingDomesticItems":100.25,
+      |      "zeroEmissionsGoodsVehicleAllowance":100.25,
+      |      "propertyAllowance":100.25,
+      |      "otherCapitalAllowance":100.25,
+      |      "structureAndBuildingAllowance":100.25,
+      |      "electricChargePointAllowance":100.25
+      |   }
+      |}
+      |""".stripMargin)
+
+  val jsonBodyNoAllowances = Json.parse(
+    """
+      |{
+      |   "countryCode":"GER",
+      |   "adjustments":[
+      |      {
+      |         "privateUseAdjustment":100.25,
+      |         "balancingCharge":100.25
+      |      }
+      |   ]
+      |}
+      |""".stripMargin)
+
+  val jsonBodyMultipleAdjustments = Json.parse(
+    """
+      |{
+      |   "countryCode":"GER",
+      |   "adjustments":[
+      |      {
+      |         "privateUseAdjustment":100.25,
+      |         "balancingCharge":100.25
+      |      },
+      |      {
+      |         "privateUseAdjustment":200.50,
+      |         "balancingCharge":200.50
+      |      }
+      |   ],
+      |   "allowances":{
+      |      "annualInvestmentAllowance":100.25,
+      |      "costOfReplacingDomesticItems":100.25,
+      |      "zeroEmissionsGoodsVehicleAllowance":100.25,
+      |      "propertyAllowance":100.25,
+      |      "otherCapitalAllowance":100.25,
+      |      "structureAndBuildingAllowance":100.25,
+      |      "electricChargePointAllowance":100.25
+      |   }
+      |}
+      |""".stripMargin)
+
+
+  "reads" when {
+    "passed a valid JSON" should {
+      "return a valid model" in {
+        jsonBody.as[ForeignPropertyEntry] shouldBe foreignProperty
+      }
+      "return a valid model with no adjustments object" in {
+        jsonBodyNoAdjustments.as[ForeignPropertyEntry] shouldBe foreignPropertyNoAdjustments
+      }
+      "return a valid model with no allowances object" in {
+        jsonBodyNoAllowances.as[ForeignPropertyEntry] shouldBe foreignPropertyNoAllowances
+      }
+      "return a valid model with multiple adjustments object" in {
+        jsonBodyMultipleAdjustments.as[ForeignPropertyEntry] shouldBe foreignPropertyMultipleAdjustments
+      }
+    }
+  }
+  "writes" when {
+    "passed valid model" should {
+      "return valid JSON" in {
+        Json.toJson(foreignProperty) shouldBe jsonBody
+      }
+      "return a valid JSON with no adjustments" in {
+        Json.toJson(foreignPropertyNoAdjustments) shouldBe jsonBodyNoAdjustments
+      }
+      "return a valid JSON with no allowances" in {
+        Json.toJson(foreignPropertyNoAllowances) shouldBe jsonBodyNoAllowances
+      }
+      "return a valid JSON with multiple adjustments" in {
+        Json.toJson(foreignPropertyMultipleAdjustments) shouldBe jsonBodyMultipleAdjustments
+      }
+    }
+  }
+
+}

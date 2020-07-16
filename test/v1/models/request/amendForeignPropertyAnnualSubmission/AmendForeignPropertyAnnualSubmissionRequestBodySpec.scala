@@ -55,6 +55,15 @@ class AmendForeignPropertyAnnualSubmissionRequestBodySpec extends UnitSpec with 
         )))))
     )
 
+  val amendForeignPropertyAnnualSubmissionRequestBodyMinimum =
+    AmendForeignPropertyAnnualSubmissionRequestBody(
+      None,
+      Some(Seq(ForeignPropertyEntry(
+        "GER",
+        None,
+        None)))
+    )
+
   val jsonBody = Json.parse(
     """
       |{
@@ -95,10 +104,24 @@ class AmendForeignPropertyAnnualSubmissionRequestBodySpec extends UnitSpec with 
       |}
       |""".stripMargin)
 
+  val jsonBodyMinimum = Json.parse(
+    """
+      |{
+      |   "foreignProperty":[
+      |      {
+      |         "countryCode":"GER"
+      |      }
+      |   ]
+      |}
+      |""".stripMargin)
+
   "reads" when {
     "passed a valid JSON" should {
       "return a valid model" in {
         jsonBody.as[AmendForeignPropertyAnnualSubmissionRequestBody] shouldBe amendForeignPropertyAnnualSubmissionRequestBody
+      }
+      "return a valid model with minimum fields" in {
+        jsonBodyMinimum.as[AmendForeignPropertyAnnualSubmissionRequestBody] shouldBe amendForeignPropertyAnnualSubmissionRequestBodyMinimum
       }
     }
   }
@@ -106,6 +129,9 @@ class AmendForeignPropertyAnnualSubmissionRequestBodySpec extends UnitSpec with 
     "passed valid model" should {
       "return valid JSON" in {
         Json.toJson(amendForeignPropertyAnnualSubmissionRequestBody) shouldBe jsonBody
+      }
+      "return a valid minimum JSON" in {
+        Json.toJson(amendForeignPropertyAnnualSubmissionRequestBodyMinimum) shouldBe jsonBodyMinimum
       }
     }
   }

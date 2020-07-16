@@ -17,10 +17,11 @@
 package v1.models.request.amendForeignPropertyAnnualSubmission
 
 import play.api.libs.json._
+import v1.models.request.amendForeignPropertyAnnualSubmission.foreignFhlEea.ForeignFhlEea
+import v1.models.request.amendForeignPropertyAnnualSubmission.foreignProperty.ForeignPropertyEntry
 case class AmendForeignPropertyAnnualSubmissionRequestBody(foreignFhlEea: Option[ForeignFhlEea], foreignProperty: Option[Seq[ForeignPropertyEntry]])
 
 
 object AmendForeignPropertyAnnualSubmissionRequestBody {
-  implicit val reads: Reads[AmendForeignPropertyAnnualSubmissionRequestBody] = Json.reads[AmendForeignPropertyAnnualSubmissionRequestBody]
-  implicit val writes: Writes[AmendForeignPropertyAnnualSubmissionRequestBody] = Json.writes[AmendForeignPropertyAnnualSubmissionRequestBody]
+  implicit val format: OFormat[AmendForeignPropertyAnnualSubmissionRequestBody] = Json.format[AmendForeignPropertyAnnualSubmissionRequestBody]
 }

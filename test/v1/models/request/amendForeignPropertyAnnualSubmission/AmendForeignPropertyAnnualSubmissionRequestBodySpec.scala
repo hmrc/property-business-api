@@ -18,45 +18,41 @@ package v1.models.request.amendForeignPropertyAnnualSubmission
 
 import play.api.libs.json.Json
 import support.UnitSpec
+import v1.models.request.amendForeignPropertyAnnualSubmission.foreignFhlEea.{ForeignFhlEea, ForeignFhlEeaAdjustments, ForeignFhlEeaAllowances}
+import v1.models.request.amendForeignPropertyAnnualSubmission.foreignProperty.{ForeignPropertyAdjustments, ForeignPropertyAllowances, ForeignPropertyEntry}
 import v1.models.utils.JsonErrorValidators
 
 class AmendForeignPropertyAnnualSubmissionRequestBodySpec extends UnitSpec with JsonErrorValidators {
 
-
   val amendForeignPropertyAnnualSubmissionRequestBody =
     AmendForeignPropertyAnnualSubmissionRequestBody(
       Some(ForeignFhlEea(
-        Some(Adjustments(
-          Some(5000.99),
-          Some(5000.99),
+        Some(ForeignFhlEeaAdjustments(
+          Some(100.25),
+          Some(100.25),
           Some(true)
         )),
-        Some(Allowances(
-          Some(5000.99),
-          None,
-          None,
-          Some(5000.99),
-          Some(5000.99),
-          None,
-          Some(5000.99)
+        Some(ForeignFhlEeaAllowances(
+          Some(100.25),
+          Some(100.25),
+          Some(100.25),
+          Some(100.25)
         ))
       )),
       Some(Seq(ForeignPropertyEntry(
-        "FRA",
-        Some(Adjustments(
-          Some(5000.99),
-          Some(5000.99),
-          None)),
-        Some(Allowances(
-          Some(5000.99),
-          Some(5000.99),
-          Some(5000.99),
-          Some(5000.99),
-          Some(5000.99),
-          Some(5000.99),
-          Some(5000.99)
-        ))
-      )))
+        "GER",
+        Some(Seq(ForeignPropertyAdjustments(
+          Some(100.25),
+          Some(100.25)))),
+        Some(ForeignPropertyAllowances(
+          Some(100.25),
+          Some(100.25),
+          Some(100.25),
+          Some(100.25),
+          Some(100.25),
+          Some(100.25),
+          Some(100.25)
+        )))))
     )
 
   val jsonBody = Json.parse(

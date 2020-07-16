@@ -14,8 +14,12 @@
  * limitations under the License.
  */
 
-package v1.models.request.amendForeignPropertyAnnualSubmission
+package v1.models.request.amendForeignPropertyAnnualSubmission.foreignFhlEea
 
-case class ForeignPropertyEntry(countryCode: String,
-                                adjustments: Option[Adjustments],
-                                allowances: Option[Allowances])
+import play.api.libs.json.{Json, OFormat}
+
+case class ForeignFhlEea(adjustments: Option[ForeignFhlEeaAdjustments], allowances: Option[ForeignFhlEeaAllowances])
+
+object ForeignFhlEea {
+  implicit val format: OFormat[ForeignFhlEea] = Json.format[ForeignFhlEea]
+}

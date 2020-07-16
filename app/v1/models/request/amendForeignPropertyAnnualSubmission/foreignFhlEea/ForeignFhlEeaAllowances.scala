@@ -14,8 +14,15 @@
  * limitations under the License.
  */
 
-package v1.models.request.amendForeignPropertyAnnualSubmission
+package v1.models.request.amendForeignPropertyAnnualSubmission.foreignFhlEea
 
-case class Adjustments(privateUseAdjustment: Option[BigDecimal],
-                       balancingCharge: Option[BigDecimal],
-                       periodOfGraceAdjustment: Option[Boolean])
+import play.api.libs.json.{Json, OFormat}
+
+case class ForeignFhlEeaAllowances(annualInvestmentAllowance: Option[BigDecimal],
+                                   otherCapitalAllowance: Option[BigDecimal],
+                                   propertyAllowance: Option[BigDecimal],
+                                   electricChargePointAllowance: Option[BigDecimal])
+
+object ForeignFhlEeaAllowances {
+  implicit val format: OFormat[ForeignFhlEeaAllowances] = Json.format[ForeignFhlEeaAllowances]
+}

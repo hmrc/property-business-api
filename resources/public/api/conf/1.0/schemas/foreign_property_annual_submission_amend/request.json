@@ -6,7 +6,7 @@
   "properties": {
     "foreignFhlEea": {
       "type": "object",
-      "description": "Array holding the income and expenditure of the user's Furnished Holiday Lets in the European Economic Area for the period.",
+      "description": "Object holding the income and expenditure of the user's Furnished Holiday Lets in the European Economic Area for the period.",
       "properties": {
         "adjustments": {
           "type": "object",

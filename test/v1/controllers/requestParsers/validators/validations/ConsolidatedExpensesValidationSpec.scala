@@ -18,8 +18,8 @@ package v1.controllers.requestParsers.validators.validations
 
 import support.UnitSpec
 import v1.models.errors.RuleBothExpensesSuppliedError
-import v1.models.request.common
-import v1.models.request.common.foreignPropertyEntry.ForeignPropertyExpenditure
+import v1.models.request.foreignPropertyPeriodSummary.common
+import v1.models.request.foreignPropertyPeriodSummary.common.foreignPropertyEntry.ForeignPropertyExpenditure
 
 class ConsolidatedExpensesValidationSpec extends UnitSpec {
 

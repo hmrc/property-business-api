@@ -4,9 +4,18 @@ is:
   - headers.testScenarioHeader
   - errors.formatNino
   - errors.formatBusinessId
+  - errors.formatTaxYear
+  - errors.formatCountryCode
+  - errors.formatValue
+  - errors.incorrectOrEmptyBody
+  - errors.ruleTaxYearNotSupported
+  - errors.ruleTaxYearRangeInvalid
+  - errors.ruleCountryCode
+  - errors.clientOrAgentNotAuthorised
+  - errors.notFound
 displayName: Amend a Foreign Property Income & Expenditure Annual Summary [test only]
 description: This endpoint allows the developer to submit the adjustments and allowances for a foreign property business in a tax year. This submission is for either or both of Furnished Holiday Lets in the European Economic Area and all other foreign Property submissions.  A National Insurance number, business ID and tax year must be provided.
-(annotations.sandboxData): !include scenarios/amend_foreign_property.md
+(annotations.sandboxData): !include scenarios/foreign_property_annual_submission_amend.md
 (annotations.scope): "write:self-assessment"
 securedBy: [ sec.oauth_2_0: { scopes: [ "write:self-assessment" ] } ]
 body:

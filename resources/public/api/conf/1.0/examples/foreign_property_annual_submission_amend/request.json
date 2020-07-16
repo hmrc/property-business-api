@@ -1,29 +1,25 @@
 {
-  "foreignFhlEea":[
-    {
-      "adjustments":{
+  "foreignFhlEea": {
+      "adjustments": {
         "privateUseAdjustment":100.25,
         "balancingCharge":100.25,
         "periodOfGraceAdjustment":true
       },
-      "allowances":{
+      "allowances": {
         "annualInvestmentAllowance":100.25,
         "otherCapitalAllowance":100.25,
         "propertyAllowance":100.25,
         "electricChargePointAllowance":100.25
       }
-    }
-  ],
-  "foreignProperty":[
+    },
+  "foreignProperty": [
     {
       "countryCode":"GER",
-      "adjustments":[
-        {
-          "privateUseAdjustment":100.25,
-          "balancingCharge":100.25
-        }
-      ],
-      "allowances":{
+      "adjustments": {
+        "privateUseAdjustment":100.25,
+        "balancingCharge":100.25
+      },
+      "allowances": {
         "annualInvestmentAllowance":100.25,
         "costOfReplacingDomesticItems":100.25,
         "zeroEmissionsGoodsVehicleAllowance":100.25,

@@ -246,3 +246,28 @@ traits:
                 description: Period summaries are not contiguous.
                 value:
                   code: RULE_NOT_CONTIGUOUS_PERIOD
+  ruleTaxYearNotSupported:
+    responses:
+      400:
+        body:
+          application/json:
+            type: types.errorResponse
+            examples:
+              ruleNotContiguousPeriod:
+                description: The specified Tax year is not supported. That is, the tax year specified is before the minimum tax year value
+                value:
+                  code: RULE_TAX_YEAR_NOT_SUPPORTED
+  ruleTaxYearRangeInvalid:
+    responses:
+      400:
+        body:
+          application/json:
+            type: types.errorResponse
+            examples:
+              ruleNotContiguousPeriod:
+                description: Tax year range invalid. A tax year range of one year is required
+                value:
+                  code: RULE_TAX_YEAR_RANGE_INVALID
+
+
+

@@ -35,7 +35,7 @@ object FromDateFormatError extends MtdError("FORMAT_FROM_DATE", "The provided Fr
 object ToDateFormatError extends MtdError("FORMAT_TO_DATE", "The provided To date is invalid")
 object CountryCodeFormatError extends MtdError("FORMAT_COUNTRY_CODE", "The provided Country code is invalid")
 object ValueFormatError extends MtdError("FORMAT_VALUE", "One or more monetary fields are invalid")
-
+object TaxYearFormatError extends MtdError("FORMAT_TAX_YEAR", "The provided Tax year is invalid")
 
 // Rule Errors
 object RuleIncorrectOrEmptyBodyError extends MtdError("RULE_INCORRECT_OR_EMPTY_BODY_SUBMITTED", "An empty or non-matching body was submitted")
@@ -48,6 +48,8 @@ object RuleCountryCodeError
 object RuleOverlappingPeriodError extends MtdError("RULE_OVERLAPPING_PERIOD", "Period summary overlaps with any of the existing period summaries")
 object RuleMisalignedPeriodError extends MtdError("RULE_MISALIGNED_PERIOD", "Period summary is not within the accounting period")
 object RuleNotContiguousPeriodError extends MtdError("RULE_NOT_CONTIGUOUS_PERIOD", "Period summaries are not contiguous")
+object RuleTaxYearNotSupportedError extends MtdError("RULE_TAX_YEAR_NOT_SUPPORTED", "The tax year specified is before the minimum tax year value")
+object RuleTaxYearRangeInvalidError extends MtdError("RULE_TAX_YEAR_RANGE_INVALID", "The tax year range is invalid")
 
 object MissingFromDateError extends MtdError("MISSING_FROM_DATE", "The From date parameter is missing")
 object MissingToDateError extends MtdError("MISSING_TO_DATE", "The To date parameter is missing")

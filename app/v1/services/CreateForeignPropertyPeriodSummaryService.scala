@@ -24,7 +24,7 @@ import utils.Logging
 import v1.connectors.CreateForeignPropertyPeriodSummaryConnector
 import v1.controllers.EndpointLogContext
 import v1.models.errors._
-import v1.models.request.createForeignPropertyPeriodSummary.CreateForeignPropertyRequestData
+import v1.models.request.createForeignPropertyPeriodSummary.CreateForeignPropertyPeriodSummaryRequestData
 import v1.support.DesResponseMappingSupport
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -32,10 +32,10 @@ import scala.concurrent.{ExecutionContext, Future}
 @Singleton
 class CreateForeignPropertyPeriodSummaryService @Inject()(connector: CreateForeignPropertyPeriodSummaryConnector) extends DesResponseMappingSupport with Logging {
 
-  def createForeignProperty(request: CreateForeignPropertyRequestData)(
+  def createForeignProperty(request: CreateForeignPropertyPeriodSummaryRequestData)(
     implicit hc: HeaderCarrier,
     ec: ExecutionContext,
-    logContext: EndpointLogContext): Future[CreateForeignPropertyServiceOutcome] = {
+    logContext: EndpointLogContext): Future[CreateForeignPropertyPeriodSummaryServiceOutcome] = {
 
     val result = for {
       desResponseWrapper <- EitherT(connector.createForeignProperty(request)).leftMap(mapDesErrors(desErrorMap))

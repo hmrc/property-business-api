@@ -21,8 +21,8 @@ import javax.inject.{Inject, Singleton}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
 import v1.connectors.httpparsers.StandardDesHttpParser._
-import v1.models.request.listForeignPropertiesPeriodSummaries.ListForeignPropertiesRequest
-import v1.models.response.listForeignPropertiesPeriodSummaries.{ListForeignPropertiesResponse, SubmissionPeriod}
+import v1.models.request.listForeignPropertiesPeriodSummaries.ListForeignPropertiesPeriodSummariesRequest
+import v1.models.response.listForeignPropertiesPeriodSummaries.{ListForeignPropertiesPeriodSummariesResponse, SubmissionPeriod}
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -30,14 +30,14 @@ import scala.concurrent.{ExecutionContext, Future}
 class ListForeignPropertiesPeriodSummariesConnector @Inject()(val http: HttpClient,
                                                               val appConfig: AppConfig) extends BaseDesConnector {
 
-  def listForeignProperties(request: ListForeignPropertiesRequest)(
+  def listForeignProperties(request: ListForeignPropertiesPeriodSummariesRequest)(
     implicit hc: HeaderCarrier,
-    ec: ExecutionContext): Future[DesOutcome[ListForeignPropertiesResponse[SubmissionPeriod]]] = {
+    ec: ExecutionContext): Future[DesOutcome[ListForeignPropertiesPeriodSummariesResponse[SubmissionPeriod]]] = {
 
     val desUri = s"business/property/${request.nino}/${request.businessId}/period?fromDate=${request.fromDate}&toDate=${request.toDate}"
 
     get(
-      uri = DesUri[ListForeignPropertiesResponse[SubmissionPeriod]](desUri)
+      uri = DesUri[ListForeignPropertiesPeriodSummariesResponse[SubmissionPeriod]](desUri)
     )
   }
 }

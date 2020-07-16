@@ -20,7 +20,7 @@ import support.UnitSpec
 import uk.gov.hmrc.domain.Nino
 import v1.mocks.validators.MockRetrieveForeignPropertyPeriodSummaryValidator
 import v1.models.errors.{BadRequestError, BusinessIdFormatError, ErrorWrapper, NinoFormatError}
-import v1.models.request.retrieveForeignPropertyPeriodSummary.{RetrieveForeignPropertyRawData, RetrieveForeignPropertyRequestData}
+import v1.models.request.retrieveForeignPropertyPeriodSummary.{RetrieveForeignPropertyPeriodSummaryRawData, RetrieveForeignPropertyPeriodSummaryRequestData}
 
 class RetrieveForeignPropertyPeriodSummaryRequestParserSpec extends UnitSpec {
   val nino = "AA123456B"
@@ -28,7 +28,7 @@ class RetrieveForeignPropertyPeriodSummaryRequestParserSpec extends UnitSpec {
   val submissionId = "12345678-1234-4123-9123-123456789012"
 
   val inputData =
-    RetrieveForeignPropertyRawData(nino, businessId, submissionId)
+    RetrieveForeignPropertyPeriodSummaryRawData(nino, businessId, submissionId)
 
   trait Test extends MockRetrieveForeignPropertyPeriodSummaryValidator {
     lazy val parser = new RetrieveForeignPropertyPeriodSummaryRequestParser(mockValidator)
@@ -39,7 +39,7 @@ class RetrieveForeignPropertyPeriodSummaryRequestParserSpec extends UnitSpec {
       "valid request data is supplied" in new Test {
         MockRetrieveForeignPropertyValidator.validate(inputData).returns(Nil)
 
-        parser.parseRequest(inputData) shouldBe Right(RetrieveForeignPropertyRequestData(Nino(nino), businessId, submissionId))
+        parser.parseRequest(inputData) shouldBe Right(RetrieveForeignPropertyPeriodSummaryRequestData(Nino(nino), businessId, submissionId))
       }
     }
     "return an ErrorWrapper" when {

@@ -21,7 +21,7 @@ import javax.inject.{Inject, Singleton}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
 import v1.connectors.httpparsers.StandardDesHttpParser._
-import v1.models.request.amendForeignPropertyPeriodSummary.AmendForeignPropertyRequest
+import v1.models.request.amendForeignPropertyPeriodSummary.AmendForeignPropertyPeriodSummaryRequest
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -29,7 +29,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class AmendForeignPropertyPeriodSummaryConnector @Inject()(val http: HttpClient,
                                                            val appConfig: AppConfig) extends BaseDesConnector {
 
-  def amendForeignProperty(request: AmendForeignPropertyRequest)(
+  def amendForeignProperty(request: AmendForeignPropertyPeriodSummaryRequest)(
     implicit hc: HeaderCarrier,
     ec: ExecutionContext): Future[DesOutcome[Unit]] = {
 

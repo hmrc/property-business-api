@@ -19,14 +19,14 @@ package v1.controllers.requestParsers.validators
 import v1.controllers.requestParsers.validators.validations._
 import v1.models.errors._
 import v1.models.request.common.foreignPropertyEntry.{ForeignPropertyEntry, ForeignPropertyExpenditure}
-import v1.models.request.amendForeignPropertyPeriodSummary.{AmendForeignPropertyRawData, AmendForeignPropertyRequestBody}
+import v1.models.request.amendForeignPropertyPeriodSummary.{AmendForeignPropertyPeriodSummaryRawData, AmendForeignPropertyPeriodSummaryRequestBody}
 import v1.models.request.common.foreignFhlEea.{ForeignFhlEea, ForeignFhlEeaExpenditure}
 
-class AmendForeignPropertyPeriodSummaryValidator extends Validator[AmendForeignPropertyRawData] {
+class AmendForeignPropertyPeriodSummaryValidator extends Validator[AmendForeignPropertyPeriodSummaryRawData] {
 
   private val validationSet = List(parameterFormatValidation, bodyFormatValidation, bodyFieldValidation)
 
-  private def parameterFormatValidation: AmendForeignPropertyRawData => List[List[MtdError]] = (data: AmendForeignPropertyRawData) => {
+  private def parameterFormatValidation: AmendForeignPropertyPeriodSummaryRawData => List[List[MtdError]] = (data: AmendForeignPropertyPeriodSummaryRawData) => {
     List(
       NinoValidation.validate(data.nino),
       BusinessIdValidation.validate(data.businessId),
@@ -34,11 +34,11 @@ class AmendForeignPropertyPeriodSummaryValidator extends Validator[AmendForeignP
     )
   }
 
-  private def bodyFormatValidation: AmendForeignPropertyRawData => List[List[MtdError]] = { data =>
-    val baseValidation = List(JsonFormatValidation.validate[AmendForeignPropertyRequestBody](data.body, RuleIncorrectOrEmptyBodyError))
+  private def bodyFormatValidation: AmendForeignPropertyPeriodSummaryRawData => List[List[MtdError]] = { data =>
+    val baseValidation = List(JsonFormatValidation.validate[AmendForeignPropertyPeriodSummaryRequestBody](data.body, RuleIncorrectOrEmptyBodyError))
 
     val extraValidation: List[List[MtdError]] = {
-      data.body.asOpt[AmendForeignPropertyRequestBody].map(_.isEmpty).map {
+      data.body.asOpt[AmendForeignPropertyPeriodSummaryRequestBody].map(_.isEmpty).map {
         case true => List(List(RuleIncorrectOrEmptyBodyError))
         case false => NoValidationErrors
       }.getOrElse(NoValidationErrors)
@@ -47,8 +47,8 @@ class AmendForeignPropertyPeriodSummaryValidator extends Validator[AmendForeignP
     baseValidation ++ extraValidation
   }
 
-  private def bodyFieldValidation: AmendForeignPropertyRawData => List[List[MtdError]] = { data =>
-    val body = data.body.as[AmendForeignPropertyRequestBody]
+  private def bodyFieldValidation: AmendForeignPropertyPeriodSummaryRawData => List[List[MtdError]] = { data =>
+    val body = data.body.as[AmendForeignPropertyPeriodSummaryRequestBody]
 
     List(flattenErrors(List(
       body.foreignFhlEea.map(validateForeignFhlEea).getOrElse(NoValidationErrors),
@@ -197,7 +197,7 @@ class AmendForeignPropertyPeriodSummaryValidator extends Validator[AmendForeignP
     )
   }
 
-  override def validate(data: AmendForeignPropertyRawData): List[MtdError] = {
+  override def validate(data: AmendForeignPropertyPeriodSummaryRawData): List[MtdError] = {
     run(validationSet, data).distinct
   }
 }

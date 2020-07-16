@@ -21,17 +21,17 @@ import play.api.libs.json.{Json, OFormat}
 import v1.hateoas.{HateoasLinksFactory, HateoasLinks}
 import v1.models.hateoas.{HateoasData, Link}
 
-case class CreateForeignPropertyResponse(submissionId: String)
+case class CreateForeignPropertyPeriodSummaryResponse(submissionId: String)
 
-object CreateForeignPropertyResponse extends HateoasLinks{
-  implicit val format: OFormat[CreateForeignPropertyResponse] = Json.format[CreateForeignPropertyResponse]
+object CreateForeignPropertyPeriodSummaryResponse extends HateoasLinks{
+  implicit val format: OFormat[CreateForeignPropertyPeriodSummaryResponse] = Json.format[CreateForeignPropertyPeriodSummaryResponse]
 
-  implicit object LinksFactory extends HateoasLinksFactory[CreateForeignPropertyResponse, CreateForeignPropertyHateoasData] {
-    override def links(appConfig: AppConfig, data: CreateForeignPropertyHateoasData): Seq[Link] = {
+  implicit object LinksFactory extends HateoasLinksFactory[CreateForeignPropertyPeriodSummaryResponse, CreateForeignPropertyPeriodSummaryHateoasData] {
+    override def links(appConfig: AppConfig, data: CreateForeignPropertyPeriodSummaryHateoasData): Seq[Link] = {
       import data._
       Seq(retrieveForeignPropertyPeriodSummary(appConfig, nino, businessId, submissionId))
     }
   }
 }
 
-case class CreateForeignPropertyHateoasData(nino: String, businessId: String, submissionId: String) extends HateoasData
+case class CreateForeignPropertyPeriodSummaryHateoasData(nino: String, businessId: String, submissionId: String) extends HateoasData

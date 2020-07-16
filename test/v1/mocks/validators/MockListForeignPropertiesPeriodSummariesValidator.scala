@@ -20,7 +20,7 @@ import org.scalamock.handlers.CallHandler1
 import org.scalamock.scalatest.MockFactory
 import v1.controllers.requestParsers.validators.ListForeignPropertiesPeriodSummariesValidator
 import v1.models.errors.MtdError
-import v1.models.request.listForeignPropertiesPeriodSummaries.ListForeignPropertiesRawData
+import v1.models.request.listForeignPropertiesPeriodSummaries.ListForeignPropertiesPeriodSummariesRawData
 
 class MockListForeignPropertiesPeriodSummariesValidator extends MockFactory {
 
@@ -28,9 +28,9 @@ class MockListForeignPropertiesPeriodSummariesValidator extends MockFactory {
 
   object MockListForeignPropertiesValidator {
 
-    def validate(data: ListForeignPropertiesRawData): CallHandler1[ListForeignPropertiesRawData, List[MtdError]] = {
+    def validate(data: ListForeignPropertiesPeriodSummariesRawData): CallHandler1[ListForeignPropertiesPeriodSummariesRawData, List[MtdError]] = {
       (mockValidator
-        .validate(_: ListForeignPropertiesRawData))
+        .validate(_: ListForeignPropertiesPeriodSummariesRawData))
         .expects(data)
     }
   }

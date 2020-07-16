@@ -20,8 +20,8 @@ import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
 import uk.gov.hmrc.http.HeaderCarrier
 import v1.connectors.{DesOutcome, ListForeignPropertiesPeriodSummariesConnector}
-import v1.models.request.listForeignPropertiesPeriodSummaries.ListForeignPropertiesRequest
-import v1.models.response.listForeignPropertiesPeriodSummaries.{ListForeignPropertiesResponse, SubmissionPeriod}
+import v1.models.request.listForeignPropertiesPeriodSummaries.ListForeignPropertiesPeriodSummariesRequest
+import v1.models.response.listForeignPropertiesPeriodSummaries.{ListForeignPropertiesPeriodSummariesResponse, SubmissionPeriod}
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -31,9 +31,9 @@ trait MockListForeignPropertiesPeriodSummariesConnector extends MockFactory {
 
   object MockListForeignPropertiesConnector {
 
-    def listForeignProperties(requestData: ListForeignPropertiesRequest): CallHandler[Future[DesOutcome[ListForeignPropertiesResponse[SubmissionPeriod]]]] = {
+    def listForeignProperties(requestData: ListForeignPropertiesPeriodSummariesRequest): CallHandler[Future[DesOutcome[ListForeignPropertiesPeriodSummariesResponse[SubmissionPeriod]]]] = {
       (mockListForeignPropertiesConnector
-        .listForeignProperties(_: ListForeignPropertiesRequest)(_: HeaderCarrier, _: ExecutionContext))
+        .listForeignProperties(_: ListForeignPropertiesPeriodSummariesRequest)(_: HeaderCarrier, _: ExecutionContext))
         .expects(requestData, *, *)
     }
   }

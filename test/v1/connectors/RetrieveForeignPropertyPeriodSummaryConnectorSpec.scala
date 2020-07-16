@@ -20,8 +20,8 @@ import mocks.MockAppConfig
 import uk.gov.hmrc.domain.Nino
 import v1.mocks.MockHttpClient
 import v1.models.outcomes.ResponseWrapper
-import v1.models.request.retrieveForeignPropertyPeriodSummary.RetrieveForeignPropertyRequestData
-import v1.models.response.retrieveForeignPropertyPeriodSummary.RetrieveForeignPropertyResponse
+import v1.models.request.retrieveForeignPropertyPeriodSummary.RetrieveForeignPropertyPeriodSummaryRequestData
+import v1.models.response.retrieveForeignPropertyPeriodSummary.RetrieveForeignPropertyPeriodSummaryResponse
 import v1.models.response.retrieveForeignPropertyPeriodSummary.foreignFhlEea.{ForeignFhlEea, ForeignFhlEeaExpenditure, ForeignFhlEeaIncome}
 import v1.models.response.retrieveForeignPropertyPeriodSummary.foreignProperty.{ForeignProperty, ForeignPropertyExpenditure, ForeignPropertyIncome, ForeignPropertyRentIncome}
 
@@ -33,9 +33,9 @@ class RetrieveForeignPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
   val businessId = "XAIS12345678910"
   val submissionId = "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
 
-  val request = RetrieveForeignPropertyRequestData(nino, businessId, submissionId)
+  val request = RetrieveForeignPropertyPeriodSummaryRequestData(nino, businessId, submissionId)
 
-  val response = RetrieveForeignPropertyResponse(
+  val response = RetrieveForeignPropertyPeriodSummaryResponse(
     "2020-01-01",
     "2020-01-31",
     Some(ForeignFhlEea(

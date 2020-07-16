@@ -14,8 +14,9 @@
  * limitations under the License.
  */
 
-package v1.models.request.listForeignPropertiesPeriodSummaries
+package v1.models.request.createForeignPropertyPeriodSummary
 
-import uk.gov.hmrc.domain.Nino
+import play.api.libs.json.JsValue
+import v1.models.request.RawData
 
-case class ListForeignPropertiesRequest(nino: Nino, businessId: String, fromDate: String, toDate: String)
+case class CreateForeignPropertyPeriodSummaryRawData(nino: String, businessId: String, body: JsValue) extends RawData

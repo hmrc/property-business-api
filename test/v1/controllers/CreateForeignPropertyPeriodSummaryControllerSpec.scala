@@ -30,7 +30,7 @@ import v1.models.outcomes.ResponseWrapper
 import v1.models.request.common.foreignFhlEea.{ForeignFhlEea, ForeignFhlEeaExpenditure, ForeignFhlEeaIncome}
 import v1.models.request.common.foreignPropertyEntry.{ForeignPropertyEntry, ForeignPropertyExpenditure, ForeignPropertyIncome, ForeignPropertyRentIncome}
 import v1.models.request.createForeignPropertyPeriodSummary._
-import v1.models.response.createForeignPropertyPeriodSummary.{CreateForeignPropertyHateoasData, CreateForeignPropertyResponse}
+import v1.models.response.createForeignPropertyPeriodSummary.{CreateForeignPropertyPeriodSummaryHateoasData, CreateForeignPropertyPeriodSummaryResponse}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -169,7 +169,7 @@ class CreateForeignPropertyPeriodSummaryControllerSpec
       |}
       |""".stripMargin)
 
-  val response = CreateForeignPropertyResponse("4557ecb5-fd32-48cc-81f5-e6acd1099f3c")
+  val response = CreateForeignPropertyPeriodSummaryResponse("4557ecb5-fd32-48cc-81f5-e6acd1099f3c")
 
 
   private val foreignFhlEea = ForeignFhlEea(ForeignFhlEeaIncome(2000.99, Some(2000.99)),
@@ -199,16 +199,16 @@ class CreateForeignPropertyPeriodSummaryControllerSpec
   )))
 
 
-  private val requestBody = CreateForeignPropertyRequestBody("2019-01-01", "2018-01-01", Some(foreignFhlEea), Some(Seq(foreignProperty)))
-  private val requestData = CreateForeignPropertyRequestData(Nino(nino), businessId, requestBody)
-  private val rawData = CreateForeignPropertyRawData(nino, businessId, consolidatedRequestBodyJson)
+  private val requestBody = CreateForeignPropertyPeriodSummaryRequestBody("2019-01-01", "2018-01-01", Some(foreignFhlEea), Some(Seq(foreignProperty)))
+  private val requestData = CreateForeignPropertyPeriodSummaryRequestData(Nino(nino), businessId, requestBody)
+  private val rawData = CreateForeignPropertyPeriodSummaryRawData(nino, businessId, consolidatedRequestBodyJson)
 
   "create" should {
     "return a successful response from a consolidated request" when {
       "the request received is valid" in new Test {
 
         MockCreateForeignPropertyRequestParser
-          .requestFor(CreateForeignPropertyRawData(nino, businessId, consolidatedRequestBodyJson))
+          .requestFor(CreateForeignPropertyPeriodSummaryRawData(nino, businessId, consolidatedRequestBodyJson))
           .returns(Right(requestData))
 
         MockCreateForeignPropertyService
@@ -216,7 +216,7 @@ class CreateForeignPropertyPeriodSummaryControllerSpec
           .returns(Future.successful(Right(ResponseWrapper(correlationId, response))))
 
         MockHateoasFactory
-          .wrap(response, CreateForeignPropertyHateoasData(nino, businessId, submissionId))
+          .wrap(response, CreateForeignPropertyPeriodSummaryHateoasData(nino, businessId, submissionId))
           .returns(HateoasWrapper(response, Seq(testHateoasLink)))
 
         val result: Future[Result] = controller.handleRequest(nino, businessId)(fakePostRequest(consolidatedRequestBodyJson))
@@ -230,7 +230,7 @@ class CreateForeignPropertyPeriodSummaryControllerSpec
       "the request received is valid" in new Test {
 
         MockCreateForeignPropertyRequestParser
-          .requestFor(CreateForeignPropertyRawData(nino, businessId, unconsolidatedRequestBodyJson))
+          .requestFor(CreateForeignPropertyPeriodSummaryRawData(nino, businessId, unconsolidatedRequestBodyJson))
           .returns(Right(requestData))
 
         MockCreateForeignPropertyService
@@ -238,7 +238,7 @@ class CreateForeignPropertyPeriodSummaryControllerSpec
           .returns(Future.successful(Right(ResponseWrapper(correlationId, response))))
 
         MockHateoasFactory
-          .wrap(response, CreateForeignPropertyHateoasData(nino, businessId, submissionId))
+          .wrap(response, CreateForeignPropertyPeriodSummaryHateoasData(nino, businessId, submissionId))
           .returns(HateoasWrapper(response, Seq(testHateoasLink)))
 
         val result: Future[Result] = controller.handleRequest(nino, businessId)(fakePostRequest(unconsolidatedRequestBodyJson))

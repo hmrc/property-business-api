@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package v1.models.request.createForeignPropertyPeriodSummary
+package v1.models.request.amendForeignPropertyPeriodSummary
 
 import play.api.libs.json.Json
 import support.UnitSpec
@@ -22,11 +22,9 @@ import v1.models.request.common.foreignFhlEea.{ForeignFhlEea, ForeignFhlEeaExpen
 import v1.models.request.common.foreignPropertyEntry.{ForeignPropertyEntry, ForeignPropertyExpenditure, ForeignPropertyIncome, ForeignPropertyRentIncome}
 import v1.models.utils.JsonErrorValidators
 
-class CreateForeignPropertyRequestBodySpec extends UnitSpec with JsonErrorValidators {
+class AmendForeignPropertyPeriodSummaryRequestBodySpec extends UnitSpec with JsonErrorValidators {
 
-  val createForeignPropertyRequestBody = CreateForeignPropertyRequestBody(
-    "2020-01-01",
-    "2020-01-31",
+  val amendForeignPropertyRequestBody = AmendForeignPropertyPeriodSummaryRequestBody(
     Some(ForeignFhlEea(
       ForeignFhlEeaIncome(5000.99, Some(5000.99)),
       Some(ForeignFhlEeaExpenditure(
@@ -61,12 +59,10 @@ class CreateForeignPropertyRequestBodySpec extends UnitSpec with JsonErrorValida
         Some(5000.99),
         Some(5000.99)
       ))))
-  ))
+    ))
 
   val readsJson = Json.parse(
     """{
-      |  "fromDate": "2020-01-01",
-      |  "toDate": "2020-01-31",
       |  "foreignFhlEea": {
       |    "income": {
       |      "rentAmount": 5000.99,
@@ -115,8 +111,6 @@ class CreateForeignPropertyRequestBodySpec extends UnitSpec with JsonErrorValida
 
   val writesJson = Json.parse(
     """{
-      |  "fromDate": "2020-01-01",
-      |  "toDate": "2020-01-31",
       |  "foreignFhlEea": {
       |    "income": {
       |      "rentAmount": 5000.99,
@@ -166,14 +160,14 @@ class CreateForeignPropertyRequestBodySpec extends UnitSpec with JsonErrorValida
   "reads" when {
     "passed a valid JSON" should {
       "return a valid model" in {
-        readsJson.as[CreateForeignPropertyRequestBody] shouldBe createForeignPropertyRequestBody
+        readsJson.as[AmendForeignPropertyPeriodSummaryRequestBody] shouldBe amendForeignPropertyRequestBody
       }
     }
   }
   "writes" when {
     "passed valid model" should {
       "return valid JSON" in {
-        Json.toJson(createForeignPropertyRequestBody) shouldBe writesJson
+        Json.toJson(amendForeignPropertyRequestBody) shouldBe writesJson
       }
     }
   }

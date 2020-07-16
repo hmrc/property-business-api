@@ -26,7 +26,7 @@ import v1.models.outcomes.ResponseWrapper
 import v1.models.request.common.foreignFhlEea.{ForeignFhlEea, ForeignFhlEeaExpenditure, ForeignFhlEeaIncome}
 import v1.models.request.common.foreignPropertyEntry.{ForeignPropertyEntry, ForeignPropertyExpenditure, ForeignPropertyIncome, ForeignPropertyRentIncome}
 import v1.models.request.createForeignPropertyPeriodSummary._
-import v1.models.response.createForeignPropertyPeriodSummary.CreateForeignPropertyResponse
+import v1.models.response.createForeignPropertyPeriodSummary.CreateForeignPropertyPeriodSummaryResponse
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -37,7 +37,7 @@ class CreateForeignPropertyPeriodSummaryServiceSpec extends UnitSpec {
   val nino = Nino("AA123456A")
   private val correlationId = "X-123"
 
-  val regularExpensesBody = CreateForeignPropertyRequestBody(
+  val regularExpensesBody = CreateForeignPropertyPeriodSummaryRequestBody(
     "2020-01-01",
     "2020-01-31",
     Some(ForeignFhlEea(
@@ -76,7 +76,7 @@ class CreateForeignPropertyPeriodSummaryServiceSpec extends UnitSpec {
       ))))
     ))
 
-  val consolidatedExpensesBody = CreateForeignPropertyRequestBody(
+  val consolidatedExpensesBody = CreateForeignPropertyPeriodSummaryRequestBody(
     "2020-01-01",
     "2020-01-31",
     Some(ForeignFhlEea(
@@ -115,11 +115,11 @@ class CreateForeignPropertyPeriodSummaryServiceSpec extends UnitSpec {
       ))))
     ))
 
-  val response = CreateForeignPropertyResponse("4557ecb5-fd32-48cc-81f5-e6acd1099f3c")
+  val response = CreateForeignPropertyPeriodSummaryResponse("4557ecb5-fd32-48cc-81f5-e6acd1099f3c")
 
-  private val regularExpensesRequestData = CreateForeignPropertyRequestData(nino, businessId, regularExpensesBody)
+  private val regularExpensesRequestData = CreateForeignPropertyPeriodSummaryRequestData(nino, businessId, regularExpensesBody)
 
-  private val consolidatedExpensesRequestData = CreateForeignPropertyRequestData(nino, businessId, consolidatedExpensesBody)
+  private val consolidatedExpensesRequestData = CreateForeignPropertyPeriodSummaryRequestData(nino, businessId, consolidatedExpensesBody)
 
   trait Test extends MockCreateForeignPropertyPeriodSummaryConnector {
     implicit val hc: HeaderCarrier = HeaderCarrier()

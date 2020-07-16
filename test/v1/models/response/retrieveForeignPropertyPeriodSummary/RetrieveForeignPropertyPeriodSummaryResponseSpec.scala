@@ -24,9 +24,9 @@ import v1.models.response.retrieveForeignPropertyPeriodSummary.foreignFhlEea._
 import v1.models.response.retrieveForeignPropertyPeriodSummary.foreignProperty._
 import v1.models.utils.JsonErrorValidators
 
-class RetrieveForeignPropertyResponseSpec extends UnitSpec with JsonErrorValidators with MockAppConfig {
+class RetrieveForeignPropertyPeriodSummaryResponseSpec extends UnitSpec with JsonErrorValidators with MockAppConfig {
 
-  val retrieveForeignPropertyResponseBody = RetrieveForeignPropertyResponse(
+  val retrieveForeignPropertyResponseBody = RetrieveForeignPropertyPeriodSummaryResponse(
     "2020-01-01",
     "2020-01-31",
     Some(ForeignFhlEea(
@@ -169,7 +169,7 @@ class RetrieveForeignPropertyResponseSpec extends UnitSpec with JsonErrorValidat
   "reads" when {
     "passed a valid JSON" should {
       "return a valid model" in {
-        readsJson.as[RetrieveForeignPropertyResponse] shouldBe retrieveForeignPropertyResponseBody
+        readsJson.as[RetrieveForeignPropertyPeriodSummaryResponse] shouldBe retrieveForeignPropertyResponseBody
       }
     }
   }
@@ -184,11 +184,11 @@ class RetrieveForeignPropertyResponseSpec extends UnitSpec with JsonErrorValidat
   "LinksFactory" should {
     "produce the correct links" when {
       "called" in {
-        val data: RetrieveForeignPropertyHateoasData = RetrieveForeignPropertyHateoasData("myNino", "myBusinessId", "mySubmissionId")
+        val data: RetrieveForeignPropertyPeriodSummaryHateoasData = RetrieveForeignPropertyPeriodSummaryHateoasData("myNino", "myBusinessId", "mySubmissionId")
 
         MockedAppConfig.apiGatewayContext.returns("my/context").anyNumberOfTimes()
 
-        RetrieveForeignPropertyResponse.RetrieveForeignPropertyLinksFactory.links(mockAppConfig, data) shouldBe Seq(
+        RetrieveForeignPropertyPeriodSummaryResponse.RetrieveForeignPropertyLinksFactory.links(mockAppConfig, data) shouldBe Seq(
           Link(href = s"/my/context/${data.nino}/${data.businessId}/period/${data.submissionId}", method = Method.PUT, rel = "amend-property-period-summary"),
           Link(href = s"/my/context/${data.nino}/${data.businessId}/period/${data.submissionId}", method = Method.GET, rel = "self"),
           Link(href = s"/my/context/${data.nino}/${data.businessId}/period", method = Method.GET, rel = "list-property-period-summaries")

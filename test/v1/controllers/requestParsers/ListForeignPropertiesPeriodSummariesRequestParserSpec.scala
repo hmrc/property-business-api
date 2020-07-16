@@ -21,7 +21,7 @@ import uk.gov.hmrc.domain.Nino
 import v1.mocks.support.MockDateUtils
 import v1.mocks.validators.MockListForeignPropertiesPeriodSummariesValidator
 import v1.models.errors.{BadRequestError, BusinessIdFormatError, ErrorWrapper, NinoFormatError}
-import v1.models.request.listForeignPropertiesPeriodSummaries.{ListForeignPropertiesRawData, ListForeignPropertiesRequest}
+import v1.models.request.listForeignPropertiesPeriodSummaries.{ListForeignPropertiesPeriodSummariesRawData, ListForeignPropertiesPeriodSummariesRequest}
 
 class ListForeignPropertiesPeriodSummariesRequestParserSpec extends UnitSpec {
   val nino = "AA123456B"
@@ -30,9 +30,9 @@ class ListForeignPropertiesPeriodSummariesRequestParserSpec extends UnitSpec {
   val toDate = "2020-08-06"
 
   val inputData =
-    ListForeignPropertiesRawData(nino, businessId, Some(fromDate), Some(toDate))
+    ListForeignPropertiesPeriodSummariesRawData(nino, businessId, Some(fromDate), Some(toDate))
   val inputDataWithoutDates =
-    ListForeignPropertiesRawData(nino, businessId, None, None)
+    ListForeignPropertiesPeriodSummariesRawData(nino, businessId, None, None)
 
   trait Test extends MockListForeignPropertiesPeriodSummariesValidator with MockDateUtils {
     lazy val parser = new ListForeignPropertiesPeriodSummariesRequestParser(mockValidator, mockDateUtils)
@@ -43,14 +43,14 @@ class ListForeignPropertiesPeriodSummariesRequestParserSpec extends UnitSpec {
       "valid request data is supplied" in new Test {
         MockListForeignPropertiesValidator.validate(inputData).returns(Nil)
 
-        parser.parseRequest(inputData) shouldBe Right(ListForeignPropertiesRequest(Nino(nino), businessId, fromDate, toDate))
+        parser.parseRequest(inputData) shouldBe Right(ListForeignPropertiesPeriodSummariesRequest(Nino(nino), businessId, fromDate, toDate))
       }
       "valid request data is supplied without dates" in new Test {
         MockListForeignPropertiesValidator.validate(inputDataWithoutDates).returns(Nil)
         MockDateUtils.currentTaxYearStart().returns("start")
         MockDateUtils.currentTaxYearEnd().returns("end")
 
-        parser.parseRequest(inputDataWithoutDates) shouldBe Right(ListForeignPropertiesRequest(Nino(nino), businessId, "start", "end"))
+        parser.parseRequest(inputDataWithoutDates) shouldBe Right(ListForeignPropertiesPeriodSummariesRequest(Nino(nino), businessId, "start", "end"))
       }
     }
     "return an ErrorWrapper" when {

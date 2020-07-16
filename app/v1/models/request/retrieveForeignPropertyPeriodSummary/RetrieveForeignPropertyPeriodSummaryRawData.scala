@@ -18,4 +18,4 @@ package v1.models.request.retrieveForeignPropertyPeriodSummary
 
 import v1.models.request.RawData
 
-case class RetrieveForeignPropertyRawData(nino: String, businessId: String, submissionId: String) extends RawData
+case class RetrieveForeignPropertyPeriodSummaryRawData(nino: String, businessId: String, submissionId: String) extends RawData

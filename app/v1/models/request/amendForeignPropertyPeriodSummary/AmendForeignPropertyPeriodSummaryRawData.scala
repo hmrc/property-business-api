@@ -16,6 +16,7 @@
 
 package v1.models.request.amendForeignPropertyPeriodSummary
 
-import uk.gov.hmrc.domain.Nino
+import play.api.libs.json.JsValue
+import v1.models.request.RawData
 
-case class AmendForeignPropertyRequest(nino: Nino, businessId: String, submissionId: String, body: AmendForeignPropertyRequestBody)
+case class AmendForeignPropertyPeriodSummaryRawData(nino: String, businessId: String, submissionId: String, body: JsValue) extends RawData

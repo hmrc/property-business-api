@@ -24,7 +24,7 @@ import utils.Logging
 import v1.connectors.RetrieveForeignPropertyPeriodSummaryConnector
 import v1.controllers.EndpointLogContext
 import v1.models.errors.{BusinessIdFormatError, DownstreamError, NinoFormatError, NotFoundError, SubmissionIdFormatError, SubmissionIdNotFoundError}
-import v1.models.request.retrieveForeignPropertyPeriodSummary.RetrieveForeignPropertyRequestData
+import v1.models.request.retrieveForeignPropertyPeriodSummary.RetrieveForeignPropertyPeriodSummaryRequestData
 import v1.support.DesResponseMappingSupport
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -32,10 +32,10 @@ import scala.concurrent.{ExecutionContext, Future}
 @Singleton
 class RetrieveForeignPropertyPeriodSummaryService @Inject()(connector: RetrieveForeignPropertyPeriodSummaryConnector) extends DesResponseMappingSupport with Logging {
 
-  def retrieveForeignProperty(request: RetrieveForeignPropertyRequestData)(
+  def retrieveForeignProperty(request: RetrieveForeignPropertyPeriodSummaryRequestData)(
     implicit hc: HeaderCarrier,
     ec: ExecutionContext,
-    logContext: EndpointLogContext): Future[RetrieveForeignPropertyServiceOutcome] = {
+    logContext: EndpointLogContext): Future[RetrieveForeignPropertyPeriodSummaryServiceOutcome] = {
 
     val result = for {
       desResponseWrapper <- EitherT(connector.retrieveForeignProperty(request)).leftMap(mapDesErrors(desErrorMap))

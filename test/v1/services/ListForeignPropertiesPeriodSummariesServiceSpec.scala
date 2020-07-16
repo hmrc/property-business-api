@@ -23,8 +23,8 @@ import v1.controllers.EndpointLogContext
 import v1.mocks.connectors.MockListForeignPropertiesPeriodSummariesConnector
 import v1.models.errors._
 import v1.models.outcomes.ResponseWrapper
-import v1.models.request.listForeignPropertiesPeriodSummaries.ListForeignPropertiesRequest
-import v1.models.response.listForeignPropertiesPeriodSummaries.{ListForeignPropertiesResponse, SubmissionPeriod}
+import v1.models.request.listForeignPropertiesPeriodSummaries.ListForeignPropertiesPeriodSummariesRequest
+import v1.models.response.listForeignPropertiesPeriodSummaries.{ListForeignPropertiesPeriodSummariesResponse, SubmissionPeriod}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -38,9 +38,9 @@ class ListForeignPropertiesPeriodSummariesServiceSpec extends UnitSpec {
   val toDate = "2020-08-31"
   private val correlationId = "X-123"
 
-  val request = ListForeignPropertiesRequest(nino, businessId, fromDate, toDate)
+  val request = ListForeignPropertiesPeriodSummariesRequest(nino, businessId, fromDate, toDate)
 
-  val response = ListForeignPropertiesResponse(Seq(
+  val response = ListForeignPropertiesPeriodSummariesResponse(Seq(
     SubmissionPeriod("4557ecb5-fd32-48cc-81f5-e6acd1099f3c", "2020-06-22", "2020-06-22"),
     SubmissionPeriod("4557ecb5-fd32-48cc-81f5-e6acd1099f3d", "2020-08-22", "2020-08-22")
   ))

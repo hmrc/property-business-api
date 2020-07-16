@@ -27,8 +27,8 @@ import v1.models.errors.{BadRequestError, BusinessIdFormatError, DownstreamError
 import v1.models.hateoas.{HateoasWrapper, Link}
 import v1.models.hateoas.Method.GET
 import v1.models.outcomes.ResponseWrapper
-import v1.models.request.retrieveForeignPropertyPeriodSummary.{RetrieveForeignPropertyRawData, RetrieveForeignPropertyRequestData}
-import v1.models.response.retrieveForeignPropertyPeriodSummary.{RetrieveForeignPropertyHateoasData, RetrieveForeignPropertyResponse}
+import v1.models.request.retrieveForeignPropertyPeriodSummary.{RetrieveForeignPropertyPeriodSummaryRawData, RetrieveForeignPropertyPeriodSummaryRequestData}
+import v1.models.response.retrieveForeignPropertyPeriodSummary.{RetrieveForeignPropertyPeriodSummaryHateoasData, RetrieveForeignPropertyPeriodSummaryResponse}
 import v1.models.response.retrieveForeignPropertyPeriodSummary.foreignFhlEea.{ForeignFhlEea, ForeignFhlEeaExpenditure, ForeignFhlEeaIncome}
 import v1.models.response.retrieveForeignPropertyPeriodSummary.foreignProperty.{ForeignProperty, ForeignPropertyExpenditure, ForeignPropertyIncome, ForeignPropertyRentIncome}
 
@@ -65,12 +65,12 @@ class RetrieveForeignPropertyPeriodSummaryControllerSpec
   private val submissionId = "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
   private val correlationId = "X-123"
 
-  private val rawData = RetrieveForeignPropertyRawData(nino, businessId, submissionId)
-  private val requestData = RetrieveForeignPropertyRequestData(Nino(nino), businessId, submissionId)
+  private val rawData = RetrieveForeignPropertyPeriodSummaryRawData(nino, businessId, submissionId)
+  private val requestData = RetrieveForeignPropertyPeriodSummaryRequestData(Nino(nino), businessId, submissionId)
 
   private val testHateoasLink = Link(href = s"/individuals/business/property/${nino}/${businessId}/period/${submissionId}", method = GET, rel = "self")
 
-  val responseBody = RetrieveForeignPropertyResponse(
+  val responseBody = RetrieveForeignPropertyPeriodSummaryResponse(
     "2020-01-01",
     "2020-01-31",
     Some(ForeignFhlEea(
@@ -122,7 +122,7 @@ class RetrieveForeignPropertyPeriodSummaryControllerSpec
           .returns(Future.successful(Right(ResponseWrapper(correlationId, responseBody))))
 
         MockHateoasFactory
-          .wrap(responseBody, RetrieveForeignPropertyHateoasData(nino, businessId, submissionId))
+          .wrap(responseBody, RetrieveForeignPropertyPeriodSummaryHateoasData(nino, businessId, submissionId))
           .returns(HateoasWrapper(responseBody, Seq(testHateoasLink)))
 
         val result: Future[Result] = controller.handleRequest(nino, businessId, submissionId)(fakeRequest)

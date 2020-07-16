@@ -27,8 +27,8 @@ import v1.models.errors._
 import v1.models.hateoas.Method.GET
 import v1.models.hateoas.{HateoasWrapper, Link}
 import v1.models.outcomes.ResponseWrapper
-import v1.models.request.listForeignPropertiesPeriodSummaries.{ListForeignPropertiesRawData, ListForeignPropertiesRequest}
-import v1.models.response.listForeignPropertiesPeriodSummaries.{ListForeignPropertiesHateoasData, ListForeignPropertiesResponse, SubmissionPeriod}
+import v1.models.request.listForeignPropertiesPeriodSummaries.{ListForeignPropertiesPeriodSummariesRawData, ListForeignPropertiesPeriodSummariesRequest}
+import v1.models.response.listForeignPropertiesPeriodSummaries.{ListForeignPropertiesPeriodSummariesHateoasData, ListForeignPropertiesPeriodSummariesResponse, SubmissionPeriod}
 import v1.models.hateoas.RelType.SELF
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -65,12 +65,12 @@ class ListForeignPropertiesPeriodSummariesControllerSpec
   val toDate = "2020-08-31"
   private val correlationId = "X-123"
 
-  val request = ListForeignPropertiesRequest(Nino(nino), businessId, fromDate, toDate)
+  val request = ListForeignPropertiesPeriodSummariesRequest(Nino(nino), businessId, fromDate, toDate)
 
   val responseModel1 = SubmissionPeriod("4557ecb5-fd32-48cc-81f5-e6acd1099f3c", "2020-06-22", "2020-06-22")
   val responseModel2 = SubmissionPeriod("4557ecb5-fd32-48cc-81f5-e6acd1099f3d", "2020-08-22", "2020-08-22")
 
-  val response = ListForeignPropertiesResponse(Seq(
+  val response = ListForeignPropertiesPeriodSummariesResponse(Seq(
     responseModel1,
     responseModel2
   ))
@@ -89,7 +89,7 @@ class ListForeignPropertiesPeriodSummariesControllerSpec
     rel = SELF
   )
 
-  private val hateoasResponse = ListForeignPropertiesResponse(
+  private val hateoasResponse = ListForeignPropertiesPeriodSummariesResponse(
     Seq(
       HateoasWrapper(responseModel1,
         Seq(
@@ -104,13 +104,13 @@ class ListForeignPropertiesPeriodSummariesControllerSpec
     )
   )
 
-  val serviceResponse = ListForeignPropertiesResponse(Seq(
+  val serviceResponse = ListForeignPropertiesPeriodSummariesResponse(Seq(
     SubmissionPeriod("4557ecb5-fd32-48cc-81f5-e6acd1099f3c", "2020-06-22", "2020-06-22"),
     SubmissionPeriod("4557ecb5-fd32-48cc-81f5-e6acd1099f3d", "2020-08-22", "2020-08-22")
   ))
 
-  private val rawData = ListForeignPropertiesRawData(nino, businessId, Some(fromDate), Some(toDate))
-  private val requestData = ListForeignPropertiesRequest(Nino(nino), businessId, fromDate, toDate)
+  private val rawData = ListForeignPropertiesPeriodSummariesRawData(nino, businessId, Some(fromDate), Some(toDate))
+  private val requestData = ListForeignPropertiesPeriodSummariesRequest(Nino(nino), businessId, fromDate, toDate)
 
   "handleRequest" should {
     "return Ok" when {
@@ -125,7 +125,7 @@ class ListForeignPropertiesPeriodSummariesControllerSpec
           .returns(Future.successful(Right(ResponseWrapper(correlationId, serviceResponse))))
 
         MockHateoasFactory
-          .wrapList(serviceResponse, ListForeignPropertiesHateoasData(nino, businessId))
+          .wrapList(serviceResponse, ListForeignPropertiesPeriodSummariesHateoasData(nino, businessId))
           .returns(HateoasWrapper(hateoasResponse, Seq(testHateoasLink)))
 
         val result: Future[Result] = controller.handleRequest(nino, businessId, Some(fromDate), Some(toDate))(fakeRequest)

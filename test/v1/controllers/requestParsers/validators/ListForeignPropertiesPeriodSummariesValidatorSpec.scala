@@ -18,7 +18,7 @@ package v1.controllers.requestParsers.validators
 
 import support.UnitSpec
 import v1.models.errors._
-import v1.models.request.listForeignPropertiesPeriodSummaries.ListForeignPropertiesRawData
+import v1.models.request.listForeignPropertiesPeriodSummaries.ListForeignPropertiesPeriodSummariesRawData
 
 class ListForeignPropertiesPeriodSummariesValidatorSpec extends UnitSpec {
 
@@ -32,36 +32,36 @@ class ListForeignPropertiesPeriodSummariesValidatorSpec extends UnitSpec {
   "running a validation" should {
     "return no errors" when {
       "a valid request is supplied" in {
-        validator.validate(ListForeignPropertiesRawData(validNino, validBusinessId, Some(validFromDate), Some(validToDate))) shouldBe Nil
+        validator.validate(ListForeignPropertiesPeriodSummariesRawData(validNino, validBusinessId, Some(validFromDate), Some(validToDate))) shouldBe Nil
       }
       "a valid request is supplied without dates" in {
-        validator.validate(ListForeignPropertiesRawData(validNino, validBusinessId, None, None)) shouldBe Nil
+        validator.validate(ListForeignPropertiesPeriodSummariesRawData(validNino, validBusinessId, None, None)) shouldBe Nil
       }
     }
     "return a path parameter format error" when {
       "an invalid nino is supplied" in {
-        validator.validate(ListForeignPropertiesRawData("Walrus", validBusinessId, Some(validFromDate), Some(validToDate))) shouldBe List(NinoFormatError)
+        validator.validate(ListForeignPropertiesPeriodSummariesRawData("Walrus", validBusinessId, Some(validFromDate), Some(validToDate))) shouldBe List(NinoFormatError)
       }
       "an invalid businessId is supplied" in {
-        validator.validate(ListForeignPropertiesRawData(validNino, "Beans", Some(validFromDate), Some(validToDate))) shouldBe List(BusinessIdFormatError)
+        validator.validate(ListForeignPropertiesPeriodSummariesRawData(validNino, "Beans", Some(validFromDate), Some(validToDate))) shouldBe List(BusinessIdFormatError)
       }
       "an invalid fromDate is supplied" in {
-        validator.validate(ListForeignPropertiesRawData(validNino, validBusinessId, Some("20202-202-202"), Some(validToDate))) shouldBe List(FromDateFormatError)
+        validator.validate(ListForeignPropertiesPeriodSummariesRawData(validNino, validBusinessId, Some("20202-202-202"), Some(validToDate))) shouldBe List(FromDateFormatError)
       }
       "an invalid toDate is supplied" in {
-        validator.validate(ListForeignPropertiesRawData(validNino, validBusinessId, Some(validFromDate), Some("20202-202-202"))) shouldBe List(ToDateFormatError)
+        validator.validate(ListForeignPropertiesPeriodSummariesRawData(validNino, validBusinessId, Some(validFromDate), Some("20202-202-202"))) shouldBe List(ToDateFormatError)
       }
       "toDate is before fromDate" in {
-        validator.validate(ListForeignPropertiesRawData(validNino, validBusinessId, Some("2020-08-06"), Some("2020-06-06"))) shouldBe List(RuleToDateBeforeFromDateError)
+        validator.validate(ListForeignPropertiesPeriodSummariesRawData(validNino, validBusinessId, Some("2020-08-06"), Some("2020-06-06"))) shouldBe List(RuleToDateBeforeFromDateError)
       }
       "only fromDate is provided" in {
-        validator.validate(ListForeignPropertiesRawData(validNino, validBusinessId, Some("2020-08-06"), None)) shouldBe List(MissingToDateError)
+        validator.validate(ListForeignPropertiesPeriodSummariesRawData(validNino, validBusinessId, Some("2020-08-06"), None)) shouldBe List(MissingToDateError)
       }
       "only toDate is provided" in {
-        validator.validate(ListForeignPropertiesRawData(validNino, validBusinessId, None, Some("2020-08-06"))) shouldBe List(MissingFromDateError)
+        validator.validate(ListForeignPropertiesPeriodSummariesRawData(validNino, validBusinessId, None, Some("2020-08-06"))) shouldBe List(MissingFromDateError)
       }
       "multiple format errors are made" in {
-        validator.validate(ListForeignPropertiesRawData("Walrus", "Beans", Some(validFromDate), Some(validToDate))) shouldBe List(NinoFormatError, BusinessIdFormatError)
+        validator.validate(ListForeignPropertiesPeriodSummariesRawData("Walrus", "Beans", Some(validFromDate), Some(validToDate))) shouldBe List(NinoFormatError, BusinessIdFormatError)
       }
     }
   }

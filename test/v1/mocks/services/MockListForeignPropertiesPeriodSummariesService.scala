@@ -22,8 +22,8 @@ import uk.gov.hmrc.http.HeaderCarrier
 import v1.controllers.EndpointLogContext
 import v1.models.errors.ErrorWrapper
 import v1.models.outcomes.ResponseWrapper
-import v1.models.request.listForeignPropertiesPeriodSummaries.ListForeignPropertiesRequest
-import v1.models.response.listForeignPropertiesPeriodSummaries.{ListForeignPropertiesResponse, SubmissionPeriod}
+import v1.models.request.listForeignPropertiesPeriodSummaries.ListForeignPropertiesPeriodSummariesRequest
+import v1.models.response.listForeignPropertiesPeriodSummaries.{ListForeignPropertiesPeriodSummariesResponse, SubmissionPeriod}
 import v1.services.ListForeignPropertiesPeriodSummariesService
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -34,10 +34,10 @@ trait MockListForeignPropertiesPeriodSummariesService extends MockFactory {
 
   object MockListForeignPropertiesService {
 
-    def listForeignProperties(requestData: ListForeignPropertiesRequest):
-    CallHandler[Future[Either[ErrorWrapper, ResponseWrapper[ListForeignPropertiesResponse[SubmissionPeriod]]]]] = {
+    def listForeignProperties(requestData: ListForeignPropertiesPeriodSummariesRequest):
+    CallHandler[Future[Either[ErrorWrapper, ResponseWrapper[ListForeignPropertiesPeriodSummariesResponse[SubmissionPeriod]]]]] = {
       (mockService
-        .listForeignProperties(_: ListForeignPropertiesRequest)(_: HeaderCarrier, _: ExecutionContext, _: EndpointLogContext))
+        .listForeignProperties(_: ListForeignPropertiesPeriodSummariesRequest)(_: HeaderCarrier, _: ExecutionContext, _: EndpointLogContext))
         .expects(requestData, *, *, *)
     }
   }

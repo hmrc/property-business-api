@@ -25,9 +25,9 @@ import utils.Logging
 import v1.controllers.requestParsers.AmendForeignPropertyPeriodSummaryRequestParser
 import v1.hateoas.HateoasFactory
 import v1.models.errors._
-import v1.models.request.amendForeignPropertyPeriodSummary.AmendForeignPropertyRawData
-import v1.models.response.amendForeignPropertyPeriodSummary.AmendForeignPropertyHateoasData
-import v1.models.response.amendForeignPropertyPeriodSummary.AmendForeignPropertyResponse.AmendForeignPropertyLinksFactory
+import v1.models.request.amendForeignPropertyPeriodSummary.AmendForeignPropertyPeriodSummaryRawData
+import v1.models.response.amendForeignPropertyPeriodSummary.AmendForeignPropertyPeriodSummaryHateoasData
+import v1.models.response.amendForeignPropertyPeriodSummary.AmendForeignPropertyPeriodSummaryResponse.AmendForeignPropertyLinksFactory
 import v1.services.{AmendForeignPropertyPeriodSummaryService, EnrolmentsAuthService, MtdIdLookupService}
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -45,13 +45,13 @@ class AmendForeignPropertyPeriodSummaryController  @Inject()(val authService: En
     EndpointLogContext(controllerName = "AmendForeignPropertyController", endpointName = "amendForeignProperty")
   def handleRequest(nino: String, businessId: String, submissionId: String): Action[JsValue] =
     authorisedAction(nino).async(parse.json) { implicit request =>
-      val rawData = AmendForeignPropertyRawData(nino, businessId, submissionId, request.body)
+      val rawData = AmendForeignPropertyPeriodSummaryRawData(nino, businessId, submissionId, request.body)
       val result =
         for {
           parsedRequest <- EitherT.fromEither[Future](parser.parseRequest(rawData))
           serviceResponse <- EitherT(service.amendForeignProperty(parsedRequest))
           vendorResponse <- EitherT.fromEither[Future](
-            hateoasFactory.wrap(serviceResponse.responseData, AmendForeignPropertyHateoasData(nino, businessId, submissionId)).asRight[ErrorWrapper])
+            hateoasFactory.wrap(serviceResponse.responseData, AmendForeignPropertyPeriodSummaryHateoasData(nino, businessId, submissionId)).asRight[ErrorWrapper])
         } yield {
           logger.info(
             s"[${endpointLogContext.controllerName}][${endpointLogContext.endpointName}] - " +

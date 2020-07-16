@@ -14,9 +14,8 @@
  * limitations under the License.
  */
 
-package v1.models.request.createForeignPropertyPeriodSummary
+package v1.models.request.listForeignPropertiesPeriodSummaries
 
-import play.api.libs.json.JsValue
 import v1.models.request.RawData
 
-case class CreateForeignPropertyRawData(nino: String, businessId: String, body: JsValue) extends RawData
+case class ListForeignPropertiesPeriodSummariesRawData(nino: String, businessId: String, fromDate: Option[String], toDate: Option[String]) extends RawData

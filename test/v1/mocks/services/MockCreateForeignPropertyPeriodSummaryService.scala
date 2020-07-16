@@ -22,8 +22,8 @@ import uk.gov.hmrc.http.HeaderCarrier
 import v1.controllers.EndpointLogContext
 import v1.models.errors.ErrorWrapper
 import v1.models.outcomes.ResponseWrapper
-import v1.models.request.createForeignPropertyPeriodSummary.CreateForeignPropertyRequestData
-import v1.models.response.createForeignPropertyPeriodSummary.CreateForeignPropertyResponse
+import v1.models.request.createForeignPropertyPeriodSummary.CreateForeignPropertyPeriodSummaryRequestData
+import v1.models.response.createForeignPropertyPeriodSummary.CreateForeignPropertyPeriodSummaryResponse
 import v1.services.CreateForeignPropertyPeriodSummaryService
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -34,9 +34,9 @@ trait MockCreateForeignPropertyPeriodSummaryService extends MockFactory {
 
   object MockCreateForeignPropertyService {
 
-    def createForeignProperty(requestData: CreateForeignPropertyRequestData): CallHandler[Future[Either[ErrorWrapper, ResponseWrapper[CreateForeignPropertyResponse]]]] = {
+    def createForeignProperty(requestData: CreateForeignPropertyPeriodSummaryRequestData): CallHandler[Future[Either[ErrorWrapper, ResponseWrapper[CreateForeignPropertyPeriodSummaryResponse]]]] = {
       (mockCreateForeignPropertyService
-        .createForeignProperty(_: CreateForeignPropertyRequestData)(_: HeaderCarrier, _: ExecutionContext, _: EndpointLogContext))
+        .createForeignProperty(_: CreateForeignPropertyPeriodSummaryRequestData)(_: HeaderCarrier, _: ExecutionContext, _: EndpointLogContext))
         .expects(requestData, *, *, *)
     }
   }

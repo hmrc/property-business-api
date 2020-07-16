@@ -22,7 +22,7 @@ import uk.gov.hmrc.domain.Nino
 import v1.mocks.validators.MockAmendForeignPropertyPeriodSummaryValidator
 import v1.models.errors._
 import v1.models.request.common.foreignPropertyEntry.{ForeignPropertyEntry, ForeignPropertyExpenditure, ForeignPropertyIncome, ForeignPropertyRentIncome}
-import v1.models.request.amendForeignPropertyPeriodSummary.{AmendForeignPropertyRawData, AmendForeignPropertyRequest, AmendForeignPropertyRequestBody}
+import v1.models.request.amendForeignPropertyPeriodSummary.{AmendForeignPropertyPeriodSummaryRawData, AmendForeignPropertyPeriodSummaryRequest, AmendForeignPropertyPeriodSummaryRequestBody}
 import v1.models.request.common.foreignFhlEea.{ForeignFhlEea, ForeignFhlEeaExpenditure, ForeignFhlEeaIncome}
 
 
@@ -77,7 +77,7 @@ class AmendForeignPropertyPeriodSummaryRequestParserSpec extends UnitSpec {
     """.stripMargin)
 
   val inputData =
-    AmendForeignPropertyRawData(nino, businessId, submissionId, requestBodyJson)
+    AmendForeignPropertyPeriodSummaryRawData(nino, businessId, submissionId, requestBodyJson)
 
   trait Test extends MockAmendForeignPropertyPeriodSummaryValidator {
     lazy val parser = new AmendForeignPropertyPeriodSummaryRequestParser(mockValidator)
@@ -126,13 +126,13 @@ class AmendForeignPropertyPeriodSummaryRequestParserSpec extends UnitSpec {
             consolidatedExpenses = None
           ))
         )
-        val model: AmendForeignPropertyRequestBody = AmendForeignPropertyRequestBody(
+        val model: AmendForeignPropertyPeriodSummaryRequestBody = AmendForeignPropertyPeriodSummaryRequestBody(
           foreignFhlEea = Some(foreignFhlEea),
           foreignProperty = Some(Seq(foreignProperty))
         )
 
         parser.parseRequest(inputData) shouldBe
-          Right(AmendForeignPropertyRequest(Nino(nino), businessId, submissionId, model))
+          Right(AmendForeignPropertyPeriodSummaryRequest(Nino(nino), businessId, submissionId, model))
       }
     }
 

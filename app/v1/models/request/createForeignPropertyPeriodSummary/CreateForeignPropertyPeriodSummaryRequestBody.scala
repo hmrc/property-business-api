@@ -14,22 +14,19 @@
  * limitations under the License.
  */
 
-package v1.models.request.amendForeignPropertyPeriodSummary
+package v1.models.request.createForeignPropertyPeriodSummary
 
-import play.api.libs.json.{Json, Reads, Writes}
+import play.api.libs.json.{Json, OFormat}
 import v1.models.request.common.foreignFhlEea.ForeignFhlEea
 import v1.models.request.common.foreignPropertyEntry.ForeignPropertyEntry
 
-case class AmendForeignPropertyRequestBody(foreignFhlEea: Option[ForeignFhlEea], foreignProperty: Option[Seq[ForeignPropertyEntry]]) {
+case class CreateForeignPropertyPeriodSummaryRequestBody(fromDate: String, toDate: String, foreignFhlEea: Option[ForeignFhlEea], foreignProperty: Option[Seq[ForeignPropertyEntry]]) {
   def isEmpty: Boolean = (foreignFhlEea.isEmpty && foreignProperty.isEmpty) ||
     foreignFhlEea.flatMap(_.expenditure.map(_.isEmpty)).getOrElse(false) ||
     foreignProperty.exists(_.isEmpty) ||
     foreignProperty.exists(_.exists(_.expenditure.exists(_.isEmpty)))
 }
 
-object AmendForeignPropertyRequestBody {
-  implicit val reads: Reads[AmendForeignPropertyRequestBody] = Json.reads[AmendForeignPropertyRequestBody]
-  implicit val writes: Writes[AmendForeignPropertyRequestBody] = Json.writes[AmendForeignPropertyRequestBody]
+object CreateForeignPropertyPeriodSummaryRequestBody {
+  implicit val format: OFormat[CreateForeignPropertyPeriodSummaryRequestBody] = Json.format[CreateForeignPropertyPeriodSummaryRequestBody]
 }
-
-

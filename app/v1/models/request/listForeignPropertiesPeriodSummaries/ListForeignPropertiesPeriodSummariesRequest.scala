@@ -14,9 +14,8 @@
  * limitations under the License.
  */
 
-package v1.models.request.amendForeignPropertyPeriodSummary
+package v1.models.request.listForeignPropertiesPeriodSummaries
 
-import play.api.libs.json.JsValue
-import v1.models.request.RawData
+import uk.gov.hmrc.domain.Nino
 
-case class AmendForeignPropertyRawData(nino: String, businessId: String, submissionId: String, body: JsValue) extends RawData
+case class ListForeignPropertiesPeriodSummariesRequest(nino: Nino, businessId: String, fromDate: String, toDate: String)

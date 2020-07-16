@@ -22,8 +22,8 @@ import play.api.http.Status
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
 import v1.connectors.httpparsers.StandardDesHttpParser._
-import v1.models.request.createForeignPropertyPeriodSummary.CreateForeignPropertyRequestData
-import v1.models.response.createForeignPropertyPeriodSummary.CreateForeignPropertyResponse
+import v1.models.request.createForeignPropertyPeriodSummary.CreateForeignPropertyPeriodSummaryRequestData
+import v1.models.response.createForeignPropertyPeriodSummary.CreateForeignPropertyPeriodSummaryResponse
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -31,15 +31,15 @@ import scala.concurrent.{ExecutionContext, Future}
 class CreateForeignPropertyPeriodSummaryConnector @Inject()(val http: HttpClient,
                                                             val appConfig: AppConfig) extends BaseDesConnector {
 
-  def createForeignProperty(request: CreateForeignPropertyRequestData)(
+  def createForeignProperty(request: CreateForeignPropertyPeriodSummaryRequestData)(
     implicit hc: HeaderCarrier,
-    ec: ExecutionContext): Future[DesOutcome[CreateForeignPropertyResponse]] = {
+    ec: ExecutionContext): Future[DesOutcome[CreateForeignPropertyPeriodSummaryResponse]] = {
 
     implicit val desSuccessCode: SuccessCode = SuccessCode(Status.CREATED)
 
     post(
       body = request.body,
-      uri = DesUri[CreateForeignPropertyResponse](s"business/property/${request.nino}/${request.businessId}/period")
+      uri = DesUri[CreateForeignPropertyPeriodSummaryResponse](s"business/property/${request.nino}/${request.businessId}/period")
     )
   }
 }

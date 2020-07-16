@@ -22,8 +22,8 @@ import uk.gov.hmrc.http.HeaderCarrier
 import v1.controllers.EndpointLogContext
 import v1.models.errors.ErrorWrapper
 import v1.models.outcomes.ResponseWrapper
-import v1.models.request.retrieveForeignPropertyPeriodSummary.RetrieveForeignPropertyRequestData
-import v1.models.response.retrieveForeignPropertyPeriodSummary.RetrieveForeignPropertyResponse
+import v1.models.request.retrieveForeignPropertyPeriodSummary.RetrieveForeignPropertyPeriodSummaryRequestData
+import v1.models.response.retrieveForeignPropertyPeriodSummary.RetrieveForeignPropertyPeriodSummaryResponse
 import v1.services.RetrieveForeignPropertyPeriodSummaryService
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -33,9 +33,9 @@ trait MockRetrieveForeignPropertyPeriodSummaryService extends MockFactory {
   val mockRetrieveForeignPropertyService: RetrieveForeignPropertyPeriodSummaryService = mock[RetrieveForeignPropertyPeriodSummaryService]
 
   object MockRetrieveForeignPropertyService {
-    def retrieve(requestData: RetrieveForeignPropertyRequestData): CallHandler[Future[Either[ErrorWrapper, ResponseWrapper[RetrieveForeignPropertyResponse]]]] = {
+    def retrieve(requestData: RetrieveForeignPropertyPeriodSummaryRequestData): CallHandler[Future[Either[ErrorWrapper, ResponseWrapper[RetrieveForeignPropertyPeriodSummaryResponse]]]] = {
       (mockRetrieveForeignPropertyService
-        .retrieveForeignProperty(_: RetrieveForeignPropertyRequestData)(_: HeaderCarrier, _: ExecutionContext, _: EndpointLogContext))
+        .retrieveForeignProperty(_: RetrieveForeignPropertyPeriodSummaryRequestData)(_: HeaderCarrier, _: ExecutionContext, _: EndpointLogContext))
         .expects(requestData, *, *, *)
     }
   }

@@ -19,11 +19,11 @@ package v1.controllers.requestParsers
 import javax.inject.Inject
 import uk.gov.hmrc.domain.Nino
 import v1.controllers.requestParsers.validators.CreateForeignPropertyPeriodSummaryValidator
-import v1.models.request.createForeignPropertyPeriodSummary.{CreateForeignPropertyRawData, CreateForeignPropertyRequestBody, CreateForeignPropertyRequestData}
+import v1.models.request.createForeignPropertyPeriodSummary.{CreateForeignPropertyPeriodSummaryRawData, CreateForeignPropertyPeriodSummaryRequestBody, CreateForeignPropertyPeriodSummaryRequestData}
 
 class CreateForeignPropertyPeriodSummaryRequestParser @Inject()(val validator: CreateForeignPropertyPeriodSummaryValidator)
-  extends RequestParser[CreateForeignPropertyRawData, CreateForeignPropertyRequestData] {
+  extends RequestParser[CreateForeignPropertyPeriodSummaryRawData, CreateForeignPropertyPeriodSummaryRequestData] {
 
-  override protected def requestFor(data: CreateForeignPropertyRawData): CreateForeignPropertyRequestData =
-    CreateForeignPropertyRequestData(Nino(data.nino), data.businessId, data.body.as[CreateForeignPropertyRequestBody])
+  override protected def requestFor(data: CreateForeignPropertyPeriodSummaryRawData): CreateForeignPropertyPeriodSummaryRequestData =
+    CreateForeignPropertyPeriodSummaryRequestData(Nino(data.nino), data.businessId, data.body.as[CreateForeignPropertyPeriodSummaryRequestBody])
 }

@@ -25,8 +25,8 @@ import utils.Logging
 import v1.controllers.requestParsers.RetrieveForeignPropertyPeriodSummaryRequestParser
 import v1.hateoas.HateoasFactory
 import v1.models.errors._
-import v1.models.request.retrieveForeignPropertyPeriodSummary.RetrieveForeignPropertyRawData
-import v1.models.response.retrieveForeignPropertyPeriodSummary.RetrieveForeignPropertyHateoasData
+import v1.models.request.retrieveForeignPropertyPeriodSummary.RetrieveForeignPropertyPeriodSummaryRawData
+import v1.models.response.retrieveForeignPropertyPeriodSummary.RetrieveForeignPropertyPeriodSummaryHateoasData
 import v1.services.{EnrolmentsAuthService, MtdIdLookupService, RetrieveForeignPropertyPeriodSummaryService}
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -45,13 +45,13 @@ class RetrieveForeignPropertyPeriodSummaryController @Inject()(val authService: 
 
   def handleRequest(nino: String, businessId: String, submissionId: String): Action[AnyContent] =
     authorisedAction(nino).async { implicit request =>
-      val rawData = RetrieveForeignPropertyRawData(nino, businessId, submissionId)
+      val rawData = RetrieveForeignPropertyPeriodSummaryRawData(nino, businessId, submissionId)
       val result =
         for {
           parsedRequest <- EitherT.fromEither[Future](parser.parseRequest(rawData))
           serviceResponse <- EitherT(service.retrieveForeignProperty(parsedRequest))
           vendorResponse <- EitherT.fromEither[Future](
-            hateoasFactory.wrap(serviceResponse.responseData, RetrieveForeignPropertyHateoasData(nino, businessId, submissionId)).asRight[ErrorWrapper])
+            hateoasFactory.wrap(serviceResponse.responseData, RetrieveForeignPropertyPeriodSummaryHateoasData(nino, businessId, submissionId)).asRight[ErrorWrapper])
         } yield {
           logger.info(
             s"[${endpointLogContext.controllerName}][${endpointLogContext.endpointName}] - " +

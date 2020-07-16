@@ -23,7 +23,7 @@ import v1.controllers.EndpointLogContext
 import v1.mocks.connectors.MockAmendForeignPropertyPeriodSummaryConnector
 import v1.models.errors._
 import v1.models.outcomes.ResponseWrapper
-import v1.models.request.amendForeignPropertyPeriodSummary.{AmendForeignPropertyRequest, AmendForeignPropertyRequestBody}
+import v1.models.request.amendForeignPropertyPeriodSummary.{AmendForeignPropertyPeriodSummaryRequest, AmendForeignPropertyPeriodSummaryRequestBody}
 import v1.models.request.common.foreignFhlEea.{ForeignFhlEea, ForeignFhlEeaExpenditure, ForeignFhlEeaIncome}
 import v1.models.request.common.foreignPropertyEntry.{ForeignPropertyEntry, ForeignPropertyExpenditure, ForeignPropertyIncome, ForeignPropertyRentIncome}
 
@@ -75,12 +75,12 @@ class AmendForeignPropertyPeriodSummaryServiceSpec extends UnitSpec {
     ))
   )
 
-  val body: AmendForeignPropertyRequestBody = AmendForeignPropertyRequestBody(
+  val body: AmendForeignPropertyPeriodSummaryRequestBody = AmendForeignPropertyPeriodSummaryRequestBody(
     foreignFhlEea = Some(foreignFhlEea),
     foreignProperty = Some(Seq(foreignProperty))
   )
 
-  private val requestData = AmendForeignPropertyRequest(nino, businessId, submissionId, body)
+  private val requestData = AmendForeignPropertyPeriodSummaryRequest(nino, businessId, submissionId, body)
 
   trait Test extends MockAmendForeignPropertyPeriodSummaryConnector {
     implicit val hc: HeaderCarrier = HeaderCarrier()

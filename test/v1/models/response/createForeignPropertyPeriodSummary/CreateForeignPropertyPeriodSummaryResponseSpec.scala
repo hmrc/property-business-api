@@ -20,9 +20,9 @@ import play.api.libs.json.Json
 import support.UnitSpec
 import v1.models.utils.JsonErrorValidators
 
-class CreateForeignPropertyResponseSpec extends UnitSpec with JsonErrorValidators {
+class CreateForeignPropertyPeriodSummaryResponseSpec extends UnitSpec with JsonErrorValidators {
 
-  val createForeignPropertyResponse = CreateForeignPropertyResponse(
+  val createForeignPropertyResponse = CreateForeignPropertyPeriodSummaryResponse(
     "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
   )
 
@@ -34,7 +34,7 @@ class CreateForeignPropertyResponseSpec extends UnitSpec with JsonErrorValidator
   "reads" when {
     "passed a valid JSON" should {
       "return a valid model" in {
-        json.as[CreateForeignPropertyResponse] shouldBe createForeignPropertyResponse
+        json.as[CreateForeignPropertyPeriodSummaryResponse] shouldBe createForeignPropertyResponse
       }
     }
   }

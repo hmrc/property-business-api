@@ -18,7 +18,7 @@ package v1.controllers.requestParsers.validators
 
 import support.UnitSpec
 import v1.models.errors.{BusinessIdFormatError, NinoFormatError, SubmissionIdFormatError}
-import v1.models.request.retrieveForeignPropertyPeriodSummary.RetrieveForeignPropertyRawData
+import v1.models.request.retrieveForeignPropertyPeriodSummary.RetrieveForeignPropertyPeriodSummaryRawData
 
 class RetrieveForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec {
 
@@ -31,21 +31,21 @@ class RetrieveForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec {
   "running a validation" should {
     "return no errors" when {
       "a valid request is supplied" in {
-        validator.validate(RetrieveForeignPropertyRawData(validNino, validBusinessId, validSubmissionId)) shouldBe Nil
+        validator.validate(RetrieveForeignPropertyPeriodSummaryRawData(validNino, validBusinessId, validSubmissionId)) shouldBe Nil
       }
     }
     "return a path parameter format error" when {
       "an invalid nino is supplied" in {
-        validator.validate(RetrieveForeignPropertyRawData("Walrus", validBusinessId, validSubmissionId)) shouldBe List(NinoFormatError)
+        validator.validate(RetrieveForeignPropertyPeriodSummaryRawData("Walrus", validBusinessId, validSubmissionId)) shouldBe List(NinoFormatError)
       }
       "an invalid businessId is supplied" in {
-        validator.validate(RetrieveForeignPropertyRawData(validNino, "Beans", validSubmissionId)) shouldBe List(BusinessIdFormatError)
+        validator.validate(RetrieveForeignPropertyPeriodSummaryRawData(validNino, "Beans", validSubmissionId)) shouldBe List(BusinessIdFormatError)
       }
       "an invalid submissionId is supplied" in {
-        validator.validate(RetrieveForeignPropertyRawData(validNino, validBusinessId, "ABCDEFGHIJKLMNOPQRSTUVWXYZ")) shouldBe List(SubmissionIdFormatError)
+        validator.validate(RetrieveForeignPropertyPeriodSummaryRawData(validNino, validBusinessId, "ABCDEFGHIJKLMNOPQRSTUVWXYZ")) shouldBe List(SubmissionIdFormatError)
       }
       "multiple format errors are made" in {
-        validator.validate(RetrieveForeignPropertyRawData("Walrus", "Beans", "ABCDEFGHIJKLMNOPQRSTUVWXYZ")) shouldBe List(NinoFormatError, BusinessIdFormatError,SubmissionIdFormatError)
+        validator.validate(RetrieveForeignPropertyPeriodSummaryRawData("Walrus", "Beans", "ABCDEFGHIJKLMNOPQRSTUVWXYZ")) shouldBe List(NinoFormatError, BusinessIdFormatError,SubmissionIdFormatError)
       }
     }
   }

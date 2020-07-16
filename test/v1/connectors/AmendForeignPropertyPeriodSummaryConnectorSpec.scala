@@ -20,7 +20,7 @@ import mocks.MockAppConfig
 import uk.gov.hmrc.domain.Nino
 import v1.mocks.MockHttpClient
 import v1.models.outcomes.ResponseWrapper
-import v1.models.request.amendForeignPropertyPeriodSummary.{AmendForeignPropertyRequest, AmendForeignPropertyRequestBody}
+import v1.models.request.amendForeignPropertyPeriodSummary.{AmendForeignPropertyPeriodSummaryRequest, AmendForeignPropertyPeriodSummaryRequestBody}
 import v1.models.request.common.foreignFhlEea.{ForeignFhlEea, ForeignFhlEeaExpenditure, ForeignFhlEeaIncome}
 import v1.models.request.common.foreignPropertyEntry.{ForeignPropertyEntry, ForeignPropertyExpenditure, ForeignPropertyIncome, ForeignPropertyRentIncome}
 
@@ -69,12 +69,12 @@ class AmendForeignPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
     ))
   )
 
-  val body: AmendForeignPropertyRequestBody = AmendForeignPropertyRequestBody(
+  val body: AmendForeignPropertyPeriodSummaryRequestBody = AmendForeignPropertyPeriodSummaryRequestBody(
     foreignFhlEea = Some(foreignFhlEea),
     foreignProperty = Some(Seq(foreignProperty))
   )
 
-  val request = AmendForeignPropertyRequest(nino, businessId, submissionId, body)
+  val request = AmendForeignPropertyPeriodSummaryRequest(nino, businessId, submissionId, body)
 
   val response = ()
 

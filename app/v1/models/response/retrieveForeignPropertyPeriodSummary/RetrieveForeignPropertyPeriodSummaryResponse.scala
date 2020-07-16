@@ -24,16 +24,16 @@ import v1.models.hateoas.RelType.LIST_PROPERTY_PERIOD_SUMMARIES
 import v1.models.response.retrieveForeignPropertyPeriodSummary.foreignFhlEea.ForeignFhlEea
 import v1.models.response.retrieveForeignPropertyPeriodSummary.foreignProperty.ForeignProperty
 
-case class RetrieveForeignPropertyResponse(fromDate: String,
-                                           toDate: String,
-                                           foreignFhlEea: Option[ForeignFhlEea],
-                                           foreignProperty: Option[Seq[ForeignProperty]])
+case class RetrieveForeignPropertyPeriodSummaryResponse(fromDate: String,
+                                                        toDate: String,
+                                                        foreignFhlEea: Option[ForeignFhlEea],
+                                                        foreignProperty: Option[Seq[ForeignProperty]])
 
-object RetrieveForeignPropertyResponse extends HateoasLinks {
-  implicit val format: OFormat[RetrieveForeignPropertyResponse] = Json.format[RetrieveForeignPropertyResponse]
+object RetrieveForeignPropertyPeriodSummaryResponse extends HateoasLinks {
+  implicit val format: OFormat[RetrieveForeignPropertyPeriodSummaryResponse] = Json.format[RetrieveForeignPropertyPeriodSummaryResponse]
 
-  implicit object RetrieveForeignPropertyLinksFactory extends HateoasLinksFactory[RetrieveForeignPropertyResponse, RetrieveForeignPropertyHateoasData] {
-    override def links(appConfig: AppConfig, data: RetrieveForeignPropertyHateoasData): Seq[Link] = {
+  implicit object RetrieveForeignPropertyLinksFactory extends HateoasLinksFactory[RetrieveForeignPropertyPeriodSummaryResponse, RetrieveForeignPropertyPeriodSummaryHateoasData] {
+    override def links(appConfig: AppConfig, data: RetrieveForeignPropertyPeriodSummaryHateoasData): Seq[Link] = {
       import data._
       Seq(
         amendForeignPropertyPeriodSummary(appConfig, nino, businessId, submissionId),
@@ -44,4 +44,4 @@ object RetrieveForeignPropertyResponse extends HateoasLinks {
   }
 }
 
-case class RetrieveForeignPropertyHateoasData(nino: String, businessId: String, submissionId: String) extends HateoasData
+case class RetrieveForeignPropertyPeriodSummaryHateoasData(nino: String, businessId: String, submissionId: String) extends HateoasData

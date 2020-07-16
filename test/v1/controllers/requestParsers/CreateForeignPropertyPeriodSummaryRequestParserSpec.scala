@@ -23,7 +23,7 @@ import v1.mocks.validators.MockCreateForeignPropertyPeriodSummaryValidator
 import v1.models.errors.{BadRequestError, BusinessIdFormatError, ErrorWrapper, NinoFormatError}
 import v1.models.request.common.foreignFhlEea.{ForeignFhlEea, ForeignFhlEeaExpenditure, ForeignFhlEeaIncome}
 import v1.models.request.common.foreignPropertyEntry.{ForeignPropertyEntry, ForeignPropertyExpenditure, ForeignPropertyIncome, ForeignPropertyRentIncome}
-import v1.models.request.createForeignPropertyPeriodSummary.{CreateForeignPropertyRawData, CreateForeignPropertyRequestBody, CreateForeignPropertyRequestData}
+import v1.models.request.createForeignPropertyPeriodSummary.{CreateForeignPropertyPeriodSummaryRawData, CreateForeignPropertyPeriodSummaryRequestBody, CreateForeignPropertyPeriodSummaryRequestData}
 
 class CreateForeignPropertyPeriodSummaryRequestParserSpec extends UnitSpec {
   val nino = "AA123456B"
@@ -77,7 +77,7 @@ class CreateForeignPropertyPeriodSummaryRequestParserSpec extends UnitSpec {
     """.stripMargin)
 
   val inputData =
-    CreateForeignPropertyRawData(nino, businessId, requestBodyJson)
+    CreateForeignPropertyPeriodSummaryRawData(nino, businessId, requestBodyJson)
 
   trait Test extends MockCreateForeignPropertyPeriodSummaryValidator {
     lazy val parser = new CreateForeignPropertyPeriodSummaryRequestParser(mockValidator)
@@ -126,7 +126,7 @@ class CreateForeignPropertyPeriodSummaryRequestParserSpec extends UnitSpec {
             consolidatedExpenses = None
           ))
         )
-        val model: CreateForeignPropertyRequestBody = CreateForeignPropertyRequestBody(
+        val model: CreateForeignPropertyPeriodSummaryRequestBody = CreateForeignPropertyPeriodSummaryRequestBody(
           fromDate = "2020-01-01",
           toDate = "2020-01-31",
           foreignFhlEea = Some(foreignFhlEea),
@@ -134,7 +134,7 @@ class CreateForeignPropertyPeriodSummaryRequestParserSpec extends UnitSpec {
         )
 
         parser.parseRequest(inputData) shouldBe
-          Right(CreateForeignPropertyRequestData(Nino(nino), businessId, model))
+          Right(CreateForeignPropertyPeriodSummaryRequestData(Nino(nino), businessId, model))
       }
     }
 

@@ -26,8 +26,8 @@ import utils.Logging
 import v1.controllers.requestParsers.CreateForeignPropertyPeriodSummaryRequestParser
 import v1.hateoas.HateoasFactory
 import v1.models.errors._
-import v1.models.request.createForeignPropertyPeriodSummary.CreateForeignPropertyRawData
-import v1.models.response.createForeignPropertyPeriodSummary.CreateForeignPropertyHateoasData
+import v1.models.request.createForeignPropertyPeriodSummary.CreateForeignPropertyPeriodSummaryRawData
+import v1.models.response.createForeignPropertyPeriodSummary.CreateForeignPropertyPeriodSummaryHateoasData
 import v1.services._
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -46,14 +46,14 @@ class CreateForeignPropertyPeriodSummaryController @Inject()(val authService: En
 
   def handleRequest(nino: String, businessId: String): Action[JsValue] =
     authorisedAction(nino).async(parse.json) { implicit request =>
-      val rawData = CreateForeignPropertyRawData(nino, businessId, request.body)
+      val rawData = CreateForeignPropertyPeriodSummaryRawData(nino, businessId, request.body)
       val result =
         for {
           parsedRequest <- EitherT.fromEither[Future](parser.parseRequest(rawData))
           serviceResponse <- EitherT(service.createForeignProperty(parsedRequest))
           vendorResponse <- EitherT.fromEither[Future](
             hateoasFactory
-              .wrap(serviceResponse.responseData, CreateForeignPropertyHateoasData(nino, businessId, serviceResponse.responseData.submissionId))
+              .wrap(serviceResponse.responseData, CreateForeignPropertyPeriodSummaryHateoasData(nino, businessId, serviceResponse.responseData.submissionId))
               .asRight[ErrorWrapper]
           )
         } yield {

@@ -27,10 +27,10 @@ import v1.models.errors._
 import v1.models.hateoas.{HateoasWrapper, Link}
 import v1.models.hateoas.Method.GET
 import v1.models.outcomes.ResponseWrapper
-import v1.models.request.amendForeignPropertyPeriodSummary.{AmendForeignPropertyRawData, AmendForeignPropertyRequest, AmendForeignPropertyRequestBody}
+import v1.models.request.amendForeignPropertyPeriodSummary.{AmendForeignPropertyPeriodSummaryRawData, AmendForeignPropertyPeriodSummaryRequest, AmendForeignPropertyPeriodSummaryRequestBody}
 import v1.models.request.common.foreignFhlEea.{ForeignFhlEea, ForeignFhlEeaExpenditure, ForeignFhlEeaIncome}
 import v1.models.request.common.foreignPropertyEntry.{ForeignPropertyEntry, ForeignPropertyExpenditure, ForeignPropertyIncome, ForeignPropertyRentIncome}
-import v1.models.response.amendForeignPropertyPeriodSummary.AmendForeignPropertyHateoasData
+import v1.models.response.amendForeignPropertyPeriodSummary.AmendForeignPropertyPeriodSummaryHateoasData
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -152,13 +152,13 @@ class AmendForeignPropertyPeriodSummaryControllerSpec
     ))
   )
 
-  val requestBody: AmendForeignPropertyRequestBody = AmendForeignPropertyRequestBody(
+  val requestBody: AmendForeignPropertyPeriodSummaryRequestBody = AmendForeignPropertyPeriodSummaryRequestBody(
     foreignFhlEea = Some(foreignFhlEea),
     foreignProperty = Some(Seq(foreignProperty))
   )
 
-  private val rawData = AmendForeignPropertyRawData(nino, businessId, submissionId, requestJson)
-  private val requestData = AmendForeignPropertyRequest(Nino(nino), businessId, submissionId, requestBody)
+  private val rawData = AmendForeignPropertyPeriodSummaryRawData(nino, businessId, submissionId, requestJson)
+  private val requestData = AmendForeignPropertyPeriodSummaryRequest(Nino(nino), businessId, submissionId, requestBody)
 
   "handleRequest" should {
     "return Ok" when {
@@ -173,7 +173,7 @@ class AmendForeignPropertyPeriodSummaryControllerSpec
           .returns(Future.successful(Right(ResponseWrapper(correlationId, ()))))
 
         MockHateoasFactory
-          .wrap((), AmendForeignPropertyHateoasData(nino, businessId, submissionId))
+          .wrap((), AmendForeignPropertyPeriodSummaryHateoasData(nino, businessId, submissionId))
           .returns(HateoasWrapper((), Seq(testHateoasLink)))
 
         val result: Future[Result] = controller.handleRequest(nino, businessId, submissionId)(fakePostRequest(requestJson))

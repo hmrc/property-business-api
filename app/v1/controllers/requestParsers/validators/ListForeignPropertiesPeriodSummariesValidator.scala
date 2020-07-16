@@ -18,13 +18,13 @@ package v1.controllers.requestParsers.validators
 
 import v1.controllers.requestParsers.validators.validations._
 import v1.models.errors.MtdError
-import v1.models.request.listForeignPropertiesPeriodSummaries.ListForeignPropertiesRawData
+import v1.models.request.listForeignPropertiesPeriodSummaries.ListForeignPropertiesPeriodSummariesRawData
 
-class ListForeignPropertiesPeriodSummariesValidator extends Validator[ListForeignPropertiesRawData] {
+class ListForeignPropertiesPeriodSummariesValidator extends Validator[ListForeignPropertiesPeriodSummariesRawData] {
 
   private val validationSet = List(parameterFormatValidation, parameterRuleValidation)
 
-  private def parameterFormatValidation: ListForeignPropertiesRawData => List[List[MtdError]] = (data: ListForeignPropertiesRawData) => {
+  private def parameterFormatValidation: ListForeignPropertiesPeriodSummariesRawData => List[List[MtdError]] = (data: ListForeignPropertiesPeriodSummariesRawData) => {
     List(
       NinoValidation.validate(data.nino),
       BusinessIdValidation.validate(data.businessId),
@@ -33,7 +33,7 @@ class ListForeignPropertiesPeriodSummariesValidator extends Validator[ListForeig
     )
   }
 
-  private def parameterRuleValidation: ListForeignPropertiesRawData => List[List[MtdError]] = (data: ListForeignPropertiesRawData) => {
+  private def parameterRuleValidation: ListForeignPropertiesPeriodSummariesRawData => List[List[MtdError]] = (data: ListForeignPropertiesPeriodSummariesRawData) => {
     val toDateBeforeFromDateValidation = {
       for {
         fromDate <- data.fromDate
@@ -49,7 +49,7 @@ class ListForeignPropertiesPeriodSummariesValidator extends Validator[ListForeig
 
   }
 
-  override def validate(data: ListForeignPropertiesRawData): List[MtdError] = {
+  override def validate(data: ListForeignPropertiesPeriodSummariesRawData): List[MtdError] = {
     run(validationSet, data).distinct
   }
 }

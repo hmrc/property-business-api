@@ -19,7 +19,7 @@ package v1.models.request.amendForeignPropertyAnnualSubmission.foreignProperty
 import play.api.libs.json.{Json, OFormat}
 
 case class ForeignPropertyAllowances(annualInvestmentAllowance: Option[BigDecimal],
-                                     costOfReplacingDomesticItems:Option[BigDecimal],
+                                     costOfReplacingDomesticItems: Option[BigDecimal],
                                      zeroEmissionsGoodsVehicleAllowance: Option[BigDecimal],
                                      propertyAllowance: Option[BigDecimal],
                                      otherCapitalAllowance: Option[BigDecimal],

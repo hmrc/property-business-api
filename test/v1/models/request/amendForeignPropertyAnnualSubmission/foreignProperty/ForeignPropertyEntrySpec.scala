@@ -25,10 +25,10 @@ class ForeignPropertyEntrySpec extends UnitSpec with JsonErrorValidators{
   val foreignProperty =
     ForeignPropertyEntry(
       "GER",
-      Some(Seq(ForeignPropertyAdjustments(
+      Some(ForeignPropertyAdjustments(
         Some(100.25),
         Some(100.25)
-      ))),
+      )),
       Some(ForeignPropertyAllowances(
         Some(100.25),
         Some(100.25),
@@ -58,45 +58,21 @@ class ForeignPropertyEntrySpec extends UnitSpec with JsonErrorValidators{
   val foreignPropertyNoAllowances =
     ForeignPropertyEntry(
       "GER",
-      Some(Seq(ForeignPropertyAdjustments(
+      Some(ForeignPropertyAdjustments(
         Some(100.25),
         Some(100.25)
-      ))),
+      )),
       None
-    )
-
-  val foreignPropertyMultipleAdjustments =
-    ForeignPropertyEntry(
-      "GER",
-      Some(Seq(ForeignPropertyAdjustments(
-        Some(100.25),
-        Some(100.25)
-      ),
-        ForeignPropertyAdjustments(
-          Some(200.50),
-          Some(200.50)
-        ))),
-      Some(ForeignPropertyAllowances(
-        Some(100.25),
-        Some(100.25),
-        Some(100.25),
-        Some(100.25),
-        Some(100.25),
-        Some(100.25),
-        Some(100.25)
-      ))
     )
 
   val jsonBody = Json.parse(
     """
       |{
       |   "countryCode":"GER",
-      |   "adjustments":[
-      |      {
-      |         "privateUseAdjustment":100.25,
-      |         "balancingCharge":100.25
-      |      }
-      |   ],
+      |   "adjustments":{
+      |      "privateUseAdjustment":100.25,
+      |      "balancingCharge":100.25
+      |   },
       |   "allowances":{
       |      "annualInvestmentAllowance":100.25,
       |      "costOfReplacingDomesticItems":100.25,
@@ -129,41 +105,12 @@ class ForeignPropertyEntrySpec extends UnitSpec with JsonErrorValidators{
     """
       |{
       |   "countryCode":"GER",
-      |   "adjustments":[
-      |      {
-      |         "privateUseAdjustment":100.25,
-      |         "balancingCharge":100.25
-      |      }
-      |   ]
-      |}
-      |""".stripMargin)
-
-  val jsonBodyMultipleAdjustments = Json.parse(
-    """
-      |{
-      |   "countryCode":"GER",
-      |   "adjustments":[
-      |      {
-      |         "privateUseAdjustment":100.25,
-      |         "balancingCharge":100.25
-      |      },
-      |      {
-      |         "privateUseAdjustment":200.50,
-      |         "balancingCharge":200.50
-      |      }
-      |   ],
-      |   "allowances":{
-      |      "annualInvestmentAllowance":100.25,
-      |      "costOfReplacingDomesticItems":100.25,
-      |      "zeroEmissionsGoodsVehicleAllowance":100.25,
-      |      "propertyAllowance":100.25,
-      |      "otherCapitalAllowance":100.25,
-      |      "structureAndBuildingAllowance":100.25,
-      |      "electricChargePointAllowance":100.25
+      |   "adjustments":{
+      |      "privateUseAdjustment":100.25,
+      |      "balancingCharge":100.25
       |   }
       |}
       |""".stripMargin)
-
 
   "reads" when {
     "passed a valid JSON" should {
@@ -175,9 +122,6 @@ class ForeignPropertyEntrySpec extends UnitSpec with JsonErrorValidators{
       }
       "return a valid model with no allowances object" in {
         jsonBodyNoAllowances.as[ForeignPropertyEntry] shouldBe foreignPropertyNoAllowances
-      }
-      "return a valid model with multiple adjustments object" in {
-        jsonBodyMultipleAdjustments.as[ForeignPropertyEntry] shouldBe foreignPropertyMultipleAdjustments
       }
     }
   }
@@ -191,9 +135,6 @@ class ForeignPropertyEntrySpec extends UnitSpec with JsonErrorValidators{
       }
       "return a valid JSON with no allowances" in {
         Json.toJson(foreignPropertyNoAllowances) shouldBe jsonBodyNoAllowances
-      }
-      "return a valid JSON with multiple adjustments" in {
-        Json.toJson(foreignPropertyMultipleAdjustments) shouldBe jsonBodyMultipleAdjustments
       }
     }
   }

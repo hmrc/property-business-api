@@ -41,9 +41,9 @@ class AmendForeignPropertyAnnualSubmissionRequestBodySpec extends UnitSpec with 
       )),
       Some(Seq(ForeignPropertyEntry(
         "GER",
-        Some(Seq(ForeignPropertyAdjustments(
+        Some(ForeignPropertyAdjustments(
           Some(100.25),
-          Some(100.25)))),
+          Some(100.25))),
         Some(ForeignPropertyAllowances(
           Some(100.25),
           Some(100.25),
@@ -84,12 +84,10 @@ class AmendForeignPropertyAnnualSubmissionRequestBodySpec extends UnitSpec with 
       |   "foreignProperty":[
       |      {
       |         "countryCode":"GER",
-      |         "adjustments":[
-      |            {
-      |               "privateUseAdjustment":100.25,
-      |               "balancingCharge":100.25
-      |            }
-      |         ],
+      |         "adjustments":{
+      |            "privateUseAdjustment":100.25,
+      |            "balancingCharge":100.25
+      |         },
       |         "allowances":{
       |            "annualInvestmentAllowance":100.25,
       |            "costOfReplacingDomesticItems":100.25,

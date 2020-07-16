@@ -22,5 +22,5 @@ case class ForeignPropertyAdjustments(privateUseAdjustment: Option[BigDecimal],
                                       balancingCharge: Option[BigDecimal])
 
 object ForeignPropertyAdjustments {
-  implicit val foreignPropertyAdjustments: OFormat[ForeignPropertyAdjustments] = Json.format[ForeignPropertyAdjustments]
+  implicit val format: OFormat[ForeignPropertyAdjustments] = Json.format[ForeignPropertyAdjustments]
 }

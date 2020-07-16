@@ -1,0 +1,31 @@
+is:
+  - headers.acceptJson
+  - headers.contentTypeJson
+  - headers.testScenarioHeader
+  - errors.formatNino
+  - errors.formatBusinessId
+displayName: Amend a Foreign Property Income & Expenditure Annual Summary [test only]
+description: This endpoint allows the developer to submit the adjustments and allowances for a foreign property business in a tax year. This submission is for either or both of Furnished Holiday Lets in the European Economic Area and all other foreign Property submissions.  A National Insurance number, business ID and tax year must be provided.
+(annotations.sandboxData): #!include scenarios/amend_foreign_property.md
+(annotations.scope): "write:self-assessment"
+securedBy: [ sec.oauth_2_0: { scopes: [ "write:self-assessment" ] } ]
+body:
+  application/json:
+    type: !include schemas/foreign_property_annual_submission_amend/request.json
+    examples:
+      example-1x:
+        description: Example Reponse with Expenditure
+        value: !include examples/foreign_property_annual_submission_amend/request.json
+responses:
+  200:
+    body:
+      application/json:
+        type: !include schemas/foreign_property_annual_submission_amend/response.json
+        examples:
+          example:
+            description: Example Response
+            value: !include examples/foreign_property_annual_submission_amend/response.json
+    headers:
+      X-CorrelationId:
+        example: c75f40a6-a3df-4429-a697-471eeec46435
+        description: Unique ID for operation tracking <br> String, 36 characters.

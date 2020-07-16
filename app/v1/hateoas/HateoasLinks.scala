@@ -32,15 +32,15 @@ trait HateoasLinks {
     s"/${appConfig.apiGatewayContext}/$nino/$businessId/period/$submissionId"
 
   //API resource links
-  def listForeignProperties(appConfig: AppConfig, nino: String, businessId: String, rel: String = SELF): Link =
+  def listForeignPropertiesPeriodSummaries(appConfig: AppConfig, nino: String, businessId: String, rel: String = SELF): Link =
     Link(href = foreignPropertyUri(appConfig, nino, businessId), method = GET, rel = rel)
 
-  def createForeignProperty(appConfig: AppConfig, nino: String, businessId: String): Link =
+  def createForeignPropertyPeriodSummary(appConfig: AppConfig, nino: String, businessId: String): Link =
     Link(href = foreignPropertyUri(appConfig, nino, businessId), method = POST, rel = CREATE_PROPERTY_PERIOD_SUMMARY)
 
-  def amendForeignProperty(appConfig: AppConfig, nino: String, businessId: String, submissionId: String): Link =
+  def amendForeignPropertyPeriodSummary(appConfig: AppConfig, nino: String, businessId: String, submissionId: String): Link =
     Link(href = foreignPropertySubmissionUri(appConfig, nino, businessId, submissionId), method = PUT, rel = AMEND_PROPERTY_PERIOD_SUMMARY)
 
-  def retrieveForeignProperty(appConfig: AppConfig, nino: String, businessId: String, submissionId: String): Link =
+  def retrieveForeignPropertyPeriodSummary(appConfig: AppConfig, nino: String, businessId: String, submissionId: String): Link =
     Link(href = foreignPropertySubmissionUri(appConfig, nino, businessId, submissionId), method = GET, rel = SELF)
 }

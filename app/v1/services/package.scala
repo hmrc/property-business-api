@@ -18,9 +18,9 @@ package v1
 
 import v1.models.errors.ErrorWrapper
 import v1.models.outcomes.ResponseWrapper
-import v1.models.response.listForeignProperties.{ListForeignPropertiesResponse, SubmissionPeriod}
-import v1.models.response.createForeignProperty.CreateForeignPropertyResponse
-import v1.models.response.retrieveForeignProperty.RetrieveForeignPropertyResponse
+import v1.models.response.listForeignPropertiesPeriodSummaries.{ListForeignPropertiesResponse, SubmissionPeriod}
+import v1.models.response.createForeignPropertyPeriodSummary.CreateForeignPropertyResponse
+import v1.models.response.retrieveForeignPropertyPeriodSummary.RetrieveForeignPropertyResponse
 
 
 package object services {

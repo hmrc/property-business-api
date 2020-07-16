@@ -158,6 +158,28 @@ traits:
                   description: The To date is earlier than the From date.
                   value:
                     code: RULE_TO_DATE_BEFORE_FROM_DATE
+  ruleTaxYearNotSupported:
+      responses:
+        400:
+          body:
+            application/json:
+              type: types.errorResponse
+              examples:
+                ruleTaxYearNotSupported:
+                  description: The specified tax year is not supported. That is, the tax year specified is before the minimum tax year value.
+                  value:
+                    code: RULE_TAX_YEAR_NOT_SUPPORTED
+  ruleTaxYearRangeInvalid:
+      responses:
+        400:
+          body:
+            application/json:
+              type: types.errorResponse
+              examples:
+                ruleTaxYearRangeInvalid:
+                  description: Tax year range invalid. A tax year range of one year is required.
+                  value:
+                    code: RULE_TAX_YEAR_RANGE_INVALID
   bothExpensesSupplied:
     responses:
       400:

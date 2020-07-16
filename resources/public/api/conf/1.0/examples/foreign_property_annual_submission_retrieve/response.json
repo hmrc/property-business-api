@@ -1,0 +1,50 @@
+{
+  "foreignFhlEea": {
+    "adjustments": {
+      "privateUseAdjustment": 100.25,
+      "balancingCharge": 100.25,
+      "periodOfGraceAdjustment": true
+    },
+    "allowances": {
+      "annualInvestmentAllowance": 100.25,
+      "otherCapitalAllowance": 100.25,
+      "propertyAllowance": 100.25,
+      "electricChargePointAllowance": 100.25
+    }
+  },
+  "foreignProperty": [
+    {
+      "countryCode": "FRA",
+      "adjustments": {
+        "privateUseAdjustment": 100.25,
+        "balancingCharge": 100.25
+      },
+      "allowances": {
+        "annualInvestmentAllowance": 100.25,
+        "costOfReplacingDomesticItems": 100.25,
+        "zeroEmissionsGoodsVehicleAllowance": 100.25,
+        "propertyAllowance": 100.25,
+        "otherCapitalAllowance": 100.25,
+        "structureAndBuildingAllowance": 100.25,
+        "electricChargePointAllowance": 100.25
+      }
+    }
+  ],
+  "links": [
+    {
+      "href": "/individuals/business/property/CX897463D/XAIS12345678910/annual/2019-20",
+      "method": "PUT",
+      "rel": "amend-property-annual-submission"
+    },
+    {
+      "href": "/individuals/business/property/CX897463D/XAIS12345678910/annual/2019-20",
+      "method": "GET",
+      "rel": "self"
+    },
+    {
+      "href": "/individuals/business/property/CX897463D/XAIS12345678910/annual/2019-20",
+      "method": "DELETE",
+      "rel": "delete-property-annual-submission"
+    }
+  ]
+}

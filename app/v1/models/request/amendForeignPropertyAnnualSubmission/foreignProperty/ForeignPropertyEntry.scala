@@ -20,7 +20,11 @@ import play.api.libs.json.{Json, OFormat}
 
 case class ForeignPropertyEntry(countryCode: String,
                                 adjustments: Option[ForeignPropertyAdjustments],
-                                allowances: Option[ForeignPropertyAllowances])
+                                allowances: Option[ForeignPropertyAllowances]) {
+  def isEmpty: Boolean =
+    adjustments.exists(_.isEmpty) ||
+    allowances.exists(_.isEmpty)
+}
 
 object ForeignPropertyEntry {
   implicit val format: OFormat[ForeignPropertyEntry] = Json.format[ForeignPropertyEntry]

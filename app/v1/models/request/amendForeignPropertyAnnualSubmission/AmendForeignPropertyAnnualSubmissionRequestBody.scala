@@ -21,11 +21,8 @@ import v1.models.request.amendForeignPropertyAnnualSubmission.foreignFhlEea.Fore
 import v1.models.request.amendForeignPropertyAnnualSubmission.foreignProperty.ForeignPropertyEntry
 case class AmendForeignPropertyAnnualSubmissionRequestBody(foreignFhlEea: Option[ForeignFhlEea], foreignProperty: Option[Seq[ForeignPropertyEntry]]) {
   def isEmpty: Boolean = (foreignFhlEea.isEmpty && foreignProperty.isEmpty) ||
-  foreignFhlEea.flatMap(_.adjustments.map(_.isEmpty)).getOrElse(false) ||
-    foreignFhlEea.flatMap(_.allowances.map(_.isEmpty)).getOrElse(false) ||
-    foreignProperty.exists(_.isEmpty) ||
-    foreignProperty.exists(_.exists(_.adjustments.exists(_.isEmpty))) ||
-    foreignProperty.exists(_.exists(_.allowances.exists(_.isEmpty)))
+    foreignFhlEea.exists(_.isEmpty) ||
+    foreignProperty.exists(_.isEmpty)
 }
 
 object AmendForeignPropertyAnnualSubmissionRequestBody {

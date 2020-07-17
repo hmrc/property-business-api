@@ -94,7 +94,8 @@ class AmendForeignPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec {
         )
         .returns(Future.successful(outcome))
 
-      await(Future.successful(outcome)) shouldBe outcome
+      await(connector.amendForeignPropertyAnnualSubmission(request)) shouldBe outcome
+
     }
   }
 }

@@ -4,6 +4,7 @@ uses:
   types: https://developer.service.hmrc.gov.uk/api-documentation/assets/common/modules/types.raml
 
 traits:
+# 404
   notFound:
     responses:
       404:
@@ -26,6 +27,7 @@ traits:
                 description: A submission with this Submission ID does not exist for this Business Income Source.
                 value:
                   code: SUBMISSION_ID_NOT_FOUND
+# 403
   clientOrAgentNotAuthorised:
     responses:
       403:
@@ -37,6 +39,8 @@ traits:
                 description: 'The client or agent is not authorised. This is because: the client is not subscribed to MTD, the agent is not subscribed to Agent Services, or the client has not authorised the agent to act on their behalf.'
                 value:
                   code: CLIENT_OR_AGENT_NOT_AUTHORISED
+# 400
+# FORMAT_XXX
   formatNino:
     responses:
       400:
@@ -114,17 +118,6 @@ traits:
                 description: The format of the supplied tax year field is not valid.
                 value:
                   code: FORMAT_TAX_YEAR
-  incorrectOrEmptyBody:
-    responses:
-      400:
-        body:
-          application/json:
-            type: types.errorResponse
-            examples:
-              incorrectOrEmptyBody:
-                description: An empty or non-matching body was submitted.
-                value:
-                  code: RULE_INCORRECT_OR_EMPTY_BODY_SUBMITTED
   formatCountryCode:
     responses:
       400:
@@ -136,17 +129,18 @@ traits:
                 description: The format of the supplied Country Code field is not valid.
                 value:
                   code: FORMAT_COUNTRY_CODE
-  ruleBothExpensesSupplied:
-      responses:
-        400:
-          body:
-            application/json:
-              type: types.errorResponse
-              examples:
-                ruleBothExpensesSupplied:
-                  description: Both expenses and consolidatedExpenses can not be present at the same time.
-                  value:
-                    code: RULE_BOTH_EXPENSES_SUPPLIED
+# RULE_XXX
+  ruleIncorrectOrEmptyBody:
+    responses:
+      400:
+        body:
+          application/json:
+            type: types.errorResponse
+            examples:
+              ruleIncorrectOrEmptyBody:
+                description: An empty or non-matching body was submitted.
+                value:
+                  code: RULE_INCORRECT_OR_EMPTY_BODY_SUBMITTED
   ruleToDateBeforeFromDate:
       responses:
         400:
@@ -158,14 +152,36 @@ traits:
                   description: The To date is earlier than the From date.
                   value:
                     code: RULE_TO_DATE_BEFORE_FROM_DATE
-  bothExpensesSupplied:
+  ruleTaxYearNotSupported:
+      responses:
+        400:
+          body:
+            application/json:
+              type: types.errorResponse
+              examples:
+                ruleTaxYearNotSupported:
+                  description: The specified tax year is not supported. That is, the tax year specified is before the minimum tax year value.
+                  value:
+                    code: RULE_TAX_YEAR_NOT_SUPPORTED
+  ruleTaxYearRangeInvalid:
+      responses:
+        400:
+          body:
+            application/json:
+              type: types.errorResponse
+              examples:
+                ruleTaxYearRangeInvalid:
+                  description: Tax year range invalid. A tax year range of one year is required.
+                  value:
+                    code: RULE_TAX_YEAR_RANGE_INVALID
+  ruleBothExpensesSupplied:
     responses:
       400:
         body:
           application/json:
             type: types.errorResponse
             examples:
-              bothExpensesSupplied:
+              ruleBothExpensesSupplied:
                 description: Both Expenses and Consolidated Expenses can not be present at the same time.
                 value:
                   code: RULE_BOTH_EXPENSES_SUPPLIED
@@ -202,6 +218,18 @@ traits:
                 description: Period summary is not within the accounting period.
                 value:
                   code: RULE_MISALIGNED_PERIOD
+  ruleNotContiguousPeriod:
+    responses:
+      400:
+        body:
+          application/json:
+            type: types.errorResponse
+            examples:
+              ruleNotContiguousPeriod:
+                description: Period summaries are not contiguous.
+                value:
+                  code: RULE_NOT_CONTIGUOUS_PERIOD
+# MISSING_XXX
   missingFromDate:
     responses:
       400:
@@ -224,50 +252,3 @@ traits:
                 description: The To date parameter is missing.
                 value:
                   code: MISSING_TO_DATE
-  toDateBeforeFromDate:
-    responses:
-      400:
-        body:
-          application/json:
-            type: types.errorResponse
-            examples:
-              toDateBeforeFromDate:
-                description: The To date is earlier than the From date.
-                value:
-                  code: RULE_TO_DATE_BEFORE_FROM_DATE
-  ruleNotContiguousPeriod:
-    responses:
-      400:
-        body:
-          application/json:
-            type: types.errorResponse
-            examples:
-              ruleNotContiguousPeriod:
-                description: Period summaries are not contiguous.
-                value:
-                  code: RULE_NOT_CONTIGUOUS_PERIOD
-  ruleTaxYearNotSupported:
-    responses:
-      400:
-        body:
-          application/json:
-            type: types.errorResponse
-            examples:
-              ruleNotContiguousPeriod:
-                description: The specified Tax year is not supported. That is, the tax year specified is before the minimum tax year value.
-                value:
-                  code: RULE_TAX_YEAR_NOT_SUPPORTED
-  ruleTaxYearRangeInvalid:
-    responses:
-      400:
-        body:
-          application/json:
-            type: types.errorResponse
-            examples:
-              ruleNotContiguousPeriod:
-                description: Tax year range invalid. A tax year range of one year is required.
-                value:
-                  code: RULE_TAX_YEAR_RANGE_INVALID
-
-
-

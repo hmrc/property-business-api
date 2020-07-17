@@ -106,7 +106,7 @@ class AmendForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec {
       |}
     """.stripMargin)
 
-  val validator = new AmendForeignPropertyPeriodSubmissionValidator()
+  val validator = new AmendForeignPropertyPeriodSummaryValidator()
 
   "running a validation" should {
     "return no errors" when {

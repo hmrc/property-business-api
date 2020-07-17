@@ -18,10 +18,10 @@ package v1.controllers.requestParsers
 
 import javax.inject.Inject
 import uk.gov.hmrc.domain.Nino
-import v1.controllers.requestParsers.validators.AmendForeignPropertyPeriodSubmissionValidator
+import v1.controllers.requestParsers.validators.AmendForeignPropertyPeriodSummaryValidator
 import v1.models.request.amendForeignPropertyPeriodSummary.{AmendForeignPropertyPeriodSummaryRawData, AmendForeignPropertyPeriodSummaryRequestBody, AmendForeignPropertyPeriodSummaryRequest}
 
-class AmendForeignPropertyPeriodSummaryRequestParser @Inject()(val validator: AmendForeignPropertyPeriodSubmissionValidator)
+class AmendForeignPropertyPeriodSummaryRequestParser @Inject()(val validator: AmendForeignPropertyPeriodSummaryValidator)
   extends RequestParser[AmendForeignPropertyPeriodSummaryRawData, AmendForeignPropertyPeriodSummaryRequest] {
 
   override protected def requestFor(data: AmendForeignPropertyPeriodSummaryRawData): AmendForeignPropertyPeriodSummaryRequest =

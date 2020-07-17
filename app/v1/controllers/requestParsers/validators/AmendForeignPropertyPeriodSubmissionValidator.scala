@@ -22,7 +22,7 @@ import v1.models.request.common.foreignPropertyEntry.{ForeignPropertyEntry, Fore
 import v1.models.request.amendForeignPropertyPeriodSummary.{AmendForeignPropertyPeriodSummaryRawData, AmendForeignPropertyPeriodSummaryRequestBody}
 import v1.models.request.common.foreignFhlEea.{ForeignFhlEea, ForeignFhlEeaExpenditure}
 
-class AmendForeignPropertyPeriodSummaryValidator extends Validator[AmendForeignPropertyPeriodSummaryRawData] {
+class AmendForeignPropertyPeriodSubmissionValidator extends Validator[AmendForeignPropertyPeriodSummaryRawData] {
 
   private val validationSet = List(parameterFormatValidation, bodyFormatValidation, bodyFieldValidation)
 

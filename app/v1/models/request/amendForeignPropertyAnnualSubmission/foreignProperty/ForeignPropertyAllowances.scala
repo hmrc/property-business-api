@@ -24,7 +24,15 @@ case class ForeignPropertyAllowances(annualInvestmentAllowance: Option[BigDecima
                                      propertyAllowance: Option[BigDecimal],
                                      otherCapitalAllowance: Option[BigDecimal],
                                      structureAndBuildingAllowance: Option[BigDecimal],
-                                     electricChargePointAllowance: Option[BigDecimal])
+                                     electricChargePointAllowance: Option[BigDecimal]) {
+  def isEmpty: Boolean = annualInvestmentAllowance.isEmpty &&
+    costOfReplacingDomesticItems.isEmpty &&
+    zeroEmissionsGoodsVehicleAllowance.isEmpty &&
+    propertyAllowance.isEmpty &&
+    otherCapitalAllowance.isEmpty &&
+    structureAndBuildingAllowance.isEmpty &&
+    electricChargePointAllowance.isEmpty
+}
 
 object ForeignPropertyAllowances {
   implicit val format: OFormat[ForeignPropertyAllowances] = Json.format[ForeignPropertyAllowances]

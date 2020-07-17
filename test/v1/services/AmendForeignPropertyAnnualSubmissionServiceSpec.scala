@@ -90,7 +90,7 @@ class AmendForeignPropertyAnnualSubmissionServiceSpec extends UnitSpec {
         MockAmendForeignPropertyAnnualSubmissionConnector.amendForeignProperty(request)
           .returns(Future.successful(Right(ResponseWrapper(correlationId, ()))))
 
-        await(service.amendForeignProperty(request)) shouldBe Right(ResponseWrapper(correlationId, ()))
+        await(service.amendForeignPropertyAnnualSubmission(request)) shouldBe Right(ResponseWrapper(correlationId, ()))
       }
     }
   }
@@ -104,12 +104,12 @@ class AmendForeignPropertyAnnualSubmissionServiceSpec extends UnitSpec {
           MockAmendForeignPropertyAnnualSubmissionConnector.amendForeignProperty(request)
             .returns(Future.successful(Left(ResponseWrapper(correlationId, DesErrors.single(DesErrorCode(desErrorCode))))))
 
-          await(service.amendForeignProperty(request)) shouldBe Left(ErrorWrapper(Some(correlationId), error))
+          await(service.amendForeignPropertyAnnualSubmission(request)) shouldBe Left(ErrorWrapper(Some(correlationId), error))
         }
 
       val input = Seq(
         "INVALID_TAXABLE_ENTITY_ID" -> NinoFormatError,
-        "INVALID_BUSINESS_ID" -> BusinessIdFormatError,
+        "INVALID_INCOME_SOURCE_ID" -> BusinessIdFormatError,
         "NOT_FOUND" -> NotFoundError,
         "SERVER_ERROR" -> DownstreamError,
         "SERVICE_UNAVAILABLE" -> DownstreamError

@@ -33,10 +33,10 @@ import scala.concurrent.{ExecutionContext, Future}
 class AmendForeignPropertyAnnualSubmissionService @Inject()
 (connector: AmendForeignPropertyAnnualSubmissionConnector) extends DesResponseMappingSupport with Logging {
 
-  def amendForeignProperty(request: AmendForeignPropertyAnnualSubmissionRequest)(
+  def amendForeignPropertyAnnualSubmission(request: AmendForeignPropertyAnnualSubmissionRequest)(
     implicit hc: HeaderCarrier,
     ec: ExecutionContext,
-    logContext: EndpointLogContext): Future[AmendForeignPropertyPeriodSummaryServiceOutcome] = {
+    logContext: EndpointLogContext): Future[AmendForeignPropertyAnnualSubmissionServiceOutcome] = {
 
     val result = for {
       desResponseWrapper <- EitherT(connector.amendForeignPropertyAnnualSubmission(request)).leftMap(mapDesErrors(desErrorMap))
@@ -48,7 +48,7 @@ class AmendForeignPropertyAnnualSubmissionService @Inject()
   private def desErrorMap =
     Map(
       "INVALID_TAXABLE_ENTITY_ID" -> NinoFormatError,
-      "INVALID_BUSINESS_ID" -> BusinessIdFormatError,
+      "INVALID_INCOME_SOURCE_ID" -> BusinessIdFormatError,
       "NOT_FOUND" -> NotFoundError,
       "SERVER_ERROR" -> DownstreamError,
       "SERVICE_UNAVAILABLE" -> DownstreamError

@@ -9,13 +9,13 @@ is:
   - errors.ruleTaxYearRangeInvalid
   - errors.clientOrAgentNotAuthorised
   - errors.notFound
-displayName: Amend a Foreign Property Income & Expenditure Period Summary [test only]
-description:
+displayName: Delete a Foreign Property Annual Summary [test only]
+description: This endpoint allows the developer to delete the adjustments and allowances for a foreign property business in a tax year. A National Insurance number, business ID and tax year must be provided.
 (annotations.sandboxData): !include scenarios/foreign_property_annual_submission_delete_scenarios.md
 (annotations.scope): "write:self-assessment"
 securedBy: [ sec.oauth_2_0: { scopes: [ "write:self-assessment" ] } ]
 responses:
-  404:
+  204:
     headers:
       X-CorrelationId:
         example: c75f40a6-a3df-4429-a697-471eeec46435

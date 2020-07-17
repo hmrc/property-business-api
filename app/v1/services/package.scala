@@ -35,4 +35,6 @@ package object services {
 
   type ListForeignPropertiesPeriodSummariesServiceOutcome = ServiceOutcome[ListForeignPropertiesPeriodSummariesResponse[SubmissionPeriod]]
 
+  type AmendForeignPropertyAnnualSubmissionServiceOutcome = ServiceOutcome[Unit]
+
 }

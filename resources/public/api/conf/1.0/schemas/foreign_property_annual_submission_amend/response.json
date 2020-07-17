@@ -1,0 +1,48 @@
+
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "title": "Amend a Foreign Property Income & Expenses Period Summary",
+  "description": "This endpoint allows a developer to re-submit the income and expenditure for a foreign property business that occurred between two dates. This submission is for either or both of Furnished Holiday Letting (FHL) in the European Economic Area (EEA) and all other foreign property submissions. A National Insurance number, business ID and submission ID are required.",
+  "type": "object",
+  "properties": {
+    "links": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "description": "A list of endpoint links that indicate possible actions related to the current resource.",
+        "properties": {
+          "href": {
+            "description": "The relative url of the endpoint",
+            "type": "string",
+            "example": "/individuals/business/property/TC663795B/XAIS12345678910/period/4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
+          },
+          "method": {
+            "description": "The HTTP method type for the endpoint.",
+            "type": "string",
+            "enum": [
+              "GET",
+              "PUT",
+              "DELETE"
+            ]
+          },
+          "rel": {
+            "description": "A label for the endpoint, which describes how it is related to the current resource. The rel will be self where the action is retrieval of the same resource.",
+            "type": "string",
+            "enum": [
+              "amend-property-annual-summary",
+              "delete-property-annual-summary",
+              "self"
+            ]
+          }
+        },
+        "required": [
+          "href",
+          "rel",
+          "method"
+        ],
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}

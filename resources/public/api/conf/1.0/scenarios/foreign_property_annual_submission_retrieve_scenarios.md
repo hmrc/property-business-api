@@ -9,11 +9,11 @@
     <tbody>
         <tr>
             <td><p>N/A - DEFAULT</p></td>
-            <td><p>Simulate success response with a single item in the Foreign Property array.</p></td>
+            <td><p>Simulate a scenario with a single item in the Foreign Property array.</p></td>
         </tr>
         <tr>
             <td><p>MULTIPLE_FOREIGN_PROPERTY</p></td>
-            <td><p>Simulate success response with multiple items in the Foreign Property array.</p></td>
+            <td><p>Simulate a scenario with multiple items in the Foreign Property array.</p></td>
         </tr>
         <tr>
             <td><p>NOT_FOUND</p></td>

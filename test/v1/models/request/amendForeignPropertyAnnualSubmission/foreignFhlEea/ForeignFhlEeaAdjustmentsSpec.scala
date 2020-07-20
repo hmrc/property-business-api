@@ -38,6 +38,12 @@ class ForeignFhlEeaAdjustmentsSpec extends UnitSpec with JsonErrorValidators {
       |}
       |""".stripMargin)
 
+  val emptyJson = Json.parse(
+    """
+      |{}
+      |""".stripMargin
+  )
+
   "reads" when {
     "passed a valid JSON" should {
       "return a valid model" in {
@@ -49,6 +55,18 @@ class ForeignFhlEeaAdjustmentsSpec extends UnitSpec with JsonErrorValidators {
     "passed valid model" should {
       "return valid JSON" in {
         Json.toJson(foreignFhlEeaAdjustments) shouldBe jsonBody
+      }
+    }
+  }
+  "isEmpty" when {
+    "passed a valid model" should {
+      "return false" in {
+        jsonBody.as[ForeignFhlEeaAdjustments].isEmpty shouldBe false
+      }
+    }
+    "passed an empty model" should {
+      "return true" in {
+        emptyJson.as[ForeignFhlEeaAdjustments].isEmpty shouldBe true
       }
     }
   }

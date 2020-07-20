@@ -133,6 +133,55 @@ class AmendForeignPropertyAnnualSubmissionValidatorSpec extends UnitSpec {
             |""".stripMargin
         ))) shouldBe Nil
       }
+      "only a foreignProperty is supplied" in {
+        validator.validate(AmendForeignPropertyAnnualSubmissionRawData(validNino, validBusinessId, validTaxYear, Json.parse(
+          """
+            |{
+            |   "foreignProperty":[
+            |      {
+            |         "countryCode":"FRA",
+            |         "adjustments":
+            |            {
+            |               "privateUseAdjustment":100.25,
+            |               "balancingCharge":100.25
+            |            }
+            |         ,
+            |         "allowances":{
+            |            "annualInvestmentAllowance":100.25,
+            |            "costOfReplacingDomesticItems":100.25,
+            |            "zeroEmissionsGoodsVehicleAllowance":100.25,
+            |            "propertyAllowance":100.25,
+            |            "otherCapitalAllowance":100.25,
+            |            "structureAndBuildingAllowance":100.25,
+            |            "electricChargePointAllowance":100.25
+            |         }
+            |      }
+            |   ]
+            |}
+            |""".stripMargin
+        ))) shouldBe Nil
+      }
+      "only a foreignEeaFhl is supplied" in {
+        validator.validate(AmendForeignPropertyAnnualSubmissionRawData(validNino, validBusinessId, validTaxYear, Json.parse(
+          """
+            |{
+            |   "foreignFhlEea":{
+            |      "adjustments":{
+            |         "privateUseAdjustment":100.25,
+            |         "balancingCharge":100.25,
+            |         "periodOfGraceAdjustment":true
+            |      },
+            |      "allowances":{
+            |         "annualInvestmentAllowance":100.25,
+            |         "otherCapitalAllowance":100.25,
+            |         "propertyAllowance":100.25,
+            |         "electricChargePointAllowance":100.25
+            |      }
+            |   }
+            |}
+            |""".stripMargin
+        ))) shouldBe Nil
+      }
     }
     "return a path parameter error" when {
       "an invalid nino is supplied" in {

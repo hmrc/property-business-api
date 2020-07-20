@@ -25,10 +25,10 @@ import v1.models.request.deleteForeignPropertyAnnualSubmission.{DeleteForeignPro
 class DeleteForeignPropertyAnnualSubmissionRequestParserSpec extends UnitSpec {
   val nino = "AA123456B"
   val businessId = "XAIS12345678901"
-  val submissionId = "12345678-1234-4123-9123-123456789012"
+  val taxYear = "2021-22"
 
   val inputData =
-    DeleteForeignPropertyAnnualSubmissionRawData(nino, businessId, submissionId)
+    DeleteForeignPropertyAnnualSubmissionRawData(nino, businessId, taxYear)
 
   trait Test extends MockDeleteForeignPropertyAnnualSubmissionValidator {
     lazy val parser = new DeleteForeignPropertyAnnualSubmissionRequestParser(mockValidator)
@@ -39,7 +39,7 @@ class DeleteForeignPropertyAnnualSubmissionRequestParserSpec extends UnitSpec {
       "valid request data is supplied" in new Test {
         MockRetrieveForeignPropertyValidator.validate(inputData).returns(Nil)
 
-        parser.parseRequest(inputData) shouldBe Right(DeleteForeignPropertyAnnualSubmissionRequest(Nino(nino), businessId, submissionId))
+        parser.parseRequest(inputData) shouldBe Right(DeleteForeignPropertyAnnualSubmissionRequest(Nino(nino), businessId, taxYear))
       }
     }
     "return an ErrorWrapper" when {

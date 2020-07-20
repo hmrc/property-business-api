@@ -14,16 +14,16 @@
  * limitations under the License.
  */
 
-package v1.models.response.retrieve.foreignFhlEea
+package v1.models.response.retrieveForeignProperty.foreignProperty
 
 import play.api.libs.json.Json
 import support.UnitSpec
-import v1.models.response.retrieveForeignProperty.foreignFhlEea.ForeignFhlEeaIncome
+import v1.models.response.retrieveForeignProperty.foreignProperty.ForeignPropertyRentIncome
 import v1.models.utils.JsonErrorValidators
 
-class ForeignFhlEeaIncomeSpec extends UnitSpec with JsonErrorValidators {
+class ForeignPropertyRentIncomeSpec extends UnitSpec with JsonErrorValidators {
 
-  val foreignFhlEeaIncome = ForeignFhlEeaIncome(
+  val rentIncome = ForeignPropertyRentIncome(
     5000.99,
     Some(5000.99)
   )
@@ -37,14 +37,14 @@ class ForeignFhlEeaIncomeSpec extends UnitSpec with JsonErrorValidators {
   "reads" when {
     "passed a valid JSON" should {
       "return a valid model" in {
-        json.as[ForeignFhlEeaIncome] shouldBe foreignFhlEeaIncome
+        json.as[ForeignPropertyRentIncome] shouldBe rentIncome
       }
     }
   }
   "writes" when {
     "passed valid model" should {
       "return valid JSON" in {
-        Json.toJson(foreignFhlEeaIncome) shouldBe json
+        Json.toJson(rentIncome) shouldBe json
       }
     }
   }

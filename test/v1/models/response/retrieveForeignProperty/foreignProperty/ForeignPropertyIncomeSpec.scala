@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package v1.models.response.retrieve.foreignProperty
+package v1.models.response.retrieveForeignProperty.foreignProperty
 
 import play.api.libs.json.Json
 import support.UnitSpec

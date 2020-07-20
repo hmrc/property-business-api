@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package v1.models.response.retrieve
+package v1.models.response.retrieveForeignProperty
 
 import mocks.MockAppConfig
 import play.api.libs.json.Json

@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-package v1.models.request.deleteForeignPropertyAnualSubmission
+package v1.models.request.deleteForeignPropertyAnnualSubmission
 
 import v1.models.request.RawData
 
-case class DeleteForeignPropertyAnualSubmissionRawData(nino: String, businessId: String, taxYear: String) extends RawData
+case class DeleteForeignPropertyAnnualSubmissionRawData(nino: String, businessId: String, taxYear: String) extends RawData

@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-package v1.models.request.deleteForeignPropertyAnualSubmission
+package v1.models.request.deleteForeignPropertyAnnualSubmission
 
 import uk.gov.hmrc.domain.Nino
 
-case class DeleteForeignPropertyAnualSubmissionRequest(nino: Nino, businessId: String, taxYear: String)
+case class DeleteForeignPropertyAnnualSubmissionRequest(nino: Nino, businessId: String, taxYear: String)

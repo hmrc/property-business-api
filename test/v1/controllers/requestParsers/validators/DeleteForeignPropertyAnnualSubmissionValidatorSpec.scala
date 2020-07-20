@@ -17,7 +17,7 @@
 package v1.controllers.requestParsers.validators
 
 import support.UnitSpec
-import v1.models.errors.{BusinessIdFormatError, NinoFormatError, SubmissionIdFormatError}
+import v1.models.errors.{BusinessIdFormatError, NinoFormatError, RuleTaxYearNotSupportedError, RuleTaxYearRangeInvalidError, TaxYearFormatError}
 import v1.models.request.deleteForeignPropertyAnnualSubmission.DeleteForeignPropertyAnnualSubmissionRawData
 
 class DeleteForeignPropertyAnnualSubmissionValidatorSpec extends UnitSpec {
@@ -41,11 +41,17 @@ class DeleteForeignPropertyAnnualSubmissionValidatorSpec extends UnitSpec {
       "an invalid businessId is supplied" in {
         validator.validate(DeleteForeignPropertyAnnualSubmissionRawData(validNino, "Beans", validTaxYear)) shouldBe List(BusinessIdFormatError)
       }
-      "an invalid taxYear is supplied" in {
-        validator.validate(DeleteForeignPropertyAnnualSubmissionRawData(validNino, validBusinessId, "ABCDEFGHIJKLMNOPQRSTUVWXYZ")) shouldBe List(TaxYearFormatError)
+      "an invalid taxYear format is supplied" in {
+        validator.validate(DeleteForeignPropertyAnnualSubmissionRawData(validNino, validBusinessId, "2021/22")) shouldBe List(TaxYearFormatError)
+      }
+      "an unsupported taxYear is supplied" in {
+        validator.validate(DeleteForeignPropertyAnnualSubmissionRawData(validNino, validBusinessId, "2019-20")) shouldBe List(RuleTaxYearNotSupportedError)
+      }
+      "an invalid taxYear range is supplied" in {
+        validator.validate(DeleteForeignPropertyAnnualSubmissionRawData(validNino, validBusinessId, "2021-23")) shouldBe List(RuleTaxYearRangeInvalidError)
       }
       "multiple format errors are made" in {
-        validator.validate(DeleteForeignPropertyAnnualSubmissionRawData("Walrus", "Beans", "ABCDEFGHIJKLMNOPQRSTUVWXYZ")) shouldBe List(NinoFormatError, BusinessIdFormatError, TaxYearFormatError)
+        validator.validate(DeleteForeignPropertyAnnualSubmissionRawData("Walrus", "Beans", "2021/22")) shouldBe List(NinoFormatError, BusinessIdFormatError, TaxYearFormatError)
       }
     }
   }

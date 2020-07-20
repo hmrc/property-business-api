@@ -16,7 +16,7 @@
 
 package v1.controllers.requestParsers.validators
 
-import v1.controllers.requestParsers.validators.validations.{BusinessIdValidation, NinoValidation, SubmissionIdValidation}
+import v1.controllers.requestParsers.validators.validations.{BusinessIdValidation, NinoValidation, SubmissionIdValidation, TaxYearValidation}
 import v1.models.errors.MtdError
 import v1.models.request.deleteForeignPropertyAnnualSubmission.DeleteForeignPropertyAnnualSubmissionRawData
 
@@ -29,7 +29,7 @@ class DeleteForeignPropertyAnnualSubmissionValidator extends Validator[DeleteFor
     List(
       NinoValidation.validate(data.nino),
       BusinessIdValidation.validate(data.businessId),
-//      TaxYearValidation.validate(data.taxYear)
+      TaxYearValidation.validate(data.taxYear)
     )
   }
 

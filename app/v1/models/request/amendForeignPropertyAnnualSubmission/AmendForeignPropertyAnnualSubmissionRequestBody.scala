@@ -19,8 +19,11 @@ package v1.models.request.amendForeignPropertyAnnualSubmission
 import play.api.libs.json._
 import v1.models.request.amendForeignPropertyAnnualSubmission.foreignFhlEea.ForeignFhlEea
 import v1.models.request.amendForeignPropertyAnnualSubmission.foreignProperty.ForeignPropertyEntry
-case class AmendForeignPropertyAnnualSubmissionRequestBody(foreignFhlEea: Option[ForeignFhlEea], foreignProperty: Option[Seq[ForeignPropertyEntry]])
-
+case class AmendForeignPropertyAnnualSubmissionRequestBody(foreignFhlEea: Option[ForeignFhlEea], foreignProperty: Option[Seq[ForeignPropertyEntry]]) {
+  def isEmpty: Boolean = (foreignFhlEea.isEmpty && foreignProperty.isEmpty) ||
+    foreignFhlEea.exists(_.isEmpty) ||
+    foreignProperty.exists(_.isEmpty)
+}
 
 object AmendForeignPropertyAnnualSubmissionRequestBody {
   implicit val format: OFormat[AmendForeignPropertyAnnualSubmissionRequestBody] = Json.format[AmendForeignPropertyAnnualSubmissionRequestBody]

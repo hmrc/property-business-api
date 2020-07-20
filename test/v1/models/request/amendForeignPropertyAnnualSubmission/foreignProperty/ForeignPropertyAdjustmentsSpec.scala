@@ -36,6 +36,13 @@ class ForeignPropertyAdjustmentsSpec extends UnitSpec with JsonErrorValidators {
       |}
       |""".stripMargin)
 
+  val emptyJson = Json.parse(
+    """
+      |{}
+      |""".stripMargin
+  )
+
+
   "reads" when {
     "passed a valid JSON" should {
       "return a valid model" in {
@@ -50,5 +57,16 @@ class ForeignPropertyAdjustmentsSpec extends UnitSpec with JsonErrorValidators {
       }
     }
   }
-
+  "isEmpty" when {
+    "passed a valid model" should {
+      "return false" in {
+        jsonBody.as[ForeignPropertyAdjustments].isEmpty shouldBe false
+      }
+    }
+    "passed an empty model" should {
+      "return true" in {
+        emptyJson.as[ForeignPropertyAdjustments].isEmpty shouldBe true
+      }
+    }
+  }
 }

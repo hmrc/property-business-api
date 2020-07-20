@@ -112,6 +112,12 @@ class ForeignPropertyEntrySpec extends UnitSpec with JsonErrorValidators{
       |}
       |""".stripMargin)
 
+  val emptyJson = Json.parse(
+    """
+      |{}
+      |""".stripMargin
+  )
+
   "reads" when {
     "passed a valid JSON" should {
       "return a valid model" in {

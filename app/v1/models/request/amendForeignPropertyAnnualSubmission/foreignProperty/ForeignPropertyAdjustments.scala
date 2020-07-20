@@ -19,7 +19,10 @@ package v1.models.request.amendForeignPropertyAnnualSubmission.foreignProperty
 import play.api.libs.json.{Json, OFormat}
 
 case class ForeignPropertyAdjustments(privateUseAdjustment: Option[BigDecimal],
-                                      balancingCharge: Option[BigDecimal])
+                                      balancingCharge: Option[BigDecimal]) {
+  def isEmpty: Boolean = privateUseAdjustment.isEmpty &&
+    balancingCharge.isEmpty
+}
 
 object ForeignPropertyAdjustments {
   implicit val format: OFormat[ForeignPropertyAdjustments] = Json.format[ForeignPropertyAdjustments]

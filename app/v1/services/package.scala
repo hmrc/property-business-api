@@ -37,4 +37,6 @@ package object services {
 
   type AmendForeignPropertyAnnualSubmissionServiceOutcome = ServiceOutcome[Unit]
 
+  type DeleteForeignPropertyAnnualSubmissionServiceOutcome = ServiceOutcome[Unit]
+
 }

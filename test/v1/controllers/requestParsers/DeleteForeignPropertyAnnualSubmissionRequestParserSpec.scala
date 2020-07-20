@@ -37,21 +37,21 @@ class DeleteForeignPropertyAnnualSubmissionRequestParserSpec extends UnitSpec {
   "parse" should {
     "return a request object" when {
       "valid request data is supplied" in new Test {
-        MockRetrieveForeignPropertyValidator.validate(inputData).returns(Nil)
+        MockDeleteForeignPropertyAnnualSubmissionValidator.validate(inputData).returns(Nil)
 
         parser.parseRequest(inputData) shouldBe Right(DeleteForeignPropertyAnnualSubmissionRequest(Nino(nino), businessId, taxYear))
       }
     }
     "return an ErrorWrapper" when {
       "a single validation error occurs" in new Test {
-        MockRetrieveForeignPropertyValidator.validate(inputData)
+        MockDeleteForeignPropertyAnnualSubmissionValidator.validate(inputData)
           .returns(List(NinoFormatError))
 
         parser.parseRequest(inputData) shouldBe
           Left(ErrorWrapper(None, NinoFormatError, None))
       }
       "multiple validation errors occur" in new Test {
-        MockRetrieveForeignPropertyValidator.validate(inputData)
+        MockDeleteForeignPropertyAnnualSubmissionValidator.validate(inputData)
           .returns(List(NinoFormatError, BusinessIdFormatError))
 
         parser.parseRequest(inputData) shouldBe

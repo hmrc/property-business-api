@@ -23,8 +23,9 @@ import play.api.libs.json.Json
 import play.api.mvc.{Action, AnyContent, ControllerComponents}
 import utils.Logging
 import v1.hateoas.HateoasFactory
-import v1.models.errors.{BusinessIdFormatError, DownstreamError, ErrorWrapper, NinoFormatError, NotFoundError}
-import v1.services.{EnrolmentsAuthService, MtdIdLookupService}
+import v1.models.errors.{BusinessIdFormatError, DownstreamError, ErrorWrapper, NinoFormatError, NotFoundError, RuleTaxYearNotSupportedError, RuleTaxYearRangeInvalidError, TaxYearFormatError}
+import v1.models.request.deleteForeignPropertyAnnualSubmission.DeleteForeignPropertyAnnualSubmissionRawData
+import v1.services.{DeleteForeignPropertyAnnualSubmissionService, EnrolmentsAuthService, MtdIdLookupService}
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -33,7 +34,6 @@ class DeleteForeignPropertyAnnualSubmissionController @Inject()(val authService:
                                                                 val lookupService: MtdIdLookupService,
                                                                 parser: DeleteForeignPropertyAnnualSubmissionRequestParser,
                                                                 service: DeleteForeignPropertyAnnualSubmissionService,
-                                                                hateoasFactory: HateoasFactory,
                                                                 cc: ControllerComponents)(implicit ec: ExecutionContext)
   extends AuthorisedController(cc) with BaseController with Logging {
 
@@ -46,9 +46,8 @@ class DeleteForeignPropertyAnnualSubmissionController @Inject()(val authService:
       val result =
         for {
           parsedRequest <- EitherT.fromEither[Future](parser.parseRequest(rawData))
-          serviceResponse <- EitherT(service.deleteForeignProperty(parsedRequest))
+          serviceResponse <- EitherT(service.deleteForeignPropertyAnnualSubmission(parsedRequest))
           vendorResponse <- EitherT.fromEither[Future](
-            hateoasFactory.wrap(serviceResponse.responseData, DeleteForeignPropertyAnnualSubmissionHateoasData(nino, businessId, taxYear)).asRight[ErrorWrapper])
         } yield {
           logger.info(
             s"[${endpointLogContext.controllerName}][${endpointLogContext.endpointName}] - " +
@@ -66,7 +65,8 @@ class DeleteForeignPropertyAnnualSubmissionController @Inject()(val authService:
 
   private def errorResult(errorWrapper: ErrorWrapper) = {
     (errorWrapper.error: @unchecked) match {
-      case NinoFormatError | BusinessIdFormatError | TaxYearFormatError | TaxYearNotSupportedError | TaxYearInvalid => BadRequest(Json.toJson(errorWrapper))
+      case NinoFormatError | BusinessIdFormatError | TaxYearFormatError |
+           RuleTaxYearNotSupportedError | RuleTaxYearRangeInvalidError => BadRequest(Json.toJson(errorWrapper))
       case DownstreamError => InternalServerError(Json.toJson(errorWrapper))
       case NotFoundError => NotFound(Json.toJson(errorWrapper))
     }

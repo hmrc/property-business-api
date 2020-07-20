@@ -24,37 +24,6 @@ import v1.models.utils.JsonErrorValidators
 
 class RetrieveForeignPropertyAnnualSubmissionResponseSpec extends UnitSpec with JsonErrorValidators {
 
-//    val retrieveForeignPropertyAnnualSubmissionRequestBody =
-//      RetrieveForeignPropertyAnnualSubmissionResponse(
-//        Some(ForeignFhlEea(
-//          Some(ForeignFhlEeaAdjustments(
-//            Some(100.25),
-//            Some(100.25),
-//            Some(true)
-//          )),
-//          Some(ForeignFhlEeaAllowances(
-//            Some(100.25),
-//            Some(100.25),
-//            Some(100.25),
-//            Some(100.25)
-//          ))
-//        )),
-//        Some(Seq(ForeignPropertyEntry(
-//          "GER",
-//          Some(ForeignPropertyAdjustments(
-//            Some(100.25),
-//            Some(100.25))),
-//          Some(ForeignPropertyAllowances(
-//            Some(100.25),
-//            Some(100.25),
-//            Some(100.25),
-//            Some(100.25),
-//            Some(100.25),
-//            Some(100.25),
-//            Some(100.25)
-//          )))))
-//      )
-
   val retrieveForeignPropertyAnnualSubmissionRequestBody =
     RetrieveForeignPropertyAnnualSubmissionResponse(
       Some(ForeignFhlEeaEntry(

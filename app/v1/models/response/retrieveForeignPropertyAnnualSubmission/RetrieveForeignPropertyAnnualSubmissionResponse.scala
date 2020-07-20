@@ -20,7 +20,7 @@ import play.api.libs.json.{Json, OFormat}
 import v1.models.response.retrieveForeignPropertyAnnualSubmission.foreignFhlEea.ForeignFhlEeaEntry
 import v1.models.response.retrieveForeignPropertyAnnualSubmission.foreignProperty.ForeignPropertyEntry
 
-case class RetrieveForeignPropertyAnnualSubmissionResponse(fhlEea: Option[ForeignFhlEeaEntry], foreignProperty: Option[Seq[ForeignPropertyEntry]])
+case class RetrieveForeignPropertyAnnualSubmissionResponse(foreignFhlEea: Option[ForeignFhlEeaEntry], foreignProperty: Option[Seq[ForeignPropertyEntry]])
 
 object RetrieveForeignPropertyAnnualSubmissionResponse {
   implicit  val format: OFormat[RetrieveForeignPropertyAnnualSubmissionResponse] = Json.format[RetrieveForeignPropertyAnnualSubmissionResponse]

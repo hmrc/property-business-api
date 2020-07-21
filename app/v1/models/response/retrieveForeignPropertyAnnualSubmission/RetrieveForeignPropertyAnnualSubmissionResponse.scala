@@ -33,7 +33,9 @@ object RetrieveForeignPropertyAnnualSubmissionResponse {
     override def links(appConfig: AppConfig, data: RetrieveForeignPropertyAnnualSubmissionHateoasData): Seq[Link] = {
       import data._
       Seq(
-
+        amendForeignPropertyAnnualSubmission(appConfig, nino, businessId, taxYear),
+        retrieveForeignPropertyAnnualSubmission(appConfig, nino, businessId, taxYear),
+        deleteForeignPropertiesAnnualSubmissions(appConfig, nino, businessId, taxYear)
       )
     }
   }

@@ -117,7 +117,7 @@ class AmendForeignPropertyAnnualSubmissionControllerISpec extends IntegrationBas
     """.stripMargin
   }
 
-  "Calling the amend other deductions endpoint" should {
+  "Calling the amend foreign property annual submission endpoint" should {
 
     "return a 200 status code" when {
 

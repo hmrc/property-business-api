@@ -81,7 +81,7 @@ class AmendForeignPropertyAnnualSubmissionController @Inject()(val authService: 
            RuleTaxYearRangeInvalidError |
            MtdErrorWithCustomMessage(RuleCountryCodeError.code) => BadRequest(Json.toJson(errorWrapper))
       case DownstreamError => InternalServerError(Json.toJson(errorWrapper))
-      case NotFoundError | SubmissionIdNotFoundError => NotFound(Json.toJson(errorWrapper))
+      case NotFoundError => NotFound(Json.toJson(errorWrapper))
     }
   }
 }

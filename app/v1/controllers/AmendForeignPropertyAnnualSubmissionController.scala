@@ -17,13 +17,16 @@
 package v1.controllers
 
 import cats.data.EitherT
+import cats.implicits._
 import javax.inject.{Inject, Singleton}
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.{Action, ControllerComponents}
 import utils.Logging
+import v1.controllers.requestParsers.AmendForeignPropertyAnnualSubmissionRequestParser
 import v1.hateoas.HateoasFactory
 import v1.models.errors._
 import v1.models.request.amendForeignPropertyAnnualSubmission.AmendForeignPropertyAnnualSubmissionRawData
+import v1.models.response.amendForeignPropertyAnnualSubmission.AmendForeignPropertyAnnualSubmissionResponse.AmendForeignPropertyLinksFactory
 import v1.models.response.amendForeignPropertyAnnualSubmission.AmendForeignPropertyAnnualSubmissionHateoasData
 import v1.services.{AmendForeignPropertyAnnualSubmissionService, EnrolmentsAuthService, MtdIdLookupService}
 
@@ -48,8 +51,7 @@ class AmendForeignPropertyAnnualSubmissionController @Inject()(val authService: 
           parsedRequest <- EitherT.fromEither[Future](parser.parseRequest(rawData))
           serviceResponse <- EitherT(service.amendForeignPropertyAnnualSubmission(parsedRequest))
           vendorResponse <- EitherT.fromEither[Future](
-            hateoasFactory.wrap(serviceResponse.responseData, AmendForeignPropertyAnnualSubmissionHateoasData(nino, businessId, taxYear)).asRight[ErrorWrapper]
-          )
+            hateoasFactory.wrap(serviceResponse.responseData, AmendForeignPropertyAnnualSubmissionHateoasData(nino, businessId, taxYear)).asRight[ErrorWrapper])
         } yield {
           logger.info(
             s"[${endpointLogContext.controllerName}][${endpointLogContext.endpointName}] - " +
@@ -71,11 +73,12 @@ class AmendForeignPropertyAnnualSubmissionController @Inject()(val authService: 
       case BadRequestError |
            NinoFormatError |
            BusinessIdFormatError |
-           SubmissionIdFormatError |
+           TaxYearFormatError |
            MtdErrorWithCustomMessage(CountryCodeFormatError.code) |
            MtdErrorWithCustomMessage(ValueFormatError.code) |
            RuleIncorrectOrEmptyBodyError |
-           MtdErrorWithCustomMessage(RuleBothExpensesSuppliedError.code) |
+           RuleTaxYearNotSupportedError |
+           RuleTaxYearRangeInvalidError |
            MtdErrorWithCustomMessage(RuleCountryCodeError.code) => BadRequest(Json.toJson(errorWrapper))
       case DownstreamError => InternalServerError(Json.toJson(errorWrapper))
       case NotFoundError | SubmissionIdNotFoundError => NotFound(Json.toJson(errorWrapper))

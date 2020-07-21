@@ -49,11 +49,11 @@ trait HateoasLinks {
     Link(href = foreignPropertySubmissionUri(appConfig, nino, businessId, submissionId), method = GET, rel = SELF)
 
   def retrieveForeignPropertyAnnualSubmission(appConfig: AppConfig, nino: String, businessId: String, taxYear: String): Link =
-    Link(href = foreignPropertySubmissionUri(appConfig, nino, businessId, taxYear), method = GET, rel = SELF)
+    Link(href = foreignPropertyAnnualSubmissionUri(appConfig, nino, businessId, taxYear), method = GET, rel = SELF)
 
   def amendForeignPropertyAnnualSubmission(appConfig: AppConfig, nino: String, businessId: String, taxYear: String): Link =
-    Link(href = foreignPropertySubmissionUri(appConfig, nino, businessId, taxYear), method = PUT, rel = AMEND_PROPERTY_ANNUAL_SUBMISSION)
+    Link(href = foreignPropertyAnnualSubmissionUri(appConfig, nino, businessId, taxYear), method = PUT, rel = AMEND_PROPERTY_ANNUAL_SUBMISSION)
 
   def deleteForeignPropertyAnnualSubmission(appConfig: AppConfig, nino: String, businessId: String, taxYear: String): Link =
-    Link(href = foreignPropertySubmissionUri(appConfig, nino, businessId, taxYear), method = PUT, rel = DELETE_PROPERTY_ANNUAL_SUBMISSION)
+    Link(href = foreignPropertyAnnualSubmissionUri(appConfig, nino, businessId, taxYear), method = DELETE, rel = DELETE_PROPERTY_ANNUAL_SUBMISSION)
 }

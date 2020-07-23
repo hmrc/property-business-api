@@ -31,7 +31,7 @@ class RetrieveForeignPropertyAnnualSubmissionControllerISpec extends Integration
 
     val nino = "AA123456A"
     val businessId = "XAIS12345678910"
-    val taxYear = "2020-21"
+    val taxYear = "2021-22"
 
     val responseBody = Json.parse(
       s"""
@@ -69,17 +69,17 @@ class RetrieveForeignPropertyAnnualSubmissionControllerISpec extends Integration
          |  ],
          |  "links": [
          |    {
-         |      "href": "/individuals/business/property/CX897463D/XAIS12345678910/annual/2021-22",
+         |      "href": "/individuals/business/property/AA123456A/XAIS12345678910/annual/2021-22",
          |      "method": "PUT",
          |      "rel": "amend-property-annual-submission"
          |    },
          |    {
-         |      "href": "/individuals/business/property/CX897463D/XAIS12345678910/annual/2021-22",
+         |      "href": "/individuals/business/property/AA123456A/XAIS12345678910/annual/2021-22",
          |      "method": "GET",
          |      "rel": "self"
          |    },
          |    {
-         |      "href": "/individuals/business/property/CX897463D/XAIS12345678910/annual/2021-22",
+         |      "href": "/individuals/business/property/AA123456A/XAIS12345678910/annual/2021-22",
          |      "method": "DELETE",
          |      "rel": "delete-property-annual-submission"
          |    }
@@ -190,11 +190,11 @@ class RetrieveForeignPropertyAnnualSubmissionControllerISpec extends Integration
         }
 
         val input = Seq(
-          ("AA123", "XAIS12345678910", "2020-21", Status.BAD_REQUEST, NinoFormatError),
-          ("AA123456A", "203100", "2020-21", Status.BAD_REQUEST, BusinessIdFormatError),
+          ("AA123", "XAIS12345678910", "2021-22", Status.BAD_REQUEST, NinoFormatError),
+          ("AA123456A", "203100", "2021-22", Status.BAD_REQUEST, BusinessIdFormatError),
           ("AA123456A", "XAIS12345678910", "2020", Status.BAD_REQUEST, TaxYearFormatError),
           ("AA123456A", "XAIS12345678910", "2020-22", Status.BAD_REQUEST, RuleTaxYearRangeInvalidError),
-          ("AA123456A", "XAIS12345678910", "1942-43", Status.BAD_REQUEST, RuleTaxYearNotSupportedError)
+          ("AA123456A", "XAIS12345678910", "2019-20", Status.BAD_REQUEST, RuleTaxYearNotSupportedError)
         )
 
 
@@ -221,7 +221,7 @@ class RetrieveForeignPropertyAnnualSubmissionControllerISpec extends Integration
 
         val input = Seq(
           (Status.BAD_REQUEST, "INVALID_TAXABLE_ENTITY_ID", Status.BAD_REQUEST, NinoFormatError),
-          (Status.BAD_REQUEST, "FORMAT_BUSINESS_ID", Status.BAD_REQUEST, BusinessIdFormatError),
+          (Status.BAD_REQUEST, "INVALID_INCOME_SOURCE_ID", Status.BAD_REQUEST, BusinessIdFormatError),
           (Status.NOT_FOUND, "NOT_FOUND", Status.NOT_FOUND, NotFoundError),
           (Status.INTERNAL_SERVER_ERROR, "SERVER_ERROR", Status.INTERNAL_SERVER_ERROR, DownstreamError),
           (Status.SERVICE_UNAVAILABLE, "SERVICE_UNAVAILABLE", Status.INTERNAL_SERVER_ERROR, DownstreamError)

@@ -20,6 +20,7 @@ import config.AppConfig
 import play.api.libs.json.{Json, OFormat}
 import v1.hateoas.HateoasLinksFactory
 import v1.models.hateoas.{HateoasData, Link}
+import v1.models.response.amendForeignPropertyAnnualSubmission.AmendForeignPropertyAnnualSubmissionResponse._
 import v1.models.response.retrieveForeignPropertyAnnualSubmission.foreignFhlEea.ForeignFhlEeaEntry
 import v1.models.response.retrieveForeignPropertyAnnualSubmission.foreignProperty.ForeignPropertyEntry
 
@@ -35,7 +36,7 @@ object RetrieveForeignPropertyAnnualSubmissionResponse {
       Seq(
         amendForeignPropertyAnnualSubmission(appConfig, nino, businessId, taxYear),
         retrieveForeignPropertyAnnualSubmission(appConfig, nino, businessId, taxYear),
-        deleteForeignPropertiesAnnualSubmissions(appConfig, nino, businessId, taxYear)
+        deleteForeignPropertyAnnualSubmission(appConfig, nino, businessId, taxYear)
       )
     }
   }

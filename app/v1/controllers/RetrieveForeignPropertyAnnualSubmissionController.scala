@@ -26,6 +26,7 @@ import v1.controllers.requestParsers.RetrieveForeignPropertyAnnualSubmissionRequ
 import v1.hateoas.HateoasFactory
 import v1.models.errors._
 import v1.models.request.retrieveForeignPropertyAnnualSubmission.RetrieveForeignPropertyAnnualSubmissionRawData
+import v1.models.response.retrieveForeignPropertyAnnualSubmission.RetrieveForeignPropertyAnnualSubmissionHateoasData
 import v1.services.{EnrolmentsAuthService, MtdIdLookupService}
 
 import scala.concurrent.{ExecutionContext, Future}

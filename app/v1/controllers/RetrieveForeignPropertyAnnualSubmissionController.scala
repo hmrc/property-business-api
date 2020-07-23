@@ -27,7 +27,7 @@ import v1.hateoas.HateoasFactory
 import v1.models.errors._
 import v1.models.request.retrieveForeignPropertyAnnualSubmission.RetrieveForeignPropertyAnnualSubmissionRawData
 import v1.models.response.retrieveForeignPropertyAnnualSubmission.RetrieveForeignPropertyAnnualSubmissionHateoasData
-import v1.services.{EnrolmentsAuthService, MtdIdLookupService}
+import v1.services.{EnrolmentsAuthService, MtdIdLookupService, RetrieveForeignPropertyAnnualSubmissionService}
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -49,9 +49,10 @@ class RetrieveForeignPropertyAnnualSubmissionController @Inject()(val authServic
       val result =
         for {
           parsedRequest <- EitherT.fromEither[Future](parser.parseRequest(rawData))
-          serviceResponse <- EitherT(service.retrieve(parsedRequest))
+          serviceResponse <- EitherT(service.retrieveForeignProperty(parsedRequest))
           vendorResponse <- EitherT.fromEither[Future](
-            hateoasFactory.wrap(serviceResponse.responseData, RetrieveForeignPropertyAnnualSubmissionHateoasData(nino, businessId, taxYear)).asRight[ErrorWrapper]
+            hateoasFactory.wrap(serviceResponse.responseData,
+              RetrieveForeignPropertyAnnualSubmissionHateoasData(nino, businessId, taxYear)).asRight[ErrorWrapper]
           )
         } yield {
           logger.info(

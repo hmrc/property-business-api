@@ -25,7 +25,7 @@ import v1.models.response.retrieveForeignPropertyAnnualSubmission.RetrieveForeig
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class MockRetrieveForeignPropertyAnnualSubmissionConnector extends MockFactory {
+trait MockRetrieveForeignPropertyAnnualSubmissionConnector extends MockFactory {
 
   val mockRetrieveForeignPropertyConnector: RetrieveForeignPropertyAnnualSubmissionConnector = mock[RetrieveForeignPropertyAnnualSubmissionConnector]
 

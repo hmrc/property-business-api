@@ -124,11 +124,11 @@ class RetrieveForeignPropertyAnnualSubmissionControllerISpec extends Integration
          |}
          |""".stripMargin)
 
+    def setupStubs(): StubMapping
+
     def uri: String = s"/$nino/$businessId/annual/$taxYear"
 
     def desUri: String = s"/business/property/$nino/$businessId/annual/$taxYear"
-
-    def setupStubs(): StubMapping
 
     def request(): WSRequest = {
       setupStubs()
@@ -192,7 +192,9 @@ class RetrieveForeignPropertyAnnualSubmissionControllerISpec extends Integration
         val input = Seq(
           ("AA123", "XAIS12345678910", "2020-21", Status.BAD_REQUEST, NinoFormatError),
           ("AA123456A", "203100", "2020-21", Status.BAD_REQUEST, BusinessIdFormatError),
-          ("AA123456A", "XAIS12345678910", "2020", Status.BAD_REQUEST, TaxYearFormatError)
+          ("AA123456A", "XAIS12345678910", "2020", Status.BAD_REQUEST, TaxYearFormatError),
+          ("AA123456A", "XAIS12345678910", "2020-22", Status.BAD_REQUEST, RuleTaxYearRangeInvalidError),
+          ("AA123456A", "XAIS12345678910", "1942-43", Status.BAD_REQUEST, RuleTaxYearNotSupportedError)
         )
 
 

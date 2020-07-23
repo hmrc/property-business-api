@@ -146,8 +146,10 @@ class RetrieveForeignPropertyAnnualSubmissionControllerSpec
         val input = Seq(
           (BadRequestError, BAD_REQUEST),
           (NinoFormatError, BAD_REQUEST),
+          (BusinessIdFormatError, BAD_REQUEST),
           (TaxYearFormatError, BAD_REQUEST),
-          (SubmissionIdFormatError, BAD_REQUEST)
+          (RuleTaxYearRangeInvalidError, BAD_REQUEST),
+          (RuleTaxYearNotSupportedError, BAD_REQUEST)
         )
 
         input.foreach(args => (errorsFromParserTester _).tupled(args))
@@ -175,9 +177,7 @@ class RetrieveForeignPropertyAnnualSubmissionControllerSpec
         val input = Seq(
           (NinoFormatError, BAD_REQUEST),
           (BusinessIdFormatError, BAD_REQUEST),
-          (SubmissionIdFormatError, BAD_REQUEST),
           (NotFoundError, NOT_FOUND),
-          (SubmissionIdNotFoundError, NOT_FOUND),
           (DownstreamError, INTERNAL_SERVER_ERROR)
         )
 

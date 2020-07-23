@@ -18,7 +18,7 @@ package v1.services
 
 import cats.implicits._
 import cats.data.EitherT
-import javax.inject.Inject
+import javax.inject.{Inject, Singleton}
 import uk.gov.hmrc.http.HeaderCarrier
 import utils.Logging
 import v1.connectors.RetrieveForeignPropertyAnnualSubmissionConnector
@@ -29,6 +29,7 @@ import v1.support.DesResponseMappingSupport
 
 import scala.concurrent.{ExecutionContext, Future}
 
+@Singleton
 class RetrieveForeignPropertyAnnualSubmissionService @Inject()
 (connector: RetrieveForeignPropertyAnnualSubmissionConnector) extends DesResponseMappingSupport with Logging {
 
@@ -47,7 +48,7 @@ class RetrieveForeignPropertyAnnualSubmissionService @Inject()
   private def desErrorMap =
     Map(
       "INVALID_TAXABLE_ENTITY_ID" -> NinoFormatError,
-      "FORMAT_BUSINESS_ID" -> BusinessIdFormatError,
+      "INVALID_INCOME_SOURCE_ID" -> BusinessIdFormatError,
       "NOT_FOUND" -> NotFoundError,
       "SERVER_ERROR" -> DownstreamError,
       "SERVICE_UNAVAILABLE" -> DownstreamError

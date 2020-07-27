@@ -20,7 +20,6 @@ import config.AppConfig
 import play.api.libs.json.{Json, OFormat}
 import v1.hateoas.{HateoasLinks, HateoasLinksFactory}
 import v1.models.hateoas.{HateoasData, Link}
-import v1.models.response.amendForeignPropertyAnnualSubmission.AmendForeignPropertyAnnualSubmissionResponse._
 import v1.models.response.retrieveForeignPropertyAnnualSubmission.foreignFhlEea.ForeignFhlEeaEntry
 import v1.models.response.retrieveForeignPropertyAnnualSubmission.foreignProperty.ForeignPropertyEntry
 
@@ -29,7 +28,7 @@ case class RetrieveForeignPropertyAnnualSubmissionResponse(foreignFhlEea: Option
 object RetrieveForeignPropertyAnnualSubmissionResponse extends HateoasLinks {
   implicit  val format: OFormat[RetrieveForeignPropertyAnnualSubmissionResponse] = Json.format[RetrieveForeignPropertyAnnualSubmissionResponse]
 
-  implicit object RetrieveForeignPropertyAnnualSubmissionLinksFactory extends
+  implicit object RetrieveAnnualSubmissionLinksFactory extends
     HateoasLinksFactory[RetrieveForeignPropertyAnnualSubmissionResponse, RetrieveForeignPropertyAnnualSubmissionHateoasData] {
     override def links(appConfig: AppConfig, data: RetrieveForeignPropertyAnnualSubmissionHateoasData): Seq[Link] = {
       import data._

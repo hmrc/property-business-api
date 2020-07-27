@@ -22,7 +22,6 @@ import support.UnitSpec
 import v1.models.hateoas.{Link, Method}
 import v1.models.response.retrieveForeignPropertyAnnualSubmission.foreignFhlEea.{ForeignFhlEeaAdjustments, ForeignFhlEeaAllowances, ForeignFhlEeaEntry}
 import v1.models.response.retrieveForeignPropertyAnnualSubmission.foreignProperty.{ForeignPropertyAdjustments, ForeignPropertyAllowances, ForeignPropertyEntry}
-import v1.models.utils.JsonErrorValidators
 
 class RetrieveForeignPropertyAnnualSubmissionResponseSpec extends UnitSpec with MockAppConfig {
 

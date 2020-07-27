@@ -1,7 +1,9 @@
 GET        /:nino/:businessId/period                         v1.controllers.ListForeignPropertiesPeriodSummariesController.handleRequest(nino: String, businessId: String, fromDate: Option[String], toDate: Option[String])
 POST       /:nino/:businessId/period                         v1.controllers.CreateForeignPropertyPeriodSummaryController.handleRequest(nino: String, businessId: String)
+
 PUT        /:nino/:businessId/period/:submissionId           v1.controllers.AmendForeignPropertyPeriodSummaryController.handleRequest(nino: String, businessId: String, submissionId: String)
 GET        /:nino/:businessId/period/:submissionId           v1.controllers.RetrieveForeignPropertyPeriodSummaryController.handleRequest(nino: String, businessId: String, submissionId: String)
+
 DELETE     /:nino/:businessId/annual/:taxYear                v1.controllers.DeleteForeignPropertyAnnualSubmissionController.handleRequest(nino: String, businessId: String, taxYear: String)
 PUT        /:nino/:businessId/annual/:taxYear                v1.controllers.AmendForeignPropertyAnnualSubmissionController.handleRequest(nino: String, businessId: String, taxYear: String)
 GET        /:nino/:businessId/annual/:taxYear                v1.controllers.RetrieveForeignPropertyAnnualSubmissionController.handleRequest(nino: String, businessId: String, taxYear: String)

@@ -22,136 +22,113 @@ import play.api.http.Status
 import play.api.libs.json.Json
 import play.api.libs.ws.{WSRequest, WSResponse}
 import support.IntegrationBaseSpec
-import v1.models.errors.{BusinessIdFormatError, DownstreamError, MtdError, NinoFormatError, NotFoundError, SubmissionIdFormatError, SubmissionIdNotFoundError}
+import v1.models.errors._
 import v1.stubs.{AuditStub, AuthStub, DesStub, MtdIdLookupStub}
 
-class RetrieveForeignPropertyPeriodSummaryControllerISpec extends IntegrationBaseSpec {
+class RetrieveForeignPropertyAnnualSubmissionControllerISpec extends IntegrationBaseSpec {
 
   private trait Test {
 
     val nino = "AA123456A"
     val businessId = "XAIS12345678910"
-    val submissionId = "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
+    val taxYear = "2021-22"
 
     val responseBody = Json.parse(
       s"""
          |{
-         |  "fromDate": "2019-04-06",
-         |  "toDate": "2019-07-06",
          |  "foreignFhlEea": {
-         |    "income": {
-         |      "rentAmount": 200.22,
-         |      "taxDeducted": 22.22
+         |    "adjustments": {
+         |      "privateUseAdjustment": 100.25,
+         |      "balancingCharge": 100.25,
+         |      "periodOfGraceAdjustment": true
          |    },
-         |    "expenditure": {
-         |      "premisesRunningCosts": 100.25,
-         |      "repairsAndMaintenance": 100.25,
-         |      "financialCosts": 100.25,
-         |      "professionalFees": 100.25,
-         |      "costsOfServices": 100.25,
-         |      "travelCosts": 100.25,
-         |      "other": 100.25
+         |    "allowances": {
+         |      "annualInvestmentAllowance": 100.25,
+         |      "otherCapitalAllowance": 100.25,
+         |      "propertyAllowance": 100.25,
+         |      "electricChargePointAllowance": 100.25
          |    }
          |  },
          |  "foreignProperty": [
          |    {
          |      "countryCode": "FRA",
-         |      "income": {
-         |        "rentIncome": {
-         |          "rentAmount": 200.22,
-         |          "taxDeducted": 22.22
-         |        },
-         |        "foreignTaxCreditRelief": true,
-         |        "premiumOfLeaseGrant": 100.25,
-         |        "otherPropertyIncome": 100.25,
-         |        "foreignTaxTakenOff": 44.21,
-         |        "specialWithholdingTaxOrUKTaxPaid": 23.78
+         |      "adjustments": {
+         |        "privateUseAdjustment": 100.25,
+         |        "balancingCharge": 100.25
          |      },
-         |      "expenditure": {
-         |        "premisesRunningCosts": 100.25,
-         |        "repairsAndMaintenance": 100.25,
-         |        "financialCosts": 200.25,
-         |        "professionalFees": 100.25,
-         |        "costsOfServices": 100.25,
-         |        "travelCosts": 100.25,
-         |        "other": 100.25
+         |      "allowances": {
+         |        "annualInvestmentAllowance": 100.25,
+         |        "costOfReplacingDomesticItems": 100.25,
+         |        "zeroEmissionsGoodsVehicleAllowance": 100.25,
+         |        "propertyAllowance": 100.25,
+         |        "otherCapitalAllowance": 100.25,
+         |        "structureAndBuildingAllowance": 100.25,
+         |        "electricChargePointAllowance": 100.25
          |      }
          |    }
          |  ],
          |  "links": [
          |    {
-         |      "href": "/individuals/business/property/${nino}/${businessId}/period/${submissionId}",
+         |      "href": "/individuals/business/property/AA123456A/XAIS12345678910/annual/2021-22",
          |      "method": "PUT",
-         |      "rel": "amend-property-period-summary"
+         |      "rel": "amend-property-annual-submission"
          |    },
          |    {
-         |      "href": "/individuals/business/property/${nino}/${businessId}/period/${submissionId}",
+         |      "href": "/individuals/business/property/AA123456A/XAIS12345678910/annual/2021-22",
          |      "method": "GET",
          |      "rel": "self"
          |    },
          |    {
-         |      "href": "/individuals/business/property/${nino}/${businessId}/period",
-         |      "method": "GET",
-         |      "rel": "list-property-period-summaries"
+         |      "href": "/individuals/business/property/AA123456A/XAIS12345678910/annual/2021-22",
+         |      "method": "DELETE",
+         |      "rel": "delete-property-annual-submission"
          |    }
          |  ]
          |}
-         |""".stripMargin
-    )
+         |""".stripMargin)
 
     val desResponseBody = Json.parse(
       s"""
          |{
-         |  "fromDate": "2019-04-06",
-         |  "toDate": "2019-07-06",
          |  "foreignFhlEea": {
-         |        "income": {
-         |          "rentAmount": 200.22,
-         |          "taxDeducted": 22.22
-         |        },
-         |        "expenses": {
-         |          "premisesRunningCostsAmount": 100.25,
-         |          "repairsAndMaintenanceAmount": 100.25,
-         |          "financialCostsAmount": 100.25,
-         |          "professionalFeesAmount": 100.25,
-         |          "costOfServicesAmount": 100.25,
-         |          "travelCostsAmount": 100.25,
-         |          "otherAmount": 100.25
-         |        }
-         |      },
+         |    "adjustments": {
+         |      "privateUseAdjustment": 100.25,
+         |      "balancingCharge": 100.25,
+         |      "periodOfGraceAdjustment": true
+         |    },
+         |    "allowances": {
+         |      "annualInvestmentAllowance": 100.25,
+         |      "otherCapitalAllowance": 100.25,
+         |      "propertyAllowance": 100.25,
+         |      "electricChargePointAllowance": 100.25
+         |    }
+         |  },
          |  "foreignProperty": [
-         |      {
-         |        "countryCode": "FRA",
-         |        "income": {
-         |            "rentIncome": {
-         |                "rentAmount": 200.22,
-         |                "taxDeducted": 22.22
-         |            },
-         |          "foreignTaxCreditRelief": true,
-         |          "premiumOfLeaseGrantAmount": 100.25,
-         |          "otherPropertyIncomeAmount": 100.25,
-         |          "foreignTaxPaidOrDeducted": 44.21,
-         |          "specialWithholdingTaxOrUKTaxPaid": 23.78
-         |        },
-         |        "expenses": {
-         |          "premisesRunningCostsAmount": 100.25,
-         |          "repairsAndMaintenanceAmount": 100.25,
-         |          "financialCostsAmount": 200.25,
-         |          "professionalFeesAmount": 100.25,
-         |          "costOfServicesAmount": 100.25,
-         |          "travelCostsAmount": 100.25,
-         |          "otherAmount": 100.25
-         |         }
+         |    {
+         |      "countryCode": "FRA",
+         |      "adjustments": {
+         |        "privateUseAdjustment": 100.25,
+         |        "balancingCharge": 100.25
+         |      },
+         |      "allowances": {
+         |        "annualInvestmentAllowance": 100.25,
+         |        "costOfReplacingDomesticItems": 100.25,
+         |        "zeroEmissionsGoodsVehicleAllowance": 100.25,
+         |        "propertyAllowance": 100.25,
+         |        "otherCapitalAllowance": 100.25,
+         |        "structureAndBuildingAllowance": 100.25,
+         |        "electricChargePointAllowance": 100.25
          |      }
-         |    ]
+         |    }
+         |  ]
          |}
          |""".stripMargin)
 
-    def uri: String = s"/$nino/$businessId/period/$submissionId"
-
-    def desUri: String = s"/business/property/${nino}/${businessId}/period/${submissionId}"
-
     def setupStubs(): StubMapping
+
+    def uri: String = s"/$nino/$businessId/annual/$taxYear"
+
+    def desUri: String = s"/business/property/$nino/$businessId/annual/$taxYear"
 
     def request(): WSRequest = {
       setupStubs()
@@ -191,13 +168,14 @@ class RetrieveForeignPropertyPeriodSummaryControllerISpec extends IntegrationBas
     "return error according to spec" when {
 
       "validation error" when {
-        def validationErrorTest(requestNino: String, requestBusinessId: String, requestSubmissionId: String,
+        def validationErrorTest(requestNino: String, requestBusinessId: String, requestTaxYear: String,
                                 expectedStatus: Int, expectedBody: MtdError): Unit = {
           s"validation fails with ${expectedBody.code} error" in new Test {
 
             override val nino: String = requestNino
             override val businessId: String = requestBusinessId
-            override val submissionId: String = requestSubmissionId
+            override val taxYear: String = requestTaxYear
+
 
             override def setupStubs(): StubMapping = {
               AuditStub.audit()
@@ -212,9 +190,11 @@ class RetrieveForeignPropertyPeriodSummaryControllerISpec extends IntegrationBas
         }
 
         val input = Seq(
-          ("Walrus", "XAIS12345678910", "4557ecb5-fd32-48cc-81f5-e6acd1099f3c", Status.BAD_REQUEST, NinoFormatError),
-          ("AA123456A", "203100", "4557ecb5-fd32-48cc-81f5-e6acd1099f3c", Status.BAD_REQUEST, BusinessIdFormatError),
-          ("AA123456A", "XAIS12345678910", "Beans", Status.BAD_REQUEST, SubmissionIdFormatError)
+          ("AA123", "XAIS12345678910", "2021-22", Status.BAD_REQUEST, NinoFormatError),
+          ("AA123456A", "203100", "2021-22", Status.BAD_REQUEST, BusinessIdFormatError),
+          ("AA123456A", "XAIS12345678910", "2020", Status.BAD_REQUEST, TaxYearFormatError),
+          ("AA123456A", "XAIS12345678910", "2020-22", Status.BAD_REQUEST, RuleTaxYearRangeInvalidError),
+          ("AA123456A", "XAIS12345678910", "2019-20", Status.BAD_REQUEST, RuleTaxYearNotSupportedError)
         )
 
 
@@ -224,6 +204,7 @@ class RetrieveForeignPropertyPeriodSummaryControllerISpec extends IntegrationBas
       "des service error" when {
         def serviceErrorTest(desStatus: Int, desCode: String, expectedStatus: Int, expectedBody: MtdError): Unit = {
           s"des returns an $desCode error and status $desStatus" in new Test {
+
 
             override def setupStubs(): StubMapping = {
               AuditStub.audit()
@@ -240,10 +221,8 @@ class RetrieveForeignPropertyPeriodSummaryControllerISpec extends IntegrationBas
 
         val input = Seq(
           (Status.BAD_REQUEST, "INVALID_TAXABLE_ENTITY_ID", Status.BAD_REQUEST, NinoFormatError),
-          (Status.BAD_REQUEST, "FORMAT_BUSINESS_ID", Status.BAD_REQUEST, BusinessIdFormatError),
-          (Status.BAD_REQUEST, "FORMAT_SUBMISSION_ID", Status.BAD_REQUEST, SubmissionIdFormatError),
+          (Status.BAD_REQUEST, "INVALID_INCOME_SOURCE_ID", Status.BAD_REQUEST, BusinessIdFormatError),
           (Status.NOT_FOUND, "NOT_FOUND", Status.NOT_FOUND, NotFoundError),
-          (Status.NOT_FOUND, "SUBMISSION_ID_NOT_FOUND", Status.NOT_FOUND, SubmissionIdNotFoundError),
           (Status.INTERNAL_SERVER_ERROR, "SERVER_ERROR", Status.INTERNAL_SERVER_ERROR, DownstreamError),
           (Status.SERVICE_UNAVAILABLE, "SERVICE_UNAVAILABLE", Status.INTERNAL_SERVER_ERROR, DownstreamError)
         )

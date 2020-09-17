@@ -39,7 +39,7 @@ class RetrieveForeignPropertyAnnualSubmissionRequestParserSpec extends UnitSpec 
       "valid request data is supplied" in new Test {
         MockRetrieveForeignPropertyAnnualSubmissionValidator.validate(inputData).returns(Nil)
 
-        parser.parseRequest(inputData) shouldBe Right(RetrieveForeignPropertyAnnualSubmissionRequestData(Nino(nino), businessId, taxYear))
+        parser.parseRequest(inputData) shouldBe Right(RetrieveForeignPropertyAnnualSubmissionRequest(Nino(nino), businessId, taxYear))
       }
     }
     "return an ErrorWrapper" when {

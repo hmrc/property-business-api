@@ -27,7 +27,7 @@ import v1.models.errors.{BadRequestError, BusinessIdFormatError, DownstreamError
 import v1.models.hateoas.{HateoasWrapper, Link}
 import v1.models.hateoas.Method.GET
 import v1.models.outcomes.ResponseWrapper
-import v1.models.request.retrieveForeignPropertyPeriodSummary.{RetrieveForeignPropertyPeriodSummaryRawData, RetrieveForeignPropertyPeriodSummaryRequestData}
+import v1.models.request.retrieveForeignPropertyPeriodSummary.{RetrieveForeignPropertyPeriodSummaryRawData, RetrieveForeignPropertyPeriodSummaryRequest}
 import v1.models.response.retrieveForeignPropertyPeriodSummary.{RetrieveForeignPropertyPeriodSummaryHateoasData, RetrieveForeignPropertyPeriodSummaryResponse}
 import v1.models.response.retrieveForeignPropertyPeriodSummary.foreignFhlEea.{ForeignFhlEea, ForeignFhlEeaExpenditure, ForeignFhlEeaIncome}
 import v1.models.response.retrieveForeignPropertyPeriodSummary.foreignProperty.{ForeignProperty, ForeignPropertyExpenditure, ForeignPropertyIncome, ForeignPropertyRentIncome}
@@ -66,7 +66,7 @@ class RetrieveForeignPropertyPeriodSummaryControllerSpec
   private val correlationId = "X-123"
 
   private val rawData = RetrieveForeignPropertyPeriodSummaryRawData(nino, businessId, submissionId)
-  private val requestData = RetrieveForeignPropertyPeriodSummaryRequestData(Nino(nino), businessId, submissionId)
+  private val requestData = RetrieveForeignPropertyPeriodSummaryRequest(Nino(nino), businessId, submissionId)
 
   private val testHateoasLink = Link(href = s"/individuals/business/property/${nino}/${businessId}/period/${submissionId}", method = GET, rel = "self")
 

@@ -14,8 +14,9 @@
  * limitations under the License.
  */
 
-package v1.models.request.retrieveForeignPropertyAnnualSubmission
+package v1.models.request.createForeignPropertyPeriodSummary
 
 import uk.gov.hmrc.domain.Nino
 
-case class RetrieveForeignPropertyAnnualSubmissionRequestData(nino: Nino, businessId: String, taxYear: String)
+case class CreateForeignPropertyPeriodSummaryRequest(nino: Nino, businessId: String, body: CreateForeignPropertyPeriodSummaryRequestBody)
+

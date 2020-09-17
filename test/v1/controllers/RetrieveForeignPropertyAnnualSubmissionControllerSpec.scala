@@ -27,7 +27,7 @@ import v1.models.errors._
 import v1.models.hateoas.{HateoasWrapper, Link}
 import v1.models.hateoas.Method.GET
 import v1.models.outcomes.ResponseWrapper
-import v1.models.request.retrieveForeignPropertyAnnualSubmission.{RetrieveForeignPropertyAnnualSubmissionRawData, RetrieveForeignPropertyAnnualSubmissionRequestData}
+import v1.models.request.retrieveForeignPropertyAnnualSubmission.{RetrieveForeignPropertyAnnualSubmissionRawData, RetrieveForeignPropertyAnnualSubmissionRequest}
 import v1.models.response.retrieveForeignPropertyAnnualSubmission.foreignFhlEea.{ForeignFhlEeaAdjustments, ForeignFhlEeaAllowances, ForeignFhlEeaEntry}
 import v1.models.response.retrieveForeignPropertyAnnualSubmission.foreignProperty.{ForeignPropertyAdjustments, ForeignPropertyAllowances, ForeignPropertyEntry}
 import v1.models.response.retrieveForeignPropertyAnnualSubmission.{RetrieveForeignPropertyAnnualSubmissionHateoasData, RetrieveForeignPropertyAnnualSubmissionResponse}
@@ -66,7 +66,7 @@ class RetrieveForeignPropertyAnnualSubmissionControllerSpec
   private val correlationId = "X-123"
 
   private val rawData = RetrieveForeignPropertyAnnualSubmissionRawData(nino, businessId, taxYear)
-  private val requestData = RetrieveForeignPropertyAnnualSubmissionRequestData(Nino(nino), businessId, taxYear)
+  private val requestData = RetrieveForeignPropertyAnnualSubmissionRequest(Nino(nino), businessId, taxYear)
 
   private val testHateoasLink = Link(href = s"Individuals/business/property/$nino/$businessId/annual/$taxYear", method = GET, rel = "self")
 

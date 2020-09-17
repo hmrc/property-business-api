@@ -23,7 +23,7 @@ import v1.mocks.validators.MockCreateForeignPropertyPeriodSummaryValidator
 import v1.models.errors.{BadRequestError, BusinessIdFormatError, ErrorWrapper, NinoFormatError}
 import v1.models.request.common.foreignFhlEea.{ForeignFhlEea, ForeignFhlEeaExpenditure, ForeignFhlEeaIncome}
 import v1.models.request.common.foreignPropertyEntry.{ForeignPropertyEntry, ForeignPropertyExpenditure, ForeignPropertyIncome, ForeignPropertyRentIncome}
-import v1.models.request.createForeignPropertyPeriodSummary.{CreateForeignPropertyPeriodSummaryRawData, CreateForeignPropertyPeriodSummaryRequestBody, CreateForeignPropertyPeriodSummaryRequestData}
+import v1.models.request.createForeignPropertyPeriodSummary.{CreateForeignPropertyPeriodSummaryRawData, CreateForeignPropertyPeriodSummaryRequestBody, CreateForeignPropertyPeriodSummaryRequest}
 
 class CreateForeignPropertyPeriodSummaryRequestParserSpec extends UnitSpec {
   val nino = "AA123456B"
@@ -134,7 +134,7 @@ class CreateForeignPropertyPeriodSummaryRequestParserSpec extends UnitSpec {
         )
 
         parser.parseRequest(inputData) shouldBe
-          Right(CreateForeignPropertyPeriodSummaryRequestData(Nino(nino), businessId, model))
+          Right(CreateForeignPropertyPeriodSummaryRequest(Nino(nino), businessId, model))
       }
     }
 

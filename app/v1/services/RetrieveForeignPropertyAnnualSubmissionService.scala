@@ -24,7 +24,7 @@ import utils.Logging
 import v1.connectors.RetrieveForeignPropertyAnnualSubmissionConnector
 import v1.controllers.EndpointLogContext
 import v1.models.errors.{BusinessIdFormatError, DownstreamError, NinoFormatError, NotFoundError}
-import v1.models.request.retrieveForeignPropertyAnnualSubmission.RetrieveForeignPropertyAnnualSubmissionRequestData
+import v1.models.request.retrieveForeignPropertyAnnualSubmission.RetrieveForeignPropertyAnnualSubmissionRequest
 import v1.support.DesResponseMappingSupport
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -33,7 +33,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class RetrieveForeignPropertyAnnualSubmissionService @Inject()
 (connector: RetrieveForeignPropertyAnnualSubmissionConnector) extends DesResponseMappingSupport with Logging {
 
-  def retrieveForeignProperty(request: RetrieveForeignPropertyAnnualSubmissionRequestData)(
+  def retrieveForeignProperty(request: RetrieveForeignPropertyAnnualSubmissionRequest)(
     implicit hc: HeaderCarrier,
     ec: ExecutionContext,
     logContext: EndpointLogContext): Future[RetrieveForeignPropertyAnnualSubmissionServiceOutcome] = {

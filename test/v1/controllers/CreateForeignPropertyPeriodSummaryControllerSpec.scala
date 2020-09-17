@@ -200,7 +200,7 @@ class CreateForeignPropertyPeriodSummaryControllerSpec
 
 
   private val requestBody = CreateForeignPropertyPeriodSummaryRequestBody("2019-01-01", "2018-01-01", Some(foreignFhlEea), Some(Seq(foreignProperty)))
-  private val requestData = CreateForeignPropertyPeriodSummaryRequestData(Nino(nino), businessId, requestBody)
+  private val requestData = CreateForeignPropertyPeriodSummaryRequest(Nino(nino), businessId, requestBody)
   private val rawData = CreateForeignPropertyPeriodSummaryRawData(nino, businessId, consolidatedRequestBodyJson)
 
   "create" should {

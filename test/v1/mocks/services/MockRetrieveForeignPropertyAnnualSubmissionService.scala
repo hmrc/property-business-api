@@ -22,7 +22,7 @@ import uk.gov.hmrc.http.HeaderCarrier
 import v1.controllers.EndpointLogContext
 import v1.models.errors.ErrorWrapper
 import v1.models.outcomes.ResponseWrapper
-import v1.models.request.retrieveForeignPropertyAnnualSubmission.RetrieveForeignPropertyAnnualSubmissionRequestData
+import v1.models.request.retrieveForeignPropertyAnnualSubmission.RetrieveForeignPropertyAnnualSubmissionRequest
 import v1.models.response.retrieveForeignPropertyAnnualSubmission.RetrieveForeignPropertyAnnualSubmissionResponse
 import v1.services.RetrieveForeignPropertyAnnualSubmissionService
 
@@ -33,10 +33,10 @@ trait MockRetrieveForeignPropertyAnnualSubmissionService extends MockFactory {
   val mockRetrieveForeignPropertyAnnualSubmissionService: RetrieveForeignPropertyAnnualSubmissionService = mock[RetrieveForeignPropertyAnnualSubmissionService]
 
   object MockRetrieveForeignPropertyService {
-    def retrieve(requestData: RetrieveForeignPropertyAnnualSubmissionRequestData):
+    def retrieve(requestData: RetrieveForeignPropertyAnnualSubmissionRequest):
     CallHandler[Future[Either[ErrorWrapper, ResponseWrapper[RetrieveForeignPropertyAnnualSubmissionResponse]]]] = {
       (mockRetrieveForeignPropertyAnnualSubmissionService
-        .retrieveForeignProperty(_: RetrieveForeignPropertyAnnualSubmissionRequestData)(_: HeaderCarrier, _: ExecutionContext, _: EndpointLogContext))
+        .retrieveForeignProperty(_: RetrieveForeignPropertyAnnualSubmissionRequest)(_: HeaderCarrier, _: ExecutionContext, _: EndpointLogContext))
         .expects(requestData, *, *, *)
     }
   }

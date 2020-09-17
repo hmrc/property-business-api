@@ -21,7 +21,7 @@ import javax.inject.{Inject, Singleton}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
 import v1.connectors.httpparsers.StandardDesHttpParser._
-import v1.models.request.retrieveForeignPropertyPeriodSummary.RetrieveForeignPropertyPeriodSummaryRequestData
+import v1.models.request.retrieveForeignPropertyPeriodSummary.RetrieveForeignPropertyPeriodSummaryRequest
 import v1.models.response.retrieveForeignPropertyPeriodSummary.RetrieveForeignPropertyPeriodSummaryResponse
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -30,7 +30,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class RetrieveForeignPropertyPeriodSummaryConnector @Inject()(val http: HttpClient,
                                                               val appConfig: AppConfig) extends BaseDesConnector {
 
-  def retrieveForeignProperty(request: RetrieveForeignPropertyPeriodSummaryRequestData)(
+  def retrieveForeignProperty(request: RetrieveForeignPropertyPeriodSummaryRequest)(
     implicit hc: HeaderCarrier,
     ec: ExecutionContext): Future[DesOutcome[RetrieveForeignPropertyPeriodSummaryResponse]] = {
 

@@ -28,7 +28,7 @@ trait MockRetrieveForeignPropertyAnnualSubmissionRequestParser extends MockFacto
     RetrieveForeignPropertyAnnualSubmissionRequestParser = mock[RetrieveForeignPropertyAnnualSubmissionRequestParser]
 
   object MockRetrieveForeignPropertyRequestParser {
-    def parse(data: RetrieveForeignPropertyAnnualSubmissionRawData): CallHandler[Either[ErrorWrapper, RetrieveForeignPropertyAnnualSubmissionRequestData]] = {
+    def parse(data: RetrieveForeignPropertyAnnualSubmissionRawData): CallHandler[Either[ErrorWrapper, RetrieveForeignPropertyAnnualSubmissionRequest]] = {
       (mockRetrieveForeignPropertyAnnualSubmissionRequestParser.parseRequest(_: RetrieveForeignPropertyAnnualSubmissionRawData)).expects(data)
     }
   }

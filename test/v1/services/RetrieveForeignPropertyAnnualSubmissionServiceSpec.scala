@@ -21,7 +21,7 @@ import uk.gov.hmrc.domain.Nino
 import v1.mocks.connectors.{MockRetrieveForeignPropertyAnnualSubmissionConnector}
 import v1.models.errors.{BusinessIdFormatError, DesErrorCode, DesErrors, DownstreamError, ErrorWrapper, MtdError, NinoFormatError, NotFoundError}
 import v1.models.outcomes.ResponseWrapper
-import v1.models.request.retrieveForeignPropertyAnnualSubmission.RetrieveForeignPropertyAnnualSubmissionRequestData
+import v1.models.request.retrieveForeignPropertyAnnualSubmission.RetrieveForeignPropertyAnnualSubmissionRequest
 import v1.models.response.retrieveForeignPropertyAnnualSubmission.RetrieveForeignPropertyAnnualSubmissionResponse
 import v1.models.response.retrieveForeignPropertyAnnualSubmission.foreignFhlEea.{ForeignFhlEeaAdjustments, ForeignFhlEeaAllowances, ForeignFhlEeaEntry}
 import v1.models.response.retrieveForeignPropertyAnnualSubmission.foreignProperty.{ForeignPropertyAdjustments, ForeignPropertyAllowances, ForeignPropertyEntry}
@@ -64,7 +64,7 @@ class RetrieveForeignPropertyAnnualSubmissionServiceSpec extends UnitSpec {
         Some(100.25),
         Some(100.25)))))))
 
-  private val requestData = RetrieveForeignPropertyAnnualSubmissionRequestData(nino, businessId, taxYear)
+  private val requestData = RetrieveForeignPropertyAnnualSubmissionRequest(nino, businessId, taxYear)
 
   trait Test extends MockRetrieveForeignPropertyAnnualSubmissionConnector {
     implicit val hc: HeaderCarrier = HeaderCarrier()

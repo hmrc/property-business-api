@@ -117,9 +117,9 @@ class CreateForeignPropertyPeriodSummaryServiceSpec extends UnitSpec {
 
   val response = CreateForeignPropertyPeriodSummaryResponse("4557ecb5-fd32-48cc-81f5-e6acd1099f3c")
 
-  private val regularExpensesRequestData = CreateForeignPropertyPeriodSummaryRequestData(nino, businessId, regularExpensesBody)
+  private val regularExpensesRequestData = CreateForeignPropertyPeriodSummaryRequest(nino, businessId, regularExpensesBody)
 
-  private val consolidatedExpensesRequestData = CreateForeignPropertyPeriodSummaryRequestData(nino, businessId, consolidatedExpensesBody)
+  private val consolidatedExpensesRequestData = CreateForeignPropertyPeriodSummaryRequest(nino, businessId, consolidatedExpensesBody)
 
   trait Test extends MockCreateForeignPropertyPeriodSummaryConnector {
     implicit val hc: HeaderCarrier = HeaderCarrier()

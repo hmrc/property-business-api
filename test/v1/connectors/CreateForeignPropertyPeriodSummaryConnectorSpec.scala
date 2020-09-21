@@ -112,9 +112,9 @@ class CreateForeignPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
 
   val response = CreateForeignPropertyPeriodSummaryResponse("4557ecb5-fd32-48cc-81f5-e6acd1099f3c")
 
-  private val regularExpensesRequestData = CreateForeignPropertyPeriodSummaryRequestData(nino, businessId, regularExpensesBody)
+  private val regularExpensesRequestData = CreateForeignPropertyPeriodSummaryRequest(nino, businessId, regularExpensesBody)
 
-  private val consolidatedExpensesRequestData = CreateForeignPropertyPeriodSummaryRequestData(nino, businessId, consolidatedExpensesBody)
+  private val consolidatedExpensesRequestData = CreateForeignPropertyPeriodSummaryRequest(nino, businessId, consolidatedExpensesBody)
 
   class Test extends MockHttpClient with MockAppConfig {
     val connector: CreateForeignPropertyPeriodSummaryConnector = new CreateForeignPropertyPeriodSummaryConnector(http = mockHttpClient, appConfig = mockAppConfig)

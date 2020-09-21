@@ -20,7 +20,7 @@ import mocks.MockAppConfig
 import uk.gov.hmrc.domain.Nino
 import v1.mocks.MockHttpClient
 import v1.models.outcomes.ResponseWrapper
-import v1.models.request.retrieveForeignPropertyAnnualSubmission.RetrieveForeignPropertyAnnualSubmissionRequestData
+import v1.models.request.retrieveForeignPropertyAnnualSubmission.RetrieveForeignPropertyAnnualSubmissionRequest
 import v1.models.response.retrieveForeignPropertyAnnualSubmission.RetrieveForeignPropertyAnnualSubmissionResponse
 import v1.models.response.retrieveForeignPropertyAnnualSubmission.foreignFhlEea.{ForeignFhlEeaAdjustments, ForeignFhlEeaAllowances, ForeignFhlEeaEntry}
 import v1.models.response.retrieveForeignPropertyAnnualSubmission.foreignProperty.{ForeignPropertyAdjustments, ForeignPropertyAllowances, ForeignPropertyEntry}
@@ -32,7 +32,7 @@ class RetrieveForeignPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec
   val businessId = "XAIS12345678910"
   val taxYear = "2019-20"
 
-  val request = RetrieveForeignPropertyAnnualSubmissionRequestData(nino, businessId, taxYear)
+  val request = RetrieveForeignPropertyAnnualSubmissionRequest(nino, businessId, taxYear)
 
   val response = RetrieveForeignPropertyAnnualSubmissionResponse(
     Some(ForeignFhlEeaEntry(

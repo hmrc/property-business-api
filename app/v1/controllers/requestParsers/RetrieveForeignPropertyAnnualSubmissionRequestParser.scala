@@ -22,8 +22,8 @@ import v1.controllers.requestParsers.validators.RetrieveForeignPropertyAnnualSub
 import v1.models.request.retrieveForeignPropertyAnnualSubmission._
 
 class RetrieveForeignPropertyAnnualSubmissionRequestParser @Inject()(val validator: RetrieveForeignPropertyAnnualSubmissionValidator)
-  extends RequestParser[RetrieveForeignPropertyAnnualSubmissionRawData, RetrieveForeignPropertyAnnualSubmissionRequestData] {
+  extends RequestParser[RetrieveForeignPropertyAnnualSubmissionRawData, RetrieveForeignPropertyAnnualSubmissionRequest] {
 
-  override protected def requestFor(data: RetrieveForeignPropertyAnnualSubmissionRawData): RetrieveForeignPropertyAnnualSubmissionRequestData =
-    RetrieveForeignPropertyAnnualSubmissionRequestData(Nino(data.nino), data.businessId, data.taxYear)
+  override protected def requestFor(data: RetrieveForeignPropertyAnnualSubmissionRawData): RetrieveForeignPropertyAnnualSubmissionRequest =
+    RetrieveForeignPropertyAnnualSubmissionRequest(Nino(data.nino), data.businessId, data.taxYear)
 }

@@ -36,7 +36,7 @@ class ListForeignPropertiesPeriodSummariesServiceSpec extends UnitSpec {
   val businessId = "XAIS12345678910"
   val fromDate = "2020-06-01"
   val toDate = "2020-08-31"
-  private val correlationId = "X-123"
+  implicit val correlationId = "X-123"
 
   val request = ListForeignPropertiesPeriodSummariesRequest(nino, businessId, fromDate, toDate)
 
@@ -74,7 +74,7 @@ class ListForeignPropertiesPeriodSummariesServiceSpec extends UnitSpec {
           MockListForeignPropertiesConnector.listForeignProperties(request)
             .returns(Future.successful(Left(ResponseWrapper(correlationId, DesErrors.single(DesErrorCode(desErrorCode))))))
 
-          await(service.listForeignProperties(request)) shouldBe Left(ErrorWrapper(Some(correlationId), error))
+          await(service.listForeignProperties(request)) shouldBe Left(ErrorWrapper(correlationId, error))
         }
 
       val input = Seq(

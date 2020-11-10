@@ -31,7 +31,8 @@ class DeleteForeignPropertyAnnualSubmissionConnector @Inject()(val http: HttpCli
 
   def deleteForeignPropertyAnnualSubmission(request: DeleteForeignPropertyAnnualSubmissionRequest)(
     implicit hc: HeaderCarrier,
-    ec: ExecutionContext): Future[DesOutcome[Unit]] = {
+    ec: ExecutionContext,
+    correlationId: String): Future[DesOutcome[Unit]] = {
 
     delete(
       uri = DesUri[Unit](s"business/property/${request.nino}/${request.businessId}/annual/${request.taxYear}")

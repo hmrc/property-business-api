@@ -28,7 +28,7 @@ trait MockDeleteForeignPropertyAnnualSubmissionRequestParser extends MockFactory
 
   object MockDeleteForeignPropertyAnnualSubmissionRequestParser {
     def parse(data: DeleteForeignPropertyAnnualSubmissionRawData): CallHandler[Either[ErrorWrapper, DeleteForeignPropertyAnnualSubmissionRequest]] = {
-      (mockDeleteForeignPropertyAnnualSubmissionRequestParser.parseRequest(_: DeleteForeignPropertyAnnualSubmissionRawData)).expects(data)
+      (mockDeleteForeignPropertyAnnualSubmissionRequestParser.parseRequest(_: DeleteForeignPropertyAnnualSubmissionRawData)(_: String)).expects(data, *)
     }
   }
 }

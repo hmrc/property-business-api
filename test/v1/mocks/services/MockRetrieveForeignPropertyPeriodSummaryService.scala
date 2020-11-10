@@ -35,8 +35,8 @@ trait MockRetrieveForeignPropertyPeriodSummaryService extends MockFactory {
   object MockRetrieveForeignPropertyService {
     def retrieve(requestData: RetrieveForeignPropertyPeriodSummaryRequest): CallHandler[Future[Either[ErrorWrapper, ResponseWrapper[RetrieveForeignPropertyPeriodSummaryResponse]]]] = {
       (mockRetrieveForeignPropertyService
-        .retrieveForeignProperty(_: RetrieveForeignPropertyPeriodSummaryRequest)(_: HeaderCarrier, _: ExecutionContext, _: EndpointLogContext))
-        .expects(requestData, *, *, *)
+        .retrieveForeignProperty(_: RetrieveForeignPropertyPeriodSummaryRequest)(_: HeaderCarrier, _: ExecutionContext, _: EndpointLogContext, _: String))
+        .expects(requestData, *, *, *, *)
     }
   }
 }

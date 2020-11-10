@@ -36,7 +36,7 @@ class RetrieveForeignPropertyPeriodSummaryServiceSpec extends UnitSpec {
   val nino = Nino("AA123456A")
   val businessId = "XAIS12345678910"
   val submissionId = "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
-  private val correlationId = "X-123"
+  implicit val correlationId = "X-123"
 
   val response = RetrieveForeignPropertyPeriodSummaryResponse(
     "2020-01-01",
@@ -108,7 +108,7 @@ class RetrieveForeignPropertyPeriodSummaryServiceSpec extends UnitSpec {
           MockRetrieveForeignPropertyConnector.retrieveForeignProperty(requestData)
             .returns(Future.successful(Left(ResponseWrapper(correlationId, DesErrors.single(DesErrorCode(desErrorCode))))))
 
-          await(service.retrieveForeignProperty(requestData)) shouldBe Left(ErrorWrapper(Some(correlationId), error))
+          await(service.retrieveForeignProperty(requestData)) shouldBe Left(ErrorWrapper(correlationId, error))
         }
 
       val input = Seq(

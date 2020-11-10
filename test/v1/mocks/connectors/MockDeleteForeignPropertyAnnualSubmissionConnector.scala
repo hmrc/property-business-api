@@ -32,8 +32,8 @@ trait MockDeleteForeignPropertyAnnualSubmissionConnector extends MockFactory {
 
     def deleteForeignProperty(requestData: DeleteForeignPropertyAnnualSubmissionRequest): CallHandler[Future[DesOutcome[Unit]]] = {
       (mockDeleteForeignPropertyAnnualSubmissionConnector
-        .deleteForeignPropertyAnnualSubmission(_: DeleteForeignPropertyAnnualSubmissionRequest)(_: HeaderCarrier, _: ExecutionContext))
-        .expects(requestData, *, *)
+        .deleteForeignPropertyAnnualSubmission(_: DeleteForeignPropertyAnnualSubmissionRequest)(_: HeaderCarrier, _: ExecutionContext, _: String))
+        .expects(requestData, *, *, *)
     }
   }
 }

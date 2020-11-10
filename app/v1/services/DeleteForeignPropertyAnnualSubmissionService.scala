@@ -35,7 +35,8 @@ class DeleteForeignPropertyAnnualSubmissionService @Inject()(connector: DeleteFo
   def deleteForeignPropertyAnnualSubmission(request: DeleteForeignPropertyAnnualSubmissionRequest)(
     implicit hc: HeaderCarrier,
     ec: ExecutionContext,
-    logContext: EndpointLogContext): Future[DeleteForeignPropertyAnnualSubmissionServiceOutcome] = {
+    logContext: EndpointLogContext,
+    correlationId: String): Future[DeleteForeignPropertyAnnualSubmissionServiceOutcome] = {
 
     val result = for {
       desResponseWrapper <- EitherT(connector.deleteForeignPropertyAnnualSubmission(request)).leftMap(mapDesErrors(desErrorMap))

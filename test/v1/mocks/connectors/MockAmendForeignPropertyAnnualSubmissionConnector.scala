@@ -32,8 +32,8 @@ trait MockAmendForeignPropertyAnnualSubmissionConnector extends MockFactory {
 
     def amendForeignProperty(requestData: AmendForeignPropertyAnnualSubmissionRequest): CallHandler[Future[DesOutcome[Unit]]] = {
       (mockAmendForeignPropertyAnnualSubmissionConnector
-        .amendForeignPropertyAnnualSubmission(_: AmendForeignPropertyAnnualSubmissionRequest)(_: HeaderCarrier, _: ExecutionContext))
-        .expects(requestData, *, *)
+        .amendForeignPropertyAnnualSubmission(_: AmendForeignPropertyAnnualSubmissionRequest)(_: HeaderCarrier, _: ExecutionContext, _: String))
+        .expects(requestData, *, *, *)
     }
   }
 

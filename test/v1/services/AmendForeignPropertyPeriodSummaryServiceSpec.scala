@@ -35,7 +35,7 @@ class AmendForeignPropertyPeriodSummaryServiceSpec extends UnitSpec {
   val nino = Nino("AA123456A")
   val businessId = "XAIS12345678910"
   val submissionId = "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
-  private val correlationId = "X-123"
+  implicit val correlationId = "X-123"
 
   private val foreignFhlEea: ForeignFhlEea = ForeignFhlEea(
     income = ForeignFhlEeaIncome(rentAmount = 567.83, taxDeducted = Some(4321.92)),
@@ -111,7 +111,7 @@ class AmendForeignPropertyPeriodSummaryServiceSpec extends UnitSpec {
           MockAmendForeignPropertyConnector.amendForeignProperty(requestData)
             .returns(Future.successful(Left(ResponseWrapper(correlationId, DesErrors.single(DesErrorCode(desErrorCode))))))
 
-          await(service.amendForeignProperty(requestData)) shouldBe Left(ErrorWrapper(Some(correlationId), error))
+          await(service.amendForeignProperty(requestData)) shouldBe Left(ErrorWrapper(correlationId, error))
         }
 
       val input = Seq(

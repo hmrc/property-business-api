@@ -28,6 +28,7 @@ class ListForeignPropertiesPeriodSummariesRequestParserSpec extends UnitSpec {
   val businessId = "XAIS12345678901"
   val fromDate = "2020-06-06"
   val toDate = "2020-08-06"
+  implicit val correlationId = "X-123"
 
   val inputData =
     ListForeignPropertiesPeriodSummariesRawData(nino, businessId, Some(fromDate), Some(toDate))
@@ -59,14 +60,14 @@ class ListForeignPropertiesPeriodSummariesRequestParserSpec extends UnitSpec {
           .returns(List(NinoFormatError))
 
         parser.parseRequest(inputData) shouldBe
-          Left(ErrorWrapper(None, NinoFormatError, None))
+          Left(ErrorWrapper(correlationId, NinoFormatError, None))
       }
       "multiple validation errors occur" in new Test {
         MockListForeignPropertiesValidator.validate(inputData)
           .returns(List(NinoFormatError, BusinessIdFormatError))
 
         parser.parseRequest(inputData) shouldBe
-          Left(ErrorWrapper(None, BadRequestError, Some(Seq(NinoFormatError, BusinessIdFormatError))))
+          Left(ErrorWrapper(correlationId, BadRequestError, Some(Seq(NinoFormatError, BusinessIdFormatError))))
       }
     }
   }

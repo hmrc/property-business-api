@@ -35,7 +35,8 @@ class CreateForeignPropertyPeriodSummaryService @Inject()(connector: CreateForei
   def createForeignProperty(request: CreateForeignPropertyPeriodSummaryRequest)(
     implicit hc: HeaderCarrier,
     ec: ExecutionContext,
-    logContext: EndpointLogContext): Future[CreateForeignPropertyPeriodSummaryServiceOutcome] = {
+    logContext: EndpointLogContext,
+    correlationId: String): Future[CreateForeignPropertyPeriodSummaryServiceOutcome] = {
 
     val result = for {
       desResponseWrapper <- EitherT(connector.createForeignProperty(request)).leftMap(mapDesErrors(desErrorMap))

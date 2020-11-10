@@ -26,6 +26,7 @@ class RetrieveForeignPropertyAnnualSubmissionRequestParserSpec extends UnitSpec 
   val nino = "AA123456B"
   val businessId = "XAIS12345678901"
   val taxYear = "2021-22"
+  implicit val correlationId = "X-123"
 
   val inputData =
     RetrieveForeignPropertyAnnualSubmissionRawData(nino, businessId, taxYear)
@@ -48,14 +49,14 @@ class RetrieveForeignPropertyAnnualSubmissionRequestParserSpec extends UnitSpec 
           .returns(List(NinoFormatError))
 
         parser.parseRequest(inputData) shouldBe
-          Left(ErrorWrapper(None, NinoFormatError, None))
+          Left(ErrorWrapper(correlationId, NinoFormatError, None))
       }
       "multiple validation errors occur" in new Test {
         MockRetrieveForeignPropertyAnnualSubmissionValidator.validate(inputData)
           .returns(List(NinoFormatError, BusinessIdFormatError))
 
         parser.parseRequest(inputData) shouldBe
-          Left(ErrorWrapper(None, BadRequestError, Some(Seq(NinoFormatError, BusinessIdFormatError))))
+          Left(ErrorWrapper(correlationId, BadRequestError, Some(Seq(NinoFormatError, BusinessIdFormatError))))
       }
     }
   }

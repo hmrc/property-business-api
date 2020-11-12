@@ -35,7 +35,8 @@ class ListForeignPropertiesPeriodSummariesService @Inject()(connector: ListForei
   def listForeignProperties(request: ListForeignPropertiesPeriodSummariesRequest)(
     implicit hc: HeaderCarrier,
     ec: ExecutionContext,
-    logContext: EndpointLogContext): Future[ListForeignPropertiesPeriodSummariesServiceOutcome] = {
+    logContext: EndpointLogContext,
+    correlationId: String): Future[ListForeignPropertiesPeriodSummariesServiceOutcome] = {
 
     val result = for {
       desResponseWrapper <- EitherT(connector.listForeignProperties(request)).leftMap(mapDesErrors(desErrorMap))

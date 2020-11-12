@@ -32,8 +32,8 @@ trait MockAmendForeignPropertyPeriodSummaryConnector extends MockFactory {
 
     def amendForeignProperty(requestData: AmendForeignPropertyPeriodSummaryRequest): CallHandler[Future[DesOutcome[Unit]]] = {
       (mockAmendForeignPropertyConnector
-        .amendForeignProperty(_: AmendForeignPropertyPeriodSummaryRequest)(_: HeaderCarrier, _: ExecutionContext))
-        .expects(requestData, *, *)
+        .amendForeignProperty(_: AmendForeignPropertyPeriodSummaryRequest)(_: HeaderCarrier, _: ExecutionContext, _: String))
+        .expects(requestData, *, *, *)
     }
   }
 }

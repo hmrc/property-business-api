@@ -32,7 +32,8 @@ class RetrieveForeignPropertyAnnualSubmissionConnector @Inject()(val http: HttpC
 
   def retrieveForeignProperty(request: RetrieveForeignPropertyAnnualSubmissionRequest)(
     implicit hc: HeaderCarrier,
-    ec: ExecutionContext): Future[DesOutcome[RetrieveForeignPropertyAnnualSubmissionResponse]] = {
+    ec: ExecutionContext,
+    correlationId: String): Future[DesOutcome[RetrieveForeignPropertyAnnualSubmissionResponse]] = {
 
     get(
       uri = DesUri[RetrieveForeignPropertyAnnualSubmissionResponse](s"business/property/${request.nino}/${request.businessId}/annual/${request.taxYear}")

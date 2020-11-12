@@ -36,7 +36,8 @@ class RetrieveForeignPropertyAnnualSubmissionService @Inject()
   def retrieveForeignProperty(request: RetrieveForeignPropertyAnnualSubmissionRequest)(
     implicit hc: HeaderCarrier,
     ec: ExecutionContext,
-    logContext: EndpointLogContext): Future[RetrieveForeignPropertyAnnualSubmissionServiceOutcome] = {
+    logContext: EndpointLogContext,
+    correlationId: String): Future[RetrieveForeignPropertyAnnualSubmissionServiceOutcome] = {
 
     val result = for {
       desResponseWrapper <- EitherT(connector.retrieveForeignProperty(request)).leftMap(mapDesErrors(desErrorMap))

@@ -21,7 +21,7 @@ import cats.implicits._
 import javax.inject.{Inject, Singleton}
 import play.api.libs.json.Json
 import play.api.mvc.{Action, AnyContent, ControllerComponents}
-import utils.Logging
+import utils.{IdGenerator, Logging}
 import v1.controllers.requestParsers.DeleteForeignPropertyAnnualSubmissionRequestParser
 import v1.models.errors.{BadRequestError, BusinessIdFormatError, DownstreamError, ErrorWrapper, NinoFormatError, NotFoundError, RuleTaxYearNotSupportedError, RuleTaxYearRangeInvalidError, TaxYearFormatError}
 import v1.models.request.deleteForeignPropertyAnnualSubmission.DeleteForeignPropertyAnnualSubmissionRawData
@@ -34,7 +34,8 @@ class DeleteForeignPropertyAnnualSubmissionController @Inject()(val authService:
                                                                 val lookupService: MtdIdLookupService,
                                                                 parser: DeleteForeignPropertyAnnualSubmissionRequestParser,
                                                                 service: DeleteForeignPropertyAnnualSubmissionService,
-                                                                cc: ControllerComponents)(implicit ec: ExecutionContext)
+                                                                cc: ControllerComponents,
+                                                                idGenerator: IdGenerator)(implicit ec: ExecutionContext)
   extends AuthorisedController(cc) with BaseController with Logging {
 
   implicit val endpointLogContext: EndpointLogContext =
@@ -42,6 +43,9 @@ class DeleteForeignPropertyAnnualSubmissionController @Inject()(val authService:
 
   def handleRequest(nino: String, businessId: String, taxYear: String): Action[AnyContent] =
     authorisedAction(nino).async { implicit request =>
+      implicit val correlationId: String = idGenerator.getCorrelationId
+      logger.info(message = s"[${endpointLogContext.controllerName}][${endpointLogContext.endpointName}] " +
+        s"with correlationId : $correlationId")
       val rawData = DeleteForeignPropertyAnnualSubmissionRawData(nino, businessId, taxYear)
       val result =
         for {
@@ -56,8 +60,13 @@ class DeleteForeignPropertyAnnualSubmissionController @Inject()(val authService:
 
         }
       result.leftMap { errorWrapper =>
-        val correlationId = getCorrelationId(errorWrapper)
-        errorResult(errorWrapper).withApiHeaders(correlationId)
+        val resCorrelationId = errorWrapper.correlationId
+        val result = errorResult(errorWrapper).withApiHeaders(resCorrelationId)
+
+        logger.warn(
+          s"[${endpointLogContext.controllerName}][${endpointLogContext.endpointName}] - " +
+            s"Error response received with CorrelationId: $resCorrelationId")
+        result
       }.merge
     }
 

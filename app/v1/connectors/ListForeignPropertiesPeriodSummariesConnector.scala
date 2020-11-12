@@ -32,7 +32,8 @@ class ListForeignPropertiesPeriodSummariesConnector @Inject()(val http: HttpClie
 
   def listForeignProperties(request: ListForeignPropertiesPeriodSummariesRequest)(
     implicit hc: HeaderCarrier,
-    ec: ExecutionContext): Future[DesOutcome[ListForeignPropertiesPeriodSummariesResponse[SubmissionPeriod]]] = {
+    ec: ExecutionContext,
+    correlationId: String): Future[DesOutcome[ListForeignPropertiesPeriodSummariesResponse[SubmissionPeriod]]] = {
 
     val desUri = s"business/property/${request.nino}/${request.businessId}/period?fromDate=${request.fromDate}&toDate=${request.toDate}"
 

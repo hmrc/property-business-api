@@ -33,7 +33,8 @@ class CreateForeignPropertyPeriodSummaryConnector @Inject()(val http: HttpClient
 
   def createForeignProperty(request: CreateForeignPropertyPeriodSummaryRequest)(
     implicit hc: HeaderCarrier,
-    ec: ExecutionContext): Future[DesOutcome[CreateForeignPropertyPeriodSummaryResponse]] = {
+    ec: ExecutionContext,
+    correlationId: String): Future[DesOutcome[CreateForeignPropertyPeriodSummaryResponse]] = {
 
     implicit val desSuccessCode: SuccessCode = SuccessCode(Status.CREATED)
 

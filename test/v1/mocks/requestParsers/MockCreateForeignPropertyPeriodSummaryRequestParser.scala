@@ -28,7 +28,7 @@ trait MockCreateForeignPropertyPeriodSummaryRequestParser extends MockFactory {
 
   object MockCreateForeignPropertyRequestParser {
     def requestFor(data: CreateForeignPropertyPeriodSummaryRawData): CallHandler[Either[ErrorWrapper, CreateForeignPropertyPeriodSummaryRequest]] = {
-      (mockCreateForeignPropertyRequestParser.parseRequest(_: CreateForeignPropertyPeriodSummaryRawData)).expects(data)
+      (mockCreateForeignPropertyRequestParser.parseRequest(_: CreateForeignPropertyPeriodSummaryRawData)(_: String)).expects(data, *)
     }
   }
 }

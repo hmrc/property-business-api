@@ -33,7 +33,7 @@ class DeleteForeignPropertyAnnualSubmissionServiceSpec extends UnitSpec {
   val nino = Nino("AA123456A")
   val businessId = "XAIS12345678910"
   val taxYear = "2021-22"
-  private val correlationId = "X-123"
+  implicit val correlationId = "X-123"
 
   private val requestData = DeleteForeignPropertyAnnualSubmissionRequest(nino, businessId, taxYear)
 
@@ -66,7 +66,7 @@ class DeleteForeignPropertyAnnualSubmissionServiceSpec extends UnitSpec {
           MockDeleteForeignPropertyAnnualSubmissionConnector.deleteForeignProperty(requestData)
             .returns(Future.successful(Left(ResponseWrapper(correlationId, DesErrors.single(DesErrorCode(desErrorCode))))))
 
-          await(service.deleteForeignPropertyAnnualSubmission(requestData)) shouldBe Left(ErrorWrapper(Some(correlationId), error))
+          await(service.deleteForeignPropertyAnnualSubmission(requestData)) shouldBe Left(ErrorWrapper(correlationId, error))
         }
 
       val input = Seq(

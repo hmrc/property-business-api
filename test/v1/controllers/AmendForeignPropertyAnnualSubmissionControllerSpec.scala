@@ -20,6 +20,7 @@ import play.api.libs.json.Json
 import play.api.mvc.Result
 import uk.gov.hmrc.domain.Nino
 import uk.gov.hmrc.http.HeaderCarrier
+import v1.mocks.MockIdGenerator
 import v1.mocks.hateoas.MockHateoasFactory
 import v1.mocks.requestParsers.MockAmendForeignPropertyAnnualSubmissionRequestParser
 import v1.mocks.services.{MockAmendForeignPropertyAnnualSubmissionService, MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService}
@@ -27,8 +28,7 @@ import v1.models.errors._
 import v1.models.hateoas.{HateoasWrapper, Link}
 import v1.models.hateoas.Method.GET
 import v1.models.outcomes.ResponseWrapper
-import v1.models.request
-.amendForeignPropertyAnnualSubmission.{AmendForeignPropertyAnnualSubmissionRawData, AmendForeignPropertyAnnualSubmissionRequest, AmendForeignPropertyAnnualSubmissionRequestBody}
+import v1.models.request.amendForeignPropertyAnnualSubmission.{AmendForeignPropertyAnnualSubmissionRawData, AmendForeignPropertyAnnualSubmissionRequest, AmendForeignPropertyAnnualSubmissionRequestBody}
 import v1.models.request.amendForeignPropertyAnnualSubmission.foreignFhlEea.{ForeignFhlEea, ForeignFhlEeaAdjustments, ForeignFhlEeaAllowances}
 import v1.models.request.amendForeignPropertyAnnualSubmission.foreignProperty.{ForeignPropertyAdjustments, ForeignPropertyAllowances, ForeignPropertyEntry}
 import v1.models.response.amendForeignPropertyAnnualSubmission.AmendForeignPropertyAnnualSubmissionHateoasData
@@ -44,7 +44,13 @@ class AmendForeignPropertyAnnualSubmissionControllerSpec
     with MockAmendForeignPropertyAnnualSubmissionService
     with MockAmendForeignPropertyAnnualSubmissionRequestParser
     with MockHateoasFactory
-    with MockAuditService {
+    with MockAuditService
+    with MockIdGenerator {
+
+  private val nino = "AA123456A"
+  private val businessId = "XAIS12345678910"
+  private val taxYear = "2019-20"
+  private val correlationId = "X-123"
 
   trait Test {
     val hc = HeaderCarrier()
@@ -55,17 +61,14 @@ class AmendForeignPropertyAnnualSubmissionControllerSpec
       parser = mockAmendForeignPropertyAnnualSubmissionRequestParser,
       service = mockService,
       hateoasFactory = mockHateoasFactory,
-      cc = cc
+      cc = cc,
+      idGenerator = mockIdGenerator
     )
 
     MockedMtdIdLookupService.lookup(nino).returns(Future.successful(Right("test-mtd-id")))
     MockedEnrolmentsAuthService.authoriseUser()
+    MockIdGenerator.getCorrelationId.returns(correlationId)
   }
-
-  private val nino = "AA123456A"
-  private val businessId = "XAIS12345678910"
-  private val taxYear = "2019-20"
-  private val correlationId = "X-123"
 
   private val testHateoasLink = Link(href = s"Individuals/business/property/$nino/$businessId/annual/$taxYear", method = GET, rel = "self")
 
@@ -174,7 +177,7 @@ class AmendForeignPropertyAnnualSubmissionControllerSpec
 
             MockAmendForeignPropertyAnnualSubmissionRequestParser
               .parseRequest(rawData)
-              .returns(Left(ErrorWrapper(Some(correlationId), error, None)))
+              .returns(Left(ErrorWrapper(correlationId, error, None)))
 
             val result: Future[Result] = controller.handleRequest(nino, businessId, taxYear)(fakePostRequest(requestJson))
 
@@ -228,7 +231,7 @@ class AmendForeignPropertyAnnualSubmissionControllerSpec
 
             MockAmendForeignPropertyAnnualSubmissionService
               .amend(request)
-              .returns(Future.successful(Left(ErrorWrapper(Some(correlationId), mtdError))))
+              .returns(Future.successful(Left(ErrorWrapper(correlationId, mtdError))))
 
             val result: Future[Result] = controller.handleRequest(nino, businessId, taxYear)(fakePostRequest(requestJson))
 

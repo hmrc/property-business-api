@@ -29,7 +29,7 @@ trait MockAmendForeignPropertyAnnualSubmissionRequestParser extends MockFactory 
 
   object MockAmendForeignPropertyAnnualSubmissionRequestParser {
     def parseRequest(data: AmendForeignPropertyAnnualSubmissionRawData): CallHandler[Either[ErrorWrapper, AmendForeignPropertyAnnualSubmissionRequest]] = {
-      (mockAmendForeignPropertyAnnualSubmissionRequestParser.parseRequest(_: AmendForeignPropertyAnnualSubmissionRawData)).expects(data)
+      (mockAmendForeignPropertyAnnualSubmissionRequestParser.parseRequest(_: AmendForeignPropertyAnnualSubmissionRawData)(_: String)).expects(data, *)
     }
   }
 }

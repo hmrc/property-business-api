@@ -33,8 +33,8 @@ trait MockRetrieveForeignPropertyPeriodSummaryConnector extends MockFactory {
 
     def retrieveForeignProperty(requestData: RetrieveForeignPropertyPeriodSummaryRequest): CallHandler[Future[DesOutcome[RetrieveForeignPropertyPeriodSummaryResponse]]] = {
       (mockRetrieveForeignPropertyConnector
-        .retrieveForeignProperty(_: RetrieveForeignPropertyPeriodSummaryRequest)(_: HeaderCarrier, _: ExecutionContext))
-        .expects(requestData, *, *)
+        .retrieveForeignProperty(_: RetrieveForeignPropertyPeriodSummaryRequest)(_: HeaderCarrier, _: ExecutionContext, _: String))
+        .expects(requestData, *, *, *)
     }
   }
 }

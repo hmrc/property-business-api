@@ -29,6 +29,7 @@ class AmendForeignPropertyAnnualSubmissionRequestParserSpec extends UnitSpec {
   val nino = "AA123456B"
   val businessId = "XAIS12345678901"
   val taxYear = "2021-22"
+  implicit val correlationId = "X-123"
 
   private val requestBodyJson = Json.parse(
     """
@@ -124,7 +125,7 @@ class AmendForeignPropertyAnnualSubmissionRequestParserSpec extends UnitSpec {
           .returns(List(NinoFormatError))
 
         parser.parseRequest(inputData) shouldBe
-          Left(ErrorWrapper(None, NinoFormatError, None))
+          Left(ErrorWrapper(correlationId, NinoFormatError, None))
       }
 
       "multiple validation errors occur" in new Test {
@@ -132,7 +133,7 @@ class AmendForeignPropertyAnnualSubmissionRequestParserSpec extends UnitSpec {
           .returns(List(NinoFormatError, BusinessIdFormatError))
 
         parser.parseRequest(inputData) shouldBe
-          Left(ErrorWrapper(None, BadRequestError, Some(Seq(NinoFormatError, BusinessIdFormatError))))
+          Left(ErrorWrapper(correlationId, BadRequestError, Some(Seq(NinoFormatError, BusinessIdFormatError))))
       }
     }
   }

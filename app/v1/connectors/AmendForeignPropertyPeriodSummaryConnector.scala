@@ -31,7 +31,8 @@ class AmendForeignPropertyPeriodSummaryConnector @Inject()(val http: HttpClient,
 
   def amendForeignProperty(request: AmendForeignPropertyPeriodSummaryRequest)(
     implicit hc: HeaderCarrier,
-    ec: ExecutionContext): Future[DesOutcome[Unit]] = {
+    ec: ExecutionContext,
+    correlationId: String): Future[DesOutcome[Unit]] = {
 
     put(
       body = request.body,

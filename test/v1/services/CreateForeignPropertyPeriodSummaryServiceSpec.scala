@@ -35,7 +35,7 @@ class CreateForeignPropertyPeriodSummaryServiceSpec extends UnitSpec {
 
   val businessId = "XAIS12345678910"
   val nino = Nino("AA123456A")
-  private val correlationId = "X-123"
+  implicit val correlationId = "X-123"
 
   val regularExpensesBody = CreateForeignPropertyPeriodSummaryRequestBody(
     "2020-01-01",
@@ -156,7 +156,7 @@ class CreateForeignPropertyPeriodSummaryServiceSpec extends UnitSpec {
           MockCreateForeignPropertyConnector.createForeignProperty(regularExpensesRequestData)
             .returns(Future.successful(Left(ResponseWrapper(correlationId, DesErrors.single(DesErrorCode(desErrorCode))))))
 
-          await(service.createForeignProperty(regularExpensesRequestData)) shouldBe Left(ErrorWrapper(Some(correlationId), error))
+          await(service.createForeignProperty(regularExpensesRequestData)) shouldBe Left(ErrorWrapper(correlationId, error))
         }
 
       val input = Seq(

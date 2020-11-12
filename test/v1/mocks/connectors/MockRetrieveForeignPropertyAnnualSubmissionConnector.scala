@@ -34,8 +34,8 @@ trait MockRetrieveForeignPropertyAnnualSubmissionConnector extends MockFactory {
     def retrieveForeignProperty(requestData: RetrieveForeignPropertyAnnualSubmissionRequest):
     CallHandler[Future[DesOutcome[RetrieveForeignPropertyAnnualSubmissionResponse]]] = {
       (mockRetrieveForeignPropertyConnector
-        .retrieveForeignProperty(_: RetrieveForeignPropertyAnnualSubmissionRequest)(_: HeaderCarrier, _: ExecutionContext))
-        .expects(requestData, *, *)
+        .retrieveForeignProperty(_: RetrieveForeignPropertyAnnualSubmissionRequest)(_: HeaderCarrier, _: ExecutionContext, _: String))
+        .expects(requestData, *, *, *)
     }
   }
 }

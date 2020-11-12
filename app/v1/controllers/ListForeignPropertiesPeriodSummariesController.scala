@@ -21,7 +21,7 @@ import cats.implicits._
 import javax.inject.{Inject, Singleton}
 import play.api.libs.json.Json
 import play.api.mvc.{Action, AnyContent, ControllerComponents}
-import utils.Logging
+import utils.{IdGenerator, Logging}
 import v1.controllers.requestParsers.ListForeignPropertiesPeriodSummariesRequestParser
 import v1.hateoas.HateoasFactory
 import v1.models.errors._
@@ -37,13 +37,17 @@ class ListForeignPropertiesPeriodSummariesController  @Inject()(val authService:
                                                                 parser: ListForeignPropertiesPeriodSummariesRequestParser,
                                                                 service: ListForeignPropertiesPeriodSummariesService,
                                                                 hateoasFactory: HateoasFactory,
-                                                                cc: ControllerComponents)(implicit ec: ExecutionContext)
+                                                                cc: ControllerComponents,
+                                                                idGenerator: IdGenerator)(implicit ec: ExecutionContext)
   extends AuthorisedController(cc) with BaseController with Logging {
 
   implicit val endpointLogContext: EndpointLogContext =
     EndpointLogContext(controllerName = "ListForeignPropertiesController", endpointName = "listForeignProperties")
   def handleRequest(nino: String, businessId: String, fromDate: Option[String], toDate: Option[String]): Action[AnyContent] =
     authorisedAction(nino).async { implicit request =>
+      implicit val correlationId: String = idGenerator.getCorrelationId
+      logger.info(message = s"[${endpointLogContext.controllerName}][${endpointLogContext.endpointName}] " +
+        s"with correlationId : $correlationId")
       val rawData = ListForeignPropertiesPeriodSummariesRawData(nino, businessId, fromDate, toDate)
       val result =
         for {
@@ -64,8 +68,13 @@ class ListForeignPropertiesPeriodSummariesController  @Inject()(val authService:
         }
 
       result.leftMap { errorWrapper =>
-        val correlationId = getCorrelationId(errorWrapper)
-        errorResult(errorWrapper).withApiHeaders(correlationId)
+        val resCorrelationId = errorWrapper.correlationId
+        val result = errorResult(errorWrapper).withApiHeaders(resCorrelationId)
+
+        logger.warn(
+          s"[${endpointLogContext.controllerName}][${endpointLogContext.endpointName}] - " +
+            s"Error response received with CorrelationId: $resCorrelationId")
+        result
       }.merge
     }
 

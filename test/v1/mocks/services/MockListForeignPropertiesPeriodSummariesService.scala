@@ -37,8 +37,8 @@ trait MockListForeignPropertiesPeriodSummariesService extends MockFactory {
     def listForeignProperties(requestData: ListForeignPropertiesPeriodSummariesRequest):
     CallHandler[Future[Either[ErrorWrapper, ResponseWrapper[ListForeignPropertiesPeriodSummariesResponse[SubmissionPeriod]]]]] = {
       (mockService
-        .listForeignProperties(_: ListForeignPropertiesPeriodSummariesRequest)(_: HeaderCarrier, _: ExecutionContext, _: EndpointLogContext))
-        .expects(requestData, *, *, *)
+        .listForeignProperties(_: ListForeignPropertiesPeriodSummariesRequest)(_: HeaderCarrier, _: ExecutionContext, _: EndpointLogContext, _: String))
+        .expects(requestData, *, *, *, *)
     }
   }
 

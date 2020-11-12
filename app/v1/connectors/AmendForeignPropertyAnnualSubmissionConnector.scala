@@ -30,7 +30,8 @@ class AmendForeignPropertyAnnualSubmissionConnector @Inject()(val http: HttpClie
                                                               val appConfig: AppConfig) extends BaseDesConnector {
   def amendForeignPropertyAnnualSubmission(request: AmendForeignPropertyAnnualSubmissionRequest)(
     implicit hc: HeaderCarrier,
-    ec: ExecutionContext): Future[DesOutcome[Unit]] = {
+    ec: ExecutionContext,
+    correlationId: String): Future[DesOutcome[Unit]] = {
 
     put(
       body = request.body,

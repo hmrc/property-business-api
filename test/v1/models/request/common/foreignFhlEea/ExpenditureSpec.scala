@@ -48,14 +48,14 @@ class ExpenditureSpec extends UnitSpec {
   val desJson: JsValue = Json.parse(
     s"""
        |{
-       |  "premisesRunningCostsAmount": 4567.98,
-       |  "repairsAndMaintenanceAmount": 98765.67,
-       |  "financialCostsAmount": 4566.95,
-       |  "professionalFeesAmount": 23.65,
-       |  "costsOfServicesAmount": 4567.77,
-       |  "travelCostsAmount": 456.77,
-       |  "otherAmount": 567.67,
-       |  "consolidatedExpensesAmount": 456.98
+       |  "premisesRunningCosts": 4567.98,
+       |  "repairsAndMaintenance": 98765.67,
+       |  "financialCosts": 4566.95,
+       |  "professionalFees": 23.65,
+       |  "costsOfServices": 4567.77,
+       |  "travelCosts": 456.77,
+       |  "other": 567.67,
+       |  "consolidatedExpense": 456.98
        |}
        |""".stripMargin)
 

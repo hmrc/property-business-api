@@ -85,22 +85,22 @@ class ForeignPropertyEntrySpec extends UnitSpec {
        |      "taxDeducted": 6334.34
        |    },
        |    "foreignTaxCreditRelief": true,
-       |    "premiumOfLeaseGrantAmount": 2543.43,
-       |    "otherPropertyIncomeAmount": 54325.30,
+       |    "premiumOfLeaseGrant": 2543.43,
+       |    "otherPropertyIncome": 54325.30,
        |    "foreignTaxPaidOrDeducted": 6543.01,
-       |    "specialWithholdingTaxOrUKTaxPaid": 643245.00
+       |    "specialWithholdingTaxOrUkTaxPaid": 643245.00
        |  },
        |  "expenses": {
-       |    "premisesRunningCostsAmount": 5635.43,
-       |    "repairsAndMaintenanceAmount": 3456.65,
-       |    "financialCostsAmount": 34532.21,
-       |    "professionalFeesAmount": 32465.32,
-       |    "costsOfServicesAmount": 2567.21,
-       |    "travelCostsAmount": 2345.76,
-       |    "residentialFinancialCostAmount": 21235.22,
-       |    "broughtFwdResidentialFinancialCostAmount": 12556.00,
-       |    "otherAmount": 2425.11,
-       |    "consolidatedExpensesAmount": 352.66
+       |    "premisesRunningCosts": 5635.43,
+       |    "repairsAndMaintenance": 3456.65,
+       |    "financialCosts": 34532.21,
+       |    "professionalFees": 32465.32,
+       |    "costsOfServices": 2567.21,
+       |    "travelCosts": 2345.76,
+       |    "residentialFinancialCost": 21235.22,
+       |    "broughtFwdResidentialFinancialCost": 12556.00,
+       |    "other": 2425.11,
+       |    "consolidatedExpense": 352.66
        |  }
        |}
        |""".stripMargin)

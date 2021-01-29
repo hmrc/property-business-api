@@ -31,9 +31,9 @@ object ForeignPropertyIncome {
   implicit val writes: Reads[ForeignPropertyIncome] = (
     (JsPath \ "rentIncome").read[ForeignPropertyRentIncome] and
       (JsPath \ "foreignTaxCreditRelief").read[Boolean] and
-      (JsPath \ "premiumOfLeaseGrantAmount").readNullable[BigDecimal] and
-      (JsPath \ "otherPropertyIncomeAmount").readNullable[BigDecimal] and
+      (JsPath \ "premiumOfLeaseGrant").readNullable[BigDecimal] and
+      (JsPath \ "otherPropertyIncome").readNullable[BigDecimal] and
       (JsPath \ "foreignTaxPaidOrDeducted").readNullable[BigDecimal] and
-      (JsPath \ "specialWithholdingTaxOrUKTaxPaid").readNullable[BigDecimal]
+      (JsPath \ "specialWithholdingTaxOrUkTaxPaid").readNullable[BigDecimal]
     )(ForeignPropertyIncome.apply _)
 }

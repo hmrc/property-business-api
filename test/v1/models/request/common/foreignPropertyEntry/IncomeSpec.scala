@@ -53,10 +53,10 @@ class IncomeSpec extends UnitSpec {
        |    "taxDeducted": 6334.34
        |  },
        |  "foreignTaxCreditRelief": true,
-       |  "premiumOfLeaseGrantAmount": 2543.43,
-       |  "otherPropertyIncomeAmount": 54325.30,
+       |  "premiumOfLeaseGrant": 2543.43,
+       |  "otherPropertyIncome": 54325.30,
        |  "foreignTaxPaidOrDeducted": 6543.01,
-       |  "specialWithholdingTaxOrUKTaxPaid": 643245.00
+       |  "specialWithholdingTaxOrUkTaxPaid": 643245.00
        |}
        |""".stripMargin)
 

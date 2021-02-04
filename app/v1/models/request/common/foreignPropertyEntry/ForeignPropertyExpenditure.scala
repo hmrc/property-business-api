@@ -51,7 +51,7 @@ object ForeignPropertyExpenditure {
       (JsPath \ "repairsAndMaintenance").writeNullable[BigDecimal] and
       (JsPath \ "financialCosts").writeNullable[BigDecimal] and
       (JsPath \ "professionalFees").writeNullable[BigDecimal] and
-      (JsPath \ "costsOfServices").writeNullable[BigDecimal] and
+      (JsPath \ "costOfServices").writeNullable[BigDecimal] and
       (JsPath \ "travelCosts").writeNullable[BigDecimal] and
       (JsPath \ "residentialFinancialCost").writeNullable[BigDecimal] and
       (JsPath \ "broughtFwdResidentialFinancialCost").writeNullable[BigDecimal] and

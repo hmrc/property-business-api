@@ -67,7 +67,7 @@ class ForeignFhlEeaSpec extends UnitSpec {
        |    "repairsAndMaintenance": 98765.67,
        |    "financialCosts": 4566.95,
        |    "professionalFees": 23.65,
-       |    "costsOfServices": 4567.77,
+       |    "costOfServices": 4567.77,
        |    "travelCosts": 456.77,
        |    "other": 567.67,
        |    "consolidatedExpense": 456.98

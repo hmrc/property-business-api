@@ -121,7 +121,7 @@ class AmendForeignPropertyPeriodSummaryRequestBodySpec extends UnitSpec with Jso
       |      "repairsAndMaintenance": 5000.99,
       |      "financialCosts": 5000.99,
       |      "professionalFees": 5000.99,
-      |      "costsOfServices": 5000.99,
+      |      "costOfServices": 5000.99,
       |      "travelCosts": 5000.99,
       |      "other": 5000.99,
       |      "consolidatedExpense": 5000.99
@@ -136,7 +136,7 @@ class AmendForeignPropertyPeriodSummaryRequestBodySpec extends UnitSpec with Jso
       |          "taxDeducted": 5000.99
       |        },
       |        "foreignTaxCreditRelief": false,
-      |        "premiumOfLeaseGrant": 5000.99,
+      |        "premiumsOfLeaseGrant": 5000.99,
       |        "otherPropertyIncome": 5000.99,
       |        "foreignTaxPaidOrDeducted": 5000.99,
       |        "specialWithholdingTaxOrUkTaxPaid": 5000.99
@@ -146,7 +146,7 @@ class AmendForeignPropertyPeriodSummaryRequestBodySpec extends UnitSpec with Jso
       |        "repairsAndMaintenance": 5000.99,
       |        "financialCosts": 5000.99,
       |        "professionalFees": 5000.99,
-      |        "costsOfServices": 5000.99,
+      |        "costOfServices": 5000.99,
       |        "travelCosts": 5000.99,
       |        "residentialFinancialCost": 5000.99,
       |        "broughtFwdResidentialFinancialCost": 5000.99,

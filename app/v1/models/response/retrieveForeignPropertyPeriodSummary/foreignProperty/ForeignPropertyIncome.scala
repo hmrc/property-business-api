@@ -27,11 +27,11 @@ case class ForeignPropertyIncome(rentIncome: ForeignPropertyRentIncome,
                                  specialWithholdingTaxOrUKTaxPaid: Option[BigDecimal])
 
 object ForeignPropertyIncome {
-  implicit val reads: Writes[ForeignPropertyIncome] = Json.writes[ForeignPropertyIncome]
-  implicit val writes: Reads[ForeignPropertyIncome] = (
+  implicit val writes: Writes[ForeignPropertyIncome] = Json.writes[ForeignPropertyIncome]
+  implicit val reads: Reads[ForeignPropertyIncome] = (
     (JsPath \ "rentIncome").read[ForeignPropertyRentIncome] and
       (JsPath \ "foreignTaxCreditRelief").read[Boolean] and
-      (JsPath \ "premiumOfLeaseGrant").readNullable[BigDecimal] and
+      (JsPath \ "premiumsOfLeaseGrant").readNullable[BigDecimal] and
       (JsPath \ "otherPropertyIncome").readNullable[BigDecimal] and
       (JsPath \ "foreignTaxPaidOrDeducted").readNullable[BigDecimal] and
       (JsPath \ "specialWithholdingTaxOrUkTaxPaid").readNullable[BigDecimal]

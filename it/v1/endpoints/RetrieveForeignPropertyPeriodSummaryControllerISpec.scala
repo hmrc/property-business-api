@@ -128,7 +128,7 @@ class RetrieveForeignPropertyPeriodSummaryControllerISpec extends IntegrationBas
          |                "taxDeducted": 22.22
          |            },
          |          "foreignTaxCreditRelief": true,
-         |          "premiumOfLeaseGrant": 100.25,
+         |          "premiumsOfLeaseGrant": 100.25,
          |          "otherPropertyIncome": 100.25,
          |          "foreignTaxPaidOrDeducted": 44.21,
          |          "specialWithholdingTaxOrUkTaxPaid": 23.78

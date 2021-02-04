@@ -57,7 +57,7 @@ class ExpenditureSpec extends UnitSpec {
        |  "repairsAndMaintenance": 3456.65,
        |  "financialCosts": 34532.21,
        |  "professionalFees": 32465.32,
-       |  "costsOfServices": 2567.21,
+       |  "costOfServices": 2567.21,
        |  "travelCosts": 2345.76,
        |  "residentialFinancialCost": 21235.22,
        |  "broughtFwdResidentialFinancialCost": 12556.00,

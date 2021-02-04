@@ -17,7 +17,7 @@
 package v1.models.response.retrieveForeignPropertyPeriodSummary
 
 import mocks.MockAppConfig
-import play.api.libs.json.Json
+import play.api.libs.json.{JsValue, Json}
 import support.UnitSpec
 import v1.models.hateoas.{Link, Method}
 import v1.models.response.retrieveForeignPropertyPeriodSummary.foreignFhlEea._
@@ -26,7 +26,7 @@ import v1.models.utils.JsonErrorValidators
 
 class RetrieveForeignPropertyPeriodSummaryResponseSpec extends UnitSpec with JsonErrorValidators with MockAppConfig {
 
-  val retrieveForeignPropertyResponseBody = RetrieveForeignPropertyPeriodSummaryResponse(
+  val retrieveForeignPropertyResponseBody: RetrieveForeignPropertyPeriodSummaryResponse = RetrieveForeignPropertyPeriodSummaryResponse(
     "2020-01-01",
     "2020-01-31",
     Some(ForeignFhlEea(
@@ -65,7 +65,7 @@ class RetrieveForeignPropertyPeriodSummaryResponseSpec extends UnitSpec with Jso
       ))))
     ))
 
-  val writesJson = Json.parse(
+  val writesJson: JsValue = Json.parse(
     """{
       |  "fromDate": "2020-01-01",
       |  "toDate": "2020-01-31",
@@ -116,7 +116,7 @@ class RetrieveForeignPropertyPeriodSummaryResponseSpec extends UnitSpec with Jso
       |}
       |""".stripMargin)
 
-  val readsJson = Json.parse(
+  val readsJson: JsValue = Json.parse(
     """{
       |  "fromDate": "2020-01-01",
       |  "toDate": "2020-01-31",
@@ -145,7 +145,7 @@ class RetrieveForeignPropertyPeriodSummaryResponseSpec extends UnitSpec with Jso
       |          "taxDeducted": 5000.99
       |        },
       |        "foreignTaxCreditRelief": false,
-      |        "premiumOfLeaseGrant": 5000.99,
+      |        "premiumsOfLeaseGrant": 5000.99,
       |        "otherPropertyIncome": 5000.99,
       |        "foreignTaxPaidOrDeducted": 5000.99,
       |        "specialWithholdingTaxOrUkTaxPaid": 5000.99

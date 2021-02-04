@@ -34,7 +34,7 @@ object ForeignPropertyIncome {
   implicit val writes: Writes[ForeignPropertyIncome] = (
     (JsPath \ "rentIncome").write[ForeignPropertyRentIncome] and
       (JsPath \ "foreignTaxCreditRelief").write[Boolean] and
-      (JsPath \ "premiumOfLeaseGrant").writeNullable[BigDecimal] and
+      (JsPath \ "premiumsOfLeaseGrant").writeNullable[BigDecimal] and
       (JsPath \ "otherPropertyIncome").writeNullable[BigDecimal] and
       (JsPath \ "foreignTaxPaidOrDeducted").writeNullable[BigDecimal] and
       (JsPath \ "specialWithholdingTaxOrUkTaxPaid").writeNullable[BigDecimal]

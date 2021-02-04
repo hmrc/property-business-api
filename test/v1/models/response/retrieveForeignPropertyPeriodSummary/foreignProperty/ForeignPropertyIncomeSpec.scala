@@ -51,10 +51,10 @@ class ForeignPropertyIncomeSpec extends UnitSpec with JsonErrorValidators {
       |      "taxDeducted": 5000.99
       |    },
       |    "foreignTaxCreditRelief": false,
-      |    "premiumOfLeaseGrantAmount": 5000.99,
-      |    "otherPropertyIncomeAmount": 5000.99,
+      |    "premiumsOfLeaseGrant": 5000.99,
+      |    "otherPropertyIncome": 5000.99,
       |    "foreignTaxPaidOrDeducted": 5000.99,
-      |    "specialWithholdingTaxOrUKTaxPaid": 5000.99
+      |    "specialWithholdingTaxOrUkTaxPaid": 5000.99
       |  }""".stripMargin)
 
 

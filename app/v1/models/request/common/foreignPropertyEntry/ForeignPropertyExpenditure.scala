@@ -47,15 +47,15 @@ object ForeignPropertyExpenditure {
   implicit val reads: Reads[ForeignPropertyExpenditure] = Json.reads[ForeignPropertyExpenditure]
 
   implicit val writes: Writes[ForeignPropertyExpenditure] = (
-    (JsPath \ "premisesRunningCostsAmount").writeNullable[BigDecimal] and
-      (JsPath \ "repairsAndMaintenanceAmount").writeNullable[BigDecimal] and
-      (JsPath \ "financialCostsAmount").writeNullable[BigDecimal] and
-      (JsPath \ "professionalFeesAmount").writeNullable[BigDecimal] and
-      (JsPath \ "costsOfServicesAmount").writeNullable[BigDecimal] and
-      (JsPath \ "travelCostsAmount").writeNullable[BigDecimal] and
-      (JsPath \ "residentialFinancialCostAmount").writeNullable[BigDecimal] and
-      (JsPath \ "broughtFwdResidentialFinancialCostAmount").writeNullable[BigDecimal] and
-      (JsPath \ "otherAmount").writeNullable[BigDecimal] and
-      (JsPath \ "consolidatedExpensesAmount").writeNullable[BigDecimal]
+    (JsPath \ "premisesRunningCosts").writeNullable[BigDecimal] and
+      (JsPath \ "repairsAndMaintenance").writeNullable[BigDecimal] and
+      (JsPath \ "financialCosts").writeNullable[BigDecimal] and
+      (JsPath \ "professionalFees").writeNullable[BigDecimal] and
+      (JsPath \ "costOfServices").writeNullable[BigDecimal] and
+      (JsPath \ "travelCosts").writeNullable[BigDecimal] and
+      (JsPath \ "residentialFinancialCost").writeNullable[BigDecimal] and
+      (JsPath \ "broughtFwdResidentialFinancialCost").writeNullable[BigDecimal] and
+      (JsPath \ "other").writeNullable[BigDecimal] and
+      (JsPath \ "consolidatedExpense").writeNullable[BigDecimal]
     ) (unlift(ForeignPropertyExpenditure.unapply))
 }

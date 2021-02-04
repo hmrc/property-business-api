@@ -117,14 +117,14 @@ class AmendForeignPropertyPeriodSummaryRequestBodySpec extends UnitSpec with Jso
       |      "taxDeducted": 5000.99
       |    },
       |    "expenses": {
-      |      "premisesRunningCostsAmount": 5000.99,
-      |      "repairsAndMaintenanceAmount": 5000.99,
-      |      "financialCostsAmount": 5000.99,
-      |      "professionalFeesAmount": 5000.99,
-      |      "costsOfServicesAmount": 5000.99,
-      |      "travelCostsAmount": 5000.99,
-      |      "otherAmount": 5000.99,
-      |      "consolidatedExpensesAmount": 5000.99
+      |      "premisesRunningCosts": 5000.99,
+      |      "repairsAndMaintenance": 5000.99,
+      |      "financialCosts": 5000.99,
+      |      "professionalFees": 5000.99,
+      |      "costOfServices": 5000.99,
+      |      "travelCosts": 5000.99,
+      |      "other": 5000.99,
+      |      "consolidatedExpense": 5000.99
       |    }
       |  },
       |  "foreignProperty": [
@@ -136,22 +136,22 @@ class AmendForeignPropertyPeriodSummaryRequestBodySpec extends UnitSpec with Jso
       |          "taxDeducted": 5000.99
       |        },
       |        "foreignTaxCreditRelief": false,
-      |        "premiumOfLeaseGrantAmount": 5000.99,
-      |        "otherPropertyIncomeAmount": 5000.99,
+      |        "premiumsOfLeaseGrant": 5000.99,
+      |        "otherPropertyIncome": 5000.99,
       |        "foreignTaxPaidOrDeducted": 5000.99,
-      |        "specialWithholdingTaxOrUKTaxPaid": 5000.99
+      |        "specialWithholdingTaxOrUkTaxPaid": 5000.99
       |      },
       |      "expenses": {
-      |        "premisesRunningCostsAmount": 5000.99,
-      |        "repairsAndMaintenanceAmount": 5000.99,
-      |        "financialCostsAmount": 5000.99,
-      |        "professionalFeesAmount": 5000.99,
-      |        "costsOfServicesAmount": 5000.99,
-      |        "travelCostsAmount": 5000.99,
-      |        "residentialFinancialCostAmount": 5000.99,
-      |        "broughtFwdResidentialFinancialCostAmount": 5000.99,
-      |        "otherAmount": 5000.99,
-      |        "consolidatedExpensesAmount": 5000.99
+      |        "premisesRunningCosts": 5000.99,
+      |        "repairsAndMaintenance": 5000.99,
+      |        "financialCosts": 5000.99,
+      |        "professionalFees": 5000.99,
+      |        "costOfServices": 5000.99,
+      |        "travelCosts": 5000.99,
+      |        "residentialFinancialCost": 5000.99,
+      |        "broughtFwdResidentialFinancialCost": 5000.99,
+      |        "other": 5000.99,
+      |        "consolidatedExpense": 5000.99
       |      }
       |    }
       |  ]

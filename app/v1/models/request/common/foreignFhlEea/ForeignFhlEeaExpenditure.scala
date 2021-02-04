@@ -43,13 +43,13 @@ object ForeignFhlEeaExpenditure {
   implicit val reads: Reads[ForeignFhlEeaExpenditure] = Json.reads[ForeignFhlEeaExpenditure]
 
   implicit val writes: Writes[ForeignFhlEeaExpenditure] = (
-    (JsPath \ "premisesRunningCostsAmount").writeNullable[BigDecimal] and
-      (JsPath \ "repairsAndMaintenanceAmount").writeNullable[BigDecimal] and
-      (JsPath \ "financialCostsAmount").writeNullable[BigDecimal] and
-      (JsPath \ "professionalFeesAmount").writeNullable[BigDecimal] and
-      (JsPath \ "costsOfServicesAmount").writeNullable[BigDecimal] and
-      (JsPath \ "travelCostsAmount").writeNullable[BigDecimal] and
-      (JsPath \ "otherAmount").writeNullable[BigDecimal] and
-      (JsPath \ "consolidatedExpensesAmount").writeNullable[BigDecimal]
+    (JsPath \ "premisesRunningCosts").writeNullable[BigDecimal] and
+      (JsPath \ "repairsAndMaintenance").writeNullable[BigDecimal] and
+      (JsPath \ "financialCosts").writeNullable[BigDecimal] and
+      (JsPath \ "professionalFees").writeNullable[BigDecimal] and
+      (JsPath \ "costOfServices").writeNullable[BigDecimal] and
+      (JsPath \ "travelCosts").writeNullable[BigDecimal] and
+      (JsPath \ "other").writeNullable[BigDecimal] and
+      (JsPath \ "consolidatedExpense").writeNullable[BigDecimal]
     ) (unlift(ForeignFhlEeaExpenditure.unapply))
 }

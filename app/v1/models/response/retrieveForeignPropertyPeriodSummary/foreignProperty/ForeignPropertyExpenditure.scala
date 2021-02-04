@@ -33,15 +33,15 @@ case class ForeignPropertyExpenditure(premisesRunningCosts: Option[BigDecimal],
 object ForeignPropertyExpenditure {
   implicit val writes: Writes[ForeignPropertyExpenditure] = Json.writes[ForeignPropertyExpenditure]
   implicit val reads: Reads[ForeignPropertyExpenditure] = (
-    (JsPath \ "premisesRunningCostsAmount").readNullable[BigDecimal] and
-      (JsPath \ "repairsAndMaintenanceAmount").readNullable[BigDecimal] and
-      (JsPath \ "financialCostsAmount").readNullable[BigDecimal] and
-      (JsPath \ "professionalFeesAmount").readNullable[BigDecimal] and
-      (JsPath \ "costOfServicesAmount").readNullable[BigDecimal] and
-      (JsPath \ "travelCostsAmount").readNullable[BigDecimal] and
-      (JsPath \ "residentialFinancialCostAmount").readNullable[BigDecimal] and
-      (JsPath \ "broughtFwdResidentialFinancialCostAmount").readNullable[BigDecimal] and
-      (JsPath \ "otherAmount").readNullable[BigDecimal] and
-      (JsPath \ "consolidatedExpensesAmount").readNullable[BigDecimal]
+    (JsPath \ "premisesRunningCosts").readNullable[BigDecimal] and
+      (JsPath \ "repairsAndMaintenance").readNullable[BigDecimal] and
+      (JsPath \ "financialCosts").readNullable[BigDecimal] and
+      (JsPath \ "professionalFees").readNullable[BigDecimal] and
+      (JsPath \ "costOfServices").readNullable[BigDecimal] and
+      (JsPath \ "travelCosts").readNullable[BigDecimal] and
+      (JsPath \ "residentialFinancialCost").readNullable[BigDecimal] and
+      (JsPath \ "broughtFwdResidentialFinancialCost").readNullable[BigDecimal] and
+      (JsPath \ "other").readNullable[BigDecimal] and
+      (JsPath \ "consolidatedExpense").readNullable[BigDecimal]
     )(ForeignPropertyExpenditure.apply _)
 }

@@ -24,7 +24,7 @@ import v1.models.hateoas.RelType.LIST_PROPERTY_PERIOD_SUMMARIES
 import v1.models.response.retrieveForeignPropertyPeriodSummary.foreignFhlEea.ForeignFhlEea
 import v1.models.response.retrieveForeignPropertyPeriodSummary.foreignProperty.ForeignProperty
 
-case class RetrieveForeignPropertyPeriodSummaryResponse(fromDate: String,
+case class  RetrieveForeignPropertyPeriodSummaryResponse(fromDate: String,
                                                         toDate: String,
                                                         foreignFhlEea: Option[ForeignFhlEea],
                                                         foreignProperty: Option[Seq[ForeignProperty]])

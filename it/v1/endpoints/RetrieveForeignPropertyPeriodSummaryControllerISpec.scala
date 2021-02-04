@@ -110,13 +110,13 @@ class RetrieveForeignPropertyPeriodSummaryControllerISpec extends IntegrationBas
          |          "taxDeducted": 22.22
          |        },
          |        "expenses": {
-         |          "premisesRunningCostsAmount": 100.25,
-         |          "repairsAndMaintenanceAmount": 100.25,
-         |          "financialCostsAmount": 100.25,
-         |          "professionalFeesAmount": 100.25,
-         |          "costOfServicesAmount": 100.25,
-         |          "travelCostsAmount": 100.25,
-         |          "otherAmount": 100.25
+         |          "premisesRunningCosts": 100.25,
+         |          "repairsAndMaintenance": 100.25,
+         |          "financialCosts": 100.25,
+         |          "professionalFees": 100.25,
+         |          "costOfServices": 100.25,
+         |          "travelCosts": 100.25,
+         |          "other": 100.25
          |        }
          |      },
          |  "foreignProperty": [
@@ -128,19 +128,19 @@ class RetrieveForeignPropertyPeriodSummaryControllerISpec extends IntegrationBas
          |                "taxDeducted": 22.22
          |            },
          |          "foreignTaxCreditRelief": true,
-         |          "premiumOfLeaseGrantAmount": 100.25,
-         |          "otherPropertyIncomeAmount": 100.25,
+         |          "premiumsOfLeaseGrant": 100.25,
+         |          "otherPropertyIncome": 100.25,
          |          "foreignTaxPaidOrDeducted": 44.21,
-         |          "specialWithholdingTaxOrUKTaxPaid": 23.78
+         |          "specialWithholdingTaxOrUkTaxPaid": 23.78
          |        },
          |        "expenses": {
-         |          "premisesRunningCostsAmount": 100.25,
-         |          "repairsAndMaintenanceAmount": 100.25,
-         |          "financialCostsAmount": 200.25,
-         |          "professionalFeesAmount": 100.25,
-         |          "costOfServicesAmount": 100.25,
-         |          "travelCostsAmount": 100.25,
-         |          "otherAmount": 100.25
+         |          "premisesRunningCosts": 100.25,
+         |          "repairsAndMaintenance": 100.25,
+         |          "financialCosts": 200.25,
+         |          "professionalFees": 100.25,
+         |          "costOfServices": 100.25,
+         |          "travelCosts": 100.25,
+         |          "other": 100.25
          |         }
          |      }
          |    ]

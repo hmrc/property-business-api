@@ -51,16 +51,16 @@ class ForeignPropertyExpenditureSpec extends UnitSpec with JsonErrorValidators {
 
   val readsJson = Json.parse(
     """{
-      |  "premisesRunningCostsAmount": 5000.99,
-      |  "repairsAndMaintenanceAmount": 5000.99,
-      |  "financialCostsAmount": 5000.99,
-      |  "professionalFeesAmount": 5000.99,
-      |  "costOfServicesAmount": 5000.99,
-      |  "travelCostsAmount": 5000.99,
-      |  "residentialFinancialCostAmount": 5000.99,
-      |  "broughtFwdResidentialFinancialCostAmount": 5000.99,
-      |  "otherAmount": 5000.99,
-      |  "consolidatedExpensesAmount": 5000.99
+      |  "premisesRunningCosts": 5000.99,
+      |  "repairsAndMaintenance": 5000.99,
+      |  "financialCosts": 5000.99,
+      |  "professionalFees": 5000.99,
+      |  "costOfServices": 5000.99,
+      |  "travelCosts": 5000.99,
+      |  "residentialFinancialCost": 5000.99,
+      |  "broughtFwdResidentialFinancialCost": 5000.99,
+      |  "other": 5000.99,
+      |  "consolidatedExpense": 5000.99
       |}""".stripMargin)
 
 

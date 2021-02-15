@@ -229,6 +229,17 @@ traits:
                 description: Period summaries are not contiguous.
                 value:
                   code: RULE_NOT_CONTIGUOUS_PERIOD
+  ruleDuplicateSubmission:
+    responses:
+      400:
+        body:
+          application/json:
+            type: types.errorResponse
+            examples:
+              ruleDuplicateSubmission:
+                description: A summary has already been submitted for the  period specified.
+                value:
+                  code: RULE_DUPLICATE_SUBMISSION
 # MISSING_XXX
   missingFromDate:
     responses:

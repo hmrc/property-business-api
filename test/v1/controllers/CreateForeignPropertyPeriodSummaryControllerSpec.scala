@@ -78,8 +78,7 @@ class CreateForeignPropertyPeriodSummaryControllerSpec
       |  "toDate": "2019-04-06",
       |  "foreignFhlEea": {
       |    "income": {
-      |      "rentAmount": 5000.99,
-      |      "taxDeducted": 5000.99
+      |      "rentAmount": 5000.99
       |    },
       |    "expenditure": {
       |      "consolidatedExpenses": 5000.99
@@ -116,8 +115,7 @@ class CreateForeignPropertyPeriodSummaryControllerSpec
       |  "toDate": "2019-04-06",
       |  "foreignFhlEea": {
       |    "income": {
-      |      "rentAmount": 5000.99,
-      |      "taxDeducted": 5000.99
+      |      "rentAmount": 5000.99
       |    },
       |    "expenditure": {
       |      "premisesRunningCosts": 5000.99,
@@ -134,8 +132,7 @@ class CreateForeignPropertyPeriodSummaryControllerSpec
       |      "countryCode": "FRA",
       |      "income": {
       |        "rentIncome": {
-      |          "rentAmount": 5000.99,
-      |          "taxDeducted": 5000.99
+      |          "rentAmount": 5000.99
       |        },
       |        "foreignTaxCreditRelief": false,
       |        "premiumOfLeaseGrant": 5000.99,
@@ -176,7 +173,7 @@ class CreateForeignPropertyPeriodSummaryControllerSpec
   val response = CreateForeignPropertyPeriodSummaryResponse("4557ecb5-fd32-48cc-81f5-e6acd1099f3c")
 
 
-  private val foreignFhlEea = ForeignFhlEea(ForeignFhlEeaIncome(2000.99, Some(2000.99)),
+  private val foreignFhlEea = ForeignFhlEea(ForeignFhlEeaIncome(2000.99),
     Some(ForeignFhlEeaExpenditure(
       Some(2000.99),
       Some(2000.99),
@@ -189,7 +186,7 @@ class CreateForeignPropertyPeriodSummaryControllerSpec
     )))
 
   private val foreignProperty = ForeignPropertyEntry("FRA", ForeignPropertyIncome(
-    ForeignPropertyRentIncome(2000.99, 2000.99), true, Some(2000.99), Some(2000.99), Some(2000.99), Some(2000.99)),
+    ForeignPropertyRentIncome(2000.99), true, Some(2000.99), Some(2000.99), Some(2000.99), Some(2000.99)),
   Some(ForeignPropertyExpenditure(Some(2000.99),
     Some(2000.99),
     Some(2000.99),
@@ -313,6 +310,12 @@ class CreateForeignPropertyPeriodSummaryControllerSpec
           (NinoFormatError, BAD_REQUEST),
           (BusinessIdFormatError, BAD_REQUEST),
           (NotFoundError, NOT_FOUND),
+          (DownstreamError, INTERNAL_SERVER_ERROR),
+          (RuleOverlappingPeriodError, BAD_REQUEST),
+          (RuleMisalignedPeriodError, BAD_REQUEST),
+          (RuleNotContiguousPeriodError, BAD_REQUEST),
+          (RuleToDateBeforeFromDateError, BAD_REQUEST),
+          (RuleDuplicateSubmission, BAD_REQUEST)
         )
 
         input.foreach(args => (serviceErrors _).tupled(args))

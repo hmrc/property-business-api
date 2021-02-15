@@ -41,7 +41,7 @@ class CreateForeignPropertyPeriodSummaryServiceSpec extends UnitSpec {
     "2020-01-01",
     "2020-01-31",
     Some(ForeignFhlEea(
-      ForeignFhlEeaIncome(5000.99, Some(5000.99)),
+      ForeignFhlEeaIncome(5000.99),
       Some(ForeignFhlEeaExpenditure(
         Some(5000.99),
         Some(5000.99),
@@ -55,7 +55,7 @@ class CreateForeignPropertyPeriodSummaryServiceSpec extends UnitSpec {
     )),
     Some(Seq(ForeignPropertyEntry("FRA",
       ForeignPropertyIncome(
-        ForeignPropertyRentIncome(5000.99, 5000.99),
+        ForeignPropertyRentIncome(5000.99),
         false,
         Some(5000.99),
         Some(5000.99),
@@ -80,7 +80,7 @@ class CreateForeignPropertyPeriodSummaryServiceSpec extends UnitSpec {
     "2020-01-01",
     "2020-01-31",
     Some(ForeignFhlEea(
-      ForeignFhlEeaIncome(5000.99, Some(5000.99)),
+      ForeignFhlEeaIncome(5000.99),
       Some(ForeignFhlEeaExpenditure(
         None,
         None,
@@ -94,7 +94,7 @@ class CreateForeignPropertyPeriodSummaryServiceSpec extends UnitSpec {
     )),
     Some(Seq(ForeignPropertyEntry("FRA",
       ForeignPropertyIncome(
-        ForeignPropertyRentIncome(5000.99, 5000.99),
+        ForeignPropertyRentIncome(5000.99),
         false,
         Some(5000.99),
         Some(5000.99),
@@ -161,11 +161,15 @@ class CreateForeignPropertyPeriodSummaryServiceSpec extends UnitSpec {
 
       val input = Seq(
         "INVALID_TAXABLE_ENTITY_ID" -> NinoFormatError,
-        "FORMAT_BUSINESS_ID" -> BusinessIdFormatError,
-        "RULE_OVERLAPPING_PERIOD" -> RuleOverlappingPeriodError,
-        "RULE_MISALIGNED_PERIOD" -> RuleMisalignedPeriodError,
-        "RULE_NOT_CONTIGUOUS_PERIOD" -> RuleNotContiguousPeriodError,
-        "NOT_FOUND" -> NotFoundError,
+        "INVALID_INCOMESOURCEID" -> BusinessIdFormatError,
+        "INVALID_PAYLOAD" -> DownstreamError,
+        "INVALID_CORRELATIONID" -> DownstreamError,
+        "OVERLAPS_IN_PERIOD" -> RuleOverlappingPeriodError,
+        "NOT_ALIGN_PERIOD" -> RuleMisalignedPeriodError,
+        "GAPS_IN_PERIOD" -> RuleNotContiguousPeriodError,
+        "INVALID_DATE_RANGE" -> RuleToDateBeforeFromDateError,
+        "DUPLICATE_SUBMISSION" -> RuleDuplicateSubmission,
+        "INCOME_SOURCE_NOT_FOUND" -> NotFoundError,
         "SERVER_ERROR" -> DownstreamError,
         "SERVICE_UNAVAILABLE" -> DownstreamError
       )

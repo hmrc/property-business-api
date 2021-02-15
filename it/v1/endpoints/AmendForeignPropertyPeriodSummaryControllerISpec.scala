@@ -39,8 +39,7 @@ class AmendForeignPropertyPeriodSummaryControllerISpec extends IntegrationBaseSp
          |{
          |  "foreignFhlEea": {
          |    "income": {
-         |      "rentAmount": 567.83,
-         |      "taxDeducted": 4321.92
+         |      "rentAmount": 567.83
          |      },
          |    "expenditure": {
          |      "premisesRunningCosts": 4567.98,
@@ -56,8 +55,7 @@ class AmendForeignPropertyPeriodSummaryControllerISpec extends IntegrationBaseSp
          |      "countryCode": "FRA",
          |      "income": {
          |        "rentIncome": {
-         |          "rentAmount": 34456.30,
-         |          "taxDeducted": 6334.34
+         |          "rentAmount": 34456.30
          |        },
          |        "foreignTaxCreditRelief": true,
          |        "premiumOfLeaseGrant": 2543.43,
@@ -152,8 +150,7 @@ class AmendForeignPropertyPeriodSummaryControllerISpec extends IntegrationBaseSp
              |{
              |  "foreignFhlEea": {
              |    "income": {
-             |      "rentAmount": 567.483,
-             |      "taxDeducted": 4321.4492
+             |      "rentAmount": 567.483
              |      },
              |    "expenditure": {
              |      "consolidatedExpenses": 567.67432
@@ -163,8 +160,7 @@ class AmendForeignPropertyPeriodSummaryControllerISpec extends IntegrationBaseSp
              |      "countryCode": "asgregs",
              |      "income": {
              |        "rentIncome": {
-             |          "rentAmount": 34456.31230,
-             |          "taxDeducted": 6334.32134
+             |          "rentAmount": 34456.31230
              |        },
              |        "foreignTaxCreditRelief": true,
              |        "premiumOfLeaseGrant": 2543.41233,
@@ -191,10 +187,8 @@ class AmendForeignPropertyPeriodSummaryControllerISpec extends IntegrationBaseSp
             message = "One or more monetary fields are invalid",
             paths = Some(List(
               "/foreignFhlEea/income/rentAmount",
-              "/foreignFhlEea/income/taxDeducted",
               "/foreignFhlEea/expenditure/consolidatedExpenses",
               "/foreignProperty/0/income/rentIncome/rentAmount",
-              "/foreignProperty/0/income/rentIncome/taxDeducted",
               "/foreignProperty/0/income/premiumOfLeaseGrant",
               "/foreignProperty/0/income/otherPropertyIncome",
               "/foreignProperty/0/income/foreignTaxTakenOff",
@@ -228,8 +222,7 @@ class AmendForeignPropertyPeriodSummaryControllerISpec extends IntegrationBaseSp
             |{
             |  "foreignFhlEea": {
             |    "income": {
-            |      "rentAmount": 567.83,
-            |      "taxDeducted": 4321.92
+            |      "rentAmount": 567.83
             |      },
             |    "expenditure": {
             |      "premisesRunningCosts": 4567.98,
@@ -245,8 +238,7 @@ class AmendForeignPropertyPeriodSummaryControllerISpec extends IntegrationBaseSp
             |      "countryCode": "FRA",
             |      "income": {
             |        "rentIncome": {
-            |          "rentAmount": 34456.30,
-            |          "taxDeducted": 6334.34
+            |          "rentAmount": 34456.30
             |        },
             |        "foreignTaxCreditRelief": true,
             |        "premiumOfLeaseGrant": 2543.43,
@@ -275,8 +267,7 @@ class AmendForeignPropertyPeriodSummaryControllerISpec extends IntegrationBaseSp
             |{
             |  "foreignFhlEea": {
             |    "income": {
-            |      "rentAmount": 567.83,
-            |      "taxDeducted": 4321.92
+            |      "rentAmount": 567.83
             |      },
             |    "expenditure": {
             |      "premisesRunningCosts": 4567.98,
@@ -288,8 +279,7 @@ class AmendForeignPropertyPeriodSummaryControllerISpec extends IntegrationBaseSp
             |      "countryCode": "FRA",
             |      "income": {
             |        "rentIncome": {
-            |          "rentAmount": 34456.30,
-            |          "taxDeducted": 6334.34
+            |          "rentAmount": 34456.30
             |        },
             |        "foreignTaxCreditRelief": true,
             |        "premiumOfLeaseGrant": 2543.43,
@@ -310,8 +300,7 @@ class AmendForeignPropertyPeriodSummaryControllerISpec extends IntegrationBaseSp
              |{
              |  "foreignFhlEea": {
              |    "income": {
-             |      "rentAmount": 567.483,
-             |      "taxDeducted": 4321.4492
+             |      "rentAmount": 567.483
              |      },
              |    "expenditure": {
              |      "consolidatedExpenses": 567.67432
@@ -321,8 +310,7 @@ class AmendForeignPropertyPeriodSummaryControllerISpec extends IntegrationBaseSp
              |      "countryCode": "FRA",
              |      "income": {
              |        "rentIncome": {
-             |          "rentAmount": 34456.31230,
-             |          "taxDeducted": 6334.32134
+             |          "rentAmount": 34456.31230
              |        },
              |        "foreignTaxCreditRelief": true,
              |        "premiumOfLeaseGrant": 2543.41233,
@@ -343,8 +331,7 @@ class AmendForeignPropertyPeriodSummaryControllerISpec extends IntegrationBaseSp
              |{
              |  "foreignFhlEea": {
              |    "income": {
-             |      "rentAmount": 567.43,
-             |      "taxDeducted": 4321.92
+             |      "rentAmount": 567.43
              |      },
              |    "expenditure": {
              |      "consolidatedExpenses": 567.67
@@ -354,8 +341,7 @@ class AmendForeignPropertyPeriodSummaryControllerISpec extends IntegrationBaseSp
              |      "countryCode": "asgregs",
              |      "income": {
              |        "rentIncome": {
-             |          "rentAmount": 34456.31,
-             |          "taxDeducted": 6334.32
+             |          "rentAmount": 34456.31
              |        },
              |        "foreignTaxCreditRelief": true,
              |        "premiumOfLeaseGrant": 2543.43,
@@ -376,10 +362,8 @@ class AmendForeignPropertyPeriodSummaryControllerISpec extends IntegrationBaseSp
           message = "One or more monetary fields are invalid",
           paths = Some(List(
             "/foreignFhlEea/income/rentAmount",
-            "/foreignFhlEea/income/taxDeducted",
             "/foreignFhlEea/expenditure/consolidatedExpenses",
             "/foreignProperty/0/income/rentIncome/rentAmount",
-            "/foreignProperty/0/income/rentIncome/taxDeducted",
             "/foreignProperty/0/income/premiumOfLeaseGrant",
             "/foreignProperty/0/income/otherPropertyIncome",
             "/foreignProperty/0/income/foreignTaxTakenOff",

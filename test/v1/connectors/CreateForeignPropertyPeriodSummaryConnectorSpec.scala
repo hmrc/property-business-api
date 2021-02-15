@@ -36,7 +36,7 @@ class CreateForeignPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
     "2020-01-01",
     "2020-01-31",
     Some(ForeignFhlEea(
-      ForeignFhlEeaIncome(5000.99, Some(5000.99)),
+      ForeignFhlEeaIncome(5000.99),
       Some(ForeignFhlEeaExpenditure(
         Some(5000.99),
         Some(5000.99),
@@ -50,7 +50,7 @@ class CreateForeignPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
     )),
     Some(Seq(ForeignPropertyEntry("FRA",
       ForeignPropertyIncome(
-        ForeignPropertyRentIncome(5000.99, 5000.99),
+        ForeignPropertyRentIncome(5000.99),
         false,
         Some(5000.99),
         Some(5000.99),
@@ -75,7 +75,7 @@ class CreateForeignPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
     "2020-01-01",
     "2020-01-31",
     Some(ForeignFhlEea(
-      ForeignFhlEeaIncome(5000.99, Some(5000.99)),
+      ForeignFhlEeaIncome(5000.99),
       Some(ForeignFhlEeaExpenditure(
         None,
         None,
@@ -89,7 +89,7 @@ class CreateForeignPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
     )),
     Some(Seq(ForeignPropertyEntry("FRA",
       ForeignPropertyIncome(
-        ForeignPropertyRentIncome(5000.99, 5000.99),
+        ForeignPropertyRentIncome(5000.99),
         false,
         Some(5000.99),
         Some(5000.99),

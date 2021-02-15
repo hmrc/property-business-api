@@ -25,8 +25,7 @@ class ForeignFhlEeaSpec extends UnitSpec {
     s"""
        |{
        |  "income": {
-       |    "rentAmount": 567.83,
-       |    "taxDeducted": 4321.92
+       |    "rentAmount": 567.83
        |    },
        |  "expenditure": {
        |    "premisesRunningCosts": 4567.98,
@@ -42,7 +41,7 @@ class ForeignFhlEeaSpec extends UnitSpec {
        |""".stripMargin)
 
   val model: ForeignFhlEea = ForeignFhlEea(
-    income = ForeignFhlEeaIncome(rentAmount = 567.83, taxDeducted = Some(4321.92)),
+    income = ForeignFhlEeaIncome(rentAmount = 567.83),
     expenditure = Some(ForeignFhlEeaExpenditure(
       premisesRunningCosts = Some(4567.98),
       repairsAndMaintenance = Some(98765.67),
@@ -59,8 +58,7 @@ class ForeignFhlEeaSpec extends UnitSpec {
     s"""
        |{
        |  "income": {
-       |    "rentAmount": 567.83,
-       |    "taxDeducted": 4321.92
+       |    "rentAmount": 567.83
        |    },
        |  "expenses": {
        |    "premisesRunningCosts": 4567.98,

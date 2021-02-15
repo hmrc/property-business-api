@@ -31,8 +31,7 @@ class AmendForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec {
     """{
       |  "foreignFhlEea": {
       |    "income": {
-      |      "rentAmount": 567.83,
-      |      "taxDeducted": 4321.92
+      |      "rentAmount": 567.83
       |      },
       |    "expenditure": {
       |      "premisesRunningCosts": 4567.98,
@@ -49,8 +48,7 @@ class AmendForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec {
       |      "countryCode": "GBR",
       |      "income": {
       |        "rentIncome": {
-      |          "rentAmount": 34456.30,
-      |          "taxDeducted": 6334.34
+      |          "rentAmount": 34456.30
       |        },
       |        "foreignTaxCreditRelief": true,
       |        "premiumOfLeaseGrant": 2543.43,
@@ -75,8 +73,7 @@ class AmendForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec {
     """{
       |  "foreignFhlEea": {
       |    "income": {
-      |      "rentAmount": 567.83,
-      |      "taxDeducted": 4321.92
+      |      "rentAmount": 567.83
       |      },
       |    "expenditure": {
       |      "consolidatedExpenses": 456.98
@@ -87,8 +84,7 @@ class AmendForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec {
       |      "countryCode": "GBR",
       |      "income": {
       |        "rentIncome": {
-      |          "rentAmount": 34456.30,
-      |          "taxDeducted": 6334.34
+      |          "rentAmount": 34456.30
       |        },
       |        "foreignTaxCreditRelief": true,
       |        "premiumOfLeaseGrant": 2543.43,
@@ -137,8 +133,7 @@ class AmendForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec {
             |      "countryCode": "GBR",
             |      "income": {
             |        "rentIncome": {
-            |          "rentAmount": 34456.30,
-            |          "taxDeducted": 6334.34
+            |          "rentAmount": 34456.30
             |        },
             |        "foreignTaxCreditRelief": true
             |      }
@@ -221,8 +216,7 @@ class AmendForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec {
             |{
             |  "foreignFhlEea": {
             |    "income": {
-            |      "rentAmount": 567.833,
-            |      "taxDeducted": 4321.92
+            |      "rentAmount": 567.833
             |      },
             |    "expenditure": {
             |      "premisesRunningCosts": 4567.98,
@@ -264,63 +258,13 @@ class AmendForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec {
           ValueFormatError.copy(paths = Some(Seq("/foreignFhlEea/income/rentAmount")))
         )
       }
-      "foreignFhlEea/income/taxDeducted is invalid" in {
-        validator.validate(AmendForeignPropertyPeriodSummaryRawData(validNino, validBusinessId, validSubmissionId, Json.parse(
-          """
-            |{
-            |  "foreignFhlEea": {
-            |    "income": {
-            |      "rentAmount": 567.83,
-            |      "taxDeducted": 4321.923
-            |      },
-            |    "expenditure": {
-            |      "premisesRunningCosts": 4567.98,
-            |      "repairsAndMaintenance": 98765.67,
-            |      "financialCosts": 4566.95,
-            |      "professionalFees": 23.65,
-            |      "costsOfServices": 4567.77,
-            |      "travelCosts": 456.77,
-            |      "other": 567.67
-            |    }
-            |
-            |  },
-            |  "foreignProperty": [{
-            |      "countryCode": "GBR",
-            |      "income": {
-            |        "rentIncome": {
-            |          "rentAmount": 34456.30,
-            |          "taxDeducted": 6334.34
-            |        },
-            |        "foreignTaxCreditRelief": true,
-            |        "premiumOfLeaseGrant": 2543.43,
-            |        "otherPropertyIncome": 54325.30,
-            |        "foreignTaxTakenOff": 6543.01,
-            |        "specialWithholdingTaxOrUKTaxPaid": 643245.00
-            |      },
-            |      "expenditure": {
-            |        "premisesRunningCosts": 5635.43,
-            |        "repairsAndMaintenance": 3456.65,
-            |        "financialCosts": 34532.21,
-            |        "professionalFees": 32465.32,
-            |        "costsOfServices": 2567.21,
-            |        "travelCosts": 2345.76,
-            |        "other": 2425.11
-            |      }
-            |    }
-            |  ]
-            |}
-            |""".stripMargin))) shouldBe List(
-          ValueFormatError.copy(paths = Some(Seq("/foreignFhlEea/income/taxDeducted")))
-        )
-      }
       "foreignFhlEea/expenditure/premisesRunningCosts is invalid" in {
         validator.validate(AmendForeignPropertyPeriodSummaryRawData(validNino, validBusinessId, validSubmissionId, Json.parse(
           """
             |{
             |  "foreignFhlEea": {
             |    "income": {
-            |      "rentAmount": 567.83,
-            |      "taxDeducted": 4321.92
+            |      "rentAmount": 567.83
             |      },
             |    "expenditure": {
             |      "premisesRunningCosts": 4567.983,
@@ -337,8 +281,7 @@ class AmendForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec {
             |      "countryCode": "GBR",
             |      "income": {
             |        "rentIncome": {
-            |          "rentAmount": 34456.30,
-            |          "taxDeducted": 6334.34
+            |          "rentAmount": 34456.30
             |        },
             |        "foreignTaxCreditRelief": true,
             |        "premiumOfLeaseGrant": 2543.43,
@@ -368,8 +311,7 @@ class AmendForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec {
             |{
             |  "foreignFhlEea": {
             |    "income": {
-            |      "rentAmount": 567.83,
-            |      "taxDeducted": 4321.92
+            |      "rentAmount": 567.83
             |      },
             |    "expenditure": {
             |      "premisesRunningCosts": 4567.98,
@@ -386,8 +328,7 @@ class AmendForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec {
             |      "countryCode": "GBR",
             |      "income": {
             |        "rentIncome": {
-            |          "rentAmount": 34456.30,
-            |          "taxDeducted": 6334.34
+            |          "rentAmount": 34456.30
             |        },
             |        "foreignTaxCreditRelief": true,
             |        "premiumOfLeaseGrant": 2543.43,
@@ -417,8 +358,7 @@ class AmendForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec {
             |{
             |  "foreignFhlEea": {
             |    "income": {
-            |      "rentAmount": 567.83,
-            |      "taxDeducted": 4321.92
+            |      "rentAmount": 567.83
             |      },
             |    "expenditure": {
             |      "premisesRunningCosts": 4567.98,
@@ -435,8 +375,7 @@ class AmendForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec {
             |      "countryCode": "GBR",
             |      "income": {
             |        "rentIncome": {
-            |          "rentAmount": 34456.30,
-            |          "taxDeducted": 6334.34
+            |          "rentAmount": 34456.30
             |        },
             |        "foreignTaxCreditRelief": true,
             |        "premiumOfLeaseGrant": 2543.43,
@@ -466,8 +405,7 @@ class AmendForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec {
             |{
             |  "foreignFhlEea": {
             |    "income": {
-            |      "rentAmount": 567.83,
-            |      "taxDeducted": 4321.92
+            |      "rentAmount": 567.83
             |      },
             |    "expenditure": {
             |      "premisesRunningCosts": 4567.98,
@@ -484,8 +422,7 @@ class AmendForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec {
             |      "countryCode": "GBR",
             |      "income": {
             |        "rentIncome": {
-            |          "rentAmount": 34456.30,
-            |          "taxDeducted": 6334.34
+            |          "rentAmount": 34456.30
             |        },
             |        "foreignTaxCreditRelief": true,
             |        "premiumOfLeaseGrant": 2543.43,
@@ -515,8 +452,7 @@ class AmendForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec {
             |{
             |  "foreignFhlEea": {
             |    "income": {
-            |      "rentAmount": 567.83,
-            |      "taxDeducted": 4321.92
+            |      "rentAmount": 567.83
             |      },
             |    "expenditure": {
             |      "premisesRunningCosts": 4567.98,
@@ -533,8 +469,7 @@ class AmendForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec {
             |      "countryCode": "GBR",
             |      "income": {
             |        "rentIncome": {
-            |          "rentAmount": 34456.30,
-            |          "taxDeducted": 6334.34
+            |          "rentAmount": 34456.30
             |        },
             |        "foreignTaxCreditRelief": true,
             |        "premiumOfLeaseGrant": 2543.43,
@@ -564,8 +499,7 @@ class AmendForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec {
             |{
             |  "foreignFhlEea": {
             |    "income": {
-            |      "rentAmount": 567.83,
-            |      "taxDeducted": 4321.92
+            |      "rentAmount": 567.83
             |      },
             |    "expenditure": {
             |      "premisesRunningCosts": 4567.98,
@@ -582,8 +516,7 @@ class AmendForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec {
             |      "countryCode": "GBR",
             |      "income": {
             |        "rentIncome": {
-            |          "rentAmount": 34456.30,
-            |          "taxDeducted": 6334.34
+            |          "rentAmount": 34456.30
             |        },
             |        "foreignTaxCreditRelief": true,
             |        "premiumOfLeaseGrant": 2543.43,
@@ -613,8 +546,7 @@ class AmendForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec {
             |{
             |  "foreignFhlEea": {
             |    "income": {
-            |      "rentAmount": 567.83,
-            |      "taxDeducted": 4321.92
+            |      "rentAmount": 567.83
             |      },
             |    "expenditure": {
             |      "premisesRunningCosts": 4567.98,
@@ -631,8 +563,7 @@ class AmendForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec {
             |      "countryCode": "GBR",
             |      "income": {
             |        "rentIncome": {
-            |          "rentAmount": 34456.30,
-            |          "taxDeducted": 6334.34
+            |          "rentAmount": 34456.30
             |        },
             |        "foreignTaxCreditRelief": true,
             |        "premiumOfLeaseGrant": 2543.43,
@@ -662,8 +593,7 @@ class AmendForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec {
             |{
             |  "foreignFhlEea": {
             |    "income": {
-            |      "rentAmount": 567.83,
-            |      "taxDeducted": 4321.92
+            |      "rentAmount": 567.83
             |      },
             |    "expenditure": {
             |      "consolidatedExpenses": 567.673
@@ -674,8 +604,7 @@ class AmendForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec {
             |      "countryCode": "GBR",
             |      "income": {
             |        "rentIncome": {
-            |          "rentAmount": 34456.30,
-            |          "taxDeducted": 6334.34
+            |          "rentAmount": 34456.30
             |        },
             |        "foreignTaxCreditRelief": true,
             |        "premiumOfLeaseGrant": 2543.43,
@@ -705,8 +634,7 @@ class AmendForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec {
             |{
             |  "foreignFhlEea": {
             |    "income": {
-            |      "rentAmount": 567.83,
-            |      "taxDeducted": 4321.92
+            |      "rentAmount": 567.83
             |      },
             |    "expenditure": {
             |      "premisesRunningCosts": 4567.98,
@@ -723,8 +651,7 @@ class AmendForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec {
             |      "countryCode": "GBR",
             |      "income": {
             |        "rentIncome": {
-            |          "rentAmount": 34456.303,
-            |          "taxDeducted": 6334.34
+            |          "rentAmount": 34456.303
             |        },
             |        "foreignTaxCreditRelief": true,
             |        "premiumOfLeaseGrant": 2543.43,
@@ -748,63 +675,13 @@ class AmendForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec {
           ValueFormatError.copy(paths = Some(Seq("/foreignProperty/0/income/rentIncome/rentAmount")))
         )
       }
-      "foreignProperty/0/income/rentIncome/taxDeducted is invalid" in {
-        validator.validate(AmendForeignPropertyPeriodSummaryRawData(validNino, validBusinessId, validSubmissionId, Json.parse(
-          """
-            |{
-            |  "foreignFhlEea": {
-            |    "income": {
-            |      "rentAmount": 567.83,
-            |      "taxDeducted": 4321.92
-            |      },
-            |    "expenditure": {
-            |      "premisesRunningCosts": 4567.98,
-            |      "repairsAndMaintenance": 98765.67,
-            |      "financialCosts": 4566.95,
-            |      "professionalFees": 23.65,
-            |      "costsOfServices": 4567.77,
-            |      "travelCosts": 456.77,
-            |      "other": 567.67
-            |    }
-            |
-            |  },
-            |  "foreignProperty": [{
-            |      "countryCode": "GBR",
-            |      "income": {
-            |        "rentIncome": {
-            |          "rentAmount": 34456.30,
-            |          "taxDeducted": 6334.343
-            |        },
-            |        "foreignTaxCreditRelief": true,
-            |        "premiumOfLeaseGrant": 2543.43,
-            |        "otherPropertyIncome": 54325.30,
-            |        "foreignTaxTakenOff": 6543.01,
-            |        "specialWithholdingTaxOrUKTaxPaid": 643245.00
-            |      },
-            |      "expenditure": {
-            |        "premisesRunningCosts": 5635.43,
-            |        "repairsAndMaintenance": 3456.65,
-            |        "financialCosts": 34532.21,
-            |        "professionalFees": 32465.32,
-            |        "costsOfServices": 2567.21,
-            |        "travelCosts": 2345.76,
-            |        "other": 2425.11
-            |      }
-            |    }
-            |  ]
-            |}
-            |""".stripMargin))) shouldBe List(
-          ValueFormatError.copy(paths = Some(Seq("/foreignProperty/0/income/rentIncome/taxDeducted")))
-        )
-      }
       "foreignProperty/0/income/premiumOfLeaseGrant is invalid" in {
         validator.validate(AmendForeignPropertyPeriodSummaryRawData(validNino, validBusinessId, validSubmissionId, Json.parse(
           """
             |{
             |  "foreignFhlEea": {
             |    "income": {
-            |      "rentAmount": 567.83,
-            |      "taxDeducted": 4321.92
+            |      "rentAmount": 567.83
             |      },
             |    "expenditure": {
             |      "premisesRunningCosts": 4567.98,
@@ -821,8 +698,7 @@ class AmendForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec {
             |      "countryCode": "GBR",
             |      "income": {
             |        "rentIncome": {
-            |          "rentAmount": 34456.30,
-            |          "taxDeducted": 6334.34
+            |          "rentAmount": 34456.30
             |        },
             |        "foreignTaxCreditRelief": true,
             |        "premiumOfLeaseGrant": 2543.433,
@@ -852,8 +728,7 @@ class AmendForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec {
             |{
             |  "foreignFhlEea": {
             |    "income": {
-            |      "rentAmount": 567.83,
-            |      "taxDeducted": 4321.92
+            |      "rentAmount": 567.83
             |      },
             |    "expenditure": {
             |      "premisesRunningCosts": 4567.98,
@@ -870,8 +745,7 @@ class AmendForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec {
             |      "countryCode": "GBR",
             |      "income": {
             |        "rentIncome": {
-            |          "rentAmount": 34456.30,
-            |          "taxDeducted": 6334.34
+            |          "rentAmount": 34456.30
             |        },
             |        "foreignTaxCreditRelief": true,
             |        "premiumOfLeaseGrant": 2543.43,
@@ -901,8 +775,7 @@ class AmendForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec {
             |{
             |  "foreignFhlEea": {
             |    "income": {
-            |      "rentAmount": 567.83,
-            |      "taxDeducted": 4321.92
+            |      "rentAmount": 567.83
             |      },
             |    "expenditure": {
             |      "premisesRunningCosts": 4567.98,
@@ -919,8 +792,7 @@ class AmendForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec {
             |      "countryCode": "GBR",
             |      "income": {
             |        "rentIncome": {
-            |          "rentAmount": 34456.30,
-            |          "taxDeducted": 6334.34
+            |          "rentAmount": 34456.30
             |        },
             |        "foreignTaxCreditRelief": true,
             |        "premiumOfLeaseGrant": 2543.43,
@@ -950,8 +822,7 @@ class AmendForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec {
             |{
             |  "foreignFhlEea": {
             |    "income": {
-            |      "rentAmount": 567.83,
-            |      "taxDeducted": 4321.92
+            |      "rentAmount": 567.83
             |      },
             |    "expenditure": {
             |      "premisesRunningCosts": 4567.98,
@@ -968,8 +839,7 @@ class AmendForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec {
             |      "countryCode": "GBR",
             |      "income": {
             |        "rentIncome": {
-            |          "rentAmount": 34456.30,
-            |          "taxDeducted": 6334.34
+            |          "rentAmount": 34456.30
             |        },
             |        "foreignTaxCreditRelief": true,
             |        "premiumOfLeaseGrant": 2543.43,
@@ -999,8 +869,7 @@ class AmendForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec {
             |{
             |  "foreignFhlEea": {
             |    "income": {
-            |      "rentAmount": 567.83,
-            |      "taxDeducted": 4321.92
+            |      "rentAmount": 567.83
             |      },
             |    "expenditure": {
             |      "premisesRunningCosts": 4567.98,
@@ -1017,8 +886,7 @@ class AmendForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec {
             |      "countryCode": "GBR",
             |      "income": {
             |        "rentIncome": {
-            |          "rentAmount": 34456.30,
-            |          "taxDeducted": 6334.34
+            |          "rentAmount": 34456.30
             |        },
             |        "foreignTaxCreditRelief": true,
             |        "premiumOfLeaseGrant": 2543.43,
@@ -1048,8 +916,7 @@ class AmendForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec {
             |{
             |  "foreignFhlEea": {
             |    "income": {
-            |      "rentAmount": 567.83,
-            |      "taxDeducted": 4321.92
+            |      "rentAmount": 567.83
             |      },
             |    "expenditure": {
             |      "premisesRunningCosts": 4567.98,
@@ -1066,8 +933,7 @@ class AmendForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec {
             |      "countryCode": "GBR",
             |      "income": {
             |        "rentIncome": {
-            |          "rentAmount": 34456.30,
-            |          "taxDeducted": 6334.34
+            |          "rentAmount": 34456.30
             |        },
             |        "foreignTaxCreditRelief": true,
             |        "premiumOfLeaseGrant": 2543.43,
@@ -1097,8 +963,7 @@ class AmendForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec {
             |{
             |  "foreignFhlEea": {
             |    "income": {
-            |      "rentAmount": 567.83,
-            |      "taxDeducted": 4321.92
+            |      "rentAmount": 567.83
             |      },
             |    "expenditure": {
             |      "premisesRunningCosts": 4567.98,
@@ -1115,8 +980,7 @@ class AmendForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec {
             |      "countryCode": "GBR",
             |      "income": {
             |        "rentIncome": {
-            |          "rentAmount": 34456.30,
-            |          "taxDeducted": 6334.34
+            |          "rentAmount": 34456.30
             |        },
             |        "foreignTaxCreditRelief": true,
             |        "premiumOfLeaseGrant": 2543.43,
@@ -1146,8 +1010,7 @@ class AmendForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec {
             |{
             |  "foreignFhlEea": {
             |    "income": {
-            |      "rentAmount": 567.83,
-            |      "taxDeducted": 4321.92
+            |      "rentAmount": 567.83
             |      },
             |    "expenditure": {
             |      "premisesRunningCosts": 4567.98,
@@ -1164,8 +1027,7 @@ class AmendForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec {
             |      "countryCode": "GBR",
             |      "income": {
             |        "rentIncome": {
-            |          "rentAmount": 34456.30,
-            |          "taxDeducted": 6334.34
+            |          "rentAmount": 34456.30
             |        },
             |        "foreignTaxCreditRelief": true,
             |        "premiumOfLeaseGrant": 2543.43,
@@ -1195,8 +1057,7 @@ class AmendForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec {
             |{
             |  "foreignFhlEea": {
             |    "income": {
-            |      "rentAmount": 567.83,
-            |      "taxDeducted": 4321.92
+            |      "rentAmount": 567.83
             |      },
             |    "expenditure": {
             |      "premisesRunningCosts": 4567.98,
@@ -1213,8 +1074,7 @@ class AmendForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec {
             |      "countryCode": "GBR",
             |      "income": {
             |        "rentIncome": {
-            |          "rentAmount": 34456.30,
-            |          "taxDeducted": 6334.34
+            |          "rentAmount": 34456.30
             |        },
             |        "foreignTaxCreditRelief": true,
             |        "premiumOfLeaseGrant": 2543.43,
@@ -1244,8 +1104,7 @@ class AmendForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec {
             |{
             |  "foreignFhlEea": {
             |    "income": {
-            |      "rentAmount": 567.83,
-            |      "taxDeducted": 4321.92
+            |      "rentAmount": 567.83
             |      },
             |    "expenditure": {
             |      "premisesRunningCosts": 4567.98,
@@ -1262,8 +1121,7 @@ class AmendForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec {
             |      "countryCode": "GBR",
             |      "income": {
             |        "rentIncome": {
-            |          "rentAmount": 34456.30,
-            |          "taxDeducted": 6334.34
+            |          "rentAmount": 34456.30
             |        },
             |        "foreignTaxCreditRelief": true,
             |        "premiumOfLeaseGrant": 2543.43,
@@ -1293,8 +1151,7 @@ class AmendForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec {
             |{
             |  "foreignFhlEea": {
             |    "income": {
-            |      "rentAmount": 567.83,
-            |      "taxDeducted": 4321.92
+            |      "rentAmount": 567.83
             |      },
             |    "expenditure": {
             |      "premisesRunningCosts": 4567.98,
@@ -1311,8 +1168,7 @@ class AmendForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec {
             |      "countryCode": "GBR",
             |      "income": {
             |        "rentIncome": {
-            |          "rentAmount": 34456.30,
-            |          "taxDeducted": 6334.34
+            |          "rentAmount": 34456.30
             |        },
             |        "foreignTaxCreditRelief": true,
             |        "premiumOfLeaseGrant": 2543.43,
@@ -1342,8 +1198,7 @@ class AmendForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec {
             |{
             |  "foreignFhlEea": {
             |    "income": {
-            |      "rentAmount": 567.83,
-            |      "taxDeducted": 4321.92
+            |      "rentAmount": 567.83
             |      },
             |    "expenditure": {
             |      "consolidatedExpenses": 456.98
@@ -1354,8 +1209,7 @@ class AmendForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec {
             |      "countryCode": "GBR",
             |      "income": {
             |        "rentIncome": {
-            |          "rentAmount": 34456.30,
-            |          "taxDeducted": 6334.34
+            |          "rentAmount": 34456.30
             |        },
             |        "foreignTaxCreditRelief": true,
             |        "premiumOfLeaseGrant": 2543.43,
@@ -1381,8 +1235,7 @@ class AmendForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec {
             |{
             |  "foreignFhlEea": {
             |    "income": {
-            |      "rentAmount": 567.83,
-            |      "taxDeducted": 4321.92
+            |      "rentAmount": 567.83
             |      },
             |    "expenditure": {
             |      "consolidatedExpenses": 456.98
@@ -1393,8 +1246,7 @@ class AmendForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec {
             |      "countryCode": "GBR",
             |      "income": {
             |        "rentIncome": {
-            |          "rentAmount": 34456.30,
-            |          "taxDeducted": 6334.34
+            |          "rentAmount": 34456.30
             |        },
             |        "foreignTaxCreditRelief": true,
             |        "premiumOfLeaseGrant": 2543.43,
@@ -1420,8 +1272,7 @@ class AmendForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec {
             |{
             |  "foreignFhlEea": {
             |    "income": {
-            |      "rentAmount": 567.83,
-            |      "taxDeducted": 4321.92
+            |      "rentAmount": 567.83
             |      },
             |    "expenditure": {
             |      "consolidatedExpenses": 456.98
@@ -1432,8 +1283,7 @@ class AmendForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec {
             |      "countryCode": "GBR",
             |      "income": {
             |        "rentIncome": {
-            |          "rentAmount": 34456.30,
-            |          "taxDeducted": 6334.34
+            |          "rentAmount": 34456.30
             |        },
             |        "foreignTaxCreditRelief": true,
             |        "premiumOfLeaseGrant": 2543.43,
@@ -1459,8 +1309,7 @@ class AmendForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec {
             |{
             |  "foreignFhlEea": {
             |    "income": {
-            |      "rentAmount": 567.83,
-            |      "taxDeducted": 4321.92
+            |      "rentAmount": 567.83
             |      },
             |    "expenditure": {
             |      "premisesRunningCosts": 4567.98,
@@ -1478,8 +1327,7 @@ class AmendForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec {
             |      "countryCode": "GBR",
             |      "income": {
             |        "rentIncome": {
-            |          "rentAmount": 34456.30,
-            |          "taxDeducted": 6334.34
+            |          "rentAmount": 34456.30
             |        },
             |        "foreignTaxCreditRelief": true,
             |        "premiumOfLeaseGrant": 2543.463,
@@ -1501,8 +1349,7 @@ class AmendForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec {
             |      "countryCode": "GBR",
             |      "income": {
             |        "rentIncome": {
-            |          "rentAmount": 34456.3320,
-            |          "taxDeducted": 6334.34
+            |          "rentAmount": 34456.3320
             |        },
             |        "foreignTaxCreditRelief": true,
             |        "premiumOfLeaseGrant": 2543.43,
@@ -1540,8 +1387,7 @@ class AmendForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec {
             |{
             |  "foreignFhlEea": {
             |    "income": {
-            |      "rentAmount": 567.83,
-            |      "taxDeducted": 4321.92
+            |      "rentAmount": 567.83
             |      },
             |    "expenditure": {
             |      "premisesRunningCosts": 4567.98,
@@ -1558,8 +1404,7 @@ class AmendForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec {
             |      "countryCode": "ABC",
             |      "income": {
             |        "rentIncome": {
-            |          "rentAmount": 34456.30,
-            |          "taxDeducted": 6334.34
+            |          "rentAmount": 34456.30
             |        },
             |        "foreignTaxCreditRelief": true,
             |        "premiumOfLeaseGrant": 2543.43,
@@ -1588,8 +1433,7 @@ class AmendForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec {
             |{
             |  "foreignFhlEea": {
             |    "income": {
-            |      "rentAmount": 567.83,
-            |      "taxDeducted": 4321.92
+            |      "rentAmount": 567.83
             |      },
             |    "expenditure": {
             |      "premisesRunningCosts": 4567.98,
@@ -1607,8 +1451,7 @@ class AmendForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec {
             |      "countryCode": "ABC",
             |      "income": {
             |        "rentIncome": {
-            |          "rentAmount": 34456.30,
-            |          "taxDeducted": 6334.34
+            |          "rentAmount": 34456.30
             |        },
             |        "foreignTaxCreditRelief": true,
             |        "premiumOfLeaseGrant": 2543.43,
@@ -1630,8 +1473,7 @@ class AmendForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec {
             |      "countryCode": "DEF",
             |      "income": {
             |        "rentIncome": {
-            |          "rentAmount": 34456.30,
-            |          "taxDeducted": 6334.34
+            |          "rentAmount": 34456.30
             |        },
             |        "foreignTaxCreditRelief": true,
             |        "premiumOfLeaseGrant": 2543.43,
@@ -1663,8 +1505,7 @@ class AmendForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec {
             |{
             |  "foreignFhlEea": {
             |    "income": {
-            |      "rentAmount": 567.83,
-            |      "taxDeducted": 4321.92
+            |      "rentAmount": 567.83
             |      },
             |    "expenditure": {
             |      "premisesRunningCosts": 4567.98,
@@ -1681,8 +1522,7 @@ class AmendForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec {
             |      "countryCode": "12345678",
             |      "income": {
             |        "rentIncome": {
-            |          "rentAmount": 34456.30,
-            |          "taxDeducted": 6334.34
+            |          "rentAmount": 34456.30
             |        },
             |        "foreignTaxCreditRelief": true,
             |        "premiumOfLeaseGrant": 2543.43,
@@ -1711,8 +1551,7 @@ class AmendForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec {
             |{
             |  "foreignFhlEea": {
             |    "income": {
-            |      "rentAmount": 567.83,
-            |      "taxDeducted": 4321.92
+            |      "rentAmount": 567.83
             |      },
             |    "expenditure": {
             |      "premisesRunningCosts": 4567.98,
@@ -1730,8 +1569,7 @@ class AmendForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec {
             |      "countryCode": "12345678",
             |      "income": {
             |        "rentIncome": {
-            |          "rentAmount": 34456.30,
-            |          "taxDeducted": 6334.34
+            |          "rentAmount": 34456.30
             |        },
             |        "foreignTaxCreditRelief": true,
             |        "premiumOfLeaseGrant": 2543.43,
@@ -1753,8 +1591,7 @@ class AmendForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec {
             |      "countryCode": "34567890",
             |      "income": {
             |        "rentIncome": {
-            |          "rentAmount": 34456.30,
-            |          "taxDeducted": 6334.34
+            |          "rentAmount": 34456.30
             |        },
             |        "foreignTaxCreditRelief": true,
             |        "premiumOfLeaseGrant": 2543.43,
@@ -1786,8 +1623,7 @@ class AmendForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec {
             |{
             |  "foreignFhlEea": {
             |    "income": {
-            |      "rentAmount": 567.83,
-            |      "taxDeducted": 4321.92
+            |      "rentAmount": 567.83
             |      },
             |    "expenditure": {
             |      "other": 2425.11,
@@ -1799,8 +1635,7 @@ class AmendForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec {
             |      "countryCode": "GBR",
             |      "income": {
             |        "rentIncome": {
-            |          "rentAmount": 34456.30,
-            |          "taxDeducted": 6334.34
+            |          "rentAmount": 34456.30
             |        },
             |        "foreignTaxCreditRelief": true,
             |        "premiumOfLeaseGrant": 2543.43,
@@ -1825,8 +1660,7 @@ class AmendForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec {
             |{
             |  "foreignFhlEea": {
             |    "income": {
-            |      "rentAmount": 567.83,
-            |      "taxDeducted": 4321.92
+            |      "rentAmount": 567.83
             |      },
             |    "expenditure": {
             |      "consolidatedExpenses": 456.98
@@ -1837,8 +1671,7 @@ class AmendForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec {
             |      "countryCode": "GBR",
             |      "income": {
             |        "rentIncome": {
-            |          "rentAmount": 34456.30,
-            |          "taxDeducted": 6334.34
+            |          "rentAmount": 34456.30
             |        },
             |        "foreignTaxCreditRelief": true,
             |        "premiumOfLeaseGrant": 2543.43,
@@ -1864,8 +1697,7 @@ class AmendForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec {
             |{
             |  "foreignFhlEea": {
             |    "income": {
-            |      "rentAmount": 567.83,
-            |      "taxDeducted": 4321.92
+            |      "rentAmount": 567.83
             |      },
             |    "expenditure": {
             |      "other": 2425.11,
@@ -1878,8 +1710,7 @@ class AmendForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec {
             |      "countryCode": "GBR",
             |      "income": {
             |        "rentIncome": {
-            |          "rentAmount": 34456.30,
-            |          "taxDeducted": 6334.34
+            |          "rentAmount": 34456.30
             |        },
             |        "foreignTaxCreditRelief": true,
             |        "premiumOfLeaseGrant": 2543.43,
@@ -1898,8 +1729,7 @@ class AmendForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec {
             |      "countryCode": "GBR",
             |      "income": {
             |        "rentIncome": {
-            |          "rentAmount": 34456.30,
-            |          "taxDeducted": 6334.34
+            |          "rentAmount": 34456.30
             |        },
             |        "foreignTaxCreditRelief": true,
             |        "premiumOfLeaseGrant": 2543.43,

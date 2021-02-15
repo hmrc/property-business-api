@@ -25,8 +25,7 @@ class IncomeSpec extends UnitSpec {
     s"""
        |{
        |  "rentIncome": {
-       |    "rentAmount": 34456.30,
-       |    "taxDeducted": 6334.34
+       |    "rentAmount": 34456.30
        |  },
        |  "foreignTaxCreditRelief": true,
        |  "premiumOfLeaseGrant": 2543.43,
@@ -37,7 +36,7 @@ class IncomeSpec extends UnitSpec {
        |""".stripMargin)
 
   val model: ForeignPropertyIncome = ForeignPropertyIncome(
-    rentIncome = ForeignPropertyRentIncome(rentAmount = 34456.30, taxDeducted = 6334.34),
+    rentIncome = ForeignPropertyRentIncome(rentAmount = 34456.30),
     foreignTaxCreditRelief = true,
     premiumOfLeaseGrant = Some(2543.43),
     otherPropertyIncome = Some(54325.30),
@@ -49,8 +48,7 @@ class IncomeSpec extends UnitSpec {
     s"""
        |{
        |  "rentIncome": {
-       |    "rentAmount": 34456.30,
-       |    "taxDeducted": 6334.34
+       |    "rentAmount": 34456.30
        |  },
        |  "foreignTaxCreditRelief": true,
        |  "premiumsOfLeaseGrant": 2543.43,

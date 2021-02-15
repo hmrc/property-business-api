@@ -50,7 +50,7 @@ object RuleMisalignedPeriodError extends MtdError("RULE_MISALIGNED_PERIOD", "Per
 object RuleNotContiguousPeriodError extends MtdError("RULE_NOT_CONTIGUOUS_PERIOD", "Period summaries are not contiguous")
 object RuleTaxYearNotSupportedError extends MtdError("RULE_TAX_YEAR_NOT_SUPPORTED", "The tax year specified is before the minimum tax year value")
 object RuleTaxYearRangeInvalidError extends MtdError("RULE_TAX_YEAR_RANGE_INVALID", "The tax year range is invalid")
-object RuleDuplicateSubmission extends MtdError("RULE_DUPLICATE_SUBMISSION", "A summary has already been submitted for the  period specified.")
+object RuleDuplicateSubmission extends MtdError("RULE_DUPLICATE_SUBMISSION", "A summary has already been submitted for the  period specified")
 
 object MissingFromDateError extends MtdError("MISSING_FROM_DATE", "The From date parameter is missing")
 object MissingToDateError extends MtdError("MISSING_TO_DATE", "The To date parameter is missing")

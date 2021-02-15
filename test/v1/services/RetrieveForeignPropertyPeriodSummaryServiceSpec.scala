@@ -113,12 +113,12 @@ class RetrieveForeignPropertyPeriodSummaryServiceSpec extends UnitSpec {
 
       val input = Seq(
         "INVALID_TAXABLE_ENTITY_ID" -> NinoFormatError,
-        "FORMAT_BUSINESS_ID" -> BusinessIdFormatError,
-        "FORMAT_SUBMISSION_ID" -> SubmissionIdFormatError,
-        "NOT_FOUND" -> NotFoundError,
-        "SUBMISSION_ID_NOT_FOUND" -> SubmissionIdNotFoundError,
+        "INVALID_INCOMESOURCE_ID" -> BusinessIdFormatError,
+        "INVALID_SUBMISSION_ID" -> SubmissionIdFormatError,
+        "INCOME_SOURCE_NOT_FOUND" -> NotFoundError,
         "SERVER_ERROR" -> DownstreamError,
-        "SERVICE_UNAVAILABLE" -> DownstreamError
+        "SERVICE_UNAVAILABLE" -> DownstreamError,
+        "INVALID_CORRELATIONID" -> DownstreamError
       )
 
       input.foreach(args => (serviceError _).tupled(args))

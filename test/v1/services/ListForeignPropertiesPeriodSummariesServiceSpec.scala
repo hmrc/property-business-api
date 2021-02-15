@@ -79,8 +79,12 @@ class ListForeignPropertiesPeriodSummariesServiceSpec extends UnitSpec {
 
       val input = Seq(
         "INVALID_TAXABLE_ENTITY_ID" -> NinoFormatError,
-        "FORMAT_BUSINESS_ID" -> BusinessIdFormatError,
-        "NOT_FOUND" -> NotFoundError,
+        "INVALID_INCOMESOURCEID" -> BusinessIdFormatError,
+        "INCOME_SOURCE_NOT_FOUND" -> NotFoundError,
+        "INVALID_FROM_DATE" -> DownstreamError,
+        "INVALID_TO_DATE" -> DownstreamError,
+        "INVALID_DATE_REQUEST" -> DownstreamError,
+        "INVALID_CORRELATIONID" -> DownstreamError,
         "SERVER_ERROR" -> DownstreamError,
         "SERVICE_UNAVAILABLE" -> DownstreamError
       )

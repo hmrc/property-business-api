@@ -20,8 +20,8 @@
     </tbody>
     <tbody>
         <tr>
-            <td><p>SUBMISSION_ID_NOT_FOUND</p></td>
-            <td><p>Simulates the scenario where the given submission id could not be found.</p></td>
+            <td><p>INCOME_SOURCE_NOT_FOUND</p></td>
+            <td><p>Simulates the scenario where the given income source id could not be found.</p></td>
         </tr>
     </tbody>
 </table>

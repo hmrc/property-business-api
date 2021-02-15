@@ -1,8 +1,7 @@
 {
   "foreignFhlEea": {
     "income": {
-      "rentAmount": 643.59,
-      "taxDeducted": 3762.99
+      "rentAmount": 643.59
     },
     "expenditure": {
       "consolidatedExpenses": 456.98
@@ -13,8 +12,7 @@
       "countryCode": "FRA",
       "income": {
         "rentIncome": {
-          "rentAmount": 28972.56,
-          "taxDeducted": 5326.23
+          "rentAmount": 28972.56
         },
         "foreignTaxCreditRelief": true,
         "premiumOfLeaseGrant": 2823.44,

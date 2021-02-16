@@ -116,10 +116,12 @@ class AmendForeignPropertyPeriodSummaryServiceSpec extends UnitSpec {
 
       val input = Seq(
         "INVALID_TAXABLE_ENTITY_ID" -> NinoFormatError,
-        "INVALID_BUSINESS_ID" -> BusinessIdFormatError,
+        "INVALID_INCOMESOURCEID" -> BusinessIdFormatError,
+        "INVALID_CORRELATIONID" -> DownstreamError,
+        "INVALID_PAYLOAD" -> DownstreamError,
         "INVALID_SUBMISSION_ID" -> SubmissionIdFormatError,
-        "SUBMISSION_ID_NOT_FOUND" -> SubmissionIdNotFoundError,
-        "NOT_FOUND" -> NotFoundError,
+        "INCOME_SOURCE_NOT_FOUND" -> IncomeSourceNotFoundError,
+        "NO_DATA_FOUND" -> NotFoundError,
         "SERVER_ERROR" -> DownstreamError,
         "SERVICE_UNAVAILABLE" -> DownstreamError
       )

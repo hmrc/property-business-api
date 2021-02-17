@@ -23,7 +23,7 @@ import uk.gov.hmrc.http.HeaderCarrier
 import utils.Logging
 import v1.connectors.RetrieveForeignPropertyPeriodSummaryConnector
 import v1.controllers.EndpointLogContext
-import v1.models.errors.{BusinessIdFormatError, DownstreamError, NinoFormatError, NotFoundError, SubmissionIdFormatError, SubmissionIdNotFoundError}
+import v1.models.errors._
 import v1.models.request.retrieveForeignPropertyPeriodSummary.RetrieveForeignPropertyPeriodSummaryRequest
 import v1.support.DesResponseMappingSupport
 

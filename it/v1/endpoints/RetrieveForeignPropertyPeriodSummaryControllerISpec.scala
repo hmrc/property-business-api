@@ -40,8 +40,7 @@ class RetrieveForeignPropertyPeriodSummaryControllerISpec extends IntegrationBas
          |  "toDate": "2019-07-06",
          |  "foreignFhlEea": {
          |    "income": {
-         |      "rentAmount": 200.22,
-         |      "taxDeducted": 22.22
+         |      "rentAmount": 200.22
          |    },
          |    "expenditure": {
          |      "premisesRunningCosts": 100.25,
@@ -58,8 +57,7 @@ class RetrieveForeignPropertyPeriodSummaryControllerISpec extends IntegrationBas
          |      "countryCode": "FRA",
          |      "income": {
          |        "rentIncome": {
-         |          "rentAmount": 200.22,
-         |          "taxDeducted": 22.22
+         |          "rentAmount": 200.22
          |        },
          |        "foreignTaxCreditRelief": true,
          |        "premiumOfLeaseGrant": 100.25,
@@ -106,8 +104,7 @@ class RetrieveForeignPropertyPeriodSummaryControllerISpec extends IntegrationBas
          |  "toDate": "2019-07-06",
          |  "foreignFhlEea": {
          |        "income": {
-         |          "rentAmount": 200.22,
-         |          "taxDeducted": 22.22
+         |          "rentAmount": 200.22
          |        },
          |        "expenses": {
          |          "premisesRunningCosts": 100.25,
@@ -124,8 +121,7 @@ class RetrieveForeignPropertyPeriodSummaryControllerISpec extends IntegrationBas
          |        "countryCode": "FRA",
          |        "income": {
          |            "rentIncome": {
-         |                "rentAmount": 200.22,
-         |                "taxDeducted": 22.22
+         |                "rentAmount": 200.22
          |            },
          |          "foreignTaxCreditRelief": true,
          |          "premiumsOfLeaseGrant": 100.25,

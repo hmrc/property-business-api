@@ -22,15 +22,11 @@ import v1.models.utils.JsonErrorValidators
 
 class ForeignFhlEeaIncomeSpec extends UnitSpec with JsonErrorValidators {
 
-  val foreignFhlEeaIncome = ForeignFhlEeaIncome(
-    5000.99,
-    Some(5000.99)
-  )
+  val foreignFhlEeaIncome = ForeignFhlEeaIncome(5000.99)
 
   val json = Json.parse(
     """{
-      |  "rentAmount": 5000.99,
-      |  "taxDeducted": 5000.99
+      |  "rentAmount": 5000.99
       |}""".stripMargin)
 
   "reads" when {

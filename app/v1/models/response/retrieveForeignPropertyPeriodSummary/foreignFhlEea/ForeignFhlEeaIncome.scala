@@ -18,7 +18,7 @@ package v1.models.response.retrieveForeignPropertyPeriodSummary.foreignFhlEea
 
 import play.api.libs.json.{Json, OFormat}
 
-case class ForeignFhlEeaIncome(rentAmount: BigDecimal, taxDeducted: Option[BigDecimal])
+case class ForeignFhlEeaIncome(rentAmount: BigDecimal)
 
 object ForeignFhlEeaIncome {
   implicit val format: OFormat[ForeignFhlEeaIncome] = Json.format[ForeignFhlEeaIncome]

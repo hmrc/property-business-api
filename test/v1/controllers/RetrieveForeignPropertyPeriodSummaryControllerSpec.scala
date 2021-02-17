@@ -78,7 +78,7 @@ class RetrieveForeignPropertyPeriodSummaryControllerSpec
     "2020-01-01",
     "2020-01-31",
     Some(ForeignFhlEea(
-      ForeignFhlEeaIncome(5000.99, Some(5000.99)),
+      ForeignFhlEeaIncome(5000.99),
       Some(ForeignFhlEeaExpenditure(
         Some(5000.99),
         Some(5000.99),
@@ -92,7 +92,7 @@ class RetrieveForeignPropertyPeriodSummaryControllerSpec
     )),
     Some(Seq(ForeignProperty("FRA",
       ForeignPropertyIncome(
-        ForeignPropertyRentIncome(5000.99, Some(5000.99)),
+        ForeignPropertyRentIncome(5000.99),
         false,
         Some(5000.99),
         Some(5000.99),
@@ -185,7 +185,6 @@ class RetrieveForeignPropertyPeriodSummaryControllerSpec
           (BusinessIdFormatError, BAD_REQUEST),
           (SubmissionIdFormatError, BAD_REQUEST),
           (NotFoundError, NOT_FOUND),
-          (SubmissionIdNotFoundError, NOT_FOUND),
           (DownstreamError, INTERNAL_SERVER_ERROR)
         )
 

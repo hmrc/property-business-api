@@ -97,7 +97,8 @@ class CreateForeignPropertyPeriodSummaryController @Inject()(val authService: En
            RuleOverlappingPeriodError |
            RuleMisalignedPeriodError |
            RuleNotContiguousPeriodError |
-           RuleIncorrectOrEmptyBodyError =>
+           RuleIncorrectOrEmptyBodyError |
+           RuleDuplicateSubmission =>
         BadRequest(Json.toJson(errorWrapper))
       case NotFoundError => NotFound(Json.toJson(errorWrapper))
       case DownstreamError => InternalServerError(Json.toJson(errorWrapper))

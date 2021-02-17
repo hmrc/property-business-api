@@ -28,7 +28,7 @@ class CreateForeignPropertyPeriodSummaryRequestBodySpec extends UnitSpec with Js
     "2020-01-01",
     "2020-01-31",
     Some(ForeignFhlEea(
-      ForeignFhlEeaIncome(5000.99, Some(5000.99)),
+      ForeignFhlEeaIncome(5000.99),
       Some(ForeignFhlEeaExpenditure(
         Some(5000.99),
         Some(5000.99),
@@ -42,7 +42,7 @@ class CreateForeignPropertyPeriodSummaryRequestBodySpec extends UnitSpec with Js
     )),
     Some(Seq(ForeignPropertyEntry("FRA",
       ForeignPropertyIncome(
-        ForeignPropertyRentIncome(5000.99, 5000.99),
+        ForeignPropertyRentIncome(5000.99),
         false,
         Some(5000.99),
         Some(5000.99),
@@ -69,8 +69,7 @@ class CreateForeignPropertyPeriodSummaryRequestBodySpec extends UnitSpec with Js
       |  "toDate": "2020-01-31",
       |  "foreignFhlEea": {
       |    "income": {
-      |      "rentAmount": 5000.99,
-      |      "taxDeducted": 5000.99
+      |      "rentAmount": 5000.99
       |    },
       |    "expenditure": {
       |      "premisesRunningCosts": 5000.99,
@@ -88,8 +87,7 @@ class CreateForeignPropertyPeriodSummaryRequestBodySpec extends UnitSpec with Js
       |      "countryCode": "FRA",
       |      "income": {
       |        "rentIncome": {
-      |          "rentAmount": 5000.99,
-      |          "taxDeducted": 5000.99
+      |          "rentAmount": 5000.99
       |        },
       |        "foreignTaxCreditRelief": false,
       |        "premiumOfLeaseGrant": 5000.99,
@@ -119,8 +117,7 @@ class CreateForeignPropertyPeriodSummaryRequestBodySpec extends UnitSpec with Js
       |  "toDate": "2020-01-31",
       |  "foreignFhlEea": {
       |    "income": {
-      |      "rentAmount": 5000.99,
-      |      "taxDeducted": 5000.99
+      |      "rentAmount": 5000.99
       |    },
       |    "expenses": {
       |      "premisesRunningCosts": 5000.99,
@@ -138,8 +135,7 @@ class CreateForeignPropertyPeriodSummaryRequestBodySpec extends UnitSpec with Js
       |      "countryCode": "FRA",
       |      "income": {
       |        "rentIncome": {
-      |          "rentAmount": 5000.99,
-      |          "taxDeducted": 5000.99
+      |          "rentAmount": 5000.99
       |        },
       |        "foreignTaxCreditRelief": false,
       |        "premiumsOfLeaseGrant": 5000.99,

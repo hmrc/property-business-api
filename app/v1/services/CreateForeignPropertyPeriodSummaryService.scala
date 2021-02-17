@@ -30,7 +30,8 @@ import v1.support.DesResponseMappingSupport
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class CreateForeignPropertyPeriodSummaryService @Inject()(connector: CreateForeignPropertyPeriodSummaryConnector) extends DesResponseMappingSupport with Logging {
+class CreateForeignPropertyPeriodSummaryService @Inject()(connector: CreateForeignPropertyPeriodSummaryConnector)
+  extends DesResponseMappingSupport with Logging {
 
   def createForeignProperty(request: CreateForeignPropertyPeriodSummaryRequest)(
     implicit hc: HeaderCarrier,
@@ -48,13 +49,17 @@ class CreateForeignPropertyPeriodSummaryService @Inject()(connector: CreateForei
   private def desErrorMap =
     Map(
       "INVALID_TAXABLE_ENTITY_ID" -> NinoFormatError,
-      "FORMAT_BUSINESS_ID" -> BusinessIdFormatError,
-      "RULE_OVERLAPPING_PERIOD" -> RuleOverlappingPeriodError,
-      "RULE_MISALIGNED_PERIOD" -> RuleMisalignedPeriodError,
-      "RULE_NOT_CONTIGUOUS_PERIOD" -> RuleNotContiguousPeriodError,
-      "NOT_FOUND" -> NotFoundError,
+      "INVALID_INCOMESOURCEID" -> BusinessIdFormatError,
+      "OVERLAPS_IN_PERIOD" -> RuleOverlappingPeriodError,
+      "NOT_ALIGN_PERIOD" -> RuleMisalignedPeriodError,
+      "GAPS_IN_PERIOD" -> RuleNotContiguousPeriodError,
+      "INCOME_SOURCE_NOT_FOUND" -> NotFoundError,
       "SERVER_ERROR" -> DownstreamError,
-      "SERVICE_UNAVAILABLE" -> DownstreamError
+      "SERVICE_UNAVAILABLE" -> DownstreamError,
+      "INVALID_PAYLOAD" -> DownstreamError,
+      "INVALID_CORRELATIONID" -> DownstreamError,
+      "DUPLICATE_SUBMISSION" -> RuleDuplicateSubmission,
+      "INVALID_DATE_RANGE" -> RuleToDateBeforeFromDateError
     )
 
 }

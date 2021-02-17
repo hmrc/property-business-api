@@ -32,7 +32,7 @@ class AmendForeignPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
   val businessId = "XAIS12345678910"
   val submissionId = "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
   private val foreignFhlEea: ForeignFhlEea = ForeignFhlEea(
-    income = ForeignFhlEeaIncome(rentAmount = 567.83, taxDeducted = Some(4321.92)),
+    income = ForeignFhlEeaIncome(rentAmount = 567.83),
     expenditure = Some(ForeignFhlEeaExpenditure(
       premisesRunningCosts = Some(4567.98),
       repairsAndMaintenance = Some(98765.67),
@@ -48,7 +48,7 @@ class AmendForeignPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
   private val foreignProperty: ForeignPropertyEntry = ForeignPropertyEntry(
     countryCode = "zzz",
     income = ForeignPropertyIncome(
-      rentIncome = ForeignPropertyRentIncome(rentAmount = 34456.30, taxDeducted = 6334.34),
+      rentIncome = ForeignPropertyRentIncome(rentAmount = 34456.30),
       foreignTaxCreditRelief = true,
       premiumOfLeaseGrant = Some(2543.43),
       otherPropertyIncome = Some(54325.30),

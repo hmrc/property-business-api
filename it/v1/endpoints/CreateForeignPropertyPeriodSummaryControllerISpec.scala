@@ -35,8 +35,7 @@ class CreateForeignPropertyPeriodSummaryControllerISpec extends IntegrationBaseS
       |  "toDate": "2019-04-06",
       |  "foreignFhlEea": {
       |    "income": {
-      |      "rentAmount": 5000.99,
-      |      "taxDeducted": 5000.99
+      |      "rentAmount": 5000.99
       |    },
       |    "expenditure": {
       |      "premisesRunningCosts": 5000.99,
@@ -53,8 +52,7 @@ class CreateForeignPropertyPeriodSummaryControllerISpec extends IntegrationBaseS
       |      "countryCode": "FRA",
       |      "income": {
       |        "rentIncome": {
-      |          "rentAmount": 5000.99,
-      |          "taxDeducted": 5000.99
+      |          "rentAmount": 5000.99
       |        },
       |        "foreignTaxCreditRelief": false,
       |        "premiumOfLeaseGrant": 5000.99,
@@ -85,8 +83,7 @@ class CreateForeignPropertyPeriodSummaryControllerISpec extends IntegrationBaseS
       |  "toDate": "2019-04-06",
       |  "foreignFhlEea": {
       |    "income": {
-      |      "rentAmount": 5000.99,
-      |      "taxDeducted": 5000.99
+      |      "rentAmount": 5000.99
       |    },
       |    "expenditure": {
       |      "consolidatedExpenses": 5000.99
@@ -97,8 +94,7 @@ class CreateForeignPropertyPeriodSummaryControllerISpec extends IntegrationBaseS
       |      "countryCode": "FRA",
       |      "income": {
       |        "rentIncome": {
-      |          "rentAmount": 5000.99,
-      |          "taxDeducted": 5000.99
+      |          "rentAmount": 5000.99
       |        },
       |        "foreignTaxCreditRelief": false,
       |        "premiumOfLeaseGrant": 5000.99,
@@ -123,8 +119,7 @@ class CreateForeignPropertyPeriodSummaryControllerISpec extends IntegrationBaseS
       |  "toDate": "20190406",
       |  "foreignFhlEea": {
       |    "income": {
-      |      "rentAmount": 5000.99,
-      |      "taxDeducted": 5000.99
+      |      "rentAmount": 5000.99
       |    },
       |    "expenditure": {
       |      "premisesRunningCosts": 5000.99,
@@ -141,8 +136,7 @@ class CreateForeignPropertyPeriodSummaryControllerISpec extends IntegrationBaseS
       |      "countryCode": "FRA",
       |      "income": {
       |        "rentIncome": {
-      |          "rentAmount": 5000.99,
-      |          "taxDeducted": 5000.99
+      |          "rentAmount": 5000.99
       |        },
       |        "foreignTaxCreditRelief": false,
       |        "premiumOfLeaseGrant": 5000.99,
@@ -173,8 +167,7 @@ class CreateForeignPropertyPeriodSummaryControllerISpec extends IntegrationBaseS
       |  "toDate": "2019-04-06",
       |  "foreignFhlEea": {
       |    "income": {
-      |      "rentAmount": 5000.99,
-      |      "taxDeducted": 5000.99
+      |      "rentAmount": 5000.99
       |    },
       |    "expenditure": {
       |      "premisesRunningCosts": 5000.99,
@@ -191,8 +184,7 @@ class CreateForeignPropertyPeriodSummaryControllerISpec extends IntegrationBaseS
       |      "countryCode": "FRA",
       |      "income": {
       |        "rentIncome": {
-      |          "rentAmount": 5000.99,
-      |          "taxDeducted": 5000.99
+      |          "rentAmount": 5000.99
       |        },
       |        "foreignTaxCreditRelief": false,
       |        "premiumOfLeaseGrant": 5000.99,
@@ -223,8 +215,7 @@ class CreateForeignPropertyPeriodSummaryControllerISpec extends IntegrationBaseS
       |  "toDate": "2019-04-06",
       |  "foreignFhlEea": {
       |    "income": {
-      |      "rentAmount": 5000.99,
-      |      "taxDeducted": 5000.99
+      |      "rentAmount": 5000.99
       |    },
       |    "expenditure": {
       |      "premisesRunningCosts": 5000.99,
@@ -241,8 +232,7 @@ class CreateForeignPropertyPeriodSummaryControllerISpec extends IntegrationBaseS
       |      "countryCode": "ASDF",
       |      "income": {
       |        "rentIncome": {
-      |          "rentAmount": 5000.99,
-      |          "taxDeducted": 5000.99
+      |          "rentAmount": 5000.99
       |        },
       |        "foreignTaxCreditRelief": false,
       |        "premiumOfLeaseGrant": 5000.99,
@@ -273,8 +263,7 @@ class CreateForeignPropertyPeriodSummaryControllerISpec extends IntegrationBaseS
       |  "toDate": "2019-04-06",
       |  "foreignFhlEea": {
       |    "income": {
-      |      "rentAmount": 5000.99634874383248236385,
-      |      "taxDeducted": 5000.99634874383248236385
+      |      "rentAmount": 5000.99634874383248236385
       |    },
       |    "expenditure": {
       |      "premisesRunningCosts": 5000.99634874383248236385,
@@ -291,8 +280,7 @@ class CreateForeignPropertyPeriodSummaryControllerISpec extends IntegrationBaseS
       |      "countryCode": "FRA",
       |      "income": {
       |        "rentIncome": {
-      |          "rentAmount": 5000.99634874383248236385,
-      |          "taxDeducted": 5000.99634874383248236385
+      |          "rentAmount": 5000.99634874383248236385
       |        },
       |        "foreignTaxCreditRelief": false,
       |        "premiumOfLeaseGrant": 5000.99634874383248236385,
@@ -323,8 +311,7 @@ class CreateForeignPropertyPeriodSummaryControllerISpec extends IntegrationBaseS
       |  "toDate": "2019-04-06",
       |  "foreignFhlEea": {
       |    "income": {
-      |      "rentAmount": 5000.99,
-      |      "taxDeducted": 5000.99
+      |      "rentAmount": 5000.99
       |    },
       |    "expenditure": {
       |      "premisesRunningCosts": 5000.99,
@@ -342,8 +329,7 @@ class CreateForeignPropertyPeriodSummaryControllerISpec extends IntegrationBaseS
       |      "countryCode": "FRA",
       |      "income": {
       |        "rentIncome": {
-      |          "rentAmount": 5000.99,
-      |          "taxDeducted": 5000.99
+      |          "rentAmount": 5000.99
       |        },
       |        "foreignTaxCreditRelief": false,
       |        "premiumOfLeaseGrant": 5000.99,
@@ -375,8 +361,7 @@ class CreateForeignPropertyPeriodSummaryControllerISpec extends IntegrationBaseS
       |  "toDate": "2019-04-06",
       |  "foreignFhlEea": {
       |    "income": {
-      |      "rentAmount": 5000.99,
-      |      "taxDeducted": 5000.99
+      |      "rentAmount": 5000.99
       |    },
       |    "expenditure": {
       |      "premisesRunningCosts": 5000.99,
@@ -393,8 +378,7 @@ class CreateForeignPropertyPeriodSummaryControllerISpec extends IntegrationBaseS
       |      "countryCode": "FRA",
       |      "income": {
       |        "rentIncome": {
-      |          "rentAmount": 5000.99,
-      |          "taxDeducted": 5000.99
+      |          "rentAmount": 5000.99
       |        },
       |        "foreignTaxCreditRelief": false,
       |        "premiumOfLeaseGrant": 5000.99,
@@ -425,8 +409,7 @@ class CreateForeignPropertyPeriodSummaryControllerISpec extends IntegrationBaseS
       |  "toDate": "2019-04-06",
       |  "foreignFhlEea": {
       |    "income": {
-      |      "rentAmount": 5000.99,
-      |      "taxDeducted": 5000.99
+      |      "rentAmount": 5000.99
       |    },
       |    "expenditure": {
       |      "premisesRunningCosts": 5000.99,
@@ -443,8 +426,7 @@ class CreateForeignPropertyPeriodSummaryControllerISpec extends IntegrationBaseS
       |      "countryCode": "OFV",
       |      "income": {
       |        "rentIncome": {
-      |          "rentAmount": 5000.99,
-      |          "taxDeducted": 5000.99
+      |          "rentAmount": 5000.99
       |        },
       |        "foreignTaxCreditRelief": false,
       |        "premiumOfLeaseGrant": 5000.99,
@@ -473,7 +455,6 @@ class CreateForeignPropertyPeriodSummaryControllerISpec extends IntegrationBaseS
     message = "One or more monetary fields are invalid",
     paths = Some(List(
       "/foreignFhlEea/income/rentAmount",
-      "/foreignFhlEea/income/taxDeducted",
       "/foreignFhlEea/expenditure/premisesRunningCosts",
       "/foreignFhlEea/expenditure/repairsAndMaintenance",
       "/foreignFhlEea/expenditure/financialCosts",
@@ -482,7 +463,6 @@ class CreateForeignPropertyPeriodSummaryControllerISpec extends IntegrationBaseS
       "/foreignFhlEea/expenditure/travelCosts",
       "/foreignFhlEea/expenditure/other",
       "/foreignProperty/0/income/rentIncome/rentAmount",
-      "/foreignProperty/0/income/rentIncome/taxDeducted",
       "/foreignProperty/0/income/premiumOfLeaseGrant",
       "/foreignProperty/0/income/otherPropertyIncome",
       "/foreignProperty/0/income/foreignTaxTakenOff",
@@ -681,12 +661,16 @@ class CreateForeignPropertyPeriodSummaryControllerISpec extends IntegrationBaseS
         val input = Seq(
           (Status.SERVICE_UNAVAILABLE, "SERVICE_UNAVAILABLE", Status.INTERNAL_SERVER_ERROR, DownstreamError),
           (Status.INTERNAL_SERVER_ERROR, "SERVER_ERROR", Status.INTERNAL_SERVER_ERROR, DownstreamError),
-          (Status.BAD_REQUEST, "NOT_FOUND", Status.NOT_FOUND, NotFoundError),
+          (Status.BAD_REQUEST, "INCOME_SOURCE_NOT_FOUND", Status.NOT_FOUND, NotFoundError),
           (Status.BAD_REQUEST, "INVALID_TAXABLE_ENTITY_ID", Status.BAD_REQUEST, NinoFormatError),
-          (Status.BAD_REQUEST, "FORMAT_BUSINESS_ID", Status.BAD_REQUEST, BusinessIdFormatError),
-          (Status.UNPROCESSABLE_ENTITY, "RULE_OVERLAPPING_PERIOD", Status.BAD_REQUEST, RuleOverlappingPeriodError),
-          (Status.UNPROCESSABLE_ENTITY, "RULE_MISALIGNED_PERIOD", Status.BAD_REQUEST, RuleMisalignedPeriodError),
-          (Status.UNPROCESSABLE_ENTITY, "RULE_NOT_CONTIGUOUS_PERIOD", Status.BAD_REQUEST, RuleNotContiguousPeriodError)
+          (Status.BAD_REQUEST, "INVALID_INCOMESOURCEID", Status.BAD_REQUEST, BusinessIdFormatError),
+          (Status.BAD_REQUEST, "INVALID_PAYLOAD", Status.INTERNAL_SERVER_ERROR, DownstreamError),
+          (Status.BAD_REQUEST, "INVALID_CORRELATIONID", Status.INTERNAL_SERVER_ERROR, DownstreamError),
+          (Status.CONFLICT, "DUPLICATE_SUBMISSION", Status.BAD_REQUEST, RuleDuplicateSubmission),
+          (Status.UNPROCESSABLE_ENTITY, "OVERLAPS_IN_PERIOD", Status.BAD_REQUEST, RuleOverlappingPeriodError),
+          (Status.UNPROCESSABLE_ENTITY, "NOT_ALIGN_PERIOD", Status.BAD_REQUEST, RuleMisalignedPeriodError),
+          (Status.UNPROCESSABLE_ENTITY, "GAPS_IN_PERIOD", Status.BAD_REQUEST, RuleNotContiguousPeriodError),
+          (Status.UNPROCESSABLE_ENTITY, "INVALID_DATE_RANGE", Status.BAD_REQUEST, RuleToDateBeforeFromDateError)
         )
 
         input.foreach(args => (serviceErrorTest _).tupled(args))

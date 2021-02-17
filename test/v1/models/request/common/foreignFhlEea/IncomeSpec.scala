@@ -24,18 +24,16 @@ class IncomeSpec extends UnitSpec {
   val mtdJson: JsValue = Json.parse(
     s"""
        |{
-       |  "rentAmount": 567.83,
-       |  "taxDeducted": 4321.92
+       |  "rentAmount": 567.83
        |}
        |""".stripMargin)
 
-  val model: ForeignFhlEeaIncome = ForeignFhlEeaIncome(rentAmount = 567.83, taxDeducted = Some(4321.92))
+  val model: ForeignFhlEeaIncome = ForeignFhlEeaIncome(rentAmount = 567.83)
 
   val desJson: JsValue = Json.parse(
     s"""
        |{
-       |  "rentAmount": 567.83,
-       |  "taxDeducted": 4321.92
+       |  "rentAmount": 567.83
        |}
        |""".stripMargin)
 

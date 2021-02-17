@@ -78,10 +78,6 @@ class CreateForeignPropertyPeriodSummaryValidator extends Validator[CreateForeig
         path = "/foreignFhlEea/income/rentAmount"
       ),
       NumberValidation.validateOptional(
-        field = foreignFhlEea.income.taxDeducted,
-        path = "/foreignFhlEea/income/taxDeducted"
-      ),
-      NumberValidation.validateOptional(
         field = foreignFhlEea.expenditure.flatMap(_.premisesRunningCosts),
         path = "/foreignFhlEea/expenditure/premisesRunningCosts"
       ),
@@ -125,10 +121,6 @@ class CreateForeignPropertyPeriodSummaryValidator extends Validator[CreateForeig
       NumberValidation.validateOptional(
         field = Some(foreignProperty.income.rentIncome.rentAmount),
         path = s"/foreignProperty/$index/income/rentIncome/rentAmount"
-      ),
-      NumberValidation.validateOptional(
-        field = Some(foreignProperty.income.rentIncome.taxDeducted),
-        path = s"/foreignProperty/$index/income/rentIncome/taxDeducted"
       ),
       NumberValidation.validateOptional(
         field = foreignProperty.income.premiumOfLeaseGrant,

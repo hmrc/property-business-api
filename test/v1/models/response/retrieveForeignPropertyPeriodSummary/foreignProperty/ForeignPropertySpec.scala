@@ -25,7 +25,7 @@ class ForeignPropertySpec extends UnitSpec with JsonErrorValidators {
   val foreignProperty = ForeignProperty(
     "FRA",
     ForeignPropertyIncome(
-      ForeignPropertyRentIncome(5000.99, Some(5000.99)),
+      ForeignPropertyRentIncome(5000.99),
       false,
       Some(5000.99),
       Some(5000.99),
@@ -51,8 +51,7 @@ class ForeignPropertySpec extends UnitSpec with JsonErrorValidators {
       |  "countryCode": "FRA",
       |  "income": {
       |    "rentIncome": {
-      |      "rentAmount": 5000.99,
-      |      "taxDeducted": 5000.99
+      |      "rentAmount": 5000.99
       |    },
       |    "foreignTaxCreditRelief": false,
       |    "premiumOfLeaseGrant": 5000.99,
@@ -79,8 +78,7 @@ class ForeignPropertySpec extends UnitSpec with JsonErrorValidators {
       |  "countryCode": "FRA",
       |  "income": {
       |    "rentIncome": {
-      |      "rentAmount": 5000.99,
-      |      "taxDeducted": 5000.99
+      |      "rentAmount": 5000.99
       |    },
       |    "foreignTaxCreditRelief": false,
       |    "premiumsOfLeaseGrant": 5000.99,

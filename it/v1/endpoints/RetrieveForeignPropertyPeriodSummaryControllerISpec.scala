@@ -40,8 +40,7 @@ class RetrieveForeignPropertyPeriodSummaryControllerISpec extends IntegrationBas
          |  "toDate": "2019-07-06",
          |  "foreignFhlEea": {
          |    "income": {
-         |      "rentAmount": 200.22,
-         |      "taxDeducted": 22.22
+         |      "rentAmount": 200.22
          |    },
          |    "expenditure": {
          |      "premisesRunningCosts": 100.25,
@@ -58,8 +57,7 @@ class RetrieveForeignPropertyPeriodSummaryControllerISpec extends IntegrationBas
          |      "countryCode": "FRA",
          |      "income": {
          |        "rentIncome": {
-         |          "rentAmount": 200.22,
-         |          "taxDeducted": 22.22
+         |          "rentAmount": 200.22
          |        },
          |        "foreignTaxCreditRelief": true,
          |        "premiumOfLeaseGrant": 100.25,
@@ -106,8 +104,7 @@ class RetrieveForeignPropertyPeriodSummaryControllerISpec extends IntegrationBas
          |  "toDate": "2019-07-06",
          |  "foreignFhlEea": {
          |        "income": {
-         |          "rentAmount": 200.22,
-         |          "taxDeducted": 22.22
+         |          "rentAmount": 200.22
          |        },
          |        "expenses": {
          |          "premisesRunningCosts": 100.25,
@@ -124,8 +121,7 @@ class RetrieveForeignPropertyPeriodSummaryControllerISpec extends IntegrationBas
          |        "countryCode": "FRA",
          |        "income": {
          |            "rentIncome": {
-         |                "rentAmount": 200.22,
-         |                "taxDeducted": 22.22
+         |                "rentAmount": 200.22
          |            },
          |          "foreignTaxCreditRelief": true,
          |          "premiumsOfLeaseGrant": 100.25,
@@ -240,10 +236,10 @@ class RetrieveForeignPropertyPeriodSummaryControllerISpec extends IntegrationBas
 
         val input = Seq(
           (Status.BAD_REQUEST, "INVALID_TAXABLE_ENTITY_ID", Status.BAD_REQUEST, NinoFormatError),
-          (Status.BAD_REQUEST, "FORMAT_BUSINESS_ID", Status.BAD_REQUEST, BusinessIdFormatError),
-          (Status.BAD_REQUEST, "FORMAT_SUBMISSION_ID", Status.BAD_REQUEST, SubmissionIdFormatError),
-          (Status.NOT_FOUND, "NOT_FOUND", Status.NOT_FOUND, NotFoundError),
-          (Status.NOT_FOUND, "SUBMISSION_ID_NOT_FOUND", Status.NOT_FOUND, SubmissionIdNotFoundError),
+          (Status.BAD_REQUEST, "INVALID_INCOMESOURCE_ID", Status.BAD_REQUEST, BusinessIdFormatError),
+          (Status.BAD_REQUEST, "INVALID_SUBMISSION_ID", Status.BAD_REQUEST, SubmissionIdFormatError),
+          (Status.BAD_REQUEST, "INVALID_CORRELATIONID", Status.INTERNAL_SERVER_ERROR, DownstreamError),
+          (Status.NOT_FOUND, "INCOME_SOURCE_NOT_FOUND", Status.NOT_FOUND, NotFoundError),
           (Status.INTERNAL_SERVER_ERROR, "SERVER_ERROR", Status.INTERNAL_SERVER_ERROR, DownstreamError),
           (Status.SERVICE_UNAVAILABLE, "SERVICE_UNAVAILABLE", Status.INTERNAL_SERVER_ERROR, DownstreamError)
         )

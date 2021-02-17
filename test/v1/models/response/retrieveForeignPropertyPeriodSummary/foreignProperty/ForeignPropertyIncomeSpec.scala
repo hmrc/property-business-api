@@ -23,7 +23,7 @@ import v1.models.utils.JsonErrorValidators
 class ForeignPropertyIncomeSpec extends UnitSpec with JsonErrorValidators {
 
   val foreignPropertyIncome = ForeignPropertyIncome(
-    ForeignPropertyRentIncome(5000.99, Some(5000.99)),
+    ForeignPropertyRentIncome(5000.99),
     false,
     Some(5000.99),
     Some(5000.99),
@@ -34,8 +34,7 @@ class ForeignPropertyIncomeSpec extends UnitSpec with JsonErrorValidators {
   val writesJson = Json.parse(
     """{
       |    "rentIncome": {
-      |      "rentAmount": 5000.99,
-      |      "taxDeducted": 5000.99
+      |      "rentAmount": 5000.99
       |    },
       |    "foreignTaxCreditRelief": false,
       |    "premiumOfLeaseGrant": 5000.99,
@@ -47,8 +46,7 @@ class ForeignPropertyIncomeSpec extends UnitSpec with JsonErrorValidators {
   val readsJson = Json.parse(
     """{
       |    "rentIncome": {
-      |      "rentAmount": 5000.99,
-      |      "taxDeducted": 5000.99
+      |      "rentAmount": 5000.99
       |    },
       |    "foreignTaxCreditRelief": false,
       |    "premiumsOfLeaseGrant": 5000.99,

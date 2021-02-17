@@ -24,7 +24,7 @@ import v1.mocks.MockIdGenerator
 import v1.mocks.hateoas.MockHateoasFactory
 import v1.mocks.requestParsers.MockRetrieveForeignPropertyPeriodSummaryRequestParser
 import v1.mocks.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService, MockRetrieveForeignPropertyPeriodSummaryService}
-import v1.models.errors.{BadRequestError, BusinessIdFormatError, DownstreamError, ErrorWrapper, MtdError, NinoFormatError, NotFoundError, SubmissionIdFormatError, SubmissionIdNotFoundError}
+import v1.models.errors._
 import v1.models.hateoas.{HateoasWrapper, Link}
 import v1.models.hateoas.Method.GET
 import v1.models.outcomes.ResponseWrapper
@@ -78,7 +78,7 @@ class RetrieveForeignPropertyPeriodSummaryControllerSpec
     "2020-01-01",
     "2020-01-31",
     Some(ForeignFhlEea(
-      ForeignFhlEeaIncome(5000.99, Some(5000.99)),
+      ForeignFhlEeaIncome(5000.99),
       Some(ForeignFhlEeaExpenditure(
         Some(5000.99),
         Some(5000.99),
@@ -92,7 +92,7 @@ class RetrieveForeignPropertyPeriodSummaryControllerSpec
     )),
     Some(Seq(ForeignProperty("FRA",
       ForeignPropertyIncome(
-        ForeignPropertyRentIncome(5000.99, Some(5000.99)),
+        ForeignPropertyRentIncome(5000.99),
         false,
         Some(5000.99),
         Some(5000.99),
@@ -185,7 +185,6 @@ class RetrieveForeignPropertyPeriodSummaryControllerSpec
           (BusinessIdFormatError, BAD_REQUEST),
           (SubmissionIdFormatError, BAD_REQUEST),
           (NotFoundError, NOT_FOUND),
-          (SubmissionIdNotFoundError, NOT_FOUND),
           (DownstreamError, INTERNAL_SERVER_ERROR)
         )
 

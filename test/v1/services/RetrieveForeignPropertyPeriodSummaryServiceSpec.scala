@@ -21,7 +21,7 @@ import uk.gov.hmrc.domain.Nino
 import uk.gov.hmrc.http.HeaderCarrier
 import v1.controllers.EndpointLogContext
 import v1.mocks.connectors.MockRetrieveForeignPropertyPeriodSummaryConnector
-import v1.models.errors.{BusinessIdFormatError, DesErrorCode, DesErrors, DownstreamError, ErrorWrapper, MtdError, NinoFormatError, NotFoundError, SubmissionIdFormatError, SubmissionIdNotFoundError}
+import v1.models.errors._
 import v1.models.outcomes.ResponseWrapper
 import v1.models.request.retrieveForeignPropertyPeriodSummary.RetrieveForeignPropertyPeriodSummaryRequest
 import v1.models.response.retrieveForeignPropertyPeriodSummary.RetrieveForeignPropertyPeriodSummaryResponse
@@ -42,7 +42,7 @@ class RetrieveForeignPropertyPeriodSummaryServiceSpec extends UnitSpec {
     "2020-01-01",
     "2020-01-31",
     Some(ForeignFhlEea(
-      ForeignFhlEeaIncome(5000.99, Some(5000.99)),
+      ForeignFhlEeaIncome(5000.99),
       Some(ForeignFhlEeaExpenditure(
         Some(5000.99),
         Some(5000.99),
@@ -56,7 +56,7 @@ class RetrieveForeignPropertyPeriodSummaryServiceSpec extends UnitSpec {
     )),
     Some(Seq(ForeignProperty("FRA",
       ForeignPropertyIncome(
-        ForeignPropertyRentIncome(5000.99, Some(5000.99)),
+        ForeignPropertyRentIncome(5000.99),
         false,
         Some(5000.99),
         Some(5000.99),
@@ -113,12 +113,12 @@ class RetrieveForeignPropertyPeriodSummaryServiceSpec extends UnitSpec {
 
       val input = Seq(
         "INVALID_TAXABLE_ENTITY_ID" -> NinoFormatError,
-        "FORMAT_BUSINESS_ID" -> BusinessIdFormatError,
-        "FORMAT_SUBMISSION_ID" -> SubmissionIdFormatError,
-        "NOT_FOUND" -> NotFoundError,
-        "SUBMISSION_ID_NOT_FOUND" -> SubmissionIdNotFoundError,
+        "INVALID_INCOMESOURCE_ID" -> BusinessIdFormatError,
+        "INVALID_SUBMISSION_ID" -> SubmissionIdFormatError,
+        "INCOME_SOURCE_NOT_FOUND" -> NotFoundError,
         "SERVER_ERROR" -> DownstreamError,
-        "SERVICE_UNAVAILABLE" -> DownstreamError
+        "SERVICE_UNAVAILABLE" -> DownstreamError,
+        "INVALID_CORRELATIONID" -> DownstreamError
       )
 
       input.foreach(args => (serviceError _).tupled(args))

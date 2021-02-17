@@ -23,14 +23,15 @@ import uk.gov.hmrc.http.HeaderCarrier
 import utils.Logging
 import v1.connectors.RetrieveForeignPropertyPeriodSummaryConnector
 import v1.controllers.EndpointLogContext
-import v1.models.errors.{BusinessIdFormatError, DownstreamError, NinoFormatError, NotFoundError, SubmissionIdFormatError, SubmissionIdNotFoundError}
+import v1.models.errors._
 import v1.models.request.retrieveForeignPropertyPeriodSummary.RetrieveForeignPropertyPeriodSummaryRequest
 import v1.support.DesResponseMappingSupport
 
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class RetrieveForeignPropertyPeriodSummaryService @Inject()(connector: RetrieveForeignPropertyPeriodSummaryConnector) extends DesResponseMappingSupport with Logging {
+class RetrieveForeignPropertyPeriodSummaryService @Inject()(connector: RetrieveForeignPropertyPeriodSummaryConnector)
+  extends DesResponseMappingSupport with Logging {
 
   def retrieveForeignProperty(request: RetrieveForeignPropertyPeriodSummaryRequest)(
     implicit hc: HeaderCarrier,
@@ -48,12 +49,12 @@ class RetrieveForeignPropertyPeriodSummaryService @Inject()(connector: RetrieveF
   private def desErrorMap =
     Map(
       "INVALID_TAXABLE_ENTITY_ID" -> NinoFormatError,
-      "FORMAT_BUSINESS_ID" -> BusinessIdFormatError,
-      "FORMAT_SUBMISSION_ID" -> SubmissionIdFormatError,
-      "NOT_FOUND" -> NotFoundError,
-      "SUBMISSION_ID_NOT_FOUND" -> SubmissionIdNotFoundError,
+      "INVALID_INCOMESOURCE_ID" -> BusinessIdFormatError,
+      "INVALID_SUBMISSION_ID" -> SubmissionIdFormatError,
+      "INCOME_SOURCE_NOT_FOUND" -> NotFoundError,
       "SERVER_ERROR" -> DownstreamError,
-      "SERVICE_UNAVAILABLE" -> DownstreamError
+      "SERVICE_UNAVAILABLE" -> DownstreamError,
+      "INVALID_CORRELATIONID" -> DownstreamError
     )
 
 }

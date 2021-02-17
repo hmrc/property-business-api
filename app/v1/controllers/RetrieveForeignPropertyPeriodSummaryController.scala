@@ -80,7 +80,7 @@ class RetrieveForeignPropertyPeriodSummaryController @Inject()(val authService: 
     (errorWrapper.error: @unchecked) match {
       case NinoFormatError | BusinessIdFormatError | SubmissionIdFormatError | BadRequestError => BadRequest(Json.toJson(errorWrapper))
       case DownstreamError => InternalServerError(Json.toJson(errorWrapper))
-      case NotFoundError | SubmissionIdNotFoundError => NotFound(Json.toJson(errorWrapper))
+      case NotFoundError => NotFound(Json.toJson(errorWrapper))
     }
   }
 }

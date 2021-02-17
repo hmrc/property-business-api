@@ -26,11 +26,6 @@
               "type": "number",
               "description": "Total rents and other income from property.\n\nThe value must be between 0 and 99999999999.99.",
               "example": "5000.99"
-            },
-            "taxDeducted": {
-              "type": "number",
-              "description": "Tax taken off rental Income (applies to non-resident landlords only).\n\nThe value must be greater than 0 and up to 99999999999.99.",
-              "example": "5000.99"
             }
           },
           "required": [
@@ -113,11 +108,6 @@
                   "rentAmount": {
                     "type": "number",
                     "description": "The total amount of rental income.\n\nThe value must be between 0 and 99999999999.99.",
-                    "example": "5000.99"
-                  },
-                  "taxDeducted": {
-                    "type": "number",
-                    "description": "Tax already taken off from the rental income.\n\nThe value must be greater than 0 and up to 99999999999.99.",
                     "example": "5000.99"
                   }
                 },

@@ -23,9 +23,5 @@
             <td><p>NOT_FOUND</p></td>
             <td><p>Simulate a scenario where no data is found.</p></td>
         </tr>
-        <tr>
-            <td><p>SUBMISSION_ID_NOT_FOUND</p></td>
-            <td><p>Simulate a scenario where this Submission ID does not exist for this Business Income Source.</p></td>
-        </tr>
     </tbody>
 </table>

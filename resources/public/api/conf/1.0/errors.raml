@@ -27,6 +27,17 @@ traits:
                 description: A submission with this Submission ID does not exist for this Business Income Source.
                 value:
                   code: SUBMISSION_ID_NOT_FOUND
+  incomeSourceNotFound:
+    responses:
+      404:
+        body:
+          application/json:
+            type: types.errorResponse
+            examples:
+              incomeSourceNotFound:
+                description: Income source not found.
+                value:
+                  code: INCOME_SOURCE_NOT_FOUND
 # 403
   clientOrAgentNotAuthorised:
     responses:

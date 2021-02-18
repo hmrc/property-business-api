@@ -110,7 +110,6 @@ class AmendForeignPropertyAnnualSubmissionRequestParserSpec extends UnitSpec {
                 Some(100.25),
                 Some(100.25),
                 Some(100.25),
-                Some(100.25),
                 Some(100.25)
               )))))
           )

@@ -23,14 +23,12 @@ case class ForeignPropertyAllowances(annualInvestmentAllowance: Option[BigDecima
                                      zeroEmissionsGoodsVehicleAllowance: Option[BigDecimal],
                                      propertyAllowance: Option[BigDecimal],
                                      otherCapitalAllowance: Option[BigDecimal],
-                                     structureAndBuildingAllowance: Option[BigDecimal],
                                      electricChargePointAllowance: Option[BigDecimal]) {
   def isEmpty: Boolean = annualInvestmentAllowance.isEmpty &&
     costOfReplacingDomesticItems.isEmpty &&
     zeroEmissionsGoodsVehicleAllowance.isEmpty &&
     propertyAllowance.isEmpty &&
     otherCapitalAllowance.isEmpty &&
-    structureAndBuildingAllowance.isEmpty &&
     electricChargePointAllowance.isEmpty
 }
 

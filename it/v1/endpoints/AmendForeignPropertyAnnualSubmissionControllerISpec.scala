@@ -63,7 +63,6 @@ class AmendForeignPropertyAnnualSubmissionControllerISpec extends IntegrationBas
         |        "zeroEmissionsGoodsVehicleAllowance":100.25,
         |        "propertyAllowance":100.25,
         |        "otherCapitalAllowance":100.25,
-        |        "structureAndBuildingAllowance":100.25,
         |        "electricChargePointAllowance":100.25
         |      }
         |    }
@@ -168,7 +167,6 @@ class AmendForeignPropertyAnnualSubmissionControllerISpec extends IntegrationBas
             |        "zeroEmissionsGoodsVehicleAllowance":100.256436,
             |        "propertyAllowance":100.256436,
             |        "otherCapitalAllowance":100.256436,
-            |        "structureAndBuildingAllowance":100.256436,
             |        "electricChargePointAllowance":100.256436
             |      }
             |    }
@@ -199,7 +197,6 @@ class AmendForeignPropertyAnnualSubmissionControllerISpec extends IntegrationBas
               "/foreignProperty/0/allowances/zeroEmissionsGoodsVehicleAllowance",
               "/foreignProperty/0/allowances/propertyAllowance",
               "/foreignProperty/0/allowances/otherCapitalAllowance",
-              "/foreignProperty/0/allowances/structureAndBuildingAllowance",
               "/foreignProperty/0/allowances/electricChargePointAllowance"
             ))
           )
@@ -253,7 +250,6 @@ class AmendForeignPropertyAnnualSubmissionControllerISpec extends IntegrationBas
             |        "zeroEmissionsGoodsVehicleAllowance":100.25,
             |        "propertyAllowance":100.25,
             |        "otherCapitalAllowance":100.25,
-            |        "structureAndBuildingAllowance":100.25,
             |        "electricChargePointAllowance":100.25
             |      }
             |    }
@@ -290,7 +286,6 @@ class AmendForeignPropertyAnnualSubmissionControllerISpec extends IntegrationBas
             |        "zeroEmissionsGoodsVehicleAllowance":100.256436,
             |        "propertyAllowance":100.256436,
             |        "otherCapitalAllowance":100.256436,
-            |        "structureAndBuildingAllowance":100.256436,
             |        "electricChargePointAllowance":100.256436
             |      }
             |    }
@@ -327,7 +322,6 @@ class AmendForeignPropertyAnnualSubmissionControllerISpec extends IntegrationBas
             |        "zeroEmissionsGoodsVehicleAllowance":100.25,
             |        "propertyAllowance":100.25,
             |        "otherCapitalAllowance":100.25,
-            |        "structureAndBuildingAllowance":100.25,
             |        "electricChargePointAllowance":100.25
             |      }
             |    }
@@ -351,7 +345,6 @@ class AmendForeignPropertyAnnualSubmissionControllerISpec extends IntegrationBas
             "/foreignProperty/0/allowances/zeroEmissionsGoodsVehicleAllowance",
             "/foreignProperty/0/allowances/propertyAllowance",
             "/foreignProperty/0/allowances/otherCapitalAllowance",
-            "/foreignProperty/0/allowances/structureAndBuildingAllowance",
             "/foreignProperty/0/allowances/electricChargePointAllowance"
           ))
         )
@@ -423,7 +416,11 @@ class AmendForeignPropertyAnnualSubmissionControllerISpec extends IntegrationBas
           val input = Seq(
             (BAD_REQUEST, "INVALID_TAXABLE_ENTITY_ID", BAD_REQUEST, NinoFormatError),
             (BAD_REQUEST, "INVALID_INCOME_SOURCE_ID", BAD_REQUEST, BusinessIdFormatError),
-            (NOT_FOUND, "NOT_FOUND", NOT_FOUND, NotFoundError),
+            (BAD_REQUEST, "INVALID_SUBMISSION_ID", BAD_REQUEST, BusinessIdFormatError),
+            (INTERNAL_SERVER_ERROR, "INVALID_TAX_YEAR", INTERNAL_SERVER_ERROR, DownstreamError),
+            (INTERNAL_SERVER_ERROR, "INVALID_PAYLOAD", INTERNAL_SERVER_ERROR, DownstreamError),
+            (INTERNAL_SERVER_ERROR, "INVALID_CORRELATION_ID", INTERNAL_SERVER_ERROR, DownstreamError),
+            (INTERNAL_SERVER_ERROR, "UNPROCESSABLE_ENTITY", INTERNAL_SERVER_ERROR, DownstreamError),
             (INTERNAL_SERVER_ERROR, "SERVER_ERROR", INTERNAL_SERVER_ERROR, DownstreamError),
             (SERVICE_UNAVAILABLE, "SERVICE_UNAVAILABLE", INTERNAL_SERVER_ERROR, DownstreamError))
 

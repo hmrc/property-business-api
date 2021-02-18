@@ -58,7 +58,6 @@ class AmendForeignPropertyAnnualSubmissionValidatorSpec extends UnitSpec {
       |            "zeroEmissionsGoodsVehicleAllowance":100.25,
       |            "propertyAllowance":100.25,
       |            "otherCapitalAllowance":100.25,
-      |            "structureAndBuildingAllowance":100.25,
       |            "electricChargePointAllowance":100.25
       |         }
       |      }
@@ -106,7 +105,6 @@ class AmendForeignPropertyAnnualSubmissionValidatorSpec extends UnitSpec {
             |            "zeroEmissionsGoodsVehicleAllowance":100.25,
             |            "propertyAllowance":100.25,
             |            "otherCapitalAllowance":100.25,
-            |            "structureAndBuildingAllowance":100.25,
             |            "electricChargePointAllowance":100.25
             |         }
             |      },
@@ -124,7 +122,6 @@ class AmendForeignPropertyAnnualSubmissionValidatorSpec extends UnitSpec {
             |            "zeroEmissionsGoodsVehicleAllowance":100.25,
             |            "propertyAllowance":100.25,
             |            "otherCapitalAllowance":100.25,
-            |            "structureAndBuildingAllowance":100.25,
             |            "electricChargePointAllowance":100.25
             |         }
             |      }
@@ -152,7 +149,6 @@ class AmendForeignPropertyAnnualSubmissionValidatorSpec extends UnitSpec {
             |            "zeroEmissionsGoodsVehicleAllowance":100.25,
             |            "propertyAllowance":100.25,
             |            "otherCapitalAllowance":100.25,
-            |            "structureAndBuildingAllowance":100.25,
             |            "electricChargePointAllowance":100.25
             |         }
             |      }
@@ -289,7 +285,6 @@ class AmendForeignPropertyAnnualSubmissionValidatorSpec extends UnitSpec {
             |            "zeroEmissionsGoodsVehicleAllowance":100.25,
             |            "propertyAllowance":100.25,
             |            "otherCapitalAllowance":100.25,
-            |            "structureAndBuildingAllowance":100.25,
             |            "electricChargePointAllowance":100.25
             |         }
             |      }
@@ -331,7 +326,6 @@ class AmendForeignPropertyAnnualSubmissionValidatorSpec extends UnitSpec {
             |            "zeroEmissionsGoodsVehicleAllowance":100.25,
             |            "propertyAllowance":100.25,
             |            "otherCapitalAllowance":100.25,
-            |            "structureAndBuildingAllowance":100.25,
             |            "electricChargePointAllowance":100.25
             |         }
             |      }
@@ -373,7 +367,6 @@ class AmendForeignPropertyAnnualSubmissionValidatorSpec extends UnitSpec {
             |            "zeroEmissionsGoodsVehicleAllowance":100.25,
             |            "propertyAllowance":100.25,
             |            "otherCapitalAllowance":100.25,
-            |            "structureAndBuildingAllowance":100.25,
             |            "electricChargePointAllowance":100.25
             |         }
             |      }
@@ -415,7 +408,6 @@ class AmendForeignPropertyAnnualSubmissionValidatorSpec extends UnitSpec {
             |            "zeroEmissionsGoodsVehicleAllowance":100.25,
             |            "propertyAllowance":100.25,
             |            "otherCapitalAllowance":100.25,
-            |            "structureAndBuildingAllowance":100.25,
             |            "electricChargePointAllowance":100.25
             |         }
             |      }
@@ -457,7 +449,6 @@ class AmendForeignPropertyAnnualSubmissionValidatorSpec extends UnitSpec {
             |            "zeroEmissionsGoodsVehicleAllowance":100.25,
             |            "propertyAllowance":100.25,
             |            "otherCapitalAllowance":100.25,
-            |            "structureAndBuildingAllowance":100.25,
             |            "electricChargePointAllowance":100.25
             |         }
             |      }
@@ -499,7 +490,6 @@ class AmendForeignPropertyAnnualSubmissionValidatorSpec extends UnitSpec {
             |            "zeroEmissionsGoodsVehicleAllowance":100.25,
             |            "propertyAllowance":100.25,
             |            "otherCapitalAllowance":100.25,
-            |            "structureAndBuildingAllowance":100.25,
             |            "electricChargePointAllowance":100.25
             |         }
             |      }
@@ -541,7 +531,6 @@ class AmendForeignPropertyAnnualSubmissionValidatorSpec extends UnitSpec {
             |            "zeroEmissionsGoodsVehicleAllowance":100.25,
             |            "propertyAllowance":100.25,
             |            "otherCapitalAllowance":100.25,
-            |            "structureAndBuildingAllowance":100.25,
             |            "electricChargePointAllowance":100.25
             |         }
             |      }
@@ -583,7 +572,6 @@ class AmendForeignPropertyAnnualSubmissionValidatorSpec extends UnitSpec {
             |            "zeroEmissionsGoodsVehicleAllowance":100.25,
             |            "propertyAllowance":100.25,
             |            "otherCapitalAllowance":100.25,
-            |            "structureAndBuildingAllowance":100.25,
             |            "electricChargePointAllowance":100.25
             |         }
             |      }
@@ -625,7 +613,6 @@ class AmendForeignPropertyAnnualSubmissionValidatorSpec extends UnitSpec {
             |            "zeroEmissionsGoodsVehicleAllowance":100.25,
             |            "propertyAllowance":100.25,
             |            "otherCapitalAllowance":100.25,
-            |            "structureAndBuildingAllowance":100.25,
             |            "electricChargePointAllowance":100.25
             |         }
             |      }
@@ -667,7 +654,6 @@ class AmendForeignPropertyAnnualSubmissionValidatorSpec extends UnitSpec {
             |            "zeroEmissionsGoodsVehicleAllowance":100.25,
             |            "propertyAllowance":100.25,
             |            "otherCapitalAllowance":100.25,
-            |            "structureAndBuildingAllowance":100.25,
             |            "electricChargePointAllowance":100.25
             |         }
             |      }
@@ -709,7 +695,6 @@ class AmendForeignPropertyAnnualSubmissionValidatorSpec extends UnitSpec {
             |            "zeroEmissionsGoodsVehicleAllowance":-1,
             |            "propertyAllowance":100.25,
             |            "otherCapitalAllowance":100.25,
-            |            "structureAndBuildingAllowance":100.25,
             |            "electricChargePointAllowance":100.25
             |         }
             |      }
@@ -751,7 +736,6 @@ class AmendForeignPropertyAnnualSubmissionValidatorSpec extends UnitSpec {
             |            "zeroEmissionsGoodsVehicleAllowance":100.25,
             |            "propertyAllowance":-1,
             |            "otherCapitalAllowance":100.25,
-            |            "structureAndBuildingAllowance":100.25,
             |            "electricChargePointAllowance":100.25
             |         }
             |      }
@@ -793,7 +777,6 @@ class AmendForeignPropertyAnnualSubmissionValidatorSpec extends UnitSpec {
             |            "zeroEmissionsGoodsVehicleAllowance":100.25,
             |            "propertyAllowance":100.25,
             |            "otherCapitalAllowance":-1,
-            |            "structureAndBuildingAllowance":100.25,
             |            "electricChargePointAllowance":100.25
             |         }
             |      }
@@ -801,48 +784,6 @@ class AmendForeignPropertyAnnualSubmissionValidatorSpec extends UnitSpec {
             |}
             |""".stripMargin
         ))) shouldBe List(ValueFormatError.copy(paths = Some(Seq("/foreignProperty/0/allowances/otherCapitalAllowance"))))
-      }
-      "/foreignProperty/allowances/structureAndBuildingAllowance is invalid" in {
-        validator.validate(AmendForeignPropertyAnnualSubmissionRawData(validNino, validBusinessId, validTaxYear, Json.parse(
-          """
-            |{
-            |   "foreignFhlEea":
-            |      {
-            |         "adjustments":{
-            |            "privateUseAdjustment":100.25,
-            |            "balancingCharge":100.25,
-            |            "periodOfGraceAdjustment":true
-            |         },
-            |         "allowances":{
-            |            "annualInvestmentAllowance":100.25,
-            |            "otherCapitalAllowance":100.25,
-            |            "propertyAllowance":100.25,
-            |            "electricChargePointAllowance":100.25
-            |         }
-            |      },
-            |   "foreignProperty":[
-            |      {
-            |         "countryCode":"FRA",
-            |         "adjustments":
-            |            {
-            |               "privateUseAdjustment":100.25,
-            |               "balancingCharge":100.25
-            |            }
-            |         ,
-            |         "allowances":{
-            |            "annualInvestmentAllowance":100.25,
-            |            "costOfReplacingDomesticItems":100.25,
-            |            "zeroEmissionsGoodsVehicleAllowance":100.25,
-            |            "propertyAllowance":100.25,
-            |            "otherCapitalAllowance":100.25,
-            |            "structureAndBuildingAllowance":-1,
-            |            "electricChargePointAllowance":100.25
-            |         }
-            |      }
-            |   ]
-            |}
-            |""".stripMargin
-        ))) shouldBe List(ValueFormatError.copy(paths = Some(Seq("/foreignProperty/0/allowances/structureAndBuildingAllowance"))))
       }
       "/foreignProperty/allowances/electricChargePointAllowance is invalid" in {
         validator.validate(AmendForeignPropertyAnnualSubmissionRawData(validNino, validBusinessId, validTaxYear, Json.parse(
@@ -877,7 +818,6 @@ class AmendForeignPropertyAnnualSubmissionValidatorSpec extends UnitSpec {
             |            "zeroEmissionsGoodsVehicleAllowance":100.25,
             |            "propertyAllowance":100.25,
             |            "otherCapitalAllowance":100.25,
-            |            "structureAndBuildingAllowance":100.25,
             |            "electricChargePointAllowance":-1
             |         }
             |      }
@@ -921,7 +861,6 @@ class AmendForeignPropertyAnnualSubmissionValidatorSpec extends UnitSpec {
             |            "zeroEmissionsGoodsVehicleAllowance":100.25,
             |            "propertyAllowance":100.25,
             |            "otherCapitalAllowance":100.25,
-            |            "structureAndBuildingAllowance":100.25,
             |            "electricChargePointAllowance":100.25
             |         }
             |      }
@@ -963,7 +902,6 @@ class AmendForeignPropertyAnnualSubmissionValidatorSpec extends UnitSpec {
             |            "zeroEmissionsGoodsVehicleAllowance":100.25,
             |            "propertyAllowance":100.25,
             |            "otherCapitalAllowance":100.25,
-            |            "structureAndBuildingAllowance":100.25,
             |            "electricChargePointAllowance":100.25
             |         }
             |      }
@@ -1035,7 +973,6 @@ class AmendForeignPropertyAnnualSubmissionValidatorSpec extends UnitSpec {
           "/foreignProperty/0/allowances/zeroEmissionsGoodsVehicleAllowance",
           "/foreignProperty/0/allowances/propertyAllowance",
           "/foreignProperty/0/allowances/otherCapitalAllowance",
-          "/foreignProperty/0/allowances/structureAndBuildingAllowance",
           "/foreignProperty/0/allowances/electricChargePointAllowance"))))
       }
     }

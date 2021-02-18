@@ -50,7 +50,11 @@ class AmendForeignPropertyAnnualSubmissionService @Inject()
     Map(
       "INVALID_TAXABLE_ENTITY_ID" -> NinoFormatError,
       "INVALID_INCOME_SOURCE_ID" -> BusinessIdFormatError,
-      "NOT_FOUND" -> NotFoundError,
+      "INVALID_SUBMISSION_ID" -> BusinessIdFormatError,
+      "INVALID_TAX_YEAR" -> DownstreamError,
+      "INVALID_PAYLOAD" -> DownstreamError,
+      "INVALID_CORRELATION_ID" -> DownstreamError,
+      "UNPROCESSABLE_ENTITY" -> DownstreamError,
       "SERVER_ERROR" -> DownstreamError,
       "SERVICE_UNAVAILABLE" -> DownstreamError
     )

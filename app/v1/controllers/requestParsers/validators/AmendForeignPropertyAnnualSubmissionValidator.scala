@@ -122,10 +122,6 @@ class AmendForeignPropertyAnnualSubmissionValidator extends Validator[AmendForei
         path = s"/foreignProperty/$index/allowances/otherCapitalAllowance"
       ),
       NumberValidation.validateOptional(
-        field = foreignPropertyEntry.allowances.flatMap(_.structureAndBuildingAllowance),
-        path = s"/foreignProperty/$index/allowances/structureAndBuildingAllowance"
-      ),
-      NumberValidation.validateOptional(
         field = foreignPropertyEntry.allowances.flatMap(_.electricChargePointAllowance),
         path = s"/foreignProperty/$index/allowances/electricChargePointAllowance"
       )

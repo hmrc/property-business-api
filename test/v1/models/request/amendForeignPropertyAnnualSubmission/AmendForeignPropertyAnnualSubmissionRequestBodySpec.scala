@@ -50,7 +50,6 @@ class AmendForeignPropertyAnnualSubmissionRequestBodySpec extends UnitSpec with 
           Some(100.25),
           Some(100.25),
           Some(100.25),
-          Some(100.25),
           Some(100.25)
         )))))
     )
@@ -94,7 +93,6 @@ class AmendForeignPropertyAnnualSubmissionRequestBodySpec extends UnitSpec with 
       |            "zeroEmissionsGoodsVehicleAllowance":100.25,
       |            "propertyAllowance":100.25,
       |            "otherCapitalAllowance":100.25,
-      |            "structureAndBuildingAllowance":100.25,
       |            "electricChargePointAllowance":100.25
       |         }
       |      }

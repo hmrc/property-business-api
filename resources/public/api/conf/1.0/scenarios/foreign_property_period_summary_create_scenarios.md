@@ -29,7 +29,7 @@
         </tr>
         <tr>
             <td><p>DUPLICATE_SUBMISSION</p></td>
-            <td><p>Simulates the scenario where a summary has already been submitted for the  period specified.</p></td>
+            <td><p>Simulates the scenario where a summary has already been submitted for the specified period.</p></td>
         </tr>
     </tbody>
 </table>

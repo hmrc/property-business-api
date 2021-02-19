@@ -447,10 +447,12 @@ class AmendForeignPropertyPeriodSummaryControllerISpec extends IntegrationBaseSp
 
           val input = Seq(
             (BAD_REQUEST, "INVALID_TAXABLE_ENTITY_ID", BAD_REQUEST, NinoFormatError),
-            (BAD_REQUEST, "INVALID_BUSINESS_ID", BAD_REQUEST, BusinessIdFormatError),
+            (BAD_REQUEST, "INVALID_INCOMESOURCEID", BAD_REQUEST, BusinessIdFormatError),
+            (BAD_REQUEST, "INVALID_CORRELATIONID", INTERNAL_SERVER_ERROR, DownstreamError),
+            (BAD_REQUEST, "INVALID_PAYLOAD", INTERNAL_SERVER_ERROR, DownstreamError),
             (BAD_REQUEST, "INVALID_SUBMISSION_ID", BAD_REQUEST, SubmissionIdFormatError),
-            (NOT_FOUND, "SUBMISSION_ID_NOT_FOUND", NOT_FOUND, SubmissionIdNotFoundError),
-            (NOT_FOUND, "NOT_FOUND", NOT_FOUND, NotFoundError),
+            (NOT_FOUND, "INCOME_SOURCE_NOT_FOUND", NOT_FOUND, IncomeSourceNotFoundError),
+            (NOT_FOUND, "NO_DATA_FOUND", NOT_FOUND, NotFoundError),
             (INTERNAL_SERVER_ERROR, "SERVER_ERROR", INTERNAL_SERVER_ERROR, DownstreamError),
             (SERVICE_UNAVAILABLE, "SERVICE_UNAVAILABLE", INTERNAL_SERVER_ERROR, DownstreamError))
 

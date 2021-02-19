@@ -89,7 +89,7 @@ class AmendForeignPropertyPeriodSummaryController  @Inject()(val authService: En
            MtdErrorWithCustomMessage(RuleBothExpensesSuppliedError.code) |
            MtdErrorWithCustomMessage(RuleCountryCodeError.code) => BadRequest(Json.toJson(errorWrapper))
       case DownstreamError => InternalServerError(Json.toJson(errorWrapper))
-      case NotFoundError | SubmissionIdNotFoundError => NotFound(Json.toJson(errorWrapper))
+      case NotFoundError | IncomeSourceNotFoundError => NotFound(Json.toJson(errorWrapper))
     }
   }
 }

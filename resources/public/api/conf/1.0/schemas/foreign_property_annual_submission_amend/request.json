@@ -85,7 +85,7 @@
         "description": "Array holding the income and expenses of the user's Foreign property business - excluding Furnished Holiday Lets in the European Economic Area - for the period.",
         "properties": {
           "countryCode": {
-            "description": "Codes for the representation of names of countries.\n\nThe value must be ISO 3166-1 alpha-3.",
+            "description": "A three-letter code that represents a country name. The value must be a ISO 3166-1 alpha-3 code.",
             "type": "string",
             "pattern": "^[A-Z]{3}$",
             "example": "FRA"

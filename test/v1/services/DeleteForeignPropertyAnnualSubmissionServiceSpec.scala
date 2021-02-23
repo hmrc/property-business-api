@@ -72,7 +72,9 @@ class DeleteForeignPropertyAnnualSubmissionServiceSpec extends UnitSpec {
       val input = Seq(
         "INVALID_TAXABLE_ENTITY_ID" -> NinoFormatError,
         "INVALID_INCOME_SOURCE_ID" -> BusinessIdFormatError,
-        "NOT_FOUND" -> NotFoundError,
+        "INVALID_TAX_YEAR" -> DownstreamError,
+        "INVALID_CORRELATIONID" -> DownstreamError,
+        "NO_DATA_FOUND" -> NotFoundError,
         "SERVER_ERROR" -> DownstreamError,
         "SERVICE_UNAVAILABLE" -> DownstreamError
       )

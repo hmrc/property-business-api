@@ -56,7 +56,6 @@ class RetrieveForeignPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec
           Some(100.25),
           Some(100.25),
           Some(100.25),
-          Some(100.25),
           Some(100.25)))))))
 
   class Test extends MockHttpClient with MockAppConfig {

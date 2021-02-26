@@ -23,7 +23,6 @@ case class ForeignPropertyAllowances(annualInvestmentAllowance: Option[BigDecima
                                      zeroEmissionsGoodsVehicleAllowance: Option[BigDecimal],
                                      propertyAllowance: Option[BigDecimal],
                                      otherCapitalAllowance: Option[BigDecimal],
-                                     structureAndBuildingAllowance: Option[BigDecimal],
                                      electricChargePointAllowance:  Option[BigDecimal]
                                     )
 

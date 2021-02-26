@@ -101,7 +101,6 @@ class RetrieveForeignPropertyAnnualSubmissionControllerSpec
       Some(5000.99),
       Some(5000.99),
       Some(5000.99),
-      Some(5000.99),
       Some(5000.99)
     ))
   )

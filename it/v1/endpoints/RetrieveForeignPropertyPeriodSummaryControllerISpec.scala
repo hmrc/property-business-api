@@ -22,7 +22,7 @@ import play.api.http.Status
 import play.api.libs.json.Json
 import play.api.libs.ws.{WSRequest, WSResponse}
 import support.IntegrationBaseSpec
-import v1.models.errors.{BusinessIdFormatError, DownstreamError, MtdError, NinoFormatError, NotFoundError, SubmissionIdFormatError, SubmissionIdNotFoundError}
+import v1.models.errors.{BusinessIdFormatError, DownstreamError, MtdError, NinoFormatError, NotFoundError, SubmissionIdFormatError}
 import v1.stubs.{AuditStub, AuthStub, DesStub, MtdIdLookupStub}
 
 class RetrieveForeignPropertyPeriodSummaryControllerISpec extends IntegrationBaseSpec {

@@ -54,6 +54,7 @@ class AmendForeignPropertyPeriodSummaryControllerSpec
       lookupService = mockMtdIdLookupService,
       parser = mockAmendForeignPropertyRequestParser,
       service = mockService,
+      auditService = mockAuditService,
       hateoasFactory = mockHateoasFactory,
       cc = cc,
       idGenerator = mockIdGenerator

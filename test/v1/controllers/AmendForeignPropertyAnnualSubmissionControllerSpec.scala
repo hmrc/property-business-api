@@ -60,6 +60,7 @@ class AmendForeignPropertyAnnualSubmissionControllerSpec
       lookupService = mockMtdIdLookupService,
       parser = mockAmendForeignPropertyAnnualSubmissionRequestParser,
       service = mockService,
+      auditService = mockAuditService,
       hateoasFactory = mockHateoasFactory,
       cc = cc,
       idGenerator = mockIdGenerator

@@ -53,6 +53,7 @@ class CreateForeignPropertyPeriodSummaryControllerSpec
       authService = mockEnrolmentsAuthService,
       lookupService = mockMtdIdLookupService,
       service = mockCreateForeignPropertyService,
+      auditService = mockAuditService,
       parser = mockCreateForeignPropertyRequestParser,
       hateoasFactory = mockHateoasFactory,
       cc = cc,

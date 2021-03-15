@@ -47,6 +47,7 @@ class DeleteForeignPropertyAnnualSubmissionControllerSpec
       lookupService = mockMtdIdLookupService,
       parser = mockDeleteForeignPropertyAnnualSubmissionRequestParser,
       service = mockDeleteForeignPropertyAnnualSubmissionService,
+      auditService = mockAuditService,
       cc = cc,
       idGenerator = mockIdGenerator
     )

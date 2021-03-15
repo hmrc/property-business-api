@@ -22,9 +22,11 @@ import javax.inject.{Inject, Singleton}
 import play.api.http.MimeTypes
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.{Action, ControllerComponents}
+import uk.gov.hmrc.http.HeaderCarrier
 import utils.{IdGenerator, Logging}
 import v1.controllers.requestParsers.CreateForeignPropertyPeriodSummaryRequestParser
 import v1.hateoas.HateoasFactory
+import v1.models.audit.{AuditEvent, AuditResponse, CreateForeignPropertyAuditDetail}
 import v1.models.errors._
 import v1.models.request.createForeignPropertyPeriodSummary.CreateForeignPropertyPeriodSummaryRawData
 import v1.models.response.createForeignPropertyPeriodSummary.CreateForeignPropertyPeriodSummaryHateoasData
@@ -37,6 +39,7 @@ class CreateForeignPropertyPeriodSummaryController @Inject()(val authService: En
                                                              val lookupService: MtdIdLookupService,
                                                              parser: CreateForeignPropertyPeriodSummaryRequestParser,
                                                              service: CreateForeignPropertyPeriodSummaryService,
+                                                             auditService: AuditService,
                                                              hateoasFactory: HateoasFactory,
                                                              cc: ControllerComponents,
                                                              idGenerator: IdGenerator)(implicit ec: ExecutionContext)
@@ -65,6 +68,11 @@ class CreateForeignPropertyPeriodSummaryController @Inject()(val authService: En
             s"[${endpointLogContext.controllerName}][${endpointLogContext.endpointName}] - " +
               s"Success response received with CorrelationId: ${serviceResponse.correlationId}")
 
+          val response = Json.toJson(vendorResponse)
+
+          auditSubmission(CreateForeignPropertyAuditDetail(request.userDetails, nino, businessId, request.body,
+            serviceResponse.correlationId, AuditResponse(OK, Right(Some(response)))))
+
           Created(Json.toJson(vendorResponse))
             .withApiHeaders(serviceResponse.correlationId)
             .as(MimeTypes.JSON)
@@ -73,6 +81,10 @@ class CreateForeignPropertyPeriodSummaryController @Inject()(val authService: En
       result.leftMap { errorWrapper =>
         val resCorrelationId = errorWrapper.correlationId
         val result = errorResult(errorWrapper).withApiHeaders(resCorrelationId)
+
+
+        auditSubmission(CreateForeignPropertyAuditDetail(request.userDetails, nino, businessId, request.body,
+          correlationId, AuditResponse(result.header.status, Left(errorWrapper.auditErrors))))
 
         logger.warn(
           s"[${endpointLogContext.controllerName}][${endpointLogContext.endpointName}] - " +
@@ -105,4 +117,10 @@ class CreateForeignPropertyPeriodSummaryController @Inject()(val authService: En
     }
   }
 
+  private def auditSubmission(details: CreateForeignPropertyAuditDetail)
+                             (implicit hc: HeaderCarrier,
+                              ec: ExecutionContext) = {
+    val event = AuditEvent("AmendForeignPropertyIncomeAndExpenditurePeriodSummary", "Amend-Foreign-Property-Income-And-Expenditure-Period-Summary", details)
+    auditService.auditEvent(event)
+  }
 }

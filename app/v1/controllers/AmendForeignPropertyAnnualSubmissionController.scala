@@ -66,7 +66,7 @@ class AmendForeignPropertyAnnualSubmissionController @Inject()(val authService: 
 
           val response = Json.toJson(vendorResponse)
 
-          auditSubmission(CreateAndAmendForeignPropertyAnnualAuditDetail(request.userDetails, nino, businessId, request.body,
+          auditSubmission(CreateAndAmendForeignPropertyAnnualAuditDetail(request.userDetails, nino, taxYear, request.body,
             serviceResponse.correlationId, AuditResponse(OK, Right(Some(response)))))
 
           Ok(Json.toJson(vendorResponse))

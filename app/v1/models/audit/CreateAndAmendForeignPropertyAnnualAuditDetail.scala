@@ -22,7 +22,7 @@ import v1.models.auth.UserDetails
 case class CreateAndAmendForeignPropertyAnnualAuditDetail(userType: String,
                                             agentReferenceNumber: Option[String],
                                             nino: String,
-                                            businessId: String,
+                                            taxYear: String,
                                             request: JsValue,
                                             `X-CorrelationId`: String,
                                             response: AuditResponse)
@@ -32,7 +32,7 @@ object CreateAndAmendForeignPropertyAnnualAuditDetail {
 
   def apply(userDetails: UserDetails,
             nino: String,
-            businessId: String,
+            taxYear: String,
             request: JsValue,
             `X-CorrelationId`: String,
             auditResponse: AuditResponse): CreateAndAmendForeignPropertyAnnualAuditDetail = {
@@ -41,7 +41,7 @@ object CreateAndAmendForeignPropertyAnnualAuditDetail {
       userType = userDetails.userType,
       agentReferenceNumber = userDetails.agentReferenceNumber,
       nino = nino,
-      businessId = businessId,
+      taxYear = taxYear,
       request = request,
       `X-CorrelationId`,
       auditResponse

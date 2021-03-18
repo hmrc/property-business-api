@@ -21,11 +21,13 @@ import cats.implicits._
 import javax.inject.{Inject, Singleton}
 import play.api.libs.json.Json
 import play.api.mvc.{Action, AnyContent, ControllerComponents}
+import uk.gov.hmrc.http.HeaderCarrier
 import utils.{IdGenerator, Logging}
 import v1.controllers.requestParsers.DeleteForeignPropertyAnnualSubmissionRequestParser
-import v1.models.errors.{BadRequestError, BusinessIdFormatError, DownstreamError, ErrorWrapper, NinoFormatError, NotFoundError, RuleTaxYearNotSupportedError, RuleTaxYearRangeInvalidError, TaxYearFormatError}
+import v1.models.audit.{AuditEvent, AuditResponse, DeleteForeignPropertyAnnualAuditDetail}
+import v1.models.errors._
 import v1.models.request.deleteForeignPropertyAnnualSubmission.DeleteForeignPropertyAnnualSubmissionRawData
-import v1.services.{DeleteForeignPropertyAnnualSubmissionService, EnrolmentsAuthService, MtdIdLookupService}
+import v1.services.{AuditService, DeleteForeignPropertyAnnualSubmissionService, EnrolmentsAuthService, MtdIdLookupService}
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -34,6 +36,7 @@ class DeleteForeignPropertyAnnualSubmissionController @Inject()(val authService:
                                                                 val lookupService: MtdIdLookupService,
                                                                 parser: DeleteForeignPropertyAnnualSubmissionRequestParser,
                                                                 service: DeleteForeignPropertyAnnualSubmissionService,
+                                                                auditService: AuditService,
                                                                 cc: ControllerComponents,
                                                                 idGenerator: IdGenerator)(implicit ec: ExecutionContext)
   extends AuthorisedController(cc) with BaseController with Logging {
@@ -56,6 +59,9 @@ class DeleteForeignPropertyAnnualSubmissionController @Inject()(val authService:
             s"[${endpointLogContext.controllerName}][${endpointLogContext.endpointName}] - " +
               s"Success response received with CorrelationId: ${serviceResponse.correlationId}")
 
+          auditSubmission(DeleteForeignPropertyAnnualAuditDetail(request.userDetails, nino, businessId, taxYear,
+            serviceResponse.correlationId, AuditResponse(NO_CONTENT, Right(None))))
+
           NoContent.withApiHeaders(serviceResponse.correlationId)
 
         }
@@ -66,6 +72,10 @@ class DeleteForeignPropertyAnnualSubmissionController @Inject()(val authService:
         logger.warn(
           s"[${endpointLogContext.controllerName}][${endpointLogContext.endpointName}] - " +
             s"Error response received with CorrelationId: $resCorrelationId")
+
+        auditSubmission(DeleteForeignPropertyAnnualAuditDetail(request.userDetails, nino, businessId, taxYear,
+          correlationId, AuditResponse(result.header.status, Left(errorWrapper.auditErrors))))
+
         result
       }.merge
     }
@@ -78,5 +88,12 @@ class DeleteForeignPropertyAnnualSubmissionController @Inject()(val authService:
       case DownstreamError => InternalServerError(Json.toJson(errorWrapper))
       case NotFoundError => NotFound(Json.toJson(errorWrapper))
     }
+  }
+
+  private def auditSubmission(details: DeleteForeignPropertyAnnualAuditDetail)
+                             (implicit hc: HeaderCarrier,
+                              ec: ExecutionContext) = {
+    val event = AuditEvent("DeleteForeignPropertyAnnualSummary", "Delete-Foreign-Property-Annual-Summary", details)
+    auditService.auditEvent(event)
   }
 }

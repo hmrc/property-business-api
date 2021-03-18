@@ -24,11 +24,12 @@ import v1.mocks.MockIdGenerator
 import v1.mocks.hateoas.MockHateoasFactory
 import v1.mocks.requestParsers.MockAmendForeignPropertyAnnualSubmissionRequestParser
 import v1.mocks.services.{MockAmendForeignPropertyAnnualSubmissionService, MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService}
+import v1.models.audit.{AuditError, AuditEvent, AuditResponse, CreateAndAmendForeignPropertyAnnualAuditDetail}
 import v1.models.errors._
 import v1.models.hateoas.{HateoasWrapper, Link}
 import v1.models.hateoas.Method.GET
 import v1.models.outcomes.ResponseWrapper
-import v1.models.request.amendForeignPropertyAnnualSubmission.{AmendForeignPropertyAnnualSubmissionRawData, AmendForeignPropertyAnnualSubmissionRequest, AmendForeignPropertyAnnualSubmissionRequestBody}
+import v1.models.request.amendForeignPropertyAnnualSubmission._
 import v1.models.request.amendForeignPropertyAnnualSubmission.foreignFhlEea.{ForeignFhlEea, ForeignFhlEeaAdjustments, ForeignFhlEeaAllowances}
 import v1.models.request.amendForeignPropertyAnnualSubmission.foreignProperty.{ForeignPropertyAdjustments, ForeignPropertyAllowances, ForeignPropertyEntry}
 import v1.models.response.amendForeignPropertyAnnualSubmission.AmendForeignPropertyAnnualSubmissionHateoasData
@@ -60,6 +61,7 @@ class AmendForeignPropertyAnnualSubmissionControllerSpec
       lookupService = mockMtdIdLookupService,
       parser = mockAmendForeignPropertyAnnualSubmissionRequestParser,
       service = mockService,
+      auditService = mockAuditService,
       hateoasFactory = mockHateoasFactory,
       cc = cc,
       idGenerator = mockIdGenerator
@@ -70,7 +72,37 @@ class AmendForeignPropertyAnnualSubmissionControllerSpec
     MockIdGenerator.getCorrelationId.returns(correlationId)
   }
 
-  private val testHateoasLink = Link(href = s"Individuals/business/property/$nino/$businessId/annual/$taxYear", method = GET, rel = "self")
+  private val testHateoasLink = Link(href = s"/Individuals/business/property/$nino/$businessId/annual/$taxYear", method = GET, rel = "self")
+
+  val hateoasResponse = Json.parse(
+    s"""
+      |{
+      |   "links": [
+      |            {
+      |              "href": "/Individuals/business/property/$nino/$businessId/annual/$taxYear",
+      |              "method": "GET",
+      |              "rel": "self"
+      |            }
+      |          ]
+      |}
+      |""".stripMargin
+  )
+
+  def event(auditResponse: AuditResponse): AuditEvent[CreateAndAmendForeignPropertyAnnualAuditDetail] =
+    AuditEvent(
+      auditType = "CreateAmendForeignPropertyAnnualSummary",
+      transactionName = "Create-Amend-Foreign-Property-Annual-Summary",
+      detail = CreateAndAmendForeignPropertyAnnualAuditDetail(
+        userType = "Individual",
+        agentReferenceNumber = None,
+        nino,
+        businessId,
+        taxYear,
+        requestJson,
+        correlationId,
+        response = auditResponse
+      )
+    )
 
   private val requestJson = Json.parse(
     """
@@ -167,6 +199,9 @@ class AmendForeignPropertyAnnualSubmissionControllerSpec
         val result: Future[Result] = controller.handleRequest(nino, businessId, taxYear)(fakePostRequest(requestJson))
         status(result) shouldBe OK
         header("X-CorrelationId", result) shouldBe Some(correlationId)
+
+        val auditResponse: AuditResponse = AuditResponse(OK, None, Some(hateoasResponse))
+        MockedAuditService.verifyAuditEvent(event(auditResponse)).once
       }
     }
     "return the error as per spec" when {
@@ -183,6 +218,9 @@ class AmendForeignPropertyAnnualSubmissionControllerSpec
             status(result) shouldBe expectedStatus
             contentAsJson(result) shouldBe Json.toJson(error)
             header("X-CorrelationId", result) shouldBe Some(correlationId)
+
+            val auditResponse: AuditResponse = AuditResponse(expectedStatus, Some(Seq(AuditError(error.code))), None)
+            MockedAuditService.verifyAuditEvent(event(auditResponse)).once
           }
         }
 
@@ -237,6 +275,10 @@ class AmendForeignPropertyAnnualSubmissionControllerSpec
             status(result) shouldBe expectedStatus
             contentAsJson(result) shouldBe Json.toJson(mtdError)
             header("X-CorrelationId", result) shouldBe Some(correlationId)
+
+
+            val auditResponse: AuditResponse = AuditResponse(expectedStatus, Some(Seq(AuditError(mtdError.code))), None)
+            MockedAuditService.verifyAuditEvent(event(auditResponse)).once
           }
         }
 

@@ -24,6 +24,7 @@ import v1.mocks.MockIdGenerator
 import v1.mocks.hateoas.MockHateoasFactory
 import v1.mocks.requestParsers.MockAmendForeignPropertyPeriodSummaryRequestParser
 import v1.mocks.services.{MockAmendForeignPropertyPeriodSummaryService, MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService}
+import v1.models.audit.{AmendForeignPropertyPeriodicAuditDetail, AuditError, AuditEvent, AuditResponse}
 import v1.models.errors._
 import v1.models.hateoas.{HateoasWrapper, Link}
 import v1.models.hateoas.Method.GET
@@ -54,6 +55,7 @@ class AmendForeignPropertyPeriodSummaryControllerSpec
       lookupService = mockMtdIdLookupService,
       parser = mockAmendForeignPropertyRequestParser,
       service = mockService,
+      auditService = mockAuditService,
       hateoasFactory = mockHateoasFactory,
       cc = cc,
       idGenerator = mockIdGenerator
@@ -69,7 +71,7 @@ class AmendForeignPropertyPeriodSummaryControllerSpec
   private val submissionId = "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
   private val correlationId = "X-123"
 
-  private val testHateoasLink = Link(href = s"Individuals/business/property/$nino/$businessId/period", method = GET, rel = "self")
+  private val testHateoasLink = Link(href = s"/Individuals/business/property/$nino/$businessId/period", method = GET, rel = "self")
 
   private val requestJson = Json.parse(
     """|{
@@ -164,6 +166,37 @@ class AmendForeignPropertyPeriodSummaryControllerSpec
   private val rawData = AmendForeignPropertyPeriodSummaryRawData(nino, businessId, submissionId, requestJson)
   private val requestData = AmendForeignPropertyPeriodSummaryRequest(Nino(nino), businessId, submissionId, requestBody)
 
+
+  val hateoasResponse = Json.parse(
+    s"""
+      |{
+      |        "links": [
+      |          {
+      |            "href": "/Individuals/business/property/$nino/$businessId/period",
+      |            "rel": "self",
+      |            "method": "GET"
+      |          }
+      |        ]
+      |      }
+      |""".stripMargin)
+
+
+  def event(auditResponse: AuditResponse): AuditEvent[AmendForeignPropertyPeriodicAuditDetail] =
+    AuditEvent(
+      auditType = "AmendForeignPropertyIncomeAndExpenditurePeriodSummary",
+      transactionName = "Amend-Foreign-Property-Income-And-Expenditure-Period-Summary",
+      detail = AmendForeignPropertyPeriodicAuditDetail(
+        userType = "Individual",
+        agentReferenceNumber = None,
+        nino,
+        businessId,
+        submissionId,
+        requestJson,
+        correlationId,
+        response = auditResponse
+      )
+    )
+
   "handleRequest" should {
     "return Ok" when {
       "the request received is valid" in new Test {
@@ -183,6 +216,9 @@ class AmendForeignPropertyPeriodSummaryControllerSpec
         val result: Future[Result] = controller.handleRequest(nino, businessId, submissionId)(fakePostRequest(requestJson))
         status(result) shouldBe OK
         header("X-CorrelationId", result) shouldBe Some(correlationId)
+
+        val auditResponse: AuditResponse = AuditResponse(OK, None, Some(hateoasResponse))
+        MockedAuditService.verifyAuditEvent(event(auditResponse)).once
       }
     }
     "return the error as per spec" when {
@@ -199,6 +235,9 @@ class AmendForeignPropertyPeriodSummaryControllerSpec
             status(result) shouldBe expectedStatus
             contentAsJson(result) shouldBe Json.toJson(error)
             header("X-CorrelationId", result) shouldBe Some(correlationId)
+
+            val auditResponse: AuditResponse = AuditResponse(expectedStatus, Some(Seq(AuditError(error.code))), None)
+            MockedAuditService.verifyAuditEvent(event(auditResponse)).once
           }
         }
 
@@ -243,6 +282,9 @@ class AmendForeignPropertyPeriodSummaryControllerSpec
             status(result) shouldBe expectedStatus
             contentAsJson(result) shouldBe Json.toJson(mtdError)
             header("X-CorrelationId", result) shouldBe Some(correlationId)
+
+            val auditResponse: AuditResponse = AuditResponse(expectedStatus, Some(Seq(AuditError(mtdError.code))), None)
+            MockedAuditService.verifyAuditEvent(event(auditResponse)).once
           }
         }
 

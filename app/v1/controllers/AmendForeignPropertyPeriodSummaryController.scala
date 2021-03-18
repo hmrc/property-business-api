@@ -25,7 +25,7 @@ import uk.gov.hmrc.http.HeaderCarrier
 import utils.{IdGenerator, Logging}
 import v1.controllers.requestParsers.AmendForeignPropertyPeriodSummaryRequestParser
 import v1.hateoas.HateoasFactory
-import v1.models.audit.{AmendForeignPropertyAuditDetail, AuditEvent, AuditResponse}
+import v1.models.audit.{AmendForeignPropertyPeriodicAuditDetail, AuditEvent, AuditResponse}
 import v1.models.errors._
 import v1.models.request.amendForeignPropertyPeriodSummary.AmendForeignPropertyPeriodSummaryRawData
 import v1.models.response.amendForeignPropertyPeriodSummary.AmendForeignPropertyPeriodSummaryHateoasData
@@ -66,7 +66,7 @@ class AmendForeignPropertyPeriodSummaryController  @Inject()(val authService: En
 
           val response = Json.toJson(vendorResponse)
 
-          auditSubmission(AmendForeignPropertyAuditDetail(request.userDetails, nino, businessId, submissionId, request.body,
+          auditSubmission(AmendForeignPropertyPeriodicAuditDetail(request.userDetails, nino, businessId, submissionId, request.body,
             serviceResponse.correlationId, AuditResponse(OK, Right(Some(response)))))
 
           Ok(Json.toJson(vendorResponse))
@@ -82,7 +82,7 @@ class AmendForeignPropertyPeriodSummaryController  @Inject()(val authService: En
             s"Error response received with CorrelationId: $resCorrelationId")
 
 
-        auditSubmission(AmendForeignPropertyAuditDetail(request.userDetails, nino, businessId, submissionId, request.body,
+        auditSubmission(AmendForeignPropertyPeriodicAuditDetail(request.userDetails, nino, businessId, submissionId, request.body,
           correlationId, AuditResponse(result.header.status, Left(errorWrapper.auditErrors))))
 
         result
@@ -105,7 +105,7 @@ class AmendForeignPropertyPeriodSummaryController  @Inject()(val authService: En
       case NotFoundError | IncomeSourceNotFoundError => NotFound(Json.toJson(errorWrapper))
     }
   }
-  private def auditSubmission(details: AmendForeignPropertyAuditDetail)
+  private def auditSubmission(details: AmendForeignPropertyPeriodicAuditDetail)
                              (implicit hc: HeaderCarrier,
                               ec: ExecutionContext) = {
     val event = AuditEvent("AmendForeignPropertyIncomeAndExpenditurePeriodSummary", "Amend-Foreign-Property-Income-And-Expenditure-Period-Summary", details)

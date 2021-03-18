@@ -24,6 +24,7 @@ import v1.mocks.MockIdGenerator
 import v1.mocks.hateoas.MockHateoasFactory
 import v1.mocks.requestParsers.MockCreateForeignPropertyPeriodSummaryRequestParser
 import v1.mocks.services.{MockAuditService, MockCreateForeignPropertyPeriodSummaryService, MockEnrolmentsAuthService, MockMtdIdLookupService}
+import v1.models.audit.{AuditError, AuditEvent, AuditResponse, CreateForeignPropertyPeriodicAuditDetail}
 import v1.models.errors._
 import v1.models.hateoas.Method.GET
 import v1.models.hateoas.{HateoasWrapper, Link}
@@ -205,6 +206,52 @@ class CreateForeignPropertyPeriodSummaryControllerSpec
   private val requestData = CreateForeignPropertyPeriodSummaryRequest(Nino(nino), businessId, requestBody)
   private val rawData = CreateForeignPropertyPeriodSummaryRawData(nino, businessId, consolidatedRequestBodyJson)
 
+
+  val hateoasResponse = Json.parse(
+    """
+      |{
+      |  "submissionId": "4557ecb5-fd32-48cc-81f5-e6acd1099f3c",
+      |        "links": [
+      |          {
+      |            "href": "/individuals/business/property/TC663795B/XAIS12345678910/period",
+      |            "method": "GET",
+      |            "rel": "self"
+      |          }
+      |        ]
+      |      }
+      |""".stripMargin)
+
+
+  def consolidatedEvent(auditResponse: AuditResponse): AuditEvent[CreateForeignPropertyPeriodicAuditDetail] =
+    AuditEvent(
+      auditType = "AmendForeignPropertyIncomeAndExpenditurePeriodSummary",
+      transactionName = "Amend-Foreign-Property-Income-And-Expenditure-Period-Summary",
+      detail = CreateForeignPropertyPeriodicAuditDetail(
+        userType = "Individual",
+        agentReferenceNumber = None,
+        nino,
+        businessId,
+        consolidatedRequestBodyJson,
+        correlationId,
+        response = auditResponse
+      )
+    )
+
+  def unconsolidatedEvent(auditResponse: AuditResponse): AuditEvent[CreateForeignPropertyPeriodicAuditDetail] =
+    AuditEvent(
+      auditType = "AmendForeignPropertyIncomeAndExpenditurePeriodSummary",
+      transactionName = "Amend-Foreign-Property-Income-And-Expenditure-Period-Summary",
+      detail = CreateForeignPropertyPeriodicAuditDetail(
+        userType = "Individual",
+        agentReferenceNumber = None,
+        nino,
+        businessId,
+        unconsolidatedRequestBodyJson,
+        correlationId,
+        response = auditResponse
+      )
+    )
+
   "create" should {
     "return a successful response from a consolidated request" when {
       "the request received is valid" in new Test {
@@ -225,6 +272,10 @@ class CreateForeignPropertyPeriodSummaryControllerSpec
         status(result) shouldBe CREATED
         contentAsJson(result) shouldBe responseBody
         header("X-CorrelationId", result) shouldBe Some(correlationId)
+
+
+        val auditResponse: AuditResponse = AuditResponse(OK, None, Some(hateoasResponse))
+        MockedAuditService.verifyAuditEvent(consolidatedEvent(auditResponse)).once
       }
     }
 
@@ -247,6 +298,9 @@ class CreateForeignPropertyPeriodSummaryControllerSpec
         status(result) shouldBe CREATED
         contentAsJson(result) shouldBe responseBody
         header("X-CorrelationId", result) shouldBe Some(correlationId)
+
+        val auditResponse: AuditResponse = AuditResponse(OK, None, Some(hateoasResponse))
+        MockedAuditService.verifyAuditEvent(unconsolidatedEvent(auditResponse)).once
       }
     }
 
@@ -264,6 +318,9 @@ class CreateForeignPropertyPeriodSummaryControllerSpec
             status(result) shouldBe expectedStatus
             contentAsJson(result) shouldBe Json.toJson(error)
             header("X-CorrelationId", result) shouldBe Some(correlationId)
+
+            val auditResponse: AuditResponse = AuditResponse(expectedStatus, Some(Seq(AuditError(error.code))), None)
+            MockedAuditService.verifyAuditEvent(consolidatedEvent(auditResponse)).once
           }
         }
 
@@ -304,6 +361,10 @@ class CreateForeignPropertyPeriodSummaryControllerSpec
             status(result) shouldBe expectedStatus
             contentAsJson(result) shouldBe Json.toJson(mtdError)
             header("X-CorrelationId", result) shouldBe Some(correlationId)
+
+
+            val auditResponse: AuditResponse = AuditResponse(expectedStatus, Some(Seq(AuditError(mtdError.code))), None)
+            MockedAuditService.verifyAuditEvent(consolidatedEvent(auditResponse)).once
           }
         }
 

@@ -24,7 +24,7 @@ import play.api.mvc.{Action, AnyContent, ControllerComponents}
 import uk.gov.hmrc.http.HeaderCarrier
 import utils.{IdGenerator, Logging}
 import v1.controllers.requestParsers.DeleteForeignPropertyAnnualSubmissionRequestParser
-import v1.models.audit.{AuditEvent, AuditResponse, DeleteForeignPropertyAuditDetail}
+import v1.models.audit.{AuditEvent, AuditResponse, DeleteForeignPropertyAnnualAuditDetail}
 import v1.models.errors._
 import v1.models.request.deleteForeignPropertyAnnualSubmission.DeleteForeignPropertyAnnualSubmissionRawData
 import v1.services.{AuditService, DeleteForeignPropertyAnnualSubmissionService, EnrolmentsAuthService, MtdIdLookupService}
@@ -59,7 +59,7 @@ class DeleteForeignPropertyAnnualSubmissionController @Inject()(val authService:
             s"[${endpointLogContext.controllerName}][${endpointLogContext.endpointName}] - " +
               s"Success response received with CorrelationId: ${serviceResponse.correlationId}")
 
-          auditSubmission(DeleteForeignPropertyAuditDetail(request.userDetails, nino, businessId, taxYear,
+          auditSubmission(DeleteForeignPropertyAnnualAuditDetail(request.userDetails, nino, businessId, taxYear,
             serviceResponse.correlationId, AuditResponse(NO_CONTENT, Right(None))))
 
           NoContent.withApiHeaders(serviceResponse.correlationId)
@@ -73,7 +73,7 @@ class DeleteForeignPropertyAnnualSubmissionController @Inject()(val authService:
           s"[${endpointLogContext.controllerName}][${endpointLogContext.endpointName}] - " +
             s"Error response received with CorrelationId: $resCorrelationId")
 
-        auditSubmission(DeleteForeignPropertyAuditDetail(request.userDetails, nino, businessId, taxYear,
+        auditSubmission(DeleteForeignPropertyAnnualAuditDetail(request.userDetails, nino, businessId, taxYear,
           correlationId, AuditResponse(result.header.status, Left(errorWrapper.auditErrors))))
 
         result
@@ -90,7 +90,7 @@ class DeleteForeignPropertyAnnualSubmissionController @Inject()(val authService:
     }
   }
 
-  private def auditSubmission(details: DeleteForeignPropertyAuditDetail)
+  private def auditSubmission(details: DeleteForeignPropertyAnnualAuditDetail)
                              (implicit hc: HeaderCarrier,
                               ec: ExecutionContext) = {
     val event = AuditEvent("DeleteForeignPropertyAnnualSummary", "Delete-Foreign-Property-Annual-Summary", details)

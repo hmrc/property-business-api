@@ -19,7 +19,7 @@ package v1.models.audit
 import play.api.libs.json.{JsValue, Json, Writes}
 import v1.models.auth.UserDetails
 
-case class AmendForeignPropertyAuditDetail(userType: String,
+case class AmendForeignPropertyPeriodicAuditDetail(userType: String,
                                                           agentReferenceNumber: Option[String],
                                                           nino: String,
                                                           businessId: String,
@@ -28,8 +28,8 @@ case class AmendForeignPropertyAuditDetail(userType: String,
                                                           `X-CorrelationId`: String,
                                                           response: AuditResponse)
 
-object AmendForeignPropertyAuditDetail {
-  implicit val writes: Writes[AmendForeignPropertyAuditDetail] = Json.writes[AmendForeignPropertyAuditDetail]
+object AmendForeignPropertyPeriodicAuditDetail {
+  implicit val writes: Writes[AmendForeignPropertyPeriodicAuditDetail] = Json.writes[AmendForeignPropertyPeriodicAuditDetail]
 
   def apply(userDetails: UserDetails,
             nino: String,
@@ -37,9 +37,9 @@ object AmendForeignPropertyAuditDetail {
             submissionId: String,
             request: JsValue,
             `X-CorrelationId`: String,
-            auditResponse: AuditResponse): AmendForeignPropertyAuditDetail = {
+            auditResponse: AuditResponse): AmendForeignPropertyPeriodicAuditDetail = {
 
-    AmendForeignPropertyAuditDetail(
+    AmendForeignPropertyPeriodicAuditDetail(
       userType = userDetails.userType,
       agentReferenceNumber = userDetails.agentReferenceNumber,
       nino = nino,

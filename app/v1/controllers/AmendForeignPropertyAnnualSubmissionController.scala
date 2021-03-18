@@ -66,7 +66,7 @@ class AmendForeignPropertyAnnualSubmissionController @Inject()(val authService: 
 
           val response = Json.toJson(vendorResponse)
 
-          auditSubmission(CreateAndAmendForeignPropertyAnnualAuditDetail(request.userDetails, nino, taxYear, request.body,
+          auditSubmission(CreateAndAmendForeignPropertyAnnualAuditDetail(request.userDetails, nino, businessId, taxYear, request.body,
             serviceResponse.correlationId, AuditResponse(OK, Right(Some(response)))))
 
           Ok(Json.toJson(vendorResponse))
@@ -81,7 +81,7 @@ class AmendForeignPropertyAnnualSubmissionController @Inject()(val authService: 
           s"[${endpointLogContext.controllerName}][${endpointLogContext.endpointName}] - " +
             s"Error response received with CorrelationId: $resCorrelationId")
 
-        auditSubmission(CreateAndAmendForeignPropertyAnnualAuditDetail(request.userDetails, nino, taxYear, request.body,
+        auditSubmission(CreateAndAmendForeignPropertyAnnualAuditDetail(request.userDetails, nino, businessId, taxYear, request.body,
           correlationId, AuditResponse(result.header.status, Left(errorWrapper.auditErrors))))
 
         result

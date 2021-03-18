@@ -19,25 +19,25 @@ package v1.models.audit
 import play.api.libs.json.{Json, Writes}
 import v1.models.auth.UserDetails
 
-case class DeleteForeignPropertyAuditDetail(userType: String,
-                                            agentReferenceNumber: Option[String],
-                                            nino: String,
-                                            businessId: String,
-                                            taxYear: String,
-                                            `X-CorrelationId`: String,
-                                            response: AuditResponse)
+case class DeleteForeignPropertyAnnualAuditDetail(userType: String,
+                                                  agentReferenceNumber: Option[String],
+                                                  nino: String,
+                                                  businessId: String,
+                                                  taxYear: String,
+                                                  `X-CorrelationId`: String,
+                                                  response: AuditResponse)
 
-object DeleteForeignPropertyAuditDetail {
-  implicit val writes: Writes[DeleteForeignPropertyAuditDetail] = Json.writes[DeleteForeignPropertyAuditDetail]
+object DeleteForeignPropertyAnnualAuditDetail {
+  implicit val writes: Writes[DeleteForeignPropertyAnnualAuditDetail] = Json.writes[DeleteForeignPropertyAnnualAuditDetail]
 
   def apply(userDetails: UserDetails,
             nino: String,
             businessId: String,
             taxYear: String,
             `X-CorrelationId`: String,
-            auditResponse: AuditResponse): DeleteForeignPropertyAuditDetail = {
+            auditResponse: AuditResponse): DeleteForeignPropertyAnnualAuditDetail = {
 
-    DeleteForeignPropertyAuditDetail(
+    DeleteForeignPropertyAnnualAuditDetail(
       userType = userDetails.userType,
       agentReferenceNumber = userDetails.agentReferenceNumber,
       nino = nino,

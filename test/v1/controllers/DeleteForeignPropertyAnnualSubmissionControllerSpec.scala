@@ -23,7 +23,7 @@ import uk.gov.hmrc.http.HeaderCarrier
 import v1.mocks.MockIdGenerator
 import v1.mocks.requestParsers.MockDeleteForeignPropertyAnnualSubmissionRequestParser
 import v1.mocks.services.{MockAuditService, MockDeleteForeignPropertyAnnualSubmissionService, MockEnrolmentsAuthService, MockMtdIdLookupService}
-import v1.models.audit.{AuditError, AuditEvent, AuditResponse, DeleteForeignPropertyAuditDetail}
+import v1.models.audit.{AuditError, AuditEvent, AuditResponse, DeleteForeignPropertyAnnualAuditDetail}
 import v1.models.errors.{BadRequestError, BusinessIdFormatError, DownstreamError, ErrorWrapper, MtdError, NinoFormatError, NotFoundError, RuleTaxYearNotSupportedError, RuleTaxYearRangeInvalidError, TaxYearFormatError}
 import v1.models.outcomes.ResponseWrapper
 import v1.models.request.deleteForeignPropertyAnnualSubmission.{DeleteForeignPropertyAnnualSubmissionRawData, DeleteForeignPropertyAnnualSubmissionRequest}
@@ -66,11 +66,11 @@ class DeleteForeignPropertyAnnualSubmissionControllerSpec
   private val rawData = DeleteForeignPropertyAnnualSubmissionRawData(nino, businessId, taxYear)
   private val requestData = DeleteForeignPropertyAnnualSubmissionRequest(Nino(nino), businessId, taxYear)
 
-  def event(auditResponse: AuditResponse): AuditEvent[DeleteForeignPropertyAuditDetail] =
+  def event(auditResponse: AuditResponse): AuditEvent[DeleteForeignPropertyAnnualAuditDetail] =
     AuditEvent(
       auditType = "DeleteForeignPropertyAnnualSummary",
       transactionName = "Delete-Foreign-Property-Annual-Summary",
-      detail = DeleteForeignPropertyAuditDetail(
+      detail = DeleteForeignPropertyAnnualAuditDetail(
         userType = "Individual",
         agentReferenceNumber = None,
         nino,

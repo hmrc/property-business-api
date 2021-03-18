@@ -224,8 +224,8 @@ class CreateForeignPropertyPeriodSummaryControllerSpec
 
   def consolidatedEvent(auditResponse: AuditResponse): AuditEvent[CreateForeignPropertyPeriodicAuditDetail] =
     AuditEvent(
-      auditType = "AmendForeignPropertyIncomeAndExpenditurePeriodSummary",
-      transactionName = "Amend-Foreign-Property-Income-And-Expenditure-Period-Summary",
+      auditType = "CreateForeignPropertyIncomeAndExpenditurePeriodSummary",
+      transactionName = "Create-Foreign-Property-Income-And-Expenditure-Period-Summary",
       detail = CreateForeignPropertyPeriodicAuditDetail(
         userType = "Individual",
         agentReferenceNumber = None,
@@ -239,8 +239,8 @@ class CreateForeignPropertyPeriodSummaryControllerSpec
 
   def unconsolidatedEvent(auditResponse: AuditResponse): AuditEvent[CreateForeignPropertyPeriodicAuditDetail] =
     AuditEvent(
-      auditType = "AmendForeignPropertyIncomeAndExpenditurePeriodSummary",
-      transactionName = "Amend-Foreign-Property-Income-And-Expenditure-Period-Summary",
+      auditType = "CreateForeignPropertyIncomeAndExpenditurePeriodSummary",
+      transactionName = "Create-Foreign-Property-Income-And-Expenditure-Period-Summary",
       detail = CreateForeignPropertyPeriodicAuditDetail(
         userType = "Individual",
         agentReferenceNumber = None,

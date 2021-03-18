@@ -120,7 +120,7 @@ class CreateForeignPropertyPeriodSummaryController @Inject()(val authService: En
   private def auditSubmission(details: CreateForeignPropertyPeriodicAuditDetail)
                              (implicit hc: HeaderCarrier,
                               ec: ExecutionContext) = {
-    val event = AuditEvent("AmendForeignPropertyIncomeAndExpenditurePeriodSummary", "Amend-Foreign-Property-Income-And-Expenditure-Period-Summary", details)
+    val event = AuditEvent("CreateForeignPropertyIncomeAndExpenditurePeriodSummary", "Create-Foreign-Property-Income-And-Expenditure-Period-Summary", details)
     auditService.auditEvent(event)
   }
 }

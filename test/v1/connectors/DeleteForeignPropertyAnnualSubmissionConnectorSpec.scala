@@ -47,7 +47,7 @@ class DeleteForeignPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec {
       val outcome = Right(ResponseWrapper(correlationId, ()))
       MockedHttpClient
         .delete(
-          url = s"$baseUrl/business/property/${nino}/${businessId}/annual/${taxYear}",
+          url = s"$baseUrl/income-tax/business/property/annual/${nino}/${businessId}/${taxYear}",
           requiredHeaders = "Environment" -> "des-environment", "Authorization" -> s"Bearer des-token"
         )
         .returns(Future.successful(outcome))

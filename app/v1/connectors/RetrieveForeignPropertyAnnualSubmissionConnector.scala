@@ -36,7 +36,7 @@ class RetrieveForeignPropertyAnnualSubmissionConnector @Inject()(val http: HttpC
     correlationId: String): Future[DesOutcome[RetrieveForeignPropertyAnnualSubmissionResponse]] = {
 
     get(
-      uri = DesUri[RetrieveForeignPropertyAnnualSubmissionResponse](s"business/property/${request.nino}/${request.businessId}/annual/${request.taxYear}")
+      uri = DesUri[RetrieveForeignPropertyAnnualSubmissionResponse](s"income-tax/business/property/annual/${request.nino}/${request.businessId}/${request.taxYear}")
     )
   }
 }

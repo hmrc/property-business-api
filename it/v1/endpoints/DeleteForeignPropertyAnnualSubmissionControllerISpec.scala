@@ -36,7 +36,7 @@ class DeleteForeignPropertyAnnualSubmissionControllerISpec extends IntegrationBa
 
     def uri: String = s"/$nino/$businessId/annual/$taxYear"
 
-    def desUri: String = s"/business/property/$nino/$businessId/annual/$taxYear"
+    def desUri: String = s"/income-tax/business/property/annual/$nino/$businessId/$taxYear"
 
     def setupStubs(): StubMapping
 

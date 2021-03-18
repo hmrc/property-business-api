@@ -106,7 +106,7 @@ class AmendForeignPropertyPeriodSummaryControllerISpec extends IntegrationBaseSp
 
     def uri: String = s"/$nino/$businessId/period/$submissionId"
 
-    def desUri: String = s"/business/property/$nino/$businessId/period/$submissionId"
+    def desUri: String = s"/income-tax/business/property/periodic/$nino/$businessId/$submissionId"
 
     def request(): WSRequest = {
       setupStubs()

@@ -113,7 +113,7 @@ class ListForeignPropertiesPeriodSummariesControllerISpec extends IntegrationBas
       "toDate" -> toDate
     )
 
-    def desUri: String = s"/business/property/${nino}/${businessId}/period"
+    def desUri: String = s"/income-tax/business/property/periodic/${nino}/${businessId}"
 
     def setupStubs(): StubMapping
 

@@ -99,7 +99,7 @@ class AmendForeignPropertyAnnualSubmissionControllerISpec extends IntegrationBas
 
     def uri: String = s"/$nino/$businessId/annual/$taxYear"
 
-    def desUri: String = s"/business/property/$nino/$businessId/annual/$taxYear"
+    def desUri: String = s"/income-tax/business/property/annual/$nino/$businessId/$taxYear"
 
     def request(): WSRequest = {
       setupStubs()

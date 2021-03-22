@@ -542,7 +542,7 @@ class CreateForeignPropertyPeriodSummaryControllerISpec extends IntegrationBaseS
     trait CreateTest extends Test {
       def uri: String = s"/$nino/$businessId/period"
 
-      def desUri: String = s"/business/property/$nino/$businessId/period"
+      def desUri: String = s"/income-tax/business/property/periodic/$nino/$businessId"
 
       val desResponse = Json.parse(
         """

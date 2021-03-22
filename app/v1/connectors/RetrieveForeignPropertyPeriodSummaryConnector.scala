@@ -36,7 +36,7 @@ class RetrieveForeignPropertyPeriodSummaryConnector @Inject()(val http: HttpClie
     correlationId: String): Future[DesOutcome[RetrieveForeignPropertyPeriodSummaryResponse]] = {
 
     get(
-      uri = DesUri[RetrieveForeignPropertyPeriodSummaryResponse](s"business/property/${request.nino}/${request.businessId}/period/${request.submissionId}")
+      uri = DesUri[RetrieveForeignPropertyPeriodSummaryResponse](s"income-tax/business/property/periodic/${request.nino}/${request.businessId}/${request.submissionId}")
     )
   }
 }

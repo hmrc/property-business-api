@@ -36,7 +36,7 @@ class AmendForeignPropertyPeriodSummaryConnector @Inject()(val http: HttpClient,
 
     put(
       body = request.body,
-      uri = DesUri[Unit](s"business/property/${request.nino}/${request.businessId}/period/${request.submissionId}")
+      uri = DesUri[Unit](s"income-tax/business/property/periodic/${request.nino}/${request.businessId}/${request.submissionId}")
     )
   }
 }

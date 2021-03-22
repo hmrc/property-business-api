@@ -93,7 +93,7 @@ class AmendForeignPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
       val outcome = Right(ResponseWrapper(correlationId, response))
       MockedHttpClient
         .put(
-          url = s"$baseUrl/income-tax/business/property/periodic/${nino}/${businessId}/${submissionId}",
+          url = s"$baseUrl/income-tax/business/property/period/${nino}/${businessId}/${submissionId}",
           body = body,
           requiredHeaders = "Environment" -> "des-environment", "Authorization" -> s"Bearer des-token"
         )

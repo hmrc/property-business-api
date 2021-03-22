@@ -131,7 +131,7 @@ class CreateForeignPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
       val outcome = Right(ResponseWrapper(correlationId, response))
       MockedHttpClient
         .post(
-          url = s"$baseUrl/income-tax/business/property/periodic/${nino}/${businessId}",
+          url = s"$baseUrl/income-tax/business/property/period/${nino}/${businessId}",
           body = regularExpensesBody,
           requiredHeaders = "Environment" -> "des-environment", "Authorization" -> s"Bearer des-token"
         )
@@ -146,7 +146,7 @@ class CreateForeignPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
       val outcome = Right(ResponseWrapper(correlationId, response))
       MockedHttpClient
         .post(
-          url = s"$baseUrl/income-tax/business/property/periodic/${nino}/${businessId}",
+          url = s"$baseUrl/income-tax/business/property/period/${nino}/${businessId}",
           body = consolidatedExpensesBody,
           requiredHeaders = "Environment" -> "des-environment", "Authorization" -> s"Bearer des-token"
         )

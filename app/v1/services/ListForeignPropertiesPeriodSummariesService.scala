@@ -49,7 +49,7 @@ class ListForeignPropertiesPeriodSummariesService @Inject()(connector: ListForei
     Map(
       "INVALID_TAXABLE_ENTITY_ID" -> NinoFormatError,
       "INVALID_INCOMESOURCEID" -> BusinessIdFormatError,
-      "INCOME_SOURCE_NOT_FOUND" -> NotFoundError,
+      "NO_DATA_FOUND" -> NotFoundError,
       "INVALID_FROM_DATE" -> DownstreamError,
       "INVALID_TO_DATE" -> DownstreamError,
       "INVALID_DATE_REQUEST" -> DownstreamError,

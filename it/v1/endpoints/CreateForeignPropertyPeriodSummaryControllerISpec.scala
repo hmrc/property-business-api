@@ -564,7 +564,7 @@ class CreateForeignPropertyPeriodSummaryControllerISpec extends IntegrationBaseS
         }
 
         val response: WSResponse = await(request().post(unconsolidatedRequestJson))
-        response.status shouldBe Status.OK
+        response.status shouldBe Status.CREATED
         response.json shouldBe responseBody
         response.header("Content-Type") shouldBe Some("application/json")
       }
@@ -579,7 +579,7 @@ class CreateForeignPropertyPeriodSummaryControllerISpec extends IntegrationBaseS
         }
 
         val response: WSResponse = await(request().post(consolidatedRequestBodyJson))
-        response.status shouldBe Status.OK
+        response.status shouldBe Status.CREATED
         response.json shouldBe responseBody
         response.header("Content-Type") shouldBe Some("application/json")
       }

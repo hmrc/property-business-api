@@ -53,7 +53,7 @@ class AmendForeignPropertyPeriodSummaryService @Inject()(connector: AmendForeign
       "INVALID_CORRELATIONID" -> DownstreamError,
       "INVALID_PAYLOAD" -> DownstreamError,
       "INVALID_SUBMISSION_ID" -> SubmissionIdFormatError,
-      "INCOME_SOURCE_NOT_FOUND" -> IncomeSourceNotFoundError,
+      "INCOME_SOURCE_NOT_FOUND" -> NotFoundError,
       "NO_DATA_FOUND" -> NotFoundError,
       "SERVER_ERROR" -> DownstreamError,
       "SERVICE_UNAVAILABLE" -> DownstreamError

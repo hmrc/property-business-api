@@ -292,7 +292,6 @@ class AmendForeignPropertyPeriodSummaryControllerSpec
           (NinoFormatError, BAD_REQUEST),
           (BusinessIdFormatError, BAD_REQUEST),
           (SubmissionIdFormatError, BAD_REQUEST),
-          (IncomeSourceNotFoundError, NOT_FOUND),
           (NotFoundError, NOT_FOUND),
           (DownstreamError, INTERNAL_SERVER_ERROR)
         )

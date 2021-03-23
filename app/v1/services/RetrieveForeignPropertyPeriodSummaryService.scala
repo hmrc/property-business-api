@@ -51,7 +51,7 @@ class RetrieveForeignPropertyPeriodSummaryService @Inject()(connector: RetrieveF
       "INVALID_TAXABLE_ENTITY_ID" -> NinoFormatError,
       "INVALID_INCOMESOURCE_ID" -> BusinessIdFormatError,
       "INVALID_SUBMISSION_ID" -> SubmissionIdFormatError,
-      "INCOME_SOURCE_NOT_FOUND" -> NotFoundError,
+      "NO_DATA_FOUND" -> NotFoundError,
       "SERVER_ERROR" -> DownstreamError,
       "SERVICE_UNAVAILABLE" -> DownstreamError,
       "INVALID_CORRELATIONID" -> DownstreamError

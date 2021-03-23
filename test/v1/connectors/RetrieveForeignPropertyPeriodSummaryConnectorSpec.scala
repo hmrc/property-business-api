@@ -89,7 +89,7 @@ class RetrieveForeignPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
       val outcome = Right(ResponseWrapper(correlationId, response))
       MockedHttpClient
         .get(
-          url = s"$baseUrl/income-tax/business/property/period/${nino}/${businessId}/${submissionId}",
+          url = s"$baseUrl/income-tax/business/property/periodic/${nino}/${businessId}/${submissionId}",
           requiredHeaders = "Environment" -> "des-environment", "Authorization" -> s"Bearer des-token"
         )
         .returns(Future.successful(outcome))

@@ -73,7 +73,7 @@ class CreateForeignPropertyPeriodSummaryController @Inject()(val authService: En
           auditSubmission(CreateForeignPropertyPeriodicAuditDetail(request.userDetails, nino, businessId, request.body,
             serviceResponse.correlationId, AuditResponse(OK, Right(Some(response)))))
 
-          Created(Json.toJson(vendorResponse))
+          Ok(Json.toJson(vendorResponse))
             .withApiHeaders(serviceResponse.correlationId)
             .as(MimeTypes.JSON)
         }

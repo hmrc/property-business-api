@@ -269,7 +269,7 @@ class CreateForeignPropertyPeriodSummaryControllerSpec
           .returns(HateoasWrapper(response, Seq(testHateoasLink)))
 
         val result: Future[Result] = controller.handleRequest(nino, businessId)(fakePostRequest(consolidatedRequestBodyJson))
-        status(result) shouldBe CREATED
+        status(result) shouldBe OK
         contentAsJson(result) shouldBe responseBody
         header("X-CorrelationId", result) shouldBe Some(correlationId)
 
@@ -295,7 +295,7 @@ class CreateForeignPropertyPeriodSummaryControllerSpec
           .returns(HateoasWrapper(response, Seq(testHateoasLink)))
 
         val result: Future[Result] = controller.handleRequest(nino, businessId)(fakePostRequest(unconsolidatedRequestBodyJson))
-        status(result) shouldBe CREATED
+        status(result) shouldBe OK
         contentAsJson(result) shouldBe responseBody
         header("X-CorrelationId", result) shouldBe Some(correlationId)
 

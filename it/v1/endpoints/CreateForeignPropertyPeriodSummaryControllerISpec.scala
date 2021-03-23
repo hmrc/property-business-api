@@ -559,12 +559,12 @@ class CreateForeignPropertyPeriodSummaryControllerISpec extends IntegrationBaseS
           AuditStub.audit()
           AuthStub.authorised()
           MtdIdLookupStub.ninoFound(nino)
-          DesStub.onSuccess(DesStub.POST, desUri, Status.CREATED, desResponse)
+          DesStub.onSuccess(DesStub.POST, desUri, Status.OK, desResponse)
 
         }
 
         val response: WSResponse = await(request().post(unconsolidatedRequestJson))
-        response.status shouldBe Status.CREATED
+        response.status shouldBe Status.OK
         response.json shouldBe responseBody
         response.header("Content-Type") shouldBe Some("application/json")
       }
@@ -574,12 +574,12 @@ class CreateForeignPropertyPeriodSummaryControllerISpec extends IntegrationBaseS
           AuditStub.audit()
           AuthStub.authorised()
           MtdIdLookupStub.ninoFound(nino)
-          DesStub.onSuccess(DesStub.POST, desUri, Status.CREATED, desResponse)
+          DesStub.onSuccess(DesStub.POST, desUri, Status.OK, desResponse)
 
         }
 
         val response: WSResponse = await(request().post(consolidatedRequestBodyJson))
-        response.status shouldBe Status.CREATED
+        response.status shouldBe Status.OK
         response.json shouldBe responseBody
         response.header("Content-Type") shouldBe Some("application/json")
       }

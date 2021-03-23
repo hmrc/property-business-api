@@ -81,7 +81,7 @@ class AuthISpec extends IntegrationBaseSpec {
 
     def uri: String = s"/$nino/$businessId/period/$submissionId"
 
-    def desUri: String = s"/income-tax/business/property/periodic/$nino/$businessId/$submissionId"
+    def desUri: String = s"/income-tax/business/property/period/$nino/$businessId/$submissionId"
 
     def setupStubs(): StubMapping
 

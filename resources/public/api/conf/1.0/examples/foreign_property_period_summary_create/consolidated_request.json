@@ -23,7 +23,9 @@
         "specialWithholdingTaxOrUKTaxPaid": 5000.99
       },
       "expenditure": {
-        "consolidatedExpenses": 5000.99
+        "residentialFinancialCost": 200.25,
+        "broughtFwdResidentialFinancialCost": 100.25,
+        "consolidatedExpenses": 100.25
       }
     }
   ]

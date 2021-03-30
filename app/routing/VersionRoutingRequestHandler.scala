@@ -18,6 +18,7 @@ package routing
 
 import config.{AppConfig, FeatureSwitch}
 import definition.Versions
+
 import javax.inject.{Inject, Singleton}
 import play.api.http.{DefaultHttpRequestHandler, HttpConfiguration, HttpErrorHandler, HttpFilters}
 import play.api.libs.json.Json

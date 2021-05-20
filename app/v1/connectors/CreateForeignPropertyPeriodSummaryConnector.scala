@@ -29,18 +29,18 @@ import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class CreateForeignPropertyPeriodSummaryConnector @Inject()(val http: HttpClient,
-                                                            val appConfig: AppConfig) extends BaseDesConnector {
+                                                            val appConfig: AppConfig) extends BaseDownstreamConnector {
 
   def createForeignProperty(request: CreateForeignPropertyPeriodSummaryRequest)(
     implicit hc: HeaderCarrier,
     ec: ExecutionContext,
-    correlationId: String): Future[DesOutcome[CreateForeignPropertyPeriodSummaryResponse]] = {
+    correlationId: String): Future[DownstreamOutcome[CreateForeignPropertyPeriodSummaryResponse]] = {
 
-    implicit val desSuccessCode: SuccessCode = SuccessCode(Status.OK)
+    implicit val successCode: SuccessCode = SuccessCode(Status.OK)
 
     post(
       body = request.body,
-      uri = DesUri[CreateForeignPropertyPeriodSummaryResponse](s"income-tax/business/property/periodic/${request.nino}/${request.businessId}")
+      uri = IfsUri[CreateForeignPropertyPeriodSummaryResponse](s"income-tax/business/property/periodic/${request.nino}/${request.businessId}")
     )
   }
 }

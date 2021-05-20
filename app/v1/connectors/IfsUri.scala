@@ -16,4 +16,4 @@
 
 package v1.connectors
 
-case class DesUri[Resp](value: String)
+case class IfsUri[Resp](value: String)

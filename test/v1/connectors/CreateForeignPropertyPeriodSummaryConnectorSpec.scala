@@ -20,8 +20,8 @@ import mocks.MockAppConfig
 import uk.gov.hmrc.domain.Nino
 import v1.mocks.MockHttpClient
 import v1.models.outcomes.ResponseWrapper
-import v1.models.request.common.foreignFhlEea.{ForeignFhlEea, ForeignFhlEeaExpenditure, ForeignFhlEeaIncome}
-import v1.models.request.common.foreignPropertyEntry.{ForeignPropertyEntry, ForeignPropertyExpenditure, ForeignPropertyIncome, ForeignPropertyRentIncome}
+import v1.models.request.common.foreignFhlEea._
+import v1.models.request.common.foreignPropertyEntry._
 import v1.models.request.createForeignPropertyPeriodSummary._
 import v1.models.response.createForeignPropertyPeriodSummary.CreateForeignPropertyPeriodSummaryResponse
 
@@ -29,10 +29,10 @@ import scala.concurrent.Future
 
 class CreateForeignPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
 
-  val businessId = "XAIS12345678910"
-  val nino = Nino("AA123456A")
+  val businessId: String = "XAIS12345678910"
+  val nino: Nino = Nino("AA123456A")
 
-  val regularExpensesBody = CreateForeignPropertyPeriodSummaryRequestBody(
+  val regularExpensesBody: CreateForeignPropertyPeriodSummaryRequestBody = CreateForeignPropertyPeriodSummaryRequestBody(
     "2020-01-01",
     "2020-01-31",
     Some(ForeignFhlEea(
@@ -71,7 +71,7 @@ class CreateForeignPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
       ))))
     ))
 
-  val consolidatedExpensesBody = CreateForeignPropertyPeriodSummaryRequestBody(
+  val consolidatedExpensesBody: CreateForeignPropertyPeriodSummaryRequestBody = CreateForeignPropertyPeriodSummaryRequestBody(
     "2020-01-01",
     "2020-01-31",
     Some(ForeignFhlEea(
@@ -110,19 +110,21 @@ class CreateForeignPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
       ))))
     ))
 
-  val response = CreateForeignPropertyPeriodSummaryResponse("4557ecb5-fd32-48cc-81f5-e6acd1099f3c")
+  private val response = CreateForeignPropertyPeriodSummaryResponse("4557ecb5-fd32-48cc-81f5-e6acd1099f3c")
 
   private val regularExpensesRequestData = CreateForeignPropertyPeriodSummaryRequest(nino, businessId, regularExpensesBody)
 
   private val consolidatedExpensesRequestData = CreateForeignPropertyPeriodSummaryRequest(nino, businessId, consolidatedExpensesBody)
 
   class Test extends MockHttpClient with MockAppConfig {
-    val connector: CreateForeignPropertyPeriodSummaryConnector = new CreateForeignPropertyPeriodSummaryConnector(http = mockHttpClient, appConfig = mockAppConfig)
+    val connector: CreateForeignPropertyPeriodSummaryConnector = new CreateForeignPropertyPeriodSummaryConnector(
+      http = mockHttpClient,
+      appConfig = mockAppConfig
+    )
 
-    val desRequestHeaders: Seq[(String, String)] = Seq("Environment" -> "des-environment", "Authorization" -> s"Bearer des-token")
-    MockedAppConfig.desBaseUrl returns baseUrl
-    MockedAppConfig.desToken returns "des-token"
-    MockedAppConfig.desEnvironment returns "des-environment"
+    MockedAppConfig.ifsBaseUrl returns baseUrl
+    MockedAppConfig.ifsToken returns "ifs-token"
+    MockedAppConfig.ifsEnvironment returns "ifs-environment"
   }
 
   "connector" must {
@@ -131,9 +133,9 @@ class CreateForeignPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
       val outcome = Right(ResponseWrapper(correlationId, response))
       MockedHttpClient
         .post(
-          url = s"$baseUrl/income-tax/business/property/periodic/${nino}/${businessId}",
+          url = s"$baseUrl/income-tax/business/property/periodic/$nino/$businessId",
           body = regularExpensesBody,
-          requiredHeaders = "Environment" -> "des-environment", "Authorization" -> s"Bearer des-token"
+          requiredHeaders = "Environment" -> "ifs-environment", "Authorization" -> s"Bearer ifs-token"
         )
         .returns(Future.successful(outcome))
 
@@ -146,9 +148,9 @@ class CreateForeignPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
       val outcome = Right(ResponseWrapper(correlationId, response))
       MockedHttpClient
         .post(
-          url = s"$baseUrl/income-tax/business/property/periodic/${nino}/${businessId}",
+          url = s"$baseUrl/income-tax/business/property/periodic/$nino/$businessId",
           body = consolidatedExpensesBody,
-          requiredHeaders = "Environment" -> "des-environment", "Authorization" -> s"Bearer des-token"
+          requiredHeaders = "Environment" -> "ifs-environment", "Authorization" -> s"Bearer ifs-token"
         )
         .returns(Future.successful(outcome))
 

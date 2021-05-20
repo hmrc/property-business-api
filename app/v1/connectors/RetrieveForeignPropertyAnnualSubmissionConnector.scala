@@ -28,15 +28,17 @@ import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class RetrieveForeignPropertyAnnualSubmissionConnector @Inject()(val http: HttpClient,
-                                                                 val appConfig: AppConfig) extends BaseDesConnector {
+                                                                 val appConfig: AppConfig) extends BaseDownstreamConnector {
 
   def retrieveForeignProperty(request: RetrieveForeignPropertyAnnualSubmissionRequest)(
     implicit hc: HeaderCarrier,
     ec: ExecutionContext,
-    correlationId: String): Future[DesOutcome[RetrieveForeignPropertyAnnualSubmissionResponse]] = {
+    correlationId: String): Future[DownstreamOutcome[RetrieveForeignPropertyAnnualSubmissionResponse]] = {
+
+    val ifsUri = s"income-tax/business/property/annual/${request.nino}/${request.businessId}/${request.taxYear}"
 
     get(
-      uri = DesUri[RetrieveForeignPropertyAnnualSubmissionResponse](s"income-tax/business/property/annual/${request.nino}/${request.businessId}/${request.taxYear}")
+      uri = IfsUri[RetrieveForeignPropertyAnnualSubmissionResponse](ifsUri)
     )
   }
 }

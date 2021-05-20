@@ -24,7 +24,7 @@ import v1.models.outcomes.ResponseWrapper
 
 import scala.concurrent.Future
 
-class BaseDesConnectorSpec extends ConnectorSpec {
+class BaseDownstreamConnectorSpec extends ConnectorSpec {
 
   // WLOG
   case class Result(value: Int)
@@ -37,35 +37,35 @@ class BaseDesConnectorSpec extends ConnectorSpec {
   val url = "some/url?param=value"
   val absoluteUrl = s"$baseUrl/$url"
 
-  implicit val httpReads: HttpReads[DesOutcome[Result]] = mock[HttpReads[DesOutcome[Result]]]
+  implicit val httpReads: HttpReads[DownstreamOutcome[Result]] = mock[HttpReads[DownstreamOutcome[Result]]]
 
   class Test extends MockHttpClient with MockAppConfig {
-    val connector: BaseDesConnector = new BaseDesConnector {
+    val connector: BaseDownstreamConnector = new BaseDownstreamConnector {
       val http: HttpClient = mockHttpClient
       val appConfig: AppConfig = mockAppConfig
     }
-    MockedAppConfig.desBaseUrl returns baseUrl
-    MockedAppConfig.desToken returns "des-token"
-    MockedAppConfig.desEnvironment returns "des-environment"
+    MockedAppConfig.ifsBaseUrl returns baseUrl
+    MockedAppConfig.ifsToken returns "ifs-token"
+    MockedAppConfig.ifsEnvironment returns "ifs-environment"
   }
 
   "post" must {
-    "posts with the required des headers and returns the result" in new Test {
+    "posts with the required ifs headers and returns the result" in new Test {
       MockedHttpClient
-        .post(absoluteUrl, body, "Environment" -> "des-environment", "Authorization" -> s"Bearer des-token")
+        .post(absoluteUrl, body, "Environment" -> "ifs-environment", "Authorization" -> s"Bearer ifs-token")
         .returns(Future.successful(outcome))
 
-      await(connector.post(body, DesUri[Result](url))) shouldBe outcome
+      await(connector.post(body, IfsUri[Result](url))) shouldBe outcome
     }
   }
 
   "get" must {
-    "get with the requred des headers and return the result" in new Test {
+    "get with the required ifs headers and return the result" in new Test {
       MockedHttpClient
-        .get(absoluteUrl, "Environment" -> "des-environment", "Authorization" -> s"Bearer des-token")
+        .get(absoluteUrl, "Environment" -> "ifs-environment", "Authorization" -> s"Bearer ifs-token")
         .returns(Future.successful(outcome))
 
-      await(connector.get(DesUri[Result](url))) shouldBe outcome
+      await(connector.get(IfsUri[Result](url))) shouldBe outcome
     }
   }
 }

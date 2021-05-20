@@ -27,15 +27,15 @@ import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class DeleteForeignPropertyAnnualSubmissionConnector @Inject()(val http: HttpClient,
-                                                               val appConfig: AppConfig) extends BaseDesConnector {
+                                                               val appConfig: AppConfig) extends BaseDownstreamConnector {
 
   def deleteForeignPropertyAnnualSubmission(request: DeleteForeignPropertyAnnualSubmissionRequest)(
     implicit hc: HeaderCarrier,
     ec: ExecutionContext,
-    correlationId: String): Future[DesOutcome[Unit]] = {
+    correlationId: String): Future[DownstreamOutcome[Unit]] = {
 
     delete(
-      uri = DesUri[Unit](s"income-tax/business/property/annual/${request.nino}/${request.businessId}/${request.taxYear}")
+      uri = IfsUri[Unit](s"income-tax/business/property/annual/${request.nino.nino}/${request.businessId}/${request.taxYear}")
     )
   }
 }

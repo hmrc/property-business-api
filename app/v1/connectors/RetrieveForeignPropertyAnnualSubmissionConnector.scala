@@ -35,10 +35,10 @@ class RetrieveForeignPropertyAnnualSubmissionConnector @Inject()(val http: HttpC
     ec: ExecutionContext,
     correlationId: String): Future[DownstreamOutcome[RetrieveForeignPropertyAnnualSubmissionResponse]] = {
 
-    val ifsUri = s"income-tax/business/property/annual/${request.nino}/${request.businessId}/${request.taxYear}"
+    val url = s"income-tax/business/property/annual/${request.nino.nino}/${request.businessId}/${request.taxYear}"
 
     get(
-      uri = IfsUri[RetrieveForeignPropertyAnnualSubmissionResponse](ifsUri)
+      uri = IfsUri[RetrieveForeignPropertyAnnualSubmissionResponse](url)
     )
   }
 }

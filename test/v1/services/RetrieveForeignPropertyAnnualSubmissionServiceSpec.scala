@@ -17,29 +17,28 @@
 package v1.services
 
 import support.UnitSpec
-import uk.gov.hmrc.domain.Nino
-import v1.mocks.connectors.{MockRetrieveForeignPropertyAnnualSubmissionConnector}
-import v1.models.errors.{BusinessIdFormatError, DesErrorCode, DesErrors, DownstreamError, ErrorWrapper, MtdError, NinoFormatError, NotFoundError}
+import v1.mocks.connectors.MockRetrieveForeignPropertyAnnualSubmissionConnector
+import v1.models.errors._
 import v1.models.outcomes.ResponseWrapper
 import v1.models.request.retrieveForeignPropertyAnnualSubmission.RetrieveForeignPropertyAnnualSubmissionRequest
 import v1.models.response.retrieveForeignPropertyAnnualSubmission.RetrieveForeignPropertyAnnualSubmissionResponse
-import v1.models.response.retrieveForeignPropertyAnnualSubmission.foreignFhlEea.{ForeignFhlEeaAdjustments, ForeignFhlEeaAllowances, ForeignFhlEeaEntry}
-import v1.models.response.retrieveForeignPropertyAnnualSubmission.foreignProperty.{ForeignPropertyAdjustments, ForeignPropertyAllowances, ForeignPropertyEntry}
+import v1.models.response.retrieveForeignPropertyAnnualSubmission.foreignFhlEea._
+import v1.models.response.retrieveForeignPropertyAnnualSubmission.foreignProperty._
 import uk.gov.hmrc.http.HeaderCarrier
 import v1.controllers.EndpointLogContext
-import scala.concurrent.ExecutionContext.Implicits.global
+import v1.models.domain.Nino
 
+import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class RetrieveForeignPropertyAnnualSubmissionServiceSpec extends UnitSpec {
 
+  val nino: String = "AA123456A"
+  val businessId: String = "XAIS12345678910"
+  val taxYear: String = "2019-20"
+  implicit val correlationId: String = "X-123"
 
-  val nino = Nino("AA123456A")
-  val businessId = "XAIS12345678910"
-  val taxYear = "2019-20"
-  implicit val correlationId = "X-123"
-
-  val response = RetrieveForeignPropertyAnnualSubmissionResponse(
+  private val response = RetrieveForeignPropertyAnnualSubmissionResponse(
     Some(ForeignFhlEeaEntry(
       Some(ForeignFhlEeaAdjustments(
         Some(100.25),
@@ -63,7 +62,7 @@ class RetrieveForeignPropertyAnnualSubmissionServiceSpec extends UnitSpec {
         Some(100.25),
         Some(100.25)))))))
 
-  private val requestData = RetrieveForeignPropertyAnnualSubmissionRequest(nino, businessId, taxYear)
+  private val requestData = RetrieveForeignPropertyAnnualSubmissionRequest(Nino(nino), businessId, taxYear)
 
   trait Test extends MockRetrieveForeignPropertyAnnualSubmissionConnector {
     implicit val hc: HeaderCarrier = HeaderCarrier()

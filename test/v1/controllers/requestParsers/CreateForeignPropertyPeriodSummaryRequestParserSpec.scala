@@ -18,17 +18,18 @@ package v1.controllers.requestParsers
 
 import play.api.libs.json.Json
 import support.UnitSpec
-import uk.gov.hmrc.domain.Nino
 import v1.mocks.validators.MockCreateForeignPropertyPeriodSummaryValidator
+import v1.models.domain.Nino
 import v1.models.errors.{BadRequestError, BusinessIdFormatError, ErrorWrapper, NinoFormatError}
-import v1.models.request.common.foreignFhlEea.{ForeignFhlEea, ForeignFhlEeaExpenditure, ForeignFhlEeaIncome}
-import v1.models.request.common.foreignPropertyEntry.{ForeignPropertyEntry, ForeignPropertyExpenditure, ForeignPropertyIncome, ForeignPropertyRentIncome}
-import v1.models.request.createForeignPropertyPeriodSummary.{CreateForeignPropertyPeriodSummaryRawData, CreateForeignPropertyPeriodSummaryRequestBody, CreateForeignPropertyPeriodSummaryRequest}
+import v1.models.request.common.foreignFhlEea._
+import v1.models.request.common.foreignPropertyEntry._
+import v1.models.request.createForeignPropertyPeriodSummary._
 
 class CreateForeignPropertyPeriodSummaryRequestParserSpec extends UnitSpec {
-  val nino = "AA123456B"
-  val businessId = "XAIS12345678901"
-  implicit val correlationId = "X-123"
+
+  val nino: String = "AA123456B"
+  val businessId: String = "XAIS12345678901"
+  implicit val correlationId: String = "X-123"
 
   private val requestBodyJson = Json.parse(
     """{
@@ -77,7 +78,7 @@ class CreateForeignPropertyPeriodSummaryRequestParserSpec extends UnitSpec {
       |}
     """.stripMargin)
 
-  val inputData =
+  val inputData: CreateForeignPropertyPeriodSummaryRawData =
     CreateForeignPropertyPeriodSummaryRawData(nino, businessId, requestBodyJson)
 
   trait Test extends MockCreateForeignPropertyPeriodSummaryValidator {

@@ -16,27 +16,26 @@
 
 package v1.controllers
 
-import play.api.libs.json.Json
+import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.Result
-import uk.gov.hmrc.domain.Nino
 import uk.gov.hmrc.http.HeaderCarrier
 import v1.mocks.MockIdGenerator
 import v1.mocks.hateoas.MockHateoasFactory
 import v1.mocks.requestParsers.MockAmendForeignPropertyAnnualSubmissionRequestParser
 import v1.mocks.services.{MockAmendForeignPropertyAnnualSubmissionService, MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService}
 import v1.models.audit.{AuditError, AuditEvent, AuditResponse, CreateAndAmendForeignPropertyAnnualAuditDetail}
+import v1.models.domain.Nino
 import v1.models.errors._
 import v1.models.hateoas.{HateoasWrapper, Link}
 import v1.models.hateoas.Method.GET
 import v1.models.outcomes.ResponseWrapper
 import v1.models.request.amendForeignPropertyAnnualSubmission._
-import v1.models.request.amendForeignPropertyAnnualSubmission.foreignFhlEea.{ForeignFhlEea, ForeignFhlEeaAdjustments, ForeignFhlEeaAllowances}
-import v1.models.request.amendForeignPropertyAnnualSubmission.foreignProperty.{ForeignPropertyAdjustments, ForeignPropertyAllowances, ForeignPropertyEntry}
+import v1.models.request.amendForeignPropertyAnnualSubmission.foreignFhlEea._
+import v1.models.request.amendForeignPropertyAnnualSubmission.foreignProperty._
 import v1.models.response.amendForeignPropertyAnnualSubmission.AmendForeignPropertyAnnualSubmissionHateoasData
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
-
 
 class AmendForeignPropertyAnnualSubmissionControllerSpec
   extends ControllerBaseSpec
@@ -54,7 +53,7 @@ class AmendForeignPropertyAnnualSubmissionControllerSpec
   private val correlationId = "X-123"
 
   trait Test {
-    val hc = HeaderCarrier()
+    val hc: HeaderCarrier = HeaderCarrier()
 
     val controller = new AmendForeignPropertyAnnualSubmissionController(
       authService = mockEnrolmentsAuthService,
@@ -67,25 +66,25 @@ class AmendForeignPropertyAnnualSubmissionControllerSpec
       idGenerator = mockIdGenerator
     )
 
-    MockedMtdIdLookupService.lookup(nino).returns(Future.successful(Right("test-mtd-id")))
+    MockMtdIdLookupService.lookup(nino).returns(Future.successful(Right("test-mtd-id")))
     MockedEnrolmentsAuthService.authoriseUser()
     MockIdGenerator.getCorrelationId.returns(correlationId)
   }
 
   private val testHateoasLink = Link(href = s"/Individuals/business/property/$nino/$businessId/annual/$taxYear", method = GET, rel = "self")
 
-  val hateoasResponse = Json.parse(
+  val hateoasResponse: JsValue = Json.parse(
     s"""
       |{
       |   "links": [
-      |            {
-      |              "href": "/Individuals/business/property/$nino/$businessId/annual/$taxYear",
-      |              "method": "GET",
-      |              "rel": "self"
-      |            }
-      |          ]
+      |      {
+      |         "href": "/Individuals/business/property/$nino/$businessId/annual/$taxYear",
+      |         "method": "GET",
+      |         "rel": "self"
+      |      }
+      |   ]
       |}
-      |""".stripMargin
+    """.stripMargin
   )
 
   def event(auditResponse: AuditResponse): AuditEvent[CreateAndAmendForeignPropertyAnnualAuditDetail] =
@@ -172,7 +171,7 @@ class AmendForeignPropertyAnnualSubmissionControllerSpec
     ))
   )
 
-  val body = AmendForeignPropertyAnnualSubmissionRequestBody(
+  val body: AmendForeignPropertyAnnualSubmissionRequestBody = AmendForeignPropertyAnnualSubmissionRequestBody(
     Some(foreignFhlEea),
     Some(Seq(foreignPropertyEntry))
   )

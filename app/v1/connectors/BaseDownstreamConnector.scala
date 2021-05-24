@@ -18,7 +18,6 @@ package v1.connectors
 
 import config.AppConfig
 import play.api.libs.json.Writes
-import uk.gov.hmrc.http.logging.Authorization
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, HttpReads}
 import utils.Logging
 
@@ -28,9 +27,19 @@ trait BaseDownstreamConnector extends Logging {
   val http: HttpClient
   val appConfig: AppConfig
 
-  private[connectors] def ifsHeaderCarrier(implicit hc: HeaderCarrier, correlationId: String): HeaderCarrier =
-    hc.copy(authorization = Some(Authorization(s"Bearer ${appConfig.ifsToken}")))
-      .withExtraHeaders("Environment" -> appConfig.ifsEnv, "CorrelationId" -> correlationId)
+  private def ifsHeaderCarrier(additionalHeaders: Seq[String] = Seq.empty)(implicit hc: HeaderCarrier,
+                                                                           correlationId: String): HeaderCarrier =
+    HeaderCarrier(
+      extraHeaders = hc.extraHeaders ++
+        // Contract headers
+        Seq(
+          "Authorization" -> s"Bearer ${appConfig.ifsToken}",
+          "Environment" -> appConfig.ifsEnv,
+          "CorrelationId" -> correlationId
+        ) ++
+        // Other headers (i.e Gov-Test-Scenario, Content-Type)
+        hc.headers(additionalHeaders ++ appConfig.ifsEnvironmentHeaders.getOrElse(Seq.empty))
+    )
 
   def post[Body: Writes, Resp](body: Body, uri: IfsUri[Resp])(implicit ec: ExecutionContext,
                                                               hc: HeaderCarrier,
@@ -38,10 +47,10 @@ trait BaseDownstreamConnector extends Logging {
                                                               correlationId: String): Future[DownstreamOutcome[Resp]] = {
 
     def doPost(implicit hc: HeaderCarrier): Future[DownstreamOutcome[Resp]] = {
-      http.POST(s"${appConfig.ifsBaseUrl}/${uri.value}", body)
+      http.POST(url = s"${appConfig.ifsBaseUrl}/${uri.value}", body)
     }
 
-    doPost(ifsHeaderCarrier(hc, correlationId))
+    doPost(ifsHeaderCarrier(Seq("Content-Type")))
   }
 
   def get[Resp](uri: IfsUri[Resp])(implicit ec: ExecutionContext,
@@ -50,9 +59,9 @@ trait BaseDownstreamConnector extends Logging {
                                    correlationId: String): Future[DownstreamOutcome[Resp]] = {
 
     def doGet(implicit hc: HeaderCarrier): Future[DownstreamOutcome[Resp]] =
-      http.GET(s"${appConfig.ifsBaseUrl}/${uri.value}")
+      http.GET(url = s"${appConfig.ifsBaseUrl}/${uri.value}")
 
-    doGet(ifsHeaderCarrier(hc, correlationId))
+    doGet(ifsHeaderCarrier())
   }
 
   def put[Body: Writes, Resp](body: Body, uri: IfsUri[Resp])(implicit ec: ExecutionContext,
@@ -61,9 +70,9 @@ trait BaseDownstreamConnector extends Logging {
                                                              correlationId: String): Future[DownstreamOutcome[Resp]] = {
 
     def doPut(implicit hc: HeaderCarrier): Future[DownstreamOutcome[Resp]] =
-      http.PUT(s"${appConfig.ifsBaseUrl}/${uri.value}", body)
+      http.PUT(url = s"${appConfig.ifsBaseUrl}/${uri.value}", body)
 
-    doPut(ifsHeaderCarrier(hc, correlationId))
+    doPut(ifsHeaderCarrier(Seq("Content-Type")))
   }
 
   def delete[Resp](uri: IfsUri[Resp])(implicit ec: ExecutionContext,
@@ -72,9 +81,9 @@ trait BaseDownstreamConnector extends Logging {
                                       correlationId: String): Future[DownstreamOutcome[Resp]] = {
 
     def doDelete(implicit hc: HeaderCarrier): Future[DownstreamOutcome[Resp]] =
-      http.DELETE(s"${appConfig.ifsBaseUrl}/${uri.value}")
+      http.DELETE(url = s"${appConfig.ifsBaseUrl}/${uri.value}")
 
-    doDelete(ifsHeaderCarrier(hc, correlationId))
+    doDelete(ifsHeaderCarrier())
   }
 
 }

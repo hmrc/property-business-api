@@ -17,8 +17,9 @@
 package v1.connectors
 
 import mocks.MockAppConfig
-import uk.gov.hmrc.domain.Nino
+import uk.gov.hmrc.http.HeaderCarrier
 import v1.mocks.MockHttpClient
+import v1.models.domain.Nino
 import v1.models.outcomes.ResponseWrapper
 import v1.models.request.common.foreignFhlEea._
 import v1.models.request.common.foreignPropertyEntry._
@@ -30,7 +31,7 @@ import scala.concurrent.Future
 class CreateForeignPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
 
   val businessId: String = "XAIS12345678910"
-  val nino: Nino = Nino("AA123456A")
+  val nino: String = "AA123456A"
 
   val regularExpensesBody: CreateForeignPropertyPeriodSummaryRequestBody = CreateForeignPropertyPeriodSummaryRequestBody(
     "2020-01-01",
@@ -112,9 +113,9 @@ class CreateForeignPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
 
   private val response = CreateForeignPropertyPeriodSummaryResponse("4557ecb5-fd32-48cc-81f5-e6acd1099f3c")
 
-  private val regularExpensesRequestData = CreateForeignPropertyPeriodSummaryRequest(nino, businessId, regularExpensesBody)
+  private val regularExpensesRequestData = CreateForeignPropertyPeriodSummaryRequest(Nino(nino), businessId, regularExpensesBody)
 
-  private val consolidatedExpensesRequestData = CreateForeignPropertyPeriodSummaryRequest(nino, businessId, consolidatedExpensesBody)
+  private val consolidatedExpensesRequestData = CreateForeignPropertyPeriodSummaryRequest(Nino(nino), businessId, consolidatedExpensesBody)
 
   class Test extends MockHttpClient with MockAppConfig {
     val connector: CreateForeignPropertyPeriodSummaryConnector = new CreateForeignPropertyPeriodSummaryConnector(
@@ -122,20 +123,26 @@ class CreateForeignPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
       appConfig = mockAppConfig
     )
 
-    MockedAppConfig.ifsBaseUrl returns baseUrl
-    MockedAppConfig.ifsToken returns "ifs-token"
-    MockedAppConfig.ifsEnvironment returns "ifs-environment"
+    MockAppConfig.ifsBaseUrl returns baseUrl
+    MockAppConfig.ifsToken returns "ifs-token"
+    MockAppConfig.ifsEnvironment returns "ifs-environment"
+    MockAppConfig.ifsEnvironmentHeaders returns Some(allowedIfsHeaders)
   }
 
   "connector" must {
-    "put a body with regular expenses and return 200 with submissionId" in new Test {
-
+    "post a body with regular expenses and return 200 with submissionId" in new Test {
       val outcome = Right(ResponseWrapper(correlationId, response))
-      MockedHttpClient
+
+      implicit val hc: HeaderCarrier = HeaderCarrier(otherHeaders = otherHeaders ++ Seq("Content-Type" -> "application/json"))
+      val requiredIfsHeadersPost: Seq[(String, String)] = requiredIfsHeaders ++ Seq("Content-Type" -> "application/json")
+
+      MockHttpClient
         .post(
           url = s"$baseUrl/income-tax/business/property/periodic/$nino/$businessId",
+          config = dummyIfsHeaderCarrierConfig,
           body = regularExpensesBody,
-          requiredHeaders = "Environment" -> "ifs-environment", "Authorization" -> s"Bearer ifs-token"
+          requiredHeaders = requiredIfsHeadersPost,
+          excludedHeaders = Seq("AnotherHeader" -> "HeaderValue")
         )
         .returns(Future.successful(outcome))
 
@@ -143,14 +150,19 @@ class CreateForeignPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
 
     }
 
-    "put a body with consolidated expenses and return 200 with submissionId" in new Test {
-
+    "post a body with consolidated expenses and return 200 with submissionId" in new Test {
       val outcome = Right(ResponseWrapper(correlationId, response))
-      MockedHttpClient
+
+      implicit val hc: HeaderCarrier = HeaderCarrier(otherHeaders = otherHeaders ++ Seq("Content-Type" -> "application/json"))
+      val requiredIfsHeadersPost: Seq[(String, String)] = requiredIfsHeaders ++ Seq("Content-Type" -> "application/json")
+
+      MockHttpClient
         .post(
           url = s"$baseUrl/income-tax/business/property/periodic/$nino/$businessId",
+          config = dummyIfsHeaderCarrierConfig,
           body = consolidatedExpensesBody,
-          requiredHeaders = "Environment" -> "ifs-environment", "Authorization" -> s"Bearer ifs-token"
+          requiredHeaders = requiredIfsHeadersPost,
+          excludedHeaders = Seq("AnotherHeader" -> "HeaderValue")
         )
         .returns(Future.successful(outcome))
 

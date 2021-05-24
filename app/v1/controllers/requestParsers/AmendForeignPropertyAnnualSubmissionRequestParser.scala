@@ -17,8 +17,8 @@
 package v1.controllers.requestParsers
 
 import javax.inject.Inject
-import uk.gov.hmrc.domain.Nino
 import v1.controllers.requestParsers.validators.AmendForeignPropertyAnnualSubmissionValidator
+import v1.models.domain.Nino
 import v1.models.request.amendForeignPropertyAnnualSubmission._
 
 class AmendForeignPropertyAnnualSubmissionRequestParser @Inject()(val validator: AmendForeignPropertyAnnualSubmissionValidator)
@@ -26,5 +26,4 @@ class AmendForeignPropertyAnnualSubmissionRequestParser @Inject()(val validator:
 
   override protected def requestFor(data: AmendForeignPropertyAnnualSubmissionRawData): AmendForeignPropertyAnnualSubmissionRequest =
     AmendForeignPropertyAnnualSubmissionRequest(Nino(data.nino), data.businessId, data.taxYear, data.body.as[AmendForeignPropertyAnnualSubmissionRequestBody])
-
 }

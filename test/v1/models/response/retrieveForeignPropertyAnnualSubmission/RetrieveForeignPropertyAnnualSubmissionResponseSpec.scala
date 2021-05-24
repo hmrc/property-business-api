@@ -25,108 +25,112 @@ import v1.models.response.retrieveForeignPropertyAnnualSubmission.foreignPropert
 
 class RetrieveForeignPropertyAnnualSubmissionResponseSpec extends UnitSpec with MockAppConfig {
 
-  val retrieveForeignPropertyAnnualSubmissionRequestBody =
-    RetrieveForeignPropertyAnnualSubmissionResponse(
-      Some(ForeignFhlEeaEntry(
-        Some(ForeignFhlEeaAdjustments(
-          Some(100.25),
-          Some(100.25),
-          Some(true))),
-        Some(ForeignFhlEeaAllowances(
-          Some(100.25),
-          Some(100.25),
-          Some(100.25),
-          Some(100.25))))),
-      Some(Seq(ForeignPropertyEntry(
-        "GER",
-        Some(ForeignPropertyAdjustments(
-          Some(100.25),
-          Some(100.25))),
-        Some(ForeignPropertyAllowances(
-          Some(100.25),
-          Some(100.25),
-          Some(100.25),
-          Some(100.25),
-          Some(100.25),
-          Some(100.25)))))))
+  private val retrieveForeignPropertyAnnualSubmissionRequestBody = RetrieveForeignPropertyAnnualSubmissionResponse(
+    Some(ForeignFhlEeaEntry(
+      Some(ForeignFhlEeaAdjustments(
+        Some(100.25),
+        Some(100.25),
+        Some(true))),
+      Some(ForeignFhlEeaAllowances(
+        Some(100.25),
+        Some(100.25),
+        Some(100.25),
+        Some(100.25)))
+    )),
+    Some(Seq(ForeignPropertyEntry(
+      "GER",
+      Some(ForeignPropertyAdjustments(
+        Some(100.25),
+        Some(100.25))),
+      Some(ForeignPropertyAllowances(
+        Some(100.25),
+        Some(100.25),
+        Some(100.25),
+        Some(100.25),
+        Some(100.25),
+        Some(100.25)))
+    )))
+  )
 
-    val retrieveForeignPropertyAnnualSubmissionRequestBodyMinimum =
-      RetrieveForeignPropertyAnnualSubmissionResponse(
-        None,
-        Some(Seq(ForeignPropertyEntry(
-          "GER",
-          None,
-          None)))
-      )
+  private val retrieveForeignPropertyAnnualSubmissionRequestBodyMinimum = RetrieveForeignPropertyAnnualSubmissionResponse(
+    None,
+    Some(Seq(ForeignPropertyEntry(
+      "GER",
+      None,
+      None
+    )))
+  )
 
-    val jsonBody = Json.parse(
-      """
-        |{
-        |   "foreignFhlEea":
-        |      {
-        |         "adjustments":{
-        |            "privateUseAdjustment":100.25,
-        |            "balancingCharge":100.25,
-        |            "periodOfGraceAdjustment":true
-        |         },
-        |         "allowances":{
-        |            "annualInvestmentAllowance":100.25,
-        |            "otherCapitalAllowance":100.25,
-        |            "propertyAllowance":100.25,
-        |            "electricChargePointAllowance":100.25
-        |         }
-        |      },
-        |   "foreignProperty":[
-        |      {
-        |         "countryCode":"GER",
-        |         "adjustments":{
-        |            "privateUseAdjustment":100.25,
-        |            "balancingCharge":100.25
-        |         },
-        |         "allowances":{
-        |            "annualInvestmentAllowance":100.25,
-        |            "costOfReplacingDomesticItems":100.25,
-        |            "zeroEmissionsGoodsVehicleAllowance":100.25,
-        |            "propertyAllowance":100.25,
-        |            "otherCapitalAllowance":100.25,
-        |            "electricChargePointAllowance":100.25
-        |         }
-        |      }
-        |   ]
-        |}
-        |""".stripMargin)
+  private val jsonBody = Json.parse(
+    """
+       |{
+       |   "foreignFhlEea":
+       |      {
+       |         "adjustments":{
+       |            "privateUseAdjustment":100.25,
+       |            "balancingCharge":100.25,
+       |            "periodOfGraceAdjustment":true
+       |         },
+       |         "allowances":{
+       |            "annualInvestmentAllowance":100.25,
+       |            "otherCapitalAllowance":100.25,
+       |            "propertyAllowance":100.25,
+       |            "electricChargePointAllowance":100.25
+       |         }
+       |      },
+       |   "foreignProperty":[
+       |      {
+       |         "countryCode":"GER",
+       |         "adjustments":{
+       |            "privateUseAdjustment":100.25,
+       |            "balancingCharge":100.25
+       |         },
+       |         "allowances":{
+       |            "annualInvestmentAllowance":100.25,
+       |            "costOfReplacingDomesticItems":100.25,
+       |            "zeroEmissionsGoodsVehicleAllowance":100.25,
+       |            "propertyAllowance":100.25,
+       |            "otherCapitalAllowance":100.25,
+       |            "electricChargePointAllowance":100.25
+       |         }
+       |      }
+       |   ]
+       |}
+     """.stripMargin
+  )
 
-    val jsonBodyMinimum = Json.parse(
-      """
-        |{
-        |   "foreignProperty":[
-        |      {
-        |         "countryCode":"GER"
-        |      }
-        |   ]
-        |}
-        |""".stripMargin)
+  private val jsonBodyMinimum = Json.parse(
+    """
+       |{
+       |   "foreignProperty":[
+       |      {
+       |         "countryCode":"GER"
+       |      }
+       |   ]
+       |}
+     """.stripMargin
+  )
 
-    "reads" when {
-      "passed a valid JSON" should {
-        "return a valid model" in {
-          jsonBody.as[RetrieveForeignPropertyAnnualSubmissionResponse] shouldBe retrieveForeignPropertyAnnualSubmissionRequestBody
-        }
-        "return a valid model with minimum fields" in {
-          jsonBodyMinimum.as[RetrieveForeignPropertyAnnualSubmissionResponse] shouldBe retrieveForeignPropertyAnnualSubmissionRequestBodyMinimum
-        }
+  "reads" when {
+    "passed a valid JSON" should {
+      "return a valid model" in {
+        jsonBody.as[RetrieveForeignPropertyAnnualSubmissionResponse] shouldBe retrieveForeignPropertyAnnualSubmissionRequestBody
+      }
+      "return a valid model with minimum fields" in {
+        jsonBodyMinimum.as[RetrieveForeignPropertyAnnualSubmissionResponse] shouldBe retrieveForeignPropertyAnnualSubmissionRequestBodyMinimum
       }
     }
-    "writes" when {
-      "passed valid model" should {
-        "return valid JSON" in {
-          Json.toJson(retrieveForeignPropertyAnnualSubmissionRequestBody) shouldBe jsonBody
-        }
-        "return a valid minimum JSON" in {
-          Json.toJson(retrieveForeignPropertyAnnualSubmissionRequestBodyMinimum) shouldBe jsonBodyMinimum
-        }
+  }
+  "writes" when {
+    "passed valid model" should {
+      "return valid JSON" in {
+        Json.toJson(retrieveForeignPropertyAnnualSubmissionRequestBody) shouldBe jsonBody
+      }
+      "return a valid minimum JSON" in {
+        Json.toJson(retrieveForeignPropertyAnnualSubmissionRequestBodyMinimum) shouldBe jsonBodyMinimum
       }
     }
+  }
 
   "LinksFactory" should {
     "produce the correct links" when {
@@ -134,7 +138,7 @@ class RetrieveForeignPropertyAnnualSubmissionResponseSpec extends UnitSpec with 
         val data: RetrieveForeignPropertyAnnualSubmissionHateoasData =
           RetrieveForeignPropertyAnnualSubmissionHateoasData("myNino", "myBusinessId", "mySubmissionId")
 
-        MockedAppConfig.apiGatewayContext.returns("my/context").anyNumberOfTimes()
+        MockAppConfig.apiGatewayContext.returns("my/context").anyNumberOfTimes()
 
         RetrieveForeignPropertyAnnualSubmissionResponse.RetrieveAnnualSubmissionLinksFactory.links(mockAppConfig, data) shouldBe Seq(
           Link(href = s"/my/context/${data.nino}/${data.businessId}/annual/${data.taxYear}", method = Method.PUT, rel = "amend-property-annual-submission"),

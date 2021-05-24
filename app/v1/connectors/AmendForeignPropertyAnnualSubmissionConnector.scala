@@ -36,7 +36,7 @@ class AmendForeignPropertyAnnualSubmissionConnector @Inject()(val http: HttpClie
 
     put(
       body = request.body,
-      uri = IfsUri[Unit](s"income-tax/business/property/annual/${request.nino}/${request.businessId}/${request.taxYear}")
+      uri = IfsUri[Unit](s"income-tax/business/property/annual/${request.nino.nino}/${request.businessId}/${request.taxYear}")
     )
   }
 }

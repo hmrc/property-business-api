@@ -35,7 +35,7 @@ class DeleteForeignPropertyAnnualSubmissionConnector @Inject()(val http: HttpCli
     correlationId: String): Future[DownstreamOutcome[Unit]] = {
 
     delete(
-      uri = IfsUri[Unit](s"income-tax/business/property/annual/${request.nino}/${request.businessId}/${request.taxYear}")
+      uri = IfsUri[Unit](s"income-tax/business/property/annual/${request.nino.nino}/${request.businessId}/${request.taxYear}")
     )
   }
 }

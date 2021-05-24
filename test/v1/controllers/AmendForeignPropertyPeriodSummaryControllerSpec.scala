@@ -16,22 +16,22 @@
 
 package v1.controllers
 
-import play.api.libs.json.Json
+import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.Result
-import uk.gov.hmrc.domain.Nino
 import uk.gov.hmrc.http.HeaderCarrier
 import v1.mocks.MockIdGenerator
 import v1.mocks.hateoas.MockHateoasFactory
 import v1.mocks.requestParsers.MockAmendForeignPropertyPeriodSummaryRequestParser
 import v1.mocks.services.{MockAmendForeignPropertyPeriodSummaryService, MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService}
 import v1.models.audit.{AmendForeignPropertyPeriodicAuditDetail, AuditError, AuditEvent, AuditResponse}
+import v1.models.domain.Nino
 import v1.models.errors._
 import v1.models.hateoas.{HateoasWrapper, Link}
 import v1.models.hateoas.Method.GET
 import v1.models.outcomes.ResponseWrapper
-import v1.models.request.amendForeignPropertyPeriodSummary.{AmendForeignPropertyPeriodSummaryRawData, AmendForeignPropertyPeriodSummaryRequest, AmendForeignPropertyPeriodSummaryRequestBody}
-import v1.models.request.common.foreignFhlEea.{ForeignFhlEea, ForeignFhlEeaExpenditure, ForeignFhlEeaIncome}
-import v1.models.request.common.foreignPropertyEntry.{ForeignPropertyEntry, ForeignPropertyExpenditure, ForeignPropertyIncome, ForeignPropertyRentIncome}
+import v1.models.request.amendForeignPropertyPeriodSummary._
+import v1.models.request.common.foreignFhlEea._
+import v1.models.request.common.foreignPropertyEntry._
 import v1.models.response.amendForeignPropertyPeriodSummary.AmendForeignPropertyPeriodSummaryHateoasData
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -47,8 +47,13 @@ class AmendForeignPropertyPeriodSummaryControllerSpec
     with MockAuditService
     with MockIdGenerator {
 
+  private val nino = "AA123456A"
+  private val businessId = "XAIS12345678910"
+  private val submissionId = "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
+  private val correlationId = "X-123"
+
   trait Test {
-    val hc = HeaderCarrier()
+    val hc: HeaderCarrier = HeaderCarrier()
 
     val controller = new AmendForeignPropertyPeriodSummaryController(
       authService = mockEnrolmentsAuthService,
@@ -61,20 +66,16 @@ class AmendForeignPropertyPeriodSummaryControllerSpec
       idGenerator = mockIdGenerator
     )
 
-    MockedMtdIdLookupService.lookup(nino).returns(Future.successful(Right("test-mtd-id")))
+    MockMtdIdLookupService.lookup(nino).returns(Future.successful(Right("test-mtd-id")))
     MockedEnrolmentsAuthService.authoriseUser()
     MockIdGenerator.getCorrelationId.returns(correlationId)
   }
 
-  private val nino = "AA123456A"
-  private val businessId = "XAIS12345678910"
-  private val submissionId = "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
-  private val correlationId = "X-123"
-
   private val testHateoasLink = Link(href = s"/Individuals/business/property/$nino/$businessId/period", method = GET, rel = "self")
 
   private val requestJson = Json.parse(
-    """|{
+    """
+       |{
        |  "foreignFhlEea": {
        |    "income": {
        |      "rentAmount": 567.83,
@@ -117,7 +118,7 @@ class AmendForeignPropertyPeriodSummaryControllerSpec
        |    }
        |  ]
        |}
-       |""".stripMargin
+     """.stripMargin
   )
 
   private val foreignFhlEea: ForeignFhlEea = ForeignFhlEea(
@@ -166,20 +167,19 @@ class AmendForeignPropertyPeriodSummaryControllerSpec
   private val rawData = AmendForeignPropertyPeriodSummaryRawData(nino, businessId, submissionId, requestJson)
   private val requestData = AmendForeignPropertyPeriodSummaryRequest(Nino(nino), businessId, submissionId, requestBody)
 
-
-  val hateoasResponse = Json.parse(
+  val hateoasResponse: JsValue = Json.parse(
     s"""
       |{
-      |        "links": [
-      |          {
-      |            "href": "/Individuals/business/property/$nino/$businessId/period",
-      |            "rel": "self",
-      |            "method": "GET"
-      |          }
-      |        ]
-      |      }
-      |""".stripMargin)
-
+      |  "links": [
+      |     {
+      |        "href": "/Individuals/business/property/$nino/$businessId/period",
+      |        "rel": "self",
+      |        "method": "GET"
+      |     }
+      |  ]
+      |}
+    """.stripMargin
+  )
 
   def event(auditResponse: AuditResponse): AuditEvent[AmendForeignPropertyPeriodicAuditDetail] =
     AuditEvent(

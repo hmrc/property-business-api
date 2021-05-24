@@ -17,8 +17,8 @@
 package v1.connectors
 
 import mocks.MockAppConfig
-import uk.gov.hmrc.domain.Nino
 import v1.mocks.MockHttpClient
+import v1.models.domain.Nino
 import v1.models.outcomes.ResponseWrapper
 import v1.models.request.deleteForeignPropertyAnnualSubmission.DeleteForeignPropertyAnnualSubmissionRequest
 
@@ -26,12 +26,12 @@ import scala.concurrent.Future
 
 class DeleteForeignPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec {
 
-  val nino: Nino = Nino("AA123456A")
+  val nino: String = "AA123456A"
   val businessId: String = "XAIS12345678910"
   val taxYear: String = "2021-22"
 
   val request: DeleteForeignPropertyAnnualSubmissionRequest = DeleteForeignPropertyAnnualSubmissionRequest(
-    nino = nino,
+    nino = Nino(nino),
     businessId = businessId,
     taxYear = taxYear
   )
@@ -42,19 +42,22 @@ class DeleteForeignPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec {
       appConfig = mockAppConfig
     )
 
-    MockedAppConfig.ifsBaseUrl returns baseUrl
-    MockedAppConfig.ifsToken returns "ifs-token"
-    MockedAppConfig.ifsEnvironment returns "ifs-environment"
+    MockAppConfig.ifsBaseUrl returns baseUrl
+    MockAppConfig.ifsToken returns "ifs-token"
+    MockAppConfig.ifsEnvironment returns "ifs-environment"
+    MockAppConfig.ifsEnvironmentHeaders returns Some(allowedIfsHeaders)
   }
 
   "connector" must {
     "send a request and return no content" in new Test {
-
       val outcome = Right(ResponseWrapper(correlationId, ()))
-      MockedHttpClient
+
+      MockHttpClient
         .delete(
           url = s"$baseUrl/income-tax/business/property/annual/$nino/$businessId/$taxYear",
-          requiredHeaders = "Environment" -> "ifs-environment", "Authorization" -> s"Bearer ifs-token"
+          config = dummyIfsHeaderCarrierConfig,
+          requiredHeaders = requiredIfsHeaders,
+          excludedHeaders = Seq("AnotherHeader" -> "HeaderValue")
         )
         .returns(Future.successful(outcome))
 

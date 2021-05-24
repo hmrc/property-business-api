@@ -17,8 +17,9 @@
 package v1.connectors
 
 import mocks.MockAppConfig
-import uk.gov.hmrc.domain.Nino
+import uk.gov.hmrc.http.HeaderCarrier
 import v1.mocks.MockHttpClient
+import v1.models.domain.Nino
 import v1.models.outcomes.ResponseWrapper
 import v1.models.request.amendForeignPropertyPeriodSummary._
 import v1.models.request.common.foreignFhlEea._
@@ -28,7 +29,7 @@ import scala.concurrent.Future
 
 class AmendForeignPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
 
-  val nino: Nino = Nino("AA123456A")
+  val nino: String = "AA123456A"
   val businessId: String = "XAIS12345678910"
   val submissionId: String = "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
 
@@ -76,7 +77,7 @@ class AmendForeignPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
   )
 
   val request: AmendForeignPropertyPeriodSummaryRequest = AmendForeignPropertyPeriodSummaryRequest(
-    nino = nino,
+    nino = Nino(nino),
     businessId = businessId,
     submissionId = submissionId,
     body = body
@@ -88,20 +89,26 @@ class AmendForeignPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
       appConfig = mockAppConfig
     )
 
-    MockedAppConfig.ifsBaseUrl returns baseUrl
-    MockedAppConfig.ifsToken returns "ifs-token"
-    MockedAppConfig.ifsEnvironment returns "ifs-environment"
+    MockAppConfig.ifsBaseUrl returns baseUrl
+    MockAppConfig.ifsToken returns "ifs-token"
+    MockAppConfig.ifsEnvironment returns "ifs-environment"
+    MockAppConfig.ifsEnvironmentHeaders returns Some(allowedIfsHeaders)
   }
 
   "connector" must {
     "put a body and return 204 no body" in new Test {
-
       val outcome = Right(ResponseWrapper(correlationId, ()))
-      MockedHttpClient
+
+      implicit val hc: HeaderCarrier = HeaderCarrier(otherHeaders = otherHeaders ++ Seq("Content-Type" -> "application/json"))
+      val requiredIfsHeadersPut: Seq[(String, String)] = requiredIfsHeaders ++ Seq("Content-Type" -> "application/json")
+
+      MockHttpClient
         .put(
           url = s"$baseUrl/income-tax/business/property/periodic/$nino/$businessId/$submissionId",
+          config = dummyIfsHeaderCarrierConfig,
           body = body,
-          requiredHeaders = "Environment" -> "ifs-environment", "Authorization" -> s"Bearer ifs-token"
+          requiredHeaders = requiredIfsHeadersPut,
+          excludedHeaders = Seq("AnotherHeader" -> "HeaderValue")
         )
         .returns(Future.successful(outcome))
 

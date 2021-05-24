@@ -14,44 +14,41 @@
  * limitations under the License.
  */
 
-package v1.models.response.retrieveForeignPropertyAnnualSubmission.ForeignFhlEea
+package v1.models.response.retrieveForeignPropertyAnnualSubmission.foreignFhlEea
 
 import play.api.libs.json.Json
 import support.UnitSpec
-import v1.models.response.retrieveForeignPropertyAnnualSubmission.foreignFhlEea.ForeignFhlEeaAllowances
 import v1.models.utils.JsonErrorValidators
 
-class ForeignFhlEeaEntryAllowancesSpec extends UnitSpec with JsonErrorValidators {
+class ForeignFhlEeaEntryAdjustmentsSpec extends UnitSpec with JsonErrorValidators {
 
-  val foreignFhlEeaAllowances =
-    ForeignFhlEeaAllowances(
-      Some(100.25),
-      Some(100.25),
-      Some(100.25),
-      Some(100.25)
-    )
+  private val foreignFhlEeaAdjustments = ForeignFhlEeaAdjustments(
+    Some(100.25),
+    Some(100.25),
+    Some(true)
+  )
 
-  val jsonBody = Json.parse(
+  private val jsonBody = Json.parse(
     """
       |{
-      |    "annualInvestmentAllowance":100.25,
-      |    "otherCapitalAllowance":100.25,
-      |    "propertyAllowance":100.25,
-      |    "electricChargePointAllowance":100.25
+      |    "privateUseAdjustment":100.25,
+      |    "balancingCharge":100.25,
+      |    "periodOfGraceAdjustment":true
       |}
-      |""".stripMargin)
+    """.stripMargin
+  )
 
   "reads" when {
     "passed a valid JSON" should {
       "return a valid model" in {
-        jsonBody.as[ForeignFhlEeaAllowances] shouldBe foreignFhlEeaAllowances
+        jsonBody.as[ForeignFhlEeaAdjustments] shouldBe foreignFhlEeaAdjustments
       }
     }
   }
   "writes" when {
     "passed valid model" should {
       "return valid JSON" in {
-        Json.toJson(foreignFhlEeaAllowances) shouldBe jsonBody
+        Json.toJson(foreignFhlEeaAdjustments) shouldBe jsonBody
       }
     }
   }

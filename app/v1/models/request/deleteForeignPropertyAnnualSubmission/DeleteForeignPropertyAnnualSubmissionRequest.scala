@@ -16,6 +16,6 @@
 
 package v1.models.request.deleteForeignPropertyAnnualSubmission
 
-import uk.gov.hmrc.domain.Nino
+import v1.models.domain.Nino
 
 case class DeleteForeignPropertyAnnualSubmissionRequest(nino: Nino, businessId: String, taxYear: String)

@@ -18,37 +18,42 @@ package v1.controllers
 
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.Result
-import uk.gov.hmrc.domain.Nino
 import uk.gov.hmrc.http.HeaderCarrier
 import v1.mocks.MockIdGenerator
 import v1.mocks.hateoas.MockHateoasFactory
 import v1.mocks.requestParsers.MockCreateForeignPropertyPeriodSummaryRequestParser
 import v1.mocks.services.{MockAuditService, MockCreateForeignPropertyPeriodSummaryService, MockEnrolmentsAuthService, MockMtdIdLookupService}
 import v1.models.audit.{AuditError, AuditEvent, AuditResponse, CreateForeignPropertyPeriodicAuditDetail}
+import v1.models.domain.Nino
 import v1.models.errors._
 import v1.models.hateoas.Method.GET
 import v1.models.hateoas.{HateoasWrapper, Link}
 import v1.models.outcomes.ResponseWrapper
-import v1.models.request.common.foreignFhlEea.{ForeignFhlEea, ForeignFhlEeaExpenditure, ForeignFhlEeaIncome}
-import v1.models.request.common.foreignPropertyEntry.{ForeignPropertyEntry, ForeignPropertyExpenditure, ForeignPropertyIncome, ForeignPropertyRentIncome}
+import v1.models.request.common.foreignFhlEea._
+import v1.models.request.common.foreignPropertyEntry._
 import v1.models.request.createForeignPropertyPeriodSummary._
-import v1.models.response.createForeignPropertyPeriodSummary.{CreateForeignPropertyPeriodSummaryHateoasData, CreateForeignPropertyPeriodSummaryResponse}
+import v1.models.response.createForeignPropertyPeriodSummary._
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class CreateForeignPropertyPeriodSummaryControllerSpec
   extends ControllerBaseSpec
-  with MockEnrolmentsAuthService
-  with MockMtdIdLookupService
-  with MockCreateForeignPropertyPeriodSummaryService
-  with MockCreateForeignPropertyPeriodSummaryRequestParser
-  with MockHateoasFactory
-  with MockAuditService
-  with MockIdGenerator {
+    with MockEnrolmentsAuthService
+    with MockMtdIdLookupService
+    with MockCreateForeignPropertyPeriodSummaryService
+    with MockCreateForeignPropertyPeriodSummaryRequestParser
+    with MockHateoasFactory
+    with MockAuditService
+    with MockIdGenerator {
+
+  private val nino = "AA123456A"
+  private val businessId = "XAIS12345678910"
+  private val submissionId = "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
+  private val correlationId = "a1e8057e-fbbc-47a8-a8b4-78d9f015c253"
 
   trait Test {
-    val hc = HeaderCarrier()
+    val hc: HeaderCarrier = HeaderCarrier()
 
     val controller = new CreateForeignPropertyPeriodSummaryController(
       authService = mockEnrolmentsAuthService,
@@ -61,17 +66,12 @@ class CreateForeignPropertyPeriodSummaryControllerSpec
       idGenerator = mockIdGenerator
     )
 
-    MockedMtdIdLookupService.lookup(nino).returns(Future.successful(Right("test-mtd-id")))
+    MockMtdIdLookupService.lookup(nino).returns(Future.successful(Right("test-mtd-id")))
     MockedEnrolmentsAuthService.authoriseUser()
     MockIdGenerator.getCorrelationId.returns(correlationId)
   }
 
-  private val correlationId = "a1e8057e-fbbc-47a8-a8b4-78d9f015c253"
-
-  private val nino = "AA123456A"
-  private val businessId = "XAIS12345678910"
-  private val submissionId = "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
-  val testHateoasLink = Link(href = "/individuals/business/property/TC663795B/XAIS12345678910/period", method = GET, rel="self")
+  private val testHateoasLink = Link(href = "/individuals/business/property/TC663795B/XAIS12345678910/period", method = GET, rel="self")
 
   private val consolidatedRequestBodyJson: JsValue = Json.parse(
     """
@@ -108,7 +108,8 @@ class CreateForeignPropertyPeriodSummaryControllerSpec
       |    }
       |  ]
       |}
-      |""".stripMargin)
+    """.stripMargin
+  )
 
   private val unconsolidatedRequestBodyJson: JsValue = Json.parse(
     """
@@ -156,7 +157,8 @@ class CreateForeignPropertyPeriodSummaryControllerSpec
       |    }
       |  ]
       |}
-      |""".stripMargin)
+    """.stripMargin
+  )
 
   private val responseBody = Json.parse(
     """
@@ -170,10 +172,12 @@ class CreateForeignPropertyPeriodSummaryControllerSpec
       |    }
       |  ]
       |}
-      |""".stripMargin)
+    """.stripMargin
+  )
 
-  val response = CreateForeignPropertyPeriodSummaryResponse("4557ecb5-fd32-48cc-81f5-e6acd1099f3c")
-
+  val response: CreateForeignPropertyPeriodSummaryResponse = CreateForeignPropertyPeriodSummaryResponse(
+    submissionId = "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
+  )
 
   private val foreignFhlEea = ForeignFhlEea(ForeignFhlEeaIncome(2000.99),
     Some(ForeignFhlEeaExpenditure(
@@ -201,13 +205,11 @@ class CreateForeignPropertyPeriodSummaryControllerSpec
     Some(2000.99)
   )))
 
-
   private val requestBody = CreateForeignPropertyPeriodSummaryRequestBody("2019-01-01", "2018-01-01", Some(foreignFhlEea), Some(Seq(foreignProperty)))
   private val requestData = CreateForeignPropertyPeriodSummaryRequest(Nino(nino), businessId, requestBody)
   private val rawData = CreateForeignPropertyPeriodSummaryRawData(nino, businessId, consolidatedRequestBodyJson)
 
-
-  val hateoasResponse = Json.parse(
+  val hateoasResponse: JsValue = Json.parse(
     """
       |{
       |  "submissionId": "4557ecb5-fd32-48cc-81f5-e6acd1099f3c",
@@ -219,8 +221,8 @@ class CreateForeignPropertyPeriodSummaryControllerSpec
       |          }
       |        ]
       |      }
-      |""".stripMargin)
-
+    """.stripMargin
+  )
 
   def consolidatedEvent(auditResponse: AuditResponse): AuditEvent[CreateForeignPropertyPeriodicAuditDetail] =
     AuditEvent(
@@ -384,5 +386,4 @@ class CreateForeignPropertyPeriodSummaryControllerSpec
       }
     }
   }
-
 }

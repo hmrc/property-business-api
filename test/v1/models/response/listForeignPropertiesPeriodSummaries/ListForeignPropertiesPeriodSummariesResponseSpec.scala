@@ -23,6 +23,7 @@ import v1.models.hateoas.Link
 import v1.models.hateoas.Method.{GET, POST}
 
 class ListForeignPropertiesPeriodSummariesResponseSpec extends UnitSpec with MockAppConfig {
+
   "reads" should {
     "read from a single item array" in {
       val desJson = Json.parse(
@@ -42,7 +43,8 @@ class ListForeignPropertiesPeriodSummariesResponseSpec extends UnitSpec with Moc
           |    }
           |  }
           |]
-          |""".stripMargin)
+        """.stripMargin
+      )
 
       val model = ListForeignPropertiesPeriodSummariesResponse(Seq(
         SubmissionPeriod("4557ecb5-fd32-48cc-81f5-e6acd1099f3c", "2020-06-22", "2020-06-22")
@@ -76,7 +78,8 @@ class ListForeignPropertiesPeriodSummariesResponseSpec extends UnitSpec with Moc
           |    }
           |  }
           |]
-          |""".stripMargin)
+        """.stripMargin
+      )
 
       val model = ListForeignPropertiesPeriodSummariesResponse(Seq(
         SubmissionPeriod("4557ecb5-fd32-48cc-81f5-e6acd1099f3c", "2020-06-22", "2020-06-22"),
@@ -91,7 +94,8 @@ class ListForeignPropertiesPeriodSummariesResponseSpec extends UnitSpec with Moc
           |[
           |
           |]
-          |""".stripMargin)
+        """.stripMargin
+      )
 
       val model = ListForeignPropertiesPeriodSummariesResponse(Seq())
 
@@ -116,7 +120,8 @@ class ListForeignPropertiesPeriodSummariesResponseSpec extends UnitSpec with Moc
           |    }
           |  ]
           |}
-          |""".stripMargin)
+        """.stripMargin
+      )
 
       Json.toJson(model) shouldBe mtdJson
     }
@@ -128,7 +133,7 @@ class ListForeignPropertiesPeriodSummariesResponseSpec extends UnitSpec with Moc
     val submissionId = "mysubmissionid"
 
     "expose the correct top level links for list" in {
-      MockedAppConfig.apiGatewayContext.returns("my/context").anyNumberOfTimes
+      MockAppConfig.apiGatewayContext.returns("my/context").anyNumberOfTimes
       ListForeignPropertiesPeriodSummariesResponse.LinksFactory.links(mockAppConfig, ListForeignPropertiesPeriodSummariesHateoasData(nino, businessId)) shouldBe
         Seq(
           Link(s"/my/context/$nino/$businessId/period", GET, "self"),
@@ -137,7 +142,7 @@ class ListForeignPropertiesPeriodSummariesResponseSpec extends UnitSpec with Moc
     }
 
     "expose the correct item level links for list" in {
-      MockedAppConfig.apiGatewayContext.returns("my/context").anyNumberOfTimes
+      MockAppConfig.apiGatewayContext.returns("my/context").anyNumberOfTimes
       ListForeignPropertiesPeriodSummariesResponse.LinksFactory.itemLinks(mockAppConfig, ListForeignPropertiesPeriodSummariesHateoasData(nino, businessId),
         SubmissionPeriod(submissionId, "", "")) shouldBe
         Seq(
@@ -148,7 +153,8 @@ class ListForeignPropertiesPeriodSummariesResponseSpec extends UnitSpec with Moc
 
   "Response Functor" should {
     "apply the map function" in {
-      ListForeignPropertiesPeriodSummariesResponse.ResponseFunctor.map(ListForeignPropertiesPeriodSummariesResponse(Seq(1)))(_.toString) shouldBe ListForeignPropertiesPeriodSummariesResponse(Seq("1"))
+      ListForeignPropertiesPeriodSummariesResponse.ResponseFunctor.map(
+        ListForeignPropertiesPeriodSummariesResponse(Seq(1)))(_.toString) shouldBe ListForeignPropertiesPeriodSummariesResponse(Seq("1"))
     }
   }
 }

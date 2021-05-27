@@ -21,7 +21,7 @@ import config.AppConfig
 import javax.inject.{Inject, Singleton}
 import play.api.http.Status
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
-import v1.connectors.httpparsers.StandardDesHttpParser._
+import v1.connectors.httpparsers.StandardIfsHttpParser._
 import v1.models.request.createForeignPropertyPeriodSummary.CreateForeignPropertyPeriodSummaryRequest
 import v1.models.response.createForeignPropertyPeriodSummary.CreateForeignPropertyPeriodSummaryResponse
 
@@ -29,12 +29,12 @@ import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class CreateForeignPropertyPeriodSummaryConnector @Inject()(val http: HttpClient,
-                                                            val appConfig: AppConfig) extends BaseDownstreamConnector {
+                                                            val appConfig: AppConfig) extends BaseIfsConnector {
 
   def createForeignProperty(request: CreateForeignPropertyPeriodSummaryRequest)(
     implicit hc: HeaderCarrier,
     ec: ExecutionContext,
-    correlationId: String): Future[DownstreamOutcome[CreateForeignPropertyPeriodSummaryResponse]] = {
+    correlationId: String): Future[IfsOutcome[CreateForeignPropertyPeriodSummaryResponse]] = {
 
     implicit val successCode: SuccessCode = SuccessCode(Status.OK)
 

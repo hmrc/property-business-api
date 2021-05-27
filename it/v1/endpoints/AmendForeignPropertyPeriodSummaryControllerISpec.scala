@@ -23,7 +23,7 @@ import play.api.libs.json.{JsObject, JsValue, Json}
 import play.api.libs.ws.{WSRequest, WSResponse}
 import support.IntegrationBaseSpec
 import v1.models.errors._
-import v1.stubs.{AuditStub, AuthStub, DesStub, MtdIdLookupStub}
+import v1.stubs.{AuditStub, AuthStub, IfsStub, MtdIdLookupStub}
 
 class AmendForeignPropertyPeriodSummaryControllerISpec extends IntegrationBaseSpec {
 
@@ -35,49 +35,50 @@ class AmendForeignPropertyPeriodSummaryControllerISpec extends IntegrationBaseSp
     val correlationId: String = "X-123"
 
     val requestBodyJson: JsValue = Json.parse(
-      s"""
-         |{
-         |  "foreignFhlEea": {
-         |    "income": {
-         |      "rentAmount": 567.83
-         |      },
-         |    "expenditure": {
-         |      "premisesRunningCosts": 4567.98,
-         |      "repairsAndMaintenance": 98765.67,
-         |      "financialCosts": 4566.95,
-         |      "professionalFees": 23.65,
-         |      "costsOfServices": 4567.77,
-         |      "travelCosts": 456.77,
-         |      "other": 567.67
-         |    }
-         |  },
-         |  "foreignProperty": [{
-         |      "countryCode": "FRA",
-         |      "income": {
-         |        "rentIncome": {
-         |          "rentAmount": 34456.30
-         |        },
-         |        "foreignTaxCreditRelief": true,
-         |        "premiumOfLeaseGrant": 2543.43,
-         |        "otherPropertyIncome": 54325.30,
-         |        "foreignTaxTakenOff": 6543.01,
-         |        "specialWithholdingTaxOrUKTaxPaid": 643245.00
-         |      },
-         |      "expenditure": {
-         |        "premisesRunningCosts": 5635.43,
-         |        "repairsAndMaintenance": 3456.65,
-         |        "financialCosts": 34532.21,
-         |        "professionalFees": 32465.32,
-         |        "costsOfServices": 2567.21,
-         |        "travelCosts": 2345.76,
-         |        "residentialFinancialCost": 21235.22,
-         |        "broughtFwdResidentialFinancialCost": 12556.00,
-         |        "other": 2425.11
-         |      }
-         |    }
-         |  ]
-         |}
-    """.stripMargin)
+      """
+        |{
+        |  "foreignFhlEea": {
+        |    "income": {
+        |      "rentAmount": 567.83
+        |      },
+        |    "expenditure": {
+        |      "premisesRunningCosts": 4567.98,
+        |      "repairsAndMaintenance": 98765.67,
+        |      "financialCosts": 4566.95,
+        |      "professionalFees": 23.65,
+        |      "costsOfServices": 4567.77,
+        |      "travelCosts": 456.77,
+        |      "other": 567.67
+        |    }
+        |  },
+        |  "foreignProperty": [{
+        |      "countryCode": "FRA",
+        |      "income": {
+        |        "rentIncome": {
+        |          "rentAmount": 34456.30
+        |        },
+        |        "foreignTaxCreditRelief": true,
+        |        "premiumOfLeaseGrant": 2543.43,
+        |        "otherPropertyIncome": 54325.30,
+        |        "foreignTaxTakenOff": 6543.01,
+        |        "specialWithholdingTaxOrUKTaxPaid": 643245.00
+        |      },
+        |      "expenditure": {
+        |        "premisesRunningCosts": 5635.43,
+        |        "repairsAndMaintenance": 3456.65,
+        |        "financialCosts": 34532.21,
+        |        "professionalFees": 32465.32,
+        |        "costsOfServices": 2567.21,
+        |        "travelCosts": 2345.76,
+        |        "residentialFinancialCost": 21235.22,
+        |        "broughtFwdResidentialFinancialCost": 12556.00,
+        |        "other": 2425.11
+        |      }
+        |    }
+        |  ]
+        |}
+      """.stripMargin
+    )
 
     val responseBody: JsValue = Json.parse(
       s"""
@@ -100,13 +101,14 @@ class AmendForeignPropertyPeriodSummaryControllerISpec extends IntegrationBaseSp
          |      }
          |   ]
          |}
-         |""".stripMargin)
+       """.stripMargin
+    )
 
     def setupStubs(): StubMapping
 
     def uri: String = s"/$nino/$businessId/period/$submissionId"
 
-    def desUri: String = s"/income-tax/business/property/periodic/$nino/$businessId/$submissionId"
+    def ifsUri: String = s"/income-tax/business/property/periodic/$nino/$businessId/$submissionId"
 
     def request(): WSRequest = {
       setupStubs()
@@ -116,14 +118,14 @@ class AmendForeignPropertyPeriodSummaryControllerISpec extends IntegrationBaseSp
 
     def errorBody(code: String): String =
       s"""
-         |      {
-         |        "code": "$code",
-         |        "reason": "des message"
-         |      }
-    """.stripMargin
+         |{
+         |  "code": "$code",
+         |  "reason": "ifs message"
+         |}
+       """.stripMargin
   }
 
-  "Calling the amend other deductions endpoint" should {
+  "Calling the amend foreign property period summary endpoint" should {
 
     "return a 200 status code" when {
 
@@ -133,7 +135,7 @@ class AmendForeignPropertyPeriodSummaryControllerISpec extends IntegrationBaseSp
           AuditStub.audit()
           AuthStub.authorised()
           MtdIdLookupStub.ninoFound(nino)
-          DesStub.onSuccess(DesStub.PUT, desUri, NO_CONTENT, JsObject.empty)
+          IfsStub.onSuccess(IfsStub.PUT, ifsUri, NO_CONTENT, JsObject.empty)
         }
 
         val response: WSResponse = await(request().put(requestBodyJson))
@@ -174,7 +176,8 @@ class AmendForeignPropertyPeriodSummaryControllerISpec extends IntegrationBaseSp
              |    }
              |  ]
              |}
-    """.stripMargin)
+           """.stripMargin
+        )
 
         val allInvalidFieldsRequestError: List[MtdError] = List(
           CountryCodeFormatError.copy(
@@ -260,7 +263,8 @@ class AmendForeignPropertyPeriodSummaryControllerISpec extends IntegrationBaseSp
             |    }
             |  ]
             |}
-            |""".stripMargin)
+          """.stripMargin
+        )
 
         val bothExpensesTypesProvidedJson = Json.parse(
           """
@@ -293,7 +297,8 @@ class AmendForeignPropertyPeriodSummaryControllerISpec extends IntegrationBaseSp
             |    }
             |  ]
             |}
-            |""".stripMargin)
+          """.stripMargin
+        )
 
         val allInvalidValueRequestBodyJson: JsValue = Json.parse(
           s"""
@@ -324,7 +329,8 @@ class AmendForeignPropertyPeriodSummaryControllerISpec extends IntegrationBaseSp
              |    }
              |  ]
              |}
-             """.stripMargin)
+           """.stripMargin
+        )
 
         val allInvalidCountryCodeRequestBodyJson: JsValue = Json.parse(
           s"""
@@ -355,7 +361,8 @@ class AmendForeignPropertyPeriodSummaryControllerISpec extends IntegrationBaseSp
              |    }
              |  ]
              |}
-             """.stripMargin)
+           """.stripMargin
+        )
 
 
         val allInvalidValueRequestError: MtdError = ValueFormatError.copy(
@@ -428,15 +435,15 @@ class AmendForeignPropertyPeriodSummaryControllerISpec extends IntegrationBaseSp
           input.foreach(args => (validationErrorTest _).tupled(args))
         }
 
-        "des service error" when {
-          def serviceErrorTest(desStatus: Int, desCode: String, expectedStatus: Int, expectedBody: MtdError): Unit = {
-            s"des returns an $desCode error and status $desStatus" in new Test {
+        "ifs service error" when {
+          def serviceErrorTest(ifsStatus: Int, ifsCode: String, expectedStatus: Int, expectedBody: MtdError): Unit = {
+            s"ifs returns an $ifsCode error and status $ifsStatus" in new Test {
 
               override def setupStubs(): StubMapping = {
                 AuditStub.audit()
                 AuthStub.authorised()
                 MtdIdLookupStub.ninoFound(nino)
-                DesStub.onError(DesStub.PUT, desUri, desStatus, errorBody(desCode))
+                IfsStub.onError(IfsStub.PUT, ifsUri, ifsStatus, errorBody(ifsCode))
               }
 
               val response: WSResponse = await(request().put(requestBodyJson))

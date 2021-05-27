@@ -26,7 +26,7 @@ class ListForeignPropertiesPeriodSummariesResponseSpec extends UnitSpec with Moc
 
   "reads" should {
     "read from a single item array" in {
-      val desJson = Json.parse(
+      val ifsJson = Json.parse(
         """
           |[
           |  {
@@ -50,10 +50,10 @@ class ListForeignPropertiesPeriodSummariesResponseSpec extends UnitSpec with Moc
         SubmissionPeriod("4557ecb5-fd32-48cc-81f5-e6acd1099f3c", "2020-06-22", "2020-06-22")
       ))
 
-      desJson.as[ListForeignPropertiesPeriodSummariesResponse[SubmissionPeriod]] shouldBe model
+      ifsJson.as[ListForeignPropertiesPeriodSummariesResponse[SubmissionPeriod]] shouldBe model
     }
     "read from a multiple item array" in {
-      val desJson = Json.parse(
+      val ifsJson = Json.parse(
         """
           |[
           |  {
@@ -86,10 +86,10 @@ class ListForeignPropertiesPeriodSummariesResponseSpec extends UnitSpec with Moc
         SubmissionPeriod("4557ecb5-fd32-48cc-81f5-e6acd1099f3d", "2020-08-22", "2020-08-22")
       ))
 
-      desJson.as[ListForeignPropertiesPeriodSummariesResponse[SubmissionPeriod]] shouldBe model
+      ifsJson.as[ListForeignPropertiesPeriodSummariesResponse[SubmissionPeriod]] shouldBe model
     }
     "read an empty array" in {
-      val desJson = Json.parse(
+      val ifsJson = Json.parse(
         """
           |[
           |
@@ -99,7 +99,7 @@ class ListForeignPropertiesPeriodSummariesResponseSpec extends UnitSpec with Moc
 
       val model = ListForeignPropertiesPeriodSummariesResponse(Seq())
 
-      desJson.as[ListForeignPropertiesPeriodSummariesResponse[SubmissionPeriod]] shouldBe model
+      ifsJson.as[ListForeignPropertiesPeriodSummariesResponse[SubmissionPeriod]] shouldBe model
     }
   }
 

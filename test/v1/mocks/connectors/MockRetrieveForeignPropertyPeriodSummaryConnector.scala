@@ -19,7 +19,7 @@ package v1.mocks.connectors
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
 import uk.gov.hmrc.http.HeaderCarrier
-import v1.connectors.{DownstreamOutcome, RetrieveForeignPropertyPeriodSummaryConnector}
+import v1.connectors.{IfsOutcome, RetrieveForeignPropertyPeriodSummaryConnector}
 import v1.models.request.retrieveForeignPropertyPeriodSummary.RetrieveForeignPropertyPeriodSummaryRequest
 import v1.models.response.retrieveForeignPropertyPeriodSummary.RetrieveForeignPropertyPeriodSummaryResponse
 
@@ -32,7 +32,7 @@ trait MockRetrieveForeignPropertyPeriodSummaryConnector extends MockFactory {
   object MockRetrieveForeignPropertyConnector {
 
     def retrieveForeignProperty(requestData: RetrieveForeignPropertyPeriodSummaryRequest):
-    CallHandler[Future[DownstreamOutcome[RetrieveForeignPropertyPeriodSummaryResponse]]] = {
+    CallHandler[Future[IfsOutcome[RetrieveForeignPropertyPeriodSummaryResponse]]] = {
       (mockRetrieveForeignPropertyConnector
         .retrieveForeignProperty(_: RetrieveForeignPropertyPeriodSummaryRequest)(_: HeaderCarrier, _: ExecutionContext, _: String))
         .expects(requestData, *, *, *)

@@ -24,7 +24,7 @@ import v1.models.outcomes.ResponseWrapper
 
 import scala.concurrent.Future
 
-class BaseDownstreamConnectorSpec extends ConnectorSpec {
+class BaseIfsConnectorSpec extends ConnectorSpec {
   // WLOG
   case class Result(value: Int)
 
@@ -35,10 +35,10 @@ class BaseDownstreamConnectorSpec extends ConnectorSpec {
   val url = "some/url?param=value"
   val absoluteUrl = s"$baseUrl/$url"
 
-  implicit val httpReads: HttpReads[DownstreamOutcome[Result]] = mock[HttpReads[DownstreamOutcome[Result]]]
+  implicit val httpReads: HttpReads[IfsOutcome[Result]] = mock[HttpReads[IfsOutcome[Result]]]
 
   class Test(ifsEnvironmentHeaders: Option[Seq[String]]) extends MockHttpClient with MockAppConfig {
-    val connector: BaseDownstreamConnector = new BaseDownstreamConnector {
+    val connector: BaseIfsConnector = new BaseIfsConnector {
       val http: HttpClient = mockHttpClient
       val appConfig: AppConfig = mockAppConfig
     }
@@ -49,7 +49,7 @@ class BaseDownstreamConnectorSpec extends ConnectorSpec {
     MockAppConfig.ifsEnvironmentHeaders returns ifsEnvironmentHeaders
   }
 
-  "BaseDownstreamConnector" when {
+  "BaseIfsConnector" when {
     val requiredHeaders: Seq[(String, String)] = Seq(
       "Environment" -> "ifs-environment",
       "Authorization" -> s"Bearer ifs-token",
@@ -62,7 +62,7 @@ class BaseDownstreamConnectorSpec extends ConnectorSpec {
       "AnotherHeader" -> "HeaderValue"
     )
 
-    "making a HTTP request to a downstream service (i.e IFS)" must {
+    "making a HTTP request to IFS" must {
       testHttpMethods(dummyIfsHeaderCarrierConfig, requiredHeaders, excludedHeaders, Some(allowedIfsHeaders))
 
       "exclude all `otherHeaders` when no external service header allow-list is found" should {

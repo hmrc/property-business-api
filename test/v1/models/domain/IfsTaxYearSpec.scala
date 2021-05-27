@@ -14,24 +14,20 @@
  * limitations under the License.
  */
 
-package v1.models.errors
+package v1.models.domain
 
-import play.api.libs.json.{Json, Reads}
+import support.UnitSpec
 
-case class DesErrorCode(code: String) {
-  def toMtd: MtdError = MtdError(code = code, message = "")
+class IfsTaxYearSpec extends UnitSpec {
+  "toString" should {
+    "return the value inside the model as a String instead of the standard case class toString" in {
+      IfsTaxYear("value").toString shouldBe "value"
+    }
+  }
+
+  "fromMtd" should {
+    "return the IFS representation of an MTD tax year (XXYY-ZZ -> XXZZ)" in {
+      IfsTaxYear.fromMtd("2018-19") shouldBe IfsTaxYear("2019")
+    }
+  }
 }
-
-object DesErrorCode {
-  implicit val reads: Reads[DesErrorCode] = Json.reads[DesErrorCode]
-}
-
-sealed trait DesError
-
-case class DesErrors(errors: List[DesErrorCode]) extends DesError
-
-object DesErrors {
-  def single(error: DesErrorCode): DesErrors = DesErrors(List(error))
-}
-
-case class OutboundError(error: MtdError, errors: Option[Seq[MtdError]] = None) extends DesError

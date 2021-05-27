@@ -17,19 +17,19 @@
 package v1.models.domain
 
 /**
-  * Represents a tax year for DES
+  * Represents a tax year for IFS
   *
   * @param value the tax year string (where 2018 represents 2017-18)
   */
-case class DesTaxYear(value: String) extends AnyVal {
+case class IfsTaxYear(value: String) extends AnyVal {
   override def toString: String = value
 }
 
-object DesTaxYear {
+object IfsTaxYear {
 
   /**
     * @param taxYear tax year in MTD format (e.g. 2017-18)
     */
-  def fromMtd(taxYear: String): DesTaxYear =
-    DesTaxYear(taxYear.take(2) + taxYear.drop(5))
+  def fromMtd(taxYear: String): IfsTaxYear =
+    IfsTaxYear(taxYear.take(2) + taxYear.drop(5))
 }

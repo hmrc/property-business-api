@@ -22,7 +22,7 @@ import support.UnitSpec
 class SubmissionPeriodSpec extends UnitSpec {
   "reads" should {
     "read when only foreignFhlEea is provided" in {
-      val desJson = Json.parse(
+      val ifsJson = Json.parse(
         """
           |{
           |    "submittedOn": "2020-06-22T22:00:20Z",
@@ -31,15 +31,16 @@ class SubmissionPeriodSpec extends UnitSpec {
           |      "fromDate": "2020-06-22",
           |      "toDate": "2020-06-22"
           |    }
-          |  }
-          |""".stripMargin)
+          |}
+        """.stripMargin
+      )
 
       val model = SubmissionPeriod("4557ecb5-fd32-48cc-81f5-e6acd1099f3c", "2020-06-22", "2020-06-22")
 
-      desJson.as[SubmissionPeriod] shouldBe model
+      ifsJson.as[SubmissionPeriod] shouldBe model
     }
     "read when only foreignProperty is provided" in {
-      val desJson = Json.parse(
+      val ifsJson = Json.parse(
         """
           |{
           |    "submittedOn": "2020-06-22T22:00:20Z",
@@ -48,15 +49,16 @@ class SubmissionPeriodSpec extends UnitSpec {
           |      "fromDate": "2020-06-22",
           |      "toDate": "2020-06-22"
           |    }
-          |  }
-          |""".stripMargin)
+          |}
+        """.stripMargin
+      )
 
       val model = SubmissionPeriod("4557ecb5-fd32-48cc-81f5-e6acd1099f3c", "2020-06-22", "2020-06-22")
 
-      desJson.as[SubmissionPeriod] shouldBe model
+      ifsJson.as[SubmissionPeriod] shouldBe model
     }
     "read when foreignProperty is provided before foreignFhlEea" in {
-      val desJson = Json.parse(
+      val ifsJson = Json.parse(
         """
           |{
           |    "submittedOn": "2020-06-22T22:00:20Z",
@@ -70,15 +72,16 @@ class SubmissionPeriodSpec extends UnitSpec {
           |      "fromDate": "2020-06-22",
           |      "toDate": "2020-06-22"
           |    }
-          |  }
-          |""".stripMargin)
+          |}
+        """.stripMargin
+      )
 
       val model = SubmissionPeriod("4557ecb5-fd32-48cc-81f5-e6acd1099f3c", "2020-06-22", "2020-06-22")
 
-      desJson.as[SubmissionPeriod] shouldBe model
+      ifsJson.as[SubmissionPeriod] shouldBe model
     }
     "read when foreignFhlEea is provided before foreignProperty" in {
-      val desJson = Json.parse(
+      val ifsJson = Json.parse(
         """
           |{
           |    "submittedOn": "2020-06-22T22:00:20Z",
@@ -92,12 +95,13 @@ class SubmissionPeriodSpec extends UnitSpec {
           |      "fromDate": "2020-06-22",
           |      "toDate": "2020-06-22"
           |    }
-          |  }
-          |""".stripMargin)
+          |}
+        """.stripMargin
+      )
 
       val model = SubmissionPeriod("4557ecb5-fd32-48cc-81f5-e6acd1099f3c", "2020-06-22", "2020-06-22")
 
-      desJson.as[SubmissionPeriod] shouldBe model
+      ifsJson.as[SubmissionPeriod] shouldBe model
     }
   }
 
@@ -112,7 +116,8 @@ class SubmissionPeriodSpec extends UnitSpec {
           |  "fromDate": "2020-06-22",
           |  "toDate": "2020-06-22"
           |}
-          |""".stripMargin)
+        """.stripMargin
+      )
 
       Json.toJson(model) shouldBe mtdJson
     }

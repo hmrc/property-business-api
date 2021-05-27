@@ -20,7 +20,7 @@ import config.AppConfig
 
 import javax.inject.{Inject, Singleton}
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
-import v1.connectors.httpparsers.StandardDesHttpParser._
+import v1.connectors.httpparsers.StandardIfsHttpParser._
 import v1.models.request.retrieveForeignPropertyPeriodSummary.RetrieveForeignPropertyPeriodSummaryRequest
 import v1.models.response.retrieveForeignPropertyPeriodSummary.RetrieveForeignPropertyPeriodSummaryResponse
 
@@ -28,12 +28,12 @@ import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class RetrieveForeignPropertyPeriodSummaryConnector @Inject()(val http: HttpClient,
-                                                              val appConfig: AppConfig) extends BaseDownstreamConnector {
+                                                              val appConfig: AppConfig) extends BaseIfsConnector {
 
   def retrieveForeignProperty(request: RetrieveForeignPropertyPeriodSummaryRequest)(
     implicit hc: HeaderCarrier,
     ec: ExecutionContext,
-    correlationId: String): Future[DownstreamOutcome[RetrieveForeignPropertyPeriodSummaryResponse]] = {
+    correlationId: String): Future[IfsOutcome[RetrieveForeignPropertyPeriodSummaryResponse]] = {
 
     val url = s"income-tax/business/property/periodic/${request.nino.nino}/${request.businessId}/${request.submissionId}"
 

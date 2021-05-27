@@ -22,7 +22,7 @@ import support.UnitSpec
 class ForeignPropertyEntrySpec extends UnitSpec {
 
   val mtdJson: JsValue = Json.parse(
-    s"""
+     """
        |{
        |  "countryCode": "zzz",
        |  "income": {
@@ -48,7 +48,8 @@ class ForeignPropertyEntrySpec extends UnitSpec {
        |    "consolidatedExpenses": 352.66
        |  }
        |}
-       |""".stripMargin)
+     """.stripMargin
+  )
 
   val model: ForeignPropertyEntry = ForeignPropertyEntry(
     countryCode = "zzz",
@@ -74,8 +75,8 @@ class ForeignPropertyEntrySpec extends UnitSpec {
     ))
   )
 
-  val desJson: JsValue = Json.parse(
-    s"""
+  val ifsJson: JsValue = Json.parse(
+     """
        |{
        |  "countryCode": "zzz",
        |  "income": {
@@ -101,8 +102,8 @@ class ForeignPropertyEntrySpec extends UnitSpec {
        |    "consolidatedExpense": 352.66
        |  }
        |}
-       |""".stripMargin)
-
+     """.stripMargin
+  )
 
   "reads" should {
     "read from JSON" when {
@@ -115,7 +116,7 @@ class ForeignPropertyEntrySpec extends UnitSpec {
   "writes" should {
     "write to JSON" when {
       "valid model is provided" in {
-        Json.toJson(model) shouldBe desJson
+        Json.toJson(model) shouldBe ifsJson
       }
     }
   }

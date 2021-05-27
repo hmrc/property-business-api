@@ -22,20 +22,21 @@ import support.UnitSpec
 class ExpenditureSpec extends UnitSpec {
 
   val mtdJson: JsValue = Json.parse(
-    s"""
-       |{
-       |  "premisesRunningCosts": 5635.43,
-       |  "repairsAndMaintenance": 3456.65,
-       |  "financialCosts": 34532.21,
-       |  "professionalFees": 32465.32,
-       |  "costsOfServices": 2567.21,
-       |  "travelCosts": 2345.76,
-       |  "residentialFinancialCost": 21235.22,
-       |  "broughtFwdResidentialFinancialCost": 12556.00,
-       |  "other": 2425.11,
-       |  "consolidatedExpenses": 352.66
-       |}
-       |""".stripMargin)
+    """
+      |{
+      |  "premisesRunningCosts": 5635.43,
+      |  "repairsAndMaintenance": 3456.65,
+      |  "financialCosts": 34532.21,
+      |  "professionalFees": 32465.32,
+      |  "costsOfServices": 2567.21,
+      |  "travelCosts": 2345.76,
+      |  "residentialFinancialCost": 21235.22,
+      |  "broughtFwdResidentialFinancialCost": 12556.00,
+      |  "other": 2425.11,
+      |  "consolidatedExpenses": 352.66
+      |}
+    """.stripMargin
+  )
 
   val model: ForeignPropertyExpenditure = ForeignPropertyExpenditure(
     premisesRunningCosts = Some(5635.43),
@@ -50,22 +51,22 @@ class ExpenditureSpec extends UnitSpec {
     consolidatedExpenses = Some(352.66)
   )
 
-  val desJson: JsValue = Json.parse(
-    s"""
-       |{
-       |  "premisesRunningCosts": 5635.43,
-       |  "repairsAndMaintenance": 3456.65,
-       |  "financialCosts": 34532.21,
-       |  "professionalFees": 32465.32,
-       |  "costOfServices": 2567.21,
-       |  "travelCosts": 2345.76,
-       |  "residentialFinancialCost": 21235.22,
-       |  "broughtFwdResidentialFinancialCost": 12556.00,
-       |  "other": 2425.11,
-       |  "consolidatedExpense": 352.66
-       |}
-       |""".stripMargin)
-
+  val ifsJson: JsValue = Json.parse(
+    """
+      |{
+      |  "premisesRunningCosts": 5635.43,
+      |  "repairsAndMaintenance": 3456.65,
+      |  "financialCosts": 34532.21,
+      |  "professionalFees": 32465.32,
+      |  "costOfServices": 2567.21,
+      |  "travelCosts": 2345.76,
+      |  "residentialFinancialCost": 21235.22,
+      |  "broughtFwdResidentialFinancialCost": 12556.00,
+      |  "other": 2425.11,
+      |  "consolidatedExpense": 352.66
+      |}
+    """.stripMargin
+  )
 
   "reads" should {
     "read from JSON" when {
@@ -78,7 +79,7 @@ class ExpenditureSpec extends UnitSpec {
   "writes" should {
     "write to JSON" when {
       "valid model is provided" in {
-        Json.toJson(model) shouldBe desJson
+        Json.toJson(model) shouldBe ifsJson
       }
     }
   }

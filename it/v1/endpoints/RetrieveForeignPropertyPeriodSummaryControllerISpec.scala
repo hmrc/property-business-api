@@ -19,21 +19,21 @@ package v1.endpoints
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import play.api.http.HeaderNames.ACCEPT
 import play.api.http.Status
-import play.api.libs.json.Json
+import play.api.libs.json.{JsValue, Json}
 import play.api.libs.ws.{WSRequest, WSResponse}
 import support.IntegrationBaseSpec
 import v1.models.errors.{BusinessIdFormatError, DownstreamError, MtdError, NinoFormatError, NotFoundError, SubmissionIdFormatError}
-import v1.stubs.{AuditStub, AuthStub, DesStub, MtdIdLookupStub}
+import v1.stubs.{AuditStub, AuthStub, IfsStub, MtdIdLookupStub}
 
 class RetrieveForeignPropertyPeriodSummaryControllerISpec extends IntegrationBaseSpec {
 
   private trait Test {
 
-    val nino = "AA123456A"
-    val businessId = "XAIS12345678910"
-    val submissionId = "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
+    val nino: String = "AA123456A"
+    val businessId: String = "XAIS12345678910"
+    val submissionId: String = "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
 
-    val responseBody = Json.parse(
+    val responseBody: JsValue = Json.parse(
       s"""
          |{
          |  "fromDate": "2019-04-06",
@@ -94,11 +94,11 @@ class RetrieveForeignPropertyPeriodSummaryControllerISpec extends IntegrationBas
          |    }
          |  ]
          |}
-         |""".stripMargin
+       """.stripMargin
     )
 
-    val desResponseBody = Json.parse(
-      s"""
+    val ifsResponseBody: JsValue = Json.parse(
+       """
          |{
          |  "fromDate": "2019-04-06",
          |  "toDate": "2019-07-06",
@@ -141,11 +141,12 @@ class RetrieveForeignPropertyPeriodSummaryControllerISpec extends IntegrationBas
          |      }
          |    ]
          |}
-         |""".stripMargin)
+       """.stripMargin
+    )
 
     def uri: String = s"/$nino/$businessId/period/$submissionId"
 
-    def desUri: String = s"/income-tax/business/property/periodic/${nino}/${businessId}/${submissionId}"
+    def ifsUri: String = s"/income-tax/business/property/periodic/${nino}/${businessId}/${submissionId}"
 
     def setupStubs(): StubMapping
 
@@ -157,14 +158,14 @@ class RetrieveForeignPropertyPeriodSummaryControllerISpec extends IntegrationBas
 
     def errorBody(code: String): String =
       s"""
-         |      {
-         |        "code": "$code",
-         |        "reason": "des message"
-         |      }
-    """.stripMargin
+         |{
+         |  "code": "$code",
+         |  "reason": "ifs message"
+         |}
+       """.stripMargin
   }
 
-  "calling the retrieve endpoint" should {
+  "calling the retrieve foreign property period summary endpoint" should {
 
     "return a 200 status code" when {
 
@@ -174,7 +175,7 @@ class RetrieveForeignPropertyPeriodSummaryControllerISpec extends IntegrationBas
           AuditStub.audit()
           AuthStub.authorised()
           MtdIdLookupStub.ninoFound(nino)
-          DesStub.onSuccess(DesStub.GET, desUri, Status.OK, desResponseBody)
+          IfsStub.onSuccess(IfsStub.GET, ifsUri, Status.OK, ifsResponseBody)
         }
 
         val response: WSResponse = await(request().get())
@@ -217,15 +218,15 @@ class RetrieveForeignPropertyPeriodSummaryControllerISpec extends IntegrationBas
         input.foreach(args => (validationErrorTest _).tupled(args))
       }
 
-      "des service error" when {
-        def serviceErrorTest(desStatus: Int, desCode: String, expectedStatus: Int, expectedBody: MtdError): Unit = {
-          s"des returns an $desCode error and status $desStatus" in new Test {
+      "ifs service error" when {
+        def serviceErrorTest(ifsStatus: Int, ifsCode: String, expectedStatus: Int, expectedBody: MtdError): Unit = {
+          s"ifs returns an $ifsCode error and status $ifsStatus" in new Test {
 
             override def setupStubs(): StubMapping = {
               AuditStub.audit()
               AuthStub.authorised()
               MtdIdLookupStub.ninoFound(nino)
-              DesStub.onError(DesStub.GET, desUri, desStatus, errorBody(desCode))
+              IfsStub.onError(IfsStub.GET, ifsUri, ifsStatus, errorBody(ifsCode))
             }
 
             val response: WSResponse = await(request().get())

@@ -20,7 +20,7 @@ import config.AppConfig
 
 import javax.inject.{Inject, Singleton}
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
-import v1.connectors.httpparsers.StandardDesHttpParser._
+import v1.connectors.httpparsers.StandardIfsHttpParser._
 import v1.models.request.listForeignPropertiesPeriodSummaries.ListForeignPropertiesPeriodSummariesRequest
 import v1.models.response.listForeignPropertiesPeriodSummaries.{ListForeignPropertiesPeriodSummariesResponse, SubmissionPeriod}
 
@@ -28,12 +28,12 @@ import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class ListForeignPropertiesPeriodSummariesConnector @Inject()(val http: HttpClient,
-                                                              val appConfig: AppConfig) extends BaseDownstreamConnector {
+                                                              val appConfig: AppConfig) extends BaseIfsConnector {
 
   def listForeignProperties(request: ListForeignPropertiesPeriodSummariesRequest)(
     implicit hc: HeaderCarrier,
     ec: ExecutionContext,
-    correlationId: String): Future[DownstreamOutcome[ListForeignPropertiesPeriodSummariesResponse[SubmissionPeriod]]] = {
+    correlationId: String): Future[IfsOutcome[ListForeignPropertiesPeriodSummariesResponse[SubmissionPeriod]]] = {
 
     val url = s"income-tax/business/property/${request.nino.nino}/${request.businessId}/period?fromDate=${request.fromDate}&toDate=${request.toDate}"
 

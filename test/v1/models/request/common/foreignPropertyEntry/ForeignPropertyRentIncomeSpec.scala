@@ -22,21 +22,22 @@ import support.UnitSpec
 class ForeignPropertyRentIncomeSpec extends UnitSpec {
 
   val mtdJson: JsValue = Json.parse(
-    s"""
-       |{
-       |  "rentAmount": 34456.30
-       |}
-       |""".stripMargin)
+    """
+      |{
+      |  "rentAmount": 34456.30
+      |}
+    """.stripMargin
+  )
 
   val model: ForeignPropertyRentIncome = ForeignPropertyRentIncome(rentAmount = 34456.30)
 
-  val desJson: JsValue = Json.parse(
-    s"""
-       |{
-       |  "rentAmount": 34456.30
-       |}
-       |""".stripMargin)
-
+  val ifsJson: JsValue = Json.parse(
+    """
+      |{
+      |  "rentAmount": 34456.30
+      |}
+    """.stripMargin
+  )
 
   "reads" should {
     "read from JSON" when {
@@ -49,7 +50,7 @@ class ForeignPropertyRentIncomeSpec extends UnitSpec {
   "writes" should {
     "write to JSON" when {
       "valid model is provided" in {
-        Json.toJson(model) shouldBe desJson
+        Json.toJson(model) shouldBe ifsJson
       }
     }
   }

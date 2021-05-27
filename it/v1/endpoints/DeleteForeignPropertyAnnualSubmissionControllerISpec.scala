@@ -23,19 +23,19 @@ import play.api.libs.json.{JsObject, Json}
 import play.api.libs.ws.{WSRequest, WSResponse}
 import support.IntegrationBaseSpec
 import v1.models.errors._
-import v1.stubs.{AuditStub, AuthStub, DesStub, MtdIdLookupStub}
+import v1.stubs.{AuditStub, AuthStub, IfsStub, MtdIdLookupStub}
 
 class DeleteForeignPropertyAnnualSubmissionControllerISpec extends IntegrationBaseSpec {
 
   private trait Test {
 
-    val nino = "AA123456A"
-    val businessId = "XAIS12345678910"
-    val taxYear = "2021-22"
+    val nino: String = "AA123456A"
+    val businessId: String = "XAIS12345678910"
+    val taxYear: String = "2021-22"
 
     def uri: String = s"/$nino/$businessId/annual/$taxYear"
 
-    def desUri: String = s"/income-tax/business/property/annual/$nino/$businessId/$taxYear"
+    def ifsUri: String = s"/income-tax/business/property/annual/$nino/$businessId/$taxYear"
 
     def setupStubs(): StubMapping
 
@@ -47,14 +47,14 @@ class DeleteForeignPropertyAnnualSubmissionControllerISpec extends IntegrationBa
 
     def errorBody(code: String): String =
       s"""
-         |      {
-         |        "code": "$code",
-         |        "reason": "des message"
-         |      }
-    """.stripMargin
+         |{
+         |  "code": "$code",
+         |  "reason": "ifs message"
+         |}
+       """.stripMargin
   }
 
-  "calling the delete endpoint" should {
+  "calling the delete foreign property annual submission endpoint" should {
 
     "return a 204 status code" when {
 
@@ -64,7 +64,7 @@ class DeleteForeignPropertyAnnualSubmissionControllerISpec extends IntegrationBa
           AuditStub.audit()
           AuthStub.authorised()
           MtdIdLookupStub.ninoFound(nino)
-          DesStub.onSuccess(DesStub.DELETE, desUri, Status.NO_CONTENT, JsObject.empty)
+          IfsStub.onSuccess(IfsStub.DELETE, ifsUri, Status.NO_CONTENT, JsObject.empty)
         }
 
         val response: WSResponse = await(request().delete())
@@ -106,15 +106,15 @@ class DeleteForeignPropertyAnnualSubmissionControllerISpec extends IntegrationBa
         input.foreach(args => (validationErrorTest _).tupled(args))
       }
 
-      "des service error" when {
-        def serviceErrorTest(desStatus: Int, desCode: String, expectedStatus: Int, expectedBody: MtdError): Unit = {
-          s"des returns an $desCode error and status $desStatus" in new Test {
+      "ifs service error" when {
+        def serviceErrorTest(ifsStatus: Int, ifsCode: String, expectedStatus: Int, expectedBody: MtdError): Unit = {
+          s"ifs returns an $ifsCode error and status $ifsStatus" in new Test {
 
             override def setupStubs(): StubMapping = {
               AuditStub.audit()
               AuthStub.authorised()
               MtdIdLookupStub.ninoFound(nino)
-              DesStub.onError(DesStub.DELETE, desUri, desStatus, errorBody(desCode))
+              IfsStub.onError(IfsStub.DELETE, ifsUri, ifsStatus, errorBody(ifsCode))
             }
 
             val response: WSResponse = await(request().delete())

@@ -20,19 +20,19 @@ import config.AppConfig
 
 import javax.inject.{Inject, Singleton}
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
-import v1.connectors.httpparsers.StandardDesHttpParser._
+import v1.connectors.httpparsers.StandardIfsHttpParser._
 import v1.models.request.amendForeignPropertyAnnualSubmission.AmendForeignPropertyAnnualSubmissionRequest
 
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class AmendForeignPropertyAnnualSubmissionConnector @Inject()(val http: HttpClient,
-                                                              val appConfig: AppConfig) extends BaseDownstreamConnector {
+                                                              val appConfig: AppConfig) extends BaseIfsConnector {
 
   def amendForeignPropertyAnnualSubmission(request: AmendForeignPropertyAnnualSubmissionRequest)(
     implicit hc: HeaderCarrier,
     ec: ExecutionContext,
-    correlationId: String): Future[DownstreamOutcome[Unit]] = {
+    correlationId: String): Future[IfsOutcome[Unit]] = {
 
     put(
       body = request.body,

@@ -22,18 +22,19 @@ import support.UnitSpec
 class IncomeSpec extends UnitSpec {
 
   val mtdJson: JsValue = Json.parse(
-    s"""
-       |{
-       |  "rentIncome": {
-       |    "rentAmount": 34456.30
-       |  },
-       |  "foreignTaxCreditRelief": true,
-       |  "premiumOfLeaseGrant": 2543.43,
-       |  "otherPropertyIncome": 54325.30,
-       |  "foreignTaxTakenOff": 6543.01,
-       |  "specialWithholdingTaxOrUKTaxPaid": 643245.00
-       |}
-       |""".stripMargin)
+    """
+      |{
+      |  "rentIncome": {
+      |    "rentAmount": 34456.30
+      |  },
+      |  "foreignTaxCreditRelief": true,
+      |  "premiumOfLeaseGrant": 2543.43,
+      |  "otherPropertyIncome": 54325.30,
+      |  "foreignTaxTakenOff": 6543.01,
+      |  "specialWithholdingTaxOrUKTaxPaid": 643245.00
+      |}
+    """.stripMargin
+  )
 
   val model: ForeignPropertyIncome = ForeignPropertyIncome(
     rentIncome = ForeignPropertyRentIncome(rentAmount = 34456.30),
@@ -44,20 +45,20 @@ class IncomeSpec extends UnitSpec {
     specialWithholdingTaxOrUKTaxPaid = Some(643245.00)
   )
 
-  val desJson: JsValue = Json.parse(
-    s"""
-       |{
-       |  "rentIncome": {
-       |    "rentAmount": 34456.30
-       |  },
-       |  "foreignTaxCreditRelief": true,
-       |  "premiumsOfLeaseGrant": 2543.43,
-       |  "otherPropertyIncome": 54325.30,
-       |  "foreignTaxPaidOrDeducted": 6543.01,
-       |  "specialWithholdingTaxOrUkTaxPaid": 643245.00
-       |}
-       |""".stripMargin)
-
+  val ifsJson: JsValue = Json.parse(
+    """
+      |{
+      |  "rentIncome": {
+      |    "rentAmount": 34456.30
+      |  },
+      |  "foreignTaxCreditRelief": true,
+      |  "premiumsOfLeaseGrant": 2543.43,
+      |  "otherPropertyIncome": 54325.30,
+      |  "foreignTaxPaidOrDeducted": 6543.01,
+      |  "specialWithholdingTaxOrUkTaxPaid": 643245.00
+      |}
+    """.stripMargin
+  )
 
   "reads" should {
     "read from JSON" when {
@@ -70,7 +71,7 @@ class IncomeSpec extends UnitSpec {
   "writes" should {
     "write to JSON" when {
       "valid model is provided" in {
-        Json.toJson(model) shouldBe desJson
+        Json.toJson(model) shouldBe ifsJson
       }
     }
   }

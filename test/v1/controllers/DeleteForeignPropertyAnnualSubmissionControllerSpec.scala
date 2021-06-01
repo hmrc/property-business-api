@@ -18,15 +18,15 @@ package v1.controllers
 
 import play.api.libs.json.Json
 import play.api.mvc.Result
-import uk.gov.hmrc.domain.Nino
 import uk.gov.hmrc.http.HeaderCarrier
 import v1.mocks.MockIdGenerator
 import v1.mocks.requestParsers.MockDeleteForeignPropertyAnnualSubmissionRequestParser
 import v1.mocks.services.{MockAuditService, MockDeleteForeignPropertyAnnualSubmissionService, MockEnrolmentsAuthService, MockMtdIdLookupService}
 import v1.models.audit.{AuditError, AuditEvent, AuditResponse, DeleteForeignPropertyAnnualAuditDetail}
-import v1.models.errors.{BadRequestError, BusinessIdFormatError, DownstreamError, ErrorWrapper, MtdError, NinoFormatError, NotFoundError, RuleTaxYearNotSupportedError, RuleTaxYearRangeInvalidError, TaxYearFormatError}
+import v1.models.domain.Nino
+import v1.models.errors._
 import v1.models.outcomes.ResponseWrapper
-import v1.models.request.deleteForeignPropertyAnnualSubmission.{DeleteForeignPropertyAnnualSubmissionRawData, DeleteForeignPropertyAnnualSubmissionRequest}
+import v1.models.request.deleteForeignPropertyAnnualSubmission._
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -40,8 +40,13 @@ class DeleteForeignPropertyAnnualSubmissionControllerSpec
     with MockAuditService
     with MockIdGenerator {
 
+  private val nino = "AA123456A"
+  private val businessId = "XAIS12345678910"
+  private val taxYear = "2021-22"
+  private val correlationId = "X-123"
+
   trait Test {
-    val hc = HeaderCarrier()
+    val hc: HeaderCarrier = HeaderCarrier()
 
     val controller = new DeleteForeignPropertyAnnualSubmissionController(
       authService = mockEnrolmentsAuthService,
@@ -53,15 +58,10 @@ class DeleteForeignPropertyAnnualSubmissionControllerSpec
       idGenerator = mockIdGenerator
     )
 
-    MockedMtdIdLookupService.lookup(nino).returns(Future.successful(Right("test-mtd-id")))
+    MockMtdIdLookupService.lookup(nino).returns(Future.successful(Right("test-mtd-id")))
     MockedEnrolmentsAuthService.authoriseUser()
     MockIdGenerator.getCorrelationId.returns(correlationId)
   }
-
-  private val nino = "AA123456A"
-  private val businessId = "XAIS12345678910"
-  private val taxYear = "2021-22"
-  private val correlationId = "X-123"
 
   private val rawData = DeleteForeignPropertyAnnualSubmissionRawData(nino, businessId, taxYear)
   private val requestData = DeleteForeignPropertyAnnualSubmissionRequest(Nino(nino), businessId, taxYear)

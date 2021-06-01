@@ -17,10 +17,10 @@
 package v1.services
 
 import support.UnitSpec
-import uk.gov.hmrc.domain.Nino
 import uk.gov.hmrc.http.HeaderCarrier
 import v1.controllers.EndpointLogContext
 import v1.mocks.connectors.MockListForeignPropertiesPeriodSummariesConnector
+import v1.models.domain.Nino
 import v1.models.errors._
 import v1.models.outcomes.ResponseWrapper
 import v1.models.request.listForeignPropertiesPeriodSummaries.ListForeignPropertiesPeriodSummariesRequest
@@ -31,16 +31,15 @@ import scala.concurrent.Future
 
 class ListForeignPropertiesPeriodSummariesServiceSpec extends UnitSpec {
 
+  val nino: String = "AA123456A"
+  val businessId: String = "XAIS12345678910"
+  val fromDate: String = "2020-06-01"
+  val toDate: String = "2020-08-31"
+  implicit val correlationId: String = "X-123"
 
-  val nino = Nino("AA123456A")
-  val businessId = "XAIS12345678910"
-  val fromDate = "2020-06-01"
-  val toDate = "2020-08-31"
-  implicit val correlationId = "X-123"
+  private val request = ListForeignPropertiesPeriodSummariesRequest(Nino(nino), businessId, fromDate, toDate)
 
-  val request = ListForeignPropertiesPeriodSummariesRequest(nino, businessId, fromDate, toDate)
-
-  val response = ListForeignPropertiesPeriodSummariesResponse(Seq(
+  private val response = ListForeignPropertiesPeriodSummariesResponse(Seq(
     SubmissionPeriod("4557ecb5-fd32-48cc-81f5-e6acd1099f3c", "2020-06-22", "2020-06-22"),
     SubmissionPeriod("4557ecb5-fd32-48cc-81f5-e6acd1099f3d", "2020-08-22", "2020-08-22")
   ))
@@ -68,11 +67,11 @@ class ListForeignPropertiesPeriodSummariesServiceSpec extends UnitSpec {
   "unsuccessful" should {
     "map errors according to spec" when {
 
-      def serviceError(desErrorCode: String, error: MtdError): Unit =
-        s"a $desErrorCode error is returned from the service" in new Test {
+      def serviceError(ifsErrorCode: String, error: MtdError): Unit =
+        s"a $ifsErrorCode error is returned from the service" in new Test {
 
           MockListForeignPropertiesConnector.listForeignProperties(request)
-            .returns(Future.successful(Left(ResponseWrapper(correlationId, DesErrors.single(DesErrorCode(desErrorCode))))))
+            .returns(Future.successful(Left(ResponseWrapper(correlationId, IfsErrors.single(IfsErrorCode(ifsErrorCode))))))
 
           await(service.listForeignProperties(request)) shouldBe Left(ErrorWrapper(correlationId, error))
         }

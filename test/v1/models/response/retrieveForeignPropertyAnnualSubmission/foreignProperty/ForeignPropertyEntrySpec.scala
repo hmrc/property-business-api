@@ -14,57 +14,53 @@
  * limitations under the License.
  */
 
-package v1.models.response.retrieveForeignPropertyAnnualSubmission.ForeignProperty
+package v1.models.response.retrieveForeignPropertyAnnualSubmission.foreignProperty
 
 import play.api.libs.json.Json
 import support.UnitSpec
-import v1.models.response.retrieveForeignPropertyAnnualSubmission.foreignProperty.{ForeignPropertyAdjustments, ForeignPropertyAllowances, ForeignPropertyEntry}
 import v1.models.utils.JsonErrorValidators
 
 class ForeignPropertyEntrySpec extends UnitSpec with JsonErrorValidators{
 
-  val foreignProperty =
-    ForeignPropertyEntry(
-      "GER",
-      Some(ForeignPropertyAdjustments(
-        Some(100.25),
-        Some(100.25)
-      )),
-      Some(ForeignPropertyAllowances(
-        Some(100.25),
-        Some(100.25),
-        Some(100.25),
-        Some(100.25),
-        Some(100.25),
-        Some(100.25)
-      ))
-    )
+  private val foreignProperty = ForeignPropertyEntry(
+    "GER",
+    Some(ForeignPropertyAdjustments(
+      Some(100.25),
+      Some(100.25)
+    )),
+    Some(ForeignPropertyAllowances(
+      Some(100.25),
+      Some(100.25),
+      Some(100.25),
+      Some(100.25),
+      Some(100.25),
+      Some(100.25)
+    ))
+  )
 
-  val foreignPropertyNoAdjustments =
-    ForeignPropertyEntry(
-      "GER",
-      None,
-      Some(ForeignPropertyAllowances(
-        Some(100.25),
-        Some(100.25),
-        Some(100.25),
-        Some(100.25),
-        Some(100.25),
-        Some(100.25)
-      ))
-    )
+  private val foreignPropertyNoAdjustments = ForeignPropertyEntry(
+    "GER",
+    None,
+    Some(ForeignPropertyAllowances(
+      Some(100.25),
+      Some(100.25),
+      Some(100.25),
+      Some(100.25),
+      Some(100.25),
+      Some(100.25)
+    ))
+  )
 
-  val foreignPropertyNoAllowances =
-    ForeignPropertyEntry(
-      "GER",
-      Some(ForeignPropertyAdjustments(
-        Some(100.25),
-        Some(100.25)
-      )),
-      None
-    )
+  private val foreignPropertyNoAllowances = ForeignPropertyEntry(
+    "GER",
+    Some(ForeignPropertyAdjustments(
+      Some(100.25),
+      Some(100.25)
+    )),
+    None
+  )
 
-  val jsonBody = Json.parse(
+  private val jsonBody = Json.parse(
     """
       |{
       |   "countryCode":"GER",
@@ -81,9 +77,10 @@ class ForeignPropertyEntrySpec extends UnitSpec with JsonErrorValidators{
       |      "electricChargePointAllowance":100.25
       |   }
       |}
-      |""".stripMargin)
+    """.stripMargin
+  )
 
-  val jsonBodyNoAdjustments = Json.parse(
+  private val jsonBodyNoAdjustments = Json.parse(
     """
       |{
       |   "countryCode":"GER",
@@ -96,9 +93,10 @@ class ForeignPropertyEntrySpec extends UnitSpec with JsonErrorValidators{
       |      "electricChargePointAllowance":100.25
       |   }
       |}
-      |""".stripMargin)
+    """.stripMargin
+  )
 
-  val jsonBodyNoAllowances = Json.parse(
+  private val jsonBodyNoAllowances = Json.parse(
     """
       |{
       |   "countryCode":"GER",
@@ -107,7 +105,8 @@ class ForeignPropertyEntrySpec extends UnitSpec with JsonErrorValidators{
       |      "balancingCharge":100.25
       |   }
       |}
-      |""".stripMargin)
+     """.stripMargin
+  )
 
   "reads" when {
     "passed a valid JSON" should {

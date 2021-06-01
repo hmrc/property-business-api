@@ -19,22 +19,22 @@ package v1.endpoints
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import play.api.http.HeaderNames.ACCEPT
 import play.api.http.Status
-import play.api.libs.json.Json
+import play.api.libs.json.{JsValue, Json}
 import play.api.libs.ws.{WSRequest, WSResponse}
 import support.IntegrationBaseSpec
 import v1.models.errors._
-import v1.stubs.{AuditStub, AuthStub, DesStub, MtdIdLookupStub}
+import v1.stubs.{AuditStub, AuthStub, IfsStub, MtdIdLookupStub}
 
 class RetrieveForeignPropertyAnnualSubmissionControllerISpec extends IntegrationBaseSpec {
 
   private trait Test {
 
-    val nino = "AA123456A"
-    val businessId = "XAIS12345678910"
-    val taxYear = "2021-22"
+    val nino: String = "AA123456A"
+    val businessId: String = "XAIS12345678910"
+    val taxYear: String = "2021-22"
 
-    val responseBody = Json.parse(
-      s"""
+    val responseBody: JsValue = Json.parse(
+       """
          |{
          |  "foreignFhlEea": {
          |    "adjustments": {
@@ -84,10 +84,11 @@ class RetrieveForeignPropertyAnnualSubmissionControllerISpec extends Integration
          |    }
          |  ]
          |}
-         |""".stripMargin)
+       """.stripMargin
+    )
 
-    val desResponseBody = Json.parse(
-      s"""
+    val ifsResponseBody: JsValue = Json.parse(
+       """
          |{
          |  "foreignFhlEea": {
          |    "adjustments": {
@@ -120,13 +121,14 @@ class RetrieveForeignPropertyAnnualSubmissionControllerISpec extends Integration
          |    }
          |  ]
          |}
-         |""".stripMargin)
+       """.stripMargin
+    )
 
     def setupStubs(): StubMapping
 
     def uri: String = s"/$nino/$businessId/annual/$taxYear"
 
-    def desUri: String = s"/income-tax/business/property/annual/$nino/$businessId/$taxYear"
+    def ifsUri: String = s"/income-tax/business/property/annual/$nino/$businessId/$taxYear"
 
     def request(): WSRequest = {
       setupStubs()
@@ -136,14 +138,14 @@ class RetrieveForeignPropertyAnnualSubmissionControllerISpec extends Integration
 
     def errorBody(code: String): String =
       s"""
-         |      {
-         |        "code": "$code",
-         |        "reason": "des message"
-         |      }
-    """.stripMargin
+         |{
+         |  "code": "$code",
+         |  "reason": "ifs message"
+         |}
+       """.stripMargin
   }
 
-  "calling the retrieve endpoint" should {
+  "calling the retrieve foreign property annual submission endpoint" should {
 
     "return a 200 status code" when {
 
@@ -153,7 +155,7 @@ class RetrieveForeignPropertyAnnualSubmissionControllerISpec extends Integration
           AuditStub.audit()
           AuthStub.authorised()
           MtdIdLookupStub.ninoFound(nino)
-          DesStub.onSuccess(DesStub.GET, desUri, Status.OK, desResponseBody)
+          IfsStub.onSuccess(IfsStub.GET, ifsUri, Status.OK, ifsResponseBody)
         }
 
         val response: WSResponse = await(request().get())
@@ -199,16 +201,16 @@ class RetrieveForeignPropertyAnnualSubmissionControllerISpec extends Integration
         input.foreach(args => (validationErrorTest _).tupled(args))
       }
 
-      "des service error" when {
-        def serviceErrorTest(desStatus: Int, desCode: String, expectedStatus: Int, expectedBody: MtdError): Unit = {
-          s"des returns an $desCode error and status $desStatus" in new Test {
+      "ifs service error" when {
+        def serviceErrorTest(ifsStatus: Int, ifsCode: String, expectedStatus: Int, expectedBody: MtdError): Unit = {
+          s"ifs returns an $ifsCode error and status $ifsStatus" in new Test {
 
 
             override def setupStubs(): StubMapping = {
               AuditStub.audit()
               AuthStub.authorised()
               MtdIdLookupStub.ninoFound(nino)
-              DesStub.onError(DesStub.GET, desUri, desStatus, errorBody(desCode))
+              IfsStub.onError(IfsStub.GET, ifsUri, ifsStatus, errorBody(ifsCode))
             }
 
             val response: WSResponse = await(request().get())

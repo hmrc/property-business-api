@@ -16,6 +16,6 @@
 
 package v1.models.request.retrieveForeignPropertyAnnualSubmission
 
-import uk.gov.hmrc.domain.Nino
+import v1.models.domain.Nino
 
 case class RetrieveForeignPropertyAnnualSubmissionRequest(nino: Nino, businessId: String, taxYear: String)

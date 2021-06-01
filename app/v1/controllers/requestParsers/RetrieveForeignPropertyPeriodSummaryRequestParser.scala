@@ -17,14 +17,13 @@
 package v1.controllers.requestParsers
 
 import javax.inject.Inject
-import uk.gov.hmrc.domain.Nino
 import v1.controllers.requestParsers.validators.RetrieveForeignPropertyPeriodSummaryValidator
-import v1.models.request.retrieveForeignPropertyPeriodSummary.{RetrieveForeignPropertyPeriodSummaryRawData, RetrieveForeignPropertyPeriodSummaryRequest}
+import v1.models.domain.Nino
+import v1.models.request.retrieveForeignPropertyPeriodSummary._
 
 class RetrieveForeignPropertyPeriodSummaryRequestParser @Inject()(val validator: RetrieveForeignPropertyPeriodSummaryValidator)
   extends RequestParser[RetrieveForeignPropertyPeriodSummaryRawData, RetrieveForeignPropertyPeriodSummaryRequest] {
 
   override protected def requestFor(data: RetrieveForeignPropertyPeriodSummaryRawData): RetrieveForeignPropertyPeriodSummaryRequest =
     RetrieveForeignPropertyPeriodSummaryRequest(Nino(data.nino), data.businessId, data.submissionId)
-
 }

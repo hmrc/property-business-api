@@ -25,12 +25,13 @@ import v1.connectors.DeleteForeignPropertyAnnualSubmissionConnector
 import v1.controllers.EndpointLogContext
 import v1.models.errors.{BusinessIdFormatError, DownstreamError, NinoFormatError, NotFoundError}
 import v1.models.request.deleteForeignPropertyAnnualSubmission.DeleteForeignPropertyAnnualSubmissionRequest
-import v1.support.DesResponseMappingSupport
+import v1.support.IfsResponseMappingSupport
 
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class DeleteForeignPropertyAnnualSubmissionService @Inject()(connector: DeleteForeignPropertyAnnualSubmissionConnector) extends DesResponseMappingSupport with Logging {
+class DeleteForeignPropertyAnnualSubmissionService @Inject()(connector: DeleteForeignPropertyAnnualSubmissionConnector)
+  extends IfsResponseMappingSupport with Logging {
 
   def deleteForeignPropertyAnnualSubmission(request: DeleteForeignPropertyAnnualSubmissionRequest)(
     implicit hc: HeaderCarrier,
@@ -39,13 +40,13 @@ class DeleteForeignPropertyAnnualSubmissionService @Inject()(connector: DeleteFo
     correlationId: String): Future[DeleteForeignPropertyAnnualSubmissionServiceOutcome] = {
 
     val result = for {
-      desResponseWrapper <- EitherT(connector.deleteForeignPropertyAnnualSubmission(request)).leftMap(mapDesErrors(desErrorMap))
-    } yield desResponseWrapper
+      ifsResponseWrapper <- EitherT(connector.deleteForeignPropertyAnnualSubmission(request)).leftMap(mapIfsErrors(ifsErrorMap))
+    } yield ifsResponseWrapper
 
     result.value
   }
 
-  private def desErrorMap =
+  private def ifsErrorMap =
     Map(
       "INVALID_TAXABLE_ENTITY_ID" -> NinoFormatError,
       "INVALID_INCOME_SOURCE_ID" -> BusinessIdFormatError,
@@ -57,4 +58,3 @@ class DeleteForeignPropertyAnnualSubmissionService @Inject()(connector: DeleteFo
     )
 
 }
-

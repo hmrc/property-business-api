@@ -25,13 +25,13 @@ import v1.connectors.RetrieveForeignPropertyPeriodSummaryConnector
 import v1.controllers.EndpointLogContext
 import v1.models.errors._
 import v1.models.request.retrieveForeignPropertyPeriodSummary.RetrieveForeignPropertyPeriodSummaryRequest
-import v1.support.DesResponseMappingSupport
+import v1.support.IfsResponseMappingSupport
 
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class RetrieveForeignPropertyPeriodSummaryService @Inject()(connector: RetrieveForeignPropertyPeriodSummaryConnector)
-  extends DesResponseMappingSupport with Logging {
+  extends IfsResponseMappingSupport with Logging {
 
   def retrieveForeignProperty(request: RetrieveForeignPropertyPeriodSummaryRequest)(
     implicit hc: HeaderCarrier,
@@ -40,13 +40,13 @@ class RetrieveForeignPropertyPeriodSummaryService @Inject()(connector: RetrieveF
     correlationId: String): Future[RetrieveForeignPropertyPeriodSummaryServiceOutcome] = {
 
     val result = for {
-      desResponseWrapper <- EitherT(connector.retrieveForeignProperty(request)).leftMap(mapDesErrors(desErrorMap))
-    } yield desResponseWrapper
+      ifsResponseWrapper <- EitherT(connector.retrieveForeignProperty(request)).leftMap(mapIfsErrors(ifsErrorMap))
+    } yield ifsResponseWrapper
 
     result.value
   }
 
-  private def desErrorMap =
+  private def ifsErrorMap =
     Map(
       "INVALID_TAXABLE_ENTITY_ID" -> NinoFormatError,
       "INVALID_INCOMESOURCE_ID" -> BusinessIdFormatError,

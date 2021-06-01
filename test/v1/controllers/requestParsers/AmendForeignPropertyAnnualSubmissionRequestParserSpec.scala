@@ -18,18 +18,19 @@ package v1.controllers.requestParsers
 
 import play.api.libs.json.Json
 import support.UnitSpec
-import uk.gov.hmrc.domain.Nino
 import v1.mocks.validators.MockAmendForeignPropertyAnnualSubmissionValidator
+import v1.models.domain.Nino
 import v1.models.errors.{BadRequestError, BusinessIdFormatError, ErrorWrapper, NinoFormatError}
 import v1.models.request.amendForeignPropertyAnnualSubmission._
-import v1.models.request.amendForeignPropertyAnnualSubmission.foreignFhlEea.{ForeignFhlEea, ForeignFhlEeaAdjustments, ForeignFhlEeaAllowances}
-import v1.models.request.amendForeignPropertyAnnualSubmission.foreignProperty.{ForeignPropertyAdjustments, ForeignPropertyAllowances, ForeignPropertyEntry}
+import v1.models.request.amendForeignPropertyAnnualSubmission.foreignFhlEea._
+import v1.models.request.amendForeignPropertyAnnualSubmission.foreignProperty._
 
 class AmendForeignPropertyAnnualSubmissionRequestParserSpec extends UnitSpec {
-  val nino = "AA123456B"
-  val businessId = "XAIS12345678901"
-  val taxYear = "2021-22"
-  implicit val correlationId = "X-123"
+
+  val nino: String = "AA123456B"
+  val businessId: String = "XAIS12345678901"
+  val taxYear: String = "2021-22"
+  implicit val correlationId: String = "X-123"
 
   private val requestBodyJson = Json.parse(
     """
@@ -69,10 +70,10 @@ class AmendForeignPropertyAnnualSubmissionRequestParserSpec extends UnitSpec {
       |      }
       |   ]
       |}
-      |""".stripMargin
+    """.stripMargin
   )
 
-  val inputData =
+  val inputData: AmendForeignPropertyAnnualSubmissionRawData =
     AmendForeignPropertyAnnualSubmissionRawData(nino, businessId, taxYear, requestBodyJson)
 
   trait Test extends MockAmendForeignPropertyAnnualSubmissionValidator {
@@ -84,7 +85,7 @@ class AmendForeignPropertyAnnualSubmissionRequestParserSpec extends UnitSpec {
       "valid request data is supplied" in new Test {
         MockAmendForeignPropertyValidator.validate(inputData).returns(Nil)
 
-        val amendForeignPropertyAnnualSubmissionRequestBody =
+        val amendForeignPropertyAnnualSubmissionRequestBody: AmendForeignPropertyAnnualSubmissionRequestBody =
           AmendForeignPropertyAnnualSubmissionRequestBody(
             Some(ForeignFhlEea(
               Some(ForeignFhlEeaAdjustments(

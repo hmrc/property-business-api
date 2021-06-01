@@ -17,25 +17,25 @@
 package v1.services
 
 import support.UnitSpec
-import uk.gov.hmrc.domain.Nino
 import uk.gov.hmrc.http.HeaderCarrier
 import v1.controllers.EndpointLogContext
 import v1.mocks.connectors.MockAmendForeignPropertyPeriodSummaryConnector
+import v1.models.domain.Nino
 import v1.models.errors._
 import v1.models.outcomes.ResponseWrapper
-import v1.models.request.amendForeignPropertyPeriodSummary.{AmendForeignPropertyPeriodSummaryRequest, AmendForeignPropertyPeriodSummaryRequestBody}
-import v1.models.request.common.foreignFhlEea.{ForeignFhlEea, ForeignFhlEeaExpenditure, ForeignFhlEeaIncome}
-import v1.models.request.common.foreignPropertyEntry.{ForeignPropertyEntry, ForeignPropertyExpenditure, ForeignPropertyIncome, ForeignPropertyRentIncome}
+import v1.models.request.amendForeignPropertyPeriodSummary._
+import v1.models.request.common.foreignFhlEea._
+import v1.models.request.common.foreignPropertyEntry._
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class AmendForeignPropertyPeriodSummaryServiceSpec extends UnitSpec {
 
-  val nino = Nino("AA123456A")
-  val businessId = "XAIS12345678910"
-  val submissionId = "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
-  implicit val correlationId = "X-123"
+  val nino: String = "AA123456A"
+  val businessId: String = "XAIS12345678910"
+  val submissionId: String = "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
+  implicit val correlationId: String = "X-123"
 
   private val foreignFhlEea: ForeignFhlEea = ForeignFhlEea(
     income = ForeignFhlEeaIncome(rentAmount = 567.83),
@@ -80,7 +80,7 @@ class AmendForeignPropertyPeriodSummaryServiceSpec extends UnitSpec {
     foreignProperty = Some(Seq(foreignProperty))
   )
 
-  private val requestData = AmendForeignPropertyPeriodSummaryRequest(nino, businessId, submissionId, body)
+  private val requestData = AmendForeignPropertyPeriodSummaryRequest(Nino(nino), businessId, submissionId, body)
 
   trait Test extends MockAmendForeignPropertyPeriodSummaryConnector {
     implicit val hc: HeaderCarrier = HeaderCarrier()
@@ -105,11 +105,11 @@ class AmendForeignPropertyPeriodSummaryServiceSpec extends UnitSpec {
   "unsuccessful" should {
     "map errors according to spec" when {
 
-      def serviceError(desErrorCode: String, error: MtdError): Unit =
-        s"a $desErrorCode error is returned from the service" in new Test {
+      def serviceError(ifsErrorCode: String, error: MtdError): Unit =
+        s"a $ifsErrorCode error is returned from the service" in new Test {
 
           MockAmendForeignPropertyConnector.amendForeignProperty(requestData)
-            .returns(Future.successful(Left(ResponseWrapper(correlationId, DesErrors.single(DesErrorCode(desErrorCode))))))
+            .returns(Future.successful(Left(ResponseWrapper(correlationId, IfsErrors.single(IfsErrorCode(ifsErrorCode))))))
 
           await(service.amendForeignProperty(requestData)) shouldBe Left(ErrorWrapper(correlationId, error))
         }

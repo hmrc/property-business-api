@@ -22,23 +22,24 @@ import support.UnitSpec
 class ForeignFhlEeaSpec extends UnitSpec {
 
   val mtdJson: JsValue = Json.parse(
-    s"""
-       |{
-       |  "income": {
-       |    "rentAmount": 567.83
-       |    },
-       |  "expenditure": {
-       |    "premisesRunningCosts": 4567.98,
-       |    "repairsAndMaintenance": 98765.67,
-       |    "financialCosts": 4566.95,
-       |    "professionalFees": 23.65,
-       |    "costsOfServices": 4567.77,
-       |    "travelCosts": 456.77,
-       |    "other": 567.67,
-       |    "consolidatedExpenses": 456.98
-       |  }
-       |}
-       |""".stripMargin)
+    """
+      |{
+      |  "income": {
+      |    "rentAmount": 567.83
+      |    },
+      |  "expenditure": {
+      |    "premisesRunningCosts": 4567.98,
+      |    "repairsAndMaintenance": 98765.67,
+      |    "financialCosts": 4566.95,
+      |    "professionalFees": 23.65,
+      |    "costsOfServices": 4567.77,
+      |    "travelCosts": 456.77,
+      |    "other": 567.67,
+      |    "consolidatedExpenses": 456.98
+      |  }
+      |}
+    """.stripMargin
+  )
 
   val model: ForeignFhlEea = ForeignFhlEea(
     income = ForeignFhlEeaIncome(rentAmount = 567.83),
@@ -54,25 +55,25 @@ class ForeignFhlEeaSpec extends UnitSpec {
     ))
   )
 
-  val desJson: JsValue = Json.parse(
-    s"""
-       |{
-       |  "income": {
-       |    "rentAmount": 567.83
-       |    },
-       |  "expenses": {
-       |    "premisesRunningCosts": 4567.98,
-       |    "repairsAndMaintenance": 98765.67,
-       |    "financialCosts": 4566.95,
-       |    "professionalFees": 23.65,
-       |    "costOfServices": 4567.77,
-       |    "travelCosts": 456.77,
-       |    "other": 567.67,
-       |    "consolidatedExpense": 456.98
-       |  }
-       |}
-       |""".stripMargin)
-
+  val ifsJson: JsValue = Json.parse(
+    """
+      |{
+      |  "income": {
+      |    "rentAmount": 567.83
+      |    },
+      |  "expenses": {
+      |    "premisesRunningCosts": 4567.98,
+      |    "repairsAndMaintenance": 98765.67,
+      |    "financialCosts": 4566.95,
+      |    "professionalFees": 23.65,
+      |    "costOfServices": 4567.77,
+      |    "travelCosts": 456.77,
+      |    "other": 567.67,
+      |    "consolidatedExpense": 456.98
+      |  }
+      |}
+    """.stripMargin
+  )
 
   "reads" should {
     "read from JSON" when {
@@ -85,7 +86,7 @@ class ForeignFhlEeaSpec extends UnitSpec {
   "writes" should {
     "write to JSON" when {
       "valid model is provided" in {
-        Json.toJson(model) shouldBe desJson
+        Json.toJson(model) shouldBe ifsJson
       }
     }
   }

@@ -9,7 +9,7 @@
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIED OR CONDITIONS OF ANY KIND, either express or implied.
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
@@ -22,66 +22,67 @@ import play.api.http.Status
 import play.api.libs.json.{JsValue, Json}
 import play.api.libs.ws.{WSRequest, WSResponse}
 import support.IntegrationBaseSpec
-import v1.stubs.{AuditStub, AuthStub, DesStub, MtdIdLookupStub}
+import v1.stubs.{AuditStub, AuthStub, IfsStub, MtdIdLookupStub}
 
 class AuthISpec extends IntegrationBaseSpec {
 
   private trait Test {
-    val nino = "AA123456A"
-    val businessId = "XAIS12345678910"
-    val submissionId = "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
+    val nino: String = "AA123456A"
+    val businessId: String = "XAIS12345678910"
+    val submissionId: String = "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
 
-    val desResponseBody: JsValue = Json.parse(
-      s"""
-         |{
-         |  "fromDate": "2019-04-06",
-         |  "toDate": "2019-07-06",
-         |  "foreignFhlEea": {
-         |        "income": {
-         |          "rentAmount": 200.22,
-         |          "taxDeducted": 22.22
-         |        },
-         |        "expenses": {
-         |          "premisesRunningCostsAmount": 100.25,
-         |          "repairsAndMaintenanceAmount": 100.25,
-         |          "financialCostsAmount": 100.25,
-         |          "professionalFeesAmount": 100.25,
-         |          "costOfServicesAmount": 100.25,
-         |          "travelCostsAmount": 100.25,
-         |          "otherAmount": 100.25
-         |        }
-         |      },
-         |  "foreignProperty": [
-         |      {
-         |        "countryCode": "FRA",
-         |        "income": {
-         |            "rentIncome": {
-         |                "rentAmount": 200.22,
-         |                "taxDeducted": 22.22
-         |            },
-         |          "foreignTaxCreditRelief": true,
-         |          "premiumOfLeaseGrantAmount": 100.25,
-         |          "otherPropertyIncomeAmount": 100.25,
-         |          "foreignTaxPaidOrDeducted": 44.21,
-         |          "specialWithholdingTaxOrUKTaxPaid": 23.78
-         |        },
-         |        "expenses": {
-         |          "premisesRunningCostsAmount": 100.25,
-         |          "repairsAndMaintenanceAmount": 100.25,
-         |          "financialCostsAmount": 200.25,
-         |          "professionalFeesAmount": 100.25,
-         |          "costOfServicesAmount": 100.25,
-         |          "travelCostsAmount": 100.25,
-         |          "otherAmount": 100.25
-         |         }
-         |      }
-         |    ]
-         |}
-         |""".stripMargin)
+    val ifsResponseBody: JsValue = Json.parse(
+      """
+        |{
+        |  "fromDate": "2019-04-06",
+        |  "toDate": "2019-07-06",
+        |  "foreignFhlEea": {
+        |        "income": {
+        |          "rentAmount": 200.22,
+        |          "taxDeducted": 22.22
+        |        },
+        |        "expenses": {
+        |          "premisesRunningCostsAmount": 100.25,
+        |          "repairsAndMaintenanceAmount": 100.25,
+        |          "financialCostsAmount": 100.25,
+        |          "professionalFeesAmount": 100.25,
+        |          "costOfServicesAmount": 100.25,
+        |          "travelCostsAmount": 100.25,
+        |          "otherAmount": 100.25
+        |        }
+        |      },
+        |  "foreignProperty": [
+        |      {
+        |        "countryCode": "FRA",
+        |        "income": {
+        |            "rentIncome": {
+        |                "rentAmount": 200.22,
+        |                "taxDeducted": 22.22
+        |            },
+        |          "foreignTaxCreditRelief": true,
+        |          "premiumOfLeaseGrantAmount": 100.25,
+        |          "otherPropertyIncomeAmount": 100.25,
+        |          "foreignTaxPaidOrDeducted": 44.21,
+        |          "specialWithholdingTaxOrUKTaxPaid": 23.78
+        |        },
+        |        "expenses": {
+        |          "premisesRunningCostsAmount": 100.25,
+        |          "repairsAndMaintenanceAmount": 100.25,
+        |          "financialCostsAmount": 200.25,
+        |          "professionalFeesAmount": 100.25,
+        |          "costOfServicesAmount": 100.25,
+        |          "travelCostsAmount": 100.25,
+        |          "otherAmount": 100.25
+        |         }
+        |      }
+        |    ]
+        |}
+      """.stripMargin
+    )
 
     def uri: String = s"/$nino/$businessId/period/$submissionId"
 
-    def desUri: String = s"/income-tax/business/property/periodic/$nino/$businessId/$submissionId"
+    def ifsUri: String = s"/income-tax/business/property/periodic/$nino/$businessId/$submissionId"
 
     def setupStubs(): StubMapping
 
@@ -92,7 +93,7 @@ class AuthISpec extends IntegrationBaseSpec {
     }
   }
 
-  "Calling the sample endpoint" when {
+  "Calling the amend foreign property period summary endpoint" when {
 
     "the NINO cannot be converted to a MTD ID" should {
 
@@ -116,7 +117,7 @@ class AuthISpec extends IntegrationBaseSpec {
           AuditStub.audit()
           AuthStub.authorised()
           MtdIdLookupStub.ninoFound(nino)
-          DesStub.onSuccess(DesStub.GET, desUri, Status.OK, desResponseBody)
+          IfsStub.onSuccess(IfsStub.GET, ifsUri, Status.OK, ifsResponseBody)
         }
 
         val response: WSResponse = await(request().get())
@@ -155,7 +156,5 @@ class AuthISpec extends IntegrationBaseSpec {
         response.status shouldBe Status.FORBIDDEN
       }
     }
-
   }
-
 }

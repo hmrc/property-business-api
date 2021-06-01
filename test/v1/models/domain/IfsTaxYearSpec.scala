@@ -14,25 +14,20 @@
  * limitations under the License.
  */
 
-package v1.models.errors
+package v1.models.domain
 
-import play.api.libs.json.Json
 import support.UnitSpec
 
-class DesErrorCodeSpec extends UnitSpec {
+class IfsTaxYearSpec extends UnitSpec {
+  "toString" should {
+    "return the value inside the model as a String instead of the standard case class toString" in {
+      IfsTaxYear("value").toString shouldBe "value"
+    }
+  }
 
-  "reads" should {
-    val json = Json.parse(
-      """
-        |{
-        |   "code": "CODE",
-        |   "reason": "ignored"
-        |}
-      """.stripMargin
-    )
-
-    "generate the correct error code" in {
-      json.as[DesErrorCode] shouldBe DesErrorCode("CODE")
+  "fromMtd" should {
+    "return the IFS representation of an MTD tax year (XXYY-ZZ -> XXZZ)" in {
+      IfsTaxYear.fromMtd("2018-19") shouldBe IfsTaxYear("2019")
     }
   }
 }

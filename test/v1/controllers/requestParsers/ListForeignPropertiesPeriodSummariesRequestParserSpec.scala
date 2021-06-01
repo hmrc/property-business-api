@@ -17,22 +17,23 @@
 package v1.controllers.requestParsers
 
 import support.UnitSpec
-import uk.gov.hmrc.domain.Nino
 import v1.mocks.support.MockDateUtils
 import v1.mocks.validators.MockListForeignPropertiesPeriodSummariesValidator
+import v1.models.domain.Nino
 import v1.models.errors.{BadRequestError, BusinessIdFormatError, ErrorWrapper, NinoFormatError}
-import v1.models.request.listForeignPropertiesPeriodSummaries.{ListForeignPropertiesPeriodSummariesRawData, ListForeignPropertiesPeriodSummariesRequest}
+import v1.models.request.listForeignPropertiesPeriodSummaries._
 
 class ListForeignPropertiesPeriodSummariesRequestParserSpec extends UnitSpec {
-  val nino = "AA123456B"
-  val businessId = "XAIS12345678901"
-  val fromDate = "2020-06-06"
-  val toDate = "2020-08-06"
-  implicit val correlationId = "X-123"
 
-  val inputData =
+  val nino: String = "AA123456B"
+  val businessId: String = "XAIS12345678901"
+  val fromDate: String = "2020-06-06"
+  val toDate: String = "2020-08-06"
+  implicit val correlationId: String = "X-123"
+
+  val inputData: ListForeignPropertiesPeriodSummariesRawData =
     ListForeignPropertiesPeriodSummariesRawData(nino, businessId, Some(fromDate), Some(toDate))
-  val inputDataWithoutDates =
+  val inputDataWithoutDates: ListForeignPropertiesPeriodSummariesRawData =
     ListForeignPropertiesPeriodSummariesRawData(nino, businessId, None, None)
 
   trait Test extends MockListForeignPropertiesPeriodSummariesValidator with MockDateUtils {

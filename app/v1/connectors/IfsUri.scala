@@ -14,20 +14,6 @@
  * limitations under the License.
  */
 
-package v1.models.domain
+package v1.connectors
 
-import support.UnitSpec
-
-class DesTaxYearSpec extends UnitSpec {
-  "toString" should {
-    "return the value inside the model as a String instead of the standard case class toString" in {
-      DesTaxYear("value").toString shouldBe "value"
-    }
-  }
-
-  "fromMtd" should {
-    "return the DES representation of an MTD tax year (XXYY-ZZ -> XXZZ)" in {
-      DesTaxYear.fromMtd("2018-19") shouldBe DesTaxYear("2019")
-    }
-  }
-}
+case class IfsUri[Resp](value: String)

@@ -21,18 +21,19 @@ import support.UnitSpec
 
 class ExpenditureSpec extends UnitSpec {
   val mtdJson: JsValue = Json.parse(
-    s"""
-       |{
-       |  "premisesRunningCosts": 4567.98,
-       |  "repairsAndMaintenance": 98765.67,
-       |  "financialCosts": 4566.95,
-       |  "professionalFees": 23.65,
-       |  "costsOfServices": 4567.77,
-       |  "travelCosts": 456.77,
-       |  "other": 567.67,
-       |  "consolidatedExpenses": 456.98
-       |}
-       |""".stripMargin)
+    """
+      |{
+      |  "premisesRunningCosts": 4567.98,
+      |  "repairsAndMaintenance": 98765.67,
+      |  "financialCosts": 4566.95,
+      |  "professionalFees": 23.65,
+      |  "costsOfServices": 4567.77,
+      |  "travelCosts": 456.77,
+      |  "other": 567.67,
+      |  "consolidatedExpenses": 456.98
+      |}
+    """.stripMargin
+  )
 
   val model: ForeignFhlEeaExpenditure = ForeignFhlEeaExpenditure(
     premisesRunningCosts = Some(4567.98),
@@ -45,20 +46,20 @@ class ExpenditureSpec extends UnitSpec {
     consolidatedExpenses = Some(456.98)
   )
 
-  val desJson: JsValue = Json.parse(
-    s"""
-       |{
-       |  "premisesRunningCosts": 4567.98,
-       |  "repairsAndMaintenance": 98765.67,
-       |  "financialCosts": 4566.95,
-       |  "professionalFees": 23.65,
-       |  "costOfServices": 4567.77,
-       |  "travelCosts": 456.77,
-       |  "other": 567.67,
-       |  "consolidatedExpense": 456.98
-       |}
-       |""".stripMargin)
-
+  val ifsJson: JsValue = Json.parse(
+    """
+      |{
+      |  "premisesRunningCosts": 4567.98,
+      |  "repairsAndMaintenance": 98765.67,
+      |  "financialCosts": 4566.95,
+      |  "professionalFees": 23.65,
+      |  "costOfServices": 4567.77,
+      |  "travelCosts": 456.77,
+      |  "other": 567.67,
+      |  "consolidatedExpense": 456.98
+      |}
+    """.stripMargin
+  )
 
   "reads" should {
     "read from JSON" when {
@@ -71,7 +72,7 @@ class ExpenditureSpec extends UnitSpec {
   "writes" should {
     "write to JSON" when {
       "valid model is provided" in {
-        Json.toJson(model) shouldBe desJson
+        Json.toJson(model) shouldBe ifsJson
       }
     }
   }

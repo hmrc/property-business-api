@@ -17,11 +17,11 @@
 package v1.services
 
 import support.UnitSpec
-import uk.gov.hmrc.domain.Nino
 import uk.gov.hmrc.http.HeaderCarrier
 import v1.controllers.EndpointLogContext
 import v1.mocks.connectors.MockDeleteForeignPropertyAnnualSubmissionConnector
-import v1.models.errors.{BusinessIdFormatError, DesErrorCode, DesErrors, DownstreamError, ErrorWrapper, MtdError, NinoFormatError, NotFoundError}
+import v1.models.domain.Nino
+import v1.models.errors._
 import v1.models.outcomes.ResponseWrapper
 import v1.models.request.deleteForeignPropertyAnnualSubmission.DeleteForeignPropertyAnnualSubmissionRequest
 
@@ -30,12 +30,12 @@ import scala.concurrent.Future
 
 class DeleteForeignPropertyAnnualSubmissionServiceSpec extends UnitSpec {
 
-  val nino = Nino("AA123456A")
-  val businessId = "XAIS12345678910"
-  val taxYear = "2021-22"
-  implicit val correlationId = "X-123"
+  val nino: String = "AA123456A"
+  val businessId: String = "XAIS12345678910"
+  val taxYear: String = "2021-22"
+  implicit val correlationId: String = "X-123"
 
-  private val requestData = DeleteForeignPropertyAnnualSubmissionRequest(nino, businessId, taxYear)
+  private val requestData = DeleteForeignPropertyAnnualSubmissionRequest(Nino(nino), businessId, taxYear)
 
   trait Test extends MockDeleteForeignPropertyAnnualSubmissionConnector {
     implicit val hc: HeaderCarrier = HeaderCarrier()
@@ -60,11 +60,11 @@ class DeleteForeignPropertyAnnualSubmissionServiceSpec extends UnitSpec {
   "unsuccessful" should {
     "map errors according to spec" when {
 
-      def serviceError(desErrorCode: String, error: MtdError): Unit =
-        s"a $desErrorCode error is returned from the service" in new Test {
+      def serviceError(ifsErrorCode: String, error: MtdError): Unit =
+        s"a $ifsErrorCode error is returned from the service" in new Test {
 
           MockDeleteForeignPropertyAnnualSubmissionConnector.deleteForeignProperty(requestData)
-            .returns(Future.successful(Left(ResponseWrapper(correlationId, DesErrors.single(DesErrorCode(desErrorCode))))))
+            .returns(Future.successful(Left(ResponseWrapper(correlationId, IfsErrors.single(IfsErrorCode(ifsErrorCode))))))
 
           await(service.deleteForeignPropertyAnnualSubmission(requestData)) shouldBe Left(ErrorWrapper(correlationId, error))
         }
@@ -83,4 +83,3 @@ class DeleteForeignPropertyAnnualSubmissionServiceSpec extends UnitSpec {
     }
   }
 }
-

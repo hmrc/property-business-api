@@ -9,7 +9,7 @@
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIED OR CONDITIONS OF ANY KIND, either express or implied.
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
@@ -23,10 +23,9 @@ import play.api.libs.json.{JsValue, Json}
 import play.api.libs.ws.{WSRequest, WSResponse}
 import support.IntegrationBaseSpec
 import v1.models.errors._
-import v1.stubs.{AuditStub, AuthStub, DesStub, MtdIdLookupStub}
+import v1.stubs.{AuditStub, AuthStub, IfsStub, MtdIdLookupStub}
 
 class CreateForeignPropertyPeriodSummaryControllerISpec extends IntegrationBaseSpec {
-
 
   val unconsolidatedRequestJson: JsValue = Json.parse(
     """
@@ -74,7 +73,8 @@ class CreateForeignPropertyPeriodSummaryControllerISpec extends IntegrationBaseS
       |    }
       |  ]
       |}
-      |""".stripMargin)
+    """.stripMargin
+  )
 
   val consolidatedRequestBodyJson: JsValue = Json.parse(
     """
@@ -110,7 +110,8 @@ class CreateForeignPropertyPeriodSummaryControllerISpec extends IntegrationBaseS
       |    }
       |  ]
       |}
-      |""".stripMargin)
+    """.stripMargin
+  )
 
   val invalidToDateRequestJson: JsValue = Json.parse(
     """
@@ -158,7 +159,8 @@ class CreateForeignPropertyPeriodSummaryControllerISpec extends IntegrationBaseS
       |    }
       |  ]
       |}
-      |""".stripMargin)
+    """.stripMargin
+  )
 
   val invalidFromDateRequestJson: JsValue = Json.parse(
     """
@@ -206,7 +208,8 @@ class CreateForeignPropertyPeriodSummaryControllerISpec extends IntegrationBaseS
       |    }
       |  ]
       |}
-      |""".stripMargin)
+    """.stripMargin
+  )
 
   val invalidCountryCodeRequestJson: JsValue = Json.parse(
     """
@@ -254,7 +257,8 @@ class CreateForeignPropertyPeriodSummaryControllerISpec extends IntegrationBaseS
       |    }
       |  ]
       |}
-      |""".stripMargin)
+    """.stripMargin
+  )
 
   val invalidValueRequestJson:  JsValue = Json.parse(
     """
@@ -302,7 +306,8 @@ class CreateForeignPropertyPeriodSummaryControllerISpec extends IntegrationBaseS
       |    }
       |  ]
       |}
-      |""".stripMargin)
+    """.stripMargin
+  )
 
   val bothExpensesSuppliedRequestJson: JsValue = Json.parse(
     """
@@ -352,7 +357,8 @@ class CreateForeignPropertyPeriodSummaryControllerISpec extends IntegrationBaseS
       |    }
       |  ]
       |}
-      |""".stripMargin)
+    """.stripMargin
+  )
 
   val toDateBeforeFromDateRequestJson: JsValue = Json.parse(
     """
@@ -400,7 +406,8 @@ class CreateForeignPropertyPeriodSummaryControllerISpec extends IntegrationBaseS
       |    }
       |  ]
       |}
-      |""".stripMargin)
+    """.stripMargin
+  )
 
   val ruleCountryCodeErrorRequestJson: JsValue = Json.parse(
     """
@@ -448,8 +455,8 @@ class CreateForeignPropertyPeriodSummaryControllerISpec extends IntegrationBaseS
       |    }
       |  ]
       |}
-      |""".stripMargin)
-
+    """.stripMargin
+  )
 
   val allInvalidValueRequestError: MtdError = ValueFormatError.copy(
     message = "One or more monetary fields are invalid",
@@ -498,10 +505,9 @@ class CreateForeignPropertyPeriodSummaryControllerISpec extends IntegrationBaseS
     ))
   )
 
-
   private trait Test {
-    val nino = "TC663795B"
-    val businessId = "XAIS12345678910"
+    val nino: String = "TC663795B"
+    val businessId: String = "XAIS12345678910"
 
 
     def setupStubs(): StubMapping
@@ -514,7 +520,7 @@ class CreateForeignPropertyPeriodSummaryControllerISpec extends IntegrationBaseS
         .withHttpHeaders((ACCEPT, "application/vnd.hmrc.1.0+json"))
     }
 
-    val responseBody = Json.parse(
+    val responseBody: JsValue = Json.parse(
       """
         |{
         |  "submissionId": "4557ecb5-fd32-48cc-81f5-e6acd1099f3c",
@@ -526,15 +532,16 @@ class CreateForeignPropertyPeriodSummaryControllerISpec extends IntegrationBaseS
         |    }
         |  ]
         |}
-        |""".stripMargin)
+      """.stripMargin
+    )
 
     def errorBody(code: String): String =
       s"""
-         |      {
-         |        "code": "$code",
-         |        "reason": "des message"
-         |      }
-    """.stripMargin
+         |{
+         |   "code": "$code",
+         |   "reason": "ifs message"
+         |}
+       """.stripMargin
   }
 
   "calling the create endpoint" should {
@@ -542,14 +549,15 @@ class CreateForeignPropertyPeriodSummaryControllerISpec extends IntegrationBaseS
     trait CreateTest extends Test {
       def uri: String = s"/$nino/$businessId/period"
 
-      def desUri: String = s"/income-tax/business/property/periodic/$nino/$businessId"
+      def ifsUri: String = s"/income-tax/business/property/periodic/$nino/$businessId"
 
-      val desResponse = Json.parse(
+      val ifsResponse: JsValue = Json.parse(
         """
           |{
           |  "submissionId": "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
           |}
-          |  """.stripMargin)
+        """.stripMargin
+      )
     }
 
     "return a 201 status" when {
@@ -559,7 +567,7 @@ class CreateForeignPropertyPeriodSummaryControllerISpec extends IntegrationBaseS
           AuditStub.audit()
           AuthStub.authorised()
           MtdIdLookupStub.ninoFound(nino)
-          DesStub.onSuccess(DesStub.POST, desUri, Status.OK, desResponse)
+          IfsStub.onSuccess(IfsStub.POST, ifsUri, Status.OK, ifsResponse)
 
         }
 
@@ -574,7 +582,7 @@ class CreateForeignPropertyPeriodSummaryControllerISpec extends IntegrationBaseS
           AuditStub.audit()
           AuthStub.authorised()
           MtdIdLookupStub.ninoFound(nino)
-          DesStub.onSuccess(DesStub.POST, desUri, Status.OK, desResponse)
+          IfsStub.onSuccess(IfsStub.POST, ifsUri, Status.OK, ifsResponse)
 
         }
 
@@ -583,8 +591,6 @@ class CreateForeignPropertyPeriodSummaryControllerISpec extends IntegrationBaseS
         response.json shouldBe responseBody
         response.header("Content-Type") shouldBe Some("application/json")
       }
-
-
     }
 
     "return bad request error" when {
@@ -594,7 +600,7 @@ class CreateForeignPropertyPeriodSummaryControllerISpec extends IntegrationBaseS
              |{
              | badJson
              | }
-             | """.stripMargin
+           """.stripMargin
 
         override def setupStubs(): StubMapping = {
           AuditStub.audit()
@@ -641,15 +647,15 @@ class CreateForeignPropertyPeriodSummaryControllerISpec extends IntegrationBaseS
 
         input.foreach(args => (validationErrorTest _).tupled(args))
       }
-      "des service error" when {
-        def serviceErrorTest(desStatus: Int, desCode: String, expectedStatus: Int, expectedBody: MtdError): Unit = {
-          s"des returns an $desCode error and status $desStatus" in new CreateTest {
+      "ifs service error" when {
+        def serviceErrorTest(ifsStatus: Int, ifsCode: String, expectedStatus: Int, expectedBody: MtdError): Unit = {
+          s"ifs returns an $ifsCode error and status $ifsStatus" in new CreateTest {
 
             override def setupStubs(): StubMapping = {
               AuditStub.audit()
               AuthStub.authorised()
               MtdIdLookupStub.ninoFound(nino)
-              DesStub.onError(DesStub.POST, desUri, desStatus, errorBody(desCode))
+              IfsStub.onError(IfsStub.POST, ifsUri, ifsStatus, errorBody(ifsCode))
             }
 
             val response: WSResponse = await(request().post(unconsolidatedRequestJson))
@@ -677,5 +683,4 @@ class CreateForeignPropertyPeriodSummaryControllerISpec extends IntegrationBaseS
       }
     }
   }
-
 }

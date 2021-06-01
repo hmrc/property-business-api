@@ -17,24 +17,29 @@
 package v1.connectors
 
 import mocks.MockAppConfig
-import uk.gov.hmrc.domain.Nino
 import v1.mocks.MockHttpClient
+import v1.models.domain.Nino
 import v1.models.outcomes.ResponseWrapper
 import v1.models.request.retrieveForeignPropertyAnnualSubmission.RetrieveForeignPropertyAnnualSubmissionRequest
 import v1.models.response.retrieveForeignPropertyAnnualSubmission.RetrieveForeignPropertyAnnualSubmissionResponse
-import v1.models.response.retrieveForeignPropertyAnnualSubmission.foreignFhlEea.{ForeignFhlEeaAdjustments, ForeignFhlEeaAllowances, ForeignFhlEeaEntry}
-import v1.models.response.retrieveForeignPropertyAnnualSubmission.foreignProperty.{ForeignPropertyAdjustments, ForeignPropertyAllowances, ForeignPropertyEntry}
+import v1.models.response.retrieveForeignPropertyAnnualSubmission.foreignFhlEea._
+import v1.models.response.retrieveForeignPropertyAnnualSubmission.foreignProperty._
 
 import scala.concurrent.Future
 
 class RetrieveForeignPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec {
-  val nino = Nino("AA123456A")
-  val businessId = "XAIS12345678910"
-  val taxYear = "2019-20"
 
-  val request = RetrieveForeignPropertyAnnualSubmissionRequest(nino, businessId, taxYear)
+  val nino: String = "AA123456A"
+  val businessId: String = "XAIS12345678910"
+  val taxYear: String = "2019-20"
 
-  val response = RetrieveForeignPropertyAnnualSubmissionResponse(
+  val request: RetrieveForeignPropertyAnnualSubmissionRequest = RetrieveForeignPropertyAnnualSubmissionRequest(
+    nino = Nino(nino),
+    businessId = businessId,
+    taxYear = taxYear
+  )
+
+  private val response = RetrieveForeignPropertyAnnualSubmissionResponse(
     Some(ForeignFhlEeaEntry(
       Some(ForeignFhlEeaAdjustments(
       Some(100.25),
@@ -59,23 +64,27 @@ class RetrieveForeignPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec
           Some(100.25)))))))
 
   class Test extends MockHttpClient with MockAppConfig {
-    val connector: RetrieveForeignPropertyAnnualSubmissionConnector =
-      new RetrieveForeignPropertyAnnualSubmissionConnector(http = mockHttpClient, appConfig = mockAppConfig)
+    val connector: RetrieveForeignPropertyAnnualSubmissionConnector = new RetrieveForeignPropertyAnnualSubmissionConnector(
+      http = mockHttpClient,
+      appConfig = mockAppConfig
+    )
 
-    val desRequestHeaders: Seq[(String, String)] = Seq("Environment" -> "des-environment", "Authorization" -> s"Bearer des-token")
-    MockedAppConfig.desBaseUrl returns baseUrl
-    MockedAppConfig.desToken returns "des-token"
-    MockedAppConfig.desEnvironment returns "des-environment"
+    MockAppConfig.ifsBaseUrl returns baseUrl
+    MockAppConfig.ifsToken returns "ifs-token"
+    MockAppConfig.ifsEnvironment returns "ifs-environment"
+    MockAppConfig.ifsEnvironmentHeaders returns Some(allowedIfsHeaders)
   }
 
   "connector" must {
     "send a request and return a body" in new Test {
-
       val outcome = Right(ResponseWrapper(correlationId, response))
-      MockedHttpClient
+
+      MockHttpClient
         .get(
-          url = s"$baseUrl/income-tax/business/property/annual/${nino}/${businessId}/${taxYear}",
-          requiredHeaders = "Environment" -> "des-environment", "Authorization" -> s"Bearer des-token"
+          url = s"$baseUrl/income-tax/business/property/annual/$nino/$businessId/$taxYear",
+          config = dummyIfsHeaderCarrierConfig,
+          requiredHeaders = requiredIfsHeaders,
+          excludedHeaders = Seq("AnotherHeader" -> "HeaderValue")
         )
         .returns(Future.successful(outcome))
 

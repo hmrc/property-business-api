@@ -17,9 +17,9 @@
 package v1.controllers.requestParsers
 
 import javax.inject.Inject
-import uk.gov.hmrc.domain.Nino
 import v1.controllers.requestParsers.validators.DeleteForeignPropertyAnnualSubmissionValidator
-import v1.models.request.deleteForeignPropertyAnnualSubmission.{DeleteForeignPropertyAnnualSubmissionRawData, DeleteForeignPropertyAnnualSubmissionRequest}
+import v1.models.domain.Nino
+import v1.models.request.deleteForeignPropertyAnnualSubmission._
 
 class DeleteForeignPropertyAnnualSubmissionRequestParser @Inject()(val validator: DeleteForeignPropertyAnnualSubmissionValidator)
   extends RequestParser[DeleteForeignPropertyAnnualSubmissionRawData, DeleteForeignPropertyAnnualSubmissionRequest] {

@@ -20,22 +20,23 @@ import config.AppConfig
 
 import javax.inject.{Inject, Singleton}
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
-import v1.connectors.httpparsers.StandardDesHttpParser._
+import v1.connectors.httpparsers.StandardIfsHttpParser._
 import v1.models.request.amendForeignPropertyAnnualSubmission.AmendForeignPropertyAnnualSubmissionRequest
 
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class AmendForeignPropertyAnnualSubmissionConnector @Inject()(val http: HttpClient,
-                                                              val appConfig: AppConfig) extends BaseDesConnector {
+                                                              val appConfig: AppConfig) extends BaseIfsConnector {
+
   def amendForeignPropertyAnnualSubmission(request: AmendForeignPropertyAnnualSubmissionRequest)(
     implicit hc: HeaderCarrier,
     ec: ExecutionContext,
-    correlationId: String): Future[DesOutcome[Unit]] = {
+    correlationId: String): Future[IfsOutcome[Unit]] = {
 
     put(
       body = request.body,
-      uri = DesUri[Unit](s"income-tax/business/property/annual/${request.nino}/${request.businessId}/${request.taxYear}")
+      uri = IfsUri[Unit](s"income-tax/business/property/annual/${request.nino.nino}/${request.businessId}/${request.taxYear}")
     )
   }
 }

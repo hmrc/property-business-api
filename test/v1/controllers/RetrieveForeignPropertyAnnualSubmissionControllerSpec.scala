@@ -17,21 +17,21 @@
 package v1.controllers
 
 import play.api.libs.json.Json
-import uk.gov.hmrc.domain.Nino
 import play.api.mvc.Result
 import uk.gov.hmrc.http.HeaderCarrier
 import v1.mocks.MockIdGenerator
 import v1.mocks.hateoas.MockHateoasFactory
 import v1.mocks.requestParsers.MockRetrieveForeignPropertyAnnualSubmissionRequestParser
 import v1.mocks.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService, MockRetrieveForeignPropertyAnnualSubmissionService}
+import v1.models.domain.Nino
 import v1.models.errors._
 import v1.models.hateoas.{HateoasWrapper, Link}
 import v1.models.hateoas.Method.GET
 import v1.models.outcomes.ResponseWrapper
-import v1.models.request.retrieveForeignPropertyAnnualSubmission.{RetrieveForeignPropertyAnnualSubmissionRawData, RetrieveForeignPropertyAnnualSubmissionRequest}
-import v1.models.response.retrieveForeignPropertyAnnualSubmission.foreignFhlEea.{ForeignFhlEeaAdjustments, ForeignFhlEeaAllowances, ForeignFhlEeaEntry}
-import v1.models.response.retrieveForeignPropertyAnnualSubmission.foreignProperty.{ForeignPropertyAdjustments, ForeignPropertyAllowances, ForeignPropertyEntry}
-import v1.models.response.retrieveForeignPropertyAnnualSubmission.{RetrieveForeignPropertyAnnualSubmissionHateoasData, RetrieveForeignPropertyAnnualSubmissionResponse}
+import v1.models.request.retrieveForeignPropertyAnnualSubmission._
+import v1.models.response.retrieveForeignPropertyAnnualSubmission.foreignFhlEea._
+import v1.models.response.retrieveForeignPropertyAnnualSubmission.foreignProperty._
+import v1.models.response.retrieveForeignPropertyAnnualSubmission._
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -46,8 +46,13 @@ class RetrieveForeignPropertyAnnualSubmissionControllerSpec
     with MockAuditService
     with MockIdGenerator {
 
+  private val nino = "AA123456A"
+  private val businessId = "XAIS12345678910"
+  private val taxYear = "2020-21"
+  private val correlationId = "X-123"
+
   trait Test {
-    val hc = HeaderCarrier()
+    val hc: HeaderCarrier = HeaderCarrier()
 
     val controller = new RetrieveForeignPropertyAnnualSubmissionController(
       authService = mockEnrolmentsAuthService,
@@ -59,21 +64,15 @@ class RetrieveForeignPropertyAnnualSubmissionControllerSpec
       idGenerator = mockIdGenerator
     )
 
-    MockedMtdIdLookupService.lookup(nino).returns(Future.successful(Right("test-mtd-id")))
+    MockMtdIdLookupService.lookup(nino).returns(Future.successful(Right("test-mtd-id")))
     MockedEnrolmentsAuthService.authoriseUser()
     MockIdGenerator.getCorrelationId.returns(correlationId)
   }
-
-  private val nino = "AA123456A"
-  private val businessId = "XAIS12345678910"
-  private val taxYear = "2020-21"
-  private val correlationId = "X-123"
 
   private val rawData = RetrieveForeignPropertyAnnualSubmissionRawData(nino, businessId, taxYear)
   private val requestData = RetrieveForeignPropertyAnnualSubmissionRequest(Nino(nino), businessId, taxYear)
 
   private val testHateoasLink = Link(href = s"Individuals/business/property/$nino/$businessId/annual/$taxYear", method = GET, rel = "self")
-
 
   private val foreignFhlEeaEntry = ForeignFhlEeaEntry(
     Some(ForeignFhlEeaAdjustments(
@@ -105,8 +104,10 @@ class RetrieveForeignPropertyAnnualSubmissionControllerSpec
     ))
   )
 
-  val responseBody: RetrieveForeignPropertyAnnualSubmissionResponse = RetrieveForeignPropertyAnnualSubmissionResponse(Some(foreignFhlEeaEntry), Some(Seq(foreignPropertyEntry)))
-
+  val responseBody: RetrieveForeignPropertyAnnualSubmissionResponse = RetrieveForeignPropertyAnnualSubmissionResponse(
+    foreignFhlEea = Some(foreignFhlEeaEntry),
+    foreignProperty = Some(Seq(foreignPropertyEntry))
+  )
 
   "handleRequest" should {
     "return Ok" when {

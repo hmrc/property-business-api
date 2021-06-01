@@ -25,13 +25,13 @@ import v1.connectors.AmendForeignPropertyAnnualSubmissionConnector
 import v1.controllers.EndpointLogContext
 import v1.models.errors._
 import v1.models.request.amendForeignPropertyAnnualSubmission.AmendForeignPropertyAnnualSubmissionRequest
-import v1.support.DesResponseMappingSupport
+import v1.support.IfsResponseMappingSupport
 
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class AmendForeignPropertyAnnualSubmissionService @Inject()
-(connector: AmendForeignPropertyAnnualSubmissionConnector) extends DesResponseMappingSupport with Logging {
+class AmendForeignPropertyAnnualSubmissionService @Inject()(connector: AmendForeignPropertyAnnualSubmissionConnector)
+  extends IfsResponseMappingSupport with Logging {
 
   def amendForeignPropertyAnnualSubmission(request: AmendForeignPropertyAnnualSubmissionRequest)(
     implicit hc: HeaderCarrier,
@@ -40,13 +40,13 @@ class AmendForeignPropertyAnnualSubmissionService @Inject()
     correlationId: String): Future[AmendForeignPropertyAnnualSubmissionServiceOutcome] = {
 
     val result = for {
-      desResponseWrapper <- EitherT(connector.amendForeignPropertyAnnualSubmission(request)).leftMap(mapDesErrors(desErrorMap))
-    } yield desResponseWrapper
+      ifsResponseWrapper <- EitherT(connector.amendForeignPropertyAnnualSubmission(request)).leftMap(mapIfsErrors(ifsErrorMap))
+    } yield ifsResponseWrapper
 
     result.value
   }
 
-  private def desErrorMap =
+  private def ifsErrorMap =
     Map(
       "INVALID_TAXABLE_ENTITY_ID" -> NinoFormatError,
       "INVALID_INCOME_SOURCE_ID" -> BusinessIdFormatError,

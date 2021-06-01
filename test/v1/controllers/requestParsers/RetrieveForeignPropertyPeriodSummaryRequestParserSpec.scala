@@ -17,18 +17,19 @@
 package v1.controllers.requestParsers
 
 import support.UnitSpec
-import uk.gov.hmrc.domain.Nino
 import v1.mocks.validators.MockRetrieveForeignPropertyPeriodSummaryValidator
+import v1.models.domain.Nino
 import v1.models.errors.{BadRequestError, BusinessIdFormatError, ErrorWrapper, NinoFormatError}
-import v1.models.request.retrieveForeignPropertyPeriodSummary.{RetrieveForeignPropertyPeriodSummaryRawData, RetrieveForeignPropertyPeriodSummaryRequest}
+import v1.models.request.retrieveForeignPropertyPeriodSummary._
 
 class RetrieveForeignPropertyPeriodSummaryRequestParserSpec extends UnitSpec {
-  val nino = "AA123456B"
-  val businessId = "XAIS12345678901"
-  val submissionId = "12345678-1234-4123-9123-123456789012"
-  implicit val correlationId = "X-123"
 
-  val inputData =
+  val nino: String = "AA123456B"
+  val businessId: String = "XAIS12345678901"
+  val submissionId: String = "12345678-1234-4123-9123-123456789012"
+  implicit val correlationId: String = "X-123"
+
+  val inputData: RetrieveForeignPropertyPeriodSummaryRawData =
     RetrieveForeignPropertyPeriodSummaryRawData(nino, businessId, submissionId)
 
   trait Test extends MockRetrieveForeignPropertyPeriodSummaryValidator {

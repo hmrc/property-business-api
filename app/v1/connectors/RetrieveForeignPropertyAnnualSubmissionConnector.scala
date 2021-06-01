@@ -20,7 +20,7 @@ import config.AppConfig
 
 import javax.inject.{Inject, Singleton}
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
-import v1.connectors.httpparsers.StandardDesHttpParser._
+import v1.connectors.httpparsers.StandardIfsHttpParser._
 import v1.models.request.retrieveForeignPropertyAnnualSubmission.RetrieveForeignPropertyAnnualSubmissionRequest
 import v1.models.response.retrieveForeignPropertyAnnualSubmission.RetrieveForeignPropertyAnnualSubmissionResponse
 
@@ -28,15 +28,17 @@ import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class RetrieveForeignPropertyAnnualSubmissionConnector @Inject()(val http: HttpClient,
-                                                                 val appConfig: AppConfig) extends BaseDesConnector {
+                                                                 val appConfig: AppConfig) extends BaseIfsConnector {
 
   def retrieveForeignProperty(request: RetrieveForeignPropertyAnnualSubmissionRequest)(
     implicit hc: HeaderCarrier,
     ec: ExecutionContext,
-    correlationId: String): Future[DesOutcome[RetrieveForeignPropertyAnnualSubmissionResponse]] = {
+    correlationId: String): Future[IfsOutcome[RetrieveForeignPropertyAnnualSubmissionResponse]] = {
+
+    val url = s"income-tax/business/property/annual/${request.nino.nino}/${request.businessId}/${request.taxYear}"
 
     get(
-      uri = DesUri[RetrieveForeignPropertyAnnualSubmissionResponse](s"income-tax/business/property/annual/${request.nino}/${request.businessId}/${request.taxYear}")
+      uri = IfsUri[RetrieveForeignPropertyAnnualSubmissionResponse](url)
     )
   }
 }

@@ -18,20 +18,20 @@ package v1.models.errors
 
 import play.api.libs.json.{Json, Reads}
 
-case class DesErrorCode(code: String) {
+case class IfsErrorCode(code: String) {
   def toMtd: MtdError = MtdError(code = code, message = "")
 }
 
-object DesErrorCode {
-  implicit val reads: Reads[DesErrorCode] = Json.reads[DesErrorCode]
+object IfsErrorCode {
+  implicit val reads: Reads[IfsErrorCode] = Json.reads[IfsErrorCode]
 }
 
-sealed trait DesError
+sealed trait IfsError
 
-case class DesErrors(errors: List[DesErrorCode]) extends DesError
+case class IfsErrors(errors: List[IfsErrorCode]) extends IfsError
 
-object DesErrors {
-  def single(error: DesErrorCode): DesErrors = DesErrors(List(error))
+object IfsErrors {
+  def single(error: IfsErrorCode): IfsErrors = IfsErrors(List(error))
 }
 
-case class OutboundError(error: MtdError, errors: Option[Seq[MtdError]] = None) extends DesError
+case class OutboundError(error: MtdError, errors: Option[Seq[MtdError]] = None) extends IfsError

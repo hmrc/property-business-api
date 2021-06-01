@@ -23,18 +23,18 @@ import play.api.libs.json.{JsObject, JsValue, Json}
 import play.api.libs.ws.{WSRequest, WSResponse}
 import support.IntegrationBaseSpec
 import v1.models.errors._
-import v1.stubs.{AuditStub, AuthStub, DesStub, MtdIdLookupStub}
+import v1.stubs.{AuditStub, AuthStub, IfsStub, MtdIdLookupStub}
 
 class AmendForeignPropertyAnnualSubmissionControllerISpec extends IntegrationBaseSpec {
 
   private trait Test {
 
-    val nino = "TC663795B"
-    val businessId = "XAIS12345678910"
-    val taxYear = "2021-22"
-    val correlationId = "X-123"
+    val nino: String = "TC663795B"
+    val businessId: String = "XAIS12345678910"
+    val taxYear: String = "2021-22"
+    val correlationId: String = "X-123"
 
-    val requestBodyJson = Json.parse(
+    val requestBodyJson: JsValue = Json.parse(
       """
         |{
         |  "foreignFhlEea": {
@@ -68,38 +68,38 @@ class AmendForeignPropertyAnnualSubmissionControllerISpec extends IntegrationBas
         |    }
         |  ]
         |}
-        |""".stripMargin
+      """.stripMargin
     )
 
-
     val responseBody: JsValue = Json.parse(
-      s"""
-         |{
-         |  "links":[
-         |    {
-         |      "href":"/individuals/business/property/TC663795B/XAIS12345678910/annual/2021-22",
-         |      "method":"GET",
-         |      "rel":"self"
-         |    },
-         |    {
-         |      "href":"/individuals/business/property/TC663795B/XAIS12345678910/annual/2021-22",
-         |      "method":"PUT",
-         |      "rel":"amend-property-annual-submission"
-         |    },
-         |    {
-         |      "href":"/individuals/business/property/TC663795B/XAIS12345678910/annual/2021-22",
-         |      "method":"DELETE",
-         |      "rel":"delete-property-annual-submission"
-         |    }
-         |  ]
-         |}
-         |""".stripMargin)
+      """
+        |{
+        |  "links":[
+        |    {
+        |      "href":"/individuals/business/property/TC663795B/XAIS12345678910/annual/2021-22",
+        |      "method":"GET",
+        |      "rel":"self"
+        |    },
+        |    {
+        |      "href":"/individuals/business/property/TC663795B/XAIS12345678910/annual/2021-22",
+        |      "method":"PUT",
+        |      "rel":"amend-property-annual-submission"
+        |    },
+        |    {
+        |      "href":"/individuals/business/property/TC663795B/XAIS12345678910/annual/2021-22",
+        |      "method":"DELETE",
+        |      "rel":"delete-property-annual-submission"
+        |    }
+        |  ]
+        |}
+      """.stripMargin
+    )
 
     def setupStubs(): StubMapping
 
     def uri: String = s"/$nino/$businessId/annual/$taxYear"
 
-    def desUri: String = s"/income-tax/business/property/annual/$nino/$businessId/$taxYear"
+    def ifsUri: String = s"/income-tax/business/property/annual/$nino/$businessId/$taxYear"
 
     def request(): WSRequest = {
       setupStubs()
@@ -109,11 +109,11 @@ class AmendForeignPropertyAnnualSubmissionControllerISpec extends IntegrationBas
 
     def errorBody(code: String): String =
       s"""
-         |      {
-         |        "code": "$code",
-         |        "reason": "des message"
-         |      }
-    """.stripMargin
+         |{
+         |  "code": "$code",
+         |  "reason": "ifs message"
+         |}
+       """.stripMargin
   }
 
   "Calling the amend foreign property annual submission endpoint" should {
@@ -126,7 +126,7 @@ class AmendForeignPropertyAnnualSubmissionControllerISpec extends IntegrationBas
           AuditStub.audit()
           AuthStub.authorised()
           MtdIdLookupStub.ninoFound(nino)
-          DesStub.onSuccess(DesStub.PUT, desUri, NO_CONTENT, JsObject.empty)
+          IfsStub.onSuccess(IfsStub.PUT, ifsUri, NO_CONTENT, JsObject.empty)
         }
 
         val response: WSResponse = await(request().put(requestBodyJson))
@@ -291,7 +291,8 @@ class AmendForeignPropertyAnnualSubmissionControllerISpec extends IntegrationBas
             |    }
             |  ]
             |}
-            |""".stripMargin)
+          """.stripMargin
+        )
 
         val allInvalidCountryCodeRequestBodyJson: JsValue = Json.parse(
           """
@@ -327,7 +328,8 @@ class AmendForeignPropertyAnnualSubmissionControllerISpec extends IntegrationBas
             |    }
             |  ]
             |}
-            |""".stripMargin)
+          """.stripMargin
+        )
 
         val allInvalidValueRequestError: MtdError = ValueFormatError.copy(
           message = "One or more monetary fields are invalid",
@@ -396,15 +398,15 @@ class AmendForeignPropertyAnnualSubmissionControllerISpec extends IntegrationBas
           input.foreach(args => (validationErrorTest _).tupled(args))
         }
 
-        "des service error" when {
-          def serviceErrorTest(desStatus: Int, desCode: String, expectedStatus: Int, expectedBody: MtdError): Unit = {
-            s"des returns an $desCode error and status $desStatus" in new Test {
+        "ifs service error" when {
+          def serviceErrorTest(ifsStatus: Int, ifsCode: String, expectedStatus: Int, expectedBody: MtdError): Unit = {
+            s"ifs returns an $ifsCode error and status $ifsStatus" in new Test {
 
               override def setupStubs(): StubMapping = {
                 AuditStub.audit()
                 AuthStub.authorised()
                 MtdIdLookupStub.ninoFound(nino)
-                DesStub.onError(DesStub.PUT, desUri, desStatus, errorBody(desCode))
+                IfsStub.onError(IfsStub.PUT, ifsUri, ifsStatus, errorBody(ifsCode))
               }
 
               val response: WSResponse = await(request().put(requestBodyJson))

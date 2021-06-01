@@ -16,6 +16,6 @@
 
 package v1.models.request.listForeignPropertiesPeriodSummaries
 
-import uk.gov.hmrc.domain.Nino
+import v1.models.domain.Nino
 
 case class ListForeignPropertiesPeriodSummariesRequest(nino: Nino, businessId: String, fromDate: String, toDate: String)

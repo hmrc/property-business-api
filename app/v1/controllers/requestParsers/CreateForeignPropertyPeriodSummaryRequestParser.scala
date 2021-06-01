@@ -17,9 +17,9 @@
 package v1.controllers.requestParsers
 
 import javax.inject.Inject
-import uk.gov.hmrc.domain.Nino
 import v1.controllers.requestParsers.validators.CreateForeignPropertyPeriodSummaryValidator
-import v1.models.request.createForeignPropertyPeriodSummary.{CreateForeignPropertyPeriodSummaryRawData, CreateForeignPropertyPeriodSummaryRequestBody, CreateForeignPropertyPeriodSummaryRequest}
+import v1.models.domain.Nino
+import v1.models.request.createForeignPropertyPeriodSummary._
 
 class CreateForeignPropertyPeriodSummaryRequestParser @Inject()(val validator: CreateForeignPropertyPeriodSummaryValidator)
   extends RequestParser[CreateForeignPropertyPeriodSummaryRawData, CreateForeignPropertyPeriodSummaryRequest] {

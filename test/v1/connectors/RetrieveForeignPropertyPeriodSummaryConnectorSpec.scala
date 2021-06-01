@@ -17,25 +17,29 @@
 package v1.connectors
 
 import mocks.MockAppConfig
-import uk.gov.hmrc.domain.Nino
 import v1.mocks.MockHttpClient
+import v1.models.domain.Nino
 import v1.models.outcomes.ResponseWrapper
 import v1.models.request.retrieveForeignPropertyPeriodSummary.RetrieveForeignPropertyPeriodSummaryRequest
 import v1.models.response.retrieveForeignPropertyPeriodSummary.RetrieveForeignPropertyPeriodSummaryResponse
-import v1.models.response.retrieveForeignPropertyPeriodSummary.foreignFhlEea.{ForeignFhlEea, ForeignFhlEeaExpenditure, ForeignFhlEeaIncome}
-import v1.models.response.retrieveForeignPropertyPeriodSummary.foreignProperty.{ForeignProperty, ForeignPropertyExpenditure, ForeignPropertyIncome, ForeignPropertyRentIncome}
+import v1.models.response.retrieveForeignPropertyPeriodSummary.foreignFhlEea._
+import v1.models.response.retrieveForeignPropertyPeriodSummary.foreignProperty._
 
 import scala.concurrent.Future
 
 class RetrieveForeignPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
 
-  val nino = Nino("AA123456A")
-  val businessId = "XAIS12345678910"
-  val submissionId = "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
+  val nino: String = "AA123456A"
+  val businessId: String = "XAIS12345678910"
+  val submissionId: String = "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
 
-  val request = RetrieveForeignPropertyPeriodSummaryRequest(nino, businessId, submissionId)
+  val request: RetrieveForeignPropertyPeriodSummaryRequest = RetrieveForeignPropertyPeriodSummaryRequest(
+    nino = Nino(nino),
+    businessId = businessId,
+    submissionId = submissionId
+  )
 
-  val response = RetrieveForeignPropertyPeriodSummaryResponse(
+  private val response = RetrieveForeignPropertyPeriodSummaryResponse(
     "2020-01-01",
     "2020-01-31",
     Some(ForeignFhlEea(
@@ -75,22 +79,27 @@ class RetrieveForeignPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
   ))
 
   class Test extends MockHttpClient with MockAppConfig {
-    val connector: RetrieveForeignPropertyPeriodSummaryConnector = new RetrieveForeignPropertyPeriodSummaryConnector(http = mockHttpClient, appConfig = mockAppConfig)
+    val connector: RetrieveForeignPropertyPeriodSummaryConnector = new RetrieveForeignPropertyPeriodSummaryConnector(
+      http = mockHttpClient,
+      appConfig = mockAppConfig
+    )
 
-    val desRequestHeaders: Seq[(String, String)] = Seq("Environment" -> "des-environment", "Authorization" -> s"Bearer des-token")
-    MockedAppConfig.desBaseUrl returns baseUrl
-    MockedAppConfig.desToken returns "des-token"
-    MockedAppConfig.desEnvironment returns "des-environment"
+    MockAppConfig.ifsBaseUrl returns baseUrl
+    MockAppConfig.ifsToken returns "ifs-token"
+    MockAppConfig.ifsEnvironment returns "ifs-environment"
+    MockAppConfig.ifsEnvironmentHeaders returns Some(allowedIfsHeaders)
   }
 
   "connector" must {
     "send a request and return a body" in new Test {
-
       val outcome = Right(ResponseWrapper(correlationId, response))
-      MockedHttpClient
+
+      MockHttpClient
         .get(
-          url = s"$baseUrl/income-tax/business/property/periodic/${nino}/${businessId}/${submissionId}",
-          requiredHeaders = "Environment" -> "des-environment", "Authorization" -> s"Bearer des-token"
+          url = s"$baseUrl/income-tax/business/property/periodic/$nino/$businessId/$submissionId",
+          config = dummyIfsHeaderCarrierConfig,
+          requiredHeaders = requiredIfsHeaders,
+          excludedHeaders = Seq("AnotherHeader" -> "HeaderValue")
         )
         .returns(Future.successful(outcome))
 

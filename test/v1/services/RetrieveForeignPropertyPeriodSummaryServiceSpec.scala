@@ -17,28 +17,28 @@
 package v1.services
 
 import support.UnitSpec
-import uk.gov.hmrc.domain.Nino
 import uk.gov.hmrc.http.HeaderCarrier
 import v1.controllers.EndpointLogContext
 import v1.mocks.connectors.MockRetrieveForeignPropertyPeriodSummaryConnector
+import v1.models.domain.Nino
 import v1.models.errors._
 import v1.models.outcomes.ResponseWrapper
 import v1.models.request.retrieveForeignPropertyPeriodSummary.RetrieveForeignPropertyPeriodSummaryRequest
 import v1.models.response.retrieveForeignPropertyPeriodSummary.RetrieveForeignPropertyPeriodSummaryResponse
-import v1.models.response.retrieveForeignPropertyPeriodSummary.foreignFhlEea.{ForeignFhlEea, ForeignFhlEeaExpenditure, ForeignFhlEeaIncome}
-import v1.models.response.retrieveForeignPropertyPeriodSummary.foreignProperty.{ForeignProperty, ForeignPropertyExpenditure, ForeignPropertyIncome, ForeignPropertyRentIncome}
+import v1.models.response.retrieveForeignPropertyPeriodSummary.foreignFhlEea._
+import v1.models.response.retrieveForeignPropertyPeriodSummary.foreignProperty._
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class RetrieveForeignPropertyPeriodSummaryServiceSpec extends UnitSpec {
 
-  val nino = Nino("AA123456A")
-  val businessId = "XAIS12345678910"
-  val submissionId = "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
-  implicit val correlationId = "X-123"
+  val nino: String = "AA123456A"
+  val businessId: String = "XAIS12345678910"
+  val submissionId: String = "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
+  implicit val correlationId: String = "X-123"
 
-  val response = RetrieveForeignPropertyPeriodSummaryResponse(
+  private val response = RetrieveForeignPropertyPeriodSummaryResponse(
     "2020-01-01",
     "2020-01-31",
     Some(ForeignFhlEea(
@@ -77,7 +77,7 @@ class RetrieveForeignPropertyPeriodSummaryServiceSpec extends UnitSpec {
       ))))
     ))
 
-  private val requestData = RetrieveForeignPropertyPeriodSummaryRequest(nino, businessId, submissionId)
+  private val requestData = RetrieveForeignPropertyPeriodSummaryRequest(Nino(nino), businessId, submissionId)
 
   trait Test extends MockRetrieveForeignPropertyPeriodSummaryConnector {
     implicit val hc: HeaderCarrier = HeaderCarrier()
@@ -102,11 +102,11 @@ class RetrieveForeignPropertyPeriodSummaryServiceSpec extends UnitSpec {
   "unsuccessful" should {
     "map errors according to spec" when {
 
-      def serviceError(desErrorCode: String, error: MtdError): Unit =
-        s"a $desErrorCode error is returned from the service" in new Test {
+      def serviceError(ifsErrorCode: String, error: MtdError): Unit =
+        s"a $ifsErrorCode error is returned from the service" in new Test {
 
           MockRetrieveForeignPropertyConnector.retrieveForeignProperty(requestData)
-            .returns(Future.successful(Left(ResponseWrapper(correlationId, DesErrors.single(DesErrorCode(desErrorCode))))))
+            .returns(Future.successful(Left(ResponseWrapper(correlationId, IfsErrors.single(IfsErrorCode(ifsErrorCode))))))
 
           await(service.retrieveForeignProperty(requestData)) shouldBe Left(ErrorWrapper(correlationId, error))
         }

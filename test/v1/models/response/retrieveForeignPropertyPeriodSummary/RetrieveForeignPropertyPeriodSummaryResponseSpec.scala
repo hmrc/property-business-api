@@ -42,7 +42,8 @@ class RetrieveForeignPropertyPeriodSummaryResponseSpec extends UnitSpec with Jso
         Some(5000.99)
       ))
     )),
-    Some(Seq(ForeignProperty("FRA",
+    Some(Seq(ForeignProperty(
+      "FRA",
       ForeignPropertyIncome(
         ForeignPropertyRentIncome(5000.99),
         false,
@@ -66,7 +67,8 @@ class RetrieveForeignPropertyPeriodSummaryResponseSpec extends UnitSpec with Jso
     ))
 
   val writesJson: JsValue = Json.parse(
-    """{
+    """
+      |{
       |  "fromDate": "2020-01-01",
       |  "toDate": "2020-01-31",
       |  "foreignFhlEea": {
@@ -112,10 +114,12 @@ class RetrieveForeignPropertyPeriodSummaryResponseSpec extends UnitSpec with Jso
       |    }
       |  ]
       |}
-      |""".stripMargin)
+    """.stripMargin
+  )
 
   val readsJson: JsValue = Json.parse(
-    """{
+    """
+      |{
       |  "fromDate": "2020-01-01",
       |  "toDate": "2020-01-31",
       |  "foreignFhlEea": {
@@ -160,7 +164,9 @@ class RetrieveForeignPropertyPeriodSummaryResponseSpec extends UnitSpec with Jso
       |      }
       |    }
       |  ]
-      |}""".stripMargin)
+      |}
+    """.stripMargin
+  )
 
   "reads" when {
     "passed a valid JSON" should {
@@ -182,7 +188,7 @@ class RetrieveForeignPropertyPeriodSummaryResponseSpec extends UnitSpec with Jso
       "called" in {
         val data: RetrieveForeignPropertyPeriodSummaryHateoasData = RetrieveForeignPropertyPeriodSummaryHateoasData("myNino", "myBusinessId", "mySubmissionId")
 
-        MockedAppConfig.apiGatewayContext.returns("my/context").anyNumberOfTimes()
+        MockAppConfig.apiGatewayContext.returns("my/context").anyNumberOfTimes()
 
         RetrieveForeignPropertyPeriodSummaryResponse.RetrieveForeignPropertyLinksFactory.links(mockAppConfig, data) shouldBe Seq(
           Link(href = s"/my/context/${data.nino}/${data.businessId}/period/${data.submissionId}", method = Method.PUT, rel = "amend-property-period-summary"),

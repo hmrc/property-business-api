@@ -17,18 +17,19 @@
 package v1.controllers.requestParsers
 
 import support.UnitSpec
-import uk.gov.hmrc.domain.Nino
 import v1.mocks.validators.MockRetrieveForeignPropertyAnnualSubmissionValidator
+import v1.models.domain.Nino
 import v1.models.errors.{BadRequestError, BusinessIdFormatError, ErrorWrapper, NinoFormatError}
 import v1.models.request.retrieveForeignPropertyAnnualSubmission._
 
 class RetrieveForeignPropertyAnnualSubmissionRequestParserSpec extends UnitSpec {
-  val nino = "AA123456B"
-  val businessId = "XAIS12345678901"
-  val taxYear = "2021-22"
-  implicit val correlationId = "X-123"
 
-  val inputData =
+  val nino: String = "AA123456B"
+  val businessId: String = "XAIS12345678901"
+  val taxYear: String = "2021-22"
+  implicit val correlationId: String = "X-123"
+
+  val inputData: RetrieveForeignPropertyAnnualSubmissionRawData =
     RetrieveForeignPropertyAnnualSubmissionRawData(nino, businessId, taxYear)
 
   trait Test extends MockRetrieveForeignPropertyAnnualSubmissionValidator {

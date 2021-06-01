@@ -16,12 +16,15 @@
 
 package v1.models.errors
 
-import play.api.libs.json.{Json, Writes}
+import play.api.libs.json.{Json, OWrites}
 
 case class MtdError(code: String, message: String, paths: Option[Seq[String]] = None)
 
 object MtdError {
-  implicit val writes: Writes[MtdError] = Json.writes[MtdError]
+  implicit val writes: OWrites[MtdError] = Json.writes[MtdError]
+
+  implicit def genericWrites[T <: MtdError]: OWrites[T] =
+    writes.contramap[T](c => c: MtdError)
 }
 
 object MtdErrorWithCustomMessage {
@@ -73,8 +76,8 @@ object UnauthorisedError extends MtdError("CLIENT_OR_AGENT_NOT_AUTHORISED", "The
 object InvalidBearerTokenError extends MtdError("UNAUTHORIZED", "Bearer token is missing or not authorized")
 
 // Accept header Errors
-object  InvalidAcceptHeaderError extends MtdError("ACCEPT_HEADER_INVALID", "The accept header is missing or invalid")
+object InvalidAcceptHeaderError extends MtdError("ACCEPT_HEADER_INVALID", "The accept header is missing or invalid")
 
-object  UnsupportedVersionError extends MtdError("NOT_FOUND", "The requested resource could not be found")
+object UnsupportedVersionError extends MtdError("NOT_FOUND", "The requested resource could not be found")
 
 object InvalidBodyTypeError extends MtdError("INVALID_BODY_TYPE", "Expecting text/json or application/json body")

@@ -18,20 +18,20 @@ package v1.controllers
 
 import play.api.libs.json.Json
 import play.api.mvc.Result
-import uk.gov.hmrc.domain.Nino
 import uk.gov.hmrc.http.HeaderCarrier
 import v1.mocks.MockIdGenerator
 import v1.mocks.hateoas.MockHateoasFactory
 import v1.mocks.requestParsers.MockRetrieveForeignPropertyPeriodSummaryRequestParser
 import v1.mocks.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService, MockRetrieveForeignPropertyPeriodSummaryService}
+import v1.models.domain.Nino
 import v1.models.errors._
 import v1.models.hateoas.{HateoasWrapper, Link}
 import v1.models.hateoas.Method.GET
 import v1.models.outcomes.ResponseWrapper
-import v1.models.request.retrieveForeignPropertyPeriodSummary.{RetrieveForeignPropertyPeriodSummaryRawData, RetrieveForeignPropertyPeriodSummaryRequest}
-import v1.models.response.retrieveForeignPropertyPeriodSummary.{RetrieveForeignPropertyPeriodSummaryHateoasData, RetrieveForeignPropertyPeriodSummaryResponse}
-import v1.models.response.retrieveForeignPropertyPeriodSummary.foreignFhlEea.{ForeignFhlEea, ForeignFhlEeaExpenditure, ForeignFhlEeaIncome}
-import v1.models.response.retrieveForeignPropertyPeriodSummary.foreignProperty.{ForeignProperty, ForeignPropertyExpenditure, ForeignPropertyIncome, ForeignPropertyRentIncome}
+import v1.models.request.retrieveForeignPropertyPeriodSummary._
+import v1.models.response.retrieveForeignPropertyPeriodSummary._
+import v1.models.response.retrieveForeignPropertyPeriodSummary.foreignFhlEea._
+import v1.models.response.retrieveForeignPropertyPeriodSummary.foreignProperty._
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -46,8 +46,13 @@ class RetrieveForeignPropertyPeriodSummaryControllerSpec
     with MockAuditService
     with MockIdGenerator {
 
+  private val nino = "AA123456A"
+  private val businessId = "XAIS12345678910"
+  private val submissionId = "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
+  private val correlationId = "X-123"
+
   trait Test {
-    val hc = HeaderCarrier()
+    val hc: HeaderCarrier = HeaderCarrier()
 
     val controller = new RetrieveForeignPropertyPeriodSummaryController(
       authService = mockEnrolmentsAuthService,
@@ -59,22 +64,17 @@ class RetrieveForeignPropertyPeriodSummaryControllerSpec
       idGenerator = mockIdGenerator
     )
 
-    MockedMtdIdLookupService.lookup(nino).returns(Future.successful(Right("test-mtd-id")))
+    MockMtdIdLookupService.lookup(nino).returns(Future.successful(Right("test-mtd-id")))
     MockedEnrolmentsAuthService.authoriseUser()
     MockIdGenerator.getCorrelationId.returns(correlationId)
   }
-
-  private val nino = "AA123456A"
-  private val businessId = "XAIS12345678910"
-  private val submissionId = "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
-  private val correlationId = "X-123"
 
   private val rawData = RetrieveForeignPropertyPeriodSummaryRawData(nino, businessId, submissionId)
   private val requestData = RetrieveForeignPropertyPeriodSummaryRequest(Nino(nino), businessId, submissionId)
 
   private val testHateoasLink = Link(href = s"/individuals/business/property/${nino}/${businessId}/period/${submissionId}", method = GET, rel = "self")
 
-  val responseBody = RetrieveForeignPropertyPeriodSummaryResponse(
+  private val responseBody = RetrieveForeignPropertyPeriodSummaryResponse(
     "2020-01-01",
     "2020-01-31",
     Some(ForeignFhlEea(

@@ -17,9 +17,9 @@
 package v1.controllers.requestParsers
 
 import javax.inject.Inject
-import uk.gov.hmrc.domain.Nino
 import v1.controllers.requestParsers.validators.ListForeignPropertiesPeriodSummariesValidator
-import v1.models.request.listForeignPropertiesPeriodSummaries.{ListForeignPropertiesPeriodSummariesRawData, ListForeignPropertiesPeriodSummariesRequest}
+import v1.models.domain.Nino
+import v1.models.request.listForeignPropertiesPeriodSummaries._
 import v1.support.DateUtils
 
 class ListForeignPropertiesPeriodSummariesRequestParser @Inject()(val validator: ListForeignPropertiesPeriodSummariesValidator, dateUtils: DateUtils)
@@ -30,5 +30,4 @@ class ListForeignPropertiesPeriodSummariesRequestParser @Inject()(val validator:
     val toDate = data.toDate.getOrElse(dateUtils.currentTaxYearEnd)
     ListForeignPropertiesPeriodSummariesRequest(Nino(data.nino), data.businessId, fromDate, toDate)
   }
-
 }

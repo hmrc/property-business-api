@@ -16,6 +16,6 @@
 
 package v1.models.request.amendForeignPropertyPeriodSummary
 
-import uk.gov.hmrc.domain.Nino
+import v1.models.domain.Nino
 
 case class AmendForeignPropertyPeriodSummaryRequest(nino: Nino, businessId: String, submissionId: String, body: AmendForeignPropertyPeriodSummaryRequestBody)

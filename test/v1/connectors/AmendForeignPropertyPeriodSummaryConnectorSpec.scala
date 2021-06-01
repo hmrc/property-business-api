@@ -17,20 +17,22 @@
 package v1.connectors
 
 import mocks.MockAppConfig
-import uk.gov.hmrc.domain.Nino
+import uk.gov.hmrc.http.HeaderCarrier
 import v1.mocks.MockHttpClient
+import v1.models.domain.Nino
 import v1.models.outcomes.ResponseWrapper
-import v1.models.request.amendForeignPropertyPeriodSummary.{AmendForeignPropertyPeriodSummaryRequest, AmendForeignPropertyPeriodSummaryRequestBody}
-import v1.models.request.common.foreignFhlEea.{ForeignFhlEea, ForeignFhlEeaExpenditure, ForeignFhlEeaIncome}
-import v1.models.request.common.foreignPropertyEntry.{ForeignPropertyEntry, ForeignPropertyExpenditure, ForeignPropertyIncome, ForeignPropertyRentIncome}
+import v1.models.request.amendForeignPropertyPeriodSummary._
+import v1.models.request.common.foreignFhlEea._
+import v1.models.request.common.foreignPropertyEntry._
 
 import scala.concurrent.Future
 
 class AmendForeignPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
 
-  val nino = Nino("AA123456A")
-  val businessId = "XAIS12345678910"
-  val submissionId = "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
+  val nino: String = "AA123456A"
+  val businessId: String = "XAIS12345678910"
+  val submissionId: String = "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
+
   private val foreignFhlEea: ForeignFhlEea = ForeignFhlEea(
     income = ForeignFhlEeaIncome(rentAmount = 567.83),
     expenditure = Some(ForeignFhlEeaExpenditure(
@@ -74,28 +76,39 @@ class AmendForeignPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
     foreignProperty = Some(Seq(foreignProperty))
   )
 
-  val request = AmendForeignPropertyPeriodSummaryRequest(nino, businessId, submissionId, body)
-
-  val response = ()
+  val request: AmendForeignPropertyPeriodSummaryRequest = AmendForeignPropertyPeriodSummaryRequest(
+    nino = Nino(nino),
+    businessId = businessId,
+    submissionId = submissionId,
+    body = body
+  )
 
   class Test extends MockHttpClient with MockAppConfig {
-    val connector: AmendForeignPropertyPeriodSummaryConnector = new AmendForeignPropertyPeriodSummaryConnector(http = mockHttpClient, appConfig = mockAppConfig)
+    val connector: AmendForeignPropertyPeriodSummaryConnector = new AmendForeignPropertyPeriodSummaryConnector(
+      http = mockHttpClient,
+      appConfig = mockAppConfig
+    )
 
-    val desRequestHeaders: Seq[(String, String)] = Seq("Environment" -> "des-environment", "Authorization" -> s"Bearer des-token")
-    MockedAppConfig.desBaseUrl returns baseUrl
-    MockedAppConfig.desToken returns "des-token"
-    MockedAppConfig.desEnvironment returns "des-environment"
+    MockAppConfig.ifsBaseUrl returns baseUrl
+    MockAppConfig.ifsToken returns "ifs-token"
+    MockAppConfig.ifsEnvironment returns "ifs-environment"
+    MockAppConfig.ifsEnvironmentHeaders returns Some(allowedIfsHeaders)
   }
 
   "connector" must {
     "put a body and return 204 no body" in new Test {
+      val outcome = Right(ResponseWrapper(correlationId, ()))
 
-      val outcome = Right(ResponseWrapper(correlationId, response))
-      MockedHttpClient
+      implicit val hc: HeaderCarrier = HeaderCarrier(otherHeaders = otherHeaders ++ Seq("Content-Type" -> "application/json"))
+      val requiredIfsHeadersPut: Seq[(String, String)] = requiredIfsHeaders ++ Seq("Content-Type" -> "application/json")
+
+      MockHttpClient
         .put(
-          url = s"$baseUrl/income-tax/business/property/periodic/${nino}/${businessId}/${submissionId}",
+          url = s"$baseUrl/income-tax/business/property/periodic/$nino/$businessId/$submissionId",
+          config = dummyIfsHeaderCarrierConfig,
           body = body,
-          requiredHeaders = "Environment" -> "des-environment", "Authorization" -> s"Bearer des-token"
+          requiredHeaders = requiredIfsHeadersPut,
+          excludedHeaders = Seq("AnotherHeader" -> "HeaderValue")
         )
         .returns(Future.successful(outcome))
 

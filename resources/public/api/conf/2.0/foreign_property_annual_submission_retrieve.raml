@@ -1,0 +1,28 @@
+is:
+  - headers.acceptJson
+  - headers.testScenarioHeader
+  - errors.formatNino
+  - errors.formatBusinessId
+  - errors.formatTaxYear
+  - errors.ruleTaxYearNotSupported
+  - errors.ruleTaxYearRangeInvalid
+  - errors.clientOrAgentNotAuthorised
+  - errors.notFound
+displayName: Retrieve a Foreign Property Annual Submission
+description: This endpoint allows the developer to retrieve previously submitted adjustments and allowances for a foreign property business in a tax year. A National Insurance number, business ID and tax year must be provided.
+(annotations.sandboxData): !include scenarios/foreign_property_annual_submission_retrieve_scenarios.md
+(annotations.scope): "read:self-assessment"
+securedBy: [ sec.oauth_2_0: { scopes: [ "read:self-assessment" ] } ]
+responses:
+  200:
+    body:
+      application/json:
+        type: !include schemas/foreign_property_annual_submission_retrieve/response.json
+        examples:
+          example-1:
+            description: Example response
+            value: !include examples/foreign_property_annual_submission_retrieve/response.json
+    headers:
+      X-CorrelationId:
+        example: c75f40a6-a3df-4429-a697-471eeec46435
+        description: Unique ID for operation tracking <br> String, 36 characters.

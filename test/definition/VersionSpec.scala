@@ -26,6 +26,7 @@ class VersionSpec extends UnitSpec {
     "retrieved from a request header" must {
       "work" in {
         Versions.getFromRequest(FakeRequest().withHeaders((ACCEPT, "application/vnd.hmrc.1.0+json"))) shouldBe Some("1.0")
+        Versions.getFromRequest(FakeRequest().withHeaders((ACCEPT, "application/vnd.hmrc.2.0+json"))) shouldBe Some("2.0")
       }
     }
   }

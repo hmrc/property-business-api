@@ -18,7 +18,7 @@ package definition
 
 import config.ConfidenceLevelConfig
 import definition.APIStatus.{ALPHA, BETA}
-import definition.Versions.VERSION_1
+import definition.Versions.{VERSION_1, VERSION_2}
 import mocks.MockAppConfig
 import support.UnitSpec
 import uk.gov.hmrc.auth.core.ConfidenceLevel
@@ -36,9 +36,11 @@ class ApiDefinitionFactorySpec extends UnitSpec {
   "definition" when {
     "called" should {
       "return a valid Definition case class" in new Test {
-        MockAppConfig.featureSwitch returns None
-        MockAppConfig.apiStatus returns "1.0"
-        MockAppConfig.endpointsEnabled returns true
+        MockAppConfig.featureSwitch returns None anyNumberOfTimes()
+        MockAppConfig.apiStatus("1.0") returns "BETA"
+        MockAppConfig.apiStatus("2.0") returns "ALPHA"
+        MockAppConfig.endpointsEnabled("1.0") returns true anyNumberOfTimes()
+        MockAppConfig.endpointsEnabled("2.0") returns true anyNumberOfTimes()
         MockAppConfig.confidenceLevelCheckEnabled returns ConfidenceLevelConfig(definitionEnabled = true, authValidationEnabled = true) anyNumberOfTimes()
 
         private val readScope = "read:self-assessment"
@@ -68,6 +70,11 @@ class ApiDefinitionFactorySpec extends UnitSpec {
               versions = Seq(
                 APIVersion(
                   version = VERSION_1,
+                  status = BETA,
+                  endpointsEnabled = true
+                ),
+                APIVersion(
+                  version = VERSION_2,
                   status = ALPHA,
                   endpointsEnabled = true
                 )
@@ -97,14 +104,14 @@ class ApiDefinitionFactorySpec extends UnitSpec {
   "buildAPIStatus" when {
     "the 'apiStatus' parameter is present and valid" should {
       "return the correct status" in new Test {
-        MockAppConfig.apiStatus returns "BETA"
+        MockAppConfig.apiStatus("1.0") returns "BETA"
         apiDefinitionFactory.buildAPIStatus(version = "1.0") shouldBe BETA
       }
     }
 
     "the 'apiStatus' parameter is present and invalid" should {
       "default to alpha" in new Test {
-        MockAppConfig.apiStatus returns "ALPHO"
+        MockAppConfig.apiStatus("1.0") returns "ALPHO"
         apiDefinitionFactory.buildAPIStatus(version = "1.0") shouldBe ALPHA
       }
     }

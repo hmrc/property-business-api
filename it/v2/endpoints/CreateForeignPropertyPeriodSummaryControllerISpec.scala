@@ -517,7 +517,7 @@ class CreateForeignPropertyPeriodSummaryControllerISpec extends IntegrationBaseS
     def request(): WSRequest = {
       setupStubs()
       buildRequest(uri)
-        .withHttpHeaders((ACCEPT, "application/vnd.hmrc.1.0+json"))
+        .withHttpHeaders((ACCEPT, "application/vnd.hmrc.2.0+json"))
     }
 
     val responseBody: JsValue = Json.parse(

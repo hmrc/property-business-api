@@ -42,7 +42,7 @@ class DeleteForeignPropertyAnnualSubmissionControllerISpec extends IntegrationBa
     def request(): WSRequest = {
       setupStubs()
       buildRequest(uri)
-        .withHttpHeaders((ACCEPT, "application/vnd.hmrc.1.0+json"))
+        .withHttpHeaders((ACCEPT, "application/vnd.hmrc.2.0+json"))
     }
 
     def errorBody(code: String): String =

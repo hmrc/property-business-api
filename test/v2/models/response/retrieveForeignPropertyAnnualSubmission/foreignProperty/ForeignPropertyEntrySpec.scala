@@ -34,6 +34,7 @@ class ForeignPropertyEntrySpec extends UnitSpec with JsonErrorValidators{
       Some(100.25),
       Some(100.25),
       Some(100.25),
+      Some(100.25),
       Some(100.25)
     ))
   )
@@ -42,6 +43,7 @@ class ForeignPropertyEntrySpec extends UnitSpec with JsonErrorValidators{
     "GER",
     None,
     Some(ForeignPropertyAllowances(
+      Some(100.25),
       Some(100.25),
       Some(100.25),
       Some(100.25),
@@ -74,6 +76,7 @@ class ForeignPropertyEntrySpec extends UnitSpec with JsonErrorValidators{
       |      "zeroEmissionsGoodsVehicleAllowance":100.25,
       |      "propertyAllowance":100.25,
       |      "otherCapitalAllowance":100.25,
+      |      "structureAndBuildingAllowance":100.25,
       |      "electricChargePointAllowance":100.25
       |   }
       |}
@@ -90,6 +93,7 @@ class ForeignPropertyEntrySpec extends UnitSpec with JsonErrorValidators{
       |      "zeroEmissionsGoodsVehicleAllowance":100.25,
       |      "propertyAllowance":100.25,
       |      "otherCapitalAllowance":100.25,
+      |      "structureAndBuildingAllowance":100.25,
       |      "electricChargePointAllowance":100.25
       |   }
       |}

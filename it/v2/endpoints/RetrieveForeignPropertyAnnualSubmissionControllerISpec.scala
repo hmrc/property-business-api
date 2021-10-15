@@ -34,93 +34,95 @@ class RetrieveForeignPropertyAnnualSubmissionControllerISpec extends Integration
     val taxYear: String = "2021-22"
 
     val responseBody: JsValue = Json.parse(
-       """
-         |{
-         |  "foreignFhlEea": {
-         |    "adjustments": {
-         |      "privateUseAdjustment": 100.25,
-         |      "balancingCharge": 100.25,
-         |      "periodOfGraceAdjustment": true
-         |    },
-         |    "allowances": {
-         |      "annualInvestmentAllowance": 100.25,
-         |      "otherCapitalAllowance": 100.25,
-         |      "propertyAllowance": 100.25,
-         |      "electricChargePointAllowance": 100.25
-         |    }
-         |  },
-         |  "foreignProperty": [
-         |    {
-         |      "countryCode": "FRA",
-         |      "adjustments": {
-         |        "privateUseAdjustment": 100.25,
-         |        "balancingCharge": 100.25
-         |      },
-         |      "allowances": {
-         |        "annualInvestmentAllowance": 100.25,
-         |        "costOfReplacingDomesticItems": 100.25,
-         |        "zeroEmissionsGoodsVehicleAllowance": 100.25,
-         |        "propertyAllowance": 100.25,
-         |        "otherCapitalAllowance": 100.25,
-         |        "electricChargePointAllowance": 100.25
-         |      }
-         |    }
-         |  ],
-         |  "links": [
-         |    {
-         |      "href": "/individuals/business/property/AA123456A/XAIS12345678910/annual/2021-22",
-         |      "method": "PUT",
-         |      "rel": "amend-property-annual-submission"
-         |    },
-         |    {
-         |      "href": "/individuals/business/property/AA123456A/XAIS12345678910/annual/2021-22",
-         |      "method": "GET",
-         |      "rel": "self"
-         |    },
-         |    {
-         |      "href": "/individuals/business/property/AA123456A/XAIS12345678910/annual/2021-22",
-         |      "method": "DELETE",
-         |      "rel": "delete-property-annual-submission"
-         |    }
-         |  ]
-         |}
+      """
+        |{
+        |  "foreignFhlEea": {
+        |    "adjustments": {
+        |      "privateUseAdjustment": 100.25,
+        |      "balancingCharge": 100.25,
+        |      "periodOfGraceAdjustment": true
+        |    },
+        |    "allowances": {
+        |      "annualInvestmentAllowance": 100.25,
+        |      "otherCapitalAllowance": 100.25,
+        |      "propertyAllowance": 100.25,
+        |      "electricChargePointAllowance": 100.25
+        |    }
+        |  },
+        |  "foreignProperty": [
+        |    {
+        |      "countryCode": "FRA",
+        |      "adjustments": {
+        |        "privateUseAdjustment": 100.25,
+        |        "balancingCharge": 100.25
+        |      },
+        |      "allowances": {
+        |        "annualInvestmentAllowance": 100.25,
+        |        "costOfReplacingDomesticItems": 100.25,
+        |        "zeroEmissionsGoodsVehicleAllowance": 100.25,
+        |        "propertyAllowance": 100.25,
+        |        "otherCapitalAllowance": 100.25,
+        |        "structureAndBuildingAllowance": 100.25,
+        |        "electricChargePointAllowance": 100.25
+        |      }
+        |    }
+        |  ],
+        |  "links": [
+        |    {
+        |      "href": "/individuals/business/property/AA123456A/XAIS12345678910/annual/2021-22",
+        |      "method": "PUT",
+        |      "rel": "amend-property-annual-submission"
+        |    },
+        |    {
+        |      "href": "/individuals/business/property/AA123456A/XAIS12345678910/annual/2021-22",
+        |      "method": "GET",
+        |      "rel": "self"
+        |    },
+        |    {
+        |      "href": "/individuals/business/property/AA123456A/XAIS12345678910/annual/2021-22",
+        |      "method": "DELETE",
+        |      "rel": "delete-property-annual-submission"
+        |    }
+        |  ]
+        |}
        """.stripMargin
     )
 
     val ifsResponseBody: JsValue = Json.parse(
-       """
-         |{
-         |  "foreignFhlEea": {
-         |    "adjustments": {
-         |      "privateUseAdjustment": 100.25,
-         |      "balancingCharge": 100.25,
-         |      "periodOfGraceAdjustment": true
-         |    },
-         |    "allowances": {
-         |      "annualInvestmentAllowance": 100.25,
-         |      "otherCapitalAllowance": 100.25,
-         |      "propertyAllowance": 100.25,
-         |      "electricChargePointAllowance": 100.25
-         |    }
-         |  },
-         |  "foreignProperty": [
-         |    {
-         |      "countryCode": "FRA",
-         |      "adjustments": {
-         |        "privateUseAdjustment": 100.25,
-         |        "balancingCharge": 100.25
-         |      },
-         |      "allowances": {
-         |        "annualInvestmentAllowance": 100.25,
-         |        "costOfReplacingDomesticItems": 100.25,
-         |        "zeroEmissionsGoodsVehicleAllowance": 100.25,
-         |        "propertyAllowance": 100.25,
-         |        "otherCapitalAllowance": 100.25,
-         |        "electricChargePointAllowance": 100.25
-         |      }
-         |    }
-         |  ]
-         |}
+      """
+        |{
+        |  "foreignFhlEea": {
+        |    "adjustments": {
+        |      "privateUseAdjustment": 100.25,
+        |      "balancingCharge": 100.25,
+        |      "periodOfGraceAdjustment": true
+        |    },
+        |    "allowances": {
+        |      "annualInvestmentAllowance": 100.25,
+        |      "otherCapitalAllowance": 100.25,
+        |      "propertyAllowance": 100.25,
+        |      "electricChargePointAllowance": 100.25
+        |    }
+        |  },
+        |  "foreignProperty": [
+        |    {
+        |      "countryCode": "FRA",
+        |      "adjustments": {
+        |        "privateUseAdjustment": 100.25,
+        |        "balancingCharge": 100.25
+        |      },
+        |      "allowances": {
+        |        "annualInvestmentAllowance": 100.25,
+        |        "costOfReplacingDomesticItems": 100.25,
+        |        "zeroEmissionsGoodsVehicleAllowance": 100.25,
+        |        "propertyAllowance": 100.25,
+        |        "otherCapitalAllowance": 100.25,
+        |        "structureAndBuildingAllowance": 100.25,
+        |        "electricChargePointAllowance": 100.25
+        |      }
+        |    }
+        |  ]
+        |}
        """.stripMargin
     )
 
@@ -133,7 +135,7 @@ class RetrieveForeignPropertyAnnualSubmissionControllerISpec extends Integration
     def request(): WSRequest = {
       setupStubs()
       buildRequest(uri)
-        .withHttpHeaders((ACCEPT, "application/vnd.hmrc.2.0+json"))
+        .withHttpHeaders((ACCEPT, "application/vnd.hmrc.1.0+json"))
     }
 
     def errorBody(code: String): String =
@@ -221,7 +223,7 @@ class RetrieveForeignPropertyAnnualSubmissionControllerISpec extends Integration
 
         val input = Seq(
           (Status.BAD_REQUEST, "INVALID_TAXABLE_ENTITY_ID", Status.BAD_REQUEST, NinoFormatError),
-          (Status.BAD_REQUEST, "INVALID_INCOME_SOURCE_ID", Status.BAD_REQUEST, BusinessIdFormatError),
+          (Status.BAD_REQUEST, "INVALID_INCOMESOURCEID", Status.BAD_REQUEST, BusinessIdFormatError),
           (Status.NOT_FOUND, "NO_DATA_FOUND", Status.NOT_FOUND, NotFoundError),
           (Status.BAD_REQUEST, "INVALID_CORRELATIONID", Status.INTERNAL_SERVER_ERROR, DownstreamError),
           (Status.BAD_REQUEST, "INVALID_PAYLOAD", Status.INTERNAL_SERVER_ERROR, DownstreamError),

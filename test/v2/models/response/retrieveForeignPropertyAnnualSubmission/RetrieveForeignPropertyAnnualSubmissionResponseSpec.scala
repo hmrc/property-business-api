@@ -48,6 +48,7 @@ class RetrieveForeignPropertyAnnualSubmissionResponseSpec extends UnitSpec with 
         Some(100.25),
         Some(100.25),
         Some(100.25),
+        Some(100.25),
         Some(100.25)))
     )))
   )
@@ -63,51 +64,52 @@ class RetrieveForeignPropertyAnnualSubmissionResponseSpec extends UnitSpec with 
 
   private val jsonBody = Json.parse(
     """
-       |{
-       |   "foreignFhlEea":
-       |      {
-       |         "adjustments":{
-       |            "privateUseAdjustment":100.25,
-       |            "balancingCharge":100.25,
-       |            "periodOfGraceAdjustment":true
-       |         },
-       |         "allowances":{
-       |            "annualInvestmentAllowance":100.25,
-       |            "otherCapitalAllowance":100.25,
-       |            "propertyAllowance":100.25,
-       |            "electricChargePointAllowance":100.25
-       |         }
-       |      },
-       |   "foreignProperty":[
-       |      {
-       |         "countryCode":"GER",
-       |         "adjustments":{
-       |            "privateUseAdjustment":100.25,
-       |            "balancingCharge":100.25
-       |         },
-       |         "allowances":{
-       |            "annualInvestmentAllowance":100.25,
-       |            "costOfReplacingDomesticItems":100.25,
-       |            "zeroEmissionsGoodsVehicleAllowance":100.25,
-       |            "propertyAllowance":100.25,
-       |            "otherCapitalAllowance":100.25,
-       |            "electricChargePointAllowance":100.25
-       |         }
-       |      }
-       |   ]
-       |}
+      |{
+      |   "foreignFhlEea":
+      |      {
+      |         "adjustments":{
+      |            "privateUseAdjustment":100.25,
+      |            "balancingCharge":100.25,
+      |            "periodOfGraceAdjustment":true
+      |         },
+      |         "allowances":{
+      |            "annualInvestmentAllowance":100.25,
+      |            "otherCapitalAllowance":100.25,
+      |            "propertyAllowance":100.25,
+      |            "electricChargePointAllowance":100.25
+      |         }
+      |      },
+      |   "foreignProperty":[
+      |      {
+      |         "countryCode":"GER",
+      |         "adjustments":{
+      |            "privateUseAdjustment":100.25,
+      |            "balancingCharge":100.25
+      |         },
+      |         "allowances":{
+      |            "annualInvestmentAllowance":100.25,
+      |            "costOfReplacingDomesticItems":100.25,
+      |            "zeroEmissionsGoodsVehicleAllowance":100.25,
+      |            "propertyAllowance":100.25,
+      |            "otherCapitalAllowance":100.25,
+      |            "structureAndBuildingAllowance":100.25,
+      |            "electricChargePointAllowance":100.25
+      |         }
+      |      }
+      |   ]
+      |}
      """.stripMargin
   )
 
   private val jsonBodyMinimum = Json.parse(
     """
-       |{
-       |   "foreignProperty":[
-       |      {
-       |         "countryCode":"GER"
-       |      }
-       |   ]
-       |}
+      |{
+      |   "foreignProperty":[
+      |      {
+      |         "countryCode":"GER"
+      |      }
+      |   ]
+      |}
      """.stripMargin
   )
 

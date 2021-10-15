@@ -49,7 +49,7 @@ class RetrieveForeignPropertyAnnualSubmissionService @Inject()(connector: Retrie
   private def ifsErrorMap =
     Map(
       "INVALID_TAXABLE_ENTITY_ID" -> NinoFormatError,
-      "INVALID_INCOME_SOURCE_ID" -> BusinessIdFormatError,
+      "INVALID_INCOMESOURCEID" -> BusinessIdFormatError,
       "NO_DATA_FOUND" -> NotFoundError,
       "INVALID_CORRELATIONID" -> DownstreamError,
       "INVALID_PAYLOAD" -> DownstreamError,

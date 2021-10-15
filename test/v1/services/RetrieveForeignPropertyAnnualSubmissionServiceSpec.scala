@@ -60,6 +60,7 @@ class RetrieveForeignPropertyAnnualSubmissionServiceSpec extends UnitSpec {
         Some(100.25),
         Some(100.25),
         Some(100.25),
+        Some(100.25),
         Some(100.25)))))))
 
   private val requestData = RetrieveForeignPropertyAnnualSubmissionRequest(Nino(nino), businessId, taxYear)
@@ -98,7 +99,7 @@ class RetrieveForeignPropertyAnnualSubmissionServiceSpec extends UnitSpec {
 
       val input = Seq(
         "INVALID_TAXABLE_ENTITY_ID" -> NinoFormatError,
-        "INVALID_INCOME_SOURCE_ID" -> BusinessIdFormatError,
+        "INVALID_INCOMESOURCEID" -> BusinessIdFormatError,
         "NO_DATA_FOUND" -> NotFoundError,
         "INVALID_CORRELATIONID" -> DownstreamError,
         "INVALID_PAYLOAD" -> DownstreamError,

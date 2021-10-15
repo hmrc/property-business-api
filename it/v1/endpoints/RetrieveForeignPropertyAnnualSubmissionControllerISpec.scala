@@ -62,6 +62,7 @@ class RetrieveForeignPropertyAnnualSubmissionControllerISpec extends Integration
          |        "zeroEmissionsGoodsVehicleAllowance": 100.25,
          |        "propertyAllowance": 100.25,
          |        "otherCapitalAllowance": 100.25,
+         |        "structureAndBuildingAllowance": 100.25,
          |        "electricChargePointAllowance": 100.25
          |      }
          |    }
@@ -116,6 +117,7 @@ class RetrieveForeignPropertyAnnualSubmissionControllerISpec extends Integration
          |        "zeroEmissionsGoodsVehicleAllowance": 100.25,
          |        "propertyAllowance": 100.25,
          |        "otherCapitalAllowance": 100.25,
+         |        "structureAndBuildingAllowance": 100.25,
          |        "electricChargePointAllowance": 100.25
          |      }
          |    }
@@ -221,7 +223,7 @@ class RetrieveForeignPropertyAnnualSubmissionControllerISpec extends Integration
 
         val input = Seq(
           (Status.BAD_REQUEST, "INVALID_TAXABLE_ENTITY_ID", Status.BAD_REQUEST, NinoFormatError),
-          (Status.BAD_REQUEST, "INVALID_INCOME_SOURCE_ID", Status.BAD_REQUEST, BusinessIdFormatError),
+          (Status.BAD_REQUEST, "INVALID_INCOMESOURCEID", Status.BAD_REQUEST, BusinessIdFormatError),
           (Status.NOT_FOUND, "NO_DATA_FOUND", Status.NOT_FOUND, NotFoundError),
           (Status.BAD_REQUEST, "INVALID_CORRELATIONID", Status.INTERNAL_SERVER_ERROR, DownstreamError),
           (Status.BAD_REQUEST, "INVALID_PAYLOAD", Status.INTERNAL_SERVER_ERROR, DownstreamError),

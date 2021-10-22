@@ -141,6 +141,28 @@ traits:
                 description: An empty or non-matching body was submitted.
                 value:
                   code: RULE_INCORRECT_OR_EMPTY_BODY_SUBMITTED
+  ruleTypeOfBusinessIncorrect:
+      responses:
+        400:
+          body:
+            application/json:
+              type: types.errorResponse
+              examples:
+                ruleTypeOfBusinessIncorrect:
+                  description: The supplied Business ID does not represent a UK property business.
+                  value:
+                    code: RULE_TYPE_OF_BUSINESS_INCORRECT
+  ruleBuildingNameNumber:
+      responses:
+        400:
+          body:
+            application/json:
+              type: types.errorResponse
+              examples:
+                ruleBuildingNameNumber:
+                  description: One of building name or number must be supplied.
+                  value:
+                    code: RULE_BUILDING_NAME_NUMBER
   ruleToDateBeforeFromDate:
       responses:
         400:

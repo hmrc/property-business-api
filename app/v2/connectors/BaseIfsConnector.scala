@@ -18,23 +18,22 @@ package v2.connectors
 
 import config.AppConfig
 import play.api.libs.json.Writes
-import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, HttpReads}
+import uk.gov.hmrc.http.{ HeaderCarrier, HttpClient, HttpReads }
 import utils.Logging
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.{ ExecutionContext, Future }
 
 trait BaseIfsConnector extends Logging {
   val http: HttpClient
   val appConfig: AppConfig
 
-  private def ifsHeaderCarrier(additionalHeaders: Seq[String] = Seq.empty)(implicit hc: HeaderCarrier,
-                                                                           correlationId: String): HeaderCarrier =
+  private def ifsHeaderCarrier(additionalHeaders: Seq[String] = Seq.empty)(implicit hc: HeaderCarrier, correlationId: String): HeaderCarrier =
     HeaderCarrier(
       extraHeaders = hc.extraHeaders ++
         // Contract headers
         Seq(
           "Authorization" -> s"Bearer ${appConfig.ifsToken}",
-          "Environment" -> appConfig.ifsEnv,
+          "Environment"   -> appConfig.ifsEnv,
           "CorrelationId" -> correlationId
         ) ++
         // Other headers (i.e Gov-Test-Scenario, Content-Type)
@@ -53,13 +52,13 @@ trait BaseIfsConnector extends Logging {
     doPost(ifsHeaderCarrier(Seq("Content-Type")))
   }
 
-  def get[Resp](uri: IfsUri[Resp])(implicit ec: ExecutionContext,
-                                   hc: HeaderCarrier,
-                                   httpReads: HttpReads[IfsOutcome[Resp]],
-                                   correlationId: String): Future[IfsOutcome[Resp]] = {
+  def get[Resp](uri: IfsUri[Resp], queryParams: Seq[(String, String)] = Seq.empty)(implicit ec: ExecutionContext,
+                                                                                   hc: HeaderCarrier,
+                                                                                   httpReads: HttpReads[IfsOutcome[Resp]],
+                                                                                   correlationId: String): Future[IfsOutcome[Resp]] = {
 
     def doGet(implicit hc: HeaderCarrier): Future[IfsOutcome[Resp]] =
-      http.GET(url = s"${appConfig.ifsBaseUrl}/${uri.value}")
+      http.GET(url = s"${appConfig.ifsBaseUrl}/${uri.value}", queryParams = queryParams)
 
     doGet(ifsHeaderCarrier())
   }

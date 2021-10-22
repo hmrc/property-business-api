@@ -16,7 +16,6 @@
 
 package v1.services
 
-import support.UnitSpec
 import uk.gov.hmrc.http.HeaderCarrier
 import v1.controllers.EndpointLogContext
 import v1.mocks.connectors.MockAmendForeignPropertyAnnualSubmissionConnector
@@ -27,10 +26,9 @@ import v1.models.request.amendForeignPropertyAnnualSubmission._
 import v1.models.request.amendForeignPropertyAnnualSubmission.foreignFhlEea._
 import v1.models.request.amendForeignPropertyAnnualSubmission.foreignProperty._
 
-import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-class AmendForeignPropertyAnnualSubmissionServiceSpec extends UnitSpec {
+class AmendForeignPropertyAnnualSubmissionServiceSpec extends ServiceSpec {
 
   val nino: String = "AA123456A"
   val businessId: String = "XAIS12345678910"
@@ -63,6 +61,7 @@ class AmendForeignPropertyAnnualSubmissionServiceSpec extends UnitSpec {
       Some(5000.99),
       Some(5000.99),
       Some(5000.99),
+      Some(4000.99),
       Some(5000.99)
     ))
   )

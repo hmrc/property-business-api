@@ -94,11 +94,11 @@ class AmendForeignPropertyAnnualSubmissionControllerSpec
       detail = CreateAndAmendForeignPropertyAnnualAuditDetail(
         userType = "Individual",
         agentReferenceNumber = None,
-        nino,
-        businessId,
-        taxYear,
-        requestJson,
-        correlationId,
+        nino = nino,
+        businessId = businessId,
+        taxYear = taxYear,
+        request = requestJson,
+        `X-CorrelationId` = correlationId,
         response = auditResponse
       )
     )
@@ -132,13 +132,13 @@ class AmendForeignPropertyAnnualSubmissionControllerSpec
       |        "zeroEmissionsGoodsVehicleAllowance":100.25,
       |        "propertyAllowance":100.25,
       |        "otherCapitalAllowance":100.25,
-      |        "structureAndBuildingAllowance":100.25,
+      |        "structureAndBuildingAllowance":109.45,
       |        "electricChargePointAllowance":100.25
       |      }
       |    }
       |  ]
       |}
-      |""".stripMargin
+    """.stripMargin
   )
 
   private val foreignFhlEea = ForeignFhlEea(
@@ -167,6 +167,7 @@ class AmendForeignPropertyAnnualSubmissionControllerSpec
       Some(5000.99),
       Some(5000.99),
       Some(5000.99),
+      Some(3000.99),
       Some(5000.99)
     ))
   )

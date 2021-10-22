@@ -64,7 +64,7 @@ class AmendForeignPropertyAnnualSubmissionRequestParserSpec extends UnitSpec {
       |            "zeroEmissionsGoodsVehicleAllowance":100.25,
       |            "propertyAllowance":100.25,
       |            "otherCapitalAllowance":100.25,
-      |            "structureAndBuildingAllowance":100.25,
+      |            "structureAndBuildingAllowance":103.45,
       |            "electricChargePointAllowance":100.25
       |         }
       |      }
@@ -111,6 +111,7 @@ class AmendForeignPropertyAnnualSubmissionRequestParserSpec extends UnitSpec {
                 Some(100.25),
                 Some(100.25),
                 Some(100.25),
+                Some(103.45),
                 Some(100.25)
               )))))
           )
@@ -119,7 +120,7 @@ class AmendForeignPropertyAnnualSubmissionRequestParserSpec extends UnitSpec {
           Right(AmendForeignPropertyAnnualSubmissionRequest(Nino(nino), businessId, taxYear, amendForeignPropertyAnnualSubmissionRequestBody))
       }
     }
-    "return an ErrroWrapper" when {
+    "return an ErrorWrapper" when {
       "a single validation error occurs" in new Test {
         MockAmendForeignPropertyValidator.validate(inputData)
           .returns(List(NinoFormatError))

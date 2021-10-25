@@ -14,22 +14,8 @@
  * limitations under the License.
  */
 
-package v1.models.domain
+package v2.models.request.retrieveUkPropertyAnnualSubmission
 
-/**
-  * Represents a tax year for IFS
-  *
-  * @param value the tax year string (where 2018 represents 2017-18)
-  */
-case class IfsTaxYear(value: String) extends AnyVal {
-  override def toString: String = value
-}
+import v2.models.domain.Nino
 
-object IfsTaxYear {
-
-  /**
-    * @param taxYear tax year in MTD format (e.g. 2017-18)
-    */
-  def fromMtd(taxYear: String): IfsTaxYear =
-    IfsTaxYear(taxYear.take(2) + taxYear.drop(5))
-}
+case class RetrieveUkPropertyAnnualSubmissionRequest(nino: Nino, businessId: String, taxYear: String)

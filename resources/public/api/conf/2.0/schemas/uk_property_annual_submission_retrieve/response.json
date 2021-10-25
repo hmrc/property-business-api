@@ -1,7 +1,7 @@
 {
   "$schema": "http://json-schema.org/draft-04/schema#",
-  "title": "Retrieve a UK property business annual summary",
-  "description": "Retrieve a UK property business annual summary",
+  "title": "Retrieve a UK property business annual submission",
+  "description": "Retrieve a UK property business annual submission",
   "type": "object",
   "properties": {
     "submittedOn": {

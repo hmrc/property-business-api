@@ -26,7 +26,7 @@ class AmendForeignPropertyAnnualSubmissionValidator extends Validator[AmendForei
 
   private val validationSet = List(parameterFormatValidation, bodyFormatValidation, bodyFieldValidation)
 
-  private def parameterFormatValidation: AmendForeignPropertyAnnualSubmissionRawData => List[List[MtdError]] = (data: AmendForeignPropertyAnnualSubmissionRawData) => {
+  private def parameterFormatValidation: AmendForeignPropertyAnnualSubmissionRawData => List[List[MtdError]] = { data =>
     List(
       NinoValidation.validate(data.nino),
       BusinessIdValidation.validate(data.businessId),
@@ -120,6 +120,10 @@ class AmendForeignPropertyAnnualSubmissionValidator extends Validator[AmendForei
       NumberValidation.validateOptional(
         field = foreignPropertyEntry.allowances.flatMap(_.otherCapitalAllowance),
         path = s"/foreignProperty/$index/allowances/otherCapitalAllowance"
+      ),
+      NumberValidation.validateOptional(
+        field = foreignPropertyEntry.allowances.flatMap(_.structureAndBuildingAllowance),
+        path = s"/foreignProperty/$index/allowances/structureAndBuildingAllowance"
       ),
       NumberValidation.validateOptional(
         field = foreignPropertyEntry.allowances.flatMap(_.electricChargePointAllowance),

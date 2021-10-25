@@ -16,13 +16,13 @@
 
 package v1.models.request.amendForeignPropertyAnnualSubmission.foreignProperty
 
-import play.api.libs.json.Json
+import play.api.libs.json.{JsValue, Json}
 import support.UnitSpec
 import v1.models.utils.JsonErrorValidators
 
 class ForeignPropertyEntrySpec extends UnitSpec with JsonErrorValidators{
 
-  val foreignProperty =
+  val foreignProperty: ForeignPropertyEntry =
     ForeignPropertyEntry(
       "GER",
       Some(ForeignPropertyAdjustments(
@@ -35,11 +35,12 @@ class ForeignPropertyEntrySpec extends UnitSpec with JsonErrorValidators{
         Some(100.25),
         Some(100.25),
         Some(100.25),
+        Some(200.65),
         Some(100.25)
       ))
     )
 
-  val foreignPropertyNoAdjustments =
+  val foreignPropertyNoAdjustments: ForeignPropertyEntry =
     ForeignPropertyEntry(
       "GER",
       None,
@@ -49,11 +50,12 @@ class ForeignPropertyEntrySpec extends UnitSpec with JsonErrorValidators{
         Some(100.25),
         Some(100.25),
         Some(100.25),
+        Some(300.45),
         Some(100.25)
       ))
     )
 
-  val foreignPropertyNoAllowances =
+  val foreignPropertyNoAllowances: ForeignPropertyEntry =
     ForeignPropertyEntry(
       "GER",
       Some(ForeignPropertyAdjustments(
@@ -63,7 +65,7 @@ class ForeignPropertyEntrySpec extends UnitSpec with JsonErrorValidators{
       None
     )
 
-  val jsonBody = Json.parse(
+  val jsonBody: JsValue = Json.parse(
     """
       |{
       |   "countryCode":"GER",
@@ -77,12 +79,14 @@ class ForeignPropertyEntrySpec extends UnitSpec with JsonErrorValidators{
       |      "zeroEmissionsGoodsVehicleAllowance":100.25,
       |      "propertyAllowance":100.25,
       |      "otherCapitalAllowance":100.25,
+      |      "structureAndBuildingAllowance":200.65,
       |      "electricChargePointAllowance":100.25
       |   }
       |}
-      |""".stripMargin)
+    """.stripMargin
+  )
 
-  val jsonBodyNoAdjustments = Json.parse(
+  val jsonBodyNoAdjustments: JsValue = Json.parse(
     """
       |{
       |   "countryCode":"GER",
@@ -92,12 +96,14 @@ class ForeignPropertyEntrySpec extends UnitSpec with JsonErrorValidators{
       |      "zeroEmissionsGoodsVehicleAllowance":100.25,
       |      "propertyAllowance":100.25,
       |      "otherCapitalAllowance":100.25,
+      |      "structureAndBuildingAllowance":300.45,
       |      "electricChargePointAllowance":100.25
       |   }
       |}
-      |""".stripMargin)
+    """.stripMargin
+  )
 
-  val jsonBodyNoAllowances = Json.parse(
+  val jsonBodyNoAllowances: JsValue = Json.parse(
     """
       |{
       |   "countryCode":"GER",
@@ -106,12 +112,13 @@ class ForeignPropertyEntrySpec extends UnitSpec with JsonErrorValidators{
       |      "balancingCharge":100.25
       |   }
       |}
-      |""".stripMargin)
+    """.stripMargin
+  )
 
-  val emptyJson = Json.parse(
+  val emptyJson: JsValue = Json.parse(
     """
       |{}
-      |""".stripMargin
+    """.stripMargin
   )
 
   "reads" when {
@@ -140,5 +147,4 @@ class ForeignPropertyEntrySpec extends UnitSpec with JsonErrorValidators{
       }
     }
   }
-
 }

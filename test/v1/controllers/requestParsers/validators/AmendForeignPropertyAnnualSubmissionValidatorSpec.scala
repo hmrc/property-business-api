@@ -26,6 +26,7 @@ class AmendForeignPropertyAnnualSubmissionValidatorSpec extends UnitSpec {
   private val validNino = "AA123456A"
   private val validBusinessId = "XAIS12345678901"
   private val validTaxYear = "2021-22"
+
   private val requestBodyJson = Json.parse(
     """
       |{
@@ -58,12 +59,13 @@ class AmendForeignPropertyAnnualSubmissionValidatorSpec extends UnitSpec {
       |            "zeroEmissionsGoodsVehicleAllowance":100.25,
       |            "propertyAllowance":100.25,
       |            "otherCapitalAllowance":100.25,
+      |            "structureAndBuildingAllowance":110.55,
       |            "electricChargePointAllowance":100.25
       |         }
       |      }
       |   ]
       |}
-      |""".stripMargin
+    """.stripMargin
   )
 
   val validator = new AmendForeignPropertyAnnualSubmissionValidator()
@@ -83,7 +85,7 @@ class AmendForeignPropertyAnnualSubmissionValidatorSpec extends UnitSpec {
             |      }
             |   ]
             |}
-            |""".stripMargin
+          """.stripMargin
         ))) shouldBe Nil
       }
       "a foreignProperty with multiple objects is supplied" in {
@@ -105,6 +107,7 @@ class AmendForeignPropertyAnnualSubmissionValidatorSpec extends UnitSpec {
             |            "zeroEmissionsGoodsVehicleAllowance":100.25,
             |            "propertyAllowance":100.25,
             |            "otherCapitalAllowance":100.25,
+            |            "structureAndBuildingAllowance":105.35,
             |            "electricChargePointAllowance":100.25
             |         }
             |      },
@@ -122,12 +125,13 @@ class AmendForeignPropertyAnnualSubmissionValidatorSpec extends UnitSpec {
             |            "zeroEmissionsGoodsVehicleAllowance":100.25,
             |            "propertyAllowance":100.25,
             |            "otherCapitalAllowance":100.25,
+            |            "structureAndBuildingAllowance":106.45,
             |            "electricChargePointAllowance":100.25
             |         }
             |      }
             |   ]
             |}
-            |""".stripMargin
+          """.stripMargin
         ))) shouldBe Nil
       }
       "only a foreignProperty is supplied" in {
@@ -149,12 +153,13 @@ class AmendForeignPropertyAnnualSubmissionValidatorSpec extends UnitSpec {
             |            "zeroEmissionsGoodsVehicleAllowance":100.25,
             |            "propertyAllowance":100.25,
             |            "otherCapitalAllowance":100.25,
+            |            "structureAndBuildingAllowance":107.35,
             |            "electricChargePointAllowance":100.25
             |         }
             |      }
             |   ]
             |}
-            |""".stripMargin
+          """.stripMargin
         ))) shouldBe Nil
       }
       "only a foreignEeaFhl is supplied" in {
@@ -175,80 +180,102 @@ class AmendForeignPropertyAnnualSubmissionValidatorSpec extends UnitSpec {
             |      }
             |   }
             |}
-            |""".stripMargin
+          """.stripMargin
         ))) shouldBe Nil
       }
     }
     "return a path parameter error" when {
       "an invalid nino is supplied" in {
-        validator.validate(AmendForeignPropertyAnnualSubmissionRawData("A12344A", validBusinessId, validTaxYear, requestBodyJson)) shouldBe List(NinoFormatError)
+        validator.validate(AmendForeignPropertyAnnualSubmissionRawData("A12344A", validBusinessId, validTaxYear, requestBodyJson)) shouldBe
+          List(NinoFormatError)
       }
       "an invalid businessId is supplied" in {
-        validator.validate(AmendForeignPropertyAnnualSubmissionRawData(validNino, "Walrus", validTaxYear, requestBodyJson)) shouldBe List(BusinessIdFormatError)
+        validator.validate(AmendForeignPropertyAnnualSubmissionRawData(validNino, "Walrus", validTaxYear, requestBodyJson)) shouldBe
+          List(BusinessIdFormatError)
       }
       "an invalid taxYear is supplied" in {
-        validator.validate(AmendForeignPropertyAnnualSubmissionRawData(validNino, validBusinessId, "2103/01", requestBodyJson)) shouldBe List(TaxYearFormatError)
+        validator.validate(AmendForeignPropertyAnnualSubmissionRawData(validNino, validBusinessId, "2103/01", requestBodyJson)) shouldBe
+          List(TaxYearFormatError)
       }
       "an invalid taxYear range is supplied" in {
-        validator.validate(AmendForeignPropertyAnnualSubmissionRawData(validNino, validBusinessId, "2022-24", requestBodyJson)) shouldBe List(RuleTaxYearRangeInvalidError)
+        validator.validate(AmendForeignPropertyAnnualSubmissionRawData(validNino, validBusinessId, "2022-24", requestBodyJson)) shouldBe
+          List(RuleTaxYearRangeInvalidError)
       }
       "a below minimum taxYear is supplied" in {
-        validator.validate(AmendForeignPropertyAnnualSubmissionRawData(validNino, validBusinessId, "2018-19", requestBodyJson)) shouldBe List(RuleTaxYearNotSupportedError)
+        validator.validate(AmendForeignPropertyAnnualSubmissionRawData(validNino, validBusinessId, "2018-19", requestBodyJson)) shouldBe
+          List(RuleTaxYearNotSupportedError)
       }
     }
     "return RuleIncorrectOrEmptyBodyError" when {
       "an empty body is submitted" in {
-        validator.validate(AmendForeignPropertyAnnualSubmissionRawData(validNino, validBusinessId, validTaxYear, Json.parse("""{}"""))) shouldBe List(RuleIncorrectOrEmptyBodyError)
+        validator.validate(AmendForeignPropertyAnnualSubmissionRawData(validNino, validBusinessId, validTaxYear, Json.parse("""{}"""))) shouldBe
+          List(RuleIncorrectOrEmptyBodyError)
       }
       "an empty foreignFhlEea is submitted" in {
         validator.validate(AmendForeignPropertyAnnualSubmissionRawData(validNino, validBusinessId, validTaxYear, Json.parse(
-          """{
+          """
+            |{
             |  "foreignFhlEea": {}
-            |}""".stripMargin))) shouldBe List(RuleIncorrectOrEmptyBodyError)
+            |}
+          """.stripMargin
+        ))) shouldBe List(RuleIncorrectOrEmptyBodyError)
       }
       "an empty foreignProperty is submitted" in {
         validator.validate(AmendForeignPropertyAnnualSubmissionRawData(validNino, validBusinessId, validTaxYear, Json.parse(
-          """{
-            |   "foreignProperty": [
-            |   {}
-            |   ]
-            |}""".stripMargin))) shouldBe List(RuleIncorrectOrEmptyBodyError)
+          """
+            |{
+            |   "foreignProperty": [{}]
+            |}
+          """.stripMargin
+        ))) shouldBe List(RuleIncorrectOrEmptyBodyError)
       }
       "an empty /foreignFhlEea/allowances is submitted" in {
         validator.validate(AmendForeignPropertyAnnualSubmissionRawData(validNino, validBusinessId, validTaxYear, Json.parse(
-          """{
+          """
+            |{
             |   "foreignFhlEea": {
             |     "allowances": {}
             |   }
-            |}""".stripMargin))) shouldBe List(RuleIncorrectOrEmptyBodyError)
+            |}
+          """.stripMargin
+        ))) shouldBe List(RuleIncorrectOrEmptyBodyError)
       }
       "an empty /foreignFhlEea/adjustments is submitted" in {
         validator.validate(AmendForeignPropertyAnnualSubmissionRawData(validNino, validBusinessId, validTaxYear, Json.parse(
-          """{
+          """
+            |{
             |   "foreignFhlEea": {
             |     "adjustments": {}
             |   }
-            |}""".stripMargin))) shouldBe List(RuleIncorrectOrEmptyBodyError)
+            |}
+          """.stripMargin
+        ))) shouldBe List(RuleIncorrectOrEmptyBodyError)
       }
-      "an empty /foreignProperty/allowances is submitted" in {
+      "an empty /foreignProperty/0/allowances is submitted" in {
         validator.validate(AmendForeignPropertyAnnualSubmissionRawData(validNino, validBusinessId, validTaxYear, Json.parse(
-          """{
+          """
+            |{
             |   "foreignProperty": [
             |     {
             |     "allowances": {}
             |     }
             |   ]
-            |}""".stripMargin))) shouldBe List(RuleIncorrectOrEmptyBodyError)
+            |}
+          """.stripMargin
+        ))) shouldBe List(RuleIncorrectOrEmptyBodyError)
       }
-      "an empty /foreignProperty/adjustments is submitted" in {
+      "an empty /foreignProperty/0/adjustments is submitted" in {
         validator.validate(AmendForeignPropertyAnnualSubmissionRawData(validNino, validBusinessId, validTaxYear, Json.parse(
-          """{
+          """
+            |{
             |   "foreignProperty": [
             |     {
             |     "adjustments": {}
             |     }
             |   ]
-            |}""".stripMargin))) shouldBe List(RuleIncorrectOrEmptyBodyError)
+            |}
+          """.stripMargin
+        ))) shouldBe List(RuleIncorrectOrEmptyBodyError)
       }
     }
     "return ValueFormatError" when {
@@ -290,7 +317,7 @@ class AmendForeignPropertyAnnualSubmissionValidatorSpec extends UnitSpec {
             |      }
             |   ]
             |}
-            |""".stripMargin
+          """.stripMargin
         ))) shouldBe List(ValueFormatError.copy(paths = Some(Seq("/foreignFhlEea/adjustments/privateUseAdjustment"))))
       }
       "/foreignFhlEea/adjustments/balancingCharge is invalid" in {
@@ -331,7 +358,7 @@ class AmendForeignPropertyAnnualSubmissionValidatorSpec extends UnitSpec {
             |      }
             |   ]
             |}
-            |""".stripMargin
+          """.stripMargin
         ))) shouldBe List(ValueFormatError.copy(paths = Some(Seq("/foreignFhlEea/adjustments/balancingCharge"))))
       }
       "/foreignFhlEea/allowances/annualInvestmentAllowance is invalid" in {
@@ -372,7 +399,7 @@ class AmendForeignPropertyAnnualSubmissionValidatorSpec extends UnitSpec {
             |      }
             |   ]
             |}
-            |""".stripMargin
+          """.stripMargin
         ))) shouldBe List(ValueFormatError.copy(paths = Some(Seq("/foreignFhlEea/allowances/annualInvestmentAllowance"))))
       }
       "/foreignFhlEea/allowances/otherCapitalAllowance is invalid" in {
@@ -413,7 +440,7 @@ class AmendForeignPropertyAnnualSubmissionValidatorSpec extends UnitSpec {
             |      }
             |   ]
             |}
-            |""".stripMargin
+          """.stripMargin
         ))) shouldBe List(ValueFormatError.copy(paths = Some(Seq("/foreignFhlEea/allowances/otherCapitalAllowance"))))
       }
       "/foreignFhlEea/allowances/propertyAllowance is invalid" in {
@@ -454,7 +481,7 @@ class AmendForeignPropertyAnnualSubmissionValidatorSpec extends UnitSpec {
             |      }
             |   ]
             |}
-            |""".stripMargin
+          """.stripMargin
         ))) shouldBe List(ValueFormatError.copy(paths = Some(Seq("/foreignFhlEea/allowances/propertyAllowance"))))
       }
       "/foreignFhlEea/allowances/electricChargePointAllowance is invalid" in {
@@ -495,10 +522,10 @@ class AmendForeignPropertyAnnualSubmissionValidatorSpec extends UnitSpec {
             |      }
             |   ]
             |}
-            |""".stripMargin
+          """.stripMargin
         ))) shouldBe List(ValueFormatError.copy(paths = Some(Seq("/foreignFhlEea/allowances/electricChargePointAllowance"))))
       }
-      "/foreignProperty/adjustments/privateUseAdjustment is invalid" in {
+      "/foreignProperty/0/adjustments/privateUseAdjustment is invalid" in {
         validator.validate(AmendForeignPropertyAnnualSubmissionRawData(validNino, validBusinessId, validTaxYear, Json.parse(
           """
             |{
@@ -536,10 +563,10 @@ class AmendForeignPropertyAnnualSubmissionValidatorSpec extends UnitSpec {
             |      }
             |   ]
             |}
-            |""".stripMargin
+          """.stripMargin
         ))) shouldBe List(ValueFormatError.copy(paths = Some(Seq("/foreignProperty/0/adjustments/privateUseAdjustment"))))
       }
-      "/foreignProperty/adjustments/balancingCharge is invalid" in {
+      "/foreignProperty/0/adjustments/balancingCharge is invalid" in {
         validator.validate(AmendForeignPropertyAnnualSubmissionRawData(validNino, validBusinessId, validTaxYear, Json.parse(
           """
             |{
@@ -577,10 +604,10 @@ class AmendForeignPropertyAnnualSubmissionValidatorSpec extends UnitSpec {
             |      }
             |   ]
             |}
-            |""".stripMargin
+          """.stripMargin
         ))) shouldBe List(ValueFormatError.copy(paths = Some(Seq("/foreignProperty/0/adjustments/balancingCharge"))))
       }
-      "/foreignProperty/allowances/annualInvestmentAllowance is invalid" in {
+      "/foreignProperty/0/allowances/annualInvestmentAllowance is invalid" in {
         validator.validate(AmendForeignPropertyAnnualSubmissionRawData(validNino, validBusinessId, validTaxYear, Json.parse(
           """
             |{
@@ -618,10 +645,10 @@ class AmendForeignPropertyAnnualSubmissionValidatorSpec extends UnitSpec {
             |      }
             |   ]
             |}
-            |""".stripMargin
+          """.stripMargin
         ))) shouldBe List(ValueFormatError.copy(paths = Some(Seq("/foreignProperty/0/allowances/annualInvestmentAllowance"))))
       }
-      "/foreignProperty/allowances/costOfReplacingDomesticItems is invalid" in {
+      "/foreignProperty/0/allowances/costOfReplacingDomesticItems is invalid" in {
         validator.validate(AmendForeignPropertyAnnualSubmissionRawData(validNino, validBusinessId, validTaxYear, Json.parse(
           """
             |{
@@ -659,10 +686,10 @@ class AmendForeignPropertyAnnualSubmissionValidatorSpec extends UnitSpec {
             |      }
             |   ]
             |}
-            |""".stripMargin
+          """.stripMargin
         ))) shouldBe List(ValueFormatError.copy(paths = Some(Seq("/foreignProperty/0/allowances/costOfReplacingDomesticItems"))))
       }
-      "/foreignProperty/allowances/zeroEmissionsGoodsVehicleAllowance is invalid" in {
+      "/foreignProperty/0/allowances/zeroEmissionsGoodsVehicleAllowance is invalid" in {
         validator.validate(AmendForeignPropertyAnnualSubmissionRawData(validNino, validBusinessId, validTaxYear, Json.parse(
           """
             |{
@@ -700,10 +727,10 @@ class AmendForeignPropertyAnnualSubmissionValidatorSpec extends UnitSpec {
             |      }
             |   ]
             |}
-            |""".stripMargin
+          """.stripMargin
         ))) shouldBe List(ValueFormatError.copy(paths = Some(Seq("/foreignProperty/0/allowances/zeroEmissionsGoodsVehicleAllowance"))))
       }
-      "/foreignProperty/allowances/propertyAllowance is invalid" in {
+      "/foreignProperty/0/allowances/propertyAllowance is invalid" in {
         validator.validate(AmendForeignPropertyAnnualSubmissionRawData(validNino, validBusinessId, validTaxYear, Json.parse(
           """
             |{
@@ -741,10 +768,10 @@ class AmendForeignPropertyAnnualSubmissionValidatorSpec extends UnitSpec {
             |      }
             |   ]
             |}
-            |""".stripMargin
+          """.stripMargin
         ))) shouldBe List(ValueFormatError.copy(paths = Some(Seq("/foreignProperty/0/allowances/propertyAllowance"))))
       }
-      "/foreignProperty/allowances/otherCapitalAllowance is invalid" in {
+      "/foreignProperty/0/allowances/otherCapitalAllowance is invalid" in {
         validator.validate(AmendForeignPropertyAnnualSubmissionRawData(validNino, validBusinessId, validTaxYear, Json.parse(
           """
             |{
@@ -782,10 +809,26 @@ class AmendForeignPropertyAnnualSubmissionValidatorSpec extends UnitSpec {
             |      }
             |   ]
             |}
-            |""".stripMargin
+          """.stripMargin
         ))) shouldBe List(ValueFormatError.copy(paths = Some(Seq("/foreignProperty/0/allowances/otherCapitalAllowance"))))
       }
-      "/foreignProperty/allowances/electricChargePointAllowance is invalid" in {
+      "/foreignProperty/0/allowances/structureAndBuildingAllowance is invalid" in {
+        validator.validate(AmendForeignPropertyAnnualSubmissionRawData(validNino, validBusinessId, validTaxYear, Json.parse(
+          """
+            |{
+            |   "foreignProperty":[
+            |      {
+            |         "countryCode":"FRA",
+            |         "allowances":{
+            |            "structureAndBuildingAllowance":-5.99
+            |         }
+            |      }
+            |   ]
+            |}
+          """.stripMargin
+        ))) shouldBe List(ValueFormatError.copy(paths = Some(Seq("/foreignProperty/0/allowances/structureAndBuildingAllowance"))))
+      }
+      "/foreignProperty/0/allowances/electricChargePointAllowance is invalid" in {
         validator.validate(AmendForeignPropertyAnnualSubmissionRawData(validNino, validBusinessId, validTaxYear, Json.parse(
           """
             |{
@@ -823,7 +866,7 @@ class AmendForeignPropertyAnnualSubmissionValidatorSpec extends UnitSpec {
             |      }
             |   ]
             |}
-            |""".stripMargin
+          """.stripMargin
         ))) shouldBe List(ValueFormatError.copy(paths = Some(Seq("/foreignProperty/0/allowances/electricChargePointAllowance"))))
       }
     }
@@ -866,7 +909,7 @@ class AmendForeignPropertyAnnualSubmissionValidatorSpec extends UnitSpec {
             |      }
             |   ]
             |}
-            |""".stripMargin
+          """.stripMargin
         ))) shouldBe List(CountryCodeFormatError.copy(paths = Some(Seq("/foreignProperty/0/countryCode"))))
       }
       "the three character code isn't ISO 3166-1 alpha-3" in {
@@ -907,13 +950,14 @@ class AmendForeignPropertyAnnualSubmissionValidatorSpec extends UnitSpec {
             |      }
             |   ]
             |}
-            |""".stripMargin
+          """.stripMargin
         ))) shouldBe List(RuleCountryCodeError.copy(paths = Some(Seq("/foreignProperty/0/countryCode"))))
       }
     }
     "return multiple errors" when {
       "every path parameter format is invalid" in {
-        validator.validate(AmendForeignPropertyAnnualSubmissionRawData("AJAA12", "XASOE12", "201219", requestBodyJson)) shouldBe List(NinoFormatError, BusinessIdFormatError, TaxYearFormatError)
+        validator.validate(AmendForeignPropertyAnnualSubmissionRawData("AJAA12", "XASOE12", "201219", requestBodyJson)) shouldBe
+          List(NinoFormatError, BusinessIdFormatError, TaxYearFormatError)
       }
       "every field in the body is invalid" in {
         validator.validate(AmendForeignPropertyAnnualSubmissionRawData(validNino, validBusinessId, validTaxYear, Json.parse(
@@ -948,32 +992,34 @@ class AmendForeignPropertyAnnualSubmissionValidatorSpec extends UnitSpec {
             |            "zeroEmissionsGoodsVehicleAllowance":-1,
             |            "propertyAllowance":-1,
             |            "otherCapitalAllowance":-1,
-            |            "structureAndBuildingAllowance":-1,
+            |            "structureAndBuildingAllowance":-1.99,
             |            "electricChargePointAllowance":-1
             |         }
             |      }
             |   ]
             |}
-            |""".stripMargin
+          """.stripMargin
         ))) shouldBe List(
           CountryCodeFormatError.copy(paths = Some(Seq(
             "/foreignProperty/0/countryCode"
           ))),
           ValueFormatError.copy(paths = Some(Seq(
-          "/foreignFhlEea/adjustments/privateUseAdjustment",
-          "/foreignFhlEea/adjustments/balancingCharge",
-          "/foreignFhlEea/allowances/annualInvestmentAllowance",
-          "/foreignFhlEea/allowances/otherCapitalAllowance",
-          "/foreignFhlEea/allowances/propertyAllowance",
-          "/foreignFhlEea/allowances/electricChargePointAllowance",
-          "/foreignProperty/0/adjustments/privateUseAdjustment",
-          "/foreignProperty/0/adjustments/balancingCharge",
-          "/foreignProperty/0/allowances/annualInvestmentAllowance",
-          "/foreignProperty/0/allowances/costOfReplacingDomesticItems",
-          "/foreignProperty/0/allowances/zeroEmissionsGoodsVehicleAllowance",
-          "/foreignProperty/0/allowances/propertyAllowance",
-          "/foreignProperty/0/allowances/otherCapitalAllowance",
-          "/foreignProperty/0/allowances/electricChargePointAllowance"))))
+            "/foreignFhlEea/adjustments/privateUseAdjustment",
+            "/foreignFhlEea/adjustments/balancingCharge",
+            "/foreignFhlEea/allowances/annualInvestmentAllowance",
+            "/foreignFhlEea/allowances/otherCapitalAllowance",
+            "/foreignFhlEea/allowances/propertyAllowance",
+            "/foreignFhlEea/allowances/electricChargePointAllowance",
+            "/foreignProperty/0/adjustments/privateUseAdjustment",
+            "/foreignProperty/0/adjustments/balancingCharge",
+            "/foreignProperty/0/allowances/annualInvestmentAllowance",
+            "/foreignProperty/0/allowances/costOfReplacingDomesticItems",
+            "/foreignProperty/0/allowances/zeroEmissionsGoodsVehicleAllowance",
+            "/foreignProperty/0/allowances/propertyAllowance",
+            "/foreignProperty/0/allowances/otherCapitalAllowance",
+            "/foreignProperty/0/allowances/structureAndBuildingAllowance",
+            "/foreignProperty/0/allowances/electricChargePointAllowance")
+          )))
       }
     }
   }

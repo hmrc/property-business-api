@@ -63,6 +63,7 @@ class AmendForeignPropertyAnnualSubmissionControllerISpec extends IntegrationBas
         |        "zeroEmissionsGoodsVehicleAllowance":100.25,
         |        "propertyAllowance":100.25,
         |        "otherCapitalAllowance":100.25,
+        |        "structureAndBuildingAllowance":101.25,
         |        "electricChargePointAllowance":100.25
         |      }
         |    }
@@ -167,12 +168,14 @@ class AmendForeignPropertyAnnualSubmissionControllerISpec extends IntegrationBas
             |        "zeroEmissionsGoodsVehicleAllowance":100.256436,
             |        "propertyAllowance":100.256436,
             |        "otherCapitalAllowance":100.256436,
+            |        "structureAndBuildingAllowance":101.995,
             |        "electricChargePointAllowance":100.256436
             |      }
             |    }
             |  ]
             |}
-            |""".stripMargin)
+          """.stripMargin
+        )
 
         val allInvalidFieldsRequestError: List[MtdError] = List(
           CountryCodeFormatError.copy(
@@ -197,6 +200,7 @@ class AmendForeignPropertyAnnualSubmissionControllerISpec extends IntegrationBas
               "/foreignProperty/0/allowances/zeroEmissionsGoodsVehicleAllowance",
               "/foreignProperty/0/allowances/propertyAllowance",
               "/foreignProperty/0/allowances/otherCapitalAllowance",
+              "/foreignProperty/0/allowances/structureAndBuildingAllowance",
               "/foreignProperty/0/allowances/electricChargePointAllowance"
             ))
           )
@@ -250,12 +254,14 @@ class AmendForeignPropertyAnnualSubmissionControllerISpec extends IntegrationBas
             |        "zeroEmissionsGoodsVehicleAllowance":100.25,
             |        "propertyAllowance":100.25,
             |        "otherCapitalAllowance":100.25,
+            |        "structureAndBuildingAllowance":102.35,
             |        "electricChargePointAllowance":100.25
             |      }
             |    }
             |  ]
             |}
-            |""".stripMargin)
+          """.stripMargin
+        )
 
         val allInvalidValueRequestBodyJson: JsValue = Json.parse(
           """
@@ -286,6 +292,7 @@ class AmendForeignPropertyAnnualSubmissionControllerISpec extends IntegrationBas
             |        "zeroEmissionsGoodsVehicleAllowance":100.256436,
             |        "propertyAllowance":100.256436,
             |        "otherCapitalAllowance":100.256436,
+            |        "structureAndBuildingAllowance": -100.25,
             |        "electricChargePointAllowance":100.256436
             |      }
             |    }
@@ -323,6 +330,7 @@ class AmendForeignPropertyAnnualSubmissionControllerISpec extends IntegrationBas
             |        "zeroEmissionsGoodsVehicleAllowance":100.25,
             |        "propertyAllowance":100.25,
             |        "otherCapitalAllowance":100.25,
+            |        "structureAndBuildingAllowance": 170.75,
             |        "electricChargePointAllowance":100.25
             |      }
             |    }
@@ -347,6 +355,7 @@ class AmendForeignPropertyAnnualSubmissionControllerISpec extends IntegrationBas
             "/foreignProperty/0/allowances/zeroEmissionsGoodsVehicleAllowance",
             "/foreignProperty/0/allowances/propertyAllowance",
             "/foreignProperty/0/allowances/otherCapitalAllowance",
+            "/foreignProperty/0/allowances/structureAndBuildingAllowance",
             "/foreignProperty/0/allowances/electricChargePointAllowance"
           ))
         )

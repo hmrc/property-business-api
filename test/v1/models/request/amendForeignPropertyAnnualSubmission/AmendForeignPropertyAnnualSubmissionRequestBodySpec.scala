@@ -16,7 +16,7 @@
 
 package v1.models.request.amendForeignPropertyAnnualSubmission
 
-import play.api.libs.json.Json
+import play.api.libs.json.{JsValue, Json}
 import support.UnitSpec
 import v1.models.request.amendForeignPropertyAnnualSubmission.foreignFhlEea.{ForeignFhlEea, ForeignFhlEeaAdjustments, ForeignFhlEeaAllowances}
 import v1.models.request.amendForeignPropertyAnnualSubmission.foreignProperty.{ForeignPropertyAdjustments, ForeignPropertyAllowances, ForeignPropertyEntry}
@@ -24,7 +24,7 @@ import v1.models.utils.JsonErrorValidators
 
 class AmendForeignPropertyAnnualSubmissionRequestBodySpec extends UnitSpec with JsonErrorValidators {
 
-  val amendForeignPropertyAnnualSubmissionRequestBody =
+  val amendForeignPropertyAnnualSubmissionRequestBody: AmendForeignPropertyAnnualSubmissionRequestBody =
     AmendForeignPropertyAnnualSubmissionRequestBody(
       Some(ForeignFhlEea(
         Some(ForeignFhlEeaAdjustments(
@@ -50,11 +50,12 @@ class AmendForeignPropertyAnnualSubmissionRequestBodySpec extends UnitSpec with 
           Some(100.25),
           Some(100.25),
           Some(100.25),
+          Some(160.85),
           Some(100.25)
         )))))
     )
 
-  val amendForeignPropertyAnnualSubmissionRequestBodyMinimum =
+  val amendForeignPropertyAnnualSubmissionRequestBodyMinimum: AmendForeignPropertyAnnualSubmissionRequestBody =
     AmendForeignPropertyAnnualSubmissionRequestBody(
       None,
       Some(Seq(ForeignPropertyEntry(
@@ -63,7 +64,7 @@ class AmendForeignPropertyAnnualSubmissionRequestBodySpec extends UnitSpec with 
         None)))
     )
 
-  val jsonBody = Json.parse(
+  val jsonBody: JsValue = Json.parse(
     """
       |{
       |   "foreignFhlEea":
@@ -93,14 +94,16 @@ class AmendForeignPropertyAnnualSubmissionRequestBodySpec extends UnitSpec with 
       |            "zeroEmissionsGoodsVehicleAllowance":100.25,
       |            "propertyAllowance":100.25,
       |            "otherCapitalAllowance":100.25,
+      |            "structureAndBuildingAllowance":160.85,
       |            "electricChargePointAllowance":100.25
       |         }
       |      }
       |   ]
       |}
-      |""".stripMargin)
+    """.stripMargin
+  )
 
-  val jsonBodyMinimum = Json.parse(
+  val jsonBodyMinimum: JsValue = Json.parse(
     """
       |{
       |   "foreignProperty":[
@@ -109,7 +112,8 @@ class AmendForeignPropertyAnnualSubmissionRequestBodySpec extends UnitSpec with 
       |      }
       |   ]
       |}
-      |""".stripMargin)
+    """.stripMargin
+  )
 
   "reads" when {
     "passed a valid JSON" should {

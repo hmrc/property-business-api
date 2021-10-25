@@ -16,23 +16,24 @@
 
 package v1.models.request.amendForeignPropertyAnnualSubmission.foreignProperty
 
-import play.api.libs.json.Json
+import play.api.libs.json.{JsValue, Json}
 import support.UnitSpec
 import v1.models.utils.JsonErrorValidators
 
 class ForeignPropertyAllowancesSpec extends UnitSpec with JsonErrorValidators{
 
-  val foreignPropertyAllowances =
+  val foreignPropertyAllowances: ForeignPropertyAllowances =
     ForeignPropertyAllowances(
       Some(100.25),
       Some(100.25),
       Some(100.25),
       Some(100.25),
       Some(100.25),
+      Some(150.75),
       Some(100.25)
     )
 
-  val jsonBody = Json.parse(
+  val jsonBody: JsValue = Json.parse(
     """
       |{
       |    "annualInvestmentAllowance":100.25,
@@ -40,14 +41,16 @@ class ForeignPropertyAllowancesSpec extends UnitSpec with JsonErrorValidators{
       |    "zeroEmissionsGoodsVehicleAllowance":100.25,
       |    "propertyAllowance":100.25,
       |    "otherCapitalAllowance":100.25,
+      |    "structureAndBuildingAllowance":150.75,
       |    "electricChargePointAllowance":100.25
       |}
-      |""".stripMargin)
+    """.stripMargin
+  )
 
-  val emptyJson = Json.parse(
+  val emptyJson: JsValue = Json.parse(
     """
       |{}
-      |""".stripMargin
+    """.stripMargin
   )
 
   "reads" when {

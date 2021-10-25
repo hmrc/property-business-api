@@ -59,6 +59,7 @@ class AmendForeignPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec {
       Some(5000.99),
       Some(5000.99),
       Some(5000.99),
+      Some(4000.99),
       Some(5000.99)
     ))
   )
@@ -101,11 +102,9 @@ class AmendForeignPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec {
           body = body,
           requiredHeaders = requiredIfsHeadersPut,
           excludedHeaders = Seq("AnotherHeader" -> "HeaderValue")
-        )
-        .returns(Future.successful(outcome))
+        ).returns(Future.successful(outcome))
 
       await(connector.amendForeignPropertyAnnualSubmission(request)) shouldBe outcome
-
     }
   }
 }

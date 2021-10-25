@@ -25,34 +25,43 @@ trait HateoasLinks {
 
   //Domain URIs
 
-  private def foreignPropertyUri(appConfig: AppConfig, nino: String, businessId: String): String =
+  private def propertyUri(appConfig: AppConfig, nino: String, businessId: String): String =
     s"/${appConfig.apiGatewayContext}/$nino/$businessId/period"
 
-  private def foreignPropertyAnnualSubmissionUri(appConfig: AppConfig, nino: String, businessId: String, taxYear: String): String =
-    s"/${appConfig.apiGatewayContext}/$nino/$businessId/annual/$taxYear"
-
-  private def foreignPropertySubmissionUri(appConfig: AppConfig, nino: String, businessId: String, submissionId: String): String =
+  private def propertySubmissionUri(appConfig: AppConfig, nino: String, businessId: String, submissionId: String): String =
     s"/${appConfig.apiGatewayContext}/$nino/$businessId/period/$submissionId"
 
-  //API resource links
+  private def propertyAnnualSubmissionUri(appConfig: AppConfig, nino: String, businessId: String, taxYear: String): String =
+    s"/${appConfig.apiGatewayContext}/$nino/$businessId/annual/$taxYear"
+
+  private def ukPropertyAnnualSubmissionUri(appConfig: AppConfig, nino: String, businessId: String, taxYear: String): String =
+    s"/${appConfig.apiGatewayContext}/uk/$nino/$businessId/annual/$taxYear"
+
+  // API resource links
   def listForeignPropertiesPeriodSummaries(appConfig: AppConfig, nino: String, businessId: String, rel: String = SELF): Link =
-    Link(href = foreignPropertyUri(appConfig, nino, businessId), method = GET, rel = rel)
+    Link(href = propertyUri(appConfig, nino, businessId), method = GET, rel = rel)
 
   def createForeignPropertyPeriodSummary(appConfig: AppConfig, nino: String, businessId: String): Link =
-    Link(href = foreignPropertyUri(appConfig, nino, businessId), method = POST, rel = CREATE_PROPERTY_PERIOD_SUMMARY)
+    Link(href = propertyUri(appConfig, nino, businessId), method = POST, rel = CREATE_PROPERTY_PERIOD_SUMMARY)
 
   def amendForeignPropertyPeriodSummary(appConfig: AppConfig, nino: String, businessId: String, submissionId: String): Link =
-    Link(href = foreignPropertySubmissionUri(appConfig, nino, businessId, submissionId), method = PUT, rel = AMEND_PROPERTY_PERIOD_SUMMARY)
+    Link(href = propertySubmissionUri(appConfig, nino, businessId, submissionId), method = PUT, rel = AMEND_PROPERTY_PERIOD_SUMMARY)
 
   def retrieveForeignPropertyPeriodSummary(appConfig: AppConfig, nino: String, businessId: String, submissionId: String): Link =
-    Link(href = foreignPropertySubmissionUri(appConfig, nino, businessId, submissionId), method = GET, rel = SELF)
+    Link(href = propertySubmissionUri(appConfig, nino, businessId, submissionId), method = GET, rel = SELF)
 
   def retrieveForeignPropertyAnnualSubmission(appConfig: AppConfig, nino: String, businessId: String, taxYear: String): Link =
-    Link(href = foreignPropertyAnnualSubmissionUri(appConfig, nino, businessId, taxYear), method = GET, rel = SELF)
+    Link(href = propertyAnnualSubmissionUri(appConfig, nino, businessId, taxYear), method = GET, rel = SELF)
 
   def amendForeignPropertyAnnualSubmission(appConfig: AppConfig, nino: String, businessId: String, taxYear: String): Link =
-    Link(href = foreignPropertyAnnualSubmissionUri(appConfig, nino, businessId, taxYear), method = PUT, rel = AMEND_PROPERTY_ANNUAL_SUBMISSION)
+    Link(href = propertyAnnualSubmissionUri(appConfig, nino, businessId, taxYear), method = PUT, rel = AMEND_PROPERTY_ANNUAL_SUBMISSION)
 
-  def deleteForeignPropertyAnnualSubmission(appConfig: AppConfig, nino: String, businessId: String, taxYear: String): Link =
-    Link(href = foreignPropertyAnnualSubmissionUri(appConfig, nino, businessId, taxYear), method = DELETE, rel = DELETE_PROPERTY_ANNUAL_SUBMISSION)
+  def deletePropertyAnnualSubmission(appConfig: AppConfig, nino: String, businessId: String, taxYear: String): Link =
+    Link(href = propertyAnnualSubmissionUri(appConfig, nino, businessId, taxYear), method = DELETE, rel = DELETE_PROPERTY_ANNUAL_SUBMISSION)
+
+  def retrieveUkPropertyAnnualSubmission(appConfig: AppConfig, nino: String, businessId: String, taxYear: String): Link =
+    Link(href = ukPropertyAnnualSubmissionUri(appConfig, nino, businessId, taxYear), method = GET, rel = SELF)
+
+  def amendUkPropertyAnnualSubmission(appConfig: AppConfig, nino: String, businessId: String, taxYear: String): Link =
+    Link(href = ukPropertyAnnualSubmissionUri(appConfig, nino, businessId, taxYear), method = PUT, rel = AMEND_UK_PROPERTY_ANNUAL_SUBMISSION)
 }

@@ -35,7 +35,7 @@ object RetrieveForeignPropertyAnnualSubmissionResponse extends HateoasLinks {
       Seq(
         amendForeignPropertyAnnualSubmission(appConfig, nino, businessId, taxYear),
         retrieveForeignPropertyAnnualSubmission(appConfig, nino, businessId, taxYear),
-        deleteForeignPropertyAnnualSubmission(appConfig, nino, businessId, taxYear)
+        deletePropertyAnnualSubmission(appConfig, nino, businessId, taxYear)
       )
     }
   }

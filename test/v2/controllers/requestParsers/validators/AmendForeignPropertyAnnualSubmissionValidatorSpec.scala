@@ -16,12 +16,13 @@
 
 package v2.controllers.requestParsers.validators
 
+import mocks.MockAppConfig
 import play.api.libs.json.Json
 import support.UnitSpec
 import v2.models.errors._
 import v2.models.request.amendForeignPropertyAnnualSubmission.AmendForeignPropertyAnnualSubmissionRawData
 
-class AmendForeignPropertyAnnualSubmissionValidatorSpec extends UnitSpec {
+class AmendForeignPropertyAnnualSubmissionValidatorSpec extends UnitSpec with MockAppConfig {
 
   private val validNino       = "AA123456A"
   private val validBusinessId = "XAIS12345678901"
@@ -66,7 +67,8 @@ class AmendForeignPropertyAnnualSubmissionValidatorSpec extends UnitSpec {
       |""".stripMargin
   )
 
-  val validator = new AmendForeignPropertyAnnualSubmissionValidator()
+  MockAppConfig.minimumTaxV2Foreign returns 2021
+  val validator = new AmendForeignPropertyAnnualSubmissionValidator(mockAppConfig)
 
   "running a validation" should {
     "return no errors" when {

@@ -43,5 +43,8 @@ trait MockAppConfig extends MockFactory {
 
     def confidenceLevelCheckEnabled: CallHandler[ConfidenceLevelConfig] =
       (mockAppConfig.confidenceLevelConfig _: () => ConfidenceLevelConfig).expects()
+
+    def minimumTaxV2Foreign: CallHandler[Int] = (mockAppConfig.minimumTaxV2Foreign _).expects()
+    def minimumTaxV2Uk: CallHandler[Int]      = (mockAppConfig.minimumTaxV2Uk _).expects()
   }
 }

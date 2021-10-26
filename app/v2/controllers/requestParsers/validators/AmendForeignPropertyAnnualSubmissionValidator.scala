@@ -16,6 +16,7 @@
 
 package v2.controllers.requestParsers.validators
 
+import config.AppConfig
 import v2.controllers.requestParsers.validators.validations._
 import v2.models.errors._
 import v2.models.request.amendForeignPropertyAnnualSubmission.foreignFhlEea.ForeignFhlEea
@@ -25,16 +26,20 @@ import v2.models.request.amendForeignPropertyAnnualSubmission.{
   AmendForeignPropertyAnnualSubmissionRequestBody
 }
 
-class AmendForeignPropertyAnnualSubmissionValidator extends Validator[AmendForeignPropertyAnnualSubmissionRawData] {
+import javax.inject.{ Inject, Singleton }
 
-  private val validationSet = List(parameterFormatValidation, bodyFormatValidation, bodyFieldValidation)
+@Singleton
+class AmendForeignPropertyAnnualSubmissionValidator @Inject()(appConfig: AppConfig) extends Validator[AmendForeignPropertyAnnualSubmissionRawData] {
+
+  private lazy val minTaxYear = appConfig.minimumTaxV2Foreign
+  private val validationSet   = List(parameterFormatValidation, bodyFormatValidation, bodyFieldValidation)
 
   private def parameterFormatValidation: AmendForeignPropertyAnnualSubmissionRawData => List[List[MtdError]] =
     (data: AmendForeignPropertyAnnualSubmissionRawData) => {
       List(
         NinoValidation.validate(data.nino),
         BusinessIdValidation.validate(data.businessId),
-        TaxYearValidation.validate(data.taxYear)
+        TaxYearValidation.validate(minTaxYear, data.taxYear)
       )
     }
 

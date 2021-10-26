@@ -22,6 +22,9 @@ import v2.models.request.common.foreignPropertyEntry.{ ForeignPropertyEntry, For
 import v2.models.request.amendForeignPropertyPeriodSummary.{ AmendForeignPropertyPeriodSummaryRawData, AmendForeignPropertyPeriodSummaryRequestBody }
 import v2.models.request.common.foreignFhlEea.{ ForeignFhlEea, ForeignFhlEeaExpenditure }
 
+import javax.inject.Singleton
+
+@Singleton
 class AmendForeignPropertyPeriodSummaryValidator extends Validator[AmendForeignPropertyPeriodSummaryRawData] {
 
   private val validationSet = List(parameterFormatValidation, bodyFormatValidation, bodyFieldValidation)

@@ -20,6 +20,9 @@ import v2.controllers.requestParsers.validators.validations._
 import v2.models.errors.MtdError
 import v2.models.request.listForeignPropertiesPeriodSummaries.ListForeignPropertiesPeriodSummariesRawData
 
+import javax.inject.Singleton
+
+@Singleton
 class ListForeignPropertiesPeriodSummariesValidator extends Validator[ListForeignPropertiesPeriodSummariesRawData] {
 
   private val validationSet = List(parameterFormatValidation, parameterRuleValidation)

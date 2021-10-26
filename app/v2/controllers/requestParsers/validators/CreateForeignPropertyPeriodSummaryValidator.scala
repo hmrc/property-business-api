@@ -25,6 +25,9 @@ import v2.models.request.createForeignPropertyPeriodSummary.{
 }
 import v2.models.request.common.foreignFhlEea.{ ForeignFhlEea, ForeignFhlEeaExpenditure }
 
+import javax.inject.Singleton
+
+@Singleton
 class CreateForeignPropertyPeriodSummaryValidator extends Validator[CreateForeignPropertyPeriodSummaryRawData] {
 
   private val validationSet = List(parameterFormatValidation, bodyFormatValidation, bodyFieldFormatValidation, dateRangeValidation)

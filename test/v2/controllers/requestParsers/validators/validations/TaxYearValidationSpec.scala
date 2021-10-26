@@ -21,37 +21,32 @@ import v2.models.errors.{ RuleTaxYearNotSupportedError, RuleTaxYearRangeInvalidE
 
 class TaxYearValidationSpec extends UnitSpec {
 
-  val taxYear = "2021-22"
+  val minTaxYear = 2021
+  val taxYear    = "2021-22"
 
   "validate" should {
     "return no errors" when {
       "a valid taxYear is supplied" in {
-        val validationResult = TaxYearValidation.validate(taxYear)
+        val validationResult = TaxYearValidation.validate(minTaxYear, taxYear)
 
-        validationResult.isEmpty shouldBe true
+        validationResult shouldBe Nil
       }
     }
     "return an error" when {
       "a taxYear with an invalid format is supplied" in {
-        val validationResult = TaxYearValidation.validate("2019/20")
+        val validationResult = TaxYearValidation.validate(minTaxYear, "2019/20")
 
-        validationResult.isEmpty shouldBe false
-        validationResult.length shouldBe 1
-        validationResult.head shouldBe TaxYearFormatError
+        validationResult shouldBe List(TaxYearFormatError)
       }
       "a taxYear with a range longer than 1 is supplied" in {
-        val validationResult = TaxYearValidation.validate("2021-23")
+        val validationResult = TaxYearValidation.validate(minTaxYear, "2021-23")
 
-        validationResult.isEmpty shouldBe false
-        validationResult.length shouldBe 1
-        validationResult.head shouldBe RuleTaxYearRangeInvalidError
+        validationResult shouldBe List(RuleTaxYearRangeInvalidError)
       }
       "a taxYear that isn't the minimum is supplied" in {
-        val validationResult = TaxYearValidation.validate("2020-21")
+        val validationResult = TaxYearValidation.validate(2022, taxYear)
 
-        validationResult.isEmpty shouldBe false
-        validationResult.length shouldBe 1
-        validationResult.head shouldBe RuleTaxYearNotSupportedError
+        validationResult shouldBe List(RuleTaxYearNotSupportedError)
       }
     }
   }

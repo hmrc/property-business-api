@@ -20,6 +20,9 @@ import v2.controllers.requestParsers.validators.validations.{ BusinessIdValidati
 import v2.models.errors.MtdError
 import v2.models.request.retrieveForeignPropertyPeriodSummary.RetrieveForeignPropertyPeriodSummaryRawData
 
+import javax.inject.Singleton
+
+@Singleton
 class RetrieveForeignPropertyPeriodSummaryValidator extends Validator[RetrieveForeignPropertyPeriodSummaryRawData] {
 
   private val validationSet = List(parameterFormatValidation)

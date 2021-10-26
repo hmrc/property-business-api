@@ -37,6 +37,9 @@ trait AppConfig {
   def apiStatus(version: String): String
   def featureSwitch: Option[Configuration]
   def endpointsEnabled(version: String): Boolean
+
+  def minimumTaxV2Foreign: Int
+  def minimumTaxV2Uk: Int
 }
 
 @Singleton
@@ -57,6 +60,9 @@ class AppConfigImpl @Inject()(config: ServicesConfig, configuration: Configurati
   def apiStatus(version: String): String           = config.getString(s"api.$version.status")
   def featureSwitch: Option[Configuration]         = configuration.getOptional[Configuration](s"feature-switch")
   def endpointsEnabled(version: String): Boolean   = config.getBoolean(s"api.$version.endpoints.enabled")
+
+  val minimumTaxV2Foreign: Int = config.getInt("minimum-tax-year.version-2.foreign")
+  val minimumTaxV2Uk: Int      = config.getInt("minimum-tax-year.version-2.uk")
 }
 
 case class ConfidenceLevelConfig(definitionEnabled: Boolean, authValidationEnabled: Boolean)

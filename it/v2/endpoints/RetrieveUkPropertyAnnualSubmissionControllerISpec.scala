@@ -31,12 +31,12 @@ class RetrieveUkPropertyAnnualSubmissionControllerISpec extends V2IntegrationBas
 
     val nino: String = "AA123456A"
     val businessId: String = "XAIS12345678910"
-    val taxYear: String = "2021-22"
+    val taxYear: String = "2022-23"
 
     val responseBody: JsValue = Json.parse(
-      """
+      s"""
         |{
-        |  "submittedOn": "2020-06-17T10:53:38Z",
+        |  "submittedOn": "2022-06-17T10:53:38Z",
         |  "ukFhlProperty": {
         |     "allowances": {
         |        "annualInvestmentAllowance": 123.45,
@@ -110,17 +110,17 @@ class RetrieveUkPropertyAnnualSubmissionControllerISpec extends V2IntegrationBas
         |  },
         |  "links": [
         |    {
-        |      "href": "/individuals/business/property/uk/AA123456A/XAIS12345678910/annual/2021-22",
+        |      "href": "/individuals/business/property/uk/AA123456A/XAIS12345678910/annual/$taxYear",
         |      "method": "PUT",
         |      "rel": "amend-uk-property-annual-submission"
         |    },
         |    {
-        |      "href": "/individuals/business/property/uk/AA123456A/XAIS12345678910/annual/2021-22",
+        |      "href": "/individuals/business/property/uk/AA123456A/XAIS12345678910/annual/$taxYear",
         |      "method": "GET",
         |      "rel": "self"
         |    },
         |    {
-        |      "href": "/individuals/business/property/uk/AA123456A/XAIS12345678910/annual/2021-22",
+        |      "href": "/individuals/business/property/AA123456A/XAIS12345678910/annual/$taxYear",
         |      "method": "DELETE",
         |      "rel": "delete-property-annual-submission"
         |    }
@@ -132,7 +132,7 @@ class RetrieveUkPropertyAnnualSubmissionControllerISpec extends V2IntegrationBas
     val downstreamResponseBody: JsValue = Json.parse(
       """
         |{
-        |   "submittedOn":"2020-06-17T10:53:38Z",
+        |   "submittedOn":"2022-06-17T10:53:38Z",
         |   "ukFhlProperty":{
         |      "allowances":{
         |         "annualInvestmentAllowance":123.45,
@@ -210,9 +210,15 @@ class RetrieveUkPropertyAnnualSubmissionControllerISpec extends V2IntegrationBas
 
     def setupStubs(): StubMapping
 
-    def uri: String = s"/$nino/$businessId/annual/$taxYear"
+    def uri: String = s"/uk/$nino/$businessId/annual/$taxYear"
 
-    def ifsUri: String = s"/income-tax/business/property/uk/$nino/$businessId/annual/$taxYear"
+    def ifsUri: String = s"/income-tax/business/property/annual"
+
+    def ifsQueryParams: Map[String, String] = Map(
+      "taxableEntityId" -> nino,
+      "incomeSourceId" -> businessId,
+      "taxYear" -> taxYear
+    )
 
     def request(): WSRequest = {
       setupStubs()
@@ -239,7 +245,7 @@ class RetrieveUkPropertyAnnualSubmissionControllerISpec extends V2IntegrationBas
           AuditStub.audit()
           AuthStub.authorised()
           MtdIdLookupStub.ninoFound(nino)
-          IfsStub.onSuccess(IfsStub.GET, ifsUri, Status.OK, downstreamResponseBody)
+          IfsStub.onSuccess(IfsStub.GET, ifsUri, ifsQueryParams, Status.OK, downstreamResponseBody)
         }
 
         val response: WSResponse = await(request().get())
@@ -274,10 +280,10 @@ class RetrieveUkPropertyAnnualSubmissionControllerISpec extends V2IntegrationBas
         }
 
         val input = Seq(
-          ("AA123", "XAIS12345678910", "2021-22", Status.BAD_REQUEST, NinoFormatError),
+          ("AA123", "XAIS12345678910", "2022-23", Status.BAD_REQUEST, NinoFormatError),
           ("AA123456A", "XAIS12345678910", "2020", Status.BAD_REQUEST, TaxYearFormatError),
-          ("AA123456A", "203100", "2021-22", Status.BAD_REQUEST, BusinessIdFormatError),
-          ("AA123456A", "XAIS12345678910", "2020-22", Status.BAD_REQUEST, RuleTaxYearRangeInvalidError),
+          ("AA123456A", "203100", "2022-23", Status.BAD_REQUEST, BusinessIdFormatError),
+          ("AA123456A", "XAIS12345678910", "2020-23", Status.BAD_REQUEST, RuleTaxYearRangeInvalidError),
           ("AA123456A", "XAIS12345678910", "2019-20", Status.BAD_REQUEST, RuleTaxYearNotSupportedError)
         )
 
@@ -294,7 +300,7 @@ class RetrieveUkPropertyAnnualSubmissionControllerISpec extends V2IntegrationBas
               AuditStub.audit()
               AuthStub.authorised()
               MtdIdLookupStub.ninoFound(nino)
-              IfsStub.onError(IfsStub.GET, ifsUri, ifsStatus, errorBody(ifsCode))
+              IfsStub.onError(IfsStub.GET, ifsUri, ifsQueryParams, ifsStatus, errorBody(ifsCode))
             }
 
             val response: WSResponse = await(request().get())
@@ -321,7 +327,7 @@ class RetrieveUkPropertyAnnualSubmissionControllerISpec extends V2IntegrationBas
         override val downstreamResponseBody: JsValue = Json.parse(
           """
             |{
-            |  "submittedOn":"2020-06-17T10:53:38Z",
+            |  "submittedOn":"2022-06-17T10:53:38Z",
             |  "foreignProperty": [
             |    {
             |      "countryCode": "FRA",
@@ -347,7 +353,7 @@ class RetrieveUkPropertyAnnualSubmissionControllerISpec extends V2IntegrationBas
           AuditStub.audit()
           AuthStub.authorised()
           MtdIdLookupStub.ninoFound(nino)
-          IfsStub.onSuccess(IfsStub.GET, ifsUri, Status.OK, downstreamResponseBody)
+          IfsStub.onSuccess(IfsStub.GET, ifsUri, ifsQueryParams, Status.OK, downstreamResponseBody)
         }
 
         val response: WSResponse = await(request().get())

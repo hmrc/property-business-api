@@ -1,0 +1,348 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "title": "Retrieve a UK property business annual submission",
+  "description": "Retrieve a UK property business annual submission",
+  "type": "object",
+  "properties": {
+    "submittedOn": {
+      "type": "string",
+      "description": "The date the UK property was submitted, in the format YYYY-MM-DDThh:mm:ss.SSSZ",
+      "example": "2020-07-07T10:59:47.544Z"
+    },
+    "ukFhlProperty": {
+      "type": "object",
+      "description": "Object holding the adjustments and allowances of the user's Furnished Holiday Letting (FHL) in the United Kingdom.",
+      "properties": {
+        "adjustments": {
+          "type": "object",
+          "description": "Object holding UK FHL Property Adjustments.",
+          "properties": {
+            "lossBroughtForward": {
+              "type": "number",
+              "description": "Loss brought forward from earlier years\n\nThe value must be between 0 and 99999999999.99 up to 2 decimal places.",
+              "example": "5000.99"
+            },
+            "privateUseAdjustment": {
+              "type": "number",
+              "description": "Any expenses incurred not solely for the property business.\n\nThe value must be between 0 and 99999999999.99 up to 2 decimal places.",
+              "example": "5000.99"
+            },
+            "balancingCharge": {
+              "type": "number",
+              "description": "A charge for an item, for which capital allowance was claimed, but has since been sold, given away or is no longer in use.\n\nThe value must be between 0 and 99999999999.99 up to 2 decimal places.",
+              "example": "5000.99"
+            },
+            "periodOfGraceAdjustment": {
+              "type": "boolean",
+              "description": "A boolean to identify  a property which didn't qualify for FHL this year but qualified the previous year.\n\nThe value must be true or false.",
+              "example": "true"
+            },
+            "businessPremisesRenovationAllowanceBalancingCharges": {
+              "type": "number",
+              "description": "Income from the sale or grant of a long lease for a premium of renovated business premises within 7 years of first use.\n\nThe value must be between 0 and 99999999999.99 up to 2 decimal places.",
+              "example": "5000.99"
+            },
+            "nonResidentLandlord": {
+              "type": "boolean",
+              "description": "A boolean to identify  that the user is a Non-Resident Landlord.\n\nThe value must be true or false",
+              "example": "false"
+            },
+            "rentARoom": {
+              "type": "object",
+              "description": "Object holding UK FHL Rent A Room income shared.",
+              "properties": {
+                "jointlyLet": {
+                  "type": "boolean",
+                  "description": "A boolean to identify that the Rent A Room income (RAR) is shared with another individual.\n\nThe value must be true or false",
+                  "example": "true"
+                }
+              },
+              "required": [
+                "jointlyLet"
+              ]
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "nonResidentLandlord",
+            "periodOfGraceAdjustment"
+          ]
+        },
+        "allowances": {
+          "type": "object",
+          "description": "Object holding UK FHL Property Allowances.",
+          "properties": {
+            "annualInvestmentAllowance": {
+              "type": "number",
+              "description": "The amount claimed on equipment bought (except cars) up to maximum annual amount.\n\nThe value must be between 0 and 99999999999.99 up to 2 decimal places.",
+              "example": "5000.99"
+            },
+            "businessPremisesRenovationAllowance": {
+              "type": "number",
+              "description": "The allowance amount for renovation or conversion of derelict business properties.\n\nThe value must be between 0 and 99999999999.99 up to 2 decimal places.",
+              "example": "5000.99"
+            },
+            "otherCapitalAllowance": {
+              "type": "number",
+              "description": "All other capital allowances.\n\nThe value must be between 0 and 99999999999.99 up to 2 decimal places.",
+              "example": "5000.99"
+            },
+            "propertyIncomeAllowance": {
+              "type": "number",
+              "description": "The amount of Tax exemption for individuals with income from land or property.\n\nThe value must be between 0 and 99999999999.99 up to 2 decimal places.",
+              "example": "5000.99"
+            },
+            "electricChargePointAllowance": {
+              "type": "number",
+              "description": "The expenditure incurred on electric charge-point equipment.\n\nThe value must be between 0 and 99999999999.99 up to 2 decimal places.",
+              "example": "5000.99"
+            },
+            "zeroEmissionsCarAllowance": {
+              "type": "number",
+              "description": "The amount of zero emissions car allowance.\n\nThe value must be between 0 and 99999999999.99 up to 2 decimal places.",
+              "example": "5000.99"
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "ukNonFhlProperty": {
+      "type": "object",
+      "description": "Object holding allowances and adjustments for UK property business - excluding Furnished Holiday Lettings (FHL) - for the period.",
+      "properties": {
+        "adjustments": {
+          "type": "object",
+          "description": "Object holding UK Non FHL Property Adjustments.",
+          "properties": {
+            "lossBroughtForward": {
+              "type": "number",
+              "description": "Loss brought forward from earlier years\n\nThe value must be between 0 and 99999999999.99 up to 2 decimal places.",
+              "example": "5000.99"
+            },
+            "balancingCharge": {
+              "type": "number",
+              "description": "If an item for which capital allowance was claimed has been sold, given away or is no longer in use.\n\nThe value must be between 0 and 99999999999.99 up to 2 decimal places.",
+              "example": "5000.99"
+            },
+            "privateUseAdjustment": {
+              "type": "number",
+              "description": "Any expenses incurred that were not solely for the property business.\n\nThe value must be between 0 and 99999999999.99 up to 2 decimal places.",
+              "example": "5000.99"
+            },
+            "businessPremisesRenovationAllowanceBalancingCharges": {
+              "type": "number",
+              "description": "Income from the sale or grant of a long lease for a premium of renovated business premises within 7 years of first use.\n\nThe value must be between 0 and 99999999999.99 up to 2 decimal places.",
+              "example": "5000.99"
+            },
+            "nonResidentLandlord": {
+              "type": "boolean",
+              "description": "A boolean to identify that the user is a Non-Resident Landlord.\n\nThe value must be true or false",
+              "example": "false"
+            },
+            "rentARoom": {
+              "type": "object",
+              "description": "Object holding Non UK FHL Rent A Room income shared.",
+              "properties": {
+                "jointlyLet": {
+                  "type": "boolean",
+                  "description": "A boolean to identify that the Rent A Room income (RAR) is shared with another individual.\n\nThe value must be true or false.",
+                  "example": "true"
+                }
+              },
+              "required": [
+                "jointlyLet"
+              ]
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "nonResidentLandlord"
+          ]
+        },
+        "allowances": {
+          "type": "object",
+          "description": "Object holding UK Non FHL Property Allowances.",
+          "properties": {
+            "annualInvestmentAllowance": {
+              "type": "number",
+              "description": "The amount claimed on equipment bought (except cars) up to maximum annual amount.\n\nThe value must be between 0 and 99999999999.99 up to 2 decimal places.",
+              "example": "5000.99"
+            },
+            "zeroEmissionGoodsVehicleAllowance": {
+              "type": "number",
+              "description": "The amount of Zero emission goods vehicle allowance for goods vehicles purchased for business use.\n\nThe value must be between 0 and 99999999999.99 up to 2 decimal places.",
+              "example": "5000.99"
+            },
+            "businessPremisesRenovationAllowance": {
+              "type": "number",
+              "description": "Allowance for renovation or conversion of derelict business properties.\n\nThe value must be between 0 and 99999999999.99 up to 2 decimal places.",
+              "example": "5000.99"
+            },
+            "otherCapitalAllowance": {
+              "type": "number",
+              "description": "All other capital allowances.\n\nThe value must be between 0 and 99999999999.99 up to 2 decimal places.",
+              "example": "5000.99"
+            },
+            "costOfReplacingDomesticGoods": {
+              "type": "number",
+              "description": "Cost of Replacing Domestic Items - formerly Wear and Tear allowance.\n\nThe value must be between 0 and 99999999999.99 up to 2 decimal places.",
+              "example": "5000.99"
+            },
+            "propertyIncomeAllowance": {
+              "type": "number",
+              "description": "The amount of Tax exemption for individuals with income from land or property.\n\nThe value must be between 0 and 99999999999.99 up to 2 decimal places.",
+              "example": "5000.99"
+            },
+            "electricChargePointAllowance": {
+              "type": "number",
+              "description": "The expenditure incurred on electric charge-point equipment.\n\nThe value must be between 0 and 99999999999.99 up to 2 decimal places.",
+              "example": "5000.99"
+            },
+            "zeroEmissionsCarAllowance": {
+              "type": "number",
+              "description": "The amount of zero emissions car allowance.\n\nThe value must be between 0 and 99999999999.99 up to 2 decimal places.",
+              "example": "5000.99"
+            },
+            "structuredBuildingAllowance": {
+              "type":  "array",
+              "description": "Details about structured building allowance.",
+              "items": {
+               "type": "object",
+                "properties": {
+                  "amount": {
+                    "type": "number",
+                    "description": "The amount of structured building allowance.\n\nThe value must be between 0 and 99999999999.99 up to 2 decimal places.",
+                    "example": "5000.99"
+                  },
+                  "firstYear": {
+                    "type": "object",
+                    "description": "Object holding UK Non FHL structured building allowance details.",
+                    "properties": {
+                      "qualifyingDate": {
+                        "type": "string",
+                        "description": "The date qualified for structured building allowance\n\nMust conform to the format YYYY-MM-DD.",
+                        "example": "2020-01-01"
+                      },
+                      "qualifyingAmountExpenditure": {
+                        "type": "number",
+                        "description": "The amount of qualifying expenditure\n\nThe value must be between 0 and 99999999999.99 up to 2 decimal places.",
+                        "example": "5000.99"
+                      }
+                    },
+                    "required": [
+                      "qualifyingDate",
+                      "qualifyingAmountExpenditure"
+                    ]
+                  },
+                  "building": {
+                    "type": "object",
+                    "desdription": "Object holding UK Non FHL structured building details.\nPost code is mandatory and minimum one of name and number field must be supplied.",
+                    "properties": {
+                      "name": {
+                        "type": "string",
+                        "description": "The name of the building.\n\nMust conform to the regular expression ^[0-9a-zA-Z{À-˿’}\\- _&`():.'^]{1,90}$",
+                        "example": "Green Oak’s"
+                      },
+                      "number": {
+                        "type": "string",
+                        "description": "The number of the building.\n\nMust conform to the regular expression ^[0-9a-zA-Z{À-˿’}\\- _&`():.'^]{1,90}$",
+                        "example": "16AD"
+                      },
+                      "postcode": {
+                        "type": "string",
+                        "description": "The postcode of the building.\n\nMust conform to the regular expression ^[0-9a-zA-Z{À-˿’}\\- _&`():.'^]{1,90}$",
+                        "example": "GF49JH"
+                      }
+                    },
+                    "required": [
+                      "postcode"
+                    ]
+                  }
+                },
+                "required": [
+                  "amount",
+                  "building"
+                ]
+              }
+            },
+            "enhancedStructuredBuildingAllowance": {
+              "type": "array",
+              "description": "Details about enhanced structured building allowance.",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "amount": {
+                    "type": "number",
+                    "description": "The amount of enhanced structured building allowance.\n\nThe value must be between 0 and 99999999999.99 up to 2 decimal places.",
+                    "example": "5000.99"
+                  },
+                  "firstYear": {
+                    "type": "object",
+                    "description": "Object holding UK Non FHL enhanced structured building allowance details.",
+                    "properties": {
+                      "qualifyingDate": {
+                        "type": "string",
+                        "description": "The date qualified for structured building allowance\n\nMust conform to the format YYYY-MM-DD.",
+                        "example": "2020-01-01"
+                      },
+                      "qualifyingAmountExpenditure": {
+                        "type": "number",
+                        "description": "The amount of qualifying expenditure\n\nThe value must be between 0 and 99999999999.99 up to 2 decimal places.",
+                        "example": "5000.99"
+                      }
+                    },
+                    "required": [
+                      "qualifyingDate",
+                      "qualifyingAmountExpenditure"
+                    ]
+                  },
+                  "building": {
+                    "type": "object",
+                    "desdription": "Object holding UK Non FHL structured building details.\nPost code is mandatory and minimum one of name and number field must be supplied.",
+                    "properties": {
+                      "name": {
+                        "type": "string",
+                        "description": "The name of the building.\n\nMust conform to the regular expression ^[0-9a-zA-Z{À-˿’}\\- _&`():.'^]{1,90}$",
+                        "example": "Green Oak’s"
+                      },
+                      "number": {
+                        "type": "string",
+                        "description": "The number of the building.\n\nMust conform to the regular expression ^[0-9a-zA-Z{À-˿’}\\- _&`():.'^]{1,90}$",
+                        "example": "16AD"
+                      },
+                      "postcode": {
+                        "type": "string",
+                        "description": "The postcode of the building.\n\nMust conform to the regular expression ^[0-9a-zA-Z{À-˿’}\\- _&`():.'^]{1,90}$",
+                        "example": "GF49JH"
+                      }
+                    },
+                    "required": [
+                      "postcode"
+                    ]
+                  }
+                },
+                "required": [
+                  "amount",
+                  "building"
+                ]
+              }
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "zeroEmissionsCarAllowance": {
+      "type": "number",
+      "description": "The amount of zero emissions car allowance.\n\nThe value must be between 0 and 99999999999.99 up to 2 decimal places.",
+      "example": "5000.99"
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "submittedOn"
+  ]
+}

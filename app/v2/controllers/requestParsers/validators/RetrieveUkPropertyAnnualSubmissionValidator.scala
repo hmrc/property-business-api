@@ -16,22 +16,28 @@
 
 package v2.controllers.requestParsers.validators
 
-import v2.controllers.requestParsers.validators.validations.{BusinessIdValidation, NinoValidation, TaxYearValidation}
+import com.google.inject.Inject
+import config.AppConfig
+import v2.controllers.requestParsers.validators.validations.{ BusinessIdValidation, NinoValidation, TaxYearValidation }
 import v2.models.errors.MtdError
 import v2.models.request.retrieveUkPropertyAnnualSubmission.RetrieveUkPropertyAnnualSubmissionRawData
 
-class RetrieveUkPropertyAnnualSubmissionValidator extends Validator[RetrieveUkPropertyAnnualSubmissionRawData] {
+import javax.inject.Singleton
 
-  private val validationSet = List(parameterFormatValidation)
+@Singleton
+class RetrieveUkPropertyAnnualSubmissionValidator @Inject()(appConfig: AppConfig) extends Validator[RetrieveUkPropertyAnnualSubmissionRawData] {
+
+  private lazy val minTaxYear = appConfig.minimumTaxV2Uk
+  private val validationSet   = List(parameterFormatValidation)
 
   private def parameterFormatValidation: RetrieveUkPropertyAnnualSubmissionRawData => List[List[MtdError]] =
     (data: RetrieveUkPropertyAnnualSubmissionRawData) => {
-    List(
-      NinoValidation.validate(data.nino),
-      BusinessIdValidation.validate(data.businessId),
-      TaxYearValidation.validate(data.taxYear)
-    )
-  }
+      List(
+        NinoValidation.validate(data.nino),
+        BusinessIdValidation.validate(data.businessId),
+        TaxYearValidation.validate(minTaxYear, data.taxYear)
+      )
+    }
 
   override def validate(data: RetrieveUkPropertyAnnualSubmissionRawData): List[MtdError] = {
     run(validationSet, data).distinct

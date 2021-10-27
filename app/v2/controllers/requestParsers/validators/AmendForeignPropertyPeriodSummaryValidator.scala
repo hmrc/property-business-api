@@ -18,30 +18,35 @@ package v2.controllers.requestParsers.validators
 
 import v2.controllers.requestParsers.validators.validations._
 import v2.models.errors._
-import v2.models.request.common.foreignPropertyEntry.{ForeignPropertyEntry, ForeignPropertyExpenditure}
-import v2.models.request.amendForeignPropertyPeriodSummary.{AmendForeignPropertyPeriodSummaryRawData, AmendForeignPropertyPeriodSummaryRequestBody}
-import v2.models.request.common.foreignFhlEea.{ForeignFhlEea, ForeignFhlEeaExpenditure}
+import v2.models.request.common.foreignPropertyEntry.{ ForeignPropertyEntry, ForeignPropertyExpenditure }
+import v2.models.request.amendForeignPropertyPeriodSummary.{ AmendForeignPropertyPeriodSummaryRawData, AmendForeignPropertyPeriodSummaryRequestBody }
+import v2.models.request.common.foreignFhlEea.{ ForeignFhlEea, ForeignFhlEeaExpenditure }
 
 class AmendForeignPropertyPeriodSummaryValidator extends Validator[AmendForeignPropertyPeriodSummaryRawData] {
 
   private val validationSet = List(parameterFormatValidation, bodyFormatValidation, bodyFieldValidation)
 
-  private def parameterFormatValidation: AmendForeignPropertyPeriodSummaryRawData => List[List[MtdError]] = (data: AmendForeignPropertyPeriodSummaryRawData) => {
-    List(
-      NinoValidation.validate(data.nino),
-      BusinessIdValidation.validate(data.businessId),
-      SubmissionIdValidation.validate(data.submissionId)
-    )
-  }
+  private def parameterFormatValidation: AmendForeignPropertyPeriodSummaryRawData => List[List[MtdError]] =
+    (data: AmendForeignPropertyPeriodSummaryRawData) => {
+      List(
+        NinoValidation.validate(data.nino),
+        BusinessIdValidation.validate(data.businessId),
+        SubmissionIdValidation.validate(data.submissionId)
+      )
+    }
 
   private def bodyFormatValidation: AmendForeignPropertyPeriodSummaryRawData => List[List[MtdError]] = { data =>
     val baseValidation = List(JsonFormatValidation.validate[AmendForeignPropertyPeriodSummaryRequestBody](data.body, RuleIncorrectOrEmptyBodyError))
 
     val extraValidation: List[List[MtdError]] = {
-      data.body.asOpt[AmendForeignPropertyPeriodSummaryRequestBody].map(_.isEmpty).map {
-        case true => List(List(RuleIncorrectOrEmptyBodyError))
-        case false => NoValidationErrors
-      }.getOrElse(NoValidationErrors)
+      data.body
+        .asOpt[AmendForeignPropertyPeriodSummaryRequestBody]
+        .map(_.isEmpty)
+        .map {
+          case true  => List(List(RuleIncorrectOrEmptyBodyError))
+          case false => NoValidationErrors
+        }
+        .getOrElse(NoValidationErrors)
     }
 
     baseValidation ++ extraValidation
@@ -50,19 +55,26 @@ class AmendForeignPropertyPeriodSummaryValidator extends Validator[AmendForeignP
   private def bodyFieldValidation: AmendForeignPropertyPeriodSummaryRawData => List[List[MtdError]] = { data =>
     val body = data.body.as[AmendForeignPropertyPeriodSummaryRequestBody]
 
-    List(flattenErrors(List(
-      body.foreignFhlEea.map(validateForeignFhlEea).getOrElse(NoValidationErrors),
-      body.foreignProperty.map(_.zipWithIndex.toList.flatMap {
-        case (entry, i) => validateForeignProperty(entry, i)
-      }).getOrElse(NoValidationErrors),
-      body.foreignFhlEea.flatMap(_.expenditure.map(validateForeignFhlEeaConsolidatedExpenses)).getOrElse(NoValidationErrors),
-      body.foreignProperty.map(
-        _.toList.zipWithIndex.map {
-          case (entry, i) =>
-            entry.expenditure.map(expenditure => validateForeignPropertyConsolidatedExpenses(expenditure, i)).getOrElse(NoValidationErrors)
-        }
-      ).getOrElse(Nil).flatten
-    )))
+    List(
+      flattenErrors(
+        List(
+          body.foreignFhlEea.map(validateForeignFhlEea).getOrElse(NoValidationErrors),
+          body.foreignProperty
+            .map(_.zipWithIndex.toList.flatMap {
+              case (entry, i) => validateForeignProperty(entry, i)
+            })
+            .getOrElse(NoValidationErrors),
+          body.foreignFhlEea.flatMap(_.expenditure.map(validateForeignFhlEeaConsolidatedExpenses)).getOrElse(NoValidationErrors),
+          body.foreignProperty
+            .map(
+              _.toList.zipWithIndex.map {
+                case (entry, i) =>
+                  entry.expenditure.map(expenditure => validateForeignPropertyConsolidatedExpenses(expenditure, i)).getOrElse(NoValidationErrors)
+              }
+            )
+            .getOrElse(Nil)
+            .flatten
+        )))
   }
 
   private def validateForeignFhlEea(foreignFhlEea: ForeignFhlEea): List[MtdError] = {

@@ -16,7 +16,7 @@
 
 package v2.controllers.requestParsers.validators
 
-import v2.controllers.requestParsers.validators.validations.{BusinessIdValidation, NinoValidation, TaxYearValidation}
+import v2.controllers.requestParsers.validators.validations.{ BusinessIdValidation, NinoValidation, TaxYearValidation }
 import v2.models.errors.MtdError
 import v2.models.request.retrieveUkPropertyAnnualSubmission.RetrieveUkPropertyAnnualSubmissionRawData
 
@@ -26,12 +26,12 @@ class RetrieveUkPropertyAnnualSubmissionValidator extends Validator[RetrieveUkPr
 
   private def parameterFormatValidation: RetrieveUkPropertyAnnualSubmissionRawData => List[List[MtdError]] =
     (data: RetrieveUkPropertyAnnualSubmissionRawData) => {
-    List(
-      NinoValidation.validate(data.nino),
-      BusinessIdValidation.validate(data.businessId),
-      TaxYearValidation.validate(data.taxYear)
-    )
-  }
+      List(
+        NinoValidation.validate(data.nino),
+        BusinessIdValidation.validate(data.businessId),
+        TaxYearValidation.validate(data.taxYear)
+      )
+    }
 
   override def validate(data: RetrieveUkPropertyAnnualSubmissionRawData): List[MtdError] = {
     run(validationSet, data).distinct

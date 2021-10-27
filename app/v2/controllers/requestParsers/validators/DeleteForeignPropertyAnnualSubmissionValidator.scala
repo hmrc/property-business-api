@@ -16,7 +16,7 @@
 
 package v2.controllers.requestParsers.validators
 
-import v2.controllers.requestParsers.validators.validations.{BusinessIdValidation, NinoValidation, TaxYearValidation}
+import v2.controllers.requestParsers.validators.validations.{ BusinessIdValidation, NinoValidation, TaxYearValidation }
 import v2.models.errors.MtdError
 import v2.models.request.deleteForeignPropertyAnnualSubmission.DeleteForeignPropertyAnnualSubmissionRawData
 
@@ -26,12 +26,12 @@ class DeleteForeignPropertyAnnualSubmissionValidator extends Validator[DeleteFor
 
   private def parameterFormatValidation: DeleteForeignPropertyAnnualSubmissionRawData => List[List[MtdError]] =
     (data: DeleteForeignPropertyAnnualSubmissionRawData) => {
-    List(
-      NinoValidation.validate(data.nino),
-      BusinessIdValidation.validate(data.businessId),
-      TaxYearValidation.validate(data.taxYear)
-    )
-  }
+      List(
+        NinoValidation.validate(data.nino),
+        BusinessIdValidation.validate(data.businessId),
+        TaxYearValidation.validate(data.taxYear)
+      )
+    }
 
   override def validate(data: DeleteForeignPropertyAnnualSubmissionRawData): List[MtdError] = {
     run(validationSet, data).distinct

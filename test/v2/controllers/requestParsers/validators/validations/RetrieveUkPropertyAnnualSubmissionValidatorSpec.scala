@@ -23,9 +23,9 @@ import v2.models.request.retrieveUkPropertyAnnualSubmission.RetrieveUkPropertyAn
 
 class RetrieveUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec {
 
-  private val validNino = "AA123456A"
+  private val validNino       = "AA123456A"
   private val validBusinessId = "XAIS12345678901"
-  private val validTaxYear = "2021-22"
+  private val validTaxYear    = "2021-22"
 
   private val validator = new RetrieveUkPropertyAnnualSubmissionValidator
 
@@ -46,10 +46,12 @@ class RetrieveUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec {
         validator.validate(RetrieveUkPropertyAnnualSubmissionRawData(validNino, validBusinessId, "2021/22")) shouldBe List(TaxYearFormatError)
       }
       "an unsupported taxYear is supplied" in {
-        validator.validate(RetrieveUkPropertyAnnualSubmissionRawData(validNino, validBusinessId, "2019-20")) shouldBe List(RuleTaxYearNotSupportedError)
+        validator.validate(RetrieveUkPropertyAnnualSubmissionRawData(validNino, validBusinessId, "2019-20")) shouldBe List(
+          RuleTaxYearNotSupportedError)
       }
       "an invalid taxYear range is supplied" in {
-        validator.validate(RetrieveUkPropertyAnnualSubmissionRawData(validNino, validBusinessId, "2021-23")) shouldBe List(RuleTaxYearRangeInvalidError)
+        validator.validate(RetrieveUkPropertyAnnualSubmissionRawData(validNino, validBusinessId, "2021-23")) shouldBe List(
+          RuleTaxYearRangeInvalidError)
       }
       "multiple format errors are made" in {
         validator.validate(RetrieveUkPropertyAnnualSubmissionRawData("Nino", "BusinessId", "2021/22")) shouldBe

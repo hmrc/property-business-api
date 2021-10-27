@@ -152,17 +152,6 @@ traits:
                   description: The supplied Business ID does not represent a UK property business.
                   value:
                     code: RULE_TYPE_OF_BUSINESS_INCORRECT
-  ruleBuildingNameNumber:
-      responses:
-        400:
-          body:
-            application/json:
-              type: types.errorResponse
-              examples:
-                ruleBuildingNameNumber:
-                  description: One of building name or number must be supplied.
-                  value:
-                    code: RULE_BUILDING_NAME_NUMBER
   ruleToDateBeforeFromDate:
       responses:
         400:

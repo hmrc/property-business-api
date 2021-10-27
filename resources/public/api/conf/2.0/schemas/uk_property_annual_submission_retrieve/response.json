@@ -110,7 +110,7 @@
     },
     "ukNonFhlProperty": {
       "type": "object",
-      "description": "Object  holding allowances and adjustments for UK property business - excluding Furnished Holiday Lettings (FHL) - for the period.",
+      "description": "Object holding allowances and adjustments for UK property business - excluding Furnished Holiday Lettings (FHL) - for the period.",
       "properties": {
         "adjustments": {
           "type": "object",
@@ -128,7 +128,7 @@
             },
             "privateUseAdjustment": {
               "type": "number",
-              "description": "Any expenses incurred not solely for the property business.\n\nThe value must be between 0 and 99999999999.99 up to 2 decimal places.",
+              "description": "Any expenses incurred that were not solely for the property business.\n\nThe value must be between 0 and 99999999999.99 up to 2 decimal places.",
               "example": "5000.99"
             },
             "businessPremisesRenovationAllowanceBalancingCharges": {
@@ -177,7 +177,7 @@
             },
             "businessPremisesRenovationAllowance": {
               "type": "number",
-              "description": "The allowance amount for renovation or conversion of derelict business properties.\n\nThe value must be between 0 and 99999999999.99 up to 2 decimal places.",
+              "description": "Allowance for renovation or conversion of derelict business properties.\n\nThe value must be between 0 and 99999999999.99 up to 2 decimal places.",
               "example": "5000.99"
             },
             "otherCapitalAllowance": {

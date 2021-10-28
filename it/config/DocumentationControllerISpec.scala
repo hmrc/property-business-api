@@ -19,9 +19,9 @@ package config
 import play.api.http.Status
 import play.api.libs.json.{JsValue, Json}
 import play.api.libs.ws.WSResponse
-import support.IntegrationBaseSpec
+import support.V2IntegrationBaseSpec
 
-class DocumentationControllerISpec extends IntegrationBaseSpec {
+class DocumentationControllerISpec extends V2IntegrationBaseSpec {
 
   val apiDefinitionJson: JsValue = Json.parse(
     """

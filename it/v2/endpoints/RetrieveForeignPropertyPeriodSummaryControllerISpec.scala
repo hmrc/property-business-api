@@ -21,11 +21,11 @@ import play.api.http.HeaderNames.ACCEPT
 import play.api.http.Status
 import play.api.libs.json.{JsValue, Json}
 import play.api.libs.ws.{WSRequest, WSResponse}
-import support.IntegrationBaseSpec
+import support.V2IntegrationBaseSpec
 import v2.models.errors.{BusinessIdFormatError, DownstreamError, MtdError, NinoFormatError, NotFoundError, SubmissionIdFormatError}
 import v2.stubs.{AuditStub, AuthStub, IfsStub, MtdIdLookupStub}
 
-class RetrieveForeignPropertyPeriodSummaryControllerISpec extends IntegrationBaseSpec {
+class RetrieveForeignPropertyPeriodSummaryControllerISpec extends V2IntegrationBaseSpec {
 
   private trait Test {
 

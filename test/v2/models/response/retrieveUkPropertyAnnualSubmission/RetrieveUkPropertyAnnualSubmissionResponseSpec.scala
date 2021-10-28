@@ -16,12 +16,14 @@
 
 package v2.models.response.retrieveUkPropertyAnnualSubmission
 
+import mocks.MockAppConfig
 import play.api.libs.json.{JsValue, Json}
 import support.UnitSpec
+import v2.models.hateoas.{Link, Method}
 import v2.models.response.retrieveUkPropertyAnnualSubmission.ukFhlProperty._
 import v2.models.response.retrieveUkPropertyAnnualSubmission.ukNonFhlProperty._
 
-class RetrieveUkPropertyAnnualSubmissionResponseSpec extends UnitSpec {
+class RetrieveUkPropertyAnnualSubmissionResponseSpec extends UnitSpec with MockAppConfig {
 
   val downstreamJson: JsValue = Json.parse("""
       |{
@@ -281,6 +283,27 @@ class RetrieveUkPropertyAnnualSubmissionResponseSpec extends UnitSpec {
   "writes" should {
     "write a model to JSON" in {
       Json.toJson(model) shouldBe mtdJson
+    }
+  }
+
+  "LinksFactory" should {
+    "produce the correct links" when {
+      "called" in {
+        val data: RetrieveUkPropertyAnnualSubmissionHateoasData =
+          RetrieveUkPropertyAnnualSubmissionHateoasData("myNino", "myBusinessId", "mySubmissionId")
+
+        MockAppConfig.apiGatewayContext.returns("my/context").anyNumberOfTimes()
+
+        RetrieveUkPropertyAnnualSubmissionResponse.RetrieveAnnualSubmissionLinksFactory.links(mockAppConfig, data) shouldBe Seq(
+          Link(href = s"/my/context/uk/${data.nino}/${data.businessId}/annual/${data.taxYear}",
+               method = Method.PUT,
+               rel = "amend-uk-property-annual-submission"),
+          Link(href = s"/my/context/uk/${data.nino}/${data.businessId}/annual/${data.taxYear}", method = Method.GET, rel = "self"),
+          Link(href = s"/my/context/${data.nino}/${data.businessId}/annual/${data.taxYear}",
+               method = Method.DELETE,
+               rel = "delete-property-annual-submission")
+        )
+      }
     }
   }
 }

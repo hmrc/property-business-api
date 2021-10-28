@@ -16,8 +16,11 @@
 
 package v2.models.response.retrieveUkPropertyAnnualSubmission
 
+import config.AppConfig
 import play.api.libs.functional.syntax._
 import play.api.libs.json._
+import v2.hateoas.{HateoasLinks, HateoasLinksFactory}
+import v2.models.hateoas.{HateoasData, Link}
 import v2.models.response.retrieveUkPropertyAnnualSubmission.ukFhlProperty.UkFhlProperty
 import v2.models.response.retrieveUkPropertyAnnualSubmission.ukNonFhlProperty.UkNonFhlProperty
 
@@ -25,7 +28,7 @@ case class RetrieveUkPropertyAnnualSubmissionResponse(submittedOn: String,
                                                       ukFhlProperty: Option[UkFhlProperty],
                                                       ukNonFhlProperty: Option[UkNonFhlProperty])
 
-object RetrieveUkPropertyAnnualSubmissionResponse {
+object RetrieveUkPropertyAnnualSubmissionResponse extends HateoasLinks {
   implicit val writes: OWrites[RetrieveUkPropertyAnnualSubmissionResponse] = Json.writes[RetrieveUkPropertyAnnualSubmissionResponse]
 
   implicit val reads: Reads[RetrieveUkPropertyAnnualSubmissionResponse] = (
@@ -33,4 +36,18 @@ object RetrieveUkPropertyAnnualSubmissionResponse {
       (__ \ "ukFhlProperty").readNullable[UkFhlProperty] and
       (__ \ "ukOtherProperty").readNullable[UkNonFhlProperty]
   )(RetrieveUkPropertyAnnualSubmissionResponse.apply _)
+
+  implicit object RetrieveAnnualSubmissionLinksFactory extends
+    HateoasLinksFactory[RetrieveUkPropertyAnnualSubmissionResponse, RetrieveUkPropertyAnnualSubmissionHateoasData] {
+    override def links(appConfig: AppConfig, data: RetrieveUkPropertyAnnualSubmissionHateoasData): Seq[Link] = {
+      import data._
+      Seq(
+        amendUkPropertyAnnualSubmission(appConfig, nino, businessId, taxYear),
+        retrieveUkPropertyAnnualSubmission(appConfig, nino, businessId, taxYear),
+        deletePropertyAnnualSubmission(appConfig, nino, businessId, taxYear)
+      )
+    }
+  }
 }
+
+case class RetrieveUkPropertyAnnualSubmissionHateoasData(nino: String, businessId: String, taxYear: String) extends HateoasData

@@ -21,11 +21,11 @@ import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import play.api.http.Status
 import play.api.libs.json.{JsObject, Json}
 import play.api.libs.ws.{WSRequest, WSResponse}
-import support.IntegrationBaseSpec
+import support.V1IntegrationBaseSpec
 import v1.models.errors._
 import v1.stubs.{AuditStub, AuthStub, IfsStub, MtdIdLookupStub}
 
-class DeleteForeignPropertyAnnualSubmissionControllerISpec extends IntegrationBaseSpec {
+class DeleteForeignPropertyAnnualSubmissionControllerISpec extends V1IntegrationBaseSpec {
 
   private trait Test {
 

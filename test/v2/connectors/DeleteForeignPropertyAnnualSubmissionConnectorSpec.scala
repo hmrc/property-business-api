@@ -20,23 +20,24 @@ import mocks.MockAppConfig
 import v2.mocks.MockHttpClient
 import v2.models.domain.Nino
 import v2.models.outcomes.ResponseWrapper
-import v2.models.request.deleteForeignPropertyAnnualSubmission.DeleteForeignPropertyAnnualSubmissionRequest
+import v2.models.request.deletePropertyAnnualSubmission.DeletePropertyAnnualSubmissionRequest
 
 import scala.concurrent.Future
 
 class DeleteForeignPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec {
 
-  val nino: String = "AA123456A"
+  val nino: String       = "AA123456A"
   val businessId: String = "XAIS12345678910"
-  val taxYear: String = "2021-22"
+  val taxYear: String    = "2021-22"
 
-  val request: DeleteForeignPropertyAnnualSubmissionRequest = DeleteForeignPropertyAnnualSubmissionRequest(
+  val request: DeletePropertyAnnualSubmissionRequest = DeletePropertyAnnualSubmissionRequest(
     nino = Nino(nino),
     businessId = businessId,
     taxYear = taxYear
   )
 
   class Test extends MockHttpClient with MockAppConfig {
+
     val connector: DeleteForeignPropertyAnnualSubmissionConnector = new DeleteForeignPropertyAnnualSubmissionConnector(
       http = mockHttpClient,
       appConfig = mockAppConfig

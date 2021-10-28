@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-package v2.models.request.deleteForeignPropertyAnnualSubmission
+package v2.models.request.deletePropertyAnnualSubmission
 
 import v2.models.domain.Nino
 
-case class DeleteForeignPropertyAnnualSubmissionRequest(nino: Nino, businessId: String, taxYear: String)
+case class DeletePropertyAnnualSubmissionRequest(nino: Nino, businessId: String, taxYear: String)

@@ -20,7 +20,7 @@ import org.scalamock.handlers.CallHandler1
 import org.scalamock.scalatest.MockFactory
 import v2.controllers.requestParsers.validators.DeleteForeignPropertyAnnualSubmissionValidator
 import v2.models.errors.MtdError
-import v2.models.request.deleteForeignPropertyAnnualSubmission.DeleteForeignPropertyAnnualSubmissionRawData
+import v2.models.request.deletePropertyAnnualSubmission.DeletePropertyAnnualSubmissionRawData
 
 class MockDeleteForeignPropertyAnnualSubmissionValidator extends MockFactory {
 
@@ -28,9 +28,9 @@ class MockDeleteForeignPropertyAnnualSubmissionValidator extends MockFactory {
 
   object MockDeleteForeignPropertyAnnualSubmissionValidator {
 
-    def validate(data: DeleteForeignPropertyAnnualSubmissionRawData): CallHandler1[DeleteForeignPropertyAnnualSubmissionRawData, List[MtdError]] = {
+    def validate(data: DeletePropertyAnnualSubmissionRawData): CallHandler1[DeletePropertyAnnualSubmissionRawData, List[MtdError]] = {
       (mockValidator
-        .validate(_: DeleteForeignPropertyAnnualSubmissionRawData))
+        .validate(_: DeletePropertyAnnualSubmissionRawData))
         .expects(data)
     }
   }

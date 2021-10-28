@@ -19,11 +19,11 @@ package v2.controllers.requestParsers
 import javax.inject.Inject
 import v2.controllers.requestParsers.validators.DeleteForeignPropertyAnnualSubmissionValidator
 import v2.models.domain.Nino
-import v2.models.request.deleteForeignPropertyAnnualSubmission._
+import v2.models.request.deletePropertyAnnualSubmission._
 
 class DeleteForeignPropertyAnnualSubmissionRequestParser @Inject()(val validator: DeleteForeignPropertyAnnualSubmissionValidator)
-  extends RequestParser[DeleteForeignPropertyAnnualSubmissionRawData, DeleteForeignPropertyAnnualSubmissionRequest] {
+    extends RequestParser[DeletePropertyAnnualSubmissionRawData, DeletePropertyAnnualSubmissionRequest] {
 
-  override protected def requestFor(data: DeleteForeignPropertyAnnualSubmissionRawData): DeleteForeignPropertyAnnualSubmissionRequest =
-    DeleteForeignPropertyAnnualSubmissionRequest(Nino(data.nino), data.businessId, data.taxYear)
+  override protected def requestFor(data: DeletePropertyAnnualSubmissionRawData): DeletePropertyAnnualSubmissionRequest =
+    DeletePropertyAnnualSubmissionRequest(Nino(data.nino), data.businessId, data.taxYear)
 }

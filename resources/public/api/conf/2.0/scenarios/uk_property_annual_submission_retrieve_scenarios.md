@@ -9,19 +9,19 @@
     <tbody>
         <tr>
             <td><p>N/A - DEFAULT</p></td>
-            <td><p>Simulate success response with expenditure.</p></td>
+            <td><p>Simulates the scenario where no data is found.</p></td>
         </tr>
         <tr>
             <td><p>UK_PROPERTY</p></td>
-            <td><p>Simulates success response with FHL and Non-FHL properties.</p></td>
+            <td><p>Simulates success response with UK FHL and Non-FHL properties.</p></td>
         </tr>
         <tr>
-            <td><p>FHL_PROPERTY</p></td>
-            <td><p>Simulates success response with FHL property.</p></td>
+            <td><p>UK_FHL_PROPERTY</p></td>
+            <td><p>Simulates success response with UK FHL property.</p></td>
         </tr>
         <tr>
-            <td><p>NON_FHL_PROPERTY</p></td>
-            <td><p>Simulates success response with Non-FHL property.</p></td>
+            <td><p>UK_NON_FHL_PROPERTY</p></td>
+            <td><p>Simulates success response with UK Non-FHL property.</p></td>
         </tr>
     </tbody>
 </table>

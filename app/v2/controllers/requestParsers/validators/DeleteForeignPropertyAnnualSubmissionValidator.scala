@@ -19,18 +19,18 @@ package v2.controllers.requestParsers.validators
 import config.AppConfig
 import v2.controllers.requestParsers.validators.validations.{ BusinessIdValidation, NinoValidation, TaxYearValidation }
 import v2.models.errors.MtdError
-import v2.models.request.deleteForeignPropertyAnnualSubmission.DeleteForeignPropertyAnnualSubmissionRawData
+import v2.models.request.deletePropertyAnnualSubmission.DeletePropertyAnnualSubmissionRawData
 
 import javax.inject.{ Inject, Singleton }
 
 @Singleton
-class DeleteForeignPropertyAnnualSubmissionValidator @Inject()(appConfig: AppConfig) extends Validator[DeleteForeignPropertyAnnualSubmissionRawData] {
+class DeleteForeignPropertyAnnualSubmissionValidator @Inject()(appConfig: AppConfig) extends Validator[DeletePropertyAnnualSubmissionRawData] {
 
   private lazy val minTaxYear = appConfig.minimumTaxV2Foreign
   private val validationSet   = List(parameterFormatValidation)
 
-  private def parameterFormatValidation: DeleteForeignPropertyAnnualSubmissionRawData => List[List[MtdError]] =
-    (data: DeleteForeignPropertyAnnualSubmissionRawData) => {
+  private def parameterFormatValidation: DeletePropertyAnnualSubmissionRawData => List[List[MtdError]] =
+    (data: DeletePropertyAnnualSubmissionRawData) => {
       List(
         NinoValidation.validate(data.nino),
         BusinessIdValidation.validate(data.businessId),
@@ -38,7 +38,7 @@ class DeleteForeignPropertyAnnualSubmissionValidator @Inject()(appConfig: AppCon
       )
     }
 
-  override def validate(data: DeleteForeignPropertyAnnualSubmissionRawData): List[MtdError] = {
+  override def validate(data: DeletePropertyAnnualSubmissionRawData): List[MtdError] = {
     run(validationSet, data).distinct
   }
 }

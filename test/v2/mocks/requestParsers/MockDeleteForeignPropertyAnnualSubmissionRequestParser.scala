@@ -20,15 +20,17 @@ import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
 import v2.controllers.requestParsers.DeleteForeignPropertyAnnualSubmissionRequestParser
 import v2.models.errors.ErrorWrapper
-import v2.models.request.deleteForeignPropertyAnnualSubmission.{DeleteForeignPropertyAnnualSubmissionRawData, DeleteForeignPropertyAnnualSubmissionRequest}
+import v2.models.request.deletePropertyAnnualSubmission.{ DeletePropertyAnnualSubmissionRawData, DeletePropertyAnnualSubmissionRequest }
 
 trait MockDeleteForeignPropertyAnnualSubmissionRequestParser extends MockFactory {
 
-  val mockDeleteForeignPropertyAnnualSubmissionRequestParser: DeleteForeignPropertyAnnualSubmissionRequestParser = mock[DeleteForeignPropertyAnnualSubmissionRequestParser]
+  val mockDeleteForeignPropertyAnnualSubmissionRequestParser: DeleteForeignPropertyAnnualSubmissionRequestParser =
+    mock[DeleteForeignPropertyAnnualSubmissionRequestParser]
 
   object MockDeleteForeignPropertyAnnualSubmissionRequestParser {
-    def parse(data: DeleteForeignPropertyAnnualSubmissionRawData): CallHandler[Either[ErrorWrapper, DeleteForeignPropertyAnnualSubmissionRequest]] = {
-      (mockDeleteForeignPropertyAnnualSubmissionRequestParser.parseRequest(_: DeleteForeignPropertyAnnualSubmissionRawData)(_: String)).expects(data, *)
+
+    def parse(data: DeletePropertyAnnualSubmissionRawData): CallHandler[Either[ErrorWrapper, DeletePropertyAnnualSubmissionRequest]] = {
+      (mockDeleteForeignPropertyAnnualSubmissionRequestParser.parseRequest(_: DeletePropertyAnnualSubmissionRawData)(_: String)).expects(data, *)
     }
   }
 }

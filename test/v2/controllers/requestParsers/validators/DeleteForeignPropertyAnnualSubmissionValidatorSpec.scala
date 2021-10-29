@@ -19,7 +19,7 @@ package v2.controllers.requestParsers.validators
 import mocks.MockAppConfig
 import support.UnitSpec
 import v2.models.errors.{ BusinessIdFormatError, NinoFormatError, RuleTaxYearNotSupportedError, RuleTaxYearRangeInvalidError, TaxYearFormatError }
-import v2.models.request.deleteForeignPropertyAnnualSubmission.DeleteForeignPropertyAnnualSubmissionRawData
+import v2.models.request.deletePropertyAnnualSubmission.DeletePropertyAnnualSubmissionRawData
 
 class DeleteForeignPropertyAnnualSubmissionValidatorSpec extends UnitSpec with MockAppConfig {
 
@@ -33,31 +33,29 @@ class DeleteForeignPropertyAnnualSubmissionValidatorSpec extends UnitSpec with M
   "running a validation" should {
     "return no errors" when {
       "a valid request is supplied" in {
-        validator.validate(DeleteForeignPropertyAnnualSubmissionRawData(validNino, validBusinessId, validTaxYear)) shouldBe Nil
+        validator.validate(DeletePropertyAnnualSubmissionRawData(validNino, validBusinessId, validTaxYear)) shouldBe Nil
       }
     }
     "return a path parameter format error" when {
       "an invalid nino is supplied" in {
-        validator.validate(DeleteForeignPropertyAnnualSubmissionRawData("Walrus", validBusinessId, validTaxYear)) shouldBe List(NinoFormatError)
+        validator.validate(DeletePropertyAnnualSubmissionRawData("Walrus", validBusinessId, validTaxYear)) shouldBe List(NinoFormatError)
       }
       "an invalid businessId is supplied" in {
-        validator.validate(DeleteForeignPropertyAnnualSubmissionRawData(validNino, "Beans", validTaxYear)) shouldBe List(BusinessIdFormatError)
+        validator.validate(DeletePropertyAnnualSubmissionRawData(validNino, "Beans", validTaxYear)) shouldBe List(BusinessIdFormatError)
       }
       "an invalid taxYear format is supplied" in {
-        validator.validate(DeleteForeignPropertyAnnualSubmissionRawData(validNino, validBusinessId, "2021/22")) shouldBe List(TaxYearFormatError)
+        validator.validate(DeletePropertyAnnualSubmissionRawData(validNino, validBusinessId, "2021/22")) shouldBe List(TaxYearFormatError)
       }
       "an unsupported taxYear is supplied" in {
-        validator.validate(DeleteForeignPropertyAnnualSubmissionRawData(validNino, validBusinessId, "2019-20")) shouldBe List(
-          RuleTaxYearNotSupportedError)
+        validator.validate(DeletePropertyAnnualSubmissionRawData(validNino, validBusinessId, "2019-20")) shouldBe List(RuleTaxYearNotSupportedError)
       }
       "an invalid taxYear range is supplied" in {
-        validator.validate(DeleteForeignPropertyAnnualSubmissionRawData(validNino, validBusinessId, "2021-23")) shouldBe List(
-          RuleTaxYearRangeInvalidError)
+        validator.validate(DeletePropertyAnnualSubmissionRawData(validNino, validBusinessId, "2021-23")) shouldBe List(RuleTaxYearRangeInvalidError)
       }
       "multiple format errors are made" in {
-        validator.validate(DeleteForeignPropertyAnnualSubmissionRawData("Walrus", "Beans", "2021/22")) shouldBe List(NinoFormatError,
-                                                                                                                     BusinessIdFormatError,
-                                                                                                                     TaxYearFormatError)
+        validator.validate(DeletePropertyAnnualSubmissionRawData("Walrus", "Beans", "2021/22")) shouldBe List(NinoFormatError,
+                                                                                                      BusinessIdFormatError,
+                                                                                                      TaxYearFormatError)
       }
     }
   }

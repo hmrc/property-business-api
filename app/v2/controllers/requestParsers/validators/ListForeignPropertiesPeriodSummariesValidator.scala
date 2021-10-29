@@ -20,34 +20,39 @@ import v2.controllers.requestParsers.validators.validations._
 import v2.models.errors.MtdError
 import v2.models.request.listForeignPropertiesPeriodSummaries.ListForeignPropertiesPeriodSummariesRawData
 
+import javax.inject.Singleton
+
+@Singleton
 class ListForeignPropertiesPeriodSummariesValidator extends Validator[ListForeignPropertiesPeriodSummariesRawData] {
 
   private val validationSet = List(parameterFormatValidation, parameterRuleValidation)
 
-  private def parameterFormatValidation: ListForeignPropertiesPeriodSummariesRawData => List[List[MtdError]] = (data: ListForeignPropertiesPeriodSummariesRawData) => {
-    List(
-      NinoValidation.validate(data.nino),
-      BusinessIdValidation.validate(data.businessId),
-      data.fromDate.map(DateValidation.validate(_, isFromDate = true)).getOrElse(Nil),
-      data.toDate.map(DateValidation.validate(_, isFromDate = false)).getOrElse(Nil),
-    )
-  }
+  private def parameterFormatValidation: ListForeignPropertiesPeriodSummariesRawData => List[List[MtdError]] =
+    (data: ListForeignPropertiesPeriodSummariesRawData) => {
+      List(
+        NinoValidation.validate(data.nino),
+        BusinessIdValidation.validate(data.businessId),
+        data.fromDate.map(DateValidation.validate(_, isFromDate = true)).getOrElse(Nil),
+        data.toDate.map(DateValidation.validate(_, isFromDate = false)).getOrElse(Nil),
+      )
+    }
 
-  private def parameterRuleValidation: ListForeignPropertiesPeriodSummariesRawData => List[List[MtdError]] = (data: ListForeignPropertiesPeriodSummariesRawData) => {
-    val toDateBeforeFromDateValidation = {
-      for {
-        fromDate <- data.fromDate
-        toDate <- data.toDate
-      } yield {
-        ToDateBeforeFromDateValidation.validate(fromDate, toDate)
-      }
-    }.getOrElse(Nil)
-    List(
-      toDateBeforeFromDateValidation,
-      FromDateAndToDateProvidedValidation.validate(data.fromDate, data.toDate)
-    )
+  private def parameterRuleValidation: ListForeignPropertiesPeriodSummariesRawData => List[List[MtdError]] =
+    (data: ListForeignPropertiesPeriodSummariesRawData) => {
+      val toDateBeforeFromDateValidation = {
+        for {
+          fromDate <- data.fromDate
+          toDate   <- data.toDate
+        } yield {
+          ToDateBeforeFromDateValidation.validate(fromDate, toDate)
+        }
+      }.getOrElse(Nil)
+      List(
+        toDateBeforeFromDateValidation,
+        FromDateAndToDateProvidedValidation.validate(data.fromDate, data.toDate)
+      )
 
-  }
+    }
 
   override def validate(data: ListForeignPropertiesPeriodSummariesRawData): List[MtdError] = {
     run(validationSet, data).distinct

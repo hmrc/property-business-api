@@ -14,20 +14,19 @@
  * limitations under the License.
  */
 
-package v2.models.domain
+package v2.models.response.retrieveUkPropertyAnnualSubmission.ukFhlProperty
 
-import support.UnitSpec
+import play.api.libs.json.{Json, OFormat}
 
-class IfsTaxYearSpec extends UnitSpec {
-  "toString" should {
-    "return the value inside the model as a String instead of the standard case class toString" in {
-      IfsTaxYear("value").toString shouldBe "value"
-    }
-  }
+case class UkFhlPropertyAllowances(
+    annualInvestmentAllowance: Option[BigDecimal],
+    businessPremisesRenovationAllowance: Option[BigDecimal],
+    otherCapitalAllowance: Option[BigDecimal],
+    propertyIncomeAllowance: Option[BigDecimal],
+    electricChargePointAllowance: Option[BigDecimal],
+    zeroEmissionsCarAllowance: Option[BigDecimal]
+)
 
-  "fromMtd" should {
-    "return the IFS representation of an MTD tax year (XXYY-ZZ -> XXZZ)" in {
-      IfsTaxYear.fromMtd("2018-19") shouldBe IfsTaxYear("2019")
-    }
-  }
+object UkFhlPropertyAllowances {
+  implicit val format: OFormat[UkFhlPropertyAllowances] = Json.format[UkFhlPropertyAllowances]
 }

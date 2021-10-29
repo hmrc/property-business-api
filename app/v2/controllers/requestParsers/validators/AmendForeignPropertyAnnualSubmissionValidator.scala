@@ -16,32 +16,46 @@
 
 package v2.controllers.requestParsers.validators
 
+import config.AppConfig
 import v2.controllers.requestParsers.validators.validations._
 import v2.models.errors._
 import v2.models.request.amendForeignPropertyAnnualSubmission.foreignFhlEea.ForeignFhlEea
 import v2.models.request.amendForeignPropertyAnnualSubmission.foreignProperty.ForeignPropertyEntry
-import v2.models.request.amendForeignPropertyAnnualSubmission.{AmendForeignPropertyAnnualSubmissionRawData, AmendForeignPropertyAnnualSubmissionRequestBody}
+import v2.models.request.amendForeignPropertyAnnualSubmission.{
+  AmendForeignPropertyAnnualSubmissionRawData,
+  AmendForeignPropertyAnnualSubmissionRequestBody
+}
 
-class AmendForeignPropertyAnnualSubmissionValidator extends Validator[AmendForeignPropertyAnnualSubmissionRawData] {
+import javax.inject.{ Inject, Singleton }
 
-  private val validationSet = List(parameterFormatValidation, bodyFormatValidation, bodyFieldValidation)
+@Singleton
+class AmendForeignPropertyAnnualSubmissionValidator @Inject()(appConfig: AppConfig) extends Validator[AmendForeignPropertyAnnualSubmissionRawData] {
 
-  private def parameterFormatValidation: AmendForeignPropertyAnnualSubmissionRawData => List[List[MtdError]] = (data: AmendForeignPropertyAnnualSubmissionRawData) => {
-    List(
-      NinoValidation.validate(data.nino),
-      BusinessIdValidation.validate(data.businessId),
-      TaxYearValidation.validate(data.taxYear)
-    )
-  }
+  private lazy val minTaxYear = appConfig.minimumTaxV2Foreign
+  private val validationSet   = List(parameterFormatValidation, bodyFormatValidation, bodyFieldValidation)
+
+  private def parameterFormatValidation: AmendForeignPropertyAnnualSubmissionRawData => List[List[MtdError]] =
+    (data: AmendForeignPropertyAnnualSubmissionRawData) => {
+      List(
+        NinoValidation.validate(data.nino),
+        BusinessIdValidation.validate(data.businessId),
+        TaxYearValidation.validate(minTaxYear, data.taxYear)
+      )
+    }
 
   private def bodyFormatValidation: AmendForeignPropertyAnnualSubmissionRawData => List[List[MtdError]] = { data =>
-    val baseValidation = List(JsonFormatValidation.validate[AmendForeignPropertyAnnualSubmissionRequestBody](data.body, RuleIncorrectOrEmptyBodyError))
+    val baseValidation = List(
+      JsonFormatValidation.validate[AmendForeignPropertyAnnualSubmissionRequestBody](data.body, RuleIncorrectOrEmptyBodyError))
 
     val extraValidation: List[List[MtdError]] = {
-      data.body.asOpt[AmendForeignPropertyAnnualSubmissionRequestBody].map(_.isEmpty).map {
-        case true => List(List(RuleIncorrectOrEmptyBodyError))
-        case false => NoValidationErrors
-      }.getOrElse(NoValidationErrors)
+      data.body
+        .asOpt[AmendForeignPropertyAnnualSubmissionRequestBody]
+        .map(_.isEmpty)
+        .map {
+          case true  => List(List(RuleIncorrectOrEmptyBodyError))
+          case false => NoValidationErrors
+        }
+        .getOrElse(NoValidationErrors)
     }
 
     baseValidation ++ extraValidation
@@ -50,12 +64,16 @@ class AmendForeignPropertyAnnualSubmissionValidator extends Validator[AmendForei
   private def bodyFieldValidation: AmendForeignPropertyAnnualSubmissionRawData => List[List[MtdError]] = { data =>
     val body = data.body.as[AmendForeignPropertyAnnualSubmissionRequestBody]
 
-    List(flattenErrors(List(
-      body.foreignFhlEea.map(validateForeignFhlEea).getOrElse(NoValidationErrors),
-      body.foreignProperty.map(_.zipWithIndex.toList.flatMap {
-        case (entry, i) => validateForeignProperty(entry, i)
-      }).getOrElse(NoValidationErrors)
-    )))
+    List(
+      flattenErrors(
+        List(
+          body.foreignFhlEea.map(validateForeignFhlEea).getOrElse(NoValidationErrors),
+          body.foreignProperty
+            .map(_.zipWithIndex.toList.flatMap {
+              case (entry, i) => validateForeignProperty(entry, i)
+            })
+            .getOrElse(NoValidationErrors)
+        )))
   }
 
   private def validateForeignFhlEea(foreignFhlEea: ForeignFhlEea): List[MtdError] = {

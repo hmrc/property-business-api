@@ -14,20 +14,8 @@
  * limitations under the License.
  */
 
-package v1.models.domain
+package support
 
-import support.UnitSpec
-
-class IfsTaxYearSpec extends UnitSpec {
-  "toString" should {
-    "return the value inside the model as a String instead of the standard case class toString" in {
-      IfsTaxYear("value").toString shouldBe "value"
-    }
-  }
-
-  "fromMtd" should {
-    "return the IFS representation of an MTD tax year (XXYY-ZZ -> XXZZ)" in {
-      IfsTaxYear.fromMtd("2018-19") shouldBe IfsTaxYear("2019")
-    }
-  }
+trait V2IntegrationBaseSpec extends IntegrationBaseSpec {
+  override def v2Enabled: Boolean = true
 }

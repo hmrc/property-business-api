@@ -37,7 +37,7 @@ class AmendForeignPropertyAnnualSubmissionService @Inject()(connector: AmendFore
     implicit hc: HeaderCarrier,
     ec: ExecutionContext,
     logContext: EndpointLogContext,
-    correlationId: String): Future[AmendForeignPropertyAnnualSubmissionServiceOutcome] = {
+    correlationId: String): Future[ServiceOutcome[Unit]] = {
 
     val result = for {
       ifsResponseWrapper <- EitherT(connector.amendForeignPropertyAnnualSubmission(request)).leftMap(mapIfsErrors(ifsErrorMap))

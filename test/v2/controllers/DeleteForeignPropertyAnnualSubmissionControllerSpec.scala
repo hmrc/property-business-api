@@ -21,7 +21,7 @@ import play.api.mvc.Result
 import uk.gov.hmrc.http.HeaderCarrier
 import v2.mocks.MockIdGenerator
 import v2.mocks.requestParsers.MockDeleteForeignPropertyAnnualSubmissionRequestParser
-import v2.mocks.services.{ MockAuditService, MockDeleteForeignPropertyAnnualSubmissionService, MockEnrolmentsAuthService, MockMtdIdLookupService }
+import v2.mocks.services.{ MockAuditService, MockDeletePropertyAnnualSubmissionService, MockEnrolmentsAuthService, MockMtdIdLookupService }
 import v2.models.audit.{ AuditError, AuditEvent, AuditResponse, DeleteForeignPropertyAnnualAuditDetail }
 import v2.models.domain.Nino
 import v2.models.errors._
@@ -35,7 +35,7 @@ class DeleteForeignPropertyAnnualSubmissionControllerSpec
     extends ControllerBaseSpec
     with MockEnrolmentsAuthService
     with MockMtdIdLookupService
-    with MockDeleteForeignPropertyAnnualSubmissionService
+    with MockDeletePropertyAnnualSubmissionService
     with MockDeleteForeignPropertyAnnualSubmissionRequestParser
     with MockAuditService
     with MockIdGenerator {

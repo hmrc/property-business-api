@@ -24,7 +24,7 @@ import v2.models.request.deletePropertyAnnualSubmission.DeletePropertyAnnualSubm
 
 import scala.concurrent.Future
 
-class DeleteForeignPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec {
+class DeletePropertyAnnualSubmissionConnectorSpec extends ConnectorSpec {
 
   val nino: String       = "AA123456A"
   val businessId: String = "XAIS12345678910"
@@ -38,7 +38,7 @@ class DeleteForeignPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec {
 
   class Test extends MockHttpClient with MockAppConfig {
 
-    val connector: DeleteForeignPropertyAnnualSubmissionConnector = new DeleteForeignPropertyAnnualSubmissionConnector(
+    val connector: DeletePropertyAnnualSubmissionConnector = new DeletePropertyAnnualSubmissionConnector(
       http = mockHttpClient,
       appConfig = mockAppConfig
     )
@@ -55,14 +55,14 @@ class DeleteForeignPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec {
 
       MockHttpClient
         .delete(
-          url = s"$baseUrl/income-tax/business/property/annual/$nino/$businessId/$taxYear",
+          url = s"$baseUrl/income-tax/business/property/annual?taxableEntityId=$nino&incomeSourceId=$businessId&taxYear=$taxYear",
           config = dummyIfsHeaderCarrierConfig,
           requiredHeaders = requiredIfsHeaders,
           excludedHeaders = Seq("AnotherHeader" -> "HeaderValue")
         )
         .returns(Future.successful(outcome))
 
-      await(connector.deleteForeignPropertyAnnualSubmission(request)) shouldBe outcome
+      await(connector.deletePropertyAnnualSubmission(request)) shouldBe outcome
 
     }
   }

@@ -23,14 +23,14 @@ import v2.controllers.EndpointLogContext
 import v2.models.errors.ErrorWrapper
 import v2.models.outcomes.ResponseWrapper
 import v2.models.request.deletePropertyAnnualSubmission.DeletePropertyAnnualSubmissionRequest
-import v2.services.DeleteForeignPropertyAnnualSubmissionService
+import v2.services.DeletePropertyAnnualSubmissionService
 
 import scala.concurrent.{ ExecutionContext, Future }
 
-trait MockDeleteForeignPropertyAnnualSubmissionService extends MockFactory {
+trait MockDeletePropertyAnnualSubmissionService extends MockFactory {
 
-  val mockDeleteForeignPropertyAnnualSubmissionService: DeleteForeignPropertyAnnualSubmissionService =
-    mock[DeleteForeignPropertyAnnualSubmissionService]
+  val mockDeleteForeignPropertyAnnualSubmissionService: DeletePropertyAnnualSubmissionService =
+    mock[DeletePropertyAnnualSubmissionService]
 
   object MockDeleteForeignPropertyAnnualSubmissionService {
 
@@ -38,7 +38,7 @@ trait MockDeleteForeignPropertyAnnualSubmissionService extends MockFactory {
         requestData: DeletePropertyAnnualSubmissionRequest): CallHandler[Future[Either[ErrorWrapper, ResponseWrapper[Unit]]]] = {
       (
         mockDeleteForeignPropertyAnnualSubmissionService
-          .deleteForeignPropertyAnnualSubmission(_: DeletePropertyAnnualSubmissionRequest)(
+          .deletePropertyAnnualSubmission(_: DeletePropertyAnnualSubmissionRequest)(
             _: HeaderCarrier,
             _: ExecutionContext,
             _: EndpointLogContext,

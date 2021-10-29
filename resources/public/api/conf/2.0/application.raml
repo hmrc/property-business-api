@@ -20,7 +20,7 @@ documentation:
  - title: Testing
    content: !include docs/testing.md
 
-mediaType: application/hal+json
+mediaType: application/json
 
 uses:
   sec: https://developer.service.hmrc.gov.uk/api-documentation/assets/common/modules/securitySchemes.raml
@@ -46,10 +46,10 @@ uses:
         /annual:
           (annotations.group):
             name: UK property business annual submission
-            description: Resources relating to an business' UK Annual Submission
+            description: Resources relating to an individual's UK property business annual submission
           /{taxYear}:
             uriParameters:
               taxYear:
                 description: 'The tax year to which the data applies. For example: 2022-23. The start year and end year must not span two tax years. The minimum tax year is 2022-23. No gaps are allowed, for example, 2022-24 is not valid. (The minimum tax year in Sandbox is 2019-20.)'
-                example: 2021-22
+                example: 2022-23
             get: !include uk_property_annual_submission_retrieve.raml

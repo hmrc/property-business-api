@@ -21,11 +21,11 @@ import play.api.http.HeaderNames.ACCEPT
 import play.api.http.Status
 import play.api.libs.json.{JsValue, Json}
 import play.api.libs.ws.{WSRequest, WSResponse}
-import support.IntegrationBaseSpec
+import support.V1IntegrationBaseSpec
 import v1.models.errors._
 import v1.stubs.{AuditStub, AuthStub, IfsStub, MtdIdLookupStub}
 
-class ListForeignPropertiesPeriodSummariesControllerISpec extends IntegrationBaseSpec {
+class ListForeignPropertiesPeriodSummariesControllerISpec extends V1IntegrationBaseSpec {
 
   private trait Test {
 

@@ -14,22 +14,12 @@
  * limitations under the License.
  */
 
-package v1.models.domain
+package v2.models.response.retrieveUkPropertyAnnualSubmission.ukFhlProperty
 
-/**
-  * Represents a tax year for IFS
-  *
-  * @param value the tax year string (where 2018 represents 2017-18)
-  */
-case class IfsTaxYear(value: String) extends AnyVal {
-  override def toString: String = value
-}
+import play.api.libs.json.{Json, OFormat}
 
-object IfsTaxYear {
+case class UkFhlPropertyRentARoom(jointlyLet: Boolean)
 
-  /**
-    * @param taxYear tax year in MTD format (e.g. 2017-18)
-    */
-  def fromMtd(taxYear: String): IfsTaxYear =
-    IfsTaxYear(taxYear.take(2) + taxYear.drop(5))
+object UkFhlPropertyRentARoom {
+  implicit val format: OFormat[UkFhlPropertyRentARoom] = Json.format[UkFhlPropertyRentARoom]
 }

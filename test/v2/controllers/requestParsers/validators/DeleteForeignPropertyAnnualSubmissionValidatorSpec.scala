@@ -16,17 +16,19 @@
 
 package v2.controllers.requestParsers.validators
 
+import mocks.MockAppConfig
 import support.UnitSpec
 import v2.models.errors.{ BusinessIdFormatError, NinoFormatError, RuleTaxYearNotSupportedError, RuleTaxYearRangeInvalidError, TaxYearFormatError }
 import v2.models.request.deletePropertyAnnualSubmission.DeletePropertyAnnualSubmissionRawData
 
-class DeleteForeignPropertyAnnualSubmissionValidatorSpec extends UnitSpec {
+class DeleteForeignPropertyAnnualSubmissionValidatorSpec extends UnitSpec with MockAppConfig {
 
   private val validNino       = "AA123456A"
   private val validBusinessId = "XAIS12345678901"
   private val validTaxYear    = "2021-22"
 
-  private val validator = new DeleteForeignPropertyAnnualSubmissionValidator
+  MockAppConfig.minimumTaxV2Foreign returns 2021
+  private val validator = new DeleteForeignPropertyAnnualSubmissionValidator(mockAppConfig)
 
   "running a validation" should {
     "return no errors" when {

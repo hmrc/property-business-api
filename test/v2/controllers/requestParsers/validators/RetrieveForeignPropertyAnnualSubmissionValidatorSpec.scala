@@ -16,17 +16,19 @@
 
 package v2.controllers.requestParsers.validators
 
+import mocks.MockAppConfig
 import support.UnitSpec
 import v2.models.errors._
 import v2.models.request.retrieveForeignPropertyAnnualSubmission.RetrieveForeignPropertyAnnualSubmissionRawData
 
-class RetrieveForeignPropertyAnnualSubmissionValidatorSpec extends UnitSpec {
+class RetrieveForeignPropertyAnnualSubmissionValidatorSpec extends UnitSpec with MockAppConfig {
 
-  private val validNino = "AA123456A"
+  private val validNino       = "AA123456A"
   private val validBusinessId = "XAIS12345678901"
-  private val validTaxYear = "2021-22"
+  private val validTaxYear    = "2021-22"
 
-  private val validator = new RetrieveForeignPropertyAnnualSubmissionValidator
+  MockAppConfig.minimumTaxV2Foreign returns 2021
+  private val validator = new RetrieveForeignPropertyAnnualSubmissionValidator(mockAppConfig)
 
   "running a validation" should {
     "return no errors" when {
@@ -45,13 +47,17 @@ class RetrieveForeignPropertyAnnualSubmissionValidatorSpec extends UnitSpec {
         validator.validate(RetrieveForeignPropertyAnnualSubmissionRawData(validNino, validBusinessId, "2021/22")) shouldBe List(TaxYearFormatError)
       }
       "an unsupported taxYear is supplied" in {
-        validator.validate(RetrieveForeignPropertyAnnualSubmissionRawData(validNino, validBusinessId, "2019-20")) shouldBe List(RuleTaxYearNotSupportedError)
+        validator.validate(RetrieveForeignPropertyAnnualSubmissionRawData(validNino, validBusinessId, "2019-20")) shouldBe List(
+          RuleTaxYearNotSupportedError)
       }
       "an invalid taxYear range is supplied" in {
-        validator.validate(RetrieveForeignPropertyAnnualSubmissionRawData(validNino, validBusinessId, "2021-23")) shouldBe List(RuleTaxYearRangeInvalidError)
+        validator.validate(RetrieveForeignPropertyAnnualSubmissionRawData(validNino, validBusinessId, "2021-23")) shouldBe List(
+          RuleTaxYearRangeInvalidError)
       }
       "multiple format errors are made" in {
-        validator.validate(RetrieveForeignPropertyAnnualSubmissionRawData("Walrus", "Beans", "2021/22")) shouldBe List(NinoFormatError, BusinessIdFormatError, TaxYearFormatError)
+        validator.validate(RetrieveForeignPropertyAnnualSubmissionRawData("Walrus", "Beans", "2021/22")) shouldBe List(NinoFormatError,
+                                                                                                                       BusinessIdFormatError,
+                                                                                                                       TaxYearFormatError)
       }
     }
   }

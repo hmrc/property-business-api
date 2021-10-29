@@ -16,21 +16,21 @@
 
 package v2.controllers.requestParsers.validators.validations
 
-import v2.models.errors.{MtdError, RuleTaxYearNotSupportedError, RuleTaxYearRangeInvalidError, TaxYearFormatError}
+import v2.models.errors.{ MtdError, RuleTaxYearNotSupportedError, RuleTaxYearRangeInvalidError, TaxYearFormatError }
 
 object TaxYearValidation {
 
   val taxYearFormat = "20[1-9][0-9]\\-[1-9][0-9]"
 
-  def validate(taxYear: String): List[MtdError] = {
+  def validate(minimumTaxYear: Int, taxYear: String): List[MtdError] = {
     if (taxYear.matches(taxYearFormat)) {
 
-      val start = taxYear.substring(2, 4).toInt
-      val end   = taxYear.substring(5, 7).toInt
+      val start     = taxYear.substring(2, 4).toInt
+      val end       = taxYear.substring(5, 7).toInt
       val startYear = taxYear.substring(0, 4).toInt
 
       if (end - start == 1) {
-        if (startYear >= minimumTaxYear){
+        if (startYear >= minimumTaxYear) {
           NoValidationErrors
         } else {
           List(RuleTaxYearNotSupportedError)

@@ -16,20 +16,25 @@
 
 package v2.controllers.requestParsers.validators
 
+import config.AppConfig
 import v2.controllers.requestParsers.validators.validations.{ BusinessIdValidation, NinoValidation, TaxYearValidation }
 import v2.models.errors.MtdError
 import v2.models.request.deletePropertyAnnualSubmission.DeletePropertyAnnualSubmissionRawData
 
-class DeleteForeignPropertyAnnualSubmissionValidator extends Validator[DeletePropertyAnnualSubmissionRawData] {
+import javax.inject.{ Inject, Singleton }
 
-  private val validationSet = List(parameterFormatValidation)
+@Singleton
+class DeleteForeignPropertyAnnualSubmissionValidator @Inject()(appConfig: AppConfig) extends Validator[DeletePropertyAnnualSubmissionRawData] {
+
+  private lazy val minTaxYear = appConfig.minimumTaxV2Foreign
+  private val validationSet   = List(parameterFormatValidation)
 
   private def parameterFormatValidation: DeletePropertyAnnualSubmissionRawData => List[List[MtdError]] =
     (data: DeletePropertyAnnualSubmissionRawData) => {
       List(
         NinoValidation.validate(data.nino),
         BusinessIdValidation.validate(data.businessId),
-        TaxYearValidation.validate(data.taxYear)
+        TaxYearValidation.validate(minTaxYear, data.taxYear)
       )
     }
 

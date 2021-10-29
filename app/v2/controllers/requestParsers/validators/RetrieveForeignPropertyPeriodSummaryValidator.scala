@@ -16,21 +16,25 @@
 
 package v2.controllers.requestParsers.validators
 
-import v2.controllers.requestParsers.validators.validations.{BusinessIdValidation, NinoValidation, SubmissionIdValidation}
+import v2.controllers.requestParsers.validators.validations.{ BusinessIdValidation, NinoValidation, SubmissionIdValidation }
 import v2.models.errors.MtdError
 import v2.models.request.retrieveForeignPropertyPeriodSummary.RetrieveForeignPropertyPeriodSummaryRawData
 
+import javax.inject.Singleton
+
+@Singleton
 class RetrieveForeignPropertyPeriodSummaryValidator extends Validator[RetrieveForeignPropertyPeriodSummaryRawData] {
 
   private val validationSet = List(parameterFormatValidation)
 
-  private def parameterFormatValidation: RetrieveForeignPropertyPeriodSummaryRawData => List[List[MtdError]] = (data: RetrieveForeignPropertyPeriodSummaryRawData) => {
-    List(
-      NinoValidation.validate(data.nino),
-      BusinessIdValidation.validate(data.businessId),
-      SubmissionIdValidation.validate(data.submissionId)
-    )
-  }
+  private def parameterFormatValidation: RetrieveForeignPropertyPeriodSummaryRawData => List[List[MtdError]] =
+    (data: RetrieveForeignPropertyPeriodSummaryRawData) => {
+      List(
+        NinoValidation.validate(data.nino),
+        BusinessIdValidation.validate(data.businessId),
+        SubmissionIdValidation.validate(data.submissionId)
+      )
+    }
 
   override def validate(data: RetrieveForeignPropertyPeriodSummaryRawData): List[MtdError] = {
     run(validationSet, data).distinct

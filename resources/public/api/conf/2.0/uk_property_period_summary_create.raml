@@ -1,0 +1,49 @@
+is:
+  - headers.acceptJson
+  - headers.contentTypeJson
+  - headers.testScenarioHeader
+  - errors.formatNino
+  - errors.formatTaxYear
+  - errors.formatBusinessId
+  - errors.formatFromDate
+  - errors.formatToDate
+  - errors.formatValue
+  - errors.ruleTaxYearRangeInvalid
+  - errors.ruleTaxYearNotSupported
+  - errors.ruleBothExpensesSupplied
+  - errors.ruleIncorrectOrEmptyBody
+  - errors.ruleToDateBeforeFromDate
+  - errors.ruleOverlappingPeriod
+  - errors.ruleMisalignedPeriod
+  - errors.ruleNotContiguousPeriod
+  - errors.ruleDuplicateSubmission
+  - errors.clientOrAgentNotAuthorised
+  - errors.notFound
+displayName: Create a UK Property Income & Expenses Period Summary [Test Only]
+description: This endpoint allows a developer to re-submit the income and expenditure for a UK property business. This submission is for either or both of Furnished Holiday Letting (FHL) and Non FHL UK property submissions. A National Insurance number, business ID and tax year are required.
+(annotations.sandboxData): !include scenarios/uk_property_period_summary_create_scenarios.md
+(annotations.scope): "write:self-assessment"
+securedBy: [ sec.oauth_2_0: { scopes: [ "write:self-assessment" ] } ]
+body:
+  application/json:
+    type: !include schemas/uk_property_period_summary_create/request.json
+    examples:
+     example-1:
+      description: Full Expenses request
+      value: !include examples/uk_property_period_summary_create/request.json
+     example-2:
+      description: Consolidated Expenses request
+      value: !include examples/uk_property_period_summary_create/consolidated_request.json
+responses:
+  201:
+    body:
+      application/json:
+        type: !include schemas/uk_property_period_summary_create/response.json
+        examples:
+          example-1:
+            description: Default Example
+            value: !include examples/uk_property_period_summary_create/response.json
+    headers:
+      X-CorrelationId:
+        example: c75f40a6-a3df-4429-a697-471eeec46435
+        description: Unique ID for operation tracking <br> String, 36 characters.

@@ -9,7 +9,7 @@ is:
   - errors.clientOrAgentNotAuthorised
   - errors.notFound
 displayName: Delete a Property Annual Submission [test only]
-description: This endpoint allows a developer to delete income and expenditure for a property business. For either or both of Furnished Holiday Letting (FHL) in the European Economic Area (EEA) and Non FHL property submissions. A National Insurance number, business ID and tax year are required.
+description: This endpoint allows the developer to delete the adjustments and allowances for a UK or Foreign property business in a tax year. A National Insurance number, business ID and tax year must be provided.
 (annotations.sandboxData): !include scenarios/delete_property_annual_submission_scenarios.md
 (annotations.scope): "read:self-assessment"
 securedBy: [ sec.oauth_2_0: { scopes: [ "read:self-assessment" ] } ]

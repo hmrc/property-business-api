@@ -17,11 +17,11 @@
 package v2.controllers.requestParsers
 
 import javax.inject.Inject
-import v2.controllers.requestParsers.validators.DeleteForeignPropertyAnnualSubmissionValidator
+import v2.controllers.requestParsers.validators.DeletePropertyAnnualSubmissionValidator
 import v2.models.domain.Nino
 import v2.models.request.deletePropertyAnnualSubmission._
 
-class DeleteForeignPropertyAnnualSubmissionRequestParser @Inject()(val validator: DeleteForeignPropertyAnnualSubmissionValidator)
+class DeletePropertyAnnualSubmissionRequestParser @Inject()(val validator: DeletePropertyAnnualSubmissionValidator)
     extends RequestParser[DeletePropertyAnnualSubmissionRawData, DeletePropertyAnnualSubmissionRequest] {
 
   override protected def requestFor(data: DeletePropertyAnnualSubmissionRawData): DeletePropertyAnnualSubmissionRequest =

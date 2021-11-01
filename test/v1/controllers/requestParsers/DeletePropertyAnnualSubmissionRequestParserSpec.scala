@@ -14,25 +14,25 @@
  * limitations under the License.
  */
 
-package v2.controllers.requestParsers
+package v1.controllers.requestParsers
 
 import support.UnitSpec
-import v2.mocks.validators.MockDeleteForeignPropertyAnnualSubmissionValidator
-import v2.models.domain.Nino
-import v2.models.errors.{ BadRequestError, BusinessIdFormatError, ErrorWrapper, NinoFormatError }
-import v2.models.request.deletePropertyAnnualSubmission._
+import v1.mocks.validators.MockDeletePropertyAnnualSubmissionValidator
+import v1.models.domain.Nino
+import v1.models.errors.{BadRequestError, BusinessIdFormatError, ErrorWrapper, NinoFormatError}
+import v1.models.request.deleteForeignPropertyAnnualSubmission._
 
-class DeleteForeignPropertyAnnualSubmissionRequestParserSpec extends UnitSpec {
+class DeletePropertyAnnualSubmissionRequestParserSpec extends UnitSpec {
 
-  val nino: String                   = "AA123456B"
-  val businessId: String             = "XAIS12345678901"
-  val taxYear: String                = "2021-22"
+  val nino: String = "AA123456B"
+  val businessId: String = "XAIS12345678901"
+  val taxYear: String = "2021-22"
   implicit val correlationId: String = "X-123"
 
-  val inputData: DeletePropertyAnnualSubmissionRawData =
-    DeletePropertyAnnualSubmissionRawData(nino, businessId, taxYear)
+  val inputData: DeleteForeignPropertyAnnualSubmissionRawData =
+    DeleteForeignPropertyAnnualSubmissionRawData(nino, businessId, taxYear)
 
-  trait Test extends MockDeleteForeignPropertyAnnualSubmissionValidator {
+  trait Test extends MockDeletePropertyAnnualSubmissionValidator {
     lazy val parser = new DeleteForeignPropertyAnnualSubmissionRequestParser(mockValidator)
   }
 
@@ -41,21 +41,19 @@ class DeleteForeignPropertyAnnualSubmissionRequestParserSpec extends UnitSpec {
       "valid request data is supplied" in new Test {
         MockDeleteForeignPropertyAnnualSubmissionValidator.validate(inputData).returns(Nil)
 
-        parser.parseRequest(inputData) shouldBe Right(DeletePropertyAnnualSubmissionRequest(Nino(nino), businessId, taxYear))
+        parser.parseRequest(inputData) shouldBe Right(DeleteForeignPropertyAnnualSubmissionRequest(Nino(nino), businessId, taxYear))
       }
     }
     "return an ErrorWrapper" when {
       "a single validation error occurs" in new Test {
-        MockDeleteForeignPropertyAnnualSubmissionValidator
-          .validate(inputData)
+        MockDeleteForeignPropertyAnnualSubmissionValidator.validate(inputData)
           .returns(List(NinoFormatError))
 
         parser.parseRequest(inputData) shouldBe
           Left(ErrorWrapper(correlationId, NinoFormatError, None))
       }
       "multiple validation errors occur" in new Test {
-        MockDeleteForeignPropertyAnnualSubmissionValidator
-          .validate(inputData)
+        MockDeleteForeignPropertyAnnualSubmissionValidator.validate(inputData)
           .returns(List(NinoFormatError, BusinessIdFormatError))
 
         parser.parseRequest(inputData) shouldBe

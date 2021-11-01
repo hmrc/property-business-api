@@ -14,23 +14,23 @@
  * limitations under the License.
  */
 
-package v2.mocks.validators
+package v1.mocks.validators
 
 import org.scalamock.handlers.CallHandler1
 import org.scalamock.scalatest.MockFactory
-import v2.controllers.requestParsers.validators.DeleteForeignPropertyAnnualSubmissionValidator
-import v2.models.errors.MtdError
-import v2.models.request.deletePropertyAnnualSubmission.DeletePropertyAnnualSubmissionRawData
+import v1.controllers.requestParsers.validators.DeleteForeignPropertyAnnualSubmissionValidator
+import v1.models.errors.MtdError
+import v1.models.request.deleteForeignPropertyAnnualSubmission.DeleteForeignPropertyAnnualSubmissionRawData
 
-class MockDeleteForeignPropertyAnnualSubmissionValidator extends MockFactory {
+class MockDeletePropertyAnnualSubmissionValidator extends MockFactory {
 
   val mockValidator: DeleteForeignPropertyAnnualSubmissionValidator = mock[DeleteForeignPropertyAnnualSubmissionValidator]
 
   object MockDeleteForeignPropertyAnnualSubmissionValidator {
 
-    def validate(data: DeletePropertyAnnualSubmissionRawData): CallHandler1[DeletePropertyAnnualSubmissionRawData, List[MtdError]] = {
+    def validate(data: DeleteForeignPropertyAnnualSubmissionRawData): CallHandler1[DeleteForeignPropertyAnnualSubmissionRawData, List[MtdError]] = {
       (mockValidator
-        .validate(_: DeletePropertyAnnualSubmissionRawData))
+        .validate(_: DeleteForeignPropertyAnnualSubmissionRawData))
         .expects(data)
     }
   }

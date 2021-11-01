@@ -20,7 +20,7 @@ import support.UnitSpec
 import v1.models.errors.{BusinessIdFormatError, NinoFormatError, RuleTaxYearNotSupportedError, RuleTaxYearRangeInvalidError, TaxYearFormatError}
 import v1.models.request.deleteForeignPropertyAnnualSubmission.DeleteForeignPropertyAnnualSubmissionRawData
 
-class DeleteForeignPropertyAnnualSubmissionValidatorSpec extends UnitSpec {
+class DeletePropertyAnnualSubmissionValidatorSpec extends UnitSpec {
 
   private val validNino = "AA123456A"
   private val validBusinessId = "XAIS12345678901"

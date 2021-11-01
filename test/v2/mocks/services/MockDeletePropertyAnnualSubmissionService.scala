@@ -29,15 +29,15 @@ import scala.concurrent.{ ExecutionContext, Future }
 
 trait MockDeletePropertyAnnualSubmissionService extends MockFactory {
 
-  val mockDeleteForeignPropertyAnnualSubmissionService: DeletePropertyAnnualSubmissionService =
+  val mockDeletePropertyAnnualSubmissionService: DeletePropertyAnnualSubmissionService =
     mock[DeletePropertyAnnualSubmissionService]
 
-  object MockDeleteForeignPropertyAnnualSubmissionService {
+  object MockDeletePropertyAnnualSubmissionService {
 
-    def deleteForeignPropertyAnnualSubmissionService(
+    def deletePropertyAnnualSubmission(
         requestData: DeletePropertyAnnualSubmissionRequest): CallHandler[Future[Either[ErrorWrapper, ResponseWrapper[Unit]]]] = {
       (
-        mockDeleteForeignPropertyAnnualSubmissionService
+        mockDeletePropertyAnnualSubmissionService
           .deletePropertyAnnualSubmission(_: DeletePropertyAnnualSubmissionRequest)(
             _: HeaderCarrier,
             _: ExecutionContext,

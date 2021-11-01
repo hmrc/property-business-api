@@ -16,7 +16,6 @@
 
 package v2.services
 
-import support.UnitSpec
 import uk.gov.hmrc.http.HeaderCarrier
 import v2.controllers.EndpointLogContext
 import v2.mocks.connectors.MockDeletePropertyAnnualSubmissionConnector
@@ -25,10 +24,9 @@ import v2.models.errors._
 import v2.models.outcomes.ResponseWrapper
 import v2.models.request.deletePropertyAnnualSubmission.DeletePropertyAnnualSubmissionRequest
 
-import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-class DeletePropertyAnnualSubmissionServiceSpec extends UnitSpec {
+class DeletePropertyAnnualSubmissionServiceSpec extends ServiceSpec {
 
   val nino: String                   = "AA123456A"
   val businessId: String             = "XAIS12345678910"
@@ -42,15 +40,15 @@ class DeletePropertyAnnualSubmissionServiceSpec extends UnitSpec {
     implicit val logContext: EndpointLogContext = EndpointLogContext("c", "ep")
 
     val service = new DeletePropertyAnnualSubmissionService(
-      connector = mockDeleteForeignPropertyAnnualSubmissionConnector
+      connector = mockDeletePropertyAnnualSubmissionConnector
     )
   }
 
   "service" when {
     "service call successful" should {
       "return mapped result" in new Test {
-        MockDeleteForeignPropertyAnnualSubmissionConnector
-          .deleteForeignProperty(requestData)
+        MockDeletePropertyAnnualSubmissionConnector
+          .deletePropertyAnnualSubmission(requestData)
           .returns(Future.successful(Right(ResponseWrapper(correlationId, ()))))
 
         await(service.deletePropertyAnnualSubmission(requestData)) shouldBe Right(ResponseWrapper(correlationId, ()))
@@ -63,8 +61,8 @@ class DeletePropertyAnnualSubmissionServiceSpec extends UnitSpec {
         def serviceError(ifsErrorCode: String, error: MtdError): Unit =
           s"a $ifsErrorCode error is returned from the service" in new Test {
 
-            MockDeleteForeignPropertyAnnualSubmissionConnector
-              .deleteForeignProperty(requestData)
+            MockDeletePropertyAnnualSubmissionConnector
+              .deletePropertyAnnualSubmission(requestData)
               .returns(Future.successful(Left(ResponseWrapper(correlationId, IfsErrors.single(IfsErrorCode(ifsErrorCode))))))
 
             await(service.deletePropertyAnnualSubmission(requestData)) shouldBe Left(ErrorWrapper(correlationId, error))

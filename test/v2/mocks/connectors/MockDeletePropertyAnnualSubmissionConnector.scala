@@ -26,14 +26,14 @@ import scala.concurrent.{ ExecutionContext, Future }
 
 trait MockDeletePropertyAnnualSubmissionConnector extends MockFactory {
 
-  val mockDeleteForeignPropertyAnnualSubmissionConnector: DeletePropertyAnnualSubmissionConnector =
+  val mockDeletePropertyAnnualSubmissionConnector: DeletePropertyAnnualSubmissionConnector =
     mock[DeletePropertyAnnualSubmissionConnector]
 
-  object MockDeleteForeignPropertyAnnualSubmissionConnector {
+  object MockDeletePropertyAnnualSubmissionConnector {
 
-    def deleteForeignProperty(requestData: DeletePropertyAnnualSubmissionRequest): CallHandler[Future[IfsOutcome[Unit]]] = {
+    def deletePropertyAnnualSubmission(requestData: DeletePropertyAnnualSubmissionRequest): CallHandler[Future[IfsOutcome[Unit]]] = {
       (
-        mockDeleteForeignPropertyAnnualSubmissionConnector
+        mockDeletePropertyAnnualSubmissionConnector
           .deletePropertyAnnualSubmission(_: DeletePropertyAnnualSubmissionRequest)(
             _: HeaderCarrier,
             _: ExecutionContext,

@@ -27,7 +27,7 @@ import v2.controllers.requestParsers.DeletePropertyAnnualSubmissionRequestParser
 import v2.models.audit.{ AuditEvent, AuditResponse, DeleteForeignPropertyAnnualAuditDetail }
 import v2.models.errors._
 import v2.models.request.deletePropertyAnnualSubmission.DeletePropertyAnnualSubmissionRawData
-import v2.services.{ AuditService, DeleteForeignPropertyAnnualSubmissionService, EnrolmentsAuthService, MtdIdLookupService }
+import v2.services.{ AuditService, DeletePropertyAnnualSubmissionService, EnrolmentsAuthService, MtdIdLookupService }
 
 import scala.concurrent.{ ExecutionContext, Future }
 
@@ -35,7 +35,7 @@ import scala.concurrent.{ ExecutionContext, Future }
 class DeleteForeignPropertyAnnualSubmissionController @Inject()(val authService: EnrolmentsAuthService,
                                                                 val lookupService: MtdIdLookupService,
                                                                 parser: DeletePropertyAnnualSubmissionRequestParser,
-                                                                service: DeleteForeignPropertyAnnualSubmissionService,
+                                                                service: DeletePropertyAnnualSubmissionService,
                                                                 auditService: AuditService,
                                                                 cc: ControllerComponents,
                                                                 idGenerator: IdGenerator)(implicit ec: ExecutionContext)
@@ -56,7 +56,7 @@ class DeleteForeignPropertyAnnualSubmissionController @Inject()(val authService:
       val result =
         for {
           parsedRequest   <- EitherT.fromEither[Future](parser.parseRequest(rawData))
-          serviceResponse <- EitherT(service.deleteForeignPropertyAnnualSubmission(parsedRequest))
+          serviceResponse <- EitherT(service.deletePropertyAnnualSubmission(parsedRequest))
         } yield {
           logger.info(
             s"[${endpointLogContext.controllerName}][${endpointLogContext.endpointName}] - " +

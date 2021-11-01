@@ -22,9 +22,10 @@ import v1.controllers.requestParsers.DeleteForeignPropertyAnnualSubmissionReques
 import v1.models.errors.ErrorWrapper
 import v1.models.request.deleteForeignPropertyAnnualSubmission.{DeleteForeignPropertyAnnualSubmissionRawData, DeleteForeignPropertyAnnualSubmissionRequest}
 
-trait MockDeletePropertyAnnualSubmissionRequestParser extends MockFactory {
+trait MockDeleteForeignPropertyAnnualSubmissionRequestParser extends MockFactory {
 
-  val mockDeleteForeignPropertyAnnualSubmissionRequestParser: DeleteForeignPropertyAnnualSubmissionRequestParser = mock[DeleteForeignPropertyAnnualSubmissionRequestParser]
+  val mockDeleteForeignPropertyAnnualSubmissionRequestParser:
+    DeleteForeignPropertyAnnualSubmissionRequestParser = mock[DeleteForeignPropertyAnnualSubmissionRequestParser]
 
   object MockDeleteForeignPropertyAnnualSubmissionRequestParser {
     def parse(data: DeleteForeignPropertyAnnualSubmissionRawData): CallHandler[Either[ErrorWrapper, DeleteForeignPropertyAnnualSubmissionRequest]] = {

@@ -18,27 +18,9 @@ package v2
 
 import v2.models.errors.ErrorWrapper
 import v2.models.outcomes.ResponseWrapper
-import v2.models.response.listForeignPropertiesPeriodSummaries.{ ListForeignPropertiesPeriodSummariesResponse, SubmissionPeriod }
-import v2.models.response.createForeignPropertyPeriodSummary.CreateForeignPropertyPeriodSummaryResponse
-import v2.models.response.retrieveForeignPropertyAnnualSubmission.RetrieveForeignPropertyAnnualSubmissionResponse
-import v2.models.response.retrieveForeignPropertyPeriodSummary.RetrieveForeignPropertyPeriodSummaryResponse
 
 package object services {
 
   type ServiceOutcome[A] = Either[ErrorWrapper, ResponseWrapper[A]]
-
-  type CreateForeignPropertyPeriodSummaryServiceOutcome = ServiceOutcome[CreateForeignPropertyPeriodSummaryResponse]
-
-  type AmendForeignPropertyPeriodSummaryServiceOutcome = ServiceOutcome[Unit]
-
-  type RetrieveForeignPropertyPeriodSummaryServiceOutcome = ServiceOutcome[RetrieveForeignPropertyPeriodSummaryResponse]
-
-  type RetrieveForeignPropertyAnnualSubmissionServiceOutcome = ServiceOutcome[RetrieveForeignPropertyAnnualSubmissionResponse]
-
-  type ListForeignPropertiesPeriodSummariesServiceOutcome = ServiceOutcome[ListForeignPropertiesPeriodSummariesResponse[SubmissionPeriod]]
-
-  type AmendForeignPropertyAnnualSubmissionServiceOutcome = ServiceOutcome[Unit]
-
-  type DeleteForeignPropertyAnnualSubmissionServiceOutcome = ServiceOutcome[Unit]
 
 }

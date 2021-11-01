@@ -14,33 +14,38 @@
  * limitations under the License.
  */
 
-package v2.mocks.connectors
+package v2.mocks.services
 
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
 import uk.gov.hmrc.http.HeaderCarrier
-import v2.connectors.{ DeleteForeignPropertyAnnualSubmissionConnector, IfsOutcome }
+import v2.controllers.EndpointLogContext
+import v2.models.errors.ErrorWrapper
+import v2.models.outcomes.ResponseWrapper
 import v2.models.request.deletePropertyAnnualSubmission.DeletePropertyAnnualSubmissionRequest
+import v2.services.DeletePropertyAnnualSubmissionService
 
 import scala.concurrent.{ ExecutionContext, Future }
 
-trait MockDeleteForeignPropertyAnnualSubmissionConnector extends MockFactory {
+trait MockDeletePropertyAnnualSubmissionService extends MockFactory {
 
-  val mockDeleteForeignPropertyAnnualSubmissionConnector: DeleteForeignPropertyAnnualSubmissionConnector =
-    mock[DeleteForeignPropertyAnnualSubmissionConnector]
+  val mockDeletePropertyAnnualSubmissionService: DeletePropertyAnnualSubmissionService =
+    mock[DeletePropertyAnnualSubmissionService]
 
-  object MockDeleteForeignPropertyAnnualSubmissionConnector {
+  object MockDeletePropertyAnnualSubmissionService {
 
-    def deleteForeignProperty(requestData: DeletePropertyAnnualSubmissionRequest): CallHandler[Future[IfsOutcome[Unit]]] = {
+    def deletePropertyAnnualSubmission(
+        requestData: DeletePropertyAnnualSubmissionRequest): CallHandler[Future[Either[ErrorWrapper, ResponseWrapper[Unit]]]] = {
       (
-        mockDeleteForeignPropertyAnnualSubmissionConnector
-          .deleteForeignPropertyAnnualSubmission(_: DeletePropertyAnnualSubmissionRequest)(
+        mockDeletePropertyAnnualSubmissionService
+          .deletePropertyAnnualSubmission(_: DeletePropertyAnnualSubmissionRequest)(
             _: HeaderCarrier,
             _: ExecutionContext,
+            _: EndpointLogContext,
             _: String
           )
         )
-        .expects(requestData, *, *, *)
+        .expects(requestData, *, *, *, *)
     }
   }
 }

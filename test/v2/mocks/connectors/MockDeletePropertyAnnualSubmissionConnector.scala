@@ -14,38 +14,33 @@
  * limitations under the License.
  */
 
-package v2.mocks.services
+package v2.mocks.connectors
 
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
 import uk.gov.hmrc.http.HeaderCarrier
-import v2.controllers.EndpointLogContext
-import v2.models.errors.ErrorWrapper
-import v2.models.outcomes.ResponseWrapper
+import v2.connectors.{ DeletePropertyAnnualSubmissionConnector, IfsOutcome }
 import v2.models.request.deletePropertyAnnualSubmission.DeletePropertyAnnualSubmissionRequest
-import v2.services.DeleteForeignPropertyAnnualSubmissionService
 
 import scala.concurrent.{ ExecutionContext, Future }
 
-trait MockDeleteForeignPropertyAnnualSubmissionService extends MockFactory {
+trait MockDeletePropertyAnnualSubmissionConnector extends MockFactory {
 
-  val mockDeleteForeignPropertyAnnualSubmissionService: DeleteForeignPropertyAnnualSubmissionService =
-    mock[DeleteForeignPropertyAnnualSubmissionService]
+  val mockDeletePropertyAnnualSubmissionConnector: DeletePropertyAnnualSubmissionConnector =
+    mock[DeletePropertyAnnualSubmissionConnector]
 
-  object MockDeleteForeignPropertyAnnualSubmissionService {
+  object MockDeletePropertyAnnualSubmissionConnector {
 
-    def deleteForeignPropertyAnnualSubmissionService(
-        requestData: DeletePropertyAnnualSubmissionRequest): CallHandler[Future[Either[ErrorWrapper, ResponseWrapper[Unit]]]] = {
+    def deletePropertyAnnualSubmission(requestData: DeletePropertyAnnualSubmissionRequest): CallHandler[Future[IfsOutcome[Unit]]] = {
       (
-        mockDeleteForeignPropertyAnnualSubmissionService
-          .deleteForeignPropertyAnnualSubmission(_: DeletePropertyAnnualSubmissionRequest)(
+        mockDeletePropertyAnnualSubmissionConnector
+          .deletePropertyAnnualSubmission(_: DeletePropertyAnnualSubmissionRequest)(
             _: HeaderCarrier,
             _: ExecutionContext,
-            _: EndpointLogContext,
             _: String
           )
         )
-        .expects(requestData, *, *, *, *)
+        .expects(requestData, *, *, *)
     }
   }
 }

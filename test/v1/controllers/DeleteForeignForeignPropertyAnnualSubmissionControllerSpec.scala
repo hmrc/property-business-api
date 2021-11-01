@@ -20,7 +20,7 @@ import play.api.libs.json.Json
 import play.api.mvc.Result
 import uk.gov.hmrc.http.HeaderCarrier
 import v1.mocks.MockIdGenerator
-import v1.mocks.requestParsers.MockDeletePropertyAnnualSubmissionRequestParser
+import v1.mocks.requestParsers.MockDeleteForeignPropertyAnnualSubmissionRequestParser
 import v1.mocks.services.{MockAuditService, MockDeleteForeignPropertyAnnualSubmissionService, MockEnrolmentsAuthService, MockMtdIdLookupService}
 import v1.models.audit.{AuditError, AuditEvent, AuditResponse, DeleteForeignPropertyAnnualAuditDetail}
 import v1.models.domain.Nino
@@ -31,12 +31,12 @@ import v1.models.request.deleteForeignPropertyAnnualSubmission._
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-class DeleteForeignPropertyAnnualSubmissionControllerSpec
+class DeleteForeignForeignPropertyAnnualSubmissionControllerSpec
   extends ControllerBaseSpec
     with MockEnrolmentsAuthService
     with MockMtdIdLookupService
     with MockDeleteForeignPropertyAnnualSubmissionService
-    with MockDeletePropertyAnnualSubmissionRequestParser
+    with MockDeleteForeignPropertyAnnualSubmissionRequestParser
     with MockAuditService
     with MockIdGenerator {
 

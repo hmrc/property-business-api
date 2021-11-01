@@ -22,7 +22,7 @@ import v1.models.domain.Nino
 import v1.models.errors.{BadRequestError, BusinessIdFormatError, ErrorWrapper, NinoFormatError}
 import v1.models.request.deleteForeignPropertyAnnualSubmission._
 
-class DeletePropertyAnnualSubmissionRequestParserSpec extends UnitSpec {
+class DeleteForeignPropertyAnnualSubmissionRequestParserSpec extends UnitSpec {
 
   val nino: String = "AA123456B"
   val businessId: String = "XAIS12345678901"

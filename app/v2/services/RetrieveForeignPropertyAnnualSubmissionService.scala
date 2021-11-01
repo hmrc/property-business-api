@@ -18,6 +18,7 @@ package v2.services
 
 import cats.implicits._
 import cats.data.EitherT
+
 import javax.inject.{Inject, Singleton}
 import uk.gov.hmrc.http.HeaderCarrier
 import utils.Logging
@@ -25,6 +26,7 @@ import v2.connectors.RetrieveForeignPropertyAnnualSubmissionConnector
 import v2.controllers.EndpointLogContext
 import v2.models.errors.{BusinessIdFormatError, DownstreamError, NinoFormatError, NotFoundError}
 import v2.models.request.retrieveForeignPropertyAnnualSubmission.RetrieveForeignPropertyAnnualSubmissionRequest
+import v2.models.response.retrieveForeignPropertyAnnualSubmission.RetrieveForeignPropertyAnnualSubmissionResponse
 import v2.support.IfsResponseMappingSupport
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -37,7 +39,7 @@ class RetrieveForeignPropertyAnnualSubmissionService @Inject()(connector: Retrie
     implicit hc: HeaderCarrier,
     ec: ExecutionContext,
     logContext: EndpointLogContext,
-    correlationId: String): Future[RetrieveForeignPropertyAnnualSubmissionServiceOutcome] = {
+    correlationId: String): Future[ServiceOutcome[RetrieveForeignPropertyAnnualSubmissionResponse]] = {
 
     val result = for {
       ifsResponseWrapper <- EitherT(connector.retrieveForeignProperty(request)).leftMap(mapIfsErrors(ifsErrorMap))

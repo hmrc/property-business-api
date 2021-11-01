@@ -53,3 +53,24 @@ uses:
                 description: 'The tax year to which the data applies. For example: 2022-23. The start year and end year must not span two tax years. The minimum tax year is 2022-23. No gaps are allowed, for example, 2022-24 is not valid. (The minimum tax year in Sandbox is 2019-20.)'
                 example: 2022-23
             get: !include uk_property_annual_submission_retrieve.raml
+  /{nino}:
+    uriParameters:
+      nino:
+        description: National Insurance number, in the format AA999999A.
+        type: string
+        example: TC663795B
+    /{businessId}:
+      uriParameters:
+        businessId:
+          description: 'An identifier for the business, unique to the customer.<p>Must conform to the regular expression `^X[A-Z0-9]{1}IS[0-9]{11}$`'
+          example: XAIS12345678910
+      /annual:
+        (annotations.group):
+          name: UK and Foreign Annual Submission Deletions
+          description: Resources relating to the deletion of all UK and Foreign property business' Annual Submission
+        /{taxYear}:
+          uriParameters:
+            taxYear:
+              description: 'The tax year to which the data applies. For example: 2021-22. The start year and end year must not span two tax years. The minimum tax year is 2021-22. No gaps are allowed, for example, 2022-24 is not valid. (The minimum tax year in Sandbox is 2019-20.)'
+              example: 2021-22
+          delete: !include delete_property_submission.raml

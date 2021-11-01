@@ -2,15 +2,15 @@ is:
   - headers.acceptJson
   - headers.testScenarioHeader
   - errors.formatNino
-  - errors.formatBusinessId
   - errors.formatTaxYear
-  - errors.ruleTaxYearNotSupported
+  - errors.formatBusinessId
   - errors.ruleTaxYearRangeInvalid
+  - errors.ruleTaxYearNotSupported
   - errors.clientOrAgentNotAuthorised
   - errors.notFound
-displayName: Delete a Foreign Property Annual Summary
-description: This endpoint allows the developer to delete the adjustments and allowances for a foreign property business in a tax year. A National Insurance number, business ID and tax year must be provided.
-(annotations.sandboxData): !include scenarios/foreign_property_annual_submission_delete_scenarios.md
+displayName: Delete a Property Annual Submission [test only]
+description: This endpoint allows the developer to delete the adjustments and allowances for a UK or Foreign property business in a tax year. A National Insurance number, business ID and tax year must be provided.
+(annotations.sandboxData): !include scenarios/delete_property_annual_submission_scenarios.md
 (annotations.scope): "write:self-assessment"
 securedBy: [ sec.oauth_2_0: { scopes: [ "write:self-assessment" ] } ]
 responses:

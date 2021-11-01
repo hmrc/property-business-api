@@ -6,6 +6,6 @@ POST       /:nino/:businessId/period                         v2.controllers.Crea
 PUT        /:nino/:businessId/period/:submissionId           v2.controllers.AmendForeignPropertyPeriodSummaryController.handleRequest(nino: String, businessId: String, submissionId: String)
 GET        /:nino/:businessId/period/:submissionId           v2.controllers.RetrieveForeignPropertyPeriodSummaryController.handleRequest(nino: String, businessId: String, submissionId: String)
 
-DELETE     /:nino/:businessId/annual/:taxYear                v2.controllers.DeleteForeignPropertyAnnualSubmissionController.handleRequest(nino: String, businessId: String, taxYear: String)
+DELETE     /:nino/:businessId/annual/:taxYear                v2.controllers.DeletePropertyAnnualSubmissionController.handleRequest(nino: String, businessId: String, taxYear: String)
 PUT        /:nino/:businessId/annual/:taxYear                v2.controllers.AmendForeignPropertyAnnualSubmissionController.handleRequest(nino: String, businessId: String, taxYear: String)
 GET        /:nino/:businessId/annual/:taxYear                v2.controllers.RetrieveForeignPropertyAnnualSubmissionController.handleRequest(nino: String, businessId: String, taxYear: String)

@@ -22,8 +22,6 @@ import uk.gov.hmrc.http.HeaderCarrier
 import v2.mocks.MockIdGenerator
 import v2.mocks.requestParsers.MockDeletePropertyAnnualSubmissionRequestParser
 import v2.mocks.services.{ MockAuditService, MockDeletePropertyAnnualSubmissionService, MockEnrolmentsAuthService, MockMtdIdLookupService }
-
-import v2.models.audit.{ AuditError, AuditEvent, AuditResponse, DeleteForeignPropertyAnnualAuditDetail }
 import v2.models.domain.Nino
 import v2.models.errors._
 import v2.models.outcomes.ResponseWrapper
@@ -32,7 +30,7 @@ import v2.models.request.deletePropertyAnnualSubmission._
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-class DeleteForeignPropertyAnnualSubmissionControllerSpec
+class DeletePropertyAnnualSubmissionControllerSpec
     extends ControllerBaseSpec
     with MockEnrolmentsAuthService
     with MockMtdIdLookupService
@@ -49,12 +47,11 @@ class DeleteForeignPropertyAnnualSubmissionControllerSpec
   trait Test {
     val hc: HeaderCarrier = HeaderCarrier()
 
-    val controller = new DeleteForeignPropertyAnnualSubmissionController(
+    val controller = new DeletePropertyAnnualSubmissionController(
       authService = mockEnrolmentsAuthService,
       lookupService = mockMtdIdLookupService,
       parser = mockDeletePropertyAnnualSubmissionRequestParser,
       service = mockDeletePropertyAnnualSubmissionService,
-      auditService = mockAuditService,
       cc = cc,
       idGenerator = mockIdGenerator
     )
@@ -66,21 +63,6 @@ class DeleteForeignPropertyAnnualSubmissionControllerSpec
 
   private val rawData     = DeletePropertyAnnualSubmissionRawData(nino, businessId, taxYear)
   private val requestData = DeletePropertyAnnualSubmissionRequest(Nino(nino), businessId, taxYear)
-
-  def event(auditResponse: AuditResponse): AuditEvent[DeleteForeignPropertyAnnualAuditDetail] =
-    AuditEvent(
-      auditType = "DeleteForeignPropertyAnnualSummary",
-      transactionName = "Delete-Foreign-Property-Annual-Summary",
-      detail = DeleteForeignPropertyAnnualAuditDetail(
-        userType = "Individual",
-        agentReferenceNumber = None,
-        nino,
-        businessId,
-        taxYear,
-        correlationId,
-        response = auditResponse
-      )
-    )
 
   "handleRequest" should {
     "return No Content" when {
@@ -97,9 +79,6 @@ class DeleteForeignPropertyAnnualSubmissionControllerSpec
         val result: Future[Result] = controller.handleRequest(nino, businessId, taxYear)(fakeRequest)
         status(result) shouldBe NO_CONTENT
         header("X-CorrelationId", result) shouldBe Some(correlationId)
-
-        val auditResponse: AuditResponse = AuditResponse(NO_CONTENT, None, None)
-        MockedAuditService.verifyAuditEvent(event(auditResponse)).once
       }
     }
     "return the error as per spec" when {
@@ -116,9 +95,6 @@ class DeleteForeignPropertyAnnualSubmissionControllerSpec
             status(result) shouldBe expectedStatus
             contentAsJson(result) shouldBe Json.toJson(error)
             header("X-CorrelationId", result) shouldBe Some(correlationId)
-
-            val auditResponse: AuditResponse = AuditResponse(expectedStatus, Some(Seq(AuditError(error.code))), None)
-            MockedAuditService.verifyAuditEvent(event(auditResponse)).once
           }
         }
 
@@ -150,9 +126,6 @@ class DeleteForeignPropertyAnnualSubmissionControllerSpec
             status(result) shouldBe expectedStatus
             contentAsJson(result) shouldBe Json.toJson(mtdError)
             header("X-CorrelationId", result) shouldBe Some(correlationId)
-
-            val auditResponse: AuditResponse = AuditResponse(expectedStatus, Some(Seq(AuditError(mtdError.code))), None)
-            MockedAuditService.verifyAuditEvent(event(auditResponse)).once
           }
         }
 

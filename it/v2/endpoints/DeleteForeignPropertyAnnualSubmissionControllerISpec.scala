@@ -35,7 +35,7 @@ class DeleteForeignPropertyAnnualSubmissionControllerISpec extends V2Integration
 
     def uri: String = s"/$nino/$businessId/annual/$taxYear"
 
-    def ifsUri: String = s"/income-tax/business/property/annual/$nino/$businessId/$taxYear"
+    def ifsUri: String = s"/income-tax/business/property/annual"
 
     def setupStubs(): StubMapping
 
@@ -44,6 +44,12 @@ class DeleteForeignPropertyAnnualSubmissionControllerISpec extends V2Integration
       buildRequest(uri)
         .withHttpHeaders((ACCEPT, "application/vnd.hmrc.2.0+json"))
     }
+
+    def ifsQueryParams: Map[String, String] = Map(
+      "taxableEntityId" -> nino,
+      "incomeSourceId" -> businessId,
+      "taxYear" -> taxYear
+    )
 
     def errorBody(code: String): String =
       s"""
@@ -64,7 +70,7 @@ class DeleteForeignPropertyAnnualSubmissionControllerISpec extends V2Integration
           AuditStub.audit()
           AuthStub.authorised()
           MtdIdLookupStub.ninoFound(nino)
-          IfsStub.onSuccess(IfsStub.DELETE, ifsUri, Status.NO_CONTENT, JsObject.empty)
+          IfsStub.onSuccess(IfsStub.DELETE, ifsUri, ifsQueryParams, Status.NO_CONTENT, JsObject.empty)
         }
 
         val response: WSResponse = await(request().delete())
@@ -114,7 +120,7 @@ class DeleteForeignPropertyAnnualSubmissionControllerISpec extends V2Integration
               AuditStub.audit()
               AuthStub.authorised()
               MtdIdLookupStub.ninoFound(nino)
-              IfsStub.onError(IfsStub.DELETE, ifsUri, ifsStatus, errorBody(ifsCode))
+              IfsStub.onError(IfsStub.DELETE, ifsUri, ifsQueryParams, ifsStatus, errorBody(ifsCode))
             }
 
             val response: WSResponse = await(request().delete())
@@ -125,8 +131,8 @@ class DeleteForeignPropertyAnnualSubmissionControllerISpec extends V2Integration
 
         val input = Seq(
           (Status.BAD_REQUEST, "INVALID_TAXABLE_ENTITY_ID", Status.BAD_REQUEST, NinoFormatError),
-          (Status.BAD_REQUEST, "INVALID_INCOME_SOURCE_ID", Status.BAD_REQUEST, BusinessIdFormatError),
-          (Status.BAD_REQUEST, "INVALID_TAX_YEAR", Status.INTERNAL_SERVER_ERROR, DownstreamError),
+          (Status.BAD_REQUEST, "INVALID_INCOMESOURCEID", Status.BAD_REQUEST, BusinessIdFormatError),
+          (Status.BAD_REQUEST, "INVALID_TAX_YEAR", Status.BAD_REQUEST, TaxYearFormatError),
           (Status.BAD_REQUEST, "INVALID_CORRELATIONID", Status.INTERNAL_SERVER_ERROR, DownstreamError),
           (Status.NOT_FOUND, "NO_DATA_FOUND", Status.NOT_FOUND, NotFoundError),
           (Status.INTERNAL_SERVER_ERROR, "SERVER_ERROR", Status.INTERNAL_SERVER_ERROR, DownstreamError),

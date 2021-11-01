@@ -21,7 +21,7 @@ import play.api.mvc.Result
 import uk.gov.hmrc.http.HeaderCarrier
 import v2.mocks.MockIdGenerator
 import v2.mocks.requestParsers.MockDeleteForeignPropertyAnnualSubmissionRequestParser
-import v2.mocks.services.{ MockAuditService, MockDeleteForeignPropertyAnnualSubmissionService, MockEnrolmentsAuthService, MockMtdIdLookupService }
+import v2.mocks.services.{ MockAuditService, MockDeletePropertyAnnualSubmissionService, MockEnrolmentsAuthService, MockMtdIdLookupService }
 import v2.models.audit.{ AuditError, AuditEvent, AuditResponse, DeleteForeignPropertyAnnualAuditDetail }
 import v2.models.domain.Nino
 import v2.models.errors._
@@ -35,7 +35,7 @@ class DeleteForeignPropertyAnnualSubmissionControllerSpec
     extends ControllerBaseSpec
     with MockEnrolmentsAuthService
     with MockMtdIdLookupService
-    with MockDeleteForeignPropertyAnnualSubmissionService
+    with MockDeletePropertyAnnualSubmissionService
     with MockDeleteForeignPropertyAnnualSubmissionRequestParser
     with MockAuditService
     with MockIdGenerator {
@@ -52,7 +52,7 @@ class DeleteForeignPropertyAnnualSubmissionControllerSpec
       authService = mockEnrolmentsAuthService,
       lookupService = mockMtdIdLookupService,
       parser = mockDeleteForeignPropertyAnnualSubmissionRequestParser,
-      service = mockDeleteForeignPropertyAnnualSubmissionService,
+      service = mockDeletePropertyAnnualSubmissionService,
       auditService = mockAuditService,
       cc = cc,
       idGenerator = mockIdGenerator
@@ -89,8 +89,8 @@ class DeleteForeignPropertyAnnualSubmissionControllerSpec
           .parse(rawData)
           .returns(Right(requestData))
 
-        MockDeleteForeignPropertyAnnualSubmissionService
-          .deleteForeignPropertyAnnualSubmissionService(requestData)
+        MockDeletePropertyAnnualSubmissionService
+          .deletePropertyAnnualSubmission(requestData)
           .returns(Future.successful(Right(ResponseWrapper(correlationId, ()))))
 
         val result: Future[Result] = controller.handleRequest(nino, businessId, taxYear)(fakeRequest)
@@ -140,8 +140,8 @@ class DeleteForeignPropertyAnnualSubmissionControllerSpec
               .parse(rawData)
               .returns(Right(requestData))
 
-            MockDeleteForeignPropertyAnnualSubmissionService
-              .deleteForeignPropertyAnnualSubmissionService(requestData)
+            MockDeletePropertyAnnualSubmissionService
+              .deletePropertyAnnualSubmission(requestData)
               .returns(Future.successful(Left(ErrorWrapper(correlationId, mtdError))))
 
             val result: Future[Result] = controller.handleRequest(nino, businessId, taxYear)(fakeRequest)

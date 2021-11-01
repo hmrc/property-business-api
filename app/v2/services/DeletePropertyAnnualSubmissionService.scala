@@ -18,30 +18,31 @@ package v2.services
 
 import cats.implicits._
 import cats.data.EitherT
+
 import javax.inject.{ Inject, Singleton }
 import uk.gov.hmrc.http.HeaderCarrier
 import utils.Logging
-import v2.connectors.DeleteForeignPropertyAnnualSubmissionConnector
+import v2.connectors.DeletePropertyAnnualSubmissionConnector
 import v2.controllers.EndpointLogContext
-import v2.models.errors.{ BusinessIdFormatError, DownstreamError, NinoFormatError, NotFoundError }
+import v2.models.errors.{ BusinessIdFormatError, DownstreamError, NinoFormatError, NotFoundError, TaxYearFormatError }
 import v2.models.request.deletePropertyAnnualSubmission.DeletePropertyAnnualSubmissionRequest
 import v2.support.IfsResponseMappingSupport
 
 import scala.concurrent.{ ExecutionContext, Future }
 
 @Singleton
-class DeleteForeignPropertyAnnualSubmissionService @Inject()(connector: DeleteForeignPropertyAnnualSubmissionConnector)
+class DeletePropertyAnnualSubmissionService @Inject()(connector: DeletePropertyAnnualSubmissionConnector)
     extends IfsResponseMappingSupport
     with Logging {
 
-  def deleteForeignPropertyAnnualSubmission(request: DeletePropertyAnnualSubmissionRequest)(
+  def deletePropertyAnnualSubmission(request: DeletePropertyAnnualSubmissionRequest)(
       implicit hc: HeaderCarrier,
       ec: ExecutionContext,
       logContext: EndpointLogContext,
-      correlationId: String): Future[DeleteForeignPropertyAnnualSubmissionServiceOutcome] = {
+      correlationId: String): Future[ServiceOutcome[Unit]] = {
 
     val result = for {
-      ifsResponseWrapper <- EitherT(connector.deleteForeignPropertyAnnualSubmission(request)).leftMap(mapIfsErrors(ifsErrorMap))
+      ifsResponseWrapper <- EitherT(connector.deletePropertyAnnualSubmission(request)).leftMap(mapIfsErrors(ifsErrorMap))
     } yield ifsResponseWrapper
 
     result.value
@@ -50,8 +51,8 @@ class DeleteForeignPropertyAnnualSubmissionService @Inject()(connector: DeleteFo
   private def ifsErrorMap =
     Map(
       "INVALID_TAXABLE_ENTITY_ID" -> NinoFormatError,
-      "INVALID_INCOME_SOURCE_ID"  -> BusinessIdFormatError,
-      "INVALID_TAX_YEAR"          -> DownstreamError,
+      "INVALID_TAX_YEAR"          -> TaxYearFormatError,
+      "INVALID_INCOMESOURCEID"    -> BusinessIdFormatError,
       "INVALID_CORRELATIONID"     -> DownstreamError,
       "NO_DATA_FOUND"             -> NotFoundError,
       "SERVER_ERROR"              -> DownstreamError,

@@ -26,13 +26,15 @@ import v2.models.request.deletePropertyAnnualSubmission.DeletePropertyAnnualSubm
 import scala.concurrent.{ ExecutionContext, Future }
 
 @Singleton
-class DeleteForeignPropertyAnnualSubmissionConnector @Inject()(val http: HttpClient, val appConfig: AppConfig) extends BaseIfsConnector {
+class DeletePropertyAnnualSubmissionConnector @Inject()(val http: HttpClient, val appConfig: AppConfig) extends BaseIfsConnector {
 
-  def deleteForeignPropertyAnnualSubmission(
-      request: DeletePropertyAnnualSubmissionRequest)(implicit hc: HeaderCarrier, ec: ExecutionContext, correlationId: String): Future[IfsOutcome[Unit]] = {
+  def deletePropertyAnnualSubmission(request: DeletePropertyAnnualSubmissionRequest)(implicit hc: HeaderCarrier,
+                                                                                     ec: ExecutionContext,
+                                                                                     correlationId: String): Future[IfsOutcome[Unit]] = {
 
     delete(
-      uri = IfsUri[Unit](s"income-tax/business/property/annual/${request.nino.nino}/${request.businessId}/${request.taxYear}")
+      uri = IfsUri[Unit](
+        s"income-tax/business/property/annual?taxableEntityId=${request.nino.nino}&incomeSourceId=${request.businessId}&taxYear=${request.taxYear}")
     )
   }
 }

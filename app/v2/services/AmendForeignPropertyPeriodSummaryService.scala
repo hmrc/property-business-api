@@ -38,7 +38,7 @@ class AmendForeignPropertyPeriodSummaryService @Inject()(connector: AmendForeign
     implicit hc: HeaderCarrier,
     ec: ExecutionContext,
     logContext: EndpointLogContext,
-    correlationId: String): Future[AmendForeignPropertyPeriodSummaryServiceOutcome] = {
+    correlationId: String): Future[ServiceOutcome[Unit]] = {
 
     val result = for {
       ifsResponseWrapper <- EitherT(connector.amendForeignProperty(request)).leftMap(mapIfsErrors(ifsErrorMap))

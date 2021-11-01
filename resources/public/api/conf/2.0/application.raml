@@ -66,11 +66,11 @@ uses:
           example: XAIS12345678910
       /annual:
         (annotations.group):
-          name: property business annual
-          description: Resources relating to all property business' Annual Submission
+          name: UK and Foreign Annual Submission Deletions
+          description: Resources relating to the deletion of all UK and Foreign property business' Annual Submission
         /{taxYear}:
           uriParameters:
             taxYear:
-              description: 'The tax year to which the data applies. For example: 2022-23. The start year and end year must not span two tax years. The minimum tax year is 2022-23. No gaps are allowed, for example, 2022-24 is not valid. (The minimum tax year in Sandbox is 2019-20.)'
+              description: 'The tax year to which the data applies. For example: 2021-22. The start year and end year must not span two tax years. The minimum tax year is 2021-22. No gaps are allowed, for example, 2022-24 is not valid. (The minimum tax year in Sandbox is 2019-20.)'
               example: 2021-22
           delete: !include delete_property_submission.raml

@@ -22,7 +22,7 @@ import v1.controllers.requestParsers.validators.DeleteForeignPropertyAnnualSubmi
 import v1.models.errors.MtdError
 import v1.models.request.deleteForeignPropertyAnnualSubmission.DeleteForeignPropertyAnnualSubmissionRawData
 
-class MockDeletePropertyAnnualSubmissionValidator extends MockFactory {
+class MockDeleteForeignPropertyAnnualSubmissionValidator extends MockFactory {
 
   val mockValidator: DeleteForeignPropertyAnnualSubmissionValidator = mock[DeleteForeignPropertyAnnualSubmissionValidator]
 

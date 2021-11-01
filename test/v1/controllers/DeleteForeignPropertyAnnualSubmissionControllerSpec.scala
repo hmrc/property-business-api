@@ -31,7 +31,7 @@ import v1.models.request.deleteForeignPropertyAnnualSubmission._
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-class DeleteForeignForeignPropertyAnnualSubmissionControllerSpec
+class DeleteForeignPropertyAnnualSubmissionControllerSpec
   extends ControllerBaseSpec
     with MockEnrolmentsAuthService
     with MockMtdIdLookupService

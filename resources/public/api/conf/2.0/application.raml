@@ -53,6 +53,16 @@ uses:
                 description: 'The tax year to which the data applies. For example: 2022-23. The start year and end year must not span two tax years. The minimum tax year is 2022-23. No gaps are allowed, for example, 2022-24 is not valid. (The minimum tax year in Sandbox is 2019-20.)'
                 example: 2022-23
             get: !include uk_property_annual_submission_retrieve.raml
+        /period:
+          (annotations.group):
+            name: UK Property Income & Expenses Period Summary
+            description: Resources relating to an business' UK Period Summary
+          /{taxYear}:
+            uriParameters:
+              taxYear:
+                description: 'The tax year to which the data applies. For example, 2022-23. The start year and end year must not span two tax years. The minimum tax year is 2022-23. No gaps are allowed, for example, 2022-24 is not valid. (The minimum tax year in Sandbox is 2019-20.)'
+                example: 2022-23
+            post: !include uk_property_period_summary_create.raml
   /{nino}:
     uriParameters:
       nino:

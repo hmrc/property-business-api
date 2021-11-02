@@ -27,7 +27,7 @@ trait MockDeletePropertyAnnualSubmissionRequestParser extends MockFactory {
   val mockDeletePropertyAnnualSubmissionRequestParser: DeletePropertyAnnualSubmissionRequestParser =
     mock[DeletePropertyAnnualSubmissionRequestParser]
 
-  object MockDeleteForeignPropertyAnnualSubmissionRequestParser {
+  object MockDeletePropertyAnnualSubmissionRequestParser {
 
     def parse(data: DeletePropertyAnnualSubmissionRawData): CallHandler[Either[ErrorWrapper, DeletePropertyAnnualSubmissionRequest]] = {
       (mockDeletePropertyAnnualSubmissionRequestParser.parseRequest(_: DeletePropertyAnnualSubmissionRawData)(_: String)).expects(data, *)

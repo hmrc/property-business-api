@@ -23,7 +23,6 @@ import play.api.libs.json.Json
 import play.api.mvc.{ Action, AnyContent, ControllerComponents }
 import utils.{ IdGenerator, Logging }
 import v2.controllers.requestParsers.DeletePropertyAnnualSubmissionRequestParser
-import v2.models.audit.{ AuditEvent, AuditResponse, DeleteForeignPropertyAnnualAuditDetail }
 import v2.models.errors._
 import v2.models.request.deletePropertyAnnualSubmission.DeletePropertyAnnualSubmissionRawData
 import v2.services.{ DeletePropertyAnnualSubmissionService, EnrolmentsAuthService, MtdIdLookupService }
@@ -31,11 +30,10 @@ import v2.services.{ DeletePropertyAnnualSubmissionService, EnrolmentsAuthServic
 import scala.concurrent.{ ExecutionContext, Future }
 
 @Singleton
-class DeleteForeignPropertyAnnualSubmissionController @Inject()(val authService: EnrolmentsAuthService,
+class DeletePropertyAnnualSubmissionController @Inject()(val authService: EnrolmentsAuthService,
                                                                 val lookupService: MtdIdLookupService,
                                                                 parser: DeletePropertyAnnualSubmissionRequestParser,
                                                                 service: DeletePropertyAnnualSubmissionService,
-                                                                auditService: AuditService,
                                                                 cc: ControllerComponents,
                                                                 idGenerator: IdGenerator)(implicit ec: ExecutionContext)
     extends AuthorisedController(cc)

@@ -36,7 +36,6 @@ class DeletePropertyAnnualSubmissionControllerSpec
     with MockMtdIdLookupService
     with MockDeletePropertyAnnualSubmissionService
     with MockDeletePropertyAnnualSubmissionRequestParser
-    with MockAuditService
     with MockIdGenerator {
 
   private val nino          = "AA123456A"

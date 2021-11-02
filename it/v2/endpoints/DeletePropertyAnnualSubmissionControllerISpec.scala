@@ -60,7 +60,7 @@ class DeletePropertyAnnualSubmissionControllerISpec extends V2IntegrationBaseSpe
        """.stripMargin
   }
 
-  "calling the delete foreign property annual submission endpoint" should {
+  "calling the delete property annual submission endpoint" should {
 
     "return a 204 status code" when {
 

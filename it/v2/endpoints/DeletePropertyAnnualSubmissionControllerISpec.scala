@@ -25,7 +25,7 @@ import support.V2IntegrationBaseSpec
 import v2.models.errors._
 import v2.stubs.{AuditStub, AuthStub, IfsStub, MtdIdLookupStub}
 
-class DeleteForeignPropertyAnnualSubmissionControllerISpec extends V2IntegrationBaseSpec {
+class DeletePropertyAnnualSubmissionControllerISpec extends V2IntegrationBaseSpec {
 
   private trait Test {
 

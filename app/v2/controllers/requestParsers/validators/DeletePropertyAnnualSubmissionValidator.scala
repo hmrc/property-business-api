@@ -24,7 +24,7 @@ import v2.models.request.deletePropertyAnnualSubmission.DeletePropertyAnnualSubm
 import javax.inject.{ Inject, Singleton }
 
 @Singleton
-class DeleteForeignPropertyAnnualSubmissionValidator @Inject()(appConfig: AppConfig) extends Validator[DeletePropertyAnnualSubmissionRawData] {
+class DeletePropertyAnnualSubmissionValidator @Inject()(appConfig: AppConfig) extends Validator[DeletePropertyAnnualSubmissionRawData] {
 
   private lazy val minTaxYear = appConfig.minimumTaxV2Foreign
   private val validationSet   = List(parameterFormatValidation)

@@ -18,15 +18,15 @@ package v2.mocks.validators
 
 import org.scalamock.handlers.CallHandler1
 import org.scalamock.scalatest.MockFactory
-import v2.controllers.requestParsers.validators.DeleteForeignPropertyAnnualSubmissionValidator
+import v2.controllers.requestParsers.validators.DeletePropertyAnnualSubmissionValidator
 import v2.models.errors.MtdError
 import v2.models.request.deletePropertyAnnualSubmission.DeletePropertyAnnualSubmissionRawData
 
-class MockDeleteForeignPropertyAnnualSubmissionValidator extends MockFactory {
+class MockDeletePropertyAnnualSubmissionValidator extends MockFactory {
 
-  val mockValidator: DeleteForeignPropertyAnnualSubmissionValidator = mock[DeleteForeignPropertyAnnualSubmissionValidator]
+  val mockValidator: DeletePropertyAnnualSubmissionValidator = mock[DeletePropertyAnnualSubmissionValidator]
 
-  object MockDeleteForeignPropertyAnnualSubmissionValidator {
+  object MockDeletePropertyAnnualSubmissionValidator {
 
     def validate(data: DeletePropertyAnnualSubmissionRawData): CallHandler1[DeletePropertyAnnualSubmissionRawData, List[MtdError]] = {
       (mockValidator

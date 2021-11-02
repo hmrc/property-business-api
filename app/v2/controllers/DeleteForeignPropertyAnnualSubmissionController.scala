@@ -23,7 +23,7 @@ import play.api.libs.json.Json
 import play.api.mvc.{ Action, AnyContent, ControllerComponents }
 import uk.gov.hmrc.http.HeaderCarrier
 import utils.{ IdGenerator, Logging }
-import v2.controllers.requestParsers.DeleteForeignPropertyAnnualSubmissionRequestParser
+import v2.controllers.requestParsers.DeletePropertyAnnualSubmissionRequestParser
 import v2.models.audit.{ AuditEvent, AuditResponse, DeleteForeignPropertyAnnualAuditDetail }
 import v2.models.errors._
 import v2.models.request.deletePropertyAnnualSubmission.DeletePropertyAnnualSubmissionRawData
@@ -34,7 +34,7 @@ import scala.concurrent.{ ExecutionContext, Future }
 @Singleton
 class DeleteForeignPropertyAnnualSubmissionController @Inject()(val authService: EnrolmentsAuthService,
                                                                 val lookupService: MtdIdLookupService,
-                                                                parser: DeleteForeignPropertyAnnualSubmissionRequestParser,
+                                                                parser: DeletePropertyAnnualSubmissionRequestParser,
                                                                 service: DeletePropertyAnnualSubmissionService,
                                                                 auditService: AuditService,
                                                                 cc: ControllerComponents,

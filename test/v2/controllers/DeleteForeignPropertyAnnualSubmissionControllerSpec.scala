@@ -20,8 +20,9 @@ import play.api.libs.json.Json
 import play.api.mvc.Result
 import uk.gov.hmrc.http.HeaderCarrier
 import v2.mocks.MockIdGenerator
-import v2.mocks.requestParsers.MockDeleteForeignPropertyAnnualSubmissionRequestParser
+import v2.mocks.requestParsers.MockDeletePropertyAnnualSubmissionRequestParser
 import v2.mocks.services.{ MockAuditService, MockDeletePropertyAnnualSubmissionService, MockEnrolmentsAuthService, MockMtdIdLookupService }
+
 import v2.models.audit.{ AuditError, AuditEvent, AuditResponse, DeleteForeignPropertyAnnualAuditDetail }
 import v2.models.domain.Nino
 import v2.models.errors._
@@ -36,7 +37,7 @@ class DeleteForeignPropertyAnnualSubmissionControllerSpec
     with MockEnrolmentsAuthService
     with MockMtdIdLookupService
     with MockDeletePropertyAnnualSubmissionService
-    with MockDeleteForeignPropertyAnnualSubmissionRequestParser
+    with MockDeletePropertyAnnualSubmissionRequestParser
     with MockAuditService
     with MockIdGenerator {
 
@@ -51,7 +52,7 @@ class DeleteForeignPropertyAnnualSubmissionControllerSpec
     val controller = new DeleteForeignPropertyAnnualSubmissionController(
       authService = mockEnrolmentsAuthService,
       lookupService = mockMtdIdLookupService,
-      parser = mockDeleteForeignPropertyAnnualSubmissionRequestParser,
+      parser = mockDeletePropertyAnnualSubmissionRequestParser,
       service = mockDeletePropertyAnnualSubmissionService,
       auditService = mockAuditService,
       cc = cc,
@@ -85,7 +86,7 @@ class DeleteForeignPropertyAnnualSubmissionControllerSpec
     "return No Content" when {
       "the request received is valid" in new Test {
 
-        MockDeleteForeignPropertyAnnualSubmissionRequestParser
+        MockDeletePropertyAnnualSubmissionRequestParser
           .parse(rawData)
           .returns(Right(requestData))
 
@@ -106,7 +107,7 @@ class DeleteForeignPropertyAnnualSubmissionControllerSpec
         def errorsFromParserTester(error: MtdError, expectedStatus: Int): Unit = {
           s"a ${error.code} error is returned from the parser" in new Test {
 
-            MockDeleteForeignPropertyAnnualSubmissionRequestParser
+            MockDeletePropertyAnnualSubmissionRequestParser
               .parse(rawData)
               .returns(Left(ErrorWrapper(correlationId, error, None)))
 
@@ -136,7 +137,7 @@ class DeleteForeignPropertyAnnualSubmissionControllerSpec
         def serviceErrors(mtdError: MtdError, expectedStatus: Int): Unit = {
           s"a $mtdError error is returned from the service" in new Test {
 
-            MockDeleteForeignPropertyAnnualSubmissionRequestParser
+            MockDeletePropertyAnnualSubmissionRequestParser
               .parse(rawData)
               .returns(Right(requestData))
 

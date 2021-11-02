@@ -26,7 +26,7 @@ class MockDeletePropertyAnnualSubmissionValidator extends MockFactory {
 
   val mockValidator: DeletePropertyAnnualSubmissionValidator = mock[DeletePropertyAnnualSubmissionValidator]
 
-  object MockDeleteForeignPropertyAnnualSubmissionValidator {
+  object MockDeletePropertyAnnualSubmissionValidator {
 
     def validate(data: DeletePropertyAnnualSubmissionRawData): CallHandler1[DeletePropertyAnnualSubmissionRawData, List[MtdError]] = {
       (mockValidator

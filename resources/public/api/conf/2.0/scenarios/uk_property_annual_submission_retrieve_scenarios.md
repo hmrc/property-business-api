@@ -23,5 +23,9 @@
             <td><p>UK_NON_FHL_PROPERTY</p></td>
             <td><p>Simulates success response with UK Non-FHL property.</p></td>
         </tr>
+        <tr>
+            <td><p>FOREIGN_PROPERTY</p></td>
+            <td><p>Simulates the scenario where wrong business type is returned.</p></td>
+        </tr>
     </tbody>
 </table>

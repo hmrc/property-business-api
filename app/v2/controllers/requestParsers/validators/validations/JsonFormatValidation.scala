@@ -16,18 +16,97 @@
 
 package v2.controllers.requestParsers.validators.validations
 
+import play.api.Logger
 import play.api.libs.json._
-import v2.models.errors.MtdError
+import v2.models.errors.{ MtdError, RuleIncorrectOrEmptyBodyError }
 
 object JsonFormatValidation {
 
-  def validate[A](data: JsValue, error: MtdError)(implicit reads: Reads[A]): List[MtdError] = {
+  private val logger: Logger = Logger(this.getClass)
 
-    data.validate[A] match {
-      case JsSuccess(_, _) => NoValidationErrors
-      case _               => List(error)
+  def validate[A: OFormat](data: JsValue): List[MtdError] = {
+    if (data == JsObject.empty) {
+      List(RuleIncorrectOrEmptyBodyError)
+    } else {
+      data.validate[A] match {
+        case JsSuccess(_, _)                                          => NoValidationErrors
+        case JsError(errors: Seq[(JsPath, Seq[JsonValidationError])]) => handleErrors(errors)
+      }
     }
-
   }
 
+  /**
+    * Detects empty objects or arrays in JSON. Makes sense only when the schema / class structure
+    * allows for optional arrays that can safely omitted when empty.
+    */
+  def validatedNestedEmpty(data: JsValue): List[MtdError] = {
+
+    def pathsToEmptyParts(acc: List[String], path: String, json: JsValue): List[String] = {
+      json match {
+        case o: JsObject =>
+          if (o == JsObject.empty) {
+            path :: acc
+          } else {
+            val children = o.fields
+            children.foldLeft(acc) {
+              case (acc, (name, value)) => pathsToEmptyParts(acc, s"$path/$name", value)
+            }
+          }
+
+        case a: JsArray =>
+          val children = a.value
+          if (children.isEmpty) {
+            path :: acc
+          } else {
+            children.zipWithIndex.foldLeft(acc) {
+              case (acc, (value, i)) => pathsToEmptyParts(acc, s"$path/$i", value)
+            }
+          }
+
+        case _ => acc
+      }
+    }
+
+    if (data == JsObject.empty) {
+      List(RuleIncorrectOrEmptyBodyError)
+    } else {
+      pathsToEmptyParts(Nil, "", data) match {
+        case Nil   => Nil
+        case paths => List(RuleIncorrectOrEmptyBodyError.copy(paths = Some(paths.reverse)))
+      }
+    }
+  }
+
+  private def handleErrors(errors: Seq[(JsPath, Seq[JsonValidationError])]): List[MtdError] = {
+    val failures = errors.map {
+      case (path: JsPath, Seq(JsonValidationError(Seq("error.path.missing"))))                              => MissingMandatoryField(path)
+      case (path: JsPath, Seq(JsonValidationError(Seq(error: String)))) if error.contains("error.expected") => WrongFieldType(path)
+      case (path: JsPath, _)                                                                                => OtherFailure(path)
+    }
+
+    val logString = failures
+      .groupBy(_.getClass)
+      .values
+      .map(failure => s"${failure.head.failureReason}: " + s"${failure.map(_.fromJsPath)}")
+      .toString()
+      .dropRight(1)
+      .drop(5)
+
+    logger.warn(s"[JsonFormatValidation][validate] - Request body failed validation with errors - $logString")
+    List(RuleIncorrectOrEmptyBodyError.copy(paths = Some(failures.map(_.fromJsPath))))
+  }
+
+  private class JsonFormatValidationFailure(path: JsPath, failure: String) {
+    val failureReason: String = failure
+
+    def fromJsPath: String =
+      path
+        .toString()
+        .replace("(", "/")
+        .replace(")", "")
+  }
+
+  private case class MissingMandatoryField(path: JsPath) extends JsonFormatValidationFailure(path, "Missing mandatory field")
+  private case class WrongFieldType(path: JsPath)        extends JsonFormatValidationFailure(path, "Wrong field type")
+  private case class OtherFailure(path: JsPath)          extends JsonFormatValidationFailure(path, "Other failure")
 }

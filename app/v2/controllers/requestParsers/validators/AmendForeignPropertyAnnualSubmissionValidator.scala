@@ -45,7 +45,7 @@ class AmendForeignPropertyAnnualSubmissionValidator @Inject()(appConfig: AppConf
 
   private def bodyFormatValidation: AmendForeignPropertyAnnualSubmissionRawData => List[List[MtdError]] = { data =>
     val baseValidation = List(
-      JsonFormatValidation.validate[AmendForeignPropertyAnnualSubmissionRequestBody](data.body, RuleIncorrectOrEmptyBodyError))
+      JsonFormatValidation.validate[AmendForeignPropertyAnnualSubmissionRequestBody](data.body))
 
     val extraValidation: List[List[MtdError]] = {
       data.body

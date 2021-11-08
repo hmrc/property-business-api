@@ -173,7 +173,7 @@ class AmendForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec {
         validator.validate(AmendForeignPropertyPeriodSummaryRawData(validNino, validBusinessId, validSubmissionId, Json.parse(
           """{
             |  "foreignFhlEea": {}
-            |}""".stripMargin))) shouldBe List(RuleIncorrectOrEmptyBodyError)
+            |}""".stripMargin))) shouldBe List(RuleIncorrectOrEmptyBodyError.copy(paths=Some(Seq("/foreignFhlEea/income"))))
       }
       "foreignFhlEea.expenditure is empty" in {
         validator.validate(AmendForeignPropertyPeriodSummaryRawData(validNino, validBusinessId, validSubmissionId, Json.parse(
@@ -181,7 +181,7 @@ class AmendForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec {
             |  "foreignFhlEea": {
             |    "expenditure": {}
             |  }
-            |}""".stripMargin))) shouldBe List(RuleIncorrectOrEmptyBodyError)
+            |}""".stripMargin))) shouldBe List(RuleIncorrectOrEmptyBodyError.copy(paths=Some(Seq("/foreignFhlEea/income"))))
       }
       "an empty foreignProperty is submitted" in {
         validator.validate(AmendForeignPropertyPeriodSummaryRawData(validNino, validBusinessId, validSubmissionId, Json.parse(
@@ -195,7 +195,7 @@ class AmendForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec {
             |  "foreignProperty": [
             |    {}
             |  ]
-            |}""".stripMargin))) shouldBe List(RuleIncorrectOrEmptyBodyError)
+            |}""".stripMargin))) shouldBe List(RuleIncorrectOrEmptyBodyError.copy(paths=Some(Seq("/foreignProperty/0/income", "/foreignProperty/0/countryCode"))))
       }
       "foreignProperty[].expenditure is empty" in {
         validator.validate(AmendForeignPropertyPeriodSummaryRawData(validNino, validBusinessId, validSubmissionId, Json.parse(
@@ -205,7 +205,7 @@ class AmendForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec {
             |      "expenditure": {}
             |    }
             |  ]
-            |}""".stripMargin))) shouldBe List(RuleIncorrectOrEmptyBodyError)
+            |}""".stripMargin))) shouldBe List(RuleIncorrectOrEmptyBodyError.copy(paths=Some(Seq("/foreignProperty/0/income", "/foreignProperty/0/countryCode"))))
       }
     }
 

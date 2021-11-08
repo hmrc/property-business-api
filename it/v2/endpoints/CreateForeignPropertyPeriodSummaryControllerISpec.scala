@@ -19,6 +19,7 @@ package v2.endpoints
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import play.api.http.HeaderNames.ACCEPT
 import play.api.http.Status
+import play.api.http.Status.BAD_REQUEST
 import play.api.libs.json.{JsValue, Json}
 import play.api.libs.ws.{WSRequest, WSResponse}
 import support.V2IntegrationBaseSpec
@@ -459,7 +460,6 @@ class CreateForeignPropertyPeriodSummaryControllerISpec extends V2IntegrationBas
   )
 
   val allInvalidValueRequestError: MtdError = ValueFormatError.copy(
-    message = "One or more monetary fields are invalid",
     paths = Some(List(
       "/foreignFhlEea/income/rentAmount",
       "/foreignFhlEea/expenditure/premisesRunningCosts",
@@ -638,6 +638,7 @@ class CreateForeignPropertyPeriodSummaryControllerISpec extends V2IntegrationBas
           ("AA123456A", "XA***IS1", unconsolidatedRequestJson, Status.BAD_REQUEST, BusinessIdFormatError),
           ("AA123456A", "XAIS12345678910", invalidToDateRequestJson, Status.BAD_REQUEST, ToDateFormatError),
           ("AA123456A", "XAIS12345678910", invalidFromDateRequestJson, Status.BAD_REQUEST, FromDateFormatError),
+          ("AA123456A", "XAIS12345678910", Json.parse(s"""{"foreignFhlEea": 2342314}"""), BAD_REQUEST, RuleIncorrectOrEmptyBodyError.copy(paths = Some(Seq("/toDate", "/fromDate", "/foreignFhlEea")))),
           ("AA123456A", "XAIS12345678910", invalidCountryCodeRequestJson, Status.BAD_REQUEST, allInvalidCountryCodeRequestError),
           ("AA123456A", "XAIS12345678910", invalidValueRequestJson, Status.BAD_REQUEST, allInvalidValueRequestError),
           ("AA123456A", "XAIS12345678910", bothExpensesSuppliedRequestJson, Status.BAD_REQUEST, RuleBothExpensesSuppliedRequestError),

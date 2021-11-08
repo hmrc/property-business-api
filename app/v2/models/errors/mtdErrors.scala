@@ -44,7 +44,7 @@ object TaxYearFormatError      extends MtdError("FORMAT_TAX_YEAR", "The provided
 object RuleIncorrectOrEmptyBodyError extends MtdError("RULE_INCORRECT_OR_EMPTY_BODY_SUBMITTED", "An empty or non-matching body was submitted")
 
 object RuleBothExpensesSuppliedError
-    extends MtdError("RULE_BOTH_EXPENSES_SUPPLIED", "Both expenses and consolidatedExpenses can not be present at the same time")
+    extends MtdError("RULE_BOTH_EXPENSES_SUPPLIED", "Both Expenses and Consolidated Expenses must not be present at the same time")
 object RuleToDateBeforeFromDateError extends MtdError("RULE_TO_DATE_BEFORE_FROM_DATE", "The To date cannot be earlier than the From date")
 object RuleCountryCodeError          extends MtdError("RULE_COUNTRY_CODE", "The country code is not a valid ISO 3166-1 alpha-3 country code")
 object RuleOverlappingPeriodError    extends MtdError("RULE_OVERLAPPING_PERIOD", "Period summary overlaps with any of the existing period summaries")

@@ -16,7 +16,7 @@
 
 package v2.models.request.amendForeignPropertyPeriodSummary
 
-import play.api.libs.json.{Json, Reads, Writes}
+import play.api.libs.json.{Json, OWrites, Reads}
 import v2.models.request.common.foreignFhlEea.ForeignFhlEea
 import v2.models.request.common.foreignPropertyEntry.ForeignPropertyEntry
 
@@ -29,7 +29,7 @@ case class AmendForeignPropertyPeriodSummaryRequestBody(foreignFhlEea: Option[Fo
 
 object AmendForeignPropertyPeriodSummaryRequestBody {
   implicit val reads: Reads[AmendForeignPropertyPeriodSummaryRequestBody] = Json.reads[AmendForeignPropertyPeriodSummaryRequestBody]
-  implicit val writes: Writes[AmendForeignPropertyPeriodSummaryRequestBody] = Json.writes[AmendForeignPropertyPeriodSummaryRequestBody]
+  implicit val writes: OWrites[AmendForeignPropertyPeriodSummaryRequestBody] = Json.writes[AmendForeignPropertyPeriodSummaryRequestBody]
 }
 
 

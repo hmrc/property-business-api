@@ -252,7 +252,7 @@ class AmendForeignPropertyAnnualSubmissionValidatorSpec extends UnitSpec with Mo
             |   {}
             |   ]
             |}""".stripMargin)
-          )) shouldBe List(RuleIncorrectOrEmptyBodyError)
+          )) shouldBe List(RuleIncorrectOrEmptyBodyError.copy(paths=Some(Seq("/foreignProperty/0/countryCode"))))
       }
       "an empty /foreignFhlEea/allowances is submitted" in {
         validator.validate(
@@ -293,7 +293,7 @@ class AmendForeignPropertyAnnualSubmissionValidatorSpec extends UnitSpec with Mo
             |     }
             |   ]
             |}""".stripMargin)
-          )) shouldBe List(RuleIncorrectOrEmptyBodyError)
+          )) shouldBe List(RuleIncorrectOrEmptyBodyError.copy(paths=Some(Seq("/foreignProperty/0/countryCode"))))
       }
       "an empty /foreignProperty/adjustments is submitted" in {
         validator.validate(
@@ -308,7 +308,7 @@ class AmendForeignPropertyAnnualSubmissionValidatorSpec extends UnitSpec with Mo
             |     }
             |   ]
             |}""".stripMargin)
-          )) shouldBe List(RuleIncorrectOrEmptyBodyError)
+          )) shouldBe List(RuleIncorrectOrEmptyBodyError.copy(paths=Some(Seq("/foreignProperty/0/countryCode"))))
       }
     }
     "return ValueFormatError" when {

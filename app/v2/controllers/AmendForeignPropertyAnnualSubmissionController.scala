@@ -97,7 +97,7 @@ class AmendForeignPropertyAnnualSubmissionController @Inject()(val authService: 
            TaxYearFormatError |
            MtdErrorWithCustomMessage(CountryCodeFormatError.code) |
            MtdErrorWithCustomMessage(ValueFormatError.code) |
-           RuleIncorrectOrEmptyBodyError |
+           MtdErrorWithCustomMessage(RuleIncorrectOrEmptyBodyError.code) |
            RuleTaxYearNotSupportedError |
            RuleTaxYearRangeInvalidError |
            MtdErrorWithCustomMessage(RuleCountryCodeError.code) => BadRequest(Json.toJson(errorWrapper))

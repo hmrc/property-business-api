@@ -176,13 +176,11 @@ class AmendForeignPropertyAnnualSubmissionControllerISpec extends V2IntegrationB
 
         val allInvalidFieldsRequestError: List[MtdError] = List(
           CountryCodeFormatError.copy(
-            message = "The provided Country code is invalid",
             paths = Some(List(
               "/foreignProperty/0/countryCode"
             ))
           ),
           ValueFormatError.copy(
-            message = "One or more monetary fields are invalid",
             paths = Some(List(
               "/foreignFhlEea/adjustments/privateUseAdjustment",
               "/foreignFhlEea/adjustments/balancingCharge",
@@ -390,7 +388,7 @@ class AmendForeignPropertyAnnualSubmissionControllerISpec extends V2IntegrationB
             ("AA123456A", "XAIS12345678910", "2021-24", validRequestBodyJson, BAD_REQUEST, RuleTaxYearRangeInvalidError),
             ("AA123456A", "XAIS12345678910", "2019-20", validRequestBodyJson, BAD_REQUEST, RuleTaxYearNotSupportedError),
             ("AA123456A", "XAIS12345678910", "2021-22",
-              Json.parse(s"""{"foreignFhlEea": 2342314}""".stripMargin), BAD_REQUEST, RuleIncorrectOrEmptyBodyError),
+              Json.parse(s"""{"foreignFhlEea": 2342314}""".stripMargin), BAD_REQUEST, RuleIncorrectOrEmptyBodyError.copy(paths = Some(Seq("/foreignFhlEea")))),
             ("AA123456A", "XAIS12345678910", "2021-22", allInvalidValueRequestBodyJson, BAD_REQUEST, allInvalidValueRequestError),
             ("AA123456A", "XAIS12345678910", "2021-22", allInvalidCountryCodeRequestBodyJson, BAD_REQUEST, allInvalidCountryCodeRequestError)
           )

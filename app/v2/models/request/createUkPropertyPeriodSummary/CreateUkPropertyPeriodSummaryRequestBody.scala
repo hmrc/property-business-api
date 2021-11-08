@@ -16,8 +16,8 @@
 
 package v2.models.request.createUkPropertyPeriodSummary
 
-import play.api.libs.json.{JsPath, Json, Reads, Writes}
 import play.api.libs.functional.syntax._
+import play.api.libs.json.{JsPath, Json, OWrites, Reads}
 import v2.models.request.createUkPropertyPeriodSummary.ukFhlProperty.UkFhlProperty
 import v2.models.request.createUkPropertyPeriodSummary.ukNonFhlProperty.UkNonFhlProperty
 
@@ -29,10 +29,11 @@ case class CreateUkPropertyPeriodSummaryRequestBody(fromDate: String,
 
 
 
+
 object CreateUkPropertyPeriodSummaryRequestBody {
   implicit val reads: Reads[CreateUkPropertyPeriodSummaryRequestBody] = Json.reads[CreateUkPropertyPeriodSummaryRequestBody]
 
-  implicit val writes: Writes[CreateUkPropertyPeriodSummaryRequestBody] = (
+  implicit val writes: OWrites[CreateUkPropertyPeriodSummaryRequestBody] = (
     (JsPath \ "fromDate").write[String] and
       (JsPath \ "toDate").write[String] and
       (JsPath \ "ukFhlProperty").writeNullable[UkFhlProperty] and

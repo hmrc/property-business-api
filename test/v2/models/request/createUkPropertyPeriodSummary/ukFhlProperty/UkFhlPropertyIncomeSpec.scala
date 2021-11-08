@@ -25,7 +25,7 @@ class UkFhlPropertyIncomeSpec extends UnitSpec {
     UkFhlPropertyIncome(
       Some(5000.99),
       Some(3123.21),
-      Some(UkFhlPropertyIncomeRentARoom(
+      Some(UkFhlPropertyRentARoom(
         Some(532.12)
       ))
     )

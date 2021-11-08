@@ -21,14 +21,14 @@ import play.api.libs.functional.syntax._
 
 case class UkFhlPropertyIncome(periodAmount: Option[BigDecimal],
                                taxDeducted: Option[BigDecimal],
-                               rentARoom: Option[UkFhlPropertyIncomeRentARoom])
+                               rentARoom: Option[UkFhlPropertyRentARoom])
 object UkFhlPropertyIncome {
   implicit val reads: Reads[UkFhlPropertyIncome] = Json.reads[UkFhlPropertyIncome]
 
   implicit val writes: Writes[UkFhlPropertyIncome] = (
     (JsPath \ "periodAmount").writeNullable[BigDecimal] and
       (JsPath \ "taxDeducted").writeNullable[BigDecimal] and
-      (JsPath \ "ukFhlRentARoom").writeNullable[UkFhlPropertyIncomeRentARoom]
+      (JsPath \ "ukFhlRentARoom").writeNullable[UkFhlPropertyRentARoom]
     ) (unlift(UkFhlPropertyIncome.unapply))
 
 }

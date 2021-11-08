@@ -29,8 +29,9 @@ class UkFhlPropertyExpensesSpec extends UnitSpec {
       Some(8831.12),
       Some(484.12),
       Some(99282),
+      Some(999.99),
       Some(974.47),
-      Some(UkFhlPropertyExpensesRentARoom(
+      Some(UkFhlPropertyRentARoom(
         Some(8842.43)
       ))
     )
@@ -44,6 +45,7 @@ class UkFhlPropertyExpensesSpec extends UnitSpec {
       |    "professionalFees": 8831.12,
       |    "costOfServices": 484.12,
       |    "other": 99282,
+      |    "consolidatedExpense": 999.99,
       |    "travelCosts": 974.47,
       |    "rentARoom": {
       |        "amountClaimed": 8842.43
@@ -60,6 +62,7 @@ class UkFhlPropertyExpensesSpec extends UnitSpec {
       |    "professionalFees": 8831.12,
       |    "costOfServices": 484.12,
       |    "other": 99282,
+      |    "consolidatedExpenses": 999.99,
       |    "travelCosts": 974.47,
       |    "ukFhlRentARoom": {
       |        "amountClaimed": 8842.43

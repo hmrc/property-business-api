@@ -19,31 +19,54 @@ package v2.models.request.createUkPropertyPeriodSummary.ukFhlProperty
 import play.api.libs.json.{JsValue, Json}
 import support.UnitSpec
 
-class UkFhlPropertyIncomeRentARoomSpec extends UnitSpec {
+class UkFhlPropertyRentARoomSpec extends UnitSpec {
 
-  val requestBody: UkFhlPropertyIncomeRentARoom =
-    UkFhlPropertyIncomeRentARoom(Some(532.12))
+  val requestExpensesBody: UkFhlPropertyRentARoom =
+    UkFhlPropertyRentARoom(Some(532.12))
 
-  val validJson: JsValue = Json.parse(
+  val UkFhlExpensesJson: JsValue = Json.parse(
     """
       |{
-      |    "rentsReceived": 532.12
+      |    "amountClaimed": 532.12
       |}
       |""".stripMargin)
-
-
 
   "reads" when {
     "passed a valid JSON" should {
       "return a valid model" in {
-        validJson.as[UkFhlPropertyIncomeRentARoom] shouldBe requestBody
+        UkFhlExpensesJson.as[UkFhlPropertyRentARoom] shouldBe requestExpensesBody
       }
     }
   }
   "writes" when {
     "passed valid model" should {
       "return valid JSON" in {
-        Json.toJson(requestBody) shouldBe validJson
+        Json.toJson(requestExpensesBody) shouldBe UkFhlExpensesJson
+      }
+    }
+  }
+
+  val requestIncomeBody: UkFhlPropertyRentARoom =
+    UkFhlPropertyRentARoom(Some(532.12))
+
+  val UkFhlPropertyIncomeJson: JsValue = Json.parse(
+    """
+      |{
+      |    "rentsReceived": 532.12
+      |}
+      |""".stripMargin)
+
+  "reads" when {
+    "passed a valid JSON" should {
+      "return a valid model" in {
+        UkFhlPropertyIncomeJson.as[UkFhlPropertyRentARoom] shouldBe requestIncomeBody
+      }
+    }
+  }
+  "writes" when {
+    "passed valid model" should {
+      "return valid JSON" in {
+        Json.toJson(requestIncomeBody) shouldBe UkFhlPropertyIncomeJson
       }
     }
   }

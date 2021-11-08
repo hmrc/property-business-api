@@ -25,8 +25,9 @@ case class UkFhlPropertyExpenses(premisesRunningCosts: Option[BigDecimal],
                                  professionalFees: Option[BigDecimal],
                                  costOfServices: Option[BigDecimal],
                                  other: Option[BigDecimal],
+                                 consolidatedExpense: Option[BigDecimal],
                                  travelCosts: Option[BigDecimal],
-                                 rentARoom: Option[UkFhlPropertyExpensesRentARoom])
+                                 rentARoom: Option[UkFhlPropertyRentARoom])
 
 
 object UkFhlPropertyExpenses {
@@ -39,7 +40,8 @@ object UkFhlPropertyExpenses {
       (JsPath \ "professionalFees").writeNullable[BigDecimal] and
       (JsPath \ "costOfServices").writeNullable[BigDecimal] and
       (JsPath \ "other").writeNullable[BigDecimal] and
+      (JsPath \ "consolidatedExpenses").writeNullable[BigDecimal] and
       (JsPath \ "travelCosts").writeNullable[BigDecimal] and
-      (JsPath \ "ukFhlRentARoom").writeNullable[UkFhlPropertyExpensesRentARoom]
+      (JsPath \ "ukFhlRentARoom").writeNullable[UkFhlPropertyRentARoom]
   ) (unlift(UkFhlPropertyExpenses.unapply))
 }

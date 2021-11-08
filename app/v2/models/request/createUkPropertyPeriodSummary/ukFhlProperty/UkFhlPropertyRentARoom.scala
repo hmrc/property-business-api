@@ -18,9 +18,9 @@ package v2.models.request.createUkPropertyPeriodSummary.ukFhlProperty
 
 import play.api.libs.json.{Json, OFormat}
 
-case class UkFhlPropertyExpensesRentARoom(amountClaimed: Option[BigDecimal])
+case class UkFhlPropertyRentARoom(amountClaimed: Option[BigDecimal],
+                                  rentReceived: Option[BigDecimal])
 
-
-object UkFhlPropertyExpensesRentARoom {
-  implicit val format: OFormat[UkFhlPropertyExpensesRentARoom] = Json.format[UkFhlPropertyExpensesRentARoom]
+object UkFhlPropertyRentARoom {
+  implicit val format: OFormat[UkFhlPropertyRentARoom] = Json.format[UkFhlPropertyRentARoom]
 }

@@ -45,22 +45,22 @@ uses:
             example: XAIS12345678910
         /annual:
           (annotations.group):
-            name: UK property business annual submission
-            description: Resources relating to an individual's UK property business annual submission
+            name: UK Property Business Annual Submission
+            description: Resources relating to an individual's UK Property Business Annual Submission
           /{taxYear}:
             uriParameters:
               taxYear:
-                description: 'The tax year to which the data applies. For example: 2022-23. The start year and end year must not span two tax years. The minimum tax year is 2022-23. No gaps are allowed, for example, 2022-24 is not valid. (The minimum tax year in Sandbox is 2019-20.)'
+                description: 'The tax year to which the data applies. For example: 2022-23. The start year and end year must not span two tax years. The minimum tax year is 2022-23. No gaps are allowed, for example, 2022-24 is not valid. (The minimum tax year in Sandbox is 2021-22.)'
                 example: 2022-23
             get: !include uk_property_annual_submission_retrieve.raml
         /period:
           (annotations.group):
             name: UK Property Income & Expenses Period Summary
-            description: Resources relating to an business' UK Period Summary
+            description: Resources relating to an individual's UK Property Income & Expenses Period Summary
           /{taxYear}:
             uriParameters:
               taxYear:
-                description: 'The tax year to which the data applies. For example, 2022-23. The start year and end year must not span two tax years. The minimum tax year is 2022-23. No gaps are allowed, for example, 2022-24 is not valid. (The minimum tax year in Sandbox is 2019-20.)'
+                description: 'The tax year to which the data applies. For example, 2022-23. The start year and end year must not span two tax years. The minimum tax year is 2022-23. No gaps are allowed, for example, 2022-24 is not valid. (The minimum tax year in Sandbox is 2021-22.)'
                 example: 2022-23
             post: !include uk_property_period_summary_create.raml
   /{nino}:
@@ -76,11 +76,11 @@ uses:
           example: XAIS12345678910
       /annual:
         (annotations.group):
-          name: UK and Foreign Annual Submission Deletions
-          description: Resources relating to the deletion of all UK and Foreign property business' Annual Submission
+          name: UK or Foreign Property Annual Submission Deletion
+          description: Resources relating to an individual's UK or Foreign Property Annual Submission Deletion
         /{taxYear}:
           uriParameters:
             taxYear:
-              description: 'The tax year to which the data applies. For example: 2021-22. The start year and end year must not span two tax years. The minimum tax year is 2021-22. No gaps are allowed, for example, 2022-24 is not valid. (The minimum tax year in Sandbox is 2019-20.)'
+              description: 'The tax year to which the data applies. For example: 2021-22. The start year and end year must not span two tax years. The minimum tax year is 2021-22. No gaps are allowed, for example, 2022-24 is not valid.'
               example: 2021-22
           delete: !include delete_property_submission.raml

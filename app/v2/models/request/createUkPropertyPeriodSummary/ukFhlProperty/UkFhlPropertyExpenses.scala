@@ -18,6 +18,7 @@ package v2.models.request.createUkPropertyPeriodSummary.ukFhlProperty
 
 import play.api.libs.json.{JsPath, Json, Reads, Writes}
 import play.api.libs.functional.syntax._
+import v2.models.request.createUkPropertyPeriodSummary.ukNonFhlProperty.UkNonFhlPropertyExpensesRentARoom
 
 case class UkFhlPropertyExpenses(premisesRunningCosts: Option[BigDecimal],
                                  repairsAndMaintenance: Option[BigDecimal],
@@ -27,7 +28,7 @@ case class UkFhlPropertyExpenses(premisesRunningCosts: Option[BigDecimal],
                                  other: Option[BigDecimal],
                                  consolidatedExpense: Option[BigDecimal],
                                  travelCosts: Option[BigDecimal],
-                                 rentARoom: Option[UkFhlPropertyRentARoom])
+                                 rentARoom: Option[UkNonFhlPropertyExpensesRentARoom])
 
 
 object UkFhlPropertyExpenses {
@@ -42,6 +43,6 @@ object UkFhlPropertyExpenses {
       (JsPath \ "other").writeNullable[BigDecimal] and
       (JsPath \ "consolidatedExpenses").writeNullable[BigDecimal] and
       (JsPath \ "travelCosts").writeNullable[BigDecimal] and
-      (JsPath \ "ukFhlRentARoom").writeNullable[UkFhlPropertyRentARoom]
+      (JsPath \ "ukFhlRentARoom").writeNullable[UkNonFhlPropertyExpensesRentARoom]
   ) (unlift(UkFhlPropertyExpenses.unapply))
 }

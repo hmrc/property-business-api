@@ -31,7 +31,7 @@ class CreateUkPropertyPeriodSummaryRequestBodySpec extends UnitSpec {
         Some(UkFhlPropertyIncome(
           Some(5000.99),
           Some(3123.21),
-          Some(UkFhlPropertyRentARoom(
+          Some(UkNonFhlPropertyIncomeRentARoom(
             Some(532.12)
           ))
         )),
@@ -44,7 +44,7 @@ class CreateUkPropertyPeriodSummaryRequestBodySpec extends UnitSpec {
           Some(99282),
           Some(999.99),
           Some(974.47),
-          Some(UkFhlPropertyRentARoom(
+          Some(UkNonFhlPropertyExpensesRentARoom(
             Some(8842.43)
           ))
         ))

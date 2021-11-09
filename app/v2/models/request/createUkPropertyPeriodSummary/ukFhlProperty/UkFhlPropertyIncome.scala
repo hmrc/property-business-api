@@ -18,7 +18,7 @@ package v2.models.request.createUkPropertyPeriodSummary.ukFhlProperty
 
 import play.api.libs.json.{JsPath, Json, Reads, Writes}
 import play.api.libs.functional.syntax._
-import v2.models.request.common.ukPropertyRentARoom.UkPropertyIncomeRentARoom
+import v2.models.request.createUkPropertyPeriodSummary.ukNonFhlProperty.UkPropertyIncomeRentARoom
 
 case class UkFhlPropertyIncome(periodAmount: Option[BigDecimal],
                                taxDeducted: Option[BigDecimal],

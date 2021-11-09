@@ -14,13 +14,12 @@
  * limitations under the License.
  */
 
-package v2.models.request.common.ukPropertyRentARoom
+package v2.models.request.createUkPropertyPeriodSummary.ukNonFhlProperty
 
 import play.api.libs.json.{Json, OFormat}
 
-case class UkPropertyIncomeRentARoom(rentsReceived: Option[BigDecimal])
+case class UkPropertyExpensesRentARoom(amountClaimed: Option[BigDecimal])
 
-
-object UkPropertyIncomeRentARoom {
-  implicit val format: OFormat[UkPropertyIncomeRentARoom] = Json.format[UkPropertyIncomeRentARoom]
+object UkPropertyExpensesRentARoom {
+  implicit val format: OFormat[UkPropertyExpensesRentARoom] = Json.format[UkPropertyExpensesRentARoom]
 }

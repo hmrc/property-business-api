@@ -18,7 +18,6 @@ package v2.models.request.createUkPropertyPeriodSummary.ukNonFhlProperty
 
 import play.api.libs.json.{JsPath, Json, Reads, Writes}
 import play.api.libs.functional.syntax._
-import v2.models.request.common.ukPropertyRentARoom.UkPropertyIncomeRentARoom
 
 case class UkNonFhlPropertyIncome(premiumsOfLeaseGrant: Option[BigDecimal],
                                   reversePremiums: Option[BigDecimal],

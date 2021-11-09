@@ -14,15 +14,15 @@
  * limitations under the License.
  */
 
-package v2.models.request.createUkPropertyPeriodSummary.ukNonFhlProperty
+package v2.models.request.common.ukPropertyRentARoom
 
 import play.api.libs.json.{JsValue, Json}
 import support.UnitSpec
 
-class UkNonFhlPropertyExpensesRentARoomSpec extends UnitSpec {
+class UkPropertyExpensesRentARoomSpec extends UnitSpec {
 
-  val requestBody: UkNonFhlPropertyExpensesRentARoom =
-    UkNonFhlPropertyExpensesRentARoom(Some(947.66))
+  val requestBody: UkPropertyExpensesRentARoom =
+    UkPropertyExpensesRentARoom(Some(947.66))
 
   val validJson: JsValue = Json.parse(
     """
@@ -34,7 +34,7 @@ class UkNonFhlPropertyExpensesRentARoomSpec extends UnitSpec {
   "reads" when {
     "passed a valid JSON" should {
       "return a valid model" in {
-        validJson.as[UkNonFhlPropertyExpensesRentARoom] shouldBe requestBody
+        validJson.as[UkPropertyExpensesRentARoom] shouldBe requestBody
       }
     }
   }

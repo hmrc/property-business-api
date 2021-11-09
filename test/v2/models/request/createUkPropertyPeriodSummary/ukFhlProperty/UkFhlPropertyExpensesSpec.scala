@@ -18,7 +18,7 @@ package v2.models.request.createUkPropertyPeriodSummary.ukFhlProperty
 
 import play.api.libs.json.{JsValue, Json}
 import support.UnitSpec
-import v2.models.request.createUkPropertyPeriodSummary.ukNonFhlProperty.UkNonFhlPropertyExpensesRentARoom
+import v2.models.request.common.ukPropertyRentARoom.UkPropertyExpensesRentARoom
 
 class UkFhlPropertyExpensesSpec extends UnitSpec {
 
@@ -32,7 +32,7 @@ class UkFhlPropertyExpensesSpec extends UnitSpec {
       Some(99282),
       Some(999.99),
       Some(974.47),
-      Some(UkNonFhlPropertyExpensesRentARoom(
+      Some(UkPropertyExpensesRentARoom(
         Some(8842.43)
       ))
     )

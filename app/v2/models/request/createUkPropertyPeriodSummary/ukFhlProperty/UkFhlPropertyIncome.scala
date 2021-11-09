@@ -18,18 +18,18 @@ package v2.models.request.createUkPropertyPeriodSummary.ukFhlProperty
 
 import play.api.libs.json.{JsPath, Json, Reads, Writes}
 import play.api.libs.functional.syntax._
-import v2.models.request.createUkPropertyPeriodSummary.ukNonFhlProperty.UkNonFhlPropertyIncomeRentARoom
+import v2.models.request.common.ukPropertyRentARoom.UkPropertyIncomeRentARoom
 
 case class UkFhlPropertyIncome(periodAmount: Option[BigDecimal],
                                taxDeducted: Option[BigDecimal],
-                               rentARoom: Option[UkNonFhlPropertyIncomeRentARoom])
+                               rentARoom: Option[UkPropertyIncomeRentARoom])
 object UkFhlPropertyIncome {
   implicit val reads: Reads[UkFhlPropertyIncome] = Json.reads[UkFhlPropertyIncome]
 
   implicit val writes: Writes[UkFhlPropertyIncome] = (
     (JsPath \ "periodAmount").writeNullable[BigDecimal] and
       (JsPath \ "taxDeducted").writeNullable[BigDecimal] and
-      (JsPath \ "ukFhlRentARoom").writeNullable[UkNonFhlPropertyIncomeRentARoom]
+      (JsPath \ "ukFhlRentARoom").writeNullable[UkPropertyIncomeRentARoom]
     ) (unlift(UkFhlPropertyIncome.unapply))
 
 }

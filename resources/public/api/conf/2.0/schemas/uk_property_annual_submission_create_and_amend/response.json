@@ -1,0 +1,48 @@
+
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "title": "Amend a Foreign Property Income & Expenses Period Summary",
+  "description": "This endpoint allows a developer to re-submit the income and expenditure for a uk property business that occurred between two dates.",
+  "type": "object",
+  "properties": {
+    "links": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "description": "A list of endpoint links that indicate possible actions related to the current resource.",
+        "properties": {
+          "href": {
+            "description": "The relative url of the endpoint",
+            "type": "string",
+            "example": "/individuals/business/property/uk/TC663795B/XAIS12345678910/annual/2022-23"
+          },
+          "method": {
+            "description": "The HTTP method type for the endpoint.",
+            "type": "string",
+            "enum": [
+              "GET",
+              "PUT",
+              "DELETE"
+            ]
+          },
+          "rel": {
+            "description": "A label for the endpoint, which describes how it is related to the current resource. The rel will be self where the action is retrieval of the same resource.",
+            "type": "string",
+            "enum": [
+              "amend-uk-property-annual-submission",
+              "delete-property-annual-submission",
+              "self"
+            ]
+          }
+        },
+        "required": [
+          "href",
+          "rel",
+          "method"
+        ],
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}

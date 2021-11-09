@@ -64,7 +64,7 @@ class UkNonFhlPropertySpec extends UnitSpec {
       |        }
       |    },
       |    "expenses": {
-      |        "consolidatedExpenses": 988.18
+      |        "consolidatedExpense": 988.18
       |    }
       |}
       |""".stripMargin)

@@ -39,7 +39,7 @@ class CreateUkPropertyPeriodSummaryConnector @Inject()(val http: HttpClient,
 
     post(
       body = request.body,
-      uri = IfsUri[CreateUkPropertyPeriodSummaryResponse](s"income-tax/business/property/annual?taxableEntityId=${request.nino.nino}&incomeSourceId=${request.businessId}&taxYear=${request.taxYear}")
+      uri = IfsUri[CreateUkPropertyPeriodSummaryResponse](s"income-tax/business/property/periodic?taxableEntityId=${request.nino.nino}&incomeSourceId=${request.businessId}&taxYear=${request.taxYear}")
     )
   }
 }

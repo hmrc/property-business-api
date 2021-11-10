@@ -16,12 +16,19 @@
 
 package v2.models.request.amendUkPropertyAnnualSubmission.ukNonFhlProperty
 
-import play.api.libs.json.{Json, OFormat}
+import play.api.libs.functional.syntax._
+import play.api.libs.json.{JsPath, Json, Reads, Writes}
 
 case class Building(name: Option[String],
                     number: Option[String],
                     postcode: String)
 
 object Building {
-  implicit val format: OFormat[Building] = Json.format[Building]
+  implicit val reads: Reads[Building] = Json.reads[Building]
+
+  implicit val writes: Writes[Building] = (
+    (JsPath \ "name").writeNullable[String] and
+      (JsPath \ "number").writeNullable[String] and
+      (JsPath \ "postCode").write[String]
+    ) (unlift(Building.unapply))
 }

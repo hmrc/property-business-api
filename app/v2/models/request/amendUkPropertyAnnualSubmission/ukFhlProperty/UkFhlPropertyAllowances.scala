@@ -18,7 +18,7 @@ package v2.models.request.amendUkPropertyAnnualSubmission.ukFhlProperty
 
 import play.api.libs.json.{Json, OFormat}
 
-case class UkFhlPropertyAllowances (annualInvestmentAllowance: Option[BigDecimal],
+case class UkFhlPropertyAllowances(annualInvestmentAllowance: Option[BigDecimal],
                                     businessPremisesRenovationAllowance: Option[BigDecimal],
                                     otherCapitalAllowance: Option[BigDecimal],
                                     electricChargePointAllowance: Option[BigDecimal],

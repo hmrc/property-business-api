@@ -22,13 +22,13 @@ import v2.models.request.amendUkPropertyAnnualSubmission.ukFhlProperty.UkFhlProp
 import v2.models.request.amendUkPropertyAnnualSubmission.ukNonFhlProperty.UkNonFhlProperty
 
 case class AmendUkPropertyAnnualSubmissionRequestBody(ukFhlProperty: Option[UkFhlProperty],
-                                                      ukNonFhlProperty: Option[Seq[UkNonFhlProperty]])
+                                                      ukNonFhlProperty: Option[UkNonFhlProperty])
 
 object AmendUkPropertyAnnualSubmissionRequestBody {
   implicit val reads: Reads[AmendUkPropertyAnnualSubmissionRequestBody] = Json.reads[AmendUkPropertyAnnualSubmissionRequestBody]
 
   implicit val writes: Writes[AmendUkPropertyAnnualSubmissionRequestBody] = (
     (JsPath \ "ukFhlProperty").writeNullable[UkFhlProperty] and
-      (JsPath \ "ukOtherProperty").writeNullable[Seq[UkNonFhlProperty]]
+      (JsPath \ "ukOtherProperty").writeNullable[UkNonFhlProperty]
     ) (unlift(AmendUkPropertyAnnualSubmissionRequestBody.unapply))
 }

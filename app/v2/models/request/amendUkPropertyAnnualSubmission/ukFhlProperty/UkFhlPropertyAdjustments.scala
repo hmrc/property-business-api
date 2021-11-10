@@ -16,7 +16,8 @@
 
 package v2.models.request.amendUkPropertyAnnualSubmission.ukFhlProperty
 
-import play.api.libs.json.{Json, OFormat}
+import play.api.libs.functional.syntax._
+import play.api.libs.json.{JsPath, Json, Reads, Writes}
 import v2.models.request.common.ukPropertyRentARoom.UkPropertyAdjustmentsRentARoom
 
 case class UkFhlPropertyAdjustments(lossBroughtForward: Option[BigDecimal],
@@ -28,5 +29,15 @@ case class UkFhlPropertyAdjustments(lossBroughtForward: Option[BigDecimal],
                                     rentARoom: Option[UkPropertyAdjustmentsRentARoom])
 
 object UkFhlPropertyAdjustments {
-  implicit val format: OFormat[UkFhlPropertyAdjustments] = Json.format[UkFhlPropertyAdjustments]
+  implicit val reads: Reads[UkFhlPropertyAdjustments] = Json.reads[UkFhlPropertyAdjustments]
+
+  implicit val writes: Writes[UkFhlPropertyAdjustments] = (
+  (JsPath \ "lossBroughtForward").writeNullable[BigDecimal] and
+    (JsPath \ "privateUseAdjustment").writeNullable[BigDecimal] and
+    (JsPath \ "balancingCharge").writeNullable[BigDecimal] and
+    (JsPath \ "periodOfGraceAdjustment").write[Boolean] and
+    (JsPath \ "businessPremisesRenovationAllowanceBalancingCharges").writeNullable[BigDecimal] and
+    (JsPath \ "nonResidentLandlord").write[Boolean] and
+    (JsPath \ "ukFhlRentARoom").writeNullable[UkPropertyAdjustmentsRentARoom]
+  ) (unlift(UkFhlPropertyAdjustments.unapply))
 }

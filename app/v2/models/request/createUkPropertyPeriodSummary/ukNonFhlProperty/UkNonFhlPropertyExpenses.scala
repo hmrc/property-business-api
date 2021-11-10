@@ -30,7 +30,7 @@ case class UkNonFhlPropertyExpenses(premisesRunningCosts: Option[BigDecimal],
                                     travelCosts: Option[BigDecimal],
                                     residentialFinancialCostsCarriedForward: Option[BigDecimal],
                                     rentARoom: Option[UkPropertyExpensesRentARoom],
-                                    consolidatedExpenses: Option[BigDecimal])
+                                    consolidatedExpense: Option[BigDecimal])
 
 
 object UkNonFhlPropertyExpenses {

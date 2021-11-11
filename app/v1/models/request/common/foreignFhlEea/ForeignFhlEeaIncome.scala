@@ -16,11 +16,15 @@
 
 package v1.models.request.common.foreignFhlEea
 
-import play.api.libs.json.{Json, Reads, Writes}
+import play.api.libs.functional.syntax.unlift
+import play.api.libs.json.{JsPath, Json, Reads, Writes}
 
 case class ForeignFhlEeaIncome(rentAmount: Option[BigDecimal])
 
 object ForeignFhlEeaIncome {
   implicit val reads: Reads[ForeignFhlEeaIncome] = Json.reads[ForeignFhlEeaIncome]
-  implicit val writes: Writes[ForeignFhlEeaIncome] = Json.writes[ForeignFhlEeaIncome]
+
+  implicit val writes: Writes[ForeignFhlEeaIncome] =  (
+    (JsPath \ "income").writeNullable[ForeignFhlEeaIncome]
+    ) (unlift(ForeignFhlEeaIncome.unapply))
 }

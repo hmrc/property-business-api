@@ -19,25 +19,52 @@ package v2.controllers.requestParsers.validators.validations
 import v2.models.errors.{MtdError, RuleBothExpensesSuppliedError}
 import v2.models.request.common.foreignFhlEea._
 import v2.models.request.common.foreignPropertyEntry._
+import v2.models.request.createUkPropertyPeriodSummary.ukFhlProperty.UkFhlPropertyExpenses
+import v2.models.request.createUkPropertyPeriodSummary.ukNonFhlProperty.UkNonFhlPropertyExpenses
 
 object ConsolidatedExpensesValidation {
+
   def validate(expenditure: ForeignPropertyExpenditure, path: String): List[MtdError] = {
     expenditure.consolidatedExpenses match {
       case None => NoValidationErrors
-      case Some(_) => expenditure match {
-        case ForeignPropertyExpenditure(None, None, None, None, None, None, _, _, None, Some(_)) => NoValidationErrors
-        case _ => List(RuleBothExpensesSuppliedError.copy(paths = Some(Seq(path))))
-      }
+      case Some(_) =>
+        expenditure match {
+          case ForeignPropertyExpenditure(None, None, None, None, None, None, _, _, None, Some(_)) => NoValidationErrors
+          case _                                                                                   => List(RuleBothExpensesSuppliedError.copy(paths = Some(Seq(path))))
+        }
     }
   }
 
   def validate(expenditure: ForeignFhlEeaExpenditure, path: String): List[MtdError] = {
     expenditure.consolidatedExpenses match {
       case None => NoValidationErrors
-      case Some(_) => expenditure match {
-        case ForeignFhlEeaExpenditure(None, None, None, None, None, None, None, Some(_)) => NoValidationErrors
-        case _ => List(RuleBothExpensesSuppliedError.copy(paths = Some(Seq(path))))
-      }
+      case Some(_) =>
+        expenditure match {
+          case ForeignFhlEeaExpenditure(None, None, None, None, None, None, None, Some(_)) => NoValidationErrors
+          case _                                                                           => List(RuleBothExpensesSuppliedError.copy(paths = Some(Seq(path))))
+        }
+    }
+  }
+
+  def validate(expenses: UkFhlPropertyExpenses, path: String): List[MtdError] = {
+    expenses.consolidatedExpense match {
+      case None => NoValidationErrors
+      case Some(_) =>
+        expenses match {
+          case UkFhlPropertyExpenses(None, None, None, None, None, None, Some(_), None, None) => NoValidationErrors
+          case _                                                                              => List(RuleBothExpensesSuppliedError.copy(paths = Some(Seq(path))))
+        }
+    }
+  }
+
+  def validate(expenses: UkNonFhlPropertyExpenses, path: String): List[MtdError] = {
+    expenses.consolidatedExpenses match {
+      case None => NoValidationErrors
+      case Some(_) =>
+        expenses match {
+          case UkNonFhlPropertyExpenses(None, None, None, None, None, None, None, None, None, None, Some(_)) => NoValidationErrors
+          case _                                                                                             => List(RuleBothExpensesSuppliedError.copy(paths = Some(Seq(path))))
+        }
     }
   }
 }

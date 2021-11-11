@@ -194,7 +194,7 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec {
             |  "toDate": "2020-01-31",
             |  "foreignFhlEea": {}
             |}
-            |""".stripMargin))) shouldBe List(RuleIncorrectOrEmptyBodyError)
+            |""".stripMargin))) shouldBe List(RuleIncorrectOrEmptyBodyError.copy(paths=Some(Seq("/foreignFhlEea/income"))))
       }
       "foreignFhlEea.expenditure is empty" in {
         validator.validate(CreateForeignPropertyPeriodSummaryRawData(validNino, validBusinessId, Json.parse(
@@ -206,7 +206,7 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec {
             |    "expenditure": {}
             |  }
             |}
-            |""".stripMargin))) shouldBe List(RuleIncorrectOrEmptyBodyError)
+            |""".stripMargin))) shouldBe List(RuleIncorrectOrEmptyBodyError.copy(paths=Some(Seq("/foreignFhlEea/income"))))
       }
       "an empty foreignProperty is submitted" in {
         validator.validate(CreateForeignPropertyPeriodSummaryRawData(validNino, validBusinessId, Json.parse(
@@ -224,7 +224,7 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec {
             |  "foreignProperty": [
             |    {}
             |  ]
-            |}""".stripMargin))) shouldBe List(RuleIncorrectOrEmptyBodyError)
+            |}""".stripMargin))) shouldBe List(RuleIncorrectOrEmptyBodyError.copy(paths=Some(Seq("/foreignProperty/0/income", "/foreignProperty/0/countryCode"))))
       }
       "foreignProperty[].expenditure is empty" in {
         validator.validate(CreateForeignPropertyPeriodSummaryRawData(validNino, validBusinessId, Json.parse(
@@ -236,7 +236,7 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec {
             |      "expenditure": {}
             |    }
             |  ]
-            |}""".stripMargin))) shouldBe List(RuleIncorrectOrEmptyBodyError)
+            |}""".stripMargin))) shouldBe List(RuleIncorrectOrEmptyBodyError.copy(paths=Some(Seq("/foreignProperty/0/income", "/foreignProperty/0/countryCode"))))
       }
     }
 

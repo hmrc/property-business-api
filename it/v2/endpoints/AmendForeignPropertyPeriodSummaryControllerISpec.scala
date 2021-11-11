@@ -181,13 +181,11 @@ class AmendForeignPropertyPeriodSummaryControllerISpec extends V2IntegrationBase
 
         val allInvalidFieldsRequestError: List[MtdError] = List(
           CountryCodeFormatError.copy(
-            message = "The provided Country code is invalid",
             paths = Some(List(
               "/foreignProperty/0/countryCode"
             ))
           ),
           ValueFormatError.copy(
-            message = "One or more monetary fields are invalid",
             paths = Some(List(
               "/foreignFhlEea/income/rentAmount",
               "/foreignFhlEea/expenditure/consolidatedExpenses",
@@ -366,7 +364,6 @@ class AmendForeignPropertyPeriodSummaryControllerISpec extends V2IntegrationBase
 
 
         val allInvalidValueRequestError: MtdError = ValueFormatError.copy(
-          message = "One or more monetary fields are invalid",
           paths = Some(List(
             "/foreignFhlEea/income/rentAmount",
             "/foreignFhlEea/expenditure/consolidatedExpenses",
@@ -380,14 +377,12 @@ class AmendForeignPropertyPeriodSummaryControllerISpec extends V2IntegrationBase
         )
 
         val allInvalidCountryCodeRequestError: MtdError = CountryCodeFormatError.copy(
-          message = "The provided Country code is invalid",
           paths = Some(List(
             "/foreignProperty/0/countryCode"
           ))
         )
 
         val RuleBothExpensesSuppliedRequestError: MtdError = RuleBothExpensesSuppliedError.copy(
-          message = "Both expenses and consolidatedExpenses can not be present at the same time",
           paths = Some(List(
             "/foreignFhlEea/expenditure"
           ))
@@ -425,7 +420,7 @@ class AmendForeignPropertyPeriodSummaryControllerISpec extends V2IntegrationBase
             ("AA123456A", "XAIS1234dfxgchjbn5678910", "4557ecb5-fd32-48cc-81f5-e6acd1099f3c", validRequestBodyJson, BAD_REQUEST, BusinessIdFormatError),
             ("AA123456A", "XAIS12345678910", "4557ecb5-fd32-awefwaef48cc-81f5-e6acd1099f3c", validRequestBodyJson, BAD_REQUEST, SubmissionIdFormatError),
             ("AA123456A", "XAIS12345678910", "4557ecb5-fd32-48cc-81f5-e6acd1099f3c",
-              Json.parse(s"""{"foreignFhlEea": 2342314}""".stripMargin), BAD_REQUEST, RuleIncorrectOrEmptyBodyError),
+              Json.parse(s"""{"foreignFhlEea": 2342314}""".stripMargin), BAD_REQUEST, RuleIncorrectOrEmptyBodyError.copy(paths = Some(Seq("/foreignFhlEea")))),
             ("AA123456A", "XAIS12345678910", "4557ecb5-fd32-48cc-81f5-e6acd1099f3c", bothExpensesTypesProvidedJson, BAD_REQUEST, RuleBothExpensesSuppliedRequestError),
             ("AA123456A", "XAIS12345678910", "4557ecb5-fd32-48cc-81f5-e6acd1099f3c", allInvalidValueRequestBodyJson, BAD_REQUEST, allInvalidValueRequestError),
             ("AA123456A", "XAIS12345678910", "4557ecb5-fd32-48cc-81f5-e6acd1099f3c",

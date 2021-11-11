@@ -39,7 +39,7 @@ class AmendForeignPropertyPeriodSummaryValidator extends Validator[AmendForeignP
     }
 
   private def bodyFormatValidation: AmendForeignPropertyPeriodSummaryRawData => List[List[MtdError]] = { data =>
-    val baseValidation = List(JsonFormatValidation.validate[AmendForeignPropertyPeriodSummaryRequestBody](data.body, RuleIncorrectOrEmptyBodyError))
+    val baseValidation = List(JsonFormatValidation.validate[AmendForeignPropertyPeriodSummaryRequestBody](data.body))
 
     val extraValidation: List[List[MtdError]] = {
       data.body

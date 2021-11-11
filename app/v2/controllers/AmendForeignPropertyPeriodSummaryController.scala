@@ -98,7 +98,7 @@ class AmendForeignPropertyPeriodSummaryController  @Inject()(val authService: En
            SubmissionIdFormatError |
            MtdErrorWithCustomMessage(CountryCodeFormatError.code) |
            MtdErrorWithCustomMessage(ValueFormatError.code) |
-           RuleIncorrectOrEmptyBodyError |
+           MtdErrorWithCustomMessage(RuleIncorrectOrEmptyBodyError.code) |
            MtdErrorWithCustomMessage(RuleBothExpensesSuppliedError.code) |
            MtdErrorWithCustomMessage(RuleCountryCodeError.code) => BadRequest(Json.toJson(errorWrapper))
       case DownstreamError => InternalServerError(Json.toJson(errorWrapper))

@@ -24,13 +24,10 @@
           "properties": {
             "rentAmount": {
               "type": "number",
-              "description": "Total rents and other income from property.\n\nThe value must be between 0 and 99999999999.99.",
+              "description": "Total rents and other income from property. The value must be between 0 and 99999999999.99.",
               "example": "5000.99"
             }
           },
-          "required": [
-            "rentAmount"
-          ],
           "additionalProperties": false
         },
         "expenditure": {
@@ -39,51 +36,48 @@
           "properties": {
             "premisesRunningCosts": {
               "type": "number",
-              "description": "Rent, rates, insurance, ground rents and other costs.\n\nThe value must be greater than 0 and up to 99999999999.99.",
+              "description": "\tRent, rates, insurance, ground rents and other costs. The value must be between 0 and 99999999999.99.",
               "example": "5000.99"
             },
             "repairsAndMaintenance": {
               "type": "number",
-              "description": "Property repairs and maintenance.\n\nThe value must be greater than 0 and up to 99999999999.99.",
+              "description": "Property repairs and maintenance. The value must be between 0 and 99999999999.99.",
               "example": "5000.99"
             },
             "financialCosts": {
               "type": "number",
-              "description": "Loan interest and other financial costs.\n\nThe value must be greater than 0 and up to 99999999999.99.",
+              "description": "Loan interest and other financial costs. The value must be between 0 and 99999999999.99.",
               "example": "5000.99"
             },
             "professionalFees": {
               "type": "number",
-              "description": "Legal, management and other professional fees.\n\nThe value must be greater than 0 and up to 99999999999.99.",
+              "description": "Legal, management and other professional fees. The value must be between 0 and 99999999999.99.",
               "example": "5000.99"
             },
             "costsOfServices": {
               "type": "number",
-              "description": "Cost of services provided, including wages.\n\nThe value must be greater than 0 and up to 99999999999.99.",
+              "description": "Cost of services provided, including wages. The value must be between 0 and 99999999999.99.",
               "example": "5000.99"
             },
             "travelCosts": {
               "type": "number",
-              "description": "Car, van and travel costs incurred in running a property business.\n\nThe value must be greater than 0 and up to 99999999999.99.",
+              "description": "Car, van and travel costs incurred in running a property business. The value must be between 0 and 99999999999.99.",
               "example": "5000.99"
             },
             "other": {
               "type": "number",
-              "description": "Other allowable property expenses.\n\nThe value must be greater than 0 and up to 99999999999.99.",
+              "description": "Other allowable property expenses. The value must be between 0 and 99999999999.99.",
               "example": "5000.99"
             },
             "consolidatedExpenses": {
               "type": "number",
-              "description": "Sum of all expenses for the specified period.\n\nThe value must be greater than 0 and up to 99999999999.99.",
+              "description": "Sum of all expenses for the specified period. The value must be between 0 and 99999999999.99.",
               "example": "5000.99"
             }
           },
           "additionalProperties": false
         }
       },
-      "required": [
-        "income"
-      ],
       "additionalProperties": false
     },
     "foreignProperty": {
@@ -94,7 +88,7 @@
         "properties": {
           "countryCode": {
             "type": "string",
-            "description": "A three-letter code that represents a country name.\n\nThis must be an ISO 3166-1 Alpha-3 value.",
+            "description": "A three-letter code that represents a country name. This must be an ISO 3166-1 Alpha-3 value.",
             "example": "FRA"
           },
           "income": {
@@ -107,13 +101,10 @@
                 "properties": {
                   "rentAmount": {
                     "type": "number",
-                    "description": "The total amount of rental income.\n\nThe value must be between 0 and 99999999999.99.",
+                    "description": "The total amount of rental income. The value must be between 0 and 99999999999.99.",
                     "example": "5000.99"
                   }
                 },
-                "required": [
-                  "rentAmount"
-                ],
                 "additionalProperties": false
               },
               "foreignTaxCreditRelief": {
@@ -123,27 +114,26 @@
               },
               "premiumOfLeaseGrant": {
                 "type": "number",
-                "description": "Premiums received for the grant of a lease and other lump sums to possess a property.\n\nThe value must be greater than 0 and up to 99999999999.99.",
+                "description": "Premiums received for the grant of a lease and other lump sums to possess a property. The value must be between 0 and 99999999999.99.",
                 "example": "5000.99"
               },
               "otherPropertyIncome": {
                 "type": "number",
-                "description": "Other income from property, such as rent charges and ground rents, income from letting others tip waste on your land, and income for the use of a caravan or houseboat at a fixed location.\n\nThe value must be greater than 0 and up to 99999999999.99.",
+                "description": "Other income from property, such as rent charges and ground rents, income from letting others tip waste on your land, and income for the use of a caravan or houseboat at a fixed location. The value must be between 0 and 99999999999.99.",
                 "example": "5000.99"
               },
               "foreignTaxTakenOff": {
                 "type": "number",
-                "description": "The total amount of foreign tax taken off your income.\n\nThe value must be greater than 0 and up to 99999999999.99.",
+                "description": "The total amount of foreign tax taken off your income. The value must be between 0 and 99999999999.99.",
                 "example": "5000.99"
               },
               "specialWithholdingTaxOrUKTaxPaid": {
                 "type": "number",
-                "description": "Tax withheld (in UK Pounds) on certain payments to UK residents or UK Tax taken off rental Income (applies to non-resident landlords only).\n\nThe value must be greater than 0 and up to 99999999999.99.",
+                "description": "Tax withheld (in UK Pounds) on certain payments to UK residents or UK Tax taken off rental Income (applies to non-resident landlords only). The value must be between 0 and 99999999999.99.",
                 "example": "5000.99"
               }
             },
             "required": [
-              "rentIncome",
               "foreignTaxCreditRelief"
             ],
             "additionalProperties": false
@@ -154,52 +144,52 @@
             "properties": {
               "premisesRunningCosts": {
                 "type": "number",
-                "description": "Rent, rates, insurance, ground rents and other costs.\n\nThe value must be greater than 0 and up to 99999999999.99.",
+                "description": "Rent, rates, insurance, ground rents and other costs. The value must be between 0 and 99999999999.99.",
                 "example": "5000.99"
               },
               "repairsAndMaintenance": {
                 "type": "number",
-                "description": "Property repairs and maintenance.\n\nThe value must be greater than 0 and up to 99999999999.99.",
+                "description": "Property repairs and maintenance. The value must be between 0 and 99999999999.99.",
                 "example": "5000.99"
               },
               "financialCosts": {
                 "type": "number",
-                "description": "Loan interest and other financial costs.\n\nThe value must be greater than 0 and up to 99999999999.99.",
+                "description": "Loan interest and other financial costs. The value must be between 0 and 99999999999.99.",
                 "example": "5000.99"
               },
               "professionalFees": {
                 "type": "number",
-                "description": "Legal, management and other professional fees.\n\nThe value must be greater than 0 and up to 99999999999.99.",
+                "description": "Legal, management and other professional fees. The value must be between 0 and 99999999999.99.",
                 "example": "5000.99"
               },
               "costsOfServices": {
                 "type": "number",
-                "description": "Cost of services provided, including wages.\n\nThe value must be greater than 0 and up to 99999999999.99.",
+                "description": "Cost of services provided, including wages. The value must be between 0 and 99999999999.99.",
                 "example": "5000.99"
               },
               "travelCosts": {
                 "type": "number",
-                "description": "Car, van and travel costs incurred in running a property business.\n\nThe value must be greater than 0 and up to 99999999999.99.",
+                "description": "Car, van and travel costs incurred in running a property business. The value must be between 0 and 99999999999.99.",
                 "example": "5000.99"
               },
               "residentialFinancialCost": {
                 "type": "number",
-                "description": "The residential financial cost that can be deductible from rental income (tax relief).\n\nThe value must be greater than 0 and up to 99999999999.99.",
+                "description": "The residential financial cost that can be deductible from rental income (tax relief). The value must be between 0 and 99999999999.99.",
                 "example": "5000.99"
               },
               "broughtFwdResidentialFinancialCost": {
                 "type": "number",
-                "description": "Amount of relief brought forward for restricted residential financial costs.\n\nThe value must be greater than 0 and up to 99999999999.99.",
+                "description": "Amount of relief brought forward for restricted residential financial costs. The value must be between 0 and 99999999999.99.",
                 "example": "5000.99"
               },
               "other": {
                 "type": "number",
-                "description": "Other allowable property expenses.\n\nThe value must be greater than 0 and up to 99999999999.99.",
+                "description": "Other allowable property expenses. The value must be between 0 and 99999999999.99.",
                 "example": "5000.99"
               },
               "consolidatedExpenses": {
                 "type": "number",
-                "description": "Sum of all expenses for the specified period.\n\nThe value must be greater than 0 and up to 99999999999.99.",
+                "description": "Sum of all expenses for the specified period. The value must be between 0 and 99999999999.99.",
                 "example": "5000.99"
               }
             },
@@ -207,8 +197,7 @@
           }
         },
         "required": [
-          "countryCode",
-          "income"
+          "countryCode"
         ],
         "additionalProperties": false
       }

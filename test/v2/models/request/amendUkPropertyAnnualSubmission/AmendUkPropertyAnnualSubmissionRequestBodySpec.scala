@@ -27,7 +27,7 @@ class AmendUkPropertyAnnualSubmissionRequestBodySpec extends UnitSpec {
   val requestBody: AmendUkPropertyAnnualSubmissionRequestBody =
     AmendUkPropertyAnnualSubmissionRequestBody(
       Some(UkFhlProperty(
-        UkFhlPropertyAdjustments(
+        Some(UkFhlPropertyAdjustments(
           Some(1000.10),
           Some(1000.20),
           Some(1000.30),
@@ -35,15 +35,15 @@ class AmendUkPropertyAnnualSubmissionRequestBodySpec extends UnitSpec {
           Some(1000.40),
           true,
           Some(UkPropertyAdjustmentsRentARoom(true))
-        ),
-        UkFhlPropertyAllowances(
+        )),
+        Some(UkFhlPropertyAllowances(
           Some(1000.50),
           Some(1000.60),
           Some(1000.70),
           Some(1000.80),
           Some(1000.90),
           None
-        )
+        ))
       )),
       Some(UkNonFhlProperty(
         Some(UkNonFhlPropertyAdjustments(
@@ -52,7 +52,7 @@ class AmendUkPropertyAnnualSubmissionRequestBodySpec extends UnitSpec {
           Some(2000.30),
           Some(2000.40),
           true,
-          UkPropertyAdjustmentsRentARoom(true)
+          Some(UkPropertyAdjustmentsRentARoom(true))
         )),
         Some(UkNonFhlPropertyAllowances(
           Some(2000.50),

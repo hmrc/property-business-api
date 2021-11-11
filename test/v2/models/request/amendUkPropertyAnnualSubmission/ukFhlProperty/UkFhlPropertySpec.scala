@@ -24,7 +24,7 @@ class UkFhlPropertySpec extends UnitSpec {
 
   val requestBody: UkFhlProperty =
       UkFhlProperty(
-        UkFhlPropertyAdjustments(
+        Some(UkFhlPropertyAdjustments(
           Some(1000.10),
           Some(1000.20),
           Some(1000.30),
@@ -32,15 +32,15 @@ class UkFhlPropertySpec extends UnitSpec {
           Some(1000.40),
           true,
           Some(UkPropertyAdjustmentsRentARoom(true))
-        ),
-        UkFhlPropertyAllowances(
+        )),
+        Some(UkFhlPropertyAllowances(
           Some(1000.50),
           Some(1000.60),
           Some(1000.70),
           Some(1000.80),
           Some(1000.90),
           None
-        )
+        ))
       )
 
   val validMtdJson: JsValue = Json.parse(

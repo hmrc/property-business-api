@@ -30,7 +30,7 @@ class UkNonFhlPropertySpec extends UnitSpec {
           Some(2000.30),
           Some(2000.40),
           true,
-          UkPropertyAdjustmentsRentARoom(true)
+          Some(UkPropertyAdjustmentsRentARoom(true))
         )),
         Some(UkNonFhlPropertyAllowances(
           Some(2000.50),

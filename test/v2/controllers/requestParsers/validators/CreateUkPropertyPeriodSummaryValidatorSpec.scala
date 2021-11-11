@@ -114,7 +114,7 @@ class CreateUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with JsonError
       |            }
       |        },
       |        "expenses": {
-      |            "consolidatedExpenses": 988.18
+      |            "consolidatedExpense": 988.18
       |        }
       |    }
       |}
@@ -357,7 +357,7 @@ class CreateUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with JsonError
       "consolidated expenses is invalid" when {
         Seq(
           "/ukFhlProperty/expenses/consolidatedExpense",
-          "/ukNonFhlProperty/expenses/consolidatedExpenses",
+          "/ukNonFhlProperty/expenses/consolidatedExpense",
         ).foreach(testValueFormatError)
 
         def testValueFormatError(path: String): Unit = s"for $path" in {
@@ -406,7 +406,7 @@ class CreateUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with JsonError
           CreateUkPropertyPeriodSummaryRawData(validNino,
                                                taxYear,
                                                validBusinessId,
-                                               requestBodyJson.update("ukNonFhlProperty/expenses/consolidatedExpenses", JsNumber(123.45)))) shouldBe
+                                               requestBodyJson.update("ukNonFhlProperty/expenses/consolidatedExpense", JsNumber(123.45)))) shouldBe
           List(RuleBothExpensesSuppliedError.copy(paths = Some(Seq("/ukNonFhlProperty/expenses"))))
       }
     }

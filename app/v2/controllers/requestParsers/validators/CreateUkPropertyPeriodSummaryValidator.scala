@@ -19,7 +19,7 @@ package v2.controllers.requestParsers.validators
 import com.google.inject.Inject
 import config.AppConfig
 import v2.controllers.requestParsers.validators.validations._
-import v2.models.errors.MtdError
+import v2.models.errors.{MtdError, RuleIncorrectOrEmptyBodyError}
 import v2.models.request.createUkPropertyPeriodSummary.ukFhlProperty.UkFhlProperty
 import v2.models.request.createUkPropertyPeriodSummary.ukNonFhlProperty.UkNonFhlProperty
 import v2.models.request.createUkPropertyPeriodSummary.{CreateUkPropertyPeriodSummaryRawData, CreateUkPropertyPeriodSummaryRequestBody}
@@ -42,8 +42,17 @@ class CreateUkPropertyPeriodSummaryValidator @Inject()(appConfig: AppConfig) ext
     }
 
   private def bodyFormatValidation: CreateUkPropertyPeriodSummaryRawData => List[List[MtdError]] = { data =>
-    List(JsonFormatValidation.validate[CreateUkPropertyPeriodSummaryRequestBody](data.body)) ++
-      List(JsonFormatValidation.validatedNestedEmpty(data.body))
+    val schemaValidation = JsonFormatValidation.validate[CreateUkPropertyPeriodSummaryRequestBody](data.body)
+
+    val extraValidation =
+      data.body.asOpt[CreateUkPropertyPeriodSummaryRequestBody] match {
+        case Some(body) if body.ukNonFhlProperty.isEmpty && body.ukFhlProperty.isEmpty => List(RuleIncorrectOrEmptyBodyError)
+        case _                                                                         => NoValidationErrors
+      }
+
+    val emptyStructureValidation = JsonFormatValidation.validatedNestedEmpty(data.body)
+
+    List(schemaValidation, extraValidation, emptyStructureValidation)
   }
 
   private def bodyFieldFormatValidation: CreateUkPropertyPeriodSummaryRawData => List[List[MtdError]] = { data =>

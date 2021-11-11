@@ -215,6 +215,21 @@ class CreateUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with JsonError
           RuleIncorrectOrEmptyBodyError)
       }
 
+      "neither fhl nor non-fhl property data is provided" in {
+        validator.validate(
+          CreateUkPropertyPeriodSummaryRawData(
+            validNino,
+            taxYear,
+            validBusinessId,
+            Json.parse("""
+                         |{
+                         |  "fromDate": "2020-01-01",
+                         |  "toDate": "2020-01-31"
+                         |}
+                         |""".stripMargin)
+          )) shouldBe List(RuleIncorrectOrEmptyBodyError)
+      }
+
       "an empty object is submitted" when {
 
         Seq(

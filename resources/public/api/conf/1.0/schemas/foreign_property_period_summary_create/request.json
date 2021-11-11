@@ -158,7 +158,7 @@
                 "example": "5000.99"
               },
               "professionalFees": {
-                "description": "Legal, management and other professional fees. The value must be between 0 and 99999999999.99",
+                "description": "Legal, management and other professional fees. The value must be between 0 and 99999999999.99.",
                 "type": "number",
                 "example": "5000.99"
               },

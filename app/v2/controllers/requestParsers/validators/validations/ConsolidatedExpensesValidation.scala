@@ -19,8 +19,8 @@ package v2.controllers.requestParsers.validators.validations
 import v2.models.errors.{MtdError, RuleBothExpensesSuppliedError}
 import v2.models.request.common.foreignFhlEea._
 import v2.models.request.common.foreignPropertyEntry._
-import v2.models.request.createUkPropertyPeriodSummary.ukFhlProperty.UkFhlPropertyExpenses
-import v2.models.request.createUkPropertyPeriodSummary.ukNonFhlProperty.UkNonFhlPropertyExpenses
+import v2.models.request.common.ukFhlProperty.UkFhlPropertyExpenses
+import v2.models.request.common.ukNonFhlProperty.UkNonFhlPropertyExpenses
 
 object ConsolidatedExpensesValidation {
 

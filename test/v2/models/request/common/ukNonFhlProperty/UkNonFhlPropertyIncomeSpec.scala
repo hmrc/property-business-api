@@ -14,45 +14,36 @@
  * limitations under the License.
  */
 
-package v2.models.request.createUkPropertyPeriodSummary.ukNonFhlProperty
+package v2.models.request.common.ukNonFhlProperty
 
 import play.api.libs.json.{JsValue, Json}
 import support.UnitSpec
-import v2.models.request.common.ukPropertyRentARoom.UkPropertyExpensesRentARoom
+import v2.models.request.common.ukPropertyRentARoom.UkPropertyIncomeRentARoom
 
-class UkNonFhlPropertyExpensesSpec extends UnitSpec {
+class UkNonFhlPropertyIncomeSpec extends UnitSpec {
 
-  val requestBody: UkNonFhlPropertyExpenses =
-    UkNonFhlPropertyExpenses(
+  val requestBody: UkNonFhlPropertyIncome =
+    UkNonFhlPropertyIncome(
       Some(41.12),
       Some(84.31),
       Some(9884.93),
       Some(842.99),
       Some(31.44),
-      Some(84.31),
-      Some(9884.93),
-      Some(842.99),
-      Some(31.44),
-      Some(UkPropertyExpensesRentARoom(
+      Some(UkPropertyIncomeRentARoom(
         Some(947.66)
-      )),
-      None
+      ))
     )
 
   val mtdJson: JsValue = Json.parse(
     """
       |{
-      |    "premisesRunningCosts": 41.12,
-      |    "repairsAndMaintenance": 84.31,
-      |    "financialCosts": 9884.93,
-      |    "professionalFees": 842.99,
-      |    "costOfServices": 31.44,
-      |    "other": 84.31,
-      |    "residentialFinancialCost": 9884.93,
-      |    "travelCosts": 842.99,
-      |    "residentialFinancialCostsCarriedForward": 31.44,
+      |    "premiumsOfLeaseGrant": 41.12,
+      |    "reversePremiums": 84.31,
+      |    "periodAmount": 9884.93,
+      |    "taxDeducted": 842.99,
+      |    "otherIncome": 31.44,
       |    "rentARoom": {
-      |        "amountClaimed": 947.66
+      |        "rentsReceived": 947.66
       |    }
       |}
       |""".stripMargin)
@@ -60,17 +51,13 @@ class UkNonFhlPropertyExpensesSpec extends UnitSpec {
   val desJson: JsValue = Json.parse(
     """
       |{
-      |    "premisesRunningCosts": 41.12,
-      |    "repairsAndMaintenance": 84.31,
-      |    "financialCosts": 9884.93,
-      |    "professionalFees": 842.99,
-      |    "costOfServices": 31.44,
-      |    "other": 84.31,
-      |    "residentialFinancialCost": 9884.93,
-      |    "travelCosts": 842.99,
-      |    "residentialFinancialCostsCarriedForward": 31.44,
+      |    "premiumsOfLeaseGrant": 41.12,
+      |    "reversePremiums": 84.31,
+      |    "periodAmount": 9884.93,
+      |    "taxDeducted": 842.99,
+      |    "otherIncome": 31.44,
       |    "ukOtherRentARoom": {
-      |        "amountClaimed": 947.66
+      |        "rentsReceived": 947.66
       |    }
       |}
       |""".stripMargin)
@@ -78,7 +65,7 @@ class UkNonFhlPropertyExpensesSpec extends UnitSpec {
   "reads" when {
     "passed a valid JSON" should {
       "return a valid model" in {
-        mtdJson.as[UkNonFhlPropertyExpenses] shouldBe requestBody
+        mtdJson.as[UkNonFhlPropertyIncome] shouldBe requestBody
       }
     }
   }

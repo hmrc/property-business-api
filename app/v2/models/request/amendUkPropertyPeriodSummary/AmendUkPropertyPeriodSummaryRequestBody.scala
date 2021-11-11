@@ -14,30 +14,21 @@
  * limitations under the License.
  */
 
-package v2.models.request.createUkPropertyPeriodSummary
+package v2.models.request.amendUkPropertyPeriodSummary
 
 import play.api.libs.functional.syntax._
-import play.api.libs.json.{JsPath, Json, OWrites, Reads}
+import play.api.libs.json.{JsPath, Json, Reads, Writes}
 import v2.models.request.common.ukFhlProperty.UkFhlProperty
 import v2.models.request.common.ukNonFhlProperty.UkNonFhlProperty
 
+case class AmendUkPropertyPeriodSummaryRequestBody(ukFhlProperty: Option[UkFhlProperty], ukNonFhlProperty: Option[UkNonFhlProperty])
 
-case class CreateUkPropertyPeriodSummaryRequestBody(fromDate: String,
-                                                    toDate: String,
-                                                    ukFhlProperty: Option[UkFhlProperty],
-                                                    ukNonFhlProperty: Option[UkNonFhlProperty])
+object AmendUkPropertyPeriodSummaryRequestBody {
+  implicit val reads: Reads[AmendUkPropertyPeriodSummaryRequestBody] = Json.reads[AmendUkPropertyPeriodSummaryRequestBody]
 
-
-
-
-object CreateUkPropertyPeriodSummaryRequestBody {
-  implicit val reads: Reads[CreateUkPropertyPeriodSummaryRequestBody] = Json.reads[CreateUkPropertyPeriodSummaryRequestBody]
-
-  implicit val writes: OWrites[CreateUkPropertyPeriodSummaryRequestBody] = (
-    (JsPath \ "fromDate").write[String] and
-      (JsPath \ "toDate").write[String] and
+  implicit val writes: Writes[AmendUkPropertyPeriodSummaryRequestBody] = (
       (JsPath \ "ukFhlProperty").writeNullable[UkFhlProperty] and
       (JsPath \ "ukOtherProperty").writeNullable[UkNonFhlProperty]
-  ) (unlift(CreateUkPropertyPeriodSummaryRequestBody.unapply))
+    ) (unlift(AmendUkPropertyPeriodSummaryRequestBody.unapply))
 
 }

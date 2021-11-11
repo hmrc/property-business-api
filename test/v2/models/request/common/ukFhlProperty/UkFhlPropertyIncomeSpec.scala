@@ -14,58 +14,51 @@
  * limitations under the License.
  */
 
-package v2.models.request.createUkPropertyPeriodSummary.ukNonFhlProperty
+package v2.models.request.common.ukFhlProperty
 
 import play.api.libs.json.{JsValue, Json}
 import support.UnitSpec
 import v2.models.request.common.ukPropertyRentARoom.UkPropertyIncomeRentARoom
 
-class UkNonFhlPropertyIncomeSpec extends UnitSpec {
+class UkFhlPropertyIncomeSpec extends UnitSpec {
 
-  val requestBody: UkNonFhlPropertyIncome =
-    UkNonFhlPropertyIncome(
-      Some(41.12),
-      Some(84.31),
-      Some(9884.93),
-      Some(842.99),
-      Some(31.44),
+  val requestBody: UkFhlPropertyIncome =
+    UkFhlPropertyIncome(
+      Some(5000.99),
+      Some(3123.21),
       Some(UkPropertyIncomeRentARoom(
-        Some(947.66)
+        Some(532.12)
       ))
     )
 
   val mtdJson: JsValue = Json.parse(
     """
       |{
-      |    "premiumsOfLeaseGrant": 41.12,
-      |    "reversePremiums": 84.31,
-      |    "periodAmount": 9884.93,
-      |    "taxDeducted": 842.99,
-      |    "otherIncome": 31.44,
+      |    "periodAmount": 5000.99,
+      |    "taxDeducted": 3123.21,
       |    "rentARoom": {
-      |        "rentsReceived": 947.66
+      |        "rentsReceived": 532.12
       |    }
       |}
       |""".stripMargin)
+
 
   val desJson: JsValue = Json.parse(
     """
       |{
-      |    "premiumsOfLeaseGrant": 41.12,
-      |    "reversePremiums": 84.31,
-      |    "periodAmount": 9884.93,
-      |    "taxDeducted": 842.99,
-      |    "otherIncome": 31.44,
-      |    "ukOtherRentARoom": {
-      |        "rentsReceived": 947.66
+      |    "periodAmount": 5000.99,
+      |    "taxDeducted": 3123.21,
+      |    "ukFhlRentARoom": {
+      |        "rentsReceived": 532.12
       |    }
       |}
       |""".stripMargin)
 
+
   "reads" when {
     "passed a valid JSON" should {
       "return a valid model" in {
-        mtdJson.as[UkNonFhlPropertyIncome] shouldBe requestBody
+        mtdJson.as[UkFhlPropertyIncome] shouldBe requestBody
       }
     }
   }

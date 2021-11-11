@@ -14,42 +14,45 @@
  * limitations under the License.
  */
 
-package v2.models.request.createUkPropertyPeriodSummary.ukFhlProperty
+package v2.models.request.common.ukNonFhlProperty
 
 import play.api.libs.json.{JsValue, Json}
 import support.UnitSpec
 import v2.models.request.common.ukPropertyRentARoom.UkPropertyExpensesRentARoom
 
-class UkFhlPropertyExpensesSpec extends UnitSpec {
+class UkNonFhlPropertyExpensesSpec extends UnitSpec {
 
-  val requestBody: UkFhlPropertyExpenses =
-    UkFhlPropertyExpenses(
-      Some(3123.21),
-      Some(928.42),
+  val requestBody: UkNonFhlPropertyExpenses =
+    UkNonFhlPropertyExpenses(
+      Some(41.12),
+      Some(84.31),
+      Some(9884.93),
       Some(842.99),
-      Some(8831.12),
-      Some(484.12),
-      Some(99282),
-      Some(999.99),
-      Some(974.47),
+      Some(31.44),
+      Some(84.31),
+      Some(9884.93),
+      Some(842.99),
+      Some(31.44),
       Some(UkPropertyExpensesRentARoom(
-        Some(8842.43)
-      ))
+        Some(947.66)
+      )),
+      None
     )
 
   val mtdJson: JsValue = Json.parse(
     """
       |{
-      |    "premisesRunningCosts": 3123.21,
-      |    "repairsAndMaintenance": 928.42,
-      |    "financialCosts": 842.99,
-      |    "professionalFees": 8831.12,
-      |    "costOfServices": 484.12,
-      |    "other": 99282,
-      |    "consolidatedExpense": 999.99,
-      |    "travelCosts": 974.47,
+      |    "premisesRunningCosts": 41.12,
+      |    "repairsAndMaintenance": 84.31,
+      |    "financialCosts": 9884.93,
+      |    "professionalFees": 842.99,
+      |    "costOfServices": 31.44,
+      |    "other": 84.31,
+      |    "residentialFinancialCost": 9884.93,
+      |    "travelCosts": 842.99,
+      |    "residentialFinancialCostsCarriedForward": 31.44,
       |    "rentARoom": {
-      |        "amountClaimed": 8842.43
+      |        "amountClaimed": 947.66
       |    }
       |}
       |""".stripMargin)
@@ -57,16 +60,17 @@ class UkFhlPropertyExpensesSpec extends UnitSpec {
   val desJson: JsValue = Json.parse(
     """
       |{
-      |    "premisesRunningCosts": 3123.21,
-      |    "repairsAndMaintenance": 928.42,
-      |    "financialCosts": 842.99,
-      |    "professionalFees": 8831.12,
-      |    "costOfServices": 484.12,
-      |    "other": 99282,
-      |    "consolidatedExpenses": 999.99,
-      |    "travelCosts": 974.47,
-      |    "ukFhlRentARoom": {
-      |        "amountClaimed": 8842.43
+      |    "premisesRunningCosts": 41.12,
+      |    "repairsAndMaintenance": 84.31,
+      |    "financialCosts": 9884.93,
+      |    "professionalFees": 842.99,
+      |    "costOfServices": 31.44,
+      |    "other": 84.31,
+      |    "residentialFinancialCost": 9884.93,
+      |    "travelCosts": 842.99,
+      |    "residentialFinancialCostsCarriedForward": 31.44,
+      |    "ukOtherRentARoom": {
+      |        "amountClaimed": 947.66
       |    }
       |}
       |""".stripMargin)
@@ -74,7 +78,7 @@ class UkFhlPropertyExpensesSpec extends UnitSpec {
   "reads" when {
     "passed a valid JSON" should {
       "return a valid model" in {
-        mtdJson.as[UkFhlPropertyExpenses] shouldBe requestBody
+        mtdJson.as[UkNonFhlPropertyExpenses] shouldBe requestBody
       }
     }
   }

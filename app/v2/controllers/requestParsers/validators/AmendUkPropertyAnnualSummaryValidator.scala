@@ -22,13 +22,13 @@ import v2.controllers.requestParsers.validators.validations._
 import v2.models.errors._
 
 @Singleton
-class AmendUkPropertyAnnualSummaryValidator @Inject()(appConfig: AppConfig) extends Validator[AmendUkPropertyAnnualSubmissionRawData] {
+class AmendUkPropertyAnnualSummaryValidator @Inject()(appConfig: AppConfig) extends Validator[AmendUkPropertyAnnualSummaryRawData] {
 
   private lazy val minTaxYear = appConfig.minimumTaxV2Uk
-  private val validationSet   = List(parameterFormatValidation)
+  private val validationSet = List(parameterFormatValidation)
 
-  private def parameterFormatValidation: AmendUkPropertyAnnualSubmissionRawData => List[List[MtdError]] =
-    (data: AmendUkPropertyAnnualSubmissionRawData) => {
+  private def parameterFormatValidation: AmendUkPropertyAnnualSummaryRawData => List[List[MtdError]] =
+    (data: AmendUkPropertyAnnualSummaryRawData) => {
       List(
         NinoValidation.validate(data.nino),
         BusinessIdValidation.validate(data.businessId),
@@ -36,32 +36,19 @@ class AmendUkPropertyAnnualSummaryValidator @Inject()(appConfig: AppConfig) exte
       )
     }
 
-  private def bodyFormatValidation: AmendUkPropertyAnnualSubmissionRawData => List[List[MtdError]] = { data =>
-    val baseValidation = List(
-      JsonFormatValidation.validate[AmendUkPropertyAnnualSubmissionRequestBody](data.body, RuleIncorrectOrEmptyBodyError))
-
-    val extraValidation: List[List[MtdError]] = {
-      data.body
-        .asOpt[AmendUkPropertyAnnualSubmissionRequestBody]
-        .map(_.isEmpty)
-        .map {
-          case true  => List(List(RuleIncorrectOrEmptyBodyError))
-          case false => NoValidationErrors
-        }
-        .getOrElse(NoValidationErrors)
-    }
-
-    baseValidation ++ extraValidation
+  private def bodyFormatValidation: AmendUkPropertyAnnualSummaryRawData => List[List[MtdError]] = { data =>
+    List(JsonFormatValidation.validate[AmendUkPropertyAnnualSummaryRequestBody](data.body)) ++
+      List(JsonFormatValidation.validatedNestedEmpty(data.body))
   }
 
-  private def bodyFieldValidation: AmendUkPropertyAnnualSubmissionRawData => List[List[MtdError]] { data =>
-  val body = data.body.as[AmendUkPropertyAnnualSubmissionRequestBody]
+  private def bodyFieldValidation: AmendUkPropertyAnnualSummaryRawData => List[List[MtdError]] {data =>
+    val body = data.body.as[AmendUkPropertyAnnualSummaryRequestBody]
 
-  List(
-    flattenErrors(
-      List(
-        body.ukFhlProperty.map(validateUkFhlProperty).getOrElse(NoValidationErrors),
-        body.ukFhlProperty
+    List (
+    flattenErrors (
+    List (
+    body.ukFhlProperty.map (validateUkFhlProperty).getOrElse (NoValidationErrors),
+    body.ukFhlProperty
 
     )
     )
@@ -115,8 +102,113 @@ class AmendUkPropertyAnnualSummaryValidator @Inject()(appConfig: AppConfig) exte
 
   private def validateukNonFhlProperty(ukNonFhlProperty: UkNonFhlProperty): List[MtdError] = {
     List(
-
+      NumberValidation.validateOptional(
+        field = Some(ukNonFhlProperty.adjustments.lossBroughtForward),
+        path = "/ukFhlProperty/adjustments/lossBroughtForward"
+      ),
+      NumberValidation.validateOptional(
+        field = Some(ukNonFhlProperty.adjustments.balancingCharge),
+        path = "/ukFhlProperty/adjustments/balancingCharge"
+      ),
+      NumberValidation.validateOptional(
+        field = Some(ukNonFhlProperty.adjustments.privateUseAdjustment),
+        path = "/ukFhlProperty/adjustments/privateUseAdjustment"
+      ),
+      NumberValidation.validateOptional(
+        field = Some(ukNonFhlProperty.adjustments.businessPremisesRenovationAllowanceBalancingCharges),
+        path = "/ukFhlProperty/adjustments/businessPremisesRenovationAllowanceBalancingCharges"
+      ),
+      NumberValidation.validateOptional(
+        field = Some(ukNonFhlProperty.allowances.annualInvestmentAllowance),
+        path = "/ukFhlProperty/allowances/annualInvestmentAllowance"
+      ),
+      NumberValidation.validateOptional(
+        field = Some(ukNonFhlProperty.allowances.zeroEmissionGoodsVehicleAllowance),
+        path = "/ukFhlProperty/allowances/zeroEmissionGoodsVehicleAllowance"
+      ),
+      NumberValidation.validateOptional(
+        field = Some(ukNonFhlProperty.allowances.businessPremisesRenovationAllowance),
+        path = "/ukFhlProperty/allowances/businessPremisesRenovationAllowance"
+      ),
+      NumberValidation.validateOptional(
+        field = Some(ukNonFhlProperty.allowances.otherCapitalAllowance),
+        path = "/ukFhlProperty/allowances/otherCapitalAllowance"
+      ),
+      NumberValidation.validateOptional(
+        field = Some(ukNonFhlProperty.allowances.costOfReplacingDomesticGoods),
+        path = "/ukFhlProperty/allowances/costOfReplacingDomesticGoods"
+      ),
+      NumberValidation.validateOptional(
+        field = Some(ukNonFhlProperty.allowances.electricChargePointAllowance),
+        path = "/ukFhlProperty/allowances/electricChargePointAllowance"
+      ),
+      NumberValidation.validateOptional(
+        field = Some(ukNonFhlProperty.allowances.zeroEmissionsCarAllowance),
+        path = "/ukFhlProperty/allowances/zeroEmissionsCarAllowance"
+      ),
+      NumberValidation.validateOptional(
+        field = Some(ukNonFhlProperty.allowances.propertyIncomeAllowance),
+        path = "/ukFhlProperty/allowances/propertyIncomeAllowance"
+      ),
+      NumberValidation.validateOptional(
+        field = Some(ukNonFhlProperty.allowances.structuredBuildingAllowance.amount),
+        path = "/ukFhlProperty/allowances/structuredBuildingAllowance/amount"
+      ),
+      DateValidation.validateOtherDate(
+        field = Some(ukNonFhlProperty.allowances.structuredBuildingAllowance.firstYear.qualifyingDate),
+        path = "/ukFhlProperty/allowances/structuredBuildingAllowance/firstYear/qualifyingDate"
+      ),
+      NumberValidation.validateOptional(
+        field = Some(ukNonFhlProperty.allowances.structuredBuildingAllowance.firstYear.qualifyingAmountExpenditure),
+        path = "/ukFhlProperty/allowances/structuredBuildingAllowance/firstYear/qualifyingAmountExpenditure"
+      ),
+      StringValidation.validate(
+        field = Some(ukNonFhlProperty.allowances.structuredBuildingAllowance.building.name),
+        path = "/ukFhlProperty/allowances/structuredBuildingAllowance/building/name"
+      ),
+      StringValidation.validate(
+        field = Some(ukNonFhlProperty.allowances.structuredBuildingAllowance.building.number),
+        path = "/ukFhlProperty/allowances/structuredBuildingAllowance/building/number"
+      ),
+      StringValidation.validate(
+        field = Some(ukNonFhlProperty.allowances.structuredBuildingAllowance.building.postcode),
+        path = "/ukFhlProperty/allowances/structuredBuildingAllowance/building/postcode"
+      ),
+      NumberValidation.validateOptional(
+        field = Some(ukNonFhlProperty.allowances.enhancedStructuredBuildingAllowance.amount),
+        path = "/ukFhlProperty/allowances/enhancedStructuredBuildingAllowance/amount"
+      ),
+      DateValidation.validateOtherDate(
+        field = Some(ukNonFhlProperty.allowances.enhancedStructuredBuildingAllowance.firstYear.qualifyingDate),
+        path = "/ukFhlProperty/allowances/enhancedStructuredBuildingAllowance/firstYear/qualifyingDate"
+      ),
+      NumberValidation.validateOptional(
+        field = Some(ukNonFhlProperty.allowances.enhancedStructuredBuildingAllowance.firstYear.qualifyingAmountExpenditure),
+        path = "/ukFhlProperty/allowances/enhancedStructuredBuildingAllowance/firstYear/qualifyingAmountExpenditure"
+      ),
+      StringValidation.validate(
+        field = Some(ukNonFhlProperty.allowances.enhancedStructuredBuildingAllowance.building.name),
+        path = "/ukFhlProperty/allowances/enhancedStructuredBuildingAllowance/building/name"
+      ),
+      StringValidation.validate(
+        field = Some(ukNonFhlProperty.allowances.enhancedStructuredBuildingAllowance.building.number),
+        path = "/ukFhlProperty/allowances/enhancedStructuredBuildingAllowance/building/number"
+      ),
+      StringValidation.validate(
+        field = Some(ukNonFhlProperty.allowances.enhancedStructuredBuildingAllowance.building.postcode),
+        path = "/ukFhlProperty/allowances/enhancedStructuredBuildingAllowance/building/postcode"
+      )
     )
   }
 
+
+
+  private def validateBothAllowances: CreateUkPropertyAnnualSummaryRawData => List[List[MtdError]] = { data =>
+    val body = data.body.as[CreateUkPropertyAnnualSummaryRequestBody]
+    AllowancesValidation.validate(body)
+  }
+
+  override def validate(data: AmendUkPropertyAnnualSummaryRawData): List[MtdError] = {
+    run(validationSet, data).distinct
+  }
 }

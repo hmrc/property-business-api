@@ -203,9 +203,18 @@ class AmendUkPropertyAnnualSummaryValidator @Inject()(appConfig: AppConfig) exte
 
 
 
-  private def validateBothAllowances: CreateUkPropertyAnnualSummaryRawData => List[List[MtdError]] = { data =>
-    val body = data.body.as[CreateUkPropertyAnnualSummaryRequestBody]
-    AllowancesValidation.validate(body)
+  private def validateFhlAllowances(allowances: UkFhlPropertyAllowances) : List[MtdError] = {
+    AllowancesValidation.validate(
+      allowances = allowances,
+      path = s"ukFhlProperty/allowances"
+    )
+  }
+
+  private def validateFhlAllowances(allowances: UkNonFhlPropertyAllowances) : List[MtdError] = {
+    AllowancesValidation.validate(
+      allowances = allowances,
+      path = s"ukNonFhlProperty/allowances"
+    )
   }
 
   override def validate(data: AmendUkPropertyAnnualSummaryRawData): List[MtdError] = {

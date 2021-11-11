@@ -16,17 +16,26 @@
 
 package v2.controllers.requestParsers.validators.validations
 
-import v2.models.errors.MtdError
+import v2.models.errors.{MtdError, RuleBothAllowancesSuppliedError}
 
 object AllowancesValidation {
 
 
-  def validate(body: AmendUkPropertyAnnualSummaryRequestBody): List[MtdError] = {
-    body.ukFhlProperty.allowances match {
+  def validate(allowances: UkFhlPropertyAllowances, path: String): List[MtdError] = {
+    allowances.propertyIncomeAllowance match {
       case None => NoValidationErrors
-      case Some(_) => body.ukNonFhlProperty.allowances match {
-        case None => NoValidationErrors
-        case Some(_) => List(RuleBoth)
+      case Some(_) => allowances match {
+        case UkFhlPropertyAllowances(None, None, None, None, None, Some(_)) => NoValidationErrors
+        case _ => List(RuleBothAllowancesSuppliedError.copy(paths = Some(Seq(path))))
+      }
+    }
+  }
+  def validate(allowances: UkNonFhlPropertyAllowances, path: String): List[MtdError] = {
+    allowances.propertyIncomeAllowance match {
+      case None => NoValidationErrors
+      case Some(_) => allowances match {
+        case UkFhlPropertyAllowances(None, None, None, None, None, Some(_)) => NoValidationErrors
+        case _ => List(RuleBothAllowancesSuppliedError.copy(paths = Some(Seq(path))))
       }
     }
   }

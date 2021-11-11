@@ -184,8 +184,8 @@ class CreateUkPropertyPeriodSummaryValidator @Inject()(appConfig: AppConfig) ext
         path = "/ukNonFhlProperty/expenses/residentialFinancialCost"
       ),
       NumberValidation.validateOptional(
-        field = property.expenses.flatMap(_.consolidatedExpenses),
-        path = "/ukNonFhlProperty/expenses/consolidatedExpenses"
+        field = property.expenses.flatMap(_.consolidatedExpense),
+        path = "/ukNonFhlProperty/expenses/consolidatedExpense"
       ),
       NumberValidation.validateOptional(
         field = property.expenses.flatMap(_.travelCosts),

@@ -58,7 +58,7 @@ object ConsolidatedExpensesValidation {
   }
 
   def validate(expenses: UkNonFhlPropertyExpenses, path: String): List[MtdError] = {
-    expenses.consolidatedExpenses match {
+    expenses.consolidatedExpense match {
       case None => NoValidationErrors
       case Some(_) =>
         expenses match {

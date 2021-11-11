@@ -18,7 +18,7 @@ package v2.models.request.amendUkPropertyAnnualSubmission.ukFhlProperty
 
 import play.api.libs.json.{Json, OFormat}
 
-case class UkFhlProperty(adjustments: UkFhlPropertyAdjustments, allowances: UkFhlPropertyAllowances)
+case class UkFhlProperty(adjustments: Option[UkFhlPropertyAdjustments], allowances: Option[UkFhlPropertyAllowances])
 
 object UkFhlProperty {
   implicit val format: OFormat[UkFhlProperty] = Json.format[UkFhlProperty]

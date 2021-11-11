@@ -25,7 +25,7 @@ case class UkNonFhlPropertyAdjustments(lossBroughtForward: Option[BigDecimal],
                                        privateUseAdjustment: Option[BigDecimal],
                                        businessPremisesRenovationAllowanceBalancingCharges: Option[BigDecimal],
                                        nonResidentLandlord: Boolean,
-                                       rentARoom: UkPropertyAdjustmentsRentARoom)
+                                       rentARoom: Option[UkPropertyAdjustmentsRentARoom])
 
 object UkNonFhlPropertyAdjustments {
   implicit val reads: Reads[UkNonFhlPropertyAdjustments] = Json.reads[UkNonFhlPropertyAdjustments]
@@ -36,6 +36,6 @@ object UkNonFhlPropertyAdjustments {
     (JsPath \ "privateUseAdjustment").writeNullable[BigDecimal] and
     (JsPath \ "businessPremisesRenovationAllowanceBalancingCharges").writeNullable[BigDecimal] and
     (JsPath \ "nonResidentLandlord").write[Boolean] and
-      (JsPath \ "ukOtherRentARoom").write[UkPropertyAdjustmentsRentARoom]
+      (JsPath \ "ukOtherRentARoom").writeNullable[UkPropertyAdjustmentsRentARoom]
     ) (unlift(UkNonFhlPropertyAdjustments.unapply))
 }

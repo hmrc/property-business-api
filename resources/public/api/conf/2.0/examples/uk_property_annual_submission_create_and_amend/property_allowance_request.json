@@ -1,0 +1,33 @@
+{
+  "ukFhlProperty": {
+    "allowances": {
+      "propertyIncomeAllowance": 123.45
+    },
+    "adjustments": {
+      "lossBroughtForward": 343.34,
+      "privateUseAdjustment": 454.45,
+      "balancingCharge": 231.45,
+      "periodOfGraceAdjustment": true,
+      "businessPremisesRenovationAllowanceBalancingCharges": 567.67,
+      "nonResidentLandlord": true,
+      "rentARoom": {
+        "jointlyLet": true
+      }
+    }
+  },
+  "ukNonFhlProperty": {
+    "allowances": {
+      "propertyIncomeAllowance": 678.45
+    },
+    "adjustments": {
+      "lossBroughtForward": 334.45,
+      "balancingCharge": 565.34,
+      "privateUseAdjustment": 533.54,
+      "businessPremisesRenovationAllowanceBalancingCharges": 563.34,
+      "nonResidentLandlord": true,
+      "rentARoom": {
+        "jointlyLet": true
+      }
+    }
+  }
+}

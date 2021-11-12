@@ -1,0 +1,46 @@
+is:
+  - headers.acceptJson
+  - headers.contentTypeJson
+  - headers.testScenarioHeader
+  - errors.formatNino
+  - errors.formatBusinessId
+  - errors.formatTaxYear
+  - errors.formatValue
+  - errors.formatDate
+  - errors.formatString
+  - errors.ruleIncorrectOrEmptyBody
+  - errors.ruleBothAllowancesSupplied
+  - errors.ruleBuildingNameNumber
+  - errors.ruleTaxYearRangeInvalid
+  - errors.ruleTaxYearNotSupported
+  - errors.ruleTypeOfBusinessIncorrect
+  - errors.clientOrAgentNotAuthorised
+  - errors.notFound
+displayName: Create and amend a UK property business annual submission [test only]
+description: This endpoint allows a developer to re-submit adjustments and allowances for a UK property business. This submission is for either or both of Furnished Holiday Letting (FHL) and Non FHL UK property submissions. A National Insurance number, business ID and tax year are required.
+(annotations.sandboxData): !include scenarios/uk_property_annual_submission_create_and_amend_scenarios.md
+(annotations.scope): "write:self-assessment"
+securedBy: [ sec.oauth_2_0: { scopes: [ "write:self-assessment" ] } ]
+body:
+  application/json:
+    type: !include schemas/uk_property_annual_submission_create_and_amend/request.json
+    examples:
+      example-1:
+        description: Property Allowance request
+        value: !include examples/uk_property_annual_submission_create_and_amend/property_allowance_request.json
+      example-2:
+        description: All Other Allowance request
+        value: !include examples/uk_property_annual_submission_create_and_amend/all_other_allowance_request.json
+responses:
+  200:
+    body:
+      application/json:
+        type: !include schemas/uk_property_annual_submission_create_and_amend/response.json
+        examples:
+          example-1:
+            description: Example response
+            value: !include examples/uk_property_annual_submission_create_and_amend/response.json
+    headers:
+      X-CorrelationId:
+        example: c75f40a6-a3df-4429-a697-471eeec46435
+        description: Unique ID for operation tracking <br> String, 36 characters.

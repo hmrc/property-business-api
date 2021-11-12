@@ -96,6 +96,28 @@ traits:
                 description: The format of one or more monetary fields is not valid.
                 value:
                   code: FORMAT_VALUE
+  formatDate:
+    responses:
+      400:
+        body:
+          application/json:
+            type: types.errorResponse
+            examples:
+              formatDate:
+                description: The supplied date format is not valid.
+                value:
+                  code: FORMAT_DATE
+  formatString:
+    responses:
+      400:
+        body:
+          application/json:
+            type: types.errorResponse
+            examples:
+              formatString:
+                description: One or more strings have been added with the incorrect format.
+                value:
+                  code: FORMAT_STRING
   formatSubmissionId:
     responses:
       400:
@@ -196,6 +218,28 @@ traits:
                 description: Both Expenses and Consolidated Expenses must not be present at the same time.
                 value:
                   code: RULE_BOTH_EXPENSES_SUPPLIED
+  ruleBothAllowancesSupplied:
+    responses:
+      400:
+        body:
+          application/json:
+            type: types.errorResponse
+            examples:
+              ruleBothAllowancesSupplied:
+                description: Both allowances and property income allowance must not be present at the same time.
+                value:
+                  code: RULE_BOTH_ALLOWANCES_SUPPLIED
+  ruleBuildingNameNumber:
+    responses:
+      400:
+        body:
+          application/json:
+            type: types.errorResponse
+            examples:
+              ruleBuildingNameNumber:
+                description: One of building name or number must be supplied.
+                value:
+                  code: RULE_BUILDING_NAME_NUMBER
   ruleCountryCode:
     responses:
       400:

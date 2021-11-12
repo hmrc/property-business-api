@@ -20,9 +20,9 @@ import support.UnitSpec
 import v2.models.errors.RuleBothExpensesSuppliedError
 import v2.models.request.common
 import v2.models.request.common.foreignPropertyEntry.ForeignPropertyExpenditure
+import v2.models.request.common.ukFhlProperty.UkFhlPropertyExpenses
+import v2.models.request.common.ukNonFhlProperty.UkNonFhlPropertyExpenses
 import v2.models.request.common.ukPropertyRentARoom.UkPropertyExpensesRentARoom
-import v2.models.request.createUkPropertyPeriodSummary.ukFhlProperty.UkFhlPropertyExpenses
-import v2.models.request.createUkPropertyPeriodSummary.ukNonFhlProperty.UkNonFhlPropertyExpenses
 
 class ConsolidatedExpensesValidationSpec extends UnitSpec {
 

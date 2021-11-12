@@ -14,12 +14,9 @@
  * limitations under the License.
  */
 
-package v2.models.request.createUkPropertyPeriodSummary.ukNonFhlProperty
+package v2.models.request.amendUkPropertyPeriodSummary
 
-import play.api.libs.json.{Json, OFormat}
+import play.api.libs.json.JsValue
+import v2.models.request.RawData
 
-case class UkNonFhlProperty(income: Option[UkNonFhlPropertyIncome], expenses: Option[UkNonFhlPropertyExpenses])
-
-object UkNonFhlProperty {
-  implicit val format: OFormat[UkNonFhlProperty] = Json.format[UkNonFhlProperty]
-}
+case class AmendUkPropertyPeriodSummaryRawData(nino: String, businessId: String, taxYear: String, submissionId: String, body: JsValue) extends RawData

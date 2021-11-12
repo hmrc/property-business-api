@@ -14,51 +14,67 @@
  * limitations under the License.
  */
 
-package v2.models.request.createUkPropertyPeriodSummary.ukFhlProperty
+package v2.models.request.common.ukFhlProperty
 
 import play.api.libs.json.{JsValue, Json}
 import support.UnitSpec
-import v2.models.request.common.ukPropertyRentARoom.UkPropertyIncomeRentARoom
+import v2.models.request.common.ukPropertyRentARoom.UkPropertyExpensesRentARoom
 
-class UkFhlPropertyIncomeSpec extends UnitSpec {
+class UkFhlPropertyExpensesSpec extends UnitSpec {
 
-  val requestBody: UkFhlPropertyIncome =
-    UkFhlPropertyIncome(
-      Some(5000.99),
+  val requestBody: UkFhlPropertyExpenses =
+    UkFhlPropertyExpenses(
       Some(3123.21),
-      Some(UkPropertyIncomeRentARoom(
-        Some(532.12)
+      Some(928.42),
+      Some(842.99),
+      Some(8831.12),
+      Some(484.12),
+      Some(99282),
+      Some(999.99),
+      Some(974.47),
+      Some(UkPropertyExpensesRentARoom(
+        Some(8842.43)
       ))
     )
 
   val mtdJson: JsValue = Json.parse(
     """
       |{
-      |    "periodAmount": 5000.99,
-      |    "taxDeducted": 3123.21,
+      |    "premisesRunningCosts": 3123.21,
+      |    "repairsAndMaintenance": 928.42,
+      |    "financialCosts": 842.99,
+      |    "professionalFees": 8831.12,
+      |    "costOfServices": 484.12,
+      |    "other": 99282,
+      |    "consolidatedExpense": 999.99,
+      |    "travelCosts": 974.47,
       |    "rentARoom": {
-      |        "rentsReceived": 532.12
+      |        "amountClaimed": 8842.43
       |    }
       |}
       |""".stripMargin)
-
 
   val desJson: JsValue = Json.parse(
     """
       |{
-      |    "periodAmount": 5000.99,
-      |    "taxDeducted": 3123.21,
+      |    "premisesRunningCosts": 3123.21,
+      |    "repairsAndMaintenance": 928.42,
+      |    "financialCosts": 842.99,
+      |    "professionalFees": 8831.12,
+      |    "costOfServices": 484.12,
+      |    "other": 99282,
+      |    "consolidatedExpenses": 999.99,
+      |    "travelCosts": 974.47,
       |    "ukFhlRentARoom": {
-      |        "rentsReceived": 532.12
+      |        "amountClaimed": 8842.43
       |    }
       |}
       |""".stripMargin)
 
-
   "reads" when {
     "passed a valid JSON" should {
       "return a valid model" in {
-        mtdJson.as[UkFhlPropertyIncome] shouldBe requestBody
+        mtdJson.as[UkFhlPropertyExpenses] shouldBe requestBody
       }
     }
   }

@@ -25,8 +25,8 @@ import v2.models.errors._
 import v2.models.outcomes.ResponseWrapper
 import v2.models.request.common.ukPropertyRentARoom.{UkPropertyExpensesRentARoom, UkPropertyIncomeRentARoom}
 import v2.models.request.createUkPropertyPeriodSummary._
-import v2.models.request.createUkPropertyPeriodSummary.ukFhlProperty._
-import v2.models.request.createUkPropertyPeriodSummary.ukNonFhlProperty._
+import v2.models.request.common.ukFhlProperty._
+import v2.models.request.common.ukNonFhlProperty._
 import v2.models.response.createUkPropertyPeriodSummary.CreateUkPropertyPeriodSummaryResponse
 
 import scala.concurrent.ExecutionContext.Implicits.global

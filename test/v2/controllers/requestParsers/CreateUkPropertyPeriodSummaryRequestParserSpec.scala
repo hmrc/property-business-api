@@ -20,13 +20,9 @@ import play.api.libs.json.Json
 import support.UnitSpec
 import v2.mocks.validators.MockCreateUkPropertyPeriodSummaryValidator
 import v2.models.domain.Nino
-import v2.models.errors.{ BadRequestError, BusinessIdFormatError, ErrorWrapper, NinoFormatError }
-import v2.models.request.createUkPropertyPeriodSummary.ukFhlProperty.{ UkFhlProperty, UkFhlPropertyIncome }
-import v2.models.request.createUkPropertyPeriodSummary.{
-  CreateUkPropertyPeriodSummaryRawData,
-  CreateUkPropertyPeriodSummaryRequest,
-  CreateUkPropertyPeriodSummaryRequestBody
-}
+import v2.models.errors.{BadRequestError, BusinessIdFormatError, ErrorWrapper, NinoFormatError}
+import v2.models.request.common.ukFhlProperty.{UkFhlProperty, UkFhlPropertyIncome}
+import v2.models.request.createUkPropertyPeriodSummary._
 
 class CreateUkPropertyPeriodSummaryRequestParserSpec extends UnitSpec {
 

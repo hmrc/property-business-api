@@ -20,11 +20,10 @@ import com.google.inject.Inject
 import config.AppConfig
 import v2.controllers.requestParsers.validators.validations._
 import v2.models.errors.{MtdError, RuleIncorrectOrEmptyBodyError}
-import v2.models.request.createUkPropertyPeriodSummary.ukFhlProperty.UkFhlProperty
-import v2.models.request.createUkPropertyPeriodSummary.ukNonFhlProperty.UkNonFhlProperty
 import v2.models.request.createUkPropertyPeriodSummary.{CreateUkPropertyPeriodSummaryRawData, CreateUkPropertyPeriodSummaryRequestBody}
-
 import javax.inject.Singleton
+import v2.models.request.common.ukFhlProperty.UkFhlProperty
+import v2.models.request.common.ukNonFhlProperty.UkNonFhlProperty
 
 @Singleton
 class CreateUkPropertyPeriodSummaryValidator @Inject()(appConfig: AppConfig) extends Validator[CreateUkPropertyPeriodSummaryRawData] {

@@ -20,6 +20,7 @@ import mocks.MockAppConfig
 import play.api.libs.json._
 import support.UnitSpec
 import v2.models.errors._
+import v2.models.request.amendUkPropertyPeriodSummary.AmendUkPropertyPeriodSummaryRawData
 import v2.models.utils.JsonErrorValidators
 
 class AmendUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with JsonErrorValidators with MockAppConfig {

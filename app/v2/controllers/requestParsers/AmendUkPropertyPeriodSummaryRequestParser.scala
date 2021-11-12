@@ -16,8 +16,9 @@
 
 package v2.controllers.requestParsers
 
+import v2.controllers.requestParsers.validators.AmendUkPropertyPeriodSummaryValidator
 import v2.models.domain.Nino
-
+import v2.models.request.amendUkPropertyPeriodSummary._
 import javax.inject.Inject
 
 class AmendUkPropertyPeriodSummaryRequestParser @Inject()(val validator: AmendUkPropertyPeriodSummaryValidator)

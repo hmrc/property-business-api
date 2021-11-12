@@ -20,6 +20,9 @@ import com.google.inject.Inject
 import config.AppConfig
 import v2.controllers.requestParsers.validators.validations._
 import v2.models.errors.{MtdError, RuleIncorrectOrEmptyBodyError}
+import v2.models.request.amendUkPropertyPeriodSummary._
+import v2.models.request.common.ukFhlProperty.UkFhlProperty
+import v2.models.request.common.ukNonFhlProperty.UkNonFhlProperty
 
 import javax.inject.Singleton
 

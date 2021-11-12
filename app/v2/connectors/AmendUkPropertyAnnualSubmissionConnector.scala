@@ -18,17 +18,17 @@ package v2.connectors
 
 import config.AppConfig
 import javax.inject.{Inject, Singleton}
-import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
 import v2.connectors.httpparsers.StandardIfsHttpParser._
-import v2.models.request.amendUKPropertyAnnualSubmission.AmendUKPropertyAnnualSubmissionRequest
+import v2.models.request.amendUkPropertyAnnualSubmission.AmendUkPropertyAnnualSubmissionRequest
 
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class AmendUKPropertyAnnualSubmissionConnector @Inject()(val http: HttpClient,
+class AmendUkPropertyAnnualSubmissionConnector @Inject()(val http: HttpClient,
                                                          val appConfig: AppConfig) extends BaseIfsConnector {
 
-  def amendUKPropertyAnnualSubmission(request: AmendUKPropertyAnnualSubmissionRequest)(
+  def amendUkPropertyAnnualSubmission(request: AmendUkPropertyAnnualSubmissionRequest)(
     implicit hc: HeaderCarrier,
     ec: ExecutionContext,
     correlationId: String): Future[IfsOutcome[Unit]] = {

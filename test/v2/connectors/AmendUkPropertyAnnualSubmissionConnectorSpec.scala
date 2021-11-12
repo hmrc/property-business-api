@@ -21,50 +21,49 @@ import uk.gov.hmrc.http.HeaderCarrier
 import v2.mocks.MockHttpClient
 import v2.models.domain.Nino
 import v2.models.outcomes.ResponseWrapper
-import v2.models.request.amendForeignPropertyAnnualSubmission._
-import v2.models.request.amendForeignPropertyAnnualSubmission.foreignFhlEea._
-import v2.models.request.amendForeignPropertyAnnualSubmission.foreignProperty._
+import v2.models.request.amendUkPropertyAnnualSubmission._
+import v2.models.request.amendUkPropertyAnnualSubmission.ukFhlProperty._
+import v2.models.request.amendUkPropertyAnnualSubmission.ukNonFhlProperty._
+import v2.models.request.common.ukPropertyRentARoom.UkPropertyAdjustmentsRentARoom
 
 import scala.concurrent.Future
 
-class CreateAmendUKPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec {
+class AmendUkPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec {
 
   val nino: String = "AA123456A"
   val businessId: String = "XAIS12345678910"
   val taxYear: String = "2022-23"
 
-  private val ukFhlProperty = ukFhlProperty(
-    Some(ukFhlPropertyAdjustments(
-      Some(5000.99),
+  private val ukFhlProperty = UkFhlProperty(
+    Some(UkFhlPropertyAdjustments(
       Some(5000.99),
       Some(5000.99),
       Some(5000.99),
       true,
-      Some(rentARoom(
-        true
-      ))
+      Some(5000.99),
+      true,
+      Some(UkPropertyAdjustmentsRentARoom(true))
     )),
-    Some(ukFhlPropertyAllowances(
+    Some(UkFhlPropertyAllowances(
       Some(5000.99),
       Some(5000.99),
       Some(5000.99),
       Some(5000.99),
-      Some(5000.99)
+      Some(5000.99),
+      None
     ))
   )
 
-  private val ukNonFhlProperty = ukNonFhlProperty(
-    Some(ukNonFhlPropertyAdjustments(
+  private val ukNonFhlProperty = UkNonFhlProperty(
+    Some(UkNonFhlPropertyAdjustments(
       Some(5000.99),
       Some(5000.99),
       Some(5000.99),
       Some(5000.99),
       true,
-      Some(rentARoom(
-        true
-      ))
+      Some(UkPropertyAdjustmentsRentARoom(true))
     )),
-    Some(ukNonFhlPropertyAllowances(
+    Some(UkNonFhlPropertyAllowances(
       Some(5000.99),
       Some(5000.99),
       Some(5000.99),
@@ -72,27 +71,40 @@ class CreateAmendUKPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec {
       Some(5000.99),
       Some(5000.99),
       Some(5000.99),
-      Some(Seq(structuredBuildingAllowance(
+      None,
+      Some(Seq(StructuredBuildingAllowance(
         5000.99,
-        Some(firstYear(
+        Some(FirstYear(
           "2020-01-01",
           5000.99
         )),
-        Some(building(
+        Building(
           Some("Green Oak's"),
-          Some("16AD"),
-          Some("GF49JH")
-        ))
+          None,
+          "GF49JH"
+        )
+      ))),
+      Some(Seq(StructuredBuildingAllowance(
+        3000.50,
+        Some(FirstYear(
+          "2020-01-01",
+          3000.60
+        )),
+        Building(
+          None,
+          Some("house number"),
+          "GF49JH"
+        )
       )))
     ))
   )
 
-  val body: AmendUKPropertyAnnualSubmissionRequestBody = AmendUKPropertyAnnualSubmissionRequestBody(
+  val body: AmendUkPropertyAnnualSubmissionRequestBody = AmendUkPropertyAnnualSubmissionRequestBody(
     Some(ukFhlProperty),
     Some(ukNonFhlProperty)
   )
 
-  val request: AmendUKPropertyAnnualSubmissionRequest = AmendUKPropertyAnnualSubmissionRequest(
+  val request: AmendUkPropertyAnnualSubmissionRequest = AmendUkPropertyAnnualSubmissionRequest(
     nino = Nino(nino),
     businessId = businessId,
     taxYear = taxYear,
@@ -100,7 +112,7 @@ class CreateAmendUKPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec {
   )
 
   class Test extends MockHttpClient with MockAppConfig {
-    val connector = new AmendUKPropertyAnnualSubmissionConnector(
+    val connector = new AmendUkPropertyAnnualSubmissionConnector(
       http = mockHttpClient,
       appConfig = mockAppConfig
     )
@@ -128,7 +140,7 @@ class CreateAmendUKPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec {
         )
         .returns(Future.successful(outcome))
 
-      await(connector.amendUKPropertyAnnualSubmission(request)) shouldBe outcome
+      await(connector.amendUkPropertyAnnualSubmission(request)) shouldBe outcome
 
     }
   }

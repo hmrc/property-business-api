@@ -19,56 +19,55 @@ package v2.services
 import support.UnitSpec
 import uk.gov.hmrc.http.HeaderCarrier
 import v2.controllers.EndpointLogContext
-import v2.mocks.connectors.MockAmendForeignPropertyAnnualSubmissionConnector
+import v2.mocks.connectors.MockAmendUkPropertyAnnualSubmissionConnector
 import v2.models.domain.Nino
 import v2.models.errors._
 import v2.models.outcomes.ResponseWrapper
-import v2.models.request.amendForeignPropertyAnnualSubmission._
-import v2.models.request.amendForeignPropertyAnnualSubmission.foreignFhlEea._
-import v2.models.request.amendForeignPropertyAnnualSubmission.foreignProperty._
+import v2.models.request.amendUkPropertyAnnualSubmission.{AmendUkPropertyAnnualSubmissionRequest, AmendUkPropertyAnnualSubmissionRequestBody}
+import v2.models.request.amendUkPropertyAnnualSubmission.ukFhlProperty._
+import v2.models.request.amendUkPropertyAnnualSubmission.ukNonFhlProperty._
+import v2.models.request.common.ukPropertyRentARoom.UkPropertyAdjustmentsRentARoom
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-class CreateAmendUKPropertyAnnualSubmissionServiceSpec extends UnitSpec {
+class AmendUkPropertyAnnualSubmissionServiceSpec extends UnitSpec {
 
   val nino: String = "AA123456A"
   val businessId: String = "XAIS12345678910"
   val taxYear: String = "2022-23"
   implicit val correlationId: String = "X-123"
 
-  private val ukFhlProperty = ukFhlProperty(
-    Some(ukFhlPropertyAdjustments(
-      Some(5000.99),
+  private val ukFhlProperty = UkFhlProperty(
+    Some(UkFhlPropertyAdjustments(
       Some(5000.99),
       Some(5000.99),
       Some(5000.99),
       true,
-      Some(rentARoom(
-        true
-      ))
+      Some(5000.99),
+      true,
+      Some(UkPropertyAdjustmentsRentARoom(true))
     )),
-    Some(ukFhlPropertyAllowances(
+    Some(UkFhlPropertyAllowances(
       Some(5000.99),
       Some(5000.99),
       Some(5000.99),
       Some(5000.99),
-      Some(5000.99)
+      Some(5000.99),
+      None
     ))
   )
 
-  private val ukNonFhlProperty = ukNonFhlProperty(
-    Some(ukNonFhlPropertyAdjustments(
+  private val ukNonFhlProperty = UkNonFhlProperty(
+    Some(UkNonFhlPropertyAdjustments(
       Some(5000.99),
       Some(5000.99),
       Some(5000.99),
       Some(5000.99),
       true,
-      Some(rentARoom(
-        true
-      ))
+      Some(UkPropertyAdjustmentsRentARoom(true))
     )),
-    Some(ukNonFhlPropertyAllowances(
+    Some(UkNonFhlPropertyAllowances(
       Some(5000.99),
       Some(5000.99),
       Some(5000.99),
@@ -76,44 +75,57 @@ class CreateAmendUKPropertyAnnualSubmissionServiceSpec extends UnitSpec {
       Some(5000.99),
       Some(5000.99),
       Some(5000.99),
-      Some(Seq(structuredBuildingAllowance(
+      None,
+      Some(Seq(StructuredBuildingAllowance(
         5000.99,
-        Some(firstYear(
+        Some(FirstYear(
           "2020-01-01",
           5000.99
         )),
-        Some(building(
+        Building(
           Some("Green Oak's"),
-          Some("16AD"),
-          Some("GF49JH")
-        ))
+          None,
+          "GF49JH"
+        )
+      ))),
+      Some(Seq(StructuredBuildingAllowance(
+        3000.50,
+        Some(FirstYear(
+          "2020-01-01",
+          3000.60
+        )),
+        Building(
+          None,
+          Some("house number"),
+          "GF49JH"
+        )
       )))
     ))
   )
 
-  val body: AmendUKPropertyAnnualSubmissionRequestBody = AmendUKPropertyAnnualSubmissionRequestBody(
-    Some(foreignFhlEea),
-    Some(Seq(foreignPropertyEntry))
+  val body: AmendUkPropertyAnnualSubmissionRequestBody = AmendUkPropertyAnnualSubmissionRequestBody(
+    Some(ukFhlProperty),
+    Some(ukNonFhlProperty)
   )
 
-  private val request = AmendUKPropertyAnnualSubmissionRequest(Nino(nino), businessId, taxYear, body)
+  private val request = AmendUkPropertyAnnualSubmissionRequest(Nino(nino), businessId, taxYear, body)
 
-  trait Test extends MockAmendUKPropertyAnnualSubmissionConnector {
+  trait Test extends MockAmendUkPropertyAnnualSubmissionConnector {
     implicit val hc: HeaderCarrier = HeaderCarrier()
     implicit val logContext: EndpointLogContext = EndpointLogContext("c", "ep")
 
-    val service = new AmendUKPropertyAnnualSubmissionService(
-      connector = mockAmendUKPropertyAnnualSubmissionConnector
+    val service = new AmendUkPropertyAnnualSubmissionService(
+      connector = mockAmendUkPropertyAnnualSubmissionConnector
     )
   }
 
   "service" should {
     "service call successful" when {
       "return mapped result" in new Test {
-        MockAmendUKPropertyAnnualSubmissionConnector.amendUKProperty(request)
+        MockAmendUkPropertyAnnualSubmissionConnector.amendUkProperty(request)
           .returns(Future.successful(Right(ResponseWrapper(correlationId, ()))))
 
-        await(service.amendUKPropertyAnnualSubmission(request)) shouldBe Right(ResponseWrapper(correlationId, ()))
+        await(service.amendUkPropertyAnnualSubmission(request)) shouldBe Right(ResponseWrapper(correlationId, ()))
     }
     }
   }
@@ -124,10 +136,10 @@ class CreateAmendUKPropertyAnnualSubmissionServiceSpec extends UnitSpec {
       def serviceError(ifsErrorCode: String, error: MtdError): Unit =
         s"a $ifsErrorCode error is returned from the service" in new Test {
 
-          MockAmendUKPropertyAnnualSubmissionConnector.amendUKProperty(request)
+          MockAmendUkPropertyAnnualSubmissionConnector.amendUkProperty(request)
             .returns(Future.successful(Left(ResponseWrapper(correlationId, IfsErrors.single(IfsErrorCode(ifsErrorCode))))))
 
-          await(service.amendUKPropertyAnnualSubmission(request)) shouldBe Left(ErrorWrapper(correlationId, error))
+          await(service.amendUkPropertyAnnualSubmission(request)) shouldBe Left(ErrorWrapper(correlationId, error))
         }
 
       val input = Seq(

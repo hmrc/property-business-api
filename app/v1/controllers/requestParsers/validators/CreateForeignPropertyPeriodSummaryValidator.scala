@@ -74,7 +74,7 @@ class CreateForeignPropertyPeriodSummaryValidator extends Validator[CreateForeig
   private def validateForeignFhlEea(foreignFhlEea: ForeignFhlEea): List[MtdError] = {
     List(
       NumberValidation.validateOptional(
-        field = Some(foreignFhlEea.income.rentAmount),
+        field = foreignFhlEea.income.flatMap(_.rentAmount),
         path = "/foreignFhlEea/income/rentAmount"
       ),
       NumberValidation.validateOptional(
@@ -119,7 +119,7 @@ class CreateForeignPropertyPeriodSummaryValidator extends Validator[CreateForeig
         path = s"/foreignProperty/$index/countryCode"
       ),
       NumberValidation.validateOptional(
-        field = Some(foreignProperty.income.rentIncome.rentAmount),
+        field = foreignProperty.income.rentIncome.flatMap(_.rentAmount),
         path = s"/foreignProperty/$index/income/rentIncome/rentAmount"
       ),
       NumberValidation.validateOptional(
@@ -204,4 +204,5 @@ class CreateForeignPropertyPeriodSummaryValidator extends Validator[CreateForeig
   override def validate(data: CreateForeignPropertyPeriodSummaryRawData): List[MtdError] = {
     run(validationSet, data).distinct
   }
+
 }

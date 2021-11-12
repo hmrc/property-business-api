@@ -29,7 +29,7 @@ class ForeignPropertyRentIncomeSpec extends UnitSpec {
     """.stripMargin
   )
 
-  val model: ForeignPropertyRentIncome = ForeignPropertyRentIncome(rentAmount = 34456.30)
+  val model: ForeignPropertyRentIncome = ForeignPropertyRentIncome(Some(34456.30))
 
   val ifsJson: JsValue = Json.parse(
     """

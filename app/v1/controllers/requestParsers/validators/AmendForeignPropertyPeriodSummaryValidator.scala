@@ -68,7 +68,7 @@ class AmendForeignPropertyPeriodSummaryValidator extends Validator[AmendForeignP
   private def validateForeignFhlEea(foreignFhlEea: ForeignFhlEea): List[MtdError] = {
     List(
       NumberValidation.validateOptional(
-        field = Some(foreignFhlEea.income.rentAmount),
+        field = foreignFhlEea.income.flatMap(_.rentAmount),
         path = "/foreignFhlEea/income/rentAmount"
       ),
       NumberValidation.validateOptional(
@@ -113,7 +113,7 @@ class AmendForeignPropertyPeriodSummaryValidator extends Validator[AmendForeignP
         path = s"/foreignProperty/$index/countryCode"
       ),
       NumberValidation.validateOptional(
-        field = Some(foreignPropertyEntry.income.rentIncome.rentAmount),
+        field = foreignPropertyEntry.income.rentIncome.flatMap(_.rentAmount),
         path = s"/foreignProperty/$index/income/rentIncome/rentAmount"
       ),
       NumberValidation.validateOptional(

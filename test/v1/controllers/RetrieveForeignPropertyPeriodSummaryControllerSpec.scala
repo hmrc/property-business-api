@@ -78,7 +78,7 @@ class RetrieveForeignPropertyPeriodSummaryControllerSpec
     "2020-01-01",
     "2020-01-31",
     Some(ForeignFhlEea(
-      ForeignFhlEeaIncome(5000.99),
+      Some(ForeignFhlEeaIncome(Some(5000.99))),
       Some(ForeignFhlEeaExpenditure(
         Some(5000.99),
         Some(5000.99),
@@ -92,7 +92,7 @@ class RetrieveForeignPropertyPeriodSummaryControllerSpec
     )),
     Some(Seq(ForeignProperty("FRA",
       ForeignPropertyIncome(
-        ForeignPropertyRentIncome(5000.99),
+        Some(ForeignPropertyRentIncome(Some(5000.99))),
         false,
         Some(5000.99),
         Some(5000.99),

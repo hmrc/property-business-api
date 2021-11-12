@@ -23,7 +23,7 @@ import v1.models.utils.JsonErrorValidators
 class ForeignFhlEeaSpec extends UnitSpec with JsonErrorValidators {
 
   val foreignFhlEea = ForeignFhlEea(
-    ForeignFhlEeaIncome(5000.99),
+    Some(ForeignFhlEeaIncome(Some(5000.99))),
     Some(ForeignFhlEeaExpenditure(
       Some(5000.99),
       Some(5000.99),

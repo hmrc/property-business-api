@@ -19,8 +19,9 @@ package v2.controllers.requestParsers.validators
 import mocks.MockAppConfig
 import play.api.libs.json.{JsValue, Json}
 import support.UnitSpec
+import v2.models.request.amendUkPropertyAnnualSubmission.AmendUkPropertyAnnualSubmissionRawData
 
-class AmendUkPropertyAnnualSummaryValidatorSpec extends UnitSpec with MockAppConfig {
+class AmendUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec with MockAppConfig {
 
   private val validNino       = "AA123456A"
   private val validBusinessId = "XAIS12345678901"
@@ -102,12 +103,12 @@ class AmendUkPropertyAnnualSummaryValidatorSpec extends UnitSpec with MockAppCon
 
 
   MockAppConfig.minimumTaxV2Uk returns 2021
-  val validator = new AmendUkPropertyAnnualSummaryValidator(mockAppConfig)
+  val validator = new AmendUkPropertyAnnualSubmissionValidator(mockAppConfig)
 
   "running a validation" should {
     "return no errors" when {
       "a valid request is supplied" in {
-        validator.validate(AmendUkPropertyAnnualSummaryRawData(validNino, validBusinessId, validTaxYear, requestBodyJson)) shouldBe Nil
+        validator.validate(AmendUkPropertyAnnualSubmissionRawData(validNino, validBusinessId, validTaxYear, requestBodyJson)) shouldBe Nil
       }
     }
   }

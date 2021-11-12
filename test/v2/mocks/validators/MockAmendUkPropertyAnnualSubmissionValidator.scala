@@ -18,9 +18,11 @@ package v2.mocks.validators
 
 import org.scalamock.handlers.CallHandler1
 import org.scalamock.scalatest.MockFactory
+import v2.controllers.requestParsers.validators.AmendUkPropertyAnnualSubmissionValidator
 import v2.models.errors.MtdError
+import v2.models.request.amendUkPropertyAnnualSubmission.AmendUkPropertyAnnualSubmissionRawData
 
-class MockAmendUkPropertyAnnualSummaryValidator extends MockFactory {
+class MockAmendUkPropertyAnnualSubmissionValidator extends MockFactory {
 
   val mockValidator: AmendUkPropertyAnnualSubmissionValidator = mock[AmendUkPropertyAnnualSubmissionValidator]
 

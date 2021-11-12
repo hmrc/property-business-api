@@ -17,6 +17,8 @@
 package v2.controllers.requestParsers.validators.validations
 
 import v2.models.errors.{MtdError, RuleBothAllowancesSuppliedError}
+import v2.models.request.amendUkPropertyAnnualSubmission.ukFhlProperty.UkFhlPropertyAllowances
+import v2.models.request.amendUkPropertyAnnualSubmission.ukNonFhlProperty.UkNonFhlPropertyAllowances
 
 object AllowancesValidation {
 
@@ -34,7 +36,7 @@ object AllowancesValidation {
     allowances.propertyIncomeAllowance match {
       case None => NoValidationErrors
       case Some(_) => allowances match {
-        case UkFhlPropertyAllowances(None, None, None, None, None, Some(_)) => NoValidationErrors
+        case UkNonFhlPropertyAllowances(None, None, None, None, None, None, None, Some(_), None, None) => NoValidationErrors
         case _ => List(RuleBothAllowancesSuppliedError.copy(paths = Some(Seq(path))))
       }
     }

@@ -18,11 +18,15 @@ package v2.controllers.requestParsers
 
 import play.api.libs.json.{JsValue, Json}
 import support.UnitSpec
-import v2.mocks.validators.MockAmendUkPropertyAnnualSummaryValidator
+import v2.mocks.validators.MockAmendUkPropertyAnnualSubmissionValidator
 import v2.models.domain.Nino
 import v2.models.errors.{BadRequestError, BusinessIdFormatError, ErrorWrapper, NinoFormatError}
+import v2.models.request.amendUkPropertyAnnualSubmission.ukFhlProperty.{UkFhlProperty, UkFhlPropertyAdjustments, UkFhlPropertyAllowances}
+import v2.models.request.amendUkPropertyAnnualSubmission.ukNonFhlProperty.{Building, FirstYear, StructuredBuildingAllowance, UkNonFhlProperty, UkNonFhlPropertyAdjustments, UkNonFhlPropertyAllowances}
+import v2.models.request.amendUkPropertyAnnualSubmission.{AmendUkPropertyAnnualSubmissionRawData, AmendUkPropertyAnnualSubmissionRequest, AmendUkPropertyAnnualSubmissionRequestBody}
+import v2.models.request.common.ukPropertyRentARoom.UkPropertyAdjustmentsRentARoom
 
-class AmendUkPropertyAnnualSummaryRequestParserSpec extends UnitSpec {
+class AmendUkPropertyAnnualSubmissionRequestParserSpec extends UnitSpec {
 
   val nino: String = "AA123456B"
   val businessId: String = "XAIS12345678901"
@@ -107,22 +111,87 @@ class AmendUkPropertyAnnualSummaryRequestParserSpec extends UnitSpec {
   val inputData: AmendUkPropertyAnnualSubmissionRawData =
     AmendUkPropertyAnnualSubmissionRawData(nino, businessId, taxYear, requestBodyJson)
 
-  trait Test extends MockAmendUkPropertyAnnualSummaryValidator {
-    val parser = new AmendUkPropertyAnnualSubmissionRequestParser(mockValidator)
+  trait Test extends MockAmendUkPropertyAnnualSubmissionValidator {
+    lazy val parser = new AmendUkPropertyAnnualSubmissionRequestParser(mockValidator)
   }
   
   "parse" should {
     "return a request object" when {
       "valid request data is supplied" in new Test {
-        MockAmendUkPropertyAnnualSummaryValidator.validate(inputData).returns.(Nil)
-        
-        val amendUkPropertyAnnualSummaryRequestBody: amendUkPropertyAnnualSummaryRequestBody =
+        MockAmendUkPropertyValidator.validate(inputData).returns(Nil)
 
-          parser.parsedRequest(inputData) shouldBe
-            Right(AmendUkPropertyAnnualSummaryRequest(Nino(nino), businessId, taxYear, amendUkPropertyAnnualSummaryRequestBody)))
+        val amendUkPropertyAnnualSubmissionRequestBody: AmendUkPropertyAnnualSubmissionRequestBody =
+          AmendUkPropertyAnnualSubmissionRequestBody(
+            Some(UkFhlProperty(
+              Some(UkFhlPropertyAdjustments(
+                Some(1000.10),
+                Some(1000.20),
+                Some(1000.30),
+                true,
+                Some(1000.40),
+                true,
+                Some(UkPropertyAdjustmentsRentARoom(true))
+              )),
+              Some(UkFhlPropertyAllowances(
+                Some(1000.50),
+                Some(1000.60),
+                Some(1000.70),
+                Some(1000.80),
+                Some(1000.90),
+                None
+              ))
+            )),
+            Some(UkNonFhlProperty(
+              Some(UkNonFhlPropertyAdjustments(
+                Some(2000.10),
+                Some(2000.20),
+                Some(2000.30),
+                Some(2000.40),
+                true,
+                Some(UkPropertyAdjustmentsRentARoom(true))
+              )),
+              Some(UkNonFhlPropertyAllowances(
+                Some(2000.50),
+                Some(2000.60),
+                Some(2000.70),
+                Some(2000.80),
+                Some(2000.90),
+                Some(3000.10),
+                Some(3000.20),
+                None,
+                Some(Seq(StructuredBuildingAllowance(
+                  3000.30,
+                  Some(FirstYear(
+                    "2020-01-01",
+                    3000.40
+                  )),
+                  Building(
+                    Some("house name"),
+                    None,
+                    "GF49JH"
+                  )
+                ))),
+                Some(Seq(StructuredBuildingAllowance(
+                  3000.50,
+                  Some(FirstYear(
+                    "2020-01-01",
+                    3000.60
+                  )),
+                  Building(
+                    None,
+                    Some("house number"),
+                    "GF49JH"
+                  )
+                )))
+              ))
+            ))
+          )
+
+        parser.parseRequest(inputData) shouldBe
+          Right(AmendUkPropertyAnnualSubmissionRequest(Nino(nino), businessId, taxYear, amendUkPropertyAnnualSubmissionRequestBody))
       }
     }
-    "return an ErrroWrapper" when {
+    "return an ErrrorWrapper" when {
       "a single validation error occurs" in new Test {
         MockAmendUkPropertyValidator.validate(inputData)
           .returns(List(NinoFormatError))

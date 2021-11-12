@@ -28,7 +28,7 @@ object NumberValidation {
   }
 
 
-  private def validate(field: BigDecimal, path: String): List[MtdError] = {
+   def validate(field: BigDecimal, path: String): List[MtdError] = {
     if (field >= 0 && field < 100000000000.00 && field.scale <= 2) {
       Nil
     } else {

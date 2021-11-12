@@ -18,7 +18,7 @@ package v2.controllers.requestParsers.validators
 
 import com.google.inject.Inject
 import config.AppConfig
-import v2.controllers.requestParsers.validators.validations.{BusinessIdValidation, NinoValidation, NoValidationErrors, SubmissionIdValidation, TaxYearValidation}
+import v2.controllers.requestParsers.validators.validations._
 import v2.models.errors.{MtdError, RuleIncorrectOrEmptyBodyError}
 
 import javax.inject.Singleton
@@ -27,7 +27,7 @@ import javax.inject.Singleton
 class AmendUkPropertyPeriodSummaryValidator @Inject()(appConfig: AppConfig) extends Validator[AmendUkPropertyPeriodSummaryRawData] {
 
   private lazy val minTaxYear = appConfig.minimumTaxV2Uk
-  private val validationSet   = List(parameterFormatValidation, bodyFormatValidation, bodyFieldFormatValidation, dateRangeValidation)
+  private val validationSet   = List(parameterFormatValidation, bodyFormatValidation, bodyFieldFormatValidation)
 
   private def parameterFormatValidation: AmendUkPropertyPeriodSummaryRawData => List[List[MtdError]] =
     (data: AmendUkPropertyPeriodSummaryRawData) => {
@@ -57,11 +57,6 @@ class AmendUkPropertyPeriodSummaryValidator @Inject()(appConfig: AppConfig) exte
   private def bodyFieldFormatValidation: AmendUkPropertyPeriodSummaryRawData => List[List[MtdError]] = { data =>
     val body = data.body.as[AmendUkPropertyPeriodSummaryRequestBody]
 
-    val regularErrors = List(
-      DateValidation.validate(body.fromDate, isFromDate = true),
-      DateValidation.validate(body.toDate, isFromDate = false)
-    )
-
     val pathErrors = List(
       flattenErrors(
         List(
@@ -71,7 +66,7 @@ class AmendUkPropertyPeriodSummaryValidator @Inject()(appConfig: AppConfig) exte
           body.ukNonFhlProperty.flatMap(_.expenses.map(ConsolidatedExpensesValidation.validate(_,"/ukNonFhlProperty/expenses"))).getOrElse(NoValidationErrors),
         )))
 
-    regularErrors ++ pathErrors
+    pathErrors
 
   }
 
@@ -114,8 +109,8 @@ class AmendUkPropertyPeriodSummaryValidator @Inject()(appConfig: AppConfig) exte
         path = "/ukFhlProperty/expenses/other"
       ),
       NumberValidation.validateOptional(
-        field = property.expenses.flatMap(_.consolidatedExpense),
-        path = "/ukFhlProperty/expenses/consolidatedExpense"
+        field = property.expenses.flatMap(_.consolidatedExpenses),
+        path = "/ukFhlProperty/expenses/consolidatedExpenses"
       ),
       NumberValidation.validateOptional(
         field = property.expenses.flatMap(_.travelCosts),
@@ -183,8 +178,8 @@ class AmendUkPropertyPeriodSummaryValidator @Inject()(appConfig: AppConfig) exte
         path = "/ukNonFhlProperty/expenses/residentialFinancialCost"
       ),
       NumberValidation.validateOptional(
-        field = property.expenses.flatMap(_.consolidatedExpense),
-        path = "/ukNonFhlProperty/expenses/consolidatedExpense"
+        field = property.expenses.flatMap(_.consolidatedExpenses),
+        path = "/ukNonFhlProperty/expenses/consolidatedExpenses"
       ),
       NumberValidation.validateOptional(
         field = property.expenses.flatMap(_.travelCosts),
@@ -201,11 +196,19 @@ class AmendUkPropertyPeriodSummaryValidator @Inject()(appConfig: AppConfig) exte
     ).flatten
   }
 
-  private def dateRangeValidation: AmendUkPropertyPeriodSummaryRawData => List[List[MtdError]] = { data =>
-    val body = data.body.as[AmendUkPropertyPeriodSummaryRequestBody]
+ // private def validateUkPropertyConsolidatedExpenses(expenses: UkFhlPropertyExpenses): List[MtdError] = {
+ //   ConsolidatedExpensesValidation.validate(
+ //     expenses = expenses,
+ //     path = s"/ukFhlProperty/expenses"
+ //   )
+ // }
 
-    List(ToDateBeforeFromDateValidation.validate(body.fromDate, body.toDate))
-  }
+ // private def validateUkNonFhlPropertyConsolidatedExpenses(expenses: UkFhlPropertyExpenses): List[MtdError] = {
+ //   ConsolidatedExpensesValidation.validate(
+ //     expenses = expenses,
+ //     path = s"/ukNonFhlProperty/expenses"
+  //  )
+  //}
 
   override def validate(data: AmendUkPropertyPeriodSummaryRawData): List[MtdError] = {
     run(validationSet, data).distinct

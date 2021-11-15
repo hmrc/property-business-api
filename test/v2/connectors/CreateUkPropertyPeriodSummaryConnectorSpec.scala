@@ -53,7 +53,7 @@ class CreateUkPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
         Some(8831.12),
         Some(484.12),
         Some(99282.52),
-        consolidatedExpense = None,
+        consolidatedExpenses = None,
         Some(974.47),
         Some(UkPropertyExpensesRentARoom(
           Some(8842.43)
@@ -84,7 +84,7 @@ class CreateUkPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
         Some(UkPropertyExpensesRentARoom(
           Some(947.66)
         )),
-        consolidatedExpense = None
+        consolidatedExpenses = None
       ))
     ))
   )
@@ -107,7 +107,7 @@ class CreateUkPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
         None,
         None,
         None,
-        consolidatedExpense = Some(41.12),
+        consolidatedExpenses = Some(41.12),
         None,
         None
       ))
@@ -130,11 +130,11 @@ class CreateUkPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
         None,
         None,
         None,
-        residentialFinancialCost = Some(999.99),
         None,
-        residentialFinancialCostsCarriedForward = Some(8831.12),
         None,
-        consolidatedExpense = Some(947.66)
+        None,
+        None,
+        consolidatedExpenses = Some(947.66)
       ))
     ))
   )
@@ -166,7 +166,7 @@ class CreateUkPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
 
       MockHttpClient
         .post(
-          url = s"$baseUrl/income-tax/business/property/periodic?taxableEntityId=$nino&incomeSourceId=$businessId&taxYear=$taxYear",
+          url = s"$baseUrl/income-tax/business/property/periodic?taxableEntityId=$nino&taxYearExplicit=$taxYear&incomeSourceId=$businessId",
           config = dummyIfsHeaderCarrierConfig,
           body = regularExpensesBody,
           requiredHeaders = requiredIfsHeadersPost,
@@ -186,7 +186,7 @@ class CreateUkPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
 
       MockHttpClient
         .post(
-          url = s"$baseUrl/income-tax/business/property/periodic?taxableEntityId=$nino&incomeSourceId=$businessId&taxYear=$taxYear",
+          url = s"$baseUrl/income-tax/business/property/periodic?taxableEntityId=$nino&taxYearExplicit=$taxYear&incomeSourceId=$businessId",
           config = dummyIfsHeaderCarrierConfig,
           body = consolidatedExpensesBody,
           requiredHeaders = requiredIfsHeadersPost,

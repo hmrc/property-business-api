@@ -20,31 +20,34 @@ import com.google.inject.Inject
 import config.AppConfig
 import v2.controllers.requestParsers.validators.validations._
 import v2.models.errors.{MtdError, RuleIncorrectOrEmptyBodyError}
-import v2.models.request.createUkPropertyPeriodSummary.{CreateUkPropertyPeriodSummaryRawData, CreateUkPropertyPeriodSummaryRequestBody}
-import javax.inject.Singleton
+import v2.models.request.amendUkPropertyPeriodSummary.{AmendUkPropertyPeriodSummaryRawData, AmendUkPropertyPeriodSummaryRequestBody}
 import v2.models.request.common.ukFhlProperty.UkFhlProperty
 import v2.models.request.common.ukNonFhlProperty.UkNonFhlProperty
 
+import javax.inject.Singleton
+
 @Singleton
-class CreateUkPropertyPeriodSummaryValidator @Inject()(appConfig: AppConfig) extends Validator[CreateUkPropertyPeriodSummaryRawData] {
+class AmendUkPropertyPeriodSummaryValidator @Inject()(appConfig: AppConfig) extends Validator[AmendUkPropertyPeriodSummaryRawData] {
 
   private lazy val minTaxYear = appConfig.minimumTaxV2Uk
-  private val validationSet   = List(parameterFormatValidation, bodyFormatValidation, bodyFieldFormatValidation, dateRangeValidation)
+  private val validationSet   = List(parameterFormatValidation, bodyFormatValidation, bodyFieldFormatValidation)
 
-  private def parameterFormatValidation: CreateUkPropertyPeriodSummaryRawData => List[List[MtdError]] =
-    (data: CreateUkPropertyPeriodSummaryRawData) => {
+  private def parameterFormatValidation: AmendUkPropertyPeriodSummaryRawData => List[List[MtdError]] =
+    (data: AmendUkPropertyPeriodSummaryRawData) => {
       List(
         NinoValidation.validate(data.nino),
         TaxYearValidation.validate(minTaxYear, data.taxYear),
-        BusinessIdValidation.validate(data.businessId)
+        BusinessIdValidation.validate(data.businessId),
+        SubmissionIdValidation.validate(data.submissionId)
+
       )
     }
 
-  private def bodyFormatValidation: CreateUkPropertyPeriodSummaryRawData => List[List[MtdError]] = { data =>
-    val schemaValidation = JsonFormatValidation.validate[CreateUkPropertyPeriodSummaryRequestBody](data.body)
+  private def bodyFormatValidation: AmendUkPropertyPeriodSummaryRawData => List[List[MtdError]] = { data =>
+    val schemaValidation = JsonFormatValidation.validate[AmendUkPropertyPeriodSummaryRequestBody](data.body)
 
     val extraValidation =
-      data.body.asOpt[CreateUkPropertyPeriodSummaryRequestBody] match {
+      data.body.asOpt[AmendUkPropertyPeriodSummaryRequestBody] match {
         case Some(body) if body.ukNonFhlProperty.isEmpty && body.ukFhlProperty.isEmpty => List(RuleIncorrectOrEmptyBodyError)
         case _                                                                         => NoValidationErrors
       }
@@ -54,13 +57,8 @@ class CreateUkPropertyPeriodSummaryValidator @Inject()(appConfig: AppConfig) ext
     List(schemaValidation, extraValidation, emptyStructureValidation)
   }
 
-  private def bodyFieldFormatValidation: CreateUkPropertyPeriodSummaryRawData => List[List[MtdError]] = { data =>
-    val body = data.body.as[CreateUkPropertyPeriodSummaryRequestBody]
-
-    val regularErrors = List(
-      DateValidation.validate(body.fromDate, isFromDate = true),
-      DateValidation.validate(body.toDate, isFromDate = false)
-    )
+  private def bodyFieldFormatValidation: AmendUkPropertyPeriodSummaryRawData => List[List[MtdError]] = { data =>
+    val body = data.body.as[AmendUkPropertyPeriodSummaryRequestBody]
 
     val pathErrors = List(
       flattenErrors(
@@ -71,7 +69,7 @@ class CreateUkPropertyPeriodSummaryValidator @Inject()(appConfig: AppConfig) ext
           body.ukNonFhlProperty.flatMap(_.expenses.map(ConsolidatedExpensesValidation.validate(_,"/ukNonFhlProperty/expenses"))).getOrElse(NoValidationErrors),
         )))
 
-    regularErrors ++ pathErrors
+    pathErrors
 
   }
 
@@ -201,13 +199,7 @@ class CreateUkPropertyPeriodSummaryValidator @Inject()(appConfig: AppConfig) ext
     ).flatten
   }
 
-  private def dateRangeValidation: CreateUkPropertyPeriodSummaryRawData => List[List[MtdError]] = { data =>
-    val body = data.body.as[CreateUkPropertyPeriodSummaryRequestBody]
-
-    List(ToDateBeforeFromDateValidation.validate(body.fromDate, body.toDate))
-  }
-
-  override def validate(data: CreateUkPropertyPeriodSummaryRawData): List[MtdError] = {
+  override def validate(data: AmendUkPropertyPeriodSummaryRawData): List[MtdError] = {
     run(validationSet, data).distinct
   }
 }

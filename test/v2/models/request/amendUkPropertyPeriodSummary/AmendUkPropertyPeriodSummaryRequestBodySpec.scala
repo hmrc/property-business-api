@@ -42,7 +42,7 @@ class AmendUkPropertyPeriodSummaryRequestBodySpec extends UnitSpec with JsonErro
           Some(1234.78),
           Some(1234.89),
           Some(1234.12),
-          consolidatedExpense = None,
+          consolidatedExpenses = None,
           Some(1234.23),
           Some(UkPropertyExpensesRentARoom(
             Some(1234.34)

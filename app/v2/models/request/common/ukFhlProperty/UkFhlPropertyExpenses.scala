@@ -26,7 +26,7 @@ case class UkFhlPropertyExpenses(premisesRunningCosts: Option[BigDecimal],
                                  professionalFees: Option[BigDecimal],
                                  costOfServices: Option[BigDecimal],
                                  other: Option[BigDecimal],
-                                 consolidatedExpense: Option[BigDecimal],
+                                 consolidatedExpenses: Option[BigDecimal],
                                  travelCosts: Option[BigDecimal],
                                  rentARoom: Option[UkPropertyExpensesRentARoom])
 

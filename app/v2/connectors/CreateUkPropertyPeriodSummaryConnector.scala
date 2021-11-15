@@ -18,7 +18,6 @@ package v2.connectors
 
 import config.AppConfig
 import javax.inject.{Inject, Singleton}
-import play.api.http.Status
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
 import v2.connectors.httpparsers.StandardIfsHttpParser._
 import v2.models.request.createUkPropertyPeriodSummary.CreateUkPropertyPeriodSummaryRequest
@@ -35,11 +34,10 @@ class CreateUkPropertyPeriodSummaryConnector @Inject()(val http: HttpClient,
     ec: ExecutionContext,
     correlationId: String): Future[IfsOutcome[CreateUkPropertyPeriodSummaryResponse]] = {
 
-    implicit val successCode: SuccessCode = SuccessCode(Status.OK)
-
     post(
       body = request.body,
-      uri = IfsUri[CreateUkPropertyPeriodSummaryResponse](s"income-tax/business/property/periodic?taxableEntityId=${request.nino.nino}&incomeSourceId=${request.businessId}&taxYear=${request.taxYear}")
+      uri = IfsUri[CreateUkPropertyPeriodSummaryResponse](
+        s"income-tax/business/property/periodic?taxableEntityId=${request.nino.nino}&taxYearExplicit=${request.taxYear}&incomeSourceId=${request.businessId}")
     )
   }
 }

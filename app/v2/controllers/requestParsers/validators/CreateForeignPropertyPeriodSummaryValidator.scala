@@ -19,10 +19,7 @@ package v2.controllers.requestParsers.validators
 import v2.controllers.requestParsers.validators.validations._
 import v2.models.errors.{ MtdError, RuleIncorrectOrEmptyBodyError }
 import v2.models.request.common.foreignPropertyEntry.{ ForeignPropertyEntry, ForeignPropertyExpenditure }
-import v2.models.request.createForeignPropertyPeriodSummary.{
-  CreateForeignPropertyPeriodSummaryRawData,
-  CreateForeignPropertyPeriodSummaryRequestBody
-}
+import v2.models.request.createForeignPropertyPeriodSummary.{CreateForeignPropertyPeriodSummaryRawData,CreateForeignPropertyPeriodSummaryRequestBody}
 import v2.models.request.common.foreignFhlEea.{ ForeignFhlEea, ForeignFhlEeaExpenditure }
 
 import javax.inject.Singleton

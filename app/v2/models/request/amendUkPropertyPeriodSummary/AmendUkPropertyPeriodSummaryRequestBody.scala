@@ -17,7 +17,7 @@
 package v2.models.request.amendUkPropertyPeriodSummary
 
 import play.api.libs.functional.syntax._
-import play.api.libs.json.{JsPath, Json, Reads, Writes}
+import play.api.libs.json.{JsPath, Json, OWrites, Reads}
 import v2.models.request.common.ukFhlProperty.UkFhlProperty
 import v2.models.request.common.ukNonFhlProperty.UkNonFhlProperty
 
@@ -26,7 +26,7 @@ case class AmendUkPropertyPeriodSummaryRequestBody(ukFhlProperty: Option[UkFhlPr
 object AmendUkPropertyPeriodSummaryRequestBody {
   implicit val reads: Reads[AmendUkPropertyPeriodSummaryRequestBody] = Json.reads[AmendUkPropertyPeriodSummaryRequestBody]
 
-  implicit val writes: Writes[AmendUkPropertyPeriodSummaryRequestBody] = (
+  implicit val writes: OWrites[AmendUkPropertyPeriodSummaryRequestBody] = (
       (JsPath \ "ukFhlProperty").writeNullable[UkFhlProperty] and
       (JsPath \ "ukOtherProperty").writeNullable[UkNonFhlProperty]
     ) (unlift(AmendUkPropertyPeriodSummaryRequestBody.unapply))

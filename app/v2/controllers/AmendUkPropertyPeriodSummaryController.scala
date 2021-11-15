@@ -22,9 +22,11 @@ import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.{Action, ControllerComponents}
 import uk.gov.hmrc.http.HeaderCarrier
 import utils.{IdGenerator, Logging}
+import v2.controllers.requestParsers.AmendUkPropertyPeriodSummaryRequestParser
 import v2.hateoas.HateoasFactory
 import v2.models.audit.{AuditEvent, AuditResponse}
 import v2.models.errors._
+import v2.models.request.amendUkPropertyPeriodSummary.AmendUkPropertyPeriodSummaryRawData
 import v2.services._
 
 import javax.inject.{Inject, Singleton}
@@ -99,6 +101,7 @@ class AmendUkPropertyPeriodSummaryController @Inject()(val authService: Enrolmen
            RuleTaxYearNotSupportedError |
            RuleIncorrectOrEmptyBodyError |
            RuleTypeOfBusinessIncorrect|
+           RuleBothExpensesSuppliedError|
            MtdErrorWithCustomMessage(CountryCodeFormatError.code) |
            MtdErrorWithCustomMessage(ValueFormatError.code) |
            MtdErrorWithCustomMessage(RuleBothExpensesSuppliedError.code) |

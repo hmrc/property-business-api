@@ -130,9 +130,9 @@ class CreateUkPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
         None,
         None,
         None,
-        residentialFinancialCost = Some(999.99),
         None,
-        residentialFinancialCostsCarriedForward = Some(8831.12),
+        None,
+        None,
         None,
         consolidatedExpense = Some(947.66)
       ))
@@ -166,7 +166,7 @@ class CreateUkPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
 
       MockHttpClient
         .post(
-          url = s"$baseUrl/income-tax/business/property/periodic?taxableEntityId=$nino&incomeSourceId=$businessId&taxYear=$taxYear",
+          url = s"$baseUrl/income-tax/business/property/periodic?taxableEntityId=$nino&taxYearExplicit=$taxYear&incomeSourceId=$businessId",
           config = dummyIfsHeaderCarrierConfig,
           body = regularExpensesBody,
           requiredHeaders = requiredIfsHeadersPost,
@@ -186,7 +186,7 @@ class CreateUkPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
 
       MockHttpClient
         .post(
-          url = s"$baseUrl/income-tax/business/property/periodic?taxableEntityId=$nino&incomeSourceId=$businessId&taxYear=$taxYear",
+          url = s"$baseUrl/income-tax/business/property/periodic?taxableEntityId=$nino&taxYearExplicit=$taxYear&incomeSourceId=$businessId",
           config = dummyIfsHeaderCarrierConfig,
           body = consolidatedExpensesBody,
           requiredHeaders = requiredIfsHeadersPost,

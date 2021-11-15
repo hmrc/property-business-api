@@ -25,5 +25,5 @@ class AmendUkPropertyAnnualSubmissionRequestParser @Inject()(val validator: Amen
   extends RequestParser[AmendUkPropertyAnnualSubmissionRawData, AmendUkPropertyAnnualSubmissionRequest] {
 
   override protected def requestFor(data: AmendUkPropertyAnnualSubmissionRawData): AmendUkPropertyAnnualSubmissionRequest =
-    AmendUkPropertyAnnualSubmissionRequest(Nino(data.nino), data.businessId, data.businessId, data.body.as[AmendUkPropertyAnnualSubmissionRequestBody])
+    AmendUkPropertyAnnualSubmissionRequest(Nino(data.nino), data.businessId, data.taxYear, data.body.as[AmendUkPropertyAnnualSubmissionRequestBody])
 }

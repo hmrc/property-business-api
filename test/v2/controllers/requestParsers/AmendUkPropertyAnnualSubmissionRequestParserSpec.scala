@@ -114,7 +114,7 @@ class AmendUkPropertyAnnualSubmissionRequestParserSpec extends UnitSpec {
   trait Test extends MockAmendUkPropertyAnnualSubmissionValidator {
     lazy val parser = new AmendUkPropertyAnnualSubmissionRequestParser(mockValidator)
   }
-  
+
   "parse" should {
     "return a request object" when {
       "valid request data is supplied" in new Test {
@@ -122,69 +122,59 @@ class AmendUkPropertyAnnualSubmissionRequestParserSpec extends UnitSpec {
 
         val amendUkPropertyAnnualSubmissionRequestBody: AmendUkPropertyAnnualSubmissionRequestBody =
           AmendUkPropertyAnnualSubmissionRequestBody(
-            Some(UkFhlProperty(
-              Some(UkFhlPropertyAdjustments(
-                Some(1000.10),
-                Some(1000.20),
-                Some(1000.30),
-                true,
-                Some(1000.40),
-                true,
-                Some(UkPropertyAdjustmentsRentARoom(true))
-              )),
-              Some(UkFhlPropertyAllowances(
-                Some(1000.50),
-                Some(1000.60),
-                Some(1000.70),
-                Some(1000.80),
-                Some(1000.90),
-                None
-              ))
-            )),
-            Some(UkNonFhlProperty(
-              Some(UkNonFhlPropertyAdjustments(
-                Some(2000.10),
-                Some(2000.20),
-                Some(2000.30),
-                Some(2000.40),
-                true,
-                Some(UkPropertyAdjustmentsRentARoom(true))
-              )),
-              Some(UkNonFhlPropertyAllowances(
-                Some(2000.50),
-                Some(2000.60),
-                Some(2000.70),
-                Some(2000.80),
-                Some(2000.90),
-                Some(3000.10),
-                Some(3000.20),
-                None,
-                Some(Seq(StructuredBuildingAllowance(
-                  3000.30,
-                  Some(FirstYear(
-                    "2020-01-01",
-                    3000.40
-                  )),
-                  Building(
-                    Some("house name"),
-                    None,
-                    "GF49JH"
-                  )
-                ))),
-                Some(Seq(StructuredBuildingAllowance(
-                  3000.50,
-                  Some(FirstYear(
-                    "2020-01-01",
-                    3000.60
-                  )),
-                  Building(
-                    None,
-                    Some("house number"),
-                    "GF49JH"
-                  )
-                )))
-              ))
-            ))
+            Some(
+              UkFhlProperty(
+                Some(
+                  UkFhlPropertyAdjustments(
+                    Some(343.34),
+                    Some(454.45),
+                    Some(231.45),
+                    true,
+                    Some(567.67),
+                    true,
+                    Some(
+                      UkPropertyAdjustmentsRentARoom(true)))),
+                Some(
+                  UkFhlPropertyAllowances(
+                    Some(123.45),
+                    Some(345.56),
+                    Some(345.34),
+                    Some(453.34),
+                    Some(123.12),
+                    None)))),
+            Some(
+              UkNonFhlProperty(
+                Some(UkNonFhlPropertyAdjustments(
+                  Some(334.45),
+                  Some(565.34),
+                  Some(533.54),
+                  Some(563.34),
+                  true,
+                  Some(UkPropertyAdjustmentsRentARoom(true)))),
+                Some(UkNonFhlPropertyAllowances(
+                  Some(678.45),
+                  Some(456.34),
+                  Some(573.45),
+                  Some(452.34),
+                  Some(567.34),
+                  Some(454.34),
+                  Some(454.34),
+                  None,
+                  Some(Seq(
+                    StructuredBuildingAllowance(
+                      234.34,
+                      Some(FirstYear("2020-03-29", 3434.45)),
+                      Building(Some("Plaza"), Some("1"), "TF3 4EH")))),
+                  Some(Seq(
+                    StructuredBuildingAllowance(
+                      234.45,
+                      Some(FirstYear("2020-05-29", 453.34)),
+                      Building(Some("Plaza 2"), Some("2"), "TF3 4ER")
+                    )
+                  ))
+                ))
+              )
+            )
           )
 
         parser.parseRequest(inputData) shouldBe
@@ -192,6 +182,7 @@ class AmendUkPropertyAnnualSubmissionRequestParserSpec extends UnitSpec {
       }
     }
     "return an ErrrorWrapper" when {
+
       "a single validation error occurs" in new Test {
         MockAmendUkPropertyValidator.validate(inputData)
           .returns(List(NinoFormatError))

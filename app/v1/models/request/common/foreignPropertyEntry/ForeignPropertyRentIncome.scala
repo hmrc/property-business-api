@@ -18,7 +18,7 @@ package v1.models.request.common.foreignPropertyEntry
 
 import play.api.libs.json.{Json, Reads, Writes}
 
-case class ForeignPropertyRentIncome(rentAmount: BigDecimal)
+case class ForeignPropertyRentIncome(rentAmount: Option[BigDecimal])
 
 object ForeignPropertyRentIncome {
   implicit val reads: Reads[ForeignPropertyRentIncome] = Json.reads[ForeignPropertyRentIncome]

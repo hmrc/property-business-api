@@ -19,7 +19,7 @@ package v1.models.response.retrieveForeignPropertyPeriodSummary.foreignProperty
 import play.api.libs.json.{JsPath, Json, Reads, Writes}
 import play.api.libs.functional.syntax._
 
-case class ForeignPropertyIncome(rentIncome: ForeignPropertyRentIncome,
+case class ForeignPropertyIncome(rentIncome: Option[ForeignPropertyRentIncome],
                                  foreignTaxCreditRelief: Boolean,
                                  premiumOfLeaseGrant: Option[BigDecimal],
                                  otherPropertyIncome: Option[BigDecimal],
@@ -29,7 +29,7 @@ case class ForeignPropertyIncome(rentIncome: ForeignPropertyRentIncome,
 object ForeignPropertyIncome {
   implicit val writes: Writes[ForeignPropertyIncome] = Json.writes[ForeignPropertyIncome]
   implicit val reads: Reads[ForeignPropertyIncome] = (
-    (JsPath \ "rentIncome").read[ForeignPropertyRentIncome] and
+    (JsPath \ "rentIncome").readNullable[ForeignPropertyRentIncome] and
       (JsPath \ "foreignTaxCreditRelief").read[Boolean] and
       (JsPath \ "premiumsOfLeaseGrant").readNullable[BigDecimal] and
       (JsPath \ "otherPropertyIncome").readNullable[BigDecimal] and

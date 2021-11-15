@@ -25,7 +25,7 @@ class ForeignPropertySpec extends UnitSpec with JsonErrorValidators {
   val foreignProperty = ForeignProperty(
     "FRA",
     ForeignPropertyIncome(
-      ForeignPropertyRentIncome(5000.99),
+      Some(ForeignPropertyRentIncome(Some(5000.99))),
       false,
       Some(5000.99),
       Some(5000.99),

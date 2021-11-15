@@ -28,7 +28,7 @@ class CreateForeignPropertyPeriodSummaryRequestBodySpec extends UnitSpec with Js
     "2020-01-01",
     "2020-01-31",
     Some(ForeignFhlEea(
-      ForeignFhlEeaIncome(5000.99),
+      Some(ForeignFhlEeaIncome(Some(5000.99))),
       Some(ForeignFhlEeaExpenditure(
         Some(5000.99),
         Some(5000.99),
@@ -41,14 +41,14 @@ class CreateForeignPropertyPeriodSummaryRequestBodySpec extends UnitSpec with Js
       ))
     )),
     Some(Seq(ForeignPropertyEntry("FRA",
-      ForeignPropertyIncome(
-        ForeignPropertyRentIncome(5000.99),
+      Some(ForeignPropertyIncome(
+        Some(ForeignPropertyRentIncome(Some(5000.99))),
         false,
         Some(5000.99),
         Some(5000.99),
         Some(5000.99),
         Some(5000.99)
-      ),
+      )),
       Some(ForeignPropertyExpenditure(
         Some(5000.99),
         Some(5000.99),

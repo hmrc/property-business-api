@@ -179,7 +179,7 @@ class CreateForeignPropertyPeriodSummaryControllerSpec
     submissionId = "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
   )
 
-  private val foreignFhlEea = ForeignFhlEea(ForeignFhlEeaIncome(2000.99),
+  private val foreignFhlEea = ForeignFhlEea(Some(ForeignFhlEeaIncome(Some(2000.99))),
     Some(ForeignFhlEeaExpenditure(
       Some(2000.99),
       Some(2000.99),
@@ -191,8 +191,8 @@ class CreateForeignPropertyPeriodSummaryControllerSpec
       Some(2000.99)
     )))
 
-  private val foreignProperty = ForeignPropertyEntry("FRA", ForeignPropertyIncome(
-    ForeignPropertyRentIncome(2000.99), true, Some(2000.99), Some(2000.99), Some(2000.99), Some(2000.99)),
+  private val foreignProperty = ForeignPropertyEntry("FRA", Some(ForeignPropertyIncome(
+    Some(ForeignPropertyRentIncome(Some(2000.99))), true, Some(2000.99), Some(2000.99), Some(2000.99), Some(2000.99))),
   Some(ForeignPropertyExpenditure(Some(2000.99),
     Some(2000.99),
     Some(2000.99),

@@ -74,7 +74,7 @@ class CreateForeignPropertyPeriodSummaryValidator extends Validator[CreateForeig
   private def validateForeignFhlEea(foreignFhlEea: ForeignFhlEea): List[MtdError] = {
     List(
       NumberValidation.validateOptional(
-        field = Some(foreignFhlEea.income.rentAmount),
+        field = foreignFhlEea.income.flatMap(_.rentAmount),
         path = "/foreignFhlEea/income/rentAmount"
       ),
       NumberValidation.validateOptional(
@@ -119,23 +119,23 @@ class CreateForeignPropertyPeriodSummaryValidator extends Validator[CreateForeig
         path = s"/foreignProperty/$index/countryCode"
       ),
       NumberValidation.validateOptional(
-        field = Some(foreignProperty.income.rentIncome.rentAmount),
+        field = foreignProperty.income.flatMap(_.rentIncome).flatMap(_.rentAmount),
         path = s"/foreignProperty/$index/income/rentIncome/rentAmount"
       ),
       NumberValidation.validateOptional(
-        field = foreignProperty.income.premiumOfLeaseGrant,
+        field = foreignProperty.income.flatMap(_.premiumOfLeaseGrant),
         path = s"/foreignProperty/$index/income/premiumOfLeaseGrant"
       ),
       NumberValidation.validateOptional(
-        field = foreignProperty.income.otherPropertyIncome,
+        field = foreignProperty.income.flatMap(_.otherPropertyIncome),
         path = s"/foreignProperty/$index/income/otherPropertyIncome"
       ),
       NumberValidation.validateOptional(
-        field = foreignProperty.income.foreignTaxTakenOff,
+        field = foreignProperty.income.flatMap(_.foreignTaxTakenOff),
         path = s"/foreignProperty/$index/income/foreignTaxTakenOff"
       ),
       NumberValidation.validateOptional(
-        field = foreignProperty.income.specialWithholdingTaxOrUKTaxPaid,
+        field = foreignProperty.income.flatMap(_.specialWithholdingTaxOrUKTaxPaid),
         path = s"/foreignProperty/$index/income/specialWithholdingTaxOrUKTaxPaid"
       ),
       NumberValidation.validateOptional(
@@ -204,4 +204,5 @@ class CreateForeignPropertyPeriodSummaryValidator extends Validator[CreateForeig
   override def validate(data: CreateForeignPropertyPeriodSummaryRawData): List[MtdError] = {
     run(validationSet, data).distinct
   }
+
 }

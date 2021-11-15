@@ -91,7 +91,7 @@ class AmendForeignPropertyPeriodSummaryRequestParserSpec extends UnitSpec {
         MockAmendForeignPropertyValidator.validate(inputData).returns(Nil)
 
         val foreignFhlEea: ForeignFhlEea = ForeignFhlEea(
-          income = ForeignFhlEeaIncome(rentAmount = 567.83),
+          income = Some(ForeignFhlEeaIncome(Some(567.83))),
           expenditure = Some(ForeignFhlEeaExpenditure(
             premisesRunningCosts = Some(4567.98),
             repairsAndMaintenance = Some(98765.67),
@@ -106,14 +106,14 @@ class AmendForeignPropertyPeriodSummaryRequestParserSpec extends UnitSpec {
 
         val foreignProperty: ForeignPropertyEntry = ForeignPropertyEntry(
           countryCode = "GBR",
-          income = ForeignPropertyIncome(
-            rentIncome = ForeignPropertyRentIncome(rentAmount = 34456.30),
+          income = Some(ForeignPropertyIncome(
+            rentIncome = Some(ForeignPropertyRentIncome(rentAmount = Some(34456.30))),
             foreignTaxCreditRelief = true,
             premiumOfLeaseGrant = Some(2543.43),
             otherPropertyIncome = Some(54325.30),
             foreignTaxTakenOff = Some(6543.01),
             specialWithholdingTaxOrUKTaxPaid = Some(643245.00)
-          ),
+          )),
           expenditure = Some(ForeignPropertyExpenditure(
             premisesRunningCosts = Some(5635.43),
             repairsAndMaintenance = Some(3456.65),
@@ -127,6 +127,7 @@ class AmendForeignPropertyPeriodSummaryRequestParserSpec extends UnitSpec {
             consolidatedExpenses = None
           ))
         )
+
         val model: AmendForeignPropertyPeriodSummaryRequestBody = AmendForeignPropertyPeriodSummaryRequestBody(
           foreignFhlEea = Some(foreignFhlEea),
           foreignProperty = Some(Seq(foreignProperty))

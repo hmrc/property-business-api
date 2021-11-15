@@ -19,13 +19,15 @@ package v1.models.request.common.foreignFhlEea
 import play.api.libs.functional.syntax._
 import play.api.libs.json.{JsPath, Json, Reads, Writes}
 
-case class ForeignFhlEea(income: ForeignFhlEeaIncome, expenditure: Option[ForeignFhlEeaExpenditure])
+case class ForeignFhlEea(income: Option[ForeignFhlEeaIncome], expenditure: Option[ForeignFhlEeaExpenditure]) {
+  def isEmpty: Boolean = (income.isEmpty && expenditure.isEmpty) || income.exists(_.isEmpty) || expenditure.exists(_.isEmpty)
+}
 
 object ForeignFhlEea {
   implicit val reads: Reads[ForeignFhlEea] = Json.reads[ForeignFhlEea]
 
   implicit val writes: Writes[ForeignFhlEea] = (
-    (JsPath \ "income").write[ForeignFhlEeaIncome] and
+    (JsPath \ "income").writeNullable[ForeignFhlEeaIncome] and
       (JsPath \ "expenses").writeNullable[ForeignFhlEeaExpenditure]
     ) (unlift(ForeignFhlEea.unapply))
 }

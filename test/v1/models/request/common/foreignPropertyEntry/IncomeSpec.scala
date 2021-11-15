@@ -37,7 +37,7 @@ class IncomeSpec extends UnitSpec {
   )
 
   val model: ForeignPropertyIncome = ForeignPropertyIncome(
-    rentIncome = ForeignPropertyRentIncome(rentAmount = 34456.30),
+    rentIncome = Some(ForeignPropertyRentIncome(rentAmount = Some(34456.30))),
     foreignTaxCreditRelief = true,
     premiumOfLeaseGrant = Some(2543.43),
     otherPropertyIncome = Some(54325.30),

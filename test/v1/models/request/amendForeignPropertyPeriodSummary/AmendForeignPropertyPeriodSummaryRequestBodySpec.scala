@@ -26,7 +26,7 @@ class AmendForeignPropertyPeriodSummaryRequestBodySpec extends UnitSpec with Jso
 
   val amendForeignPropertyRequestBody = AmendForeignPropertyPeriodSummaryRequestBody(
     Some(ForeignFhlEea(
-      ForeignFhlEeaIncome(5000.99),
+      Some(ForeignFhlEeaIncome(Some(5000.99))),
       Some(ForeignFhlEeaExpenditure(
         Some(5000.99),
         Some(5000.99),
@@ -39,14 +39,14 @@ class AmendForeignPropertyPeriodSummaryRequestBodySpec extends UnitSpec with Jso
       ))
     )),
     Some(Seq(ForeignPropertyEntry("FRA",
-      ForeignPropertyIncome(
-        ForeignPropertyRentIncome(5000.99),
+      Some(ForeignPropertyIncome(
+        Some(ForeignPropertyRentIncome(Some(5000.99))),
         false,
         Some(5000.99),
         Some(5000.99),
         Some(5000.99),
         Some(5000.99)
-      ),
+      )),
       Some(ForeignPropertyExpenditure(
         Some(5000.99),
         Some(5000.99),

@@ -20,7 +20,7 @@ import play.api.libs.functional.syntax._
 import play.api.libs.json.{JsPath, Json, Reads, Writes}
 
 case class ForeignPropertyIncome(
-                                  rentIncome: ForeignPropertyRentIncome,
+                                  rentIncome: Option[ForeignPropertyRentIncome],
                                   foreignTaxCreditRelief: Boolean,
                                   premiumOfLeaseGrant: Option[BigDecimal],
                                   otherPropertyIncome: Option[BigDecimal],
@@ -32,7 +32,7 @@ object ForeignPropertyIncome {
   implicit val reads: Reads[ForeignPropertyIncome] = Json.reads[ForeignPropertyIncome]
 
   implicit val writes: Writes[ForeignPropertyIncome] = (
-    (JsPath \ "rentIncome").write[ForeignPropertyRentIncome] and
+    (JsPath \ "rentIncome").writeNullable[ForeignPropertyRentIncome] and
       (JsPath \ "foreignTaxCreditRelief").write[Boolean] and
       (JsPath \ "premiumsOfLeaseGrant").writeNullable[BigDecimal] and
       (JsPath \ "otherPropertyIncome").writeNullable[BigDecimal] and

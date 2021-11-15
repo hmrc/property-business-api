@@ -1,0 +1,383 @@
+/*
+ * Copyright 2021 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package v2.endpoints
+
+import com.github.tomakehurst.wiremock.stubbing.StubMapping
+import play.api.http.HeaderNames.ACCEPT
+import play.api.http.Status._
+import play.api.libs.json.{ JsObject, JsValue, Json }
+import play.api.libs.ws.{ WSRequest, WSResponse }
+import support.V2IntegrationBaseSpec
+import v2.models.errors._
+import v2.stubs.{ AuthStub, IfsStub, MtdIdLookupStub }
+
+class AmendUkPropertyAnnualSubmissionControllerISpec extends V2IntegrationBaseSpec {
+
+  private trait Test {
+
+    val nino: String = "TC663795B"
+    val businessId: String = "XAIS12345678910"
+    val taxYear: String = "2021-22"
+    val correlationId: String = "X-123"
+
+    val requestBodyJson: JsValue = Json.parse(
+      """
+        |{
+        |  "ukFhlProperty": {
+        |    "allowances": {
+        |      "annualInvestmentAllowance": 1000.50,
+        |      "businessPremisesRenovationAllowance": 1000.60,
+        |      "otherCapitalAllowance": 1000.70,
+        |      "electricChargePointAllowance": 1000.80,
+        |      "zeroEmissionsCarAllowance": 1000.90
+        |    },
+        |    "adjustments": {
+        |      "lossBroughtForward": 1000.10,
+        |      "privateUseAdjustment": 1000.20,
+        |      "balancingCharge": 1000.30,
+        |      "periodOfGraceAdjustment": true,
+        |      "businessPremisesRenovationAllowanceBalancingCharges": 1000.40,
+        |      "nonResidentLandlord": true,
+        |      "rentARoom": {
+        |        "jointlyLet": true
+        |      }
+        |    }
+        |  },
+        |  "ukNonFhlProperty": {
+        |    "allowances": {
+        |      "annualInvestmentAllowance": 2000.50,
+        |      "zeroEmissionGoodsVehicleAllowance": 2000.60,
+        |      "businessPremisesRenovationAllowance": 2000.70,
+        |      "otherCapitalAllowance": 2000.80,
+        |      "costOfReplacingDomesticGoods": 2000.90,
+        |      "electricChargePointAllowance": 3000.10,
+        |      "structuredBuildingAllowance": [
+        |        {
+        |          "amount": 3000.30,
+        |          "firstYear": {
+        |            "qualifyingDate": "2020-01-01",
+        |            "qualifyingAmountExpenditure": 3000.40
+        |          },
+        |          "building": {
+        |            "name": "house name",
+        |            "postcode": "GF49JH"
+        |          }
+        |        }
+        |      ],
+        |      "enhancedStructuredBuildingAllowance": [
+        |        {
+        |          "amount": 3000.50,
+        |          "firstYear": {
+        |            "qualifyingDate": "2020-01-01",
+        |            "qualifyingAmountExpenditure": 3000.60
+        |          },
+        |          "building": {
+        |            "number": "house number",
+        |            "postcode": "GF49JH"
+        |          }
+        |        }
+        |      ],
+        |      "zeroEmissionsCarAllowance": 3000.20
+        |    },
+        |    "adjustments": {
+        |      "lossBroughtForward": 2000.10,
+        |      "balancingCharge": 2000.20,
+        |      "privateUseAdjustment": 2000.30,
+        |      "businessPremisesRenovationAllowanceBalancingCharges": 2000.40,
+        |      "nonResidentLandlord": true,
+        |      "rentARoom": {
+        |        "jointlyLet": true
+        |      }
+        |    }
+        |  }
+        |}
+      """.stripMargin
+    )
+
+    val responseBody: JsValue = Json.parse(
+      """
+        |{
+        |  "links":[
+        |    {
+        |      "href":"",
+        |      "method":"GET",
+        |      "rel":"self"
+        |    },
+        |    {
+        |      "href":"",
+        |      "method":"",
+        |      "rel":""
+        |    },
+        |    {
+        |      "href":"",
+        |      "method":"",
+        |      "rel":""
+        |    }
+        |  ]
+        |}
+      """.stripMargin
+    )
+
+    def setupStubs(): StubMapping
+
+    def uri: String = s"/uk/$nino/$businessId/annual/$taxYear"
+
+    def ifsUri: String = s"/income-tax/business/property/annual?taxableEntityId=$nino&incomeSourceId=$businessId&taxYear=$taxYear"
+
+    def request(): WSRequest = {
+      setupStubs()
+      buildRequest(uri)
+        .withHttpHeaders((ACCEPT, "application/vnd.hmrc.2.0+json"))
+    }
+
+    def errorBody(code: String): String =
+      s"""
+         |{
+         |  "code": "$code",
+         |  "reason": "ifs message"
+         |}
+       """.stripMargin
+  }
+
+  "Calling the amend uk property annual submission endpoint" should {
+
+    "return a 200 status code" when {
+
+      "any valid request is made" in new Test {
+
+        override def setupStubs(): StubMapping = {
+          AuthStub.authorised()
+          MtdIdLookupStub.ninoFound(nino)
+          IfsStub.onSuccess(IfsStub.PUT, ifsUri, NO_CONTENT, JsObject.empty)
+        }
+
+        val response: WSResponse = await(request().put(requestBodyJson))
+        response.status shouldBe OK
+        response.json shouldBe responseBody
+        response.header("X-CorrelationId").nonEmpty shouldBe true
+      }
+    }
+
+    "return a 400 with multiple errors" when {
+      "all field validations fail on the request body" in new Test {
+
+        val allInvalidFieldsRequestBodyJson: JsValue = Json.parse(
+          """
+            |{
+            |  "ukFhlProperty": {
+            |    "allowances": {
+            |      "annualInvestmentAllowance": 1000.50678,
+            |      "businessPremisesRenovationAllowance": 1000.65670,
+            |      "otherCapitalAllowance": 1000.76780,
+            |      "electricChargePointAllowance": 1000.856780,
+            |      "zeroEmissionsCarAllowance": 1000.678990
+            |    },
+            |    "adjustments": {
+            |      "lossBroughtForward": 1000.678910,
+            |      "privateUseAdjustment": 1000.2456780,
+            |      "balancingCharge": 1000.356780,
+            |      "periodOfGraceAdjustment": true,
+            |      "businessPremisesRenovationAllowanceBalancingCharges": 1000.4567890,
+            |      "nonResidentLandlord": true,
+            |      "rentARoom": {
+            |        "jointlyLet": true
+            |      }
+            |    }
+            |  },
+            |  "ukNonFhlProperty": {
+            |    "allowances": {
+            |      "annualInvestmentAllowance": 2000.5456780,
+            |      "zeroEmissionGoodsVehicleAllowance": 2000.6567890,
+            |      "businessPremisesRenovationAllowance": 2000.75678900,
+            |      "otherCapitalAllowance": 2000.56789080,
+            |      "costOfReplacingDomesticGoods": 2000.95678900,
+            |      "electricChargePointAllowance": 3000.1567890,
+            |      "structuredBuildingAllowance": [
+            |        {
+            |          "amount": 3000.36780,
+            |          "firstYear": {
+            |            "qualifyingDate": "202456780-01-01",
+            |            "qualifyingAmountExpenditure": 3000.45678900
+            |          },
+            |          "building": {
+            |            "name": "house namerdfyucrvtyfcvgcfvgbkgxdcfvjgbgxdchfvjgbgfdhgjvbkdcfvygbhdfchgjbdcfhvgjbkhcdfvgjbdfcgjvhbcfhgjvbhdcfhvgy",
+            |            "postcode": "GF49JHrdfyucrvtyfcvgcfvgbkgxdcfvjgbgxdchfvjgbgfdhgjvbkdcfvygbhdfchgjbdcfhvgjbkhcdfvgjbdfcgjvhbcfhgjvbhdcfhvgy"
+            |          }
+            |        }
+            |      ],
+            |      "enhancedStructuredBuildingAllowance": [
+            |        {
+            |          "amount": 3000.5345670,
+            |          "firstYear": {
+            |            "qualifyingDate": "24568020-01-01",
+            |            "qualifyingAmountExpenditure": 3000.64567890
+            |          },
+            |          "building": {
+            |            "number": "house numberrdfyucrvtyfcvgcfvgbkgxdcfvjgbgxdchfvjgbgfdhgjvbkdcfvygbhdfchgjbdcfhvgjbkhcdfvgjbdfcgjvhbcfhgjvbhdcfhvgy",
+            |            "postcode": "GF49JHrdfyucrvtyfcvgcfvgbkgxdcfvjgbgxdchfvjgbgfdhgjvbkdcfvygbhdfchgjbdcfhvgjbkhcdfvgjbdfcgjvhbcfhgjvbhdcfhvgy"
+            |          }
+            |        }
+            |      ],
+            |      "zeroEmissionsCarAllowance": 3000.45678920
+            |    },
+            |    "adjustments": {
+            |      "lossBroughtForward": 2000.56789010,
+            |      "balancingCharge": 2000.6789020,
+            |      "privateUseAdjustment": 2000.34567890,
+            |      "businessPremisesRenovationAllowanceBalancingCharges": 2000.456780,
+            |      "nonResidentLandlord": true,
+            |      "rentARoom": {
+            |        "jointlyLet": true
+            |      }
+            |    }
+            |  }
+            |}
+            |""".stripMargin)
+
+        val allInvalidFieldsRequestError: List[MtdError] = List(
+          ValueFormatError.copy(
+            paths = Some(List(
+              "/ukFhlProperty/allowances/annualInvestmentAllowance",
+              "/ukFhlProperty/allowances/businessPremisesRenovationAllowance",
+              "/ukFhlProperty/allowances/otherCapitalAllowance",
+              "/ukFhlProperty/allowances/electricChargePointAllowance",
+              "/ukFhlProperty/allowances/zeroEmissionsCarAllowance",
+              "/ukFhlProperty/adjustments/lossBroughtForward",
+              "/ukFhlProperty/adjustments/privateUseAdjustment",
+              "/ukFhlProperty/adjustments/balancingCharge",
+              "/ukFhlProperty/adjustments/businessPremisesRenovationAllowanceBalancingCharges",
+              "/ukNonFhlProperty/allowances/annualInvestmentAllowance",
+              "/ukNonFhlProperty/allowances/zeroEmissionGoodsVehicleAllowance",
+              "/ukNonFhlProperty/allowances/businessPremisesRenovationAllowance",
+              "/ukNonFhlProperty/allowances/otherCapitalAllowance",
+              "/ukNonFhlProperty/allowances/costOfReplacingDomesticGoods",
+              "/ukNonFhlProperty/allowances/electricChargePointAllowance",
+              "/ukNonFhlProperty/allowances/structuredBuildingAllowance/1/amount",
+              "/ukNonFhlProperty/allowances/structuredBuildingAllowance/1/firstYear/qualifyingAmountExpenditure",
+              "/ukNonFhlProperty/allowances/enhancedStructuredBuildingAllowance/1/amount",
+              "/ukNonFhlProperty/allowances/enhancedStructuredBuildingAllowance/1/firstYear/qualifyingAmountExpenditure",
+              "/ukNonFhlProperty/allowances/zeroEmissionsCarAllowance",
+              "/ukNonFhlProperty/adjustments/lossBroughtForward",
+              "/ukNonFhlProperty/adjustments/balancingCharge",
+              "/ukNonFhlProperty/adjustments/privateUseAdjustment",
+              "/ukNonFhlProperty/adjustments/businessPremisesRenovationAllowanceBalancingCharges"
+            ))
+          ),
+          StringFormatError.copy(
+            paths = Some(List(
+              "/ukNonFhlProperty/allowances/structuredBuildingAllowance/1/firstYear/qualifyingDate",
+              "/ukNonFhlProperty/allowances/enhancedStructuredBuildingAllowance/1/firstYear/qualifyingDate",
+              "/ukNonFhlProperty/allowances/structuredBuildingAllowance/1/building/name",
+              "/ukNonFhlProperty/allowances/enhancedStructuredBuildingAllowance/1/building/number"
+            ))
+          ),
+        )
+
+        val wrappedErrors: ErrorWrapper = ErrorWrapper(
+          correlationId = correlationId,
+          error = BadRequestError,
+          errors = Some(allInvalidFieldsRequestError)
+        )
+
+        override def setupStubs(): StubMapping = {
+          AuthStub.authorised()
+          MtdIdLookupStub.ninoFound(nino)
+        }
+
+        val response: WSResponse = await(request().put(allInvalidFieldsRequestBodyJson))
+        response.status shouldBe BAD_REQUEST
+        response.json shouldBe Json.toJson(wrappedErrors)
+      }
+    }
+    "return an error according to spec" when {
+
+      val validRequestBodyJson = Json.parse(
+        """
+          |{
+          |  "ukFhlProperty": {
+          |    "allowances": {
+          |      "annualInvestmentAllowance": 1000.50,
+          |      "businessPremisesRenovationAllowance": 1000.60,
+          |      "otherCapitalAllowance": 1000.70,
+          |      "electricChargePointAllowance": 1000.80,
+          |      "zeroEmissionsCarAllowance": 1000.90
+          |    },
+          |    "adjustments": {
+          |      "lossBroughtForward": 1000.10,
+          |      "privateUseAdjustment": 1000.20,
+          |      "balancingCharge": 1000.30,
+          |      "periodOfGraceAdjustment": true,
+          |      "businessPremisesRenovationAllowanceBalancingCharges": 1000.40,
+          |      "nonResidentLandlord": true,
+          |      "rentARoom": {
+          |        "jointlyLet": true
+          |      }
+          |    }
+          |  },
+          |  "ukNonFhlProperty": {
+          |    "allowances": {
+          |      "annualInvestmentAllowance": 2000.50,
+          |      "zeroEmissionGoodsVehicleAllowance": 2000.60,
+          |      "businessPremisesRenovationAllowance": 2000.70,
+          |      "otherCapitalAllowance": 2000.80,
+          |      "costOfReplacingDomesticGoods": 2000.90,
+          |      "electricChargePointAllowance": 3000.10,
+          |      "structuredBuildingAllowance": [
+          |        {
+          |          "amount": 3000.30,
+          |          "firstYear": {
+          |            "qualifyingDate": "2020-01-01",
+          |            "qualifyingAmountExpenditure": 3000.40
+          |          },
+          |          "building": {
+          |            "name": "house name",
+          |            "postcode": "GF49JH"
+          |          }
+          |        }
+          |      ],
+          |      "enhancedStructuredBuildingAllowance": [
+          |        {
+          |          "amount": 3000.50,
+          |          "firstYear": {
+          |            "qualifyingDate": "2020-01-01",
+          |            "qualifyingAmountExpenditure": 3000.60
+          |          },
+          |          "building": {
+          |            "number": "house number",
+          |            "postcode": "GF49JH"
+          |          }
+          |        }
+          |      ],
+          |      "zeroEmissionsCarAllowance": 3000.20
+          |    },
+          |    "adjustments": {
+          |      "lossBroughtForward": 2000.10,
+          |      "balancingCharge": 2000.20,
+          |      "privateUseAdjustment": 2000.30,
+          |      "businessPremisesRenovationAllowanceBalancingCharges": 2000.40,
+          |      "nonResidentLandlord": true,
+          |      "rentARoom": {
+          |        "jointlyLet": true
+          |      }
+          |    }
+          |  }
+          |}
+          |""".stripMargin)
+
+    }
+  }
+}

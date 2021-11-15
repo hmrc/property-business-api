@@ -96,7 +96,7 @@ class AmendUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with JsonErrorV
       |            }
       |        },
       |        "expenses": {
-      |            "consolidatedExpense": 988.18
+      |            "consolidatedExpenses": 988.18
       |        }
       |    },
       |    "ukNonFhlProperty": {
@@ -111,7 +111,7 @@ class AmendUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with JsonErrorV
       |            }
       |        },
       |        "expenses": {
-      |            "consolidatedExpense": 988.18
+      |            "consolidatedExpenses": 988.18
       |        }
       |    }
       |}
@@ -287,8 +287,8 @@ class AmendUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with JsonErrorV
 
         "consolidated expenses is invalid" when {
           Seq(
-            "/ukFhlProperty/expenses/consolidatedExpense",
-            "/ukNonFhlProperty/expenses/consolidatedExpense",
+            "/ukFhlProperty/expenses/consolidatedExpenses",
+            "/ukNonFhlProperty/expenses/consolidatedExpenses",
           ).foreach(testValueFormatError)
 
           def testValueFormatError(path: String): Unit = s"for $path" in {
@@ -331,7 +331,7 @@ class AmendUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with JsonErrorV
               taxYear,
               validBusinessId,
               validSubmissionId,
-              requestBodyJson.update("ukFhlProperty/expenses/consolidatedExpense", JsNumber(123.45)))) shouldBe
+              requestBodyJson.update("ukFhlProperty/expenses/consolidatedExpenses", JsNumber(123.45)))) shouldBe
             List(RuleBothExpensesSuppliedError.copy(paths = Some(Seq("/ukFhlProperty/expenses"))))
         }
 
@@ -341,7 +341,7 @@ class AmendUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with JsonErrorV
               taxYear,
               validBusinessId,
               validSubmissionId,
-              requestBodyJson.update("ukNonFhlProperty/expenses/consolidatedExpense", JsNumber(123.45)))) shouldBe
+              requestBodyJson.update("ukNonFhlProperty/expenses/consolidatedExpenses", JsNumber(123.45)))) shouldBe
             List(RuleBothExpensesSuppliedError.copy(paths = Some(Seq("/ukNonFhlProperty/expenses"))))
         }
       }

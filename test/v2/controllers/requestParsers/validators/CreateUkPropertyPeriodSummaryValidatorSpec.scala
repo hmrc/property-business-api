@@ -86,7 +86,7 @@ class CreateUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with JsonError
       |""".stripMargin
   )
 
-  private val requestBodyJsonConsolidatedExpense = Json.parse(
+  private val requestBodyJsonConsolidatedExpenses = Json.parse(
     """{
       |    "fromDate": "2020-01-01",
       |    "toDate": "2020-01-31",
@@ -99,7 +99,7 @@ class CreateUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with JsonError
       |            }
       |        },
       |        "expenses": {
-      |            "consolidatedExpense": 988.18
+      |            "consolidatedExpenses": 988.18
       |        }
       |    },
       |    "ukNonFhlProperty": {
@@ -114,7 +114,7 @@ class CreateUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with JsonError
       |            }
       |        },
       |        "expenses": {
-      |            "consolidatedExpense": 988.18
+      |            "consolidatedExpenses": 988.18
       |        }
       |    }
       |}
@@ -130,7 +130,7 @@ class CreateUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with JsonError
       }
 
       "a valid consolidated expenses request is supplied" in {
-        validator.validate(CreateUkPropertyPeriodSummaryRawData(validNino, taxYear, validBusinessId, requestBodyJsonConsolidatedExpense)) shouldBe Nil
+        validator.validate(CreateUkPropertyPeriodSummaryRawData(validNino, taxYear, validBusinessId, requestBodyJsonConsolidatedExpenses)) shouldBe Nil
       }
 
       "a minimal fhl request is supplied" in {
@@ -356,8 +356,8 @@ class CreateUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with JsonError
 
       "consolidated expenses is invalid" when {
         Seq(
-          "/ukFhlProperty/expenses/consolidatedExpense",
-          "/ukNonFhlProperty/expenses/consolidatedExpense",
+          "/ukFhlProperty/expenses/consolidatedExpenses",
+          "/ukNonFhlProperty/expenses/consolidatedExpenses",
         ).foreach(testValueFormatError)
 
         def testValueFormatError(path: String): Unit = s"for $path" in {
@@ -366,7 +366,7 @@ class CreateUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with JsonError
               validNino,
               taxYear,
               validBusinessId,
-              requestBodyJsonConsolidatedExpense.update(path, JsNumber(123.456))
+              requestBodyJsonConsolidatedExpenses.update(path, JsNumber(123.456))
             )) shouldBe List(ValueFormatError.copy(paths = Some(Seq(path))))
         }
       }
@@ -397,7 +397,7 @@ class CreateUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with JsonError
           CreateUkPropertyPeriodSummaryRawData(validNino,
                                                taxYear,
                                                validBusinessId,
-                                               requestBodyJson.update("ukFhlProperty/expenses/consolidatedExpense", JsNumber(123.45)))) shouldBe
+                                               requestBodyJson.update("ukFhlProperty/expenses/consolidatedExpenses", JsNumber(123.45)))) shouldBe
           List(RuleBothExpensesSuppliedError.copy(paths = Some(Seq("/ukFhlProperty/expenses"))))
       }
 
@@ -406,7 +406,7 @@ class CreateUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with JsonError
           CreateUkPropertyPeriodSummaryRawData(validNino,
                                                taxYear,
                                                validBusinessId,
-                                               requestBodyJson.update("ukNonFhlProperty/expenses/consolidatedExpense", JsNumber(123.45)))) shouldBe
+                                               requestBodyJson.update("ukNonFhlProperty/expenses/consolidatedExpenses", JsNumber(123.45)))) shouldBe
           List(RuleBothExpensesSuppliedError.copy(paths = Some(Seq("/ukNonFhlProperty/expenses"))))
       }
     }

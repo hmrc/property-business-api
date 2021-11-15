@@ -112,8 +112,8 @@ class AmendUkPropertyPeriodSummaryValidator @Inject()(appConfig: AppConfig) exte
         path = "/ukFhlProperty/expenses/other"
       ),
       NumberValidation.validateOptional(
-        field = property.expenses.flatMap(_.consolidatedExpense),
-        path = "/ukFhlProperty/expenses/consolidatedExpense"
+        field = property.expenses.flatMap(_.consolidatedExpenses),
+        path = "/ukFhlProperty/expenses/consolidatedExpenses"
       ),
       NumberValidation.validateOptional(
         field = property.expenses.flatMap(_.travelCosts),
@@ -181,8 +181,8 @@ class AmendUkPropertyPeriodSummaryValidator @Inject()(appConfig: AppConfig) exte
         path = "/ukNonFhlProperty/expenses/residentialFinancialCost"
       ),
       NumberValidation.validateOptional(
-        field = property.expenses.flatMap(_.consolidatedExpense),
-        path = "/ukNonFhlProperty/expenses/consolidatedExpense"
+        field = property.expenses.flatMap(_.consolidatedExpenses),
+        path = "/ukNonFhlProperty/expenses/consolidatedExpenses"
       ),
       NumberValidation.validateOptional(
         field = property.expenses.flatMap(_.travelCosts),

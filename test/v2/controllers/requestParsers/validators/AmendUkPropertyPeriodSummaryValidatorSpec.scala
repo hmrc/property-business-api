@@ -20,7 +20,7 @@ import mocks.MockAppConfig
 import play.api.libs.json._
 import support.UnitSpec
 import v2.models.errors._
-import v2.models.request.amendUkPropertyPeriodSummary.AmendUkPropertyPeriodSummaryRawData
+import v2.models.request.amendUkPropertyPeriodSummary._
 import v2.models.utils.JsonErrorValidators
 
 class AmendUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with JsonErrorValidators with MockAppConfig {
@@ -203,6 +203,13 @@ class AmendUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with JsonErrorV
       "an invalid businessId is supplied" in {
         validator.validate(AmendUkPropertyPeriodSummaryRawData(validNino, taxYear, "20178", validSubmissionId, requestBodyJson)) shouldBe
           List(BusinessIdFormatError)
+      }
+    }
+
+    "return SubmissionIdFormatError error" when {
+      "an invalid submissionId is supplied" in {
+        validator.validate(AmendUkPropertyPeriodSummaryRawData(validNino, taxYear, validBusinessId, "12345", requestBodyJson)) shouldBe
+          List(SubmissionIdFormatError)
       }
     }
 

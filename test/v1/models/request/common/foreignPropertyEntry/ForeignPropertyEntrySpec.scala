@@ -53,14 +53,14 @@ class ForeignPropertyEntrySpec extends UnitSpec {
 
   val model: ForeignPropertyEntry = ForeignPropertyEntry(
     countryCode = "zzz",
-    income = ForeignPropertyIncome(
+    income = Some(ForeignPropertyIncome(
       rentIncome = Some(ForeignPropertyRentIncome(rentAmount = Some(34456.30))),
       foreignTaxCreditRelief = true,
       premiumOfLeaseGrant = Some(2543.43),
       otherPropertyIncome = Some(54325.30),
       foreignTaxTakenOff = Some(6543.01),
       specialWithholdingTaxOrUKTaxPaid = Some(643245.00)
-    ),
+    )),
     expenditure = Some(ForeignPropertyExpenditure(
       premisesRunningCosts = Some(5635.43),
       repairsAndMaintenance = Some(3456.65),

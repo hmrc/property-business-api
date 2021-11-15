@@ -50,14 +50,14 @@ class CreateForeignPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
       ))
     )),
     Some(Seq(ForeignPropertyEntry("FRA",
-      ForeignPropertyIncome(
+      Some(ForeignPropertyIncome(
         Some(ForeignPropertyRentIncome(Some(5000.99))),
         false,
         Some(5000.99),
         Some(5000.99),
         Some(5000.99),
         Some(5000.99)
-      ),
+      )),
       Some(ForeignPropertyExpenditure(
         Some(5000.99),
         Some(5000.99),
@@ -89,14 +89,14 @@ class CreateForeignPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
       ))
     )),
     Some(Seq(ForeignPropertyEntry("FRA",
-      ForeignPropertyIncome(
+      Some(ForeignPropertyIncome(
         Some(ForeignPropertyRentIncome(Some(5000.99))),
         false,
         Some(5000.99),
         Some(5000.99),
         Some(5000.99),
         Some(5000.99)
-      ),
+      )),
       Some(ForeignPropertyExpenditure(
         None,
         None,

@@ -39,14 +39,14 @@ class AmendForeignPropertyPeriodSummaryRequestBodySpec extends UnitSpec with Jso
       ))
     )),
     Some(Seq(ForeignPropertyEntry("FRA",
-      ForeignPropertyIncome(
+      Some(ForeignPropertyIncome(
         Some(ForeignPropertyRentIncome(Some(5000.99))),
         false,
         Some(5000.99),
         Some(5000.99),
         Some(5000.99),
         Some(5000.99)
-      ),
+      )),
       Some(ForeignPropertyExpenditure(
         Some(5000.99),
         Some(5000.99),

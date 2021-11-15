@@ -119,23 +119,23 @@ class CreateForeignPropertyPeriodSummaryValidator extends Validator[CreateForeig
         path = s"/foreignProperty/$index/countryCode"
       ),
       NumberValidation.validateOptional(
-        field = foreignProperty.income.rentIncome.flatMap(_.rentAmount),
+        field = foreignProperty.income.flatMap(_.rentIncome).flatMap(_.rentAmount),
         path = s"/foreignProperty/$index/income/rentIncome/rentAmount"
       ),
       NumberValidation.validateOptional(
-        field = foreignProperty.income.premiumOfLeaseGrant,
+        field = foreignProperty.income.flatMap(_.premiumOfLeaseGrant),
         path = s"/foreignProperty/$index/income/premiumOfLeaseGrant"
       ),
       NumberValidation.validateOptional(
-        field = foreignProperty.income.otherPropertyIncome,
+        field = foreignProperty.income.flatMap(_.otherPropertyIncome),
         path = s"/foreignProperty/$index/income/otherPropertyIncome"
       ),
       NumberValidation.validateOptional(
-        field = foreignProperty.income.foreignTaxTakenOff,
+        field = foreignProperty.income.flatMap(_.foreignTaxTakenOff),
         path = s"/foreignProperty/$index/income/foreignTaxTakenOff"
       ),
       NumberValidation.validateOptional(
-        field = foreignProperty.income.specialWithholdingTaxOrUKTaxPaid,
+        field = foreignProperty.income.flatMap(_.specialWithholdingTaxOrUKTaxPaid),
         path = s"/foreignProperty/$index/income/specialWithholdingTaxOrUKTaxPaid"
       ),
       NumberValidation.validateOptional(

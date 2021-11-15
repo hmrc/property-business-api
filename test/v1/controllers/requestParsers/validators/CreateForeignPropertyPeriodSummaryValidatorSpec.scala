@@ -226,6 +226,29 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec {
             |  ]
             |}""".stripMargin))) shouldBe List(RuleIncorrectOrEmptyBodyError)
       }
+      "an empty foreignPropertyEntry is submitted" in {
+        validator.validate(CreateForeignPropertyPeriodSummaryRawData(validNino, validBusinessId, Json.parse(
+          """{
+            |  "fromDate": "2020-01-01",
+            |  "toDate": "2020-01-31",
+            |  "foreignProperty": [
+            |    {
+            |    }
+            |  ]
+            |}""".stripMargin))) shouldBe List(RuleIncorrectOrEmptyBodyError)
+      }
+      "foreignProperty[].income is empty" in {
+        validator.validate(CreateForeignPropertyPeriodSummaryRawData(validNino, validBusinessId, Json.parse(
+          """{
+            |  "fromDate": "2020-01-01",
+            |  "toDate": "2020-01-31",
+            |  "foreignProperty": [
+            |    {
+            |      "income": {}
+            |    }
+            |  ]
+            |}""".stripMargin))) shouldBe List(RuleIncorrectOrEmptyBodyError)
+      }
       "foreignProperty[].expenditure is empty" in {
         validator.validate(CreateForeignPropertyPeriodSummaryRawData(validNino, validBusinessId, Json.parse(
           """{

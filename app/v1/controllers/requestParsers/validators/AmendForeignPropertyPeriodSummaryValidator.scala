@@ -113,23 +113,23 @@ class AmendForeignPropertyPeriodSummaryValidator extends Validator[AmendForeignP
         path = s"/foreignProperty/$index/countryCode"
       ),
       NumberValidation.validateOptional(
-        field = foreignPropertyEntry.income.rentIncome.flatMap(_.rentAmount),
+        field = foreignPropertyEntry.income.flatMap(_.rentIncome).flatMap(_.rentAmount),
         path = s"/foreignProperty/$index/income/rentIncome/rentAmount"
       ),
       NumberValidation.validateOptional(
-        field = foreignPropertyEntry.income.premiumOfLeaseGrant,
+        field = foreignPropertyEntry.income.flatMap(_.premiumOfLeaseGrant),
         path = s"/foreignProperty/$index/income/premiumOfLeaseGrant"
       ),
       NumberValidation.validateOptional(
-        field = foreignPropertyEntry.income.otherPropertyIncome,
+        field = foreignPropertyEntry.income.flatMap(_.otherPropertyIncome),
         path = s"/foreignProperty/$index/income/otherPropertyIncome"
       ),
       NumberValidation.validateOptional(
-        field = foreignPropertyEntry.income.foreignTaxTakenOff,
+        field = foreignPropertyEntry.income.flatMap(_.foreignTaxTakenOff),
         path = s"/foreignProperty/$index/income/foreignTaxTakenOff"
       ),
       NumberValidation.validateOptional(
-        field = foreignPropertyEntry.income.specialWithholdingTaxOrUKTaxPaid,
+        field = foreignPropertyEntry.income.flatMap(_.specialWithholdingTaxOrUKTaxPaid),
         path = s"/foreignProperty/$index/income/specialWithholdingTaxOrUKTaxPaid"
       ),
       NumberValidation.validateOptional(

@@ -310,7 +310,7 @@ class CreateUkPropertyPeriodSummaryControllerISpec extends V2IntegrationBaseSpec
       |            "rentARoom": {
       |                "amountClaimed": 8842.43
       |            },
-      |            "consolidatedExpense": 5000.99
+      |            "consolidatedExpenses": 5000.99
       |        }
       |    },
       |    "ukNonFhlProperty": {
@@ -337,7 +337,7 @@ class CreateUkPropertyPeriodSummaryControllerISpec extends V2IntegrationBaseSpec
       |            "rentARoom": {
       |                "amountClaimed": 8842.43
       |            },
-      |            "consolidatedExpense": 5000.99
+      |            "consolidatedExpenses": 5000.99
       |        }
       |    }
       |}
@@ -453,7 +453,7 @@ class CreateUkPropertyPeriodSummaryControllerISpec extends V2IntegrationBaseSpec
     def ifsQueryParams: Map[String, String] = Map(
       "taxableEntityId" -> nino,
       "incomeSourceId" -> businessId,
-      "taxYear" -> taxYear
+      "taxYearExplicit" -> taxYear
     )
 
     def request(): WSRequest = {

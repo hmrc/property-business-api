@@ -30,7 +30,8 @@ object ConsolidatedExpensesValidation {
       case Some(_) =>
         expenditure match {
           case ForeignPropertyExpenditure(None, None, None, None, None, None, _, _, None, Some(_)) => NoValidationErrors
-          case _                                                                                   => List(RuleBothExpensesSuppliedError.copy(paths = Some(Seq(path))))
+          case _                                                                                   =>
+            List(RuleBothExpensesSuppliedError.copy(paths = Some(Seq(path))))
         }
     }
   }

@@ -16,10 +16,28 @@
 
 package v2.models.response.createUkPropertyPeriodSummary
 
+import config.AppConfig
 import play.api.libs.json.{Json, OFormat}
+import v2.hateoas.HateoasLinksFactory
+import v2.models.hateoas.{HateoasData, Link}
 
 case class CreateUkPropertyPeriodSummaryResponse(submissionId: String)
 
 object CreateUkPropertyPeriodSummaryResponse {
   implicit val format: OFormat[CreateUkPropertyPeriodSummaryResponse] = Json.format[CreateUkPropertyPeriodSummaryResponse]
+  
+  implicit object LinksFactory extends HateoasLinksFactory[CreateUkPropertyPeriodSummaryResponse, CreateUkPropertyPeriodSummaryHateoasData] {
+    override def links(appConfig: AppConfig, data: CreateUkPropertyPeriodSummaryHateoasData): Seq[Link] = {
+
+      /*
+      * Add retrieveUkPropertyPeriodSummary call when it ready (uncomment below 2 lines)
+      * import data._
+      * retrieveUkPropertyPeriodSummary(appConfig, nino, businessId, submissionId)
+      * */
+
+      Seq.empty
+    }
+  }
 }
+
+case class CreateUkPropertyPeriodSummaryHateoasData(nino: String, businessId: String, submissionId: String) extends HateoasData

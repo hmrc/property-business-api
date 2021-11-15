@@ -132,7 +132,7 @@ class AmendUkPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec {
 
       MockHttpClient
         .put(
-          url = s"$baseUrl/income-tax/business/property/annual/$nino/$businessId/$taxYear",
+          url = s"$baseUrl/income-tax/business/property/annual?taxableEntityId=$nino&incomeSourceId=$businessId&taxYear=$taxYear",
           config = dummyIfsHeaderCarrierConfig,
           body = body,
           requiredHeaders = requiredIfsHeadersPut,

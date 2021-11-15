@@ -19,7 +19,7 @@ package v2.models.request.amendUkPropertyPeriodSummary
 import v2.models.domain.Nino
 
 case class AmendUkPropertyPeriodSummaryRequest(nino: Nino,
-                                               businessId: String,
                                                taxYear: String,
+                                               businessId: String,
                                                submissionId: String,
                                                body: AmendUkPropertyPeriodSummaryRequestBody)

@@ -55,7 +55,7 @@ class CreateUkPropertyPeriodSummaryServiceSpec extends ServiceSpec {
         Some(8831.12),
         Some(484.12),
         Some(99282.52),
-        consolidatedExpense = None,
+        consolidatedExpenses = None,
         Some(974.47),
         Some(UkPropertyExpensesRentARoom(
           Some(8842.43)
@@ -86,7 +86,7 @@ class CreateUkPropertyPeriodSummaryServiceSpec extends ServiceSpec {
         Some(UkPropertyExpensesRentARoom(
           Some(947.66)
         )),
-        consolidatedExpense = None
+        consolidatedExpenses = None
       ))
     ))
   )
@@ -109,7 +109,7 @@ class CreateUkPropertyPeriodSummaryServiceSpec extends ServiceSpec {
         None,
         None,
         None,
-        consolidatedExpense = Some(41.12),
+        consolidatedExpenses = Some(41.12),
         None,
         None
       ))
@@ -136,7 +136,7 @@ class CreateUkPropertyPeriodSummaryServiceSpec extends ServiceSpec {
         None,
         None,
         None,
-        consolidatedExpense = Some(947.66)
+        consolidatedExpenses = Some(947.66)
       ))
     ))
   )

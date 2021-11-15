@@ -22,6 +22,7 @@ import v2.models.domain.Nino
 import v2.models.errors.{BadRequestError, BusinessIdFormatError, ErrorWrapper, NinoFormatError}
 import v2.models.request.amendUkPropertyPeriodSummary._
 import v2.models.request.common.ukFhlProperty._
+import v2.mocks.validators.MockAmendUkPropertyPeriodSummaryValidator
 
 class AmendUkPropertyPeriodSummaryRequestParserSpec extends UnitSpec {
 

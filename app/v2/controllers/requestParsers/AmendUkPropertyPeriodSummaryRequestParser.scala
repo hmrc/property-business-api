@@ -25,5 +25,5 @@ class AmendUkPropertyPeriodSummaryRequestParser @Inject()(val validator: AmendUk
     extends RequestParser[AmendUkPropertyPeriodSummaryRawData, AmendUkPropertyPeriodSummaryRequest] {
 
   override protected def requestFor(data: AmendUkPropertyPeriodSummaryRawData): AmendUkPropertyPeriodSummaryRequest =
-    AmendUkPropertyPeriodSummaryRequest(Nino(data.nino), data.businessId, data.taxYear, data.submissionId, data.body.as[AmendUkPropertyPeriodSummaryRequestBody])
+    AmendUkPropertyPeriodSummaryRequest(Nino(data.nino), data.taxYear, data.businessId, data.submissionId, data.body.as[AmendUkPropertyPeriodSummaryRequestBody])
 }

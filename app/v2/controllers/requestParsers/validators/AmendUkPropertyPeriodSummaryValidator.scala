@@ -20,7 +20,7 @@ import com.google.inject.Inject
 import config.AppConfig
 import v2.controllers.requestParsers.validators.validations._
 import v2.models.errors.{MtdError, RuleIncorrectOrEmptyBodyError}
-import v2.models.request.amendUkPropertyPeriodSummary._
+import v2.models.request.amendUkPropertyPeriodSummary.{AmendUkPropertyPeriodSummaryRawData, AmendUkPropertyPeriodSummaryRequestBody}
 import v2.models.request.common.ukFhlProperty.UkFhlProperty
 import v2.models.request.common.ukNonFhlProperty.UkNonFhlProperty
 
@@ -36,8 +36,8 @@ class AmendUkPropertyPeriodSummaryValidator @Inject()(appConfig: AppConfig) exte
     (data: AmendUkPropertyPeriodSummaryRawData) => {
       List(
         NinoValidation.validate(data.nino),
-        BusinessIdValidation.validate(data.businessId),
         TaxYearValidation.validate(minTaxYear, data.taxYear),
+        BusinessIdValidation.validate(data.businessId),
         SubmissionIdValidation.validate(data.submissionId)
 
       )
@@ -112,8 +112,8 @@ class AmendUkPropertyPeriodSummaryValidator @Inject()(appConfig: AppConfig) exte
         path = "/ukFhlProperty/expenses/other"
       ),
       NumberValidation.validateOptional(
-        field = property.expenses.flatMap(_.consolidatedExpenses),
-        path = "/ukFhlProperty/expenses/consolidatedExpenses"
+        field = property.expenses.flatMap(_.consolidatedExpense),
+        path = "/ukFhlProperty/expenses/consolidatedExpense"
       ),
       NumberValidation.validateOptional(
         field = property.expenses.flatMap(_.travelCosts),
@@ -181,8 +181,8 @@ class AmendUkPropertyPeriodSummaryValidator @Inject()(appConfig: AppConfig) exte
         path = "/ukNonFhlProperty/expenses/residentialFinancialCost"
       ),
       NumberValidation.validateOptional(
-        field = property.expenses.flatMap(_.consolidatedExpenses),
-        path = "/ukNonFhlProperty/expenses/consolidatedExpenses"
+        field = property.expenses.flatMap(_.consolidatedExpense),
+        path = "/ukNonFhlProperty/expenses/consolidatedExpense"
       ),
       NumberValidation.validateOptional(
         field = property.expenses.flatMap(_.travelCosts),
@@ -198,20 +198,6 @@ class AmendUkPropertyPeriodSummaryValidator @Inject()(appConfig: AppConfig) exte
       ),
     ).flatten
   }
-
- // private def validateUkPropertyConsolidatedExpenses(expenses: UkFhlPropertyExpenses): List[MtdError] = {
- //   ConsolidatedExpensesValidation.validate(
- //     expenses = expenses,
- //     path = s"/ukFhlProperty/expenses"
- //   )
- // }
-
- // private def validateUkNonFhlPropertyConsolidatedExpenses(expenses: UkFhlPropertyExpenses): List[MtdError] = {
- //   ConsolidatedExpensesValidation.validate(
- //     expenses = expenses,
- //     path = s"/ukNonFhlProperty/expenses"
-  //  )
-  //}
 
   override def validate(data: AmendUkPropertyPeriodSummaryRawData): List[MtdError] = {
     run(validationSet, data).distinct

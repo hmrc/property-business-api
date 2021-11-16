@@ -26,7 +26,8 @@ import v2.mocks.services.{MockAuditService, MockCreateUkPropertyPeriodSummarySer
 import v2.models.audit.{AuditError, AuditEvent, AuditResponse, CreateUkPropertyPeriodicAuditDetail}
 import v2.models.domain.Nino
 import v2.models.errors._
-import v2.models.hateoas.HateoasWrapper
+import v2.models.hateoas.Method.GET
+import v2.models.hateoas.{HateoasWrapper, Link}
 import v2.models.outcomes.ResponseWrapper
 import v2.models.request.common.ukFhlProperty.{UkFhlProperty, UkFhlPropertyExpenses, UkFhlPropertyIncome}
 import v2.models.request.common.ukNonFhlProperty.{UkNonFhlProperty, UkNonFhlPropertyExpenses, UkNonFhlPropertyIncome}
@@ -270,10 +271,17 @@ class CreateUkPropertyPeriodSummaryControllerSpec
   private val rawData = CreateUkPropertyPeriodSummaryRawData(nino, taxYear, businessId, requestBodyJson)
 
   val hateoasResponse: JsValue = Json.parse(
-    """
-      |{
-      |  "submissionId": "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
-      |}
+    s"""
+       |{
+       |  "submissionId": "4557ecb5-fd32-48cc-81f5-e6acd1099f3c",
+       |  "links": [
+       |    {
+       |      "href":"/individuals/business/property/uk/$nino/$businessId/period/$taxYear/4557ecb5-fd32-48cc-81f5-e6acd1099f3c",
+       |      "method":"GET",
+       |      "rel":"self"
+       |    }
+       |  ]
+       |}
     """.stripMargin
   )
 
@@ -310,16 +318,27 @@ class CreateUkPropertyPeriodSummaryControllerSpec
     )
 
   private val responseBody = Json.parse(
-    """
-      |{
-      |  "submissionId": "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
-      |}
-    """.stripMargin
+    s"""
+       |{
+       |  "submissionId": "4557ecb5-fd32-48cc-81f5-e6acd1099f3c",
+       |  "links": [
+       |    {
+       |      "href":"/individuals/business/property/uk/$nino/$businessId/period/$taxYear/4557ecb5-fd32-48cc-81f5-e6acd1099f3c",
+       |      "method":"GET",
+       |      "rel":"self"
+       |    }
+       |  ]
+       |}
+      """.stripMargin
   )
 
   val response: CreateUkPropertyPeriodSummaryResponse = CreateUkPropertyPeriodSummaryResponse(
     submissionId = "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
   )
+
+  private val testHateoasLink =
+    Link(href = s"/individuals/business/property/uk/$nino/$businessId/period/$taxYear/4557ecb5-fd32-48cc-81f5-e6acd1099f3c",
+    method = GET, rel="self")
 
   "create" should {
     "return a successful response from a consolidated request" when {
@@ -334,8 +353,8 @@ class CreateUkPropertyPeriodSummaryControllerSpec
           .returns(Future.successful(Right(ResponseWrapper(correlationId, response))))
 
         MockHateoasFactory
-          .wrap(response, CreateUkPropertyPeriodSummaryHateoasData(nino, businessId, submissionId))
-          .returns(HateoasWrapper(response, Seq.empty))
+          .wrap(response, CreateUkPropertyPeriodSummaryHateoasData(nino, businessId, taxYear, submissionId))
+          .returns(HateoasWrapper(response, Seq(testHateoasLink)))
 
         val result: Future[Result] = controller.handleRequest(nino, businessId, taxYear)(fakePostRequest(requestBodyJsonConsolidatedExpense))
         status(result) shouldBe CREATED
@@ -360,8 +379,8 @@ class CreateUkPropertyPeriodSummaryControllerSpec
           .returns(Future.successful(Right(ResponseWrapper(correlationId, response))))
 
         MockHateoasFactory
-          .wrap(response, CreateUkPropertyPeriodSummaryHateoasData(nino, businessId, submissionId))
-          .returns(HateoasWrapper(response, Seq.empty))
+          .wrap(response, CreateUkPropertyPeriodSummaryHateoasData(nino, businessId, taxYear, submissionId))
+          .returns(HateoasWrapper(response, Seq(testHateoasLink)))
 
         val result: Future[Result] = controller.handleRequest(nino, businessId, taxYear)(fakePostRequest(requestBodyJson))
         status(result) shouldBe CREATED

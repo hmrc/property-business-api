@@ -379,9 +379,16 @@ class CreateUkPropertyPeriodSummaryControllerISpec extends V2IntegrationBaseSpec
     }
 
     val responseBody: JsValue = Json.parse(
-      """
+      s"""
         |{
-        |  "submissionId": "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
+        |  "submissionId": "4557ecb5-fd32-48cc-81f5-e6acd1099f3c",
+        |  "links": [
+        |    {
+        |      "href":"/individuals/business/property/uk/$nino/$businessId/period/$taxYear/4557ecb5-fd32-48cc-81f5-e6acd1099f3c",
+        |      "method":"GET",
+        |      "rel":"self"
+        |    }
+        |  ]
         |}
       """.stripMargin
     )

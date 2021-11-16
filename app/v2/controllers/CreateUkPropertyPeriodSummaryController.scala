@@ -59,8 +59,8 @@ class CreateUkPropertyPeriodSummaryController @Inject()(val authService: Enrolme
           parsedRequest <- EitherT.fromEither[Future](parser.parseRequest(rawData))
           serviceResponse <- EitherT(service.createUkProperty(parsedRequest))
           vendorResponse <- EitherT.fromEither[Future](
-            hateoasFactory
-              .wrap(serviceResponse.responseData, CreateUkPropertyPeriodSummaryHateoasData(nino, businessId, serviceResponse.responseData.submissionId))
+            hateoasFactory.wrap(serviceResponse.responseData,
+              CreateUkPropertyPeriodSummaryHateoasData(nino, businessId, taxYear, serviceResponse.responseData.submissionId))
               .asRight[ErrorWrapper]
           )
         } yield {

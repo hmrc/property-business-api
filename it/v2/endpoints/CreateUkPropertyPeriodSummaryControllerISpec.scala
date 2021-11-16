@@ -122,54 +122,7 @@ class CreateUkPropertyPeriodSummaryControllerISpec extends V2IntegrationBaseSpec
     """
       |{
       |  "fromDate": "2018-04-06",
-      |  "toDate": "20190406",
-      |  "ukFhlProperty":{
-      |        "income": {
-      |            "periodAmount": 5000.99,
-      |            "taxDeducted": 3123.21,
-      |            "rentARoom": {
-      |                "rentsReceived": 532.12
-      |            }
-      |        },
-      |        "expenses": {
-      |            "premisesRunningCosts": 3123.21,
-      |            "repairsAndMaintenance": 928.42,
-      |            "financialCosts": 842.99,
-      |            "professionalFees": 8831.12,
-      |            "costOfServices": 484.12,
-      |            "other": 99282,
-      |            "travelCosts": 974.47,
-      |            "rentARoom": {
-      |                "amountClaimed": 8842.43
-      |            }
-      |        }
-      |    },
-      |  "ukNonFhlProperty": {
-      |        "income": {
-      |            "premiumsOfLeaseGrant": 42.12,
-      |            "reversePremiums": 84.31,
-      |            "periodAmount": 9884.93,
-      |            "taxDeducted": 842.99,
-      |            "otherIncome": 31.44,
-      |            "rentARoom": {
-      |                "rentsReceived": 947.66
-      |            }
-      |        },
-      |        "expenses": {
-      |            "premisesRunningCosts": 3123.21,
-      |            "repairsAndMaintenance": 928.42,
-      |            "financialCosts": 842.99,
-      |            "professionalFees": 8831.12,
-      |            "costOfServices": 484.12,
-      |            "other": 99282,
-      |            "residentialFinancialCost": 12.34,
-      |            "travelCosts": 974.47,
-      |            "residentialFinancialCostsCarriedForward": 12.34,
-      |            "rentARoom": {
-      |                "amountClaimed": 8842.43
-      |            }
-      |        }
-      |    }
+      |  "toDate": "20190406"
       |}
     """.stripMargin
   )
@@ -178,54 +131,7 @@ class CreateUkPropertyPeriodSummaryControllerISpec extends V2IntegrationBaseSpec
     """
       |{
       |  "fromDate": "20180406",
-      |  "toDate": "2019-04-06",
-      |  "ukFhlProperty":{
-      |        "income": {
-      |            "periodAmount": 5000.99,
-      |            "taxDeducted": 3123.21,
-      |            "rentARoom": {
-      |                "rentsReceived": 532.12
-      |            }
-      |        },
-      |        "expenses": {
-      |            "premisesRunningCosts": 3123.21,
-      |            "repairsAndMaintenance": 928.42,
-      |            "financialCosts": 842.99,
-      |            "professionalFees": 8831.12,
-      |            "costOfServices": 484.12,
-      |            "other": 99282,
-      |            "travelCosts": 974.47,
-      |            "rentARoom": {
-      |                "amountClaimed": 8842.43
-      |            }
-      |        }
-      |    },
-      |  "ukNonFhlProperty": {
-      |        "income": {
-      |            "premiumsOfLeaseGrant": 42.12,
-      |            "reversePremiums": 84.31,
-      |            "periodAmount": 9884.93,
-      |            "taxDeducted": 842.99,
-      |            "otherIncome": 31.44,
-      |            "rentARoom": {
-      |                "rentsReceived": 947.66
-      |            }
-      |        },
-      |        "expenses": {
-      |            "premisesRunningCosts": 3123.21,
-      |            "repairsAndMaintenance": 928.42,
-      |            "financialCosts": 842.99,
-      |            "professionalFees": 8831.12,
-      |            "costOfServices": 484.12,
-      |            "other": 99282,
-      |            "residentialFinancialCost": 12.34,
-      |            "travelCosts": 974.47,
-      |            "residentialFinancialCostsCarriedForward": 12.34,
-      |            "rentARoom": {
-      |                "amountClaimed": 8842.43
-      |            }
-      |        }
-      |    }
+      |  "toDate": "2019-04-06"
       |}
     """.stripMargin
   )

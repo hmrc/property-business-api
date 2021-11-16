@@ -123,9 +123,6 @@ class AmendUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec with JsonErr
               """
                 |{
                 |  "ukFhlProperty": {
-                |    "allowances": {
-                |      "annualInvestmentAllowance": 123.45
-                |    },
                 |    "adjustments": {
                 |      "periodOfGraceAdjustment": true,
                 |      "nonResidentLandlord": true
@@ -1169,7 +1166,8 @@ class AmendUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec with JsonErr
           ))
         ))
       }
-      "propertyIncomeAllowance is invalid" in {
+
+      "ukFhlProperty propertyIncomeAllowance is invalid" in {
         validator.validate(AmendUkPropertyAnnualSubmissionRawData(
           validNino,
           validBusinessId,
@@ -1245,6 +1243,34 @@ class AmendUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec with JsonErr
               |}
               |""".stripMargin)
         )) shouldBe List(ValueFormatError.copy(paths = Some(Seq("/ukFhlProperty/allowances/propertyIncomeAllowance"))))
+      }
+
+      "ukNonFhlProperty propertyIncomeAllowance is invalid" in {
+        validator.validate(AmendUkPropertyAnnualSubmissionRawData(
+          validNino,
+          validBusinessId,
+          validTaxYear,
+          Json.parse(
+            """
+              |{
+              |  "ukNonFhlProperty": {
+              |    "allowances": {
+              |      "propertyIncomeAllowance": 345.676
+              |    },
+              |    "adjustments": {
+              |      "lossBroughtForward": 334.45,
+              |      "balancingCharge": 565.34,
+              |      "privateUseAdjustment": 533.54,
+              |      "businessPremisesRenovationAllowanceBalancingCharges": 563.34,
+              |      "nonResidentLandlord": true,
+              |      "rentARoom": {
+              |        "jointlyLet": true
+              |      }
+              |    }
+              |  }
+              |}
+              |""".stripMargin)
+        )) shouldBe List(ValueFormatError.copy(paths = Some(Seq("/ukNonFhlProperty/allowances/propertyIncomeAllowance"))))
       }
     }
 

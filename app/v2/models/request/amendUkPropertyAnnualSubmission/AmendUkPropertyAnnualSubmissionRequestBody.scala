@@ -16,7 +16,7 @@
 
 package v2.models.request.amendUkPropertyAnnualSubmission
 
-import play.api.libs.json.{JsPath, Json, OWrites, Reads, Writes}
+import play.api.libs.json.{JsPath, Json, OWrites, Reads}
 import play.api.libs.functional.syntax._
 import v2.models.request.amendUkPropertyAnnualSubmission.ukFhlProperty.UkFhlProperty
 import v2.models.request.amendUkPropertyAnnualSubmission.ukNonFhlProperty.UkNonFhlProperty

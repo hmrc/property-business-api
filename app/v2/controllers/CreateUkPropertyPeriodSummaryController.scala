@@ -19,48 +19,48 @@ package v2.controllers
 import cats.data.EitherT
 import cats.implicits._
 import javax.inject.{Inject, Singleton}
-import play.api.http.MimeTypes
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.{Action, ControllerComponents}
 import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.play.audit.http.connector.AuditResult
 import utils.{IdGenerator, Logging}
-import v2.controllers.requestParsers.CreateForeignPropertyPeriodSummaryRequestParser
+import v2.controllers.requestParsers.CreateUkPropertyPeriodSummaryRequestParser
 import v2.hateoas.HateoasFactory
-import v2.models.audit.{AuditEvent, AuditResponse, CreateForeignPropertyPeriodicAuditDetail}
+import v2.models.audit.{AuditEvent, AuditResponse, CreateUkPropertyPeriodicAuditDetail}
 import v2.models.errors._
-import v2.models.request.createForeignPropertyPeriodSummary.CreateForeignPropertyPeriodSummaryRawData
-import v2.models.response.createForeignPropertyPeriodSummary.CreateForeignPropertyPeriodSummaryHateoasData
+import v2.models.request.createUkPropertyPeriodSummary.CreateUkPropertyPeriodSummaryRawData
+import v2.models.response.createUkPropertyPeriodSummary.CreateUkPropertyPeriodSummaryHateoasData
 import v2.services._
 
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class CreateForeignPropertyPeriodSummaryController @Inject()(val authService: EnrolmentsAuthService,
-                                                             val lookupService: MtdIdLookupService,
-                                                             parser: CreateForeignPropertyPeriodSummaryRequestParser,
-                                                             service: CreateForeignPropertyPeriodSummaryService,
-                                                             auditService: AuditService,
-                                                             hateoasFactory: HateoasFactory,
-                                                             cc: ControllerComponents,
-                                                             idGenerator: IdGenerator)(implicit ec: ExecutionContext)
+class CreateUkPropertyPeriodSummaryController @Inject()(val authService: EnrolmentsAuthService,
+                                                        val lookupService: MtdIdLookupService,
+                                                        parser: CreateUkPropertyPeriodSummaryRequestParser,
+                                                        service: CreateUkPropertyPeriodSummaryService,
+                                                        auditService: AuditService,
+                                                        hateoasFactory: HateoasFactory,
+                                                        cc: ControllerComponents,
+                                                        idGenerator: IdGenerator)(implicit ec: ExecutionContext)
   extends AuthorisedController(cc) with BaseController with Logging {
 
   implicit val endpointLogContext: EndpointLogContext =
-    EndpointLogContext(controllerName = "CreateForeignPropertyController", endpointName = "Create a Foreign Property Income & Expenditure Period Summary")
+    EndpointLogContext(controllerName = "CreateUkPropertyController", endpointName = "Create a Uk Property Income & Expenditure Period Summary")
 
-  def handleRequest(nino: String, businessId: String): Action[JsValue] =
+  def handleRequest(nino: String, businessId: String, taxYear: String): Action[JsValue] =
     authorisedAction(nino).async(parse.json) { implicit request =>
       implicit val correlationId: String = idGenerator.getCorrelationId
       logger.info(message = s"[${endpointLogContext.controllerName}][${endpointLogContext.endpointName}] " +
         s"with correlationId : $correlationId")
-      val rawData = CreateForeignPropertyPeriodSummaryRawData(nino, businessId, request.body)
+      val rawData = CreateUkPropertyPeriodSummaryRawData(nino, taxYear, businessId, request.body)
       val result =
         for {
           parsedRequest <- EitherT.fromEither[Future](parser.parseRequest(rawData))
-          serviceResponse <- EitherT(service.createForeignProperty(parsedRequest))
+          serviceResponse <- EitherT(service.createUkProperty(parsedRequest))
           vendorResponse <- EitherT.fromEither[Future](
-            hateoasFactory
-              .wrap(serviceResponse.responseData, CreateForeignPropertyPeriodSummaryHateoasData(nino, businessId, serviceResponse.responseData.submissionId))
+            hateoasFactory.wrap(serviceResponse.responseData,
+              CreateUkPropertyPeriodSummaryHateoasData(nino, businessId, taxYear, serviceResponse.responseData.submissionId))
               .asRight[ErrorWrapper]
           )
         } yield {
@@ -70,20 +70,18 @@ class CreateForeignPropertyPeriodSummaryController @Inject()(val authService: En
 
           val response = Json.toJson(vendorResponse)
 
-          auditSubmission(CreateForeignPropertyPeriodicAuditDetail(request.userDetails, nino, businessId, request.body,
+          auditSubmission(CreateUkPropertyPeriodicAuditDetail(request.userDetails, nino, taxYear, businessId, request.body,
             serviceResponse.correlationId, AuditResponse(OK, Right(Some(response)))))
 
           Created(Json.toJson(vendorResponse))
             .withApiHeaders(serviceResponse.correlationId)
-            .as(MimeTypes.JSON)
         }
 
       result.leftMap { errorWrapper =>
         val resCorrelationId = errorWrapper.correlationId
         val result = errorResult(errorWrapper).withApiHeaders(resCorrelationId)
 
-
-        auditSubmission(CreateForeignPropertyPeriodicAuditDetail(request.userDetails, nino, businessId, request.body,
+        auditSubmission(CreateUkPropertyPeriodicAuditDetail(request.userDetails, nino, taxYear, businessId, request.body,
           correlationId, AuditResponse(result.header.status, Left(errorWrapper.auditErrors))))
 
         logger.warn(
@@ -95,17 +93,18 @@ class CreateForeignPropertyPeriodSummaryController @Inject()(val authService: En
 
   private def errorResult(errorWrapper: ErrorWrapper) = {
     (errorWrapper.error: @unchecked) match {
-      case RuleIncorrectOrEmptyBodyError |
-           BadRequestError |
+      case BadRequestError |
            NinoFormatError |
+           TaxYearFormatError |
            BusinessIdFormatError |
+           RuleTaxYearRangeInvalidError |
+           RuleTaxYearNotSupportedError |
+           RuleIncorrectOrEmptyBodyError |
            ToDateFormatError |
            FromDateFormatError |
-           MtdErrorWithCustomMessage(CountryCodeFormatError.code) |
            MtdErrorWithCustomMessage(ValueFormatError.code) |
            MtdErrorWithCustomMessage(RuleBothExpensesSuppliedError.code) |
            RuleToDateBeforeFromDateError |
-           MtdErrorWithCustomMessage(RuleCountryCodeError.code) |
            RuleOverlappingPeriodError |
            RuleMisalignedPeriodError |
            RuleNotContiguousPeriodError |
@@ -117,10 +116,10 @@ class CreateForeignPropertyPeriodSummaryController @Inject()(val authService: En
     }
   }
 
-  private def auditSubmission(details: CreateForeignPropertyPeriodicAuditDetail)
+  private def auditSubmission(details: CreateUkPropertyPeriodicAuditDetail)
                              (implicit hc: HeaderCarrier,
-                              ec: ExecutionContext) = {
-    val event = AuditEvent("CreateForeignPropertyIncomeAndExpenditurePeriodSummary", "Create-Foreign-Property-Income-And-Expenditure-Period-Summary", details)
+                              ec: ExecutionContext): Future[AuditResult] = {
+    val event = AuditEvent("CreateUkPropertyIncomeAndExpenditurePeriodSummary", "Create-Uk-Property-Income-And-Expenditure-Period-Summary", details)
     auditService.auditEvent(event)
   }
 }

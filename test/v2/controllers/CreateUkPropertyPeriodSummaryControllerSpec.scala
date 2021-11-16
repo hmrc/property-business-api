@@ -317,21 +317,6 @@ class CreateUkPropertyPeriodSummaryControllerSpec
       )
     )
 
-  private val responseBody = Json.parse(
-    s"""
-       |{
-       |  "submissionId": "4557ecb5-fd32-48cc-81f5-e6acd1099f3c",
-       |  "links": [
-       |    {
-       |      "href":"/individuals/business/property/uk/$nino/$businessId/period/$taxYear/4557ecb5-fd32-48cc-81f5-e6acd1099f3c",
-       |      "method":"GET",
-       |      "rel":"self"
-       |    }
-       |  ]
-       |}
-      """.stripMargin
-  )
-
   val response: CreateUkPropertyPeriodSummaryResponse = CreateUkPropertyPeriodSummaryResponse(
     submissionId = "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
   )
@@ -358,7 +343,7 @@ class CreateUkPropertyPeriodSummaryControllerSpec
 
         val result: Future[Result] = controller.handleRequest(nino, businessId, taxYear)(fakePostRequest(requestBodyJsonConsolidatedExpense))
         status(result) shouldBe CREATED
-        contentAsJson(result) shouldBe responseBody
+        contentAsJson(result) shouldBe hateoasResponse
         header("X-CorrelationId", result) shouldBe Some(correlationId)
 
 
@@ -384,7 +369,7 @@ class CreateUkPropertyPeriodSummaryControllerSpec
 
         val result: Future[Result] = controller.handleRequest(nino, businessId, taxYear)(fakePostRequest(requestBodyJson))
         status(result) shouldBe CREATED
-        contentAsJson(result) shouldBe responseBody
+        contentAsJson(result) shouldBe hateoasResponse
         header("X-CorrelationId", result) shouldBe Some(correlationId)
 
         val auditResponse: AuditResponse = AuditResponse(OK, None, Some(hateoasResponse))

@@ -17,7 +17,6 @@
 package v2.controllers
 
 import cats.data.EitherT
-import play.api.http.MimeTypes
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.{Action, ControllerComponents}
 import uk.gov.hmrc.http.HeaderCarrier
@@ -44,23 +43,19 @@ class AmendUkPropertyPeriodSummaryController @Inject()(val authService: Enrolmen
   extends AuthorisedController(cc) with BaseController with Logging {
 
   implicit val endpointLogContext: EndpointLogContext =
-    EndpointLogContext(controllerName = "AmendUkPropertyController", endpointName = "Amend a UK Property Income & Expenditure Period Summary")
-
-  def handleRequest(nino: String, businessId: String): Action[JsValue] =
+    EndpointLogContext(controllerName = "AmendUkPropertyController", endpointName = "amendUkProperty")
+  def handleRequest(nino: String, businessId: String, submissionId: String): Action[JsValue] =
     authorisedAction(nino).async(parse.json) { implicit request =>
       implicit val correlationId: String = idGenerator.getCorrelationId
       logger.info(message = s"[${endpointLogContext.controllerName}][${endpointLogContext.endpointName}] " +
         s"with correlationId : $correlationId")
-      val rawData = AmendUkPropertyPeriodSummaryRawData(nino, businessId, request.body)
+        val rawData = AmendUkPropertyPeriodSummaryRawData(nino, businessId, submissionId, request.body)
       val result =
         for {
           parsedRequest <- EitherT.fromEither[Future](parser.parseRequest(rawData))
-          serviceResponse <- EitherT(service.AmendUkProperty(parsedRequest))
+          serviceResponse <- EitherT(service.amendUkPropertyService(parsedRequest))
           vendorResponse <- EitherT.fromEither[Future](
-            hateoasFactory
-              .wrap(serviceResponse.responseData, AmendUkPropertyPeriodSummaryHateoasData(nino, businessId, serviceResponse.responseData.submissionId))
-              .asRight[ErrorWrapper]
-          )
+            hateoasFactory.wrap(serviceResponse.responseData, AmendUkPropertyPeriodSummaryHateoasData(nino, businessId, submissionId)).asRight[ErrorWrapper])
         } yield {
           logger.info(
             s"[${endpointLogContext.controllerName}][${endpointLogContext.endpointName}] - " +
@@ -68,25 +63,25 @@ class AmendUkPropertyPeriodSummaryController @Inject()(val authService: Enrolmen
 
           val response = Json.toJson(vendorResponse)
 
-          auditSubmission(AmendUkPropertyPeriodicAuditDetail(request.userDetails, nino, businessId, request.body,
+          auditSubmission(AmendUkPropertyPeriodicAuditDetail(request.userDetails, nino, businessId, submissionId, request.body,
             serviceResponse.correlationId, AuditResponse(OK, Right(Some(response)))))
 
-          Created(Json.toJson(vendorResponse))
+          Ok(Json.toJson(vendorResponse))
             .withApiHeaders(serviceResponse.correlationId)
-            .as(MimeTypes.JSON)
         }
 
       result.leftMap { errorWrapper =>
         val resCorrelationId = errorWrapper.correlationId
         val result = errorResult(errorWrapper).withApiHeaders(resCorrelationId)
 
-
-        auditSubmission(AmendUkPropertyPeriodicAuditDetail(request.userDetails, nino, businessId, request.body,
-          correlationId, AuditResponse(result.header.status, Left(errorWrapper.auditErrors))))
-
         logger.warn(
           s"[${endpointLogContext.controllerName}][${endpointLogContext.endpointName}] - " +
             s"Error response received with CorrelationId: $resCorrelationId")
+
+
+        auditSubmission(AmendUkPropertyPeriodicAuditDetail(request.userDetails, nino, businessId, submissionId, request.body,
+          correlationId, AuditResponse(result.header.status, Left(errorWrapper.auditErrors))))
+
         result
       }.merge
     }

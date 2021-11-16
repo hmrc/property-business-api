@@ -25,12 +25,12 @@ import v2.mocks.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdId
 import v2.models.audit.{AuditError, AuditEvent, AuditResponse}
 import v2.models.domain.Nino
 import v2.models.errors._
-import v2.models.hateoas.Method.GET
-import v2.models.hateoas.{HateoasWrapper, Link}
+import v2.models.hateoas.HateoasWrapper
 import v2.models.outcomes.ResponseWrapper
 import v2.models.request.amendUkPropertyPeriodSummary.{AmendUkPropertyPeriodSummaryRawData, AmendUkPropertyPeriodSummaryRequest, AmendUkPropertyPeriodSummaryRequestBody}
 import v2.models.request.common.ukFhlProperty.{UkFhlProperty, UkFhlPropertyExpenses, UkFhlPropertyIncome}
-import v2.models.request.common.ukNonFhlProperty.{UkNonFhlProperty, UkNonFhlPropertyExpenses}
+import v2.models.request.common.ukNonFhlProperty.{UkNonFhlProperty, UkNonFhlPropertyExpenses, UkNonFhlPropertyIncome}
+import v2.models.request.common.ukPropertyRentARoom.{UkPropertyExpensesRentARoom, UkPropertyIncomeRentARoom}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -69,6 +69,94 @@ class AmendUkPropertyPeriodSummaryControllerSpec
     MockedEnrolmentsAuthService.authoriseUser()
     MockIdGenerator.getCorrelationId.returns(correlationId)
   }
+
+  def consolidatedEvent(auditResponse: AuditResponse): AuditEvent[AmendUkPropertyPeriodicAuditDetail] =
+    AuditEvent(
+      auditType = "AmendUkPropertyIncomeAndExpenditurePeriodSummary",
+      transactionName = "Amend-Uk-Property-Income-And-Expenditure-Period-Summary",
+      detail = AmendUkPropertyPeriodicAuditDetail(
+        userType = "Individual",
+        agentReferenceNumber = None,
+        nino,
+        taxYear,
+        businessId,
+        submissionId,
+        requestBodyWithConsolidatedExpense,
+        correlationId,
+        response = auditResponse
+      )
+    )
+
+  def unconsolidatedEvent(auditResponse: AuditResponse): AuditEvent[AmendUkPropertyPeriodicAuditDetail] =
+    AuditEvent(
+      auditType = "AmendUkPropertyIncomeAndExpenditurePeriodSummary",
+      transactionName = "Amend-Uk-Property-Income-And-Expenditure-Period-Summary",
+      detail = AmendUkPropertyPeriodicAuditDetail(
+        userType = "Individual",
+        agentReferenceNumber = None,
+        nino,
+        taxYear,
+        businessId,
+        submissionId,
+        requestBodyJson,
+        correlationId,
+        response = auditResponse
+      )
+    )
+
+
+  private val requestBodyJson = Json.parse(
+    """{
+      |    "ukFhlProperty":{
+      |        "income": {
+      |            "periodAmount": 5000.99,
+      |            "taxDeducted": 3123.21,
+      |            "rentARoom": {
+      |                "rentsReceived": 532.12
+      |            }
+      |        },
+      |        "expenses": {
+      |            "premisesRunningCosts": 3123.21,
+      |            "repairsAndMaintenance": 928.42,
+      |            "financialCosts": 842.99,
+      |            "professionalFees": 8831.12,
+      |            "costOfServices": 484.12,
+      |            "other": 99282,
+      |            "travelCosts": 974.47,
+      |            "rentARoom": {
+      |                "amountClaimed": 8842.43
+      |            }
+      |        }
+      |    },
+      |    "ukNonFhlProperty": {
+      |        "income": {
+      |            "premiumsOfLeaseGrant": 42.12,
+      |            "reversePremiums": 84.31,
+      |            "periodAmount": 9884.93,
+      |            "taxDeducted": 842.99,
+      |            "otherIncome": 31.44,
+      |            "rentARoom": {
+      |                "rentsReceived": 947.66
+      |            }
+      |        },
+      |        "expenses": {
+      |            "premisesRunningCosts": 3123.21,
+      |            "repairsAndMaintenance": 928.42,
+      |            "financialCosts": 842.99,
+      |            "professionalFees": 8831.12,
+      |            "costOfServices": 484.12,
+      |            "other": 99282,
+      |            "residentialFinancialCost": 12.34,
+      |            "travelCosts": 974.47,
+      |            "residentialFinancialCostsCarriedForward": 12.34,
+      |            "rentARoom": {
+      |                "amountClaimed": 8842.43
+      |            }
+      |        }
+      |    }
+      |}
+      |""".stripMargin
+  )
 
   val requestBody: AmendUkPropertyPeriodSummaryRequestBody =
     AmendUkPropertyPeriodSummaryRequestBody(
@@ -170,7 +258,7 @@ class AmendUkPropertyPeriodSummaryControllerSpec
       ))
     )
 
-  private val requestBodyJson = Json.parse(
+  private val requestBodyJsonConsolidatedExpense = Json.parse(
     """{
       |    "ukFhlProperty":{
       |        "income": {
@@ -181,16 +269,7 @@ class AmendUkPropertyPeriodSummaryControllerSpec
       |            }
       |        },
       |        "expenses": {
-      |            "premisesRunningCosts": 3123.21,
-      |            "repairsAndMaintenance": 928.42,
-      |            "financialCosts": 842.99,
-      |            "professionalFees": 8831.12,
-      |            "costOfServices": 484.12,
-      |            "other": 99282,
-      |            "travelCosts": 974.47,
-      |            "rentARoom": {
-      |                "amountClaimed": 8842.43
-      |            }
+      |            "consolidatedExpense": 988.18
       |        }
       |    },
       |    "ukNonFhlProperty": {
@@ -205,23 +284,13 @@ class AmendUkPropertyPeriodSummaryControllerSpec
       |            }
       |        },
       |        "expenses": {
-      |            "premisesRunningCosts": 3123.21,
-      |            "repairsAndMaintenance": 928.42,
-      |            "financialCosts": 842.99,
-      |            "professionalFees": 8831.12,
-      |            "costOfServices": 484.12,
-      |            "other": 99282,
-      |            "residentialFinancialCost": 12.34,
-      |            "travelCosts": 974.47,
-      |            "residentialFinancialCostsCarriedForward": 12.34,
-      |            "rentARoom": {
-      |                "amountClaimed": 8842.43
-      |            }
+      |            "consolidatedExpense": 988.18
       |        }
       |    }
       |}
       |""".stripMargin
   )
+
 
   private val requestData = AmendUkPropertyPeriodSummaryRequest(Nino(nino), taxYear, businessId, submissionId, requestBody)
   private val rawData = AmendUkPropertyPeriodSummaryRawData(nino, taxYear, businessId, submissionId, requestBodyJson)
@@ -234,55 +303,56 @@ class AmendUkPropertyPeriodSummaryControllerSpec
     """.stripMargin
   )
 
-  def consolidatedEvent(auditResponse: AuditResponse): AuditEvent[AmendUkPropertyPeriodicAuditDetail] =
-    AuditEvent(
-      auditType = "AmendUkPropertyIncomeAndExpenditurePeriodSummary",
-      transactionName = "Amend-Uk-Property-Income-And-Expenditure-Period-Summary",
-      detail = AmendUkPropertyPeriodicAuditDetail(
-        userType = "Individual",
-        agentReferenceNumber = None,
-        nino,
-        taxYear,
-        businessId,
-        submissionId,
-        requestBodyWithConsolidatedExpense,
-        correlationId,
-        response = auditResponse
-      )
-    )
+    "amend" should {
+      "return a successful response from a consolidated request" when {
+        "the request received is valid" in new Test {
 
-  private val responseBody = Json.parse(
-    """
-      |{
-      |  "submissionId": "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
-      |}
-    """.stripMargin
-  )
+          MockAmendUkPropertyRequestParser
+            .requestFor(AmendUkPropertyPeriodSummaryRawData(nino, taxYear, businessId, submissionId, requestBodyJsonConsolidatedExpense))
+            .returns(Right(requestData))
 
-  "amend" should {
-    "return a successful response from a consolidated request" when {
-      "the request received is valid" in new Test {
+          MockAmendUkPropertyService
+            .amendUkProperty(requestData)
+            .returns(Future.successful(Right(ResponseWrapper(correlationId, ()))))
 
-        MockAmendUkPropertyRequestParser
-          .parseRequest(rawData)
-          .returns(Right(requestData))
+          MockHateoasFactory
+            .wrap((), AmendUkPropertyPeriodSummaryHateoasData(nino, taxYear, businessId, submissionId))
+            .returns(HateoasWrapper((), Seq.empty))
 
-        MockAmendUkPropertyService
-          .amend(requestData)
-          .returns(Future.successful(Right(ResponseWrapper(correlationId, ()))))
+          val result: Future[Result] = controller.handleRequest(nino, businessId, taxYear)(fakePostRequest(requestBodyJsonConsolidatedExpense))
+          status(result) shouldBe OK
+          header("X-CorrelationId", result) shouldBe Some(correlationId)
 
-        MockHateoasFactory
-          .wrap((), AmendUkPropertyPeriodSummaryHateoasData(nino, taxYear, businessId, submissionId))
-          .returns(HateoasWrapper(response, Seq.empty))
 
-        val result: Future[Result] = controller.handleRequest(nino, taxYear, businessId, submissionId)(fakePostRequest(requestBodyJsonConsolidatedExpense))
-        status(result) shouldBe OK
-        header("X-CorrelationId", result) shouldBe Some(correlationId)
-
-        val auditResponse: AuditResponse = AuditResponse(OK, None, Some(hateoasResponse))
-        MockedAuditService.verifyAuditEvent(consolidatedEvent(auditResponse)).once
+          val auditResponse: AuditResponse = AuditResponse(OK, None, Some(hateoasResponse))
+          MockedAuditService.verifyAuditEvent(consolidatedEvent(auditResponse)).once
+        }
       }
-    }
+
+      "return a successful response from an unconsolidated request" when {
+        "the request received is valid" in new Test {
+
+          MockAmendUkPropertyRequestParser
+            .requestFor(AmendUkPropertyPeriodSummaryRawData(nino, taxYear, businessId, submissionId, requestBodyJson))
+            .returns(Right(requestData))
+
+          MockAmendUkPropertyService
+            .amendUkProperty(requestData)
+            .returns(Future.successful(Right(ResponseWrapper(correlationId, ()))))
+
+          MockHateoasFactory
+            .wrap((), AmendUkPropertyPeriodSummaryHateoasData(nino, businessId, submissionId))
+            .returns(HateoasWrapper((), Seq.empty))
+
+          val result: Future[Result] = controller.handleRequest(nino, businessId, taxYear)(fakePostRequest(requestBodyJson))
+          status(result) shouldBe OK
+          header("X-CorrelationId", result) shouldBe Some(correlationId)
+
+          val auditResponse: AuditResponse = AuditResponse(OK, None, Some(hateoasResponse))
+          MockedAuditService.verifyAuditEvent(unconsolidatedEvent(auditResponse)).once
+        }
+      }
+
     "return the error as per spec" when {
       "parser errors occur" should {
         def errorsFromParserTester(error: MtdError, expectedStatus: Int): Unit = {
@@ -299,7 +369,7 @@ class AmendUkPropertyPeriodSummaryControllerSpec
             header("X-CorrelationId", result) shouldBe Some(correlationId)
 
             val auditResponse: AuditResponse = AuditResponse(expectedStatus, Some(Seq(AuditError(error.code))), None)
-            MockedAuditService.verifyAuditEvent(event(auditResponse)).once
+            MockedAuditService.verifyAuditEvent(consolidatedEvent(auditResponse)).once
           }
         }
 
@@ -339,14 +409,14 @@ class AmendUkPropertyPeriodSummaryControllerSpec
               .amend(requestData)
               .returns(Future.successful(Left(ErrorWrapper(correlationId, mtdError))))
 
-            val result: Future[Result] = controller.handleRequest(nino, taxYear, businessId, submissionId)(fakePostRequest(requestBodyJson))
+            val result: Future[Result] = controller.handleRequest(nino, taxYear, businessId)(fakePostRequest(requestBodyJson))
 
             status(result) shouldBe expectedStatus
             contentAsJson(result) shouldBe Json.toJson(mtdError)
             header("X-CorrelationId", result) shouldBe Some(correlationId)
 
             val auditResponse: AuditResponse = AuditResponse(expectedStatus, Some(Seq(AuditError(mtdError.code))), None)
-            MockedAuditService.verifyAuditEvent(event(auditResponse)).once
+            MockedAuditService.verifyAuditEvent(unconsolidatedEvent(auditResponse)).once
           }
         }
 

@@ -214,8 +214,8 @@ class AmendUkPropertyAnnualSubmissionControllerISpec extends V2IntegrationBaseSp
             |            "qualifyingAmountExpenditure": 3000.45678900
             |          },
             |          "building": {
-            |            "name": "house namerdfyucrvtyfcvgcfvgbkgxdcfvjgbgxdchfvjgbgfdhgjvbkdcfvygbhdfchgjbdcfhvgjbkhcdfvgjbdfcgjvhbcfhgjvbhdcfhvgy",
-            |            "postcode": "GF49JHrdfyucrvtyfcvgcfvgbkgxdcfvjgbgxdchfvjgbgfdhgjvbkdcfvygbhdfchgjbdcfhvgjbkhcdfvgjbdfcgjvhbcfhgjvbhdcfhvgy"
+            |            "name": "house name*",
+            |            "postcode": "GF49JH*"
             |          }
             |        }
             |      ],
@@ -227,8 +227,8 @@ class AmendUkPropertyAnnualSubmissionControllerISpec extends V2IntegrationBaseSp
             |            "qualifyingAmountExpenditure": 3000.64567890
             |          },
             |          "building": {
-            |            "number": "house numberrdfyucrvtyfcvgcfvgbkgxdcfvjgbgxdchfvjgbgfdhgjvbkdcfvygbhdfchgjbdcfhvgjbkhcdfvgjbdfcgjvhbcfhgjvbhdcfhvgy",
-            |            "postcode": "GF49JHrdfyucrvtyfcvgcfvgbkgxdcfvjgbgxdchfvjgbgfdhgjvbkdcfvygbhdfchgjbdcfhvgjbkhcdfvgjbdfcgjvhbcfhgjvbhdcfhvgy"
+            |            "number": "house number*",
+            |            "postcode": "GF49JH*"
             |          }
             |        }
             |      ],
@@ -266,10 +266,10 @@ class AmendUkPropertyAnnualSubmissionControllerISpec extends V2IntegrationBaseSp
               "/ukNonFhlProperty/allowances/otherCapitalAllowance",
               "/ukNonFhlProperty/allowances/costOfReplacingDomesticGoods",
               "/ukNonFhlProperty/allowances/electricChargePointAllowance",
-              "/ukNonFhlProperty/allowances/structuredBuildingAllowance/1/amount",
-              "/ukNonFhlProperty/allowances/structuredBuildingAllowance/1/firstYear/qualifyingAmountExpenditure",
-              "/ukNonFhlProperty/allowances/enhancedStructuredBuildingAllowance/1/amount",
-              "/ukNonFhlProperty/allowances/enhancedStructuredBuildingAllowance/1/firstYear/qualifyingAmountExpenditure",
+              "/ukNonFhlProperty/allowances/structuredBuildingAllowance/0/amount",
+              "/ukNonFhlProperty/allowances/structuredBuildingAllowance/0/firstYear/qualifyingAmountExpenditure",
+              "/ukNonFhlProperty/allowances/enhancedStructuredBuildingAllowance/0/amount",
+              "/ukNonFhlProperty/allowances/enhancedStructuredBuildingAllowance/0/firstYear/qualifyingAmountExpenditure",
               "/ukNonFhlProperty/allowances/zeroEmissionsCarAllowance",
               "/ukNonFhlProperty/adjustments/lossBroughtForward",
               "/ukNonFhlProperty/adjustments/balancingCharge",
@@ -378,6 +378,344 @@ class AmendUkPropertyAnnualSubmissionControllerISpec extends V2IntegrationBaseSp
           |}
           |""".stripMargin)
 
+      val allInvalidValueRequestBodyJson = Json.parse(
+        """
+          |{
+          |  "ukFhlProperty": {
+          |    "allowances": {
+          |      "annualInvestmentAllowance": 1000.7650,
+          |      "businessPremisesRenovationAllowance": 1000.6350,
+          |      "otherCapitalAllowance": 1000.72650,
+          |      "electricChargePointAllowance": 1000.834650,
+          |      "zeroEmissionsCarAllowance": 1000.923540
+          |    },
+          |    "adjustments": {
+          |      "lossBroughtForward": 1000.10346,
+          |      "privateUseAdjustment": 1000.22540,
+          |      "balancingCharge": 1000.336540,
+          |      "periodOfGraceAdjustment": true,
+          |      "businessPremisesRenovationAllowanceBalancingCharges": 1000.4253420,
+          |      "nonResidentLandlord": true,
+          |      "rentARoom": {
+          |        "jointlyLet": true
+          |      }
+          |    }
+          |  },
+          |  "ukNonFhlProperty": {
+          |    "allowances": {
+          |      "annualInvestmentAllowance": 2000.5635430,
+          |      "zeroEmissionGoodsVehicleAllowance": 2000.6235450,
+          |      "businessPremisesRenovationAllowance": 2000.745360,
+          |      "otherCapitalAllowance": 2000.8243520,
+          |      "costOfReplacingDomesticGoods": 2000.9064532,
+          |      "electricChargePointAllowance": 3000.1234520,
+          |      "structuredBuildingAllowance": [
+          |        {
+          |          "amount": 3000.303645,
+          |          "firstYear": {
+          |            "qualifyingDate": "2020-01-01",
+          |            "qualifyingAmountExpenditure": 3000.4234520
+          |          },
+          |          "building": {
+          |            "name": "house name",
+          |            "postcode": "GF49JH"
+          |          }
+          |        }
+          |      ],
+          |      "enhancedStructuredBuildingAllowance": [
+          |        {
+          |          "amount": 3000.534560,
+          |          "firstYear": {
+          |            "qualifyingDate": "2020-01-01",
+          |            "qualifyingAmountExpenditure": 3000.656430
+          |          },
+          |          "building": {
+          |            "number": "house number",
+          |            "postcode": "GF49JH"
+          |          }
+          |        }
+          |      ],
+          |      "zeroEmissionsCarAllowance": 3000.2364560
+          |    },
+          |    "adjustments": {
+          |      "lossBroughtForward": 2000.13460,
+          |      "balancingCharge": 2000.26530,
+          |      "privateUseAdjustment": 2000.2645230,
+          |      "businessPremisesRenovationAllowanceBalancingCharges": 2000.434560,
+          |      "nonResidentLandlord": true,
+          |      "rentARoom": {
+          |        "jointlyLet": true
+          |      }
+          |    }
+          |  }
+          |}
+          |""".stripMargin)
+
+      val allInvalidDateFormatRequestBodyJson = Json.parse(
+        """
+          |{
+          |  "ukFhlProperty": {
+          |    "allowances": {
+          |      "annualInvestmentAllowance": 1000.50,
+          |      "businessPremisesRenovationAllowance": 1000.60,
+          |      "otherCapitalAllowance": 1000.70,
+          |      "electricChargePointAllowance": 1000.80,
+          |      "zeroEmissionsCarAllowance": 1000.90
+          |    },
+          |    "adjustments": {
+          |      "lossBroughtForward": 1000.10,
+          |      "privateUseAdjustment": 1000.20,
+          |      "balancingCharge": 1000.30,
+          |      "periodOfGraceAdjustment": true,
+          |      "businessPremisesRenovationAllowanceBalancingCharges": 1000.40,
+          |      "nonResidentLandlord": true,
+          |      "rentARoom": {
+          |        "jointlyLet": true
+          |      }
+          |    }
+          |  },
+          |  "ukNonFhlProperty": {
+          |    "allowances": {
+          |      "annualInvestmentAllowance": 2000.50,
+          |      "zeroEmissionGoodsVehicleAllowance": 2000.60,
+          |      "businessPremisesRenovationAllowance": 2000.70,
+          |      "otherCapitalAllowance": 2000.80,
+          |      "costOfReplacingDomesticGoods": 2000.90,
+          |      "electricChargePointAllowance": 3000.10,
+          |      "structuredBuildingAllowance": [
+          |        {
+          |          "amount": 3000.30,
+          |          "firstYear": {
+          |            "qualifyingDate": "2034620-01-01",
+          |            "qualifyingAmountExpenditure": 3000.40
+          |          },
+          |          "building": {
+          |            "name": "house name",
+          |            "postcode": "GF49JH"
+          |          }
+          |        }
+          |      ],
+          |      "enhancedStructuredBuildingAllowance": [
+          |        {
+          |          "amount": 3000.50,
+          |          "firstYear": {
+          |            "qualifyingDate": "2031420-01-01",
+          |            "qualifyingAmountExpenditure": 3000.60
+          |          },
+          |          "building": {
+          |            "number": "house number",
+          |            "postcode": "GF49JH"
+          |          }
+          |        }
+          |      ],
+          |      "zeroEmissionsCarAllowance": 3000.20
+          |    },
+          |    "adjustments": {
+          |      "lossBroughtForward": 2000.10,
+          |      "balancingCharge": 2000.20,
+          |      "privateUseAdjustment": 2000.30,
+          |      "businessPremisesRenovationAllowanceBalancingCharges": 2000.40,
+          |      "nonResidentLandlord": true,
+          |      "rentARoom": {
+          |        "jointlyLet": true
+          |      }
+          |    }
+          |  }
+          |}
+          |""".stripMargin)
+
+      val allInvalidStringRequestBodyJson = Json.parse(
+        """
+          |{
+          |  "ukFhlProperty": {
+          |    "allowances": {
+          |      "annualInvestmentAllowance": 1000.50,
+          |      "businessPremisesRenovationAllowance": 1000.60,
+          |      "otherCapitalAllowance": 1000.70,
+          |      "electricChargePointAllowance": 1000.80,
+          |      "zeroEmissionsCarAllowance": 1000.90
+          |    },
+          |    "adjustments": {
+          |      "lossBroughtForward": 1000.10,
+          |      "privateUseAdjustment": 1000.20,
+          |      "balancingCharge": 1000.30,
+          |      "periodOfGraceAdjustment": true,
+          |      "businessPremisesRenovationAllowanceBalancingCharges": 1000.40,
+          |      "nonResidentLandlord": true,
+          |      "rentARoom": {
+          |        "jointlyLet": true
+          |      }
+          |    }
+          |  },
+          |  "ukNonFhlProperty": {
+          |    "allowances": {
+          |      "annualInvestmentAllowance": 2000.50,
+          |      "zeroEmissionGoodsVehicleAllowance": 2000.60,
+          |      "businessPremisesRenovationAllowance": 2000.70,
+          |      "otherCapitalAllowance": 2000.80,
+          |      "costOfReplacingDomesticGoods": 2000.90,
+          |      "electricChargePointAllowance": 3000.10,
+          |      "structuredBuildingAllowance": [
+          |        {
+          |          "amount": 3000.30,
+          |          "firstYear": {
+          |            "qualifyingDate": "2020-01-01",
+          |            "qualifyingAmountExpenditure": 3000.40
+          |          },
+          |          "building": {
+          |            "name": "house name*",
+          |            "postcode": "GF49JH*"
+          |          }
+          |        }
+          |      ],
+          |      "enhancedStructuredBuildingAllowance": [
+          |        {
+          |          "amount": 3000.50,
+          |          "firstYear": {
+          |            "qualifyingDate": "2020-01-01",
+          |            "qualifyingAmountExpenditure": 3000.60
+          |          },
+          |          "building": {
+          |            "number": "house number*",
+          |            "postcode": "GF49JH*"
+          |          }
+          |        }
+          |      ],
+          |      "zeroEmissionsCarAllowance": 3000.20
+          |    },
+          |    "adjustments": {
+          |      "lossBroughtForward": 2000.10,
+          |      "balancingCharge": 2000.20,
+          |      "privateUseAdjustment": 2000.30,
+          |      "businessPremisesRenovationAllowanceBalancingCharges": 2000.40,
+          |      "nonResidentLandlord": true,
+          |      "rentARoom": {
+          |        "jointlyLet": true
+          |      }
+          |    }
+          |  }
+          |}
+          |""".stripMargin)
+
+      val allInvalidValueRequestError: MtdError = ValueFormatError.copy(
+        message = "One or more monetary fields are invalid",
+        paths = Some(List(
+          "/ukFhlProperty/allowances/annualInvestmentAllowance",
+          "/ukFhlProperty/allowances/businessPremisesRenovationAllowance",
+          "/ukFhlProperty/allowances/otherCapitalAllowance",
+          "/ukFhlProperty/allowances/electricChargePointAllowance",
+          "/ukFhlProperty/allowances/zeroEmissionsCarAllowance",
+          "/ukFhlProperty/adjustments/lossBroughtForward",
+          "/ukFhlProperty/adjustments/privateUseAdjustment",
+          "/ukFhlProperty/adjustments/balancingCharge",
+          "/ukFhlProperty/adjustments/businessPremisesRenovationAllowanceBalancingCharges",
+          "/ukNonFhlProperty/allowances/annualInvestmentAllowance",
+          "/ukNonFhlProperty/allowances/zeroEmissionGoodsVehicleAllowance",
+          "/ukNonFhlProperty/allowances/businessPremisesRenovationAllowance",
+          "/ukNonFhlProperty/allowances/otherCapitalAllowance",
+          "/ukNonFhlProperty/allowances/costOfReplacingDomesticGoods",
+          "/ukNonFhlProperty/allowances/electricChargePointAllowance",
+          "/ukNonFhlProperty/allowances/structuredBuildingAllowance/0/amount",
+          "/ukNonFhlProperty/allowances/structuredBuildingAllowance/0/firstYear/qualifyingAmountExpenditure",
+          "/ukNonFhlProperty/allowances/enhancedStructuredBuildingAllowance/0/amount",
+          "/ukNonFhlProperty/allowances/enhancedStructuredBuildingAllowance/0/firstYear/qualifyingAmountExpenditure",
+          "/ukNonFhlProperty/allowances/zeroEmissionsCarAllowance",
+          "/ukNonFhlProperty/adjustments/lossBroughtForward",
+          "/ukNonFhlProperty/adjustments/balancingCharge",
+          "/ukNonFhlProperty/adjustments/privateUseAdjustment",
+          "/ukNonFhlProperty/adjustments/businessPremisesRenovationAllowanceBalancingCharges"
+        ))
+      )
+
+      val allInvalidDateFormatRequestError: MtdError = DateFormatError.copy(
+        message = "The supplied date format is not valid",
+        paths = Some(List(
+          "/ukNonFhlProperty/allowances/structuredBuildingAllowance/0/firstYear/qualifyingDate",
+          "/ukNonFhlProperty/allowances/enhancedStructuredBuildingAllowance/0/firstYear/qualifyingDate"
+        ))
+      )
+
+      val allInvalidStringRequestError: MtdError = StringFormatError.copy(
+        message = "One or more strings have been added with the incorrect format",
+        paths = Some(List(
+          "/ukNonFhlProperty/allowances/structuredBuildingAllowance/0/building/name",
+          "/ukNonFhlProperty/allowances/structuredBuildingAllowance/0/building/postcode",
+          "/ukNonFhlProperty/allowances/enhancedStructuredBuildingAllowance/0/building/number",
+          "/ukNonFhlProperty/allowances/enhancedStructuredBuildingAllowance/0/building/postcode"
+        ))
+      )
+
+      "validation error occurs" when {
+        def validationErrorTest(requestNino: String,
+                                requestBusinessId: String,
+                                requestTaxYear: String,
+                                requestBody: JsValue,
+                                expectedStatus: Int,
+                                expectedBody: MtdError): Unit = {
+          s"validation fails with ${expectedBody.code} error" in new Test {
+
+            override val nino: String = requestNino
+            override val businessId: String = requestBusinessId
+            override val taxYear: String = requestTaxYear
+            override val requestBodyJson: JsValue = requestBody
+
+            override def setupStubs(): StubMapping = {
+              AuthStub.authorised()
+              MtdIdLookupStub.ninoFound(nino)
+            }
+
+            val response: WSResponse = await(request().put(requestBodyJson))
+            response.status shouldBe expectedStatus
+            response.json shouldBe Json.toJson(expectedBody)
+          }
+        }
+
+        val input = Seq(
+          ("AA1123A", "XAIS12345678910", "2021-22", validRequestBodyJson, BAD_REQUEST, NinoFormatError),
+          ("AA123456A", "XAIS1234dfxgchjbn5678910", "2021-22", validRequestBodyJson, BAD_REQUEST, BusinessIdFormatError),
+          ("AA123456A", "XAIS12345678910", "2021-24", validRequestBodyJson, BAD_REQUEST, RuleTaxYearRangeInvalidError),
+          ("AA123456A", "XAIS12345678910", "2019-20", validRequestBodyJson, BAD_REQUEST, RuleTaxYearNotSupportedError),
+          ("AA123456A", "XAIS12345678910", "2021-22", Json.parse(s"""{}""".stripMargin), BAD_REQUEST, RuleIncorrectOrEmptyBodyError),
+          ("AA123456A", "XAIS12345678910", "2021-22", allInvalidValueRequestBodyJson, BAD_REQUEST, allInvalidValueRequestError),
+          ("AA123456A", "XAIS12345678910", "2021-22", allInvalidDateFormatRequestBodyJson, BAD_REQUEST, allInvalidDateFormatRequestError),
+          ("AA123456A", "XAIS12345678910", "2021-22", allInvalidStringRequestBodyJson, BAD_REQUEST, allInvalidStringRequestError)
+        )
+
+        input.foreach(args => (validationErrorTest _).tupled(args))
+      }
+
+      "downstream service error" when {
+        def serviceErrorTest(ifsStatus: Int, downstreamCode: String, expectedStatus: Int, expectedBody: MtdError): Unit = {
+          s"downstream returns an $downstreamCode error and status $ifsStatus" in new Test {
+
+            override def setupStubs(): StubMapping = {
+              AuthStub.authorised()
+              MtdIdLookupStub.ninoFound(nino)
+              IfsStub.onError(IfsStub.PUT, ifsUri, ifsStatus, errorBody(downstreamCode))
+            }
+
+            val response: WSResponse = await(request().put(requestBodyJson))
+            response.status shouldBe expectedStatus
+            response.json shouldBe Json.toJson(expectedBody)
+          }
+        }
+
+        val input = Seq(
+          (BAD_REQUEST, "INVALID_TAXABLE_ENTITY_ID", BAD_REQUEST, NinoFormatError),
+          (BAD_REQUEST, "INVALID_TAX_YEAR", BAD_REQUEST, TaxYearFormatError),
+          (BAD_REQUEST, "INVALID_INCOMESOURCEID", BAD_REQUEST, BusinessIdFormatError),
+          (BAD_REQUEST, "INVALID_PAYLOAD", INTERNAL_SERVER_ERROR, DownstreamError),
+          (BAD_REQUEST, "INVALID_CORRELATIONID", INTERNAL_SERVER_ERROR, DownstreamError),
+          (NOT_FOUND, "INCOME_SOURCE_NOT_FOUND", NOT_FOUND, NotFoundError),
+          (UNPROCESSABLE_ENTITY, "INCOMPATIBLE_PAYLOAD", BAD_REQUEST, RuleTypeOfBusinessIncorrect),
+          (UNPROCESSABLE_ENTITY, "TAX_YEAR_NOT_SUPPORTED", BAD_REQUEST, RuleTaxYearNotSupportedError),
+          (UNPROCESSABLE_ENTITY, "DUPLICATE_COUNTRY_CODE", INTERNAL_SERVER_ERROR, DownstreamError),
+          (INTERNAL_SERVER_ERROR, "SERVER_ERROR", INTERNAL_SERVER_ERROR, DownstreamError),
+          (SERVICE_UNAVAILABLE, "SERVICE_UNAVAILABLE", INTERNAL_SERVER_ERROR, DownstreamError)
+        )
+
+        input.foreach(args => (serviceErrorTest _).tupled(args))
+      }
     }
   }
 }

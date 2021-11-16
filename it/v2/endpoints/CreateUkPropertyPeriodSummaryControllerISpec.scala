@@ -122,7 +122,12 @@ class CreateUkPropertyPeriodSummaryControllerISpec extends V2IntegrationBaseSpec
     """
       |{
       |  "fromDate": "2018-04-06",
-      |  "toDate": "20190406"
+      |  "toDate": "20190406",
+      |  "ukFhlProperty":{
+      |    "expenses": {
+      |       "consolidatedExpense": 988.18
+      |    }
+      |  }
       |}
     """.stripMargin
   )
@@ -131,7 +136,12 @@ class CreateUkPropertyPeriodSummaryControllerISpec extends V2IntegrationBaseSpec
     """
       |{
       |  "fromDate": "20180406",
-      |  "toDate": "2019-04-06"
+      |  "toDate": "2019-04-06",
+      |  "ukFhlProperty":{
+      |    "expenses": {
+      |       "consolidatedExpense": 988.18
+      |    }
+      |  }
       |}
     """.stripMargin
   )

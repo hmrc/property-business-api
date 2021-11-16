@@ -16,25 +16,18 @@
 
 package v2.controllers.requestParsers.validators.validations
 
-import v2.models.errors.{ValueFormatError, MtdError}
+import v2.models.errors.{MtdError, RuleBuildingNameNumber}
+import v2.models.request.amendUkPropertyAnnualSubmission.ukNonFhlProperty.Building
 
-object NumberValidation {
+import scala.util.{Failure, Success, Try}
 
-  def validateOptional(field: Option[BigDecimal], path: String): List[MtdError] = {
-    field match {
-      case None => NoValidationErrors
-      case Some(value) => validate(value, path)
-    }
+object BuildingValidation {
+
+  def validate(body: Building): List[MtdError] = Try {
+    body.name.isEmpty && body.number.isEmpty
   }
-
-
-   def validate(field: BigDecimal, path: String): List[MtdError] = {
-    if (field >= 0 && field < 100000000000.00 && field.scale <= 2) {
-      Nil
-    } else {
-      List(
-        ValueFormatError.copy(paths = Some(Seq(path)))
-      )
-    }
+  match {
+    case Success(_) => List(RuleBuildingNameNumber)
+    case Failure(_) => NoValidationErrors
   }
 }

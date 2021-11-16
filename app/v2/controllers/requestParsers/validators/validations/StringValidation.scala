@@ -16,11 +16,11 @@
 
 package v2.controllers.requestParsers.validators.validations
 
-import v2.models.errors.{ValueFormatError, MtdError}
+import v2.models.errors.{MtdError, StringFormatError}
 
-object NumberValidation {
+object StringValidation {
 
-  def validateOptional(field: Option[BigDecimal], path: String): List[MtdError] = {
+  def validateOptional(field: Option[String], path: String) = {
     field match {
       case None => NoValidationErrors
       case Some(value) => validate(value, path)
@@ -28,13 +28,8 @@ object NumberValidation {
   }
 
 
-   def validate(field: BigDecimal, path: String): List[MtdError] = {
-    if (field >= 0 && field < 100000000000.00 && field.scale <= 2) {
-      Nil
-    } else {
-      List(
-        ValueFormatError.copy(paths = Some(Seq(path)))
-      )
-    }
+  def validate(field: String, path: String): List[MtdError] = {
+    val regex = "^[0-9a-zA-Z{À-˿’}\\- _&`():.'^]{1,90}$"
+    if(field.matches(regex)) NoValidationErrors else List(StringFormatError.copy(paths = Some(Seq(path))))
   }
 }

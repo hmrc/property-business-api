@@ -183,7 +183,7 @@ class AmendUkPropertyAnnualSubmissionValidator @Inject()(appConfig: AppConfig) e
     List(
     NumberValidation.validate(
       field = buildingAllowance.amount,
-      path = "/ukNonFhlProperty/allowances/structuredBuildingAllowance/amount"
+      path = s"/ukNonFhlProperty/allowances/structuredBuildingAllowance/$index/amount"
     ),
       DateValidation.validateOtherDate(
         field = buildingAllowance.firstYear.map(_.qualifyingDate),
@@ -211,7 +211,7 @@ class AmendUkPropertyAnnualSubmissionValidator @Inject()(appConfig: AppConfig) e
     List(
     NumberValidation.validate(
       field = buildingAllowance.amount,
-      path = "/ukNonFhlProperty/allowances/enhancedStructuredBuildingAllowance/amount"
+      path = s"/ukNonFhlProperty/allowances/enhancedStructuredBuildingAllowance/$index/amount"
     ),
       DateValidation.validateOtherDate(
         field = buildingAllowance.firstYear.map(_.qualifyingDate),

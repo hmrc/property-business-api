@@ -1161,7 +1161,7 @@ class AmendUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec with JsonErr
           )
         ) shouldBe List(ValueFormatError.copy(paths =
           Some(List(
-            "/ukNonFhlProperty/allowances/enhancedStructuredBuildingAllowance/amount",
+            "/ukNonFhlProperty/allowances/enhancedStructuredBuildingAllowance/0/amount",
             "/ukNonFhlProperty/allowances/enhancedStructuredBuildingAllowance/0/firstYear/qualifyingAmountExpenditure"
           ))
         ))

@@ -21,13 +21,14 @@ import play.api.mvc.Result
 import uk.gov.hmrc.http.HeaderCarrier
 import v2.mocks.MockIdGenerator
 import v2.mocks.hateoas.MockHateoasFactory
-import v2.mocks.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService}
+import v2.mocks.requestParsers.MockAmendUkPropertyPeriodSummaryRequestParser
+import v2.mocks.services.{MockAmendUkPropertyPeriodSummaryService, MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService}
 import v2.models.audit.{AuditError, AuditEvent, AuditResponse}
 import v2.models.domain.Nino
 import v2.models.errors._
 import v2.models.hateoas.HateoasWrapper
 import v2.models.outcomes.ResponseWrapper
-import v2.models.request.amendUkPropertyPeriodSummary.{AmendUkPropertyPeriodSummaryRawData, AmendUkPropertyPeriodSummaryRequest, AmendUkPropertyPeriodSummaryRequestBody}
+import v2.models.request.amendUkPropertyPeriodSummary._
 import v2.models.request.common.ukFhlProperty.{UkFhlProperty, UkFhlPropertyExpenses, UkFhlPropertyIncome}
 import v2.models.request.common.ukNonFhlProperty.{UkNonFhlProperty, UkNonFhlPropertyExpenses, UkNonFhlPropertyIncome}
 import v2.models.request.common.ukPropertyRentARoom.{UkPropertyExpensesRentARoom, UkPropertyIncomeRentARoom}
@@ -312,7 +313,7 @@ class AmendUkPropertyPeriodSummaryControllerSpec
             .returns(Right(requestData))
 
           MockAmendUkPropertyService
-            .amendUkProperty(requestData)
+            .amend(requestData)
             .returns(Future.successful(Right(ResponseWrapper(correlationId, ()))))
 
           MockHateoasFactory
@@ -337,14 +338,14 @@ class AmendUkPropertyPeriodSummaryControllerSpec
             .returns(Right(requestData))
 
           MockAmendUkPropertyService
-            .amendUkProperty(requestData)
+            .amend(requestData)
             .returns(Future.successful(Right(ResponseWrapper(correlationId, ()))))
 
           MockHateoasFactory
-            .wrap((), AmendUkPropertyPeriodSummaryHateoasData(nino, businessId, submissionId))
+            .wrap((), AmendUkPropertyPeriodSummaryHateoasData(nino, taxYear, businessId, submissionId))
             .returns(HateoasWrapper((), Seq.empty))
 
-          val result: Future[Result] = controller.handleRequest(nino, businessId, taxYear)(fakePostRequest(requestBodyJson))
+          val result: Future[Result] = controller.handleRequest(nino, taxYear, businessId, submissionId)(fakePostRequest(requestBodyJson))
           status(result) shouldBe OK
           header("X-CorrelationId", result) shouldBe Some(correlationId)
 
@@ -359,10 +360,10 @@ class AmendUkPropertyPeriodSummaryControllerSpec
           s"a ${error.code} error is returned from the parser" in new Test {
 
             MockAmendUkPropertyRequestParser
-              .parseRequest(rawData)
+              .requestFor(rawData)
               .returns(Left(ErrorWrapper(correlationId, error, None)))
 
-            val result: Future[Result] = controller.handleRequest(nino, businessId, taxYear)(fakePostRequest(requestBodyJson))
+            val result: Future[Result] = controller.handleRequest(nino, taxYear, businessId, submissionId)(fakePostRequest(requestBodyJson))
 
             status(result) shouldBe expectedStatus
             contentAsJson(result) shouldBe Json.toJson(error)
@@ -402,14 +403,14 @@ class AmendUkPropertyPeriodSummaryControllerSpec
           s"a $mtdError error is returned from the service" in new Test {
 
             MockAmendUkPropertyRequestParser
-              .parseRequest(rawData)
+              .requestFor(rawData)
               .returns(Right(requestData))
 
             MockAmendUkPropertyService
               .amend(requestData)
               .returns(Future.successful(Left(ErrorWrapper(correlationId, mtdError))))
 
-            val result: Future[Result] = controller.handleRequest(nino, taxYear, businessId)(fakePostRequest(requestBodyJson))
+            val result: Future[Result] = controller.handleRequest(nino, taxYear, businessId, submissionId)(fakePostRequest(requestBodyJson))
 
             status(result) shouldBe expectedStatus
             contentAsJson(result) shouldBe Json.toJson(mtdError)

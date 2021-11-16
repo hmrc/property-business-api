@@ -25,7 +25,6 @@ import v2.controllers.requestParsers.AmendUkPropertyPeriodSummaryRequestParser
 import v2.hateoas.HateoasFactory
 import v2.models.audit.{AuditEvent, AuditResponse}
 import v2.models.errors._
-import v2.models.request.amendUkPropertyPeriodSummary.AmendUkPropertyPeriodSummaryRawData
 import v2.services._
 
 import javax.inject.{Inject, Singleton}
@@ -44,7 +43,7 @@ class AmendUkPropertyPeriodSummaryController @Inject()(val authService: Enrolmen
 
   implicit val endpointLogContext: EndpointLogContext =
     EndpointLogContext(controllerName = "AmendUkPropertyController", endpointName = "amendUkProperty")
-  def handleRequest(nino: String, businessId: String, submissionId: String): Action[JsValue] =
+  def handleRequest(nino: String, taxYear: String, businessId: String, submissionId: String): Action[JsValue] =
     authorisedAction(nino).async(parse.json) { implicit request =>
       implicit val correlationId: String = idGenerator.getCorrelationId
       logger.info(message = s"[${endpointLogContext.controllerName}][${endpointLogContext.endpointName}] " +
@@ -53,9 +52,9 @@ class AmendUkPropertyPeriodSummaryController @Inject()(val authService: Enrolmen
       val result =
         for {
           parsedRequest <- EitherT.fromEither[Future](parser.parseRequest(rawData))
-          serviceResponse <- EitherT(service.amendUkPropertyService(parsedRequest))
+          serviceResponse <- EitherT(service.amendUkPropertyPeriodSummary(parsedRequest))
           vendorResponse <- EitherT.fromEither[Future](
-            hateoasFactory.wrap(serviceResponse.responseData, AmendUkPropertyPeriodSummaryHateoasData(nino, businessId, submissionId)).asRight[ErrorWrapper])
+            hateoasFactory.wrap(serviceResponse.responseData, AmendUkPropertyPeriodSummaryHateoasData(nino, taxYear, businessId, submissionId)).asRight[ErrorWrapper])
         } yield {
           logger.info(
             s"[${endpointLogContext.controllerName}][${endpointLogContext.endpointName}] - " +

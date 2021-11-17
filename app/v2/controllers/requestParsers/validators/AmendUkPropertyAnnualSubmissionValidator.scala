@@ -21,7 +21,7 @@ import javax.inject.{Inject, Singleton}
 import v2.controllers.requestParsers.validators.validations._
 import v2.models.errors._
 import v2.models.request.amendUkPropertyAnnualSubmission.ukFhlProperty.{UkFhlProperty, UkFhlPropertyAllowances}
-import v2.models.request.amendUkPropertyAnnualSubmission.ukNonFhlProperty.{FirstYear, StructuredBuildingAllowance, UkNonFhlProperty, UkNonFhlPropertyAllowances}
+import v2.models.request.amendUkPropertyAnnualSubmission.ukNonFhlProperty.{StructuredBuildingAllowance, UkNonFhlProperty, UkNonFhlPropertyAllowances}
 import v2.models.request.amendUkPropertyAnnualSubmission.{AmendUkPropertyAnnualSubmissionRawData, AmendUkPropertyAnnualSubmissionRequestBody}
 
 @Singleton
@@ -53,10 +53,8 @@ class AmendUkPropertyAnnualSubmissionValidator @Inject()(appConfig: AppConfig) e
     List(schemeValidation, extraValidation, emptyStructureValidation)
   }
 
-
   private def bodyFieldValidation: AmendUkPropertyAnnualSubmissionRawData => List[List[MtdError]] = { data =>
     val body = data.body.as[AmendUkPropertyAnnualSubmissionRequestBody]
-
 
     List(
       flattenErrors(
@@ -76,7 +74,6 @@ class AmendUkPropertyAnnualSubmissionValidator @Inject()(appConfig: AppConfig) e
       )
     )
   }
-
 
   private def validateUkFhlProperty(ukFhlProperty: UkFhlProperty): List[MtdError] = {
     List(
@@ -176,9 +173,6 @@ class AmendUkPropertyAnnualSubmissionValidator @Inject()(appConfig: AppConfig) e
     ).flatten
   }
 
-
-
-
   private def validateStructuredBuildingAllowance(buildingAllowance: StructuredBuildingAllowance, index: Int): List[MtdError] = {
     List(
     NumberValidation.validate(
@@ -235,8 +229,6 @@ class AmendUkPropertyAnnualSubmissionValidator @Inject()(appConfig: AppConfig) e
       ),
     ).flatten
   }
-
-
 
   private def validateFhlAllowances(allowances: UkFhlPropertyAllowances) : List[MtdError] = {
     AllowancesValidation.validate(

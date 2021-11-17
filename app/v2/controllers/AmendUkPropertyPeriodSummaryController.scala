@@ -17,14 +17,19 @@
 package v2.controllers
 
 import cats.data.EitherT
+import cats.implicits.catsSyntaxEitherId
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.{Action, ControllerComponents}
 import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.play.audit.http.connector.AuditResult
 import utils.{IdGenerator, Logging}
 import v2.controllers.requestParsers.AmendUkPropertyPeriodSummaryRequestParser
 import v2.hateoas.HateoasFactory
-import v2.models.audit.{AuditEvent, AuditResponse}
+import v2.models.audit.{AmendUkPropertyPeriodicAuditDetail, AuditEvent, AuditResponse}
 import v2.models.errors._
+import v2.models.request.amendUkPropertyPeriodSummary.AmendUkPropertyPeriodSummaryRawData
+import v2.models.response.amendUkPropertyPeriodSummary.AmendUkPropertyPeriodSummaryHateoasData
+import v2.models.response.amendUkPropertyPeriodSummary.AmendUkPropertyPeriodSummaryResponse.AmendUkPropertyLinksFactory
 import v2.services._
 
 import javax.inject.{Inject, Singleton}
@@ -43,29 +48,33 @@ class AmendUkPropertyPeriodSummaryController @Inject()(val authService: Enrolmen
 
   implicit val endpointLogContext: EndpointLogContext =
     EndpointLogContext(controllerName = "AmendUkPropertyController", endpointName = "amendUkProperty")
+
   def handleRequest(nino: String, taxYear: String, businessId: String, submissionId: String): Action[JsValue] =
     authorisedAction(nino).async(parse.json) { implicit request =>
       implicit val correlationId: String = idGenerator.getCorrelationId
       logger.info(message = s"[${endpointLogContext.controllerName}][${endpointLogContext.endpointName}] " +
         s"with correlationId : $correlationId")
-        val rawData = AmendUkPropertyPeriodSummaryRawData(nino, businessId, submissionId, request.body)
-      val result =
-        for {
-          parsedRequest <- EitherT.fromEither[Future](parser.parseRequest(rawData))
-          serviceResponse <- EitherT(service.amendUkPropertyPeriodSummary(parsedRequest))
-          vendorResponse <- EitherT.fromEither[Future](
-            hateoasFactory.wrap(serviceResponse.responseData, AmendUkPropertyPeriodSummaryHateoasData(nino, taxYear, businessId, submissionId)).asRight[ErrorWrapper])
-        } yield {
-          logger.info(
-            s"[${endpointLogContext.controllerName}][${endpointLogContext.endpointName}] - " +
-              s"Success response received with CorrelationId: ${serviceResponse.correlationId}")
+        val rawData = AmendUkPropertyPeriodSummaryRawData(nino, taxYear, businessId, submissionId, request.body)
+        val result =
+          for {
+            parsedRequest <- EitherT.fromEither[Future](parser.parseRequest(rawData))
+            serviceResponse <- EitherT(service.amendUkPropertyPeriodSummary(parsedRequest))
+            vendorResponse <- EitherT.fromEither[Future](
+              hateoasFactory.wrap(serviceResponse.responseData,
+                AmendUkPropertyPeriodSummaryHateoasData(nino, taxYear, businessId, submissionId)).
+                asRight[ErrorWrapper]
+            )
+          } yield {
+            logger.info(
+              s"[${endpointLogContext.controllerName}][${endpointLogContext.endpointName}] - " +
+                s"Success response received with CorrelationId: ${serviceResponse.correlationId}")
 
-          val response = Json.toJson(vendorResponse)
+            val response = Json.toJson(vendorResponse)
 
-          auditSubmission(AmendUkPropertyPeriodicAuditDetail(request.userDetails, nino, businessId, submissionId, request.body,
+            auditSubmission(AmendUkPropertyPeriodicAuditDetail(request.userDetails, nino, taxYear, businessId, submissionId, request.body,
             serviceResponse.correlationId, AuditResponse(OK, Right(Some(response)))))
 
-          Ok(Json.toJson(vendorResponse))
+            Ok(Json.toJson(vendorResponse))
             .withApiHeaders(serviceResponse.correlationId)
         }
 
@@ -73,14 +82,12 @@ class AmendUkPropertyPeriodSummaryController @Inject()(val authService: Enrolmen
         val resCorrelationId = errorWrapper.correlationId
         val result = errorResult(errorWrapper).withApiHeaders(resCorrelationId)
 
+        auditSubmission(AmendUkPropertyPeriodicAuditDetail(request.userDetails, nino, taxYear, businessId, submissionId, request.body,
+          correlationId, AuditResponse(result.header.status, Left(errorWrapper.auditErrors))))
+
         logger.warn(
           s"[${endpointLogContext.controllerName}][${endpointLogContext.endpointName}] - " +
             s"Error response received with CorrelationId: $resCorrelationId")
-
-
-        auditSubmission(AmendUkPropertyPeriodicAuditDetail(request.userDetails, nino, businessId, submissionId, request.body,
-          correlationId, AuditResponse(result.header.status, Left(errorWrapper.auditErrors))))
-
         result
       }.merge
     }
@@ -89,17 +96,15 @@ class AmendUkPropertyPeriodSummaryController @Inject()(val authService: Enrolmen
     (errorWrapper.error: @unchecked) match {
       case BadRequestError |
            NinoFormatError |
+           TaxYearFormatError |
            BusinessIdFormatError |
            SubmissionIdFormatError |
            RuleTaxYearRangeInvalidError |
            RuleTaxYearNotSupportedError |
            RuleIncorrectOrEmptyBodyError |
            RuleTypeOfBusinessIncorrect|
-           RuleBothExpensesSuppliedError|
-           MtdErrorWithCustomMessage(CountryCodeFormatError.code) |
            MtdErrorWithCustomMessage(ValueFormatError.code) |
            MtdErrorWithCustomMessage(RuleBothExpensesSuppliedError.code) |
-           MtdErrorWithCustomMessage(RuleCountryCodeError.code) |
            MtdErrorWithCustomMessage(RuleIncorrectOrEmptyBodyError.code) |
            RuleDuplicateSubmission =>
         BadRequest(Json.toJson(errorWrapper))
@@ -110,7 +115,7 @@ class AmendUkPropertyPeriodSummaryController @Inject()(val authService: Enrolmen
 
   private def auditSubmission(details: AmendUkPropertyPeriodicAuditDetail)
                              (implicit hc: HeaderCarrier,
-                              ec: ExecutionContext) = {
+                              ec: ExecutionContext): Future[AuditResult] =  {
     val event = AuditEvent("AmendUkPropertyIncomeAndExpenditurePeriodSummary", "Amend-Uk-Property-Income-And-Expenditure-Period-Summary", details)
     auditService.auditEvent(event)
   }

@@ -71,4 +71,7 @@ trait HateoasLinks {
   def retrieveUkPropertyPeriodicSummary(appConfig: AppConfig, nino: String, businessId: String, taxYear: String, submissionId: String): Link =
     Link(href = ukPropertyPeriodicSummaryUri(appConfig, nino, businessId, taxYear, submissionId), method = GET, rel = SELF)
 
+  def amendUkPropertyPeriodicSummary(appConfig: AppConfig, nino: String, businessId: String, taxYear: String, submissionId: String): Link =
+    Link(href = ukPropertyPeriodicSummaryUri(appConfig, nino, businessId, taxYear, submissionId), method = PUT, rel = AMEND_UK_PROPERTY_PERIOD_SUMMARY)
+
 }

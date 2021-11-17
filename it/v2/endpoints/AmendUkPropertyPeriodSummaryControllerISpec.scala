@@ -82,7 +82,7 @@ class AmendUkPropertyPeriodSummaryControllerISpec extends V2IntegrationBaseSpec 
         |""".stripMargin
     )
 
-    private val requestBodyJsonConsolidatedExpense = Json.parse(
+    private val requestBodyJsonConsolidatedExpenses = Json.parse(
       """{
         |    "ukFhlProperty":{
         |        "income": {
@@ -93,7 +93,7 @@ class AmendUkPropertyPeriodSummaryControllerISpec extends V2IntegrationBaseSpec 
         |            }
         |        },
         |        "expenses": {
-        |            "consolidatedExpense": 988.18
+        |            "consolidatedExpenses": 988.18
         |        }
         |    },
         |    "ukNonFhlProperty": {
@@ -108,7 +108,7 @@ class AmendUkPropertyPeriodSummaryControllerISpec extends V2IntegrationBaseSpec 
         |            }
         |        },
         |        "expenses": {
-        |            "consolidatedExpense": 988.18
+        |            "consolidatedExpenses": 988.18
         |        }
         |    }
         |}
@@ -191,7 +191,7 @@ class AmendUkPropertyPeriodSummaryControllerISpec extends V2IntegrationBaseSpec 
         |            "rentARoom": {
         |                "amountClaimed": 8842.43
         |            },
-        |            "consolidatedExpense": 5000.99
+        |            "consolidatedExpenses": 5000.99
         |        }
         |    },
         |    "ukNonFhlProperty": {
@@ -218,7 +218,7 @@ class AmendUkPropertyPeriodSummaryControllerISpec extends V2IntegrationBaseSpec 
         |            "rentARoom": {
         |                "amountClaimed": 8842.43
         |            },
-        |            "consolidatedExpense": 5000.99
+        |            "consolidatedExpenses": 5000.99
         |        }
         |    }
         |}
@@ -319,7 +319,7 @@ class AmendUkPropertyPeriodSummaryControllerISpec extends V2IntegrationBaseSpec 
             IfsStub.onSuccess(IfsStub.PUT, ifsUri, NO_CONTENT, JsObject.empty)
           }
 
-          val response: WSResponse = await(request().put(requestBodyJsonConsolidatedExpense))
+          val response: WSResponse = await(request().put(requestBodyJsonConsolidatedExpenses))
           response.status shouldBe OK
           response.json shouldBe responseBody
           response.header("X-CorrelationId").nonEmpty shouldBe true
@@ -332,7 +332,7 @@ class AmendUkPropertyPeriodSummaryControllerISpec extends V2IntegrationBaseSpec 
               IfsStub.onSuccess(IfsStub.PUT, ifsUri, NO_CONTENT, JsObject.empty)
             }
 
-            val response: WSResponse = await(request().put(requestBodyJsonConsolidatedExpense))
+            val response: WSResponse = await(request().put(requestBodyJsonConsolidatedExpenses))
             response.status shouldBe OK
             response.json shouldBe responseBody
             response.header("Content-Type").nonEmpty shouldBe true
@@ -391,10 +391,10 @@ class AmendUkPropertyPeriodSummaryControllerISpec extends V2IntegrationBaseSpec 
               val input = Seq(
                 ("AA1123A", "2022-23", "XAIS12345678910", "4557ecb5-fd32-48cc-81f5-e6acd1099f3c", requestBodyJson, BAD_REQUEST, NinoFormatError),
                 ("AA123456A", "20223", "XAIS12345678910", "4557ecb5-fd32-48cc-81f5-e6acd1099f3c", requestBodyJson, BAD_REQUEST, TaxYearFormatError),
-                ("AA123456A", "2021-23", "XAIS12345678910", "4557ecb5-fd32-48cc-81f5-e6acd1099f3c", requestBodyJson, BAD_REQUEST, RuleTaxYearRangeInvalidError),
-                ("AA123456A", "2021-22", "XAIS12345678910", "4557ecb5-fd32-48cc-81f5-e6acd1099f3c", requestBodyJson, BAD_REQUEST, RuleTaxYearNotSupportedError),
                 ("AA123456A", "2022-23", "XAIS1234dfxgchjbn5678910", "4557ecb5-fd32-48cc-81f5-e6acd1099f3c", requestBodyJson, BAD_REQUEST, BusinessIdFormatError),
                 ("AA123456A", "2022-23", "XAIS12345678910", "4557ecb5-fd32-awefwaef48cc-81f5-e6acd1099f3c", requestBodyJson, BAD_REQUEST, SubmissionIdFormatError),
+                ("AA123456A", "2021-23", "XAIS12345678910", "4557ecb5-fd32-48cc-81f5-e6acd1099f3c", requestBodyJson, BAD_REQUEST, RuleTaxYearRangeInvalidError),
+                ("AA123456A", "2021-22", "XAIS12345678910", "4557ecb5-fd32-48cc-81f5-e6acd1099f3c", requestBodyJson, BAD_REQUEST, RuleTaxYearNotSupportedError),
                 ("AA123456A", "2022-23", "XAIS12345678910", "4557ecb5-fd32-48cc-81f5-e6acd1099f3c", Json.parse(s"""{"ukFhlProperty": {}}""".stripMargin), BAD_REQUEST,
                   RuleIncorrectOrEmptyBodyError.copy(paths = Some(Seq("/ukFhlProperty")))),
                 ("AA123456A", "2022-23", "XAIS12345678910", "4557ecb5-fd32-48cc-81f5-e6acd1099f3c", invalidValueRequestJson, BAD_REQUEST, allInvalidValueRequestError),
@@ -423,11 +423,11 @@ class AmendUkPropertyPeriodSummaryControllerISpec extends V2IntegrationBaseSpec 
 
               val input = Seq(
                 (BAD_REQUEST, "INVALID_TAXABLE_ENTITY_ID", BAD_REQUEST, NinoFormatError),
-                (BAD_REQUEST, "INVALID_TAXABLE_ENTITY_ID", BAD_REQUEST, TaxYearFormatError),
+                (BAD_REQUEST, "INVALID_TAX_YEAR", BAD_REQUEST, TaxYearFormatError),
                 (BAD_REQUEST, "INVALID_INCOMESOURCEID", BAD_REQUEST, BusinessIdFormatError),
+                (BAD_REQUEST, "INVALID_SUBMISSION_ID", BAD_REQUEST, SubmissionIdFormatError),
                 (BAD_REQUEST, "INVALID_CORRELATIONID", INTERNAL_SERVER_ERROR, DownstreamError),
                 (BAD_REQUEST, "INVALID_PAYLOAD", INTERNAL_SERVER_ERROR, DownstreamError),
-                (BAD_REQUEST, "INVALID_SUBMISSION_ID", BAD_REQUEST, SubmissionIdFormatError),
                 (CONFLICT, "INCOMPATIBLE_PAYLOAD", BAD_REQUEST, RuleTypeOfBusinessIncorrect),
                 (CONFLICT, "DUPLICATE_COUNTRY_CODE", BAD_REQUEST, RuleDuplicateSubmission),
                 (CONFLICT, "TAX_YEAR_NOT_SUPPORTED", BAD_REQUEST, RuleTaxYearNotSupportedError),

@@ -18,4 +18,4 @@ package v2.models.request.retrieveForeignPropertyAnnualSubmission
 
 import v2.models.request.RawData
 
-case class RetrieveForeignPropertyAnnualSubmissionRawData(nino: String, businessId: String, taxYear: String) extends RawData
+case class RetrieveForeignPropertyAnnualSubmissionRawData(nino: String, businessId: String, taxYear: String, submissionId: String) extends RawData

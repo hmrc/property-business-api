@@ -96,7 +96,7 @@ class CreateUkPropertyPeriodSummaryControllerISpec extends V2IntegrationBaseSpec
       |            }
       |        },
       |        "expenses": {
-      |            "consolidatedExpense": 988.18
+      |            "consolidatedExpenses": 988.18
       |        }
       |    },
       |    "ukNonFhlProperty": {
@@ -111,7 +111,7 @@ class CreateUkPropertyPeriodSummaryControllerISpec extends V2IntegrationBaseSpec
       |            }
       |        },
       |        "expenses": {
-      |            "consolidatedExpense": 988.18
+      |            "consolidatedExpenses": 988.18
       |        }
       |    }
       |}
@@ -125,7 +125,7 @@ class CreateUkPropertyPeriodSummaryControllerISpec extends V2IntegrationBaseSpec
       |  "toDate": "20190406",
       |  "ukFhlProperty":{
       |    "expenses": {
-      |       "consolidatedExpense": 988.18
+      |       "consolidatedExpenses": 988.18
       |    }
       |  }
       |}
@@ -139,7 +139,7 @@ class CreateUkPropertyPeriodSummaryControllerISpec extends V2IntegrationBaseSpec
       |  "toDate": "2019-04-06",
       |  "ukFhlProperty":{
       |    "expenses": {
-      |       "consolidatedExpense": 988.18
+      |       "consolidatedExpenses": 988.18
       |    }
       |  }
       |}
@@ -422,7 +422,7 @@ class CreateUkPropertyPeriodSummaryControllerISpec extends V2IntegrationBaseSpec
           IfsStub.onSuccess(IfsStub.POST, ifsUri, ifsQueryParams, Status.OK, ifsResponse)
         }
 
-        val response: WSResponse = await(request().post(requestBodyJsonConsolidatedExpense))
+        val response: WSResponse = await(request().post(requestBodyJson))
         response.status shouldBe Status.CREATED
         response.json shouldBe responseBody
         response.header("Content-Type") shouldBe Some("application/json")

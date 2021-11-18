@@ -25,10 +25,121 @@ import v2.models.hateoas.Link
 import v2.models.hateoas.Method._
 
 class RetrieveUkPropertyPeriodSummaryResponseSpec extends UnitSpec with MockAppConfig {
-  val json: JsValue = Json.parse(
+
+  val downstreamJson: JsValue = Json.parse(
     """
       |{
-      | "dummy": "A"
+      |  "submittedOn": "2020-06-17T10:53:38Z",
+      |  "fromDate": "2019-01-29",
+      |  "toDate": "2020-03-29",
+      |  "ukFhlProperty": {
+      |    "income": {
+      |      "periodAmount": 0,
+      |      "taxDeducted": 0,
+      |      "ukFhlRentARoom": {
+      |        "rentsReceived": 0
+      |      }
+      |    },
+      |    "expenses": {
+      |      "premisesRunningCosts": 0,
+      |      "repairsAndMaintenance": 0,
+      |      "financialCosts": 0,
+      |      "professionalFees": 0,
+      |      "costOfServices": 0,
+      |      "other": 0,
+      |      "consolidatedExpenses": 0,
+      |      "travelCosts": 0,
+      |      "ukFhlRentARoom": {
+      |        "amountClaimed": 0
+      |      }
+      |    }
+      |  },
+      |  "ukOtherProperty": {
+      |    "income": {
+      |      "premiumsOfLeaseGrant": 0,
+      |      "reversePremiums": 0,
+      |      "periodAmount": 0,
+      |      "taxDeducted": 0,
+      |      "otherIncome": 0,
+      |      "ukOtherRentARoom": {
+      |        "rentsReceived": 0
+      |      }
+      |    },
+      |    "expenses": {
+      |      "premisesRunningCosts": 0,
+      |      "repairsAndMaintenance": 0,
+      |      "financialCosts": 0,
+      |      "professionalFees": 0,
+      |      "costOfServices": 0,
+      |      "other": 0,
+      |      "consolidatedExpenses": 0,
+      |      "residentialFinancialCost": 0,
+      |      "travelCosts": 0,
+      |      "residentialFinancialCostsCarriedForward": 0,
+      |      "ukOtherRentARoom": {
+      |        "amountClaimed": 0
+      |      }
+      |    }
+      |  }
+      |}
+    """.stripMargin
+  )
+
+  val mtdJson: JsValue = Json.parse(
+    """
+      |{
+      |  "submittedOn": "2020-06-17T10:53:38Z",
+      |  "fromDate": "2019-01-29",
+      |  "toDate": "2020-03-29",
+      |  "ukFhlProperty": {
+      |    "income": {
+      |      "periodAmount": 0,
+      |      "taxDeducted": 0,
+      |      "rentARoom": {
+      |        "rentsReceived": 0
+      |      }
+      |    },
+      |    "expenses": {
+      |      "premisesRunningCosts": 0,
+      |      "repairsAndMaintenance": 0,
+      |      "financialCosts": 0,
+      |      "professionalFees": 0,
+      |      "costOfServices": 0,
+      |      "other": 0,
+      |      "consolidatedExpenses": 0,
+      |      "travelCosts": 0,
+      |      "rentARoom": {
+      |        "amountClaimed": 0
+      |      }
+      |    }
+      |  },
+      |  "ukOtherProperty": {
+      |    "income": {
+      |      "premiumsOfLeaseGrant": 0,
+      |      "reversePremiums": 0,
+      |      "periodAmount": 0,
+      |      "taxDeducted": 0,
+      |      "otherIncome": 0,
+      |      "rentARoom": {
+      |        "rentsReceived": 0
+      |      }
+      |    },
+      |    "expenses": {
+      |      "premisesRunningCosts": 0,
+      |      "repairsAndMaintenance": 0,
+      |      "financialCosts": 0,
+      |      "professionalFees": 0,
+      |      "costOfServices": 0,
+      |      "other": 0,
+      |      "consolidatedExpenses": 0,
+      |      "residentialFinancialCost": 0,
+      |      "travelCosts": 0,
+      |      "residentialFinancialCostsCarriedForward": 0,
+      |      "rentARoom": {
+      |        "amountClaimed": 0
+      |      }
+      |    }
+      |  }
       |}
     """.stripMargin
   )
@@ -41,6 +152,20 @@ class RetrieveUkPropertyPeriodSummaryResponseSpec extends UnitSpec with MockAppC
     taxYear = "2022-23",
     submissionId = "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
   )
+
+  "RetrieveUkPropertyPeriodSummaryResponse" when {
+    "read from downstream JSON" should {
+      "create the expected model" in {
+        downstreamJson.as[RetrieveUkPropertyPeriodSummaryResponse] shouldBe model
+      }
+    }
+
+    "written to JSON" should {
+      "produce the expected JSON" in {
+        Json.toJson(model) shouldBe mtdJson
+      }
+    }
+  }
 
   "hateoasLinksFactory" when {
     "wrap" should {

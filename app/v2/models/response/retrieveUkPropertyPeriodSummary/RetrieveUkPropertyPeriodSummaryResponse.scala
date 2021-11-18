@@ -23,7 +23,11 @@ import v2.models.hateoas.Link
 import v2.hateoas.HateoasLinks
 import v2.models.hateoas.HateoasData
 
-case class RetrieveUkPropertyPeriodSummaryResponse(dummy: String)
+case class RetrieveUkPropertyPeriodSummaryResponse(submittedOn: String,
+                                                   fromDate: String,
+                                                   toDate: String,
+                                                   ukFhlProperty: Option[String],
+                                                   ukNonFhlProperty: Option[String])
 
 object RetrieveUkPropertyPeriodSummaryResponse extends HateoasLinks {
   implicit val format: OFormat[RetrieveUkPropertyPeriodSummaryResponse] = Json.format[RetrieveUkPropertyPeriodSummaryResponse]

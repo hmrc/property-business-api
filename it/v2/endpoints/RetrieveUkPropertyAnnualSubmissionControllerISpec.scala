@@ -358,7 +358,7 @@ class RetrieveUkPropertyAnnualSubmissionControllerISpec extends V2IntegrationBas
 
         val response: WSResponse = await(request().get())
         response.status shouldBe Status.BAD_REQUEST
-        response.json shouldBe Json.toJson(RuleTypeOfBusinessIncorrect)
+        response.json shouldBe Json.toJson(RuleTypeOfBusinessIncorrectError)
       }
     }
   }

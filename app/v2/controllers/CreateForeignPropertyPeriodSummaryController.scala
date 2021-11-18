@@ -110,7 +110,7 @@ class CreateForeignPropertyPeriodSummaryController @Inject()(val authService: En
            RuleMisalignedPeriodError |
            RuleNotContiguousPeriodError |
            MtdErrorWithCustomMessage(RuleIncorrectOrEmptyBodyError.code) |
-           RuleDuplicateSubmission =>
+           RuleDuplicateSubmissionError =>
         BadRequest(Json.toJson(errorWrapper))
       case NotFoundError => NotFound(Json.toJson(errorWrapper))
       case DownstreamError => InternalServerError(Json.toJson(errorWrapper))

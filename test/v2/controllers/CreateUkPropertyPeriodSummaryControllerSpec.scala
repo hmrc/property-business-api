@@ -449,7 +449,7 @@ class CreateUkPropertyPeriodSummaryControllerSpec
           (RuleMisalignedPeriodError, BAD_REQUEST),
           (RuleNotContiguousPeriodError, BAD_REQUEST),
           (RuleToDateBeforeFromDateError, BAD_REQUEST),
-          (RuleDuplicateSubmission, BAD_REQUEST)
+          (RuleDuplicateSubmissionError, BAD_REQUEST)
         )
 
         input.foreach(args => (serviceErrors _).tupled(args))

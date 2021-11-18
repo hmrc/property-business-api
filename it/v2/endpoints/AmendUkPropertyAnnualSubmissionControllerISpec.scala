@@ -31,7 +31,7 @@ class AmendUkPropertyAnnualSubmissionControllerISpec extends V2IntegrationBaseSp
 
     val nino: String = "TC663795B"
     val businessId: String = "XAIS12345678910"
-    val taxYear: String = "2021-22"
+    val taxYear: String = "2022-23"
     val correlationId: String = "X-123"
 
     val requestBodyJson: JsValue = Json.parse(
@@ -113,19 +113,19 @@ class AmendUkPropertyAnnualSubmissionControllerISpec extends V2IntegrationBaseSp
         |{
         |  "links":[
         |    {
-        |      "href":"",
+        |      "href":"/individuals/business/property/uk/TC663795B/XAIS12345678910/annual/2022-23",
+        |      "method":"PUT",
+        |      "rel":"amend-uk-property-annual-submission"
+        |    },
+        |    {
+        |      "href":"/individuals/business/property/uk/TC663795B/XAIS12345678910/annual/2022-23",
         |      "method":"GET",
         |      "rel":"self"
         |    },
         |    {
-        |      "href":"",
-        |      "method":"",
-        |      "rel":""
-        |    },
-        |    {
-        |      "href":"",
-        |      "method":"",
-        |      "rel":""
+        |      "href":"/individuals/business/property/TC663795B/XAIS12345678910/annual/2022-23",
+        |      "method":"DELETE",
+        |      "rel":"delete-property-annual-submission"
         |    }
         |  ]
         |}
@@ -136,7 +136,13 @@ class AmendUkPropertyAnnualSubmissionControllerISpec extends V2IntegrationBaseSp
 
     def uri: String = s"/uk/$nino/$businessId/annual/$taxYear"
 
-    def ifsUri: String = s"/income-tax/business/property/annual?taxableEntityId=$nino&incomeSourceId=$businessId&taxYear=$taxYear"
+    def ifsUri: String = s"/income-tax/business/property/annual"
+
+      def ifsQueryParams: Map[String, String] = Map(
+      "taxableEntityId" -> nino,
+      "incomeSourceId" -> businessId,
+      "taxYear" -> taxYear
+      )
 
     def request(): WSRequest = {
       setupStubs()
@@ -162,7 +168,7 @@ class AmendUkPropertyAnnualSubmissionControllerISpec extends V2IntegrationBaseSp
         override def setupStubs(): StubMapping = {
           AuthStub.authorised()
           MtdIdLookupStub.ninoFound(nino)
-          IfsStub.onSuccess(IfsStub.PUT, ifsUri, NO_CONTENT, JsObject.empty)
+          IfsStub.onSuccess(IfsStub.PUT, ifsUri, ifsQueryParams, NO_CONTENT, JsObject.empty)
         }
 
         val response: WSResponse = await(request().put(requestBodyJson))
@@ -251,40 +257,46 @@ class AmendUkPropertyAnnualSubmissionControllerISpec extends V2IntegrationBaseSp
         val allInvalidFieldsRequestError: List[MtdError] = List(
           ValueFormatError.copy(
             paths = Some(List(
+              "/ukFhlProperty/adjustments/lossBroughtForward",
+              "/ukFhlProperty/adjustments/balancingCharge",
+              "/ukFhlProperty/adjustments/privateUseAdjustment",
+              "/ukFhlProperty/adjustments/businessPremisesRenovationAllowanceBalancingCharges",
               "/ukFhlProperty/allowances/annualInvestmentAllowance",
               "/ukFhlProperty/allowances/businessPremisesRenovationAllowance",
               "/ukFhlProperty/allowances/otherCapitalAllowance",
               "/ukFhlProperty/allowances/electricChargePointAllowance",
               "/ukFhlProperty/allowances/zeroEmissionsCarAllowance",
-              "/ukFhlProperty/adjustments/lossBroughtForward",
-              "/ukFhlProperty/adjustments/privateUseAdjustment",
-              "/ukFhlProperty/adjustments/balancingCharge",
-              "/ukFhlProperty/adjustments/businessPremisesRenovationAllowanceBalancingCharges",
+              "/ukNonFhlProperty/adjustments/lossBroughtForward",
+              "/ukNonFhlProperty/adjustments/balancingCharge",
+              "/ukNonFhlProperty/adjustments/privateUseAdjustment",
+              "/ukNonFhlProperty/adjustments/businessPremisesRenovationAllowanceBalancingCharges",
               "/ukNonFhlProperty/allowances/annualInvestmentAllowance",
               "/ukNonFhlProperty/allowances/zeroEmissionGoodsVehicleAllowance",
               "/ukNonFhlProperty/allowances/businessPremisesRenovationAllowance",
               "/ukNonFhlProperty/allowances/otherCapitalAllowance",
               "/ukNonFhlProperty/allowances/costOfReplacingDomesticGoods",
               "/ukNonFhlProperty/allowances/electricChargePointAllowance",
+              "/ukNonFhlProperty/allowances/zeroEmissionsCarAllowance",
               "/ukNonFhlProperty/allowances/structuredBuildingAllowance/0/amount",
               "/ukNonFhlProperty/allowances/structuredBuildingAllowance/0/firstYear/qualifyingAmountExpenditure",
               "/ukNonFhlProperty/allowances/enhancedStructuredBuildingAllowance/0/amount",
-              "/ukNonFhlProperty/allowances/enhancedStructuredBuildingAllowance/0/firstYear/qualifyingAmountExpenditure",
-              "/ukNonFhlProperty/allowances/zeroEmissionsCarAllowance",
-              "/ukNonFhlProperty/adjustments/lossBroughtForward",
-              "/ukNonFhlProperty/adjustments/balancingCharge",
-              "/ukNonFhlProperty/adjustments/privateUseAdjustment",
-              "/ukNonFhlProperty/adjustments/businessPremisesRenovationAllowanceBalancingCharges"
+              "/ukNonFhlProperty/allowances/enhancedStructuredBuildingAllowance/0/firstYear/qualifyingAmountExpenditure"
+            ))
+          ),
+          DateFormatError.copy(
+            paths = Some(List(
+              "/ukNonFhlProperty/allowances/structuredBuildingAllowance/0/firstYear/qualifyingDate",
+              "/ukNonFhlProperty/allowances/enhancedStructuredBuildingAllowance/0/firstYear/qualifyingDate"
             ))
           ),
           StringFormatError.copy(
             paths = Some(List(
-              "/ukNonFhlProperty/allowances/structuredBuildingAllowance/1/firstYear/qualifyingDate",
-              "/ukNonFhlProperty/allowances/enhancedStructuredBuildingAllowance/1/firstYear/qualifyingDate",
-              "/ukNonFhlProperty/allowances/structuredBuildingAllowance/1/building/name",
-              "/ukNonFhlProperty/allowances/enhancedStructuredBuildingAllowance/1/building/number"
+              "/ukNonFhlProperty/allowances/structuredBuildingAllowance/0/building/name",
+              "/ukNonFhlProperty/allowances/structuredBuildingAllowance/0/building/postcode",
+              "/ukNonFhlProperty/allowances/enhancedStructuredBuildingAllowance/0/building/number",
+              "/ukNonFhlProperty/allowances/enhancedStructuredBuildingAllowance/0/building/postcode"
             ))
-          ),
+          )
         )
 
         val wrappedErrors: ErrorWrapper = ErrorWrapper(
@@ -600,30 +612,30 @@ class AmendUkPropertyAnnualSubmissionControllerISpec extends V2IntegrationBaseSp
       val allInvalidValueRequestError: MtdError = ValueFormatError.copy(
         message = "One or more monetary fields are invalid",
         paths = Some(List(
+          "/ukFhlProperty/adjustments/lossBroughtForward",
+          "/ukFhlProperty/adjustments/balancingCharge",
+          "/ukFhlProperty/adjustments/privateUseAdjustment",
+          "/ukFhlProperty/adjustments/businessPremisesRenovationAllowanceBalancingCharges",
           "/ukFhlProperty/allowances/annualInvestmentAllowance",
           "/ukFhlProperty/allowances/businessPremisesRenovationAllowance",
           "/ukFhlProperty/allowances/otherCapitalAllowance",
           "/ukFhlProperty/allowances/electricChargePointAllowance",
           "/ukFhlProperty/allowances/zeroEmissionsCarAllowance",
-          "/ukFhlProperty/adjustments/lossBroughtForward",
-          "/ukFhlProperty/adjustments/privateUseAdjustment",
-          "/ukFhlProperty/adjustments/balancingCharge",
-          "/ukFhlProperty/adjustments/businessPremisesRenovationAllowanceBalancingCharges",
+          "/ukNonFhlProperty/adjustments/lossBroughtForward",
+          "/ukNonFhlProperty/adjustments/balancingCharge",
+          "/ukNonFhlProperty/adjustments/privateUseAdjustment",
+          "/ukNonFhlProperty/adjustments/businessPremisesRenovationAllowanceBalancingCharges",
           "/ukNonFhlProperty/allowances/annualInvestmentAllowance",
           "/ukNonFhlProperty/allowances/zeroEmissionGoodsVehicleAllowance",
           "/ukNonFhlProperty/allowances/businessPremisesRenovationAllowance",
           "/ukNonFhlProperty/allowances/otherCapitalAllowance",
           "/ukNonFhlProperty/allowances/costOfReplacingDomesticGoods",
           "/ukNonFhlProperty/allowances/electricChargePointAllowance",
+          "/ukNonFhlProperty/allowances/zeroEmissionsCarAllowance",
           "/ukNonFhlProperty/allowances/structuredBuildingAllowance/0/amount",
           "/ukNonFhlProperty/allowances/structuredBuildingAllowance/0/firstYear/qualifyingAmountExpenditure",
           "/ukNonFhlProperty/allowances/enhancedStructuredBuildingAllowance/0/amount",
-          "/ukNonFhlProperty/allowances/enhancedStructuredBuildingAllowance/0/firstYear/qualifyingAmountExpenditure",
-          "/ukNonFhlProperty/allowances/zeroEmissionsCarAllowance",
-          "/ukNonFhlProperty/adjustments/lossBroughtForward",
-          "/ukNonFhlProperty/adjustments/balancingCharge",
-          "/ukNonFhlProperty/adjustments/privateUseAdjustment",
-          "/ukNonFhlProperty/adjustments/businessPremisesRenovationAllowanceBalancingCharges"
+          "/ukNonFhlProperty/allowances/enhancedStructuredBuildingAllowance/0/firstYear/qualifyingAmountExpenditure"
         ))
       )
 
@@ -671,14 +683,14 @@ class AmendUkPropertyAnnualSubmissionControllerISpec extends V2IntegrationBaseSp
         }
 
         val input = Seq(
-          ("AA1123A", "XAIS12345678910", "2021-22", validRequestBodyJson, BAD_REQUEST, NinoFormatError),
-          ("AA123456A", "XAIS1234dfxgchjbn5678910", "2021-22", validRequestBodyJson, BAD_REQUEST, BusinessIdFormatError),
+          ("AA1123A", "XAIS12345678910", "2022-23", validRequestBodyJson, BAD_REQUEST, NinoFormatError),
+          ("AA123456A", "XAIS1234dfxgchjbn5678910", "2022-23", validRequestBodyJson, BAD_REQUEST, BusinessIdFormatError),
           ("AA123456A", "XAIS12345678910", "2021-24", validRequestBodyJson, BAD_REQUEST, RuleTaxYearRangeInvalidError),
-          ("AA123456A", "XAIS12345678910", "2019-20", validRequestBodyJson, BAD_REQUEST, RuleTaxYearNotSupportedError),
-          ("AA123456A", "XAIS12345678910", "2021-22", Json.parse(s"""{}""".stripMargin), BAD_REQUEST, RuleIncorrectOrEmptyBodyError),
-          ("AA123456A", "XAIS12345678910", "2021-22", allInvalidValueRequestBodyJson, BAD_REQUEST, allInvalidValueRequestError),
-          ("AA123456A", "XAIS12345678910", "2021-22", allInvalidDateFormatRequestBodyJson, BAD_REQUEST, allInvalidDateFormatRequestError),
-          ("AA123456A", "XAIS12345678910", "2021-22", allInvalidStringRequestBodyJson, BAD_REQUEST, allInvalidStringRequestError)
+          ("AA123456A", "XAIS12345678910", "2021-22", validRequestBodyJson, BAD_REQUEST, RuleTaxYearNotSupportedError),
+          ("AA123456A", "XAIS12345678910", "2022-23", Json.parse(s"""{}""".stripMargin), BAD_REQUEST, RuleIncorrectOrEmptyBodyError),
+          ("AA123456A", "XAIS12345678910", "2022-23", allInvalidValueRequestBodyJson, BAD_REQUEST, allInvalidValueRequestError),
+          ("AA123456A", "XAIS12345678910", "2022-23", allInvalidDateFormatRequestBodyJson, BAD_REQUEST, allInvalidDateFormatRequestError),
+          ("AA123456A", "XAIS12345678910", "2022-23", allInvalidStringRequestBodyJson, BAD_REQUEST, allInvalidStringRequestError)
         )
 
         input.foreach(args => (validationErrorTest _).tupled(args))
@@ -707,7 +719,7 @@ class AmendUkPropertyAnnualSubmissionControllerISpec extends V2IntegrationBaseSp
           (BAD_REQUEST, "INVALID_PAYLOAD", INTERNAL_SERVER_ERROR, DownstreamError),
           (BAD_REQUEST, "INVALID_CORRELATIONID", INTERNAL_SERVER_ERROR, DownstreamError),
           (NOT_FOUND, "INCOME_SOURCE_NOT_FOUND", NOT_FOUND, NotFoundError),
-          (UNPROCESSABLE_ENTITY, "INCOMPATIBLE_PAYLOAD", BAD_REQUEST, RuleTypeOfBusinessIncorrect),
+          (UNPROCESSABLE_ENTITY, "INCOMPATIBLE_PAYLOAD", BAD_REQUEST, RuleTypeOfBusinessIncorrectError),
           (UNPROCESSABLE_ENTITY, "TAX_YEAR_NOT_SUPPORTED", BAD_REQUEST, RuleTaxYearNotSupportedError),
           (UNPROCESSABLE_ENTITY, "DUPLICATE_COUNTRY_CODE", INTERNAL_SERVER_ERROR, DownstreamError),
           (INTERNAL_SERVER_ERROR, "SERVER_ERROR", INTERNAL_SERVER_ERROR, DownstreamError),

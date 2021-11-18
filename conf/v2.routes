@@ -1,4 +1,5 @@
 GET        /uk/:nino/:businessId/annual/:taxYear             v2.controllers.RetrieveUkPropertyAnnualSubmissionController.handleRequest(nino: String, businessId: String, taxYear: String)
+PUT        /uk/:nino/:businessId/annual/:taxYear             v2.controllers.AmendUkPropertyAnnualSubmissionController.handleRequest(nino: String, businessId: String, taxYear: String)
 POST       /uk/:nino/:businessId/period/:taxYear             v2.controllers.CreateUkPropertyPeriodSummaryController.handleRequest(nino: String, businessId: String, taxYear: String)
 
 GET        /:nino/:businessId/period                         v2.controllers.ListForeignPropertiesPeriodSummariesController.handleRequest(nino: String, businessId: String, fromDate: Option[String], toDate: Option[String])

@@ -21,7 +21,6 @@ import cats.implicits._
 import javax.inject.{Inject, Singleton}
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.{Action, ControllerComponents}
-import uk.gov.hmrc.http.HeaderCarrier
 import utils.{IdGenerator, Logging}
 import v2.controllers.requestParsers.AmendUkPropertyAnnualSubmissionRequestParser
 import v2.hateoas.HateoasFactory
@@ -48,8 +47,7 @@ class AmendUkPropertyAnnualSubmissionController @Inject()(val authService: Enrol
   def handleRequest(nino: String, businessId: String, taxYear: String): Action[JsValue] =
     authorisedAction(nino).async(parse.json) { implicit request =>
       implicit val correlationId: String = idGenerator.getCorrelationId
-      logger.info(message = s"[${endpointLogContext.controllerName}][${endpointLogContext.endpointName}] " +
-        s"with correlationId : $correlationId")
+      logger.info(message = s"[${endpointLogContext.controllerName}][${endpointLogContext.endpointName}] with correlationId : $correlationId")
       val rawData = AmendUkPropertyAnnualSubmissionRawData(nino, businessId, taxYear, request.body)
       val result =
         for {
@@ -58,11 +56,10 @@ class AmendUkPropertyAnnualSubmissionController @Inject()(val authService: Enrol
           vendorResponse <- EitherT.fromEither[Future](
             hateoasFactory.wrap(serviceResponse.responseData, AmendUkPropertyAnnualSubmissionHateoasData(nino, businessId, taxYear)).asRight[ErrorWrapper])
         } yield {
+
           logger.info(
             s"[${endpointLogContext.controllerName}][${endpointLogContext.endpointName}] - " +
             s"Success response recieved with CorrelationId: ${serviceResponse.correlationId}")
-
-          val response = Json.toJson(vendorResponse)
 
           Ok(Json.toJson(vendorResponse))
             .withApiHeaders(serviceResponse.correlationId)
@@ -84,7 +81,18 @@ class AmendUkPropertyAnnualSubmissionController @Inject()(val authService: Enrol
 
     (errorWrapper.error: @unchecked) match {
       case BadRequestError |
-           NinoFormatError => BadRequest(Json.toJson(errorWrapper))
+           NinoFormatError |
+           TaxYearFormatError |
+           BusinessIdFormatError |
+           RuleTaxYearRangeInvalidError |
+           RuleTaxYearNotSupportedError |
+           MtdErrorWithCustomMessage(ValueFormatError.code) |
+           MtdErrorWithCustomMessage(RuleIncorrectOrEmptyBodyError.code) |
+           RuleTypeOfBusinessIncorrectError |
+           RuleBothAllowancesSuppliedError |
+           RuleBuildingNameNumberError |
+           MtdErrorWithCustomMessage(DateFormatError.code) |
+           MtdErrorWithCustomMessage(StringFormatError.code) => BadRequest(Json.toJson(errorWrapper))
       case DownstreamError => InternalServerError(Json.toJson(errorWrapper))
       case NotFoundError => NotFound(Json.toJson(errorWrapper))
     }

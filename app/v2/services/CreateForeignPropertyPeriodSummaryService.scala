@@ -60,7 +60,7 @@ class CreateForeignPropertyPeriodSummaryService @Inject()(connector: CreateForei
       "SERVICE_UNAVAILABLE" -> DownstreamError,
       "INVALID_PAYLOAD" -> DownstreamError,
       "INVALID_CORRELATIONID" -> DownstreamError,
-      "DUPLICATE_SUBMISSION" -> RuleDuplicateSubmission,
+      "DUPLICATE_SUBMISSION" -> RuleDuplicateSubmissionError,
       "INVALID_DATE_RANGE" -> RuleToDateBeforeFromDateError
     )
 

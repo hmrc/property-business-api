@@ -21,7 +21,7 @@ import javax.inject.{Inject, Singleton}
 import v2.controllers.requestParsers.validators.validations._
 import v2.models.errors._
 import v2.models.request.amendUkPropertyAnnualSubmission.ukFhlProperty.{UkFhlProperty, UkFhlPropertyAllowances}
-import v2.models.request.amendUkPropertyAnnualSubmission.ukNonFhlProperty.{FirstYear, StructuredBuildingAllowance, UkNonFhlProperty, UkNonFhlPropertyAllowances}
+import v2.models.request.amendUkPropertyAnnualSubmission.ukNonFhlProperty.{StructuredBuildingAllowance, UkNonFhlProperty, UkNonFhlPropertyAllowances}
 import v2.models.request.amendUkPropertyAnnualSubmission.{AmendUkPropertyAnnualSubmissionRawData, AmendUkPropertyAnnualSubmissionRequestBody}
 
 @Singleton

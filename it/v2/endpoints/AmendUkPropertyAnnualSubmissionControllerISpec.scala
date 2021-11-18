@@ -283,18 +283,18 @@ class AmendUkPropertyAnnualSubmissionControllerISpec extends V2IntegrationBaseSp
               "/ukNonFhlProperty/allowances/enhancedStructuredBuildingAllowance/0/firstYear/qualifyingAmountExpenditure"
             ))
           ),
-          DateFormatError.copy(
-            paths = Some(List(
-              "/ukNonFhlProperty/allowances/structuredBuildingAllowance/0/firstYear/qualifyingDate",
-              "/ukNonFhlProperty/allowances/enhancedStructuredBuildingAllowance/0/firstYear/qualifyingDate"
-            ))
-          ),
           StringFormatError.copy(
             paths = Some(List(
               "/ukNonFhlProperty/allowances/structuredBuildingAllowance/0/building/name",
               "/ukNonFhlProperty/allowances/structuredBuildingAllowance/0/building/postcode",
               "/ukNonFhlProperty/allowances/enhancedStructuredBuildingAllowance/0/building/number",
               "/ukNonFhlProperty/allowances/enhancedStructuredBuildingAllowance/0/building/postcode"
+            ))
+          ),
+          DateFormatError.copy(
+            paths = Some(List(
+              "/ukNonFhlProperty/allowances/structuredBuildingAllowance/0/firstYear/qualifyingDate",
+              "/ukNonFhlProperty/allowances/enhancedStructuredBuildingAllowance/0/firstYear/qualifyingDate"
             ))
           )
         )
@@ -609,6 +609,156 @@ class AmendUkPropertyAnnualSubmissionControllerISpec extends V2IntegrationBaseSp
           |}
           |""".stripMargin)
 
+      val buildingNameNumberBodyJson = Json.parse(
+        """
+          |{
+          |  "ukFhlProperty": {
+          |    "allowances": {
+          |      "annualInvestmentAllowance": 1000.50,
+          |      "businessPremisesRenovationAllowance": 1000.60,
+          |      "otherCapitalAllowance": 1000.70,
+          |      "electricChargePointAllowance": 1000.80,
+          |      "zeroEmissionsCarAllowance": 1000.90
+          |    },
+          |    "adjustments": {
+          |      "lossBroughtForward": 1000.10,
+          |      "privateUseAdjustment": 1000.20,
+          |      "balancingCharge": 1000.30,
+          |      "periodOfGraceAdjustment": true,
+          |      "businessPremisesRenovationAllowanceBalancingCharges": 1000.40,
+          |      "nonResidentLandlord": true,
+          |      "rentARoom": {
+          |        "jointlyLet": true
+          |      }
+          |    }
+          |  },
+          |  "ukNonFhlProperty": {
+          |    "allowances": {
+          |      "annualInvestmentAllowance": 2000.50,
+          |      "zeroEmissionGoodsVehicleAllowance": 2000.60,
+          |      "businessPremisesRenovationAllowance": 2000.70,
+          |      "otherCapitalAllowance": 2000.80,
+          |      "costOfReplacingDomesticGoods": 2000.90,
+          |      "electricChargePointAllowance": 3000.10,
+          |      "structuredBuildingAllowance": [
+          |        {
+          |          "amount": 3000.30,
+          |          "firstYear": {
+          |            "qualifyingDate": "2020-01-01",
+          |            "qualifyingAmountExpenditure": 3000.40
+          |          },
+          |          "building": {
+          |            "name": "house name",
+          |            "number": "house number",
+          |            "postcode": "GF49JH"
+          |          }
+          |        }
+          |      ],
+          |      "enhancedStructuredBuildingAllowance": [
+          |        {
+          |          "amount": 3000.50,
+          |          "firstYear": {
+          |            "qualifyingDate": "2020-01-01",
+          |            "qualifyingAmountExpenditure": 3000.60
+          |          },
+          |          "building": {
+          |            "number": "house number",
+          |            "postcode": "GF49JH"
+          |          }
+          |        }
+          |      ],
+          |      "zeroEmissionsCarAllowance": 3000.20
+          |    },
+          |    "adjustments": {
+          |      "lossBroughtForward": 2000.10,
+          |      "balancingCharge": 2000.20,
+          |      "privateUseAdjustment": 2000.30,
+          |      "businessPremisesRenovationAllowanceBalancingCharges": 2000.40,
+          |      "nonResidentLandlord": true,
+          |      "rentARoom": {
+          |        "jointlyLet": true
+          |      }
+          |    }
+          |  }
+          |}
+          |""".stripMargin)
+
+      val bothAllowancesSuppliedBodyJson = Json.parse(
+        """
+          |{
+          |  "ukFhlProperty": {
+          |    "allowances": {
+          |      "propertyIncomeAllowance": 3456.76,
+          |      "annualInvestmentAllowance": 1000.50,
+          |      "businessPremisesRenovationAllowance": 1000.60,
+          |      "otherCapitalAllowance": 1000.70,
+          |      "electricChargePointAllowance": 1000.80,
+          |      "zeroEmissionsCarAllowance": 1000.90
+          |    },
+          |    "adjustments": {
+          |      "lossBroughtForward": 1000.10,
+          |      "privateUseAdjustment": 1000.20,
+          |      "balancingCharge": 1000.30,
+          |      "periodOfGraceAdjustment": true,
+          |      "businessPremisesRenovationAllowanceBalancingCharges": 1000.40,
+          |      "nonResidentLandlord": true,
+          |      "rentARoom": {
+          |        "jointlyLet": true
+          |      }
+          |    }
+          |  },
+          |  "ukNonFhlProperty": {
+          |    "allowances": {
+          |      "propertyIncomeAllowance": 3456.76,
+          |      "annualInvestmentAllowance": 2000.50,
+          |      "zeroEmissionGoodsVehicleAllowance": 2000.60,
+          |      "businessPremisesRenovationAllowance": 2000.70,
+          |      "otherCapitalAllowance": 2000.80,
+          |      "costOfReplacingDomesticGoods": 2000.90,
+          |      "electricChargePointAllowance": 3000.10,
+          |      "structuredBuildingAllowance": [
+          |        {
+          |          "amount": 3000.30,
+          |          "firstYear": {
+          |            "qualifyingDate": "2020-01-01",
+          |            "qualifyingAmountExpenditure": 3000.40
+          |          },
+          |          "building": {
+          |            "name": "house name",
+          |            "number": "house number",
+          |            "postcode": "GF49JH"
+          |          }
+          |        }
+          |      ],
+          |      "enhancedStructuredBuildingAllowance": [
+          |        {
+          |          "amount": 3000.50,
+          |          "firstYear": {
+          |            "qualifyingDate": "2020-01-01",
+          |            "qualifyingAmountExpenditure": 3000.60
+          |          },
+          |          "building": {
+          |            "number": "house number",
+          |            "postcode": "GF49JH"
+          |          }
+          |        }
+          |      ],
+          |      "zeroEmissionsCarAllowance": 3000.20
+          |    },
+          |    "adjustments": {
+          |      "lossBroughtForward": 2000.10,
+          |      "balancingCharge": 2000.20,
+          |      "privateUseAdjustment": 2000.30,
+          |      "businessPremisesRenovationAllowanceBalancingCharges": 2000.40,
+          |      "nonResidentLandlord": true,
+          |      "rentARoom": {
+          |        "jointlyLet": true
+          |      }
+          |    }
+          |  }
+          |}
+          |""".stripMargin)
+
       val allInvalidValueRequestError: MtdError = ValueFormatError.copy(
         message = "One or more monetary fields are invalid",
         paths = Some(List(
@@ -648,12 +798,27 @@ class AmendUkPropertyAnnualSubmissionControllerISpec extends V2IntegrationBaseSp
       )
 
       val allInvalidStringRequestError: MtdError = StringFormatError.copy(
-        message = "One or more strings have been added with the incorrect format",
+        message = "The supplied string format is not valid",
         paths = Some(List(
           "/ukNonFhlProperty/allowances/structuredBuildingAllowance/0/building/name",
           "/ukNonFhlProperty/allowances/structuredBuildingAllowance/0/building/postcode",
           "/ukNonFhlProperty/allowances/enhancedStructuredBuildingAllowance/0/building/number",
           "/ukNonFhlProperty/allowances/enhancedStructuredBuildingAllowance/0/building/postcode"
+        ))
+      )
+
+      val buildingNameNumberError: MtdError = RuleBuildingNameNumberError.copy(
+        message = "Postcode must be supplied along with at least one of name or number",
+        paths = Some(List(
+          "/ukNonFhlProperty/allowances/structuredBuildingAllowance/0/building"
+        ))
+      )
+
+      val bothAllowancesSuppliedError: MtdError = RuleBothAllowancesSuppliedError.copy(
+        message = "Both allowances and property allowances must not be present at the same time",
+        paths = Some(List(
+          "/ukFhlProperty/allowances",
+          "/ukNonFhlProperty/allowances"
         ))
       )
 
@@ -684,13 +849,16 @@ class AmendUkPropertyAnnualSubmissionControllerISpec extends V2IntegrationBaseSp
 
         val input = Seq(
           ("AA1123A", "XAIS12345678910", "2022-23", validRequestBodyJson, BAD_REQUEST, NinoFormatError),
+          ("AA123456A", "XAIS12345678910", "202362-23", validRequestBodyJson, BAD_REQUEST, TaxYearFormatError),
           ("AA123456A", "XAIS1234dfxgchjbn5678910", "2022-23", validRequestBodyJson, BAD_REQUEST, BusinessIdFormatError),
           ("AA123456A", "XAIS12345678910", "2021-24", validRequestBodyJson, BAD_REQUEST, RuleTaxYearRangeInvalidError),
           ("AA123456A", "XAIS12345678910", "2021-22", validRequestBodyJson, BAD_REQUEST, RuleTaxYearNotSupportedError),
           ("AA123456A", "XAIS12345678910", "2022-23", Json.parse(s"""{}""".stripMargin), BAD_REQUEST, RuleIncorrectOrEmptyBodyError),
           ("AA123456A", "XAIS12345678910", "2022-23", allInvalidValueRequestBodyJson, BAD_REQUEST, allInvalidValueRequestError),
           ("AA123456A", "XAIS12345678910", "2022-23", allInvalidDateFormatRequestBodyJson, BAD_REQUEST, allInvalidDateFormatRequestError),
-          ("AA123456A", "XAIS12345678910", "2022-23", allInvalidStringRequestBodyJson, BAD_REQUEST, allInvalidStringRequestError)
+          ("AA123456A", "XAIS12345678910", "2022-23", allInvalidStringRequestBodyJson, BAD_REQUEST, allInvalidStringRequestError),
+          ("AA123456A", "XAIS12345678910", "2022-23", buildingNameNumberBodyJson, BAD_REQUEST, buildingNameNumberError),
+          ("AA123456A", "XAIS12345678910", "2022-23", bothAllowancesSuppliedBodyJson, BAD_REQUEST, bothAllowancesSuppliedError)
         )
 
         input.foreach(args => (validationErrorTest _).tupled(args))

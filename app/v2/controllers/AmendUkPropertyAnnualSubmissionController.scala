@@ -89,8 +89,8 @@ class AmendUkPropertyAnnualSubmissionController @Inject()(val authService: Enrol
            MtdErrorWithCustomMessage(ValueFormatError.code) |
            MtdErrorWithCustomMessage(RuleIncorrectOrEmptyBodyError.code) |
            RuleTypeOfBusinessIncorrectError |
-           RuleBothAllowancesSuppliedError |
-           RuleBuildingNameNumberError |
+           MtdErrorWithCustomMessage(RuleBothAllowancesSuppliedError.code) |
+           MtdErrorWithCustomMessage(RuleBuildingNameNumberError.code) |
            MtdErrorWithCustomMessage(DateFormatError.code) |
            MtdErrorWithCustomMessage(StringFormatError.code) => BadRequest(Json.toJson(errorWrapper))
       case DownstreamError => InternalServerError(Json.toJson(errorWrapper))

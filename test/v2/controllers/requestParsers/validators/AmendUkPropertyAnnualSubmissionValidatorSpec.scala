@@ -1281,7 +1281,7 @@ class AmendUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec with JsonErr
           validBusinessId,
           validTaxYear,
           requestBodyJson.update("/ukFhlProperty/allowances/propertyIncomeAllowance", JsNumber(123.45))
-        )) shouldBe List(RuleBothAllowancesSuppliedError.copy(paths = Some(Seq("ukFhlProperty/allowances"))))
+        )) shouldBe List(RuleBothAllowancesSuppliedError.copy(paths = Some(Seq("/ukFhlProperty/allowances"))))
       }
 
       "allowances and propertyIncomeAllowance supplied for non fhl" in {
@@ -1290,7 +1290,7 @@ class AmendUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec with JsonErr
           validBusinessId,
           validTaxYear,
           requestBodyJson.update("/ukNonFhlProperty/allowances/propertyIncomeAllowance", JsNumber(123.45))
-        )) shouldBe List(RuleBothAllowancesSuppliedError.copy(paths = Some(Seq("ukNonFhlProperty/allowances"))))
+        )) shouldBe List(RuleBothAllowancesSuppliedError.copy(paths = Some(Seq("/ukNonFhlProperty/allowances"))))
       }
     }
 

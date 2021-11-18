@@ -37,7 +37,7 @@ object SubmissionIdFormatError extends MtdError("FORMAT_SUBMISSION_ID", "The pro
 object FromDateFormatError     extends MtdError("FORMAT_FROM_DATE", "The provided From date is invalid")
 object ToDateFormatError       extends MtdError("FORMAT_TO_DATE", "The provided To date is invalid")
 object DateFormatError         extends MtdError("FORMAT_DATE", "The supplied date format is not valid")
-object StringFormatError       extends MtdError("FORMAT_STRING", "One or more strings have been added with the incorrect format")
+object StringFormatError       extends MtdError("FORMAT_STRING", "The supplied string format is not valid")
 object CountryCodeFormatError  extends MtdError("FORMAT_COUNTRY_CODE", "The provided Country code is invalid")
 object ValueFormatError        extends MtdError("FORMAT_VALUE", "One or more monetary fields are invalid")
 object TaxYearFormatError      extends MtdError("FORMAT_TAX_YEAR", "The provided Tax year is invalid")

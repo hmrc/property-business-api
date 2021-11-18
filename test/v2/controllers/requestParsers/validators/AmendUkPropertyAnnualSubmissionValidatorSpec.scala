@@ -293,6 +293,22 @@ class AmendUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec with JsonErr
           }
       }
 
+      "an object is empty except for a additional (non-schema) property" in {
+        val json = Json.parse("""{
+                                |    "ukFhlProperty":{
+                                |       "unknownField": 999.99
+                                |    }
+                                |}""".stripMargin)
+
+        validator.validate(
+          AmendUkPropertyAnnualSubmissionRawData(
+            validNino,
+            validBusinessId,
+            validTaxYear,
+            json
+          )) shouldBe List(RuleIncorrectOrEmptyBodyError.copy(paths = Some(Seq("/ukFhlProperty"))))
+      }
+
       "an empty ukFhlProperty adjustments object is submitted" in {
         validator.validate(AmendUkPropertyAnnualSubmissionRawData(
           validNino,
@@ -306,8 +322,7 @@ class AmendUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec with JsonErr
               |  }
               |}
               |""".stripMargin)
-        )) shouldBe List(RuleIncorrectOrEmptyBodyError.copy(paths = Some(List("/ukFhlProperty/adjustments/periodOfGraceAdjustment", "/ukFhlProperty/adjustments/nonResidentLandlord"))),
-          RuleIncorrectOrEmptyBodyError.copy(paths = Some(List("/ukFhlProperty/adjustments"))))
+        )) shouldBe List(RuleIncorrectOrEmptyBodyError.copy(paths = Some(List("/ukFhlProperty/adjustments/periodOfGraceAdjustment", "/ukFhlProperty/adjustments/nonResidentLandlord"))))
       }
 
       "an empty ukFhlProperty adjustments rentARoom object is submitted" in {
@@ -389,8 +404,7 @@ class AmendUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec with JsonErr
               |}
               |""".stripMargin)
         )) shouldBe List(
-          RuleIncorrectOrEmptyBodyError.copy(paths = Some(List("/ukFhlProperty/adjustments/rentARoom/jointlyLet"))),
-          RuleIncorrectOrEmptyBodyError.copy(paths = Some(List("/ukFhlProperty/adjustments/rentARoom")))
+          RuleIncorrectOrEmptyBodyError.copy(paths = Some(List("/ukFhlProperty/adjustments/rentARoom/jointlyLet")))
         )
       }
 
@@ -447,8 +461,7 @@ class AmendUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec with JsonErr
               |
               |""".stripMargin)
         )) shouldBe List(
-          RuleIncorrectOrEmptyBodyError.copy(paths = Some(List("/ukNonFhlProperty/adjustments/nonResidentLandlord"))),
-          RuleIncorrectOrEmptyBodyError.copy(paths = Some(List("/ukNonFhlProperty/adjustments")))
+          RuleIncorrectOrEmptyBodyError.copy(paths = Some(List("/ukNonFhlProperty/adjustments/nonResidentLandlord")))
         )
       }
 
@@ -531,8 +544,7 @@ class AmendUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec with JsonErr
               |}
               |""".stripMargin)
         )) shouldBe List(
-          RuleIncorrectOrEmptyBodyError.copy(paths = Some(List("/ukNonFhlProperty/adjustments/rentARoom/jointlyLet"))),
-          RuleIncorrectOrEmptyBodyError.copy(paths = Some(List("/ukNonFhlProperty/adjustments/rentARoom")))
+          RuleIncorrectOrEmptyBodyError.copy(paths = Some(List("/ukNonFhlProperty/adjustments/rentARoom/jointlyLet")))
         )
       }
     }

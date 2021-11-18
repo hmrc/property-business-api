@@ -19,7 +19,7 @@ package v2.controllers.requestParsers.validators
 import com.google.inject.Inject
 import config.AppConfig
 import v2.controllers.requestParsers.validators.validations._
-import v2.models.errors.{MtdError, RuleIncorrectOrEmptyBodyError}
+import v2.models.errors.MtdError
 import v2.models.request.amendUkPropertyPeriodSummary.{AmendUkPropertyPeriodSummaryRawData, AmendUkPropertyPeriodSummaryRequestBody}
 import v2.models.request.common.ukFhlProperty.UkFhlProperty
 import v2.models.request.common.ukNonFhlProperty.UkNonFhlProperty
@@ -39,22 +39,14 @@ class AmendUkPropertyPeriodSummaryValidator @Inject()(appConfig: AppConfig) exte
         TaxYearValidation.validate(minTaxYear, data.taxYear),
         BusinessIdValidation.validate(data.businessId),
         SubmissionIdValidation.validate(data.submissionId)
-
       )
     }
 
   private def bodyFormatValidation: AmendUkPropertyPeriodSummaryRawData => List[List[MtdError]] = { data =>
-    val schemaValidation = JsonFormatValidation.validate[AmendUkPropertyPeriodSummaryRequestBody](data.body)
-
-    val extraValidation =
-      data.body.asOpt[AmendUkPropertyPeriodSummaryRequestBody] match {
-        case Some(body) if body.ukNonFhlProperty.isEmpty && body.ukFhlProperty.isEmpty => List(RuleIncorrectOrEmptyBodyError)
-        case _                                                                         => NoValidationErrors
-      }
-
-    val emptyStructureValidation = JsonFormatValidation.validatedNestedEmpty(data.body)
-
-    List(schemaValidation, extraValidation, emptyStructureValidation)
+    JsonFormatValidation.validateAndCheckNonEmpty[AmendUkPropertyPeriodSummaryRequestBody](data.body) match {
+      case Nil => NoValidationErrors
+      case schemaErrors => List(schemaErrors)
+    }
   }
 
   private def bodyFieldFormatValidation: AmendUkPropertyPeriodSummaryRawData => List[List[MtdError]] = { data =>
@@ -65,8 +57,12 @@ class AmendUkPropertyPeriodSummaryValidator @Inject()(appConfig: AppConfig) exte
         List(
           body.ukFhlProperty.map(validateFhlMonetaryValues).getOrElse(NoValidationErrors),
           body.ukNonFhlProperty.map(validateNonFhlMonetaryValues).getOrElse(NoValidationErrors),
-          body.ukFhlProperty.flatMap(_.expenses.map(ConsolidatedExpensesValidation.validate(_,"/ukFhlProperty/expenses"))).getOrElse(NoValidationErrors),
-          body.ukNonFhlProperty.flatMap(_.expenses.map(ConsolidatedExpensesValidation.validate(_,"/ukNonFhlProperty/expenses"))).getOrElse(NoValidationErrors),
+          body.ukFhlProperty
+            .flatMap(_.expenses.map(ConsolidatedExpensesValidation.validate(_, "/ukFhlProperty/expenses")))
+            .getOrElse(NoValidationErrors),
+          body.ukNonFhlProperty
+            .flatMap(_.expenses.map(ConsolidatedExpensesValidation.validate(_, "/ukNonFhlProperty/expenses")))
+            .getOrElse(NoValidationErrors),
         )))
 
     pathErrors

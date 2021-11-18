@@ -17,20 +17,23 @@
 package v2.models.request.createUkPropertyPeriodSummary
 
 import play.api.libs.functional.syntax._
-import play.api.libs.json.{JsPath, Json, OWrites, Reads}
+import play.api.libs.json.{ JsPath, Json, OWrites, Reads }
+import shapeless.HNil
+import utils.EmptinessChecker
 import v2.models.request.common.ukFhlProperty.UkFhlProperty
 import v2.models.request.common.ukNonFhlProperty.UkNonFhlProperty
-
 
 case class CreateUkPropertyPeriodSummaryRequestBody(fromDate: String,
                                                     toDate: String,
                                                     ukFhlProperty: Option[UkFhlProperty],
                                                     ukNonFhlProperty: Option[UkNonFhlProperty])
 
-
-
-
 object CreateUkPropertyPeriodSummaryRequestBody {
+  implicit val emptinessChecker: EmptinessChecker[CreateUkPropertyPeriodSummaryRequestBody] = EmptinessChecker.use { body =>
+    "ukFhlProperty"      -> body.ukFhlProperty ::
+      "ukNonFhlProperty" -> body.ukNonFhlProperty :: HNil
+  }
+
   implicit val reads: Reads[CreateUkPropertyPeriodSummaryRequestBody] = Json.reads[CreateUkPropertyPeriodSummaryRequestBody]
 
   implicit val writes: OWrites[CreateUkPropertyPeriodSummaryRequestBody] = (
@@ -38,6 +41,6 @@ object CreateUkPropertyPeriodSummaryRequestBody {
       (JsPath \ "toDate").write[String] and
       (JsPath \ "ukFhlProperty").writeNullable[UkFhlProperty] and
       (JsPath \ "ukOtherProperty").writeNullable[UkNonFhlProperty]
-  ) (unlift(CreateUkPropertyPeriodSummaryRequestBody.unapply))
+  )(unlift(CreateUkPropertyPeriodSummaryRequestBody.unapply))
 
 }

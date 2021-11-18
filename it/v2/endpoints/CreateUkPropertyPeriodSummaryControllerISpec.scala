@@ -125,7 +125,7 @@ class CreateUkPropertyPeriodSummaryControllerISpec extends V2IntegrationBaseSpec
       |  "toDate": "20190406",
       |  "ukFhlProperty":{
       |    "expenses": {
-      |       "consolidatedExpense": 988.18
+      |       "consolidatedExpenses": 988.18
       |    }
       |  }
       |}
@@ -139,7 +139,7 @@ class CreateUkPropertyPeriodSummaryControllerISpec extends V2IntegrationBaseSpec
       |  "toDate": "2019-04-06",
       |  "ukFhlProperty":{
       |    "expenses": {
-      |       "consolidatedExpense": 988.18
+      |       "consolidatedExpenses": 988.18
       |    }
       |  }
       |}

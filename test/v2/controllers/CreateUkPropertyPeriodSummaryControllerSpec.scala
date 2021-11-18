@@ -245,7 +245,7 @@ class CreateUkPropertyPeriodSummaryControllerSpec
       |            }
       |        },
       |        "expenses": {
-      |            "consolidatedExpense": 988.18
+      |            "consolidatedExpenses": 988.18
       |        }
       |    },
       |    "ukNonFhlProperty": {
@@ -260,7 +260,7 @@ class CreateUkPropertyPeriodSummaryControllerSpec
       |            }
       |        },
       |        "expenses": {
-      |            "consolidatedExpense": 988.18
+      |            "consolidatedExpenses": 988.18
       |        }
       |    }
       |}

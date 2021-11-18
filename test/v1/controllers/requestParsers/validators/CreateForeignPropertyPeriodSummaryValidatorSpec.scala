@@ -243,7 +243,7 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec {
             |  "fromDate": "2020-01-01",
             |  "toDate": "2020-01-31",
             |  "foreignProperty": [
-            |    {
+            |    {g
             |      "income": {}
             |    }
             |  ]

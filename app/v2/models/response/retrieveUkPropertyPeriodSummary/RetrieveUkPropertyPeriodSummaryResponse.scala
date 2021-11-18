@@ -21,22 +21,23 @@ import play.api.libs.json.{Json, OFormat}
 import v2.hateoas.HateoasLinksFactory
 import v2.models.hateoas.Link
 import v2.hateoas.HateoasLinks
+import v2.models.hateoas.HateoasData
 
-case class RetrieveUkPropertyPeriodSummaryResponse()
+case class RetrieveUkPropertyPeriodSummaryResponse(dummy: String)
 
 object RetrieveUkPropertyPeriodSummaryResponse extends HateoasLinks {
   implicit val format: OFormat[RetrieveUkPropertyPeriodSummaryResponse] = Json.format[RetrieveUkPropertyPeriodSummaryResponse]
 
-  implicit object hateoasFactory extends HateoasLinksFactory[RetrieveUkPropertyPeriodSummaryResponse, RetrieveUkPropertyPeriodSummaryHateoasData] {
+  implicit object hateoasLinksFactory extends HateoasLinksFactory[RetrieveUkPropertyPeriodSummaryResponse, RetrieveUkPropertyPeriodSummaryHateoasData] {
     override def links(appConfig: AppConfig, data: RetrieveUkPropertyPeriodSummaryHateoasData): Seq[Link] = {
       import data._
       Seq(
-        retrieveUkPropertyPeriodSummary(appConfig, nino, businessId, taxYear, submissionId),
         amendUkPropertyPeriodSummary(appConfig, nino, businessId, taxYear, submissionId),
+        retrieveUkPropertyPeriodSummary(appConfig, nino, businessId, taxYear, submissionId),
         listPropertyPeriodicSummary(appConfig, nino, businessId, taxYear)
       )
     }
   }
 }
 
-case class RetrieveUkPropertyPeriodSummaryHateoasData(nino: String, businessId: String, taxYear: String, submissionId: String)
+case class RetrieveUkPropertyPeriodSummaryHateoasData(nino: String, businessId: String, taxYear: String, submissionId: String) extends HateoasData

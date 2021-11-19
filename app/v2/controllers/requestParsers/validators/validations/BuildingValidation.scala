@@ -19,15 +19,11 @@ package v2.controllers.requestParsers.validators.validations
 import v2.models.errors.{MtdError, RuleBuildingNameNumberError}
 import v2.models.request.amendUkPropertyAnnualSubmission.ukNonFhlProperty.Building
 
-import scala.util.{Failure, Success, Try}
-
 object BuildingValidation {
 
-  def validate(body: Building): List[MtdError] = Try {
-    body.name.isEmpty && body.number.isEmpty
-  }
-  match {
-    case Success(_) => List(RuleBuildingNameNumberError)
-    case Failure(_) => NoValidationErrors
+  def validate(body: Building, path: String): List[MtdError] =
+    (body.name, body.number) match {
+    case (None, None) => List(RuleBuildingNameNumberError.copy(paths = Some(Seq(path))))
+    case (_, _) => NoValidationErrors
   }
 }

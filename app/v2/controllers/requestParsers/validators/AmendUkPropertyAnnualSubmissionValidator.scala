@@ -64,11 +64,11 @@ class AmendUkPropertyAnnualSubmissionValidator @Inject()(appConfig: AppConfig) e
         body.ukNonFhlProperty.map(validateukNonFhlProperty).getOrElse(NoValidationErrors),
           body.ukFhlProperty.flatMap(_.allowances).map(validateFhlAllowances).getOrElse(NoValidationErrors),
           body.ukNonFhlProperty.flatMap(_.allowances).map(validateNonFhlAllowances).getOrElse(NoValidationErrors),
-          body.ukNonFhlProperty.flatMap(_.allowances.map(_.structuredBuildingAllowance).flatten).map(_.zipWithIndex.toList.flatMap {
+          body.ukNonFhlProperty.flatMap(_.allowances.flatMap(_.structuredBuildingAllowance)).map(_.zipWithIndex.toList.flatMap {
             case (entry, i) => validateStructuredBuildingAllowance(entry, i)
           })
             .getOrElse(NoValidationErrors),
-          body.ukNonFhlProperty.flatMap(_.allowances.map(_.enhancedStructuredBuildingAllowance).flatten).map(_.zipWithIndex.toList.flatMap {
+          body.ukNonFhlProperty.flatMap(_.allowances.flatMap(_.enhancedStructuredBuildingAllowance)).map(_.zipWithIndex.toList.flatMap {
             case (entry, i) => validateEnhancedStructuredBuildingAllowance(entry, i)
           })
             .getOrElse(NoValidationErrors)
@@ -193,6 +193,10 @@ class AmendUkPropertyAnnualSubmissionValidator @Inject()(appConfig: AppConfig) e
         field = buildingAllowance.firstYear.map(_.qualifyingAmountExpenditure),
         path = s"/ukNonFhlProperty/allowances/structuredBuildingAllowance/$index/firstYear/qualifyingAmountExpenditure"
       ),
+      BuildingValidation.validate(
+        body = buildingAllowance.building,
+        path = s"/ukNonFhlProperty/allowances/structuredBuildingAllowance/$index/building"
+      ),
       StringValidation.validateOptional(
         field = buildingAllowance.building.name,
         path = s"/ukNonFhlProperty/allowances/structuredBuildingAllowance/$index/building/name"
@@ -220,6 +224,10 @@ class AmendUkPropertyAnnualSubmissionValidator @Inject()(appConfig: AppConfig) e
       NumberValidation.validateOptional(
         field = buildingAllowance.firstYear.map(_.qualifyingAmountExpenditure),
         path = s"/ukNonFhlProperty/allowances/enhancedStructuredBuildingAllowance/$index/firstYear/qualifyingAmountExpenditure"
+      ),
+      BuildingValidation.validate(
+        body = buildingAllowance.building,
+        path = s"/ukNonFhlProperty/allowances/enhancedStructuredBuildingAllowance/$index/building"
       ),
       StringValidation.validateOptional(
         field = buildingAllowance.building.name,

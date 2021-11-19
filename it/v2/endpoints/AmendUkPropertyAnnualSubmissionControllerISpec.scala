@@ -648,8 +648,6 @@ class AmendUkPropertyAnnualSubmissionControllerISpec extends V2IntegrationBaseSp
           |            "qualifyingAmountExpenditure": 3000.40
           |          },
           |          "building": {
-          |            "name": "house name",
-          |            "number": "house number",
           |            "postcode": "GF49JH"
           |          }
           |        }
@@ -662,7 +660,6 @@ class AmendUkPropertyAnnualSubmissionControllerISpec extends V2IntegrationBaseSp
           |            "qualifyingAmountExpenditure": 3000.60
           |          },
           |          "building": {
-          |            "number": "house number",
           |            "postcode": "GF49JH"
           |          }
           |        }
@@ -725,7 +722,6 @@ class AmendUkPropertyAnnualSubmissionControllerISpec extends V2IntegrationBaseSp
           |          },
           |          "building": {
           |            "name": "house name",
-          |            "number": "house number",
           |            "postcode": "GF49JH"
           |          }
           |        }
@@ -810,7 +806,8 @@ class AmendUkPropertyAnnualSubmissionControllerISpec extends V2IntegrationBaseSp
       val buildingNameNumberError: MtdError = RuleBuildingNameNumberError.copy(
         message = "Postcode must be supplied along with at least one of name or number",
         paths = Some(List(
-          "/ukNonFhlProperty/allowances/structuredBuildingAllowance/0/building"
+          "/ukNonFhlProperty/allowances/structuredBuildingAllowance/0/building",
+          "/ukNonFhlProperty/allowances/enhancedStructuredBuildingAllowance/0/building"
         ))
       )
 

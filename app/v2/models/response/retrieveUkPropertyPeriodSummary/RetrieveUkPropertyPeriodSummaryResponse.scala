@@ -17,7 +17,7 @@
 package v2.models.response.retrieveUkPropertyPeriodSummary
 
 import config.AppConfig
-import play.api.libs.json.{Json, OFormat}
+import play.api.libs.json.{Json, OWrites, Reads}
 import v2.hateoas.HateoasLinksFactory
 import v2.models.hateoas.Link
 import v2.hateoas.HateoasLinks
@@ -26,11 +26,13 @@ import v2.models.hateoas.HateoasData
 case class RetrieveUkPropertyPeriodSummaryResponse(submittedOn: String,
                                                    fromDate: String,
                                                    toDate: String,
-                                                   ukFhlProperty: Option[String],
-                                                   ukNonFhlProperty: Option[String])
+                                                   ukFhlProperty: Option[UkFhlProperty],
+                                                   ukNonFhlProperty: Option[UkNonFhlProperty])
 
 object RetrieveUkPropertyPeriodSummaryResponse extends HateoasLinks {
-  implicit val format: OFormat[RetrieveUkPropertyPeriodSummaryResponse] = Json.format[RetrieveUkPropertyPeriodSummaryResponse]
+  implicit val writes: OWrites[RetrieveUkPropertyPeriodSummaryResponse] = Json.writes[RetrieveUkPropertyPeriodSummaryResponse]
+
+  implicit val reads: Reads[RetrieveUkPropertyPeriodSummaryResponse] = Json.reads[RetrieveUkPropertyPeriodSummaryResponse] //TODO: Implement custom reads
 
   implicit object hateoasLinksFactory extends HateoasLinksFactory[RetrieveUkPropertyPeriodSummaryResponse, RetrieveUkPropertyPeriodSummaryHateoasData] {
     override def links(appConfig: AppConfig, data: RetrieveUkPropertyPeriodSummaryHateoasData): Seq[Link] = {

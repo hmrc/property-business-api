@@ -16,4 +16,10 @@
 
 package v2.models.response.retrieveUkPropertyPeriodSummary
 
-case class ukNonFhlProperty()
+import play.api.libs.json.{Json, OFormat}
+
+case class UkNonFhlProperty(income: Option[NonFhlPropertyIncome], expenses: Option[NonFhlPropertyExpenses])
+
+object UkNonFhlProperty {
+  implicit val format: OFormat[UkNonFhlProperty] = Json.format[UkNonFhlProperty]
+}

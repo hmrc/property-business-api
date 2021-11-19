@@ -16,4 +16,16 @@
 
 package v2.models.response.retrieveUkPropertyPeriodSummary
 
-case class NonFhlPropertyIncome()
+import play.api.libs.json.{Json, OWrites, Reads}
+
+case class NonFhlPropertyIncome(premiumsOfLeaseGrant: Option[BigDecimal],
+                                reversePremiums: Option[BigDecimal],
+                                periodAmount: Option[BigDecimal],
+                                taxDeducted: Option[BigDecimal],
+                                otherIncome: Option[BigDecimal],
+                                rentARoom: Option[RentARoomIncome])
+
+object NonFhlPropertyIncome {
+  implicit val writes: OWrites[NonFhlPropertyIncome] = Json.writes[NonFhlPropertyIncome]
+  implicit val reads: Reads[NonFhlPropertyIncome] = Json.reads[NonFhlPropertyIncome]
+}

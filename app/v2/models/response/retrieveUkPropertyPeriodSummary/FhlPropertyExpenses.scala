@@ -16,4 +16,19 @@
 
 package v2.models.response.retrieveUkPropertyPeriodSummary
 
-case class FhlPropertyExpenses()
+import play.api.libs.json.{Json, OWrites, Reads}
+
+case class FhlPropertyExpenses(premisesRunningCosts: Option[BigDecimal],
+                               repairsAndMaintenance: Option[BigDecimal],
+                               financialCosts: Option[BigDecimal],
+                               professionalFees: Option[BigDecimal],
+                               costOfServices: Option[BigDecimal],
+                               other: Option[BigDecimal],
+                               travelCosts: Option[BigDecimal],
+                               rentARoom: Option[RentARoomExpenses],
+                               consolidatedExpenses: Option[BigDecimal])
+
+object FhlPropertyExpenses {
+  implicit val writes: OWrites[FhlPropertyExpenses] = Json.writes[FhlPropertyExpenses]
+  implicit val reads: Reads[FhlPropertyExpenses] = Json.reads[FhlPropertyExpenses]
+}

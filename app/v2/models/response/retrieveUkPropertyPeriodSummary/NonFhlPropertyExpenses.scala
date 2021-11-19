@@ -16,6 +16,21 @@
 
 package v2.models.response.retrieveUkPropertyPeriodSummary
 
-class NonFhlPropertyExpenses {
+import play.api.libs.json.{Json, OWrites, Reads}
 
+case class NonFhlPropertyExpenses(premisesRunningCosts: Option[BigDecimal],
+                                  repairsAndMaintenance: Option[BigDecimal],
+                                  financialCosts: Option[BigDecimal],
+                                  professionalFees: Option[BigDecimal],
+                                  costOfServices: Option[BigDecimal],
+                                  other: Option[BigDecimal],
+                                  residentialFinancialCost: Option[BigDecimal],
+                                  travelCosts: Option[BigDecimal],
+                                  residentialFinancialCostsCarriedForward: Option[BigDecimal],
+                                  rentARoom: Option[RentARoomExpenses],
+                                  consolidatedExpenses: Option[BigDecimal])
+
+object NonFhlPropertyExpenses {
+  implicit val writes: OWrites[NonFhlPropertyExpenses] = Json.writes[NonFhlPropertyExpenses]
+  implicit val reads: Reads[NonFhlPropertyExpenses] = Json.reads[NonFhlPropertyExpenses]
 }

@@ -18,7 +18,9 @@ package v2.models.response.retrieveUkPropertyPeriodSummary
 
 import play.api.libs.json.{Json, OWrites, Reads}
 
-case class FhlPropertyIncome()
+case class FhlPropertyIncome(periodAmount: Option[BigDecimal],
+                             taxDeducted: Option[BigDecimal],
+                             rentARoom: Option[RentARoomIncome])
 
 object FhlPropertyIncome {
   implicit val writes: OWrites[FhlPropertyIncome] = Json.writes[FhlPropertyIncome]

@@ -21,7 +21,7 @@
             "enum": [
               "self",
               "list-property-period-summaries",
-              "amend-property-period-summary"
+              "amend-uk-property-period-summary"
             ]
           },
           "method": {

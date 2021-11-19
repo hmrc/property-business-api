@@ -1,5 +1,6 @@
 is:
   - headers.acceptJson
+  - headers.contentTypeJson
   - headers.testScenarioHeader
   - errors.formatNino
   - errors.formatTaxYear
@@ -16,14 +17,17 @@ description: This endpoint allows a developer to retrieve the income and expense
 (annotations.scope): "read:self-assessment"
 securedBy: [ sec.oauth_2_0: { scopes: [ "read:self-assessment" ] } ]
 responses:
-  201:
+  200:
     body:
       application/json:
         type: !include schemas/uk_property_period_summary_retrieve/response.json
         examples:
           example-1:
-            description: Default Example
+            description: Full Expenditure response
             value: !include examples/uk_property_period_summary_retrieve/response.json
+          example-2:
+            description: Consolidated Expenditure response
+            value: !include examples/uk_property_period_summary_retrieve/consolidated_response.json
     headers:
       X-CorrelationId:
         example: c75f40a6-a3df-4429-a697-471eeec46435

@@ -69,7 +69,6 @@ uses:
                 submissionId:
                   description: 'An identifier for the income and expenditure period summary.<p>Must conform to the regular expression `^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$`'
                   example: 4557ecb5-fd32-48cc-81f5-e6acd1099f3c
-              put: !include uk_property_period_summary_amend.raml
               get: !include uk_property_period_summary_retrieve.raml
   /{nino}:
     uriParameters:

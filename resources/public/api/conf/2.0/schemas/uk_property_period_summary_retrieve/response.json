@@ -55,12 +55,7 @@
                   "maximum": 99999999999.99,
                   "example": "5000.99"
                 }
-              },
-              "required": [
-                "submittedOn",
-                "fromDate",
-                "toDate"
-              ]
+              }
             }
           }
         },
@@ -148,177 +143,177 @@
             }
           }
         }
-      },
-      "ukNonFhlProperty": {
-        "type": "object",
-        "description": "Object  holding the income and expenses of the UK property business - excluding Furnished Holiday Lettings (FHL) for the period. (At least one of income or expenses should be present).",
-        "properties": {
-          "income": {
-            "type": "object",
-            "description": "Object holding the income details for the period.",
-            "properties": {
-              "premiumsOfLeaseGrant ": {
-                "description": "Premiums received for the grant of a lease and other lump sums to possess a property. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
-                "type": "number",
-                "multipleOf": 0.01,
-                "minimum": 0.00,
-                "maximum": 99999999999.99,
-                "example": "5000.99"
-              },
-              "reversePremiums": {
-                "description": "Amount paid by a landlord or outgoing tenant to induce a new tenant to enter into a leasehold agreement. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
-                "type": "number",
-                "multipleOf": 0.01,
-                "minimum": 0.00,
-                "maximum": 99999999999.99,
-                "example": "5000.99"
-              },
-              "periodAmount": {
-                "description": "Total rent and other income from property. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
-                "type": "number",
-                "multipleOf": 0.01,
-                "minimum": 0.00,
-                "maximum": 99999999999.99,
-                "example": "5000.99"
-              },
-              "taxDeducted": {
-                "description": "Tax already deducted from the rental income. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
-                "type": "number",
-                "multipleOf": 0.01,
-                "minimum": 0.00,
-                "maximum": 99999999999.99,
-                "example": "5000.99"
-              },
-              "otherIncome": {
-                "description": "Other allowable property expenses. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
-                "type": "number",
-                "multipleOf": 0.01,
-                "minimum": 0.00,
-                "maximum": 99999999999.99,
-                "example": "5000.99"
-              },
-              "rentARoom": {
-                "type": "object",
-                "description": "Object holding the rents received for the period.",
-                "properties": {
-                  "rentsReceived": {
-                    "description": "Total rents received from properties. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
-                    "type": "number",
-                    "multipleOf": 0.01,
-                    "minimum": 0.00,
-                    "maximum": 99999999999.99,
-                    "example": "5000.99"
-                  }
+      }
+    },
+    "ukNonFhlProperty": {
+      "type": "object",
+      "description": "Object  holding the income and expenses of the UK property business - excluding Furnished Holiday Lettings (FHL) for the period. (At least one of income or expenses should be present).",
+      "properties": {
+        "income": {
+          "type": "object",
+          "description": "Object holding the income details for the period.",
+          "properties": {
+            "premiumsOfLeaseGrant ": {
+              "description": "Premiums received for the grant of a lease and other lump sums to possess a property. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
+              "type": "number",
+              "multipleOf": 0.01,
+              "minimum": 0.00,
+              "maximum": 99999999999.99,
+              "example": "5000.99"
+            },
+            "reversePremiums": {
+              "description": "Amount paid by a landlord or outgoing tenant to induce a new tenant to enter into a leasehold agreement. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
+              "type": "number",
+              "multipleOf": 0.01,
+              "minimum": 0.00,
+              "maximum": 99999999999.99,
+              "example": "5000.99"
+            },
+            "periodAmount": {
+              "description": "Total rent and other income from property. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
+              "type": "number",
+              "multipleOf": 0.01,
+              "minimum": 0.00,
+              "maximum": 99999999999.99,
+              "example": "5000.99"
+            },
+            "taxDeducted": {
+              "description": "Tax already deducted from the rental income. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
+              "type": "number",
+              "multipleOf": 0.01,
+              "minimum": 0.00,
+              "maximum": 99999999999.99,
+              "example": "5000.99"
+            },
+            "otherIncome": {
+              "description": "Other allowable property expenses. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
+              "type": "number",
+              "multipleOf": 0.01,
+              "minimum": 0.00,
+              "maximum": 99999999999.99,
+              "example": "5000.99"
+            },
+            "rentARoom": {
+              "type": "object",
+              "description": "Object holding the rents received for the period.",
+              "properties": {
+                "rentsReceived": {
+                  "description": "Total rents received from properties. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
+                  "type": "number",
+                  "multipleOf": 0.01,
+                  "minimum": 0.00,
+                  "maximum": 99999999999.99,
+                  "example": "5000.99"
                 }
               }
             }
-          },
-          "expenses": {
-            "type": "object",
-            "description": "Object holding the expenses for the period.",
-            "properties": {
-              "premisesRunningCosts": {
-                "description": "Rent, rates, insurance, ground rents and other costs. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
-                "type": "number",
-                "multipleOf": 0.01,
-                "minimum": 0.00,
-                "maximum": 99999999999.99,
-                "example": "5000.99"
-              },
-              "zeroEmissionGoodsVehicleAllowance": {
-                "description": "The amount of zero emission goods vehicle allowance for goods vehicles purchased for business use. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
-                "type": "number",
-                "multipleOf": 0.01,
-                "minimum": 0.00,
-                "maximum": 99999999999.99,
-                "example": "5000.99"
-              },
-              "repairsAndMaintenance": {
-                "description": "Property repairs and maintenance. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
-                "type": "number",
-                "multipleOf": 0.01,
-                "minimum": 0.00,
-                "maximum": 99999999999.99,
-                "example": "5000.99"
-              },
-              "financialCosts": {
-                "description": "Loan interest and other financial costs. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
-                "type": "number",
-                "multipleOf": 0.01,
-                "minimum": 0.00,
-                "maximum": 99999999999.99,
-                "example": "5000.99"
-              },
-              "professionalFees": {
-                "description": "Legal, management and other professional fees. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
-                "type": "number",
-                "multipleOf": 0.01,
-                "minimum": 0.00,
-                "maximum": 99999999999.99,
-                "example": "5000.99"
-              },
-              "costOfServices": {
-                "description": "Cost of services provided, including wages. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
-                "type": "number",
-                "multipleOf": 0.01,
-                "minimum": 0.00,
-                "maximum": 99999999999.99,
-                "example": "5000.99"
-              },
-              "other": {
-                "description": "Other allowable property expenses. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
-                "type": "number",
-                "multipleOf": 0.01,
-                "minimum": 0.00,
-                "maximum": 99999999999.99,
-                "example": "5000.99"
-              },
-              "residentialFinancialCost": {
-                "description": "The residential financial cost that can be deductible from rental income (tax relief). The value must be between 0 and 99999999999.99 up to 2 decimal places.",
-                "type": "number",
-                "multipleOf": 0.01,
-                "minimum": 0.00,
-                "maximum": 99999999999.99,
-                "example": "5000.99"
-              },
-              "travelCosts": {
-                "description": "Car, van and travel costs incurred in running a property business. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
-                "type": "number",
-                "multipleOf": 0.01,
-                "minimum": 0.00,
-                "maximum": 99999999999.99,
-                "example": "5000.99"
-              },
-              "residentialFinancialCostsCarriedForward": {
-                "description": "Amount of residential financial costs carried forward. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
-                "type": "number",
-                "multipleOf": 0.01,
-                "minimum": 0.00,
-                "maximum": 99999999999.99,
-                "example": "5000.99"
-              },
-              "rentARoom": {
-                "type": "object",
-                "description": "Object holding the rents claimed for the period.",
-                "properties": {
-                  "amountClaimed": {
-                    "description": "The amount of UK Furnished Holiday Lettings rent claimed. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
-                    "type": "number",
-                    "multipleOf": 0.01,
-                    "minimum": 0.00,
-                    "maximum": 99999999999.99,
-                    "example": "5000.99"
-                  }
+          }
+        },
+        "expenses": {
+          "type": "object",
+          "description": "Object holding the expenses for the period.",
+          "properties": {
+            "premisesRunningCosts": {
+              "description": "Rent, rates, insurance, ground rents and other costs. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
+              "type": "number",
+              "multipleOf": 0.01,
+              "minimum": 0.00,
+              "maximum": 99999999999.99,
+              "example": "5000.99"
+            },
+            "zeroEmissionGoodsVehicleAllowance": {
+              "description": "The amount of zero emission goods vehicle allowance for goods vehicles purchased for business use. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
+              "type": "number",
+              "multipleOf": 0.01,
+              "minimum": 0.00,
+              "maximum": 99999999999.99,
+              "example": "5000.99"
+            },
+            "repairsAndMaintenance": {
+              "description": "Property repairs and maintenance. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
+              "type": "number",
+              "multipleOf": 0.01,
+              "minimum": 0.00,
+              "maximum": 99999999999.99,
+              "example": "5000.99"
+            },
+            "financialCosts": {
+              "description": "Loan interest and other financial costs. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
+              "type": "number",
+              "multipleOf": 0.01,
+              "minimum": 0.00,
+              "maximum": 99999999999.99,
+              "example": "5000.99"
+            },
+            "professionalFees": {
+              "description": "Legal, management and other professional fees. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
+              "type": "number",
+              "multipleOf": 0.01,
+              "minimum": 0.00,
+              "maximum": 99999999999.99,
+              "example": "5000.99"
+            },
+            "costOfServices": {
+              "description": "Cost of services provided, including wages. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
+              "type": "number",
+              "multipleOf": 0.01,
+              "minimum": 0.00,
+              "maximum": 99999999999.99,
+              "example": "5000.99"
+            },
+            "other": {
+              "description": "Other allowable property expenses. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
+              "type": "number",
+              "multipleOf": 0.01,
+              "minimum": 0.00,
+              "maximum": 99999999999.99,
+              "example": "5000.99"
+            },
+            "residentialFinancialCost": {
+              "description": "The residential financial cost that can be deductible from rental income (tax relief). The value must be between 0 and 99999999999.99 up to 2 decimal places.",
+              "type": "number",
+              "multipleOf": 0.01,
+              "minimum": 0.00,
+              "maximum": 99999999999.99,
+              "example": "5000.99"
+            },
+            "travelCosts": {
+              "description": "Car, van and travel costs incurred in running a property business. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
+              "type": "number",
+              "multipleOf": 0.01,
+              "minimum": 0.00,
+              "maximum": 99999999999.99,
+              "example": "5000.99"
+            },
+            "residentialFinancialCostsCarriedForward": {
+              "description": "Amount of residential financial costs carried forward. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
+              "type": "number",
+              "multipleOf": 0.01,
+              "minimum": 0.00,
+              "maximum": 99999999999.99,
+              "example": "5000.99"
+            },
+            "rentARoom": {
+              "type": "object",
+              "description": "Object holding the rents claimed for the period.",
+              "properties": {
+                "amountClaimed": {
+                  "description": "The amount of UK Furnished Holiday Lettings rent claimed. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
+                  "type": "number",
+                  "multipleOf": 0.01,
+                  "minimum": 0.00,
+                  "maximum": 99999999999.99,
+                  "example": "5000.99"
                 }
-              },
-              "consolidatedExpenses": {
-                "description": "The sum of all expenses for the specified period. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
-                "type": "number",
-                "multipleOf": 0.01,
-                "minimum": 0.00,
-                "maximum": 99999999999.99,
-                "example": "5000.99"
               }
+            },
+            "consolidatedExpenses": {
+              "description": "The sum of all expenses for the specified period. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
+              "type": "number",
+              "multipleOf": 0.01,
+              "minimum": 0.00,
+              "maximum": 99999999999.99,
+              "example": "5000.99"
             }
           }
         }

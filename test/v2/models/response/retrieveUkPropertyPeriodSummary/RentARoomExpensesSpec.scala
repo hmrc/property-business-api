@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 HM Revenue & Customs
+ * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -41,7 +41,7 @@ class RentARoomExpensesSpec extends UnitSpec {
   "RentARoomExpenses" when {
     "read from valid JSON" should {
       "return the expected model" in {
-        downstreamJson.as[RentARoomIncome] shouldBe model
+        downstreamJson.as[RentARoomExpenses] shouldBe model
       }
     }
 

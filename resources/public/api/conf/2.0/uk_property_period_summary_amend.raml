@@ -1,0 +1,43 @@
+is:
+  - headers.acceptJson
+  - headers.contentTypeJson
+  - headers.testScenarioHeader
+  - errors.formatNino
+  - errors.formatTaxYear
+  - errors.formatBusinessId
+  - errors.formatSubmissionId
+  - errors.formatValue
+  - errors.ruleTaxYearRangeInvalid
+  - errors.ruleTaxYearNotSupported
+  - errors.ruleBothExpensesSupplied
+  - errors.ruleTypeOfBusinessIncorrect
+  - errors.ruleIncorrectOrEmptyBody
+  - errors.clientOrAgentNotAuthorised
+  - errors.notFound
+displayName: Amend a UK Property Income & Expenses Period Summary [test only]
+description: This endpoint allows a developer to re-submit the income and expenditure for a UK property business. This submission is for either or both of Furnished Holiday Letting (FHL) and Non FHL UK property submissions. A National Insurance number, business ID, tax year and submission ID are required.
+(annotations.sandboxData): !include scenarios/uk_property_period_summary_amend_scenarios.md
+(annotations.scope): "write:self-assessment"
+securedBy: [ sec.oauth_2_0: { scopes: [ "write:self-assessment" ] } ]
+body:
+  application/json:
+    type: !include schemas/uk_property_period_summary_amend/request.json
+    examples:
+      example-1:
+        description: Full Expenses request
+        value: !include examples/uk_property_period_summary_amend/request.json
+      example-2:
+        description: Consolidated Expenses request
+        value: !include examples/uk_property_period_summary_amend/consolidated_request.json
+responses:
+  200:
+    body:
+      application/json:
+        type: !include schemas/uk_property_period_summary_amend/response.json
+        example:
+          description: Default Example
+          value: !include examples/uk_property_period_summary_amend/response.json
+    headers:
+      X-CorrelationId:
+        example: c75f40a6-a3df-4429-a697-471eeec46435
+        description: Unique ID for operation tracking <br> String, 36 characters.

@@ -20,6 +20,6 @@ import play.api.libs.json.{Json, OFormat}
 
 case class RentARoomExpenses(amountClaimed: Option[BigDecimal])
 
-object RentARoomExpenses{
+object RentARoomExpenses {
   implicit val format: OFormat[RentARoomExpenses] = Json.format[RentARoomExpenses]
 }

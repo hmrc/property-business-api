@@ -16,7 +16,8 @@
 
 package v2.models.response.retrieveUkPropertyPeriodSummary
 
-import play.api.libs.json.{Json, OWrites, Reads}
+import play.api.libs.functional.syntax._
+import play.api.libs.json.{JsPath, Json, OWrites, Reads}
 
 case class FhlPropertyIncome(periodAmount: Option[BigDecimal],
                              taxDeducted: Option[BigDecimal],
@@ -24,5 +25,10 @@ case class FhlPropertyIncome(periodAmount: Option[BigDecimal],
 
 object FhlPropertyIncome {
   implicit val writes: OWrites[FhlPropertyIncome] = Json.writes[FhlPropertyIncome]
-  implicit val reads: Reads[FhlPropertyIncome] = Json.reads[FhlPropertyIncome]
+
+  implicit val reads: Reads[FhlPropertyIncome] = (
+    (JsPath \ "periodAmount").readNullable[BigDecimal] and
+      (JsPath \ "taxDeducted").readNullable[BigDecimal] and
+      (JsPath \ "ukFhlRentARoom").readNullable[RentARoomIncome]
+    ) (FhlPropertyIncome.apply _)
 }

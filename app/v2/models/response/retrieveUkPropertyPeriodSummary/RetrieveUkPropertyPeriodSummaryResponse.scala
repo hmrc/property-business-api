@@ -17,11 +17,10 @@
 package v2.models.response.retrieveUkPropertyPeriodSummary
 
 import config.AppConfig
-import play.api.libs.json.{Json, OWrites, Reads}
-import v2.hateoas.HateoasLinksFactory
-import v2.models.hateoas.Link
-import v2.hateoas.HateoasLinks
-import v2.models.hateoas.HateoasData
+import play.api.libs.functional.syntax._
+import play.api.libs.json.{Json, OWrites, Reads, __}
+import v2.hateoas.{HateoasLinks, HateoasLinksFactory}
+import v2.models.hateoas.{HateoasData, Link}
 
 case class RetrieveUkPropertyPeriodSummaryResponse(submittedOn: String,
                                                    fromDate: String,
@@ -32,7 +31,13 @@ case class RetrieveUkPropertyPeriodSummaryResponse(submittedOn: String,
 object RetrieveUkPropertyPeriodSummaryResponse extends HateoasLinks {
   implicit val writes: OWrites[RetrieveUkPropertyPeriodSummaryResponse] = Json.writes[RetrieveUkPropertyPeriodSummaryResponse]
 
-  implicit val reads: Reads[RetrieveUkPropertyPeriodSummaryResponse] = Json.reads[RetrieveUkPropertyPeriodSummaryResponse] //TODO: Implement custom reads
+  implicit val reads: Reads[RetrieveUkPropertyPeriodSummaryResponse] = (
+    (__ \ "submittedOn").read[String] and
+      (__ \ "fromDate").read[String] and
+      (__ \ "toDate").read[String] and
+      (__ \ "ukFhlProperty").readNullable[UkFhlProperty] and
+      (__ \ "ukOtherProperty").readNullable[UkNonFhlProperty]
+    ) (RetrieveUkPropertyPeriodSummaryResponse.apply _)
 
   implicit object hateoasLinksFactory extends HateoasLinksFactory[RetrieveUkPropertyPeriodSummaryResponse, RetrieveUkPropertyPeriodSummaryHateoasData] {
     override def links(appConfig: AppConfig, data: RetrieveUkPropertyPeriodSummaryHateoasData): Seq[Link] = {
@@ -44,6 +49,7 @@ object RetrieveUkPropertyPeriodSummaryResponse extends HateoasLinks {
       )
     }
   }
+
 }
 
 case class RetrieveUkPropertyPeriodSummaryHateoasData(nino: String, businessId: String, taxYear: String, submissionId: String) extends HateoasData

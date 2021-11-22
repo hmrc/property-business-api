@@ -16,7 +16,8 @@
 
 package v2.models.response.retrieveUkPropertyPeriodSummary
 
-import play.api.libs.json.{Json, OWrites, Reads}
+import play.api.libs.functional.syntax._
+import play.api.libs.json.{JsPath, Json, OWrites, Reads}
 
 case class NonFhlPropertyExpenses(premisesRunningCosts: Option[BigDecimal],
                                   repairsAndMaintenance: Option[BigDecimal],
@@ -32,5 +33,18 @@ case class NonFhlPropertyExpenses(premisesRunningCosts: Option[BigDecimal],
 
 object NonFhlPropertyExpenses {
   implicit val writes: OWrites[NonFhlPropertyExpenses] = Json.writes[NonFhlPropertyExpenses]
-  implicit val reads: Reads[NonFhlPropertyExpenses] = Json.reads[NonFhlPropertyExpenses]
+
+  implicit val reads: Reads[NonFhlPropertyExpenses] = (
+    (JsPath \ "premisesRunningCosts").readNullable[BigDecimal] and
+      (JsPath \ "repairsAndMaintenance").readNullable[BigDecimal] and
+      (JsPath \ "financialCosts").readNullable[BigDecimal] and
+      (JsPath \ "professionalFees").readNullable[BigDecimal] and
+      (JsPath \ "costOfServices").readNullable[BigDecimal] and
+      (JsPath \ "other").readNullable[BigDecimal] and
+      (JsPath \ "residentialFinancialCost").readNullable[BigDecimal] and
+      (JsPath \ "travelCosts").readNullable[BigDecimal] and
+      (JsPath \ "residentialFinancialCostsCarriedForward").readNullable[BigDecimal] and
+      (JsPath \ "ukOtherRentARoom").readNullable[RentARoomExpenses] and
+      (JsPath \ "consolidatedExpenses").readNullable[BigDecimal]
+    ) (NonFhlPropertyExpenses.apply _)
 }

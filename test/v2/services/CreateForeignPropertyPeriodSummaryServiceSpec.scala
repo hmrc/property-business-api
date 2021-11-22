@@ -35,15 +35,15 @@ class CreateForeignPropertyPeriodSummaryServiceSpec extends UnitSpec {
 
   val businessId: String = "XAIS12345678910"
   val nino: String = "AA123456A"
-  val taxYear: String = "2022-23"
+  val taxYear: String = "2019-20"
   implicit val correlationId: String = "X-123"
 
   private val regularExpensesBody = CreateForeignPropertyPeriodSummaryRequestBody(
     "2020-01-01",
     "2020-01-31",
-    Some(CreateForeignFhlEea(
-      Some(ForeignFhlEeaIncome(Some(5000.99))),
-      Some(CreateForeignFhlEeaExpenses(
+    Some(ForeignFhlEea(
+      ForeignFhlEeaIncome(5000.99),
+      Some(ForeignFhlEeaExpenditure(
         Some(5000.99),
         Some(5000.99),
         Some(5000.99),
@@ -54,16 +54,16 @@ class CreateForeignPropertyPeriodSummaryServiceSpec extends UnitSpec {
         None
       ))
     )),
-    Some(Seq(CreateForeignNonFhlPropertyEntry("FRA",
-      Some(ForeignNonFhlPropertyIncome(
-        Some(ForeignNonFhlPropertyRentIncome(Some(5000.99))),
+    Some(Seq(ForeignPropertyEntry("FRA",
+      ForeignPropertyIncome(
+        ForeignPropertyRentIncome(5000.99),
         false,
         Some(5000.99),
         Some(5000.99),
         Some(5000.99),
         Some(5000.99)
-      )),
-      Some(CreateForeignNonFhlPropertyExpenses(
+      ),
+      Some(ForeignPropertyExpenditure(
         Some(5000.99),
         Some(5000.99),
         Some(5000.99),
@@ -80,9 +80,9 @@ class CreateForeignPropertyPeriodSummaryServiceSpec extends UnitSpec {
   private val consolidatedExpensesBody = CreateForeignPropertyPeriodSummaryRequestBody(
     "2020-01-01",
     "2020-01-31",
-    Some(CreateForeignFhlEea(
-      Some(ForeignFhlEeaIncome(Some(5000.99))),
-      Some(CreateForeignFhlEeaExpenses(
+    Some(ForeignFhlEea(
+      ForeignFhlEeaIncome(5000.99),
+      Some(ForeignFhlEeaExpenditure(
         None,
         None,
         None,
@@ -93,16 +93,16 @@ class CreateForeignPropertyPeriodSummaryServiceSpec extends UnitSpec {
         Some(3653.35)
       ))
     )),
-    Some(Seq(CreateForeignNonFhlPropertyEntry("FRA",
-      Some(ForeignNonFhlPropertyIncome(
-       Some( ForeignNonFhlPropertyRentIncome(Some(5000.99))),
+    Some(Seq(ForeignPropertyEntry("FRA",
+      ForeignPropertyIncome(
+        ForeignPropertyRentIncome(5000.99),
         false,
         Some(5000.99),
         Some(5000.99),
         Some(5000.99),
         Some(5000.99)
-      )),
-      Some(CreateForeignNonFhlPropertyExpenses(
+      ),
+      Some(ForeignPropertyExpenditure(
         None,
         None,
         None,
@@ -171,7 +171,7 @@ class CreateForeignPropertyPeriodSummaryServiceSpec extends UnitSpec {
         "NOT_ALIGN_PERIOD" -> RuleMisalignedPeriodError,
         "GAPS_IN_PERIOD" -> RuleNotContiguousPeriodError,
         "INVALID_DATE_RANGE" -> RuleToDateBeforeFromDateError,
-        "DUPLICATE_SUBMISSION" -> RuleDuplicateSubmissionError,
+        "DUPLICATE_SUBMISSION" -> RuleDuplicateSubmission,
         "INCOME_SOURCE_NOT_FOUND" -> NotFoundError,
         "SERVER_ERROR" -> DownstreamError,
         "SERVICE_UNAVAILABLE" -> DownstreamError

@@ -32,14 +32,14 @@ class CreateForeignPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
 
   val businessId: String = "XAIS12345678910"
   val nino: String = "AA123456A"
-  val taxYear: String = "2022-23"
+  val taxYear: String = "2019-20"
 
   val regularExpensesBody: CreateForeignPropertyPeriodSummaryRequestBody = CreateForeignPropertyPeriodSummaryRequestBody(
     "2020-01-01",
     "2020-01-31",
-    Some(CreateForeignFhlEea(
-      Some(ForeignFhlEeaIncome(Some(5000.99))),
-      Some(CreateForeignFhlEeaExpenses(
+    Some(ForeignFhlEea(
+      ForeignFhlEeaIncome(5000.99),
+      Some(ForeignFhlEeaExpenditure(
         Some(5000.99),
         Some(5000.99),
         Some(5000.99),
@@ -50,16 +50,16 @@ class CreateForeignPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
         None
       ))
     )),
-    Some(Seq(CreateForeignNonFhlPropertyEntry("FRA",
-      Some(ForeignNonFhlPropertyIncome(
-        Some(ForeignNonFhlPropertyRentIncome(Some(5000.99))),
+    Some(Seq(ForeignPropertyEntry("FRA",
+      ForeignPropertyIncome(
+        ForeignPropertyRentIncome(5000.99),
         false,
         Some(5000.99),
         Some(5000.99),
         Some(5000.99),
         Some(5000.99)
-      )),
-      Some(CreateForeignNonFhlPropertyExpenses(
+      ),
+      Some(ForeignPropertyExpenditure(
         Some(5000.99),
         Some(5000.99),
         Some(5000.99),
@@ -76,9 +76,9 @@ class CreateForeignPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
   val consolidatedExpensesBody: CreateForeignPropertyPeriodSummaryRequestBody = CreateForeignPropertyPeriodSummaryRequestBody(
     "2020-01-01",
     "2020-01-31",
-    Some(CreateForeignFhlEea(
-      Some(ForeignFhlEeaIncome(Some(5000.99))),
-      Some(CreateForeignFhlEeaExpenses(
+    Some(ForeignFhlEea(
+      ForeignFhlEeaIncome(5000.99),
+      Some(ForeignFhlEeaExpenditure(
         None,
         None,
         None,
@@ -89,16 +89,16 @@ class CreateForeignPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
         Some(3653.35)
       ))
     )),
-    Some(Seq(CreateForeignNonFhlPropertyEntry("FRA",
-      Some(ForeignNonFhlPropertyIncome(
-        Some(ForeignNonFhlPropertyRentIncome(Some(5000.99))),
+    Some(Seq(ForeignPropertyEntry("FRA",
+      ForeignPropertyIncome(
+        ForeignPropertyRentIncome(5000.99),
         false,
         Some(5000.99),
         Some(5000.99),
         Some(5000.99),
         Some(5000.99)
-      )),
-      Some(CreateForeignNonFhlPropertyExpenses(
+      ),
+      Some(ForeignPropertyExpenditure(
         None,
         None,
         None,
@@ -114,9 +114,9 @@ class CreateForeignPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
 
   private val response = CreateForeignPropertyPeriodSummaryResponse("4557ecb5-fd32-48cc-81f5-e6acd1099f3c")
 
-  private val regularExpensesRequestData = CreateForeignPropertyPeriodSummaryRequest(Nino(nino), businessId, taxYear, regularExpensesBody)
+  private val regularExpensesRequestData = CreateForeignPropertyPeriodSummaryRequest(Nino(nino), businessId, regularExpensesBody)
 
-  private val consolidatedExpensesRequestData = CreateForeignPropertyPeriodSummaryRequest(Nino(nino), businessId, taxYear, consolidatedExpensesBody)
+  private val consolidatedExpensesRequestData = CreateForeignPropertyPeriodSummaryRequest(Nino(nino), businessId, consolidatedExpensesBody)
 
   class Test extends MockHttpClient with MockAppConfig {
     val connector: CreateForeignPropertyPeriodSummaryConnector = new CreateForeignPropertyPeriodSummaryConnector(
@@ -139,7 +139,7 @@ class CreateForeignPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
 
       MockHttpClient
         .post(
-          url = s"$baseUrl/income-tax/business/property/periodic/$nino/$businessId",
+          url = s"$baseUrl/income-tax/business/property/periodic?$nino&$businessId&$taxYear",
           config = dummyIfsHeaderCarrierConfig,
           body = regularExpensesBody,
           requiredHeaders = requiredIfsHeadersPost,
@@ -159,7 +159,7 @@ class CreateForeignPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
 
       MockHttpClient
         .post(
-          url = s"$baseUrl/income-tax/business/property/periodic/$nino/$businessId",
+          url = s"$baseUrl/income-tax/business/property/periodic?$nino&$businessId&$taxYear",
           config = dummyIfsHeaderCarrierConfig,
           body = consolidatedExpensesBody,
           requiredHeaders = requiredIfsHeadersPost,

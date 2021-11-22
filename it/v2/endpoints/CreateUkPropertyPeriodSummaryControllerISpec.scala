@@ -96,7 +96,7 @@ class CreateUkPropertyPeriodSummaryControllerISpec extends V2IntegrationBaseSpec
       |            }
       |        },
       |        "expenses": {
-      |            "consolidatedExpense": 988.18
+      |            "consolidatedExpenses": 988.18
       |        }
       |    },
       |    "ukNonFhlProperty": {
@@ -111,7 +111,7 @@ class CreateUkPropertyPeriodSummaryControllerISpec extends V2IntegrationBaseSpec
       |            }
       |        },
       |        "expenses": {
-      |            "consolidatedExpense": 988.18
+      |            "consolidatedExpenses": 988.18
       |        }
       |    }
       |}
@@ -125,7 +125,7 @@ class CreateUkPropertyPeriodSummaryControllerISpec extends V2IntegrationBaseSpec
       |  "toDate": "20190406",
       |  "ukFhlProperty":{
       |    "expenses": {
-      |       "consolidatedExpense": 988.18
+      |       "consolidatedExpenses": 988.18
       |    }
       |  }
       |}
@@ -139,7 +139,7 @@ class CreateUkPropertyPeriodSummaryControllerISpec extends V2IntegrationBaseSpec
       |  "toDate": "2019-04-06",
       |  "ukFhlProperty":{
       |    "expenses": {
-      |       "consolidatedExpense": 988.18
+      |       "consolidatedExpenses": 988.18
       |    }
       |  }
       |}
@@ -422,7 +422,7 @@ class CreateUkPropertyPeriodSummaryControllerISpec extends V2IntegrationBaseSpec
           IfsStub.onSuccess(IfsStub.POST, ifsUri, ifsQueryParams, Status.OK, ifsResponse)
         }
 
-        val response: WSResponse = await(request().post(requestBodyJsonConsolidatedExpense))
+        val response: WSResponse = await(request().post(requestBodyJson))
         response.status shouldBe Status.CREATED
         response.json shouldBe responseBody
         response.header("Content-Type") shouldBe Some("application/json")
@@ -531,7 +531,7 @@ class CreateUkPropertyPeriodSummaryControllerISpec extends V2IntegrationBaseSpec
           (Status.BAD_REQUEST, "INVALID_INCOMESOURCEID", Status.BAD_REQUEST, BusinessIdFormatError),
           (Status.BAD_REQUEST, "INVALID_PAYLOAD", Status.INTERNAL_SERVER_ERROR, DownstreamError),
           (Status.BAD_REQUEST, "INVALID_CORRELATIONID", Status.INTERNAL_SERVER_ERROR, DownstreamError),
-          (Status.CONFLICT, "DUPLICATE_SUBMISSION", Status.BAD_REQUEST, RuleDuplicateSubmission),
+          (Status.CONFLICT, "DUPLICATE_SUBMISSION", Status.BAD_REQUEST, RuleDuplicateSubmissionError),
           (Status.UNPROCESSABLE_ENTITY, "OVERLAPS_IN_PERIOD", Status.BAD_REQUEST, RuleOverlappingPeriodError),
           (Status.UNPROCESSABLE_ENTITY, "NOT_ALIGN_PERIOD", Status.BAD_REQUEST, RuleMisalignedPeriodError),
           (Status.UNPROCESSABLE_ENTITY, "GAPS_IN_PERIOD", Status.BAD_REQUEST, RuleNotContiguousPeriodError),

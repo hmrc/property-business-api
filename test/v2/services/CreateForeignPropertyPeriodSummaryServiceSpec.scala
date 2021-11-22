@@ -170,7 +170,7 @@ class CreateForeignPropertyPeriodSummaryServiceSpec extends UnitSpec {
         "NOT_ALIGN_PERIOD" -> RuleMisalignedPeriodError,
         "GAPS_IN_PERIOD" -> RuleNotContiguousPeriodError,
         "INVALID_DATE_RANGE" -> RuleToDateBeforeFromDateError,
-        "DUPLICATE_SUBMISSION" -> RuleDuplicateSubmission,
+        "DUPLICATE_SUBMISSION" -> RuleDuplicateSubmissionError,
         "INCOME_SOURCE_NOT_FOUND" -> NotFoundError,
         "SERVER_ERROR" -> DownstreamError,
         "SERVICE_UNAVAILABLE" -> DownstreamError

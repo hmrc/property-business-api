@@ -55,7 +55,7 @@ class CreateUkPropertyPeriodSummaryService @Inject()(connector: CreateUkProperty
       "INVALID_PAYLOAD" -> DownstreamError,
       "INVALID_CORRELATIONID" -> DownstreamError,
       "INCOME_SOURCE_NOT_FOUND" -> NotFoundError,
-      "DUPLICATE_SUBMISSION" -> RuleDuplicateSubmission,
+      "DUPLICATE_SUBMISSION" -> RuleDuplicateSubmissionError,
       "NOT_ALIGN_PERIOD" -> RuleMisalignedPeriodError,
       "OVERLAPS_IN_PERIOD" -> RuleOverlappingPeriodError,
       "GAPS_IN_PERIOD" -> RuleNotContiguousPeriodError,

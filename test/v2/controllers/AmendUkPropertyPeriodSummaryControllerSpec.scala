@@ -385,7 +385,7 @@ class AmendUkPropertyPeriodSummaryControllerSpec
           (BusinessIdFormatError, BAD_REQUEST),
           (SubmissionIdFormatError, BAD_REQUEST),
           (RuleTaxYearNotSupportedError, BAD_REQUEST),
-          (RuleTypeOfBusinessIncorrect, BAD_REQUEST),
+          (RuleTypeOfBusinessIncorrectError, BAD_REQUEST),
           (DownstreamError, INTERNAL_SERVER_ERROR)
         )
 
@@ -418,10 +418,10 @@ class AmendUkPropertyPeriodSummaryControllerSpec
           (BusinessIdFormatError, BAD_REQUEST),
           (SubmissionIdFormatError, BAD_REQUEST),
           (NotFoundError, NOT_FOUND),
-          (RuleTypeOfBusinessIncorrect, BAD_REQUEST),
+          (RuleTypeOfBusinessIncorrectError, BAD_REQUEST),
           (RuleTaxYearNotSupportedError, BAD_REQUEST),
           (DownstreamError, INTERNAL_SERVER_ERROR),
-          (RuleDuplicateSubmission, BAD_REQUEST)
+          (RuleDuplicateSubmissionError, BAD_REQUEST)
         )
 
         input.foreach(args => (serviceErrors _).tupled(args))

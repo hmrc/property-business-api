@@ -1281,7 +1281,7 @@ class AmendUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec with JsonErr
           validBusinessId,
           validTaxYear,
           requestBodyJson.update("/ukFhlProperty/allowances/propertyIncomeAllowance", JsNumber(123.45))
-        )) shouldBe List(RuleBothAllowancesSuppliedError.copy(paths = Some(Seq("ukFhlProperty/allowances"))))
+        )) shouldBe List(RuleBothAllowancesSuppliedError.copy(paths = Some(Seq("/ukFhlProperty/allowances"))))
       }
 
       "allowances and propertyIncomeAllowance supplied for non fhl" in {
@@ -1290,7 +1290,130 @@ class AmendUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec with JsonErr
           validBusinessId,
           validTaxYear,
           requestBodyJson.update("/ukNonFhlProperty/allowances/propertyIncomeAllowance", JsNumber(123.45))
-        )) shouldBe List(RuleBothAllowancesSuppliedError.copy(paths = Some(Seq("ukNonFhlProperty/allowances"))))
+        )) shouldBe List(RuleBothAllowancesSuppliedError.copy(paths = Some(Seq("/ukNonFhlProperty/allowances"))))
+      }
+    }
+
+    "return RuleBuildingNameNumberError" when {
+      "request supplied has structuredBuildingAllowance/building with no name or number" in {
+        validator.validate(AmendUkPropertyAnnualSubmissionRawData(
+          validNino,
+          validBusinessId,
+          validTaxYear,
+          Json.parse(
+            """
+              |{
+              |  "ukNonFhlProperty": {
+              |    "allowances": {
+              |      "annualInvestmentAllowance": 2000.50,
+              |      "zeroEmissionGoodsVehicleAllowance": 2000.60,
+              |      "businessPremisesRenovationAllowance": 2000.70,
+              |      "otherCapitalAllowance": 2000.80,
+              |      "costOfReplacingDomesticGoods": 2000.90,
+              |      "electricChargePointAllowance": 3000.10,
+              |      "structuredBuildingAllowance": [
+              |        {
+              |          "amount": 3000.30,
+              |          "firstYear": {
+              |            "qualifyingDate": "2020-01-01",
+              |            "qualifyingAmountExpenditure": 3000.40
+              |          },
+              |          "building": {
+              |            "postcode": "GF49JH"
+              |          }
+              |        }
+              |      ],
+              |      "enhancedStructuredBuildingAllowance": [
+              |        {
+              |          "amount": 3000.50,
+              |          "firstYear": {
+              |            "qualifyingDate": "2020-01-01",
+              |            "qualifyingAmountExpenditure": 3000.60
+              |          },
+              |          "building": {
+              |            "name": "house name",
+              |            "number": "house number",
+              |            "postcode": "GF49JH"
+              |          }
+              |        }
+              |      ],
+              |      "zeroEmissionsCarAllowance": 3000.20
+              |    },
+              |    "adjustments": {
+              |      "lossBroughtForward": 2000.10,
+              |      "balancingCharge": 2000.20,
+              |      "privateUseAdjustment": 2000.30,
+              |      "businessPremisesRenovationAllowanceBalancingCharges": 2000.40,
+              |      "nonResidentLandlord": true,
+              |      "rentARoom": {
+              |        "jointlyLet": true
+              |      }
+              |    }
+              |  }
+              |}
+      """.stripMargin)
+        )) shouldBe
+          List(RuleBuildingNameNumberError.copy(paths = Some(Seq("/ukNonFhlProperty/allowances/structuredBuildingAllowance/0/building"))))
+      }
+
+      "request supplied has enhancedStructuredBuildingAllowance/building with no name or number" in {
+        validator.validate(AmendUkPropertyAnnualSubmissionRawData(
+          validNino,
+          validBusinessId,
+          validTaxYear,
+          Json.parse(
+            """
+              |{
+              |  "ukNonFhlProperty": {
+              |    "allowances": {
+              |      "annualInvestmentAllowance": 2000.50,
+              |      "zeroEmissionGoodsVehicleAllowance": 2000.60,
+              |      "businessPremisesRenovationAllowance": 2000.70,
+              |      "otherCapitalAllowance": 2000.80,
+              |      "costOfReplacingDomesticGoods": 2000.90,
+              |      "electricChargePointAllowance": 3000.10,
+              |      "structuredBuildingAllowance": [
+              |        {
+              |          "amount": 3000.30,
+              |          "firstYear": {
+              |            "qualifyingDate": "2020-01-01",
+              |            "qualifyingAmountExpenditure": 3000.40
+              |          },
+              |          "building": {
+              |            "name": "house name",
+              |            "postcode": "GF49JH"
+              |          }
+              |        }
+              |      ],
+              |      "enhancedStructuredBuildingAllowance": [
+              |        {
+              |          "amount": 3000.50,
+              |          "firstYear": {
+              |            "qualifyingDate": "2020-01-01",
+              |            "qualifyingAmountExpenditure": 3000.60
+              |          },
+              |          "building": {
+              |            "postcode": "GF49JH"
+              |          }
+              |        }
+              |      ],
+              |      "zeroEmissionsCarAllowance": 3000.20
+              |    },
+              |    "adjustments": {
+              |      "lossBroughtForward": 2000.10,
+              |      "balancingCharge": 2000.20,
+              |      "privateUseAdjustment": 2000.30,
+              |      "businessPremisesRenovationAllowanceBalancingCharges": 2000.40,
+              |      "nonResidentLandlord": true,
+              |      "rentARoom": {
+              |        "jointlyLet": true
+              |      }
+              |    }
+              |  }
+              |}
+              """.stripMargin)
+        )) shouldBe
+          List(RuleBuildingNameNumberError.copy(paths = Some(Seq("/ukNonFhlProperty/allowances/enhancedStructuredBuildingAllowance/0/building"))))
       }
     }
 

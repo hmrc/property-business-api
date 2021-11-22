@@ -138,7 +138,7 @@ class AmendUkPropertyPeriodSummaryServiceSpec extends ServiceSpec {
           "INVALID_PAYLOAD" -> DownstreamError,
           "INVALID_CORRELATIONID" -> DownstreamError,
           "NO_DATA_FOUND" -> NotFoundError,
-          "INCOMPATIBLE_PAYLOAD" -> RuleTypeOfBusinessIncorrect,
+          "INCOMPATIBLE_PAYLOAD" -> RuleTypeOfBusinessIncorrectError,
           "TAX_YEAR_NOT_SUPPORTED" -> RuleTaxYearNotSupportedError,
           "BUSINESS_VALIDATION_FAILURE" -> DownstreamError,
           "DUPLICATE_COUNTRY_CODE" -> DownstreamError,

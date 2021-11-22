@@ -241,7 +241,7 @@ class RetrieveUkPropertyAnnualSubmissionControllerSpec
           (TaxYearFormatError, BAD_REQUEST),
           (BusinessIdFormatError, BAD_REQUEST),
           (RuleTaxYearNotSupportedError, BAD_REQUEST),
-          (RuleTypeOfBusinessIncorrect, BAD_REQUEST),
+          (RuleTypeOfBusinessIncorrectError, BAD_REQUEST),
           (NotFoundError, NOT_FOUND),
           (DownstreamError, INTERNAL_SERVER_ERROR)
         )

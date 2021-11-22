@@ -71,7 +71,7 @@ class RetrieveUkPropertyAnnualSubmissionServiceSpec extends UnitSpec {
         MockRetrieveUkPropertyConnector
           .retrieve(request) returns Future.successful(Right(ResponseWrapper(correlationId, NonUkResult)))
 
-        await(service.retrieveUkProperty(request)) shouldBe Left(ErrorWrapper(correlationId, RuleTypeOfBusinessIncorrect))
+        await(service.retrieveUkProperty(request)) shouldBe Left(ErrorWrapper(correlationId, RuleTypeOfBusinessIncorrectError))
       }
     }
 

@@ -16,49 +16,15 @@
 
 package v2.models.response.retrieveUkPropertyPeriodSummary
 
+import fixtures.RetrieveUkPropertyPeriodSummary.ResponseModelsFixture
 import play.api.libs.json.{JsValue, Json}
 import support.UnitSpec
 
-class FhlPropertyExpensesSpec extends UnitSpec {
-  val downstreamJson: JsValue = Json.parse(
-    """
-      |{
-      |  "premisesRunningCosts": 0,
-      |  "repairsAndMaintenance": 0,
-      |  "financialCosts": 0,
-      |  "professionalFees": 0,
-      |  "costOfServices": 0,
-      |  "other": 0,
-      |  "consolidatedExpenses": 0,
-      |  "travelCosts": 0,
-      |  "ukFhlRentARoom": {
-      |    "amountClaimed": 0
-      |  }
-      |}
-    """.stripMargin
-  )
-
-  val mtdJson: JsValue = Json.parse(
-    """
-      |{
-      |  "premisesRunningCosts": 0,
-      |  "repairsAndMaintenance": 0,
-      |  "financialCosts": 0,
-      |  "professionalFees": 0,
-      |  "costOfServices": 0,
-      |  "other": 0,
-      |  "consolidatedExpenses": 0,
-      |  "travelCosts": 0,
-      |  "rentARoom": {
-      |    "amountClaimed": 0
-      |  }
-      |}
-    """.stripMargin
-  )
-
-  val model: FhlPropertyExpenses = FhlPropertyExpenses(Some(0), Some(0), Some(0), Some(0), Some(0), Some(0), Some(0), Some(RentARoomExpenses(Some(0))), Some(0))
-
+class FhlPropertyExpensesSpec extends UnitSpec with ResponseModelsFixture {
   "FhlPropertyExpenses" when {
+    val downstreamJson: JsValue = (fullDownstreamJson \ "ukFhlProperty" \ "expenses").get
+    val mtdJson: JsValue = (fullMtdJson \ "ukFhlProperty" \ "expenses").get
+    val model: FhlPropertyExpenses = fhlPropertyExpensesModel
     "read from valid JSON" should {
       "return the expected model" in {
         downstreamJson.as[FhlPropertyExpenses] shouldBe model

@@ -16,29 +16,15 @@
 
 package v2.models.response.retrieveUkPropertyPeriodSummary
 
+import fixtures.RetrieveUkPropertyPeriodSummary.ResponseModelsFixture
 import play.api.libs.json.{JsValue, Json}
 import support.UnitSpec
 
-class RentARoomExpensesSpec extends UnitSpec {
-  val downstreamJson: JsValue = Json.parse(
-    """
-      |{
-      |  "amountClaimed": 0
-      |}
-    """.stripMargin
-  )
-
-  val mtdJson: JsValue = Json.parse(
-    """
-      |{
-      |  "amountClaimed": 0
-      |}
-    """.stripMargin
-  )
-
-  val model: RentARoomExpenses = RentARoomExpenses(Some(0))
-
+class RentARoomExpensesSpec extends UnitSpec with ResponseModelsFixture {
   "RentARoomExpenses" when {
+    val downstreamJson: JsValue = (fullDownstreamJson \ "ukOtherProperty" \ "expenses" \ "ukOtherRentARoom").get
+    val mtdJson: JsValue = (fullMtdJson \ "ukNonFhlProperty" \ "expenses" \ "rentARoom").get
+    val model: RentARoomExpenses = ukNonFhlRentARoomExpensesModel
     "read from valid JSON" should {
       "return the expected model" in {
         downstreamJson.as[RentARoomExpenses] shouldBe model

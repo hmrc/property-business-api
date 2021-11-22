@@ -16,6 +16,7 @@
 
 package v2.models.response.retrieveUkPropertyPeriodSummary
 
+import fixtures.RetrieveUkPropertyPeriodSummary.ResponseModelsFixture
 import mocks.MockAppConfig
 import play.api.libs.json.{JsValue, Json}
 import support.UnitSpec
@@ -24,126 +25,10 @@ import v2.models.hateoas.HateoasWrapper
 import v2.models.hateoas.Link
 import v2.models.hateoas.Method._
 
-class RetrieveUkPropertyPeriodSummaryResponseSpec extends UnitSpec with MockAppConfig {
-  val downstreamJson: JsValue = Json.parse(
-    """
-      |{
-      |  "submittedOn": "2020-06-17T10:53:38Z",
-      |  "fromDate": "2019-01-29",
-      |  "toDate": "2020-03-29",
-      |  "ukFhlProperty": {
-      |    "income": {
-      |      "periodAmount": 0,
-      |      "taxDeducted": 0,
-      |      "ukFhlRentARoom": {
-      |        "rentsReceived": 0
-      |      }
-      |    },
-      |    "expenses": {
-      |      "premisesRunningCosts": 0,
-      |      "repairsAndMaintenance": 0,
-      |      "financialCosts": 0,
-      |      "professionalFees": 0,
-      |      "costOfServices": 0,
-      |      "other": 0,
-      |      "consolidatedExpenses": 0,
-      |      "travelCosts": 0,
-      |      "ukFhlRentARoom": {
-      |        "amountClaimed": 0
-      |      }
-      |    }
-      |  },
-      |  "ukOtherProperty": {
-      |    "income": {
-      |      "premiumsOfLeaseGrant": 0,
-      |      "reversePremiums": 0,
-      |      "periodAmount": 0,
-      |      "taxDeducted": 0,
-      |      "otherIncome": 0,
-      |      "ukOtherRentARoom": {
-      |        "rentsReceived": 0
-      |      }
-      |    },
-      |    "expenses": {
-      |      "premisesRunningCosts": 0,
-      |      "repairsAndMaintenance": 0,
-      |      "financialCosts": 0,
-      |      "professionalFees": 0,
-      |      "costOfServices": 0,
-      |      "other": 0,
-      |      "consolidatedExpenses": 0,
-      |      "residentialFinancialCost": 0,
-      |      "travelCosts": 0,
-      |      "residentialFinancialCostsCarriedForward": 0,
-      |      "ukOtherRentARoom": {
-      |        "amountClaimed": 0
-      |      }
-      |    }
-      |  }
-      |}
-    """.stripMargin
-  )
-
-  val mtdJson: JsValue = Json.parse(
-    """
-      |{
-      |  "submittedOn": "2020-06-17T10:53:38Z",
-      |  "fromDate": "2019-01-29",
-      |  "toDate": "2020-03-29",
-      |  "ukFhlProperty": {
-      |    "income": {
-      |      "periodAmount": 0,
-      |      "taxDeducted": 0,
-      |      "rentARoom": {
-      |        "rentsReceived": 0
-      |      }
-      |    },
-      |    "expenses": {
-      |      "premisesRunningCosts": 0,
-      |      "repairsAndMaintenance": 0,
-      |      "financialCosts": 0,
-      |      "professionalFees": 0,
-      |      "costOfServices": 0,
-      |      "other": 0,
-      |      "travelCosts": 0,
-      |      "rentARoom": {
-      |        "amountClaimed": 0
-      |      },
-      |      "consolidatedExpenses": 0
-      |    }
-      |  },
-      |  "ukNonFhlProperty": {
-      |    "income": {
-      |      "premiumsOfLeaseGrant": 0,
-      |      "reversePremiums": 0,
-      |      "periodAmount": 0,
-      |      "taxDeducted": 0,
-      |      "otherIncome": 0,
-      |      "rentARoom": {
-      |        "rentsReceived": 0
-      |      }
-      |    },
-      |    "expenses": {
-      |      "premisesRunningCosts": 0,
-      |      "repairsAndMaintenance": 0,
-      |      "financialCosts": 0,
-      |      "professionalFees": 0,
-      |      "costOfServices": 0,
-      |      "other": 0,
-      |      "residentialFinancialCost": 0,
-      |      "travelCosts": 0,
-      |      "residentialFinancialCostsCarriedForward": 0,
-      |      "rentARoom": {
-      |        "amountClaimed": 0
-      |      },
-      |      "consolidatedExpenses": 0
-      |    }
-      |  }
-      |}
-    """.stripMargin
-  )
-
-  val model: RetrieveUkPropertyPeriodSummaryResponse = RetrieveUkPropertyPeriodSummaryResponse("2020-06-17T10:53:38Z", "2019-01-29", "2020-03-29", Some(UkFhlProperty(Some(FhlPropertyIncome(Some(0), Some(0), Some(RentARoomIncome(Some(0))))), Some(FhlPropertyExpenses(Some(0), Some(0), Some(0), Some(0), Some(0), Some(0), Some(0), Some(RentARoomExpenses(Some(0))), Some(0))))), Some(UkNonFhlProperty(Some(NonFhlPropertyIncome(Some(0), Some(0), Some(0), Some(0), Some(0), Some(RentARoomIncome(Some(0))))), Some(NonFhlPropertyExpenses(Some(0), Some(0), Some(0), Some(0), Some(0), Some(0), Some(0), Some(0), Some(0), Some(RentARoomExpenses(Some(0))), Some(0))))))
+class RetrieveUkPropertyPeriodSummaryResponseSpec extends UnitSpec with MockAppConfig with ResponseModelsFixture {
+  val downstreamJson: JsValue = fullDownstreamJson
+  val mtdJson: JsValue = fullMtdJson
+  val model: RetrieveUkPropertyPeriodSummaryResponse = fullResponseModel
 
   val hateoasData: RetrieveUkPropertyPeriodSummaryHateoasData = RetrieveUkPropertyPeriodSummaryHateoasData(
     nino = "AA999999A",

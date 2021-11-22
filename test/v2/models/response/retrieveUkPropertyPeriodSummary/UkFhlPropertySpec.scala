@@ -16,67 +16,15 @@
 
 package v2.models.response.retrieveUkPropertyPeriodSummary
 
+import fixtures.RetrieveUkPropertyPeriodSummary.ResponseModelsFixture
 import play.api.libs.json.{JsValue, Json}
 import support.UnitSpec
 
-class UkFhlPropertySpec extends UnitSpec {
-  val downstreamJson: JsValue = Json.parse(
-    """
-      |{
-      |  "income": {
-      |    "periodAmount": 0,
-      |    "taxDeducted": 0,
-      |    "ukFhlRentARoom": {
-      |      "rentsReceived": 0
-      |    }
-      |  },
-      |  "expenses": {
-      |    "premisesRunningCosts": 0,
-      |    "repairsAndMaintenance": 0,
-      |    "financialCosts": 0,
-      |    "professionalFees": 0,
-      |    "costOfServices": 0,
-      |    "other": 0,
-      |    "consolidatedExpenses": 0,
-      |    "travelCosts": 0,
-      |    "ukFhlRentARoom": {
-      |      "amountClaimed": 0
-      |    }
-      |  }
-      |}
-    """.stripMargin
-  )
-
-  val mtdJson: JsValue = Json.parse(
-    """
-      |{
-      |  "income": {
-      |    "periodAmount": 0,
-      |    "taxDeducted": 0,
-      |    "rentARoom": {
-      |      "rentsReceived": 0
-      |    }
-      |  },
-      |  "expenses": {
-      |    "premisesRunningCosts": 0,
-      |    "repairsAndMaintenance": 0,
-      |    "financialCosts": 0,
-      |    "professionalFees": 0,
-      |    "costOfServices": 0,
-      |    "other": 0,
-      |    "consolidatedExpenses": 0,
-      |    "travelCosts": 0,
-      |    "rentARoom": {
-      |      "amountClaimed": 0
-      |    }
-      |  }
-      |}
-    """.stripMargin
-  )
-
-  val model: UkFhlProperty = UkFhlProperty(Some(FhlPropertyIncome(Some(0), Some(0), Some(RentARoomIncome(Some(0))))), Some(FhlPropertyExpenses(Some(0), Some(0), Some(0), Some(0), Some(0), Some(0), Some(0), Some(RentARoomExpenses(Some(0))), Some(0))))
-
+class UkFhlPropertySpec extends UnitSpec with ResponseModelsFixture {
   "UkFhlProperty" when {
+    val downstreamJson: JsValue = (fullDownstreamJson \ "ukFhlProperty").get
+    val mtdJson: JsValue = (fullMtdJson \ "ukFhlProperty").get
+    val model: UkFhlProperty = ukFhlPropertyModel
     "read from valid JSON" should {
       "return the expected model" in {
         downstreamJson.as[UkFhlProperty] shouldBe model

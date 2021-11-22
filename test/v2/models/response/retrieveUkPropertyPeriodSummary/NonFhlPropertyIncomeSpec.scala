@@ -16,43 +16,15 @@
 
 package v2.models.response.retrieveUkPropertyPeriodSummary
 
+import fixtures.RetrieveUkPropertyPeriodSummary.ResponseModelsFixture
 import play.api.libs.json.{JsValue, Json}
 import support.UnitSpec
 
-class NonFhlPropertyIncomeSpec extends UnitSpec {
-  val downstreamJson: JsValue = Json.parse(
-    """
-      |{
-      |  "premiumsOfLeaseGrant": 0,
-      |  "reversePremiums": 0,
-      |  "periodAmount": 0,
-      |  "taxDeducted": 0,
-      |  "otherIncome": 0,
-      |  "ukOtherRentARoom": {
-      |    "rentsReceived": 0
-      |  }
-      |}
-    """.stripMargin
-  )
-
-  val mtdJson: JsValue = Json.parse(
-    """
-      |{
-      |  "premiumsOfLeaseGrant": 0,
-      |  "reversePremiums": 0,
-      |  "periodAmount": 0,
-      |  "taxDeducted": 0,
-      |  "otherIncome": 0,
-      |  "rentARoom": {
-      |    "rentsReceived": 0
-      |  }
-      |}
-    """.stripMargin
-  )
-
-  val model: NonFhlPropertyIncome = NonFhlPropertyIncome(Some(0), Some(0), Some(0), Some(0), Some(0), Some(RentARoomIncome(Some(0))))
-
+class NonFhlPropertyIncomeSpec extends UnitSpec with ResponseModelsFixture {
   "NonFhlPropertyIncome" when {
+    val downstreamJson: JsValue = (fullDownstreamJson \ "ukOtherProperty" \ "income").get
+    val mtdJson: JsValue = (fullMtdJson \ "ukNonFhlProperty" \ "income").get
+    val model: NonFhlPropertyIncome = ukNonFhlIncomeModel
     "read from valid JSON" should {
       "return the expected model" in {
         downstreamJson.as[NonFhlPropertyIncome] shouldBe model

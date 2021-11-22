@@ -25,7 +25,6 @@ import v2.models.hateoas.Link
 import v2.models.hateoas.Method._
 
 class RetrieveUkPropertyPeriodSummaryResponseSpec extends UnitSpec with MockAppConfig {
-
   val downstreamJson: JsValue = Json.parse(
     """
       |{
@@ -106,14 +105,14 @@ class RetrieveUkPropertyPeriodSummaryResponseSpec extends UnitSpec with MockAppC
       |      "professionalFees": 0,
       |      "costOfServices": 0,
       |      "other": 0,
-      |      "consolidatedExpenses": 0,
       |      "travelCosts": 0,
       |      "rentARoom": {
       |        "amountClaimed": 0
-      |      }
+      |      },
+      |      "consolidatedExpenses": 0
       |    }
       |  },
-      |  "ukOtherProperty": {
+      |  "ukNonFhlProperty": {
       |    "income": {
       |      "premiumsOfLeaseGrant": 0,
       |      "reversePremiums": 0,
@@ -131,20 +130,20 @@ class RetrieveUkPropertyPeriodSummaryResponseSpec extends UnitSpec with MockAppC
       |      "professionalFees": 0,
       |      "costOfServices": 0,
       |      "other": 0,
-      |      "consolidatedExpenses": 0,
       |      "residentialFinancialCost": 0,
       |      "travelCosts": 0,
       |      "residentialFinancialCostsCarriedForward": 0,
       |      "rentARoom": {
       |        "amountClaimed": 0
-      |      }
+      |      },
+      |      "consolidatedExpenses": 0
       |    }
       |  }
       |}
     """.stripMargin
   )
 
-  val model: RetrieveUkPropertyPeriodSummaryResponse = RetrieveUkPropertyPeriodSummaryResponse("A")
+  val model: RetrieveUkPropertyPeriodSummaryResponse = RetrieveUkPropertyPeriodSummaryResponse("2020-06-17T10:53:38Z", "2019-01-29", "2020-03-29", Some(UkFhlProperty(Some(FhlPropertyIncome(Some(0), Some(0), Some(RentARoomIncome(Some(0))))), Some(FhlPropertyExpenses(Some(0), Some(0), Some(0), Some(0), Some(0), Some(0), Some(0), Some(RentARoomExpenses(Some(0))), Some(0))))), Some(UkNonFhlProperty(Some(NonFhlPropertyIncome(Some(0), Some(0), Some(0), Some(0), Some(0), Some(RentARoomIncome(Some(0))))), Some(NonFhlPropertyExpenses(Some(0), Some(0), Some(0), Some(0), Some(0), Some(0), Some(0), Some(0), Some(0), Some(RentARoomExpenses(Some(0))), Some(0))))))
 
   val hateoasData: RetrieveUkPropertyPeriodSummaryHateoasData = RetrieveUkPropertyPeriodSummaryHateoasData(
     nino = "AA999999A",

@@ -13,7 +13,7 @@
           "type": "object",
           "properties": {
             "periodAmount": {
-              "description": "Total rent and other income from property. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
+              "description": "Total rents from property, ground rents and rent charges but not rent-a-room. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
               "type": "number",
               "multipleOf": 0.01,
               "minimum": 0.00,
@@ -29,7 +29,7 @@
               "example": "5000.99"
             },
             "rentARoom": {
-              "description": "Object holding the rents received for the period.",
+              "description": "Object holding the rents received for rooms.",
               "type": "object",
               "properties": {
                 "rentsReceived": {
@@ -135,7 +135,7 @@
       }
     },
     "ukNonFhlProperty": {
-      "description": "Object  holding the income and expenses of the UK property business - excluding Furnished Holiday Lettings (FHL) for the period.\n(At least one of income or expenses should be present)",
+      "description": "Object holding the income and expenses of the UK property business - excluding Furnished Holiday Lettings (FHL) for the period.\n(At least one of income or expenses should be present)",
       "type": "object",
       "properties": {
         "income": {
@@ -159,7 +159,7 @@
               "example": "5000.99"
             },
             "periodAmount": {
-              "description": "Total rent and other income from property. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
+              "description": "Total rents from property (but not ground rents, rent charges and rent-a-room rental income). The value must be between 0 and 99999999999.99 up to 2 decimal places.",
               "type": "number",
               "multipleOf": 0.01,
               "minimum": 0.00,
@@ -175,7 +175,7 @@
               "example": "5000.99"
             },
             "otherIncome": {
-              "description": "Other allowable property expenses. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
+              "description": "Total amount of rent and any income for services provided to tenants. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
               "type": "number",
               "multipleOf": 0.01,
               "minimum": 0.00,
@@ -183,7 +183,7 @@
               "example": "5000.99"
             },
             "rentARoom": {
-              "description": "Object holding the rents received for the period.",
+              "description": "Object holding the rents received for rooms.",
               "type": "object",
               "properties": {
                 "rentsReceived": {
@@ -253,7 +253,7 @@
               "example": "5000.99"
             },
             "residentialFinancialCost": {
-              "description": "The residential financial cost that can be deductible from rental income (tax relief). The value must be between 0 and 99999999999.99 up to 2 decimal places.",
+              "description": "The residential financial cost deductible from rental income (tax relief). The value must be between 0 and 99999999999.99 up to 2 decimal places.",
               "type": "number",
               "multipleOf": 0.01,
               "minimum": 0.00,
@@ -277,7 +277,7 @@
               "example": "5000.99"
             },
             "rentARoom": {
-              "description": "Object holding the amount claimed for the period.",
+              "description": "Object holding the rent claimed for rooms.",
               "type": "object",
               "properties": {
                 "amountClaimed": {

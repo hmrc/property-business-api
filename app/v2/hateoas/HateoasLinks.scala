@@ -37,6 +37,9 @@ trait HateoasLinks {
   private def ukPropertyAnnualSubmissionUri(appConfig: AppConfig, nino: String, businessId: String, taxYear: String): String =
     s"/${appConfig.apiGatewayContext}/uk/$nino/$businessId/annual/$taxYear"
 
+  private def ukPropertyPeriodListUri(appConfig: AppConfig, nino: String, businessId: String, taxYear: String): String =
+    s"/${appConfig.apiGatewayContext}/uk/$nino/$businessId/period/$taxYear"
+
   private def ukPropertyPeriodicSummaryUri(appConfig: AppConfig, nino: String, businessId: String, taxYear: String, submissionId: String): String =
     s"/${appConfig.apiGatewayContext}/uk/$nino/$businessId/period/$taxYear/$submissionId"
 
@@ -73,5 +76,8 @@ trait HateoasLinks {
 
   def amendUkPropertyPeriodicSummary(appConfig: AppConfig, nino: String, businessId: String, taxYear: String, submissionId: String): Link =
     Link(href = ukPropertyPeriodicSummaryUri(appConfig, nino, businessId, taxYear, submissionId), method = PUT, rel = AMEND_UK_PROPERTY_PERIOD_SUMMARY)
+
+  def listUkPropertyPeriodicSummary(appConfig: AppConfig, nino: String, businessId: String, taxYear: String, rel: String = SELF): Link =
+    Link(href = ukPropertyPeriodListUri(appConfig, nino, businessId, taxYear), method = GET, rel)
 
 }

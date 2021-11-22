@@ -290,9 +290,25 @@ class AmendUkPropertyPeriodSummaryControllerISpec extends V2IntegrationBaseSpec 
       }
 
       val responseBody: JsValue = Json.parse(
-        """
+        s"""
           |{
-          |  "submissionId": "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
+          |  "links": [
+          |    {
+          |      "href":"/individuals/business/property/uk/$nino/$businessId/period/$taxYear",
+          |      "method":"GET",
+          |      "rel":"list-property-period-summaries"
+          |    },
+          |    {
+          |      "href":"/individuals/business/property/uk/$nino/$businessId/period/$taxYear/$submissionId",
+          |      "method":"GET",
+          |      "rel":"self"
+          |    },
+          |    {
+          |      "href":"/individuals/business/property/uk/$nino/$businessId/period/$taxYear/$submissionId",
+          |      "method":"PUT",
+          |      "rel":"amend-uk-property-period-summary"
+          |    }
+          |  ]
           |}
      """.stripMargin
       )
@@ -313,7 +329,6 @@ class AmendUkPropertyPeriodSummaryControllerISpec extends V2IntegrationBaseSpec 
         "any valid unconsolidated request is made" in new Test {
 
           override def setupStubs(): StubMapping = {
-            AuditStub.audit()
             AuthStub.authorised()
             MtdIdLookupStub.ninoFound(nino)
             IfsStub.onSuccess(IfsStub.PUT, ifsUri, NO_CONTENT, JsObject.empty)
@@ -349,7 +364,6 @@ class AmendUkPropertyPeriodSummaryControllerISpec extends V2IntegrationBaseSpec 
            """.stripMargin
 
             override def setupStubs(): StubMapping = {
-              AuditStub.audit()
               AuthStub.authorised()
               MtdIdLookupStub.ninoFound(nino)
             }
@@ -377,7 +391,6 @@ class AmendUkPropertyPeriodSummaryControllerISpec extends V2IntegrationBaseSpec 
                   override val submissionId: String = requestSubmissionId
 
                   override def setupStubs(): StubMapping = {
-                    AuditStub.audit()
                     AuthStub.authorised()
                     MtdIdLookupStub.ninoFound(nino)
                   }
@@ -409,7 +422,6 @@ class AmendUkPropertyPeriodSummaryControllerISpec extends V2IntegrationBaseSpec 
                 s"ifs returns an $ifsCode error and status $ifsStatus" in new Test {
 
                   override def setupStubs(): StubMapping = {
-                    AuditStub.audit()
                     AuthStub.authorised()
                     MtdIdLookupStub.ninoFound(nino)
                     IfsStub.onError(IfsStub.PUT, ifsUri, ifsQueryParams, ifsStatus, errorBody(ifsCode))

@@ -25,4 +25,5 @@ object RelType {
   val DELETE_PROPERTY_ANNUAL_SUBMISSION = "delete-property-annual-submission"
   val AMEND_UK_PROPERTY_ANNUAL_SUBMISSION = "amend-uk-property-annual-submission"
   val AMEND_UK_PROPERTY_PERIOD_SUMMARY = "amend-uk-property-period-summary"
+  val LIST_UK_PROPERTY_PERIOD_SUMMARIES = "list-property-period-summaries"
 }

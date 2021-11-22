@@ -258,13 +258,12 @@ class AmendUkPropertyPeriodSummaryControllerSpec
       |""".stripMargin
   )
 
-  private val requestData = AmendUkPropertyPeriodSummaryRequest(Nino(nino), businessId, taxYear, submissionId, requestBody)
-  private val rawData = AmendUkPropertyPeriodSummaryRawData(nino, businessId, taxYear, submissionId, requestBodyJson)
+  private val requestData = AmendUkPropertyPeriodSummaryRequest(Nino(nino), taxYear, businessId, submissionId, requestBody)
+  private val rawData = AmendUkPropertyPeriodSummaryRawData(nino, taxYear, businessId, submissionId, requestBodyJson)
 
   val hateoasResponse: JsValue = Json.parse(
     s"""
        |{
-       |  "submissionId": "4557ecb5-fd32-48cc-81f5-e6acd1099f3c",
        |  "links": [
        |    {
        |      "href":"/individuals/business/property/uk/$nino/$businessId/period/$taxYear/$submissionId",
@@ -323,7 +322,7 @@ class AmendUkPropertyPeriodSummaryControllerSpec
         "the request received is valid" in new Test {
 
           MockAmendUkPropertyRequestParser
-            .requestFor(AmendUkPropertyPeriodSummaryRawData(nino, businessId, taxYear, submissionId, requestBodyJsonConsolidatedExpenses))
+            .requestFor(AmendUkPropertyPeriodSummaryRawData(nino, taxYear, businessId, submissionId, requestBodyJsonConsolidatedExpenses))
             .returns(Right(requestData))
 
           MockAmendUkPropertyService
@@ -337,9 +336,6 @@ class AmendUkPropertyPeriodSummaryControllerSpec
           val result: Future[Result] = controller.handleRequest(nino, businessId, taxYear, submissionId)(fakePostRequest(requestBodyJsonConsolidatedExpenses))
           status(result) shouldBe OK
           header("X-CorrelationId", result) shouldBe Some(correlationId)
-
-          val auditResponse: AuditResponse = AuditResponse(OK, None, Some(hateoasResponse))
-          MockedAuditService.verifyAuditEvent(consolidatedEvent(auditResponse)).once
         }
       }
 
@@ -347,7 +343,7 @@ class AmendUkPropertyPeriodSummaryControllerSpec
         "the request received is valid" in new Test {
 
           MockAmendUkPropertyRequestParser
-            .requestFor(AmendUkPropertyPeriodSummaryRawData(nino, businessId, taxYear, submissionId, requestBodyJson))
+            .requestFor(AmendUkPropertyPeriodSummaryRawData(nino, taxYear, businessId, submissionId, requestBodyJson))
             .returns(Right(requestData))
 
           MockAmendUkPropertyService
@@ -356,14 +352,12 @@ class AmendUkPropertyPeriodSummaryControllerSpec
 
           MockHateoasFactory
             .wrap((), AmendUkPropertyPeriodSummaryHateoasData(nino, businessId, taxYear, submissionId))
-            .returns(HateoasWrapper((), Seq.empty))
+            .returns(HateoasWrapper((), Seq(testHateoasLink)))
 
           val result: Future[Result] = controller.handleRequest(nino, businessId, taxYear, submissionId)(fakePostRequest(requestBodyJson))
           status(result) shouldBe OK
           header("X-CorrelationId", result) shouldBe Some(correlationId)
 
-          val auditResponse: AuditResponse = AuditResponse(OK, None, Some(hateoasResponse))
-          MockedAuditService.verifyAuditEvent(unconsolidatedEvent(auditResponse)).once
         }
       }
 
@@ -373,17 +367,14 @@ class AmendUkPropertyPeriodSummaryControllerSpec
           s"a ${error.code} error is returned from the parser" in new Test {
 
             MockAmendUkPropertyRequestParser
-              .requestFor(rawData)
+              .requestFor(rawData.copy(body = requestBodyJsonConsolidatedExpenses))
               .returns(Left(ErrorWrapper(correlationId, error, None)))
 
-            val result: Future[Result] = controller.handleRequest(nino, businessId, taxYear, submissionId)(fakePostRequest(requestBodyJson))
+            val result: Future[Result] = controller.handleRequest(nino, businessId, taxYear, submissionId)(fakePostRequest(requestBodyJsonConsolidatedExpenses))
 
             status(result) shouldBe expectedStatus
             contentAsJson(result) shouldBe Json.toJson(error)
             header("X-CorrelationId", result) shouldBe Some(correlationId)
-
-            val auditResponse: AuditResponse = AuditResponse(expectedStatus, Some(Seq(AuditError(error.code))), None)
-            MockedAuditService.verifyAuditEvent(consolidatedEvent(auditResponse)).once
           }
         }
 
@@ -418,9 +409,6 @@ class AmendUkPropertyPeriodSummaryControllerSpec
             status(result) shouldBe expectedStatus
             contentAsJson(result) shouldBe Json.toJson(mtdError)
             header("X-CorrelationId", result) shouldBe Some(correlationId)
-
-            val auditResponse: AuditResponse = AuditResponse(expectedStatus, Some(Seq(AuditError(mtdError.code))), None)
-            MockedAuditService.verifyAuditEvent(unconsolidatedEvent(auditResponse)).once
           }
         }
 

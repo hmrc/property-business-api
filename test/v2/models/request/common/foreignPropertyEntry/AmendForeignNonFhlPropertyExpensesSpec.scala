@@ -83,10 +83,4 @@ class AmendForeignNonFhlPropertyExpensesSpec extends UnitSpec {
       }
     }
   }
-
-  "isEmpty" should {
-    "return true when no fields are provided" in {
-      AmendForeignNonFhlPropertyExpenses(None, None, None, None, None, None, None, None, None, None).isEmpty shouldBe true
-    }
-  }
 }

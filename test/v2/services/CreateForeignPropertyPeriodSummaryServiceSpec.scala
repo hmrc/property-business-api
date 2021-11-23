@@ -165,6 +165,7 @@ class CreateForeignPropertyPeriodSummaryServiceSpec extends UnitSpec {
       val input = Seq(
         "INVALID_TAXABLE_ENTITY_ID" -> NinoFormatError,
         "INVALID_INCOMESOURCEID" -> BusinessIdFormatError,
+        "INVALID_TAX_YEAR_EXPLICIT" -> TaxYearFormatError,
         "INVALID_PAYLOAD" -> DownstreamError,
         "INVALID_CORRELATIONID" -> DownstreamError,
         "OVERLAPS_IN_PERIOD" -> RuleOverlappingPeriodError,

@@ -9,11 +9,7 @@
     <tbody>
         <tr>
             <td><p>N/A - DEFAULT</p></td>
-            <td><p>Simulate success response.</p></td>
-        </tr>
-        <tr>
-            <td><p>NOT_FOUND</p></td>
-            <td><p>Simulates the scenario where the given resource could not be found.</p></td>
+            <td><p>Simulates the scenario where no data is found.</p></td>
         </tr>
         <tr>
             <td><p>UK_PROPERTY</p></td>

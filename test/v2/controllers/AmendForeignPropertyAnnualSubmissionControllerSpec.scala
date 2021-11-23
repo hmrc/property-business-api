@@ -75,15 +75,15 @@ class AmendForeignPropertyAnnualSubmissionControllerSpec
 
   val hateoasResponse: JsValue = Json.parse(
     s"""
-      |{
-      |   "links": [
-      |      {
-      |         "href": "/Individuals/business/property/$nino/$businessId/annual/$taxYear",
-      |         "method": "GET",
-      |         "rel": "self"
-      |      }
-      |   ]
-      |}
+       |{
+       |   "links": [
+       |      {
+       |         "href": "/Individuals/business/property/$nino/$businessId/annual/$taxYear",
+       |         "method": "GET",
+       |         "rel": "self"
+       |      }
+       |   ]
+       |}
     """.stripMargin
   )
 

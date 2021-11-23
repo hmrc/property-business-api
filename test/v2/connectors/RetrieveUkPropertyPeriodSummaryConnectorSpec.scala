@@ -16,28 +16,28 @@
 
 package v2.connectors
 
+import fixtures.RetrieveUkPropertyPeriodSummary.ResponseModelsFixture
 import mocks.MockAppConfig
 import v2.mocks.MockHttpClient
 import v2.models.domain.Nino
 import v2.models.outcomes.ResponseWrapper
+import v2.models.request.retrieveUkPropertyPeriodSummary.RetrieveUkPropertyPeriodSummaryRequest
 
 import scala.concurrent.Future
 
-class RetrieveUkPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
+class RetrieveUkPropertyPeriodSummaryConnectorSpec extends ConnectorSpec with ResponseModelsFixture {
 
   val nino: String = "AA123456A"
   val businessId: String = "XAIS12345678910"
   val taxYear: String = "2019-20"
   val submissionId: String = "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
 
-  val request: RetrieveUkPropertyPeriodSummaryRequest(
-  nino = Nino(nino),
-  businessId = businessId,
-  taxYear = taxYear,
-  submissionId = submissionId
-  )
-
-  private val response = RetrieveUkPropertyPeriodSummaryResponse
+  val request: RetrieveUkPropertyPeriodSummaryRequest =
+    RetrieveUkPropertyPeriodSummaryRequest(
+      Nino(nino),
+      businessId,
+      taxYear,
+      submissionId)
 
   class Test extends MockHttpClient with MockAppConfig {
     val connector: RetrieveUkPropertyPeriodSummaryConnector = new RetrieveUkPropertyPeriodSummaryConnector(
@@ -53,11 +53,11 @@ class RetrieveUkPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
 
  "connector" must {
    "send a request and return a body" in new Test {
-     val outcome = Right(ResponseWrapper(correlationId, response))
+     val outcome = Right(ResponseWrapper(correlationId, fullResponseModel))
 
      MockHttpClient
        .get(
-         url = s"$baseUrl/income-tax/business/property/periodic?$nino/$businessId/$taxYear",
+         url = s"$baseUrl//income-tax/business/property/periodic?taxableEntityId=$nino&taxYear=$taxYear&incomeSourceId=$businessId&submissionId=$submissionId",
          config = dummyIfsHeaderCarrierConfig,
          requiredHeaders = requiredIfsHeaders,
          excludedHeaders = Seq("AnotherHeader" -> "HeaderValue")

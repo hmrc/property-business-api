@@ -19,6 +19,9 @@ package v2.connectors
 import config.AppConfig
 import javax.inject.{Inject, Singleton}
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
+import v2.connectors.httpparsers.StandardIfsHttpParser._
+import v2.models.request.retrieveUkPropertyPeriodSummary.RetrieveUkPropertyPeriodSummaryRequest
+import v2.models.response.retrieveUkPropertyPeriodSummary.RetrieveUkPropertyPeriodSummaryResponse
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -26,16 +29,15 @@ import scala.concurrent.{ExecutionContext, Future}
 class RetrieveUkPropertyPeriodSummaryConnector @Inject()(val http: HttpClient,
                                                          val appConfig: AppConfig) extends BaseIfsConnector {
 
-  def retrieveUkProperty(request: RetrieveUKPropertyPeriodSummaryRequest)(
+  def retrieveUkProperty(request: RetrieveUkPropertyPeriodSummaryRequest)(
                         implicit hc: HeaderCarrier,
                         ec: ExecutionContext,
-                        correlationId: String): Future[IfsOutcome[RetrieveUKPropertyPeriodSummaryResponse]] = {
+                        correlationId: String): Future[IfsOutcome[RetrieveUkPropertyPeriodSummaryResponse]] = {
 
     val url = s"/income-tax/business/property/periodic?taxableEntityId=${request.nino.nino}&taxYear=${request.taxYear}&incomeSourceId=${request.businessId}&submissionId=${request.submissionId}"
 
     get(
-      uri = IfsUri[RetrieveUKPropertyPeriodSummaryResponse](url)
+      uri = IfsUri[RetrieveUkPropertyPeriodSummaryResponse](url)
     )
   }
-
 }

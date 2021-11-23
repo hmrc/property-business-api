@@ -23,6 +23,8 @@ import utils.Logging
 import v2.connectors.RetrieveUkPropertyPeriodSummaryConnector
 import v2.controllers.EndpointLogContext
 import v2.models.errors._
+import v2.models.request.retrieveUkPropertyPeriodSummary.RetrieveUkPropertyPeriodSummaryRequest
+import v2.models.response.retrieveUkPropertyPeriodSummary.RetrieveUkPropertyPeriodSummaryResponse
 import v2.support.IfsResponseMappingSupport
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -30,11 +32,11 @@ import scala.concurrent.{ExecutionContext, Future}
 class RetrieveUkPropertyPeriodSummaryService @Inject()(connector: RetrieveUkPropertyPeriodSummaryConnector)
   extends IfsResponseMappingSupport with Logging {
 
-  def retrieveUkProperty(request: RetrieveUKPropertyPeriodSummaryRequest)(
+  def retrieveUkProperty(request: RetrieveUkPropertyPeriodSummaryRequest)(
     implicit hc: HeaderCarrier,
     ec: ExecutionContext,
     logContext: EndpointLogContext,
-    correlationId: String): Future[ServiceOutcome[RetrieveUKPropertyPeriodSummaryResponse]] = {
+    correlationId: String): Future[ServiceOutcome[RetrieveUkPropertyPeriodSummaryResponse]] = {
 
     val result = for {
       ifsResponseWrapper <- EitherT(connector.retrieveUkProperty(request)).leftMap(mapIfsErrors(ifsErrorMap))

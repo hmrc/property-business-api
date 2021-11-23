@@ -16,6 +16,7 @@
 
 package v2.services
 
+import fixtures.RetrieveUkPropertyPeriodSummary.ResponseModelsFixture
 import support.UnitSpec
 import uk.gov.hmrc.http.HeaderCarrier
 import v2.controllers.EndpointLogContext
@@ -23,18 +24,18 @@ import v2.mocks.connectors.MockRetrieveUkPropertyPeriodSummaryConnector
 import v2.models.domain.Nino
 import v2.models.errors._
 import v2.models.outcomes.ResponseWrapper
+import v2.models.request.retrieveUkPropertyPeriodSummary.RetrieveUkPropertyPeriodSummaryRequest
 
+import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-class RetrieveUkPropertyPeriodSummaryServiceSpec extends UnitSpec {
+class RetrieveUkPropertyPeriodSummaryServiceSpec extends UnitSpec with ResponseModelsFixture {
 
   val nino: String = "AA123456A"
   val businessId: String = "XAIS12345678910"
   val taxYear: String = "2019-20"
   val submissionId: String = "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
   implicit val correlationId: String = "X-123"
-
-  private val response = RetrieveUkPropertyPeriodSummaryResponse
 
 
   private val requestData = RetrieveUkPropertyPeriodSummaryRequest(Nino(nino), businessId, taxYear, submissionId)
@@ -52,9 +53,9 @@ class RetrieveUkPropertyPeriodSummaryServiceSpec extends UnitSpec {
     "service call successful" when {
       "return mapped result" in new Test {
         MockRetrieveUkPropertyConnector.retrieveUkProperty(requestData)
-          .returns(Future.successful(Right(ResponseWrapper(correlationId, response))))
+          .returns(Future.successful(Right(ResponseWrapper(correlationId, fullResponseModel))))
 
-        await(service.retrieveUkProperty(requestData)) shouldBe Right(ResponseWrapper(correlationId, response))
+        await(service.retrieveUkProperty(requestData)) shouldBe Right(ResponseWrapper(correlationId, fullResponseModel))
       }
     }
   }

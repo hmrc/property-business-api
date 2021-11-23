@@ -37,7 +37,6 @@ class AmendUkPropertyPeriodSummaryController @Inject()(val authService: Enrolmen
                                                        val lookupService: MtdIdLookupService,
                                                        parser: AmendUkPropertyPeriodSummaryRequestParser,
                                                        service: AmendUkPropertyPeriodSummaryService,
-                                                       auditService: AuditService,
                                                        hateoasFactory: HateoasFactory,
                                                        cc: ControllerComponents,
                                                        idGenerator: IdGenerator)(implicit ec: ExecutionContext)
@@ -94,8 +93,7 @@ class AmendUkPropertyPeriodSummaryController @Inject()(val authService: Enrolmen
            RuleTypeOfBusinessIncorrectError|
            MtdErrorWithCustomMessage(ValueFormatError.code) |
            MtdErrorWithCustomMessage(RuleBothExpensesSuppliedError.code) |
-           MtdErrorWithCustomMessage(RuleIncorrectOrEmptyBodyError.code) |
-           RuleDuplicateSubmissionError =>
+           MtdErrorWithCustomMessage(RuleIncorrectOrEmptyBodyError.code) =>
         BadRequest(Json.toJson(errorWrapper))
       case NotFoundError => NotFound(Json.toJson(errorWrapper))
       case DownstreamError => InternalServerError(Json.toJson(errorWrapper))

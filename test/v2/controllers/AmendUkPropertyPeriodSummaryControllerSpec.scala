@@ -23,11 +23,10 @@ import v2.mocks.MockIdGenerator
 import v2.mocks.hateoas.MockHateoasFactory
 import v2.mocks.requestParsers.MockAmendUkPropertyPeriodSummaryRequestParser
 import v2.mocks.services._
-import v2.models.audit._
 import v2.models.domain.Nino
 import v2.models.errors._
-import v2.models.hateoas.{HateoasWrapper, Link}
 import v2.models.hateoas.Method.GET
+import v2.models.hateoas.{HateoasWrapper, Link}
 import v2.models.outcomes.ResponseWrapper
 import v2.models.request.amendUkPropertyPeriodSummary._
 import v2.models.request.common.ukFhlProperty._
@@ -45,7 +44,6 @@ class AmendUkPropertyPeriodSummaryControllerSpec
     with MockAmendUkPropertyPeriodSummaryService
     with MockAmendUkPropertyPeriodSummaryRequestParser
     with MockHateoasFactory
-    with MockAuditService
     with MockIdGenerator {
 
   private val nino = "AA123456A"
@@ -62,7 +60,6 @@ class AmendUkPropertyPeriodSummaryControllerSpec
       lookupService = mockMtdIdLookupService,
       parser = mockAmendUkPropertyRequestParser,
       service = mockService,
-      auditService = mockAuditService,
       hateoasFactory = mockHateoasFactory,
       cc = cc,
       idGenerator = mockIdGenerator
@@ -275,40 +272,6 @@ class AmendUkPropertyPeriodSummaryControllerSpec
     """.stripMargin
   )
 
-  def consolidatedEvent(auditResponse: AuditResponse): AuditEvent[AmendUkPropertyPeriodicAuditDetail] =
-    AuditEvent(
-      auditType = "AmendUkPropertyIncomeAndExpenditurePeriodSummary",
-      transactionName = "Amend-Uk-Property-Income-And-Expenditure-Period-Summary",
-      detail = AmendUkPropertyPeriodicAuditDetail(
-        userType = "Individual",
-        agentReferenceNumber = None,
-        nino,
-        businessId,
-        taxYear,
-        submissionId,
-        requestBodyJsonConsolidatedExpenses,
-        correlationId,
-        response = auditResponse
-      )
-    )
-
-  def unconsolidatedEvent(auditResponse: AuditResponse): AuditEvent[AmendUkPropertyPeriodicAuditDetail] =
-    AuditEvent(
-      auditType = "AmendUkPropertyIncomeAndExpenditurePeriodSummary",
-      transactionName = "Amend-Uk-Property-Income-And-Expenditure-Period-Summary",
-      detail = AmendUkPropertyPeriodicAuditDetail(
-        userType = "Individual",
-        agentReferenceNumber = None,
-        nino,
-        businessId,
-        taxYear,
-        submissionId,
-        requestBodyJson,
-        correlationId,
-        response = auditResponse
-      )
-    )
-
   val response: AmendUkPropertyPeriodSummaryResponse = AmendUkPropertyPeriodSummaryResponse(
     submissionId = "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
   )
@@ -420,8 +383,7 @@ class AmendUkPropertyPeriodSummaryControllerSpec
           (NotFoundError, NOT_FOUND),
           (RuleTypeOfBusinessIncorrectError, BAD_REQUEST),
           (RuleTaxYearNotSupportedError, BAD_REQUEST),
-          (DownstreamError, INTERNAL_SERVER_ERROR),
-          (RuleDuplicateSubmissionError, BAD_REQUEST)
+          (DownstreamError, INTERNAL_SERVER_ERROR)
         )
 
         input.foreach(args => (serviceErrors _).tupled(args))

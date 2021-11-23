@@ -39,7 +39,6 @@ class AmendUkPropertyPeriodSummaryValidator @Inject()(appConfig: AppConfig) exte
         TaxYearValidation.validate(minTaxYear, data.taxYear),
         BusinessIdValidation.validate(data.businessId),
         SubmissionIdValidation.validate(data.submissionId)
-
       )
     }
 

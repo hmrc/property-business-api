@@ -14,15 +14,8 @@
  * limitations under the License.
  */
 
-package v2.models.hateoas
+package v2.models.request.retrieveUkPropertyPeriodSummary
 
-object RelType {
-  val SELF = "self"
-  val AMEND_PROPERTY_PERIOD_SUMMARY = "amend-property-period-summary"
-  val LIST_PROPERTY_PERIOD_SUMMARIES = "list-property-period-summaries"
-  val CREATE_PROPERTY_PERIOD_SUMMARY = "create-property-period-summary"
-  val AMEND_PROPERTY_ANNUAL_SUBMISSION = "amend-property-annual-submission"
-  val DELETE_PROPERTY_ANNUAL_SUBMISSION = "delete-property-annual-submission"
-  val AMEND_UK_PROPERTY_ANNUAL_SUBMISSION = "amend-uk-property-annual-submission"
-  val AMEND_UK_PROPERTY_PERIOD_SUMMARY = "amend-property-period-summary"
-}
+import v2.models.domain.Nino
+
+case class RetrieveUkPropertyPeriodSummaryRequest(nino: Nino, businessId: String, taxYear: String, submissionId: String)

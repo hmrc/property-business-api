@@ -31,8 +31,8 @@ object AmendUkPropertyPeriodSummaryResponse extends HateoasLinks {
       import data._
       Seq(
         listUkPropertyPeriodicSummary(appConfig, nino, businessId, taxYear, rel = LIST_UK_PROPERTY_PERIOD_SUMMARIES),
-        retrieveUkPropertyPeriodicSummary(appConfig, nino, businessId, taxYear, submissionId),
-        amendUkPropertyPeriodicSummary(appConfig, nino, businessId, taxYear, submissionId)
+        retrieveUkPropertyPeriodSummary(appConfig, nino, businessId, taxYear, submissionId),
+        amendUkPropertyPeriodSummary(appConfig, nino, businessId, taxYear, submissionId)
       )
     }
   }

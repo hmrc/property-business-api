@@ -28,6 +28,9 @@ trait HateoasLinks {
   private def propertyUri(appConfig: AppConfig, nino: String, businessId: String): String =
     s"/${appConfig.apiGatewayContext}/$nino/$businessId/period"
 
+  private def propertyUriTaxYear(appConfig: AppConfig, nino: String, businessId: String, taxYear: String): String =
+    s"/${appConfig.apiGatewayContext}/$nino/$businessId/period/$taxYear"
+
   private def propertySubmissionUri(appConfig: AppConfig, nino: String, businessId: String, submissionId: String): String =
     s"/${appConfig.apiGatewayContext}/$nino/$businessId/period/$submissionId"
 
@@ -40,7 +43,7 @@ trait HateoasLinks {
   private def ukPropertyPeriodListUri(appConfig: AppConfig, nino: String, businessId: String, taxYear: String): String =
     s"/${appConfig.apiGatewayContext}/uk/$nino/$businessId/period/$taxYear"
 
-  private def ukPropertyPeriodicSummaryUri(appConfig: AppConfig, nino: String, businessId: String, taxYear: String, submissionId: String): String =
+  private def ukPropertyPeriodSummaryUri(appConfig: AppConfig, nino: String, businessId: String, taxYear: String, submissionId: String): String =
     s"/${appConfig.apiGatewayContext}/uk/$nino/$businessId/period/$taxYear/$submissionId"
 
   // API resource links
@@ -71,13 +74,16 @@ trait HateoasLinks {
   def amendUkPropertyAnnualSubmission(appConfig: AppConfig, nino: String, businessId: String, taxYear: String): Link =
     Link(href = ukPropertyAnnualSubmissionUri(appConfig, nino, businessId, taxYear), method = PUT, rel = AMEND_UK_PROPERTY_ANNUAL_SUBMISSION)
 
-  def retrieveUkPropertyPeriodicSummary(appConfig: AppConfig, nino: String, businessId: String, taxYear: String, submissionId: String): Link =
-    Link(href = ukPropertyPeriodicSummaryUri(appConfig, nino, businessId, taxYear, submissionId), method = GET, rel = SELF)
+  def listPropertyPeriodicSummary(appConfig: AppConfig, nino: String, businessId: String, taxYear: String): Link =
+    Link(href = propertyUriTaxYear(appConfig, nino, businessId, taxYear), method = GET, rel = LIST_PROPERTY_PERIOD_SUMMARIES)
 
-  def amendUkPropertyPeriodicSummary(appConfig: AppConfig, nino: String, businessId: String, taxYear: String, submissionId: String): Link =
-    Link(href = ukPropertyPeriodicSummaryUri(appConfig, nino, businessId, taxYear, submissionId), method = PUT, rel = AMEND_UK_PROPERTY_PERIOD_SUMMARY)
+  // UK Property Income & Expenses Period Summary
+  def retrieveUkPropertyPeriodSummary(appConfig: AppConfig, nino: String, businessId: String, taxYear: String, submissionId: String): Link =
+    Link(href = ukPropertyPeriodSummaryUri(appConfig, nino, businessId, taxYear, submissionId), method = GET, rel = SELF)
+
+  def amendUkPropertyPeriodSummary(appConfig: AppConfig, nino: String, businessId: String, taxYear: String, submissionId: String): Link =
+    Link(href = ukPropertyPeriodSummaryUri(appConfig, nino, businessId, taxYear, submissionId), method = PUT, rel = AMEND_UK_PROPERTY_PERIOD_SUMMARY)
 
   def listUkPropertyPeriodicSummary(appConfig: AppConfig, nino: String, businessId: String, taxYear: String, rel: String = SELF): Link =
     Link(href = ukPropertyPeriodListUri(appConfig, nino, businessId, taxYear), method = GET, rel)
-
 }

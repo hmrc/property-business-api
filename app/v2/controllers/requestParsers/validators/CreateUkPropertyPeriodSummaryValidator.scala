@@ -19,11 +19,12 @@ package v2.controllers.requestParsers.validators
 import com.google.inject.Inject
 import config.AppConfig
 import v2.controllers.requestParsers.validators.validations._
-import v2.models.errors.{MtdError, RuleIncorrectOrEmptyBodyError}
-import v2.models.request.createUkPropertyPeriodSummary.{CreateUkPropertyPeriodSummaryRawData, CreateUkPropertyPeriodSummaryRequestBody}
-import javax.inject.Singleton
+import v2.models.errors.MtdError
 import v2.models.request.common.ukFhlProperty.UkFhlProperty
 import v2.models.request.common.ukNonFhlProperty.UkNonFhlProperty
+import v2.models.request.createUkPropertyPeriodSummary.{CreateUkPropertyPeriodSummaryRawData, CreateUkPropertyPeriodSummaryRequestBody}
+
+import javax.inject.Singleton
 
 @Singleton
 class CreateUkPropertyPeriodSummaryValidator @Inject()(appConfig: AppConfig) extends Validator[CreateUkPropertyPeriodSummaryRawData] {
@@ -41,17 +42,10 @@ class CreateUkPropertyPeriodSummaryValidator @Inject()(appConfig: AppConfig) ext
     }
 
   private def bodyFormatValidation: CreateUkPropertyPeriodSummaryRawData => List[List[MtdError]] = { data =>
-    val schemaValidation = JsonFormatValidation.validate[CreateUkPropertyPeriodSummaryRequestBody](data.body)
-
-    val extraValidation =
-      data.body.asOpt[CreateUkPropertyPeriodSummaryRequestBody] match {
-        case Some(body) if body.ukNonFhlProperty.isEmpty && body.ukFhlProperty.isEmpty => List(RuleIncorrectOrEmptyBodyError)
-        case _                                                                         => NoValidationErrors
-      }
-
-    val emptyStructureValidation = JsonFormatValidation.validatedNestedEmpty(data.body)
-
-    List(schemaValidation, extraValidation, emptyStructureValidation)
+    JsonFormatValidation.validateAndCheckNonEmpty[CreateUkPropertyPeriodSummaryRequestBody](data.body) match {
+      case Nil => NoValidationErrors
+      case schemaErrors => List(schemaErrors)
+    }
   }
 
   private def bodyFieldFormatValidation: CreateUkPropertyPeriodSummaryRawData => List[List[MtdError]] = { data =>
@@ -67,8 +61,12 @@ class CreateUkPropertyPeriodSummaryValidator @Inject()(appConfig: AppConfig) ext
         List(
           body.ukFhlProperty.map(validateFhlMonetaryValues).getOrElse(NoValidationErrors),
           body.ukNonFhlProperty.map(validateNonFhlMonetaryValues).getOrElse(NoValidationErrors),
-          body.ukFhlProperty.flatMap(_.expenses.map(ConsolidatedExpensesValidation.validate(_,"/ukFhlProperty/expenses"))).getOrElse(NoValidationErrors),
-          body.ukNonFhlProperty.flatMap(_.expenses.map(ConsolidatedExpensesValidation.validate(_,"/ukNonFhlProperty/expenses"))).getOrElse(NoValidationErrors),
+          body.ukFhlProperty
+            .flatMap(_.expenses.map(ConsolidatedExpensesValidation.validate(_, "/ukFhlProperty/expenses")))
+            .getOrElse(NoValidationErrors),
+          body.ukNonFhlProperty
+            .flatMap(_.expenses.map(ConsolidatedExpensesValidation.validate(_, "/ukNonFhlProperty/expenses")))
+            .getOrElse(NoValidationErrors),
         )))
 
     regularErrors ++ pathErrors

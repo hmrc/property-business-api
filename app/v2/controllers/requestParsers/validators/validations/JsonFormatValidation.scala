@@ -18,61 +18,38 @@ package v2.controllers.requestParsers.validators.validations
 
 import play.api.Logger
 import play.api.libs.json._
+import utils.{ EmptinessChecker, EmptyPathsResult }
 import v2.models.errors.{ MtdError, RuleIncorrectOrEmptyBodyError }
 
 object JsonFormatValidation {
 
   private val logger: Logger = Logger(this.getClass)
 
-  def validate[A: OFormat](data: JsValue): List[MtdError] = {
+  def validate[A: OFormat](data: JsValue): List[MtdError] =
+    validateOrRead(data) match {
+      case Left(errors) => errors
+      case Right(_)     => Nil
+    }
+
+  def validateAndCheckNonEmpty[A: OFormat: EmptinessChecker](data: JsValue): List[MtdError] =
+    validateOrRead[A](data) match {
+      case Left(schemaErrors) => schemaErrors
+      case Right(body) =>
+        EmptinessChecker.findEmptyPaths(body) match {
+          case EmptyPathsResult.CompletelyEmpty   => List(RuleIncorrectOrEmptyBodyError)
+          case EmptyPathsResult.EmptyPaths(paths) => List(RuleIncorrectOrEmptyBodyError.copy(paths = Some(paths)))
+          case EmptyPathsResult.NoEmptyPaths      => Nil
+        }
+      case _ => Nil
+    }
+
+  def validateOrRead[A: OFormat](data: JsValue): Either[List[MtdError], A] = {
     if (data == JsObject.empty) {
-      List(RuleIncorrectOrEmptyBodyError)
+      Left(List(RuleIncorrectOrEmptyBodyError))
     } else {
       data.validate[A] match {
-        case JsSuccess(_, _)                                          => NoValidationErrors
-        case JsError(errors: Seq[(JsPath, Seq[JsonValidationError])]) => handleErrors(errors)
-      }
-    }
-  }
-
-  /**
-    * Detects empty objects or arrays in JSON. Makes sense only when the schema / class structure
-    * allows for optional arrays that can safely omitted when empty.
-    */
-  def validatedNestedEmpty(data: JsValue): List[MtdError] = {
-
-    def pathsToEmptyParts(acc: List[String], path: String, json: JsValue): List[String] = {
-      json match {
-        case o: JsObject =>
-          if (o == JsObject.empty) {
-            path :: acc
-          } else {
-            val children = o.fields
-            children.foldLeft(acc) {
-              case (acc, (name, value)) => pathsToEmptyParts(acc, s"$path/$name", value)
-            }
-          }
-
-        case a: JsArray =>
-          val children = a.value
-          if (children.isEmpty) {
-            path :: acc
-          } else {
-            children.zipWithIndex.foldLeft(acc) {
-              case (acc, (value, i)) => pathsToEmptyParts(acc, s"$path/$i", value)
-            }
-          }
-
-        case _ => acc
-      }
-    }
-
-    if (data == JsObject.empty) {
-      List(RuleIncorrectOrEmptyBodyError)
-    } else {
-      pathsToEmptyParts(Nil, "", data) match {
-        case Nil   => Nil
-        case paths => List(RuleIncorrectOrEmptyBodyError.copy(paths = Some(paths.reverse)))
+        case JsSuccess(a, _)                                          => Right(a)
+        case JsError(errors: Seq[(JsPath, Seq[JsonValidationError])]) => Left(handleErrors(errors))
       }
     }
   }

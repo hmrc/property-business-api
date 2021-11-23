@@ -258,6 +258,24 @@ class CreateUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with JsonError
           }
       }
 
+      "an object is empty except for a additional (non-schema) property" in {
+        val json = Json.parse("""{
+                     |    "fromDate": "2020-01-01",
+                     |    "toDate": "2020-01-31",
+                     |    "ukFhlProperty":{
+                     |       "unknownField": 999.99
+                     |    }
+                     |}""".stripMargin)
+
+        validator.validate(
+        CreateUkPropertyPeriodSummaryRawData(
+          validNino,
+          taxYear,
+          validBusinessId,
+          json
+        )) shouldBe List(RuleIncorrectOrEmptyBodyError.copy(paths = Some(Seq("/ukFhlProperty"))))
+      }
+
       "fromDate is missing" in {
         validator.validate(
           CreateUkPropertyPeriodSummaryRawData(

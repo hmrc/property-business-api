@@ -248,6 +248,23 @@ class AmendUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with JsonErrorV
           }
       }
 
+      "an object is empty except for a additional (non-schema) property" in {
+        val json = Json.parse("""{
+                                |    "ukFhlProperty":{
+                                |       "unknownField": 999.99
+                                |    }
+                                |}""".stripMargin)
+
+        validator.validate(
+          AmendUkPropertyPeriodSummaryRawData(
+            validNino,
+            taxYear,
+            validBusinessId,
+            validSubmissionId,
+            json
+          )) shouldBe List(RuleIncorrectOrEmptyBodyError.copy(paths = Some(Seq("/ukFhlProperty"))))
+      }
+
       "return ValueFormatError" when {
         "income or (non-consolidated) expenses is invalid" when {
           Seq(

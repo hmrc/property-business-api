@@ -17,12 +17,13 @@
 package v2.controllers.requestParsers.validators
 
 import config.AppConfig
-import javax.inject.{Inject, Singleton}
 import v2.controllers.requestParsers.validators.validations._
 import v2.models.errors._
 import v2.models.request.amendUkPropertyAnnualSubmission.ukFhlProperty.{UkFhlProperty, UkFhlPropertyAllowances}
 import v2.models.request.amendUkPropertyAnnualSubmission.ukNonFhlProperty.{StructuredBuildingAllowance, UkNonFhlProperty, UkNonFhlPropertyAllowances}
 import v2.models.request.amendUkPropertyAnnualSubmission.{AmendUkPropertyAnnualSubmissionRawData, AmendUkPropertyAnnualSubmissionRequestBody}
+
+import javax.inject.{Inject, Singleton}
 
 @Singleton
 class AmendUkPropertyAnnualSubmissionValidator @Inject()(appConfig: AppConfig) extends Validator[AmendUkPropertyAnnualSubmissionRawData] {
@@ -40,19 +41,11 @@ class AmendUkPropertyAnnualSubmissionValidator @Inject()(appConfig: AppConfig) e
     }
 
   private def bodyFormatValidation: AmendUkPropertyAnnualSubmissionRawData => List[List[MtdError]] = { data =>
-    val schemeValidation = JsonFormatValidation.validate[AmendUkPropertyAnnualSubmissionRequestBody](data.body)
-
-    val extraValidation =
-      data.body.asOpt[AmendUkPropertyAnnualSubmissionRequestBody] match {
-        case Some(body) if body.ukFhlProperty.isEmpty && body.ukNonFhlProperty.isEmpty => List(RuleIncorrectOrEmptyBodyError)
-        case _                                                                         => NoValidationErrors
-      }
-
-    val emptyStructureValidation = JsonFormatValidation.validatedNestedEmpty(data.body)
-
-    List(schemeValidation, extraValidation, emptyStructureValidation)
+    JsonFormatValidation.validateAndCheckNonEmpty[AmendUkPropertyAnnualSubmissionRequestBody](data.body) match {
+      case Nil => NoValidationErrors
+      case schemaErrors => List(schemaErrors)
+    }
   }
-
 
   private def bodyFieldValidation: AmendUkPropertyAnnualSubmissionRawData => List[List[MtdError]] = { data =>
     val body = data.body.as[AmendUkPropertyAnnualSubmissionRequestBody]
@@ -76,7 +69,6 @@ class AmendUkPropertyAnnualSubmissionValidator @Inject()(appConfig: AppConfig) e
       )
     )
   }
-
 
   private def validateUkFhlProperty(ukFhlProperty: UkFhlProperty): List[MtdError] = {
     List(
@@ -176,9 +168,6 @@ class AmendUkPropertyAnnualSubmissionValidator @Inject()(appConfig: AppConfig) e
     ).flatten
   }
 
-
-
-
   private def validateStructuredBuildingAllowance(buildingAllowance: StructuredBuildingAllowance, index: Int): List[MtdError] = {
     List(
     NumberValidation.validate(
@@ -243,8 +232,6 @@ class AmendUkPropertyAnnualSubmissionValidator @Inject()(appConfig: AppConfig) e
       ),
     ).flatten
   }
-
-
 
   private def validateFhlAllowances(allowances: UkFhlPropertyAllowances) : List[MtdError] = {
     AllowancesValidation.validate(

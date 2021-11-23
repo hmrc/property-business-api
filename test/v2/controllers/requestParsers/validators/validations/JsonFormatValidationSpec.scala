@@ -16,27 +16,34 @@
 
 package v2.controllers.requestParsers.validators.validations
 
-import play.api.libs.json.{ JsObject, Json, OFormat }
+import play.api.libs.json.{ Json, OFormat }
+import shapeless.HNil
 import support.UnitSpec
+import utils.EmptinessChecker
 import v2.models.errors.RuleIncorrectOrEmptyBodyError
 import v2.models.utils.JsonErrorValidators
 
 class JsonFormatValidationSpec extends UnitSpec with JsonErrorValidators {
 
-  case class TestDataObject(field1: String, field2: String)
+  case class TestDataObject(field1: String, field2: String, oneOf1: Option[String] = None, oneOf2: Option[String] = None)
   case class TestDataWrapper(arrayField: Seq[TestDataObject])
 
   implicit val testDataObjectFormat: OFormat[TestDataObject]   = Json.format[TestDataObject]
   implicit val testDataWrapperFormat: OFormat[TestDataWrapper] = Json.format[TestDataWrapper]
 
-  "validate" should {
-    "return no errors" when {
+  // at least one of oneOf1 and oneOf2 must be included:
+  implicit val emptinessChecker: EmptinessChecker[TestDataObject] = EmptinessChecker.use { o =>
+    "oneOf1" -> o.oneOf1 :: "oneOf2" -> o.oneOf2 :: HNil
+  }
+
+  "validateOrRead" should {
+    "return the object" when {
       "when a valid JSON object with all the necessary fields is supplied" in {
 
         val validJson = Json.parse("""{ "field1" : "Something", "field2" : "SomethingElse" }""")
 
-        val validationResult = JsonFormatValidation.validate[TestDataObject](validJson)
-        validationResult shouldBe empty
+        val validationResult = JsonFormatValidation.validateOrRead[TestDataObject](validJson)
+        validationResult shouldBe Right(TestDataObject("Something", "SomethingElse"))
       }
     }
 
@@ -44,124 +51,80 @@ class JsonFormatValidationSpec extends UnitSpec with JsonErrorValidators {
       "required field is missing" in {
         val json = Json.parse("""{ "field1" : "Something" }""")
 
-        val validationResult = JsonFormatValidation.validate[TestDataObject](json)
-        validationResult shouldBe List(RuleIncorrectOrEmptyBodyError.copy(paths = Some(Seq("/field2"))))
+        val validationResult = JsonFormatValidation.validateOrRead[TestDataObject](json)
+        validationResult shouldBe Left(List(RuleIncorrectOrEmptyBodyError.copy(paths = Some(Seq("/field2")))))
       }
 
       "required field is missing in array object" in {
         val json = Json.parse("""{ "arrayField" : [{ "field1" : "Something" }]}""")
 
-        val validationResult = JsonFormatValidation.validate[TestDataWrapper](json)
-        validationResult shouldBe List(RuleIncorrectOrEmptyBodyError.copy(paths = Some(Seq("/arrayField/0/field2"))))
+        val validationResult = JsonFormatValidation.validateOrRead[TestDataWrapper](json)
+        validationResult shouldBe Left(List(RuleIncorrectOrEmptyBodyError.copy(paths = Some(Seq("/arrayField/0/field2")))))
       }
 
       "required field is missing in multiple array objects" in {
         val json = Json.parse("""{ "arrayField" : [{ "field1" : "Something" }, { "field1" : "Something" }]}""")
 
-        val validationResult = JsonFormatValidation.validate[TestDataWrapper](json)
-        validationResult shouldBe List(
-          RuleIncorrectOrEmptyBodyError.copy(
-            paths = Some(
-              Seq(
+        val validationResult = JsonFormatValidation.validateOrRead[TestDataWrapper](json)
+        validationResult shouldBe Left(
+          List(
+            RuleIncorrectOrEmptyBodyError.copy(
+              paths = Some(Seq(
                 "/arrayField/0/field2",
                 "/arrayField/1/field2"
-              ))))
+              )))))
       }
 
       "empty body is submitted" in {
         val json = Json.parse("""{}""")
 
-        val validationResult = JsonFormatValidation.validate[TestDataObject](json)
-        validationResult shouldBe List(RuleIncorrectOrEmptyBodyError)
+        val validationResult = JsonFormatValidation.validateOrRead[TestDataObject](json)
+        validationResult shouldBe Left(List(RuleIncorrectOrEmptyBodyError))
       }
 
       "a non-empty body is supplied without any expected fields" in {
         val json = Json.parse("""{"field": "value"}""")
 
-        val validationResult = JsonFormatValidation.validate[TestDataObject](json)
-        validationResult shouldBe List(RuleIncorrectOrEmptyBodyError.copy(paths = Some(Seq("/field1", "/field2"))))
+        val validationResult = JsonFormatValidation.validateOrRead[TestDataObject](json)
+        validationResult shouldBe Left(List(RuleIncorrectOrEmptyBodyError.copy(paths = Some(Seq("/field1", "/field2")))))
       }
 
       "a field is supplied with the wrong data type" in {
         val json = Json.parse("""{"field1": true, "field2": "value"}""")
 
-        val validationResult = JsonFormatValidation.validate[TestDataObject](json)
-        validationResult shouldBe List(RuleIncorrectOrEmptyBodyError.copy(paths = Some(Seq("/field1"))))
+        val validationResult = JsonFormatValidation.validateOrRead[TestDataObject](json)
+        validationResult shouldBe Left(List(RuleIncorrectOrEmptyBodyError.copy(paths = Some(Seq("/field1")))))
       }
     }
   }
 
-  "validateEmptyFields" when {
-    "empty body" must {
-      "return error" in {
-        JsonFormatValidation.validatedNestedEmpty(JsObject.empty) shouldBe List(RuleIncorrectOrEmptyBodyError)
-      }
+  "validateAndCheckNonEmpty" should {
+    "validate against the json format" in {
+      val json = Json.parse("""{ "field1" : "Something" }""")
+
+      val validationResult = JsonFormatValidation.validate[TestDataObject](json)
+      validationResult shouldBe List(RuleIncorrectOrEmptyBodyError.copy(paths = Some(Seq("/field2"))))
     }
 
-    "all arrays and objects are empty" must {
-      "return successfully" in {
-        JsonFormatValidation.validatedNestedEmpty(Json.parse("""{
-              | "obj1": {"a": 1},
-              | "arr1": [{"b": 1}]
-              |}""".stripMargin)) shouldBe Nil
-      }
+    "detect empty objects" in {
+      val validJson = Json.parse("""{ "field1" : "Something", "field2" : "SomethingElse" }""")
+
+      val validationResult = JsonFormatValidation.validateAndCheckNonEmpty[TestDataObject](validJson)
+      validationResult shouldBe List(RuleIncorrectOrEmptyBodyError)
     }
 
-    "has empty array" must {
-      "return an error with the path" in {
-        JsonFormatValidation.validatedNestedEmpty(Json.parse("""{
-              | "obj1": {"a": 1},
-              | "arr1": []
-              |}""".stripMargin)) shouldBe List(RuleIncorrectOrEmptyBodyError.copy(paths = Some(Seq("/arr1"))))
-      }
+    "detect empty arrays" in {
+      val json             = Json.parse("""{ "arrayField": [] }""")
+      val validationResult = JsonFormatValidation.validateAndCheckNonEmpty[TestDataWrapper](json)
+
+      validationResult shouldBe List(RuleIncorrectOrEmptyBodyError.copy(paths = Some(Seq("/arrayField"))))
     }
 
-    "has empty array nested" must {
-      "return an error with the path" in {
-        JsonFormatValidation.validatedNestedEmpty(Json.parse("""{
-              | "obj1": {"arr1": []}
-              |}""".stripMargin)) shouldBe List(RuleIncorrectOrEmptyBodyError.copy(paths = Some(Seq("/obj1/arr1"))))
-      }
-    }
+    "return no error when all objects are non-empty" in {
+      val validJson = Json.parse("""{ "field1" : "Something", "field2" : "SomethingElse", "oneOf1": "value" }""")
 
-    "has empty object" must {
-      "return an error with the path" in {
-        JsonFormatValidation.validatedNestedEmpty(Json.parse("""{
-              | "obj1": {},
-              | "arr1": [{"a": 1}]
-              |}""".stripMargin)) shouldBe List(RuleIncorrectOrEmptyBodyError.copy(paths = Some(Seq("/obj1"))))
-      }
-    }
-
-    "has empty object nested" must {
-      "return an error with the path" in {
-        JsonFormatValidation.validatedNestedEmpty(Json.parse("""{
-              | "obj1": { "obj2": {}},
-              | "arr1": [{"a": 1}]
-              |}""".stripMargin)) shouldBe List(RuleIncorrectOrEmptyBodyError.copy(paths = Some(Seq("/obj1/obj2"))))
-      }
-    }
-
-    "has empty object inside arrays" must {
-      "return an error with the path" in {
-        JsonFormatValidation.validatedNestedEmpty(Json.parse("""{
-              | "arr1": [{"obj1": {}}, {"obj2": {}}]
-              |}""".stripMargin)) shouldBe List(RuleIncorrectOrEmptyBodyError.copy(paths = Some(Seq("/arr1/0/obj1", "/arr1/1/obj2"))))
-      }
-    }
-
-    "has multiple empty objects" must {
-      "return an error with the paths for all of them" in {
-        JsonFormatValidation.validatedNestedEmpty(Json.parse("""{
-              | "obj1": { "obj2": {}},
-              | "arr1": [],
-              | "arr2": [{ "obj3": {}}],
-              | "arr3": [{}],
-              | "obj4": {}
-              |}""".stripMargin)) shouldBe List(
-          RuleIncorrectOrEmptyBodyError
-            .copy(paths = Some(Seq("/obj1/obj2", "/arr1", "/arr2/0/obj3", "/arr3/0", "/obj4"))))
-      }
+      val validationResult = JsonFormatValidation.validateAndCheckNonEmpty[TestDataObject](validJson)
+      validationResult shouldBe Nil
     }
   }
 }

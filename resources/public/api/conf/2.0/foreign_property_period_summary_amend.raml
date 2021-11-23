@@ -3,12 +3,17 @@ is:
   - headers.contentTypeJson
   - headers.testScenarioHeader
   - errors.formatNino
+  - errors.formatTaxYear
   - errors.formatBusinessId
   - errors.formatSubmissionId
   - errors.formatCountryCode
+  - errors.ruleTaxYearRangeInvalid
+  - errors.ruleTaxYearNotSupported
   - errors.formatValue
-  - errors.ruleIncorrectOrEmptyBody
   - errors.ruleBothExpensesSupplied
+  - errors.ruleTypeOfBusinessIncorrect
+  - errors.ruleDuplicateCountryCode
+  - errors.ruleIncorrectOrEmptyBody
   - errors.ruleCountryCode
   - errors.clientOrAgentNotAuthorised
   - errors.notFound
@@ -21,7 +26,7 @@ body:
   application/json:
     type: !include schemas/foreign_property_period_summary_amend/request.json
     examples:
-      example-1x:
+      example-1:
         description: Full Expenditure request
         value: !include examples/foreign_property_period_summary_amend/request.json
       example-2:

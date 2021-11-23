@@ -40,9 +40,9 @@ class CreateForeignPropertyPeriodSummaryServiceSpec extends UnitSpec {
   private val regularExpensesBody = CreateForeignPropertyPeriodSummaryRequestBody(
     "2020-01-01",
     "2020-01-31",
-    Some(ForeignFhlEea(
+    Some(CreateForeignFhlEea(
       ForeignFhlEeaIncome(5000.99),
-      Some(ForeignFhlEeaExpenditure(
+      Some(CreateForeignFhlEeaExpenses(
         Some(5000.99),
         Some(5000.99),
         Some(5000.99),
@@ -53,8 +53,8 @@ class CreateForeignPropertyPeriodSummaryServiceSpec extends UnitSpec {
         None
       ))
     )),
-    Some(Seq(ForeignPropertyEntry("FRA",
-      ForeignPropertyIncome(
+    Some(Seq(CreateForeignNonFhlPropertyEntry("FRA",
+      ForeignNonFhlPropertyIncome(
         ForeignPropertyRentIncome(5000.99),
         false,
         Some(5000.99),
@@ -62,7 +62,7 @@ class CreateForeignPropertyPeriodSummaryServiceSpec extends UnitSpec {
         Some(5000.99),
         Some(5000.99)
       ),
-      Some(ForeignPropertyExpenditure(
+      Some(CreateForeignNonFhlPropertyExpenses(
         Some(5000.99),
         Some(5000.99),
         Some(5000.99),
@@ -79,9 +79,9 @@ class CreateForeignPropertyPeriodSummaryServiceSpec extends UnitSpec {
   private val consolidatedExpensesBody = CreateForeignPropertyPeriodSummaryRequestBody(
     "2020-01-01",
     "2020-01-31",
-    Some(ForeignFhlEea(
+    Some(CreateForeignFhlEea(
       ForeignFhlEeaIncome(5000.99),
-      Some(ForeignFhlEeaExpenditure(
+      Some(CreateForeignFhlEeaExpenses(
         None,
         None,
         None,
@@ -92,8 +92,8 @@ class CreateForeignPropertyPeriodSummaryServiceSpec extends UnitSpec {
         Some(3653.35)
       ))
     )),
-    Some(Seq(ForeignPropertyEntry("FRA",
-      ForeignPropertyIncome(
+    Some(Seq(CreateForeignNonFhlPropertyEntry("FRA",
+      ForeignNonFhlPropertyIncome(
         ForeignPropertyRentIncome(5000.99),
         false,
         Some(5000.99),
@@ -101,7 +101,7 @@ class CreateForeignPropertyPeriodSummaryServiceSpec extends UnitSpec {
         Some(5000.99),
         Some(5000.99)
       ),
-      Some(ForeignPropertyExpenditure(
+      Some(CreateForeignNonFhlPropertyExpenses(
         None,
         None,
         None,

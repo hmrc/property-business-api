@@ -37,36 +37,36 @@ class AmendForeignPropertyPeriodSummaryServiceSpec extends UnitSpec {
   val submissionId: String = "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
   implicit val correlationId: String = "X-123"
 
-  private val foreignFhlEea: ForeignFhlEea = ForeignFhlEea(
+  private val foreignFhlEea: AmendForeignFhlEea = AmendForeignFhlEea(
     income = ForeignFhlEeaIncome(rentAmount = 567.83),
-    expenditure = Some(ForeignFhlEeaExpenditure(
+    expenses = Some(AmendForeignFhlEeaExpenses(
       premisesRunningCosts = Some(4567.98),
       repairsAndMaintenance = Some(98765.67),
       financialCosts = Some(4566.95),
       professionalFees = Some(23.65),
-      costsOfServices = Some(4567.77),
+      costOfServices = Some(4567.77),
       travelCosts = Some(456.77),
       other = Some(567.67),
       consolidatedExpenses = Some(456.98)
     ))
   )
 
-  private val foreignProperty: ForeignPropertyEntry = ForeignPropertyEntry(
+  private val foreignNonFhlProperty: AmendForeignNonFhlPropertyEntry = AmendForeignNonFhlPropertyEntry(
     countryCode = "zzz",
-    income = ForeignPropertyIncome(
+    income = ForeignNonFhlPropertyIncome(
       rentIncome = ForeignPropertyRentIncome(rentAmount = 34456.30),
       foreignTaxCreditRelief = true,
-      premiumOfLeaseGrant = Some(2543.43),
+      premiumsOfLeaseGrant = Some(2543.43),
       otherPropertyIncome = Some(54325.30),
-      foreignTaxTakenOff = Some(6543.01),
-      specialWithholdingTaxOrUKTaxPaid = Some(643245.00)
+      foreignTaxPaidOrDeducted = Some(6543.01),
+      specialWithholdingTaxOrUkTaxPaid = Some(643245.00)
     ),
-    expenditure = Some(ForeignPropertyExpenditure(
+    expenses = Some(AmendForeignNonFhlPropertyExpenses(
       premisesRunningCosts = Some(5635.43),
       repairsAndMaintenance = Some(3456.65),
       financialCosts = Some(34532.21),
       professionalFees = Some(32465.32),
-      costsOfServices = Some(2567.21),
+      costOfServices = Some(2567.21),
       travelCosts = Some(2345.76),
       residentialFinancialCost = Some(21235.22),
       broughtFwdResidentialFinancialCost = Some(12556.00),
@@ -77,7 +77,7 @@ class AmendForeignPropertyPeriodSummaryServiceSpec extends UnitSpec {
 
   val body: AmendForeignPropertyPeriodSummaryRequestBody = AmendForeignPropertyPeriodSummaryRequestBody(
     foreignFhlEea = Some(foreignFhlEea),
-    foreignProperty = Some(Seq(foreignProperty))
+    foreignNonFhlProperty = Some(Seq(foreignNonFhlProperty))
   )
 
   private val requestData = AmendForeignPropertyPeriodSummaryRequest(Nino(nino), businessId, submissionId, body)

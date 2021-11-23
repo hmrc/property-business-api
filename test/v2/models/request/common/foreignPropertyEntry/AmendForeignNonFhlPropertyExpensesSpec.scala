@@ -19,7 +19,7 @@ package v2.models.request.common.foreignPropertyEntry
 import play.api.libs.json.{JsValue, Json}
 import support.UnitSpec
 
-class ExpenditureSpec extends UnitSpec {
+class AmendForeignNonFhlPropertyExpensesSpec extends UnitSpec {
 
   val mtdJson: JsValue = Json.parse(
     """
@@ -28,7 +28,7 @@ class ExpenditureSpec extends UnitSpec {
       |  "repairsAndMaintenance": 3456.65,
       |  "financialCosts": 34532.21,
       |  "professionalFees": 32465.32,
-      |  "costsOfServices": 2567.21,
+      |  "costOfServices": 2567.21,
       |  "travelCosts": 2345.76,
       |  "residentialFinancialCost": 21235.22,
       |  "broughtFwdResidentialFinancialCost": 12556.00,
@@ -38,12 +38,12 @@ class ExpenditureSpec extends UnitSpec {
     """.stripMargin
   )
 
-  val model: ForeignPropertyExpenditure = ForeignPropertyExpenditure(
+  val model: AmendForeignNonFhlPropertyExpenses = AmendForeignNonFhlPropertyExpenses(
     premisesRunningCosts = Some(5635.43),
     repairsAndMaintenance = Some(3456.65),
     financialCosts = Some(34532.21),
     professionalFees = Some(32465.32),
-    costsOfServices = Some(2567.21),
+    costOfServices = Some(2567.21),
     travelCosts = Some(2345.76),
     residentialFinancialCost = Some(21235.22),
     broughtFwdResidentialFinancialCost = Some(12556.00),
@@ -71,7 +71,7 @@ class ExpenditureSpec extends UnitSpec {
   "reads" should {
     "read from JSON" when {
       "valid JSON is provided" in {
-        mtdJson.as[ForeignPropertyExpenditure] shouldBe model
+        mtdJson.as[AmendForeignNonFhlPropertyExpenses] shouldBe model
       }
     }
   }
@@ -86,7 +86,7 @@ class ExpenditureSpec extends UnitSpec {
 
   "isEmpty" should {
     "return true when no fields are provided" in {
-      ForeignPropertyExpenditure(None, None, None, None, None, None, None, None, None, None).isEmpty shouldBe true
+      AmendForeignNonFhlPropertyExpenses(None, None, None, None, None, None, None, None, None, None).isEmpty shouldBe true
     }
   }
 }

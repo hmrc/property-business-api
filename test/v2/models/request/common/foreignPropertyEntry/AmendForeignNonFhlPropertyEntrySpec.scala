@@ -19,7 +19,7 @@ package v2.models.request.common.foreignPropertyEntry
 import play.api.libs.json.{JsValue, Json}
 import support.UnitSpec
 
-class ForeignPropertyEntrySpec extends UnitSpec {
+class AmendForeignNonFhlPropertyEntrySpec extends UnitSpec {
 
   val mtdJson: JsValue = Json.parse(
      """
@@ -30,17 +30,17 @@ class ForeignPropertyEntrySpec extends UnitSpec {
        |      "rentAmount": 34456.30
        |    },
        |    "foreignTaxCreditRelief": true,
-       |    "premiumOfLeaseGrant": 2543.43,
+       |    "premiumsOfLeaseGrant": 2543.43,
        |    "otherPropertyIncome": 54325.30,
-       |    "foreignTaxTakenOff": 6543.01,
-       |    "specialWithholdingTaxOrUKTaxPaid": 643245.00
+       |    "foreignTaxPaidOrDeducted": 6543.01,
+       |    "specialWithholdingTaxOrUkTaxPaid": 643245.00
        |  },
-       |  "expenditure": {
+       |  "expenses": {
        |    "premisesRunningCosts": 5635.43,
        |    "repairsAndMaintenance": 3456.65,
        |    "financialCosts": 34532.21,
        |    "professionalFees": 32465.32,
-       |    "costsOfServices": 2567.21,
+       |    "costOfServices": 2567.21,
        |    "travelCosts": 2345.76,
        |    "residentialFinancialCost": 21235.22,
        |    "broughtFwdResidentialFinancialCost": 12556.00,
@@ -51,22 +51,22 @@ class ForeignPropertyEntrySpec extends UnitSpec {
      """.stripMargin
   )
 
-  val model: ForeignPropertyEntry = ForeignPropertyEntry(
+  val model: AmendForeignNonFhlPropertyEntry = AmendForeignNonFhlPropertyEntry(
     countryCode = "zzz",
-    income = ForeignPropertyIncome(
+    income = ForeignNonFhlPropertyIncome(
       rentIncome = ForeignPropertyRentIncome(rentAmount = 34456.30),
       foreignTaxCreditRelief = true,
-      premiumOfLeaseGrant = Some(2543.43),
+      premiumsOfLeaseGrant = Some(2543.43),
       otherPropertyIncome = Some(54325.30),
-      foreignTaxTakenOff = Some(6543.01),
-      specialWithholdingTaxOrUKTaxPaid = Some(643245.00)
+      foreignTaxPaidOrDeducted = Some(6543.01),
+      specialWithholdingTaxOrUkTaxPaid = Some(643245.00)
     ),
-    expenditure = Some(ForeignPropertyExpenditure(
+    expenses = Some(AmendForeignNonFhlPropertyExpenses(
       premisesRunningCosts = Some(5635.43),
       repairsAndMaintenance = Some(3456.65),
       financialCosts = Some(34532.21),
       professionalFees = Some(32465.32),
-      costsOfServices = Some(2567.21),
+      costOfServices = Some(2567.21),
       travelCosts = Some(2345.76),
       residentialFinancialCost = Some(21235.22),
       broughtFwdResidentialFinancialCost = Some(12556.00),
@@ -108,7 +108,7 @@ class ForeignPropertyEntrySpec extends UnitSpec {
   "reads" should {
     "read from JSON" when {
       "valid JSON is provided" in {
-        mtdJson.as[ForeignPropertyEntry] shouldBe model
+        mtdJson.as[AmendForeignNonFhlPropertyEntry] shouldBe model
       }
     }
   }

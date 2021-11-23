@@ -14,18 +14,20 @@
  * limitations under the License.
  */
 
-package v2.models.request.common.foreignFhlEea
+package v2.models.request.common.foreignPropertyEntry
 
 import play.api.libs.functional.syntax._
 import play.api.libs.json.{JsPath, Json, Reads, Writes}
 
-case class ForeignFhlEeaExpenditure(
+case class CreateForeignNonFhlPropertyExpenses(
                         premisesRunningCosts: Option[BigDecimal],
                         repairsAndMaintenance: Option[BigDecimal],
                         financialCosts: Option[BigDecimal],
                         professionalFees: Option[BigDecimal],
-                        costsOfServices: Option[BigDecimal],
+                        costOfServices: Option[BigDecimal],
                         travelCosts: Option[BigDecimal],
+                        residentialFinancialCost: Option[BigDecimal],
+                        broughtFwdResidentialFinancialCost: Option[BigDecimal],
                         other: Option[BigDecimal],
                         consolidatedExpenses: Option[BigDecimal]
                       ) {
@@ -33,23 +35,27 @@ case class ForeignFhlEeaExpenditure(
     repairsAndMaintenance.isEmpty &&
     financialCosts.isEmpty &&
     professionalFees.isEmpty &&
-    costsOfServices.isEmpty &&
+    costOfServices.isEmpty &&
     travelCosts.isEmpty &&
+    residentialFinancialCost.isEmpty &&
+    broughtFwdResidentialFinancialCost.isEmpty &&
     other.isEmpty &&
     consolidatedExpenses.isEmpty
 }
 
-object ForeignFhlEeaExpenditure {
-  implicit val reads: Reads[ForeignFhlEeaExpenditure] = Json.reads[ForeignFhlEeaExpenditure]
+object CreateForeignNonFhlPropertyExpenses {
+  implicit val reads: Reads[CreateForeignNonFhlPropertyExpenses] = Json.reads[CreateForeignNonFhlPropertyExpenses]
 
-  implicit val writes: Writes[ForeignFhlEeaExpenditure] = (
+  implicit val writes: Writes[CreateForeignNonFhlPropertyExpenses] = (
     (JsPath \ "premisesRunningCosts").writeNullable[BigDecimal] and
       (JsPath \ "repairsAndMaintenance").writeNullable[BigDecimal] and
       (JsPath \ "financialCosts").writeNullable[BigDecimal] and
       (JsPath \ "professionalFees").writeNullable[BigDecimal] and
       (JsPath \ "costOfServices").writeNullable[BigDecimal] and
       (JsPath \ "travelCosts").writeNullable[BigDecimal] and
+      (JsPath \ "residentialFinancialCost").writeNullable[BigDecimal] and
+      (JsPath \ "broughtFwdResidentialFinancialCost").writeNullable[BigDecimal] and
       (JsPath \ "other").writeNullable[BigDecimal] and
-      (JsPath \ "consolidatedExpense").writeNullable[BigDecimal]
-    ) (unlift(ForeignFhlEeaExpenditure.unapply))
+      (JsPath \ "consolidatedExpenses").writeNullable[BigDecimal]
+    ) (unlift(CreateForeignNonFhlPropertyExpenses.unapply))
 }

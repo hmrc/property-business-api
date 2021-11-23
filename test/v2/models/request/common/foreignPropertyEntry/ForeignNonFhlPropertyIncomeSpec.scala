@@ -19,7 +19,7 @@ package v2.models.request.common.foreignPropertyEntry
 import play.api.libs.json.{JsValue, Json}
 import support.UnitSpec
 
-class IncomeSpec extends UnitSpec {
+class ForeignNonFhlPropertyIncomeSpec extends UnitSpec {
 
   val mtdJson: JsValue = Json.parse(
     """
@@ -28,21 +28,21 @@ class IncomeSpec extends UnitSpec {
       |    "rentAmount": 34456.30
       |  },
       |  "foreignTaxCreditRelief": true,
-      |  "premiumOfLeaseGrant": 2543.43,
+      |  "premiumsOfLeaseGrant": 2543.43,
       |  "otherPropertyIncome": 54325.30,
-      |  "foreignTaxTakenOff": 6543.01,
-      |  "specialWithholdingTaxOrUKTaxPaid": 643245.00
+      |  "foreignTaxPaidOrDeducted": 6543.01,
+      |  "specialWithholdingTaxOrUkTaxPaid": 643245.00
       |}
     """.stripMargin
   )
 
-  val model: ForeignPropertyIncome = ForeignPropertyIncome(
+  val model: ForeignNonFhlPropertyIncome = ForeignNonFhlPropertyIncome(
     rentIncome = ForeignPropertyRentIncome(rentAmount = 34456.30),
     foreignTaxCreditRelief = true,
-    premiumOfLeaseGrant = Some(2543.43),
+    premiumsOfLeaseGrant = Some(2543.43),
     otherPropertyIncome = Some(54325.30),
-    foreignTaxTakenOff = Some(6543.01),
-    specialWithholdingTaxOrUKTaxPaid = Some(643245.00)
+    foreignTaxPaidOrDeducted = Some(6543.01),
+    specialWithholdingTaxOrUkTaxPaid = Some(643245.00)
   )
 
   val ifsJson: JsValue = Json.parse(
@@ -63,7 +63,7 @@ class IncomeSpec extends UnitSpec {
   "reads" should {
     "read from JSON" when {
       "valid JSON is provided" in {
-        mtdJson.as[ForeignPropertyIncome] shouldBe model
+        mtdJson.as[ForeignNonFhlPropertyIncome] shouldBe model
       }
     }
   }

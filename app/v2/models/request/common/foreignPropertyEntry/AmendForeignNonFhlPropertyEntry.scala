@@ -19,18 +19,18 @@ package v2.models.request.common.foreignPropertyEntry
 import play.api.libs.functional.syntax._
 import play.api.libs.json.{JsPath, Json, Reads, Writes}
 
-case class ForeignPropertyEntry(
+case class AmendForeignNonFhlPropertyEntry(
                                  countryCode: String,
-                                 income: ForeignPropertyIncome,
-                                 expenditure: Option[ForeignPropertyExpenditure]
+                                 income: ForeignNonFhlPropertyIncome,
+                                 expenses: Option[AmendForeignNonFhlPropertyExpenses]
                                )
 
-object ForeignPropertyEntry {
-  implicit val reads: Reads[ForeignPropertyEntry] = Json.reads[ForeignPropertyEntry]
+object AmendForeignNonFhlPropertyEntry {
+  implicit val reads: Reads[AmendForeignNonFhlPropertyEntry] = Json.reads[AmendForeignNonFhlPropertyEntry]
 
-  implicit val writes: Writes[ForeignPropertyEntry] = (
+  implicit val writes: Writes[AmendForeignNonFhlPropertyEntry] = (
     (JsPath \ "countryCode").write[String] and
-      (JsPath \ "income").write[ForeignPropertyIncome] and
-      (JsPath \ "expenses").writeNullable[ForeignPropertyExpenditure]
-    ) (unlift(ForeignPropertyEntry.unapply))
+      (JsPath \ "income").write[ForeignNonFhlPropertyIncome] and
+      (JsPath \ "expenses").writeNullable[AmendForeignNonFhlPropertyExpenses]
+    ) (unlift(AmendForeignNonFhlPropertyEntry.unapply))
 }

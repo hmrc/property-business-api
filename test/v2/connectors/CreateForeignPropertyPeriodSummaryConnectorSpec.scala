@@ -36,9 +36,9 @@ class CreateForeignPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
   val regularExpensesBody: CreateForeignPropertyPeriodSummaryRequestBody = CreateForeignPropertyPeriodSummaryRequestBody(
     "2020-01-01",
     "2020-01-31",
-    Some(ForeignFhlEea(
+    Some(CreateForeignFhlEea(
       ForeignFhlEeaIncome(5000.99),
-      Some(ForeignFhlEeaExpenditure(
+      Some(CreateForeignFhlEeaExpenses(
         Some(5000.99),
         Some(5000.99),
         Some(5000.99),
@@ -49,8 +49,8 @@ class CreateForeignPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
         None
       ))
     )),
-    Some(Seq(ForeignPropertyEntry("FRA",
-      ForeignPropertyIncome(
+    Some(Seq(CreateForeignNonFhlPropertyEntry("FRA",
+      ForeignNonFhlPropertyIncome(
         ForeignPropertyRentIncome(5000.99),
         false,
         Some(5000.99),
@@ -58,7 +58,7 @@ class CreateForeignPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
         Some(5000.99),
         Some(5000.99)
       ),
-      Some(ForeignPropertyExpenditure(
+      Some(CreateForeignNonFhlPropertyExpenses(
         Some(5000.99),
         Some(5000.99),
         Some(5000.99),
@@ -75,9 +75,9 @@ class CreateForeignPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
   val consolidatedExpensesBody: CreateForeignPropertyPeriodSummaryRequestBody = CreateForeignPropertyPeriodSummaryRequestBody(
     "2020-01-01",
     "2020-01-31",
-    Some(ForeignFhlEea(
+    Some(CreateForeignFhlEea(
       ForeignFhlEeaIncome(5000.99),
-      Some(ForeignFhlEeaExpenditure(
+      Some(CreateForeignFhlEeaExpenses(
         None,
         None,
         None,
@@ -88,8 +88,8 @@ class CreateForeignPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
         Some(3653.35)
       ))
     )),
-    Some(Seq(ForeignPropertyEntry("FRA",
-      ForeignPropertyIncome(
+    Some(Seq(CreateForeignNonFhlPropertyEntry("FRA",
+      ForeignNonFhlPropertyIncome(
         ForeignPropertyRentIncome(5000.99),
         false,
         Some(5000.99),
@@ -97,7 +97,7 @@ class CreateForeignPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
         Some(5000.99),
         Some(5000.99)
       ),
-      Some(ForeignPropertyExpenditure(
+      Some(CreateForeignNonFhlPropertyExpenses(
         None,
         None,
         None,

@@ -14,20 +14,20 @@
  * limitations under the License.
  */
 
-package v2.models.response.retrieveForeignPropertyPeriodSummary.foreignProperty
+package v2.models.response.retrieveForeignPropertyPeriodSummary.foreignNonFhlProperty
 
 import play.api.libs.json.{JsPath, Json, Reads, Writes}
 import play.api.libs.functional.syntax._
 
-case class ForeignProperty(countryCode: String,
-                           income: ForeignPropertyIncome,
-                           expenditure: Option[ForeignPropertyExpenditure])
+case class ForeignNonFhlProperty(countryCode: String,
+                                 income: Option[ForeignNonFhlPropertyIncome],
+                                 expenses: Option[ForeignNonFhlPropertyExpenses])
 
-object ForeignProperty {
-  implicit val writes: Writes[ForeignProperty] = Json.writes[ForeignProperty]
-  implicit val reads: Reads[ForeignProperty] = (
+object ForeignNonFhlProperty {
+  implicit val writes: Writes[ForeignNonFhlProperty] = Json.writes[ForeignNonFhlProperty]
+  implicit val reads: Reads[ForeignNonFhlProperty] = (
     (JsPath \ "countryCode").read[String] and
-      (JsPath \ "income").read[ForeignPropertyIncome] and
-      (JsPath \ "expenses").readNullable[ForeignPropertyExpenditure]
-  )(ForeignProperty.apply _)
+      (JsPath \ "income").readNullable[ForeignNonFhlPropertyIncome] and
+      (JsPath \ "expenses").readNullable[ForeignNonFhlPropertyExpenses]
+  )(ForeignNonFhlProperty.apply _)
 }

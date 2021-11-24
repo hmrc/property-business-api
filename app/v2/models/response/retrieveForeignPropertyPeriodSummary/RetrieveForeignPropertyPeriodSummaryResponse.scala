@@ -22,12 +22,13 @@ import v2.hateoas.{HateoasLinks, HateoasLinksFactory}
 import v2.models.hateoas.{HateoasData, Link}
 import v2.models.hateoas.RelType.LIST_PROPERTY_PERIOD_SUMMARIES
 import v2.models.response.retrieveForeignPropertyPeriodSummary.foreignFhlEea.ForeignFhlEea
-import v2.models.response.retrieveForeignPropertyPeriodSummary.foreignProperty.ForeignProperty
+import v2.models.response.retrieveForeignPropertyPeriodSummary.foreignNonFhlProperty.ForeignNonFhlProperty
 
-case class  RetrieveForeignPropertyPeriodSummaryResponse(fromDate: String,
-                                                        toDate: String,
-                                                        foreignFhlEea: Option[ForeignFhlEea],
-                                                        foreignProperty: Option[Seq[ForeignProperty]])
+case class  RetrieveForeignPropertyPeriodSummaryResponse(submittedOn: String,
+                                                         fromDate: String,
+                                                         toDate: String,
+                                                         foreignFhlEea: Option[ForeignFhlEea],
+                                                         foreignNonFhlProperty: Option[Seq[ForeignNonFhlProperty]])
 
 object RetrieveForeignPropertyPeriodSummaryResponse extends HateoasLinks {
   implicit val format: OFormat[RetrieveForeignPropertyPeriodSummaryResponse] = Json.format[RetrieveForeignPropertyPeriodSummaryResponse]

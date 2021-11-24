@@ -14,26 +14,26 @@
  * limitations under the License.
  */
 
-package v2.models.response.retrieveForeignPropertyPeriodSummary.foreignProperty
+package v2.models.response.retrieveForeignPropertyPeriodSummary.foreignNonFhlProperty
 
 import play.api.libs.json.{JsPath, Json, Reads, Writes}
 import play.api.libs.functional.syntax._
 
-case class ForeignPropertyIncome(rentIncome: ForeignPropertyRentIncome,
-                                 foreignTaxCreditRelief: Boolean,
-                                 premiumOfLeaseGrant: Option[BigDecimal],
-                                 otherPropertyIncome: Option[BigDecimal],
-                                 foreignTaxTakenOff: Option[BigDecimal],
-                                 specialWithholdingTaxOrUKTaxPaid: Option[BigDecimal])
+case class ForeignNonFhlPropertyIncome(rentIncome: Option[ForeignNonFhlPropertyRentIncome],
+                                       foreignTaxCreditRelief: Boolean,
+                                       premiumsOfLeaseGrant: Option[BigDecimal],
+                                       otherPropertyIncome: Option[BigDecimal],
+                                       foreignTaxPaidOrDeducted: Option[BigDecimal],
+                                       specialWithholdingTaxOrUkTaxPaid: Option[BigDecimal])
 
-object ForeignPropertyIncome {
-  implicit val writes: Writes[ForeignPropertyIncome] = Json.writes[ForeignPropertyIncome]
-  implicit val reads: Reads[ForeignPropertyIncome] = (
-    (JsPath \ "rentIncome").read[ForeignPropertyRentIncome] and
+object ForeignNonFhlPropertyIncome {
+  implicit val writes: Writes[ForeignNonFhlPropertyIncome] = Json.writes[ForeignNonFhlPropertyIncome]
+  implicit val reads: Reads[ForeignNonFhlPropertyIncome] = (
+    (JsPath \ "rentIncome").readNullable[ForeignNonFhlPropertyRentIncome] and
       (JsPath \ "foreignTaxCreditRelief").read[Boolean] and
       (JsPath \ "premiumsOfLeaseGrant").readNullable[BigDecimal] and
       (JsPath \ "otherPropertyIncome").readNullable[BigDecimal] and
       (JsPath \ "foreignTaxPaidOrDeducted").readNullable[BigDecimal] and
       (JsPath \ "specialWithholdingTaxOrUkTaxPaid").readNullable[BigDecimal]
-    )(ForeignPropertyIncome.apply _)
+    )(ForeignNonFhlPropertyIncome.apply _)
 }

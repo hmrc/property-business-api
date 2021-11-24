@@ -31,7 +31,7 @@ import v2.models.outcomes.ResponseWrapper
 import v2.models.request.retrieveForeignPropertyPeriodSummary._
 import v2.models.response.retrieveForeignPropertyPeriodSummary._
 import v2.models.response.retrieveForeignPropertyPeriodSummary.foreignFhlEea._
-import v2.models.response.retrieveForeignPropertyPeriodSummary.foreignProperty._
+import v2.models.response.retrieveForeignPropertyPeriodSummary.foreignNonFhlProperty._
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -79,7 +79,7 @@ class RetrieveForeignPropertyPeriodSummaryControllerSpec
     "2020-01-31",
     Some(ForeignFhlEea(
       ForeignFhlEeaIncome(5000.99),
-      Some(ForeignFhlEeaExpenditure(
+      Some(ForeignFhlEeaExpenses(
         Some(5000.99),
         Some(5000.99),
         Some(5000.99),
@@ -91,15 +91,15 @@ class RetrieveForeignPropertyPeriodSummaryControllerSpec
       ))
     )),
     Some(Seq(ForeignProperty("FRA",
-      ForeignPropertyIncome(
-        ForeignPropertyRentIncome(5000.99),
+      ForeignNonFhlPropertyIncome(
+        ForeignNonFhlPropertyRentIncome(5000.99),
         false,
         Some(5000.99),
         Some(5000.99),
         Some(5000.99),
         Some(5000.99)
       ),
-      Some(ForeignPropertyExpenditure(
+      Some(ForeignNonFhlPropertyExpenses(
         Some(5000.99),
         Some(5000.99),
         Some(5000.99),

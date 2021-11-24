@@ -14,25 +14,25 @@
  * limitations under the License.
  */
 
-package v2.models.response.retrieveForeignPropertyPeriodSummary.foreignProperty
+package v2.models.response.retrieveForeignPropertyPeriodSummary.foreignNonFhlProperty
 
 import play.api.libs.json.{JsPath, Json, Reads, Writes}
 import play.api.libs.functional.syntax._
 
-case class ForeignPropertyExpenditure(premisesRunningCosts: Option[BigDecimal],
-                                      repairsAndMaintenance: Option[BigDecimal],
-                                      financialCosts: Option[BigDecimal],
-                                      professionalFees: Option[BigDecimal],
-                                      costsOfServices: Option[BigDecimal],
-                                      travelCosts: Option[BigDecimal],
-                                      residentialFinancialCost: Option[BigDecimal],
-                                      broughtFwdResidentialFinancialCost: Option[BigDecimal],
-                                      other: Option[BigDecimal],
-                                      consolidatedExpenses: Option[BigDecimal])
+case class ForeignNonFhlPropertyExpenses(premisesRunningCosts: Option[BigDecimal],
+                                         repairsAndMaintenance: Option[BigDecimal],
+                                         financialCosts: Option[BigDecimal],
+                                         professionalFees: Option[BigDecimal],
+                                         costOfServices	: Option[BigDecimal],
+                                         travelCosts: Option[BigDecimal],
+                                         residentialFinancialCost: Option[BigDecimal],
+                                         broughtFwdResidentialFinancialCost: Option[BigDecimal],
+                                         other: Option[BigDecimal],
+                                         consolidatedExpenses: Option[BigDecimal])
 
-object ForeignPropertyExpenditure {
-  implicit val writes: Writes[ForeignPropertyExpenditure] = Json.writes[ForeignPropertyExpenditure]
-  implicit val reads: Reads[ForeignPropertyExpenditure] = (
+object ForeignNonFhlPropertyExpenses {
+  implicit val writes: Writes[ForeignNonFhlPropertyExpenses] = Json.writes[ForeignNonFhlPropertyExpenses]
+  implicit val reads: Reads[ForeignNonFhlPropertyExpenses] = (
     (JsPath \ "premisesRunningCosts").readNullable[BigDecimal] and
       (JsPath \ "repairsAndMaintenance").readNullable[BigDecimal] and
       (JsPath \ "financialCosts").readNullable[BigDecimal] and
@@ -43,5 +43,5 @@ object ForeignPropertyExpenditure {
       (JsPath \ "broughtFwdResidentialFinancialCost").readNullable[BigDecimal] and
       (JsPath \ "other").readNullable[BigDecimal] and
       (JsPath \ "consolidatedExpense").readNullable[BigDecimal]
-    )(ForeignPropertyExpenditure.apply _)
+    )(ForeignNonFhlPropertyExpenses.apply _)
 }

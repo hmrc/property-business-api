@@ -127,7 +127,7 @@ class CreateForeignPropertyPeriodSummaryRequestBodySpec extends UnitSpec with Js
       |      "costOfServices": 5000.99,
       |      "travelCosts": 5000.99,
       |      "other": 5000.99,
-      |      "consolidatedExpenses": 5000.99
+      |      "consolidatedExpenseAmount": 5000.99
       |    }
       |  },
       |  "foreignNonFhlProperty": [
@@ -153,7 +153,7 @@ class CreateForeignPropertyPeriodSummaryRequestBodySpec extends UnitSpec with Js
       |        "residentialFinancialCost": 5000.99,
       |        "broughtFwdResidentialFinancialCost": 5000.99,
       |        "other": 5000.99,
-      |        "consolidatedExpenses": 5000.99
+      |        "consolidatedExpenseAmount": 5000.99
       |      }
       |    }
       |  ]

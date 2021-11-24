@@ -56,6 +56,6 @@ object CreateForeignNonFhlPropertyExpenses {
       (JsPath \ "residentialFinancialCost").writeNullable[BigDecimal] and
       (JsPath \ "broughtFwdResidentialFinancialCost").writeNullable[BigDecimal] and
       (JsPath \ "other").writeNullable[BigDecimal] and
-      (JsPath \ "consolidatedExpenses").writeNullable[BigDecimal]
+      (JsPath \ "consolidatedExpenseAmount").writeNullable[BigDecimal]
     ) (unlift(CreateForeignNonFhlPropertyExpenses.unapply))
 }

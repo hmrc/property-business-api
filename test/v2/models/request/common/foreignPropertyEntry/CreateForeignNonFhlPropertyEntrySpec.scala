@@ -99,7 +99,7 @@ class CreateForeignNonFhlPropertyEntrySpec extends UnitSpec {
        |    "residentialFinancialCost": 21235.22,
        |    "broughtFwdResidentialFinancialCost": 12556.00,
        |    "other": 2425.11,
-       |    "consolidatedExpenses": 352.66
+       |    "consolidatedExpenseAmount": 352.66
        |  }
        |}
      """.stripMargin

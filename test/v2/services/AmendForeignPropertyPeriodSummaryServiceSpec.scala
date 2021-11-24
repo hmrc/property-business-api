@@ -34,6 +34,7 @@ class AmendForeignPropertyPeriodSummaryServiceSpec extends UnitSpec {
 
   val nino: String = "AA123456A"
   val businessId: String = "XAIS12345678910"
+  val taxYear: String = "2022-23"
   val submissionId: String = "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
   implicit val correlationId: String = "X-123"
 
@@ -80,7 +81,7 @@ class AmendForeignPropertyPeriodSummaryServiceSpec extends UnitSpec {
     foreignNonFhlProperty = Some(Seq(foreignNonFhlProperty))
   )
 
-  private val requestData = AmendForeignPropertyPeriodSummaryRequest(Nino(nino), businessId, submissionId, body)
+  private val requestData = AmendForeignPropertyPeriodSummaryRequest(Nino(nino), businessId, taxYear, submissionId, body)
 
   trait Test extends MockAmendForeignPropertyPeriodSummaryConnector {
     implicit val hc: HeaderCarrier = HeaderCarrier()

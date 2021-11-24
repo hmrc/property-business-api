@@ -31,6 +31,7 @@ class AmendForeignPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
 
   val nino: String = "AA123456A"
   val businessId: String = "XAIS12345678910"
+  val taxYear: String = "2022-23"
   val submissionId: String = "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
 
   private val foreignFhlEea: AmendForeignFhlEea = AmendForeignFhlEea(
@@ -79,6 +80,7 @@ class AmendForeignPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
   val request: AmendForeignPropertyPeriodSummaryRequest = AmendForeignPropertyPeriodSummaryRequest(
     nino = Nino(nino),
     businessId = businessId,
+    taxYear = taxYear,
     submissionId = submissionId,
     body = body
   )

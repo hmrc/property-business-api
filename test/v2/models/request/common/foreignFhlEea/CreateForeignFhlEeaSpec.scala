@@ -69,7 +69,7 @@ class CreateForeignFhlEeaSpec extends UnitSpec {
       |    "costOfServices": 4567.77,
       |    "travelCosts": 456.77,
       |    "other": 567.67,
-      |    "consolidatedExpenses": 456.98
+      |    "consolidatedExpenseAmount": 456.98
       |  }
       |}
     """.stripMargin

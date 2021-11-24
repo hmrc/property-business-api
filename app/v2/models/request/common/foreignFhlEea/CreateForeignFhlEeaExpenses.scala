@@ -50,6 +50,6 @@ object CreateForeignFhlEeaExpenses {
       (JsPath \ "costOfServices").writeNullable[BigDecimal] and
       (JsPath \ "travelCosts").writeNullable[BigDecimal] and
       (JsPath \ "other").writeNullable[BigDecimal] and
-      (JsPath \ "consolidatedExpenses").writeNullable[BigDecimal]
+      (JsPath \ "consolidatedExpenseAmount").writeNullable[BigDecimal]
     ) (unlift(CreateForeignFhlEeaExpenses.unapply))
 }

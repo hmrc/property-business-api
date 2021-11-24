@@ -1,15 +1,16 @@
 {
-  "fromDate": "2019-04-06",
-  "toDate": "2019-07-06",
+  "submittedOn": "2021-07-07T10:59:47Z",
+  "fromDate": "2020-01-01",
+  "toDate": "2020-01-31",
   "foreignFhlEea": {
     "income": {
       "rentAmount": 200.22
     },
-    "expenditure": {
+    "expenses": {
       "consolidatedExpenses": 100.25
     }
   },
-  "foreignProperty": [
+  "foreignNonFhlProperty": [
     {
       "countryCode": "FRA",
       "income": {
@@ -17,12 +18,12 @@
           "rentAmount": 200.22
         },
         "foreignTaxCreditRelief": true,
-        "premiumOfLeaseGrant": 100.25,
+        "premiumsOfLeaseGrant": 100.25,
         "otherPropertyIncome": 100.25,
-        "foreignTaxTakenOff": 44.21,
-        "specialWithholdingTaxOrUKTaxPaid": 23.78
+        "foreignTaxPaidOrDeducted": 44.21,
+        "specialWithholdingTaxOrUkTaxPaid": 23.78
       },
-      "expenditure": {
+      "expenses": {
         "residentialFinancialCost": 200.25,
         "broughtFwdResidentialFinancialCost": 100.25,
         "consolidatedExpenses": 100.25
@@ -31,17 +32,17 @@
   ],
   "links": [
     {
-      "href": "/individuals/business/property/{nino}/{businessId}/period/{submissionId}",
+      "href": "/individuals/business/property/foreign/{nino}/{businessId}/period/{taxYear}/{submissionId}",
       "method": "PUT",
-      "rel": "amend-property-period-summary"
+      "rel": "amend-foreign-property-period-summary"
     },
     {
-      "href": "/individuals/business/property/{nino}/{businessId}/period/{submissionId}",
+      "href": "/individuals/business/property/foreign/{nino}/{businessId}/period/{taxYear}/{submissionId}",
       "method": "GET",
       "rel": "self"
     },
     {
-      "href": "/individuals/business/property/{nino}/{businessId}/period",
+      "href": "/individuals/business/property/{nino}/{businessId}/period/{taxYear}",
       "method": "GET",
       "rel": "list-property-period-summaries"
     }

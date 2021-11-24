@@ -1,21 +1,22 @@
 {
-  "fromDate": "2019-04-06",
-  "toDate": "2019-07-06",
+  "submittedOn": "2021-07-07T10:59:47Z",
+  "fromDate": "2020-01-01",
+  "toDate": "2020-01-31",
   "foreignFhlEea": {
     "income": {
       "rentAmount": 200.22
     },
-    "expenditure": {
+    "expenses": {
       "premisesRunningCosts": 100.25,
       "repairsAndMaintenance": 100.25,
       "financialCosts": 100.25,
       "professionalFees": 100.25,
-      "costsOfServices": 100.25,
+      "costOfServices": 100.25,
       "travelCosts": 100.25,
       "other": 100.25
     }
   },
-  "foreignProperty": [
+  "foreignNonFhlProperty": [
     {
       "countryCode": "FRA",
       "income": {
@@ -23,17 +24,17 @@
           "rentAmount": 200.22
         },
         "foreignTaxCreditRelief": true,
-        "premiumOfLeaseGrant": 100.25,
+        "premiumsOfLeaseGrant": 100.25,
         "otherPropertyIncome": 100.25,
-        "foreignTaxTakenOff": 44.21,
-        "specialWithholdingTaxOrUKTaxPaid": 23.78
+        "foreignTaxPaidOrDeducted": 44.21,
+        "specialWithholdingTaxOrUkTaxPaid": 23.78
       },
-      "expenditure": {
+      "expenses": {
         "premisesRunningCosts": 100.25,
         "repairsAndMaintenance": 100.25,
         "financialCosts": 200.25,
         "professionalFees": 100.25,
-        "costsOfServices": 100.25,
+        "costOfServices": 100.25,
         "travelCosts": 100.25,
         "other": 100.25
       }
@@ -41,17 +42,17 @@
   ],
   "links": [
     {
-      "href": "/individuals/business/property/{nino}/{businessId}/period/{submissionId}",
+      "href": "/individuals/business/property/foreign/CX897463D/XAIS12345678910/period/2021-22/4557ecb5-fd32-48cc-81f5-e6acd1099f3c",
       "method": "PUT",
-      "rel": "amend-property-period-summary"
+      "rel": "amend-foreign-property-period-summary"
     },
     {
-      "href": "/individuals/business/property/{nino}/{businessId}/period/{submissionId}",
+      "href": "/individuals/business/property/foreign/CX897463D/XAIS12345678910/period/2021-22/4557ecb5-fd32-48cc-81f5-e6acd1099f3c",
       "method": "GET",
       "rel": "self"
     },
     {
-      "href": "/individuals/business/property/{nino}/{businessId}/period",
+      "href": "/individuals/business/property/CX897463D/XAIS12345678910/period/2021-22",
       "method": "GET",
       "rel": "list-property-period-summaries"
     }

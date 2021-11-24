@@ -9,19 +9,31 @@
     <tbody>
         <tr>
             <td><p>N/A - DEFAULT</p></td>
-            <td><p>Simulate success response with expenditure.</p></td>
+            <td><p>Simulates the scenario where no data is found.</p></td>
         </tr>
         <tr>
-            <td><p>CONSOLIDATED_EXPENDITURE</p></td>
-            <td><p>Simulate success response with consolidated expenditure.</p></td>
+            <td><p>FOREIGN_PROPERTY</p></td>
+            <td><p>Simulates success response with Foreign FHL and Non-FHL properties.</p></td>
         </tr>
         <tr>
-            <td><p>NO_EXPENDITURE</p></td>
-            <td><p>Simulate success response with no expenditure.</p></td>
+            <td><p>FOREIGN_FHL_PROPERTY</p></td>
+            <td><p>Simulates success response with Foreign FHL property.</p></td>
         </tr>
         <tr>
-            <td><p>NOT_FOUND</p></td>
-            <td><p>Simulate a scenario where no data is found.</p></td>
+            <td><p>FOREIGN_NON_FHL_PROPERTY</p></td>
+            <td><p>Simulates success response with Foreign Non-FHL property.</p></td>
+        </tr>
+        <tr>
+            <td><p>CONSOLIDATED_EXPENSES</p></td>
+            <td><p>Simulates success response with consolidated expense.</p></td>
+        </tr>
+        <tr>
+            <td><p>UK_PROPERTY</p></td>
+            <td><p>Simulates the scenario where wrong business type is returned.</p></td>
+        </tr>
+        <tr>
+            <td><p>NO_EXPENSES</p></td>
+            <td><p>Simulates success response with no expenses.</p></td>
         </tr>
     </tbody>
 </table>

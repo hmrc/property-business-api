@@ -1,22 +1,33 @@
 {
   "foreignFhlEea": {
     "income": {
-      "rentsReceived": 1123.89
+      "rentAmount": 1123.89
     },
     "expenses": {
-      "consolidatedExpenses": 334.64
+      "premisesRunningCosts": 332.78,
+      "repairsAndMaintenance": 231.45,
+      "financialCosts": 345.23,
+      "professionalFees": 232.45,
+      "costOfServices": 231.56,
+      "travelCosts": 234.67,
+      "other": 3457.9
     }
   },
-  "foreignNonFhlProperty": [
+  "foreignProperty": [
     {
-      "countryCode": "FRA",
+      "countryCode": "AFG",
       "income": {
         "rentIncome": {
-          "rentsReceived": 440.31
-        }
+          "rentAmount": 440.31
+        },
+        "foreignTaxCreditRelief": false,
+        "premiumsOfLeaseGrant": 950.48,
+        "otherPropertyIncome": 802.49,
+        "foreignTaxPaidOrDeducted": 734.18,
+        "specialWithholdingTaxOrUkTaxPaid": 85.47
       },
       "expenses": {
-        "consolidatedExpenses": 334.64
+        "consolidatedExpense": 334.64
       }
     }
   ]

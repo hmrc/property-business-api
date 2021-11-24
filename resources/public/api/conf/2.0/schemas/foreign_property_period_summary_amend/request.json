@@ -111,7 +111,10 @@
                 "type": "string",
                 "example": "FRA"
               }
-            }
+            },
+            "required": [
+              "countryCode"
+            ]
           },
           "income": {
             "type": "object",
@@ -261,8 +264,7 @@
           }
         },
         "required": [
-          "foreignNonFhlPropertyEntry",
-          "countryCode"
+          "foreignNonFhlPropertyEntry"
         ]
       }
     }

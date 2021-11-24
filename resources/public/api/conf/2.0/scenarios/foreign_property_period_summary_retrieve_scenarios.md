@@ -16,16 +16,20 @@
             <td><p>Simulates success response with Foreign FHL and Non-FHL properties.</p></td>
         </tr>
         <tr>
-            <td><p>FOREIGN_FHL_PROPERTY</p></td>
+            <td><p>FOREIGN_FHL_FULL_EXPENSES</p></td>
             <td><p>Simulates success response with Foreign FHL property.</p></td>
         </tr>
         <tr>
-            <td><p>FOREIGN_NON_FHL_PROPERTY</p></td>
+            <td><p>FOREIGN_FHL_CONSOLIDATED</p></td>
+            <td><p>Simulates the scenario of a FHL property with consolidated expenses.</p></td>
+        </tr>
+        <tr>
+            <td><p>FOREIGN_NON_FHL_FULL_EXPENSES</p></td>
             <td><p>Simulates success response with Foreign Non-FHL property.</p></td>
         </tr>
         <tr>
-            <td><p>CONSOLIDATED_EXPENSES</p></td>
-            <td><p>Simulates success response with consolidated expense.</p></td>
+            <td><p>FOREIGN_NON_FHL_CONSOLIDATED</p></td>
+            <td><p>	Simulates the scenario of a Non-FHL property with consolidated expenses.</p></td>
         </tr>
         <tr>
             <td><p>UK_PROPERTY</p></td>

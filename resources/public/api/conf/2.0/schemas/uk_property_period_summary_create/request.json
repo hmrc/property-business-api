@@ -1,7 +1,7 @@
 {
   "$schema": "http://json-schema.org/draft-04/schema#",
-  "title": "Create Foreign Property Income & Expenditure Period",
-  "description": "This endpoint allows the developer to submit the income and expenditure for a foreign property business that occurred between two dates. This submission is for either or both of Furnished Holiday Lettings (FHL) in the European Economic Area (EEA) and all other foreign Property submissions. A National Insurance number and business ID are required.",
+  "title": "Create a UK Property Income & Expenses Period Summary",
+  "description": "This endpoint allows the developer to submit the income and expenses for a foreign property business that occurred between two dates. This submission is for either or both of Furnished Holiday Lettings (FHL) in the European Economic Area (EEA) and all other foreign Property submissions. A National Insurance number and business ID are required.",
   "type": "object",
   "properties": {
     "fromDate": {
@@ -135,7 +135,7 @@
               "example": "5000.99"
             },
             "otherIncome": {
-              "description": "Other allowable property expenses. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
+              "description": "Other allowable property incomes. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
               "type": "number",
               "example": "5000.99"
             },

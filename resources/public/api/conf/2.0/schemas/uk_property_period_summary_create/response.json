@@ -2,11 +2,11 @@
 {
   "$schema": "http://json-schema.org/draft-04/schema#",
   "title": "Create a UK Property Income & Expenses Period Summary",
-  "description": "This endpoint allows a developer to re-submit the income and expenditure for a UK property business. This submission is for either or both of Furnished Holiday Letting (FHL) and Non FHL UK property submissions. A National Insurance number, business ID and tax year are required.",
+  "description": "This endpoint allows a developer to submit the income and expenses for a UK property business. This submission is for either or both of Furnished Holiday Letting (FHL) and Non FHL UK property submissions. A National Insurance number, business ID and tax year are required.",
   "type": "object",
   "properties": {
     "submissionId": {
-      "description": "An identifier for the income and expenditure period summary.",
+      "description": "An identifier for the income and expenses period summary.",
       "type": "string",
       "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
       "example": "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"

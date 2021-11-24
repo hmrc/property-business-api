@@ -39,7 +39,7 @@ object ToDateFormatError       extends MtdError("FORMAT_TO_DATE", "The provided 
 object DateFormatError         extends MtdError("FORMAT_DATE", "The supplied date format is not valid")
 object StringFormatError       extends MtdError("FORMAT_STRING", "The supplied string format is not valid")
 object CountryCodeFormatError  extends MtdError("FORMAT_COUNTRY_CODE", "The provided Country code is invalid")
-object ValueFormatError        extends MtdError("FORMAT_VALUE", "One or more monetary fields are invalid")
+object ValueFormatError        extends MtdError("FORMAT_VALUE", "The value must be between 0 and 99999999999.99")
 object TaxYearFormatError      extends MtdError("FORMAT_TAX_YEAR", "The provided Tax year is invalid")
 
 // Rule Errors

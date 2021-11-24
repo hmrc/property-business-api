@@ -255,6 +255,20 @@ class AmendUkPropertyAnnualSubmissionControllerISpec extends V2IntegrationBaseSp
             |""".stripMargin)
 
         val allInvalidFieldsRequestError: List[MtdError] = List(
+          StringFormatError.copy(
+            paths = Some(List(
+              "/ukNonFhlProperty/allowances/structuredBuildingAllowance/0/building/name",
+              "/ukNonFhlProperty/allowances/structuredBuildingAllowance/0/building/postcode",
+              "/ukNonFhlProperty/allowances/enhancedStructuredBuildingAllowance/0/building/number",
+              "/ukNonFhlProperty/allowances/enhancedStructuredBuildingAllowance/0/building/postcode"
+            ))
+          ),
+          DateFormatError.copy(
+            paths = Some(List(
+              "/ukNonFhlProperty/allowances/structuredBuildingAllowance/0/firstYear/qualifyingDate",
+              "/ukNonFhlProperty/allowances/enhancedStructuredBuildingAllowance/0/firstYear/qualifyingDate"
+            ))
+          ),
           ValueFormatError.copy(
             paths = Some(List(
               "/ukFhlProperty/adjustments/lossBroughtForward",
@@ -281,20 +295,6 @@ class AmendUkPropertyAnnualSubmissionControllerISpec extends V2IntegrationBaseSp
               "/ukNonFhlProperty/allowances/structuredBuildingAllowance/0/firstYear/qualifyingAmountExpenditure",
               "/ukNonFhlProperty/allowances/enhancedStructuredBuildingAllowance/0/amount",
               "/ukNonFhlProperty/allowances/enhancedStructuredBuildingAllowance/0/firstYear/qualifyingAmountExpenditure"
-            ))
-          ),
-          StringFormatError.copy(
-            paths = Some(List(
-              "/ukNonFhlProperty/allowances/structuredBuildingAllowance/0/building/name",
-              "/ukNonFhlProperty/allowances/structuredBuildingAllowance/0/building/postcode",
-              "/ukNonFhlProperty/allowances/enhancedStructuredBuildingAllowance/0/building/number",
-              "/ukNonFhlProperty/allowances/enhancedStructuredBuildingAllowance/0/building/postcode"
-            ))
-          ),
-          DateFormatError.copy(
-            paths = Some(List(
-              "/ukNonFhlProperty/allowances/structuredBuildingAllowance/0/firstYear/qualifyingDate",
-              "/ukNonFhlProperty/allowances/enhancedStructuredBuildingAllowance/0/firstYear/qualifyingDate"
             ))
           )
         )
@@ -756,7 +756,7 @@ class AmendUkPropertyAnnualSubmissionControllerISpec extends V2IntegrationBaseSp
           |""".stripMargin)
 
       val allInvalidValueRequestError: MtdError = ValueFormatError.copy(
-        message = "One or more monetary fields are invalid",
+        message = "The value must be between 0 and 99999999999.99",
         paths = Some(List(
           "/ukFhlProperty/adjustments/lossBroughtForward",
           "/ukFhlProperty/adjustments/balancingCharge",

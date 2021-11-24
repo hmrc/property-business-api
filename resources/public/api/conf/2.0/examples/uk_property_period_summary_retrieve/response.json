@@ -1,0 +1,69 @@
+{
+  "submittedOn": "2021-10-21T08:57:47Z",
+  "fromDate": "2020-01-01",
+  "toDate": "2020-01-31",
+  "ukFhlProperty": {
+    "income": {
+      "periodAmount": 5000.99,
+      "taxDeducted": 3123.21,
+      "rentARoom": {
+        "rentsReceived": 532.12
+      }
+    },
+    "expenses": {
+      "premisesRunningCosts": 4141.21,
+      "repairsAndMaintenance": 582.21,
+      "financialCosts": 829.39,
+      "professionalFees": 4992.31,
+      "costOfServices": 98.21,
+      "other": 29.48,
+      "travelCosts": 48.93,
+      "rentARoom": {
+        "amountClaimed": 88.21
+      }
+    }
+  },
+  "ukNonFhlProperty": {
+    "income": {
+      "premiumsOfLeaseGrant": 42.12,
+      "reversePremiums": 84.31,
+      "periodAmount": 9884.93,
+      "taxDeducted": 842.99,
+      "otherIncome": 31.44,
+      "rentARoom": {
+        "rentsReceived": 947.66
+      }
+    },
+    "expenses": {
+      "premisesRunningCosts": 4141.21,
+      "repairsAndMaintenance": 582.21,
+      "financialCosts": 829.39,
+      "professionalFees": 4992.31,
+      "costOfServices": 98.21,
+      "other": 29.48,
+      "residentialFinancialCost": 2884.99,
+      "travelCosts": 48.93,
+      "residentialFinancialCostsCarriedForward": 483.91,
+      "rentARoom": {
+        "amountClaimed": 88.21
+      }
+    }
+  },
+  "links": [
+    {
+      "href":"/individuals/business/property/uk/AA999999A/XAIS12345678910/period/2022-23/4557ecb5-fd32-48cc-81f5-e6acd1099f3c",
+      "method": "PUT",
+      "rel": "amend-uk-property-period-summary"
+    },
+    {
+      "href":"/individuals/business/property/uk/AA999999A/XAIS12345678910/period/2022-23/4557ecb5-fd32-48cc-81f5-e6acd1099f3c",
+      "method": "GET",
+      "rel": "self"
+    },
+    {
+      "href":"/individuals/business/property/uk/AA999999A/XAIS12345678910/period/2022-23",
+      "method": "GET",
+      "rel": "list-property-period-summaries"
+    }
+  ]
+}

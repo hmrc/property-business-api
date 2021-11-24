@@ -92,6 +92,7 @@ uses:
               taxYear:
                 description: 'The tax year to which the data applies. For example, 2022-23.  The start year and end year must not span two tax years. The minimum tax year is 2021-22. No gaps are allowed, for example, 2022-24 is not valid.'
                 example: 2022-23
+            post: !include foreign_property_period_summary_create.raml
             /{submissionId}:
               uriParameters:
                 submissionId:

@@ -29,7 +29,7 @@
             "type": "string",
             "enum": [
               "list-property-period-summaries",
-              "amend-property-period-summary",
+              "amend-foreign-property-period-summary",
               "self"
             ]
           }

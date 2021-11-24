@@ -29,7 +29,7 @@
         </tr>
         <tr>
             <td><p>FOREIGN_NON_FHL_CONSOLIDATED</p></td>
-            <td><p>	Simulates the scenario of a Non-FHL property with consolidated expenses.</p></td>
+            <td><p>Simulates the scenario of a Non-FHL property with consolidated expenses.</p></td>
         </tr>
         <tr>
             <td><p>UK_PROPERTY</p></td>

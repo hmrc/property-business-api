@@ -19,6 +19,7 @@ package v2.services
 import fixtures.RetrieveUkPropertyPeriodSummary.ResponseModelsFixture
 import support.UnitSpec
 import uk.gov.hmrc.http.HeaderCarrier
+import v2.connectors.RetrieveUkPropertyPeriodSummaryConnector.UkResult
 import v2.controllers.EndpointLogContext
 import v2.mocks.connectors.MockRetrieveUkPropertyPeriodSummaryConnector
 import v2.models.domain.Nino
@@ -53,7 +54,7 @@ class RetrieveUkPropertyPeriodSummaryServiceSpec extends UnitSpec with ResponseM
     "service call successful" when {
       "return mapped result" in new Test {
         MockRetrieveUkPropertyConnector.retrieveUkProperty(requestData)
-          .returns(Future.successful(Right(ResponseWrapper(correlationId, fullResponseModel))))
+          .returns(Future.successful(Right(ResponseWrapper(correlationId, UkResult(fullResponseModel)))))
 
         await(service.retrieveUkProperty(requestData)) shouldBe Right(ResponseWrapper(correlationId, fullResponseModel))
       }
@@ -75,7 +76,7 @@ class RetrieveUkPropertyPeriodSummaryServiceSpec extends UnitSpec with ResponseM
       val input = Seq(
         "INVALID_TAXABLE_ENTITY_ID" -> NinoFormatError,
         "INVALID_TAX_YEAR" -> TaxYearFormatError,
-        "INVALID_INCOMESOURCE_ID" -> BusinessIdFormatError,
+        "INVALID_INCOMESOURCEID" -> BusinessIdFormatError,
         "INVALID_SUBMISSION_ID" -> SubmissionIdFormatError,
         "TAX_YEAR_NOT_SUPPORTED" -> RuleTaxYearNotSupportedError,
         "NO_DATA_FOUND" -> NotFoundError,

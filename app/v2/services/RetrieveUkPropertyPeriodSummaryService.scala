@@ -20,9 +20,12 @@ import cats.data.EitherT
 import javax.inject.Inject
 import uk.gov.hmrc.http.HeaderCarrier
 import utils.Logging
+import v2.connectors
 import v2.connectors.RetrieveUkPropertyPeriodSummaryConnector
+import v2.connectors.RetrieveUkPropertyPeriodSummaryConnector.{NonUkResult, UkResult}
 import v2.controllers.EndpointLogContext
 import v2.models.errors._
+import v2.models.outcomes.ResponseWrapper
 import v2.models.request.retrieveUkPropertyPeriodSummary.RetrieveUkPropertyPeriodSummaryRequest
 import v2.models.response.retrieveUkPropertyPeriodSummary.RetrieveUkPropertyPeriodSummaryResponse
 import v2.support.IfsResponseMappingSupport
@@ -39,8 +42,9 @@ class RetrieveUkPropertyPeriodSummaryService @Inject()(connector: RetrieveUkProp
     correlationId: String): Future[ServiceOutcome[RetrieveUkPropertyPeriodSummaryResponse]] = {
 
     val result = for {
-      ifsResponseWrapper <- EitherT(connector.retrieveUkProperty(request)).leftMap(mapIfsErrors(ifsErrorMap))
-    } yield ifsResponseWrapper
+      connectorResultWrapper <- EitherT(connector.retrieveUkProperty(request)).leftMap(mapIfsErrors(ifsErrorMap))
+      mtdResponseWrapper     <- EitherT.fromEither[Future](validateBusinessType(connectorResultWrapper))
+    } yield mtdResponseWrapper
 
     result.value
   }
@@ -49,7 +53,7 @@ class RetrieveUkPropertyPeriodSummaryService @Inject()(connector: RetrieveUkProp
     Map(
       "INVALID_TAXABLE_ENTITY_ID" -> NinoFormatError,
       "INVALID_TAX_YEAR" -> TaxYearFormatError,
-      "INVALID_INCOMESOURCE_ID" -> BusinessIdFormatError,
+      "INVALID_INCOMESOURCEID" -> BusinessIdFormatError,
       "INVALID_SUBMISSION_ID" -> SubmissionIdFormatError,
       "TAX_YEAR_NOT_SUPPORTED" -> RuleTaxYearNotSupportedError,
       "NO_DATA_FOUND" -> NotFoundError,
@@ -57,5 +61,11 @@ class RetrieveUkPropertyPeriodSummaryService @Inject()(connector: RetrieveUkProp
       "SERVICE_UNAVAILABLE" -> DownstreamError,
       "INVALID_CORRELATIONID" -> DownstreamError
     )
+
+  private def validateBusinessType(resultWrapper: ResponseWrapper[connectors.RetrieveUkPropertyPeriodSummaryConnector.Result]) =
+    resultWrapper.responseData match {
+      case UkResult(response) => Right(ResponseWrapper(resultWrapper.correlationId, response))
+      case NonUkResult        => Left(ErrorWrapper(resultWrapper.correlationId, RuleTypeOfBusinessIncorrectError))
+    }
 
 }

@@ -19,7 +19,7 @@ package v2.services
 import fixtures.RetrieveUkPropertyPeriodSummary.ResponseModelsFixture
 import support.UnitSpec
 import uk.gov.hmrc.http.HeaderCarrier
-import v2.connectors.RetrieveUkPropertyPeriodSummaryConnector.UkResult
+import v2.connectors.RetrieveUkPropertyPeriodSummaryConnector.{NonUkResult, UkResult}
 import v2.controllers.EndpointLogContext
 import v2.mocks.connectors.MockRetrieveUkPropertyPeriodSummaryConnector
 import v2.models.domain.Nino
@@ -59,6 +59,16 @@ class RetrieveUkPropertyPeriodSummaryServiceSpec extends UnitSpec with ResponseM
         await(service.retrieveUkProperty(requestData)) shouldBe Right(ResponseWrapper(correlationId, fullResponseModel))
       }
     }
+
+    "a non-uk result is found" should {
+      "return a RULE_TYPE_OF_BUSINESS_INCORRECT error" in new Test {
+        MockRetrieveUkPropertyConnector
+          .retrieveUkProperty(requestData) returns Future.successful(Right(ResponseWrapper(correlationId, NonUkResult)))
+
+        await(service.retrieveUkProperty(requestData)) shouldBe Left(ErrorWrapper(correlationId, RuleTypeOfBusinessIncorrectError))
+      }
+    }
+
   }
 
   "unsuccessful" should {

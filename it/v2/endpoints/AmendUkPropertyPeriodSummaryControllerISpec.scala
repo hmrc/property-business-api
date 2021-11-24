@@ -270,7 +270,7 @@ class AmendUkPropertyPeriodSummaryControllerISpec extends V2IntegrationBaseSpec 
 
     def setupStubs(): StubMapping
 
-    def uri: String = s"/uk/$nino/$businessId/$taxYear/period/$submissionId"
+    def uri: String = s"/uk/$nino/$businessId/period/$taxYear/$submissionId"
 
     def ifsUri: String = s"/income-tax/business/property/periodic"
 

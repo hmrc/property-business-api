@@ -13,7 +13,7 @@
       "other": 3457.9
     }
   },
-  "foreignProperty": [
+  "foreignNonFhlProperty": [
     {
       "countryCode": "AFG",
       "income": {
@@ -27,7 +27,15 @@
         "specialWithholdingTaxOrUkTaxPaid": 85.47
       },
       "expenses": {
-        "consolidatedExpense": 334.64
+        "premisesRunningCosts":129.35,
+        "repairsAndMaintenance":7490.32,
+        "financialCosts":5000.99,
+        "professionalFees":847.90,
+        "travelCosts":69.20,
+        "costOfServices":478.23,
+        "residentialFinancialCost":879.28,
+        "broughtFwdResidentialFinancialCost":846.13,
+        "other":138.92
       }
     }
   ]

@@ -4,16 +4,10 @@
       "rentAmount": 1123.89
     },
     "expenses": {
-      "premisesRunningCosts": 332.78,
-      "repairsAndMaintenance": 231.45,
-      "financialCosts": 345.23,
-      "professionalFees": 232.45,
-      "costOfServices": 231.56,
-      "travelCosts": 234.67,
-      "other": 3457.9
+      "consolidatedExpenses": 334.64
     }
   },
-  "foreignProperty": [
+  "foreignNonFhlProperty": [
     {
       "countryCode": "AFG",
       "income": {
@@ -27,7 +21,9 @@
         "specialWithholdingTaxOrUkTaxPaid": 85.47
       },
       "expenses": {
-        "consolidatedExpense": 334.64
+        "consolidatedExpenses": 3992.93,
+        "residentialFinancialCost":879.28,
+        "broughtFwdResidentialFinancialCost":846.13
       }
     }
   ]

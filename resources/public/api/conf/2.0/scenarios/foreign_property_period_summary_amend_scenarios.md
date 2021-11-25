@@ -15,13 +15,19 @@
     <tbody>
         <tr>
             <td><p>NOT_FOUND</p></td>
-            <td><p>Simulates the scenario where the given property could not be found.</p></td>
+            <td><p>Simulates the scenario where no data is found.</p></td>
         </tr>
     </tbody>
     <tbody>
         <tr>
-            <td><p>INCOME_SOURCE_NOT_FOUND</p></td>
-            <td><p>Simulates the scenario where the given income source id could not be found.</p></td>
+            <td><p>TYPE_OF_BUSINESS_INCORRECT</p></td>
+            <td><p>Simulates the scenario where an businessId for something other than a foreign property is supplied.</p></td>
+        </tr>
+    </tbody>
+    <tbody>
+        <tr>
+            <td><p>DUPLICATE_COUNTRY_CODE</p></td>
+            <td><p>Duplicate Country code is not allowed</p></td>
         </tr>
     </tbody>
 </table>

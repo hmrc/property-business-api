@@ -295,6 +295,17 @@ traits:
                 description: A summary has already been submitted for the period specified.
                 value:
                   code: RULE_DUPLICATE_SUBMISSION
+  ruleDuplicateCountryCode:
+    responses:
+      400:
+        body:
+          application/json:
+            type: types.errorResponse
+            examples:
+              ruleDuplicateCountryCode:
+                description: Duplicate Country code is not allowed.
+                value:
+                  code: RULE_DUPLICATE_COUNTRY_CODE
 # MISSING_XXX
   missingFromDate:
     responses:

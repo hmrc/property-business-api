@@ -1,41 +1,41 @@
 {
   "foreignFhlEea": {
     "income": {
-      "rentAmount": 567.83
+      "rentAmount": 1123.89
     },
-    "expenditure": {
-      "premisesRunningCosts": 4567.98,
-      "repairsAndMaintenance": 98765.67,
-      "financialCosts": 4566.95,
-      "professionalFees": 23.65,
-      "costsOfServices": 4567.77,
-      "travelCosts": 456.77,
-      "other": 567.67
+    "expenses": {
+      "premisesRunningCosts": 332.78,
+      "repairsAndMaintenance": 231.45,
+      "financialCosts": 345.23,
+      "professionalFees": 232.45,
+      "costOfServices": 231.56,
+      "travelCosts": 234.67,
+      "other": 3457.9
     }
   },
-  "foreignProperty": [
+  "foreignNonFhlProperty": [
     {
-      "countryCode": "FRA",
+      "countryCode": "AFG",
       "income": {
         "rentIncome": {
-          "rentAmount": 34456.30
+          "rentAmount": 440.31
         },
-        "foreignTaxCreditRelief": true,
-        "premiumOfLeaseGrant": 2543.43,
-        "otherPropertyIncome": 54325.30,
-        "foreignTaxTakenOff": 6543.01,
-        "specialWithholdingTaxOrUKTaxPaid": 643245.00
+        "foreignTaxCreditRelief": false,
+        "premiumsOfLeaseGrant": 950.48,
+        "otherPropertyIncome": 802.49,
+        "foreignTaxPaidOrDeducted": 734.18,
+        "specialWithholdingTaxOrUkTaxPaid": 85.47
       },
-      "expenditure": {
-        "premisesRunningCosts": 5635.43,
-        "repairsAndMaintenance": 3456.65,
-        "financialCosts": 34532.21,
-        "professionalFees": 32465.32,
-        "costsOfServices": 2567.21,
-        "travelCosts": 2345.76,
-        "residentialFinancialCost": 21235.22,
-        "broughtFwdResidentialFinancialCost": 12556.00,
-        "other": 2425.11
+      "expenses": {
+        "premisesRunningCosts":129.35,
+        "repairsAndMaintenance":7490.32,
+        "financialCosts":5000.99,
+        "professionalFees":847.90,
+        "travelCosts":69.20,
+        "costOfServices":478.23,
+        "residentialFinancialCost":879.28,
+        "broughtFwdResidentialFinancialCost":846.13,
+        "other":138.92
       }
     }
   ]

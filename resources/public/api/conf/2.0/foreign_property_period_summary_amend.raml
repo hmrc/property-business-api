@@ -3,17 +3,22 @@ is:
   - headers.contentTypeJson
   - headers.testScenarioHeader
   - errors.formatNino
+  - errors.formatTaxYear
   - errors.formatBusinessId
   - errors.formatSubmissionId
   - errors.formatCountryCode
+  - errors.ruleTaxYearRangeInvalid
+  - errors.ruleTaxYearNotSupported
   - errors.formatValue
-  - errors.ruleIncorrectOrEmptyBody
   - errors.ruleBothExpensesSupplied
+  - errors.ruleTypeOfBusinessIncorrect
+  - errors.ruleDuplicateCountryCode
+  - errors.ruleIncorrectOrEmptyBody
   - errors.ruleCountryCode
   - errors.clientOrAgentNotAuthorised
   - errors.notFound
-displayName: Amend a Foreign Property Income & Expenditure Period Summary
-description: This endpoint allows a developer to re-submit the income and expenditure for a foreign property business that occurred between two dates. This submission is for either or both of Furnished Holiday Letting (FHL) in the European Economic Area (EEA) and all other foreign property submissions. A National Insurance number, business ID and submission ID are required.
+displayName: Amend a Foreign Property Income & Expenses Period Summary [test only]
+description: This endpoint allows a developer to amend the income and expenses for a foreign property business. This submission is for either or both of Furnished Holiday Letting (FHL) in the European Economic Area (EEA) and all other foreign property submissions. A National Insurance number, business ID, tax year and submission ID are required.
 (annotations.sandboxData): !include scenarios/foreign_property_period_summary_amend_scenarios.md
 (annotations.scope): "write:self-assessment"
 securedBy: [ sec.oauth_2_0: { scopes: [ "write:self-assessment" ] } ]
@@ -21,11 +26,11 @@ body:
   application/json:
     type: !include schemas/foreign_property_period_summary_amend/request.json
     examples:
-      example-1x:
-        description: Full Expenditure request
+      example-1:
+        description: Full Expenses request
         value: !include examples/foreign_property_period_summary_amend/request.json
       example-2:
-        description: Consolidated Expenditure request
+        description: Consolidated Expenses request
         value: !include examples/foreign_property_period_summary_amend/consolidated_request.json
 responses:
   200:
@@ -33,7 +38,7 @@ responses:
       application/json:
         type: !include schemas/foreign_property_period_summary_amend/response.json
         examples:
-          example:
+          example-1:
             description: Example Response
             value: !include examples/foreign_property_period_summary_amend/response.json
     headers:

@@ -42,7 +42,7 @@ class CreateForeignFhlEeaSpec extends UnitSpec {
   )
 
   val model: CreateForeignFhlEea = CreateForeignFhlEea(
-    income = ForeignFhlEeaIncome(rentAmount = 567.83),
+    income = Some(ForeignFhlEeaIncome(rentAmount = Some(567.83))),
     expenses = Some(CreateForeignFhlEeaExpenses(
       premisesRunningCosts = Some(4567.98),
       repairsAndMaintenance = Some(98765.67),

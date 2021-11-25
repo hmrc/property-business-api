@@ -37,7 +37,7 @@ class ForeignNonFhlPropertyIncomeSpec extends UnitSpec {
   )
 
   val model: ForeignNonFhlPropertyIncome = ForeignNonFhlPropertyIncome(
-    rentIncome = ForeignPropertyRentIncome(rentAmount = 34456.30),
+    rentIncome = ForeignNonFhlPropertyRentIncome(rentAmount = Some(34456.30)),
     foreignTaxCreditRelief = true,
     premiumsOfLeaseGrant = Some(2543.43),
     otherPropertyIncome = Some(54325.30),

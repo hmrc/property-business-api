@@ -39,7 +39,7 @@ class AmendForeignPropertyPeriodSummaryServiceSpec extends UnitSpec {
   implicit val correlationId: String = "X-123"
 
   private val foreignFhlEea: AmendForeignFhlEea = AmendForeignFhlEea(
-    income = ForeignFhlEeaIncome(rentAmount = 567.83),
+    income = Some(ForeignFhlEeaIncome(rentAmount = Some(567.83))),
     expenses = Some(AmendForeignFhlEeaExpenses(
       premisesRunningCosts = Some(4567.98),
       repairsAndMaintenance = Some(98765.67),
@@ -54,14 +54,14 @@ class AmendForeignPropertyPeriodSummaryServiceSpec extends UnitSpec {
 
   private val foreignNonFhlProperty: AmendForeignNonFhlPropertyEntry = AmendForeignNonFhlPropertyEntry(
     countryCode = "zzz",
-    income = ForeignNonFhlPropertyIncome(
-      rentIncome = ForeignPropertyRentIncome(rentAmount = 34456.30),
+    income = Some(ForeignNonFhlPropertyIncome(
+      rentIncome = ForeignNonFhlPropertyRentIncome(rentAmount = Some(34456.30)),
       foreignTaxCreditRelief = true,
       premiumsOfLeaseGrant = Some(2543.43),
       otherPropertyIncome = Some(54325.30),
       foreignTaxPaidOrDeducted = Some(6543.01),
       specialWithholdingTaxOrUkTaxPaid = Some(643245.00)
-    ),
+    )),
     expenses = Some(AmendForeignNonFhlPropertyExpenses(
       premisesRunningCosts = Some(5635.43),
       repairsAndMaintenance = Some(3456.65),

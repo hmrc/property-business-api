@@ -21,7 +21,7 @@ import play.api.libs.json.{JsPath, Json, Reads, Writes}
 
 case class CreateForeignNonFhlPropertyEntry(
                                  countryCode: String,
-                                 income: ForeignNonFhlPropertyIncome,
+                                 income: Option[ForeignNonFhlPropertyIncome],
                                  expenses: Option[CreateForeignNonFhlPropertyExpenses]
                                )
 
@@ -30,7 +30,7 @@ object CreateForeignNonFhlPropertyEntry {
 
   implicit val writes: Writes[CreateForeignNonFhlPropertyEntry] = (
     (JsPath \ "countryCode").write[String] and
-      (JsPath \ "income").write[ForeignNonFhlPropertyIncome] and
+      (JsPath \ "income").writeNullable[ForeignNonFhlPropertyIncome] and
       (JsPath \ "expenses").writeNullable[CreateForeignNonFhlPropertyExpenses]
     ) (unlift(CreateForeignNonFhlPropertyEntry.unapply))
 }

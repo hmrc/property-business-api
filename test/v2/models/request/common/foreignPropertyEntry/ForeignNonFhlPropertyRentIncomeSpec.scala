@@ -19,7 +19,7 @@ package v2.models.request.common.foreignPropertyEntry
 import play.api.libs.json.{JsValue, Json}
 import support.UnitSpec
 
-class ForeignPropertyRentIncomeSpec extends UnitSpec {
+class ForeignNonFhlPropertyRentIncomeSpec extends UnitSpec {
 
   val mtdJson: JsValue = Json.parse(
     """
@@ -29,7 +29,7 @@ class ForeignPropertyRentIncomeSpec extends UnitSpec {
     """.stripMargin
   )
 
-  val model: ForeignPropertyRentIncome = ForeignPropertyRentIncome(rentAmount = 34456.30)
+  val model: ForeignNonFhlPropertyRentIncome = ForeignNonFhlPropertyRentIncome(rentAmount = Some(34456.30))
 
   val ifsJson: JsValue = Json.parse(
     """
@@ -42,7 +42,7 @@ class ForeignPropertyRentIncomeSpec extends UnitSpec {
   "reads" should {
     "read from JSON" when {
       "valid JSON is provided" in {
-        mtdJson.as[ForeignPropertyRentIncome] shouldBe model
+        mtdJson.as[ForeignNonFhlPropertyRentIncome] shouldBe model
       }
     }
   }

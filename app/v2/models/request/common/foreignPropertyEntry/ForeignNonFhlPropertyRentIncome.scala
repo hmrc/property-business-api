@@ -18,9 +18,9 @@ package v2.models.request.common.foreignPropertyEntry
 
 import play.api.libs.json.{Json, Reads, Writes}
 
-case class ForeignPropertyRentIncome(rentAmount: BigDecimal)
+case class ForeignNonFhlPropertyRentIncome(rentAmount: Option[BigDecimal])
 
-object ForeignPropertyRentIncome {
-  implicit val reads: Reads[ForeignPropertyRentIncome] = Json.reads[ForeignPropertyRentIncome]
-  implicit val writes: Writes[ForeignPropertyRentIncome] = Json.writes[ForeignPropertyRentIncome]
+object ForeignNonFhlPropertyRentIncome {
+  implicit val reads: Reads[ForeignNonFhlPropertyRentIncome] = Json.reads[ForeignNonFhlPropertyRentIncome]
+  implicit val writes: Writes[ForeignNonFhlPropertyRentIncome] = Json.writes[ForeignNonFhlPropertyRentIncome]
 }

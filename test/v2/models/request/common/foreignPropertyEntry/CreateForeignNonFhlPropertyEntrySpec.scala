@@ -53,14 +53,14 @@ class CreateForeignNonFhlPropertyEntrySpec extends UnitSpec {
 
   val model: CreateForeignNonFhlPropertyEntry = CreateForeignNonFhlPropertyEntry(
     countryCode = "zzz",
-    income = ForeignNonFhlPropertyIncome(
-      rentIncome = ForeignPropertyRentIncome(rentAmount = 34456.30),
+    income = Some(ForeignNonFhlPropertyIncome(
+      rentIncome = ForeignNonFhlPropertyRentIncome(rentAmount = Some(34456.30)),
       foreignTaxCreditRelief = true,
       premiumsOfLeaseGrant = Some(2543.43),
       otherPropertyIncome = Some(54325.30),
       foreignTaxPaidOrDeducted = Some(6543.01),
       specialWithholdingTaxOrUkTaxPaid = Some(643245.00)
-    ),
+    )),
     expenses = Some(CreateForeignNonFhlPropertyExpenses(
       premisesRunningCosts = Some(5635.43),
       repairsAndMaintenance = Some(3456.65),

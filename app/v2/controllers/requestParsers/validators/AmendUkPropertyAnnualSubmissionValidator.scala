@@ -50,7 +50,6 @@ class AmendUkPropertyAnnualSubmissionValidator @Inject()(appConfig: AppConfig) e
   private def bodyFieldValidation: AmendUkPropertyAnnualSubmissionRawData => List[List[MtdError]] = { data =>
     val body = data.body.as[AmendUkPropertyAnnualSubmissionRequestBody]
 
-
     List(
       flattenErrors(
         List(body.ukFhlProperty.map(validateUkFhlProperty).getOrElse(NoValidationErrors),

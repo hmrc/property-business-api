@@ -19,7 +19,7 @@ package v2.models.request.common.foreignFhlEea
 import play.api.libs.json.{JsValue, Json}
 import support.UnitSpec
 
-class ExpenditureSpec extends UnitSpec {
+class CreateForeignFhlEeaExpensesSpec extends UnitSpec {
   val mtdJson: JsValue = Json.parse(
     """
       |{
@@ -27,7 +27,7 @@ class ExpenditureSpec extends UnitSpec {
       |  "repairsAndMaintenance": 98765.67,
       |  "financialCosts": 4566.95,
       |  "professionalFees": 23.65,
-      |  "costsOfServices": 4567.77,
+      |  "costOfServices": 4567.77,
       |  "travelCosts": 456.77,
       |  "other": 567.67,
       |  "consolidatedExpenses": 456.98
@@ -35,12 +35,12 @@ class ExpenditureSpec extends UnitSpec {
     """.stripMargin
   )
 
-  val model: ForeignFhlEeaExpenditure = ForeignFhlEeaExpenditure(
+  val model: CreateForeignFhlEeaExpenses = CreateForeignFhlEeaExpenses(
     premisesRunningCosts = Some(4567.98),
     repairsAndMaintenance = Some(98765.67),
     financialCosts = Some(4566.95),
     professionalFees = Some(23.65),
-    costsOfServices = Some(4567.77),
+    costOfServices = Some(4567.77),
     travelCosts = Some(456.77),
     other = Some(567.67),
     consolidatedExpenses = Some(456.98)
@@ -56,7 +56,7 @@ class ExpenditureSpec extends UnitSpec {
       |  "costOfServices": 4567.77,
       |  "travelCosts": 456.77,
       |  "other": 567.67,
-      |  "consolidatedExpense": 456.98
+      |  "consolidatedExpenseAmount": 456.98
       |}
     """.stripMargin
   )
@@ -64,7 +64,7 @@ class ExpenditureSpec extends UnitSpec {
   "reads" should {
     "read from JSON" when {
       "valid JSON is provided" in {
-        mtdJson.as[ForeignFhlEeaExpenditure] shouldBe model
+        mtdJson.as[CreateForeignFhlEeaExpenses] shouldBe model
       }
     }
   }

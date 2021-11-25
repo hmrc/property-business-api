@@ -35,14 +35,15 @@ class CreateForeignPropertyPeriodSummaryServiceSpec extends UnitSpec {
 
   val businessId: String = "XAIS12345678910"
   val nino: String = "AA123456A"
+  val taxYear: String = "2022-23"
   implicit val correlationId: String = "X-123"
 
   private val regularExpensesBody = CreateForeignPropertyPeriodSummaryRequestBody(
     "2020-01-01",
     "2020-01-31",
-    Some(ForeignFhlEea(
-      ForeignFhlEeaIncome(5000.99),
-      Some(ForeignFhlEeaExpenditure(
+    Some(CreateForeignFhlEea(
+      Some(ForeignFhlEeaIncome(Some(5000.99))),
+      Some(CreateForeignFhlEeaExpenses(
         Some(5000.99),
         Some(5000.99),
         Some(5000.99),
@@ -53,16 +54,16 @@ class CreateForeignPropertyPeriodSummaryServiceSpec extends UnitSpec {
         None
       ))
     )),
-    Some(Seq(ForeignPropertyEntry("FRA",
-      ForeignPropertyIncome(
-        ForeignPropertyRentIncome(5000.99),
+    Some(Seq(CreateForeignNonFhlPropertyEntry("FRA",
+      Some(ForeignNonFhlPropertyIncome(
+        Some(ForeignNonFhlPropertyRentIncome(Some(5000.99))),
         false,
         Some(5000.99),
         Some(5000.99),
         Some(5000.99),
         Some(5000.99)
-      ),
-      Some(ForeignPropertyExpenditure(
+      )),
+      Some(CreateForeignNonFhlPropertyExpenses(
         Some(5000.99),
         Some(5000.99),
         Some(5000.99),
@@ -79,9 +80,9 @@ class CreateForeignPropertyPeriodSummaryServiceSpec extends UnitSpec {
   private val consolidatedExpensesBody = CreateForeignPropertyPeriodSummaryRequestBody(
     "2020-01-01",
     "2020-01-31",
-    Some(ForeignFhlEea(
-      ForeignFhlEeaIncome(5000.99),
-      Some(ForeignFhlEeaExpenditure(
+    Some(CreateForeignFhlEea(
+      Some(ForeignFhlEeaIncome(Some(5000.99))),
+      Some(CreateForeignFhlEeaExpenses(
         None,
         None,
         None,
@@ -92,16 +93,16 @@ class CreateForeignPropertyPeriodSummaryServiceSpec extends UnitSpec {
         Some(3653.35)
       ))
     )),
-    Some(Seq(ForeignPropertyEntry("FRA",
-      ForeignPropertyIncome(
-        ForeignPropertyRentIncome(5000.99),
+    Some(Seq(CreateForeignNonFhlPropertyEntry("FRA",
+      Some(ForeignNonFhlPropertyIncome(
+       Some( ForeignNonFhlPropertyRentIncome(Some(5000.99))),
         false,
         Some(5000.99),
         Some(5000.99),
         Some(5000.99),
         Some(5000.99)
-      ),
-      Some(ForeignPropertyExpenditure(
+      )),
+      Some(CreateForeignNonFhlPropertyExpenses(
         None,
         None,
         None,
@@ -119,9 +120,9 @@ class CreateForeignPropertyPeriodSummaryServiceSpec extends UnitSpec {
     submissionId = "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
   )
 
-  private val regularExpensesRequestData = CreateForeignPropertyPeriodSummaryRequest(Nino(nino), businessId, regularExpensesBody)
+  private val regularExpensesRequestData = CreateForeignPropertyPeriodSummaryRequest(Nino(nino), businessId, taxYear, regularExpensesBody)
 
-  private val consolidatedExpensesRequestData = CreateForeignPropertyPeriodSummaryRequest(Nino(nino), businessId, consolidatedExpensesBody)
+  private val consolidatedExpensesRequestData = CreateForeignPropertyPeriodSummaryRequest(Nino(nino), businessId, taxYear, consolidatedExpensesBody)
 
   trait Test extends MockCreateForeignPropertyPeriodSummaryConnector {
     implicit val hc: HeaderCarrier = HeaderCarrier()

@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-package v2.models.request.common.foreignFhlEea
+package v2.models.request.common.foreignPropertyEntry
 
 import play.api.libs.json.{Json, Reads, Writes}
 
-case class ForeignFhlEeaIncome(rentAmount: Option[BigDecimal])
+case class ForeignNonFhlPropertyRentIncome(rentAmount: Option[BigDecimal])
 
-object ForeignFhlEeaIncome {
-  implicit val reads: Reads[ForeignFhlEeaIncome] = Json.reads[ForeignFhlEeaIncome]
-  implicit val writes: Writes[ForeignFhlEeaIncome] = Json.writes[ForeignFhlEeaIncome]
+object ForeignNonFhlPropertyRentIncome {
+  implicit val reads: Reads[ForeignNonFhlPropertyRentIncome] = Json.reads[ForeignNonFhlPropertyRentIncome]
+  implicit val writes: Writes[ForeignNonFhlPropertyRentIncome] = Json.writes[ForeignNonFhlPropertyRentIncome]
 }

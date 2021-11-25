@@ -18,5 +18,5 @@ package v2.models.request.createForeignPropertyPeriodSummary
 
 import v2.models.domain.Nino
 
-case class CreateForeignPropertyPeriodSummaryRequest(nino: Nino, businessId: String, body: CreateForeignPropertyPeriodSummaryRequestBody)
+case class CreateForeignPropertyPeriodSummaryRequest(nino: Nino, businessId: String, taxYear: String, body: CreateForeignPropertyPeriodSummaryRequestBody)
 

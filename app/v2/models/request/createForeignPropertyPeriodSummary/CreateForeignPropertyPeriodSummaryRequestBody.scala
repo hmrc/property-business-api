@@ -17,18 +17,17 @@
 package v2.models.request.createForeignPropertyPeriodSummary
 
 import play.api.libs.json.{Json, OFormat}
-import v2.models.request.common.foreignFhlEea.ForeignFhlEea
-import v2.models.request.common.foreignPropertyEntry.ForeignPropertyEntry
+import v2.models.request.common.foreignFhlEea.CreateForeignFhlEea
+import v2.models.request.common.foreignPropertyEntry.CreateForeignNonFhlPropertyEntry
 
-case class CreateForeignPropertyPeriodSummaryRequestBody(
-                                                          fromDate: String,
-                                                          toDate: String,
-                                                          foreignFhlEea: Option[ForeignFhlEea],
-                                                          foreignProperty: Option[Seq[ForeignPropertyEntry]]) {
-  def isEmpty: Boolean = (foreignFhlEea.isEmpty && foreignProperty.isEmpty) ||
-    foreignFhlEea.flatMap(_.expenditure.map(_.isEmpty)).getOrElse(false) ||
-    foreignProperty.exists(_.isEmpty) ||
-    foreignProperty.exists(_.exists(_.expenditure.exists(_.isEmpty)))
+case class CreateForeignPropertyPeriodSummaryRequestBody(fromDate: String,
+                                                         toDate: String,
+                                                         foreignFhlEea: Option[CreateForeignFhlEea],
+                                                         foreignNonFhlProperty: Option[Seq[CreateForeignNonFhlPropertyEntry]]) {
+  def isEmpty: Boolean = (foreignFhlEea.isEmpty && foreignNonFhlProperty.isEmpty) ||
+    foreignFhlEea.flatMap(_.expenses.map(_.isEmpty)).getOrElse(false) ||
+    foreignNonFhlProperty.exists(_.isEmpty) ||
+    foreignNonFhlProperty.exists(_.exists(_.expenses.exists(_.isEmpty)))
 }
 
 object CreateForeignPropertyPeriodSummaryRequestBody {

@@ -19,12 +19,12 @@ package v2.models.request.common.foreignFhlEea
 import play.api.libs.functional.syntax._
 import play.api.libs.json.{JsPath, Json, Reads, Writes}
 
-case class ForeignFhlEeaExpenditure(
+case class CreateForeignFhlEeaExpenses(
                         premisesRunningCosts: Option[BigDecimal],
                         repairsAndMaintenance: Option[BigDecimal],
                         financialCosts: Option[BigDecimal],
                         professionalFees: Option[BigDecimal],
-                        costsOfServices: Option[BigDecimal],
+                        costOfServices: Option[BigDecimal],
                         travelCosts: Option[BigDecimal],
                         other: Option[BigDecimal],
                         consolidatedExpenses: Option[BigDecimal]
@@ -33,16 +33,16 @@ case class ForeignFhlEeaExpenditure(
     repairsAndMaintenance.isEmpty &&
     financialCosts.isEmpty &&
     professionalFees.isEmpty &&
-    costsOfServices.isEmpty &&
+    costOfServices.isEmpty &&
     travelCosts.isEmpty &&
     other.isEmpty &&
     consolidatedExpenses.isEmpty
 }
 
-object ForeignFhlEeaExpenditure {
-  implicit val reads: Reads[ForeignFhlEeaExpenditure] = Json.reads[ForeignFhlEeaExpenditure]
+object CreateForeignFhlEeaExpenses {
+  implicit val reads: Reads[CreateForeignFhlEeaExpenses] = Json.reads[CreateForeignFhlEeaExpenses]
 
-  implicit val writes: Writes[ForeignFhlEeaExpenditure] = (
+  implicit val writes: Writes[CreateForeignFhlEeaExpenses] = (
     (JsPath \ "premisesRunningCosts").writeNullable[BigDecimal] and
       (JsPath \ "repairsAndMaintenance").writeNullable[BigDecimal] and
       (JsPath \ "financialCosts").writeNullable[BigDecimal] and
@@ -50,6 +50,6 @@ object ForeignFhlEeaExpenditure {
       (JsPath \ "costOfServices").writeNullable[BigDecimal] and
       (JsPath \ "travelCosts").writeNullable[BigDecimal] and
       (JsPath \ "other").writeNullable[BigDecimal] and
-      (JsPath \ "consolidatedExpense").writeNullable[BigDecimal]
-    ) (unlift(ForeignFhlEeaExpenditure.unapply))
+      (JsPath \ "consolidatedExpenseAmount").writeNullable[BigDecimal]
+    ) (unlift(CreateForeignFhlEeaExpenses.unapply))
 }

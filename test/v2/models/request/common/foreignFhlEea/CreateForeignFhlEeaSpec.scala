@@ -19,7 +19,7 @@ package v2.models.request.common.foreignFhlEea
 import play.api.libs.json.{JsValue, Json}
 import support.UnitSpec
 
-class ForeignFhlEeaSpec extends UnitSpec {
+class CreateForeignFhlEeaSpec extends UnitSpec {
 
   val mtdJson: JsValue = Json.parse(
     """
@@ -27,12 +27,12 @@ class ForeignFhlEeaSpec extends UnitSpec {
       |  "income": {
       |    "rentAmount": 567.83
       |    },
-      |  "expenditure": {
+      |  "expenses": {
       |    "premisesRunningCosts": 4567.98,
       |    "repairsAndMaintenance": 98765.67,
       |    "financialCosts": 4566.95,
       |    "professionalFees": 23.65,
-      |    "costsOfServices": 4567.77,
+      |    "costOfServices": 4567.77,
       |    "travelCosts": 456.77,
       |    "other": 567.67,
       |    "consolidatedExpenses": 456.98
@@ -41,14 +41,14 @@ class ForeignFhlEeaSpec extends UnitSpec {
     """.stripMargin
   )
 
-  val model: ForeignFhlEea = ForeignFhlEea(
-    income = ForeignFhlEeaIncome(rentAmount = 567.83),
-    expenditure = Some(ForeignFhlEeaExpenditure(
+  val model: CreateForeignFhlEea = CreateForeignFhlEea(
+    income = Some(ForeignFhlEeaIncome(rentAmount = Some(567.83))),
+    expenses = Some(CreateForeignFhlEeaExpenses(
       premisesRunningCosts = Some(4567.98),
       repairsAndMaintenance = Some(98765.67),
       financialCosts = Some(4566.95),
       professionalFees = Some(23.65),
-      costsOfServices = Some(4567.77),
+      costOfServices = Some(4567.77),
       travelCosts = Some(456.77),
       other = Some(567.67),
       consolidatedExpenses = Some(456.98)
@@ -69,7 +69,7 @@ class ForeignFhlEeaSpec extends UnitSpec {
       |    "costOfServices": 4567.77,
       |    "travelCosts": 456.77,
       |    "other": 567.67,
-      |    "consolidatedExpense": 456.98
+      |    "consolidatedExpenseAmount": 456.98
       |  }
       |}
     """.stripMargin
@@ -78,7 +78,7 @@ class ForeignFhlEeaSpec extends UnitSpec {
   "reads" should {
     "read from JSON" when {
       "valid JSON is provided" in {
-        mtdJson.as[ForeignFhlEea] shouldBe model
+        mtdJson.as[CreateForeignFhlEea] shouldBe model
       }
     }
   }

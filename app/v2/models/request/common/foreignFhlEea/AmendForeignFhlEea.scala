@@ -14,13 +14,19 @@
  * limitations under the License.
  */
 
-package v2.models.request.common.foreignPropertyEntry
+package v2.models.request.common.foreignFhlEea
 
-import play.api.libs.json.{Json, Reads, Writes}
+import play.api.libs.functional.syntax._
+import play.api.libs.json.{JsPath, Json, Reads, Writes}
 
-case class ForeignPropertyRentIncome(rentAmount: BigDecimal)
+case class AmendForeignFhlEea(income: Option[ForeignFhlEeaIncome], expenses: Option[AmendForeignFhlEeaExpenses])
 
-object ForeignPropertyRentIncome {
-  implicit val reads: Reads[ForeignPropertyRentIncome] = Json.reads[ForeignPropertyRentIncome]
-  implicit val writes: Writes[ForeignPropertyRentIncome] = Json.writes[ForeignPropertyRentIncome]
+
+object AmendForeignFhlEea {
+  implicit val reads: Reads[AmendForeignFhlEea] = Json.reads[AmendForeignFhlEea]
+
+  implicit val writes: Writes[AmendForeignFhlEea] = (
+    (JsPath \ "income").writeNullable[ForeignFhlEeaIncome] and
+      (JsPath \ "expenses").writeNullable[AmendForeignFhlEeaExpenses]
+    ) (unlift(AmendForeignFhlEea.unapply))
 }

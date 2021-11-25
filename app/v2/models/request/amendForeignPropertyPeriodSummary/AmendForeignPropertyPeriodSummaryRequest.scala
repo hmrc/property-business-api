@@ -18,4 +18,4 @@ package v2.models.request.amendForeignPropertyPeriodSummary
 
 import v2.models.domain.Nino
 
-case class AmendForeignPropertyPeriodSummaryRequest(nino: Nino, businessId: String, submissionId: String, body: AmendForeignPropertyPeriodSummaryRequestBody)
+case class AmendForeignPropertyPeriodSummaryRequest(nino: Nino, businessId: String, taxYear: String, submissionId: String, body: AmendForeignPropertyPeriodSummaryRequestBody)

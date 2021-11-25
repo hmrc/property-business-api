@@ -16,20 +16,23 @@
 
 package v2.models.request.amendForeignPropertyPeriodSummary
 
-import play.api.libs.json.{Json, OWrites, Reads}
-import v2.models.request.common.foreignFhlEea.ForeignFhlEea
-import v2.models.request.common.foreignPropertyEntry.ForeignPropertyEntry
+import play.api.libs.functional.syntax._
+import play.api.libs.json.{JsPath, Json, Reads, Writes}
+import v2.models.request.common.foreignFhlEea.AmendForeignFhlEea
+import v2.models.request.common.foreignPropertyEntry.AmendForeignNonFhlPropertyEntry
 
-case class AmendForeignPropertyPeriodSummaryRequestBody(foreignFhlEea: Option[ForeignFhlEea], foreignProperty: Option[Seq[ForeignPropertyEntry]]) {
-  def isEmpty: Boolean = (foreignFhlEea.isEmpty && foreignProperty.isEmpty) ||
-    foreignFhlEea.flatMap(_.expenditure.map(_.isEmpty)).getOrElse(false) ||
-    foreignProperty.exists(_.isEmpty) ||
-    foreignProperty.exists(_.exists(_.expenditure.exists(_.isEmpty)))
+case class AmendForeignPropertyPeriodSummaryRequestBody(foreignFhlEea: Option[AmendForeignFhlEea], foreignNonFhlProperty: Option[Seq[AmendForeignNonFhlPropertyEntry]]) {
+  def isEmpty: Boolean = (foreignFhlEea.isEmpty && foreignNonFhlProperty.isEmpty) ||
+    foreignFhlEea.flatMap(_.expenses.map(_.isEmpty)).getOrElse(false) ||
+    foreignNonFhlProperty.exists(_.isEmpty) ||
+    foreignNonFhlProperty.exists(_.exists(_.expenses.exists(_.isEmpty)))
 }
 
 object AmendForeignPropertyPeriodSummaryRequestBody {
   implicit val reads: Reads[AmendForeignPropertyPeriodSummaryRequestBody] = Json.reads[AmendForeignPropertyPeriodSummaryRequestBody]
-  implicit val writes: OWrites[AmendForeignPropertyPeriodSummaryRequestBody] = Json.writes[AmendForeignPropertyPeriodSummaryRequestBody]
+
+  implicit val writes: Writes[AmendForeignPropertyPeriodSummaryRequestBody] = (
+    (JsPath \ "foreignFhlEea").writeNullable[AmendForeignFhlEea] and
+      (JsPath \ "foreignProperty").writeNullable[Seq[AmendForeignNonFhlPropertyEntry]]
+    ) (unlift(AmendForeignPropertyPeriodSummaryRequestBody.unapply))
 }
-
-

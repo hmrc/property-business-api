@@ -19,43 +19,22 @@ package v2.models.request.common.foreignPropertyEntry
 import play.api.libs.json.{JsValue, Json}
 import support.UnitSpec
 
-class IncomeSpec extends UnitSpec {
+class ForeignNonFhlPropertyRentIncomeSpec extends UnitSpec {
 
   val mtdJson: JsValue = Json.parse(
     """
       |{
-      |  "rentIncome": {
-      |    "rentAmount": 34456.30
-      |  },
-      |  "foreignTaxCreditRelief": true,
-      |  "premiumOfLeaseGrant": 2543.43,
-      |  "otherPropertyIncome": 54325.30,
-      |  "foreignTaxTakenOff": 6543.01,
-      |  "specialWithholdingTaxOrUKTaxPaid": 643245.00
+      |  "rentAmount": 34456.30
       |}
     """.stripMargin
   )
 
-  val model: ForeignPropertyIncome = ForeignPropertyIncome(
-    rentIncome = ForeignPropertyRentIncome(rentAmount = 34456.30),
-    foreignTaxCreditRelief = true,
-    premiumOfLeaseGrant = Some(2543.43),
-    otherPropertyIncome = Some(54325.30),
-    foreignTaxTakenOff = Some(6543.01),
-    specialWithholdingTaxOrUKTaxPaid = Some(643245.00)
-  )
+  val model: ForeignNonFhlPropertyRentIncome = ForeignNonFhlPropertyRentIncome(rentAmount = Some(34456.30))
 
   val ifsJson: JsValue = Json.parse(
     """
       |{
-      |  "rentIncome": {
-      |    "rentAmount": 34456.30
-      |  },
-      |  "foreignTaxCreditRelief": true,
-      |  "premiumsOfLeaseGrant": 2543.43,
-      |  "otherPropertyIncome": 54325.30,
-      |  "foreignTaxPaidOrDeducted": 6543.01,
-      |  "specialWithholdingTaxOrUkTaxPaid": 643245.00
+      |  "rentAmount": 34456.30
       |}
     """.stripMargin
   )
@@ -63,7 +42,7 @@ class IncomeSpec extends UnitSpec {
   "reads" should {
     "read from JSON" when {
       "valid JSON is provided" in {
-        mtdJson.as[ForeignPropertyIncome] shouldBe model
+        mtdJson.as[ForeignNonFhlPropertyRentIncome] shouldBe model
       }
     }
   }

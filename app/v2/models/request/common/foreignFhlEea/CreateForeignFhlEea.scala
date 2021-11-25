@@ -19,13 +19,14 @@ package v2.models.request.common.foreignFhlEea
 import play.api.libs.functional.syntax._
 import play.api.libs.json.{JsPath, Json, Reads, Writes}
 
-case class ForeignFhlEea(income: ForeignFhlEeaIncome, expenditure: Option[ForeignFhlEeaExpenditure])
+case class CreateForeignFhlEea(income: Option[ForeignFhlEeaIncome], expenses: Option[CreateForeignFhlEeaExpenses])
 
-object ForeignFhlEea {
-  implicit val reads: Reads[ForeignFhlEea] = Json.reads[ForeignFhlEea]
 
-  implicit val writes: Writes[ForeignFhlEea] = (
-    (JsPath \ "income").write[ForeignFhlEeaIncome] and
-      (JsPath \ "expenses").writeNullable[ForeignFhlEeaExpenditure]
-    ) (unlift(ForeignFhlEea.unapply))
+object CreateForeignFhlEea {
+  implicit val reads: Reads[CreateForeignFhlEea] = Json.reads[CreateForeignFhlEea]
+
+  implicit val writes: Writes[CreateForeignFhlEea] = (
+    (JsPath \ "income").writeNullable[ForeignFhlEeaIncome] and
+      (JsPath \ "expenses").writeNullable[CreateForeignFhlEeaExpenses]
+    ) (unlift(CreateForeignFhlEea.unapply))
 }

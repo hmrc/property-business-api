@@ -19,24 +19,24 @@ package v2.models.request.common.foreignPropertyEntry
 import play.api.libs.functional.syntax._
 import play.api.libs.json.{JsPath, Json, Reads, Writes}
 
-case class ForeignPropertyIncome(
-                                  rentIncome: ForeignPropertyRentIncome,
-                                  foreignTaxCreditRelief: Boolean,
-                                  premiumOfLeaseGrant: Option[BigDecimal],
-                                  otherPropertyIncome: Option[BigDecimal],
-                                  foreignTaxTakenOff: Option[BigDecimal],
-                                  specialWithholdingTaxOrUKTaxPaid: Option[BigDecimal]
+case class ForeignNonFhlPropertyIncome(
+                                        rentIncome: Option[ForeignNonFhlPropertyRentIncome],
+                                        foreignTaxCreditRelief: Boolean,
+                                        premiumsOfLeaseGrant: Option[BigDecimal],
+                                        otherPropertyIncome: Option[BigDecimal],
+                                        foreignTaxPaidOrDeducted: Option[BigDecimal],
+                                        specialWithholdingTaxOrUkTaxPaid: Option[BigDecimal]
                                 )
 
-object ForeignPropertyIncome {
-  implicit val reads: Reads[ForeignPropertyIncome] = Json.reads[ForeignPropertyIncome]
+object ForeignNonFhlPropertyIncome {
+  implicit val reads: Reads[ForeignNonFhlPropertyIncome] = Json.reads[ForeignNonFhlPropertyIncome]
 
-  implicit val writes: Writes[ForeignPropertyIncome] = (
-    (JsPath \ "rentIncome").write[ForeignPropertyRentIncome] and
+  implicit val writes: Writes[ForeignNonFhlPropertyIncome] = (
+    (JsPath \ "rentIncome").writeNullable[ForeignNonFhlPropertyRentIncome] and
       (JsPath \ "foreignTaxCreditRelief").write[Boolean] and
       (JsPath \ "premiumsOfLeaseGrant").writeNullable[BigDecimal] and
       (JsPath \ "otherPropertyIncome").writeNullable[BigDecimal] and
       (JsPath \ "foreignTaxPaidOrDeducted").writeNullable[BigDecimal] and
       (JsPath \ "specialWithholdingTaxOrUkTaxPaid").writeNullable[BigDecimal]
-    ) (unlift(ForeignPropertyIncome.unapply))
+    ) (unlift(ForeignNonFhlPropertyIncome.unapply))
 }

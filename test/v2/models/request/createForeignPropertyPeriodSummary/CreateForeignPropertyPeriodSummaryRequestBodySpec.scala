@@ -18,8 +18,8 @@ package v2.models.request.createForeignPropertyPeriodSummary
 
 import play.api.libs.json.Json
 import support.UnitSpec
-import v2.models.request.common.foreignFhlEea.{ForeignFhlEea, ForeignFhlEeaExpenditure, ForeignFhlEeaIncome}
-import v2.models.request.common.foreignPropertyEntry.{ForeignPropertyEntry, ForeignPropertyExpenditure, ForeignPropertyIncome, ForeignPropertyRentIncome}
+import v2.models.request.common.foreignFhlEea._
+import v2.models.request.common.foreignPropertyEntry._
 import v2.models.utils.JsonErrorValidators
 
 class CreateForeignPropertyPeriodSummaryRequestBodySpec extends UnitSpec with JsonErrorValidators {
@@ -27,9 +27,9 @@ class CreateForeignPropertyPeriodSummaryRequestBodySpec extends UnitSpec with Js
   val createForeignPropertyRequestBody = CreateForeignPropertyPeriodSummaryRequestBody(
     "2020-01-01",
     "2020-01-31",
-    Some(ForeignFhlEea(
-      ForeignFhlEeaIncome(5000.99),
-      Some(ForeignFhlEeaExpenditure(
+    Some(CreateForeignFhlEea(
+      Some(ForeignFhlEeaIncome(Some(5000.99))),
+      Some(CreateForeignFhlEeaExpenses(
         Some(5000.99),
         Some(5000.99),
         Some(5000.99),
@@ -40,16 +40,16 @@ class CreateForeignPropertyPeriodSummaryRequestBodySpec extends UnitSpec with Js
         Some(5000.99)
       ))
     )),
-    Some(Seq(ForeignPropertyEntry("FRA",
-      ForeignPropertyIncome(
-        ForeignPropertyRentIncome(5000.99),
+    Some(Seq(CreateForeignNonFhlPropertyEntry("FRA",
+      Some(ForeignNonFhlPropertyIncome(
+        Some(ForeignNonFhlPropertyRentIncome(Some(5000.99))),
         false,
         Some(5000.99),
         Some(5000.99),
         Some(5000.99),
         Some(5000.99)
-      ),
-      Some(ForeignPropertyExpenditure(
+      )),
+      Some(CreateForeignNonFhlPropertyExpenses(
         Some(5000.99),
         Some(5000.99),
         Some(5000.99),
@@ -71,18 +71,18 @@ class CreateForeignPropertyPeriodSummaryRequestBodySpec extends UnitSpec with Js
       |    "income": {
       |      "rentAmount": 5000.99
       |    },
-      |    "expenditure": {
+      |    "expenses": {
       |      "premisesRunningCosts": 5000.99,
       |      "repairsAndMaintenance": 5000.99,
       |      "financialCosts": 5000.99,
       |      "professionalFees": 5000.99,
-      |      "costsOfServices": 5000.99,
+      |      "costOfServices": 5000.99,
       |      "travelCosts": 5000.99,
       |      "other": 5000.99,
       |      "consolidatedExpenses": 5000.99
       |    }
       |  },
-      |  "foreignProperty": [
+      |  "foreignNonFhlProperty": [
       |    {
       |      "countryCode": "FRA",
       |      "income": {
@@ -90,17 +90,17 @@ class CreateForeignPropertyPeriodSummaryRequestBodySpec extends UnitSpec with Js
       |          "rentAmount": 5000.99
       |        },
       |        "foreignTaxCreditRelief": false,
-      |        "premiumOfLeaseGrant": 5000.99,
+      |        "premiumsOfLeaseGrant": 5000.99,
       |        "otherPropertyIncome": 5000.99,
-      |        "foreignTaxTakenOff": 5000.99,
-      |        "specialWithholdingTaxOrUKTaxPaid": 5000.99
+      |        "foreignTaxPaidOrDeducted": 5000.99,
+      |        "specialWithholdingTaxOrUkTaxPaid": 5000.99
       |      },
-      |      "expenditure": {
+      |      "expenses": {
       |        "premisesRunningCosts": 5000.99,
       |        "repairsAndMaintenance": 5000.99,
       |        "financialCosts": 5000.99,
       |        "professionalFees": 5000.99,
-      |        "costsOfServices": 5000.99,
+      |        "costOfServices": 5000.99,
       |        "travelCosts": 5000.99,
       |        "residentialFinancialCost": 5000.99,
       |        "broughtFwdResidentialFinancialCost": 5000.99,
@@ -127,10 +127,10 @@ class CreateForeignPropertyPeriodSummaryRequestBodySpec extends UnitSpec with Js
       |      "costOfServices": 5000.99,
       |      "travelCosts": 5000.99,
       |      "other": 5000.99,
-      |      "consolidatedExpense": 5000.99
+      |      "consolidatedExpenseAmount": 5000.99
       |    }
       |  },
-      |  "foreignProperty": [
+      |  "foreignNonFhlProperty": [
       |    {
       |      "countryCode": "FRA",
       |      "income": {
@@ -153,7 +153,7 @@ class CreateForeignPropertyPeriodSummaryRequestBodySpec extends UnitSpec with Js
       |        "residentialFinancialCost": 5000.99,
       |        "broughtFwdResidentialFinancialCost": 5000.99,
       |        "other": 5000.99,
-      |        "consolidatedExpense": 5000.99
+      |        "consolidatedExpenseAmount": 5000.99
       |      }
       |    }
       |  ]

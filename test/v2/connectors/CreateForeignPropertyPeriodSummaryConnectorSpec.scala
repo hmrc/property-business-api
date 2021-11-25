@@ -34,12 +34,12 @@ class CreateForeignPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
   val nino: String = "AA123456A"
   val taxYear: String = "2019-20"
 
-  val regularExpensesBody: CreateForeignPropertyPeriodSummaryRequestBody = CreateForeignPropertyPeriodSummaryRequestBody(
+  private val regularExpensesBody = CreateForeignPropertyPeriodSummaryRequestBody(
     "2020-01-01",
     "2020-01-31",
-    Some(ForeignFhlEea(
-      ForeignFhlEeaIncome(5000.99),
-      Some(ForeignFhlEeaExpenditure(
+    Some(CreateForeignFhlEea(
+      Some(ForeignFhlEeaIncome(Some(5000.99))),
+      Some(CreateForeignFhlEeaExpenses(
         Some(5000.99),
         Some(5000.99),
         Some(5000.99),
@@ -50,16 +50,16 @@ class CreateForeignPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
         None
       ))
     )),
-    Some(Seq(ForeignPropertyEntry("FRA",
-      ForeignPropertyIncome(
-        ForeignPropertyRentIncome(5000.99),
+    Some(Seq(CreateForeignNonFhlPropertyEntry("FRA",
+      Some(ForeignNonFhlPropertyIncome(
+        Some(ForeignNonFhlPropertyRentIncome(Some(5000.99))),
         false,
         Some(5000.99),
         Some(5000.99),
         Some(5000.99),
         Some(5000.99)
-      ),
-      Some(ForeignPropertyExpenditure(
+      )),
+      Some(CreateForeignNonFhlPropertyExpenses(
         Some(5000.99),
         Some(5000.99),
         Some(5000.99),
@@ -73,12 +73,12 @@ class CreateForeignPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
       ))))
     ))
 
-  val consolidatedExpensesBody: CreateForeignPropertyPeriodSummaryRequestBody = CreateForeignPropertyPeriodSummaryRequestBody(
+  private val consolidatedExpensesBody = CreateForeignPropertyPeriodSummaryRequestBody(
     "2020-01-01",
     "2020-01-31",
-    Some(ForeignFhlEea(
-      ForeignFhlEeaIncome(5000.99),
-      Some(ForeignFhlEeaExpenditure(
+    Some(CreateForeignFhlEea(
+      Some(ForeignFhlEeaIncome(Some(5000.99))),
+      Some(CreateForeignFhlEeaExpenses(
         None,
         None,
         None,
@@ -89,16 +89,16 @@ class CreateForeignPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
         Some(3653.35)
       ))
     )),
-    Some(Seq(ForeignPropertyEntry("FRA",
-      ForeignPropertyIncome(
-        ForeignPropertyRentIncome(5000.99),
+    Some(Seq(CreateForeignNonFhlPropertyEntry("FRA",
+      Some(ForeignNonFhlPropertyIncome(
+        Some(ForeignNonFhlPropertyRentIncome(Some(5000.99))),
         false,
         Some(5000.99),
         Some(5000.99),
         Some(5000.99),
         Some(5000.99)
-      ),
-      Some(ForeignPropertyExpenditure(
+      )),
+      Some(CreateForeignNonFhlPropertyExpenses(
         None,
         None,
         None,
@@ -114,9 +114,9 @@ class CreateForeignPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
 
   private val response = CreateForeignPropertyPeriodSummaryResponse("4557ecb5-fd32-48cc-81f5-e6acd1099f3c")
 
-  private val regularExpensesRequestData = CreateForeignPropertyPeriodSummaryRequest(Nino(nino), businessId, regularExpensesBody)
+  private val regularExpensesRequestData = CreateForeignPropertyPeriodSummaryRequest(Nino(nino), businessId, taxYear, regularExpensesBody)
 
-  private val consolidatedExpensesRequestData = CreateForeignPropertyPeriodSummaryRequest(Nino(nino), businessId, consolidatedExpensesBody)
+  private val consolidatedExpensesRequestData = CreateForeignPropertyPeriodSummaryRequest(Nino(nino), businessId, taxYear, consolidatedExpensesBody)
 
   class Test extends MockHttpClient with MockAppConfig {
     val connector: CreateForeignPropertyPeriodSummaryConnector = new CreateForeignPropertyPeriodSummaryConnector(

@@ -40,7 +40,7 @@ class AmendForeignPropertyPeriodSummaryRequestBodySpec extends UnitSpec with Jso
     )),
     Some(Seq(AmendForeignNonFhlPropertyEntry("FRA",
       Some(ForeignNonFhlPropertyIncome(
-        ForeignNonFhlPropertyRentIncome(Some(5000.99)),
+        Some(ForeignNonFhlPropertyRentIncome(Some(5000.99))),
         false,
         Some(5000.99),
         Some(5000.99),

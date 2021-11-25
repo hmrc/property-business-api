@@ -19,21 +19,21 @@ package v2.mocks.connectors
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
 import uk.gov.hmrc.http.HeaderCarrier
+import v2.connectors.RetrieveForeignPropertyPeriodSummaryConnector.Result
 import v2.connectors.{IfsOutcome, RetrieveForeignPropertyPeriodSummaryConnector}
 import v2.models.request.retrieveForeignPropertyPeriodSummary.RetrieveForeignPropertyPeriodSummaryRequest
-import v2.models.response.retrieveForeignPropertyPeriodSummary.RetrieveForeignPropertyPeriodSummaryResponse
 
 import scala.concurrent.{ExecutionContext, Future}
 
 trait MockRetrieveForeignPropertyPeriodSummaryConnector extends MockFactory {
 
-  val mockRetrieveForeignPropertyConnector: RetrieveForeignPropertyPeriodSummaryConnector = mock[RetrieveForeignPropertyPeriodSummaryConnector]
+  val mockConnector: RetrieveForeignPropertyPeriodSummaryConnector = mock[RetrieveForeignPropertyPeriodSummaryConnector]
 
   object MockRetrieveForeignPropertyConnector {
 
     def retrieveForeignProperty(requestData: RetrieveForeignPropertyPeriodSummaryRequest):
-    CallHandler[Future[IfsOutcome[RetrieveForeignPropertyPeriodSummaryResponse]]] = {
-      (mockRetrieveForeignPropertyConnector
+    CallHandler[Future[IfsOutcome[Result]]] = {
+      (mockConnector
         .retrieveForeignProperty(_: RetrieveForeignPropertyPeriodSummaryRequest)(_: HeaderCarrier, _: ExecutionContext, _: String))
         .expects(requestData, *, *, *)
     }

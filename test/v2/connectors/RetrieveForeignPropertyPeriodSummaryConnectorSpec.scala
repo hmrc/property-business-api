@@ -40,43 +40,45 @@ class RetrieveForeignPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
   )
 
   private val response = RetrieveForeignPropertyPeriodSummaryResponse(
+    "2021-06-17T10:53:38Z",
     "2020-01-01",
     "2020-01-31",
     Some(ForeignFhlEea(
-    ForeignFhlEeaIncome(5000.99),
-    Some(ForeignFhlEeaExpenses(
-      Some(5000.99),
-      Some(5000.99),
-      Some(5000.99),
-      Some(5000.99),
-      Some(5000.99),
-      Some(5000.99),
-      Some(5000.99),
-      None
+      Some(ForeignFhlEeaIncome(Some(5000.99))),
+      Some(ForeignFhlEeaExpenses(
+        Some(5000.99),
+        Some(5000.99),
+        Some(5000.99),
+        Some(5000.99),
+        Some(5000.99),
+        Some(5000.99),
+        Some(5000.99),
+        Some(5000.99)
+      ))
+    )),
+    Some(Seq(ForeignNonFhlProperty(
+      "FRA",
+      Some(ForeignNonFhlPropertyIncome(
+        Some(ForeignNonFhlPropertyRentIncome(Some(5000.99))),
+        false,
+        Some(5000.99),
+        Some(5000.99),
+        Some(5000.99),
+        Some(5000.99)
+      )),
+      Some(ForeignNonFhlPropertyExpenses(
+        Some(5000.99),
+        Some(5000.99),
+        Some(5000.99),
+        Some(5000.99),
+        Some(5000.99),
+        Some(5000.99),
+        Some(5000.99),
+        Some(5000.99),
+        Some(5000.99),
+        Some(5000.99)
+      ))))
     ))
-  )),
-  Some(Seq(ForeignNonFhlProperty("FRA",
-    ForeignNonFhlPropertyIncome(
-      ForeignNonFhlPropertyRentIncome(5000.99),
-      false,
-      Some(5000.99),
-      Some(5000.99),
-      Some(5000.99),
-      Some(5000.99)
-    ),
-    Some(ForeignNonFhlPropertyExpenses(
-      Some(5000.99),
-      Some(5000.99),
-      Some(5000.99),
-      Some(5000.99),
-      Some(5000.99),
-      Some(5000.99),
-      Some(5000.99),
-      Some(5000.99),
-      Some(5000.99),
-      None
-    ))))
-  ))
 
   class Test extends MockHttpClient with MockAppConfig {
     val connector: RetrieveForeignPropertyPeriodSummaryConnector = new RetrieveForeignPropertyPeriodSummaryConnector(

@@ -121,6 +121,7 @@ class RetrieveForeignPropertyPeriodSummaryResponseSpec extends UnitSpec with Jso
   val readsJson: JsValue = Json.parse(
     """
       |{
+      |  "submittedOn": "2021-06-17T10:53:38Z",
       |  "fromDate": "2020-01-01",
       |  "toDate": "2020-01-31",
       |  "foreignFhlEea": {

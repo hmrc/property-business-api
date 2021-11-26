@@ -26,7 +26,7 @@ import v2.models.outcomes.ResponseWrapper
 import v2.models.request.retrieveForeignPropertyPeriodSummary.RetrieveForeignPropertyPeriodSummaryRequest
 import v2.models.response.retrieveForeignPropertyPeriodSummary.RetrieveForeignPropertyPeriodSummaryResponse
 import v2.models.response.retrieveForeignPropertyPeriodSummary.foreignFhlEea._
-import v2.models.response.retrieveForeignPropertyPeriodSummary.foreignProperty._
+import v2.models.response.retrieveForeignPropertyPeriodSummary.foreignNonFhlProperty._
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -35,15 +35,17 @@ class RetrieveForeignPropertyPeriodSummaryServiceSpec extends UnitSpec {
 
   val nino: String = "AA123456A"
   val businessId: String = "XAIS12345678910"
+  val taxYear: String = "2022-23"
   val submissionId: String = "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
   implicit val correlationId: String = "X-123"
 
   private val response = RetrieveForeignPropertyPeriodSummaryResponse(
+    "2021-06-17T10:53:38Z",
     "2020-01-01",
     "2020-01-31",
     Some(ForeignFhlEea(
-      ForeignFhlEeaIncome(5000.99),
-      Some(ForeignFhlEeaExpenditure(
+      Some(ForeignFhlEeaIncome(Some(5000.99))),
+      Some(ForeignFhlEeaExpenses(
         Some(5000.99),
         Some(5000.99),
         Some(5000.99),
@@ -51,19 +53,20 @@ class RetrieveForeignPropertyPeriodSummaryServiceSpec extends UnitSpec {
         Some(5000.99),
         Some(5000.99),
         Some(5000.99),
-        None
+        Some(5000.99)
       ))
     )),
-    Some(Seq(ForeignProperty("FRA",
-      ForeignPropertyIncome(
-        ForeignPropertyRentIncome(5000.99),
+    Some(Seq(ForeignNonFhlProperty(
+      "FRA",
+      Some(ForeignNonFhlPropertyIncome(
+        Some(ForeignNonFhlPropertyRentIncome(Some(5000.99))),
         false,
         Some(5000.99),
         Some(5000.99),
         Some(5000.99),
         Some(5000.99)
-      ),
-      Some(ForeignPropertyExpenditure(
+      )),
+      Some(ForeignNonFhlPropertyExpenses(
         Some(5000.99),
         Some(5000.99),
         Some(5000.99),
@@ -73,11 +76,11 @@ class RetrieveForeignPropertyPeriodSummaryServiceSpec extends UnitSpec {
         Some(5000.99),
         Some(5000.99),
         Some(5000.99),
-        None
+        Some(5000.99)
       ))))
     ))
 
-  private val requestData = RetrieveForeignPropertyPeriodSummaryRequest(Nino(nino), businessId, submissionId)
+  private val requestData = RetrieveForeignPropertyPeriodSummaryRequest(Nino(nino), businessId, taxYear, submissionId)
 
   trait Test extends MockRetrieveForeignPropertyPeriodSummaryConnector {
     implicit val hc: HeaderCarrier = HeaderCarrier()

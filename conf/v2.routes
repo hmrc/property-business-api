@@ -4,10 +4,10 @@ POST       /uk/:nino/:businessId/period/:taxYear                   v2.controller
 
 PUT        /uk/:nino/:businessId/period/:taxYear/:submissionId     v2.controllers.AmendUkPropertyPeriodSummaryController.handleRequest(nino: String, businessId: String, taxYear: String, submissionId: String)
 
-GET        /:nino/:businessId/period                               v2.controllers.ListForeignPropertiesPeriodSummariesController.handleRequest(nino: String, businessId: String, fromDate: Option[String], toDate: Option[String])
+#GET        /:nino/:businessId/period                               v2.controllers.ListForeignPropertiesPeriodSummariesController.handleRequest(nino: String, businessId: String, fromDate: Option[String], toDate: Option[String])
 #POST       /:nino/:businessId/period                               v2.controllers.CreateForeignPropertyPeriodSummaryController.handleRequest(nino: String, businessId: String)
 #PUT        /:nino/:businessId/period/:submissionId                 v2.controllers.AmendForeignPropertyPeriodSummaryController.handleRequest(nino: String, businessId: String, submissionId: String)
-GET        /:nino/:businessId/period/:submissionId                 v2.controllers.RetrieveForeignPropertyPeriodSummaryController.handleRequest(nino: String, businessId: String, submissionId: String)
+#GET        /:nino/:businessId/period/:submissionId                 v2.controllers.RetrieveForeignPropertyPeriodSummaryController.handleRequest(nino: String, businessId: String, submissionId: String)
 
 DELETE     /:nino/:businessId/annual/:taxYear                      v2.controllers.DeletePropertyAnnualSubmissionController.handleRequest(nino: String, businessId: String, taxYear: String)
 PUT        /:nino/:businessId/annual/:taxYear                      v2.controllers.AmendForeignPropertyAnnualSubmissionController.handleRequest(nino: String, businessId: String, taxYear: String)

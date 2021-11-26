@@ -19,19 +19,22 @@ package v2.models.response.retrieveForeignPropertyPeriodSummary
 import mocks.MockAppConfig
 import play.api.libs.json.{JsValue, Json}
 import support.UnitSpec
-import v2.models.hateoas.{Link, Method}
+import v2.hateoas.HateoasFactory
+import v2.models.hateoas.Method.{GET, PUT}
+import v2.models.hateoas.{HateoasWrapper, Link, Method}
 import v2.models.response.retrieveForeignPropertyPeriodSummary.foreignFhlEea._
-import v2.models.response.retrieveForeignPropertyPeriodSummary.foreignProperty._
+import v2.models.response.retrieveForeignPropertyPeriodSummary.foreignNonFhlProperty._
 import v2.models.utils.JsonErrorValidators
 
 class RetrieveForeignPropertyPeriodSummaryResponseSpec extends UnitSpec with JsonErrorValidators with MockAppConfig {
 
   val retrieveForeignPropertyResponseBody: RetrieveForeignPropertyPeriodSummaryResponse = RetrieveForeignPropertyPeriodSummaryResponse(
+    "2021-06-17T10:53:38Z",
     "2020-01-01",
     "2020-01-31",
     Some(ForeignFhlEea(
-      ForeignFhlEeaIncome(5000.99),
-      Some(ForeignFhlEeaExpenditure(
+      Some(ForeignFhlEeaIncome(Some(5000.99))),
+      Some(ForeignFhlEeaExpenses(
         Some(5000.99),
         Some(5000.99),
         Some(5000.99),
@@ -42,17 +45,17 @@ class RetrieveForeignPropertyPeriodSummaryResponseSpec extends UnitSpec with Jso
         Some(5000.99)
       ))
     )),
-    Some(Seq(ForeignProperty(
+    Some(Seq(ForeignNonFhlProperty(
       "FRA",
-      ForeignPropertyIncome(
-        ForeignPropertyRentIncome(5000.99),
+      Some(ForeignNonFhlPropertyIncome(
+        Some(ForeignNonFhlPropertyRentIncome(Some(5000.99))),
         false,
         Some(5000.99),
         Some(5000.99),
         Some(5000.99),
         Some(5000.99)
-      ),
-      Some(ForeignPropertyExpenditure(
+      )),
+      Some(ForeignNonFhlPropertyExpenses(
         Some(5000.99),
         Some(5000.99),
         Some(5000.99),
@@ -69,24 +72,25 @@ class RetrieveForeignPropertyPeriodSummaryResponseSpec extends UnitSpec with Jso
   val writesJson: JsValue = Json.parse(
     """
       |{
+      |  "submittedOn": "2021-06-17T10:53:38Z",
       |  "fromDate": "2020-01-01",
       |  "toDate": "2020-01-31",
       |  "foreignFhlEea": {
       |    "income": {
       |      "rentAmount": 5000.99
       |    },
-      |    "expenditure": {
+      |    "expenses": {
       |      "premisesRunningCosts": 5000.99,
       |      "repairsAndMaintenance": 5000.99,
       |      "financialCosts": 5000.99,
       |      "professionalFees": 5000.99,
-      |      "costsOfServices": 5000.99,
+      |      "costOfServices": 5000.99,
       |      "travelCosts": 5000.99,
       |      "other": 5000.99,
       |      "consolidatedExpenses": 5000.99
       |    }
       |  },
-      |  "foreignProperty": [
+      |  "foreignNonFhlProperty": [
       |    {
       |      "countryCode": "FRA",
       |      "income": {
@@ -94,17 +98,17 @@ class RetrieveForeignPropertyPeriodSummaryResponseSpec extends UnitSpec with Jso
       |          "rentAmount": 5000.99
       |        },
       |        "foreignTaxCreditRelief": false,
-      |        "premiumOfLeaseGrant": 5000.99,
+      |        "premiumsOfLeaseGrant": 5000.99,
       |        "otherPropertyIncome": 5000.99,
-      |        "foreignTaxTakenOff": 5000.99,
-      |        "specialWithholdingTaxOrUKTaxPaid": 5000.99
+      |        "foreignTaxPaidOrDeducted": 5000.99,
+      |        "specialWithholdingTaxOrUkTaxPaid": 5000.99
       |      },
-      |      "expenditure": {
+      |      "expenses": {
       |        "premisesRunningCosts": 5000.99,
       |        "repairsAndMaintenance": 5000.99,
       |        "financialCosts": 5000.99,
       |        "professionalFees": 5000.99,
-      |        "costsOfServices": 5000.99,
+      |        "costOfServices": 5000.99,
       |        "travelCosts": 5000.99,
       |        "residentialFinancialCost": 5000.99,
       |        "broughtFwdResidentialFinancialCost": 5000.99,
@@ -117,9 +121,17 @@ class RetrieveForeignPropertyPeriodSummaryResponseSpec extends UnitSpec with Jso
     """.stripMargin
   )
 
+  val hateoasData: RetrieveForeignPropertyPeriodSummaryHateoasData = RetrieveForeignPropertyPeriodSummaryHateoasData(
+    nino = "AA999999A",
+    businessId = "XAIS12345678910",
+    taxYear = "2022-23",
+    submissionId = "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
+  )
+
   val readsJson: JsValue = Json.parse(
     """
       |{
+      |  "submittedOn": "2021-06-17T10:53:38Z",
       |  "fromDate": "2020-01-01",
       |  "toDate": "2020-01-31",
       |  "foreignFhlEea": {
@@ -183,18 +195,24 @@ class RetrieveForeignPropertyPeriodSummaryResponseSpec extends UnitSpec with Jso
     }
   }
 
-  "LinksFactory" should {
-    "produce the correct links" when {
-      "called" in {
-        val data: RetrieveForeignPropertyPeriodSummaryHateoasData = RetrieveForeignPropertyPeriodSummaryHateoasData("myNino", "myBusinessId", "mySubmissionId")
+  "hateoasLinksFactory" when {
+    "wrap" should {
+      "return the expected wrapped response with correct links" in {
+        MockAppConfig.apiGatewayContext.returns("individuals/business/property").anyNumberOfTimes()
+        val wrappedResponse: HateoasWrapper[RetrieveForeignPropertyPeriodSummaryResponse] = new HateoasFactory(mockAppConfig).wrap(retrieveForeignPropertyResponseBody, hateoasData)
 
-        MockAppConfig.apiGatewayContext.returns("my/context").anyNumberOfTimes()
+        val baseUrl = "/individuals/business/property/foreign/AA999999A/XAIS12345678910/period/2022-23"
 
-        RetrieveForeignPropertyPeriodSummaryResponse.RetrieveForeignPropertyLinksFactory.links(mockAppConfig, data) shouldBe Seq(
-          Link(href = s"/my/context/${data.nino}/${data.businessId}/period/${data.submissionId}", method = Method.PUT, rel = "amend-property-period-summary"),
-          Link(href = s"/my/context/${data.nino}/${data.businessId}/period/${data.submissionId}", method = Method.GET, rel = "self"),
-          Link(href = s"/my/context/${data.nino}/${data.businessId}/period", method = Method.GET, rel = "list-property-period-summaries")
+        val expectedWrappedResponse: HateoasWrapper[RetrieveForeignPropertyPeriodSummaryResponse] = HateoasWrapper(
+          retrieveForeignPropertyResponseBody,
+          Seq(
+            Link(s"$baseUrl/4557ecb5-fd32-48cc-81f5-e6acd1099f3c", PUT, "amend-foreign-property-period-summary"),
+            Link(s"$baseUrl/4557ecb5-fd32-48cc-81f5-e6acd1099f3c", GET, "self"),
+            Link("/individuals/business/property/AA999999A/XAIS12345678910/period/2022-23", GET, "list-property-period-summaries")
+          )
         )
+
+        wrappedResponse shouldBe expectedWrappedResponse
       }
     }
   }

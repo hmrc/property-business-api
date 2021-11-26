@@ -130,23 +130,23 @@ class ListForeignPropertiesPeriodSummariesResponseSpec extends UnitSpec with Moc
   "Links Factory" should {
     val nino = "mynino"
     val businessId = "mysubmissionid"
+    val taxYear = "myTaxYear"
     val submissionId = "mysubmissionid"
 
     "expose the correct top level links for list" in {
       MockAppConfig.apiGatewayContext.returns("my/context").anyNumberOfTimes
-      ListForeignPropertiesPeriodSummariesResponse.LinksFactory.links(mockAppConfig, ListForeignPropertiesPeriodSummariesHateoasData(nino, businessId)) shouldBe
+      ListForeignPropertiesPeriodSummariesResponse.LinksFactory.links(mockAppConfig, ListForeignPropertiesPeriodSummariesHateoasData(nino, businessId, taxYear)) shouldBe
         Seq(
-          Link(s"/my/context/$nino/$businessId/period", GET, "self"),
-          Link(s"/my/context/$nino/$businessId/period", POST, "create-property-period-summary")
+          Link(s"/my/context/$nino/$businessId/period/$taxYear", GET, "self")
         )
     }
 
     "expose the correct item level links for list" in {
       MockAppConfig.apiGatewayContext.returns("my/context").anyNumberOfTimes
-      ListForeignPropertiesPeriodSummariesResponse.LinksFactory.itemLinks(mockAppConfig, ListForeignPropertiesPeriodSummariesHateoasData(nino, businessId),
+      ListForeignPropertiesPeriodSummariesResponse.LinksFactory.itemLinks(mockAppConfig, ListForeignPropertiesPeriodSummariesHateoasData(nino, businessId, taxYear),
         SubmissionPeriod(submissionId, "", "")) shouldBe
         Seq(
-          Link(s"/my/context/$nino/$businessId/period/$submissionId", GET, "self")
+          Link(s"/my/context/foreign/$nino/$businessId/period/$taxYear/$submissionId", GET, "self")
         )
     }
   }

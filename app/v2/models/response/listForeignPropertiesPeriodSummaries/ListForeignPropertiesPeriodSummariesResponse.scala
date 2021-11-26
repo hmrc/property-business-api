@@ -34,12 +34,11 @@ object ListForeignPropertiesPeriodSummariesResponse extends HateoasLinks {
   implicit object LinksFactory extends HateoasListLinksFactory[ListForeignPropertiesPeriodSummariesResponse, SubmissionPeriod, ListForeignPropertiesPeriodSummariesHateoasData] {
 
     override def itemLinks(appConfig: AppConfig, data: ListForeignPropertiesPeriodSummariesHateoasData, item: SubmissionPeriod): Seq[Link] =
-      Seq(retrieveForeignPropertyPeriodSummary(appConfig, data.nino, data.businessId, item.submissionId))
+      Seq(retrieveForeignPropertyPeriodSummary(appConfig, data.nino, data.businessId, data.taxYear, item.submissionId))
 
     override def links(appConfig: AppConfig, data: ListForeignPropertiesPeriodSummariesHateoasData): Seq[Link] = {
       Seq(
-        listForeignPropertiesPeriodSummaries(appConfig, data.nino, data.businessId),
-        createForeignPropertyPeriodSummary(appConfig, data.nino, data.businessId)
+        listForeignPropertiesPeriodSummaries(appConfig, data.nino, data.businessId, data.taxYear)
       )
     }
   }
@@ -50,4 +49,4 @@ object ListForeignPropertiesPeriodSummariesResponse extends HateoasLinks {
   }
 }
 
-case class ListForeignPropertiesPeriodSummariesHateoasData(nino: String, businessId: String) extends HateoasData
+case class ListForeignPropertiesPeriodSummariesHateoasData(nino: String, businessId: String, taxYear: String) extends HateoasData

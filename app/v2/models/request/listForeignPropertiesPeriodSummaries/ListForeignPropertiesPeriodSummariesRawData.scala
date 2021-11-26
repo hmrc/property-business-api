@@ -18,4 +18,4 @@ package v2.models.request.listForeignPropertiesPeriodSummaries
 
 import v2.models.request.RawData
 
-case class ListForeignPropertiesPeriodSummariesRawData(nino: String, businessId: String, fromDate: Option[String], toDate: Option[String]) extends RawData
+case class ListForeignPropertiesPeriodSummariesRawData(nino: String, businessId: String, taxYear: String) extends RawData

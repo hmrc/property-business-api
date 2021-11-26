@@ -29,6 +29,7 @@ class AuthISpec extends V2IntegrationBaseSpec {
   private trait Test {
     val nino: String = "AA123456A"
     val businessId: String = "XAIS12345678910"
+    val taxYear: String = "2022-23"
     val submissionId: String = "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
 
     val ifsResponseBody: JsValue = Json.parse(

@@ -33,8 +33,8 @@ object RetrieveForeignPropertyAnnualSubmissionResponse extends HateoasLinks {
     override def links(appConfig: AppConfig, data: RetrieveForeignPropertyAnnualSubmissionHateoasData): Seq[Link] = {
       import data._
       Seq(
-        amendForeignPropertyAnnualSubmission(appConfig, nino, businessId, taxYear),
-        retrieveForeignPropertyAnnualSubmission(appConfig, nino, businessId, taxYear),
+        createAmendForeignPropertyAnnualSubmission(appConfig, nino, businessId, taxYear),
+        retrieveForeignPropertyAnnualSubmission(appConfig, nino, businessId, taxYear, self = true),
         deletePropertyAnnualSubmission(appConfig, nino, businessId, taxYear)
       )
     }

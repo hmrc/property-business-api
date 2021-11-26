@@ -297,7 +297,7 @@ class RetrieveUkPropertyAnnualSubmissionResponseSpec extends UnitSpec with MockA
         RetrieveUkPropertyAnnualSubmissionResponse.RetrieveAnnualSubmissionLinksFactory.links(mockAppConfig, data) shouldBe Seq(
           Link(href = s"/my/context/uk/${data.nino}/${data.businessId}/annual/${data.taxYear}",
                method = Method.PUT,
-               rel = "amend-uk-property-annual-submission"),
+               rel = "create-and-amend-uk-property-annual-submission"),
           Link(href = s"/my/context/uk/${data.nino}/${data.businessId}/annual/${data.taxYear}", method = Method.GET, rel = "self"),
           Link(href = s"/my/context/${data.nino}/${data.businessId}/annual/${data.taxYear}",
                method = Method.DELETE,

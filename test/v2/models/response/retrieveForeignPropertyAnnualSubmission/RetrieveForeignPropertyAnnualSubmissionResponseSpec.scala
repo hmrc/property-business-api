@@ -143,8 +143,8 @@ class RetrieveForeignPropertyAnnualSubmissionResponseSpec extends UnitSpec with 
         MockAppConfig.apiGatewayContext.returns("my/context").anyNumberOfTimes()
 
         RetrieveForeignPropertyAnnualSubmissionResponse.RetrieveAnnualSubmissionLinksFactory.links(mockAppConfig, data) shouldBe Seq(
-          Link(href = s"/my/context/${data.nino}/${data.businessId}/annual/${data.taxYear}", method = Method.PUT, rel = "amend-property-annual-submission"),
-          Link(href = s"/my/context/${data.nino}/${data.businessId}/annual/${data.taxYear}", method = Method.GET, rel = "self"),
+          Link(href = s"/my/context/foreign/${data.nino}/${data.businessId}/annual/${data.taxYear}", method = Method.PUT, rel = "create-and-amend-foreign-property-annual-submission"),
+          Link(href = s"/my/context/foreign/${data.nino}/${data.businessId}/annual/${data.taxYear}", method = Method.GET, rel = "self"),
           Link(href = s"/my/context/${data.nino}/${data.businessId}/annual/${data.taxYear}", method = Method.DELETE, rel = "delete-property-annual-submission")
         )
       }

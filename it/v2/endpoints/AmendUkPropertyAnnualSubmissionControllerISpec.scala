@@ -115,7 +115,7 @@ class AmendUkPropertyAnnualSubmissionControllerISpec extends V2IntegrationBaseSp
         |    {
         |      "href":"/individuals/business/property/uk/TC663795B/XAIS12345678910/annual/2022-23",
         |      "method":"PUT",
-        |      "rel":"amend-uk-property-annual-submission"
+        |      "rel":"create-and-amend-uk-property-annual-submission"
         |    },
         |    {
         |      "href":"/individuals/business/property/uk/TC663795B/XAIS12345678910/annual/2022-23",

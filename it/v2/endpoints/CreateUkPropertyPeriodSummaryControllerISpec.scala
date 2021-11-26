@@ -385,6 +385,11 @@ class CreateUkPropertyPeriodSummaryControllerISpec extends V2IntegrationBaseSpec
         |  "links": [
         |    {
         |      "href":"/individuals/business/property/uk/$nino/$businessId/period/$taxYear/4557ecb5-fd32-48cc-81f5-e6acd1099f3c",
+        |      "method":"PUT",
+        |      "rel":"amend-uk-property-period-summary"
+        |    },
+        |    {
+        |      "href":"/individuals/business/property/uk/$nino/$businessId/period/$taxYear/4557ecb5-fd32-48cc-81f5-e6acd1099f3c",
         |      "method":"GET",
         |      "rel":"self"
         |    }

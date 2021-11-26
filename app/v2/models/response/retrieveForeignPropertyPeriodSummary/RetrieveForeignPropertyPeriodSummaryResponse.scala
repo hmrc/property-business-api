@@ -20,7 +20,6 @@ import config.AppConfig
 import play.api.libs.json.{Json, OFormat}
 import v2.hateoas.{HateoasLinks, HateoasLinksFactory}
 import v2.models.hateoas.{HateoasData, Link}
-import v2.models.hateoas.RelType.LIST_PROPERTY_PERIOD_SUMMARIES
 import v2.models.response.retrieveForeignPropertyPeriodSummary.foreignFhlEea.ForeignFhlEea
 import v2.models.response.retrieveForeignPropertyPeriodSummary.foreignProperty.ForeignProperty
 
@@ -35,10 +34,12 @@ object RetrieveForeignPropertyPeriodSummaryResponse extends HateoasLinks {
   implicit object RetrieveForeignPropertyLinksFactory extends HateoasLinksFactory[RetrieveForeignPropertyPeriodSummaryResponse, RetrieveForeignPropertyPeriodSummaryHateoasData] {
     override def links(appConfig: AppConfig, data: RetrieveForeignPropertyPeriodSummaryHateoasData): Seq[Link] = {
       import data._
+
+      val taxYear = "XXXXXXXXXXXXXX" // FIXME remove once build endpoint
       Seq(
-        amendForeignPropertyPeriodSummary(appConfig, nino, businessId, submissionId),
-        retrieveForeignPropertyPeriodSummary(appConfig, nino, businessId, submissionId),
-        listForeignPropertiesPeriodSummaries(appConfig, nino, businessId, rel = LIST_PROPERTY_PERIOD_SUMMARIES)
+        amendForeignPropertyPeriodSummary(appConfig, nino, businessId, taxYear, submissionId),
+        retrieveForeignPropertyPeriodSummary(appConfig, nino, businessId, taxYear, submissionId, self = true),
+        listPropertyPeriodSummaries(appConfig, nino, businessId, taxYear, self = false)
       )
     }
   }

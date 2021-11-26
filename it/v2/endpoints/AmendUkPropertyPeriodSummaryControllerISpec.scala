@@ -292,7 +292,7 @@ class AmendUkPropertyPeriodSummaryControllerISpec extends V2IntegrationBaseSpec 
          |{
          |  "links": [
          |    {
-         |      "href":"/individuals/business/property/uk/$nino/$businessId/period/$taxYear",
+         |      "href":"/individuals/business/property/$nino/$businessId/period/$taxYear",
          |      "method":"GET",
          |      "rel":"list-property-period-summaries"
          |    },

@@ -16,7 +16,6 @@
 
 package v2.services
 
-import support.UnitSpec
 import uk.gov.hmrc.http.HeaderCarrier
 import v2.controllers.EndpointLogContext
 import v2.mocks.connectors.MockAmendForeignPropertyPeriodSummaryConnector
@@ -27,10 +26,9 @@ import v2.models.request.amendForeignPropertyPeriodSummary._
 import v2.models.request.common.foreignFhlEea._
 import v2.models.request.common.foreignPropertyEntry._
 
-import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-class AmendForeignPropertyPeriodSummaryServiceSpec extends UnitSpec {
+class AmendForeignPropertyPeriodSummaryServiceSpec extends ServiceSpec {
 
   val nino: String = "AA123456A"
   val businessId: String = "XAIS12345678910"
@@ -39,23 +37,27 @@ class AmendForeignPropertyPeriodSummaryServiceSpec extends UnitSpec {
   implicit val correlationId: String = "X-123"
 
   private val foreignFhlEea: AmendForeignFhlEea = AmendForeignFhlEea(
-    income = Some(ForeignFhlEeaIncome(rentAmount = Some(567.83))),
+    income = Some(ForeignFhlEeaIncome(
+      rentAmount = Some(567.83)
+    )),
     expenses = Some(AmendForeignFhlEeaExpenses(
       premisesRunningCosts = Some(4567.98),
       repairsAndMaintenance = Some(98765.67),
-      financialCosts = Some(4566.95),
+      financialCosts = Some(5000.95),
       professionalFees = Some(23.65),
-      costOfServices = Some(4567.77),
-      travelCosts = Some(456.77),
-      other = Some(567.67),
-      consolidatedExpenses = Some(456.98)
+      costOfServices = Some(4777.77),
+      travelCosts = Some(440.88),
+      other = Some(569.75),
+      consolidatedExpenses = None
     ))
   )
 
-  private val foreignNonFhlProperty: AmendForeignNonFhlPropertyEntry = AmendForeignNonFhlPropertyEntry(
-    countryCode = "zzz",
+  private val foreignNonFhlPropertyEntry: AmendForeignNonFhlPropertyEntry = AmendForeignNonFhlPropertyEntry(
+    countryCode = "FRA",
     income = Some(ForeignNonFhlPropertyIncome(
-      rentIncome = Some(ForeignNonFhlPropertyRentIncome(rentAmount = Some(34456.30))),
+      rentIncome = Some(ForeignNonFhlPropertyRentIncome(
+        rentAmount = Some(34456.30)
+      )),
       foreignTaxCreditRelief = true,
       premiumsOfLeaseGrant = Some(2543.43),
       otherPropertyIncome = Some(54325.30),
@@ -72,62 +74,74 @@ class AmendForeignPropertyPeriodSummaryServiceSpec extends UnitSpec {
       residentialFinancialCost = Some(21235.22),
       broughtFwdResidentialFinancialCost = Some(12556.00),
       other = Some(2425.11),
-      consolidatedExpenses = Some(352.66)
+      consolidatedExpenses = None
     ))
   )
 
-  val body: AmendForeignPropertyPeriodSummaryRequestBody = AmendForeignPropertyPeriodSummaryRequestBody(
+  private val requestBody: AmendForeignPropertyPeriodSummaryRequestBody = AmendForeignPropertyPeriodSummaryRequestBody(
     foreignFhlEea = Some(foreignFhlEea),
-    foreignNonFhlProperty = Some(Seq(foreignNonFhlProperty))
+    foreignNonFhlProperty = Some(Seq(foreignNonFhlPropertyEntry))
   )
 
-  private val requestData = AmendForeignPropertyPeriodSummaryRequest(Nino(nino), businessId, taxYear, submissionId, body)
+  private val request: AmendForeignPropertyPeriodSummaryRequest = AmendForeignPropertyPeriodSummaryRequest(
+    nino = Nino(nino),
+    businessId = businessId,
+    taxYear = taxYear,
+    submissionId = submissionId,
+    body = requestBody
+  )
 
   trait Test extends MockAmendForeignPropertyPeriodSummaryConnector {
     implicit val hc: HeaderCarrier = HeaderCarrier()
     implicit val logContext: EndpointLogContext = EndpointLogContext("c", "ep")
 
     val service = new AmendForeignPropertyPeriodSummaryService(
-      connector = mockAmendForeignPropertyConnector
+      connector = mockAmendForeignPropertyPeriodSummaryConnector
     )
   }
 
-  "service" should {
-    "service call successful" when {
+  "service" when {
+    "service call successful" should {
       "return mapped result" in new Test {
-        MockAmendForeignPropertyConnector.amendForeignProperty(requestData)
+        MockAmendForeignPropertyPeriodSummaryConnector
+          .amendForeignPropertyPeriodSummary(request)
           .returns(Future.successful(Right(ResponseWrapper(correlationId, ()))))
 
-        await(service.amendForeignProperty(requestData)) shouldBe Right(ResponseWrapper(correlationId, ()))
+        await(service.amendForeignPropertyPeriodSummary(request)) shouldBe Right(ResponseWrapper(correlationId, ()))
       }
     }
-  }
 
-  "unsuccessful" should {
-    "map errors according to spec" when {
+    "unsuccessful" should {
+      "map errors according to spec" when {
 
-      def serviceError(ifsErrorCode: String, error: MtdError): Unit =
-        s"a $ifsErrorCode error is returned from the service" in new Test {
+        def serviceError(ifsErrorCode: String, error: MtdError): Unit =
+          s"a $ifsErrorCode error is returned from the service" in new Test {
 
-          MockAmendForeignPropertyConnector.amendForeignProperty(requestData)
-            .returns(Future.successful(Left(ResponseWrapper(correlationId, IfsErrors.single(IfsErrorCode(ifsErrorCode))))))
+            MockAmendForeignPropertyPeriodSummaryConnector
+              .amendForeignPropertyPeriodSummary(request)
+              .returns(Future.successful(Left(ResponseWrapper(correlationId, IfsErrors.single(IfsErrorCode(ifsErrorCode))))))
 
-          await(service.amendForeignProperty(requestData)) shouldBe Left(ErrorWrapper(correlationId, error))
-        }
+            await(service.amendForeignPropertyPeriodSummary(request)) shouldBe Left(ErrorWrapper(correlationId, error))
+          }
 
-      val input = Seq(
-        "INVALID_TAXABLE_ENTITY_ID" -> NinoFormatError,
-        "INVALID_INCOMESOURCEID" -> BusinessIdFormatError,
-        "INVALID_CORRELATIONID" -> DownstreamError,
-        "INVALID_PAYLOAD" -> DownstreamError,
-        "INVALID_SUBMISSION_ID" -> SubmissionIdFormatError,
-        "INCOME_SOURCE_NOT_FOUND" -> NotFoundError,
-        "NO_DATA_FOUND" -> NotFoundError,
-        "SERVER_ERROR" -> DownstreamError,
-        "SERVICE_UNAVAILABLE" -> DownstreamError
-      )
+        val input = Seq(
+          "INVALID_TAXABLE_ENTITY_ID" -> NinoFormatError,
+          "INVALID_TAX_YEAR" -> TaxYearFormatError,
+          "INVALID_INCOMESOURCEID" -> BusinessIdFormatError,
+          "INVALID_SUBMISSION_ID" -> SubmissionIdFormatError,
+          "INVALID_PAYLOAD" -> DownstreamError,
+          "INVALID_CORRELATIONID" -> DownstreamError,
+          "NO_DATA_FOUND" -> NotFoundError,
+          "INCOMPATIBLE_PAYLOAD" -> RuleTypeOfBusinessIncorrectError,
+          "TAX_YEAR_NOT_SUPPORTED" -> RuleTaxYearNotSupportedError,
+          "BUSINESS_VALIDATION_FAILURE" -> DownstreamError,
+          "DUPLICATE_COUNTRY_CODE" -> RuleDuplicateCountryCodeError,
+          "SERVER_ERROR" -> DownstreamError,
+          "SERVICE_UNAVAILABLE" -> DownstreamError
+        )
 
-      input.foreach(args => (serviceError _).tupled(args))
+        input.foreach(args => (serviceError _).tupled(args))
+      }
     }
   }
 }

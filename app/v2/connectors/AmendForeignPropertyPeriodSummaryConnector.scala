@@ -17,7 +17,6 @@
 package v2.connectors
 
 import config.AppConfig
-
 import javax.inject.{Inject, Singleton}
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
 import v2.connectors.httpparsers.StandardIfsHttpParser._
@@ -29,14 +28,16 @@ import scala.concurrent.{ExecutionContext, Future}
 class AmendForeignPropertyPeriodSummaryConnector @Inject()(val http: HttpClient,
                                                            val appConfig: AppConfig) extends BaseIfsConnector {
 
-  def amendForeignProperty(request: AmendForeignPropertyPeriodSummaryRequest)(
+  def amendForeignPropertyPeriodSummary(request: AmendForeignPropertyPeriodSummaryRequest)(
     implicit hc: HeaderCarrier,
     ec: ExecutionContext,
     correlationId: String): Future[IfsOutcome[Unit]] = {
 
     put(
       body = request.body,
-      uri = IfsUri[Unit](s"income-tax/business/property/periodic/${request.nino.nino}/${request.businessId}/${request.submissionId}")
+      uri = IfsUri[Unit](
+        s"income-tax/business/property/periodic?" +
+          s"taxableEntityId=${request.nino.nino}&taxYear=${request.taxYear}&incomeSourceId=${request.businessId}&submissionId=${request.submissionId}")
     )
   }
 }

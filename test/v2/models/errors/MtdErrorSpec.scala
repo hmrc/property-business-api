@@ -34,9 +34,9 @@ class MtdErrorSpec extends UnitSpec {
     }
   }
 
-  "MtdErrorWithCustomMessage.unapply" should {
+  "MtdErrorWithCode.unapply" should {
     "return the error code" in {
-      MtdErrorWithCustomMessage.unapply(MtdError("CODE", "message")) shouldBe Some("CODE")
+      MtdErrorWithCode.unapply(MtdError("CODE", "message")) shouldBe Some("CODE")
     }
   }
 }

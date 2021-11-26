@@ -86,13 +86,13 @@ class AmendUkPropertyAnnualSubmissionController @Inject()(val authService: Enrol
            BusinessIdFormatError |
            RuleTaxYearRangeInvalidError |
            RuleTaxYearNotSupportedError |
-           MtdErrorWithCustomMessage(ValueFormatError.code) |
-           MtdErrorWithCustomMessage(RuleIncorrectOrEmptyBodyError.code) |
+           MtdErrorWithCode(ValueFormatError.code) |
+           MtdErrorWithCode(RuleIncorrectOrEmptyBodyError.code) |
            RuleTypeOfBusinessIncorrectError |
-           MtdErrorWithCustomMessage(RuleBothAllowancesSuppliedError.code) |
-           MtdErrorWithCustomMessage(RuleBuildingNameNumberError.code) |
-           MtdErrorWithCustomMessage(DateFormatError.code) |
-           MtdErrorWithCustomMessage(StringFormatError.code) => BadRequest(Json.toJson(errorWrapper))
+           MtdErrorWithCode(RuleBothAllowancesSuppliedError.code) |
+           MtdErrorWithCode(RuleBuildingNameNumberError.code) |
+           MtdErrorWithCode(DateFormatError.code) |
+           MtdErrorWithCode(StringFormatError.code) => BadRequest(Json.toJson(errorWrapper))
       case DownstreamError => InternalServerError(Json.toJson(errorWrapper))
       case NotFoundError => NotFound(Json.toJson(errorWrapper))
     }

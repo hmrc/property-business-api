@@ -25,7 +25,9 @@ case class CreateForeignPropertyPeriodSummaryRequestBody(fromDate: String,
                                                          foreignFhlEea: Option[CreateForeignFhlEea],
                                                          foreignNonFhlProperty: Option[Seq[CreateForeignNonFhlPropertyEntry]]) {
   def isEmpty: Boolean = (foreignFhlEea.isEmpty && foreignNonFhlProperty.isEmpty) ||
+    foreignFhlEea.exists(_.isEmpty) ||
     foreignFhlEea.flatMap(_.expenses.map(_.isEmpty)).getOrElse(false) ||
+    foreignFhlEea.flatMap(_.income.map(_.isEmpty)).getOrElse(false) ||
     foreignNonFhlProperty.exists(_.isEmpty) ||
     foreignNonFhlProperty.exists(_.exists(_.expenses.exists(_.isEmpty)))
 }

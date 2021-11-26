@@ -18,7 +18,7 @@ package v2.controllers.requestParsers.validators
 
 import play.api.libs.json.Json
 import support.UnitSpec
-import v2.models.errors.{BusinessIdFormatError, CountryCodeFormatError, FromDateFormatError, NinoFormatError, RuleBothExpensesSuppliedError, RuleCountryCodeError, RuleIncorrectOrEmptyBodyError, RuleToDateBeforeFromDateError, TaxYearFormatError, ToDateFormatError, ValueFormatError}
+import v2.models.errors.{BusinessIdFormatError, CountryCodeFormatError, FromDateFormatError, NinoFormatError, RuleBothExpensesSuppliedError, RuleCountryCodeError, RuleIncorrectOrEmptyBodyError, RuleTaxYearNotSupportedError, RuleTaxYearRangeInvalidError, RuleToDateBeforeFromDateError, TaxYearFormatError, ToDateFormatError, ValueFormatError}
 import v2.models.request.createForeignPropertyPeriodSummary.CreateForeignPropertyPeriodSummaryRawData
 
 class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec {
@@ -29,45 +29,45 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec {
   private val requestBodyJson = Json.parse(
     """
       |{
-      |   "fromDate":"2020-01-01",
-      |   "toDate":"2020-01-31",
+      |   "fromDate":"2020-03-29",
+      |   "toDate":"2021-03-29",
       |   "foreignFhlEea":{
       |      "income":{
-      |         "rentAmount":5000.99
+      |         "rentAmount":381.21
       |      },
-      |      "expenditure":{
-      |         "premisesRunningCosts":5000.99,
-      |         "repairsAndMaintenance":5000.99,
-      |         "financialCosts":5000.99,
-      |         "professionalFees":5000.99,
-      |         "costsOfServices":5000.99,
-      |         "travelCosts":5000.99,
-      |         "other":5000.99
+      |      "expenses":{
+      |         "premisesRunningCosts":993.31,
+      |         "repairsAndMaintenance":8842.23,
+      |         "financialCosts":994,
+      |         "professionalFees":992.12,
+      |         "costOfServices":4620.23,
+      |         "travelCosts":774,
+      |         "other":984.41
       |      }
       |   },
-      |   "foreignProperty":[
+      |   "foreignNonFhlProperty":[
       |      {
-      |         "countryCode":"FRA",
+      |         "countryCode":"AFG",
       |         "income":{
       |            "rentIncome":{
-      |               "rentAmount":5000.99
+      |               "rentAmount":4882.23
       |            },
-      |            "foreignTaxCreditRelief":false,
-      |            "premiumOfLeaseGrant":5000.99,
-      |            "otherPropertyIncome":5000.99,
-      |            "foreignTaxTakenOff":5000.99,
-      |            "specialWithholdingTaxOrUKTaxPaid":5000.99
+      |            "foreignTaxCreditRelief":true,
+      |            "premiumsOfLeaseGrant":884.72,
+      |            "otherPropertyIncome":7713.09,
+      |            "foreignTaxPaidOrDeducted":884.12,
+      |            "specialWithholdingTaxOrUkTaxPaid":847.72
       |         },
-      |         "expenditure":{
-      |            "premisesRunningCosts":5000.99,
-      |            "repairsAndMaintenance":5000.99,
+      |         "expenses":{
+      |            "premisesRunningCosts":129.35,
+      |            "repairsAndMaintenance":7490.32,
       |            "financialCosts":5000.99,
-      |            "professionalFees":5000.99,
-      |            "costsOfServices":5000.99,
-      |            "travelCosts":5000.99,
-      |            "residentialFinancialCost":5000.99,
-      |            "broughtFwdResidentialFinancialCost":5000.99,
-      |            "other":5000.99
+      |            "professionalFees":847.90,
+      |            "travelCosts":69.20,
+      |            "costOfServices":478.23,
+      |            "residentialFinancialCost":879.28,
+      |            "broughtFwdResidentialFinancialCost":846.13,
+      |            "other":138.92
       |         }
       |      }
       |   ]
@@ -77,45 +77,31 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec {
   private val requestBodyConsolidationExpenseJson = Json.parse(
     """
       |{
-      |   "fromDate":"2020-01-01",
-      |   "toDate":"2020-01-31",
+      |   "fromDate":"2020-03-29",
+      |   "toDate":"2021-03-29",
       |   "foreignFhlEea":{
       |      "income":{
-      |         "rentAmount":5000.99
+      |         "rentAmount":381.21
       |      },
-      |      "expenditure":{
-      |         "premisesRunningCosts":5000.99,
-      |         "repairsAndMaintenance":5000.99,
-      |         "financialCosts":5000.99,
-      |         "professionalFees":5000.99,
-      |         "costsOfServices":5000.99,
-      |         "travelCosts":5000.99,
-      |         "other":5000.99
+      |      "expenses":{
+      |         "consolidatedExpenses":993.31
       |      }
       |   },
-      |   "foreignProperty":[
+      |   "foreignNonFhlProperty":[
       |      {
-      |         "countryCode":"FRA",
+      |         "countryCode":"AFG",
       |         "income":{
       |            "rentIncome":{
-      |               "rentAmount":5000.99
+      |               "rentAmount":4882.23
       |            },
-      |            "foreignTaxCreditRelief":false,
-      |            "premiumOfLeaseGrant":5000.99,
-      |            "otherPropertyIncome":5000.99,
-      |            "foreignTaxTakenOff":5000.99,
-      |            "specialWithholdingTaxOrUKTaxPaid":5000.99
+      |            "foreignTaxCreditRelief":true,
+      |            "premiumsOfLeaseGrant":884.72,
+      |            "otherPropertyIncome":7713.09,
+      |            "foreignTaxPaidOrDeducted":884.12,
+      |            "specialWithholdingTaxOrUkTaxPaid":847.72
       |         },
-      |         "expenditure":{
-      |            "premisesRunningCosts":5000.99,
-      |            "repairsAndMaintenance":5000.99,
-      |            "financialCosts":5000.99,
-      |            "professionalFees":5000.99,
-      |            "costsOfServices":5000.99,
-      |            "travelCosts":5000.99,
-      |            "residentialFinancialCost":5000.99,
-      |            "broughtFwdResidentialFinancialCost":5000.99,
-      |            "other":5000.99
+      |         "expenses":{
+      |            "consolidatedExpenses":129.35
       |         }
       |      }
       |   ]
@@ -147,13 +133,13 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec {
             |}
             |""".stripMargin))) shouldBe Nil
       }
-      "a minimal foreignProperty request is supplied" in {
+      "a minimal foreignNonFhlProperty request is supplied" in {
         validator.validate(CreateForeignPropertyPeriodSummaryRawData(validNino, validBusinessId, validTaxYear, Json.parse(
           """
             |{
             |  "fromDate": "2020-01-01",
             |  "toDate": "2020-01-31",
-            |  "foreignProperty": [
+            |  "foreignNonFhlProperty": [
             |    {
             |      "countryCode": "GBR",
             |      "income": {
@@ -186,21 +172,21 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec {
     "return TaxYearFormatError error" when {
       "an invalid taxYear is supplied" in {
         validator.validate(CreateForeignPropertyPeriodSummaryRawData(validNino, validBusinessId, "20231", requestBodyJson)) shouldBe
-          List(BusinessIdFormatError)
+          List(TaxYearFormatError)
       }
     }
 
     "return RuleTaxYearRangeInvalidError" when {
       "a taxYear with a range higher than 1 is supplied" in {
         validator.validate(CreateForeignPropertyPeriodSummaryRawData(validNino, validBusinessId, "2021-23", requestBodyJson)) shouldBe
-          List(BusinessIdFormatError)
+          List(RuleTaxYearRangeInvalidError)
       }
     }
 
     "return RuleTaxYearNotSupportedError" when {
       "a taxYear that's before 2021 is supplied" in {
         validator.validate(CreateForeignPropertyPeriodSummaryRawData(validNino, validBusinessId, "2020-21", requestBodyJson)) shouldBe
-          List(BusinessIdFormatError)
+          List(RuleTaxYearNotSupportedError)
       }
     }
 
@@ -216,49 +202,73 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec {
             |  "toDate": "2020-01-31",
             |  "foreignFhlEea": {}
             |}
-            |""".stripMargin))) shouldBe List(RuleIncorrectOrEmptyBodyError.copy(paths=Some(Seq("/foreignFhlEea/income"))))
+            |""".stripMargin))) shouldBe List(RuleIncorrectOrEmptyBodyError)
       }
-      "foreignFhlEea.expenditure is empty" in {
+      "foreignFhlEea.expenses is empty" in {
         validator.validate(CreateForeignPropertyPeriodSummaryRawData(validNino, validBusinessId, validTaxYear, Json.parse(
           """
             |{
             |  "fromDate": "2020-01-01",
             |  "toDate": "2020-01-31",
             |  "foreignFhlEea": {
-            |    "expenditure": {}
+            |    "expenses": {}
             |  }
             |}
-            |""".stripMargin))) shouldBe List(RuleIncorrectOrEmptyBodyError.copy(paths=Some(Seq("/foreignFhlEea/income"))))
+            |""".stripMargin))) shouldBe List(RuleIncorrectOrEmptyBodyError)
       }
-      "an empty foreignProperty is submitted" in {
+      "foreignFhlEea.income is empty" in {
+        validator.validate(CreateForeignPropertyPeriodSummaryRawData(validNino, validBusinessId, validTaxYear, Json.parse(
+          """
+            |{
+            |  "fromDate": "2020-01-01",
+            |  "toDate": "2020-01-31",
+            |  "foreignFhlEea": {
+            |    "income": {}
+            |  }
+            |}
+            |""".stripMargin))) shouldBe List(RuleIncorrectOrEmptyBodyError)
+      }
+      "an empty foreignNonFhlProperty is submitted" in {
         validator.validate(CreateForeignPropertyPeriodSummaryRawData(validNino, validBusinessId, validTaxYear, Json.parse(
           """{
             |  "fromDate": "2020-01-01",
             |  "toDate": "2020-01-31",
-            |  "foreignProperty": []
+            |  "foreignNonFhlProperty": []
             |}""".stripMargin))) shouldBe List(RuleIncorrectOrEmptyBodyError)
       }
-      "a foreignProperty array is submitted with an empty body in it" in {
+      "a foreignNonFhlProperty array is submitted with an empty body in it" in {
         validator.validate(CreateForeignPropertyPeriodSummaryRawData(validNino, validBusinessId, validTaxYear, Json.parse(
           """{
             |  "fromDate": "2020-01-01",
             |  "toDate": "2020-01-31",
-            |  "foreignProperty": [
+            |  "foreignNonFhlProperty": [
             |    {}
             |  ]
-            |}""".stripMargin))) shouldBe List(RuleIncorrectOrEmptyBodyError.copy(paths=Some(Seq("/foreignProperty/0/income", "/foreignProperty/0/countryCode"))))
+            |}""".stripMargin))) shouldBe List(RuleIncorrectOrEmptyBodyError.copy(paths=Some(Seq("/foreignNonFhlProperty/0/countryCode"))))
       }
-      "foreignProperty[].expenditure is empty" in {
+      "foreignNonFhlProperty[].expenses is empty" in {
         validator.validate(CreateForeignPropertyPeriodSummaryRawData(validNino, validBusinessId, validTaxYear, Json.parse(
           """{
             |  "fromDate": "2020-01-01",
             |  "toDate": "2020-01-31",
-            |  "foreignProperty": [
+            |  "foreignNonFhlProperty": [
             |    {
-            |      "expenditure": {}
+            |      "expenses": {}
             |    }
             |  ]
-            |}""".stripMargin))) shouldBe List(RuleIncorrectOrEmptyBodyError.copy(paths=Some(Seq("/foreignProperty/0/income", "/foreignProperty/0/countryCode"))))
+            |}""".stripMargin))) shouldBe List(RuleIncorrectOrEmptyBodyError.copy(paths=Some(Seq("/foreignNonFhlProperty/0/countryCode"))))
+      }
+      "foreignNonFhlProperty[].income is empty" in {
+        validator.validate(CreateForeignPropertyPeriodSummaryRawData(validNino, validBusinessId, validTaxYear, Json.parse(
+          """{
+            |  "fromDate": "2020-01-01",
+            |  "toDate": "2020-01-31",
+            |  "foreignNonFhlProperty": [
+            |    {
+            |      "income": {}
+            |    }
+            |  ]
+            |}""".stripMargin))) shouldBe List(RuleIncorrectOrEmptyBodyError.copy(paths=Some(Seq("/foreignNonFhlProperty/0/countryCode", "/foreignNonFhlProperty/0/income/foreignTaxCreditRelief"))))
       }
     }
 
@@ -268,44 +278,44 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec {
           """
             |{
             |   "fromDate":"01-01-2023",
-            |   "toDate":"2020-01-31",
+            |   "toDate":"2021-03-29",
             |   "foreignFhlEea":{
             |      "income":{
-            |         "rentAmount":5000.99
+            |         "rentAmount":381.21
             |      },
-            |      "expenditure":{
-            |         "premisesRunningCosts":5000.99,
-            |         "repairsAndMaintenance":5000.99,
-            |         "financialCosts":5000.99,
-            |         "professionalFees":5000.99,
-            |         "costsOfServices":5000.99,
-            |         "travelCosts":5000.99,
-            |         "other":5000.99
+            |      "expenses":{
+            |         "premisesRunningCosts":993.31,
+            |         "repairsAndMaintenance":8842.23,
+            |         "financialCosts":994,
+            |         "professionalFees":992.12,
+            |         "costOfServices":4620.23,
+            |         "travelCosts":774,
+            |         "other":984.41
             |      }
             |   },
-            |   "foreignProperty":[
+            |   "foreignNonFhlProperty":[
             |      {
-            |         "countryCode":"FRA",
+            |         "countryCode":"AFG",
             |         "income":{
             |            "rentIncome":{
-            |               "rentAmount":5000.99
+            |               "rentAmount":4882.23
             |            },
-            |            "foreignTaxCreditRelief":false,
-            |            "premiumOfLeaseGrant":5000.99,
-            |            "otherPropertyIncome":5000.99,
-            |            "foreignTaxTakenOff":5000.99,
-            |            "specialWithholdingTaxOrUKTaxPaid":5000.99
+            |            "foreignTaxCreditRelief":true,
+            |            "premiumsOfLeaseGrant":884.72,
+            |            "otherPropertyIncome":7713.09,
+            |            "foreignTaxPaidOrDeducted":884.12,
+            |            "specialWithholdingTaxOrUkTaxPaid":847.72
             |         },
-            |         "expenditure":{
-            |            "premisesRunningCosts":5000.99,
-            |            "repairsAndMaintenance":5000.99,
+            |         "expenses":{
+            |            "premisesRunningCosts":129.35,
+            |            "repairsAndMaintenance":7490.32,
             |            "financialCosts":5000.99,
-            |            "professionalFees":5000.99,
-            |            "costsOfServices":5000.99,
-            |            "travelCosts":5000.99,
-            |            "residentialFinancialCost":5000.99,
-            |            "broughtFwdResidentialFinancialCost":5000.99,
-            |            "other":5000.99
+            |            "professionalFees":847.90,
+            |            "travelCosts":69.20,
+            |            "costOfServices":478.23,
+            |            "residentialFinancialCost":879.28,
+            |            "broughtFwdResidentialFinancialCost":846.13,
+            |            "other":138.92
             |         }
             |      }
             |   ]
@@ -321,41 +331,41 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec {
             |   "toDate":"2020.10.01",
             |   "foreignFhlEea":{
             |      "income":{
-            |         "rentAmount":5000.99
+            |         "rentAmount":381.21
             |      },
-            |      "expenditure":{
-            |         "premisesRunningCosts":5000.99,
-            |         "repairsAndMaintenance":5000.99,
-            |         "financialCosts":5000.99,
-            |         "professionalFees":5000.99,
-            |         "costsOfServices":5000.99,
-            |         "travelCosts":5000.99,
-            |         "other":5000.99
+            |      "expenses":{
+            |         "premisesRunningCosts":993.31,
+            |         "repairsAndMaintenance":8842.23,
+            |         "financialCosts":994,
+            |         "professionalFees":992.12,
+            |         "costOfServices":4620.23,
+            |         "travelCosts":774,
+            |         "other":984.41
             |      }
             |   },
-            |   "foreignProperty":[
+            |   "foreignNonFhlProperty":[
             |      {
-            |         "countryCode":"FRA",
+            |         "countryCode":"AFG",
             |         "income":{
             |            "rentIncome":{
-            |               "rentAmount":5000.99
+            |               "rentAmount":4882.23
             |            },
-            |            "foreignTaxCreditRelief":false,
-            |            "premiumOfLeaseGrant":5000.99,
-            |            "otherPropertyIncome":5000.99,
-            |            "foreignTaxTakenOff":5000.99,
-            |            "specialWithholdingTaxOrUKTaxPaid":5000.99
+            |            "foreignTaxCreditRelief":true,
+            |            "premiumsOfLeaseGrant":884.72,
+            |            "otherPropertyIncome":7713.09,
+            |            "foreignTaxPaidOrDeducted":884.12,
+            |            "specialWithholdingTaxOrUkTaxPaid":847.72
             |         },
-            |         "expenditure":{
-            |            "premisesRunningCosts":5000.99,
-            |            "repairsAndMaintenance":5000.99,
+            |         "expenses":{
+            |            "premisesRunningCosts":129.35,
+            |            "repairsAndMaintenance":7490.32,
             |            "financialCosts":5000.99,
-            |            "professionalFees":5000.99,
-            |            "costsOfServices":5000.99,
-            |            "travelCosts":5000.99,
-            |            "residentialFinancialCost":5000.99,
-            |            "broughtFwdResidentialFinancialCost":5000.99,
-            |            "other":5000.99
+            |            "professionalFees":847.90,
+            |            "travelCosts":69.20,
+            |            "costOfServices":478.23,
+            |            "residentialFinancialCost":879.28,
+            |            "broughtFwdResidentialFinancialCost":846.13,
+            |            "other":138.92
             |         }
             |      }
             |   ]
@@ -372,41 +382,41 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec {
             |   "toDate":"2020-01-01",
             |   "foreignFhlEea":{
             |      "income":{
-            |         "rentAmount":5000.99
+            |         "rentAmount":381.21
             |      },
-            |      "expenditure":{
-            |         "premisesRunningCosts":5000.99,
-            |         "repairsAndMaintenance":5000.99,
-            |         "financialCosts":5000.99,
-            |         "professionalFees":5000.99,
-            |         "costsOfServices":5000.99,
-            |         "travelCosts":5000.99,
-            |         "other":5000.99
+            |      "expenses":{
+            |         "premisesRunningCosts":993.31,
+            |         "repairsAndMaintenance":8842.23,
+            |         "financialCosts":994,
+            |         "professionalFees":992.12,
+            |         "costOfServices":4620.23,
+            |         "travelCosts":774,
+            |         "other":984.41
             |      }
             |   },
-            |   "foreignProperty":[
+            |   "foreignNonFhlProperty":[
             |      {
-            |         "countryCode":"FRA",
+            |         "countryCode":"AFG",
             |         "income":{
             |            "rentIncome":{
-            |               "rentAmount":5000.99
+            |               "rentAmount":4882.23
             |            },
-            |            "foreignTaxCreditRelief":false,
-            |            "premiumOfLeaseGrant":5000.99,
-            |            "otherPropertyIncome":5000.99,
-            |            "foreignTaxTakenOff":5000.99,
-            |            "specialWithholdingTaxOrUKTaxPaid":5000.99
+            |            "foreignTaxCreditRelief":true,
+            |            "premiumsOfLeaseGrant":884.72,
+            |            "otherPropertyIncome":7713.09,
+            |            "foreignTaxPaidOrDeducted":884.12,
+            |            "specialWithholdingTaxOrUkTaxPaid":847.72
             |         },
-            |         "expenditure":{
-            |            "premisesRunningCosts":5000.99,
-            |            "repairsAndMaintenance":5000.99,
+            |         "expenses":{
+            |            "premisesRunningCosts":129.35,
+            |            "repairsAndMaintenance":7490.32,
             |            "financialCosts":5000.99,
-            |            "professionalFees":5000.99,
-            |            "costsOfServices":5000.99,
-            |            "travelCosts":5000.99,
-            |            "residentialFinancialCost":5000.99,
-            |            "broughtFwdResidentialFinancialCost":5000.99,
-            |            "other":5000.99
+            |            "professionalFees":847.90,
+            |            "travelCosts":69.20,
+            |            "costOfServices":478.23,
+            |            "residentialFinancialCost":879.28,
+            |            "broughtFwdResidentialFinancialCost":846.13,
+            |            "other":138.92
             |         }
             |      }
             |   ]
@@ -421,397 +431,411 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec {
         validator.validate(CreateForeignPropertyPeriodSummaryRawData(validNino, validBusinessId, validTaxYear, Json.parse(
           """
             |{
-            |  "fromDate": "2020-01-01",
-            |  "toDate": "2020-01-31",
-            |  "foreignFhlEea": {
-            |    "income": {
-            |      "rentAmount": 567.833
+            |   "fromDate":"2020-03-29",
+            |   "toDate":"2021-03-29",
+            |   "foreignFhlEea":{
+            |      "income":{
+            |         "rentAmount":381.211
             |      },
-            |    "expenditure": {
-            |      "premisesRunningCosts": 4567.98,
-            |      "repairsAndMaintenance": 98765.67,
-            |      "financialCosts": 4566.95,
-            |      "professionalFees": 23.65,
-            |      "costsOfServices": 4567.77,
-            |      "travelCosts": 456.77,
-            |      "other": 567.67
-            |    }
-            |
-            |  },
-            |  "foreignProperty": [{
-            |      "countryCode": "GBR",
-            |      "income": {
-            |        "rentIncome": {
-            |          "rentAmount": 34456.30
-            |        },
-            |        "foreignTaxCreditRelief": true,
-            |        "premiumOfLeaseGrant": 2543.43,
-            |        "otherPropertyIncome": 54325.30,
-            |        "foreignTaxTakenOff": 6543.01,
-            |        "specialWithholdingTaxOrUKTaxPaid": 643245.00
-            |      },
-            |      "expenditure": {
-            |        "premisesRunningCosts": 5635.43,
-            |        "repairsAndMaintenance": 3456.65,
-            |        "financialCosts": 34532.21,
-            |        "professionalFees": 32465.32,
-            |        "costsOfServices": 2567.21,
-            |        "travelCosts": 2345.76,
-            |        "other": 2425.11
+            |      "expenses":{
+            |         "premisesRunningCosts":993.31,
+            |         "repairsAndMaintenance":8842.23,
+            |         "financialCosts":994,
+            |         "professionalFees":992.12,
+            |         "costOfServices":4620.23,
+            |         "travelCosts":774,
+            |         "other":984.41
             |      }
-            |    }
-            |  ]
+            |   },
+            |   "foreignNonFhlProperty":[
+            |      {
+            |         "countryCode":"AFG",
+            |         "income":{
+            |            "rentIncome":{
+            |               "rentAmount":4882.23
+            |            },
+            |            "foreignTaxCreditRelief":true,
+            |            "premiumsOfLeaseGrant":884.72,
+            |            "otherPropertyIncome":7713.09,
+            |            "foreignTaxPaidOrDeducted":884.12,
+            |            "specialWithholdingTaxOrUkTaxPaid":847.72
+            |         },
+            |         "expenses":{
+            |            "premisesRunningCosts":129.35,
+            |            "repairsAndMaintenance":7490.32,
+            |            "financialCosts":5000.99,
+            |            "professionalFees":847.90,
+            |            "travelCosts":69.20,
+            |            "costOfServices":478.23,
+            |            "residentialFinancialCost":879.28,
+            |            "broughtFwdResidentialFinancialCost":846.13,
+            |            "other":138.92
+            |         }
+            |      }
+            |   ]
             |}
             |""".stripMargin))) shouldBe List(
           ValueFormatError.copy(paths = Some(Seq("/foreignFhlEea/income/rentAmount")))
         )
       }
-      "foreignFhlEea/expenditure/premisesRunningCosts is invalid" in {
+      "foreignFhlEea/expenses/premisesRunningCosts is invalid" in {
         validator.validate(CreateForeignPropertyPeriodSummaryRawData(validNino, validBusinessId, validTaxYear, Json.parse(
           """
             |{
-            |  "fromDate": "2020-01-01",
-            |  "toDate": "2020-01-31",
-            |  "foreignFhlEea": {
-            |    "income": {
-            |      "rentAmount": 567.83
+            |   "fromDate":"2020-03-29",
+            |   "toDate":"2021-03-29",
+            |   "foreignFhlEea":{
+            |      "income":{
+            |         "rentAmount":381.21
             |      },
-            |    "expenditure": {
-            |      "premisesRunningCosts": 4567.983,
-            |      "repairsAndMaintenance": 98765.67,
-            |      "financialCosts": 4566.95,
-            |      "professionalFees": 23.65,
-            |      "costsOfServices": 4567.77,
-            |      "travelCosts": 456.77,
-            |      "other": 567.67
-            |    }
-            |
-            |  },
-            |  "foreignProperty": [{
-            |      "countryCode": "GBR",
-            |      "income": {
-            |        "rentIncome": {
-            |          "rentAmount": 34456.30
-            |        },
-            |        "foreignTaxCreditRelief": true,
-            |        "premiumOfLeaseGrant": 2543.43,
-            |        "otherPropertyIncome": 54325.30,
-            |        "foreignTaxTakenOff": 6543.01,
-            |        "specialWithholdingTaxOrUKTaxPaid": 643245.00
-            |      },
-            |      "expenditure": {
-            |        "premisesRunningCosts": 5635.43,
-            |        "repairsAndMaintenance": 3456.65,
-            |        "financialCosts": 34532.21,
-            |        "professionalFees": 32465.32,
-            |        "costsOfServices": 2567.21,
-            |        "travelCosts": 2345.76,
-            |        "other": 2425.11
+            |      "expenses":{
+            |         "premisesRunningCosts":993.311,
+            |         "repairsAndMaintenance":8842.23,
+            |         "financialCosts":994,
+            |         "professionalFees":992.12,
+            |         "costOfServices":4620.23,
+            |         "travelCosts":774,
+            |         "other":984.41
             |      }
-            |    }
-            |  ]
+            |   },
+            |   "foreignNonFhlProperty":[
+            |      {
+            |         "countryCode":"AFG",
+            |         "income":{
+            |            "rentIncome":{
+            |               "rentAmount":4882.23
+            |            },
+            |            "foreignTaxCreditRelief":true,
+            |            "premiumsOfLeaseGrant":884.72,
+            |            "otherPropertyIncome":7713.09,
+            |            "foreignTaxPaidOrDeducted":884.12,
+            |            "specialWithholdingTaxOrUkTaxPaid":847.72
+            |         },
+            |         "expenses":{
+            |            "premisesRunningCosts":129.35,
+            |            "repairsAndMaintenance":7490.32,
+            |            "financialCosts":5000.99,
+            |            "professionalFees":847.90,
+            |            "travelCosts":69.20,
+            |            "costOfServices":478.23,
+            |            "residentialFinancialCost":879.28,
+            |            "broughtFwdResidentialFinancialCost":846.13,
+            |            "other":138.92
+            |         }
+            |      }
+            |   ]
             |}
             |""".stripMargin))) shouldBe List(
-          ValueFormatError.copy(paths = Some(Seq("/foreignFhlEea/expenditure/premisesRunningCosts")))
+          ValueFormatError.copy(paths = Some(Seq("/foreignFhlEea/expenses/premisesRunningCosts")))
         )
       }
-      "foreignFhlEea/expenditure/repairsAndMaintenance is invalid" in {
+      "foreignFhlEea/expenses/repairsAndMaintenance is invalid" in {
         validator.validate(CreateForeignPropertyPeriodSummaryRawData(validNino, validBusinessId, validTaxYear, Json.parse(
           """
             |{
-            |  "fromDate": "2020-01-01",
-            |  "toDate": "2020-01-31",
-            |  "foreignFhlEea": {
-            |    "income": {
-            |      "rentAmount": 567.83
+            |   "fromDate":"2020-03-29",
+            |   "toDate":"2021-03-29",
+            |   "foreignFhlEea":{
+            |      "income":{
+            |         "rentAmount":381.21
             |      },
-            |    "expenditure": {
-            |      "premisesRunningCosts": 4567.98,
-            |      "repairsAndMaintenance": 98765.673,
-            |      "financialCosts": 4566.95,
-            |      "professionalFees": 23.65,
-            |      "costsOfServices": 4567.77,
-            |      "travelCosts": 456.77,
-            |      "other": 567.67
-            |    }
-            |
-            |  },
-            |  "foreignProperty": [{
-            |      "countryCode": "GBR",
-            |      "income": {
-            |        "rentIncome": {
-            |          "rentAmount": 34456.30
-            |        },
-            |        "foreignTaxCreditRelief": true,
-            |        "premiumOfLeaseGrant": 2543.43,
-            |        "otherPropertyIncome": 54325.30,
-            |        "foreignTaxTakenOff": 6543.01,
-            |        "specialWithholdingTaxOrUKTaxPaid": 643245.00
-            |      },
-            |      "expenditure": {
-            |        "premisesRunningCosts": 5635.43,
-            |        "repairsAndMaintenance": 3456.65,
-            |        "financialCosts": 34532.21,
-            |        "professionalFees": 32465.32,
-            |        "costsOfServices": 2567.21,
-            |        "travelCosts": 2345.76,
-            |        "other": 2425.11
+            |      "expenses":{
+            |         "premisesRunningCosts":993.31,
+            |         "repairsAndMaintenance":8842.231,
+            |         "financialCosts":994,
+            |         "professionalFees":992.12,
+            |         "costOfServices":4620.23,
+            |         "travelCosts":774,
+            |         "other":984.41
             |      }
-            |    }
-            |  ]
+            |   },
+            |   "foreignNonFhlProperty":[
+            |      {
+            |         "countryCode":"AFG",
+            |         "income":{
+            |            "rentIncome":{
+            |               "rentAmount":4882.23
+            |            },
+            |            "foreignTaxCreditRelief":true,
+            |            "premiumsOfLeaseGrant":884.72,
+            |            "otherPropertyIncome":7713.09,
+            |            "foreignTaxPaidOrDeducted":884.12,
+            |            "specialWithholdingTaxOrUkTaxPaid":847.72
+            |         },
+            |         "expenses":{
+            |            "premisesRunningCosts":129.35,
+            |            "repairsAndMaintenance":7490.32,
+            |            "financialCosts":5000.99,
+            |            "professionalFees":847.90,
+            |            "travelCosts":69.20,
+            |            "costOfServices":478.23,
+            |            "residentialFinancialCost":879.28,
+            |            "broughtFwdResidentialFinancialCost":846.13,
+            |            "other":138.92
+            |         }
+            |      }
+            |   ]
             |}
             |""".stripMargin))) shouldBe List(
-          ValueFormatError.copy(paths = Some(Seq("/foreignFhlEea/expenditure/repairsAndMaintenance")))
+          ValueFormatError.copy(paths = Some(Seq("/foreignFhlEea/expenses/repairsAndMaintenance")))
         )
       }
-      "foreignFhlEea/expenditure/financialCosts is invalid" in {
+      "foreignFhlEea/expenses/financialCosts is invalid" in {
         validator.validate(CreateForeignPropertyPeriodSummaryRawData(validNino, validBusinessId, validTaxYear, Json.parse(
           """
             |{
-            |  "fromDate": "2020-01-01",
-            |  "toDate": "2020-01-31",
-            |  "foreignFhlEea": {
-            |    "income": {
-            |      "rentAmount": 567.83
+            |   "fromDate":"2020-03-29",
+            |   "toDate":"2021-03-29",
+            |   "foreignFhlEea":{
+            |      "income":{
+            |         "rentAmount":381.21
             |      },
-            |    "expenditure": {
-            |      "premisesRunningCosts": 4567.98,
-            |      "repairsAndMaintenance": 98765.67,
-            |      "financialCosts": 4566.953,
-            |      "professionalFees": 23.65,
-            |      "costsOfServices": 4567.77,
-            |      "travelCosts": 456.77,
-            |      "other": 567.67
-            |    }
-            |
-            |  },
-            |  "foreignProperty": [{
-            |      "countryCode": "GBR",
-            |      "income": {
-            |        "rentIncome": {
-            |          "rentAmount": 34456.30
-            |        },
-            |        "foreignTaxCreditRelief": true,
-            |        "premiumOfLeaseGrant": 2543.43,
-            |        "otherPropertyIncome": 54325.30,
-            |        "foreignTaxTakenOff": 6543.01,
-            |        "specialWithholdingTaxOrUKTaxPaid": 643245.00
-            |      },
-            |      "expenditure": {
-            |        "premisesRunningCosts": 5635.43,
-            |        "repairsAndMaintenance": 3456.65,
-            |        "financialCosts": 34532.21,
-            |        "professionalFees": 32465.32,
-            |        "costsOfServices": 2567.21,
-            |        "travelCosts": 2345.76,
-            |        "other": 2425.11
+            |      "expenses":{
+            |         "premisesRunningCosts":993.31,
+            |         "repairsAndMaintenance":8842.23,
+            |         "financialCosts":994.231,
+            |         "professionalFees":992.12,
+            |         "costOfServices":4620.23,
+            |         "travelCosts":774,
+            |         "other":984.41
             |      }
-            |    }
-            |  ]
+            |   },
+            |   "foreignNonFhlProperty":[
+            |      {
+            |         "countryCode":"AFG",
+            |         "income":{
+            |            "rentIncome":{
+            |               "rentAmount":4882.23
+            |            },
+            |            "foreignTaxCreditRelief":true,
+            |            "premiumsOfLeaseGrant":884.72,
+            |            "otherPropertyIncome":7713.09,
+            |            "foreignTaxPaidOrDeducted":884.12,
+            |            "specialWithholdingTaxOrUkTaxPaid":847.72
+            |         },
+            |         "expenses":{
+            |            "premisesRunningCosts":129.35,
+            |            "repairsAndMaintenance":7490.32,
+            |            "financialCosts":5000.99,
+            |            "professionalFees":847.90,
+            |            "travelCosts":69.20,
+            |            "costOfServices":478.23,
+            |            "residentialFinancialCost":879.28,
+            |            "broughtFwdResidentialFinancialCost":846.13,
+            |            "other":138.92
+            |         }
+            |      }
+            |   ]
             |}
             |""".stripMargin))) shouldBe List(
-          ValueFormatError.copy(paths = Some(Seq("/foreignFhlEea/expenditure/financialCosts")))
+          ValueFormatError.copy(paths = Some(Seq("/foreignFhlEea/expenses/financialCosts")))
         )
       }
-      "foreignFhlEea/expenditure/professionalFees is invalid" in {
+      "foreignFhlEea/expenses/professionalFees is invalid" in {
         validator.validate(CreateForeignPropertyPeriodSummaryRawData(validNino, validBusinessId, validTaxYear, Json.parse(
           """
             |{
-            |  "fromDate": "2020-01-01",
-            |  "toDate": "2020-01-31",
-            |  "fromDate": "2020-01-01",
-            |  "toDate": "2020-01-31",
-            |  "foreignFhlEea": {
-            |    "income": {
-            |      "rentAmount": 567.83
+            |   "fromDate":"2020-03-29",
+            |   "toDate":"2021-03-29",
+            |   "foreignFhlEea":{
+            |      "income":{
+            |         "rentAmount":381.21
             |      },
-            |    "expenditure": {
-            |      "premisesRunningCosts": 4567.98,
-            |      "repairsAndMaintenance": 98765.67,
-            |      "financialCosts": 4566.95,
-            |      "professionalFees": 23.653,
-            |      "costsOfServices": 4567.77,
-            |      "travelCosts": 456.77,
-            |      "other": 567.67
-            |    }
-            |
-            |  },
-            |  "foreignProperty": [{
-            |      "countryCode": "GBR",
-            |      "income": {
-            |        "rentIncome": {
-            |          "rentAmount": 34456.30
-            |        },
-            |        "foreignTaxCreditRelief": true,
-            |        "premiumOfLeaseGrant": 2543.43,
-            |        "otherPropertyIncome": 54325.30,
-            |        "foreignTaxTakenOff": 6543.01,
-            |        "specialWithholdingTaxOrUKTaxPaid": 643245.00
-            |      },
-            |      "expenditure": {
-            |        "premisesRunningCosts": 5635.43,
-            |        "repairsAndMaintenance": 3456.65,
-            |        "financialCosts": 34532.21,
-            |        "professionalFees": 32465.32,
-            |        "costsOfServices": 2567.21,
-            |        "travelCosts": 2345.76,
-            |        "other": 2425.11
+            |      "expenses":{
+            |         "premisesRunningCosts":993.31,
+            |         "repairsAndMaintenance":8842.23,
+            |         "financialCosts":994,
+            |         "professionalFees":992.112,
+            |         "costOfServices":4620.23,
+            |         "travelCosts":774,
+            |         "other":984.41
             |      }
-            |    }
-            |  ]
+            |   },
+            |   "foreignNonFhlProperty":[
+            |      {
+            |         "countryCode":"AFG",
+            |         "income":{
+            |            "rentIncome":{
+            |               "rentAmount":4882.23
+            |            },
+            |            "foreignTaxCreditRelief":true,
+            |            "premiumsOfLeaseGrant":884.72,
+            |            "otherPropertyIncome":7713.09,
+            |            "foreignTaxPaidOrDeducted":884.12,
+            |            "specialWithholdingTaxOrUkTaxPaid":847.72
+            |         },
+            |         "expenses":{
+            |            "premisesRunningCosts":129.35,
+            |            "repairsAndMaintenance":7490.32,
+            |            "financialCosts":5000.99,
+            |            "professionalFees":847.90,
+            |            "travelCosts":69.20,
+            |            "costOfServices":478.23,
+            |            "residentialFinancialCost":879.28,
+            |            "broughtFwdResidentialFinancialCost":846.13,
+            |            "other":138.92
+            |         }
+            |      }
+            |   ]
             |}
             |""".stripMargin))) shouldBe List(
-          ValueFormatError.copy(paths = Some(Seq("/foreignFhlEea/expenditure/professionalFees")))
+          ValueFormatError.copy(paths = Some(Seq("/foreignFhlEea/expenses/professionalFees")))
         )
       }
-      "foreignFhlEea/expenditure/costsOfServices is invalid" in {
+      "foreignFhlEea/expenses/costOfServices is invalid" in {
         validator.validate(CreateForeignPropertyPeriodSummaryRawData(validNino, validBusinessId, validTaxYear, Json.parse(
           """
             |{
-            |  "fromDate": "2020-01-01",
-            |  "toDate": "2020-01-31",
-            |  "foreignFhlEea": {
-            |    "income": {
-            |      "rentAmount": 567.83
+            |   "fromDate":"2020-03-29",
+            |   "toDate":"2021-03-29",
+            |   "foreignFhlEea":{
+            |      "income":{
+            |         "rentAmount":381.21
             |      },
-            |    "expenditure": {
-            |      "premisesRunningCosts": 4567.98,
-            |      "repairsAndMaintenance": 98765.67,
-            |      "financialCosts": 4566.95,
-            |      "professionalFees": 23.65,
-            |      "costsOfServices": 4567.773,
-            |      "travelCosts": 456.77,
-            |      "other": 567.67
-            |    }
-            |
-            |  },
-            |  "foreignProperty": [{
-            |      "countryCode": "GBR",
-            |      "income": {
-            |        "rentIncome": {
-            |          "rentAmount": 34456.30
-            |        },
-            |        "foreignTaxCreditRelief": true,
-            |        "premiumOfLeaseGrant": 2543.43,
-            |        "otherPropertyIncome": 54325.30,
-            |        "foreignTaxTakenOff": 6543.01,
-            |        "specialWithholdingTaxOrUKTaxPaid": 643245.00
-            |      },
-            |      "expenditure": {
-            |        "premisesRunningCosts": 5635.43,
-            |        "repairsAndMaintenance": 3456.65,
-            |        "financialCosts": 34532.21,
-            |        "professionalFees": 32465.32,
-            |        "costsOfServices": 2567.21,
-            |        "travelCosts": 2345.76,
-            |        "other": 2425.11
+            |      "expenses":{
+            |         "premisesRunningCosts":993.31,
+            |         "repairsAndMaintenance":8842.23,
+            |         "financialCosts":994,
+            |         "professionalFees":992.12,
+            |         "costOfServices":4620.231,
+            |         "travelCosts":774,
+            |         "other":984.41
             |      }
-            |    }
-            |  ]
+            |   },
+            |   "foreignNonFhlProperty":[
+            |      {
+            |         "countryCode":"AFG",
+            |         "income":{
+            |            "rentIncome":{
+            |               "rentAmount":4882.23
+            |            },
+            |            "foreignTaxCreditRelief":true,
+            |            "premiumsOfLeaseGrant":884.72,
+            |            "otherPropertyIncome":7713.09,
+            |            "foreignTaxPaidOrDeducted":884.12,
+            |            "specialWithholdingTaxOrUkTaxPaid":847.72
+            |         },
+            |         "expenses":{
+            |            "premisesRunningCosts":129.35,
+            |            "repairsAndMaintenance":7490.32,
+            |            "financialCosts":5000.99,
+            |            "professionalFees":847.90,
+            |            "travelCosts":69.20,
+            |            "costOfServices":478.23,
+            |            "residentialFinancialCost":879.28,
+            |            "broughtFwdResidentialFinancialCost":846.13,
+            |            "other":138.92
+            |         }
+            |      }
+            |   ]
             |}
             |""".stripMargin))) shouldBe List(
-          ValueFormatError.copy(paths = Some(Seq("/foreignFhlEea/expenditure/costsOfServices")))
+          ValueFormatError.copy(paths = Some(Seq("/foreignFhlEea/expenses/costOfServices")))
         )
       }
-      "foreignFhlEea/expenditure/travelCosts is invalid" in {
+      "foreignFhlEea/expenses/travelCosts is invalid" in {
         validator.validate(CreateForeignPropertyPeriodSummaryRawData(validNino, validBusinessId, validTaxYear, Json.parse(
           """
             |{
-            |  "fromDate": "2020-01-01",
-            |  "toDate": "2020-01-31",
-            |  "foreignFhlEea": {
-            |    "income": {
-            |      "rentAmount": 567.83
+            |   "fromDate":"2020-03-29",
+            |   "toDate":"2021-03-29",
+            |   "foreignFhlEea":{
+            |      "income":{
+            |         "rentAmount":381.21
             |      },
-            |    "expenditure": {
-            |      "premisesRunningCosts": 4567.98,
-            |      "repairsAndMaintenance": 98765.67,
-            |      "financialCosts": 4566.95,
-            |      "professionalFees": 23.65,
-            |      "costsOfServices": 4567.77,
-            |      "travelCosts": 456.773,
-            |      "other": 567.67
-            |    }
-            |
-            |  },
-            |  "foreignProperty": [{
-            |      "countryCode": "GBR",
-            |      "income": {
-            |        "rentIncome": {
-            |          "rentAmount": 34456.30
-            |        },
-            |        "foreignTaxCreditRelief": true,
-            |        "premiumOfLeaseGrant": 2543.43,
-            |        "otherPropertyIncome": 54325.30,
-            |        "foreignTaxTakenOff": 6543.01,
-            |        "specialWithholdingTaxOrUKTaxPaid": 643245.00
-            |      },
-            |      "expenditure": {
-            |        "premisesRunningCosts": 5635.43,
-            |        "repairsAndMaintenance": 3456.65,
-            |        "financialCosts": 34532.21,
-            |        "professionalFees": 32465.32,
-            |        "costsOfServices": 2567.21,
-            |        "travelCosts": 2345.76,
-            |        "other": 2425.11
+            |      "expenses":{
+            |         "premisesRunningCosts":993.31,
+            |         "repairsAndMaintenance":8842.23,
+            |         "financialCosts":994,
+            |         "professionalFees":992.12,
+            |         "costOfServices":4620.23,
+            |         "travelCosts":774.321,
+            |         "other":984.41
             |      }
-            |    }
-            |  ]
+            |   },
+            |   "foreignNonFhlProperty":[
+            |      {
+            |         "countryCode":"AFG",
+            |         "income":{
+            |            "rentIncome":{
+            |               "rentAmount":4882.23
+            |            },
+            |            "foreignTaxCreditRelief":true,
+            |            "premiumsOfLeaseGrant":884.72,
+            |            "otherPropertyIncome":7713.09,
+            |            "foreignTaxPaidOrDeducted":884.12,
+            |            "specialWithholdingTaxOrUkTaxPaid":847.72
+            |         },
+            |         "expenses":{
+            |            "premisesRunningCosts":129.35,
+            |            "repairsAndMaintenance":7490.32,
+            |            "financialCosts":5000.99,
+            |            "professionalFees":847.90,
+            |            "travelCosts":69.20,
+            |            "costOfServices":478.23,
+            |            "residentialFinancialCost":879.28,
+            |            "broughtFwdResidentialFinancialCost":846.13,
+            |            "other":138.92
+            |         }
+            |      }
+            |   ]
             |}
             |""".stripMargin))) shouldBe List(
-          ValueFormatError.copy(paths = Some(Seq("/foreignFhlEea/expenditure/travelCosts")))
+          ValueFormatError.copy(paths = Some(Seq("/foreignFhlEea/expenses/travelCosts")))
         )
       }
-      "foreignFhlEea/expenditure/other is invalid" in {
+      "foreignFhlEea/expenses/other is invalid" in {
         validator.validate(CreateForeignPropertyPeriodSummaryRawData(validNino, validBusinessId, validTaxYear, Json.parse(
           """
             |{
-            |  "fromDate": "2020-01-01",
-            |  "toDate": "2020-01-31",
-            |  "foreignFhlEea": {
-            |    "income": {
-            |      "rentAmount": 567.83
+            |   "fromDate":"2020-03-29",
+            |   "toDate":"2021-03-29",
+            |   "foreignFhlEea":{
+            |      "income":{
+            |         "rentAmount":381.21
             |      },
-            |    "expenditure": {
-            |      "premisesRunningCosts": 4567.98,
-            |      "repairsAndMaintenance": 98765.67,
-            |      "financialCosts": 4566.95,
-            |      "professionalFees": 23.65,
-            |      "costsOfServices": 4567.77,
-            |      "travelCosts": 456.77,
-            |      "other": 567.673
-            |    }
-            |
-            |  },
-            |  "foreignProperty": [{
-            |      "countryCode": "GBR",
-            |      "income": {
-            |        "rentIncome": {
-            |          "rentAmount": 34456.30
-            |        },
-            |        "foreignTaxCreditRelief": true,
-            |        "premiumOfLeaseGrant": 2543.43,
-            |        "otherPropertyIncome": 54325.30,
-            |        "foreignTaxTakenOff": 6543.01,
-            |        "specialWithholdingTaxOrUKTaxPaid": 643245.00
-            |      },
-            |      "expenditure": {
-            |        "premisesRunningCosts": 5635.43,
-            |        "repairsAndMaintenance": 3456.65,
-            |        "financialCosts": 34532.21,
-            |        "professionalFees": 32465.32,
-            |        "costsOfServices": 2567.21,
-            |        "travelCosts": 2345.76,
-            |        "other": 2425.11
+            |      "expenses":{
+            |         "premisesRunningCosts":993.31,
+            |         "repairsAndMaintenance":8842.23,
+            |         "financialCosts":994,
+            |         "professionalFees":992.12,
+            |         "costOfServices":4620.23,
+            |         "travelCosts":774,
+            |         "other":984.411
             |      }
-            |    }
-            |  ]
+            |   },
+            |   "foreignNonFhlProperty":[
+            |      {
+            |         "countryCode":"AFG",
+            |         "income":{
+            |            "rentIncome":{
+            |               "rentAmount":4882.23
+            |            },
+            |            "foreignTaxCreditRelief":true,
+            |            "premiumsOfLeaseGrant":884.72,
+            |            "otherPropertyIncome":7713.09,
+            |            "foreignTaxPaidOrDeducted":884.12,
+            |            "specialWithholdingTaxOrUkTaxPaid":847.72
+            |         },
+            |         "expenses":{
+            |            "premisesRunningCosts":129.35,
+            |            "repairsAndMaintenance":7490.32,
+            |            "financialCosts":5000.99,
+            |            "professionalFees":847.90,
+            |            "travelCosts":69.20,
+            |            "costOfServices":478.23,
+            |            "residentialFinancialCost":879.28,
+            |            "broughtFwdResidentialFinancialCost":846.13,
+            |            "other":138.92
+            |         }
+            |      }
+            |   ]
             |}
             |""".stripMargin))) shouldBe List(
-          ValueFormatError.copy(paths = Some(Seq("/foreignFhlEea/expenditure/other")))
+          ValueFormatError.copy(paths = Some(Seq("/foreignFhlEea/expenses/other")))
         )
       }
-      "foreignFhlEea/expenditure/consolidatedExpenses is invalid" in {
+      "foreignFhlEea/expenses/consolidatedExpenses is invalid" in {
         validator.validate(CreateForeignPropertyPeriodSummaryRawData(validNino, validBusinessId, validTaxYear, Json.parse(
           """
             |{
@@ -821,7 +845,7 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec {
             |    "income": {
             |      "rentAmount": 567.83
             |      },
-            |    "expenditure": {
+            |    "expenses": {
             |      "consolidatedExpenses": 567.673
             |    }
             |
@@ -838,7 +862,7 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec {
             |        "foreignTaxTakenOff": 6543.01,
             |        "specialWithholdingTaxOrUKTaxPaid": 643245.00
             |      },
-            |      "expenditure": {
+            |      "expenses": {
             |        "premisesRunningCosts": 5635.43,
             |        "repairsAndMaintenance": 3456.65,
             |        "financialCosts": 34532.21,
@@ -851,598 +875,622 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec {
             |  ]
             |}
             |""".stripMargin))) shouldBe List(
-          ValueFormatError.copy(paths = Some(Seq("/foreignFhlEea/expenditure/consolidatedExpenses")))
+          ValueFormatError.copy(paths = Some(Seq("/foreignFhlEea/expenses/consolidatedExpenses")))
         )
       }
-      "foreignProperty/0/income/rentIncome/rentAmount is invalid" in {
+      "foreignNonFhlProperty/0/income/rentIncome/rentAmount is invalid" in {
         validator.validate(CreateForeignPropertyPeriodSummaryRawData(validNino, validBusinessId, validTaxYear, Json.parse(
           """
             |{
-            |  "fromDate": "2020-01-01",
-            |  "toDate": "2020-01-31",
-            |  "foreignFhlEea": {
-            |    "income": {
-            |      "rentAmount": 567.83
+            |   "fromDate":"2020-03-29",
+            |   "toDate":"2021-03-29",
+            |   "foreignFhlEea":{
+            |      "income":{
+            |         "rentAmount":381.21
             |      },
-            |    "expenditure": {
-            |      "premisesRunningCosts": 4567.98,
-            |      "repairsAndMaintenance": 98765.67,
-            |      "financialCosts": 4566.95,
-            |      "professionalFees": 23.65,
-            |      "costsOfServices": 4567.77,
-            |      "travelCosts": 456.77,
-            |      "other": 567.67
-            |    }
-            |
-            |  },
-            |  "foreignProperty": [{
-            |      "countryCode": "GBR",
-            |      "income": {
-            |        "rentIncome": {
-            |          "rentAmount": 34456.303
-            |        },
-            |        "foreignTaxCreditRelief": true,
-            |        "premiumOfLeaseGrant": 2543.43,
-            |        "otherPropertyIncome": 54325.30,
-            |        "foreignTaxTakenOff": 6543.01,
-            |        "specialWithholdingTaxOrUKTaxPaid": 643245.00
-            |      },
-            |      "expenditure": {
-            |        "premisesRunningCosts": 5635.43,
-            |        "repairsAndMaintenance": 3456.65,
-            |        "financialCosts": 34532.21,
-            |        "professionalFees": 32465.32,
-            |        "costsOfServices": 2567.21,
-            |        "travelCosts": 2345.76,
-            |        "other": 2425.11
+            |      "expenses":{
+            |         "premisesRunningCosts":993.31,
+            |         "repairsAndMaintenance":8842.23,
+            |         "financialCosts":994,
+            |         "professionalFees":992.12,
+            |         "costOfServices":4620.23,
+            |         "travelCosts":774,
+            |         "other":984.41
             |      }
-            |    }
-            |  ]
+            |   },
+            |   "foreignNonFhlProperty":[
+            |      {
+            |         "countryCode":"AFG",
+            |         "income":{
+            |            "rentIncome":{
+            |               "rentAmount":4882.231
+            |            },
+            |            "foreignTaxCreditRelief":true,
+            |            "premiumsOfLeaseGrant":884.72,
+            |            "otherPropertyIncome":7713.09,
+            |            "foreignTaxPaidOrDeducted":884.12,
+            |            "specialWithholdingTaxOrUkTaxPaid":847.72
+            |         },
+            |         "expenses":{
+            |            "premisesRunningCosts":129.35,
+            |            "repairsAndMaintenance":7490.32,
+            |            "financialCosts":5000.99,
+            |            "professionalFees":847.90,
+            |            "travelCosts":69.20,
+            |            "costOfServices":478.23,
+            |            "residentialFinancialCost":879.28,
+            |            "broughtFwdResidentialFinancialCost":846.13,
+            |            "other":138.92
+            |         }
+            |      }
+            |   ]
             |}
             |""".stripMargin))) shouldBe List(
-          ValueFormatError.copy(paths = Some(Seq("/foreignProperty/0/income/rentIncome/rentAmount")))
+          ValueFormatError.copy(paths = Some(Seq("/foreignNonFhlProperty/0/income/rentIncome/rentAmount")))
         )
       }
-      "foreignProperty/0/income/premiumOfLeaseGrant is invalid" in {
+      "foreignNonFhlProperty/0/income/premiumsOfLeaseGrant is invalid" in {
         validator.validate(CreateForeignPropertyPeriodSummaryRawData(validNino, validBusinessId, validTaxYear, Json.parse(
           """
             |{
-            |  "fromDate": "2020-01-01",
-            |  "toDate": "2020-01-31",
-            |  "foreignFhlEea": {
-            |    "income": {
-            |      "rentAmount": 567.83
+            |   "fromDate":"2020-03-29",
+            |   "toDate":"2021-03-29",
+            |   "foreignFhlEea":{
+            |      "income":{
+            |         "rentAmount":381.21
             |      },
-            |    "expenditure": {
-            |      "premisesRunningCosts": 4567.98,
-            |      "repairsAndMaintenance": 98765.67,
-            |      "financialCosts": 4566.95,
-            |      "professionalFees": 23.65,
-            |      "costsOfServices": 4567.77,
-            |      "travelCosts": 456.77,
-            |      "other": 567.67
-            |    }
-            |
-            |  },
-            |  "foreignProperty": [{
-            |      "countryCode": "GBR",
-            |      "income": {
-            |        "rentIncome": {
-            |          "rentAmount": 34456.30
-            |        },
-            |        "foreignTaxCreditRelief": true,
-            |        "premiumOfLeaseGrant": 2543.433,
-            |        "otherPropertyIncome": 54325.30,
-            |        "foreignTaxTakenOff": 6543.01,
-            |        "specialWithholdingTaxOrUKTaxPaid": 643245.00
-            |      },
-            |      "expenditure": {
-            |        "premisesRunningCosts": 5635.43,
-            |        "repairsAndMaintenance": 3456.65,
-            |        "financialCosts": 34532.21,
-            |        "professionalFees": 32465.32,
-            |        "costsOfServices": 2567.21,
-            |        "travelCosts": 2345.76,
-            |        "other": 2425.11
+            |      "expenses":{
+            |         "premisesRunningCosts":993.31,
+            |         "repairsAndMaintenance":8842.23,
+            |         "financialCosts":994,
+            |         "professionalFees":992.12,
+            |         "costOfServices":4620.23,
+            |         "travelCosts":774,
+            |         "other":984.41
             |      }
-            |    }
-            |  ]
+            |   },
+            |   "foreignNonFhlProperty":[
+            |      {
+            |         "countryCode":"AFG",
+            |         "income":{
+            |            "rentIncome":{
+            |               "rentAmount":4882.23
+            |            },
+            |            "foreignTaxCreditRelief":true,
+            |            "premiumsOfLeaseGrant":884.721,
+            |            "otherPropertyIncome":7713.09,
+            |            "foreignTaxPaidOrDeducted":884.12,
+            |            "specialWithholdingTaxOrUkTaxPaid":847.72
+            |         },
+            |         "expenses":{
+            |            "premisesRunningCosts":129.35,
+            |            "repairsAndMaintenance":7490.32,
+            |            "financialCosts":5000.99,
+            |            "professionalFees":847.90,
+            |            "travelCosts":69.20,
+            |            "costOfServices":478.23,
+            |            "residentialFinancialCost":879.28,
+            |            "broughtFwdResidentialFinancialCost":846.13,
+            |            "other":138.92
+            |         }
+            |      }
+            |   ]
             |}
             |""".stripMargin))) shouldBe List(
-          ValueFormatError.copy(paths = Some(Seq("/foreignProperty/0/income/premiumOfLeaseGrant")))
+          ValueFormatError.copy(paths = Some(Seq("/foreignNonFhlProperty/0/income/premiumsOfLeaseGrant")))
         )
       }
-      "foreignProperty/0/income/otherPropertyIncome is invalid" in {
+      "foreignNonFhlProperty/0/income/otherPropertyIncome is invalid" in {
         validator.validate(CreateForeignPropertyPeriodSummaryRawData(validNino, validBusinessId, validTaxYear, Json.parse(
           """
             |{
-            |  "fromDate": "2020-01-01",
-            |  "toDate": "2020-01-31",
-            |  "foreignFhlEea": {
-            |    "income": {
-            |      "rentAmount": 567.83
+            |   "fromDate":"2020-03-29",
+            |   "toDate":"2021-03-29",
+            |   "foreignFhlEea":{
+            |      "income":{
+            |         "rentAmount":381.21
             |      },
-            |    "expenditure": {
-            |      "premisesRunningCosts": 4567.98,
-            |      "repairsAndMaintenance": 98765.67,
-            |      "financialCosts": 4566.95,
-            |      "professionalFees": 23.65,
-            |      "costsOfServices": 4567.77,
-            |      "travelCosts": 456.77,
-            |      "other": 567.67
-            |    }
-            |
-            |  },
-            |  "foreignProperty": [{
-            |      "countryCode": "GBR",
-            |      "income": {
-            |        "rentIncome": {
-            |          "rentAmount": 34456.30
-            |        },
-            |        "foreignTaxCreditRelief": true,
-            |        "premiumOfLeaseGrant": 2543.43,
-            |        "otherPropertyIncome": 54325.303,
-            |        "foreignTaxTakenOff": 6543.01,
-            |        "specialWithholdingTaxOrUKTaxPaid": 643245.00
-            |      },
-            |      "expenditure": {
-            |        "premisesRunningCosts": 5635.43,
-            |        "repairsAndMaintenance": 3456.65,
-            |        "financialCosts": 34532.21,
-            |        "professionalFees": 32465.32,
-            |        "costsOfServices": 2567.21,
-            |        "travelCosts": 2345.76,
-            |        "other": 2425.11
+            |      "expenses":{
+            |         "premisesRunningCosts":993.31,
+            |         "repairsAndMaintenance":8842.23,
+            |         "financialCosts":994,
+            |         "professionalFees":992.12,
+            |         "costOfServices":4620.23,
+            |         "travelCosts":774,
+            |         "other":984.41
             |      }
-            |    }
-            |  ]
+            |   },
+            |   "foreignNonFhlProperty":[
+            |      {
+            |         "countryCode":"AFG",
+            |         "income":{
+            |            "rentIncome":{
+            |               "rentAmount":4882.23
+            |            },
+            |            "foreignTaxCreditRelief":true,
+            |            "premiumsOfLeaseGrant":884.72,
+            |            "otherPropertyIncome":7713.091,
+            |            "foreignTaxPaidOrDeducted":884.12,
+            |            "specialWithholdingTaxOrUkTaxPaid":847.72
+            |         },
+            |         "expenses":{
+            |            "premisesRunningCosts":129.35,
+            |            "repairsAndMaintenance":7490.32,
+            |            "financialCosts":5000.99,
+            |            "professionalFees":847.90,
+            |            "travelCosts":69.20,
+            |            "costOfServices":478.23,
+            |            "residentialFinancialCost":879.28,
+            |            "broughtFwdResidentialFinancialCost":846.13,
+            |            "other":138.92
+            |         }
+            |      }
+            |   ]
             |}
             |""".stripMargin))) shouldBe List(
-          ValueFormatError.copy(paths = Some(Seq("/foreignProperty/0/income/otherPropertyIncome")))
+          ValueFormatError.copy(paths = Some(Seq("/foreignNonFhlProperty/0/income/otherPropertyIncome")))
         )
       }
-      "foreignProperty/0/income/foreignTaxTakenOff is invalid" in {
+      "foreignNonFhlProperty/0/income/foreignTaxPaidOrDeducted is invalid" in {
         validator.validate(CreateForeignPropertyPeriodSummaryRawData(validNino, validBusinessId, validTaxYear, Json.parse(
           """
             |{
-            |  "fromDate": "2020-01-01",
-            |  "toDate": "2020-01-31",
-            |  "foreignFhlEea": {
-            |    "income": {
-            |      "rentAmount": 567.83
+            |   "fromDate":"2020-03-29",
+            |   "toDate":"2021-03-29",
+            |   "foreignFhlEea":{
+            |      "income":{
+            |         "rentAmount":381.21
             |      },
-            |    "expenditure": {
-            |      "premisesRunningCosts": 4567.98,
-            |      "repairsAndMaintenance": 98765.67,
-            |      "financialCosts": 4566.95,
-            |      "professionalFees": 23.65,
-            |      "costsOfServices": 4567.77,
-            |      "travelCosts": 456.77,
-            |      "other": 567.67
-            |    }
-            |
-            |  },
-            |  "foreignProperty": [{
-            |      "countryCode": "GBR",
-            |      "income": {
-            |        "rentIncome": {
-            |          "rentAmount": 34456.30
-            |        },
-            |        "foreignTaxCreditRelief": true,
-            |        "premiumOfLeaseGrant": 2543.43,
-            |        "otherPropertyIncome": 54325.30,
-            |        "foreignTaxTakenOff": 6543.013,
-            |        "specialWithholdingTaxOrUKTaxPaid": 643245.00
-            |      },
-            |      "expenditure": {
-            |        "premisesRunningCosts": 5635.43,
-            |        "repairsAndMaintenance": 3456.65,
-            |        "financialCosts": 34532.21,
-            |        "professionalFees": 32465.32,
-            |        "costsOfServices": 2567.21,
-            |        "travelCosts": 2345.76,
-            |        "other": 2425.11
+            |      "expenses":{
+            |         "premisesRunningCosts":993.31,
+            |         "repairsAndMaintenance":8842.23,
+            |         "financialCosts":994,
+            |         "professionalFees":992.12,
+            |         "costOfServices":4620.23,
+            |         "travelCosts":774,
+            |         "other":984.41
             |      }
-            |    }
-            |  ]
+            |   },
+            |   "foreignNonFhlProperty":[
+            |      {
+            |         "countryCode":"AFG",
+            |         "income":{
+            |            "rentIncome":{
+            |               "rentAmount":4882.23
+            |            },
+            |            "foreignTaxCreditRelief":true,
+            |            "premiumsOfLeaseGrant":884.72,
+            |            "otherPropertyIncome":7713.09,
+            |            "foreignTaxPaidOrDeducted":884.121,
+            |            "specialWithholdingTaxOrUkTaxPaid":847.72
+            |         },
+            |         "expenses":{
+            |            "premisesRunningCosts":129.35,
+            |            "repairsAndMaintenance":7490.32,
+            |            "financialCosts":5000.99,
+            |            "professionalFees":847.90,
+            |            "travelCosts":69.20,
+            |            "costOfServices":478.23,
+            |            "residentialFinancialCost":879.28,
+            |            "broughtFwdResidentialFinancialCost":846.13,
+            |            "other":138.92
+            |         }
+            |      }
+            |   ]
             |}
             |""".stripMargin))) shouldBe List(
-          ValueFormatError.copy(paths = Some(Seq("/foreignProperty/0/income/foreignTaxTakenOff")))
+          ValueFormatError.copy(paths = Some(Seq("/foreignNonFhlProperty/0/income/foreignTaxPaidOrDeducted")))
         )
       }
-      "foreignProperty/0/income/specialWithholdingTaxOrUKTaxPaid is invalid" in {
+      "foreignNonFhlProperty/0/income/specialWithholdingTaxOrUkTaxPaid is invalid" in {
         validator.validate(CreateForeignPropertyPeriodSummaryRawData(validNino, validBusinessId, validTaxYear, Json.parse(
           """
             |{
-            |  "fromDate": "2020-01-01",
-            |  "toDate": "2020-01-31",
-            |  "foreignFhlEea": {
-            |    "income": {
-            |      "rentAmount": 567.83
+            |   "fromDate":"2020-03-29",
+            |   "toDate":"2021-03-29",
+            |   "foreignFhlEea":{
+            |      "income":{
+            |         "rentAmount":381.21
             |      },
-            |    "expenditure": {
-            |      "premisesRunningCosts": 4567.98,
-            |      "repairsAndMaintenance": 98765.67,
-            |      "financialCosts": 4566.95,
-            |      "professionalFees": 23.65,
-            |      "costsOfServices": 4567.77,
-            |      "travelCosts": 456.77,
-            |      "other": 567.67
-            |    }
-            |
-            |  },
-            |  "foreignProperty": [{
-            |      "countryCode": "GBR",
-            |      "income": {
-            |        "rentIncome": {
-            |          "rentAmount": 34456.30
-            |        },
-            |        "foreignTaxCreditRelief": true,
-            |        "premiumOfLeaseGrant": 2543.43,
-            |        "otherPropertyIncome": 54325.30,
-            |        "foreignTaxTakenOff": 6543.01,
-            |        "specialWithholdingTaxOrUKTaxPaid": 643245.003
-            |      },
-            |      "expenditure": {
-            |        "premisesRunningCosts": 5635.43,
-            |        "repairsAndMaintenance": 3456.65,
-            |        "financialCosts": 34532.21,
-            |        "professionalFees": 32465.32,
-            |        "costsOfServices": 2567.21,
-            |        "travelCosts": 2345.76,
-            |        "other": 2425.11
+            |      "expenses":{
+            |         "premisesRunningCosts":993.31,
+            |         "repairsAndMaintenance":8842.23,
+            |         "financialCosts":994,
+            |         "professionalFees":992.12,
+            |         "costOfServices":4620.23,
+            |         "travelCosts":774,
+            |         "other":984.41
             |      }
-            |    }
-            |  ]
+            |   },
+            |   "foreignNonFhlProperty":[
+            |      {
+            |         "countryCode":"AFG",
+            |         "income":{
+            |            "rentIncome":{
+            |               "rentAmount":4882.23
+            |            },
+            |            "foreignTaxCreditRelief":true,
+            |            "premiumsOfLeaseGrant":884.72,
+            |            "otherPropertyIncome":7713.09,
+            |            "foreignTaxPaidOrDeducted":884.12,
+            |            "specialWithholdingTaxOrUkTaxPaid":847.721
+            |         },
+            |         "expenses":{
+            |            "premisesRunningCosts":129.35,
+            |            "repairsAndMaintenance":7490.32,
+            |            "financialCosts":5000.99,
+            |            "professionalFees":847.90,
+            |            "travelCosts":69.20,
+            |            "costOfServices":478.23,
+            |            "residentialFinancialCost":879.28,
+            |            "broughtFwdResidentialFinancialCost":846.13,
+            |            "other":138.92
+            |         }
+            |      }
+            |   ]
             |}
             |""".stripMargin))) shouldBe List(
-          ValueFormatError.copy(paths = Some(Seq("/foreignProperty/0/income/specialWithholdingTaxOrUKTaxPaid")))
+          ValueFormatError.copy(paths = Some(Seq("/foreignNonFhlProperty/0/income/specialWithholdingTaxOrUkTaxPaid")))
         )
       }
-      "foreignProperty/0/expenditure/premisesRunningCosts is invalid" in {
+      "foreignNonFhlProperty/0/expenses/premisesRunningCosts is invalid" in {
         validator.validate(CreateForeignPropertyPeriodSummaryRawData(validNino, validBusinessId, validTaxYear, Json.parse(
           """
             |{
-            |  "fromDate": "2020-01-01",
-            |  "toDate": "2020-01-31",
-            |  "foreignFhlEea": {
-            |    "income": {
-            |      "rentAmount": 567.83
+            |   "fromDate":"2020-03-29",
+            |   "toDate":"2021-03-29",
+            |   "foreignFhlEea":{
+            |      "income":{
+            |         "rentAmount":381.21
             |      },
-            |    "expenditure": {
-            |      "premisesRunningCosts": 4567.98,
-            |      "repairsAndMaintenance": 98765.67,
-            |      "financialCosts": 4566.95,
-            |      "professionalFees": 23.65,
-            |      "costsOfServices": 4567.77,
-            |      "travelCosts": 456.77,
-            |      "other": 567.67
-            |    }
-            |
-            |  },
-            |  "foreignProperty": [{
-            |      "countryCode": "GBR",
-            |      "income": {
-            |        "rentIncome": {
-            |          "rentAmount": 34456.30
-            |        },
-            |        "foreignTaxCreditRelief": true,
-            |        "premiumOfLeaseGrant": 2543.43,
-            |        "otherPropertyIncome": 54325.30,
-            |        "foreignTaxTakenOff": 6543.01,
-            |        "specialWithholdingTaxOrUKTaxPaid": 643245.00
-            |      },
-            |      "expenditure": {
-            |        "premisesRunningCosts": 5635.433,
-            |        "repairsAndMaintenance": 3456.65,
-            |        "financialCosts": 34532.21,
-            |        "professionalFees": 32465.32,
-            |        "costsOfServices": 2567.21,
-            |        "travelCosts": 2345.76,
-            |        "other": 2425.11
+            |      "expenses":{
+            |         "premisesRunningCosts":993.31,
+            |         "repairsAndMaintenance":8842.23,
+            |         "financialCosts":994,
+            |         "professionalFees":992.12,
+            |         "costOfServices":4620.23,
+            |         "travelCosts":774,
+            |         "other":984.41
             |      }
-            |    }
-            |  ]
+            |   },
+            |   "foreignNonFhlProperty":[
+            |      {
+            |         "countryCode":"AFG",
+            |         "income":{
+            |            "rentIncome":{
+            |               "rentAmount":4882.23
+            |            },
+            |            "foreignTaxCreditRelief":true,
+            |            "premiumsOfLeaseGrant":884.72,
+            |            "otherPropertyIncome":7713.09,
+            |            "foreignTaxPaidOrDeducted":884.12,
+            |            "specialWithholdingTaxOrUkTaxPaid":847.72
+            |         },
+            |         "expenses":{
+            |            "premisesRunningCosts":129.351,
+            |            "repairsAndMaintenance":7490.32,
+            |            "financialCosts":5000.99,
+            |            "professionalFees":847.90,
+            |            "travelCosts":69.20,
+            |            "costOfServices":478.23,
+            |            "residentialFinancialCost":879.28,
+            |            "broughtFwdResidentialFinancialCost":846.13,
+            |            "other":138.92
+            |         }
+            |      }
+            |   ]
             |}
             |""".stripMargin))) shouldBe List(
-          ValueFormatError.copy(paths = Some(Seq("/foreignProperty/0/expenditure/premisesRunningCosts")))
+          ValueFormatError.copy(paths = Some(Seq("/foreignNonFhlProperty/0/expenses/premisesRunningCosts")))
         )
       }
-      "foreignProperty/0/expenditure/repairsAndMaintenance is invalid" in {
+      "foreignNonFhlProperty/0/expenses/repairsAndMaintenance is invalid" in {
         validator.validate(CreateForeignPropertyPeriodSummaryRawData(validNino, validBusinessId, validTaxYear, Json.parse(
           """
             |{
-            |  "fromDate": "2020-01-01",
-            |  "toDate": "2020-01-31",
-            |  "foreignFhlEea": {
-            |    "income": {
-            |      "rentAmount": 567.83
+            |   "fromDate":"2020-03-29",
+            |   "toDate":"2021-03-29",
+            |   "foreignFhlEea":{
+            |      "income":{
+            |         "rentAmount":381.21
             |      },
-            |    "expenditure": {
-            |      "premisesRunningCosts": 4567.98,
-            |      "repairsAndMaintenance": 98765.67,
-            |      "financialCosts": 4566.95,
-            |      "professionalFees": 23.65,
-            |      "costsOfServices": 4567.77,
-            |      "travelCosts": 456.77,
-            |      "other": 567.67
-            |    }
-            |
-            |  },
-            |  "foreignProperty": [{
-            |      "countryCode": "GBR",
-            |      "income": {
-            |        "rentIncome": {
-            |          "rentAmount": 34456.30
-            |        },
-            |        "foreignTaxCreditRelief": true,
-            |        "premiumOfLeaseGrant": 2543.43,
-            |        "otherPropertyIncome": 54325.30,
-            |        "foreignTaxTakenOff": 6543.01,
-            |        "specialWithholdingTaxOrUKTaxPaid": 643245.00
-            |      },
-            |      "expenditure": {
-            |        "premisesRunningCosts": 5635.43,
-            |        "repairsAndMaintenance": 3456.653,
-            |        "financialCosts": 34532.21,
-            |        "professionalFees": 32465.32,
-            |        "costsOfServices": 2567.21,
-            |        "travelCosts": 2345.76,
-            |        "other": 2425.11
+            |      "expenses":{
+            |         "premisesRunningCosts":993.31,
+            |         "repairsAndMaintenance":8842.23,
+            |         "financialCosts":994,
+            |         "professionalFees":992.12,
+            |         "costOfServices":4620.23,
+            |         "travelCosts":774,
+            |         "other":984.41
             |      }
-            |    }
-            |  ]
+            |   },
+            |   "foreignNonFhlProperty":[
+            |      {
+            |         "countryCode":"AFG",
+            |         "income":{
+            |            "rentIncome":{
+            |               "rentAmount":4882.23
+            |            },
+            |            "foreignTaxCreditRelief":true,
+            |            "premiumsOfLeaseGrant":884.72,
+            |            "otherPropertyIncome":7713.09,
+            |            "foreignTaxPaidOrDeducted":884.12,
+            |            "specialWithholdingTaxOrUkTaxPaid":847.72
+            |         },
+            |         "expenses":{
+            |            "premisesRunningCosts":129.35,
+            |            "repairsAndMaintenance":7490.321,
+            |            "financialCosts":5000.99,
+            |            "professionalFees":847.90,
+            |            "travelCosts":69.20,
+            |            "costOfServices":478.23,
+            |            "residentialFinancialCost":879.28,
+            |            "broughtFwdResidentialFinancialCost":846.13,
+            |            "other":138.92
+            |         }
+            |      }
+            |   ]
             |}
             |""".stripMargin))) shouldBe List(
-          ValueFormatError.copy(paths = Some(Seq("/foreignProperty/0/expenditure/repairsAndMaintenance")))
+          ValueFormatError.copy(paths = Some(Seq("/foreignNonFhlProperty/0/expenses/repairsAndMaintenance")))
         )
       }
-      "foreignProperty/0/expenditure/financialCosts is invalid" in {
+      "foreignNonFhlProperty/0/expenses/financialCosts is invalid" in {
         validator.validate(CreateForeignPropertyPeriodSummaryRawData(validNino, validBusinessId, validTaxYear, Json.parse(
           """
             |{
-            |  "fromDate": "2020-01-01",
-            |  "toDate": "2020-01-31",
-            |  "foreignFhlEea": {
-            |    "income": {
-            |      "rentAmount": 567.83
+            |   "fromDate":"2020-03-29",
+            |   "toDate":"2021-03-29",
+            |   "foreignFhlEea":{
+            |      "income":{
+            |         "rentAmount":381.21
             |      },
-            |    "expenditure": {
-            |      "premisesRunningCosts": 4567.98,
-            |      "repairsAndMaintenance": 98765.67,
-            |      "financialCosts": 4566.95,
-            |      "professionalFees": 23.65,
-            |      "costsOfServices": 4567.77,
-            |      "travelCosts": 456.77,
-            |      "other": 567.67
-            |    }
-            |
-            |  },
-            |  "foreignProperty": [{
-            |      "countryCode": "GBR",
-            |      "income": {
-            |        "rentIncome": {
-            |          "rentAmount": 34456.30
-            |        },
-            |        "foreignTaxCreditRelief": true,
-            |        "premiumOfLeaseGrant": 2543.43,
-            |        "otherPropertyIncome": 54325.30,
-            |        "foreignTaxTakenOff": 6543.01,
-            |        "specialWithholdingTaxOrUKTaxPaid": 643245.00
-            |      },
-            |      "expenditure": {
-            |        "premisesRunningCosts": 5635.43,
-            |        "repairsAndMaintenance": 3456.65,
-            |        "financialCosts": 34532.213,
-            |        "professionalFees": 32465.32,
-            |        "costsOfServices": 2567.21,
-            |        "travelCosts": 2345.76,
-            |        "other": 2425.11
+            |      "expenses":{
+            |         "premisesRunningCosts":993.31,
+            |         "repairsAndMaintenance":8842.23,
+            |         "financialCosts":994,
+            |         "professionalFees":992.12,
+            |         "costOfServices":4620.23,
+            |         "travelCosts":774,
+            |         "other":984.41
             |      }
-            |    }
-            |  ]
+            |   },
+            |   "foreignNonFhlProperty":[
+            |      {
+            |         "countryCode":"AFG",
+            |         "income":{
+            |            "rentIncome":{
+            |               "rentAmount":4882.23
+            |            },
+            |            "foreignTaxCreditRelief":true,
+            |            "premiumsOfLeaseGrant":884.72,
+            |            "otherPropertyIncome":7713.09,
+            |            "foreignTaxPaidOrDeducted":884.12,
+            |            "specialWithholdingTaxOrUkTaxPaid":847.72
+            |         },
+            |         "expenses":{
+            |            "premisesRunningCosts":129.35,
+            |            "repairsAndMaintenance":7490.32,
+            |            "financialCosts":5000.991,
+            |            "professionalFees":847.90,
+            |            "travelCosts":69.20,
+            |            "costOfServices":478.23,
+            |            "residentialFinancialCost":879.28,
+            |            "broughtFwdResidentialFinancialCost":846.13,
+            |            "other":138.92
+            |         }
+            |      }
+            |   ]
             |}
             |""".stripMargin))) shouldBe List(
-          ValueFormatError.copy(paths = Some(Seq("/foreignProperty/0/expenditure/financialCosts")))
+          ValueFormatError.copy(paths = Some(Seq("/foreignNonFhlProperty/0/expenses/financialCosts")))
         )
       }
-      "foreignProperty/0/expenditure/professionalFees is invalid" in {
+      "foreignNonFhlProperty/0/expenses/professionalFees is invalid" in {
         validator.validate(CreateForeignPropertyPeriodSummaryRawData(validNino, validBusinessId, validTaxYear, Json.parse(
           """
             |{
-            |  "fromDate": "2020-01-01",
-            |  "toDate": "2020-01-31",
-            |  "foreignFhlEea": {
-            |    "income": {
-            |      "rentAmount": 567.83
+            |   "fromDate":"2020-03-29",
+            |   "toDate":"2021-03-29",
+            |   "foreignFhlEea":{
+            |      "income":{
+            |         "rentAmount":381.21
             |      },
-            |    "expenditure": {
-            |      "premisesRunningCosts": 4567.98,
-            |      "repairsAndMaintenance": 98765.67,
-            |      "financialCosts": 4566.95,
-            |      "professionalFees": 23.65,
-            |      "costsOfServices": 4567.77,
-            |      "travelCosts": 456.77,
-            |      "other": 567.67
-            |    }
-            |
-            |  },
-            |  "foreignProperty": [{
-            |      "countryCode": "GBR",
-            |      "income": {
-            |        "rentIncome": {
-            |          "rentAmount": 34456.30
-            |        },
-            |        "foreignTaxCreditRelief": true,
-            |        "premiumOfLeaseGrant": 2543.43,
-            |        "otherPropertyIncome": 54325.30,
-            |        "foreignTaxTakenOff": 6543.01,
-            |        "specialWithholdingTaxOrUKTaxPaid": 643245.00
-            |      },
-            |      "expenditure": {
-            |        "premisesRunningCosts": 5635.43,
-            |        "repairsAndMaintenance": 3456.65,
-            |        "financialCosts": 34532.21,
-            |        "professionalFees": 32465.323,
-            |        "costsOfServices": 2567.21,
-            |        "travelCosts": 2345.76,
-            |        "other": 2425.11
+            |      "expenses":{
+            |         "premisesRunningCosts":993.31,
+            |         "repairsAndMaintenance":8842.23,
+            |         "financialCosts":994,
+            |         "professionalFees":992.12,
+            |         "costOfServices":4620.23,
+            |         "travelCosts":774,
+            |         "other":984.41
             |      }
-            |    }
-            |  ]
+            |   },
+            |   "foreignNonFhlProperty":[
+            |      {
+            |         "countryCode":"AFG",
+            |         "income":{
+            |            "rentIncome":{
+            |               "rentAmount":4882.23
+            |            },
+            |            "foreignTaxCreditRelief":true,
+            |            "premiumsOfLeaseGrant":884.72,
+            |            "otherPropertyIncome":7713.09,
+            |            "foreignTaxPaidOrDeducted":884.12,
+            |            "specialWithholdingTaxOrUkTaxPaid":847.72
+            |         },
+            |         "expenses":{
+            |            "premisesRunningCosts":129.35,
+            |            "repairsAndMaintenance":7490.32,
+            |            "financialCosts":5000.99,
+            |            "professionalFees":847.901,
+            |            "travelCosts":69.20,
+            |            "costOfServices":478.23,
+            |            "residentialFinancialCost":879.28,
+            |            "broughtFwdResidentialFinancialCost":846.13,
+            |            "other":138.92
+            |         }
+            |      }
+            |   ]
             |}
             |""".stripMargin))) shouldBe List(
-          ValueFormatError.copy(paths = Some(Seq("/foreignProperty/0/expenditure/professionalFees")))
+          ValueFormatError.copy(paths = Some(Seq("/foreignNonFhlProperty/0/expenses/professionalFees")))
         )
       }
-      "foreignProperty/0/expenditure/costsOfServices is invalid" in {
+      "foreignNonFhlProperty/0/expenses/costOfServices is invalid" in {
         validator.validate(CreateForeignPropertyPeriodSummaryRawData(validNino, validBusinessId, validTaxYear, Json.parse(
           """
             |{
-            |  "fromDate": "2020-01-01",
-            |  "toDate": "2020-01-31",
-            |  "foreignFhlEea": {
-            |    "income": {
-            |      "rentAmount": 567.83
+            |   "fromDate":"2020-03-29",
+            |   "toDate":"2021-03-29",
+            |   "foreignFhlEea":{
+            |      "income":{
+            |         "rentAmount":381.21
             |      },
-            |    "expenditure": {
-            |      "premisesRunningCosts": 4567.98,
-            |      "repairsAndMaintenance": 98765.67,
-            |      "financialCosts": 4566.95,
-            |      "professionalFees": 23.65,
-            |      "costsOfServices": 4567.77,
-            |      "travelCosts": 456.77,
-            |      "other": 567.67
-            |    }
-            |
-            |  },
-            |  "foreignProperty": [{
-            |      "countryCode": "GBR",
-            |      "income": {
-            |        "rentIncome": {
-            |          "rentAmount": 34456.30
-            |        },
-            |        "foreignTaxCreditRelief": true,
-            |        "premiumOfLeaseGrant": 2543.43,
-            |        "otherPropertyIncome": 54325.30,
-            |        "foreignTaxTakenOff": 6543.01,
-            |        "specialWithholdingTaxOrUKTaxPaid": 643245.00
-            |      },
-            |      "expenditure": {
-            |        "premisesRunningCosts": 5635.43,
-            |        "repairsAndMaintenance": 3456.65,
-            |        "financialCosts": 34532.21,
-            |        "professionalFees": 32465.32,
-            |        "costsOfServices": 2567.213,
-            |        "travelCosts": 2345.76,
-            |        "other": 2425.11
+            |      "expenses":{
+            |         "premisesRunningCosts":993.31,
+            |         "repairsAndMaintenance":8842.23,
+            |         "financialCosts":994,
+            |         "professionalFees":992.12,
+            |         "costOfServices":4620.23,
+            |         "travelCosts":774,
+            |         "other":984.41
             |      }
-            |    }
-            |  ]
+            |   },
+            |   "foreignNonFhlProperty":[
+            |      {
+            |         "countryCode":"AFG",
+            |         "income":{
+            |            "rentIncome":{
+            |               "rentAmount":4882.23
+            |            },
+            |            "foreignTaxCreditRelief":true,
+            |            "premiumsOfLeaseGrant":884.72,
+            |            "otherPropertyIncome":7713.09,
+            |            "foreignTaxPaidOrDeducted":884.12,
+            |            "specialWithholdingTaxOrUkTaxPaid":847.72
+            |         },
+            |         "expenses":{
+            |            "premisesRunningCosts":129.35,
+            |            "repairsAndMaintenance":7490.32,
+            |            "financialCosts":5000.99,
+            |            "professionalFees":847.90,
+            |            "travelCosts":69.20,
+            |            "costOfServices":478.231,
+            |            "residentialFinancialCost":879.28,
+            |            "broughtFwdResidentialFinancialCost":846.13,
+            |            "other":138.92
+            |         }
+            |      }
+            |   ]
             |}
             |""".stripMargin))) shouldBe List(
-          ValueFormatError.copy(paths = Some(Seq("/foreignProperty/0/expenditure/costsOfServices")))
+          ValueFormatError.copy(paths = Some(Seq("/foreignNonFhlProperty/0/expenses/costOfServices")))
         )
       }
-      "foreignProperty/0/expenditure/travelCosts is invalid" in {
+      "foreignNonFhlProperty/0/expenses/travelCosts is invalid" in {
         validator.validate(CreateForeignPropertyPeriodSummaryRawData(validNino, validBusinessId, validTaxYear, Json.parse(
           """
             |{
-            |  "fromDate": "2020-01-01",
-            |  "toDate": "2020-01-31",
-            |  "foreignFhlEea": {
-            |    "income": {
-            |      "rentAmount": 567.83
+            |   "fromDate":"2020-03-29",
+            |   "toDate":"2021-03-29",
+            |   "foreignFhlEea":{
+            |      "income":{
+            |         "rentAmount":381.21
             |      },
-            |    "expenditure": {
-            |      "premisesRunningCosts": 4567.98,
-            |      "repairsAndMaintenance": 98765.67,
-            |      "financialCosts": 4566.95,
-            |      "professionalFees": 23.65,
-            |      "costsOfServices": 4567.77,
-            |      "travelCosts": 456.77,
-            |      "other": 567.67
-            |    }
-            |
-            |  },
-            |  "foreignProperty": [{
-            |      "countryCode": "GBR",
-            |      "income": {
-            |        "rentIncome": {
-            |          "rentAmount": 34456.30
-            |        },
-            |        "foreignTaxCreditRelief": true,
-            |        "premiumOfLeaseGrant": 2543.43,
-            |        "otherPropertyIncome": 54325.30,
-            |        "foreignTaxTakenOff": 6543.01,
-            |        "specialWithholdingTaxOrUKTaxPaid": 643245.00
-            |      },
-            |      "expenditure": {
-            |        "premisesRunningCosts": 5635.43,
-            |        "repairsAndMaintenance": 3456.65,
-            |        "financialCosts": 34532.21,
-            |        "professionalFees": 32465.32,
-            |        "costsOfServices": 2567.21,
-            |        "travelCosts": 2345.763,
-            |        "other": 2425.11
+            |      "expenses":{
+            |         "premisesRunningCosts":993.31,
+            |         "repairsAndMaintenance":8842.23,
+            |         "financialCosts":994,
+            |         "professionalFees":992.12,
+            |         "costOfServices":4620.23,
+            |         "travelCosts":774,
+            |         "other":984.41
             |      }
-            |    }
-            |  ]
+            |   },
+            |   "foreignNonFhlProperty":[
+            |      {
+            |         "countryCode":"AFG",
+            |         "income":{
+            |            "rentIncome":{
+            |               "rentAmount":4882.23
+            |            },
+            |            "foreignTaxCreditRelief":true,
+            |            "premiumsOfLeaseGrant":884.72,
+            |            "otherPropertyIncome":7713.09,
+            |            "foreignTaxPaidOrDeducted":884.12,
+            |            "specialWithholdingTaxOrUkTaxPaid":847.72
+            |         },
+            |         "expenses":{
+            |            "premisesRunningCosts":129.35,
+            |            "repairsAndMaintenance":7490.32,
+            |            "financialCosts":5000.99,
+            |            "professionalFees":847.90,
+            |            "travelCosts":69.201,
+            |            "costOfServices":478.23,
+            |            "residentialFinancialCost":879.28,
+            |            "broughtFwdResidentialFinancialCost":846.13,
+            |            "other":138.92
+            |         }
+            |      }
+            |   ]
             |}
             |""".stripMargin))) shouldBe List(
-          ValueFormatError.copy(paths = Some(Seq("/foreignProperty/0/expenditure/travelCosts")))
+          ValueFormatError.copy(paths = Some(Seq("/foreignNonFhlProperty/0/expenses/travelCosts")))
         )
       }
-      "foreignProperty/0/expenditure/other is invalid" in {
+      "foreignNonFhlProperty/0/expenses/other is invalid" in {
         validator.validate(CreateForeignPropertyPeriodSummaryRawData(validNino, validBusinessId, validTaxYear, Json.parse(
           """
             |{
-            |  "fromDate": "2020-01-01",
-            |  "toDate": "2020-01-31",
-            |  "foreignFhlEea": {
-            |    "income": {
-            |      "rentAmount": 567.83
+            |   "fromDate":"2020-03-29",
+            |   "toDate":"2021-03-29",
+            |   "foreignFhlEea":{
+            |      "income":{
+            |         "rentAmount":381.21
             |      },
-            |    "expenditure": {
-            |      "premisesRunningCosts": 4567.98,
-            |      "repairsAndMaintenance": 98765.67,
-            |      "financialCosts": 4566.95,
-            |      "professionalFees": 23.65,
-            |      "costsOfServices": 4567.77,
-            |      "travelCosts": 456.77,
-            |      "other": 567.67
-            |    }
-            |
-            |  },
-            |  "foreignProperty": [{
-            |      "countryCode": "GBR",
-            |      "income": {
-            |        "rentIncome": {
-            |          "rentAmount": 34456.30
-            |        },
-            |        "foreignTaxCreditRelief": true,
-            |        "premiumOfLeaseGrant": 2543.43,
-            |        "otherPropertyIncome": 54325.30,
-            |        "foreignTaxTakenOff": 6543.01,
-            |        "specialWithholdingTaxOrUKTaxPaid": 643245.00
-            |      },
-            |      "expenditure": {
-            |        "premisesRunningCosts": 5635.43,
-            |        "repairsAndMaintenance": 3456.65,
-            |        "financialCosts": 34532.21,
-            |        "professionalFees": 32465.32,
-            |        "costsOfServices": 2567.21,
-            |        "travelCosts": 2345.76,
-            |        "other": 2425.113
+            |      "expenses":{
+            |         "premisesRunningCosts":993.31,
+            |         "repairsAndMaintenance":8842.23,
+            |         "financialCosts":994,
+            |         "professionalFees":992.12,
+            |         "costOfServices":4620.23,
+            |         "travelCosts":774,
+            |         "other":984.41
             |      }
-            |    }
-            |  ]
+            |   },
+            |   "foreignNonFhlProperty":[
+            |      {
+            |         "countryCode":"AFG",
+            |         "income":{
+            |            "rentIncome":{
+            |               "rentAmount":4882.23
+            |            },
+            |            "foreignTaxCreditRelief":true,
+            |            "premiumsOfLeaseGrant":884.72,
+            |            "otherPropertyIncome":7713.09,
+            |            "foreignTaxPaidOrDeducted":884.12,
+            |            "specialWithholdingTaxOrUkTaxPaid":847.72
+            |         },
+            |         "expenses":{
+            |            "premisesRunningCosts":129.35,
+            |            "repairsAndMaintenance":7490.32,
+            |            "financialCosts":5000.99,
+            |            "professionalFees":847.90,
+            |            "travelCosts":69.20,
+            |            "costOfServices":478.23,
+            |            "residentialFinancialCost":879.28,
+            |            "broughtFwdResidentialFinancialCost":846.13,
+            |            "other":138.921
+            |         }
+            |      }
+            |   ]
             |}
             |""".stripMargin))) shouldBe List(
-          ValueFormatError.copy(paths = Some(Seq("/foreignProperty/0/expenditure/other")))
+          ValueFormatError.copy(paths = Some(Seq("/foreignNonFhlProperty/0/expenses/other")))
         )
       }
-      "foreignProperty/0/expenditure/residentialFinancialCost is invalid" in {
+      "foreignNonFhlProperty/0/expenses/residentialFinancialCost is invalid" in {
         validator.validate(CreateForeignPropertyPeriodSummaryRawData(validNino, validBusinessId, validTaxYear, Json.parse(
           """
             |{
@@ -1452,24 +1500,24 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec {
             |    "income": {
             |      "rentAmount": 567.83
             |      },
-            |    "expenditure": {
+            |    "expenses": {
             |      "consolidatedExpenses": 456.98
             |    }
             |
             |  },
-            |  "foreignProperty": [{
+            |  "foreignNonFhlProperty": [{
             |      "countryCode": "GBR",
             |      "income": {
             |        "rentIncome": {
             |          "rentAmount": 34456.30
             |        },
             |        "foreignTaxCreditRelief": true,
-            |        "premiumOfLeaseGrant": 2543.43,
+            |        "premiumsOfLeaseGrant": 2543.43,
             |        "otherPropertyIncome": 54325.30,
             |        "foreignTaxTakenOff": 6543.01,
             |        "specialWithholdingTaxOrUKTaxPaid": 643245.00
             |      },
-            |      "expenditure": {
+            |      "expenses": {
             |        "residentialFinancialCost": 21235.223,
             |        "broughtFwdResidentialFinancialCost": 12556.00,
             |        "consolidatedExpenses": 352.66
@@ -1478,10 +1526,10 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec {
             |  ]
             |}
             |""".stripMargin))) shouldBe List(
-          ValueFormatError.copy(paths = Some(Seq("/foreignProperty/0/expenditure/residentialFinancialCost")))
+          ValueFormatError.copy(paths = Some(Seq("/foreignNonFhlProperty/0/expenses/residentialFinancialCost")))
         )
       }
-      "foreignProperty/0/expenditure/broughtFwdResidentialFinancialCost is invalid" in {
+      "foreignNonFhlProperty/0/expenses/broughtFwdResidentialFinancialCost is invalid" in {
         validator.validate(CreateForeignPropertyPeriodSummaryRawData(validNino, validBusinessId, validTaxYear, Json.parse(
           """
             |{
@@ -1491,24 +1539,24 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec {
             |    "income": {
             |      "rentAmount": 567.83
             |      },
-            |    "expenditure": {
+            |    "expenses": {
             |      "consolidatedExpenses": 456.98
             |    }
             |
             |  },
-            |  "foreignProperty": [{
+            |  "foreignNonFhlProperty": [{
             |      "countryCode": "GBR",
             |      "income": {
             |        "rentIncome": {
             |          "rentAmount": 34456.30
             |        },
             |        "foreignTaxCreditRelief": true,
-            |        "premiumOfLeaseGrant": 2543.43,
+            |        "premiumsOfLeaseGrant": 2543.43,
             |        "otherPropertyIncome": 54325.30,
             |        "foreignTaxTakenOff": 6543.01,
             |        "specialWithholdingTaxOrUKTaxPaid": 643245.00
             |      },
-            |      "expenditure": {
+            |      "expenses": {
             |        "residentialFinancialCost": 21235.22,
             |        "broughtFwdResidentialFinancialCost": 12556.003,
             |        "consolidatedExpenses": 352.66
@@ -1517,10 +1565,10 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec {
             |  ]
             |}
             |""".stripMargin))) shouldBe List(
-          ValueFormatError.copy(paths = Some(Seq("/foreignProperty/0/expenditure/broughtFwdResidentialFinancialCost")))
+          ValueFormatError.copy(paths = Some(Seq("/foreignNonFhlProperty/0/expenses/broughtFwdResidentialFinancialCost")))
         )
       }
-      "foreignProperty/0/expenditure/consolidatedExpenses is invalid" in {
+      "foreignNonFhlProperty/0/expenses/consolidatedExpenses is invalid" in {
         validator.validate(CreateForeignPropertyPeriodSummaryRawData(validNino, validBusinessId, validTaxYear, Json.parse(
           """
             |{
@@ -1530,24 +1578,24 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec {
             |    "income": {
             |      "rentAmount": 567.83
             |      },
-            |    "expenditure": {
+            |    "expenses": {
             |      "consolidatedExpenses": 456.98
             |    }
             |
             |  },
-            |  "foreignProperty": [{
+            |  "foreignNonFhlProperty": [{
             |      "countryCode": "GBR",
             |      "income": {
             |        "rentIncome": {
             |          "rentAmount": 34456.30
             |        },
             |        "foreignTaxCreditRelief": true,
-            |        "premiumOfLeaseGrant": 2543.43,
+            |        "premiumsOfLeaseGrant": 2543.43,
             |        "otherPropertyIncome": 54325.30,
             |        "foreignTaxTakenOff": 6543.01,
             |        "specialWithholdingTaxOrUKTaxPaid": 643245.00
             |      },
-            |      "expenditure": {
+            |      "expenses": {
             |        "residentialFinancialCost": 21235.22,
             |        "broughtFwdResidentialFinancialCost": 12556.00,
             |        "consolidatedExpenses": 352.663
@@ -1556,7 +1604,7 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec {
             |  ]
             |}
             |""".stripMargin))) shouldBe List(
-          ValueFormatError.copy(paths = Some(Seq("/foreignProperty/0/expenditure/consolidatedExpenses")))
+          ValueFormatError.copy(paths = Some(Seq("/foreignNonFhlProperty/0/expenses/consolidatedExpenses")))
         )
       }
       "multiple fields are invalid" in {
@@ -1569,7 +1617,7 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec {
             |    "income": {
             |      "rentAmount": 567.83
             |      },
-            |    "expenditure": {
+            |    "expenses": {
             |      "premisesRunningCosts": 4567.98,
             |      "repairsAndMaintenance": 98765.67,
             |      "financialCosts": 4566.95,
@@ -1580,7 +1628,7 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec {
             |    }
             |
             |  },
-            |  "foreignProperty": [
+            |  "foreignNonFhlProperty": [
             |    {
             |      "countryCode": "GBR",
             |      "income": {
@@ -1588,12 +1636,12 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec {
             |          "rentAmount": 34456.30
             |        },
             |        "foreignTaxCreditRelief": true,
-            |        "premiumOfLeaseGrant": 2543.463,
+            |        "premiumsOfLeaseGrant": 2543.463,
             |        "otherPropertyIncome": 54325.30,
             |        "foreignTaxTakenOff": 6543.01,
             |        "specialWithholdingTaxOrUKTaxPaid": 643245.00
             |      },
-            |      "expenditure": {
+            |      "expenses": {
             |        "premisesRunningCosts": 5635.43,
             |        "repairsAndMaintenance": 3456.65,
             |        "financialCosts": 34532.21,
@@ -1610,12 +1658,12 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec {
             |          "rentAmount": 34456.3320
             |        },
             |        "foreignTaxCreditRelief": true,
-            |        "premiumOfLeaseGrant": 2543.43,
+            |        "premiumsOfLeaseGrant": 2543.43,
             |        "otherPropertyIncome": 54325.30,
             |        "foreignTaxTakenOff": 6543.01,
             |        "specialWithholdingTaxOrUKTaxPaid": 643245.00
             |      },
-            |      "expenditure": {
+            |      "expenses": {
             |        "premisesRunningCosts": 5635.43,
             |        "repairsAndMaintenance": 3456.65,
             |        "financialCosts": 34532.212,
@@ -1629,10 +1677,10 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec {
             |}
             |""".stripMargin))) shouldBe List(
           ValueFormatError.copy(paths = Some(Seq(
-            "/foreignFhlEea/expenditure/travelCosts",
-            "/foreignProperty/0/income/premiumOfLeaseGrant",
-            "/foreignProperty/1/income/rentIncome/rentAmount",
-            "/foreignProperty/1/expenditure/financialCosts"
+            "/foreignFhlEea/expenses/travelCosts",
+            "/foreignNonFhlProperty/0/income/premiumsOfLeaseGrant",
+            "/foreignNonFhlProperty/1/income/rentIncome/rentAmount",
+            "/foreignNonFhlProperty/1/expenses/financialCosts"
           )))
         )
       }
@@ -1649,7 +1697,7 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec {
             |    "income": {
             |      "rentAmount": 567.83
             |      },
-            |    "expenditure": {
+            |    "expenses": {
             |      "premisesRunningCosts": 4567.98,
             |      "repairsAndMaintenance": 98765.67,
             |      "financialCosts": 4566.95,
@@ -1660,19 +1708,19 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec {
             |    }
             |
             |  },
-            |  "foreignProperty": [{
+            |  "foreignNonFhlProperty": [{
             |      "countryCode": "ABC",
             |      "income": {
             |        "rentIncome": {
             |          "rentAmount": 34456.30
             |        },
             |        "foreignTaxCreditRelief": true,
-            |        "premiumOfLeaseGrant": 2543.43,
+            |        "premiumsOfLeaseGrant": 2543.43,
             |        "otherPropertyIncome": 54325.30,
             |        "foreignTaxTakenOff": 6543.01,
             |        "specialWithholdingTaxOrUKTaxPaid": 643245.00
             |      },
-            |      "expenditure": {
+            |      "expenses": {
             |        "premisesRunningCosts": 5635.43,
             |        "repairsAndMaintenance": 3456.65,
             |        "financialCosts": 34532.21,
@@ -1685,7 +1733,7 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec {
             |  ]
             |}
             |""".stripMargin
-        ))) shouldBe List(RuleCountryCodeError.copy(paths = Some(Seq("/foreignProperty/0/countryCode"))))
+        ))) shouldBe List(RuleCountryCodeError.copy(paths = Some(Seq("/foreignNonFhlProperty/0/countryCode"))))
       }
       "multiple invalid country codes are provided" in {
         validator.validate(CreateForeignPropertyPeriodSummaryRawData(validNino, validBusinessId, validTaxYear, Json.parse(
@@ -1697,7 +1745,7 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec {
             |    "income": {
             |      "rentAmount": 567.83
             |      },
-            |    "expenditure": {
+            |    "expenses": {
             |      "premisesRunningCosts": 4567.98,
             |      "repairsAndMaintenance": 98765.67,
             |      "financialCosts": 4566.95,
@@ -1708,7 +1756,7 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec {
             |    }
             |
             |  },
-            |  "foreignProperty": [
+            |  "foreignNonFhlProperty": [
             |    {
             |      "countryCode": "ABC",
             |      "income": {
@@ -1716,12 +1764,12 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec {
             |          "rentAmount": 34456.30
             |        },
             |        "foreignTaxCreditRelief": true,
-            |        "premiumOfLeaseGrant": 2543.43,
+            |        "premiumsOfLeaseGrant": 2543.43,
             |        "otherPropertyIncome": 54325.30,
             |        "foreignTaxTakenOff": 6543.01,
             |        "specialWithholdingTaxOrUKTaxPaid": 643245.00
             |      },
-            |      "expenditure": {
+            |      "expenses": {
             |        "premisesRunningCosts": 5635.43,
             |        "repairsAndMaintenance": 3456.65,
             |        "financialCosts": 34532.21,
@@ -1738,12 +1786,12 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec {
             |          "rentAmount": 34456.30
             |        },
             |        "foreignTaxCreditRelief": true,
-            |        "premiumOfLeaseGrant": 2543.43,
+            |        "premiumsOfLeaseGrant": 2543.43,
             |        "otherPropertyIncome": 54325.30,
             |        "foreignTaxTakenOff": 6543.01,
             |        "specialWithholdingTaxOrUKTaxPaid": 643245.00
             |      },
-            |      "expenditure": {
+            |      "expenses": {
             |        "premisesRunningCosts": 5635.43,
             |        "repairsAndMaintenance": 3456.65,
             |        "financialCosts": 34532.21,
@@ -1756,7 +1804,7 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec {
             |  ]
             |}
             |""".stripMargin
-        ))) shouldBe List(RuleCountryCodeError.copy(paths = Some(Seq("/foreignProperty/0/countryCode", "/foreignProperty/1/countryCode"))))
+        ))) shouldBe List(RuleCountryCodeError.copy(paths = Some(Seq("/foreignNonFhlProperty/0/countryCode", "/foreignNonFhlProperty/1/countryCode"))))
       }
     }
 
@@ -1771,7 +1819,7 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec {
             |    "income": {
             |      "rentAmount": 567.83
             |      },
-            |    "expenditure": {
+            |    "expenses": {
             |      "premisesRunningCosts": 4567.98,
             |      "repairsAndMaintenance": 98765.67,
             |      "financialCosts": 4566.95,
@@ -1782,19 +1830,19 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec {
             |    }
             |
             |  },
-            |  "foreignProperty": [{
+            |  "foreignNonFhlProperty": [{
             |      "countryCode": "12345678",
             |      "income": {
             |        "rentIncome": {
             |          "rentAmount": 34456.30
             |        },
             |        "foreignTaxCreditRelief": true,
-            |        "premiumOfLeaseGrant": 2543.43,
+            |        "premiumsOfLeaseGrant": 2543.43,
             |        "otherPropertyIncome": 54325.30,
             |        "foreignTaxTakenOff": 6543.01,
             |        "specialWithholdingTaxOrUKTaxPaid": 643245.00
             |      },
-            |      "expenditure": {
+            |      "expenses": {
             |        "premisesRunningCosts": 5635.43,
             |        "repairsAndMaintenance": 3456.65,
             |        "financialCosts": 34532.21,
@@ -1807,7 +1855,7 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec {
             |  ]
             |}
             |""".stripMargin
-        ))) shouldBe List(CountryCodeFormatError.copy(paths = Some(Seq("/foreignProperty/0/countryCode"))))
+        ))) shouldBe List(CountryCodeFormatError.copy(paths = Some(Seq("/foreignNonFhlProperty/0/countryCode"))))
       }
       "multiple invalid country codes are provided" in {
         validator.validate(CreateForeignPropertyPeriodSummaryRawData(validNino, validBusinessId, validTaxYear, Json.parse(
@@ -1819,7 +1867,7 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec {
             |    "income": {
             |      "rentAmount": 567.83
             |      },
-            |    "expenditure": {
+            |    "expenses": {
             |      "premisesRunningCosts": 4567.98,
             |      "repairsAndMaintenance": 98765.67,
             |      "financialCosts": 4566.95,
@@ -1830,7 +1878,7 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec {
             |    }
             |
             |  },
-            |  "foreignProperty": [
+            |  "foreignNonFhlProperty": [
             |    {
             |      "countryCode": "12345678",
             |      "income": {
@@ -1838,12 +1886,12 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec {
             |          "rentAmount": 34456.30
             |        },
             |        "foreignTaxCreditRelief": true,
-            |        "premiumOfLeaseGrant": 2543.43,
+            |        "premiumsOfLeaseGrant": 2543.43,
             |        "otherPropertyIncome": 54325.30,
             |        "foreignTaxTakenOff": 6543.01,
             |        "specialWithholdingTaxOrUKTaxPaid": 643245.00
             |      },
-            |      "expenditure": {
+            |      "expenses": {
             |        "premisesRunningCosts": 5635.43,
             |        "repairsAndMaintenance": 3456.65,
             |        "financialCosts": 34532.21,
@@ -1860,12 +1908,12 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec {
             |          "rentAmount": 34456.30
             |        },
             |        "foreignTaxCreditRelief": true,
-            |        "premiumOfLeaseGrant": 2543.43,
+            |        "premiumsOfLeaseGrant": 2543.43,
             |        "otherPropertyIncome": 54325.30,
             |        "foreignTaxTakenOff": 6543.01,
             |        "specialWithholdingTaxOrUKTaxPaid": 643245.00
             |      },
-            |      "expenditure": {
+            |      "expenses": {
             |        "premisesRunningCosts": 5635.43,
             |        "repairsAndMaintenance": 3456.65,
             |        "financialCosts": 34532.21,
@@ -1878,12 +1926,12 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec {
             |  ]
             |}
             |""".stripMargin
-        ))) shouldBe List(CountryCodeFormatError.copy(paths = Some(Seq("/foreignProperty/0/countryCode", "/foreignProperty/1/countryCode"))))
+        ))) shouldBe List(CountryCodeFormatError.copy(paths = Some(Seq("/foreignNonFhlProperty/0/countryCode", "/foreignNonFhlProperty/1/countryCode"))))
       }
     }
 
     "return RuleBothExpensesSuppliedError" when {
-      "foreignFhlEea/expenditure is invalid" in {
+      "foreignFhlEea/expenses is invalid" in {
         validator.validate(CreateForeignPropertyPeriodSummaryRawData(validNino, validBusinessId, validTaxYear, Json.parse(
           """
             |{
@@ -1893,25 +1941,25 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec {
             |    "income": {
             |      "rentAmount": 567.83
             |      },
-            |    "expenditure": {
+            |    "expenses": {
             |      "other": 2425.11,
             |      "consolidatedExpenses": 456.98
             |    }
             |
             |  },
-            |  "foreignProperty": [{
+            |  "foreignNonFhlProperty": [{
             |      "countryCode": "GBR",
             |      "income": {
             |        "rentIncome": {
             |          "rentAmount": 34456.30
             |        },
             |        "foreignTaxCreditRelief": true,
-            |        "premiumOfLeaseGrant": 2543.43,
+            |        "premiumsOfLeaseGrant": 2543.43,
             |        "otherPropertyIncome": 54325.30,
             |        "foreignTaxTakenOff": 6543.01,
             |        "specialWithholdingTaxOrUKTaxPaid": 643245.00
             |      },
-            |      "expenditure": {
+            |      "expenses": {
             |        "residentialFinancialCost": 21235.22,
             |        "broughtFwdResidentialFinancialCost": 12556.00,
             |        "consolidatedExpenses": 352.66
@@ -1920,9 +1968,9 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec {
             |  ]
             |}
             |""".stripMargin
-        ))) shouldBe List(RuleBothExpensesSuppliedError.copy(paths = Some(Seq("/foreignFhlEea/expenditure"))))
+        ))) shouldBe List(RuleBothExpensesSuppliedError.copy(paths = Some(Seq("/foreignFhlEea/expenses"))))
       }
-      "foreignProperty/0/expenditure is invalid" in {
+      "foreignNonFhlProperty/0/expenses is invalid" in {
         validator.validate(CreateForeignPropertyPeriodSummaryRawData(validNino, validBusinessId, validTaxYear, Json.parse(
           """
             |{
@@ -1932,24 +1980,24 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec {
             |    "income": {
             |      "rentAmount": 567.83
             |      },
-            |    "expenditure": {
+            |    "expenses": {
             |      "consolidatedExpenses": 456.98
             |    }
             |
             |  },
-            |  "foreignProperty": [{
+            |  "foreignNonFhlProperty": [{
             |      "countryCode": "GBR",
             |      "income": {
             |        "rentIncome": {
             |          "rentAmount": 34456.30
             |        },
             |        "foreignTaxCreditRelief": true,
-            |        "premiumOfLeaseGrant": 2543.43,
+            |        "premiumsOfLeaseGrant": 2543.43,
             |        "otherPropertyIncome": 54325.30,
             |        "foreignTaxTakenOff": 6543.01,
             |        "specialWithholdingTaxOrUKTaxPaid": 643245.00
             |      },
-            |      "expenditure": {
+            |      "expenses": {
             |        "residentialFinancialCost": 21235.22,
             |        "broughtFwdResidentialFinancialCost": 12556.00,
             |        "other": 2425.11,
@@ -1959,9 +2007,9 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec {
             |  ]
             |}
             |""".stripMargin
-        ))) shouldBe List(RuleBothExpensesSuppliedError.copy(paths = Some(Seq("/foreignProperty/0/expenditure"))))
+        ))) shouldBe List(RuleBothExpensesSuppliedError.copy(paths = Some(Seq("/foreignNonFhlProperty/0/expenses"))))
       }
-      "multiple expenditure objects are invalid" in {
+      "multiple expenses objects are invalid" in {
         validator.validate(CreateForeignPropertyPeriodSummaryRawData(validNino, validBusinessId, validTaxYear, Json.parse(
           """
             |{
@@ -1971,13 +2019,13 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec {
             |    "income": {
             |      "rentAmount": 567.83
             |      },
-            |    "expenditure": {
+            |    "expenses": {
             |      "other": 2425.11,
             |      "consolidatedExpenses": 456.98
             |    }
             |
             |  },
-            |  "foreignProperty": [
+            |  "foreignNonFhlProperty": [
             |    {
             |      "countryCode": "GBR",
             |      "income": {
@@ -1985,12 +2033,12 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec {
             |          "rentAmount": 34456.30
             |        },
             |        "foreignTaxCreditRelief": true,
-            |        "premiumOfLeaseGrant": 2543.43,
+            |        "premiumsOfLeaseGrant": 2543.43,
             |        "otherPropertyIncome": 54325.30,
             |        "foreignTaxTakenOff": 6543.01,
             |        "specialWithholdingTaxOrUKTaxPaid": 643245.00
             |      },
-            |      "expenditure": {
+            |      "expenses": {
             |        "residentialFinancialCost": 21235.22,
             |        "broughtFwdResidentialFinancialCost": 12556.00,
             |        "other": 2425.11,
@@ -2004,12 +2052,12 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec {
             |          "rentAmount": 34456.30
             |        },
             |        "foreignTaxCreditRelief": true,
-            |        "premiumOfLeaseGrant": 2543.43,
+            |        "premiumsOfLeaseGrant": 2543.43,
             |        "otherPropertyIncome": 54325.30,
             |        "foreignTaxTakenOff": 6543.01,
             |        "specialWithholdingTaxOrUKTaxPaid": 643245.00
             |      },
-            |      "expenditure": {
+            |      "expenses": {
             |        "residentialFinancialCost": 21235.22,
             |        "broughtFwdResidentialFinancialCost": 12556.00,
             |        "other": 2425.11,
@@ -2020,9 +2068,9 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec {
             |}
             |""".stripMargin
         ))) shouldBe List(RuleBothExpensesSuppliedError.copy(paths = Some(Seq(
-          "/foreignFhlEea/expenditure",
-          "/foreignProperty/0/expenditure",
-          "/foreignProperty/1/expenditure"
+          "/foreignFhlEea/expenses",
+          "/foreignNonFhlProperty/0/expenses",
+          "/foreignNonFhlProperty/1/expenses"
         ))))
       }
     }
@@ -2030,7 +2078,7 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec {
     "return multiple errors" when {
       "request supplied has multiple errors" in {
         validator.validate(CreateForeignPropertyPeriodSummaryRawData("A12344A", "20178", "232301", requestBodyJson)) shouldBe
-          List(NinoFormatError, BusinessIdFormatError, TaxYearFormatError)
+          List(NinoFormatError, TaxYearFormatError, BusinessIdFormatError)
       }
     }
   }

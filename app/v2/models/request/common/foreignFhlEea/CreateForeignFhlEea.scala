@@ -19,7 +19,10 @@ package v2.models.request.common.foreignFhlEea
 import play.api.libs.functional.syntax._
 import play.api.libs.json.{JsPath, Json, Reads, Writes}
 
-case class CreateForeignFhlEea(income: Option[ForeignFhlEeaIncome], expenses: Option[CreateForeignFhlEeaExpenses])
+case class CreateForeignFhlEea(income: Option[ForeignFhlEeaIncome], expenses: Option[CreateForeignFhlEeaExpenses]) {
+
+  def isEmpty: Boolean = income.isEmpty && expenses.isEmpty
+}
 
 
 object CreateForeignFhlEea {

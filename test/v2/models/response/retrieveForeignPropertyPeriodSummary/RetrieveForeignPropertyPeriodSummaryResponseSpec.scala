@@ -20,17 +20,18 @@ import mocks.MockAppConfig
 import play.api.libs.json.{JsValue, Json}
 import support.UnitSpec
 import v2.models.response.retrieveForeignPropertyPeriodSummary.foreignFhlEea._
-import v2.models.response.retrieveForeignPropertyPeriodSummary.foreignProperty._
+import v2.models.response.retrieveForeignPropertyPeriodSummary.foreignNonFhlProperty._
 import v2.models.utils.JsonErrorValidators
 
 class RetrieveForeignPropertyPeriodSummaryResponseSpec extends UnitSpec with JsonErrorValidators with MockAppConfig {
 
   val retrieveForeignPropertyResponseBody: RetrieveForeignPropertyPeriodSummaryResponse = RetrieveForeignPropertyPeriodSummaryResponse(
+    "2021-06-17T10:53:38Z",
     "2020-01-01",
     "2020-01-31",
     Some(ForeignFhlEea(
-      ForeignFhlEeaIncome(5000.99),
-      Some(ForeignFhlEeaExpenditure(
+      Some(ForeignFhlEeaIncome(Some(5000.99))),
+      Some(ForeignFhlEeaExpenses(
         Some(5000.99),
         Some(5000.99),
         Some(5000.99),
@@ -41,17 +42,17 @@ class RetrieveForeignPropertyPeriodSummaryResponseSpec extends UnitSpec with Jso
         Some(5000.99)
       ))
     )),
-    Some(Seq(ForeignProperty(
+    Some(Seq(ForeignNonFhlProperty(
       "FRA",
-      ForeignPropertyIncome(
-        ForeignPropertyRentIncome(5000.99),
+      Some(ForeignNonFhlPropertyIncome(
+        Some(ForeignNonFhlPropertyRentIncome(Some(5000.99))),
         false,
         Some(5000.99),
         Some(5000.99),
         Some(5000.99),
         Some(5000.99)
-      ),
-      Some(ForeignPropertyExpenditure(
+      )),
+      Some(ForeignNonFhlPropertyExpenses(
         Some(5000.99),
         Some(5000.99),
         Some(5000.99),
@@ -68,24 +69,25 @@ class RetrieveForeignPropertyPeriodSummaryResponseSpec extends UnitSpec with Jso
   val writesJson: JsValue = Json.parse(
     """
       |{
+      |  "submittedOn": "2021-06-17T10:53:38Z",
       |  "fromDate": "2020-01-01",
       |  "toDate": "2020-01-31",
       |  "foreignFhlEea": {
       |    "income": {
       |      "rentAmount": 5000.99
       |    },
-      |    "expenditure": {
+      |    "expenses": {
       |      "premisesRunningCosts": 5000.99,
       |      "repairsAndMaintenance": 5000.99,
       |      "financialCosts": 5000.99,
       |      "professionalFees": 5000.99,
-      |      "costsOfServices": 5000.99,
+      |      "costOfServices": 5000.99,
       |      "travelCosts": 5000.99,
       |      "other": 5000.99,
       |      "consolidatedExpenses": 5000.99
       |    }
       |  },
-      |  "foreignProperty": [
+      |  "foreignNonFhlProperty": [
       |    {
       |      "countryCode": "FRA",
       |      "income": {
@@ -93,17 +95,17 @@ class RetrieveForeignPropertyPeriodSummaryResponseSpec extends UnitSpec with Jso
       |          "rentAmount": 5000.99
       |        },
       |        "foreignTaxCreditRelief": false,
-      |        "premiumOfLeaseGrant": 5000.99,
+      |        "premiumsOfLeaseGrant": 5000.99,
       |        "otherPropertyIncome": 5000.99,
-      |        "foreignTaxTakenOff": 5000.99,
-      |        "specialWithholdingTaxOrUKTaxPaid": 5000.99
+      |        "foreignTaxPaidOrDeducted": 5000.99,
+      |        "specialWithholdingTaxOrUkTaxPaid": 5000.99
       |      },
-      |      "expenditure": {
+      |      "expenses": {
       |        "premisesRunningCosts": 5000.99,
       |        "repairsAndMaintenance": 5000.99,
       |        "financialCosts": 5000.99,
       |        "professionalFees": 5000.99,
-      |        "costsOfServices": 5000.99,
+      |        "costOfServices": 5000.99,
       |        "travelCosts": 5000.99,
       |        "residentialFinancialCost": 5000.99,
       |        "broughtFwdResidentialFinancialCost": 5000.99,

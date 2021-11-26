@@ -165,7 +165,7 @@
                 "example": "5000.99"
               },
               "foreignTaxPaidOrDeducted": {
-                "description": "The total amount of foreign tax taken off or deducted from your income. The value must be greater than 0 and up to 99999999999.99.",
+                "description": "The total amount of foreign tax paid or deducted from your income. The value must be greater than 0 and up to 99999999999.99.",
                 "type": "number",
                 "multipleOf": 0.01,
                 "minimum": 0.00,
@@ -173,7 +173,7 @@
                 "example": "5000.99"
               },
               "specialWithholdingTaxOrUkTaxPaid": {
-                "description": "Tax withheld (in UK Pounds) on certain payments to UK residents or UK Tax taken off rental Income (applies to non-resident landlords only). The value must be greater than 0 and up to 99999999999.99.",
+                "description": "Tax withheld (in UK Pounds) on certain payments to UK residents or UK Tax paid from rental Income (applies to non-resident landlords only). The value must be greater than 0 and up to 99999999999.99.",
                 "type": "number",
                 "multipleOf": 0.01,
                 "minimum": 0.00,
@@ -240,7 +240,7 @@
                 "example": "5000.99"
               },
               "residentialFinancialCost": {
-                "description": "The residential financial cost that can be deductible from rental income (tax relief). The value must be greater than 0 and up to 99999999999.99.",
+                "description": "The residential financial cost that can be deducted from rental income (tax relief). The value must be greater than 0 and up to 99999999999.99.",
                 "type": "number",
                 "multipleOf": 0.01,
                 "minimum": 0.00,

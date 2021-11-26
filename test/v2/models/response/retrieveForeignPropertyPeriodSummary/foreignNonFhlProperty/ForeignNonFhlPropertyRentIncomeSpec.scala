@@ -22,7 +22,7 @@ import v2.models.utils.JsonErrorValidators
 
 class ForeignNonFhlPropertyRentIncomeSpec extends UnitSpec with JsonErrorValidators {
 
-  val rentIncome = Some(ForeignNonFhlPropertyRentIncome(Some(5000.99)))
+  val rentIncome = ForeignNonFhlPropertyRentIncome(Some(5000.99))
 
   val json = Json.parse(
     """{

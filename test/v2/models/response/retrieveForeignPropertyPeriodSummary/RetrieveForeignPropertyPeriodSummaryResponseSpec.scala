@@ -19,9 +19,12 @@ package v2.models.response.retrieveForeignPropertyPeriodSummary
 import mocks.MockAppConfig
 import play.api.libs.json.{JsValue, Json}
 import support.UnitSpec
-import v2.models.hateoas.{Link, Method}
+import v2.hateoas.HateoasFactory
+import v2.models.hateoas.Method.{GET, PUT}
+import v2.models.hateoas.{HateoasWrapper, Link, Method}
 import v2.models.response.retrieveForeignPropertyPeriodSummary.foreignFhlEea._
 import v2.models.response.retrieveForeignPropertyPeriodSummary.foreignNonFhlProperty._
+import v2.models.response.retrieveUkPropertyPeriodSummary.{RetrieveUkPropertyPeriodSummaryHateoasData, RetrieveUkPropertyPeriodSummaryResponse}
 import v2.models.utils.JsonErrorValidators
 
 class RetrieveForeignPropertyPeriodSummaryResponseSpec extends UnitSpec with JsonErrorValidators with MockAppConfig {
@@ -119,6 +122,13 @@ class RetrieveForeignPropertyPeriodSummaryResponseSpec extends UnitSpec with Jso
     """.stripMargin
   )
 
+  val hateoasData: RetrieveForeignPropertyPeriodSummaryHateoasData = RetrieveForeignPropertyPeriodSummaryHateoasData(
+    nino = "AA999999A",
+    businessId = "XAIS12345678910",
+    taxYear = "2022-23",
+    submissionId = "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
+  )
+
   val readsJson: JsValue = Json.parse(
     """
       |{
@@ -186,18 +196,24 @@ class RetrieveForeignPropertyPeriodSummaryResponseSpec extends UnitSpec with Jso
     }
   }
 
-  "LinksFactory" should {
-    "produce the correct links" when {
-      "called" in {
-        val data: RetrieveForeignPropertyPeriodSummaryHateoasData = RetrieveForeignPropertyPeriodSummaryHateoasData("myNino", "myBusinessId", "mySubmissionId")
+  "hateoasLinksFactory" when {
+    "wrap" should {
+      "return the expected wrapped response with correct links" in {
+        MockAppConfig.apiGatewayContext.returns("individuals/business/property").anyNumberOfTimes()
+        val wrappedResponse: HateoasWrapper[RetrieveForeignPropertyPeriodSummaryResponse] = new HateoasFactory(mockAppConfig).wrap(retrieveForeignPropertyResponseBody, hateoasData)
 
-        MockAppConfig.apiGatewayContext.returns("my/context").anyNumberOfTimes()
+        val baseUrl = "/individuals/business/property/foreign/AA999999A/XAIS12345678910/period/2022-23"
 
-        RetrieveForeignPropertyPeriodSummaryResponse.RetrieveForeignPropertyLinksFactory.links(mockAppConfig, data) shouldBe Seq(
-          Link(href = s"/my/context/foreign/${data.nino}/${data.businessId}/period/2022-23/${data.submissionId}", method = Method.PUT, rel = "amend-foreign-property-period-summary"),
-          Link(href = s"/my/context/foreign/${data.nino}/${data.businessId}/period/2022-23/${data.submissionId}", method = Method.GET, rel = "self"),
-          Link(href = s"/my/context/foreign/${data.nino}/${data.businessId}/period/2022-23", method = Method.GET, rel = "list-property-period-summaries")
+        val expectedWrappedResponse: HateoasWrapper[RetrieveUkPropertyPeriodSummaryResponse] = HateoasWrapper(
+          retrieveForeignPropertyResponseBody,
+          Seq(
+            Link(s"$baseUrl/4557ecb5-fd32-48cc-81f5-e6acd1099f3c", PUT, "amend-foreign-property-period-summary"),
+            Link(s"$baseUrl/4557ecb5-fd32-48cc-81f5-e6acd1099f3c", GET, "self"),
+            Link("/individuals/business/property/AA999999A/XAIS12345678910/period/2022-23", GET, "list-property-period-summaries")
+          )
         )
+
+        wrappedResponse shouldBe expectedWrappedResponse
       }
     }
   }

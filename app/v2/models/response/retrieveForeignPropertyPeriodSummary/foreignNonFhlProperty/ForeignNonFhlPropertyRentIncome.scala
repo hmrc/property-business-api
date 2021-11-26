@@ -22,7 +22,6 @@ case class ForeignNonFhlPropertyRentIncome(rentAmount: Option[BigDecimal])
 
 object ForeignNonFhlPropertyRentIncome {
   implicit val writes: Writes[ForeignNonFhlPropertyRentIncome] = Json.writes[ForeignNonFhlPropertyRentIncome]
-  implicit val reads: Reads[ForeignNonFhlPropertyRentIncome] = (
-    (JsPath \ "rentAmount").readNullable[BigDecimal]
-    )(ForeignNonFhlPropertyRentIncome.apply _)
+  implicit val reads: Reads[ForeignNonFhlPropertyRentIncome] =
+    (JsPath \ "rentAmount").readNullable[BigDecimal].map(rentAmount => ForeignNonFhlPropertyRentIncome(rentAmount))
 }

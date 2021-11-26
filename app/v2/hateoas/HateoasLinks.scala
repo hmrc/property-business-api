@@ -43,18 +43,15 @@ trait HateoasLinks {
   private def ukPropertyPeriodSummaryUri(appConfig: AppConfig, nino: String, businessId: String, taxYear: String, submissionId: String): String =
     s"/${appConfig.apiGatewayContext}/uk/$nino/$businessId/period/$taxYear/$submissionId"
 
+  private def foreignPropertyPeriodSummaryUri(appConfig: AppConfig, nino: String, businessId: String, taxYear: String, submissionId: String): String =
+    s"/${appConfig.apiGatewayContext}/foreign/$nino/$businessId/period/$taxYear/$submissionId"
+
   // API resource links
   def listForeignPropertiesPeriodSummaries(appConfig: AppConfig, nino: String, businessId: String, rel: String = SELF): Link =
     Link(href = propertyUri(appConfig, nino, businessId), method = GET, rel = rel)
 
   def createForeignPropertyPeriodSummary(appConfig: AppConfig, nino: String, businessId: String): Link =
     Link(href = propertyUri(appConfig, nino, businessId), method = POST, rel = CREATE_PROPERTY_PERIOD_SUMMARY)
-
-  def amendForeignPropertyPeriodSummary(appConfig: AppConfig, nino: String, businessId: String, submissionId: String): Link =
-    Link(href = propertySubmissionUri(appConfig, nino, businessId, submissionId), method = PUT, rel = AMEND_PROPERTY_PERIOD_SUMMARY)
-
-  def retrieveForeignPropertyPeriodSummary(appConfig: AppConfig, nino: String, businessId: String, submissionId: String): Link =
-    Link(href = propertySubmissionUri(appConfig, nino, businessId, submissionId), method = GET, rel = SELF)
 
   def retrieveForeignPropertyAnnualSubmission(appConfig: AppConfig, nino: String, businessId: String, taxYear: String): Link =
     Link(href = propertyAnnualSubmissionUri(appConfig, nino, businessId, taxYear), method = GET, rel = SELF)
@@ -80,4 +77,11 @@ trait HateoasLinks {
 
   def amendUkPropertyPeriodSummary(appConfig: AppConfig, nino: String, businessId: String, taxYear: String, submissionId: String): Link =
     Link(href = ukPropertyPeriodSummaryUri(appConfig, nino, businessId, taxYear, submissionId), method = PUT, rel = AMEND_UK_PROPERTY_PERIOD_SUMMARY)
+
+  //Foreign Property Income & Expenses Period Summary V2
+  def retrieveForeignPropertyPeriodSummary(appConfig: AppConfig, nino: String, businessId: String, taxYear: String, submissionId: String): Link =
+    Link(href = foreignPropertyPeriodSummaryUri(appConfig, nino, businessId, taxYear, submissionId), method = PUT, rel = RETRIEVE_FOREIGN_PROPERTY_PERIOD_SUMMARY)
+
+  def amendForeignPropertyPeriodSummary(appConfig: AppConfig, nino: String, businessId: String, taxYear: String, submissionId: String): Link =
+    Link(href = foreignPropertyPeriodSummaryUri(appConfig, nino, businessId, taxYear, submissionId), method = PUT, rel = AMEND_FOREIGN_PROPERTY_PERIOD_SUMMARY)
 }

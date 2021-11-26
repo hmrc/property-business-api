@@ -104,14 +104,14 @@ class ForeignNonFhlPropertySpec extends UnitSpec with JsonErrorValidators {
   "reads" when {
     "passed a valid JSON" should {
       "return a valid model" in {
-        readsJson.as[ForeignNonFhlProperty] shouldBe ForeignNonFhlProperty
+        readsJson.as[ForeignNonFhlProperty] shouldBe foreignNonFhlProperty
       }
     }
   }
   "writes" when {
     "passed valid model" should {
       "return valid JSON" in {
-        Json.toJson(ForeignNonFhlProperty) shouldBe writesJson
+        Json.toJson(foreignNonFhlProperty) shouldBe writesJson
       }
     }
   }

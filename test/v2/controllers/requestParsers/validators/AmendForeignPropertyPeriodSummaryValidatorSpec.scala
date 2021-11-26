@@ -32,8 +32,9 @@ class AmendForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with JsonE
 
   MockAppConfig.minimumTaxV2Foreign returns 2021
 
-  private val entry = Json.parse("""{
-    |  "countryCode": "AFG",
+  private def entryWith(countryCode: String) =
+    Json.parse(s"""{
+    |  "countryCode": "$countryCode",
     |  "income": {
     |    "rentIncome": {
     |      "rentAmount": 440.31
@@ -56,6 +57,8 @@ class AmendForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with JsonE
     |    "other": 3457.9
     |  }
     |}""".stripMargin)
+
+  private val entry = entryWith(countryCode = "AFG")
 
   private def bodyWith(nonFhlEntries: JsValue*) = Json.parse(
     s"""{
@@ -360,7 +363,8 @@ class AmendForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with JsonE
           val path2 = "/foreignNonFhlProperty/1/income/rentIncome/rentAmount"
 
           val json =
-            bodyWith(entry.update("/expenses/travelCosts", badValue), entry.update("/income/rentIncome/rentAmount", badValue))
+            bodyWith(entryWith(countryCode = "ZWE").update("/expenses/travelCosts", badValue),
+                     entry.update("/income/rentIncome/rentAmount", badValue))
               .update(path0, badValue)
 
           validator.validate(
@@ -393,7 +397,7 @@ class AmendForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with JsonE
               businessId = validBusinessId,
               taxYear = taxYear,
               submissionId = validSubmissionId,
-              body = bodyWith(entry.update("/countryCode", JsString("QQQ")))
+              body = bodyWith(entryWith(countryCode = "QQQ"))
             )) shouldBe List(RuleCountryCodeError.copy(paths = Some(Seq("/foreignNonFhlProperty/0/countryCode"))))
         }
         "multiple invalid country codes are provided" in {
@@ -402,7 +406,7 @@ class AmendForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with JsonE
             businessId = validBusinessId,
             taxYear = taxYear,
             submissionId = validSubmissionId,
-            body = bodyWith(entry.update("/countryCode", JsString("QQQ")), entry.update("/countryCode", JsString("QQQ")))
+            body = bodyWith(entryWith(countryCode = "QQQ"), entryWith(countryCode = "AAA"))
           )) shouldBe List(
             RuleCountryCodeError.copy(paths = Some(Seq("/foreignNonFhlProperty/0/countryCode", "/foreignNonFhlProperty/1/countryCode"))))
         }
@@ -416,8 +420,41 @@ class AmendForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with JsonE
               businessId = validBusinessId,
               taxYear = taxYear,
               submissionId = validSubmissionId,
-              body = bodyWith(entry.update("/countryCode", JsString("XXXX")))
+              body = bodyWith(entryWith(countryCode = "XXXX"))
             )) shouldBe List(CountryCodeFormatError.copy(paths = Some(Seq("/foreignNonFhlProperty/0/countryCode"))))
+        }
+      }
+
+      "return RuleDuplicateCountryCodeError" when {
+        "a country code is duplicated" in {
+          val code = "ZWE"
+          validator.validate(
+            AmendForeignPropertyPeriodSummaryRawData(
+              nino = validNino,
+              businessId = validBusinessId,
+              taxYear = taxYear,
+              submissionId = validSubmissionId,
+              body = bodyWith(entryWith(code), entryWith(code))
+            )) shouldBe List(
+            RuleDuplicateCountryCodeError
+              .forDuplicatedCodesAndPaths(code = code, paths = Seq("/foreignNonFhlProperty/0/countryCode", "/foreignNonFhlProperty/1/countryCode")))
+        }
+
+        "multiple country codes are duplicated" in {
+          val code1 = "AFG"
+          val code2 = "ZWE"
+          validator.validate(AmendForeignPropertyPeriodSummaryRawData(
+            nino = validNino,
+            businessId = validBusinessId,
+            taxYear = taxYear,
+            submissionId = validSubmissionId,
+            body = bodyWith(entryWith(code1), entryWith(code2), entryWith(code1), entryWith(code2))
+          )) should contain theSameElementsAs List(
+            RuleDuplicateCountryCodeError
+              .forDuplicatedCodesAndPaths(code = code1, paths = Seq("/foreignNonFhlProperty/0/countryCode", "/foreignNonFhlProperty/2/countryCode")),
+            RuleDuplicateCountryCodeError
+              .forDuplicatedCodesAndPaths(code = code2, paths = Seq("/foreignNonFhlProperty/1/countryCode", "/foreignNonFhlProperty/3/countryCode")),
+          )
         }
       }
 
@@ -439,7 +476,7 @@ class AmendForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with JsonE
             businessId = validBusinessId,
             taxYear = taxYear,
             submissionId = validSubmissionId,
-            body = bodyWith(entry.update("expenses/consolidatedExpenses", JsNumber(123.45)),
+            body = bodyWith(entryWith(countryCode = "ZWE").update("expenses/consolidatedExpenses", JsNumber(123.45)),
                             entry.update("expenses/consolidatedExpenses", JsNumber(123.45)))
           )) shouldBe
             List(RuleBothExpensesSuppliedError.copy(paths = Some(Seq("/foreignNonFhlProperty/0/expenses", "/foreignNonFhlProperty/1/expenses"))))

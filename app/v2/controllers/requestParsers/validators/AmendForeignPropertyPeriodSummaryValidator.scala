@@ -19,9 +19,9 @@ package v2.controllers.requestParsers.validators
 import config.AppConfig
 import v2.controllers.requestParsers.validators.validations._
 import v2.models.errors._
-import v2.models.request.amendForeignPropertyPeriodSummary.{AmendForeignPropertyPeriodSummaryRawData, AmendForeignPropertyPeriodSummaryRequestBody}
-import v2.models.request.common.foreignFhlEea.{AmendForeignFhlEea, AmendForeignFhlEeaExpenses}
-import v2.models.request.common.foreignPropertyEntry.{AmendForeignNonFhlPropertyEntry, AmendForeignNonFhlPropertyExpenses}
+import v2.models.request.amendForeignPropertyPeriodSummary.{ AmendForeignPropertyPeriodSummaryRawData, AmendForeignPropertyPeriodSummaryRequestBody }
+import v2.models.request.common.foreignFhlEea.{ AmendForeignFhlEea, AmendForeignFhlEeaExpenses }
+import v2.models.request.common.foreignPropertyEntry.{ AmendForeignNonFhlPropertyEntry, AmendForeignNonFhlPropertyExpenses }
 
 import javax.inject.Singleton
 
@@ -63,13 +63,14 @@ class AmendForeignPropertyPeriodSummaryValidator(appConfig: AppConfig) extends V
           body.foreignFhlEea.flatMap(_.expenses.map(validateForeignFhlEeaConsolidatedExpenses)).getOrElse(NoValidationErrors),
           body.foreignNonFhlProperty
             .map(_.zipWithIndex.toList.map {
-                case (entry, i) =>
-                  entry.expenses.map(expenditure => validateForeignPropertyConsolidatedExpenses(expenditure, i)).getOrElse(NoValidationErrors)
-              }
-            )
+              case (entry, i) =>
+                entry.expenses.map(expenditure => validateForeignPropertyConsolidatedExpenses(expenditure, i)).getOrElse(NoValidationErrors)
+            })
             .getOrElse(Nil)
-            .flatten
-        )))
+            .flatten,
+          duplicateCountryCodeValidation(body)
+        ))
+    )
   }
 
   private def validateForeignFhlEea(foreignFhlEea: AmendForeignFhlEea): List[MtdError] = {
@@ -194,6 +195,23 @@ class AmendForeignPropertyPeriodSummaryValidator(appConfig: AppConfig) extends V
       expenses = expenses,
       path = s"/foreignNonFhlProperty/$index/expenses"
     )
+  }
+
+  private def duplicateCountryCodeValidation(body: AmendForeignPropertyPeriodSummaryRequestBody): List[MtdError] = {
+    body.foreignNonFhlProperty
+      .map { entries =>
+        entries.zipWithIndex
+          .map {
+            case (entry, idx) => (entry.countryCode, s"/foreignNonFhlProperty/$idx/countryCode")
+          }
+          .groupBy(_._1)
+          .collect {
+            case (code, codeAndPaths) if codeAndPaths.size >= 2 =>
+              RuleDuplicateCountryCodeError.forDuplicatedCodesAndPaths(code, codeAndPaths.map(_._2))
+          }
+          .toList
+      }
+      .getOrElse(Nil)
   }
 
   override def validate(data: AmendForeignPropertyPeriodSummaryRawData): List[MtdError] = {

@@ -16,12 +16,11 @@
 
 package v2.models.response.retrieveForeignPropertyPeriodSummary.foreignFhlEea
 
-import play.api.libs.json.{JsPath, Json, Reads, Writes}
+import play.api.libs.json.{Json, Reads, Writes}
 
 case class ForeignFhlEeaIncome(rentAmount: Option[BigDecimal])
 
 object ForeignFhlEeaIncome {
   implicit val writes: Writes[ForeignFhlEeaIncome] = Json.writes[ForeignFhlEeaIncome]
-  implicit val reads: Reads[ForeignFhlEeaIncome] =
-    (JsPath \ "rentAmount").readNullable[BigDecimal].map(rentAmount => ForeignFhlEeaIncome(rentAmount))
+  implicit val reads: Reads[ForeignFhlEeaIncome] = Json.reads[ForeignFhlEeaIncome]
 }

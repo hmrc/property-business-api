@@ -46,7 +46,8 @@ class RetrieveUkPropertyPeriodSummaryConnector @Inject()(val http: HttpClient,
                         correlationId: String): Future[IfsOutcome[Result]] = {
 
     val response = get(
-      uri = IfsUri[RetrieveUkPropertyPeriodSummaryResponse](s"/income-tax/business/property/periodic?taxableEntityId=${request.nino.nino}&taxYear=${request.taxYear}&incomeSourceId=${request.businessId}&submissionId=${request.submissionId}")
+      uri = IfsUri[RetrieveUkPropertyPeriodSummaryResponse](s"income-tax/business/property/periodic?" +
+        s"taxableEntityId=${request.nino.nino}&taxYear=${request.taxYear}&incomeSourceId=${request.businessId}&submissionId=${request.submissionId}")
     )
 
     response.map {

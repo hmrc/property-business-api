@@ -18,13 +18,17 @@ package v2.controllers
 
 import play.api.libs.json.{JsValue, Json}
 import uk.gov.hmrc.http.HeaderCarrier
+import play.api.mvc.Result
+import v2.models.response.amendForeignPropertyPeriodSummary.AmendForeignPropertyPeriodSummaryHateoasData
 import v2.models.hateoas.Method._
-import v1.mocks.requestParsers.MockAmendForeignPropertyPeriodSummaryRequestParser
+import v2.mocks.requestParsers.MockAmendForeignPropertyPeriodSummaryRequestParser
 import v2.mocks.MockIdGenerator
 import v2.mocks.hateoas.MockHateoasFactory
 import v2.mocks.services.{MockAmendForeignPropertyPeriodSummaryService, MockEnrolmentsAuthService, MockMtdIdLookupService}
 import v2.models.domain.Nino
-import v2.models.hateoas.Link
+import v2.models.errors._
+import v2.models.hateoas.{HateoasWrapper, Link}
+import v2.models.outcomes.ResponseWrapper
 import v2.models.request.amendForeignPropertyPeriodSummary._
 import v2.models.request.common.foreignFhlEea.{AmendForeignFhlEea, AmendForeignFhlEeaExpenses, ForeignFhlEeaIncome}
 import v2.models.request.common.foreignPropertyEntry._
@@ -52,7 +56,7 @@ class AmendForeignPropertyPeriodSummaryControllerSpec
     val controller = new AmendForeignPropertyPeriodSummaryController(
       authService = mockEnrolmentsAuthService,
       lookupService = mockMtdIdLookupService,
-      parser = mockAmendForeignPropertyRequestParser,
+      parser = mockAmendForeignPropertyPeriodSummaryRequestParser,
       service = mockService,
       hateoasFactory = mockHateoasFactory,
       cc = cc,
@@ -185,6 +189,7 @@ class AmendForeignPropertyPeriodSummaryControllerSpec
       |    }
       |  ]
       |}""".stripMargin)
+
   private val requestBodyJsonConsolidatedExpenses = Json.parse(
     """{
       |  "foreignFhlEea": {
@@ -254,6 +259,115 @@ class AmendForeignPropertyPeriodSummaryControllerSpec
     )
 
   "amend" should {
-    "return a succ"
+    "return a successful response from a consolidated request" when {
+      "the request received is valid" in new Test {
+
+        MockAmendForeignPropertyRequestParser
+          .parseRequest(AmendForeignPropertyPeriodSummaryRawData(nino, businessId, taxYear, submissionId, requestBodyJsonConsolidatedExpenses))
+          .returns(Right(requestData))
+
+        MockAmendForeignPropertyService
+          .amend(requestData)
+          .returns(Future.successful(Right(ResponseWrapper(correlationId, ()))))
+
+        MockHateoasFactory
+          .wrap((), AmendForeignPropertyPeriodSummaryHateoasData(nino, businessId, taxYear, submissionId))
+          .returns(HateoasWrapper((), testHateoasLinks))
+
+        val result: Future[Result] = controller.handleRequest(nino, businessId, taxYear, submissionId)(fakePostRequest(requestBodyJsonConsolidatedExpenses))
+        status(result) shouldBe OK
+        header("X-CorrelationId", result) shouldBe Some(correlationId)
+      }
+    }
+    "return a successful response from an unconsolidated request" when {
+      "the request received is valid" in new Test {
+
+        MockAmendForeignPropertyRequestParser
+          .parseRequest(AmendForeignPropertyPeriodSummaryRawData(nino, businessId, taxYear, submissionId, requestBodyJson))
+          .returns(Right(requestData))
+
+        MockAmendForeignPropertyService
+          .amend(requestData)
+          .returns(Future.successful(Right(ResponseWrapper(correlationId, ()))))
+
+        MockHateoasFactory
+          .wrap((), AmendForeignPropertyPeriodSummaryHateoasData(nino, businessId, taxYear, submissionId))
+          .returns(HateoasWrapper((), testHateoasLinks))
+
+        val result: Future[Result] = controller.handleRequest(nino, businessId, taxYear, submissionId)(fakePostRequest(requestBodyJson))
+        status(result) shouldBe OK
+        header("X-CorrelationId", result) shouldBe Some(correlationId)
+      }
+    }
+
+    "return the error as per spec" when {
+      "parser errors occur" should {
+        def errorsFromParserTester(error: MtdError, expectedStatus: Int): Unit = {
+          s"a ${error.code} error is returned from the parser" in new Test {
+
+            MockAmendForeignPropertyRequestParser
+              .parseRequest(rawData.copy(body = requestBodyJsonConsolidatedExpenses))
+              .returns(Left(ErrorWrapper(correlationId, error, None)))
+
+            val result: Future[Result] = controller.handleRequest(nino, businessId, taxYear, submissionId)(fakePostRequest(requestBodyJsonConsolidatedExpenses))
+
+            status(result) shouldBe expectedStatus
+            contentAsJson(result) shouldBe Json.toJson(error)
+            header("X-CorrelationId", result) shouldBe Some(correlationId)
+          }
+        }
+
+        val input = Seq(
+          (BadRequestError, BAD_REQUEST),
+          (NinoFormatError, BAD_REQUEST),
+          (TaxYearFormatError, BAD_REQUEST),
+          (BusinessIdFormatError, BAD_REQUEST),
+          (SubmissionIdFormatError, BAD_REQUEST),
+          (CountryCodeFormatError, BAD_REQUEST),
+          (RuleCountryCodeError, BAD_REQUEST),
+          (RuleTaxYearNotSupportedError, BAD_REQUEST),
+          (RuleTypeOfBusinessIncorrectError, BAD_REQUEST),
+          (DownstreamError, INTERNAL_SERVER_ERROR)
+        )
+
+        input.foreach(args => (errorsFromParserTester _).tupled(args))
+      }
+
+      "service errors occur" should {
+        def serviceErrors(mtdError: MtdError, expectedStatus: Int): Unit = {
+          s"a $mtdError error is returned from the service" in new Test {
+
+            MockAmendForeignPropertyRequestParser
+              .parseRequest(rawData)
+              .returns(Right(requestData))
+
+            MockAmendForeignPropertyService
+              .amend(requestData)
+              .returns(Future.successful(Left(ErrorWrapper(correlationId, mtdError))))
+
+            val result: Future[Result] = controller.handleRequest(nino, businessId, taxYear, submissionId)(fakePostRequest(requestBodyJson))
+
+            status(result) shouldBe expectedStatus
+            contentAsJson(result) shouldBe Json.toJson(mtdError)
+            header("X-CorrelationId", result) shouldBe Some(correlationId)
+          }
+        }
+
+        val input = Seq(
+          (NinoFormatError, BAD_REQUEST),
+          (TaxYearFormatError, BAD_REQUEST),
+          (BusinessIdFormatError, BAD_REQUEST),
+          (SubmissionIdFormatError, BAD_REQUEST),
+          (NotFoundError, NOT_FOUND),
+          (CountryCodeFormatError, BAD_REQUEST),
+          (RuleCountryCodeError, BAD_REQUEST),
+          (RuleTypeOfBusinessIncorrectError, BAD_REQUEST),
+          (RuleTaxYearNotSupportedError, BAD_REQUEST),
+          (DownstreamError, INTERNAL_SERVER_ERROR)
+        )
+
+        input.foreach(args => (serviceErrors _).tupled(args))
+      }
+    }
   }
 }

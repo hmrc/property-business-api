@@ -33,13 +33,13 @@ object ListForeignPropertiesPeriodSummariesResponse extends HateoasLinks {
 
   implicit object LinksFactory extends HateoasListLinksFactory[ListForeignPropertiesPeriodSummariesResponse, SubmissionPeriod, ListForeignPropertiesPeriodSummariesHateoasData] {
 
-    override def itemLinks(appConfig: AppConfig, data: ListForeignPropertiesPeriodSummariesHateoasData, item: SubmissionPeriod): Seq[Link] =
-      Seq(retrieveForeignPropertyPeriodSummary(appConfig, data.nino, data.businessId, item.submissionId))
+    override def itemLinks(appConfig: AppConfig, data: ListForeignPropertiesPeriodSummariesHateoasData, item: SubmissionPeriod): Seq[Link] = Nil
 
     override def links(appConfig: AppConfig, data: ListForeignPropertiesPeriodSummariesHateoasData): Seq[Link] = {
+      import data._
+      val taxYear = "XXXXXXXXXXXXXX" // FIXME remove once (corresponding generic) build endpoint
       Seq(
-        listForeignPropertiesPeriodSummaries(appConfig, data.nino, data.businessId),
-        createForeignPropertyPeriodSummary(appConfig, data.nino, data.businessId)
+        listPropertyPeriodSummaries(appConfig, nino, data.businessId, taxYear, self = true)
       )
     }
   }

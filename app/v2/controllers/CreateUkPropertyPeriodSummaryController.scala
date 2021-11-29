@@ -73,7 +73,7 @@ class CreateUkPropertyPeriodSummaryController @Inject()(val authService: Enrolme
           auditSubmission(CreateUkPropertyPeriodicAuditDetail(request.userDetails, nino, taxYear, businessId, request.body,
             serviceResponse.correlationId, AuditResponse(OK, Right(Some(response)))))
 
-          Created(Json.toJson(vendorResponse))
+          Created(response)
             .withApiHeaders(serviceResponse.correlationId)
         }
 

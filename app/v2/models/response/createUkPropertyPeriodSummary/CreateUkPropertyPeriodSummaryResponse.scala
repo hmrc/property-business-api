@@ -30,7 +30,9 @@ object CreateUkPropertyPeriodSummaryResponse extends HateoasLinks{
   implicit object LinksFactory extends HateoasLinksFactory[CreateUkPropertyPeriodSummaryResponse, CreateUkPropertyPeriodSummaryHateoasData] {
     override def links(appConfig: AppConfig, data: CreateUkPropertyPeriodSummaryHateoasData): Seq[Link] = {
      import data._
-      Seq(retrieveUkPropertyPeriodSummary(appConfig, nino, businessId, taxYear, submissionId))
+      Seq(
+        amendUkPropertyPeriodSummary(appConfig,nino,businessId, taxYear, submissionId),
+        retrieveUkPropertyPeriodSummary(appConfig, nino, businessId, taxYear, submissionId, self = true))
     }
   }
 }

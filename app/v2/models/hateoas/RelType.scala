@@ -18,12 +18,18 @@ package v2.models.hateoas
 
 object RelType {
   val SELF = "self"
-  val AMEND_PROPERTY_PERIOD_SUMMARY = "amend-property-period-summary"
-  val LIST_PROPERTY_PERIOD_SUMMARIES = "list-property-period-summaries"
-  val CREATE_PROPERTY_PERIOD_SUMMARY = "create-property-period-summary"
-  val AMEND_PROPERTY_ANNUAL_SUBMISSION = "amend-property-annual-submission"
-  val DELETE_PROPERTY_ANNUAL_SUBMISSION = "delete-property-annual-submission"
-  val AMEND_UK_PROPERTY_ANNUAL_SUBMISSION = "amend-uk-property-annual-submission"
+  val AMEND_FOREIGN_PROPERTY_PERIOD_SUMMARY = "amend-foreign-property-period-summary"
+  val CREATE_FOREIGN_PROPERTY_PERIOD_SUMMARY = "create-foreign-property-period-summary"
+  val RETRIEVE_FOREIGN_PROPERTY_PERIOD_SUMMARY = "retrieve-foreign-property-period-summary"
+  val CREATE_AND_AMEND_FOREIGN_PROPERTY_ANNUAL_SUBMISSION = "create-and-amend-foreign-property-annual-submission"
+  val RETRIEVE_FOREIGN_PROPERTY_ANNUAL_SUBMISSION = "retrieve-foreign-property-annual-submission"
+
+  val CREATE_UK_PROPERTY_PERIOD_SUMMARY = "create-uk-property-period-summary"
   val AMEND_UK_PROPERTY_PERIOD_SUMMARY = "amend-uk-property-period-summary"
-  val LIST_UK_PROPERTY_PERIOD_SUMMARIES = "list-property-period-summaries"
+  val RETRIEVE_UK_PROPERTY_PERIOD_SUMMARY = "retrieve-uk-property-period-summary"
+  val CREATE_AND_AMEND_UK_PROPERTY_ANNUAL_SUBMISSION = "create-and-amend-uk-property-annual-submission"
+  val RETRIEVE_UK_PROPERTY_ANNUAL_SUBMISSION = "retrieve-uk-property-annual-submission"
+
+  val LIST_PROPERTY_PERIOD_SUMMARIES = "list-property-period-summaries"
+  val DELETE_PROPERTY_ANNUAL_SUBMISSION = "delete-property-annual-submission"
 }

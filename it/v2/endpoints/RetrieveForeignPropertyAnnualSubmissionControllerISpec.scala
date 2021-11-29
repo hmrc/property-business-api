@@ -69,12 +69,12 @@ class RetrieveForeignPropertyAnnualSubmissionControllerISpec extends V2Integrati
         |  ],
         |  "links": [
         |    {
-        |      "href": "/individuals/business/property/AA123456A/XAIS12345678910/annual/2021-22",
+        |      "href": "/individuals/business/property/foreign/AA123456A/XAIS12345678910/annual/2021-22",
         |      "method": "PUT",
-        |      "rel": "amend-property-annual-submission"
+        |      "rel": "create-and-amend-foreign-property-annual-submission"
         |    },
         |    {
-        |      "href": "/individuals/business/property/AA123456A/XAIS12345678910/annual/2021-22",
+        |      "href": "/individuals/business/property/foreign/AA123456A/XAIS12345678910/annual/2021-22",
         |      "method": "GET",
         |      "rel": "self"
         |    },

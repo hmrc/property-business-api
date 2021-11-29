@@ -62,7 +62,7 @@ class AmendForeignPropertyAnnualSubmissionController @Inject()(val authService: 
         } yield {
           logger.info(
             s"[${endpointLogContext.controllerName}][${endpointLogContext.endpointName}] - " +
-            s"Success response recieved with CorrelationId: ${serviceResponse.correlationId}")
+            s"Success response received with CorrelationId: ${serviceResponse.correlationId}")
 
           val response = Json.toJson(vendorResponse)
 

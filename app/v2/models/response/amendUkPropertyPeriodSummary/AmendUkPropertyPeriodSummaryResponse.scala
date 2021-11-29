@@ -20,7 +20,6 @@ import config.AppConfig
 import v2.hateoas.HateoasLinksFactory
 import v2.hateoas.HateoasLinks
 import v2.models.hateoas.{HateoasData, Link}
-import v2.models.hateoas.RelType._
 
 case class AmendUkPropertyPeriodSummaryResponse(submissionId: String)
 
@@ -30,8 +29,8 @@ object AmendUkPropertyPeriodSummaryResponse extends HateoasLinks {
     override def links(appConfig: AppConfig, data: AmendUkPropertyPeriodSummaryHateoasData): Seq[Link] = {
       import data._
       Seq(
-        listUkPropertyPeriodicSummary(appConfig, nino, businessId, taxYear, rel = LIST_UK_PROPERTY_PERIOD_SUMMARIES),
-        retrieveUkPropertyPeriodSummary(appConfig, nino, businessId, taxYear, submissionId),
+        listPropertyPeriodSummaries(appConfig, nino, businessId, taxYear, self = false),
+        retrieveUkPropertyPeriodSummary(appConfig, nino, businessId, taxYear, submissionId, self = true),
         amendUkPropertyPeriodSummary(appConfig, nino, businessId, taxYear, submissionId)
       )
     }

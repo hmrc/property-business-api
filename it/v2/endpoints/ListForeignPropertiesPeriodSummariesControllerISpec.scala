@@ -41,38 +41,19 @@ class ListForeignPropertiesPeriodSummariesControllerISpec extends V2IntegrationB
          |    {
          |      "submissionId": "4557ecb5-fd32-48cc-81f5-e6acd1099f3c",
          |      "fromDate": "2020-06-22",
-         |      "toDate": "2020-06-22",
-         |      "links": [
-         |        {
-         |          "href": "/individuals/business/property/$nino/$businessId/period/4557ecb5-fd32-48cc-81f5-e6acd1099f3c",
-         |          "method": "GET",
-         |          "rel": "self"
-         |        }
-         |      ]
+         |      "toDate": "2020-06-22"
          |    },
          |    {
          |      "submissionId": "4557ecb5-fd32-48cc-81f5-e6acd1099f3d",
          |      "fromDate": "2020-08-22",
-         |      "toDate": "2020-08-22",
-         |      "links": [
-         |        {
-         |          "href": "/individuals/business/property/$nino/$businessId/period/4557ecb5-fd32-48cc-81f5-e6acd1099f3d",
-         |          "method": "GET",
-         |          "rel": "self"
-         |        }
-         |      ]
+         |      "toDate": "2020-08-22"
          |    }
          |  ],
          |  "links": [
          |    {
-         |      "href": "/individuals/business/property/$nino/$businessId/period",
+         |      "href": "/individuals/business/property/$nino/$businessId/period/XXXXXXXXXXXXXX",
          |      "method": "GET",
          |      "rel": "self"
-         |    },
-         |    {
-         |      "href": "/individuals/business/property/$nino/$businessId/period",
-         |      "method": "POST",
-         |      "rel": "create-property-period-summary"
          |    }
          |  ]
          |}

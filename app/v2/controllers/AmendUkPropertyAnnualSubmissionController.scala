@@ -59,7 +59,7 @@ class AmendUkPropertyAnnualSubmissionController @Inject()(val authService: Enrol
 
           logger.info(
             s"[${endpointLogContext.controllerName}][${endpointLogContext.endpointName}] - " +
-            s"Success response recieved with CorrelationId: ${serviceResponse.correlationId}")
+            s"Success response received with CorrelationId: ${serviceResponse.correlationId}")
 
           Ok(Json.toJson(vendorResponse))
             .withApiHeaders(serviceResponse.correlationId)

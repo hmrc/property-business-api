@@ -78,17 +78,17 @@ class RetrieveForeignPropertyPeriodSummaryControllerISpec extends V2IntegrationB
          |  ],
          |  "links": [
          |    {
-         |      "href": "/individuals/business/property/${nino}/${businessId}/period/${submissionId}",
+         |      "href": "/individuals/business/property/foreign/${nino}/${businessId}/period/XXXXXXXXXXXXXX/${submissionId}",
          |      "method": "PUT",
-         |      "rel": "amend-property-period-summary"
+         |      "rel": "amend-foreign-property-period-summary"
          |    },
          |    {
-         |      "href": "/individuals/business/property/${nino}/${businessId}/period/${submissionId}",
+         |      "href": "/individuals/business/property/foreign/${nino}/${businessId}/period/XXXXXXXXXXXXXX/${submissionId}",
          |      "method": "GET",
          |      "rel": "self"
          |    },
          |    {
-         |      "href": "/individuals/business/property/${nino}/${businessId}/period",
+         |      "href": "/individuals/business/property/${nino}/${businessId}/period/XXXXXXXXXXXXXX",
          |      "method": "GET",
          |      "rel": "list-property-period-summaries"
          |    }

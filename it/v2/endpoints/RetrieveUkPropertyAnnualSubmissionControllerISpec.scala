@@ -112,7 +112,7 @@ class RetrieveUkPropertyAnnualSubmissionControllerISpec extends V2IntegrationBas
         |    {
         |      "href": "/individuals/business/property/uk/AA123456A/XAIS12345678910/annual/$taxYear",
         |      "method": "PUT",
-        |      "rel": "amend-uk-property-annual-submission"
+        |      "rel": "create-and-amend-uk-property-annual-submission"
         |    },
         |    {
         |      "href": "/individuals/business/property/uk/AA123456A/XAIS12345678910/annual/$taxYear",

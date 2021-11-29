@@ -29,9 +29,12 @@ object CreateForeignPropertyPeriodSummaryResponse extends HateoasLinks{
   implicit object LinksFactory extends HateoasLinksFactory[CreateForeignPropertyPeriodSummaryResponse, CreateForeignPropertyPeriodSummaryHateoasData] {
     override def links(appConfig: AppConfig, data: CreateForeignPropertyPeriodSummaryHateoasData): Seq[Link] = {
       import data._
-      Seq(retrieveForeignPropertyPeriodSummary(appConfig, nino, businessId, submissionId))
+      Seq(
+        retrieveForeignPropertyPeriodSummary(appConfig, nino, businessId, taxYear, submissionId, self = true),
+        amendForeignPropertyPeriodSummary(appConfig, nino, businessId, taxYear, submissionId),
+      )
     }
   }
 }
 
-case class CreateForeignPropertyPeriodSummaryHateoasData(nino: String, businessId: String, submissionId: String) extends HateoasData
+case class CreateForeignPropertyPeriodSummaryHateoasData(nino: String, businessId: String, taxYear: String, submissionId: String) extends HateoasData

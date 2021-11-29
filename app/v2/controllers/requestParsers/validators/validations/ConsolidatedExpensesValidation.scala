@@ -24,25 +24,25 @@ import v2.models.request.common.ukNonFhlProperty.UkNonFhlPropertyExpenses
 
 object ConsolidatedExpensesValidation {
 
-  def validate(expenditure: CreateForeignNonFhlPropertyExpenses, path: String): List[MtdError] = {
-    expenditure.consolidatedExpenses match {
+  def validate(expenses: CreateForeignNonFhlPropertyExpenses, path: String): List[MtdError] = {
+    expenses.consolidatedExpenses match {
       case None => NoValidationErrors
       case Some(_) =>
-        expenditure match {
+        expenses match {
           case CreateForeignNonFhlPropertyExpenses(None, None, None, None, None, None, _, _, None, Some(_)) => NoValidationErrors
-          case _                                                                                   =>
+          case _ =>
             List(RuleBothExpensesSuppliedError.copy(paths = Some(Seq(path))))
         }
     }
   }
 
-  def validate(expenditure: CreateForeignFhlEeaExpenses, path: String): List[MtdError] = {
-    expenditure.consolidatedExpenses match {
+  def validate(expenses: CreateForeignFhlEeaExpenses, path: String): List[MtdError] = {
+    expenses.consolidatedExpenses match {
       case None => NoValidationErrors
       case Some(_) =>
-        expenditure match {
+        expenses match {
           case CreateForeignFhlEeaExpenses(None, None, None, None, None, None, None, Some(_)) => NoValidationErrors
-          case _                                                                           => List(RuleBothExpensesSuppliedError.copy(paths = Some(Seq(path))))
+          case _                                                                              => List(RuleBothExpensesSuppliedError.copy(paths = Some(Seq(path))))
         }
     }
   }
@@ -65,6 +65,28 @@ object ConsolidatedExpensesValidation {
         expenses match {
           case UkNonFhlPropertyExpenses(None, None, None, None, None, None, None, None, None, None, Some(_)) => NoValidationErrors
           case _                                                                                             => List(RuleBothExpensesSuppliedError.copy(paths = Some(Seq(path))))
+        }
+    }
+  }
+
+  def validate(expenses: AmendForeignFhlEeaExpenses, path: String): List[MtdError] = {
+    expenses.consolidatedExpenses match {
+      case None => NoValidationErrors
+      case Some(_) =>
+        expenses match {
+          case AmendForeignFhlEeaExpenses(None, None, None, None, None, None, None, Some(_)) => NoValidationErrors
+          case _                                                                             => List(RuleBothExpensesSuppliedError.copy(paths = Some(Seq(path))))
+        }
+    }
+  }
+
+  def validate(expenses: AmendForeignNonFhlPropertyExpenses, path: String): List[MtdError] = {
+    expenses.consolidatedExpenses match {
+      case None => NoValidationErrors
+      case Some(_) =>
+        expenses match {
+          case AmendForeignNonFhlPropertyExpenses(None, None, None, None, None, None, _, _, None, Some(_)) => NoValidationErrors
+          case _                                                                                           => List(RuleBothExpensesSuppliedError.copy(paths = Some(Seq(path))))
         }
     }
   }

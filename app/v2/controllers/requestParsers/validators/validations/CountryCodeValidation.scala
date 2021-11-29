@@ -17,12 +17,22 @@
 package v2.controllers.requestParsers.validators.validations
 
 import com.neovisionaries.i18n.CountryCode
-import v2.models.errors.{CountryCodeFormatError, RuleCountryCodeError, MtdError}
+import v2.models.errors.{ CountryCodeFormatError, RuleCountryCodeError, MtdError }
 
 object CountryCodeValidation {
-  def validate(field: String, path: String): List[MtdError] = (CountryCode.getByAlpha3Code(field), field) match {
-    case (_: CountryCode,_) => NoValidationErrors
-    case (_, code) if code.length == 3 => List(RuleCountryCodeError.copy(paths = Some(Seq(path))))
-    case _ => List(CountryCodeFormatError.copy(paths = Some(Seq(path))))
+
+  private val permittedCustomCodes = Set("ZZZ")
+
+  def validate(field: String, path: String): List[MtdError] = {
+    if (field.length != 3) {
+      List(CountryCodeFormatError.copy(paths = Some(Seq(path))))
+    } else if (permittedCustomCodes.contains(field)) {
+      NoValidationErrors
+    } else {
+      Option(CountryCode.getByAlpha3Code(field)) match {
+        case Some(_) => NoValidationErrors
+        case None    => List(RuleCountryCodeError.copy(paths = Some(Seq(path))))
+      }
+    }
   }
 }

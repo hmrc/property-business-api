@@ -17,22 +17,18 @@
 package v2.models.request.amendForeignPropertyPeriodSummary
 
 import play.api.libs.functional.syntax._
-import play.api.libs.json.{JsPath, Json, Reads, Writes}
+import play.api.libs.json.{ JsPath, Json, OWrites, Reads }
 import v2.models.request.common.foreignFhlEea.AmendForeignFhlEea
 import v2.models.request.common.foreignPropertyEntry.AmendForeignNonFhlPropertyEntry
 
-case class AmendForeignPropertyPeriodSummaryRequestBody(foreignFhlEea: Option[AmendForeignFhlEea], foreignNonFhlProperty: Option[Seq[AmendForeignNonFhlPropertyEntry]]) {
-  def isEmpty: Boolean = (foreignFhlEea.isEmpty && foreignNonFhlProperty.isEmpty) ||
-    foreignFhlEea.flatMap(_.expenses.map(_.isEmpty)).getOrElse(false) ||
-    foreignNonFhlProperty.exists(_.isEmpty) ||
-    foreignNonFhlProperty.exists(_.exists(_.expenses.exists(_.isEmpty)))
-}
+case class AmendForeignPropertyPeriodSummaryRequestBody(foreignFhlEea: Option[AmendForeignFhlEea],
+                                                        foreignNonFhlProperty: Option[Seq[AmendForeignNonFhlPropertyEntry]])
 
 object AmendForeignPropertyPeriodSummaryRequestBody {
   implicit val reads: Reads[AmendForeignPropertyPeriodSummaryRequestBody] = Json.reads[AmendForeignPropertyPeriodSummaryRequestBody]
 
-  implicit val writes: Writes[AmendForeignPropertyPeriodSummaryRequestBody] = (
+  implicit val writes: OWrites[AmendForeignPropertyPeriodSummaryRequestBody] = (
     (JsPath \ "foreignFhlEea").writeNullable[AmendForeignFhlEea] and
       (JsPath \ "foreignProperty").writeNullable[Seq[AmendForeignNonFhlPropertyEntry]]
-    ) (unlift(AmendForeignPropertyPeriodSummaryRequestBody.unapply))
+  )(unlift(AmendForeignPropertyPeriodSummaryRequestBody.unapply))
 }

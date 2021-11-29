@@ -16,7 +16,7 @@
 
 package v2.models.errors
 
-import play.api.libs.json.{ Json, OWrites }
+import play.api.libs.json.{Json, OWrites}
 
 case class MtdError(code: String, message: String, paths: Option[Seq[String]] = None)
 
@@ -44,6 +44,10 @@ object TaxYearFormatError      extends MtdError("FORMAT_TAX_YEAR", "The provided
 
 // Rule Errors
 object RuleIncorrectOrEmptyBodyError extends MtdError("RULE_INCORRECT_OR_EMPTY_BODY_SUBMITTED", "An empty or non-matching body was submitted")
+object RuleDuplicateCountryCodeError      extends MtdError("RULE_DUPLICATE_COUNTRY_CODE", "You cannot supply the same country code for multiple properties") {
+  def forDuplicatedCodesAndPaths(code: String, paths: Seq[String]): MtdError =
+    RuleDuplicateCountryCodeError.copy(message = s"The country code '$code' is duplicated for multiple properties", paths = Some(paths))
+}
 
 object RuleBothExpensesSuppliedError
     extends MtdError("RULE_BOTH_EXPENSES_SUPPLIED", "Both Expenses and Consolidated Expenses must not be present at the same time")

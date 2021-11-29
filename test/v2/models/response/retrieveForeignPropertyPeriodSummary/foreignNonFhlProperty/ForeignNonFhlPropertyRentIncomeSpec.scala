@@ -14,15 +14,15 @@
  * limitations under the License.
  */
 
-package v2.models.response.retrieveForeignPropertyPeriodSummary.foreignProperty
+package v2.models.response.retrieveForeignPropertyPeriodSummary.foreignNonFhlProperty
 
 import play.api.libs.json.Json
 import support.UnitSpec
 import v2.models.utils.JsonErrorValidators
 
-class ForeignPropertyRentIncomeSpec extends UnitSpec with JsonErrorValidators {
+class ForeignNonFhlPropertyRentIncomeSpec extends UnitSpec with JsonErrorValidators {
 
-  val rentIncome = ForeignPropertyRentIncome(5000.99)
+  val rentIncome = ForeignNonFhlPropertyRentIncome(Some(5000.99))
 
   val json = Json.parse(
     """{
@@ -32,7 +32,7 @@ class ForeignPropertyRentIncomeSpec extends UnitSpec with JsonErrorValidators {
   "reads" when {
     "passed a valid JSON" should {
       "return a valid model" in {
-        json.as[ForeignPropertyRentIncome] shouldBe rentIncome
+        json.as[ForeignNonFhlPropertyRentIncome] shouldBe rentIncome
       }
     }
   }

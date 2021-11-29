@@ -14,12 +14,13 @@
  * limitations under the License.
  */
 
-package v2.models.response.retrieveForeignPropertyPeriodSummary.foreignProperty
+package v2.models.response.retrieveForeignPropertyPeriodSummary.foreignNonFhlProperty
 
-import play.api.libs.json.{Json, OFormat}
+import play.api.libs.json.{Json, Reads, Writes}
 
-case class ForeignPropertyRentIncome(rentAmount: BigDecimal)
+case class ForeignNonFhlPropertyRentIncome(rentAmount: Option[BigDecimal])
 
-object ForeignPropertyRentIncome {
-  implicit val format: OFormat[ForeignPropertyRentIncome] = Json.format[ForeignPropertyRentIncome]
+object ForeignNonFhlPropertyRentIncome {
+  implicit val writes: Writes[ForeignNonFhlPropertyRentIncome] = Json.writes[ForeignNonFhlPropertyRentIncome]
+  implicit val reads: Reads[ForeignNonFhlPropertyRentIncome] = Json.reads[ForeignNonFhlPropertyRentIncome]
 }

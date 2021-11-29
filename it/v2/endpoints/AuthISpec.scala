@@ -93,68 +93,68 @@ class AuthISpec extends V2IntegrationBaseSpec {
     }
   }
 
-  "Calling the amend foreign property period summary endpoint" when {
-
-    "the NINO cannot be converted to a MTD ID" should {
-
-      "return 500" in new Test {
-        override val nino: String = "AA123456A"
-
-        override def setupStubs(): StubMapping = {
-          AuditStub.audit()
-          MtdIdLookupStub.internalServerError(nino)
-        }
-
-        val response: WSResponse = await(request().get())
-        response.status shouldBe Status.INTERNAL_SERVER_ERROR
-      }
-    }
-
-    "an MTD ID is successfully retrieve from the NINO and the user is authorised" should {
-
-      "return 201" in new Test {
-        override def setupStubs(): StubMapping = {
-          AuditStub.audit()
-          AuthStub.authorised()
-          MtdIdLookupStub.ninoFound(nino)
-          IfsStub.onSuccess(IfsStub.GET, ifsUri, Status.OK, ifsResponseBody)
-        }
-
-        val response: WSResponse = await(request().get())
-        response.status shouldBe Status.OK
-      }
-    }
-
-    "an MTD ID is successfully retrieve from the NINO and the user is NOT logged in" should {
-
-      "return 403" in new Test {
-        override val nino: String = "AA123456A"
-
-        override def setupStubs(): StubMapping = {
-          AuditStub.audit()
-          MtdIdLookupStub.ninoFound(nino)
-          AuthStub.unauthorisedNotLoggedIn()
-        }
-
-        val response: WSResponse = await(request().get())
-        response.status shouldBe Status.FORBIDDEN
-      }
-    }
-
-    "an MTD ID is successfully retrieve from the NINO and the user is NOT authorised" should {
-
-      "return 403" in new Test {
-        override val nino: String = "AA123456A"
-
-        override def setupStubs(): StubMapping = {
-          AuditStub.audit()
-          MtdIdLookupStub.ninoFound(nino)
-          AuthStub.unauthorisedOther()
-        }
-
-        val response: WSResponse = await(request().get())
-        response.status shouldBe Status.FORBIDDEN
-      }
-    }
-  }
+//  "Calling the amend foreign property period summary endpoint" when {
+//
+//    "the NINO cannot be converted to a MTD ID" should {
+//
+//      "return 500" in new Test {
+//        override val nino: String = "AA123456A"
+//
+//        override def setupStubs(): StubMapping = {
+//          AuditStub.audit()
+//          MtdIdLookupStub.internalServerError(nino)
+//        }
+//
+//        val response: WSResponse = await(request().get())
+//        response.status shouldBe Status.INTERNAL_SERVER_ERROR
+//      }
+//    }
+//
+//    "an MTD ID is successfully retrieve from the NINO and the user is authorised" should {
+//
+//      "return 201" in new Test {
+//        override def setupStubs(): StubMapping = {
+//          AuditStub.audit()
+//          AuthStub.authorised()
+//          MtdIdLookupStub.ninoFound(nino)
+//          IfsStub.onSuccess(IfsStub.GET, ifsUri, Status.OK, ifsResponseBody)
+//        }
+//
+//        val response: WSResponse = await(request().get())
+//        response.status shouldBe Status.OK
+//      }
+//    }
+//
+//    "an MTD ID is successfully retrieve from the NINO and the user is NOT logged in" should {
+//
+//      "return 403" in new Test {
+//        override val nino: String = "AA123456A"
+//
+//        override def setupStubs(): StubMapping = {
+//          AuditStub.audit()
+//          MtdIdLookupStub.ninoFound(nino)
+//          AuthStub.unauthorisedNotLoggedIn()
+//        }
+//
+//        val response: WSResponse = await(request().get())
+//        response.status shouldBe Status.FORBIDDEN
+//      }
+//    }
+//
+//    "an MTD ID is successfully retrieve from the NINO and the user is NOT authorised" should {
+//
+//      "return 403" in new Test {
+//        override val nino: String = "AA123456A"
+//
+//        override def setupStubs(): StubMapping = {
+//          AuditStub.audit()
+//          MtdIdLookupStub.ninoFound(nino)
+//          AuthStub.unauthorisedOther()
+//        }
+//
+//        val response: WSResponse = await(request().get())
+//        response.status shouldBe Status.FORBIDDEN
+//      }
+//    }
+//  }
 }

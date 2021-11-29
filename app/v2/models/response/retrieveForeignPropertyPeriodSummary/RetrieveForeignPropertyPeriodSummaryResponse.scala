@@ -17,25 +17,33 @@
 package v2.models.response.retrieveForeignPropertyPeriodSummary
 
 import config.AppConfig
-import play.api.libs.json.{Json, OFormat}
+import play.api.libs.json.{JsPath, Json, Reads, Writes}
+import play.api.libs.functional.syntax._
 import v2.hateoas.{HateoasLinks, HateoasLinksFactory}
 import v2.models.hateoas.{HateoasData, Link}
 import v2.models.response.retrieveForeignPropertyPeriodSummary.foreignFhlEea.ForeignFhlEea
-import v2.models.response.retrieveForeignPropertyPeriodSummary.foreignProperty.ForeignProperty
+import v2.models.response.retrieveForeignPropertyPeriodSummary.foreignNonFhlProperty.ForeignNonFhlProperty
 
-case class  RetrieveForeignPropertyPeriodSummaryResponse(fromDate: String,
-                                                        toDate: String,
-                                                        foreignFhlEea: Option[ForeignFhlEea],
-                                                        foreignProperty: Option[Seq[ForeignProperty]])
+case class  RetrieveForeignPropertyPeriodSummaryResponse(submittedOn: String,
+                                                         fromDate: String,
+                                                         toDate: String,
+                                                         foreignFhlEea: Option[ForeignFhlEea],
+                                                         foreignNonFhlProperty: Option[Seq[ForeignNonFhlProperty]])
 
 object RetrieveForeignPropertyPeriodSummaryResponse extends HateoasLinks {
-  implicit val format: OFormat[RetrieveForeignPropertyPeriodSummaryResponse] = Json.format[RetrieveForeignPropertyPeriodSummaryResponse]
+  implicit val writes: Writes[RetrieveForeignPropertyPeriodSummaryResponse] = Json.writes[RetrieveForeignPropertyPeriodSummaryResponse]
+  implicit val reads: Reads[RetrieveForeignPropertyPeriodSummaryResponse] = (
+    (JsPath \ "submittedOn").read[String] and
+      (JsPath \ "fromDate").read[String] and
+      (JsPath \ "toDate").read[String] and
+      (JsPath \ "foreignFhlEea").readNullable[ForeignFhlEea] and
+      (JsPath \ "foreignProperty").readNullable[Seq[ForeignNonFhlProperty]]
+    )(RetrieveForeignPropertyPeriodSummaryResponse.apply _)
 
   implicit object RetrieveForeignPropertyLinksFactory extends HateoasLinksFactory[RetrieveForeignPropertyPeriodSummaryResponse, RetrieveForeignPropertyPeriodSummaryHateoasData] {
     override def links(appConfig: AppConfig, data: RetrieveForeignPropertyPeriodSummaryHateoasData): Seq[Link] = {
       import data._
 
-      val taxYear = "XXXXXXXXXXXXXX" // FIXME remove once build endpoint
       Seq(
         amendForeignPropertyPeriodSummary(appConfig, nino, businessId, taxYear, submissionId),
         retrieveForeignPropertyPeriodSummary(appConfig, nino, businessId, taxYear, submissionId, self = true),
@@ -45,4 +53,4 @@ object RetrieveForeignPropertyPeriodSummaryResponse extends HateoasLinks {
   }
 }
 
-case class RetrieveForeignPropertyPeriodSummaryHateoasData(nino: String, businessId: String, submissionId: String) extends HateoasData
+case class RetrieveForeignPropertyPeriodSummaryHateoasData(nino: String, businessId: String, taxYear: String, submissionId: String) extends HateoasData

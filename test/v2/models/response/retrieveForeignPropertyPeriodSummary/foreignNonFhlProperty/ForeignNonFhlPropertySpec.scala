@@ -14,25 +14,25 @@
  * limitations under the License.
  */
 
-package v2.models.response.retrieveForeignPropertyPeriodSummary.foreignProperty
+package v2.models.response.retrieveForeignPropertyPeriodSummary.foreignNonFhlProperty
 
 import play.api.libs.json.Json
 import support.UnitSpec
 import v2.models.utils.JsonErrorValidators
 
-class ForeignPropertySpec extends UnitSpec with JsonErrorValidators {
+class ForeignNonFhlPropertySpec extends UnitSpec with JsonErrorValidators {
 
-  val foreignProperty = ForeignProperty(
+  val foreignNonFhlProperty = ForeignNonFhlProperty(
     "FRA",
-    ForeignPropertyIncome(
-      ForeignPropertyRentIncome(5000.99),
+    Some(ForeignNonFhlPropertyIncome(
+      Some(ForeignNonFhlPropertyRentIncome(Some(5000.99))),
       false,
       Some(5000.99),
       Some(5000.99),
       Some(5000.99),
       Some(5000.99)
-    ),
-    Some(ForeignPropertyExpenditure(
+    )),
+    Some(ForeignNonFhlPropertyExpenses(
       Some(5000.99),
       Some(5000.99),
       Some(5000.99),
@@ -54,17 +54,17 @@ class ForeignPropertySpec extends UnitSpec with JsonErrorValidators {
       |      "rentAmount": 5000.99
       |    },
       |    "foreignTaxCreditRelief": false,
-      |    "premiumOfLeaseGrant": 5000.99,
+      |    "premiumsOfLeaseGrant": 5000.99,
       |    "otherPropertyIncome": 5000.99,
-      |    "foreignTaxTakenOff": 5000.99,
-      |    "specialWithholdingTaxOrUKTaxPaid": 5000.99
+      |    "foreignTaxPaidOrDeducted": 5000.99,
+      |    "specialWithholdingTaxOrUkTaxPaid": 5000.99
       |  },
-      |  "expenditure": {
+      |  "expenses": {
       |    "premisesRunningCosts": 5000.99,
       |    "repairsAndMaintenance": 5000.99,
       |    "financialCosts": 5000.99,
       |    "professionalFees": 5000.99,
-      |    "costsOfServices": 5000.99,
+      |    "costOfServices": 5000.99,
       |    "travelCosts": 5000.99,
       |    "residentialFinancialCost": 5000.99,
       |    "broughtFwdResidentialFinancialCost": 5000.99,
@@ -104,14 +104,14 @@ class ForeignPropertySpec extends UnitSpec with JsonErrorValidators {
   "reads" when {
     "passed a valid JSON" should {
       "return a valid model" in {
-        readsJson.as[ForeignProperty] shouldBe foreignProperty
+        readsJson.as[ForeignNonFhlProperty] shouldBe foreignNonFhlProperty
       }
     }
   }
   "writes" when {
     "passed valid model" should {
       "return valid JSON" in {
-        Json.toJson(foreignProperty) shouldBe writesJson
+        Json.toJson(foreignNonFhlProperty) shouldBe writesJson
       }
     }
   }

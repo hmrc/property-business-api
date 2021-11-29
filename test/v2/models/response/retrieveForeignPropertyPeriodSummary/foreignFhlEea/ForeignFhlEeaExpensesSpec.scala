@@ -20,9 +20,9 @@ import play.api.libs.json.Json
 import support.UnitSpec
 import v2.models.utils.JsonErrorValidators
 
-class ForeignFhlEeaExpenditureSpec extends UnitSpec with JsonErrorValidators {
+class ForeignFhlEeaExpensesSpec extends UnitSpec with JsonErrorValidators {
 
-  val foreignFhlEeaExpenditure = ForeignFhlEeaExpenditure(
+  val foreignFhlEeaExpenses = ForeignFhlEeaExpenses(
     Some(5000.99),
     Some(5000.99),
     Some(5000.99),
@@ -39,7 +39,7 @@ class ForeignFhlEeaExpenditureSpec extends UnitSpec with JsonErrorValidators {
       |  "repairsAndMaintenance": 5000.99,
       |  "financialCosts": 5000.99,
       |  "professionalFees": 5000.99,
-      |  "costsOfServices": 5000.99,
+      |  "costOfServices": 5000.99,
       |  "travelCosts": 5000.99,
       |  "other": 5000.99,
       |  "consolidatedExpenses": 5000.99
@@ -60,14 +60,14 @@ class ForeignFhlEeaExpenditureSpec extends UnitSpec with JsonErrorValidators {
   "reads" when {
     "passed a valid JSON" should {
       "return a valid model" in {
-        readsJson.as[ForeignFhlEeaExpenditure] shouldBe foreignFhlEeaExpenditure
+        readsJson.as[ForeignFhlEeaExpenses] shouldBe foreignFhlEeaExpenses
       }
     }
   }
   "writes" when {
     "passed valid model" should {
       "return valid JSON" in {
-        Json.toJson(foreignFhlEeaExpenditure) shouldBe writesJson
+        Json.toJson(foreignFhlEeaExpenses) shouldBe writesJson
       }
     }
   }

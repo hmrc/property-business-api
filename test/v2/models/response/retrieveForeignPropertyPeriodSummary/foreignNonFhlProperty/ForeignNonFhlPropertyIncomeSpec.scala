@@ -14,16 +14,16 @@
  * limitations under the License.
  */
 
-package v2.models.response.retrieveForeignPropertyPeriodSummary.foreignProperty
+package v2.models.response.retrieveForeignPropertyPeriodSummary.foreignNonFhlProperty
 
 import play.api.libs.json.Json
 import support.UnitSpec
 import v2.models.utils.JsonErrorValidators
 
-class ForeignPropertyIncomeSpec extends UnitSpec with JsonErrorValidators {
+class ForeignNonFhlPropertyIncomeSpec extends UnitSpec with JsonErrorValidators {
 
-  val foreignPropertyIncome = ForeignPropertyIncome(
-    ForeignPropertyRentIncome(5000.99),
+  val foreignNonFhlPropertyIncome = ForeignNonFhlPropertyIncome(
+    Some(ForeignNonFhlPropertyRentIncome(Some(5000.99))),
     false,
     Some(5000.99),
     Some(5000.99),
@@ -37,10 +37,10 @@ class ForeignPropertyIncomeSpec extends UnitSpec with JsonErrorValidators {
       |      "rentAmount": 5000.99
       |    },
       |    "foreignTaxCreditRelief": false,
-      |    "premiumOfLeaseGrant": 5000.99,
+      |    "premiumsOfLeaseGrant": 5000.99,
       |    "otherPropertyIncome": 5000.99,
-      |    "foreignTaxTakenOff": 5000.99,
-      |    "specialWithholdingTaxOrUKTaxPaid": 5000.99
+      |    "foreignTaxPaidOrDeducted": 5000.99,
+      |    "specialWithholdingTaxOrUkTaxPaid": 5000.99
       |  }""".stripMargin)
 
   val readsJson = Json.parse(
@@ -59,14 +59,14 @@ class ForeignPropertyIncomeSpec extends UnitSpec with JsonErrorValidators {
   "reads" when {
     "passed a valid JSON" should {
       "return a valid model" in {
-        readsJson.as[ForeignPropertyIncome] shouldBe foreignPropertyIncome
+        readsJson.as[ForeignNonFhlPropertyIncome] shouldBe foreignNonFhlPropertyIncome
       }
     }
   }
   "writes" when {
     "passed valid model" should {
       "return valid JSON" in {
-        Json.toJson(foreignPropertyIncome) shouldBe writesJson
+        Json.toJson(foreignNonFhlPropertyIncome) shouldBe writesJson
       }
     }
   }

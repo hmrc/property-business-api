@@ -19,18 +19,18 @@ package v2.models.response.retrieveForeignPropertyPeriodSummary.foreignFhlEea
 import play.api.libs.json.{JsPath, Json, Reads, Writes}
 import play.api.libs.functional.syntax._
 
-case class ForeignFhlEeaExpenditure(premisesRunningCosts: Option[BigDecimal],
-                                    repairsAndMaintenance: Option[BigDecimal],
-                                    financialCosts: Option[BigDecimal],
-                                    professionalFees: Option[BigDecimal],
-                                    costsOfServices: Option[BigDecimal],
-                                    travelCosts: Option[BigDecimal],
-                                    other: Option[BigDecimal],
-                                    consolidatedExpenses: Option[BigDecimal])
+case class ForeignFhlEeaExpenses(premisesRunningCosts: Option[BigDecimal],
+                                 repairsAndMaintenance: Option[BigDecimal],
+                                 financialCosts: Option[BigDecimal],
+                                 professionalFees: Option[BigDecimal],
+                                 costOfServices: Option[BigDecimal],
+                                 travelCosts: Option[BigDecimal],
+                                 other: Option[BigDecimal],
+                                 consolidatedExpenses: Option[BigDecimal])
 
-object ForeignFhlEeaExpenditure {
-  implicit val writes: Writes[ForeignFhlEeaExpenditure] = Json.writes[ForeignFhlEeaExpenditure]
-  implicit val reads: Reads[ForeignFhlEeaExpenditure] = (
+object ForeignFhlEeaExpenses {
+  implicit val writes: Writes[ForeignFhlEeaExpenses] = Json.writes[ForeignFhlEeaExpenses]
+  implicit val reads: Reads[ForeignFhlEeaExpenses] = (
     (JsPath \ "premisesRunningCosts").readNullable[BigDecimal] and
       (JsPath \ "repairsAndMaintenance").readNullable[BigDecimal] and
       (JsPath \ "financialCosts").readNullable[BigDecimal] and
@@ -39,5 +39,5 @@ object ForeignFhlEeaExpenditure {
       (JsPath \ "travelCosts").readNullable[BigDecimal] and
       (JsPath \ "other").readNullable[BigDecimal] and
       (JsPath \ "consolidatedExpense").readNullable[BigDecimal]
-    )(ForeignFhlEeaExpenditure.apply _)
+    )(ForeignFhlEeaExpenses.apply _)
 }

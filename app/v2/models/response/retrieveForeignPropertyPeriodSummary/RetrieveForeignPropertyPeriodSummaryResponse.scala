@@ -44,7 +44,6 @@ object RetrieveForeignPropertyPeriodSummaryResponse extends HateoasLinks {
     override def links(appConfig: AppConfig, data: RetrieveForeignPropertyPeriodSummaryHateoasData): Seq[Link] = {
       import data._
 
-      val taxYear = "2022-23"
       Seq(
         amendForeignPropertyPeriodSummary(appConfig, nino, businessId, taxYear, submissionId),
         retrieveForeignPropertyPeriodSummary(appConfig, nino, businessId, taxYear, submissionId, self = true),
@@ -54,4 +53,4 @@ object RetrieveForeignPropertyPeriodSummaryResponse extends HateoasLinks {
   }
 }
 
-case class RetrieveForeignPropertyPeriodSummaryHateoasData(nino: String, taxYear: String, businessId: String, submissionId: String) extends HateoasData
+case class RetrieveForeignPropertyPeriodSummaryHateoasData(nino: String, businessId: String, taxYear: String, submissionId: String) extends HateoasData

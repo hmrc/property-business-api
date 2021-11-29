@@ -19,6 +19,7 @@ package v2.models.response.retrieveForeignPropertyPeriodSummary
 import mocks.MockAppConfig
 import play.api.libs.json.{JsValue, Json}
 import support.UnitSpec
+import v2.models.hateoas.{Link, Method}
 import v2.models.response.retrieveForeignPropertyPeriodSummary.foreignFhlEea._
 import v2.models.response.retrieveForeignPropertyPeriodSummary.foreignNonFhlProperty._
 import v2.models.utils.JsonErrorValidators
@@ -186,19 +187,18 @@ class RetrieveForeignPropertyPeriodSummaryResponseSpec extends UnitSpec with Jso
   }
 
   "LinksFactory" should {
-    // FIXME reinstate once build endpoint
-//    "produce the correct links" when {
-//      "called" in {
-//        val data: RetrieveForeignPropertyPeriodSummaryHateoasData = RetrieveForeignPropertyPeriodSummaryHateoasData("myNino", "myBusinessId", "mySubmissionId")
-//
-//        MockAppConfig.apiGatewayContext.returns("my/context").anyNumberOfTimes()
-//
-//        RetrieveForeignPropertyPeriodSummaryResponse.RetrieveForeignPropertyLinksFactory.links(mockAppConfig, data) shouldBe Seq(
-//          Link(href = s"/my/context/${data.nino}/${data.businessId}/period/${data.submissionId}", method = Method.PUT, rel = "amend-property-period-summary"),
-//          Link(href = s"/my/context/${data.nino}/${data.businessId}/period/${data.submissionId}", method = Method.GET, rel = "self"),
-//          Link(href = s"/my/context/${data.nino}/${data.businessId}/period", method = Method.GET, rel = "list-property-period-summaries")
-//        )
-//      }
-//    }
+    "produce the correct links" when {
+      "called" in {
+        val data: RetrieveForeignPropertyPeriodSummaryHateoasData = RetrieveForeignPropertyPeriodSummaryHateoasData("myNino", "myBusinessId", "myTaxYear", "mySubmissionId")
+
+        MockAppConfig.apiGatewayContext.returns("my/context").anyNumberOfTimes()
+
+        RetrieveForeignPropertyPeriodSummaryResponse.RetrieveForeignPropertyLinksFactory.links(mockAppConfig, data) shouldBe Seq(
+          Link(href = s"/my/context/foreign/${data.nino}/${data.businessId}/period/${data.taxYear}/${data.submissionId}", method = Method.PUT, rel = "amend-foreign-property-period-summary"),
+          Link(href = s"/my/context/foreign/${data.nino}/${data.businessId}/period/${data.taxYear}/${data.submissionId}", method = Method.GET, rel = "self"),
+          Link(href = s"/my/context/${data.nino}/${data.businessId}/period/${data.taxYear}", method = Method.GET, rel = "list-property-period-summaries")
+        )
+      }
+    }
   }
 }

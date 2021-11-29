@@ -100,6 +100,16 @@ uses:
                   example: 4557ecb5-fd32-48cc-81f5-e6acd1099f3c
               get: !include foreign_property_period_summary_retrieve.raml
               put: !include foreign_property_period_summary_amend.raml
+        /annual:
+          (annotations.group):
+            name: Create and Amend a Foreign Property Annual Submission
+            description: This endpoint allows a developer to re-submit adjustments and allowances for a foreign property business. This submission is for either or both of Furnished Holiday Letting (FHL) in the European Economic Area (EEA) and Non FHL Foreign Property submissions. A National Insurance number, business ID and tax year must be provided.
+          /{taxYear}:
+            uriParameters:
+              taxYear:
+                description: 'The tax year to which the data applies. For example: 2022-23. The start year and end year must not span two tax years. The minimum tax year is 2021-22. No gaps are allowed, for example, 2022-24 is not valid.'
+                example: 2022-23
+            put: !include foreign_property_annual_submission_create_and_amend.raml
   /{nino}:
     uriParameters:
       nino:

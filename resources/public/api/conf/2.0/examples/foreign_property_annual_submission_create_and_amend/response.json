@@ -1,0 +1,19 @@
+{
+  "links":[
+    {
+      "href":"/individuals/business/property/foreign/{nino}/{businessId}/annual/{taxYear}",
+      "method":"GET",
+      "rel":"self"
+    },
+    {
+      "href":"/individuals/business/property/foreign/{nino}/{businessId}/annual/{taxYear}",
+      "method":"PUT",
+      "rel":"create-and-amend-foreign-property-annual-submission"
+    },
+    {
+      "href":"/individuals/business/property/{nino}/{businessId}/annual/{taxYear}",
+      "method":"DELETE",
+      "rel":"delete-property-annual-submission"
+    }
+  ]
+}

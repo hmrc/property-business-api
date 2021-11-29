@@ -35,10 +35,10 @@ class CreateForeignPropertyPeriodSummaryServiceSpec extends UnitSpec {
 
   val businessId: String = "XAIS12345678910"
   val nino: String = "AA123456A"
-  val taxYear: String = "2022-23"
+  val taxYear: String = "2019-20"
   implicit val correlationId: String = "X-123"
 
-  private val regularExpensesBody = CreateForeignPropertyPeriodSummaryRequestBody(
+  private val expensesBody = CreateForeignPropertyPeriodSummaryRequestBody(
     "2020-01-01",
     "2020-01-31",
     Some(CreateForeignFhlEea(
@@ -77,52 +77,13 @@ class CreateForeignPropertyPeriodSummaryServiceSpec extends UnitSpec {
       ))))
     ))
 
-  private val consolidatedExpensesBody = CreateForeignPropertyPeriodSummaryRequestBody(
-    "2020-01-01",
-    "2020-01-31",
-    Some(CreateForeignFhlEea(
-      Some(ForeignFhlEeaIncome(Some(5000.99))),
-      Some(CreateForeignFhlEeaExpenses(
-        None,
-        None,
-        None,
-        None,
-        None,
-        None,
-        None,
-        Some(3653.35)
-      ))
-    )),
-    Some(Seq(CreateForeignNonFhlPropertyEntry("FRA",
-      Some(ForeignNonFhlPropertyIncome(
-       Some( ForeignNonFhlPropertyRentIncome(Some(5000.99))),
-        false,
-        Some(5000.99),
-        Some(5000.99),
-        Some(5000.99),
-        Some(5000.99)
-      )),
-      Some(CreateForeignNonFhlPropertyExpenses(
-        None,
-        None,
-        None,
-        None,
-        None,
-        None,
-        None,
-        None,
-        None,
-        Some(235324.23)
-      ))))
-    ))
 
   val response: CreateForeignPropertyPeriodSummaryResponse = CreateForeignPropertyPeriodSummaryResponse(
     submissionId = "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
   )
 
-  private val regularExpensesRequestData = CreateForeignPropertyPeriodSummaryRequest(Nino(nino), businessId, taxYear, regularExpensesBody)
+  private val expensesRequestData = CreateForeignPropertyPeriodSummaryRequest(Nino(nino), businessId, taxYear, expensesBody)
 
-  private val consolidatedExpensesRequestData = CreateForeignPropertyPeriodSummaryRequest(Nino(nino), businessId, taxYear, consolidatedExpensesBody)
 
   trait Test extends MockCreateForeignPropertyPeriodSummaryConnector {
     implicit val hc: HeaderCarrier = HeaderCarrier()
@@ -135,17 +96,11 @@ class CreateForeignPropertyPeriodSummaryServiceSpec extends UnitSpec {
 
   "service" should {
     "service call successful" when {
-      "return mapped result for regular Expenses" in new Test {
-        MockCreateForeignPropertyConnector.createForeignProperty(regularExpensesRequestData)
+      "return mapped result" in new Test {
+        MockCreateForeignPropertyConnector.createForeignProperty(expensesRequestData)
           .returns(Future.successful(Right(ResponseWrapper(correlationId, response))))
 
-        await(service.createForeignProperty(regularExpensesRequestData)) shouldBe Right(ResponseWrapper(correlationId, response))
-      }
-      "return mapped result for consolidated Expenses" in new Test {
-        MockCreateForeignPropertyConnector.createForeignProperty(consolidatedExpensesRequestData)
-          .returns(Future.successful(Right(ResponseWrapper(correlationId, response))))
-
-        await(service.createForeignProperty(consolidatedExpensesRequestData)) shouldBe Right(ResponseWrapper(correlationId, response))
+        await(service.createForeignProperty(expensesRequestData)) shouldBe Right(ResponseWrapper(correlationId, response))
       }
     }
   }
@@ -156,15 +111,17 @@ class CreateForeignPropertyPeriodSummaryServiceSpec extends UnitSpec {
       def serviceError(ifsErrorCode: String, error: MtdError): Unit =
         s"a $ifsErrorCode error is returned from the service" in new Test {
 
-          MockCreateForeignPropertyConnector.createForeignProperty(regularExpensesRequestData)
+          MockCreateForeignPropertyConnector.createForeignProperty(expensesRequestData)
             .returns(Future.successful(Left(ResponseWrapper(correlationId, IfsErrors.single(IfsErrorCode(ifsErrorCode))))))
 
-          await(service.createForeignProperty(regularExpensesRequestData)) shouldBe Left(ErrorWrapper(correlationId, error))
+          await(service.createForeignProperty(expensesRequestData)) shouldBe Left(ErrorWrapper(correlationId, error))
         }
 
       val input = Seq(
         "INVALID_TAXABLE_ENTITY_ID" -> NinoFormatError,
         "INVALID_INCOMESOURCEID" -> BusinessIdFormatError,
+        "INVALID_TAX_YEAR_EXPLICIT" -> TaxYearFormatError,
+        "DUPLICATE_COUNTRY_CODE" -> RuleDuplicateCountryCode,
         "INVALID_PAYLOAD" -> DownstreamError,
         "INVALID_CORRELATIONID" -> DownstreamError,
         "OVERLAPS_IN_PERIOD" -> RuleOverlappingPeriodError,

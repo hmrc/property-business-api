@@ -32,9 +32,9 @@ class CreateForeignPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
 
   val businessId: String = "XAIS12345678910"
   val nino: String = "AA123456A"
-  val taxYear: String = "2022-23"
+  val taxYear: String = "2019-20"
 
-  val regularExpensesBody: CreateForeignPropertyPeriodSummaryRequestBody = CreateForeignPropertyPeriodSummaryRequestBody(
+  private val regularExpensesBody = CreateForeignPropertyPeriodSummaryRequestBody(
     "2020-01-01",
     "2020-01-31",
     Some(CreateForeignFhlEea(
@@ -73,50 +73,11 @@ class CreateForeignPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
       ))))
     ))
 
-  val consolidatedExpensesBody: CreateForeignPropertyPeriodSummaryRequestBody = CreateForeignPropertyPeriodSummaryRequestBody(
-    "2020-01-01",
-    "2020-01-31",
-    Some(CreateForeignFhlEea(
-      Some(ForeignFhlEeaIncome(Some(5000.99))),
-      Some(CreateForeignFhlEeaExpenses(
-        None,
-        None,
-        None,
-        None,
-        None,
-        None,
-        None,
-        Some(3653.35)
-      ))
-    )),
-    Some(Seq(CreateForeignNonFhlPropertyEntry("FRA",
-      Some(ForeignNonFhlPropertyIncome(
-        Some(ForeignNonFhlPropertyRentIncome(Some(5000.99))),
-        false,
-        Some(5000.99),
-        Some(5000.99),
-        Some(5000.99),
-        Some(5000.99)
-      )),
-      Some(CreateForeignNonFhlPropertyExpenses(
-        None,
-        None,
-        None,
-        None,
-        None,
-        None,
-        None,
-        None,
-        None,
-        Some(235324.23)
-      ))))
-    ))
 
   private val response = CreateForeignPropertyPeriodSummaryResponse("4557ecb5-fd32-48cc-81f5-e6acd1099f3c")
 
   private val regularExpensesRequestData = CreateForeignPropertyPeriodSummaryRequest(Nino(nino), businessId, taxYear, regularExpensesBody)
 
-  private val consolidatedExpensesRequestData = CreateForeignPropertyPeriodSummaryRequest(Nino(nino), businessId, taxYear, consolidatedExpensesBody)
 
   class Test extends MockHttpClient with MockAppConfig {
     val connector: CreateForeignPropertyPeriodSummaryConnector = new CreateForeignPropertyPeriodSummaryConnector(
@@ -131,7 +92,7 @@ class CreateForeignPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
   }
 
   "connector" must {
-    "post a body with regular expenses and return 200 with submissionId" in new Test {
+    "post a valid body and return 200 with submissionId" in new Test {
       val outcome = Right(ResponseWrapper(correlationId, response))
 
       implicit val hc: HeaderCarrier = HeaderCarrier(otherHeaders = otherHeaders ++ Seq("Content-Type" -> "application/json"))
@@ -139,7 +100,7 @@ class CreateForeignPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
 
       MockHttpClient
         .post(
-          url = s"$baseUrl/income-tax/business/property/periodic/$nino/$businessId",
+          url = s"$baseUrl/income-tax/business/property/periodic?taxableEntityId=$nino&incomeSourceId=$businessId&taxYearExplicit=$taxYear",
           config = dummyIfsHeaderCarrierConfig,
           body = regularExpensesBody,
           requiredHeaders = requiredIfsHeadersPost,
@@ -151,24 +112,5 @@ class CreateForeignPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
 
     }
 
-    "post a body with consolidated expenses and return 200 with submissionId" in new Test {
-      val outcome = Right(ResponseWrapper(correlationId, response))
-
-      implicit val hc: HeaderCarrier = HeaderCarrier(otherHeaders = otherHeaders ++ Seq("Content-Type" -> "application/json"))
-      val requiredIfsHeadersPost: Seq[(String, String)] = requiredIfsHeaders ++ Seq("Content-Type" -> "application/json")
-
-      MockHttpClient
-        .post(
-          url = s"$baseUrl/income-tax/business/property/periodic/$nino/$businessId",
-          config = dummyIfsHeaderCarrierConfig,
-          body = consolidatedExpensesBody,
-          requiredHeaders = requiredIfsHeadersPost,
-          excludedHeaders = Seq("AnotherHeader" -> "HeaderValue")
-        )
-        .returns(Future.successful(outcome))
-
-      await(connector.createForeignProperty(consolidatedExpensesRequestData)) shouldBe outcome
-
-    }
   }
 }

@@ -16,14 +16,16 @@
 
 package v2.controllers.requestParsers.validators
 
+import config.AppConfig
 import v2.controllers.requestParsers.validators.validations.{BusinessIdValidation, NinoValidation, SubmissionIdValidation, TaxYearValidation}
 import v2.models.errors.MtdError
 import v2.models.request.retrieveForeignPropertyPeriodSummary.RetrieveForeignPropertyPeriodSummaryRawData
-import javax.inject.Singleton
+import javax.inject.{Inject, Singleton}
 
 @Singleton
-class RetrieveForeignPropertyPeriodSummaryValidator extends Validator[RetrieveForeignPropertyPeriodSummaryRawData] {
+class RetrieveForeignPropertyPeriodSummaryValidator @Inject()(appConfig: AppConfig) extends Validator[RetrieveForeignPropertyPeriodSummaryRawData] {
 
+  private lazy val minTaxYear = appConfig.minimumTaxV2Uk
   private val validationSet = List(parameterFormatValidation)
 
   private def parameterFormatValidation: RetrieveForeignPropertyPeriodSummaryRawData => List[List[MtdError]] =
@@ -31,7 +33,7 @@ class RetrieveForeignPropertyPeriodSummaryValidator extends Validator[RetrieveFo
       List(
         NinoValidation.validate(data.nino),
         BusinessIdValidation.validate(data.businessId),
-        TaxYearValidation.validate(data.taxYear),
+        TaxYearValidation.validate(minTaxYear, data.taxYear),
         SubmissionIdValidation.validate(data.submissionId)
       )
     }

@@ -35,6 +35,7 @@ class RetrieveForeignPropertyPeriodSummaryServiceSpec extends UnitSpec {
 
   val nino: String = "AA123456A"
   val businessId: String = "XAIS12345678910"
+  val taxYear: String = "2022-23"
   val submissionId: String = "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
   implicit val correlationId: String = "X-123"
 
@@ -79,7 +80,7 @@ class RetrieveForeignPropertyPeriodSummaryServiceSpec extends UnitSpec {
       ))))
     ))
 
-  private val requestData = RetrieveForeignPropertyPeriodSummaryRequest(Nino(nino), businessId, submissionId)
+  private val requestData = RetrieveForeignPropertyPeriodSummaryRequest(Nino(nino), businessId, taxYear, submissionId)
 
   trait Test extends MockRetrieveForeignPropertyPeriodSummaryConnector {
     implicit val hc: HeaderCarrier = HeaderCarrier()

@@ -16,18 +16,20 @@
 
 package v2.controllers.requestParsers.validators
 
+import mocks.MockAppConfig
 import support.UnitSpec
 import v2.models.errors._
 import v2.models.request.retrieveForeignPropertyPeriodSummary.RetrieveForeignPropertyPeriodSummaryRawData
 
-class RetrieveForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec {
+class RetrieveForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with MockAppConfig {
 
   private val validNino = "AA123456A"
   private val validBusinessId = "XAIS12345678901"
   private val validTaxYear = "2022-23"
   private val validSubmissionId = "12345678-1234-4123-9123-123456789012"
 
-  private val validator = new RetrieveForeignPropertyPeriodSummaryValidator
+  MockAppConfig.minimumTaxV2Uk returns 2022
+  private val validator = new RetrieveForeignPropertyPeriodSummaryValidator(mockAppConfig)
 
   "running a validation" should {
     "return no errors" when {
@@ -46,10 +48,10 @@ class RetrieveForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec {
         validator.validate(RetrieveForeignPropertyPeriodSummaryRawData(validNino, validBusinessId, "2022/2023", validSubmissionId)) shouldBe List(TaxYearFormatError)
       }
       "a taxYear with an invalid range is supplied" in {
-        validator.validate(RetrieveForeignPropertyPeriodSummaryRawData(validNino, validBusinessId, "2022-24", validSubmissionId)) shouldBe List(BusinessIdFormatError)
+        validator.validate(RetrieveForeignPropertyPeriodSummaryRawData(validNino, validBusinessId, "2022-24", validSubmissionId)) shouldBe List(RuleTaxYearRangeInvalidError)
       }
       "an unsupported taxYear is supplied" in {
-        validator.validate(RetrieveForeignPropertyPeriodSummaryRawData(validNino, validBusinessId, "2020-21", validSubmissionId)) shouldBe List(BusinessIdFormatError)
+        validator.validate(RetrieveForeignPropertyPeriodSummaryRawData(validNino, validBusinessId, "2020-21", validSubmissionId)) shouldBe List(RuleTaxYearNotSupportedError)
       }
       "an invalid submissionId is supplied" in {
         validator.validate(RetrieveForeignPropertyPeriodSummaryRawData(validNino, validBusinessId, validTaxYear, "ABCDEFGHIJKLMNOPQRSTUVWXYZ")) shouldBe List(SubmissionIdFormatError)

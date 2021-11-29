@@ -275,6 +275,7 @@ class AmendForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with JsonE
           (bodyWith(entry.replaceWithEmptyObject("/expenses")), "/foreignNonFhlProperty/0/expenses"),
           (bodyWith(entry.removeProperty("/countryCode")), "/foreignNonFhlProperty/0/countryCode"),
           (bodyWith(entry.removeProperty("/income/foreignTaxCreditRelief")), "/foreignNonFhlProperty/0/income/foreignTaxCreditRelief"),
+          (bodyWith(entry.removeProperty("/income").removeProperty("/expenses")), "/foreignNonFhlProperty/0"),
         ).foreach((testWith _).tupled)
 
         def testWith(body: JsValue, expectedPath: String): Unit =

@@ -100,7 +100,7 @@ class CreateForeignPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
 
       MockHttpClient
         .post(
-          url = s"$baseUrl/income-tax/business/property/periodic?taxableEntityId=$nino&incomeSourceId=$businessId&taxYearExplicit=$taxYear",
+          url = s"$baseUrl/income-tax/business/property/periodic?taxableEntityId=$nino&taxYearExplicit=$taxYear&incomeSourceId=$businessId",
           config = dummyIfsHeaderCarrierConfig,
           body = regularExpensesBody,
           requiredHeaders = requiredIfsHeadersPost,

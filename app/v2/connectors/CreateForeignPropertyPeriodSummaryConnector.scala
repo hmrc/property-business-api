@@ -40,7 +40,8 @@ class CreateForeignPropertyPeriodSummaryConnector @Inject()(val http: HttpClient
 
     post(
       body = request.body,
-      uri = IfsUri[CreateForeignPropertyPeriodSummaryResponse](s"income-tax/business/property/periodic?taxableEntityId=${request.nino.nino}&incomeSourceId=${request.businessId}&taxYearExplicit=${request.taxYear}")
+      uri = IfsUri[CreateForeignPropertyPeriodSummaryResponse](
+        s"income-tax/business/property/periodic?taxableEntityId=${request.nino.nino}&taxYearExplicit=${request.taxYear}&incomeSourceId=${request.businessId}")
     )
   }
 }

@@ -19,8 +19,6 @@ package v2.models.response.listForeignPropertiesPeriodSummaries
 import mocks.MockAppConfig
 import play.api.libs.json.Json
 import support.UnitSpec
-import v2.models.hateoas.Link
-import v2.models.hateoas.Method.{GET, POST}
 
 class ListForeignPropertiesPeriodSummariesResponseSpec extends UnitSpec with MockAppConfig {
 

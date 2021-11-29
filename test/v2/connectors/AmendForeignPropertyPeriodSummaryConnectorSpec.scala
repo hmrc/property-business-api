@@ -35,23 +35,27 @@ class AmendForeignPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
   val submissionId: String = "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
 
   private val foreignFhlEea: AmendForeignFhlEea = AmendForeignFhlEea(
-    income = Some(ForeignFhlEeaIncome(rentAmount = Some(567.83))),
+    income = Some(ForeignFhlEeaIncome(
+      rentAmount = Some(567.83)
+    )),
     expenses = Some(AmendForeignFhlEeaExpenses(
       premisesRunningCosts = Some(4567.98),
       repairsAndMaintenance = Some(98765.67),
-      financialCosts = Some(4566.95),
+      financialCosts = Some(5000.95),
       professionalFees = Some(23.65),
-      costOfServices = Some(4567.77),
-      travelCosts = Some(456.77),
-      other = Some(567.67),
-      consolidatedExpenses = Some(456.98)
+      costOfServices = Some(4777.77),
+      travelCosts = Some(440.88),
+      other = Some(569.75),
+      consolidatedExpenses = None
     ))
   )
 
-  private val foreignProperty: AmendForeignNonFhlPropertyEntry = AmendForeignNonFhlPropertyEntry(
-    countryCode = "zzz",
+  private val foreignNonFhlPropertyEntry: AmendForeignNonFhlPropertyEntry = AmendForeignNonFhlPropertyEntry(
+    countryCode = "FRA",
     income = Some(ForeignNonFhlPropertyIncome(
-      rentIncome = Some(ForeignNonFhlPropertyRentIncome(rentAmount = Some(34456.30))),
+      rentIncome = Some(ForeignNonFhlPropertyRentIncome(
+        rentAmount = Some(34456.30)
+      )),
       foreignTaxCreditRelief = true,
       premiumsOfLeaseGrant = Some(2543.43),
       otherPropertyIncome = Some(54325.30),
@@ -68,21 +72,21 @@ class AmendForeignPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
       residentialFinancialCost = Some(21235.22),
       broughtFwdResidentialFinancialCost = Some(12556.00),
       other = Some(2425.11),
-      consolidatedExpenses = Some(352.66)
+      consolidatedExpenses = None
     ))
   )
 
-  val body: AmendForeignPropertyPeriodSummaryRequestBody = AmendForeignPropertyPeriodSummaryRequestBody(
+  private val requestBody: AmendForeignPropertyPeriodSummaryRequestBody = AmendForeignPropertyPeriodSummaryRequestBody(
     foreignFhlEea = Some(foreignFhlEea),
-    foreignNonFhlProperty = Some(Seq(foreignProperty))
+    foreignNonFhlProperty = Some(Seq(foreignNonFhlPropertyEntry))
   )
 
-  val request: AmendForeignPropertyPeriodSummaryRequest = AmendForeignPropertyPeriodSummaryRequest(
+  private val request: AmendForeignPropertyPeriodSummaryRequest = AmendForeignPropertyPeriodSummaryRequest(
     nino = Nino(nino),
     businessId = businessId,
     taxYear = taxYear,
     submissionId = submissionId,
-    body = body
+    body = requestBody
   )
 
   class Test extends MockHttpClient with MockAppConfig {
@@ -97,8 +101,8 @@ class AmendForeignPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
     MockAppConfig.ifsEnvironmentHeaders returns Some(allowedIfsHeaders)
   }
 
-  "connector" must {
-    "put a body and return 204 no body" in new Test {
+  "AmendForeignPropertyPeriodSummaryConnector" must {
+    "send a request and return 204 no content" in new Test {
       val outcome = Right(ResponseWrapper(correlationId, ()))
 
       implicit val hc: HeaderCarrier = HeaderCarrier(otherHeaders = otherHeaders ++ Seq("Content-Type" -> "application/json"))
@@ -106,16 +110,15 @@ class AmendForeignPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
 
       MockHttpClient
         .put(
-          url = s"$baseUrl/income-tax/business/property/periodic/$nino/$businessId/$submissionId",
+          url = s"$baseUrl/income-tax/business/property/periodic?" +
+            s"taxableEntityId=$nino&taxYear=$taxYear&incomeSourceId=$businessId&submissionId=$submissionId",
           config = dummyIfsHeaderCarrierConfig,
-          body = body,
+          body = requestBody,
           requiredHeaders = requiredIfsHeadersPut,
           excludedHeaders = Seq("AnotherHeader" -> "HeaderValue")
-        )
-        .returns(Future.successful(outcome))
+        ).returns(Future.successful(outcome))
 
-      await(connector.amendForeignProperty(request)) shouldBe outcome
-
+      await(connector.amendForeignPropertyPeriodSummary(request)) shouldBe outcome
     }
   }
 }

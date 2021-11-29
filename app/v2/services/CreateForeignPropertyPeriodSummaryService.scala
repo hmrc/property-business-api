@@ -53,7 +53,7 @@ class CreateForeignPropertyPeriodSummaryService @Inject()(connector: CreateForei
       "INVALID_TAXABLE_ENTITY_ID" -> NinoFormatError,
       "INVALID_INCOMESOURCEID" -> BusinessIdFormatError,
       "INVALID_TAX_YEAR_EXPLICIT" -> TaxYearFormatError,
-      "DUPLICATE_COUNTRY_CODE" -> RuleDuplicateCountryCode,
+      "DUPLICATE_COUNTRY_CODE" -> RuleDuplicateCountryCodeError,
       "OVERLAPS_IN_PERIOD" -> RuleOverlappingPeriodError,
       "NOT_ALIGN_PERIOD" -> RuleMisalignedPeriodError,
       "GAPS_IN_PERIOD" -> RuleNotContiguousPeriodError,

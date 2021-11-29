@@ -26,13 +26,13 @@ import scala.concurrent.{ExecutionContext, Future}
 
 trait MockAmendForeignPropertyPeriodSummaryConnector extends MockFactory {
 
-  val mockAmendForeignPropertyConnector: AmendForeignPropertyPeriodSummaryConnector = mock[AmendForeignPropertyPeriodSummaryConnector]
+  val mockAmendForeignPropertyPeriodSummaryConnector: AmendForeignPropertyPeriodSummaryConnector = mock[AmendForeignPropertyPeriodSummaryConnector]
 
-  object MockAmendForeignPropertyConnector {
+  object MockAmendForeignPropertyPeriodSummaryConnector {
 
-    def amendForeignProperty(requestData: AmendForeignPropertyPeriodSummaryRequest): CallHandler[Future[IfsOutcome[Unit]]] = {
-      (mockAmendForeignPropertyConnector
-        .amendForeignProperty(_: AmendForeignPropertyPeriodSummaryRequest)(_: HeaderCarrier, _: ExecutionContext, _: String))
+    def amendForeignPropertyPeriodSummary(requestData: AmendForeignPropertyPeriodSummaryRequest): CallHandler[Future[IfsOutcome[Unit]]] = {
+      (mockAmendForeignPropertyPeriodSummaryConnector
+        .amendForeignPropertyPeriodSummary(_: AmendForeignPropertyPeriodSummaryRequest)(_: HeaderCarrier, _: ExecutionContext, _: String))
         .expects(requestData, *, *, *)
     }
   }

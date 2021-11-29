@@ -16,8 +16,8 @@
 
 package v2.services
 
-import cats.implicits._
 import cats.data.EitherT
+import cats.implicits._
 import javax.inject.{Inject, Singleton}
 import uk.gov.hmrc.http.HeaderCarrier
 import utils.Logging
@@ -29,19 +29,18 @@ import v2.support.IfsResponseMappingSupport
 
 import scala.concurrent.{ExecutionContext, Future}
 
-
 @Singleton
 class AmendForeignPropertyPeriodSummaryService @Inject()(connector: AmendForeignPropertyPeriodSummaryConnector)
   extends IfsResponseMappingSupport with Logging {
 
-  def amendForeignProperty(request: AmendForeignPropertyPeriodSummaryRequest)(
+  def amendForeignPropertyPeriodSummary(request: AmendForeignPropertyPeriodSummaryRequest)(
     implicit hc: HeaderCarrier,
     ec: ExecutionContext,
     logContext: EndpointLogContext,
     correlationId: String): Future[ServiceOutcome[Unit]] = {
 
     val result = for {
-      ifsResponseWrapper <- EitherT(connector.amendForeignProperty(request)).leftMap(mapIfsErrors(ifsErrorMap))
+      ifsResponseWrapper <- EitherT(connector.amendForeignPropertyPeriodSummary(request)).leftMap(mapIfsErrors(ifsErrorMap))
     } yield ifsResponseWrapper
 
     result.value
@@ -50,12 +49,16 @@ class AmendForeignPropertyPeriodSummaryService @Inject()(connector: AmendForeign
   private def ifsErrorMap =
     Map(
       "INVALID_TAXABLE_ENTITY_ID" -> NinoFormatError,
+      "INVALID_TAX_YEAR" -> TaxYearFormatError,
       "INVALID_INCOMESOURCEID" -> BusinessIdFormatError,
-      "INVALID_CORRELATIONID" -> DownstreamError,
-      "INVALID_PAYLOAD" -> DownstreamError,
       "INVALID_SUBMISSION_ID" -> SubmissionIdFormatError,
-      "INCOME_SOURCE_NOT_FOUND" -> NotFoundError,
+      "INVALID_PAYLOAD" -> DownstreamError,
+      "INVALID_CORRELATIONID" -> DownstreamError,
       "NO_DATA_FOUND" -> NotFoundError,
+      "INCOMPATIBLE_PAYLOAD" -> RuleTypeOfBusinessIncorrectError,
+      "TAX_YEAR_NOT_SUPPORTED" -> RuleTaxYearNotSupportedError,
+      "BUSINESS_VALIDATION_FAILURE" -> DownstreamError,
+      "DUPLICATE_COUNTRY_CODE" -> RuleDuplicateCountryCodeError,
       "SERVER_ERROR" -> DownstreamError,
       "SERVICE_UNAVAILABLE" -> DownstreamError
     )

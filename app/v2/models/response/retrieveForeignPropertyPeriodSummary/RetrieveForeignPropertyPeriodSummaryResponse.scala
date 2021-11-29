@@ -30,7 +30,7 @@ case class  RetrieveForeignPropertyPeriodSummaryResponse(submittedOn: String,
                                                          foreignFhlEea: Option[ForeignFhlEea],
                                                          foreignNonFhlProperty: Option[Seq[ForeignNonFhlProperty]])
 
-object RetrieveForeignPropertyPeriodSummaryResponse {
+object RetrieveForeignPropertyPeriodSummaryResponse extends HateoasLinks {
   implicit val writes: Writes[RetrieveForeignPropertyPeriodSummaryResponse] = Json.writes[RetrieveForeignPropertyPeriodSummaryResponse]
   implicit val reads: Reads[RetrieveForeignPropertyPeriodSummaryResponse] = (
     (JsPath \ "submittedOn").read[String] and
@@ -44,7 +44,7 @@ object RetrieveForeignPropertyPeriodSummaryResponse {
     override def links(appConfig: AppConfig, data: RetrieveForeignPropertyPeriodSummaryHateoasData): Seq[Link] = {
       import data._
 
-      val taxYear = "XXXXXXXXXXXXXX" // FIXME remove once build endpoint
+      val taxYear = "2022-23"
       Seq(
         amendForeignPropertyPeriodSummary(appConfig, nino, businessId, taxYear, submissionId),
         retrieveForeignPropertyPeriodSummary(appConfig, nino, businessId, taxYear, submissionId, self = true),
@@ -54,4 +54,4 @@ object RetrieveForeignPropertyPeriodSummaryResponse {
   }
 }
 
-case class RetrieveForeignPropertyPeriodSummaryHateoasData(nino: String, businessId: String, submissionId: String) extends HateoasData
+case class RetrieveForeignPropertyPeriodSummaryHateoasData(nino: String, taxYear: String, businessId: String, submissionId: String) extends HateoasData

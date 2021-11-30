@@ -18,6 +18,7 @@ package v2.services
 
 import support.UnitSpec
 import uk.gov.hmrc.http.HeaderCarrier
+import v2.connectors.RetrieveForeignPropertyPeriodSummaryConnector.{ForeignResult, NonForeignResult}
 import v2.controllers.EndpointLogContext
 import v2.mocks.connectors.MockRetrieveForeignPropertyPeriodSummaryConnector
 import v2.models.domain.Nino
@@ -39,55 +40,22 @@ class RetrieveForeignPropertyPeriodSummaryServiceSpec extends UnitSpec {
   val submissionId: String = "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
   implicit val correlationId: String = "X-123"
 
-  private val response = RetrieveForeignPropertyPeriodSummaryResponse(
-    "2021-06-17T10:53:38Z",
-    "2020-01-01",
-    "2020-01-31",
-    Some(ForeignFhlEea(
-      Some(ForeignFhlEeaIncome(Some(5000.99))),
-      Some(ForeignFhlEeaExpenses(
-        Some(5000.99),
-        Some(5000.99),
-        Some(5000.99),
-        Some(5000.99),
-        Some(5000.99),
-        Some(5000.99),
-        Some(5000.99),
-        Some(5000.99)
-      ))
-    )),
-    Some(Seq(ForeignNonFhlProperty(
-      "FRA",
-      Some(ForeignNonFhlPropertyIncome(
-        Some(ForeignNonFhlPropertyRentIncome(Some(5000.99))),
-        false,
-        Some(5000.99),
-        Some(5000.99),
-        Some(5000.99),
-        Some(5000.99)
-      )),
-      Some(ForeignNonFhlPropertyExpenses(
-        Some(5000.99),
-        Some(5000.99),
-        Some(5000.99),
-        Some(5000.99),
-        Some(5000.99),
-        Some(5000.99),
-        Some(5000.99),
-        Some(5000.99),
-        Some(5000.99),
-        Some(5000.99)
-      ))))
-    ))
+  val countryCode: String = "FRA"
 
-  private val requestData = RetrieveForeignPropertyPeriodSummaryRequest(Nino(nino), businessId, taxYear, submissionId)
+  val foreignFhlEea: ForeignFhlEea                 = ForeignFhlEea(None, None)
+  val foreignNonFhlProperty: ForeignNonFhlProperty = ForeignNonFhlProperty(countryCode, None, None)
+
+  private val response =
+    RetrieveForeignPropertyPeriodSummaryResponse("2020-06-17T10:53:38Z", "2019-01-29", "2020-03-29", Some(foreignFhlEea), Some(Seq(foreignNonFhlProperty)))
+
+  private val requestData = RetrieveForeignPropertyPeriodSummaryRequest(Nino(nino), taxYear, businessId, submissionId)
 
   trait Test extends MockRetrieveForeignPropertyPeriodSummaryConnector {
     implicit val hc: HeaderCarrier = HeaderCarrier()
     implicit val logContext: EndpointLogContext = EndpointLogContext("c", "ep")
 
     val service = new RetrieveForeignPropertyPeriodSummaryService(
-      connector = mockRetrieveForeignPropertyConnector
+      connector = mockConnector
     )
   }
 
@@ -95,10 +63,19 @@ class RetrieveForeignPropertyPeriodSummaryServiceSpec extends UnitSpec {
     "service call successful" when {
       "return mapped result" in new Test {
         MockRetrieveForeignPropertyConnector.retrieveForeignProperty(requestData)
-          .returns(Future.successful(Right(ResponseWrapper(correlationId, response))))
+          .returns(Future.successful(Right(ResponseWrapper(correlationId, ForeignResult(response)))))
 
         await(service.retrieveForeignProperty(requestData)) shouldBe Right(ResponseWrapper(correlationId, response))
       }
+    }
+  }
+
+  "a non-foreign result is found" should {
+    "return a RULE_TYPE_OF_BUSINESS_INCORRECT error" in new Test {
+      MockRetrieveForeignPropertyConnector
+        .retrieveForeignProperty(requestData) returns Future.successful(Right(ResponseWrapper(correlationId, NonForeignResult)))
+
+      await(service.retrieveForeignProperty(requestData)) shouldBe Left(ErrorWrapper(correlationId, RuleTypeOfBusinessIncorrectError))
     }
   }
 
@@ -116,12 +93,14 @@ class RetrieveForeignPropertyPeriodSummaryServiceSpec extends UnitSpec {
 
       val input = Seq(
         "INVALID_TAXABLE_ENTITY_ID" -> NinoFormatError,
-        "INVALID_INCOMESOURCE_ID" -> BusinessIdFormatError,
+        "INVALID_TAX_YEAR" -> TaxYearFormatError,
+        "INVALID_INCOMESOURCEID" -> BusinessIdFormatError,
         "INVALID_SUBMISSION_ID" -> SubmissionIdFormatError,
+        "INVALID_CORRELATIONID" -> DownstreamError,
         "NO_DATA_FOUND" -> NotFoundError,
+        "TAX_YEAR_NOT_SUPPORTED" -> RuleTaxYearNotSupportedError,
         "SERVER_ERROR" -> DownstreamError,
         "SERVICE_UNAVAILABLE" -> DownstreamError,
-        "INVALID_CORRELATIONID" -> DownstreamError
       )
 
       input.foreach(args => (serviceError _).tupled(args))

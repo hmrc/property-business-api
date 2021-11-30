@@ -46,8 +46,8 @@ class RetrieveForeignPropertyPeriodSummaryConnector @Inject()(val http: HttpClie
                                                                                     correlationId: String): Future[IfsOutcome[Result]] = {
     val response = get(
       uri = IfsUri[RetrieveForeignPropertyPeriodSummaryResponse]("income-tax/business/property/annual"),
-      queryParams = Seq("taxableEntityId" -> request.nino.value, "taxYear" -> request.taxYear,
-        "incomeSourceId" -> request.businessId, "submissionId" -> request.submissionId)
+      queryParams = Seq("taxableEntityId" -> request.nino.value, "incomeSourceId" -> request.businessId,
+        "taxYear" -> request.taxYear, "submissionId" -> request.submissionId)
     )
 
     response.map {

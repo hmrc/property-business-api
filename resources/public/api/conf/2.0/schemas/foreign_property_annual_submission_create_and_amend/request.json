@@ -35,13 +35,11 @@
             }
           },
           "additionalProperties": false,
-          "required": [
-            "periodOfGraceAdjustment"
-          ]
+          "required": ["periodOfGraceAdjustment"]
         },
         "allowances": {
-          "description": "Object holding other and property allowances details.",
           "type": "object",
+          "description": "Object holding other and property allowances details.",
           "properties": {
             "annualInvestmentAllowance": {
               "type": "number",
@@ -120,7 +118,8 @@
                 "maximum": 99999999999.99,
                 "example": 5002.29
               }
-            }
+            },
+            "additionalProperties": false
           },
           "allowances": {
             "type": "object",
@@ -191,8 +190,8 @@
                     "amount": {
                       "type": "number",
                       "description": "The amount of structured building allowance.\n\nThe value must be between 0 and 99999999999.99 up to 2 decimal places.",
-                      "multipleOf": 0.00,
-                      "minimum": 0.01,
+                      "multipleOf": 0.01,
+                      "minimum": 0.00,
                       "maximum": 99999999999.99,
                       "example": 4003.39
                     },
@@ -215,10 +214,7 @@
                         }
                       },
                       "additionalProperties": false,
-                      "required": [
-                        "qualifyingDate",
-                        "qualifyingAmountExpenditure"
-                      ]
+                      "required": ["qualifyingDate", "qualifyingAmountExpenditure"]
                     },
                     "building": {
                       "type": "object",
@@ -244,26 +240,20 @@
                         }
                       },
                       "additionalProperties": false,
-                      "required": [
-                        "postCode"
-                      ]
+                      "required": ["postCode"]
                     }
                   },
                   "additionalProperties": false,
-                  "required": [
-                    "amount",
-                    "building"
-                  ]
-                }
+                  "required": ["amount", "building"]
+                },
+                "additionalProperties": false
               }
             },
             "additionalProperties": false
           }
         },
         "additionalProperties": false,
-        "required": [
-          "countryCode"
-        ]
+        "required": ["countryCode"]
       },
       "additionalProperties": false
     }

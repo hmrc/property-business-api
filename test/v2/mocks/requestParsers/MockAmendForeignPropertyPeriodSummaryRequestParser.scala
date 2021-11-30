@@ -18,6 +18,7 @@ package v2.mocks.requestParsers
 
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
+import v2.controllers.requestParsers.AmendForeignPropertyPeriodSummaryRequestParser
 import v2.models.errors.ErrorWrapper
 import v2.models.request.amendForeignPropertyPeriodSummary.{AmendForeignPropertyPeriodSummaryRawData, AmendForeignPropertyPeriodSummaryRequest}
 
@@ -27,7 +28,7 @@ trait MockAmendForeignPropertyPeriodSummaryRequestParser extends MockFactory {
 
   object MockAmendForeignPropertyRequestParser {
     def parseRequest(data: AmendForeignPropertyPeriodSummaryRawData): CallHandler[Either[ErrorWrapper, AmendForeignPropertyPeriodSummaryRequest]] = {
-      (mockAmendForeignPropertyRequestParser.parseRequest(_: AmendForeignPropertyPeriodSummaryRawData)(_: String)).expects(data, *)
+      (mockAmendForeignPropertyPeriodSummaryRequestParser.parseRequest(_: AmendForeignPropertyPeriodSummaryRawData)(_: String)).expects(data, *)
     }
   }
 }

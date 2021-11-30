@@ -33,6 +33,7 @@ import v2.models.request.amendForeignPropertyPeriodSummary._
 import v2.models.request.common.foreignFhlEea.{AmendForeignFhlEea, AmendForeignFhlEeaExpenses, ForeignFhlEeaIncome}
 import v2.models.request.common.foreignPropertyEntry._
 
+import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class AmendForeignPropertyPeriodSummaryControllerSpec
@@ -263,7 +264,7 @@ class AmendForeignPropertyPeriodSummaryControllerSpec
       "the request received is valid" in new Test {
 
         MockAmendForeignPropertyRequestParser
-          .parseRequest(AmendForeignPropertyPeriodSummaryRawData(nino, businessId, taxYear, submissionId, requestBodyJsonConsolidatedExpenses))
+          .parseRequest(AmendForeignPropertyPeriodSummaryRawData(nino, taxYear, businessId, submissionId, requestBodyJsonConsolidatedExpenses))
           .returns(Right(requestData))
 
         MockAmendForeignPropertyService
@@ -283,7 +284,7 @@ class AmendForeignPropertyPeriodSummaryControllerSpec
       "the request received is valid" in new Test {
 
         MockAmendForeignPropertyRequestParser
-          .parseRequest(AmendForeignPropertyPeriodSummaryRawData(nino, businessId, taxYear, submissionId, requestBodyJson))
+          .parseRequest(AmendForeignPropertyPeriodSummaryRawData(nino, taxYear, businessId, submissionId, requestBodyJson))
           .returns(Right(requestData))
 
         MockAmendForeignPropertyService
@@ -309,7 +310,7 @@ class AmendForeignPropertyPeriodSummaryControllerSpec
               .parseRequest(rawData.copy(body = requestBodyJsonConsolidatedExpenses))
               .returns(Left(ErrorWrapper(correlationId, error, None)))
 
-            val result: Future[Result] = controller.handleRequest(nino, businessId, taxYear, submissionId)(fakePostRequest(requestBodyJsonConsolidatedExpenses))
+            val result: Future[Result] = controller.handleRequest(nino, taxYear, businessId, submissionId)(fakePostRequest(requestBodyJsonConsolidatedExpenses))
 
             status(result) shouldBe expectedStatus
             contentAsJson(result) shouldBe Json.toJson(error)
@@ -345,7 +346,7 @@ class AmendForeignPropertyPeriodSummaryControllerSpec
               .amend(requestData)
               .returns(Future.successful(Left(ErrorWrapper(correlationId, mtdError))))
 
-            val result: Future[Result] = controller.handleRequest(nino, businessId, taxYear, submissionId)(fakePostRequest(requestBodyJson))
+            val result: Future[Result] = controller.handleRequest(nino, taxYear, businessId, submissionId)(fakePostRequest(requestBodyJson))
 
             status(result) shouldBe expectedStatus
             contentAsJson(result) shouldBe Json.toJson(mtdError)

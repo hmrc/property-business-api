@@ -17,13 +17,14 @@
 package v2.controllers
 
 import cats.data.EitherT
-import cats.implicits.catsSyntaxEitherId
+import cats.implicits._
 import javax.inject.{Inject, Singleton}
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.{Action, ControllerComponents}
 import utils.{IdGenerator, Logging}
 import v2.hateoas.HateoasFactory
 import v2.models.errors._
+import v2.models.response.amendForeignPropertyPeriodSummary.AmendForeignPropertyPeriodSummaryResponse.AmendForeignPropertyLinksFactory
 import v2.models.request.amendForeignPropertyPeriodSummary.AmendForeignPropertyPeriodSummaryRawData
 import v2.models.response.amendForeignPropertyPeriodSummary.AmendForeignPropertyPeriodSummaryHateoasData
 import v2.controllers.requestParsers.AmendForeignPropertyPeriodSummaryRequestParser

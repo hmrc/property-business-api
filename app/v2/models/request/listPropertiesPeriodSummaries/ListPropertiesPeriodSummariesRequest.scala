@@ -18,4 +18,4 @@ package v2.models.request.listPropertiesPeriodSummaries
 
 import v2.models.domain.Nino
 
-case class ListForeignPropertiesPeriodSummariesRequest(nino: Nino, businessId: String, taxYear: String)
+case class ListPropertiesPeriodSummariesRequest(nino: Nino, businessId: String, taxYear: String)

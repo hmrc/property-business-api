@@ -48,7 +48,7 @@ class RetrieveForeignPropertyPeriodSummaryServiceSpec extends UnitSpec {
   private val response =
     RetrieveForeignPropertyPeriodSummaryResponse("2020-06-17T10:53:38Z", "2019-01-29", "2020-03-29", Some(foreignFhlEea), Some(Seq(foreignNonFhlProperty)))
 
-  private val requestData = RetrieveForeignPropertyPeriodSummaryRequest(Nino(nino), taxYear, businessId, submissionId)
+  private val requestData = RetrieveForeignPropertyPeriodSummaryRequest(Nino(nino), businessId, taxYear, submissionId)
 
   trait Test extends MockRetrieveForeignPropertyPeriodSummaryConnector {
     implicit val hc: HeaderCarrier = HeaderCarrier()

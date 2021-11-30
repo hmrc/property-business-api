@@ -18,7 +18,7 @@ package v2.connectors
 
 import mocks.MockAppConfig
 import org.scalamock.handlers.CallHandler
-import v2.connectors.RetrieveForeignPropertyPeriodSummaryConnector.ForeignResult
+import v2.connectors.RetrieveForeignPropertyPeriodSummaryConnector.{ForeignResult, NonForeignResult}
 import v2.mocks.MockHttpClient
 import v2.models.domain.Nino
 import v2.models.errors.{IfsErrorCode, IfsErrors}
@@ -67,7 +67,7 @@ class RetrieveForeignPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
     : CallHandler[Future[IfsOutcome[RetrieveForeignPropertyPeriodSummaryResponse]]]#Derived = {
       MockHttpClient
         .get(
-          url = s"$baseUrl//income-tax/business/property/periodic?taxableEntityId=$nino&incomeSourceId=$businessId&taxYear=$taxYear&submissionId=$submissionId",
+          url = s"$baseUrl/income-tax/business/property/periodic",
           config = dummyIfsHeaderCarrierConfig,
           queryParams = Seq("taxableEntityId" -> nino, "incomeSourceId" -> businessId, "taxYear" -> taxYear, "submissionId" -> submissionId),
           requiredHeaders = requiredIfsHeaders,
@@ -96,7 +96,7 @@ class RetrieveForeignPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
 
         stubHttpResponse(outcome)
 
-        await(connector.retrieveForeignProperty(request)) shouldBe Right(ResponseWrapper(correlationId, ForeignResult(response)))
+        await(connector.retrieveForeignProperty(request)) shouldBe Right(ResponseWrapper(correlationId, NonForeignResult))
       }
     }
 
@@ -117,7 +117,7 @@ class RetrieveForeignPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
 
         stubHttpResponse(outcome)
 
-        await(connector.retrieveForeignProperty(request)) shouldBe Right(ResponseWrapper(correlationId, ForeignNonFhlProperty))
+        await(connector.retrieveForeignProperty(request)) shouldBe Right(ResponseWrapper(correlationId, NonForeignResult))
       }
     }
 

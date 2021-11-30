@@ -19,14 +19,13 @@ package v2.controllers.requestParsers.validators
 import config.AppConfig
 import v2.controllers.requestParsers.validators.validations._
 import v2.models.errors._
-import v2.models.request.amendForeignPropertyPeriodSummary.{ AmendForeignPropertyPeriodSummaryRawData, AmendForeignPropertyPeriodSummaryRequestBody }
-import v2.models.request.common.foreignFhlEea.{ AmendForeignFhlEea, AmendForeignFhlEeaExpenses }
-import v2.models.request.common.foreignPropertyEntry.{ AmendForeignNonFhlPropertyEntry, AmendForeignNonFhlPropertyExpenses }
-
-import javax.inject.Singleton
+import v2.models.request.amendForeignPropertyPeriodSummary.{AmendForeignPropertyPeriodSummaryRawData, AmendForeignPropertyPeriodSummaryRequestBody}
+import v2.models.request.common.foreignFhlEea.{AmendForeignFhlEea, AmendForeignFhlEeaExpenses}
+import v2.models.request.common.foreignPropertyEntry.{AmendForeignNonFhlPropertyEntry, AmendForeignNonFhlPropertyExpenses}
+import javax.inject.{Inject, Singleton}
 
 @Singleton
-class AmendForeignPropertyPeriodSummaryValidator(appConfig: AppConfig) extends Validator[AmendForeignPropertyPeriodSummaryRawData] {
+class AmendForeignPropertyPeriodSummaryValidator @Inject()(appConfig: AppConfig) extends Validator[AmendForeignPropertyPeriodSummaryRawData] {
 
   private lazy val minTaxYear = appConfig.minimumTaxV2Foreign
   private val validationSet   = List(parameterFormatValidation, bodyFormatValidation, bodyFieldValidation)

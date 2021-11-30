@@ -129,12 +129,12 @@
               },
               "foreignTaxPaidOrDeducted": {
                 "type": "number",
-                "description": "The total amount of foreign tax taken off or deducted from your income.\n\nThe value must be between 0 and 99999999999.99 up to 2 decimal places.",
+                "description": "The total amount of foreign tax paid or deducted from your income.\n\nThe value must be between 0 and 99999999999.99 up to 2 decimal places.",
                 "example": "5000.99"
               },
               "specialWithholdingTaxOrUkTaxPaid": {
                 "type": "number",
-                "description": "Tax withheld (in UK Pounds) on certain payments to UK residents or UK Tax taken off rental Income (applies to non-resident landlords only).\n\nThe value must be between 0 and 99999999999.99 up to 2 decimal places.",
+                "description": "Tax withheld (in UK Pounds) on certain payments to UK residents or UK Tax paid from rental Income (applies to non-resident landlords only).\n\nThe value must be between 0 and 99999999999.99 up to 2 decimal places.",
                 "example": "5000.99"
               }
             },
@@ -179,7 +179,7 @@
               },
               "residentialFinancialCost": {
                 "type": "number",
-                "description": "The residential financial cost that can be deductible from rental income (tax relief).\n\nThe value must be between 0 and 99999999999.99 up to 2 decimal places.",
+                "description": "The residential financial cost deductible from rental income (tax relief).\n\nThe value must be between 0 and 99999999999.99 up to 2 decimal places.",
                 "example": "5000.99"
               },
               "broughtFwdResidentialFinancialCost": {

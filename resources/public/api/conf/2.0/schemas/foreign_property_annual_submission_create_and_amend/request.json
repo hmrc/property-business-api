@@ -236,7 +236,7 @@
                           "pattern": "^[0-9a-zA-Z{À-˿’}\\- _&`():.'^]{1,90}$",
                           "example": "16AD"
                         },
-                        "postcode": {
+                        "postCode": {
                           "type": "string",
                           "description": "The postcode for the building.\nMust conform to the regular expression.",
                           "pattern": "^[0-9a-zA-Z{À-˿’}\\- _&`():.'^]{1,90}$",
@@ -245,7 +245,7 @@
                       },
                       "additionalProperties": false,
                       "required": [
-                        "postcode"
+                        "postCode"
                       ]
                     }
                   },

@@ -17,7 +17,8 @@
 package v2.controllers
 
 import cats.data.EitherT
-import javax.inject.Inject
+import cats.implicits.catsSyntaxEitherId
+import javax.inject.{Inject, Singleton}
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.{Action, ControllerComponents}
 import utils.{IdGenerator, Logging}
@@ -25,7 +26,8 @@ import v2.hateoas.HateoasFactory
 import v2.models.errors._
 import v2.models.request.amendForeignPropertyPeriodSummary.AmendForeignPropertyPeriodSummaryRawData
 import v2.models.response.amendForeignPropertyPeriodSummary.AmendForeignPropertyPeriodSummaryHateoasData
-import v2.services.{EnrolmentsAuthService, MtdIdLookupService}
+import v2.controllers.requestParsers.AmendForeignPropertyPeriodSummaryRequestParser
+import v2.services.{AmendForeignPropertyPeriodSummaryService, EnrolmentsAuthService, MtdIdLookupService}
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -49,13 +51,14 @@ class AmendForeignPropertyPeriodSummaryController @Inject()(val authService: Enr
       logger.info(message = s"[${endpointLogContext.controllerName}][${endpointLogContext.endpointName}] " +
         s"with correlationId : $correlationId")
       val rawData = AmendForeignPropertyPeriodSummaryRawData(nino, taxYear, businessId, submissionId, request.body)
+      val result =
       for {
         parsedRequest <- EitherT.fromEither[Future](parser.parseRequest(rawData))
-        serviceResponse <- EitherT(service.amend(parsedRequest))
+        serviceResponse <- EitherT(service.amendForeignPropertyPeriodSummary(parsedRequest))
         vendorResponse <- EitherT.fromEither[Future](
           hateoasFactory.wrap(serviceResponse.responseData,
             AmendForeignPropertyPeriodSummaryHateoasData(nino, businessId, taxYear, submissionId)).
-          asRight[ErrorWrapper]
+            asRight[ErrorWrapper]
         )
       } yield {
         logger.info(
@@ -66,9 +69,9 @@ class AmendForeignPropertyPeriodSummaryController @Inject()(val authService: Enr
           .withApiHeaders(serviceResponse.correlationId)
       }
 
-      result.leftMap { errorWreapper =>
-        val resCorrelationId = errorWreapper.correlationId
-        val result = errorResult(errorWreapper).withApiheaders(resCorrelationId)
+      result.leftMap { errorWrapper =>
+        val resCorrelationId = errorWrapper.correlationId
+        val result = errorResult(errorWrapper).withApiHeaders(resCorrelationId)
 
         logger.warn(
           s"[${endpointLogContext.controllerName}][${endpointLogContext.endpointName}] - " +

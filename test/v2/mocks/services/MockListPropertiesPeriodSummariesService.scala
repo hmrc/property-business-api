@@ -22,22 +22,22 @@ import uk.gov.hmrc.http.HeaderCarrier
 import v2.controllers.EndpointLogContext
 import v2.models.errors.ErrorWrapper
 import v2.models.outcomes.ResponseWrapper
-import v2.models.request.listForeignPropertiesPeriodSummaries.ListForeignPropertiesPeriodSummariesRequest
-import v2.models.response.listForeignPropertiesPeriodSummaries.{ListForeignPropertiesPeriodSummariesResponse, SubmissionPeriod}
-import v2.services.ListForeignPropertiesPeriodSummariesService
+import v2.models.request.listPropertiesPeriodSummaries.ListPropertiesPeriodSummariesRequest
+import v2.models.response.listPropertiesPeriodSummaries.ListPropertiesPeriodSummariesResponse
+import v2.services.ListPropertiesPeriodSummariesService
 
 import scala.concurrent.{ExecutionContext, Future}
 
-trait MockListForeignPropertiesPeriodSummariesService extends MockFactory {
+trait MockListPropertiesPeriodSummariesService extends MockFactory {
 
-  val mockService: ListForeignPropertiesPeriodSummariesService = mock[ListForeignPropertiesPeriodSummariesService]
+  val mockService: ListPropertiesPeriodSummariesService = mock[ListPropertiesPeriodSummariesService]
 
-  object MockListForeignPropertiesService {
+  object MockListPropertiesPeriodSummariesService {
 
-    def listForeignProperties(requestData: ListForeignPropertiesPeriodSummariesRequest):
-    CallHandler[Future[Either[ErrorWrapper, ResponseWrapper[ListForeignPropertiesPeriodSummariesResponse[SubmissionPeriod]]]]] = {
+    def listPeriodSummaries(requestData: ListPropertiesPeriodSummariesRequest):
+    CallHandler[Future[Either[ErrorWrapper, ResponseWrapper[ListPropertiesPeriodSummariesResponse]]]] = {
       (mockService
-        .listForeignProperties(_: ListForeignPropertiesPeriodSummariesRequest)(_: HeaderCarrier, _: ExecutionContext, _: EndpointLogContext, _: String))
+        .listPeriodSummaries(_: ListPropertiesPeriodSummariesRequest)(_: HeaderCarrier, _: ExecutionContext, _: EndpointLogContext, _: String))
         .expects(requestData, *, *, *, *)
     }
   }

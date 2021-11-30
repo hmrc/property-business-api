@@ -18,31 +18,30 @@ package v2.services
 
 import cats.data.EitherT
 import cats.implicits._
-
-import javax.inject.{Inject, Singleton}
 import uk.gov.hmrc.http.HeaderCarrier
 import utils.Logging
-import v2.connectors.ListForeignPropertiesPeriodSummariesConnector
+import v2.connectors.ListPropertiesPeriodSummariesConnector
 import v2.controllers.EndpointLogContext
 import v2.models.errors._
-import v2.models.request.listForeignPropertiesPeriodSummaries.ListForeignPropertiesPeriodSummariesRequest
-import v2.models.response.listForeignPropertiesPeriodSummaries.{ListForeignPropertiesPeriodSummariesResponse, SubmissionPeriod}
+import v2.models.request.listPropertiesPeriodSummaries.ListPropertiesPeriodSummariesRequest
+import v2.models.response.listPropertiesPeriodSummaries.ListPropertiesPeriodSummariesResponse
 import v2.support.IfsResponseMappingSupport
 
+import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class ListForeignPropertiesPeriodSummariesService @Inject()(connector: ListForeignPropertiesPeriodSummariesConnector)
+class ListPropertiesPeriodSummariesService @Inject()(connector: ListPropertiesPeriodSummariesConnector)
   extends IfsResponseMappingSupport with Logging {
 
-  def listForeignProperties(request: ListForeignPropertiesPeriodSummariesRequest)(
+  def listPeriodSummaries(request: ListPropertiesPeriodSummariesRequest)(
     implicit hc: HeaderCarrier,
     ec: ExecutionContext,
     logContext: EndpointLogContext,
-    correlationId: String): Future[ServiceOutcome[ListForeignPropertiesPeriodSummariesResponse[SubmissionPeriod]]] = {
+    correlationId: String): Future[ServiceOutcome[ListPropertiesPeriodSummariesResponse]] = {
 
     val result = for {
-      ifsResponseWrapper <- EitherT(connector.listForeignProperties(request)).leftMap(mapIfsErrors(ifsErrorMap))
+      ifsResponseWrapper <- EitherT(connector.listPeriodSummaries(request)).leftMap(mapIfsErrors(ifsErrorMap))
     } yield ifsResponseWrapper
 
     result.value
@@ -52,10 +51,9 @@ class ListForeignPropertiesPeriodSummariesService @Inject()(connector: ListForei
     Map(
       "INVALID_TAXABLE_ENTITY_ID" -> NinoFormatError,
       "INVALID_INCOMESOURCEID" -> BusinessIdFormatError,
+      "INVALID_TAX_YEAR" -> TaxYearFormatError,
       "NO_DATA_FOUND" -> NotFoundError,
-      "INVALID_FROM_DATE" -> DownstreamError,
-      "INVALID_TO_DATE" -> DownstreamError,
-      "INVALID_DATE_REQUEST" -> DownstreamError,
+      "TAX_YEAR_NOT_SUPPORTED" -> RuleTaxYearNotSupportedError,
       "INVALID_CORRELATIONID" -> DownstreamError,
       "SERVER_ERROR" -> DownstreamError,
       "SERVICE_UNAVAILABLE" -> DownstreamError

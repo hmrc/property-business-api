@@ -19,6 +19,7 @@ package v2.models.response.listPropertyPeriodSummaries
 import mocks.MockAppConfig
 import play.api.libs.json.Json
 import support.UnitSpec
+import v2.models.hateoas.{Link, Method}
 
 class ListPropertyPeriodSummariesResponseSpec extends UnitSpec with MockAppConfig {
 
@@ -105,6 +106,21 @@ class ListPropertyPeriodSummariesResponseSpec extends UnitSpec with MockAppConfi
       )
 
       Json.toJson(model) shouldBe mtdJson
+    }
+  }
+
+  "LinksFactory" should {
+    "produce the correct links" when {
+      "called" in {
+        val data: ListPropertyPeriodSummariesHateoasData =
+          ListPropertyPeriodSummariesHateoasData("myNino", "myBusinessId", "myTaxYear")
+
+        MockAppConfig.apiGatewayContext.returns("my/context").anyNumberOfTimes()
+
+        ListPropertyPeriodSummariesResponse.LinksFactory.links(mockAppConfig, data) shouldBe Seq(
+          Link(href = s"/my/context/${data.nino}/${data.businessId}/period/${data.taxYear}", method = Method.GET, rel = "self")
+        )
+      }
     }
   }
 }

@@ -131,3 +131,13 @@ uses:
               description: 'The tax year to which the data applies. For example: 2021-22. The start year and end year must not span two tax years. The minimum tax year is 2021-22. No gaps are allowed, for example, 2022-24 is not valid.'
               example: 2021-22
           delete: !include delete_property_submission.raml
+      /period:
+        (annotations.group):
+          name: UK or Foreign Property Income and Expenses Period Summaries List
+          description: Resources relating to an individual's UK or Foreign Property Income and Expenses Period Summaries List
+        /{taxYear}:
+          uriParameters:
+            taxYear:
+              description: 'The tax year to which the data applies. For example: 2022-23. The start year and end year must not span two tax years. The minimum tax year is 2021-22. No gaps are allowed, for example, 2022-24 is not valid.'
+              example: 2022-23
+          get: !include list_property_period_summaries.raml

@@ -5,12 +5,12 @@
   "type": "object",
   "properties": {
     "foreignFhlEea": {
-      "description": "Object holding the adjustments and allowances of the user's Furnished Holiday Lets in the European Economic Area for the period",
       "type": "object",
+      "description": "Object holding the adjustments and allowances of the user's Furnished Holiday Lets in the European Economic Area for the period",
       "properties": {
         "adjustments": {
-          "description": "Object holding Foreign FHL EEA Property Adjustments",
           "type": "object",
+          "description": "Object holding Foreign FHL EEA Property Adjustments",
           "properties": {
             "privateUseAdjustment": {
               "type": "number",
@@ -30,14 +30,14 @@
             },
             "periodOfGraceAdjustment": {
               "type": "boolean",
-              "description": "A boolean to identify  a property which didn't qualify for FHL this year, but qualified the previous year.\n\nThe value must be true or false.",
+              "description": "A boolean to identify a property which didn't qualify for FHL this year, but qualified the previous year.\n\nThe value must be true or false.",
               "example": false
             }
           },
+          "additionalProperties": false,
           "required": [
             "periodOfGraceAdjustment"
-          ],
-          "additionalProperties": false
+          ]
         },
         "allowances": {
           "description": "Object holding other and property allowances details.",
@@ -185,82 +185,90 @@
               "structuredBuildingAllowance": {
                 "type": "array",
                 "description": "Details about structured building allowances",
-                "properties": {
-                  "amount": {
-                    "type": "number",
-                    "description": "The amount of structured building allowance.\n\nThe value must be between 0 and 99999999999.99 up to 2 decimal places.",
-                    "multipleOf": 0.00,
-                    "minimum": 0.01,
-                    "maximum": 99999999999.99,
-                    "example": 4003.39
-                  },
-                  "firstYear": {
-                    "type": "object",
-                    "description": "Object holding foreign Non FHL structured building allowance details.",
-                    "properties": {
-                      "qualifyingDate": {
-                        "type": "string",
-                        "description": "The date qualified for structured building allowance.\n\nMust conform to the format YYYY-MM-DD",
-                        "example": "2020-03-29T00:00:00.000Z"
-                      },
-                      "qualifyingAmountExpenditure": {
-                        "type": "number",
-                        "description": "The amount of qualifying expenditure.\n\nThe value must be between 0 and 99999999999.99 up to 2 decimal places.",
-                        "multipleOf": 0.01,
-                        "minimum": 0.00,
-                        "maximum": 99999999999.99,
-                        "example": 3000.33
-                      }
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "amount": {
+                      "type": "number",
+                      "description": "The amount of structured building allowance.\n\nThe value must be between 0 and 99999999999.99 up to 2 decimal places.",
+                      "multipleOf": 0.00,
+                      "minimum": 0.01,
+                      "maximum": 99999999999.99,
+                      "example": 4003.39
                     },
-                    "required": [
-                      "qualifyingDate",
-                      "qualifyingAmountExpenditure"
-                    ],
-                    "additionalProperties": false
-                  },
-                  "building": {
-                    "type": "object",
-                    "description": "Object holding foreign Non FHL structured building details.\nPost code is mandatory and minimum one of name and number field must be supplied",
-                    "properties": {
-                      "name": {
-                        "type": "string",
-                        "description": "Must conform to the regular expression ^[0-9a-zA-Z{À-˿’}\\- _&`():.'^]{1,90}$",
-                        "example": "Green Oak’s"
+                    "firstYear": {
+                      "type": "object",
+                      "description": "Object holding foreign Non FHL structured building allowance details.",
+                      "properties": {
+                        "qualifyingDate": {
+                          "type": "string",
+                          "description": "The date qualified for structured building allowance.\n\nMust conform to the format YYYY-MM-DD",
+                          "example": "2020-03-29T00:00:00.000Z"
+                        },
+                        "qualifyingAmountExpenditure": {
+                          "type": "number",
+                          "description": "The amount of qualifying expenditure.\n\nThe value must be between 0 and 99999999999.99 up to 2 decimal places.",
+                          "multipleOf": 0.01,
+                          "minimum": 0.00,
+                          "maximum": 99999999999.99,
+                          "example": 3000.33
+                        }
                       },
-                      "number": {
-                        "type": "string",
-                        "description": "The number of the building.\nMust conform to the regular expression ^[0-9a-zA-Z{À-˿’}\\- _&`():.'^]{1,90}$",
-                        "example": "16AD"
-                      },
-                      "postcode": {
-                        "type": "string",
-                        "description": "The postcode for the building.\nMust conform to the regular expression ^[0-9a-zA-Z{À-˿’}\\- _&`():.'^]{1,90}$",
-                        "example": "GF49JH"
-                      }
+                      "additionalProperties": false,
+                      "required": [
+                        "qualifyingDate",
+                        "qualifyingAmountExpenditure"
+                      ]
                     },
-                    "required": [
-                      "building",
-                      "postcode"
-                    ],
-                    "additionalProperties": false
-                  }
-                },
-                "required": [
-                  "amount"
-                ],
-                "additionalProperties": false
+                    "building": {
+                      "type": "object",
+                      "description": "Object holding foreign Non FHL structured building details.\nPost code is mandatory and minimum one of name and number field must be supplied",
+                      "properties": {
+                        "name": {
+                          "type": "string",
+                          "description": "Must conform to the regular expression.",
+                          "pattern": "^[0-9a-zA-Z{À-˿’}\\- _&`():.'^]{1,90}$",
+                          "example": "Green Oak’s"
+                        },
+                        "number": {
+                          "type": "string",
+                          "description": "The number of the building.\nMust conform to the regular expression.",
+                          "pattern": "^[0-9a-zA-Z{À-˿’}\\- _&`():.'^]{1,90}$",
+                          "example": "16AD"
+                        },
+                        "postcode": {
+                          "type": "string",
+                          "description": "The postcode for the building.\nMust conform to the regular expression.",
+                          "pattern": "^[0-9a-zA-Z{À-˿’}\\- _&`():.'^]{1,90}$",
+                          "example": "GF49JH"
+                        }
+                      },
+                      "additionalProperties": false,
+                      "required": [
+                        "postcode"
+                      ]
+                    }
+                  },
+                  "additionalProperties": false,
+                  "required": [
+                    "amount",
+                    "building"
+                  ]
+                }
               }
             },
             "additionalProperties": false
           }
         },
+        "additionalProperties": false,
         "required": [
           "countryCode"
-        ],
-        "additionalProperties": false
-      }
+        ]
+      },
+      "additionalProperties": false
     }
-  }
+  },
+  "additionalProperties": false
 }
 
 

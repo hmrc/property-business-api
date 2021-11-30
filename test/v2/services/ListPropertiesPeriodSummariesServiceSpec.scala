@@ -19,47 +19,46 @@ package v2.services
 import support.UnitSpec
 import uk.gov.hmrc.http.HeaderCarrier
 import v2.controllers.EndpointLogContext
-import v2.mocks.connectors.MockListForeignPropertiesPeriodSummariesConnector
+import v2.mocks.connectors.MockListPropertiesPeriodSummariesConnector
 import v2.models.domain.Nino
 import v2.models.errors._
 import v2.models.outcomes.ResponseWrapper
-import v2.models.request.listForeignPropertiesPeriodSummaries.ListForeignPropertiesPeriodSummariesRequest
-import v2.models.response.listForeignPropertiesPeriodSummaries.{ListForeignPropertiesPeriodSummariesResponse, SubmissionPeriod}
+import v2.models.request.listPropertiesPeriodSummaries.ListPropertiesPeriodSummariesRequest
+import v2.models.response.listPropertiesPeriodSummaries.{ListPropertiesPeriodSummariesResponse, SubmissionPeriod}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-class ListForeignPropertiesPeriodSummariesServiceSpec extends UnitSpec {
+class ListPropertiesPeriodSummariesServiceSpec extends UnitSpec {
 
   val nino: String = "AA123456A"
   val businessId: String = "XAIS12345678910"
-  val fromDate: String = "2020-06-01"
-  val toDate: String = "2020-08-31"
+  val taxYear: String = "2021-22"
   implicit val correlationId: String = "X-123"
 
-  private val request = ListForeignPropertiesPeriodSummariesRequest(Nino(nino), businessId, fromDate, toDate)
+  private val request = ListPropertiesPeriodSummariesRequest(Nino(nino), businessId, taxYear)
 
-  private val response = ListForeignPropertiesPeriodSummariesResponse(Seq(
+  private val response = ListPropertiesPeriodSummariesResponse(Seq(
     SubmissionPeriod("4557ecb5-fd32-48cc-81f5-e6acd1099f3c", "2020-06-22", "2020-06-22"),
     SubmissionPeriod("4557ecb5-fd32-48cc-81f5-e6acd1099f3d", "2020-08-22", "2020-08-22")
   ))
 
-  trait Test extends MockListForeignPropertiesPeriodSummariesConnector {
+  trait Test extends MockListPropertiesPeriodSummariesConnector {
     implicit val hc: HeaderCarrier = HeaderCarrier()
     implicit val logContext: EndpointLogContext = EndpointLogContext("c", "ep")
 
-    val service = new ListForeignPropertiesPeriodSummariesService(
-      connector = mockListForeignPropertiesConnector
+    val service = new ListPropertiesPeriodSummariesService(
+      connector = mockListPropertiesPeriodSummariesConnector
     )
   }
 
   "service" should {
     "service call successful" when {
       "return mapped result" in new Test {
-        MockListForeignPropertiesConnector.listForeignProperties(request)
+        MockListPropertiesPeriodSummariesConnector.listPeriodSummaries(request)
           .returns(Future.successful(Right(ResponseWrapper(correlationId, response))))
 
-        await(service.listForeignProperties(request)) shouldBe Right(ResponseWrapper(correlationId, response))
+        await(service.listPeriodSummaries(request)) shouldBe Right(ResponseWrapper(correlationId, response))
       }
     }
   }
@@ -70,20 +69,19 @@ class ListForeignPropertiesPeriodSummariesServiceSpec extends UnitSpec {
       def serviceError(ifsErrorCode: String, error: MtdError): Unit =
         s"a $ifsErrorCode error is returned from the service" in new Test {
 
-          MockListForeignPropertiesConnector.listForeignProperties(request)
+          MockListPropertiesPeriodSummariesConnector.listPeriodSummaries(request)
             .returns(Future.successful(Left(ResponseWrapper(correlationId, IfsErrors.single(IfsErrorCode(ifsErrorCode))))))
 
-          await(service.listForeignProperties(request)) shouldBe Left(ErrorWrapper(correlationId, error))
+          await(service.listPeriodSummaries(request)) shouldBe Left(ErrorWrapper(correlationId, error))
         }
 
       val input = Seq(
         "INVALID_TAXABLE_ENTITY_ID" -> NinoFormatError,
         "INVALID_INCOMESOURCEID" -> BusinessIdFormatError,
-        "NO_DATA_FOUND" -> NotFoundError,
-        "INVALID_FROM_DATE" -> DownstreamError,
-        "INVALID_TO_DATE" -> DownstreamError,
-        "INVALID_DATE_REQUEST" -> DownstreamError,
+        "INVALID_TAX_YEAR" -> TaxYearFormatError,
         "INVALID_CORRELATIONID" -> DownstreamError,
+        "NO_DATA_FOUND" -> NotFoundError,
+        "TAX_YEAR_NOT_SUPPORTED" -> RuleTaxYearNotSupportedError,
         "SERVER_ERROR" -> DownstreamError,
         "SERVICE_UNAVAILABLE" -> DownstreamError
       )

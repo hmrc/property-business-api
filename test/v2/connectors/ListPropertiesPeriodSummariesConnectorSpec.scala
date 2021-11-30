@@ -20,32 +20,31 @@ import mocks.MockAppConfig
 import v2.mocks.MockHttpClient
 import v2.models.domain.Nino
 import v2.models.outcomes.ResponseWrapper
-import v2.models.request.listForeignPropertiesPeriodSummaries.ListForeignPropertiesPeriodSummariesRequest
-import v2.models.response.listForeignPropertiesPeriodSummaries._
+import v2.models.request.listPropertiesPeriodSummaries.ListPropertiesPeriodSummariesRequest
+import v2.models.response.listPropertiesPeriodSummaries.{ ListPropertiesPeriodSummariesResponse, SubmissionPeriod }
 
 import scala.concurrent.Future
 
-class ListForeignPropertiesPeriodSummariesConnectorSpec extends ConnectorSpec {
+class ListPropertiesPeriodSummariesConnectorSpec extends ConnectorSpec {
 
-  val nino: String = "AA123456A"
+  val nino: String       = "AA123456A"
   val businessId: String = "XAIS12345678910"
-  val fromDate: String = "2020-06-01"
-  val toDate: String = "2020-08-31"
+  val taxYear: String    = "2022-23"
 
-  val request: ListForeignPropertiesPeriodSummariesRequest = ListForeignPropertiesPeriodSummariesRequest(
+  val request: ListPropertiesPeriodSummariesRequest = ListPropertiesPeriodSummariesRequest(
     nino = Nino(nino),
     businessId = businessId,
-    fromDate = fromDate,
-    toDate = toDate
+    taxYear = taxYear
   )
 
-  private val response = ListForeignPropertiesPeriodSummariesResponse(Seq(
-    SubmissionPeriod("4557ecb5-fd32-48cc-81f5-e6acd1099f3c", "2020-06-22", "2020-06-22"),
-    SubmissionPeriod("4557ecb5-fd32-48cc-81f5-e6acd1099f3d", "2020-08-22", "2020-08-22")
-  ))
+  private val response = ListPropertiesPeriodSummariesResponse(
+    Seq(
+      SubmissionPeriod("4557ecb5-fd32-48cc-81f5-e6acd1099f3c", "2020-06-22", "2020-06-22")
+    ))
 
   class Test extends MockHttpClient with MockAppConfig {
-    val connector: ListForeignPropertiesPeriodSummariesConnector = new ListForeignPropertiesPeriodSummariesConnector(
+
+    val connector: ListPropertiesPeriodSummariesConnector = new ListPropertiesPeriodSummariesConnector(
       http = mockHttpClient,
       appConfig = mockAppConfig
     )
@@ -62,14 +61,15 @@ class ListForeignPropertiesPeriodSummariesConnectorSpec extends ConnectorSpec {
 
       MockHttpClient
         .get(
-          url = s"$baseUrl/income-tax/business/property/$nino/$businessId/period?fromDate=$fromDate&toDate=$toDate",
+          url = s"$baseUrl/income-tax/business/property/$nino/$businessId/period",
+          queryParams = Seq("taxYear" -> taxYear),
           config = dummyIfsHeaderCarrierConfig,
           requiredHeaders = requiredIfsHeaders,
           excludedHeaders = Seq("AnotherHeader" -> "HeaderValue")
         )
         .returns(Future.successful(outcome))
 
-      await(connector.listForeignProperties(request)) shouldBe outcome
+      await(connector.listPeriodSummaries(request)) shouldBe outcome
 
     }
   }

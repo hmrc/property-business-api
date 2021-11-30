@@ -102,7 +102,7 @@
     },
     "foreignNonFhlProperty": {
       "type": "array",
-      "description": "Array holding the income and expenses of the user's foreign property business - excluding Furnished Holiday Lettings (FHL) in the European Economic Area (EEA) - for the period",
+      "description": "Array holding the income and expenses of the user's foreign property business - excluding Furnished Holiday Lettings (FHL) in the European Economic Area (EEA) - for the period.",
       "items": {
         "type": "object",
         "properties": {
@@ -131,7 +131,7 @@
                 "additionalProperties": false
               },
               "foreignTaxCreditRelief": {
-                "description": "A boolean indicating whether Foreign Tax Credit Relief (FTCR) has been claimed. The value must be true or false",
+                "description": "A boolean indicating whether Foreign Tax Credit Relief (FTCR) has been claimed. The value must be true or false.",
                 "type": "boolean",
                 "example": "false"
               },
@@ -152,7 +152,7 @@
                 "example": "5000.99"
               },
               "foreignTaxPaidOrDeducted": {
-                "description": "The total amount of foreign tax taken off or deducted from your income. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
+                "description": "The total amount of foreign tax paid or deducted from your income. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
                 "type": "number",
                 "multipleOf": 0.01,
                 "minimum": 0.00,
@@ -160,7 +160,7 @@
                 "example": "5000.99"
               },
               "specialWithholdingTaxOrUkTaxPaid": {
-                "description": "Tax withheld (in UK Pounds) on certain payments to UK residents or UK Tax taken off rental Income (applies to non-resident landlords only). The value must be between 0 and 99999999999.99.",
+                "description": "Tax withheld (in UK Pounds) on certain payments to UK residents or UK Tax paid from rental Income (applies to non-resident landlords only). The value must be between 0 and 99999999999.99 up to 2 decimal places.",
                 "type": "number",
                 "multipleOf": 0.01,
                 "minimum": 0.00,
@@ -226,7 +226,7 @@
                 "example": "5000.99"
               },
               "residentialFinancialCost": {
-                "description": "The residential financial cost that can be deductible from rental income (tax relief). The value must be between 0 and 99999999999.99 up to 2 decimal places",
+                "description": "The residential financial cost deductible from rental income (tax relief). The value must be between 0 and 99999999999.99 up to 2 decimal places.",
                 "type": "number",
                 "multipleOf": 0.01,
                 "minimum": 0.00,

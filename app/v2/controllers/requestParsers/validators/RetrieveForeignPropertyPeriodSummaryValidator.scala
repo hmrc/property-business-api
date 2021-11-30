@@ -25,7 +25,7 @@ import javax.inject.{Inject, Singleton}
 @Singleton
 class RetrieveForeignPropertyPeriodSummaryValidator @Inject()(appConfig: AppConfig) extends Validator[RetrieveForeignPropertyPeriodSummaryRawData] {
 
-  private lazy val minTaxYear = appConfig.minimumTaxV2Uk
+  private lazy val minTaxYear = appConfig.minimumTaxV2Foreign
   private val validationSet = List(parameterFormatValidation)
 
   private def parameterFormatValidation: RetrieveForeignPropertyPeriodSummaryRawData => List[List[MtdError]] =

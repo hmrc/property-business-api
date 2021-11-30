@@ -142,7 +142,7 @@
                 "maximum": 99999999999.99,
                 "example": 409.99
               },
-              "zeroEmissionsGoodsVehicleAllowance": {
+              "zeroEmissionGoodsVehicleAllowance": {
                 "type": "number",
                 "description": "The amount of Zero emission goods vehicle allowance for goods vehicles purchased for business use.\n\nThe value must be between 0 and 99999999999.99 up to 2 decimal places.",
                 "multipleOf": 0.01,
@@ -270,5 +270,3 @@
   },
   "additionalProperties": false
 }
-
-

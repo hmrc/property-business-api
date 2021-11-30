@@ -3,7 +3,7 @@
     "adjustments": {
       "privateUseAdjustment": 34343.45,
       "balancingCharge": 53543.23,
-      "periodOfGraceAdjustment": false
+      "periodOfGraceAdjustment": true
     },
     "allowances": {
       "annualInvestmentAllowance": 3434.23,
@@ -23,11 +23,11 @@
       "allowances": {
         "annualInvestmentAllowance": 38330.95,
         "costOfReplacingDomesticItems": 41985.17,
-        "zeroEmissionsGoodsVehicleAllowance": 9769.19,
+        "zeroEmissionGoodsVehicleAllowance": 9769.19,
         "otherCapitalAllowance": 1049.21,
         "electricChargePointAllowance": 3565.45,
-        "zeroEmissionsCarAllowance": 5005.59,
-        "propertyIncomeAllowance": 5004.49,
+        "zeroEmissionsCarAllowance": 1000.99,
+        "propertyIncomeAllowance": 4002.29,
         "structuredBuildingAllowance": [
           {
             "amount": 3545.12,

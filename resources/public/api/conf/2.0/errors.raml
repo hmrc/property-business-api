@@ -303,9 +303,20 @@ traits:
             type: types.errorResponse
             examples:
               ruleDuplicateCountryCode:
-                description: Duplicate Country code is not allowed.
+                description: The same countryCode cannot be supplied for multiple properties. If there are multiple properties per country the adjustments and allowances should be the total across all properties.
                 value:
                   code: RULE_DUPLICATE_COUNTRY_CODE
+  rulePropertyIncomeAllowance:
+    responses:
+      400:
+        body:
+          application/json:
+            type: types.errorResponse
+            examples:
+              rulePropertyIncomeAllowance:
+                description: The propertyIncomeAllowance cannot be submitted if privateUseAdjustment is supplied.
+                value:
+                  code: RULE_PROPERTY_INCOME_ALLOWANCE
 # MISSING_XXX
   missingFromDate:
     responses:

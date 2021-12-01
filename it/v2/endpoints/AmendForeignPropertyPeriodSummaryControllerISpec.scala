@@ -116,8 +116,7 @@ class AmendForeignPropertyPeriodSummaryControllerISpec extends V2IntegrationBase
       |      "professionalFees": 5000.9999,
       |      "costOfServices": 5000.9999,
       |      "travelCosts": 5000.9999,
-      |      "other": 5000.9999,
-      |      "consolidatedExpenses": 5000.9999
+      |      "other": 5000.9999
       |    }
       |  },
       |  "foreignNonFhlProperty": [
@@ -142,8 +141,7 @@ class AmendForeignPropertyPeriodSummaryControllerISpec extends V2IntegrationBase
       |        "travelCosts": 5000.9999,
       |        "residentialFinancialCost": 5000.9999,
       |        "broughtFwdResidentialFinancialCost": 5000.9999,
-      |        "other": 5000.9999,
-      |        "consolidatedExpenses": 5000.9999
+      |        "other": 5000.9999
       |      }
       |    }
       |  ]
@@ -197,14 +195,35 @@ class AmendForeignPropertyPeriodSummaryControllerISpec extends V2IntegrationBase
 
   val allInvalidValueRequestError: MtdError = ValueFormatError.copy(
     paths = Some(List(
-      ""
+      "/foreignFhlEea/income/rentAmount",
+      "/foreignFhlEea/expenses/premisesRunningCosts",
+      "/foreignFhlEea/expenses/repairsAndMaintenance",
+      "/foreignFhlEea/expenses/financialCosts",
+      "/foreignFhlEea/expenses/professionalFees",
+      "/foreignFhlEea/expenses/costOfServices",
+      "/foreignFhlEea/expenses/travelCosts",
+      "/foreignFhlEea/expenses/other",
+      "/foreignNonFhlProperty/0/income/rentIncome/rentAmount",
+      "/foreignNonFhlProperty/0/income/premiumsOfLeaseGrant",
+      "/foreignNonFhlProperty/0/income/otherPropertyIncome",
+      "/foreignNonFhlProperty/0/income/foreignTaxPaidOrDeducted",
+      "/foreignNonFhlProperty/0/income/specialWithholdingTaxOrUkTaxPaid",
+      "/foreignNonFhlProperty/0/expenses/premisesRunningCosts",
+      "/foreignNonFhlProperty/0/expenses/repairsAndMaintenance",
+      "/foreignNonFhlProperty/0/expenses/financialCosts",
+      "/foreignNonFhlProperty/0/expenses/professionalFees",
+      "/foreignNonFhlProperty/0/expenses/costOfServices",
+      "/foreignNonFhlProperty/0/expenses/travelCosts",
+      "/foreignNonFhlProperty/0/expenses/residentialFinancialCost",
+      "/foreignNonFhlProperty/0/expenses/broughtFwdResidentialFinancialCost",
+      "/foreignNonFhlProperty/0/expenses/other"
     ))
   )
 
   val RuleBothExpensesSuppliedRequestError: MtdError = RuleBothExpensesSuppliedError.copy(
     paths = Some(List(
       "/foreignFhlEea/expenses",
-      "/foreignNonFhlProperty/expenses"
+      "/foreignNonFhlProperty/0/expenses"
     ))
   )
 
@@ -239,13 +258,13 @@ class AmendForeignPropertyPeriodSummaryControllerISpec extends V2IntegrationBase
          |  "links": [
          |    {
          |      "href":"/individuals/business/property/foreign/$nino/$businessId/period/$taxYear/$submissionId",
-         |      "method":"GET",
-         |      "rel":"self"
+         |      "method":"PUT",
+         |      "rel":"amend-foreign-property-period-summary"
          |    },
          |    {
          |      "href":"/individuals/business/property/foreign/$nino/$businessId/period/$taxYear/$submissionId",
-         |      "method":"PUT",
-         |      "rel":"amend-foreign-property-period-summary"
+         |      "method":"GET",
+         |      "rel":"self"
          |    },
          |    {
          |      "href":"/individuals/business/property/$nino/$businessId/period/$taxYear",
@@ -270,6 +289,7 @@ class AmendForeignPropertyPeriodSummaryControllerISpec extends V2IntegrationBase
     "return a 200 status code" when {
 
       "a valid unconsolidated request is made" in new Test {
+
         override def setupStubs(): StubMapping = {
           AuthStub.authorised()
           MtdIdLookupStub.ninoFound(nino)
@@ -349,7 +369,7 @@ class AmendForeignPropertyPeriodSummaryControllerISpec extends V2IntegrationBase
         ("AA123456A", "2022-23", "XAIS1234dfxgchjbn5678910", "4557ecb5-fd32-48cc-81f5-e6acd1099f3c", requestBodyJson, BAD_REQUEST, BusinessIdFormatError),
         ("AA123456A", "2022-23", "XAIS12345678910", "4557ecb5-fd32-awefwaef48cc-81f5-e6acd1099f3c", requestBodyJson, BAD_REQUEST, SubmissionIdFormatError),
         ("AA123456A", "2021-23", "XAIS12345678910", "4557ecb5-fd32-48cc-81f5-e6acd1099f3c", requestBodyJson, BAD_REQUEST, RuleTaxYearRangeInvalidError),
-        ("AA123456A", "2021-22", "XAIS12345678910", "4557ecb5-fd32-48cc-81f5-e6acd1099f3c", requestBodyJson, BAD_REQUEST, RuleTaxYearNotSupportedError),
+        ("AA123456A", "2020-21", "XAIS12345678910", "4557ecb5-fd32-48cc-81f5-e6acd1099f3c", requestBodyJson, BAD_REQUEST, RuleTaxYearNotSupportedError),
         ("AA123456A", "2022-23", "XAIS12345678910", "4557ecb5-fd32-48cc-81f5-e6acd1099f3c", Json.parse(s"""{"foreignFhlEea": {}}""".stripMargin), BAD_REQUEST,
           RuleIncorrectOrEmptyBodyError.copy(paths = Some(Seq("/foreignFhlEea")))),
         ("AA123456A", "2022-23", "XAIS12345678910", "4557ecb5-fd32-48cc-81f5-e6acd1099f3c", invalidValueRequestJson, BAD_REQUEST, allInvalidValueRequestError),

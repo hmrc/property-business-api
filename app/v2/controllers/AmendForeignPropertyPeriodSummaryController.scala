@@ -51,7 +51,7 @@ class AmendForeignPropertyPeriodSummaryController @Inject()(val authService: Enr
       implicit val correlationId: String = idGenerator.getCorrelationId
       logger.info(message = s"[${endpointLogContext.controllerName}][${endpointLogContext.endpointName}] " +
         s"with correlationId : $correlationId")
-      val rawData = AmendForeignPropertyPeriodSummaryRawData(nino, taxYear, businessId, submissionId, request.body)
+      val rawData = AmendForeignPropertyPeriodSummaryRawData(nino, businessId, taxYear, submissionId, request.body)
       val result =
       for {
         parsedRequest <- EitherT.fromEither[Future](parser.parseRequest(rawData))

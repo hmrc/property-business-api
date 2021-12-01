@@ -19,7 +19,6 @@ package v2.models.response.amendForeignPropertyPeriodSummary
 import config.AppConfig
 import v2.hateoas.{HateoasLinks, HateoasLinksFactory}
 import v2.models.hateoas.{HateoasData, Link}
-import v2.models.hateoas.RelType._
 
 object AmendForeignPropertyPeriodSummaryResponse extends HateoasLinks {
 
@@ -29,7 +28,7 @@ object AmendForeignPropertyPeriodSummaryResponse extends HateoasLinks {
       Seq(
         amendForeignPropertyPeriodSummary(appConfig, nino, businessId, taxYear, submissionId),
         retrieveForeignPropertyPeriodSummary(appConfig, nino, businessId, taxYear, submissionId, self = true),
-        listPropertyPeriodSummaries(appConfig, nino, businessId, LIST_PROPERTY_PERIOD_SUMMARIES, self = false)
+        listPropertyPeriodSummaries(appConfig, nino, businessId, taxYear, self = false)
       )
     }
   }

@@ -264,7 +264,7 @@ class AmendForeignPropertyPeriodSummaryControllerSpec
       "the request received is valid" in new Test {
 
         MockAmendForeignPropertyRequestParser
-          .parseRequest(AmendForeignPropertyPeriodSummaryRawData(nino, taxYear, businessId, submissionId, requestBodyJsonConsolidatedExpenses))
+          .parseRequest(AmendForeignPropertyPeriodSummaryRawData(nino, businessId, taxYear, submissionId, requestBodyJsonConsolidatedExpenses))
           .returns(Right(requestData))
 
         MockAmendForeignPropertyService
@@ -284,7 +284,7 @@ class AmendForeignPropertyPeriodSummaryControllerSpec
       "the request received is valid" in new Test {
 
         MockAmendForeignPropertyRequestParser
-          .parseRequest(AmendForeignPropertyPeriodSummaryRawData(nino, taxYear, businessId, submissionId, requestBodyJson))
+          .parseRequest(AmendForeignPropertyPeriodSummaryRawData(nino, businessId, taxYear, submissionId, requestBodyJson))
           .returns(Right(requestData))
 
         MockAmendForeignPropertyService
@@ -310,7 +310,7 @@ class AmendForeignPropertyPeriodSummaryControllerSpec
               .parseRequest(rawData.copy(body = requestBodyJsonConsolidatedExpenses))
               .returns(Left(ErrorWrapper(correlationId, error, None)))
 
-            val result: Future[Result] = controller.handleRequest(nino, taxYear, businessId, submissionId)(fakePostRequest(requestBodyJsonConsolidatedExpenses))
+            val result: Future[Result] = controller.handleRequest(nino, businessId, taxYear, submissionId)(fakePostRequest(requestBodyJsonConsolidatedExpenses))
 
             status(result) shouldBe expectedStatus
             contentAsJson(result) shouldBe Json.toJson(error)
@@ -346,7 +346,7 @@ class AmendForeignPropertyPeriodSummaryControllerSpec
               .amend(requestData)
               .returns(Future.successful(Left(ErrorWrapper(correlationId, mtdError))))
 
-            val result: Future[Result] = controller.handleRequest(nino, taxYear, businessId, submissionId)(fakePostRequest(requestBodyJson))
+            val result: Future[Result] = controller.handleRequest(nino, businessId, taxYear, submissionId)(fakePostRequest(requestBodyJson))
 
             status(result) shouldBe expectedStatus
             contentAsJson(result) shouldBe Json.toJson(mtdError)

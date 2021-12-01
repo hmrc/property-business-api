@@ -25,5 +25,5 @@ class CreateForeignPropertyPeriodSummaryRequestParser @Inject()(val validator: C
     extends RequestParser[CreateForeignPropertyPeriodSummaryRawData, CreateForeignPropertyPeriodSummaryRequest] {
 
   override protected def requestFor(data: CreateForeignPropertyPeriodSummaryRawData): CreateForeignPropertyPeriodSummaryRequest =
-    CreateForeignPropertyPeriodSummaryRequest(Nino(data.nino), data.taxYear, data.businessId, data.body.as[CreateForeignPropertyPeriodSummaryRequestBody])
+    CreateForeignPropertyPeriodSummaryRequest(Nino(data.nino), data.businessId, data.taxYear, data.body.as[CreateForeignPropertyPeriodSummaryRequestBody])
 }

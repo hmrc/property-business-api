@@ -17,10 +17,10 @@
 package v2.controllers.requestParsers.validators
 
 import v2.controllers.requestParsers.validators.validations._
-import v2.models.errors.{MtdError, RuleIncorrectOrEmptyBodyError}
+import v2.models.errors.{MtdError, RuleDuplicateCountryCodeError}
 import v2.models.request.createForeignPropertyPeriodSummary.{CreateForeignPropertyPeriodSummaryRawData, CreateForeignPropertyPeriodSummaryRequestBody}
 import javax.inject.Singleton
-import v1.controllers.requestParsers.validators.validations.minimumTaxYear
+import v2.controllers.requestParsers.validators.validations.minimumTaxYear
 import v2.models.request.common.foreignFhlEea.{CreateForeignFhlEea, CreateForeignFhlEeaExpenses}
 import v2.models.request.common.foreignPropertyEntry.{CreateForeignNonFhlPropertyEntry, CreateForeignNonFhlPropertyExpenses}
 
@@ -39,20 +39,10 @@ class CreateForeignPropertyPeriodSummaryValidator extends Validator[CreateForeig
     }
 
   private def bodyFormatValidation: CreateForeignPropertyPeriodSummaryRawData => List[List[MtdError]] = { data =>
-    val baseValidation = List(JsonFormatValidation.validate[CreateForeignPropertyPeriodSummaryRequestBody](data.body))
-
-    val extraValidation: List[List[MtdError]] = {
-      data.body
-        .asOpt[CreateForeignPropertyPeriodSummaryRequestBody]
-        .map(_.isEmpty)
-        .map {
-          case true  => List(List(RuleIncorrectOrEmptyBodyError))
-          case false => NoValidationErrors
-        }
-        .getOrElse(NoValidationErrors)
+    JsonFormatValidation.validateAndCheckNonEmpty[CreateForeignPropertyPeriodSummaryRequestBody](data.body) match {
+      case Nil => NoValidationErrors
+      case schemaErrors => List(schemaErrors)
     }
-
-    baseValidation ++ extraValidation
   }
 
   private def bodyFieldFormatValidation: CreateForeignPropertyPeriodSummaryRawData => List[List[MtdError]] = { data =>
@@ -81,7 +71,8 @@ class CreateForeignPropertyPeriodSummaryValidator extends Validator[CreateForeig
               }
             )
             .getOrElse(Nil)
-            .flatten
+            .flatten,
+          duplicateCountryCodeValidation(body)
         )))
 
     regularErrors ++ pathErrors
@@ -215,6 +206,23 @@ class CreateForeignPropertyPeriodSummaryValidator extends Validator[CreateForeig
     val body = data.body.as[CreateForeignPropertyPeriodSummaryRequestBody]
 
     List(ToDateBeforeFromDateValidation.validate(body.fromDate, body.toDate))
+  }
+
+  private def duplicateCountryCodeValidation(body: CreateForeignPropertyPeriodSummaryRequestBody): List[MtdError] = {
+    body.foreignNonFhlProperty
+      .map { entries =>
+        entries.zipWithIndex
+          .map {
+            case (entry, idx) => (entry.countryCode, s"/foreignNonFhlProperty/$idx/countryCode")
+          }
+          .groupBy(_._1)
+          .collect {
+            case (code, codeAndPaths) if codeAndPaths.size >= 2 =>
+              RuleDuplicateCountryCodeError.forDuplicatedCodesAndPaths(code, codeAndPaths.map(_._2))
+          }
+          .toList
+      }
+      .getOrElse(Nil)
   }
 
   override def validate(data: CreateForeignPropertyPeriodSummaryRawData): List[MtdError] = {

@@ -16,9 +16,9 @@
 
 package v2.controllers.requestParsers.validators
 
-import play.api.libs.json.Json
+import play.api.libs.json.{JsArray, JsValue, Json}
 import support.UnitSpec
-import v2.models.errors.{BusinessIdFormatError, CountryCodeFormatError, FromDateFormatError, NinoFormatError, RuleBothExpensesSuppliedError, RuleCountryCodeError, RuleIncorrectOrEmptyBodyError, RuleTaxYearNotSupportedError, RuleTaxYearRangeInvalidError, RuleToDateBeforeFromDateError, TaxYearFormatError, ToDateFormatError, ValueFormatError}
+import v2.models.errors.{BusinessIdFormatError, CountryCodeFormatError, FromDateFormatError, NinoFormatError, RuleBothExpensesSuppliedError, RuleCountryCodeError, RuleDuplicateCountryCodeError, RuleIncorrectOrEmptyBodyError, RuleTaxYearNotSupportedError, RuleTaxYearRangeInvalidError, RuleToDateBeforeFromDateError, TaxYearFormatError, ToDateFormatError, ValueFormatError}
 import v2.models.request.createForeignPropertyPeriodSummary.CreateForeignPropertyPeriodSummaryRawData
 
 class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec {
@@ -26,59 +26,92 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec {
   private val validNino = "AA123456A"
   private val validBusinessId = "XAIS12345678901"
   private val validTaxYear = "2021-22"
-  private val requestBodyJson = Json.parse(
+
+  private def entryWith(countryCode: String) =
+    Json.parse(
+      s"""
+         |{
+         |         "countryCode": "${countryCode}",
+         |         "income":{
+         |            "rentIncome":{
+         |               "rentAmount":4882.23
+         |            },
+         |            "foreignTaxCreditRelief":true,
+         |            "premiumsOfLeaseGrant":884.72,
+         |            "otherPropertyIncome":7713.09,
+         |            "foreignTaxPaidOrDeducted":884.12,
+         |            "specialWithholdingTaxOrUkTaxPaid":847.72
+         |         },
+         |         "expenses":{
+         |            "premisesRunningCosts":129.35,
+         |            "repairsAndMaintenance":7490.32,
+         |            "financialCosts":5000.99,
+         |            "professionalFees":847.90,
+         |            "travelCosts":69.20,
+         |            "costOfServices":478.23,
+         |            "residentialFinancialCost":879.28,
+         |            "broughtFwdResidentialFinancialCost":846.13,
+         |            "other":138.92
+         |         }
+         |}
+         |""".stripMargin
+    )
+
+  private val entry = entryWith(countryCode = "AFG")
+
+  private def bodyWith(nonFhlEntries: JsValue*) =
+    Json.parse(
+      s"""
+         |{
+         |   "fromDate":"2020-03-29",
+         |   "toDate":"2021-03-29",
+         |   "foreignFhlEea":{
+         |      "income":{
+         |         "rentAmount":381.21
+         |      },
+         |      "expenses":{
+         |         "premisesRunningCosts":993.31,
+         |         "repairsAndMaintenance":8842.23,
+         |         "financialCosts":994,
+         |         "professionalFees":992.12,
+         |         "costOfServices":4620.23,
+         |         "travelCosts":774,
+         |         "other":984.41
+         |      }
+         |   },
+         |   "foreignNonFhlProperty": ${JsArray(nonFhlEntries)}
+         |}
+         |""".stripMargin
+    )
+
+  private val requestBodyJson = bodyWith(entry)
+
+  private def entryConsolidated = Json.parse(
     """
       |{
-      |   "fromDate":"2020-03-29",
-      |   "toDate":"2021-03-29",
-      |   "foreignFhlEea":{
-      |      "income":{
-      |         "rentAmount":381.21
-      |      },
-      |      "expenses":{
-      |         "premisesRunningCosts":993.31,
-      |         "repairsAndMaintenance":8842.23,
-      |         "financialCosts":994,
-      |         "professionalFees":992.12,
-      |         "costOfServices":4620.23,
-      |         "travelCosts":774,
-      |         "other":984.41
-      |      }
-      |   },
-      |   "foreignNonFhlProperty":[
-      |      {
-      |         "countryCode":"AFG",
-      |         "income":{
-      |            "rentIncome":{
-      |               "rentAmount":4882.23
-      |            },
-      |            "foreignTaxCreditRelief":true,
-      |            "premiumsOfLeaseGrant":884.72,
-      |            "otherPropertyIncome":7713.09,
-      |            "foreignTaxPaidOrDeducted":884.12,
-      |            "specialWithholdingTaxOrUkTaxPaid":847.72
-      |         },
-      |         "expenses":{
-      |            "premisesRunningCosts":129.35,
-      |            "repairsAndMaintenance":7490.32,
-      |            "financialCosts":5000.99,
-      |            "professionalFees":847.90,
-      |            "travelCosts":69.20,
-      |            "costOfServices":478.23,
-      |            "residentialFinancialCost":879.28,
-      |            "broughtFwdResidentialFinancialCost":846.13,
-      |            "other":138.92
-      |         }
-      |      }
-      |   ]
+      |     "countryCode":"AFG",
+      |     "income":{
+      |        "rentIncome":{
+      |           "rentAmount":4882.23
+      |        },
+      |        "foreignTaxCreditRelief":true,
+      |        "premiumsOfLeaseGrant":884.72,
+      |        "otherPropertyIncome":7713.09,
+      |        "foreignTaxPaidOrDeducted":884.12,
+      |        "specialWithholdingTaxOrUkTaxPaid":847.72
+      |     },
+      |     "expenses":{
+      |        "consolidatedExpenses":129.35
+      |     }
       |}
       |""".stripMargin
   )
-  private val requestBodyConsolidationExpenseJson = Json.parse(
-    """
+
+  private def consolidatedBodyWith(nonFhlEntries: JsValue*) = Json.parse(
+    s"""
       |{
-      |   "fromDate":"2020-03-29",
-      |   "toDate":"2021-03-29",
+      |   "fromDate": "2020-01-01",
+      |   "toDate": "2020-01-31",
       |   "foreignFhlEea":{
       |      "income":{
       |         "rentAmount":381.21
@@ -87,27 +120,12 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec {
       |         "consolidatedExpenses":993.31
       |      }
       |   },
-      |   "foreignNonFhlProperty":[
-      |      {
-      |         "countryCode":"AFG",
-      |         "income":{
-      |            "rentIncome":{
-      |               "rentAmount":4882.23
-      |            },
-      |            "foreignTaxCreditRelief":true,
-      |            "premiumsOfLeaseGrant":884.72,
-      |            "otherPropertyIncome":7713.09,
-      |            "foreignTaxPaidOrDeducted":884.12,
-      |            "specialWithholdingTaxOrUkTaxPaid":847.72
-      |         },
-      |         "expenses":{
-      |            "consolidatedExpenses":129.35
-      |         }
-      |      }
-      |   ]
+      |   "foreignNonFhlProperty": ${JsArray(nonFhlEntries)}
       |}
       |""".stripMargin
   )
+
+  private val requestBodyConsolidationExpenseJson = consolidatedBodyWith(entryConsolidated)
 
   val validator = new CreateForeignPropertyPeriodSummaryValidator()
 
@@ -202,7 +220,7 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec {
             |  "toDate": "2020-01-31",
             |  "foreignFhlEea": {}
             |}
-            |""".stripMargin))) shouldBe List(RuleIncorrectOrEmptyBodyError)
+            |""".stripMargin))) shouldBe List(RuleIncorrectOrEmptyBodyError.copy(paths = Some(List("/foreignFhlEea"))))
       }
       "foreignFhlEea.expenses is empty" in {
         validator.validate(CreateForeignPropertyPeriodSummaryRawData(validNino, validBusinessId, validTaxYear, Json.parse(
@@ -214,7 +232,7 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec {
             |    "expenses": {}
             |  }
             |}
-            |""".stripMargin))) shouldBe List(RuleIncorrectOrEmptyBodyError)
+            |""".stripMargin))) shouldBe List(RuleIncorrectOrEmptyBodyError.copy(paths = Some(List("/foreignFhlEea/expenses"))))
       }
       "foreignFhlEea.income is empty" in {
         validator.validate(CreateForeignPropertyPeriodSummaryRawData(validNino, validBusinessId, validTaxYear, Json.parse(
@@ -226,7 +244,7 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec {
             |    "income": {}
             |  }
             |}
-            |""".stripMargin))) shouldBe List(RuleIncorrectOrEmptyBodyError)
+            |""".stripMargin))) shouldBe List(RuleIncorrectOrEmptyBodyError.copy(paths = Some(List("/foreignFhlEea/income"))))
       }
       "an empty foreignNonFhlProperty is submitted" in {
         validator.validate(CreateForeignPropertyPeriodSummaryRawData(validNino, validBusinessId, validTaxYear, Json.parse(
@@ -234,7 +252,7 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec {
             |  "fromDate": "2020-01-01",
             |  "toDate": "2020-01-31",
             |  "foreignNonFhlProperty": []
-            |}""".stripMargin))) shouldBe List(RuleIncorrectOrEmptyBodyError)
+            |}""".stripMargin))) shouldBe List(RuleIncorrectOrEmptyBodyError.copy(paths = Some(List("/foreignNonFhlProperty"))))
       }
       "a foreignNonFhlProperty array is submitted with an empty body in it" in {
         validator.validate(CreateForeignPropertyPeriodSummaryRawData(validNino, validBusinessId, validTaxYear, Json.parse(
@@ -253,10 +271,11 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec {
             |  "toDate": "2020-01-31",
             |  "foreignNonFhlProperty": [
             |    {
+            |      "countryCode":"AFG",
             |      "expenses": {}
             |    }
             |  ]
-            |}""".stripMargin))) shouldBe List(RuleIncorrectOrEmptyBodyError.copy(paths=Some(Seq("/foreignNonFhlProperty/0/countryCode"))))
+            |}""".stripMargin))) shouldBe List(RuleIncorrectOrEmptyBodyError.copy(paths = Some(List("/foreignNonFhlProperty/0/expenses"))))
       }
       "foreignNonFhlProperty[].income is empty" in {
         validator.validate(CreateForeignPropertyPeriodSummaryRawData(validNino, validBusinessId, validTaxYear, Json.parse(
@@ -265,10 +284,39 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec {
             |  "toDate": "2020-01-31",
             |  "foreignNonFhlProperty": [
             |    {
+            |      "countryCode":"AFG",
             |      "income": {}
             |    }
             |  ]
-            |}""".stripMargin))) shouldBe List(RuleIncorrectOrEmptyBodyError.copy(paths=Some(Seq("/foreignNonFhlProperty/0/countryCode", "/foreignNonFhlProperty/0/income/foreignTaxCreditRelief"))))
+            |}""".stripMargin))) shouldBe List(RuleIncorrectOrEmptyBodyError.copy(paths=Some(Seq("/foreignNonFhlProperty/0/income/foreignTaxCreditRelief"))))
+      }
+      "foreignNonFhlProperty[].income and foreignNonFhlProperty[].expenses are missing but countryCode exists" in {
+        validator.validate(CreateForeignPropertyPeriodSummaryRawData(validNino, validBusinessId, validTaxYear, Json.parse(
+          """{
+            |  "fromDate": "2020-01-01",
+            |  "toDate": "2020-01-31",
+            |  "foreignNonFhlProperty": [
+            |    {
+            |      "countryCode":"AFG"
+            |    }
+            |  ]
+            |}""".stripMargin))) shouldBe List(RuleIncorrectOrEmptyBodyError.copy(paths = Some(List("/foreignNonFhlProperty/0"))))
+      }
+      "foreignNonFhlProperty[].income.rentIncome is empty" in {
+        validator.validate(CreateForeignPropertyPeriodSummaryRawData(validNino, validBusinessId, validTaxYear, Json.parse(
+          """{
+            |  "fromDate": "2020-01-01",
+            |  "toDate": "2020-01-31",
+            |  "foreignNonFhlProperty": [
+            |    {
+            |      "countryCode":"AFG",
+            |      "income": {
+            |         "rentIncome": {},
+            |         "foreignTaxCreditRelief" : true
+            |      }
+            |    }
+            |  ]
+            |}""".stripMargin))) shouldBe List(RuleIncorrectOrEmptyBodyError.copy(paths = Some(List("/foreignNonFhlProperty/0/income/rentIncome"))))
       }
     }
 
@@ -423,6 +471,37 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec {
             |}
             |""".stripMargin
         ))) shouldBe List(RuleToDateBeforeFromDateError)
+      }
+    }
+
+    "return RuleDuplicateCountryCodeError" when {
+      "a country code is duplicated" in {
+        val code = "ZWE"
+        validator.validate(
+          CreateForeignPropertyPeriodSummaryRawData(
+            nino = validNino,
+            businessId = validBusinessId,
+            taxYear = validTaxYear,
+            body = bodyWith(entryWith(code), entryWith(code))
+          )) shouldBe List(
+          RuleDuplicateCountryCodeError
+            .forDuplicatedCodesAndPaths(code = code, paths = Seq("/foreignNonFhlProperty/0/countryCode", "/foreignNonFhlProperty/1/countryCode")))
+      }
+
+      "multiple country codes are duplicated" in {
+        val code1 = "AFG"
+        val code2 = "ZWE"
+        validator.validate(CreateForeignPropertyPeriodSummaryRawData(
+          nino = validNino,
+          businessId = validBusinessId,
+          taxYear = validTaxYear,
+          body = bodyWith(entryWith(code1), entryWith(code2), entryWith(code1), entryWith(code2))
+        )) should contain theSameElementsAs List(
+          RuleDuplicateCountryCodeError
+            .forDuplicatedCodesAndPaths(code = code1, paths = Seq("/foreignNonFhlProperty/0/countryCode", "/foreignNonFhlProperty/2/countryCode")),
+          RuleDuplicateCountryCodeError
+            .forDuplicatedCodesAndPaths(code = code2, paths = Seq("/foreignNonFhlProperty/1/countryCode", "/foreignNonFhlProperty/3/countryCode")),
+        )
       }
     }
 
@@ -1630,7 +1709,7 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec {
             |  },
             |  "foreignNonFhlProperty": [
             |    {
-            |      "countryCode": "GBR",
+            |      "countryCode": "FRA",
             |      "income": {
             |        "rentIncome": {
             |          "rentAmount": 34456.30
@@ -2027,7 +2106,7 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec {
             |  },
             |  "foreignNonFhlProperty": [
             |    {
-            |      "countryCode": "GBR",
+            |      "countryCode": "FRA",
             |      "income": {
             |        "rentIncome": {
             |          "rentAmount": 34456.30

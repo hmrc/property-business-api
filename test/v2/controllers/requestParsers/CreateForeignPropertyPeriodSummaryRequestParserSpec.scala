@@ -27,8 +27,8 @@ import v2.models.request.createForeignPropertyPeriodSummary._
 class CreateForeignPropertyPeriodSummaryRequestParserSpec extends UnitSpec {
 
   val nino: String                   = "AA123456B"
-  val taxYear: String                = "2022-23"
   val businessId: String             = "XAIS12345678901"
+  val taxYear: String                = "2022-23"
   implicit val correlationId: String = "X-123"
 
   // Simple case as JSON reads are tested elsewhere...
@@ -47,7 +47,7 @@ class CreateForeignPropertyPeriodSummaryRequestParserSpec extends UnitSpec {
   )
 
   val inputData: CreateForeignPropertyPeriodSummaryRawData =
-    CreateForeignPropertyPeriodSummaryRawData(nino, taxYear, businessId, requestBodyJson)
+    CreateForeignPropertyPeriodSummaryRawData(nino = nino, businessId = businessId, taxYear = taxYear, body = requestBodyJson)
 
   trait Test extends MockCreateForeignPropertyPeriodSummaryValidator {
     lazy val parser = new CreateForeignPropertyPeriodSummaryRequestParser(mockValidator)

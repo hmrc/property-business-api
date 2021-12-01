@@ -17,21 +17,21 @@
 package v2.models.request.createForeignPropertyPeriodSummary
 
 import play.api.libs.json.{Json, OFormat}
+import shapeless.HNil
+import utils.EmptinessChecker
 import v2.models.request.common.foreignFhlEea.CreateForeignFhlEea
 import v2.models.request.common.foreignPropertyEntry.CreateForeignNonFhlPropertyEntry
 
 case class CreateForeignPropertyPeriodSummaryRequestBody(fromDate: String,
                                                          toDate: String,
                                                          foreignFhlEea: Option[CreateForeignFhlEea],
-                                                         foreignNonFhlProperty: Option[Seq[CreateForeignNonFhlPropertyEntry]]) {
-  def isEmpty: Boolean = (foreignFhlEea.isEmpty && foreignNonFhlProperty.isEmpty) ||
-    foreignFhlEea.exists(_.isEmpty) ||
-    foreignFhlEea.flatMap(_.expenses.map(_.isEmpty)).getOrElse(false) ||
-    foreignFhlEea.flatMap(_.income.map(_.isEmpty)).getOrElse(false) ||
-    foreignNonFhlProperty.exists(_.isEmpty) ||
-    foreignNonFhlProperty.exists(_.exists(_.expenses.exists(_.isEmpty)))
-}
+                                                         foreignNonFhlProperty: Option[Seq[CreateForeignNonFhlPropertyEntry]])
 
 object CreateForeignPropertyPeriodSummaryRequestBody {
+  implicit val emptinessChecker: EmptinessChecker[CreateForeignPropertyPeriodSummaryRequestBody] = EmptinessChecker.use { body =>
+    "foreignFhlEea" -> body.foreignFhlEea ::
+    "foreignNonFhlProperty" -> body.foreignNonFhlProperty :: HNil
+  }
+
   implicit val format: OFormat[CreateForeignPropertyPeriodSummaryRequestBody] = Json.format[CreateForeignPropertyPeriodSummaryRequestBody]
 }

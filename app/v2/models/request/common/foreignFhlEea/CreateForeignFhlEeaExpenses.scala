@@ -27,17 +27,7 @@ case class CreateForeignFhlEeaExpenses(
                         costOfServices: Option[BigDecimal],
                         travelCosts: Option[BigDecimal],
                         other: Option[BigDecimal],
-                        consolidatedExpenses: Option[BigDecimal]
-                      ) {
-  def isEmpty: Boolean = premisesRunningCosts.isEmpty &&
-    repairsAndMaintenance.isEmpty &&
-    financialCosts.isEmpty &&
-    professionalFees.isEmpty &&
-    costOfServices.isEmpty &&
-    travelCosts.isEmpty &&
-    other.isEmpty &&
-    consolidatedExpenses.isEmpty
-}
+                        consolidatedExpenses: Option[BigDecimal])
 
 object CreateForeignFhlEeaExpenses {
   implicit val reads: Reads[CreateForeignFhlEeaExpenses] = Json.reads[CreateForeignFhlEeaExpenses]

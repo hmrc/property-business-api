@@ -14,17 +14,19 @@
  * limitations under the License.
  */
 
-package v2.models.response.listPropertiesPeriodSummaries
+package v2.models.response.listPropertyPeriodSummaries
 
-import play.api.libs.json.{Json, OWrites, Reads}
+import play.api.libs.functional.syntax._
+import play.api.libs.json._
 
-case class ListPropertiesPeriodSummariesResponse(submissions: Seq[SubmissionPeriod])
+case class SubmissionPeriod(submissionId: String, fromDate: String, toDate: String)
 
-object ListPropertiesPeriodSummariesResponse {
+object SubmissionPeriod {
+  implicit val reads: Reads[SubmissionPeriod] = (
+    (JsPath \ "submissionId").read[String] and
+      (JsPath \ "fromDate").read[String] and
+      (JsPath \ "toDate").read[String]
+    ) (SubmissionPeriod.apply _)
 
-  implicit def reads: Reads[ListPropertiesPeriodSummariesResponse] =
-    implicitly[Reads[Seq[SubmissionPeriod]]].map(ListPropertiesPeriodSummariesResponse(_))
-
-  implicit def writes: OWrites[ListPropertiesPeriodSummariesResponse] =
-    Json.writes[ListPropertiesPeriodSummariesResponse]
+  implicit val writes: OWrites[SubmissionPeriod] = Json.writes[SubmissionPeriod]
 }

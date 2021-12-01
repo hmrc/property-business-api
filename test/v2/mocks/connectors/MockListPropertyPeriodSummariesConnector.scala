@@ -19,22 +19,22 @@ package v2.mocks.connectors
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
 import uk.gov.hmrc.http.HeaderCarrier
-import v2.connectors.{IfsOutcome, ListPropertiesPeriodSummariesConnector}
-import v2.models.request.listPropertiesPeriodSummaries.ListPropertiesPeriodSummariesRequest
-import v2.models.response.listPropertiesPeriodSummaries.ListPropertiesPeriodSummariesResponse
+import v2.connectors.{IfsOutcome, ListPropertyPeriodSummariesConnector}
+import v2.models.request.listPropertyPeriodSummaries.ListPropertyPeriodSummariesRequest
+import v2.models.response.listPropertyPeriodSummaries.ListPropertyPeriodSummariesResponse
 
 import scala.concurrent.{ExecutionContext, Future}
 
-trait MockListPropertiesPeriodSummariesConnector extends MockFactory {
+trait MockListPropertyPeriodSummariesConnector extends MockFactory {
 
-  val mockListPropertiesPeriodSummariesConnector: ListPropertiesPeriodSummariesConnector = mock[ListPropertiesPeriodSummariesConnector]
+  val mockListPropertyPeriodSummariesConnector: ListPropertyPeriodSummariesConnector = mock[ListPropertyPeriodSummariesConnector]
 
-  object MockListPropertiesPeriodSummariesConnector {
+  object MockListPropertyPeriodSummariesConnector {
 
-    def listPeriodSummaries(requestData: ListPropertiesPeriodSummariesRequest):
-    CallHandler[Future[IfsOutcome[ListPropertiesPeriodSummariesResponse]]] = {
-      (mockListPropertiesPeriodSummariesConnector
-        .listPeriodSummaries(_: ListPropertiesPeriodSummariesRequest)(_: HeaderCarrier, _: ExecutionContext, _: String))
+    def listPeriodSummaries(requestData: ListPropertyPeriodSummariesRequest):
+    CallHandler[Future[IfsOutcome[ListPropertyPeriodSummariesResponse]]] = {
+      (mockListPropertyPeriodSummariesConnector
+        .listPeriodSummaries(_: ListPropertyPeriodSummariesRequest)(_: HeaderCarrier, _: ExecutionContext, _: String))
         .expects(requestData, *, *, *)
     }
   }

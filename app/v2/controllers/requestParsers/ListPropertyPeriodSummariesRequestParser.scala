@@ -14,8 +14,17 @@
  * limitations under the License.
  */
 
-package v2.models.request.listPropertiesPeriodSummaries
+package v2.controllers.requestParsers
 
+import javax.inject.Inject
+import v2.controllers.requestParsers.validators.ListPropertyPeriodSummariesValidator
 import v2.models.domain.Nino
+import v2.models.request.listPropertyPeriodSummaries._
 
-case class ListPropertiesPeriodSummariesRequest(nino: Nino, businessId: String, taxYear: String)
+class ListPropertyPeriodSummariesRequestParser @Inject()(val validator: ListPropertyPeriodSummariesValidator)
+  extends RequestParser[ListPropertyPeriodSummariesRawData, ListPropertyPeriodSummariesRequest] {
+
+  override protected def requestFor(data: ListPropertyPeriodSummariesRawData): ListPropertyPeriodSummariesRequest = {
+    ListPropertyPeriodSummariesRequest(Nino(data.nino), data.businessId, data.taxYear)
+  }
+}

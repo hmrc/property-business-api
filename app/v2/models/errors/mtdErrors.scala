@@ -40,7 +40,10 @@ object ToDateFormatError       extends MtdError("FORMAT_TO_DATE", "The provided 
 object DateFormatError         extends MtdError("FORMAT_DATE", "The supplied date format is not valid")
 object StringFormatError       extends MtdError("FORMAT_STRING", "The supplied string format is not valid")
 object CountryCodeFormatError  extends MtdError("FORMAT_COUNTRY_CODE", "The provided Country code is invalid")
-object ValueFormatError        extends MtdError("FORMAT_VALUE", "The value must be between 0 and 99999999999.99")
+object ValueFormatError        extends MtdError("FORMAT_VALUE", "The value must be between 0 and 99999999999.99"){
+  def forPathAndRange(path : String, min: String, max: String): MtdError =
+    ValueFormatError.copy(paths = Some(Seq(path)), message = s"The value must be between $min and $max" )
+}
 object TaxYearFormatError      extends MtdError("FORMAT_TAX_YEAR", "The provided tax year is invalid")
 
 // Rule Errors
@@ -61,6 +64,8 @@ object RuleBothExpensesSuppliedError
   extends MtdError("RULE_BOTH_EXPENSES_SUPPLIED", "Both Expenses and Consolidated Expenses must not be present at the same time")
 object RuleBothAllowancesSuppliedError
   extends MtdError("RULE_BOTH_ALLOWANCES_SUPPLIED", "Both allowances and property allowances must not be present at the same time")
+object RulePropertyIncomeAllowance
+  extends MtdError("RULE_PROPERTY_INCOME_ALLOWANCE", "The propertyIncomeAllowance cannot be submitted if privateUseAdjustment is supplied")
 object RuleTaxYearNotSupportedError
   extends MtdError("RULE_TAX_YEAR_NOT_SUPPORTED", "The specified tax year is not supported. The tax year specified is before the minimum tax year value")
 object RuleTaxYearRangeInvalidError

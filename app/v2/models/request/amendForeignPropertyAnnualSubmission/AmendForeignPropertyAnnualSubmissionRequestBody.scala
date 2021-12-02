@@ -27,7 +27,7 @@ case class AmendForeignPropertyAnnualSubmissionRequestBody(foreignFhlEea: Option
 object AmendForeignPropertyAnnualSubmissionRequestBody {
   implicit val reads: Reads[AmendForeignPropertyAnnualSubmissionRequestBody] = Json.reads[AmendForeignPropertyAnnualSubmissionRequestBody]
 
-  implicit val writes: Writes[AmendForeignPropertyAnnualSubmissionRequestBody] = (
+  implicit val writes: OWrites[AmendForeignPropertyAnnualSubmissionRequestBody] = (
     (JsPath \ "foreignFhlEea").writeNullable[ForeignFhlEea] and
       (JsPath \ "foreignProperty").writeNullable[Seq[ForeignNonFhlEntry]]
   )(unlift(AmendForeignPropertyAnnualSubmissionRequestBody.unapply))

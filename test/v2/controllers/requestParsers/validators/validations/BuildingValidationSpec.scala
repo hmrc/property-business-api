@@ -27,25 +27,24 @@ class BuildingValidationSpec extends UnitSpec {
       "name is provided" in {
         val building = Building(Some("name"), None, "postcode")
         val validationResult = BuildingValidation.validate(building, "path")
-        validationResult.isEmpty shouldBe true
+        validationResult shouldBe Nil
       }
       "number is provided" in {
         val building = Building(None, Some("number"), "postcode")
         val validationResult = BuildingValidation.validate(building, "path")
-        validationResult.isEmpty shouldBe true
+        validationResult shouldBe Nil
       }
       "name and number is provided" in {
         val building = Building(Some("name"), Some("number"), "postcode")
         val validationResult = BuildingValidation.validate(building, "path")
-        validationResult.isEmpty shouldBe true
+        validationResult shouldBe Nil
       }
     }
     "return RuleBuildingNameNumberError error" when {
       "no name or number is provided" in {
         val building = Building(None, None, "postcode")
         val validationResult = BuildingValidation.validate(building, "path")
-        validationResult.length shouldBe 1
-        validationResult.head shouldBe RuleBuildingNameNumberError.copy(paths = Some(Seq("path")))
+        validationResult shouldBe List(RuleBuildingNameNumberError.copy(paths = Some(Seq("path"))))
       }
     }
   }

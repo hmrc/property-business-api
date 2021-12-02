@@ -25,6 +25,7 @@ import v2.models.request.amendForeignPropertyAnnualSubmission.{
   AmendForeignPropertyAnnualSubmissionRawData,
   AmendForeignPropertyAnnualSubmissionRequestBody
 }
+import v2.models.request.common.StructuredBuildingAllowance
 
 import javax.inject.{ Inject, Singleton }
 
@@ -44,7 +45,10 @@ class AmendForeignPropertyAnnualSubmissionValidator @Inject()(appConfig: AppConf
     }
 
   private def bodyFormatValidation: AmendForeignPropertyAnnualSubmissionRawData => List[List[MtdError]] = { data =>
-    ???
+    JsonFormatValidation.validateAndCheckNonEmpty[AmendForeignPropertyAnnualSubmissionRequestBody](data.body) match {
+      case Nil          => NoValidationErrors
+      case schemaErrors => List(schemaErrors)
+    }
   }
 
   private def bodyFieldValidation: AmendForeignPropertyAnnualSubmissionRawData => List[List[MtdError]] = { data =>
@@ -58,78 +62,145 @@ class AmendForeignPropertyAnnualSubmissionValidator @Inject()(appConfig: AppConf
             .map(_.zipWithIndex.toList.flatMap {
               case (entry, i) => validateForeignProperty(entry, i)
             })
-            .getOrElse(NoValidationErrors)
+            .getOrElse(NoValidationErrors),
+          duplicateCountryCodeValidation(body)
         )))
   }
 
   private def validateForeignFhlEea(foreignFhlEea: ForeignFhlEea): List[MtdError] = {
     List(
-      NumberValidation.validateOptional(
-        field = foreignFhlEea.adjustments.flatMap(_.privateUseAdjustment),
-        path = "/foreignFhlEea/adjustments/privateUseAdjustment"
-      ),
-      NumberValidation.validateOptional(
-        field = foreignFhlEea.adjustments.flatMap(_.balancingCharge),
-        path = "/foreignFhlEea/adjustments/balancingCharge"
-      ),
-      NumberValidation.validateOptional(
-        field = foreignFhlEea.allowances.flatMap(_.annualInvestmentAllowance),
-        path = "/foreignFhlEea/allowances/annualInvestmentAllowance"
-      ),
-      NumberValidation.validateOptional(
-        field = foreignFhlEea.allowances.flatMap(_.otherCapitalAllowance),
-        path = "/foreignFhlEea/allowances/otherCapitalAllowance"
-      ),
-      NumberValidation.validateOptional(
-        field = foreignFhlEea.allowances.flatMap(_.propertyIncomeAllowance),
-        path = "/foreignFhlEea/allowances/propertyAllowance"
-      ),
-      NumberValidation.validateOptional(
-        field = foreignFhlEea.allowances.flatMap(_.electricChargePointAllowance),
-        path = "/foreignFhlEea/allowances/electricChargePointAllowance"
-      )
+      NumberValidation.validateOptional(field = foreignFhlEea.adjustments.flatMap(_.privateUseAdjustment),
+                                        path = "/foreignFhlEea/adjustments/privateUseAdjustment"),
+      NumberValidation.validateOptional(field = foreignFhlEea.adjustments.flatMap(_.balancingCharge),
+                                        path = "/foreignFhlEea/adjustments/balancingCharge"),
+      NumberValidation.validateOptional(field = foreignFhlEea.allowances.flatMap(_.annualInvestmentAllowance),
+                                        path = "/foreignFhlEea/allowances/annualInvestmentAllowance"),
+      NumberValidation.validateOptional(field = foreignFhlEea.allowances.flatMap(_.otherCapitalAllowance),
+                                        path = "/foreignFhlEea/allowances/otherCapitalAllowance"),
+      NumberValidation.validateOptional(field = foreignFhlEea.allowances.flatMap(_.electricChargePointAllowance),
+                                        path = "/foreignFhlEea/allowances/electricChargePointAllowance"),
+      NumberValidation.validateOptional(field = foreignFhlEea.allowances.flatMap(_.zeroEmissionsCarAllowance),
+                                        path = "/foreignFhlEea/allowances/zeroEmissionsCarAllowance"),
+      NumberValidation.validateOptional(field = foreignFhlEea.allowances.flatMap(_.propertyIncomeAllowance),
+                                        path = "/foreignFhlEea/allowances/propertyIncomeAllowance",
+                                        max = 1000),
+      foreignFhlEea.allowances
+        .map(allowances => AllowancesValidation.validate(allowances = allowances, path = "/foreignFhlEea/allowances"))
+        .getOrElse(Nil),
+      validatePropertyIncomeAllowance(foreignFhlEea)
     ).flatten
   }
 
-  private def validateForeignProperty(foreignPropertyEntry: ForeignNonFhlEntry, index: Int): List[MtdError] = {
+  private def validateForeignProperty(entry: ForeignNonFhlEntry, index: Int): List[MtdError] = {
+
     List(
-      CountryCodeValidation.validate(
-        field = foreignPropertyEntry.countryCode,
-        path = s"/foreignProperty/$index/countryCode"
-      ),
+      CountryCodeValidation.validate(field = entry.countryCode, path = s"/foreignNonFhlProperty/$index/countryCode"),
+      NumberValidation.validateOptional(field = entry.adjustments.flatMap(_.privateUseAdjustment),
+                                        path = s"/foreignNonFhlProperty/$index/adjustments/privateUseAdjustment"),
+      NumberValidation.validateOptional(field = entry.adjustments.flatMap(_.balancingCharge),
+                                        path = s"/foreignNonFhlProperty/$index/adjustments/balancingCharge"),
+      NumberValidation.validateOptional(field = entry.allowances.flatMap(_.annualInvestmentAllowance),
+                                        path = s"/foreignNonFhlProperty/$index/allowances/annualInvestmentAllowance"),
+      NumberValidation.validateOptional(field = entry.allowances.flatMap(_.costOfReplacingDomesticItems),
+                                        path = s"/foreignNonFhlProperty/$index/allowances/costOfReplacingDomesticItems"),
       NumberValidation.validateOptional(
-        field = foreignPropertyEntry.adjustments.flatMap(_.privateUseAdjustment),
-        path = s"/foreignProperty/$index/adjustments/privateUseAdjustment"
+        field = entry.allowances.flatMap(_.zeroEmissionsGoodsVehicleAllowance),
+        path = s"/foreignNonFhlProperty/$index/allowances/zeroEmissionsGoodsVehicleAllowance"
       ),
-      NumberValidation.validateOptional(
-        field = foreignPropertyEntry.adjustments.flatMap(_.balancingCharge),
-        path = s"/foreignProperty/$index/adjustments/balancingCharge"
-      ),
-      NumberValidation.validateOptional(
-        field = foreignPropertyEntry.allowances.flatMap(_.annualInvestmentAllowance),
-        path = s"/foreignProperty/$index/allowances/annualInvestmentAllowance"
-      ),
-      NumberValidation.validateOptional(
-        field = foreignPropertyEntry.allowances.flatMap(_.costOfReplacingDomesticItems),
-        path = s"/foreignProperty/$index/allowances/costOfReplacingDomesticItems"
-      ),
-      NumberValidation.validateOptional(
-        field = foreignPropertyEntry.allowances.flatMap(_.zeroEmissionsGoodsVehicleAllowance),
-        path = s"/foreignProperty/$index/allowances/zeroEmissionsGoodsVehicleAllowance"
-      ),
-      NumberValidation.validateOptional(
-        field = foreignPropertyEntry.allowances.flatMap(_.propertyIncomeAllowance),
-        path = s"/foreignProperty/$index/allowances/propertyAllowance"
-      ),
-      NumberValidation.validateOptional(
-        field = foreignPropertyEntry.allowances.flatMap(_.otherCapitalAllowance),
-        path = s"/foreignProperty/$index/allowances/otherCapitalAllowance"
-      ),
-      NumberValidation.validateOptional(
-        field = foreignPropertyEntry.allowances.flatMap(_.electricChargePointAllowance),
-        path = s"/foreignProperty/$index/allowances/electricChargePointAllowance"
-      )
+      NumberValidation.validateOptional(field = entry.allowances.flatMap(_.otherCapitalAllowance),
+                                        path = s"/foreignNonFhlProperty/$index/allowances/otherCapitalAllowance"),
+      NumberValidation.validateOptional(field = entry.allowances.flatMap(_.electricChargePointAllowance),
+                                        path = s"/foreignNonFhlProperty/$index/allowances/electricChargePointAllowance"),
+      NumberValidation.validateOptional(field = entry.allowances.flatMap(_.zeroEmissionsCarAllowance),
+                                        path = s"/foreignNonFhlProperty/$index/allowances/zeroEmissionsCarAllowance"),
+      NumberValidation.validateOptional(field = entry.allowances.flatMap(_.propertyIncomeAllowance),
+                                        path = s"/foreignNonFhlProperty/$index/allowances/propertyIncomeAllowance",
+                                        max = 1000),
+      entry.allowances
+        .flatMap(_.structuredBuildingAllowance)
+        .map(_.zipWithIndex.toList.flatMap {
+          case (entry, i) => validateBuilding(entry, index, i)
+        })
+        .getOrElse(NoValidationErrors),
+      entry.allowances
+        .map(allowances => AllowancesValidation.validate(allowances = allowances, path = s"/foreignNonFhlProperty/$index/allowances"))
+        .getOrElse(Nil),
+      validatePropertyIncomeAllowance(entry, index)
     ).flatten
+  }
+
+  def validateBuilding(structuredBuildingAllowance: StructuredBuildingAllowance, index: Int, bldgIdx: Int): List[MtdError] = {
+    List(
+      NumberValidation.validate(
+        field = structuredBuildingAllowance.amount,
+        path = s"/foreignNonFhlProperty/$index/allowances/structuredBuildingAllowance/$bldgIdx/amount"
+      ),
+      NumberValidation.validateOptional(
+        field = structuredBuildingAllowance.firstYear.map(_.qualifyingAmountExpenditure),
+        path = s"/foreignNonFhlProperty/$index/allowances/structuredBuildingAllowance/$bldgIdx/firstYear/qualifyingAmountExpenditure"
+      ),
+      StringValidation.validate(
+        field = structuredBuildingAllowance.building.postcode,
+        path = s"/foreignNonFhlProperty/$index/allowances/structuredBuildingAllowance/$bldgIdx/building/postcode"
+      ),
+      StringValidation.validateOptional(
+        field = structuredBuildingAllowance.building.name,
+        path = s"/foreignNonFhlProperty/$index/allowances/structuredBuildingAllowance/$bldgIdx/building/name"
+      ),
+      StringValidation.validateOptional(
+        field = structuredBuildingAllowance.building.number,
+        path = s"/foreignNonFhlProperty/$index/allowances/structuredBuildingAllowance/$bldgIdx/building/number"
+      ),
+      DateValidation.validateOtherDate(
+        field = structuredBuildingAllowance.firstYear.map(_.qualifyingDate),
+        path = s"/foreignNonFhlProperty/$index/allowances/structuredBuildingAllowance/$bldgIdx/firstYear/qualifyingDate"
+      ),
+      BuildingValidation.validate(
+        body = structuredBuildingAllowance.building,
+        path = s"/foreignNonFhlProperty/$index/allowances/structuredBuildingAllowance/$bldgIdx/building"
+      ),
+    ).flatten
+  }
+
+  def validatePropertyIncomeAllowance(foreignFhlEea: ForeignFhlEea): List[MtdError] = {
+    (for {
+      allowances  <- foreignFhlEea.allowances
+      adjustments <- foreignFhlEea.adjustments
+    } yield {
+      (allowances.propertyIncomeAllowance, adjustments.privateUseAdjustment) match {
+        case (Some(_), Some(_)) => List(RulePropertyIncomeAllowance.copy(paths = Some(Seq("/foreignFhlEea"))))
+        case _                  => Nil
+      }
+    }).getOrElse(Nil)
+  }
+
+  def validatePropertyIncomeAllowance(foreignPropertyEntry: ForeignNonFhlEntry, index: Int): List[MtdError] = {
+    (for {
+      allowances  <- foreignPropertyEntry.allowances
+      adjustments <- foreignPropertyEntry.adjustments
+    } yield {
+      (allowances.propertyIncomeAllowance, adjustments.privateUseAdjustment) match {
+        case (Some(_), Some(_)) => List(RulePropertyIncomeAllowance.copy(paths = Some(Seq(s"/foreignNonFhlProperty/$index"))))
+        case _                  => Nil
+      }
+    }).getOrElse(Nil)
+  }
+
+  private def duplicateCountryCodeValidation(body: AmendForeignPropertyAnnualSubmissionRequestBody): List[MtdError] = {
+    body.foreignNonFhlProperty
+      .map { entries =>
+        entries.zipWithIndex
+          .map {
+            case (entry, idx) => (entry.countryCode, s"/foreignNonFhlProperty/$idx/countryCode")
+          }
+          .groupBy(_._1)
+          .collect {
+            case (code, codeAndPaths) if codeAndPaths.size >= 2 =>
+              RuleDuplicateCountryCodeError.forDuplicatedCodesAndPaths(code, codeAndPaths.map(_._2))
+          }
+          .toList
+      }
+      .getOrElse(Nil)
   }
 
   override def validate(data: AmendForeignPropertyAnnualSubmissionRawData): List[MtdError] = {

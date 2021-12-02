@@ -6,11 +6,11 @@
   "properties": {
     "foreignFhlEea": {
       "type": "object",
-      "description": "Object holding the adjustments and allowances of the user's Furnished Holiday Lets in the European Economic Area for the period",
+      "description": "Object holding the adjustments and allowances of the user's Furnished Holiday Lets in the European Economic Area for the period.",
       "properties": {
         "adjustments": {
           "type": "object",
-          "description": "Object holding Foreign FHL EEA Property Adjustments",
+          "description": "Object holding Foreign FHL EEA Property Adjustments.",
           "properties": {
             "privateUseAdjustment": {
               "type": "number",
@@ -81,11 +81,9 @@
               "maximum": 99999999999.99,
               "example": "5004.49"
             }
-          },
-          "additionalProperties": false
+          }
         }
-      },
-      "additionalProperties": false
+      }
     },
     "foreignNonFhlProperty": {
       "type": "array",
@@ -118,12 +116,11 @@
                 "maximum": 99999999999.99,
                 "example": "5002.29"
               }
-            },
-            "additionalProperties": false
+            }
           },
           "allowances": {
             "type": "object",
-            "description": "Object holding foreign Non FHL Property Allowances",
+            "description": "Object holding foreign Non FHL Property Allowances.",
             "properties": {
               "annualInvestmentAllowance": {
                 "type": "number",
@@ -183,7 +180,7 @@
               },
               "structuredBuildingAllowance": {
                 "type": "array",
-                "description": "Details about structured building allowances",
+                "description": "Details about structured building allowances.",
                 "items": {
                   "type": "object",
                   "properties": {
@@ -201,8 +198,8 @@
                       "properties": {
                         "qualifyingDate": {
                           "type": "string",
-                          "description": "The date qualified for structured building allowance.\n\nMust conform to the format YYYY-MM-DD",
-                          "example": "2020-03-29T00:00:00.000Z"
+                          "description": "The date qualified for structured building allowance.\n\nMust conform to the format YYYY-MM-DD.",
+                          "example": "2020-03-29"
                         },
                         "qualifyingAmountExpenditure": {
                           "type": "number",
@@ -218,7 +215,7 @@
                     },
                     "building": {
                       "type": "object",
-                      "description": "Object holding foreign Non FHL structured building details.\nPost code is mandatory and minimum one of name and number field must be supplied",
+                      "description": "Object holding foreign Non FHL structured building details.\nPost code is mandatory and minimum one of name and number field must be supplied.",
                       "properties": {
                         "name": {
                           "type": "string",
@@ -245,18 +242,14 @@
                   },
                   "additionalProperties": false,
                   "required": ["amount", "building"]
-                },
-                "additionalProperties": false
+                }
               }
-            },
-            "additionalProperties": false
+            }
           }
         },
         "additionalProperties": false,
         "required": ["countryCode"]
-      },
-      "additionalProperties": false
+      }
     }
-  },
-  "additionalProperties": false
+  }
 }

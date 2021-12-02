@@ -175,7 +175,7 @@
               },
               "propertyIncomeAllowance": {
                 "type": "number",
-                "description": "The limited amount Tax exemption for individuals with income from land or property. The value must be between 0 and 1000.00 up to 2 decimal places.",
+                "description": "The amount of Tax exemption for individuals with income from land or property. The value must be between 0 and 1000.00 up to 2 decimal places.",
                 "multipleOf": 0.01,
                 "minimum": 0.00,
                 "maximum": 1000.00,

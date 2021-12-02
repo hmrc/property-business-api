@@ -20,25 +20,45 @@ import config.AppConfig
 
 import javax.inject.{Inject, Singleton}
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
+import v2.connectors.RetrieveForeignPropertyPeriodSummaryConnector._
 import v2.connectors.httpparsers.StandardIfsHttpParser._
+import v2.models.outcomes.ResponseWrapper
 import v2.models.request.retrieveForeignPropertyPeriodSummary.RetrieveForeignPropertyPeriodSummaryRequest
 import v2.models.response.retrieveForeignPropertyPeriodSummary.RetrieveForeignPropertyPeriodSummaryResponse
 
 import scala.concurrent.{ExecutionContext, Future}
 
+object RetrieveForeignPropertyPeriodSummaryConnector{
+
+  sealed trait Result
+
+  case class ForeignResult(response: RetrieveForeignPropertyPeriodSummaryResponse) extends Result
+
+  case object NonForeignResult extends Result
+}
+
 @Singleton
 class RetrieveForeignPropertyPeriodSummaryConnector @Inject()(val http: HttpClient,
                                                               val appConfig: AppConfig) extends BaseIfsConnector {
 
-  def retrieveForeignProperty(request: RetrieveForeignPropertyPeriodSummaryRequest)(
-    implicit hc: HeaderCarrier,
-    ec: ExecutionContext,
-    correlationId: String): Future[IfsOutcome[RetrieveForeignPropertyPeriodSummaryResponse]] = {
-
-    val url = s"income-tax/business/property/periodic/${request.nino.nino}/${request.businessId}/${request.submissionId}"
-
-    get(
-      uri = IfsUri[RetrieveForeignPropertyPeriodSummaryResponse](url)
+  def retrieveForeignProperty(request: RetrieveForeignPropertyPeriodSummaryRequest)(implicit hc: HeaderCarrier,
+                                                                                    ec: ExecutionContext,
+                                                                                    correlationId: String): Future[IfsOutcome[Result]] = {
+    val response = get(
+      uri = IfsUri[RetrieveForeignPropertyPeriodSummaryResponse]("income-tax/business/property/periodic"),
+      queryParams = Seq("taxableEntityId" -> request.nino.value, "incomeSourceId" -> request.businessId,
+        "taxYear" -> request.taxYear, "submissionId" -> request.submissionId)
     )
+
+    response.map {
+      case Right(ResponseWrapper(corId, resp)) if foreignResult(resp) => Right(ResponseWrapper(corId, ForeignResult(resp)))
+      case Right(ResponseWrapper(corId, _)) => Right(ResponseWrapper(corId, NonForeignResult))
+      case Left(e) => Left(e)
+    }
   }
+
+  //The same API#1595 IF endpoint is used for both uk and foreign properties.
+  //If a businessId of the right type is specified some of these optional fields will be present...
+  private def foreignResult(response: RetrieveForeignPropertyPeriodSummaryResponse): Boolean =
+    response.foreignFhlEea.nonEmpty || response.foreignFhlEea.nonEmpty
 }

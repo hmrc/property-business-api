@@ -42,8 +42,45 @@ class RetrieveForeignPropertyPeriodSummaryServiceSpec extends UnitSpec {
 
   val countryCode: String = "FRA"
 
-  val foreignFhlEea: ForeignFhlEea                 = ForeignFhlEea(None, None)
-  val foreignNonFhlProperty: ForeignNonFhlProperty = ForeignNonFhlProperty(countryCode, None, None)
+  val foreignFhlEea: ForeignFhlEea =
+    ForeignFhlEea(
+      Some(ForeignFhlEeaIncome(Some(5000.99))),
+      Some(ForeignFhlEeaExpenses(
+        Some(5000.99),
+        Some(5000.99),
+        Some(5000.99),
+        Some(5000.99),
+        Some(5000.99),
+        Some(5000.99),
+        Some(5000.99),
+        None
+      ))
+    )
+
+  val foreignNonFhlProperty: ForeignNonFhlProperty =
+    ForeignNonFhlProperty(
+      countryCode,
+      Some(ForeignNonFhlPropertyIncome(
+        Some(ForeignNonFhlPropertyRentIncome(Some(5000.99))),
+        false,
+        Some(5000.99),
+        Some(5000.99),
+        Some(5000.99),
+        Some(5000.99)
+      )),
+      Some(ForeignNonFhlPropertyExpenses(
+        Some(5000.99),
+        Some(5000.99),
+        Some(5000.99),
+        Some(5000.99),
+        Some(5000.99),
+        Some(5000.99),
+        Some(5000.99),
+        Some(5000.99),
+        Some(5000.99),
+        None
+      ))
+    )
 
   private val response =
     RetrieveForeignPropertyPeriodSummaryResponse("2020-06-17T10:53:38Z", "2019-01-29", "2020-03-29", Some(foreignFhlEea), Some(Seq(foreignNonFhlProperty)))

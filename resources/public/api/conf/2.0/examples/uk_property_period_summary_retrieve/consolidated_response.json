@@ -41,7 +41,7 @@
       "rel": "self"
     },
     {
-      "href":"/individuals/business/property/uk/AA999999A/XAIS12345678910/period/2022-23",
+      "href":"/individuals/business/property/AA999999A/XAIS12345678910/period/2022-23",
       "method": "GET",
       "rel": "list-property-period-summaries"
     }

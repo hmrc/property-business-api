@@ -55,7 +55,7 @@ class RetrieveForeignPropertyPeriodSummaryServiceSpec extends UnitSpec {
     implicit val logContext: EndpointLogContext = EndpointLogContext("c", "ep")
 
     val service = new RetrieveForeignPropertyPeriodSummaryService(
-      connector = mockConnector
+      connector = mockRetrieveForeignPropertyConnector
     )
   }
 

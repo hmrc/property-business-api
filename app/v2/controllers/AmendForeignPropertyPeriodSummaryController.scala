@@ -44,7 +44,7 @@ class AmendForeignPropertyPeriodSummaryController @Inject()(val authService: Enr
 
 
   implicit val endpointLogContext: EndpointLogContext =
-    EndpointLogContext(controllerName = "AmendForeignPropertyController", endpointName = "amendForeignProperty")
+    EndpointLogContext(controllerName = "AmendForeignPropertyPeriodicController", endpointName = "amendForeignPropertyPeriodic")
 
   def handleRequest(nino: String, businessId: String, taxYear: String, submissionId: String): Action[JsValue] =
     authorisedAction(nino).async(parse.json) { implicit request =>

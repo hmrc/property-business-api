@@ -274,14 +274,6 @@ class AmendForeignPropertyPeriodSummaryControllerISpec extends V2IntegrationBase
          |  ]
          |}
          |""".stripMargin)
-
-    def errorBody(code: String): String =
-      s"""
-         |{
-         |   "code": "$code",
-         |   "reason": "ifs message"
-         |}
-      """.stripMargin
   }
 
   "calling the amend foreign property period summary endpoint" should {

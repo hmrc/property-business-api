@@ -81,9 +81,11 @@
               "maximum": 99999999999.99,
               "example": "5004.49"
             }
-          }
+          },
+          "additionalProperties": false
         }
-      }
+      },
+      "additionalProperties": false
     },
     "foreignNonFhlProperty": {
       "type": "array",
@@ -116,7 +118,8 @@
                 "maximum": 99999999999.99,
                 "example": "5002.29"
               }
-            }
+            },
+            "additionalProperties": false
           },
           "allowances": {
             "type": "object",
@@ -242,14 +245,18 @@
                   },
                   "additionalProperties": false,
                   "required": ["amount", "building"]
-                }
+                },
+                "additionalProperties": false
               }
-            }
+            },
+            "additionalProperties": false
           }
         },
         "additionalProperties": false,
         "required": ["countryCode"]
-      }
+      },
+      "additionalProperties": false
     }
-  }
+  },
+  "additionalProperties": false
 }

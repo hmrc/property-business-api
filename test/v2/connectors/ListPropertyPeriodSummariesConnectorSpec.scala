@@ -20,31 +20,31 @@ import mocks.MockAppConfig
 import v2.mocks.MockHttpClient
 import v2.models.domain.Nino
 import v2.models.outcomes.ResponseWrapper
-import v2.models.request.listPropertiesPeriodSummaries.ListPropertiesPeriodSummariesRequest
-import v2.models.response.listPropertiesPeriodSummaries.{ ListPropertiesPeriodSummariesResponse, SubmissionPeriod }
+import v2.models.request.listPropertyPeriodSummaries.ListPropertyPeriodSummariesRequest
+import v2.models.response.listPropertyPeriodSummaries.{ ListPropertyPeriodSummariesResponse, SubmissionPeriod }
 
 import scala.concurrent.Future
 
-class ListPropertiesPeriodSummariesConnectorSpec extends ConnectorSpec {
+class ListPropertyPeriodSummariesConnectorSpec extends ConnectorSpec {
 
   val nino: String       = "AA123456A"
   val businessId: String = "XAIS12345678910"
   val taxYear: String    = "2022-23"
 
-  val request: ListPropertiesPeriodSummariesRequest = ListPropertiesPeriodSummariesRequest(
+  val request: ListPropertyPeriodSummariesRequest = ListPropertyPeriodSummariesRequest(
     nino = Nino(nino),
     businessId = businessId,
     taxYear = taxYear
   )
 
-  private val response = ListPropertiesPeriodSummariesResponse(
+  private val response = ListPropertyPeriodSummariesResponse(
     Seq(
       SubmissionPeriod("4557ecb5-fd32-48cc-81f5-e6acd1099f3c", "2020-06-22", "2020-06-22")
     ))
 
   class Test extends MockHttpClient with MockAppConfig {
 
-    val connector: ListPropertiesPeriodSummariesConnector = new ListPropertiesPeriodSummariesConnector(
+    val connector: ListPropertyPeriodSummariesConnector = new ListPropertyPeriodSummariesConnector(
       http = mockHttpClient,
       appConfig = mockAppConfig
     )

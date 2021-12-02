@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-package v2.models.response.listPropertiesPeriodSummaries
+package v2.models.response.listPropertyPeriodSummaries
 
 import mocks.MockAppConfig
 import play.api.libs.json.Json
 import support.UnitSpec
 
-class ListPropertiesPeriodSummariesResponseSpec extends UnitSpec with MockAppConfig {
+class ListPropertyPeriodSummariesResponseSpec extends UnitSpec with MockAppConfig {
 
   "reads" should {
     "read from a single item array" in {
@@ -36,11 +36,11 @@ class ListPropertiesPeriodSummariesResponseSpec extends UnitSpec with MockAppCon
         """.stripMargin
       )
 
-      val model = ListPropertiesPeriodSummariesResponse(Seq(
+      val model = ListPropertyPeriodSummariesResponse(Seq(
         SubmissionPeriod("4557ecb5-fd32-48cc-81f5-e6acd1099f3c", "2022-06-22", "2023-06-22")
       ))
 
-      ifsJson.as[ListPropertiesPeriodSummariesResponse] shouldBe model
+      ifsJson.as[ListPropertyPeriodSummariesResponse] shouldBe model
     }
 
     "read from a multiple item array" in {
@@ -61,12 +61,12 @@ class ListPropertiesPeriodSummariesResponseSpec extends UnitSpec with MockAppCon
         """.stripMargin
       )
 
-      val model = ListPropertiesPeriodSummariesResponse(Seq(
+      val model = ListPropertyPeriodSummariesResponse(Seq(
         SubmissionPeriod("4557ecb5-fd32-48cc-81f5-e6acd1099f3c", "2022-06-22", "2022-06-22"),
         SubmissionPeriod("4557ecb5-fd32-48cc-81f5-e6acd1099f3d", "2022-08-22", "2022-08-22")
       ))
 
-      ifsJson.as[ListPropertiesPeriodSummariesResponse] shouldBe model
+      ifsJson.as[ListPropertyPeriodSummariesResponse] shouldBe model
     }
 
     "read an empty array" in {
@@ -78,15 +78,15 @@ class ListPropertiesPeriodSummariesResponseSpec extends UnitSpec with MockAppCon
         """.stripMargin
       )
 
-      val model = ListPropertiesPeriodSummariesResponse(Seq())
+      val model = ListPropertyPeriodSummariesResponse(Seq())
 
-      ifsJson.as[ListPropertiesPeriodSummariesResponse] shouldBe model
+      ifsJson.as[ListPropertyPeriodSummariesResponse] shouldBe model
     }
   }
 
   "writes" should {
     "write to JSON" in {
-      val model = ListPropertiesPeriodSummariesResponse(Seq(
+      val model = ListPropertyPeriodSummariesResponse(Seq(
         SubmissionPeriod("4557ecb5-fd32-48cc-81f5-e6acd1099f3c", "2022-06-22", "2022-06-22")
       ))
 

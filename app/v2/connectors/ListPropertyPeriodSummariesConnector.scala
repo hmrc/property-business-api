@@ -17,27 +17,27 @@
 package v2.connectors
 
 import config.AppConfig
+import javax.inject.{Inject, Singleton}
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
 import v2.connectors.httpparsers.StandardIfsHttpParser._
-import v2.models.request.listPropertiesPeriodSummaries.ListPropertiesPeriodSummariesRequest
-import v2.models.response.listPropertiesPeriodSummaries.ListPropertiesPeriodSummariesResponse
+import v2.models.request.listPropertyPeriodSummaries.ListPropertyPeriodSummariesRequest
+import v2.models.response.listPropertyPeriodSummaries.ListPropertyPeriodSummariesResponse
 
-import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class ListPropertiesPeriodSummariesConnector @Inject()(val http: HttpClient,
+class ListPropertyPeriodSummariesConnector @Inject()(val http: HttpClient,
                                                        val appConfig: AppConfig) extends BaseIfsConnector {
 
-  def listPeriodSummaries(request: ListPropertiesPeriodSummariesRequest)(
+  def listPeriodSummaries(request: ListPropertyPeriodSummariesRequest)(
     implicit hc: HeaderCarrier,
     ec: ExecutionContext,
-    correlationId: String): Future[IfsOutcome[ListPropertiesPeriodSummariesResponse]] = {
+    correlationId: String): Future[IfsOutcome[ListPropertyPeriodSummariesResponse]] = {
 
     val url = s"income-tax/business/property/${request.nino.nino}/${request.businessId}/period"
 
     get(
-      uri = IfsUri[ListPropertiesPeriodSummariesResponse](url),
+      uri = IfsUri[ListPropertyPeriodSummariesResponse](url),
       queryParams = Seq("taxYear" -> request.taxYear)
     )
   }

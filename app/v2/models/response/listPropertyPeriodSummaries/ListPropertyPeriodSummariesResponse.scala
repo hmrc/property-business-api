@@ -14,8 +14,17 @@
  * limitations under the License.
  */
 
-package v2.models.request.listPropertiesPeriodSummaries
+package v2.models.response.listPropertyPeriodSummaries
 
-import v2.models.request.RawData
+import play.api.libs.json.{Json, OWrites, Reads}
 
-case class ListPropertiesPeriodSummariesRawData(nino: String, businessId: String, taxYear: String) extends RawData
+case class ListPropertyPeriodSummariesResponse(submissions: Seq[SubmissionPeriod])
+
+object ListPropertyPeriodSummariesResponse {
+
+  implicit def reads: Reads[ListPropertyPeriodSummariesResponse] =
+    implicitly[Reads[Seq[SubmissionPeriod]]].map(ListPropertyPeriodSummariesResponse(_))
+
+  implicit def writes: OWrites[ListPropertyPeriodSummariesResponse] =
+    Json.writes[ListPropertyPeriodSummariesResponse]
+}

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package v2.models.response.listPropertiesPeriodSummaries
+package v2.models.response.listPropertyPeriodSummaries
 
 import play.api.libs.json.Json
 import support.UnitSpec

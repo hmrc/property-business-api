@@ -14,19 +14,8 @@
  * limitations under the License.
  */
 
-package v2.models.response.listPropertiesPeriodSummaries
+package v2.models.request.listPropertyPeriodSummaries
 
-import play.api.libs.functional.syntax._
-import play.api.libs.json._
+import v2.models.domain.Nino
 
-case class SubmissionPeriod(submissionId: String, fromDate: String, toDate: String)
-
-object SubmissionPeriod {
-  implicit val reads: Reads[SubmissionPeriod] = (
-    (JsPath \ "submissionId").read[String] and
-      (JsPath \ "fromDate").read[String] and
-      (JsPath \ "toDate").read[String]
-    ) (SubmissionPeriod.apply _)
-
-  implicit val writes: OWrites[SubmissionPeriod] = Json.writes[SubmissionPeriod]
-}
+case class ListPropertyPeriodSummariesRequest(nino: Nino, businessId: String, taxYear: String)

@@ -20,25 +20,25 @@ import cats.data.EitherT
 import cats.implicits._
 import uk.gov.hmrc.http.HeaderCarrier
 import utils.Logging
-import v2.connectors.ListPropertiesPeriodSummariesConnector
+import v2.connectors.ListPropertyPeriodSummariesConnector
 import v2.controllers.EndpointLogContext
 import v2.models.errors._
-import v2.models.request.listPropertiesPeriodSummaries.ListPropertiesPeriodSummariesRequest
-import v2.models.response.listPropertiesPeriodSummaries.ListPropertiesPeriodSummariesResponse
+import v2.models.request.listPropertyPeriodSummaries.ListPropertyPeriodSummariesRequest
+import v2.models.response.listPropertyPeriodSummaries.ListPropertyPeriodSummariesResponse
 import v2.support.IfsResponseMappingSupport
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class ListPropertiesPeriodSummariesService @Inject()(connector: ListPropertiesPeriodSummariesConnector)
+class ListPropertyPeriodSummariesService @Inject()(connector: ListPropertyPeriodSummariesConnector)
   extends IfsResponseMappingSupport with Logging {
 
-  def listPeriodSummaries(request: ListPropertiesPeriodSummariesRequest)(
+  def listPeriodSummaries(request: ListPropertyPeriodSummariesRequest)(
     implicit hc: HeaderCarrier,
     ec: ExecutionContext,
     logContext: EndpointLogContext,
-    correlationId: String): Future[ServiceOutcome[ListPropertiesPeriodSummariesResponse]] = {
+    correlationId: String): Future[ServiceOutcome[ListPropertyPeriodSummariesResponse]] = {
 
     val result = for {
       ifsResponseWrapper <- EitherT(connector.listPeriodSummaries(request)).leftMap(mapIfsErrors(ifsErrorMap))

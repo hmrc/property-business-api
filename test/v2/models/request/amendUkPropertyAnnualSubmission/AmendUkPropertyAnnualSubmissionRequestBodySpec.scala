@@ -20,6 +20,7 @@ import play.api.libs.json.{JsValue, Json}
 import support.UnitSpec
 import v2.models.request.amendUkPropertyAnnualSubmission.ukFhlProperty._
 import v2.models.request.amendUkPropertyAnnualSubmission.ukNonFhlProperty._
+import v2.models.request.common.{Building, FirstYear, StructuredBuildingAllowance}
 import v2.models.request.common.ukPropertyRentARoom.UkPropertyAdjustmentsRentARoom
 
 class AmendUkPropertyAnnualSubmissionRequestBodySpec extends UnitSpec {

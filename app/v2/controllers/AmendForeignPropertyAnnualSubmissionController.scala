@@ -28,7 +28,7 @@ import v2.hateoas.HateoasFactory
 import v2.models.audit.{AuditEvent, AuditResponse, CreateAndAmendForeignPropertyAnnualAuditDetail}
 import v2.models.errors._
 import v2.models.request.amendForeignPropertyAnnualSubmission.AmendForeignPropertyAnnualSubmissionRawData
-import v2.models.response.amendForeignPropertyAnnualSubmission.AmendForeignPropertyAnnualSubmissionResponse.AmendForeignPropertyLinksFactory
+import v2.models.response.amendForeignPropertyAnnualSubmission.AmendForeignPropertyAnnualSubmissionResponse._
 import v2.models.response.amendForeignPropertyAnnualSubmission.AmendForeignPropertyAnnualSubmissionHateoasData
 import v2.services.{AmendForeignPropertyAnnualSubmissionService, AuditService, EnrolmentsAuthService, MtdIdLookupService}
 

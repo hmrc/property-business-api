@@ -16,15 +16,19 @@
 
 package v2.models.request.amendForeignPropertyAnnualSubmission
 
+import play.api.libs.functional.syntax._
 import play.api.libs.json._
 import v2.models.request.amendForeignPropertyAnnualSubmission.foreignFhlEea.ForeignFhlEea
-import v2.models.request.amendForeignPropertyAnnualSubmission.foreignProperty.ForeignPropertyEntry
-case class AmendForeignPropertyAnnualSubmissionRequestBody(foreignFhlEea: Option[ForeignFhlEea], foreignProperty: Option[Seq[ForeignPropertyEntry]]) {
-  def isEmpty: Boolean = (foreignFhlEea.isEmpty && foreignProperty.isEmpty) ||
-    foreignFhlEea.exists(_.isEmpty) ||
-    foreignProperty.exists(_.isEmpty)
-}
+import v2.models.request.amendForeignPropertyAnnualSubmission.foreignNonFhl.ForeignNonFhlEntry
+
+case class AmendForeignPropertyAnnualSubmissionRequestBody(foreignFhlEea: Option[ForeignFhlEea],
+                                                           foreignNonFhlProperty: Option[Seq[ForeignNonFhlEntry]])
 
 object AmendForeignPropertyAnnualSubmissionRequestBody {
-  implicit val format: OFormat[AmendForeignPropertyAnnualSubmissionRequestBody] = Json.format[AmendForeignPropertyAnnualSubmissionRequestBody]
+  implicit val reads: Reads[AmendForeignPropertyAnnualSubmissionRequestBody] = Json.reads[AmendForeignPropertyAnnualSubmissionRequestBody]
+
+  implicit val writes: Writes[AmendForeignPropertyAnnualSubmissionRequestBody] = (
+    (JsPath \ "foreignFhlEea").writeNullable[ForeignFhlEea] and
+      (JsPath \ "foreignProperty").writeNullable[Seq[ForeignNonFhlEntry]]
+  )(unlift(AmendForeignPropertyAnnualSubmissionRequestBody.unapply))
 }

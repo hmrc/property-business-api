@@ -14,26 +14,26 @@
  * limitations under the License.
  */
 
-package v2.models.request.amendForeignPropertyAnnualSubmission.foreignFhlEea
+package v2.models.request.amendForeignPropertyAnnualSubmission.foreignNonFhl
 
 import play.api.libs.json.Json
 import support.UnitSpec
 import v2.models.request.amendForeignPropertyAnnualSubmission.AmendForeignPropertyAnnualSubmissionFixture
 import v2.models.utils.JsonErrorValidators
 
-class ForeignFhlEeaAllowancesSpec extends UnitSpec with JsonErrorValidators with AmendForeignPropertyAnnualSubmissionFixture {
+class ForeignNonFhlAllowancesSpec extends UnitSpec with JsonErrorValidators with AmendForeignPropertyAnnualSubmissionFixture {
 
   "reads" when {
     "passed valid mtd JSON" should {
       "return the model" in {
-        foreignFhlEeaAllowancesMtdJson.as[ForeignFhlEeaAllowances] shouldBe foreignFhlEeaAllowances
+        foreignNonFhlAllowancesMtdJson.as[ForeignNonFhlAllowances] shouldBe foreignNonFhlAllowances
       }
     }
   }
   "writes" when {
     "passed a model" should {
       "return downstream JSON" in {
-        Json.toJson(foreignFhlEeaAllowances) shouldBe foreignFhlEeaAllowancesDownstreamJson
+        Json.toJson(foreignNonFhlAllowances) shouldBe foreignNonFhlAllowancesDownstreamJson
       }
     }
   }

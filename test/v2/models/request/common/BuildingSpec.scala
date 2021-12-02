@@ -14,38 +14,49 @@
  * limitations under the License.
  */
 
-package v2.models.request.amendUkPropertyAnnualSubmission.ukNonFhlProperty
+package v2.models.request.common
 
 import play.api.libs.json.{JsValue, Json}
 import support.UnitSpec
 
-class FirstYearSpec extends UnitSpec {
+class BuildingSpec extends UnitSpec {
 
-  val requestBody: FirstYear =
-    FirstYear(
-        "2020-01-01",
-        3000.40
+  val requestBody: Building =
+      Building(
+        Some("house name"),
+        Some("house number"),
+        "GF49JH"
       )
 
-  val validJson: JsValue = Json.parse(
+  val validMtdJson: JsValue = Json.parse(
     """
       |{
-      |  "qualifyingDate": "2020-01-01",
-      |  "qualifyingAmountExpenditure": 3000.40
+      |  "name": "house name",
+      |  "number": "house number",
+      |  "postcode": "GF49JH"
+      |}
+      |""".stripMargin)
+
+  val validDownstreamJson: JsValue = Json.parse(
+    """
+      |{
+      |  "name": "house name",
+      |  "number": "house number",
+      |  "postCode": "GF49JH"
       |}
       |""".stripMargin)
 
   "reads" when {
     "passed a valid JSON" should {
       "return a valid model" in {
-        validJson.as[FirstYear] shouldBe requestBody
+        validMtdJson.as[Building] shouldBe requestBody
       }
     }
   }
   "writes" when {
     "passed valid model" should {
       "return valid JSON" in {
-        Json.toJson(requestBody) shouldBe validJson
+        Json.toJson(requestBody) shouldBe validDownstreamJson
       }
     }
   }

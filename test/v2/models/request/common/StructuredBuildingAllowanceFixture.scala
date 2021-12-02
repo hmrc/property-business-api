@@ -14,28 +14,27 @@
  * limitations under the License.
  */
 
-package v2.models.request.amendUkPropertyAnnualSubmission.ukNonFhlProperty
+package v2.models.request.common
 
 import play.api.libs.json.{JsValue, Json}
-import support.UnitSpec
 
-class StructuredBuildingAllowanceSpec extends UnitSpec {
+trait StructuredBuildingAllowanceFixture {
 
-  val requestBody: StructuredBuildingAllowance =
+  val structuredBuildingAllowance: StructuredBuildingAllowance =
     StructuredBuildingAllowance(
-        3000.30,
-        Some(FirstYear(
-          "2020-01-01",
-          3000.40
-        )),
-        Building(
-          Some("house name"),
-          Some("house number"),
-          "GF49JH"
-        )
+      3000.30,
+      Some(FirstYear(
+        "2020-01-01",
+        3000.40
+      )),
+      Building(
+        Some("house name"),
+        Some("house number"),
+        "GF49JH"
       )
+    )
 
-  val validMtdJson: JsValue = Json.parse(
+  val structuredBuildingAllowanceMtdJson: JsValue = Json.parse(
     """
       |{
       |  "amount": 3000.30,
@@ -51,7 +50,7 @@ class StructuredBuildingAllowanceSpec extends UnitSpec {
       |}
       |""".stripMargin)
 
-  val validDownstreamJson: JsValue = Json.parse(
+  val structuredBuildingAllowanceDownstreamJson: JsValue = Json.parse(
     """
       |{
       |  "amount": 3000.30,
@@ -67,18 +66,4 @@ class StructuredBuildingAllowanceSpec extends UnitSpec {
       |}
       |""".stripMargin)
 
-  "reads" when {
-    "passed a valid JSON" should {
-      "return a valid model" in {
-        validMtdJson.as[StructuredBuildingAllowance] shouldBe requestBody
-      }
-    }
-  }
-  "writes" when {
-    "passed valid model" should {
-      "return valid JSON" in {
-        Json.toJson(requestBody) shouldBe validDownstreamJson
-      }
-    }
-  }
 }

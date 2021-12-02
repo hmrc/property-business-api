@@ -14,49 +14,24 @@
  * limitations under the License.
  */
 
-package v2.models.request.amendUkPropertyAnnualSubmission.ukNonFhlProperty
+package v2.models.request.common
 
-import play.api.libs.json.{JsValue, Json}
+import play.api.libs.json.Json
 import support.UnitSpec
 
-class BuildingSpec extends UnitSpec {
-
-  val requestBody: Building =
-      Building(
-        Some("house name"),
-        Some("house number"),
-        "GF49JH"
-      )
-
-  val validMtdJson: JsValue = Json.parse(
-    """
-      |{
-      |  "name": "house name",
-      |  "number": "house number",
-      |  "postcode": "GF49JH"
-      |}
-      |""".stripMargin)
-
-  val validDownstreamJson: JsValue = Json.parse(
-    """
-      |{
-      |  "name": "house name",
-      |  "number": "house number",
-      |  "postCode": "GF49JH"
-      |}
-      |""".stripMargin)
+class StructuredBuildingAllowanceSpec extends UnitSpec with StructuredBuildingAllowanceFixture {
 
   "reads" when {
     "passed a valid JSON" should {
       "return a valid model" in {
-        validMtdJson.as[Building] shouldBe requestBody
+        structuredBuildingAllowanceMtdJson.as[StructuredBuildingAllowance] shouldBe structuredBuildingAllowance
       }
     }
   }
   "writes" when {
     "passed valid model" should {
       "return valid JSON" in {
-        Json.toJson(requestBody) shouldBe validDownstreamJson
+        Json.toJson(structuredBuildingAllowance) shouldBe structuredBuildingAllowanceDownstreamJson
       }
     }
   }

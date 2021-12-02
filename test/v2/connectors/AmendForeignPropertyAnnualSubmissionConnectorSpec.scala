@@ -23,7 +23,7 @@ import v2.models.domain.Nino
 import v2.models.outcomes.ResponseWrapper
 import v2.models.request.amendForeignPropertyAnnualSubmission._
 import v2.models.request.amendForeignPropertyAnnualSubmission.foreignFhlEea._
-import v2.models.request.amendForeignPropertyAnnualSubmission.foreignProperty._
+import v2.models.request.amendForeignPropertyAnnualSubmission.foreignNonFhl._
 
 import scala.concurrent.Future
 
@@ -33,35 +33,9 @@ class AmendForeignPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec {
   val businessId: String = "XAIS12345678910"
   val taxYear: String = "2020-21"
 
-  private val foreignFhlEea = ForeignFhlEea(
-    Some(ForeignFhlEeaAdjustments(
-      Some(5000.99),
-      Some(5000.99),
-      Some(true)
-    )),
-    Some(ForeignFhlEeaAllowances(
-      Some(5000.99),
-      Some(5000.99),
-      Some(5000.99),
-      Some(5000.99)
-    ))
-  )
+  private val foreignFhlEea = ForeignFhlEea(None, None)
 
-  private val foreignPropertyEntry = ForeignPropertyEntry(
-    "FRA",
-    Some(ForeignPropertyAdjustments(
-      Some(5000.99),
-      Some(5000.99)
-    )),
-    Some(ForeignPropertyAllowances(
-      Some(5000.99),
-      Some(5000.99),
-      Some(5000.99),
-      Some(5000.99),
-      Some(5000.99),
-      Some(5000.99)
-    ))
-  )
+  private val foreignPropertyEntry = ForeignNonFhlEntry("FRA", None, None)
 
   val body: AmendForeignPropertyAnnualSubmissionRequestBody = AmendForeignPropertyAnnualSubmissionRequestBody(
     Some(foreignFhlEea),

@@ -11,5 +11,5 @@ PUT        /foreign/:nino/:businessId/period/:taxYear/:submissionId v2.controlle
 #GET        /:nino/:businessId/period/:submissionId                 v2.controllers.RetrieveForeignPropertyPeriodSummaryController.handleRequest(nino: String, businessId: String, submissionId: String)
 
 DELETE     /:nino/:businessId/annual/:taxYear                       v2.controllers.DeletePropertyAnnualSubmissionController.handleRequest(nino: String, businessId: String, taxYear: String)
-PUT        /:nino/:businessId/annual/:taxYear                       v2.controllers.AmendForeignPropertyAnnualSubmissionController.handleRequest(nino: String, businessId: String, taxYear: String)
+#PUT        /:nino/:businessId/annual/:taxYear                       v2.controllers.AmendForeignPropertyAnnualSubmissionController.handleRequest(nino: String, businessId: String, taxYear: String)
 GET        /:nino/:businessId/annual/:taxYear                       v2.controllers.RetrieveForeignPropertyAnnualSubmissionController.handleRequest(nino: String, businessId: String, taxYear: String)

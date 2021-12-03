@@ -25,7 +25,7 @@ import v2.models.errors._
 import v2.models.outcomes.ResponseWrapper
 import v2.models.request.amendForeignPropertyAnnualSubmission._
 import v2.models.request.amendForeignPropertyAnnualSubmission.foreignFhlEea._
-import v2.models.request.amendForeignPropertyAnnualSubmission.foreignProperty._
+import v2.models.request.amendForeignPropertyAnnualSubmission.foreignNonFhl._
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -37,35 +37,9 @@ class AmendForeignPropertyAnnualSubmissionServiceSpec extends UnitSpec {
   val taxYear: String = "2020-21"
   implicit val correlationId: String = "X-123"
 
-  private val foreignFhlEea = ForeignFhlEea(
-    Some(ForeignFhlEeaAdjustments(
-      Some(5000.99),
-      Some(5000.99),
-      Some(true)
-    )),
-    Some(ForeignFhlEeaAllowances(
-      Some(5000.99),
-      Some(5000.99),
-      Some(5000.99),
-      Some(5000.99)
-    ))
-  )
+  private val foreignFhlEea = ForeignFhlEea(None, None)
 
-  private val foreignPropertyEntry = ForeignPropertyEntry(
-    "FRA",
-    Some(ForeignPropertyAdjustments(
-      Some(5000.99),
-      Some(5000.99)
-    )),
-    Some(ForeignPropertyAllowances(
-      Some(5000.99),
-      Some(5000.99),
-      Some(5000.99),
-      Some(5000.99),
-      Some(5000.99),
-      Some(5000.99)
-    ))
-  )
+  private val foreignPropertyEntry = ForeignNonFhlEntry("FRA", None, None)
 
   val body: AmendForeignPropertyAnnualSubmissionRequestBody = AmendForeignPropertyAnnualSubmissionRequestBody(
     Some(foreignFhlEea),

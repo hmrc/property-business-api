@@ -14,16 +14,14 @@
  * limitations under the License.
  */
 
-package v2.models.request.amendForeignPropertyAnnualSubmission.foreignProperty
+package v2.models.request.amendForeignPropertyAnnualSubmission.foreignNonFhl
 
 import play.api.libs.json.{Json, OFormat}
 
-case class ForeignPropertyAdjustments(privateUseAdjustment: Option[BigDecimal],
-                                      balancingCharge: Option[BigDecimal]) {
-  def isEmpty: Boolean = privateUseAdjustment.isEmpty &&
-    balancingCharge.isEmpty
-}
+case class ForeignNonFhlEntry(countryCode: String,
+                              adjustments: Option[ForeignNonFhlAdjustments],
+                              allowances: Option[ForeignNonFhlAllowances])
 
-object ForeignPropertyAdjustments {
-  implicit val format: OFormat[ForeignPropertyAdjustments] = Json.format[ForeignPropertyAdjustments]
+object ForeignNonFhlEntry {
+  implicit val format: OFormat[ForeignNonFhlEntry] = Json.format[ForeignNonFhlEntry]
 }

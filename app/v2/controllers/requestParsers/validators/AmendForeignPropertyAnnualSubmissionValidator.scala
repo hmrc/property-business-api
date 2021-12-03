@@ -20,7 +20,7 @@ import config.AppConfig
 import v2.controllers.requestParsers.validators.validations._
 import v2.models.errors._
 import v2.models.request.amendForeignPropertyAnnualSubmission.foreignFhlEea.ForeignFhlEea
-import v2.models.request.amendForeignPropertyAnnualSubmission.foreignProperty.ForeignPropertyEntry
+import v2.models.request.amendForeignPropertyAnnualSubmission.foreignNonFhl.ForeignNonFhlEntry
 import v2.models.request.amendForeignPropertyAnnualSubmission.{
   AmendForeignPropertyAnnualSubmissionRawData,
   AmendForeignPropertyAnnualSubmissionRequestBody
@@ -44,21 +44,7 @@ class AmendForeignPropertyAnnualSubmissionValidator @Inject()(appConfig: AppConf
     }
 
   private def bodyFormatValidation: AmendForeignPropertyAnnualSubmissionRawData => List[List[MtdError]] = { data =>
-    val baseValidation = List(
-      JsonFormatValidation.validate[AmendForeignPropertyAnnualSubmissionRequestBody](data.body))
-
-    val extraValidation: List[List[MtdError]] = {
-      data.body
-        .asOpt[AmendForeignPropertyAnnualSubmissionRequestBody]
-        .map(_.isEmpty)
-        .map {
-          case true  => List(List(RuleIncorrectOrEmptyBodyError))
-          case false => NoValidationErrors
-        }
-        .getOrElse(NoValidationErrors)
-    }
-
-    baseValidation ++ extraValidation
+    ???
   }
 
   private def bodyFieldValidation: AmendForeignPropertyAnnualSubmissionRawData => List[List[MtdError]] = { data =>
@@ -68,7 +54,7 @@ class AmendForeignPropertyAnnualSubmissionValidator @Inject()(appConfig: AppConf
       flattenErrors(
         List(
           body.foreignFhlEea.map(validateForeignFhlEea).getOrElse(NoValidationErrors),
-          body.foreignProperty
+          body.foreignNonFhlProperty
             .map(_.zipWithIndex.toList.flatMap {
               case (entry, i) => validateForeignProperty(entry, i)
             })
@@ -95,7 +81,7 @@ class AmendForeignPropertyAnnualSubmissionValidator @Inject()(appConfig: AppConf
         path = "/foreignFhlEea/allowances/otherCapitalAllowance"
       ),
       NumberValidation.validateOptional(
-        field = foreignFhlEea.allowances.flatMap(_.propertyAllowance),
+        field = foreignFhlEea.allowances.flatMap(_.propertyIncomeAllowance),
         path = "/foreignFhlEea/allowances/propertyAllowance"
       ),
       NumberValidation.validateOptional(
@@ -105,7 +91,7 @@ class AmendForeignPropertyAnnualSubmissionValidator @Inject()(appConfig: AppConf
     ).flatten
   }
 
-  private def validateForeignProperty(foreignPropertyEntry: ForeignPropertyEntry, index: Int): List[MtdError] = {
+  private def validateForeignProperty(foreignPropertyEntry: ForeignNonFhlEntry, index: Int): List[MtdError] = {
     List(
       CountryCodeValidation.validate(
         field = foreignPropertyEntry.countryCode,
@@ -132,7 +118,7 @@ class AmendForeignPropertyAnnualSubmissionValidator @Inject()(appConfig: AppConf
         path = s"/foreignProperty/$index/allowances/zeroEmissionsGoodsVehicleAllowance"
       ),
       NumberValidation.validateOptional(
-        field = foreignPropertyEntry.allowances.flatMap(_.propertyAllowance),
+        field = foreignPropertyEntry.allowances.flatMap(_.propertyIncomeAllowance),
         path = s"/foreignProperty/$index/allowances/propertyAllowance"
       ),
       NumberValidation.validateOptional(

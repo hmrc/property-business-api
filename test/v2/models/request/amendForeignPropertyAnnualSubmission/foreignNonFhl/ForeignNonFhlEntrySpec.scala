@@ -14,66 +14,73 @@
  * limitations under the License.
  */
 
-package v2.models.request.amendForeignPropertyAnnualSubmission.foreignFhlEea
+package v2.models.request.amendForeignPropertyAnnualSubmission.foreignNonFhl
 
-import play.api.libs.json.{ JsValue, Json }
+import play.api.libs.json.{JsValue, Json}
 import support.UnitSpec
 import v2.models.request.amendForeignPropertyAnnualSubmission.AmendForeignPropertyAnnualSubmissionFixture
 import v2.models.utils.JsonErrorValidators
 
-class ForeignFhlEeaSpec extends UnitSpec with JsonErrorValidators with AmendForeignPropertyAnnualSubmissionFixture {
+class ForeignNonFhlEntrySpec extends UnitSpec with JsonErrorValidators with AmendForeignPropertyAnnualSubmissionFixture {
 
-  private val allowancesOnly: ForeignFhlEea = ForeignFhlEea(
-    allowances = Some(foreignFhlEeaAllowances),
+  private val allowancesOnly: ForeignNonFhlEntry = ForeignNonFhlEntry(
+    countryCode = "GER",
+    allowances = Some(foreignNonFhlAllowances),
     adjustments = None
   )
 
   private val allowancesOnlyMtdJson: JsValue = Json.parse(s"""
-      |{
-      |   "allowances": $foreignFhlEeaAllowancesMtdJson
-      |}""".stripMargin)
+     |{
+     |   "countryCode": "GER",
+     |   "allowances": $foreignNonFhlAllowancesMtdJson
+     |}""".stripMargin)
 
   private val allowancesOnlyDownstreamJson: JsValue = Json.parse(s"""
-       |{
-       |   "allowances": $foreignFhlEeaAllowancesDownstreamJson
-       |}""".stripMargin)
+    |{
+    |   "countryCode": "GER",
+    |   "allowances": $foreignNonFhlAllowancesDownstreamJson
+    |}""".stripMargin)
 
-  private val adjustmentsOnly: ForeignFhlEea = ForeignFhlEea(
+  private val adjustmentsOnly: ForeignNonFhlEntry = ForeignNonFhlEntry(
+    countryCode = "GER",
     allowances = None,
-    adjustments = Some(foreignFhlEeaAdjustments)
+    adjustments = Some(foreignNonFhlAdjustments)
   )
 
   private val adjustmentsOnlyMtdJson: JsValue = Json.parse(s"""
-       |{
-       |   "adjustments": $foreignFhlEeaAdjustmentsMtdJson
-       |}""".stripMargin)
+    |{
+    |   "countryCode": "GER",
+    |   "adjustments": $foreignNonFhlAdjustmentsMtdJson
+    |}""".stripMargin)
 
   private val adjustmentsOnlyDownstreamJson: JsValue = Json.parse(s"""
-       |{
-       |   "adjustments": $foreignFhlEeaAdjustmentsDownstreamJson
-       |}""".stripMargin)
+   |{
+   |   "countryCode": "GER",
+   |   "adjustments": $foreignNonFhlAdjustmentsDownstreamJson
+   |}""".stripMargin)
 
   "reads" when {
     "passed valid mtd JSON" should {
       "return the model" in {
-        foreignFhlEeaMtdJson.as[ForeignFhlEea] shouldBe foreignFhlEea
+        foreignNonFhlEntryMtdJson.as[ForeignNonFhlEntry] shouldBe foreignNonFhlEntry
       }
     }
     "passed valid mtd JSON with allowances only" should {
       "return the model" in {
-        allowancesOnlyMtdJson.as[ForeignFhlEea] shouldBe allowancesOnly
+        allowancesOnlyMtdJson.as[ForeignNonFhlEntry] shouldBe allowancesOnly
       }
     }
     "passed valid mtd JSON with adjustments only" should {
       "return the model" in {
-        adjustmentsOnlyMtdJson.as[ForeignFhlEea] shouldBe adjustmentsOnly
+        adjustmentsOnlyMtdJson.as[ForeignNonFhlEntry] shouldBe adjustmentsOnly
       }
     }
   }
+
   "writes" when {
     "passed a model" should {
       "return downstream JSON" in {
-        Json.toJson(foreignFhlEea) shouldBe foreignFhlEeaDownstreamJson
+        Json.toJson(foreignNonFhlEntry) shouldBe foreignNonFhlEntryDownstreamJson
       }
     }
     "passed a model with allowances only" should {
@@ -87,4 +94,5 @@ class ForeignFhlEeaSpec extends UnitSpec with JsonErrorValidators with AmendFore
       }
     }
   }
+
 }

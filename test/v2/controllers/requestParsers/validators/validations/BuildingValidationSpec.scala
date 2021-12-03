@@ -18,7 +18,7 @@ package v2.controllers.requestParsers.validators.validations
 
 import support.UnitSpec
 import v2.models.errors.RuleBuildingNameNumberError
-import v2.models.request.amendUkPropertyAnnualSubmission.ukNonFhlProperty.Building
+import v2.models.request.common.Building
 
 class BuildingValidationSpec extends UnitSpec {
 

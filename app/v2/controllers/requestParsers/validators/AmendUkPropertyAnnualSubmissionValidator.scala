@@ -20,8 +20,9 @@ import config.AppConfig
 import v2.controllers.requestParsers.validators.validations._
 import v2.models.errors._
 import v2.models.request.amendUkPropertyAnnualSubmission.ukFhlProperty.{UkFhlProperty, UkFhlPropertyAllowances}
-import v2.models.request.amendUkPropertyAnnualSubmission.ukNonFhlProperty.{StructuredBuildingAllowance, UkNonFhlProperty, UkNonFhlPropertyAllowances}
+import v2.models.request.amendUkPropertyAnnualSubmission.ukNonFhlProperty.{UkNonFhlProperty, UkNonFhlPropertyAllowances}
 import v2.models.request.amendUkPropertyAnnualSubmission.{AmendUkPropertyAnnualSubmissionRawData, AmendUkPropertyAnnualSubmissionRequestBody}
+import v2.models.request.common.StructuredBuildingAllowance
 
 import javax.inject.{Inject, Singleton}
 

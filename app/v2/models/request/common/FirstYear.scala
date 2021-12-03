@@ -14,14 +14,13 @@
  * limitations under the License.
  */
 
-package v2.models.request.amendUkPropertyAnnualSubmission.ukNonFhlProperty
+package v2.models.request.common
 
 import play.api.libs.json.{Json, OFormat}
 
-case class StructuredBuildingAllowance(amount: BigDecimal,
-                                       firstYear: Option[FirstYear],
-                                       building: Building)
+case class FirstYear(qualifyingDate: String,
+                     qualifyingAmountExpenditure: BigDecimal)
 
-object StructuredBuildingAllowance {
-  implicit val format: OFormat[StructuredBuildingAllowance] = Json.format[StructuredBuildingAllowance]
+object FirstYear {
+  implicit val format: OFormat[FirstYear] = Json.format[FirstYear]
 }

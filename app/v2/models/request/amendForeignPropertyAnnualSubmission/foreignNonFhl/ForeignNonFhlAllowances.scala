@@ -14,25 +14,32 @@
  * limitations under the License.
  */
 
-package v2.models.request.amendForeignPropertyAnnualSubmission.foreignFhlEea
+package v2.models.request.amendForeignPropertyAnnualSubmission.foreignNonFhl
 
 import play.api.libs.functional.syntax._
 import play.api.libs.json.{JsPath, Json, Reads, Writes}
+import v2.models.request.common.StructuredBuildingAllowance
 
-case class ForeignFhlEeaAllowances(annualInvestmentAllowance: Option[BigDecimal],
+case class ForeignNonFhlAllowances(annualInvestmentAllowance: Option[BigDecimal],
+                                   costOfReplacingDomesticItems: Option[BigDecimal],
+                                   zeroEmissionsGoodsVehicleAllowance: Option[BigDecimal],
                                    otherCapitalAllowance: Option[BigDecimal],
                                    electricChargePointAllowance: Option[BigDecimal],
                                    zeroEmissionsCarAllowance: Option[BigDecimal],
-                                   propertyIncomeAllowance: Option[BigDecimal])
+                                   propertyIncomeAllowance: Option[BigDecimal],
+                                   structuredBuildingAllowance: Option[Seq[StructuredBuildingAllowance]])
 
-object ForeignFhlEeaAllowances {
-  implicit val reads: Reads[ForeignFhlEeaAllowances] = Json.reads[ForeignFhlEeaAllowances]
+object ForeignNonFhlAllowances {
+  implicit val reads: Reads[ForeignNonFhlAllowances] = Json.reads[ForeignNonFhlAllowances]
 
-  implicit val writes: Writes[ForeignFhlEeaAllowances] = (
+  implicit val writes: Writes[ForeignNonFhlAllowances] = (
     (JsPath \ "annualInvestmentAllowance").writeNullable[BigDecimal] and
+      (JsPath \ "costOfReplacingDomesticItems").writeNullable[BigDecimal] and
+      (JsPath \ "zeroEmissionsGoodsVehicleAllowance").writeNullable[BigDecimal] and
       (JsPath \ "otherCapitalAllowance").writeNullable[BigDecimal] and
       (JsPath \ "electricChargePointAllowance").writeNullable[BigDecimal] and
       (JsPath \ "zeroEmissionsCarAllowance").writeNullable[BigDecimal] and
-      (JsPath \ "propertyAllowance").writeNullable[BigDecimal]
-    )(unlift(ForeignFhlEeaAllowances.unapply))
+      (JsPath \ "propertyAllowance").writeNullable[BigDecimal] and
+      (JsPath \ "structuredBuildingAllowance").writeNullable[Seq[StructuredBuildingAllowance]]
+  )(unlift(ForeignNonFhlAllowances.unapply))
 }

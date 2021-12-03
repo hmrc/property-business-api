@@ -16,118 +16,77 @@
 
 package v2.models.request.amendForeignPropertyAnnualSubmission
 
-import play.api.libs.json.Json
+import play.api.libs.json.{JsValue, Json}
 import support.UnitSpec
-import v2.models.request.amendForeignPropertyAnnualSubmission.foreignFhlEea.{ForeignFhlEea, ForeignFhlEeaAdjustments, ForeignFhlEeaAllowances}
-import v2.models.request.amendForeignPropertyAnnualSubmission.foreignProperty.{ForeignPropertyAdjustments, ForeignPropertyAllowances, ForeignPropertyEntry}
 import v2.models.utils.JsonErrorValidators
 
-class AmendForeignPropertyAnnualSubmissionRequestBodySpec extends UnitSpec with JsonErrorValidators {
+class AmendForeignPropertyAnnualSubmissionRequestBodySpec extends UnitSpec with JsonErrorValidators with AmendForeignPropertyAnnualSubmissionFixture {
 
-  val amendForeignPropertyAnnualSubmissionRequestBody =
-    AmendForeignPropertyAnnualSubmissionRequestBody(
-      Some(ForeignFhlEea(
-        Some(ForeignFhlEeaAdjustments(
-          Some(100.25),
-          Some(100.25),
-          Some(true)
-        )),
-        Some(ForeignFhlEeaAllowances(
-          Some(100.25),
-          Some(100.25),
-          Some(100.25),
-          Some(100.25)
-        ))
-      )),
-      Some(Seq(ForeignPropertyEntry(
-        "GER",
-        Some(ForeignPropertyAdjustments(
-          Some(100.25),
-          Some(100.25))),
-        Some(ForeignPropertyAllowances(
-          Some(100.25),
-          Some(100.25),
-          Some(100.25),
-          Some(100.25),
-          Some(100.25),
-          Some(100.25)
-        )))))
-    )
+  private val fhlModel: AmendForeignPropertyAnnualSubmissionRequestBody =
+    AmendForeignPropertyAnnualSubmissionRequestBody(foreignFhlEea = Some(foreignFhlEea), foreignNonFhlProperty = None)
 
-  val amendForeignPropertyAnnualSubmissionRequestBodyMinimum =
-    AmendForeignPropertyAnnualSubmissionRequestBody(
-      None,
-      Some(Seq(ForeignPropertyEntry(
-        "GER",
-        None,
-        None)))
-    )
+  private val fhlMtdJson: JsValue = Json.parse(s"""
+       |{
+       |   "foreignFhlEea": $foreignFhlEeaMtdJson
+       |}
+       |""".stripMargin)
 
-  val jsonBody = Json.parse(
-    """
+  private val fhlDownstreamJson: JsValue = Json.parse(s"""
       |{
-      |   "foreignFhlEea":
-      |      {
-      |         "adjustments":{
-      |            "privateUseAdjustment":100.25,
-      |            "balancingCharge":100.25,
-      |            "periodOfGraceAdjustment":true
-      |         },
-      |         "allowances":{
-      |            "annualInvestmentAllowance":100.25,
-      |            "otherCapitalAllowance":100.25,
-      |            "propertyAllowance":100.25,
-      |            "electricChargePointAllowance":100.25
-      |         }
-      |      },
-      |   "foreignProperty":[
-      |      {
-      |         "countryCode":"GER",
-      |         "adjustments":{
-      |            "privateUseAdjustment":100.25,
-      |            "balancingCharge":100.25
-      |         },
-      |         "allowances":{
-      |            "annualInvestmentAllowance":100.25,
-      |            "costOfReplacingDomesticItems":100.25,
-      |            "zeroEmissionsGoodsVehicleAllowance":100.25,
-      |            "propertyAllowance":100.25,
-      |            "otherCapitalAllowance":100.25,
-      |            "electricChargePointAllowance":100.25
-      |         }
-      |      }
-      |   ]
+      |   "foreignFhlEea": $foreignFhlEeaDownstreamJson
       |}
       |""".stripMargin)
 
-  val jsonBodyMinimum = Json.parse(
-    """
+  private val nonFhlModel: AmendForeignPropertyAnnualSubmissionRequestBody =
+    AmendForeignPropertyAnnualSubmissionRequestBody(foreignFhlEea = None, foreignNonFhlProperty = Some(Seq(foreignNonFhlEntry)))
+
+  private val nonFhlMtdJson: JsValue        = Json.parse(s"""
       |{
-      |   "foreignProperty":[
-      |      {
-      |         "countryCode":"GER"
-      |      }
-      |   ]
+      |   "foreignNonFhlProperty":[ $foreignNonFhlEntryMtdJson ]
+      |}
+      |""".stripMargin)
+
+  private val nonFhlDownstreamJson: JsValue = Json.parse(s"""
+      |{
+      |   "foreignProperty":[ $foreignNonFhlEntryDownstreamJson ]
       |}
       |""".stripMargin)
 
   "reads" when {
-    "passed a valid JSON" should {
-      "return a valid model" in {
-        jsonBody.as[AmendForeignPropertyAnnualSubmissionRequestBody] shouldBe amendForeignPropertyAnnualSubmissionRequestBody
+    "passed valid mtd JSON" should {
+      "return the model" in {
+        amendForeignPropertyAnnualSubmissionRequestBodyMtdJson
+          .as[AmendForeignPropertyAnnualSubmissionRequestBody] shouldBe amendForeignPropertyAnnualSubmissionRequestBody
       }
-      "return a valid model with minimum fields" in {
-        jsonBodyMinimum.as[AmendForeignPropertyAnnualSubmissionRequestBody] shouldBe amendForeignPropertyAnnualSubmissionRequestBodyMinimum
+    }
+    "passed valid mtd JSON with just Fhl" should {
+      "return the model" in {
+        fhlMtdJson
+          .as[AmendForeignPropertyAnnualSubmissionRequestBody] shouldBe fhlModel
+      }
+    }
+    "passed valid mtd JSON with just NonFhl" should {
+      "return the model" in {
+        nonFhlMtdJson
+          .as[AmendForeignPropertyAnnualSubmissionRequestBody] shouldBe nonFhlModel
       }
     }
   }
+
   "writes" when {
-    "passed valid model" should {
-      "return valid JSON" in {
-        Json.toJson(amendForeignPropertyAnnualSubmissionRequestBody) shouldBe jsonBody
+    "passed a model" should {
+      "return downstream JSON" in {
+        Json.toJson(amendForeignPropertyAnnualSubmissionRequestBody) shouldBe amendForeignPropertyAnnualSubmissionRequestBodyDownstreamJson
       }
-      "return a valid minimum JSON" in {
-        Json.toJson(amendForeignPropertyAnnualSubmissionRequestBodyMinimum) shouldBe jsonBodyMinimum
+    }
+    "passed a model with minimal fields" should {
+      "return downstream JSON" in {
+        Json.toJson(fhlModel) shouldBe fhlDownstreamJson
+      }
+    }
+    "passed a model with just Fhl" should {
+      "return downstream JSON" in {
+        Json.toJson(nonFhlModel) shouldBe nonFhlDownstreamJson
       }
     }
   }

@@ -18,57 +18,23 @@ package v2.models.request.amendForeignPropertyAnnualSubmission.foreignFhlEea
 
 import play.api.libs.json.Json
 import support.UnitSpec
+import v2.models.request.amendForeignPropertyAnnualSubmission.AmendForeignPropertyAnnualSubmissionFixture
 import v2.models.utils.JsonErrorValidators
 
-class ForeignFhlEeaAdjustmentsSpec extends UnitSpec with JsonErrorValidators {
-
-  val foreignFhlEeaAdjustments =
-    ForeignFhlEeaAdjustments(
-      Some(100.25),
-      Some(100.25),
-      Some(true)
-    )
-
-  val jsonBody = Json.parse(
-    """
-      |{
-      |    "privateUseAdjustment":100.25,
-      |    "balancingCharge":100.25,
-      |    "periodOfGraceAdjustment":true
-      |}
-      |""".stripMargin)
-
-  val emptyJson = Json.parse(
-    """
-      |{}
-      |""".stripMargin
-  )
+class ForeignFhlEeaAdjustmentsSpec extends UnitSpec with JsonErrorValidators with AmendForeignPropertyAnnualSubmissionFixture {
 
   "reads" when {
-    "passed a valid JSON" should {
-      "return a valid model" in {
-        jsonBody.as[ForeignFhlEeaAdjustments] shouldBe foreignFhlEeaAdjustments
+    "passed valid mtd JSON" should {
+      "return the model" in {
+        foreignFhlEeaAdjustmentsMtdJson.as[ForeignFhlEeaAdjustments] shouldBe foreignFhlEeaAdjustments
       }
     }
   }
   "writes" when {
-    "passed valid model" should {
-      "return valid JSON" in {
-        Json.toJson(foreignFhlEeaAdjustments) shouldBe jsonBody
+    "passed a model" should {
+      "return downstream JSON" in {
+        Json.toJson(foreignFhlEeaAdjustments) shouldBe foreignFhlEeaAdjustmentsDownstreamJson
       }
     }
   }
-  "isEmpty" when {
-    "passed a valid model" should {
-      "return false" in {
-        jsonBody.as[ForeignFhlEeaAdjustments].isEmpty shouldBe false
-      }
-    }
-    "passed an empty model" should {
-      "return true" in {
-        emptyJson.as[ForeignFhlEeaAdjustments].isEmpty shouldBe true
-      }
-    }
-  }
-
 }

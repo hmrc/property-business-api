@@ -17,7 +17,7 @@
 package v2.controllers.requestParsers.validators.validations
 
 import v2.models.errors.{MtdError, RuleBuildingNameNumberError}
-import v2.models.request.amendUkPropertyAnnualSubmission.ukNonFhlProperty.Building
+import v2.models.request.common.Building
 
 object BuildingValidation {
 

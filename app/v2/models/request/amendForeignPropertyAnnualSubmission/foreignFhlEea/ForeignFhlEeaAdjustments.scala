@@ -20,11 +20,7 @@ import play.api.libs.json.{Json, OFormat}
 
 case class ForeignFhlEeaAdjustments(privateUseAdjustment: Option[BigDecimal],
                                     balancingCharge: Option[BigDecimal],
-                                    periodOfGraceAdjustment: Option[Boolean]) {
-  def isEmpty: Boolean = privateUseAdjustment.isEmpty &&
-    balancingCharge.isEmpty &&
-    periodOfGraceAdjustment.isEmpty
-}
+                                    periodOfGraceAdjustment: Boolean)
 
 
 object ForeignFhlEeaAdjustments {

@@ -17,6 +17,7 @@
 package v2.models.request.amendUkPropertyAnnualSubmission.ukNonFhlProperty
 
 import play.api.libs.json.{Json, OFormat}
+import v2.models.request.common.StructuredBuildingAllowance
 
 case class UkNonFhlPropertyAllowances(annualInvestmentAllowance: Option[BigDecimal],
                                       zeroEmissionGoodsVehicleAllowance: Option[BigDecimal],

@@ -19,7 +19,8 @@ package v2.controllers.requestParsers.validators.validations
 import support.UnitSpec
 import v2.models.errors.RuleBothAllowancesSuppliedError
 import v2.models.request.amendUkPropertyAnnualSubmission.ukFhlProperty.UkFhlPropertyAllowances
-import v2.models.request.amendUkPropertyAnnualSubmission.ukNonFhlProperty.{Building, StructuredBuildingAllowance, UkNonFhlPropertyAllowances}
+import v2.models.request.amendUkPropertyAnnualSubmission.ukNonFhlProperty.UkNonFhlPropertyAllowances
+import v2.models.request.common.{Building, StructuredBuildingAllowance}
 
 class AllowancesValidationSpec extends UnitSpec {
 

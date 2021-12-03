@@ -17,22 +17,21 @@
 package v2.models.response.amendForeignPropertyAnnualSubmission
 
 import config.AppConfig
-import v2.hateoas.{HateoasLinks, HateoasLinksFactory}
-import v2.models.hateoas.{HateoasData, Link}
+import v2.hateoas.{ HateoasLinks, HateoasLinksFactory }
+import v2.models.hateoas.{ HateoasData, Link }
 
 object AmendForeignPropertyAnnualSubmissionResponse extends HateoasLinks {
 
-  implicit object AmendForeignPropertyLinksFactory extends HateoasLinksFactory[Unit, AmendForeignPropertyAnnualSubmissionHateoasData] {
+  implicit object LinksFactory extends HateoasLinksFactory[Unit, AmendForeignPropertyAnnualSubmissionHateoasData] {
     override def links(appConfig: AppConfig, data: AmendForeignPropertyAnnualSubmissionHateoasData): Seq[Link] = {
       import data._
       Seq(
-        retrieveForeignPropertyAnnualSubmission(appConfig, nino, businessId, taxYear, self = false),
         createAmendForeignPropertyAnnualSubmission(appConfig, nino, businessId, taxYear),
+        retrieveForeignPropertyAnnualSubmission(appConfig, nino, businessId, taxYear, self = true),
         deletePropertyAnnualSubmission(appConfig, nino, businessId, taxYear)
       )
     }
   }
 }
-
 
 case class AmendForeignPropertyAnnualSubmissionHateoasData(nino: String, businessId: String, taxYear: String) extends HateoasData

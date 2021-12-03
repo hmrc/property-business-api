@@ -55,9 +55,11 @@
                   "maximum": 99999999999.99,
                   "example": "5000.99"
                 }
-              }
+              },
+              "additionalProperties": false
             }
-          }
+          },
+          "additionalProperties": false
         },
         "expenses": {
           "type": "object",
@@ -123,7 +125,7 @@
               "type": "object",
               "description": "Object holding the rents claimed for the period.",
               "properties": {
-                "rentsReceived": {
+                "amountClaimed": {
                   "description": "The amount of UK Furnished Holiday Lettings rent claimed. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
                   "type": "number",
                   "multipleOf": 0.01,
@@ -131,7 +133,8 @@
                   "maximum": 99999999999.99,
                   "example": "5000.99"
                 }
-              }
+              },
+              "additionalProperties": false
             },
             "consolidatedExpenses": {
               "description": "The sum of all expenses for the specified period. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
@@ -141,9 +144,11 @@
               "maximum": 99999999999.99,
               "example": "5000.99"
             }
-          }
+          },
+          "additionalProperties": false
         }
-      }
+      },
+      "additionalProperties": false
     },
     "ukNonFhlProperty": {
       "type": "object",
@@ -153,7 +158,7 @@
           "type": "object",
           "description": "Object holding the income details for the period.",
           "properties": {
-            "premiumsOfLeaseGrant ": {
+            "premiumsOfLeaseGrant": {
               "description": "Premiums received for the grant of a lease and other lump sums to possess a property. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
               "type": "number",
               "multipleOf": 0.01,
@@ -205,9 +210,11 @@
                   "maximum": 99999999999.99,
                   "example": "5000.99"
                 }
-              }
+              },
+              "additionalProperties": false
             }
-          }
+          },
+          "additionalProperties": false
         },
         "expenses": {
           "type": "object",
@@ -305,7 +312,8 @@
                   "maximum": 99999999999.99,
                   "example": "5000.99"
                 }
-              }
+              },
+              "additionalProperties": false
             },
             "consolidatedExpenses": {
               "description": "The sum of all expenses for the specified period. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
@@ -315,14 +323,55 @@
               "maximum": 99999999999.99,
               "example": "5000.99"
             }
-          }
+          },
+          "additionalProperties": false
         }
-      }
+      },
+      "additionalProperties": false
+    },
+    "links": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "description": "A list of endpoint links that indicate possible actions related to the current resource.",
+        "properties": {
+          "href": {
+            "description": "The relative url of the endpoint",
+            "type": "string",
+            "example": "/individuals/business/property/uk/AA999999A/XAIS12345678910/period/2022-23/4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
+          },
+          "rel": {
+            "description": "A label for the endpoint, which describes how it is related to the current resource. The rel will be self where the action is retrieval of the same resource",
+            "type": "string",
+            "enum": [
+              "self",
+              "list-property-period-summaries",
+              "amend-uk-property-period-summary"
+            ]
+          },
+          "method": {
+            "description": "The HTTP method type for the endpoint",
+            "type": "string",
+            "enum": [
+              "GET",
+              "PUT"
+            ]
+          }
+        },
+        "required": [
+          "href",
+          "rel",
+          "method"
+        ],
+        "additionalProperties": false
+      },
+      "additionalItems": false
     }
   },
   "required": [
     "submittedOn",
     "fromDate",
     "toDate"
-  ]
+  ],
+  "additionalProperties": false
 }

@@ -26,12 +26,12 @@ import v2.mocks.services.{MockAmendForeignPropertyAnnualSubmissionService, MockA
 import v2.models.audit.{AuditError, AuditEvent, AuditResponse, CreateAndAmendForeignPropertyAnnualAuditDetail}
 import v2.models.domain.Nino
 import v2.models.errors._
-import v2.models.hateoas.{HateoasWrapper, Link}
 import v2.models.hateoas.Method.GET
+import v2.models.hateoas.{HateoasWrapper, Link}
 import v2.models.outcomes.ResponseWrapper
 import v2.models.request.amendForeignPropertyAnnualSubmission._
-import v2.models.request.amendForeignPropertyAnnualSubmission.foreignFhlEea._
-import v2.models.request.amendForeignPropertyAnnualSubmission.foreignProperty._
+import v2.models.request.amendForeignPropertyAnnualSubmission.foreignFhlEea.ForeignFhlEea
+import v2.models.request.amendForeignPropertyAnnualSubmission.foreignNonFhl._
 import v2.models.response.amendForeignPropertyAnnualSubmission.AmendForeignPropertyAnnualSubmissionHateoasData
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -141,35 +141,9 @@ class AmendForeignPropertyAnnualSubmissionControllerSpec
       |""".stripMargin
   )
 
-  private val foreignFhlEea = ForeignFhlEea(
-    Some(ForeignFhlEeaAdjustments(
-      Some(5000.99),
-      Some(5000.99),
-      Some(true)
-    )),
-    Some(ForeignFhlEeaAllowances(
-      Some(5000.99),
-      Some(5000.99),
-      Some(5000.99),
-      Some(5000.99)
-    ))
-  )
+  private val foreignFhlEea = ForeignFhlEea(None, None)
 
-  private val foreignPropertyEntry = ForeignPropertyEntry(
-    "FRA",
-    Some(ForeignPropertyAdjustments(
-      Some(5000.99),
-      Some(5000.99)
-    )),
-    Some(ForeignPropertyAllowances(
-      Some(5000.99),
-      Some(5000.99),
-      Some(5000.99),
-      Some(5000.99),
-      Some(5000.99),
-      Some(5000.99)
-    ))
-  )
+  private val foreignPropertyEntry = ForeignNonFhlEntry("FRA", None, None)
 
   val body: AmendForeignPropertyAnnualSubmissionRequestBody = AmendForeignPropertyAnnualSubmissionRequestBody(
     Some(foreignFhlEea),

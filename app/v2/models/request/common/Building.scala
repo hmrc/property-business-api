@@ -14,13 +14,21 @@
  * limitations under the License.
  */
 
-package v2.models.request.amendUkPropertyAnnualSubmission.ukNonFhlProperty
+package v2.models.request.common
 
-import play.api.libs.json.{Json, OFormat}
+import play.api.libs.functional.syntax._
+import play.api.libs.json.{JsPath, Json, Reads, Writes}
 
-case class FirstYear(qualifyingDate: String,
-                     qualifyingAmountExpenditure: BigDecimal)
+case class Building(name: Option[String],
+                    number: Option[String],
+                    postcode: String)
 
-object FirstYear {
-  implicit val format: OFormat[FirstYear] = Json.format[FirstYear]
+object Building {
+  implicit val reads: Reads[Building] = Json.reads[Building]
+
+  implicit val writes: Writes[Building] = (
+    (JsPath \ "name").writeNullable[String] and
+      (JsPath \ "number").writeNullable[String] and
+      (JsPath \ "postCode").write[String]
+    ) (unlift(Building.unapply))
 }

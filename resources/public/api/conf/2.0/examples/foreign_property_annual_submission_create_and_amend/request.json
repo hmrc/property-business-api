@@ -30,7 +30,7 @@
           {
             "amount": 3545.12,
             "firstYear": {
-              "qualifyingDate": "2020-03-29T00:00:00.000Z",
+              "qualifyingDate": "2020-03-29",
               "qualifyingAmountExpenditure": 3453.34
             },
             "building": {

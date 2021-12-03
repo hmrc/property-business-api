@@ -16,15 +16,29 @@
 
 package v2.models.response.listPropertyPeriodSummaries
 
+import config.AppConfig
 import play.api.libs.json.{Json, OWrites, Reads}
+import v2.hateoas.{HateoasLinks, HateoasLinksFactory}
+import v2.models.hateoas.{HateoasData, Link}
 
 case class ListPropertyPeriodSummariesResponse(submissions: Seq[SubmissionPeriod])
 
-object ListPropertyPeriodSummariesResponse {
+object ListPropertyPeriodSummariesResponse extends HateoasLinks {
 
   implicit def reads: Reads[ListPropertyPeriodSummariesResponse] =
     implicitly[Reads[Seq[SubmissionPeriod]]].map(ListPropertyPeriodSummariesResponse(_))
 
   implicit def writes: OWrites[ListPropertyPeriodSummariesResponse] =
     Json.writes[ListPropertyPeriodSummariesResponse]
+
+  implicit object LinksFactory extends HateoasLinksFactory[ListPropertyPeriodSummariesResponse, ListPropertyPeriodSummariesHateoasData] {
+    override def links(appConfig: AppConfig, data: ListPropertyPeriodSummariesHateoasData): Seq[Link] = {
+      import data._
+      Seq(
+        listPropertyPeriodSummaries(appConfig, nino = nino, businessId = businessId, taxYear = taxYear, self = true)
+      )
+    }
+  }
 }
+
+case class ListPropertyPeriodSummariesHateoasData(nino: String, businessId: String, taxYear: String) extends HateoasData

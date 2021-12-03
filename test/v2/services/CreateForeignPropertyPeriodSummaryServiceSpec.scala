@@ -57,7 +57,7 @@ class CreateForeignPropertyPeriodSummaryServiceSpec extends UnitSpec {
     Some(Seq(CreateForeignNonFhlPropertyEntry("FRA",
       Some(ForeignNonFhlPropertyIncome(
         Some(ForeignNonFhlPropertyRentIncome(Some(5000.99))),
-        false,
+        foreignTaxCreditRelief = false,
         Some(5000.99),
         Some(5000.99),
         Some(5000.99),

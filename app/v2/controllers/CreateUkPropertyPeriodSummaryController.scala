@@ -102,13 +102,13 @@ class CreateUkPropertyPeriodSummaryController @Inject()(val authService: Enrolme
            RuleIncorrectOrEmptyBodyError |
            ToDateFormatError |
            FromDateFormatError |
-           MtdErrorWithCustomMessage(ValueFormatError.code) |
-           MtdErrorWithCustomMessage(RuleBothExpensesSuppliedError.code) |
+           MtdErrorWithCode(ValueFormatError.code) |
+           MtdErrorWithCode(RuleBothExpensesSuppliedError.code) |
            RuleToDateBeforeFromDateError |
            RuleOverlappingPeriodError |
            RuleMisalignedPeriodError |
            RuleNotContiguousPeriodError |
-           MtdErrorWithCustomMessage(RuleIncorrectOrEmptyBodyError.code) |
+           MtdErrorWithCode(RuleIncorrectOrEmptyBodyError.code) |
            RuleDuplicateSubmissionError =>
         BadRequest(Json.toJson(errorWrapper))
       case NotFoundError => NotFound(Json.toJson(errorWrapper))

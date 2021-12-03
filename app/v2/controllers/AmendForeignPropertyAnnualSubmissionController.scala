@@ -95,12 +95,12 @@ class AmendForeignPropertyAnnualSubmissionController @Inject()(val authService: 
            NinoFormatError |
            BusinessIdFormatError |
            TaxYearFormatError |
-           MtdErrorWithCustomMessage(CountryCodeFormatError.code) |
-           MtdErrorWithCustomMessage(ValueFormatError.code) |
-           MtdErrorWithCustomMessage(RuleIncorrectOrEmptyBodyError.code) |
+           MtdErrorWithCode(CountryCodeFormatError.code) |
+           MtdErrorWithCode(ValueFormatError.code) |
+           MtdErrorWithCode(RuleIncorrectOrEmptyBodyError.code) |
            RuleTaxYearNotSupportedError |
            RuleTaxYearRangeInvalidError |
-           MtdErrorWithCustomMessage(RuleCountryCodeError.code) => BadRequest(Json.toJson(errorWrapper))
+           MtdErrorWithCode(RuleCountryCodeError.code) => BadRequest(Json.toJson(errorWrapper))
       case DownstreamError => InternalServerError(Json.toJson(errorWrapper))
       case NotFoundError => NotFound(Json.toJson(errorWrapper))
     }

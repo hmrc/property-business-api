@@ -90,10 +90,10 @@ class AmendUkPropertyPeriodSummaryController @Inject()(val authService: Enrolmen
            RuleTaxYearRangeInvalidError |
            RuleTaxYearNotSupportedError |
            RuleIncorrectOrEmptyBodyError |
-           RuleTypeOfBusinessIncorrectError|
-           MtdErrorWithCustomMessage(ValueFormatError.code) |
-           MtdErrorWithCustomMessage(RuleBothExpensesSuppliedError.code) |
-           MtdErrorWithCustomMessage(RuleIncorrectOrEmptyBodyError.code) =>
+           RuleTypeOfBusinessIncorrectError |
+           MtdErrorWithCode(ValueFormatError.code) |
+           MtdErrorWithCode(RuleBothExpensesSuppliedError.code) |
+           MtdErrorWithCode(RuleIncorrectOrEmptyBodyError.code) =>
         BadRequest(Json.toJson(errorWrapper))
       case NotFoundError => NotFound(Json.toJson(errorWrapper))
       case DownstreamError => InternalServerError(Json.toJson(errorWrapper))

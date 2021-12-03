@@ -91,7 +91,7 @@ class ListPropertyPeriodSummariesControllerISpec extends V2IntegrationBaseSpec {
        """.stripMargin
   }
 
-  "Retrieve UK property period summary endpoint" should {
+  "List Property Period Summaries endpoint" should {
     "return a 200 status code" when {
       "any valid request is made" in new Test {
 
@@ -139,7 +139,7 @@ class ListPropertyPeriodSummariesControllerISpec extends V2IntegrationBaseSpec {
         ("AA123456A", "XAIS12345678910", "20223", Status.BAD_REQUEST, TaxYearFormatError),
         ("AA123456A", "XAIS12345678910", "2021-23", Status.BAD_REQUEST, RuleTaxYearRangeInvalidError),
         ("AA123456A", "XAIS12345678910", "2020-21", Status.BAD_REQUEST, RuleTaxYearNotSupportedError),
-        ("AA123456A", "XA123", "2022-23", Status.BAD_REQUEST, BusinessIdFormatError),
+        ("AA123456A", "XA123", "2022-23", Status.BAD_REQUEST, BusinessIdFormatError)
       )
       input.foreach(args => (validationErrorTest _).tupled(args))
     }
@@ -167,7 +167,7 @@ class ListPropertyPeriodSummariesControllerISpec extends V2IntegrationBaseSpec {
         (Status.BAD_REQUEST, "INVALID_TAX_YEAR", Status.BAD_REQUEST, TaxYearFormatError),
         (Status.BAD_REQUEST, "INVALID_CORRELATIONID", Status.INTERNAL_SERVER_ERROR, DownstreamError),
         (Status.NOT_FOUND, "NO_DATA_FOUND", Status.NOT_FOUND, NotFoundError),
-        (Status.BAD_REQUEST, "TAX_YEAR_NOT_SUPPORTED", Status.BAD_REQUEST, RuleTaxYearNotSupportedError),
+        (Status.UNPROCESSABLE_ENTITY, "TAX_YEAR_NOT_SUPPORTED", Status.BAD_REQUEST, RuleTaxYearNotSupportedError),
         (Status.INTERNAL_SERVER_ERROR, "SERVER_ERROR", Status.INTERNAL_SERVER_ERROR, DownstreamError),
         (Status.SERVICE_UNAVAILABLE, "SERVICE_UNAVAILABLE", Status.INTERNAL_SERVER_ERROR, DownstreamError)
       )

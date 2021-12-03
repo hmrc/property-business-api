@@ -79,7 +79,7 @@
               "multipleOf": 0.01,
               "minimum": 0.00,
               "maximum": 1000.00,
-              "example": "5004.49"
+              "example": "100.25"
             }
           },
           "additionalProperties": false
@@ -179,7 +179,7 @@
                 "multipleOf": 0.01,
                 "minimum": 0.00,
                 "maximum": 1000.00,
-                "example": "4004.49"
+                "example": "100.25"
               },
               "structuredBuildingAllowance": {
                 "type": "array",

@@ -89,9 +89,9 @@ class AmendForeignPropertyPeriodSummaryController @Inject()(val authService: Enr
            SubmissionIdFormatError |
            RuleTaxYearRangeInvalidError |
            RuleTaxYearNotSupportedError |
-           MtdErrorWithCustomMessage(ValueFormatError.code) |
-           MtdErrorWithCustomMessage(RuleBothExpensesSuppliedError.code) |
-           MtdErrorWithCustomMessage(RuleIncorrectOrEmptyBodyError.code) |
+           MtdErrorWithCode(ValueFormatError.code) |
+           MtdErrorWithCode(RuleBothExpensesSuppliedError.code) |
+           MtdErrorWithCode(RuleIncorrectOrEmptyBodyError.code) |
            RuleTypeOfBusinessIncorrectError |
            RuleDuplicateCountryCodeError |
            CountryCodeFormatError |

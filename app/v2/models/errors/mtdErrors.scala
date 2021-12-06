@@ -65,6 +65,9 @@ object RuleTaxYearNotSupportedError
   extends MtdError("RULE_TAX_YEAR_NOT_SUPPORTED", "The specified tax year is not supported. The tax year specified is before the minimum tax year value")
 object RuleTaxYearRangeInvalidError
   extends MtdError("RULE_TAX_YEAR_RANGE_INVALID", "Tax year range invalid. A tax year range of one year is required")
+object RulePropertyIncomeAllowanceError
+  extends MtdError("RULE_PROPERTY_INCOME_ALLOWANCE", "The propertyIncomeAllowance cannot be submitted if privateUseAdjustment is supplied")
+
 
 // Missing Date Errors
 object MissingFromDateError extends MtdError("MISSING_FROM_DATE", "The From date parameter is missing")

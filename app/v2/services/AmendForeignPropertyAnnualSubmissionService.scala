@@ -49,12 +49,16 @@ class AmendForeignPropertyAnnualSubmissionService @Inject()(connector: AmendFore
   private def ifsErrorMap =
     Map(
       "INVALID_TAXABLE_ENTITY_ID" -> NinoFormatError,
-      "INVALID_INCOME_SOURCE_ID" -> BusinessIdFormatError,
-      "INVALID_SUBMISSION_ID" -> BusinessIdFormatError,
-      "INVALID_TAX_YEAR" -> DownstreamError,
+      "INVALID_INCOMESOURCEID" -> BusinessIdFormatError,
+      "INVALID_TAX_YEAR" -> TaxYearFormatError,
+      "INCOMPATIBLE_PAYLOAD" -> RuleTypeOfBusinessIncorrectError,
+      "TAX_YEAR_NOT_SUPPORTED" -> RuleTaxYearNotSupportedError,
+      "BUSINESS_VALIDATION_FAILURE" -> RulePropertyIncomeAllowanceError,
+      "INCOME_SOURCE_NOT_FOUND" -> NotFoundError,
+      "MISSING_ALLOWANCES" -> DownstreamError,
       "INVALID_PAYLOAD" -> DownstreamError,
       "INVALID_CORRELATION_ID" -> DownstreamError,
-      "UNPROCESSABLE_ENTITY" -> DownstreamError,
+      "DUPLICATE_COUNTRY_CODE" -> DownstreamError,
       "SERVER_ERROR" -> DownstreamError,
       "SERVICE_UNAVAILABLE" -> DownstreamError
     )

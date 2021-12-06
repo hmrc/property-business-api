@@ -40,7 +40,8 @@ object RetrieveForeignPropertyPeriodSummaryResponse extends HateoasLinks {
       (JsPath \ "foreignProperty").readNullable[Seq[ForeignNonFhlProperty]]
     )(RetrieveForeignPropertyPeriodSummaryResponse.apply _)
 
-  implicit object RetrieveForeignPropertyLinksFactory extends HateoasLinksFactory[RetrieveForeignPropertyPeriodSummaryResponse, RetrieveForeignPropertyPeriodSummaryHateoasData] {
+  implicit object RetrieveForeignPropertyLinksFactory extends
+    HateoasLinksFactory[RetrieveForeignPropertyPeriodSummaryResponse, RetrieveForeignPropertyPeriodSummaryHateoasData] {
     override def links(appConfig: AppConfig, data: RetrieveForeignPropertyPeriodSummaryHateoasData): Seq[Link] = {
       import data._
 

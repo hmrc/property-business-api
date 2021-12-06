@@ -17,16 +17,25 @@
 package v2.models.response.retrieveForeignPropertyAnnualSubmission
 
 import config.AppConfig
-import play.api.libs.json.{Json, OFormat}
+import play.api.libs.json.{JsPath, Json, Reads, Writes}
 import v2.hateoas.{HateoasLinks, HateoasLinksFactory}
+import play.api.libs.functional.syntax._
 import v2.models.hateoas.{HateoasData, Link}
 import v2.models.response.retrieveForeignPropertyAnnualSubmission.foreignFhlEea.ForeignFhlEeaEntry
 import v2.models.response.retrieveForeignPropertyAnnualSubmission.foreignProperty.ForeignPropertyEntry
 
-case class RetrieveForeignPropertyAnnualSubmissionResponse(foreignFhlEea: Option[ForeignFhlEeaEntry], foreignProperty: Option[Seq[ForeignPropertyEntry]])
+case class RetrieveForeignPropertyAnnualSubmissionResponse(
+                                                            submittedOn: String,
+                                                            foreignFhlEea: Option[ForeignFhlEeaEntry],
+                                                            foreignNonFhlProperty: Option[Seq[ForeignPropertyEntry]])
 
 object RetrieveForeignPropertyAnnualSubmissionResponse extends HateoasLinks {
-  implicit  val format: OFormat[RetrieveForeignPropertyAnnualSubmissionResponse] = Json.format[RetrieveForeignPropertyAnnualSubmissionResponse]
+  implicit  val writes: Writes[RetrieveForeignPropertyAnnualSubmissionResponse] = Json.writes[RetrieveForeignPropertyAnnualSubmissionResponse]
+  implicit  val reads: Reads[RetrieveForeignPropertyAnnualSubmissionResponse] = (
+    (JsPath \ "submittedOn").read[String] and
+      (JsPath \ "foreignFhlEea").readNullable[ForeignFhlEeaEntry] and
+      (JsPath \ "foreignProperty").readNullable[Seq[ForeignPropertyEntry]]
+  )(RetrieveForeignPropertyAnnualSubmissionResponse.apply _)
 
   implicit object RetrieveAnnualSubmissionLinksFactory extends
     HateoasLinksFactory[RetrieveForeignPropertyAnnualSubmissionResponse, RetrieveForeignPropertyAnnualSubmissionHateoasData] {

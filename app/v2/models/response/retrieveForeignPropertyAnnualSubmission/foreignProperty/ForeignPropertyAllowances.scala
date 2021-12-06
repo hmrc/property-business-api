@@ -21,10 +21,10 @@ import play.api.libs.json.{Json, OFormat}
 case class ForeignPropertyAllowances(annualInvestmentAllowance: Option[BigDecimal],
                                      costOfReplacingDomesticItems: Option[BigDecimal],
                                      zeroEmissionsGoodsVehicleAllowance: Option[BigDecimal],
-                                     propertyAllowance: Option[BigDecimal],
                                      otherCapitalAllowance: Option[BigDecimal],
-                                     structureAndBuildingAllowance: Option[BigDecimal],
-                                     electricChargePointAllowance:  Option[BigDecimal]
+                                     electricChargePointAllowance:  Option[BigDecimal],
+                                     zeroEmissionsCarAllowance: Option[BigDecimal],
+                                     propertyAllowance: Option[BigDecimal]
                                     )
 
 object ForeignPropertyAllowances {

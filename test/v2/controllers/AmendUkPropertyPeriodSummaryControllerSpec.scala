@@ -296,7 +296,7 @@ class AmendUkPropertyPeriodSummaryControllerSpec
             .wrap((), AmendUkPropertyPeriodSummaryHateoasData(nino, businessId, taxYear, submissionId))
             .returns(HateoasWrapper((), Seq(testHateoasLink)))
 
-          val result: Future[Result] = controller.handleRequest(nino, businessId, taxYear, submissionId)(fakePostRequest(requestBodyJsonConsolidatedExpenses))
+          val result: Future[Result] = controller.handleRequest(nino, businessId, taxYear, submissionId)(fakeRequestWithBody(requestBodyJsonConsolidatedExpenses))
           status(result) shouldBe OK
           header("X-CorrelationId", result) shouldBe Some(correlationId)
         }
@@ -317,7 +317,7 @@ class AmendUkPropertyPeriodSummaryControllerSpec
             .wrap((), AmendUkPropertyPeriodSummaryHateoasData(nino, businessId, taxYear, submissionId))
             .returns(HateoasWrapper((), Seq(testHateoasLink)))
 
-          val result: Future[Result] = controller.handleRequest(nino, businessId, taxYear, submissionId)(fakePostRequest(requestBodyJson))
+          val result: Future[Result] = controller.handleRequest(nino, businessId, taxYear, submissionId)(fakeRequestWithBody(requestBodyJson))
           status(result) shouldBe OK
           header("X-CorrelationId", result) shouldBe Some(correlationId)
 
@@ -333,7 +333,7 @@ class AmendUkPropertyPeriodSummaryControllerSpec
               .requestFor(rawData.copy(body = requestBodyJsonConsolidatedExpenses))
               .returns(Left(ErrorWrapper(correlationId, error, None)))
 
-            val result: Future[Result] = controller.handleRequest(nino, businessId, taxYear, submissionId)(fakePostRequest(requestBodyJsonConsolidatedExpenses))
+            val result: Future[Result] = controller.handleRequest(nino, businessId, taxYear, submissionId)(fakeRequestWithBody(requestBodyJsonConsolidatedExpenses))
 
             status(result) shouldBe expectedStatus
             contentAsJson(result) shouldBe Json.toJson(error)
@@ -367,7 +367,7 @@ class AmendUkPropertyPeriodSummaryControllerSpec
               .amend(requestData)
               .returns(Future.successful(Left(ErrorWrapper(correlationId, mtdError))))
 
-            val result: Future[Result] = controller.handleRequest(nino, businessId, taxYear, submissionId)(fakePostRequest(requestBodyJson))
+            val result: Future[Result] = controller.handleRequest(nino, businessId, taxYear, submissionId)(fakeRequestWithBody(requestBodyJson))
 
             status(result) shouldBe expectedStatus
             contentAsJson(result) shouldBe Json.toJson(mtdError)

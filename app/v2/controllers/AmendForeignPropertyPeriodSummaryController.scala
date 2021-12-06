@@ -44,7 +44,7 @@ class AmendForeignPropertyPeriodSummaryController @Inject()(val authService: Enr
 
 
   implicit val endpointLogContext: EndpointLogContext =
-    EndpointLogContext(controllerName = "AmendForeignPropertyPeriodicController", endpointName = "amendForeignPropertyPeriodic")
+    EndpointLogContext(controllerName = "AmendForeignPropertyPeriodSummaryController", endpointName = "amendForeignPropertyPeriodSummary")
 
   def handleRequest(nino: String, businessId: String, taxYear: String, submissionId: String): Action[JsValue] =
     authorisedAction(nino).async(parse.json) { implicit request =>
@@ -89,21 +89,16 @@ class AmendForeignPropertyPeriodSummaryController @Inject()(val authService: Enr
            TaxYearFormatError |
            BusinessIdFormatError |
            SubmissionIdFormatError |
-           CountryCodeFormatError |
-           FromDateFormatError |
-           ToDateFormatError |
-           RuleCountryCodeError |
-           RuleOverlappingPeriodError |
-           RuleMisalignedPeriodError |
-           RuleNotContiguousPeriodError |
-           RuleDuplicateSubmissionError |
            RuleTaxYearRangeInvalidError |
            RuleTaxYearNotSupportedError |
            RuleIncorrectOrEmptyBodyError |
            RuleTypeOfBusinessIncorrectError |
+           MtdErrorWithCode(CountryCodeFormatError.code) |
+           MtdErrorWithCode(RuleCountryCodeError.code) |
            MtdErrorWithCode(ValueFormatError.code) |
            MtdErrorWithCode(RuleBothExpensesSuppliedError.code) |
-           MtdErrorWithCode(RuleIncorrectOrEmptyBodyError.code) =>
+           MtdErrorWithCode(RuleIncorrectOrEmptyBodyError.code) |
+           MtdErrorWithCode(RuleDuplicateCountryCodeError.code) =>
         BadRequest(Json.toJson(errorWrapper))
       case NotFoundError => NotFound(Json.toJson(errorWrapper))
       case DownstreamError => InternalServerError(Json.toJson(errorWrapper))

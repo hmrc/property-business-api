@@ -28,7 +28,8 @@ import v2.stubs.{AuthStub, IfsStub, MtdIdLookupStub}
 class AmendForeignPropertyPeriodSummaryControllerISpec extends V2IntegrationBaseSpec {
 
   private val requestBodyJson = Json.parse(
-    """{
+    """
+      |{
       |  "foreignFhlEea": {
       |    "income": {
       |      "rentAmount": 5000.99
@@ -69,10 +70,13 @@ class AmendForeignPropertyPeriodSummaryControllerISpec extends V2IntegrationBase
       |      }
       |    }
       |  ]
-      |}""".stripMargin)
+      |}
+    """.stripMargin
+  )
 
   private val requestBodyJsonConsolidatedExpenses = Json.parse(
-    """{
+    """
+      |{
       |  "foreignFhlEea": {
       |    "income": {
       |      "rentAmount": 5000.99
@@ -101,10 +105,13 @@ class AmendForeignPropertyPeriodSummaryControllerISpec extends V2IntegrationBase
       |      }
       |    }
       |  ]
-      |}""".stripMargin)
+      |}
+    """.stripMargin
+  )
 
-  val invalidValueRequestJson = Json.parse(
-    """{
+  private val invalidValueRequestJson = Json.parse(
+    """
+      |{
       |  "foreignFhlEea": {
       |    "income": {
       |      "rentAmount": 5000.9999
@@ -145,10 +152,13 @@ class AmendForeignPropertyPeriodSummaryControllerISpec extends V2IntegrationBase
       |      }
       |    }
       |  ]
-      |}""".stripMargin)
+      |}
+    """.stripMargin
+  )
 
-  val bothExpensesSuppliedRequestJson = Json.parse(
-    """{
+  private val bothExpensesSuppliedRequestJson = Json.parse(
+    """
+      |{
       |  "foreignFhlEea": {
       |    "income": {
       |      "rentAmount": 5000.99
@@ -191,7 +201,46 @@ class AmendForeignPropertyPeriodSummaryControllerISpec extends V2IntegrationBase
       |      }
       |    }
       |  ]
-      |}""".stripMargin)
+      |}
+    """.stripMargin
+  )
+
+  private val duplicateCountryCodeRequestJson = Json.parse(
+    """
+      |{
+      |  "foreignNonFhlProperty": [
+      |    {
+      |      "countryCode": "FRA",
+      |      "expenses": {
+      |        "repairsAndMaintenance": 5000.99
+      |      }
+      |    },
+      |    {
+      |      "countryCode": "FRA",
+      |      "expenses": {
+      |        "repairsAndMaintenance": 5000.99
+      |      }
+      |    }
+      |
+      |  ]
+      |}
+    """.stripMargin
+  )
+
+  private def invalidCountryCodeRequestJson(countryCode: String): JsValue = Json.parse(
+    s"""
+      |{
+      |  "foreignNonFhlProperty": [
+      |    {
+      |      "countryCode": "$countryCode",
+      |      "expenses": {
+      |        "repairsAndMaintenance": 5000.99
+      |      }
+      |    }
+      |  ]
+      |}
+    """.stripMargin
+  )
 
   val allInvalidValueRequestError: MtdError = ValueFormatError.copy(
     paths = Some(List(
@@ -220,11 +269,19 @@ class AmendForeignPropertyPeriodSummaryControllerISpec extends V2IntegrationBase
     ))
   )
 
-  val RuleBothExpensesSuppliedRequestError: MtdError = RuleBothExpensesSuppliedError.copy(
+  val ruleBothExpensesSuppliedRequestError: MtdError = RuleBothExpensesSuppliedError.copy(
     paths = Some(List(
       "/foreignFhlEea/expenses",
       "/foreignNonFhlProperty/0/expenses"
     ))
+  )
+
+  val ruleDuplicateCountryCodeRequestError: MtdError = RuleDuplicateCountryCodeError.forDuplicatedCodesAndPaths(
+    code = "FRA",
+    paths = Seq(
+      "/foreignNonFhlProperty/0/countryCode",
+      "/foreignNonFhlProperty/1/countryCode"
+    )
   )
 
   private trait Test {
@@ -254,26 +311,35 @@ class AmendForeignPropertyPeriodSummaryControllerISpec extends V2IntegrationBase
 
     val responseBody: JsValue = Json.parse(
       s"""
+        |{
+        |  "links": [
+        |    {
+        |      "href":"/individuals/business/property/foreign/$nino/$businessId/period/$taxYear/$submissionId",
+        |      "method":"PUT",
+        |      "rel":"amend-foreign-property-period-summary"
+        |    },
+        |    {
+        |      "href":"/individuals/business/property/foreign/$nino/$businessId/period/$taxYear/$submissionId",
+        |      "method":"GET",
+        |      "rel":"self"
+        |    },
+        |    {
+        |      "href":"/individuals/business/property/$nino/$businessId/period/$taxYear",
+        |      "method":"GET",
+        |      "rel":"list-property-period-summaries"
+        |    }
+        |  ]
+        |}
+      """.stripMargin
+    )
+
+    def errorBody(code: String): String =
+      s"""
          |{
-         |  "links": [
-         |    {
-         |      "href":"/individuals/business/property/foreign/$nino/$businessId/period/$taxYear/$submissionId",
-         |      "method":"PUT",
-         |      "rel":"amend-foreign-property-period-summary"
-         |    },
-         |    {
-         |      "href":"/individuals/business/property/foreign/$nino/$businessId/period/$taxYear/$submissionId",
-         |      "method":"GET",
-         |      "rel":"self"
-         |    },
-         |    {
-         |      "href":"/individuals/business/property/$nino/$businessId/period/$taxYear",
-         |      "method":"GET",
-         |      "rel":"list-property-period-summaries"
-         |    }
-         |  ]
+         |   "code": "$code",
+         |   "reason": "ifs message"
          |}
-         |""".stripMargin)
+      """.stripMargin
   }
 
   "calling the amend foreign property period summary endpoint" should {
@@ -291,6 +357,7 @@ class AmendForeignPropertyPeriodSummaryControllerISpec extends V2IntegrationBase
         val response: WSResponse = await(request().put(requestBodyJson))
         response.status shouldBe OK
         response.json shouldBe responseBody
+        response.header("Content-Type") shouldBe Some("application/json")
         response.header("X-CorrelationId").nonEmpty shouldBe true
       }
 
@@ -304,6 +371,7 @@ class AmendForeignPropertyPeriodSummaryControllerISpec extends V2IntegrationBase
         val response: WSResponse = await(request().put(requestBodyJsonConsolidatedExpenses))
         response.status shouldBe OK
         response.json shouldBe responseBody
+        response.header("Content-Type") shouldBe Some("application/json")
         response.header("X-CorrelationId").nonEmpty shouldBe true
       }
     }
@@ -365,11 +433,51 @@ class AmendForeignPropertyPeriodSummaryControllerISpec extends V2IntegrationBase
         ("AA123456A", "2022-23", "XAIS12345678910", "4557ecb5-fd32-48cc-81f5-e6acd1099f3c", Json.parse(s"""{"foreignFhlEea": {}}""".stripMargin), BAD_REQUEST,
           RuleIncorrectOrEmptyBodyError.copy(paths = Some(Seq("/foreignFhlEea")))),
         ("AA123456A", "2022-23", "XAIS12345678910", "4557ecb5-fd32-48cc-81f5-e6acd1099f3c", invalidValueRequestJson, BAD_REQUEST, allInvalidValueRequestError),
-        ("AA123456A", "2022-23", "XAIS12345678910", "4557ecb5-fd32-48cc-81f5-e6acd1099f3c",
-          bothExpensesSuppliedRequestJson, BAD_REQUEST, RuleBothExpensesSuppliedRequestError)
+        ("AA123456A", "2022-23", "XAIS12345678910", "4557ecb5-fd32-48cc-81f5-e6acd1099f3c", bothExpensesSuppliedRequestJson, BAD_REQUEST,
+          ruleBothExpensesSuppliedRequestError),
+        ("AA123456A", "2022-23", "XAIS12345678910", "4557ecb5-fd32-48cc-81f5-e6acd1099f3c", duplicateCountryCodeRequestJson, BAD_REQUEST,
+          ruleDuplicateCountryCodeRequestError),
+        ("AA123456A", "2022-23", "XAIS12345678910", "4557ecb5-fd32-48cc-81f5-e6acd1099f3c", invalidCountryCodeRequestJson("FRANCE"), BAD_REQUEST,
+          CountryCodeFormatError.copy(paths = Some(Seq("/foreignNonFhlProperty/0/countryCode")))),
+        ("AA123456A", "2022-23", "XAIS12345678910", "4557ecb5-fd32-48cc-81f5-e6acd1099f3c", invalidCountryCodeRequestJson("SBT"), BAD_REQUEST,
+          RuleCountryCodeError.copy(paths = Some(Seq("/foreignNonFhlProperty/0/countryCode"))))
       )
 
       input.foreach(args => (validationErrorTest _).tupled(args))
+    }
+
+    "return ifs service error" when {
+      def serviceErrorTest(ifsStatus: Int, ifsCode: String, expectedStatus: Int, expectedBody: MtdError): Unit = {
+        s"ifs returns an $ifsCode error and status $ifsStatus" in new Test {
+
+          override def setupStubs(): StubMapping = {
+            AuthStub.authorised()
+            MtdIdLookupStub.ninoFound(nino)
+            IfsStub.onError(IfsStub.PUT, ifsUri, ifsQueryParams, ifsStatus, errorBody(ifsCode))
+          }
+
+          val response: WSResponse = await(request().put(requestBodyJson))
+          response.status shouldBe expectedStatus
+          response.json shouldBe Json.toJson(expectedBody)
+        }
+      }
+
+      val input = Seq(
+        (BAD_REQUEST, "INVALID_TAXABLE_ENTITY_ID", BAD_REQUEST, NinoFormatError),
+        (BAD_REQUEST, "INVALID_TAX_YEAR", BAD_REQUEST, TaxYearFormatError),
+        (BAD_REQUEST, "INVALID_INCOMESOURCEID", BAD_REQUEST, BusinessIdFormatError),
+        (BAD_REQUEST, "INVALID_SUBMISSION_ID", BAD_REQUEST, SubmissionIdFormatError),
+        (BAD_REQUEST, "INVALID_CORRELATIONID", INTERNAL_SERVER_ERROR, DownstreamError),
+        (BAD_REQUEST, "INVALID_PAYLOAD", INTERNAL_SERVER_ERROR, DownstreamError),
+        (UNPROCESSABLE_ENTITY, "INCOMPATIBLE_PAYLOAD", BAD_REQUEST, RuleTypeOfBusinessIncorrectError),
+        (UNPROCESSABLE_ENTITY, "DUPLICATE_COUNTRY_CODE", BAD_REQUEST, RuleDuplicateCountryCodeError),
+        (UNPROCESSABLE_ENTITY, "TAX_YEAR_NOT_SUPPORTED", BAD_REQUEST, RuleTaxYearNotSupportedError),
+        (UNPROCESSABLE_ENTITY, "BUSINESS_VALIDATION_FAILURE", INTERNAL_SERVER_ERROR, DownstreamError),
+        (NOT_FOUND, "NO_DATA_FOUND", NOT_FOUND, NotFoundError),
+        (INTERNAL_SERVER_ERROR, "SERVER_ERROR", INTERNAL_SERVER_ERROR, DownstreamError),
+        (SERVICE_UNAVAILABLE, "SERVICE_UNAVAILABLE", INTERNAL_SERVER_ERROR, DownstreamError)
+      )
+      input.foreach(args => (serviceErrorTest _).tupled(args))
     }
   }
 }

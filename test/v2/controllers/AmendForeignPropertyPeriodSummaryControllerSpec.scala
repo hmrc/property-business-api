@@ -47,7 +47,7 @@ class AmendForeignPropertyPeriodSummaryControllerSpec
 
   private val nino = "AA123456A"
   private val businessId = "XAIS12345678910"
-  private val taxYear = "2020-21"
+  private val taxYear = "2022-23"
   private val submissionId = "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
   private val correlationId = "a1e8057e-fbbc-47a8-a8b4-78d9f015c253"
 
@@ -81,7 +81,7 @@ class AmendForeignPropertyPeriodSummaryControllerSpec
           Some(5000.99),
           Some(5000.99),
           Some(5000.99),
-          Some(5000.99)
+          None
         ))
       )),
       Some(Seq(AmendForeignNonFhlPropertyEntry("FRA",
@@ -103,7 +103,7 @@ class AmendForeignPropertyPeriodSummaryControllerSpec
           Some(5000.99),
           Some(5000.99),
           Some(5000.99),
-          Some(5000.99)
+          None
         ))))
       ))
 
@@ -138,15 +138,16 @@ class AmendForeignPropertyPeriodSummaryControllerSpec
           None,
           None,
           None,
+          Some(5000.99),
+          Some(5000.99),
           None,
-          Some(5000.99),
-          Some(5000.99),
           Some(5000.99)
         ))))
       ))
 
   private val requestBodyJson = Json.parse(
-    """{
+    """
+      |{
       |  "foreignFhlEea": {
       |    "income": {
       |      "rentAmount": 5000.99
@@ -189,10 +190,13 @@ class AmendForeignPropertyPeriodSummaryControllerSpec
       |      }
       |    }
       |  ]
-      |}""".stripMargin)
+      |}
+    """.stripMargin
+  )
 
   private val requestBodyJsonConsolidatedExpenses = Json.parse(
-    """{
+    """
+      |{
       |  "foreignFhlEea": {
       |    "income": {
       |      "rentAmount": 5000.99
@@ -221,7 +225,9 @@ class AmendForeignPropertyPeriodSummaryControllerSpec
       |      }
       |    }
       |  ]
-      |}""".stripMargin)
+      |}
+    """.stripMargin
+  )
 
   private val requestData = AmendForeignPropertyPeriodSummaryRequest(Nino(nino), businessId, taxYear, submissionId, requestBody)
   private val rawData = AmendForeignPropertyPeriodSummaryRawData(nino, businessId, taxYear, submissionId, requestBodyJson)
@@ -247,7 +253,8 @@ class AmendForeignPropertyPeriodSummaryControllerSpec
       |    }
       |  ]
       |}
-      |""".stripMargin)
+    """.stripMargin
+  )
 
   private val testHateoasLinks =
     Seq(
@@ -275,7 +282,7 @@ class AmendForeignPropertyPeriodSummaryControllerSpec
           .wrap((), AmendForeignPropertyPeriodSummaryHateoasData(nino, businessId, taxYear, submissionId))
           .returns(HateoasWrapper((), testHateoasLinks))
 
-        val result: Future[Result] = controller.handleRequest(nino, businessId, taxYear, submissionId)(fakePostRequest(requestBodyJsonConsolidatedExpenses))
+        val result: Future[Result] = controller.handleRequest(nino, businessId, taxYear, submissionId)(fakeRequestWithBody(requestBodyJsonConsolidatedExpenses))
         status(result) shouldBe OK
         header("X-CorrelationId", result) shouldBe Some(correlationId)
       }
@@ -295,7 +302,7 @@ class AmendForeignPropertyPeriodSummaryControllerSpec
           .wrap((), AmendForeignPropertyPeriodSummaryHateoasData(nino, businessId, taxYear, submissionId))
           .returns(HateoasWrapper((), testHateoasLinks))
 
-        val result: Future[Result] = controller.handleRequest(nino, businessId, taxYear, submissionId)(fakePostRequest(requestBodyJson))
+        val result: Future[Result] = controller.handleRequest(nino, businessId, taxYear, submissionId)(fakeRequestWithBody(requestBodyJson))
         status(result) shouldBe OK
         header("X-CorrelationId", result) shouldBe Some(correlationId)
       }
@@ -310,7 +317,7 @@ class AmendForeignPropertyPeriodSummaryControllerSpec
               .parseRequest(rawData.copy(body = requestBodyJsonConsolidatedExpenses))
               .returns(Left(ErrorWrapper(correlationId, error, None)))
 
-            val result: Future[Result] = controller.handleRequest(nino, businessId, taxYear, submissionId)(fakePostRequest(requestBodyJsonConsolidatedExpenses))
+            val result: Future[Result] = controller.handleRequest(nino, businessId, taxYear, submissionId)(fakeRequestWithBody(requestBodyJsonConsolidatedExpenses))
 
             status(result) shouldBe expectedStatus
             contentAsJson(result) shouldBe Json.toJson(error)
@@ -318,17 +325,21 @@ class AmendForeignPropertyPeriodSummaryControllerSpec
           }
         }
 
+        val paths = Some(Seq("/path"))
         val input = Seq(
           (BadRequestError, BAD_REQUEST),
           (NinoFormatError, BAD_REQUEST),
           (TaxYearFormatError, BAD_REQUEST),
           (BusinessIdFormatError, BAD_REQUEST),
           (SubmissionIdFormatError, BAD_REQUEST),
-          (CountryCodeFormatError, BAD_REQUEST),
-          (RuleCountryCodeError, BAD_REQUEST),
+          (RuleTaxYearRangeInvalidError, BAD_REQUEST),
           (RuleTaxYearNotSupportedError, BAD_REQUEST),
-          (RuleTypeOfBusinessIncorrectError, BAD_REQUEST),
-          (DownstreamError, INTERNAL_SERVER_ERROR)
+          (RuleIncorrectOrEmptyBodyError.copy(paths = paths), BAD_REQUEST),
+          (ValueFormatError.copy(paths = paths), BAD_REQUEST),
+          (RuleBothExpensesSuppliedError.copy(paths = paths), BAD_REQUEST),
+          (RuleDuplicateCountryCodeError.copy(paths = paths), BAD_REQUEST),
+          (CountryCodeFormatError.copy(paths = paths), BAD_REQUEST),
+          (RuleCountryCodeError.copy(paths = paths), BAD_REQUEST)
         )
 
         input.foreach(args => (errorsFromParserTester _).tupled(args))
@@ -346,7 +357,7 @@ class AmendForeignPropertyPeriodSummaryControllerSpec
               .amend(requestData)
               .returns(Future.successful(Left(ErrorWrapper(correlationId, mtdError))))
 
-            val result: Future[Result] = controller.handleRequest(nino, businessId, taxYear, submissionId)(fakePostRequest(requestBodyJson))
+            val result: Future[Result] = controller.handleRequest(nino, businessId, taxYear, submissionId)(fakeRequestWithBody(requestBodyJson))
 
             status(result) shouldBe expectedStatus
             contentAsJson(result) shouldBe Json.toJson(mtdError)
@@ -360,10 +371,9 @@ class AmendForeignPropertyPeriodSummaryControllerSpec
           (BusinessIdFormatError, BAD_REQUEST),
           (SubmissionIdFormatError, BAD_REQUEST),
           (NotFoundError, NOT_FOUND),
-          (CountryCodeFormatError, BAD_REQUEST),
-          (RuleCountryCodeError, BAD_REQUEST),
           (RuleTypeOfBusinessIncorrectError, BAD_REQUEST),
           (RuleTaxYearNotSupportedError, BAD_REQUEST),
+          (RuleDuplicateCountryCodeError, BAD_REQUEST),
           (DownstreamError, INTERNAL_SERVER_ERROR)
         )
 

@@ -118,7 +118,7 @@ class CreateForeignPropertyPeriodSummaryControllerSpec
                 CreateForeignPropertyPeriodSummaryHateoasData(nino = nino, businessId = businessId, taxYear = taxYear, submissionId = submissionId))
           .returns(HateoasWrapper(response, testHateoasLinks))
 
-        val result: Future[Result] = controller.handleRequest(nino, businessId, taxYear)(fakePostRequest(requestBodyJson))
+        val result: Future[Result] = controller.handleRequest(nino, businessId, taxYear)(fakeRequestWithBody(requestBodyJson))
 
         contentAsJson(result) shouldBe hateoasResponse
         status(result) shouldBe CREATED
@@ -135,7 +135,7 @@ class CreateForeignPropertyPeriodSummaryControllerSpec
               .returns(Left(ErrorWrapper(correlationId, error, None)))
 
             val result: Future[Result] =
-              controller.handleRequest(nino = nino, businessId = businessId, taxYear = taxYear)(fakePostRequest(requestBodyJson))
+              controller.handleRequest(nino = nino, businessId = businessId, taxYear = taxYear)(fakeRequestWithBody(requestBodyJson))
 
             contentAsJson(result) shouldBe Json.toJson(error)
             status(result) shouldBe expectedStatus
@@ -179,7 +179,7 @@ class CreateForeignPropertyPeriodSummaryControllerSpec
               .returns(Future.successful(Left(ErrorWrapper(correlationId, mtdError))))
 
             val result: Future[Result] =
-              controller.handleRequest(nino = nino, businessId = businessId, taxYear = taxYear)(fakePostRequest(requestBodyJson))
+              controller.handleRequest(nino = nino, businessId = businessId, taxYear = taxYear)(fakeRequestWithBody(requestBodyJson))
 
             contentAsJson(result) shouldBe Json.toJson(mtdError)
             status(result) shouldBe expectedStatus

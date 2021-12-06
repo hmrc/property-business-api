@@ -31,7 +31,7 @@ trait MockAmendForeignPropertyPeriodSummaryService extends MockFactory {
 
   val mockService: AmendForeignPropertyPeriodSummaryService = mock[AmendForeignPropertyPeriodSummaryService]
 
-  object MockAmendForeignPropertyService {
+  object MockAmendForeignPropertyPeriodSummaryService {
 
     def amend(requestData: AmendForeignPropertyPeriodSummaryRequest): CallHandler[Future[Either[ErrorWrapper, ResponseWrapper[Unit]]]] = {
       (mockService

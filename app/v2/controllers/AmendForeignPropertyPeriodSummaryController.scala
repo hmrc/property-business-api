@@ -17,18 +17,18 @@
 package v2.controllers
 
 import cats.data.EitherT
-import cats.implicits._
+import cats.implicits.catsSyntaxEitherId
 import javax.inject.{Inject, Singleton}
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.{Action, ControllerComponents}
 import utils.{IdGenerator, Logging}
+import v2.controllers.requestParsers.AmendForeignPropertyPeriodSummaryRequestParser
 import v2.hateoas.HateoasFactory
 import v2.models.errors._
-import v2.models.response.amendForeignPropertyPeriodSummary.AmendForeignPropertyPeriodSummaryResponse.AmendForeignPropertyLinksFactory
 import v2.models.request.amendForeignPropertyPeriodSummary.AmendForeignPropertyPeriodSummaryRawData
 import v2.models.response.amendForeignPropertyPeriodSummary.AmendForeignPropertyPeriodSummaryHateoasData
-import v2.controllers.requestParsers.AmendForeignPropertyPeriodSummaryRequestParser
-import v2.services.{AmendForeignPropertyPeriodSummaryService, EnrolmentsAuthService, MtdIdLookupService}
+import v2.models.response.amendForeignPropertyPeriodSummary.AmendForeignPropertyPeriodSummaryResponse.AmendForeignPropertyLinksFactory
+import v2.services._
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -42,33 +42,32 @@ class AmendForeignPropertyPeriodSummaryController @Inject()(val authService: Enr
                                                             idGenerator: IdGenerator)(implicit ec: ExecutionContext)
   extends AuthorisedController(cc) with BaseController with Logging {
 
-
   implicit val endpointLogContext: EndpointLogContext =
-    EndpointLogContext(controllerName = "AmendForeignPropertyPeriodicController", endpointName = "amendForeignPropertyPeriodic")
+    EndpointLogContext(controllerName = "AmendForeignPropertyController", endpointName = "amendForeignProperty")
 
   def handleRequest(nino: String, businessId: String, taxYear: String, submissionId: String): Action[JsValue] =
     authorisedAction(nino).async(parse.json) { implicit request =>
       implicit val correlationId: String = idGenerator.getCorrelationId
       logger.info(message = s"[${endpointLogContext.controllerName}][${endpointLogContext.endpointName}] " +
         s"with correlationId : $correlationId")
-      val rawData = AmendForeignPropertyPeriodSummaryRawData(nino, businessId, taxYear, submissionId, request.body)
-      val result =
-      for {
-        parsedRequest <- EitherT.fromEither[Future](parser.parseRequest(rawData))
-        serviceResponse <- EitherT(service.amendForeignPropertyPeriodSummary(parsedRequest))
-        vendorResponse <- EitherT.fromEither[Future](
-          hateoasFactory.wrap(serviceResponse.responseData,
-            AmendForeignPropertyPeriodSummaryHateoasData(nino, businessId, taxYear, submissionId)).
-            asRight[ErrorWrapper]
-        )
-      } yield {
-        logger.info(
-          s"[${endpointLogContext.controllerName}][${endpointLogContext.endpointName}] - " +
-            s"Success response received with CorrelationId: ${serviceResponse.correlationId}")
+        val rawData = AmendForeignPropertyPeriodSummaryRawData(nino, businessId, taxYear, submissionId, request.body)
+        val result =
+          for {
+            parsedRequest <- EitherT.fromEither[Future](parser.parseRequest(rawData))
+            serviceResponse <- EitherT(service.amendForeignPropertyPeriodSummary(parsedRequest))
+            vendorResponse <- EitherT.fromEither[Future](
+              hateoasFactory.wrap(serviceResponse.responseData,
+                AmendForeignPropertyPeriodSummaryHateoasData(nino, businessId, taxYear, submissionId)).
+                asRight[ErrorWrapper]
+            )
+          } yield {
+            logger.info(
+              s"[${endpointLogContext.controllerName}][${endpointLogContext.endpointName}] - " +
+                s"Success response received with CorrelationId: ${serviceResponse.correlationId}")
 
-        Ok(Json.toJson(vendorResponse))
-          .withApiHeaders(serviceResponse.correlationId)
-      }
+            Ok(Json.toJson(vendorResponse))
+            .withApiHeaders(serviceResponse.correlationId)
+        }
 
       result.leftMap { errorWrapper =>
         val resCorrelationId = errorWrapper.correlationId
@@ -81,7 +80,6 @@ class AmendForeignPropertyPeriodSummaryController @Inject()(val authService: Enr
       }.merge
     }
 
-
   private def errorResult(errorWrapper: ErrorWrapper) = {
     (errorWrapper.error: @unchecked) match {
       case BadRequestError |
@@ -89,21 +87,15 @@ class AmendForeignPropertyPeriodSummaryController @Inject()(val authService: Enr
            TaxYearFormatError |
            BusinessIdFormatError |
            SubmissionIdFormatError |
-           CountryCodeFormatError |
-           FromDateFormatError |
-           ToDateFormatError |
-           RuleCountryCodeError |
-           RuleOverlappingPeriodError |
-           RuleMisalignedPeriodError |
-           RuleNotContiguousPeriodError |
-           RuleDuplicateSubmissionError |
            RuleTaxYearRangeInvalidError |
            RuleTaxYearNotSupportedError |
-           RuleIncorrectOrEmptyBodyError |
+           MtdErrorWithCustomMessage(ValueFormatError.code) |
+           MtdErrorWithCustomMessage(RuleBothExpensesSuppliedError.code) |
+           MtdErrorWithCustomMessage(RuleIncorrectOrEmptyBodyError.code) |
            RuleTypeOfBusinessIncorrectError |
-           MtdErrorWithCode(ValueFormatError.code) |
-           MtdErrorWithCode(RuleBothExpensesSuppliedError.code) |
-           MtdErrorWithCode(RuleIncorrectOrEmptyBodyError.code) =>
+           RuleDuplicateCountryCodeError |
+           CountryCodeFormatError |
+           RuleCountryCodeError =>
         BadRequest(Json.toJson(errorWrapper))
       case NotFoundError => NotFound(Json.toJson(errorWrapper))
       case DownstreamError => InternalServerError(Json.toJson(errorWrapper))

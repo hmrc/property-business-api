@@ -17,21 +17,21 @@
 package v2.controllers
 
 import play.api.libs.json.{JsValue, Json}
-import uk.gov.hmrc.http.HeaderCarrier
 import play.api.mvc.Result
-import v2.models.response.amendForeignPropertyPeriodSummary.AmendForeignPropertyPeriodSummaryHateoasData
-import v2.models.hateoas.Method._
-import v2.mocks.requestParsers.MockAmendForeignPropertyPeriodSummaryRequestParser
+import uk.gov.hmrc.http.HeaderCarrier
 import v2.mocks.MockIdGenerator
 import v2.mocks.hateoas.MockHateoasFactory
-import v2.mocks.services.{MockAmendForeignPropertyPeriodSummaryService, MockEnrolmentsAuthService, MockMtdIdLookupService}
+import v2.mocks.requestParsers.MockAmendForeignPropertyPeriodSummaryRequestParser
+import v2.mocks.services._
 import v2.models.domain.Nino
 import v2.models.errors._
+import v2.models.hateoas.Method.GET
 import v2.models.hateoas.{HateoasWrapper, Link}
 import v2.models.outcomes.ResponseWrapper
 import v2.models.request.amendForeignPropertyPeriodSummary._
-import v2.models.request.common.foreignFhlEea.{AmendForeignFhlEea, AmendForeignFhlEeaExpenses, ForeignFhlEeaIncome}
+import v2.models.request.common.foreignFhlEea._
 import v2.models.request.common.foreignPropertyEntry._
+import v2.models.response.amendForeignPropertyPeriodSummary._
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -72,45 +72,51 @@ class AmendForeignPropertyPeriodSummaryControllerSpec
   val requestBody: AmendForeignPropertyPeriodSummaryRequestBody =
     AmendForeignPropertyPeriodSummaryRequestBody(
       Some(AmendForeignFhlEea(
-        Some(ForeignFhlEeaIncome(Some(5000.99))),
+        Some(ForeignFhlEeaIncome(
+          Some(1000.12)
+        )),
         Some(AmendForeignFhlEeaExpenses(
-          Some(5000.99),
-          Some(5000.99),
-          Some(5000.99),
-          Some(5000.99),
-          Some(5000.99),
-          Some(5000.99),
-          Some(5000.99),
-          Some(5000.99)
+          Some(1000.23),
+          Some(1000.34),
+          Some(1000.45),
+          Some(1000.56),
+          Some(1000.67),
+          Some(1000.78),
+          Some(1000.89),
+          None
         ))
       )),
-      Some(Seq(AmendForeignNonFhlPropertyEntry("FRA",
+      Some(Seq(AmendForeignNonFhlPropertyEntry(
+        countryCode = "ZZZ",
         Some(ForeignNonFhlPropertyIncome(
-          Some(ForeignNonFhlPropertyRentIncome(Some(5000.99))),
-          false,
-          Some(5000.99),
-          Some(5000.99),
-          Some(5000.99),
-          Some(5000.99)
+          Some(ForeignNonFhlPropertyRentIncome(Some(2000.12))),
+          true,
+          Some(2000.23),
+          Some(2000.34),
+          Some(2000.45),
+          Some(2000.56)
         )),
-        Some(AmendForeignNonFhlPropertyExpenses(
-          Some(5000.99),
-          Some(5000.99),
-          Some(5000.99),
-          Some(5000.99),
-          Some(5000.99),
-          Some(5000.99),
-          Some(5000.99),
-          Some(5000.99),
-          Some(5000.99),
-          Some(5000.99)
-        ))))
-      ))
+        expenses = Some(AmendForeignNonFhlPropertyExpenses(
+          Some(3000.01),
+          Some(3000.12),
+          Some(3000.23),
+          Some(3000.34),
+          Some(3000.45),
+          Some(3000.56),
+          Some(3000.67),
+          Some(3000.78),
+          Some(3000.89),
+          None
+        ))
+      )))
+    )
 
   val requestBodyWithConsolidatedExpense: AmendForeignPropertyPeriodSummaryRequestBody =
     AmendForeignPropertyPeriodSummaryRequestBody(
       Some(AmendForeignFhlEea(
-        Some(ForeignFhlEeaIncome(Some(5000.99))),
+        Some(ForeignFhlEeaIncome(
+          Some(1000.12)
+        )),
         Some(AmendForeignFhlEeaExpenses(
           None,
           None,
@@ -119,19 +125,20 @@ class AmendForeignPropertyPeriodSummaryControllerSpec
           None,
           None,
           None,
-          Some(5000.99)
+          Some(1000.23)
         ))
       )),
-      Some(Seq(AmendForeignNonFhlPropertyEntry("FRA",
+      Some(Seq(AmendForeignNonFhlPropertyEntry(
+        countryCode = "ZZZ",
         Some(ForeignNonFhlPropertyIncome(
-          Some(ForeignNonFhlPropertyRentIncome(Some(5000.99))),
-          false,
-          Some(5000.99),
-          Some(5000.99),
-          Some(5000.99),
-          Some(5000.99)
+          Some(ForeignNonFhlPropertyRentIncome(Some(2000.12))),
+          true,
+          Some(2000.23),
+          Some(2000.34),
+          Some(2000.45),
+          Some(2000.56)
         )),
-        Some(AmendForeignNonFhlPropertyExpenses(
+        expenses = Some(AmendForeignNonFhlPropertyExpenses(
           None,
           None,
           None,
@@ -139,175 +146,164 @@ class AmendForeignPropertyPeriodSummaryControllerSpec
           None,
           None,
           None,
-          Some(5000.99),
-          Some(5000.99),
-          Some(5000.99)
-        ))))
-      ))
+          None,
+          None,
+          Some(2000.67)
+        ))
+      )))
+    )
 
   private val requestBodyJson = Json.parse(
     """{
-      |  "foreignFhlEea": {
+      |    "foreignFhlEea": {
       |    "income": {
-      |      "rentAmount": 5000.99
+      |      "rentAmount": 1123.89
       |    },
       |    "expenses": {
-      |      "premisesRunningCosts": 5000.99,
-      |      "repairsAndMaintenance": 5000.99,
-      |      "financialCosts": 5000.99,
-      |      "professionalFees": 5000.99,
-      |      "costOfServices": 5000.99,
-      |      "travelCosts": 5000.99,
-      |      "other": 5000.99,
-      |      "consolidatedExpenses": 5000.99
+      |      "premisesRunningCosts": 332.78,
+      |      "repairsAndMaintenance": 231.45,
+      |      "financialCosts": 345.23,
+      |      "professionalFees": 232.45,
+      |      "costOfServices": 231.56,
+      |      "travelCosts": 234.67,
+      |      "other": 3457.9
       |    }
       |  },
       |  "foreignNonFhlProperty": [
       |    {
-      |      "countryCode": "FRA",
+      |      "countryCode": "AFG",
       |      "income": {
       |        "rentIncome": {
-      |          "rentAmount": 5000.99
+      |          "rentAmount": 440.31
       |        },
       |        "foreignTaxCreditRelief": false,
-      |        "premiumsOfLeaseGrant": 5000.99,
-      |        "otherPropertyIncome": 5000.99,
-      |        "foreignTaxPaidOrDeducted": 5000.99,
-      |        "specialWithholdingTaxOrUkTaxPaid": 5000.99
+      |        "premiumsOfLeaseGrant": 950.48,
+      |        "otherPropertyIncome": 802.49,
+      |        "foreignTaxPaidOrDeducted": 734.18,
+      |        "specialWithholdingTaxOrUkTaxPaid": 85.47
       |      },
       |      "expenses": {
-      |        "premisesRunningCosts": 5000.99,
-      |        "repairsAndMaintenance": 5000.99,
-      |        "financialCosts": 5000.99,
-      |        "professionalFees": 5000.99,
-      |        "costOfServices": 5000.99,
-      |        "travelCosts": 5000.99,
-      |        "residentialFinancialCost": 5000.99,
-      |        "broughtFwdResidentialFinancialCost": 5000.99,
-      |        "other": 5000.99,
-      |        "consolidatedExpenses": 5000.99
+      |        "premisesRunningCosts":129.35,
+      |        "repairsAndMaintenance":7490.32,
+      |        "financialCosts":5000.99,
+      |        "professionalFees":847.90,
+      |        "travelCosts":69.20,
+      |        "costOfServices":478.23,
+      |        "residentialFinancialCost":879.28,
+      |        "broughtFwdResidentialFinancialCost":846.13,
+      |        "other":138.92
       |      }
       |    }
       |  ]
-      |}""".stripMargin)
-
+      |}
+      |""".stripMargin
+  )
   private val requestBodyJsonConsolidatedExpenses = Json.parse(
     """{
       |  "foreignFhlEea": {
       |    "income": {
-      |      "rentAmount": 5000.99
+      |      "rentAmount": 1123.89
       |    },
       |    "expenses": {
-      |      "consolidatedExpenses": 5000.99
+      |      "consolidatedExpenses": 334.64
       |    }
       |  },
       |  "foreignNonFhlProperty": [
       |    {
-      |      "countryCode": "FRA",
+      |      "countryCode": "AFG",
       |      "income": {
       |        "rentIncome": {
-      |          "rentAmount": 5000.99
+      |          "rentAmount": 440.31
       |        },
       |        "foreignTaxCreditRelief": false,
-      |        "premiumsOfLeaseGrant": 5000.99,
-      |        "otherPropertyIncome": 5000.99,
-      |        "foreignTaxPaidOrDeducted": 5000.99,
-      |        "specialWithholdingTaxOrUkTaxPaid": 5000.99
+      |        "premiumsOfLeaseGrant": 950.48,
+      |        "otherPropertyIncome": 802.49,
+      |        "foreignTaxPaidOrDeducted": 734.18,
+      |        "specialWithholdingTaxOrUkTaxPaid": 85.47
       |      },
       |      "expenses": {
-      |        "residentialFinancialCost": 5000.99,
-      |        "broughtFwdResidentialFinancialCost": 5000.99,
-      |        "consolidatedExpenses": 5000.99
+      |        "consolidatedExpenses": 3992.93,
+      |        "residentialFinancialCost":879.28,
+      |        "broughtFwdResidentialFinancialCost":846.13
       |      }
       |    }
       |  ]
-      |}""".stripMargin)
+      |}
+      |""".stripMargin
+  )
 
   private val requestData = AmendForeignPropertyPeriodSummaryRequest(Nino(nino), businessId, taxYear, submissionId, requestBody)
   private val rawData = AmendForeignPropertyPeriodSummaryRawData(nino, businessId, taxYear, submissionId, requestBodyJson)
 
   val hateoasResponse: JsValue = Json.parse(
     s"""
-      |{
-      |  "links": [
-      |    {
-      |      "href":"/individuals/business/property/foreign/$nino/$businessId/period/$taxYear/$submissionId",
-      |      "method":"GET",
-      |      "rel":"self"
-      |    },
-      |    {
-      |      "href":"/individuals/business/property/foreign/$nino/$businessId/period/$taxYear/$submissionId",
-      |      "method":"PUT",
-      |      "rel":"amend-foreign-property-period-summary"
-      |    },
-      |    {
-      |      "href":"/individuals/business/property/$nino/$businessId/period/$taxYear",
-      |      "method":"GET",
-      |      "rel":"list-property-period-summaries"
-      |    }
-      |  ]
-      |}
-      |""".stripMargin)
+       |{
+       |  "links": [
+       |    {
+       |      "href":"/individuals/business/property/foreign/$nino/$businessId/period/$taxYear/$submissionId",
+       |      "method":"GET",
+       |      "rel":"self"
+       |    }
+       |  ]
+       |}
+    """.stripMargin
+  )
 
-  private val testHateoasLinks =
-    Seq(
-      Link(href = s"/individuals/business/property/foreign/$nino/$businessId/period/$taxYear/$submissionId",
-        method = GET, rel = "self"),
-      Link(href = s"/individuals/business/property/foreign/$nino/$businessId/period/$taxYear/$submissionId",
-        method = PUT, rel = "amend-foreign-property-period-summary"),
-      Link(href = s"/individuals/business/property/$nino/$businessId/period/$taxYear",
-        method = GET, rel = "list-property-period-summaries")
-    )
+  private val testHateoasLink =
+    Link(href = s"/individuals/business/property/foreign/$nino/$businessId/period/$taxYear/$submissionId",
+      method = GET, rel="self")
 
-  "amend" should {
-    "return a successful response from a consolidated request" when {
-      "the request received is valid" in new Test {
+    "amend" should {
+      "return a successful response from a consolidated request" when {
+        "the request received is valid" in new Test {
 
-        MockAmendForeignPropertyRequestParser
-          .parseRequest(AmendForeignPropertyPeriodSummaryRawData(nino, businessId, taxYear, submissionId, requestBodyJsonConsolidatedExpenses))
-          .returns(Right(requestData))
+          MockAmendForeignPropertyPeriodSummaryRequestParser
+            .requestFor(AmendForeignPropertyPeriodSummaryRawData(nino, businessId, taxYear, submissionId, requestBodyJsonConsolidatedExpenses))
+            .returns(Right(requestData))
 
-        MockAmendForeignPropertyService
-          .amend(requestData)
-          .returns(Future.successful(Right(ResponseWrapper(correlationId, ()))))
+          MockAmendForeignPropertyPeriodSummaryService
+            .amend(requestData)
+            .returns(Future.successful(Right(ResponseWrapper(correlationId, ()))))
 
-        MockHateoasFactory
-          .wrap((), AmendForeignPropertyPeriodSummaryHateoasData(nino, businessId, taxYear, submissionId))
-          .returns(HateoasWrapper((), testHateoasLinks))
+          MockHateoasFactory
+            .wrap((), AmendForeignPropertyPeriodSummaryHateoasData(nino, businessId, taxYear, submissionId))
+            .returns(HateoasWrapper((), Seq(testHateoasLink)))
 
-        val result: Future[Result] = controller.handleRequest(nino, businessId, taxYear, submissionId)(fakePostRequest(requestBodyJsonConsolidatedExpenses))
-        status(result) shouldBe OK
-        header("X-CorrelationId", result) shouldBe Some(correlationId)
+          val result: Future[Result] = controller.handleRequest(nino, businessId, taxYear, submissionId)(fakePostRequest(requestBodyJsonConsolidatedExpenses))
+          status(result) shouldBe OK
+          header("X-CorrelationId", result) shouldBe Some(correlationId)
+        }
       }
-    }
-    "return a successful response from an unconsolidated request" when {
-      "the request received is valid" in new Test {
 
-        MockAmendForeignPropertyRequestParser
-          .parseRequest(AmendForeignPropertyPeriodSummaryRawData(nino, businessId, taxYear, submissionId, requestBodyJson))
-          .returns(Right(requestData))
+      "return a successful response from an unconsolidated request" when {
+        "the request received is valid" in new Test {
 
-        MockAmendForeignPropertyService
-          .amend(requestData)
-          .returns(Future.successful(Right(ResponseWrapper(correlationId, ()))))
+          MockAmendForeignPropertyPeriodSummaryRequestParser
+            .requestFor(AmendForeignPropertyPeriodSummaryRawData(nino, businessId, taxYear, submissionId, requestBodyJson))
+            .returns(Right(requestData))
 
-        MockHateoasFactory
-          .wrap((), AmendForeignPropertyPeriodSummaryHateoasData(nino, businessId, taxYear, submissionId))
-          .returns(HateoasWrapper((), testHateoasLinks))
+          MockAmendForeignPropertyPeriodSummaryService
+            .amend(requestData)
+            .returns(Future.successful(Right(ResponseWrapper(correlationId, ()))))
 
-        val result: Future[Result] = controller.handleRequest(nino, businessId, taxYear, submissionId)(fakePostRequest(requestBodyJson))
-        status(result) shouldBe OK
-        header("X-CorrelationId", result) shouldBe Some(correlationId)
+          MockHateoasFactory
+            .wrap((), AmendForeignPropertyPeriodSummaryHateoasData(nino, businessId, taxYear, submissionId))
+            .returns(HateoasWrapper((), Seq(testHateoasLink)))
+
+          val result: Future[Result] = controller.handleRequest(nino, businessId, taxYear, submissionId)(fakePostRequest(requestBodyJson))
+          status(result) shouldBe OK
+          header("X-CorrelationId", result) shouldBe Some(correlationId)
+
+        }
       }
-    }
 
     "return the error as per spec" when {
       "parser errors occur" should {
         def errorsFromParserTester(error: MtdError, expectedStatus: Int): Unit = {
           s"a ${error.code} error is returned from the parser" in new Test {
 
-            MockAmendForeignPropertyRequestParser
-              .parseRequest(rawData.copy(body = requestBodyJsonConsolidatedExpenses))
+            MockAmendForeignPropertyPeriodSummaryRequestParser
+              .requestFor(rawData.copy(body = requestBodyJsonConsolidatedExpenses))
               .returns(Left(ErrorWrapper(correlationId, error, None)))
 
             val result: Future[Result] = controller.handleRequest(nino, businessId, taxYear, submissionId)(fakePostRequest(requestBodyJsonConsolidatedExpenses))
@@ -324,11 +320,14 @@ class AmendForeignPropertyPeriodSummaryControllerSpec
           (TaxYearFormatError, BAD_REQUEST),
           (BusinessIdFormatError, BAD_REQUEST),
           (SubmissionIdFormatError, BAD_REQUEST),
-          (CountryCodeFormatError, BAD_REQUEST),
-          (RuleCountryCodeError, BAD_REQUEST),
+          (RuleTaxYearRangeInvalidError, BAD_REQUEST),
           (RuleTaxYearNotSupportedError, BAD_REQUEST),
-          (RuleTypeOfBusinessIncorrectError, BAD_REQUEST),
-          (DownstreamError, INTERNAL_SERVER_ERROR)
+          (ValueFormatError, BAD_REQUEST),
+          (RuleBothExpensesSuppliedError, BAD_REQUEST),
+          (RuleIncorrectOrEmptyBodyError, BAD_REQUEST),
+          (RuleDuplicateCountryCodeError, BAD_REQUEST),
+          (CountryCodeFormatError, BAD_REQUEST),
+          (RuleCountryCodeError, BAD_REQUEST)
         )
 
         input.foreach(args => (errorsFromParserTester _).tupled(args))
@@ -338,11 +337,11 @@ class AmendForeignPropertyPeriodSummaryControllerSpec
         def serviceErrors(mtdError: MtdError, expectedStatus: Int): Unit = {
           s"a $mtdError error is returned from the service" in new Test {
 
-            MockAmendForeignPropertyRequestParser
-              .parseRequest(rawData)
+            MockAmendForeignPropertyPeriodSummaryRequestParser
+              .requestFor(rawData)
               .returns(Right(requestData))
 
-            MockAmendForeignPropertyService
+            MockAmendForeignPropertyPeriodSummaryService
               .amend(requestData)
               .returns(Future.successful(Left(ErrorWrapper(correlationId, mtdError))))
 
@@ -360,10 +359,9 @@ class AmendForeignPropertyPeriodSummaryControllerSpec
           (BusinessIdFormatError, BAD_REQUEST),
           (SubmissionIdFormatError, BAD_REQUEST),
           (NotFoundError, NOT_FOUND),
-          (CountryCodeFormatError, BAD_REQUEST),
-          (RuleCountryCodeError, BAD_REQUEST),
           (RuleTypeOfBusinessIncorrectError, BAD_REQUEST),
           (RuleTaxYearNotSupportedError, BAD_REQUEST),
+          (RuleDuplicateCountryCodeError, BAD_REQUEST),
           (DownstreamError, INTERNAL_SERVER_ERROR)
         )
 

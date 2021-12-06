@@ -21,26 +21,17 @@ import uk.gov.hmrc.http.HeaderCarrier
 import v2.mocks.MockHttpClient
 import v2.models.domain.Nino
 import v2.models.outcomes.ResponseWrapper
-import v2.models.request.amendForeignPropertyAnnualSubmission._
-import v2.models.request.amendForeignPropertyAnnualSubmission.foreignFhlEea._
-import v2.models.request.amendForeignPropertyAnnualSubmission.foreignNonFhl._
+import v2.models.request.amendForeignPropertyAnnualSubmission.{AmendForeignPropertyAnnualSubmissionFixture, _}
 
 import scala.concurrent.Future
 
-class AmendForeignPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec {
+class AmendForeignPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec with AmendForeignPropertyAnnualSubmissionFixture {
 
   val nino: String = "AA123456A"
   val businessId: String = "XAIS12345678910"
   val taxYear: String = "2020-21"
 
-  private val foreignFhlEea = ForeignFhlEea(None, None)
-
-  private val foreignPropertyEntry = ForeignNonFhlEntry("FRA", None, None)
-
-  val body: AmendForeignPropertyAnnualSubmissionRequestBody = AmendForeignPropertyAnnualSubmissionRequestBody(
-    Some(foreignFhlEea),
-    Some(Seq(foreignPropertyEntry))
-  )
+  val body: AmendForeignPropertyAnnualSubmissionRequestBody = amendForeignPropertyAnnualSubmissionRequestBody
 
   val request: AmendForeignPropertyAnnualSubmissionRequest = AmendForeignPropertyAnnualSubmissionRequest(
     nino = Nino(nino),
@@ -70,7 +61,7 @@ class AmendForeignPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec {
 
       MockHttpClient
         .put(
-          url = s"$baseUrl/income-tax/business/property/annual/$nino/$businessId/$taxYear",
+          url = s"$baseUrl/income-tax/business/property/annual?taxableEntityId=$nino&incomeSourceId=$businessId&taxYear=$taxYear",
           config = dummyIfsHeaderCarrierConfig,
           body = body,
           requiredHeaders = requiredIfsHeadersPut,

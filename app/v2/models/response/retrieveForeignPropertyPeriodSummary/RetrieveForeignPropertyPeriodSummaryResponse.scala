@@ -17,7 +17,7 @@
 package v2.models.response.retrieveForeignPropertyPeriodSummary
 
 import config.AppConfig
-import play.api.libs.json.{JsPath, Json, Reads, Writes}
+import play.api.libs.json.{JsPath, Json, Reads, OWrites}
 import play.api.libs.functional.syntax._
 import v2.hateoas.{HateoasLinks, HateoasLinksFactory}
 import v2.models.hateoas.{HateoasData, Link}
@@ -31,7 +31,7 @@ case class  RetrieveForeignPropertyPeriodSummaryResponse(submittedOn: String,
                                                          foreignNonFhlProperty: Option[Seq[ForeignNonFhlProperty]])
 
 object RetrieveForeignPropertyPeriodSummaryResponse extends HateoasLinks {
-  implicit val writes: Writes[RetrieveForeignPropertyPeriodSummaryResponse] = Json.writes[RetrieveForeignPropertyPeriodSummaryResponse]
+  implicit val writes: OWrites[RetrieveForeignPropertyPeriodSummaryResponse] = Json.writes[RetrieveForeignPropertyPeriodSummaryResponse]
   implicit val reads: Reads[RetrieveForeignPropertyPeriodSummaryResponse] = (
     (JsPath \ "submittedOn").read[String] and
       (JsPath \ "fromDate").read[String] and

@@ -21,17 +21,19 @@ import play.api.libs.json.Json
 import support.UnitSpec
 import v2.models.hateoas.{Link, Method}
 import v2.models.response.retrieveForeignPropertyAnnualSubmission.foreignFhlEea.{ForeignFhlEeaAdjustments, ForeignFhlEeaAllowances, ForeignFhlEeaEntry}
-import v2.models.response.retrieveForeignPropertyAnnualSubmission.foreignProperty.{ForeignPropertyAdjustments, ForeignPropertyAllowances, ForeignPropertyEntry}
+import v2.models.response.retrieveForeignPropertyAnnualSubmission.foreignProperty.{Building, FirstYear, ForeignPropertyAdjustments, ForeignPropertyAllowances, ForeignPropertyEntry, StructuredBuildingAllowance}
 
 class RetrieveForeignPropertyAnnualSubmissionResponseSpec extends UnitSpec with MockAppConfig {
 
-  private val retrieveForeignPropertyAnnualSubmissionRequestBody = RetrieveForeignPropertyAnnualSubmissionResponse(
+  private val retrieveForeignPropertyAnnualSubmissionResponseBody = RetrieveForeignPropertyAnnualSubmissionResponse(
+    "2020-07-07T10:59:47.544Z",
     Some(ForeignFhlEeaEntry(
       Some(ForeignFhlEeaAdjustments(
         Some(100.25),
         Some(100.25),
         Some(true))),
       Some(ForeignFhlEeaAllowances(
+        Some(100.25),
         Some(100.25),
         Some(100.25),
         Some(100.25),
@@ -49,11 +51,24 @@ class RetrieveForeignPropertyAnnualSubmissionResponseSpec extends UnitSpec with 
         Some(100.25),
         Some(100.25),
         Some(100.25),
-        Some(100.25)))
+        Some(100.25),
+        Some(Seq(StructuredBuildingAllowance(
+          100.25,
+          Some(FirstYear(
+            "2020-03-29",
+            100.25
+          )),
+          Building(
+            Some("Building Name"),
+            Some("12"),
+            "TF3 4GH"
+          )
+        )))))
     )))
   )
 
-  private val retrieveForeignPropertyAnnualSubmissionRequestBodyMinimum = RetrieveForeignPropertyAnnualSubmissionResponse(
+  private val retrieveForeignPropertyAnnualSubmissionResponseBodyMinimum = RetrieveForeignPropertyAnnualSubmissionResponse(
+    "2020-07-07T10:59:47.544Z",
     None,
     Some(Seq(ForeignPropertyEntry(
       "GER",
@@ -65,38 +80,120 @@ class RetrieveForeignPropertyAnnualSubmissionResponseSpec extends UnitSpec with 
   private val jsonBody = Json.parse(
     """
       |{
-      |   "foreignFhlEea":
-      |      {
-      |         "adjustments":{
-      |            "privateUseAdjustment":100.25,
-      |            "balancingCharge":100.25,
-      |            "periodOfGraceAdjustment":true
-      |         },
-      |         "allowances":{
-      |            "annualInvestmentAllowance":100.25,
-      |            "otherCapitalAllowance":100.25,
-      |            "propertyAllowance":100.25,
-      |            "electricChargePointAllowance":100.25
-      |         }
+      |  "submittedOn": "2020-07-07T10:59:47.544Z",
+      |  "foreignFhlEea": {
+      |    "adjustments": {
+      |      "privateUseAdjustment": 100.25,
+      |      "balancingCharge": 100.25,
+      |      "periodOfGraceAdjustment": true
+      |    },
+      |    "allowances": {
+      |      "annualInvestmentAllowance": 100.25,
+      |      "otherCapitalAllowance": 100.25,
+      |      "propertyAllowance": 100.25,
+      |      "electricChargePointAllowance": 100.25,
+      |      "propertyIncomeAllowance": 100.25
+      |    }
+      |  },
+      |  "foreignNonFhlProperty": [
+      |    {
+      |      "countryCode": "GER",
+      |      "adjustments": {
+      |        "privateUseAdjustment": 100.25,
+      |        "balancingCharge": 100.25
       |      },
-      |   "foreignProperty":[
-      |      {
-      |         "countryCode":"GER",
-      |         "adjustments":{
-      |            "privateUseAdjustment":100.25,
-      |            "balancingCharge":100.25
-      |         },
-      |         "allowances":{
-      |            "annualInvestmentAllowance":100.25,
-      |            "costOfReplacingDomesticItems":100.25,
-      |            "zeroEmissionsGoodsVehicleAllowance":100.25,
-      |            "propertyAllowance":100.25,
-      |            "otherCapitalAllowance":100.25,
-      |            "structureAndBuildingAllowance":100.25,
-      |            "electricChargePointAllowance":100.25
-      |         }
+      |      "allowances": {
+      |        "annualInvestmentAllowance": 100.25,
+      |        "costOfReplacingDomesticItems": 100.25,
+      |        "zeroEmissionsGoodsVehicleAllowance": 100.25,
+      |        "otherCapitalAllowance": 100.25,
+      |        "electricChargePointAllowance": 100.25,
+      |        "zeroEmissionsCarAllowance": 100.25,
+      |        "propertyAllowance": 100.25,
+      |        "structuredBuildingAllowance": [
+      |          {
+      |            "amount": 100.25,
+      |            "firstYear": {
+      |              "qualifyingDate": "2020-03-29",
+      |              "qualifyingAmountExpenditure": 100.25
+      |            },
+      |            "building": {
+      |              "name": "Building Name",
+      |              "number": "12",
+      |              "postcode": "TF3 4GH"
+      |            }
+      |          }
+      |        ]
       |      }
-      |   ]
+      |    }
+      |  ]
+      |}
+     """.stripMargin
+  )
+
+  private val ifsJson = Json.parse(
+    """
+      |{
+      |    "submittedOn": "2020-07-07T10:59:47.544Z",
+      |    "deletedOn": "2021-11-04T08:23:42Z",
+      |    "foreignFhlEea": {
+      |      "adjustments": {
+      |        "privateUseAdjustment": 100.25,
+      |        "balancingCharge": 100.25,
+      |        "periodOfGraceAdjustment": true
+      |      },
+      |      "allowances": {
+      |        "annualInvestmentAllowance": 100.25,
+      |        "otherCapitalAllowance": 100.25,
+      |        "propertyAllowance": 100.25,
+      |        "electricChargePointAllowance": 100.25,
+      |        "propertyIncomeAllowance": 100.25
+      |      }
+      |    },
+      |    "foreignProperty": [
+      |      {
+      |        "countryCode": "GER",
+      |        "adjustments": {
+      |          "privateUseAdjustment": 100.25,
+      |          "balancingCharge": 100.25
+      |        },
+      |        "allowances": {
+      |          "annualInvestmentAllowance": 100.25,
+      |          "costOfReplacingDomesticItems": 100.25,
+      |          "zeroEmissionsGoodsVehicleAllowance": 100.25,
+      |          "otherCapitalAllowance": 100.25,
+      |          "electricChargePointAllowance": 100.25,
+      |          "zeroEmissionsCarAllowance": 100.25,
+      |          "propertyAllowance": 100.25,
+      |          "structuredBuildingAllowance": [
+      |            {
+      |              "amount": 100.25,
+      |              "firstYear": {
+      |                "qualifyingDate": "2020-03-29",
+      |                "qualifyingAmountExpenditure": 100.25
+      |              },
+      |              "building": {
+      |                "name": "Building Name",
+      |                "number": "12",
+      |                "postCode": "TF3 4GH"
+      |              }
+      |            }
+      |          ]
+      |        }
+      |      }
+      |    ]
+      |  }
+      |""".stripMargin)
+
+  private val ifsJsonBodyMinimum = Json.parse(
+    """
+      |{
+      |  "submittedOn": "2020-07-07T10:59:47.544Z",
+      |  "foreignProperty": [
+      |    {
+      |      "countryCode": "GER"
+      |    }
+      |  ]
       |}
      """.stripMargin
   )
@@ -104,33 +201,32 @@ class RetrieveForeignPropertyAnnualSubmissionResponseSpec extends UnitSpec with 
   private val jsonBodyMinimum = Json.parse(
     """
       |{
-      |   "foreignProperty":[
-      |      {
-      |         "countryCode":"GER"
-      |      }
-      |   ]
+      |  "submittedOn": "2020-07-07T10:59:47.544Z",
+      |  "foreignNonFhlProperty": [
+      |    {
+      |      "countryCode": "GER"
+      |    }
+      |  ]
       |}
      """.stripMargin
   )
 
-  "reads" when {
-    "passed a valid JSON" should {
-      "return a valid model" in {
-        jsonBody.as[RetrieveForeignPropertyAnnualSubmissionResponse] shouldBe retrieveForeignPropertyAnnualSubmissionRequestBody
-      }
-      "return a valid model with minimum fields" in {
-        jsonBodyMinimum.as[RetrieveForeignPropertyAnnualSubmissionResponse] shouldBe retrieveForeignPropertyAnnualSubmissionRequestBodyMinimum
-      }
+  "reads" should {
+    "read JSON into a model" in {
+      ifsJson.as[RetrieveForeignPropertyAnnualSubmissionResponse] shouldBe retrieveForeignPropertyAnnualSubmissionResponseBody
     }
+    "read the minimum JSON into a model" in {
+      ifsJsonBodyMinimum.as[RetrieveForeignPropertyAnnualSubmissionResponse] shouldBe retrieveForeignPropertyAnnualSubmissionResponseBodyMinimum
+    }
+
   }
-  "writes" when {
-    "passed valid model" should {
-      "return valid JSON" in {
-        Json.toJson(retrieveForeignPropertyAnnualSubmissionRequestBody) shouldBe jsonBody
-      }
-      "return a valid minimum JSON" in {
-        Json.toJson(retrieveForeignPropertyAnnualSubmissionRequestBodyMinimum) shouldBe jsonBodyMinimum
-      }
+
+  "writes" should {
+    "write a model to JSON" in {
+      Json.toJson(retrieveForeignPropertyAnnualSubmissionResponseBody) shouldBe jsonBody
+    }
+    "write a minimum model to a JSON" in {
+      Json.toJson(retrieveForeignPropertyAnnualSubmissionResponseBodyMinimum) shouldBe jsonBodyMinimum
     }
   }
 

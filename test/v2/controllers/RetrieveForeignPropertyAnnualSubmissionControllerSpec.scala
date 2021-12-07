@@ -84,6 +84,7 @@ class RetrieveForeignPropertyAnnualSubmissionControllerSpec
       Some(5000.99),
       Some(5000.99),
       Some(5000.99),
+      Some(5000.99),
       Some(5000.99)
     ))
   )
@@ -95,19 +96,31 @@ class RetrieveForeignPropertyAnnualSubmissionControllerSpec
       Some(5000.99)
     )),
     Some(ForeignPropertyAllowances(
-      Some(5000.99),
-      Some(5000.99),
-      Some(5000.99),
-      Some(5000.99),
-      Some(5000.99),
-      Some(5000.99),
-      Some(5000.99)
-    ))
+      Some(100.25),
+      Some(100.25),
+      Some(100.25),
+      Some(100.25),
+      Some(100.25),
+      Some(100.25),
+      Some(100.25),
+      Some(Seq(StructuredBuildingAllowance(
+        3545.12,
+        Some(FirstYear(
+          "2020-03-29",
+          3453.34
+        )),
+        Building(
+          Some("Building Name"),
+          Some("12"),
+          "TF3 4GH"
+        )
+      )))))
   )
 
   val responseBody: RetrieveForeignPropertyAnnualSubmissionResponse = RetrieveForeignPropertyAnnualSubmissionResponse(
+    "2020-07-07T10:59:47.544Z",
     foreignFhlEea = Some(foreignFhlEeaEntry),
-    foreignProperty = Some(Seq(foreignPropertyEntry))
+    foreignNonFhlProperty = Some(Seq(foreignPropertyEntry))
   )
 
   "handleRequest" should {

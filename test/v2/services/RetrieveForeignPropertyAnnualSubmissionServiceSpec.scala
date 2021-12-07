@@ -39,12 +39,14 @@ class RetrieveForeignPropertyAnnualSubmissionServiceSpec extends UnitSpec {
   implicit val correlationId: String = "X-123"
 
   private val response = RetrieveForeignPropertyAnnualSubmissionResponse(
+    "2020-07-07T10:59:47.544Z",
     Some(ForeignFhlEeaEntry(
       Some(ForeignFhlEeaAdjustments(
         Some(100.25),
         Some(100.25),
         Some(true))),
       Some(ForeignFhlEeaAllowances(
+        Some(100.25),
         Some(100.25),
         Some(100.25),
         Some(100.25),
@@ -61,7 +63,19 @@ class RetrieveForeignPropertyAnnualSubmissionServiceSpec extends UnitSpec {
         Some(100.25),
         Some(100.25),
         Some(100.25),
-        Some(100.25)))))))
+        Some(100.25),
+        Some(Seq(StructuredBuildingAllowance(
+          3545.12,
+          Some(FirstYear(
+            "2020-03-29",
+            3453.34
+          )),
+          Building(
+            Some("Building Name"),
+            Some("12"),
+            "TF3 4GH"
+          )
+        )))))))))
 
   private val requestData = RetrieveForeignPropertyAnnualSubmissionRequest(Nino(nino), businessId, taxYear)
 

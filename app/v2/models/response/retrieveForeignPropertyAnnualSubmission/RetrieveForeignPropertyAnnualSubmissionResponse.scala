@@ -17,7 +17,7 @@
 package v2.models.response.retrieveForeignPropertyAnnualSubmission
 
 import config.AppConfig
-import play.api.libs.json.{JsPath, Json, Reads, Writes}
+import play.api.libs.json.{JsPath, Json, OWrites, Reads, Writes}
 import v2.hateoas.{HateoasLinks, HateoasLinksFactory}
 import play.api.libs.functional.syntax._
 import v2.models.hateoas.{HateoasData, Link}
@@ -30,7 +30,7 @@ case class RetrieveForeignPropertyAnnualSubmissionResponse(
                                                             foreignNonFhlProperty: Option[Seq[ForeignPropertyEntry]])
 
 object RetrieveForeignPropertyAnnualSubmissionResponse extends HateoasLinks {
-  implicit  val writes: Writes[RetrieveForeignPropertyAnnualSubmissionResponse] = Json.writes[RetrieveForeignPropertyAnnualSubmissionResponse]
+  implicit  val writes: OWrites[RetrieveForeignPropertyAnnualSubmissionResponse] = Json.writes[RetrieveForeignPropertyAnnualSubmissionResponse]
   implicit  val reads: Reads[RetrieveForeignPropertyAnnualSubmissionResponse] = (
     (JsPath \ "submittedOn").read[String] and
       (JsPath \ "foreignFhlEea").readNullable[ForeignFhlEeaEntry] and

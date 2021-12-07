@@ -24,7 +24,8 @@ case class ForeignPropertyAllowances(annualInvestmentAllowance: Option[BigDecima
                                      otherCapitalAllowance: Option[BigDecimal],
                                      electricChargePointAllowance:  Option[BigDecimal],
                                      zeroEmissionsCarAllowance: Option[BigDecimal],
-                                     propertyAllowance: Option[BigDecimal]
+                                     propertyAllowance: Option[BigDecimal],
+                                     structuredBuildingAllowance: Option[Seq[StructuredBuildingAllowance]]
                                     )
 
 object ForeignPropertyAllowances {

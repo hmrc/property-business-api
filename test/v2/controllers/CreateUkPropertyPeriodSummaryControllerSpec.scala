@@ -341,7 +341,7 @@ class CreateUkPropertyPeriodSummaryControllerSpec
           .wrap(response, CreateUkPropertyPeriodSummaryHateoasData(nino, businessId, taxYear, submissionId))
           .returns(HateoasWrapper(response, Seq(testHateoasLink)))
 
-        val result: Future[Result] = controller.handleRequest(nino, businessId, taxYear)(fakePostRequest(requestBodyJsonConsolidatedExpense))
+        val result: Future[Result] = controller.handleRequest(nino, businessId, taxYear)(fakeRequestWithBody(requestBodyJsonConsolidatedExpense))
         status(result) shouldBe CREATED
         contentAsJson(result) shouldBe hateoasResponse
         header("X-CorrelationId", result) shouldBe Some(correlationId)
@@ -367,7 +367,7 @@ class CreateUkPropertyPeriodSummaryControllerSpec
           .wrap(response, CreateUkPropertyPeriodSummaryHateoasData(nino, businessId, taxYear, submissionId))
           .returns(HateoasWrapper(response, Seq(testHateoasLink)))
 
-        val result: Future[Result] = controller.handleRequest(nino, businessId, taxYear)(fakePostRequest(requestBodyJson))
+        val result: Future[Result] = controller.handleRequest(nino, businessId, taxYear)(fakeRequestWithBody(requestBodyJson))
         status(result) shouldBe CREATED
         contentAsJson(result) shouldBe hateoasResponse
         header("X-CorrelationId", result) shouldBe Some(correlationId)
@@ -386,7 +386,7 @@ class CreateUkPropertyPeriodSummaryControllerSpec
               .requestFor(rawData)
               .returns(Left(ErrorWrapper(correlationId, error, None)))
 
-            val result: Future[Result] = controller.handleRequest(nino, businessId, taxYear)(fakePostRequest(requestBodyJson))
+            val result: Future[Result] = controller.handleRequest(nino, businessId, taxYear)(fakeRequestWithBody(requestBodyJson))
 
             status(result) shouldBe expectedStatus
             contentAsJson(result) shouldBe Json.toJson(error)
@@ -427,7 +427,7 @@ class CreateUkPropertyPeriodSummaryControllerSpec
               .createUkProperty(requestData)
               .returns(Future.successful(Left(ErrorWrapper(correlationId, mtdError))))
 
-            val result: Future[Result] = controller.handleRequest(nino, businessId, taxYear)(fakePostRequest(requestBodyJson))
+            val result: Future[Result] = controller.handleRequest(nino, businessId, taxYear)(fakeRequestWithBody(requestBodyJson))
 
             status(result) shouldBe expectedStatus
             contentAsJson(result) shouldBe Json.toJson(mtdError)

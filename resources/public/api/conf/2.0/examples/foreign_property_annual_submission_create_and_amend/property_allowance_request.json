@@ -1,7 +1,6 @@
 {
   "foreignFhlEea": {
     "adjustments": {
-      "privateUseAdjustment": 34343.45,
       "balancingCharge": 53543.23,
       "periodOfGraceAdjustment": true
     },
@@ -13,7 +12,6 @@
     {
       "countryCode": "LBN",
       "adjustments": {
-        "privateUseAdjustment": 4553.34,
         "balancingCharge": 3453.34
       },
       "allowances": {

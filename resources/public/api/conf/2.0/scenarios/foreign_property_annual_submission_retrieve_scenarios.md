@@ -12,24 +12,28 @@
             <td><p>Simulates the scenario where no data is found.</p></td>
         </tr>
         <tr>
-            <td><p>TYPE_OF_BUSINESS_INCORRECT</p></td>
-            <td><p>Simulates the scenario where an businessId for something other than a UK property is supplied.</p></td>
-        </tr>
-        <tr>
             <td><p>FOREIGN_PROPERTY</p></td>
-            <td><p>Simulates success response with Foreign FHL and Non-FHL properties.</p></td>
+            <td><p>Simulates the scenario with FHL and Non-FHL properties.</p></td>
         </tr>
         <tr>
-            <td><p>FOREIGN_FHL_PROPERTY</p></td>
-            <td><p>Simulates success response with Foreign FHL property.</p></td>
+            <td><p>FOREIGN_FHL_ALL_OTHER_ALLOWANCES</p></td>
+            <td><p>Simulates the scenario of a FHL property with all other allowances.</p></td>
+        </tr>
+        <tr>
+            <td><p>FOREIGN_FHL_PROPERTY_ALLOWANCE</p></td>
+            <td><p>Simulates the scenario of a FHL property with property allowance.</p></td>
         </tr>
          <tr>
-             <td><p>FOREIGN_NON_FHL_PROPERTY</p></td>
-             <td><p>Simulates success response with Foreign Non-FHL property.</p></td>
+             <td><p>FOREIGN_NON_FHL_ALL_OTHER_PROPERTY_ALLOWANCES</p></td>
+             <td><p>Simulates the scenario of a Non-FHL property with all other allowances.</p></td>
          </tr>
          <tr>
-             <td><p>MULTIPLE_FOREIGN_PROPERTY</p></td>
-             <td><p>Simulate a scenario with multiple items in the Foreign Property array.</p></td>
+             <td><p>FOREIGN_NON_FHL_PROPERTY_ALLOWANCE</p></td>
+             <td><p>Simulates the scenario of a Non-FHL property with property allowance.</p></td>
+         </tr>
+         <tr>
+             <td><p>UK_PROPERTY</p></td>
+             <td><p>Simulates the scenario where the type of business is incorrect.</p></td>
          </tr>
     </tbody>
 </table>

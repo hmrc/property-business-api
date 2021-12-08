@@ -6,10 +6,11 @@ is:
   - errors.formatTaxYear
   - errors.ruleTaxYearNotSupported
   - errors.ruleTaxYearRangeInvalid
+  - errors.ruleTypeOfBusinessIncorrectForeign
   - errors.clientOrAgentNotAuthorised
   - errors.notFound
-displayName: Retrieve a Foreign Property Annual Submission
-description: This endpoint allows the developer to retrieve previously submitted adjustments and allowances for a foreign property business in a tax year. A National Insurance number, business ID and tax year must be provided.
+displayName: Retrieve a Foreign Property Annual Submission [test only]
+description: This endpoint allows a developer to retrieve adjustments and allowances for a foreign property business. For either or both of Furnished Holiday Letting (FHL) in the European Economic Area (EEA) and Non FHL Foreign property submissions. A National Insurance number, business ID and tax year are required.
 (annotations.sandboxData): !include scenarios/foreign_property_annual_submission_retrieve_scenarios.md
 (annotations.scope): "read:self-assessment"
 securedBy: [ sec.oauth_2_0: { scopes: [ "read:self-assessment" ] } ]

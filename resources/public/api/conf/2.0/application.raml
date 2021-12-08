@@ -102,8 +102,8 @@ uses:
               put: !include foreign_property_period_summary_amend.raml
         /annual:
           (annotations.group):
-            name: Create and Amend a Foreign Property Annual Submission
-            description: This endpoint allows a developer to re-submit adjustments and allowances for a foreign property business. This submission is for either or both of Furnished Holiday Letting (FHL) in the European Economic Area (EEA) and Non FHL Foreign Property submissions. A National Insurance number, business ID and tax year must be provided.
+            name: Foreign Property Annual Submission
+            description: Resources relating to an individual's Foreign Property Annual Submission
           /{taxYear}:
             uriParameters:
               taxYear:
@@ -131,3 +131,13 @@ uses:
               description: 'The tax year to which the data applies. For example: 2021-22. The start year and end year must not span two tax years. The minimum tax year is 2021-22. No gaps are allowed, for example, 2022-24 is not valid.'
               example: 2021-22
           delete: !include delete_property_submission.raml
+      /period:
+        (annotations.group):
+          name: UK or Foreign Property Income and Expenses Period Summaries List
+          description: Resources relating to an individual's UK or Foreign Property Income and Expenses Period Summaries List
+        /{taxYear}:
+          uriParameters:
+            taxYear:
+              description: 'The tax year to which the data applies. For example: 2022-23. The start year and end year must not span two tax years. The minimum tax year is 2021-22. No gaps are allowed, for example, 2022-24 is not valid.'
+              example: 2022-23
+          get: !include property_period_summaries_list.raml

@@ -46,8 +46,8 @@ class RetrieveForeignPropertyPeriodSummaryConnector @Inject()(val http: HttpClie
                                                                                     correlationId: String): Future[IfsOutcome[Result]] = {
     val response = get(
       uri = IfsUri[RetrieveForeignPropertyPeriodSummaryResponse]("income-tax/business/property/periodic"),
-      queryParams = Seq("taxableEntityId" -> request.nino.value, "incomeSourceId" -> request.businessId,
-        "taxYear" -> request.taxYear, "submissionId" -> request.submissionId)
+      queryParams = Seq("taxableEntityId" -> request.nino.value, "taxYear" -> request.taxYear,
+        "incomeSourceId" -> request.businessId, "submissionId" -> request.submissionId)
     )
 
     response.map {
@@ -60,5 +60,5 @@ class RetrieveForeignPropertyPeriodSummaryConnector @Inject()(val http: HttpClie
   //The same API#1595 IF endpoint is used for both uk and foreign properties.
   //If a businessId of the right type is specified some of these optional fields will be present...
   private def foreignResult(response: RetrieveForeignPropertyPeriodSummaryResponse): Boolean =
-    response.foreignFhlEea.nonEmpty || response.foreignFhlEea.nonEmpty
+    response.foreignFhlEea.nonEmpty || response.foreignNonFhlProperty.nonEmpty
 }

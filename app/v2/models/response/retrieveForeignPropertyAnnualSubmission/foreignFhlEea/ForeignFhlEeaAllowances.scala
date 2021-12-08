@@ -21,8 +21,8 @@ import play.api.libs.functional.syntax._
 
 case class ForeignFhlEeaAllowances(annualInvestmentAllowance: Option[BigDecimal],
                                    otherCapitalAllowance: Option[BigDecimal],
-                                   propertyAllowance: Option[BigDecimal],
                                    electricChargePointAllowance: Option[BigDecimal],
+                                   zeroEmissionsCarAllowance: Option[BigDecimal],
                                    propertyIncomeAllowance: Option[BigDecimal]
                                   )
 
@@ -31,8 +31,8 @@ object ForeignFhlEeaAllowances {
   implicit  val reads: Reads[ForeignFhlEeaAllowances] = (
     (JsPath \ "annualInvestmentAllowance").readNullable[BigDecimal] and
     (JsPath \ "otherCapitalAllowance").readNullable[BigDecimal] and
-    (JsPath \ "propertyAllowance").readNullable[BigDecimal] and
     (JsPath \ "electricChargePointAllowance").readNullable[BigDecimal] and
+    (JsPath \ "zeroEmissionsCarAllowance").readNullable[BigDecimal] and
     (JsPath \ "propertyAllowance").readNullable[BigDecimal]
   )(ForeignFhlEeaAllowances.apply _)
 }

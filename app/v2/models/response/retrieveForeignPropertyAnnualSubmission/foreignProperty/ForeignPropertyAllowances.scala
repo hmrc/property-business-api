@@ -16,18 +16,30 @@
 
 package v2.models.response.retrieveForeignPropertyAnnualSubmission.foreignProperty
 
-import play.api.libs.json.{Json, OFormat}
+import play.api.libs.json.{JsPath, Json, OWrites, Reads}
+import play.api.libs.functional.syntax._
 
 case class ForeignPropertyAllowances(annualInvestmentAllowance: Option[BigDecimal],
                                      costOfReplacingDomesticItems: Option[BigDecimal],
-                                     zeroEmissionsGoodsVehicleAllowance: Option[BigDecimal],
+                                     zeroEmissionGoodsVehicleAllowance: Option[BigDecimal],
                                      otherCapitalAllowance: Option[BigDecimal],
                                      electricChargePointAllowance:  Option[BigDecimal],
                                      zeroEmissionsCarAllowance: Option[BigDecimal],
-                                     propertyAllowance: Option[BigDecimal],
+                                     propertyIncomeAllowance: Option[BigDecimal],
                                      structuredBuildingAllowance: Option[Seq[StructuredBuildingAllowance]]
                                     )
 
 object ForeignPropertyAllowances {
-  implicit  val format: OFormat[ForeignPropertyAllowances] = Json.format[ForeignPropertyAllowances]
+  implicit  val writes: OWrites[ForeignPropertyAllowances] = Json.writes[ForeignPropertyAllowances]
+
+  implicit val reads: Reads[ForeignPropertyAllowances] = (
+    (JsPath \ "annualInvestmentAllowance").readNullable[BigDecimal] and
+    (JsPath \ "costOfReplacingDomesticItems").readNullable[BigDecimal] and
+    (JsPath \ "zeroEmissionsGoodsVehicleAllowance").readNullable[BigDecimal] and
+    (JsPath \ "otherCapitalAllowance").readNullable[BigDecimal] and
+    (JsPath \ "electricChargePointAllowance").readNullable[BigDecimal] and
+    (JsPath \ "zeroEmissionsCarAllowance").readNullable[BigDecimal] and
+    (JsPath \ "propertyAllowance").readNullable[BigDecimal] and
+    (JsPath \ "structuredBuildingAllowance").readNullable[Seq[StructuredBuildingAllowance]]
+  )(ForeignPropertyAllowances.apply _)
 }

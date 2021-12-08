@@ -90,8 +90,8 @@ class RetrieveForeignPropertyAnnualSubmissionResponseSpec extends UnitSpec with 
       |    "allowances": {
       |      "annualInvestmentAllowance": 100.25,
       |      "otherCapitalAllowance": 100.25,
-      |      "propertyAllowance": 100.25,
       |      "electricChargePointAllowance": 100.25,
+      |      "zeroEmissionsCarAllowance": 100.25,
       |      "propertyIncomeAllowance": 100.25
       |    }
       |  },
@@ -105,11 +105,11 @@ class RetrieveForeignPropertyAnnualSubmissionResponseSpec extends UnitSpec with 
       |      "allowances": {
       |        "annualInvestmentAllowance": 100.25,
       |        "costOfReplacingDomesticItems": 100.25,
-      |        "zeroEmissionsGoodsVehicleAllowance": 100.25,
+      |        "zeroEmissionGoodsVehicleAllowance": 100.25,
       |        "otherCapitalAllowance": 100.25,
       |        "electricChargePointAllowance": 100.25,
       |        "zeroEmissionsCarAllowance": 100.25,
-      |        "propertyAllowance": 100.25,
+      |        "propertyIncomeAllowance": 100.25,
       |        "structuredBuildingAllowance": [
       |          {
       |            "amount": 100.25,
@@ -145,9 +145,9 @@ class RetrieveForeignPropertyAnnualSubmissionResponseSpec extends UnitSpec with 
       |      "allowances": {
       |        "annualInvestmentAllowance": 100.25,
       |        "otherCapitalAllowance": 100.25,
-      |        "propertyAllowance": 100.25,
       |        "electricChargePointAllowance": 100.25,
-      |        "propertyIncomeAllowance": 100.25
+      |        "zeroEmissionsCarAllowance": 100.25,
+      |        "propertyAllowance": 100.25
       |      }
       |    },
       |    "foreignProperty": [

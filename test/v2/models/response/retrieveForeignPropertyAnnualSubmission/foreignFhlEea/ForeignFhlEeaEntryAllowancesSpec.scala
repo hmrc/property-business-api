@@ -35,9 +35,21 @@ class ForeignFhlEeaEntryAllowancesSpec extends UnitSpec with JsonErrorValidators
       |{
       |    "annualInvestmentAllowance":100.25,
       |    "otherCapitalAllowance":100.25,
-      |    "propertyAllowance":100.25,
       |    "electricChargePointAllowance":100.25,
+      |    "zeroEmissionsCarAllowance":100.25,
       |    "propertyIncomeAllowance": 100.25
+      |}
+    """.stripMargin
+  )
+
+  private val ifsJsonBody = Json.parse(
+    """
+      |{
+      |    "annualInvestmentAllowance":100.25,
+      |    "otherCapitalAllowance":100.25,
+      |    "electricChargePointAllowance":100.25,
+      |    "zeroEmissionsCarAllowance":100.25,
+      |    "propertyAllowance": 100.25
       |}
     """.stripMargin
   )
@@ -45,7 +57,7 @@ class ForeignFhlEeaEntryAllowancesSpec extends UnitSpec with JsonErrorValidators
   "reads" when {
     "passed a valid JSON" should {
       "return a valid model" in {
-        jsonBody.as[ForeignFhlEeaAllowances] shouldBe foreignFhlEeaAllowances
+        ifsJsonBody.as[ForeignFhlEeaAllowances] shouldBe foreignFhlEeaAllowances
       }
     }
   }

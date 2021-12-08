@@ -17,7 +17,7 @@
 package v2.models.response.retrieveForeignPropertyAnnualSubmission
 
 import config.AppConfig
-import play.api.libs.json.{JsPath, Json, OWrites, Reads, Writes}
+import play.api.libs.json.{JsPath, Json, OWrites, Reads}
 import v2.hateoas.{HateoasLinks, HateoasLinksFactory}
 import play.api.libs.functional.syntax._
 import v2.models.hateoas.{HateoasData, Link}

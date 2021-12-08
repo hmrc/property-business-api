@@ -40,6 +40,7 @@ class RetrieveForeignPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec
   )
 
   private val response = RetrieveForeignPropertyAnnualSubmissionResponse(
+    "2020-07-07T10:59:47.544Z",
     Some(ForeignFhlEeaEntry(
       Some(ForeignFhlEeaAdjustments(
         Some(100.25),
@@ -49,7 +50,9 @@ class RetrieveForeignPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec
         Some(100.25),
         Some(100.25),
         Some(100.25),
-        Some(100.25))))),
+        Some(100.25),
+        Some(100.25)))
+    )),
     Some(Seq(ForeignPropertyEntry(
       "GER",
       Some(ForeignPropertyAdjustments(
@@ -62,7 +65,21 @@ class RetrieveForeignPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec
         Some(100.25),
         Some(100.25),
         Some(100.25),
-        Some(100.25)))))))
+        Some(100.25),
+        Some(Seq(StructuredBuildingAllowance(
+          3545.12,
+          Some(FirstYear(
+            "2020-03-29",
+            3453.34
+          )),
+          Building(
+            Some("Building Name"),
+            Some("12"),
+            "TF3 4GH"
+          )
+        )))))
+    )))
+  )
 
   class Test extends MockHttpClient with MockAppConfig {
     val connector: RetrieveForeignPropertyAnnualSubmissionConnector = new RetrieveForeignPropertyAnnualSubmissionConnector(

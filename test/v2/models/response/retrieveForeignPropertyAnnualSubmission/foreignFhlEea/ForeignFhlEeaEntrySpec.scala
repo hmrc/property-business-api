@@ -32,6 +32,7 @@ class ForeignFhlEeaEntrySpec extends UnitSpec with JsonErrorValidators {
       Some(100.25),
       Some(100.25),
       Some(100.25),
+      Some(100.25),
       Some(100.25)
     ))
   )
@@ -39,6 +40,7 @@ class ForeignFhlEeaEntrySpec extends UnitSpec with JsonErrorValidators {
   private val foreignFhlEeaNoAdjustments = ForeignFhlEeaEntry(
     None,
     Some(ForeignFhlEeaAllowances(
+      Some(100.25),
       Some(100.25),
       Some(100.25),
       Some(100.25),
@@ -55,7 +57,7 @@ class ForeignFhlEeaEntrySpec extends UnitSpec with JsonErrorValidators {
     None
   )
 
-  private val jsonBody = Json.parse(
+  private val ifsJsonBody = Json.parse(
   """
     |{
     |   "adjustments":{
@@ -66,23 +68,58 @@ class ForeignFhlEeaEntrySpec extends UnitSpec with JsonErrorValidators {
     |   "allowances":{
     |      "annualInvestmentAllowance":100.25,
     |      "otherCapitalAllowance":100.25,
-    |      "propertyAllowance":100.25,
-    |      "electricChargePointAllowance":100.25
+    |      "electricChargePointAllowance":100.25,
+    |      "zeroEmissionsCarAllowance":100.25,
+    |      "propertyAllowance": 100.25
     |   }
     |}
   """.stripMargin
   )
 
-  private val jsonBodyNoAdjustments = Json.parse(
+  private val jsonBody = Json.parse(
+    """
+      |{
+      |   "adjustments":{
+      |      "privateUseAdjustment":100.25,
+      |      "balancingCharge":100.25,
+      |      "periodOfGraceAdjustment":true
+      |   },
+      |   "allowances":{
+      |      "annualInvestmentAllowance":100.25,
+      |      "otherCapitalAllowance":100.25,
+      |      "electricChargePointAllowance":100.25,
+      |      "zeroEmissionsCarAllowance":100.25,
+      |      "propertyIncomeAllowance": 100.25
+      |   }
+      |}
+  """.stripMargin
+  )
+
+  private val ifsJsonBodyNoAdjustments = Json.parse(
   """
     |{
     |   "allowances":{
     |      "annualInvestmentAllowance":100.25,
     |      "otherCapitalAllowance":100.25,
-    |      "propertyAllowance":100.25,
-    |      "electricChargePointAllowance":100.25
+    |      "electricChargePointAllowance":100.25,
+    |      "zeroEmissionsCarAllowance":100.25,
+    |      "propertyAllowance": 100.25
     |   }
     |}
+  """.stripMargin
+  )
+
+  val jsonBodyNoAdjustments = Json.parse(
+    """
+      |{
+      |   "allowances":{
+      |      "annualInvestmentAllowance":100.25,
+      |      "otherCapitalAllowance":100.25,
+      |      "electricChargePointAllowance":100.25,
+      |      "zeroEmissionsCarAllowance":100.25,
+      |      "propertyIncomeAllowance": 100.25
+      |   }
+      |}
   """.stripMargin
   )
 
@@ -101,10 +138,10 @@ class ForeignFhlEeaEntrySpec extends UnitSpec with JsonErrorValidators {
   "reads" when {
     "passed a valid JSON" should {
       "return a valid model" in {
-        jsonBody.as[ForeignFhlEeaEntry] shouldBe foreignFhlEea
+        ifsJsonBody.as[ForeignFhlEeaEntry] shouldBe foreignFhlEea
       }
       "return a valid model with no adjustments object" in {
-        jsonBodyNoAdjustments.as[ForeignFhlEeaEntry] shouldBe foreignFhlEeaNoAdjustments
+        ifsJsonBodyNoAdjustments.as[ForeignFhlEeaEntry] shouldBe foreignFhlEeaNoAdjustments
       }
       "return a valid model with no allowances object" in {
         jsonBodyNoAllowances.as[ForeignFhlEeaEntry] shouldBe foreignFhlEeaNoAllowances

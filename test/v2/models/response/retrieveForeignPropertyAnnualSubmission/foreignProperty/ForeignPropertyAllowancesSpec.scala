@@ -29,27 +29,80 @@ class ForeignPropertyAllowancesSpec extends UnitSpec with JsonErrorValidators{
     Some(100.25),
     Some(100.25),
     Some(100.25),
-    Some(100.25)
-  )
+    Some(100.25),
+    Some(Seq(StructuredBuildingAllowance(
+      100.25,
+      Some(FirstYear(
+        "2020-03-29",
+        100.25
+      )),
+      Building(
+        Some("Building Name"),
+        Some("12"),
+        "TF3 4GH"
+      )
+    ))))
 
   private val jsonBody = Json.parse(
     """
       |{
-      |    "annualInvestmentAllowance":100.25,
-      |    "costOfReplacingDomesticItems":100.25,
-      |    "zeroEmissionsGoodsVehicleAllowance":100.25,
-      |    "propertyAllowance":100.25,
-      |    "otherCapitalAllowance":100.25,
-      |    "structureAndBuildingAllowance":100.25,
-      |    "electricChargePointAllowance":100.25
-      |}
+      |          "annualInvestmentAllowance": 100.25,
+      |          "costOfReplacingDomesticItems": 100.25,
+      |          "zeroEmissionGoodsVehicleAllowance": 100.25,
+      |          "otherCapitalAllowance": 100.25,
+      |          "electricChargePointAllowance": 100.25,
+      |          "zeroEmissionsCarAllowance": 100.25,
+      |          "propertyIncomeAllowance": 100.25,
+      |          "structuredBuildingAllowance": [
+      |            {
+      |              "amount": 100.25,
+      |              "firstYear": {
+      |                "qualifyingDate": "2020-03-29",
+      |                "qualifyingAmountExpenditure": 100.25
+      |              },
+      |              "building": {
+      |                "name": "Building Name",
+      |                "number": "12",
+      |                "postcode": "TF3 4GH"
+      |              }
+      |            }
+      |          ]
+      |        }
+    """.stripMargin
+  )
+
+  private val ifsJsonBody = Json.parse(
+    """
+      |{
+      |          "annualInvestmentAllowance": 100.25,
+      |          "costOfReplacingDomesticItems": 100.25,
+      |          "zeroEmissionsGoodsVehicleAllowance": 100.25,
+      |          "otherCapitalAllowance": 100.25,
+      |          "electricChargePointAllowance": 100.25,
+      |          "zeroEmissionsCarAllowance": 100.25,
+      |          "propertyAllowance": 100.25,
+      |          "structuredBuildingAllowance": [
+      |            {
+      |              "amount": 100.25,
+      |              "firstYear": {
+      |                "qualifyingDate": "2020-03-29",
+      |                "qualifyingAmountExpenditure": 100.25
+      |              },
+      |              "building": {
+      |                "name": "Building Name",
+      |                "number": "12",
+      |                "postCode": "TF3 4GH"
+      |              }
+      |            }
+      |          ]
+      |        }
     """.stripMargin
   )
 
   "reads" when {
     "passed a valid JSON" should {
       "return a valid model" in {
-        jsonBody.as[ForeignPropertyAllowances] shouldBe foreignPropertyAllowances
+        ifsJsonBody.as[ForeignPropertyAllowances] shouldBe foreignPropertyAllowances
       }
     }
   }

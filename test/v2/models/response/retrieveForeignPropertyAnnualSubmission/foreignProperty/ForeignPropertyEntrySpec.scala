@@ -20,7 +20,7 @@ import play.api.libs.json.Json
 import support.UnitSpec
 import v2.models.utils.JsonErrorValidators
 
-class ForeignPropertyEntrySpec extends UnitSpec with JsonErrorValidators{
+class ForeignPropertyEntrySpec extends UnitSpec with JsonErrorValidators {
 
   private val foreignProperty = ForeignPropertyEntry(
     "GER",
@@ -35,8 +35,19 @@ class ForeignPropertyEntrySpec extends UnitSpec with JsonErrorValidators{
       Some(100.25),
       Some(100.25),
       Some(100.25),
-      Some(100.25)
-    ))
+      Some(100.25),
+      Some(Seq(StructuredBuildingAllowance(
+        100.25,
+        Some(FirstYear(
+          "2020-03-29",
+          100.25
+        )),
+        Building(
+          Some("Building Name"),
+          Some("12"),
+          "TF3 4GH"
+        )
+      )))))
   )
 
   private val foreignPropertyNoAdjustments = ForeignPropertyEntry(
@@ -49,8 +60,19 @@ class ForeignPropertyEntrySpec extends UnitSpec with JsonErrorValidators{
       Some(100.25),
       Some(100.25),
       Some(100.25),
-      Some(100.25)
-    ))
+      Some(100.25),
+      Some(Seq(StructuredBuildingAllowance(
+        100.25,
+        Some(FirstYear(
+          "2020-03-29",
+          100.25
+        )),
+        Building(
+          Some("Building Name"),
+          Some("12"),
+          "TF3 4GH"
+        )
+      )))))
   )
 
   private val foreignPropertyNoAllowances = ForeignPropertyEntry(
@@ -70,15 +92,64 @@ class ForeignPropertyEntrySpec extends UnitSpec with JsonErrorValidators{
       |      "privateUseAdjustment":100.25,
       |      "balancingCharge":100.25
       |   },
-      |   "allowances":{
-      |      "annualInvestmentAllowance":100.25,
-      |      "costOfReplacingDomesticItems":100.25,
-      |      "zeroEmissionsGoodsVehicleAllowance":100.25,
-      |      "propertyAllowance":100.25,
-      |      "otherCapitalAllowance":100.25,
-      |      "structureAndBuildingAllowance":100.25,
-      |      "electricChargePointAllowance":100.25
-      |   }
+      |      "allowances": {
+      |        "annualInvestmentAllowance": 100.25,
+      |        "costOfReplacingDomesticItems": 100.25,
+      |        "zeroEmissionGoodsVehicleAllowance": 100.25,
+      |        "otherCapitalAllowance": 100.25,
+      |        "electricChargePointAllowance": 100.25,
+      |        "zeroEmissionsCarAllowance": 100.25,
+      |        "propertyIncomeAllowance": 100.25,
+      |        "structuredBuildingAllowance": [
+      |          {
+      |            "amount": 100.25,
+      |            "firstYear": {
+      |              "qualifyingDate": "2020-03-29",
+      |              "qualifyingAmountExpenditure": 100.25
+      |            },
+      |            "building": {
+      |              "name": "Building Name",
+      |              "number": "12",
+      |              "postcode": "TF3 4GH"
+      |            }
+      |          }
+      |        ]
+      |      }
+      |}
+    """.stripMargin
+  )
+
+  private val ifsJsonBody = Json.parse(
+    """
+      |{
+      |   "countryCode":"GER",
+      |   "adjustments":{
+      |      "privateUseAdjustment":100.25,
+      |      "balancingCharge":100.25
+      |   },
+      |      "allowances": {
+      |        "annualInvestmentAllowance": 100.25,
+      |        "costOfReplacingDomesticItems": 100.25,
+      |        "zeroEmissionsGoodsVehicleAllowance": 100.25,
+      |        "otherCapitalAllowance": 100.25,
+      |        "electricChargePointAllowance": 100.25,
+      |        "zeroEmissionsCarAllowance": 100.25,
+      |        "propertyAllowance": 100.25,
+      |        "structuredBuildingAllowance": [
+      |          {
+      |            "amount": 100.25,
+      |            "firstYear": {
+      |              "qualifyingDate": "2020-03-29",
+      |              "qualifyingAmountExpenditure": 100.25
+      |            },
+      |            "building": {
+      |              "name": "Building Name",
+      |              "number": "12",
+      |              "postCode": "TF3 4GH"
+      |            }
+      |          }
+      |        ]
+      |      }
       |}
     """.stripMargin
   )
@@ -87,15 +158,60 @@ class ForeignPropertyEntrySpec extends UnitSpec with JsonErrorValidators{
     """
       |{
       |   "countryCode":"GER",
-      |   "allowances":{
-      |      "annualInvestmentAllowance":100.25,
-      |      "costOfReplacingDomesticItems":100.25,
-      |      "zeroEmissionsGoodsVehicleAllowance":100.25,
-      |      "propertyAllowance":100.25,
-      |      "otherCapitalAllowance":100.25,
-      |      "structureAndBuildingAllowance":100.25,
-      |      "electricChargePointAllowance":100.25
-      |   }
+      |   "allowances": {
+      |     "annualInvestmentAllowance": 100.25,
+      |     "costOfReplacingDomesticItems": 100.25,
+      |     "zeroEmissionGoodsVehicleAllowance": 100.25,
+      |     "otherCapitalAllowance": 100.25,
+      |     "electricChargePointAllowance": 100.25,
+      |     "zeroEmissionsCarAllowance": 100.25,
+      |     "propertyIncomeAllowance": 100.25,
+      |     "structuredBuildingAllowance": [
+      |          {
+      |            "amount": 100.25,
+      |            "firstYear": {
+      |              "qualifyingDate": "2020-03-29",
+      |              "qualifyingAmountExpenditure": 100.25
+      |            },
+      |            "building": {
+      |              "name": "Building Name",
+      |              "number": "12",
+      |              "postcode": "TF3 4GH"
+      |            }
+      |          }
+      |        ]
+      |      }
+      |}
+    """.stripMargin
+  )
+
+  private val ifsJsonBodyNoAdjustments = Json.parse(
+    """
+      |{
+      |   "countryCode":"GER",
+      |   "allowances": {
+      |     "annualInvestmentAllowance": 100.25,
+      |     "costOfReplacingDomesticItems": 100.25,
+      |     "zeroEmissionsGoodsVehicleAllowance": 100.25,
+      |     "otherCapitalAllowance": 100.25,
+      |     "electricChargePointAllowance": 100.25,
+      |     "zeroEmissionsCarAllowance": 100.25,
+      |     "propertyAllowance": 100.25,
+      |     "structuredBuildingAllowance": [
+      |          {
+      |            "amount": 100.25,
+      |            "firstYear": {
+      |              "qualifyingDate": "2020-03-29",
+      |              "qualifyingAmountExpenditure": 100.25
+      |            },
+      |            "building": {
+      |              "name": "Building Name",
+      |              "number": "12",
+      |              "postCode": "TF3 4GH"
+      |            }
+      |          }
+      |        ]
+      |      }
       |}
     """.stripMargin
   )
@@ -115,10 +231,10 @@ class ForeignPropertyEntrySpec extends UnitSpec with JsonErrorValidators{
   "reads" when {
     "passed a valid JSON" should {
       "return a valid model" in {
-        jsonBody.as[ForeignPropertyEntry] shouldBe foreignProperty
+        ifsJsonBody.as[ForeignPropertyEntry] shouldBe foreignProperty
       }
       "return a valid model with no adjustments object" in {
-        jsonBodyNoAdjustments.as[ForeignPropertyEntry] shouldBe foreignPropertyNoAdjustments
+        ifsJsonBodyNoAdjustments.as[ForeignPropertyEntry] shouldBe foreignPropertyNoAdjustments
       }
       "return a valid model with no allowances object" in {
         jsonBodyNoAllowances.as[ForeignPropertyEntry] shouldBe foreignPropertyNoAllowances

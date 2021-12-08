@@ -10,8 +10,7 @@
       "annualInvestmentAllowance":3434.23,
       "otherCapitalAllowance":1343.34,
       "electricChargePointAllowance":6565.45,
-      "zeroEmissionsCarAllowance":3456.34,
-      "propertyIncomeAllowance":100.25
+      "zeroEmissionsCarAllowance":3456.34
     }
   },
   "foreignNonFhlProperty":[
@@ -41,8 +40,7 @@
             }
           }
         ],
-        "zeroEmissionsCarAllowance":3456.34,
-        "propertyIncomeAllowance":100.25
+        "zeroEmissionsCarAllowance":3456.34
       }
     }
   ],

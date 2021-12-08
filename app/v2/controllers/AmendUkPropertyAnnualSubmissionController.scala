@@ -90,6 +90,7 @@ class AmendUkPropertyAnnualSubmissionController @Inject()(val authService: Enrol
            MtdErrorWithCode(RuleIncorrectOrEmptyBodyError.code) |
            RuleTypeOfBusinessIncorrectError |
            MtdErrorWithCode(RuleBothAllowancesSuppliedError.code) |
+           MtdErrorWithCode(RulePropertyIncomeAllowanceError.code) |
            MtdErrorWithCode(RuleBuildingNameNumberError.code) |
            MtdErrorWithCode(DateFormatError.code) |
            MtdErrorWithCode(StringFormatError.code) => BadRequest(Json.toJson(errorWrapper))

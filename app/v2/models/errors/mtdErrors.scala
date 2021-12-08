@@ -64,8 +64,6 @@ object RuleBothExpensesSuppliedError
   extends MtdError("RULE_BOTH_EXPENSES_SUPPLIED", "Both Expenses and Consolidated Expenses must not be present at the same time")
 object RuleBothAllowancesSuppliedError
   extends MtdError("RULE_BOTH_ALLOWANCES_SUPPLIED", "Both allowances and property allowances must not be present at the same time")
-object RulePropertyIncomeAllowance
-  extends MtdError("RULE_PROPERTY_INCOME_ALLOWANCE", "The propertyIncomeAllowance cannot be submitted if privateUseAdjustment is supplied")
 object RuleTaxYearNotSupportedError
   extends MtdError("RULE_TAX_YEAR_NOT_SUPPORTED", "The specified tax year is not supported. The tax year specified is before the minimum tax year value")
 object RuleTaxYearRangeInvalidError

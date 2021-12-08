@@ -685,7 +685,7 @@ class AmendUkPropertyAnnualSubmissionControllerISpec extends V2IntegrationBaseSp
           |{
           |  "ukFhlProperty": {
           |    "allowances": {
-          |      "propertyIncomeAllowance": 3456.76,
+          |      "propertyIncomeAllowance": 1000.00,
           |      "annualInvestmentAllowance": 1000.50,
           |      "businessPremisesRenovationAllowance": 1000.60,
           |      "otherCapitalAllowance": 1000.70,
@@ -694,7 +694,6 @@ class AmendUkPropertyAnnualSubmissionControllerISpec extends V2IntegrationBaseSp
           |    },
           |    "adjustments": {
           |      "lossBroughtForward": 1000.10,
-          |      "privateUseAdjustment": 1000.20,
           |      "balancingCharge": 1000.30,
           |      "periodOfGraceAdjustment": true,
           |      "businessPremisesRenovationAllowanceBalancingCharges": 1000.40,
@@ -706,7 +705,7 @@ class AmendUkPropertyAnnualSubmissionControllerISpec extends V2IntegrationBaseSp
           |  },
           |  "ukNonFhlProperty": {
           |    "allowances": {
-          |      "propertyIncomeAllowance": 3456.76,
+          |      "propertyIncomeAllowance": 1000.00,
           |      "annualInvestmentAllowance": 2000.50,
           |      "zeroEmissionGoodsVehicleAllowance": 2000.60,
           |      "businessPremisesRenovationAllowance": 2000.70,
@@ -744,12 +743,27 @@ class AmendUkPropertyAnnualSubmissionControllerISpec extends V2IntegrationBaseSp
           |    "adjustments": {
           |      "lossBroughtForward": 2000.10,
           |      "balancingCharge": 2000.20,
-          |      "privateUseAdjustment": 2000.30,
           |      "businessPremisesRenovationAllowanceBalancingCharges": 2000.40,
           |      "nonResidentLandlord": true,
           |      "rentARoom": {
           |        "jointlyLet": true
           |      }
+          |    }
+          |  }
+          |}
+          |""".stripMargin)
+
+      val propertyIncomeAllowanceBodyJson = Json.parse(
+        """
+          |{
+          |  "ukFhlProperty": {
+          |    "allowances": {
+          |      "propertyIncomeAllowance": 1000.00
+          |    },
+          |    "adjustments": {
+          |      "privateUseAdjustment": 2000.30,
+          |      "periodOfGraceAdjustment": true,
+          |      "nonResidentLandlord": true
           |    }
           |  }
           |}
@@ -819,6 +833,8 @@ class AmendUkPropertyAnnualSubmissionControllerISpec extends V2IntegrationBaseSp
         ))
       )
 
+      val propertyIncomeAllowanceError: MtdError = RulePropertyIncomeAllowanceError.copy(paths = Some(List("/ukFhlProperty")))
+
       "validation error occurs" when {
         def validationErrorTest(requestNino: String,
                                 requestBusinessId: String,
@@ -855,7 +871,8 @@ class AmendUkPropertyAnnualSubmissionControllerISpec extends V2IntegrationBaseSp
           ("AA123456A", "XAIS12345678910", "2022-23", allInvalidDateFormatRequestBodyJson, BAD_REQUEST, allInvalidDateFormatRequestError),
           ("AA123456A", "XAIS12345678910", "2022-23", allInvalidStringRequestBodyJson, BAD_REQUEST, allInvalidStringRequestError),
           ("AA123456A", "XAIS12345678910", "2022-23", buildingNameNumberBodyJson, BAD_REQUEST, buildingNameNumberError),
-          ("AA123456A", "XAIS12345678910", "2022-23", bothAllowancesSuppliedBodyJson, BAD_REQUEST, bothAllowancesSuppliedError)
+          ("AA123456A", "XAIS12345678910", "2022-23", bothAllowancesSuppliedBodyJson, BAD_REQUEST, bothAllowancesSuppliedError),
+          ("AA123456A", "XAIS12345678910", "2022-23", propertyIncomeAllowanceBodyJson, BAD_REQUEST, propertyIncomeAllowanceError)
         )
 
         input.foreach(args => (validationErrorTest _).tupled(args))
@@ -886,6 +903,8 @@ class AmendUkPropertyAnnualSubmissionControllerISpec extends V2IntegrationBaseSp
           (NOT_FOUND, "INCOME_SOURCE_NOT_FOUND", NOT_FOUND, NotFoundError),
           (UNPROCESSABLE_ENTITY, "INCOMPATIBLE_PAYLOAD", BAD_REQUEST, RuleTypeOfBusinessIncorrectError),
           (UNPROCESSABLE_ENTITY, "TAX_YEAR_NOT_SUPPORTED", BAD_REQUEST, RuleTaxYearNotSupportedError),
+          (UNPROCESSABLE_ENTITY, "BUSINESS_VALIDATION_FAILURE", BAD_REQUEST, RulePropertyIncomeAllowanceError),
+          (UNPROCESSABLE_ENTITY, "MISSING_ALLOWANCES", INTERNAL_SERVER_ERROR, DownstreamError),
           (UNPROCESSABLE_ENTITY, "DUPLICATE_COUNTRY_CODE", INTERNAL_SERVER_ERROR, DownstreamError),
           (INTERNAL_SERVER_ERROR, "SERVER_ERROR", INTERNAL_SERVER_ERROR, DownstreamError),
           (SERVICE_UNAVAILABLE, "SERVICE_UNAVAILABLE", INTERNAL_SERVER_ERROR, DownstreamError)

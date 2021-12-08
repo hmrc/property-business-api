@@ -550,7 +550,7 @@ class AmendUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec with JsonErr
     }
 
     "return Date Errors" when {
-      "structuredBuildingAllowance/qualifyingData is invalid" in {
+      "structuredBuildingAllowance/qualifyingDate is invalid" in {
         validator.validate(AmendUkPropertyAnnualSubmissionRawData(
           validNino,
           validBusinessId,
@@ -632,7 +632,7 @@ class AmendUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec with JsonErr
         )) shouldBe List(DateFormatError.copy(paths = Some(Seq("/ukNonFhlProperty/allowances/structuredBuildingAllowance/0/firstYear/qualifyingDate"))))
       }
 
-      "enhancedStructuredBuildingAllowance/qualifyingData is invalid" in {
+      "enhancedStructuredBuildingAllowance/qualifyingDate is invalid" in {
         validator.validate(AmendUkPropertyAnnualSubmissionRawData(
           validNino,
           validBusinessId,
@@ -1193,7 +1193,6 @@ class AmendUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec with JsonErr
               |          },
               |    "adjustments": {
               |      "lossBroughtForward": 343.34,
-              |      "privateUseAdjustment": 454.45,
               |      "balancingCharge": 231.45,
               |      "periodOfGraceAdjustment": true,
               |      "businessPremisesRenovationAllowanceBalancingCharges": 567.67,
@@ -1254,7 +1253,7 @@ class AmendUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec with JsonErr
               |  }
               |}
               |""".stripMargin)
-        )) shouldBe List(ValueFormatError.copy(paths = Some(Seq("/ukFhlProperty/allowances/propertyIncomeAllowance"))))
+        )) shouldBe List(ValueFormatError.forPathAndRange("/ukFhlProperty/allowances/propertyIncomeAllowance", "0", "1000"))
       }
 
       "ukNonFhlProperty propertyIncomeAllowance is invalid" in {
@@ -1272,7 +1271,6 @@ class AmendUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec with JsonErr
               |    "adjustments": {
               |      "lossBroughtForward": 334.45,
               |      "balancingCharge": 565.34,
-              |      "privateUseAdjustment": 533.54,
               |      "businessPremisesRenovationAllowanceBalancingCharges": 563.34,
               |      "nonResidentLandlord": true,
               |      "rentARoom": {
@@ -1282,8 +1280,44 @@ class AmendUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec with JsonErr
               |  }
               |}
               |""".stripMargin)
-        )) shouldBe List(ValueFormatError.copy(paths = Some(Seq("/ukNonFhlProperty/allowances/propertyIncomeAllowance"))))
+        )) shouldBe List(ValueFormatError.forPathAndRange("/ukNonFhlProperty/allowances/propertyIncomeAllowance", "0", "1000"))
       }
+    }
+
+    "for non fhl" in {
+      validator.validate(AmendUkPropertyAnnualSubmissionRawData(
+        validNino,
+        validBusinessId,
+        validTaxYear,
+        Json.parse("""
+            |{
+            |  "ukFhlProperty": {
+            |    "allowances": {
+            |       "propertyIncomeAllowance": 1000.01
+            |    }
+            |  }
+            |}
+            |""".stripMargin)
+      )) shouldBe List(ValueFormatError.forPathAndRange("/ukFhlProperty/allowances/propertyIncomeAllowance", "0", "1000"))
+    }
+  }
+
+  "propertyIncomeAllowance allowances is too large" when {
+    "for fhl" in {
+      validator.validate(AmendUkPropertyAnnualSubmissionRawData(
+      validNino,
+      validBusinessId,
+      validTaxYear,
+      Json.parse("""
+                 |{
+                 |  "ukNonFhlProperty": {
+                 |    "allowances": {
+                 |      "propertyIncomeAllowance": 1000.01
+                 |    }
+                 |  }
+                 |}
+                 |""".stripMargin)
+      )) shouldBe List(ValueFormatError.forPathAndRange("/ukNonFhlProperty/allowances/propertyIncomeAllowance", "0", "1000"))
     }
 
     "return RuleBothAllowancesSuppliedError" when {
@@ -1292,7 +1326,9 @@ class AmendUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec with JsonErr
           validNino,
           validBusinessId,
           validTaxYear,
-          requestBodyJson.update("/ukFhlProperty/allowances/propertyIncomeAllowance", JsNumber(123.45))
+          requestBodyJson
+            .update("/ukFhlProperty/allowances/propertyIncomeAllowance", JsNumber(123.45))
+            .removeProperty("/ukFhlProperty/adjustments/privateUseAdjustment")
         )) shouldBe List(RuleBothAllowancesSuppliedError.copy(paths = Some(Seq("/ukFhlProperty/allowances"))))
       }
 
@@ -1301,7 +1337,9 @@ class AmendUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec with JsonErr
           validNino,
           validBusinessId,
           validTaxYear,
-          requestBodyJson.update("/ukNonFhlProperty/allowances/propertyIncomeAllowance", JsNumber(123.45))
+          requestBodyJson
+            .update("/ukNonFhlProperty/allowances/propertyIncomeAllowance", JsNumber(123.45))
+            .removeProperty("/ukNonFhlProperty/adjustments/privateUseAdjustment")
         )) shouldBe List(RuleBothAllowancesSuppliedError.copy(paths = Some(Seq("/ukNonFhlProperty/allowances"))))
       }
     }
@@ -1426,6 +1464,55 @@ class AmendUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec with JsonErr
               """.stripMargin)
         )) shouldBe
           List(RuleBuildingNameNumberError.copy(paths = Some(Seq("/ukNonFhlProperty/allowances/enhancedStructuredBuildingAllowance/0/building"))))
+      }
+    }
+
+    "return RulePropertyIncomeAllowanceError" when {
+      "propertyIncomeAllowance is supplied with privateUseAdjustment for fhl" in {
+        validator.validate(AmendUkPropertyAnnualSubmissionRawData(
+          validNino,
+          validBusinessId,
+          validTaxYear,
+          Json.parse(
+            """
+              |{
+              |  "ukFhlProperty": {
+              |    "allowances": {
+              |      "propertyIncomeAllowance": 1.25
+              |    },
+              |    "adjustments": {
+              |      "privateUseAdjustment": 1.25,
+              |      "nonResidentLandlord": true,
+              |      "periodOfGraceAdjustment": true
+              |    }
+              |  }
+              |}
+              |""".stripMargin)
+        )) shouldBe
+          List(RulePropertyIncomeAllowanceError.copy(paths = Some(Seq("/ukFhlProperty"))))
+      }
+
+      "propertyIncomeAllowance is supplied with privateUseAdjustment for non-fhl" in {
+        validator.validate(AmendUkPropertyAnnualSubmissionRawData(
+          validNino,
+          validBusinessId,
+          validTaxYear,
+          Json.parse(
+            """
+              |{
+              |  "ukNonFhlProperty": {
+              |    "allowances": {
+              |      "propertyIncomeAllowance": 1.25
+              |    },
+              |    "adjustments": {
+              |      "privateUseAdjustment": 1.25,
+              |      "nonResidentLandlord": true
+              |    }
+              |  }
+              |}
+              |""".stripMargin)
+        )) shouldBe
+          List(RulePropertyIncomeAllowanceError.copy(paths = Some(Seq("/ukNonFhlProperty"))))
       }
     }
 

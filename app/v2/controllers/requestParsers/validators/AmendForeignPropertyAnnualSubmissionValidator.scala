@@ -129,7 +129,7 @@ class AmendForeignPropertyAnnualSubmissionValidator @Inject()(appConfig: AppConf
     ).flatten
   }
 
-  def validateBuilding(structuredBuildingAllowance: StructuredBuildingAllowance, index: Int, bldgIdx: Int): List[MtdError] = {
+  private def validateBuilding(structuredBuildingAllowance: StructuredBuildingAllowance, index: Int, bldgIdx: Int): List[MtdError] = {
     List(
       NumberValidation.validate(
         field = structuredBuildingAllowance.amount,
@@ -168,7 +168,7 @@ class AmendForeignPropertyAnnualSubmissionValidator @Inject()(appConfig: AppConf
       adjustments <- foreignFhlEea.adjustments
     } yield {
       (allowances.propertyIncomeAllowance, adjustments.privateUseAdjustment) match {
-        case (Some(_), Some(_)) => List(RulePropertyIncomeAllowance.copy(paths = Some(Seq("/foreignFhlEea"))))
+        case (Some(_), Some(_)) => List(RulePropertyIncomeAllowanceError.copy(paths = Some(Seq("/foreignFhlEea"))))
         case _                  => Nil
       }
     }).getOrElse(Nil)
@@ -180,7 +180,7 @@ class AmendForeignPropertyAnnualSubmissionValidator @Inject()(appConfig: AppConf
       adjustments <- foreignPropertyEntry.adjustments
     } yield {
       (allowances.propertyIncomeAllowance, adjustments.privateUseAdjustment) match {
-        case (Some(_), Some(_)) => List(RulePropertyIncomeAllowance.copy(paths = Some(Seq(s"/foreignNonFhlProperty/$index"))))
+        case (Some(_), Some(_)) => List(RulePropertyIncomeAllowanceError.copy(paths = Some(Seq(s"/foreignNonFhlProperty/$index"))))
         case _                  => Nil
       }
     }).getOrElse(Nil)

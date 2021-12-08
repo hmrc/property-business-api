@@ -17,7 +17,7 @@
 package v2.controllers.requestParsers.validators
 
 import mocks.MockAppConfig
-import play.api.libs.json.{ JsArray, JsNumber, JsString, JsValue, Json }
+import play.api.libs.json._
 import support.UnitSpec
 import v2.models.errors._
 import v2.models.request.amendForeignPropertyAnnualSubmission.AmendForeignPropertyAnnualSubmissionRawData
@@ -654,7 +654,7 @@ class AmendForeignPropertyAnnualSubmissionValidatorSpec extends UnitSpec with Js
             taxYear = taxYear,
             body = propertyIncomeAllowanceBody.update("/foreignFhlEea/adjustments/privateUseAdjustment", JsNumber(123.45))
           )) shouldBe
-            List(RulePropertyIncomeAllowance.copy(paths = Some(Seq("/foreignFhlEea"))))
+            List(RulePropertyIncomeAllowanceError.copy(paths = Some(Seq("/foreignFhlEea"))))
         }
 
         "propertyIncomeAllowance is supplied with privateUseAdjustment for non-fhl" in {
@@ -664,7 +664,7 @@ class AmendForeignPropertyAnnualSubmissionValidatorSpec extends UnitSpec with Js
               businessId = validBusinessId,
               taxYear = taxYear,
               body = bodyWith(entryPropertyIncomeAllowance.update("/adjustments/privateUseAdjustment", JsNumber(123.45))))) shouldBe
-            List(RulePropertyIncomeAllowance.copy(paths = Some(Seq("/foreignNonFhlProperty/0"))))
+            List(RulePropertyIncomeAllowanceError.copy(paths = Some(Seq("/foreignNonFhlProperty/0"))))
         }
       }
 

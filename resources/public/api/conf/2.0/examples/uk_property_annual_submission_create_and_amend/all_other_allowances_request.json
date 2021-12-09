@@ -35,7 +35,7 @@
             "qualifyingAmountExpenditure": 3434.45
           },
           "building": {
-            "name": "Building Name",
+            "name": "Red Oaks",
             "number": "1",
             "postcode": "SW1A 2AA"
           }
@@ -49,7 +49,7 @@
             "qualifyingAmountExpenditure": 453.34
           },
           "building": {
-            "name": "Building Name",
+            "name": "Green Oaks",
             "number": "2",
             "postcode": "SW1A 2AB"
           }

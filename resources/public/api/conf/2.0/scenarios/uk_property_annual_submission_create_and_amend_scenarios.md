@@ -17,7 +17,7 @@
         </tr>
         <tr>
             <td><p>TYPE_OF_BUSINESS_INCORRECT</p></td>
-            <td><p>Simulates the scenario where an businessId for something other than a UK property is supplied.</p></td>
+            <td><p>Simulates the scenario where a businessId for something other than a UK property is supplied.</p></td>
         </tr>
     </tbody>
 </table>

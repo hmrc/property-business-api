@@ -72,7 +72,7 @@ class RetrieveForeignPropertyAnnualSubmissionControllerSpec
   private val rawData = RetrieveForeignPropertyAnnualSubmissionRawData(nino, businessId, taxYear)
   private val requestData = RetrieveForeignPropertyAnnualSubmissionRequest(Nino(nino), businessId, taxYear)
 
-  private val testHateoasLink = Link(href = s"Individuals/business/property/$nino/$businessId/annual/$taxYear", method = GET, rel = "self")
+  private val testHateoasLink = Link(href = s"Individuals/business/property/foreign/$nino/$businessId/annual/$taxYear", method = GET, rel = "self")
 
   private val foreignFhlEeaEntry = ForeignFhlEeaEntry(
     Some(ForeignFhlEeaAdjustments(

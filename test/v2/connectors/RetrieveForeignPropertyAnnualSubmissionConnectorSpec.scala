@@ -17,8 +17,11 @@
 package v2.connectors
 
 import mocks.MockAppConfig
+import org.scalamock.handlers.CallHandler
+import v2.connectors.RetrieveForeignPropertyAnnualSubmissionConnector.{ForeignResult, NonForeignResult}
 import v2.mocks.MockHttpClient
 import v2.models.domain.Nino
+import v2.models.errors.{IfsErrorCode, IfsErrors}
 import v2.models.outcomes.ResponseWrapper
 import v2.models.request.retrieveForeignPropertyAnnualSubmission.RetrieveForeignPropertyAnnualSubmissionRequest
 import v2.models.response.retrieveForeignPropertyAnnualSubmission.RetrieveForeignPropertyAnnualSubmissionResponse
@@ -33,53 +36,20 @@ class RetrieveForeignPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec
   val businessId: String = "XAIS12345678910"
   val taxYear: String = "2019-20"
 
-  val request: RetrieveForeignPropertyAnnualSubmissionRequest = RetrieveForeignPropertyAnnualSubmissionRequest(
-    nino = Nino(nino),
-    businessId = businessId,
-    taxYear = taxYear
-  )
+  val request: RetrieveForeignPropertyAnnualSubmissionRequest =
+    RetrieveForeignPropertyAnnualSubmissionRequest(
+      Nino(nino),
+      businessId,
+      taxYear
 
-  private val response = RetrieveForeignPropertyAnnualSubmissionResponse(
-    "2020-07-07T10:59:47.544Z",
-    Some(ForeignFhlEeaEntry(
-      Some(ForeignFhlEeaAdjustments(
-        Some(100.25),
-        Some(100.25),
-        Some(true))),
-      Some(ForeignFhlEeaAllowances(
-        Some(100.25),
-        Some(100.25),
-        Some(100.25),
-        Some(100.25),
-        Some(100.25)))
-    )),
-    Some(Seq(ForeignPropertyEntry(
-      "GER",
-      Some(ForeignPropertyAdjustments(
-        Some(100.25),
-        Some(100.25))),
-      Some(ForeignPropertyAllowances(
-        Some(100.25),
-        Some(100.25),
-        Some(100.25),
-        Some(100.25),
-        Some(100.25),
-        Some(100.25),
-        Some(100.25),
-        Some(Seq(StructuredBuildingAllowance(
-          3545.12,
-          Some(FirstYear(
-            "2020-03-29",
-            3453.34
-          )),
-          Building(
-            Some("Building Name"),
-            Some("12"),
-            "TF3 4GH"
-          )
-        )))))
-    )))
-  )
+    )
+  val countryCode: String = "FRA"
+
+  val foreignFhlEea: ForeignFhlEeaEntry = ForeignFhlEeaEntry(None, None)
+  val foreignNonFhlProperty: ForeignPropertyEntry = ForeignPropertyEntry(countryCode, None, None)
+
+  def responseWith(foreignFhlEea: Option[ForeignFhlEeaEntry], foreignNonFhlProperty: Option[Seq[ForeignPropertyEntry]]): RetrieveForeignPropertyAnnualSubmissionResponse =
+    RetrieveForeignPropertyAnnualSubmissionResponse("2020-06-17T10:53:38Z", foreignFhlEea, foreignNonFhlProperty)
 
   class Test extends MockHttpClient with MockAppConfig {
     val connector: RetrieveForeignPropertyAnnualSubmissionConnector = new RetrieveForeignPropertyAnnualSubmissionConnector(
@@ -91,23 +61,74 @@ class RetrieveForeignPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec
     MockAppConfig.ifsToken returns "ifs-token"
     MockAppConfig.ifsEnvironment returns "ifs-environment"
     MockAppConfig.ifsEnvironmentHeaders returns Some(allowedIfsHeaders)
-  }
 
-  "connector" must {
-    "send a request and return a body" in new Test {
-      val outcome = Right(ResponseWrapper(correlationId, response))
-
+    def stubHttpResponse(outcome: IfsOutcome[RetrieveForeignPropertyAnnualSubmissionResponse])
+    : CallHandler[Future[IfsOutcome[RetrieveForeignPropertyAnnualSubmissionResponse]]]#Derived = {
       MockHttpClient
         .get(
-          url = s"$baseUrl/income-tax/business/property/annual?taxableEntityId=$nino&incomeSourceId=$businessId&taxYear=$taxYear",
+          url = s"$baseUrl/income-tax/business/property/annual",
           config = dummyIfsHeaderCarrierConfig,
+          queryParams = Seq("taxableEntityId" -> nino, "incomeSourceId" -> businessId, "taxYear" -> taxYear),
           requiredHeaders = requiredIfsHeaders,
           excludedHeaders = Seq("AnotherHeader" -> "HeaderValue")
         )
         .returns(Future.successful(outcome))
+    }
+  }
 
-      await(connector.retrieveForeignProperty(request)) shouldBe outcome
+  "connector" when {
+    "response has a foreign fhl details" must {
+      "return a foreign result" in new Test {
+        val response: RetrieveForeignPropertyAnnualSubmissionResponse = responseWith(foreignFhlEea = Some(foreignFhlEea), foreignNonFhlProperty = None)
+        val outcome                                                = Right(ResponseWrapper(correlationId, response))
 
+        stubHttpResponse(outcome)
+
+        await(connector.retrieveForeignProperty(request)) shouldBe Right(ResponseWrapper(correlationId, ForeignResult(response)))
+      }
+    }
+
+    "response has foreign non-fhl details" must {
+      "return a foreign result" in new Test {
+        val response: RetrieveForeignPropertyAnnualSubmissionResponse = responseWith(foreignFhlEea = None, foreignNonFhlProperty = Some(Seq(foreignNonFhlProperty)))
+        val outcome                                                = Right(ResponseWrapper(correlationId, response))
+
+        stubHttpResponse(outcome)
+
+        await(connector.retrieveForeignProperty(request)) shouldBe Right(ResponseWrapper(correlationId, ForeignResult(response)))
+      }
+    }
+
+    "response has foreign fhl and non-fhl details" must {
+      "return a foreign result" in new Test {
+        val response: RetrieveForeignPropertyAnnualSubmissionResponse = responseWith(foreignFhlEea = Some(foreignFhlEea), foreignNonFhlProperty = Some(Seq(foreignNonFhlProperty)))
+        val outcome =  Right(ResponseWrapper(correlationId, response))
+
+        stubHttpResponse(outcome)
+
+        await(connector.retrieveForeignProperty(request)) shouldBe Right(ResponseWrapper(correlationId,ForeignResult(response)))
+      }
+    }
+    "response has no details" must {
+      "return a non-foreign result" in new Test{
+        val response: RetrieveForeignPropertyAnnualSubmissionResponse = responseWith(None, None)
+        val outcome                                                = Right(ResponseWrapper(correlationId, response))
+
+        stubHttpResponse(outcome)
+
+        await(connector.retrieveForeignProperty(request)) shouldBe Right(ResponseWrapper(correlationId, NonForeignResult))
+      }
+    }
+
+    "response is an error" must {
+      "return the error" in new Test {
+        val outcome = Left(ResponseWrapper(correlationId, IfsErrors.single(IfsErrorCode("SOME_ERROR"))))
+
+        stubHttpResponse(outcome)
+
+        await(connector.retrieveForeignProperty(request)) shouldBe
+          Left(ResponseWrapper(correlationId, IfsErrors.single(IfsErrorCode("SOME_ERROR"))))
+      }
     }
   }
 }

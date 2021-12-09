@@ -18,13 +18,15 @@ package v2.services
 
 import cats.implicits._
 import cats.data.EitherT
-
 import javax.inject.{Inject, Singleton}
 import uk.gov.hmrc.http.HeaderCarrier
 import utils.Logging
+import v2.connectors
 import v2.connectors.RetrieveForeignPropertyAnnualSubmissionConnector
+import v2.connectors.RetrieveForeignPropertyAnnualSubmissionConnector.{ForeignResult, NonForeignResult}
 import v2.controllers.EndpointLogContext
-import v2.models.errors.{BusinessIdFormatError, DownstreamError, NinoFormatError, NotFoundError}
+import v2.models.errors.{BusinessIdFormatError, DownstreamError, ErrorWrapper, NinoFormatError, NotFoundError, RuleTaxYearNotSupportedError, RuleTypeOfBusinessIncorrectError, TaxYearFormatError}
+import v2.models.outcomes.ResponseWrapper
 import v2.models.request.retrieveForeignPropertyAnnualSubmission.RetrieveForeignPropertyAnnualSubmissionRequest
 import v2.models.response.retrieveForeignPropertyAnnualSubmission.RetrieveForeignPropertyAnnualSubmissionResponse
 import v2.support.IfsResponseMappingSupport
@@ -42,8 +44,9 @@ class RetrieveForeignPropertyAnnualSubmissionService @Inject()(connector: Retrie
     correlationId: String): Future[ServiceOutcome[RetrieveForeignPropertyAnnualSubmissionResponse]] = {
 
     val result = for {
-      ifsResponseWrapper <- EitherT(connector.retrieveForeignProperty(request)).leftMap(mapIfsErrors(ifsErrorMap))
-    } yield ifsResponseWrapper
+      connectorResultWrapper <- EitherT(connector.retrieveForeignProperty(request)).leftMap(mapIfsErrors(ifsErrorMap))
+      mtdResponseWrapper     <- EitherT.fromEither[Future](validateBusinessType(connectorResultWrapper))
+    } yield mtdResponseWrapper
 
     result.value
   }
@@ -51,13 +54,19 @@ class RetrieveForeignPropertyAnnualSubmissionService @Inject()(connector: Retrie
   private def ifsErrorMap =
     Map(
       "INVALID_TAXABLE_ENTITY_ID" -> NinoFormatError,
+      "INVALID_TAX_YEAR" -> TaxYearFormatError,
       "INVALID_INCOMESOURCEID" -> BusinessIdFormatError,
-      "NO_DATA_FOUND" -> NotFoundError,
       "INVALID_CORRELATIONID" -> DownstreamError,
-      "INVALID_PAYLOAD" -> DownstreamError,
-      "INVALID_TAX_YEAR" -> DownstreamError,
+      "NO_DATA_FOUND" -> NotFoundError,
+      "TAX_YEAR_NOT_SUPPORTED" -> RuleTaxYearNotSupportedError,
       "SERVER_ERROR" -> DownstreamError,
       "SERVICE_UNAVAILABLE" -> DownstreamError
     )
 
+
+  private def validateBusinessType(resultWrapper: ResponseWrapper[connectors.RetrieveForeignPropertyAnnualSubmissionConnector.Result]) =
+    resultWrapper.responseData match {
+      case ForeignResult(response) => Right(ResponseWrapper(resultWrapper.correlationId, response))
+      case NonForeignResult        => Left(ErrorWrapper(resultWrapper.correlationId, RuleTypeOfBusinessIncorrectError))
+    }
 }

@@ -17,8 +17,10 @@
 package v2.connectors
 
 import config.AppConfig
+
 import javax.inject.{Inject, Singleton}
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
+import v2.connectors.RetrieveForeignPropertyAnnualSubmissionConnector._
 import v2.connectors.httpparsers.StandardIfsHttpParser._
 import v2.models.outcomes.ResponseWrapper
 import v2.models.request.retrieveForeignPropertyAnnualSubmission.RetrieveForeignPropertyAnnualSubmissionRequest
@@ -35,14 +37,13 @@ object RetrieveForeignPropertyAnnualSubmissionConnector {
   case object NonForeignResult extends Result
 }
 
-import v2.connectors.RetrieveForeignPropertyAnnualSubmissionConnector._
-
 @Singleton
-class RetrieveForeignPropertyAnnualSubmissionConnector @Inject()(val http: HttpClient, val appConfig: AppConfig) extends BaseIfsConnector {
+class RetrieveForeignPropertyAnnualSubmissionConnector @Inject()(val http: HttpClient,
+                                                                 val appConfig: AppConfig) extends BaseIfsConnector {
 
   def retrieveForeignProperty(request: RetrieveForeignPropertyAnnualSubmissionRequest)(implicit hc: HeaderCarrier,
-                                                                             ec: ExecutionContext,
-                                                                             correlationId: String): Future[IfsOutcome[Result]] = {
+                                                                                       ec: ExecutionContext,
+                                                                                       correlationId: String): Future[IfsOutcome[Result]] = {
 
     val response = get(
       uri = IfsUri[RetrieveForeignPropertyAnnualSubmissionResponse]("income-tax/business/property/annual"),
@@ -59,5 +60,5 @@ class RetrieveForeignPropertyAnnualSubmissionConnector @Inject()(val http: HttpC
   // The same API#1598 IF endpoint is used for both uk and foreign properties.
   // If a businessId of the right type is specified some of these optional fields will be present...
   private def foreignResult(response: RetrieveForeignPropertyAnnualSubmissionResponse): Boolean =
-    response.foreignFhlEea.nonEmpty || response.foreignProperty.nonEmpty
+    response.foreignFhlEea.nonEmpty || response.foreignNonFhlProperty.nonEmpty
 }

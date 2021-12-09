@@ -24,7 +24,7 @@
             <td><p>Simulates the scenario of a FHL property with property allowance.</p></td>
         </tr>
          <tr>
-             <td><p>FOREIGN_NON_FHL_ALL_OTHER_PROPERTY_ALLOWANCES</p></td>
+             <td><p>FOREIGN_NON_FHL_ALL_OTHER_ALLOWANCES</p></td>
              <td><p>Simulates the scenario of a Non-FHL property with all other allowances.</p></td>
          </tr>
          <tr>

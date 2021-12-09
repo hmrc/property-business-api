@@ -44,9 +44,9 @@ class AmendUkPropertyAnnualSubmissionServiceSpec extends UnitSpec {
       Some(5000.99),
       Some(5000.99),
       Some(5000.99),
-      true,
+      periodOfGraceAdjustment = true,
       Some(5000.99),
-      true,
+      nonResidentLandlord = true,
       Some(UkPropertyAdjustmentsRentARoom(true))
     )),
     Some(UkFhlPropertyAllowances(
@@ -65,7 +65,7 @@ class AmendUkPropertyAnnualSubmissionServiceSpec extends UnitSpec {
       Some(5000.99),
       Some(5000.99),
       Some(5000.99),
-      true,
+      nonResidentLandlord = true,
       Some(UkPropertyAdjustmentsRentARoom(true))
     )),
     Some(UkNonFhlPropertyAllowances(
@@ -152,6 +152,8 @@ class AmendUkPropertyAnnualSubmissionServiceSpec extends UnitSpec {
         "INCOME_SOURCE_NOT_FOUND" -> NotFoundError,
         "INCOMPATIBLE_PAYLOAD" -> RuleTypeOfBusinessIncorrectError,
         "TAX_YEAR_NOT_SUPPORTED" -> RuleTaxYearNotSupportedError,
+        "BUSINESS_VALIDATION_FAILURE" -> RulePropertyIncomeAllowanceError,
+        "MISSING_ALLOWANCES" -> DownstreamError,
         "DUPLICATE_COUNTRY_CODE" -> DownstreamError,
         "SERVER_ERROR" -> DownstreamError,
         "SERVICE_UNAVAILABLE" -> DownstreamError

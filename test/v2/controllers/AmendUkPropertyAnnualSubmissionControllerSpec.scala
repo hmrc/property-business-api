@@ -175,9 +175,9 @@ class AmendUkPropertyAnnualSubmissionControllerSpec
       Some(1000.10),
       Some(1000.20),
       Some(1000.30),
-      true,
+      periodOfGraceAdjustment = true,
       Some(1000.40),
-      true,
+      nonResidentLandlord = true,
       Some(UkPropertyAdjustmentsRentARoom(true))
     )),
     Some(UkFhlPropertyAllowances(
@@ -196,7 +196,7 @@ class AmendUkPropertyAnnualSubmissionControllerSpec
       Some(2000.20),
       Some(2000.30),
       Some(2000.40),
-      true,
+      nonResidentLandlord = true,
       Some(UkPropertyAdjustmentsRentARoom(true))
     )),
     Some(UkNonFhlPropertyAllowances(
@@ -288,6 +288,7 @@ class AmendUkPropertyAnnualSubmissionControllerSpec
           (TaxYearFormatError, BAD_REQUEST),
           (RuleTaxYearNotSupportedError, BAD_REQUEST),
           (RuleTaxYearRangeInvalidError, BAD_REQUEST),
+          (RulePropertyIncomeAllowanceError,BAD_REQUEST),
           (ValueFormatError.copy(
             paths = Some(List(
               "/ukFhlProperty/adjustments/lossBroughtForward",
@@ -365,6 +366,7 @@ class AmendUkPropertyAnnualSubmissionControllerSpec
           (NotFoundError, NOT_FOUND),
           (RuleTypeOfBusinessIncorrectError, BAD_REQUEST),
           (RuleTaxYearNotSupportedError, BAD_REQUEST),
+          (RulePropertyIncomeAllowanceError,BAD_REQUEST),
           (DownstreamError, INTERNAL_SERVER_ERROR)
         )
 

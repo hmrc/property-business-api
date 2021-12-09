@@ -30,24 +30,24 @@ class AllowancesValidationSpec extends UnitSpec {
     "return no errors" when {
       "only propertyIncomeAllowance is provided" in {
         val allowances       = UkFhlPropertyAllowances(None, None, None, None, None, Some(76543.73))
-        val validationResult = AllowancesValidation.validate(allowances, "path")
+        val validationResult = AllowancesValidation.validateUkFhl(allowances, "path")
         validationResult shouldBe Nil
       }
       "everything apart from propertyIncomeAllowance is provided" in {
         val allowances       = UkFhlPropertyAllowances(Some(2576.26), Some(3645.36), Some(254.66), Some(827.33), Some(909.11), None)
-        val validationResult = AllowancesValidation.validate(allowances, "path")
+        val validationResult = AllowancesValidation.validateUkFhl(allowances, "path")
         validationResult shouldBe Nil
       }
       "some fields excluding propertyIncomeAllowance is provided" in {
         val allowances       = UkFhlPropertyAllowances(Some(2576.26), None, None, None, Some(909.11), None)
-        val validationResult = AllowancesValidation.validate(allowances, "path")
+        val validationResult = AllowancesValidation.validateUkFhl(allowances, "path")
         validationResult shouldBe Nil
       }
     }
     "return RuleBothAllowancesSuppliedError error" when {
       "propertyIncomeAllowance is provided with other fields" in {
         val allowances       = UkFhlPropertyAllowances(Some(2576.26), None, None, None, Some(909.11), Some(76543.73))
-        val validationResult = AllowancesValidation.validate(allowances, "path")
+        val validationResult = AllowancesValidation.validateUkFhl(allowances, "path")
         validationResult shouldBe List(RuleBothAllowancesSuppliedError.copy(paths = Some(Seq("path"))))
       }
     }
@@ -57,7 +57,7 @@ class AllowancesValidationSpec extends UnitSpec {
     "return no errors" when {
       "only propertyIncomeAllowance is provided" in {
         val allowances       = UkNonFhlPropertyAllowances(None, None, None, None, None, None, None, Some(5326.11), None, None)
-        val validationResult = AllowancesValidation.validate(allowances, "path")
+        val validationResult = AllowancesValidation.validateUkNonFhl(allowances, "path")
         validationResult shouldBe Nil
       }
       "everything apart from propertyIncomeAllowance is provided" in {
@@ -65,19 +65,19 @@ class AllowancesValidationSpec extends UnitSpec {
         val enhancedStructuredBuildingAllowance = StructuredBuildingAllowance(514.34, None, Building(Some("name"), Some("number"), "postcode"))
         val allowances = UkNonFhlPropertyAllowances(Some(5326.11), Some(5326.11), Some(5326.11), Some(5326.11), Some(5326.11), Some(5326.11),
           Some(5326.11), None, Some(Seq(structuredBuildingAllowance)), Some(Seq(enhancedStructuredBuildingAllowance)))
-        val validationResult = AllowancesValidation.validate(allowances, "path")
+        val validationResult = AllowancesValidation.validateUkNonFhl(allowances, "path")
         validationResult shouldBe Nil
       }
       "some fields excluding propertyIncomeAllowance is provided" in {
         val allowances       = UkNonFhlPropertyAllowances(Some(5326.11), None, Some(5326.11), None, None, None, None, None, None, None)
-        val validationResult = AllowancesValidation.validate(allowances, "path")
+        val validationResult = AllowancesValidation.validateUkNonFhl(allowances, "path")
         validationResult shouldBe Nil
       }
     }
     "return RuleBothAllowancesSuppliedError error" when {
       "propertyIncomeAllowance is provided with other fields" in {
         val allowances       = UkNonFhlPropertyAllowances(Some(5326.11), None, Some(5326.11), None, None, Some(5326.11), None, Some(5326.11), None, None)
-        val validationResult = AllowancesValidation.validate(allowances, "path")
+        val validationResult = AllowancesValidation.validateUkNonFhl(allowances, "path")
         validationResult shouldBe List(RuleBothAllowancesSuppliedError.copy(paths = Some(Seq("path"))))
       }
     }
@@ -90,34 +90,34 @@ class AllowancesValidationSpec extends UnitSpec {
     "return no errors" when {
       "other fields are provided without propertyIncomeAllowance" in {
         val allowances = ForeignFhlEeaAllowances(provided, provided, provided, provided, propertyIncomeAllowance = None)
-        AllowancesValidation.validate(allowances, "path") shouldBe Nil
+        AllowancesValidation.validateForeignFhl(allowances, "path") shouldBe Nil
       }
 
       "only propertyIncomeAllowance is provided" in {
         val allowances = ForeignFhlEeaAllowances(None, None, None, None, propertyIncomeAllowance = provided)
-        AllowancesValidation.validate(allowances, "path") shouldBe Nil
+        AllowancesValidation.validateForeignFhl(allowances, "path") shouldBe Nil
       }
     }
 
     "return an error" when {
       "annualInvestmentAllowance is provided with propertyIncomeAllowance" in {
         val allowances = ForeignFhlEeaAllowances(annualInvestmentAllowance = provided, None, None, None, propertyIncomeAllowance = provided)
-        AllowancesValidation.validate(allowances, "path") shouldBe List(RuleBothAllowancesSuppliedError.copy(paths = Some(Seq("path"))))
+        AllowancesValidation.validateForeignFhl(allowances, "path") shouldBe List(RuleBothAllowancesSuppliedError.copy(paths = Some(Seq("path"))))
       }
 
       "otherCapitalAllowance is provided with propertyIncomeAllowance" in {
         val allowances = ForeignFhlEeaAllowances(None, otherCapitalAllowance = provided, None, None, propertyIncomeAllowance = provided)
-        AllowancesValidation.validate(allowances, "path") shouldBe List(RuleBothAllowancesSuppliedError.copy(paths = Some(Seq("path"))))
+        AllowancesValidation.validateForeignFhl(allowances, "path") shouldBe List(RuleBothAllowancesSuppliedError.copy(paths = Some(Seq("path"))))
       }
 
       "electricChargePointAllowance is provided with propertyIncomeAllowance" in {
         val allowances = ForeignFhlEeaAllowances(None, None, electricChargePointAllowance = provided, None, propertyIncomeAllowance = provided)
-        AllowancesValidation.validate(allowances, "path") shouldBe List(RuleBothAllowancesSuppliedError.copy(paths = Some(Seq("path"))))
+        AllowancesValidation.validateForeignFhl(allowances, "path") shouldBe List(RuleBothAllowancesSuppliedError.copy(paths = Some(Seq("path"))))
       }
 
       "zeroEmissionsCarAllowance is provided with propertyIncomeAllowance" in {
         val allowances = ForeignFhlEeaAllowances(None, None, None, zeroEmissionsCarAllowance = provided, propertyIncomeAllowance = provided)
-        AllowancesValidation.validate(allowances, "path") shouldBe List(RuleBothAllowancesSuppliedError.copy(paths = Some(Seq("path"))))
+        AllowancesValidation.validateForeignFhl(allowances, "path") shouldBe List(RuleBothAllowancesSuppliedError.copy(paths = Some(Seq("path"))))
       }
     }
   }
@@ -130,12 +130,12 @@ class AllowancesValidationSpec extends UnitSpec {
       "other fields are provided without propertyIncomeAllowance" in {
         val allowances =
           ForeignNonFhlAllowances(provided, provided, provided, provided, provided, provided, propertyIncomeAllowance = None, structuredBuildingAllowance)
-        AllowancesValidation.validate(allowances, "path") shouldBe Nil
+        AllowancesValidation.validateForeignNonFhl(allowances, "path") shouldBe Nil
       }
 
       "only propertyIncomeAllowance is provided" in {
         val allowances = ForeignNonFhlAllowances(None, None, None, None, None, None, propertyIncomeAllowance = None, None)
-        AllowancesValidation.validate(allowances, "path") shouldBe Nil
+        AllowancesValidation.validateForeignNonFhl(allowances, "path") shouldBe Nil
       }
     }
 
@@ -143,42 +143,42 @@ class AllowancesValidationSpec extends UnitSpec {
       "annualInvestmentAllowance is provided with propertyIncomeAllowance" in {
         val allowances =
           ForeignNonFhlAllowances(annualInvestmentAllowance = provided, None, None, None, None, None, propertyIncomeAllowance = provided, None)
-        AllowancesValidation.validate(allowances, "path") shouldBe List(RuleBothAllowancesSuppliedError.copy(paths = Some(Seq("path"))))
+        AllowancesValidation.validateForeignNonFhl(allowances, "path") shouldBe List(RuleBothAllowancesSuppliedError.copy(paths = Some(Seq("path"))))
       }
 
       "costOfReplacingDomesticItems is provided with propertyIncomeAllowance" in {
         val allowances =
           ForeignNonFhlAllowances(None, costOfReplacingDomesticItems = provided, None, None, None, None, propertyIncomeAllowance = provided, None)
-        AllowancesValidation.validate(allowances, "path") shouldBe List(RuleBothAllowancesSuppliedError.copy(paths = Some(Seq("path"))))
+        AllowancesValidation.validateForeignNonFhl(allowances, "path") shouldBe List(RuleBothAllowancesSuppliedError.copy(paths = Some(Seq("path"))))
       }
 
       "zeroEmissionsGoodsVehicleAllowance is provided with propertyIncomeAllowance" in {
         val allowances =
           ForeignNonFhlAllowances(None, None, zeroEmissionsGoodsVehicleAllowance = provided, None, None, None, propertyIncomeAllowance = provided, None)
-        AllowancesValidation.validate(allowances, "path") shouldBe List(RuleBothAllowancesSuppliedError.copy(paths = Some(Seq("path"))))
+        AllowancesValidation.validateForeignNonFhl(allowances, "path") shouldBe List(RuleBothAllowancesSuppliedError.copy(paths = Some(Seq("path"))))
       }
 
       "otherCapitalAllowance is provided with propertyIncomeAllowance" in {
         val allowances = ForeignNonFhlAllowances(None, None, None, otherCapitalAllowance = provided, None, None, propertyIncomeAllowance = provided, None)
-        AllowancesValidation.validate(allowances, "path") shouldBe List(RuleBothAllowancesSuppliedError.copy(paths = Some(Seq("path"))))
+        AllowancesValidation.validateForeignNonFhl(allowances, "path") shouldBe List(RuleBothAllowancesSuppliedError.copy(paths = Some(Seq("path"))))
       }
 
       "electricChargePointAllowance is provided with propertyIncomeAllowance" in {
         val allowances =
           ForeignNonFhlAllowances(None, None, None, None, electricChargePointAllowance = provided, None, propertyIncomeAllowance = provided, None)
-        AllowancesValidation.validate(allowances, "path") shouldBe List(RuleBothAllowancesSuppliedError.copy(paths = Some(Seq("path"))))
+        AllowancesValidation.validateForeignNonFhl(allowances, "path") shouldBe List(RuleBothAllowancesSuppliedError.copy(paths = Some(Seq("path"))))
       }
 
       "zeroEmissionsCarAllowance is provided with propertyIncomeAllowance" in {
         val allowances =
           ForeignNonFhlAllowances(None, None, None, None, None, zeroEmissionsCarAllowance = provided, propertyIncomeAllowance = provided, None)
-        AllowancesValidation.validate(allowances, "path") shouldBe List(RuleBothAllowancesSuppliedError.copy(paths = Some(Seq("path"))))
+        AllowancesValidation.validateForeignNonFhl(allowances, "path") shouldBe List(RuleBothAllowancesSuppliedError.copy(paths = Some(Seq("path"))))
       }
 
       "structuredBuildingAllowance is provided with propertyIncomeAllowance" in {
         val allowances =
           ForeignNonFhlAllowances(None, None, None, None, None, None, propertyIncomeAllowance = provided, structuredBuildingAllowance)
-        AllowancesValidation.validate(allowances, "path") shouldBe List(RuleBothAllowancesSuppliedError.copy(paths = Some(Seq("path"))))
+        AllowancesValidation.validateForeignNonFhl(allowances, "path") shouldBe List(RuleBothAllowancesSuppliedError.copy(paths = Some(Seq("path"))))
       }
     }
   }

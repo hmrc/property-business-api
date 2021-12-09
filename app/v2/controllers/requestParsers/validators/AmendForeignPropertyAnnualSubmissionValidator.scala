@@ -85,9 +85,9 @@ class AmendForeignPropertyAnnualSubmissionValidator @Inject()(appConfig: AppConf
                                         path = "/foreignFhlEea/allowances/propertyIncomeAllowance",
                                         max = 1000),
       foreignFhlEea.allowances
-        .map(allowances => AllowancesValidation.validate(allowances = allowances, path = "/foreignFhlEea/allowances"))
+        .map(allowances => AllowancesValidation.validateForeignFhl(allowances = allowances, path = "/foreignFhlEea/allowances"))
         .getOrElse(Nil),
-      validatePropertyIncomeAllowance(foreignFhlEea)
+      validateFhlPropertyIncomeAllowance(foreignFhlEea)
     ).flatten
   }
 
@@ -123,9 +123,9 @@ class AmendForeignPropertyAnnualSubmissionValidator @Inject()(appConfig: AppConf
         })
         .getOrElse(NoValidationErrors),
       entry.allowances
-        .map(allowances => AllowancesValidation.validate(allowances = allowances, path = s"/foreignNonFhlProperty/$index/allowances"))
+        .map(allowances => AllowancesValidation.validateForeignNonFhl(allowances = allowances, path = s"/foreignNonFhlProperty/$index/allowances"))
         .getOrElse(Nil),
-      validatePropertyIncomeAllowance(entry, index)
+      validateNonFhlPropertyIncomeAllowance(entry, index)
     ).flatten
   }
 
@@ -162,7 +162,7 @@ class AmendForeignPropertyAnnualSubmissionValidator @Inject()(appConfig: AppConf
     ).flatten
   }
 
-  def validatePropertyIncomeAllowance(foreignFhlEea: ForeignFhlEea): List[MtdError] = {
+  private def validateFhlPropertyIncomeAllowance(foreignFhlEea: ForeignFhlEea): List[MtdError] = {
     (for {
       allowances  <- foreignFhlEea.allowances
       adjustments <- foreignFhlEea.adjustments
@@ -174,7 +174,7 @@ class AmendForeignPropertyAnnualSubmissionValidator @Inject()(appConfig: AppConf
     }).getOrElse(Nil)
   }
 
-  def validatePropertyIncomeAllowance(foreignPropertyEntry: ForeignNonFhlEntry, index: Int): List[MtdError] = {
+  private def validateNonFhlPropertyIncomeAllowance(foreignPropertyEntry: ForeignNonFhlEntry, index: Int): List[MtdError] = {
     (for {
       allowances  <- foreignPropertyEntry.allowances
       adjustments <- foreignPropertyEntry.adjustments

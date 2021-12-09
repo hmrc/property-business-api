@@ -25,7 +25,7 @@ import v2.models.request.amendUkPropertyAnnualSubmission.ukNonFhlProperty.UkNonF
 object AllowancesValidation {
 
 
-  def validate(allowances: UkFhlPropertyAllowances, path: String): List[MtdError] = {
+  def validateUkFhl(allowances: UkFhlPropertyAllowances, path: String): List[MtdError] = {
     allowances.propertyIncomeAllowance match {
       case None => NoValidationErrors
       case Some(_) => allowances match {
@@ -34,7 +34,7 @@ object AllowancesValidation {
       }
     }
   }
-  def validate(allowances: UkNonFhlPropertyAllowances, path: String): List[MtdError] = {
+  def validateUkNonFhl(allowances: UkNonFhlPropertyAllowances, path: String): List[MtdError] = {
     allowances.propertyIncomeAllowance match {
       case None => NoValidationErrors
       case Some(_) => allowances match {
@@ -45,7 +45,7 @@ object AllowancesValidation {
   }
 
 
-  def validate(allowances: ForeignFhlEeaAllowances, path: String): List[MtdError] =  {
+  def validateForeignFhl(allowances: ForeignFhlEeaAllowances, path: String): List[MtdError] =  {
     allowances.propertyIncomeAllowance match {
       case None => NoValidationErrors
       case Some(_) => allowances match {
@@ -55,7 +55,7 @@ object AllowancesValidation {
     }
   }
 
-  def validate(allowances: ForeignNonFhlAllowances, path: String): List[MtdError] =  {
+  def validateForeignNonFhl(allowances: ForeignNonFhlAllowances, path: String): List[MtdError] =  {
     allowances.propertyIncomeAllowance match {
       case None => NoValidationErrors
       case Some(_) => allowances match {

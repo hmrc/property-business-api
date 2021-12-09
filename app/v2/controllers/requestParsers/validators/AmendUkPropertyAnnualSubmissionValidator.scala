@@ -234,14 +234,14 @@ class AmendUkPropertyAnnualSubmissionValidator @Inject()(appConfig: AppConfig) e
   }
 
   private def validateFhlAllowances(allowances: UkFhlPropertyAllowances) : List[MtdError] = {
-    AllowancesValidation.validate(
+    AllowancesValidation.validateUkFhl(
       allowances = allowances,
       path = s"/ukFhlProperty/allowances"
     )
   }
 
   private def validateNonFhlAllowances(allowances: UkNonFhlPropertyAllowances) : List[MtdError] = {
-    AllowancesValidation.validate(
+    AllowancesValidation.validateUkNonFhl(
       allowances = allowances,
       path = s"/ukNonFhlProperty/allowances"
     )

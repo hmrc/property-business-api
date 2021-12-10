@@ -25,6 +25,7 @@ import v2.models.response.retrieveForeignPropertyAnnualSubmission.RetrieveForeig
 import v2.models.response.retrieveForeignPropertyAnnualSubmission.foreignFhlEea._
 import v2.models.response.retrieveForeignPropertyAnnualSubmission.foreignProperty._
 import uk.gov.hmrc.http.HeaderCarrier
+import v2.connectors.RetrieveForeignPropertyAnnualSubmissionConnector.{ForeignResult, NonForeignResult}
 import v2.controllers.EndpointLogContext
 import v2.models.domain.Nino
 
@@ -92,10 +93,19 @@ class RetrieveForeignPropertyAnnualSubmissionServiceSpec extends UnitSpec {
     "service call successful" when {
       "return mapped result" in new Test {
         MockRetrieveForeignPropertyConnector.retrieveForeignProperty(requestData)
-          .returns(Future.successful(Right(ResponseWrapper(correlationId, response))))
+          .returns(Future.successful(Right(ResponseWrapper(correlationId, ForeignResult(response)))))
 
         await(service.retrieveForeignProperty(requestData)) shouldBe Right(ResponseWrapper(correlationId, response))
       }
+    }
+  }
+
+  "a non-foreign result is found" should {
+    "return a RULE_TYPE_OF_BUSINESS_INCORRECT error" in new Test {
+      MockRetrieveForeignPropertyConnector
+        .retrieveForeignProperty(requestData) returns Future.successful(Right(ResponseWrapper(correlationId, NonForeignResult)))
+
+      await(service.retrieveForeignProperty(requestData)) shouldBe Left(ErrorWrapper(correlationId, RuleTypeOfBusinessIncorrectError))
     }
   }
 
@@ -113,11 +123,11 @@ class RetrieveForeignPropertyAnnualSubmissionServiceSpec extends UnitSpec {
 
       val input = Seq(
         "INVALID_TAXABLE_ENTITY_ID" -> NinoFormatError,
+        "INVALID_TAX_YEAR" -> TaxYearFormatError,
         "INVALID_INCOMESOURCEID" -> BusinessIdFormatError,
-        "NO_DATA_FOUND" -> NotFoundError,
         "INVALID_CORRELATIONID" -> DownstreamError,
-        "INVALID_PAYLOAD" -> DownstreamError,
-        "INVALID_TAX_YEAR" -> DownstreamError,
+        "NO_DATA_FOUND" -> NotFoundError,
+        "TAX_YEAR_NOT_SUPPORTED" -> RuleTaxYearNotSupportedError,
         "SERVER_ERROR" -> DownstreamError,
         "SERVICE_UNAVAILABLE" -> DownstreamError
       )

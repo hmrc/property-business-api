@@ -14,6 +14,7 @@ is:
   - errors.ruleTaxYearRangeInvalid
   - errors.ruleTaxYearNotSupported
   - errors.ruleTypeOfBusinessIncorrectUk
+  - errors.rulePropertyIncomeAllowance
   - errors.clientOrAgentNotAuthorised
   - errors.notFound
 displayName: Create and Amend a UK Property Business Annual Submission [test only]
@@ -29,8 +30,8 @@ body:
         description: Property Allowance request
         value: !include examples/uk_property_annual_submission_create_and_amend/property_allowance_request.json
       example-2:
-        description: All Other Allowance request
-        value: !include examples/uk_property_annual_submission_create_and_amend/all_other_allowance_request.json
+        description: All Other Allowances request
+        value: !include examples/uk_property_annual_submission_create_and_amend/all_other_allowances_request.json
 responses:
   200:
     body:

@@ -1,8 +1,7 @@
-
 {
   "$schema": "http://json-schema.org/draft-04/schema#",
-  "title": "Amend a Foreign Property Income & Expenses Period Summary",
-  "description": "This endpoint allows a developer to re-submit the income and expenditure for a uk property business that occurred between two dates.",
+  "title": "Create and Amend a UK Property Business Annual Submission",
+  "description": "This endpoint allows a developer to re-submit adjustments and allowances for a UK property business. This submission is for either or both of Furnished Holiday Letting (FHL) and Non FHL UK property submissions. A National Insurance number, business ID and tax year are required.",
   "type": "object",
   "properties": {
     "links": {
@@ -12,7 +11,7 @@
         "description": "A list of endpoint links that indicate possible actions related to the current resource.",
         "properties": {
           "href": {
-            "description": "The relative url of the endpoint",
+            "description": "The relative url of the endpoint.",
             "type": "string",
             "example": "/individuals/business/property/uk/TC663795B/XAIS12345678910/annual/2022-23"
           },

@@ -139,8 +139,8 @@ class AmendUkPropertyAnnualSubmissionValidator @Inject()(appConfig: AppConfig) e
         path = "/ukNonFhlProperty/allowances/annualInvestmentAllowance"
       ),
       NumberValidation.validateOptional(
-        field = ukNonFhlProperty.allowances.flatMap(_.zeroEmissionGoodsVehicleAllowance),
-        path = "/ukNonFhlProperty/allowances/zeroEmissionGoodsVehicleAllowance"
+        field = ukNonFhlProperty.allowances.flatMap(_.zeroEmissionsGoodsVehicleAllowance),
+        path = "/ukNonFhlProperty/allowances/zeroEmissionsGoodsVehicleAllowance"
       ),
       NumberValidation.validateOptional(
         field = ukNonFhlProperty.allowances.flatMap(_.businessPremisesRenovationAllowance),

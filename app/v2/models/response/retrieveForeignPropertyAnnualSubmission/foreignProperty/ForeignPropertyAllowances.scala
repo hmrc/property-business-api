@@ -21,7 +21,7 @@ import play.api.libs.functional.syntax._
 
 case class ForeignPropertyAllowances(annualInvestmentAllowance: Option[BigDecimal],
                                      costOfReplacingDomesticItems: Option[BigDecimal],
-                                     zeroEmissionGoodsVehicleAllowance: Option[BigDecimal],
+                                     zeroEmissionsGoodsVehicleAllowance: Option[BigDecimal],
                                      otherCapitalAllowance: Option[BigDecimal],
                                      electricChargePointAllowance:  Option[BigDecimal],
                                      zeroEmissionsCarAllowance: Option[BigDecimal],

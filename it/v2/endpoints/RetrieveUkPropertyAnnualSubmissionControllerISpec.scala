@@ -61,7 +61,7 @@ class RetrieveUkPropertyAnnualSubmissionControllerISpec extends V2IntegrationBas
         |  "ukNonFhlProperty": {
         |    "allowances": {
         |      "annualInvestmentAllowance": 678.45,
-        |      "zeroEmissionGoodsVehicleAllowance": 456.34,
+        |      "zeroEmissionsGoodsVehicleAllowance": 456.34,
         |      "businessPremisesRenovationAllowance": 573.45,
         |      "otherCapitalAllowance": 452.34,
         |      "costOfReplacingDomesticGoods": 567.34,

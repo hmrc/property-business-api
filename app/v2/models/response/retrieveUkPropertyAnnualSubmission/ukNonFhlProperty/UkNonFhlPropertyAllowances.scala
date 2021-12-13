@@ -16,11 +16,12 @@
 
 package v2.models.response.retrieveUkPropertyAnnualSubmission.ukNonFhlProperty
 
-import play.api.libs.json.{Json, OFormat}
+import play.api.libs.json.{JsPath, Json, OWrites, Reads}
+import play.api.libs.functional.syntax._
 
 case class UkNonFhlPropertyAllowances(
     annualInvestmentAllowance: Option[BigDecimal],
-    zeroEmissionGoodsVehicleAllowance: Option[BigDecimal],
+    zeroEmissionsGoodsVehicleAllowance: Option[BigDecimal],
     businessPremisesRenovationAllowance: Option[BigDecimal],
     otherCapitalAllowance: Option[BigDecimal],
     costOfReplacingDomesticGoods: Option[BigDecimal],
@@ -32,5 +33,18 @@ case class UkNonFhlPropertyAllowances(
 )
 
 object UkNonFhlPropertyAllowances {
-  implicit val format: OFormat[UkNonFhlPropertyAllowances] = Json.format[UkNonFhlPropertyAllowances]
+  implicit  val writes: OWrites[UkNonFhlPropertyAllowances] = Json.writes[UkNonFhlPropertyAllowances]
+
+  implicit val reads: Reads[UkNonFhlPropertyAllowances] = (
+    (JsPath \ "annualInvestmentAllowance").readNullable[BigDecimal] and
+      (JsPath \ "zeroEmissionGoodsVehicleAllowance").readNullable[BigDecimal] and
+      (JsPath \ "businessPremisesRenovationAllowance").readNullable[BigDecimal] and
+      (JsPath \ "otherCapitalAllowance").readNullable[BigDecimal] and
+      (JsPath \ "costOfReplacingDomesticGoods").readNullable[BigDecimal] and
+      (JsPath \ "propertyIncomeAllowance").readNullable[BigDecimal] and
+      (JsPath \ "electricChargePointAllowance").readNullable[BigDecimal] and
+      (JsPath \ "structuredBuildingAllowance").readNullable[Seq[UkNonFhlPropertyStructuredBuildingAllowance]] and
+      (JsPath \ "enhancedStructuredBuildingAllowance").readNullable[Seq[UkNonFhlPropertyStructuredBuildingAllowance]] and
+      (JsPath \ "zeroEmissionsCarAllowance").readNullable[BigDecimal]
+    )(UkNonFhlPropertyAllowances.apply _)
 }

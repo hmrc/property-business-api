@@ -22,7 +22,7 @@
       "allowances": {
         "annualInvestmentAllowance": 38330.95,
         "costOfReplacingDomesticItems": 41985.17,
-        "zeroEmissionGoodsVehicleAllowance": 9769.19,
+        "zeroEmissionsGoodsVehicleAllowance": 9769.19,
         "otherCapitalAllowance": 1049.21,
         "electricChargePointAllowance": 3565.45,
         "zeroEmissionsCarAllowance": 1000.99,
@@ -34,7 +34,7 @@
               "qualifyingAmountExpenditure": 3453.34
             },
             "building": {
-              "name": "Building name",
+              "name": "Green Oaks",
               "number": "12",
               "postcode": "TF3 4GH"
             }

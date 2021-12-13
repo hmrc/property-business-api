@@ -1,7 +1,6 @@
-
 {
   "$schema": "http://json-schema.org/draft-04/schema#",
-  "title": "Create and Amend a Foreign Property Annual Summary",
+  "title": "Create and Amend a Foreign Property Annual Submission",
   "description": "This endpoint allows a developer to re-submit adjustments and allowances for a foreign property business. This submission is for either or both of Furnished Holiday Letting (FHL) in the European Economic Area (EEA) and Non FHL Foreign Property submissions. A National Insurance number, business ID and tax year must be provided.",
   "type": "object",
   "properties": {
@@ -12,7 +11,7 @@
         "description": "A list of endpoint links that indicate possible actions related to the current resource.",
         "properties": {
           "href": {
-            "description": "The relative url of the endpoint",
+            "description": "The relative url of the endpoint.",
             "type": "string",
             "example": "/individuals/business/property/foreign/TC663795B/XAIS12345678910/annual/2022-23"
           },

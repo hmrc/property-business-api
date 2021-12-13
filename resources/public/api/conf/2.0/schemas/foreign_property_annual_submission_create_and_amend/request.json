@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-04/schema#",
-  "title": "Create and Amend a Foreign Property Annual Summary",
+  "title": "Create and Amend a Foreign Property Annual Submission",
   "description": "This endpoint allows a developer to re-submit adjustments and allowances for a foreign property business. This submission is for either or both of Furnished Holiday Letting (FHL) in the European Economic Area (EEA) and Non FHL Foreign Property submissions. A National Insurance number, business ID and tax year must be provided.",
   "type": "object",
   "properties": {
@@ -75,7 +75,7 @@
             },
             "propertyIncomeAllowance": {
               "type": "number",
-              "description": "The amount of Tax exemption for individuals with income from land or property. The value must be between 0 and 1000.00 up to 2 decimal places.",
+              "description": "The amount of tax exemption for individuals with income from land or property. The value must be between 0 and 1000.00 up to 2 decimal places.",
               "multipleOf": 0.01,
               "minimum": 0.00,
               "maximum": 1000.00,
@@ -89,7 +89,7 @@
     },
     "foreignNonFhlProperty": {
       "type": "array",
-      "description": "Array holding the adjustments and allowances of the user's foreign property business - excluding Furnished Holiday Lettings (FHL) in the European Economic Area (EEA) - for the period.",
+      "description": "Array holding the adjustments and allowances of the user's foreign property business - excluding Furnished Holiday Lettings (FHL) in the European Economic Area (EEA) for the period.",
       "items": {
         "type": "object",
         "properties": {
@@ -141,9 +141,9 @@
                 "maximum": 99999999999.99,
                 "example": "409.99"
               },
-              "zeroEmissionGoodsVehicleAllowance": {
+              "zeroEmissionsGoodsVehicleAllowance": {
                 "type": "number",
-                "description": "The amount of Zero emission goods vehicle allowance for goods vehicles purchased for business use. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
+                "description": "The amount of zero emissions goods vehicle allowance for goods vehicles purchased for business use. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
                 "multipleOf": 0.01,
                 "minimum": 0.00,
                 "maximum": 99999999999.99,
@@ -175,7 +175,7 @@
               },
               "propertyIncomeAllowance": {
                 "type": "number",
-                "description": "The amount of Tax exemption for individuals with income from land or property. The value must be between 0 and 1000.00 up to 2 decimal places.",
+                "description": "The amount of tax exemption for individuals with income from land or property. The value must be between 0 and 1000.00 up to 2 decimal places.",
                 "multipleOf": 0.01,
                 "minimum": 0.00,
                 "maximum": 1000.00,
@@ -183,7 +183,7 @@
               },
               "structuredBuildingAllowance": {
                 "type": "array",
-                "description": "Details about structured building allowances.",
+                "description": "Details about structured building allowance.",
                 "items": {
                   "type": "object",
                   "properties": {
@@ -218,7 +218,7 @@
                     },
                     "building": {
                       "type": "object",
-                      "description": "Object holding foreign Non FHL structured building details. Post code is mandatory and minimum one of name and number field must be supplied.",
+                      "description": "Object holding foreign Non FHL structured building details. Postcode is mandatory and minimum one of name and number field must be supplied.",
                       "properties": {
                         "name": {
                           "type": "string",
@@ -230,13 +230,13 @@
                           "type": "string",
                           "description": "The number of the building.",
                           "pattern": "^[0-9a-zA-Z{À-˿’}\\- _&`():.'^]{1,90}$",
-                          "example": "16AD"
+                          "example": "16"
                         },
                         "postcode": {
                           "type": "string",
                           "description": "The postcode for the building.",
                           "pattern": "^[0-9a-zA-Z{À-˿’}\\- _&`():.'^]{1,90}$",
-                          "example": "GF49JH"
+                          "example": "GF4 9JH"
                         }
                       },
                       "additionalProperties": false,

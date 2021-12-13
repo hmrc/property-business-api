@@ -23,15 +23,13 @@ import v2.mocks.MockIdGenerator
 import v2.mocks.hateoas.MockHateoasFactory
 import v2.mocks.requestParsers.MockAmendForeignPropertyAnnualSubmissionRequestParser
 import v2.mocks.services.{MockAmendForeignPropertyAnnualSubmissionService, MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService}
-import v2.models.audit.{AuditError, AuditEvent, AuditResponse, CreateAndAmendForeignPropertyAnnualAuditDetail}
+import v2.models.audit.{AuditEvent, AuditResponse, CreateAndAmendForeignPropertyAnnualAuditDetail}
 import v2.models.domain.Nino
 import v2.models.errors._
 import v2.models.hateoas.Method.GET
 import v2.models.hateoas.{HateoasWrapper, Link}
 import v2.models.outcomes.ResponseWrapper
 import v2.models.request.amendForeignPropertyAnnualSubmission._
-import v2.models.request.amendForeignPropertyAnnualSubmission.foreignFhlEea.ForeignFhlEea
-import v2.models.request.amendForeignPropertyAnnualSubmission.foreignNonFhl._
 import v2.models.response.amendForeignPropertyAnnualSubmission.AmendForeignPropertyAnnualSubmissionHateoasData
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -45,7 +43,8 @@ class AmendForeignPropertyAnnualSubmissionControllerSpec
     with MockAmendForeignPropertyAnnualSubmissionRequestParser
     with MockHateoasFactory
     with MockAuditService
-    with MockIdGenerator {
+    with MockIdGenerator
+    with AmendForeignPropertyAnnualSubmissionFixture {
 
   private val nino = "AA123456A"
   private val businessId = "XAIS12345678910"
@@ -103,52 +102,9 @@ class AmendForeignPropertyAnnualSubmissionControllerSpec
       )
     )
 
-  private val requestJson = Json.parse(
-    """
-      |{
-      |  "foreignFhlEea": {
-      |      "adjustments": {
-      |        "privateUseAdjustment":100.25,
-      |        "balancingCharge":100.25,
-      |        "periodOfGraceAdjustment":true
-      |      },
-      |      "allowances": {
-      |        "annualInvestmentAllowance":100.25,
-      |        "otherCapitalAllowance":100.25,
-      |        "propertyAllowance":100.25,
-      |        "electricChargePointAllowance":100.25
-      |      }
-      |    },
-      |  "foreignProperty": [
-      |    {
-      |      "countryCode":"GER",
-      |      "adjustments": {
-      |        "privateUseAdjustment":100.25,
-      |        "balancingCharge":100.25
-      |      },
-      |      "allowances": {
-      |        "annualInvestmentAllowance":100.25,
-      |        "costOfReplacingDomesticItems":100.25,
-      |        "zeroEmissionsGoodsVehicleAllowance":100.25,
-      |        "propertyAllowance":100.25,
-      |        "otherCapitalAllowance":100.25,
-      |        "structureAndBuildingAllowance":100.25,
-      |        "electricChargePointAllowance":100.25
-      |      }
-      |    }
-      |  ]
-      |}
-      |""".stripMargin
-  )
+  private val requestJson =  amendForeignPropertyAnnualSubmissionRequestBodyMtdJson
 
-  private val foreignFhlEea = ForeignFhlEea(None, None)
-
-  private val foreignPropertyEntry = ForeignNonFhlEntry("FRA", None, None)
-
-  val body: AmendForeignPropertyAnnualSubmissionRequestBody = AmendForeignPropertyAnnualSubmissionRequestBody(
-    Some(foreignFhlEea),
-    Some(Seq(foreignPropertyEntry))
-  )
+  val body: AmendForeignPropertyAnnualSubmissionRequestBody = amendForeignPropertyAnnualSubmissionRequestBody
 
   private val rawData = AmendForeignPropertyAnnualSubmissionRawData(nino, businessId, taxYear, requestJson)
   private val request = AmendForeignPropertyAnnualSubmissionRequest(Nino(nino), businessId, taxYear, body)
@@ -172,11 +128,9 @@ class AmendForeignPropertyAnnualSubmissionControllerSpec
         val result: Future[Result] = controller.handleRequest(nino, businessId, taxYear)(fakeRequestWithBody(requestJson))
         status(result) shouldBe OK
         header("X-CorrelationId", result) shouldBe Some(correlationId)
-
-        val auditResponse: AuditResponse = AuditResponse(OK, None, Some(hateoasResponse))
-        MockedAuditService.verifyAuditEvent(event(auditResponse)).once
       }
     }
+
     "return the error as per spec" when {
       "parser errors occur" should {
         def errorsFromParserTester(error: MtdError, expectedStatus: Int): Unit = {
@@ -191,9 +145,6 @@ class AmendForeignPropertyAnnualSubmissionControllerSpec
             status(result) shouldBe expectedStatus
             contentAsJson(result) shouldBe Json.toJson(error)
             header("X-CorrelationId", result) shouldBe Some(correlationId)
-
-            val auditResponse: AuditResponse = AuditResponse(expectedStatus, Some(Seq(AuditError(error.code))), None)
-            MockedAuditService.verifyAuditEvent(event(auditResponse)).once
           }
         }
 
@@ -205,27 +156,25 @@ class AmendForeignPropertyAnnualSubmissionControllerSpec
           (RuleTaxYearNotSupportedError, BAD_REQUEST),
           (RuleTaxYearRangeInvalidError, BAD_REQUEST),
           (CountryCodeFormatError.copy(paths = Some(Seq(
-            "foreignProperty/0/countryCode"))), BAD_REQUEST),
+            "foreignNonFhlProperty/0/countryCode"))), BAD_REQUEST),
           (ValueFormatError.copy(paths = Some(Seq(
             "foreignFhlEea/adjustments/privateUseAdjustment",
             "foreignFhlEea/adjustments/balancingCharge",
             "foreignFhlEea/allowances/annualInvestmentAllowance",
             "foreignFhlEea/allowances/otherCapitalAllowance",
-            "foreignFhlEea/allowances/propertyAllowance",
+            "foreignFhlEea/allowances/propertyIncomeAllowance",
             "foreignFhlEea/allowances/electricChargePointAllowance",
-            "foreignProperty/adjustments/privateUseAdjustment",
-            "foreignProperty/adjustments/balancingCharge",
-            "foreignProperty/allowances/annualInvestmentAllowance",
-            "foreignProperty/allowances/costOfReplacingDomesticItems",
-            "foreignProperty/allowances/zeroEmissionsGoodsVehicleAllowance",
-            "foreignProperty/allowances/propertyAllowance",
-            "foreignProperty/allowances/otherCapitalAllowance",
-            "foreignProperty/allowances/structureAndBuildingAllowance",
-            "foreignProperty/allowances/electricChargePointAllowance"
+            "foreignNonFhlProperty/adjustments/privateUseAdjustment",
+            "foreignNonFhlProperty/adjustments/balancingCharge",
+            "foreignNonFhlProperty/allowances/annualInvestmentAllowance",
+            "foreignNonFhlProperty/allowances/costOfReplacingDomesticItems",
+            "foreignNonFhlProperty/allowances/zeroEmissionsGoodsVehicleAllowance",
+            "foreignNonFhlProperty/allowances/propertyIncomeAllowance",
+            "foreignNonFhlProperty/allowances/electricChargePointAllowance"
           ))), BAD_REQUEST),
           (RuleIncorrectOrEmptyBodyError, BAD_REQUEST),
           (RuleCountryCodeError.copy(paths = Some(Seq(
-            "foreignProperty/0/countryCode"))), BAD_REQUEST)
+            "foreignNonFhlProperty/0/countryCode"))), BAD_REQUEST)
         )
 
         input.foreach(args => (errorsFromParserTester _).tupled(args))
@@ -248,16 +197,17 @@ class AmendForeignPropertyAnnualSubmissionControllerSpec
             status(result) shouldBe expectedStatus
             contentAsJson(result) shouldBe Json.toJson(mtdError)
             header("X-CorrelationId", result) shouldBe Some(correlationId)
-
-
-            val auditResponse: AuditResponse = AuditResponse(expectedStatus, Some(Seq(AuditError(mtdError.code))), None)
-            MockedAuditService.verifyAuditEvent(event(auditResponse)).once
           }
         }
 
         val input = Seq(
           (NinoFormatError, BAD_REQUEST),
           (BusinessIdFormatError, BAD_REQUEST),
+          (TaxYearFormatError, BAD_REQUEST),
+          (RuleTypeOfBusinessIncorrectError, BAD_REQUEST),
+          (RuleTaxYearNotSupportedError, BAD_REQUEST),
+          (RulePropertyIncomeAllowanceError, BAD_REQUEST),
+          (RuleDuplicateCountryCodeError, BAD_REQUEST),
           (NotFoundError, NOT_FOUND),
           (DownstreamError, INTERNAL_SERVER_ERROR)
         )

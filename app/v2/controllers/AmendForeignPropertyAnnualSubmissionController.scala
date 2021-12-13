@@ -21,15 +21,13 @@ import cats.implicits._
 import javax.inject.{Inject, Singleton}
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.{Action, ControllerComponents}
-import uk.gov.hmrc.http.HeaderCarrier
 import utils.{IdGenerator, Logging}
 import v2.controllers.requestParsers.AmendForeignPropertyAnnualSubmissionRequestParser
 import v2.hateoas.HateoasFactory
-import v2.models.audit.{AuditEvent, AuditResponse, CreateAndAmendForeignPropertyAnnualAuditDetail}
 import v2.models.errors._
 import v2.models.request.amendForeignPropertyAnnualSubmission.AmendForeignPropertyAnnualSubmissionRawData
-import v2.models.response.amendForeignPropertyAnnualSubmission.AmendForeignPropertyAnnualSubmissionResponse._
 import v2.models.response.amendForeignPropertyAnnualSubmission.AmendForeignPropertyAnnualSubmissionHateoasData
+import v2.models.response.amendForeignPropertyAnnualSubmission.AmendForeignPropertyAnnualSubmissionResponse._
 import v2.services.{AmendForeignPropertyAnnualSubmissionService, AuditService, EnrolmentsAuthService, MtdIdLookupService}
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -64,11 +62,6 @@ class AmendForeignPropertyAnnualSubmissionController @Inject()(val authService: 
             s"[${endpointLogContext.controllerName}][${endpointLogContext.endpointName}] - " +
             s"Success response received with CorrelationId: ${serviceResponse.correlationId}")
 
-          val response = Json.toJson(vendorResponse)
-
-          auditSubmission(CreateAndAmendForeignPropertyAnnualAuditDetail(request.userDetails, nino, businessId, taxYear, request.body,
-            serviceResponse.correlationId, AuditResponse(OK, Right(Some(response)))))
-
           Ok(Json.toJson(vendorResponse))
             .withApiHeaders(serviceResponse.correlationId)
         }
@@ -81,9 +74,6 @@ class AmendForeignPropertyAnnualSubmissionController @Inject()(val authService: 
           s"[${endpointLogContext.controllerName}][${endpointLogContext.endpointName}] - " +
             s"Error response received with CorrelationId: $resCorrelationId")
 
-        auditSubmission(CreateAndAmendForeignPropertyAnnualAuditDetail(request.userDetails, nino, businessId, taxYear, request.body,
-          correlationId, AuditResponse(result.header.status, Left(errorWrapper.auditErrors))))
-
         result
       }.merge
     }
@@ -95,20 +85,21 @@ class AmendForeignPropertyAnnualSubmissionController @Inject()(val authService: 
            NinoFormatError |
            BusinessIdFormatError |
            TaxYearFormatError |
+           MtdErrorWithCode(RuleBothAllowancesSuppliedError.code) |
+           MtdErrorWithCode(RuleBuildingNameNumberError.code) |
+           RuleTypeOfBusinessIncorrectError |
            MtdErrorWithCode(CountryCodeFormatError.code) |
            MtdErrorWithCode(ValueFormatError.code) |
+           MtdErrorWithCode(DateFormatError.code) |
+           MtdErrorWithCode(StringFormatError.code) |
            MtdErrorWithCode(RuleIncorrectOrEmptyBodyError.code) |
            RuleTaxYearNotSupportedError |
            RuleTaxYearRangeInvalidError |
-           MtdErrorWithCode(RuleCountryCodeError.code) => BadRequest(Json.toJson(errorWrapper))
+           MtdErrorWithCode(RuleCountryCodeError.code) |
+           MtdErrorWithCode(RuleDuplicateCountryCodeError.code) |
+           MtdErrorWithCode(RulePropertyIncomeAllowanceError.code) => BadRequest(Json.toJson(errorWrapper))
       case DownstreamError => InternalServerError(Json.toJson(errorWrapper))
       case NotFoundError => NotFound(Json.toJson(errorWrapper))
     }
-  }
-  private def auditSubmission(details: CreateAndAmendForeignPropertyAnnualAuditDetail)
-                             (implicit hc: HeaderCarrier,
-                              ec: ExecutionContext) = {
-    val event = AuditEvent("CreateAmendForeignPropertyAnnualSummary", "Create-Amend-Foreign-Property-Annual-Summary", details)
-    auditService.auditEvent(event)
   }
 }

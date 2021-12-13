@@ -57,8 +57,8 @@ class AmendForeignPropertyAnnualSubmissionService @Inject()(connector: AmendFore
       "INCOME_SOURCE_NOT_FOUND" -> NotFoundError,
       "MISSING_ALLOWANCES" -> DownstreamError,
       "INVALID_PAYLOAD" -> DownstreamError,
-      "INVALID_CORRELATION_ID" -> DownstreamError,
-      "DUPLICATE_COUNTRY_CODE" -> DownstreamError,
+      "INVALID_CORRELATIONID" -> DownstreamError,
+      "DUPLICATE_COUNTRY_CODE" -> RuleDuplicateCountryCodeError,
       "SERVER_ERROR" -> DownstreamError,
       "SERVICE_UNAVAILABLE" -> DownstreamError
     )

@@ -16,7 +16,6 @@
       "annualInvestmentAllowance":123.45,
       "businessPremisesRenovationAllowance":345.56,
       "otherCapitalAllowance":345.34,
-      "propertyIncomeAllowance":453.45,
       "electricChargePointAllowance":453.34,
       "zeroEmissionsCarAllowance":123.12
     }
@@ -38,7 +37,6 @@
       "businessPremisesRenovationAllowance":573.45,
       "otherCapitalAllowance":452.34,
       "costOfReplacingDomesticGoods":567.34,
-      "propertyIncomeAllowance":342.34,
       "electricChargePointAllowance":454.34,
       "structuredBuildingAllowance":[
         {

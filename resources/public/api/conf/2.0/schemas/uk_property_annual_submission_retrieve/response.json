@@ -89,8 +89,8 @@
             },
             "propertyIncomeAllowance": {
               "type": "number",
-              "description": "The amount of Tax exemption for individuals with income from land or property. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
-              "example": "5000.99"
+              "description": "The amount of Tax exemption for individuals with income from land or property. The value must be between 0 and 1000.00 up to 2 decimal places.",
+              "example": "100.25"
             },
             "electricChargePointAllowance": {
               "type": "number",
@@ -192,8 +192,8 @@
             },
             "propertyIncomeAllowance": {
               "type": "number",
-              "description": "The amount of Tax exemption for individuals with income from land or property. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
-              "example": "5000.99"
+              "description": "The amount of Tax exemption for individuals with income from land or property. The value must be between 0 and 1000.00 up to 2 decimal places.",
+              "example": "100.25"
             },
             "electricChargePointAllowance": {
               "type": "number",

@@ -122,7 +122,7 @@ class AmendUkPropertyAnnualSubmissionControllerSpec
       |  "ukNonFhlProperty": {
       |    "allowances": {
       |      "annualInvestmentAllowance": 2000.50,
-      |      "zeroEmissionGoodsVehicleAllowance": 2000.60,
+      |      "zeroEmissionsGoodsVehicleAllowance": 2000.60,
       |      "businessPremisesRenovationAllowance": 2000.70,
       |      "otherCapitalAllowance": 2000.80,
       |      "costOfReplacingDomesticGoods": 2000.90,
@@ -305,7 +305,7 @@ class AmendUkPropertyAnnualSubmissionControllerSpec
               "/ukNonFhlProperty/adjustments/privateUseAdjustment",
               "/ukNonFhlProperty/adjustments/businessPremisesRenovationAllowanceBalancingCharges",
               "/ukNonFhlProperty/allowances/annualInvestmentAllowance",
-              "/ukNonFhlProperty/allowances/zeroEmissionGoodsVehicleAllowance",
+              "/ukNonFhlProperty/allowances/zeroEmissionsGoodsVehicleAllowance",
               "/ukNonFhlProperty/allowances/businessPremisesRenovationAllowance",
               "/ukNonFhlProperty/allowances/otherCapitalAllowance",
               "/ukNonFhlProperty/allowances/costOfReplacingDomesticGoods",

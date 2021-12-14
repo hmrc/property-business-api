@@ -13,22 +13,22 @@
         </tr>
         <tr>
             <td><p>UK_PROPERTY</p></td>
-            <td><p>Simulates success response with FHL and Non-FHL properties.</p></td>
+            <td><p>Simulates the scenario with FHL and Non-FHL properties.</p></td>
         </tr>
         <tr>
-            <td><p>UK_PROPERTY_FHL_ALL_OTHER_ALLOWANCES</p></td>
+            <td><p>UK_FHL_ALL_OTHER_ALLOWANCES</p></td>
             <td><p>Simulates the scenario of a FHL property with all other allowances.</p></td>
         </tr>
         <tr>
-            <td><p>UK_PROPERTY_FHL_PROPERTY_ALLOWANCE</p></td>
+            <td><p>UK_FHL_PROPERTY_ALLOWANCE</p></td>
             <td><p>Simulates success response with UK Non-FHL property.</p></td>
         </tr>
         <tr>
-            <td><p>UK_PROPERTY_NON_FHL_ALL_OTHER_ALLOWANCES</p></td>
+            <td><p>UK_NON_FHL_ALL_OTHER_ALLOWANCES</p></td>
             <td><p>Simulates the scenario of a Non-FHL property with all other allowances.</p></td>
         </tr>
         <tr>
-            <td><p>UK_PROPERTY_NON_FHL_PROPERTY_ALLOWANCE</p></td>
+            <td><p>UK_NON_FHL_PROPERTY_ALLOWANCE</p></td>
             <td><p>Simulates the scenario of a Non-FHL property with property allowance.</p></td>
         </tr>
         <tr>

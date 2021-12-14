@@ -162,7 +162,7 @@ class RetrieveForeignPropertyAnnualSubmissionControllerISpec extends V2Integrati
 //
 //        val response: WSResponse = await(request().get())
 //        response.status shouldBe Status.OK
-//        all_other_allowances_response.json shouldBe responseBody
+//        response.json shouldBe responseBody
 //        response.header("X-CorrelationId").nonEmpty shouldBe true
 //        response.header("Content-Type") shouldBe Some("application/json")
 //      }
@@ -217,7 +217,7 @@ class RetrieveForeignPropertyAnnualSubmissionControllerISpec extends V2Integrati
 //
 //            val response: WSResponse = await(request().get())
 //            response.status shouldBe expectedStatus
-//            all_other_allowances_response.json shouldBe Json.toJson(expectedBody)
+//            response.json shouldBe Json.toJson(expectedBody)
 //          }
 //        }
 //

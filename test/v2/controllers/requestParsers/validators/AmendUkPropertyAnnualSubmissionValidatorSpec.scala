@@ -54,7 +54,7 @@ class AmendUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec with JsonErr
       |  "ukNonFhlProperty": {
       |    "allowances": {
       |      "annualInvestmentAllowance": 678.45,
-      |      "zeroEmissionGoodsVehicleAllowance": 456.34,
+      |      "zeroEmissionsGoodsVehicleAllowance": 456.34,
       |      "businessPremisesRenovationAllowance": 573.45,
       |      "otherCapitalAllowance": 452.34,
       |      "costOfReplacingDomesticGoods": 567.34,
@@ -181,7 +181,7 @@ class AmendUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec with JsonErr
                 |  "ukNonFhlProperty": {
                 |    "allowances": {
                 |      "annualInvestmentAllowance": 678.45,
-                |      "zeroEmissionGoodsVehicleAllowance": 456.34,
+                |      "zeroEmissionsGoodsVehicleAllowance": 456.34,
                 |      "businessPremisesRenovationAllowance": 573.45,
                 |      "otherCapitalAllowance": 452.34,
                 |      "costOfReplacingDomesticGoods": 567.34,
@@ -355,7 +355,7 @@ class AmendUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec with JsonErr
               |  "ukNonFhlProperty": {
               |    "allowances": {
               |      "annualInvestmentAllowance": 678.45,
-              |      "zeroEmissionGoodsVehicleAllowance": 456.34,
+              |      "zeroEmissionsGoodsVehicleAllowance": 456.34,
               |      "businessPremisesRenovationAllowance": 573.45,
               |      "otherCapitalAllowance": 452.34,
               |      "costOfReplacingDomesticGoods": 567.34,
@@ -419,7 +419,7 @@ class AmendUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec with JsonErr
               |  "ukNonFhlProperty": {
               |    "allowances": {
               |      "annualInvestmentAllowance": 678.45,
-              |      "zeroEmissionGoodsVehicleAllowance": 456.34,
+              |      "zeroEmissionsGoodsVehicleAllowance": 456.34,
               |      "businessPremisesRenovationAllowance": 573.45,
               |      "otherCapitalAllowance": 452.34,
               |      "costOfReplacingDomesticGoods": 567.34,
@@ -496,7 +496,7 @@ class AmendUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec with JsonErr
               |  "ukNonFhlProperty": {
               |    "allowances": {
               |      "annualInvestmentAllowance": 678.45,
-              |      "zeroEmissionGoodsVehicleAllowance": 456.34,
+              |      "zeroEmissionsGoodsVehicleAllowance": 456.34,
               |      "businessPremisesRenovationAllowance": 573.45,
               |      "otherCapitalAllowance": 452.34,
               |      "costOfReplacingDomesticGoods": 567.34,
@@ -581,7 +581,7 @@ class AmendUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec with JsonErr
               |  "ukNonFhlProperty": {
               |    "allowances": {
               |      "annualInvestmentAllowance": 678.45,
-              |      "zeroEmissionGoodsVehicleAllowance": 456.34,
+              |      "zeroEmissionsGoodsVehicleAllowance": 456.34,
               |      "businessPremisesRenovationAllowance": 573.45,
               |      "otherCapitalAllowance": 452.34,
               |      "costOfReplacingDomesticGoods": 567.34,
@@ -663,7 +663,7 @@ class AmendUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec with JsonErr
               |  "ukNonFhlProperty": {
               |    "allowances": {
               |      "annualInvestmentAllowance": 678.45,
-              |      "zeroEmissionGoodsVehicleAllowance": 456.34,
+              |      "zeroEmissionsGoodsVehicleAllowance": 456.34,
               |      "businessPremisesRenovationAllowance": 573.45,
               |      "otherCapitalAllowance": 452.34,
               |      "costOfReplacingDomesticGoods": 567.34,
@@ -747,7 +747,7 @@ class AmendUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec with JsonErr
               |  "ukNonFhlProperty": {
               |    "allowances": {
               |      "annualInvestmentAllowance": 678.45,
-              |      "zeroEmissionGoodsVehicleAllowance": 456.34,
+              |      "zeroEmissionsGoodsVehicleAllowance": 456.34,
               |      "businessPremisesRenovationAllowance": 573.45,
               |      "otherCapitalAllowance": 452.34,
               |      "costOfReplacingDomesticGoods": 567.34,
@@ -829,7 +829,7 @@ class AmendUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec with JsonErr
               |  "ukNonFhlProperty": {
               |    "allowances": {
               |      "annualInvestmentAllowance": 678.45,
-              |      "zeroEmissionGoodsVehicleAllowance": 456.34,
+              |      "zeroEmissionsGoodsVehicleAllowance": 456.34,
               |      "businessPremisesRenovationAllowance": 573.45,
               |      "otherCapitalAllowance": 452.34,
               |      "costOfReplacingDomesticGoods": 567.34,
@@ -911,7 +911,7 @@ class AmendUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec with JsonErr
               |  "ukNonFhlProperty": {
               |    "allowances": {
               |      "annualInvestmentAllowance": 678.45,
-              |      "zeroEmissionGoodsVehicleAllowance": 456.34,
+              |      "zeroEmissionsGoodsVehicleAllowance": 456.34,
               |      "businessPremisesRenovationAllowance": 573.45,
               |      "otherCapitalAllowance": 452.34,
               |      "costOfReplacingDomesticGoods": 567.34,
@@ -977,7 +977,7 @@ class AmendUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec with JsonErr
           "/ukFhlProperty/adjustments/balancingCharge",
           "/ukFhlProperty/adjustments/businessPremisesRenovationAllowanceBalancingCharges",
           "/ukNonFhlProperty/allowances/annualInvestmentAllowance",
-          "/ukNonFhlProperty/allowances/zeroEmissionGoodsVehicleAllowance",
+          "/ukNonFhlProperty/allowances/zeroEmissionsGoodsVehicleAllowance",
           "/ukNonFhlProperty/allowances/businessPremisesRenovationAllowance",
           "/ukNonFhlProperty/allowances/otherCapitalAllowance",
           "/ukNonFhlProperty/allowances/costOfReplacingDomesticGoods",
@@ -1033,7 +1033,7 @@ class AmendUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec with JsonErr
                 |  "ukNonFhlProperty": {
                 |    "allowances": {
                 |      "annualInvestmentAllowance": 678.45,
-                |      "zeroEmissionGoodsVehicleAllowance": 456.34,
+                |      "zeroEmissionsGoodsVehicleAllowance": 456.34,
                 |      "businessPremisesRenovationAllowance": 573.45,
                 |      "otherCapitalAllowance": 452.34,
                 |      "costOfReplacingDomesticGoods": 567.34,
@@ -1122,7 +1122,7 @@ class AmendUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec with JsonErr
                 |  "ukNonFhlProperty": {
                 |    "allowances": {
                 |      "annualInvestmentAllowance": 678.45,
-                |      "zeroEmissionGoodsVehicleAllowance": 456.34,
+                |      "zeroEmissionsGoodsVehicleAllowance": 456.34,
                 |      "businessPremisesRenovationAllowance": 573.45,
                 |      "otherCapitalAllowance": 452.34,
                 |      "costOfReplacingDomesticGoods": 567.34,
@@ -1205,7 +1205,7 @@ class AmendUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec with JsonErr
               |  "ukNonFhlProperty": {
               |    "allowances": {
               |      "annualInvestmentAllowance": 678.45,
-              |      "zeroEmissionGoodsVehicleAllowance": 456.34,
+              |      "zeroEmissionsGoodsVehicleAllowance": 456.34,
               |      "businessPremisesRenovationAllowance": 573.45,
               |      "otherCapitalAllowance": 452.34,
               |      "costOfReplacingDomesticGoods": 567.34,
@@ -1356,7 +1356,7 @@ class AmendUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec with JsonErr
               |  "ukNonFhlProperty": {
               |    "allowances": {
               |      "annualInvestmentAllowance": 2000.50,
-              |      "zeroEmissionGoodsVehicleAllowance": 2000.60,
+              |      "zeroEmissionsGoodsVehicleAllowance": 2000.60,
               |      "businessPremisesRenovationAllowance": 2000.70,
               |      "otherCapitalAllowance": 2000.80,
               |      "costOfReplacingDomesticGoods": 2000.90,
@@ -1417,7 +1417,7 @@ class AmendUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec with JsonErr
               |  "ukNonFhlProperty": {
               |    "allowances": {
               |      "annualInvestmentAllowance": 2000.50,
-              |      "zeroEmissionGoodsVehicleAllowance": 2000.60,
+              |      "zeroEmissionsGoodsVehicleAllowance": 2000.60,
               |      "businessPremisesRenovationAllowance": 2000.70,
               |      "otherCapitalAllowance": 2000.80,
               |      "costOfReplacingDomesticGoods": 2000.90,

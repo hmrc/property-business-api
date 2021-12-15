@@ -91,7 +91,7 @@ class UkNonFhlPropertySpec extends UnitSpec {
     allowances = Some(
       UkNonFhlPropertyAllowances(
         annualInvestmentAllowance = Some(678.45),
-        zeroEmissionGoodsVehicleAllowance = Some(456.34),
+        zeroEmissionsGoodsVehicleAllowance = Some(456.34),
         businessPremisesRenovationAllowance = Some(573.45),
         otherCapitalAllowance = Some(452.34),
         costOfReplacingDomesticGoods = Some(567.34),
@@ -140,7 +140,7 @@ class UkNonFhlPropertySpec extends UnitSpec {
       |{
       |   "allowances":{
       |      "annualInvestmentAllowance":678.45,
-      |      "zeroEmissionGoodsVehicleAllowance":456.34,
+      |      "zeroEmissionsGoodsVehicleAllowance":456.34,
       |      "businessPremisesRenovationAllowance":573.45,
       |      "otherCapitalAllowance":452.34,
       |      "costOfReplacingDomesticGoods":567.34,

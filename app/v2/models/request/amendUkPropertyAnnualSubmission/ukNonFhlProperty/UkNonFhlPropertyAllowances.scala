@@ -16,11 +16,12 @@
 
 package v2.models.request.amendUkPropertyAnnualSubmission.ukNonFhlProperty
 
-import play.api.libs.json.{Json, OFormat}
+import play.api.libs.functional.syntax._
+import play.api.libs.json.{JsPath, Json, Reads, Writes}
 import v2.models.request.common.StructuredBuildingAllowance
 
 case class UkNonFhlPropertyAllowances(annualInvestmentAllowance: Option[BigDecimal],
-                                      zeroEmissionGoodsVehicleAllowance: Option[BigDecimal],
+                                      zeroEmissionsGoodsVehicleAllowance: Option[BigDecimal],
                                       businessPremisesRenovationAllowance: Option[BigDecimal],
                                       otherCapitalAllowance: Option[BigDecimal],
                                       costOfReplacingDomesticGoods: Option[BigDecimal],
@@ -32,5 +33,18 @@ case class UkNonFhlPropertyAllowances(annualInvestmentAllowance: Option[BigDecim
                                      )
 
 object UkNonFhlPropertyAllowances {
-  implicit val format: OFormat[UkNonFhlPropertyAllowances] = Json.format[UkNonFhlPropertyAllowances]
+  implicit val reads: Reads[UkNonFhlPropertyAllowances] = Json.reads[UkNonFhlPropertyAllowances]
+
+  implicit val writes: Writes[UkNonFhlPropertyAllowances] = (
+    (JsPath \ "annualInvestmentAllowance").writeNullable[BigDecimal] and
+      (JsPath \ "zeroEmissionGoodsVehicleAllowance").writeNullable[BigDecimal] and
+      (JsPath \ "businessPremisesRenovationAllowance").writeNullable[BigDecimal] and
+      (JsPath \ "otherCapitalAllowance").writeNullable[BigDecimal] and
+      (JsPath \ "costOfReplacingDomesticGoods").writeNullable[BigDecimal] and
+      (JsPath \ "electricChargePointAllowance").writeNullable[BigDecimal] and
+      (JsPath \ "zeroEmissionsCarAllowance").writeNullable[BigDecimal] and
+      (JsPath \ "propertyIncomeAllowance").writeNullable[BigDecimal] and
+      (JsPath \ "structuredBuildingAllowance").writeNullable[Seq[StructuredBuildingAllowance]] and
+      (JsPath \ "enhancedStructuredBuildingAllowance").writeNullable[Seq[StructuredBuildingAllowance]]
+    ) (unlift(UkNonFhlPropertyAllowances.unapply))
 }

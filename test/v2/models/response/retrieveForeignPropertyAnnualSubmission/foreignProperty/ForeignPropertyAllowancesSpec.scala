@@ -48,7 +48,7 @@ class ForeignPropertyAllowancesSpec extends UnitSpec with JsonErrorValidators{
       |{
       |          "annualInvestmentAllowance": 100.25,
       |          "costOfReplacingDomesticItems": 100.25,
-      |          "zeroEmissionGoodsVehicleAllowance": 100.25,
+      |          "zeroEmissionsGoodsVehicleAllowance": 100.25,
       |          "otherCapitalAllowance": 100.25,
       |          "electricChargePointAllowance": 100.25,
       |          "zeroEmissionsCarAllowance": 100.25,

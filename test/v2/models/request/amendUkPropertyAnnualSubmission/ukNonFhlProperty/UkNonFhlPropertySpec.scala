@@ -74,7 +74,7 @@ class UkNonFhlPropertySpec extends UnitSpec {
       |{
       |    "allowances": {
       |      "annualInvestmentAllowance": 2000.50,
-      |      "zeroEmissionGoodsVehicleAllowance": 2000.60,
+      |      "zeroEmissionsGoodsVehicleAllowance": 2000.60,
       |      "businessPremisesRenovationAllowance": 2000.70,
       |      "otherCapitalAllowance": 2000.80,
       |      "costOfReplacingDomesticGoods": 2000.90,

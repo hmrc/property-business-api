@@ -1,7 +1,7 @@
 {
   "$schema": "http://json-schema.org/draft-04/schema#",
   "title": "Retrieve a Foreign Property Annual Submission",
-  "description": "Retrieve a Foreign Property Annual Submission",
+  "description": "This endpoint allows a developer to retrieve adjustments and allowances for a foreign property business. For either or both of Furnished Holiday Letting (FHL) in the European Economic Area (EEA) and Non FHL Foreign property submissions. A National Insurance number, business ID and tax year are required.",
   "type": "object",
   "properties": {
     "submittedOn": {
@@ -19,7 +19,7 @@
           "properties": {
             "privateUseAdjustment": {
               "type": "number",
-              "description": "Any expenses incurred not solely for the property business.\n\nThe value must be between 0 and 99999999999.99 up to 2 decimal places.",
+              "description": "Any adjustments that are not solely for the property business. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
               "example": "5000.99"
             },
             "balancingCharge": {
@@ -29,7 +29,7 @@
             },
             "periodOfGraceAdjustment": {
               "type": "boolean",
-              "description": "A boolean to identify  a property which didn't qualify for FHL this year, but qualified the previous year. The value must be true or false",
+              "description": "A boolean to identify a property which didn't qualify for FHL this year, but qualified the previous year. The value must be true or false.",
               "example": "true"
             }
           },
@@ -51,17 +51,17 @@
             },
             "electricChargePointAllowance": {
               "type": "number",
-              "description": "The expenses incurred on electric charge-point equipment. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
+              "description": "The expenditure incurred on electric charge-point equipment. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
               "example": "5000.99"
             },
             "zeroEmissionsCarAllowance": {
               "type": "number",
-              "description": "The amount of zero emissions car allowance.\n\nThe value must be between 0 and 99999999999.99 up to 2 decimal places.",
+              "description": "The amount of zero emissions car allowance. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
               "example": "5000.99"
             },
             "propertyIncomeAllowance": {
               "type": "number",
-              "description": "The amount of Tax exemption for individuals with income from land or property. The value must be between 0 and 1000.00 up to 2 decimal places.",
+              "description": "The amount of tax exemption for individuals with income from land or property. The value must be between 0 and 1000.00 up to 2 decimal places.",
               "example": "100.25"
             }
           },
@@ -72,7 +72,7 @@
     },
     "foreignNonFhlProperty": {
       "type": "array",
-      "description": "Array holding the adjustments and allowances of the user's foreign property business - excluding Furnished Holiday Lettings (FHL) in the European Economic Area (EEA) - for the period.",
+      "description": "Array holding the adjustments and allowances of the user's foreign property business - excluding Furnished Holiday Lettings (FHL) in the European Economic Area (EEA) for the period.",
       "items": {
         "type": "object",
         "properties": {
@@ -115,7 +115,7 @@
               },
               "zeroEmissionsGoodsVehicleAllowance": {
                 "type": "number",
-                "description": "The amount of Zero emission goods vehicle allowance for goods vehicles purchased for business use. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
+                "description": "The amount of zero emissions goods vehicle allowance for goods vehicles purchased for business use. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
                 "example": "5000.99"
               },
               "otherCapitalAllowance": {
@@ -125,7 +125,7 @@
               },
               "electricChargePointAllowance": {
                 "type": "number",
-                "description": "The expenses incurred on electric charge-point equipment. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
+                "description": "The expenditure incurred on electric charge-point equipment. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
                 "example": "5000.99"
               },
               "zeroEmissionsCarAllowance": {
@@ -135,12 +135,12 @@
               },
               "propertyIncomeAllowance": {
                 "type": "number",
-                "description": "The amount of Tax exemption for individuals with income from land or property. The value must be between 0 and 1000.00 up to 2 decimal places.",
+                "description": "The amount of tax exemption for individuals with income from land or property. The value must be between 0 and 1000.00 up to 2 decimal places.",
                 "example": "100.25"
               },
               "structuredBuildingAllowance": {
                 "type": "array",
-                "description": "Details about structured building allowances",
+                "description": "Details about structured building allowance.",
                 "items": {
                   "type": "object",
                   "properties": {
@@ -151,11 +151,11 @@
                     },
                     "firstYear": {
                       "type": "object",
-                      "description": "Object holding foreign structured building allowance details.",
+                      "description": "Object holding foreign Non FHL structured building allowance details.",
                       "properties": {
                         "qualifyingDate": {
                           "type": "string",
-                          "description": "The date qualified for structured building allowance. Must conform to the format YYYY-MM-DD",
+                          "description": "The date qualified for structured building allowance. Must conform to the format YYYY-MM-DD.",
                           "example": "2020-01-01"
                         },
                         "qualifyingAmountExpenditure": {
@@ -172,7 +172,7 @@
                     },
                     "building": {
                       "type": "object",
-                      "description": "Object holding Foreign FHL structured building details.\nPostcode is mandatory and minimum one of name and number field must be supplied.",
+                      "description": "Object holding Foreign Non FHL structured building details. Postcode is mandatory and minimum one of name and number field must be supplied.",
                       "properties": {
                         "name": {
                           "type": "string",
@@ -184,13 +184,13 @@
                           "type": "string",
                           "description": "The number of the building.",
                           "pattern": "^[0-9a-zA-Z{À-˿’}\\- _&`():.'^]{1,90}$",
-                          "example": "16AD"
+                          "example": "16"
                         },
                         "postcode": {
                           "type": "string",
                           "description": "The postcode for the building.",
                           "pattern": "^[0-9a-zA-Z{À-˿’}\\- _&`():.'^]{1,90}$",
-                          "example": "GF49JH"
+                          "example": "GF4 9JH"
                         }
                       },
                       "additionalProperties": false,
@@ -237,7 +237,7 @@
             ]
           },
           "rel": {
-            "description": "A label for the endpoint, which describes how it is related to the current resource\nThe rel will be self where the action is retrieval of the same resource.",
+            "description": "A label for the endpoint, which describes how it is related to the current resource. The rel will be self where the action is retrieval of the same resource.",
             "type": "string",
             "enum": [
               "self",

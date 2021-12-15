@@ -22,7 +22,7 @@
             },
             "privateUseAdjustment": {
               "type": "number",
-              "description": "Any expenses incurred that are not solely for the property business. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
+              "description": "Any adjustments that are not solely for the property business. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
               "multipleOf": 0.01,
               "minimum": 0.00,
               "maximum": 99999999999.99,
@@ -117,7 +117,7 @@
             },
             "propertyIncomeAllowance": {
               "type": "number",
-              "description": "The amount of Tax exemption for individuals with income from land or property. The value must be between 0 and 1000.00 up to 2 decimal places.",
+              "description": "The amount of tax exemption for individuals with income from land or property. The value must be between 0 and 1000.00 up to 2 decimal places.",
               "multipleOf": 0.01,
               "minimum": 0.00,
               "maximum": 1000.00,
@@ -155,7 +155,7 @@
             },
             "privateUseAdjustment": {
               "type": "number",
-              "description": "Any expenses incurred that are not solely for the property business. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
+              "description": "Any adjustments that are not solely for the property business. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
               "multipleOf": 0.01,
               "minimum": 0.00,
               "maximum": 99999999999.99,
@@ -203,9 +203,9 @@
               "maximum": 99999999999.99,
               "example": "5000.99"
             },
-            "zeroEmissionGoodsVehicleAllowance": {
+            "zeroEmissionsGoodsVehicleAllowance": {
               "type": "number",
-              "description": "The amount of Zero emission goods vehicle allowance for goods vehicles purchased for business use. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
+              "description": "The amount of zero emissions goods vehicle allowance for goods vehicles purchased for business use. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
               "multipleOf": 0.01,
               "minimum": 0.00,
               "maximum": 99999999999.99,
@@ -253,7 +253,7 @@
             },
             "propertyIncomeAllowance": {
               "type": "number",
-              "description": "The amount of Tax exemption for individuals with income from land or property. The value must be between 0 and 1000.00 up to 2 decimal places.",
+              "description": "The amount of tax exemption for individuals with income from land or property. The value must be between 0 and 1000.00 up to 2 decimal places.",
               "multipleOf": 0.01,
               "minimum": 0.00,
               "maximum": 1000.00,
@@ -261,7 +261,7 @@
             },
             "structuredBuildingAllowance": {
               "type": "array",
-              "description": "Details about structured building allowances.",
+              "description": "Details about structured building allowance.",
               "items": {
                 "type": "object",
                 "properties": {
@@ -302,7 +302,7 @@
                         "type": "string",
                         "description": "The name of the building.",
                         "pattern": "^[0-9a-zA-Z{À-˿’}\\- _&`():.'^]{1,90}$",
-                        "example": "Building Name"
+                        "example": "Green Oak’s"
                       },
                       "number": {
                         "type": "string",
@@ -328,7 +328,7 @@
             },
             "enhancedStructuredBuildingAllowance": {
               "type": "array",
-              "description": "Details about enhanced structured building allowances.",
+              "description": "Details about enhanced structured building allowance.",
               "items": {
                 "type": "object",
                 "properties": {
@@ -346,7 +346,7 @@
                     "properties": {
                       "qualifyingDate": {
                         "type": "string",
-                        "description": "The date qualified for structured building allowance. Must conform to the format YYYY-MM-DD.",
+                        "description": "The date qualified for enhanced structured building allowance. Must conform to the format YYYY-MM-DD.",
                         "example": "2020-01-01"
                       },
                       "qualifyingAmountExpenditure": {
@@ -363,13 +363,13 @@
                   },
                   "building": {
                     "type": "object",
-                    "description": "Object holding UK Non FHL structured building details. Postcode is mandatory and minimum one of name and number field must be supplied.",
+                    "description": "Object holding UK Non FHL enhanced structured building details. Postcode is mandatory and minimum one of name and number field must be supplied.",
                     "properties": {
                       "name": {
                         "type": "string",
                         "description": "The name of the building.",
                         "pattern": "^[0-9a-zA-Z{À-˿’}\\- _&`():.'^]{1,90}$",
-                        "example": "Building Name"
+                        "example": "Green Oak’s"
                       },
                       "number": {
                         "type": "string",

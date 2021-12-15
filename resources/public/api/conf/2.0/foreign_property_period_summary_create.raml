@@ -23,7 +23,11 @@ is:
   - errors.clientOrAgentNotAuthorised
   - errors.notFound
 displayName: Create a Foreign Property Income & Expenses Period Summary [test only]
-description: This endpoint allows the developer to submit the income and expenses for a foreign property business that occurred between two dates. This submission is for either or both of Furnished Holiday Lettings (FHL) in the European Economic Area (EEA) and all other foreign Property submissions. A National Insurance number, tax year and business ID are required.
+description: |
+    This endpoint allows the developer to submit the income and expenses for a foreign property business that occurred between two dates.
+    This submission is for either or both of Furnished Holiday Lettings (FHL) in the European Economic Area (EEA) and all other foreign Property submissions.
+    In the case of Non-FHL Foreign Property, if there are multiple properties per country, the income and expenses should be the total across all properties.
+    A National Insurance number, tax year and business ID are required.
 (annotations.sandboxData): !include scenarios/foreign_property_period_summary_create_scenarios.md
 (annotations.scope): "write:self-assessment"
 securedBy: [ sec.oauth_2_0: { scopes: [ "write:self-assessment" ] } ]

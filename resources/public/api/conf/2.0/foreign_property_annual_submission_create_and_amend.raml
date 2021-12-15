@@ -21,7 +21,11 @@ is:
   - errors.clientOrAgentNotAuthorised
   - errors.notFound
 displayName: Create and Amend a Foreign Property Annual Submission [test only]
-description: This endpoint allows a developer to re-submit adjustments and allowances for a foreign property business. This submission is for either or both of Furnished Holiday Letting (FHL) in the European Economic Area (EEA) and Non FHL Foreign Property submissions. A National Insurance number, business ID and tax year must be provided.
+description: |
+    This endpoint allows a developer to re-submit adjustments and allowances for a foreign property business.
+    This submission is for either or both of Furnished Holiday Letting (FHL) in the European Economic Area (EEA) and Non FHL Foreign Property submissions.
+    In the case of Non-FHL Foreign Property, if there are multiple properties per country, the adjustments and allowances should be the total across all properties.
+    A National Insurance number, business ID and tax year must be provided.
 (annotations.sandboxData): !include scenarios/foreign_property_annual_submission_create_and_amend_scenarios.md
 (annotations.scope): "write:self-assessment"
 securedBy: [ sec.oauth_2_0: { scopes: [ "write:self-assessment" ] } ]

@@ -23,7 +23,7 @@ import play.api.libs.json.{JsValue, Json}
 import play.api.libs.ws.{WSRequest, WSResponse}
 import support.V2IntegrationBaseSpec
 import v2.models.errors._
-import v2.stubs.{AuditStub, AuthStub, IfsStub, MtdIdLookupStub}
+import v2.stubs.{AuthStub, IfsStub, MtdIdLookupStub}
 
 class RetrieveForeignPropertyAnnualSubmissionControllerISpec extends V2IntegrationBaseSpec {
 
@@ -36,6 +36,7 @@ class RetrieveForeignPropertyAnnualSubmissionControllerISpec extends V2Integrati
     val responseBody: JsValue = Json.parse(
       """
         |{
+        |  "submittedOn": "2020-07-07T10:59:47.544Z",
         |  "foreignFhlEea": {
         |    "adjustments": {
         |      "privateUseAdjustment": 100.25,
@@ -45,13 +46,14 @@ class RetrieveForeignPropertyAnnualSubmissionControllerISpec extends V2Integrati
         |    "allowances": {
         |      "annualInvestmentAllowance": 100.25,
         |      "otherCapitalAllowance": 100.25,
-        |      "propertyAllowance": 100.25,
-        |      "electricChargePointAllowance": 100.25
+        |      "electricChargePointAllowance": 100.25,
+        |      "zeroEmissionsCarAllowance": 100.25,
+        |      "propertyIncomeAllowance": 100.25
         |    }
         |  },
-        |  "foreignProperty": [
+        |  "foreignNonFhlProperty": [
         |    {
-        |      "countryCode": "FRA",
+        |      "countryCode": "GER",
         |      "adjustments": {
         |        "privateUseAdjustment": 100.25,
         |        "balancingCharge": 100.25
@@ -59,11 +61,25 @@ class RetrieveForeignPropertyAnnualSubmissionControllerISpec extends V2Integrati
         |      "allowances": {
         |        "annualInvestmentAllowance": 100.25,
         |        "costOfReplacingDomesticItems": 100.25,
-        |        "zeroEmissionsGoodsVehicleAllowance": 100.25,
-        |        "propertyAllowance": 100.25,
+        |        "zeroEmissionGoodsVehicleAllowance": 100.25,
         |        "otherCapitalAllowance": 100.25,
-        |        "structureAndBuildingAllowance": 100.25,
-        |        "electricChargePointAllowance": 100.25
+        |        "electricChargePointAllowance": 100.25,
+        |        "zeroEmissionsCarAllowance": 100.25,
+        |        "propertyIncomeAllowance": 100.25,
+        |        "structuredBuildingAllowance": [
+        |          {
+        |            "amount": 100.25,
+        |            "firstYear": {
+        |              "qualifyingDate": "2020-03-29",
+        |              "qualifyingAmountExpenditure": 100.25
+        |            },
+        |            "building": {
+        |              "name": "Building Name",
+        |              "number": "12",
+        |              "postcode": "TF3 4GH"
+        |            }
+        |          }
+        |        ]
         |      }
         |    }
         |  ],
@@ -85,52 +101,74 @@ class RetrieveForeignPropertyAnnualSubmissionControllerISpec extends V2Integrati
         |    }
         |  ]
         |}
-       """.stripMargin
+     """.stripMargin
     )
 
     val ifsResponseBody: JsValue = Json.parse(
       """
         |{
-        |  "foreignFhlEea": {
-        |    "adjustments": {
-        |      "privateUseAdjustment": 100.25,
-        |      "balancingCharge": 100.25,
-        |      "periodOfGraceAdjustment": true
-        |    },
-        |    "allowances": {
-        |      "annualInvestmentAllowance": 100.25,
-        |      "otherCapitalAllowance": 100.25,
-        |      "propertyAllowance": 100.25,
-        |      "electricChargePointAllowance": 100.25
-        |    }
-        |  },
-        |  "foreignProperty": [
-        |    {
-        |      "countryCode": "FRA",
+        |    "submittedOn": "2020-07-07T10:59:47.544Z",
+        |    "deletedOn": "2021-11-04T08:23:42Z",
+        |    "foreignFhlEea": {
         |      "adjustments": {
         |        "privateUseAdjustment": 100.25,
-        |        "balancingCharge": 100.25
+        |        "balancingCharge": 100.25,
+        |        "periodOfGraceAdjustment": true
         |      },
         |      "allowances": {
         |        "annualInvestmentAllowance": 100.25,
-        |        "costOfReplacingDomesticItems": 100.25,
-        |        "zeroEmissionsGoodsVehicleAllowance": 100.25,
-        |        "propertyAllowance": 100.25,
         |        "otherCapitalAllowance": 100.25,
-        |        "structureAndBuildingAllowance": 100.25,
-        |        "electricChargePointAllowance": 100.25
+        |        "electricChargePointAllowance": 100.25,
+        |        "zeroEmissionsCarAllowance": 100.25,
+        |        "propertyAllowance": 100.25
         |      }
-        |    }
-        |  ]
-        |}
-       """.stripMargin
-    )
+        |    },
+        |    "foreignProperty": [
+        |      {
+        |        "countryCode": "GER",
+        |        "adjustments": {
+        |          "privateUseAdjustment": 100.25,
+        |          "balancingCharge": 100.25
+        |        },
+        |        "allowances": {
+        |          "annualInvestmentAllowance": 100.25,
+        |          "costOfReplacingDomesticItems": 100.25,
+        |          "zeroEmissionsGoodsVehicleAllowance": 100.25,
+        |          "otherCapitalAllowance": 100.25,
+        |          "electricChargePointAllowance": 100.25,
+        |          "zeroEmissionsCarAllowance": 100.25,
+        |          "propertyAllowance": 100.25,
+        |          "structuredBuildingAllowance": [
+        |            {
+        |              "amount": 100.25,
+        |              "firstYear": {
+        |                "qualifyingDate": "2020-03-29",
+        |                "qualifyingAmountExpenditure": 100.25
+        |              },
+        |              "building": {
+        |                "name": "Building Name",
+        |                "number": "12",
+        |                "postCode": "TF3 4GH"
+        |              }
+        |            }
+        |          ]
+        |        }
+        |      }
+        |    ]
+        |  }
+        |""".stripMargin)
 
     def setupStubs(): StubMapping
 
-    def uri: String = s"/$nino/$businessId/annual/$taxYear"
+    def uri: String = s"/foreign/$nino/$businessId/annual/$taxYear"
 
-    def ifsUri: String = s"/income-tax/business/property/annual/$nino/$businessId/$taxYear"
+    def ifsUri: String = s"/income-tax/business/property/annual"
+
+    def ifsQueryParams: Map[String, String] = Map(
+      "taxableEntityId" -> nino,
+      "incomeSourceId" -> businessId,
+      "taxYear" -> taxYear
+    )
 
     def request(): WSRequest = {
       setupStubs()
@@ -149,24 +187,23 @@ class RetrieveForeignPropertyAnnualSubmissionControllerISpec extends V2Integrati
 
   "calling the retrieve foreign property annual submission endpoint" should {
 
-//    "return a 200 status code" when {
-//
-//      "any valid request is made" in new Test {
-//
-//        override def setupStubs(): StubMapping = {
-//          AuditStub.audit()
-//          AuthStub.authorised()
-//          MtdIdLookupStub.ninoFound(nino)
-//          IfsStub.onSuccess(IfsStub.GET, ifsUri, Status.OK, ifsResponseBody)
-//        }
-//
-//        val response: WSResponse = await(request().get())
-//        response.status shouldBe Status.OK
-//        response.json shouldBe responseBody
-//        response.header("X-CorrelationId").nonEmpty shouldBe true
-//        response.header("Content-Type") shouldBe Some("application/json")
-//      }
-//    }
+    "return a 200 status code" when {
+
+      "any valid request is made" in new Test {
+
+        override def setupStubs(): StubMapping = {
+          AuthStub.authorised()
+          MtdIdLookupStub.ninoFound(nino)
+          IfsStub.onSuccess(IfsStub.GET, ifsUri, ifsQueryParams, Status.OK, ifsResponseBody)
+        }
+
+        val response: WSResponse = await(request().get())
+        response.status shouldBe Status.OK
+        response.json shouldBe responseBody
+        response.header("X-CorrelationId").nonEmpty shouldBe true
+        response.header("Content-Type") shouldBe Some("application/json")
+      }
+    }
     "return error according to spec" when {
 
       "validation error" when {
@@ -180,7 +217,6 @@ class RetrieveForeignPropertyAnnualSubmissionControllerISpec extends V2Integrati
 
 
             override def setupStubs(): StubMapping = {
-              AuditStub.audit()
               AuthStub.authorised()
               MtdIdLookupStub.ninoFound(requestNino)
             }
@@ -203,37 +239,36 @@ class RetrieveForeignPropertyAnnualSubmissionControllerISpec extends V2Integrati
         input.foreach(args => (validationErrorTest _).tupled(args))
       }
 
-//      "ifs service error" when {
-//        def serviceErrorTest(ifsStatus: Int, ifsCode: String, expectedStatus: Int, expectedBody: MtdError): Unit = {
-//          s"ifs returns an $ifsCode error and status $ifsStatus" in new Test {
-//
-//
-//            override def setupStubs(): StubMapping = {
-//              AuditStub.audit()
-//              AuthStub.authorised()
-//              MtdIdLookupStub.ninoFound(nino)
-//              IfsStub.onError(IfsStub.GET, ifsUri, ifsStatus, errorBody(ifsCode))
-//            }
-//
-//            val response: WSResponse = await(request().get())
-//            response.status shouldBe expectedStatus
-//            response.json shouldBe Json.toJson(expectedBody)
-//          }
-//        }
-//
-//        val input = Seq(
-//          (Status.BAD_REQUEST, "INVALID_TAXABLE_ENTITY_ID", Status.BAD_REQUEST, NinoFormatError),
-//          (Status.BAD_REQUEST, "INVALID_TAX_YEAR", Status.BAD_REQUEST, TaxYearFormatError),
-//          (Status.NOT_FOUND, "INVALID_INCOMESOURCEID", Status.BAD_REQUEST, BusinessIdFormatError),
-//          (Status.BAD_REQUEST, "INVALID_CORRELATIONID", Status.INTERNAL_SERVER_ERROR, DownstreamError),
-//          (Status.NOT_FOUND, "NO_DATA_FOUND", Status.NOT_FOUND, NotFoundError),
-//          (Status.UNPROCESSABLE_ENTITY, "TAX_YEAR_NOT_SUPPORTED", Status.BAD_REQUEST, RuleTaxYearNotSupportedError),
-//          (Status.INTERNAL_SERVER_ERROR, "SERVER_ERROR", Status.INTERNAL_SERVER_ERROR, DownstreamError),
-//          (Status.SERVICE_UNAVAILABLE, "SERVICE_UNAVAILABLE", Status.INTERNAL_SERVER_ERROR, DownstreamError)
-//        )
-//
-//        input.foreach(args => (serviceErrorTest _).tupled(args))
-//      }
+      "ifs service error" when {
+        def serviceErrorTest(ifsStatus: Int, ifsCode: String, expectedStatus: Int, expectedBody: MtdError): Unit = {
+          s"ifs returns an $ifsCode error and status $ifsStatus" in new Test {
+
+
+            override def setupStubs(): StubMapping = {
+              AuthStub.authorised()
+              MtdIdLookupStub.ninoFound(nino)
+              IfsStub.onError(IfsStub.GET, ifsUri, ifsQueryParams, ifsStatus, errorBody(ifsCode))
+            }
+
+            val response: WSResponse = await(request().get())
+            response.status shouldBe expectedStatus
+            response.json shouldBe Json.toJson(expectedBody)
+          }
+        }
+
+        val input = Seq(
+          (Status.BAD_REQUEST, "INVALID_TAXABLE_ENTITY_ID", Status.BAD_REQUEST, NinoFormatError),
+          (Status.BAD_REQUEST, "INVALID_TAX_YEAR", Status.BAD_REQUEST, TaxYearFormatError),
+          (Status.NOT_FOUND, "INVALID_INCOMESOURCEID", Status.BAD_REQUEST, BusinessIdFormatError),
+          (Status.BAD_REQUEST, "INVALID_CORRELATIONID", Status.INTERNAL_SERVER_ERROR, DownstreamError),
+          (Status.NOT_FOUND, "NO_DATA_FOUND", Status.NOT_FOUND, NotFoundError),
+          (Status.UNPROCESSABLE_ENTITY, "TAX_YEAR_NOT_SUPPORTED", Status.BAD_REQUEST, RuleTaxYearNotSupportedError),
+          (Status.INTERNAL_SERVER_ERROR, "SERVER_ERROR", Status.INTERNAL_SERVER_ERROR, DownstreamError),
+          (Status.SERVICE_UNAVAILABLE, "SERVICE_UNAVAILABLE", Status.INTERNAL_SERVER_ERROR, DownstreamError)
+        )
+
+        input.foreach(args => (serviceErrorTest _).tupled(args))
+      }
     }
   }
 }

@@ -72,7 +72,7 @@ class RetrieveForeignPropertyAnnualSubmissionControllerSpec
   private val rawData = RetrieveForeignPropertyAnnualSubmissionRawData(nino, businessId, taxYear)
   private val requestData = RetrieveForeignPropertyAnnualSubmissionRequest(Nino(nino), businessId, taxYear)
 
-  private val testHateoasLink = Link(href = s"Individuals/business/property/$nino/$businessId/annual/$taxYear", method = GET, rel = "self")
+  private val testHateoasLink = Link(href = s"Individuals/business/property/foreign/$nino/$businessId/annual/$taxYear", method = GET, rel = "self")
 
   private val foreignFhlEeaEntry = ForeignFhlEeaEntry(
     Some(ForeignFhlEeaAdjustments(
@@ -195,6 +195,9 @@ class RetrieveForeignPropertyAnnualSubmissionControllerSpec
         val input = Seq(
           (NinoFormatError, BAD_REQUEST),
           (BusinessIdFormatError, BAD_REQUEST),
+          (TaxYearFormatError, BAD_REQUEST),
+          (RuleTaxYearNotSupportedError, BAD_REQUEST),
+          (RuleTypeOfBusinessIncorrectError, BAD_REQUEST),
           (NotFoundError, NOT_FOUND),
           (DownstreamError, INTERNAL_SERVER_ERROR)
         )

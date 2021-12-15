@@ -12,5 +12,4 @@ GET        /foreign/:nino/:businessId/period/:taxYear/:submissionId    v2.contro
 
 DELETE     /:nino/:businessId/annual/:taxYear                          v2.controllers.DeletePropertyAnnualSubmissionController.handleRequest(nino: String, businessId: String, taxYear: String)
 PUT        /foreign/:nino/:businessId/annual/:taxYear                  v2.controllers.AmendForeignPropertyAnnualSubmissionController.handleRequest(nino: String, businessId: String, taxYear: String)
-GET        /:nino/:businessId/annual/:taxYear                          v2.controllers.RetrieveForeignPropertyAnnualSubmissionController.handleRequest(nino: String, businessId: String, taxYear: String)
 GET        /foreign/:nino/:businessId/annual/:taxYear                  v2.controllers.RetrieveForeignPropertyAnnualSubmissionController.handleRequest(nino: String, businessId: String, taxYear: String)

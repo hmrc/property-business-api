@@ -255,20 +255,6 @@ class AmendUkPropertyAnnualSubmissionControllerISpec extends V2IntegrationBaseSp
             |""".stripMargin)
 
         val allInvalidFieldsRequestError: List[MtdError] = List(
-          StringFormatError.copy(
-            paths = Some(List(
-              "/ukNonFhlProperty/allowances/structuredBuildingAllowance/0/building/name",
-              "/ukNonFhlProperty/allowances/structuredBuildingAllowance/0/building/postcode",
-              "/ukNonFhlProperty/allowances/enhancedStructuredBuildingAllowance/0/building/number",
-              "/ukNonFhlProperty/allowances/enhancedStructuredBuildingAllowance/0/building/postcode"
-            ))
-          ),
-          DateFormatError.copy(
-            paths = Some(List(
-              "/ukNonFhlProperty/allowances/structuredBuildingAllowance/0/firstYear/qualifyingDate",
-              "/ukNonFhlProperty/allowances/enhancedStructuredBuildingAllowance/0/firstYear/qualifyingDate"
-            ))
-          ),
           ValueFormatError.copy(
             paths = Some(List(
               "/ukFhlProperty/adjustments/lossBroughtForward",
@@ -296,7 +282,21 @@ class AmendUkPropertyAnnualSubmissionControllerISpec extends V2IntegrationBaseSp
               "/ukNonFhlProperty/allowances/enhancedStructuredBuildingAllowance/0/amount",
               "/ukNonFhlProperty/allowances/enhancedStructuredBuildingAllowance/0/firstYear/qualifyingAmountExpenditure"
             ))
-          )
+          ),
+          DateFormatError.copy(
+            paths = Some(List(
+              "/ukNonFhlProperty/allowances/structuredBuildingAllowance/0/firstYear/qualifyingDate",
+              "/ukNonFhlProperty/allowances/enhancedStructuredBuildingAllowance/0/firstYear/qualifyingDate"
+            ))
+          ),
+          StringFormatError.copy(
+            paths = Some(List(
+              "/ukNonFhlProperty/allowances/structuredBuildingAllowance/0/building/name",
+              "/ukNonFhlProperty/allowances/structuredBuildingAllowance/0/building/postcode",
+              "/ukNonFhlProperty/allowances/enhancedStructuredBuildingAllowance/0/building/number",
+              "/ukNonFhlProperty/allowances/enhancedStructuredBuildingAllowance/0/building/postcode"
+            ))
+          ),
         )
 
         val wrappedErrors: ErrorWrapper = ErrorWrapper(

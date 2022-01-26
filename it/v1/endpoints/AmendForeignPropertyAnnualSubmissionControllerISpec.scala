@@ -178,12 +178,6 @@ class AmendForeignPropertyAnnualSubmissionControllerISpec extends V1IntegrationB
         )
 
         val allInvalidFieldsRequestError: List[MtdError] = List(
-          CountryCodeFormatError.copy(
-            message = "The provided Country code is invalid",
-            paths = Some(List(
-              "/foreignProperty/0/countryCode"
-            ))
-          ),
           ValueFormatError.copy(
             message = "One or more monetary fields are invalid",
             paths = Some(List(
@@ -203,7 +197,13 @@ class AmendForeignPropertyAnnualSubmissionControllerISpec extends V1IntegrationB
               "/foreignProperty/0/allowances/structureAndBuildingAllowance",
               "/foreignProperty/0/allowances/electricChargePointAllowance"
             ))
-          )
+          ),
+          CountryCodeFormatError.copy(
+            message = "The provided Country code is invalid",
+            paths = Some(List(
+              "/foreignProperty/0/countryCode"
+            ))
+          ),
         )
 
         val wrappedErrors: ErrorWrapper = ErrorWrapper(

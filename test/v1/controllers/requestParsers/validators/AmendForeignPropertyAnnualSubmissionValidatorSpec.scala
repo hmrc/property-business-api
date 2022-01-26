@@ -999,7 +999,7 @@ class AmendForeignPropertyAnnualSubmissionValidatorSpec extends UnitSpec {
             |   ]
             |}
           """.stripMargin
-        ))) shouldBe List(
+        ))) should contain theSameElementsAs List(
           CountryCodeFormatError.copy(paths = Some(Seq(
             "/foreignProperty/0/countryCode"
           ))),

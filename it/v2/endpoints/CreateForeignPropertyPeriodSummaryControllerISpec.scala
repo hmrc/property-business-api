@@ -68,7 +68,7 @@ class CreateForeignPropertyPeriodSummaryControllerISpec extends V2IntegrationBas
     def ifsQueryParams: Map[String, String] = Map(
       "taxableEntityId" -> nino,
       "incomeSourceId"  -> businessId,
-      "taxYearExplicit" -> taxYear
+      "taxYear" -> taxYear
     )
 
     def request(): WSRequest = {
@@ -246,7 +246,7 @@ class CreateForeignPropertyPeriodSummaryControllerISpec extends V2IntegrationBas
           (Status.BAD_REQUEST, "INVALID_INCOMESOURCEID", Status.BAD_REQUEST, BusinessIdFormatError),
           (Status.BAD_REQUEST, "INVALID_PAYLOAD", Status.INTERNAL_SERVER_ERROR, DownstreamError),
           (Status.BAD_REQUEST, "INVALID_CORRELATIONID", Status.INTERNAL_SERVER_ERROR, DownstreamError),
-          (Status.BAD_REQUEST, "INVALID_TAX_YEAR_EXPLICIT", Status.BAD_REQUEST, TaxYearFormatError),
+          (Status.BAD_REQUEST, "INVALID_TAX_YEAR", Status.BAD_REQUEST, TaxYearFormatError),
           (Status.NOT_FOUND, "INCOME_SOURCE_NOT_FOUND", Status.NOT_FOUND, NotFoundError),
           (Status.CONFLICT, "DUPLICATE_SUBMISSION", Status.BAD_REQUEST, RuleDuplicateSubmissionError),
           (Status.UNPROCESSABLE_ENTITY, "NOT_ALIGN_PERIOD", Status.BAD_REQUEST, RuleMisalignedPeriodError),
@@ -254,6 +254,8 @@ class CreateForeignPropertyPeriodSummaryControllerISpec extends V2IntegrationBas
           (Status.UNPROCESSABLE_ENTITY, "GAPS_IN_PERIOD", Status.BAD_REQUEST, RuleNotContiguousPeriodError),
           (Status.UNPROCESSABLE_ENTITY, "INVALID_DATE_RANGE", Status.BAD_REQUEST, RuleToDateBeforeFromDateError),
           (Status.UNPROCESSABLE_ENTITY, "DUPLICATE_COUNTRY_CODE", Status.BAD_REQUEST, RuleDuplicateCountryCodeError),
+          (Status.UNPROCESSABLE_ENTITY, "INCOMPATIBLE_PAYLOAD", Status.BAD_REQUEST, RuleTypeOfBusinessIncorrectError),
+          (Status.UNPROCESSABLE_ENTITY, "TAX_YEAR_NOT_SUPPORTED", Status.BAD_REQUEST, RuleTaxYearNotSupportedError),
           (Status.INTERNAL_SERVER_ERROR, "SERVER_ERROR", Status.INTERNAL_SERVER_ERROR, DownstreamError),
           (Status.SERVICE_UNAVAILABLE, "SERVICE_UNAVAILABLE", Status.INTERNAL_SERVER_ERROR, DownstreamError),
         )

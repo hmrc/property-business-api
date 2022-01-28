@@ -52,7 +52,7 @@ class CreateForeignPropertyPeriodSummaryService @Inject()(connector: CreateForei
     Map(
       "INVALID_TAXABLE_ENTITY_ID" -> NinoFormatError,
       "INVALID_INCOMESOURCEID" -> BusinessIdFormatError,
-      "INVALID_TAX_YEAR_EXPLICIT" -> TaxYearFormatError,
+      "INVALID_TAX_YEAR" -> TaxYearFormatError,
       "DUPLICATE_COUNTRY_CODE" -> RuleDuplicateCountryCodeError,
       "OVERLAPS_IN_PERIOD" -> RuleOverlappingPeriodError,
       "NOT_ALIGN_PERIOD" -> RuleMisalignedPeriodError,
@@ -63,7 +63,9 @@ class CreateForeignPropertyPeriodSummaryService @Inject()(connector: CreateForei
       "INVALID_PAYLOAD" -> DownstreamError,
       "INVALID_CORRELATIONID" -> DownstreamError,
       "DUPLICATE_SUBMISSION" -> RuleDuplicateSubmissionError,
-      "INVALID_DATE_RANGE" -> RuleToDateBeforeFromDateError
+      "INVALID_DATE_RANGE" -> RuleToDateBeforeFromDateError,
+      "INCOMPATIBLE_PAYLOAD" -> RuleTypeOfBusinessIncorrectError,
+      "TAX_YEAR_NOT_SUPPORTED" -> RuleTaxYearNotSupportedError
     )
 
 }

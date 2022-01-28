@@ -120,7 +120,7 @@ class CreateForeignPropertyPeriodSummaryServiceSpec extends UnitSpec {
       val input = Seq(
         "INVALID_TAXABLE_ENTITY_ID" -> NinoFormatError,
         "INVALID_INCOMESOURCEID" -> BusinessIdFormatError,
-        "INVALID_TAX_YEAR_EXPLICIT" -> TaxYearFormatError,
+        "INVALID_TAX_YEAR" -> TaxYearFormatError,
         "DUPLICATE_COUNTRY_CODE" -> RuleDuplicateCountryCodeError,
         "INVALID_PAYLOAD" -> DownstreamError,
         "INVALID_CORRELATIONID" -> DownstreamError,
@@ -130,6 +130,8 @@ class CreateForeignPropertyPeriodSummaryServiceSpec extends UnitSpec {
         "INVALID_DATE_RANGE" -> RuleToDateBeforeFromDateError,
         "DUPLICATE_SUBMISSION" -> RuleDuplicateSubmissionError,
         "INCOME_SOURCE_NOT_FOUND" -> NotFoundError,
+        "INCOMPATIBLE_PAYLOAD" -> RuleTypeOfBusinessIncorrectError,
+        "TAX_YEAR_NOT_SUPPORTED" -> RuleTaxYearNotSupportedError,
         "SERVER_ERROR" -> DownstreamError,
         "SERVICE_UNAVAILABLE" -> DownstreamError
       )

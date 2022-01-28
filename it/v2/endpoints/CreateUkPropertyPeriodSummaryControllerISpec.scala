@@ -369,7 +369,7 @@ class CreateUkPropertyPeriodSummaryControllerISpec extends V2IntegrationBaseSpec
     def ifsQueryParams: Map[String, String] = Map(
       "taxableEntityId" -> nino,
       "incomeSourceId" -> businessId,
-      "taxYearExplicit" -> taxYear
+      "taxYear" -> taxYear
     )
 
     def request(): WSRequest = {

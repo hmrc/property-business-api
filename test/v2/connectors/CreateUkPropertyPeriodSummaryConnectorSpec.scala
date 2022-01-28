@@ -166,7 +166,7 @@ class CreateUkPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
 
       MockHttpClient
         .post(
-          url = s"$baseUrl/income-tax/business/property/periodic?taxableEntityId=$nino&taxYearExplicit=$taxYear&incomeSourceId=$businessId",
+          url = s"$baseUrl/income-tax/business/property/periodic?taxableEntityId=$nino&taxYear=$taxYear&incomeSourceId=$businessId",
           config = dummyIfsHeaderCarrierConfig,
           body = regularExpensesBody,
           requiredHeaders = requiredIfsHeadersPost,
@@ -186,7 +186,7 @@ class CreateUkPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
 
       MockHttpClient
         .post(
-          url = s"$baseUrl/income-tax/business/property/periodic?taxableEntityId=$nino&taxYearExplicit=$taxYear&incomeSourceId=$businessId",
+          url = s"$baseUrl/income-tax/business/property/periodic?taxableEntityId=$nino&taxYear=$taxYear&incomeSourceId=$businessId",
           config = dummyIfsHeaderCarrierConfig,
           body = consolidatedExpensesBody,
           requiredHeaders = requiredIfsHeadersPost,

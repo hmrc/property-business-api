@@ -97,6 +97,7 @@ class CreateUkPropertyPeriodSummaryController @Inject()(val authService: Enrolme
            NinoFormatError |
            TaxYearFormatError |
            BusinessIdFormatError |
+           RuleTypeOfBusinessIncorrectError |
            RuleTaxYearRangeInvalidError |
            RuleTaxYearNotSupportedError |
            RuleIncorrectOrEmptyBodyError |

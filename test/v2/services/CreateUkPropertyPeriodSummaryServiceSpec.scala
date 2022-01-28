@@ -189,7 +189,9 @@ class CreateUkPropertyPeriodSummaryServiceSpec extends ServiceSpec {
         val input = Seq(
           "INVALID_TAXABLE_ENTITY_ID" -> NinoFormatError,
           "INVALID_INCOMESOURCEID" -> BusinessIdFormatError,
-          "INVALID_TAX_YEAR_EXPLICIT" -> TaxYearFormatError,
+          "INVALID_TAX_YEAR" -> TaxYearFormatError,
+          "TAX_YEAR_NOT_SUPPORTED" -> RuleTaxYearNotSupportedError,
+          "INCOMPATIBLE_PAYLOAD" -> RuleTypeOfBusinessIncorrectError,
           "INVALID_PAYLOAD" -> DownstreamError,
           "INVALID_CORRELATIONID" -> DownstreamError,
           "INCOME_SOURCE_NOT_FOUND" -> NotFoundError,

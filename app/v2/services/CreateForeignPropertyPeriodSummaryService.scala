@@ -65,7 +65,8 @@ class CreateForeignPropertyPeriodSummaryService @Inject()(connector: CreateForei
       "DUPLICATE_SUBMISSION" -> RuleDuplicateSubmissionError,
       "INVALID_DATE_RANGE" -> RuleToDateBeforeFromDateError,
       "INCOMPATIBLE_PAYLOAD" -> RuleTypeOfBusinessIncorrectError,
-      "TAX_YEAR_NOT_SUPPORTED" -> RuleTaxYearNotSupportedError
+      "TAX_YEAR_NOT_SUPPORTED" -> RuleTaxYearNotSupportedError,
+      "MISSING_EXPENSES" -> DownstreamError
     )
 
 }

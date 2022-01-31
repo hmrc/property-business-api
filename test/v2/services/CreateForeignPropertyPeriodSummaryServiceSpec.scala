@@ -132,6 +132,7 @@ class CreateForeignPropertyPeriodSummaryServiceSpec extends UnitSpec {
         "INCOME_SOURCE_NOT_FOUND" -> NotFoundError,
         "INCOMPATIBLE_PAYLOAD" -> RuleTypeOfBusinessIncorrectError,
         "TAX_YEAR_NOT_SUPPORTED" -> RuleTaxYearNotSupportedError,
+        "MISSING_EXPENSES" -> DownstreamError,
         "SERVER_ERROR" -> DownstreamError,
         "SERVICE_UNAVAILABLE" -> DownstreamError
       )

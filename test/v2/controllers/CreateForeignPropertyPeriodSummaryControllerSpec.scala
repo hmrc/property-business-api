@@ -200,7 +200,7 @@ class CreateForeignPropertyPeriodSummaryControllerSpec
           (RuleToDateBeforeFromDateError, BAD_REQUEST),
           (RuleDuplicateCountryCodeError, BAD_REQUEST),
           (RuleTypeOfBusinessIncorrectError, BAD_REQUEST),
-          (RuleTaxYearNotSupportedError, BAD_REQUEST),
+          (RuleTaxYearNotSupportedError, BAD_REQUEST)
         )
 
         input.foreach(args => (serviceErrors _).tupled(args))

@@ -51,7 +51,9 @@ class CreateUkPropertyPeriodSummaryService @Inject()(connector: CreateUkProperty
     Map(
       "INVALID_TAXABLE_ENTITY_ID" -> NinoFormatError,
       "INVALID_INCOMESOURCEID" -> BusinessIdFormatError,
-      "INVALID_TAX_YEAR_EXPLICIT" -> TaxYearFormatError,
+      "INVALID_TAX_YEAR" -> TaxYearFormatError,
+      "TAX_YEAR_NOT_SUPPORTED" -> RuleTaxYearNotSupportedError,
+      "INCOMPATIBLE_PAYLOAD" -> RuleTypeOfBusinessIncorrectError,
       "INVALID_PAYLOAD" -> DownstreamError,
       "INVALID_CORRELATIONID" -> DownstreamError,
       "INCOME_SOURCE_NOT_FOUND" -> NotFoundError,
@@ -60,6 +62,7 @@ class CreateUkPropertyPeriodSummaryService @Inject()(connector: CreateUkProperty
       "OVERLAPS_IN_PERIOD" -> RuleOverlappingPeriodError,
       "GAPS_IN_PERIOD" -> RuleNotContiguousPeriodError,
       "INVALID_DATE_RANGE" -> RuleToDateBeforeFromDateError,
+      "MISSING_EXPENSES" -> DownstreamError,
       "SERVER_ERROR" -> DownstreamError,
       "SERVICE_UNAVAILABLE" -> DownstreamError
     )

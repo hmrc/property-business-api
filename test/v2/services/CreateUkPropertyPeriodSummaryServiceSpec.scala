@@ -200,6 +200,7 @@ class CreateUkPropertyPeriodSummaryServiceSpec extends ServiceSpec {
           "OVERLAPS_IN_PERIOD" -> RuleOverlappingPeriodError,
           "GAPS_IN_PERIOD" -> RuleNotContiguousPeriodError,
           "INVALID_DATE_RANGE" -> RuleToDateBeforeFromDateError,
+          "MISSING_EXPENSES" -> DownstreamError,
           "SERVER_ERROR" -> DownstreamError,
           "SERVICE_UNAVAILABLE" -> DownstreamError
         )

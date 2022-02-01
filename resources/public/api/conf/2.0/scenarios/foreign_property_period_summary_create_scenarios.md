@@ -31,5 +31,9 @@
             <td><p>DUPLICATE_SUBMISSION</p></td>
             <td><p>Simulates the scenario where a summary has already been submitted for the specified period.</p></td>
         </tr>
+        <tr>
+            <td><p>TYPE_OF_BUSINESS_INCORRECT</p></td>
+            <td><p>Simulates the scenario where the supplied Business ID does not represent a foreign property business.</p></td>
+        </tr>
     </tbody>
 </table>

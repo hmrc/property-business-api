@@ -57,6 +57,7 @@ class AmendForeignPropertyPeriodSummaryService @Inject()(connector: AmendForeign
       "NO_DATA_FOUND" -> NotFoundError,
       "INCOMPATIBLE_PAYLOAD" -> RuleTypeOfBusinessIncorrectError,
       "TAX_YEAR_NOT_SUPPORTED" -> RuleTaxYearNotSupportedError,
+      "MISSING_EXPENSES" -> DownstreamError,
       "BUSINESS_VALIDATION_FAILURE" -> DownstreamError,
       "DUPLICATE_COUNTRY_CODE" -> RuleDuplicateCountryCodeError,
       "SERVER_ERROR" -> DownstreamError,

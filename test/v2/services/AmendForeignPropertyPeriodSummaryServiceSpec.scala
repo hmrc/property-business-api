@@ -136,6 +136,7 @@ class AmendForeignPropertyPeriodSummaryServiceSpec extends ServiceSpec {
           "TAX_YEAR_NOT_SUPPORTED" -> RuleTaxYearNotSupportedError,
           "BUSINESS_VALIDATION_FAILURE" -> DownstreamError,
           "DUPLICATE_COUNTRY_CODE" -> RuleDuplicateCountryCodeError,
+          "MISSING_EXPENSES" -> DownstreamError,
           "SERVER_ERROR" -> DownstreamError,
           "SERVICE_UNAVAILABLE" -> DownstreamError
         )

@@ -16,34 +16,33 @@
 
 package v2.models.request.createForeignPropertyPeriodSummary
 
-import play.api.libs.json.Json
+import play.api.libs.json.{JsValue, Json}
 import support.UnitSpec
 import v2.models.request.common.foreignFhlEea._
 import v2.models.request.common.foreignPropertyEntry._
-import v2.models.utils.JsonErrorValidators
 
-class CreateForeignPropertyPeriodSummaryRequestBodySpec extends UnitSpec with JsonErrorValidators {
+class CreateForeignPropertyPeriodSummaryRequestBodySpec extends UnitSpec {
 
-  val createForeignPropertyRequestBody = CreateForeignPropertyPeriodSummaryRequestBody(
+  val createForeignPropertyRequestBody: CreateForeignPropertyPeriodSummaryRequestBody = CreateForeignPropertyPeriodSummaryRequestBody(
     "2020-01-01",
     "2020-01-31",
     Some(CreateForeignFhlEea(
       Some(ForeignFhlEeaIncome(Some(5000.99))),
       Some(CreateForeignFhlEeaExpenses(
-        Some(5000.99),
-        Some(5000.99),
-        Some(5000.99),
-        Some(5000.99),
-        Some(5000.99),
-        Some(5000.99),
-        Some(5000.99),
+        None,
+        None,
+        None,
+        None,
+        None,
+        None,
+        None,
         Some(5000.99)
       ))
     )),
     Some(Seq(CreateForeignNonFhlPropertyEntry("FRA",
       Some(ForeignNonFhlPropertyIncome(
         Some(ForeignNonFhlPropertyRentIncome(Some(5000.99))),
-        false,
+        foreignTaxCreditRelief = false,
         Some(5000.99),
         Some(5000.99),
         Some(5000.99),
@@ -59,12 +58,13 @@ class CreateForeignPropertyPeriodSummaryRequestBodySpec extends UnitSpec with Js
         Some(5000.99),
         Some(5000.99),
         Some(5000.99),
-        Some(5000.99)
+        None
       ))))
   ))
 
-  val readsJson = Json.parse(
-    """{
+  val readsJson: JsValue = Json.parse(
+    """
+      |{
       |  "fromDate": "2020-01-01",
       |  "toDate": "2020-01-31",
       |  "foreignFhlEea": {
@@ -72,13 +72,6 @@ class CreateForeignPropertyPeriodSummaryRequestBodySpec extends UnitSpec with Js
       |      "rentAmount": 5000.99
       |    },
       |    "expenses": {
-      |      "premisesRunningCosts": 5000.99,
-      |      "repairsAndMaintenance": 5000.99,
-      |      "financialCosts": 5000.99,
-      |      "professionalFees": 5000.99,
-      |      "costOfServices": 5000.99,
-      |      "travelCosts": 5000.99,
-      |      "other": 5000.99,
       |      "consolidatedExpenses": 5000.99
       |    }
       |  },
@@ -104,15 +97,17 @@ class CreateForeignPropertyPeriodSummaryRequestBodySpec extends UnitSpec with Js
       |        "travelCosts": 5000.99,
       |        "residentialFinancialCost": 5000.99,
       |        "broughtFwdResidentialFinancialCost": 5000.99,
-      |        "other": 5000.99,
-      |        "consolidatedExpenses": 5000.99
+      |        "other": 5000.99
       |      }
       |    }
       |  ]
-      |}""".stripMargin)
+      |}
+    """.stripMargin
+  )
 
-  val writesJson = Json.parse(
-    """{
+  val writesJson: JsValue = Json.parse(
+    """
+      |{
       |  "fromDate": "2020-01-01",
       |  "toDate": "2020-01-31",
       |  "foreignFhlEea": {
@@ -120,17 +115,10 @@ class CreateForeignPropertyPeriodSummaryRequestBodySpec extends UnitSpec with Js
       |      "rentAmount": 5000.99
       |    },
       |    "expenses": {
-      |      "premisesRunningCosts": 5000.99,
-      |      "repairsAndMaintenance": 5000.99,
-      |      "financialCosts": 5000.99,
-      |      "professionalFees": 5000.99,
-      |      "costOfServices": 5000.99,
-      |      "travelCosts": 5000.99,
-      |      "other": 5000.99,
       |      "consolidatedExpenseAmount": 5000.99
       |    }
       |  },
-      |  "foreignNonFhlProperty": [
+      |  "foreignProperty": [
       |    {
       |      "countryCode": "FRA",
       |      "income": {
@@ -152,12 +140,13 @@ class CreateForeignPropertyPeriodSummaryRequestBodySpec extends UnitSpec with Js
       |        "travelCosts": 5000.99,
       |        "residentialFinancialCost": 5000.99,
       |        "broughtFwdResidentialFinancialCost": 5000.99,
-      |        "other": 5000.99,
-      |        "consolidatedExpenseAmount": 5000.99
+      |        "other": 5000.99
       |      }
       |    }
       |  ]
-      |}""".stripMargin)
+      |}
+    """.stripMargin
+  )
 
   "reads" when {
     "passed a valid JSON" should {

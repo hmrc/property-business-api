@@ -16,22 +16,25 @@
 
 package v2.controllers.requestParsers.validators
 
+import mocks.MockAppConfig
 import play.api.libs.json.{JsArray, JsValue, Json}
 import support.UnitSpec
-import v2.models.errors.{BusinessIdFormatError, CountryCodeFormatError, FromDateFormatError, NinoFormatError, RuleBothExpensesSuppliedError, RuleCountryCodeError, RuleDuplicateCountryCodeError, RuleIncorrectOrEmptyBodyError, RuleTaxYearNotSupportedError, RuleTaxYearRangeInvalidError, RuleToDateBeforeFromDateError, TaxYearFormatError, ToDateFormatError, ValueFormatError}
+import v2.models.errors._
 import v2.models.request.createForeignPropertyPeriodSummary.CreateForeignPropertyPeriodSummaryRawData
 
-class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec {
+class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with MockAppConfig {
 
   private val validNino = "AA123456A"
   private val validBusinessId = "XAIS12345678901"
   private val validTaxYear = "2021-22"
 
+  MockAppConfig.minimumTaxV2Foreign returns 2021
+
   private def entryWith(countryCode: String) =
     Json.parse(
       s"""
          |{
-         |         "countryCode": "${countryCode}",
+         |         "countryCode": "$countryCode",
          |         "income":{
          |            "rentIncome":{
          |               "rentAmount":4882.23
@@ -127,7 +130,7 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec {
 
   private val requestBodyConsolidationExpenseJson = consolidatedBodyWith(entryConsolidated)
 
-  val validator = new CreateForeignPropertyPeriodSummaryValidator()
+  val validator = new CreateForeignPropertyPeriodSummaryValidator(mockAppConfig)
 
   "running a validation" should {
     "return no errors" when {

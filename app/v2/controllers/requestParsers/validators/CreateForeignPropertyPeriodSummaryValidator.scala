@@ -16,24 +16,26 @@
 
 package v2.controllers.requestParsers.validators
 
+import config.AppConfig
 import v2.controllers.requestParsers.validators.validations._
 import v2.models.errors.{MtdError, RuleDuplicateCountryCodeError}
 import v2.models.request.createForeignPropertyPeriodSummary.{CreateForeignPropertyPeriodSummaryRawData, CreateForeignPropertyPeriodSummaryRequestBody}
-import javax.inject.Singleton
-import v2.controllers.requestParsers.validators.validations.minimumTaxYear
+
+import javax.inject.{Inject, Singleton}
 import v2.models.request.common.foreignFhlEea.{CreateForeignFhlEea, CreateForeignFhlEeaExpenses}
 import v2.models.request.common.foreignPropertyEntry.{CreateForeignNonFhlPropertyEntry, CreateForeignNonFhlPropertyExpenses}
 
 @Singleton
-class CreateForeignPropertyPeriodSummaryValidator extends Validator[CreateForeignPropertyPeriodSummaryRawData] {
+class CreateForeignPropertyPeriodSummaryValidator @Inject()(appConfig: AppConfig) extends Validator[CreateForeignPropertyPeriodSummaryRawData] {
 
+  private lazy val minTaxYear = appConfig.minimumTaxV2Foreign
   private val validationSet = List(parameterFormatValidation, bodyFormatValidation, bodyFieldFormatValidation, dateRangeValidation)
 
   private def parameterFormatValidation: CreateForeignPropertyPeriodSummaryRawData => List[List[MtdError]] =
     (data: CreateForeignPropertyPeriodSummaryRawData) => {
       List(
         NinoValidation.validate(data.nino),
-        TaxYearValidation.validate(minimumTaxYear, data.taxYear),
+        TaxYearValidation.validate(minTaxYear, data.taxYear),
         BusinessIdValidation.validate(data.businessId)
       )
     }

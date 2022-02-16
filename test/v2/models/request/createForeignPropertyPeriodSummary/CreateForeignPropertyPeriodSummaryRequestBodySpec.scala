@@ -29,13 +29,13 @@ class CreateForeignPropertyPeriodSummaryRequestBodySpec extends UnitSpec {
     Some(CreateForeignFhlEea(
       Some(ForeignFhlEeaIncome(Some(5000.99))),
       Some(CreateForeignFhlEeaExpenses(
-        None,
-        None,
-        None,
-        None,
-        None,
-        None,
-        None,
+        Some(5000.99),
+        Some(5000.99),
+        Some(5000.99),
+        Some(5000.99),
+        Some(5000.99),
+        Some(5000.99),
+        Some(5000.99),
         Some(5000.99)
       ))
     )),
@@ -58,7 +58,7 @@ class CreateForeignPropertyPeriodSummaryRequestBodySpec extends UnitSpec {
         Some(5000.99),
         Some(5000.99),
         Some(5000.99),
-        None
+        Some(5000.99)
       ))))
   ))
 
@@ -72,6 +72,13 @@ class CreateForeignPropertyPeriodSummaryRequestBodySpec extends UnitSpec {
       |      "rentAmount": 5000.99
       |    },
       |    "expenses": {
+      |      "premisesRunningCosts": 5000.99,
+      |      "repairsAndMaintenance": 5000.99,
+      |      "financialCosts": 5000.99,
+      |      "professionalFees": 5000.99,
+      |      "costOfServices": 5000.99,
+      |      "travelCosts": 5000.99,
+      |      "other": 5000.99,
       |      "consolidatedExpenses": 5000.99
       |    }
       |  },
@@ -97,7 +104,8 @@ class CreateForeignPropertyPeriodSummaryRequestBodySpec extends UnitSpec {
       |        "travelCosts": 5000.99,
       |        "residentialFinancialCost": 5000.99,
       |        "broughtFwdResidentialFinancialCost": 5000.99,
-      |        "other": 5000.99
+      |        "other": 5000.99,
+      |        "consolidatedExpenses": 5000.99
       |      }
       |    }
       |  ]
@@ -115,6 +123,13 @@ class CreateForeignPropertyPeriodSummaryRequestBodySpec extends UnitSpec {
       |      "rentAmount": 5000.99
       |    },
       |    "expenses": {
+      |      "premisesRunningCosts": 5000.99,
+      |      "repairsAndMaintenance": 5000.99,
+      |      "financialCosts": 5000.99,
+      |      "professionalFees": 5000.99,
+      |      "costOfServices": 5000.99,
+      |      "travelCosts": 5000.99,
+      |      "other": 5000.99,
       |      "consolidatedExpenseAmount": 5000.99
       |    }
       |  },
@@ -140,7 +155,8 @@ class CreateForeignPropertyPeriodSummaryRequestBodySpec extends UnitSpec {
       |        "travelCosts": 5000.99,
       |        "residentialFinancialCost": 5000.99,
       |        "broughtFwdResidentialFinancialCost": 5000.99,
-      |        "other": 5000.99
+      |        "other": 5000.99,
+      |        "consolidatedExpenseAmount": 5000.99
       |      }
       |    }
       |  ]

@@ -1,5 +1,7 @@
 This API allows developers to:
 
+- list, retrieve, create or amend an individual’s UK Property Income & Expenditure Period Summaries
+- retrieve, create, amend or delete an individual’s UK Property Annual Summary
 - list, retrieve, create or amend an individual’s Foreign Property Income & Expenditure Period Summaries
 - retrieve, create, amend or delete an individual’s Foreign Property Annual Summary
 

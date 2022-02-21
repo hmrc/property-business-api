@@ -18,24 +18,28 @@ package v2.controllers
 
 import cats.data.EitherT
 import cats.implicits._
-import javax.inject.{ Inject, Singleton }
 import play.api.libs.json.Json
-import play.api.mvc.{ Action, AnyContent, ControllerComponents }
-import utils.{ IdGenerator, Logging }
+import play.api.mvc.{Action, AnyContent, ControllerComponents}
+import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.play.audit.http.connector.AuditResult
+import utils.{IdGenerator, Logging}
 import v2.controllers.requestParsers.DeletePropertyAnnualSubmissionRequestParser
+import v2.models.audit.{AuditEvent, AuditResponse, GenericAuditDetail}
 import v2.models.errors._
 import v2.models.request.deletePropertyAnnualSubmission.DeletePropertyAnnualSubmissionRawData
-import v2.services.{ DeletePropertyAnnualSubmissionService, EnrolmentsAuthService, MtdIdLookupService }
+import v2.services.{AuditService, DeletePropertyAnnualSubmissionService, EnrolmentsAuthService, MtdIdLookupService}
 
-import scala.concurrent.{ ExecutionContext, Future }
+import javax.inject.{Inject, Singleton}
+import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class DeletePropertyAnnualSubmissionController @Inject()(val authService: EnrolmentsAuthService,
-                                                                val lookupService: MtdIdLookupService,
-                                                                parser: DeletePropertyAnnualSubmissionRequestParser,
-                                                                service: DeletePropertyAnnualSubmissionService,
-                                                                cc: ControllerComponents,
-                                                                idGenerator: IdGenerator)(implicit ec: ExecutionContext)
+                                                         val lookupService: MtdIdLookupService,
+                                                         parser: DeletePropertyAnnualSubmissionRequestParser,
+                                                         service: DeletePropertyAnnualSubmissionService,
+                                                         auditService: AuditService,
+                                                         cc: ControllerComponents,
+                                                         idGenerator: IdGenerator)(implicit ec: ExecutionContext)
     extends AuthorisedController(cc)
     with BaseController
     with Logging {
@@ -59,12 +63,17 @@ class DeletePropertyAnnualSubmissionController @Inject()(val authService: Enrolm
             s"[${endpointLogContext.controllerName}][${endpointLogContext.endpointName}] - " +
               s"Success response received with CorrelationId: ${serviceResponse.correlationId}")
 
+          auditSubmission(GenericAuditDetail(request.userDetails, rawData, serviceResponse.correlationId, AuditResponse(NO_CONTENT, Right(None))))
+
           NoContent.withApiHeaders(serviceResponse.correlationId)
 
         }
       result.leftMap { errorWrapper =>
         val resCorrelationId = errorWrapper.correlationId
         val result           = errorResult(errorWrapper).withApiHeaders(resCorrelationId)
+
+        auditSubmission(
+          GenericAuditDetail(request.userDetails, rawData, correlationId, AuditResponse(result.header.status, Left(errorWrapper.auditErrors))))
 
         logger.warn(
           s"[${endpointLogContext.controllerName}][${endpointLogContext.endpointName}] - " +
@@ -81,5 +90,10 @@ class DeletePropertyAnnualSubmissionController @Inject()(val authService: Enrolm
       case DownstreamError => InternalServerError(Json.toJson(errorWrapper))
       case NotFoundError   => NotFound(Json.toJson(errorWrapper))
     }
+  }
+
+  private def auditSubmission(details: GenericAuditDetail)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[AuditResult] = {
+    val event = AuditEvent("DeletePropertyAnnualSubmission", "delete-property-annual-submission", details)
+    auditService.auditEvent(event)
   }
 }

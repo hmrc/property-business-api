@@ -17,7 +17,11 @@
 package v2.models.audit
 
 case class AuditEvent[T](
-                          auditType: String,
-                          transactionName: String,
-                          detail: T
-                        )
+    auditType: String,
+    transactionName: String,
+    detail: T
+)
+
+object AuditEvent {
+  val apiVersionNumber: Option[String] = Some("2.0")
+}

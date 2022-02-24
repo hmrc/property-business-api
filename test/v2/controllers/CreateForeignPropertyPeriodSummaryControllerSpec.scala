@@ -22,11 +22,12 @@ import uk.gov.hmrc.http.HeaderCarrier
 import v2.mocks.MockIdGenerator
 import v2.mocks.hateoas.MockHateoasFactory
 import v2.mocks.requestParsers.MockCreateForeignPropertyPeriodSummaryRequestParser
-import v2.mocks.services.{ MockCreateForeignPropertyPeriodSummaryService, MockEnrolmentsAuthService, MockMtdIdLookupService }
+import v2.mocks.services.{MockAuditService, MockCreateForeignPropertyPeriodSummaryService, MockEnrolmentsAuthService, MockMtdIdLookupService}
+import v2.models.audit.{AuditError, AuditEvent, AuditResponse, GenericAuditDetail}
 import v2.models.domain.Nino
 import v2.models.errors._
 import v2.models.hateoas.Method.GET
-import v2.models.hateoas.{ HateoasWrapper, Link }
+import v2.models.hateoas.{HateoasWrapper, Link}
 import v2.models.outcomes.ResponseWrapper
 import v2.models.request.createForeignPropertyPeriodSummary._
 import v2.models.response.createForeignPropertyPeriodSummary._
@@ -40,6 +41,7 @@ class CreateForeignPropertyPeriodSummaryControllerSpec
     with MockMtdIdLookupService
     with MockCreateForeignPropertyPeriodSummaryService
     with MockCreateForeignPropertyPeriodSummaryRequestParser
+    with MockAuditService
     with MockHateoasFactory
     with MockIdGenerator {
 
@@ -57,6 +59,7 @@ class CreateForeignPropertyPeriodSummaryControllerSpec
       lookupService = mockMtdIdLookupService,
       service = mockCreateForeignPropertyService,
       parser = mockCreateForeignPropertyRequestParser,
+      auditService = mockAuditService,
       hateoasFactory = mockHateoasFactory,
       cc = cc,
       idGenerator = mockIdGenerator
@@ -102,6 +105,20 @@ class CreateForeignPropertyPeriodSummaryControllerSpec
 
   private val response = CreateForeignPropertyPeriodSummaryResponse(submissionId)
 
+  def event(auditResponse: AuditResponse): AuditEvent[GenericAuditDetail] =
+    AuditEvent(
+      auditType = "CreateForeignPropertyIncomeAndExpensesPeriodSummary",
+      transactionName = "create-foreign-property-income-and-expenses-period-summary",
+      detail = GenericAuditDetail(
+        versionNumber = "2.0",
+        userType = "Individual",
+        agentReferenceNumber = None,
+        params = Json.obj("nino" -> nino, "businessId" -> businessId, "taxYear" -> taxYear, "request" -> requestBodyJson),
+        correlationId = correlationId,
+        response = auditResponse
+      )
+    )
+
   "create" should {
     "return a successful response" when {
       "the request received is valid" in new Test {
@@ -123,6 +140,9 @@ class CreateForeignPropertyPeriodSummaryControllerSpec
         contentAsJson(result) shouldBe hateoasResponse
         status(result) shouldBe CREATED
         header("X-CorrelationId", result) shouldBe Some(correlationId)
+
+        val auditResponse: AuditResponse = AuditResponse(CREATED, None, Some(hateoasResponse))
+        MockedAuditService.verifyAuditEvent(event(auditResponse)).once
       }
     }
 
@@ -140,6 +160,9 @@ class CreateForeignPropertyPeriodSummaryControllerSpec
             contentAsJson(result) shouldBe Json.toJson(error)
             status(result) shouldBe expectedStatus
             header("X-CorrelationId", result) shouldBe Some(correlationId)
+
+            val auditResponse: AuditResponse = AuditResponse(expectedStatus, Some(Seq(AuditError(error.code))), None)
+            MockedAuditService.verifyAuditEvent(event(auditResponse)).once
           }
         }
 
@@ -184,6 +207,9 @@ class CreateForeignPropertyPeriodSummaryControllerSpec
             contentAsJson(result) shouldBe Json.toJson(mtdError)
             status(result) shouldBe expectedStatus
             header("X-CorrelationId", result) shouldBe Some(correlationId)
+
+            val auditResponse: AuditResponse = AuditResponse(expectedStatus, Some(Seq(AuditError(mtdError.code))), None)
+            MockedAuditService.verifyAuditEvent(event(auditResponse)).once
           }
         }
 

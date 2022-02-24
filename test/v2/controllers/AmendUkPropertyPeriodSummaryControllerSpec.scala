@@ -23,6 +23,7 @@ import v2.mocks.MockIdGenerator
 import v2.mocks.hateoas.MockHateoasFactory
 import v2.mocks.requestParsers.MockAmendUkPropertyPeriodSummaryRequestParser
 import v2.mocks.services._
+import v2.models.audit.{AuditError, AuditEvent, AuditResponse, GenericAuditDetail}
 import v2.models.domain.Nino
 import v2.models.errors._
 import v2.models.hateoas.Method.GET
@@ -38,18 +39,19 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class AmendUkPropertyPeriodSummaryControllerSpec
-  extends ControllerBaseSpec
+    extends ControllerBaseSpec
     with MockEnrolmentsAuthService
     with MockMtdIdLookupService
     with MockAmendUkPropertyPeriodSummaryService
     with MockAmendUkPropertyPeriodSummaryRequestParser
+    with MockAuditService
     with MockHateoasFactory
     with MockIdGenerator {
 
-  private val nino = "AA123456A"
-  private val businessId = "XAIS12345678910"
-  private val taxYear = "2020-21"
-  private val submissionId = "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
+  private val nino          = "AA123456A"
+  private val businessId    = "XAIS12345678910"
+  private val taxYear       = "2020-21"
+  private val submissionId  = "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
   private val correlationId = "a1e8057e-fbbc-47a8-a8b4-78d9f015c253"
 
   trait Test {
@@ -60,6 +62,7 @@ class AmendUkPropertyPeriodSummaryControllerSpec
       lookupService = mockMtdIdLookupService,
       parser = mockAmendUkPropertyRequestParser,
       service = mockService,
+      auditService = mockAuditService,
       hateoasFactory = mockHateoasFactory,
       cc = cc,
       idGenerator = mockIdGenerator
@@ -72,102 +75,113 @@ class AmendUkPropertyPeriodSummaryControllerSpec
 
   val requestBody: AmendUkPropertyPeriodSummaryRequestBody =
     AmendUkPropertyPeriodSummaryRequestBody(
-      Some(UkFhlProperty(
-        Some(UkFhlPropertyIncome(
-          Some(5000.99),
-          Some(3123.21),
-          Some(UkPropertyIncomeRentARoom(
-            Some(532.12)
+      Some(
+        UkFhlProperty(
+          Some(
+            UkFhlPropertyIncome(
+              Some(5000.99),
+              Some(3123.21),
+              Some(UkPropertyIncomeRentARoom(
+                Some(532.12)
+              ))
+            )),
+          Some(UkFhlPropertyExpenses(
+            Some(3123.21),
+            Some(928.42),
+            Some(842.99),
+            Some(8831.12),
+            Some(484.12),
+            Some(99282),
+            Some(999.99),
+            Some(974.47),
+            Some(UkPropertyExpensesRentARoom(
+              Some(8842.43)
+            ))
           ))
         )),
-        Some(UkFhlPropertyExpenses(
-          Some(3123.21),
-          Some(928.42),
-          Some(842.99),
-          Some(8831.12),
-          Some(484.12),
-          Some(99282),
-          Some(999.99),
-          Some(974.47),
-          Some(UkPropertyExpensesRentARoom(
-            Some(8842.43)
-          ))
+      Some(
+        UkNonFhlProperty(
+          Some(
+            UkNonFhlPropertyIncome(
+              Some(41.12),
+              Some(84.31),
+              Some(9884.93),
+              Some(842.99),
+              Some(31.44),
+              Some(UkPropertyIncomeRentARoom(
+                Some(947.66)
+              ))
+            )),
+          Some(
+            UkNonFhlPropertyExpenses(
+              None,
+              None,
+              None,
+              None,
+              None,
+              None,
+              None,
+              None,
+              None,
+              None,
+              Some(988.18)
+            ))
         ))
-      )),
-      Some(UkNonFhlProperty(
-        Some(UkNonFhlPropertyIncome(
-          Some(41.12),
-          Some(84.31),
-          Some(9884.93),
-          Some(842.99),
-          Some(31.44),
-          Some(UkPropertyIncomeRentARoom(
-            Some(947.66)
-          ))
-        )),
-        Some(UkNonFhlPropertyExpenses(
-          None,
-          None,
-          None,
-          None,
-          None,
-          None,
-          None,
-          None,
-          None,
-          None,
-          Some(988.18)
-        ))
-      ))
     )
 
   val requestBodyWithConsolidatedExpense: AmendUkPropertyPeriodSummaryRequestBody =
     AmendUkPropertyPeriodSummaryRequestBody(
-      Some(UkFhlProperty(
-        Some(UkFhlPropertyIncome(
-          Some(5000.99),
-          Some(3123.21),
-          Some(UkPropertyIncomeRentARoom(
-            Some(532.12)
-          ))
+      Some(
+        UkFhlProperty(
+          Some(
+            UkFhlPropertyIncome(
+              Some(5000.99),
+              Some(3123.21),
+              Some(UkPropertyIncomeRentARoom(
+                Some(532.12)
+              ))
+            )),
+          Some(
+            UkFhlPropertyExpenses(
+              None,
+              None,
+              None,
+              None,
+              None,
+              None,
+              Some(988.18),
+              None,
+              None
+            ))
         )),
-        Some(UkFhlPropertyExpenses(
-          None,
-          None,
-          None,
-          None,
-          None,
-          None,
-          Some(988.18),
-          None,
-          None
+      Some(
+        UkNonFhlProperty(
+          Some(
+            UkNonFhlPropertyIncome(
+              Some(41.12),
+              Some(84.31),
+              Some(9884.93),
+              Some(842.99),
+              Some(31.44),
+              Some(UkPropertyIncomeRentARoom(
+                Some(947.66)
+              ))
+            )),
+          Some(
+            UkNonFhlPropertyExpenses(
+              None,
+              None,
+              None,
+              None,
+              None,
+              None,
+              None,
+              None,
+              None,
+              None,
+              Some(988.18)
+            ))
         ))
-      )),
-      Some(UkNonFhlProperty(
-        Some(UkNonFhlPropertyIncome(
-          Some(41.12),
-          Some(84.31),
-          Some(9884.93),
-          Some(842.99),
-          Some(31.44),
-          Some(UkPropertyIncomeRentARoom(
-            Some(947.66)
-          ))
-        )),
-        Some(UkNonFhlPropertyExpenses(
-          None,
-          None,
-          None,
-          None,
-          None,
-          None,
-          None,
-          None,
-          None,
-          None,
-          Some(988.18)
-        ))
-      ))
     )
 
   private val requestBodyJson = Json.parse(
@@ -256,7 +270,7 @@ class AmendUkPropertyPeriodSummaryControllerSpec
   )
 
   private val requestData = AmendUkPropertyPeriodSummaryRequest(Nino(nino), taxYear, businessId, submissionId, requestBody)
-  private val rawData = AmendUkPropertyPeriodSummaryRawData(nino, taxYear, businessId, submissionId, requestBodyJson)
+  private val rawData     = AmendUkPropertyPeriodSummaryRawData(nino, taxYear, businessId, submissionId, requestBodyJson)
 
   val hateoasResponse: JsValue = Json.parse(
     s"""
@@ -277,52 +291,74 @@ class AmendUkPropertyPeriodSummaryControllerSpec
   )
 
   private val testHateoasLink =
-    Link(href = s"/individuals/business/property/uk/$nino/$businessId/period/$taxYear/$submissionId",
-      method = GET, rel="self")
+    Link(href = s"/individuals/business/property/uk/$nino/$businessId/period/$taxYear/$submissionId", method = GET, rel = "self")
 
-    "amend" should {
-      "return a successful response from a consolidated request" when {
-        "the request received is valid" in new Test {
+  def event(requestBody: JsValue, auditResponse: AuditResponse): AuditEvent[GenericAuditDetail] =
+    AuditEvent(
+      auditType = "AmendUKPropertyIncomeAndExpensesPeriodSummary",
+      transactionName = "amend-uk-property-income-and-expenses-period-summary",
+      detail = GenericAuditDetail(
+        versionNumber = "2.0",
+        userType = "Individual",
+        agentReferenceNumber = None,
+        params = Json.obj("nino" -> nino, "businessId" -> businessId, "taxYear" -> taxYear, "submissionId" -> submissionId, "request" -> requestBody),
+        correlationId = correlationId,
+        response = auditResponse
+      )
+    )
 
-          MockAmendUkPropertyRequestParser
-            .requestFor(AmendUkPropertyPeriodSummaryRawData(nino, taxYear, businessId, submissionId, requestBodyJsonConsolidatedExpenses))
-            .returns(Right(requestData))
+  "amend" should {
+    "return a successful response from a consolidated request" when {
+      "the request received is valid" in new Test {
 
-          MockAmendUkPropertyService
-            .amend(requestData)
-            .returns(Future.successful(Right(ResponseWrapper(correlationId, ()))))
+        MockAmendUkPropertyRequestParser
+          .requestFor(AmendUkPropertyPeriodSummaryRawData(nino, taxYear, businessId, submissionId, requestBodyJsonConsolidatedExpenses))
+          .returns(Right(requestData))
 
-          MockHateoasFactory
-            .wrap((), AmendUkPropertyPeriodSummaryHateoasData(nino, businessId, taxYear, submissionId))
-            .returns(HateoasWrapper((), Seq(testHateoasLink)))
+        MockAmendUkPropertyService
+          .amend(requestData)
+          .returns(Future.successful(Right(ResponseWrapper(correlationId, ()))))
 
-          val result: Future[Result] = controller.handleRequest(nino, businessId, taxYear, submissionId)(fakeRequestWithBody(requestBodyJsonConsolidatedExpenses))
-          status(result) shouldBe OK
-          header("X-CorrelationId", result) shouldBe Some(correlationId)
-        }
+        MockHateoasFactory
+          .wrap((), AmendUkPropertyPeriodSummaryHateoasData(nino, businessId, taxYear, submissionId))
+          .returns(HateoasWrapper((), Seq(testHateoasLink)))
+
+        val result: Future[Result] =
+          controller.handleRequest(nino, businessId, taxYear, submissionId)(fakeRequestWithBody(requestBodyJsonConsolidatedExpenses))
+        status(result) shouldBe OK
+        contentAsJson(result) shouldBe hateoasResponse
+        header("X-CorrelationId", result) shouldBe Some(correlationId)
+
+        val auditResponse: AuditResponse = AuditResponse(OK, None, Some(hateoasResponse))
+        MockedAuditService.verifyAuditEvent(event(requestBodyJsonConsolidatedExpenses, auditResponse)).once
       }
+    }
 
-      "return a successful response from an unconsolidated request" when {
-        "the request received is valid" in new Test {
+    "return a successful response from an unconsolidated request" when {
+      "the request received is valid" in new Test {
 
-          MockAmendUkPropertyRequestParser
-            .requestFor(AmendUkPropertyPeriodSummaryRawData(nino, taxYear, businessId, submissionId, requestBodyJson))
-            .returns(Right(requestData))
+        MockAmendUkPropertyRequestParser
+          .requestFor(AmendUkPropertyPeriodSummaryRawData(nino, taxYear, businessId, submissionId, requestBodyJson))
+          .returns(Right(requestData))
 
-          MockAmendUkPropertyService
-            .amend(requestData)
-            .returns(Future.successful(Right(ResponseWrapper(correlationId, ()))))
+        MockAmendUkPropertyService
+          .amend(requestData)
+          .returns(Future.successful(Right(ResponseWrapper(correlationId, ()))))
 
-          MockHateoasFactory
-            .wrap((), AmendUkPropertyPeriodSummaryHateoasData(nino, businessId, taxYear, submissionId))
-            .returns(HateoasWrapper((), Seq(testHateoasLink)))
+        MockHateoasFactory
+          .wrap((), AmendUkPropertyPeriodSummaryHateoasData(nino, businessId, taxYear, submissionId))
+          .returns(HateoasWrapper((), Seq(testHateoasLink)))
 
-          val result: Future[Result] = controller.handleRequest(nino, businessId, taxYear, submissionId)(fakeRequestWithBody(requestBodyJson))
-          status(result) shouldBe OK
-          header("X-CorrelationId", result) shouldBe Some(correlationId)
+        val result: Future[Result] = controller.handleRequest(nino, businessId, taxYear, submissionId)(fakeRequestWithBody(requestBodyJson))
+        status(result) shouldBe OK
+        contentAsJson(result) shouldBe hateoasResponse
+        header("X-CorrelationId", result) shouldBe Some(correlationId)
 
-        }
+        val auditResponse: AuditResponse = AuditResponse(OK, None, Some(hateoasResponse))
+        MockedAuditService.verifyAuditEvent(event(requestBodyJson, auditResponse)).once
+
       }
+    }
 
     "return the error as per spec" when {
       "parser errors occur" should {
@@ -330,14 +366,18 @@ class AmendUkPropertyPeriodSummaryControllerSpec
           s"a ${error.code} error is returned from the parser" in new Test {
 
             MockAmendUkPropertyRequestParser
-              .requestFor(rawData.copy(body = requestBodyJsonConsolidatedExpenses))
+              .requestFor(rawData.copy(body = requestBodyJson))
               .returns(Left(ErrorWrapper(correlationId, error, None)))
 
-            val result: Future[Result] = controller.handleRequest(nino, businessId, taxYear, submissionId)(fakeRequestWithBody(requestBodyJsonConsolidatedExpenses))
+            val result: Future[Result] =
+              controller.handleRequest(nino, businessId, taxYear, submissionId)(fakeRequestWithBody(requestBodyJson))
 
             status(result) shouldBe expectedStatus
             contentAsJson(result) shouldBe Json.toJson(error)
             header("X-CorrelationId", result) shouldBe Some(correlationId)
+
+            val auditResponse: AuditResponse = AuditResponse(expectedStatus, Some(Seq(AuditError(error.code))), None)
+            MockedAuditService.verifyAuditEvent(event(requestBodyJson, auditResponse)).once
           }
         }
 

@@ -18,7 +18,6 @@ package v2.controllers
 
 import cats.data.EitherT
 import cats.implicits._
-import javax.inject.{Inject, Singleton}
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.{Action, ControllerComponents}
 import uk.gov.hmrc.http.HeaderCarrier
@@ -26,12 +25,13 @@ import uk.gov.hmrc.play.audit.http.connector.AuditResult
 import utils.{IdGenerator, Logging}
 import v2.controllers.requestParsers.CreateUkPropertyPeriodSummaryRequestParser
 import v2.hateoas.HateoasFactory
-import v2.models.audit.{AuditEvent, AuditResponse, CreateUkPropertyPeriodicAuditDetail}
+import v2.models.audit.{AuditEvent, AuditResponse, GenericAuditDetail}
 import v2.models.errors._
 import v2.models.request.createUkPropertyPeriodSummary.CreateUkPropertyPeriodSummaryRawData
 import v2.models.response.createUkPropertyPeriodSummary.CreateUkPropertyPeriodSummaryHateoasData
 import v2.services._
 
+import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
@@ -43,7 +43,9 @@ class CreateUkPropertyPeriodSummaryController @Inject()(val authService: Enrolme
                                                         hateoasFactory: HateoasFactory,
                                                         cc: ControllerComponents,
                                                         idGenerator: IdGenerator)(implicit ec: ExecutionContext)
-  extends AuthorisedController(cc) with BaseController with Logging {
+    extends AuthorisedController(cc)
+    with BaseController
+    with Logging {
 
   implicit val endpointLogContext: EndpointLogContext =
     EndpointLogContext(controllerName = "CreateUkPropertyController", endpointName = "Create a Uk Property Income & Expenditure Period Summary")
@@ -51,16 +53,18 @@ class CreateUkPropertyPeriodSummaryController @Inject()(val authService: Enrolme
   def handleRequest(nino: String, businessId: String, taxYear: String): Action[JsValue] =
     authorisedAction(nino).async(parse.json) { implicit request =>
       implicit val correlationId: String = idGenerator.getCorrelationId
-      logger.info(message = s"[${endpointLogContext.controllerName}][${endpointLogContext.endpointName}] " +
-        s"with correlationId : $correlationId")
+      logger.info(
+        message = s"[${endpointLogContext.controllerName}][${endpointLogContext.endpointName}] " +
+          s"with correlationId : $correlationId")
       val rawData = CreateUkPropertyPeriodSummaryRawData(nino, taxYear, businessId, request.body)
       val result =
         for {
-          parsedRequest <- EitherT.fromEither[Future](parser.parseRequest(rawData))
+          parsedRequest   <- EitherT.fromEither[Future](parser.parseRequest(rawData))
           serviceResponse <- EitherT(service.createUkProperty(parsedRequest))
           vendorResponse <- EitherT.fromEither[Future](
-            hateoasFactory.wrap(serviceResponse.responseData,
-              CreateUkPropertyPeriodSummaryHateoasData(nino, businessId, taxYear, serviceResponse.responseData.submissionId))
+            hateoasFactory
+              .wrap(serviceResponse.responseData,
+                    CreateUkPropertyPeriodSummaryHateoasData(nino, businessId, taxYear, serviceResponse.responseData.submissionId))
               .asRight[ErrorWrapper]
           )
         } yield {
@@ -70,8 +74,8 @@ class CreateUkPropertyPeriodSummaryController @Inject()(val authService: Enrolme
 
           val response = Json.toJson(vendorResponse)
 
-          auditSubmission(CreateUkPropertyPeriodicAuditDetail(request.userDetails, nino, taxYear, businessId, request.body,
-            serviceResponse.correlationId, AuditResponse(OK, Right(Some(response)))))
+          auditSubmission(
+            GenericAuditDetail(request.userDetails, rawData, serviceResponse.correlationId, AuditResponse(CREATED, Right(Some(response)))))
 
           Created(response)
             .withApiHeaders(serviceResponse.correlationId)
@@ -79,10 +83,10 @@ class CreateUkPropertyPeriodSummaryController @Inject()(val authService: Enrolme
 
       result.leftMap { errorWrapper =>
         val resCorrelationId = errorWrapper.correlationId
-        val result = errorResult(errorWrapper).withApiHeaders(resCorrelationId)
+        val result           = errorResult(errorWrapper).withApiHeaders(resCorrelationId)
 
-        auditSubmission(CreateUkPropertyPeriodicAuditDetail(request.userDetails, nino, taxYear, businessId, request.body,
-          correlationId, AuditResponse(result.header.status, Left(errorWrapper.auditErrors))))
+        auditSubmission(
+          GenericAuditDetail(request.userDetails, rawData, correlationId, AuditResponse(result.header.status, Left(errorWrapper.auditErrors))))
 
         logger.warn(
           s"[${endpointLogContext.controllerName}][${endpointLogContext.endpointName}] - " +
@@ -93,34 +97,19 @@ class CreateUkPropertyPeriodSummaryController @Inject()(val authService: Enrolme
 
   private def errorResult(errorWrapper: ErrorWrapper) = {
     (errorWrapper.error: @unchecked) match {
-      case BadRequestError |
-           NinoFormatError |
-           TaxYearFormatError |
-           BusinessIdFormatError |
-           RuleTypeOfBusinessIncorrectError |
-           RuleTaxYearRangeInvalidError |
-           RuleTaxYearNotSupportedError |
-           RuleIncorrectOrEmptyBodyError |
-           ToDateFormatError |
-           FromDateFormatError |
-           MtdErrorWithCode(ValueFormatError.code) |
-           MtdErrorWithCode(RuleBothExpensesSuppliedError.code) |
-           RuleToDateBeforeFromDateError |
-           RuleOverlappingPeriodError |
-           RuleMisalignedPeriodError |
-           RuleNotContiguousPeriodError |
-           MtdErrorWithCode(RuleIncorrectOrEmptyBodyError.code) |
-           RuleDuplicateSubmissionError =>
+      case BadRequestError | NinoFormatError | TaxYearFormatError | BusinessIdFormatError | RuleTypeOfBusinessIncorrectError |
+          RuleTaxYearRangeInvalidError | RuleTaxYearNotSupportedError | RuleIncorrectOrEmptyBodyError | ToDateFormatError | FromDateFormatError |
+          MtdErrorWithCode(ValueFormatError.code) | MtdErrorWithCode(RuleBothExpensesSuppliedError.code) | RuleToDateBeforeFromDateError |
+          RuleOverlappingPeriodError | RuleMisalignedPeriodError | RuleNotContiguousPeriodError |
+          MtdErrorWithCode(RuleIncorrectOrEmptyBodyError.code) | RuleDuplicateSubmissionError =>
         BadRequest(Json.toJson(errorWrapper))
-      case NotFoundError => NotFound(Json.toJson(errorWrapper))
+      case NotFoundError   => NotFound(Json.toJson(errorWrapper))
       case DownstreamError => InternalServerError(Json.toJson(errorWrapper))
     }
   }
 
-  private def auditSubmission(details: CreateUkPropertyPeriodicAuditDetail)
-                             (implicit hc: HeaderCarrier,
-                              ec: ExecutionContext): Future[AuditResult] = {
-    val event = AuditEvent("CreateUkPropertyIncomeAndExpenditurePeriodSummary", "Create-Uk-Property-Income-And-Expenditure-Period-Summary", details)
+  private def auditSubmission(details: GenericAuditDetail)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[AuditResult] = {
+    val event = AuditEvent("CreateUKPropertyIncomeAndExpensesPeriodSummary", "create-uk-property-income-and-expenses-period-summary", details)
     auditService.auditEvent(event)
   }
 }

@@ -66,6 +66,7 @@ class RetrieveForeignPropertyAnnualSubmissionController @Inject()(val authServic
           Ok(Json.toJson(vendorResponse))
             .withApiHeaders(serviceResponse.correlationId)
         }
+
       result.leftMap { errorWrapper =>
         val resCorrelationId = errorWrapper.correlationId
         val result = errorResult(errorWrapper).withApiHeaders(resCorrelationId)
@@ -77,8 +78,8 @@ class RetrieveForeignPropertyAnnualSubmissionController @Inject()(val authServic
       }.merge
     }
 
-  private def errorResult(errorWrapper: ErrorWrapper) = {
-    (errorWrapper.error: @unchecked) match {
+  private def errorResult(errorWrapper: ErrorWrapper) =
+    errorWrapper.error match {
       case NinoFormatError |
            BusinessIdFormatError |
            TaxYearFormatError |
@@ -88,6 +89,6 @@ class RetrieveForeignPropertyAnnualSubmissionController @Inject()(val authServic
            BadRequestError => BadRequest(Json.toJson(errorWrapper))
       case DownstreamError => InternalServerError(Json.toJson(errorWrapper))
       case NotFoundError => NotFound(Json.toJson(errorWrapper))
+      case _ => unhandledError(errorWrapper)
     }
-  }
 }

@@ -60,8 +60,8 @@ class DeletePropertyAnnualSubmissionController @Inject()(val authService: Enrolm
               s"Success response received with CorrelationId: ${serviceResponse.correlationId}")
 
           NoContent.withApiHeaders(serviceResponse.correlationId)
-
         }
+
       result.leftMap { errorWrapper =>
         val resCorrelationId = errorWrapper.correlationId
         val result           = errorResult(errorWrapper).withApiHeaders(resCorrelationId)
@@ -73,13 +73,13 @@ class DeletePropertyAnnualSubmissionController @Inject()(val authService: Enrolm
       }.merge
     }
 
-  private def errorResult(errorWrapper: ErrorWrapper) = {
-    (errorWrapper.error: @unchecked) match {
+  private def errorResult(errorWrapper: ErrorWrapper) =
+    errorWrapper.error match {
       case NinoFormatError | BusinessIdFormatError | TaxYearFormatError | RuleTaxYearNotSupportedError | RuleTaxYearRangeInvalidError |
           BadRequestError =>
         BadRequest(Json.toJson(errorWrapper))
       case DownstreamError => InternalServerError(Json.toJson(errorWrapper))
       case NotFoundError   => NotFound(Json.toJson(errorWrapper))
+      case _ => unhandledError(errorWrapper)
     }
-  }
 }

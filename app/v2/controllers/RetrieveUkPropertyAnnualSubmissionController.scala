@@ -77,8 +77,8 @@ class RetrieveUkPropertyAnnualSubmissionController @Inject()(val authService: En
       }.merge
     }
 
-  private def errorResult(errorWrapper: ErrorWrapper) = {
-    (errorWrapper.error: @unchecked) match {
+  private def errorResult(errorWrapper: ErrorWrapper) =
+    errorWrapper.error match {
       case NinoFormatError |
            TaxYearFormatError |
            BusinessIdFormatError |
@@ -88,6 +88,6 @@ class RetrieveUkPropertyAnnualSubmissionController @Inject()(val authService: En
            BadRequestError => BadRequest(Json.toJson(errorWrapper))
       case DownstreamError => InternalServerError(Json.toJson(errorWrapper))
       case NotFoundError => NotFound(Json.toJson(errorWrapper))
+      case _ => unhandledError(errorWrapper)
     }
-  }
 }

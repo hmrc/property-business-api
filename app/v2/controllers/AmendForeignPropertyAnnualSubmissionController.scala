@@ -78,9 +78,8 @@ class AmendForeignPropertyAnnualSubmissionController @Inject()(val authService: 
       }.merge
     }
 
-  private def errorResult(errorWrapper: ErrorWrapper) = {
-
-    (errorWrapper.error: @unchecked) match {
+  private def errorResult(errorWrapper: ErrorWrapper) =
+    errorWrapper.error match {
       case BadRequestError |
            NinoFormatError |
            BusinessIdFormatError |
@@ -100,6 +99,6 @@ class AmendForeignPropertyAnnualSubmissionController @Inject()(val authService: 
            MtdErrorWithCode(RulePropertyIncomeAllowanceError.code) => BadRequest(Json.toJson(errorWrapper))
       case DownstreamError => InternalServerError(Json.toJson(errorWrapper))
       case NotFoundError => NotFound(Json.toJson(errorWrapper))
+      case _ => unhandledError(errorWrapper)
     }
-  }
 }

@@ -64,7 +64,6 @@ class ListPropertyPeriodSummariesController @Inject()(val authService: Enrolment
 
           Ok(Json.toJson(vendorResponse))
             .withApiHeaders(serviceResponse.correlationId)
-
         }
 
       result.leftMap { errorWrapper =>
@@ -78,8 +77,8 @@ class ListPropertyPeriodSummariesController @Inject()(val authService: Enrolment
       }.merge
     }
 
-  private def errorResult(errorWrapper: ErrorWrapper) = {
-    (errorWrapper.error: @unchecked) match {
+  private def errorResult(errorWrapper: ErrorWrapper) =
+    errorWrapper.error match {
       case BadRequestError |
            NinoFormatError |
            BusinessIdFormatError |
@@ -89,6 +88,6 @@ class ListPropertyPeriodSummariesController @Inject()(val authService: Enrolment
         BadRequest(Json.toJson(errorWrapper))
       case NotFoundError => NotFound(Json.toJson(errorWrapper))
       case DownstreamError => InternalServerError(Json.toJson(errorWrapper))
+      case _ => unhandledError(errorWrapper)
     }
-  }
 }

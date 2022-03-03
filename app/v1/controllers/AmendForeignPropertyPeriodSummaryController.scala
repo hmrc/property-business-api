@@ -89,9 +89,8 @@ class AmendForeignPropertyPeriodSummaryController  @Inject()(val authService: En
       }.merge
     }
 
-  private def errorResult(errorWrapper: ErrorWrapper) = {
-
-    (errorWrapper.error: @unchecked) match {
+  private def errorResult(errorWrapper: ErrorWrapper) =
+    errorWrapper.error match {
       case BadRequestError |
            NinoFormatError |
            BusinessIdFormatError |
@@ -103,8 +102,9 @@ class AmendForeignPropertyPeriodSummaryController  @Inject()(val authService: En
            MtdErrorWithCustomMessage(RuleCountryCodeError.code) => BadRequest(Json.toJson(errorWrapper))
       case DownstreamError => InternalServerError(Json.toJson(errorWrapper))
       case NotFoundError => NotFound(Json.toJson(errorWrapper))
+      case _ => unhandledError(errorWrapper)
     }
-  }
+
   private def auditSubmission(details: AmendForeignPropertyPeriodicAuditDetail)
                              (implicit hc: HeaderCarrier,
                               ec: ExecutionContext) = {

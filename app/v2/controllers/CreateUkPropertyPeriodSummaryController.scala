@@ -91,8 +91,8 @@ class CreateUkPropertyPeriodSummaryController @Inject()(val authService: Enrolme
       }.merge
     }
 
-  private def errorResult(errorWrapper: ErrorWrapper) = {
-    (errorWrapper.error: @unchecked) match {
+  private def errorResult(errorWrapper: ErrorWrapper) =
+    errorWrapper.error match {
       case BadRequestError |
            NinoFormatError |
            TaxYearFormatError |
@@ -113,8 +113,8 @@ class CreateUkPropertyPeriodSummaryController @Inject()(val authService: Enrolme
         BadRequest(Json.toJson(errorWrapper))
       case NotFoundError => NotFound(Json.toJson(errorWrapper))
       case DownstreamError => InternalServerError(Json.toJson(errorWrapper))
+      case _ => unhandledError(errorWrapper)
     }
-  }
 
   private def auditSubmission(details: CreateUkPropertyPeriodicAuditDetail)
                              (implicit hc: HeaderCarrier,

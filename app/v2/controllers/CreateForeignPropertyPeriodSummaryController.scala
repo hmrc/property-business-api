@@ -87,8 +87,8 @@ class CreateForeignPropertyPeriodSummaryController @Inject()(val authService: En
       }.merge
     }
 
-  private def errorResult(errorWrapper: ErrorWrapper) = {
-    (errorWrapper.error: @unchecked) match {
+  private def errorResult(errorWrapper: ErrorWrapper) =
+    errorWrapper.error match {
       case BadRequestError | NinoFormatError | TaxYearFormatError | BusinessIdFormatError | RuleTaxYearRangeInvalidError |
           RuleTaxYearNotSupportedError | MtdErrorWithCode(RuleIncorrectOrEmptyBodyError.code) | ToDateFormatError | FromDateFormatError |
           MtdErrorWithCode(ValueFormatError.code) | MtdErrorWithCode(RuleBothExpensesSuppliedError.code) | RuleToDateBeforeFromDateError |
@@ -98,6 +98,6 @@ class CreateForeignPropertyPeriodSummaryController @Inject()(val authService: En
         BadRequest(Json.toJson(errorWrapper))
       case NotFoundError   => NotFound(Json.toJson(errorWrapper))
       case DownstreamError => InternalServerError(Json.toJson(errorWrapper))
+      case _ => unhandledError(errorWrapper)
     }
-  }
 }

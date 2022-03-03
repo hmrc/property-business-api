@@ -18,18 +18,21 @@ package v2.controllers
 
 import cats.data.EitherT
 import cats.implicits._
-import javax.inject.{Inject, Singleton}
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.{Action, ControllerComponents}
+import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.play.audit.http.connector.AuditResult
 import utils.{IdGenerator, Logging}
 import v2.controllers.requestParsers.AmendUkPropertyAnnualSubmissionRequestParser
 import v2.hateoas.HateoasFactory
+import v2.models.audit.{AuditEvent, AuditResponse, GenericAuditDetail}
 import v2.models.errors._
 import v2.models.request.amendUkPropertyAnnualSubmission.AmendUkPropertyAnnualSubmissionRawData
 import v2.models.response.amendUkPropertyAnnualSubmission.AmendUkPropertyAnnualSubmissionHateoasData
 import v2.models.response.amendUkPropertyAnnualSubmission.AmendUkPropertyAnnualSubmissionResponse.AmendUkPropertyLinksFactory
-import v2.services.{AmendUkPropertyAnnualSubmissionService, EnrolmentsAuthService, MtdIdLookupService}
+import v2.services.{AmendUkPropertyAnnualSubmissionService, AuditService, EnrolmentsAuthService, MtdIdLookupService}
 
+import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
@@ -37,13 +40,17 @@ class AmendUkPropertyAnnualSubmissionController @Inject()(val authService: Enrol
                                                           val lookupService: MtdIdLookupService,
                                                           parser: AmendUkPropertyAnnualSubmissionRequestParser,
                                                           service: AmendUkPropertyAnnualSubmissionService,
+                                                          auditService: AuditService,
                                                           hateoasFactory: HateoasFactory,
                                                           cc: ControllerComponents,
                                                           idGenerator: IdGenerator)(implicit ec: ExecutionContext)
-  extends AuthorisedController(cc) with BaseController with Logging {
+    extends AuthorisedController(cc)
+    with BaseController
+    with Logging {
 
   implicit val endpointLogContext: EndpointLogContext =
     EndpointLogContext(controllerName = "AmendUkPropertyAnnualSubmissionController", endpointName = "AmendUkPropertyAnnualSubmission")
+
   def handleRequest(nino: String, businessId: String, taxYear: String): Action[JsValue] =
     authorisedAction(nino).async(parse.json) { implicit request =>
       implicit val correlationId: String = idGenerator.getCorrelationId
@@ -51,23 +58,32 @@ class AmendUkPropertyAnnualSubmissionController @Inject()(val authService: Enrol
       val rawData = AmendUkPropertyAnnualSubmissionRawData(nino, businessId, taxYear, request.body)
       val result =
         for {
-          parsedRequest <- EitherT.fromEither[Future](parser.parseRequest(rawData))
+          parsedRequest   <- EitherT.fromEither[Future](parser.parseRequest(rawData))
           serviceResponse <- EitherT(service.amendUkPropertyAnnualSubmission(parsedRequest))
           vendorResponse <- EitherT.fromEither[Future](
-            hateoasFactory.wrap(serviceResponse.responseData, AmendUkPropertyAnnualSubmissionHateoasData(nino, businessId, taxYear)).asRight[ErrorWrapper])
+            hateoasFactory
+              .wrap(serviceResponse.responseData, AmendUkPropertyAnnualSubmissionHateoasData(nino, businessId, taxYear))
+              .asRight[ErrorWrapper])
         } yield {
 
           logger.info(
             s"[${endpointLogContext.controllerName}][${endpointLogContext.endpointName}] - " +
-            s"Success response received with CorrelationId: ${serviceResponse.correlationId}")
+              s"Success response received with CorrelationId: ${serviceResponse.correlationId}")
 
-          Ok(Json.toJson(vendorResponse))
+          val response = Json.toJson(vendorResponse)
+
+          auditSubmission(GenericAuditDetail(request.userDetails, rawData, serviceResponse.correlationId, AuditResponse(OK, Right(Some(response)))))
+
+          Ok(response)
             .withApiHeaders(serviceResponse.correlationId)
         }
 
       result.leftMap { errorWrapper =>
         val resCorrelationId = errorWrapper.correlationId
-        val result = errorResult(errorWrapper).withApiHeaders(resCorrelationId)
+        val result           = errorResult(errorWrapper).withApiHeaders(resCorrelationId)
+
+        auditSubmission(
+          GenericAuditDetail(request.userDetails, rawData, correlationId, AuditResponse(result.header.status, Left(errorWrapper.auditErrors))))
 
         logger.warn(
           s"[${endpointLogContext.controllerName}][${endpointLogContext.endpointName}] - " +
@@ -77,24 +93,23 @@ class AmendUkPropertyAnnualSubmissionController @Inject()(val authService: Enrol
       }.merge
     }
 
-  private def errorResult(errorWrapper: ErrorWrapper) =
-    errorWrapper.error match {
-      case BadRequestError |
-           NinoFormatError |
-           TaxYearFormatError |
-           BusinessIdFormatError |
-           RuleTaxYearRangeInvalidError |
-           RuleTaxYearNotSupportedError |
-           MtdErrorWithCode(ValueFormatError.code) |
-           MtdErrorWithCode(RuleIncorrectOrEmptyBodyError.code) |
-           RuleTypeOfBusinessIncorrectError |
-           MtdErrorWithCode(RuleBothAllowancesSuppliedError.code) |
-           MtdErrorWithCode(RulePropertyIncomeAllowanceError.code) |
-           MtdErrorWithCode(RuleBuildingNameNumberError.code) |
-           MtdErrorWithCode(DateFormatError.code) |
-           MtdErrorWithCode(StringFormatError.code) => BadRequest(Json.toJson(errorWrapper))
+  private def errorResult(errorWrapper: ErrorWrapper) = {
+
+    (errorWrapper.error: @unchecked) match {
+      case BadRequestError | NinoFormatError | TaxYearFormatError | BusinessIdFormatError | RuleTaxYearRangeInvalidError |
+          RuleTaxYearNotSupportedError | MtdErrorWithCode(ValueFormatError.code) | MtdErrorWithCode(RuleIncorrectOrEmptyBodyError.code) |
+          RuleTypeOfBusinessIncorrectError | MtdErrorWithCode(RuleBothAllowancesSuppliedError.code) | MtdErrorWithCode(
+            RulePropertyIncomeAllowanceError.code) | MtdErrorWithCode(RuleBuildingNameNumberError.code) | MtdErrorWithCode(DateFormatError.code) |
+          MtdErrorWithCode(StringFormatError.code) =>
+        BadRequest(Json.toJson(errorWrapper))
       case DownstreamError => InternalServerError(Json.toJson(errorWrapper))
-      case NotFoundError => NotFound(Json.toJson(errorWrapper))
-      case _ => unhandledError(errorWrapper)
+      case NotFoundError   => NotFound(Json.toJson(errorWrapper))
     }
+  }
+
+  private def auditSubmission(details: GenericAuditDetail)(implicit hc: HeaderCarrier,
+                                                                                ec: ExecutionContext): Future[AuditResult] = {
+    val event = AuditEvent("CreateAmendUKPropertyAnnualSubmission", "create-amend-uk-property-annual-submission", details)
+    auditService.auditEvent(event)
+  }
 }

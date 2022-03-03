@@ -131,7 +131,7 @@ class RetrieveUkPropertyPeriodSummaryControllerISpec extends V2IntegrationBaseSp
         |      "professionalFees": 2.14,
         |      "costOfServices": 2.15,
         |      "other": 2.16,
-        |      "consolidatedExpenses": 2.17,
+        |      "consolidatedExpense": 2.17,
         |      "travelCosts": 2.18,
         |      "ukFhlRentARoom": {
         |        "amountClaimed": 2.19
@@ -156,7 +156,7 @@ class RetrieveUkPropertyPeriodSummaryControllerISpec extends V2IntegrationBaseSp
         |      "professionalFees": 4.14,
         |      "costOfServices": 4.15,
         |      "other": 4.16,
-        |      "consolidatedExpenses": 4.17,
+        |      "consolidatedExpense": 4.17,
         |      "residentialFinancialCost": 4.18,
         |      "travelCosts": 4.19,
         |      "residentialFinancialCostsCarriedForward": 4.20,

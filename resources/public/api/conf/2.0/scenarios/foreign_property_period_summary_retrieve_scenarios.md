@@ -35,9 +35,5 @@
             <td><p>UK_PROPERTY</p></td>
             <td><p>Simulates the scenario where wrong business type is returned.</p></td>
         </tr>
-        <tr>
-            <td><p>NO_EXPENSES</p></td>
-            <td><p>Simulates success response with no expenses.</p></td>
-        </tr>
     </tbody>
 </table>

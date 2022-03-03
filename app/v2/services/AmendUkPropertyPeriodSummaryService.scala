@@ -59,6 +59,7 @@ class AmendUkPropertyPeriodSummaryService @Inject()(connector: AmendUkPropertyPe
       "TAX_YEAR_NOT_SUPPORTED" -> RuleTaxYearNotSupportedError,
       "BUSINESS_VALIDATION_FAILURE" -> DownstreamError,
       "DUPLICATE_COUNTRY_CODE" -> DownstreamError,
+      "MISSING_EXPENSES" -> DownstreamError,
       "SERVER_ERROR" -> DownstreamError,
       "SERVICE_UNAVAILABLE" -> DownstreamError
     )

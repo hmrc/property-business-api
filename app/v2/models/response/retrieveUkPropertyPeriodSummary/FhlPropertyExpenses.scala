@@ -41,6 +41,6 @@ object FhlPropertyExpenses {
       (JsPath \ "other").readNullable[BigDecimal] and
       (JsPath \ "travelCosts").readNullable[BigDecimal] and
       (JsPath \ "ukFhlRentARoom").readNullable[RentARoomExpenses] and
-      (JsPath \ "consolidatedExpenses").readNullable[BigDecimal]
+      (JsPath \ "consolidatedExpense").readNullable[BigDecimal]
     ) (FhlPropertyExpenses.apply _)
 }

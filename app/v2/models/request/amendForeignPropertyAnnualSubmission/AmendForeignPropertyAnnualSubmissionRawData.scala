@@ -16,7 +16,17 @@
 
 package v2.models.request.amendForeignPropertyAnnualSubmission
 
-import play.api.libs.json.JsValue
+import play.api.libs.functional.syntax._
+import play.api.libs.json.{ JsPath, JsValue, OWrites }
 import v2.models.request.RawData
 
 case class AmendForeignPropertyAnnualSubmissionRawData(nino: String, businessId: String, taxYear: String, body: JsValue) extends RawData
+
+object AmendForeignPropertyAnnualSubmissionRawData {
+  implicit val writes: OWrites[AmendForeignPropertyAnnualSubmissionRawData] = (
+    (JsPath \ "nino").write[String] and
+      (JsPath \ "businessId").write[String] and
+      (JsPath \ "taxYear").write[String] and
+      (JsPath \ "request").write[JsValue]
+  )(unlift(AmendForeignPropertyAnnualSubmissionRawData.unapply))
+}

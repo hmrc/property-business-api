@@ -120,14 +120,14 @@ class AmendUkPropertyPeriodSummaryServiceSpec extends ServiceSpec {
     "unsuccessful" should {
       "map errors according to spec" when {
 
-        def serviceError(ifsErrorCode: String, error: MtdError): Unit =
+        def serviceError(ifsErrorCode: String, expectError: MtdError): Unit =
           s"a $ifsErrorCode error is returned from the service" in new Test {
 
             MockAmendUkPropertyPeriodSummaryConnector
               .amendUkPropertyPeriodSummary(request)
               .returns(Future.successful(Left(ResponseWrapper(correlationId, IfsErrors.single(IfsErrorCode(ifsErrorCode))))))
 
-            await(service.amendUkPropertyPeriodSummary(request)) shouldBe Left(ErrorWrapper(correlationId, error))
+            await(service.amendUkPropertyPeriodSummary(request)) shouldBe Left(ErrorWrapper(correlationId, expectError))
           }
 
         val input = Seq(
@@ -142,6 +142,7 @@ class AmendUkPropertyPeriodSummaryServiceSpec extends ServiceSpec {
           "TAX_YEAR_NOT_SUPPORTED" -> RuleTaxYearNotSupportedError,
           "BUSINESS_VALIDATION_FAILURE" -> DownstreamError,
           "DUPLICATE_COUNTRY_CODE" -> DownstreamError,
+          "MISSING_EXPENSES" -> DownstreamError,
           "SERVER_ERROR" -> DownstreamError,
           "SERVICE_UNAVAILABLE" -> DownstreamError
         )

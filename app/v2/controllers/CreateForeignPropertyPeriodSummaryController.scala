@@ -18,24 +18,28 @@ package v2.controllers
 
 import cats.data.EitherT
 import cats.implicits._
-import play.api.libs.json.{ JsValue, Json }
-import play.api.mvc.{ Action, ControllerComponents }
-import utils.{ IdGenerator, Logging }
+import play.api.libs.json.{JsValue, Json}
+import play.api.mvc.{Action, ControllerComponents}
+import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.play.audit.http.connector.AuditResult
+import utils.{IdGenerator, Logging}
 import v2.controllers.requestParsers.CreateForeignPropertyPeriodSummaryRequestParser
 import v2.hateoas.HateoasFactory
+import v2.models.audit.{AuditEvent, AuditResponse, GenericAuditDetail}
 import v2.models.errors._
 import v2.models.request.createForeignPropertyPeriodSummary.CreateForeignPropertyPeriodSummaryRawData
 import v2.models.response.createForeignPropertyPeriodSummary.CreateForeignPropertyPeriodSummaryHateoasData
 import v2.services._
 
-import javax.inject.{ Inject, Singleton }
-import scala.concurrent.{ ExecutionContext, Future }
+import javax.inject.{Inject, Singleton}
+import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class CreateForeignPropertyPeriodSummaryController @Inject()(val authService: EnrolmentsAuthService,
                                                              val lookupService: MtdIdLookupService,
                                                              parser: CreateForeignPropertyPeriodSummaryRequestParser,
                                                              service: CreateForeignPropertyPeriodSummaryService,
+                                                             auditService: AuditService,
                                                              hateoasFactory: HateoasFactory,
                                                              cc: ControllerComponents,
                                                              idGenerator: IdGenerator)(implicit ec: ExecutionContext)
@@ -74,30 +78,46 @@ class CreateForeignPropertyPeriodSummaryController @Inject()(val authService: En
             s"[${endpointLogContext.controllerName}][${endpointLogContext.endpointName}] - " +
               s"Success response received with CorrelationId: ${serviceResponse.correlationId}")
 
+          val response = Json.toJson(vendorResponse)
+
+          auditSubmission(
+            GenericAuditDetail(request.userDetails, rawData, serviceResponse.correlationId, AuditResponse(CREATED, Right(Some(response)))))
+
           Created(Json.toJson(vendorResponse))
             .withApiHeaders(serviceResponse.correlationId)
         }
 
       result.leftMap { errorWrapper =>
         val resCorrelationId = errorWrapper.correlationId
+        val result           = errorResult(errorWrapper).withApiHeaders(resCorrelationId)
+
+        auditSubmission(
+          GenericAuditDetail(request.userDetails, rawData, correlationId, AuditResponse(result.header.status, Left(errorWrapper.auditErrors))))
+
         logger.warn(
           s"[${endpointLogContext.controllerName}][${endpointLogContext.endpointName}] - " +
             s"Error response received with CorrelationId: $resCorrelationId")
-        errorResult(errorWrapper).withApiHeaders(resCorrelationId)
+        result
       }.merge
     }
 
-  private def errorResult(errorWrapper: ErrorWrapper) =
-    errorWrapper.error match {
+  private def errorResult(errorWrapper: ErrorWrapper) = {
+    (errorWrapper.error: @unchecked) match {
       case BadRequestError | NinoFormatError | TaxYearFormatError | BusinessIdFormatError | RuleTaxYearRangeInvalidError |
           RuleTaxYearNotSupportedError | MtdErrorWithCode(RuleIncorrectOrEmptyBodyError.code) | ToDateFormatError | FromDateFormatError |
           MtdErrorWithCode(ValueFormatError.code) | MtdErrorWithCode(RuleBothExpensesSuppliedError.code) | RuleToDateBeforeFromDateError |
           RuleOverlappingPeriodError | RuleMisalignedPeriodError | RuleNotContiguousPeriodError |
           MtdErrorWithCode(RuleIncorrectOrEmptyBodyError.code) | RuleDuplicateSubmissionError | MtdErrorWithCode(CountryCodeFormatError.code) |
-          MtdErrorWithCode(RuleCountryCodeError.code) | MtdErrorWithCode(RuleDuplicateCountryCodeError.code) =>
+          MtdErrorWithCode(RuleCountryCodeError.code) | MtdErrorWithCode(RuleDuplicateCountryCodeError.code) | RuleTypeOfBusinessIncorrectError =>
         BadRequest(Json.toJson(errorWrapper))
       case NotFoundError   => NotFound(Json.toJson(errorWrapper))
       case DownstreamError => InternalServerError(Json.toJson(errorWrapper))
-      case _ => unhandledError(errorWrapper)
     }
+  }
+
+  private def auditSubmission(details: GenericAuditDetail)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[AuditResult] = {
+    val event =
+      AuditEvent("CreateForeignPropertyIncomeAndExpensesPeriodSummary", "create-foreign-property-income-and-expenses-period-summary", details)
+    auditService.auditEvent(event)
+  }
 }

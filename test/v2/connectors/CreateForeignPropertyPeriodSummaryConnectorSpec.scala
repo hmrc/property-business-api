@@ -53,7 +53,7 @@ class CreateForeignPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
     Some(Seq(CreateForeignNonFhlPropertyEntry("FRA",
       Some(ForeignNonFhlPropertyIncome(
         Some(ForeignNonFhlPropertyRentIncome(Some(5000.99))),
-        false,
+        foreignTaxCreditRelief = false,
         Some(5000.99),
         Some(5000.99),
         Some(5000.99),
@@ -100,7 +100,7 @@ class CreateForeignPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
 
       MockHttpClient
         .post(
-          url = s"$baseUrl/income-tax/business/property/periodic?taxableEntityId=$nino&taxYearExplicit=$taxYear&incomeSourceId=$businessId",
+          url = s"$baseUrl/income-tax/business/property/periodic?taxableEntityId=$nino&taxYear=$taxYear&incomeSourceId=$businessId",
           config = dummyIfsHeaderCarrierConfig,
           body = regularExpensesBody,
           requiredHeaders = requiredIfsHeadersPost,

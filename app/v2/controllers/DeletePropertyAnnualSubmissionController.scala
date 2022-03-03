@@ -82,15 +82,15 @@ class DeletePropertyAnnualSubmissionController @Inject()(val authService: Enrolm
       }.merge
     }
 
-  private def errorResult(errorWrapper: ErrorWrapper) = {
-    (errorWrapper.error: @unchecked) match {
+  private def errorResult(errorWrapper: ErrorWrapper) =
+    errorWrapper.error match {
       case NinoFormatError | BusinessIdFormatError | TaxYearFormatError | RuleTaxYearNotSupportedError | RuleTaxYearRangeInvalidError |
           BadRequestError =>
         BadRequest(Json.toJson(errorWrapper))
       case DownstreamError => InternalServerError(Json.toJson(errorWrapper))
       case NotFoundError   => NotFound(Json.toJson(errorWrapper))
+      case _ => unhandledError(errorWrapper)
     }
-  }
 
   private def auditSubmission(details: GenericAuditDetail)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[AuditResult] = {
     val event = AuditEvent("DeletePropertyAnnualSubmission", "delete-property-annual-submission", details)

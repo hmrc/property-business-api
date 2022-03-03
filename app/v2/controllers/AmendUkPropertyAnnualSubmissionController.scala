@@ -93,9 +93,8 @@ class AmendUkPropertyAnnualSubmissionController @Inject()(val authService: Enrol
       }.merge
     }
 
-  private def errorResult(errorWrapper: ErrorWrapper) = {
-
-    (errorWrapper.error: @unchecked) match {
+  private def errorResult(errorWrapper: ErrorWrapper) =
+    errorWrapper.error match {
       case BadRequestError | NinoFormatError | TaxYearFormatError | BusinessIdFormatError | RuleTaxYearRangeInvalidError |
           RuleTaxYearNotSupportedError | MtdErrorWithCode(ValueFormatError.code) | MtdErrorWithCode(RuleIncorrectOrEmptyBodyError.code) |
           RuleTypeOfBusinessIncorrectError | MtdErrorWithCode(RuleBothAllowancesSuppliedError.code) | MtdErrorWithCode(
@@ -104,8 +103,8 @@ class AmendUkPropertyAnnualSubmissionController @Inject()(val authService: Enrol
         BadRequest(Json.toJson(errorWrapper))
       case DownstreamError => InternalServerError(Json.toJson(errorWrapper))
       case NotFoundError   => NotFound(Json.toJson(errorWrapper))
+      case _ => unhandledError(errorWrapper)
     }
-  }
 
   private def auditSubmission(details: GenericAuditDetail)(implicit hc: HeaderCarrier,
                                                                                 ec: ExecutionContext): Future[AuditResult] = {

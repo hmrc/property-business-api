@@ -20,7 +20,6 @@ import play.api.libs.functional.syntax._
 import play.api.libs.json._
 
 case class UkFhlPropertyAdjustments(
-    lossBroughtForward: Option[BigDecimal],
     privateUseAdjustment: Option[BigDecimal],
     balancingCharge: Option[BigDecimal],
     periodOfGraceAdjustment: Boolean,
@@ -33,8 +32,7 @@ object UkFhlPropertyAdjustments {
   implicit val writes: OWrites[UkFhlPropertyAdjustments] = Json.writes[UkFhlPropertyAdjustments]
 
   implicit val reads: Reads[UkFhlPropertyAdjustments] = (
-    (__ \ "lossBroughtForward").readNullable[BigDecimal] and
-      (__ \ "privateUseAdjustment").readNullable[BigDecimal] and
+    (__ \ "privateUseAdjustment").readNullable[BigDecimal] and
       (__ \ "balancingCharge").readNullable[BigDecimal] and
       (__ \ "periodOfGraceAdjustment").read[Boolean] and
       (__ \ "businessPremisesRenovationAllowanceBalancingCharges").readNullable[BigDecimal] and

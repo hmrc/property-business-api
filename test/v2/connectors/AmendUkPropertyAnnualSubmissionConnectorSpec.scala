@@ -39,7 +39,6 @@ class AmendUkPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec {
     Some(UkFhlPropertyAdjustments(
       Some(5000.99),
       Some(5000.99),
-      Some(5000.99),
       true,
       Some(5000.99),
       true,
@@ -57,7 +56,6 @@ class AmendUkPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec {
 
   private val ukNonFhlProperty = UkNonFhlProperty(
     Some(UkNonFhlPropertyAdjustments(
-      Some(5000.99),
       Some(5000.99),
       Some(5000.99),
       Some(5000.99),

@@ -29,7 +29,6 @@ class AmendUkPropertyAnnualSubmissionRequestBodySpec extends UnitSpec {
     AmendUkPropertyAnnualSubmissionRequestBody(
       Some(UkFhlProperty(
         Some(UkFhlPropertyAdjustments(
-          Some(1000.10),
           Some(1000.20),
           Some(1000.30),
           true,
@@ -48,7 +47,6 @@ class AmendUkPropertyAnnualSubmissionRequestBodySpec extends UnitSpec {
       )),
       Some(UkNonFhlProperty(
         Some(UkNonFhlPropertyAdjustments(
-          Some(2000.10),
           Some(2000.20),
           Some(2000.30),
           Some(2000.40),
@@ -104,7 +102,6 @@ class AmendUkPropertyAnnualSubmissionRequestBodySpec extends UnitSpec {
       |      "zeroEmissionsCarAllowance": 1000.90
       |    },
       |    "adjustments": {
-      |      "lossBroughtForward": 1000.10,
       |      "privateUseAdjustment": 1000.20,
       |      "balancingCharge": 1000.30,
       |      "periodOfGraceAdjustment": true,
@@ -152,7 +149,6 @@ class AmendUkPropertyAnnualSubmissionRequestBodySpec extends UnitSpec {
       |      "zeroEmissionsCarAllowance": 3000.20
       |    },
       |    "adjustments": {
-      |      "lossBroughtForward": 2000.10,
       |      "balancingCharge": 2000.20,
       |      "privateUseAdjustment": 2000.30,
       |      "businessPremisesRenovationAllowanceBalancingCharges": 2000.40,
@@ -177,7 +173,6 @@ class AmendUkPropertyAnnualSubmissionRequestBodySpec extends UnitSpec {
       |      "zeroEmissionsCarAllowance": 1000.90
       |    },
       |    "adjustments": {
-      |      "lossBroughtForward": 1000.10,
       |      "privateUseAdjustment": 1000.20,
       |      "balancingCharge": 1000.30,
       |      "periodOfGraceAdjustment": true,
@@ -225,7 +220,6 @@ class AmendUkPropertyAnnualSubmissionRequestBodySpec extends UnitSpec {
       |      "zeroEmissionsCarAllowance": 3000.20
       |    },
       |    "ukOtherPropertyAnnualAdjustments": {
-      |      "lossBroughtForward": 2000.10,
       |      "balancingCharge": 2000.20,
       |      "privateUseAdjustment": 2000.30,
       |      "businessPremisesRenovationAllowanceBalancingCharges": 2000.40,

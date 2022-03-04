@@ -40,7 +40,6 @@ class AmendUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec with JsonErr
       |      "zeroEmissionsCarAllowance": 123.12
       |    },
       |    "adjustments": {
-      |      "lossBroughtForward": 343.34,
       |      "privateUseAdjustment": 454.45,
       |      "balancingCharge": 231.45,
       |      "periodOfGraceAdjustment": true,
@@ -90,7 +89,6 @@ class AmendUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec with JsonErr
       |      "zeroEmissionsCarAllowance": 454.34
       |    },
       |    "adjustments": {
-      |      "lossBroughtForward": 334.45,
       |      "balancingCharge": 565.34,
       |      "privateUseAdjustment": 533.54,
       |      "businessPremisesRenovationAllowanceBalancingCharges": 563.34,
@@ -152,7 +150,6 @@ class AmendUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec with JsonErr
                 |      "zeroEmissionsCarAllowance": 123.12
                 |    },
                 |    "adjustments": {
-                |      "lossBroughtForward": 343.34,
                 |      "privateUseAdjustment": 454.45,
                 |      "balancingCharge": 231.45,
                 |      "periodOfGraceAdjustment": true,
@@ -217,7 +214,6 @@ class AmendUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec with JsonErr
                 |      "zeroEmissionsCarAllowance": 454.34
                 |    },
                 |    "adjustments": {
-                |      "lossBroughtForward": 334.45,
                 |      "balancingCharge": 565.34,
                 |      "privateUseAdjustment": 533.54,
                 |      "businessPremisesRenovationAllowanceBalancingCharges": 563.34,
@@ -342,7 +338,6 @@ class AmendUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec with JsonErr
               |      "zeroEmissionsCarAllowance": 123.12
               |    },
               |    "adjustments": {
-              |      "lossBroughtForward": 343.34,
               |      "privateUseAdjustment": 454.45,
               |      "balancingCharge": 231.45,
               |      "periodOfGraceAdjustment": true,
@@ -391,7 +386,6 @@ class AmendUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec with JsonErr
               |      "zeroEmissionsCarAllowance": 454.34
               |    },
               |    "adjustments": {
-              |      "lossBroughtForward": 334.45,
               |      "balancingCharge": 565.34,
               |      "privateUseAdjustment": 533.54,
               |      "businessPremisesRenovationAllowanceBalancingCharges": 563.34,
@@ -482,7 +476,6 @@ class AmendUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec with JsonErr
               |      "zeroEmissionsCarAllowance": 123.12
               |    },
               |    "adjustments": {
-              |      "lossBroughtForward": 343.34,
               |      "privateUseAdjustment": 454.45,
               |      "balancingCharge": 231.45,
               |      "periodOfGraceAdjustment": true,
@@ -532,7 +525,6 @@ class AmendUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec with JsonErr
               |      "zeroEmissionsCarAllowance": 454.34
               |    },
               |    "adjustments": {
-              |      "lossBroughtForward": 334.45,
               |      "balancingCharge": 565.34,
               |      "privateUseAdjustment": 533.54,
               |      "businessPremisesRenovationAllowanceBalancingCharges": 563.34,
@@ -567,7 +559,6 @@ class AmendUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec with JsonErr
               |      "zeroEmissionsCarAllowance": 123.12
               |    },
               |    "adjustments": {
-              |      "lossBroughtForward": 343.34,
               |      "privateUseAdjustment": 454.45,
               |      "balancingCharge": 231.45,
               |      "periodOfGraceAdjustment": true,
@@ -617,7 +608,6 @@ class AmendUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec with JsonErr
               |      "zeroEmissionsCarAllowance": 454.34
               |    },
               |    "adjustments": {
-              |      "lossBroughtForward": 334.45,
               |      "balancingCharge": 565.34,
               |      "privateUseAdjustment": 533.54,
               |      "businessPremisesRenovationAllowanceBalancingCharges": 563.34,
@@ -649,7 +639,6 @@ class AmendUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec with JsonErr
               |      "zeroEmissionsCarAllowance": 123.12
               |    },
               |    "adjustments": {
-              |      "lossBroughtForward": 343.34,
               |      "privateUseAdjustment": 454.45,
               |      "balancingCharge": 231.45,
               |      "periodOfGraceAdjustment": true,
@@ -699,7 +688,6 @@ class AmendUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec with JsonErr
               |      "zeroEmissionsCarAllowance": 454.34
               |    },
               |    "adjustments": {
-              |      "lossBroughtForward": 334.45,
               |      "balancingCharge": 565.34,
               |      "privateUseAdjustment": 533.54,
               |      "businessPremisesRenovationAllowanceBalancingCharges": 563.34,
@@ -733,7 +721,6 @@ class AmendUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec with JsonErr
               |      "zeroEmissionsCarAllowance": 123.12
               |    },
               |    "adjustments": {
-              |      "lossBroughtForward": 343.34,
               |      "privateUseAdjustment": 454.45,
               |      "balancingCharge": 231.45,
               |      "periodOfGraceAdjustment": true,
@@ -783,7 +770,6 @@ class AmendUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec with JsonErr
               |      "zeroEmissionsCarAllowance": 454.34
               |    },
               |    "adjustments": {
-              |      "lossBroughtForward": 334.45,
               |      "balancingCharge": 565.34,
               |      "privateUseAdjustment": 533.54,
               |      "businessPremisesRenovationAllowanceBalancingCharges": 563.34,
@@ -815,7 +801,6 @@ class AmendUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec with JsonErr
               |      "zeroEmissionsCarAllowance": 123.12
               |    },
               |    "adjustments": {
-              |      "lossBroughtForward": 343.34,
               |      "privateUseAdjustment": 454.45,
               |      "balancingCharge": 231.45,
               |      "periodOfGraceAdjustment": true,
@@ -865,7 +850,6 @@ class AmendUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec with JsonErr
               |      "zeroEmissionsCarAllowance": 454.34
               |    },
               |    "adjustments": {
-              |      "lossBroughtForward": 334.45,
               |      "balancingCharge": 565.34,
               |      "privateUseAdjustment": 533.54,
               |      "businessPremisesRenovationAllowanceBalancingCharges": 563.34,
@@ -897,7 +881,6 @@ class AmendUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec with JsonErr
               |      "zeroEmissionsCarAllowance": 123.12
               |    },
               |    "adjustments": {
-              |      "lossBroughtForward": 343.34,
               |      "privateUseAdjustment": 454.45,
               |      "balancingCharge": 231.45,
               |      "periodOfGraceAdjustment": true,
@@ -947,7 +930,6 @@ class AmendUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec with JsonErr
               |      "zeroEmissionsCarAllowance": 454.34
               |    },
               |    "adjustments": {
-              |      "lossBroughtForward": 334.45,
               |      "balancingCharge": 565.34,
               |      "privateUseAdjustment": 533.54,
               |      "businessPremisesRenovationAllowanceBalancingCharges": 563.34,
@@ -972,7 +954,6 @@ class AmendUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec with JsonErr
           "/ukFhlProperty/allowances/otherCapitalAllowance",
           "/ukFhlProperty/allowances/electricChargePointAllowance",
           "/ukFhlProperty/allowances/zeroEmissionsCarAllowance",
-          "/ukFhlProperty/adjustments/lossBroughtForward",
           "/ukFhlProperty/adjustments/privateUseAdjustment",
           "/ukFhlProperty/adjustments/balancingCharge",
           "/ukFhlProperty/adjustments/businessPremisesRenovationAllowanceBalancingCharges",
@@ -983,7 +964,6 @@ class AmendUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec with JsonErr
           "/ukNonFhlProperty/allowances/costOfReplacingDomesticGoods",
           "/ukNonFhlProperty/allowances/electricChargePointAllowance",
           "/ukNonFhlProperty/allowances/zeroEmissionsCarAllowance",
-          "/ukNonFhlProperty/adjustments/lossBroughtForward",
           "/ukNonFhlProperty/adjustments/balancingCharge",
           "/ukNonFhlProperty/adjustments/privateUseAdjustment",
           "/ukNonFhlProperty/adjustments/businessPremisesRenovationAllowanceBalancingCharges",
@@ -1019,7 +999,6 @@ class AmendUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec with JsonErr
                 |      "zeroEmissionsCarAllowance": 123.12
                 |    },
                 |    "adjustments": {
-                |      "lossBroughtForward": 343.34,
                 |      "privateUseAdjustment": 454.45,
                 |      "balancingCharge": 231.45,
                 |      "periodOfGraceAdjustment": true,
@@ -1069,7 +1048,6 @@ class AmendUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec with JsonErr
                 |      "zeroEmissionsCarAllowance": 454.34
                 |    },
                 |    "adjustments": {
-                |      "lossBroughtForward": 334.45,
                 |      "balancingCharge": 565.34,
                 |      "privateUseAdjustment": 533.54,
                 |      "businessPremisesRenovationAllowanceBalancingCharges": 563.34,
@@ -1108,7 +1086,6 @@ class AmendUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec with JsonErr
                 |      "zeroEmissionsCarAllowance": 123.12
                 |    },
                 |    "adjustments": {
-                |      "lossBroughtForward": 343.34,
                 |      "privateUseAdjustment": 454.45,
                 |      "balancingCharge": 231.45,
                 |      "periodOfGraceAdjustment": true,
@@ -1158,7 +1135,6 @@ class AmendUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec with JsonErr
                 |      "zeroEmissionsCarAllowance": 454.34
                 |    },
                 |    "adjustments": {
-                |      "lossBroughtForward": 334.45,
                 |      "balancingCharge": 565.34,
                 |      "privateUseAdjustment": 533.54,
                 |      "businessPremisesRenovationAllowanceBalancingCharges": 563.34,
@@ -1192,7 +1168,6 @@ class AmendUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec with JsonErr
               |       "propertyIncomeAllowance": 123.455
               |          },
               |    "adjustments": {
-              |      "lossBroughtForward": 343.34,
               |      "balancingCharge": 231.45,
               |      "periodOfGraceAdjustment": true,
               |      "businessPremisesRenovationAllowanceBalancingCharges": 567.67,
@@ -1241,7 +1216,6 @@ class AmendUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec with JsonErr
               |      "zeroEmissionsCarAllowance": 454.34
               |    },
               |    "adjustments": {
-              |      "lossBroughtForward": 334.45,
               |      "balancingCharge": 565.34,
               |      "privateUseAdjustment": 533.54,
               |      "businessPremisesRenovationAllowanceBalancingCharges": 563.34,
@@ -1269,7 +1243,6 @@ class AmendUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec with JsonErr
               |      "propertyIncomeAllowance": 345.676
               |    },
               |    "adjustments": {
-              |      "lossBroughtForward": 334.45,
               |      "balancingCharge": 565.34,
               |      "businessPremisesRenovationAllowanceBalancingCharges": 563.34,
               |      "nonResidentLandlord": true,
@@ -1390,7 +1363,6 @@ class AmendUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec with JsonErr
               |      "zeroEmissionsCarAllowance": 3000.20
               |    },
               |    "adjustments": {
-              |      "lossBroughtForward": 2000.10,
               |      "balancingCharge": 2000.20,
               |      "privateUseAdjustment": 2000.30,
               |      "businessPremisesRenovationAllowanceBalancingCharges": 2000.40,

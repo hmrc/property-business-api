@@ -62,7 +62,6 @@ class UkNonFhlPropertySpec extends UnitSpec {
       |      "zeroEmissionsCarAllowance":454.34
       |   },
       |   "ukOtherPropertyAnnualAdjustments":{
-      |      "lossBroughtForward":334.45,
       |      "balancingCharge":565.34,
       |      "privateUseAdjustment":533.54,
       |      "businessPremisesRenovationAllowanceBalancingCharges":563.34,
@@ -77,7 +76,6 @@ class UkNonFhlPropertySpec extends UnitSpec {
   val model: UkNonFhlProperty = UkNonFhlProperty(
     adjustments = Some(
       UkNonFhlPropertyAdjustments(
-        lossBroughtForward = Some(334.45),
         balancingCharge = Some(565.34),
         privateUseAdjustment = Some(533.54),
         businessPremisesRenovationAllowanceBalancingCharges = Some(563.34),
@@ -177,7 +175,6 @@ class UkNonFhlPropertySpec extends UnitSpec {
       |      "zeroEmissionsCarAllowance":454.34
       |   },
       |   "adjustments":{
-      |      "lossBroughtForward":334.45,
       |      "balancingCharge":565.34,
       |      "privateUseAdjustment":533.54,
       |      "businessPremisesRenovationAllowanceBalancingCharges":563.34,

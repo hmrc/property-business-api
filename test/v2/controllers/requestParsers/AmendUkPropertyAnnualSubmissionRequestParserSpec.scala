@@ -46,7 +46,6 @@ class AmendUkPropertyAnnualSubmissionRequestParserSpec extends UnitSpec {
       |      "zeroEmissionsCarAllowance": 123.12
       |    },
       |    "adjustments": {
-      |      "lossBroughtForward": 343.34,
       |      "privateUseAdjustment": 454.45,
       |      "balancingCharge": 231.45,
       |      "periodOfGraceAdjustment": true,
@@ -96,7 +95,6 @@ class AmendUkPropertyAnnualSubmissionRequestParserSpec extends UnitSpec {
       |      "zeroEmissionsCarAllowance": 454.34
       |    },
       |    "adjustments": {
-      |      "lossBroughtForward": 334.45,
       |      "balancingCharge": 565.34,
       |      "privateUseAdjustment": 533.54,
       |      "businessPremisesRenovationAllowanceBalancingCharges": 563.34,
@@ -127,7 +125,6 @@ class AmendUkPropertyAnnualSubmissionRequestParserSpec extends UnitSpec {
               UkFhlProperty(
                 Some(
                   UkFhlPropertyAdjustments(
-                    Some(343.34),
                     Some(454.45),
                     Some(231.45),
                     true,
@@ -146,7 +143,6 @@ class AmendUkPropertyAnnualSubmissionRequestParserSpec extends UnitSpec {
             Some(
               UkNonFhlProperty(
                 Some(UkNonFhlPropertyAdjustments(
-                  Some(334.45),
                   Some(565.34),
                   Some(533.54),
                   Some(563.34),

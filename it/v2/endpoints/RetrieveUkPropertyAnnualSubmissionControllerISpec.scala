@@ -47,7 +47,6 @@ class RetrieveUkPropertyAnnualSubmissionControllerISpec extends V2IntegrationBas
         |        "zeroEmissionsCarAllowance": 123.12
         |     },
         |     "adjustments": {
-        |        "lossBroughtForward": 343.34,
         |        "privateUseAdjustment": 454.45,
         |        "balancingCharge": 231.45,
         |        "periodOfGraceAdjustment": true,
@@ -98,7 +97,6 @@ class RetrieveUkPropertyAnnualSubmissionControllerISpec extends V2IntegrationBas
         |      "zeroEmissionsCarAllowance": 454.34
         |    },
         |    "adjustments": {
-        |      "lossBroughtForward": 334.45,
         |      "balancingCharge": 565.34,
         |      "privateUseAdjustment": 533.54,
         |      "businessPremisesRenovationAllowanceBalancingCharges": 563.34,
@@ -143,7 +141,6 @@ class RetrieveUkPropertyAnnualSubmissionControllerISpec extends V2IntegrationBas
         |         "zeroEmissionsCarAllowance":123.12
         |      },
         |      "adjustments":{
-        |         "lossBroughtForward":343.34,
         |         "privateUseAdjustment":454.45,
         |         "balancingCharge":231.45,
         |         "periodOfGraceAdjustment":true,
@@ -194,7 +191,6 @@ class RetrieveUkPropertyAnnualSubmissionControllerISpec extends V2IntegrationBas
         |         "zeroEmissionsCarAllowance":454.34
         |      },
         |      "ukOtherPropertyAnnualAdjustments":{
-        |         "lossBroughtForward":334.45,
         |         "balancingCharge":565.34,
         |         "privateUseAdjustment":533.54,
         |         "businessPremisesRenovationAllowanceBalancingCharges":563.34,

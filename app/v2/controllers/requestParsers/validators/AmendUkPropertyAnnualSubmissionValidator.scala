@@ -73,10 +73,6 @@ class AmendUkPropertyAnnualSubmissionValidator @Inject()(appConfig: AppConfig) e
   private def validateUkFhlProperty(ukFhlProperty: UkFhlProperty): List[MtdError] = {
     List(
       NumberValidation.validateOptional(
-        field = ukFhlProperty.adjustments.flatMap(_.lossBroughtForward),
-        path = "/ukFhlProperty/adjustments/lossBroughtForward"
-      ),
-      NumberValidation.validateOptional(
         field = ukFhlProperty.adjustments.flatMap(_.balancingCharge),
         path = "/ukFhlProperty/adjustments/balancingCharge"
       ),
@@ -118,10 +114,6 @@ class AmendUkPropertyAnnualSubmissionValidator @Inject()(appConfig: AppConfig) e
 
   private def validateukNonFhlProperty(ukNonFhlProperty: UkNonFhlProperty): List[MtdError] = {
     List(
-      NumberValidation.validateOptional(
-        field = ukNonFhlProperty.adjustments.flatMap(_.lossBroughtForward),
-        path = "/ukNonFhlProperty/adjustments/lossBroughtForward"
-      ),
       NumberValidation.validateOptional(
         field = ukNonFhlProperty.adjustments.flatMap(_.balancingCharge),
         path = "/ukNonFhlProperty/adjustments/balancingCharge"

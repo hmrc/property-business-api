@@ -24,7 +24,6 @@ class UkFhlPropertyAdjustmentsSpec extends UnitSpec {
 
   val requestBody: UkFhlPropertyAdjustments =
       UkFhlPropertyAdjustments(
-        Some(1000.10),
         Some(1000.20),
         Some(1000.30),
         true,
@@ -37,7 +36,6 @@ class UkFhlPropertyAdjustmentsSpec extends UnitSpec {
   val validMtdJson: JsValue = Json.parse(
     """
       |{
-      |  "lossBroughtForward": 1000.10,
       |  "privateUseAdjustment": 1000.20,
       |  "balancingCharge": 1000.30,
       |  "periodOfGraceAdjustment": true,
@@ -52,7 +50,6 @@ class UkFhlPropertyAdjustmentsSpec extends UnitSpec {
   val validDownstreamJson: JsValue = Json.parse(
     """
       |{
-      |  "lossBroughtForward": 1000.10,
       |  "privateUseAdjustment": 1000.20,
       |  "balancingCharge": 1000.30,
       |  "periodOfGraceAdjustment": true,

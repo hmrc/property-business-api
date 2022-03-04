@@ -31,7 +31,6 @@ class UkFhlPropertySpec extends UnitSpec {
       |      "zeroEmissionsCarAllowance":123.12
       |   },
       |   "adjustments":{
-      |      "lossBroughtForward":343.34,
       |      "privateUseAdjustment":454.45,
       |      "balancingCharge":231.45,
       |      "periodOfGraceAdjustment":true,
@@ -47,7 +46,6 @@ class UkFhlPropertySpec extends UnitSpec {
   val model: UkFhlProperty = UkFhlProperty(
     adjustments = Some(
       UkFhlPropertyAdjustments(
-        lossBroughtForward = Some(343.34),
         privateUseAdjustment = Some(454.45),
         balancingCharge = Some(231.45),
         periodOfGraceAdjustment = true,
@@ -82,7 +80,6 @@ class UkFhlPropertySpec extends UnitSpec {
       |      "zeroEmissionsCarAllowance":123.12
       |   },
       |   "adjustments":{
-      |      "lossBroughtForward":343.34,
       |      "privateUseAdjustment":454.45,
       |      "balancingCharge":231.45,
       |      "periodOfGraceAdjustment":true,

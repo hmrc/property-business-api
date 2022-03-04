@@ -38,7 +38,6 @@ class RetrieveUkPropertyAnnualSubmissionResponseSpec extends UnitSpec with MockA
       |         "zeroEmissionsCarAllowance":123.12
       |      },
       |      "adjustments":{
-      |         "lossBroughtForward":343.34,
       |         "privateUseAdjustment":454.45,
       |         "balancingCharge":231.45,
       |         "periodOfGraceAdjustment":true,
@@ -89,7 +88,6 @@ class RetrieveUkPropertyAnnualSubmissionResponseSpec extends UnitSpec with MockA
       |         "zeroEmissionsCarAllowance":454.34
       |      },
       |      "ukOtherPropertyAnnualAdjustments":{
-      |         "lossBroughtForward":334.45,
       |         "balancingCharge":565.34,
       |         "privateUseAdjustment":533.54,
       |         "businessPremisesRenovationAllowanceBalancingCharges":563.34,
@@ -108,7 +106,6 @@ class RetrieveUkPropertyAnnualSubmissionResponseSpec extends UnitSpec with MockA
       UkFhlProperty(
         adjustments = Some(
           UkFhlPropertyAdjustments(
-            lossBroughtForward = Some(343.34),
             privateUseAdjustment = Some(454.45),
             balancingCharge = Some(231.45),
             periodOfGraceAdjustment = true,
@@ -136,7 +133,6 @@ class RetrieveUkPropertyAnnualSubmissionResponseSpec extends UnitSpec with MockA
       UkNonFhlProperty(
         adjustments = Some(
           UkNonFhlPropertyAdjustments(
-            lossBroughtForward = Some(334.45),
             balancingCharge = Some(565.34),
             privateUseAdjustment = Some(533.54),
             businessPremisesRenovationAllowanceBalancingCharges = Some(563.34),
@@ -210,7 +206,6 @@ class RetrieveUkPropertyAnnualSubmissionResponseSpec extends UnitSpec with MockA
       |         "zeroEmissionsCarAllowance":123.12
       |      },
       |      "adjustments":{
-      |         "lossBroughtForward":343.34,
       |         "privateUseAdjustment":454.45,
       |         "balancingCharge":231.45,
       |         "periodOfGraceAdjustment":true,
@@ -261,7 +256,6 @@ class RetrieveUkPropertyAnnualSubmissionResponseSpec extends UnitSpec with MockA
       |         "zeroEmissionsCarAllowance":454.34
       |      },
       |      "adjustments":{
-      |         "lossBroughtForward":334.45,
       |         "balancingCharge":565.34,
       |         "privateUseAdjustment":533.54,
       |         "businessPremisesRenovationAllowanceBalancingCharges":563.34,

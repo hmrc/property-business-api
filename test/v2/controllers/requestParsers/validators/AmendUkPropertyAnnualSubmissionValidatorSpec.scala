@@ -1422,7 +1422,6 @@ class AmendUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec with JsonErr
               |      "zeroEmissionsCarAllowance": 3000.20
               |    },
               |    "adjustments": {
-              |      "lossBroughtForward": 2000.10,
               |      "balancingCharge": 2000.20,
               |      "privateUseAdjustment": 2000.30,
               |      "businessPremisesRenovationAllowanceBalancingCharges": 2000.40,

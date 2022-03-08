@@ -2,7 +2,6 @@
   "submittedOn":"2022-06-17T10:53:38Z",
   "ukFhlProperty":{
     "adjustments":{
-      "lossBroughtForward":343.34,
       "balancingCharge":231.45,
       "periodOfGraceAdjustment":true,
       "businessPremisesRenovationAllowanceBalancingCharges":567.67,
@@ -17,7 +16,6 @@
   },
   "ukNonFhlProperty":{
     "adjustments":{
-      "lossBroughtForward":334.45,
       "balancingCharge":565.34,
       "businessPremisesRenovationAllowanceBalancingCharges":563.34,
       "nonResidentLandlord":true,

@@ -94,16 +94,16 @@ class AmendUkPropertyPeriodSummaryController @Inject()(val authService: Enrolmen
       }.merge
     }
 
-  private def errorResult(errorWrapper: ErrorWrapper) = {
-    (errorWrapper.error: @unchecked) match {
+  private def errorResult(errorWrapper: ErrorWrapper) =
+    errorWrapper.error match {
       case BadRequestError | NinoFormatError | TaxYearFormatError | BusinessIdFormatError | SubmissionIdFormatError | RuleTaxYearRangeInvalidError |
           RuleTaxYearNotSupportedError | RuleIncorrectOrEmptyBodyError | RuleTypeOfBusinessIncorrectError | MtdErrorWithCode(ValueFormatError.code) |
           MtdErrorWithCode(RuleBothExpensesSuppliedError.code) | MtdErrorWithCode(RuleIncorrectOrEmptyBodyError.code) =>
         BadRequest(Json.toJson(errorWrapper))
       case NotFoundError   => NotFound(Json.toJson(errorWrapper))
       case DownstreamError => InternalServerError(Json.toJson(errorWrapper))
+      case _ => unhandledError(errorWrapper)
     }
-  }
 
   private def auditSubmission(details: GenericAuditDetail)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[AuditResult] = {
     val event = AuditEvent("AmendUKPropertyIncomeAndExpensesPeriodSummary", "amend-uk-property-income-and-expenses-period-summary", details)

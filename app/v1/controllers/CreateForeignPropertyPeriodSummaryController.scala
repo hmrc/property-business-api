@@ -93,8 +93,8 @@ class CreateForeignPropertyPeriodSummaryController @Inject()(val authService: En
       }.merge
     }
 
-  private def errorResult(errorWrapper: ErrorWrapper) = {
-    (errorWrapper.error: @unchecked) match {
+  private def errorResult(errorWrapper: ErrorWrapper) =
+    errorWrapper.error match {
       case RuleIncorrectOrEmptyBodyError |
            BadRequestError |
            NinoFormatError |
@@ -114,8 +114,8 @@ class CreateForeignPropertyPeriodSummaryController @Inject()(val authService: En
         BadRequest(Json.toJson(errorWrapper))
       case NotFoundError => NotFound(Json.toJson(errorWrapper))
       case DownstreamError => InternalServerError(Json.toJson(errorWrapper))
+      case _ => unhandledError(errorWrapper)
     }
-  }
 
   private def auditSubmission(details: CreateForeignPropertyPeriodicAuditDetail)
                              (implicit hc: HeaderCarrier,

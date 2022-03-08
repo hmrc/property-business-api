@@ -78,7 +78,7 @@ class RetrieveForeignPropertyAnnualSubmissionController @Inject()(val authServic
     }
 
   private def errorResult(errorWrapper: ErrorWrapper) = {
-    (errorWrapper.error: @unchecked) match {
+    errorWrapper.error match {
       case NinoFormatError |
            BusinessIdFormatError |
            TaxYearFormatError |
@@ -87,6 +87,7 @@ class RetrieveForeignPropertyAnnualSubmissionController @Inject()(val authServic
            BadRequestError => BadRequest(Json.toJson(errorWrapper))
       case DownstreamError => InternalServerError(Json.toJson(errorWrapper))
       case NotFoundError => NotFound(Json.toJson(errorWrapper))
+      case _ => unhandledError(errorWrapper)
     }
   }
 }

@@ -398,18 +398,6 @@ class AmendForeignPropertyAnnualSubmissionControllerISpec extends V2IntegrationB
       "field data validations fail on the request body" in new Test {
 
         val allInvalidFieldsRequestErrors: List[MtdError] = List(
-          DateFormatError.copy(
-            paths = Some(List(
-              "/foreignNonFhlProperty/0/allowances/structuredBuildingAllowance/0/firstYear/qualifyingDate"
-            ))
-          ),
-          StringFormatError.copy(
-            paths = Some(List(
-              "/foreignNonFhlProperty/0/allowances/structuredBuildingAllowance/0/building/postcode",
-              "/foreignNonFhlProperty/0/allowances/structuredBuildingAllowance/0/building/name",
-              "/foreignNonFhlProperty/0/allowances/structuredBuildingAllowance/0/building/number"
-            ))
-          ),
           ValueFormatError.copy(
             paths = Some(List(
               "/foreignFhlEea/adjustments/privateUseAdjustment",
@@ -420,7 +408,19 @@ class AmendForeignPropertyAnnualSubmissionControllerISpec extends V2IntegrationB
               "/foreignNonFhlProperty/0/adjustments/balancingCharge",
               "/foreignNonFhlProperty/0/allowances/annualInvestmentAllowance"
             ))
-          )
+          ),
+          StringFormatError.copy(
+            paths = Some(List(
+              "/foreignNonFhlProperty/0/allowances/structuredBuildingAllowance/0/building/postcode",
+              "/foreignNonFhlProperty/0/allowances/structuredBuildingAllowance/0/building/name",
+              "/foreignNonFhlProperty/0/allowances/structuredBuildingAllowance/0/building/number"
+            ))
+          ),
+          DateFormatError.copy(
+            paths = Some(List(
+              "/foreignNonFhlProperty/0/allowances/structuredBuildingAllowance/0/firstYear/qualifyingDate"
+            ))
+          ),
         )
 
         val wrappedErrors: ErrorWrapper = ErrorWrapper(

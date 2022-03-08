@@ -88,9 +88,8 @@ class AmendForeignPropertyAnnualSubmissionController @Inject()(val authService: 
       }.merge
     }
 
-  private def errorResult(errorWrapper: ErrorWrapper) = {
-
-    (errorWrapper.error: @unchecked) match {
+  private def errorResult(errorWrapper: ErrorWrapper) =
+    errorWrapper.error match {
       case BadRequestError |
            NinoFormatError |
            BusinessIdFormatError |
@@ -103,8 +102,9 @@ class AmendForeignPropertyAnnualSubmissionController @Inject()(val authService: 
            MtdErrorWithCustomMessage(RuleCountryCodeError.code) => BadRequest(Json.toJson(errorWrapper))
       case DownstreamError => InternalServerError(Json.toJson(errorWrapper))
       case NotFoundError => NotFound(Json.toJson(errorWrapper))
+      case _ => unhandledError(errorWrapper)
     }
-  }
+
   private def auditSubmission(details: CreateAndAmendForeignPropertyAnnualAuditDetail)
                              (implicit hc: HeaderCarrier,
                               ec: ExecutionContext) = {

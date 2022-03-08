@@ -94,9 +94,8 @@ class AmendForeignPropertyAnnualSubmissionController @Inject()(val authService: 
       }.merge
     }
 
-  private def errorResult(errorWrapper: ErrorWrapper) = {
-
-    (errorWrapper.error: @unchecked) match {
+  private def errorResult(errorWrapper: ErrorWrapper) =
+    errorWrapper.error match {
       case BadRequestError | NinoFormatError | BusinessIdFormatError | TaxYearFormatError | MtdErrorWithCode(RuleBothAllowancesSuppliedError.code) |
           MtdErrorWithCode(RuleBuildingNameNumberError.code) | RuleTypeOfBusinessIncorrectError | MtdErrorWithCode(CountryCodeFormatError.code) |
           MtdErrorWithCode(ValueFormatError.code) | MtdErrorWithCode(DateFormatError.code) | MtdErrorWithCode(StringFormatError.code) |
@@ -106,8 +105,8 @@ class AmendForeignPropertyAnnualSubmissionController @Inject()(val authService: 
         BadRequest(Json.toJson(errorWrapper))
       case DownstreamError => InternalServerError(Json.toJson(errorWrapper))
       case NotFoundError   => NotFound(Json.toJson(errorWrapper))
+      case _ => unhandledError(errorWrapper)
     }
-  }
 
   private def auditSubmission(details: GenericAuditDetail)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[AuditResult] = {
     val event = AuditEvent("CreateAmendForeignPropertyAnnualSubmission", "create-amend-foreign-property-annual-submission", details)

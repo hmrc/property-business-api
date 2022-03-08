@@ -22,7 +22,6 @@ import support.UnitSpec
 class UkFhlPropertyAdjustmentsSpec extends UnitSpec {
   val downstreamJson: JsValue = Json.parse("""
       |{
-      |   "lossBroughtForward":343.34,
       |   "privateUseAdjustment":454.45,
       |   "balancingCharge":231.45,
       |   "periodOfGraceAdjustment":true,
@@ -35,7 +34,6 @@ class UkFhlPropertyAdjustmentsSpec extends UnitSpec {
       |""".stripMargin)
 
   val model: UkFhlPropertyAdjustments = UkFhlPropertyAdjustments(
-    lossBroughtForward = Some(343.34),
     privateUseAdjustment = Some(454.45),
     balancingCharge = Some(231.45),
     periodOfGraceAdjustment = true,
@@ -49,7 +47,6 @@ class UkFhlPropertyAdjustmentsSpec extends UnitSpec {
 
   val mtdJson: JsValue = Json.parse("""
       |{
-      |   "lossBroughtForward":343.34,
       |   "privateUseAdjustment":454.45,
       |   "balancingCharge":231.45,
       |   "periodOfGraceAdjustment":true,

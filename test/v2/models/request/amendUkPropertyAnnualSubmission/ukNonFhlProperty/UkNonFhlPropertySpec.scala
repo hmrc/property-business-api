@@ -26,7 +26,6 @@ class UkNonFhlPropertySpec extends UnitSpec {
   val requestBody: UkNonFhlProperty =
       UkNonFhlProperty(
         Some(UkNonFhlPropertyAdjustments(
-          Some(2000.10),
           Some(2000.20),
           Some(2000.30),
           Some(2000.40),
@@ -108,7 +107,6 @@ class UkNonFhlPropertySpec extends UnitSpec {
       |      "zeroEmissionsCarAllowance": 3000.20
       |    },
       |    "adjustments": {
-      |      "lossBroughtForward": 2000.10,
       |      "balancingCharge": 2000.20,
       |      "privateUseAdjustment": 2000.30,
       |      "businessPremisesRenovationAllowanceBalancingCharges": 2000.40,
@@ -159,7 +157,6 @@ class UkNonFhlPropertySpec extends UnitSpec {
       |      "zeroEmissionsCarAllowance": 3000.20
       |    },
       |    "ukOtherPropertyAnnualAdjustments": {
-      |      "lossBroughtForward": 2000.10,
       |      "balancingCharge": 2000.20,
       |      "privateUseAdjustment": 2000.30,
       |      "businessPremisesRenovationAllowanceBalancingCharges": 2000.40,

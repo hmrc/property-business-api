@@ -46,7 +46,6 @@ class AmendUkPropertyAnnualSubmissionControllerISpec extends V2IntegrationBaseSp
         |      "zeroEmissionsCarAllowance": 1000.90
         |    },
         |    "adjustments": {
-        |      "lossBroughtForward": 1000.10,
         |      "privateUseAdjustment": 1000.20,
         |      "balancingCharge": 1000.30,
         |      "periodOfGraceAdjustment": true,
@@ -94,7 +93,6 @@ class AmendUkPropertyAnnualSubmissionControllerISpec extends V2IntegrationBaseSp
         |      "zeroEmissionsCarAllowance": 3000.20
         |    },
         |    "adjustments": {
-        |      "lossBroughtForward": 2000.10,
         |      "balancingCharge": 2000.20,
         |      "privateUseAdjustment": 2000.30,
         |      "businessPremisesRenovationAllowanceBalancingCharges": 2000.40,
@@ -193,7 +191,6 @@ class AmendUkPropertyAnnualSubmissionControllerISpec extends V2IntegrationBaseSp
             |      "zeroEmissionsCarAllowance": 1000.678990
             |    },
             |    "adjustments": {
-            |      "lossBroughtForward": 1000.678910,
             |      "privateUseAdjustment": 1000.2456780,
             |      "balancingCharge": 1000.356780,
             |      "periodOfGraceAdjustment": true,
@@ -241,7 +238,6 @@ class AmendUkPropertyAnnualSubmissionControllerISpec extends V2IntegrationBaseSp
             |      "zeroEmissionsCarAllowance": 3000.45678920
             |    },
             |    "adjustments": {
-            |      "lossBroughtForward": 2000.56789010,
             |      "balancingCharge": 2000.6789020,
             |      "privateUseAdjustment": 2000.34567890,
             |      "businessPremisesRenovationAllowanceBalancingCharges": 2000.456780,
@@ -271,7 +267,6 @@ class AmendUkPropertyAnnualSubmissionControllerISpec extends V2IntegrationBaseSp
           ),
           ValueFormatError.copy(
             paths = Some(List(
-              "/ukFhlProperty/adjustments/lossBroughtForward",
               "/ukFhlProperty/adjustments/balancingCharge",
               "/ukFhlProperty/adjustments/privateUseAdjustment",
               "/ukFhlProperty/adjustments/businessPremisesRenovationAllowanceBalancingCharges",
@@ -280,7 +275,6 @@ class AmendUkPropertyAnnualSubmissionControllerISpec extends V2IntegrationBaseSp
               "/ukFhlProperty/allowances/otherCapitalAllowance",
               "/ukFhlProperty/allowances/electricChargePointAllowance",
               "/ukFhlProperty/allowances/zeroEmissionsCarAllowance",
-              "/ukNonFhlProperty/adjustments/lossBroughtForward",
               "/ukNonFhlProperty/adjustments/balancingCharge",
               "/ukNonFhlProperty/adjustments/privateUseAdjustment",
               "/ukNonFhlProperty/adjustments/businessPremisesRenovationAllowanceBalancingCharges",
@@ -329,7 +323,6 @@ class AmendUkPropertyAnnualSubmissionControllerISpec extends V2IntegrationBaseSp
           |      "zeroEmissionsCarAllowance": 1000.90
           |    },
           |    "adjustments": {
-          |      "lossBroughtForward": 1000.10,
           |      "privateUseAdjustment": 1000.20,
           |      "balancingCharge": 1000.30,
           |      "periodOfGraceAdjustment": true,
@@ -377,7 +370,6 @@ class AmendUkPropertyAnnualSubmissionControllerISpec extends V2IntegrationBaseSp
           |      "zeroEmissionsCarAllowance": 3000.20
           |    },
           |    "adjustments": {
-          |      "lossBroughtForward": 2000.10,
           |      "balancingCharge": 2000.20,
           |      "privateUseAdjustment": 2000.30,
           |      "businessPremisesRenovationAllowanceBalancingCharges": 2000.40,
@@ -402,7 +394,6 @@ class AmendUkPropertyAnnualSubmissionControllerISpec extends V2IntegrationBaseSp
           |      "zeroEmissionsCarAllowance": 1000.923540
           |    },
           |    "adjustments": {
-          |      "lossBroughtForward": 1000.10346,
           |      "privateUseAdjustment": 1000.22540,
           |      "balancingCharge": 1000.336540,
           |      "periodOfGraceAdjustment": true,
@@ -450,7 +441,6 @@ class AmendUkPropertyAnnualSubmissionControllerISpec extends V2IntegrationBaseSp
           |      "zeroEmissionsCarAllowance": 3000.2364560
           |    },
           |    "adjustments": {
-          |      "lossBroughtForward": 2000.13460,
           |      "balancingCharge": 2000.26530,
           |      "privateUseAdjustment": 2000.2645230,
           |      "businessPremisesRenovationAllowanceBalancingCharges": 2000.434560,
@@ -475,7 +465,6 @@ class AmendUkPropertyAnnualSubmissionControllerISpec extends V2IntegrationBaseSp
           |      "zeroEmissionsCarAllowance": 1000.90
           |    },
           |    "adjustments": {
-          |      "lossBroughtForward": 1000.10,
           |      "privateUseAdjustment": 1000.20,
           |      "balancingCharge": 1000.30,
           |      "periodOfGraceAdjustment": true,
@@ -523,7 +512,6 @@ class AmendUkPropertyAnnualSubmissionControllerISpec extends V2IntegrationBaseSp
           |      "zeroEmissionsCarAllowance": 3000.20
           |    },
           |    "adjustments": {
-          |      "lossBroughtForward": 2000.10,
           |      "balancingCharge": 2000.20,
           |      "privateUseAdjustment": 2000.30,
           |      "businessPremisesRenovationAllowanceBalancingCharges": 2000.40,
@@ -548,7 +536,6 @@ class AmendUkPropertyAnnualSubmissionControllerISpec extends V2IntegrationBaseSp
           |      "zeroEmissionsCarAllowance": 1000.90
           |    },
           |    "adjustments": {
-          |      "lossBroughtForward": 1000.10,
           |      "privateUseAdjustment": 1000.20,
           |      "balancingCharge": 1000.30,
           |      "periodOfGraceAdjustment": true,
@@ -596,7 +583,6 @@ class AmendUkPropertyAnnualSubmissionControllerISpec extends V2IntegrationBaseSp
           |      "zeroEmissionsCarAllowance": 3000.20
           |    },
           |    "adjustments": {
-          |      "lossBroughtForward": 2000.10,
           |      "balancingCharge": 2000.20,
           |      "privateUseAdjustment": 2000.30,
           |      "businessPremisesRenovationAllowanceBalancingCharges": 2000.40,
@@ -621,7 +607,6 @@ class AmendUkPropertyAnnualSubmissionControllerISpec extends V2IntegrationBaseSp
           |      "zeroEmissionsCarAllowance": 1000.90
           |    },
           |    "adjustments": {
-          |      "lossBroughtForward": 1000.10,
           |      "privateUseAdjustment": 1000.20,
           |      "balancingCharge": 1000.30,
           |      "periodOfGraceAdjustment": true,
@@ -667,7 +652,6 @@ class AmendUkPropertyAnnualSubmissionControllerISpec extends V2IntegrationBaseSp
           |      "zeroEmissionsCarAllowance": 3000.20
           |    },
           |    "adjustments": {
-          |      "lossBroughtForward": 2000.10,
           |      "balancingCharge": 2000.20,
           |      "privateUseAdjustment": 2000.30,
           |      "businessPremisesRenovationAllowanceBalancingCharges": 2000.40,
@@ -693,7 +677,6 @@ class AmendUkPropertyAnnualSubmissionControllerISpec extends V2IntegrationBaseSp
           |      "zeroEmissionsCarAllowance": 1000.90
           |    },
           |    "adjustments": {
-          |      "lossBroughtForward": 1000.10,
           |      "balancingCharge": 1000.30,
           |      "periodOfGraceAdjustment": true,
           |      "businessPremisesRenovationAllowanceBalancingCharges": 1000.40,
@@ -741,7 +724,6 @@ class AmendUkPropertyAnnualSubmissionControllerISpec extends V2IntegrationBaseSp
           |      "zeroEmissionsCarAllowance": 3000.20
           |    },
           |    "adjustments": {
-          |      "lossBroughtForward": 2000.10,
           |      "balancingCharge": 2000.20,
           |      "businessPremisesRenovationAllowanceBalancingCharges": 2000.40,
           |      "nonResidentLandlord": true,
@@ -772,7 +754,6 @@ class AmendUkPropertyAnnualSubmissionControllerISpec extends V2IntegrationBaseSp
       val allInvalidValueRequestError: MtdError = ValueFormatError.copy(
         message = "The value must be between 0 and 99999999999.99",
         paths = Some(List(
-          "/ukFhlProperty/adjustments/lossBroughtForward",
           "/ukFhlProperty/adjustments/balancingCharge",
           "/ukFhlProperty/adjustments/privateUseAdjustment",
           "/ukFhlProperty/adjustments/businessPremisesRenovationAllowanceBalancingCharges",
@@ -781,7 +762,6 @@ class AmendUkPropertyAnnualSubmissionControllerISpec extends V2IntegrationBaseSp
           "/ukFhlProperty/allowances/otherCapitalAllowance",
           "/ukFhlProperty/allowances/electricChargePointAllowance",
           "/ukFhlProperty/allowances/zeroEmissionsCarAllowance",
-          "/ukNonFhlProperty/adjustments/lossBroughtForward",
           "/ukNonFhlProperty/adjustments/balancingCharge",
           "/ukNonFhlProperty/adjustments/privateUseAdjustment",
           "/ukNonFhlProperty/adjustments/businessPremisesRenovationAllowanceBalancingCharges",

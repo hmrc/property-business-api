@@ -77,7 +77,6 @@ class RetrieveUkPropertyAnnualSubmissionControllerSpec
   private val ukFhlProperty = UkFhlProperty(
     adjustments = Some(
       UkFhlPropertyAdjustments(
-        lossBroughtForward = Some(343.34),
         privateUseAdjustment = Some(454.45),
         balancingCharge = Some(231.45),
         periodOfGraceAdjustment = true,
@@ -104,7 +103,6 @@ class RetrieveUkPropertyAnnualSubmissionControllerSpec
   private val ukNonFhlProperty = UkNonFhlProperty(
     adjustments = Some(
       UkNonFhlPropertyAdjustments(
-        lossBroughtForward = Some(334.45),
         balancingCharge = Some(565.34),
         privateUseAdjustment = Some(533.54),
         businessPremisesRenovationAllowanceBalancingCharges = Some(563.34),

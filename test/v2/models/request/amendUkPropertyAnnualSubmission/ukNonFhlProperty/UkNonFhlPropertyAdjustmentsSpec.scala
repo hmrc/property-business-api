@@ -24,7 +24,6 @@ class UkNonFhlPropertyAdjustmentsSpec extends UnitSpec {
 
   val requestBody: UkNonFhlPropertyAdjustments =
     UkNonFhlPropertyAdjustments(
-        Some(2000.10),
         Some(2000.20),
         Some(2000.30),
         Some(2000.40),
@@ -35,7 +34,6 @@ class UkNonFhlPropertyAdjustmentsSpec extends UnitSpec {
   val validMtdJson: JsValue = Json.parse(
     """
       |{
-      |      "lossBroughtForward": 2000.10,
       |      "balancingCharge": 2000.20,
       |      "privateUseAdjustment": 2000.30,
       |      "businessPremisesRenovationAllowanceBalancingCharges": 2000.40,
@@ -49,7 +47,6 @@ class UkNonFhlPropertyAdjustmentsSpec extends UnitSpec {
   val validDownstreamJson: JsValue = Json.parse(
     """
       |{
-      |      "lossBroughtForward": 2000.10,
       |      "balancingCharge": 2000.20,
       |      "privateUseAdjustment": 2000.30,
       |      "businessPremisesRenovationAllowanceBalancingCharges": 2000.40,

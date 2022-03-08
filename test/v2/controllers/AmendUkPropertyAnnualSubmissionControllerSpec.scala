@@ -99,7 +99,6 @@ class AmendUkPropertyAnnualSubmissionControllerSpec
       |      "zeroEmissionsCarAllowance": 1000.90
       |    },
       |    "adjustments": {
-      |      "lossBroughtForward": 1000.10,
       |      "privateUseAdjustment": 1000.20,
       |      "balancingCharge": 1000.30,
       |      "periodOfGraceAdjustment": true,
@@ -147,7 +146,6 @@ class AmendUkPropertyAnnualSubmissionControllerSpec
       |      "zeroEmissionsCarAllowance": 3000.20
       |    },
       |    "adjustments": {
-      |      "lossBroughtForward": 2000.10,
       |      "balancingCharge": 2000.20,
       |      "privateUseAdjustment": 2000.30,
       |      "businessPremisesRenovationAllowanceBalancingCharges": 2000.40,
@@ -164,7 +162,6 @@ class AmendUkPropertyAnnualSubmissionControllerSpec
   private val ukFhlProperty: UkFhlProperty = UkFhlProperty(
     Some(
       UkFhlPropertyAdjustments(
-        Some(1000.10),
         Some(1000.20),
         Some(1000.30),
         periodOfGraceAdjustment = true,
@@ -186,7 +183,6 @@ class AmendUkPropertyAnnualSubmissionControllerSpec
   private val ukNonFhlProperty: UkNonFhlProperty = UkNonFhlProperty(
     Some(
       UkNonFhlPropertyAdjustments(
-        Some(2000.10),
         Some(2000.20),
         Some(2000.30),
         Some(2000.40),
@@ -312,7 +308,6 @@ class AmendUkPropertyAnnualSubmissionControllerSpec
           (ValueFormatError.copy(
              paths = Some(
                List(
-                 "/ukFhlProperty/adjustments/lossBroughtForward",
                  "/ukFhlProperty/adjustments/balancingCharge",
                  "/ukFhlProperty/adjustments/privateUseAdjustment",
                  "/ukFhlProperty/adjustments/businessPremisesRenovationAllowanceBalancingCharges",
@@ -321,7 +316,6 @@ class AmendUkPropertyAnnualSubmissionControllerSpec
                  "/ukFhlProperty/allowances/otherCapitalAllowance",
                  "/ukFhlProperty/allowances/electricChargePointAllowance",
                  "/ukFhlProperty/allowances/zeroEmissionsCarAllowance",
-                 "/ukNonFhlProperty/adjustments/lossBroughtForward",
                  "/ukNonFhlProperty/adjustments/balancingCharge",
                  "/ukNonFhlProperty/adjustments/privateUseAdjustment",
                  "/ukNonFhlProperty/adjustments/businessPremisesRenovationAllowanceBalancingCharges",

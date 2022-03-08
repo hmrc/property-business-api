@@ -20,8 +20,7 @@ import play.api.libs.json.{JsPath, Json, Reads, Writes}
 import play.api.libs.functional.syntax._
 import v2.models.request.common.ukPropertyRentARoom.UkPropertyAdjustmentsRentARoom
 
-case class UkNonFhlPropertyAdjustments(lossBroughtForward: Option[BigDecimal],
-                                       balancingCharge: Option[BigDecimal],
+case class UkNonFhlPropertyAdjustments(balancingCharge: Option[BigDecimal],
                                        privateUseAdjustment: Option[BigDecimal],
                                        businessPremisesRenovationAllowanceBalancingCharges: Option[BigDecimal],
                                        nonResidentLandlord: Boolean,
@@ -31,7 +30,6 @@ object UkNonFhlPropertyAdjustments {
   implicit val reads: Reads[UkNonFhlPropertyAdjustments] = Json.reads[UkNonFhlPropertyAdjustments]
 
   implicit val writes: Writes[UkNonFhlPropertyAdjustments] = (
-    (JsPath \ "lossBroughtForward").writeNullable[BigDecimal] and
     (JsPath \ "balancingCharge").writeNullable[BigDecimal] and
     (JsPath \ "privateUseAdjustment").writeNullable[BigDecimal] and
     (JsPath \ "businessPremisesRenovationAllowanceBalancingCharges").writeNullable[BigDecimal] and

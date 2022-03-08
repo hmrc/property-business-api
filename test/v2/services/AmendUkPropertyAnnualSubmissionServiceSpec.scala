@@ -43,7 +43,6 @@ class AmendUkPropertyAnnualSubmissionServiceSpec extends UnitSpec {
     Some(UkFhlPropertyAdjustments(
       Some(5000.99),
       Some(5000.99),
-      Some(5000.99),
       periodOfGraceAdjustment = true,
       Some(5000.99),
       nonResidentLandlord = true,
@@ -61,7 +60,6 @@ class AmendUkPropertyAnnualSubmissionServiceSpec extends UnitSpec {
 
   private val ukNonFhlProperty = UkNonFhlProperty(
     Some(UkNonFhlPropertyAdjustments(
-      Some(5000.99),
       Some(5000.99),
       Some(5000.99),
       Some(5000.99),

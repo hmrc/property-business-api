@@ -21,6 +21,7 @@ import play.api.http.HeaderNames.ACCEPT
 import play.api.http.Status._
 import play.api.libs.json.{JsObject, JsValue, Json}
 import play.api.libs.ws.{WSRequest, WSResponse}
+import play.api.test.Helpers.AUTHORIZATION
 import support.V2IntegrationBaseSpec
 import v2.models.errors._
 import v2.stubs.{AuthStub, IfsStub, MtdIdLookupStub}
@@ -306,7 +307,10 @@ class AmendForeignPropertyPeriodSummaryControllerISpec extends V2IntegrationBase
     def request(): WSRequest = {
       setupStubs()
       buildRequest(uri)
-        .withHttpHeaders((ACCEPT, "application/vnd.hmrc.2.0+json"))
+        .withHttpHeaders(
+          (ACCEPT, "application/vnd.hmrc.2.0+json"),
+          (AUTHORIZATION, "Bearer 123") // some bearer token
+      )
     }
 
     val responseBody: JsValue = Json.parse(
@@ -442,7 +446,6 @@ class AmendForeignPropertyPeriodSummaryControllerISpec extends V2IntegrationBase
         ("AA123456A", "2022-23", "XAIS12345678910", "4557ecb5-fd32-48cc-81f5-e6acd1099f3c", invalidCountryCodeRequestJson("SBT"), BAD_REQUEST,
           RuleCountryCodeError.copy(paths = Some(Seq("/foreignNonFhlProperty/0/countryCode"))))
       )
-
       input.foreach(args => (validationErrorTest _).tupled(args))
     }
 

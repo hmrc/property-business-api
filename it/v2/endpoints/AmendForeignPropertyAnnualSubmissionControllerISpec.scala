@@ -21,6 +21,7 @@ import play.api.http.HeaderNames.ACCEPT
 import play.api.http.Status._
 import play.api.libs.json.{JsObject, JsValue, Json}
 import play.api.libs.ws.{WSRequest, WSResponse}
+import play.api.test.Helpers.AUTHORIZATION
 import support.V2IntegrationBaseSpec
 import v2.models.errors._
 import v2.models.request.amendForeignPropertyAnnualSubmission.AmendForeignPropertyAnnualSubmissionFixture
@@ -304,7 +305,10 @@ class AmendForeignPropertyAnnualSubmissionControllerISpec extends V2IntegrationB
     def request(): WSRequest = {
       setupStubs()
       buildRequest(uri)
-        .withHttpHeaders((ACCEPT, "application/vnd.hmrc.2.0+json"))
+        .withHttpHeaders(
+          (ACCEPT, "application/vnd.hmrc.2.0+json"),
+          (AUTHORIZATION, "Bearer 123") // some bearer token
+      )
     }
 
     val responseBody: JsValue = Json.parse(
@@ -490,7 +494,6 @@ class AmendForeignPropertyAnnualSubmissionControllerISpec extends V2IntegrationB
         ("AA123456A", "XAIS12345678910", "2022-23", ruleBuildingNameOrNumberErrorRequestJson,
           BAD_REQUEST, RuleBuildingNameNumberError.copy(paths = Some(Seq("/foreignNonFhlProperty/0/allowances/structuredBuildingAllowance/0/building"))))
       )
-
       input.foreach(args => (validationErrorTest _).tupled(args))
     }
 
@@ -526,7 +529,6 @@ class AmendForeignPropertyAnnualSubmissionControllerISpec extends V2IntegrationB
         (INTERNAL_SERVER_ERROR, "SERVER_ERROR", INTERNAL_SERVER_ERROR, DownstreamError),
         (SERVICE_UNAVAILABLE, "SERVICE_UNAVAILABLE", INTERNAL_SERVER_ERROR, DownstreamError)
       )
-
       input.foreach(args => (serviceErrorTest _).tupled(args))
     }
   }

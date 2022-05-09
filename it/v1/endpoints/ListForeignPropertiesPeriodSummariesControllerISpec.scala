@@ -21,6 +21,7 @@ import play.api.http.HeaderNames.ACCEPT
 import play.api.http.Status
 import play.api.libs.json.{JsValue, Json}
 import play.api.libs.ws.{WSRequest, WSResponse}
+import play.api.test.Helpers.AUTHORIZATION
 import support.V1IntegrationBaseSpec
 import v1.models.errors._
 import v1.stubs.{AuditStub, AuthStub, IfsStub, MtdIdLookupStub}
@@ -121,7 +122,10 @@ class ListForeignPropertiesPeriodSummariesControllerISpec extends V1IntegrationB
     def request(): WSRequest = {
       setupStubs()
       buildRequest(uri)
-        .withHttpHeaders((ACCEPT, "application/vnd.hmrc.1.0+json"))
+        .withHttpHeaders(
+          (ACCEPT, "application/vnd.hmrc.1.0+json"),
+          (AUTHORIZATION, "Bearer 123") // some bearer token
+      )
     }
 
     def errorBody(code: String): String =
@@ -214,10 +218,7 @@ class ListForeignPropertiesPeriodSummariesControllerISpec extends V1IntegrationB
           ("AA123456A", "XAIS12345678910", "20-20-2", "2020-09-22", Status.BAD_REQUEST, FromDateFormatError),
           ("AA123456A", "XAIS12345678910", "2020-05-22", "20-2-02", Status.BAD_REQUEST, ToDateFormatError),
           ("AA123456A", "XAIS12345678910", "2020-05-22", "2020-04-22", Status.BAD_REQUEST, RuleToDateBeforeFromDateError)
-
         )
-
-
         input.foreach(args => (validationErrorTest _).tupled(args))
       }
 
@@ -249,7 +250,6 @@ class ListForeignPropertiesPeriodSummariesControllerISpec extends V1IntegrationB
           (Status.INTERNAL_SERVER_ERROR, "SERVER_ERROR", Status.INTERNAL_SERVER_ERROR, DownstreamError),
           (Status.SERVICE_UNAVAILABLE, "SERVICE_UNAVAILABLE", Status.INTERNAL_SERVER_ERROR, DownstreamError)
         )
-
         input.foreach(args => (serviceErrorTest _).tupled(args))
       }
     }

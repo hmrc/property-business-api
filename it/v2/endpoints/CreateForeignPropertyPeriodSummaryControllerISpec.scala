@@ -20,11 +20,12 @@ import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import play.api.http.HeaderNames.ACCEPT
 import play.api.http.Status
 import play.api.libs.json._
-import play.api.libs.ws.{ WSRequest, WSResponse }
+import play.api.libs.ws.{WSRequest, WSResponse}
+import play.api.test.Helpers.AUTHORIZATION
 import support.V2IntegrationBaseSpec
 import v2.models.errors._
 import v2.models.utils.JsonErrorValidators
-import v2.stubs.{ AuditStub, AuthStub, IfsStub, MtdIdLookupStub }
+import v2.stubs.{AuditStub, AuthStub, IfsStub, MtdIdLookupStub}
 
 class CreateForeignPropertyPeriodSummaryControllerISpec extends V2IntegrationBaseSpec with JsonErrorValidators {
 
@@ -74,7 +75,10 @@ class CreateForeignPropertyPeriodSummaryControllerISpec extends V2IntegrationBas
     def request(): WSRequest = {
       setupStubs()
       buildRequest(s"/foreign/$nino/$businessId/period/$taxYear")
-        .withHttpHeaders((ACCEPT, "application/vnd.hmrc.2.0+json"))
+        .withHttpHeaders(
+          (ACCEPT, "application/vnd.hmrc.2.0+json"),
+          (AUTHORIZATION, "Bearer 123") // some bearer token
+      )
     }
 
     val responseBody: JsValue = Json.parse(
@@ -178,52 +182,28 @@ class CreateForeignPropertyPeriodSummaryControllerISpec extends V2IntegrationBas
           ("AA123456A", "XA***IS1", "2022-23", requestBody, Status.BAD_REQUEST, BusinessIdFormatError),
           ("AA123456A", "XAIS12345678910", "2021-23", requestBody, Status.BAD_REQUEST, RuleTaxYearRangeInvalidError),
           ("AA123456A", "XAIS12345678910", "2020-21", requestBody, Status.BAD_REQUEST, RuleTaxYearNotSupportedError),
-          ("AA123456A",
-           "XAIS12345678910",
-           "2021-22",
+          ("AA123456A", "XAIS12345678910", "2021-22",
            requestBody.update("/foreignFhlEea/expenses/premisesRunningCosts", JsNumber(1.234)),
            Status.BAD_REQUEST,
            ValueFormatError.copy(paths = Some(Seq("/foreignFhlEea/expenses/premisesRunningCosts")))),
-          ("AA123456A",
-           "XAIS12345678910",
-           "2022-23",
+          ("AA123456A", "XAIS12345678910", "2022-23",
            requestBody.update("/foreignFhlEea/expenses/consolidatedExpenses", JsNumber(1.23)),
            Status.BAD_REQUEST,
            RuleBothExpensesSuppliedError.copy(paths = Some(Seq("/foreignFhlEea/expenses")))),
           ("AA123456A", "XAIS12345678910", "2021-22", JsObject.empty, Status.BAD_REQUEST, RuleIncorrectOrEmptyBodyError),
           ("AA123456A", "XAIS12345678910", "2022-23", requestBody.update("/fromDate", JsString("XX")), Status.BAD_REQUEST, FromDateFormatError),
           ("AA123456A", "XAIS12345678910", "2022-23", requestBody.update("/toDate", JsString("XX")), Status.BAD_REQUEST, ToDateFormatError),
-          ("AA123456A",
-           "XAIS12345678910",
-           "2022-23",
-           requestBody.update("/toDate", JsString("1999-01-01")),
-           Status.BAD_REQUEST,
-           RuleToDateBeforeFromDateError),
-          ("AA123456A",
-           "XAIS12345678910",
-           "2022-23",
-           requestBodyWith(nonFhlEntryWith("France")),
-           Status.BAD_REQUEST,
-           CountryCodeFormatError.copy(paths = Some(Seq("/foreignNonFhlProperty/0/countryCode")))),
-          ("AA123456A",
-           "XAIS12345678910",
-           "2022-23",
-           requestBodyWith(nonFhlEntryWith("QQQ")),
-           Status.BAD_REQUEST,
+          ("AA123456A", "XAIS12345678910", "2022-23", requestBody.update("/toDate", JsString("1999-01-01")), Status.BAD_REQUEST, RuleToDateBeforeFromDateError),
+          ("AA123456A", "XAIS12345678910", "2022-23", requestBodyWith(nonFhlEntryWith("France")), Status.BAD_REQUEST, CountryCodeFormatError.copy(paths = Some(Seq("/foreignNonFhlProperty/0/countryCode")))),
+          ("AA123456A", "XAIS12345678910", "2022-23", requestBodyWith(nonFhlEntryWith("QQQ")), Status.BAD_REQUEST,
            RuleCountryCodeError.copy(paths = Some(Seq("/foreignNonFhlProperty/0/countryCode")))),
-          ("AA123456A",
-           "XAIS12345678910",
-           "2022-23",
-           requestBodyWith(nonFhlEntry, nonFhlEntry),
-           Status.BAD_REQUEST,
-           RuleDuplicateCountryCodeError.forDuplicatedCodesAndPaths("AFG",
-                                                                    Seq("/foreignNonFhlProperty/0/countryCode",
-                                                                        "/foreignNonFhlProperty/1/countryCode")),
+          ("AA123456A", "XAIS12345678910", "2022-23", requestBodyWith(nonFhlEntry, nonFhlEntry), Status.BAD_REQUEST, RuleDuplicateCountryCodeError.forDuplicatedCodesAndPaths("AFG", Seq("/foreignNonFhlProperty/0/countryCode",
+            "/foreignNonFhlProperty/1/countryCode")),
           )
         )
-
         input.foreach(args => (validationErrorTest _).tupled(args))
       }
+
       "ifs service error" when {
         def serviceErrorTest(ifsStatus: Int, ifsCode: String, expectedStatus: Int, expectedBody: MtdError): Unit = {
           s"ifs returns an $ifsCode error and status $ifsStatus" in new Test {
@@ -260,7 +240,6 @@ class CreateForeignPropertyPeriodSummaryControllerISpec extends V2IntegrationBas
           (Status.INTERNAL_SERVER_ERROR, "SERVER_ERROR", Status.INTERNAL_SERVER_ERROR, DownstreamError),
           (Status.SERVICE_UNAVAILABLE, "SERVICE_UNAVAILABLE", Status.INTERNAL_SERVER_ERROR, DownstreamError),
         )
-
         input.foreach(args => (serviceErrorTest _).tupled(args))
       }
     }

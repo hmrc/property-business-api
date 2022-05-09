@@ -21,6 +21,7 @@ import play.api.http.HeaderNames.ACCEPT
 import play.api.http.Status
 import play.api.libs.json.{JsValue, Json}
 import play.api.libs.ws.{WSRequest, WSResponse}
+import play.api.test.Helpers.AUTHORIZATION
 import support.V1IntegrationBaseSpec
 import v1.models.errors.{BusinessIdFormatError, DownstreamError, MtdError, NinoFormatError, NotFoundError, SubmissionIdFormatError}
 import v1.stubs.{AuditStub, AuthStub, IfsStub, MtdIdLookupStub}
@@ -153,7 +154,10 @@ class RetrieveForeignPropertyPeriodSummaryControllerISpec extends V1IntegrationB
     def request(): WSRequest = {
       setupStubs()
       buildRequest(uri)
-        .withHttpHeaders((ACCEPT, "application/vnd.hmrc.1.0+json"))
+        .withHttpHeaders(
+          (ACCEPT, "application/vnd.hmrc.1.0+json"),
+          (AUTHORIZATION, "Bearer 123") // some bearer token
+      )
     }
 
     def errorBody(code: String): String =
@@ -213,8 +217,6 @@ class RetrieveForeignPropertyPeriodSummaryControllerISpec extends V1IntegrationB
           ("AA123456A", "203100", "4557ecb5-fd32-48cc-81f5-e6acd1099f3c", Status.BAD_REQUEST, BusinessIdFormatError),
           ("AA123456A", "XAIS12345678910", "Beans", Status.BAD_REQUEST, SubmissionIdFormatError)
         )
-
-
         input.foreach(args => (validationErrorTest _).tupled(args))
       }
 
@@ -244,7 +246,6 @@ class RetrieveForeignPropertyPeriodSummaryControllerISpec extends V1IntegrationB
           (Status.INTERNAL_SERVER_ERROR, "SERVER_ERROR", Status.INTERNAL_SERVER_ERROR, DownstreamError),
           (Status.SERVICE_UNAVAILABLE, "SERVICE_UNAVAILABLE", Status.INTERNAL_SERVER_ERROR, DownstreamError)
         )
-
         input.foreach(args => (serviceErrorTest _).tupled(args))
       }
     }

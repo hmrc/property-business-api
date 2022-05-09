@@ -21,6 +21,7 @@ import play.api.http.HeaderNames.ACCEPT
 import play.api.http.Status
 import play.api.libs.json.{JsValue, Json}
 import play.api.libs.ws.{WSRequest, WSResponse}
+import play.api.test.Helpers.AUTHORIZATION
 import support.V1IntegrationBaseSpec
 import v1.models.errors._
 import v1.stubs.{AuditStub, AuthStub, IfsStub, MtdIdLookupStub}
@@ -509,7 +510,6 @@ class CreateForeignPropertyPeriodSummaryControllerISpec extends V1IntegrationBas
     val nino: String = "TC663795B"
     val businessId: String = "XAIS12345678910"
 
-
     def setupStubs(): StubMapping
 
     def uri: String
@@ -517,7 +517,10 @@ class CreateForeignPropertyPeriodSummaryControllerISpec extends V1IntegrationBas
     def request(): WSRequest = {
       setupStubs()
       buildRequest(uri)
-        .withHttpHeaders((ACCEPT, "application/vnd.hmrc.1.0+json"))
+        .withHttpHeaders(
+          (ACCEPT, "application/vnd.hmrc.1.0+json"),
+          (AUTHORIZATION, "Bearer 123") // some bearer token
+      )
     }
 
     val responseBody: JsValue = Json.parse(
@@ -644,7 +647,6 @@ class CreateForeignPropertyPeriodSummaryControllerISpec extends V1IntegrationBas
           ("AA123456A", "XAIS12345678910", toDateBeforeFromDateRequestJson, Status.BAD_REQUEST, RuleToDateBeforeFromDateError),
           ("AA123456A", "XAIS12345678910", ruleCountryCodeErrorRequestJson, Status.BAD_REQUEST, allRuleCountryCodeRequestError)
         )
-
         input.foreach(args => (validationErrorTest _).tupled(args))
       }
       "ifs service error" when {
@@ -678,7 +680,6 @@ class CreateForeignPropertyPeriodSummaryControllerISpec extends V1IntegrationBas
           (Status.UNPROCESSABLE_ENTITY, "GAPS_IN_PERIOD", Status.BAD_REQUEST, RuleNotContiguousPeriodError),
           (Status.UNPROCESSABLE_ENTITY, "INVALID_DATE_RANGE", Status.BAD_REQUEST, RuleToDateBeforeFromDateError)
         )
-
         input.foreach(args => (serviceErrorTest _).tupled(args))
       }
     }

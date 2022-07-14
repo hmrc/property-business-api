@@ -14,13 +14,11 @@
  * limitations under the License.
  */
 
-package v2.models.response.retrieveForeignPropertyPeriodSummary.foreignFhlEea
+package v2.models.request.retrieveHistoricFhlUkPropertyBusinessAnnualSubmission
 
-import play.api.libs.json.{ Json, Reads, Writes }
+import v2.models.domain.Nino
+import v2.models.request.RawData
 
-case class ForeignFhlEeaIncome(rentAmount: Option[BigDecimal])
+case class RetrieveHistoricFhlUkPropertyBusinessAnnualSubmissionRawData(nino: String, taxYear: String) extends RawData
 
-object ForeignFhlEeaIncome {
-  implicit val writes: Writes[ForeignFhlEeaIncome] = Json.writes[ForeignFhlEeaIncome]
-  implicit val reads: Reads[ForeignFhlEeaIncome]   = Json.reads[ForeignFhlEeaIncome]
-}
+case class RetrieveHistoricFhlUkPropertyBusinessAnnualSubmissionRequest(nino: Nino, taxYear: String)

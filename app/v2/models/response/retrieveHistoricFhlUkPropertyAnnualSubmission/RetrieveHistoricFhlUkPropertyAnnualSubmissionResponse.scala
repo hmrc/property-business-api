@@ -31,14 +31,15 @@ object RetrieveHistoricFhlUkPropertyAnnualSubmissionResponse extends HateoasLink
   implicit val reads: Reads[RetrieveHistoricFhlUkPropertyAnnualSubmissionResponse] =
     Json.reads[RetrieveHistoricFhlUkPropertyAnnualSubmissionResponse]
 
-  implicit object RetrieveHistoricFhlUkPropertyBusinessAnnualSubmissionLinksFactory
+  implicit object RetrieveHistoricFhlUkPropertyAnnualSubmissionLinksFactory
       extends HateoasLinksFactory[RetrieveHistoricFhlUkPropertyAnnualSubmissionResponse, RetrieveHistoricFhlUkPropertyAnnualSubmissionHateoasData] {
+
     override def links(appConfig: AppConfig, data: RetrieveHistoricFhlUkPropertyAnnualSubmissionHateoasData): Seq[Link] = {
       import data._
       Seq(
-        //   createAmendHistoricFhlUkPropertyBusinessAnnualSubmission(appConfig, nino, taxYear),
-        retrieveHistoricFhlUkPropertyBusinessAnnualSubmission(appConfig, nino, taxYear, self = true),
-        //   deleteHistoricFhlUkPropertyBusinessAnnualSubmission(appConfig, nino, taxYear)
+        //   createAmendHistoricFhlUkPropertyAnnualSubmission(appConfig, nino, taxYear),
+        retrieveHistoricFhlUkPropertyAnnualSubmission(appConfig, nino, taxYear, self = true),
+        //   deleteHistoricFhlUkPropertyAnnualSubmission(appConfig, nino, taxYear)
       )
     }
   }

@@ -46,7 +46,6 @@ trait HateoasLinks {
   private def ukHistoricFhlAnnualUri(appConfig: AppConfig, nino: String, taxYear: String): String =
     s"/${appConfig.apiGatewayContext}/uk/furnished-holiday-lettings/$nino/$taxYear"
 
-
   // API resource links
 
   // Foreign
@@ -101,14 +100,12 @@ trait HateoasLinks {
     Link(href = ukAnnualUri(appConfig, nino, businessId, taxYear), method = GET, rel)
   }
 
-
   // Historic FHL UK Annual:
 
-  def retrieveHistoricFhlUkPropertyBusinessAnnualSubmission(appConfig: AppConfig, nino: String, taxYear: String, self: Boolean): Link = {
+  def retrieveHistoricFhlUkPropertyAnnualSubmission(appConfig: AppConfig, nino: String, taxYear: String, self: Boolean): Link = {
     val rel = if (self) "self" else RETRIEVE_HISTORIC_FHL_UK_PROPERTY_ANNUAL_SUBMISSION
     Link(href = ukHistoricFhlAnnualUri(appConfig, nino, taxYear), method = GET, rel)
   }
-
 
   // Generic
   def listPropertyPeriodSummaries(appConfig: AppConfig, nino: String, businessId: String, taxYear: String, self: Boolean): Link = {

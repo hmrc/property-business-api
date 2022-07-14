@@ -1,0 +1,11 @@
+{
+  "lossBroughtForward": 200.00,
+  "balancingCharge": 200.00,
+  "privateUseAdjustment": 200.00,
+  "periodOfGraceAdjustment": true,
+  "businessPremisesRenovationAllowanceBalancingCharges": 200.02,
+  "nonResidentLandlord": true,
+  "rentARoom": {
+    "jointlyLet": true
+  }
+}

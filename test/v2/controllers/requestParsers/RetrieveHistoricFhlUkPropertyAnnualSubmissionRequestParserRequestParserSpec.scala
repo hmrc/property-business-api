@@ -20,19 +20,19 @@ import support.UnitSpec
 import v2.mocks.validators.MockRetrieveUkPropertyBusinessAnnualSummaryValidator
 import v2.models.domain.Nino
 import v2.models.errors.{BadRequestError, ErrorWrapper, NinoFormatError, TaxYearFormatError}
-import v2.models.request.retrieveUkPropertyBusinessAnnualSummary._
+import v2.models.request.RetrieveHistoricFhlUkPropertyAnnualSubmission._
 
-class RetrieveUkPropertyBusinessAnnualSummaryRequestParserRequestParserSpec extends UnitSpec {
+class RetrieveHistoricFhlUkPropertyAnnualSubmissionRequestParserRequestParserSpec extends UnitSpec {
 
   val nino: String = "AA123456B"
   val taxYear: String = "2021-22"
   implicit val correlationId: String = "X-12345"
 
-  val inputData: RetrieveUkPropertyBusinessAnnualSummaryRawData =
-    RetrieveUkPropertyBusinessAnnualSummaryRawData(nino, taxYear)
+  val inputData: RetrieveHistoricFhlUkPropertyAnnualSubmissionRawData =
+    RetrieveHistoricFhlUkPropertyAnnualSubmissionRawData(nino, taxYear)
 
   trait Test extends MockRetrieveUkPropertyBusinessAnnualSummaryValidator {
-    lazy val parser = new RetrieveUkPropertyBusinessAnnualSummaryRequestParser(mockValidator)
+    lazy val parser = new RetrieveHistoricFhlUkPropertyAnnualSubmissionRequestParser(mockValidator)
   }
 
   "parse" should {
@@ -40,7 +40,7 @@ class RetrieveUkPropertyBusinessAnnualSummaryRequestParserRequestParserSpec exte
       "valid request data is supplied" in new Test {
         MockRetrieveUkPropertyBusinessAnnualSummaryValidator.validate(inputData).returns(Nil)
 
-        parser.parseRequest(inputData) shouldBe Right(RetrieveUkPropertyBusinessAnnualSummaryRequest(Nino(nino), taxYear))
+        parser.parseRequest(inputData) shouldBe Right(RetrieveHistoricFhlUkPropertyAnnualSubmissionRequest(Nino(nino), taxYear))
       }
     }
 

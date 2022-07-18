@@ -18,21 +18,21 @@ package v2.mocks.validators
 
 import org.scalamock.handlers.CallHandler1
 import org.scalamock.scalatest.MockFactory
-import v2.controllers.requestParsers.validators.RetrieveUkPropertyBusinessAnnualSummaryValidator
+import v2.controllers.requestParsers.validators.RetrieveHistoricFhlUkPropertyAnnualSubmissionValidator
 import v2.models.errors.MtdError
-import v2.models.request.retrieveUkPropertyBusinessAnnualSummary.RetrieveUkPropertyBusinessAnnualSummaryRawData
+import v2.models.request.RetrieveHistoricFhlUkPropertyAnnualSubmission.RetrieveHistoricFhlUkPropertyAnnualSubmissionRawData
 
-class MockRetrieveUkPropertyBusinessAnnualSummaryValidator extends MockFactory {
+class MockRetrieveHistoricFhlUkPropertyAnnualSubmissionValidator extends MockFactory {
 
-  val mockValidator: RetrieveUkPropertyBusinessAnnualSummaryValidator = mock[RetrieveUkPropertyBusinessAnnualSummaryValidator]
+  val mockValidator: RetrieveHistoricFhlUkPropertyAnnualSubmissionValidator = mock[RetrieveHistoricFhlUkPropertyAnnualSubmissionValidator]
 
-  object MockRetrieveUkPropertyBusinessAnnualSummaryValidator {
+  object MockRetrieveHistoricFhlUkPropertyAnnualSubmissionValidator {
 
-    def validate(data: RetrieveUkPropertyBusinessAnnualSummaryRawData): CallHandler1[RetrieveUkPropertyBusinessAnnualSummaryRawData, List[MtdError]] = {
+    def validate(data: RetrieveHistoricFhlUkPropertyAnnualSubmissionRawData):
+      CallHandler1[RetrieveHistoricFhlUkPropertyAnnualSubmissionRawData, List[MtdError]] = {
       (mockValidator
-        .validate(_: RetrieveUkPropertyBusinessAnnualSummaryRawData))
+        .validate(_: RetrieveHistoricFhlUkPropertyAnnualSubmissionRawData))
         .expects(data)
     }
   }
-
 }

@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-package v2.models.request.retrieveUkPropertyBusinessAnnualSummary
+package v2.models.request.RetrieveHistoricFhlUkPropertyAnnualSubmission
 
-import v2.models.request.RawData
+import v2.models.domain.Nino
 
-case class RetrieveUkPropertyBusinessAnnualSummaryRawData(nino: String, taxYear: String) extends RawData
+case class RetrieveHistoricFhlUkPropertyAnnualSubmissionRequest(nino: Nino, taxYear: String)

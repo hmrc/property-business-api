@@ -66,6 +66,8 @@ object RuleBothAllowancesSuppliedError
   extends MtdError("RULE_BOTH_ALLOWANCES_SUPPLIED", "Both allowances and property allowances must not be present at the same time")
 object RuleTaxYearNotSupportedError
   extends MtdError("RULE_TAX_YEAR_NOT_SUPPORTED", "The specified tax year is not supported. The tax year specified is before the minimum tax year value")
+object RuleHistoricTaxYearNotSupportedError
+  extends MtdError("RULE_TAX_YEAR_NOT_SUPPORTED", "The tax year specified does not lie within the supported range")
 object RuleTaxYearRangeInvalidError
   extends MtdError("RULE_TAX_YEAR_RANGE_INVALID", "Tax year range invalid. A tax year range of one year is required")
 object RulePropertyIncomeAllowanceError

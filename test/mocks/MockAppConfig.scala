@@ -46,5 +46,8 @@ trait MockAppConfig extends MockFactory {
 
     def minimumTaxV2Foreign: CallHandler[Int] = (mockAppConfig.minimumTaxV2Foreign _).expects()
     def minimumTaxV2Uk: CallHandler[Int]      = (mockAppConfig.minimumTaxV2Uk _).expects()
+
+    def minimumTaxHistoricFHL: CallHandler[Int] = (mockAppConfig.minimumTaxHistoricFHL _).expects()
+    def maximumTaxHistoricFHL: CallHandler[Int] = (mockAppConfig.maximumTaxHistoricFHL _).expects()
   }
 }

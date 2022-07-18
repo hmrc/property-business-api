@@ -40,6 +40,9 @@ trait AppConfig {
 
   def minimumTaxV2Foreign: Int
   def minimumTaxV2Uk: Int
+
+  def minimumTaxHistoricFHL: Int
+  def maximumTaxHistoricFHL: Int
 }
 
 @Singleton
@@ -63,6 +66,9 @@ class AppConfigImpl @Inject()(config: ServicesConfig, configuration: Configurati
 
   val minimumTaxV2Foreign: Int = config.getInt("minimum-tax-year.version-2.foreign")
   val minimumTaxV2Uk: Int      = config.getInt("minimum-tax-year.version-2.uk")
+
+  val minimumTaxHistoricFHL: Int = config.getInt("minimum-tax-year.version-2.historic")
+  val maximumTaxHistoricFHL: Int = config.getInt("maximum-tax-year.version-2.historic")
 }
 
 case class ConfidenceLevelConfig(definitionEnabled: Boolean, authValidationEnabled: Boolean)

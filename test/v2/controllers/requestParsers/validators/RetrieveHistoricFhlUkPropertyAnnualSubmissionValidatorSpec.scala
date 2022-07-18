@@ -26,7 +26,8 @@ class RetrieveHistoricFhlUkPropertyAnnualSubmissionValidatorSpec extends UnitSpe
   private val validNino       = "AA123456A"
   private val validTaxYear    = "2021-22"
 
-  MockAppConfig.minimumTaxV2Uk returns 2021
+  MockAppConfig.minimumTaxHistoricFHL returns 2017
+  MockAppConfig.maximumTaxHistoricFHL returns 2021
 
   private val validator = new RetrieveHistoricFhlUkPropertyAnnualSubmissionValidator(mockAppConfig)
 
@@ -44,8 +45,12 @@ class RetrieveHistoricFhlUkPropertyAnnualSubmissionValidatorSpec extends UnitSpe
         validator.validate(RetrieveHistoricFhlUkPropertyAnnualSubmissionRawData(validNino, "2021/22")) shouldBe List(TaxYearFormatError)
       }
       "an unsupported taxYear is supplied" in {
-        validator.validate(RetrieveHistoricFhlUkPropertyAnnualSubmissionRawData(validNino, "2019-20")) shouldBe List(
-          RuleTaxYearNotSupportedError)
+        validator.validate(RetrieveHistoricFhlUkPropertyAnnualSubmissionRawData(validNino, "2016-17")) shouldBe List(
+          RuleHistoricTaxYearNotSupportedError)
+      }
+      "an unsupported historic taxYear is supplied" in {
+        validator.validate(RetrieveHistoricFhlUkPropertyAnnualSubmissionRawData(validNino, "2022-23")) shouldBe List(
+          RuleHistoricTaxYearNotSupportedError)
       }
       "an invalid taxYear range is supplied" in {
         validator.validate(RetrieveHistoricFhlUkPropertyAnnualSubmissionRawData(validNino, "2021-23")) shouldBe List(

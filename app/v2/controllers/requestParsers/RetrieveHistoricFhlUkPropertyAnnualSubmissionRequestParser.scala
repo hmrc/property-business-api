@@ -19,7 +19,7 @@ package v2.controllers.requestParsers
 import javax.inject.Inject
 import v2.controllers.requestParsers.validators.RetrieveHistoricFhlUkPropertyAnnualSubmissionValidator
 import v2.models.domain.Nino
-import v2.models.request.RetrieveHistoricFhlUkPropertyAnnualSubmission._
+import v2.models.request.retrieveHistoricFhlUkPropertyAnnualSubmission._
 
 class RetrieveHistoricFhlUkPropertyAnnualSubmissionRequestParser @Inject()(val validator: RetrieveHistoricFhlUkPropertyAnnualSubmissionValidator)
   extends RequestParser[RetrieveHistoricFhlUkPropertyAnnualSubmissionRawData, RetrieveHistoricFhlUkPropertyAnnualSubmissionRequest] {

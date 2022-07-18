@@ -17,10 +17,10 @@
 package v2.controllers.requestParsers
 
 import support.UnitSpec
-import v2.mocks.validators.MockRetrieveUkPropertyBusinessAnnualSummaryValidator
+import v2.mocks.validators.MockRetrieveHistoricFhlUkPropertyAnnualSubmissionValidator
 import v2.models.domain.Nino
 import v2.models.errors.{BadRequestError, ErrorWrapper, NinoFormatError, TaxYearFormatError}
-import v2.models.request.RetrieveHistoricFhlUkPropertyAnnualSubmission._
+import v2.models.request.retrieveHistoricFhlUkPropertyAnnualSubmission._
 
 class RetrieveHistoricFhlUkPropertyAnnualSubmissionRequestParserRequestParserSpec extends UnitSpec {
 
@@ -31,14 +31,14 @@ class RetrieveHistoricFhlUkPropertyAnnualSubmissionRequestParserRequestParserSpe
   val inputData: RetrieveHistoricFhlUkPropertyAnnualSubmissionRawData =
     RetrieveHistoricFhlUkPropertyAnnualSubmissionRawData(nino, taxYear)
 
-  trait Test extends MockRetrieveUkPropertyBusinessAnnualSummaryValidator {
+  trait Test extends MockRetrieveHistoricFhlUkPropertyAnnualSubmissionValidator {
     lazy val parser = new RetrieveHistoricFhlUkPropertyAnnualSubmissionRequestParser(mockValidator)
   }
 
   "parse" should {
     "return a request object" when {
       "valid request data is supplied" in new Test {
-        MockRetrieveUkPropertyBusinessAnnualSummaryValidator.validate(inputData).returns(Nil)
+        MockRetrieveHistoricFhlUkPropertyAnnualSubmissionValidator.validate(inputData).returns(Nil)
 
         parser.parseRequest(inputData) shouldBe Right(RetrieveHistoricFhlUkPropertyAnnualSubmissionRequest(Nino(nino), taxYear))
       }
@@ -46,7 +46,7 @@ class RetrieveHistoricFhlUkPropertyAnnualSubmissionRequestParserRequestParserSpe
 
     "return an ErrorWrapper" when {
       "a single validation error occurs" in new Test {
-        MockRetrieveUkPropertyBusinessAnnualSummaryValidator.validate(inputData)
+        MockRetrieveHistoricFhlUkPropertyAnnualSubmissionValidator.validate(inputData)
           .returns(List(NinoFormatError))
 
         parser.parseRequest(inputData) shouldBe
@@ -54,7 +54,7 @@ class RetrieveHistoricFhlUkPropertyAnnualSubmissionRequestParserRequestParserSpe
       }
 
       "multiple validation errors occur" in new Test {
-        MockRetrieveUkPropertyBusinessAnnualSummaryValidator.validate(inputData)
+        MockRetrieveHistoricFhlUkPropertyAnnualSubmissionValidator.validate(inputData)
           .returns(List(NinoFormatError, TaxYearFormatError))
 
         parser.parseRequest(inputData) shouldBe

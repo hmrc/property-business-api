@@ -54,8 +54,8 @@ class ListPropertyPeriodSummariesService @Inject()(connector: ListPropertyPeriod
       "INVALID_TAX_YEAR" -> TaxYearFormatError,
       "NO_DATA_FOUND" -> NotFoundError,
       "TAX_YEAR_NOT_SUPPORTED" -> RuleTaxYearNotSupportedError,
-      "INVALID_CORRELATIONID" -> DownstreamError,
-      "SERVER_ERROR" -> DownstreamError,
-      "SERVICE_UNAVAILABLE" -> DownstreamError
+      "INVALID_CORRELATIONID" -> DownstreamMtdError,
+      "SERVER_ERROR" -> DownstreamMtdError,
+      "SERVICE_UNAVAILABLE" -> DownstreamMtdError
     )
 }

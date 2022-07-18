@@ -54,17 +54,17 @@ class CreateUkPropertyPeriodSummaryService @Inject()(connector: CreateUkProperty
       "INVALID_TAX_YEAR" -> TaxYearFormatError,
       "TAX_YEAR_NOT_SUPPORTED" -> RuleTaxYearNotSupportedError,
       "INCOMPATIBLE_PAYLOAD" -> RuleTypeOfBusinessIncorrectError,
-      "INVALID_PAYLOAD" -> DownstreamError,
-      "INVALID_CORRELATIONID" -> DownstreamError,
+      "INVALID_PAYLOAD" -> DownstreamMtdError,
+      "INVALID_CORRELATIONID" -> DownstreamMtdError,
       "INCOME_SOURCE_NOT_FOUND" -> NotFoundError,
       "DUPLICATE_SUBMISSION" -> RuleDuplicateSubmissionError,
       "NOT_ALIGN_PERIOD" -> RuleMisalignedPeriodError,
       "OVERLAPS_IN_PERIOD" -> RuleOverlappingPeriodError,
       "GAPS_IN_PERIOD" -> RuleNotContiguousPeriodError,
       "INVALID_DATE_RANGE" -> RuleToDateBeforeFromDateError,
-      "MISSING_EXPENSES" -> DownstreamError,
-      "SERVER_ERROR" -> DownstreamError,
-      "SERVICE_UNAVAILABLE" -> DownstreamError
+      "MISSING_EXPENSES" -> DownstreamMtdError,
+      "SERVER_ERROR" -> DownstreamMtdError,
+      "SERVICE_UNAVAILABLE" -> DownstreamMtdError
     )
 
 }

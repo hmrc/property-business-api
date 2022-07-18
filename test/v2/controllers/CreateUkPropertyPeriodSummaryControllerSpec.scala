@@ -402,7 +402,7 @@ class CreateUkPropertyPeriodSummaryControllerSpec
           (RuleBothExpensesSuppliedError, BAD_REQUEST),
           (RuleToDateBeforeFromDateError, BAD_REQUEST),
           (RuleIncorrectOrEmptyBodyError, BAD_REQUEST),
-          (DownstreamError, INTERNAL_SERVER_ERROR)
+          (DownstreamMtdError, INTERNAL_SERVER_ERROR)
         )
 
         input.foreach(args => (errorsFromParserTester _).tupled(args))
@@ -438,7 +438,7 @@ class CreateUkPropertyPeriodSummaryControllerSpec
           (RuleTypeOfBusinessIncorrectError, BAD_REQUEST),
           (BusinessIdFormatError, BAD_REQUEST),
           (NotFoundError, NOT_FOUND),
-          (DownstreamError, INTERNAL_SERVER_ERROR),
+          (DownstreamMtdError, INTERNAL_SERVER_ERROR),
           (RuleOverlappingPeriodError, BAD_REQUEST),
           (RuleMisalignedPeriodError, BAD_REQUEST),
           (RuleNotContiguousPeriodError, BAD_REQUEST),

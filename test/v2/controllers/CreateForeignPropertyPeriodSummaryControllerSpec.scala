@@ -183,7 +183,7 @@ class CreateForeignPropertyPeriodSummaryControllerSpec
           (RuleCountryCodeError.copy(paths = paths), BAD_REQUEST),
           (RuleDuplicateCountryCodeError.copy(paths = paths), BAD_REQUEST),
           (BadRequestError, BAD_REQUEST),
-          (DownstreamError, INTERNAL_SERVER_ERROR)
+          (DownstreamMtdError, INTERNAL_SERVER_ERROR)
         )
 
         input.foreach(args => (errorsFromParserTester _).tupled(args))
@@ -218,7 +218,7 @@ class CreateForeignPropertyPeriodSummaryControllerSpec
           (BusinessIdFormatError, BAD_REQUEST),
           (TaxYearFormatError, BAD_REQUEST),
           (NotFoundError, NOT_FOUND),
-          (DownstreamError, INTERNAL_SERVER_ERROR),
+          (DownstreamMtdError, INTERNAL_SERVER_ERROR),
           (RuleDuplicateSubmissionError, BAD_REQUEST),
           (RuleMisalignedPeriodError, BAD_REQUEST),
           (RuleOverlappingPeriodError, BAD_REQUEST),

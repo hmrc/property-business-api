@@ -52,15 +52,15 @@ class AmendForeignPropertyPeriodSummaryService @Inject()(connector: AmendForeign
       "INVALID_TAX_YEAR" -> TaxYearFormatError,
       "INVALID_INCOMESOURCEID" -> BusinessIdFormatError,
       "INVALID_SUBMISSION_ID" -> SubmissionIdFormatError,
-      "INVALID_PAYLOAD" -> DownstreamError,
-      "INVALID_CORRELATIONID" -> DownstreamError,
+      "INVALID_PAYLOAD" -> DownstreamMtdError,
+      "INVALID_CORRELATIONID" -> DownstreamMtdError,
       "NO_DATA_FOUND" -> NotFoundError,
       "INCOMPATIBLE_PAYLOAD" -> RuleTypeOfBusinessIncorrectError,
       "TAX_YEAR_NOT_SUPPORTED" -> RuleTaxYearNotSupportedError,
-      "MISSING_EXPENSES" -> DownstreamError,
-      "BUSINESS_VALIDATION_FAILURE" -> DownstreamError,
+      "MISSING_EXPENSES" -> DownstreamMtdError,
+      "BUSINESS_VALIDATION_FAILURE" -> DownstreamMtdError,
       "DUPLICATE_COUNTRY_CODE" -> RuleDuplicateCountryCodeError,
-      "SERVER_ERROR" -> DownstreamError,
-      "SERVICE_UNAVAILABLE" -> DownstreamError
+      "SERVER_ERROR" -> DownstreamMtdError,
+      "SERVICE_UNAVAILABLE" -> DownstreamMtdError
     )
 }

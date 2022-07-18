@@ -123,7 +123,7 @@ class RetrieveForeignPropertyPeriodSummaryServiceSpec extends UnitSpec {
         s"a $ifsErrorCode error is returned from the service" in new Test {
 
           MockRetrieveForeignPropertyConnector.retrieveForeignProperty(requestData)
-            .returns(Future.successful(Left(ResponseWrapper(correlationId, IfsErrors.single(IfsErrorCode(ifsErrorCode))))))
+            .returns(Future.successful(Left(ResponseWrapper(correlationId, DownstreamErrors.single(DownstreamErrorCode(ifsErrorCode))))))
 
           await(service.retrieveForeignProperty(requestData)) shouldBe Left(ErrorWrapper(correlationId, error))
         }
@@ -133,11 +133,11 @@ class RetrieveForeignPropertyPeriodSummaryServiceSpec extends UnitSpec {
         "INVALID_TAX_YEAR" -> TaxYearFormatError,
         "INVALID_INCOMESOURCEID" -> BusinessIdFormatError,
         "INVALID_SUBMISSION_ID" -> SubmissionIdFormatError,
-        "INVALID_CORRELATIONID" -> DownstreamError,
+        "INVALID_CORRELATIONID" -> DownstreamMtdError,
         "NO_DATA_FOUND" -> NotFoundError,
         "TAX_YEAR_NOT_SUPPORTED" -> RuleTaxYearNotSupportedError,
-        "SERVER_ERROR" -> DownstreamError,
-        "SERVICE_UNAVAILABLE" -> DownstreamError,
+        "SERVER_ERROR" -> DownstreamMtdError,
+        "SERVICE_UNAVAILABLE" -> DownstreamMtdError,
       )
 
       input.foreach(args => (serviceError _).tupled(args))

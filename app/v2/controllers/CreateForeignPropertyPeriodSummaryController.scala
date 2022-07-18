@@ -111,7 +111,7 @@ class CreateForeignPropertyPeriodSummaryController @Inject()(val authService: En
           MtdErrorWithCode(RuleCountryCodeError.code) | MtdErrorWithCode(RuleDuplicateCountryCodeError.code) | RuleTypeOfBusinessIncorrectError =>
         BadRequest(Json.toJson(errorWrapper))
       case NotFoundError   => NotFound(Json.toJson(errorWrapper))
-      case DownstreamError => InternalServerError(Json.toJson(errorWrapper))
+      case DownstreamMtdError => InternalServerError(Json.toJson(errorWrapper))
       case _ => unhandledError(errorWrapper)
     }
 

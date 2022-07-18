@@ -125,7 +125,7 @@ class AmendUkPropertyPeriodSummaryServiceSpec extends ServiceSpec {
 
             MockAmendUkPropertyPeriodSummaryConnector
               .amendUkPropertyPeriodSummary(request)
-              .returns(Future.successful(Left(ResponseWrapper(correlationId, IfsErrors.single(IfsErrorCode(ifsErrorCode))))))
+              .returns(Future.successful(Left(ResponseWrapper(correlationId, DownstreamErrors.single(DownstreamErrorCode(ifsErrorCode))))))
 
             await(service.amendUkPropertyPeriodSummary(request)) shouldBe Left(ErrorWrapper(correlationId, expectError))
           }
@@ -135,16 +135,16 @@ class AmendUkPropertyPeriodSummaryServiceSpec extends ServiceSpec {
           "INVALID_TAX_YEAR" -> TaxYearFormatError,
           "INVALID_INCOMESOURCEID" -> BusinessIdFormatError,
           "INVALID_SUBMISSION_ID" -> SubmissionIdFormatError,
-          "INVALID_PAYLOAD" -> DownstreamError,
-          "INVALID_CORRELATIONID" -> DownstreamError,
+          "INVALID_PAYLOAD" -> DownstreamMtdError,
+          "INVALID_CORRELATIONID" -> DownstreamMtdError,
           "NO_DATA_FOUND" -> NotFoundError,
           "INCOMPATIBLE_PAYLOAD" -> RuleTypeOfBusinessIncorrectError,
           "TAX_YEAR_NOT_SUPPORTED" -> RuleTaxYearNotSupportedError,
-          "BUSINESS_VALIDATION_FAILURE" -> DownstreamError,
-          "DUPLICATE_COUNTRY_CODE" -> DownstreamError,
-          "MISSING_EXPENSES" -> DownstreamError,
-          "SERVER_ERROR" -> DownstreamError,
-          "SERVICE_UNAVAILABLE" -> DownstreamError
+          "BUSINESS_VALIDATION_FAILURE" -> DownstreamMtdError,
+          "DUPLICATE_COUNTRY_CODE" -> DownstreamMtdError,
+          "MISSING_EXPENSES" -> DownstreamMtdError,
+          "SERVER_ERROR" -> DownstreamMtdError,
+          "SERVICE_UNAVAILABLE" -> DownstreamMtdError
         )
 
         input.foreach(args => (serviceError _).tupled(args))

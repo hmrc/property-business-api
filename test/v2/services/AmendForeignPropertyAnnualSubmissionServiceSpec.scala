@@ -75,7 +75,7 @@ class AmendForeignPropertyAnnualSubmissionServiceSpec extends UnitSpec {
         s"a $ifsErrorCode error is returned from the service" in new Test {
 
           MockAmendForeignPropertyAnnualSubmissionConnector.amendForeignProperty(request)
-            .returns(Future.successful(Left(ResponseWrapper(correlationId, IfsErrors.single(IfsErrorCode(ifsErrorCode))))))
+            .returns(Future.successful(Left(ResponseWrapper(correlationId, DownstreamErrors.single(DownstreamErrorCode(ifsErrorCode))))))
 
           await(service.amendForeignPropertyAnnualSubmission(request)) shouldBe Left(ErrorWrapper(correlationId, error))
         }
@@ -88,12 +88,12 @@ class AmendForeignPropertyAnnualSubmissionServiceSpec extends UnitSpec {
         "TAX_YEAR_NOT_SUPPORTED" -> RuleTaxYearNotSupportedError,
         "BUSINESS_VALIDATION_FAILURE" -> RulePropertyIncomeAllowanceError,
         "INCOME_SOURCE_NOT_FOUND" -> NotFoundError,
-        "MISSING_ALLOWANCES" -> DownstreamError,
-        "INVALID_PAYLOAD" -> DownstreamError,
-        "INVALID_CORRELATIONID" -> DownstreamError,
+        "MISSING_ALLOWANCES" -> DownstreamMtdError,
+        "INVALID_PAYLOAD" -> DownstreamMtdError,
+        "INVALID_CORRELATIONID" -> DownstreamMtdError,
         "DUPLICATE_COUNTRY_CODE" -> RuleDuplicateCountryCodeError,
-        "SERVER_ERROR" -> DownstreamError,
-        "SERVICE_UNAVAILABLE" -> DownstreamError
+        "SERVER_ERROR" -> DownstreamMtdError,
+        "SERVICE_UNAVAILABLE" -> DownstreamMtdError
       )
 
       input.foreach(args => (serviceError _).tupled(args))

@@ -24,26 +24,26 @@ import v2.models.outcomes.ResponseWrapper
 trait IfsResponseMappingSupport {
   self: Logging =>
 
-  final def mapIfsErrors[D](errorCodeMap: PartialFunction[String, MtdError])(ifsResponseWrapper: ResponseWrapper[IfsError])(
+  final def mapIfsErrors[D](errorCodeMap: PartialFunction[String, MtdError])(ifsResponseWrapper: ResponseWrapper[DownstreamError])(
     implicit logContext: EndpointLogContext): ErrorWrapper = {
 
     lazy val defaultErrorCodeMapping: String => MtdError = { code =>
       logger.warn(s"[${logContext.controllerName}] [${logContext.endpointName}] - No mapping found for error code $code")
-      DownstreamError
+      DownstreamMtdError
     }
 
     ifsResponseWrapper match {
-      case ResponseWrapper(correlationId, IfsErrors(error :: Nil)) =>
+      case ResponseWrapper(correlationId, DownstreamErrors(error :: Nil)) =>
         ErrorWrapper(correlationId, errorCodeMap.applyOrElse(error.code, defaultErrorCodeMapping), None)
 
-      case ResponseWrapper(correlationId, IfsErrors(errorCodes)) =>
+      case ResponseWrapper(correlationId, DownstreamErrors(errorCodes)) =>
         val mtdErrors = errorCodes.map(error => errorCodeMap.applyOrElse(error.code, defaultErrorCodeMapping))
 
-        if (mtdErrors.contains(DownstreamError)) {
+        if (mtdErrors.contains(DownstreamMtdError)) {
           logger.warn(
             s"[${logContext.controllerName}] [${logContext.endpointName}] [CorrelationId - $correlationId]" +
               s" - downstream returned ${errorCodes.map(_.code).mkString(",")}. Revert to ISE")
-          ErrorWrapper(correlationId, DownstreamError, None)
+          ErrorWrapper(correlationId, DownstreamMtdError, None)
         } else {
           ErrorWrapper(correlationId, BadRequestError, Some(mtdErrors))
         }

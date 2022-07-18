@@ -16,22 +16,23 @@
 
 package v2.models.errors
 
-import play.api.libs.json.{Json, Reads}
+import play.api.libs.json.Json
+import support.UnitSpec
 
-case class IfsErrorCode(code: String) {
-  def toMtd: MtdError = MtdError(code = code, message = "")
+class DownstreamMtdErrorCodeSpec extends UnitSpec {
+
+  "reads" should {
+    val json = Json.parse(
+      """
+        |{
+        |   "code": "CODE",
+        |   "reason": "ignored"
+        |}
+      """.stripMargin
+    )
+
+    "generate the correct error code" in {
+      json.as[DownstreamErrorCode] shouldBe DownstreamErrorCode("CODE")
+    }
+  }
 }
-
-object IfsErrorCode {
-  implicit val reads: Reads[IfsErrorCode] = Json.reads[IfsErrorCode]
-}
-
-sealed trait IfsError
-
-case class IfsErrors(errors: List[IfsErrorCode]) extends IfsError
-
-object IfsErrors {
-  def single(error: IfsErrorCode): IfsErrors = IfsErrors(List(error))
-}
-
-case class OutboundError(error: MtdError, errors: Option[Seq[MtdError]] = None) extends IfsError

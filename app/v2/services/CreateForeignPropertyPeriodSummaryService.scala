@@ -58,15 +58,15 @@ class CreateForeignPropertyPeriodSummaryService @Inject()(connector: CreateForei
       "NOT_ALIGN_PERIOD" -> RuleMisalignedPeriodError,
       "GAPS_IN_PERIOD" -> RuleNotContiguousPeriodError,
       "INCOME_SOURCE_NOT_FOUND" -> NotFoundError,
-      "SERVER_ERROR" -> DownstreamError,
-      "SERVICE_UNAVAILABLE" -> DownstreamError,
-      "INVALID_PAYLOAD" -> DownstreamError,
-      "INVALID_CORRELATIONID" -> DownstreamError,
+      "SERVER_ERROR" -> DownstreamMtdError,
+      "SERVICE_UNAVAILABLE" -> DownstreamMtdError,
+      "INVALID_PAYLOAD" -> DownstreamMtdError,
+      "INVALID_CORRELATIONID" -> DownstreamMtdError,
       "DUPLICATE_SUBMISSION" -> RuleDuplicateSubmissionError,
       "INVALID_DATE_RANGE" -> RuleToDateBeforeFromDateError,
       "INCOMPATIBLE_PAYLOAD" -> RuleTypeOfBusinessIncorrectError,
       "TAX_YEAR_NOT_SUPPORTED" -> RuleTaxYearNotSupportedError,
-      "MISSING_EXPENSES" -> DownstreamError
+      "MISSING_EXPENSES" -> DownstreamMtdError
     )
 
 }

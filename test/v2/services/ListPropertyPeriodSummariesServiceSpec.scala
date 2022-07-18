@@ -70,7 +70,7 @@ class ListPropertyPeriodSummariesServiceSpec extends UnitSpec {
         s"a $ifsErrorCode error is returned from the service" in new Test {
 
           MockListPropertyPeriodSummariesConnector.listPeriodSummaries(request)
-            .returns(Future.successful(Left(ResponseWrapper(correlationId, IfsErrors.single(IfsErrorCode(ifsErrorCode))))))
+            .returns(Future.successful(Left(ResponseWrapper(correlationId, DownstreamErrors.single(DownstreamErrorCode(ifsErrorCode))))))
 
           await(service.listPeriodSummaries(request)) shouldBe Left(ErrorWrapper(correlationId, error))
         }
@@ -79,11 +79,11 @@ class ListPropertyPeriodSummariesServiceSpec extends UnitSpec {
         "INVALID_TAXABLE_ENTITY_ID" -> NinoFormatError,
         "INVALID_INCOMESOURCEID" -> BusinessIdFormatError,
         "INVALID_TAX_YEAR" -> TaxYearFormatError,
-        "INVALID_CORRELATIONID" -> DownstreamError,
+        "INVALID_CORRELATIONID" -> DownstreamMtdError,
         "NO_DATA_FOUND" -> NotFoundError,
         "TAX_YEAR_NOT_SUPPORTED" -> RuleTaxYearNotSupportedError,
-        "SERVER_ERROR" -> DownstreamError,
-        "SERVICE_UNAVAILABLE" -> DownstreamError
+        "SERVER_ERROR" -> DownstreamMtdError,
+        "SERVICE_UNAVAILABLE" -> DownstreamMtdError
       )
 
       input.foreach(args => (serviceError _).tupled(args))

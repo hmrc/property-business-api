@@ -78,7 +78,7 @@ class RetrieveUkPropertyPeriodSummaryServiceSpec extends UnitSpec with ResponseM
         s"a $ifsErrorCode error is returned from the service" in new Test {
 
           MockRetrieveUkPropertyConnector.retrieveUkProperty(requestData)
-            .returns(Future.successful(Left(ResponseWrapper(correlationId, IfsErrors.single(IfsErrorCode(ifsErrorCode))))))
+            .returns(Future.successful(Left(ResponseWrapper(correlationId, DownstreamErrors.single(DownstreamErrorCode(ifsErrorCode))))))
 
           await(service.retrieveUkProperty(requestData)) shouldBe Left(ErrorWrapper(correlationId, error))
         }
@@ -90,9 +90,9 @@ class RetrieveUkPropertyPeriodSummaryServiceSpec extends UnitSpec with ResponseM
         "INVALID_SUBMISSION_ID" -> SubmissionIdFormatError,
         "TAX_YEAR_NOT_SUPPORTED" -> RuleTaxYearNotSupportedError,
         "NO_DATA_FOUND" -> NotFoundError,
-        "SERVER_ERROR" -> DownstreamError,
-        "SERVICE_UNAVAILABLE" -> DownstreamError,
-        "INVALID_CORRELATIONID" -> DownstreamError
+        "SERVER_ERROR" -> DownstreamMtdError,
+        "SERVICE_UNAVAILABLE" -> DownstreamMtdError,
+        "INVALID_CORRELATIONID" -> DownstreamMtdError
       )
 
       input.foreach(args => (serviceError _).tupled(args))

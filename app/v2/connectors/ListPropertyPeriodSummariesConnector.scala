@@ -17,8 +17,10 @@
 package v2.connectors
 
 import config.AppConfig
+
 import javax.inject.{Inject, Singleton}
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
+import v2.connectors.DownstreamUri.IfsUri
 import v2.connectors.httpparsers.StandardIfsHttpParser._
 import v2.models.request.listPropertyPeriodSummaries.ListPropertyPeriodSummariesRequest
 import v2.models.response.listPropertyPeriodSummaries.ListPropertyPeriodSummariesResponse
@@ -27,12 +29,12 @@ import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class ListPropertyPeriodSummariesConnector @Inject()(val http: HttpClient,
-                                                       val appConfig: AppConfig) extends BaseIfsConnector {
+                                                       val appConfig: AppConfig) extends BaseDownstreamConnector {
 
   def listPeriodSummaries(request: ListPropertyPeriodSummariesRequest)(
     implicit hc: HeaderCarrier,
     ec: ExecutionContext,
-    correlationId: String): Future[IfsOutcome[ListPropertyPeriodSummariesResponse]] = {
+    correlationId: String): Future[DownstreamOutcome[ListPropertyPeriodSummariesResponse]] = {
 
     val url = s"income-tax/business/property/${request.nino.nino}/${request.businessId}/period"
 

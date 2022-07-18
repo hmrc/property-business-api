@@ -19,7 +19,7 @@ package v2.mocks.connectors
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
 import uk.gov.hmrc.http.HeaderCarrier
-import v2.connectors.{IfsOutcome, ListPropertyPeriodSummariesConnector}
+import v2.connectors.{DownstreamOutcome, ListPropertyPeriodSummariesConnector}
 import v2.models.request.listPropertyPeriodSummaries.ListPropertyPeriodSummariesRequest
 import v2.models.response.listPropertyPeriodSummaries.ListPropertyPeriodSummariesResponse
 
@@ -32,7 +32,7 @@ trait MockListPropertyPeriodSummariesConnector extends MockFactory {
   object MockListPropertyPeriodSummariesConnector {
 
     def listPeriodSummaries(requestData: ListPropertyPeriodSummariesRequest):
-    CallHandler[Future[IfsOutcome[ListPropertyPeriodSummariesResponse]]] = {
+    CallHandler[Future[DownstreamOutcome[ListPropertyPeriodSummariesResponse]]] = {
       (mockListPropertyPeriodSummariesConnector
         .listPeriodSummaries(_: ListPropertyPeriodSummariesRequest)(_: HeaderCarrier, _: ExecutionContext, _: String))
         .expects(requestData, *, *, *)

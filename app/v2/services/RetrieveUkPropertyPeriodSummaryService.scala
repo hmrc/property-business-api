@@ -57,9 +57,9 @@ class RetrieveUkPropertyPeriodSummaryService @Inject()(connector: RetrieveUkProp
       "INVALID_SUBMISSION_ID" -> SubmissionIdFormatError,
       "TAX_YEAR_NOT_SUPPORTED" -> RuleTaxYearNotSupportedError,
       "NO_DATA_FOUND" -> NotFoundError,
-      "SERVER_ERROR" -> DownstreamError,
-      "SERVICE_UNAVAILABLE" -> DownstreamError,
-      "INVALID_CORRELATIONID" -> DownstreamError
+      "SERVER_ERROR" -> DownstreamMtdError,
+      "SERVICE_UNAVAILABLE" -> DownstreamMtdError,
+      "INVALID_CORRELATIONID" -> DownstreamMtdError
     )
 
   private def validateBusinessType(resultWrapper: ResponseWrapper[connectors.RetrieveUkPropertyPeriodSummaryConnector.Result]) =

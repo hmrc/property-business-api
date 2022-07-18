@@ -20,7 +20,7 @@ import play.api.http.Status.{FORBIDDEN, OK, UNAUTHORIZED}
 import play.api.libs.json._
 import uk.gov.hmrc.http.{HttpReads, HttpResponse}
 import v2.connectors.MtdIdLookupOutcome
-import v2.models.errors.{DownstreamError, InvalidBearerTokenError, NinoFormatError}
+import v2.models.errors.{DownstreamMtdError, InvalidBearerTokenError, NinoFormatError}
 
 object MtdIdLookupHttpParser extends HttpParser {
 
@@ -30,11 +30,11 @@ object MtdIdLookupHttpParser extends HttpParser {
     response.status match {
       case OK => response.validateJson[String](mtdIdJsonReads) match {
         case Some(mtdId) => Right(mtdId)
-        case None => Left(DownstreamError)
+        case None => Left(DownstreamMtdError)
       }
       case FORBIDDEN => Left(NinoFormatError)
       case UNAUTHORIZED => Left(InvalidBearerTokenError)
-      case _ => Left(DownstreamError)
+      case _ => Left(DownstreamMtdError)
     }
   }
 }

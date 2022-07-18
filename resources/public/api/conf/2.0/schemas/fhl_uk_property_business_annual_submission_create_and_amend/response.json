@@ -28,9 +28,9 @@
             "description": "A label for the endpoint, which describes how it is related to the current resource. The rel will be self where the action is retrieval of the same resource.",
             "type": "string",
             "enum": [
-              "amend-uk-property-annual-submission",
-              "delete-property-annual-submission",
-              "self"
+              "create-and-amend-uk-property-historic-fhl-annual-submission",
+              "self",
+              "delete-uk-property-historic-fhl-annual-submission"
             ]
           }
         },

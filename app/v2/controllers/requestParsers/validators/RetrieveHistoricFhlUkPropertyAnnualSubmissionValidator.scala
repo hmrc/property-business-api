@@ -27,8 +27,8 @@ import v2.models.request.retrieveHistoricFhlUkPropertyAnnualSubmission.RetrieveH
 class RetrieveHistoricFhlUkPropertyAnnualSubmissionValidator @Inject()(appConfig: AppConfig) extends
   Validator[RetrieveHistoricFhlUkPropertyAnnualSubmissionRawData] {
 
-  private lazy val minTaxYear = appConfig.minimumTaxHistoricFHL
-  private lazy val maxTaxYear = appConfig.maximumTaxHistoricFHL
+  private lazy val minTaxYear = appConfig.minimumTaxHistoric
+  private lazy val maxTaxYear = appConfig.maximumTaxHistoric
   private val validationSet   = List(parameterFormatValidation)
 
   private def parameterFormatValidation: RetrieveHistoricFhlUkPropertyAnnualSubmissionRawData => List[List[MtdError]] =

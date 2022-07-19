@@ -25,14 +25,14 @@ import v2.controllers.EndpointLogContext
 import v2.models.errors._
 import v2.models.request.listPropertyPeriodSummaries.ListPropertyPeriodSummariesRequest
 import v2.models.response.listPropertyPeriodSummaries.ListPropertyPeriodSummariesResponse
-import v2.support.IfsResponseMappingSupport
+import v2.support.DownstreamResponseMappingSupport
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class ListPropertyPeriodSummariesService @Inject()(connector: ListPropertyPeriodSummariesConnector)
-  extends IfsResponseMappingSupport with Logging {
+  extends DownstreamResponseMappingSupport with Logging {
 
   def listPeriodSummaries(request: ListPropertyPeriodSummariesRequest)(
     implicit hc: HeaderCarrier,
@@ -41,7 +41,7 @@ class ListPropertyPeriodSummariesService @Inject()(connector: ListPropertyPeriod
     correlationId: String): Future[ServiceOutcome[ListPropertyPeriodSummariesResponse]] = {
 
     val result = for {
-      ifsResponseWrapper <- EitherT(connector.listPeriodSummaries(request)).leftMap(mapIfsErrors(ifsErrorMap))
+      ifsResponseWrapper <- EitherT(connector.listPeriodSummaries(request)).leftMap(mapDownstreamErrors(ifsErrorMap))
     } yield ifsResponseWrapper
 
     result.value

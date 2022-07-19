@@ -90,8 +90,8 @@ class RetrieveHistoricFhlUkPropertyAnnualSubmissionConnectorSpec extends Connect
   "connector" when {
     "request asks for a historic FHL UK property annual submission" must {
       "return a valid result" in new Test {
-        val response: RetrieveHistoricFhlUkPropertyAnnualSubmissionResponse = responseWith(Some(annualAdjustments), Some(annualAllowances))
-        val outcome                                                         = Right(ResponseWrapper(correlationId, response))
+        val response = responseWith(Some(annualAdjustments), Some(annualAllowances))
+        val outcome  = Right(ResponseWrapper(correlationId, response))
 
         stubHttpResponse(outcome)
 

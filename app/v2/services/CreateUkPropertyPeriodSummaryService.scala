@@ -26,13 +26,13 @@ import v2.controllers.EndpointLogContext
 import v2.models.errors._
 import v2.models.request.createUkPropertyPeriodSummary.CreateUkPropertyPeriodSummaryRequest
 import v2.models.response.createUkPropertyPeriodSummary.CreateUkPropertyPeriodSummaryResponse
-import v2.support.IfsResponseMappingSupport
+import v2.support.DownstreamResponseMappingSupport
 
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class CreateUkPropertyPeriodSummaryService @Inject()(connector: CreateUkPropertyPeriodSummaryConnector)
-  extends IfsResponseMappingSupport with Logging {
+  extends DownstreamResponseMappingSupport with Logging {
 
   def createUkProperty(request: CreateUkPropertyPeriodSummaryRequest)(
     implicit hc: HeaderCarrier,
@@ -41,7 +41,7 @@ class CreateUkPropertyPeriodSummaryService @Inject()(connector: CreateUkProperty
     correlationId: String): Future[ServiceOutcome[CreateUkPropertyPeriodSummaryResponse]] = {
 
     val result = for {
-      ifsResponseWrapper <- EitherT(connector.createUkProperty(request)).leftMap(mapIfsErrors(ifsErrorMap))
+      ifsResponseWrapper <- EitherT(connector.createUkProperty(request)).leftMap(mapDownstreamErrors(ifsErrorMap))
     } yield ifsResponseWrapper
 
     result.value

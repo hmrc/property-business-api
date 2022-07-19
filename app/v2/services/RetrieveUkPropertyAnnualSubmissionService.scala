@@ -27,14 +27,14 @@ import v2.models.errors._
 import v2.models.outcomes.ResponseWrapper
 import v2.models.request.retrieveUkPropertyAnnualSubmission.RetrieveUkPropertyAnnualSubmissionRequest
 import v2.models.response.retrieveUkPropertyAnnualSubmission.RetrieveUkPropertyAnnualSubmissionResponse
-import v2.support.IfsResponseMappingSupport
+import v2.support.DownstreamResponseMappingSupport
 
 import javax.inject.{ Inject, Singleton }
 import scala.concurrent.{ ExecutionContext, Future }
 
 @Singleton
 class RetrieveUkPropertyAnnualSubmissionService @Inject()(connector: RetrieveUkPropertyAnnualSubmissionConnector)
-    extends IfsResponseMappingSupport
+    extends DownstreamResponseMappingSupport
     with Logging {
 
   private val ifsErrorMap =
@@ -56,7 +56,7 @@ class RetrieveUkPropertyAnnualSubmissionService @Inject()(connector: RetrieveUkP
       correlationId: String): Future[ServiceOutcome[RetrieveUkPropertyAnnualSubmissionResponse]] = {
 
     val result = for {
-      connectorResultWrapper <- EitherT(connector.retrieveUkProperty(request)).leftMap(mapIfsErrors(ifsErrorMap))
+      connectorResultWrapper <- EitherT(connector.retrieveUkProperty(request)).leftMap(mapDownstreamErrors(ifsErrorMap))
       mtdResponseWrapper     <- EitherT.fromEither[Future](validateBusinessType(connectorResultWrapper))
     } yield mtdResponseWrapper
 

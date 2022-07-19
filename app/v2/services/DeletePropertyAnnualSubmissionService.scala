@@ -26,13 +26,13 @@ import v2.connectors.DeletePropertyAnnualSubmissionConnector
 import v2.controllers.EndpointLogContext
 import v2.models.errors.{ BusinessIdFormatError, DownstreamMtdError, NinoFormatError, NotFoundError, TaxYearFormatError }
 import v2.models.request.deletePropertyAnnualSubmission.DeletePropertyAnnualSubmissionRequest
-import v2.support.IfsResponseMappingSupport
+import v2.support.DownstreamResponseMappingSupport
 
 import scala.concurrent.{ ExecutionContext, Future }
 
 @Singleton
 class DeletePropertyAnnualSubmissionService @Inject()(connector: DeletePropertyAnnualSubmissionConnector)
-    extends IfsResponseMappingSupport
+    extends DownstreamResponseMappingSupport
     with Logging {
 
   def deletePropertyAnnualSubmission(request: DeletePropertyAnnualSubmissionRequest)(
@@ -42,7 +42,7 @@ class DeletePropertyAnnualSubmissionService @Inject()(connector: DeletePropertyA
       correlationId: String): Future[ServiceOutcome[Unit]] = {
 
     val result = for {
-      ifsResponseWrapper <- EitherT(connector.deletePropertyAnnualSubmission(request)).leftMap(mapIfsErrors(ifsErrorMap))
+      ifsResponseWrapper <- EitherT(connector.deletePropertyAnnualSubmission(request)).leftMap(mapDownstreamErrors(ifsErrorMap))
     } yield ifsResponseWrapper
 
     result.value

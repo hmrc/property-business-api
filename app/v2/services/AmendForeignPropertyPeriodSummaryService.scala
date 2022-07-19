@@ -25,13 +25,13 @@ import v2.connectors.AmendForeignPropertyPeriodSummaryConnector
 import v2.controllers.EndpointLogContext
 import v2.models.errors._
 import v2.models.request.amendForeignPropertyPeriodSummary.AmendForeignPropertyPeriodSummaryRequest
-import v2.support.IfsResponseMappingSupport
+import v2.support.DownstreamResponseMappingSupport
 
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class AmendForeignPropertyPeriodSummaryService @Inject()(connector: AmendForeignPropertyPeriodSummaryConnector)
-  extends IfsResponseMappingSupport with Logging {
+  extends DownstreamResponseMappingSupport with Logging {
 
   def amendForeignPropertyPeriodSummary(request: AmendForeignPropertyPeriodSummaryRequest)(
     implicit hc: HeaderCarrier,
@@ -40,7 +40,7 @@ class AmendForeignPropertyPeriodSummaryService @Inject()(connector: AmendForeign
     correlationId: String): Future[ServiceOutcome[Unit]] = {
 
     val result = for {
-      ifsResponseWrapper <- EitherT(connector.amendForeignPropertyPeriodSummary(request)).leftMap(mapIfsErrors(ifsErrorMap))
+      ifsResponseWrapper <- EitherT(connector.amendForeignPropertyPeriodSummary(request)).leftMap(mapDownstreamErrors(ifsErrorMap))
     } yield ifsResponseWrapper
 
     result.value

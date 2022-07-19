@@ -25,13 +25,13 @@ import v2.connectors.AmendUkPropertyAnnualSubmissionConnector
 import v2.controllers.EndpointLogContext
 import v2.models.errors._
 import v2.models.request.amendUkPropertyAnnualSubmission.AmendUkPropertyAnnualSubmissionRequest
-import v2.support.IfsResponseMappingSupport
+import v2.support.DownstreamResponseMappingSupport
 
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class AmendUkPropertyAnnualSubmissionService @Inject()(connector: AmendUkPropertyAnnualSubmissionConnector)
-  extends IfsResponseMappingSupport with Logging {
+  extends DownstreamResponseMappingSupport with Logging {
 
   def amendUkPropertyAnnualSubmission(request: AmendUkPropertyAnnualSubmissionRequest)(
     implicit hc: HeaderCarrier,
@@ -40,7 +40,7 @@ class AmendUkPropertyAnnualSubmissionService @Inject()(connector: AmendUkPropert
     correlationId: String): Future[ServiceOutcome[Unit]] = {
 
     val result = for {
-      ifsResponseWrapper <- EitherT(connector.amendUkPropertyAnnualSubmission(request)).leftMap(mapIfsErrors(ifsErrorMap))
+      ifsResponseWrapper <- EitherT(connector.amendUkPropertyAnnualSubmission(request)).leftMap(mapDownstreamErrors(ifsErrorMap))
     } yield ifsResponseWrapper
 
     result.value

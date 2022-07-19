@@ -33,6 +33,11 @@ class HistoricTaxYearValidationSpec extends UnitSpec {
 
         validationResult shouldBe Nil
       }
+      "the minimum TaxYear is supplied" in {
+        val validationResult = HistoricTaxYearValidation.validate(minTaxYear, maxTaxYear, "2017-18")
+
+        validationResult shouldBe Nil
+      }
     }
     "return an error" when {
       "a taxYear with an invalid format is supplied" in {

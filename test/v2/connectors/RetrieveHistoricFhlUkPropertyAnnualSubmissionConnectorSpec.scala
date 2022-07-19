@@ -79,7 +79,7 @@ class RetrieveHistoricFhlUkPropertyAnnualSubmissionConnectorSpec extends Connect
       : CallHandler[Future[DownstreamOutcome[RetrieveHistoricFhlUkPropertyAnnualSubmissionResponse]]]#Derived = {
       MockHttpClient
         .get(
-          url = s"/income-tax/nino/$nino/uk-properties/furnished-holiday-lettings/annual-summaries/$taxYear",
+          url = s"$baseUrl/income-tax/nino/$nino/uk-properties/furnished-holiday-lettings/annual-summaries/$taxYear",
           config = dummyDesHeaderCarrierConfig,
           requiredHeaders = requiredDesHeaders,
         )

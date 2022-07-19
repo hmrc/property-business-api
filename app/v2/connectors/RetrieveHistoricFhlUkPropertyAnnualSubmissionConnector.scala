@@ -37,7 +37,7 @@ class RetrieveHistoricFhlUkPropertyAnnualSubmissionConnector @Inject()(val http:
     val taxYear = request.taxYear
     val response = get(
       uri = DesUri[RetrieveHistoricFhlUkPropertyAnnualSubmissionResponse]
-        (s"/income-tax/nino/$nino/uk-properties/furnished-holiday-lettings/annual-summaries/$taxYear")
+        (s"income-tax/nino/$nino/uk-properties/furnished-holiday-lettings/annual-summaries/$taxYear")
     )
 
     response

@@ -37,9 +37,7 @@ object RetrieveHistoricFhlUkPropertyAnnualSubmissionResponse extends HateoasLink
     override def links(appConfig: AppConfig, data: RetrieveHistoricFhlUkPropertyAnnualSubmissionHateoasData): Seq[Link] = {
       import data._
       Seq(
-        //   createAmendHistoricFhlUkPropertyAnnualSubmission(appConfig, nino, taxYear),
         retrieveHistoricFhlUkPropertyAnnualSubmission(appConfig, nino, taxYear, self = true),
-        //   deleteHistoricFhlUkPropertyAnnualSubmission(appConfig, nino, taxYear)
       )
     }
   }

@@ -31,6 +31,6 @@ object HistoricFhlAnnualAllowances {
     (JsPath \ "annualInvestmentAllowance").writeNullable[BigDecimal] and
       (JsPath \ "businessPremisesRenovationAllowance").writeNullable[BigDecimal] and
       (JsPath \ "otherCapitalAllowance").writeNullable[BigDecimal] and
-      (JsPath \ "propertyAllowance").writeNullable[BigDecimal]
+      (JsPath \ "propertyIncomeAllowance").writeNullable[BigDecimal]
     )(unlift(HistoricFhlAnnualAllowances.unapply))
 }

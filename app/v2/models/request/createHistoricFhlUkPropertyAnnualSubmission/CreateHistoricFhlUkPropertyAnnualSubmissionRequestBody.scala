@@ -20,19 +20,21 @@ import play.api.libs.functional.syntax._
 import play.api.libs.json.{JsPath, Json, OWrites, Reads}
 import shapeless.HNil
 import utils.EmptinessChecker
-import v2.models.request.common.foreignFhlEea.CreateForeignFhlEea
-import v2.models.request.common.foreignPropertyEntry.CreateForeignNonFhlPropertyEntry
+import v2.models.request.amendHistoricFhlUkPropertyAnnualSubmission.historicFhl.{HistoricFhlAnnualAdjustments, HistoricFhlAnnualAllowances}
 
-case class CreateHistoricFhlUkPropertyAnnualSubmissionRequestBody((historicFhl: HistoricFhl)
+case class CreateHistoricFhlUkPropertyAnnualSubmissionRequestBody(annualAdjustments: Option[HistoricFhlAnnualAdjustments],
+                                                                  annualAllowances: Option[HistoricFhlAnnualAllowances])
 
 object CreateHistoricFhlUkPropertyAnnualSubmissionRequestBody {
-  implicit val emptinessChecker: EmptinessChecker[CreateFhlUkPropertyBusinessAnnualSummaryRequestBody] = EmptinessChecker.use { body =>
-    "historicFhl" -> body.historicFhl :: HNil
+  implicit val emptinessChecker: EmptinessChecker[CreateHistoricFhlUkPropertyAnnualSubmissionRequestBody] = EmptinessChecker.use { body =>
+    "annualAdjustments" -> body.annualAdjustments ::
+    "annualAllowances" -> body.annualAllowances :: HNil
   }
 
   implicit val reads: Reads[CreateHistoricFhlUkPropertyAnnualSubmissionRequestBody] = Json.reads[CreateHistoricFhlUkPropertyAnnualSubmissionRequestBody]
 
   implicit val writes: OWrites[CreateHistoricFhlUkPropertyAnnualSubmissionRequestBody] = (
-    (JsPath \ "historicFhl").writeNullable[HistoricFhl]
+    (JsPath \ "annualAdjustments").writeNullable[HistoricFhlAnnualAdjustments] and
+      (JsPath \ "annualAllowances").writeNullable[HistoricFhlAnnualAllowances]
     )(unlift(CreateHistoricFhlUkPropertyAnnualSubmissionRequestBody.unapply))
 }

@@ -17,16 +17,17 @@
 package v2.models.request.amendHistoricFhlUkPropertyAnnualSubmission
 
 import play.api.libs.functional.syntax._
-import play.api.libs.json.{ JsPath, Json, OWrites, Reads }
-import v2.models.request.common.foreignFhlEea.AmendForeignFhlEea
-import v2.models.request.common.foreignPropertyEntry.AmendForeignNonFhlPropertyEntry
+import play.api.libs.json.{JsPath, Json, OWrites, Reads}
+import v2.models.request.amendHistoricFhlUkPropertyAnnualSubmission.historicFhl.{HistoricFhlAnnualAdjustments, HistoricFhlAnnualAllowances}
 
-case class AmendHistoricFhlUkPropertyAnnualSubmissionRequestBody(historicFhl: HistoricFhl)
+case class AmendHistoricFhlUkPropertyAnnualSubmissionRequestBody(annualAdjustments: Option[HistoricFhlAnnualAdjustments],
+                                                                 annualAllowances: Option[HistoricFhlAnnualAllowances])
 
 object AmendHistoricFhlUkPropertyAnnualSubmissionRequestBody {
   implicit val reads: Reads[AmendHistoricFhlUkPropertyAnnualSubmissionRequestBody] = Json.reads[AmendHistoricFhlUkPropertyAnnualSubmissionRequestBody]
 
   implicit val writes: OWrites[AmendHistoricFhlUkPropertyAnnualSubmissionRequestBody] = (
-    (JsPath \ "historicFhl").writeNullable[HistoricFhl]
+    (JsPath \ "annualAdjustments").writeNullable[HistoricFhlAnnualAdjustments] and
+      (JsPath \ "annualAllowances").writeNullable[HistoricFhlAnnualAllowances]
     )(unlift(AmendHistoricFhlUkPropertyAnnualSubmissionRequestBody.unapply))
 }

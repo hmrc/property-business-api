@@ -16,9 +16,11 @@
 
 package v2.models.request.amendHistoricFhlUkPropertyAnnualSubmission.historicFhl
 
-import play.api.libs.json.{Json, OFormat}
+import play.api.libs.functional.syntax.{toFunctionalBuilderOps, unlift}
+import play.api.libs.json.{JsPath, Json, OFormat, Writes}
+import v2.models.request.common.ukPropertyRentARoom.UkPropertyAdjustmentsRentARoom
 
-case class HistoricFhlAnnualAdjustments(lossBoughtForward: Option[BigDecimal],
+case class HistoricFhlAnnualAdjustments(lossBroughtForward: Option[BigDecimal],
                                         privateUseAdjustment: Option[BigDecimal],
                                         balancingCharge: Option[BigDecimal],
                                         periodOfGraceAdjustment: Boolean,
@@ -30,7 +32,7 @@ object HistoricFhlAnnualAdjustments {
   implicit val format: OFormat[HistoricFhlAnnualAdjustments] = Json.format[HistoricFhlAnnualAdjustments]
 
   implicit val writes: Writes[HistoricFhlAnnualAdjustments] = (
-    (JsPath \ "lossBoughtForward").writeNullable[BigDecimal] and
+    (JsPath \ "lossBroughtForward").writeNullable[BigDecimal] and
       (JsPath \ "privateUseAdjustment").writeNullable[BigDecimal] and
       (JsPath \ "balancingCharge").writeNullable[BigDecimal] and
       (JsPath \ "periodOfGraceAdjustment").write[Boolean] and

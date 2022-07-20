@@ -19,14 +19,13 @@ package v2.connectors
 import mocks.MockAppConfig
 import org.scalamock.handlers.CallHandler
 import v2.mocks.MockHttpClient
-import v2.models.domain.Nino
+import v2.models.domain.{ Nino, TaxYear }
 import v2.models.errors.{ DownstreamErrorCode, DownstreamErrors }
 import v2.models.outcomes.ResponseWrapper
 import v2.models.request.retrieveHistoricFhlUkPropertyAnnualSubmission.RetrieveHistoricFhlUkPropertyAnnualSubmissionRequest
 import v2.models.response.retrieveHistoricFhlUkPropertyAnnualSubmission.{
   AnnualAdjustments,
   AnnualAllowances,
-  RentARoom,
   RetrieveHistoricFhlUkPropertyAnnualSubmissionResponse
 }
 
@@ -35,29 +34,15 @@ import scala.concurrent.Future
 class RetrieveHistoricFhlUkPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec {
 
   val nino: String    = "AA123456A"
-  val taxYear: String = "2020"
+  val taxYear: String = "2019-20"
 
   val request: RetrieveHistoricFhlUkPropertyAnnualSubmissionRequest = RetrieveHistoricFhlUkPropertyAnnualSubmissionRequest(
     nino = Nino(nino),
-    taxYear = taxYear
+    taxYear = TaxYear.fromMtd(taxYear)
   )
 
-  val annualAdjustments = AnnualAdjustments(
-    Option(BigDecimal("100.11")),
-    Option(BigDecimal("200.11")),
-    Option(BigDecimal("105.11")),
-    true,
-    Option(BigDecimal("100.11")),
-    false,
-    Option(RentARoom(true))
-  )
-
-  val annualAllowances = AnnualAllowances(
-    Option(BigDecimal("100.11")),
-    Option(BigDecimal("300.11")),
-    Option(BigDecimal("405.11")),
-    Option(BigDecimal("550.11"))
-  )
+  val annualAdjustments = AnnualAdjustments(None, None, None, true, None, false, None)
+  val annualAllowances = AnnualAllowances(None, None, None, None)
 
   def responseWith(annualAdjustments: Option[AnnualAdjustments],
                    annualAllowances: Option[AnnualAllowances]): RetrieveHistoricFhlUkPropertyAnnualSubmissionResponse =

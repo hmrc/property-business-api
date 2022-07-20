@@ -20,16 +20,11 @@ import support.UnitSpec
 import uk.gov.hmrc.http.HeaderCarrier
 import v2.controllers.EndpointLogContext
 import v2.mocks.connectors.MockRetrieveHistoricFhlUkPropertyAnnualSubmissionConnector
-import v2.models.domain.Nino
+import v2.models.domain.{Nino, TaxYear}
 import v2.models.errors._
 import v2.models.outcomes.ResponseWrapper
 import v2.models.request.retrieveHistoricFhlUkPropertyAnnualSubmission.RetrieveHistoricFhlUkPropertyAnnualSubmissionRequest
-import v2.models.response.retrieveHistoricFhlUkPropertyAnnualSubmission.{
-  AnnualAdjustments,
-  AnnualAllowances,
-  RentARoom,
-  RetrieveHistoricFhlUkPropertyAnnualSubmissionResponse
-}
+import v2.models.response.retrieveHistoricFhlUkPropertyAnnualSubmission.{AnnualAdjustments, AnnualAllowances, RentARoom, RetrieveHistoricFhlUkPropertyAnnualSubmissionResponse}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -60,7 +55,7 @@ class RetrieveHistoricFhlUkPropertyAnnualSubmissionServiceSpec extends UnitSpec 
   private val response =
     RetrieveHistoricFhlUkPropertyAnnualSubmissionResponse(Some(annualAdjustments), Some(annualAllowances))
 
-  private val request = RetrieveHistoricFhlUkPropertyAnnualSubmissionRequest(Nino(nino), taxYear)
+  private val request = RetrieveHistoricFhlUkPropertyAnnualSubmissionRequest(Nino(nino), TaxYear.fromMtd(taxYear))
 
   trait Test extends MockRetrieveHistoricFhlUkPropertyAnnualSubmissionConnector {
     implicit val hc: HeaderCarrier              = HeaderCarrier()

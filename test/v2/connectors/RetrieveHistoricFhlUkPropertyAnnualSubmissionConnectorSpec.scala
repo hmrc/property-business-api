@@ -35,7 +35,7 @@ import scala.concurrent.Future
 class RetrieveHistoricFhlUkPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec {
 
   val nino: String    = "AA123456A"
-  val taxYear: String = "2019-20"
+  val taxYear: String = "2020"
 
   val request: RetrieveHistoricFhlUkPropertyAnnualSubmissionRequest = RetrieveHistoricFhlUkPropertyAnnualSubmissionRequest(
     nino = Nino(nino),

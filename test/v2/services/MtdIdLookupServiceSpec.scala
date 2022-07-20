@@ -17,7 +17,7 @@
 package v2.services
 
 import v2.mocks.connectors.MockMtdIdLookupConnector
-import v2.models.errors.{DownstreamMtdError, NinoFormatError, UnauthorisedError}
+import v2.models.errors.{InternalError, NinoFormatError, UnauthorisedError}
 
 import scala.concurrent.Future
 
@@ -62,7 +62,7 @@ class MtdIdLookupServiceSpec extends ServiceSpec {
 
     "a downstream error occurs the service" should {
       "proxy the error to the caller" in new Test {
-        val connectorResponse = Left(DownstreamMtdError)
+        val connectorResponse = Left(InternalError)
 
         MockedMtdIdLookupConnector.lookup(nino)
           .returns(Future.successful(connectorResponse))

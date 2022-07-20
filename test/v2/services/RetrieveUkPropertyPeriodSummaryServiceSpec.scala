@@ -90,9 +90,9 @@ class RetrieveUkPropertyPeriodSummaryServiceSpec extends UnitSpec with ResponseM
         "INVALID_SUBMISSION_ID" -> SubmissionIdFormatError,
         "TAX_YEAR_NOT_SUPPORTED" -> RuleTaxYearNotSupportedError,
         "NO_DATA_FOUND" -> NotFoundError,
-        "SERVER_ERROR" -> DownstreamMtdError,
-        "SERVICE_UNAVAILABLE" -> DownstreamMtdError,
-        "INVALID_CORRELATIONID" -> DownstreamMtdError
+        "SERVER_ERROR" -> InternalError,
+        "SERVICE_UNAVAILABLE" -> InternalError,
+        "INVALID_CORRELATIONID" -> InternalError
       )
 
       input.foreach(args => (serviceError _).tupled(args))

@@ -24,7 +24,7 @@ import uk.gov.hmrc.http.HeaderCarrier
 import utils.Logging
 import v2.connectors.DeletePropertyAnnualSubmissionConnector
 import v2.controllers.EndpointLogContext
-import v2.models.errors.{ BusinessIdFormatError, DownstreamMtdError, NinoFormatError, NotFoundError, TaxYearFormatError }
+import v2.models.errors.{ BusinessIdFormatError, InternalError, NinoFormatError, NotFoundError, TaxYearFormatError }
 import v2.models.request.deletePropertyAnnualSubmission.DeletePropertyAnnualSubmissionRequest
 import v2.support.DownstreamResponseMappingSupport
 
@@ -53,10 +53,10 @@ class DeletePropertyAnnualSubmissionService @Inject()(connector: DeletePropertyA
       "INVALID_TAXABLE_ENTITY_ID" -> NinoFormatError,
       "INVALID_TAX_YEAR"          -> TaxYearFormatError,
       "INVALID_INCOMESOURCEID"    -> BusinessIdFormatError,
-      "INVALID_CORRELATIONID"     -> DownstreamMtdError,
+      "INVALID_CORRELATIONID"     -> InternalError,
       "NO_DATA_FOUND"             -> NotFoundError,
-      "SERVER_ERROR"              -> DownstreamMtdError,
-      "SERVICE_UNAVAILABLE"       -> DownstreamMtdError
+      "SERVER_ERROR"              -> InternalError,
+      "SERVICE_UNAVAILABLE"       -> InternalError
     )
 
 }

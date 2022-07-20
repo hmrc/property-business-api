@@ -217,7 +217,7 @@ class AmendForeignPropertyAnnualSubmissionControllerSpec
           (RulePropertyIncomeAllowanceError, BAD_REQUEST),
           (RuleDuplicateCountryCodeError, BAD_REQUEST),
           (NotFoundError, NOT_FOUND),
-          (DownstreamMtdError, INTERNAL_SERVER_ERROR)
+          (InternalError, INTERNAL_SERVER_ERROR)
         )
 
         input.foreach(args => (serviceErrors _).tupled(args))

@@ -20,7 +20,7 @@ import play.api.http.Status._
 import play.api.libs.json.Reads
 import uk.gov.hmrc.http.{HttpReads, HttpResponse}
 import v2.connectors.DownstreamOutcome
-import v2.models.errors.{DownstreamMtdError, OutboundError}
+import v2.models.errors.{InternalError, OutboundError}
 import v2.models.outcomes.ResponseWrapper
 
 object StandardIfsHttpParser extends HttpParser {
@@ -37,7 +37,7 @@ object StandardIfsHttpParser extends HttpParser {
     (_: String, url: String, response: HttpResponse) => doRead(url, response) { correlationId =>
       response.validateJson[A] match {
         case Some(ref) => Right(ResponseWrapper(correlationId, ref))
-        case None => Left(ResponseWrapper(correlationId, OutboundError(DownstreamMtdError)))
+        case None => Left(ResponseWrapper(correlationId, OutboundError(InternalError)))
       }
     }
 
@@ -64,7 +64,7 @@ object StandardIfsHttpParser extends HttpParser {
            FORBIDDEN |
            CONFLICT |
            UNPROCESSABLE_ENTITY => Left(ResponseWrapper(correlationId, parseErrors(response)))
-      case _ => Left(ResponseWrapper(correlationId, OutboundError(DownstreamMtdError)))
+      case _ => Left(ResponseWrapper(correlationId, OutboundError(InternalError)))
     }
   }
 }

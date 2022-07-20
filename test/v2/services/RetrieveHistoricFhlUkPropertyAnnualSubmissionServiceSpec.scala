@@ -98,12 +98,12 @@ class RetrieveHistoricFhlUkPropertyAnnualSubmissionServiceSpec extends UnitSpec 
 
         val input = Seq(
           "INVALID_NINO"        -> NinoFormatError,
-          "INVALID_TYPE"        -> DownstreamMtdError,
+          "INVALID_TYPE"        -> InternalError,
           "INVALID_TAX_YEAR"    -> TaxYearFormatError,
           "NOT_FOUND_PROPERTY"  -> NotFoundError,
           "NOT_FOUND_PERIOD"    -> NotFoundError,
-          "SERVER_ERROR"        -> DownstreamMtdError,
-          "SERVICE_UNAVAILABLE" -> DownstreamMtdError
+          "SERVER_ERROR"        -> InternalError,
+          "SERVICE_UNAVAILABLE" -> InternalError
         )
 
         input.foreach(args => (serviceError _).tupled(args))

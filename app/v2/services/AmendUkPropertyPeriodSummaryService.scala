@@ -52,15 +52,15 @@ class AmendUkPropertyPeriodSummaryService @Inject()(connector: AmendUkPropertyPe
       "INVALID_TAX_YEAR" -> TaxYearFormatError,
       "INVALID_INCOMESOURCEID" -> BusinessIdFormatError,
       "INVALID_SUBMISSION_ID" -> SubmissionIdFormatError,
-      "INVALID_PAYLOAD" -> DownstreamMtdError,
-      "INVALID_CORRELATIONID" -> DownstreamMtdError,
+      "INVALID_PAYLOAD" -> InternalError,
+      "INVALID_CORRELATIONID" -> InternalError,
       "NO_DATA_FOUND" -> NotFoundError,
       "INCOMPATIBLE_PAYLOAD" -> RuleTypeOfBusinessIncorrectError,
       "TAX_YEAR_NOT_SUPPORTED" -> RuleTaxYearNotSupportedError,
-      "BUSINESS_VALIDATION_FAILURE" -> DownstreamMtdError,
-      "DUPLICATE_COUNTRY_CODE" -> DownstreamMtdError,
-      "MISSING_EXPENSES" -> DownstreamMtdError,
-      "SERVER_ERROR" -> DownstreamMtdError,
-      "SERVICE_UNAVAILABLE" -> DownstreamMtdError
+      "BUSINESS_VALIDATION_FAILURE" -> InternalError,
+      "DUPLICATE_COUNTRY_CODE" -> InternalError,
+      "MISSING_EXPENSES" -> InternalError,
+      "SERVER_ERROR" -> InternalError,
+      "SERVICE_UNAVAILABLE" -> InternalError
     )
 }

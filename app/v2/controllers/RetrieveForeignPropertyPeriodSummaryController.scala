@@ -90,7 +90,7 @@ class RetrieveForeignPropertyPeriodSummaryController @Inject()(val authService: 
            RuleTaxYearNotSupportedError =>
         BadRequest(Json.toJson(errorWrapper))
       case NotFoundError => NotFound(Json.toJson(errorWrapper))
-      case DownstreamMtdError => InternalServerError(Json.toJson(errorWrapper))
+      case InternalError => InternalServerError(Json.toJson(errorWrapper))
       case _ => unhandledError(errorWrapper)
     }
 }

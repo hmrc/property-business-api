@@ -42,11 +42,11 @@ class RetrieveUkPropertyAnnualSubmissionService @Inject()(connector: RetrieveUkP
       "INVALID_TAXABLE_ENTITY_ID" -> NinoFormatError,
       "INVALID_INCOMESOURCEID"    -> BusinessIdFormatError,
       "INVALID_TAX_YEAR"          -> TaxYearFormatError,
-      "INVALID_CORRELATIONID"     -> DownstreamMtdError,
+      "INVALID_CORRELATIONID"     -> InternalError,
       "NO_DATA_FOUND"             -> NotFoundError,
       "TAX_YEAR_NOT_SUPPORTED"    -> RuleTaxYearNotSupportedError,
-      "SERVER_ERROR"              -> DownstreamMtdError,
-      "SERVICE_UNAVAILABLE"       -> DownstreamMtdError
+      "SERVER_ERROR"              -> InternalError,
+      "SERVICE_UNAVAILABLE"       -> InternalError
     )
 
   def retrieveUkProperty(request: RetrieveUkPropertyAnnualSubmissionRequest)(

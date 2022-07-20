@@ -145,16 +145,16 @@ class AmendUkPropertyAnnualSubmissionServiceSpec extends UnitSpec {
         "INVALID_TAXABLE_ENTITY_ID" -> NinoFormatError,
         "INVALID_TAX_YEAR" -> TaxYearFormatError,
         "INVALID_INCOMESOURCEID" -> BusinessIdFormatError,
-        "INVALID_PAYLOAD" -> DownstreamMtdError,
-        "INVALID_CORRELATIONID" -> DownstreamMtdError,
+        "INVALID_PAYLOAD" -> InternalError,
+        "INVALID_CORRELATIONID" -> InternalError,
         "INCOME_SOURCE_NOT_FOUND" -> NotFoundError,
         "INCOMPATIBLE_PAYLOAD" -> RuleTypeOfBusinessIncorrectError,
         "TAX_YEAR_NOT_SUPPORTED" -> RuleTaxYearNotSupportedError,
         "BUSINESS_VALIDATION_FAILURE" -> RulePropertyIncomeAllowanceError,
-        "MISSING_ALLOWANCES" -> DownstreamMtdError,
-        "DUPLICATE_COUNTRY_CODE" -> DownstreamMtdError,
-        "SERVER_ERROR" -> DownstreamMtdError,
-        "SERVICE_UNAVAILABLE" -> DownstreamMtdError
+        "MISSING_ALLOWANCES" -> InternalError,
+        "DUPLICATE_COUNTRY_CODE" -> InternalError,
+        "SERVER_ERROR" -> InternalError,
+        "SERVICE_UNAVAILABLE" -> InternalError
       )
 
       input.foreach(args => (serviceError _).tupled(args))

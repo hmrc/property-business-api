@@ -55,11 +55,11 @@ class AmendForeignPropertyAnnualSubmissionService @Inject()(connector: AmendFore
       "TAX_YEAR_NOT_SUPPORTED" -> RuleTaxYearNotSupportedError,
       "BUSINESS_VALIDATION_FAILURE" -> RulePropertyIncomeAllowanceError,
       "INCOME_SOURCE_NOT_FOUND" -> NotFoundError,
-      "MISSING_ALLOWANCES" -> DownstreamMtdError,
-      "INVALID_PAYLOAD" -> DownstreamMtdError,
-      "INVALID_CORRELATIONID" -> DownstreamMtdError,
+      "MISSING_ALLOWANCES" -> InternalError,
+      "INVALID_PAYLOAD" -> InternalError,
+      "INVALID_CORRELATIONID" -> InternalError,
       "DUPLICATE_COUNTRY_CODE" -> RuleDuplicateCountryCodeError,
-      "SERVER_ERROR" -> DownstreamMtdError,
-      "SERVICE_UNAVAILABLE" -> DownstreamMtdError
+      "SERVER_ERROR" -> InternalError,
+      "SERVICE_UNAVAILABLE" -> InternalError
     )
 }

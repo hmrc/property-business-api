@@ -122,8 +122,8 @@ class CreateForeignPropertyPeriodSummaryServiceSpec extends UnitSpec {
         "INVALID_INCOMESOURCEID" -> BusinessIdFormatError,
         "INVALID_TAX_YEAR" -> TaxYearFormatError,
         "DUPLICATE_COUNTRY_CODE" -> RuleDuplicateCountryCodeError,
-        "INVALID_PAYLOAD" -> DownstreamMtdError,
-        "INVALID_CORRELATIONID" -> DownstreamMtdError,
+        "INVALID_PAYLOAD" -> InternalError,
+        "INVALID_CORRELATIONID" -> InternalError,
         "OVERLAPS_IN_PERIOD" -> RuleOverlappingPeriodError,
         "NOT_ALIGN_PERIOD" -> RuleMisalignedPeriodError,
         "GAPS_IN_PERIOD" -> RuleNotContiguousPeriodError,
@@ -132,9 +132,9 @@ class CreateForeignPropertyPeriodSummaryServiceSpec extends UnitSpec {
         "INCOME_SOURCE_NOT_FOUND" -> NotFoundError,
         "INCOMPATIBLE_PAYLOAD" -> RuleTypeOfBusinessIncorrectError,
         "TAX_YEAR_NOT_SUPPORTED" -> RuleTaxYearNotSupportedError,
-        "MISSING_EXPENSES" -> DownstreamMtdError,
-        "SERVER_ERROR" -> DownstreamMtdError,
-        "SERVICE_UNAVAILABLE" -> DownstreamMtdError
+        "MISSING_EXPENSES" -> InternalError,
+        "SERVER_ERROR" -> InternalError,
+        "SERVICE_UNAVAILABLE" -> InternalError
       )
 
       input.foreach(args => (serviceError _).tupled(args))

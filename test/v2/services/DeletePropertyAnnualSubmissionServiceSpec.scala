@@ -72,10 +72,10 @@ class DeletePropertyAnnualSubmissionServiceSpec extends ServiceSpec {
           "INVALID_TAXABLE_ENTITY_ID" -> NinoFormatError,
           "INVALID_TAX_YEAR"          -> TaxYearFormatError,
           "INVALID_INCOMESOURCEID"    -> BusinessIdFormatError,
-          "INVALID_CORRELATIONID"     -> DownstreamMtdError,
+          "INVALID_CORRELATIONID"     -> InternalError,
           "NO_DATA_FOUND"             -> NotFoundError,
-          "SERVER_ERROR"              -> DownstreamMtdError,
-          "SERVICE_UNAVAILABLE"       -> DownstreamMtdError
+          "SERVER_ERROR"              -> InternalError,
+          "SERVICE_UNAVAILABLE"       -> InternalError
         )
 
         input.foreach(args => (serviceError _).tupled(args))

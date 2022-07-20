@@ -28,6 +28,7 @@ object RelType {
   val AMEND_UK_PROPERTY_PERIOD_SUMMARY = "amend-uk-property-period-summary"
   val RETRIEVE_UK_PROPERTY_PERIOD_SUMMARY = "retrieve-uk-property-period-summary"
   val CREATE_AND_AMEND_UK_PROPERTY_ANNUAL_SUBMISSION = "create-and-amend-uk-property-annual-submission"
+  val CREATE_AND_AMEND_UK_PROPERTY_HISTORIC_FHL_ANNUAL_SUBMISSION = "create-and-amend-uk-property-historic-fhl-annual-submission"
   val RETRIEVE_UK_PROPERTY_ANNUAL_SUBMISSION = "retrieve-uk-property-annual-submission"
 
   val LIST_PROPERTY_PERIOD_SUMMARIES = "list-property-period-summaries"

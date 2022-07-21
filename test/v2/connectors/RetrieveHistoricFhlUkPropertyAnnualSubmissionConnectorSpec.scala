@@ -85,15 +85,52 @@ class RetrieveHistoricFhlUkPropertyAnnualSubmissionConnectorSpec extends Connect
         result shouldBe outcome
       }
 
-      "return an error" in new Test {
-        val outcome = Left(ResponseWrapper(correlationId, DownstreamErrors.single(DownstreamErrorCode("SOME_ERROR"))))
+      "response is an error" must {
+        "return an error" in new Test {
+          val outcome = Left(ResponseWrapper(correlationId, DownstreamErrors.single(DownstreamErrorCode("SOME_ERROR"))))
 
-        stubHttpResponse(outcome)
+          stubHttpResponse(outcome)
 
-        val result = await(connector.retrieve(request))
-        result shouldBe outcome
+          val result = await(connector.retrieve(request))
+          result shouldBe outcome
+        }
+      }
+
+      "response has annualAdjustments only" must {
+        "return a valid result" in new Test {
+          val response = responseWith(Some(annualAdjustments), None)
+          val outcome  = Right(ResponseWrapper(correlationId, response))
+
+          stubHttpResponse(outcome)
+
+          val result = await(connector.retrieve(request))
+          result shouldBe outcome
+        }
+      }
+
+      "response has annualAllowances only" must {
+        "return a valid result" in new Test {
+          val response = responseWith(None, Some(annualAllowances))
+          val outcome  = Right(ResponseWrapper(correlationId, response))
+
+          stubHttpResponse(outcome)
+
+          val result = await(connector.retrieve(request))
+          result shouldBe outcome
+        }
+      }
+
+      "response has neither annualAdjustments nor annualAllowances" must {
+        "return a valid result" in new Test {
+          val response = responseWith(None, None)
+          val outcome  = Right(ResponseWrapper(correlationId, response))
+
+          stubHttpResponse(outcome)
+
+          val result = await(connector.retrieve(request))
+          result shouldBe outcome
+        }
       }
     }
-
   }
 }

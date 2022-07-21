@@ -33,16 +33,17 @@ import scala.concurrent.Future
 
 class RetrieveHistoricFhlUkPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec {
 
-  val nino: String    = "AA123456A"
-  val taxYear: String = "2019-20"
+  val nino: String              = "AA123456A"
+  val mtdTaxYear: String        = "2019-20"
+  val downstreamTaxYear: String = "2020"
 
   val request: RetrieveHistoricFhlUkPropertyAnnualSubmissionRequest = RetrieveHistoricFhlUkPropertyAnnualSubmissionRequest(
     nino = Nino(nino),
-    taxYear = TaxYear.fromMtd(taxYear)
+    taxYear = TaxYear.fromMtd(mtdTaxYear)
   )
 
   val annualAdjustments = AnnualAdjustments(None, None, None, true, None, false, None)
-  val annualAllowances = AnnualAllowances(None, None, None, None)
+  val annualAllowances  = AnnualAllowances(None, None, None, None)
 
   def responseWith(annualAdjustments: Option[AnnualAdjustments],
                    annualAllowances: Option[AnnualAllowances]): RetrieveHistoricFhlUkPropertyAnnualSubmissionResponse =
@@ -64,7 +65,7 @@ class RetrieveHistoricFhlUkPropertyAnnualSubmissionConnectorSpec extends Connect
       : CallHandler[Future[DownstreamOutcome[RetrieveHistoricFhlUkPropertyAnnualSubmissionResponse]]]#Derived = {
       MockHttpClient
         .get(
-          url = s"$baseUrl/income-tax/nino/$nino/uk-properties/furnished-holiday-lettings/annual-summaries/$taxYear",
+          url = s"$baseUrl/income-tax/nino/$nino/uk-properties/furnished-holiday-lettings/annual-summaries/$downstreamTaxYear",
           config = dummyDesHeaderCarrierConfig,
           requiredHeaders = requiredDesHeaders,
         )

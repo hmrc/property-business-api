@@ -10,34 +10,22 @@
       "properties": {
         "lossBroughtForward": {
           "type": "number",
-          "description": "Loss brought forward from earlier years.",
-          "multipleOf": 0.01,
-          "minimum": 0.00,
-          "maximum": 99999999999.99,
+          "description": "Loss brought forward from earlier years. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
           "example": "2000.99"
         },
         "privateUseAdjustment": {
           "type": "number",
-          "description": "Private use adjustment on an asset by a sole trader or partner in a partnership, the asset is put in to a single-asset pool and allowances are restricted on the business to private-use ratio.",
-          "multipleOf": 0.01,
-          "minimum": 0.00,
-          "maximum": 99999999999.99,
+          "description": "Private use adjustment on an asset by a sole trader or partner in a partnership, the asset is put in to a single-asset pool and allowances are restricted on the business to private-use ratio. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
           "example": "1000.45"
         },
         "balancingCharge": {
           "type": "number",
-          "description": "Balancing charge on sale or cessation of business use (where you have disposed of assets for more than their tax value).",
-          "multipleOf": 0.01,
-          "minimum": 0.00,
-          "maximum": 99999999999.99,
+          "description": "Balancing charge on sale or cessation of business use (where you have disposed of assets for more than their tax value). The value must be between 0 and 99999999999.99 up to 2 decimal places.",
           "example": "1000.45"
         },
         "businessPremisesRenovationAllowanceBalancingCharges": {
           "type": "number",
-          "description": "Income from the sale or grant of a long lease for a premium of renovated business premises within 7 years of first use.",
-          "multipleOf": 0.01,
-          "minimum": 0.00,
-          "maximum": 99999999999.99,
+          "description": "Income from the sale or grant of a long lease for a premium of renovated business premises within 7 years of first use. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
           "example": "5000.99"
         },
         "nonResidentLandlord": {
@@ -54,9 +42,11 @@
               "description": "A boolean to identify that the Rent A Room income (RAR) is shared with another individual.",
               "example": "false"
             }
-          }
+          },
+          "required": ["jointlyLet"]
         }
-      }
+      },
+      "required": ["nonResidentLandlord"]
     },
     "annualAllowances": {
       "type": "object",
@@ -64,50 +54,32 @@
       "properties": {
         "annualInvestmentAllowance": {
           "type": "number",
-          "description": "The amount claimed on equipment bought (except cars) up to the maximum annual amount.",
-          "multipleOf": 0.01,
-          "minimum": 0.00,
-          "maximum": 99999999999.99,
+          "description": "The amount claimed on equipment bought (except cars) up to the maximum annual amount. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
           "example": "5000.99"
         },
         "zeroEmissionGoodsVehicleAllowance": {
           "type": "number",
-          "description": "The number of zero-emissions goods vehicle allowance for goods vehicles purchased for business use.",
-          "multipleOf": 0.01,
-          "minimum": 0.00,
-          "maximum": 99999999999.99,
+          "description": "The number of zero-emissions goods vehicle allowance for goods vehicles purchased for business use. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
           "example": "5000.99"
         },
         "businessPremisesRenovationAllowance": {
           "type": "number",
-          "description": "The allowance amount for renovation or conversion of derelict business properties.",
-          "multipleOf": 0.01,
-          "minimum": 0.00,
-          "maximum": 99999999999.99,
+          "description": "The allowance amount for renovation or conversion of derelict business properties. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
           "example": "5000.99"
         },
         "otherCapitalAllowance": {
           "type": "number",
-          "description": "All other capital allowances.",
-          "multipleOf": 0.01,
-          "minimum": 0.00,
-          "maximum": 99999999999.99,
+          "description": "All other capital allowances. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
           "example": "5000.99"
         },
         "costOfReplacingDomesticGoods": {
           "type": "number",
-          "description": "Cost of Replacing Domestic Items - formerly Wear and Tear allowance.",
-          "multipleOf": 0.01,
-          "minimum": 0.00,
-          "maximum": 99999999999.99,
+          "description": "Cost of Replacing Domestic Items - formerly Wear and Tear allowance. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
           "example": "5000.99"
         },
         "propertyIncomeAllowance": {
           "type": "number",
-          "description": "The amount of tax exemption for individuals with income from land or property.",
-          "multipleOf": 0.01,
-          "minimum": 0.00,
-          "maximum": 1000.00,
+          "description": "The amount of tax exemption for individuals with income from land or property. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
           "example": "100.25"
         }
       }

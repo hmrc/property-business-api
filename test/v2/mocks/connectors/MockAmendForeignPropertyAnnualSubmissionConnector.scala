@@ -19,7 +19,7 @@ package v2.mocks.connectors
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
 import uk.gov.hmrc.http.HeaderCarrier
-import v2.connectors.{AmendForeignPropertyAnnualSubmissionConnector, IfsOutcome}
+import v2.connectors.{AmendForeignPropertyAnnualSubmissionConnector, DownstreamOutcome}
 import v2.models.request.amendForeignPropertyAnnualSubmission.AmendForeignPropertyAnnualSubmissionRequest
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -30,7 +30,7 @@ trait MockAmendForeignPropertyAnnualSubmissionConnector extends MockFactory {
 
   object MockAmendForeignPropertyAnnualSubmissionConnector {
 
-    def amendForeignProperty(requestData: AmendForeignPropertyAnnualSubmissionRequest): CallHandler[Future[IfsOutcome[Unit]]] = {
+    def amendForeignProperty(requestData: AmendForeignPropertyAnnualSubmissionRequest): CallHandler[Future[DownstreamOutcome[Unit]]] = {
       (mockAmendForeignPropertyAnnualSubmissionConnector
         .amendForeignPropertyAnnualSubmission(_: AmendForeignPropertyAnnualSubmissionRequest)(_: HeaderCarrier, _: ExecutionContext, _: String))
         .expects(requestData, *, *, *)

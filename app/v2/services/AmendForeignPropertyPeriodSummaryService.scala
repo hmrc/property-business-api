@@ -25,13 +25,13 @@ import v2.connectors.AmendForeignPropertyPeriodSummaryConnector
 import v2.controllers.EndpointLogContext
 import v2.models.errors._
 import v2.models.request.amendForeignPropertyPeriodSummary.AmendForeignPropertyPeriodSummaryRequest
-import v2.support.IfsResponseMappingSupport
+import v2.support.DownstreamResponseMappingSupport
 
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class AmendForeignPropertyPeriodSummaryService @Inject()(connector: AmendForeignPropertyPeriodSummaryConnector)
-  extends IfsResponseMappingSupport with Logging {
+  extends DownstreamResponseMappingSupport with Logging {
 
   def amendForeignPropertyPeriodSummary(request: AmendForeignPropertyPeriodSummaryRequest)(
     implicit hc: HeaderCarrier,
@@ -40,7 +40,7 @@ class AmendForeignPropertyPeriodSummaryService @Inject()(connector: AmendForeign
     correlationId: String): Future[ServiceOutcome[Unit]] = {
 
     val result = for {
-      ifsResponseWrapper <- EitherT(connector.amendForeignPropertyPeriodSummary(request)).leftMap(mapIfsErrors(ifsErrorMap))
+      ifsResponseWrapper <- EitherT(connector.amendForeignPropertyPeriodSummary(request)).leftMap(mapDownstreamErrors(ifsErrorMap))
     } yield ifsResponseWrapper
 
     result.value
@@ -52,15 +52,15 @@ class AmendForeignPropertyPeriodSummaryService @Inject()(connector: AmendForeign
       "INVALID_TAX_YEAR" -> TaxYearFormatError,
       "INVALID_INCOMESOURCEID" -> BusinessIdFormatError,
       "INVALID_SUBMISSION_ID" -> SubmissionIdFormatError,
-      "INVALID_PAYLOAD" -> DownstreamError,
-      "INVALID_CORRELATIONID" -> DownstreamError,
+      "INVALID_PAYLOAD" -> InternalError,
+      "INVALID_CORRELATIONID" -> InternalError,
       "NO_DATA_FOUND" -> NotFoundError,
       "INCOMPATIBLE_PAYLOAD" -> RuleTypeOfBusinessIncorrectError,
       "TAX_YEAR_NOT_SUPPORTED" -> RuleTaxYearNotSupportedError,
-      "MISSING_EXPENSES" -> DownstreamError,
-      "BUSINESS_VALIDATION_FAILURE" -> DownstreamError,
+      "MISSING_EXPENSES" -> InternalError,
+      "BUSINESS_VALIDATION_FAILURE" -> InternalError,
       "DUPLICATE_COUNTRY_CODE" -> RuleDuplicateCountryCodeError,
-      "SERVER_ERROR" -> DownstreamError,
-      "SERVICE_UNAVAILABLE" -> DownstreamError
+      "SERVER_ERROR" -> InternalError,
+      "SERVICE_UNAVAILABLE" -> InternalError
     )
 }

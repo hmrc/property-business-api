@@ -18,7 +18,7 @@ package v2.controllers.requestParsers
 
 import support.UnitSpec
 import v2.mocks.validators.MockRetrieveHistoricFhlUkPropertyAnnualSubmissionValidator
-import v2.models.domain.Nino
+import v2.models.domain.{Nino, TaxYear}
 import v2.models.errors.{BadRequestError, ErrorWrapper, NinoFormatError, TaxYearFormatError}
 import v2.models.request.retrieveHistoricFhlUkPropertyAnnualSubmission._
 
@@ -40,7 +40,7 @@ class RetrieveHistoricFhlUkPropertyAnnualSubmissionRequestParserRequestParserSpe
       "valid request data is supplied" in new Test {
         MockRetrieveHistoricFhlUkPropertyAnnualSubmissionValidator.validate(inputData).returns(Nil)
 
-        parser.parseRequest(inputData) shouldBe Right(RetrieveHistoricFhlUkPropertyAnnualSubmissionRequest(Nino(nino), taxYear))
+        parser.parseRequest(inputData) shouldBe Right(RetrieveHistoricFhlUkPropertyAnnualSubmissionRequest(Nino(nino), TaxYear.fromMtd(taxYear)))
       }
     }
 

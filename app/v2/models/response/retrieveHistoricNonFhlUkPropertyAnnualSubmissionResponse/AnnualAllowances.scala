@@ -20,9 +20,9 @@ import play.api.libs.functional.syntax.toFunctionalBuilderOps
 import play.api.libs.json.{JsPath, Json, OWrites, Reads}
 
 case class AnnualAllowances(annualInvestmentAllowance: Option[BigDecimal],
+                            otherCapitalAllowance: Option[BigDecimal],
                             zeroEmissionGoodsVehicleAllowance: Option[BigDecimal],
                             businessPremisesRenovationAllowance: Option[BigDecimal],
-                            otherCapitalAllowance: Option[BigDecimal],
                             costOfReplacingDomesticGoods: Option[BigDecimal],
                             propertyIncomeAllowance: Option[BigDecimal])
 
@@ -31,8 +31,8 @@ object AnnualAllowances{
 
   implicit val reads: Reads[AnnualAllowances] =(
     (JsPath \ "annualInvestmentAllowance").readNullable[BigDecimal] and
-      (JsPath \ "zeroEmissionGoodsVehicleAllowance").readNullable[BigDecimal] and
       (JsPath \ "otherCapitalAllowance").readNullable[BigDecimal] and
+      (JsPath \ "zeroEmissionGoodsVehicleAllowance").readNullable[BigDecimal] and
       (JsPath \ "businessPremisesRenovationAllowance").readNullable[BigDecimal] and
       (JsPath \ "costOfReplacingDomGoods").readNullable[BigDecimal] and
       (JsPath \ "propertyIncomeAllowance").readNullable[BigDecimal]

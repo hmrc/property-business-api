@@ -28,8 +28,8 @@ class AnnualAdjustmentsSpec extends UnitSpec{
   val downstreamJson: JsValue = Json.parse("""
                                              |   {
                                              |      "lossBroughtForward": 200.00,
-                                             |      "balancingCharge": 200.00,
-                                             |      "privateUseAdjustment": 200.00,
+                                             |      "balancingCharge": 300.00,
+                                             |      "privateUseAdjustment": 400.00,
                                              |      "businessPremisesRenovationAllowanceBalancingCharges": 80.02,
                                              |      "nonResidentLandlord": true,
                                              |      "ukRentARoom": {
@@ -40,8 +40,8 @@ class AnnualAdjustmentsSpec extends UnitSpec{
   val mtdJson: JsValue = Json.parse("""
                                              |   {
                                              |      "lossBroughtForward": 200.00,
-                                             |      "balancingCharge": 200.00,
-                                             |      "privateUseAdjustment": 200.00,
+                                             |      "balancingCharge": 300.00,
+                                             |      "privateUseAdjustment": 400.00,
                                              |      "businessPremisesRenovationAllowanceBalancingCharges": 80.02,
                                              |      "nonResidentLandlord": true,
                                              |      "rentARoom": {
@@ -52,8 +52,8 @@ class AnnualAdjustmentsSpec extends UnitSpec{
 
   val model: AnnualAdjustments = AnnualAdjustments(
     lossBroughtForward = decimal("200.00"),
-    privateUseAdjustment = decimal("200.00"),
-    balancingCharge = decimal("200.00"),
+    balancingCharge = decimal("300.00"),
+    privateUseAdjustment = decimal("400.00"),
     businessPremisesRenovationAllowanceBalancingCharges = decimal("80.02"),
     nonResidentLandlord = true,
     rentARoom = Option(RentARoom(jointlyLet = true)))

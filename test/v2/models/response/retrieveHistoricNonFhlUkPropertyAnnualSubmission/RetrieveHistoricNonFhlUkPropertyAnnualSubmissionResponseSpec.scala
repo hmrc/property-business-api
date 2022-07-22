@@ -28,8 +28,8 @@ class RetrieveHistoricNonFhlUkPropertyAnnualSubmissionResponseSpec extends UnitS
       |   "annualAdjustments":
       |   {
       |      "lossBroughtForward": 200.00,
-      |      "balancingCharge": 200.00,
-      |      "privateUseAdjustment": 200.00,
+      |      "balancingCharge": 300.00,
+      |      "privateUseAdjustment": 400.00,
       |      "businessPremisesRenovationAllowanceBalancingCharges": 80.02,
       |      "nonResidentLandlord": true,
       |      "ukRentARoom": {
@@ -38,8 +38,8 @@ class RetrieveHistoricNonFhlUkPropertyAnnualSubmissionResponseSpec extends UnitS
       |   },
       |   "annualAllowances": {
       |      "annualInvestmentAllowance": 200.00,
-      |      "otherCapitalAllowance": 200.00,
-      |      "zeroEmissionGoodsVehicleAllowance": 200.00,
+      |      "otherCapitalAllowance": 300.00,
+      |      "zeroEmissionGoodsVehicleAllowance": 400.00,
       |      "businessPremisesRenovationAllowance": 200.00,
       |      "costOfReplacingDomGoods": 200.00,
       |      "propertyIncomeAllowance": 30.02
@@ -52,8 +52,8 @@ class RetrieveHistoricNonFhlUkPropertyAnnualSubmissionResponseSpec extends UnitS
        |   "annualAdjustments":
        |   {
        |      "lossBroughtForward": 200.00,
-       |      "balancingCharge": 200.00,
-       |      "privateUseAdjustment": 200.00,
+       |      "balancingCharge": 300.00,
+       |      "privateUseAdjustment": 400.00,
        |      "businessPremisesRenovationAllowanceBalancingCharges": 80.02,
        |      "nonResidentLandlord": true,
        |      "rentARoom": {
@@ -62,8 +62,8 @@ class RetrieveHistoricNonFhlUkPropertyAnnualSubmissionResponseSpec extends UnitS
        |   },
        |   "annualAllowances": {
        |      "annualInvestmentAllowance": 200.00,
-       |      "otherCapitalAllowance": 200.00,
-       |      "zeroEmissionGoodsVehicleAllowance": 200.00,
+       |      "otherCapitalAllowance": 300.00,
+       |      "zeroEmissionGoodsVehicleAllowance": 400.00,
        |      "businessPremisesRenovationAllowance": 200.00,
        |      "costOfReplacingDomesticGoods": 200.00,
        |      "propertyIncomeAllowance": 30.02
@@ -76,16 +76,16 @@ class RetrieveHistoricNonFhlUkPropertyAnnualSubmissionResponseSpec extends UnitS
     Some(
       AnnualAdjustments(
         lossBroughtForward = decimal("200.00"),
-        balancingCharge = decimal("200.00"),
-        privateUseAdjustment = decimal("200.00"),
+        balancingCharge = decimal("300.00"),
+        privateUseAdjustment = decimal("400.00"),
         businessPremisesRenovationAllowanceBalancingCharges = decimal("80.02"),
         nonResidentLandlord = true,
         rentARoom = Option(RentARoom(jointlyLet = true)))),
     Some(
       AnnualAllowances(
         annualInvestmentAllowance = decimal("200.00"),
-        otherCapitalAllowance = decimal("200.00"),
-        zeroEmissionGoodsVehicleAllowance = decimal("200.00"),
+        otherCapitalAllowance = decimal("300.00"),
+        zeroEmissionGoodsVehicleAllowance = decimal("400.00"),
         businessPremisesRenovationAllowance = decimal("200.00"),
         costOfReplacingDomesticGoods = decimal("200.00"),
         propertyIncomeAllowance = decimal("30.02"))

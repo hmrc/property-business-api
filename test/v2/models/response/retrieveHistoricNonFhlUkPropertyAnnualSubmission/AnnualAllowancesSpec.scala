@@ -28,8 +28,8 @@ class AnnualAllowancesSpec extends UnitSpec{
   val downstreamJson: JsValue = Json.parse("""
                                              |   {
                                              |      "annualInvestmentAllowance": 200.00,
-                                             |      "otherCapitalAllowance": 200.00,
-                                             |      "zeroEmissionGoodsVehicleAllowance": 200.00,
+                                             |      "otherCapitalAllowance": 300.00,
+                                             |      "zeroEmissionGoodsVehicleAllowance": 400.00,
                                              |      "businessPremisesRenovationAllowance": 200.00,
                                              |      "costOfReplacingDomGoods": 200.00,
                                              |      "propertyIncomeAllowance": 30.02
@@ -38,8 +38,8 @@ class AnnualAllowancesSpec extends UnitSpec{
   val mtdJson: JsValue = Json.parse("""
                                       |   {
                                       |     "annualInvestmentAllowance": 200.00,
-                                      |      "otherCapitalAllowance": 200.00,
-                                      |      "zeroEmissionGoodsVehicleAllowance": 200.00,
+                                      |      "otherCapitalAllowance": 300.00,
+                                      |      "zeroEmissionGoodsVehicleAllowance": 400.00,
                                       |      "businessPremisesRenovationAllowance": 200.00,
                                       |      "costOfReplacingDomesticGoods": 200.00,
                                       |      "propertyIncomeAllowance": 30.02
@@ -48,8 +48,8 @@ class AnnualAllowancesSpec extends UnitSpec{
 
   val model: AnnualAllowances = AnnualAllowances(
     annualInvestmentAllowance = decimal("200.00"),
-    otherCapitalAllowance = decimal("200.00"),
-    zeroEmissionGoodsVehicleAllowance = decimal("200.00"),
+    otherCapitalAllowance = decimal("300.00"),
+    zeroEmissionGoodsVehicleAllowance = decimal("400.00"),
     businessPremisesRenovationAllowance = decimal("200.00"),
     costOfReplacingDomesticGoods = decimal("200.00"),
     propertyIncomeAllowance = decimal("30.02"))

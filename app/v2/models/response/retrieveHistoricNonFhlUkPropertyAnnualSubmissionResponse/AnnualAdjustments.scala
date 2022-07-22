@@ -28,8 +28,8 @@ object RentARoom {
 }
 
 case class AnnualAdjustments(lossBroughtForward: Option[BigDecimal],
-                             privateUseAdjustment: Option[BigDecimal],
                              balancingCharge: Option[BigDecimal],
+                             privateUseAdjustment: Option[BigDecimal],
                              businessPremisesRenovationAllowanceBalancingCharges: Option[BigDecimal],
                              nonResidentLandlord: Boolean,
                              rentARoom: Option[RentARoom])

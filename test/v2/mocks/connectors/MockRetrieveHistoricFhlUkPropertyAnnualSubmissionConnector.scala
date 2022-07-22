@@ -27,11 +27,13 @@ import scala.concurrent.{ExecutionContext, Future}
 
 trait MockRetrieveHistoricFhlUkPropertyAnnualSubmissionConnector extends MockFactory {
 
-  val mockRetrieveHistoricFhlUkPropertyConnector: RetrieveHistoricFhlUkPropertyAnnualSubmissionConnector = mock[RetrieveHistoricFhlUkPropertyAnnualSubmissionConnector]
+  val mockRetrieveHistoricFhlUkPropertyConnector:
+    RetrieveHistoricFhlUkPropertyAnnualSubmissionConnector = mock[RetrieveHistoricFhlUkPropertyAnnualSubmissionConnector]
 
   object MockRetrieveHistoricFhlUkPropertyAnnualSubmissionConnector {
 
-    def retrieve(requestData: RetrieveHistoricFhlUkPropertyAnnualSubmissionRequest): CallHandler[Future[DownstreamOutcome[RetrieveHistoricFhlUkPropertyAnnualSubmissionResponse]]] = {
+    def retrieve(requestData: RetrieveHistoricFhlUkPropertyAnnualSubmissionRequest):
+      CallHandler[Future[DownstreamOutcome[RetrieveHistoricFhlUkPropertyAnnualSubmissionResponse]]] = {
       (mockRetrieveHistoricFhlUkPropertyConnector
         .retrieve(_: RetrieveHistoricFhlUkPropertyAnnualSubmissionRequest)(_: HeaderCarrier, _: ExecutionContext, _: String))
         .expects(requestData, *, *, *)

@@ -25,7 +25,7 @@ import play.api.test.Helpers.AUTHORIZATION
 import support.V2IntegrationBaseSpec
 import v2.models.errors._
 import v2.models.utils.JsonErrorValidators
-import v2.stubs.{AuditStub, AuthStub, IfsStub, MtdIdLookupStub}
+import v2.stubs.{AuditStub, AuthStub, DownstreamStub, MtdIdLookupStub}
 
 class CreateForeignPropertyPeriodSummaryControllerISpec extends V2IntegrationBaseSpec with JsonErrorValidators {
 
@@ -127,7 +127,7 @@ class CreateForeignPropertyPeriodSummaryControllerISpec extends V2IntegrationBas
           AuditStub.audit()
           AuthStub.authorised()
           MtdIdLookupStub.ninoFound(nino)
-          IfsStub.onSuccess(IfsStub.POST, ifsUri, ifsQueryParams, Status.OK, ifsResponse)
+          DownstreamStub.onSuccess(DownstreamStub.POST, ifsUri, ifsQueryParams, Status.OK, ifsResponse)
         }
 
         val response: WSResponse = await(request().post(requestBody))
@@ -212,7 +212,7 @@ class CreateForeignPropertyPeriodSummaryControllerISpec extends V2IntegrationBas
               AuditStub.audit()
               AuthStub.authorised()
               MtdIdLookupStub.ninoFound(nino)
-              IfsStub.onError(IfsStub.POST, ifsUri, ifsQueryParams, ifsStatus, errorBody(ifsCode))
+              DownstreamStub.onError(DownstreamStub.POST, ifsUri, ifsQueryParams, ifsStatus, errorBody(ifsCode))
             }
 
             val response: WSResponse = await(request().post(requestBody))

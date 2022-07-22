@@ -25,7 +25,7 @@ import play.api.test.Helpers.AUTHORIZATION
 import support.V2IntegrationBaseSpec
 import v2.models.errors._
 import v2.models.request.amendForeignPropertyAnnualSubmission.AmendForeignPropertyAnnualSubmissionFixture
-import v2.stubs.{AuditStub, AuthStub, IfsStub, MtdIdLookupStub}
+import v2.stubs.{AuditStub, AuthStub, DownstreamStub, MtdIdLookupStub}
 
 class AmendForeignPropertyAnnualSubmissionControllerISpec extends V2IntegrationBaseSpec with AmendForeignPropertyAnnualSubmissionFixture {
 
@@ -354,7 +354,7 @@ class AmendForeignPropertyAnnualSubmissionControllerISpec extends V2IntegrationB
           AuditStub.audit()
           AuthStub.authorised()
           MtdIdLookupStub.ninoFound(nino)
-          IfsStub.onSuccess(IfsStub.PUT, ifsUri, ifsQueryParams, NO_CONTENT, JsObject.empty)
+          DownstreamStub.onSuccess(DownstreamStub.PUT, ifsUri, ifsQueryParams, NO_CONTENT, JsObject.empty)
         }
 
         val response: WSResponse = await(request().put(requestBodyJson))
@@ -505,7 +505,7 @@ class AmendForeignPropertyAnnualSubmissionControllerISpec extends V2IntegrationB
             AuditStub.audit()
             AuthStub.authorised()
             MtdIdLookupStub.ninoFound(nino)
-            IfsStub.onError(IfsStub.PUT, ifsUri, ifsStatus, errorBody(downstreamCode))
+            DownstreamStub.onError(DownstreamStub.PUT, ifsUri, ifsStatus, errorBody(downstreamCode))
           }
 
           val response: WSResponse = await(request().put(requestBodyJson))

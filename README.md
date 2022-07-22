@@ -29,7 +29,7 @@ To view documentation locally ensure the Property Business API is running, and r
 Then go to http://localhost:9680/api-documentation/docs/api/preview and use this port and version:
 
 ```
-http://localhost:7798/api/conf/1.0/application.raml
+http://localhost:7798/api/conf/2.0/application.raml
 ```
 
 ## Changelog

@@ -19,6 +19,10 @@ package v2.controllers.requestParsers
 import javax.inject.Inject
 import v2.controllers.requestParsers.validators.RetrieveHistoricNonFhlUkPropertyAnnualSubmissionValidator
 import v2.models.domain.Nino
+import v2.models.request.retrieveHistoricNonFhlUkPropertyAnnualSubmission.{
+  RetrieveHistoricNonFhlUkPropertyAnnualSubmissionRawData,
+  RetrieveHistoricNonFhlUkPropertyAnnualSubmissionRequest
+}
 
 class RetrieveHistoricNonFhlUkPropertyAnnualSubmissionRequestParser @Inject()(
     val validator: RetrieveHistoricNonFhlUkPropertyAnnualSubmissionValidator)

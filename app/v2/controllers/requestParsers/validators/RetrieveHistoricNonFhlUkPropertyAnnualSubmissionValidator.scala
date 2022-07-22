@@ -21,6 +21,7 @@ import config.AppConfig
 import javax.inject.{ Inject, Singleton }
 import v2.controllers.requestParsers.validators.validations.{ HistoricTaxYearValidation, NinoValidation }
 import v2.models.errors.MtdError
+import v2.models.request.retrieveHistoricNonFhlUkPropertyAnnualSubmission.RetrieveHistoricNonFhlUkPropertyAnnualSubmissionRawData
 
 @Singleton
 class RetrieveHistoricNonFhlUkPropertyAnnualSubmissionValidator @Inject()(appConfig: AppConfig)

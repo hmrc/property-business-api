@@ -20,6 +20,7 @@ import support.UnitSpec
 import v2.mocks.validators.MockRetrieveHistoricNonFhlUkPropertyAnnualSubmissionValidator
 import v2.models.domain.Nino
 import v2.models.errors.{ BadRequestError, ErrorWrapper, NinoFormatError, TaxYearFormatError }
+import v2.models.request.retrieveHistoricNonFhlUkPropertyAnnualSubmission._
 
 class RetrieveHistoricNonFhlUkPropertyAnnualSubmissionRequestParserRequestParserSpec extends UnitSpec {
 

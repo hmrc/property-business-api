@@ -20,6 +20,7 @@ import config.AppConfig
 
 import javax.inject.{Inject, Singleton}
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
+import v2.connectors.DownstreamUri.IfsUri
 import v2.connectors.RetrieveForeignPropertyPeriodSummaryConnector._
 import v2.connectors.httpparsers.StandardIfsHttpParser._
 import v2.models.outcomes.ResponseWrapper
@@ -39,11 +40,11 @@ object RetrieveForeignPropertyPeriodSummaryConnector{
 
 @Singleton
 class RetrieveForeignPropertyPeriodSummaryConnector @Inject()(val http: HttpClient,
-                                                              val appConfig: AppConfig) extends BaseIfsConnector {
+                                                              val appConfig: AppConfig) extends BaseDownstreamConnector {
 
   def retrieveForeignProperty(request: RetrieveForeignPropertyPeriodSummaryRequest)(implicit hc: HeaderCarrier,
                                                                                     ec: ExecutionContext,
-                                                                                    correlationId: String): Future[IfsOutcome[Result]] = {
+                                                                                    correlationId: String): Future[DownstreamOutcome[Result]] = {
     val response = get(
       uri = IfsUri[RetrieveForeignPropertyPeriodSummaryResponse]("income-tax/business/property/periodic"),
       queryParams = Seq("taxableEntityId" -> request.nino.value, "taxYear" -> request.taxYear,

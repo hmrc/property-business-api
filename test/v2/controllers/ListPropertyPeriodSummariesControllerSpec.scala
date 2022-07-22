@@ -156,7 +156,7 @@ class ListPropertyPeriodSummariesControllerSpec
           (TaxYearFormatError, BAD_REQUEST),
           (NotFoundError, NOT_FOUND),
           (RuleTaxYearNotSupportedError, BAD_REQUEST),
-          (DownstreamError, INTERNAL_SERVER_ERROR)
+          (InternalError, INTERNAL_SERVER_ERROR)
         )
 
         input.foreach(args => (serviceErrors _).tupled(args))

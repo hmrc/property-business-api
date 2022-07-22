@@ -27,13 +27,13 @@ import v2.controllers.EndpointLogContext
 import v2.models.errors._
 import v2.models.request.createForeignPropertyPeriodSummary.CreateForeignPropertyPeriodSummaryRequest
 import v2.models.response.createForeignPropertyPeriodSummary.CreateForeignPropertyPeriodSummaryResponse
-import v2.support.IfsResponseMappingSupport
+import v2.support.DownstreamResponseMappingSupport
 
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class CreateForeignPropertyPeriodSummaryService @Inject()(connector: CreateForeignPropertyPeriodSummaryConnector)
-  extends IfsResponseMappingSupport with Logging {
+  extends DownstreamResponseMappingSupport with Logging {
 
   def createForeignProperty(request: CreateForeignPropertyPeriodSummaryRequest)(
     implicit hc: HeaderCarrier,
@@ -42,7 +42,7 @@ class CreateForeignPropertyPeriodSummaryService @Inject()(connector: CreateForei
     correlationId: String): Future[ServiceOutcome[CreateForeignPropertyPeriodSummaryResponse]] = {
 
     val result = for {
-      ifsResponseWrapper <- EitherT(connector.createForeignProperty(request)).leftMap(mapIfsErrors(ifsErrorMap))
+      ifsResponseWrapper <- EitherT(connector.createForeignProperty(request)).leftMap(mapDownstreamErrors(ifsErrorMap))
     } yield ifsResponseWrapper
 
     result.value
@@ -58,15 +58,15 @@ class CreateForeignPropertyPeriodSummaryService @Inject()(connector: CreateForei
       "NOT_ALIGN_PERIOD" -> RuleMisalignedPeriodError,
       "GAPS_IN_PERIOD" -> RuleNotContiguousPeriodError,
       "INCOME_SOURCE_NOT_FOUND" -> NotFoundError,
-      "SERVER_ERROR" -> DownstreamError,
-      "SERVICE_UNAVAILABLE" -> DownstreamError,
-      "INVALID_PAYLOAD" -> DownstreamError,
-      "INVALID_CORRELATIONID" -> DownstreamError,
+      "SERVER_ERROR" -> InternalError,
+      "SERVICE_UNAVAILABLE" -> InternalError,
+      "INVALID_PAYLOAD" -> InternalError,
+      "INVALID_CORRELATIONID" -> InternalError,
       "DUPLICATE_SUBMISSION" -> RuleDuplicateSubmissionError,
       "INVALID_DATE_RANGE" -> RuleToDateBeforeFromDateError,
       "INCOMPATIBLE_PAYLOAD" -> RuleTypeOfBusinessIncorrectError,
       "TAX_YEAR_NOT_SUPPORTED" -> RuleTaxYearNotSupportedError,
-      "MISSING_EXPENSES" -> DownstreamError
+      "MISSING_EXPENSES" -> InternalError
     )
 
 }

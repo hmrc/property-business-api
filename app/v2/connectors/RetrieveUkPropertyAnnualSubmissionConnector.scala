@@ -17,14 +17,15 @@
 package v2.connectors
 
 import config.AppConfig
-import uk.gov.hmrc.http.{ HeaderCarrier, HttpClient }
+import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
+import v2.connectors.DownstreamUri.IfsUri
 import v2.connectors.httpparsers.StandardIfsHttpParser._
 import v2.models.outcomes.ResponseWrapper
 import v2.models.request.retrieveUkPropertyAnnualSubmission.RetrieveUkPropertyAnnualSubmissionRequest
 import v2.models.response.retrieveUkPropertyAnnualSubmission.RetrieveUkPropertyAnnualSubmissionResponse
 
-import javax.inject.{ Inject, Singleton }
-import scala.concurrent.{ ExecutionContext, Future }
+import javax.inject.{Inject, Singleton}
+import scala.concurrent.{ExecutionContext, Future}
 
 object RetrieveUkPropertyAnnualSubmissionConnector {
 
@@ -38,11 +39,11 @@ object RetrieveUkPropertyAnnualSubmissionConnector {
 import v2.connectors.RetrieveUkPropertyAnnualSubmissionConnector._
 
 @Singleton
-class RetrieveUkPropertyAnnualSubmissionConnector @Inject()(val http: HttpClient, val appConfig: AppConfig) extends BaseIfsConnector {
+class RetrieveUkPropertyAnnualSubmissionConnector @Inject()(val http: HttpClient, val appConfig: AppConfig) extends BaseDownstreamConnector {
 
   def retrieveUkProperty(request: RetrieveUkPropertyAnnualSubmissionRequest)(implicit hc: HeaderCarrier,
                                                                              ec: ExecutionContext,
-                                                                             correlationId: String): Future[IfsOutcome[Result]] = {
+                                                                             correlationId: String): Future[DownstreamOutcome[Result]] = {
 
     val response = get(
       uri = IfsUri[RetrieveUkPropertyAnnualSubmissionResponse]("income-tax/business/property/annual"),
@@ -51,8 +52,8 @@ class RetrieveUkPropertyAnnualSubmissionConnector @Inject()(val http: HttpClient
 
     response.map {
       case Right(ResponseWrapper(corId, resp)) if ukResult(resp) => Right(ResponseWrapper(corId, UkResult(resp)))
-      case Right(ResponseWrapper(corId, _))                      => Right(ResponseWrapper(corId, NonUkResult))
-      case Left(e)                                               => Left(e)
+      case Right(ResponseWrapper(corId, _)) => Right(ResponseWrapper(corId, NonUkResult))
+      case Left(e) => Left(e)
     }
   }
 

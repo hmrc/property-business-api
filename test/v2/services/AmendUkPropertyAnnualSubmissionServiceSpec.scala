@@ -136,7 +136,7 @@ class AmendUkPropertyAnnualSubmissionServiceSpec extends UnitSpec {
         s"a $ifsErrorCode error is returned from the service" in new Test {
 
           MockAmendUkPropertyAnnualSubmissionConnector.amendUkProperty(request)
-            .returns(Future.successful(Left(ResponseWrapper(correlationId, IfsErrors.single(IfsErrorCode(ifsErrorCode))))))
+            .returns(Future.successful(Left(ResponseWrapper(correlationId, DownstreamErrors.single(DownstreamErrorCode(ifsErrorCode))))))
 
           await(service.amendUkPropertyAnnualSubmission(request)) shouldBe Left(ErrorWrapper(correlationId, error))
         }
@@ -145,16 +145,16 @@ class AmendUkPropertyAnnualSubmissionServiceSpec extends UnitSpec {
         "INVALID_TAXABLE_ENTITY_ID" -> NinoFormatError,
         "INVALID_TAX_YEAR" -> TaxYearFormatError,
         "INVALID_INCOMESOURCEID" -> BusinessIdFormatError,
-        "INVALID_PAYLOAD" -> DownstreamError,
-        "INVALID_CORRELATIONID" -> DownstreamError,
+        "INVALID_PAYLOAD" -> InternalError,
+        "INVALID_CORRELATIONID" -> InternalError,
         "INCOME_SOURCE_NOT_FOUND" -> NotFoundError,
         "INCOMPATIBLE_PAYLOAD" -> RuleTypeOfBusinessIncorrectError,
         "TAX_YEAR_NOT_SUPPORTED" -> RuleTaxYearNotSupportedError,
         "BUSINESS_VALIDATION_FAILURE" -> RulePropertyIncomeAllowanceError,
-        "MISSING_ALLOWANCES" -> DownstreamError,
-        "DUPLICATE_COUNTRY_CODE" -> DownstreamError,
-        "SERVER_ERROR" -> DownstreamError,
-        "SERVICE_UNAVAILABLE" -> DownstreamError
+        "MISSING_ALLOWANCES" -> InternalError,
+        "DUPLICATE_COUNTRY_CODE" -> InternalError,
+        "SERVER_ERROR" -> InternalError,
+        "SERVICE_UNAVAILABLE" -> InternalError
       )
 
       input.foreach(args => (serviceError _).tupled(args))

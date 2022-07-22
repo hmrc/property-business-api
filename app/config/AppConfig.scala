@@ -25,6 +25,12 @@ trait AppConfig {
   // MTD ID Lookup Config
   def mtdIdBaseUrl: String
 
+  // DES Config
+  def desBaseUrl: String
+  def desEnv: String
+  def desToken: String
+  def desEnvironmentHeaders: Option[Seq[String]]
+
   // IFS Config
   def ifsBaseUrl: String
   def ifsEnv: String
@@ -50,6 +56,12 @@ class AppConfigImpl @Inject()(config: ServicesConfig, configuration: Configurati
 
   // MTD ID Lookup Config
   val mtdIdBaseUrl: String = config.baseUrl("mtd-id-lookup")
+
+  // DES Config
+  val desBaseUrl: String                         = config.baseUrl("des")
+  val desEnv: String                             = config.getString("microservice.services.des.env")
+  val desToken: String                           = config.getString("microservice.services.des.token")
+  val desEnvironmentHeaders: Option[Seq[String]] = configuration.getOptional[Seq[String]]("microservice.services.des.environmentHeaders")
 
   // IFS Config
   val ifsBaseUrl: String                         = config.baseUrl("ifs")

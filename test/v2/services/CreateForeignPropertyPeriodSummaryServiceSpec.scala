@@ -112,7 +112,7 @@ class CreateForeignPropertyPeriodSummaryServiceSpec extends UnitSpec {
         s"a $ifsErrorCode error is returned from the service" in new Test {
 
           MockCreateForeignPropertyConnector.createForeignProperty(expensesRequestData)
-            .returns(Future.successful(Left(ResponseWrapper(correlationId, IfsErrors.single(IfsErrorCode(ifsErrorCode))))))
+            .returns(Future.successful(Left(ResponseWrapper(correlationId, DownstreamErrors.single(DownstreamErrorCode(ifsErrorCode))))))
 
           await(service.createForeignProperty(expensesRequestData)) shouldBe Left(ErrorWrapper(correlationId, error))
         }
@@ -122,8 +122,8 @@ class CreateForeignPropertyPeriodSummaryServiceSpec extends UnitSpec {
         "INVALID_INCOMESOURCEID" -> BusinessIdFormatError,
         "INVALID_TAX_YEAR" -> TaxYearFormatError,
         "DUPLICATE_COUNTRY_CODE" -> RuleDuplicateCountryCodeError,
-        "INVALID_PAYLOAD" -> DownstreamError,
-        "INVALID_CORRELATIONID" -> DownstreamError,
+        "INVALID_PAYLOAD" -> InternalError,
+        "INVALID_CORRELATIONID" -> InternalError,
         "OVERLAPS_IN_PERIOD" -> RuleOverlappingPeriodError,
         "NOT_ALIGN_PERIOD" -> RuleMisalignedPeriodError,
         "GAPS_IN_PERIOD" -> RuleNotContiguousPeriodError,
@@ -132,9 +132,9 @@ class CreateForeignPropertyPeriodSummaryServiceSpec extends UnitSpec {
         "INCOME_SOURCE_NOT_FOUND" -> NotFoundError,
         "INCOMPATIBLE_PAYLOAD" -> RuleTypeOfBusinessIncorrectError,
         "TAX_YEAR_NOT_SUPPORTED" -> RuleTaxYearNotSupportedError,
-        "MISSING_EXPENSES" -> DownstreamError,
-        "SERVER_ERROR" -> DownstreamError,
-        "SERVICE_UNAVAILABLE" -> DownstreamError
+        "MISSING_EXPENSES" -> InternalError,
+        "SERVER_ERROR" -> InternalError,
+        "SERVICE_UNAVAILABLE" -> InternalError
       )
 
       input.foreach(args => (serviceError _).tupled(args))

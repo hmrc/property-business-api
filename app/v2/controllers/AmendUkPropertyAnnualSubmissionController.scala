@@ -101,7 +101,7 @@ class AmendUkPropertyAnnualSubmissionController @Inject()(val authService: Enrol
             RulePropertyIncomeAllowanceError.code) | MtdErrorWithCode(RuleBuildingNameNumberError.code) | MtdErrorWithCode(DateFormatError.code) |
           MtdErrorWithCode(StringFormatError.code) =>
         BadRequest(Json.toJson(errorWrapper))
-      case DownstreamError => InternalServerError(Json.toJson(errorWrapper))
+      case InternalError => InternalServerError(Json.toJson(errorWrapper))
       case NotFoundError   => NotFound(Json.toJson(errorWrapper))
       case _ => unhandledError(errorWrapper)
     }

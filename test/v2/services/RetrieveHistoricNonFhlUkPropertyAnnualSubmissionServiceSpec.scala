@@ -19,13 +19,13 @@ package v2.services
 import support.UnitSpec
 import uk.gov.hmrc.http.HeaderCarrier
 import v2.controllers.EndpointLogContext
-import v2.mocks.connectors.MockRetrieveHistoricFhlUkPropertyAnnualSubmissionConnector
+import v2.mocks.connectors.MockRetrieveHistoricNonFhlUkPropertyAnnualSubmissionConnector
 import v2.models.domain.{Nino, TaxYear}
 import v2.models.errors._
 import v2.models.outcomes.ResponseWrapper
-import v2.models.request.retrieveHistoricFhlUkPropertyAnnualSubmission.RetrieveHistoricFhlUkPropertyAnnualSubmissionRequest
-import v2.models.response.retrieveHistoricFhlUkPropertyAnnualSubmission.{AnnualAdjustments,
-  AnnualAllowances, RentARoom, RetrieveHistoricFhlUkPropertyAnnualSubmissionResponse}
+import v2.models.request.retrieveHistoricNonFhlUkPropertyAnnualSubmission.RetrieveHistoricNonFhlUkPropertyAnnualSubmissionRequest
+import v2.models.response.retrieveHistoricNonFhlUkPropertyAnnualSubmissionResponse.{AnnualAdjustments,
+  AnnualAllowances, RentARoom, RetrieveHistoricNonFhlUkPropertyAnnualSubmissionResponse}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -40,7 +40,6 @@ class RetrieveHistoricNonFhlUkPropertyAnnualSubmissionServiceSpec extends UnitSp
     lossBroughtForward = Option(BigDecimal("100.11")),
     privateUseAdjustment = Option(BigDecimal("200.11")),
     balancingCharge = Option(BigDecimal("105.11")),
-    periodOfGraceAdjustment = true,
     businessPremisesRenovationAllowanceBalancingCharges = Option(BigDecimal("100.11")),
     nonResidentLandlord = false,
     rentARoom = Option(RentARoom(true))
@@ -48,29 +47,31 @@ class RetrieveHistoricNonFhlUkPropertyAnnualSubmissionServiceSpec extends UnitSp
 
   val annualAllowances: AnnualAllowances = AnnualAllowances(
     annualInvestmentAllowance = Option(BigDecimal("100.11")),
-    businessPremisesRenovationAllowance = Option(BigDecimal("300.11")),
-    otherCapitalAllowance = Option(BigDecimal("405.11")),
-    propertyIncomeAllowance = Option(BigDecimal("550.11"))
+    otherCapitalAllowance = Option(BigDecimal("300.11")),
+    zeroEmissionGoodsVehicleAllowance = Option(BigDecimal("405.11")),
+    businessPremisesRenovationAllowance = Option(BigDecimal("550.11")),
+    costOfReplacingDomesticGoods = Option(BigDecimal("550.11")),
+    propertyIncomeAllowance  = Option(BigDecimal("550.11"))
   )
 
   private val response =
-    RetrieveHistoricFhlUkPropertyAnnualSubmissionResponse(Some(annualAdjustments), Some(annualAllowances))
+    RetrieveHistoricNonFhlUkPropertyAnnualSubmissionResponse(Some(annualAdjustments), Some(annualAllowances))
 
-  private val request = RetrieveHistoricFhlUkPropertyAnnualSubmissionRequest(Nino(nino), TaxYear.fromMtd(taxYear))
+  private val request = RetrieveHistoricNonFhlUkPropertyAnnualSubmissionRequest(Nino(nino), TaxYear.fromMtd(taxYear))
 
-  trait Test extends MockRetrieveHistoricFhlUkPropertyAnnualSubmissionConnector {
+  trait Test extends MockRetrieveHistoricNonFhlUkPropertyAnnualSubmissionConnector {
     implicit val hc: HeaderCarrier = HeaderCarrier()
     implicit val logContext: EndpointLogContext = EndpointLogContext("c", "ep")
 
-    val service = new RetrieveHistoricFhlUkPropertyAnnualSubmissionService(
-      connector = mockRetrieveHistoricFhlUkPropertyConnector
+    val service = new RetrieveHistoricNonFhlUkPropertyAnnualSubmissionService(
+      connector = mockRetrieveHistoricNonFhlUkPropertyConnector
     )
   }
 
   "retrieve" should {
     "return a success result" when {
       "a valid result is found" in new Test {
-        MockRetrieveHistoricFhlUkPropertyAnnualSubmissionConnector
+        MockRetrieveHistoricNonFhlUkPropertyAnnualSubmissionConnector
           .retrieve(request) returns Future.successful(Right(ResponseWrapper(correlationId, response)))
 
         private val result = await(service.retrieve(request))
@@ -82,7 +83,7 @@ class RetrieveHistoricNonFhlUkPropertyAnnualSubmissionServiceSpec extends UnitSp
       def serviceError(downstreamErrorCode: String, error: MtdError): Unit =
         s"a $downstreamErrorCode error is returned from the service" in new Test {
 
-          MockRetrieveHistoricFhlUkPropertyAnnualSubmissionConnector
+          MockRetrieveHistoricNonFhlUkPropertyAnnualSubmissionConnector
             .retrieve(request)
             .returns(Future.successful(Left(ResponseWrapper(correlationId, DownstreamErrors.single(DownstreamErrorCode(downstreamErrorCode))))))
 

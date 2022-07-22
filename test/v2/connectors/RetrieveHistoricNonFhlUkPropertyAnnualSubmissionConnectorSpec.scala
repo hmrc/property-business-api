@@ -114,7 +114,7 @@ class RetrieveHistoricNonFhlUkPropertyAnnualSubmissionConnectorSpec extends Conn
     "return object with only annualAllowances" when {
       "response received contains only annualAllowances" in new Test {
         val response: RetrieveHistoricNonFhlUkPropertyAnnualSubmissionResponse = responseWith(None, Some(annualAllowances))
-       private val outcome  = Right(ResponseWrapper(correlationId, response))
+        private val outcome  = Right(ResponseWrapper(correlationId, response))
 
         stubHttpResponse(outcome)
 

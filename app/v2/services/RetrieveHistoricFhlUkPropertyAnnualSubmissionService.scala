@@ -20,7 +20,7 @@ import cats.data.EitherT
 import cats.implicits._
 import uk.gov.hmrc.http.HeaderCarrier
 import utils.Logging
-import v2.connectors.{RetrieveHistoricFhlUkPropertyAnnualSubmissionConnector}
+import v2.connectors.RetrieveHistoricFhlUkPropertyAnnualSubmissionConnector
 import v2.controllers.EndpointLogContext
 import v2.models.errors._
 import v2.models.request.retrieveHistoricFhlUkPropertyAnnualSubmission.RetrieveHistoricFhlUkPropertyAnnualSubmissionRequest

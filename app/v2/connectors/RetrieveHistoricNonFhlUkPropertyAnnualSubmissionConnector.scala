@@ -18,26 +18,29 @@ package v2.connectors
 
 import config.AppConfig
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
+import v2.models.request.retrieveHistoricNonFhlUkPropertyAnnualSubmission.RetrieveHistoricNonFhlUkPropertyAnnualSubmissionRequest
+import v2.models.response.retrieveHistoricNonFhlUkPropertyAnnualSubmissionResponse.RetrieveHistoricNonFhlUkPropertyAnnualSubmissionResponse
 import v2.connectors.DownstreamUri.DesUri
-import v2.connectors.httpparsers.StandardIfsHttpParser._
-import v2.models.request.retrieveHistoricFhlUkPropertyAnnualSubmission.RetrieveHistoricFhlUkPropertyAnnualSubmissionRequest
-import v2.models.response.retrieveHistoricFhlUkPropertyAnnualSubmission.RetrieveHistoricFhlUkPropertyAnnualSubmissionResponse
 import javax.inject.{Inject, Singleton}
+import v2.connectors.httpparsers.StandardIfsHttpParser._
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class RetrieveHistoricFhlUkPropertyAnnualSubmissionConnector @Inject()(val http: HttpClient, val appConfig: AppConfig) extends BaseDownstreamConnector {
+class RetrieveHistoricNonFhlUkPropertyAnnualSubmissionConnector @Inject()(val http: HttpClient,
+                                                                          val appConfig: AppConfig) extends BaseDownstreamConnector {
 
-  def retrieve(request: RetrieveHistoricFhlUkPropertyAnnualSubmissionRequest)
+
+  def retrieve(request: RetrieveHistoricNonFhlUkPropertyAnnualSubmissionRequest)
               (implicit hc: HeaderCarrier,
                ec: ExecutionContext,
-               correlationId:String): Future[DownstreamOutcome[RetrieveHistoricFhlUkPropertyAnnualSubmissionResponse]] = {
+               correlationId: String): Future[DownstreamOutcome[RetrieveHistoricNonFhlUkPropertyAnnualSubmissionResponse]] = {
 
-    val nino = request.nino.value
+    val nino = request.nino.nino
     val taxYear = request.taxYear.toDownstream
+
     val response = get(
-      uri = DesUri[RetrieveHistoricFhlUkPropertyAnnualSubmissionResponse]
-        (s"income-tax/nino/$nino/uk-properties/furnished-holiday-lettings/annual-summaries/$taxYear")
+      uri = DesUri[RetrieveHistoricNonFhlUkPropertyAnnualSubmissionResponse]
+        (s"income-tax/nino/$nino/uk-properties/other/annual-summaries/$taxYear")
     )
 
     response

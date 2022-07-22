@@ -37,18 +37,18 @@ class RetrieveHistoricNonFhlUkPropertyAnnualSubmissionValidatorSpec extends Unit
         validator.validate(RetrieveHistoricNonFhlUkPropertyAnnualSubmissionRawData(validNino, validTaxYear)) shouldBe Nil
       }
     }
-    "return a path parameter format error" when {
+    "return a validation error" when {
       "an invalid nino is supplied" in {
         validator.validate(RetrieveHistoricNonFhlUkPropertyAnnualSubmissionRawData("Nino", validTaxYear)) shouldBe List(NinoFormatError)
       }
       "an invalid taxYear format is supplied" in {
         validator.validate(RetrieveHistoricNonFhlUkPropertyAnnualSubmissionRawData(validNino, "2021/22")) shouldBe List(TaxYearFormatError)
       }
-      "an unsupported taxYear is supplied" in {
+      "an unsupported min taxYear is supplied" in {
         validator.validate(RetrieveHistoricNonFhlUkPropertyAnnualSubmissionRawData(validNino, "2016-17")) shouldBe List(
           RuleHistoricTaxYearNotSupportedError)
       }
-      "an unsupported historic taxYear is supplied" in {
+      "an unsupported max taxYear is supplied" in {
         validator.validate(RetrieveHistoricNonFhlUkPropertyAnnualSubmissionRawData(validNino, "2022-23")) shouldBe List(
           RuleHistoricTaxYearNotSupportedError)
       }

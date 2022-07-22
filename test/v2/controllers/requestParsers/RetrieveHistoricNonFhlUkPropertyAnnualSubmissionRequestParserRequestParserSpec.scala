@@ -18,8 +18,8 @@ package v2.controllers.requestParsers
 
 import support.UnitSpec
 import v2.mocks.validators.MockRetrieveHistoricNonFhlUkPropertyAnnualSubmissionValidator
-import v2.models.domain.Nino
-import v2.models.errors.{ BadRequestError, ErrorWrapper, NinoFormatError, TaxYearFormatError }
+import v2.models.domain.{Nino, TaxYear}
+import v2.models.errors.{BadRequestError, ErrorWrapper, NinoFormatError, TaxYearFormatError}
 import v2.models.request.retrieveHistoricNonFhlUkPropertyAnnualSubmission._
 
 class RetrieveHistoricNonFhlUkPropertyAnnualSubmissionRequestParserRequestParserSpec extends UnitSpec {
@@ -40,7 +40,7 @@ class RetrieveHistoricNonFhlUkPropertyAnnualSubmissionRequestParserRequestParser
       "valid request data is supplied" in new Test {
         MockRetrieveHistoricNonFhlUkPropertyAnnualSubmissionValidator.validate(inputData).returns(Nil)
 
-        parser.parseRequest(inputData) shouldBe Right(RetrieveHistoricNonFhlUkPropertyAnnualSubmissionRequest(Nino(nino), taxYear))
+        parser.parseRequest(inputData) shouldBe Right(RetrieveHistoricNonFhlUkPropertyAnnualSubmissionRequest(Nino(nino), TaxYear.fromMtd(taxYear)))
       }
     }
 

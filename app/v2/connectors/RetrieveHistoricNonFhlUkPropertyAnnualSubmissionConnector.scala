@@ -30,11 +30,14 @@ class RetrieveHistoricNonFhlUkPropertyAnnualSubmissionConnector @Inject()(val ht
                                                                           val appConfig: AppConfig) extends BaseDownstreamConnector {
 
 
-  def retrieve(request: RetrieveHistoricNonFhlUkPropertyAnnualSubmissionRequest)(implicit hc: HeaderCarrier,
-                                                                                    ec: ExecutionContext,
-                                                                                    correlationId: String): Future[DownstreamOutcome[RetrieveHistoricNonFhlUkPropertyAnnualSubmissionResponse]] = {
+  def retrieve(request: RetrieveHistoricNonFhlUkPropertyAnnualSubmissionRequest)
+              (implicit hc: HeaderCarrier,
+               ec: ExecutionContext,
+               correlationId: String): Future[DownstreamOutcome[RetrieveHistoricNonFhlUkPropertyAnnualSubmissionResponse]] = {
+
     val nino = request.nino.nino
-    val taxYear = request.taxYear
+    val taxYear = request.taxYear.toDownstream
+
     val response = get(
       uri = DesUri[RetrieveHistoricNonFhlUkPropertyAnnualSubmissionResponse]
         (s"income-tax/nino/$nino/uk-properties/other/annual-summaries/$taxYear")

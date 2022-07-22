@@ -26,7 +26,6 @@ import v2.models.request.retrieveHistoricNonFhlUkPropertyAnnualSubmission.Retrie
 import v2.models.response.retrieveHistoricNonFhlUkPropertyAnnualSubmissionResponse.RetrieveHistoricNonFhlUkPropertyAnnualSubmissionResponse
 import v2.support.DownstreamResponseMappingSupport
 
-import java.io
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 

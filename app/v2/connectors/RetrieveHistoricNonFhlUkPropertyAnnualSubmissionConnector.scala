@@ -20,27 +20,27 @@ import config.AppConfig
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
 import v2.models.request.retrieveHistoricNonFhlUkPropertyAnnualSubmission.RetrieveHistoricNonFhlUkPropertyAnnualSubmissionRequest
 import v2.models.response.retrieveHistoricNonFhlUkPropertyAnnualSubmissionResponse.RetrieveHistoricNonFhlUkPropertyAnnualSubmissionResponse
-
+import v2.connectors.DownstreamUri.DesUri
 import javax.inject.{Inject, Singleton}
+import v2.connectors.httpparsers.StandardIfsHttpParser._
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class RetrieveHistoricNonFhlUkPropertyAnnualSubmissionConnector @Inject()(val http: HttpClient,
-                                                                          val appConfig: AppConfig) extends BaseIfsConnector {
+                                                                          val appConfig: AppConfig) extends BaseDownstreamConnector {
 
 
   def retrieve(request: RetrieveHistoricNonFhlUkPropertyAnnualSubmissionRequest)(implicit hc: HeaderCarrier,
                                                                                     ec: ExecutionContext,
-                                                                                    correlationId: String): Future[IfsOutcome[RetrieveHistoricNonFhlUkPropertyAnnualSubmissionResponse]] = {
+                                                                                    correlationId: String): Future[DownstreamOutcome[RetrieveHistoricNonFhlUkPropertyAnnualSubmissionResponse]] = {
     val nino = request.nino.nino
     val taxYear = request.taxYear
-
-
     val response = get(
-      uri = IfsUri[RetrieveHistoricNonFhlUkPropertyAnnualSubmissionResponse]
+      uri = DesUri[RetrieveHistoricNonFhlUkPropertyAnnualSubmissionResponse]
         (s"income-tax/nino/$nino/uk-properties/other/annual-summaries/$taxYear")
-
     )
+
+    response
   }
 
 }

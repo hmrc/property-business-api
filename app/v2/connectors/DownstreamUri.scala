@@ -14,24 +14,13 @@
  * limitations under the License.
  */
 
-package v2.models.errors
+package v2.connectors
 
-import play.api.libs.json.{Json, Reads}
-
-case class IfsErrorCode(code: String) {
-  def toMtd: MtdError = MtdError(code = code, message = "")
+sealed trait DownstreamUri[Resp] {
+  val value: String
 }
 
-object IfsErrorCode {
-  implicit val reads: Reads[IfsErrorCode] = Json.reads[IfsErrorCode]
+object DownstreamUri {
+  final case class DesUri[Resp](value: String) extends DownstreamUri[Resp]
+  final case class IfsUri[Resp](value: String) extends DownstreamUri[Resp]
 }
-
-sealed trait IfsError
-
-case class IfsErrors(errors: List[IfsErrorCode]) extends IfsError
-
-object IfsErrors {
-  def single(error: IfsErrorCode): IfsErrors = IfsErrors(List(error))
-}
-
-case class OutboundError(error: MtdError, errors: Option[Seq[MtdError]] = None) extends IfsError

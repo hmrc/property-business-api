@@ -28,7 +28,7 @@ import uk.gov.hmrc.auth.core.retrieve.~
 import uk.gov.hmrc.http.HeaderCarrier
 import utils.Logging
 import v2.models.auth.UserDetails
-import v2.models.errors.{DownstreamError, UnauthorisedError}
+import v2.models.errors.{InternalError, UnauthorisedError}
 import v2.models.outcomes.AuthOutcome
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -67,7 +67,7 @@ class EnrolmentsAuthService @Inject()(val connector: AuthConnector, val appConfi
             user
           case None        =>
             logger.warn(s"[EnrolmentsAuthService][authorised] No AgentReferenceNumber defined on agent enrolment.")
-            Left(DownstreamError)
+            Left(InternalError)
         }
       case _ =>
         logger.warn(s"[EnrolmentsAuthService][authorised] Invalid AffinityGroup.")
@@ -77,7 +77,7 @@ class EnrolmentsAuthService @Inject()(val connector: AuthConnector, val appConfi
       case _: AuthorisationException => Future.successful(Left(UnauthorisedError))
       case error                     =>
         logger.warn(s"[EnrolmentsAuthService][authorised] An unexpected error occurred: $error")
-        Future.successful(Left(DownstreamError))
+        Future.successful(Left(InternalError))
     }
   }
 

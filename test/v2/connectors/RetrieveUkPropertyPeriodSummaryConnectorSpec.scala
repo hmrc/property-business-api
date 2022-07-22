@@ -22,7 +22,7 @@ import org.scalamock.handlers.CallHandler
 import v2.connectors.RetrieveUkPropertyPeriodSummaryConnector._
 import v2.mocks.MockHttpClient
 import v2.models.domain.Nino
-import v2.models.errors.{IfsErrorCode, IfsErrors}
+import v2.models.errors.{DownstreamErrorCode, DownstreamErrors}
 import v2.models.outcomes.ResponseWrapper
 import v2.models.request.retrieveUkPropertyPeriodSummary.RetrieveUkPropertyPeriodSummaryRequest
 import v2.models.response.retrieveUkPropertyPeriodSummary.{RetrieveUkPropertyPeriodSummaryResponse, UkFhlProperty, UkNonFhlProperty}
@@ -58,10 +58,10 @@ class RetrieveUkPropertyPeriodSummaryConnectorSpec extends ConnectorSpec with Re
     MockAppConfig.ifsBaseUrl returns baseUrl
     MockAppConfig.ifsToken returns "ifs-token"
     MockAppConfig.ifsEnvironment returns "ifs-environment"
-    MockAppConfig.ifsEnvironmentHeaders returns Some(allowedIfsHeaders)
+    MockAppConfig.ifsEnvironmentHeaders returns Some(allowedDownstreamHeaders)
 
-    def stubHttpResponse(outcome: IfsOutcome[RetrieveUkPropertyPeriodSummaryResponse])
-    : CallHandler[Future[IfsOutcome[RetrieveUkPropertyPeriodSummaryResponse]]]#Derived = {
+    def stubHttpResponse(outcome: DownstreamOutcome[RetrieveUkPropertyPeriodSummaryResponse])
+    : CallHandler[Future[DownstreamOutcome[RetrieveUkPropertyPeriodSummaryResponse]]]#Derived = {
       MockHttpClient
         .get(
           url = s"$baseUrl/income-tax/business/property/periodic?taxableEntityId=$nino&taxYear=$taxYear&incomeSourceId=$businessId&submissionId=$submissionId",
@@ -121,12 +121,12 @@ class RetrieveUkPropertyPeriodSummaryConnectorSpec extends ConnectorSpec with Re
 
     "response is an error" must {
       "return the error" in new Test {
-        val outcome = Left(ResponseWrapper(correlationId, IfsErrors.single(IfsErrorCode("SOME_ERROR"))))
+        val outcome = Left(ResponseWrapper(correlationId, DownstreamErrors.single(DownstreamErrorCode("SOME_ERROR"))))
 
         stubHttpResponse(outcome)
 
         await(connector.retrieveUkProperty(request)) shouldBe
-          Left(ResponseWrapper(correlationId, IfsErrors.single(IfsErrorCode("SOME_ERROR"))))
+          Left(ResponseWrapper(correlationId, DownstreamErrors.single(DownstreamErrorCode("SOME_ERROR"))))
       }
     }
   }

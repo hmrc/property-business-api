@@ -17,8 +17,10 @@
 package v2.connectors
 
 import config.AppConfig
+
 import javax.inject.{Inject, Singleton}
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
+import v2.connectors.DownstreamUri.IfsUri
 import v2.connectors.httpparsers.StandardIfsHttpParser._
 import v2.models.request.amendUkPropertyAnnualSubmission.AmendUkPropertyAnnualSubmissionRequest
 
@@ -26,12 +28,12 @@ import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class AmendUkPropertyAnnualSubmissionConnector @Inject()(val http: HttpClient,
-                                                         val appConfig: AppConfig) extends BaseIfsConnector {
+                                                         val appConfig: AppConfig) extends BaseDownstreamConnector {
 
   def amendUkPropertyAnnualSubmission(request: AmendUkPropertyAnnualSubmissionRequest)(
     implicit hc: HeaderCarrier,
     ec: ExecutionContext,
-    correlationId: String): Future[IfsOutcome[Unit]] = {
+    correlationId: String): Future[DownstreamOutcome[Unit]] = {
 
     put(
       body = request.body,

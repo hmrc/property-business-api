@@ -28,12 +28,12 @@ import v2.models.errors._
 import v2.models.outcomes.ResponseWrapper
 import v2.models.request.retrieveUkPropertyPeriodSummary.RetrieveUkPropertyPeriodSummaryRequest
 import v2.models.response.retrieveUkPropertyPeriodSummary.RetrieveUkPropertyPeriodSummaryResponse
-import v2.support.IfsResponseMappingSupport
+import v2.support.DownstreamResponseMappingSupport
 
 import scala.concurrent.{ExecutionContext, Future}
 
 class RetrieveUkPropertyPeriodSummaryService @Inject()(connector: RetrieveUkPropertyPeriodSummaryConnector)
-  extends IfsResponseMappingSupport with Logging {
+  extends DownstreamResponseMappingSupport with Logging {
 
   def retrieveUkProperty(request: RetrieveUkPropertyPeriodSummaryRequest)(
     implicit hc: HeaderCarrier,
@@ -42,7 +42,7 @@ class RetrieveUkPropertyPeriodSummaryService @Inject()(connector: RetrieveUkProp
     correlationId: String): Future[ServiceOutcome[RetrieveUkPropertyPeriodSummaryResponse]] = {
 
     val result = for {
-      connectorResultWrapper <- EitherT(connector.retrieveUkProperty(request)).leftMap(mapIfsErrors(ifsErrorMap))
+      connectorResultWrapper <- EitherT(connector.retrieveUkProperty(request)).leftMap(mapDownstreamErrors(ifsErrorMap))
       mtdResponseWrapper     <- EitherT.fromEither[Future](validateBusinessType(connectorResultWrapper))
     } yield mtdResponseWrapper
 
@@ -57,9 +57,9 @@ class RetrieveUkPropertyPeriodSummaryService @Inject()(connector: RetrieveUkProp
       "INVALID_SUBMISSION_ID" -> SubmissionIdFormatError,
       "TAX_YEAR_NOT_SUPPORTED" -> RuleTaxYearNotSupportedError,
       "NO_DATA_FOUND" -> NotFoundError,
-      "SERVER_ERROR" -> DownstreamError,
-      "SERVICE_UNAVAILABLE" -> DownstreamError,
-      "INVALID_CORRELATIONID" -> DownstreamError
+      "SERVER_ERROR" -> InternalError,
+      "SERVICE_UNAVAILABLE" -> InternalError,
+      "INVALID_CORRELATIONID" -> InternalError
     )
 
   private def validateBusinessType(resultWrapper: ResponseWrapper[connectors.RetrieveUkPropertyPeriodSummaryConnector.Result]) =

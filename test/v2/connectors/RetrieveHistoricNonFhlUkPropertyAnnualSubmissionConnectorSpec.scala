@@ -102,8 +102,7 @@ class RetrieveHistoricNonFhlUkPropertyAnnualSubmissionConnectorSpec extends Conn
     "return object with only annualAdjustments" when {
       "response received contains only annualAdjustments" in new Test {
         val response: RetrieveHistoricNonFhlUkPropertyAnnualSubmissionResponse = responseWith(Some(annualAdjustments), None)
-        val outcome  = Right(ResponseWrapper(correlationId, response))
-
+        private val outcome  = Right(ResponseWrapper(correlationId, response))
         stubHttpResponse(outcome)
 
         private val result = await(connector.retrieve(request))
@@ -114,7 +113,7 @@ class RetrieveHistoricNonFhlUkPropertyAnnualSubmissionConnectorSpec extends Conn
     "return object with only annualAllowances" when {
       "response received contains only annualAllowances" in new Test {
         val response: RetrieveHistoricNonFhlUkPropertyAnnualSubmissionResponse = responseWith(None, Some(annualAllowances))
-        val outcome  = Right(ResponseWrapper(correlationId, response))
+        private val outcome  = Right(ResponseWrapper(correlationId, response))
 
         stubHttpResponse(outcome)
 
@@ -126,7 +125,7 @@ class RetrieveHistoricNonFhlUkPropertyAnnualSubmissionConnectorSpec extends Conn
     "return empty object with" must {
       "return a valid result" in new Test {
         val response: RetrieveHistoricNonFhlUkPropertyAnnualSubmissionResponse = responseWith(None, None)
-        val outcome  = Right(ResponseWrapper(correlationId, response))
+        private val outcome  = Right(ResponseWrapper(correlationId, response))
 
         stubHttpResponse(outcome)
 
@@ -137,8 +136,7 @@ class RetrieveHistoricNonFhlUkPropertyAnnualSubmissionConnectorSpec extends Conn
 
     "return an error as per the spec" when {
       "an error response received" in new Test {
-        val outcome = Left(ResponseWrapper(correlationId, DownstreamErrors.single(DownstreamErrorCode("SOME_ERROR"))))
-
+        private val outcome = Left(ResponseWrapper(correlationId, DownstreamErrors.single(DownstreamErrorCode("SOME_ERROR"))))
         stubHttpResponse(outcome)
 
         private val result = await(connector.retrieve(request))

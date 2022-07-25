@@ -46,6 +46,9 @@ trait HateoasLinks {
   private def ukHistoricFhlAnnualUri(appConfig: AppConfig, nino: String, taxYear: String): String =
     s"/${appConfig.apiGatewayContext}/uk/furnished-holiday-lettings/$nino/$taxYear"
 
+  private def ukHistoricNonFhlAnnualUri(appConfig: AppConfig, nino: String, taxYear: String): String =
+    s"/${appConfig.apiGatewayContext}/uk/non-furnished-holiday-lettings/$nino/$taxYear"
+
   // API resource links
 
   // Foreign
@@ -100,11 +103,26 @@ trait HateoasLinks {
     Link(href = ukAnnualUri(appConfig, nino, businessId, taxYear), method = GET, rel)
   }
 
-  // Historic FHL UK Annual:
+  // Historic UK Annual:
 
   def retrieveHistoricFhlUkPropertyAnnualSubmission(appConfig: AppConfig, nino: String, taxYear: String, self: Boolean): Link = {
     val rel = if (self) "self" else RETRIEVE_HISTORIC_FHL_UK_PROPERTY_ANNUAL_SUBMISSION
     Link(href = ukHistoricFhlAnnualUri(appConfig, nino, taxYear), method = GET, rel)
+  }
+
+  def createAmendHistoricNonFhlUkPropertyAnnualSubmission(appConfig: AppConfig, nino: String, taxYear: String): Link = {
+    Link(href = ukHistoricNonFhlAnnualUri(appConfig, nino, taxYear),
+         method = GET,
+         rel = CREATE_AND_AMEND_HISTORIC_NON_FHL_UK_PROPERTY_ANNUAL_SUBMISSION)
+  }
+
+  def retrieveHistoricNonFhlUkPropertyAnnualSubmission(appConfig: AppConfig, nino: String, taxYear: String, self: Boolean): Link = {
+    val rel = if (self) "self" else RETRIEVE_HISTORIC_NON_FHL_UK_PROPERTY_ANNUAL_SUBMISSION
+    Link(href = ukHistoricNonFhlAnnualUri(appConfig, nino, taxYear), method = GET, rel)
+  }
+
+  def deleteHistoricNonFhlUkPropertyAnnualSubmission(appConfig: AppConfig, nino: String, taxYear: String): Link = {
+    Link(href = ukHistoricNonFhlAnnualUri(appConfig, nino, taxYear), method = GET, rel = DELETE_HISTORIC_NON_FHL_UK_PROPERTY_ANNUAL_SUBMISSION)
   }
 
   // Generic

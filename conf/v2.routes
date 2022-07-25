@@ -1,3 +1,5 @@
+GET        /uk/non-furnished-holiday-lettings/:nino/:taxYear           v2.controllers.RetrieveHistoricNonFhlUkPropertyAnnualSubmissionController.handleRequest(nino: String, taxYear: String)
+
 GET        /uk/:nino/:businessId/annual/:taxYear                       v2.controllers.RetrieveUkPropertyAnnualSubmissionController.handleRequest(nino: String, businessId: String, taxYear: String)
 PUT        /uk/:nino/:businessId/annual/:taxYear                       v2.controllers.AmendUkPropertyAnnualSubmissionController.handleRequest(nino: String, businessId: String, taxYear: String)
 POST       /uk/:nino/:businessId/period/:taxYear                       v2.controllers.CreateUkPropertyPeriodSummaryController.handleRequest(nino: String, businessId: String, taxYear: String)
@@ -13,3 +15,4 @@ GET        /foreign/:nino/:businessId/period/:taxYear/:submissionId    v2.contro
 DELETE     /:nino/:businessId/annual/:taxYear                          v2.controllers.DeletePropertyAnnualSubmissionController.handleRequest(nino: String, businessId: String, taxYear: String)
 PUT        /foreign/:nino/:businessId/annual/:taxYear                  v2.controllers.AmendForeignPropertyAnnualSubmissionController.handleRequest(nino: String, businessId: String, taxYear: String)
 GET        /foreign/:nino/:businessId/annual/:taxYear                  v2.controllers.RetrieveForeignPropertyAnnualSubmissionController.handleRequest(nino: String, businessId: String, taxYear: String)
+

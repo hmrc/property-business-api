@@ -16,14 +16,38 @@
 
 package v2.models.response.retrieveHistoricNonFhlUkPropertyAnnualSubmissionResponse
 
-import play.api.libs.json.{Json, OWrites, Reads}
+import config.AppConfig
+import play.api.libs.json.{ Json, OWrites, Reads }
+import v2.hateoas.HateoasLinksFactory
+import v2.models.hateoas.{ HateoasData, Link }
+import v2.models.response.listPropertyPeriodSummaries.ListPropertyPeriodSummariesResponse.{
+  createAmendHistoricNonFhlUkPropertyAnnualSubmission,
+  deleteHistoricNonFhlUkPropertyAnnualSubmission,
+  retrieveHistoricNonFhlUkPropertyAnnualSubmission
+}
 
 case class RetrieveHistoricNonFhlUkPropertyAnnualSubmissionResponse(annualAdjustments: Option[AnnualAdjustments],
                                                                     annualAllowances: Option[AnnualAllowances])
-object RetrieveHistoricNonFhlUkPropertyAnnualSubmissionResponse{
+
+object RetrieveHistoricNonFhlUkPropertyAnnualSubmissionResponse {
   implicit val writes: OWrites[RetrieveHistoricNonFhlUkPropertyAnnualSubmissionResponse] =
     Json.writes[RetrieveHistoricNonFhlUkPropertyAnnualSubmissionResponse]
 
   implicit val reads: Reads[RetrieveHistoricNonFhlUkPropertyAnnualSubmissionResponse] =
     Json.reads[RetrieveHistoricNonFhlUkPropertyAnnualSubmissionResponse]
+
+  implicit object RetrieveHistoricNonFhlUkPropertyAnnualSubmissionLinksFactory
+      extends HateoasLinksFactory[RetrieveHistoricNonFhlUkPropertyAnnualSubmissionResponse,
+                                  RetrieveHistoricNonFhlUkPropertyAnnualSubmissionHateoasData] {
+    override def links(appConfig: AppConfig, data: RetrieveHistoricNonFhlUkPropertyAnnualSubmissionHateoasData): Seq[Link] = {
+      import data._
+      Seq(
+        createAmendHistoricNonFhlUkPropertyAnnualSubmission(appConfig, nino, taxYear),
+        retrieveHistoricNonFhlUkPropertyAnnualSubmission(appConfig, nino, taxYear, self = true),
+        deleteHistoricNonFhlUkPropertyAnnualSubmission(appConfig, nino, taxYear)
+      )
+    }
+  }
 }
+
+case class RetrieveHistoricNonFhlUkPropertyAnnualSubmissionHateoasData(nino: String, taxYear: String) extends HateoasData

@@ -1,0 +1,47 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "title": "Create and Amend a Historic FHL UK Property Business Annual Submission",
+  "description": "This endpoint enables you to create and amend the income from adjustments and allowances for a furnished holiday lettings (FHL) UK property business for tax years from 2017-18 to 2021-22. A National Insurance number and tax year must be provided. Use this endpoint only for the specified tax year range; for current tax year submissions, use the Create and Amend a UK Property Business Annual Submission endpoint.",
+  "type": "object",
+  "properties": {
+    "links": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "description": "A list of endpoint links that indicate possible actions related to the current resource.",
+        "properties": {
+          "href": {
+            "description": "The relative url of the endpoint.",
+            "type": "string",
+            "example": "/individuals/business/property/uk/furnished-holiday-lettings/TC663795B/2019-20"
+          },
+          "method": {
+            "description": "The HTTP method type for the endpoint.",
+            "type": "string",
+            "enum": [
+              "GET",
+              "PUT",
+              "DELETE"
+            ]
+          },
+          "rel": {
+            "description": "A label for the endpoint, which describes how it is related to the current resource. The rel will be self where the action is retrieval of the same resource.",
+            "type": "string",
+            "enum": [
+              "create-and-amend-uk-property-historic-fhl-annual-submission",
+              "self",
+              "delete-uk-property-historic-fhl-annual-submission"
+            ]
+          }
+        },
+        "required": [
+          "href",
+          "rel",
+          "method"
+        ],
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}

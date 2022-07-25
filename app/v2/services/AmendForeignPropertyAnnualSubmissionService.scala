@@ -25,13 +25,13 @@ import v2.connectors.AmendForeignPropertyAnnualSubmissionConnector
 import v2.controllers.EndpointLogContext
 import v2.models.errors._
 import v2.models.request.amendForeignPropertyAnnualSubmission.AmendForeignPropertyAnnualSubmissionRequest
-import v2.support.IfsResponseMappingSupport
+import v2.support.DownstreamResponseMappingSupport
 
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class AmendForeignPropertyAnnualSubmissionService @Inject()(connector: AmendForeignPropertyAnnualSubmissionConnector)
-  extends IfsResponseMappingSupport with Logging {
+  extends DownstreamResponseMappingSupport with Logging {
 
   def amendForeignPropertyAnnualSubmission(request: AmendForeignPropertyAnnualSubmissionRequest)(
     implicit hc: HeaderCarrier,
@@ -40,7 +40,7 @@ class AmendForeignPropertyAnnualSubmissionService @Inject()(connector: AmendFore
     correlationId: String): Future[ServiceOutcome[Unit]] = {
 
     val result = for {
-      ifsResponseWrapper <- EitherT(connector.amendForeignPropertyAnnualSubmission(request)).leftMap(mapIfsErrors(ifsErrorMap))
+      ifsResponseWrapper <- EitherT(connector.amendForeignPropertyAnnualSubmission(request)).leftMap(mapDownstreamErrors(ifsErrorMap))
     } yield ifsResponseWrapper
 
     result.value
@@ -55,11 +55,11 @@ class AmendForeignPropertyAnnualSubmissionService @Inject()(connector: AmendFore
       "TAX_YEAR_NOT_SUPPORTED" -> RuleTaxYearNotSupportedError,
       "BUSINESS_VALIDATION_FAILURE" -> RulePropertyIncomeAllowanceError,
       "INCOME_SOURCE_NOT_FOUND" -> NotFoundError,
-      "MISSING_ALLOWANCES" -> DownstreamError,
-      "INVALID_PAYLOAD" -> DownstreamError,
-      "INVALID_CORRELATIONID" -> DownstreamError,
+      "MISSING_ALLOWANCES" -> InternalError,
+      "INVALID_PAYLOAD" -> InternalError,
+      "INVALID_CORRELATIONID" -> InternalError,
       "DUPLICATE_COUNTRY_CODE" -> RuleDuplicateCountryCodeError,
-      "SERVER_ERROR" -> DownstreamError,
-      "SERVICE_UNAVAILABLE" -> DownstreamError
+      "SERVER_ERROR" -> InternalError,
+      "SERVICE_UNAVAILABLE" -> InternalError
     )
 }

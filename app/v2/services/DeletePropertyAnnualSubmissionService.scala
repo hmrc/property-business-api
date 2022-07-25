@@ -24,15 +24,15 @@ import uk.gov.hmrc.http.HeaderCarrier
 import utils.Logging
 import v2.connectors.DeletePropertyAnnualSubmissionConnector
 import v2.controllers.EndpointLogContext
-import v2.models.errors.{ BusinessIdFormatError, DownstreamError, NinoFormatError, NotFoundError, TaxYearFormatError }
+import v2.models.errors.{ BusinessIdFormatError, InternalError, NinoFormatError, NotFoundError, TaxYearFormatError }
 import v2.models.request.deletePropertyAnnualSubmission.DeletePropertyAnnualSubmissionRequest
-import v2.support.IfsResponseMappingSupport
+import v2.support.DownstreamResponseMappingSupport
 
 import scala.concurrent.{ ExecutionContext, Future }
 
 @Singleton
 class DeletePropertyAnnualSubmissionService @Inject()(connector: DeletePropertyAnnualSubmissionConnector)
-    extends IfsResponseMappingSupport
+    extends DownstreamResponseMappingSupport
     with Logging {
 
   def deletePropertyAnnualSubmission(request: DeletePropertyAnnualSubmissionRequest)(
@@ -42,7 +42,7 @@ class DeletePropertyAnnualSubmissionService @Inject()(connector: DeletePropertyA
       correlationId: String): Future[ServiceOutcome[Unit]] = {
 
     val result = for {
-      ifsResponseWrapper <- EitherT(connector.deletePropertyAnnualSubmission(request)).leftMap(mapIfsErrors(ifsErrorMap))
+      ifsResponseWrapper <- EitherT(connector.deletePropertyAnnualSubmission(request)).leftMap(mapDownstreamErrors(ifsErrorMap))
     } yield ifsResponseWrapper
 
     result.value
@@ -53,10 +53,10 @@ class DeletePropertyAnnualSubmissionService @Inject()(connector: DeletePropertyA
       "INVALID_TAXABLE_ENTITY_ID" -> NinoFormatError,
       "INVALID_TAX_YEAR"          -> TaxYearFormatError,
       "INVALID_INCOMESOURCEID"    -> BusinessIdFormatError,
-      "INVALID_CORRELATIONID"     -> DownstreamError,
+      "INVALID_CORRELATIONID"     -> InternalError,
       "NO_DATA_FOUND"             -> NotFoundError,
-      "SERVER_ERROR"              -> DownstreamError,
-      "SERVICE_UNAVAILABLE"       -> DownstreamError
+      "SERVER_ERROR"              -> InternalError,
+      "SERVICE_UNAVAILABLE"       -> InternalError
     )
 
 }

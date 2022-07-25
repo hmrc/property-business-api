@@ -14,6 +14,25 @@
  * limitations under the License.
  */
 
-package v2.connectors
+package v2.models.errors
 
-case class IfsUri[Resp](value: String)
+import play.api.libs.json.Json
+import support.UnitSpec
+
+class DownstreamErrorCodeSpec extends UnitSpec {
+
+  "reads" should {
+    val json = Json.parse(
+      """
+        |{
+        |   "code": "CODE",
+        |   "reason": "ignored"
+        |}
+      """.stripMargin
+    )
+
+    "generate the correct error code" in {
+      json.as[DownstreamErrorCode] shouldBe DownstreamErrorCode("CODE")
+    }
+  }
+}

@@ -25,17 +25,17 @@ import v2.connectors
 import v2.connectors.RetrieveForeignPropertyAnnualSubmissionConnector
 import v2.connectors.RetrieveForeignPropertyAnnualSubmissionConnector.{ForeignResult, NonForeignResult}
 import v2.controllers.EndpointLogContext
-import v2.models.errors.{BusinessIdFormatError, DownstreamError, ErrorWrapper, NinoFormatError, NotFoundError, RuleTaxYearNotSupportedError, RuleTypeOfBusinessIncorrectError, TaxYearFormatError}
+import v2.models.errors.{BusinessIdFormatError, InternalError, ErrorWrapper, NinoFormatError, NotFoundError, RuleTaxYearNotSupportedError, RuleTypeOfBusinessIncorrectError, TaxYearFormatError}
 import v2.models.outcomes.ResponseWrapper
 import v2.models.request.retrieveForeignPropertyAnnualSubmission.RetrieveForeignPropertyAnnualSubmissionRequest
 import v2.models.response.retrieveForeignPropertyAnnualSubmission.RetrieveForeignPropertyAnnualSubmissionResponse
-import v2.support.IfsResponseMappingSupport
+import v2.support.DownstreamResponseMappingSupport
 
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class RetrieveForeignPropertyAnnualSubmissionService @Inject()(connector: RetrieveForeignPropertyAnnualSubmissionConnector)
-  extends IfsResponseMappingSupport with Logging {
+  extends DownstreamResponseMappingSupport with Logging {
 
   def retrieveForeignProperty(request: RetrieveForeignPropertyAnnualSubmissionRequest)(
     implicit hc: HeaderCarrier,
@@ -44,7 +44,7 @@ class RetrieveForeignPropertyAnnualSubmissionService @Inject()(connector: Retrie
     correlationId: String): Future[ServiceOutcome[RetrieveForeignPropertyAnnualSubmissionResponse]] = {
 
     val result = for {
-      connectorResultWrapper <- EitherT(connector.retrieveForeignProperty(request)).leftMap(mapIfsErrors(ifsErrorMap))
+      connectorResultWrapper <- EitherT(connector.retrieveForeignProperty(request)).leftMap(mapDownstreamErrors(ifsErrorMap))
       mtdResponseWrapper     <- EitherT.fromEither[Future](validateBusinessType(connectorResultWrapper))
     } yield mtdResponseWrapper
 
@@ -56,11 +56,11 @@ class RetrieveForeignPropertyAnnualSubmissionService @Inject()(connector: Retrie
       "INVALID_TAXABLE_ENTITY_ID" -> NinoFormatError,
       "INVALID_TAX_YEAR" -> TaxYearFormatError,
       "INVALID_INCOMESOURCEID" -> BusinessIdFormatError,
-      "INVALID_CORRELATIONID" -> DownstreamError,
+      "INVALID_CORRELATIONID" -> InternalError,
       "NO_DATA_FOUND" -> NotFoundError,
       "TAX_YEAR_NOT_SUPPORTED" -> RuleTaxYearNotSupportedError,
-      "SERVER_ERROR" -> DownstreamError,
-      "SERVICE_UNAVAILABLE" -> DownstreamError
+      "SERVER_ERROR" -> InternalError,
+      "SERVICE_UNAVAILABLE" -> InternalError
     )
 
 

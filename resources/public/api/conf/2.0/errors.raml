@@ -96,6 +96,17 @@ traits:
                 description: The format of one or more monetary fields is not valid.
                 value:
                   code: FORMAT_VALUE
+  formatFhlValue:
+    responses:
+      400:
+        body:
+          application/json:
+            type: types.errorResponse
+            examples:
+              formatFhlValue:
+                description: One or more values have been added with the incorrect format.
+                value:
+                  code: FORMAT_VALUE
   formatDate:
     responses:
       400:

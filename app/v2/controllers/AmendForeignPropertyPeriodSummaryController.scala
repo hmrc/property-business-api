@@ -103,7 +103,7 @@ class AmendForeignPropertyPeriodSummaryController @Inject()(val authService: Enr
             RuleDuplicateCountryCodeError.code) =>
         BadRequest(Json.toJson(errorWrapper))
       case NotFoundError   => NotFound(Json.toJson(errorWrapper))
-      case DownstreamError => InternalServerError(Json.toJson(errorWrapper))
+      case InternalError => InternalServerError(Json.toJson(errorWrapper))
       case _ => unhandledError(errorWrapper)
     }
 

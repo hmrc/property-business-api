@@ -14,24 +14,11 @@
  * limitations under the License.
  */
 
-package v2.models.errors
+package v2.models.request.retrieveHistoricNonFhlUkPropertyAnnualSubmission
 
-import play.api.libs.json.{Json, Reads}
+import v2.models.domain.{Nino, TaxYear}
+import v2.models.request.RawData
 
-case class IfsErrorCode(code: String) {
-  def toMtd: MtdError = MtdError(code = code, message = "")
-}
+case class RetrieveHistoricNonFhlUkPropertyAnnualSubmissionRawData(nino: String, taxYear: String) extends RawData
 
-object IfsErrorCode {
-  implicit val reads: Reads[IfsErrorCode] = Json.reads[IfsErrorCode]
-}
-
-sealed trait IfsError
-
-case class IfsErrors(errors: List[IfsErrorCode]) extends IfsError
-
-object IfsErrors {
-  def single(error: IfsErrorCode): IfsErrors = IfsErrors(List(error))
-}
-
-case class OutboundError(error: MtdError, errors: Option[Seq[MtdError]] = None) extends IfsError
+case class RetrieveHistoricNonFhlUkPropertyAnnualSubmissionRequest(nino: Nino, taxYear: TaxYear)

@@ -87,7 +87,7 @@ class ListPropertyPeriodSummariesController @Inject()(val authService: Enrolment
            RuleTaxYearNotSupportedError  =>
         BadRequest(Json.toJson(errorWrapper))
       case NotFoundError => NotFound(Json.toJson(errorWrapper))
-      case DownstreamError => InternalServerError(Json.toJson(errorWrapper))
+      case InternalError => InternalServerError(Json.toJson(errorWrapper))
       case _ => unhandledError(errorWrapper)
     }
 }

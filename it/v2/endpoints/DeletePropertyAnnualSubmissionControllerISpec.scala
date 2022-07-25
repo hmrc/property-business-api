@@ -24,7 +24,7 @@ import play.api.libs.ws.{WSRequest, WSResponse}
 import play.api.test.Helpers.AUTHORIZATION
 import support.V2IntegrationBaseSpec
 import v2.models.errors._
-import v2.stubs.{AuditStub, AuthStub, IfsStub, MtdIdLookupStub}
+import v2.stubs.{AuditStub, AuthStub, DownstreamStub, MtdIdLookupStub}
 
 class DeletePropertyAnnualSubmissionControllerISpec extends V2IntegrationBaseSpec {
 
@@ -74,7 +74,7 @@ class DeletePropertyAnnualSubmissionControllerISpec extends V2IntegrationBaseSpe
           AuditStub.audit()
           AuthStub.authorised()
           MtdIdLookupStub.ninoFound(nino)
-          IfsStub.onSuccess(IfsStub.DELETE, ifsUri, ifsQueryParams, Status.NO_CONTENT, JsObject.empty)
+          DownstreamStub.onSuccess(DownstreamStub.DELETE, ifsUri, ifsQueryParams, Status.NO_CONTENT, JsObject.empty)
         }
 
         val response: WSResponse = await(request().delete())
@@ -122,7 +122,7 @@ class DeletePropertyAnnualSubmissionControllerISpec extends V2IntegrationBaseSpe
               AuditStub.audit()
               AuthStub.authorised()
               MtdIdLookupStub.ninoFound(nino)
-              IfsStub.onError(IfsStub.DELETE, ifsUri, ifsQueryParams, ifsStatus, errorBody(ifsCode))
+              DownstreamStub.onError(DownstreamStub.DELETE, ifsUri, ifsQueryParams, ifsStatus, errorBody(ifsCode))
             }
 
             val response: WSResponse = await(request().delete())

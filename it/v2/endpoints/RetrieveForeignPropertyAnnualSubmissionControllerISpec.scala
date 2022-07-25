@@ -24,7 +24,7 @@ import play.api.libs.ws.{WSRequest, WSResponse}
 import play.api.test.Helpers.AUTHORIZATION
 import support.V2IntegrationBaseSpec
 import v2.models.errors._
-import v2.stubs.{AuthStub, IfsStub, MtdIdLookupStub}
+import v2.stubs.{AuthStub, DownstreamStub, MtdIdLookupStub}
 
 class RetrieveForeignPropertyAnnualSubmissionControllerISpec extends V2IntegrationBaseSpec {
 
@@ -198,7 +198,7 @@ class RetrieveForeignPropertyAnnualSubmissionControllerISpec extends V2Integrati
         override def setupStubs(): StubMapping = {
           AuthStub.authorised()
           MtdIdLookupStub.ninoFound(nino)
-          IfsStub.onSuccess(IfsStub.GET, ifsUri, ifsQueryParams, Status.OK, ifsResponseBody)
+          DownstreamStub.onSuccess(DownstreamStub.GET, ifsUri, ifsQueryParams, Status.OK, ifsResponseBody)
         }
 
         val response: WSResponse = await(request().get())
@@ -249,7 +249,7 @@ class RetrieveForeignPropertyAnnualSubmissionControllerISpec extends V2Integrati
             override def setupStubs(): StubMapping = {
               AuthStub.authorised()
               MtdIdLookupStub.ninoFound(nino)
-              IfsStub.onError(IfsStub.GET, ifsUri, ifsQueryParams, ifsStatus, errorBody(ifsCode))
+              DownstreamStub.onError(DownstreamStub.GET, ifsUri, ifsQueryParams, ifsStatus, errorBody(ifsCode))
             }
 
             val response: WSResponse = await(request().get())

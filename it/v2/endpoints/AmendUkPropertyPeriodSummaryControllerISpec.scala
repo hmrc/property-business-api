@@ -24,7 +24,7 @@ import play.api.libs.ws.{WSRequest, WSResponse}
 import play.api.test.Helpers.AUTHORIZATION
 import support.V2IntegrationBaseSpec
 import v2.models.errors._
-import v2.stubs.{AuditStub, AuthStub, IfsStub, MtdIdLookupStub}
+import v2.stubs.{AuditStub, AuthStub, DownstreamStub, MtdIdLookupStub}
 
 class AmendUkPropertyPeriodSummaryControllerISpec extends V2IntegrationBaseSpec {
 
@@ -333,7 +333,7 @@ class AmendUkPropertyPeriodSummaryControllerISpec extends V2IntegrationBaseSpec 
         override def setupStubs(): StubMapping = {
           AuthStub.authorised()
           MtdIdLookupStub.ninoFound(nino)
-          IfsStub.onSuccess(IfsStub.PUT, ifsUri, ifsQueryParams, NO_CONTENT, JsObject.empty)
+          DownstreamStub.onSuccess(DownstreamStub.PUT, ifsUri, ifsQueryParams, NO_CONTENT, JsObject.empty)
         }
 
         val response: WSResponse = await(request().put(requestBodyJsonConsolidatedExpenses))
@@ -347,7 +347,7 @@ class AmendUkPropertyPeriodSummaryControllerISpec extends V2IntegrationBaseSpec 
           AuditStub.audit()
           AuthStub.authorised()
           MtdIdLookupStub.ninoFound(nino)
-          IfsStub.onSuccess(IfsStub.PUT, ifsUri, ifsQueryParams, NO_CONTENT, JsObject.empty)
+          DownstreamStub.onSuccess(DownstreamStub.PUT, ifsUri, ifsQueryParams, NO_CONTENT, JsObject.empty)
         }
 
         val response: WSResponse = await(request().put(requestBodyJsonConsolidatedExpenses))
@@ -426,7 +426,7 @@ class AmendUkPropertyPeriodSummaryControllerISpec extends V2IntegrationBaseSpec 
           override def setupStubs(): StubMapping = {
             AuthStub.authorised()
             MtdIdLookupStub.ninoFound(nino)
-            IfsStub.onError(IfsStub.PUT, ifsUri, ifsQueryParams, ifsStatus, errorBody(ifsCode))
+            DownstreamStub.onError(DownstreamStub.PUT, ifsUri, ifsQueryParams, ifsStatus, errorBody(ifsCode))
           }
 
           val response: WSResponse = await(request().put(requestBodyJson))

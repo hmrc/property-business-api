@@ -24,7 +24,7 @@ import play.api.libs.ws.{WSRequest, WSResponse}
 import play.api.test.Helpers.AUTHORIZATION
 import support.V2IntegrationBaseSpec
 import v2.models.errors._
-import v2.stubs.{AuditStub, AuthStub, IfsStub, MtdIdLookupStub}
+import v2.stubs.{AuditStub, AuthStub, DownstreamStub, MtdIdLookupStub}
 
 class RetrieveUkPropertyPeriodSummaryControllerISpec extends V2IntegrationBaseSpec {
 
@@ -209,7 +209,7 @@ class RetrieveUkPropertyPeriodSummaryControllerISpec extends V2IntegrationBaseSp
           AuditStub.audit()
           AuthStub.authorised()
           MtdIdLookupStub.ninoFound(nino)
-          IfsStub.onSuccess(IfsStub.GET, ifsUri, ifsQueryParams, Status.OK, ifsResponseBody)
+          DownstreamStub.onSuccess(DownstreamStub.GET, ifsUri, ifsQueryParams, Status.OK, ifsResponseBody)
         }
 
         val response: WSResponse = await(request().get())
@@ -262,7 +262,7 @@ class RetrieveUkPropertyPeriodSummaryControllerISpec extends V2IntegrationBaseSp
             AuditStub.audit()
             AuthStub.authorised()
             MtdIdLookupStub.ninoFound(nino)
-            IfsStub.onError(IfsStub.GET, ifsUri, ifsStatus, errorBody(ifsCode))
+            DownstreamStub.onError(DownstreamStub.GET, ifsUri, ifsStatus, errorBody(ifsCode))
           }
 
           val response: WSResponse = await(request().get())

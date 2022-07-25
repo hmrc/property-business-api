@@ -24,14 +24,15 @@ import play.api.libs.ws.{ WSRequest, WSResponse }
 import play.api.test.Helpers.AUTHORIZATION
 import support.V2IntegrationBaseSpec
 import v2.models.errors._
-import v2.stubs.{ AuditStub, AuthStub, IfsStub, MtdIdLookupStub }
+import v2.stubs.{ AuditStub, AuthStub, DownstreamStub, MtdIdLookupStub }
 
 class RetrieveHistoricNonFhlUkPropertyAnnualSubmissionControllerISpec extends V2IntegrationBaseSpec {
 
   private trait Test {
 
-    val nino: String    = "AA123456A"
-    val taxYear: String = "2022-23"
+    val nino              = "AA123456A"
+    val mtdTaxYear        = "2020-21"
+    val downstreamTaxYear = "2021"
 
     val responseBody: JsValue = Json.parse(
       s"""
@@ -56,17 +57,17 @@ class RetrieveHistoricNonFhlUkPropertyAnnualSubmissionControllerISpec extends V2
          |   },
          |   "links": [
          |      {
-         |         "href": "/individuals/business/property/uk/non-furnished-holiday-lettings/AA999999A/2019-20",
+         |         "href": "/individuals/business/property/uk/non-furnished-holiday-lettings/AA123456A/2020-21",
          |         "method": "PUT",
          |         "rel": "create-and-amend-uk-property-historic-non-fhl-annual-submission"
          |      },
          |      {
-         |         "href": "/individuals/business/property/uk/non-furnished-holiday-lettings/AA999999A/2019-20",
+         |         "href": "/individuals/business/property/uk/non-furnished-holiday-lettings/AA123456A/2020-21",
          |         "method": "GET",
          |         "rel": "self"
          |      },
          |      {
-         |         "href": "/individuals/business/property/uk/non-furnished-holiday-lettings/AA999999A/2019-20",
+         |         "href": "/individuals/business/property/uk/non-furnished-holiday-lettings/AA123456A/2020-21",
          |         "method": "DELETE",
          |         "rel": "delete-uk-property-historic-non-fhl-annual-submission"
          |      }
@@ -102,9 +103,9 @@ class RetrieveHistoricNonFhlUkPropertyAnnualSubmissionControllerISpec extends V2
 
     def setupStubs(): StubMapping
 
-    def uri: String = s"/uk/non-furnished-holiday-lettings/$nino/$taxYear"
+    def uri: String = s"/uk/non-furnished-holiday-lettings/$nino/$mtdTaxYear"
 
-    def desUri: String = s"/income-tax/nino/$nino/uk-properties/other/annual-summaries/$taxYear"
+    def downstreamUri: String = s"/income-tax/nino/$nino/uk-properties/other/annual-summaries/$downstreamTaxYear"
 
     def request(): WSRequest = {
       setupStubs()
@@ -119,12 +120,12 @@ class RetrieveHistoricNonFhlUkPropertyAnnualSubmissionControllerISpec extends V2
       s"""
          |{
          |  "code": "$code",
-         |  "reason": "ifs message"
+         |  "reason": "error message from downstream"
          |}
        """.stripMargin
   }
 
-  "calling the retrieve uk property annual submission endpoint" should {
+  "calling the retrieve Non Fhl uk property annual submission endpoint" should {
 
     "return a 200 status code" when {
 
@@ -134,7 +135,7 @@ class RetrieveHistoricNonFhlUkPropertyAnnualSubmissionControllerISpec extends V2
           AuditStub.audit()
           AuthStub.authorised()
           MtdIdLookupStub.ninoFound(nino)
-          IfsStub.onSuccess(IfsStub.GET, ifsUri, ifsQueryParams, Status.OK, downstreamResponseBody)
+          DownstreamStub.onSuccess(DownstreamStub.GET, downstreamUri, Status.OK, downstreamResponseBody)
         }
 
         val response: WSResponse = await(request().get())
@@ -147,16 +148,11 @@ class RetrieveHistoricNonFhlUkPropertyAnnualSubmissionControllerISpec extends V2
 
     "return error according to spec" when {
       "validation error" when {
-        def validationErrorTest(requestNino: String,
-                                requestBusinessId: String,
-                                requestTaxYear: String,
-                                expectedStatus: Int,
-                                expectedBody: MtdError): Unit = {
+        def validationErrorTest(requestNino: String, requestTaxYear: String, expectedStatus: Int, expectedBody: MtdError): Unit = {
           s"validation fails with ${expectedBody.code} error" in new Test {
 
             override val nino: String       = requestNino
-            override val businessId: String = requestBusinessId
-            override val taxYear: String    = requestTaxYear
+            override val mtdTaxYear: String = requestTaxYear
 
             override def setupStubs(): StubMapping = {
               AuditStub.audit()
@@ -171,24 +167,23 @@ class RetrieveHistoricNonFhlUkPropertyAnnualSubmissionControllerISpec extends V2
         }
 
         val input = Seq(
-          ("AA123", "XAIS12345678910", "2022-23", Status.BAD_REQUEST, NinoFormatError),
-          ("AA123456A", "XAIS12345678910", "2020", Status.BAD_REQUEST, TaxYearFormatError),
-          ("AA123456A", "203100", "2022-23", Status.BAD_REQUEST, BusinessIdFormatError),
-          ("AA123456A", "XAIS12345678910", "2020-23", Status.BAD_REQUEST, RuleTaxYearRangeInvalidError),
-          ("AA123456A", "XAIS12345678910", "2019-20", Status.BAD_REQUEST, RuleTaxYearNotSupportedError)
+          ("AA123", "2022-23", Status.BAD_REQUEST, NinoFormatError),
+          ("AA123456A", "2020", Status.BAD_REQUEST, TaxYearFormatError),
+          ("AA123456A", "2020-23", Status.BAD_REQUEST, RuleTaxYearRangeInvalidError),
+          ("AA123456A", "2015-16", Status.BAD_REQUEST, RuleHistoricTaxYearNotSupportedError)
         )
         input.foreach(args => (validationErrorTest _).tupled(args))
       }
 
-      "ifs service error" when {
-        def serviceErrorTest(ifsStatus: Int, ifsCode: String, expectedStatus: Int, expectedBody: MtdError): Unit = {
-          s"ifs returns an $ifsCode error and status $ifsStatus" in new Test {
+      "Downstream service error" when {
+        def serviceErrorTest(downstreamStatus: Int, downstreamCode: String, expectedStatus: Int, expectedBody: MtdError): Unit = {
+          s"ifs returns an $downstreamCode error and status $downstreamStatus" in new Test {
 
             override def setupStubs(): StubMapping = {
               AuditStub.audit()
               AuthStub.authorised()
               MtdIdLookupStub.ninoFound(nino)
-              IfsStub.onError(IfsStub.GET, ifsUri, ifsQueryParams, ifsStatus, errorBody(ifsCode))
+              DownstreamStub.onError(DownstreamStub.GET, downstreamUri, downstreamStatus, errorBody(downstreamCode))
             }
 
             val response: WSResponse = await(request().get())
@@ -198,53 +193,15 @@ class RetrieveHistoricNonFhlUkPropertyAnnualSubmissionControllerISpec extends V2
         }
 
         val input = Seq(
-          (Status.BAD_REQUEST, "INVALID_TAXABLE_ENTITY_ID", Status.BAD_REQUEST, NinoFormatError),
-          (Status.BAD_REQUEST, "INVALID_INCOMESOURCEID", Status.BAD_REQUEST, BusinessIdFormatError),
+          (Status.BAD_REQUEST, "INVALID_NINO", Status.BAD_REQUEST, NinoFormatError),
+          (Status.BAD_REQUEST, "INVALID_TYPE", Status.INTERNAL_SERVER_ERROR, InternalError),
           (Status.BAD_REQUEST, "INVALID_TAX_YEAR", Status.BAD_REQUEST, TaxYearFormatError),
-          (Status.BAD_REQUEST, "INVALID_CORRELATIONID", Status.INTERNAL_SERVER_ERROR, InternalError),
-          (Status.NOT_FOUND, "NO_DATA_FOUND", Status.NOT_FOUND, NotFoundError),
-          (Status.UNPROCESSABLE_ENTITY, "TAX_YEAR_NOT_SUPPORTED", Status.BAD_REQUEST, RuleTaxYearNotSupportedError),
+          (Status.NOT_FOUND, "NOT_FOUND_PROPERTY", Status.NOT_FOUND, NotFoundError),
+          (Status.NOT_FOUND, "NOT_FOUND_PERIOD", Status.NOT_FOUND, NotFoundError),
           (Status.INTERNAL_SERVER_ERROR, "SERVER_ERROR", Status.INTERNAL_SERVER_ERROR, InternalError),
           (Status.SERVICE_UNAVAILABLE, "SERVICE_UNAVAILABLE", Status.INTERNAL_SERVER_ERROR, InternalError)
         )
         input.foreach(args => (serviceErrorTest _).tupled(args))
-      }
-
-      "ifs returns no UK properties" in new Test {
-        override val downstreamResponseBody: JsValue = Json.parse("""
-            |{
-            |  "submittedOn":"2022-06-17T10:53:38Z",
-            |  "foreignProperty": [
-            |    {
-            |      "countryCode": "FRA",
-            |      "adjustments": {
-            |        "privateUseAdjustment": 100.25,
-            |        "balancingCharge": 100.25
-            |      },
-            |      "allowances": {
-            |        "annualInvestmentAllowance": 100.25,
-            |        "costOfReplacingDomesticItems": 100.25,
-            |        "zeroEmissionsGoodsVehicleAllowance": 100.25,
-            |        "propertyAllowance": 100.25,
-            |        "otherCapitalAllowance": 100.25,
-            |        "structureAndBuildingAllowance": 100.25,
-            |        "electricChargePointAllowance": 100.25
-            |      }
-            |    }
-            |  ]
-            |}
-            |""".stripMargin)
-
-        override def setupStubs(): StubMapping = {
-          AuditStub.audit()
-          AuthStub.authorised()
-          MtdIdLookupStub.ninoFound(nino)
-          IfsStub.onSuccess(IfsStub.GET, ifsUri, ifsQueryParams, Status.OK, downstreamResponseBody)
-        }
-
-        val response: WSResponse = await(request().get())
-        response.status shouldBe Status.BAD_REQUEST
-        response.json shouldBe Json.toJson(RuleTypeOfBusinessIncorrectError)
       }
     }
   }

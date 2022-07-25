@@ -112,7 +112,7 @@ trait HateoasLinks {
 
   def createAmendHistoricNonFhlUkPropertyAnnualSubmission(appConfig: AppConfig, nino: String, taxYear: String): Link = {
     Link(href = ukHistoricNonFhlAnnualUri(appConfig, nino, taxYear),
-         method = GET,
+         method = PUT,
          rel = CREATE_AND_AMEND_HISTORIC_NON_FHL_UK_PROPERTY_ANNUAL_SUBMISSION)
   }
 
@@ -122,7 +122,7 @@ trait HateoasLinks {
   }
 
   def deleteHistoricNonFhlUkPropertyAnnualSubmission(appConfig: AppConfig, nino: String, taxYear: String): Link = {
-    Link(href = ukHistoricNonFhlAnnualUri(appConfig, nino, taxYear), method = GET, rel = DELETE_HISTORIC_NON_FHL_UK_PROPERTY_ANNUAL_SUBMISSION)
+    Link(href = ukHistoricNonFhlAnnualUri(appConfig, nino, taxYear), method = DELETE, rel = DELETE_HISTORIC_NON_FHL_UK_PROPERTY_ANNUAL_SUBMISSION)
   }
 
   // Generic

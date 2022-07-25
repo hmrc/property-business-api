@@ -16,20 +16,10 @@
 
 package v2.models.request.createAmendHistoricFhlUkPropertyAnnualSubmission
 
-import play.api.libs.functional.syntax._
-import play.api.libs.json.{JsPath, JsValue, OWrites}
+import play.api.libs.json.JsValue
 import v2.models.request.RawData
 
 case class CreateAmendHistoricFhlUkPropertyAnnualSubmissionRawData(nino: String,
                                                                    taxYear: String,
-                                                                   submissionId: String,
                                                                    body: JsValue) extends RawData
 
-object CreateAmendHistoricFhlUkPropertyAnnualSubmissionRawData{
-  implicit val writes: OWrites[CreateAmendHistoricFhlUkPropertyAnnualSubmissionRawData] = (
-    (JsPath \ "nino").write[String] and
-      (JsPath \ "taxYear").write[String] and
-      (JsPath \ "submissionId").write[String] and
-      (JsPath \ "request").write[JsValue]
-    )(unlift(CreateAmendHistoricFhlUkPropertyAnnualSubmissionRawData.unapply))
-}

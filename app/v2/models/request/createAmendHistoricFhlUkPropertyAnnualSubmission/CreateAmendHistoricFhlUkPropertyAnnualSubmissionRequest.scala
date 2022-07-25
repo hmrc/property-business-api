@@ -20,5 +20,4 @@ import v2.models.domain.Nino
 
 case class CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequest(nino: Nino,
                                                                    taxYear: String,
-                                                                   submissionId: String,
                                                                    body: CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequest)

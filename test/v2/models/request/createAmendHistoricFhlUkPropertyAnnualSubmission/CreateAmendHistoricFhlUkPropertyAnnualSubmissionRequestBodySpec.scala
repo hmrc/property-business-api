@@ -76,7 +76,7 @@ class CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequestBodySpec extends Un
       |      "periodOfGraceAdjustment": true,
       |      "businessPremisesRenovationAllowanceBalancingCharges": 200.00,
       |      "nonResidentLandlord": true,
-      |      "rentARoom": {
+      |      "ukRentARoom": {
       |         "jointlyLet": true
       |      }
       |   },

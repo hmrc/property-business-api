@@ -16,8 +16,7 @@
 
 package v2.models.request.createAmendHistoricFhlUkPropertyAnnualSubmission
 
-import play.api.libs.functional.syntax._
-import play.api.libs.json.{JsPath, Json, Reads, Writes}
+import play.api.libs.json.{Format, Json}
 
 case class HistoricFhlAnnualAllowances(annualInvestmentAllowance: Option[BigDecimal],
                                    businessPremisesRenovationAllowance: Option[BigDecimal],
@@ -25,12 +24,5 @@ case class HistoricFhlAnnualAllowances(annualInvestmentAllowance: Option[BigDeci
                                    propertyIncomeAllowance: Option[BigDecimal])
 
 object HistoricFhlAnnualAllowances {
-  implicit val reads: Reads[HistoricFhlAnnualAllowances] = Json.reads[HistoricFhlAnnualAllowances]
-
-  implicit val writes: Writes[HistoricFhlAnnualAllowances] = (
-    (JsPath \ "annualInvestmentAllowance").writeNullable[BigDecimal] and
-      (JsPath \ "businessPremisesRenovationAllowance").writeNullable[BigDecimal] and
-      (JsPath \ "otherCapitalAllowance").writeNullable[BigDecimal] and
-      (JsPath \ "propertyIncomeAllowance").writeNullable[BigDecimal]
-    )(unlift(HistoricFhlAnnualAllowances.unapply))
+  implicit val format: Format[HistoricFhlAnnualAllowances] = Json.format[HistoricFhlAnnualAllowances]
 }

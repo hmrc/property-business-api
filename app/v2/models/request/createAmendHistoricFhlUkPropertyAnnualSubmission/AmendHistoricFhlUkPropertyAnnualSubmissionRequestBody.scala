@@ -14,11 +14,10 @@
  * limitations under the License.
  */
 
-package v2.models.request.amendHistoricFhlUkPropertyAnnualSubmission
+package v2.models.request.createAmendHistoricFhlUkPropertyAnnualSubmission
 
 import play.api.libs.functional.syntax._
 import play.api.libs.json.{JsPath, Json, OWrites, Reads}
-import v2.models.request.amendHistoricFhlUkPropertyAnnualSubmission.historicFhl.{HistoricFhlAnnualAdjustments, HistoricFhlAnnualAllowances}
 
 case class AmendHistoricFhlUkPropertyAnnualSubmissionRequestBody(annualAdjustments: Option[HistoricFhlAnnualAdjustments],
                                                                  annualAllowances: Option[HistoricFhlAnnualAllowances])

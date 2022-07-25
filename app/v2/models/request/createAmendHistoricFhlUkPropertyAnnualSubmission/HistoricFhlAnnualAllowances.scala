@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package v2.models.request.amendHistoricFhlUkPropertyAnnualSubmission.historicFhl
+package v2.models.request.createAmendHistoricFhlUkPropertyAnnualSubmission
 
 import play.api.libs.functional.syntax._
 import play.api.libs.json.{JsPath, Json, Reads, Writes}

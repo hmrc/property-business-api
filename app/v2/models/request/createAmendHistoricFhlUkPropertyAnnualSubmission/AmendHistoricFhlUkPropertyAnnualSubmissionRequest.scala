@@ -14,8 +14,11 @@
  * limitations under the License.
  */
 
-package v2.models.request.amendHistoricFhlUkPropertyAnnualSubmission
+package v2.models.request.createAmendHistoricFhlUkPropertyAnnualSubmission
 
 import v2.models.domain.Nino
 
-case class AmendHistoricFhlUkPropertyAnnualSubmissionRequest(nino: Nino, taxYear: String, submissionId: String, body: AmendHistoricFhlUkPropertyAnnualSubmissionRequest)
+case class AmendHistoricFhlUkPropertyAnnualSubmissionRequest(nino: Nino,
+                                                             taxYear: String,
+                                                             submissionId: String,
+                                                             body: AmendHistoricFhlUkPropertyAnnualSubmissionRequest)

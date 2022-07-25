@@ -14,14 +14,16 @@
  * limitations under the License.
  */
 
-package v2.models.request.amendHistoricFhlUkPropertyAnnualSubmission
+package v2.models.request.createAmendHistoricFhlUkPropertyAnnualSubmission
 
 import play.api.libs.functional.syntax._
 import play.api.libs.json.{JsPath, JsValue, OWrites}
 import v2.models.request.RawData
 
-case class AmendHistoricFhlUkPropertyAnnualSubmissionRawData(nino: String, taxYear: String, submissionId: String, body: JsValue)
-  extends RawData
+case class AmendHistoricFhlUkPropertyAnnualSubmissionRawData(nino: String,
+                                                             taxYear: String,
+                                                             submissionId: String,
+                                                             body: JsValue) extends RawData
 
 object AmendHistoricFhlUkPropertyAnnualSubmissionRawData{
   implicit val writes: OWrites[AmendHistoricFhlUkPropertyAnnualSubmissionRawData] = (

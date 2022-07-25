@@ -14,11 +14,10 @@
  * limitations under the License.
  */
 
-package v2.models.request.amendHistoricFhlUkPropertyAnnualSubmission
+package v2.models.request.createAmendHistoricFhlUkPropertyAnnualSubmission
 
 import play.api.libs.json.{JsValue, Json}
 import support.UnitSpec
-import v2.models.request.amendHistoricFhlUkPropertyAnnualSubmission.historicFhl._
 import v2.models.request.common.ukPropertyRentARoom.UkPropertyAdjustmentsRentARoom
 
 class AmendHistoricFhlUkPropertyAnnualSubmissionRequestBodySpec extends UnitSpec {

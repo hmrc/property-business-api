@@ -20,7 +20,7 @@ import play.api.libs.functional.syntax._
 import play.api.libs.json.{JsPath, Json, OWrites, Reads}
 import shapeless.HNil
 import utils.EmptinessChecker
-import v2.models.request.amendHistoricFhlUkPropertyAnnualSubmission.historicFhl.{HistoricFhlAnnualAdjustments, HistoricFhlAnnualAllowances}
+import v2.models.request.createAmendHistoricFhlUkPropertyAnnualSubmission.{HistoricFhlAnnualAdjustments, HistoricFhlAnnualAllowances}
 
 case class CreateHistoricFhlUkPropertyAnnualSubmissionRequestBody(annualAdjustments: Option[HistoricFhlAnnualAdjustments],
                                                                   annualAllowances: Option[HistoricFhlAnnualAllowances])

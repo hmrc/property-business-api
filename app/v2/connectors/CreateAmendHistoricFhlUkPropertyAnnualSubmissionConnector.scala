@@ -17,30 +17,28 @@
 package v2.connectors
 
 import config.AppConfig
-import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
-import v2.connectors.DownstreamUri.{DesUri, IfsUri}
+import uk.gov.hmrc.http.{ HeaderCarrier, HttpClient }
+import v2.connectors.DownstreamUri.DesUri
 import v2.connectors.httpparsers.StandardIfsHttpParser._
-import v2.models.request.amendUkPropertyAnnualSubmission.AmendUkPropertyAnnualSubmissionRequest
 import v2.models.request.createAmendHistoricFhlUkPropertyAnnualSubmission.CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequest
 
-import javax.inject.{Inject, Singleton}
-import scala.concurrent.{ExecutionContext, Future}
+import javax.inject.{ Inject, Singleton }
+import scala.concurrent.{ ExecutionContext, Future }
 
 @Singleton
-class CreateAmendHistoricFhlUkPropertyAnnualSubmissionConnector @Inject()(val http: HttpClient,
-                                                                          val appConfig: AppConfig) extends BaseDownstreamConnector {
+class CreateAmendHistoricFhlUkPropertyAnnualSubmissionConnector @Inject()(val http: HttpClient, val appConfig: AppConfig)
+    extends BaseDownstreamConnector {
 
-  def amend(request: CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequest)(
-    implicit hc: HeaderCarrier,
-    ec: ExecutionContext,
-    correlationId: String): Future[DownstreamOutcome[Unit]] = {
+  def amend(request: CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequest)(implicit hc: HeaderCarrier,
+                                                                              ec: ExecutionContext,
+                                                                              correlationId: String): Future[DownstreamOutcome[Unit]] = {
 
-    val nino = request.nino.nino
-    val taxYear = request.taxYear //add the taxYear conversion
+    val nino    = request.nino.nino
+    val taxYear = request.taxYear.toDownstream
 
     put(
       body = request.body,
-      uri = DesUri[Unit](s"/income-tax/nino/$nino/uk-properties/furnished-holiday-lettings/annual-summaries/$taxYear")
+      uri = DesUri[Unit](s"income-tax/nino/$nino/uk-properties/furnished-holiday-lettings/annual-summaries/$taxYear")
     )
   }
 }

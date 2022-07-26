@@ -23,7 +23,8 @@ case class CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequestBody(annualAdj
                                                                        annualAllowances: Option[HistoricFhlAnnualAllowances])
 
 object CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequestBody {
-  implicit val reads: Reads[CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequestBody] = Json.reads[CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequestBody]
+  implicit val reads: Reads[CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequestBody] =
+    Json.reads[CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequestBody]
 
   implicit val writes: OWrites[CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequestBody] = (
     (JsPath \ "annualAdjustments").writeNullable[HistoricFhlAnnualAdjustments] and

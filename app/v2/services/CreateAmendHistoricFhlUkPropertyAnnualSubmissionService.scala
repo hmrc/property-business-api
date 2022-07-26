@@ -24,6 +24,7 @@ import v2.connectors.CreateAmendHistoricFhlUkPropertyAnnualSubmissionConnector
 import v2.controllers.EndpointLogContext
 import v2.models.errors._
 import v2.models.request.amendUkPropertyAnnualSubmission.AmendUkPropertyAnnualSubmissionRequest
+import v2.models.request.createAmendHistoricFhlUkPropertyAnnualSubmission.CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequest
 import v2.support.DownstreamResponseMappingSupport
 
 import javax.inject.{Inject, Singleton}
@@ -33,7 +34,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class CreateAmendHistoricFhlUkPropertyAnnualSubmissionService @Inject()(connector: CreateAmendHistoricFhlUkPropertyAnnualSubmissionConnector)
   extends DownstreamResponseMappingSupport with Logging {
 
-  def amend(request: AmendUkPropertyAnnualSubmissionRequest)(
+  def amend(request: CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequest)(
     implicit hc: HeaderCarrier,
     ec: ExecutionContext,
     logContext: EndpointLogContext,

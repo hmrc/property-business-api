@@ -21,6 +21,7 @@ import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
 import v2.connectors.DownstreamUri.{DesUri, IfsUri}
 import v2.connectors.httpparsers.StandardIfsHttpParser._
 import v2.models.request.amendUkPropertyAnnualSubmission.AmendUkPropertyAnnualSubmissionRequest
+import v2.models.request.createAmendHistoricFhlUkPropertyAnnualSubmission.CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequest
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
@@ -29,7 +30,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class CreateAmendHistoricFhlUkPropertyAnnualSubmissionConnector @Inject()(val http: HttpClient,
                                                                           val appConfig: AppConfig) extends BaseDownstreamConnector {
 
-  def amend(request: AmendUkPropertyAnnualSubmissionRequest)(
+  def amend(request: CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequest)(
     implicit hc: HeaderCarrier,
     ec: ExecutionContext,
     correlationId: String): Future[DownstreamOutcome[Unit]] = {

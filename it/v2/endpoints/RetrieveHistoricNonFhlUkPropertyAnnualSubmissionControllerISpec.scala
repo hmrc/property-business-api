@@ -76,6 +76,30 @@ class RetrieveHistoricNonFhlUkPropertyAnnualSubmissionControllerISpec extends V2
        """.stripMargin
     )
 
+    val emptyResponseWithHateoasBody: JsValue = Json.parse(
+      s"""
+         |{
+         |   "links": [
+         |      {
+         |         "href": "/individuals/business/property/uk/non-furnished-holiday-lettings/AA123456A/2020-21",
+         |         "method": "PUT",
+         |         "rel": "create-and-amend-uk-property-historic-non-fhl-annual-submission"
+         |      },
+         |      {
+         |         "href": "/individuals/business/property/uk/non-furnished-holiday-lettings/AA123456A/2020-21",
+         |         "method": "GET",
+         |         "rel": "self"
+         |      },
+         |      {
+         |         "href": "/individuals/business/property/uk/non-furnished-holiday-lettings/AA123456A/2020-21",
+         |         "method": "DELETE",
+         |         "rel": "delete-uk-property-historic-non-fhl-annual-submission"
+         |      }
+         |   ]
+         |}
+       """.stripMargin
+    )
+
     val downstreamResponseBody: JsValue = Json.parse(
       """
         |{
@@ -156,7 +180,7 @@ class RetrieveHistoricNonFhlUkPropertyAnnualSubmissionControllerISpec extends V2
 
         val response: WSResponse = await(request().get())
         response.status shouldBe Status.OK
-        response.json shouldBe Json.obj()
+        response.json shouldBe emptyResponseWithHateoasBody
         response.header("X-CorrelationId").nonEmpty shouldBe true
         response.header("Content-Type") shouldBe Some("application/json")
       }

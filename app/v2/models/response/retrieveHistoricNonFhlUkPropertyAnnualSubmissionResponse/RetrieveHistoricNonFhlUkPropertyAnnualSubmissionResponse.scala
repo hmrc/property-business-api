@@ -20,16 +20,12 @@ import config.AppConfig
 import play.api.libs.json.{ Json, OWrites, Reads }
 import v2.hateoas.HateoasLinksFactory
 import v2.models.hateoas.{ HateoasData, Link }
-import v2.models.response.listPropertyPeriodSummaries.ListPropertyPeriodSummariesResponse.{
-  createAmendHistoricNonFhlUkPropertyAnnualSubmission,
-  deleteHistoricNonFhlUkPropertyAnnualSubmission,
-  retrieveHistoricNonFhlUkPropertyAnnualSubmission
-}
+import v2.hateoas.HateoasLinks
 
 case class RetrieveHistoricNonFhlUkPropertyAnnualSubmissionResponse(annualAdjustments: Option[AnnualAdjustments],
                                                                     annualAllowances: Option[AnnualAllowances])
 
-object RetrieveHistoricNonFhlUkPropertyAnnualSubmissionResponse {
+object RetrieveHistoricNonFhlUkPropertyAnnualSubmissionResponse extends HateoasLinks {
   implicit val writes: OWrites[RetrieveHistoricNonFhlUkPropertyAnnualSubmissionResponse] =
     Json.writes[RetrieveHistoricNonFhlUkPropertyAnnualSubmissionResponse]
 

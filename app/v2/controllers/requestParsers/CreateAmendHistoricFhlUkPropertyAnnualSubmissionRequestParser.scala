@@ -27,14 +27,14 @@ import v2.models.request.createAmendHistoricFhlUkPropertyAnnualSubmission.{
 import javax.inject.Inject
 
 class CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequestParser @Inject()(
-                                                                               val validator: CreateAmendHistoricFhlUkPropertyAnnualSubmissionValidator)
-  extends RequestParser[CreateAmendHistoricFhlUkPropertyAnnualSubmissionRawData, CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequest] {
+    val validator: CreateAmendHistoricFhlUkPropertyAnnualSubmissionValidator)
+    extends RequestParser[CreateAmendHistoricFhlUkPropertyAnnualSubmissionRawData, CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequest] {
 
   override protected def requestFor(
-                                     data: CreateAmendHistoricFhlUkPropertyAnnualSubmissionRawData): CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequest = {
+      data: CreateAmendHistoricFhlUkPropertyAnnualSubmissionRawData): CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequest = {
 
     CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequest(Nino(data.nino),
-      TaxYear.fromMtd(data.taxYear),
-      data.body.as[CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequestBody])
+                                                            TaxYear.fromMtd(data.taxYear),
+                                                            data.body.as[CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequestBody])
   }
 }

@@ -30,7 +30,7 @@ import javax.inject.Singleton
 
 @Singleton
 class CreateAmendHistoricFhlUkPropertyAnnualSubmissionValidator @Inject()(appConfig: AppConfig)
-  extends Validator[CreateAmendHistoricFhlUkPropertyAnnualSubmissionRawData] {
+    extends Validator[CreateAmendHistoricFhlUkPropertyAnnualSubmissionRawData] {
 
   lazy private val minTaxYear = appConfig.minimumTaxHistoric
 
@@ -54,7 +54,7 @@ class CreateAmendHistoricFhlUkPropertyAnnualSubmissionValidator @Inject()(appCon
           optionalNumber(privateUseAdjustment, "/annualAdjustments/privateUseAdjustment") ++
           optionalNumber(balancingCharge, "/annualAdjustments/balancingCharge") ++
           optionalNumber(businessPremisesRenovationAllowanceBalancingCharges,
-            "/annualAdjustments/businessPremisesRenovationAllowanceBalancingCharges")
+                         "/annualAdjustments/businessPremisesRenovationAllowanceBalancingCharges")
       }
       .getOrElse(Nil)
 

@@ -72,12 +72,12 @@ class CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequestParserSpec extends 
         val model = CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequestBody(
           Option(
             HistoricFhlAnnualAdjustments(number("111.50"),
-              number("222.00"),
-              number("333.00"),
-              true,
-              number("444.00"),
-              false,
-              Some(UkPropertyAdjustmentsRentARoom(true)))),
+                                         number("222.00"),
+                                         number("333.00"),
+                                         true,
+                                         number("444.00"),
+                                         false,
+                                         Some(UkPropertyAdjustmentsRentARoom(true)))),
           Option(HistoricFhlAnnualAllowances(number("111.00"), number("222.00"), number("333.00"), None))
         )
 

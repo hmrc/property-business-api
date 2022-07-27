@@ -29,7 +29,8 @@ class MockCreateAmendHistoricFhlUkPropertyAnnualSubmissionValidator extends Mock
   object MockCreateAmendHistoricFhlUkPropertyAnnualSubmissionValidator {
 
     def validate(data: CreateAmendHistoricFhlUkPropertyAnnualSubmissionRawData)
-    : CallHandler1[CreateAmendHistoricFhlUkPropertyAnnualSubmissionRawData, List[MtdError]] = {
+      : CallHandler1[CreateAmendHistoricFhlUkPropertyAnnualSubmissionRawData, List[MtdError]] = {
+
       (mockValidator
         .validate(_: CreateAmendHistoricFhlUkPropertyAnnualSubmissionRawData))
         .expects(data)

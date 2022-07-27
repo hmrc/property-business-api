@@ -32,98 +32,98 @@ class CreateAmendHistoricFhlUkPropertyAnnualSubmissionValidatorSpec extends Unit
   val validator = new CreateAmendHistoricFhlUkPropertyAnnualSubmissionValidator(mockAppConfig)
 
   val validRequestBody: JsValue = Json.parse("""
-                                               | {
-                                               |   "annualAdjustments": {
-                                               |      "lossBroughtForward": 200.00,
-                                               |      "balancingCharge": 200.00,
-                                               |      "privateUseAdjustment": 200.00,
-                                               |      "periodOfGraceAdjustment": true,
-                                               |      "businessPremisesRenovationAllowanceBalancingCharges": 200.02,
-                                               |      "nonResidentLandlord": true,
-                                               |      "rentARoom": {
-                                               |         "jointlyLet": true
-                                               |      }
-                                               |   },
-                                               |   "annualAllowances": {
-                                               |      "annualInvestmentAllowance": 200.00,
-                                               |      "otherCapitalAllowance": 200.00,
-                                               |      "businessPremisesRenovationAllowance": 100.02,
-                                               |      "propertyIncomeAllowance": 10.02
-                                               |   }
-                                               | }
-                                               |""".stripMargin)
+     | {
+     |   "annualAdjustments": {
+     |      "lossBroughtForward": 200.00,
+     |      "balancingCharge": 200.00,
+     |      "privateUseAdjustment": 200.00,
+     |      "periodOfGraceAdjustment": true,
+     |      "businessPremisesRenovationAllowanceBalancingCharges": 200.02,
+     |      "nonResidentLandlord": true,
+     |      "rentARoom": {
+     |         "jointlyLet": true
+     |      }
+     |   },
+     |   "annualAllowances": {
+     |      "annualInvestmentAllowance": 200.00,
+     |      "otherCapitalAllowance": 200.00,
+     |      "businessPremisesRenovationAllowance": 100.02,
+     |      "propertyIncomeAllowance": 10.02
+     |   }
+     | }
+     |""".stripMargin)
 
   val validRequestBodyWithoutAnnualAllowances: JsValue = Json.parse("""
-                                                                      | {
-                                                                      |   "annualAdjustments": {
-                                                                      |      "lossBroughtForward": 200.00,
-                                                                      |      "balancingCharge": 200.00,
-                                                                      |      "privateUseAdjustment": 200.00,
-                                                                      |      "periodOfGraceAdjustment": true,
-                                                                      |      "businessPremisesRenovationAllowanceBalancingCharges": 200.02,
-                                                                      |      "nonResidentLandlord": true,
-                                                                      |      "rentARoom": {
-                                                                      |         "jointlyLet": true
-                                                                      |      }
-                                                                      |   }
-                                                                      | }
-                                                                      |""".stripMargin)
+     | {
+     |   "annualAdjustments": {
+     |      "lossBroughtForward": 200.00,
+     |      "balancingCharge": 200.00,
+     |      "privateUseAdjustment": 200.00,
+     |      "periodOfGraceAdjustment": true,
+     |      "businessPremisesRenovationAllowanceBalancingCharges": 200.02,
+     |      "nonResidentLandlord": true,
+     |      "rentARoom": {
+     |         "jointlyLet": true
+     |      }
+     |   }
+     | }
+     |""".stripMargin)
 
   val requestBodyWithInvalidAmounts: JsValue = Json.parse("""
-                                                            | {
-                                                            |   "annualAdjustments": {
-                                                            |      "lossBroughtForward": 200.123,
-                                                            |      "balancingCharge": -1.00,
-                                                            |      "privateUseAdjustment": 999999999990.99,
-                                                            |      "periodOfGraceAdjustment": true,
-                                                            |      "businessPremisesRenovationAllowanceBalancingCharges": 200.02,
-                                                            |      "nonResidentLandlord": true,
-                                                            |      "rentARoom": {
-                                                            |         "jointlyLet": true
-                                                            |      }
-                                                            |   }
-                                                            | }
-                                                            |""".stripMargin)
+     | {
+     |   "annualAdjustments": {
+     |      "lossBroughtForward": 200.123,
+     |      "balancingCharge": -1.00,
+     |      "privateUseAdjustment": 999999999990.99,
+     |      "periodOfGraceAdjustment": true,
+     |      "businessPremisesRenovationAllowanceBalancingCharges": 200.02,
+     |      "nonResidentLandlord": true,
+     |      "rentARoom": {
+     |         "jointlyLet": true
+     |      }
+     |   }
+     | }
+     |""".stripMargin)
 
   val incompleteRequestBody: JsValue = Json.parse("""
-                                                    | {
-                                                    |   "annualAdjustments": {
-                                                    |      "lossBroughtForward": 200.00,
-                                                    |      "balancingCharge": 200.00,
-                                                    |      "privateUseAdjustment": 200.00,
-                                                    |      "periodOfGraceAdjustment-MISSING-BECAUSE-MISSPELT": true,
-                                                    |      "businessPremisesRenovationAllowanceBalancingCharges": 200.02,
-                                                    |      "nonResidentLandlord": true,
-                                                    |      "rentARoom": {
-                                                    |         "jointlyLet": true
-                                                    |      }
-                                                    |   }
-                                                    | }
-                                                    |""".stripMargin)
+     | {
+     |   "annualAdjustments": {
+     |      "lossBroughtForward": 200.00,
+     |      "balancingCharge": 200.00,
+     |      "privateUseAdjustment": 200.00,
+     |      "periodOfGraceAdjustment-MISSING-BECAUSE-MISSPELT": true,
+     |      "businessPremisesRenovationAllowanceBalancingCharges": 200.02,
+     |      "nonResidentLandlord": true,
+     |      "rentARoom": {
+     |         "jointlyLet": true
+     |      }
+     |   }
+     | }
+     |""".stripMargin)
 
   val requestBodyWithEmptySubObjects: JsValue = Json.parse("""
-                                                             | {
-                                                             |   "annualAdjustments": {
-                                                             |   },
-                                                             |   "annualAllowances": {
-                                                             |   }
-                                                             | }
-                                                             |""".stripMargin)
+     | {
+     |   "annualAdjustments": {
+     |   },
+     |   "annualAllowances": {
+     |   }
+     | }
+     |""".stripMargin)
 
   val requestBodyWithEmptyRentARoom: JsValue = Json.parse("""
-                                                            | {
-                                                            |   "annualAdjustments": {
-                                                            |      "lossBroughtForward": 200.00,
-                                                            |      "balancingCharge": 200.00,
-                                                            |      "privateUseAdjustment": 200.00,
-                                                            |      "periodOfGraceAdjustment": true,
-                                                            |      "businessPremisesRenovationAllowanceBalancingCharges": 200.02,
-                                                            |      "nonResidentLandlord": true,
-                                                            |      "rentARoom": {
-                                                            |      }
-                                                            |   }
-                                                            | }
-                                                            |""".stripMargin)
+     | {
+     |   "annualAdjustments": {
+     |      "lossBroughtForward": 200.00,
+     |      "balancingCharge": 200.00,
+     |      "privateUseAdjustment": 200.00,
+     |      "periodOfGraceAdjustment": true,
+     |      "businessPremisesRenovationAllowanceBalancingCharges": 200.02,
+     |      "nonResidentLandlord": true,
+     |      "rentARoom": {
+     |      }
+     |   }
+     | }
+     |""".stripMargin)
 
   "The validator" should {
     "return no errors" when {

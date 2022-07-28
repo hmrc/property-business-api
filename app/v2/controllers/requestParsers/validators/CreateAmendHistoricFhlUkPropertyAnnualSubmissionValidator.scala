@@ -37,13 +37,13 @@ class CreateAmendHistoricFhlUkPropertyAnnualSubmissionValidator @Inject()(appCon
 
   override def validate(data: CreateAmendHistoricFhlUkPropertyAnnualSubmissionRawData): List[MtdError] = {
     (for {
-      _    <- parserValidation(data)
+      _    <- validateParams(data)
       body <- validateAndCheckNonEmptyOrRead[CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequestBody](data.body)
-      _    <- ruleValidation(body)
+      _    <- validateBusinessRules(body)
     } yield ()).swap.getOrElse(Nil)
   }
 
-  private def parserValidation(data: CreateAmendHistoricFhlUkPropertyAnnualSubmissionRawData): Either[List[MtdError], Unit] = {
+  private def validateParams(data: CreateAmendHistoricFhlUkPropertyAnnualSubmissionRawData): Either[List[MtdError], Unit] = {
     val errors =
       NinoValidation.validate(data.nino) ++
         TaxYearValidation.validate(minTaxYear, data.taxYear)
@@ -51,7 +51,7 @@ class CreateAmendHistoricFhlUkPropertyAnnualSubmissionValidator @Inject()(appCon
     errorsResult(errors)
   }
 
-  private def ruleValidation(body: CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequestBody): Either[List[MtdError], Unit] = {
+  private def validateBusinessRules(body: CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequestBody): Either[List[MtdError], Unit] = {
     val annualAdjustmentErrors = body.annualAdjustments
       .map { annualAdjustments =>
         import annualAdjustments._

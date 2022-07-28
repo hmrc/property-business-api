@@ -17,13 +17,14 @@
 package v2.connectors
 
 import config.AppConfig
-import uk.gov.hmrc.http.{ HeaderCarrier, HttpClient }
+import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
 import v2.connectors.DownstreamUri.DesUri
 import v2.connectors.httpparsers.StandardIfsHttpParser._
 import v2.models.request.createAmendHistoricFhlUkPropertyAnnualSubmission.CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequest
+import v2.models.response.createAmendHistoricFhlUkPropertyAnnualSubmission.CreateAmendHistoricFhlUkPropertyAnnualSubmissionResponse
 
-import javax.inject.{ Inject, Singleton }
-import scala.concurrent.{ ExecutionContext, Future }
+import javax.inject.{Inject, Singleton}
+import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class CreateAmendHistoricFhlUkPropertyAnnualSubmissionConnector @Inject()(val http: HttpClient, val appConfig: AppConfig)
@@ -31,14 +32,16 @@ class CreateAmendHistoricFhlUkPropertyAnnualSubmissionConnector @Inject()(val ht
 
   def amend(request: CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequest)(implicit hc: HeaderCarrier,
                                                                               ec: ExecutionContext,
-                                                                              correlationId: String): Future[DownstreamOutcome[Unit]] = {
+                                                                              correlationId: String):
+  Future[DownstreamOutcome[CreateAmendHistoricFhlUkPropertyAnnualSubmissionResponse]] = {
 
     val nino    = request.nino.nino
     val taxYear = request.taxYear.toDownstream
 
     put(
       body = request.body,
-      uri = DesUri[Unit](s"income-tax/nino/$nino/uk-properties/furnished-holiday-lettings/annual-summaries/$taxYear")
+      uri = DesUri[CreateAmendHistoricFhlUkPropertyAnnualSubmissionResponse]
+        (s"income-tax/nino/$nino/uk-properties/furnished-holiday-lettings/annual-summaries/$taxYear")
     )
   }
 }

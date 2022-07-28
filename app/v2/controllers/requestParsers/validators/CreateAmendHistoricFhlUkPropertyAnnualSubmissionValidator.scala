@@ -18,6 +18,7 @@ package v2.controllers.requestParsers.validators
 
 import com.google.inject.Inject
 import config.AppConfig
+import v2.controllers.requestParsers.validators.validations.JsonFormatValidation.validateAndCheckNonEmptyOrRead
 import v2.controllers.requestParsers.validators.validations.NumberValidation.{ validateOptional => optionalNumber }
 import v2.controllers.requestParsers.validators.validations._
 import v2.models.errors.MtdError
@@ -34,18 +35,23 @@ class CreateAmendHistoricFhlUkPropertyAnnualSubmissionValidator @Inject()(appCon
 
   lazy private val minTaxYear = appConfig.minimumTaxHistoric
 
-  override def validate(data: CreateAmendHistoricFhlUkPropertyAnnualSubmissionRawData): List[MtdError] =
-    parserValidation(data) ++
-      (JsonFormatValidation.validateAndCheckNonEmptyOrRead[CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequestBody](data.body) match {
-        case Left(jsonParserErrors) => jsonParserErrors
-        case Right(body)            => ruleValidation(body)
-      })
+  override def validate(data: CreateAmendHistoricFhlUkPropertyAnnualSubmissionRawData): List[MtdError] = {
+    (for {
+      _    <- parserValidation(data)
+      body <- validateAndCheckNonEmptyOrRead[CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequestBody](data.body)
+      _    <- ruleValidation(body)
+    } yield ()).swap.getOrElse(Nil)
+  }
 
-  private def parserValidation(data: CreateAmendHistoricFhlUkPropertyAnnualSubmissionRawData): List[MtdError] =
-    NinoValidation.validate(data.nino) ++
-      TaxYearValidation.validate(minTaxYear, data.taxYear)
+  private def parserValidation(data: CreateAmendHistoricFhlUkPropertyAnnualSubmissionRawData): Either[List[MtdError], Unit] = {
+    val errors =
+      NinoValidation.validate(data.nino) ++
+        TaxYearValidation.validate(minTaxYear, data.taxYear)
 
-  private def ruleValidation(body: CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequestBody): List[MtdError] = {
+    errorsResult(errors)
+  }
+
+  private def ruleValidation(body: CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequestBody): Either[List[MtdError], Unit] = {
     val annualAdjustmentErrors = body.annualAdjustments
       .map { annualAdjustments =>
         import annualAdjustments._
@@ -70,7 +76,9 @@ class CreateAmendHistoricFhlUkPropertyAnnualSubmissionValidator @Inject()(appCon
       }
       .getOrElse(Nil)
 
-    annualAdjustmentErrors ++ annualAllowanceErrors
+    errorsResult(annualAdjustmentErrors ++ annualAllowanceErrors)
   }
 
+  private def errorsResult(errors: List[MtdError]): Either[List[MtdError], Unit] =
+    if (errors.isEmpty) Right(()) else Left(errors)
 }

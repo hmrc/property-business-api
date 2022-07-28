@@ -19,7 +19,7 @@ package v2.controllers.requestParsers.validators
 import mocks.MockAppConfig
 import play.api.libs.json.{ JsObject, JsValue, Json }
 import support.UnitSpec
-import v2.models.errors.{ RuleIncorrectOrEmptyBodyError, TaxYearFormatError, ValueFormatError }
+import v2.models.errors.{ NinoFormatError, RuleIncorrectOrEmptyBodyError, TaxYearFormatError, ValueFormatError }
 import v2.models.request.createAmendHistoricFhlUkPropertyAnnualSubmission.CreateAmendHistoricFhlUkPropertyAnnualSubmissionRawData
 
 class CreateAmendHistoricFhlUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec with MockAppConfig {
@@ -189,6 +189,14 @@ class CreateAmendHistoricFhlUkPropertyAnnualSubmissionValidatorSpec extends Unit
       "given an invalid taxYear" in {
         val result = validator.validate(CreateAmendHistoricFhlUkPropertyAnnualSubmissionRawData(validNino, taxYear = "20231", validRequestBody))
         result should contain only (TaxYearFormatError)
+      }
+    }
+
+    "return only the path-param errors" when {
+      "given a request with both invalid path params and an invalid body" in {
+        val result =
+          validator.validate(CreateAmendHistoricFhlUkPropertyAnnualSubmissionRawData("BAD-NINO", validTaxYear, requestBodyWithInvalidAmounts))
+        result should contain only (NinoFormatError)
       }
     }
   }

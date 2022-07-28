@@ -37,13 +37,13 @@ class CreateAmendHistoricFhlUkPropertyAnnualSubmissionValidator @Inject()(appCon
 
   override def validate(data: CreateAmendHistoricFhlUkPropertyAnnualSubmissionRawData): List[MtdError] = {
     (for {
-      _    <- validateParams(data)
+      _    <- validatePathParams(data)
       body <- validateAndCheckNonEmptyOrRead[CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequestBody](data.body)
       _    <- validateBusinessRules(body)
     } yield ()).swap.getOrElse(Nil)
   }
 
-  private def validateParams(data: CreateAmendHistoricFhlUkPropertyAnnualSubmissionRawData): Either[List[MtdError], Unit] = {
+  private def validatePathParams(data: CreateAmendHistoricFhlUkPropertyAnnualSubmissionRawData): Either[List[MtdError], Unit] = {
     val errors =
       NinoValidation.validate(data.nino) ++
         TaxYearValidation.validate(minTaxYear, data.taxYear)

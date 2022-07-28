@@ -80,5 +80,5 @@ class CreateAmendHistoricFhlUkPropertyAnnualSubmissionValidator @Inject()(appCon
   }
 
   private def errorsResult(errors: List[MtdError]): Either[List[MtdError], Unit] =
-    if (errors.isEmpty) Right(()) else Left(errors)
+    Either.cond(errors.isEmpty, Right(()), errors)
 }

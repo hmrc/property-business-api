@@ -48,7 +48,7 @@ class CreateAmendHistoricFhlUkPropertyAnnualSubmissionController @Inject()(val a
     EndpointLogContext(controllerName = "CreateAmendHistoricFhlUkPropertyAnnualSubmissionController",
                        endpointName = "CreateAmendHistoricFhlUkPropertyAnnualSubmission")
 
-  def handleRequest(nino: String, businessId: String, taxYear: String): Action[JsValue] =
+  def handleRequest(nino: String, taxYear: String): Action[JsValue] =
     authorisedAction(nino).async(parse.json) { implicit request =>
       implicit val correlationId: String = idGenerator.getCorrelationId
       logger.info(message = s"[${endpointLogContext.controllerName}][${endpointLogContext.endpointName}] with correlationId : $correlationId")

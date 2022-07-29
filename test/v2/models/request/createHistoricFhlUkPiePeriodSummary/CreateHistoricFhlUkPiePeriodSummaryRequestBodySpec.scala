@@ -16,15 +16,18 @@
 
 package v2.models.request.createHistoricFhlUkPiePeriodSummary
 
+import play.api.libs.json.{JsValue, Json}
 import support.UnitSpec
-import v2.models.request.common.ukFhlProperty.{UkFhlProperty, UkFhlPropertyExpenses, UkFhlPropertyIncome}
-import v2.models.request.common.ukPropertyRentARoom.UkPropertyIncomeRentARoom
+import v2.models.request.common.ukFhlProperty.{UkFhlPropertyExpenses, UkFhlPropertyIncome}
+import v2.models.request.common.ukPropertyRentARoom.{UkPropertyExpensesRentARoom, UkPropertyIncomeRentARoom}
 
 class CreateHistoricFhlUkPiePeriodSummaryRequestBodySpec extends UnitSpec {
 
-  val property:UkFhlProperty = UkFhlProperty(
-    UkFhlPropertyIncome(Some(100.25), Some(100.15), Some(UkPropertyIncomeRentARoom(Some(97.50)))),
-    UkFhlPropertyExpenses(Some(123.12),
+  val income:UkFhlPropertyIncome =     UkFhlPropertyIncome(Some(100.25),
+    Some(100.15),
+    Some(UkPropertyIncomeRentARoom(Some(97.50))))
+
+  val expenses:UkFhlPropertyExpenses =  UkFhlPropertyExpenses(Some(123.12),
       Some(17.90),
       Some(38.19),
       Some(13.42),
@@ -32,12 +35,87 @@ class CreateHistoricFhlUkPiePeriodSummaryRequestBodySpec extends UnitSpec {
       Some(751.00),
       Some(1259.18),
       Some(12.00),
-      Some(UkPropertyIncomeRentARoom(Some(12.50)))))
-
+      Some(UkPropertyExpensesRentARoom(Some(12.12))))
 
   val requestBody: CreateHistoricFhlUkPiePeriodSummaryRequestBody =
     CreateHistoricFhlUkPiePeriodSummaryRequestBody(
       "2017-04-06",
       "2017-07-05",
+      Some(income),
+      Some(expenses)
     )
+
+    val mtdJson: JsValue = Json.parse(
+      """
+        |{
+        |"fromDate" : "2017-04-06",
+        | "toDate":    "2017-07-05",
+        | "income": {
+        |    "periodAmount": 100.25,
+        |    "taxDeducted": 100.15,
+        |    "rentARoom": {
+        |       "rentsReceived": 97.50
+        |    }
+        | },
+        | "expenses": {
+        |    "premisesRunningCosts": 123.12,
+        |    "repairsAndMaintenance": 17.90,
+        |    "financialCosts": 38.19,
+        |    "professionalFees": 13.42,
+        |    "costOfServices": 29.42,
+        |    "other": 751.00,
+        |    "consolidatedExpenses":1259.18,
+        |    "travelCosts": 12.00
+        | }
+        | }
+        |""".stripMargin
+    )
+
+    val desJson: JsValue = Json.parse(
+      """
+        |{
+        |"fromDate" : "2017-04-06",
+        | "toDate":    "2017-07-05",
+        | "financials":
+        | {
+        |  "income": {
+        |    "periodAmount": 100.25,
+        |    "taxDeducted": 100.15,
+        |    "ukFhlRentARoom": {
+        |       "rentsReceived": 97.50
+        |    }
+        |  },
+        |  "expenses": {
+        |    "premisesRunningCosts": 123.12,
+        |    "repairsAndMaintenance": 17.90,
+        |    "financialCosts": 38.19,
+        |    "professionalFees": 13.42,
+        |    "costOfServices": 29.42,
+        |    "other": 751.00,
+        |    "consolidatedExpenses":1259.18,
+        |    "travelCosts": 12.00,
+        |    "ukFhlRentARoom": {
+        |       "amountClaimed": 12.12
+        |    }
+        | }
+        |}
+        |}
+        |""".stripMargin
+    )
+
+    "reads" when {
+      "passed a valid JSON" should {
+        "return a valid model" in {
+          mtdJson.as[CreateHistoricFhlUkPiePeriodSummaryRequestBody] shouldBe requestBody
+        }
+      }
+    }
+
+    "writes" when {
+      "passed valid model" should {
+        "return valid JSON" in {
+          Json.toJson(requestBody) shouldBe desJson
+        }
+      }
+    }
 }

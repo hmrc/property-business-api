@@ -13,20 +13,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package v2.models.request.createHistoricFhlUkPiePeriodSummary
 
 import play.api.libs.functional.syntax.{toFunctionalBuilderOps, unlift}
 import play.api.libs.json.{JsPath, Json, OWrites, Reads}
-import v2.models.request.common.ukFhlProperty.UkFhlProperty
+import v2.models.request.common.ukFhlProperty.{UkFhlPropertyExpenses, UkFhlPropertyIncome}
 
 case class CreateHistoricFhlUkPiePeriodSummaryRequestBody (fromDate: String,
                                                            toDate: String,
-                                                           ukFhlProperty: Option[UkFhlProperty])
+                                                           income: Option[UkFhlPropertyIncome],
+                                                           expenses: Option[UkFhlPropertyExpenses])
 object CreateHistoricFhlUkPiePeriodSummaryRequestBody {
   implicit val reads: Reads[CreateHistoricFhlUkPiePeriodSummaryRequestBody] = Json.reads[CreateHistoricFhlUkPiePeriodSummaryRequestBody]
   implicit val writes: OWrites[CreateHistoricFhlUkPiePeriodSummaryRequestBody] = (
       (JsPath \ "fromDate").write[String] and
       (JsPath \ "toDate").write[String] and
-      (JsPath \ "income").writeNullable[UkFhlProperty]
+      (JsPath \ "financials" \ "income").writeNullable[UkFhlPropertyIncome] and
+      (JsPath \ "financials" \ "expenses").writeNullable[UkFhlPropertyExpenses]
     )(unlift(CreateHistoricFhlUkPiePeriodSummaryRequestBody.unapply))
 }

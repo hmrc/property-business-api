@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package v2.models.request.common.ukFhlProperty
+package v2.models.request.common.ukFhlPieProperty
 
 import play.api.libs.functional.syntax.{toFunctionalBuilderOps, unlift}
 import play.api.libs.json.{JsPath, Reads, Writes, __}

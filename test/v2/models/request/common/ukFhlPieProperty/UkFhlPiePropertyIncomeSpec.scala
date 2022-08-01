@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package v2.models.request.common.ukFhlProperty
+package v2.models.request.common.ukFhlPieProperty
 
 import play.api.libs.json.{JsValue, Json}
 import support.UnitSpec

@@ -18,7 +18,7 @@ package v2.models.request.createHistoricFhlUkPiePeriodSummary
 
 import play.api.libs.json.{JsValue, Json}
 import support.UnitSpec
-import v2.models.request.common.ukFhlProperty.{UkFhlPiePropertyIncome, UkFhlPropertyExpenses}
+import v2.models.request.common.ukFhlPieProperty.{UkFhlPiePropertyExpenses, UkFhlPiePropertyIncome}
 import v2.models.request.common.ukPropertyRentARoom.{UkPropertyExpensesRentARoom, UkPropertyIncomeRentARoom}
 
 class CreateHistoricFhlUkPiePeriodSummaryRequestBodySpec extends UnitSpec {
@@ -29,7 +29,7 @@ class CreateHistoricFhlUkPiePeriodSummaryRequestBodySpec extends UnitSpec {
       Some(UkPropertyIncomeRentARoom(Some(97.50)))
   )
 
-  val expenses:UkFhlPropertyExpenses =  UkFhlPropertyExpenses(
+  val expenses:UkFhlPiePropertyExpenses =  UkFhlPiePropertyExpenses(
       Some(123.12),
       Some(17.90),
       Some(38.19),
@@ -102,7 +102,7 @@ class CreateHistoricFhlUkPiePeriodSummaryRequestBodySpec extends UnitSpec {
         |    "other": 751.00,
         |    "consolidatedExpenses":1259.18,
         |    "travelCosts": 12.00,
-        |    "ukFhlRentARoom": {
+        |    "ukRentARoom": {
         |       "amountClaimed": 12.12
         |    }
         | }

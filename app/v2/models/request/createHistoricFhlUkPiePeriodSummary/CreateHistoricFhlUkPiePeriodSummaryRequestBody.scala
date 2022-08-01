@@ -18,25 +18,25 @@ package v2.models.request.createHistoricFhlUkPiePeriodSummary
 
 import play.api.libs.functional.syntax.{toFunctionalBuilderOps, unlift}
 import play.api.libs.json.{JsPath, OWrites, Reads, __}
-import v2.models.request.common.ukFhlProperty.{UkFhlPiePropertyIncome, UkFhlPropertyExpenses}
+import v2.models.request.common.ukFhlPieProperty.{UkFhlPiePropertyExpenses, UkFhlPiePropertyIncome}
 
 case class CreateHistoricFhlUkPiePeriodSummaryRequestBody (fromDate: String,
                                                            toDate: String,
                                                            income: Option[UkFhlPiePropertyIncome],
-                                                           expenses: Option[UkFhlPropertyExpenses])
+                                                           expenses: Option[UkFhlPiePropertyExpenses])
 object CreateHistoricFhlUkPiePeriodSummaryRequestBody {
 
   implicit val reads: Reads[CreateHistoricFhlUkPiePeriodSummaryRequestBody] =  (
       (__ \ "fromDate").read[String] and
       (__ \ "toDate" ).read[String] and
       (__ \ "income").readNullable[UkFhlPiePropertyIncome] and
-      (__ \ "expenses").readNullable[UkFhlPropertyExpenses]
+      (__ \ "expenses").readNullable[UkFhlPiePropertyExpenses]
     )(CreateHistoricFhlUkPiePeriodSummaryRequestBody.apply _)
 
   implicit val writes: OWrites[CreateHistoricFhlUkPiePeriodSummaryRequestBody] = (
       (JsPath \ "from").write[String] and
       (JsPath \ "to").write[String] and
       (JsPath \ "financials" \ "incomes").writeNullable[UkFhlPiePropertyIncome] and
-      (JsPath \ "financials" \ "deductions").writeNullable[UkFhlPropertyExpenses]
+      (JsPath \ "financials" \ "deductions").writeNullable[UkFhlPiePropertyExpenses]
     )(unlift(CreateHistoricFhlUkPiePeriodSummaryRequestBody.unapply))
 }

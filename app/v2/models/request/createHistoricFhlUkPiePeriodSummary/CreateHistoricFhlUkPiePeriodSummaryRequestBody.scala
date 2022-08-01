@@ -17,19 +17,26 @@
 package v2.models.request.createHistoricFhlUkPiePeriodSummary
 
 import play.api.libs.functional.syntax.{toFunctionalBuilderOps, unlift}
-import play.api.libs.json.{JsPath, Json, OWrites, Reads}
-import v2.models.request.common.ukFhlProperty.{UkFhlPropertyExpenses, UkFhlPropertyIncome}
+import play.api.libs.json.{JsPath, OWrites, Reads, __}
+import v2.models.request.common.ukFhlProperty.{UkFhlPiePropertyIncome, UkFhlPropertyExpenses}
 
 case class CreateHistoricFhlUkPiePeriodSummaryRequestBody (fromDate: String,
                                                            toDate: String,
-                                                           income: Option[UkFhlPropertyIncome],
+                                                           income: Option[UkFhlPiePropertyIncome],
                                                            expenses: Option[UkFhlPropertyExpenses])
 object CreateHistoricFhlUkPiePeriodSummaryRequestBody {
-  implicit val reads: Reads[CreateHistoricFhlUkPiePeriodSummaryRequestBody] = Json.reads[CreateHistoricFhlUkPiePeriodSummaryRequestBody]
+ // implicit val readPropertyIncome: Reads[CreateHistoricFhlUkPiePeriodSummaryRequestBody] =  Json.reads[CreateHistoricFhlUkPiePeriodSummaryRequestBody]
+  implicit val reads: Reads[CreateHistoricFhlUkPiePeriodSummaryRequestBody] =  (
+      (__ \ "fromDate").read[String] and
+      (__ \ "toDate" ).read[String] and
+      (__ \ "income").readNullable[UkFhlPiePropertyIncome] and
+      (__ \ "expenses").readNullable[UkFhlPropertyExpenses]
+    )(CreateHistoricFhlUkPiePeriodSummaryRequestBody.apply _)
+
   implicit val writes: OWrites[CreateHistoricFhlUkPiePeriodSummaryRequestBody] = (
-      (JsPath \ "fromDate").write[String] and
-      (JsPath \ "toDate").write[String] and
-      (JsPath \ "financials" \ "income").writeNullable[UkFhlPropertyIncome] and
-      (JsPath \ "financials" \ "expenses").writeNullable[UkFhlPropertyExpenses]
+      (JsPath \ "from").write[String] and
+      (JsPath \ "to").write[String] and
+      (JsPath \ "financials" \ "incomes").writeNullable[UkFhlPiePropertyIncome] and
+      (JsPath \ "financials" \ "deductions").writeNullable[UkFhlPropertyExpenses]
     )(unlift(CreateHistoricFhlUkPiePeriodSummaryRequestBody.unapply))
 }

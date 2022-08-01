@@ -40,12 +40,12 @@ object UkNonFhlPropertyIncome {
   )(unlift(UkNonFhlPropertyIncome.unapply))
 
   val writesIFS: Writes[UkNonFhlPropertyIncome] = (
-    (JsPath \ "premiumsOfLeaseGrant").writeNullable[BigDecimal] and         // DONE
-      (JsPath \ "reversePremiums").writeNullable[BigDecimal] and            // DONE
-      (JsPath \ "rentIncome" \ "amount").writeNullable[BigDecimal] and      // DONE
-      (JsPath \ "rentIncome" \ "taxDeducted").writeNullable[BigDecimal] and // DONE
-      (JsPath \ "otherIncome").writeNullable[BigDecimal] and                // DONE
-      (JsPath \ "ukRentARoom").writeNullable[UkPropertyIncomeRentARoom]     // DONE
+    (JsPath \ "premiumsOfLeaseGrant").writeNullable[BigDecimal] and
+      (JsPath \ "reversePremiums").writeNullable[BigDecimal] and
+      (JsPath \ "rentIncome" \ "amount").writeNullable[BigDecimal] and
+      (JsPath \ "rentIncome" \ "taxDeducted").writeNullable[BigDecimal] and
+      (JsPath \ "otherIncome").writeNullable[BigDecimal] and
+      (JsPath \ "ukRentARoom").writeNullable[UkPropertyIncomeRentARoom]
   )(unlift(UkNonFhlPropertyIncome.unapply))
 
 }

@@ -16,7 +16,7 @@
 
 package v2.models.request.common.ukNonFhlProperty
 
-import play.api.libs.json.{JsPath, Json, Reads, Writes}
+import play.api.libs.json.{ JsPath, Json, Reads, Writes }
 import play.api.libs.functional.syntax._
 import v2.models.request.common.ukPropertyRentARoom.UkPropertyIncomeRentARoom
 
@@ -26,7 +26,6 @@ case class UkNonFhlPropertyIncome(premiumsOfLeaseGrant: Option[BigDecimal],
                                   taxDeducted: Option[BigDecimal],
                                   otherIncome: Option[BigDecimal],
                                   rentARoom: Option[UkPropertyIncomeRentARoom])
-
 
 object UkNonFhlPropertyIncome {
   implicit val reads: Reads[UkNonFhlPropertyIncome] = Json.reads[UkNonFhlPropertyIncome]
@@ -38,6 +37,15 @@ object UkNonFhlPropertyIncome {
       (JsPath \ "taxDeducted").writeNullable[BigDecimal] and
       (JsPath \ "otherIncome").writeNullable[BigDecimal] and
       (JsPath \ "ukOtherRentARoom").writeNullable[UkPropertyIncomeRentARoom]
-  ) (unlift(UkNonFhlPropertyIncome.unapply))
+  )(unlift(UkNonFhlPropertyIncome.unapply))
+
+  val writesIFS: Writes[UkNonFhlPropertyIncome] = (
+    (JsPath \ "premiumsOfLeaseGrant").writeNullable[BigDecimal] and         // DONE
+      (JsPath \ "reversePremiums").writeNullable[BigDecimal] and            // DONE
+      (JsPath \ "rentIncome" \ "amount").writeNullable[BigDecimal] and      // DONE
+      (JsPath \ "rentIncome" \ "taxDeducted").writeNullable[BigDecimal] and // DONE
+      (JsPath \ "otherIncome").writeNullable[BigDecimal] and                // DONE
+      (JsPath \ "ukRentARoom").writeNullable[UkPropertyIncomeRentARoom]     // DONE
+  )(unlift(UkNonFhlPropertyIncome.unapply))
 
 }

@@ -16,7 +16,7 @@
 
 package v2.models.request.common.ukNonFhlProperty
 
-import play.api.libs.json.{JsPath, Json, Reads, Writes}
+import play.api.libs.json.{ JsPath, Json, Reads, Writes }
 import play.api.libs.functional.syntax._
 import v2.models.request.common.ukPropertyRentARoom.UkPropertyExpensesRentARoom
 
@@ -31,7 +31,6 @@ case class UkNonFhlPropertyExpenses(premisesRunningCosts: Option[BigDecimal],
                                     residentialFinancialCostsCarriedForward: Option[BigDecimal],
                                     rentARoom: Option[UkPropertyExpensesRentARoom],
                                     consolidatedExpenses: Option[BigDecimal])
-
 
 object UkNonFhlPropertyExpenses {
   implicit val reads: Reads[UkNonFhlPropertyExpenses] = Json.reads[UkNonFhlPropertyExpenses]
@@ -48,6 +47,20 @@ object UkNonFhlPropertyExpenses {
       (JsPath \ "residentialFinancialCostsCarriedForward").writeNullable[BigDecimal] and
       (JsPath \ "ukOtherRentARoom").writeNullable[UkPropertyExpensesRentARoom] and
       (JsPath \ "consolidatedExpenses").writeNullable[BigDecimal]
-  ) (unlift(UkNonFhlPropertyExpenses.unapply))
+  )(unlift(UkNonFhlPropertyExpenses.unapply))
+
+  val writesIFS: Writes[UkNonFhlPropertyExpenses] = (
+    (JsPath \ "premisesRunningCosts").writeNullable[BigDecimal] and
+      (JsPath \ "repairsAndMaintenance").writeNullable[BigDecimal] and
+      (JsPath \ "financialCosts").writeNullable[BigDecimal] and
+      (JsPath \ "professionalFees").writeNullable[BigDecimal] and
+      (JsPath \ "costOfServices").writeNullable[BigDecimal] and
+      (JsPath \ "other").writeNullable[BigDecimal] and
+      (JsPath \ "residentialFinancialCost").writeNullable[BigDecimal] and
+      (JsPath \ "travelCosts").writeNullable[BigDecimal] and
+      (JsPath \ "residentialFinancialCostsCarriedForward").writeNullable[BigDecimal] and
+      (JsPath \ "ukRentARoom").writeNullable[UkPropertyExpensesRentARoom] and
+      (JsPath \ "consolidatedExpenses").writeNullable[BigDecimal]
+  )(unlift(UkNonFhlPropertyExpenses.unapply))
 
 }

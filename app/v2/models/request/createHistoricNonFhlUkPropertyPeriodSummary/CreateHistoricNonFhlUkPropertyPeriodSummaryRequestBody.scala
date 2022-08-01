@@ -18,7 +18,6 @@ package v2.models.request.createHistoricNonFhlUkPropertyPeriodSummary
 
 import play.api.libs.functional.syntax.{ toFunctionalBuilderOps, unlift }
 import play.api.libs.json.{ JsPath, Json, OWrites, Reads }
-import v2.models.request.common.ukNonFhlProperty.{ UkNonFhlPropertyExpenses, UkNonFhlPropertyIncome }
 
 case class CreateHistoricNonFhlUkPropertyPeriodSummaryRequestBody(fromDate: String,
                                                                   toDate: String,
@@ -32,7 +31,7 @@ object CreateHistoricNonFhlUkPropertyPeriodSummaryRequestBody {
   implicit val writes: OWrites[CreateHistoricNonFhlUkPropertyPeriodSummaryRequestBody] = (
     (JsPath \ "from").write[String] and
       (JsPath \ "to").write[String] and
-      (JsPath \ "financials" \ "incomes").writeNullable[UkNonFhlPropertyIncome](UkNonFhlPropertyIncome.writesIFS) and
-      (JsPath \ "financials" \ "deductions").writeNullable[UkNonFhlPropertyExpenses](UkNonFhlPropertyExpenses.writesIFS)
+      (JsPath \ "financials" \ "incomes").writeNullable[UkNonFhlPropertyIncome] and
+      (JsPath \ "financials" \ "deductions").writeNullable[UkNonFhlPropertyExpenses]
   )(unlift(CreateHistoricNonFhlUkPropertyPeriodSummaryRequestBody.unapply))
 }

@@ -68,10 +68,10 @@ class CreateAmendHistoricFhlUkPropertyAnnualSubmissionValidator @Inject()(appCon
       .map { annualAllowances =>
         import annualAllowances._
 
-        optionalNumber(annualInvestmentAllowance, "/annualAdjustments/annualInvestmentAllowance") ++
-          optionalNumber(propertyIncomeAllowance, "/annualAdjustments/propertyIncomeAllowance") ++
-          optionalNumber(otherCapitalAllowance, "/annualAdjustments/otherCapitalAllowance") ++
-          optionalNumber(businessPremisesRenovationAllowance, "/annualAdjustments/businessPremisesRenovationAllowance")
+        optionalNumber(annualInvestmentAllowance, "/annualAllowances/annualInvestmentAllowance") ++
+          optionalNumber(propertyIncomeAllowance, "/annualAllowances/propertyIncomeAllowance") ++
+          optionalNumber(otherCapitalAllowance, "/annualAllowances/otherCapitalAllowance") ++
+          optionalNumber(businessPremisesRenovationAllowance, "/annualAllowances/businessPremisesRenovationAllowance")
 
       }
       .getOrElse(Nil)

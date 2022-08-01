@@ -50,7 +50,9 @@ class CreateAmendHistoricFhlUkPropertyAnnualSubmissionController @Inject()(val a
   def handleRequest(nino: String, taxYear: String): Action[JsValue] =
     authorisedAction(nino).async(parse.json) { implicit request =>
       implicit val correlationId: String = idGenerator.getCorrelationId
+
       logger.info(message = s"[${endpointLogContext.controllerName}][${endpointLogContext.endpointName}] with correlationId : $correlationId")
+
       val rawData = CreateAmendHistoricFhlUkPropertyAnnualSubmissionRawData(nino, taxYear, request.body)
       val result =
         for {
@@ -86,8 +88,13 @@ class CreateAmendHistoricFhlUkPropertyAnnualSubmissionController @Inject()(val a
 
   private def errorResult(errorWrapper: ErrorWrapper) =
     errorWrapper.error match {
-      case BadRequestError | NinoFormatError | TaxYearFormatError | RuleTaxYearRangeInvalidError | RuleTaxYearNotSupportedError | MtdErrorWithCode(
-            ValueFormatError.code) | MtdErrorWithCode(RuleIncorrectOrEmptyBodyError.code) =>
+      case BadRequestError
+           | NinoFormatError
+           | TaxYearFormatError
+           | RuleTaxYearRangeInvalidError
+           | RuleTaxYearNotSupportedError
+           | MtdErrorWithCode(ValueFormatError.code)
+           | MtdErrorWithCode(RuleIncorrectOrEmptyBodyError.code) =>
         BadRequest(Json.toJson(errorWrapper))
       case NotFoundError => NotFound(Json.toJson(errorWrapper))
       case InternalError => InternalServerError(Json.toJson(errorWrapper))

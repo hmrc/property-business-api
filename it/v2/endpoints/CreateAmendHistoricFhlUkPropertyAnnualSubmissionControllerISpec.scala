@@ -62,23 +62,23 @@ class CreateAmendHistoricFhlUkPropertyAnnualSubmissionControllerISpec extends V2
     val responseBody: JsValue = Json.parse(
       s"""
          |{
-         |   "links": [
-         |      {
-         |         "href": "/individuals/business/property/uk/furnished-holiday-lettings/$nino/$taxYear",
-         |         "method": "PUT",
-         |         "rel": "create-and-amend-uk-property-historic-fhl-annual-submission"
-         |      },
-         |      {
-         |         "href": "/individuals/business/property/uk/furnished-holiday-lettings/$nino/$taxYear",
-         |         "method": "GET",
-         |         "rel": "self"
-         |      },
-         |      {
-         |         "href": "/individuals/business/property/uk/furnished-holiday-lettings/$nino/$taxYear",
-         |         "method": "DELETE",
-         |         "rel": "delete-uk-property-historic-fhl-annual-submission"
-         |      }
-         |   ]
+         |    "links": [
+         |        {
+         |            "href": "/individuals/business/property/uk/furnished-holiday-lettings/TC663795B/2020-21",
+         |            "method": "GET",
+         |            "rel": "self"
+         |        },
+         |        {
+         |            "href": "/individuals/business/property/uk/furnished-holiday-lettings/TC663795B/2020-21",
+         |            "method": "PUT",
+         |            "rel": "create-and-amend-historic-fhl-uk-property-annual-submission"
+         |        },
+         |        {
+         |            "href": "/individuals/business/property/uk/furnished-holiday-lettings/TC663795B/2020-21",
+         |            "method": "DELETE",
+         |            "rel": "delete-historic-fhl-uk-property-annual-submission"
+         |        }
+         |    ]
          |}
       """.stripMargin
     )
@@ -87,14 +87,9 @@ class CreateAmendHistoricFhlUkPropertyAnnualSubmissionControllerISpec extends V2
 
     def uri: String = s"/uk/furnished-holiday-lettings/$nino/$taxYear"
 
-    def desUri: String = s"/income-tax/nino/$nino/uk-properties/furnished-holiday-lettings/annual-summaries/$taxYear"
+    def desUri: String = s"/income-tax/nino/$nino/uk-properties/furnished-holiday-lettings/annual-summaries/2021"
 
-    def desQueryParams: Map[String, String] = Map(
-      "taxableEntityId" -> nino,
-      "taxYear" -> taxYear
-    )
-
-    val desResponse = Json.parse(
+    val desResponse: JsValue = Json.parse(
       """
         |{
         |   "transactionReference": "0000000000000001"
@@ -120,16 +115,13 @@ class CreateAmendHistoricFhlUkPropertyAnnualSubmissionControllerISpec extends V2
   }
 
   "Calling the create and amend historic FHL uk property annual submission endpoint" should {
-
     "return a 200 status code" when {
-
       "any valid request is made" in new Test {
-
         override def setupStubs(): StubMapping = {
           AuthStub.authorised()
           AuditStub.audit()
           MtdIdLookupStub.ninoFound(nino)
-          DownstreamStub.onSuccess(DownstreamStub.PUT, desUri, desQueryParams, OK, desResponse)
+          DownstreamStub.onSuccess(DownstreamStub.PUT, desUri, OK, desResponse)
         }
 
         val response: WSResponse = await(request().put(requestBodyJson))
@@ -140,7 +132,7 @@ class CreateAmendHistoricFhlUkPropertyAnnualSubmissionControllerISpec extends V2
     }
 
     "return a 400 with multiple errors" when {
-      "all field validations fail on the request body" in new Test {
+      "multiple field validations fail on the request body" in new Test {
 
         override def setupStubs(): StubMapping = {
           AuthStub.authorised()
@@ -171,22 +163,19 @@ class CreateAmendHistoricFhlUkPropertyAnnualSubmissionControllerISpec extends V2
             |}
             |""".stripMargin)
 
-        val allInvalidFieldsRequestError: List[MtdError] = List(
-          ValueFormatError.copy(
+        val invalidFieldsRequestError: MtdError = ValueFormatError.copy(
             paths = Some(List(
               "/annualAdjustments/lossBroughtForward",
-              "/annualAdjustments/balancingCharge",
               "/annualAdjustments/privateUseAdjustment",
+              "/annualAdjustments/balancingCharge",
               "/annualAllowances/annualInvestmentAllowance",
               "/annualAllowances/propertyIncomeAllowance"
             ))
           )
-        )
 
         val wrappedErrors: ErrorWrapper = ErrorWrapper(
           correlationId = correlationId,
-          error = BadRequestError,
-          errors = Some(allInvalidFieldsRequestError)
+          error = invalidFieldsRequestError
         )
 
         val response: WSResponse = await(request().put(invalidFieldsRequestBodyJson))
@@ -196,27 +185,6 @@ class CreateAmendHistoricFhlUkPropertyAnnualSubmissionControllerISpec extends V2
     }
 
     "return an validation error according to spec" when {
-      def validationErrorTest(requestNino: String,
-                              requestTaxYear: String,
-                              requestBody: JsValue,
-                              expectedStatus: Int,
-                              expectedBody: MtdError): Unit = {
-        s"validation fails with ${expectedBody.code} error" in new Test {
-
-          override val nino: String = requestNino
-          override val taxYear: String = requestTaxYear
-          override val requestBodyJson: JsValue = requestBody
-
-          override def setupStubs(): StubMapping = {
-            AuthStub.authorised()
-            MtdIdLookupStub.ninoFound(nino)
-          }
-
-          val response: WSResponse = await(request().put(requestBodyJson))
-          response.status shouldBe expectedStatus
-          response.json shouldBe Json.toJson(expectedBody)
-        }
-      }
 
       val requestJson: JsValue = Json.parse(
         """
@@ -242,12 +210,32 @@ class CreateAmendHistoricFhlUkPropertyAnnualSubmissionControllerISpec extends V2
       """.stripMargin
       )
 
+      def validationErrorTest(requestNino: String,
+                              requestTaxYear: String,
+                              requestBody: JsValue,
+                              expectedStatus: Int,
+                              expectedBody: MtdError): Unit = {
+        s"validation fails with ${expectedBody.code} error" in new Test {
 
+          override val nino: String = requestNino
+          override val taxYear: String = requestTaxYear
+          override val requestBodyJson: JsValue = requestBody
+
+          override def setupStubs(): StubMapping = {
+            AuthStub.authorised()
+            MtdIdLookupStub.ninoFound(nino)
+          }
+
+          val response: WSResponse = await(request().put(requestBodyJson))
+          response.status shouldBe expectedStatus
+          response.json shouldBe Json.toJson(expectedBody)
+        }
+      }
       val input = Seq(
         ("AA1123A", "2022-23", requestJson, BAD_REQUEST, NinoFormatError),
         ("AA123456A", "202362-23", requestJson, BAD_REQUEST, TaxYearFormatError),
         ("AA123456A", "2021-24", requestJson, BAD_REQUEST, RuleTaxYearRangeInvalidError),
-        ("AA123456A", "2022-23", requestJson, BAD_REQUEST, RuleTaxYearNotSupportedError),
+        ("AA123456A", "2015-16", requestJson, BAD_REQUEST, RuleTaxYearNotSupportedError),
         ("AA123456A", "2022-23", Json.parse(s"""{}""".stripMargin), BAD_REQUEST, RuleIncorrectOrEmptyBodyError),
       )
       input.foreach(args => (validationErrorTest _).tupled(args))

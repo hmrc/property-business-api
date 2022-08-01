@@ -148,16 +148,17 @@ class CreateAmendHistoricFhlUkPropertyAnnualSubmissionValidatorSpec extends Unit
       }
     }
 
-    "return ValueFormatErrors" when {
-      "given data with invalid numeric amounts" in {
-        val expected1 = ValueFormatError.copy(paths = Some(List("/annualAdjustments/lossBroughtForward")))
-        val expected2 = ValueFormatError.copy(paths = Some(List("/annualAdjustments/privateUseAdjustment")))
-        val expected3 = ValueFormatError.copy(paths = Some(List("/annualAdjustments/balancingCharge")))
+    "return ValueFormatErrors grouped into one error object with an array of paths" when {
+      "given data with multiple invalid numeric amounts" in {
+        val expected =
+          ValueFormatError.copy(
+            paths =
+              Some(List("/annualAdjustments/lossBroughtForward", "/annualAdjustments/privateUseAdjustment", "/annualAdjustments/balancingCharge")))
 
         val result =
           validator.validate(CreateAmendHistoricFhlUkPropertyAnnualSubmissionRawData(validNino, validTaxYear, requestBodyWithInvalidAmounts))
 
-        result should contain only (expected1, expected2, expected3)
+        result should contain only (expected)
       }
     }
 

@@ -16,30 +16,22 @@
 
 package v2.controllers
 
-import play.api.libs.json.{ JsValue, Json }
+import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.Result
 import uk.gov.hmrc.http.HeaderCarrier
 import v2.mocks.MockIdGenerator
 import v2.mocks.hateoas.MockHateoasFactory
 import v2.mocks.requestParsers.MockCreateAmendHistoricFhlUkPropertyAnnualSubmissionRequestParser
-import v2.mocks.services.{
-  MockAuditService,
-  MockCreateAmendHistoricFhlUkPropertyAnnualSubmissionService,
-  MockEnrolmentsAuthService,
-  MockMtdIdLookupService
-}
-import v2.models.audit.{ AuditError, AuditResponse }
-import v2.models.domain.{ Nino, TaxYear }
+import v2.mocks.services.{MockCreateAmendHistoricFhlUkPropertyAnnualSubmissionService, MockEnrolmentsAuthService, MockMtdIdLookupService}
+import v2.models.domain.{Nino, TaxYear}
 import v2.models.errors._
 import v2.models.hateoas.Method.GET
-import v2.models.hateoas.{ HateoasWrapper, Link }
+import v2.models.hateoas.{HateoasWrapper, Link}
 import v2.models.outcomes.ResponseWrapper
 import v2.models.request.common.ukPropertyRentARoom.UkPropertyAdjustmentsRentARoom
 import v2.models.request.createAmendHistoricFhlUkPropertyAnnualSubmission._
-import v2.models.response.createAmendHistoricFhlUkPropertyAnnualSubmission.{
-  CreateAmendHistoricFhlUkPropertyAnnualSubmissionHateoasData,
-  CreateAmendHistoricFhlUkPropertyAnnualSubmissionResponse
-}
+import v2.models.response.createAmendHistoricFhlUkPropertyAnnualSubmission.
+{CreateAmendHistoricFhlUkPropertyAnnualSubmissionHateoasData, CreateAmendHistoricFhlUkPropertyAnnualSubmissionResponse}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -50,7 +42,6 @@ class CreateAmendHistoricFhlUkPropertyAnnualSubmissionControllerSpec
     with MockMtdIdLookupService
     with MockCreateAmendHistoricFhlUkPropertyAnnualSubmissionService
     with MockCreateAmendHistoricFhlUkPropertyAnnualSubmissionRequestParser
-    with MockAuditService
     with MockHateoasFactory
     with MockIdGenerator {
 
@@ -66,7 +57,6 @@ class CreateAmendHistoricFhlUkPropertyAnnualSubmissionControllerSpec
       lookupService = mockMtdIdLookupService,
       parser = mockCreateAmendHistoricFhlUkPropertyAnnualSubmissionRequestParser,
       service = mockService,
-      auditService = mockAuditService,
       hateoasFactory = mockHateoasFactory,
       cc = cc,
       idGenerator = mockIdGenerator
@@ -119,9 +109,9 @@ class CreateAmendHistoricFhlUkPropertyAnnualSubmissionControllerSpec
     Some(BigDecimal("105.11")),
     Some(BigDecimal("200.11")),
     Some(BigDecimal("120.11")),
-    true,
+    periodOfGraceAdjustment = true,
     Some(BigDecimal("101.11")),
-    false,
+    nonResidentLandlord = false,
     Some(UkPropertyAdjustmentsRentARoom(true))
   )
 
@@ -153,8 +143,8 @@ class CreateAmendHistoricFhlUkPropertyAnnualSubmissionControllerSpec
           .returns(Future.successful(Right(ResponseWrapper(correlationId, CreateAmendHistoricFhlUkPropertyAnnualSubmissionResponse(None)))))
 
         MockHateoasFactory
-          .wrap((), CreateAmendHistoricFhlUkPropertyAnnualSubmissionHateoasData(nino, taxYear))
-          .returns(HateoasWrapper((), Seq(testHateoasLink)))
+          .wrap(CreateAmendHistoricFhlUkPropertyAnnualSubmissionResponse(None), CreateAmendHistoricFhlUkPropertyAnnualSubmissionHateoasData(nino, taxYear))
+          .returns(HateoasWrapper(CreateAmendHistoricFhlUkPropertyAnnualSubmissionResponse(None), Seq(testHateoasLink)))
 
         val result: Future[Result] = controller.handleRequest(nino, taxYear)(fakeRequestWithBody(requestJson))
         status(result) shouldBe OK

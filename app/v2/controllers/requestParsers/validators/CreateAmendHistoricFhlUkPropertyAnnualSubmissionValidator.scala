@@ -78,7 +78,4 @@ class CreateAmendHistoricFhlUkPropertyAnnualSubmissionValidator @Inject()(appCon
 
     errorsResult(annualAdjustmentErrors ++ annualAllowanceErrors)
   }
-
-  private def errorsResult(errors: List[MtdError]): Either[List[MtdError], Unit] =
-    Either.cond(errors.isEmpty, Right(()), errors)
 }

@@ -40,12 +40,23 @@ class CreateHistoricNonFhlUkPropertyPeriodSummaryRequestBodySpec extends UnitSpe
     None
   )
 
+  val consolidatedExpenses: UkNonFhlPropertyExpenses =
+    UkNonFhlPropertyExpenses(None, None, None, None, None, None, None, None, None, None, Some(235.78))
+
   val createHistoricNonFhlUkPropertyPeriodSummaryRequestBody: CreateHistoricNonFhlUkPropertyPeriodSummaryRequestBody =
     CreateHistoricNonFhlUkPropertyPeriodSummaryRequestBody(
       "2019-03-11",
       "2020-04-23",
       Some(income),
       Some(expenses)
+    )
+
+  val createHistoricNonFhlUkPropertyPeriodSummaryConsolidatedRequestBody: CreateHistoricNonFhlUkPropertyPeriodSummaryRequestBody =
+    CreateHistoricNonFhlUkPropertyPeriodSummaryRequestBody(
+      "2019-03-11",
+      "2020-04-23",
+      Some(income),
+      Some(consolidatedExpenses)
     )
 
   val mtdJson: JsValue = Json.parse(
@@ -77,6 +88,28 @@ class CreateHistoricNonFhlUkPropertyPeriodSummaryRequestBodySpec extends UnitSpe
       |      "amountClaimed": 545.9
       |    }
       |  }
+      |}
+    """.stripMargin
+  )
+
+  val mtdJsonConsolidated: JsValue = Json.parse(
+    """
+      |{
+      |    "fromDate": "2019-03-11",
+      |    "toDate": "2020-04-23",
+      |    "income": {
+      |        "periodAmount": 123.45,
+      |        "premiumsOfLeaseGrant": 2355.45,
+      |        "reversePremiums": 454.56,
+      |        "otherIncome": 567.89,
+      |        "taxDeducted": 234.53,  
+      |        "rentARoom": {
+      |           "rentsReceived": 567.56
+      |         }
+      |        },
+      |       "expenses":{
+      |          "consolidatedExpenses": 235.78
+      |     }
       |}
     """.stripMargin
   )
@@ -118,6 +151,33 @@ class CreateHistoricNonFhlUkPropertyPeriodSummaryRequestBodySpec extends UnitSpe
     """.stripMargin
   )
 
+  val backendJsonConsolidated: JsValue = Json.parse(
+    """
+      |{
+      |    "from": "2019-03-11",
+      |    "to": "2020-04-23",
+      |    "financials":
+      |    {
+      |      "incomes": {
+      |       "rentIncome":{
+      |         "amount": 123.45,
+      |         "taxDeducted": 234.53
+      |       },
+      |       "premiumsOfLeaseGrant": 2355.45,
+      |       "reversePremiums": 454.56,
+      |       "otherIncome": 567.89,
+      |       "ukRentARoom": {
+      |         "rentsReceived": 567.56
+      |       }
+      |     },
+      |     "deductions":{
+      |       "consolidatedExpenses": 235.78
+      |     }
+      |   }
+      |}
+    """.stripMargin
+  )
+
   "reads" when {
     "passed a valid JSON" should {
       "return a valid model" in {
@@ -129,6 +189,22 @@ class CreateHistoricNonFhlUkPropertyPeriodSummaryRequestBodySpec extends UnitSpe
     "passed valid model" should {
       "return valid JSON" in {
         Json.toJson(createHistoricNonFhlUkPropertyPeriodSummaryRequestBody) shouldBe backendJson
+      }
+    }
+  }
+
+  "reads" when {
+    "passed a valid consolidated JSON" should {
+      "return a valid model" in {
+        mtdJsonConsolidated
+          .as[CreateHistoricNonFhlUkPropertyPeriodSummaryRequestBody] shouldBe createHistoricNonFhlUkPropertyPeriodSummaryConsolidatedRequestBody
+      }
+    }
+  }
+  "writes" when {
+    "passed valid consolidated model" should {
+      "return valid consolidated JSON" in {
+        Json.toJson(createHistoricNonFhlUkPropertyPeriodSummaryConsolidatedRequestBody) shouldBe backendJsonConsolidated
       }
     }
   }

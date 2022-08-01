@@ -25,7 +25,7 @@ case class CreateHistoricFhlUkPiePeriodSummaryRequestBody (fromDate: String,
                                                            income: Option[UkFhlPiePropertyIncome],
                                                            expenses: Option[UkFhlPropertyExpenses])
 object CreateHistoricFhlUkPiePeriodSummaryRequestBody {
- // implicit val readPropertyIncome: Reads[CreateHistoricFhlUkPiePeriodSummaryRequestBody] =  Json.reads[CreateHistoricFhlUkPiePeriodSummaryRequestBody]
+
   implicit val reads: Reads[CreateHistoricFhlUkPiePeriodSummaryRequestBody] =  (
       (__ \ "fromDate").read[String] and
       (__ \ "toDate" ).read[String] and

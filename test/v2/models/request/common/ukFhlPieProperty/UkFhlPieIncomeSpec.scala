@@ -21,7 +21,7 @@ import support.UnitSpec
 import v2.models.request.common.ukPropertyRentARoom.UkPropertyIncomeRentARoom
 
 
-class UkFhlPiePropertyIncomeSpec extends UnitSpec{
+class UkFhlPieIncomeSpec extends UnitSpec{
    val rentARoom: UkPropertyIncomeRentARoom= UkPropertyIncomeRentARoom(Some(412.89))
    val requestBody: UkFhlPieIncome = UkFhlPieIncome(Some(215.16), Some(1365.12), Some(rentARoom))
 

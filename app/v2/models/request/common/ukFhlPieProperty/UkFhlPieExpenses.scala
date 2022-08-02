@@ -21,21 +21,21 @@ import play.api.libs.json.{JsPath, Json, Reads, Writes}
 import v2.models.request.common.ukPropertyRentARoom.UkPropertyExpensesRentARoom
 
 
-case class UkFhlPiePropertyExpenses(premisesRunningCosts: Option[BigDecimal],
-                                 repairsAndMaintenance: Option[BigDecimal],
-                                 financialCosts: Option[BigDecimal],
-                                 professionalFees: Option[BigDecimal],
-                                 costOfServices: Option[BigDecimal],
-                                 other: Option[BigDecimal],
-                                 consolidatedExpenses: Option[BigDecimal],
-                                 travelCosts: Option[BigDecimal],
-                                 rentARoom: Option[UkPropertyExpensesRentARoom])
+case class UkFhlPieExpenses(premisesRunningCosts: Option[BigDecimal],
+                            repairsAndMaintenance: Option[BigDecimal],
+                            financialCosts: Option[BigDecimal],
+                            professionalFees: Option[BigDecimal],
+                            costOfServices: Option[BigDecimal],
+                            other: Option[BigDecimal],
+                            consolidatedExpenses: Option[BigDecimal],
+                            travelCosts: Option[BigDecimal],
+                            rentARoom: Option[UkPropertyExpensesRentARoom])
 
 
-object UkFhlPiePropertyExpenses {
-  implicit val reads: Reads[UkFhlPiePropertyExpenses] = Json.reads[UkFhlPiePropertyExpenses]
+object UkFhlPieExpenses {
+  implicit val reads: Reads[UkFhlPieExpenses] = Json.reads[UkFhlPieExpenses]
 
-  implicit val writes: Writes[UkFhlPiePropertyExpenses] = (
+  implicit val writes: Writes[UkFhlPieExpenses] = (
     (JsPath \ "premisesRunningCosts").writeNullable[BigDecimal] and
       (JsPath \ "repairsAndMaintenance").writeNullable[BigDecimal] and
       (JsPath \ "financialCosts").writeNullable[BigDecimal] and
@@ -45,5 +45,5 @@ object UkFhlPiePropertyExpenses {
       (JsPath \ "consolidatedExpenses").writeNullable[BigDecimal] and
       (JsPath \ "travelCosts").writeNullable[BigDecimal] and
       (JsPath \ "ukRentARoom").writeNullable[UkPropertyExpensesRentARoom]
-    ) (unlift(UkFhlPiePropertyExpenses.unapply))
+    ) (unlift(UkFhlPieExpenses.unapply))
 }

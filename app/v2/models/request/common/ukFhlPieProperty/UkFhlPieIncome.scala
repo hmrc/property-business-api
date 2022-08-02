@@ -20,21 +20,21 @@ import play.api.libs.functional.syntax.{toFunctionalBuilderOps, unlift}
 import play.api.libs.json.{JsPath, Reads, Writes, __}
 import v2.models.request.common.ukPropertyRentARoom.UkPropertyIncomeRentARoom
 
-case class UkFhlPiePropertyIncome(periodAmount: Option[BigDecimal], taxDeducted: Option[BigDecimal], ukRentARoom: Option[UkPropertyIncomeRentARoom])
+case class UkFhlPieIncome(periodAmount: Option[BigDecimal], taxDeducted: Option[BigDecimal], ukRentARoom: Option[UkPropertyIncomeRentARoom])
 
-object UkFhlPiePropertyIncome{
+object UkFhlPieIncome{
 
- implicit val reads: Reads[UkFhlPiePropertyIncome] =
+ implicit val reads: Reads[UkFhlPieIncome] =
   (
     (__ \ "periodAmount").readNullable[BigDecimal] and
     (__ \ "taxDeducted").readNullable[BigDecimal] and
     (__ \ "rentARoom").readNullable[UkPropertyIncomeRentARoom]
-  )(UkFhlPiePropertyIncome.apply _)
+  )(UkFhlPieIncome.apply _)
 
- implicit val writes: Writes[UkFhlPiePropertyIncome] = (
+ implicit val writes: Writes[UkFhlPieIncome] = (
   (JsPath \ "rentIncome" \ "amount").writeNullable[BigDecimal] and
   (JsPath \ "rentIncome" \ "taxDeducted").writeNullable[BigDecimal] and
   (JsPath \ "ukRentARoom").writeNullable[UkPropertyIncomeRentARoom]
-  ) (unlift(UkFhlPiePropertyIncome.unapply))
+  ) (unlift(UkFhlPieIncome.unapply))
 
 }

@@ -20,7 +20,7 @@ import play.api.libs.json.{JsValue, Json}
 import support.UnitSpec
 import v2.models.request.common.ukPropertyRentARoom.UkPropertyExpensesRentARoom
 
-class UkFhlPiePropertyExpensesSpec extends UnitSpec {
+class UkFhlPieExpensesSpec extends UnitSpec {
 
   val requestBody: UkFhlPieExpenses =
     UkFhlPieExpenses(

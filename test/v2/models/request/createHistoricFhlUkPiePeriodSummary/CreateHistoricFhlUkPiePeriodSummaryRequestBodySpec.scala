@@ -18,18 +18,18 @@ package v2.models.request.createHistoricFhlUkPiePeriodSummary
 
 import play.api.libs.json.{JsValue, Json}
 import support.UnitSpec
-import v2.models.request.common.ukFhlPieProperty.{UkFhlPiePropertyExpenses, UkFhlPiePropertyIncome}
+import v2.models.request.common.ukFhlPieProperty.{UkFhlPieExpenses, UkFhlPieIncome}
 import v2.models.request.common.ukPropertyRentARoom.{UkPropertyExpensesRentARoom, UkPropertyIncomeRentARoom}
 
 class CreateHistoricFhlUkPiePeriodSummaryRequestBodySpec extends UnitSpec {
 
-  val income:UkFhlPiePropertyIncome =     UkFhlPiePropertyIncome(
+  val income:UkFhlPieIncome =     UkFhlPieIncome(
       Some(100.25),
       Some(100.15),
       Some(UkPropertyIncomeRentARoom(Some(97.50)))
   )
 
-  val expenses:UkFhlPiePropertyExpenses =  UkFhlPiePropertyExpenses(
+  val expenses:UkFhlPieExpenses =  UkFhlPieExpenses(
       Some(123.12),
       Some(17.90),
       Some(38.19),

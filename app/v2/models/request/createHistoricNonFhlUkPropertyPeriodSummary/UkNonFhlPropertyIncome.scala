@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-package v2.models.request.common.ukNonFhlProperty
+package v2.models.request.createHistoricNonFhlUkPropertyPeriodSummary
 
-import play.api.libs.json.{ JsPath, Json, Reads, Writes }
 import play.api.libs.functional.syntax._
+import play.api.libs.json.{ JsPath, Json, Reads, Writes }
 import v2.models.request.common.ukPropertyRentARoom.UkPropertyIncomeRentARoom
 
 case class UkNonFhlPropertyIncome(premiumsOfLeaseGrant: Option[BigDecimal],
@@ -33,9 +33,10 @@ object UkNonFhlPropertyIncome {
   implicit val writes: Writes[UkNonFhlPropertyIncome] = (
     (JsPath \ "premiumsOfLeaseGrant").writeNullable[BigDecimal] and
       (JsPath \ "reversePremiums").writeNullable[BigDecimal] and
-      (JsPath \ "periodAmount").writeNullable[BigDecimal] and
-      (JsPath \ "taxDeducted").writeNullable[BigDecimal] and
+      (JsPath \ "rentIncome" \ "amount").writeNullable[BigDecimal] and
+      (JsPath \ "rentIncome" \ "taxDeducted").writeNullable[BigDecimal] and
       (JsPath \ "otherIncome").writeNullable[BigDecimal] and
-      (JsPath \ "ukOtherRentARoom").writeNullable[UkPropertyIncomeRentARoom]
+      (JsPath \ "ukRentARoom").writeNullable[UkPropertyIncomeRentARoom]
   )(unlift(UkNonFhlPropertyIncome.unapply))
+
 }

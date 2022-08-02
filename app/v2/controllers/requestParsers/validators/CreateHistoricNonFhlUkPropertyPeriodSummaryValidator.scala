@@ -19,9 +19,13 @@ package v2.controllers.requestParsers.validators
 import com.google.inject.Inject
 import config.AppConfig
 import v2.controllers.requestParsers.validators.validations.JsonFormatValidation.validateAndCheckNonEmptyOrRead
-import v2.controllers.requestParsers.validators.validations.NumberValidation.{ validateOptional => optionalNumber }
+import v2.controllers.requestParsers.validators.validations.NumberValidation.validateOptional
 import v2.controllers.requestParsers.validators.validations._
 import v2.models.errors.MtdError
+import v2.models.request.createHistoricNonFhlUkPropertyPeriodSummary.{
+  CreateHistoricNonFhlUkPropertyPeriodSummaryRawData,
+  CreateHistoricNonFhlUkPropertyPeriodSummaryRequestBody
+}
 
 import javax.inject.Singleton
 
@@ -29,7 +33,7 @@ import javax.inject.Singleton
 class CreateHistoricNonFhlUkPropertyPeriodSummaryValidator @Inject()(appConfig: AppConfig)
     extends Validator[CreateHistoricNonFhlUkPropertyPeriodSummaryRawData] {
 
-  lazy private val minTaxYear = appConfig.minimumTaxHistoric
+  private lazy val minTaxYear = appConfig.minimumTaxHistoric
   private lazy val maxTaxYear = appConfig.maximumTaxHistoric
 
   override def validate(data: CreateHistoricNonFhlUkPropertyPeriodSummaryRawData): List[MtdError] = {
@@ -41,47 +45,48 @@ class CreateHistoricNonFhlUkPropertyPeriodSummaryValidator @Inject()(appConfig: 
   }
 
   private def validatePathParams(data: CreateHistoricNonFhlUkPropertyPeriodSummaryRawData): Either[List[MtdError], Unit] = {
-    errorsResult(NinoValidation.validate(data.nino))
+    val ninoError =
+      NinoValidation.validate(data.nino)
+    errorsResult(ninoError)
   }
 
   private def validateBody(body: CreateHistoricNonFhlUkPropertyPeriodSummaryRequestBody): Either[List[MtdError], Unit] = {
-    val fromDateValidationErrors = DateValidation.validate(body.fromDate, true)
-    val toDateValidationErrors   = DateValidation.validate(body.toDate, false)
 
-    val incomeErrors = body.income
+    val formatDateErrors = DateValidation.validate(body.fromDate, true) ++
+      DateValidation.validate(body.toDate, false)
+
+    val historicTaxPeriodYearErrors = HistoricTaxPeriodYearValidation.validate(minTaxYear, maxTaxYear, body.fromDate) ++
+      HistoricTaxPeriodYearValidation.validate(minTaxYear, maxTaxYear, body.toDate)
+
+    val incomeFormatErrors = body.income
       .map { income =>
         import income._
-
-        optionalNumber(periodAmount, "/income/periodAmount") ++
-          optionalNumber(taxDeducted, "/income/taxDeducted") ++
-          optionalNumber(premiumsOfLeaseGrant, "/income/premiumsOfLeaseGrant") ++
-          optionalNumber(reversePremiums, "/income/reversePremiums") ++
-          optionalNumber(otherIncome, "/income/otherIncome") ++
-          optionalNumber(rentARoom, "/income/rentARoom") ++
-          optionalNumber(rentsReceived, "/income/rentARoom/rentsReceived")
+        validateOptional(periodAmount, "/income/periodAmount") ++
+          validateOptional(taxDeducted, "/income/taxDeducted") ++
+          validateOptional(premiumsOfLeaseGrant, "/income/premiumsOfLeaseGrant") ++
+          validateOptional(reversePremiums, "/income/reversePremiums") ++
+          validateOptional(otherIncome, "/income/otherIncome")
       }
       .getOrElse(Nil)
 
-    val expensesErrors = body.expenses
+    val expensesFormatErrors = body.expenses
       .map { expenses =>
         import expenses._
-
-        optionalNumber(premisesRunningCosts, "/expenses/premisesRunningCosts") ++
-          optionalNumber(repairsAndMaintenance, "/expenses/repairsAndMaintenance") ++
-          optionalNumber(financialCosts, "/expenses/premisesCosts") ++
-          optionalNumber(professionalFees, "/expenses/professionalFees") ++
-          optionalNumber(costOfServices, "/expenses/costOfServices") ++
-          optionalNumber(other, "/expenses/other") ++
-          optionalNumber(consolidatedExpenses, "/expenses/consolidatedExpenses") ++
-          optionalNumber(travelCosts, "/expenses/travelCosts") ++
-          optionalNumber(residentialFinancialCostsCarriedForward, "/expenses/residentialFinancialCostsCarriedForward") ++
-          optionalNumber(residentialFinancialCost, "/expenses/residentialFinancialCost") ++
-          optionalNumber(rentARoom, "/expenses/rentARoom") ++
-          optionalNumber(amountClaimed, "/expenses/rentARoom/amountClaimed")
-
+        validateOptional(premisesRunningCosts, "/expenses/premisesRunningCosts") ++
+          validateOptional(repairsAndMaintenance, "/expenses/repairsAndMaintenance") ++
+          validateOptional(financialCosts, "/expenses/premisesCosts") ++
+          validateOptional(professionalFees, "/expenses/professionalFees") ++
+          validateOptional(costOfServices, "/expenses/costOfServices") ++
+          validateOptional(other, "/expenses/other") ++
+          validateOptional(consolidatedExpenses, "/expenses/consolidatedExpenses") ++
+          validateOptional(travelCosts, "/expenses/travelCosts") ++
+          validateOptional(residentialFinancialCostsCarriedForward, "/expenses/residentialFinancialCostsCarriedForward") ++
+          validateOptional(residentialFinancialCost, "/expenses/residentialFinancialCost")
       }
       .getOrElse(Nil)
 
-    errorsResult(fromDateValidationErrors ++ toDateValidationErrors ++ incomeErrors ++ expensesErrors)
+    val bothExpensesErrors = body.expenses.map(ConsolidatedExpensesValidation.validate(_, "/ukFhlProperty/expenses")).getOrElse(Nil)
+
+    errorsResult(formatDateErrors ++ historicTaxPeriodYearErrors ++ incomeFormatErrors ++ expensesFormatErrors ++ bothExpensesErrors)
   }
 }

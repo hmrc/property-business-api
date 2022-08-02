@@ -62,6 +62,14 @@ documentation:
                 description: 'The tax year the data applies to, for example, 2021-22. The start year and end year must not span two tax years. The minimum tax year is 2017-18 and the maximum tax year is 2021-22. No gaps are allowed, for example, 2020-22 is not valid.'
                 example: 2021-22
             get: !include uk_property_fhl_retrieve.raml
+    /non-furnished-holiday-lettings:
+      /{nino}:
+        uriParameters:
+          nino:
+            description: National Insurance number, in the format AA999999A.
+              type: string
+              example: TC663795B
+          post: !include uk_property_non_fhl_period_summary_create.raml
     /{nino}:
       uriParameters:
         nino:

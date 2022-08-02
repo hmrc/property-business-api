@@ -1,0 +1,15 @@
+{
+  "periodId": "2017-04-06_2017-07-04",
+  "links": [
+    {
+      "href": "/individuals/business/property/uk/non-furnished-holiday-lettings/KZ816096B/2019-03-11_2020-04-23",
+      "method": "PUT",
+      "rel": "amend-uk-property-historic-non-fhl-period-summary"
+    },
+    {
+      "href": "/individuals/business/property/uk/non-furnished-holiday-lettings/KZ816096B/2019-03-11_2020-04-23",
+      "method": "GET",
+      "rel": "self"
+    }
+  ]
+}

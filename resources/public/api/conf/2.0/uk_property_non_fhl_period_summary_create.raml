@@ -1,0 +1,46 @@
+is:
+  - headers.acceptJson
+  - headers.contentTypeJson
+  - headers.testScenarioHeader
+  - errors.formatNino
+  - errors.ruleTaxYearNotSupported
+  - errors.ruleDuplicateSubmission
+  - errors.ruleMisalignedPeriod
+  - errors.ruleOverlappingPeriod
+  - errors.ruleNotContiguousPeriod
+  - errors.ruleToDateBeforeFromDate
+  - errors.ruleBothExpensesSupplied
+  - errors.formatFhlValue
+  - errors.ruleIncorrectOrEmptyBody
+  - errors.formatFromDate
+  - errors.formatToDate
+  - errors.clientOrAgentNotAuthorised
+  - errors.notFound
+displayName: Create a Historic Non-FHL UK Property Income & Expenses Period Summary
+description: This endpoint allows a developer to create income, and expenses  for their non-FHL UK property business to make periodic submission for tax years from 2017-18 to 2021-22. A National Insurance number must be provided. The new Property specification endpoints should be used to create periodic submissions for the current tax year.
+(annotations.sandboxData): !include scenarios/uk_property_non_fhl_period_summary_create.md
+(annotations.scope): "write:self-assessment"
+securedBy: [ sec.oauth_2_0: { scopes: [ "write:self-assessment" ] } ]
+body:
+  application/json:
+    type: !include schemas/uk_property_non_fhl_period_summary_create/request.json
+    examples:
+      example-1:
+        description: Full income and expenses request
+        value: !include examples/uk_property_non_fhl_period_summary_create/request.json
+      example-2:
+        description: Consolidated income and expenses request
+        value: !include examples/uk_property_non_fhl_period_summary_create/consolidated_request.json
+responses:
+  200:
+    body:
+      application/json:
+        type: !include schemas/uk_property_non_fhl_period_summary_create/response.json
+        examples:
+          example-1:
+            description: Example response
+            value: !include examples/uk_property_non_fhl_period_summary_create/response.json
+    headers:
+      X-CorrelationId:
+        example: a1e8057e-fbbc-47a8-a8b4-78d9f015c253
+        description: Unique ID for operation tracking <br> String, 36 characters.

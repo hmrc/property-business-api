@@ -21,23 +21,23 @@ import support.UnitSpec
 
 class CreateHistoricNonFhlUkPropertyPeriodSummaryRawDataSpec extends UnitSpec {
 
-  val expectedJson: JsValue = Json.parse(
-    """
-      |{
-      | "nino": "some-nino",
-      | "request": {
-      |   "bodyField": "value"
-      |   }
-      | }
-      |""".stripMargin
-  )
-
-  val result: JsValue = Json.toJson(CreateHistoricNonFhlUkPropertyPeriodSummaryRawData(nino = "some-nino", body = Json.obj("bodyField" -> "value")))
-
   "writes" must {
     "write valid json" in {
-      result shouldBe
-        expectedJson
+      val expectedJson: JsValue = Json.parse(
+        """
+          |{
+          | "nino": "some-nino",
+          | "request": {
+          |   "bodyField": "value"
+          |   }
+          | }
+          |""".stripMargin
+      )
+
+      val result: JsValue =
+        Json.toJson(CreateHistoricNonFhlUkPropertyPeriodSummaryRawData(nino = "some-nino", body = Json.obj("bodyField" -> "value")))
+
+      result shouldBe expectedJson
     }
   }
 }

@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-package v2.models.request.common.ukNonFhlProperty
+package v2.models.request.createHistoricNonFhlUkPropertyPeriodSummary
 
-import play.api.libs.json.{ JsPath, Json, Reads, Writes }
 import play.api.libs.functional.syntax._
+import play.api.libs.json.{ JsPath, Json, Reads, Writes }
 import v2.models.request.common.ukPropertyRentARoom.UkPropertyExpensesRentARoom
 
 case class UkNonFhlPropertyExpenses(premisesRunningCosts: Option[BigDecimal],
@@ -45,7 +45,8 @@ object UkNonFhlPropertyExpenses {
       (JsPath \ "residentialFinancialCost").writeNullable[BigDecimal] and
       (JsPath \ "travelCosts").writeNullable[BigDecimal] and
       (JsPath \ "residentialFinancialCostsCarriedForward").writeNullable[BigDecimal] and
-      (JsPath \ "ukOtherRentARoom").writeNullable[UkPropertyExpensesRentARoom] and
+      (JsPath \ "ukRentARoom").writeNullable[UkPropertyExpensesRentARoom] and
       (JsPath \ "consolidatedExpenses").writeNullable[BigDecimal]
   )(unlift(UkNonFhlPropertyExpenses.unapply))
+
 }

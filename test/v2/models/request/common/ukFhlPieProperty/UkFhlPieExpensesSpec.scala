@@ -22,8 +22,8 @@ import v2.models.request.common.ukPropertyRentARoom.UkPropertyExpensesRentARoom
 
 class UkFhlPiePropertyExpensesSpec extends UnitSpec {
 
-  val requestBody: UkFhlPiePropertyExpenses =
-    UkFhlPiePropertyExpenses(
+  val requestBody: UkFhlPieExpenses =
+    UkFhlPieExpenses(
       Some(3123.21),
       Some(928.42),
       Some(842.99),
@@ -74,7 +74,7 @@ class UkFhlPiePropertyExpensesSpec extends UnitSpec {
   "reads" when {
     "passed a valid JSON" should {
       "return a valid model" in {
-        mtdJson.as[UkFhlPiePropertyExpenses] shouldBe requestBody
+        mtdJson.as[UkFhlPieExpenses] shouldBe requestBody
       }
     }
   }

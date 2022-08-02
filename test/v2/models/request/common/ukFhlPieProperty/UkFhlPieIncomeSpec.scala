@@ -23,16 +23,16 @@ import v2.models.request.common.ukPropertyRentARoom.UkPropertyIncomeRentARoom
 
 class UkFhlPiePropertyIncomeSpec extends UnitSpec{
    val rentARoom: UkPropertyIncomeRentARoom= UkPropertyIncomeRentARoom(Some(412.89))
-   val requestBody: UkFhlPiePropertyIncome = UkFhlPiePropertyIncome(Some(215.16), Some(1365.12), Some(rentARoom))
+   val requestBody: UkFhlPieIncome = UkFhlPieIncome(Some(215.16), Some(1365.12), Some(rentARoom))
 
   val mtdJson: JsValue = Json.parse(
     """
       |{
-      |    "periodAmount": 215.16,
-      |    "taxDeducted": 1365.12,
+      |    "periodAmount":    215.16,
+      |    "taxDeducted":     1365.12,
       |    "rentARoom": {
-      |      "rentsReceived": 412.89
-      |   }
+      |        "rentsReceived": 412.89
+      |     }
       |}
       |""".stripMargin)
 
@@ -40,11 +40,11 @@ class UkFhlPiePropertyIncomeSpec extends UnitSpec{
     """
     |{
     |    "rentIncome": {
-    |    "amount": 215.16,
-    |    "taxDeducted": 1365.12
+    |          "amount":      215.16,
+    |          "taxDeducted": 1365.12
     |     },
     |    "ukRentARoom": {
-    |      "rentsReceived": 412.89
+    |          "rentsReceived": 412.89
     |    }
     |   }
     |""".stripMargin)
@@ -53,7 +53,7 @@ class UkFhlPiePropertyIncomeSpec extends UnitSpec{
   "reads" when {
     "passed a valid JSON" should {
       "return a valid model" in {
-        mtdJson.as[UkFhlPiePropertyIncome] shouldBe requestBody
+        mtdJson.as[UkFhlPieIncome] shouldBe requestBody
       }
     }
   }

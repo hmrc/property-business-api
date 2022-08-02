@@ -82,7 +82,7 @@ class UkNonFhlPropertyExpensesSpec extends UnitSpec {
     }
   }
   "writes" when {
-    "passed valid model" should {
+    "passed a valid object" should {
       "return valid JSON" in {
         Json.toJson(requestBody) shouldBe backendJson
       }

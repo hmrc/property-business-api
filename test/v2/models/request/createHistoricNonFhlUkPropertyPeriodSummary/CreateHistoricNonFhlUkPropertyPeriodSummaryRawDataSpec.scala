@@ -16,24 +16,28 @@
 
 package v2.models.request.createHistoricNonFhlUkPropertyPeriodSummary
 
-import play.api.libs.json.Json
+import play.api.libs.json.{ JsValue, Json }
 import support.UnitSpec
 
 class CreateHistoricNonFhlUkPropertyPeriodSummaryRawDataSpec extends UnitSpec {
 
+  val expectedJson: JsValue = Json.parse(
+    """
+      |{
+      | "nino": "some-nino",
+      | "request": {
+      |   "bodyField": "value"
+      |   }
+      | }
+      |""".stripMargin
+  )
+
+  val result: JsValue = Json.toJson(CreateHistoricNonFhlUkPropertyPeriodSummaryRawData(nino = "some-nino", body = Json.obj("bodyField" -> "value")))
+
   "writes" must {
-    "work" in {
-      Json.toJson(CreateHistoricNonFhlUkPropertyPeriodSummaryRawData(nino = "some-nino", body = Json.obj("bodyField" -> "value"))) shouldBe
-        Json.parse(
-          """
-            |{
-            | "nino": "some-nino",
-            | "request": {
-            |   "bodyField": "value"
-            |   }
-            | }
-            |""".stripMargin
-        )
+    "write valid json" in {
+      result shouldBe
+        expectedJson
     }
   }
 }

@@ -8,6 +8,7 @@ PUT        /uk/:nino/:businessId/period/:taxYear/:submissionId         v2.contro
 GET        /uk/:nino/:businessId/period/:taxYear/:submissionId         v2.controllers.RetrieveUkPropertyPeriodSummaryController.handleRequest(nino: String, businessId: String, taxYear: String, submissionId: String)
 
 GET        /uk/furnished-holiday-lettings/:nino/:taxYear               v2.controllers.RetrieveHistoricFhlUkPropertyAnnualSubmissionController.handleRequest(nino: String, taxYear: String)
+PUT        /uk/furnished-holiday-lettings/:nino/:taxYear               v2.controllers.CreateAmendHistoricFhlUkPropertyAnnualSubmissionController.handleRequest(nino: String, taxYear: String)
 
 GET        /:nino/:businessId/period/:taxYear                          v2.controllers.ListPropertyPeriodSummariesController.handleRequest(nino: String, businessId: String, taxYear: String)
 POST       /foreign/:nino/:businessId/period/:taxYear                  v2.controllers.CreateForeignPropertyPeriodSummaryController.handleRequest(nino: String, businessId: String, taxYear: String)

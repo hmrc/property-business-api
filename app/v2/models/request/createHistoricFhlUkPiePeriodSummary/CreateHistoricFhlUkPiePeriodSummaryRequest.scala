@@ -16,7 +16,7 @@
 
 package v2.models.request.createHistoricFhlUkPiePeriodSummary
 
-case class CreateHistoricFhlUkPiePeriodSummaryRequest (nino: String, body: CreateHistoricFhlUkPiePeriodSummaryRawData)
+case class CreateHistoricFhlUkPiePeriodSummaryRequest (nino: String, body: CreateHistoricFhlUkPiePeriodSummaryRequestBody)
 
 
 

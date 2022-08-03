@@ -3,47 +3,43 @@ is:
   - headers.contentTypeJson
   - headers.testScenarioHeader
   - errors.formatNino
-  - errors.formatTaxYear
-  - errors.formatBusinessId
+  - errors.formatValue
   - errors.formatFromDate
   - errors.formatToDate
-  - errors.formatValue
-  - errors.ruleTaxYearRangeInvalid
-  - errors.ruleTaxYearNotSupported
-  - errors.ruleBothExpensesSupplied
-  - errors.ruleTypeOfBusinessIncorrectUk
-  - errors.ruleIncorrectOrEmptyBody
   - errors.ruleToDateBeforeFromDate
-  - errors.ruleOverlappingPeriod
-  - errors.ruleMisalignedPeriod
-  - errors.ruleNotContiguousPeriod
+  - errors.ruleBothExpensesSupplied
+  - errors.ruleIncorrectOrEmptyBody
   - errors.ruleDuplicateSubmission
+  - errors.ruleMisalignedPeriod
+  - errors.ruleOverlappingPeriod
+  - errors.ruleNotContiguousPeriod
+  - errors.ruleTaxYearNotSupported
   - errors.clientOrAgentNotAuthorised
   - errors.notFound
-displayName: RIGHT HERE, RIGHT NOW
-description: This endpoint enables you to create income and expenses for a furnished holiday lettings (FHL) UK property business and make periodic submissions for tax years from 2017-18 to 2021-22.  A National Insurance number must be provided. Use this endpoint only for the specified tax year range; for current tax year submissions, use the XXX endpoint.
+displayName: Create a Historic FHL UK Property Income & Expenses Period Summary
+description: Hi there. I'm waiting for the endpoint description to be finalised. Please continue with your review.
 (annotations.sandboxData): !include scenarios/uk_property_period_summary_create_scenarios.md
 (annotations.scope): "write:self-assessment"
 securedBy: [ sec.oauth_2_0: { scopes: [ "write:self-assessment" ] } ]
 body:
   application/json:
-    type: !include schemas/uk_property_period_summary_create/request.json
+    type: !include schemas/uk_property_historic_fhl_period_summary_create_and_amend/request.json
     examples:
       example-1:
         description: Full Expenses request
-        value: !include examples/uk_property_period_summary_create/request.json
+        value: !include examples/uk_property_historic_fhl_period_summary_create_and_amend/request.json
       example-2:
         description: Consolidated Expenses request
-        value: !include examples/uk_property_period_summary_create/consolidated_request.json
+        value: !include examples/uk_property_historic_fhl_period_summary_create_and_amend/consolidated_request.json
 responses:
-  201:
+  202:
     body:
       application/json:
-        type: !include schemas/uk_property_period_summary_create/response.json
+        type: !include schemas/uk_property_historic_fhl_period_summary_create_and_amend/response.json
         examples:
           example-1:
             description: Default Example
-            value: !include examples/uk_property_period_summary_create/response.json
+            value: !include examples/uk_property_historic_fhl_period_summary_create_and_amend/response.json
     headers:
       X-CorrelationId:
         example: c75f40a6-a3df-4429-a697-471eeec46435

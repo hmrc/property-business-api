@@ -24,10 +24,11 @@ import v2.connectors.CreateAmendHistoricFhlUkPropertyAnnualSubmissionConnector
 import v2.controllers.EndpointLogContext
 import v2.models.errors._
 import v2.models.request.createAmendHistoricFhlUkPropertyAnnualSubmission.CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequest
+import v2.models.response.createAmendHistoricFhlUkPropertyAnnualSubmission.CreateAmendHistoricFhlUkPropertyAnnualSubmissionResponse
 import v2.support.DownstreamResponseMappingSupport
 
-import javax.inject.{ Inject, Singleton }
-import scala.concurrent.{ ExecutionContext, Future }
+import javax.inject.{Inject, Singleton}
+import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class CreateAmendHistoricFhlUkPropertyAnnualSubmissionService @Inject()(connector: CreateAmendHistoricFhlUkPropertyAnnualSubmissionConnector)
@@ -37,7 +38,8 @@ class CreateAmendHistoricFhlUkPropertyAnnualSubmissionService @Inject()(connecto
   def amend(request: CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequest)(implicit hc: HeaderCarrier,
                                                                               ec: ExecutionContext,
                                                                               logContext: EndpointLogContext,
-                                                                              correlationId: String): Future[ServiceOutcome[Unit]] = {
+                                                                              correlationId: String):
+  Future[ServiceOutcome[CreateAmendHistoricFhlUkPropertyAnnualSubmissionResponse]] = {
 
     val result = for {
       desResponseWrapper <- EitherT(connector.amend(request)).leftMap(mapDownstreamErrors(desErrorMap))

@@ -20,16 +20,12 @@ import support.UnitSpec
 import uk.gov.hmrc.http.HeaderCarrier
 import v2.controllers.EndpointLogContext
 import v2.mocks.connectors.MockCreateAmendHistoricFhlUkPropertyAnnualSubmissionConnector
-import v2.models.domain.{ Nino, TaxYear }
+import v2.models.domain.{Nino, TaxYear}
 import v2.models.errors._
 import v2.models.outcomes.ResponseWrapper
 import v2.models.request.common.ukPropertyRentARoom.UkPropertyAdjustmentsRentARoom
-import v2.models.request.createAmendHistoricFhlUkPropertyAnnualSubmission.{
-  CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequest,
-  CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequestBody,
-  HistoricFhlAnnualAdjustments,
-  HistoricFhlAnnualAllowances
-}
+import v2.models.request.createAmendHistoricFhlUkPropertyAnnualSubmission.{CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequest, CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequestBody, HistoricFhlAnnualAdjustments, HistoricFhlAnnualAllowances}
+import v2.models.response.createAmendHistoricFhlUkPropertyAnnualSubmission.CreateAmendHistoricFhlUkPropertyAnnualSubmissionResponse
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -78,9 +74,9 @@ class CreateAmendHistoricFhlUkPropertyAnnualSubmissionServiceSpec extends UnitSp
       "return mapped result" in new Test {
         MockCreateAmendHistoricFhlUkPropertyAnnualSubmissionConnector
           .amend(request)
-          .returns(Future.successful(Right(ResponseWrapper(correlationId, ()))))
+          .returns(Future.successful(Right(ResponseWrapper(correlationId, CreateAmendHistoricFhlUkPropertyAnnualSubmissionResponse(None)))))
 
-        await(service.amend(request)) shouldBe Right(ResponseWrapper(correlationId, ()))
+        await(service.amend(request)) shouldBe Right(ResponseWrapper(correlationId, CreateAmendHistoricFhlUkPropertyAnnualSubmissionResponse(None)))
       }
     }
   }

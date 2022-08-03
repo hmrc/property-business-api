@@ -14,35 +14,31 @@
  * limitations under the License.
  */
 
-package v2.mocks.connectors
+package v2.mocks.services
 
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
 import uk.gov.hmrc.http.HeaderCarrier
-import v2.connectors.{CreateAmendHistoricFhlUkPropertyAnnualSubmissionConnector, DownstreamOutcome}
+import v2.controllers.EndpointLogContext
+import v2.models.errors.ErrorWrapper
+import v2.models.outcomes.ResponseWrapper
 import v2.models.request.createAmendHistoricFhlUkPropertyAnnualSubmission.CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequest
 import v2.models.response.createAmendHistoricFhlUkPropertyAnnualSubmission.CreateAmendHistoricFhlUkPropertyAnnualSubmissionResponse
+import v2.services.CreateAmendHistoricFhlUkPropertyAnnualSubmissionService
 
 import scala.concurrent.{ExecutionContext, Future}
 
-trait MockCreateAmendHistoricFhlUkPropertyAnnualSubmissionConnector extends MockFactory {
+trait MockCreateAmendHistoricFhlUkPropertyAnnualSubmissionService extends MockFactory {
 
-  val mockCreateAmendHistoricFhlUkPropertyAnnualSubmissionConnector: CreateAmendHistoricFhlUkPropertyAnnualSubmissionConnector =
-    mock[CreateAmendHistoricFhlUkPropertyAnnualSubmissionConnector]
+  val mockService: CreateAmendHistoricFhlUkPropertyAnnualSubmissionService = mock[CreateAmendHistoricFhlUkPropertyAnnualSubmissionService]
 
-  object MockCreateAmendHistoricFhlUkPropertyAnnualSubmissionConnector {
+  object MockCreateAmendHistoricFhlUkPropertyAnnualSubmissionService {
 
     def amend(requestData: CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequest):
-    CallHandler[Future[DownstreamOutcome[CreateAmendHistoricFhlUkPropertyAnnualSubmissionResponse]]] = {
-      (
-        mockCreateAmendHistoricFhlUkPropertyAnnualSubmissionConnector
-          .amend(_: CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequest)(
-            _: HeaderCarrier,
-            _: ExecutionContext,
-            _: String
-          )
-        )
-        .expects(requestData, *, *, *)
+    CallHandler[Future[Either[ErrorWrapper, ResponseWrapper[CreateAmendHistoricFhlUkPropertyAnnualSubmissionResponse]]]] = {
+      (mockService
+        .amend(_: CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequest)(_: HeaderCarrier, _: ExecutionContext, _: EndpointLogContext, _: String))
+        .expects(requestData, *, *, *, *)
     }
   }
 }

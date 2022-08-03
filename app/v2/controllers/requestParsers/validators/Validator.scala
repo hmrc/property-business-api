@@ -56,7 +56,7 @@ trait Validator[A <: RawData] {
 
   private def combine(errors: Seq[MtdError]): List[MtdError] =
     errors
-      .groupBy(_.code)
+      .groupBy(_.message)
       .foldLeft(List[MtdError]()) {
         case (acc, (_, errs)) =>
           val paths      = errs.flatMap(_.paths.getOrElse(Nil))

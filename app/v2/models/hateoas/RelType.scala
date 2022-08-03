@@ -38,6 +38,9 @@ object RelType {
   val RETRIEVE_HISTORIC_NON_FHL_UK_PROPERTY_ANNUAL_SUBMISSION         = "retrieve-uk-property-historic-non-fhl-annual-submission"
   val DELETE_HISTORIC_NON_FHL_UK_PROPERTY_ANNUAL_SUBMISSION           = "delete-uk-property-historic-non-fhl-annual-submission"
 
+  val AMEND_HISTORIC_UK_FHL_PROPERTY_INCOME_EXPENSES_PERIOD_SUMMARY   = "amend-historic-uk-fhl-property-income-expenses-period-summary"
+  val RETRIEVE_HISTORIC_UK_FHL_PROPERTY_INCOME_EXPENSES_PERIOD_SUMMARY   = "retrieve-historic-uk-fhl-property-income-expenses-period-summary"
+
   val LIST_PROPERTY_PERIOD_SUMMARIES    = "list-property-period-summaries"
   val DELETE_PROPERTY_ANNUAL_SUBMISSION = "delete-property-annual-submission"
 }

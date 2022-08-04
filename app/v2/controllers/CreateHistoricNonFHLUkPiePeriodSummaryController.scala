@@ -24,7 +24,8 @@ import utils.{IdGenerator, Logging}
 import v2.controllers.requestParsers.CreateHistoricNonFhlUkPropertyPeriodSummaryRequestParser
 import v2.hateoas.HateoasFactory
 import v2.models.errors._
-import v2.models.request.createAmendHistoricFhlUkPropertyAnnualSubmission.CreateAmendHistoricFhlUkPropertyAnnualSubmissionRawData
+import v2.models.request.createHistoricNonFhlUkPropertyPeriodSummary.CreateHistoricNonFhlUkPropertyPeriodSummaryRawData
+import v2.models.response.createHistoricNonFhlUkPiePeriodSummaryResponse.CreateHistoricNonFhlUkPiePeriodSummaryHateoasData
 import v2.services.{EnrolmentsAuthService, MtdIdLookupService}
 
 import javax.inject.{Inject, Singleton}
@@ -55,14 +56,14 @@ class CreateHistoricNonFHLUkPiePeriodSummaryController @Inject()(val authService
 
       logger.info(message = s"[${endpointLogContext.controllerName}][${endpointLogContext.endpointName}] with correlationId : $correlationId")
 
-      val rawData = CreateAmendHistoricFhlUkPropertyAnnualSubmissionRawData(nino, taxYear, request.body)
+      val rawData = CreateHistoricNonFhlUkPropertyPeriodSummaryRawData(nino, request.body)
       val result =
         for {
           parsedRequest   <- EitherT.fromEither[Future](parser.parseRequest(rawData))
           serviceResponse <- EitherT(service.amend(parsedRequest))
           vendorResponse <- EitherT.fromEither[Future](
             hateoasFactory
-              .wrap(serviceResponse.responseData, CreateAmendHistoricFhlUkPropertyAnnualSubmissionHateoasData(nino, taxYear))
+              .wrap(serviceResponse.responseData, CreateHistoricNonFhlUkPiePeriodSummaryHateoasData(nino, periodId))
               .asRight[ErrorWrapper])
         } yield {
 
@@ -88,15 +89,16 @@ class CreateHistoricNonFHLUkPiePeriodSummaryController @Inject()(val authService
       }.merge
     }
 
+
   private def errorResult(errorWrapper: ErrorWrapper) =
     errorWrapper.error match {
-      case BadRequestError
-           | NinoFormatError
-           | TaxYearFormatError
-           | RuleTaxYearRangeInvalidError
-           | RuleTaxYearNotSupportedError
+      case NinoFormatError
+           | RuleBothExpensesSuppliedError
            | MtdErrorWithCode(ValueFormatError.code)
-           | MtdErrorWithCode(RuleIncorrectOrEmptyBodyError.code) =>
+           | MtdErrorWithCode(RuleIncorrectOrEmptyBodyError.code)
+           | FromDateFormatError
+           | ToDateFormatError
+           | RuleToDateBeforeFromDateError =>
         BadRequest(Json.toJson(errorWrapper))
       case NotFoundError => NotFound(Json.toJson(errorWrapper))
       case InternalError => InternalServerError(Json.toJson(errorWrapper))

@@ -23,9 +23,12 @@ import v2.controllers.EndpointLogContext
 import v2.mocks.connectors.MockCreateHistoricFhlUkPiePeriodSummaryConnector
 import v2.models.domain.Nino
 import v2.models.errors._
-import v2.models.request.common.ukFhlPieProperty.{UkFhlPieExpenses, UkFhlPieIncome}
-import v2.models.request.common.ukPropertyRentARoom.{UkPropertyExpensesRentARoom, UkPropertyIncomeRentARoom}
-import v2.models.request.createHistoricFhlUkPiePeriodSummary.{CreateHistoricFhlUkPiePeriodSummaryRequest, CreateHistoricFhlUkPiePeriodSummaryRequestBody}
+import v2.models.request.common.ukFhlPieProperty.{ UkFhlPieExpenses, UkFhlPieIncome }
+import v2.models.request.common.ukPropertyRentARoom.{ UkPropertyExpensesRentARoom, UkPropertyIncomeRentARoom }
+import v2.models.request.createHistoricFhlUkPiePeriodSummary.{
+  CreateHistoricFhlUkPiePeriodSummaryRequest,
+  CreateHistoricFhlUkPiePeriodSummaryRequestBody
+}
 import v2.models.response.createHistoricFhlUkPiePeriodSummary.CreateHistoricFhlUkPiePeriodSummaryResponse
 
 import scala.concurrent.Future
@@ -114,6 +117,7 @@ class CreateHistoricFhlUkPiePeriodSummaryServiceSpec extends ServiceSpec {
         "OVERLAPS_IN_PERIOD"      -> RuleOverlappingPeriodError,
         "NOT_CONTIGUOUS_PERIOD"   -> RuleNotContiguousPeriodError,
         "INVALID_PERIOD"          -> RuleToDateBeforeFromDateError,
+        "BOTH_EXPENSES_SUPPLIED"  -> RuleBothExpensesSuppliedError,
         "TAX_YEAR_NOT_SUPPORTED"  -> RuleTaxYearNotSupportedError,
         "SERVER_ERROR"            -> InternalError,
         "SERVICE_UNAVAILABLE"     -> InternalError

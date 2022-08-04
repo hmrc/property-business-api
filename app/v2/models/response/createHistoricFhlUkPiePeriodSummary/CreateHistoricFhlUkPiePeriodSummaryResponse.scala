@@ -17,24 +17,25 @@
 package v2.models.response.createHistoricFhlUkPiePeriodSummary
 
 import config.AppConfig
-import play.api.libs.json.{Json, OFormat}
-import v2.hateoas.{HateoasLinks, HateoasLinksFactory}
-import v2.models.hateoas.{HateoasData, Link}
-
+import play.api.libs.json.{ Json, OFormat }
+import v2.hateoas.{ HateoasLinks, HateoasLinksFactory }
+import v2.models.hateoas.{ HateoasData, Link }
 
 case class CreateHistoricFhlUkPiePeriodSummaryResponse(transactionReference: String)
 
 object CreateHistoricFhlUkPiePeriodSummaryResponse extends HateoasLinks {
   implicit val format: OFormat[CreateHistoricFhlUkPiePeriodSummaryResponse] = Json.format[CreateHistoricFhlUkPiePeriodSummaryResponse]
 
-  implicit object LinksFactory extends HateoasLinksFactory[CreateHistoricFhlUkPiePeriodSummaryResponse, CreateHistoricFhlUkPiePeriodSummaryHateoasData] {
+  implicit object LinksFactory
+      extends HateoasLinksFactory[CreateHistoricFhlUkPiePeriodSummaryResponse, CreateHistoricFhlUkPiePeriodSummaryHateoasData] {
     override def links(appConfig: AppConfig, data: CreateHistoricFhlUkPiePeriodSummaryHateoasData): Seq[Link] = {
       import data._
       Seq(
-        amendHistoricFhlUkPiePeriodSubmission(appConfig, nino,periodId),
+        amendHistoricFhlUkPiePeriodSubmission(appConfig, nino, periodId),
         retrieveHistoricFhlUkPiePeriodSubmission(appConfig, nino, periodId)
       )
     }
   }
 }
- case class CreateHistoricFhlUkPiePeriodSummaryHateoasData(nino: String, periodId: String, transactionId:String) extends HateoasData
+
+case class CreateHistoricFhlUkPiePeriodSummaryHateoasData(nino: String, periodId: String, transactionId: String) extends HateoasData

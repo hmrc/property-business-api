@@ -23,9 +23,7 @@ class CreateHistoricFhlUkPiePeriodSummaryRawDataSpec extends UnitSpec {
 
   "writes" must {
     "work" in {
-      Json.toJson(
-        CreateHistoricFhlUkPiePeriodSummaryRawData(nino="some-nino",
-          body = Json.obj("bodyField" -> "value"))) shouldBe
+      Json.toJson(CreateHistoricFhlUkPiePeriodSummaryRawData(nino = "some-nino", body = Json.obj("bodyField" -> "value"))) shouldBe
         Json.parse(
           """
             |{
@@ -35,7 +33,8 @@ class CreateHistoricFhlUkPiePeriodSummaryRawDataSpec extends UnitSpec {
             |   }
             | }
             |""".stripMargin
-      )
+        )
+
     }
   }
 }

@@ -34,7 +34,7 @@ class UkFhlPieIncomeSpec extends UnitSpec {
       |}
       |""".stripMargin)
 
-  val desJson: JsValue = Json.parse("""
+  val downstreamJson: JsValue = Json.parse("""
     |{
     |    "rentIncome": {
     |          "amount":      215.16,
@@ -56,7 +56,7 @@ class UkFhlPieIncomeSpec extends UnitSpec {
   "writes" when {
     "passed valid model" should {
       "return valid JSON" in {
-        Json.toJson(requestBody) shouldBe desJson
+        Json.toJson(requestBody) shouldBe downstreamJson
       }
     }
   }

@@ -54,7 +54,7 @@ class UkFhlPieExpensesSpec extends UnitSpec {
       |}
       |""".stripMargin)
 
-  val desJson: JsValue = Json.parse("""
+  val downstreamJson: JsValue = Json.parse("""
       |{
       |    "premisesRunningCosts": 3123.21,
       |    "repairsAndMaintenance": 928.42,
@@ -80,7 +80,7 @@ class UkFhlPieExpensesSpec extends UnitSpec {
   "writes" when {
     "passed valid model" should {
       "return valid JSON" in {
-        Json.toJson(requestBody) shouldBe desJson
+        Json.toJson(requestBody) shouldBe downstreamJson
       }
     }
   }

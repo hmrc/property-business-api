@@ -29,21 +29,22 @@ import v2.models.request.createHistoricFhlUkPiePeriodSummary.CreateHistoricFhlUk
 import v2.models.response.createHistoricFhlUkPiePeriodSummary.CreateHistoricFhlUkPiePeriodSummaryResponse
 import v2.support.DownstreamResponseMappingSupport
 
-
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class CreateHistoricFhlUkPiePeriodSummaryService  @Inject()(connector: CreateHistoricFhlUkPiePeriodSummaryConnector)
-  extends DownstreamResponseMappingSupport with Logging {
+class CreateHistoricFhlUkPiePeriodSummaryService @Inject()(connector: CreateHistoricFhlUkPiePeriodSummaryConnector)
+    extends DownstreamResponseMappingSupport
+    with Logging {
 
-  def createPeriodSummary(request: CreateHistoricFhlUkPiePeriodSummaryRequest)
-                         (implicit hc: HeaderCarrier,
-                          ec: ExecutionContext,
-                          logContext: EndpointLogContext,
-                          correlationId: String): Future[ServiceOutcome[CreateHistoricFhlUkPiePeriodSummaryResponse]] = {
+  def createPeriodSummary(request: CreateHistoricFhlUkPiePeriodSummaryRequest)(
+      implicit hc: HeaderCarrier,
+      ec: ExecutionContext,
+      logContext: EndpointLogContext,
+      correlationId: String): Future[ServiceOutcome[CreateHistoricFhlUkPiePeriodSummaryResponse]] = {
+
     val result = for {
       ifsResponseWrapper <- EitherT(connector.createPeriodSummary(request))
-       .leftMap(mapDownstreamErrors((ifsErrorMap)))
+        .leftMap(mapDownstreamErrors(ifsErrorMap))
     } yield ifsResponseWrapper
 
     result.value
@@ -51,18 +52,19 @@ class CreateHistoricFhlUkPiePeriodSummaryService  @Inject()(connector: CreateHis
 
   private def ifsErrorMap: Map[String, MtdError] =
     Map(
-      "INVALID_NINO" -> NinoFormatError,
-      "INVALID_TYPE" -> InternalError,
-      "INVALID_PAYLOAD" -> InternalError,
-      "INVALID_CORRELATIONID" -> InternalError,
+      "INVALID_NINO"            -> NinoFormatError,
+      "INVALID_TYPE"            -> InternalError,
+      "INVALID_PAYLOAD"         -> InternalError,
+      "INVALID_CORRELATIONID"   -> InternalError,
       "INCOME_SOURCE_NOT_FOUND" -> NotFoundError,
-      "DUPLICATE_SUBMISSION" -> RuleDuplicateSubmissionError,
-      "NOT_ALIGN_PERIOD" -> RuleMisalignedPeriodError,
-      "OVERLAPS_IN_PERIOD" -> RuleOverlappingPeriodError,
-      "NOT_CONTIGUOUS_PERIOD" -> RuleNotContiguousPeriodError,
-      "INVALID_PERIOD" -> RuleToDateBeforeFromDateError,
-      "TAX_YEAR_NOT_SUPPORTED" -> RuleTaxYearNotSupportedError,
-      "SERVER_ERROR" -> InternalError,
-      "SERVICE_UNAVAILABLE" -> InternalError
+      "DUPLICATE_SUBMISSION"    -> RuleDuplicateSubmissionError,
+      "NOT_ALIGN_PERIOD"        -> RuleMisalignedPeriodError,
+      "OVERLAPS_IN_PERIOD"      -> RuleOverlappingPeriodError,
+      "NOT_CONTIGUOUS_PERIOD"   -> RuleNotContiguousPeriodError,
+      "INVALID_PERIOD"          -> RuleToDateBeforeFromDateError,
+      "TAX_YEAR_NOT_SUPPORTED"  -> RuleTaxYearNotSupportedError,
+      "SERVER_ERROR"            -> InternalError,
+      "SERVICE_UNAVAILABLE"     -> InternalError
     )
+
 }

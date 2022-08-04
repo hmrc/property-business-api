@@ -27,16 +27,17 @@ import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class CreateHistoricFhlUkPiePeriodSummaryConnector @Inject()(val http: HttpClient,
-                                                             val appConfig: AppConfig) extends BaseDownstreamConnector {
-   def createPeriodSummary(request: CreateHistoricFhlUkPiePeriodSummaryRequest)
-                                        (implicit hc: HeaderCarrier,
-                                         ex: ExecutionContext,
-                                         correlationId: String): Future[DownstreamOutcome[CreateHistoricFhlUkPiePeriodSummaryResponse]]= {
-     post(
-       body = request.body,
-       uri = IfsUri[CreateHistoricFhlUkPiePeriodSummaryResponse](
-         s"income-tax/nino/${request.nino}/uk-properties/furnished-holiday-lettings/periodic-summaries")
-     )
-   }
- }
+class CreateHistoricFhlUkPiePeriodSummaryConnector @Inject()(val http: HttpClient, val appConfig: AppConfig) extends BaseDownstreamConnector {
+
+  def createPeriodSummary(request: CreateHistoricFhlUkPiePeriodSummaryRequest)(
+      implicit hc: HeaderCarrier,
+      ex: ExecutionContext,
+      correlationId: String): Future[DownstreamOutcome[CreateHistoricFhlUkPiePeriodSummaryResponse]] = {
+
+    post(
+      body = request.body,
+      uri = IfsUri[CreateHistoricFhlUkPiePeriodSummaryResponse](
+        s"income-tax/nino/${request.nino.nino}/uk-properties/furnished-holiday-lettings/periodic-summaries")
+    )
+  }
+}

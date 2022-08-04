@@ -19,6 +19,7 @@ package v2.connectors
 import mocks.MockAppConfig
 import uk.gov.hmrc.http.HeaderCarrier
 import v2.mocks.MockHttpClient
+import v2.models.domain.Nino
 import v2.models.outcomes.ResponseWrapper
 import v2.models.request.common.ukFhlPieProperty.{UkFhlPieExpenses, UkFhlPieIncome}
 import v2.models.request.common.ukPropertyRentARoom.{UkPropertyExpensesRentARoom, UkPropertyIncomeRentARoom}
@@ -30,41 +31,43 @@ import scala.concurrent.Future
 class CreateHistoricFhlUkPiePeriodSummaryConnectorSpec extends ConnectorSpec {
 
   val transactionReference: String = "some-transaction-reference"
-  val nino: String = "WE12356753A"
-  val fromDate: String = "2021-01-06"
-  val toDate: String = "2021-02-06"
-  val income: UkFhlPieIncome = UkFhlPieIncome(Some(129.10), Some(129.11),
-    Some(UkPropertyIncomeRentARoom(Some(144.23))))
-  val expenses: UkFhlPieExpenses = UkFhlPieExpenses(
-    premisesRunningCosts = Some(3123.21),
-    repairsAndMaintenance = Some(928.42),
-    financialCosts = Some(842.99),
-    professionalFees = Some(8831.12),
-    costOfServices = Some(484.12),
-    other = Some(992.82),
-    travelCosts = Some(999.99),
-    consolidatedExpenses = None,
-    rentARoom = Some(UkPropertyExpensesRentARoom(
-      Some(8842.43)
-    )))
-  val consolidatedExpenses:UkFhlPieExpenses = UkFhlPieExpenses(None, None, None, None, None, None, None, Some(22.50), None )
-  val url: String = s"$baseUrl/income-tax/nino/$nino/uk-properties/furnished-holiday-lettings/periodic-summaries"
+  val nino: String                 = "WE123567A"
+  val fromDate: String             = "2021-01-06"
+  val toDate: String               = "2021-02-06"
 
+  val income: UkFhlPieIncome = UkFhlPieIncome(Some(129.10), Some(129.11), Some(UkPropertyIncomeRentARoom(Some(144.23))))
+
+  val expenses: UkFhlPieExpenses = UkFhlPieExpenses(Some(3123.21),
+                                                    Some(928.42),
+                                                    Some(842.99),
+                                                    Some(8831.12),
+                                                    Some(484.12),
+                                                    Some(992.82),
+                                                    Some(999.99),
+                                                    None,
+                                                    Some(
+                                                      UkPropertyExpensesRentARoom(
+                                                        Some(8842.43)
+                                                      )))
+
+  val consolidatedExpenses: UkFhlPieExpenses = UkFhlPieExpenses(None, None, None, None, None, None, None, Some(22.50), None)
+
+  val url: String = s"$baseUrl/income-tax/nino/$nino/uk-properties/furnished-holiday-lettings/periodic-summaries"
 
   val requestBody: CreateHistoricFhlUkPiePeriodSummaryRequestBody =
     CreateHistoricFhlUkPiePeriodSummaryRequestBody(fromDate, toDate, Some(income), Some(expenses))
+
   val consolidatedBody: CreateHistoricFhlUkPiePeriodSummaryRequestBody =
     CreateHistoricFhlUkPiePeriodSummaryRequestBody(fromDate, toDate, Some(income), Some(consolidatedExpenses))
 
-  val requestData: CreateHistoricFhlUkPiePeriodSummaryRequest = CreateHistoricFhlUkPiePeriodSummaryRequest(
-    nino, requestBody)
-  val consolidatedRequestData:  CreateHistoricFhlUkPiePeriodSummaryRequest = CreateHistoricFhlUkPiePeriodSummaryRequest(
-    nino, consolidatedBody)
+  val requestData: CreateHistoricFhlUkPiePeriodSummaryRequest = CreateHistoricFhlUkPiePeriodSummaryRequest(Nino(nino), requestBody)
+
+  val consolidatedRequestData: CreateHistoricFhlUkPiePeriodSummaryRequest = CreateHistoricFhlUkPiePeriodSummaryRequest(Nino(nino), consolidatedBody)
 
   val responseData = CreateHistoricFhlUkPiePeriodSummaryResponse(transactionReference)
 
-
   class Test extends MockHttpClient with MockAppConfig {
+
     val connector: CreateHistoricFhlUkPiePeriodSummaryConnector = new CreateHistoricFhlUkPiePeriodSummaryConnector(
       http = mockHttpClient,
       appConfig = mockAppConfig
@@ -78,29 +81,29 @@ class CreateHistoricFhlUkPiePeriodSummaryConnectorSpec extends ConnectorSpec {
 
   "connector" must {
 
-     "post a body with dates, income and expenses and return a 202 with transactionReference" in new Test {
-        val outcome = Right(ResponseWrapper(transactionReference, responseData))
-
-        implicit val hc: HeaderCarrier = HeaderCarrier(otherHeaders = otherHeaders ++ Seq("Content-Type" -> "application/json"))
-        val requiredIfsHeadersPost: Seq[(String, String)] = requiredIfsHeaders ++ Seq("Content-Type" -> "application/json")
-
-        MockHttpClient
-          .post(
-            url = url,
-            config = dummyIfsHeaderCarrierConfig,
-            body = requestBody,
-            requiredHeaders = requiredIfsHeadersPost,
-            excludedHeaders = Seq("Some-Header" -> "some-value")
-          )
-          .returns(Future.successful(outcome))
-
-        await(connector.createPeriodSummary(requestData)) shouldBe outcome
-      }
-
-     "post a body with dates, income and consolidated expenses and return a 202 with transactionReference" in new Test {
+    "post a body with dates, income and expenses and return a 202 with transactionReference" in new Test {
       val outcome = Right(ResponseWrapper(transactionReference, responseData))
 
-      implicit val hc: HeaderCarrier = HeaderCarrier(otherHeaders = otherHeaders ++ Seq("Content-Type" -> "application/json"))
+      implicit val hc: HeaderCarrier                    = HeaderCarrier(otherHeaders = otherHeaders ++ Seq("Content-Type" -> "application/json"))
+      val requiredIfsHeadersPost: Seq[(String, String)] = requiredIfsHeaders ++ Seq("Content-Type" -> "application/json")
+
+      MockHttpClient
+        .post(
+          url = url,
+          config = dummyIfsHeaderCarrierConfig,
+          body = requestBody,
+          requiredHeaders = requiredIfsHeadersPost,
+          excludedHeaders = Seq("Some-Header" -> "some-value")
+        )
+        .returns(Future.successful(outcome))
+
+      await(connector.createPeriodSummary(requestData)) shouldBe outcome
+    }
+
+    "post a body with dates, income and consolidated expenses and return a 202 with transactionReference" in new Test {
+      val outcome = Right(ResponseWrapper(transactionReference, responseData))
+
+      implicit val hc: HeaderCarrier                    = HeaderCarrier(otherHeaders = otherHeaders ++ Seq("Content-Type" -> "application/json"))
       val requiredIfsHeadersPost: Seq[(String, String)] = requiredIfsHeaders ++ Seq("Content-Type" -> "application/json")
 
       MockHttpClient
@@ -115,6 +118,5 @@ class CreateHistoricFhlUkPiePeriodSummaryConnectorSpec extends ConnectorSpec {
 
       await(connector.createPeriodSummary(consolidatedRequestData)) shouldBe outcome
     }
-    }
   }
-
+}

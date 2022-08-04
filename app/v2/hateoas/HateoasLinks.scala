@@ -49,6 +49,9 @@ trait HateoasLinks {
   private def ukHistoricNonFhlAnnualUri(appConfig: AppConfig, nino: String, taxYear: String): String =
     s"/${appConfig.apiGatewayContext}/uk/non-furnished-holiday-lettings/$nino/$taxYear"
 
+  private def ukHistoricNonFhlPiePeriodSummaryUri(appConfig: AppConfig, nino: String, periodId: String): String =
+    s"/${appConfig.apiGatewayContext}/uk/furnished-holiday-lettings/$nino/$periodId"
+
   // API resource links
 
   // Foreign
@@ -102,6 +105,14 @@ trait HateoasLinks {
     val rel = if (self) "self" else RETRIEVE_UK_PROPERTY_ANNUAL_SUBMISSION
     Link(href = ukAnnualUri(appConfig, nino, businessId, taxYear), method = GET, rel)
   }
+
+  // Historic Uk Period Summaries:
+
+  def createHistoricNonFhlUkPiePeriodSummary(appConfig: AppConfig, nino: String, periodId: String): Link =
+    Link(href = ukHistoricNonFhlPiePeriodSummaryUri(appConfig, nino, periodId), method = POST, rel = CREATE_HISTORIC_NON_FHL_UK_PIE_PERIOD_SUMMARY)
+
+  def amendHistoricNonFhlUkPiePeriodSummary(appConfig: AppConfig, nino: String, periodId: String): Link =
+    Link(href = ukHistoricNonFhlPiePeriodSummaryUri(appConfig, nino, periodId), method = POST, rel = AMEND_HISTORIC_NON_FHL_UK_PIE_PERIOD_SUMMARY)
 
   // Historic UK Annual:
 

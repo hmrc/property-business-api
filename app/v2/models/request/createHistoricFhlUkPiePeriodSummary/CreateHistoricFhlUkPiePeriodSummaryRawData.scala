@@ -22,7 +22,7 @@ import v2.models.request.RawData
 /** Model name abbreviated for convenience.
   *  Create a Historic Furnished Holiday Lettings (Fhl) UK Property Income & Expenses (Pie) Period Summary
   */
-case class CreateHistoricFhlUkPiePeriodSummaryRawData(nino: String,body: JsValue) extends RawData
+case class CreateHistoricFhlUkPiePeriodSummaryRawData(nino: String, body: JsValue) extends RawData
 
 
 object CreateHistoricFhlUkPiePeriodSummaryRawData{

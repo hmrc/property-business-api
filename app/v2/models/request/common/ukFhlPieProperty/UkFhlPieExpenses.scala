@@ -20,7 +20,6 @@ import play.api.libs.functional.syntax.{toFunctionalBuilderOps, unlift}
 import play.api.libs.json.{JsPath, Json, Reads, Writes}
 import v2.models.request.common.ukPropertyRentARoom.UkPropertyExpensesRentARoom
 
-
 case class UkFhlPieExpenses(premisesRunningCosts: Option[BigDecimal],
                             repairsAndMaintenance: Option[BigDecimal],
                             financialCosts: Option[BigDecimal],
@@ -30,7 +29,6 @@ case class UkFhlPieExpenses(premisesRunningCosts: Option[BigDecimal],
                             consolidatedExpenses: Option[BigDecimal],
                             travelCosts: Option[BigDecimal],
                             rentARoom: Option[UkPropertyExpensesRentARoom])
-
 
 object UkFhlPieExpenses {
   implicit val reads: Reads[UkFhlPieExpenses] = Json.reads[UkFhlPieExpenses]
@@ -45,5 +43,5 @@ object UkFhlPieExpenses {
       (JsPath \ "consolidatedExpenses").writeNullable[BigDecimal] and
       (JsPath \ "travelCosts").writeNullable[BigDecimal] and
       (JsPath \ "ukRentARoom").writeNullable[UkPropertyExpensesRentARoom]
-    ) (unlift(UkFhlPieExpenses.unapply))
+  )(unlift(UkFhlPieExpenses.unapply))
 }

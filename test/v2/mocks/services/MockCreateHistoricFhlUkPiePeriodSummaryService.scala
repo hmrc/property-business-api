@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package v2.mocks.services
 
 import org.scalamock.handlers.CallHandler

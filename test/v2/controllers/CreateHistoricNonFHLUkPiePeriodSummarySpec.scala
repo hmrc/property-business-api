@@ -26,12 +26,13 @@ import v2.mocks.services.{MockAuditService, MockCreateUkPropertyPeriodSummarySer
 import v2.models.audit.{AuditError, AuditEvent, AuditResponse, GenericAuditDetail}
 import v2.models.domain.Nino
 import v2.models.errors._
-import v2.models.hateoas.Method.GET
+import v2.models.hateoas.Method.{GET, POST}
 import v2.models.hateoas.{HateoasWrapper, Link}
 import v2.models.outcomes.ResponseWrapper
 import v2.models.request.common.ukPropertyRentARoom.{UkPropertyExpensesRentARoom, UkPropertyIncomeRentARoom}
 import v2.models.request.createHistoricNonFhlUkPropertyPeriodSummary.{CreateHistoricNonFhlUkPropertyPeriodSummaryRawData, CreateHistoricNonFhlUkPropertyPeriodSummaryRequest, CreateHistoricNonFhlUkPropertyPeriodSummaryRequestBody, UkNonFhlPropertyExpenses, UkNonFhlPropertyIncome}
 import v2.models.request.createUkPropertyPeriodSummary._
+import v2.models.response.createHistoricNonFhlUkPiePeriodSummaryResponse.{CreateHistoricNonFhlUkPiePeriodSummaryHateoasData, CreateHistoricNonFhlUkPiePeriodSummaryResponse}
 import v2.models.response.createUkPropertyPeriodSummary._
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -227,30 +228,30 @@ class CreateHistoricNonFHLUkPiePeriodSummarySpec
       )
     )
 
-  //TODO: Make a response model here
-  val response: CreateUkPropertyPeriodSummaryResponse = CreateUkPropertyPeriodSummaryResponse(
-    submissionId = "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
+
+  val response: CreateHistoricNonFhlUkPiePeriodSummaryResponse = CreateHistoricNonFhlUkPiePeriodSummaryResponse(
+    periodId
   )
 
   private val testHateoasLink =
     Link(href = s"/individuals/business/property/uk/non-furnished-holiday-lettings/$nino/$periodId",
-      method = GET,
+      method = POST,
       rel = "self")
 
   "create" should {
     "return a successful response from a consolidated request" when {
       "the request received is valid" in new Test {
 
-        MockCreateUkPropertyRequestParser
-          .requestFor(CreateUkPropertyPeriodSummaryRawData(nino, taxYear, businessId, requestBodyJsonConsolidatedExpense))
+        MockCreateNonFhlUkPiePeriodSummaryRequestParser
+          .requestFor(CreateNonFhlUkPiePeriodSummaryRawData(nino, requestBodyJsonConsolidatedExpense))
           .returns(Right(requestData))
 
-        MockCreateUkPropertyService
-          .createUkProperty(requestData)
+        MockCreateNonFhlUkPiePeriodSummaryService
+          .createUkProperty(requestData) //This will need to be updated too.
           .returns(Future.successful(Right(ResponseWrapper(correlationId, response))))
 
         MockHateoasFactory
-          .wrap(response, CreateUkPropertyPeriodSummaryHateoasData(nino, businessId, taxYear, submissionId))
+          .wrap(response, CreateHistoricNonFhlUkPiePeriodSummaryHateoasData(nino, periodId))
           .returns(HateoasWrapper(response, Seq(testHateoasLink)))
 
         val result: Future[Result] = controller.handleRequest(nino, businessId, taxYear)(fakeRequestWithBody(requestBodyJsonConsolidatedExpense))
@@ -297,7 +298,7 @@ class CreateHistoricNonFHLUkPiePeriodSummarySpec
               .requestFor(rawData)
               .returns(Left(ErrorWrapper(correlationId, error, None)))
 
-            val result: Future[Result] = controller.handleRequest(nino, businessId, taxYear)(fakeRequestWithBody(requestBodyJson))
+            val result: Future[Result] = controller.handleRequest(nino)(fakeRequestWithBody(requestBodyJson))
 
             status(result) shouldBe expectedStatus
             contentAsJson(result) shouldBe Json.toJson(error)
@@ -309,18 +310,13 @@ class CreateHistoricNonFHLUkPiePeriodSummarySpec
         }
 
         val input = Seq(
-          (BadRequestError, BAD_REQUEST),
-          (TaxYearFormatError, BAD_REQUEST),
           (NinoFormatError, BAD_REQUEST),
-          (BusinessIdFormatError, BAD_REQUEST),
-          (RuleTaxYearRangeInvalidError, BAD_REQUEST),
-          (RuleTaxYearNotSupportedError, BAD_REQUEST),
-          (ToDateFormatError, BAD_REQUEST),
-          (FromDateFormatError, BAD_REQUEST),
           (RuleBothExpensesSuppliedError, BAD_REQUEST),
-          (RuleToDateBeforeFromDateError, BAD_REQUEST),
+          (ValueFormatError, BAD_REQUEST),
           (RuleIncorrectOrEmptyBodyError, BAD_REQUEST),
-          (InternalError, INTERNAL_SERVER_ERROR)
+          (FromDateFormatError, BAD_REQUEST),
+          (ToDateFormatError, BAD_REQUEST),
+          (RuleToDateBeforeFromDateError, BAD_REQUEST),
         )
 
         input.foreach(args => (errorsFromParserTester _).tupled(args))
@@ -330,15 +326,15 @@ class CreateHistoricNonFHLUkPiePeriodSummarySpec
         def serviceErrors(mtdError: MtdError, expectedStatus: Int): Unit = {
           s"a $mtdError error is returned from the service" in new Test {
 
-            MockCreateUkPropertyRequestParser
+            MockCreateHistoricNonFhlUkPiePeriodSummaryRequestParser
               .requestFor(rawData)
               .returns(Right(requestData))
 
-            MockCreateUkPropertyService
-              .createUkProperty(requestData)
+            MockCreateNonFhlUkPiePeriodSummaryService
+              .createUkProperty(requestData) //change this
               .returns(Future.successful(Left(ErrorWrapper(correlationId, mtdError))))
 
-            val result: Future[Result] = controller.handleRequest(nino, businessId, taxYear)(fakeRequestWithBody(requestBodyJson))
+            val result: Future[Result] = controller.handleRequest(nino)(fakeRequestWithBody(requestBodyJson))
 
             status(result) shouldBe expectedStatus
             contentAsJson(result) shouldBe Json.toJson(mtdError)
@@ -351,17 +347,13 @@ class CreateHistoricNonFHLUkPiePeriodSummarySpec
 
         val input = Seq(
           (NinoFormatError, BAD_REQUEST),
-          (TaxYearFormatError, BAD_REQUEST),
-          (RuleTaxYearNotSupportedError, BAD_REQUEST),
-          (RuleTypeOfBusinessIncorrectError, BAD_REQUEST),
-          (BusinessIdFormatError, BAD_REQUEST),
           (NotFoundError, NOT_FOUND),
-          (InternalError, INTERNAL_SERVER_ERROR),
-          (RuleOverlappingPeriodError, BAD_REQUEST),
-          (RuleMisalignedPeriodError, BAD_REQUEST),
-          (RuleNotContiguousPeriodError, BAD_REQUEST),
           (RuleToDateBeforeFromDateError, BAD_REQUEST),
-          (RuleDuplicateSubmissionError, BAD_REQUEST)
+          (RuleDuplicateSubmissionError, BAD_REQUEST),
+          (RuleMisalignedPeriodError, BAD_REQUEST),
+          (RuleOverlappingPeriodError, BAD_REQUEST),
+          (RuleNotContiguousPeriodError, BAD_REQUEST),
+          (RuleTaxYearNotSupportedError, BAD_REQUEST),
         )
 
         input.foreach(args => (serviceErrors _).tupled(args))

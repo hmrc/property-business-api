@@ -30,7 +30,8 @@ object ConsolidatedExpensesValidation {
       case None => NoValidationErrors
       case Some(_) =>
         expenses match {
-          case CreateForeignNonFhlPropertyExpenses(None, None, None, None, None, None, _, _, None, Some(_)) => NoValidationErrors
+          case CreateForeignNonFhlPropertyExpenses(None, None, None, None, None, None, _, _, None, Some(_)) =>
+            NoValidationErrors
           case _ =>
             List(RuleBothExpensesSuppliedError.copy(paths = Some(Seq(path))))
         }
@@ -42,8 +43,10 @@ object ConsolidatedExpensesValidation {
       case None => NoValidationErrors
       case Some(_) =>
         expenses match {
-          case CreateForeignFhlEeaExpenses(None, None, None, None, None, None, None, Some(_)) => NoValidationErrors
-          case _                                                                              => List(RuleBothExpensesSuppliedError.copy(paths = Some(Seq(path))))
+          case CreateForeignFhlEeaExpenses(None, None, None, None, None, None, None, Some(_)) =>
+            NoValidationErrors
+          case _ =>
+            List(RuleBothExpensesSuppliedError.copy(paths = Some(Seq(path))))
         }
     }
   }
@@ -53,8 +56,10 @@ object ConsolidatedExpensesValidation {
       case None => NoValidationErrors
       case Some(_) =>
         expenses match {
-          case CommonUkFhlPropertyExpenses(None, None, None, None, None, None, Some(_), None, None) => NoValidationErrors
-          case _                                                                                    => List(RuleBothExpensesSuppliedError.copy(paths = Some(Seq(path))))
+          case CommonUkFhlPropertyExpenses(None, None, None, None, None, None, Some(_), None, None) =>
+            NoValidationErrors
+          case _ =>
+            List(RuleBothExpensesSuppliedError.copy(paths = Some(Seq(path))))
         }
     }
   }
@@ -64,8 +69,10 @@ object ConsolidatedExpensesValidation {
       case None => NoValidationErrors
       case Some(_) =>
         expenses match {
-          case CommonUkNonFhlPropertyExpenses(None, None, None, None, None, None, None, None, None, None, Some(_)) => NoValidationErrors
-          case _                                                                                                   => List(RuleBothExpensesSuppliedError.copy(paths = Some(Seq(path))))
+          case CommonUkNonFhlPropertyExpenses(None, None, None, None, None, None, None, None, None, None, Some(_)) =>
+            NoValidationErrors
+          case _ =>
+            List(RuleBothExpensesSuppliedError.copy(paths = Some(Seq(path))))
         }
     }
   }
@@ -75,8 +82,10 @@ object ConsolidatedExpensesValidation {
       case None => NoValidationErrors
       case Some(_) =>
         expenses match {
-          case AmendForeignFhlEeaExpenses(None, None, None, None, None, None, None, Some(_)) => NoValidationErrors
-          case _                                                                             => List(RuleBothExpensesSuppliedError.copy(paths = Some(Seq(path))))
+          case AmendForeignFhlEeaExpenses(None, None, None, None, None, None, None, Some(_)) =>
+            NoValidationErrors
+          case _ =>
+            List(RuleBothExpensesSuppliedError.copy(paths = Some(Seq(path))))
         }
     }
   }
@@ -86,8 +95,10 @@ object ConsolidatedExpensesValidation {
       case None => NoValidationErrors
       case Some(_) =>
         expenses match {
-          case AmendForeignNonFhlPropertyExpenses(None, None, None, None, None, None, _, _, None, Some(_)) => NoValidationErrors
-          case _                                                                                           => List(RuleBothExpensesSuppliedError.copy(paths = Some(Seq(path))))
+          case AmendForeignNonFhlPropertyExpenses(None, None, None, None, None, None, _, _, None, Some(_)) =>
+            NoValidationErrors
+          case _ =>
+            List(RuleBothExpensesSuppliedError.copy(paths = Some(Seq(path))))
         }
     }
   }
@@ -97,8 +108,10 @@ object ConsolidatedExpensesValidation {
       case None => NoValidationErrors
       case Some(_) =>
         expenses match {
-          case UkNonFhlPropertyExpenses(None, None, None, None, None, None, None, None, None, None, Some(_)) => NoValidationErrors
-          case _                                                                                             => List(RuleBothExpensesSuppliedError.copy(paths = Some(Seq(path))))
+          case UkNonFhlPropertyExpenses(None, None, None, None, None, None, None, None, None, None, Some(_)) =>
+            NoValidationErrors
+          case _ =>
+            List(RuleBothExpensesSuppliedError.copy(paths = Some(Seq(path))))
         }
     }
   }

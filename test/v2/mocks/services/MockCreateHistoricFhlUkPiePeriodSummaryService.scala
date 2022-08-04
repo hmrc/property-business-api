@@ -18,24 +18,32 @@ package v2.mocks.services
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
 import uk.gov.hmrc.http.HeaderCarrier
-import v2.controllers.{CreateHistoricFhlUkPiePeriodSummaryService, EndpointLogContext}
+import v2.controllers.EndpointLogContext
 import v2.models.errors.ErrorWrapper
 import v2.models.outcomes.ResponseWrapper
 import v2.models.request.createHistoricFhlUkPiePeriodSummary.CreateHistoricFhlUkPiePeriodSummaryRequest
 import v2.models.response.createHistoricFhlUkPiePeriodSummary.CreateHistoricFhlUkPiePeriodSummaryResponse
+import v2.services.CreateHistoricFhlUkPiePeriodSummaryService
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.{ ExecutionContext, Future }
 
-trait  MockCreateHistoricFhlUkPiePeriodSummaryService extends MockFactory {
+trait MockCreateHistoricFhlUkPiePeriodSummaryService extends MockFactory {
 
   val mockCreateHistoricFhlUkPiePeriodSummaryService: CreateHistoricFhlUkPiePeriodSummaryService = mock[CreateHistoricFhlUkPiePeriodSummaryService]
 
   object MockCreateHistoricFhlUkPiePeriodSummaryService {
 
-    def createPeriodSummary(requestData: CreateHistoricFhlUkPiePeriodSummaryRequest):
-    CallHandler[Future[Either[ErrorWrapper, ResponseWrapper[CreateHistoricFhlUkPiePeriodSummaryResponse]]]] = {
-      (mockCreateHistoricFhlUkPiePeriodSummaryService
-        .createPeriodSummary(_: CreateHistoricFhlUkPiePeriodSummaryRequest)(_: HeaderCarrier, _: ExecutionContext, _: EndpointLogContext, _: String))
+    def createPeriodSummary(requestData: CreateHistoricFhlUkPiePeriodSummaryRequest)
+      : CallHandler[Future[Either[ErrorWrapper, ResponseWrapper[CreateHistoricFhlUkPiePeriodSummaryResponse]]]] = {
+      (
+        mockCreateHistoricFhlUkPiePeriodSummaryService
+          .createPeriodSummary(_: CreateHistoricFhlUkPiePeriodSummaryRequest)(
+            _: HeaderCarrier,
+            _: ExecutionContext,
+            _: EndpointLogContext,
+            _: String
+          )
+        )
         .expects(requestData, *, *, *, *)
     }
   }

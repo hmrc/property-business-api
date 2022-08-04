@@ -16,40 +16,61 @@
 
 package v2.controllers
 
-import play.api.libs.json.Json
+import play.api.libs.json.{ JsValue, Json }
+import play.api.mvc.Result
 import uk.gov.hmrc.http.HeaderCarrier
 import v2.mocks.MockIdGenerator
 import v2.mocks.hateoas.MockHateoasFactory
-import v2.mocks.requestParsers.MockCreateForeignPropertyPeriodSummaryRequestParser
-import v2.mocks.services.{MockCreateAmendHistoricFhlUkPropertyAnnualSubmissionService, MockCreateForeignPropertyPeriodSummaryService, MockEnrolmentsAuthService, MockMtdIdLookupService}
-import v2.models.request.createHistoricFhlUkPiePeriodSummary.CreateHistoricFhlUkPiePeriodSummaryRequestBody
+import v2.mocks.requestParsers.MockCreateHistoricFhlUkPiePeriodSummaryRequestParser
+import v2.mocks.services.{ MockCreateHistoricFhlUkPiePeriodSummaryService, MockEnrolmentsAuthService, MockMtdIdLookupService }
+import v2.models.domain.Nino
+import v2.models.hateoas.{ HateoasWrapper, Link }
+import v2.models.hateoas.Method.GET
+import v2.models.outcomes.ResponseWrapper
+import v2.models.request.createHistoricFhlUkPiePeriodSummary.{
+  CreateHistoricFhlUkPiePeriodSummaryRawData,
+  CreateHistoricFhlUkPiePeriodSummaryRequest,
+  CreateHistoricFhlUkPiePeriodSummaryRequestBody
+}
+import v2.models.response.createHistoricFhlUkPiePeriodSummary.{
+  CreateHistoricFhlUkPiePeriodSummaryHateoasData,
+  CreateHistoricFhlUkPiePeriodSummaryResponse
+}
 
+import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-class CreateHistoricFhlUkPiePeriodSummaryControllerSpec extends ControllerBaseSpec
+class CreateHistoricFhlUkPiePeriodSummaryControllerSpec
+    extends ControllerBaseSpec
     with MockEnrolmentsAuthService
     with MockMtdIdLookupService
-    with MockCreateAmendHistoricFhlUkPropertyAnnualSubmissionService
-    with MockCreateForeignPropertyPeriodSummaryRequestParser //TODO: mock Parser
+    with MockCreateHistoricFhlUkPiePeriodSummaryService
+    with MockCreateHistoricFhlUkPiePeriodSummaryRequestParser
     with MockHateoasFactory
     with MockIdGenerator {
 
-  private val nino: String = "AA123456A"
+  private val nino: String                 = "AA123456A"
+  private val correlationId: String        = "a1e8057e-fbbc-47a8-a8b4-78d9f015c253"
+  private val transactionReference: String = "transaction-reference"
+  private val periodId: String             = "2021-01-01_2021-01-02"
 
   trait Test {
     val hc: HeaderCarrier = HeaderCarrier()
-    val controller = new CreateHistoricFhlUkPiePeriodSummaryController(
+
+    val controller: CreateHistoricFhlUkPiePeriodSummaryController = new CreateHistoricFhlUkPiePeriodSummaryController(
       authService = mockEnrolmentsAuthService,
       lookupService = mockMtdIdLookupService,
-      service = mockCreateAmendHistoricService,
-      parser = mockCreateForeignPropertyRequestParser, //TODO: update parser
+      parser = mockCreateHistoricFhlUkPiePeriodSummaryRequestParser,
+      service = mockCreateHistoricFhlUkPiePeriodSummaryService,
       hateoasFactory = mockHateoasFactory,
       cc = cc,
       idGenerator = mockIdGenerator
     )
 
-    val requestBody = CreateHistoricFhlUkPiePeriodSummaryRequestBody("2021-01-01", "2021-01-02", None, None)
-    private val requestBodyJson = Json.parse(
+    val requestBody: CreateHistoricFhlUkPiePeriodSummaryRequestBody =
+      CreateHistoricFhlUkPiePeriodSummaryRequestBody("2021-01-01", "2021-01-02", None, None)
+
+    private val requestBodyJson: JsValue = Json.parse(
       """{
         |    "fromDate": "2021-01-01",
         |    "toDate": "2021-01-02"
@@ -57,13 +78,52 @@ class CreateHistoricFhlUkPiePeriodSummaryControllerSpec extends ControllerBaseSp
         |""".stripMargin
     )
 
+    private val requestData: CreateHistoricFhlUkPiePeriodSummaryRequest = CreateHistoricFhlUkPiePeriodSummaryRequest(Nino(nino), requestBody)
+    private val rawData: CreateHistoricFhlUkPiePeriodSummaryRawData     = CreateHistoricFhlUkPiePeriodSummaryRawData(nino, requestBodyJson)
 
     MockMtdIdLookupService.lookup(nino).returns(Future.successful(Right("test-mtd-id")))
     MockedEnrolmentsAuthService.authoriseUser()
     MockIdGenerator.getCorrelationId.returns(correlationId)
-  }
-  }
 
+    private val hateoasLinks: Seq[Link]  = Seq(Link(href = "/the-link/", method = GET, rel = "the-rel"))
+    private val hateoasResponse: JsValue = Json.parse(s"""
+         |{
+         |  "links":[{
+         |    "href": "/the-link",
+         |    "method": "GET",
+         |    "rel":"the-rel"
+         |  }]         
+         |}
+         |""".stripMargin)
 
+    private val response: CreateHistoricFhlUkPiePeriodSummaryResponse = CreateHistoricFhlUkPiePeriodSummaryResponse(transactionReference)
+
+    "Create" should {
+      "return a successful response " when {
+        "the request received is valid" in new Test {
+          MockCreateHistoricFhlUkPiePeriodSummaryRequestParser
+            .parseRequest(rawData)
+            .returns(Right(requestData))
+
+          MockCreateHistoricFhlUkPiePeriodSummaryService
+            .createPeriodSummary(requestData)
+            .returns(
+              Future.successful(Right(ResponseWrapper(correlationId, response)))
+            )
+
+          MockHateoasFactory
+            .wrap(response, CreateHistoricFhlUkPiePeriodSummaryHateoasData(nino, periodId, transactionReference))
+            .returns(HateoasWrapper(response, hateoasLinks))
+
+          val result: Future[Result] = controller.handleRequest(nino)(fakeRequestWithBody(requestBodyJson))
+
+          contentAsJson(result) shouldBe hateoasResponse
+          status(result) shouldBe CREATED
+          header("X-CorrelationId", result) shouldBe Some(correlationId)
+        }
+      }
+
+    }
+  }
 
 }

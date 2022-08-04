@@ -19,29 +19,28 @@ package v2.controllers
 import cats.data.EitherT
 import cats.implicits.catsSyntaxEitherId
 import config.AppConfig
-import play.api.libs.json.{JsValue, Json}
-import play.api.mvc.{Action, ControllerComponents}
-import uk.gov.hmrc.http.HttpClient
-import utils.{IdGenerator, Logging}
-import v2.connectors.{BaseDownstreamConnector, DownstreamOutcome}
-import v2.controllers.requestParsers.validators.Validator
+import play.api.libs.json.{ JsValue, Json }
+import play.api.mvc.{ Action, ControllerComponents }
+import utils.{ IdGenerator, Logging }
 import v2.controllers.requestParsers.RequestParser
+import v2.controllers.requestParsers.validators.Validator
 import v2.hateoas.HateoasFactory
 import v2.models.errors._
-import v2.models.request.createHistoricFhlUkPiePeriodSummary.{CreateHistoricFhlUkPiePeriodSummaryRawData, CreateHistoricFhlUkPiePeriodSummaryRequest, CreateHistoricFhlUkPiePeriodSummaryRequestBody}
-import v2.models.response.amendForeignPropertyAnnualSubmission.AmendForeignPropertyAnnualSubmissionResponse.LinksFactory
-import v2.models.response.createHistoricFhlUkPiePeriodSummary.{CreateHistoricFhlUkPiePeriodSummaryHateoasData, CreateHistoricFhlUkPiePeriodSummaryResponse}
-import v2.services.{CreateUkPropertyPeriodSummaryService, EnrolmentsAuthService, MtdIdLookupService, ServiceOutcome}
-import v2.support.DownstreamResponseMappingSupport
+import v2.models.request.createHistoricFhlUkPiePeriodSummary.{
+  CreateHistoricFhlUkPiePeriodSummaryRawData,
+  CreateHistoricFhlUkPiePeriodSummaryRequest
+}
+import v2.models.response.createHistoricFhlUkPiePeriodSummary.CreateHistoricFhlUkPiePeriodSummaryHateoasData
+import v2.services.{ CreateHistoricFhlUkPiePeriodSummaryService, EnrolmentsAuthService, MtdIdLookupService }
 
-import javax.inject.{Inject, Singleton}
-import scala.concurrent.{ExecutionContext, Future}
+import javax.inject.{ Inject, Singleton }
+import scala.concurrent.{ ExecutionContext, Future }
 
 @Singleton
 class CreateHistoricFhlUkPiePeriodSummaryController @Inject()(val authService: EnrolmentsAuthService,
                                                               val lookupService: MtdIdLookupService,
-                                                              parser: CreateHistoricFhlUkPiePeriodSummaryParser,
-                                                              service: CreateHistoricFhlUkPiePeriodSummaryService, //TODO: Update service
+                                                              parser: CreateHistoricFhlUkPiePeriodSummaryRequestParser,
+                                                              service: CreateHistoricFhlUkPiePeriodSummaryService,
                                                               hateoasFactory: HateoasFactory,
                                                               cc: ControllerComponents,
                                                               idGenerator: IdGenerator)(implicit ec: ExecutionContext)
@@ -70,16 +69,16 @@ class CreateHistoricFhlUkPiePeriodSummaryController @Inject()(val authService: E
           vendorResponse <- EitherT.fromEither[Future](
             hateoasFactory
               .wrap(
-                (serviceResponse,
-                 CreateHistoricFhlUkPiePeriodSummaryHateoasData(nino,
-                                                                s"${parsedRequest.body.toDate}_${parsedRequest.body.toDate}",
-                                                                serviceResponse.responseData.transactionReference
-                ))
+                serviceResponse.responseData,
+                CreateHistoricFhlUkPiePeriodSummaryHateoasData(nino,
+                                                               s"${parsedRequest.body.toDate}_${parsedRequest.body.toDate}",
+                                                               serviceResponse.responseData.transactionReference)
+              )
               .asRight[ErrorWrapper]
           )
         } yield {
           logger.info(s"Success response received with CorrelationId: ${serviceResponse.correlationId}")
-          val response = Json.toJson((vendorResponse))
+
           Created(Json.toJson(vendorResponse))
             .withApiHeaders(serviceResponse.correlationId)
         }
@@ -108,32 +107,14 @@ class CreateHistoricFhlUkPiePeriodSummaryController @Inject()(val authService: E
 }
 
 //TODO: delete and replace placeholder code (below)
-class CreateHistoricFhlUkPiePeriodSummaryParser @Inject()()
+class CreateHistoricFhlUkPiePeriodSummaryRequestParser @Inject()(val validator: CreateHistoricFhlUkPiePeriodSummaryValidator)
     extends RequestParser[CreateHistoricFhlUkPiePeriodSummaryRawData, CreateHistoricFhlUkPiePeriodSummaryRequest] {
 
   override protected def requestFor(data: CreateHistoricFhlUkPiePeriodSummaryRawData): CreateHistoricFhlUkPiePeriodSummaryRequest = ???
 
-  def parseRequest(data: CreateHistoricFhlUkPiePeriodSummaryRawData): CreateHistoricFhlUkPiePeriodSummaryRequest = ???
-
-  override val validator: Validator[CreateHistoricFhlUkPiePeriodSummaryRawData] = ???
 }
 
 @Singleton
 class CreateHistoricFhlUkPiePeriodSummaryValidator @Inject()(appConfig: AppConfig) extends Validator[CreateHistoricFhlUkPiePeriodSummaryRawData] {
   override def validate(data: CreateHistoricFhlUkPiePeriodSummaryRawData): List[MtdError] = ???
-}
-
-@Singleton
-class CreateHistoricFhlUkPiePeriodSummaryService @Inject()(connector: CreateHistoricFhlUkPiePeriodSummaryConnector)
-    extends DownstreamResponseMappingSupport
-    with Logging {
-
-  def createPeriodSummary(request: CreateHistoricFhlUkPiePeriodSummaryRequest)(): Future[ServiceOutcome[CreateHistoricFhlUkPiePeriodSummaryResponse]] = ???
-
-}
-
-@Singleton
-class CreateHistoricFhlUkPiePeriodSummaryConnector @Inject()
-(val http: HttpClient, val appConfig: AppConfig) extends BaseDownstreamConnector {
-
 }

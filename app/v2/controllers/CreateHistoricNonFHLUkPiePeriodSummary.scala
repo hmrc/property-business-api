@@ -21,6 +21,7 @@ import cats.implicits._
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.{Action, ControllerComponents}
 import utils.{IdGenerator, Logging}
+import v2.controllers.requestParsers.CreateHistoricNonFhlUkPropertyPeriodSummaryRequestParser
 import v2.hateoas.HateoasFactory
 import v2.models.errors._
 import v2.models.request.createAmendHistoricFhlUkPropertyAnnualSubmission.CreateAmendHistoricFhlUkPropertyAnnualSubmissionRawData
@@ -36,8 +37,8 @@ import scala.concurrent.{ExecutionContext, Future}
 @Singleton
 class CreateHistoricNonFHLUkPiePeriodSummaryController @Inject()(val authService: EnrolmentsAuthService,
                                                                            val lookupService: MtdIdLookupService,
-                                                                           parser: CreateHistoricFhlUkPropertyPeriodSummaryRequestParser,
-                                                                           service: CreateHistoricFhlUkPropertyPeriodSummaryService,
+                                                                           parser: CreateHistoricNonFhlUkPropertyPeriodSummaryRequestParser,
+                                                                           service: CreateHistoricNonFhlUkPropertyPeriodSummaryService,
                                                                            hateoasFactory: HateoasFactory,
                                                                            cc: ControllerComponents,
                                                                            idGenerator: IdGenerator)(implicit ec: ExecutionContext)

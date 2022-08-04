@@ -65,7 +65,8 @@ class CreateHistoricNonFhlUkPropertyPeriodSummaryValidator @Inject()(appConfig: 
           validateOptional(taxDeducted, "/income/taxDeducted") ++
           validateOptional(premiumsOfLeaseGrant, "/income/premiumsOfLeaseGrant") ++
           validateOptional(reversePremiums, "/income/reversePremiums") ++
-          validateOptional(otherIncome, "/income/otherIncome")
+          validateOptional(otherIncome, "/income/otherIncome") ++
+          validateOptional(rentARoom.flatMap(_.rentsReceived), "/income/rentARoom/rentsReceived")
       }
       .getOrElse(Nil)
 

@@ -28,31 +28,31 @@ class HistoricTaxPeriodYearValidationSpec extends UnitSpec {
   "validate" should {
     "return no errors" when {
       "a valid taxDate is supplied" in {
-        val validationResult = HistoricTaxPeriodYearValidation.validate(minTaxYear, maxTaxYear, taxDate)
+        val result = HistoricTaxPeriodYearValidation.validate(minTaxYear, maxTaxYear, taxDate)
 
-        validationResult shouldBe Nil
+        result shouldBe Nil
       }
       "the minimum taxDate is supplied" in {
-        val validationResult = HistoricTaxPeriodYearValidation.validate(minTaxYear, maxTaxYear, "2017-10-01")
+        val result = HistoricTaxPeriodYearValidation.validate(minTaxYear, maxTaxYear, "2017-10-01")
 
-        validationResult shouldBe Nil
+        result shouldBe Nil
       }
     }
     "return an error" when {
       "a taxDate with an invalid format is supplied" in {
-        val validationResult = HistoricTaxPeriodYearValidation.validate(minTaxYear, maxTaxYear, "2019-20-A1")
+        val result = HistoricTaxPeriodYearValidation.validate(minTaxYear, maxTaxYear, "2019-20-A1")
 
-        validationResult shouldBe List(TaxYearFormatError)
+        result shouldBe List(TaxYearFormatError)
       }
       "a taxDate before the minimum is supplied" in {
-        val validationResult = HistoricTaxPeriodYearValidation.validate(minTaxYear, maxTaxYear, "2014-11-10")
+        val result = HistoricTaxPeriodYearValidation.validate(minTaxYear, maxTaxYear, "2014-11-10")
 
-        validationResult shouldBe List(RuleHistoricTaxYearNotSupportedError)
+        result shouldBe List(RuleHistoricTaxYearNotSupportedError)
       }
       "a taxDate after the maximum is supplied" in {
-        val validationResult = HistoricTaxPeriodYearValidation.validate(minTaxYear, maxTaxYear, "2022-08-05")
+        val result = HistoricTaxPeriodYearValidation.validate(minTaxYear, maxTaxYear, "2022-08-05")
 
-        validationResult shouldBe List(RuleHistoricTaxYearNotSupportedError)
+        result shouldBe List(RuleHistoricTaxYearNotSupportedError)
       }
     }
   }

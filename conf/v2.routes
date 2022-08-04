@@ -19,3 +19,5 @@ DELETE     /:nino/:businessId/annual/:taxYear                          v2.contro
 PUT        /foreign/:nino/:businessId/annual/:taxYear                  v2.controllers.AmendForeignPropertyAnnualSubmissionController.handleRequest(nino: String, businessId: String, taxYear: String)
 GET        /foreign/:nino/:businessId/annual/:taxYear                  v2.controllers.RetrieveForeignPropertyAnnualSubmissionController.handleRequest(nino: String, businessId: String, taxYear: String)
 
+POST       /uk/furnished-holiday-lettings/:nino                        v2.controllers.CreateHistoricFhlUkPiePeriodSummaryController.handleRequest(nino:String)
+

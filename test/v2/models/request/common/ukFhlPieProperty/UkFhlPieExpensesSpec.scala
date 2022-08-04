@@ -16,7 +16,7 @@
 
 package v2.models.request.common.ukFhlPieProperty
 
-import play.api.libs.json.{JsValue, Json}
+import play.api.libs.json.{ JsValue, Json }
 import support.UnitSpec
 import v2.models.request.common.ukPropertyRentARoom.UkPropertyExpensesRentARoom
 
@@ -32,13 +32,13 @@ class UkFhlPieExpensesSpec extends UnitSpec {
       Some(99282),
       Some(999.99),
       Some(974.47),
-      Some(UkPropertyExpensesRentARoom(
-        Some(8842.43)
-      ))
+      Some(
+        UkPropertyExpensesRentARoom(
+          Some(8842.43)
+        ))
     )
 
-  val mtdJson: JsValue = Json.parse(
-    """
+  val mtdJson: JsValue = Json.parse("""
       |{
       |    "premisesRunningCosts": 3123.21,
       |    "repairsAndMaintenance": 928.42,
@@ -54,8 +54,7 @@ class UkFhlPieExpensesSpec extends UnitSpec {
       |}
       |""".stripMargin)
 
-  val desJson: JsValue = Json.parse(
-    """
+  val downstreamJson: JsValue = Json.parse("""
       |{
       |    "premisesRunningCosts": 3123.21,
       |    "repairsAndMaintenance": 928.42,
@@ -81,7 +80,7 @@ class UkFhlPieExpensesSpec extends UnitSpec {
   "writes" when {
     "passed valid model" should {
       "return valid JSON" in {
-        Json.toJson(requestBody) shouldBe desJson
+        Json.toJson(requestBody) shouldBe downstreamJson
       }
     }
   }

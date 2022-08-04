@@ -16,18 +16,18 @@
 
 package v2.models.request.createHistoricFhlUkPiePeriodSummary
 
-import play.api.libs.functional.syntax.{toFunctionalBuilderOps, unlift}
-import play.api.libs.json.{JsPath, JsValue, OWrites}
+import play.api.libs.functional.syntax.{ toFunctionalBuilderOps, unlift }
+import play.api.libs.json.{ JsPath, JsValue, OWrites }
 import v2.models.request.RawData
+
 /** Model name abbreviated for convenience.
   *  Create a Historic Furnished Holiday Lettings (Fhl) UK Property Income & Expenses (Pie) Period Summary
   */
-case class CreateHistoricFhlUkPiePeriodSummaryRawData(nino: String,body: JsValue) extends RawData
+case class CreateHistoricFhlUkPiePeriodSummaryRawData(nino: String, body: JsValue) extends RawData
 
-
-object CreateHistoricFhlUkPiePeriodSummaryRawData{
+object CreateHistoricFhlUkPiePeriodSummaryRawData {
   implicit val writes: OWrites[CreateHistoricFhlUkPiePeriodSummaryRawData] = (
     (JsPath \ "nino").write[String] and
-     (JsPath \ "request").write[JsValue]
-    )(unlift(CreateHistoricFhlUkPiePeriodSummaryRawData.unapply))
+      (JsPath \ "request").write[JsValue]
+  )(unlift(CreateHistoricFhlUkPiePeriodSummaryRawData.unapply))
 }

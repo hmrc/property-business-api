@@ -16,17 +16,17 @@
 
 package v2.models.response.createHistoricFhlUkPiePeriodSummary
 
-import play.api.libs.json.{JsValue, Json}
+import play.api.libs.json.{ JsValue, Json }
 import support.UnitSpec
 
-class CreateHistoricFhlUkPiePeriodSummaryResponseSpec  extends UnitSpec{
+class CreateHistoricFhlUkPiePeriodSummaryResponseSpec extends UnitSpec {
 
-  val transactionReference: String ="v2509e91f-2689-453e-9ddc-7e3cf97a8e41"
+  val transactionReference: String = "v2509e91f-2689-453e-9ddc-7e3cf97a8e41"
+
   val createHistoricFhlUkPiePeriodSummaryResponse: CreateHistoricFhlUkPiePeriodSummaryResponse =
     CreateHistoricFhlUkPiePeriodSummaryResponse(transactionReference)
 
-  val json: JsValue = Json.parse(
-    s"""
+  val json: JsValue = Json.parse(s"""
       |{
       |   "transactionReference": "$transactionReference"
       |}
@@ -35,7 +35,7 @@ class CreateHistoricFhlUkPiePeriodSummaryResponseSpec  extends UnitSpec{
   "reads" when {
     "passed valid JSON" should {
       "return a valid model" in {
-          json.as[CreateHistoricFhlUkPiePeriodSummaryResponse] shouldBe createHistoricFhlUkPiePeriodSummaryResponse
+        json.as[CreateHistoricFhlUkPiePeriodSummaryResponse] shouldBe createHistoricFhlUkPiePeriodSummaryResponse
       }
     }
   }

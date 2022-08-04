@@ -16,17 +16,15 @@
 
 package v2.models.request.common.ukFhlPieProperty
 
-import play.api.libs.json.{JsValue, Json}
+import play.api.libs.json.{ JsValue, Json }
 import support.UnitSpec
 import v2.models.request.common.ukPropertyRentARoom.UkPropertyIncomeRentARoom
 
+class UkFhlPieIncomeSpec extends UnitSpec {
+  val rentARoom: UkPropertyIncomeRentARoom = UkPropertyIncomeRentARoom(Some(412.89))
+  val requestBody: UkFhlPieIncome          = UkFhlPieIncome(Some(215.16), Some(1365.12), Some(rentARoom))
 
-class UkFhlPieIncomeSpec extends UnitSpec{
-   val rentARoom: UkPropertyIncomeRentARoom= UkPropertyIncomeRentARoom(Some(412.89))
-   val requestBody: UkFhlPieIncome = UkFhlPieIncome(Some(215.16), Some(1365.12), Some(rentARoom))
-
-  val mtdJson: JsValue = Json.parse(
-    """
+  val mtdJson: JsValue = Json.parse("""
       |{
       |    "periodAmount":    215.16,
       |    "taxDeducted":     1365.12,
@@ -36,8 +34,7 @@ class UkFhlPieIncomeSpec extends UnitSpec{
       |}
       |""".stripMargin)
 
-  val desJson: JsValue = Json.parse(
-    """
+  val downstreamJson: JsValue = Json.parse("""
     |{
     |    "rentIncome": {
     |          "amount":      215.16,
@@ -49,7 +46,6 @@ class UkFhlPieIncomeSpec extends UnitSpec{
     |   }
     |""".stripMargin)
 
-
   "reads" when {
     "passed a valid JSON" should {
       "return a valid model" in {
@@ -60,10 +56,8 @@ class UkFhlPieIncomeSpec extends UnitSpec{
   "writes" when {
     "passed valid model" should {
       "return valid JSON" in {
-        Json.toJson(requestBody) shouldBe desJson
+        Json.toJson(requestBody) shouldBe downstreamJson
       }
     }
   }
 }
-
-

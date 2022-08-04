@@ -85,7 +85,7 @@ class CreateHistoricNonFhlUkPropertyPeriodSummaryValidator @Inject()(appConfig: 
       }
       .getOrElse(Nil)
 
-    val bothExpensesErrors = body.expenses.map(ConsolidatedExpensesValidation.validate(_, "/ukFhlProperty/expenses")).getOrElse(Nil)
+    val bothExpensesErrors = body.expenses.map(ConsolidatedExpensesValidation.validate(_, "/expenses/consolidatedExpenses")).getOrElse(Nil)
 
     errorsResult(formatDateErrors ++ historicTaxPeriodYearErrors ++ incomeFormatErrors ++ expensesFormatErrors ++ bothExpensesErrors)
   }

@@ -16,9 +16,10 @@
 
 package v2.controllers.requestParsers.validators.validations
 
-import v2.models.errors.{MtdError, RuleBothExpensesSuppliedError}
+import v2.models.errors.{ MtdError, RuleBothExpensesSuppliedError }
 import v2.models.request.common.foreignFhlEea._
 import v2.models.request.common.foreignPropertyEntry._
+import v2.models.request.common.ukFhlPieProperty.UkFhlPieExpenses
 import v2.models.request.common.ukFhlProperty.UkFhlPropertyExpenses
 import v2.models.request.common.ukNonFhlProperty.UkNonFhlPropertyExpenses
 
@@ -42,6 +43,17 @@ object ConsolidatedExpensesValidation {
       case Some(_) =>
         expenses match {
           case CreateForeignFhlEeaExpenses(None, None, None, None, None, None, None, Some(_)) => NoValidationErrors
+          case _                                                                              => List(RuleBothExpensesSuppliedError.copy(paths = Some(Seq(path))))
+        }
+    }
+  }
+
+  def validate(expenses: UkFhlPieExpenses, path: String): List[MtdError] = {
+    expenses.consolidatedExpenses match {
+      case None => NoValidationErrors
+      case Some(_) =>
+        expenses match {
+          case UkFhlPropertyExpenses(None, None, None, None, None, None, Some(_), None, None) => NoValidationErrors
           case _                                                                              => List(RuleBothExpensesSuppliedError.copy(paths = Some(Seq(path))))
         }
     }

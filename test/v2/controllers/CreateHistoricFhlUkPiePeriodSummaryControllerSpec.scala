@@ -21,7 +21,7 @@ import uk.gov.hmrc.http.HeaderCarrier
 import v2.mocks.MockIdGenerator
 import v2.mocks.hateoas.MockHateoasFactory
 import v2.mocks.requestParsers.MockCreateForeignPropertyPeriodSummaryRequestParser
-import v2.mocks.services.{MockCreateForeignPropertyPeriodSummaryService, MockEnrolmentsAuthService, MockMtdIdLookupService}
+import v2.mocks.services.{MockCreateAmendHistoricFhlUkPropertyAnnualSubmissionService, MockCreateForeignPropertyPeriodSummaryService, MockEnrolmentsAuthService, MockMtdIdLookupService}
 import v2.models.request.createHistoricFhlUkPiePeriodSummary.CreateHistoricFhlUkPiePeriodSummaryRequestBody
 
 import scala.concurrent.Future
@@ -29,7 +29,7 @@ import scala.concurrent.Future
 class CreateHistoricFhlUkPiePeriodSummaryControllerSpec extends ControllerBaseSpec
     with MockEnrolmentsAuthService
     with MockMtdIdLookupService
-    with MockCreateForeignPropertyPeriodSummaryService //TODO: mock service
+    with MockCreateAmendHistoricFhlUkPropertyAnnualSubmissionService
     with MockCreateForeignPropertyPeriodSummaryRequestParser //TODO: mock Parser
     with MockHateoasFactory
     with MockIdGenerator {
@@ -41,7 +41,7 @@ class CreateHistoricFhlUkPiePeriodSummaryControllerSpec extends ControllerBaseSp
     val controller = new CreateHistoricFhlUkPiePeriodSummaryController(
       authService = mockEnrolmentsAuthService,
       lookupService = mockMtdIdLookupService,
-      service = mockCreateForeignPropertyService, //TODO: update service
+      service = mockCreateAmendHistoricService,
       parser = mockCreateForeignPropertyRequestParser, //TODO: update parser
       hateoasFactory = mockHateoasFactory,
       cc = cc,

@@ -17,6 +17,7 @@
 package v2.controllers
 
 import cats.data.EitherT
+import cats.implicits.catsSyntaxEitherId
 import config.AppConfig
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.{Action, ControllerComponents}
@@ -28,8 +29,9 @@ import v2.controllers.requestParsers.RequestParser
 import v2.hateoas.HateoasFactory
 import v2.models.errors._
 import v2.models.request.createHistoricFhlUkPiePeriodSummary.{CreateHistoricFhlUkPiePeriodSummaryRawData, CreateHistoricFhlUkPiePeriodSummaryRequest, CreateHistoricFhlUkPiePeriodSummaryRequestBody}
+import v2.models.response.amendForeignPropertyAnnualSubmission.AmendForeignPropertyAnnualSubmissionResponse.LinksFactory
 import v2.models.response.createHistoricFhlUkPiePeriodSummary.{CreateHistoricFhlUkPiePeriodSummaryHateoasData, CreateHistoricFhlUkPiePeriodSummaryResponse}
-import v2.services.{CreateUkPropertyPeriodSummaryService, EnrolmentsAuthService, MtdIdLookupService}
+import v2.services.{CreateUkPropertyPeriodSummaryService, EnrolmentsAuthService, MtdIdLookupService, ServiceOutcome}
 import v2.support.DownstreamResponseMappingSupport
 
 import javax.inject.{Inject, Singleton}
@@ -39,17 +41,19 @@ import scala.concurrent.{ExecutionContext, Future}
 class CreateHistoricFhlUkPiePeriodSummaryController @Inject()(val authService: EnrolmentsAuthService,
                                                               val lookupService: MtdIdLookupService,
                                                               parser: CreateHistoricFhlUkPiePeriodSummaryParser,
-                                                              service: CreateUkPropertyPeriodSummaryService, //TODO: Update service
+                                                              service: CreateHistoricFhlUkPiePeriodSummaryService, //TODO: Update service
                                                               hateoasFactory: HateoasFactory,
                                                               cc: ControllerComponents,
                                                               idGenerator: IdGenerator)(implicit ec: ExecutionContext)
-  extends AuthorisedController(cc)
+    extends AuthorisedController(cc)
     with BaseController
     with Logging {
 
   implicit val endpointLogContext: EndpointLogContext =
-    EndpointLogContext(controllerName = "CreateHistoricFhlUkPiePeriodSummaryController",
-      endpointName = "Create a Historic UK Furnished Holiday Letting Property Income & Expenses Period Summary")
+    EndpointLogContext(
+      controllerName = "CreateHistoricFhlUkPiePeriodSummaryController",
+      endpointName = "Create a Historic UK Furnished Holiday Letting Property Income & Expenses Period Summary"
+    )
 
   def handleRequest(nino: String): Action[JsValue] =
     authorisedAction(nino).async(parse.json) { implicit request =>
@@ -61,25 +65,27 @@ class CreateHistoricFhlUkPiePeriodSummaryController @Inject()(val authService: E
       val rawData = CreateHistoricFhlUkPiePeriodSummaryRawData(nino, request.body)
       val result =
         for {
-          parsedRequest <- EitherT.fromEither[Future](parser.parseRequest(rawData))
-          serviceResponse <- EitherT(service.createUkProperty(parsedRequest))
+          parsedRequest   <- EitherT.fromEither[Future](parser.parseRequest(rawData))
+          serviceResponse <- EitherT(service.createPeriodSummary(parsedRequest))
           vendorResponse <- EitherT.fromEither[Future](
             hateoasFactory
-              .wrap((serviceResponse.responseData,
-                CreateHistoricFhlUkPiePeriodSummaryHateoasData(nino,
-                  s"${parsedRequest.body.toDate}_${parsedRequest.body.toDate}", serviceResponse.responseData.submissionId) //TODO: transactionreference
-              )).asRight[ErrorWrapper]
+              .wrap(
+                (serviceResponse,
+                 CreateHistoricFhlUkPiePeriodSummaryHateoasData(nino,
+                                                                s"${parsedRequest.body.toDate}_${parsedRequest.body.toDate}",
+                                                                serviceResponse.responseData.transactionReference
+                ))
+              .asRight[ErrorWrapper]
           )
         } yield {
-          logger.info(
-            s"Success response received with CorrelationId: ${serviceResponse.correlationId}")
+          logger.info(s"Success response received with CorrelationId: ${serviceResponse.correlationId}")
           val response = Json.toJson((vendorResponse))
           Created(Json.toJson(vendorResponse))
             .withApiHeaders(serviceResponse.correlationId)
         }
       result.leftMap { errorWrapper =>
         val resCorrelationId = errorWrapper.correlationId
-        val result = errorResult(errorWrapper).withApiHeaders(resCorrelationId)
+        val result           = errorResult(errorWrapper).withApiHeaders(resCorrelationId)
 
         logger.warn(
           s"[${endpointLogContext.controllerName}][${endpointLogContext.endpointName}] - " +
@@ -90,24 +96,24 @@ class CreateHistoricFhlUkPiePeriodSummaryController @Inject()(val authService: E
 
   private def errorResult(errorWrapper: ErrorWrapper) =
     errorWrapper.error match {
-      case (BadRequestError | NinoFormatError | RuleBothExpensesSuppliedError | ValueFormatError |
-        RuleIncorrectOrEmptyBodyError | FromDateFormatError |ToDateFormatError |
-        RuleToDateBeforeFromDateError | RuleDuplicateSubmissionError | RuleMisalignedPeriodError |
-        RuleOverlappingPeriodError | RuleNotContiguousPeriodError | RuleTaxYearNotSupportedError)
-      => BadRequest(Json.toJson(errorWrapper))
+      case (BadRequestError | NinoFormatError | RuleBothExpensesSuppliedError | ValueFormatError | RuleIncorrectOrEmptyBodyError |
+          FromDateFormatError | ToDateFormatError | RuleToDateBeforeFromDateError | RuleDuplicateSubmissionError | RuleMisalignedPeriodError |
+          RuleOverlappingPeriodError | RuleNotContiguousPeriodError | RuleTaxYearNotSupportedError) =>
+        BadRequest(Json.toJson(errorWrapper))
       case UnauthorisedError => Unauthorized(Json.toJson(errorWrapper))
-      case NotFoundError   => NotFound(Json.toJson(errorWrapper))
-      case InternalError => InternalServerError(Json.toJson(errorWrapper))
-      case _ => unhandledError(errorWrapper)
+      case NotFoundError     => NotFound(Json.toJson(errorWrapper))
+      case InternalError     => InternalServerError(Json.toJson(errorWrapper))
+      case _                 => unhandledError(errorWrapper)
     }
 }
+
 //TODO: delete and replace placeholder code (below)
-class CreateHistoricFhlUkPiePeriodSummaryParser  @Inject()()
-  extends RequestParser[CreateHistoricFhlUkPiePeriodSummaryRawData, CreateHistoricFhlUkPiePeriodSummaryRequest] {
+class CreateHistoricFhlUkPiePeriodSummaryParser @Inject()()
+    extends RequestParser[CreateHistoricFhlUkPiePeriodSummaryRawData, CreateHistoricFhlUkPiePeriodSummaryRequest] {
 
   override protected def requestFor(data: CreateHistoricFhlUkPiePeriodSummaryRawData): CreateHistoricFhlUkPiePeriodSummaryRequest = ???
 
-  def parseRequest(data: CreateHistoricFhlUkPiePeriodSummaryRawData):  CreateHistoricFhlUkPiePeriodSummaryRequest = ???
+  def parseRequest(data: CreateHistoricFhlUkPiePeriodSummaryRawData): CreateHistoricFhlUkPiePeriodSummaryRequest = ???
 
   override val validator: Validator[CreateHistoricFhlUkPiePeriodSummaryRawData] = ???
 }
@@ -119,18 +125,15 @@ class CreateHistoricFhlUkPiePeriodSummaryValidator @Inject()(appConfig: AppConfi
 
 @Singleton
 class CreateHistoricFhlUkPiePeriodSummaryService @Inject()(connector: CreateHistoricFhlUkPiePeriodSummaryConnector)
-  extends DownstreamResponseMappingSupport
+    extends DownstreamResponseMappingSupport
     with Logging {
 
-  def createPeriodSummary(request: CreateHistoricFhlUkPiePeriodSummaryRequest)(): CreateHistoricFhlUkPiePeriodSummaryResponse = ???
+  def createPeriodSummary(request: CreateHistoricFhlUkPiePeriodSummaryRequest)(): Future[ServiceOutcome[CreateHistoricFhlUkPiePeriodSummaryResponse]] = ???
 
 }
-
 
 @Singleton
-class CreateHistoricFhlUkPiePeriodSummaryConnector @Inject()(val http: HttpClient, val appConfig: AppConfig)
-  extends BaseDownstreamConnector {
+class CreateHistoricFhlUkPiePeriodSummaryConnector @Inject()
+(val http: HttpClient, val appConfig: AppConfig) extends BaseDownstreamConnector {
+
 }
-
-
-

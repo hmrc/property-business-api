@@ -16,8 +16,8 @@
 
 package v2.models.request.common.ukFhlPieProperty
 
-import play.api.libs.functional.syntax.{toFunctionalBuilderOps, unlift}
-import play.api.libs.json.{JsPath, Json, Reads, Writes}
+import play.api.libs.functional.syntax.{ toFunctionalBuilderOps, unlift }
+import play.api.libs.json.{ JsPath, Json, Reads, Writes }
 import v2.models.request.common.ukPropertyRentARoom.UkPropertyExpensesRentARoom
 
 case class UkFhlPieExpenses(premisesRunningCosts: Option[BigDecimal],
@@ -31,9 +31,9 @@ case class UkFhlPieExpenses(premisesRunningCosts: Option[BigDecimal],
                             rentARoom: Option[UkPropertyExpensesRentARoom])
 
 object UkFhlPieExpenses {
-  implicit val reads: Reads[UkFhlPieExpenses] = Json.reads[UkFhlPieExpenses]
+  implicit val mtdReads: Reads[UkFhlPieExpenses] = Json.reads[UkFhlPieExpenses]
 
-  implicit val writes: Writes[UkFhlPieExpenses] = (
+  implicit val downstreamWrites: Writes[UkFhlPieExpenses] = (
     (JsPath \ "premisesRunningCosts").writeNullable[BigDecimal] and
       (JsPath \ "repairsAndMaintenance").writeNullable[BigDecimal] and
       (JsPath \ "financialCosts").writeNullable[BigDecimal] and

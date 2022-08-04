@@ -82,31 +82,43 @@ class CreateHistoricNonFHlUkPiePeriodSummaryControllerISpec extends V2Integratio
   )
 
   val invalidToDateRequestJson: JsValue = Json.parse(
-    """
-      |{
-      |  "fromDate": "2018-04-06",
-      |  "toDate": "20190406",
-      |  "ukFhlProperty":{
-      |    "expenses": {
-      |       "consolidatedExpenses": 988.18
-      |    }
-      |  }
-      |}
-    """.stripMargin
+    """{
+      |    "fromDate": "2019-03-11",
+      |    "toDate": "20200423",
+      |    "income": {
+      |        "periodAmount": 123.45,
+      |        "premiumsOfLeaseGrant": 2355.45,
+      |        "reversePremiums": 454.56,
+      |        "otherIncome": 567.89,
+      |        "taxDeducted": 234.53,
+      |        "rentARoom": {
+      |           "rentsReceived": 567.56
+      |         }
+      |        },
+      |       "expenses":{
+      |          "consolidatedExpenses": 235.78
+      |     }
+      |}""".stripMargin
   )
 
   val invalidFromDateRequestJson: JsValue = Json.parse(
-    """
-      |{
-      |  "fromDate": "20180406",
-      |  "toDate": "2019-04-06",
-      |  "ukFhlProperty":{
-      |    "expenses": {
-      |       "consolidatedExpenses": 988.18
-      |    }
-      |  }
-      |}
-    """.stripMargin
+    """{
+      |    "fromDate": "20190311",
+      |    "toDate": "2020-04-23",
+      |    "income": {
+      |        "periodAmount": 123.45,
+      |        "premiumsOfLeaseGrant": 2355.45,
+      |        "reversePremiums": 454.56,
+      |        "otherIncome": 567.89,
+      |        "taxDeducted": 234.53,
+      |        "rentARoom": {
+      |           "rentsReceived": 567.56
+      |         }
+      |        },
+      |       "expenses":{
+      |          "consolidatedExpenses": 235.78
+      |     }
+      |}""".stripMargin
   )
 
   val invalidValueRequestJson:  JsValue = Json.parse(
@@ -205,6 +217,44 @@ class CreateHistoricNonFHlUkPiePeriodSummaryControllerISpec extends V2Integratio
       |""".stripMargin
   )
 
+  val missingFromDateRequestJson: JsValue = Json.parse(
+    """{
+      |    "toDate": "2020-04-23",
+      |    "income": {
+      |        "periodAmount": 123.45,
+      |        "premiumsOfLeaseGrant": 2355.45,
+      |        "reversePremiums": 454.56,
+      |        "otherIncome": 567.89,
+      |        "taxDeducted": 234.53,
+      |        "rentARoom": {
+      |           "rentsReceived": 567.56
+      |         }
+      |        },
+      |       "expenses":{
+      |          "consolidatedExpenses": 235.78
+      |     }
+      |}""".stripMargin
+  )
+
+  val missingToDateRequestJson: JsValue = Json.parse(
+    """{
+      |    "fromDate": "2019-03-11",
+      |    "income": {
+      |        "periodAmount": 123.45,
+      |        "premiumsOfLeaseGrant": 2355.45,
+      |        "reversePremiums": 454.56,
+      |        "otherIncome": 567.89,
+      |        "taxDeducted": 234.53,
+      |        "rentARoom": {
+      |           "rentsReceived": 567.56
+      |         }
+      |        },
+      |       "expenses":{
+      |          "consolidatedExpenses": 235.78
+      |     }
+      |}""".stripMargin
+  )
+
   val allInvalidValueRequestError: MtdError = ValueFormatError.copy(
     paths = Some(List(
       "/fromDate",
@@ -225,14 +275,6 @@ class CreateHistoricNonFHlUkPiePeriodSummaryControllerISpec extends V2Integratio
       "/expenses/residentialFinancialCostsCarriedForward",
       "/expenses/residentialFinancialCost",
       "/expenses/rentARoom/amountClaimed"
-    ))
-  )
-
-  //This one will need some adjusting
-  val RuleBothExpensesSuppliedRequestError: MtdError = RuleBothExpensesSuppliedError.copy(
-    paths = Some(List(
-      "/expenses",
-      "/consolidatedExpenses"
     ))
   )
 
@@ -295,18 +337,18 @@ class CreateHistoricNonFHlUkPiePeriodSummaryControllerISpec extends V2Integratio
 
   "calling the create endpoint" should {
 
-    "return a 201 status" when {
+    "return a 202 status" when {
 
       "any valid unconsolidated request is made" in new Test {
         override def setupStubs(): StubMapping = {
           AuditStub.audit()
           AuthStub.authorised()
           MtdIdLookupStub.ninoFound(nino)
-          DownstreamStub.onSuccess(DownstreamStub.POST, ifsUri, ifsQueryParams, Status.OK, ifsResponse)
+          DownstreamStub.onSuccess(DownstreamStub.POST, ifsUri, Status.OK, ifsResponse)
         }
 
         val response: WSResponse = await(request().post(requestBodyJson))
-        response.status shouldBe Status.CREATED
+        response.status shouldBe Status.ACCEPTED
         response.json shouldBe responseBody
         response.header("Content-Type") shouldBe Some("application/json")
       }
@@ -316,19 +358,19 @@ class CreateHistoricNonFHlUkPiePeriodSummaryControllerISpec extends V2Integratio
           AuditStub.audit()
           AuthStub.authorised()
           MtdIdLookupStub.ninoFound(nino)
-          DownstreamStub.onSuccess(DownstreamStub.POST, ifsUri, ifsQueryParams, Status.OK, ifsResponse)
+          DownstreamStub.onSuccess(DownstreamStub.POST, ifsUri, Status.OK, ifsResponse)
 
         }
 
         val response: WSResponse = await(request().post(requestBodyJsonConsolidatedExpense))
-        response.status shouldBe Status.CREATED
+        response.status shouldBe Status.ACCEPTED
         response.json shouldBe responseBody
         response.header("Content-Type") shouldBe Some("application/json")
       }
     }
 
     "return bad request error" when {
-      "badly formed json body" in new Test {
+      "badly formed json body is submitted" in new Test {
         private val json =
           s"""
              |{
@@ -349,13 +391,10 @@ class CreateHistoricNonFHlUkPiePeriodSummaryControllerISpec extends V2Integratio
 
     "return error according to spec" when {
       "validation error" when {
-        def validationErrorTest(requestNino: String, requestBusinessId: String,
-                                requestTaxYear: String, requestBody: JsValue, expectedStatus: Int, expectedBody: MtdError): Unit = {
+        def validationErrorTest(requestNino: String, requestBody: JsValue, expectedStatus: Int, expectedBody: MtdError): Unit = {
           s"validation fails with ${expectedBody.code} error" in new Test {
 
             override val nino: String = requestNino
-            override val businessId: String = requestBusinessId
-            override val taxYear: String = requestTaxYear
 
             override def setupStubs(): StubMapping = {
               AuditStub.audit()
@@ -370,22 +409,15 @@ class CreateHistoricNonFHlUkPiePeriodSummaryControllerISpec extends V2Integratio
         }
 
         val input = Seq(
-          ("AA1123A", "XAIS12345678910", "2022-23", requestBodyJson, Status.BAD_REQUEST, NinoFormatError),
-          ("AA123456A", "XAIS12345678910", "20223", requestBodyJson, Status.BAD_REQUEST, TaxYearFormatError),
-          ("AA123456A", "XAIS12345678910", "2021-23", requestBodyJson, Status.BAD_REQUEST, RuleTaxYearRangeInvalidError),
-          ("AA123456A", "XAIS12345678910", "2021-22", requestBodyJson, Status.BAD_REQUEST, RuleTaxYearNotSupportedError),
-          ("AA123456A", "XA***IS1", "2022-23", requestBodyJson, Status.BAD_REQUEST, BusinessIdFormatError),
-          ("AA123456A", "XAIS12345678910", "2022-23", invalidToDateRequestJson, Status.BAD_REQUEST, ToDateFormatError),
-          ("AA123456A", "XAIS12345678910", "2022-23", invalidFromDateRequestJson, Status.BAD_REQUEST, FromDateFormatError),
-          ("AA123456A", "XAIS12345678910", "2022-23", Json.parse(s"""{ "fromDate": "2020-04-06",
-                                                                    |  "toDate": "2019-04-06",
-                                                                    |  "ukFhlProperty": {}
-                                                                    |  }""".stripMargin), BAD_REQUEST,
-            RuleIncorrectOrEmptyBodyError.copy(paths = Some(Seq("/ukFhlProperty")))),
-          ("AA123456A", "XAIS12345678910", "2022-23", invalidValueRequestJson, Status.BAD_REQUEST, allInvalidValueRequestError),
-          ("AA123456A", "XAIS12345678910", "2022-23", bothExpensesSuppliedRequestJson, Status.BAD_REQUEST, RuleBothExpensesSuppliedRequestError),
-          ("AA123456A", "XAIS12345678910", "2022-23", toDateBeforeFromDateRequestJson, Status.BAD_REQUEST, RuleToDateBeforeFromDateError)
-        )
+          ("AA1123A", requestBodyJson, Status.BAD_REQUEST, NinoFormatError),
+          ("AA123456A", invalidToDateRequestJson, Status.BAD_REQUEST, ToDateFormatError),
+          ("AA123456A", invalidFromDateRequestJson, Status.BAD_REQUEST, FromDateFormatError),
+          ("AA123456A", bothExpensesSuppliedRequestJson, Status.BAD_REQUEST, RuleBothExpensesSuppliedError),
+          ("AA123456A", missingFromDateRequestJson, Status.BAD_REQUEST, MissingFromDateError),
+          ("AA123456A", missingToDateRequestJson, Status.BAD_REQUEST, MissingToDateError),
+          ("AA123456A", toDateBeforeFromDateRequestJson, Status.BAD_REQUEST, RuleToDateBeforeFromDateError),
+          ("AA123456A", invalidValueRequestJson, Status.BAD_REQUEST, allInvalidValueRequestError)
+        ) //Add test for rentARoom.amountClaimed and rentARoom.rentsReceived being missing? Tech spec says they're manadatory, business spec says they're optional.
         input.foreach(args => (validationErrorTest _).tupled(args))
       }
       "ifs service error" when {
@@ -396,7 +428,7 @@ class CreateHistoricNonFHlUkPiePeriodSummaryControllerISpec extends V2Integratio
               AuditStub.audit()
               AuthStub.authorised()
               MtdIdLookupStub.ninoFound(nino)
-              DownstreamStub.onError(DownstreamStub.POST, ifsUri, ifsQueryParams, ifsStatus, errorBody(ifsCode))
+              DownstreamStub.onError(DownstreamStub.POST, ifsUri, ifsStatus, errorBody(ifsCode))
             }
 
             val response: WSResponse = await(request().post(requestBodyJson))
@@ -406,22 +438,20 @@ class CreateHistoricNonFHlUkPiePeriodSummaryControllerISpec extends V2Integratio
         }
 
         val input = Seq(
-          (Status.SERVICE_UNAVAILABLE, "SERVICE_UNAVAILABLE", Status.INTERNAL_SERVER_ERROR, InternalError),
-          (Status.INTERNAL_SERVER_ERROR, "SERVER_ERROR", Status.INTERNAL_SERVER_ERROR, InternalError),
-          (Status.NOT_FOUND, "INCOME_SOURCE_NOT_FOUND", Status.NOT_FOUND, NotFoundError),
-          (Status.BAD_REQUEST, "INVALID_TAXABLE_ENTITY_ID", Status.BAD_REQUEST, NinoFormatError),
-          (Status.BAD_REQUEST, "INVALID_TAX_YEAR", Status.BAD_REQUEST, TaxYearFormatError),
-          (Status.BAD_REQUEST, "INVALID_INCOMESOURCEID", Status.BAD_REQUEST, BusinessIdFormatError),
+          (Status.BAD_REQUEST, "INVALID_NINO", Status.BAD_REQUEST, NinoFormatError),
+          (Status.BAD_REQUEST, "INVALID_TYPE", Status.BAD_REQUEST, InternalError),
           (Status.BAD_REQUEST, "INVALID_PAYLOAD", Status.INTERNAL_SERVER_ERROR, InternalError),
           (Status.BAD_REQUEST, "INVALID_CORRELATIONID", Status.INTERNAL_SERVER_ERROR, InternalError),
-          (Status.UNPROCESSABLE_ENTITY, "MISSING_EXPENSES", Status.INTERNAL_SERVER_ERROR, InternalError),
+          (Status.NOT_FOUND, "INCOME_SOURCE_NOT_FOUND", Status.NOT_FOUND, NotFoundError),
           (Status.CONFLICT, "DUPLICATE_SUBMISSION", Status.BAD_REQUEST, RuleDuplicateSubmissionError),
-          (Status.UNPROCESSABLE_ENTITY, "OVERLAPS_IN_PERIOD", Status.BAD_REQUEST, RuleOverlappingPeriodError),
-          (Status.UNPROCESSABLE_ENTITY, "INCOMPATIBLE_PAYLOAD", Status.BAD_REQUEST, RuleTypeOfBusinessIncorrectError),
-          (Status.UNPROCESSABLE_ENTITY, "TAX_YEAR_NOT_SUPPORTED", Status.BAD_REQUEST, RuleTaxYearNotSupportedError),
           (Status.UNPROCESSABLE_ENTITY, "NOT_ALIGN_PERIOD", Status.BAD_REQUEST, RuleMisalignedPeriodError),
-          (Status.UNPROCESSABLE_ENTITY, "GAPS_IN_PERIOD", Status.BAD_REQUEST, RuleNotContiguousPeriodError),
-          (Status.UNPROCESSABLE_ENTITY, "INVALID_DATE_RANGE", Status.BAD_REQUEST, RuleToDateBeforeFromDateError)
+          (Status.UNPROCESSABLE_ENTITY, "OVERLAPS_IN_PERIOD", Status.BAD_REQUEST, RuleOverlappingPeriodError),
+          (Status.UNPROCESSABLE_ENTITY, "NOT_CONTIGUOUS_PERIOD", Status.BAD_REQUEST, RuleNotContiguousPeriodError),
+          (Status.UNPROCESSABLE_ENTITY, "INVALID_PERIOD", Status.BAD_REQUEST, RuleToDateBeforeFromDateError),
+          (Status.UNPROCESSABLE_ENTITY, "BOTH_EXPENSES_SUPPLIED", Status.BAD_REQUEST, RuleBothExpensesSuppliedError),
+          (Status.UNPROCESSABLE_ENTITY, "TAX_YEAR_NOT_SUPPORTED", Status.BAD_REQUEST, RuleTaxYearNotSupportedError),
+          (Status.INTERNAL_SERVER_ERROR, "SERVER_ERROR", Status.INTERNAL_SERVER_ERROR, InternalError),
+          (Status.SERVICE_UNAVAILABLE, "SERVICE_UNAVAILABLE", Status.INTERNAL_SERVER_ERROR, InternalError)
         )
         input.foreach(args => (serviceErrorTest _).tupled(args))
       }

@@ -25,7 +25,6 @@ import v2.controllers.requestParsers.CreateHistoricNonFhlUkPropertyPeriodSummary
 import v2.hateoas.HateoasFactory
 import v2.models.errors._
 import v2.models.request.createAmendHistoricFhlUkPropertyAnnualSubmission.CreateAmendHistoricFhlUkPropertyAnnualSubmissionRawData
-import v2.models.response.createAmendHistoricFhlUkPropertyAnnualSubmission.CreateAmendHistoricFhlUkPropertyAnnualSubmissionHateoasData
 import v2.services.{EnrolmentsAuthService, MtdIdLookupService}
 
 import javax.inject.{Inject, Singleton}

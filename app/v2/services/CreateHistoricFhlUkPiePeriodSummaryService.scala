@@ -19,7 +19,7 @@ package v2.services
 import cats.implicits._
 import cats.data.EitherT
 
-import javax.inject.{Inject, Singleton}
+import javax.inject.{ Inject, Singleton }
 import uk.gov.hmrc.http.HeaderCarrier
 import utils.Logging
 import v2.controllers.EndpointLogContext
@@ -29,7 +29,7 @@ import v2.models.request.createHistoricFhlUkPiePeriodSummary.CreateHistoricFhlUk
 import v2.models.response.createHistoricFhlUkPiePeriodSummary.CreateHistoricFhlUkPiePeriodSummaryResponse
 import v2.support.DownstreamResponseMappingSupport
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.{ ExecutionContext, Future }
 
 @Singleton
 class CreateHistoricFhlUkPiePeriodSummaryService @Inject()(connector: CreateHistoricFhlUkPiePeriodSummaryConnector)
@@ -62,9 +62,9 @@ class CreateHistoricFhlUkPiePeriodSummaryService @Inject()(connector: CreateHist
       "OVERLAPS_IN_PERIOD"      -> RuleOverlappingPeriodError,
       "NOT_CONTIGUOUS_PERIOD"   -> RuleNotContiguousPeriodError,
       "INVALID_PERIOD"          -> RuleToDateBeforeFromDateError,
+      "BOTH_EXPENSES_SUPPLIED"  -> RuleBothExpensesSuppliedError,
       "TAX_YEAR_NOT_SUPPORTED"  -> RuleTaxYearNotSupportedError,
       "SERVER_ERROR"            -> InternalError,
       "SERVICE_UNAVAILABLE"     -> InternalError
     )
-
 }

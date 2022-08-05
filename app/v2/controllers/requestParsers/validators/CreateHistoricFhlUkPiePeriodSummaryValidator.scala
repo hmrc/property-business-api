@@ -22,7 +22,10 @@ import v2.controllers.requestParsers.validators.validations.JsonFormatValidation
 import v2.controllers.requestParsers.validators.validations.NumberValidation.validateOptional
 import v2.controllers.requestParsers.validators.validations._
 import v2.models.errors.MtdError
-import v2.models.request.createHistoricFhlUkPiePeriodSummary.{CreateHistoricFhlUkPiePeriodSummaryRawData, CreateHistoricFhlUkPiePeriodSummaryRequestBody}
+import v2.models.request.createHistoricFhlUkPiePeriodSummary.{
+  CreateHistoricFhlUkPiePeriodSummaryRawData,
+  CreateHistoricFhlUkPiePeriodSummaryRequestBody
+}
 
 import javax.inject.Singleton
 
@@ -57,7 +60,7 @@ class CreateHistoricFhlUkPiePeriodSummaryValidator @Inject()(appConfig: AppConfi
     val incomeFormatErrors = body.income
       .map { income =>
         import income._
-          validateOptional(periodAmount, "/income/periodAmount") ++
+        validateOptional(periodAmount, "/income/periodAmount") ++
           validateOptional(taxDeducted, "/income/taxDeducted") ++
           validateOptional(ukRentARoom.flatMap(_.rentsReceived), "/income/rentARoom/rentsReceived")
       }
@@ -66,14 +69,14 @@ class CreateHistoricFhlUkPiePeriodSummaryValidator @Inject()(appConfig: AppConfi
     val expensesFormatErrors = body.expenses
       .map { expenses =>
         import expenses._
-          validateOptional(premisesRunningCosts, "/expenses/premisesRunningCosts") ++
+        validateOptional(premisesRunningCosts, "/expenses/premisesRunningCosts") ++
           validateOptional(repairsAndMaintenance, "/expenses/repairsAndMaintenance") ++
           validateOptional(financialCosts, "/expenses/financialCosts") ++
           validateOptional(professionalFees, "/expenses/professionalFees") ++
           validateOptional(costOfServices, "/expenses/costOfServices") ++
           validateOptional(other, "/expenses/other") ++
           validateOptional(consolidatedExpenses, "/expenses/consolidatedExpenses") ++
-          validateOptional(travelCosts, "/expenses/travelCosts")
+          validateOptional(travelCosts, "/expenses/travelCosts") ++
           validateOptional(rentARoom.flatMap(_.amountClaimed), "/expenses/rentARoom/amountClaimed")
       }
       .getOrElse(Nil)

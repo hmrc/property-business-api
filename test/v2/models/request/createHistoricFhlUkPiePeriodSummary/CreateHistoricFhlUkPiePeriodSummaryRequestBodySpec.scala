@@ -16,29 +16,28 @@
 
 package v2.models.request.createHistoricFhlUkPiePeriodSummary
 
-import play.api.libs.json.{JsValue, Json}
+import play.api.libs.json.{ JsValue, Json }
 import support.UnitSpec
-import v2.models.request.common.ukFhlPieProperty.{UkFhlPieExpenses, UkFhlPieIncome}
-import v2.models.request.common.ukPropertyRentARoom.{UkPropertyExpensesRentARoom, UkPropertyIncomeRentARoom}
+import v2.models.request.common.ukFhlPieProperty.{ UkFhlPieExpenses, UkFhlPieIncome }
+import v2.models.request.common.ukPropertyRentARoom.{ UkPropertyExpensesRentARoom, UkPropertyIncomeRentARoom }
 
 class CreateHistoricFhlUkPiePeriodSummaryRequestBodySpec extends UnitSpec {
 
-  val income:UkFhlPieIncome =     UkFhlPieIncome(
-      Some(100.25),
-      Some(100.15),
-      Some(UkPropertyIncomeRentARoom(Some(97.50)))
+  val income: UkFhlPieIncome = UkFhlPieIncome(
+    Some(100.25),
+    Some(100.15),
+    Some(UkPropertyIncomeRentARoom(Some(97.50)))
   )
 
-  val expenses:UkFhlPieExpenses =  UkFhlPieExpenses(
-      Some(123.12),
-      Some(17.90),
-      Some(38.19),
-      Some(13.42),
-      Some(29.42),
-      Some(751.00),
-      Some(1259.18),
-      Some(12.00),
-      Some(UkPropertyExpensesRentARoom(Some(12.12))))
+  val expenses: UkFhlPieExpenses = UkFhlPieExpenses(Some(123.12),
+                                                    Some(17.90),
+                                                    Some(38.19),
+                                                    Some(13.42),
+                                                    Some(29.42),
+                                                    Some(751.00),
+                                                    Some(1259.18),
+                                                    Some(12.00),
+                                                    Some(UkPropertyExpensesRentARoom(Some(12.12))))
 
   val requestBody: CreateHistoricFhlUkPiePeriodSummaryRequestBody =
     CreateHistoricFhlUkPiePeriodSummaryRequestBody(
@@ -48,8 +47,8 @@ class CreateHistoricFhlUkPiePeriodSummaryRequestBodySpec extends UnitSpec {
       Some(expenses)
     )
 
-    val mtdJson: JsValue = Json.parse(
-      """
+  val mtdJson: JsValue = Json.parse(
+    """
         |{
         |"fromDate" : "2017-04-06",
         | "toDate":    "2017-07-05",
@@ -75,10 +74,10 @@ class CreateHistoricFhlUkPiePeriodSummaryRequestBodySpec extends UnitSpec {
         | }
         | }
         |""".stripMargin
-    )
+  )
 
-    val desJson: JsValue = Json.parse(
-      """
+  val desJson: JsValue = Json.parse(
+    """
         |{
         |"from" : "2017-04-06",
         | "to":    "2017-07-05",
@@ -109,21 +108,21 @@ class CreateHistoricFhlUkPiePeriodSummaryRequestBodySpec extends UnitSpec {
         |}
         |}
         |""".stripMargin
-    )
+  )
 
-    "reads" when {
-      "passed a valid JSON" should {
-        "return a valid model" in {
-          mtdJson.as[CreateHistoricFhlUkPiePeriodSummaryRequestBody] shouldBe requestBody
-        }
+  "reads" when {
+    "passed a valid JSON" should {
+      "return a valid model" in {
+        mtdJson.as[CreateHistoricFhlUkPiePeriodSummaryRequestBody] shouldBe requestBody
       }
     }
+  }
 
-    "writes" when {
-      "passed valid model" should {
-        "return valid JSON" in {
-          Json.toJson(requestBody) shouldBe desJson
-        }
+  "writes" when {
+    "passed valid model" should {
+      "return valid JSON" in {
+        Json.toJson(requestBody) shouldBe desJson
       }
     }
+  }
 }

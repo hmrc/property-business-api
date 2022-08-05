@@ -18,53 +18,52 @@ package v2.controllers.requestParsers
 
 import play.api.libs.json.{ JsValue, Json }
 import support.UnitSpec
+import v2.mocks.validators.MockCreateHistoricFhlUkPiePeriodSummaryValidator
 import v2.models.domain.Nino
 import v2.models.errors.{ BadRequestError, ErrorWrapper, NinoFormatError, RuleBothExpensesSuppliedError }
+import v2.models.request.common.ukFhlPieProperty.{ UkFhlPieExpenses, UkFhlPieIncome }
 import v2.models.request.common.ukPropertyRentARoom.{ UkPropertyExpensesRentARoom, UkPropertyIncomeRentARoom }
 import v2.models.request.createHistoricFhlUkPiePeriodSummary.{
   CreateHistoricFhlUkPiePeriodSummaryRawData,
   CreateHistoricFhlUkPiePeriodSummaryRequest,
   CreateHistoricFhlUkPiePeriodSummaryRequestBody
 }
-import v2.models.request.createHistoricNonFhlUkPropertyPeriodSummary.{ UkNonFhlPropertyExpenses, UkNonFhlPropertyIncome }
 
 class CreateHistoricFhlUkPiePeriodSummaryParserSpec extends UnitSpec {
 
   val nino: String                   = "AA123456B"
   implicit val correlationId: String = "X-123"
 
-  val income: UkNonFhlPropertyIncome =
-    UkNonFhlPropertyIncome(Some(2355.45), Some(454.56), Some(123.45), Some(234.53), Some(567.89), Some(UkPropertyIncomeRentARoom(Some(567.56))))
+  val income: UkFhlPieIncome =
+    UkFhlPieIncome(Some(100.25), Some(100.25), Some(UkPropertyIncomeRentARoom(Some(100.25))))
 
-  val expenses: UkNonFhlPropertyExpenses = UkNonFhlPropertyExpenses(
-    Some(567.53),
-    Some(324.65),
-    Some(453.56),
-    Some(535.78),
-    Some(678.34),
-    Some(682.34),
-    Some(1000.45),
-    Some(645.56),
-    Some(672.34),
-    Some(UkPropertyExpensesRentARoom(Some(545.9))),
-    None
+  val expenses: UkFhlPieExpenses = UkFhlPieExpenses(
+    Some(100.25),
+    Some(100.25),
+    Some(100.25),
+    Some(100.25),
+    Some(100.25),
+    Some(100.25),
+    None,
+    Some(100.25),
+    Some(UkPropertyExpensesRentARoom(Some(100.25)))
   )
 
-  val consolidatedExpenses: UkNonFhlPropertyExpenses =
-    UkNonFhlPropertyExpenses(None, None, None, None, None, None, None, None, None, None, Some(235.78))
+  val consolidatedExpenses: UkFhlPieExpenses =
+    UkFhlPieExpenses(None, None, None, None, None, None, Some(100.25), None, None)
 
   val createHistoricFhlUkPiePeriodSummaryRequestBody: CreateHistoricFhlUkPiePeriodSummaryRequestBody =
     CreateHistoricFhlUkPiePeriodSummaryRequestBody(
-      "2019-03-11",
-      "2020-04-23",
+      "2017-04-06",
+      "2017-07-05",
       Some(income),
       Some(expenses)
     )
 
   val createHistoricFhlUkPiePeriodSummaryConsolidatedRequestBody: CreateHistoricFhlUkPiePeriodSummaryRequestBody =
     CreateHistoricFhlUkPiePeriodSummaryRequestBody(
-      "2019-03-11",
-      "2020-04-23",
+      "2017-04-06",
+      "2017-07-05",
       Some(income),
       Some(consolidatedExpenses)
     )
@@ -72,30 +71,25 @@ class CreateHistoricFhlUkPiePeriodSummaryParserSpec extends UnitSpec {
   private val requestBodyJson = Json.parse(
     """
       |{
-      | "fromDate": "2019-03-11",
-      | "toDate": "2020-04-23",
-      |   "income": {
-      |     "periodAmount": 123.45,
-      |     "premiumsOfLeaseGrant": 2355.45,
-      |     "reversePremiums": 454.56,
-      |     "otherIncome": 567.89,
-      |     "taxDeducted": 234.53,
-      |     "rentARoom": {
-      |       "rentsReceived": 567.56
-      |     }
-      |   },
-      |  "expenses": {
-      |    "premisesRunningCosts": 567.53,
-      |    "repairsAndMaintenance": 324.65,
-      |    "financialCosts": 453.56,
-      |    "professionalFees": 535.78,
-      |    "costOfServices": 678.34,
-      |    "other": 682.34,
-      |    "travelCosts": 645.56,
-      |    "residentialFinancialCostsCarriedForward": 672.34,
-      |    "residentialFinancialCost": 1000.45,
+      |  "fromDate": "2017-04-06",
+      |  "toDate": "2017-07-05",
+      |  "income": {
+      |    "periodAmount": 100.25,
+      |    "taxDeducted": 100.25,
       |    "rentARoom": {
-      |      "amountClaimed": 545.9
+      |      "rentsReceived": 100.25
+      |    }
+      |  },
+      |  "expenses": {
+      |    "premisesRunningCosts": 100.25,
+      |    "repairsAndMaintenance": 100.25,
+      |    "financialCosts": 100.25,
+      |    "professionalFees": 100.25,
+      |    "costOfServices": 100.25,
+      |    "travelCosts": 100.25,
+      |    "other": 100.25,
+      |    "rentARoom": {
+      |      "amountClaimed": 100.25
       |    }
       |  }
       |}
@@ -105,21 +99,18 @@ class CreateHistoricFhlUkPiePeriodSummaryParserSpec extends UnitSpec {
   val requestBodyJsonConsolidated: JsValue = Json.parse(
     """
       |{
-      |    "fromDate": "2019-03-11",
-      |    "toDate": "2020-04-23",
-      |    "income": {
-      |        "periodAmount": 123.45,
-      |        "premiumsOfLeaseGrant": 2355.45,
-      |        "reversePremiums": 454.56,
-      |        "otherIncome": 567.89,
-      |        "taxDeducted": 234.53,
-      |        "rentARoom": {
-      |           "rentsReceived": 567.56
-      |         }
-      |        },
-      |       "expenses":{
-      |          "consolidatedExpenses": 235.78
-      |     }
+      |  "fromDate": "2017-04-06",
+      |  "toDate": "2017-07-05",
+      |  "income": {
+      |    "periodAmount": 100.25,
+      |    "taxDeducted": 100.25,
+      |    "rentARoom": {
+      |      "rentsReceived": 100.25
+      |    }
+      |  },
+      |  "expenses": {
+      |    "consolidatedExpenses": 100.25
+      |  }
       |}
     """.stripMargin
   )
@@ -127,22 +118,19 @@ class CreateHistoricFhlUkPiePeriodSummaryParserSpec extends UnitSpec {
   val invalidRequestBodyJson: JsValue = Json.parse(
     """
       |{
-      |    "fromDate": "2019-03-11",
-      |    "toDate": "2020-04-23",
-      |    "income": {
-      |        "periodAmount": 123.45,
-      |        "premiumsOfLeaseGrant": 2355.45,
-      |        "reversePremiums": 454.56,
-      |        "otherIncome": 567.89,
-      |        "taxDeducted": 234.53,
-      |        "rentARoom": {
-      |           "rentsReceived": 567.56
-      |         }
-      |        },
-      |       "expenses":{
-      |          "premisesRunningCosts": 567.53,
-      |          "consolidatedExpenses": 235.78
-      |     }
+      |  "fromDate": "2017-04-06",
+      |  "toDate": "2017-07-05",
+      |  "income": {
+      |    "periodAmount": 100.25,
+      |    "taxDeducted": 100.25,
+      |    "rentARoom": {
+      |      "rentsReceived": 100.25
+      |    }
+      |  },
+      |  "expenses": {
+      |    "repairsAndMaintenance": 100.25,
+      |    "consolidatedExpenses": 100.25
+      |  }
       |}
     """.stripMargin
   )

@@ -16,29 +16,25 @@
 
 package v2.connectors
 
-
-import javax.inject.{Inject, Singleton}
+import javax.inject.{ Inject, Singleton }
 import config.AppConfig
-import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
+import uk.gov.hmrc.http.{ HeaderCarrier, HttpClient }
 import v2.connectors.DownstreamUri.IfsUri
 import v2.models.request.createHistoricNonFhlUkPropertyPeriodSummary.CreateHistoricNonFhlUkPropertyPeriodSummaryRequest
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.{ ExecutionContext, Future }
 
+@Singleton
+class CreateHistoricNonFhlUkPropertyPeriodSummaryConnector @Inject()(val http: HttpClient, val appConfig: AppConfig) extends BaseDownstreamConnector {
 
-  @Singleton
-  class CreateHistoricNonFhlUkPropertyPeriodSummaryConnector @Inject()(val http: HttpClient,
-                                                                  val appConfig: AppConfig) extends BaseDownstreamConnector {
-
-    def createHistoricNonFhlUkProperty(request: CreateHistoricNonFhlUkPropertyPeriodSummaryRequest)(
+  def createHistoricNonFhlUkProperty(request: CreateHistoricNonFhlUkPropertyPeriodSummaryRequest)(
       implicit hc: HeaderCarrier,
       ec: ExecutionContext,
-      correlationId: String): Future[DownstreamOutcome[CreateHistoricNonFhlUkPropertyPeriodSummaryResponse]] = {
+      correlationId: String): Future[DownstreamOutcome[CreateHistoricNonFhlUkPiePeriodSummaryResponse]] = {
 
-      post(
-        body = request.body,
-        uri = IfsUri[CreateUkPropertyPeriodSummaryResponse](
-          s"income-tax/business/property/periodic?taxableEntityId=${request.nino.nino}&taxYear=${request.taxYear}&incomeSourceId=${request.businessId}")
-      )
-    }
+    post(
+      body = request.body,
+      uri = IfsUri[CreateHistoricNonFhlUkPiePeriodSummaryResponse](s"/income-tax/nino/${request.nino.nino}/uk-properties/other/periodic-summaries")
+    )
   }
+}

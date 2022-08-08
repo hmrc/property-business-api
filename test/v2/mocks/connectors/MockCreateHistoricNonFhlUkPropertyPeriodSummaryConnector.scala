@@ -19,22 +19,29 @@ package v2.mocks.connectors
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
 import uk.gov.hmrc.http.HeaderCarrier
-import v2.connectors.{CreateHistoricNonFhlUkPropertyPeriodSummaryConnector, DownstreamOutcome}
+import v2.connectors.{ CreateHistoricNonFhlUkPropertyPeriodSummaryConnector, DownstreamOutcome }
 import v2.models.request.createHistoricNonFhlUkPropertyPeriodSummary.CreateHistoricNonFhlUkPropertyPeriodSummaryRequest
 import v2.models.response.createUkPropertyPeriodSummary.CreateUkPropertyPeriodSummaryResponse
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.{ ExecutionContext, Future }
 
 trait MockCreateHistoricNonFhlUkPropertyPeriodSummaryConnector extends MockFactory {
 
-  val mockCreateHistoricNonFhlUkPropertyConnector: CreateHistoricNonFhlUkPropertyPeriodSummaryConnector = mock[CreateHistoricNonFhlUkPropertyPeriodSummaryConnector]
+  val mockCreateHistoricNonFhlUkPropertyPeriodSummaryConnector: CreateHistoricNonFhlUkPropertyPeriodSummaryConnector =
+    mock[CreateHistoricNonFhlUkPropertyPeriodSummaryConnector]
 
-  object MockCreateHistoricNonFhlUkPropertyConnector {
+  object MockCreateHistoricNonFhlUkPropertyPeriodSummaryConnector {
 
-    def createHistoricNonFhlUkPropertyProperty(requestData: CreateHistoricNonFhlUkPropertyPeriodSummaryRequest):
-    CallHandler[Future[DownstreamOutcome[CreateUkPropertyPeriodSummaryResponse]]] = {
-      (mockCreateHistoricNonFhlUkPropertyConnector
-        .createHistoricNonFhlUkProperty(_: CreateHistoricNonFhlUkPropertyPeriodSummaryRequest)(_: HeaderCarrier, _: ExecutionContext, _: String))
+    def createHistoricNonFhlUkProperty(requestData: CreateHistoricNonFhlUkPropertyPeriodSummaryRequest)
+      : CallHandler[Future[DownstreamOutcome[CreateHistoricNonFhlUkPropertyPeriodSummaryResponse]]] = {
+      (
+        mockCreateHistoricNonFhlUkPropertyPeriodSummaryConnector
+          .createHistoricNonFhlUkProperty(_: CreateHistoricNonFhlUkPropertyPeriodSummaryRequest)(
+            _: HeaderCarrier,
+            _: ExecutionContext,
+            _: String
+          )
+        )
         .expects(requestData, *, *, *)
     }
   }

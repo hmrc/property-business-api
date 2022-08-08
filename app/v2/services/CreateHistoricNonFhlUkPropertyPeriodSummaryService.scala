@@ -16,8 +16,8 @@
 
 package v2.services
 
-import javax.inject.{Inject, Singleton}
-import scala.concurrent.{ExecutionContext, Future}
+import javax.inject.{ Inject, Singleton }
+import scala.concurrent.{ ExecutionContext, Future }
 import cats.data.EitherT
 import uk.gov.hmrc.http.HeaderCarrier
 import utils.Logging
@@ -27,39 +27,39 @@ import v2.models.errors._
 import v2.models.request.createHistoricNonFhlUkPropertyPeriodSummary.CreateHistoricNonFhlUkPropertyPeriodSummaryRequest
 import v2.support.DownstreamResponseMappingSupport
 
-
 @Singleton
 class CreateHistoricNonFhlUkPropertyPeriodSummaryService @Inject()(connector: CreateHistoricNonFhlUkPropertyPeriodSummaryConnector)
-  extends DownstreamResponseMappingSupport with Logging {
+    extends DownstreamResponseMappingSupport
+    with Logging {
 
-    def createHistoricNonFhlUkProperty (request: CreateHistoricNonFhlUkPropertyPeriodSummaryRequest)(
+  def createHistoricNonFhlUkProperty(request: CreateHistoricNonFhlUkPropertyPeriodSummaryRequest)(
       implicit hc: HeaderCarrier,
       ec: ExecutionContext,
       logContext: EndpointLogContext,
-      correlationId: String): Future[ServiceOutcome[CreateHistoricNonFhlUkPropertyPeriodSummaryResponse]] = {
+      correlationId: String): Future[ServiceOutcome[CreateHistoricNonFhlUkPiePeriodSummaryResponse]] = {
 
-      val result = for {
-        ifsResponseWrapper <- EitherT(connector.createHistoricNonFhlUkProperty(request)).leftMap(mapDownstreamErrors(ifsErrorMap))
-      } yield ifsResponseWrapper
+    val result = for {
+      ifsResponseWrapper <- EitherT(connector.createHistoricNonFhlUkProperty(request)).leftMap(mapDownstreamErrors(ifsErrorMap))
+    } yield ifsResponseWrapper
 
-      result.value
-    }
+    result.value
+  }
 
-    private def ifsErrorMap =
-      Map(
-        "INVALID_NINO" -> NinoFormatError,
-        "INVALID_TYPE" -> InternalError,
-        "INVALID_PAYLOAD" -> InternalError,
-        "INVALID_CORRELATIONID" -> InternalError,
-        "INCOME_SOURCE_NOT_FOUND" -> NotFoundError,
-        "DUPLICATE_SUBMISSION" -> RuleDuplicateSubmissionError,
-        "NOT_ALIGN_PERIOD" -> RuleMisalignedPeriodError,
-        "OVERLAPS_IN_PERIOD" -> RuleOverlappingPeriodError,
-        "GAPS_IN_PERIOD" -> RuleNotContiguousPeriodError,
-        "INVALID_DATE_RANGE" -> RuleToDateBeforeFromDateError,
-        "BOTH_EXPENSES_SUPPLIED" -> RuleBothExpensesSuppliedError,
-        "TAX_YEAR_NOT_SUPPORTED" -> RuleTaxYearNotSupportedError,
-        "SERVER_ERROR" -> InternalError,
-        "SERVICE_UNAVAILABLE" -> InternalError
-      )
+  private def ifsErrorMap =
+    Map(
+      "INVALID_NINO"            -> NinoFormatError,
+      "INVALID_TYPE"            -> InternalError,
+      "INVALID_PAYLOAD"         -> InternalError,
+      "INVALID_CORRELATIONID"   -> InternalError,
+      "INCOME_SOURCE_NOT_FOUND" -> NotFoundError,
+      "DUPLICATE_SUBMISSION"    -> RuleDuplicateSubmissionError,
+      "NOT_ALIGN_PERIOD"        -> RuleMisalignedPeriodError,
+      "OVERLAPS_IN_PERIOD"      -> RuleOverlappingPeriodError,
+      "GAPS_IN_PERIOD"          -> RuleNotContiguousPeriodError,
+      "INVALID_DATE_RANGE"      -> RuleToDateBeforeFromDateError,
+      "BOTH_EXPENSES_SUPPLIED"  -> RuleBothExpensesSuppliedError,
+      "TAX_YEAR_NOT_SUPPORTED"  -> RuleTaxYearNotSupportedError,
+      "SERVER_ERROR"            -> InternalError,
+      "SERVICE_UNAVAILABLE"     -> InternalError
+    )
 }

@@ -21,88 +21,66 @@ import uk.gov.hmrc.http.HeaderCarrier
 import v2.mocks.MockHttpClient
 import v2.models.domain.Nino
 import v2.models.outcomes.ResponseWrapper
-import v2.models.request.common.ukNonFhlProperty.UkNonFhlProperty
-import v2.models.request.common.ukPropertyRentARoom.{UkPropertyExpensesRentARoom, UkPropertyIncomeRentARoom}
-import v2.models.request.createHistoricNonFhlUkPropertyPeriodSummary.{CreateHistoricNonFhlUkPropertyPeriodSummaryRequestBody, UkNonFhlPropertyExpenses, UkNonFhlPropertyIncome}
+import v2.models.request.common.ukPropertyRentARoom.{ UkPropertyExpensesRentARoom, UkPropertyIncomeRentARoom }
+import v2.models.request.createHistoricNonFhlUkPropertyPeriodSummary._
+
 import scala.concurrent.Future
 
 class CreateHistoricNonFhlUkPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
 
-  val nino: String = "TC663795B"
-  val taxYear: String = "2022-23"
-  val businessId: String = "XAIS12345678910"
+  val transactionReference: String = "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
+  val nino: String                 = "TC663795B"
+  val fromDate: String             = "2019-03-11"
+  val toDate: String               = "2020-04-23"
 
-  val regularExpensesBody: CreateHistoricNonFhlUkPropertyPeriodSummaryRequestBody = CreateHistoricNonFhlUkPropertyPeriodSummaryRequestBody = CreateUkPropertyPeriodSummaryRequestBody(
-    "2019-03-11",
-    "2020-04-23",
-    Some(UkNonFhlProperty(
-      Some(UkNonFhlPropertyIncome(
-        Some(42.12),
-        Some(84.31),
-        Some(9884.93),
-        Some(842.99),
-        Some( 31.44),
-        Some(UkPropertyIncomeRentARoom(
-          Some(947.66)
-        ))
-      )),
-      Some(UkNonFhlPropertyExpenses(
-        None,
-        None,
-        None,
-        None,
-        None,
-        None,
-        None,
-        None,
-        None,
-        Some(UkPropertyExpensesRentARoom(
-          None,
-        )),
-        Some(988.18)
-      ))
-    ))
-  ),
+  val url: String = s"/income-tax/nino/$nino/uk-properties/other/periodic-summaries"
 
-  val consolidatedExpensesBody: CreateHistoricNonFhlUkPropertyPeriodSummaryRequestBody = CreateHistoricNonFhlUkPropertyPeriodSummaryRequestBody(
-    "2019-03-11",
-    "2020-04-23",
-    Some(UkNonFhlProperty(
-      Some(UkNonFhlPropertyIncome(
-        Some(42.12),
-        Some(84.31),
-        Some(9884.93),
-        Some(842.99),
-        Some( 31.44),
-        Some(UkPropertyIncomeRentARoom(
-          Some(947.66)
-        ))
-      )),
-      Some(UkNonFhlPropertyExpenses(
-        None,
-        None,
-        None,
-        None,
-        None,
-        None,
-        None,
-        None,
-        None,
-        Some(UkPropertyExpensesRentARoom(
-          None,
-        )),
-        consolidatedExpenses = Some(988.18)
-      ))
-    ))
+  val income: UkNonFhlPropertyIncome =
+    UkNonFhlPropertyIncome(Some(2355.45), Some(454.56), Some(123.45), Some(234.53), Some(567.89), Some(UkPropertyIncomeRentARoom(Some(567.56))))
+
+  val expenses: UkNonFhlPropertyExpenses = UkNonFhlPropertyExpenses(
+    Some(567.53),
+    Some(324.65),
+    Some(453.56),
+    Some(535.78),
+    Some(678.34),
+    Some(682.34),
+    Some(1000.45),
+    Some(645.56),
+    Some(672.34),
+    Some(UkPropertyExpensesRentARoom(Some(545.9))),
+    None
   )
 
-  private val response = CreateHistoricNonFhlUkPropertyPeriodSummaryResponse ("4557ecb5-fd32-48cc-81f5-e6acd1099f3c")
+  val consolidatedExpenses: UkNonFhlPropertyExpenses =
+    UkNonFhlPropertyExpenses(None, None, None, None, None, None, None, None, None, None, Some(235.78))
 
-  private val regularExpensesRequestData = CreateHistoricNonFhlUkPropertyPeriodSummaryRequestBody(Nino(nino), regularExpensesBody)
+  val requestBody: CreateHistoricNonFhlUkPropertyPeriodSummaryRequestBody =
+    CreateHistoricNonFhlUkPropertyPeriodSummaryRequestBody(
+      fromDate,
+      toDate,
+      Some(income),
+      Some(expenses)
+    )
 
-  private val consolidatedExpensesRequestData = CreateHistoricNonFhlUkPropertyPeriodSummaryRequestBody(Nino(nino), consolidatedExpensesBody)
+  val consolidatedRequestBody: CreateHistoricNonFhlUkPropertyPeriodSummaryRequestBody =
+    CreateHistoricNonFhlUkPropertyPeriodSummaryRequestBody(
+      fromDate,
+      toDate,
+      Some(income),
+      Some(consolidatedExpenses)
+    )
+
+  private val requestData =
+    CreateHistoricNonFhlUkPropertyPeriodSummaryRequest(Nino(nino), requestBody)
+
+  private val consolidatedRequestData =
+    CreateHistoricNonFhlUkPropertyPeriodSummaryRequest(Nino(nino), consolidatedRequestBody)
+
+  private val responseData = CreateHistoricNonFhlUkPropertyPeriodSummaryResponse(transactionReference)
 
   class Test extends MockHttpClient with MockAppConfig {
+
     val connector: CreateHistoricNonFhlUkPropertyPeriodSummaryConnector = new CreateHistoricNonFhlUkPropertyPeriodSummaryConnector(
       http = mockHttpClient,
       appConfig = mockAppConfig
@@ -115,44 +93,44 @@ class CreateHistoricNonFhlUkPropertyPeriodSummaryConnectorSpec extends Connector
   }
 
   "connector" must {
-    "post a body with regular expenses and return 200 with submissionId" in new Test {
-      val outcome = Right(ResponseWrapper(correlationId, response))
 
-      implicit val hc: HeaderCarrier = HeaderCarrier(otherHeaders = otherHeaders ++ Seq("Content-Type" -> "application/json"))
+    "post a body with dates, income and expenses and return a 202 with transactionReference" in new Test {
+      val outcome: Right[Nothing, ResponseWrapper[Nothing]] = Right(ResponseWrapper(transactionReference, responseData))
+
+      implicit val hc: HeaderCarrier                    = HeaderCarrier(otherHeaders = otherHeaders ++ Seq("Content-Type" -> "application/json"))
       val requiredIfsHeadersPost: Seq[(String, String)] = requiredIfsHeaders ++ Seq("Content-Type" -> "application/json")
 
       MockHttpClient
         .post(
-          url = s"$baseUrl/income-tax/business/property/periodic?taxableEntityId=$nino&taxYear=$taxYear&incomeSourceId=$businessId",
+          url = url,
           config = dummyIfsHeaderCarrierConfig,
-          body = regularExpensesBody,
+          body = requestBody,
           requiredHeaders = requiredIfsHeadersPost,
-          excludedHeaders = Seq("AnotherHeader" -> "HeaderValue")
+          excludedHeaders = Seq("Some-Header" -> "some-value")
         )
         .returns(Future.successful(outcome))
 
-      await(connector.CreateHistoricNonFhlUkProperty(regularExpensesRequestData)) shouldBe outcome
-
+      await(connector.createHistoricNonFhlUkProperty(requestData)) shouldBe outcome
     }
 
-    "post a body with consolidated expenses and return 200 with submissionId" in new Test {
-      val outcome = Right(ResponseWrapper(correlationId, response))
+    "post a body with dates, income and consolidated expenses and return a 202 with transactionReference" in new Test {
+      val outcome: Right[Nothing, ResponseWrapper[Nothing]] = Right(ResponseWrapper(transactionReference, responseData))
 
-      implicit val hc: HeaderCarrier = HeaderCarrier(otherHeaders = otherHeaders ++ Seq("Content-Type" -> "application/json"))
+      implicit val hc: HeaderCarrier                    = HeaderCarrier(otherHeaders = otherHeaders ++ Seq("Content-Type" -> "application/json"))
       val requiredIfsHeadersPost: Seq[(String, String)] = requiredIfsHeaders ++ Seq("Content-Type" -> "application/json")
 
       MockHttpClient
         .post(
-          url = s"$baseUrl/income-tax/business/property/periodic?taxableEntityId=$nino&taxYear=$taxYear&incomeSourceId=$businessId",
+          url = url,
           config = dummyIfsHeaderCarrierConfig,
-          body = consolidatedExpensesBody,
+          body = consolidatedRequestBody,
           requiredHeaders = requiredIfsHeadersPost,
-          excludedHeaders = Seq("AnotherHeader" -> "HeaderValue")
+          excludedHeaders = Seq("Some-Header" -> "some-value")
         )
         .returns(Future.successful(outcome))
 
-      await(connector.CreateHistoricNonFhlUkProperty(consolidatedExpensesRequestData)) shouldBe outcome
-
+      await(connector.createHistoricNonFhlUkProperty(consolidatedRequestData)) shouldBe outcome
     }
   }
 
+}

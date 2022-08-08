@@ -49,8 +49,11 @@ trait HateoasLinks {
   private def ukHistoricNonFhlAnnualUri(appConfig: AppConfig, nino: String, taxYear: String): String =
     s"/${appConfig.apiGatewayContext}/uk/non-furnished-holiday-lettings/$nino/$taxYear"
 
-  private def ukHistoricNonFhlPiePeriodSummary(appConfig: AppConfig, nino: String, periodId: String) =
+  private def ukHistoricFhlPiePeriodSummaryUri(appConfig: AppConfig, nino: String, periodId: String): String =
     s"/${appConfig.apiGatewayContext}/uk/furnished-holiday-lettings/$nino/$periodId"
+
+  private def ukHistoricNonFhlPiePeriodSummaryUri(appConfig: AppConfig, nino: String, periodId: String): String =
+    s"/${appConfig.apiGatewayContext}/uk/non-furnished-holiday-lettings/$nino/$periodId"
 
   // API resource links
 
@@ -139,17 +142,27 @@ trait HateoasLinks {
   }
 
   //Historic Uk Property Income & Expenses Period Summary
-  def retrieveHistoricFhlUkPiePeriodSubmission(appConfig: AppConfig, nino: String, periodId: String): Link = {
-    Link(href = ukHistoricNonFhlPiePeriodSummary(appConfig, nino, periodId),
+  def retrieveHistoricFhlUkPiePeriodSubmission(appConfig: AppConfig, nino: String, periodId: String, self: Boolean): Link = {
+    val rel = if (self) "self" else RETRIEVE_HISTORIC_UK_FHL_PROPERTY_INCOME_EXPENSES_PERIOD_SUMMARY
+    Link(href = ukHistoricFhlPiePeriodSummaryUri(appConfig, nino, periodId),
          method = GET,
-         rel = RETRIEVE_HISTORIC_UK_FHL_PROPERTY_INCOME_EXPENSES_PERIOD_SUMMARY)
+         rel = rel)
   }
 
   def amendHistoricFhlUkPiePeriodSubmission(appConfig: AppConfig, nino: String, periodId: String): Link = {
-    Link(href = ukHistoricNonFhlPiePeriodSummary(appConfig, nino, periodId),
+    Link(href = ukHistoricFhlPiePeriodSummaryUri(appConfig, nino, periodId),
          method = PUT,
          rel = AMEND_HISTORIC_UK_FHL_PROPERTY_INCOME_EXPENSES_PERIOD_SUMMARY)
   }
+
+  def retrieveHistoricNonFhlUkPiePeriodSummary(appConfig: AppConfig, nino: String, periodId: String, self:Boolean): Link = {
+    val rel = if (self) "self" else RETRIEVE_HISTORIC_NON_FHL_UK_PIE_PERIOD_SUMMARY
+    Link(href = ukHistoricNonFhlPiePeriodSummaryUri(appConfig, nino, periodId), method = GET, rel = rel)
+  }
+
+  def amendHistoricNonFhlUkPiePeriodSummary(appConfig: AppConfig, nino: String, periodId: String): Link =
+    Link(href = ukHistoricNonFhlPiePeriodSummaryUri(appConfig, nino, periodId), method = PUT, rel = AMEND_HISTORIC_NON_FHL_UK_PIE_PERIOD_SUMMARY)
+
 
   // Generic
   def listPropertyPeriodSummaries(appConfig: AppConfig, nino: String, businessId: String, taxYear: String, self: Boolean): Link = {

@@ -16,7 +16,7 @@
 
 package v2.models.request.common.ukNonFhlProperty
 
-import play.api.libs.json.{JsPath, Json, Reads, Writes}
+import play.api.libs.json.{ JsPath, Json, Reads, Writes }
 import play.api.libs.functional.syntax._
 import v2.models.request.common.ukPropertyRentARoom.UkPropertyExpensesRentARoom
 
@@ -31,7 +31,6 @@ case class UkNonFhlPropertyExpenses(premisesRunningCosts: Option[BigDecimal],
                                     residentialFinancialCostsCarriedForward: Option[BigDecimal],
                                     rentARoom: Option[UkPropertyExpensesRentARoom],
                                     consolidatedExpenses: Option[BigDecimal])
-
 
 object UkNonFhlPropertyExpenses {
   implicit val reads: Reads[UkNonFhlPropertyExpenses] = Json.reads[UkNonFhlPropertyExpenses]
@@ -48,6 +47,5 @@ object UkNonFhlPropertyExpenses {
       (JsPath \ "residentialFinancialCostsCarriedForward").writeNullable[BigDecimal] and
       (JsPath \ "ukOtherRentARoom").writeNullable[UkPropertyExpensesRentARoom] and
       (JsPath \ "consolidatedExpenses").writeNullable[BigDecimal]
-  ) (unlift(UkNonFhlPropertyExpenses.unapply))
-
+  )(unlift(UkNonFhlPropertyExpenses.unapply))
 }

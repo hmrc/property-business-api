@@ -16,11 +16,13 @@
 
 package v2.controllers.requestParsers.validators.validations
 
-import v2.models.errors.{MtdError, RuleBothExpensesSuppliedError}
+import v2.models.errors.{ MtdError, RuleBothExpensesSuppliedError }
 import v2.models.request.common.foreignFhlEea._
 import v2.models.request.common.foreignPropertyEntry._
-import v2.models.request.common.ukFhlProperty.UkFhlPropertyExpenses
-import v2.models.request.common.ukNonFhlProperty.UkNonFhlPropertyExpenses
+import v2.models.request.common.ukFhlPieProperty.UkFhlPieExpenses
+import v2.models.request.common.ukFhlProperty.{ UkFhlPropertyExpenses => CommonUkFhlPropertyExpenses }
+import v2.models.request.common.ukNonFhlProperty.{ UkNonFhlPropertyExpenses => CommonUkNonFhlPropertyExpenses }
+import v2.models.request.createHistoricNonFhlUkPropertyPeriodSummary.UkNonFhlPropertyExpenses
 
 object ConsolidatedExpensesValidation {
 
@@ -29,7 +31,8 @@ object ConsolidatedExpensesValidation {
       case None => NoValidationErrors
       case Some(_) =>
         expenses match {
-          case CreateForeignNonFhlPropertyExpenses(None, None, None, None, None, None, _, _, None, Some(_)) => NoValidationErrors
+          case CreateForeignNonFhlPropertyExpenses(None, None, None, None, None, None, _, _, None, Some(_)) =>
+            NoValidationErrors
           case _ =>
             List(RuleBothExpensesSuppliedError.copy(paths = Some(Seq(path))))
         }
@@ -41,30 +44,49 @@ object ConsolidatedExpensesValidation {
       case None => NoValidationErrors
       case Some(_) =>
         expenses match {
-          case CreateForeignFhlEeaExpenses(None, None, None, None, None, None, None, Some(_)) => NoValidationErrors
-          case _                                                                              => List(RuleBothExpensesSuppliedError.copy(paths = Some(Seq(path))))
+          case CreateForeignFhlEeaExpenses(None, None, None, None, None, None, None, Some(_)) =>
+            NoValidationErrors
+          case _ =>
+            List(RuleBothExpensesSuppliedError.copy(paths = Some(Seq(path))))
         }
     }
   }
 
-  def validate(expenses: UkFhlPropertyExpenses, path: String): List[MtdError] = {
+  def validate(expenses: UkFhlPieExpenses, path: String): List[MtdError] = {
     expenses.consolidatedExpenses match {
       case None => NoValidationErrors
       case Some(_) =>
         expenses match {
-          case UkFhlPropertyExpenses(None, None, None, None, None, None, Some(_), None, None) => NoValidationErrors
-          case _                                                                              => List(RuleBothExpensesSuppliedError.copy(paths = Some(Seq(path))))
+          case UkFhlPieExpenses(None, None, None, None, None, None, Some(_), None, None) =>
+            NoValidationErrors
+          case _ =>
+            List(RuleBothExpensesSuppliedError.copy(paths = Some(Seq(path))))
         }
     }
   }
 
-  def validate(expenses: UkNonFhlPropertyExpenses, path: String): List[MtdError] = {
+  def validate(expenses: CommonUkFhlPropertyExpenses, path: String): List[MtdError] = {
     expenses.consolidatedExpenses match {
       case None => NoValidationErrors
       case Some(_) =>
         expenses match {
-          case UkNonFhlPropertyExpenses(None, None, None, None, None, None, None, None, None, None, Some(_)) => NoValidationErrors
-          case _                                                                                             => List(RuleBothExpensesSuppliedError.copy(paths = Some(Seq(path))))
+          case CommonUkFhlPropertyExpenses(None, None, None, None, None, None, Some(_), None, None) =>
+            NoValidationErrors
+          case _ =>
+            List(RuleBothExpensesSuppliedError.copy(paths = Some(Seq(path))))
+        }
+    }
+  }
+
+  def validate(expenses: CommonUkNonFhlPropertyExpenses, path: String): List[MtdError] = {
+    expenses.consolidatedExpenses match {
+      case None => NoValidationErrors
+      case Some(_) =>
+        expenses match {
+          case CommonUkNonFhlPropertyExpenses(None, None, None, None, None, None, None, None, None, None, Some(_)) =>
+            NoValidationErrors
+          case _ =>
+            List(RuleBothExpensesSuppliedError.copy(paths = Some(Seq(path))))
         }
     }
   }
@@ -74,8 +96,10 @@ object ConsolidatedExpensesValidation {
       case None => NoValidationErrors
       case Some(_) =>
         expenses match {
-          case AmendForeignFhlEeaExpenses(None, None, None, None, None, None, None, Some(_)) => NoValidationErrors
-          case _                                                                             => List(RuleBothExpensesSuppliedError.copy(paths = Some(Seq(path))))
+          case AmendForeignFhlEeaExpenses(None, None, None, None, None, None, None, Some(_)) =>
+            NoValidationErrors
+          case _ =>
+            List(RuleBothExpensesSuppliedError.copy(paths = Some(Seq(path))))
         }
     }
   }
@@ -85,8 +109,23 @@ object ConsolidatedExpensesValidation {
       case None => NoValidationErrors
       case Some(_) =>
         expenses match {
-          case AmendForeignNonFhlPropertyExpenses(None, None, None, None, None, None, _, _, None, Some(_)) => NoValidationErrors
-          case _                                                                                           => List(RuleBothExpensesSuppliedError.copy(paths = Some(Seq(path))))
+          case AmendForeignNonFhlPropertyExpenses(None, None, None, None, None, None, _, _, None, Some(_)) =>
+            NoValidationErrors
+          case _ =>
+            List(RuleBothExpensesSuppliedError.copy(paths = Some(Seq(path))))
+        }
+    }
+  }
+
+  def validate(expenses: UkNonFhlPropertyExpenses, path: String): List[MtdError] = {
+    expenses.consolidatedExpenses match {
+      case None => NoValidationErrors
+      case Some(_) =>
+        expenses match {
+          case UkNonFhlPropertyExpenses(None, None, None, None, None, None, None, None, None, None, Some(_)) =>
+            NoValidationErrors
+          case _ =>
+            List(RuleBothExpensesSuppliedError.copy(paths = Some(Seq(path))))
         }
     }
   }

@@ -1,0 +1,49 @@
+
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "title": "Create a Historic FHL UK Property Income & Expenses Period Summary",
+  "description": "This endpoint enables you to create income and expenses for a furnished holiday lettings (FHL) UK property business and make periodic submissions for tax years from 2017-18 to 2021-22.  A National Insurance number must be provided. Use this endpoint only for the specified tax year range; for current tax year submissions, use the Retrieve a UK Property Income & Expenses Period Summary endpoint.",
+  "type": "object",
+  "properties": {
+    "periodId": {
+      "description": "An identifier for the update period, unique to the UK  business property",
+      "type": "string",
+      "pattern": "[0-9]{4}-[0-9]{2}-[0-9]{2}_[0-9]{4}-[0-9]{2}-[0-9]{2}",
+      "example": "2017-04-06_2017-07-04"
+    },
+    "links": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "description": "A list of endpoint links that indicate possible actions related to the current resource.",
+        "properties": {
+          "href": {
+            "description": "The relative url of the endpoint",
+            "type": "string",
+            "example": "\"/individuals/business/property/uk/furnished-holiday-lettings/KZ816096B/2017-04-06_2017-07-04\""
+          },
+          "rel": {
+            "description": "A label for the endpoint, which describes how it is related to the current resource. The rel will be self where the action is retrieval of the same resource",
+            "type": "string",
+            "example": "self"
+          },
+          "method": {
+            "description": "The HTTP method type for the endpoint",
+            "type": "string",
+            "example": "GET"
+          }
+        },
+        "required": [
+          "href",
+          "rel",
+          "method"
+        ],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": [
+    "periodId"
+  ],
+  "additionalProperties": false
+}

@@ -21,7 +21,7 @@ import play.api.libs.json.{Json, OFormat}
 import v2.hateoas.{HateoasLinksFactory, HateoasLinks}
 import v2.models.hateoas.{HateoasData, Link}
 
-case class CreateHistoricNonFhlUkPiePeriodSummaryResponse(periodId: String)
+case class CreateHistoricNonFhlUkPiePeriodSummaryResponse(transactionReference: String)
 
 object CreateHistoricNonFhlUkPiePeriodSummaryResponse extends HateoasLinks{
   implicit val format: OFormat[CreateHistoricNonFhlUkPiePeriodSummaryResponse] = Json.format[CreateHistoricNonFhlUkPiePeriodSummaryResponse]
@@ -36,4 +36,4 @@ object CreateHistoricNonFhlUkPiePeriodSummaryResponse extends HateoasLinks{
   }
 }
 
-case class CreateHistoricNonFhlUkPiePeriodSummaryHateoasData(nino: String, periodId: String) extends HateoasData
+case class CreateHistoricNonFhlUkPiePeriodSummaryHateoasData(nino: String, periodId: String, transactionId:String) extends HateoasData

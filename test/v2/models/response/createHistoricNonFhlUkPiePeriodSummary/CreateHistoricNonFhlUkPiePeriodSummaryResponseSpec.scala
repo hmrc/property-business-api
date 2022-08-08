@@ -24,7 +24,7 @@ import v2.models.utils.JsonErrorValidators
 class CreateHistoricNonFhlUkPiePeriodSummaryResponseSpec extends UnitSpec with JsonErrorValidators {
 
   val createHistoricNonFhlUkPiePeriodSummaryResponse = CreateHistoricNonFhlUkPiePeriodSummaryResponse(
-    periodId = "2017-04-06_2017-07-04"
+    transactionReference = "0000000000000001"
   )
 
   val json = Json.parse(

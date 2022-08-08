@@ -14,7 +14,8 @@
  * limitations under the License.
  */
 
-package v2.models.response.createHistoricNonFhlUkPiePeriodSummaryResponse
+//package v2.models.response.createHistoricNonFhlUkPiePeriodSummary
+package v2.models.response.createHistoricNonFhlUkPiePeriodSummary
 
 import config.AppConfig
 import play.api.libs.json.{Json, OFormat}
@@ -30,7 +31,7 @@ object CreateHistoricNonFhlUkPiePeriodSummaryResponse extends HateoasLinks{
     override def links(appConfig: AppConfig, data: CreateHistoricNonFhlUkPiePeriodSummaryHateoasData): Seq[Link] = {
       import data._
       Seq(
-        retrieveHistoricNonFhlUkPiePeriodSummary(appConfig: AppConfig, nino: String, periodId: String),
+        retrieveHistoricNonFhlUkPiePeriodSummary(appConfig: AppConfig, nino: String, periodId: String, self = true),
         amendHistoricNonFhlUkPiePeriodSummary(appConfig: AppConfig, nino: String, periodId: String)
 
       )

@@ -18,7 +18,6 @@ package v2.models.response.createHistoricNonFhlUkPiePeriodSummary
 
 import play.api.libs.json.Json
 import support.UnitSpec
-import v2.models.response.createHistoricNonFhlUkPiePeriodSummaryResponse.CreateHistoricNonFhlUkPiePeriodSummaryResponse
 import v2.models.utils.JsonErrorValidators
 
 class CreateHistoricNonFhlUkPiePeriodSummaryResponseSpec extends UnitSpec with JsonErrorValidators {

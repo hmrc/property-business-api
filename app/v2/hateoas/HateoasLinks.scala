@@ -109,8 +109,10 @@ trait HateoasLinks {
 
   // Historic Uk Period Summaries:
 
-  def retrieveHistoricNonFhlUkPiePeriodSummary(appConfig: AppConfig, nino: String, periodId: String): Link =
-    Link(href = ukHistoricNonFhlPiePeriodSummaryUri(appConfig, nino, periodId), method = GET, rel = RETRIEVE_HISTORIC_NON_FHL_UK_PIE_PERIOD_SUMMARY)
+  def retrieveHistoricNonFhlUkPiePeriodSummary(appConfig: AppConfig, nino: String, periodId: String, self:Boolean): Link = {
+   val rel = if (self) "self" else RETRIEVE_HISTORIC_NON_FHL_UK_PIE_PERIOD_SUMMARY
+    Link(href = ukHistoricNonFhlPiePeriodSummaryUri(appConfig, nino, periodId), method = GET, rel = rel)
+  }
 
   def amendHistoricNonFhlUkPiePeriodSummary(appConfig: AppConfig, nino: String, periodId: String): Link =
     Link(href = ukHistoricNonFhlPiePeriodSummaryUri(appConfig, nino, periodId), method = PUT, rel = AMEND_HISTORIC_NON_FHL_UK_PIE_PERIOD_SUMMARY)

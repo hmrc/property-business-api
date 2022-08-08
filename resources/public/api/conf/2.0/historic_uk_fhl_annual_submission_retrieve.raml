@@ -3,7 +3,7 @@ is:
   - errors.formatNino
   - errors.formatTaxYear
   - errors.ruleTaxYearRangeInvalid
-  - errors.ruleTaxYearNotSupported
+  - errors.ruleTaxYearNotSupportedMinMax
   - errors.clientOrAgentNotAuthorised
   - errors.notFound
 displayName: Retrieve a Historic FHL UK Property Business Annual Submission
@@ -15,8 +15,8 @@ responses:
   200:
     body:
       application/json:
-        type: !include schemas/uk_property_fhl_retrieve/response.json
-        example: !include examples/uk_property_fhl_retrieve/response.json
+        type: !include schemas/historic_uk_fhl_annual_submission_retrieve/response.json
+        example: !include examples/historic_uk_fhl_annual_submission_retrieve/response.json
     headers:
       X-CorrelationId:
         example: a1e8057e-fbbc-47a8-a8b4-78d9f015c253

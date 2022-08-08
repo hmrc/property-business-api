@@ -12,25 +12,25 @@ is:
   - errors.notFound
 displayName: Create and Amend a Historic FHL UK Property Business Annual Submission
 description: This endpoint enables you to create and amend the income from adjustments and allowances for a furnished holiday lettings (FHL) UK property business for tax years from 2017-18 to 2021-22. A National Insurance number and tax year must be provided. Use this endpoint only for the specified tax year range; for current tax year submissions, use the Create and Amend a UK Property Business Annual Submission endpoint.
-(annotations.sandboxData): !include scenarios/fhl_uk_property_business_annual_submission_create_and_amend_scenarios.md
+(annotations.sandboxData): !include scenarios/historic_uk_annual_submission_create_and_amend_scenarios.md
 (annotations.scope): "write:self-assessment"
 securedBy: [ sec.oauth_2_0: { scopes: [ "write:self-assessment" ] } ]
 body:
   application/json:
-    type: !include schemas/fhl_uk_property_business_annual_submission_create_and_amend/request.json
+    type: !include schemas/historic_uk_fhl_annual_submission_create_and_amend/request.json
     examples:
       example-1:
         description: Property Allowance request
-        value: !include examples/fhl_uk_property_business_annual_submission_create_and_amend/request.json
+        value: !include examples/historic_uk_fhl_annual_submission_create_and_amend/request.json
 responses:
   200:
     body:
       application/json:
-        type: !include schemas/fhl_uk_property_business_annual_submission_create_and_amend/response.json
+        type: !include schemas/historic_uk_fhl_annual_submission_create_and_amend/response.json
         examples:
           example-1:
             description: Example response
-            value: !include examples/fhl_uk_property_business_annual_submission_create_and_amend/response.json
+            value: !include examples/historic_uk_fhl_annual_submission_create_and_amend/response.json
     headers:
       X-CorrelationId:
         example: c75f40a6-a3df-4429-a697-471eeec46435

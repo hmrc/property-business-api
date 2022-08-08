@@ -30,6 +30,9 @@ object RelType {
   val CREATE_AND_AMEND_UK_PROPERTY_ANNUAL_SUBMISSION = "create-and-amend-uk-property-annual-submission"
   val RETRIEVE_UK_PROPERTY_ANNUAL_SUBMISSION         = "retrieve-uk-property-annual-submission"
 
+  val CREATE_HISTORIC_NON_FHL_UK_PIE_PERIOD_SUMMARY      = "create-uk-property-historic-non-fhl-period-summary"
+  val AMEND_HISTORIC_NON_FHL_UK_PIE_PERIOD_SUMMARY       = "amend-uk-property-historic-non-fhl-period-summary"
+
   val RETRIEVE_HISTORIC_FHL_UK_PROPERTY_ANNUAL_SUBMISSION = "retrieve-uk-property-historic-fhl-annual-submission"
   val CREATE_AND_AMEND_HISTORIC_FHL_UK_PROPERTY_ANNUAL_SUBMISSION = "create-and-amend-historic-fhl-uk-property-annual-submission"
   val DELETE_HISTORIC_FHL_UK_PROPERTY_ANNUAL_SUBMISSION           = "delete-historic-fhl-uk-property-annual-submission"

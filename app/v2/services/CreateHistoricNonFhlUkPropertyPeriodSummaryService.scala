@@ -25,6 +25,7 @@ import v2.connectors.CreateHistoricNonFhlUkPropertyPeriodSummaryConnector
 import v2.controllers.EndpointLogContext
 import v2.models.errors._
 import v2.models.request.createHistoricNonFhlUkPropertyPeriodSummary.CreateHistoricNonFhlUkPropertyPeriodSummaryRequest
+import v2.models.response.createHistoricNonFhlUkPiePeriodSummary.CreateHistoricNonFhlUkPiePeriodSummaryResponse
 import v2.support.DownstreamResponseMappingSupport
 
 @Singleton
@@ -39,7 +40,7 @@ class CreateHistoricNonFhlUkPropertyPeriodSummaryService @Inject()(connector: Cr
       correlationId: String): Future[ServiceOutcome[CreateHistoricNonFhlUkPiePeriodSummaryResponse]] = {
 
     val result = for {
-      ifsResponseWrapper <- EitherT(connector.createHistoricNonFhlUkProperty(request)).leftMap(mapDownstreamErrors(ifsErrorMap))
+      ifsResponseWrapper <- EitherT(connector.createPeriodSummary(request)).leftMap(mapDownstreamErrors(ifsErrorMap))
     } yield ifsResponseWrapper
 
     result.value
@@ -55,8 +56,8 @@ class CreateHistoricNonFhlUkPropertyPeriodSummaryService @Inject()(connector: Cr
       "DUPLICATE_SUBMISSION"    -> RuleDuplicateSubmissionError,
       "NOT_ALIGN_PERIOD"        -> RuleMisalignedPeriodError,
       "OVERLAPS_IN_PERIOD"      -> RuleOverlappingPeriodError,
-      "GAPS_IN_PERIOD"          -> RuleNotContiguousPeriodError,
-      "INVALID_DATE_RANGE"      -> RuleToDateBeforeFromDateError,
+      "NOT_CONTIGUOUS_PERIOD"   -> RuleNotContiguousPeriodError,
+      "INVALID_PERIOD"          -> RuleToDateBeforeFromDateError,
       "BOTH_EXPENSES_SUPPLIED"  -> RuleBothExpensesSuppliedError,
       "TAX_YEAR_NOT_SUPPORTED"  -> RuleTaxYearNotSupportedError,
       "SERVER_ERROR"            -> InternalError,

@@ -21,7 +21,7 @@ import org.scalamock.scalatest.MockFactory
 import uk.gov.hmrc.http.HeaderCarrier
 import v2.connectors.{ CreateHistoricNonFhlUkPropertyPeriodSummaryConnector, DownstreamOutcome }
 import v2.models.request.createHistoricNonFhlUkPropertyPeriodSummary.CreateHistoricNonFhlUkPropertyPeriodSummaryRequest
-import v2.models.response.createUkPropertyPeriodSummary.CreateUkPropertyPeriodSummaryResponse
+import v2.models.response.createHistoricNonFhlUkPiePeriodSummary.CreateHistoricNonFhlUkPiePeriodSummaryResponse
 
 import scala.concurrent.{ ExecutionContext, Future }
 
@@ -33,10 +33,10 @@ trait MockCreateHistoricNonFhlUkPropertyPeriodSummaryConnector extends MockFacto
   object MockCreateHistoricNonFhlUkPropertyPeriodSummaryConnector {
 
     def createHistoricNonFhlUkProperty(requestData: CreateHistoricNonFhlUkPropertyPeriodSummaryRequest)
-      : CallHandler[Future[DownstreamOutcome[CreateHistoricNonFhlUkPropertyPeriodSummaryResponse]]] = {
+      : CallHandler[Future[DownstreamOutcome[CreateHistoricNonFhlUkPiePeriodSummaryResponse]]] = {
       (
         mockCreateHistoricNonFhlUkPropertyPeriodSummaryConnector
-          .createHistoricNonFhlUkProperty(_: CreateHistoricNonFhlUkPropertyPeriodSummaryRequest)(
+          .createPeriodSummary(_: CreateHistoricNonFhlUkPropertyPeriodSummaryRequest)(
             _: HeaderCarrier,
             _: ExecutionContext,
             _: String

@@ -23,12 +23,8 @@ import v2.models.domain.Nino
 import v2.models.errors._
 import v2.models.outcomes.ResponseWrapper
 import v2.models.request.common.ukPropertyRentARoom.{ UkPropertyExpensesRentARoom, UkPropertyIncomeRentARoom }
-import v2.models.request.createHistoricNonFhlUkPropertyPeriodSummary.{
-  CreateHistoricNonFhlUkPropertyPeriodSummaryRequest,
-  CreateHistoricNonFhlUkPropertyPeriodSummaryRequestBody,
-  UkNonFhlPropertyExpenses,
-  UkNonFhlPropertyIncome
-}
+import v2.models.request.createHistoricNonFhlUkPropertyPeriodSummary._
+import v2.models.response.createHistoricNonFhlUkPiePeriodSummary.CreateHistoricNonFhlUkPiePeriodSummaryResponse
 
 import scala.concurrent.Future
 
@@ -83,7 +79,7 @@ class CreateHistoricNonFhlUkPropertyPeriodSummaryServiceSpec extends ServiceSpec
   private val consolidatedRequestData =
     CreateHistoricNonFhlUkPropertyPeriodSummaryRequest(Nino(nino), consolidatedRequestBody)
 
-  private val responseData = CreateHistoricNonFhlUkPropertyPeriodSummaryResponse(transactionReference)
+  private val responseData = CreateHistoricNonFhlUkPiePeriodSummaryResponse(transactionReference)
 
   trait Test extends MockCreateHistoricNonFhlUkPropertyPeriodSummaryConnector {
     implicit val hc: HeaderCarrier              = HeaderCarrier()
@@ -116,7 +112,7 @@ class CreateHistoricNonFhlUkPropertyPeriodSummaryServiceSpec extends ServiceSpec
 
     "service call unsuccessful map" when {
       def serviceError(ifsErrorCode: String, error: MtdError): Unit =
-        s" return a$ifsErrorCode from the service" in new Test {
+        s" return a $ifsErrorCode from the service" in new Test {
           MockCreateHistoricNonFhlUkPropertyPeriodSummaryConnector
             .createHistoricNonFhlUkProperty(requestData)
             .returns(Future.successful(Left(ResponseWrapper(transactionReference, DownstreamErrors.single(DownstreamErrorCode(ifsErrorCode))))))

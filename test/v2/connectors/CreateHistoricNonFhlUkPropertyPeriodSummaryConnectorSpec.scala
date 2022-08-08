@@ -23,6 +23,7 @@ import v2.models.domain.Nino
 import v2.models.outcomes.ResponseWrapper
 import v2.models.request.common.ukPropertyRentARoom.{ UkPropertyExpensesRentARoom, UkPropertyIncomeRentARoom }
 import v2.models.request.createHistoricNonFhlUkPropertyPeriodSummary._
+import v2.models.response.createHistoricNonFhlUkPiePeriodSummary.CreateHistoricNonFhlUkPiePeriodSummaryResponse
 
 import scala.concurrent.Future
 
@@ -32,8 +33,6 @@ class CreateHistoricNonFhlUkPropertyPeriodSummaryConnectorSpec extends Connector
   val nino: String                 = "TC663795B"
   val fromDate: String             = "2019-03-11"
   val toDate: String               = "2020-04-23"
-
-  val url: String = s"/income-tax/nino/$nino/uk-properties/other/periodic-summaries"
 
   val income: UkNonFhlPropertyIncome =
     UkNonFhlPropertyIncome(Some(2355.45), Some(454.56), Some(123.45), Some(234.53), Some(567.89), Some(UkPropertyIncomeRentARoom(Some(567.56))))
@@ -48,12 +47,18 @@ class CreateHistoricNonFhlUkPropertyPeriodSummaryConnectorSpec extends Connector
     Some(1000.45),
     Some(645.56),
     Some(672.34),
-    Some(UkPropertyExpensesRentARoom(Some(545.9))),
+    Some(
+      UkPropertyExpensesRentARoom(
+        Some(545.9)
+      )
+    ),
     None
   )
 
   val consolidatedExpenses: UkNonFhlPropertyExpenses =
     UkNonFhlPropertyExpenses(None, None, None, None, None, None, None, None, None, None, Some(235.78))
+
+  val url: String = s"$baseUrl/income-tax/nino/$nino/uk-properties/other/periodic-summaries"
 
   val requestBody: CreateHistoricNonFhlUkPropertyPeriodSummaryRequestBody =
     CreateHistoricNonFhlUkPropertyPeriodSummaryRequestBody(
@@ -71,13 +76,13 @@ class CreateHistoricNonFhlUkPropertyPeriodSummaryConnectorSpec extends Connector
       Some(consolidatedExpenses)
     )
 
-  private val requestData =
+  val requestData: CreateHistoricNonFhlUkPropertyPeriodSummaryRequest =
     CreateHistoricNonFhlUkPropertyPeriodSummaryRequest(Nino(nino), requestBody)
 
-  private val consolidatedRequestData =
+  val consolidatedRequestData: CreateHistoricNonFhlUkPropertyPeriodSummaryRequest =
     CreateHistoricNonFhlUkPropertyPeriodSummaryRequest(Nino(nino), consolidatedRequestBody)
 
-  private val responseData = CreateHistoricNonFhlUkPropertyPeriodSummaryResponse(transactionReference)
+  val responseData: CreateHistoricNonFhlUkPiePeriodSummaryResponse = CreateHistoricNonFhlUkPiePeriodSummaryResponse(transactionReference)
 
   class Test extends MockHttpClient with MockAppConfig {
 
@@ -95,7 +100,7 @@ class CreateHistoricNonFhlUkPropertyPeriodSummaryConnectorSpec extends Connector
   "connector" must {
 
     "post a body with dates, income and expenses and return a 202 with transactionReference" in new Test {
-      val outcome: Right[Nothing, ResponseWrapper[Nothing]] = Right(ResponseWrapper(transactionReference, responseData))
+      val outcome = Right(ResponseWrapper(transactionReference, responseData))
 
       implicit val hc: HeaderCarrier                    = HeaderCarrier(otherHeaders = otherHeaders ++ Seq("Content-Type" -> "application/json"))
       val requiredIfsHeadersPost: Seq[(String, String)] = requiredIfsHeaders ++ Seq("Content-Type" -> "application/json")
@@ -110,11 +115,11 @@ class CreateHistoricNonFhlUkPropertyPeriodSummaryConnectorSpec extends Connector
         )
         .returns(Future.successful(outcome))
 
-      await(connector.createHistoricNonFhlUkProperty(requestData)) shouldBe outcome
+      await(connector.createPeriodSummary(requestData)) shouldBe outcome
     }
 
     "post a body with dates, income and consolidated expenses and return a 202 with transactionReference" in new Test {
-      val outcome: Right[Nothing, ResponseWrapper[Nothing]] = Right(ResponseWrapper(transactionReference, responseData))
+      val outcome = Right(ResponseWrapper(transactionReference, responseData))
 
       implicit val hc: HeaderCarrier                    = HeaderCarrier(otherHeaders = otherHeaders ++ Seq("Content-Type" -> "application/json"))
       val requiredIfsHeadersPost: Seq[(String, String)] = requiredIfsHeaders ++ Seq("Content-Type" -> "application/json")
@@ -129,7 +134,7 @@ class CreateHistoricNonFhlUkPropertyPeriodSummaryConnectorSpec extends Connector
         )
         .returns(Future.successful(outcome))
 
-      await(connector.createHistoricNonFhlUkProperty(consolidatedRequestData)) shouldBe outcome
+      await(connector.createPeriodSummary(consolidatedRequestData)) shouldBe outcome
     }
   }
 

@@ -20,21 +20,23 @@ import javax.inject.{ Inject, Singleton }
 import config.AppConfig
 import uk.gov.hmrc.http.{ HeaderCarrier, HttpClient }
 import v2.connectors.DownstreamUri.IfsUri
+import v2.connectors.httpparsers.StandardIfsHttpParser._
 import v2.models.request.createHistoricNonFhlUkPropertyPeriodSummary.CreateHistoricNonFhlUkPropertyPeriodSummaryRequest
+import v2.models.response.createHistoricNonFhlUkPiePeriodSummary.CreateHistoricNonFhlUkPiePeriodSummaryResponse
 
 import scala.concurrent.{ ExecutionContext, Future }
 
 @Singleton
 class CreateHistoricNonFhlUkPropertyPeriodSummaryConnector @Inject()(val http: HttpClient, val appConfig: AppConfig) extends BaseDownstreamConnector {
 
-  def createHistoricNonFhlUkProperty(request: CreateHistoricNonFhlUkPropertyPeriodSummaryRequest)(
+  def createPeriodSummary(request: CreateHistoricNonFhlUkPropertyPeriodSummaryRequest)(
       implicit hc: HeaderCarrier,
       ec: ExecutionContext,
       correlationId: String): Future[DownstreamOutcome[CreateHistoricNonFhlUkPiePeriodSummaryResponse]] = {
 
     post(
       body = request.body,
-      uri = IfsUri[CreateHistoricNonFhlUkPiePeriodSummaryResponse](s"/income-tax/nino/${request.nino.nino}/uk-properties/other/periodic-summaries")
+      uri = IfsUri[CreateHistoricNonFhlUkPiePeriodSummaryResponse](s"income-tax/nino/${request.nino.nino}/uk-properties/other/periodic-summaries")
     )
   }
 }

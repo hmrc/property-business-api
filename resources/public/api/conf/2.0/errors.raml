@@ -218,6 +218,31 @@ traits:
                   description: The specified tax year is not supported. That is, the tax year specified is before the minimum tax year value.
                   value:
                     code: RULE_TAX_YEAR_NOT_SUPPORTED
+  ruleTaxYearNotSupportedMinMax:
+      responses:
+        400:
+          body:
+            application/json:
+              type: types.errorResponse
+              examples:
+                ruleTaxYearNotSupported:
+                  description: |
+                    The specified tax year is not supported.
+                    Either the tax year specified is before the minimum tax year value, or it is after the maximum tax year value.
+                  value:
+                    code: RULE_TAX_YEAR_NOT_SUPPORTED
+  rulePeriodTaxYearNotSupported:
+      responses:
+        400:
+          body:
+            application/json:
+              type: types.errorResponse
+              examples:
+                ruleTaxYearNotSupported:
+                  description: |
+                    The specified period does not lie within the supported range.
+                  value:
+                    code: RULE_TAX_YEAR_NOT_SUPPORTED
   ruleTaxYearRangeInvalid:
       responses:
         400:

@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-//package v2.models.response.createHistoricNonFhlUkPiePeriodSummary
 package v2.models.response.createHistoricNonFhlUkPiePeriodSummary
 
 import config.AppConfig

@@ -143,11 +143,11 @@ class HateoasLinksSpec extends UnitSpec with MockAppConfig with HateoasLinks {
 
     "for Historic Uk Property Income & Expenses (PIE) Period Summary" must {
       "work for PIE1 'Retrieve a Period Summary'" in new Test {
-        retrieveHistoricFhlUkPiePeriodSubmission(mockAppConfig, nino = nino, periodId = periodId) shouldBe
+        retrieveHistoricFhlUkPiePeriodSubmission(mockAppConfig, nino = nino, periodId = periodId, true) shouldBe
           Link(
             "/individuals/business/property/uk/furnished-holiday-lettings/{nino}/{periodId}",
             GET,
-            "retrieve-historic-uk-fhl-property-income-expenses-period-summary"
+            "self"
           )
       }
 
@@ -155,7 +155,7 @@ class HateoasLinksSpec extends UnitSpec with MockAppConfig with HateoasLinks {
         amendHistoricFhlUkPiePeriodSubmission(mockAppConfig, nino = nino, periodId = periodId) shouldBe
           Link("/individuals/business/property/uk/furnished-holiday-lettings/{nino}/{periodId}",
                PUT,
-               "amend-historic-uk-fhl-property-income-expenses-period-summary")
+               "amend-uk-property-historic-fhl-period-summary")
       }
     }
   }

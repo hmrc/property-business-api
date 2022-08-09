@@ -32,7 +32,7 @@ object CreateHistoricFhlUkPiePeriodSummaryResponse extends HateoasLinks {
       import data._
       Seq(
         amendHistoricFhlUkPiePeriodSubmission(appConfig, nino, periodId),
-        retrieveHistoricFhlUkPiePeriodSubmission(appConfig, nino, periodId)
+        retrieveHistoricFhlUkPiePeriodSubmission(appConfig, nino, periodId, self = true)
       )
     }
   }

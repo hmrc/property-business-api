@@ -23,23 +23,23 @@ description: This endpoint enables you to create a periodic submission of income
 securedBy: [ sec.oauth_2_0: { scopes: [ "write:self-assessment" ] } ]
 body:
   application/json:
-    type: !include schemas/uk_property_non_fhl_period_summary_create/request.json
+    type: !include schemas/historic_uk_non_fhl_period_summary_create/request.json
     examples:
       example-1:
         description: Full income and expenses request
-        value: !include examples/uk_property_non_fhl_period_summary_create/request.json
+        value: !include examples/historic_uk_non_fhl_period_summary_create/request.json
       example-2:
         description: Consolidated income and expenses request
-        value: !include examples/uk_property_non_fhl_period_summary_create/consolidated_request.json
+        value: !include examples/historic_uk_non_fhl_period_summary_create/consolidated_request.json
 responses:
   200:
     body:
       application/json:
-        type: !include schemas/uk_property_non_fhl_period_summary_create/response.json
+        type: !include schemas/historic_uk_non_fhl_period_summary_create/response.json
         examples:
           example-1:
             description: Example response
-            value: !include examples/uk_property_non_fhl_period_summary_create/response.json
+            value: !include examples/historic_uk_non_fhl_period_summary_create/response.json
     headers:
       X-CorrelationId:
         example: a1e8057e-fbbc-47a8-a8b4-78d9f015c253

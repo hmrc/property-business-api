@@ -118,17 +118,5 @@ class CreateHistoricFhlUkPiePeriodSummaryController @Inject()(val authService: E
       case _                 => unhandledError(errorWrapper)
 
     }
-
-//    errorWrapper.error match {
-//      case (BadRequestError | NinoFormatError | RuleBothExpensesSuppliedError | RuleIncorrectOrEmptyBodyError | FromDateFormatError |
-//          ToDateFormatError | RuleToDateBeforeFromDateError | RuleDuplicateSubmissionError | RuleMisalignedPeriodError | RuleOverlappingPeriodError |
-//          RuleNotContiguousPeriodError | RuleTaxYearNotSupportedError) | MtdErrorWithCode(RuleIncorrectOrEmptyBodyError.code) | MtdErrorWithCode(
-//            ValueFormatError.code) =>
-//        BadRequest(Json.toJson(errorWrapper))
-//      case UnauthorisedError => Unauthorized(Json.toJson(errorWrapper))
-//      case NotFoundError     => NotFound(Json.toJson(errorWrapper))
-//      case InternalError     => InternalServerError(Json.toJson(errorWrapper))
-//      case _                 => unhandledError(errorWrapper)
-//    }
   }
 }

@@ -154,13 +154,11 @@ trait HateoasLinks {
          rel = AMEND_HISTORIC_UK_FHL_PROPERTY_INCOME_EXPENSES_PERIOD_SUMMARY)
 
   def retrieveHistoricFhlUkPiePeriodSummary(appConfig: AppConfig, nino: String, periodId: String): Link =
-    Link(href = ukHistoricFhlPiePeriodSummaryUri(appConfig, nino, Some(periodId)),
-         method = GET,
-         rel = RETRIEVE_HISTORIC_UK_FHL_PROPERTY_INCOME_EXPENSES_PERIOD_SUMMARY)
+    Link(href = ukHistoricFhlPiePeriodSummaryUri(appConfig, nino, Some(periodId)), method = GET, rel = SELF)
 
   // Non-FHL:
   def retrieveHistoricNonFhlUkPiePeriodSummary(appConfig: AppConfig, nino: String, periodId: String): Link = {
-    Link(href = ukHistoricNonFhlPiePeriodSummaryUri(appConfig, nino, periodId), method = GET, rel = RETRIEVE_HISTORIC_NON_FHL_UK_PIE_PERIOD_SUMMARY)
+    Link(href = ukHistoricNonFhlPiePeriodSummaryUri(appConfig, nino, periodId), method = GET, rel = SELF)
   }
 
   def amendHistoricNonFhlUkPiePeriodSummary(appConfig: AppConfig, nino: String, periodId: String): Link =

@@ -103,6 +103,7 @@ documentation:
             description: National Insurance number, in the format AA999999A.
             type: string
             example: TC663795B
+        post: !include historic_uk_non_fhl_period_summary_create.raml
         /{taxYear}:
           (annotations.group):
             name: Historic non-FHL UK Property Business Annual Submission

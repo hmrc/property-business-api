@@ -1,0 +1,43 @@
+{
+  "$schema":"https://json-schema.org/draft/2019-09/schema",
+  "type":"object",
+  "properties":{
+    "periodId":{
+      "type":"string",
+      "description":"An identifier for the update period, unique to the UK business property.",
+      "example":"2017-04-06_2017-07-04"
+    },
+    "links":{
+      "type":"array",
+      "items": {
+        "type":"object",
+        "properties":{
+          "href":{
+            "description":"The relative url of the endpoint",
+            "type":"string",
+            "example":"/individuals/business/property/uk/non-furnished-holiday-lettings/KZ816096B/2019-03-11_2020-04-23"
+          },
+          "method":{
+            "description":"The HTTP method type for the endpoint",
+            "type":"string",
+            "enum": [
+              "GET",
+              "PUT"
+            ]
+          },
+          "rel":{
+            "description":"A label for the endpoint, which describes how it is related to the current resource. The rel will be self where the action is retrieval of the same resource",
+            "type":"string",
+            "enum": [
+              "self",
+              "amend-uk-property-historic-non-fhl-period-summary"
+            ]
+          }
+        }
+      }
+    }
+  },
+  "required":[
+    "periodId"
+  ]
+}

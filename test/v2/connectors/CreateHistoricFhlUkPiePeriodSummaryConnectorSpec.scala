@@ -37,7 +37,6 @@ class CreateHistoricFhlUkPiePeriodSummaryConnectorSpec extends ConnectorSpec {
   val nino           = "WE123567A"
   val fromDate       = "2021-01-06"
   val toDate         = "2021-02-06"
-  val periodId       = "2021-01-06_2021-02-06"
 
   val income: UkFhlPieIncome = UkFhlPieIncome(Some(129.10), Some(129.11), Some(UkPropertyIncomeRentARoom(Some(144.23))))
 
@@ -68,8 +67,7 @@ class CreateHistoricFhlUkPiePeriodSummaryConnectorSpec extends ConnectorSpec {
 
   val consolidatedRequestData: CreateHistoricFhlUkPiePeriodSummaryRequest = CreateHistoricFhlUkPiePeriodSummaryRequest(Nino(nino), consolidatedBody)
 
-  val downstreamResponseData        = CreateHistoricFhlUkPiePeriodSummaryResponse(transactionRef, None)
-  val responseDataWithPeriodIdAdded = downstreamResponseData.copy(periodId = Some(periodId))
+  val downstreamResponseData = CreateHistoricFhlUkPiePeriodSummaryResponse(transactionRef, None)
 
   class Test extends MockHttpClient with MockAppConfig {
 
@@ -88,7 +86,6 @@ class CreateHistoricFhlUkPiePeriodSummaryConnectorSpec extends ConnectorSpec {
 
     "post a body with dates, income and expenses and return a 202 with the Period ID added" in new Test {
       val downstreamOutcome = Right(ResponseWrapper(transactionRef, downstreamResponseData))
-      val expectedOutcome   = Right(ResponseWrapper(transactionRef, responseDataWithPeriodIdAdded))
 
       implicit val hc: HeaderCarrier                    = HeaderCarrier(otherHeaders = otherHeaders ++ Seq("Content-Type" -> "application/json"))
       val requiredIfsHeadersPost: Seq[(String, String)] = requiredIfsHeaders ++ Seq("Content-Type" -> "application/json")
@@ -104,12 +101,11 @@ class CreateHistoricFhlUkPiePeriodSummaryConnectorSpec extends ConnectorSpec {
         .returns(Future.successful(downstreamOutcome))
 
       val result = await(connector.createPeriodSummary(requestData))
-      result shouldBe expectedOutcome
+      result shouldBe downstreamOutcome
     }
 
     "post a body with dates, income and consolidated expenses and return a 202 with the Period ID added" in new Test {
       val downstreamOutcome = Right(ResponseWrapper(transactionRef, downstreamResponseData))
-      val expectedOutcome   = Right(ResponseWrapper(transactionRef, responseDataWithPeriodIdAdded))
 
       implicit val hc: HeaderCarrier                    = HeaderCarrier(otherHeaders = otherHeaders ++ Seq("Content-Type" -> "application/json"))
       val requiredIfsHeadersPost: Seq[(String, String)] = requiredIfsHeaders ++ Seq("Content-Type" -> "application/json")
@@ -124,7 +120,7 @@ class CreateHistoricFhlUkPiePeriodSummaryConnectorSpec extends ConnectorSpec {
         )
         .returns(Future.successful(downstreamOutcome))
 
-      await(connector.createPeriodSummary(consolidatedRequestData)) shouldBe expectedOutcome
+      await(connector.createPeriodSummary(consolidatedRequestData)) shouldBe downstreamOutcome
     }
   }
 }

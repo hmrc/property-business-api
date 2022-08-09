@@ -212,14 +212,14 @@ class CreateHistoricFhlUkPiePeriodSummaryValidatorSpec extends UnitSpec with Moc
     "return FromDateFormatError error" when {
       "given an invalid fromDate" in {
         val result = validator.validate(CreateHistoricFhlUkPiePeriodSummaryRawData(validNino, requestBodyWithInvalidFromDateFormat))
-        result should contain only (FromDateFormatError, TaxYearFormatError)
+        result should contain only FromDateFormatError
       }
     }
 
     "return ToDateFormatError error" when {
       "given an invalid toDate" in {
         val result = validator.validate(CreateHistoricFhlUkPiePeriodSummaryRawData(validNino, requestBodyWithInvalidToDateFormat))
-        result should contain only (ToDateFormatError, TaxYearFormatError)
+        result should contain only ToDateFormatError
       }
     }
 

@@ -16,6 +16,8 @@
 
 package v2.connectors
 
+import cats.data.EitherT
+import cats.implicits._
 import config.AppConfig
 import uk.gov.hmrc.http.{ HeaderCarrier, HttpClient }
 import v2.connectors.DownstreamUri.IfsUri
@@ -34,17 +36,18 @@ class CreateHistoricFhlUkPiePeriodSummaryConnector @Inject()(val http: HttpClien
       ex: ExecutionContext,
       correlationId: String): Future[DownstreamOutcome[CreateHistoricFhlUkPiePeriodSummaryResponse]] = {
 
-    val outcomeF = post(
+    val path = s"income-tax/nino/${request.nino.nino}/uk-properties/furnished-holiday-lettings/periodic-summaries"
+
+    val outcome = post(
       body = request.body,
-      uri = IfsUri[CreateHistoricFhlUkPiePeriodSummaryResponse](
-        s"income-tax/nino/${request.nino.nino}/uk-properties/furnished-holiday-lettings/periodic-summaries")
+      uri = IfsUri[CreateHistoricFhlUkPiePeriodSummaryResponse](path)
     )
-    val result: Future[DownstreamOutcome[CreateHistoricFhlUkPiePeriodSummaryResponse]] = {
-      outcomeF.map(_.map { wrapper =>
-        val periodId = s"${request.body.fromDate}_${request.body.toDate}"
-        wrapper.copy(responseData = wrapper.responseData.copy(periodId = Some(periodId)))
-      })
-    }
-    result
+
+    (for {
+      wrapper <- EitherT(outcome)
+    } yield {
+      val periodId = s"${request.body.fromDate}_${request.body.toDate}"
+      wrapper.copy(responseData = wrapper.responseData.copy(periodId = Some(periodId)))
+    }).value
   }
 }

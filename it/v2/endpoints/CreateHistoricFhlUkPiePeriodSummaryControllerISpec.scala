@@ -19,7 +19,7 @@ package v2.endpoints
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import play.api.http.HeaderNames.ACCEPT
 import play.api.http.Status._
-import play.api.libs.json.{ JsValue, Json }
+import play.api.libs.json.{ JsObject, JsValue, Json }
 import play.api.libs.ws.{ WSRequest, WSResponse }
 import play.api.test.Helpers.AUTHORIZATION
 import support.V2IntegrationBaseSpec
@@ -29,39 +29,95 @@ import v2.stubs.{ AuthStub, DownstreamStub, MtdIdLookupStub }
 
 class CreateHistoricFhlUkPiePeriodSummaryControllerISpec extends V2IntegrationBaseSpec {
 
+  val validRequestJson: JsValue = Json.parse(
+    """
+      | {
+      |   "fromDate": "2017-04-06",
+      |   "toDate": "2017-07-05",
+      |   "income": {
+      |     "periodAmount": 100.25,
+      |     "taxDeducted": 100.25,
+      |     "rentARoom": {
+      |       "rentsReceived": 100.25
+      |     }
+      |   },
+      |   "expenses": {
+      |     "premisesRunningCosts": 100.25,
+      |     "repairsAndMaintenance": 100.25,
+      |     "financialCosts": 100.25,
+      |     "professionalFees": 100.25,
+      |     "costOfServices": 100.25,
+      |     "travelCosts": 100.25,
+      |     "other": 100.25,
+      |     "rentARoom": {
+      |       "amountClaimed": 100.25
+      |     }
+      |   }
+      | }
+      """.stripMargin
+  )
+
+  val invalidFieldsRequestBodyJson: JsValue = Json.parse(
+    """
+      | {
+      |   "fromDate": "2017-04-06",
+      |   "toDate": "2017-07-05",
+      |   "income": {
+      |     "periodAmount": -200.11,
+      |     "taxDeducted": 100.25,
+      |     "rentARoom": {
+      |       "rentsReceived": -1
+      |     }
+      |   },
+      |   "expenses": {
+      |     "premisesRunningCosts": -11.99,
+      |     "repairsAndMaintenance": 100.25,
+      |     "financialCosts": 100.25,
+      |     "professionalFees": 100.25,
+      |     "costOfServices": 100.25,
+      |     "travelCosts": 100.25,
+      |     "other": 100.25,
+      |     "rentARoom": {
+      |       "amountClaimed": -1.23
+      |     }
+      |   }
+      | }
+      """.stripMargin
+  )
+
+  val valueFormatErrorForInvalidFieldsJson: MtdError = ValueFormatError.copy(
+    paths = Some(
+      List(
+        "/income/periodAmount",
+        "/income/rentARoom/rentsReceived",
+        "/expenses/premisesRunningCosts",
+        "/expenses/rentARoom/amountClaimed"
+      ))
+  )
+
+  val invalidFromDateRequestBodyJson: JsValue = Json.parse(
+    """
+      | {
+      |   "fromDate": "2017-04-0611111",
+      |   "toDate": "2017-07-05"
+      | }
+      """.stripMargin
+  )
+
+  val invalidToDateRequestBodyJson: JsValue = Json.parse(
+    """
+      | {
+      |   "fromDate": "2017-04-06",
+      |   "toDate": "2017-07-0522222"
+      | }
+      """.stripMargin
+  )
+
   private trait Test {
 
-    val nino: String          = "TC663795B"
-    val taxYear: String       = "2020-21"
-    val correlationId: String = "X-123"
-
-    val requestBodyJson: JsValue = Json.parse(
-      """
-         | {
-         |   "fromDate": "2017-04-06",
-         |   "toDate": "2017-07-05",
-         |   "income": {
-         |     "periodAmount": 100.25,
-         |     "taxDeducted": 100.25,
-         |     "rentARoom": {
-         |       "rentsReceived": 100.25
-         |     }
-         |   },
-         |   "expenses": {
-         |     "premisesRunningCosts": 100.25,
-         |     "repairsAndMaintenance": 100.25,
-         |     "financialCosts": 100.25,
-         |     "professionalFees": 100.25,
-         |     "costOfServices": 100.25,
-         |     "travelCosts": 100.25,
-         |     "other": 100.25,
-         |     "rentARoom": {
-         |       "amountClaimed": 100.25
-         |     }
-         |   }
-         | }
-      """.stripMargin
-    )
+    val nino: String             = "TC663795B"
+    val correlationId: String    = "X-123"
+    val requestBodyJson: JsValue = validRequestJson
 
     def setupStubs(): StubMapping
 
@@ -88,7 +144,7 @@ class CreateHistoricFhlUkPiePeriodSummaryControllerISpec extends V2IntegrationBa
       s"""
          |{
          |  "code": "$code",
-         |  "reason": "des message"
+         |  "reason": "Error message from downstream"
          |}
        """.stripMargin
   }
@@ -144,91 +200,22 @@ class CreateHistoricFhlUkPiePeriodSummaryControllerISpec extends V2IntegrationBa
           MtdIdLookupStub.ninoFound(nino)
         }
 
-        val invalidFieldsRequestBodyJson: JsValue = Json.parse(
-          """
-            | {
-            |   "fromDate": "2017-04-06",
-            |   "toDate": "2017-07-05",
-            |   "income": {
-            |     "periodAmount": -200.11,
-            |     "taxDeducted": 100.25,
-            |     "rentARoom": {
-            |       "rentsReceived": -1
-            |     }
-            |   },
-            |   "expenses": {
-            |     "premisesRunningCosts": -11.99,
-            |     "repairsAndMaintenance": 100.25,
-            |     "financialCosts": 100.25,
-            |     "professionalFees": 100.25,
-            |     "costOfServices": 100.25,
-            |     "travelCosts": 100.25,
-            |     "other": 100.25,
-            |     "rentARoom": {
-            |       "amountClaimed": -1.23
-            |     }
-            |   }
-            | }
-      """.stripMargin
-        )
-
-        val invalidFieldsRequestError: MtdError = ValueFormatError.copy(
-          paths = Some(
-            List(
-              "/annualAdjustments/lossBroughtForward",
-              "/annualAdjustments/privateUseAdjustment",
-              "/annualAdjustments/balancingCharge",
-              "/annualAllowances/annualInvestmentAllowance",
-              "/annualAllowances/propertyIncomeAllowance"
-            ))
-        )
-
-        val wrappedErrors: ErrorWrapper = ErrorWrapper(
+        val expectedWrappedErrors: ErrorWrapper = ErrorWrapper(
           correlationId = correlationId,
-          error = invalidFieldsRequestError
+          error = valueFormatErrorForInvalidFieldsJson
         )
 
         val response: WSResponse = await(request().post(invalidFieldsRequestBodyJson))
         response.status shouldBe BAD_REQUEST
-        response.json shouldBe Json.toJson(wrappedErrors)
+        response.json shouldBe Json.toJson(expectedWrappedErrors)
       }
     }
 
     "return a validation error according to spec" when {
-
-      val requestJson: JsValue = Json.parse(
-        """
-          |{
-          |   "annualAdjustments": {
-          |      "lossBroughtForward": 200.00,
-          |      "balancingCharge": 200.00,
-          |      "privateUseAdjustment": 200.00,
-          |      "periodOfGraceAdjustment": true,
-          |      "businessPremisesRenovationAllowanceBalancingCharges": 200.02,
-          |      "nonResidentLandlord": true,
-          |      "rentARoom": {
-          |         "jointlyLet": true
-          |      }
-          |   },
-          |   "annualAllowances": {
-          |      "annualInvestmentAllowance": 200.00,
-          |      "otherCapitalAllowance": 200.00,
-          |      "businessPremisesRenovationAllowance": 100.02,
-          |      "propertyIncomeAllowance": 10.02
-          |   }
-          |}
-      """.stripMargin
-      )
-
-      def validationErrorTest(requestNino: String,
-                              requestTaxYear: String,
-                              requestBody: JsValue,
-                              expectedStatus: Int,
-                              expectedBody: MtdError): Unit = {
-        s"validation fails with ${expectedBody.code} error" in new Test {
+      def validationErrorTest(requestNino: String, requestBody: JsValue, expectedStatus: Int, expectedError: MtdError): Unit = {
+        s"validation fails with ${expectedError.code} error" in new Test {
 
           override val nino: String             = requestNino
-          override val taxYear: String          = requestTaxYear
           override val requestBodyJson: JsValue = requestBody
 
           override def setupStubs(): StubMapping = {
@@ -238,27 +225,27 @@ class CreateHistoricFhlUkPiePeriodSummaryControllerISpec extends V2IntegrationBa
 
           val response: WSResponse = await(request().post(requestBodyJson))
           response.status shouldBe expectedStatus
-          response.json shouldBe Json.toJson(expectedBody)
+          response.json shouldBe Json.toJson(expectedError)
         }
       }
       val input = Seq(
-        ("AA1123A", "2022-23", requestJson, BAD_REQUEST, NinoFormatError),
-        ("AA123456A", "202362-23", requestJson, BAD_REQUEST, TaxYearFormatError),
-        ("AA123456A", "2021-24", requestJson, BAD_REQUEST, RuleTaxYearRangeInvalidError),
-        ("AA123456A", "2015-16", requestJson, BAD_REQUEST, RuleTaxYearNotSupportedError),
-        ("AA123456A", "2022-23", Json.parse(s"""{}""".stripMargin), BAD_REQUEST, RuleIncorrectOrEmptyBodyError),
+        ("AA1123A", validRequestJson, BAD_REQUEST, NinoFormatError),
+        ("AA123456A", invalidFieldsRequestBodyJson, BAD_REQUEST, valueFormatErrorForInvalidFieldsJson),
+        ("AA123456A", JsObject.empty, BAD_REQUEST, RuleIncorrectOrEmptyBodyError),
+        ("AA123456A", invalidFromDateRequestBodyJson, BAD_REQUEST, FromDateFormatError),
+        ("AA123456A", invalidToDateRequestBodyJson, BAD_REQUEST, ToDateFormatError)
       )
       input.foreach(args => (validationErrorTest _).tupled(args))
     }
 
-    "downstream service error" when {
-      def serviceErrorTest(desStatus: Int, downstreamCode: String, expectedStatus: Int, expectedBody: MtdError): Unit = {
-        s"downstream returns an $downstreamCode error and status $desStatus" in new Test {
+    "map each downstream service error to an MTD error" when {
+      def serviceErrorTest(downstreamStatus: Int, downstreamCode: String, expectedStatus: Int, expectedBody: MtdError): Unit = {
+        s"downstream responds with $downstreamCode and status $downstreamStatus" in new Test {
 
           override def setupStubs(): StubMapping = {
             AuthStub.authorised()
             MtdIdLookupStub.ninoFound(nino)
-            DownstreamStub.onError(DownstreamStub.POST, downstreamUri, desStatus, errorBody(downstreamCode))
+            DownstreamStub.onError(DownstreamStub.POST, downstreamUri, downstreamStatus, errorBody(downstreamCode))
           }
 
           val response: WSResponse = await(request().post(requestBodyJson))
@@ -272,9 +259,17 @@ class CreateHistoricFhlUkPiePeriodSummaryControllerISpec extends V2IntegrationBa
         (BAD_REQUEST, "INVALID_NINO", BAD_REQUEST, NinoFormatError),
         (BAD_REQUEST, "INVALID_TYPE", INTERNAL_SERVER_ERROR, InternalError),
         (BAD_REQUEST, "INVALID_PAYLOAD", INTERNAL_SERVER_ERROR, InternalError),
-        (BAD_REQUEST, "INVALID_TAX_YEAR", BAD_REQUEST, TaxYearFormatError),
-        (NOT_FOUND, "NOT_FOUND_PROPERTY", NOT_FOUND, NotFoundError),
-        (GONE, "GONE", INTERNAL_SERVER_ERROR, InternalError)
+        (BAD_REQUEST, "INVALID_CORRELATIONID", INTERNAL_SERVER_ERROR, InternalError),
+        (NOT_FOUND, "INCOME_SOURCE_NOT_FOUND", NOT_FOUND, NotFoundError),
+        (CONFLICT, "DUPLICATE_SUBMISSION", BAD_REQUEST, RuleDuplicateSubmissionError),
+        (UNPROCESSABLE_ENTITY, "NOT_ALIGN_PERIOD", BAD_REQUEST, RuleMisalignedPeriodError),
+        (UNPROCESSABLE_ENTITY, "OVERLAPS_IN_PERIOD", BAD_REQUEST, RuleOverlappingPeriodError),
+        (UNPROCESSABLE_ENTITY, "NOT_CONTIGUOUS_PERIOD", BAD_REQUEST, RuleNotContiguousPeriodError),
+        (UNPROCESSABLE_ENTITY, "INVALID_PERIOD", BAD_REQUEST, RuleToDateBeforeFromDateError),
+        (UNPROCESSABLE_ENTITY, "BOTH_EXPENSES_SUPPLIED", BAD_REQUEST, RuleBothExpensesSuppliedError),
+        (UNPROCESSABLE_ENTITY, "TAX_YEAR_NOT_SUPPORTED", BAD_REQUEST, RuleTaxYearNotSupportedError),
+        (INTERNAL_SERVER_ERROR, "SERVER_ERROR", INTERNAL_SERVER_ERROR, InternalError),
+        (SERVICE_UNAVAILABLE, "SERVICE_UNAVAILABLE", INTERNAL_SERVER_ERROR, InternalError)
       )
       input.foreach(args => (serviceErrorTest _).tupled(args))
     }

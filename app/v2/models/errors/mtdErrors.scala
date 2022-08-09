@@ -50,7 +50,7 @@ object CountryCodeFormatError extends MtdError("FORMAT_COUNTRY_CODE", "The provi
 
 object ValueFormatError extends MtdError("FORMAT_VALUE", "The value must be between 0 and 99999999999.99") {
 
-  def forPathAndRange(path: String, min: String, max: String): MtdError =
+  def forPathAndRange(path: String, min: String = "0", max: String = "99999999999.99"): MtdError =
     ValueFormatError.copy(paths = Some(Seq(path)), message = s"The value must be between $min and $max")
 }
 

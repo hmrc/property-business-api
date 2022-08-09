@@ -1,7 +1,5 @@
 {
   "$schema":"https://json-schema.org/draft/2019-09/schema",
-  "title":"Create a Historic Non-FHL UK Property Income & Expenses Period Summary",
-  "description":"This endpoint allows a developer to create income, and expenses  for their non-FHL UK property business to make periodic submission for tax years from 2017-18 to 2021-22. A National Insurance number must be provided. The new Property specification endpoints should be used to create periodic submissions for the current tax year.",
   "type":"object",
   "properties":{
     "periodId":{
@@ -11,50 +9,32 @@
     },
     "links":{
       "type":"array",
-      "description":"The links Schema",
-      "items":[
-        {
-          "type":"object",
-          "description":"A list of endpoint links that indicate possible actions related to the current resource.",
-          "properties":{
-            "href":{
-              "description":"The relative url of the endpoint",
-              "type":"string",
-              "example":"/individuals/business/property/uk/non-furnished-holiday-lettings/KZ816096B/2019-03-11_2020-04-23"
-            },
-            "method":{
-              "description":"The method Schema",
-              "type":"string",
-              "example":"PUT"
-            },
-            "rel":{
-              "description":"A label for the endpoint, which describes how it is related to the current resource.",
-              "type":"string",
-              "example":"amend-uk-property-historic-non-fhl-period-summary"
-            }
-          }
-        },
-        {
-          "type":"object",
-          "properties":{
-            "href":{
-              "description":"The relative url of the endpoint",
-              "type":"string",
-              "example":"/individuals/business/property/uk/non-furnished-holiday-lettings/KZ816096B/2019-03-11_2020-04-23"
-            },
-            "method":{
-              "description":"The HTTP method type for the endpoint",
-              "type":"string",
-              "example":"GET"
-            },
-            "rel":{
-              "description":"A label for the endpoint, which describes how it is related to the current resource. The rel will be self where the action is retrieval of the same resource",
-              "type":"string",
-              "example":"self"
-            }
+      "items": {
+        "type":"object",
+        "properties":{
+          "href":{
+            "description":"The relative url of the endpoint",
+            "type":"string",
+            "example":"/individuals/business/property/uk/non-furnished-holiday-lettings/KZ816096B/2019-03-11_2020-04-23"
+          },
+          "method":{
+            "description":"The HTTP method type for the endpoint",
+            "type":"string",
+            "enum": [
+              "GET",
+              "PUT"
+            ]
+          },
+          "rel":{
+            "description":"A label for the endpoint, which describes how it is related to the current resource. The rel will be self where the action is retrieval of the same resource",
+            "type":"string",
+            "enum": [
+              "self",
+              "amend-uk-property-historic-non-fhl-period-summary"
+            ]
           }
         }
-      ]
+      }
     }
   },
   "required":[

@@ -1,16 +1,14 @@
 {
   "$schema": "https://json-schema.org/draft/2019-09/schema",
-  "title": "Create a Historic Non-FHL UK Property Income & Expenses Period Summary",
-  "description": "This endpoint allows a developer to create income, and expenses  for their non-FHL UK property business to make periodic submission for tax years from 2017-18 to 2021-22. A National Insurance number must be provided. The new Property specification endpoints should be used to create periodic submissions for the current tax year.",
   "type": "object",
   "properties": {
     "fromDate": {
-      "description": "The first day that the income and expenses period summary covers.",
+      "description": "The first day that the income and expenses period summary covers. Must conform to the format YYYY-MM-DD.",
       "type": "string",
       "example": "2020-01-01"
     },
     "toDate": {
-      "description": "The last day that the income and expenses period summary covers.",
+      "description": "The last day that the income and expenses period summary covers. Must conform to the format YYYY-MM-DD.",
       "type": "string",
       "example": "2020-01-01"
     },
@@ -24,17 +22,17 @@
           "example": "5000.99"
         },
         "premiumsOfLeaseGrant": {
-          "description": "Total rents from property, ground rents and rent charges but not rent-a-room.\nThe value must be between 0 and 99999999999.99 up to 2 decimal places.",
+          "description": "Premiums received for the grant of a lease and other lump sums to possess a property.\nThe value must be between 0 and 99999999999.99 up to 2 decimal places.",
           "type": "number",
           "example": "5000.99"
         },
         "reversePremiums": {
-          "description": "Total rents from property, ground rents and rent charges but not rent-a-room.\nThe value must be between 0 and 99999999999.99 up to 2 decimal places.",
+          "description": "Amount paid by a landlord or outgoing tenant to induce a new tenant to enter into a leasehold agreement.\nThe value must be between 0 and 99999999999.99 up to 2 decimal places.",
           "type": "number",
           "example": "5000.99"
         },
         "otherIncome": {
-          "description": "Total rents from property, ground rents and rent charges but not rent-a-room.\nThe value must be between 0 and 99999999999.99 up to 2 decimal places.",
+          "description": "Total amount of rent and any income for services provided to tenants.\nThe value must be between 0 and 99999999999.99 up to 2 decimal places.",
           "type": "number",
           "example": "5000.99"
         },

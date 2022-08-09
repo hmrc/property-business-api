@@ -72,14 +72,6 @@ documentation:
                   example: 4557ecb5-fd32-48cc-81f5-e6acd1099f3c
               get: !include uk_property_period_summary_retrieve.raml
               put: !include uk_property_period_summary_amend.raml
-    /non-furnished-holiday-lettings:
-      /{nino}:
-        uriParameters:
-          nino:
-            description: National Insurance number, in the format AA999999A.
-            type: string
-            example: TC663795B
-        post: !include uk_property_non_fhl_period_summary_create.raml
     /furnished-holiday-lettings:
       /{nino}:
         (annotations.group):
@@ -111,6 +103,7 @@ documentation:
             description: National Insurance number, in the format AA999999A.
             type: string
             example: TC663795B
+        post: !include uk_property_non_fhl_period_summary_create.raml
         /{taxYear}:
           (annotations.group):
             name: Historic non-FHL UK Property Business Annual Submission

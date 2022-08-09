@@ -96,7 +96,7 @@ class CreateHistoricFhlUkPiePeriodSummaryControllerSpec
          |}
          |""".stripMargin)
 
-    private val response: CreateHistoricFhlUkPiePeriodSummaryResponse = CreateHistoricFhlUkPiePeriodSummaryResponse(transactionReference)
+    private val response: CreateHistoricFhlUkPiePeriodSummaryResponse = CreateHistoricFhlUkPiePeriodSummaryResponse(transactionReference, None)
 
     "Create" should {
       "return a successful response " when {

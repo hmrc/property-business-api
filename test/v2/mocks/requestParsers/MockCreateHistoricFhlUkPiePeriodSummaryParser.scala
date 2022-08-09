@@ -18,7 +18,7 @@ package v2.mocks.requestParsers
 
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
-import v2.controllers.CreateHistoricFhlUkPiePeriodSummaryRequestParser
+import v2.controllers.requestParsers.CreateHistoricFhlUkPiePeriodSummaryRequestParser
 import v2.models.errors.ErrorWrapper
 import v2.models.request.createHistoricFhlUkPiePeriodSummary.{
   CreateHistoricFhlUkPiePeriodSummaryRawData,

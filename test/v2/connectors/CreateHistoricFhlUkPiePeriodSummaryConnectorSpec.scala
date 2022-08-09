@@ -21,19 +21,23 @@ import uk.gov.hmrc.http.HeaderCarrier
 import v2.mocks.MockHttpClient
 import v2.models.domain.Nino
 import v2.models.outcomes.ResponseWrapper
-import v2.models.request.common.ukFhlPieProperty.{UkFhlPieExpenses, UkFhlPieIncome}
-import v2.models.request.common.ukPropertyRentARoom.{UkPropertyExpensesRentARoom, UkPropertyIncomeRentARoom}
-import v2.models.request.createHistoricFhlUkPiePeriodSummary.{CreateHistoricFhlUkPiePeriodSummaryRequest, CreateHistoricFhlUkPiePeriodSummaryRequestBody}
+import v2.models.request.common.ukFhlPieProperty.{ UkFhlPieExpenses, UkFhlPieIncome }
+import v2.models.request.common.ukPropertyRentARoom.{ UkPropertyExpensesRentARoom, UkPropertyIncomeRentARoom }
+import v2.models.request.createHistoricFhlUkPiePeriodSummary.{
+  CreateHistoricFhlUkPiePeriodSummaryRequest,
+  CreateHistoricFhlUkPiePeriodSummaryRequestBody
+}
 import v2.models.response.createHistoricFhlUkPiePeriodSummary.CreateHistoricFhlUkPiePeriodSummaryResponse
 
 import scala.concurrent.Future
 
 class CreateHistoricFhlUkPiePeriodSummaryConnectorSpec extends ConnectorSpec {
 
-  val transactionReference: String = "some-transaction-reference"
-  val nino: String                 = "WE123567A"
-  val fromDate: String             = "2021-01-06"
-  val toDate: String               = "2021-02-06"
+  val transactionRef = "some-transaction-reference"
+  val nino           = "WE123567A"
+  val fromDate       = "2021-01-06"
+  val toDate         = "2021-02-06"
+  val periodId       = "2021-01-06_2021-02-06"
 
   val income: UkFhlPieIncome = UkFhlPieIncome(Some(129.10), Some(129.11), Some(UkPropertyIncomeRentARoom(Some(144.23))))
 
@@ -64,7 +68,8 @@ class CreateHistoricFhlUkPiePeriodSummaryConnectorSpec extends ConnectorSpec {
 
   val consolidatedRequestData: CreateHistoricFhlUkPiePeriodSummaryRequest = CreateHistoricFhlUkPiePeriodSummaryRequest(Nino(nino), consolidatedBody)
 
-  val responseData = CreateHistoricFhlUkPiePeriodSummaryResponse(transactionReference)
+  val downstreamResponseData        = CreateHistoricFhlUkPiePeriodSummaryResponse(transactionRef, None)
+  val responseDataWithPeriodIdAdded = downstreamResponseData.copy(periodId = Some(periodId))
 
   class Test extends MockHttpClient with MockAppConfig {
 
@@ -81,8 +86,9 @@ class CreateHistoricFhlUkPiePeriodSummaryConnectorSpec extends ConnectorSpec {
 
   "connector" must {
 
-    "post a body with dates, income and expenses and return a 202 with transactionReference" in new Test {
-      val outcome = Right(ResponseWrapper(transactionReference, responseData))
+    "post a body with dates, income and expenses and return a 202 with the Period ID added" in new Test {
+      val downstreamOutcome = Right(ResponseWrapper(transactionRef, downstreamResponseData))
+      val expectedOutcome   = Right(ResponseWrapper(transactionRef, responseDataWithPeriodIdAdded))
 
       implicit val hc: HeaderCarrier                    = HeaderCarrier(otherHeaders = otherHeaders ++ Seq("Content-Type" -> "application/json"))
       val requiredIfsHeadersPost: Seq[(String, String)] = requiredIfsHeaders ++ Seq("Content-Type" -> "application/json")
@@ -95,13 +101,15 @@ class CreateHistoricFhlUkPiePeriodSummaryConnectorSpec extends ConnectorSpec {
           requiredHeaders = requiredIfsHeadersPost,
           excludedHeaders = Seq("Some-Header" -> "some-value")
         )
-        .returns(Future.successful(outcome))
+        .returns(Future.successful(downstreamOutcome))
 
-      await(connector.createPeriodSummary(requestData)) shouldBe outcome
+      val result = await(connector.createPeriodSummary(requestData))
+      result shouldBe expectedOutcome
     }
 
-    "post a body with dates, income and consolidated expenses and return a 202 with transactionReference" in new Test {
-      val outcome = Right(ResponseWrapper(transactionReference, responseData))
+    "post a body with dates, income and consolidated expenses and return a 202 with the Period ID added" in new Test {
+      val downstreamOutcome = Right(ResponseWrapper(transactionRef, downstreamResponseData))
+      val expectedOutcome   = Right(ResponseWrapper(transactionRef, responseDataWithPeriodIdAdded))
 
       implicit val hc: HeaderCarrier                    = HeaderCarrier(otherHeaders = otherHeaders ++ Seq("Content-Type" -> "application/json"))
       val requiredIfsHeadersPost: Seq[(String, String)] = requiredIfsHeaders ++ Seq("Content-Type" -> "application/json")
@@ -114,9 +122,9 @@ class CreateHistoricFhlUkPiePeriodSummaryConnectorSpec extends ConnectorSpec {
           requiredHeaders = requiredIfsHeadersPost,
           excludedHeaders = Seq("Some-Header" -> "some-value")
         )
-        .returns(Future.successful(outcome))
+        .returns(Future.successful(downstreamOutcome))
 
-      await(connector.createPeriodSummary(consolidatedRequestData)) shouldBe outcome
+      await(connector.createPeriodSummary(consolidatedRequestData)) shouldBe expectedOutcome
     }
   }
 }

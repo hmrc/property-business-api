@@ -18,24 +18,22 @@ package v2.controllers
 
 import cats.data.EitherT
 import cats.implicits.catsSyntaxEitherId
-import config.AppConfig
 import play.api.libs.json.{ JsValue, Json }
 import play.api.mvc.{ Action, ControllerComponents }
 import utils.{ IdGenerator, Logging }
-import v2.controllers.requestParsers.RequestParser
-import v2.controllers.requestParsers.validators.Validator
+import v2.controllers.requestParsers.CreateHistoricFhlUkPiePeriodSummaryRequestParser
 import v2.hateoas.HateoasFactory
 import v2.models.errors._
-import v2.models.request.createHistoricFhlUkPiePeriodSummary.{
-  CreateHistoricFhlUkPiePeriodSummaryRawData,
-  CreateHistoricFhlUkPiePeriodSummaryRequest
-}
+import v2.models.request.createHistoricFhlUkPiePeriodSummary.CreateHistoricFhlUkPiePeriodSummaryRawData
 import v2.models.response.createHistoricFhlUkPiePeriodSummary.CreateHistoricFhlUkPiePeriodSummaryHateoasData
 import v2.services.{ CreateHistoricFhlUkPiePeriodSummaryService, EnrolmentsAuthService, MtdIdLookupService }
 
 import javax.inject.{ Inject, Singleton }
 import scala.concurrent.{ ExecutionContext, Future }
 
+/**
+  * Controller for the Create a Historic UK Furnished Holiday Letting Property Income & Expenses Period Summary endpoint.
+  */
 @Singleton
 class CreateHistoricFhlUkPiePeriodSummaryController @Inject()(val authService: EnrolmentsAuthService,
                                                               val lookupService: MtdIdLookupService,
@@ -71,7 +69,7 @@ class CreateHistoricFhlUkPiePeriodSummaryController @Inject()(val authService: E
               .wrap(
                 serviceResponse.responseData,
                 CreateHistoricFhlUkPiePeriodSummaryHateoasData(nino,
-                                                               s"${parsedRequest.body.toDate}_${parsedRequest.body.toDate}",
+                                                               s"${parsedRequest.body.fromDate}_${parsedRequest.body.toDate}",
                                                                serviceResponse.responseData.transactionReference)
               )
               .asRight[ErrorWrapper]
@@ -93,28 +91,17 @@ class CreateHistoricFhlUkPiePeriodSummaryController @Inject()(val authService: E
       }.merge
     }
 
-  private def errorResult(errorWrapper: ErrorWrapper) =
+  private def errorResult(errorWrapper: ErrorWrapper) = {
     errorWrapper.error match {
       case (BadRequestError | NinoFormatError | RuleBothExpensesSuppliedError | ValueFormatError | RuleIncorrectOrEmptyBodyError |
           FromDateFormatError | ToDateFormatError | RuleToDateBeforeFromDateError | RuleDuplicateSubmissionError | RuleMisalignedPeriodError |
-          RuleOverlappingPeriodError | RuleNotContiguousPeriodError | RuleTaxYearNotSupportedError) =>
+          RuleOverlappingPeriodError | RuleNotContiguousPeriodError | RuleTaxYearNotSupportedError) | MtdErrorWithCode(
+            RuleIncorrectOrEmptyBodyError.code) =>
         BadRequest(Json.toJson(errorWrapper))
       case UnauthorisedError => Unauthorized(Json.toJson(errorWrapper))
       case NotFoundError     => NotFound(Json.toJson(errorWrapper))
       case InternalError     => InternalServerError(Json.toJson(errorWrapper))
       case _                 => unhandledError(errorWrapper)
     }
-}
-
-//TODO: delete and replace placeholder code (below)
-class CreateHistoricFhlUkPiePeriodSummaryRequestParser @Inject()(val validator: CreateHistoricFhlUkPiePeriodSummaryValidator)
-    extends RequestParser[CreateHistoricFhlUkPiePeriodSummaryRawData, CreateHistoricFhlUkPiePeriodSummaryRequest] {
-
-  override protected def requestFor(data: CreateHistoricFhlUkPiePeriodSummaryRawData): CreateHistoricFhlUkPiePeriodSummaryRequest = ???
-
-}
-
-@Singleton
-class CreateHistoricFhlUkPiePeriodSummaryValidator @Inject()(appConfig: AppConfig) extends Validator[CreateHistoricFhlUkPiePeriodSummaryRawData] {
-  override def validate(data: CreateHistoricFhlUkPiePeriodSummaryRawData): List[MtdError] = ???
+  }
 }

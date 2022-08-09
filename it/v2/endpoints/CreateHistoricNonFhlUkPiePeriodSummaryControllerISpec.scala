@@ -417,7 +417,7 @@ class CreateHistoricNonFHlUkPiePeriodSummaryControllerISpec extends V2Integratio
           ("AA123456A", missingToDateRequestJson, Status.BAD_REQUEST, MissingToDateError),
           ("AA123456A", toDateBeforeFromDateRequestJson, Status.BAD_REQUEST, RuleToDateBeforeFromDateError),
           ("AA123456A", invalidValueRequestJson, Status.BAD_REQUEST, allInvalidValueRequestError)
-        ) //Add test for rentARoom.amountClaimed and rentARoom.rentsReceived being missing? Tech spec says they're manadatory, business spec says they're optional.
+        ) //Should we add a test for rentARoom.amountClaimed and rentARoom.rentsReceived being missing? Tech spec says they're manadatory, business spec says they're optional.
         input.foreach(args => (validationErrorTest _).tupled(args))
       }
       "ifs service error" when {

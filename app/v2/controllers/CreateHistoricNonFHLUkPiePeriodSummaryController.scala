@@ -21,13 +21,11 @@ import cats.implicits._
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.{Action, ControllerComponents}
 import utils.{IdGenerator, Logging}
-
 import v2.controllers.requestParsers.CreateHistoricNonFhlUkPropertyPeriodSummaryRequestParser
 import v2.hateoas.HateoasFactory
 import v2.models.errors._
 import v2.models.request.createHistoricNonFhlUkPropertyPeriodSummary.CreateHistoricNonFhlUkPropertyPeriodSummaryRawData
-import v2.models.response.createHistoricNonFhlUkPiePeriodSummaryResponse.CreateHistoricNonFhlUkPiePeriodSummaryHateoasData
-
+import v2.models.response.createHistoricNonFhlUkPiePeriodSummary.CreateHistoricNonFhlUkPiePeriodSummaryHateoasData
 import v2.services.{EnrolmentsAuthService, MtdIdLookupService}
 
 import javax.inject.{Inject, Singleton}

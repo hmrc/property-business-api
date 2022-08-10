@@ -21,18 +21,16 @@ import play.api.mvc.Result
 import uk.gov.hmrc.http.HeaderCarrier
 import v2.mocks.MockIdGenerator
 import v2.mocks.hateoas.MockHateoasFactory
-import v2.mocks.requestParsers.{MockCreateForeignPropertyPeriodSummaryRequestParser, MockCreateHistoricNonFhlUkPiePeriodSummaryRequestParser}
-import v2.mocks.services.{MockAuditService, MockCreateForeignPropertyPeriodSummaryService, MockCreateHistoricNonFhlUkPiePeriodSummaryService, MockEnrolmentsAuthService, MockMtdIdLookupService}
-import v2.models.audit.{AuditError, AuditEvent, AuditResponse, GenericAuditDetail}
+import v2.mocks.requestParsers.MockCreateHistoricNonFhlUkPiePeriodSummaryRequestParser
+import v2.mocks.services.{ MockCreateHistoricNonFhlUkPiePeriodSummaryService, MockEnrolmentsAuthService, MockMtdIdLookupService}
 import v2.models.domain.Nino
 import v2.models.errors._
 import v2.models.hateoas.Method.GET
 import v2.models.hateoas.{HateoasWrapper, Link}
 import v2.models.outcomes.ResponseWrapper
-import v2.models.request.common.ukPropertyRentARoom.UkPropertyIncomeRentARoom
-import v2.models.request.createForeignPropertyPeriodSummary._
+import v2.models.request.common.ukPropertyRentARoom.{UkPropertyExpensesRentARoom, UkPropertyIncomeRentARoom}
 import v2.models.request.createHistoricNonFhlUkPropertyPeriodSummary.{CreateHistoricNonFhlUkPropertyPeriodSummaryRawData, CreateHistoricNonFhlUkPropertyPeriodSummaryRequest, CreateHistoricNonFhlUkPropertyPeriodSummaryRequestBody, UkNonFhlPropertyExpenses, UkNonFhlPropertyIncome}
-import v2.models.response.createForeignPropertyPeriodSummary._
+import v2.models.response.createHistoricNonFhlUkPiePeriodSummary.{CreateHistoricNonFhlUkPiePeriodSummaryHateoasData, CreateHistoricNonFhlUkPiePeriodSummaryResponse}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -43,13 +41,13 @@ class CreateHistoricNonFhlUkPiePeriodSummaryControllerSpec
     with MockMtdIdLookupService
     with MockCreateHistoricNonFhlUkPiePeriodSummaryService
     with MockCreateHistoricNonFhlUkPiePeriodSummaryRequestParser
-    //with MockAuditService
     with MockHateoasFactory
     with MockIdGenerator {
 
-  private val nino          = "AA123456A"
-  private val submissionId  = "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
-  private val correlationId = "a1e8057e-fbbc-47a8-a8b4-78d9f015c253"
+  private val nino                 = "AA123456A"
+  private val periodId             = "2019-03-11_2020-04-23"
+  private val transactionId        = "0000000000000001"
+  private val correlationId        = "a1e8057e-fbbc-47a8-a8b4-78d9f015c253"
 
   private val incomeModel = UkNonFhlPropertyIncome(
     periodAmount= Some(123.45),
@@ -69,8 +67,8 @@ class CreateHistoricNonFhlUkPiePeriodSummaryControllerSpec
     travelCosts = Some(645.56),
     residentialFinancialCostsCarriedForward = Some(672.34),
     residentialFinancialCost = Some(1000.45),
-    rentARoom = Some(UkPropertyIncomeRentARoom(Some(545.9))),
-    consolidatedExpenses = None()
+    rentARoom = Some(UkPropertyExpensesRentARoom(Some(545.9))),
+    consolidatedExpenses = None
   )
 
 
@@ -135,35 +133,24 @@ class CreateHistoricNonFhlUkPiePeriodSummaryControllerSpec
     Seq(Link(href = "/some/link", method = GET, rel = "someRel"))
 
   private val hateoasResponse = Json.parse(
-    s"""
-       |{
-       |  "submissionId": "$submissionId",
+    s"""{
+       |  "periodId": "$periodId",
        |  "links": [
        |    {
-       |      "href":"/some/link",
-       |      "method":"GET",
-       |      "rel":"someRel"
+       |      "href": "/individuals/business/property/uk/non-furnished-holiday-lettings/$nino/$periodId",
+       |      "method": "PUT",
+       |      "rel": "amend-uk-property-historic-non-fhl-period-summary"
+       |    },
+       |    {
+       |      "href": /individuals/business/property/uk/non-furnished-holiday-lettings/$nino/$periodId",
+       |      "method": "GET",
+       |      "rel": "self"
        |    }
        |  ]
-       |}
-    """.stripMargin
+       |}""".stripMargin
   )
 
-  private val response = CreateHistoricNonFhlUkPiePeriodSummaryResponse(submissionId)
-
-//  def event(auditResponse: AuditResponse): AuditEvent[GenericAuditDetail] =
-//    AuditEvent(
-//      auditType = "CreateForeignPropertyIncomeAndExpensesPeriodSummary",
-//      transactionName = "create-foreign-property-income-and-expenses-period-summary",
-//      detail = GenericAuditDetail(
-//        versionNumber = "2.0",
-//        userType = "Individual",
-//        agentReferenceNumber = None,
-//        params = Json.obj("nino" -> nino, "businessId" -> businessId, "taxYear" -> taxYear, "request" -> requestBodyJson),
-//        correlationId = correlationId,
-//        response = auditResponse
-//      )
-//    )
+  private val response = CreateHistoricNonFhlUkPiePeriodSummaryResponse(transactionId)
 
   "create" should {
     "return a successful response" when {
@@ -178,7 +165,7 @@ class CreateHistoricNonFhlUkPiePeriodSummaryControllerSpec
 
         MockHateoasFactory
           .wrap(response,
-            CreateHistoricNonFhlUkPiePeriodSummaryHateoasData( nino,  submissionId = submissionId))
+            CreateHistoricNonFhlUkPiePeriodSummaryHateoasData( nino, periodId, transactionId))
           .returns(HateoasWrapper(response, testHateoasLinks))
 
         val result: Future[Result] = controller.handleRequest(nino)(fakeRequestWithBody(requestBodyJson))
@@ -187,8 +174,6 @@ class CreateHistoricNonFhlUkPiePeriodSummaryControllerSpec
         status(result) shouldBe CREATED
         header("X-CorrelationId", result) shouldBe Some(correlationId)
 
-        val auditResponse: AuditResponse = AuditResponse(CREATED, None, Some(hateoasResponse))
-        MockedAuditService.verifyAuditEvent(event(auditResponse)).once
       }
     }
 
@@ -207,8 +192,6 @@ class CreateHistoricNonFhlUkPiePeriodSummaryControllerSpec
             status(result) shouldBe expectedStatus
             header("X-CorrelationId", result) shouldBe Some(correlationId)
 
-//            val auditResponse: AuditResponse = AuditResponse(expectedStatus, Some(Seq(AuditError(error.code))), None)
-//            MockedAuditService.verifyAuditEvent(event(auditResponse)).once
           }
         }
 
@@ -222,7 +205,6 @@ class CreateHistoricNonFhlUkPiePeriodSummaryControllerSpec
           (FromDateFormatError, BAD_REQUEST),
           (RuleToDateBeforeFromDateError, BAD_REQUEST)
         )
-
         input.foreach(args => (errorsFromParserTester _).tupled(args))
       }
 
@@ -239,14 +221,11 @@ class CreateHistoricNonFhlUkPiePeriodSummaryControllerSpec
               .returns(Future.successful(Left(ErrorWrapper(correlationId, mtdError))))
 
             val result: Future[Result] =
-              controller.handleRequest(nino = nino, businessId = businessId, taxYear = taxYear)(fakeRequestWithBody(requestBodyJson))
+              controller.handleRequest(nino = nino)(fakeRequestWithBody(requestBodyJson))
 
             contentAsJson(result) shouldBe Json.toJson(mtdError)
             status(result) shouldBe expectedStatus
             header("X-CorrelationId", result) shouldBe Some(correlationId)
-
-//            val auditResponse: AuditResponse = AuditResponse(expectedStatus, Some(Seq(AuditError(mtdError.code))), None)
-//            MockedAuditService.verifyAuditEvent(event(auditResponse)).once
           }
         }
 
@@ -261,7 +240,6 @@ class CreateHistoricNonFhlUkPiePeriodSummaryControllerSpec
           (InternalError, INTERNAL_SERVER_ERROR),
           (ServiceUnavailableError, INTERNAL_SERVER_ERROR)
         )
-
         input.foreach(args => (serviceErrors _).tupled(args))
       }
     }

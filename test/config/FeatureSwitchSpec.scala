@@ -33,7 +33,7 @@ class FeatureSwitchSpec extends UnitSpec with ScalaCheckPropertyChecks {
       }
     }
 
-    "v1rc switch is absent" must {
+    "v2r7c switch is absent" must {
       "default to true" in {
         featureSwitch(Some("somethingElse = someValue")).isV2R7cRoutingEnabled shouldBe true
       }

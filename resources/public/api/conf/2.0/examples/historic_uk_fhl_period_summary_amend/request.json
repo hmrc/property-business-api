@@ -1,0 +1,21 @@
+{
+  "periodIncome":{
+    "amount":1123.45,
+    "taxDeducted":2134.53,
+    "rentARoom":{
+      "rentsReceived":5167.56
+    }
+  },
+  "periodExpenses":{
+    "premiseRunningCosts":5167.53,
+    "repairsAndMaintenance":424.65,
+    "financialCosts":853.56,
+    "professionalFees":835.78,
+    "costOfServices":978.34,
+    "other":382.34,
+    "travelCosts":145.56,
+    "rentARoom":{
+      "amountClaimed":945.9
+    }
+  }
+}

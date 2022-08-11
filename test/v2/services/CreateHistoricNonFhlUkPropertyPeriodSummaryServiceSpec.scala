@@ -31,9 +31,11 @@ import scala.concurrent.Future
 class CreateHistoricNonFhlUkPropertyPeriodSummaryServiceSpec extends ServiceSpec {
 
   implicit val transactionReference: String = "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
-  val nino: String                          = "TC663795B"
-  val fromDate: String                      = "2019-03-11"
-  val toDate: String                        = "2020-04-23"
+
+  val nino     = "TC663795B"
+  val fromDate = "2021-01-06"
+  val toDate   = "2021-02-06"
+  val periodId = "2021-01-06_2021-02-06"
 
   val url: String = s"/income-tax/nino/$nino/uk-properties/other/periodic-summaries"
 
@@ -79,7 +81,7 @@ class CreateHistoricNonFhlUkPropertyPeriodSummaryServiceSpec extends ServiceSpec
   private val consolidatedRequestData =
     CreateHistoricNonFhlUkPropertyPeriodSummaryRequest(Nino(nino), consolidatedRequestBody)
 
-  private val responseData = CreateHistoricNonFhlUkPiePeriodSummaryResponse(transactionReference)
+  private val responseData = CreateHistoricNonFhlUkPiePeriodSummaryResponse(transactionReference, Some(periodId))
 
   trait Test extends MockCreateHistoricNonFhlUkPropertyPeriodSummaryConnector {
     implicit val hc: HeaderCarrier              = HeaderCarrier()
@@ -97,7 +99,8 @@ class CreateHistoricNonFhlUkPropertyPeriodSummaryServiceSpec extends ServiceSpec
           .createHistoricNonFhlUkProperty(requestData)
           .returns(Future.successful(Right(ResponseWrapper(transactionReference, responseData))))
 
-        await(service.createHistoricNonFhlUkProperty(requestData)) shouldBe Right(ResponseWrapper(transactionReference, responseData))
+        val result = await(service.createPeriodSummary(requestData))
+        result shouldBe Right(ResponseWrapper(transactionReference, responseData))
       }
 
       "return mapped result for consolidated expenses period summary" in new Test {
@@ -105,7 +108,8 @@ class CreateHistoricNonFhlUkPropertyPeriodSummaryServiceSpec extends ServiceSpec
           .createHistoricNonFhlUkProperty(consolidatedRequestData)
           .returns(Future.successful(Right(ResponseWrapper(transactionReference, responseData))))
 
-        await(service.createHistoricNonFhlUkProperty(consolidatedRequestData)) shouldBe Right(ResponseWrapper(transactionReference, responseData))
+        val result = await(service.createPeriodSummary(consolidatedRequestData))
+        result shouldBe Right(ResponseWrapper(transactionReference, responseData))
 
       }
     }
@@ -117,7 +121,7 @@ class CreateHistoricNonFhlUkPropertyPeriodSummaryServiceSpec extends ServiceSpec
             .createHistoricNonFhlUkProperty(requestData)
             .returns(Future.successful(Left(ResponseWrapper(transactionReference, DownstreamErrors.single(DownstreamErrorCode(ifsErrorCode))))))
 
-          await(service.createHistoricNonFhlUkProperty(requestData)) shouldBe Left(ErrorWrapper(transactionReference, error))
+          await(service.createPeriodSummary(requestData)) shouldBe Left(ErrorWrapper(transactionReference, error))
         }
 
       val input = Seq(

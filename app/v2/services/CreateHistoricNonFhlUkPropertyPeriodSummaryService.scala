@@ -24,6 +24,7 @@ import utils.Logging
 import v2.connectors.CreateHistoricNonFhlUkPropertyPeriodSummaryConnector
 import v2.controllers.EndpointLogContext
 import v2.models.errors._
+import v2.models.outcomes.ResponseWrapper
 import v2.models.request.createHistoricNonFhlUkPropertyPeriodSummary.CreateHistoricNonFhlUkPropertyPeriodSummaryRequest
 import v2.models.response.createHistoricNonFhlUkPiePeriodSummary.CreateHistoricNonFhlUkPiePeriodSummaryResponse
 import v2.support.DownstreamResponseMappingSupport
@@ -33,14 +34,23 @@ class CreateHistoricNonFhlUkPropertyPeriodSummaryService @Inject()(connector: Cr
     extends DownstreamResponseMappingSupport
     with Logging {
 
-  def createHistoricNonFhlUkProperty(request: CreateHistoricNonFhlUkPropertyPeriodSummaryRequest)(
+  def createPeriodSummary(request: CreateHistoricNonFhlUkPropertyPeriodSummaryRequest)(
       implicit hc: HeaderCarrier,
       ec: ExecutionContext,
       logContext: EndpointLogContext,
       correlationId: String): Future[ServiceOutcome[CreateHistoricNonFhlUkPiePeriodSummaryResponse]] = {
 
+    def withPeriodId(
+        wrapper: ResponseWrapper[CreateHistoricNonFhlUkPiePeriodSummaryResponse]): ResponseWrapper[CreateHistoricNonFhlUkPiePeriodSummaryResponse] = {
+
+      val periodId = s"${request.body.fromDate}_${request.body.toDate}"
+      wrapper.copy(responseData = wrapper.responseData.copy(periodId = Some(periodId)))
+    }
+
     val result = for {
-      ifsResponseWrapper <- EitherT(connector.createPeriodSummary(request)).leftMap(mapDownstreamErrors(ifsErrorMap))
+      ifsResponseWrapper <- EitherT(connector.createPeriodSummary(request))
+        .map(withPeriodId)
+        .leftMap(mapDownstreamErrors(ifsErrorMap))
     } yield ifsResponseWrapper
 
     result.value

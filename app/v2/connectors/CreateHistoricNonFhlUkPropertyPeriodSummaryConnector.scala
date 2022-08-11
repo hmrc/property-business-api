@@ -31,12 +31,10 @@ class CreateHistoricNonFhlUkPropertyPeriodSummaryConnector @Inject()(val http: H
 
   def createPeriodSummary(request: CreateHistoricNonFhlUkPropertyPeriodSummaryRequest)(
       implicit hc: HeaderCarrier,
-      ec: ExecutionContext,
+      ex: ExecutionContext,
       correlationId: String): Future[DownstreamOutcome[CreateHistoricNonFhlUkPiePeriodSummaryResponse]] = {
 
-    post(
-      body = request.body,
-      uri = IfsUri[CreateHistoricNonFhlUkPiePeriodSummaryResponse](s"income-tax/nino/${request.nino.nino}/uk-properties/other/periodic-summaries")
-    )
+    val path = s"income-tax/nino/${request.nino.nino}/uk-properties/other/periodic-summaries"
+    post(request.body, IfsUri[CreateHistoricNonFhlUkPiePeriodSummaryResponse](path))
   }
 }

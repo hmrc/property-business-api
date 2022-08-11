@@ -143,10 +143,6 @@ trait HateoasLinks {
 
   //Historic UK Property Income & Expenses Period Summary
   // FHL:
-  def createHistoricFhlUkPiePeriodSummary(appConfig: AppConfig, nino: String): Link =
-    Link(href = ukHistoricFhlPiePeriodSummaryUri(appConfig, nino, None),
-         method = POST,
-         rel = CREATE_HISTORIC_UK_FHL_PROPERTY_INCOME_EXPENSES_PERIOD_SUMMARY)
 
   def amendHistoricFhlUkPiePeriodSummary(appConfig: AppConfig, nino: String, periodId: String): Link =
     Link(href = ukHistoricFhlPiePeriodSummaryUri(appConfig, nino, Some(periodId)),

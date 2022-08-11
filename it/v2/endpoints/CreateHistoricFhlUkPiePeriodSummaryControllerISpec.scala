@@ -165,11 +165,6 @@ class CreateHistoricFhlUkPiePeriodSummaryControllerISpec extends V2IntegrationBa
              |    "periodId": "2017-04-06_2017-07-05",
              |    "links": [
              |        {
-             |            "href": "/individuals/business/property/uk/furnished-holiday-lettings/TC663795B",
-             |            "method": "POST",
-             |            "rel": "create-uk-property-historic-fhl-period-summary"
-             |        },
-             |        {
              |            "href": "/individuals/business/property/uk/furnished-holiday-lettings/TC663795B/2017-04-06_2017-07-05",
              |            "method": "PUT",
              |            "rel": "amend-uk-property-historic-fhl-period-summary"

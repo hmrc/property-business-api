@@ -142,13 +142,6 @@ class HateoasLinksSpec extends UnitSpec with MockAppConfig with HateoasLinks {
     }
 
     "for a Historic Uk Property Income & Expenses (PIE) Period Summary" must {
-      "return the HATEOAS link for Create" in new Test {
-        val result: Link = createHistoricFhlUkPiePeriodSummary(mockAppConfig, nino = nino)
-
-        result shouldBe
-          Link("/individuals/business/property/uk/furnished-holiday-lettings/{nino}", POST, "create-uk-property-historic-fhl-period-summary")
-      }
-
       "return the HATEOAS link for Retrieve" in new Test {
         val result: Link = retrieveHistoricFhlUkPiePeriodSummary(mockAppConfig, nino = nino, periodId = periodId)
 

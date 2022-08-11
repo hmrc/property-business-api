@@ -17,25 +17,32 @@
 package v2.models.response.createHistoricNonFhlUkPiePeriodSummary
 
 import config.AppConfig
-import play.api.libs.json.{Json, OFormat}
-import v2.hateoas.{HateoasLinks, HateoasLinksFactory}
-import v2.models.hateoas.{HateoasData, Link}
+import play.api.libs.json.{ JsObject, Json, OWrites, Reads }
+import v2.hateoas.{ HateoasLinks, HateoasLinksFactory }
+import v2.models.hateoas.{ HateoasData, Link }
 
-case class CreateHistoricNonFhlUkPiePeriodSummaryResponse(transactionReference: String)
+case class CreateHistoricNonFhlUkPiePeriodSummaryResponse(transactionReference: String, periodId: Option[String])
 
-object CreateHistoricNonFhlUkPiePeriodSummaryResponse extends HateoasLinks{
-  implicit val format: OFormat[CreateHistoricNonFhlUkPiePeriodSummaryResponse] = Json.format[CreateHistoricNonFhlUkPiePeriodSummaryResponse]
+object CreateHistoricNonFhlUkPiePeriodSummaryResponse extends HateoasLinks {
 
-  implicit object LinksFactory extends HateoasLinksFactory[CreateHistoricNonFhlUkPiePeriodSummaryResponse, CreateHistoricNonFhlUkPiePeriodSummaryHateoasData] {
+  implicit val writes: OWrites[CreateHistoricNonFhlUkPiePeriodSummaryResponse] = OWrites { response =>
+    response.periodId
+      .map(periodId => Json.obj("periodId" -> periodId))
+      .getOrElse(JsObject.empty)
+  }
+
+  implicit val reads: Reads[CreateHistoricNonFhlUkPiePeriodSummaryResponse] = Json.reads[CreateHistoricNonFhlUkPiePeriodSummaryResponse]
+
+  implicit object LinksFactory
+      extends HateoasLinksFactory[CreateHistoricNonFhlUkPiePeriodSummaryResponse, CreateHistoricNonFhlUkPiePeriodSummaryHateoasData] {
     override def links(appConfig: AppConfig, data: CreateHistoricNonFhlUkPiePeriodSummaryHateoasData): Seq[Link] = {
       import data._
       Seq(
         retrieveHistoricNonFhlUkPiePeriodSummary(appConfig: AppConfig, nino: String, periodId: String, self = true),
         amendHistoricNonFhlUkPiePeriodSummary(appConfig: AppConfig, nino: String, periodId: String)
-
       )
     }
   }
 }
 
-case class CreateHistoricNonFhlUkPiePeriodSummaryHateoasData(nino: String, periodId: String, transactionId:String) extends HateoasData
+case class CreateHistoricNonFhlUkPiePeriodSummaryHateoasData(nino: String, periodId: String, transactionId: String) extends HateoasData

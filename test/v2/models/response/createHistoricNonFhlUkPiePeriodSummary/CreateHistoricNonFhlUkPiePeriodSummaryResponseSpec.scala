@@ -16,32 +16,42 @@
 
 package v2.models.response.createHistoricNonFhlUkPiePeriodSummary
 
-import play.api.libs.json.Json
+import play.api.libs.json.{ JsValue, Json }
 import support.UnitSpec
-import v2.models.utils.JsonErrorValidators
 
-class CreateHistoricNonFhlUkPiePeriodSummaryResponseSpec extends UnitSpec with JsonErrorValidators {
+class CreateHistoricNonFhlUkPiePeriodSummaryResponseSpec extends UnitSpec {
 
-  val createHistoricNonFhlUkPiePeriodSummaryResponse = CreateHistoricNonFhlUkPiePeriodSummaryResponse(
-    transactionReference = "0000000000000001"
-  )
+  val transactionRef: String = "v2509e91f-2689-453e-9ddc-7e3cf97a8e41"
+  val periodId: String       = "2017-04-06_2017-07-05"
 
-  val json = Json.parse(
-    """{
-      |  "transactionReference": "0000000000000001"
-      |}""".stripMargin)
+  val jsonFromDownstream: JsValue = Json.parse(s"""
+                                                  | {
+                                                  |     "transactionReference": "$transactionRef"
+                                                  | }
+      """.stripMargin)
+
+  val expectedJsontoVendor: JsValue = Json.parse(s"""
+                                                    | {
+                                                    |    "periodId": "$periodId"
+                                                    | }
+       """.stripMargin)
 
   "reads" when {
-    "passed a valid JSON" should {
-      "return a valid model" in {
-        json.as[CreateHistoricNonFhlUkPiePeriodSummaryResponse] shouldBe createHistoricNonFhlUkPiePeriodSummaryResponse
+    "passed valid JSON" should {
+      "return a valid object" in {
+        val expected = CreateHistoricNonFhlUkPiePeriodSummaryResponse(transactionRef, None)
+        val result   = jsonFromDownstream.as[CreateHistoricNonFhlUkPiePeriodSummaryResponse]
+        result shouldBe expected
       }
     }
   }
+
   "writes" when {
-    "passed valid model" should {
-      "return valid JSON" in {
-        Json.toJson(createHistoricNonFhlUkPiePeriodSummaryResponse) shouldBe json
+    "passed an object" should {
+      "return the object as JSON" in {
+        val response = CreateHistoricNonFhlUkPiePeriodSummaryResponse(transactionRef, Some(periodId))
+        val result   = Json.toJson(response)
+        result shouldBe expectedJsontoVendor
       }
     }
   }

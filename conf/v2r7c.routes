@@ -13,3 +13,11 @@ GET        /foreign/:nino/:businessId/period/:taxYear/:submissionId    v2.contro
 DELETE     /:nino/:businessId/annual/:taxYear                          v2.controllers.DeletePropertyAnnualSubmissionController.handleRequest(nino: String, businessId: String, taxYear: String)
 PUT        /foreign/:nino/:businessId/annual/:taxYear                  v2.controllers.AmendForeignPropertyAnnualSubmissionController.handleRequest(nino: String, businessId: String, taxYear: String)
 GET        /foreign/:nino/:businessId/annual/:taxYear                  v2.controllers.RetrieveForeignPropertyAnnualSubmissionController.handleRequest(nino: String, businessId: String, taxYear: String)
+
+# Historical endpoints
+GET        /uk/non-furnished-holiday-lettings/:nino/:taxYear           v2.controllers.RetrieveHistoricNonFhlUkPropertyAnnualSubmissionController.handleRequest(nino: String, taxYear: String)
+
+POST       /uk/furnished-holiday-lettings/:nino                        v2.controllers.CreateHistoricFhlUkPiePeriodSummaryController.handleRequest(nino:String)
+
+PUT        /uk/furnished-holiday-lettings/:nino/:taxYear               v2.controllers.CreateAmendHistoricFhlUkPropertyAnnualSubmissionController.handleRequest(nino: String, taxYear: String)
+GET        /uk/furnished-holiday-lettings/:nino/:taxYear               v2.controllers.RetrieveHistoricFhlUkPropertyAnnualSubmissionController.handleRequest(nino: String, taxYear: String)

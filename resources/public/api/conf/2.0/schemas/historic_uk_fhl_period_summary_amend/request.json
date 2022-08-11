@@ -3,19 +3,19 @@
   "type": "object",
   "title": "Income",
   "properties": {
-    "periodIncome": {
+    "income": {
       "type": "object",
-      "description": "The periodIncome Schema",
+      "description": "Object containing the details about income",
       "properties": {
-        "amount": {
+        "periodAmount": {
           "type": "number",
-          "description": "The amount Schema",
-          "examples": "1123.45"
+          "description": "Total rents from property, ground rents and rent charges but not rent-a-room.\nThe value must be between 0 and 99999999999.99 up to 2 decimal places.",
+          "example": "1123.45"
         },
         "taxDeducted": {
           "type": "number",
           "description": "Tax already deducted from the rental income.\nThe value must be between 0 and 99999999999.99 up to 2 decimal places.",
-          "examples": "2134.53"
+          "example": "2134.53"
         },
         "rentARoom": {
           "type": "object",
@@ -24,55 +24,55 @@
             "rentsReceived": {
               "type": "number",
               "description": "Total rents received from properties.\nThe value must be between 0 and 99999999999.99 up to 2 decimal places.",
-              "examples": "5167.56"
+              "example": "5167.56"
             }
           }
         }
       }
     },
-    "periodExpenses": {
+    "expenses": {
       "type": "object",
-      "description": "The periodExpenses Schema",
+      "description": "Object holding the expenses for the period",
       "properties": {
         "premiseRunningCosts": {
           "type": "number",
           "description": "Rent, rates, insurance, ground rents and other costs.\nThe value must be between 0 and 99999999999.99 up to 2 decimal places.",
-          "examples": "5167.53"
+          "example": "5167.53"
         },
         "repairsAndMaintenance": {
           "type": "number",
           "description": "Property repairs and maintenance.\nThe value must be between 0 and 99999999999.99 up to 2 decimal places.",
-          "examples": "424.65"
+          "example": "424.65"
         },
         "financialCosts": {
           "type": "number",
           "description": "Loan interest and other financial costs.\nThe value must be between 0 and 99999999999.99 up to 2 decimal places.",
-          "examples": "853.56"
+          "example": "853.56"
         },
         "professionalFees": {
           "type": "number",
           "description": "Legal, management and other professional fees.\nThe value must be between 0 and 99999999999.99 up to 2 decimal places.",
-          "examples": "835.78"
+          "example": "835.78"
         },
         "costOfServices": {
           "type": "number",
           "description": "Cost of services provided, including wages.\nThe value must be between 0 and 99999999999.99 up to 2 decimal places.",
-          "examples": "978.34"
+          "example": "978.34"
         },
         "other": {
           "type": "number",
           "description": "Other allowable property expenses.\nThe value must be between 0 and 99999999999.99 up to 2 decimal places.",
-          "examples": "382.34"
+          "example": "382.34"
         },
         "consolidatedExpenses": {
           "type": "number",
           "description": "The sum of all expenses for the specified period.\nThe value must be between 0 and 99999999999.99 up to 2 decimal places.",
-          "examples": "5000.99"
+          "example": "5000.99"
         },
         "travelCosts": {
           "type": "number",
           "description": "Car, van and travel costs incurred in running a property business.\nThe value must be between 0 and 99999999999.99 up to 2 decimal places.",
-          "examples": "135.78"
+          "example": "135.78"
         },
         "rentARoom": {
           "type": "object",
@@ -81,7 +81,7 @@
             "amountClaimed": {
               "type": "number",
               "description": "The amount of UK Furnished Holiday Lettings rent claimed.\nThe value must be between 0 and 99999999999.99 up to 2 decimal places.",
-              "examples": "945.9"
+              "example": "945.9"
             }
           }
         }

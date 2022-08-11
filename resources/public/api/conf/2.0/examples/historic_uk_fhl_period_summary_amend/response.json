@@ -9,6 +9,11 @@
       "href": "/individuals/business/property/uk/furnished-holiday-lettings/KZ816096B/2017-04-06_2017-07-04",
       "method": "GET",
       "rel": "self"
+    },
+    {
+      "href": "/individuals/business/property/uk/furnished-holiday-lettings/KZ816096B",
+      "method": "GET",
+      "rel": "list-uk-property-historic-fhl-period-summaries"
     }
   ]
 }

@@ -1,12 +1,12 @@
 {
-  "periodIncome":{
-    "amount":1123.45,
+  "income":{
+    "periodAmount":1123.45,
     "taxDeducted":2134.53,
     "rentARoom":{
       "rentsReceived":5167.56
     }
   },
-  "periodExpenses":{
+  "expenses":{
     "consolidatedExpenses":135.78
   }
 }

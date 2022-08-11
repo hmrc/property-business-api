@@ -73,7 +73,7 @@ class CreateHistoricNonFHLUkPiePeriodSummaryController @Inject()(val authService
 
           val response = Json.toJson(vendorResponse)
 
-          Ok(response)
+          Created(response)
             .withApiHeaders(serviceResponse.correlationId)
         }
 

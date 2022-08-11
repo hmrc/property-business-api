@@ -22,21 +22,30 @@ import uk.gov.hmrc.http.HeaderCarrier
 import v2.mocks.MockIdGenerator
 import v2.mocks.hateoas.MockHateoasFactory
 import v2.mocks.requestParsers.MockCreateHistoricNonFhlUkPiePeriodSummaryRequestParser
-import v2.mocks.services.{ MockCreateHistoricNonFhlUkPiePeriodSummaryService, MockEnrolmentsAuthService, MockMtdIdLookupService}
+import v2.mocks.services.{ MockCreateHistoricNonFhlUkPiePeriodSummaryService, MockEnrolmentsAuthService, MockMtdIdLookupService }
 import v2.models.domain.Nino
 import v2.models.errors._
-import v2.models.hateoas.Method.GET
-import v2.models.hateoas.{HateoasWrapper, Link}
+import v2.models.hateoas.Method.{ GET, PUT }
+import v2.models.hateoas.{ HateoasWrapper, Link }
 import v2.models.outcomes.ResponseWrapper
-import v2.models.request.common.ukPropertyRentARoom.{UkPropertyExpensesRentARoom, UkPropertyIncomeRentARoom}
-import v2.models.request.createHistoricNonFhlUkPropertyPeriodSummary.{CreateHistoricNonFhlUkPropertyPeriodSummaryRawData, CreateHistoricNonFhlUkPropertyPeriodSummaryRequest, CreateHistoricNonFhlUkPropertyPeriodSummaryRequestBody, UkNonFhlPropertyExpenses, UkNonFhlPropertyIncome}
-import v2.models.response.createHistoricNonFhlUkPiePeriodSummary.{CreateHistoricNonFhlUkPiePeriodSummaryHateoasData, CreateHistoricNonFhlUkPiePeriodSummaryResponse}
+import v2.models.request.common.ukPropertyRentARoom.{ UkPropertyExpensesRentARoom, UkPropertyIncomeRentARoom }
+import v2.models.request.createHistoricNonFhlUkPropertyPeriodSummary.{
+  CreateHistoricNonFhlUkPropertyPeriodSummaryRawData,
+  CreateHistoricNonFhlUkPropertyPeriodSummaryRequest,
+  CreateHistoricNonFhlUkPropertyPeriodSummaryRequestBody,
+  UkNonFhlPropertyExpenses,
+  UkNonFhlPropertyIncome
+}
+import v2.models.response.createHistoricNonFhlUkPiePeriodSummary.{
+  CreateHistoricNonFhlUkPiePeriodSummaryHateoasData,
+  CreateHistoricNonFhlUkPiePeriodSummaryResponse
+}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class CreateHistoricNonFhlUkPiePeriodSummaryControllerSpec
-  extends ControllerBaseSpec
+    extends ControllerBaseSpec
     with MockEnrolmentsAuthService
     with MockMtdIdLookupService
     with MockCreateHistoricNonFhlUkPiePeriodSummaryService
@@ -44,19 +53,19 @@ class CreateHistoricNonFhlUkPiePeriodSummaryControllerSpec
     with MockHateoasFactory
     with MockIdGenerator {
 
-  private val nino                 = "AA123456A"
-  private val periodId             = "2019-03-11_2020-04-23"
-  private val transactionId        = "0000000000000001"
-  private val correlationId        = "a1e8057e-fbbc-47a8-a8b4-78d9f015c253"
+  private val nino          = "AA123456A"
+  private val periodId      = "2019-03-11_2020-04-23"
+  private val transactionId = "0000000000000001"
+  private val correlationId = "a1e8057e-fbbc-47a8-a8b4-78d9f015c253"
 
   private val incomeModel = UkNonFhlPropertyIncome(
-    periodAmount= Some(123.45),
-    premiumsOfLeaseGrant= Some(2355.45),
-    reversePremiums= Some(454.56),
-    otherIncome= Some(567.89),
-    taxDeducted= Some(9234.53),
+    periodAmount = Some(123.45),
+    premiumsOfLeaseGrant = Some(2355.45),
+    reversePremiums = Some(454.56),
+    otherIncome = Some(567.89),
+    taxDeducted = Some(9234.53),
     rentARoom = Some(UkPropertyIncomeRentARoom(Some(567.56)))
-    )
+  )
   private val expensesModel = UkNonFhlPropertyExpenses(
     premisesRunningCosts = Some(567.53),
     repairsAndMaintenance = Some(324.65),
@@ -70,7 +79,6 @@ class CreateHistoricNonFhlUkPiePeriodSummaryControllerSpec
     rentARoom = Some(UkPropertyExpensesRentARoom(Some(545.9))),
     consolidatedExpenses = None
   )
-
 
   trait Test {
     val hc: HeaderCarrier = HeaderCarrier()
@@ -129,8 +137,23 @@ class CreateHistoricNonFhlUkPiePeriodSummaryControllerSpec
     CreateHistoricNonFhlUkPropertyPeriodSummaryRequest(nino = Nino(nino), body = requestBody)
   private val rawData = CreateHistoricNonFhlUkPropertyPeriodSummaryRawData(nino = nino, body = requestBodyJson)
 
+  //Fix this
+//  private val testHateoasLinks =
+//    Seq(Link(href = "/some/link", method = GET, rel = "someRel"))
+
   private val testHateoasLinks =
-    Seq(Link(href = "/some/link", method = GET, rel = "someRel"))
+    Seq(
+      Link(
+        href = s"/individuals/business/property/uk/non-furnished-holiday-lettings/$nino/$periodId",
+        method = PUT,
+        rel = "amend-uk-property-historic-non-fhl-period-summary"
+      ),
+      Link(
+        href = s"/individuals/business/property/uk/non-furnished-holiday-lettings/$nino/$periodId",
+        method = GET,
+        rel = "self"
+      )
+      )
 
   private val hateoasResponse = Json.parse(
     s"""{
@@ -142,7 +165,7 @@ class CreateHistoricNonFhlUkPiePeriodSummaryControllerSpec
        |      "rel": "amend-uk-property-historic-non-fhl-period-summary"
        |    },
        |    {
-       |      "href": /individuals/business/property/uk/non-furnished-holiday-lettings/$nino/$periodId",
+       |      "href": "/individuals/business/property/uk/non-furnished-holiday-lettings/$nino/$periodId",
        |      "method": "GET",
        |      "rel": "self"
        |    }
@@ -164,8 +187,7 @@ class CreateHistoricNonFhlUkPiePeriodSummaryControllerSpec
           .returns(Future.successful(Right(ResponseWrapper(correlationId, response))))
 
         MockHateoasFactory
-          .wrap(response,
-            CreateHistoricNonFhlUkPiePeriodSummaryHateoasData( nino, periodId, transactionId))
+          .wrap(response, CreateHistoricNonFhlUkPiePeriodSummaryHateoasData(nino, periodId, transactionId))
           .returns(HateoasWrapper(response, testHateoasLinks))
 
         val result: Future[Result] = controller.handleRequest(nino)(fakeRequestWithBody(requestBodyJson))

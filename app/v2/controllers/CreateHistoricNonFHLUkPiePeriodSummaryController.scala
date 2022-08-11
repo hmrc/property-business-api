@@ -26,7 +26,7 @@ import v2.hateoas.HateoasFactory
 import v2.models.errors._
 import v2.models.request.createHistoricNonFhlUkPropertyPeriodSummary.CreateHistoricNonFhlUkPropertyPeriodSummaryRawData
 import v2.models.response.createHistoricNonFhlUkPiePeriodSummary.CreateHistoricNonFhlUkPiePeriodSummaryHateoasData
-import v2.services.{EnrolmentsAuthService, MtdIdLookupService}
+import v2.services.{CreateHistoricNonFhlUkPropertyPeriodSummaryService, EnrolmentsAuthService, MtdIdLookupService}
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
@@ -60,10 +60,10 @@ class CreateHistoricNonFHLUkPiePeriodSummaryController @Inject()(val authService
       val result =
         for {
           parsedRequest   <- EitherT.fromEither[Future](parser.parseRequest(rawData))
-          serviceResponse <- EitherT(service.amend(parsedRequest))
+          serviceResponse <- EitherT(service.createPeriodSummary(parsedRequest))
           vendorResponse <- EitherT.fromEither[Future](
             hateoasFactory
-              .wrap(serviceResponse.responseData, CreateHistoricNonFhlUkPiePeriodSummaryHateoasData(nino, periodId))
+              .wrap(serviceResponse.responseData, CreateHistoricNonFhlUkPiePeriodSummaryHateoasData(nino, serviceResponse.responseData.periodId.get, serviceResponse.responseData.transactionReference))
               .asRight[ErrorWrapper])
         } yield {
 

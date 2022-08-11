@@ -150,7 +150,7 @@ class CreateHistoricNonFhlUkPiePeriodSummaryControllerSpec
        |}""".stripMargin
   )
 
-  private val response = CreateHistoricNonFhlUkPiePeriodSummaryResponse(transactionId)
+  private val response = CreateHistoricNonFhlUkPiePeriodSummaryResponse(transactionId, Some(periodId))
 
   "create" should {
     "return a successful response" when {
@@ -160,7 +160,7 @@ class CreateHistoricNonFhlUkPiePeriodSummaryControllerSpec
           .returns(Right(requestData))
 
         MockCreateHistoricNonFhlUkPiePeriodSummaryService
-          .createHistoricNonFhlUkPiePeriodSummary(requestData)
+          .createPeriodSummary(requestData)
           .returns(Future.successful(Right(ResponseWrapper(correlationId, response))))
 
         MockHateoasFactory
@@ -217,7 +217,7 @@ class CreateHistoricNonFhlUkPiePeriodSummaryControllerSpec
               .returns(Right(requestData))
 
             MockCreateHistoricNonFhlUkPiePeriodSummaryService
-              .createForeignProperty(requestData)
+              .createPeriodSummary(requestData)
               .returns(Future.successful(Left(ErrorWrapper(correlationId, mtdError))))
 
             val result: Future[Result] =

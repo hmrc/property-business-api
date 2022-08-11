@@ -23,7 +23,8 @@ import v2.controllers.EndpointLogContext
 import v2.models.errors.ErrorWrapper
 import v2.models.outcomes.ResponseWrapper
 import v2.models.request.createHistoricNonFhlUkPropertyPeriodSummary.CreateHistoricNonFhlUkPropertyPeriodSummaryRequest
-import v2.models.response.createUkPropertyPeriodSummary.CreateUkPropertyPeriodSummaryResponse
+import v2.models.response.createHistoricNonFhlUkPiePeriodSummary.CreateHistoricNonFhlUkPiePeriodSummaryResponse
+import v2.services.CreateHistoricNonFhlUkPropertyPeriodSummaryService
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -33,10 +34,10 @@ trait MockCreateHistoricNonFhlUkPiePeriodSummaryService extends MockFactory {
 
   object MockCreateHistoricNonFhlUkPiePeriodSummaryService {
 
-    def createHistoricNonFhlUkPiePeriodSummary(requestData: CreateHistoricNonFhlUkPropertyPeriodSummaryRequest):
-    CallHandler[Future[Either[ErrorWrapper, ResponseWrapper[CreateUkPropertyPeriodSummaryResponse]]]] = {
+    def createPeriodSummary(requestData: CreateHistoricNonFhlUkPropertyPeriodSummaryRequest):
+    CallHandler[Future[Either[ErrorWrapper, ResponseWrapper[CreateHistoricNonFhlUkPiePeriodSummaryResponse]]]] = {
       (mockCreateHistoricNonFhlUkPiePeriodSummaryService
-        .createHistoricNonFhlUkPeriodSummary(_: CreateHistoricNonFhlUkPropertyPeriodSummaryRequest)(_: HeaderCarrier, _: ExecutionContext, _: EndpointLogContext, _: String))
+        .createPeriodSummary(_: CreateHistoricNonFhlUkPropertyPeriodSummaryRequest)(_: HeaderCarrier, _: ExecutionContext, _: EndpointLogContext, _: String))
         .expects(requestData, *, *, *, *)
     }
   }

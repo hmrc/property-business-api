@@ -69,10 +69,10 @@ class CreateHistoricNonFhlUkPropertyPeriodSummaryValidator @Inject()(appConfig: 
       .map { income =>
         import income._
         validateOptional(periodAmount, "/income/periodAmount") ++
-          validateOptional(taxDeducted, "/income/taxDeducted") ++
           validateOptional(premiumsOfLeaseGrant, "/income/premiumsOfLeaseGrant") ++
           validateOptional(reversePremiums, "/income/reversePremiums") ++
           validateOptional(otherIncome, "/income/otherIncome") ++
+          validateOptional(taxDeducted, "/income/taxDeducted") ++
           validateOptional(rentARoom.flatMap(_.rentsReceived), "/income/rentARoom/rentsReceived")
       }
       .getOrElse(Nil)
@@ -82,14 +82,15 @@ class CreateHistoricNonFhlUkPropertyPeriodSummaryValidator @Inject()(appConfig: 
         import expenses._
         validateOptional(premisesRunningCosts, "/expenses/premisesRunningCosts") ++
           validateOptional(repairsAndMaintenance, "/expenses/repairsAndMaintenance") ++
-          validateOptional(financialCosts, "/expenses/premisesCosts") ++
+          validateOptional(financialCosts, "/expenses/financialCosts") ++
           validateOptional(professionalFees, "/expenses/professionalFees") ++
           validateOptional(costOfServices, "/expenses/costOfServices") ++
           validateOptional(other, "/expenses/other") ++
           validateOptional(consolidatedExpenses, "/expenses/consolidatedExpenses") ++
           validateOptional(travelCosts, "/expenses/travelCosts") ++
           validateOptional(residentialFinancialCostsCarriedForward, "/expenses/residentialFinancialCostsCarriedForward") ++
-          validateOptional(residentialFinancialCost, "/expenses/residentialFinancialCost")
+          validateOptional(residentialFinancialCost, "/expenses/residentialFinancialCost") ++
+          validateOptional(rentARoom.flatMap(_.amountClaimed), "/expenses/rentARoom/amountClaimed")
       }
       .getOrElse(Nil)
 

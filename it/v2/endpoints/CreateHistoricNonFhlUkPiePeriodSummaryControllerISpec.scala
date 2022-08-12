@@ -123,7 +123,7 @@ class CreateHistoricNonFHlUkPiePeriodSummaryControllerISpec extends V2Integratio
   val invalidValueRequestJson:  JsValue = Json.parse(
     """{
       | "fromDate": "2019-03-11",
-      | "todate": "2020-04-23",
+      | "toDate": "2020-04-23",
       |   "income": {
       |   "periodAmount": 123.459999999999999999999999,
       |   "premiumsOfLeaseGrant": 2355.45999999999999999999999,
@@ -236,8 +236,6 @@ class CreateHistoricNonFHlUkPiePeriodSummaryControllerISpec extends V2Integratio
 
   val allInvalidValueRequestError: MtdError = ValueFormatError.copy(
     paths = Some(List(
-      "/fromDate",
-      "/toDate",
       "/income/periodAmount",
       "/income/premiumsOfLeaseGrant",
       "/income/reversePremiums",

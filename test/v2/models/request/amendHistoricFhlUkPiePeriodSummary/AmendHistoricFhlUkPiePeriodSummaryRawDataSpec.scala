@@ -24,14 +24,14 @@ class AmendHistoricFhlUkPiePeriodSummaryRawDataSpec extends UnitSpec {
     "work" in {
       Json.toJson(AmendHistoricFhlUkPiePeriodSummaryRawData(nino = "NS123456A",
                                                             periodId = "2022-01-01_2022-01-02",
-                                                            body = Json.obj("body" -> "value"))) shouldBe
+                                                            body = Json.obj("body-val" -> "value"))) shouldBe
         Json.parse(
           """
           |{
           |"nino": "NS123456A",
           |"periodId": "2022-01-01_2022-01-02",
-          | "request": {
-          | "body": "value"
+          | "body": {
+          | "body-val": "value"
           | }
           |}
           |""".stripMargin

@@ -16,12 +16,6 @@
 
 package v2.models.response.amendHistoricFhlUkPiePeriodSummary
 
-import play.api.libs.json.{ Json, OFormat }
 import v2.hateoas.HateoasLinks
 
-case class AmendHistoricFhlUkPiePeriodSummaryResponse(transactionReference: String)
-
-object AmendHistoricFhlUkPiePeriodSummaryResponse extends HateoasLinks {
-  implicit val format: OFormat[AmendHistoricFhlUkPiePeriodSummaryResponse] = Json.format[AmendHistoricFhlUkPiePeriodSummaryResponse]
-
-}
+object AmendHistoricFhlUkPiePeriodSummaryResponse extends HateoasLinks {}

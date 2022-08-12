@@ -155,7 +155,7 @@ class CreateHistoricNonFHlUkPiePeriodSummaryControllerISpec extends V2Integratio
   val bothExpensesSuppliedRequestJson: JsValue = Json.parse(
     """{
       | "fromDate": "2019-03-11",
-      | "todate": "2020-04-23",
+      | "toDate": "2020-04-23",
       |   "income": {
       |   "periodAmount": 123.45,
       |   "premiumsOfLeaseGrant": 2355.45,
@@ -411,9 +411,9 @@ class CreateHistoricNonFHlUkPiePeriodSummaryControllerISpec extends V2Integratio
           ("AA1123A", requestBodyJson, Status.BAD_REQUEST, NinoFormatError),
           ("AA123456A", invalidToDateRequestJson, Status.BAD_REQUEST, ToDateFormatError),
           ("AA123456A", invalidFromDateRequestJson, Status.BAD_REQUEST, FromDateFormatError),
-          ("AA123456A", bothExpensesSuppliedRequestJson, Status.BAD_REQUEST, RuleBothExpensesSuppliedError),
-          ("AA123456A", missingFromDateRequestJson, Status.BAD_REQUEST, MissingFromDateError),
-          ("AA123456A", missingToDateRequestJson, Status.BAD_REQUEST, MissingToDateError),
+          ("AA123456A", bothExpensesSuppliedRequestJson, Status.BAD_REQUEST, RuleBothExpensesSuppliedError.copy(paths=Some(Seq("/expenses/consolidatedExpenses")))),
+          ("AA123456A", missingFromDateRequestJson, Status.BAD_REQUEST, MissingFromDateError.copy(paths=Some(Seq("/fromDate")))),
+          ("AA123456A", missingToDateRequestJson, Status.BAD_REQUEST, MissingToDateError.copy(paths=Some(Seq("/toDate")))),
           ("AA123456A", toDateBeforeFromDateRequestJson, Status.BAD_REQUEST, RuleToDateBeforeFromDateError),
           ("AA123456A", invalidValueRequestJson, Status.BAD_REQUEST, allInvalidValueRequestError)
         ) //Should we add a test for rentARoom.amountClaimed and rentARoom.rentsReceived being missing? Tech spec says they're manadatory, business spec says they're optional.

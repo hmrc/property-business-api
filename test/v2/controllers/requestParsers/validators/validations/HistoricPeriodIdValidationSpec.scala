@@ -17,7 +17,7 @@
 package v2.controllers.requestParsers.validators.validations
 
 import support.UnitSpec
-import v2.models.errors.{ PeriodIdFormatError, RuleHistoricTaxYearNotSupportedError, TaxYearFormatError }
+import v2.models.errors.PeriodIdFormatError
 
 class HistoricPeriodIdValidationSpec extends UnitSpec {
 

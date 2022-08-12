@@ -22,19 +22,26 @@ object HistoricPeriodIdValidation {
 
   def validate(minimumTaxYear: Int, maximumTaxYear: Int, periodId: String): List[MtdError] = {
 
-    val fromDate   = periodId.substring(0, 10)
-    val toDate     = periodId.substring(11, 21)
-    val underscore = periodId.substring(10, 11)
+    val periodIdLength = "YYYY-MM-DD_YYYY-MM-DD".length
 
-    val historicDateErrors = HistoricTaxPeriodYearValidation.validate(minimumTaxYear, maximumTaxYear, fromDate) ++
-      HistoricTaxPeriodYearValidation.validate(minimumTaxYear, maximumTaxYear, toDate)
+    if (periodId.length.equals(periodIdLength)) {
 
-    val dateOrderErrors = ToDateBeforeFromDateValidation.validate(fromDate, toDate)
+      val fromDate   = periodId.substring(0, 10)
+      val toDate     = periodId.substring(11, 21)
+      val underscore = periodId.substring(10, 11)
 
-    if (historicDateErrors.equals(NoValidationErrors)) {
-      if (dateOrderErrors.equals(Nil)) {
-        if (underscore.matches("_")) {
-          NoValidationErrors
+      val historicDateErrors = HistoricTaxPeriodYearValidation.validate(minimumTaxYear, maximumTaxYear, fromDate) ++
+        HistoricTaxPeriodYearValidation.validate(minimumTaxYear, maximumTaxYear, toDate)
+
+      if (historicDateErrors.equals(NoValidationErrors)) {
+        val dateOrderErrors = ToDateBeforeFromDateValidation.validate(fromDate, toDate)
+
+        if (dateOrderErrors.equals(Nil)) {
+          if (underscore.matches("_")) {
+            NoValidationErrors
+          } else {
+            List(PeriodIdFormatError)
+          }
         } else {
           List(PeriodIdFormatError)
         }

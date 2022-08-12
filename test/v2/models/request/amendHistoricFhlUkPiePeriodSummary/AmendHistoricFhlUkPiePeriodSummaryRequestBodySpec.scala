@@ -29,15 +29,17 @@ class AmendHistoricFhlUkPiePeriodSummaryRequestBodySpec extends UnitSpec {
     Some(UkPropertyIncomeRentARoom(Some(97.50)))
   )
 
-  val expenses: UkFhlPieExpenses = UkFhlPieExpenses(Some(123.12),
-                                                    Some(17.90),
-                                                    Some(38.19),
-                                                    Some(13.42),
-                                                    Some(29.42),
-                                                    Some(751.00),
-                                                    Some(1259.18),
-                                                    Some(12.00),
-                                                    Some(UkPropertyExpensesRentARoom(Some(12.12))))
+  val expenses: UkFhlPieExpenses = UkFhlPieExpenses(
+    premisesRunningCosts = Some(123.12),
+    repairsAndMaintenance = Some(17.90),
+    financialCosts = Some(38.19),
+    professionalFees = Some(13.42),
+    costOfServices = Some(29.42),
+    other = Some(751.00),
+    consolidatedExpenses = Some(1259.18),
+    travelCosts = Some(12.00),
+    rentARoom = Some(UkPropertyExpensesRentARoom(Some(12.12)))
+  )
 
   val requestBody: AmendHistoricFhlUkPiePeriodSummaryRequestBody =
     AmendHistoricFhlUkPiePeriodSummaryRequestBody(Some(income), Some(expenses))

@@ -16,16 +16,11 @@
 
 package v2.models.request.amendHistoricFhlUkPiePeriodSummary
 
-import play.api.libs.functional.syntax.{ toFunctionalBuilderOps, unlift }
-import play.api.libs.json.{ JsPath, JsValue, OWrites }
+import play.api.libs.json.{ JsValue, Json, OWrites }
 import v2.models.request.RawData
 
 case class AmendHistoricFhlUkPiePeriodSummaryRawData(nino: String, periodId: String, body: JsValue) extends RawData
 
 object AmendHistoricFhlUkPiePeriodSummaryRawData {
-  implicit val writes: OWrites[AmendHistoricFhlUkPiePeriodSummaryRawData] = (
-    (JsPath \ "nino").write[String] and
-      (JsPath \ "periodId").write[String] and
-      (JsPath \ "request").write[JsValue]
-  )(unlift(AmendHistoricFhlUkPiePeriodSummaryRawData.unapply))
+  implicit val writes: OWrites[AmendHistoricFhlUkPiePeriodSummaryRawData] = Json.writes[AmendHistoricFhlUkPiePeriodSummaryRawData]
 }

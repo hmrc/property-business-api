@@ -303,17 +303,17 @@ class CreateHistoricNonFHlUkPiePeriodSummaryControllerISpec extends V2Integratio
 
     val responseBody: JsValue = Json.parse(
       s"""{
-         |  "periodId": "2017-04-06_2017-07-04",
+         |  "periodId": "2019-03-11_2020-04-23",
          |  "links": [
-         |    {
-         |      "href": "/individuals/business/property/uk/non-furnished-holiday-lettings/$nino/2019-03-11_2020-04-23",
-         |      "method": "PUT",
-         |      "rel": "amend-uk-property-historic-non-fhl-period-summary"
-         |    },
          |    {
          |      "href": "/individuals/business/property/uk/non-furnished-holiday-lettings/$nino/2019-03-11_2020-04-23",
          |      "method": "GET",
          |      "rel": "self"
+         |    },
+         |    {
+         |      "href": "/individuals/business/property/uk/non-furnished-holiday-lettings/$nino/2019-03-11_2020-04-23",
+         |      "method": "PUT",
+         |      "rel": "amend-uk-property-historic-non-fhl-period-summary"
          |    }
          |  ]
          |}""".stripMargin

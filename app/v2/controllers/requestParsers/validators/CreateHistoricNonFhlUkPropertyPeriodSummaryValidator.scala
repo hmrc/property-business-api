@@ -33,9 +33,6 @@ import javax.inject.Singleton
 class CreateHistoricNonFhlUkPropertyPeriodSummaryValidator @Inject()(appConfig: AppConfig)
     extends Validator[CreateHistoricNonFhlUkPropertyPeriodSummaryRawData] {
 
-  private lazy val minTaxYear = appConfig.minimumTaxHistoric
-  private lazy val maxTaxYear = appConfig.maximumTaxHistoric
-
   override def validate(data: CreateHistoricNonFhlUkPropertyPeriodSummaryRawData): List[MtdError] = {
     (for {
       _    <- validatePathParams(data)
@@ -54,9 +51,6 @@ class CreateHistoricNonFhlUkPropertyPeriodSummaryValidator @Inject()(appConfig: 
 
     val formatDateErrors = DateValidation.validate(body.fromDate, true) ++
       DateValidation.validate(body.toDate, false)
-
-    val historicTaxPeriodYearErrors = HistoricTaxPeriodYearValidation.validate(minTaxYear, maxTaxYear, body.fromDate) ++
-      HistoricTaxPeriodYearValidation.validate(minTaxYear, maxTaxYear, body.toDate)
 
     val incomeFormatErrors = body.income
       .map { income =>
@@ -88,6 +82,6 @@ class CreateHistoricNonFhlUkPropertyPeriodSummaryValidator @Inject()(appConfig: 
 
     val bothExpensesErrors = body.expenses.map(ConsolidatedExpensesValidation.validate(_, "/expenses/consolidatedExpenses")).getOrElse(Nil)
 
-    errorsResult(formatDateErrors ++ historicTaxPeriodYearErrors ++ incomeFormatErrors ++ expensesFormatErrors ++ bothExpensesErrors)
+    errorsResult(formatDateErrors ++ incomeFormatErrors ++ expensesFormatErrors ++ bothExpensesErrors)
   }
 }

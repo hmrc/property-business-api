@@ -22,9 +22,7 @@ import support.UnitSpec
 import v2.models.errors.{
   FromDateFormatError,
   NinoFormatError,
-  RuleHistoricTaxYearNotSupportedError,
   RuleIncorrectOrEmptyBodyError,
-  TaxYearFormatError,
   ToDateFormatError,
   ValueFormatError
 }
@@ -33,9 +31,6 @@ import v2.models.request.createHistoricNonFhlUkPropertyPeriodSummary.CreateHisto
 class CreateHistoricNonFhlUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with MockAppConfig {
 
   private val validNino = "AA123456A"
-
-  MockAppConfig.minimumTaxHistoric returns 2017
-  MockAppConfig.maximumTaxHistoric returns 2021
 
   val validator = new CreateHistoricNonFhlUkPropertyPeriodSummaryValidator(mockAppConfig)
 
@@ -234,28 +229,14 @@ class CreateHistoricNonFhlUkPropertyPeriodSummaryValidatorSpec extends UnitSpec 
     "return FromDateFormatError error" when {
       "given an invalid fromDate" in {
         val result = validator.validate(CreateHistoricNonFhlUkPropertyPeriodSummaryRawData(validNino, requestBodyWithInvalidFromDateFormat))
-        result should contain only (FromDateFormatError, TaxYearFormatError)
+        result should contain only (FromDateFormatError)
       }
     }
 
     "return ToDateFormatError error" when {
       "given an invalid toDate" in {
         val result = validator.validate(CreateHistoricNonFhlUkPropertyPeriodSummaryRawData(validNino, requestBodyWithInvalidToDateFormat))
-        result should contain only (ToDateFormatError, TaxYearFormatError)
-      }
-    }
-
-    "return RuleHistoricTaxYearNotSupportedError error" when {
-      "given an invalid fromDate" in {
-        val result = validator.validate(CreateHistoricNonFhlUkPropertyPeriodSummaryRawData(validNino, requestBodyWithInvalidFromDateYear))
-        result should contain only (RuleHistoricTaxYearNotSupportedError)
-      }
-    }
-
-    "return RuleHistoricTaxYearNotSupportedError error" when {
-      "given an invalid toDate" in {
-        val result = validator.validate(CreateHistoricNonFhlUkPropertyPeriodSummaryRawData(validNino, requestBodyWithInvalidToDateYear))
-        result should contain only (RuleHistoricTaxYearNotSupportedError)
+        result should contain only (ToDateFormatError)
       }
     }
 

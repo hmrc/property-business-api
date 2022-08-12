@@ -187,7 +187,7 @@ class CreateHistoricNonFHlUkPiePeriodSummaryControllerISpec extends V2Integratio
   val toDateBeforeFromDateRequestJson: JsValue = Json.parse(
     """{
       | "fromDate": "2020-03-11",
-      | "todate": "2019-04-23",
+      | "toDate": "2019-04-23",
       |   "income": {
       |   "periodAmount": 123.45,
       |   "premiumsOfLeaseGrant": 2355.45,

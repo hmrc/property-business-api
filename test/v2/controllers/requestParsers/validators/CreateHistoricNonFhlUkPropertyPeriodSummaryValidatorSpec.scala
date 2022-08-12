@@ -17,15 +17,9 @@
 package v2.controllers.requestParsers.validators
 
 import mocks.MockAppConfig
-import play.api.libs.json.{ JsObject, JsValue, Json }
+import play.api.libs.json.{JsObject, JsValue, Json}
 import support.UnitSpec
-import v2.models.errors.{
-  FromDateFormatError,
-  NinoFormatError,
-  RuleIncorrectOrEmptyBodyError,
-  ToDateFormatError,
-  ValueFormatError
-}
+import v2.models.errors.{FromDateFormatError, NinoFormatError, RuleIncorrectOrEmptyBodyError, RuleToDateBeforeFromDateError, ToDateFormatError, ValueFormatError}
 import v2.models.request.createHistoricNonFhlUkPropertyPeriodSummary.CreateHistoricNonFhlUkPropertyPeriodSummaryRawData
 
 class CreateHistoricNonFhlUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with MockAppConfig {
@@ -160,6 +154,15 @@ class CreateHistoricNonFhlUkPropertyPeriodSummaryValidatorSpec extends UnitSpec 
     """.stripMargin
   )
 
+  val requestBodyWithToDateEarlierThanFromDate: JsValue = Json.parse(
+    """
+      |{
+      |    "fromDate": "2020-04-23",
+      |    "toDate": "2019-03-11"
+      |}
+    """.stripMargin
+  )
+
   val requestBodyWithInvalidFromDateYear: JsValue = Json.parse(
     """
       |{
@@ -237,6 +240,13 @@ class CreateHistoricNonFhlUkPropertyPeriodSummaryValidatorSpec extends UnitSpec 
       "given an invalid toDate" in {
         val result = validator.validate(CreateHistoricNonFhlUkPropertyPeriodSummaryRawData(validNino, requestBodyWithInvalidToDateFormat))
         result should contain only (ToDateFormatError)
+      }
+    }
+
+    "return toDateBeforeFromDateError error" when {
+      "given a toDate that is earlier than the fromDate" in {
+        val result = validator.validate(CreateHistoricNonFhlUkPropertyPeriodSummaryRawData(validNino, requestBodyWithToDateEarlierThanFromDate))
+        result should contain only (RuleToDateBeforeFromDateError)
       }
     }
 

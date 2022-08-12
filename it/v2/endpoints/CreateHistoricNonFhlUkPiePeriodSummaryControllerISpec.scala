@@ -31,7 +31,7 @@ class CreateHistoricNonFHlUkPiePeriodSummaryControllerISpec extends V2Integratio
   private val requestBodyJson = Json.parse(
     """{
       | "fromDate": "2019-03-11",
-      | "todate": "2020-04-23",
+      | "toDate": "2020-04-23",
       |   "income": {
       |   "periodAmount": 123.45,
       |   "premiumsOfLeaseGrant": 2355.45,

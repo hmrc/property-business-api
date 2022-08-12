@@ -22,24 +22,23 @@ import uk.gov.hmrc.http.HeaderCarrier
 import v2.controllers.EndpointLogContext
 import v2.models.errors.ErrorWrapper
 import v2.models.outcomes.ResponseWrapper
-import v2.models.request.createAmendHistoricFhlUkPropertyAnnualSubmission.CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequest
-import v2.models.response.createAmendHistoricFhlUkPropertyAnnualSubmission.CreateAmendHistoricFhlUkPropertyAnnualSubmissionResponse
-import v2.services.CreateAmendHistoricFhlUkPropertyAnnualSubmissionService
+import v2.models.request.createHistoricFhlUkPiePeriodSummary.CreateHistoricFhlUkPiePeriodSummaryRequest
+import v2.models.response.createHistoricFhlUkPiePeriodSummary.CreateHistoricFhlUkPiePeriodSummaryResponse
+import v2.services.CreateHistoricFhlUkPiePeriodSummaryService
 
 import scala.concurrent.{ ExecutionContext, Future }
 
-trait MockCreateAmendHistoricFhlUkPropertyAnnualSubmissionService extends MockFactory {
+trait MockCreateHistoricFhlUkPiePeriodSummaryService extends MockFactory {
 
-  val mockCreateAmendHistoricService: CreateAmendHistoricFhlUkPropertyAnnualSubmissionService =
-    mock[CreateAmendHistoricFhlUkPropertyAnnualSubmissionService]
+  val mockCreateHistoricFhlUkPiePeriodSummaryService: CreateHistoricFhlUkPiePeriodSummaryService = mock[CreateHistoricFhlUkPiePeriodSummaryService]
 
-  object MockCreateAmendHistoricFhlUkPropertyAnnualSubmissionService {
+  object MockCreateHistoricFhlUkPiePeriodSummaryService {
 
-    def amend(requestData: CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequest)
-      : CallHandler[Future[Either[ErrorWrapper, ResponseWrapper[CreateAmendHistoricFhlUkPropertyAnnualSubmissionResponse]]]] = {
+    def createPeriodSummary(requestData: CreateHistoricFhlUkPiePeriodSummaryRequest)
+      : CallHandler[Future[Either[ErrorWrapper, ResponseWrapper[CreateHistoricFhlUkPiePeriodSummaryResponse]]]] = {
       (
-        mockCreateAmendHistoricService
-          .amend(_: CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequest)(
+        mockCreateHistoricFhlUkPiePeriodSummaryService
+          .createPeriodSummary(_: CreateHistoricFhlUkPiePeriodSummaryRequest)(
             _: HeaderCarrier,
             _: ExecutionContext,
             _: EndpointLogContext,

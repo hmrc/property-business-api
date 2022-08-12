@@ -44,18 +44,23 @@ class CreateHistoricFhlUkPiePeriodSummaryValidator @Inject()(appConfig: AppConfi
   }
 
   private def validatePathParams(data: CreateHistoricFhlUkPiePeriodSummaryRawData): Either[List[MtdError], Unit] = {
-    val ninoError =
-      NinoValidation.validate(data.nino)
+    val ninoError = NinoValidation.validate(data.nino)
     errorsResult(ninoError)
   }
 
   private def validateBody(body: CreateHistoricFhlUkPiePeriodSummaryRequestBody): Either[List[MtdError], Unit] = {
 
-    val formatDateErrors = DateValidation.validate(body.fromDate, true) ++
-      DateValidation.validate(body.toDate, false)
+    val formatDateErrors =
+      DateValidation.validate(body.fromDate, isFromDate = true) ++
+        DateValidation.validate(body.toDate, isFromDate = false)
 
-    val historicTaxPeriodYearErrors = HistoricTaxPeriodYearValidation.validate(minTaxYear, maxTaxYear, body.fromDate) ++
-      HistoricTaxPeriodYearValidation.validate(minTaxYear, maxTaxYear, body.toDate)
+    val historicTaxPeriodYearErrors =
+      if (formatDateErrors.isEmpty)
+        (
+          HistoricTaxPeriodYearValidation.validate(minTaxYear, maxTaxYear, body.fromDate) ++
+            HistoricTaxPeriodYearValidation.validate(minTaxYear, maxTaxYear, body.toDate)
+        )
+      else Nil
 
     val incomeFormatErrors = body.income
       .map { income =>

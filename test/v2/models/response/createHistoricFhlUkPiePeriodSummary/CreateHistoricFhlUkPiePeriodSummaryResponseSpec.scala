@@ -21,21 +21,37 @@ import support.UnitSpec
 
 class CreateHistoricFhlUkPiePeriodSummaryResponseSpec extends UnitSpec {
 
-  val transactionReference: String = "v2509e91f-2689-453e-9ddc-7e3cf97a8e41"
+  val transactionRef: String = "v2509e91f-2689-453e-9ddc-7e3cf97a8e41"
+  val periodId: String       = "2017-04-06_2017-07-05"
 
-  val createHistoricFhlUkPiePeriodSummaryResponse: CreateHistoricFhlUkPiePeriodSummaryResponse =
-    CreateHistoricFhlUkPiePeriodSummaryResponse(transactionReference)
-
-  val json: JsValue = Json.parse(s"""
-      |{
-      |   "transactionReference": "$transactionReference"
-      |}
+  val jsonFromDownstream: JsValue = Json.parse(s"""
+      | {
+      |     "transactionReference": "$transactionRef"
+      | }
       """.stripMargin)
+
+  val expectedJsontoVendor: JsValue = Json.parse(s"""
+       | {
+       |    "periodId": "$periodId"
+       | }
+       """.stripMargin)
 
   "reads" when {
     "passed valid JSON" should {
-      "return a valid model" in {
-        json.as[CreateHistoricFhlUkPiePeriodSummaryResponse] shouldBe createHistoricFhlUkPiePeriodSummaryResponse
+      "return a valid object" in {
+        val expected = CreateHistoricFhlUkPiePeriodSummaryResponse(transactionRef, None)
+        val result   = jsonFromDownstream.as[CreateHistoricFhlUkPiePeriodSummaryResponse]
+        result shouldBe expected
+      }
+    }
+  }
+
+  "writes" when {
+    "passed an object" should {
+      "return the object as JSON" in {
+        val response = CreateHistoricFhlUkPiePeriodSummaryResponse(transactionRef, Some(periodId))
+        val result   = Json.toJson(response)
+        result shouldBe expectedJsontoVendor
       }
     }
   }

@@ -137,10 +137,6 @@ class CreateHistoricNonFhlUkPiePeriodSummaryControllerSpec
     CreateHistoricNonFhlUkPropertyPeriodSummaryRequest(nino = Nino(nino), body = requestBody)
   private val rawData = CreateHistoricNonFhlUkPropertyPeriodSummaryRawData(nino = nino, body = requestBodyJson)
 
-  //Fix this
-//  private val testHateoasLinks =
-//    Seq(Link(href = "/some/link", method = GET, rel = "someRel"))
-
   private val testHateoasLinks =
     Seq(
       Link(

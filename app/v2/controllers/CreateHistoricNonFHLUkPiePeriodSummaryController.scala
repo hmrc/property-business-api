@@ -107,8 +107,8 @@ class CreateHistoricNonFHLUkPiePeriodSummaryController @Inject()(val authService
           RuleNotContiguousPeriodError,
           RuleTaxYearNotSupportedError,
         ) => BadRequest(Json.toJson(errorWrapper))
-      case NotFoundError => NotFound(Json.toJson(errorWrapper))
-      case InternalError => InternalServerError(Json.toJson(errorWrapper))
-      case _             => unhandledError(errorWrapper)
+      case NotFoundError           => NotFound(Json.toJson(errorWrapper))
+      case (ServiceUnavailableError | InternalError ) => InternalServerError(Json.toJson(errorWrapper))
+      case _                       => unhandledError(errorWrapper)
     }
 }

@@ -56,6 +56,8 @@ object ValueFormatError extends MtdError("FORMAT_VALUE", "The value must be betw
 
 object TaxYearFormatError extends MtdError("FORMAT_TAX_YEAR", "The provided tax year is invalid")
 
+object PeriodIdFormatError extends MtdError("FORMAT_PERIOD_ID", "The provided period id is invalid")
+
 // Rule Errors
 object RuleIncorrectOrEmptyBodyError extends MtdError("RULE_INCORRECT_OR_EMPTY_BODY_SUBMITTED", "An empty or non-matching body was submitted")
 
@@ -82,18 +84,25 @@ object RuleDuplicateCountryCodeError
   def forDuplicatedCodesAndPaths(code: String, paths: Seq[String]): MtdError =
     RuleDuplicateCountryCodeError.copy(message = s"The country code '$code' is duplicated for multiple properties", paths = Some(paths))
 }
+
 object RuleBothExpensesSuppliedError
-  extends MtdError("RULE_BOTH_EXPENSES_SUPPLIED", "Both Expenses and Consolidated Expenses must not be present at the same time")
+    extends MtdError("RULE_BOTH_EXPENSES_SUPPLIED", "Both Expenses and Consolidated Expenses must not be present at the same time")
+
 object RuleBothAllowancesSuppliedError
-  extends MtdError("RULE_BOTH_ALLOWANCES_SUPPLIED", "Both allowances and property allowances must not be present at the same time")
+    extends MtdError("RULE_BOTH_ALLOWANCES_SUPPLIED", "Both allowances and property allowances must not be present at the same time")
+
 object RuleTaxYearNotSupportedError
-  extends MtdError("RULE_TAX_YEAR_NOT_SUPPORTED", "The specified tax year is not supported. The tax year specified is before the minimum tax year value")
+    extends MtdError("RULE_TAX_YEAR_NOT_SUPPORTED",
+                     "The specified tax year is not supported. The tax year specified is before the minimum tax year value")
+
 object RuleHistoricTaxYearNotSupportedError
-  extends MtdError("RULE_TAX_YEAR_NOT_SUPPORTED", "The tax year specified does not lie within the supported range")
+    extends MtdError("RULE_TAX_YEAR_NOT_SUPPORTED", "The tax year specified does not lie within the supported range")
+
 object RuleTaxYearRangeInvalidError
-  extends MtdError("RULE_TAX_YEAR_RANGE_INVALID", "Tax year range invalid. A tax year range of one year is required")
+    extends MtdError("RULE_TAX_YEAR_RANGE_INVALID", "Tax year range invalid. A tax year range of one year is required")
+
 object RulePropertyIncomeAllowanceError
-  extends MtdError("RULE_PROPERTY_INCOME_ALLOWANCE", "The propertyIncomeAllowance cannot be submitted if privateUseAdjustment is supplied")
+    extends MtdError("RULE_PROPERTY_INCOME_ALLOWANCE", "The propertyIncomeAllowance cannot be submitted if privateUseAdjustment is supplied")
 
 // Missing Date Errors
 object MissingFromDateError extends MtdError("MISSING_FROM_DATE", "The From date parameter is missing")

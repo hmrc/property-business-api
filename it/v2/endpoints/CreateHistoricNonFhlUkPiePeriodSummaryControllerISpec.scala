@@ -340,8 +340,8 @@ class CreateHistoricNonFHlUkPiePeriodSummaryControllerISpec extends V2Integratio
 
       "any valid unconsolidated request is made" in new Test {
         override def setupStubs(): StubMapping = {
-//          AuditStub.audit()
-//          AuthStub.authorised()
+          AuditStub.audit()
+          AuthStub.authorised()
           MtdIdLookupStub.ninoFound(nino)
           DownstreamStub.onSuccess(DownstreamStub.POST, ifsUri, Status.OK, ifsResponse)
         }
@@ -362,7 +362,7 @@ class CreateHistoricNonFHlUkPiePeriodSummaryControllerISpec extends V2Integratio
         }
 
         val response: WSResponse = await(request().post(requestBodyJsonConsolidatedExpense))
-        response.status shouldBe Status.ACCEPTED
+        response.status shouldBe Status.CREATED
         response.json shouldBe responseBody
         response.header("Content-Type") shouldBe Some("application/json")
       }

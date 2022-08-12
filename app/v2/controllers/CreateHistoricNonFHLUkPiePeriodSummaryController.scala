@@ -92,14 +92,21 @@ class CreateHistoricNonFHLUkPiePeriodSummaryController @Inject()(val authService
 
   private def errorResult(errorWrapper: ErrorWrapper) =
     errorWrapper.error match {
-      case NinoFormatError
-           | RuleBothExpensesSuppliedError
-           | MtdErrorWithCode(ValueFormatError.code)
-           | MtdErrorWithCode(RuleIncorrectOrEmptyBodyError.code)
-           | FromDateFormatError
-           | ToDateFormatError
-           | RuleToDateBeforeFromDateError =>
-        BadRequest(Json.toJson(errorWrapper))
+      case _
+        if errorWrapper.containsAnyOf(
+          NinoFormatError,
+          RuleBothExpensesSuppliedError,
+          ValueFormatError,
+          RuleIncorrectOrEmptyBodyError,
+          FromDateFormatError,
+          ToDateFormatError,
+          RuleToDateBeforeFromDateError,
+          RuleDuplicateSubmissionError,
+          RuleMisalignedPeriodError,
+          RuleOverlappingPeriodError,
+          RuleNotContiguousPeriodError,
+          RuleTaxYearNotSupportedError,
+        ) => BadRequest(Json.toJson(errorWrapper))
       case NotFoundError => NotFound(Json.toJson(errorWrapper))
       case InternalError => InternalServerError(Json.toJson(errorWrapper))
       case _             => unhandledError(errorWrapper)

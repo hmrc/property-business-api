@@ -19,7 +19,6 @@ package v2.endpoints
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import play.api.http.HeaderNames.ACCEPT
 import play.api.http.Status
-import play.api.http.Status.BAD_REQUEST
 import play.api.libs.json.{JsValue, Json}
 import play.api.libs.ws.{WSRequest, WSResponse}
 import play.api.test.Helpers.AUTHORIZATION
@@ -278,7 +277,7 @@ class CreateHistoricNonFHlUkPiePeriodSummaryControllerISpec extends V2Integratio
     ))
   )
 
-  private trait Test {
+  trait Test {
     val nino: String = "TC663795B"
 
     def setupStubs(): StubMapping
@@ -312,7 +311,7 @@ class CreateHistoricNonFHlUkPiePeriodSummaryControllerISpec extends V2Integratio
          |      "rel": "amend-uk-property-historic-non-fhl-period-summary"
          |    },
          |    {
-         |      "href": /individuals/business/property/uk/non-furnished-holiday-lettings/$nino/2019-03-11_2020-04-23",
+         |      "href": "/individuals/business/property/uk/non-furnished-holiday-lettings/$nino/2019-03-11_2020-04-23",
          |      "method": "GET",
          |      "rel": "self"
          |    }
@@ -337,18 +336,18 @@ class CreateHistoricNonFHlUkPiePeriodSummaryControllerISpec extends V2Integratio
 
   "calling the create endpoint" should {
 
-    "return a 202 status" when {
+    "return a 201 status" when {
 
       "any valid unconsolidated request is made" in new Test {
         override def setupStubs(): StubMapping = {
-          AuditStub.audit()
-          AuthStub.authorised()
+//          AuditStub.audit()
+//          AuthStub.authorised()
           MtdIdLookupStub.ninoFound(nino)
           DownstreamStub.onSuccess(DownstreamStub.POST, ifsUri, Status.OK, ifsResponse)
         }
 
         val response: WSResponse = await(request().post(requestBodyJson))
-        response.status shouldBe Status.ACCEPTED
+        response.status shouldBe Status.CREATED
         response.json shouldBe responseBody
         response.header("Content-Type") shouldBe Some("application/json")
       }

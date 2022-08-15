@@ -50,7 +50,7 @@ object StandardIfsHttpParser extends HttpParser {
 
     if (response.status != successCode.status) {
       logger.warn(
-        "[StandardHttpParser][read] - " +
+        "[StandardIfsHttpParser][read] - " +
           s"Error response received from back-end with status: ${response.status} and body\n" +
           s"${response.body} and correlationId: $correlationId when calling $url")
     }
@@ -58,7 +58,7 @@ object StandardIfsHttpParser extends HttpParser {
     response.status match {
       case successCode.status =>
         logger.info(
-          "[StandardHttpParser][read] - " +
+          "[StandardIfsHttpParser][read] - " +
             s"Success response received from back-end with correlationId: $correlationId when calling $url")
         successOutcomeFactory(correlationId)
       case BAD_REQUEST | NOT_FOUND | FORBIDDEN | CONFLICT | UNPROCESSABLE_ENTITY => Left(ResponseWrapper(correlationId, parseErrors(response)))

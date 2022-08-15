@@ -19,7 +19,7 @@ package v2.connectors
 import config.AppConfig
 import uk.gov.hmrc.http.{ HeaderCarrier, HttpClient }
 import v2.connectors.DownstreamUri.IfsUri
-import v2.connectors.httpparsers.StandardIfsHttpParser._
+import v2.connectors.httpparsers.StandardHttpParser._
 import v2.models.request.createHistoricFhlUkPiePeriodSummary.CreateHistoricFhlUkPiePeriodSummaryRequest
 import v2.models.response.createHistoricFhlUkPiePeriodSummary.CreateHistoricFhlUkPiePeriodSummaryResponse
 

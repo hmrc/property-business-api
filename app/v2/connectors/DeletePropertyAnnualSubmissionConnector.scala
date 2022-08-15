@@ -18,13 +18,13 @@ package v2.connectors
 
 import config.AppConfig
 
-import javax.inject.{Inject, Singleton}
-import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
+import javax.inject.{ Inject, Singleton }
+import uk.gov.hmrc.http.{ HeaderCarrier, HttpClient }
 import v2.connectors.DownstreamUri.IfsUri
-import v2.connectors.httpparsers.StandardIfsHttpParser._
+import v2.connectors.httpparsers.StandardHttpParser._
 import v2.models.request.deletePropertyAnnualSubmission.DeletePropertyAnnualSubmissionRequest
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.{ ExecutionContext, Future }
 
 @Singleton
 class DeletePropertyAnnualSubmissionConnector @Inject()(val http: HttpClient, val appConfig: AppConfig) extends BaseDownstreamConnector {

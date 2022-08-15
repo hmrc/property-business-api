@@ -18,24 +18,23 @@ package v2.connectors
 
 import config.AppConfig
 
-import javax.inject.{Inject, Singleton}
+import javax.inject.{ Inject, Singleton }
 import play.api.http.Status
-import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
+import uk.gov.hmrc.http.{ HeaderCarrier, HttpClient }
 import v2.connectors.DownstreamUri.IfsUri
-import v2.connectors.httpparsers.StandardIfsHttpParser._
+import v2.connectors.httpparsers.StandardHttpParser._
 import v2.models.request.createForeignPropertyPeriodSummary.CreateForeignPropertyPeriodSummaryRequest
 import v2.models.response.createForeignPropertyPeriodSummary.CreateForeignPropertyPeriodSummaryResponse
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.{ ExecutionContext, Future }
 
 @Singleton
-class CreateForeignPropertyPeriodSummaryConnector @Inject()(val http: HttpClient,
-                                                            val appConfig: AppConfig) extends BaseDownstreamConnector {
+class CreateForeignPropertyPeriodSummaryConnector @Inject()(val http: HttpClient, val appConfig: AppConfig) extends BaseDownstreamConnector {
 
   def createForeignProperty(request: CreateForeignPropertyPeriodSummaryRequest)(
-    implicit hc: HeaderCarrier,
-    ec: ExecutionContext,
-    correlationId: String): Future[DownstreamOutcome[CreateForeignPropertyPeriodSummaryResponse]] = {
+      implicit hc: HeaderCarrier,
+      ec: ExecutionContext,
+      correlationId: String): Future[DownstreamOutcome[CreateForeignPropertyPeriodSummaryResponse]] = {
 
     implicit val successCode: SuccessCode = SuccessCode(Status.OK)
 

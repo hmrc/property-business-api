@@ -18,16 +18,16 @@ package v2.connectors
 
 import config.AppConfig
 
-import javax.inject.{Inject, Singleton}
-import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
+import javax.inject.{ Inject, Singleton }
+import uk.gov.hmrc.http.{ HeaderCarrier, HttpClient }
 import v2.connectors.DownstreamUri.IfsUri
 import v2.connectors.RetrieveForeignPropertyAnnualSubmissionConnector._
-import v2.connectors.httpparsers.StandardIfsHttpParser._
+import v2.connectors.httpparsers.StandardHttpParser._
 import v2.models.outcomes.ResponseWrapper
 import v2.models.request.retrieveForeignPropertyAnnualSubmission.RetrieveForeignPropertyAnnualSubmissionRequest
 import v2.models.response.retrieveForeignPropertyAnnualSubmission.RetrieveForeignPropertyAnnualSubmissionResponse
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.{ ExecutionContext, Future }
 
 object RetrieveForeignPropertyAnnualSubmissionConnector {
 
@@ -39,8 +39,7 @@ object RetrieveForeignPropertyAnnualSubmissionConnector {
 }
 
 @Singleton
-class RetrieveForeignPropertyAnnualSubmissionConnector @Inject()(val http: HttpClient,
-                                                                 val appConfig: AppConfig) extends BaseDownstreamConnector {
+class RetrieveForeignPropertyAnnualSubmissionConnector @Inject()(val http: HttpClient, val appConfig: AppConfig) extends BaseDownstreamConnector {
 
   def retrieveForeignProperty(request: RetrieveForeignPropertyAnnualSubmissionRequest)(implicit hc: HeaderCarrier,
                                                                                        ec: ExecutionContext,

@@ -14,8 +14,24 @@
  * limitations under the License.
  */
 
-package v2.models.request.amendHistoricFhlUkPiePeriodSummary
+package v2.models.domain
 
-import v2.models.domain.{ Nino, PeriodId }
+case class PeriodId(value: String) {
 
-case class AmendHistoricFhlUkPiePeriodSummaryRequest(nino: Nino, periodId: PeriodId, body: AmendHistoricFhlUkPiePeriodSummaryRequestBody)
+  val (from, to): (String, String) = {
+    if (value.length != 21) ("", "")
+    else {
+      val f = value.substring(0, 10)
+      val t = value.substring(11, 21)
+      (f, t)
+    }
+  }
+
+}
+
+object PeriodId {
+
+  def apply(from: String, to: String): PeriodId = {
+    PeriodId(s"${from}_$to")
+  }
+}

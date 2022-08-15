@@ -19,7 +19,7 @@ package v2.connectors
 import mocks.MockAppConfig
 import play.api.libs.json.JsObject
 import v2.mocks.MockHttpClient
-import v2.models.domain.Nino
+import v2.models.domain.{ Nino, TaxYear }
 import v2.models.outcomes.ResponseWrapper
 import v2.models.request.deleteHistoricFhlUkPropertyAnnualSubmission.DeleteHistoricFhlUkPropertyAnnualSubmissionRequest
 
@@ -27,8 +27,9 @@ import scala.concurrent.Future
 
 class DeleteHistoricFhlUkPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec {
 
-  val nino: String    = "AA123456A"
-  val taxYear: String = "2021-22"
+  val nino: String       = "AA123456A"
+  val mtdTaxYear: String = "2021-22"
+  val taxYear: TaxYear   = TaxYear.fromMtd(mtdTaxYear)
 
   val request: DeleteHistoricFhlUkPropertyAnnualSubmissionRequest = DeleteHistoricFhlUkPropertyAnnualSubmissionRequest(
     nino = Nino(nino),
@@ -54,7 +55,7 @@ class DeleteHistoricFhlUkPropertyAnnualSubmissionConnectorSpec extends Connector
 
       MockHttpClient
         .put(
-          url = s"$baseUrl/income-tax/nino/$nino/uk-properties/furnished-holiday-lettings/annual-summaries/$taxYear",
+          url = s"$baseUrl/income-tax/nino/$nino/uk-properties/furnished-holiday-lettings/annual-summaries/${taxYear.toDownstream}",
           config = dummyDesHeaderCarrierConfig,
           body = JsObject.empty,
           requiredHeaders = requiredDesHeaders,

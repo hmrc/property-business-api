@@ -19,7 +19,7 @@ package v2.services
 import uk.gov.hmrc.http.HeaderCarrier
 import v2.controllers.EndpointLogContext
 import v2.mocks.connectors.MockDeleteHistoricFhlUkPropertyAnnualSubmissionConnector
-import v2.models.domain.Nino
+import v2.models.domain.{ Nino, TaxYear }
 import v2.models.errors._
 import v2.models.outcomes.ResponseWrapper
 import v2.models.request.deleteHistoricFhlUkPropertyAnnualSubmission.DeleteHistoricFhlUkPropertyAnnualSubmissionRequest
@@ -29,7 +29,8 @@ import scala.concurrent.Future
 class DeleteHistoricFhlUkPropertyAnnualSubmissionServiceSpec extends ServiceSpec {
 
   val nino: String                   = "AA123456A"
-  val taxYear: String                = "2021-22"
+  val mtdTaxYear: String             = "2021-22"
+  val taxYear: TaxYear               = TaxYear.fromMtd(mtdTaxYear)
   implicit val correlationId: String = "X-123"
 
   private val requestData = DeleteHistoricFhlUkPropertyAnnualSubmissionRequest(Nino(nino), taxYear)

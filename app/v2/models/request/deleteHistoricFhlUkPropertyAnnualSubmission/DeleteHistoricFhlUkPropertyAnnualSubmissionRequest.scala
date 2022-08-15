@@ -16,6 +16,6 @@
 
 package v2.models.request.deleteHistoricFhlUkPropertyAnnualSubmission
 
-import v2.models.domain.Nino
+import v2.models.domain.{ Nino, TaxYear }
 
-case class DeleteHistoricFhlUkPropertyAnnualSubmissionRequest(nino: Nino, taxYear: String)
+case class DeleteHistoricFhlUkPropertyAnnualSubmissionRequest(nino: Nino, taxYear: TaxYear)

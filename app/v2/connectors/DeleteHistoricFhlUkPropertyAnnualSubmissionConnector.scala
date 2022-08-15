@@ -36,7 +36,7 @@ class DeleteHistoricFhlUkPropertyAnnualSubmissionConnector @Inject()(val http: H
       correlationId: String): Future[DownstreamOutcome[Unit]] = {
 
     val nino    = request.nino.nino
-    val taxYear = request.taxYear
+    val taxYear = request.taxYear.toDownstream
 
     put(
       body = JsObject.empty,

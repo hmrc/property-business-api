@@ -17,8 +17,8 @@
 package v2.models.response.amendHistoricFhlUkPiePeriodSummary
 
 import config.AppConfig
-import v2.hateoas.{HateoasLinks, HateoasLinksFactory}
-import v2.models.hateoas.{HateoasData, Link}
+import v2.hateoas.{ HateoasLinks, HateoasLinksFactory }
+import v2.models.hateoas.{ HateoasData, Link }
 
 object AmendHistoricFhlUkPropertyPeriodSummaryHateoasData extends HateoasLinks {
   implicit object LinksFactory extends HateoasLinksFactory[Unit, AmendHistoricFhlUkPropertyPeriodSummaryHateoasData] {
@@ -26,7 +26,7 @@ object AmendHistoricFhlUkPropertyPeriodSummaryHateoasData extends HateoasLinks {
       import data._
       Seq(
         amendHistoricFhlUkPiePeriodSummary(appConfig, nino, periodId),
-        retrieveHistoricFhlUkPiePeriodSummary(appConfig, nino, periodId, self = true),
+        retrieveHistoricFhlUkPiePeriodSummary(appConfig, nino, periodId),
         listHistoricFhlUkPiePeriodSummaries(appConfig, nino)
       )
     }

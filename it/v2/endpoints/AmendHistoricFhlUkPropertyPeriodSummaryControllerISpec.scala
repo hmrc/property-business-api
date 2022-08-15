@@ -192,14 +192,14 @@ class AmendHistoricFhlUkPropertyPeriodSummaryControllerISpec extends V2Integrati
         ("AA1123A", "2017-04-06_2017-07-04", requestBodyJson, BAD_REQUEST, NinoFormatError),
         ("AA123456A",
          "2017-04-06_2017-07-04",
-         requestBodyJsonConsolidatedExpenses.update("/expenses/premiseRunningCosts", JsNumber(1)),
+         requestBodyJsonConsolidatedExpenses.update("/expenses/premisesRunningCosts", JsNumber(1)),
          BAD_REQUEST,
-         RuleBothExpensesSuppliedError),
+         RuleBothExpensesSuppliedError.copy(paths = Some(Seq("/expenses/consolidatedExpenses")))),
         ("AA123456A",
          "2017-04-06_2017-07-04",
-         requestBodyJson.update("/expenses/premiseRunningCosts", JsNumber(-1)),
+         requestBodyJson.update("/expenses/premisesRunningCosts", JsNumber(-1)),
          BAD_REQUEST,
-         ValueFormatError.forPathAndRange("/expenses/premiseRunningCosts", min = "0", max = "99999999999.99")),
+         ValueFormatError.forPathAndRange("/expenses/premisesRunningCosts", min = "0", max = "99999999999.99")),
         ("AA123456A", "2017-04-06_2017-07-04", JsObject.empty, BAD_REQUEST, RuleIncorrectOrEmptyBodyError),
         ("AA123456A", "BAD_PERIOD_ID", requestBodyJson, BAD_REQUEST, FormatPeriodIdError)
       )

@@ -21,7 +21,7 @@ import play.api.mvc.Result
 import uk.gov.hmrc.http.HeaderCarrier
 import v2.mocks.MockIdGenerator
 import v2.mocks.hateoas.MockHateoasFactory
-import v2.mocks.requestParsers.MockAmendHistoricFhlUkPropertyPeriodSummaryRequestParser
+import v2.mocks.requestParsers.MockAmendHistoricFhlUkPiePeriodSummaryRequestParser
 import v2.mocks.services.{ MockAmendHistoricFhlUkPropertyPeriodSummaryService, MockEnrolmentsAuthService, MockMtdIdLookupService }
 import v2.models.domain.Nino
 import v2.models.errors._
@@ -38,7 +38,7 @@ class AmendHistoricFhlUkPropertyPeriodSummaryControllerSpec
     with MockEnrolmentsAuthService
     with MockMtdIdLookupService
     with MockAmendHistoricFhlUkPropertyPeriodSummaryService
-    with MockAmendHistoricFhlUkPropertyPeriodSummaryRequestParser
+    with MockAmendHistoricFhlUkPiePeriodSummaryRequestParser
     with MockHateoasFactory
     with MockIdGenerator {
 
@@ -114,7 +114,7 @@ class AmendHistoricFhlUkPropertyPeriodSummaryControllerSpec
         val input = Seq(
           (BadRequestError, BAD_REQUEST),
           (NinoFormatError, BAD_REQUEST),
-          (RuleBothExpensesSuppliedError, BAD_REQUEST),
+          (withPath(RuleBothExpensesSuppliedError), BAD_REQUEST),
           (withPath(ValueFormatError), BAD_REQUEST),
           (withPath(RuleIncorrectOrEmptyBodyError), BAD_REQUEST),
           (FormatPeriodIdError, BAD_REQUEST),

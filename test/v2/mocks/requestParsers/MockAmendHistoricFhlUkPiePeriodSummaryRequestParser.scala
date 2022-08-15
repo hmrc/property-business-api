@@ -18,14 +18,14 @@ package v2.mocks.requestParsers
 
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
-import v2.controllers.requestParsers.AmendHistoricFhlUkPropertyPeriodSummaryRequestParser
+import v2.controllers.requestParsers.AmendHistoricFhlUkPiePeriodSummaryRequestParser
 import v2.models.errors.ErrorWrapper
 import v2.models.request.amendHistoricFhlUkPiePeriodSummary.{ AmendHistoricFhlUkPiePeriodSummaryRawData, AmendHistoricFhlUkPiePeriodSummaryRequest }
 
-trait MockAmendHistoricFhlUkPropertyPeriodSummaryRequestParser extends MockFactory {
+trait MockAmendHistoricFhlUkPiePeriodSummaryRequestParser extends MockFactory {
 
-  val mockAmendHistoricFhlUkPropertyPeriodSummaryRequestParser: AmendHistoricFhlUkPropertyPeriodSummaryRequestParser =
-    mock[AmendHistoricFhlUkPropertyPeriodSummaryRequestParser]
+  val mockAmendHistoricFhlUkPropertyPeriodSummaryRequestParser: AmendHistoricFhlUkPiePeriodSummaryRequestParser =
+    mock[AmendHistoricFhlUkPiePeriodSummaryRequestParser]
 
   object MockAmendHistoricFhlUkPropertyPeriodSummaryRequestParser {
 

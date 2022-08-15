@@ -21,7 +21,7 @@ import cats.implicits._
 import play.api.libs.json.{ JsValue, Json }
 import play.api.mvc.{ Action, ControllerComponents }
 import utils.{ IdGenerator, Logging }
-import v2.controllers.requestParsers.AmendHistoricFhlUkPropertyPeriodSummaryRequestParser
+import v2.controllers.requestParsers.AmendHistoricFhlUkPiePeriodSummaryRequestParser
 import v2.hateoas.HateoasFactory
 import v2.models.errors._
 import v2.models.request.amendHistoricFhlUkPiePeriodSummary.AmendHistoricFhlUkPiePeriodSummaryRawData
@@ -34,7 +34,7 @@ import scala.concurrent.{ ExecutionContext, Future }
 @Singleton
 class AmendHistoricFhlUkPropertyPeriodSummaryController @Inject()(val authService: EnrolmentsAuthService,
                                                                   val lookupService: MtdIdLookupService,
-                                                                  parser: AmendHistoricFhlUkPropertyPeriodSummaryRequestParser,
+                                                                  parser: AmendHistoricFhlUkPiePeriodSummaryRequestParser,
                                                                   service: AmendHistoricFhlUkPropertyPeriodSummaryService,
                                                                   hateoasFactory: HateoasFactory,
                                                                   cc: ControllerComponents,
@@ -86,8 +86,8 @@ class AmendHistoricFhlUkPropertyPeriodSummaryController @Inject()(val authServic
     }
 
   private def errorResult(errorWrapper: ErrorWrapper) = errorWrapper.error match {
-    case BadRequestError | NinoFormatError | FormatPeriodIdError | RuleBothExpensesSuppliedError | MtdErrorWithCode(ValueFormatError.code) |
-        MtdErrorWithCode(RuleIncorrectOrEmptyBodyError.code) =>
+    case BadRequestError | NinoFormatError | FormatPeriodIdError | MtdErrorWithCode(RuleBothExpensesSuppliedError.code) | MtdErrorWithCode(
+          ValueFormatError.code) | MtdErrorWithCode(RuleIncorrectOrEmptyBodyError.code) =>
       BadRequest(Json.toJson(errorWrapper))
     case NotFoundError => NotFound(Json.toJson(errorWrapper))
     case InternalError => InternalServerError(Json.toJson(errorWrapper))

@@ -85,7 +85,7 @@ class AmendHistoricFhlUkPropertyPeriodSummaryControllerISpec extends V2Integrati
 
     def request(): WSRequest = {
       setupStubs()
-      buildRequest(s"/uk/furnished-holiday-lettings/$nino/$periodId")
+      buildRequest(s"/uk/period/furnished-holiday-lettings/$nino/$periodId")
         .withHttpHeaders(
           (ACCEPT, "application/vnd.hmrc.2.0+json"),
           (AUTHORIZATION, "Bearer 123")

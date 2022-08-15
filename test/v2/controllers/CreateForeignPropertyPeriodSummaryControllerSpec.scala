@@ -16,18 +16,17 @@
 
 package v2.controllers
 
-import play.api.libs.json.Json
+import play.api.libs.json.{ JsObject, Json }
 import play.api.mvc.Result
 import uk.gov.hmrc.http.HeaderCarrier
 import v2.mocks.MockIdGenerator
 import v2.mocks.hateoas.MockHateoasFactory
 import v2.mocks.requestParsers.MockCreateForeignPropertyPeriodSummaryRequestParser
-import v2.mocks.services.{MockAuditService, MockCreateForeignPropertyPeriodSummaryService, MockEnrolmentsAuthService, MockMtdIdLookupService}
-import v2.models.audit.{AuditError, AuditEvent, AuditResponse, GenericAuditDetail}
+import v2.mocks.services.{ MockAuditService, MockCreateForeignPropertyPeriodSummaryService, MockEnrolmentsAuthService, MockMtdIdLookupService }
+import v2.models.audit.{ AuditError, AuditEvent, AuditResponse, GenericAuditDetail }
 import v2.models.domain.Nino
 import v2.models.errors._
-import v2.models.hateoas.Method.GET
-import v2.models.hateoas.{HateoasWrapper, Link}
+import v2.models.hateoas.HateoasWrapper
 import v2.models.outcomes.ResponseWrapper
 import v2.models.request.createForeignPropertyPeriodSummary._
 import v2.models.response.createForeignPropertyPeriodSummary._
@@ -85,23 +84,15 @@ class CreateForeignPropertyPeriodSummaryControllerSpec
     CreateForeignPropertyPeriodSummaryRequest(nino = Nino(nino), businessId = businessId, taxYear = taxYear, body = requestBody)
   private val rawData = CreateForeignPropertyPeriodSummaryRawData(nino = nino, businessId = businessId, taxYear = taxYear, body = requestBodyJson)
 
-  private val testHateoasLinks =
-    Seq(Link(href = "/some/link", method = GET, rel = "someRel"))
-
-  private val hateoasResponse = Json.parse(
-    s"""
+  private val hateoasResponse = Json
+    .parse(
+      s"""
        |{
-       |  "submissionId": "$submissionId",
-       |  "links": [
-       |    {
-       |      "href":"/some/link",
-       |      "method":"GET",
-       |      "rel":"someRel"
-       |    }
-       |  ]
+       |  "submissionId": "$submissionId"
        |}
     """.stripMargin
-  )
+    )
+    .as[JsObject] ++ testHateoasLinksJson
 
   private val response = CreateForeignPropertyPeriodSummaryResponse(submissionId)
 

@@ -17,10 +17,14 @@
 package v2.controllers
 
 import play.api.http.{HeaderNames, MimeTypes, Status}
+import play.api.libs.json.{JsObject, Json}
 import play.api.mvc.{AnyContentAsEmpty, ControllerComponents}
 import play.api.test.Helpers.stubControllerComponents
 import play.api.test.{FakeRequest, ResultExtractors}
 import support.UnitSpec
+import v2.models.errors.MtdError
+import v2.models.hateoas.Link
+import v2.models.hateoas.Method.GET
 
 class ControllerBaseSpec extends UnitSpec
   with Status
@@ -37,4 +41,17 @@ class ControllerBaseSpec extends UnitSpec
   )
 
   def fakeRequestWithBody[T](body: T): FakeRequest[T] = fakeRequest.withBody(body)
+
+  val testHateoasLinks: Seq[Link] =
+    Seq(Link(href = "/some/link", method = GET, rel = "someRel"))
+
+  val testHateoasLinksJson: JsObject = Json
+    .parse(
+      """{
+        |  "links": [ { "href":"/some/link", "method":"GET", "rel":"someRel" } ]
+        |}
+        |""".stripMargin)
+    .as[JsObject]
+
+  def withPath(error: MtdError): MtdError = error.copy(paths = Some(Seq("/somePath")))
 }

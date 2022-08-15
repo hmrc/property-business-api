@@ -17,7 +17,7 @@
 package v2.models.hateoas
 
 object RelType {
-  val SELF = "self"
+  val SELF                                                = "self"
 
   val AMEND_FOREIGN_PROPERTY_PERIOD_SUMMARY               = "amend-foreign-property-period-summary"
   val CREATE_FOREIGN_PROPERTY_PERIOD_SUMMARY              = "create-foreign-property-period-summary"
@@ -32,6 +32,7 @@ object RelType {
   val RETRIEVE_UK_PROPERTY_ANNUAL_SUBMISSION         = "retrieve-uk-property-annual-submission"
 
   val AMEND_HISTORIC_NON_FHL_UK_PIE_PERIOD_SUMMARY = "amend-uk-property-historic-non-fhl-period-summary"
+  val LIST_HISTORIC_NON_FHL_UK_PIE_PERIOD_SUMMARIES    = "list-uk-property-historic-non-fhl-period-summaries"
 
   val RETRIEVE_HISTORIC_FHL_UK_PROPERTY_ANNUAL_SUBMISSION         = "retrieve-uk-property-historic-fhl-annual-submission"
   val CREATE_AND_AMEND_HISTORIC_FHL_UK_PROPERTY_ANNUAL_SUBMISSION = "create-and-amend-historic-fhl-uk-property-annual-submission"
@@ -42,6 +43,8 @@ object RelType {
   val DELETE_HISTORIC_NON_FHL_UK_PROPERTY_ANNUAL_SUBMISSION           = "delete-uk-property-historic-non-fhl-annual-submission"
 
   val AMEND_HISTORIC_UK_FHL_PROPERTY_INCOME_EXPENSES_PERIOD_SUMMARY  = "amend-uk-property-historic-fhl-period-summary"
+  val RETRIEVE_HISTORIC_UK_FHL_PROPERTY_INCOME_EXPENSES_PERIOD_SUMMARY = "amend-uk-property-historic-non-fhl-period-summary"
+  val LIST_HISTORIC_UK_FHL_PROPERTY_INCOME_EXPENSES_PERIOD_SUMMARIES    = "list-uk-property-historic-fhl-period-summaries"
 
   val LIST_PROPERTY_PERIOD_SUMMARIES    = "list-property-period-summaries"
   val DELETE_PROPERTY_ANNUAL_SUBMISSION = "delete-property-annual-submission"

@@ -43,6 +43,7 @@ object FromDateFormatError extends MtdError("FORMAT_FROM_DATE", "The provided Fr
 object ToDateFormatError extends MtdError("FORMAT_TO_DATE", "The provided To date is invalid")
 
 object DateFormatError extends MtdError("FORMAT_DATE", "The supplied date format is not valid")
+object FormatPeriodIdError extends MtdError("FORMAT_PERIOD_ID", "The provided period id is invalid")
 
 object StringFormatError extends MtdError("FORMAT_STRING", "The supplied string format is not valid")
 

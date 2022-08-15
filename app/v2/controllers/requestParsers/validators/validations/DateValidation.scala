@@ -16,36 +16,36 @@
 
 package v2.controllers.requestParsers.validators.validations
 
+import v2.models.errors.{ DateFormatError, FromDateFormatError, MtdError, ToDateFormatError }
+
 import java.time.LocalDate
-
-import v2.models.errors.{DateFormatError, FromDateFormatError, MtdError, ToDateFormatError}
-
-import scala.util.{Failure, Success, Try}
+import scala.util.{ Failure, Success, Try }
 
 object DateValidation {
 
-
   def validateOtherDate(field: Option[String], path: String): List[MtdError] =
+    field match {
+      case Some(field) =>
+        Try {
+          LocalDate.parse(field, dateFormat)
+        } match {
+          case Success(_) => Nil
+          case Failure(_) => List(DateFormatError.copy(paths = Some(Seq(path))))
+        }
+      case _ => Nil
+    }
 
-  field match {
-    case Some(field) => Try {
+  def validate(field: String, isFromDate: Boolean): List[MtdError] =
+    Try {
       LocalDate.parse(field, dateFormat)
     } match {
-      case Success(_) => NoValidationErrors
-      case Failure(_) => List(DateFormatError.copy(paths = Some(Seq(path))))
+      case Success(_) => Nil
+      case Failure(_) =>
+        if (isFromDate) {
+          List(FromDateFormatError)
+        } else {
+          List(ToDateFormatError)
+        }
     }
-    case _ => NoValidationErrors
-  }
-
-  def validate(field: String, isFromDate: Boolean): List[MtdError] = Try {
-    LocalDate.parse(field, dateFormat)
-  } match {
-    case Success(_) => NoValidationErrors
-    case Failure(_) => if (isFromDate) {
-      List(FromDateFormatError)
-    } else {
-      List(ToDateFormatError)
-    }
-  }
 
 }

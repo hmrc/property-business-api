@@ -14,15 +14,8 @@
  * limitations under the License.
  */
 
-package v2
+package v2.models.request.amendHistoricFhlUkPiePeriodSummary
 
-import v2.models.errors.{ DownstreamError, MtdError }
-import v2.models.outcomes.ResponseWrapper
+import v2.models.domain.Nino
 
-package object connectors {
-
-  type MtdIdLookupOutcome = Either[MtdError, String]
-
-  type DownstreamOutcome[A] = Either[ResponseWrapper[DownstreamError], ResponseWrapper[A]]
-
-}
+case class AmendHistoricFhlUkPiePeriodSummaryRequest(nino: Nino, periodId: String, body: AmendHistoricFhlUkPiePeriodSummaryRequestBody)

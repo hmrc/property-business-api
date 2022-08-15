@@ -17,14 +17,14 @@
 package v2.connectors
 
 import config.AppConfig
-import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
+import uk.gov.hmrc.http.{ HeaderCarrier, HttpClient }
 import v2.connectors.DownstreamUri.IfsUri
 import v2.connectors.httpparsers.StandardIfsHttpParser._
 import v2.models.request.createHistoricFhlUkPiePeriodSummary.CreateHistoricFhlUkPiePeriodSummaryRequest
-import v2.models.response.createHistoricFhlUkPiePeriodSummary.{CreateHistoricFhlUkPiePeriodSummaryResponse}
+import v2.models.response.createHistoricFhlUkPiePeriodSummary.CreateHistoricFhlUkPiePeriodSummaryResponse
 
-import javax.inject.{Inject, Singleton}
-import scala.concurrent.{ExecutionContext, Future}
+import javax.inject.{ Inject, Singleton }
+import scala.concurrent.{ ExecutionContext, Future }
 
 @Singleton
 class CreateHistoricFhlUkPiePeriodSummaryConnector @Inject()(val http: HttpClient, val appConfig: AppConfig) extends BaseDownstreamConnector {
@@ -34,10 +34,7 @@ class CreateHistoricFhlUkPiePeriodSummaryConnector @Inject()(val http: HttpClien
       ex: ExecutionContext,
       correlationId: String): Future[DownstreamOutcome[CreateHistoricFhlUkPiePeriodSummaryResponse]] = {
 
-    post(
-      body = request.body,
-      uri = IfsUri[CreateHistoricFhlUkPiePeriodSummaryResponse](
-        s"income-tax/nino/${request.nino.nino}/uk-properties/furnished-holiday-lettings/periodic-summaries")
-    )
+    val path = s"income-tax/nino/${request.nino.nino}/uk-properties/furnished-holiday-lettings/periodic-summaries"
+    post(request.body, IfsUri[CreateHistoricFhlUkPiePeriodSummaryResponse](path))
   }
 }

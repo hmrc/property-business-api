@@ -14,15 +14,13 @@
  * limitations under the License.
  */
 
-package v2
+package v2.models.request.amendHistoricFhlUkPiePeriodSummary
 
-import v2.models.errors.{ DownstreamError, MtdError }
-import v2.models.outcomes.ResponseWrapper
+import play.api.libs.json.{ JsValue, Json, OWrites }
+import v2.models.request.RawData
 
-package object connectors {
+case class AmendHistoricFhlUkPiePeriodSummaryRawData(nino: String, periodId: String, body: JsValue) extends RawData
 
-  type MtdIdLookupOutcome = Either[MtdError, String]
-
-  type DownstreamOutcome[A] = Either[ResponseWrapper[DownstreamError], ResponseWrapper[A]]
-
+object AmendHistoricFhlUkPiePeriodSummaryRawData {
+  implicit val writes: OWrites[AmendHistoricFhlUkPiePeriodSummaryRawData] = Json.writes[AmendHistoricFhlUkPiePeriodSummaryRawData]
 }

@@ -14,15 +14,8 @@
  * limitations under the License.
  */
 
-package v2
+package v2.models.response.amendHistoricFhlUkPiePeriodSummary
 
-import v2.models.errors.{ DownstreamError, MtdError }
-import v2.models.outcomes.ResponseWrapper
+import v2.hateoas.HateoasLinks
 
-package object connectors {
-
-  type MtdIdLookupOutcome = Either[MtdError, String]
-
-  type DownstreamOutcome[A] = Either[ResponseWrapper[DownstreamError], ResponseWrapper[A]]
-
-}
+object AmendHistoricFhlUkPiePeriodSummaryResponse extends HateoasLinks {}

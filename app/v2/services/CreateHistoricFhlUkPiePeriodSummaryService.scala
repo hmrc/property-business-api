@@ -16,19 +16,19 @@
 
 package v2.services
 
-import cats.implicits._
 import cats.data.EitherT
-
-import javax.inject.{ Inject, Singleton }
+import cats.implicits._
 import uk.gov.hmrc.http.HeaderCarrier
 import utils.Logging
-import v2.controllers.EndpointLogContext
 import v2.connectors.CreateHistoricFhlUkPiePeriodSummaryConnector
+import v2.controllers.EndpointLogContext
 import v2.models.errors._
+import v2.models.outcomes.ResponseWrapper
 import v2.models.request.createHistoricFhlUkPiePeriodSummary.CreateHistoricFhlUkPiePeriodSummaryRequest
 import v2.models.response.createHistoricFhlUkPiePeriodSummary.CreateHistoricFhlUkPiePeriodSummaryResponse
 import v2.support.DownstreamResponseMappingSupport
 
+import javax.inject.{ Inject, Singleton }
 import scala.concurrent.{ ExecutionContext, Future }
 
 @Singleton
@@ -42,8 +42,16 @@ class CreateHistoricFhlUkPiePeriodSummaryService @Inject()(connector: CreateHist
       logContext: EndpointLogContext,
       correlationId: String): Future[ServiceOutcome[CreateHistoricFhlUkPiePeriodSummaryResponse]] = {
 
+    def withPeriodId(
+        wrapper: ResponseWrapper[CreateHistoricFhlUkPiePeriodSummaryResponse]): ResponseWrapper[CreateHistoricFhlUkPiePeriodSummaryResponse] = {
+
+      val periodId = s"${request.body.fromDate}_${request.body.toDate}"
+      wrapper.copy(responseData = wrapper.responseData.copy(periodId = Some(periodId)))
+    }
+
     val result = for {
       ifsResponseWrapper <- EitherT(connector.createPeriodSummary(request))
+        .map(withPeriodId)
         .leftMap(mapDownstreamErrors(ifsErrorMap))
     } yield ifsResponseWrapper
 

@@ -38,7 +38,7 @@ object CreateHistoricNonFhlUkPiePeriodSummaryResponse extends HateoasLinks {
     override def links(appConfig: AppConfig, data: CreateHistoricNonFhlUkPiePeriodSummaryHateoasData): Seq[Link] = {
       import data._
       Seq(
-        retrieveHistoricNonFhlUkPiePeriodSummary(appConfig: AppConfig, nino: String, periodId: String, self = true),
+        retrieveHistoricNonFhlUkPiePeriodSummary(appConfig: AppConfig, nino: String, periodId: String),
         amendHistoricNonFhlUkPiePeriodSummary(appConfig: AppConfig, nino: String, periodId: String)
       )
     }

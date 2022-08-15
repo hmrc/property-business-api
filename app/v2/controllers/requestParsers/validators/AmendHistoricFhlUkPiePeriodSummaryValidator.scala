@@ -16,51 +16,43 @@
 
 package v2.controllers.requestParsers.validators
 
-import com.google.inject.Inject
 import config.AppConfig
 import v2.controllers.requestParsers.validators.validations.JsonFormatValidation.validateAndCheckNonEmptyOrRead
+import v2.controllers.requestParsers.validators.validations.{ ConsolidatedExpensesValidation, HistoricPeriodIdValidation, NinoValidation }
 import v2.controllers.requestParsers.validators.validations.NumberValidation.validateOptional
-import v2.controllers.requestParsers.validators.validations._
 import v2.models.errors.MtdError
-import v2.models.request.createHistoricFhlUkPiePeriodSummary.{
-  CreateHistoricFhlUkPiePeriodSummaryRawData,
-  CreateHistoricFhlUkPiePeriodSummaryRequestBody
+import v2.models.request.amendHistoricFhlUkPiePeriodSummary.{
+  AmendHistoricFhlUkPiePeriodSummaryRawData,
+  AmendHistoricFhlUkPiePeriodSummaryRequestBody
 }
 
-import javax.inject.Singleton
+import javax.inject.{ Inject, Singleton }
 
 @Singleton
-class CreateHistoricFhlUkPiePeriodSummaryValidator @Inject()(appConfig: AppConfig) extends Validator[CreateHistoricFhlUkPiePeriodSummaryRawData] {
+class AmendHistoricFhlUkPiePeriodSummaryValidator @Inject()(appConfig: AppConfig) extends Validator[AmendHistoricFhlUkPiePeriodSummaryRawData] {
 
   lazy private val minTaxYear = appConfig.minimumTaxHistoric
   lazy private val maxTaxYear = appConfig.maximumTaxHistoric
 
-  override def validate(data: CreateHistoricFhlUkPiePeriodSummaryRawData): List[MtdError] = {
+  override def validate(data: AmendHistoricFhlUkPiePeriodSummaryRawData): List[MtdError] = {
     (for {
-      _    <- validatePathParams(data)
-      body <- validateAndCheckNonEmptyOrRead[CreateHistoricFhlUkPiePeriodSummaryRequestBody](data.body)
+      _    <- validatePathParameters(data)
+      body <- validateAndCheckNonEmptyOrRead[AmendHistoricFhlUkPiePeriodSummaryRequestBody](data.body)
       _    <- validateBody(body)
     } yield ()).swap.getOrElse(Nil)
   }
 
-  private def validatePathParams(data: CreateHistoricFhlUkPiePeriodSummaryRawData): Either[List[MtdError], Unit] = {
-    val ninoError = NinoValidation.validate(data.nino)
-    errorsResult(ninoError)
+  private def validatePathParameters(data: AmendHistoricFhlUkPiePeriodSummaryRawData): Either[List[MtdError], Unit] = {
+    val ninoError =
+      NinoValidation.validate(data.nino)
+
+    val periodIdError =
+      HistoricPeriodIdValidation.validate(minTaxYear, maxTaxYear, data.periodId)
+
+    errorsResult(ninoError ++ periodIdError)
   }
 
-  private def validateBody(body: CreateHistoricFhlUkPiePeriodSummaryRequestBody): Either[List[MtdError], Unit] = {
-
-    val formatDateErrors =
-      DateValidation.validate(body.fromDate, isFromDate = true) ++
-        DateValidation.validate(body.toDate, isFromDate = false)
-
-    val historicTaxPeriodYearErrors =
-      if (formatDateErrors.isEmpty)
-        (
-          HistoricTaxPeriodYearValidation.validate(minTaxYear, maxTaxYear, body.fromDate) ++
-            HistoricTaxPeriodYearValidation.validate(minTaxYear, maxTaxYear, body.toDate)
-        )
-      else Nil
+  private def validateBody(body: AmendHistoricFhlUkPiePeriodSummaryRequestBody): Either[List[MtdError], Unit] = {
 
     val incomeFormatErrors = body.income
       .map { income =>
@@ -74,20 +66,21 @@ class CreateHistoricFhlUkPiePeriodSummaryValidator @Inject()(appConfig: AppConfi
     val expensesFormatErrors = body.expenses
       .map { expenses =>
         import expenses._
+
         validateOptional(premisesRunningCosts, "/expenses/premisesRunningCosts") ++
           validateOptional(repairsAndMaintenance, "/expenses/repairsAndMaintenance") ++
-          validateOptional(financialCosts, "/expenses/financialCosts") ++
+          validateOptional(financialCosts, "/expenses/premisesCosts") ++
           validateOptional(professionalFees, "/expenses/professionalFees") ++
           validateOptional(costOfServices, "/expenses/costOfServices") ++
           validateOptional(other, "/expenses/other") ++
           validateOptional(consolidatedExpenses, "/expenses/consolidatedExpenses") ++
           validateOptional(travelCosts, "/expenses/travelCosts") ++
-          validateOptional(rentARoom.flatMap(_.amountClaimed), "/expenses/rentARoom/amountClaimed")
+          validateOptional(rentARoom.flatMap(_.amountClaimed), "/income/rentARoom/amountClaimed")
       }
       .getOrElse(Nil)
 
     val bothExpensesErrors = body.expenses.map(ConsolidatedExpensesValidation.validate(_, "/expenses/consolidatedExpenses")).getOrElse(Nil)
 
-    errorsResult(formatDateErrors ++ historicTaxPeriodYearErrors ++ incomeFormatErrors ++ expensesFormatErrors ++ bothExpensesErrors)
+    errorsResult(incomeFormatErrors ++ expensesFormatErrors ++ bothExpensesErrors)
   }
 }

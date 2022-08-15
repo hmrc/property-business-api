@@ -17,9 +17,9 @@
 package v1.connectors.httpparsers
 
 import play.api.http.Status._
-import play.api.libs.json.{JsValue, Json, Reads}
+import play.api.libs.json.{ JsValue, Json, Reads }
 import support.UnitSpec
-import uk.gov.hmrc.http.{HttpReads, HttpResponse}
+import uk.gov.hmrc.http.{ HttpReads, HttpResponse }
 import v1.connectors.IfsOutcome
 import v1.models.errors._
 import v1.models.outcomes.ResponseWrapper
@@ -34,7 +34,7 @@ object SomeModel {
 class StandardIfsHttpParserSpec extends UnitSpec {
 
   val method = "POST"
-  val url = "test-url"
+  val url    = "test-url"
 
   val correlationId = "a1e8057e-fbbc-47a8-a8b4-78d9f015c253"
 
@@ -42,10 +42,10 @@ class StandardIfsHttpParserSpec extends UnitSpec {
 
   val httpReads: HttpReads[IfsOutcome[Unit]] = implicitly
 
-  val data = "someData"
+  val data                  = "someData"
   val expectedJson: JsValue = Json.obj("data" -> data)
 
-  val model: SomeModel = SomeModel(data)
+  val model: SomeModel                     = SomeModel(data)
   val response: ResponseWrapper[SomeModel] = ResponseWrapper(correlationId, model)
 
   "The generic HTTP parser" when {
@@ -60,8 +60,8 @@ class StandardIfsHttpParserSpec extends UnitSpec {
 
       "return an outbound error if a model object cannot be read from the response json" in {
         val badFieldTypeJson: JsValue = Json.obj("incomeSourceId" -> 1234, "incomeSourceName" -> 1234)
-        val httpResponse = HttpResponse(OK, badFieldTypeJson.toString(), Map("CorrelationId" -> Seq(correlationId)))
-        val expected = ResponseWrapper(correlationId, OutboundError(DownstreamError))
+        val httpResponse              = HttpResponse(OK, badFieldTypeJson.toString(), Map("CorrelationId" -> Seq(correlationId)))
+        val expected                  = ResponseWrapper(correlationId, OutboundError(DownstreamError))
 
         httpReads.read(method, url, httpResponse) shouldBe Left(expected)
       }
@@ -74,7 +74,7 @@ class StandardIfsHttpParserSpec extends UnitSpec {
 
     "a success code is specified" must {
       "use that status code for success" in {
-        implicit val successCode: SuccessCode = SuccessCode(PARTIAL_CONTENT)
+        implicit val successCode: SuccessCode           = SuccessCode(PARTIAL_CONTENT)
         val httpReads: HttpReads[IfsOutcome[SomeModel]] = implicitly
 
         val httpResponse = HttpResponse(PARTIAL_CONTENT, expectedJson.toString(), Map("CorrelationId" -> Seq(correlationId)))
@@ -103,7 +103,7 @@ class StandardIfsHttpParserSpec extends UnitSpec {
     }
 
     "a success code is specified" must {
-      implicit val successCode: SuccessCode = SuccessCode(PARTIAL_CONTENT)
+      implicit val successCode: SuccessCode      = SuccessCode(PARTIAL_CONTENT)
       val httpReads: HttpReads[IfsOutcome[Unit]] = implicitly
 
       "use that status code for success" in {
@@ -172,7 +172,7 @@ class StandardIfsHttpParserSpec extends UnitSpec {
 
             httpReads.read(method, url, httpResponse) shouldBe Left(ResponseWrapper(correlationId, OutboundError(DownstreamError)))
           }
-        }
+      }
     )
 
   private def handleInternalErrorsCorrectly[A](httpReads: HttpReads[IfsOutcome[A]]): Unit =
@@ -189,7 +189,7 @@ class StandardIfsHttpParserSpec extends UnitSpec {
 
           httpReads.read(method, url, httpResponse) shouldBe Left(ResponseWrapper(correlationId, OutboundError(DownstreamError)))
         }
-      })
+    })
 
   private def handleUnexpectedResponse[A](httpReads: HttpReads[IfsOutcome[A]]): Unit =
     "receiving an unexpected response" should {
@@ -207,12 +207,9 @@ class StandardIfsHttpParserSpec extends UnitSpec {
       }
     }
 
-
   private def handleBvrsCorrectly[A](httpReads: HttpReads[IfsOutcome[A]]): Unit = {
 
-
-    val singleBvrJson = Json.parse(
-      """
+    val singleBvrJson = Json.parse("""
         |{
         |   "bvrfailureResponseElement": {
         |     "validationRuleFailures": [
@@ -232,8 +229,7 @@ class StandardIfsHttpParserSpec extends UnitSpec {
         val httpResponse = HttpResponse(BAD_REQUEST, singleBvrJson.toString(), Map("CorrelationId" -> Seq(correlationId)))
 
         httpReads.read(method, url, httpResponse) shouldBe
-          Left(ResponseWrapper(correlationId,
-            OutboundError(BVRError, Some(Seq(MtdError("BVR1", ""), MtdError("BVR2", ""))))))
+          Left(ResponseWrapper(correlationId, OutboundError(BVRError, Some(Seq(MtdError("BVR1", ""), MtdError("BVR2", ""))))))
       }
     }
   }

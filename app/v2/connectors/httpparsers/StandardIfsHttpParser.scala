@@ -18,9 +18,9 @@ package v2.connectors.httpparsers
 
 import play.api.http.Status._
 import play.api.libs.json.Reads
-import uk.gov.hmrc.http.{HttpReads, HttpResponse}
+import uk.gov.hmrc.http.{ HttpReads, HttpResponse }
 import v2.connectors.DownstreamOutcome
-import v2.models.errors.{InternalError, OutboundError}
+import v2.models.errors.{ InternalError, OutboundError }
 import v2.models.outcomes.ResponseWrapper
 
 object StandardIfsHttpParser extends HttpParser {
@@ -29,27 +29,29 @@ object StandardIfsHttpParser extends HttpParser {
 
   // Return Right[IfsResponse[Unit]] as success response has no body - no need to assign it a value
   implicit def readsEmpty(implicit successCode: SuccessCode = SuccessCode(NO_CONTENT)): HttpReads[DownstreamOutcome[Unit]] =
-    (_: String, url: String, response: HttpResponse) => doRead(url, response) { correlationId =>
-      Right(ResponseWrapper(correlationId, ()))
+    (_: String, url: String, response: HttpResponse) =>
+      doRead(url, response) { correlationId =>
+        Right(ResponseWrapper(correlationId, ()))
     }
 
   implicit def reads[A: Reads](implicit successCode: SuccessCode = SuccessCode(OK)): HttpReads[DownstreamOutcome[A]] =
-    (_: String, url: String, response: HttpResponse) => doRead(url, response) { correlationId =>
-      response.validateJson[A] match {
-        case Some(ref) => Right(ResponseWrapper(correlationId, ref))
-        case None => Left(ResponseWrapper(correlationId, OutboundError(InternalError)))
-      }
+    (_: String, url: String, response: HttpResponse) =>
+      doRead(url, response) { correlationId =>
+        response.validateJson[A] match {
+          case Some(ref) => Right(ResponseWrapper(correlationId, ref))
+          case None      => Left(ResponseWrapper(correlationId, OutboundError(InternalError)))
+        }
     }
 
   private def doRead[A](url: String, response: HttpResponse)(successOutcomeFactory: String => DownstreamOutcome[A])(
-    implicit successCode: SuccessCode): DownstreamOutcome[A] = {
+      implicit successCode: SuccessCode): DownstreamOutcome[A] = {
 
     val correlationId = retrieveCorrelationId(response)
 
     if (response.status != successCode.status) {
       logger.warn(
         "[StandardIfsHttpParser][read] - " +
-          s"Error response received from IFS with status: ${response.status} and body\n" +
+          s"Error response received from back-end with status: ${response.status} and body\n" +
           s"${response.body} and correlationId: $correlationId when calling $url")
     }
 
@@ -57,14 +59,10 @@ object StandardIfsHttpParser extends HttpParser {
       case successCode.status =>
         logger.info(
           "[StandardIfsHttpParser][read] - " +
-            s"Success response received from IFS with correlationId: $correlationId when calling $url")
+            s"Success response received from back-end with correlationId: $correlationId when calling $url")
         successOutcomeFactory(correlationId)
-      case BAD_REQUEST |
-           NOT_FOUND |
-           FORBIDDEN |
-           CONFLICT |
-           UNPROCESSABLE_ENTITY => Left(ResponseWrapper(correlationId, parseErrors(response)))
-      case _ => Left(ResponseWrapper(correlationId, OutboundError(InternalError)))
+      case BAD_REQUEST | NOT_FOUND | FORBIDDEN | CONFLICT | UNPROCESSABLE_ENTITY => Left(ResponseWrapper(correlationId, parseErrors(response)))
+      case _                                                                     => Left(ResponseWrapper(correlationId, OutboundError(InternalError)))
     }
   }
 }

@@ -16,6 +16,6 @@
 
 package v2.models.request.amendHistoricFhlUkPiePeriodSummary
 
-import v2.models.domain.Nino
+import v2.models.domain.{ Nino, PeriodId }
 
-case class AmendHistoricFhlUkPiePeriodSummaryRequest(nino: Nino, periodId: String, body: AmendHistoricFhlUkPiePeriodSummaryRequestBody)
+case class AmendHistoricFhlUkPiePeriodSummaryRequest(nino: Nino, periodId: PeriodId, body: AmendHistoricFhlUkPiePeriodSummaryRequestBody)

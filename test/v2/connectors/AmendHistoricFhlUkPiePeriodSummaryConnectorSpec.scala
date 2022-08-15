@@ -42,12 +42,10 @@ class AmendHistoricFhlUkPiePeriodSummaryConnectorSpec extends ConnectorSpec {
       "return the ok result" in new Test {
         val response = AmendHistoricFhlUkPiePeriodSummaryResponse(transactionReference = "2017090920170909")
         val outcome  = Right(ResponseWrapper(correlationId, response))
-
         stubHttpResponse(outcome)
 
-        val result = await(connector.amend(request))
+        val result: DownstreamOutcome[Unit] = await(connector.amend(request))
         result shouldBe outcome
-
       }
     }
   }

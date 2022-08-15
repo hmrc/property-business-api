@@ -81,7 +81,6 @@ class AmendHistoricFhlUkPiePeriodSummaryServiceSpec extends ServiceSpec {
       )
 
       input.foreach(args => (serviceError _).tupled(args))
-
     }
   }
 

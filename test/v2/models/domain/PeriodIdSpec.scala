@@ -32,7 +32,6 @@ class PeriodIdSpec extends UnitSpec {
         val result = PeriodId("2017-04-06_2017-07-04")
         result.from shouldBe "2017-04-06"
         result.to shouldBe "2017-07-04"
-
       }
     }
 
@@ -43,5 +42,4 @@ class PeriodIdSpec extends UnitSpec {
       }
     }
   }
-
 }

@@ -19,11 +19,12 @@ package v2.models.domain
 case class PeriodId(value: String) {
 
   val (from, to): (String, String) = {
-    if (value.length != 21) ("", "")
-    else {
+    if (value.length == 21) {
       val f = value.substring(0, 10)
       val t = value.substring(11, 21)
       (f, t)
+    } else {
+      ("", "")
     }
   }
 

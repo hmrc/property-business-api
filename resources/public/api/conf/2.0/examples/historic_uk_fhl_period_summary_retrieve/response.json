@@ -3,7 +3,7 @@
     "fromDate": "2001-01-01",
     "toDate": "2001-01-01"
   },
-  "periodIncome": {
+  "income": {
     "amount": 200.00,
     "taxDeducted": 100.00,
     "rentARoom": {

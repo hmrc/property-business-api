@@ -22,7 +22,7 @@ import play.api.libs.json.JsObject
 import javax.inject.{ Inject, Singleton }
 import uk.gov.hmrc.http.{ HeaderCarrier, HttpClient }
 import v2.connectors.DownstreamUri.DesUri
-import v2.connectors.httpparsers.StandardHttpParser._
+import v2.connectors.httpparsers.StandardIfsHttpParser._
 import v2.models.request.deleteHistoricFhlUkPropertyAnnualSubmission.DeleteHistoricFhlUkPropertyAnnualSubmissionRequest
 
 import scala.concurrent.{ ExecutionContext, Future }

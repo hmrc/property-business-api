@@ -22,7 +22,7 @@ import javax.inject.{ Inject, Singleton }
 import play.api.http.Status
 import uk.gov.hmrc.http.{ HeaderCarrier, HttpClient }
 import v2.connectors.DownstreamUri.IfsUri
-import v2.connectors.httpparsers.StandardHttpParser._
+import v2.connectors.httpparsers.StandardIfsHttpParser._
 import v2.models.request.createForeignPropertyPeriodSummary.CreateForeignPropertyPeriodSummaryRequest
 import v2.models.response.createForeignPropertyPeriodSummary.CreateForeignPropertyPeriodSummaryResponse
 

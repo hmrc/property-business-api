@@ -23,7 +23,7 @@ import v2.connectors.DownstreamOutcome
 import v2.models.errors.{ InternalError, OutboundError }
 import v2.models.outcomes.ResponseWrapper
 
-object StandardHttpParser extends HttpParser {
+object StandardIfsHttpParser extends HttpParser {
 
   case class SuccessCode(status: Int) extends AnyVal
 

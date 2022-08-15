@@ -22,7 +22,7 @@ import v2.models.request.retrieveHistoricNonFhlUkPropertyAnnualSubmission.Retrie
 import v2.models.response.retrieveHistoricNonFhlUkPropertyAnnualSubmissionResponse.RetrieveHistoricNonFhlUkPropertyAnnualSubmissionResponse
 import v2.connectors.DownstreamUri.DesUri
 import javax.inject.{ Inject, Singleton }
-import v2.connectors.httpparsers.StandardHttpParser._
+import v2.connectors.httpparsers.StandardIfsHttpParser._
 import scala.concurrent.{ ExecutionContext, Future }
 
 @Singleton

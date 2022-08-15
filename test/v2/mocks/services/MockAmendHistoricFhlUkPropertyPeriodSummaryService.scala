@@ -23,13 +23,13 @@ import v2.controllers.EndpointLogContext
 import v2.models.errors.ErrorWrapper
 import v2.models.outcomes.ResponseWrapper
 import v2.models.request.amendHistoricFhlUkPiePeriodSummary.AmendHistoricFhlUkPiePeriodSummaryRequest
-import v2.services.AmendHistoricFhlUkPropertyPeriodSummaryService
+import v2.services.AmendHistoricFhlUkPiePeriodSummaryService
 
 import scala.concurrent.{ ExecutionContext, Future }
 
 trait MockAmendHistoricFhlUkPropertyPeriodSummaryService extends MockFactory {
 
-  val mockService: AmendHistoricFhlUkPropertyPeriodSummaryService = mock[AmendHistoricFhlUkPropertyPeriodSummaryService]
+  val mockService: AmendHistoricFhlUkPiePeriodSummaryService = mock[AmendHistoricFhlUkPiePeriodSummaryService]
 
   object MockAmendHistoricFhlUkPropertyPeriodSummaryService {
 

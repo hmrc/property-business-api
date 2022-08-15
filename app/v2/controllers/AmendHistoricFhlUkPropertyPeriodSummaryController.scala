@@ -26,7 +26,7 @@ import v2.hateoas.HateoasFactory
 import v2.models.errors._
 import v2.models.request.amendHistoricFhlUkPiePeriodSummary.AmendHistoricFhlUkPiePeriodSummaryRawData
 import v2.models.response.amendHistoricFhlUkPiePeriodSummary.AmendHistoricFhlUkPropertyPeriodSummaryHateoasData
-import v2.services.{ AmendHistoricFhlUkPropertyPeriodSummaryService, EnrolmentsAuthService, MtdIdLookupService }
+import v2.services.{ AmendHistoricFhlUkPiePeriodSummaryService, EnrolmentsAuthService, MtdIdLookupService }
 
 import javax.inject.{ Inject, Singleton }
 import scala.concurrent.{ ExecutionContext, Future }
@@ -35,7 +35,7 @@ import scala.concurrent.{ ExecutionContext, Future }
 class AmendHistoricFhlUkPropertyPeriodSummaryController @Inject()(val authService: EnrolmentsAuthService,
                                                                   val lookupService: MtdIdLookupService,
                                                                   parser: AmendHistoricFhlUkPiePeriodSummaryRequestParser,
-                                                                  service: AmendHistoricFhlUkPropertyPeriodSummaryService,
+                                                                  service: AmendHistoricFhlUkPiePeriodSummaryService,
                                                                   hateoasFactory: HateoasFactory,
                                                                   cc: ControllerComponents,
                                                                   idGenerator: IdGenerator)(implicit ec: ExecutionContext)
@@ -86,7 +86,7 @@ class AmendHistoricFhlUkPropertyPeriodSummaryController @Inject()(val authServic
     }
 
   private def errorResult(errorWrapper: ErrorWrapper) = errorWrapper.error match {
-    case BadRequestError | NinoFormatError | FormatPeriodIdError | MtdErrorWithCode(RuleBothExpensesSuppliedError.code) | MtdErrorWithCode(
+    case BadRequestError | NinoFormatError | PeriodIdFormatError | MtdErrorWithCode(RuleBothExpensesSuppliedError.code) | MtdErrorWithCode(
           ValueFormatError.code) | MtdErrorWithCode(RuleIncorrectOrEmptyBodyError.code) =>
       BadRequest(Json.toJson(errorWrapper))
     case NotFoundError => NotFound(Json.toJson(errorWrapper))

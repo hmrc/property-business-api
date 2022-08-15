@@ -39,7 +39,7 @@ object RetrieveHistoricNonFhlUkPropertyAnnualSubmissionResponse extends HateoasL
       import data._
       Seq(
         createAmendHistoricNonFhlUkPropertyAnnualSubmission(appConfig, nino, taxYear),
-        retrieveHistoricNonFhlUkPropertyAnnualSubmission(appConfig, nino, taxYear),
+        retrieveHistoricNonFhlUkPropertyAnnualSubmission(appConfig, nino, taxYear, self = true),
         deleteHistoricNonFhlUkPropertyAnnualSubmission(appConfig, nino, taxYear)
       )
     }

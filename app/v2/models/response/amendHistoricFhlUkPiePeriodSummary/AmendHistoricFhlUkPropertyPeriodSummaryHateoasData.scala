@@ -27,7 +27,7 @@ object AmendHistoricFhlUkPropertyPeriodSummaryHateoasData extends HateoasLinks {
       Seq(
         amendHistoricFhlUkPiePeriodSummary(appConfig, nino, periodId),
         retrieveHistoricFhlUkPiePeriodSummary(appConfig, nino, periodId),
-        listHistoricFhlUkPiePeriodSummaries(appConfig, nino)
+        listHistoricFhlUkPiePeriodSummaries(appConfig, nino, self = false)
       )
     }
   }

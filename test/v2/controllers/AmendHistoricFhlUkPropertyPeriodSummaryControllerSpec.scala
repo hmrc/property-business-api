@@ -23,7 +23,7 @@ import v2.mocks.MockIdGenerator
 import v2.mocks.hateoas.MockHateoasFactory
 import v2.mocks.requestParsers.MockAmendHistoricFhlUkPiePeriodSummaryRequestParser
 import v2.mocks.services.{ MockAmendHistoricFhlUkPropertyPeriodSummaryService, MockEnrolmentsAuthService, MockMtdIdLookupService }
-import v2.models.domain.Nino
+import v2.models.domain.{ Nino, PeriodId }
 import v2.models.errors._
 import v2.models.hateoas.HateoasWrapper
 import v2.models.outcomes.ResponseWrapper
@@ -69,7 +69,7 @@ class AmendHistoricFhlUkPropertyPeriodSummaryControllerSpec
   private val requestBody     = AmendHistoricFhlUkPiePeriodSummaryRequestBody(None, None)
 
   private val rawData = AmendHistoricFhlUkPiePeriodSummaryRawData(nino, periodId, requestBodyJson)
-  private val request = AmendHistoricFhlUkPiePeriodSummaryRequest(Nino(nino), periodId, requestBody)
+  private val request = AmendHistoricFhlUkPiePeriodSummaryRequest(Nino(nino), PeriodId(periodId), requestBody)
 
   "handleRequest" should {
     "return Ok" when {
@@ -117,7 +117,7 @@ class AmendHistoricFhlUkPropertyPeriodSummaryControllerSpec
           (withPath(RuleBothExpensesSuppliedError), BAD_REQUEST),
           (withPath(ValueFormatError), BAD_REQUEST),
           (withPath(RuleIncorrectOrEmptyBodyError), BAD_REQUEST),
-          (FormatPeriodIdError, BAD_REQUEST),
+          (PeriodIdFormatError, BAD_REQUEST),
         )
 
         input.foreach(args => (errorsFromParserTester _).tupled(args))
@@ -145,7 +145,7 @@ class AmendHistoricFhlUkPropertyPeriodSummaryControllerSpec
 
         val input = Seq(
           (NinoFormatError, BAD_REQUEST),
-          (FormatPeriodIdError, BAD_REQUEST),
+          (PeriodIdFormatError, BAD_REQUEST),
           (NotFoundError, NOT_FOUND),
           (RuleBothExpensesSuppliedError, BAD_REQUEST),
           (InternalError, INTERNAL_SERVER_ERROR)

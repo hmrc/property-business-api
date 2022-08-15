@@ -201,7 +201,7 @@ class AmendHistoricFhlUkPropertyPeriodSummaryControllerISpec extends V2Integrati
          BAD_REQUEST,
          ValueFormatError.forPathAndRange("/expenses/premisesRunningCosts", min = "0", max = "99999999999.99")),
         ("AA123456A", "2017-04-06_2017-07-04", JsObject.empty, BAD_REQUEST, RuleIncorrectOrEmptyBodyError),
-        ("AA123456A", "BAD_PERIOD_ID", requestBodyJson, BAD_REQUEST, FormatPeriodIdError)
+        ("AA123456A", "BAD_PERIOD_ID", requestBodyJson, BAD_REQUEST, PeriodIdFormatError)
       )
       input.foreach(args => (validationErrorTest _).tupled(args))
     }
@@ -226,8 +226,8 @@ class AmendHistoricFhlUkPropertyPeriodSummaryControllerISpec extends V2Integrati
         (BAD_REQUEST, "INVALID_NINO", BAD_REQUEST, NinoFormatError),
         (BAD_REQUEST, "INVALID_TYPE", INTERNAL_SERVER_ERROR, InternalError),
         (BAD_REQUEST, "INVALID_PAYLOAD", INTERNAL_SERVER_ERROR, InternalError),
-        (BAD_REQUEST, "INVALID_DATE_FROM", BAD_REQUEST, FormatPeriodIdError),
-        (BAD_REQUEST, "INVALID_DATE_TO", BAD_REQUEST, FormatPeriodIdError),
+        (BAD_REQUEST, "INVALID_DATE_FROM", BAD_REQUEST, PeriodIdFormatError),
+        (BAD_REQUEST, "INVALID_DATE_TO", BAD_REQUEST, PeriodIdFormatError),
         (BAD_REQUEST, "INVALID_CORRELATIONID", INTERNAL_SERVER_ERROR, InternalError),
         (NOT_FOUND, "SUBMISSION_PERIOD_NOT_FOUND", NOT_FOUND, NotFoundError),
         (NOT_FOUND, "NOT_FOUND_PROPERTY", NOT_FOUND, NotFoundError),

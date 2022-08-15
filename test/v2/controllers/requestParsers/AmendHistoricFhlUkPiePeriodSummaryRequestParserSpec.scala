@@ -19,7 +19,7 @@ package v2.controllers.requestParsers
 import play.api.libs.json.{ JsValue, Json }
 import support.UnitSpec
 import v2.mocks.validators.MockAmendHistoricFhlUkPiePeriodSummaryValidator
-import v2.models.domain.Nino
+import v2.models.domain.{ Nino, PeriodId }
 import v2.models.errors.{ BadRequestError, ErrorWrapper, NinoFormatError, RuleBothExpensesSuppliedError }
 import v2.models.request.amendHistoricFhlUkPiePeriodSummary.{
   AmendHistoricFhlUkPiePeriodSummaryRawData,
@@ -153,16 +153,16 @@ class AmendHistoricFhlUkPiePeriodSummaryRequestParserSpec extends UnitSpec {
     "return a request object" when {
       "valid unconsolidated request data is supplied" in new Test {
         MockAmendHistoricFhlUkPiePeriodSummaryValidator.validate(inputData).returns(Nil)
+        val result: Either[ErrorWrapper, AmendHistoricFhlUkPiePeriodSummaryRequest] = parser.parseRequest(inputData)
 
-        parser.parseRequest(inputData) shouldBe
-          Right(AmendHistoricFhlUkPiePeriodSummaryRequest(Nino(nino), periodId, requestBody))
+        result shouldBe Right(AmendHistoricFhlUkPiePeriodSummaryRequest(Nino(nino), PeriodId(periodId), requestBody))
       }
 
       "valid consolidated request data is supplied" in new Test {
         MockAmendHistoricFhlUkPiePeriodSummaryValidator.validate(consolidatedInputData).returns(Nil)
+        val result: Either[ErrorWrapper, AmendHistoricFhlUkPiePeriodSummaryRequest] = parser.parseRequest(consolidatedInputData)
 
-        parser.parseRequest(consolidatedInputData) shouldBe
-          Right(AmendHistoricFhlUkPiePeriodSummaryRequest(Nino(nino), periodId, consolidatedRequestBody))
+        result shouldBe Right(AmendHistoricFhlUkPiePeriodSummaryRequest(Nino(nino), PeriodId(periodId), consolidatedRequestBody))
       }
     }
 

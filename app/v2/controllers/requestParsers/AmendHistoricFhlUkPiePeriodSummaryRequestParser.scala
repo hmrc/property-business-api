@@ -17,7 +17,7 @@
 package v2.controllers.requestParsers
 
 import v2.controllers.requestParsers.validators.AmendHistoricFhlUkPiePeriodSummaryValidator
-import v2.models.domain.Nino
+import v2.models.domain.{ Nino, PeriodId }
 import v2.models.request.amendHistoricFhlUkPiePeriodSummary.{
   AmendHistoricFhlUkPiePeriodSummaryRawData,
   AmendHistoricFhlUkPiePeriodSummaryRequest,
@@ -30,5 +30,5 @@ class AmendHistoricFhlUkPiePeriodSummaryRequestParser @Inject()(val validator: A
     extends RequestParser[AmendHistoricFhlUkPiePeriodSummaryRawData, AmendHistoricFhlUkPiePeriodSummaryRequest] {
 
   override protected def requestFor(data: AmendHistoricFhlUkPiePeriodSummaryRawData): AmendHistoricFhlUkPiePeriodSummaryRequest =
-    AmendHistoricFhlUkPiePeriodSummaryRequest(Nino(data.nino), data.periodId, data.body.as[AmendHistoricFhlUkPiePeriodSummaryRequestBody])
+    AmendHistoricFhlUkPiePeriodSummaryRequest(Nino(data.nino), PeriodId(data.periodId), data.body.as[AmendHistoricFhlUkPiePeriodSummaryRequestBody])
 }

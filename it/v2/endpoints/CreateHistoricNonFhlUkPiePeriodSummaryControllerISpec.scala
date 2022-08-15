@@ -260,15 +260,9 @@ class CreateHistoricNonFHlUkPiePeriodSummaryControllerISpec extends V2Integratio
 
     def setupStubs(): StubMapping
 
-    def uri: String = s"/uk/non-furnished-holiday-lettings/$nino"
+    def uri: String = s"/uk/period/non-furnished-holiday-lettings/$nino"
 
     def ifsUri: String = s"/income-tax/nino/$nino/uk-properties/other/periodic-summaries"
-
-    //    def ifsQueryParams: Map[String, String] = Map(
-    //      "taxableEntityId" -> nino,
-    //      "incomeSourceId" -> businessId,
-    //      "taxYear" -> taxYear
-    //    )
 
     def request(): WSRequest = {
       setupStubs()
@@ -393,7 +387,7 @@ class CreateHistoricNonFHlUkPiePeriodSummaryControllerISpec extends V2Integratio
           ("AA123456A", missingFromAndToDateRequestJson, Status.BAD_REQUEST,  RuleIncorrectOrEmptyBodyError.copy(paths=Some(Seq("/fromDate", "/toDate")))),
           ("AA123456A", toDateBeforeFromDateRequestJson, Status.BAD_REQUEST, RuleToDateBeforeFromDateError),
           ("AA123456A", invalidValueRequestJson, Status.BAD_REQUEST, allInvalidValueRequestError)
-        ) //Should we add a test for rentARoom.amountClaimed and rentARoom.rentsReceived being missing? Tech spec says they're manadatory, business spec says they're optional.
+        ) //Should we add a test for rentARoom.amountClaimed and rentARoom.rentsReceived being missing? Tech spec says they're mandatory, business spec says they're optional.
         input.foreach(args => (validationErrorTest _).tupled(args))
       }
       "ifs service error" when {

@@ -86,8 +86,15 @@ class AmendHistoricFhlUkPropertyPeriodSummaryController @Inject()(val authServic
     }
 
   private def errorResult(errorWrapper: ErrorWrapper) = errorWrapper.error match {
-    case BadRequestError | NinoFormatError | PeriodIdFormatError | MtdErrorWithCode(RuleBothExpensesSuppliedError.code) | MtdErrorWithCode(
-          ValueFormatError.code) | MtdErrorWithCode(RuleIncorrectOrEmptyBodyError.code) =>
+    case _
+        if errorWrapper.containsAnyOf(
+          BadRequestError,
+          NinoFormatError,
+          PeriodIdFormatError,
+          RuleBothExpensesSuppliedError,
+          ValueFormatError,
+          RuleIncorrectOrEmptyBodyError
+        ) =>
       BadRequest(Json.toJson(errorWrapper))
     case NotFoundError => NotFound(Json.toJson(errorWrapper))
     case InternalError => InternalServerError(Json.toJson(errorWrapper))

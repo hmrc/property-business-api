@@ -17,7 +17,7 @@
 package v2.controllers.requestParsers.validators
 
 import config.AppConfig
-import v2.controllers.requestParsers.validators.validations.{ NinoValidation, TaxYearValidation }
+import v2.controllers.requestParsers.validators.validations.{ HistoricTaxYearValidation, NinoValidation }
 import v2.models.errors.MtdError
 import v2.models.request.deleteHistoricFhlUkPropertyAnnualSubmission.DeleteHistoricFhlUkPropertyAnnualSubmissionRawData
 
@@ -28,12 +28,13 @@ class DeleteHistoricFhlUkPropertyAnnualSubmissionValidator @Inject()(appConfig: 
     extends Validator[DeleteHistoricFhlUkPropertyAnnualSubmissionRawData] {
   private val validationSet   = List(parameterFormatValidation)
   private lazy val minTaxYear = appConfig.minimumTaxHistoric
+  private lazy val maxTaxYear = appConfig.maximumTaxHistoric
 
   private def parameterFormatValidation: DeleteHistoricFhlUkPropertyAnnualSubmissionRawData => List[List[MtdError]] =
     (data: DeleteHistoricFhlUkPropertyAnnualSubmissionRawData) => {
       List(
         NinoValidation.validate(data.nino),
-        TaxYearValidation.validate(minTaxYear, data.taxYear)
+        HistoricTaxYearValidation.validate(minTaxYear, maxTaxYear, data.taxYear)
       )
     }
   override def validate(data: DeleteHistoricFhlUkPropertyAnnualSubmissionRawData): List[MtdError] = {

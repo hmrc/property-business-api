@@ -27,6 +27,7 @@ class DeleteHistoricFhlUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec 
   private val validTaxYear = "2021-22"
 
   MockAppConfig.minimumTaxHistoric returns 2020
+  MockAppConfig.maximumTaxHistoric returns 2023
   private val validator = new DeleteHistoricFhlUkPropertyAnnualSubmissionValidator(mockAppConfig)
 
   "running a validation" should {
@@ -43,7 +44,12 @@ class DeleteHistoricFhlUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec 
         validator.validate(DeleteHistoricFhlUkPropertyAnnualSubmissionRawData(validNino, "20-21")) shouldBe List(TaxYearFormatError)
       }
       "a taxYear less than the minimum is supplied" in {
-        validator.validate(DeleteHistoricFhlUkPropertyAnnualSubmissionRawData(validNino, "2019-20")) shouldBe List(RuleTaxYearNotSupportedError)
+        validator.validate(DeleteHistoricFhlUkPropertyAnnualSubmissionRawData(validNino, "2019-20")) shouldBe List(
+          RuleHistoricTaxYearNotSupportedError)
+      }
+      "a taxYear greater than the maximum is supplied" in {
+        validator.validate(DeleteHistoricFhlUkPropertyAnnualSubmissionRawData(validNino, "2024-25")) shouldBe List(
+          RuleHistoricTaxYearNotSupportedError)
       }
       "multiple format errors are made" in {
         validator.validate(DeleteHistoricFhlUkPropertyAnnualSubmissionRawData("ABC", "21-22")) shouldBe List(NinoFormatError, TaxYearFormatError)

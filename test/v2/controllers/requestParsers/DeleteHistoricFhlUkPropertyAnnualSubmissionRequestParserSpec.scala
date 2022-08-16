@@ -34,7 +34,6 @@ class DeleteHistoricFhlUkPropertyAnnualSubmissionRequestParserSpec extends UnitS
   val inputData: DeleteHistoricFhlUkPropertyAnnualSubmissionRawData =
     DeleteHistoricFhlUkPropertyAnnualSubmissionRawData(nino, taxYear)
 
-//RuleHistoricTaxYearNotSupportedError, RuleTaxYearFormatError
   trait Test extends MockDeleteHistoricFhlUkPropertyAnnualSubmissionValidator {
     lazy val parser = new DeleteHistoricFhlUkPropertyAnnualSubmissionRequestParser(mockValidator)
   }

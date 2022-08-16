@@ -14,15 +14,13 @@
  * limitations under the License.
  */
 
-package v2.models.response.amendHistoricFhlUkPiePeriodSummary
+package v2.models.request.deleteHistoricFhlUkPropertyAnnualSubmission
 
-import play.api.libs.json.{ Json, Reads }
-import v2.hateoas.HateoasLinks
+import play.api.libs.json.{ Json, OWrites }
+import v2.models.request.RawData
 
-case class AmendHistoricFhlUkPiePeriodSummaryResponse(transactionReference: String)
+case class DeleteHistoricFhlUkPropertyAnnualSubmissionRawData(nino: String, taxYear: String) extends RawData
 
-object AmendHistoricFhlUkPiePeriodSummaryResponse extends HateoasLinks {
-
-  implicit val reads: Reads[AmendHistoricFhlUkPiePeriodSummaryResponse] = Json.reads[AmendHistoricFhlUkPiePeriodSummaryResponse]
-
+object DeleteHistoricFhlUkPropertyAnnualSubmissionRawData {
+  implicit val writes: OWrites[DeleteHistoricFhlUkPropertyAnnualSubmissionRawData] = Json.writes
 }

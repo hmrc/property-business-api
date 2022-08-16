@@ -14,15 +14,25 @@
  * limitations under the License.
  */
 
-package v2.models.response.amendHistoricFhlUkPiePeriodSummary
+package v2.models.domain
 
-import play.api.libs.json.{ Json, Reads }
-import v2.hateoas.HateoasLinks
+case class PeriodId(value: String) {
 
-case class AmendHistoricFhlUkPiePeriodSummaryResponse(transactionReference: String)
+  val (from, to): (String, String) = {
+    if (value.length == 21) {
+      val f = value.substring(0, 10)
+      val t = value.substring(11, 21)
+      (f, t)
+    } else {
+      ("", "")
+    }
+  }
 
-object AmendHistoricFhlUkPiePeriodSummaryResponse extends HateoasLinks {
+}
 
-  implicit val reads: Reads[AmendHistoricFhlUkPiePeriodSummaryResponse] = Json.reads[AmendHistoricFhlUkPiePeriodSummaryResponse]
+object PeriodId {
 
+  def apply(from: String, to: String): PeriodId = {
+    PeriodId(s"${from}_$to")
+  }
 }

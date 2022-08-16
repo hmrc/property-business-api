@@ -17,31 +17,32 @@
 package v2.connectors
 
 import config.AppConfig
+import play.api.libs.json.JsObject
+
+import javax.inject.{ Inject, Singleton }
 import uk.gov.hmrc.http.{ HeaderCarrier, HttpClient }
 import v2.connectors.DownstreamUri.DesUri
 import v2.connectors.httpparsers.StandardIfsHttpParser._
-import v2.models.request.createAmendHistoricFhlUkPropertyAnnualSubmission.CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequest
-import v2.models.response.createAmendHistoricFhlUkPropertyAnnualSubmission.CreateAmendHistoricFhlUkPropertyAnnualSubmissionResponse
+import v2.models.request.deleteHistoricFhlUkPropertyAnnualSubmission.DeleteHistoricFhlUkPropertyAnnualSubmissionRequest
 
-import javax.inject.{ Inject, Singleton }
 import scala.concurrent.{ ExecutionContext, Future }
 
 @Singleton
-class CreateAmendHistoricFhlUkPropertyAnnualSubmissionConnector @Inject()(val http: HttpClient, val appConfig: AppConfig)
-    extends BaseDownstreamConnector {
+class DeleteHistoricFhlUkPropertyAnnualSubmissionConnector @Inject()(val http: HttpClient, val appConfig: AppConfig) extends BaseDownstreamConnector {
 
-  def amend(request: CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequest)(
+  def deleteHistoricFhlUkPropertyAnnualSubmission(request: DeleteHistoricFhlUkPropertyAnnualSubmissionRequest)(
       implicit hc: HeaderCarrier,
       ec: ExecutionContext,
-      correlationId: String): Future[DownstreamOutcome[CreateAmendHistoricFhlUkPropertyAnnualSubmissionResponse]] = {
+      correlationId: String): Future[DownstreamOutcome[Unit]] = {
 
     val nino    = request.nino.nino
     val taxYear = request.taxYear.toDownstream
 
     put(
-      body = request.body,
-      uri = DesUri[CreateAmendHistoricFhlUkPropertyAnnualSubmissionResponse](
-        s"income-tax/nino/$nino/uk-properties/furnished-holiday-lettings/annual-summaries/$taxYear")
+      body = JsObject.empty,
+      uri = DesUri[Unit](
+        s"income-tax/nino/$nino/uk-properties/furnished-holiday-lettings/annual-summaries/$taxYear"
+      )
     )
   }
 }

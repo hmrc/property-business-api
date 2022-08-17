@@ -24,7 +24,7 @@ import utils.{IdGenerator, Logging}
 import v2.controllers.requestParsers.CreateHistoricNonFhlUkPropertyPeriodSummaryRequestParser
 import v2.hateoas.HateoasFactory
 import v2.models.errors._
-import v2.models.request.createHistoricNonFhlUkPropertyPeriodSummary.CreateHistoricNonFhlUkPropertyPeriodSummaryRawData
+import v2.models.request.createHistoricNonFhlUkPropertyPeriodSummary.{CreateHistoricNonFhlUkPropertyPeriodSummaryRawData, CreateHistoricNonFhlUkPropertyPeriodSummaryRequestBody}
 import v2.models.response.createHistoricNonFhlUkPiePeriodSummary.CreateHistoricNonFhlUkPiePeriodSummaryHateoasData
 import v2.services.{CreateHistoricNonFhlUkPropertyPeriodSummaryService, EnrolmentsAuthService, MtdIdLookupService}
 
@@ -57,13 +57,18 @@ class CreateHistoricNonFHLUkPiePeriodSummaryController @Inject()(val authService
       logger.info(message = s"[${endpointLogContext.controllerName}][${endpointLogContext.endpointName}] with correlationId : $correlationId")
 
       val rawData = CreateHistoricNonFhlUkPropertyPeriodSummaryRawData(nino, request.body)
+
+      val requestFromDate = request.body.as[CreateHistoricNonFhlUkPropertyPeriodSummaryRequestBody].fromDate
+      val requestToDate = request.body.as[CreateHistoricNonFhlUkPropertyPeriodSummaryRequestBody].toDate
+      val periodId = s"${requestFromDate}_${requestToDate}"
+
       val result =
         for {
           parsedRequest   <- EitherT.fromEither[Future](parser.parseRequest(rawData))
           serviceResponse <- EitherT(service.createPeriodSummary(parsedRequest))
           vendorResponse <- EitherT.fromEither[Future](
             hateoasFactory
-              .wrap(serviceResponse.responseData, CreateHistoricNonFhlUkPiePeriodSummaryHateoasData(nino, serviceResponse.responseData.periodId.get, serviceResponse.responseData.transactionReference))
+              .wrap(serviceResponse.responseData, CreateHistoricNonFhlUkPiePeriodSummaryHateoasData(nino, periodId, serviceResponse.responseData.transactionReference))
               .asRight[ErrorWrapper])
         } yield {
 

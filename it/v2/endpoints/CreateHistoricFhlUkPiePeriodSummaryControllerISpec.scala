@@ -19,15 +19,16 @@ package v2.endpoints
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import play.api.http.HeaderNames.ACCEPT
 import play.api.http.Status._
-import play.api.libs.json.{ JsObject, JsValue, Json }
+import play.api.libs.json.{ JsObject, JsString, JsValue, Json }
 import play.api.libs.ws.{ WSRequest, WSResponse }
 import play.api.test.Helpers.AUTHORIZATION
 import support.V2IntegrationBaseSpec
 import v1.stubs.AuditStub
 import v2.models.errors._
+import v2.models.utils.JsonErrorValidators
 import v2.stubs.{ AuthStub, DownstreamStub, MtdIdLookupStub }
 
-class CreateHistoricFhlUkPiePeriodSummaryControllerISpec extends V2IntegrationBaseSpec {
+class CreateHistoricFhlUkPiePeriodSummaryControllerISpec extends V2IntegrationBaseSpec with JsonErrorValidators {
 
   val validRequestJson: JsValue = Json.parse(
     """
@@ -99,7 +100,10 @@ class CreateHistoricFhlUkPiePeriodSummaryControllerISpec extends V2IntegrationBa
     """
       | {
       |   "fromDate": "2017-04-0611111",
-      |   "toDate": "2017-07-05"
+      |   "toDate": "2017-07-05",
+      |   "expenses":{
+      |       "consolidatedExpenses": 1
+      |   }
       | }
       """.stripMargin
   )
@@ -108,7 +112,10 @@ class CreateHistoricFhlUkPiePeriodSummaryControllerISpec extends V2IntegrationBa
     """
       | {
       |   "fromDate": "2017-04-06",
-      |   "toDate": "2017-07-0522222"
+      |   "toDate": "2017-07-0522222",
+      |   "expenses":{
+      |       "consolidatedExpenses": 1
+      |   }
       | }
       """.stripMargin
   )
@@ -228,7 +235,8 @@ class CreateHistoricFhlUkPiePeriodSummaryControllerISpec extends V2IntegrationBa
         ("AA123456A", invalidFieldsRequestBodyJson, BAD_REQUEST, valueFormatErrorForInvalidFieldsJson),
         ("AA123456A", JsObject.empty, BAD_REQUEST, RuleIncorrectOrEmptyBodyError),
         ("AA123456A", invalidFromDateRequestBodyJson, BAD_REQUEST, FromDateFormatError),
-        ("AA123456A", invalidToDateRequestBodyJson, BAD_REQUEST, ToDateFormatError)
+        ("AA123456A", invalidToDateRequestBodyJson, BAD_REQUEST, ToDateFormatError),
+        ("AA123456A", validRequestJson.update("/fromDate", JsString("2099-01-01")), BAD_REQUEST, RuleToDateBeforeFromDateError)
       )
       input.foreach(args => (validationErrorTest _).tupled(args))
     }

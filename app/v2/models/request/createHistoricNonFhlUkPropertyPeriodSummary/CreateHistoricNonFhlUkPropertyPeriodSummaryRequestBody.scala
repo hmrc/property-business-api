@@ -18,6 +18,8 @@ package v2.models.request.createHistoricNonFhlUkPropertyPeriodSummary
 
 import play.api.libs.functional.syntax.{ toFunctionalBuilderOps, unlift }
 import play.api.libs.json.{ JsPath, Json, OWrites, Reads }
+import shapeless.HNil
+import utils.EmptinessChecker
 
 case class CreateHistoricNonFhlUkPropertyPeriodSummaryRequestBody(fromDate: String,
                                                                   toDate: String,
@@ -25,6 +27,12 @@ case class CreateHistoricNonFhlUkPropertyPeriodSummaryRequestBody(fromDate: Stri
                                                                   expenses: Option[UkNonFhlPropertyExpenses])
 
 object CreateHistoricNonFhlUkPropertyPeriodSummaryRequestBody {
+
+  implicit val emptinessChecker: EmptinessChecker[CreateHistoricNonFhlUkPropertyPeriodSummaryRequestBody] = EmptinessChecker.use { body =>
+    "income"     -> body.income ::
+      "expenses" -> body.expenses :: HNil
+  }
+
   implicit val reads: Reads[CreateHistoricNonFhlUkPropertyPeriodSummaryRequestBody] =
     Json.reads[CreateHistoricNonFhlUkPropertyPeriodSummaryRequestBody]
 

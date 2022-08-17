@@ -17,23 +17,16 @@
 package v2.controllers.requestParsers.validators
 
 import com.google.inject.Inject
-import config.AppConfig
 import v2.controllers.requestParsers.validators.validations.JsonFormatValidation.validateAndCheckNonEmptyOrRead
 import v2.controllers.requestParsers.validators.validations.NumberValidation.validateOptional
 import v2.controllers.requestParsers.validators.validations._
 import v2.models.errors.MtdError
-import v2.models.request.createHistoricFhlUkPiePeriodSummary.{
-  CreateHistoricFhlUkPiePeriodSummaryRawData,
-  CreateHistoricFhlUkPiePeriodSummaryRequestBody
-}
+import v2.models.request.createHistoricFhlUkPiePeriodSummary.{CreateHistoricFhlUkPiePeriodSummaryRawData, CreateHistoricFhlUkPiePeriodSummaryRequestBody}
 
 import javax.inject.Singleton
 
 @Singleton
-class CreateHistoricFhlUkPiePeriodSummaryValidator @Inject()(appConfig: AppConfig) extends Validator[CreateHistoricFhlUkPiePeriodSummaryRawData] {
-
-  lazy private val minTaxYear = appConfig.minimumTaxHistoric
-  lazy private val maxTaxYear = appConfig.maximumTaxHistoric
+class CreateHistoricFhlUkPiePeriodSummaryValidator @Inject() extends Validator[CreateHistoricFhlUkPiePeriodSummaryRawData] {
 
   override def validate(data: CreateHistoricFhlUkPiePeriodSummaryRawData): List[MtdError] = {
     (for {
@@ -54,13 +47,12 @@ class CreateHistoricFhlUkPiePeriodSummaryValidator @Inject()(appConfig: AppConfi
       DateValidation.validate(body.fromDate, isFromDate = true) ++
         DateValidation.validate(body.toDate, isFromDate = false)
 
-    val historicTaxPeriodYearErrors =
-      if (formatDateErrors.isEmpty)
-        (
-          HistoricTaxPeriodYearValidation.validate(minTaxYear, maxTaxYear, body.fromDate) ++
-            HistoricTaxPeriodYearValidation.validate(minTaxYear, maxTaxYear, body.toDate)
-        )
-      else Nil
+    val dateOrderErrors =
+      if (formatDateErrors.isEmpty) {
+        ToDateBeforeFromDateValidation.validate(from = body.fromDate, to = body.toDate)
+      } else {
+        Nil
+      }
 
     val incomeFormatErrors = body.income
       .map { income =>
@@ -88,6 +80,6 @@ class CreateHistoricFhlUkPiePeriodSummaryValidator @Inject()(appConfig: AppConfi
 
     val bothExpensesErrors = body.expenses.map(ConsolidatedExpensesValidation.validate(_, "/expenses/consolidatedExpenses")).getOrElse(Nil)
 
-    errorsResult(formatDateErrors ++ historicTaxPeriodYearErrors ++ incomeFormatErrors ++ expensesFormatErrors ++ bothExpensesErrors)
+    errorsResult(formatDateErrors ++ dateOrderErrors ++ incomeFormatErrors ++ expensesFormatErrors ++ bothExpensesErrors)
   }
 }

@@ -372,7 +372,7 @@ class CreateHistoricNonFhlUkPiePeriodSummaryControllerISpec extends V2Integratio
           ("AA123456A", missingFromAndToDateRequestJson, Status.BAD_REQUEST,  RuleIncorrectOrEmptyBodyError.copy(paths=Some(Seq("/fromDate", "/toDate")))),
           ("AA123456A", toDateBeforeFromDateRequestJson, Status.BAD_REQUEST, RuleToDateBeforeFromDateError),
           ("AA123456A", invalidValueRequestJson, Status.BAD_REQUEST, allInvalidValueRequestError)
-        ) //Should we add a test for rentARoom.amountClaimed and rentARoom.rentsReceived being missing? Tech spec says they're mandatory, business spec says they're optional.
+        )
         input.foreach(args => (validationErrorTest _).tupled(args))
       }
       "ifs service error" when {

@@ -18,22 +18,22 @@ package v2.controllers
 
 import cats.data.EitherT
 import cats.implicits._
-import play.api.libs.json.{JsValue, Json}
-import play.api.mvc.{Action, ControllerComponents}
-import utils.{IdGenerator, Logging}
+import play.api.libs.json.{ JsValue, Json }
+import play.api.mvc.{ Action, ControllerComponents }
+import utils.{ IdGenerator, Logging }
 import v2.controllers.requestParsers.CreateHistoricNonFhlUkPropertyPeriodSummaryRequestParser
 import v2.hateoas.HateoasFactory
 import v2.models.errors._
-import v2.models.request.createHistoricNonFhlUkPropertyPeriodSummary.{CreateHistoricNonFhlUkPropertyPeriodSummaryRawData, CreateHistoricNonFhlUkPropertyPeriodSummaryRequestBody}
+import v2.models.request.createHistoricNonFhlUkPropertyPeriodSummary.{ CreateHistoricNonFhlUkPropertyPeriodSummaryRawData }
 import v2.models.response.createHistoricNonFhlUkPiePeriodSummary.CreateHistoricNonFhlUkPiePeriodSummaryHateoasData
-import v2.services.{CreateHistoricNonFhlUkPropertyPeriodSummaryService, EnrolmentsAuthService, MtdIdLookupService}
+import v2.services.{ CreateHistoricNonFhlUkPropertyPeriodSummaryService, EnrolmentsAuthService, MtdIdLookupService }
 
-import javax.inject.{Inject, Singleton}
-import scala.concurrent.{ExecutionContext, Future}
+import javax.inject.{ Inject, Singleton }
+import scala.concurrent.{ ExecutionContext, Future }
 
 /*
   Pie = Property Income & Expenses
-*/
+ */
 @Singleton
 class CreateHistoricNonFHLUkPiePeriodSummaryController @Inject()(val authService: EnrolmentsAuthService,
                                                                  val lookupService: MtdIdLookupService,
@@ -42,13 +42,13 @@ class CreateHistoricNonFHLUkPiePeriodSummaryController @Inject()(val authService
                                                                  hateoasFactory: HateoasFactory,
                                                                  cc: ControllerComponents,
                                                                  idGenerator: IdGenerator)(implicit ec: ExecutionContext)
-  extends AuthorisedController(cc)
+    extends AuthorisedController(cc)
     with BaseController
     with Logging {
 
   implicit val endpointLogContext: EndpointLogContext =
     EndpointLogContext(controllerName = "CreateAmendHistoricNonFHLUkPiePeriodSummaryController",
-      endpointName = "CreateAmendHistoricNonFHLUkPropertyIncomeExpensesPeriodSummary")
+                       endpointName = "CreateAmendHistoricNonFHLUkPropertyIncomeExpensesPeriodSummary")
 
   def handleRequest(nino: String): Action[JsValue] =
     authorisedAction(nino).async(parse.json) { implicit request =>
@@ -58,17 +58,18 @@ class CreateHistoricNonFHLUkPiePeriodSummaryController @Inject()(val authService
 
       val rawData = CreateHistoricNonFhlUkPropertyPeriodSummaryRawData(nino, request.body)
 
-      val requestFromDate = request.body.as[CreateHistoricNonFhlUkPropertyPeriodSummaryRequestBody].fromDate
-      val requestToDate = request.body.as[CreateHistoricNonFhlUkPropertyPeriodSummaryRequestBody].toDate
-      val periodId = s"${requestFromDate}_${requestToDate}"
-
       val result =
         for {
           parsedRequest   <- EitherT.fromEither[Future](parser.parseRequest(rawData))
           serviceResponse <- EitherT(service.createPeriodSummary(parsedRequest))
           vendorResponse <- EitherT.fromEither[Future](
             hateoasFactory
-              .wrap(serviceResponse.responseData, CreateHistoricNonFhlUkPiePeriodSummaryHateoasData(nino, periodId, serviceResponse.responseData.transactionReference))
+              .wrap(
+                serviceResponse.responseData,
+                CreateHistoricNonFhlUkPiePeriodSummaryHateoasData(nino,
+                                                                  s"${parsedRequest.body.fromDate}_${parsedRequest.body.toDate}",
+                                                                  serviceResponse.responseData.transactionReference)
+              )
               .asRight[ErrorWrapper])
         } yield {
 
@@ -94,26 +95,26 @@ class CreateHistoricNonFHLUkPiePeriodSummaryController @Inject()(val authService
       }.merge
     }
 
-
   private def errorResult(errorWrapper: ErrorWrapper) =
     errorWrapper.error match {
       case _
-        if errorWrapper.containsAnyOf(
-          NinoFormatError,
-          RuleBothExpensesSuppliedError,
-          ValueFormatError,
-          RuleIncorrectOrEmptyBodyError,
-          FromDateFormatError,
-          ToDateFormatError,
-          RuleToDateBeforeFromDateError,
-          RuleDuplicateSubmissionError,
-          RuleMisalignedPeriodError,
-          RuleOverlappingPeriodError,
-          RuleNotContiguousPeriodError,
-          RuleHistoricTaxYearNotSupportedError,
-        ) => BadRequest(Json.toJson(errorWrapper))
-      case NotFoundError           => NotFound(Json.toJson(errorWrapper))
-      case (ServiceUnavailableError | InternalError ) => InternalServerError(Json.toJson(errorWrapper))
-      case _                       => unhandledError(errorWrapper)
+          if errorWrapper.containsAnyOf(
+            NinoFormatError,
+            RuleBothExpensesSuppliedError,
+            ValueFormatError,
+            RuleIncorrectOrEmptyBodyError,
+            FromDateFormatError,
+            ToDateFormatError,
+            RuleToDateBeforeFromDateError,
+            RuleDuplicateSubmissionError,
+            RuleMisalignedPeriodError,
+            RuleOverlappingPeriodError,
+            RuleNotContiguousPeriodError,
+            RuleHistoricTaxYearNotSupportedError,
+          ) =>
+        BadRequest(Json.toJson(errorWrapper))
+      case NotFoundError                             => NotFound(Json.toJson(errorWrapper))
+      case (ServiceUnavailableError | InternalError) => InternalServerError(Json.toJson(errorWrapper))
+      case _                                         => unhandledError(errorWrapper)
     }
 }

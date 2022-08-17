@@ -25,7 +25,7 @@ import v2.mocks.requestParsers.MockCreateHistoricNonFhlUkPiePeriodSummaryRequest
 import v2.mocks.services.{MockCreateHistoricNonFhlUkPiePeriodSummaryService, MockEnrolmentsAuthService, MockMtdIdLookupService}
 import v2.models.domain.Nino
 import v2.models.errors._
-import v2.models.hateoas.Method.{GET, PUT}
+import v2.models.hateoas.Method.{GET}
 import v2.models.hateoas.{HateoasWrapper, Link}
 import v2.models.outcomes.ResponseWrapper
 import v2.models.request.createHistoricNonFhlUkPropertyPeriodSummary.{CreateHistoricNonFhlUkPropertyPeriodSummaryRawData, CreateHistoricNonFhlUkPropertyPeriodSummaryRequest, CreateHistoricNonFhlUkPropertyPeriodSummaryRequestBody}
@@ -79,35 +79,21 @@ class CreateHistoricNonFhlUkPiePeriodSummaryControllerSpec
   private val rawData = CreateHistoricNonFhlUkPropertyPeriodSummaryRawData(nino = nino, body = requestBodyJson)
 
   private val testHateoasLinks =
-    Seq(
-      Link(
-        href = s"/individuals/business/property/uk/non-furnished-holiday-lettings/$nino/$periodId",
-        method = PUT,
-        rel = "amend-uk-property-historic-non-fhl-period-summary"
-      ),
-      Link(
-        href = s"/individuals/business/property/uk/non-furnished-holiday-lettings/$nino/$periodId",
-        method = GET,
-        rel = "self"
-      )
-      )
+    Seq(Link(href = "/some/link", method = GET, rel = "someRel"))
 
   private val hateoasResponse = Json.parse(
-    s"""{
+    s"""
+       |{
        |  "periodId": "$periodId",
        |  "links": [
        |    {
-       |      "href": "/individuals/business/property/uk/non-furnished-holiday-lettings/$nino/$periodId",
-       |      "method": "PUT",
-       |      "rel": "amend-uk-property-historic-non-fhl-period-summary"
-       |    },
-       |    {
-       |      "href": "/individuals/business/property/uk/non-furnished-holiday-lettings/$nino/$periodId",
-       |      "method": "GET",
-       |      "rel": "self"
+       |      "href":"/some/link",
+       |      "method":"GET",
+       |      "rel":"someRel"
        |    }
        |  ]
-       |}""".stripMargin
+       |}
+    """.stripMargin
   )
 
   private val response = CreateHistoricNonFhlUkPiePeriodSummaryResponse(transactionId, Some(periodId))

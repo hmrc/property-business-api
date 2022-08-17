@@ -16,30 +16,20 @@
 
 package v2.controllers
 
-import play.api.libs.json.Json
+import play.api.libs.json.{JsObject, Json}
 import play.api.mvc.Result
 import uk.gov.hmrc.http.HeaderCarrier
 import v2.mocks.MockIdGenerator
 import v2.mocks.hateoas.MockHateoasFactory
 import v2.mocks.requestParsers.MockCreateHistoricNonFhlUkPiePeriodSummaryRequestParser
-import v2.mocks.services.{ MockCreateHistoricNonFhlUkPiePeriodSummaryService, MockEnrolmentsAuthService, MockMtdIdLookupService }
+import v2.mocks.services.{MockCreateHistoricNonFhlUkPiePeriodSummaryService, MockEnrolmentsAuthService, MockMtdIdLookupService}
 import v2.models.domain.Nino
 import v2.models.errors._
-import v2.models.hateoas.Method.{ GET, PUT }
-import v2.models.hateoas.{ HateoasWrapper, Link }
+import v2.models.hateoas.Method.{GET, PUT}
+import v2.models.hateoas.{HateoasWrapper, Link}
 import v2.models.outcomes.ResponseWrapper
-import v2.models.request.common.ukPropertyRentARoom.{ UkPropertyExpensesRentARoom, UkPropertyIncomeRentARoom }
-import v2.models.request.createHistoricNonFhlUkPropertyPeriodSummary.{
-  CreateHistoricNonFhlUkPropertyPeriodSummaryRawData,
-  CreateHistoricNonFhlUkPropertyPeriodSummaryRequest,
-  CreateHistoricNonFhlUkPropertyPeriodSummaryRequestBody,
-  UkNonFhlPropertyExpenses,
-  UkNonFhlPropertyIncome
-}
-import v2.models.response.createHistoricNonFhlUkPiePeriodSummary.{
-  CreateHistoricNonFhlUkPiePeriodSummaryHateoasData,
-  CreateHistoricNonFhlUkPiePeriodSummaryResponse
-}
+import v2.models.request.createHistoricNonFhlUkPropertyPeriodSummary.{CreateHistoricNonFhlUkPropertyPeriodSummaryRawData, CreateHistoricNonFhlUkPropertyPeriodSummaryRequest, CreateHistoricNonFhlUkPropertyPeriodSummaryRequestBody}
+import v2.models.response.createHistoricNonFhlUkPiePeriodSummary.{CreateHistoricNonFhlUkPiePeriodSummaryHateoasData, CreateHistoricNonFhlUkPiePeriodSummaryResponse}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -58,27 +48,6 @@ class CreateHistoricNonFhlUkPiePeriodSummaryControllerSpec
   private val transactionId = "0000000000000001"
   private val correlationId = "a1e8057e-fbbc-47a8-a8b4-78d9f015c253"
 
-  private val incomeModel = UkNonFhlPropertyIncome(
-    periodAmount = Some(123.45),
-    premiumsOfLeaseGrant = Some(2355.45),
-    reversePremiums = Some(454.56),
-    otherIncome = Some(567.89),
-    taxDeducted = Some(9234.53),
-    rentARoom = Some(UkPropertyIncomeRentARoom(Some(567.56)))
-  )
-  private val expensesModel = UkNonFhlPropertyExpenses(
-    premisesRunningCosts = Some(567.53),
-    repairsAndMaintenance = Some(324.65),
-    financialCosts = Some(453.56),
-    professionalFees = Some(535.78),
-    costOfServices = Some(678.34),
-    other = Some(682.34),
-    travelCosts = Some(645.56),
-    residentialFinancialCostsCarriedForward = Some(672.34),
-    residentialFinancialCost = Some(1000.45),
-    rentARoom = Some(UkPropertyExpensesRentARoom(Some(545.9))),
-    consolidatedExpenses = None
-  )
 
   trait Test {
     val hc: HeaderCarrier = HeaderCarrier()
@@ -98,40 +67,12 @@ class CreateHistoricNonFhlUkPiePeriodSummaryControllerSpec
     MockIdGenerator.getCorrelationId.returns(correlationId)
   }
 
+  //Request parsing is mocked so these can be kept simple:
   private val requestBody =
-    CreateHistoricNonFhlUkPropertyPeriodSummaryRequestBody(fromDate = "2019-03-11", toDate = "2020-04-23", Some(incomeModel), Some(expensesModel))
+    CreateHistoricNonFhlUkPropertyPeriodSummaryRequestBody(fromDate = "2019-03-11", toDate = "2020-04-23", None, None)
 
-  private val requestBodyJson = Json.parse(
-    """{
-      | "fromDate": "2019-03-11",
-      | "todate": "2020-04-23",
-      |   "income": {
-      |   "periodAmount": 123.45,
-      |   "premiumsOfLeaseGrant": 2355.45,
-      |   "reversePremiums": 454.56,
-      |   "otherIncome": 567.89,
-      |   "taxDeducted": 234.53,
-      |   "rentARoom": {
-      |      "rentsReceived": 567.56
-      |    }
-      |   },
-      |  "expenses":{
-      |    "premisesRunningCosts": 567.53,
-      |    "repairsAndMaintenance": 324.65,
-      |    "financialCosts": 453.56,
-      |    "professionalFees": 535.78,
-      |    "costOfServices": 678.34,
-      |    "other": 682.34,
-      |    "travelCosts": 645.56,
-      |    "residentialFinancialCostsCarriedForward": 672.34,
-      |    "residentialFinancialCost": 1000.45,
-      |    "rentARoom": {
-      |      "amountClaimed": 545.9
-      |    }
-      |  }
-      |}
-      |""".stripMargin
-  )
+  private val requestBodyJson = JsObject.empty
+
 
   private val requestData =
     CreateHistoricNonFhlUkPropertyPeriodSummaryRequest(nino = Nino(nino), body = requestBody)

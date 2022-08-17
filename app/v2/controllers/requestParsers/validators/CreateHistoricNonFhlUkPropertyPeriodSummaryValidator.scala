@@ -55,7 +55,7 @@ class CreateHistoricNonFhlUkPropertyPeriodSummaryValidator @Inject()(appConfig: 
       DateValidation.validate(body.toDate, false)
 
     def validateToDateIsAfterFromDate(toDate: String, fromDate:String):List[MtdError] ={
-      if(DateValidation.validate(fromDate, true) == NoValidationErrors && DateValidation.validate(toDate, false) == NoValidationErrors){
+      if(formatDateErrors.isEmpty){
         val ruleDateErrors = ToDateBeforeFromDateValidation.validate(body.fromDate, body.toDate)
         ruleDateErrors
       }else{

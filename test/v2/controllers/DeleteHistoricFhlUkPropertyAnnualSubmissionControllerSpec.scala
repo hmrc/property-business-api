@@ -20,14 +20,20 @@ import play.api.libs.json.Json
 import play.api.mvc.Result
 import uk.gov.hmrc.http.HeaderCarrier
 import v2.mocks.MockIdGenerator
-import v2.mocks.requestParsers.MockDeletePropertyAnnualSubmissionRequestParser
-import v2.mocks.services.{MockAuditService, MockDeletePropertyAnnualSubmissionService, MockEnrolmentsAuthService, MockMtdIdLookupService}
-import v2.models.audit.{AuditError, AuditEvent, AuditResponse, GenericAuditDetail}
-import v2.models.domain.Nino
+import v2.mocks.requestParsers.MockDeleteHistoricFhlUkPropertyAnnualSubmissionRequestParser
+import v2.mocks.services.{
+  MockAuditService,
+  MockDeleteHistoricFhlUkPropertyAnnualSubmissionService,
+  MockEnrolmentsAuthService,
+  MockMtdIdLookupService
+}
+import v2.models.domain.{ Nino, TaxYear }
 import v2.models.errors._
 import v2.models.outcomes.ResponseWrapper
-import v2.models.request.deleteHistoricFhlUkPropertyAnnualSubmission.{DeleteHistoricFhlUkPropertyAnnualSubmissionRawData, DeleteHistoricFhlUkPropertyAnnualSubmissionRequest}
-import v2.models.request.deletePropertyAnnualSubmission._
+import v2.models.request.deleteHistoricFhlUkPropertyAnnualSubmission.{
+  DeleteHistoricFhlUkPropertyAnnualSubmissionRawData,
+  DeleteHistoricFhlUkPropertyAnnualSubmissionRequest
+}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -42,7 +48,6 @@ class DeleteHistoricFhlUkPropertyAnnualSubmissionControllerSpec
     with MockIdGenerator {
 
   private val nino          = "AA123456A"
-  private val businessId    = "XAIS12345678910"
   private val taxYear       = "2021-22"
   private val correlationId = "X-123"
 
@@ -65,21 +70,7 @@ class DeleteHistoricFhlUkPropertyAnnualSubmissionControllerSpec
   }
 
   private val rawData     = DeleteHistoricFhlUkPropertyAnnualSubmissionRawData(nino, taxYear)
-  private val requestData = DeleteHistoricFhlUkPropertyAnnualSubmissionRequest(Nino(nino), taxYear)
-
-  def event(auditResponse: AuditResponse): AuditEvent[GenericAuditDetail] =
-    AuditEvent(
-      auditType = "DeleteHistoricFhlUkPropertyAnnualSubmission",
-      transactionName = "delete-historic-fhl-uk-property-annual-submission",
-      detail = GenericAuditDetail(
-        versionNumber = "2.0",
-        userType = "Individual",
-        agentReferenceNumber = None,
-        params = Json.obj("nino" -> nino, "taxYear" -> taxYear),
-        correlationId = correlationId,
-        response = auditResponse
-      )
-    )
+  private val requestData = DeleteHistoricFhlUkPropertyAnnualSubmissionRequest(Nino(nino), TaxYear.fromMtd(taxYear))
 
   "handleRequest" should {
     "return No Content" when {
@@ -90,15 +81,12 @@ class DeleteHistoricFhlUkPropertyAnnualSubmissionControllerSpec
           .returns(Right(requestData))
 
         MockDeleteHistoricFhlUkPropertyAnnualSubmissionService
-          .DeleteHistoricFhlUkPropertyAnnualSubmission(requestData)
+          .deleteHistoricFhlUkPropertyAnnualSubmission(requestData)
           .returns(Future.successful(Right(ResponseWrapper(correlationId, ()))))
 
         val result: Future[Result] = controller.handleRequest(nino, taxYear)(fakeRequest)
         status(result) shouldBe NO_CONTENT
         header("X-CorrelationId", result) shouldBe Some(correlationId)
-
-        val auditResponse: AuditResponse = AuditResponse(NO_CONTENT, None, None)
-        MockedAuditService.verifyAuditEvent(event(auditResponse)).once
       }
     }
     "return the error as per spec" when {
@@ -110,23 +98,19 @@ class DeleteHistoricFhlUkPropertyAnnualSubmissionControllerSpec
               .parse(rawData)
               .returns(Left(ErrorWrapper(correlationId, error, None)))
 
-            val result: Future[Result] = controller.handleRequest(nino, businessId, taxYear)(fakeRequest)
+            val result: Future[Result] = controller.handleRequest(nino, taxYear)(fakeRequest)
 
             status(result) shouldBe expectedStatus
             contentAsJson(result) shouldBe Json.toJson(error)
             header("X-CorrelationId", result) shouldBe Some(correlationId)
-
-            val auditResponse: AuditResponse = AuditResponse(expectedStatus, Some(Seq(AuditError(error.code))), None)
-            MockedAuditService.verifyAuditEvent(event(auditResponse)).once
           }
         }
 
         val input = Seq(
           (BadRequestError, BAD_REQUEST),
           (NinoFormatError, BAD_REQUEST),
-          (BusinessIdFormatError, BAD_REQUEST),
           (TaxYearFormatError, BAD_REQUEST),
-          (RuleTaxYearNotSupportedError, BAD_REQUEST),
+          (RuleHistoricTaxYearNotSupportedError, BAD_REQUEST),
           (RuleTaxYearRangeInvalidError, BAD_REQUEST)
         )
 
@@ -144,21 +128,17 @@ class DeleteHistoricFhlUkPropertyAnnualSubmissionControllerSpec
               .deleteHistoricFhlUkPropertyAnnualSubmission(requestData)
               .returns(Future.successful(Left(ErrorWrapper(correlationId, mtdError))))
 
-            val result: Future[Result] = controller.handleRequest(nino, businessId, taxYear)(fakeRequest)
+            val result: Future[Result] = controller.handleRequest(nino, taxYear)(fakeRequest)
 
             status(result) shouldBe expectedStatus
             contentAsJson(result) shouldBe Json.toJson(mtdError)
             header("X-CorrelationId", result) shouldBe Some(correlationId)
-
-            val auditResponse: AuditResponse = AuditResponse(expectedStatus, Some(Seq(AuditError(mtdError.code))), None)
-            MockedAuditService.verifyAuditEvent(event(auditResponse)).once
           }
         }
 
         val input = Seq(
           (NinoFormatError, BAD_REQUEST),
           (TaxYearFormatError, BAD_REQUEST),
-          (BusinessIdFormatError, BAD_REQUEST),
           (NotFoundError, NOT_FOUND),
           (InternalError, INTERNAL_SERVER_ERROR)
         )

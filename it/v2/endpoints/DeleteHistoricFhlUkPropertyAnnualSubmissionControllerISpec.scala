@@ -30,12 +30,12 @@ class DeleteHistoricFhlUkPropertyAnnualSubmissionControllerISpec extends V2Integ
 
   private trait Test {
 
-    val nino: String = "AA123456A"
+    val nino: String    = "AA123456A"
     val taxYear: String = "2021-22"
 
-    def uri: String = s"/$nino/annual/$taxYear"
+    def uri: String = s"/uk/annual/furnished-holiday-lettings/$nino/$taxYear"
 
-    def ifsUri: String = s"/income-tax/business/property/annual"
+    def desUri: String = s"/income-tax/nino/$nino/uk-properties/furnished-holiday-lettings/annual-summaries/2022"
 
     def setupStubs(): StubMapping
 
@@ -45,34 +45,27 @@ class DeleteHistoricFhlUkPropertyAnnualSubmissionControllerISpec extends V2Integ
         .withHttpHeaders(
           (ACCEPT, "application/vnd.hmrc.2.0+json"),
           (AUTHORIZATION, "Bearer 123") // some bearer token
-      )
+        )
     }
-
-    def ifsQueryParams: Map[String, String] = Map(
-      "taxableEntityId" -> nino,
-      "taxYear" -> taxYear
-    )
 
     def errorBody(code: String): String =
       s"""
          |{
          |  "code": "$code",
-         |  "reason": "ifs message"
+         |  "reason": "des message"
          |}
        """.stripMargin
   }
 
-  "calling the delete property annual submission endpoint" should {
-
+  "calling the delete historic FHL UK property annual submission endpoint" should {
     "return a 204 status code" when {
-
       "any valid request is made" in new Test {
 
         override def setupStubs(): StubMapping = {
           AuditStub.audit()
           AuthStub.authorised()
           MtdIdLookupStub.ninoFound(nino)
-          DownstreamStub.onSuccess(DownstreamStub.DELETE, ifsUri, ifsQueryParams, Status.NO_CONTENT, JsObject.empty)
+          DownstreamStub.onSuccess(DownstreamStub.PUT, desUri, Status.NO_CONTENT, JsObject.empty)
         }
 
         val response: WSResponse = await(request().delete())
@@ -80,19 +73,20 @@ class DeleteHistoricFhlUkPropertyAnnualSubmissionControllerISpec extends V2Integ
         response.header("X-CorrelationId").nonEmpty shouldBe true
       }
     }
+
     "return error according to spec" when {
 
-      "validation error" when {
-        def validationErrorTest(requestNino: String, requestBusinessId: String, requestTaxYear: String, expectedStatus: Int, expectedBody: MtdError): Unit = {
+      "a validation error occurs" when {
+        def validationErrorTest(requestNino: String, requestTaxYear: String, expectedStatus: Int, expectedBody: MtdError): Unit = {
           s"validation fails with ${expectedBody.code} error" in new Test {
 
-            override val nino: String = requestNino
+            override val nino: String    = requestNino
             override val taxYear: String = requestTaxYear
 
             override def setupStubs(): StubMapping = {
               AuditStub.audit()
               AuthStub.authorised()
-              MtdIdLookupStub.ninoFound(requestNino)
+              MtdIdLookupStub.ninoFound(nino)
             }
 
             val response: WSResponse = await(request().delete())
@@ -102,24 +96,23 @@ class DeleteHistoricFhlUkPropertyAnnualSubmissionControllerISpec extends V2Integ
         }
 
         val input = Seq(
-          ("Walrus", "XAIS12345678910", "2021-22", Status.BAD_REQUEST, NinoFormatError),
-          ("AA123456A", "203100", "2021-22", Status.BAD_REQUEST, BusinessIdFormatError),
-          ("AA123456A", "XAIS12345678910", "Beans", Status.BAD_REQUEST, TaxYearFormatError),
-          ("AA123456A", "XAIS12345678910", "2021-23", Status.BAD_REQUEST, RuleTaxYearRangeInvalidError),
-          ("AA123456A", "XAIS12345678910", "2019-20", Status.BAD_REQUEST, RuleTaxYearNotSupportedError)
+          ("hello", "2021-22", Status.BAD_REQUEST, NinoFormatError),
+          ("AA123456A", "Beans", Status.BAD_REQUEST, TaxYearFormatError),
+          ("AA123456A", "2021-23", Status.BAD_REQUEST, RuleTaxYearRangeInvalidError),
+          ("AA123456A", "2016-17", Status.BAD_REQUEST, RuleHistoricTaxYearNotSupportedError)
         )
         input.foreach(args => (validationErrorTest _).tupled(args))
       }
 
-      "ifs service error" when {
-        def serviceErrorTest(ifsStatus: Int, ifsCode: String, expectedStatus: Int, expectedBody: MtdError): Unit = {
-          s"ifs returns an $ifsCode error and status $ifsStatus" in new Test {
+      "des service error" when {
+        def serviceErrorTest(desStatus: Int, desCode: String, expectedStatus: Int, expectedBody: MtdError): Unit = {
+          s"des returns an $desCode error and status $desStatus" in new Test {
 
             override def setupStubs(): StubMapping = {
               AuditStub.audit()
               AuthStub.authorised()
               MtdIdLookupStub.ninoFound(nino)
-              DownstreamStub.onError(DownstreamStub.DELETE, ifsUri, ifsQueryParams, ifsStatus, errorBody(ifsCode))
+              DownstreamStub.onError(DownstreamStub.PUT, desUri, desStatus, errorBody(desCode))
             }
 
             val response: WSResponse = await(request().delete())
@@ -129,11 +122,13 @@ class DeleteHistoricFhlUkPropertyAnnualSubmissionControllerISpec extends V2Integ
         }
 
         val input = Seq(
-          (Status.BAD_REQUEST, "INVALID_TAXABLE_ENTITY_ID", Status.BAD_REQUEST, NinoFormatError),
-          (Status.BAD_REQUEST, "INVALID_INCOMESOURCEID", Status.BAD_REQUEST, BusinessIdFormatError),
+          (Status.BAD_REQUEST, "INVALID_NINO", Status.BAD_REQUEST, NinoFormatError),
           (Status.BAD_REQUEST, "INVALID_TAX_YEAR", Status.BAD_REQUEST, TaxYearFormatError),
           (Status.BAD_REQUEST, "INVALID_CORRELATIONID", Status.INTERNAL_SERVER_ERROR, InternalError),
-          (Status.NOT_FOUND, "NO_DATA_FOUND", Status.NOT_FOUND, NotFoundError),
+          (Status.NOT_FOUND, "NOT_FOUND", Status.NOT_FOUND, NotFoundError),
+          (Status.NOT_FOUND, "NOT_FOUND_PROPERTY", Status.NOT_FOUND, NotFoundError),
+          (Status.GONE, "GONE", Status.NOT_FOUND, NotFoundError),
+          (Status.UNPROCESSABLE_ENTITY, "UNPROCESSABLE_ENTTY", Status.INTERNAL_SERVER_ERROR, InternalError),
           (Status.INTERNAL_SERVER_ERROR, "SERVER_ERROR", Status.INTERNAL_SERVER_ERROR, InternalError),
           (Status.SERVICE_UNAVAILABLE, "SERVICE_UNAVAILABLE", Status.INTERNAL_SERVER_ERROR, InternalError)
         )

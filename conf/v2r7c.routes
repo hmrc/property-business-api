@@ -21,3 +21,4 @@ POST       /uk/furnished-holiday-lettings/:nino                        v2.contro
 
 PUT        /uk/furnished-holiday-lettings/:nino/:taxYear               v2.controllers.CreateAmendHistoricFhlUkPropertyAnnualSubmissionController.handleRequest(nino: String, taxYear: String)
 GET        /uk/furnished-holiday-lettings/:nino/:taxYear               v2.controllers.RetrieveHistoricFhlUkPropertyAnnualSubmissionController.handleRequest(nino: String, taxYear: String)
+DELETE     /uk/annual/furnished-holiday-lettings/:nino/:taxYear        v2.controllers.DeleteHistoricFhlUkPropertyAnnualSubmissionController.handleRequest(nino: String, taxYear: String)

@@ -126,26 +126,26 @@ class CreateHistoricNonFHlUkPiePeriodSummaryControllerISpec extends V2Integratio
       | "toDate": "2020-04-23",
       |   "income": {
       |   "periodAmount": 123.459999999999999999999999,
-      |   "premiumsOfLeaseGrant": 2355.45999999999999999999999,
-      |   "reversePremiums": 454.56999999999999999999999,
-      |   "otherIncome": 567.89999999999999999999999,
-      |   "taxDeducted": 234.53999999999999999999999,
+      |   "premiumsOfLeaseGrant": 2355.45,
+      |   "reversePremiums": 454.56,
+      |   "otherIncome": 567.89,
+      |   "taxDeducted": 234.53,
       |   "rentARoom": {
-      |      "rentsReceived": 567.56999999999999999999999
+      |      "rentsReceived": 567.56
       |    }
       |   },
       |  "expenses":{
-      |    "premisesRunningCosts": 567.53999999999999999999999,
-      |    "repairsAndMaintenance": 324.65999999999999999999999,
-      |    "financialCosts": 453.56999999999999999999999,
-      |    "professionalFees": 535.78999999999999999999999,
-      |    "costOfServices": 678.34999999999999999999999,
-      |    "other": 682.34999999999999999999999,
-      |    "travelCosts": 645.56999999999999999999999,
-      |    "residentialFinancialCostsCarriedForward": 672.34999999999999999999999,
-      |    "residentialFinancialCost": 1000.45999999999999999999999,
+      |    "premisesRunningCosts": 567.53,
+      |    "repairsAndMaintenance": 324.65,
+      |    "financialCosts": 453.56,
+      |    "professionalFees": 535.78,
+      |    "costOfServices": 678.34,
+      |    "other": 682.34,
+      |    "travelCosts": 645.56,
+      |    "residentialFinancialCostsCarriedForward": 672.34,
+      |    "residentialFinancialCost": 1000.45,
       |    "rentARoom": {
-      |      "amountClaimed": 545.9999999999999999999999
+      |      "amountClaimed": 545.99
       |    }
       |  }
       |}
@@ -236,22 +236,7 @@ class CreateHistoricNonFHlUkPiePeriodSummaryControllerISpec extends V2Integratio
 
   val allInvalidValueRequestError: MtdError = ValueFormatError.copy(
     paths = Some(List(
-      "/income/periodAmount",
-      "/income/premiumsOfLeaseGrant",
-      "/income/reversePremiums",
-      "/income/otherIncome",
-      "/income/taxDeducted",
-      "/income/rentARoom/rentsReceived",
-      "/expenses/premisesRunningCosts",
-      "/expenses/repairsAndMaintenance",
-      "/expenses/financialCosts",
-      "/expenses/professionalFees",
-      "/expenses/costOfServices",
-      "/expenses/other",
-      "/expenses/travelCosts",
-      "/expenses/residentialFinancialCostsCarriedForward",
-      "/expenses/residentialFinancialCost",
-      "/expenses/rentARoom/amountClaimed"
+      "/income/periodAmount"
     ))
   )
 

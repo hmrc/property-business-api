@@ -110,7 +110,7 @@ class CreateHistoricNonFHLUkPiePeriodSummaryController @Inject()(val authService
           RuleMisalignedPeriodError,
           RuleOverlappingPeriodError,
           RuleNotContiguousPeriodError,
-          RuleTaxYearNotSupportedError,
+          RuleHistoricTaxYearNotSupportedError,
         ) => BadRequest(Json.toJson(errorWrapper))
       case NotFoundError           => NotFound(Json.toJson(errorWrapper))
       case (ServiceUnavailableError | InternalError ) => InternalServerError(Json.toJson(errorWrapper))

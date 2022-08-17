@@ -71,7 +71,7 @@ class CreateHistoricFhlUkPiePeriodSummaryService @Inject()(connector: CreateHist
       "NOT_CONTIGUOUS_PERIOD"   -> RuleNotContiguousPeriodError,
       "INVALID_PERIOD"          -> RuleToDateBeforeFromDateError,
       "BOTH_EXPENSES_SUPPLIED"  -> RuleBothExpensesSuppliedError,
-      "TAX_YEAR_NOT_SUPPORTED"  -> RuleTaxYearNotSupportedError,
+      "TAX_YEAR_NOT_SUPPORTED"  -> RuleHistoricTaxYearNotSupportedError,
       "SERVER_ERROR"            -> InternalError,
       "SERVICE_UNAVAILABLE"     -> InternalError
     )

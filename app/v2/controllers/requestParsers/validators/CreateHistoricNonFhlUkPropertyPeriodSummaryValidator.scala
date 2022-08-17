@@ -54,7 +54,7 @@ class CreateHistoricNonFhlUkPropertyPeriodSummaryValidator @Inject()(appConfig: 
     val formatDateErrors = DateValidation.validate(body.fromDate, true) ++
       DateValidation.validate(body.toDate, false)
 
-    def validateToDateIsAfterFromDate(toDate: String, fromDate:String):List[MtdError] ={
+    def validateToDateIsAfterFromDate():List[MtdError] ={
       if(formatDateErrors.isEmpty){
         val ruleDateErrors = ToDateBeforeFromDateValidation.validate(body.fromDate, body.toDate)
         ruleDateErrors
@@ -63,7 +63,7 @@ class CreateHistoricNonFhlUkPropertyPeriodSummaryValidator @Inject()(appConfig: 
       }
     }
 
-    val ruleDateErrors = validateToDateIsAfterFromDate(body.toDate, body.fromDate)
+    val ruleDateErrors = validateToDateIsAfterFromDate()
 
     val incomeFormatErrors = body.income
       .map { income =>

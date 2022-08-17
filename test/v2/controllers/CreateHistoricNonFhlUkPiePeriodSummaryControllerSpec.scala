@@ -254,6 +254,7 @@ class CreateHistoricNonFhlUkPiePeriodSummaryControllerSpec
           (RuleMisalignedPeriodError, BAD_REQUEST),
           (RuleOverlappingPeriodError, BAD_REQUEST),
           (RuleNotContiguousPeriodError, BAD_REQUEST),
+          (RuleToDateBeforeFromDateError, BAD_REQUEST),
           (RuleTaxYearNotSupportedError, BAD_REQUEST),
           (InternalError, INTERNAL_SERVER_ERROR),
           (ServiceUnavailableError, INTERNAL_SERVER_ERROR)

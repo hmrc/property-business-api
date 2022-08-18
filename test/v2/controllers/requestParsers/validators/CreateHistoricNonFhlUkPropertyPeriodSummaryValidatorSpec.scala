@@ -17,25 +17,14 @@
 package v2.controllers.requestParsers.validators
 
 import mocks.MockAppConfig
-import play.api.libs.json.{ JsObject, JsValue, Json }
+import play.api.libs.json.{JsObject, JsValue, Json}
 import support.UnitSpec
-import v2.models.errors.{
-  FromDateFormatError,
-  NinoFormatError,
-  RuleHistoricTaxYearNotSupportedError,
-  RuleIncorrectOrEmptyBodyError,
-  TaxYearFormatError,
-  ToDateFormatError,
-  ValueFormatError
-}
+import v2.models.errors.{FromDateFormatError, NinoFormatError, RuleIncorrectOrEmptyBodyError, RuleToDateBeforeFromDateError, ToDateFormatError, ValueFormatError}
 import v2.models.request.createHistoricNonFhlUkPropertyPeriodSummary.CreateHistoricNonFhlUkPropertyPeriodSummaryRawData
 
 class CreateHistoricNonFhlUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with MockAppConfig {
 
   private val validNino = "AA123456A"
-
-  MockAppConfig.minimumTaxHistoric returns 2017
-  MockAppConfig.maximumTaxHistoric returns 2021
 
   val validator = new CreateHistoricNonFhlUkPropertyPeriodSummaryValidator(mockAppConfig)
 
@@ -165,6 +154,15 @@ class CreateHistoricNonFhlUkPropertyPeriodSummaryValidatorSpec extends UnitSpec 
     """.stripMargin
   )
 
+  val requestBodyWithToDateEarlierThanFromDate: JsValue = Json.parse(
+    """
+      |{
+      |    "fromDate": "2020-04-23",
+      |    "toDate": "2019-03-11"
+      |}
+    """.stripMargin
+  )
+
   val requestBodyWithInvalidFromDateYear: JsValue = Json.parse(
     """
       |{
@@ -234,28 +232,21 @@ class CreateHistoricNonFhlUkPropertyPeriodSummaryValidatorSpec extends UnitSpec 
     "return FromDateFormatError error" when {
       "given an invalid fromDate" in {
         val result = validator.validate(CreateHistoricNonFhlUkPropertyPeriodSummaryRawData(validNino, requestBodyWithInvalidFromDateFormat))
-        result should contain only (FromDateFormatError, TaxYearFormatError)
+        result should contain only (FromDateFormatError)
       }
     }
 
     "return ToDateFormatError error" when {
       "given an invalid toDate" in {
         val result = validator.validate(CreateHistoricNonFhlUkPropertyPeriodSummaryRawData(validNino, requestBodyWithInvalidToDateFormat))
-        result should contain only (ToDateFormatError, TaxYearFormatError)
+        result should contain only (ToDateFormatError)
       }
     }
 
-    "return RuleHistoricTaxYearNotSupportedError error" when {
-      "given an invalid fromDate" in {
-        val result = validator.validate(CreateHistoricNonFhlUkPropertyPeriodSummaryRawData(validNino, requestBodyWithInvalidFromDateYear))
-        result should contain only (RuleHistoricTaxYearNotSupportedError)
-      }
-    }
-
-    "return RuleHistoricTaxYearNotSupportedError error" when {
-      "given an invalid toDate" in {
-        val result = validator.validate(CreateHistoricNonFhlUkPropertyPeriodSummaryRawData(validNino, requestBodyWithInvalidToDateYear))
-        result should contain only (RuleHistoricTaxYearNotSupportedError)
+    "return toDateBeforeFromDateError error" when {
+      "given a toDate that is earlier than the fromDate" in {
+        val result = validator.validate(CreateHistoricNonFhlUkPropertyPeriodSummaryRawData(validNino, requestBodyWithToDateEarlierThanFromDate))
+        result should contain only (RuleToDateBeforeFromDateError)
       }
     }
 

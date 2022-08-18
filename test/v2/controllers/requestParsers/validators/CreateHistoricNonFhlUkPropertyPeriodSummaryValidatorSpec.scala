@@ -27,9 +27,6 @@ class CreateHistoricNonFhlUkPropertyPeriodSummaryValidatorSpec extends UnitSpec 
 
   private val validNino = "AA123456A"
 
-  MockAppConfig.minimumTaxHistoric returns 2017
-  MockAppConfig.maximumTaxHistoric returns 2021
-
   val validator = new CreateHistoricNonFhlUkPropertyPeriodSummaryValidator(mockAppConfig)
 
   private val validRequestBody: JsValue = Json.parse(
@@ -143,11 +140,26 @@ class CreateHistoricNonFhlUkPropertyPeriodSummaryValidatorSpec extends UnitSpec 
   private val requestBodyWithInvalidFromDateYear: JsValue = Json.parse(
     """
       |{
-      |    "fromDate": "2016-03-11",
-      |    "toDate": "2017-04-23",
-      |    "expenses":{
-      |       "consolidatedExpenses": 1
-      |    }
+      |    "fromDate": "2019-A3-11",
+      |    "toDate": "2020-04-23"
+      |}
+    """.stripMargin
+  )
+
+  val requestBodyWithInvalidToDateFormat: JsValue = Json.parse(
+    """
+      |{
+      |    "fromDate": "2019-03-11",
+      |    "toDate": "2020-A4-23"
+      |}
+    """.stripMargin
+  )
+
+  val requestBodyWithToDateEarlierThanFromDate: JsValue = Json.parse(
+    """
+      |{
+      |    "fromDate": "2020-04-23",
+      |    "toDate": "2019-03-11"
       |}
     """.stripMargin
   )
@@ -189,7 +201,7 @@ class CreateHistoricNonFhlUkPropertyPeriodSummaryValidatorSpec extends UnitSpec 
         val expected = RuleIncorrectOrEmptyBodyError.copy(paths = Some(List("/fromDate")))
         val result   = validator.validate(CreateHistoricNonFhlUkPropertyPeriodSummaryRawData(validNino, incompleteRequestBody))
 
-        result should contain only (expected)
+        result should contain only expected
       }
 
       "given only a fromDate and toDate" in {
@@ -206,27 +218,29 @@ class CreateHistoricNonFhlUkPropertyPeriodSummaryValidatorSpec extends UnitSpec 
         val result =
           validator.validate(CreateHistoricNonFhlUkPropertyPeriodSummaryRawData(validNino, requestBodyWithInvalidAmounts))
 
-        result should contain only (expected)
+        result should contain only expected
       }
     }
 
     "return RuleIncorrectOrEmptyBodyError" when {
       "given an empty body" in {
         val result = validator.validate(CreateHistoricNonFhlUkPropertyPeriodSummaryRawData(validNino, JsObject.empty))
-        result should contain only (RuleIncorrectOrEmptyBodyError)
+        result should contain only RuleIncorrectOrEmptyBodyError
       }
     }
 
     "return FromDateFormatError error" when {
       "given an invalid fromDate" in {
-        val result = validator.validate(CreateHistoricNonFhlUkPropertyPeriodSummaryRawData(validNino, validRequestBody.update("fromDate", JsString("BAD_DATE"))))
+        val result =
+          validator.validate(CreateHistoricNonFhlUkPropertyPeriodSummaryRawData(validNino, validRequestBody.update("fromDate", JsString("BAD_DATE"))))
         result should contain only (FromDateFormatError, TaxYearFormatError)
       }
     }
 
     "return ToDateFormatError error" when {
       "given an invalid toDate" in {
-        val result = validator.validate(CreateHistoricNonFhlUkPropertyPeriodSummaryRawData(validNino, validRequestBody.update("toDate", JsString("BAD_DATE"))))
+        val result =
+          validator.validate(CreateHistoricNonFhlUkPropertyPeriodSummaryRawData(validNino, validRequestBody.update("toDate", JsString("BAD_DATE"))))
         result should contain only (ToDateFormatError, TaxYearFormatError)
       }
     }
@@ -238,10 +252,10 @@ class CreateHistoricNonFhlUkPropertyPeriodSummaryValidatorSpec extends UnitSpec 
       }
     }
 
-    "return RuleHistoricTaxYearNotSupportedError error" when {
-      "given an invalid toDate" in {
-        val result = validator.validate(CreateHistoricNonFhlUkPropertyPeriodSummaryRawData(validNino, requestBodyWithInvalidToDateYear))
-        result should contain only (RuleHistoricTaxYearNotSupportedError)
+    "return toDateBeforeFromDateError error" when {
+      "given a toDate that is earlier than the fromDate" in {
+        val result = validator.validate(CreateHistoricNonFhlUkPropertyPeriodSummaryRawData(validNino, requestBodyWithToDateEarlierThanFromDate))
+        result should contain only RuleToDateBeforeFromDateError
       }
     }
 
@@ -249,7 +263,7 @@ class CreateHistoricNonFhlUkPropertyPeriodSummaryValidatorSpec extends UnitSpec 
       "given a request with both invalid path params and an invalid body" in {
         val result =
           validator.validate(CreateHistoricNonFhlUkPropertyPeriodSummaryRawData("BAD-NINO", requestBodyWithInvalidAmounts))
-        result should contain only (NinoFormatError)
+        result should contain only NinoFormatError
       }
     }
   }

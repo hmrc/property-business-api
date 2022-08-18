@@ -107,7 +107,7 @@ class CreateHistoricFhlUkPiePeriodSummaryController @Inject()(val authService: E
             RuleMisalignedPeriodError,
             RuleOverlappingPeriodError,
             RuleNotContiguousPeriodError,
-            RuleTaxYearNotSupportedError,
+            RuleHistoricTaxYearNotSupportedError,
             RuleIncorrectOrEmptyBodyError
           ) =>
         BadRequest(Json.toJson(errorWrapper))

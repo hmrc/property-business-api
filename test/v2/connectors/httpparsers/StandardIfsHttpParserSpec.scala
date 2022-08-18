@@ -150,7 +150,7 @@ class StandardIfsHttpParserSpec extends UnitSpec {
   )
 
   private def handleErrorsCorrectly[A](httpReads: HttpReads[DownstreamOutcome[A]]): Unit =
-    Seq(BAD_REQUEST, NOT_FOUND, FORBIDDEN, CONFLICT).foreach(
+    Seq(BAD_REQUEST, NOT_FOUND, FORBIDDEN, CONFLICT, GONE).foreach(
       responseCode =>
         s"receiving a $responseCode response" should {
           "be able to parse a single error" in {

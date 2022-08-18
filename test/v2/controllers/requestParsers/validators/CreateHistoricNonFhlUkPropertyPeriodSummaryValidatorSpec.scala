@@ -175,6 +175,13 @@ class CreateHistoricNonFhlUkPropertyPeriodSummaryValidatorSpec extends UnitSpec 
         val result = validator.validate(CreateHistoricNonFhlUkPropertyPeriodSummaryRawData(validNino, validRequestBodyConsolidated))
         result shouldBe empty
       }
+
+      "given only a fromDate and toDate" in {
+        val result =
+          validator.validate(CreateHistoricNonFhlUkPropertyPeriodSummaryRawData(validNino, requestBodyWithNoSubObjects))
+
+        result shouldBe empty
+      }
     }
 
     "return an error" when {
@@ -182,7 +189,7 @@ class CreateHistoricNonFhlUkPropertyPeriodSummaryValidatorSpec extends UnitSpec 
         val expected = RuleIncorrectOrEmptyBodyError.copy(paths = Some(List("/fromDate")))
         val result   = validator.validate(CreateHistoricNonFhlUkPropertyPeriodSummaryRawData(validNino, incompleteRequestBody))
 
-        result should contain only expected
+        result should contain only (expected)
       }
 
       "given only a fromDate and toDate" in {
@@ -199,29 +206,27 @@ class CreateHistoricNonFhlUkPropertyPeriodSummaryValidatorSpec extends UnitSpec 
         val result =
           validator.validate(CreateHistoricNonFhlUkPropertyPeriodSummaryRawData(validNino, requestBodyWithInvalidAmounts))
 
-        result should contain only expected
+        result should contain only (expected)
       }
     }
 
     "return RuleIncorrectOrEmptyBodyError" when {
       "given an empty body" in {
         val result = validator.validate(CreateHistoricNonFhlUkPropertyPeriodSummaryRawData(validNino, JsObject.empty))
-        result should contain only RuleIncorrectOrEmptyBodyError
+        result should contain only (RuleIncorrectOrEmptyBodyError)
       }
     }
 
     "return FromDateFormatError error" when {
       "given an invalid fromDate" in {
-        val result =
-          validator.validate(CreateHistoricNonFhlUkPropertyPeriodSummaryRawData(validNino, validRequestBody.update("fromDate", JsString("BAD_DATE"))))
+        val result = validator.validate(CreateHistoricNonFhlUkPropertyPeriodSummaryRawData(validNino, validRequestBody.update("fromDate", JsString("BAD_DATE"))))
         result should contain only (FromDateFormatError, TaxYearFormatError)
       }
     }
 
     "return ToDateFormatError error" when {
       "given an invalid toDate" in {
-        val result =
-          validator.validate(CreateHistoricNonFhlUkPropertyPeriodSummaryRawData(validNino, validRequestBody.update("toDate", JsString("BAD_DATE"))))
+        val result = validator.validate(CreateHistoricNonFhlUkPropertyPeriodSummaryRawData(validNino, validRequestBody.update("toDate", JsString("BAD_DATE"))))
         result should contain only (ToDateFormatError, TaxYearFormatError)
       }
     }
@@ -236,7 +241,7 @@ class CreateHistoricNonFhlUkPropertyPeriodSummaryValidatorSpec extends UnitSpec 
     "return RuleHistoricTaxYearNotSupportedError error" when {
       "given an invalid toDate" in {
         val result = validator.validate(CreateHistoricNonFhlUkPropertyPeriodSummaryRawData(validNino, requestBodyWithInvalidToDateYear))
-        result should contain only RuleHistoricTaxYearNotSupportedError
+        result should contain only (RuleHistoricTaxYearNotSupportedError)
       }
     }
 
@@ -244,7 +249,7 @@ class CreateHistoricNonFhlUkPropertyPeriodSummaryValidatorSpec extends UnitSpec 
       "given a request with both invalid path params and an invalid body" in {
         val result =
           validator.validate(CreateHistoricNonFhlUkPropertyPeriodSummaryRawData("BAD-NINO", requestBodyWithInvalidAmounts))
-        result should contain only NinoFormatError
+        result should contain only (NinoFormatError)
       }
     }
   }

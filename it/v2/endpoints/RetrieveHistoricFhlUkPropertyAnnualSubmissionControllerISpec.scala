@@ -56,7 +56,7 @@ class RetrieveHistoricFhlUkPropertyAnnualSubmissionControllerISpec extends V2Int
          |   },
          |   "links": [
          |      {
-         |         "href": "/individuals/business/property/uk/furnished-holiday-lettings/AA123456A/2020-21",
+         |         "href": "/individuals/business/property/uk/annual/furnished-holiday-lettings/AA123456A/2020-21",
          |         "method": "GET",
          |         "rel": "self"
          |      }
@@ -91,7 +91,7 @@ class RetrieveHistoricFhlUkPropertyAnnualSubmissionControllerISpec extends V2Int
 
     def setupStubs(): StubMapping
 
-    def mtdUri: String        = s"/uk/furnished-holiday-lettings/$nino/$mtdTaxYear"
+    def mtdUri: String        = s"/uk/annual/furnished-holiday-lettings/$nino/$mtdTaxYear"
     def downstreamUri: String = s"/income-tax/nino/$nino/uk-properties/furnished-holiday-lettings/annual-summaries/$downstreamTaxYear"
 
     def request(): WSRequest = {

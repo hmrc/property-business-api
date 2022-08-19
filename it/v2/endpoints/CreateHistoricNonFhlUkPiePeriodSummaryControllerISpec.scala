@@ -19,12 +19,12 @@ package v2.endpoints
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import play.api.http.HeaderNames.ACCEPT
 import play.api.http.Status
-import play.api.libs.json.{JsValue, Json}
-import play.api.libs.ws.{WSRequest, WSResponse}
+import play.api.libs.json.{ JsValue, Json }
+import play.api.libs.ws.{ WSRequest, WSResponse }
 import play.api.test.Helpers.AUTHORIZATION
 import support.V2IntegrationBaseSpec
 import v2.models.errors._
-import v2.stubs.{AuditStub, AuthStub, DownstreamStub, MtdIdLookupStub}
+import v2.stubs.{ AuditStub, AuthStub, DownstreamStub, MtdIdLookupStub }
 
 class CreateHistoricNonFhlUkPiePeriodSummaryControllerISpec extends V2IntegrationBaseSpec {
 
@@ -120,7 +120,7 @@ class CreateHistoricNonFhlUkPiePeriodSummaryControllerISpec extends V2Integratio
       |}""".stripMargin
   )
 
-  val invalidValueRequestJson:  JsValue = Json.parse(
+  val invalidValueRequestJson: JsValue = Json.parse(
     """{
       | "fromDate": "2019-03-11",
       | "toDate": "2020-04-23",
@@ -235,9 +235,10 @@ class CreateHistoricNonFhlUkPiePeriodSummaryControllerISpec extends V2Integratio
   )
 
   val allInvalidValueRequestError: MtdError = ValueFormatError.copy(
-    paths = Some(List(
-      "/income/periodAmount"
-    ))
+    paths = Some(
+      List(
+        "/income/periodAmount"
+      ))
   )
 
   trait Test {
@@ -263,12 +264,12 @@ class CreateHistoricNonFhlUkPiePeriodSummaryControllerISpec extends V2Integratio
          |  "periodId": "2019-03-11_2020-04-23",
          |  "links": [
          |    {
-         |      "href": "/individuals/business/property/uk/non-furnished-holiday-lettings/$nino/2019-03-11_2020-04-23",
+         |      "href": "/individuals/business/property/uk/period/non-furnished-holiday-lettings/$nino/2019-03-11_2020-04-23",
          |      "method": "GET",
          |      "rel": "self"
          |    },
          |    {
-         |      "href": "/individuals/business/property/uk/non-furnished-holiday-lettings/$nino/2019-03-11_2020-04-23",
+         |      "href": "/individuals/business/property/uk/period/non-furnished-holiday-lettings/$nino/2019-03-11_2020-04-23",
          |      "method": "PUT",
          |      "rel": "amend-uk-property-historic-non-fhl-period-summary"
          |    }
@@ -368,8 +369,14 @@ class CreateHistoricNonFhlUkPiePeriodSummaryControllerISpec extends V2Integratio
           ("AA1123A", requestBodyJson, Status.BAD_REQUEST, NinoFormatError),
           ("AA123456A", invalidToDateRequestJson, Status.BAD_REQUEST, ToDateFormatError),
           ("AA123456A", invalidFromDateRequestJson, Status.BAD_REQUEST, FromDateFormatError),
-          ("AA123456A", bothExpensesSuppliedRequestJson, Status.BAD_REQUEST, RuleBothExpensesSuppliedError.copy(paths=Some(Seq("/expenses/consolidatedExpenses")))),
-          ("AA123456A", missingFromAndToDateRequestJson, Status.BAD_REQUEST,  RuleIncorrectOrEmptyBodyError.copy(paths=Some(Seq("/fromDate", "/toDate")))),
+          ("AA123456A",
+           bothExpensesSuppliedRequestJson,
+           Status.BAD_REQUEST,
+           RuleBothExpensesSuppliedError.copy(paths = Some(Seq("/expenses/consolidatedExpenses")))),
+          ("AA123456A",
+           missingFromAndToDateRequestJson,
+           Status.BAD_REQUEST,
+           RuleIncorrectOrEmptyBodyError.copy(paths = Some(Seq("/fromDate", "/toDate")))),
           ("AA123456A", toDateBeforeFromDateRequestJson, Status.BAD_REQUEST, RuleToDateBeforeFromDateError),
           ("AA123456A", invalidValueRequestJson, Status.BAD_REQUEST, allInvalidValueRequestError)
         )

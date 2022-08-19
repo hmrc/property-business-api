@@ -44,18 +44,18 @@ trait HateoasLinks {
     s"/${appConfig.apiGatewayContext}/uk/$nino/$businessId/period/$taxYear/$submissionId"
 
   private def ukHistoricFhlAnnualUri(appConfig: AppConfig, nino: String, taxYear: String): String =
-    s"/${appConfig.apiGatewayContext}/uk/furnished-holiday-lettings/$nino/$taxYear"
+    s"/${appConfig.apiGatewayContext}/uk/annual/furnished-holiday-lettings/$nino/$taxYear"
 
   private def ukHistoricNonFhlAnnualUri(appConfig: AppConfig, nino: String, taxYear: String): String =
-    s"/${appConfig.apiGatewayContext}/uk/non-furnished-holiday-lettings/$nino/$taxYear"
+    s"/${appConfig.apiGatewayContext}/uk/annual/non-furnished-holiday-lettings/$nino/$taxYear"
 
   private def ukHistoricFhlPiePeriodSummaryUri(appConfig: AppConfig, nino: String, maybePeriodId: Option[String]): String = {
     val periodIdPath = maybePeriodId.map(id => s"/$id").getOrElse("")
-    s"/${appConfig.apiGatewayContext}/uk/furnished-holiday-lettings/$nino$periodIdPath"
+    s"/${appConfig.apiGatewayContext}/uk/period/furnished-holiday-lettings/$nino$periodIdPath"
   }
 
   private def ukHistoricNonFhlPiePeriodSummaryUri(appConfig: AppConfig, nino: String, periodId: String): String =
-    s"/${appConfig.apiGatewayContext}/uk/non-furnished-holiday-lettings/$nino/$periodId"
+    s"/${appConfig.apiGatewayContext}/uk/period/non-furnished-holiday-lettings/$nino/$periodId"
 
   // API resource links
 

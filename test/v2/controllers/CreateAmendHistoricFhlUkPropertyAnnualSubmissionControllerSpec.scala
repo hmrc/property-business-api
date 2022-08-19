@@ -69,13 +69,13 @@ class CreateAmendHistoricFhlUkPropertyAnnualSubmissionControllerSpec
     MockIdGenerator.getCorrelationId.returns(correlationId)
   }
 
-  private val testHateoasLink = Link(href = s"/individuals/business/property/$nino/annual/$taxYear", method = GET, rel = "self")
+  private val testHateoasLink = Link(href = s"/individuals/business/property/annual/$nino/annual/$taxYear", method = GET, rel = "self")
 
   val hateoasResponse: JsValue = Json.parse(s"""
        |{
        |   "links": [
        |      {
-       |         "href": "/individuals/business/property/$nino/annual/$taxYear",
+       |         "href": "/individuals/business/property/annual/$nino/annual/$taxYear",
        |         "method": "GET",
        |         "rel": "self"
        |      }

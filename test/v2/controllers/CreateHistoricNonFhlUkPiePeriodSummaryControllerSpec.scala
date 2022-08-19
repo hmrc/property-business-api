@@ -25,8 +25,7 @@ import v2.mocks.requestParsers.MockCreateHistoricNonFhlUkPiePeriodSummaryRequest
 import v2.mocks.services.{ MockCreateHistoricNonFhlUkPiePeriodSummaryService, MockEnrolmentsAuthService, MockMtdIdLookupService }
 import v2.models.domain.Nino
 import v2.models.errors._
-import v2.models.hateoas.Method.GET
-import v2.models.hateoas.{ HateoasWrapper, Link }
+import v2.models.hateoas.HateoasWrapper
 import v2.models.outcomes.ResponseWrapper
 import v2.models.request.createHistoricNonFhlUkPropertyPeriodSummary.{
   CreateHistoricNonFhlUkPropertyPeriodSummaryRawData,
@@ -83,11 +82,8 @@ class CreateHistoricNonFhlUkPiePeriodSummaryControllerSpec
       |}
       |""".stripMargin)
 
-  private val requestData =
-    CreateHistoricNonFhlUkPropertyPeriodSummaryRequest(nino = Nino(nino), body = requestBody)
-  private val rawData = CreateHistoricNonFhlUkPropertyPeriodSummaryRawData(nino = nino, body = requestBodyJson)
-
-  override val testHateoasLinks = Seq(Link(href = "/some/link", method = GET, rel = "someRel"))
+  private val requestData = CreateHistoricNonFhlUkPropertyPeriodSummaryRequest(nino = Nino(nino), body = requestBody)
+  private val rawData     = CreateHistoricNonFhlUkPropertyPeriodSummaryRawData(nino = nino, body = requestBodyJson)
 
   private val hateoasResponse = Json.parse(
     s"""

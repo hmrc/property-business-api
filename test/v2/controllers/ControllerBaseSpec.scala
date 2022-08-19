@@ -42,8 +42,7 @@ class ControllerBaseSpec extends UnitSpec
 
   def fakeRequestWithBody[T](body: T): FakeRequest[T] = fakeRequest.withBody(body)
 
-  val testHateoasLinks: Seq[Link] =
-    Seq(Link(href = "/some/link", method = GET, rel = "someRel"))
+  val testHateoasLinks: Seq[Link] = Seq(Link(href = "/some/link", method = GET, rel = "someRel"))
 
   val testHateoasLinksJson: JsObject = Json
     .parse(

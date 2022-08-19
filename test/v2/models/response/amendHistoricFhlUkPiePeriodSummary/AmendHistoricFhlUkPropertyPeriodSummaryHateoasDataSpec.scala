@@ -34,9 +34,9 @@ class AmendHistoricFhlUkPropertyPeriodSummaryHateoasDataSpec extends UnitSpec wi
       AmendHistoricFhlUkPropertyPeriodSummaryHateoasData.LinksFactory
         .links(mockAppConfig, AmendHistoricFhlUkPropertyPeriodSummaryHateoasData(nino, periodId)) shouldBe
         Seq(
-          Link(s"/$context/uk/furnished-holiday-lettings/$nino/$periodId", PUT, "amend-uk-property-historic-fhl-period-summary"),
-          Link(s"/$context/uk/furnished-holiday-lettings/$nino/$periodId", GET, "self"),
-          Link(s"/$context/uk/furnished-holiday-lettings/$nino", GET, "list-uk-property-historic-fhl-period-summaries")
+          Link(s"/$context/uk/period/furnished-holiday-lettings/$nino/$periodId", PUT, "amend-uk-property-historic-fhl-period-summary"),
+          Link(s"/$context/uk/period/furnished-holiday-lettings/$nino/$periodId", GET, "self"),
+          Link(s"/$context/uk/period/furnished-holiday-lettings/$nino", GET, "list-uk-property-historic-fhl-period-summaries")
         )
     }
 

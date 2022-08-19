@@ -262,7 +262,7 @@ class CreateHistoricFhlUkPiePeriodSummaryControllerISpec extends V2IntegrationBa
         (UNPROCESSABLE_ENTITY, "NOT_CONTIGUOUS_PERIOD", BAD_REQUEST, RuleNotContiguousPeriodError),
         (UNPROCESSABLE_ENTITY, "INVALID_PERIOD", BAD_REQUEST, RuleToDateBeforeFromDateError),
         (UNPROCESSABLE_ENTITY, "BOTH_EXPENSES_SUPPLIED", BAD_REQUEST, RuleBothExpensesSuppliedError),
-        (UNPROCESSABLE_ENTITY, "TAX_YEAR_NOT_SUPPORTED", BAD_REQUEST, RuleTaxYearNotSupportedError),
+        (UNPROCESSABLE_ENTITY, "TAX_YEAR_NOT_SUPPORTED", BAD_REQUEST, RuleHistoricTaxYearNotSupportedError),
         (INTERNAL_SERVER_ERROR, "SERVER_ERROR", INTERNAL_SERVER_ERROR, InternalError),
         (SERVICE_UNAVAILABLE, "SERVICE_UNAVAILABLE", INTERNAL_SERVER_ERROR, InternalError)
       )

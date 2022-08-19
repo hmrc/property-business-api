@@ -19,12 +19,12 @@ package v2.endpoints
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import play.api.http.HeaderNames.ACCEPT
 import play.api.http.Status._
-import play.api.libs.json.{JsObject, JsValue, Json}
-import play.api.libs.ws.{WSRequest, WSResponse}
+import play.api.libs.json.{ JsObject, JsValue, Json }
+import play.api.libs.ws.{ WSRequest, WSResponse }
 import play.api.test.Helpers.AUTHORIZATION
 import support.V2IntegrationBaseSpec
 import v2.models.errors._
-import v2.stubs.{AuditStub, AuthStub, DownstreamStub, MtdIdLookupStub}
+import v2.stubs.{ AuditStub, AuthStub, DownstreamStub, MtdIdLookupStub }
 
 class AmendUkPropertyPeriodSummaryControllerISpec extends V2IntegrationBaseSpec {
 
@@ -225,48 +225,50 @@ class AmendUkPropertyPeriodSummaryControllerISpec extends V2IntegrationBaseSpec 
   )
 
   val allInvalidValueRequestError: MtdError = ValueFormatError.copy(
-    paths = Some(List(
-      "/ukFhlProperty/income/periodAmount",
-      "/ukFhlProperty/income/taxDeducted",
-      "/ukFhlProperty/income/rentARoom/rentsReceived",
-      "/ukFhlProperty/expenses/premisesRunningCosts",
-      "/ukFhlProperty/expenses/repairsAndMaintenance",
-      "/ukFhlProperty/expenses/financialCosts",
-      "/ukFhlProperty/expenses/professionalFees",
-      "/ukFhlProperty/expenses/costOfServices",
-      "/ukFhlProperty/expenses/other",
-      "/ukFhlProperty/expenses/travelCosts",
-      "/ukFhlProperty/expenses/rentARoom/amountClaimed",
-      "/ukNonFhlProperty/income/premiumsOfLeaseGrant",
-      "/ukNonFhlProperty/income/reversePremiums",
-      "/ukNonFhlProperty/income/periodAmount",
-      "/ukNonFhlProperty/income/taxDeducted",
-      "/ukNonFhlProperty/income/otherIncome",
-      "/ukNonFhlProperty/income/rentARoom/rentsReceived",
-      "/ukNonFhlProperty/expenses/premisesRunningCosts",
-      "/ukNonFhlProperty/expenses/repairsAndMaintenance",
-      "/ukNonFhlProperty/expenses/financialCosts",
-      "/ukNonFhlProperty/expenses/professionalFees",
-      "/ukNonFhlProperty/expenses/costOfServices",
-      "/ukNonFhlProperty/expenses/other",
-      "/ukNonFhlProperty/expenses/residentialFinancialCost",
-      "/ukNonFhlProperty/expenses/travelCosts",
-      "/ukNonFhlProperty/expenses/residentialFinancialCostsCarriedForward",
-      "/ukNonFhlProperty/expenses/rentARoom/amountClaimed"
-    ))
+    paths = Some(
+      List(
+        "/ukFhlProperty/income/periodAmount",
+        "/ukFhlProperty/income/taxDeducted",
+        "/ukFhlProperty/income/rentARoom/rentsReceived",
+        "/ukFhlProperty/expenses/premisesRunningCosts",
+        "/ukFhlProperty/expenses/repairsAndMaintenance",
+        "/ukFhlProperty/expenses/financialCosts",
+        "/ukFhlProperty/expenses/professionalFees",
+        "/ukFhlProperty/expenses/costOfServices",
+        "/ukFhlProperty/expenses/other",
+        "/ukFhlProperty/expenses/travelCosts",
+        "/ukFhlProperty/expenses/rentARoom/amountClaimed",
+        "/ukNonFhlProperty/income/premiumsOfLeaseGrant",
+        "/ukNonFhlProperty/income/reversePremiums",
+        "/ukNonFhlProperty/income/periodAmount",
+        "/ukNonFhlProperty/income/taxDeducted",
+        "/ukNonFhlProperty/income/otherIncome",
+        "/ukNonFhlProperty/income/rentARoom/rentsReceived",
+        "/ukNonFhlProperty/expenses/premisesRunningCosts",
+        "/ukNonFhlProperty/expenses/repairsAndMaintenance",
+        "/ukNonFhlProperty/expenses/financialCosts",
+        "/ukNonFhlProperty/expenses/professionalFees",
+        "/ukNonFhlProperty/expenses/costOfServices",
+        "/ukNonFhlProperty/expenses/other",
+        "/ukNonFhlProperty/expenses/residentialFinancialCost",
+        "/ukNonFhlProperty/expenses/travelCosts",
+        "/ukNonFhlProperty/expenses/residentialFinancialCostsCarriedForward",
+        "/ukNonFhlProperty/expenses/rentARoom/amountClaimed"
+      ))
   )
 
   val RuleBothExpensesSuppliedRequestError: MtdError = RuleBothExpensesSuppliedError.copy(
-    paths = Some(List(
-      "/ukFhlProperty/expenses",
-      "/ukNonFhlProperty/expenses"
-    ))
+    paths = Some(
+      List(
+        "/ukFhlProperty/expenses",
+        "/ukNonFhlProperty/expenses"
+      ))
   )
 
   private trait Test {
-    val nino: String = "AA123456A"
-    val taxYear: String = "2022-23"
-    val businessId: String = "XAIS12345678910"
+    val nino: String         = "AA123456A"
+    val taxYear: String      = "2022-23"
+    val businessId: String   = "XAIS12345678910"
     val submissionId: String = "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
 
     def setupStubs(): StubMapping
@@ -277,9 +279,9 @@ class AmendUkPropertyPeriodSummaryControllerISpec extends V2IntegrationBaseSpec 
 
     def ifsQueryParams: Map[String, String] = Map(
       "taxableEntityId" -> nino,
-      "taxYear" -> taxYear,
-      "incomeSourceId" -> businessId,
-      "submissionId" -> submissionId
+      "taxYear"         -> taxYear,
+      "incomeSourceId"  -> businessId,
+      "submissionId"    -> submissionId
     )
 
     def request(): WSRequest = {
@@ -288,7 +290,7 @@ class AmendUkPropertyPeriodSummaryControllerISpec extends V2IntegrationBaseSpec 
         .withHttpHeaders(
           (ACCEPT, "application/vnd.hmrc.2.0+json"),
           (AUTHORIZATION, "Bearer 123") // some bearer token
-      )
+        )
     }
 
     val responseBody: JsValue = Json.parse(
@@ -336,7 +338,7 @@ class AmendUkPropertyPeriodSummaryControllerISpec extends V2IntegrationBaseSpec 
           DownstreamStub.onSuccess(DownstreamStub.PUT, ifsUri, ifsQueryParams, NO_CONTENT, JsObject.empty)
         }
 
-        val response: WSResponse = await(request().put(requestBodyJsonConsolidatedExpenses))
+        val response: WSResponse = await(request().put(requestBodyJson))
         response.status shouldBe OK
         response.json shouldBe responseBody
         response.header("X-CorrelationId").nonEmpty shouldBe true
@@ -387,9 +389,9 @@ class AmendUkPropertyPeriodSummaryControllerISpec extends V2IntegrationBaseSpec 
                               expectedBody: MtdError): Unit = {
         s"validation fails with ${expectedBody.code} error" in new Test {
 
-          override val nino: String = requestNino
-          override val taxYear: String = requestTaxYear
-          override val businessId: String = requestBusinessId
+          override val nino: String         = requestNino
+          override val taxYear: String      = requestTaxYear
+          override val businessId: String   = requestBusinessId
           override val submissionId: String = requestSubmissionId
 
           override def setupStubs(): StubMapping = {
@@ -406,15 +408,55 @@ class AmendUkPropertyPeriodSummaryControllerISpec extends V2IntegrationBaseSpec 
       val input = Seq(
         ("AA1123A", "2022-23", "XAIS12345678910", "4557ecb5-fd32-48cc-81f5-e6acd1099f3c", requestBodyJson, BAD_REQUEST, NinoFormatError),
         ("AA123456A", "20223", "XAIS12345678910", "4557ecb5-fd32-48cc-81f5-e6acd1099f3c", requestBodyJson, BAD_REQUEST, TaxYearFormatError),
-        ("AA123456A", "2022-23", "XAIS1234dfxgchjbn5678910", "4557ecb5-fd32-48cc-81f5-e6acd1099f3c", requestBodyJson, BAD_REQUEST, BusinessIdFormatError),
-        ("AA123456A", "2022-23", "XAIS12345678910", "4557ecb5-fd32-awefwaef48cc-81f5-e6acd1099f3c", requestBodyJson, BAD_REQUEST, SubmissionIdFormatError),
-        ("AA123456A", "2021-23", "XAIS12345678910", "4557ecb5-fd32-48cc-81f5-e6acd1099f3c", requestBodyJson, BAD_REQUEST, RuleTaxYearRangeInvalidError),
-        ("AA123456A", "2021-22", "XAIS12345678910", "4557ecb5-fd32-48cc-81f5-e6acd1099f3c", requestBodyJson, BAD_REQUEST, RuleTaxYearNotSupportedError),
-        ("AA123456A", "2022-23", "XAIS12345678910", "4557ecb5-fd32-48cc-81f5-e6acd1099f3c", Json.parse(s"""{"ukFhlProperty": {}}""".stripMargin), BAD_REQUEST,
-          RuleIncorrectOrEmptyBodyError.copy(paths = Some(Seq("/ukFhlProperty")))),
-        ("AA123456A", "2022-23", "XAIS12345678910", "4557ecb5-fd32-48cc-81f5-e6acd1099f3c", invalidValueRequestJson, BAD_REQUEST, allInvalidValueRequestError),
-        ("AA123456A", "2022-23", "XAIS12345678910", "4557ecb5-fd32-48cc-81f5-e6acd1099f3c",
-          bothExpensesSuppliedRequestJson, BAD_REQUEST, RuleBothExpensesSuppliedRequestError)
+        ("AA123456A",
+         "2022-23",
+         "XAIS1234dfxgchjbn5678910",
+         "4557ecb5-fd32-48cc-81f5-e6acd1099f3c",
+         requestBodyJson,
+         BAD_REQUEST,
+         BusinessIdFormatError),
+        ("AA123456A",
+         "2022-23",
+         "XAIS12345678910",
+         "4557ecb5-fd32-awefwaef48cc-81f5-e6acd1099f3c",
+         requestBodyJson,
+         BAD_REQUEST,
+         SubmissionIdFormatError),
+        ("AA123456A",
+         "2021-23",
+         "XAIS12345678910",
+         "4557ecb5-fd32-48cc-81f5-e6acd1099f3c",
+         requestBodyJson,
+         BAD_REQUEST,
+         RuleTaxYearRangeInvalidError),
+        ("AA123456A",
+         "2021-22",
+         "XAIS12345678910",
+         "4557ecb5-fd32-48cc-81f5-e6acd1099f3c",
+         requestBodyJson,
+         BAD_REQUEST,
+         RuleTaxYearNotSupportedError),
+        ("AA123456A",
+         "2022-23",
+         "XAIS12345678910",
+         "4557ecb5-fd32-48cc-81f5-e6acd1099f3c",
+         Json.parse(s"""{"ukFhlProperty": {}}""".stripMargin),
+         BAD_REQUEST,
+         RuleIncorrectOrEmptyBodyError.copy(paths = Some(Seq("/ukFhlProperty")))),
+        ("AA123456A",
+         "2022-23",
+         "XAIS12345678910",
+         "4557ecb5-fd32-48cc-81f5-e6acd1099f3c",
+         invalidValueRequestJson,
+         BAD_REQUEST,
+         allInvalidValueRequestError),
+        ("AA123456A",
+         "2022-23",
+         "XAIS12345678910",
+         "4557ecb5-fd32-48cc-81f5-e6acd1099f3c",
+         bothExpensesSuppliedRequestJson,
+         BAD_REQUEST,
+         RuleBothExpensesSuppliedRequestError)
       )
       input.foreach(args => (validationErrorTest _).tupled(args))
     }

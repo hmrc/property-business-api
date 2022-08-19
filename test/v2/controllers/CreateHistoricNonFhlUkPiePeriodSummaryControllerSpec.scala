@@ -16,20 +16,27 @@
 
 package v2.controllers
 
-import play.api.libs.json.{ JsValue, Json}
+import play.api.libs.json.{ JsValue, Json }
 import play.api.mvc.Result
 import uk.gov.hmrc.http.HeaderCarrier
 import v2.mocks.MockIdGenerator
 import v2.mocks.hateoas.MockHateoasFactory
 import v2.mocks.requestParsers.MockCreateHistoricNonFhlUkPiePeriodSummaryRequestParser
-import v2.mocks.services.{MockCreateHistoricNonFhlUkPiePeriodSummaryService, MockEnrolmentsAuthService, MockMtdIdLookupService}
+import v2.mocks.services.{ MockCreateHistoricNonFhlUkPiePeriodSummaryService, MockEnrolmentsAuthService, MockMtdIdLookupService }
 import v2.models.domain.Nino
 import v2.models.errors._
 import v2.models.hateoas.Method.GET
-import v2.models.hateoas.{HateoasWrapper, Link}
+import v2.models.hateoas.{ HateoasWrapper, Link }
 import v2.models.outcomes.ResponseWrapper
-import v2.models.request.createHistoricNonFhlUkPropertyPeriodSummary.{CreateHistoricNonFhlUkPropertyPeriodSummaryRawData, CreateHistoricNonFhlUkPropertyPeriodSummaryRequest, CreateHistoricNonFhlUkPropertyPeriodSummaryRequestBody}
-import v2.models.response.createHistoricNonFhlUkPiePeriodSummary.{CreateHistoricNonFhlUkPiePeriodSummaryHateoasData, CreateHistoricNonFhlUkPiePeriodSummaryResponse}
+import v2.models.request.createHistoricNonFhlUkPropertyPeriodSummary.{
+  CreateHistoricNonFhlUkPropertyPeriodSummaryRawData,
+  CreateHistoricNonFhlUkPropertyPeriodSummaryRequest,
+  CreateHistoricNonFhlUkPropertyPeriodSummaryRequestBody
+}
+import v2.models.response.createHistoricNonFhlUkPiePeriodSummary.{
+  CreateHistoricNonFhlUkPiePeriodSummaryHateoasData,
+  CreateHistoricNonFhlUkPiePeriodSummaryResponse
+}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -47,7 +54,6 @@ class CreateHistoricNonFhlUkPiePeriodSummaryControllerSpec
   private val periodId      = "2019-03-11_2020-04-23"
   private val transactionId = "0000000000000001"
   private val correlationId = "a1e8057e-fbbc-47a8-a8b4-78d9f015c253"
-
 
   trait Test {
     val hc: HeaderCarrier = HeaderCarrier()
@@ -71,19 +77,17 @@ class CreateHistoricNonFhlUkPiePeriodSummaryControllerSpec
   private val requestBody =
     CreateHistoricNonFhlUkPropertyPeriodSummaryRequestBody(fromDate = "2019-03-11", toDate = "2020-04-23", None, None)
 
-  private val requestBodyJson : JsValue = Json.parse("""{
+  private val requestBodyJson: JsValue = Json.parse("""{
       | "fromDate":"2019-03-11",
       | "toDate":"2020-04-23"
       |}
       |""".stripMargin)
 
-
   private val requestData =
     CreateHistoricNonFhlUkPropertyPeriodSummaryRequest(nino = Nino(nino), body = requestBody)
   private val rawData = CreateHistoricNonFhlUkPropertyPeriodSummaryRawData(nino = nino, body = requestBodyJson)
 
-  private val testHateoasLinks =
-    Seq(Link(href = "/some/link", method = GET, rel = "someRel"))
+  override val testHateoasLinks = Seq(Link(href = "/some/link", method = GET, rel = "someRel"))
 
   private val hateoasResponse = Json.parse(
     s"""

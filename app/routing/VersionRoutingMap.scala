@@ -17,8 +17,8 @@
 package routing
 
 import com.google.inject.ImplementedBy
-import config.{AppConfig, FeatureSwitch}
-import definition.Versions.{VERSION_1, VERSION_2}
+import config.{ AppConfig, FeatureSwitch }
+import definition.Versions.{ VERSION_1, VERSION_2 }
 import play.api.Logging
 import play.api.routing.Router
 

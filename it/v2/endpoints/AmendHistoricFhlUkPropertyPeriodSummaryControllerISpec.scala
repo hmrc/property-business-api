@@ -98,17 +98,17 @@ class AmendHistoricFhlUkPropertyPeriodSummaryControllerISpec extends V2Integrati
          |{
          |  "links": [
          |    {
-         |      "href":"/individuals/business/property/uk/furnished-holiday-lettings/$nino/$periodId",
+         |      "href":"/individuals/business/property/uk/period/furnished-holiday-lettings/$nino/$periodId",
          |      "method":"PUT",
          |      "rel":"amend-uk-property-historic-fhl-period-summary"
          |    },
          |    {
-         |      "href":"/individuals/business/property/uk/furnished-holiday-lettings/$nino/$periodId",
+         |      "href":"/individuals/business/property/uk/period/furnished-holiday-lettings/$nino/$periodId",
          |      "method":"GET",
          |      "rel":"self"
          |    },
          |    {
-         |      "href":"/individuals/business/property/uk/furnished-holiday-lettings/$nino",
+         |      "href":"/individuals/business/property/uk/period/furnished-holiday-lettings/$nino",
          |      "method":"GET",
          |      "rel":"list-uk-property-historic-fhl-period-summaries"
          |    }

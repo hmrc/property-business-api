@@ -19,20 +19,20 @@ package v2.endpoints
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import play.api.http.HeaderNames.ACCEPT
 import play.api.http.Status._
-import play.api.libs.json.{JsValue, Json}
-import play.api.libs.ws.{WSRequest, WSResponse}
+import play.api.libs.json.{ JsValue, Json }
+import play.api.libs.ws.{ WSRequest, WSResponse }
 import play.api.test.Helpers.AUTHORIZATION
 import support.V2IntegrationBaseSpec
 import v1.stubs.AuditStub
 import v2.models.errors._
-import v2.stubs.{AuthStub, DownstreamStub, MtdIdLookupStub}
+import v2.stubs.{ AuthStub, DownstreamStub, MtdIdLookupStub }
 
 class CreateAmendHistoricFhlUkPropertyAnnualSubmissionControllerISpec extends V2IntegrationBaseSpec {
 
   private trait Test {
 
-    val nino: String = "TC663795B"
-    val taxYear: String = "2020-21"
+    val nino: String          = "TC663795B"
+    val taxYear: String       = "2020-21"
     val correlationId: String = "X-123"
 
     val requestBodyJson: JsValue = Json.parse(
@@ -64,17 +64,17 @@ class CreateAmendHistoricFhlUkPropertyAnnualSubmissionControllerISpec extends V2
          |{
          |    "links": [
          |        {
-         |            "href": "/individuals/business/property/uk/furnished-holiday-lettings/TC663795B/2020-21",
+         |            "href": "/individuals/business/property/uk/annual/furnished-holiday-lettings/TC663795B/2020-21",
          |            "method": "GET",
          |            "rel": "self"
          |        },
          |        {
-         |            "href": "/individuals/business/property/uk/furnished-holiday-lettings/TC663795B/2020-21",
+         |            "href": "/individuals/business/property/uk/annual/furnished-holiday-lettings/TC663795B/2020-21",
          |            "method": "PUT",
          |            "rel": "create-and-amend-historic-fhl-uk-property-annual-submission"
          |        },
          |        {
-         |            "href": "/individuals/business/property/uk/furnished-holiday-lettings/TC663795B/2020-21",
+         |            "href": "/individuals/business/property/uk/annual/furnished-holiday-lettings/TC663795B/2020-21",
          |            "method": "DELETE",
          |            "rel": "delete-historic-fhl-uk-property-annual-submission"
          |        }
@@ -85,12 +85,11 @@ class CreateAmendHistoricFhlUkPropertyAnnualSubmissionControllerISpec extends V2
 
     def setupStubs(): StubMapping
 
-    def uri: String = s"/uk/furnished-holiday-lettings/$nino/$taxYear"
+    def uri: String = s"/uk/annual/furnished-holiday-lettings/$nino/$taxYear"
 
     def desUri: String = s"/income-tax/nino/$nino/uk-properties/furnished-holiday-lettings/annual-summaries/2021"
 
-    val desResponse: JsValue = Json.parse(
-      """
+    val desResponse: JsValue = Json.parse("""
         |{
         |   "transactionReference": "0000000000000001"
         |}
@@ -140,8 +139,7 @@ class CreateAmendHistoricFhlUkPropertyAnnualSubmissionControllerISpec extends V2
           MtdIdLookupStub.ninoFound(nino)
         }
 
-        val invalidFieldsRequestBodyJson: JsValue = Json.parse(
-          """
+        val invalidFieldsRequestBodyJson: JsValue = Json.parse("""
             |{
             |   "annualAdjustments": {
             |      "lossBroughtForward": 99999999999999999.00,
@@ -164,14 +162,15 @@ class CreateAmendHistoricFhlUkPropertyAnnualSubmissionControllerISpec extends V2
             |""".stripMargin)
 
         val invalidFieldsRequestError: MtdError = ValueFormatError.copy(
-            paths = Some(List(
+          paths = Some(
+            List(
               "/annualAdjustments/lossBroughtForward",
               "/annualAdjustments/privateUseAdjustment",
               "/annualAdjustments/balancingCharge",
               "/annualAllowances/annualInvestmentAllowance",
               "/annualAllowances/propertyIncomeAllowance"
             ))
-          )
+        )
 
         val wrappedErrors: ErrorWrapper = ErrorWrapper(
           correlationId = correlationId,
@@ -217,8 +216,8 @@ class CreateAmendHistoricFhlUkPropertyAnnualSubmissionControllerISpec extends V2
                               expectedBody: MtdError): Unit = {
         s"validation fails with ${expectedBody.code} error" in new Test {
 
-          override val nino: String = requestNino
-          override val taxYear: String = requestTaxYear
+          override val nino: String             = requestNino
+          override val taxYear: String          = requestTaxYear
           override val requestBodyJson: JsValue = requestBody
 
           override def setupStubs(): StubMapping = {

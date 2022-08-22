@@ -57,17 +57,17 @@ class RetrieveHistoricNonFhlUkPropertyAnnualSubmissionControllerISpec extends V2
          |   },
          |   "links": [
          |      {
-         |         "href": "/individuals/business/property/uk/non-furnished-holiday-lettings/AA123456A/2020-21",
+         |         "href": "/individuals/business/property/uk/annual/non-furnished-holiday-lettings/AA123456A/2020-21",
          |         "method": "PUT",
          |         "rel": "create-and-amend-uk-property-historic-non-fhl-annual-submission"
          |      },
          |      {
-         |         "href": "/individuals/business/property/uk/non-furnished-holiday-lettings/AA123456A/2020-21",
+         |         "href": "/individuals/business/property/uk/annual/non-furnished-holiday-lettings/AA123456A/2020-21",
          |         "method": "GET",
          |         "rel": "self"
          |      },
          |      {
-         |         "href": "/individuals/business/property/uk/non-furnished-holiday-lettings/AA123456A/2020-21",
+         |         "href": "/individuals/business/property/uk/annual/non-furnished-holiday-lettings/AA123456A/2020-21",
          |         "method": "DELETE",
          |         "rel": "delete-uk-property-historic-non-fhl-annual-submission"
          |      }
@@ -81,17 +81,17 @@ class RetrieveHistoricNonFhlUkPropertyAnnualSubmissionControllerISpec extends V2
          |{
          |   "links": [
          |      {
-         |         "href": "/individuals/business/property/uk/non-furnished-holiday-lettings/AA123456A/2020-21",
+         |         "href": "/individuals/business/property/uk/annual/non-furnished-holiday-lettings/AA123456A/2020-21",
          |         "method": "PUT",
          |         "rel": "create-and-amend-uk-property-historic-non-fhl-annual-submission"
          |      },
          |      {
-         |         "href": "/individuals/business/property/uk/non-furnished-holiday-lettings/AA123456A/2020-21",
+         |         "href": "/individuals/business/property/uk/annual/non-furnished-holiday-lettings/AA123456A/2020-21",
          |         "method": "GET",
          |         "rel": "self"
          |      },
          |      {
-         |         "href": "/individuals/business/property/uk/non-furnished-holiday-lettings/AA123456A/2020-21",
+         |         "href": "/individuals/business/property/uk/annual/non-furnished-holiday-lettings/AA123456A/2020-21",
          |         "method": "DELETE",
          |         "rel": "delete-uk-property-historic-non-fhl-annual-submission"
          |      }
@@ -127,7 +127,7 @@ class RetrieveHistoricNonFhlUkPropertyAnnualSubmissionControllerISpec extends V2
 
     def setupStubs(): StubMapping
 
-    def uri: String = s"/uk/non-furnished-holiday-lettings/$nino/$mtdTaxYear"
+    def uri: String = s"/uk/annual/non-furnished-holiday-lettings/$nino/$mtdTaxYear"
 
     def downstreamUri: String = s"/income-tax/nino/$nino/uk-properties/other/annual-summaries/$downstreamTaxYear"
 

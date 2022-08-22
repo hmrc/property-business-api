@@ -96,7 +96,7 @@ class RetrieveHistoricFhlUkPropertyAnnualSubmissionControllerSpec
   )
 
   private val mockHateoasLink =
-    Link(href = s"individuals/business/property/uk/furnished-holiday-lettings/$nino/$mtdTaxYear", method = GET, rel = "self")
+    Link(href = s"individuals/business/property/uk/annual/furnished-holiday-lettings/$nino/$mtdTaxYear", method = GET, rel = "self")
 
   val responseBody: RetrieveHistoricFhlUkPropertyAnnualSubmissionResponse = RetrieveHistoricFhlUkPropertyAnnualSubmissionResponse(
     Some(annualAdjustments),

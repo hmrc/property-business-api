@@ -171,8 +171,8 @@ class CreateHistoricNonFhlUkPropertyPeriodSummaryValidatorSpec extends UnitSpec 
       }
 
       "given only a fromDate and toDate" in {
-        validator.validate(CreateHistoricNonFhlUkPropertyPeriodSummaryRawData(validNino, requestBodyWithNoSubObjects)) should
-          contain only RuleIncorrectOrEmptyBodyError
+        val result = validator.validate(CreateHistoricNonFhlUkPropertyPeriodSummaryRawData(validNino, requestBodyWithNoSubObjects))
+        result should contain only RuleIncorrectOrEmptyBodyError
       }
     }
 
@@ -180,7 +180,6 @@ class CreateHistoricNonFhlUkPropertyPeriodSummaryValidatorSpec extends UnitSpec 
       "given data with multiple invalid numeric amounts" in {
         val expected =
           ValueFormatError.copy(paths = Some(List("/income/periodAmount", "/income/premiumsOfLeaseGrant", "/expenses/consolidatedExpenses")))
-
         val result =
           validator.validate(CreateHistoricNonFhlUkPropertyPeriodSummaryRawData(validNino, requestBodyWithInvalidAmounts))
 

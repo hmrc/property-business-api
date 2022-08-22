@@ -16,20 +16,17 @@
 
 package v2.controllers.requestParsers.validators
 
-import mocks.MockAppConfig
-import play.api.libs.json.{ JsObject, JsValue, Json }
+import play.api.libs.json.{ JsObject, JsString, JsValue, Json }
 import support.UnitSpec
 import v2.models.errors._
 import v2.models.request.createHistoricFhlUkPiePeriodSummary.CreateHistoricFhlUkPiePeriodSummaryRawData
+import v2.models.utils.JsonErrorValidators
 
-class CreateHistoricFhlUkPiePeriodSummaryValidatorSpec extends UnitSpec with MockAppConfig {
+class CreateHistoricFhlUkPiePeriodSummaryValidatorSpec extends UnitSpec with JsonErrorValidators {
 
   private val validNino = "AA123456A"
 
-  MockAppConfig.minimumTaxHistoric returns 2017
-  MockAppConfig.maximumTaxHistoric returns 2021
-
-  val validator = new CreateHistoricFhlUkPiePeriodSummaryValidator(mockAppConfig)
+  val validator = new CreateHistoricFhlUkPiePeriodSummaryValidator
 
   private val validRequestBody: JsValue = Json.parse(
     """
@@ -59,7 +56,7 @@ class CreateHistoricFhlUkPiePeriodSummaryValidatorSpec extends UnitSpec with Moc
       |""".stripMargin
   )
 
-  val validRequestBodyConsolidated: JsValue = Json.parse(
+  private val validRequestBodyConsolidated: JsValue = Json.parse(
     """
       |{
       |  "fromDate": "2017-04-06",
@@ -78,7 +75,7 @@ class CreateHistoricFhlUkPiePeriodSummaryValidatorSpec extends UnitSpec with Moc
     """.stripMargin
   )
 
-  val incompleteRequestBody: JsValue = Json.parse(
+  private val incompleteRequestBody: JsValue = Json.parse(
     """
       |{
       |  "fromDate-MISSING": "2017-04-06",
@@ -97,7 +94,7 @@ class CreateHistoricFhlUkPiePeriodSummaryValidatorSpec extends UnitSpec with Moc
       """.stripMargin
   )
 
-  val requestBodyWithInvalidAmounts: JsValue = Json.parse(
+  private val requestBodyWithInvalidAmounts: JsValue = Json.parse(
     """
       |{
       |  "fromDate": "2017-04-06",
@@ -116,47 +113,11 @@ class CreateHistoricFhlUkPiePeriodSummaryValidatorSpec extends UnitSpec with Moc
     """.stripMargin
   )
 
-  val requestBodyWithNoSubObjects: JsValue = Json.parse(
+  private val requestBodyWithNoSubObjects: JsValue = Json.parse(
     """
       |{
       |  "fromDate": "2017-04-06",
       |  "toDate": "2017-07-05"
-      |}
-    """.stripMargin
-  )
-
-  val requestBodyWithInvalidFromDateFormat: JsValue = Json.parse(
-    """
-      |{
-      |  "fromDate": "2017-B7-06",
-      |  "toDate": "2017-07-05"
-      |}
-    """.stripMargin
-  )
-
-  val requestBodyWithInvalidToDateFormat: JsValue = Json.parse(
-    """
-      |{
-      |  "fromDate": "2017-04-06",
-      |  "toDate": "2017-07-500"
-      |}
-    """.stripMargin
-  )
-
-  val requestBodyWithInvalidFromDateYear: JsValue = Json.parse(
-    """
-      |{
-      |  "fromDate": "2016-04-06",
-      |  "toDate": "2017-07-05"
-      |}
-    """.stripMargin
-  )
-
-  val requestBodyWithInvalidToDateYear: JsValue = Json.parse(
-    """
-      |{
-      |  "fromDate": "2017-04-06",
-      |  "toDate": "2024-07-05"
       |}
     """.stripMargin
   )
@@ -168,15 +129,8 @@ class CreateHistoricFhlUkPiePeriodSummaryValidatorSpec extends UnitSpec with Moc
         result shouldBe empty
       }
 
-      "given a valid request object that contains expenses in consolidated format" in {
+      "given a valid request object with consolidated expenses" in {
         val result = validator.validate(CreateHistoricFhlUkPiePeriodSummaryRawData(validNino, validRequestBodyConsolidated))
-        result shouldBe empty
-      }
-
-      "given only a fromDate and toDate" in {
-        val result =
-          validator.validate(CreateHistoricFhlUkPiePeriodSummaryRawData(validNino, requestBodyWithNoSubObjects))
-
         result shouldBe empty
       }
     }
@@ -187,6 +141,11 @@ class CreateHistoricFhlUkPiePeriodSummaryValidatorSpec extends UnitSpec with Moc
         val result   = validator.validate(CreateHistoricFhlUkPiePeriodSummaryRawData(validNino, incompleteRequestBody))
 
         result should contain only expected
+      }
+
+      "given only a fromDate and toDate" in {
+        validator.validate(CreateHistoricFhlUkPiePeriodSummaryRawData(validNino, requestBodyWithNoSubObjects)) should
+          contain only RuleIncorrectOrEmptyBodyError
       }
     }
 
@@ -211,29 +170,24 @@ class CreateHistoricFhlUkPiePeriodSummaryValidatorSpec extends UnitSpec with Moc
 
     "return FromDateFormatError error" when {
       "given an invalid fromDate" in {
-        val result = validator.validate(CreateHistoricFhlUkPiePeriodSummaryRawData(validNino, requestBodyWithInvalidFromDateFormat))
+        val result =
+          validator.validate(CreateHistoricFhlUkPiePeriodSummaryRawData(validNino, validRequestBody.update("fromDate", JsString("BAD_DATE"))))
         result should contain only FromDateFormatError
       }
     }
 
     "return ToDateFormatError error" when {
       "given an invalid toDate" in {
-        val result = validator.validate(CreateHistoricFhlUkPiePeriodSummaryRawData(validNino, requestBodyWithInvalidToDateFormat))
+        val result =
+          validator.validate(CreateHistoricFhlUkPiePeriodSummaryRawData(validNino, validRequestBody.update("toDate", JsString("BAD_DATE"))))
         result should contain only ToDateFormatError
       }
     }
 
-    "return RuleHistoricTaxYearNotSupportedError error" when {
-      "given an invalid fromDate" in {
-        val result = validator.validate(CreateHistoricFhlUkPiePeriodSummaryRawData(validNino, requestBodyWithInvalidFromDateYear))
-        result should contain only RuleHistoricTaxYearNotSupportedError
-      }
-    }
-
-    "return RuleHistoricTaxYearNotSupportedError error" when {
-      "given an invalid toDate" in {
-        val result = validator.validate(CreateHistoricFhlUkPiePeriodSummaryRawData(validNino, requestBodyWithInvalidToDateYear))
-        result should contain only RuleHistoricTaxYearNotSupportedError
+    "return RuleToDateBeforeFromDateError error" when {
+      "given an toDate is before the fromDate" in {
+        validator.validate(CreateHistoricFhlUkPiePeriodSummaryRawData(validNino, validRequestBody.update("fromDate", JsString("2099-01-01")))) should
+          contain only RuleToDateBeforeFromDateError
       }
     }
 

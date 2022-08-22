@@ -16,6 +16,8 @@
 
 package v2.models.domain
 
+import play.api.libs.json.{ JsString, Writes }
+
 case class PeriodId(value: String) {
 
   val (from, to): (String, String) = {
@@ -31,6 +33,7 @@ case class PeriodId(value: String) {
 }
 
 object PeriodId {
+  implicit val writes: Writes[PeriodId] = Writes(x => JsString(x.value))
 
   def apply(from: String, to: String): PeriodId = {
     PeriodId(s"${from}_$to")

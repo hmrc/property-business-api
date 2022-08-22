@@ -17,32 +17,27 @@
 package v2.models.response.createHistoricNonFhlUkPiePeriodSummary
 
 import config.AppConfig
-import play.api.libs.json.{ JsObject, Json, OWrites, Reads }
+import play.api.libs.json.{ Json, OWrites }
 import v2.hateoas.{ HateoasLinks, HateoasLinksFactory }
+import v2.models.domain.PeriodId
 import v2.models.hateoas.{ HateoasData, Link }
 
-case class CreateHistoricNonFhlUkPiePeriodSummaryResponse(transactionReference: String, periodId: Option[String])
+case class CreateHistoricNonFhlUkPiePeriodSummaryResponse(periodId: PeriodId)
 
 object CreateHistoricNonFhlUkPiePeriodSummaryResponse extends HateoasLinks {
 
-  implicit val writes: OWrites[CreateHistoricNonFhlUkPiePeriodSummaryResponse] = OWrites { response =>
-    response.periodId
-      .map(periodId => Json.obj("periodId" -> periodId))
-      .getOrElse(JsObject.empty)
-  }
-
-  implicit val reads: Reads[CreateHistoricNonFhlUkPiePeriodSummaryResponse] = Json.reads[CreateHistoricNonFhlUkPiePeriodSummaryResponse]
+  implicit val writes: OWrites[CreateHistoricNonFhlUkPiePeriodSummaryResponse] = Json.writes
 
   implicit object LinksFactory
       extends HateoasLinksFactory[CreateHistoricNonFhlUkPiePeriodSummaryResponse, CreateHistoricNonFhlUkPiePeriodSummaryHateoasData] {
     override def links(appConfig: AppConfig, data: CreateHistoricNonFhlUkPiePeriodSummaryHateoasData): Seq[Link] = {
       import data._
       Seq(
-        retrieveHistoricNonFhlUkPiePeriodSummary(appConfig: AppConfig, nino: String, periodId: String),
-        amendHistoricNonFhlUkPiePeriodSummary(appConfig: AppConfig, nino: String, periodId: String)
+        retrieveHistoricNonFhlUkPiePeriodSummary(appConfig, nino, periodId.value),
+        amendHistoricNonFhlUkPiePeriodSummary(appConfig, nino, periodId.value)
       )
     }
   }
 }
 
-case class CreateHistoricNonFhlUkPiePeriodSummaryHateoasData(nino: String, periodId: String, transactionId: String) extends HateoasData
+case class CreateHistoricNonFhlUkPiePeriodSummaryHateoasData(nino: String, periodId: PeriodId) extends HateoasData

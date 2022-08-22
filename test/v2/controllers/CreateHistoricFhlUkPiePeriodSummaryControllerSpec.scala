@@ -23,9 +23,9 @@ import v2.mocks.MockIdGenerator
 import v2.mocks.hateoas.MockHateoasFactory
 import v2.mocks.requestParsers.MockCreateHistoricFhlUkPiePeriodSummaryRequestParser
 import v2.mocks.services.{ MockCreateHistoricFhlUkPiePeriodSummaryService, MockEnrolmentsAuthService, MockMtdIdLookupService }
-import v2.models.domain.Nino
-import v2.models.hateoas.{ HateoasWrapper, Link }
+import v2.models.domain.{ Nino, PeriodId }
 import v2.models.hateoas.Method.GET
+import v2.models.hateoas.{ HateoasWrapper, Link }
 import v2.models.outcomes.ResponseWrapper
 import v2.models.request.createHistoricFhlUkPiePeriodSummary.{
   CreateHistoricFhlUkPiePeriodSummaryRawData,
@@ -49,10 +49,9 @@ class CreateHistoricFhlUkPiePeriodSummaryControllerSpec
     with MockHateoasFactory
     with MockIdGenerator {
 
-  private val nino: String                 = "AA123456A"
-  private val correlationId: String        = "a1e8057e-fbbc-47a8-a8b4-78d9f015c253"
-  private val transactionReference: String = "transaction-reference"
-  private val periodId: String             = "2021-01-01_2021-01-02"
+  private val nino: String          = "AA123456A"
+  private val correlationId: String = "a1e8057e-fbbc-47a8-a8b4-78d9f015c253"
+  private val periodId              = "2021-01-01_2021-01-02"
 
   trait Test {
     val hc: HeaderCarrier = HeaderCarrier()
@@ -96,7 +95,7 @@ class CreateHistoricFhlUkPiePeriodSummaryControllerSpec
          |}
          |""".stripMargin)
 
-    private val response: CreateHistoricFhlUkPiePeriodSummaryResponse = CreateHistoricFhlUkPiePeriodSummaryResponse(transactionReference, None)
+    private val response: CreateHistoricFhlUkPiePeriodSummaryResponse = CreateHistoricFhlUkPiePeriodSummaryResponse(PeriodId(periodId))
 
     "Create" should {
       "return a successful response " when {
@@ -112,7 +111,7 @@ class CreateHistoricFhlUkPiePeriodSummaryControllerSpec
             )
 
           MockHateoasFactory
-            .wrap(response, CreateHistoricFhlUkPiePeriodSummaryHateoasData(nino, periodId, transactionReference))
+            .wrap(response, CreateHistoricFhlUkPiePeriodSummaryHateoasData(nino, PeriodId(periodId)))
             .returns(HateoasWrapper(response, hateoasLinks))
 
           val result: Future[Result] = controller.handleRequest(nino)(fakeRequestWithBody(requestBodyJson))

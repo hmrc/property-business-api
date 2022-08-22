@@ -16,6 +16,7 @@
 
 package v2.models.domain
 
+import play.api.libs.json.{ JsString, Json }
 import support.UnitSpec
 
 class PeriodIdSpec extends UnitSpec {
@@ -39,6 +40,13 @@ class PeriodIdSpec extends UnitSpec {
       "create a valid PeriodId" in {
         val result = PeriodId(from = "2017-04-06", to = "2017-07-04")
         result.value shouldBe "2017-04-06_2017-07-04"
+      }
+    }
+
+    "serialized to JSON" must {
+      "serialize the embedded value as a string" in {
+        val value = "2017-04-06_2017-07-04"
+        Json.toJson(PeriodId(value)) shouldBe JsString(value)
       }
     }
   }

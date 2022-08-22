@@ -23,6 +23,7 @@ import uk.gov.hmrc.http.HeaderCarrier
 import utils.Logging
 import v2.connectors.CreateHistoricNonFhlUkPropertyPeriodSummaryConnector
 import v2.controllers.EndpointLogContext
+import v2.models.domain.PeriodId
 import v2.models.errors._
 import v2.models.outcomes.ResponseWrapper
 import v2.models.request.createHistoricNonFhlUkPropertyPeriodSummary.CreateHistoricNonFhlUkPropertyPeriodSummaryRequest
@@ -40,16 +41,13 @@ class CreateHistoricNonFhlUkPropertyPeriodSummaryService @Inject()(connector: Cr
       logContext: EndpointLogContext,
       correlationId: String): Future[ServiceOutcome[CreateHistoricNonFhlUkPiePeriodSummaryResponse]] = {
 
-    def withPeriodId(
-        wrapper: ResponseWrapper[CreateHistoricNonFhlUkPiePeriodSummaryResponse]): ResponseWrapper[CreateHistoricNonFhlUkPiePeriodSummaryResponse] = {
-
-      val periodId = s"${request.body.fromDate}_${request.body.toDate}"
-      wrapper.copy(responseData = wrapper.responseData.copy(periodId = Some(periodId)))
-    }
+    def toResponse(wrapper: ResponseWrapper[Unit]): ResponseWrapper[CreateHistoricNonFhlUkPiePeriodSummaryResponse] =
+      wrapper
+        .map(_ => CreateHistoricNonFhlUkPiePeriodSummaryResponse(PeriodId(request.body.fromDate, request.body.toDate)))
 
     val result = for {
       ifsResponseWrapper <- EitherT(connector.createPeriodSummary(request))
-        .map(withPeriodId)
+        .map(toResponse)
         .leftMap(mapDownstreamErrors(ifsErrorMap))
     } yield ifsResponseWrapper
 

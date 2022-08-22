@@ -21,18 +21,16 @@ import uk.gov.hmrc.http.HeaderCarrier
 import v2.mocks.MockHttpClient
 import v2.models.domain.Nino
 import v2.models.outcomes.ResponseWrapper
-import v2.models.request.common.ukPropertyRentARoom.{ UkPropertyExpensesRentARoom, UkPropertyIncomeRentARoom }
+import v2.models.request.common.ukPropertyRentARoom.{UkPropertyExpensesRentARoom, UkPropertyIncomeRentARoom}
 import v2.models.request.createHistoricNonFhlUkPropertyPeriodSummary._
-import v2.models.response.createHistoricNonFhlUkPiePeriodSummary.CreateHistoricNonFhlUkPiePeriodSummaryResponse
 
 import scala.concurrent.Future
 
 class CreateHistoricNonFhlUkPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
 
-  val transactionReference: String = "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
-  val nino: String                 = "TC663795B"
-  val fromDate                     = "2021-01-06"
-  val toDate                       = "2021-02-06"
+  val nino: String = "TC663795B"
+  val fromDate     = "2021-01-06"
+  val toDate       = "2021-02-06"
 
   val income: UkNonFhlPropertyIncome =
     UkNonFhlPropertyIncome(Some(2355.45), Some(454.56), Some(123.45), Some(234.53), Some(567.89), Some(UkPropertyIncomeRentARoom(Some(567.56))))
@@ -82,8 +80,6 @@ class CreateHistoricNonFhlUkPropertyPeriodSummaryConnectorSpec extends Connector
   val consolidatedRequestData: CreateHistoricNonFhlUkPropertyPeriodSummaryRequest =
     CreateHistoricNonFhlUkPropertyPeriodSummaryRequest(Nino(nino), consolidatedRequestBody)
 
-  val responseData: CreateHistoricNonFhlUkPiePeriodSummaryResponse = CreateHistoricNonFhlUkPiePeriodSummaryResponse(transactionReference, None)
-
   class Test extends MockHttpClient with MockAppConfig {
 
     val connector: CreateHistoricNonFhlUkPropertyPeriodSummaryConnector = new CreateHistoricNonFhlUkPropertyPeriodSummaryConnector(
@@ -100,7 +96,7 @@ class CreateHistoricNonFhlUkPropertyPeriodSummaryConnectorSpec extends Connector
   "connector" must {
 
     "post a body with dates, income and expenses and return a 202 with the Period ID added" in new Test {
-      val downstreamOutcome = Right(ResponseWrapper(transactionReference, responseData))
+      val downstreamOutcome = Right(ResponseWrapper(correlationId, ()))
 
       implicit val hc: HeaderCarrier                    = HeaderCarrier(otherHeaders = otherHeaders ++ Seq("Content-Type" -> "application/json"))
       val requiredIfsHeadersPost: Seq[(String, String)] = requiredIfsHeaders ++ Seq("Content-Type" -> "application/json")
@@ -120,7 +116,7 @@ class CreateHistoricNonFhlUkPropertyPeriodSummaryConnectorSpec extends Connector
     }
 
     "post a body with dates, income and consolidated expenses and return a 202 with the Period ID added" in new Test {
-      val downstreamOutcome = Right(ResponseWrapper(transactionReference, responseData))
+      val downstreamOutcome = Right(ResponseWrapper(correlationId, ()))
 
       implicit val hc: HeaderCarrier                    = HeaderCarrier(otherHeaders = otherHeaders ++ Seq("Content-Type" -> "application/json"))
       val requiredIfsHeadersPost: Seq[(String, String)] = requiredIfsHeaders ++ Seq("Content-Type" -> "application/json")

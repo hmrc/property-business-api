@@ -21,7 +21,10 @@ import v2.controllers.requestParsers.validators.validations.JsonFormatValidation
 import v2.controllers.requestParsers.validators.validations.NumberValidation.validateOptional
 import v2.controllers.requestParsers.validators.validations._
 import v2.models.errors.MtdError
-import v2.models.request.createHistoricFhlUkPiePeriodSummary.{CreateHistoricFhlUkPiePeriodSummaryRawData, CreateHistoricFhlUkPiePeriodSummaryRequestBody}
+import v2.models.request.createHistoricFhlUkPiePeriodSummary.{
+  CreateHistoricFhlUkPiePeriodSummaryRawData,
+  CreateHistoricFhlUkPiePeriodSummaryRequestBody
+}
 
 import javax.inject.Singleton
 
@@ -47,12 +50,13 @@ class CreateHistoricFhlUkPiePeriodSummaryValidator @Inject() extends Validator[C
       DateValidation.validate(body.fromDate, isFromDate = true) ++
         DateValidation.validate(body.toDate, isFromDate = false)
 
-    val dateOrderErrors =
-      if (formatDateErrors.isEmpty) {
+    def validateToDateIsAfterFromDate: List[MtdError] =
+      if (formatDateErrors.isEmpty)
         ToDateBeforeFromDateValidation.validate(from = body.fromDate, to = body.toDate)
-      } else {
-        Nil
-      }
+      else
+        NoValidationErrors
+
+    val ruleDateErrors = validateToDateIsAfterFromDate
 
     val incomeFormatErrors = body.income
       .map { income =>
@@ -80,6 +84,6 @@ class CreateHistoricFhlUkPiePeriodSummaryValidator @Inject() extends Validator[C
 
     val bothExpensesErrors = body.expenses.map(ConsolidatedExpensesValidation.validate(_, "/expenses/consolidatedExpenses")).getOrElse(Nil)
 
-    errorsResult(formatDateErrors ++ dateOrderErrors ++ incomeFormatErrors ++ expensesFormatErrors ++ bothExpensesErrors)
+    errorsResult(formatDateErrors ++ ruleDateErrors ++ incomeFormatErrors ++ expensesFormatErrors ++ bothExpensesErrors)
   }
 }

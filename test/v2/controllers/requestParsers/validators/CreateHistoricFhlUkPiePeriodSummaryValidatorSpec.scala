@@ -129,7 +129,7 @@ class CreateHistoricFhlUkPiePeriodSummaryValidatorSpec extends UnitSpec with Jso
         result shouldBe empty
       }
 
-      "given a valid request object that contains expenses in consolidated format" in {
+      "given a valid request object with consolidated expenses" in {
         val result = validator.validate(CreateHistoricFhlUkPiePeriodSummaryRawData(validNino, validRequestBodyConsolidated))
         result shouldBe empty
       }

@@ -137,38 +137,11 @@ class CreateHistoricNonFhlUkPropertyPeriodSummaryValidatorSpec extends UnitSpec 
     """.stripMargin
   )
 
-  private val requestBodyWithInvalidFromDateYear: JsValue = Json.parse(
-    """
-      |{
-      |    "fromDate": "2019-A3-11",
-      |    "toDate": "2020-04-23"
-      |}
-    """.stripMargin
-  )
-
-  val requestBodyWithInvalidToDateFormat: JsValue = Json.parse(
-    """
-      |{
-      |    "fromDate": "2019-03-11",
-      |    "toDate": "2020-A4-23"
-      |}
-    """.stripMargin
-  )
-
-  val requestBodyWithToDateEarlierThanFromDate: JsValue = Json.parse(
+  private val requestBodyWithToDateEarlierThanFromDate: JsValue = Json.parse(
     """
       |{
       |    "fromDate": "2020-04-23",
-      |    "toDate": "2019-03-11"
-      |}
-    """.stripMargin
-  )
-
-  private val requestBodyWithInvalidToDateYear: JsValue = Json.parse(
-    """
-      |{
-      |    "fromDate": "2022-03-11",
-      |    "toDate": "2023-04-23",
+      |    "toDate": "2019-03-11",
       |    "expenses":{
       |       "consolidatedExpenses": 1
       |    }
@@ -183,15 +156,8 @@ class CreateHistoricNonFhlUkPropertyPeriodSummaryValidatorSpec extends UnitSpec 
         result shouldBe empty
       }
 
-      "given a valid request object that contains expenses in consolidated format" in {
+      "given a valid request object with consolidated expenses" in {
         val result = validator.validate(CreateHistoricNonFhlUkPropertyPeriodSummaryRawData(validNino, validRequestBodyConsolidated))
-        result shouldBe empty
-      }
-
-      "given only a fromDate and toDate" in {
-        val result =
-          validator.validate(CreateHistoricNonFhlUkPropertyPeriodSummaryRawData(validNino, requestBodyWithNoSubObjects))
-
         result shouldBe empty
       }
     }
@@ -233,7 +199,7 @@ class CreateHistoricNonFhlUkPropertyPeriodSummaryValidatorSpec extends UnitSpec 
       "given an invalid fromDate" in {
         val result =
           validator.validate(CreateHistoricNonFhlUkPropertyPeriodSummaryRawData(validNino, validRequestBody.update("fromDate", JsString("BAD_DATE"))))
-        result should contain only (FromDateFormatError, TaxYearFormatError)
+        result should contain only FromDateFormatError
       }
     }
 
@@ -241,14 +207,7 @@ class CreateHistoricNonFhlUkPropertyPeriodSummaryValidatorSpec extends UnitSpec 
       "given an invalid toDate" in {
         val result =
           validator.validate(CreateHistoricNonFhlUkPropertyPeriodSummaryRawData(validNino, validRequestBody.update("toDate", JsString("BAD_DATE"))))
-        result should contain only (ToDateFormatError, TaxYearFormatError)
-      }
-    }
-
-    "return RuleHistoricTaxYearNotSupportedError error" when {
-      "given an invalid fromDate" in {
-        val result = validator.validate(CreateHistoricNonFhlUkPropertyPeriodSummaryRawData(validNino, requestBodyWithInvalidFromDateYear))
-        result should contain only RuleHistoricTaxYearNotSupportedError
+        result should contain only ToDateFormatError
       }
     }
 

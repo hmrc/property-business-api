@@ -68,9 +68,7 @@ class CreateHistoricFhlUkPiePeriodSummaryController @Inject()(val authService: E
             hateoasFactory
               .wrap(
                 serviceResponse.responseData,
-                CreateHistoricFhlUkPiePeriodSummaryHateoasData(nino,
-                                                               s"${parsedRequest.body.fromDate}_${parsedRequest.body.toDate}",
-                                                               serviceResponse.responseData.transactionReference)
+                CreateHistoricFhlUkPiePeriodSummaryHateoasData(nino, serviceResponse.responseData.periodId)
               )
               .asRight[ErrorWrapper]
           )

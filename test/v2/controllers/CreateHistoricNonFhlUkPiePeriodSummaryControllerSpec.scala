@@ -23,7 +23,7 @@ import v2.mocks.MockIdGenerator
 import v2.mocks.hateoas.MockHateoasFactory
 import v2.mocks.requestParsers.MockCreateHistoricNonFhlUkPiePeriodSummaryRequestParser
 import v2.mocks.services.{ MockCreateHistoricNonFhlUkPiePeriodSummaryService, MockEnrolmentsAuthService, MockMtdIdLookupService }
-import v2.models.domain.Nino
+import v2.models.domain.{ Nino, PeriodId }
 import v2.models.errors._
 import v2.models.hateoas.HateoasWrapper
 import v2.models.outcomes.ResponseWrapper
@@ -51,7 +51,6 @@ class CreateHistoricNonFhlUkPiePeriodSummaryControllerSpec
 
   private val nino          = "AA123456A"
   private val periodId      = "2019-03-11_2020-04-23"
-  private val transactionId = "0000000000000001"
   private val correlationId = "a1e8057e-fbbc-47a8-a8b4-78d9f015c253"
 
   trait Test {
@@ -100,7 +99,7 @@ class CreateHistoricNonFhlUkPiePeriodSummaryControllerSpec
     """.stripMargin
   )
 
-  private val response = CreateHistoricNonFhlUkPiePeriodSummaryResponse(transactionId, Some(periodId))
+  private val response = CreateHistoricNonFhlUkPiePeriodSummaryResponse(PeriodId(periodId))
 
   "create" should {
     "return a successful response" when {
@@ -114,7 +113,7 @@ class CreateHistoricNonFhlUkPiePeriodSummaryControllerSpec
           .returns(Future.successful(Right(ResponseWrapper(correlationId, response))))
 
         MockHateoasFactory
-          .wrap(response, CreateHistoricNonFhlUkPiePeriodSummaryHateoasData(nino, periodId, transactionId))
+          .wrap(response, CreateHistoricNonFhlUkPiePeriodSummaryHateoasData(nino, PeriodId(periodId)))
           .returns(HateoasWrapper(response, testHateoasLinks))
 
         val result: Future[Result] = controller.handleRequest(nino)(fakeRequestWithBody(requestBodyJson))

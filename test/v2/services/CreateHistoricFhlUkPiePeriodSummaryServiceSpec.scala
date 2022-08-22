@@ -19,7 +19,7 @@ package v2.services
 import uk.gov.hmrc.http.HeaderCarrier
 import v2.controllers.EndpointLogContext
 import v2.mocks.connectors.MockCreateHistoricFhlUkPiePeriodSummaryConnector
-import v2.models.domain.Nino
+import v2.models.domain.{ Nino, PeriodId }
 import v2.models.errors.{ ErrorWrapper, _ }
 import v2.models.outcomes.ResponseWrapper
 import v2.models.request.common.ukFhlPieProperty.{ UkFhlPieExpenses, UkFhlPieIncome }
@@ -34,7 +34,7 @@ import scala.concurrent.Future
 
 class CreateHistoricFhlUkPiePeriodSummaryServiceSpec extends ServiceSpec {
 
-  implicit val transactionReference: String = "some-transaction-reference"
+  implicit val correlationId: String = "some-correlation-id"
 
   val nino     = "WE123567A"
   val fromDate = "2021-01-06"
@@ -66,8 +66,8 @@ class CreateHistoricFhlUkPiePeriodSummaryServiceSpec extends ServiceSpec {
   val requestData: CreateHistoricFhlUkPiePeriodSummaryRequest             = CreateHistoricFhlUkPiePeriodSummaryRequest(Nino(nino), requestBody)
   val consolidatedRequestData: CreateHistoricFhlUkPiePeriodSummaryRequest = CreateHistoricFhlUkPiePeriodSummaryRequest(Nino(nino), consolidatedBody)
 
-  val responseDataWithPeriodIdAdded: CreateHistoricFhlUkPiePeriodSummaryResponse =
-    CreateHistoricFhlUkPiePeriodSummaryResponse(transactionReference, Some(periodId))
+  val responseData: CreateHistoricFhlUkPiePeriodSummaryResponse =
+    CreateHistoricFhlUkPiePeriodSummaryResponse(PeriodId(periodId))
 
   trait Test extends MockCreateHistoricFhlUkPiePeriodSummaryConnector {
     implicit val hc: HeaderCarrier              = HeaderCarrier()
@@ -83,19 +83,19 @@ class CreateHistoricFhlUkPiePeriodSummaryServiceSpec extends ServiceSpec {
       "return mapped result for regular period summary" in new Test {
         MockCreateHistoricFhlUkPiePeriodSummaryConnector
           .createPropertyPeriodSummary(requestData)
-          .returns(Future.successful(Right(ResponseWrapper(transactionReference, responseDataWithPeriodIdAdded))))
+          .returns(Future.successful(Right(ResponseWrapper(correlationId, ()))))
 
         val result = await(service.createPeriodSummary(requestData))
-        result shouldBe Right(ResponseWrapper(transactionReference, responseDataWithPeriodIdAdded))
+        result shouldBe Right(ResponseWrapper(correlationId, responseData))
       }
 
       "return mapped result for consolidated expenses period summary" in new Test {
         MockCreateHistoricFhlUkPiePeriodSummaryConnector
           .createPropertyPeriodSummary(consolidatedRequestData)
-          .returns(Future.successful(Right(ResponseWrapper(transactionReference, responseDataWithPeriodIdAdded))))
+          .returns(Future.successful(Right(ResponseWrapper(correlationId, ()))))
 
         val result = await(service.createPeriodSummary(consolidatedRequestData))
-        result shouldBe Right(ResponseWrapper(transactionReference, responseDataWithPeriodIdAdded))
+        result shouldBe Right(ResponseWrapper(correlationId, responseData))
 
       }
     }
@@ -105,9 +105,9 @@ class CreateHistoricFhlUkPiePeriodSummaryServiceSpec extends ServiceSpec {
         s" return a$ifsErrorCode from the service" in new Test {
           MockCreateHistoricFhlUkPiePeriodSummaryConnector
             .createPropertyPeriodSummary(requestData)
-            .returns(Future.successful(Left(ResponseWrapper(transactionReference, DownstreamErrors.single(DownstreamErrorCode(ifsErrorCode))))))
+            .returns(Future.successful(Left(ResponseWrapper(correlationId, DownstreamErrors.single(DownstreamErrorCode(ifsErrorCode))))))
 
-          await(service.createPeriodSummary(requestData)) shouldBe Left(ErrorWrapper(transactionReference, error))
+          await(service.createPeriodSummary(requestData)) shouldBe Left(ErrorWrapper(correlationId, error))
         }
 
       val input = Seq(

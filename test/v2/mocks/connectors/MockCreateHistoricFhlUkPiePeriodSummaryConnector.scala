@@ -19,11 +19,10 @@ package v2.mocks.connectors
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
 import uk.gov.hmrc.http.HeaderCarrier
-import v2.connectors.{CreateHistoricFhlUkPiePeriodSummaryConnector, DownstreamOutcome}
+import v2.connectors.{ CreateHistoricFhlUkPiePeriodSummaryConnector, DownstreamOutcome }
 import v2.models.request.createHistoricFhlUkPiePeriodSummary.CreateHistoricFhlUkPiePeriodSummaryRequest
-import v2.models.response.createHistoricFhlUkPiePeriodSummary.CreateHistoricFhlUkPiePeriodSummaryResponse
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.{ ExecutionContext, Future }
 
 trait MockCreateHistoricFhlUkPiePeriodSummaryConnector extends MockFactory {
 
@@ -31,10 +30,15 @@ trait MockCreateHistoricFhlUkPiePeriodSummaryConnector extends MockFactory {
 
   object MockCreateHistoricFhlUkPiePeriodSummaryConnector {
 
-    def createPropertyPeriodSummary(requestData: CreateHistoricFhlUkPiePeriodSummaryRequest):
-    CallHandler[Future[DownstreamOutcome[CreateHistoricFhlUkPiePeriodSummaryResponse]]] = {
-      (mockCreateHistoricFhlUkPiePropertyConnector
-        .createPeriodSummary(_:  CreateHistoricFhlUkPiePeriodSummaryRequest)(_: HeaderCarrier, _: ExecutionContext, _: String))
+    def createPropertyPeriodSummary(requestData: CreateHistoricFhlUkPiePeriodSummaryRequest): CallHandler[Future[DownstreamOutcome[Unit]]] = {
+      (
+        mockCreateHistoricFhlUkPiePropertyConnector
+          .createPeriodSummary(_: CreateHistoricFhlUkPiePeriodSummaryRequest)(
+            _: HeaderCarrier,
+            _: ExecutionContext,
+            _: String
+          )
+        )
         .expects(requestData, *, *, *)
     }
   }

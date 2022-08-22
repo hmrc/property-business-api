@@ -19,30 +19,25 @@ package v2.models.response.createHistoricFhlUkPiePeriodSummary
 import config.AppConfig
 import play.api.libs.json._
 import v2.hateoas.{ HateoasLinks, HateoasLinksFactory }
+import v2.models.domain.PeriodId
 import v2.models.hateoas.{ HateoasData, Link }
 
-case class CreateHistoricFhlUkPiePeriodSummaryResponse(transactionReference: String, periodId: Option[String])
+case class CreateHistoricFhlUkPiePeriodSummaryResponse(periodId: PeriodId)
 
 object CreateHistoricFhlUkPiePeriodSummaryResponse extends HateoasLinks {
 
-  implicit val writes: OWrites[CreateHistoricFhlUkPiePeriodSummaryResponse] = OWrites { response =>
-    response.periodId
-      .map(periodId => Json.obj("periodId" -> periodId))
-      .getOrElse(JsObject.empty)
-  }
-
-  implicit val reads: Reads[CreateHistoricFhlUkPiePeriodSummaryResponse] = Json.reads[CreateHistoricFhlUkPiePeriodSummaryResponse]
+  implicit val writes: OWrites[CreateHistoricFhlUkPiePeriodSummaryResponse] = Json.writes
 
   implicit object LinksFactory
       extends HateoasLinksFactory[CreateHistoricFhlUkPiePeriodSummaryResponse, CreateHistoricFhlUkPiePeriodSummaryHateoasData] {
     override def links(appConfig: AppConfig, data: CreateHistoricFhlUkPiePeriodSummaryHateoasData): Seq[Link] = {
       import data._
       Seq(
-        amendHistoricFhlUkPiePeriodSummary(appConfig, nino, periodId),
-        retrieveHistoricFhlUkPiePeriodSummary(appConfig, nino, periodId)
+        amendHistoricFhlUkPiePeriodSummary(appConfig, nino, periodId.value),
+        retrieveHistoricFhlUkPiePeriodSummary(appConfig, nino, periodId.value)
       )
     }
   }
 }
 
-case class CreateHistoricFhlUkPiePeriodSummaryHateoasData(nino: String, periodId: String, transactionId: String) extends HateoasData
+case class CreateHistoricFhlUkPiePeriodSummaryHateoasData(nino: String, periodId: PeriodId) extends HateoasData

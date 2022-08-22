@@ -17,6 +17,7 @@
 package v2.connectors
 
 import config.AppConfig
+import play.api.http.Status.OK
 import uk.gov.hmrc.http.{ HeaderCarrier, HttpClient }
 import v2.connectors.DownstreamUri.IfsUri
 import v2.connectors.httpparsers.StandardIfsHttpParser._
@@ -27,6 +28,8 @@ import scala.concurrent.{ ExecutionContext, Future }
 
 @Singleton
 class AmendHistoricFhlUkPiePeriodSummaryConnector @Inject()(val http: HttpClient, val appConfig: AppConfig) extends BaseDownstreamConnector {
+
+  implicit val successCode: SuccessCode = SuccessCode(OK)
 
   def amend(request: AmendHistoricFhlUkPiePeriodSummaryRequest)(implicit hc: HeaderCarrier,
                                                                 ec: ExecutionContext,

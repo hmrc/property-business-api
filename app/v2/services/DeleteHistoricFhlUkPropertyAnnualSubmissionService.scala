@@ -57,7 +57,7 @@ class DeleteHistoricFhlUkPropertyAnnualSubmissionService @Inject()(connector: De
       "INVALID_CORRELATIONID" -> InternalError,
       "NOT_FOUND"             -> NotFoundError,
       "NOT_FOUND_PROPERTY"    -> NotFoundError,
-      "GONE"                  -> InternalError,
+      "GONE"                  -> NotFoundError,
       "UNPROCESSABLE_ENTTY"   -> InternalError,
       "SERVER_ERROR"          -> InternalError,
       "SERVICE_UNAVAILABLE"   -> InternalError

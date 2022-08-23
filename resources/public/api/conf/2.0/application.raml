@@ -76,6 +76,37 @@ documentation:
       /furnished-holiday-lettings:
         /{nino}:
           (annotations.group):
+            name: Historic FHL UK Property Business Annual Submission
+            description: Resources relating to an individual's historic FHL UK Property Business Annual Submission
+          uriParameters:
+            nino:
+              description: National Insurance number, in the format AA999999A.
+              type: string
+              example: TC663795B
+          /{taxYear}:
+            uriParameters:
+              taxYear:
+                description: 'The tax year to which the data applies. For example: 2021-22. The start year and end year must not span two tax years. The minimum tax year is 2017-18 and the maximum tax year is 2021-22. No gaps are allowed, for example, 2022-24 is not valid. (The minimum tax year in Sandbox is 2021-22.)'
+                example: 2021-22
+            put: !include historic_uk_fhl_annual_submission_create_and_amend.raml
+            get: !include historic_uk_fhl_annual_submission_retrieve.raml
+            delete: !include historic_uk_fhl_annual_submission_delete.raml
+      /non-furnished-holiday-lettings:
+        /{nino}:
+          /{taxYear}:
+            (annotations.group):
+              name: Historic non-FHL UK Property Business Annual Submission
+              description: Resources relating to an individual's historic non-FHL UK Property Business Annual Submission
+            uriParameters:
+              taxYear:
+                description: 'The tax year the data applies to, for example, 2021-22. The start year and end year must not span two tax years. The minimum tax year is 2017-18 and the maximum tax year is 2021-22. No gaps are allowed, for example, 2020-22 is not valid.'
+                example: 2021-22
+            get: !include historic_uk_non_fhl_annual_submission_retrieve.raml
+            delete: !include historic_uk_non_fhl_annual_submission_delete.raml
+    /period:
+      /furnished-holiday-lettings:
+        /{nino}:
+          (annotations.group):
             name: Historic FHL UK Property Income & Expenses Period Summary
             description: Resources relating to an individual's historic FHL UK Property Income & Expenses Period Summaries.
           uriParameters:
@@ -83,64 +114,25 @@ documentation:
               description: National Insurance number, in the format AA999999A.
               type: string
               example: TC663795B
-          /{taxYear}:
-            (annotations.group):
-              name: Historic FHL UK Property Business Annual Submission
-              description: Resources relating to an individual's historic FHL UK Property Business Annual Submission
+          post: !include historic_uk_fhl_period_summary_create.raml
+          /{periodId}:
             uriParameters:
-              taxYear:
-                description: 'The tax year to which the data applies. For example: 2021-22. The start year and end year must not span two tax years. The minimum tax year is 2017-18 and the maximum tax year is 2021-22. No gaps are allowed, for example, 2022-24 is not valid. (The minimum tax year in Sandbox is 2021-22.)'
-                example: 2021-22
-            delete: !include historic_uk_fhl_annual_submission_delete.raml
-    /furnished-holiday-lettings:
-      /{nino}:
-        (annotations.group):
-          name: Historic FHL UK Property Income & Expenses Period Summary
-          description: Resources relating to an individual's historic FHL UK Property Income & Expenses Period Summaries.
-        uriParameters:
-          nino:
-            description: National Insurance number, in the format AA999999A.
-            type: string
-            example: TC663795B
-        post: !include historic_uk_fhl_period_summary_create.raml
-        /{periodId}:
+              periodId:
+                description: An identifier for the update period, unique to the customer's UK property business.
+                type: string
+                example: 2017-04-06_2017-07-04
+            put: !include historic_uk_fhl_period_summary_amend.raml
+      /non-furnished-holiday-lettings:
+        /{nino}:
+          (annotations.group):
+            name: Historic non-FHL UK Property Income & Expenses Period Summary
+            description: Resources relating to an individual's historic non-FHL UK Property Income & Expenses Period Summaries.
           uriParameters:
-            periodId:
-              description: An identifier for the update period, unique to the customer's UK property business.
+            nino:
+              description: National Insurance number, in the format AA999999A.
               type: string
-              example: 2017-04-06_2017-07-04
-          put: !include historic_uk_fhl_period_summary_amend.raml
-        /{taxYear}:
-          (annotations.group):
-            name: Historic FHL UK Property Business Annual Submission
-            description: Resources relating to an individual's historic FHL UK Property Business Annual Submission
-          uriParameters:
-            taxYear:
-              description: 'The tax year to which the data applies. For example: 2021-22. The start year and end year must not span two tax years. The minimum tax year is 2017-18 and the maximum tax year is 2021-22. No gaps are allowed, for example, 2022-24 is not valid. (The minimum tax year in Sandbox is 2021-22.)'
-              example: 2021-22
-          put: !include historic_uk_fhl_annual_submission_create_and_amend.raml
-          get: !include historic_uk_fhl_annual_submission_retrieve.raml
-    /non-furnished-holiday-lettings:
-      /{nino}:
-        (annotations.group):
-          name: Historic non-FHL UK Property Income & Expenses Period Summary
-          description: Resources relating to an individual's historic non-FHL UK Property Income & Expenses Period Summaries.
-        uriParameters:
-          nino:
-            description: National Insurance number, in the format AA999999A.
-            type: string
-            example: TC663795B
-        post: !include historic_uk_non_fhl_period_summary_create.raml
-        /{taxYear}:
-          (annotations.group):
-            name: Historic non-FHL UK Property Business Annual Submission
-            description: Resources relating to an individual's historic non-FHL UK Property Business Annual Submission
-          uriParameters:
-            taxYear:
-              description: 'The tax year the data applies to, for example, 2021-22. The start year and end year must not span two tax years. The minimum tax year is 2017-18 and the maximum tax year is 2021-22. No gaps are allowed, for example, 2020-22 is not valid.'
-              example: 2021-22
-          get: !include historic_uk_non_fhl_annual_submission_retrieve.raml
-          delete: !include historic_uk_non_fhl_annual_submission_delete.raml
+              example: TC663795B
+          post: !include historic_uk_non_fhl_period_summary_create.raml
   /foreign:
     /{nino}:
       uriParameters:
@@ -212,3 +204,4 @@ documentation:
               description: 'The tax year to which the data applies. For example: 2022-23. The start year and end year must not span two tax years. The minimum tax year is 2021-22. No gaps are allowed, for example, 2022-24 is not valid.'
               example: 2022-23
           get: !include property_period_summaries_list.raml
+

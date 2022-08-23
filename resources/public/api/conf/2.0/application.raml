@@ -104,17 +104,6 @@ documentation:
             get: !include historic_uk_non_fhl_annual_submission_retrieve.raml
             delete: !include historic_uk_non_fhl_annual_submission_delete.raml
     /period:
-      /non-furnished-holiday-lettings:
-        /{nino}:
-          (annotations.group):
-            name: Historic non-FHL UK Property Income & Expenses Period Summary
-            description: Resources relating to an individual's historic non-FHL UK Property Income & Expenses Period Summaries.
-          uriParameters:
-            nino:
-              description: National Insurance number, in the format AA999999A.
-              type: string
-              example: TC663795B
-          post: !include historic_uk_non_fhl_period_summary_create.raml
       /furnished-holiday-lettings:
         /{nino}:
           (annotations.group):
@@ -133,6 +122,17 @@ documentation:
                 type: string
                 example: 2017-04-06_2017-07-04
             put: !include historic_uk_fhl_period_summary_amend.raml
+      /non-furnished-holiday-lettings:
+        /{nino}:
+          (annotations.group):
+            name: Historic non-FHL UK Property Income & Expenses Period Summary
+            description: Resources relating to an individual's historic non-FHL UK Property Income & Expenses Period Summaries.
+          uriParameters:
+            nino:
+              description: National Insurance number, in the format AA999999A.
+              type: string
+              example: TC663795B
+          post: !include historic_uk_non_fhl_period_summary_create.raml
   /foreign:
     /{nino}:
       uriParameters:

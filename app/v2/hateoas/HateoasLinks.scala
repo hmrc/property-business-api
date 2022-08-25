@@ -55,8 +55,10 @@ trait HateoasLinks {
     s"/${appConfig.apiGatewayContext}/uk/period/furnished-holiday-lettings/$nino$periodIdPath"
   }
 
-  private def ukHistoricNonFhlPiePeriodSummaryUri(appConfig: AppConfig, nino: String, periodId: String): String =
-    s"/${appConfig.apiGatewayContext}/uk/period/non-furnished-holiday-lettings/$nino/$periodId"
+  private def ukHistoricNonFhlPiePeriodSummaryUri(appConfig: AppConfig, nino: String, maybePeriodId: Option[String]): String = {
+    val periodIdPath = maybePeriodId.map(id => s"/$id").getOrElse("")
+    s"/${appConfig.apiGatewayContext}/uk/period/non-furnished-holiday-lettings/$nino$periodIdPath"
+  }
 
   // API resource links
 
@@ -138,12 +140,20 @@ trait HateoasLinks {
     Link(href = ukHistoricNonFhlAnnualUri(appConfig, nino, taxYear), method = GET, rel)
   }
 
+  def listHistoricNonFhlUkPiePeriodSummaries(appConfig: AppConfig, nino: String, self: Boolean): Link = {
+    val rel = if (self) SELF else "list-uk-property-historic-non-fhl-period-summaries"
+    Link(href = ukHistoricNonFhlPiePeriodSummaryUri(appConfig, nino, None), method = GET, rel)
+  }
+
   def deleteHistoricNonFhlUkPropertyAnnualSubmission(appConfig: AppConfig, nino: String, taxYear: String): Link = {
     Link(href = ukHistoricNonFhlAnnualUri(appConfig, nino, taxYear), method = DELETE, rel = "delete-uk-property-historic-non-fhl-annual-submission")
   }
 
   //Historic UK Periodic
   // FHL:
+
+  def createHistoricFhlUkPiePeriodSummary(appConfig: AppConfig, nino: String): Link =
+    Link(href = ukHistoricFhlPiePeriodSummaryUri(appConfig, nino, None), method = POST, rel = "create-uk-property-historic-fhl-period-summary")
 
   def amendHistoricFhlUkPiePeriodSummary(appConfig: AppConfig, nino: String, periodId: String): Link =
     Link(href = ukHistoricFhlPiePeriodSummaryUri(appConfig, nino, Some(periodId)),
@@ -160,11 +170,14 @@ trait HateoasLinks {
 
   // Non-FHL:
   def retrieveHistoricNonFhlUkPiePeriodSummary(appConfig: AppConfig, nino: String, periodId: String): Link = {
-    Link(href = ukHistoricNonFhlPiePeriodSummaryUri(appConfig, nino, periodId), method = GET, rel = SELF)
+    Link(href = ukHistoricNonFhlPiePeriodSummaryUri(appConfig, nino, Some(periodId)), method = GET, rel = SELF)
   }
 
+  def createHistoricNonFhlUkPiePeriodSummary(appConfig: AppConfig, nino: String): Link =
+    Link(href = ukHistoricNonFhlPiePeriodSummaryUri(appConfig, nino, None), method = POST, rel = "create-uk-property-historic-non-fhl-period-summary")
+
   def amendHistoricNonFhlUkPiePeriodSummary(appConfig: AppConfig, nino: String, periodId: String): Link =
-    Link(href = ukHistoricNonFhlPiePeriodSummaryUri(appConfig, nino, periodId),
+    Link(href = ukHistoricNonFhlPiePeriodSummaryUri(appConfig, nino, Some(periodId)),
          method = PUT,
          rel = "amend-uk-property-historic-non-fhl-period-summary")
 

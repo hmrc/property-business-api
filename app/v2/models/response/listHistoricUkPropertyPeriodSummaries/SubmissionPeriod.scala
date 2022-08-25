@@ -20,7 +20,9 @@ import play.api.libs.functional.syntax._
 import play.api.libs.json._
 import v2.models.domain.PeriodId
 
-case class SubmissionPeriod(fromDate: String, toDate: String)
+case class SubmissionPeriod(fromDate: String, toDate: String) {
+  def periodId: PeriodId = PeriodId(fromDate, toDate)
+}
 
 object SubmissionPeriod {
   implicit val reads: Reads[SubmissionPeriod] = (
@@ -29,8 +31,7 @@ object SubmissionPeriod {
   )(SubmissionPeriod.apply _)
 
   implicit val writes: Writes[SubmissionPeriod] = Writes { x =>
-    val periodId = PeriodId(x.fromDate, x.toDate)
-    Json.writes[SubmissionPeriod].writes(x) ++ Json.obj("periodId" -> periodId)
+    Json.writes[SubmissionPeriod].writes(x) ++ Json.obj("periodId" -> x.periodId)
   }
 
 }

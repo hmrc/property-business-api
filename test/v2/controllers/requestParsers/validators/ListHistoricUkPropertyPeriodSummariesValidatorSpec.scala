@@ -19,23 +19,24 @@ package v2.controllers.requestParsers.validators
 import mocks.MockAppConfig
 import support.UnitSpec
 import v2.models.errors._
+import v2.models.request.listHistoricUkPropertyPeriodSummaries.ListHistoricUkPropertyPeriodSummariesRawData
 
-class ListHistoricFhlUkPropertyIncomeExpensesPeriodSummaryValidatorSpec extends UnitSpec with MockAppConfig {
+class ListHistoricUkPropertyPeriodSummariesValidatorSpec extends UnitSpec with MockAppConfig {
 
   private val validNino = "AA123456A"
 
-  private val validator = new ListHistoricFhlUkPropertyIncomeExpensesPeriodSummaryValidator(mockAppConfig)
+  private val validator = new ListHistoricUkPropertyPeriodSummariesValidator(mockAppConfig)
 
-  "ListHistoricFhlUkPropertyIncomeExpensesPeriodSummaryValidator" should {
+  "ListHistoricUkPropertyPeriodSummariesValidator" should {
     "return empty List (Nil)" when {
       "a valid raw data is supplied" in {
-        validator.validate(ListHistoricFhlUkPropertyIncomeExpensesPeriodSummaryRawData(validNino)) shouldBe Nil
+        validator.validate(ListHistoricUkPropertyPeriodSummariesRawData(validNino)) shouldBe Nil
       }
     }
 
     "return a validation error/s" when {
       "raw data contains invalid nino" in {
-        validator.validate(ListHistoricFhlUkPropertyIncomeExpensesPeriodSummaryRawData("AA12345")) shouldBe List(NinoFormatError)
+        validator.validate(ListHistoricUkPropertyPeriodSummariesRawData("AA12345")) shouldBe List(NinoFormatError)
       }
 
     }

@@ -17,24 +17,25 @@
 package v2.controllers.requestParsers.validators
 
 import config.AppConfig
+
 import javax.inject.{ Inject, Singleton }
 import v2.controllers.requestParsers.validators.validations._
 import v2.models.errors.MtdError
+import v2.models.request.listHistoricUkPropertyPeriodSummaries.ListHistoricUkPropertyPeriodSummariesRawData
 
 @Singleton
-class ListHistoricFhlUkPropertyIncomeExpensesPeriodSummaryValidator @Inject()(appConfig: AppConfig)
-    extends Validator[ListHistoricFhlUkPropertyIncomeExpensesPeriodSummaryRawData] {
+class ListHistoricUkPropertyPeriodSummariesValidator @Inject()(appConfig: AppConfig) extends Validator[ListHistoricUkPropertyPeriodSummariesRawData] {
 
   private val validationSet = List(parameterFormatValidation)
 
-  private def parameterFormatValidation: ListHistoricFhlUkPropertyIncomeExpensesPeriodSummaryRawData => List[List[MtdError]] =
-    (data: ListHistoricFhlUkPropertyIncomeExpensesPeriodSummaryRawData) => {
+  private def parameterFormatValidation: ListHistoricUkPropertyPeriodSummariesRawData => List[List[MtdError]] =
+    (data: ListHistoricUkPropertyPeriodSummariesRawData) => {
       List(
         NinoValidation.validate(data.nino),
       )
     }
 
-  override def validate(data: ListHistoricFhlUkPropertyIncomeExpensesPeriodSummaryRawData): List[MtdError] = {
+  override def validate(data: ListHistoricUkPropertyPeriodSummariesRawData): List[MtdError] = {
     run(validationSet, data).distinct
   }
 }

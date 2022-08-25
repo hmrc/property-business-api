@@ -18,21 +18,20 @@ package v2.mocks.validators
 
 import org.scalamock.handlers.CallHandler1
 import org.scalamock.scalatest.MockFactory
-import v2.controllers.requestParsers.validators.ListHistoricFhlUkPropertyIncomeExpensesPeriodSummaryValidator
-
+import v2.controllers.requestParsers.validators.ListHistoricUkPropertyPeriodSummariesValidator
 import v2.models.errors.MtdError
+import v2.models.request.listHistoricUkPropertyPeriodSummaries.ListHistoricUkPropertyPeriodSummariesRawData
 
-class MockListHistoricFhlUkPropertyIncomeExpensesPeriodSummaryValidator extends MockFactory {
+class MockListHistoricUkPropertyPeriodSummariesValidator extends MockFactory {
 
-  val mockValidator: ListHistoricFhlUkPropertyIncomeExpensesPeriodSummaryValidator =
-    mock[ListHistoricFhlUkPropertyIncomeExpensesPeriodSummaryValidator]
+  val mockValidator: ListHistoricUkPropertyPeriodSummariesValidator =
+    mock[ListHistoricUkPropertyPeriodSummariesValidator]
 
   object MockListHistoricFhlUkPropertyIncomeExpensesPeriodSummaryValidator {
 
-    def validate(data: ListHistoricFhlUkPropertyIncomeExpensesPeriodSummaryRawData)
-      : CallHandler1[ListHistoricFhlUkPropertyIncomeExpensesPeriodSummaryRawData, List[MtdError]] = {
+    def validate(data: ListHistoricUkPropertyPeriodSummariesRawData): CallHandler1[ListHistoricUkPropertyPeriodSummariesRawData, List[MtdError]] = {
       (mockValidator
-        .validate(_: ListHistoricFhlUkPropertyIncomeExpensesPeriodSummaryRawData))
+        .validate(_: ListHistoricUkPropertyPeriodSummariesRawData))
         .expects(data)
     }
   }

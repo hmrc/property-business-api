@@ -17,27 +17,31 @@
 package v2.controllers.requestParsers
 
 import support.UnitSpec
-import v2.mocks.validators.MockListHistoricFhlUkPropertyIncomeExpensesPeriodSummaryValidator
+import v2.mocks.validators.MockListHistoricUkPropertyPeriodSummariesValidator
 import v2.models.domain.Nino
 import v2.models.errors.{ ErrorWrapper, NinoFormatError }
+import v2.models.request.listHistoricUkPropertyPeriodSummaries.{
+  ListHistoricUkPropertyPeriodSummariesRawData,
+  ListHistoricUkPropertyPeriodSummariesRequest
+}
 
-class ListHistoricFhlUkPropertyIncomeExpensesPeriodSummaryRequestParserSpec extends UnitSpec {
+class ListHistoricUkPropertyPeriodSummariesRequestParserSpec extends UnitSpec {
 
   val nino: String                   = "AA123456B"
   implicit val correlationId: String = "X-123"
 
-  val rawData: ListHistoricFhlUkPropertyIncomeExpensesPeriodSummaryRawData = ListHistoricFhlUkPropertyIncomeExpensesPeriodSummaryRawData(nino)
+  val rawData: ListHistoricUkPropertyPeriodSummariesRawData = ListHistoricUkPropertyPeriodSummariesRawData(nino)
 
-  trait Test extends MockListHistoricFhlUkPropertyIncomeExpensesPeriodSummaryValidator {
-    lazy val parser = new ListHistoricFhlUkPropertyIncomeExpensesPeriodSummaryRequestParser(mockValidator)
+  trait Test extends MockListHistoricUkPropertyPeriodSummariesValidator {
+    lazy val parser = new ListHistoricUkPropertyPeriodSummariesRequestParser(mockValidator)
   }
 
-  "ListHistoricFhlUkPropertyIncomeExpensesPeriodSummaryRequestParser" should {
+  "ListHistoricUkPropertyPeriodSummariesRequestParser" should {
     "return a valid request object" when {
       "valid raw data is supplied" in new Test {
         MockListHistoricFhlUkPropertyIncomeExpensesPeriodSummaryValidator.validate(rawData).returns(Nil)
 
-        parser.parseRequest(rawData) shouldBe Right(ListHistoricFhlUkPropertyIncomeExpensesPeriodSummaryRequest(Nino(nino)))
+        parser.parseRequest(rawData) shouldBe Right(ListHistoricUkPropertyPeriodSummariesRequest(Nino(nino)))
       }
     }
 

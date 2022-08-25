@@ -22,6 +22,6 @@ package object validations {
 
   val dateFormat: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
   val NoValidationErrors            = List()
-  val minimumTaxYear = 2021
+  val minimumTaxYear                = 2021
 
 }

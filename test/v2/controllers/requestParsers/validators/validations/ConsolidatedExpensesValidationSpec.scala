@@ -107,41 +107,6 @@ class ConsolidatedExpensesValidationSpec extends UnitSpec {
       }
     }
 
-//
-//    "passed a foreignFhlEea model" should {
-//      val model: common.foreignFhlEea.ForeignFhlEeaExpenditure =
-//        common.foreignFhlEea.ForeignFhlEeaExpenditure(None, None, None, None, None, None, None, Some(123.45))
-//
-//      "return no errors" when {
-//        "a valid consolidatedExpenses model is supplied with only consolidatedExpenses" in {
-//          ConsolidatedExpensesValidation.validate(model, path) shouldBe Nil
-//        }
-//      }
-//      "return an error" when {
-//        "a model with consolidatedExpenses and premisesRunningCosts is supplied" in {
-//          ConsolidatedExpensesValidation.validate(model.copy(premisesRunningCosts = Some(123.45)), path) shouldBe List(error)
-//        }
-//        "a model with consolidatedExpenses and repairsAndMaintenance is supplied" in {
-//          ConsolidatedExpensesValidation.validate(model.copy(repairsAndMaintenance = Some(123.45)), path) shouldBe List(error)
-//        }
-//        "a model with consolidatedExpenses and financialCosts is supplied" in {
-//          ConsolidatedExpensesValidation.validate(model.copy(financialCosts = Some(123.45)), path) shouldBe List(error)
-//        }
-//        "a model with consolidatedExpenses and professionalFees is supplied" in {
-//          ConsolidatedExpensesValidation.validate(model.copy(professionalFees = Some(123.45)), path) shouldBe List(error)
-//        }
-//        "a model with consolidatedExpenses and costsOfServices is supplied" in {
-//          ConsolidatedExpensesValidation.validate(model.copy(costsOfServices = Some(123.45)), path) shouldBe List(error)
-//        }
-//        "a model with consolidatedExpenses and travelCosts is supplied" in {
-//          ConsolidatedExpensesValidation.validate(model.copy(travelCosts = Some(123.45)), path) shouldBe List(error)
-//        }
-//        "a model with consolidatedExpenses and other is supplied" in {
-//          ConsolidatedExpensesValidation.validate(model.copy(other = Some(123.45)), path) shouldBe List(error)
-//        }
-//      }
-//    }
-
     "passed a UkFhlPieExpenses model" should {
       val model: UkFhlPieExpenses =
         UkFhlPieExpenses(None, None, None, None, None, None, Some(123.45), None, None)

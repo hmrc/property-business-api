@@ -37,4 +37,9 @@ case class FeatureSwitch(value: Option[Configuration]) {
 
     enabled.getOrElse(false)
   }
+
+  val isV2R7cRoutingEnabled: Boolean = value match {
+    case Some(config) => config.getOptional[Boolean]("v2r7c-endpoints.enabled").getOrElse(true)
+    case None         => true
+  }
 }

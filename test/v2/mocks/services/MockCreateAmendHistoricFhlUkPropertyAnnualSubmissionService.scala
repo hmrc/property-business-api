@@ -26,18 +26,26 @@ import v2.models.request.createAmendHistoricFhlUkPropertyAnnualSubmission.Create
 import v2.models.response.createAmendHistoricFhlUkPropertyAnnualSubmission.CreateAmendHistoricFhlUkPropertyAnnualSubmissionResponse
 import v2.services.CreateAmendHistoricFhlUkPropertyAnnualSubmissionService
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.{ ExecutionContext, Future }
 
 trait MockCreateAmendHistoricFhlUkPropertyAnnualSubmissionService extends MockFactory {
 
-  val mockService: CreateAmendHistoricFhlUkPropertyAnnualSubmissionService = mock[CreateAmendHistoricFhlUkPropertyAnnualSubmissionService]
+  val mockCreateAmendHistoricService: CreateAmendHistoricFhlUkPropertyAnnualSubmissionService =
+    mock[CreateAmendHistoricFhlUkPropertyAnnualSubmissionService]
 
   object MockCreateAmendHistoricFhlUkPropertyAnnualSubmissionService {
 
-    def amend(requestData: CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequest):
-    CallHandler[Future[Either[ErrorWrapper, ResponseWrapper[CreateAmendHistoricFhlUkPropertyAnnualSubmissionResponse]]]] = {
-      (mockService
-        .amend(_: CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequest)(_: HeaderCarrier, _: ExecutionContext, _: EndpointLogContext, _: String))
+    def amend(requestData: CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequest)
+      : CallHandler[Future[Either[ErrorWrapper, ResponseWrapper[CreateAmendHistoricFhlUkPropertyAnnualSubmissionResponse]]]] = {
+      (
+        mockCreateAmendHistoricService
+          .amend(_: CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequest)(
+            _: HeaderCarrier,
+            _: ExecutionContext,
+            _: EndpointLogContext,
+            _: String
+          )
+        )
         .expects(requestData, *, *, *, *)
     }
   }

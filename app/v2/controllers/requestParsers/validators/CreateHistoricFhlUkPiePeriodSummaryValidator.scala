@@ -17,7 +17,6 @@
 package v2.controllers.requestParsers.validators
 
 import com.google.inject.Inject
-import config.AppConfig
 import v2.controllers.requestParsers.validators.validations.JsonFormatValidation.validateAndCheckNonEmptyOrRead
 import v2.controllers.requestParsers.validators.validations.NumberValidation.validateOptional
 import v2.controllers.requestParsers.validators.validations._
@@ -30,10 +29,7 @@ import v2.models.request.createHistoricFhlUkPiePeriodSummary.{
 import javax.inject.Singleton
 
 @Singleton
-class CreateHistoricFhlUkPiePeriodSummaryValidator @Inject()(appConfig: AppConfig) extends Validator[CreateHistoricFhlUkPiePeriodSummaryRawData] {
-
-  lazy private val minTaxYear = appConfig.minimumTaxHistoric
-  lazy private val maxTaxYear = appConfig.maximumTaxHistoric
+class CreateHistoricFhlUkPiePeriodSummaryValidator @Inject() extends Validator[CreateHistoricFhlUkPiePeriodSummaryRawData] {
 
   override def validate(data: CreateHistoricFhlUkPiePeriodSummaryRawData): List[MtdError] = {
     (for {
@@ -44,18 +40,23 @@ class CreateHistoricFhlUkPiePeriodSummaryValidator @Inject()(appConfig: AppConfi
   }
 
   private def validatePathParams(data: CreateHistoricFhlUkPiePeriodSummaryRawData): Either[List[MtdError], Unit] = {
-    val ninoError =
-      NinoValidation.validate(data.nino)
+    val ninoError = NinoValidation.validate(data.nino)
     errorsResult(ninoError)
   }
 
   private def validateBody(body: CreateHistoricFhlUkPiePeriodSummaryRequestBody): Either[List[MtdError], Unit] = {
 
-    val formatDateErrors = DateValidation.validate(body.fromDate, true) ++
-      DateValidation.validate(body.toDate, false)
+    val formatDateErrors =
+      DateValidation.validate(body.fromDate, isFromDate = true) ++
+        DateValidation.validate(body.toDate, isFromDate = false)
 
-    val historicTaxPeriodYearErrors = HistoricTaxPeriodYearValidation.validate(minTaxYear, maxTaxYear, body.fromDate) ++
-      HistoricTaxPeriodYearValidation.validate(minTaxYear, maxTaxYear, body.toDate)
+    def validateToDateIsAfterFromDate: List[MtdError] =
+      if (formatDateErrors.isEmpty)
+        ToDateBeforeFromDateValidation.validate(from = body.fromDate, to = body.toDate)
+      else
+        NoValidationErrors
+
+    val ruleDateErrors = validateToDateIsAfterFromDate
 
     val incomeFormatErrors = body.income
       .map { income =>
@@ -83,6 +84,6 @@ class CreateHistoricFhlUkPiePeriodSummaryValidator @Inject()(appConfig: AppConfi
 
     val bothExpensesErrors = body.expenses.map(ConsolidatedExpensesValidation.validate(_, "/expenses/consolidatedExpenses")).getOrElse(Nil)
 
-    errorsResult(formatDateErrors ++ historicTaxPeriodYearErrors ++ incomeFormatErrors ++ expensesFormatErrors ++ bothExpensesErrors)
+    errorsResult(formatDateErrors ++ ruleDateErrors ++ incomeFormatErrors ++ expensesFormatErrors ++ bothExpensesErrors)
   }
 }

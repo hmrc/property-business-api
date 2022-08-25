@@ -16,21 +16,20 @@
 
 package v2.controllers
 
-import play.api.libs.json.{JsValue, Json}
+import play.api.libs.json.{ JsValue, Json }
 import play.api.mvc.Result
 import uk.gov.hmrc.http.HeaderCarrier
 import v2.mocks.MockIdGenerator
 import v2.mocks.hateoas.MockHateoasFactory
 import v2.mocks.requestParsers.MockAmendForeignPropertyPeriodSummaryRequestParser
-import v2.mocks.services.{MockAmendForeignPropertyPeriodSummaryService, MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService}
-import v2.models.audit.{AuditError, AuditEvent, AuditResponse, GenericAuditDetail}
+import v2.mocks.services.{ MockAmendForeignPropertyPeriodSummaryService, MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService }
+import v2.models.audit.{ AuditError, AuditEvent, AuditResponse, GenericAuditDetail }
 import v2.models.domain.Nino
 import v2.models.errors._
-import v2.models.hateoas.Method._
-import v2.models.hateoas.{HateoasWrapper, Link}
+import v2.models.hateoas.HateoasWrapper
 import v2.models.outcomes.ResponseWrapper
 import v2.models.request.amendForeignPropertyPeriodSummary._
-import v2.models.request.common.foreignFhlEea.{AmendForeignFhlEea, AmendForeignFhlEeaExpenses, ForeignFhlEeaIncome}
+import v2.models.request.common.foreignFhlEea.{ AmendForeignFhlEea, AmendForeignFhlEeaExpenses, ForeignFhlEeaIncome }
 import v2.models.request.common.foreignPropertyEntry._
 import v2.models.response.amendForeignPropertyPeriodSummary.AmendForeignPropertyPeriodSummaryHateoasData
 
@@ -249,38 +248,7 @@ class AmendForeignPropertyPeriodSummaryControllerSpec
   private val requestData = AmendForeignPropertyPeriodSummaryRequest(Nino(nino), businessId, taxYear, submissionId, requestBody)
   private val rawData     = AmendForeignPropertyPeriodSummaryRawData(nino, businessId, taxYear, submissionId, requestBodyJson)
 
-  val hateoasResponse: JsValue = Json.parse(
-    s"""
-      |{
-      |  "links": [
-      |    {
-      |      "href":"/individuals/business/property/foreign/$nino/$businessId/period/$taxYear/$submissionId",
-      |      "method":"GET",
-      |      "rel":"self"
-      |    },
-      |    {
-      |      "href":"/individuals/business/property/foreign/$nino/$businessId/period/$taxYear/$submissionId",
-      |      "method":"PUT",
-      |      "rel":"amend-foreign-property-period-summary"
-      |    },
-      |    {
-      |      "href":"/individuals/business/property/$nino/$businessId/period/$taxYear",
-      |      "method":"GET",
-      |      "rel":"list-property-period-summaries"
-      |    }
-      |  ]
-      |}
-    """.stripMargin
-  )
-
-  private val testHateoasLinks =
-    Seq(
-      Link(href = s"/individuals/business/property/foreign/$nino/$businessId/period/$taxYear/$submissionId", method = GET, rel = "self"),
-      Link(href = s"/individuals/business/property/foreign/$nino/$businessId/period/$taxYear/$submissionId",
-           method = PUT,
-           rel = "amend-foreign-property-period-summary"),
-      Link(href = s"/individuals/business/property/$nino/$businessId/period/$taxYear", method = GET, rel = "list-property-period-summaries")
-    )
+  val hateoasResponse: JsValue = testHateoasLinksJson
 
   def event(requestBody: JsValue, auditResponse: AuditResponse): AuditEvent[GenericAuditDetail] =
     AuditEvent(

@@ -33,9 +33,6 @@ import javax.inject.Singleton
 class CreateHistoricNonFhlUkPropertyPeriodSummaryValidator @Inject()(appConfig: AppConfig)
     extends Validator[CreateHistoricNonFhlUkPropertyPeriodSummaryRawData] {
 
-  private lazy val minTaxYear = appConfig.minimumTaxHistoric
-  private lazy val maxTaxYear = appConfig.maximumTaxHistoric
-
   override def validate(data: CreateHistoricNonFhlUkPropertyPeriodSummaryRawData): List[MtdError] = {
     (for {
       _    <- validatePathParams(data)
@@ -52,20 +49,26 @@ class CreateHistoricNonFhlUkPropertyPeriodSummaryValidator @Inject()(appConfig: 
 
   private def validateBody(body: CreateHistoricNonFhlUkPropertyPeriodSummaryRequestBody): Either[List[MtdError], Unit] = {
 
-    val formatDateErrors = DateValidation.validate(body.fromDate, true) ++
-      DateValidation.validate(body.toDate, false)
+    val formatDateErrors =
+      DateValidation.validate(body.fromDate, true) ++
+        DateValidation.validate(body.toDate, false)
 
-    val historicTaxPeriodYearErrors = HistoricTaxPeriodYearValidation.validate(minTaxYear, maxTaxYear, body.fromDate) ++
-      HistoricTaxPeriodYearValidation.validate(minTaxYear, maxTaxYear, body.toDate)
+    def validateToDateIsAfterFromDate: List[MtdError] =
+      if (formatDateErrors.isEmpty)
+        ToDateBeforeFromDateValidation.validate(body.fromDate, body.toDate)
+      else
+        NoValidationErrors
+
+    val ruleDateErrors = validateToDateIsAfterFromDate
 
     val incomeFormatErrors = body.income
       .map { income =>
         import income._
         validateOptional(periodAmount, "/income/periodAmount") ++
-          validateOptional(taxDeducted, "/income/taxDeducted") ++
           validateOptional(premiumsOfLeaseGrant, "/income/premiumsOfLeaseGrant") ++
           validateOptional(reversePremiums, "/income/reversePremiums") ++
           validateOptional(otherIncome, "/income/otherIncome") ++
+          validateOptional(taxDeducted, "/income/taxDeducted") ++
           validateOptional(rentARoom.flatMap(_.rentsReceived), "/income/rentARoom/rentsReceived")
       }
       .getOrElse(Nil)
@@ -75,19 +78,20 @@ class CreateHistoricNonFhlUkPropertyPeriodSummaryValidator @Inject()(appConfig: 
         import expenses._
         validateOptional(premisesRunningCosts, "/expenses/premisesRunningCosts") ++
           validateOptional(repairsAndMaintenance, "/expenses/repairsAndMaintenance") ++
-          validateOptional(financialCosts, "/expenses/premisesCosts") ++
+          validateOptional(financialCosts, "/expenses/financialCosts") ++
           validateOptional(professionalFees, "/expenses/professionalFees") ++
           validateOptional(costOfServices, "/expenses/costOfServices") ++
           validateOptional(other, "/expenses/other") ++
           validateOptional(consolidatedExpenses, "/expenses/consolidatedExpenses") ++
           validateOptional(travelCosts, "/expenses/travelCosts") ++
           validateOptional(residentialFinancialCostsCarriedForward, "/expenses/residentialFinancialCostsCarriedForward") ++
-          validateOptional(residentialFinancialCost, "/expenses/residentialFinancialCost")
+          validateOptional(residentialFinancialCost, "/expenses/residentialFinancialCost") ++
+          validateOptional(rentARoom.flatMap(_.amountClaimed), "/expenses/rentARoom/amountClaimed")
       }
       .getOrElse(Nil)
 
     val bothExpensesErrors = body.expenses.map(ConsolidatedExpensesValidation.validate(_, "/expenses/consolidatedExpenses")).getOrElse(Nil)
 
-    errorsResult(formatDateErrors ++ historicTaxPeriodYearErrors ++ incomeFormatErrors ++ expensesFormatErrors ++ bothExpensesErrors)
+    errorsResult(formatDateErrors ++ ruleDateErrors ++ incomeFormatErrors ++ expensesFormatErrors ++ bothExpensesErrors)
   }
 }

@@ -16,15 +16,14 @@
 
 package support
 
-import org.scalatest.{BeforeAndAfterAll, BeforeAndAfterEach}
+import org.scalatest.{ BeforeAndAfterAll, BeforeAndAfterEach }
 import org.scalatestplus.play.guice.GuiceOneServerPerSuite
 import play.api.inject.guice.GuiceApplicationBuilder
-import play.api.libs.json.{JsValue, Json}
-import play.api.libs.ws.{WSClient, WSRequest, WSResponse}
-import play.api.{Application, Environment, Mode}
+import play.api.libs.json.{ Format, JsValue, Json }
+import play.api.libs.ws.{ WSClient, WSRequest, WSResponse }
+import play.api.{ Application, Environment, Mode }
 
-trait IntegrationBaseSpec extends UnitSpec with WireMockHelper with GuiceOneServerPerSuite
-  with BeforeAndAfterEach with BeforeAndAfterAll {
+trait IntegrationBaseSpec extends UnitSpec with WireMockHelper with GuiceOneServerPerSuite with BeforeAndAfterEach with BeforeAndAfterAll {
 
   val mockHost: String = WireMockHelper.host
   val mockPort: String = WireMockHelper.wireMockPort.toString
@@ -34,16 +33,16 @@ trait IntegrationBaseSpec extends UnitSpec with WireMockHelper with GuiceOneServ
   def v2Enabled: Boolean
 
   def servicesConfig: Map[String, String] = Map(
-    "microservice.services.des.host" -> mockHost,
-    "microservice.services.des.port" -> mockPort,
-    "microservice.services.ifs.host" -> mockHost,
-    "microservice.services.ifs.port" -> mockPort,
+    "microservice.services.des.host"           -> mockHost,
+    "microservice.services.des.port"           -> mockPort,
+    "microservice.services.ifs.host"           -> mockHost,
+    "microservice.services.ifs.port"           -> mockPort,
     "microservice.services.mtd-id-lookup.host" -> mockHost,
     "microservice.services.mtd-id-lookup.port" -> mockPort,
-    "microservice.services.auth.host" -> mockHost,
-    "microservice.services.auth.port" -> mockPort,
-    "auditing.consumer.baseUri.port" -> mockPort,
-    "feature-switch.version-2.enabled" -> s"$v2Enabled"
+    "microservice.services.auth.host"          -> mockHost,
+    "microservice.services.auth.port"          -> mockPort,
+    "auditing.consumer.baseUri.port"           -> mockPort,
+    "feature-switch.version-2.enabled"         -> s"$v2Enabled"
   )
 
   override implicit lazy val app: Application = new GuiceApplicationBuilder()
@@ -60,6 +59,13 @@ trait IntegrationBaseSpec extends UnitSpec with WireMockHelper with GuiceOneServ
     stopWireMock()
     super.afterAll()
   }
+
+  /** Creates downstream request body by reading JSON and then writing it back via a model class `A` */
+  def downstreamBody[A: Format](json: JsValue): JsValue = Json.toJson(json.as[A])
+
+
+  /** Creates downstream request body by reading JSON and then writing it back via a model class `A` */
+  def downstreamBody[A: Format](json: String): String = downstreamBody(Json.parse(json)).toString()
 
   def buildRequest(path: String): WSRequest = client.url(s"http://localhost:$port$path").withFollowRedirects(false)
 

@@ -18,27 +18,27 @@ package v2.connectors
 
 import config.AppConfig
 
-import javax.inject.{Inject, Singleton}
-import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
+import javax.inject.{ Inject, Singleton }
+import uk.gov.hmrc.http.{ HeaderCarrier, HttpClient }
 import v2.connectors.DownstreamUri.IfsUri
 import v2.connectors.httpparsers.StandardIfsHttpParser._
 import v2.models.request.amendForeignPropertyAnnualSubmission.AmendForeignPropertyAnnualSubmissionRequest
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.{ ExecutionContext, Future }
 
 @Singleton
-class AmendForeignPropertyAnnualSubmissionConnector @Inject()(val http: HttpClient,
-                                                              val appConfig: AppConfig) extends BaseDownstreamConnector {
+class AmendForeignPropertyAnnualSubmissionConnector @Inject()(val http: HttpClient, val appConfig: AppConfig) extends BaseDownstreamConnector {
 
   def amendForeignPropertyAnnualSubmission(request: AmendForeignPropertyAnnualSubmissionRequest)(
-    implicit hc: HeaderCarrier,
-    ec: ExecutionContext,
-    correlationId: String): Future[DownstreamOutcome[Unit]] = {
+      implicit hc: HeaderCarrier,
+      ec: ExecutionContext,
+      correlationId: String): Future[DownstreamOutcome[Unit]] = {
 
     put(
       body = request.body,
-      uri = IfsUri[Unit]("income-tax/business/property/annual?taxableEntityId=" +
-        s"${request.nino.nino}&incomeSourceId=${request.businessId}&taxYear=${request.taxYear}")
+      uri = IfsUri[Unit](
+        "income-tax/business/property/annual?taxableEntityId=" +
+          s"${request.nino.nino}&incomeSourceId=${request.businessId}&taxYear=${request.taxYear}")
     )
   }
 }

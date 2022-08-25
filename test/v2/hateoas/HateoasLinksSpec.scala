@@ -33,7 +33,7 @@ class HateoasLinksSpec extends UnitSpec with MockAppConfig with HateoasLinks {
     MockAppConfig.apiGatewayContext returns "individuals/business/property" anyNumberOfTimes ()
   }
 
-  "Hateoas links" when {
+  "The HateoasLinks functions" when {
     "for foreign property endpoints" must {
       "work for FP1 'Create FP period summary'" in new Test {
         createForeignPropertyPeriodSummary(mockAppConfig, nino = nino, businessId = businessId, taxYear = taxYear) shouldBe
@@ -141,19 +141,20 @@ class HateoasLinksSpec extends UnitSpec with MockAppConfig with HateoasLinks {
       }
     }
 
-    "for Historic Uk Property Income & Expenses (PIE) Period Summary" must {
-      "work for PIE1 'Retrieve a Period Summary'" in new Test {
-        retrieveHistoricFhlUkPiePeriodSubmission(mockAppConfig, nino = nino, periodId = periodId, true) shouldBe
-          Link(
-            "/individuals/business/property/uk/furnished-holiday-lettings/{nino}/{periodId}",
-            GET,
-            "self"
-          )
+    "for a Historic Uk Property Income & Expenses (PIE) Period Summary" must {
+      "return the HATEOAS link for Retrieve" in new Test {
+        val result: Link = retrieveHistoricFhlUkPiePeriodSummary(mockAppConfig, nino = nino, periodId = periodId)
+
+        result shouldBe
+          Link("/individuals/business/property/uk/period/furnished-holiday-lettings/{nino}/{periodId}", GET, "self")
+
       }
 
-      "work for PIE2 'Amend a Period Summary'" in new Test {
-        amendHistoricFhlUkPiePeriodSubmission(mockAppConfig, nino = nino, periodId = periodId) shouldBe
-          Link("/individuals/business/property/uk/furnished-holiday-lettings/{nino}/{periodId}",
+      "return the HATEOAS link for Amend" in new Test {
+        val result: Link = amendHistoricFhlUkPiePeriodSummary(mockAppConfig, nino = nino, periodId = periodId)
+
+        result shouldBe
+          Link("/individuals/business/property/uk/period/furnished-holiday-lettings/{nino}/{periodId}",
                PUT,
                "amend-uk-property-historic-fhl-period-summary")
       }

@@ -18,6 +18,8 @@ package v2.models.request.createHistoricFhlUkPiePeriodSummary
 
 import play.api.libs.functional.syntax.{ toFunctionalBuilderOps, unlift }
 import play.api.libs.json.{ JsPath, OWrites, Reads, __ }
+import shapeless.HNil
+import utils.EmptinessChecker
 import v2.models.request.common.ukFhlPieProperty.{ UkFhlPieExpenses, UkFhlPieIncome }
 
 case class CreateHistoricFhlUkPiePeriodSummaryRequestBody(fromDate: String,
@@ -26,6 +28,11 @@ case class CreateHistoricFhlUkPiePeriodSummaryRequestBody(fromDate: String,
                                                           expenses: Option[UkFhlPieExpenses])
 
 object CreateHistoricFhlUkPiePeriodSummaryRequestBody {
+
+  implicit val emptinessChecker: EmptinessChecker[CreateHistoricFhlUkPiePeriodSummaryRequestBody] = EmptinessChecker.use { body =>
+    "income"     -> body.income ::
+      "expenses" -> body.expenses :: HNil
+  }
 
   implicit val reads: Reads[CreateHistoricFhlUkPiePeriodSummaryRequestBody] = (
     (__ \ "fromDate").read[String] and

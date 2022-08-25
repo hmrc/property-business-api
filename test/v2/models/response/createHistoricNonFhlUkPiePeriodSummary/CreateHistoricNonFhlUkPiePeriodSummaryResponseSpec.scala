@@ -16,32 +16,26 @@
 
 package v2.models.response.createHistoricNonFhlUkPiePeriodSummary
 
-import play.api.libs.json.Json
+import play.api.libs.json.{ JsValue, Json }
 import support.UnitSpec
-import v2.models.utils.JsonErrorValidators
+import v2.models.domain.PeriodId
 
-class CreateHistoricNonFhlUkPiePeriodSummaryResponseSpec extends UnitSpec with JsonErrorValidators {
+class CreateHistoricNonFhlUkPiePeriodSummaryResponseSpec extends UnitSpec {
 
-  val createHistoricNonFhlUkPiePeriodSummaryResponse = CreateHistoricNonFhlUkPiePeriodSummaryResponse(
-    transactionReference = "0000000000000001"
-  )
+  val periodId: String = "2017-04-06_2017-07-05"
 
-  val json = Json.parse(
-    """{
-      |  "transactionReference": "0000000000000001"
-      |}""".stripMargin)
+  val expectedJsonToVendor: JsValue = Json.parse(s"""
+                                                    | {
+                                                    |    "periodId": "$periodId"
+                                                    | }
+       """.stripMargin)
 
-  "reads" when {
-    "passed a valid JSON" should {
-      "return a valid model" in {
-        json.as[CreateHistoricNonFhlUkPiePeriodSummaryResponse] shouldBe createHistoricNonFhlUkPiePeriodSummaryResponse
-      }
-    }
-  }
   "writes" when {
-    "passed valid model" should {
-      "return valid JSON" in {
-        Json.toJson(createHistoricNonFhlUkPiePeriodSummaryResponse) shouldBe json
+    "passed an object" should {
+      "return the object as JSON" in {
+        val response = CreateHistoricNonFhlUkPiePeriodSummaryResponse(PeriodId(periodId))
+        val result   = Json.toJson(response)
+        result shouldBe expectedJsonToVendor
       }
     }
   }

@@ -16,19 +16,20 @@
 
 package v2.services
 
-import cats.implicits._
 import cats.data.EitherT
-
-import javax.inject.{ Inject, Singleton }
+import cats.implicits._
 import uk.gov.hmrc.http.HeaderCarrier
 import utils.Logging
-import v2.controllers.EndpointLogContext
 import v2.connectors.CreateHistoricFhlUkPiePeriodSummaryConnector
+import v2.controllers.EndpointLogContext
+import v2.models.domain.PeriodId
 import v2.models.errors._
+import v2.models.outcomes.ResponseWrapper
 import v2.models.request.createHistoricFhlUkPiePeriodSummary.CreateHistoricFhlUkPiePeriodSummaryRequest
 import v2.models.response.createHistoricFhlUkPiePeriodSummary.CreateHistoricFhlUkPiePeriodSummaryResponse
 import v2.support.DownstreamResponseMappingSupport
 
+import javax.inject.{ Inject, Singleton }
 import scala.concurrent.{ ExecutionContext, Future }
 
 @Singleton
@@ -42,8 +43,13 @@ class CreateHistoricFhlUkPiePeriodSummaryService @Inject()(connector: CreateHist
       logContext: EndpointLogContext,
       correlationId: String): Future[ServiceOutcome[CreateHistoricFhlUkPiePeriodSummaryResponse]] = {
 
+    def toResponse(wrapper: ResponseWrapper[Unit]): ResponseWrapper[CreateHistoricFhlUkPiePeriodSummaryResponse] =
+      wrapper
+        .map(_ => CreateHistoricFhlUkPiePeriodSummaryResponse(PeriodId(request.body.fromDate, request.body.toDate)))
+
     val result = for {
       ifsResponseWrapper <- EitherT(connector.createPeriodSummary(request))
+        .map(toResponse)
         .leftMap(mapDownstreamErrors(ifsErrorMap))
     } yield ifsResponseWrapper
 
@@ -63,7 +69,7 @@ class CreateHistoricFhlUkPiePeriodSummaryService @Inject()(connector: CreateHist
       "NOT_CONTIGUOUS_PERIOD"   -> RuleNotContiguousPeriodError,
       "INVALID_PERIOD"          -> RuleToDateBeforeFromDateError,
       "BOTH_EXPENSES_SUPPLIED"  -> RuleBothExpensesSuppliedError,
-      "TAX_YEAR_NOT_SUPPORTED"  -> RuleTaxYearNotSupportedError,
+      "TAX_YEAR_NOT_SUPPORTED"  -> RuleHistoricTaxYearNotSupportedError,
       "SERVER_ERROR"            -> InternalError,
       "SERVICE_UNAVAILABLE"     -> InternalError
     )

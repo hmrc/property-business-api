@@ -81,7 +81,7 @@ class RetrieveHistoricNonFhlUkPropertyAnnualSubmissionControllerSpec
   private val requestData = RetrieveHistoricNonFhlUkPropertyAnnualSubmissionRequest(Nino(nino), TaxYear.fromMtd(taxYear))
 
   private val testHateoasLink =
-    Link(href = s"individuals/business/property/uk/non-furnished-holiday-lettings/$nino/$taxYear", method = GET, rel = "self")
+    Link(href = s"individuals/business/property/uk/annual/non-furnished-holiday-lettings/$nino/$taxYear", method = GET, rel = "self")
 
   private val annualAdjustments = AnnualAdjustments(
     lossBroughtForward = Some(BigDecimal("200.00")),

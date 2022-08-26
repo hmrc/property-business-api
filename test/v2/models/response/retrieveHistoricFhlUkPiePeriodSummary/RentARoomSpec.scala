@@ -58,24 +58,24 @@ class RentARoomSpec extends UnitSpec with JsonErrorValidators {
 
   "reads" when {
     "passed a valid Income JSON" should {
-      "return a valid model" in {
+      "return a valid object" in {
         readsIncomeJson.as[RentARoomIncome] shouldBe rentARoomIncome
       }
     }
     "passed a valid Expenses JSON" should {
-      "return a valid model" in {
+      "return a valid object" in {
         readsExpensesJson.as[RentARoomExpenses] shouldBe rentARoomExpenses
       }
     }
   }
 
   "writes" when {
-    "passed valid Income model" should {
+    "passed valid Income object" should {
       "return valid JSON" in {
         Json.toJson(rentARoomIncome) shouldBe writesIncomeJson
       }
     }
-    "passed a valid Expenses model" should {
+    "passed a valid Expenses object" should {
       "return valid JSON" in {
         Json.toJson(rentARoomExpenses) shouldBe writesExpensesJson
       }

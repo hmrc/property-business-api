@@ -16,9 +16,9 @@
 
 package v2.models.request.retrieveHistoricFhlUkPropertyAnnualSubmission
 
-import v2.models.domain.{Nino}
+import v2.models.domain.{Nino, PeriodId}
 import v2.models.request.RawData
 
-case class RetrieveHistoricFhlUkPiePeriodSummaryRawData(nino: String, periodId: String) extends RawData
+case class RetrieveHistoricFhlUkPiePeriodSummaryRawData(nino: String, periodId: PeriodId) extends RawData
 
-case class RetrieveHistoricFhlUkPiePeriodSummaryRequest(nino: Nino, periodId: String)
+case class RetrieveHistoricFhlUkPiePeriodSummaryRequest(nino: Nino, periodId: PeriodId)

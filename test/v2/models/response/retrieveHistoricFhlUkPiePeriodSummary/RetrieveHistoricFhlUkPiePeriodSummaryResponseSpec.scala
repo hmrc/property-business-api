@@ -22,6 +22,19 @@ import support.UnitSpec
 
 class RetrieveHistoricFhlUkPiePeriodSummaryResponseSpec extends UnitSpec with MockAppConfig {
 
+  val periodIncome = PeriodIncome(Some(5000.99), Some(5000.99), Option(RentARoomIncome(Some(5000.99))))
+  val periodExpenses = PeriodExpenses(
+    Some(5000.99),
+    Some(5000.99),
+    Some(5000.99),
+    Some(5000.99),
+    Some(5000.99),
+    Some(5000.99),
+    Some(5000.99),
+    Some(5000.99),
+    Some(RentARoomExpenses(Some(5000.99)))
+  )
+
   val downstreamJson: JsValue = Json.parse("""{
       |   "from": "2001-01-01",
       |   "to": "2001-01-01",
@@ -57,39 +70,16 @@ class RetrieveHistoricFhlUkPiePeriodSummaryResponseSpec extends UnitSpec with Mo
       |}
       |""".stripMargin)
 
-//  private def decimal(value: String): Option[BigDecimal] = Option(BigDecimal(value))
-
   val model = RetrieveHistoricFhlUkPiePeriodSummaryResponse(
     fromDate = "2001-01-01",
     toDate = "2001-01-01",
     income = Some(
-      PeriodIncome(Some(5000.99), Some(5000.99), Option(RentARoomIncome(Some(5000.99))))
+      periodIncome
     ),
     expenses = Some(
-      PeriodExpenses(
-        Some(5000.99),
-        Some(5000.99),
-        Some(5000.99),
-        Some(5000.99),
-        Some(5000.99),
-        Some(5000.99),
-        Some(5000.99),
-        Some(5000.99),
-        Some(RentARoomExpenses(Some(5000.99)))
-      ))
+      periodExpenses
+      )
   )
-
-//  val model = RetrieveHistoricFhlUkPiePeriodSummaryResponse(
-//    Some(
-//      AnnualAdjustments(decimal("200.00"),
-//                        decimal("300.00"),
-//                        decimal("400.00"),
-//                        true,
-//                        decimal("500.02"),
-//                        true,
-//                        Option(RentARoom(jointlyLet = false)))),
-//    Some(AnnualAllowances(decimal("200.00"), decimal("300.00"), decimal("400.02"), decimal("10.02")))
-//  )
 
   "reads" should {
     "read the JSON object from downstream into a case class" in {

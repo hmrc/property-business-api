@@ -23,6 +23,8 @@ import play.api.mvc.{ Action, AnyContent, ControllerComponents }
 import utils.{ IdGenerator, Logging }
 import v2.hateoas.HateoasFactory
 import v2.models.errors._
+import v2.models.request.retrieveHistoricFhlUkPropertyAnnualSubmission.RetrieveHistoricFhlUkPiePeriodSummaryRawData
+import v2.models.response.retrieveHistoricFhlUkPiePeriodSummary.RetrieveHistoricFhlUkPiePeriodSummaryHateoasData
 import v2.services.{ EnrolmentsAuthService, MtdIdLookupService }
 
 import javax.inject.{ Inject, Singleton }
@@ -50,14 +52,14 @@ class RetrieveHistoricFhlUkPiePeriodSummaryController @Inject()(val authService:
       logger.info(
         message = s"[${endpointLogContext.controllerName}][${endpointLogContext.endpointName}] " +
           s"with correlationId : $correlationId")
-      val rawData = RetrieveHistoricFhlUkPropertyPeriodSummaryRawData(nino, periodId)
+      val rawData = RetrieveHistoricFhlUkPiePeriodSummaryRawData(nino, periodId)
       val result =
         for {
           parsedRequest   <- EitherT.fromEither[Future](parser.parseRequest(rawData))
           serviceResponse <- EitherT(service.retrieve(parsedRequest))
           vendorResponse <- EitherT.fromEither[Future](
             hateoasFactory
-              .wrap(serviceResponse.responseData, RetrieveHistoricFhlUkPropertyPeriodSummarynHateoasData(nino, periodId))
+              .wrap(serviceResponse.responseData, RetrieveHistoricFhlUkPiePeriodSummaryHateoasData(nino, periodId))
               .asRight[ErrorWrapper]
           )
         } yield {

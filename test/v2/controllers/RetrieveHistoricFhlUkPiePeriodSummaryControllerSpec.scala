@@ -21,12 +21,24 @@ import play.api.mvc.Result
 import uk.gov.hmrc.http.HeaderCarrier
 import v2.mocks.MockIdGenerator
 import v2.mocks.hateoas.MockHateoasFactory
-import v2.mocks.services.{ MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService, }
+import v2.mocks.services.{ MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService }
 import v2.models.domain.{ Nino, PeriodId }
 import v2.models.errors._
 import v2.models.hateoas.Method.GET
 import v2.models.hateoas.{ HateoasWrapper, Link }
 import v2.models.outcomes.ResponseWrapper
+import v2.models.request.retrieveHistoricFhlUkPropertyAnnualSubmission.{
+  RetrieveHistoricFhlUkPiePeriodSummaryRawData,
+  RetrieveHistoricFhlUkPiePeriodSummaryRequest
+}
+import v2.models.response.retrieveHistoricFhlUkPiePeriodSummary.{
+  PeriodExpenses,
+  PeriodIncome,
+  RentARoomExpenses,
+  RentARoomIncome,
+  RetrieveHistoricFhlUkPiePeriodSummaryHateoasData,
+  RetrieveHistoricFhlUkPiePeriodSummaryResponse
+}
 
 import scala.concurrent.Future
 
@@ -68,7 +80,28 @@ class RetrieveHistoricFhlUkPiePeriodSummaryControllerSpec
   private val mockHateoasLink =
     Link(href = s"individuals/business/property/uk/annual/furnished-holiday-lettings/$nino/$periodId", method = GET, rel = "self")
 
-  val responseBody: RetrieveHistoricFhlUkPiePeriodSummaryResponse = RetrieveHistoricFhlUkPiePeriodSummaryResponse()
+  val periodIncome: PeriodIncome = PeriodIncome(Some(5000.99), Some(5000.99), Option(RentARoomIncome(Some(5000.99))))
+
+  val periodExpenses: PeriodExpenses = PeriodExpenses(
+    Some(5000.99),
+    Some(5000.99),
+    Some(5000.99),
+    Some(5000.99),
+    Some(5000.99),
+    Some(5000.99),
+    Some(5000.99),
+    Some(5000.99),
+    Some(RentARoomExpenses(Some(5000.99)))
+  )
+
+  val responseBody: RetrieveHistoricFhlUkPiePeriodSummaryResponse = RetrieveHistoricFhlUkPiePeriodSummaryResponse(fromDate = "2001-01-01",
+                                                                                                                  toDate = "2001-01-01",
+                                                                                                                  income = Some(
+                                                                                                                    periodIncome
+                                                                                                                  ),
+                                                                                                                  expenses = Some(
+                                                                                                                    periodExpenses
+                                                                                                                  ))
 
   "handleRequest" should {
     "return Ok" when {

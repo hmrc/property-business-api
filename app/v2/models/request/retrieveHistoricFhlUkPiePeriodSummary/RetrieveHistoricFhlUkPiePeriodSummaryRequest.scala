@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 
-package v2.models.domain
+package v2.models.request.retrieveHistoricFhlUkPropertyAnnualSubmission
 
-sealed trait HistoricPropertyType
+import v2.models.domain.{Nino, PeriodId}
+import v2.models.request.RawData
 
-object HistoricPropertyType {
-  case object NonFhl extends HistoricPropertyType
-  case object Fhl    extends HistoricPropertyType
-}
+case class RetrieveHistoricFhlUkPiePeriodSummaryRawData(nino: String, periodId: String) extends RawData
+
+case class RetrieveHistoricFhlUkPiePeriodSummaryRequest(nino: Nino, periodId: PeriodId)

@@ -14,11 +14,18 @@
  * limitations under the License.
  */
 
-package v2.models.domain
+package v2.models.response.retrieveHistoricFhlUkPiePeriodSummary
 
-sealed trait HistoricPropertyType
+import play.api.libs.json.{ Json, OFormat }
 
-object HistoricPropertyType {
-  case object NonFhl extends HistoricPropertyType
-  case object Fhl    extends HistoricPropertyType
+case class RentARoomIncome(rentsReceived: Option[BigDecimal])
+
+case object RentARoomIncome {
+  implicit val format: OFormat[RentARoomIncome] = Json.format[RentARoomIncome]
+}
+
+case class RentARoomExpenses(amountClaimed: Option[BigDecimal])
+
+case object RentARoomExpenses {
+  implicit val format: OFormat[RentARoomExpenses] = Json.format[RentARoomExpenses]
 }

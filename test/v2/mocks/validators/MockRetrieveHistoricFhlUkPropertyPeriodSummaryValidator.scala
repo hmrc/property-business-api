@@ -20,6 +20,7 @@ import org.scalamock.handlers.CallHandler1
 import org.scalamock.scalatest.MockFactory
 import v2.controllers.requestParsers.validators.RetrieveHistoricFhlUkPropertyPeriodSummaryValidator
 import v2.models.errors.MtdError
+import v2.models.request.retrieveHistoricFhlUkPropertyAnnualSubmission.RetrieveHistoricFhlUkPiePeriodSummaryRawData
 
 class MockRetrieveHistoricFhlUkPropertyPeriodSummaryValidator extends MockFactory {
 
@@ -27,10 +28,9 @@ class MockRetrieveHistoricFhlUkPropertyPeriodSummaryValidator extends MockFactor
 
   object MockRetrieveHistoricFhlUkPropertyPeriodSummaryValidator {
 
-    def validate(
-        data: RetrieveHistoricFhlUkPropertyPeriodSummaryRawData): CallHandler1[RetrieveHistoricFhlUkPropertyPeriodSummaryRawData, List[MtdError]] = {
+    def validate(data: RetrieveHistoricFhlUkPiePeriodSummaryRawData): CallHandler1[RetrieveHistoricFhlUkPiePeriodSummaryRawData, List[MtdError]] = {
       (mockValidator
-        .validate(_: RetrieveHistoricFhlUkPropertyPeriodSummaryRawData))
+        .validate(_: RetrieveHistoricFhlUkPiePeriodSummaryRawData))
         .expects(data)
     }
   }

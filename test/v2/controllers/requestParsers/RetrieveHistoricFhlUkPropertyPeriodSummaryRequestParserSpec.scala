@@ -20,6 +20,10 @@ import support.UnitSpec
 import v2.mocks.validators.MockRetrieveHistoricFhlUkPropertyPeriodSummaryValidator
 import v2.models.domain.{ Nino, PeriodId }
 import v2.models.errors.{ BadRequestError, ErrorWrapper, NinoFormatError, PeriodIdFormatError }
+import v2.models.request.retrieveHistoricFhlUkPropertyAnnualSubmission.{
+  RetrieveHistoricFhlUkPiePeriodSummaryRawData,
+  RetrieveHistoricFhlUkPiePeriodSummaryRequest
+}
 
 class RetrieveHistoricFhlUkPropertyPeriodSummaryRequestParserSpec extends UnitSpec {
 
@@ -27,8 +31,8 @@ class RetrieveHistoricFhlUkPropertyPeriodSummaryRequestParserSpec extends UnitSp
   val periodId: String               = "2017-04-06_2017-07-04"
   implicit val correlationId: String = "X-12345"
 
-  val inputData: RetrieveHistoricFhlUkPropertyPeriodSummaryRawData =
-    RetrieveHistoricFhlUkPropertyPeriodSummaryRawData(nino, periodId)
+  val inputData: RetrieveHistoricFhlUkPiePeriodSummaryRawData =
+    RetrieveHistoricFhlUkPiePeriodSummaryRawData(nino, periodId)
 
   trait Test extends MockRetrieveHistoricFhlUkPropertyPeriodSummaryValidator {
     lazy val parser = new RetrieveHistoricFhlUkPropertyPeriodSummaryRequestParser(mockValidator)
@@ -39,7 +43,7 @@ class RetrieveHistoricFhlUkPropertyPeriodSummaryRequestParserSpec extends UnitSp
       "valid request data is supplied" in new Test {
         MockRetrieveHistoricFhlUkPropertyPeriodSummaryValidator.validate(inputData).returns(Nil)
 
-        parser.parseRequest(inputData) shouldBe Right(RetrieveHistoricFhlUkPropertyPeriodSummaryRequest(Nino(data.nino), PeriodId(data.periodId)))
+        parser.parseRequest(inputData) shouldBe Right(RetrieveHistoricFhlUkPiePeriodSummaryRequest(Nino(nino), PeriodId(periodId)))
       }
     }
 

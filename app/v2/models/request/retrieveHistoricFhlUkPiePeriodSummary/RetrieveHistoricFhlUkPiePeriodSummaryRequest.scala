@@ -14,18 +14,11 @@
  * limitations under the License.
  */
 
-package v2.models.response.retrieveHistoricFhlUkPiePeriodSummary
+package v2.models.request.retrieveHistoricFhlUkPropertyAnnualSubmission
 
-import play.api.libs.json.{ Json, OFormat }
+import v2.models.domain.{Nino}
+import v2.models.request.RawData
 
-case class RentARoomIncome(rentsReceived: Option[BigDecimal])
+case class RetrieveHistoricFhlUkPiePeriodSummaryRawData(nino: String, periodId: String) extends RawData
 
-case object RentARoomIncome {
-  implicit val format: OFormat[RentARoomIncome] = Json.format[RentARoomIncome]
-}
-
-case class RentARoomExpenses(amountClaimed: Option[BigDecimal])
-
-case object RentARoomExpenses {
-  implicit val format: OFormat[RentARoomExpenses] = Json.format[RentARoomExpenses]
-}
+case class RetrieveHistoricFhlUkPiePeriodSummaryRequest(nino: Nino, periodId: String)

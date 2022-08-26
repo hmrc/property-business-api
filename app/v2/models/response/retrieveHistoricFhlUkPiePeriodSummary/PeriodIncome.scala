@@ -17,17 +17,17 @@
 package v2.models.response.retrieveHistoricFhlUkPiePeriodSummary
 
 import play.api.libs.functional.syntax._
-import play.api.libs.json.{JsPath, Json, OWrites, Reads}
+import play.api.libs.json.{ JsPath, Json, OWrites, Reads }
 
-case class PeriodIncome(amount: Option[BigDecimal], taxDeducted: Option[BigDecimal], rentARoom: Option[RentARoom])
+case class PeriodIncome(periodAmount: Option[BigDecimal], taxDeducted: Option[BigDecimal], rentARoom: Option[RentARoomIncome])
 
-case object PeriodIncome{
+case object PeriodIncome {
   implicit val writes: OWrites[PeriodIncome] = Json.writes[PeriodIncome]
 
   implicit val reads: Reads[PeriodIncome] = (
-    (JsPath \ "amount").readNullable[BigDecimal] and
+    (JsPath \ "periodAmount").readNullable[BigDecimal] and
       (JsPath \ "taxDeducted").readNullable[BigDecimal] and
-      (JsPath \ "rentARoom").readNullable[RentARoom]
-    ) (PeriodIncome.apply _)
+      (JsPath \ "rentARoom").readNullable[RentARoomIncome]
+  )(PeriodIncome.apply _)
 
 }

@@ -33,7 +33,7 @@ object RetrieveHistoricFhlUkPiePeriodSummaryResponse extends HateoasLinks {
   implicit val reads: Reads[RetrieveHistoricFhlUkPiePeriodSummaryResponse] = (
     (JsPath \ "from").read[String] and
       (JsPath \ "to").read[String] and
-      (__ \ "financials" \ "incomes").readNullable[PeriodIncome] and
+      (__ \ "financials" \ "incomes" ).readNullable[PeriodIncome] and
       //(JsPath \ "financials/incomes").readNullable[PeriodIncome] and
       (JsPath \ "financials" \ "deductions").readNullable[PeriodExpenses]
     )(RetrieveHistoricFhlUkPiePeriodSummaryResponse.apply _)

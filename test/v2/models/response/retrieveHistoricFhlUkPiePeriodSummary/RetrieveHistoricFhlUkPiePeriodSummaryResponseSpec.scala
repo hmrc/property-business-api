@@ -28,29 +28,29 @@ class RetrieveHistoricFhlUkPiePeriodSummaryResponseSpec extends UnitSpec with Mo
       |   "financials": {
       |      "incomes": {
       |         "rentIncome": {
-      |            "amount": 200.00,
-      |            "taxDeducted": 100.00
+      |            "amount": 5000.99,
+      |            "taxDeducted": 5000.99
       |         },
-      |         "premiumsOfLeaseGrant": 200.00,
-      |         "reversePremiums": 200.00,
-      |         "otherIncome": 200.00,
+      |         "premiumsOfLeaseGrant": 5000.99,
+      |         "reversePremiums": 5000.99,
+      |         "otherIncome": 5000.99,
       |        "ukRentARoom": {
-      |            "rentsReceived": 100.00
+      |            "rentsReceived": 5000.99
       |         }
       |      },
       |      "deductions": {
-      |         "premisesRunningCosts": 200.00,
-      |         "repairsAndMaintenance": 200.00,
-      |         "financialCosts": 200.00,
-      |         "professionalFees": 200.00,
-      |         "costOfServices": 200.00,
-      |         "other": 200.00,
-      |         "consolidatedExpenses": 200.00,
-      |         "residentialFinancialCost": 200.00,
-      |         "travelCosts": 200.00,
-      |         "residentialFinancialCostsCarriedForward": 200.00,
+      |         "premisesRunningCosts": 5000.99,
+      |         "repairsAndMaintenance": 5000.99,
+      |         "financialCosts": 5000.99,
+      |         "professionalFees": 5000.99,
+      |         "costOfServices": 5000.99,
+      |         "other": 5000.99,
+      |         "consolidatedExpenses": 5000.99,
+      |         "residentialFinancialCost": 5000.99,
+      |         "travelCosts": 5000.99,
+      |         "residentialFinancialCostsCarriedForward": 5000.99,
       |         "ukRentARoom": {
-      |            "amountClaimed": 200.00
+      |            "amountClaimed": 5000.99
       |         }
       |      }
       |   }

@@ -42,13 +42,18 @@ class PeriodIncomeSpec extends UnitSpec with JsonErrorValidators {
       |""".stripMargin
   )
 
-  val readsJson: JsValue = Json.parse("""{
-                                         |"periodAmount":5000.99,
-                                         |    "taxDeducted":5000.99,
-                                         |    "rentARoom":{
-                                         |      "rentsReceived":5000.99
-                                         |    }
-                                         |  }
+  val readsJson: JsValue = Json.parse(""" {
+                                        |         "rentIncome": {
+                                        |            "amount": 5000.99,
+                                        |            "taxDeducted": 5000.99
+                                        |         },
+                                        |         "premiumsOfLeaseGrant": 5000.99,
+                                        |         "reversePremiums": 5000.99,
+                                        |         "otherIncome": 5000.99,
+                                        |        "ukRentARoom": {
+                                        |            "rentsReceived": 5000.99
+                                        |         }
+                                        |      }
                                          |""".stripMargin)
 
   "reads" when {

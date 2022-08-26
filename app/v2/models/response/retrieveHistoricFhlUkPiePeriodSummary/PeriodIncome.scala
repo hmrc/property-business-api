@@ -25,9 +25,9 @@ case object PeriodIncome {
   implicit val writes: OWrites[PeriodIncome] = Json.writes[PeriodIncome]
 
   implicit val reads: Reads[PeriodIncome] = (
-    (JsPath \ "periodAmount").readNullable[BigDecimal] and
-      (JsPath \ "taxDeducted").readNullable[BigDecimal] and
-      (JsPath \ "rentARoom").readNullable[RentARoomIncome]
+    (JsPath \ "rentIncome" \ "amount").readNullable[BigDecimal] and
+      (JsPath \ "rentIncome" \ "taxDeducted").readNullable[BigDecimal] and
+      (JsPath \ "ukRentARoom").readNullable[RentARoomIncome]
   )(PeriodIncome.apply _)
 
 }

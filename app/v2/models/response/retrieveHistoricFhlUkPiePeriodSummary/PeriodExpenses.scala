@@ -41,6 +41,6 @@ case object PeriodExpenses {
       (JsPath \ "other").readNullable[BigDecimal] and
       (JsPath \ "consolidatedExpenses").readNullable[BigDecimal] and
       (JsPath \ "travelCosts").readNullable[BigDecimal] and
-      (JsPath \ "rentARoom").readNullable[RentARoomExpenses]
+      (JsPath \ "ukRentARoom").readNullable[RentARoomExpenses]
   )(PeriodExpenses.apply _)
 }

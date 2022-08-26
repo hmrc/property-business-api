@@ -55,18 +55,20 @@ class PeriodExpensesSpec extends UnitSpec with JsonErrorValidators {
   )
 
   val readsJson: JsValue = Json.parse("""{
-                                        |"premisesRunningCosts": 5000.99,
-                                        |    "repairsAndMaintenance": 5000.99,
-                                        |    "financialCosts": 5000.99,
-                                        |    "professionalFees": 5000.99,
-                                        |    "costOfServices": 5000.99,
-                                        |    "other": 5000.99,
-                                        |    "consolidatedExpenses": 5000.99,
-                                        |    "travelCosts": 5000.99,
-                                        |    "rentARoom":{
-                                        |      "amountClaimed":5000.99
-                                        |    }
-                                        |  }
+                                        |         "premisesRunningCosts": 5000.99,
+                                        |         "repairsAndMaintenance": 5000.99,
+                                        |         "financialCosts": 5000.99,
+                                        |         "professionalFees": 5000.99,
+                                        |         "costOfServices": 5000.99,
+                                        |         "other": 5000.99,
+                                        |         "consolidatedExpenses": 5000.99,
+                                        |         "residentialFinancialCost": 5000.99,
+                                        |         "travelCosts": 5000.99,
+                                        |         "residentialFinancialCostsCarriedForward": 5000.99,
+                                        |         "ukRentARoom": {
+                                        |            "amountClaimed": 5000.99
+                                        |         }
+                                        |      }
                                         |""".stripMargin)
 
   "reads" when {

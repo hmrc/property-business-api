@@ -54,7 +54,7 @@ class RetrieveHistoricFhlUkPropertyPeriodSummaryRequestParserSpec extends UnitSp
           .returns(List(NinoFormatError))
 
         parser.parseRequest(inputData) shouldBe
-          Left(ErrorWrapper(correlationId, NinoFormatError, None))
+          Left(ErrorWrapper(correlationId, NinoFormatError))
       }
 
       "multiple validation errors occur" in new Test {

@@ -1,0 +1,43 @@
+{
+  "periodDates": {
+    "fromDate": "2001-01-01",
+    "toDate": "2001-01-01"
+  },
+  "income": {
+    "amount": 200.00,
+    "taxDeducted": 100.00,
+    "rentARoom": {
+      "rentsReceived": 5000.99
+    }
+  },
+  "periodExpenses": {
+    "premiseRunningCosts": 5000.99,
+    "repairsAndMaintenance": 5000.99,
+    "financialCosts": 200.00,
+    "professionalFees": 200.00,
+    "costOfServices": 200.00,
+    "other": 200.00,
+    "consolidatedExpenses": 5000.99,
+    "travelCosts": 5000.99,
+    "rentARoom": {
+      "amountClaimed": 5000.99
+    }
+  },
+  "links": [
+    {
+      "href": "/individuals/business/property/uk/{nino}/{businessId}/period/{taxYear}/{submissionId}",
+      "method": "PUT",
+      "rel": "amend-uk-property-period-summary"
+    },
+    {
+      "href": "/individuals/business/property/uk/{nino}/{businessId}/period/{taxYear}/{submissionId}",
+      "method": "GET",
+      "rel": "self"
+    },
+    {
+      "href": "/individuals/business/property/{nino}/{businessId}/period/{taxYear}",
+      "method": "GET",
+      "rel": "list-property-period-summaries"
+    }
+  ]
+}

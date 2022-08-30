@@ -67,7 +67,7 @@
             "type": "string",
             "enum": [
               "GET",
-              "POST",
+              "POST"
             ]
           },
           "rel": {

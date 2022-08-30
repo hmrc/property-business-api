@@ -21,6 +21,7 @@ import play.api.mvc.Result
 import uk.gov.hmrc.http.HeaderCarrier
 import v2.mocks.MockIdGenerator
 import v2.mocks.hateoas.MockHateoasFactory
+import v2.mocks.requestParsers.MockRetrieveHistoricFhlUkPiePeriodSummaryRequestParser
 import v2.mocks.services.{ MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService }
 import v2.mocks.validators.MockRetrieveHistoricFhlUkPropertyPeriodSummaryValidator
 import v2.models.domain.{ Nino, PeriodId }
@@ -95,14 +96,15 @@ class RetrieveHistoricFhlUkPiePeriodSummaryControllerSpec
     Some(RentARoomExpenses(Some(5000.99)))
   )
 
-  val responseBody: RetrieveHistoricFhlUkPiePeriodSummaryResponse = RetrieveHistoricFhlUkPiePeriodSummaryResponse(fromDate = "2001-01-01",
-                                                                                                                  toDate = "2001-01-01",
-                                                                                                                  income = Some(
-                                                                                                                    periodIncome
-                                                                                                                  ),
-                                                                                                                  expenses = Some(
-                                                                                                                    periodExpenses
-                                                                                                                  ))
+  val responseBody: RetrieveHistoricFhlUkPiePeriodSummaryResponse =
+    RetrieveHistoricFhlUkPiePeriodSummaryResponse(fromDate = "2001-01-01",
+                                                  toDate = "2001-01-01",
+                                                  income = Some(
+                                                    periodIncome
+                                                  ),
+                                                  expenses = Some(
+                                                    periodExpenses
+                                                  ))
 
   "handleRequest" should {
     "return Ok" when {
@@ -112,7 +114,7 @@ class RetrieveHistoricFhlUkPiePeriodSummaryControllerSpec
           .parseRequest(rawData)
           .returns(Right(requestData))
 
-        MockRetrieveHistoricFhlUkPiePeriodSummaryService
+        MockRetrieveHistoricFhlUkPiePeriodSummaryRequestParser
           .retrieve(requestData)
           .returns(Future.successful(Right(ResponseWrapper(correlationId, responseBody))))
 
@@ -159,7 +161,7 @@ class RetrieveHistoricFhlUkPiePeriodSummaryControllerSpec
               .parseRequest(rawData)
               .returns(Right(requestData))
 
-            MockRetrieveHistoricFhlUkPiePeriodSummaryService
+            MockRetrieveHistoricFhlUkPiePeriodSummaryRequestParser
               .retrieve(requestData)
               .returns(Future.successful(Left(ErrorWrapper(correlationId, mtdError))))
 

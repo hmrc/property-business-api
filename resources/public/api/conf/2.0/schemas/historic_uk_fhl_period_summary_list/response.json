@@ -51,7 +51,12 @@
                   "type": "string",
                   "example": "/individuals/business/property/uk/period/furnished-holiday-lettings/TC663795B/2019-03-24_2020-05-28"
                 }
-              }
+              },
+              "required": [
+                "method",
+                "rel",
+                "href"
+              ]
             }
           }
         }
@@ -84,8 +89,17 @@
             "type": "string",
             "example": "/individuals/business/property/uk/period/furnished-holiday-lettings/TC663795B"
           }
-        }
+        },
+        "required": [
+          "method",
+          "rel",
+          "href"
+        ]
       }
     }
-  }
+  },
+  "required": [
+    "submissions",
+    "links"
+  ]
 }

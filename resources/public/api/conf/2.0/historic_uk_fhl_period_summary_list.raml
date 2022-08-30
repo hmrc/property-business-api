@@ -10,7 +10,7 @@ description: This endpoint enables you to list the income and expenses for a fur
 (annotations.scope): "write:self-assessment"
 securedBy: [ sec.oauth_2_0: { scopes: [ "write:self-assessment" ] } ]
 responses:
-  201:
+  200:
     body:
       application/json:
         type: !include schemas/historic_uk_fhl_period_summary_list/response.json

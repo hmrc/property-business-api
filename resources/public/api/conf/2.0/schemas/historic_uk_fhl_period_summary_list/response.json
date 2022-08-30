@@ -5,8 +5,9 @@
   "properties": {
     "submissions": {
       "type": "array",
-      "description": "Array containing details about FHL UK property update periods",
       "items": {
+        "type": "object",
+        "description": "Array containing details about FHL UK property update periods",
         "properties": {
           "periodId": {
             "type": "string",

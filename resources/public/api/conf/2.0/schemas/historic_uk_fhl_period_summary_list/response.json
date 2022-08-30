@@ -1,0 +1,90 @@
+{
+  "title": "request",
+  "description": "Auto generated JSON schema based on the 'request' file",
+  "type": "object",
+  "properties": {
+    "submissions": {
+      "type": "array",
+      "description": "Array containing details about FHL UK property update periods",
+      "items": {
+        "properties": {
+          "periodId": {
+            "type": "string",
+            "description": "An identifier for the update period, unique to the customer's UK property business.",
+            "example": "2017-04-06_2017-07-04"
+          },
+          "fromDate": {
+            "type": "string",
+            "description": "The first day that the income, expenses and deduction period summary covers.\n\nMust conform to the format: YYYY-MM-DD.",
+            "example":"2017-04-06"
+          },
+          "toDate": {
+            "type": "string",
+            "description": "The last day that the income, expenses and deduction period summary covers.\n\nMust conform to the format: YYYY-MM-DD",
+            "example": "2017-07-04"
+          },
+          "links": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "description": "A list of endpoint links that indicate possible actions related to the current resource.",
+              "properties": {
+                "method": {
+                  "description": "The HTTP method type for the endpoint.",
+                  "type": "string",
+                  "enum": [
+                    "GET",
+                    "PUT"
+                  ]
+                },
+                "rel": {
+                  "description": "A label for the endpoint, which describes how it is related to the current resource. The rel will be self where the action is retrieval of the same resource.",
+                  "type": "string",
+                  "enum": [
+                    "self",
+                    "amend-uk-property-historic-fhl-period-summary"
+                  ]
+                },
+                "href": {
+                  "description": "The relative url of the endpoint.",
+                  "type": "string",
+                  "example": "/individuals/business/property/uk/period/furnished-holiday-lettings/TC663795B/2019-03-24_2020-05-28"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "links": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "description": "A list of endpoint links that indicate possible actions related to the current resource.",
+        "properties": {
+          "method": {
+            "description": "The HTTP method type for the endpoint.",
+            "type": "string",
+            "enum": [
+              "GET",
+              "POST",
+            ]
+          },
+          "rel": {
+            "description": "A label for the endpoint, which describes how it is related to the current resource. The rel will be self where the action is retrieval of the same resource.",
+            "type": "string",
+            "enum": [
+              "self",
+              "create-uk-property-historic-fhl-period-summary"
+            ]
+          },
+          "href": {
+            "description": "The relative url of the endpoint.",
+            "type": "string",
+            "example": "/individuals/business/property/uk/period/furnished-holiday-lettings/TC663795B"
+          }
+        }
+      }
+    }
+  }
+}

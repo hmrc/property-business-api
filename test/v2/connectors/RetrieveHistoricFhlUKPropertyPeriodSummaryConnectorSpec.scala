@@ -81,30 +81,6 @@ class RetrieveHistoricFhlUKPropertyPeriodSummaryConnectorSpec extends ConnectorS
       }
     }
 
-    "response has income only" must {
-      "return a valid result" in new Test {
-        val response = responseWith(Some(periodIncome), None)
-        val outcome = Right(ResponseWrapper(correlationId, response))
-
-        stubHttpResponse(outcome)
-
-        val result = await(connector.retrieve(request))
-        result shouldBe outcome
-      }
-    }
-
-    "response has neither income nor expenses" must {
-      "return a valid result" in new Test {
-        val response = responseWith(None, None)
-        val outcome = Right(ResponseWrapper(correlationId, response))
-
-        stubHttpResponse(outcome)
-
-        val result = await(connector.retrieve(request))
-        result shouldBe outcome
-      }
-    }
-
     "response is an error" must {
       "return the error" in new Test {
         val outcome = Left(ResponseWrapper(correlationId, DownstreamErrors.single(DownstreamErrorCode("SOME_ERROR"))))

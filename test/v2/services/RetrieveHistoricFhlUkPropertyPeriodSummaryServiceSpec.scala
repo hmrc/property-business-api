@@ -78,7 +78,6 @@ class RetrieveHistoricFhlUkPropertyPeriodSummaryServiceSpec extends UnitSpec {
         "INVALID_NINO"        -> NinoFormatError,
         "INVALID_DATE_FROM"   -> PeriodIdFormatError,
         "INVALID_DATE_TO"   -> PeriodIdFormatError,
-        "INVALID_CORRELATION_ID"    -> UnauthorisedError,
         "INVALID_TYPE"    -> InternalError,
         "NOT_FOUND_PROPERTY"  -> NotFoundError,
         "NOT_FOUND_PERIOD"    -> NotFoundError,

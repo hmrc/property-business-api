@@ -1,0 +1,24 @@
+is:
+  - headers.acceptJson
+  - headers.contentTypeJson
+  - headers.testScenarioHeader
+  - errors.formatNino
+  - errors.clientOrAgentNotAuthorised
+displayName: List Historic FHL UK property Income & Expenses Period Summary [test only]
+description: This endpoint enables you to list the income and expenses for a furnished holiday lettings (FHL) UK property business for a specific period within tax years 2017-18 to 2021-22. A National Insurance number is required. To list summaries from the current tax year, use the List Property Income & Expenses Period Summaries endpoint.
+(annotations.sandboxData): !include scenarios/historic_uk_period_summary_list_scenarios.md
+(annotations.scope): "write:self-assessment"
+securedBy: [ sec.oauth_2_0: { scopes: [ "write:self-assessment" ] } ]
+responses:
+  200:
+    body:
+      application/json:
+        type: !include schemas/historic_uk_fhl_period_summary_list/response.json
+        examples:
+          example-1:
+            description: Default Example
+            value: !include examples/historic_uk_fhl_period_summary_list/response.json
+    headers:
+      X-CorrelationId:
+        example: c75f40a6-a3df-4429-a697-471eeec46435
+        description: Unique ID for operation tracking <br> String, 36 characters.

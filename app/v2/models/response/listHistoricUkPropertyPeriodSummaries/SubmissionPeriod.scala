@@ -30,7 +30,7 @@ object SubmissionPeriod {
       (__ \ "to").read[String]
   )(SubmissionPeriod.apply _)
 
-  implicit val writes: Writes[SubmissionPeriod] = Writes { x =>
+  implicit val writes: OWrites[SubmissionPeriod] = OWrites { x =>
     Json.writes[SubmissionPeriod].writes(x) ++ Json.obj("periodId" -> x.periodId)
   }
 

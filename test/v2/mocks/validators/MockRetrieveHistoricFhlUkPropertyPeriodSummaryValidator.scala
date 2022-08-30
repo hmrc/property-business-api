@@ -20,7 +20,7 @@ import org.scalamock.handlers.CallHandler1
 import org.scalamock.scalatest.MockFactory
 import v2.controllers.requestParsers.validators.RetrieveHistoricFhlUkPropertyPeriodSummaryValidator
 import v2.models.errors.MtdError
-import v2.models.request.retrieveHistoricFhlUkPropertyAnnualSubmission.RetrieveHistoricFhlUkPiePeriodSummaryRawData
+import v2.models.request.retrieveHistoricFhlUkPiePeriodSummary.RetrieveHistoricFhlUkPiePeriodSummaryRawData
 
 class MockRetrieveHistoricFhlUkPropertyPeriodSummaryValidator extends MockFactory {
 

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package v2.models.request.retrieveHistoricFhlUkPropertyAnnualSubmission
+package v2.models.request.retrieveHistoricFhlUkPiePeriodSummary
 
 import v2.models.domain.{Nino, PeriodId}
 import v2.models.request.RawData

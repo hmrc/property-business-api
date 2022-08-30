@@ -19,7 +19,7 @@ package v2.controllers.requestParsers.validators
 import mocks.MockAppConfig
 import support.UnitSpec
 import v2.models.errors._
-import v2.models.request.retrieveHistoricFhlUkPropertyAnnualSubmission.RetrieveHistoricFhlUkPiePeriodSummaryRawData
+import v2.models.request.retrieveHistoricFhlUkPiePeriodSummary.RetrieveHistoricFhlUkPiePeriodSummaryRawData
 
 class RetrieveHistoricFhlUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with MockAppConfig {
 

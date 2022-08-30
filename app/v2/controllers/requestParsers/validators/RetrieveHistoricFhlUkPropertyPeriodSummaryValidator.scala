@@ -21,7 +21,7 @@ import config.AppConfig
 import javax.inject.{ Inject, Singleton }
 import v2.controllers.requestParsers.validators.validations.{ HistoricPeriodIdValidation, NinoValidation }
 import v2.models.errors.MtdError
-import v2.models.request.retrieveHistoricFhlUkPropertyAnnualSubmission.RetrieveHistoricFhlUkPiePeriodSummaryRawData
+import v2.models.request.retrieveHistoricFhlUkPiePeriodSummary.RetrieveHistoricFhlUkPiePeriodSummaryRawData
 
 @Singleton
 class RetrieveHistoricFhlUkPropertyPeriodSummaryValidator @Inject()(appConfig: AppConfig)

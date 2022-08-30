@@ -22,6 +22,7 @@ import uk.gov.hmrc.http.HeaderCarrier
 import v2.mocks.MockIdGenerator
 import v2.mocks.hateoas.MockHateoasFactory
 import v2.mocks.services.{ MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService }
+import v2.mocks.validators.MockRetrieveHistoricFhlUkPropertyPeriodSummaryValidator
 import v2.models.domain.{ Nino, PeriodId }
 import v2.models.errors._
 import v2.models.hateoas.Method.GET
@@ -46,7 +47,7 @@ class RetrieveHistoricFhlUkPiePeriodSummaryControllerSpec
     extends ControllerBaseSpec
     with MockEnrolmentsAuthService
     with MockMtdIdLookupService
-    with MockRetrieveHistoricFhlUkPiePeriodSummaryService
+    with MockRetrieveHistoricFhlUkPropertyPeriodSummaryValidator
     with MockRetrieveHistoricFhlUkPiePeriodSummaryRequestParser
     with MockHateoasFactory
     with MockAuditService

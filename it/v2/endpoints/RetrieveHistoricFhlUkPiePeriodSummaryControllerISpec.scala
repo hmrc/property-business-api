@@ -31,8 +31,9 @@ class RetrieveHistoricFhlUkPiePeriodSummaryControllerISpec extends V2Integration
 
   private trait Test {
 
+    val periodIdString     = "2017-04-06_2017-07-04"
     val nino               = "AA123456A"
-    val periodId: PeriodId = PeriodId("2017-04-06_2017-07-04")
+    val periodId: PeriodId = PeriodId(periodIdString)
 
     val responseBody: JsValue = Json.parse(
       s"""
@@ -167,8 +168,8 @@ class RetrieveHistoricFhlUkPiePeriodSummaryControllerISpec extends V2Integration
         def validationErrorTest(requestNino: String, requestPeriodId: String, expectedStatus: Int, expectedBody: MtdError): Unit = {
           s"validation fails with ${expectedBody.code} error" in new Test {
 
-            override val nino: String     = requestNino
-            override val periodId: String = requestPeriodId
+            override val nino: String       = requestNino
+            override val periodId: PeriodId = PeriodId(requestPeriodId)
 
             override def setupStubs(): StubMapping = {
               AuditStub.audit()
@@ -183,10 +184,10 @@ class RetrieveHistoricFhlUkPiePeriodSummaryControllerISpec extends V2Integration
         }
 
         val input = Seq(
-          ("AA123", "2022-23", Status.BAD_REQUEST, NinoFormatError),
-          ("AA123456A", "2020", Status.BAD_REQUEST, TaxYearFormatError),
-          ("AA123456A", "2020-23", Status.BAD_REQUEST, RuleTaxYearRangeInvalidError),
-          ("AA123456A", "2015-16", Status.BAD_REQUEST, RuleHistoricTaxYearNotSupportedError)
+          ("AA123", "2017-04-06_2017-07-04", Status.BAD_REQUEST, NinoFormatError),
+          ("AA123456A", "2017-04-06__2017-07-04", Status.BAD_REQUEST, PeriodIdFormatError),
+          ("AA123456A", "2023-04-06_2023-07-04", Status.BAD_REQUEST, PeriodIdFormatError),
+          ("AA123456A", "2010-04-06_2010-07-04", Status.BAD_REQUEST, PeriodIdFormatError)
         )
         input.foreach(args => (validationErrorTest _).tupled(args))
       }
@@ -210,9 +211,11 @@ class RetrieveHistoricFhlUkPiePeriodSummaryControllerISpec extends V2Integration
 
         val input = Seq(
           (Status.BAD_REQUEST, "INVALID_NINO", Status.BAD_REQUEST, NinoFormatError),
-          (Status.BAD_REQUEST, "INVALID_TAX_YEAR", Status.BAD_REQUEST, TaxYearFormatError),
-          (Status.NOT_FOUND, "NOT_FOUND_PROPERTY", Status.NOT_FOUND, NotFoundError),
+          (Status.BAD_REQUEST, "INVALID_DATE_FROM", Status.BAD_REQUEST, PeriodIdFormatError),
+          (Status.BAD_REQUEST, "INVALID_DATE_TO", Status.BAD_REQUEST, PeriodIdFormatError),
+          (Status.BAD_REQUEST, "INVALID_CORRELATION_ID", Status.INTERNAL_SERVER_ERROR, InternalError),
           (Status.BAD_REQUEST, "INVALID_TYPE", Status.INTERNAL_SERVER_ERROR, InternalError),
+          (Status.NOT_FOUND, "NOT_FOUND_PROPERTY", Status.NOT_FOUND, NotFoundError),
           (Status.INTERNAL_SERVER_ERROR, "SERVER_ERROR", Status.INTERNAL_SERVER_ERROR, InternalError),
           (Status.SERVICE_UNAVAILABLE, "SERVICE_UNAVAILABLE", Status.INTERNAL_SERVER_ERROR, InternalError)
         )

@@ -136,8 +136,6 @@ class RetrieveHistoricFhlUkPiePeriodSummaryControllerSpec
         val input = Seq(
           (NinoFormatError, BAD_REQUEST),
           (PeriodIdFormatError, BAD_REQUEST),
-          (InternalError, INTERNAL_SERVER_ERROR),
-          (NotFoundError, NOT_FOUND),
         )
 
         input.foreach(args => (errorsFromParserTester _).tupled(args))

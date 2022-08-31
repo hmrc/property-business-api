@@ -45,7 +45,7 @@ class RetrieveHistoricFhlUkPiePeriodSummaryController @Inject()(val authService:
 
   implicit val endpointLogContext: EndpointLogContext =
     EndpointLogContext(controllerName = "RetrieveHistoricFhlUkPiePeriodSummaryController",
-                       endpointName = "retrieveHistoricFhlUkPropertyPeriodSummarySubmission")
+                       endpointName = "retrieveHistoricFhlUkPropertyPeriodSummary")
 
   def handleRequest(nino: String, periodId: String): Action[AnyContent] =
     authorisedAction(nino).async { implicit request =>

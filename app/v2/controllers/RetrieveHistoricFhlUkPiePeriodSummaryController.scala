@@ -24,9 +24,9 @@ import utils.{ IdGenerator, Logging }
 import v2.controllers.requestParsers.RetrieveHistoricFhlUkPropertyPeriodSummaryRequestParser
 import v2.hateoas.HateoasFactory
 import v2.models.errors._
-import v2.models.request.retrieveHistoricFhlUkPropertyAnnualSubmission.RetrieveHistoricFhlUkPiePeriodSummaryRawData
+import v2.models.request.retrieveHistoricFhlUkPiePeriodSummary.RetrieveHistoricFhlUkPiePeriodSummaryRawData
 import v2.models.response.retrieveHistoricFhlUkPiePeriodSummary.RetrieveHistoricFhlUkPiePeriodSummaryHateoasData
-import v2.services.{ EnrolmentsAuthService, MtdIdLookupService }
+import v2.services.{ EnrolmentsAuthService, MtdIdLookupService, RetrieveHistoricFhlUkPropertyPeriodSummaryService }
 
 import javax.inject.{ Inject, Singleton }
 import scala.concurrent.{ ExecutionContext, Future }
@@ -44,7 +44,7 @@ class RetrieveHistoricFhlUkPiePeriodSummaryController @Inject()(val authService:
     with Logging {
 
   implicit val endpointLogContext: EndpointLogContext =
-    EndpointLogContext(controllerName = "RetrieveHistoricFhlUkPropertyPeriodSummaryController",
+    EndpointLogContext(controllerName = "RetrieveHistoricFhlUkPiePeriodSummaryController",
                        endpointName = "retrieveHistoricFhlUkPropertyPeriodSummarySubmission")
 
   def handleRequest(nino: String, periodId: String): Action[AnyContent] =

@@ -23,23 +23,23 @@ import play.api.libs.json.{ JsValue, Json }
 import play.api.libs.ws.{ WSRequest, WSResponse }
 import play.api.test.Helpers.AUTHORIZATION
 import support.V2IntegrationBaseSpec
-import v2.models.domain.PeriodId
-import v2.models.errors._
+import v2.models.errors.{ InternalError, MtdError, NinoFormatError, NotFoundError, PeriodIdFormatError }
 import v2.stubs.{ AuditStub, AuthStub, DownstreamStub, MtdIdLookupStub }
 
 class RetrieveHistoricFhlUkPiePeriodSummaryControllerISpec extends V2IntegrationBaseSpec {
 
   private trait Test {
 
-    val periodIdString     = "2017-04-06_2017-07-04"
-    val nino               = "AA123456A"
-    val periodId: PeriodId = PeriodId(periodIdString)
+    val nino     = "TC663795B"
+    val from     = "2017-04-06"
+    val to       = "2017-07-04"
+    val periodId = s"${from}_$to"
 
     val responseBody: JsValue = Json.parse(
       s"""
          |{
-         |  "fromDate":"2017-04-06",
-         |  "toDate":" 2017-07-04",
+         |  "fromDate": "2017-04-06",
+         |  "toDate": "2017-07-04",
          |  "income":{
          |    "periodAmount":5000.99,
          |    "taxDeducted":5000.99,
@@ -83,8 +83,8 @@ class RetrieveHistoricFhlUkPiePeriodSummaryControllerISpec extends V2Integration
 
     val downstreamResponseBody: JsValue = Json.parse("""
          |{
-         |   "from": "2001-01-01",
-         |   "to": "2001-01-01",
+         |   "from": "2017-04-06",
+         |   "to": "2017-07-04",
          |   "financials": {
          |      "incomes": {
          |         "rentIncome": {
@@ -119,10 +119,8 @@ class RetrieveHistoricFhlUkPiePeriodSummaryControllerISpec extends V2Integration
 
     def setupStubs(): StubMapping
 
-    def mtdUri: String = s"/uk/period/furnished-holiday-lettings/$nino/${periodId.toString}"
-
-    def downstreamUri: String =
-      s"/income-tax/nino/$nino/uk-properties/furnished-holiday-lettings/periodic-summary-detail?from=${periodId.from}&to=${periodId.to}"
+    def mtdUri: String        = s"/uk/period/furnished-holiday-lettings/$nino/$periodId"
+    def downstreamUri: String = s"/income-tax/nino/$nino/uk-properties/furnished-holiday-lettings/periodic-summary-detail"
 
     def request(): WSRequest = {
       setupStubs()
@@ -142,7 +140,7 @@ class RetrieveHistoricFhlUkPiePeriodSummaryControllerISpec extends V2Integration
        """.stripMargin
   }
 
-  "calling the retrieve historic FHL uk property period submission endpoint" should {
+  "calling the retrieve uk historic FHL property income and expenses period summary endpoint" should {
 
     "return a 200 status code" when {
 
@@ -152,7 +150,7 @@ class RetrieveHistoricFhlUkPiePeriodSummaryControllerISpec extends V2Integration
           AuditStub.audit()
           AuthStub.authorised()
           MtdIdLookupStub.ninoFound(nino)
-          DownstreamStub.onSuccess(DownstreamStub.GET, downstreamUri, Status.OK, downstreamResponseBody)
+          DownstreamStub.onSuccess(DownstreamStub.GET, downstreamUri, Map("from" -> from, "to" -> to), Status.OK, downstreamResponseBody)
         }
 
         val response: WSResponse = await(request().get())
@@ -168,8 +166,8 @@ class RetrieveHistoricFhlUkPiePeriodSummaryControllerISpec extends V2Integration
         def validationErrorTest(requestNino: String, requestPeriodId: String, expectedStatus: Int, expectedBody: MtdError): Unit = {
           s"validation fails with ${expectedBody.code} error" in new Test {
 
-            override val nino: String       = requestNino
-            override val periodId: PeriodId = PeriodId(requestPeriodId)
+            override val nino: String     = requestNino
+            override val periodId: String = requestPeriodId
 
             override def setupStubs(): StubMapping = {
               AuditStub.audit()
@@ -185,9 +183,7 @@ class RetrieveHistoricFhlUkPiePeriodSummaryControllerISpec extends V2Integration
 
         val input = Seq(
           ("AA123", "2017-04-06_2017-07-04", Status.BAD_REQUEST, NinoFormatError),
-          ("AA123456A", "2017-04-06__2017-07-04", Status.BAD_REQUEST, PeriodIdFormatError),
-          ("AA123456A", "2023-04-06_2023-07-04", Status.BAD_REQUEST, PeriodIdFormatError),
-          ("AA123456A", "2010-04-06_2010-07-04", Status.BAD_REQUEST, PeriodIdFormatError)
+          ("AA123456A", "2017-07-04_2017-04-06", Status.BAD_REQUEST, PeriodIdFormatError),
         )
         input.foreach(args => (validationErrorTest _).tupled(args))
       }
@@ -213,9 +209,9 @@ class RetrieveHistoricFhlUkPiePeriodSummaryControllerISpec extends V2Integration
           (Status.BAD_REQUEST, "INVALID_NINO", Status.BAD_REQUEST, NinoFormatError),
           (Status.BAD_REQUEST, "INVALID_DATE_FROM", Status.BAD_REQUEST, PeriodIdFormatError),
           (Status.BAD_REQUEST, "INVALID_DATE_TO", Status.BAD_REQUEST, PeriodIdFormatError),
-          (Status.BAD_REQUEST, "INVALID_CORRELATION_ID", Status.INTERNAL_SERVER_ERROR, InternalError),
           (Status.BAD_REQUEST, "INVALID_TYPE", Status.INTERNAL_SERVER_ERROR, InternalError),
           (Status.NOT_FOUND, "NOT_FOUND_PROPERTY", Status.NOT_FOUND, NotFoundError),
+          (Status.NOT_FOUND, "NOT_FOUND_PERIOD", Status.NOT_FOUND, NotFoundError),
           (Status.INTERNAL_SERVER_ERROR, "SERVER_ERROR", Status.INTERNAL_SERVER_ERROR, InternalError),
           (Status.SERVICE_UNAVAILABLE, "SERVICE_UNAVAILABLE", Status.INTERNAL_SERVER_ERROR, InternalError)
         )

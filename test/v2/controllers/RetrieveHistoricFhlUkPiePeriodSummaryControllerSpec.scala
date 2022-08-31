@@ -22,40 +22,34 @@ import uk.gov.hmrc.http.HeaderCarrier
 import v2.mocks.MockIdGenerator
 import v2.mocks.hateoas.MockHateoasFactory
 import v2.mocks.requestParsers.MockRetrieveHistoricFhlUkPiePeriodSummaryRequestParser
-import v2.mocks.services.{ MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService }
-import v2.mocks.validators.MockRetrieveHistoricFhlUkPropertyPeriodSummaryValidator
+import v2.mocks.services.{ MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService, MockRetrieveHistoricFhlUkPiePeriodSummaryService }
 import v2.models.domain.{ Nino, PeriodId }
 import v2.models.errors._
 import v2.models.hateoas.Method.GET
 import v2.models.hateoas.{ HateoasWrapper, Link }
 import v2.models.outcomes.ResponseWrapper
-import v2.models.request.retrieveHistoricFhlUkPropertyAnnualSubmission.{
-  RetrieveHistoricFhlUkPiePeriodSummaryRawData,
-  RetrieveHistoricFhlUkPiePeriodSummaryRequest
-}
-import v2.models.response.retrieveHistoricFhlUkPiePeriodSummary.{
-  PeriodExpenses,
-  PeriodIncome,
-  RentARoomExpenses,
-  RentARoomIncome,
-  RetrieveHistoricFhlUkPiePeriodSummaryHateoasData,
-  RetrieveHistoricFhlUkPiePeriodSummaryResponse
-}
+import v2.models.request.retrieveHistoricFhlUkPiePeriodSummary._
+import v2.models.response.retrieveHistoricFhlUkPiePeriodSummary._
 
+import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class RetrieveHistoricFhlUkPiePeriodSummaryControllerSpec
     extends ControllerBaseSpec
     with MockEnrolmentsAuthService
     with MockMtdIdLookupService
-    with MockRetrieveHistoricFhlUkPropertyPeriodSummaryValidator
+    with MockRetrieveHistoricFhlUkPiePeriodSummaryService
     with MockRetrieveHistoricFhlUkPiePeriodSummaryRequestParser
     with MockHateoasFactory
     with MockAuditService
     with MockIdGenerator {
 
-  private val nino          = "AA123456A"
-  private val periodId      = "2017-04-06_2017-07-04"
+  private val nino = "AA123456A"
+
+  private val from     = "2017-04-06"
+  private val to       = "2017-07-04"
+  private val periodId = s"${from}_$to"
+
   private val correlationId = "X-123"
 
   trait Test {
@@ -80,41 +74,36 @@ class RetrieveHistoricFhlUkPiePeriodSummaryControllerSpec
   private val requestData = RetrieveHistoricFhlUkPiePeriodSummaryRequest(Nino(nino), PeriodId(periodId))
 
   private val mockHateoasLink =
-    Link(href = s"individuals/business/property/uk/annual/furnished-holiday-lettings/$nino/$periodId", method = GET, rel = "self")
+    Link(href = s"individuals/business/property/uk/period/furnished-holiday-lettings/$nino/$periodId", method = GET, rel = "self")
 
-  val periodIncome: PeriodIncome = PeriodIncome(Some(5000.99), Some(5000.99), Option(RentARoomIncome(Some(5000.99))))
+  val periodIncome: PeriodIncome = PeriodIncome(Some(5000.99), Some(5000.99), Some(RentARoomIncome(Some(5000.99))))
 
-  val periodExpenses: PeriodExpenses = PeriodExpenses(
-    Some(5000.99),
-    Some(5000.99),
-    Some(5000.99),
-    Some(5000.99),
-    Some(5000.99),
-    Some(5000.99),
-    Some(5000.99),
-    Some(5000.99),
-    Some(RentARoomExpenses(Some(5000.99)))
+  val periodExpenses: PeriodExpenses = PeriodExpenses(Some(5000.99),
+                                                      Some(5000.99),
+                                                      Some(5000.99),
+                                                      Some(5000.99),
+                                                      Some(5000.99),
+                                                      Some(5000.99),
+                                                      None,
+                                                      Some(5000.99),
+                                                      Some(RentARoomExpenses(Some(5000.99))))
+
+  val responseBody: RetrieveHistoricFhlUkPiePeriodSummaryResponse = RetrieveHistoricFhlUkPiePeriodSummaryResponse(
+    fromDate = from,
+    toDate = to,
+    Some(periodIncome),
+    Some(periodExpenses)
   )
-
-  val responseBody: RetrieveHistoricFhlUkPiePeriodSummaryResponse =
-    RetrieveHistoricFhlUkPiePeriodSummaryResponse(fromDate = "2001-01-01",
-                                                  toDate = "2001-01-01",
-                                                  income = Some(
-                                                    periodIncome
-                                                  ),
-                                                  expenses = Some(
-                                                    periodExpenses
-                                                  ))
 
   "handleRequest" should {
     "return Ok" when {
       "the request received is valid" in new Test {
 
-        MockRetrieveHistoricFhlUkPiePeriodSummaryRequestParser
+        MockRetrieveHistoricFhlUkPropertyRequestParser
           .parseRequest(rawData)
           .returns(Right(requestData))
 
-        MockRetrieveHistoricFhlUkPiePeriodSummaryRequestParser
+        MockRetrieveHistoricFhlUkPiePeriodSummaryService
           .retrieve(requestData)
           .returns(Future.successful(Right(ResponseWrapper(correlationId, responseBody))))
 
@@ -132,7 +121,7 @@ class RetrieveHistoricFhlUkPiePeriodSummaryControllerSpec
         def errorsFromParserTester(error: MtdError, expectedStatus: Int): Unit = {
           s"a ${error.code} error is returned from the parser" in new Test {
 
-            MockRetrieveHistoricFhlUkPiePeriodSummaryRequestParser
+            MockRetrieveHistoricFhlUkPropertyRequestParser
               .parseRequest(rawData)
               .returns(Left(ErrorWrapper(correlationId, error, None)))
 
@@ -145,9 +134,10 @@ class RetrieveHistoricFhlUkPiePeriodSummaryControllerSpec
         }
 
         val input = Seq(
-          (BadRequestError, BAD_REQUEST),
           (NinoFormatError, BAD_REQUEST),
           (PeriodIdFormatError, BAD_REQUEST),
+          (InternalError, INTERNAL_SERVER_ERROR),
+          (NotFoundError, NOT_FOUND),
         )
 
         input.foreach(args => (errorsFromParserTester _).tupled(args))
@@ -157,11 +147,11 @@ class RetrieveHistoricFhlUkPiePeriodSummaryControllerSpec
         def serviceErrors(mtdError: MtdError, expectedStatus: Int): Unit = {
           s"a $mtdError error is returned from the service" in new Test {
 
-            MockRetrieveHistoricFhlUkPiePeriodSummaryRequestParser
+            MockRetrieveHistoricFhlUkPropertyRequestParser
               .parseRequest(rawData)
               .returns(Right(requestData))
 
-            MockRetrieveHistoricFhlUkPiePeriodSummaryRequestParser
+            MockRetrieveHistoricFhlUkPiePeriodSummaryService
               .retrieve(requestData)
               .returns(Future.successful(Left(ErrorWrapper(correlationId, mtdError))))
 
@@ -176,8 +166,8 @@ class RetrieveHistoricFhlUkPiePeriodSummaryControllerSpec
         val input = Seq(
           (NinoFormatError, BAD_REQUEST),
           (PeriodIdFormatError, BAD_REQUEST),
+          (InternalError, INTERNAL_SERVER_ERROR),
           (NotFoundError, NOT_FOUND),
-          (InternalError, INTERNAL_SERVER_ERROR)
         )
 
         input.foreach(args => (serviceErrors _).tupled(args))

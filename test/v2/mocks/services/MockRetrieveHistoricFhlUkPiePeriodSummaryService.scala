@@ -22,22 +22,18 @@ import uk.gov.hmrc.http.HeaderCarrier
 import v2.controllers.EndpointLogContext
 import v2.models.errors.ErrorWrapper
 import v2.models.outcomes.ResponseWrapper
-import v2.models.request.retrieveHistoricFhlUkPropertyAnnualSubmission.{
-  RetrieveHistoricFhlUkPiePeriodSummaryRequest,
-  RetrieveHistoricFhlUkPropertyAnnualSubmissionRequest
-}
+import v2.models.request.retrieveHistoricFhlUkPiePeriodSummary.RetrieveHistoricFhlUkPiePeriodSummaryRequest
 import v2.models.response.retrieveHistoricFhlUkPiePeriodSummary.RetrieveHistoricFhlUkPiePeriodSummaryResponse
-import v2.models.response.retrieveHistoricFhlUkPropertyAnnualSubmission.RetrieveHistoricFhlUkPropertyAnnualSubmissionResponse
-import v2.services.RetrieveHistoricFhlUkPropertyAnnualSubmissionService
+import v2.services.RetrieveHistoricFhlUkPropertyPeriodSummaryService
 
 import scala.concurrent.{ ExecutionContext, Future }
 
 trait MockRetrieveHistoricFhlUkPiePeriodSummaryService extends MockFactory {
 
-  val mockRetrieveHistoricFhlUkPiePeriodSummaryService: RetrieveHistoricFhlUkPiePeriodSummaryService =
-    mock[RetrieveHistoricFhlUkPiePeriodSummaryService]
+  val mockRetrieveHistoricFhlUkPiePeriodSummaryService: RetrieveHistoricFhlUkPropertyPeriodSummaryService =
+    mock[RetrieveHistoricFhlUkPropertyPeriodSummaryService]
 
-  object MockRetrieveHistoricFhlUkPropertyService {
+  object MockRetrieveHistoricFhlUkPiePeriodSummaryService {
 
     def retrieve(requestData: RetrieveHistoricFhlUkPiePeriodSummaryRequest)
       : CallHandler[Future[Either[ErrorWrapper, ResponseWrapper[RetrieveHistoricFhlUkPiePeriodSummaryResponse]]]] = {

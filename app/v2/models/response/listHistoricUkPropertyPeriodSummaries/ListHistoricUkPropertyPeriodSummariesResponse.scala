@@ -16,6 +16,7 @@
 
 package v2.models.response.listHistoricUkPropertyPeriodSummaries
 
+import cats.Functor
 import config.AppConfig
 import play.api.libs.json.{ Json, OWrites, Reads, Writes, __ }
 import v2.hateoas.{ HateoasLinks, HateoasListLinksFactory }
@@ -68,6 +69,11 @@ object ListHistoricUkPropertyPeriodSummariesResponse extends HateoasLinks {
           )
       }
     }
+  }
+
+  implicit object ResponseFunctor extends Functor[ListHistoricUkPropertyPeriodSummariesResponse] {
+    override def map[A, B](fa: ListHistoricUkPropertyPeriodSummariesResponse[A])(f: A => B): ListHistoricUkPropertyPeriodSummariesResponse[B] =
+      ListHistoricUkPropertyPeriodSummariesResponse(fa.submissions.map(f))
   }
 }
 

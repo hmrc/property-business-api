@@ -24,7 +24,7 @@ import uk.gov.hmrc.http.HeaderCarrier
 import utils.Logging
 import v2.connectors.DeleteHistoricUkPropertyAnnualSubmissionConnector
 import v2.controllers.EndpointLogContext
-import v2.models.errors.{ InternalError, NinoFormatError, NotFoundError, TaxYearFormatError }
+import v2.models.errors.{ InternalError, NinoFormatError, NotFoundError, RuleHistoricTaxYearNotSupportedError, TaxYearFormatError }
 import v2.models.request.deleteHistoricUkPropertyAnnualSubmission.DeleteHistoricUkPropertyAnnualSubmissionRequest
 import v2.support.DownstreamResponseMappingSupport
 
@@ -42,25 +42,26 @@ class DeleteHistoricUkPropertyAnnualSubmissionService @Inject()(connector: Delet
       correlationId: String): Future[ServiceOutcome[Unit]] = {
 
     val result = for {
-      desResponseWrapper <- EitherT(connector.deleteHistoricUkPropertyAnnualSubmission(request)).leftMap(mapDownstreamErrors(desErrorMap))
-    } yield desResponseWrapper
+      downstreamResponseWrapper <- EitherT(connector.deleteHistoricUkPropertyAnnualSubmission(request))
+        .leftMap(mapDownstreamErrors(downstreamErrorMap))
+    } yield downstreamResponseWrapper
 
     result.value
   }
 
-  private def desErrorMap =
+  private def downstreamErrorMap =
     Map(
-      "INVALID_NINO"          -> NinoFormatError,
-      "INVALID_TAX_YEAR"      -> TaxYearFormatError,
-      "INVALID_TYPE"          -> InternalError,
-      "INVALID_PAYLOAD"       -> InternalError,
-      "INVALID_CORRELATIONID" -> InternalError,
-      "NOT_FOUND"             -> NotFoundError,
-      "NOT_FOUND_PROPERTY"    -> NotFoundError,
-      "GONE"                  -> NotFoundError,
-      "UNPROCESSABLE_ENTTY"   -> InternalError,
-      "SERVER_ERROR"          -> InternalError,
-      "SERVICE_UNAVAILABLE"   -> InternalError
+      "INVALID_NINO"           -> NinoFormatError,
+      "INVALID_TAX_YEAR"       -> TaxYearFormatError,
+      "INVALID_TYPE"           -> InternalError,
+      "INVALID_PAYLOAD"        -> InternalError,
+      "INVALID_CORRELATIONID"  -> InternalError,
+      "NOT_FOUND"              -> NotFoundError,
+      "NOT_FOUND_PROPERTY"     -> NotFoundError,
+      "GONE"                   -> NotFoundError,
+      "TAX_YEAR_NOT_SUPPORTED" -> RuleHistoricTaxYearNotSupportedError,
+      "SERVER_ERROR"           -> InternalError,
+      "SERVICE_UNAVAILABLE"    -> InternalError
     )
 
 }

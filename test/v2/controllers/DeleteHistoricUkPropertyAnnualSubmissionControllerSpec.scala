@@ -21,12 +21,7 @@ import play.api.mvc.{ Action, AnyContent, Result }
 import uk.gov.hmrc.http.HeaderCarrier
 import v2.mocks.MockIdGenerator
 import v2.mocks.requestParsers.MockDeleteHistoricUkPropertyAnnualSubmissionRequestParser
-import v2.mocks.services.{
-  MockAuditService,
-  MockDeleteHistoricUkPropertyAnnualSubmissionService,
-  MockEnrolmentsAuthService,
-  MockMtdIdLookupService
-}
+import v2.mocks.services.{ MockAuditService, MockDeleteHistoricUkPropertyAnnualSubmissionService, MockEnrolmentsAuthService, MockMtdIdLookupService }
 import v2.models.domain.{ HistoricPropertyType, Nino, TaxYear }
 import v2.models.errors._
 import v2.models.outcomes.ResponseWrapper
@@ -152,6 +147,7 @@ class DeleteHistoricUkPropertyAnnualSubmissionControllerSpec
             (NinoFormatError, BAD_REQUEST),
             (TaxYearFormatError, BAD_REQUEST),
             (NotFoundError, NOT_FOUND),
+            (RuleHistoricTaxYearNotSupportedError, BAD_REQUEST),
             (InternalError, INTERNAL_SERVER_ERROR)
           )
 

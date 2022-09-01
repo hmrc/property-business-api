@@ -70,17 +70,17 @@ class DeleteHistoricUkPropertyAnnualSubmissionServiceSpec extends ServiceSpec {
           }
 
         val input = Seq(
-          "INVALID_NINO"          -> NinoFormatError,
-          "INVALID_TAX_YEAR"      -> TaxYearFormatError,
-          "INVALID_TYPE"          -> InternalError,
-          "INVALID_PAYLOAD"       -> InternalError,
-          "INVALID_CORRELATIONID" -> InternalError,
-          "NOT_FOUND"             -> NotFoundError,
-          "NOT_FOUND_PROPERTY"    -> NotFoundError,
-          "GONE"                  -> NotFoundError,
-          "UNPROCESSABLE_ENTTY"   -> InternalError,
-          "SERVER_ERROR"          -> InternalError,
-          "SERVICE_UNAVAILABLE"   -> InternalError
+          "INVALID_NINO"           -> NinoFormatError,
+          "INVALID_TAX_YEAR"       -> TaxYearFormatError,
+          "INVALID_TYPE"           -> InternalError,
+          "INVALID_PAYLOAD"        -> InternalError,
+          "INVALID_CORRELATIONID"  -> InternalError,
+          "NOT_FOUND"              -> NotFoundError,
+          "NOT_FOUND_PROPERTY"     -> NotFoundError,
+          "GONE"                   -> NotFoundError,
+          "TAX_YEAR_NOT_SUPPORTED" -> RuleHistoricTaxYearNotSupportedError,
+          "SERVER_ERROR"           -> InternalError,
+          "SERVICE_UNAVAILABLE"    -> InternalError
         )
 
         input.foreach(args => (serviceError _).tupled(args))

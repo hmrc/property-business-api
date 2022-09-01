@@ -35,7 +35,7 @@ class DeleteHistoricNonFhlUkPropertyAnnualSubmissionControllerISpec extends V2In
 
     def uri: String = s"/uk/annual/non-furnished-holiday-lettings/$nino/$taxYear"
 
-    def desUri: String = s"/income-tax/nino/$nino/uk-properties/other/annual-summaries/2022"
+    def downstreamUri: String = s"/income-tax/nino/$nino/uk-properties/other/annual-summaries/2022"
 
     def setupStubs(): StubMapping
 
@@ -52,7 +52,7 @@ class DeleteHistoricNonFhlUkPropertyAnnualSubmissionControllerISpec extends V2In
       s"""
          |{
          |  "code": "$code",
-         |  "reason": "des message"
+         |  "reason": "downstream message"
          |}
        """.stripMargin
   }
@@ -65,7 +65,7 @@ class DeleteHistoricNonFhlUkPropertyAnnualSubmissionControllerISpec extends V2In
           AuditStub.audit()
           AuthStub.authorised()
           MtdIdLookupStub.ninoFound(nino)
-          DownstreamStub.onSuccess(DownstreamStub.PUT, desUri, Status.NO_CONTENT, JsObject.empty)
+          DownstreamStub.onSuccess(DownstreamStub.PUT, downstreamUri, Status.NO_CONTENT, JsObject.empty)
         }
 
         val response: WSResponse = await(request().delete())
@@ -104,15 +104,15 @@ class DeleteHistoricNonFhlUkPropertyAnnualSubmissionControllerISpec extends V2In
         input.foreach(args => (validationErrorTest _).tupled(args))
       }
 
-      "des service error" when {
-        def serviceErrorTest(desStatus: Int, desCode: String, expectedStatus: Int, expectedBody: MtdError): Unit = {
-          s"des returns an $desCode error and status $desStatus" in new Test {
+      "downstream service error" when {
+        def serviceErrorTest(downstreamStatus: Int, downstreamCode: String, expectedStatus: Int, expectedBody: MtdError): Unit = {
+          s"downstream returns an $downstreamCode error and status $downstreamStatus" in new Test {
 
             override def setupStubs(): StubMapping = {
               AuditStub.audit()
               AuthStub.authorised()
               MtdIdLookupStub.ninoFound(nino)
-              DownstreamStub.onError(DownstreamStub.PUT, desUri, desStatus, errorBody(desCode))
+              DownstreamStub.onError(DownstreamStub.PUT, downstreamUri, downstreamStatus, errorBody(downstreamCode))
             }
 
             val response: WSResponse = await(request().delete())

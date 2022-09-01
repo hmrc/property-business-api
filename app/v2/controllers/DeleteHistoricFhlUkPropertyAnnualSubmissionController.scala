@@ -22,6 +22,7 @@ import play.api.libs.json.Json
 import play.api.mvc.{ Action, AnyContent, ControllerComponents }
 import utils.{ IdGenerator, Logging }
 import v2.controllers.requestParsers.DeleteHistoricFhlUkPropertyAnnualSubmissionRequestParser
+import v2.models.domain.HistoricPropertyType
 import v2.models.errors._
 import v2.models.request.deleteHistoricFhlUkPropertyAnnualSubmission.DeleteHistoricFhlUkPropertyAnnualSubmissionRawData
 import v2.services.{ AuditService, DeleteHistoricFhlUkPropertyAnnualSubmissionService, EnrolmentsAuthService, MtdIdLookupService }
@@ -41,17 +42,30 @@ class DeleteHistoricFhlUkPropertyAnnualSubmissionController @Inject()(val authSe
     with BaseController
     with Logging {
 
-  implicit val endpointLogContext: EndpointLogContext =
-    EndpointLogContext(controllerName = "DeleteHistoricFhlUkPropertyAnnualSubmissionController",
-                       endpointName = "deleteHistoricFhlUkPropertyAnnualSubmission")
+  def handleFhlRequest(nino: String, taxYear: String): Action[AnyContent] = {
+    implicit val endpointLogContext: EndpointLogContext =
+      EndpointLogContext(controllerName = "DeleteHistoricUkPropertyAnnualSubmissionController",
+                         endpointName = "deleteHistoricFhlUkPropertyAnnualSubmission")
 
-  def handleRequest(nino: String, taxYear: String): Action[AnyContent] =
+    handleRequest(nino, taxYear, HistoricPropertyType.Fhl)
+  }
+
+  def handleNonFhlRequest(nino: String, taxYear: String): Action[AnyContent] = {
+    implicit val endpointLogContext: EndpointLogContext =
+      EndpointLogContext(controllerName = "DeleteHistoricUkPropertyAnnualSubmissionController",
+                         endpointName = "deleteHistoricNonFhlUkPropertyAnnualSubmission")
+
+    handleRequest(nino, taxYear, HistoricPropertyType.NonFhl)
+  }
+
+  def handleRequest(nino: String, taxYear: String, propertyType: HistoricPropertyType)(
+      implicit endpointLogContext: EndpointLogContext): Action[AnyContent] =
     authorisedAction(nino).async { implicit request =>
       implicit val correlationId: String = idGenerator.getCorrelationId
       logger.info(
         message = s"[${endpointLogContext.controllerName}][${endpointLogContext.endpointName}] " +
           s"with correlationId : $correlationId")
-      val rawData = DeleteHistoricFhlUkPropertyAnnualSubmissionRawData(nino, taxYear)
+      val rawData = DeleteHistoricFhlUkPropertyAnnualSubmissionRawData(nino, taxYear, propertyType)
       val result =
         for {
           parsedRequest   <- EitherT.fromEither[Future](parser.parseRequest(rawData))
@@ -75,15 +89,14 @@ class DeleteHistoricFhlUkPropertyAnnualSubmissionController @Inject()(val authSe
       }.merge
     }
 
-  private def errorResult(errorWrapper: ErrorWrapper) =
+  private def errorResult(errorWrapper: ErrorWrapper)(implicit endpointLogContext: EndpointLogContext) =
     errorWrapper.error match {
       case _
-        if errorWrapper.containsAnyOf(
-          NinoFormatError,
-          TaxYearFormatError,
-          RuleHistoricTaxYearNotSupportedError,
-          RuleTaxYearRangeInvalidError,
-          BadRequestError) =>
+          if errorWrapper.containsAnyOf(NinoFormatError,
+                                        TaxYearFormatError,
+                                        RuleHistoricTaxYearNotSupportedError,
+                                        RuleTaxYearRangeInvalidError,
+                                        BadRequestError) =>
         BadRequest(Json.toJson(errorWrapper))
       case InternalError => InternalServerError(Json.toJson(errorWrapper))
       case NotFoundError => NotFound(Json.toJson(errorWrapper))

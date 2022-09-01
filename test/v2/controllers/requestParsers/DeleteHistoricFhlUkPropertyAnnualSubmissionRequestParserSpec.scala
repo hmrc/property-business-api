@@ -18,7 +18,7 @@ package v2.controllers.requestParsers
 
 import support.UnitSpec
 import v2.mocks.validators.MockDeleteHistoricFhlUkPropertyAnnualSubmissionValidator
-import v2.models.domain.{ Nino, TaxYear }
+import v2.models.domain.{ HistoricPropertyType, Nino, TaxYear }
 import v2.models.errors._
 import v2.models.request.deleteHistoricFhlUkPropertyAnnualSubmission.{
   DeleteHistoricFhlUkPropertyAnnualSubmissionRawData,
@@ -27,12 +27,14 @@ import v2.models.request.deleteHistoricFhlUkPropertyAnnualSubmission.{
 
 class DeleteHistoricFhlUkPropertyAnnualSubmissionRequestParserSpec extends UnitSpec {
 
-  val nino: String                   = "AA123456B"
-  val taxYear: String                = "2021-22"
-  implicit val correlationId: String = "X-123"
+  val nino: String                       = "AA123456B"
+  val taxYear: String                    = "2021-22"
+  val propertyType: HistoricPropertyType = HistoricPropertyType.Fhl
+
+  implicit val correlationId: String     = "X-123"
 
   val inputData: DeleteHistoricFhlUkPropertyAnnualSubmissionRawData =
-    DeleteHistoricFhlUkPropertyAnnualSubmissionRawData(nino, taxYear)
+    DeleteHistoricFhlUkPropertyAnnualSubmissionRawData(nino, taxYear, propertyType)
 
   trait Test extends MockDeleteHistoricFhlUkPropertyAnnualSubmissionValidator {
     lazy val parser = new DeleteHistoricFhlUkPropertyAnnualSubmissionRequestParser(mockValidator)
@@ -42,7 +44,8 @@ class DeleteHistoricFhlUkPropertyAnnualSubmissionRequestParserSpec extends UnitS
     "return a request object" when {
       "valid request data is supplied" in new Test {
         MockDeleteHistoricFhlUkPropertyAnnualSubmissionValidator.validate(inputData).returns(Nil)
-        parser.parseRequest(inputData) shouldBe Right(DeleteHistoricFhlUkPropertyAnnualSubmissionRequest(Nino(nino), TaxYear.fromMtd(taxYear)))
+        parser.parseRequest(inputData) shouldBe Right(
+          DeleteHistoricFhlUkPropertyAnnualSubmissionRequest(Nino(nino), TaxYear.fromMtd(taxYear), propertyType))
       }
     }
     "return an ErrorWrapper" when {

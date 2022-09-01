@@ -19,7 +19,7 @@ package v2.connectors
 import mocks.MockAppConfig
 import play.api.libs.json.JsObject
 import v2.mocks.MockHttpClient
-import v2.models.domain.{ Nino, TaxYear }
+import v2.models.domain.{ HistoricPropertyType, Nino, TaxYear }
 import v2.models.outcomes.ResponseWrapper
 import v2.models.request.deleteHistoricFhlUkPropertyAnnualSubmission.DeleteHistoricFhlUkPropertyAnnualSubmissionRequest
 
@@ -31,10 +31,12 @@ class DeleteHistoricFhlUkPropertyAnnualSubmissionConnectorSpec extends Connector
   val mtdTaxYear: String = "2021-22"
   val taxYear: TaxYear   = TaxYear.fromMtd(mtdTaxYear)
 
-  val request: DeleteHistoricFhlUkPropertyAnnualSubmissionRequest = DeleteHistoricFhlUkPropertyAnnualSubmissionRequest(
-    nino = Nino(nino),
-    taxYear = taxYear
-  )
+  def request(propertyType: HistoricPropertyType): DeleteHistoricFhlUkPropertyAnnualSubmissionRequest =
+    DeleteHistoricFhlUkPropertyAnnualSubmissionRequest(
+      nino = Nino(nino),
+      taxYear = taxYear,
+      propertyType
+    )
 
   class Test extends MockHttpClient with MockAppConfig {
 
@@ -50,7 +52,7 @@ class DeleteHistoricFhlUkPropertyAnnualSubmissionConnectorSpec extends Connector
   }
 
   "connector" must {
-    "send a request and return no content" in new Test {
+    "send a request and return no content for FHL" in new Test {
       val outcome = Right(ResponseWrapper(correlationId, ()))
 
       MockHttpClient
@@ -63,8 +65,23 @@ class DeleteHistoricFhlUkPropertyAnnualSubmissionConnectorSpec extends Connector
         )
         .returns(Future.successful(outcome))
 
-      await(connector.deleteHistoricFhlUkPropertyAnnualSubmission(request)) shouldBe outcome
+      await(connector.deleteHistoricFhlUkPropertyAnnualSubmission(request(HistoricPropertyType.Fhl))) shouldBe outcome
+    }
 
+    "send a request and return no content for non-FHL" in new Test {
+      val outcome = Right(ResponseWrapper(correlationId, ()))
+
+      MockHttpClient
+        .put(
+          url = s"$baseUrl/income-tax/nino/$nino/uk-properties/other/annual-summaries/${taxYear.toDownstream}",
+          config = dummyDesHeaderCarrierConfig,
+          body = JsObject.empty,
+          requiredHeaders = requiredDesHeaders,
+          excludedHeaders = Seq("AnotherHeader" -> "HeaderValue")
+        )
+        .returns(Future.successful(outcome))
+
+      await(connector.deleteHistoricFhlUkPropertyAnnualSubmission(request(HistoricPropertyType.NonFhl))) shouldBe outcome
     }
   }
 }

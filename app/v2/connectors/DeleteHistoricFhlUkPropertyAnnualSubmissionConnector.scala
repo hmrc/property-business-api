@@ -23,6 +23,7 @@ import javax.inject.{ Inject, Singleton }
 import uk.gov.hmrc.http.{ HeaderCarrier, HttpClient }
 import v2.connectors.DownstreamUri.DesUri
 import v2.connectors.httpparsers.StandardIfsHttpParser._
+import v2.models.domain.HistoricPropertyType
 import v2.models.request.deleteHistoricFhlUkPropertyAnnualSubmission.DeleteHistoricFhlUkPropertyAnnualSubmissionRequest
 
 import scala.concurrent.{ ExecutionContext, Future }
@@ -38,10 +39,15 @@ class DeleteHistoricFhlUkPropertyAnnualSubmissionConnector @Inject()(val http: H
     val nino    = request.nino.nino
     val taxYear = request.taxYear.toDownstream
 
+    val propertyTypeName = request.propertyType match {
+      case HistoricPropertyType.Fhl    => "furnished-holiday-lettings"
+      case HistoricPropertyType.NonFhl => "other"
+    }
+
     put(
       body = JsObject.empty,
       uri = DesUri[Unit](
-        s"income-tax/nino/$nino/uk-properties/furnished-holiday-lettings/annual-summaries/$taxYear"
+        s"income-tax/nino/$nino/uk-properties/$propertyTypeName/annual-summaries/$taxYear"
       )
     )
   }

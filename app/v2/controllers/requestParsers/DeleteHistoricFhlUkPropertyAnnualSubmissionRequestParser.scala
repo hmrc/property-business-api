@@ -28,5 +28,5 @@ import javax.inject.Inject
 class DeleteHistoricFhlUkPropertyAnnualSubmissionRequestParser @Inject()(val validator: DeleteHistoricFhlUkPropertyAnnualSubmissionValidator)
     extends RequestParser[DeleteHistoricFhlUkPropertyAnnualSubmissionRawData, DeleteHistoricFhlUkPropertyAnnualSubmissionRequest] {
   override protected def requestFor(data: DeleteHistoricFhlUkPropertyAnnualSubmissionRawData): DeleteHistoricFhlUkPropertyAnnualSubmissionRequest =
-    DeleteHistoricFhlUkPropertyAnnualSubmissionRequest(Nino(data.nino), TaxYear.fromMtd(data.taxYear))
+    DeleteHistoricFhlUkPropertyAnnualSubmissionRequest(Nino(data.nino), TaxYear.fromMtd(data.taxYear), data.propertyType)
 }

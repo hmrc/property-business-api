@@ -19,25 +19,25 @@ package v2.controllers.requestParsers.validators
 import config.AppConfig
 import v2.controllers.requestParsers.validators.validations.{ HistoricTaxYearValidation, NinoValidation }
 import v2.models.errors.MtdError
-import v2.models.request.deleteHistoricFhlUkPropertyAnnualSubmission.DeleteHistoricFhlUkPropertyAnnualSubmissionRawData
+import v2.models.request.deleteHistoricUkPropertyAnnualSubmission.DeleteHistoricUkPropertyAnnualSubmissionRawData
 
 import javax.inject.{ Inject, Singleton }
 
 @Singleton
-class DeleteHistoricFhlUkPropertyAnnualSubmissionValidator @Inject()(appConfig: AppConfig)
-    extends Validator[DeleteHistoricFhlUkPropertyAnnualSubmissionRawData] {
+class DeleteHistoricUkPropertyAnnualSubmissionValidator @Inject()(appConfig: AppConfig)
+    extends Validator[DeleteHistoricUkPropertyAnnualSubmissionRawData] {
   private val validationSet   = List(parameterFormatValidation)
   private lazy val minTaxYear = appConfig.minimumTaxHistoric
   private lazy val maxTaxYear = appConfig.maximumTaxHistoric
 
-  private def parameterFormatValidation: DeleteHistoricFhlUkPropertyAnnualSubmissionRawData => List[List[MtdError]] =
-    (data: DeleteHistoricFhlUkPropertyAnnualSubmissionRawData) => {
+  private def parameterFormatValidation: DeleteHistoricUkPropertyAnnualSubmissionRawData => List[List[MtdError]] =
+    (data: DeleteHistoricUkPropertyAnnualSubmissionRawData) => {
       List(
         NinoValidation.validate(data.nino),
         HistoricTaxYearValidation.validate(minTaxYear, maxTaxYear, data.taxYear)
       )
     }
-  override def validate(data: DeleteHistoricFhlUkPropertyAnnualSubmissionRawData): List[MtdError] = {
+  override def validate(data: DeleteHistoricUkPropertyAnnualSubmissionRawData): List[MtdError] = {
     run(validationSet, data).distinct
   }
 }

@@ -17,15 +17,15 @@
 package v2.controllers.requestParsers
 
 import support.UnitSpec
-import v2.mocks.validators.MockDeleteHistoricFhlUkPropertyAnnualSubmissionValidator
+import v2.mocks.validators.MockDeleteHistoricUkPropertyAnnualSubmissionValidator
 import v2.models.domain.{ HistoricPropertyType, Nino, TaxYear }
 import v2.models.errors._
-import v2.models.request.deleteHistoricFhlUkPropertyAnnualSubmission.{
-  DeleteHistoricFhlUkPropertyAnnualSubmissionRawData,
-  DeleteHistoricFhlUkPropertyAnnualSubmissionRequest
+import v2.models.request.deleteHistoricUkPropertyAnnualSubmission.{
+  DeleteHistoricUkPropertyAnnualSubmissionRawData,
+  DeleteHistoricUkPropertyAnnualSubmissionRequest
 }
 
-class DeleteHistoricFhlUkPropertyAnnualSubmissionRequestParserSpec extends UnitSpec {
+class DeleteHistoricUkPropertyAnnualSubmissionRequestParserSpec extends UnitSpec {
 
   val nino: String                       = "AA123456B"
   val taxYear: String                    = "2021-22"
@@ -33,24 +33,24 @@ class DeleteHistoricFhlUkPropertyAnnualSubmissionRequestParserSpec extends UnitS
 
   implicit val correlationId: String     = "X-123"
 
-  val inputData: DeleteHistoricFhlUkPropertyAnnualSubmissionRawData =
-    DeleteHistoricFhlUkPropertyAnnualSubmissionRawData(nino, taxYear, propertyType)
+  val inputData: DeleteHistoricUkPropertyAnnualSubmissionRawData =
+    DeleteHistoricUkPropertyAnnualSubmissionRawData(nino, taxYear, propertyType)
 
-  trait Test extends MockDeleteHistoricFhlUkPropertyAnnualSubmissionValidator {
-    lazy val parser = new DeleteHistoricFhlUkPropertyAnnualSubmissionRequestParser(mockValidator)
+  trait Test extends MockDeleteHistoricUkPropertyAnnualSubmissionValidator {
+    lazy val parser = new DeleteHistoricUkPropertyAnnualSubmissionRequestParser(mockValidator)
   }
 
   "parse" should {
     "return a request object" when {
       "valid request data is supplied" in new Test {
-        MockDeleteHistoricFhlUkPropertyAnnualSubmissionValidator.validate(inputData).returns(Nil)
+        MockDeleteHistoricUkPropertyAnnualSubmissionValidator.validate(inputData).returns(Nil)
         parser.parseRequest(inputData) shouldBe Right(
-          DeleteHistoricFhlUkPropertyAnnualSubmissionRequest(Nino(nino), TaxYear.fromMtd(taxYear), propertyType))
+          DeleteHistoricUkPropertyAnnualSubmissionRequest(Nino(nino), TaxYear.fromMtd(taxYear), propertyType))
       }
     }
     "return an ErrorWrapper" when {
       "a single validation error occurs" in new Test {
-        MockDeleteHistoricFhlUkPropertyAnnualSubmissionValidator
+        MockDeleteHistoricUkPropertyAnnualSubmissionValidator
           .validate(inputData)
           .returns(List(NinoFormatError))
 
@@ -58,7 +58,7 @@ class DeleteHistoricFhlUkPropertyAnnualSubmissionRequestParserSpec extends UnitS
           Left(ErrorWrapper(correlationId, NinoFormatError, None))
       }
       "multiple validation errors occur" in new Test {
-        MockDeleteHistoricFhlUkPropertyAnnualSubmissionValidator
+        MockDeleteHistoricUkPropertyAnnualSubmissionValidator
           .validate(inputData)
           .returns(List(NinoFormatError, TaxYearFormatError))
 

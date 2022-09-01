@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-package v2.models.request.deleteHistoricFhlUkPropertyAnnualSubmission
+package v2.models.request.deleteHistoricUkPropertyAnnualSubmission
 
-import v2.models.domain.{HistoricPropertyType, Nino, TaxYear}
+import v2.models.domain.{ HistoricPropertyType, Nino, TaxYear }
 
-case class DeleteHistoricFhlUkPropertyAnnualSubmissionRequest(nino: Nino, taxYear: TaxYear, propertyType: HistoricPropertyType)
+case class DeleteHistoricUkPropertyAnnualSubmissionRequest(nino: Nino, taxYear: TaxYear, propertyType: HistoricPropertyType)

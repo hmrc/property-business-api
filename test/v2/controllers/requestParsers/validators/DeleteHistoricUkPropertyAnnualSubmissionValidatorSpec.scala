@@ -20,9 +20,9 @@ import mocks.MockAppConfig
 import support.UnitSpec
 import v2.models.domain.HistoricPropertyType
 import v2.models.errors._
-import v2.models.request.deleteHistoricFhlUkPropertyAnnualSubmission.DeleteHistoricFhlUkPropertyAnnualSubmissionRawData
+import v2.models.request.deleteHistoricUkPropertyAnnualSubmission.DeleteHistoricUkPropertyAnnualSubmissionRawData
 
-class DeleteHistoricFhlUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec with MockAppConfig {
+class DeleteHistoricUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec with MockAppConfig {
 
   private val validNino    = "AA123456A"
   private val validTaxYear = "2021-22"
@@ -30,31 +30,31 @@ class DeleteHistoricFhlUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec 
 
   MockAppConfig.minimumTaxHistoric returns 2020
   MockAppConfig.maximumTaxHistoric returns 2023
-  private val validator = new DeleteHistoricFhlUkPropertyAnnualSubmissionValidator(mockAppConfig)
+  private val validator = new DeleteHistoricUkPropertyAnnualSubmissionValidator(mockAppConfig)
 
   "running a validation" should {
     "return no errors" when {
       "a valid request is supplied" in {
-        validator.validate(DeleteHistoricFhlUkPropertyAnnualSubmissionRawData(validNino, validTaxYear, propertyType)) shouldBe Nil
+        validator.validate(DeleteHistoricUkPropertyAnnualSubmissionRawData(validNino, validTaxYear, propertyType)) shouldBe Nil
       }
     }
     "return a path parameter format error" when {
       "an invalid nino is supplied" in {
-        validator.validate(DeleteHistoricFhlUkPropertyAnnualSubmissionRawData("ABC", validTaxYear, propertyType)) shouldBe List(NinoFormatError)
+        validator.validate(DeleteHistoricUkPropertyAnnualSubmissionRawData("ABC", validTaxYear, propertyType)) shouldBe List(NinoFormatError)
       }
       "an invalid tax year format is supplied" in {
-        validator.validate(DeleteHistoricFhlUkPropertyAnnualSubmissionRawData(validNino, "20-21", propertyType)) shouldBe List(TaxYearFormatError)
+        validator.validate(DeleteHistoricUkPropertyAnnualSubmissionRawData(validNino, "20-21", propertyType)) shouldBe List(TaxYearFormatError)
       }
       "a taxYear less than the minimum is supplied" in {
-        validator.validate(DeleteHistoricFhlUkPropertyAnnualSubmissionRawData(validNino, "2019-20", propertyType)) shouldBe List(
+        validator.validate(DeleteHistoricUkPropertyAnnualSubmissionRawData(validNino, "2019-20", propertyType)) shouldBe List(
           RuleHistoricTaxYearNotSupportedError)
       }
       "a taxYear greater than the maximum is supplied" in {
-        validator.validate(DeleteHistoricFhlUkPropertyAnnualSubmissionRawData(validNino, "2024-25", propertyType)) shouldBe List(
+        validator.validate(DeleteHistoricUkPropertyAnnualSubmissionRawData(validNino, "2024-25", propertyType)) shouldBe List(
           RuleHistoricTaxYearNotSupportedError)
       }
       "multiple format errors are made" in {
-        validator.validate(DeleteHistoricFhlUkPropertyAnnualSubmissionRawData("ABC", "21-22", propertyType)) shouldBe List(NinoFormatError, TaxYearFormatError)
+        validator.validate(DeleteHistoricUkPropertyAnnualSubmissionRawData("ABC", "21-22", propertyType)) shouldBe List(NinoFormatError, TaxYearFormatError)
       }
     }
   }

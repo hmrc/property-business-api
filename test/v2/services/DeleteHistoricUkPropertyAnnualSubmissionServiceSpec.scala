@@ -18,15 +18,15 @@ package v2.services
 
 import uk.gov.hmrc.http.HeaderCarrier
 import v2.controllers.EndpointLogContext
-import v2.mocks.connectors.MockDeleteHistoricFhlUkPropertyAnnualSubmissionConnector
+import v2.mocks.connectors.MockDeleteHistoricUkPropertyAnnualSubmissionConnector
 import v2.models.domain.{ HistoricPropertyType, Nino, TaxYear }
 import v2.models.errors._
 import v2.models.outcomes.ResponseWrapper
-import v2.models.request.deleteHistoricFhlUkPropertyAnnualSubmission.DeleteHistoricFhlUkPropertyAnnualSubmissionRequest
+import v2.models.request.deleteHistoricUkPropertyAnnualSubmission.DeleteHistoricUkPropertyAnnualSubmissionRequest
 
 import scala.concurrent.Future
 
-class DeleteHistoricFhlUkPropertyAnnualSubmissionServiceSpec extends ServiceSpec {
+class DeleteHistoricUkPropertyAnnualSubmissionServiceSpec extends ServiceSpec {
 
   val nino: String                       = "AA123456A"
   val mtdTaxYear: String                 = "2021-22"
@@ -35,25 +35,25 @@ class DeleteHistoricFhlUkPropertyAnnualSubmissionServiceSpec extends ServiceSpec
 
   implicit val correlationId: String = "X-123"
 
-  private val requestData = DeleteHistoricFhlUkPropertyAnnualSubmissionRequest(Nino(nino), taxYear, propertyType)
+  private val requestData = DeleteHistoricUkPropertyAnnualSubmissionRequest(Nino(nino), taxYear, propertyType)
 
-  trait Test extends MockDeleteHistoricFhlUkPropertyAnnualSubmissionConnector {
+  trait Test extends MockDeleteHistoricUkPropertyAnnualSubmissionConnector {
     implicit val hc: HeaderCarrier              = HeaderCarrier()
     implicit val logContext: EndpointLogContext = EndpointLogContext("c", "ep")
 
-    val service = new DeleteHistoricFhlUkPropertyAnnualSubmissionService(
-      connector = mockDeleteHistoricFhlUkPropertyAnnualSubmissionConnector
+    val service = new DeleteHistoricUkPropertyAnnualSubmissionService(
+      connector = mockDeleteHistoricUkPropertyAnnualSubmissionConnector
     )
   }
 
   "service" when {
     "service call successful" should {
       "return mapped result" in new Test {
-        MockDeleteHistoricFhlUkPropertyAnnualSubmissionConnector
-          .deleteHistoricFhlUkPropertyAnnualSubmission(requestData)
+        MockDeleteHistoricUkPropertyAnnualSubmissionConnector
+          .deleteHistoricUkPropertyAnnualSubmission(requestData)
           .returns(Future.successful(Right(ResponseWrapper(correlationId, ()))))
 
-        await(service.deleteHistoricFhlUkPropertyAnnualSubmission(requestData)) shouldBe Right(ResponseWrapper(correlationId, ()))
+        await(service.deleteHistoricUkPropertyAnnualSubmission(requestData)) shouldBe Right(ResponseWrapper(correlationId, ()))
       }
     }
 
@@ -62,11 +62,11 @@ class DeleteHistoricFhlUkPropertyAnnualSubmissionServiceSpec extends ServiceSpec
         def serviceError(downstreamErrorCode: String, error: MtdError): Unit =
           s"a $downstreamErrorCode error is returned from the service" in new Test {
 
-            MockDeleteHistoricFhlUkPropertyAnnualSubmissionConnector
-              .deleteHistoricFhlUkPropertyAnnualSubmission(requestData)
+            MockDeleteHistoricUkPropertyAnnualSubmissionConnector
+              .deleteHistoricUkPropertyAnnualSubmission(requestData)
               .returns(Future.successful(Left(ResponseWrapper(correlationId, DownstreamErrors.single(DownstreamErrorCode(downstreamErrorCode))))))
 
-            await(service.deleteHistoricFhlUkPropertyAnnualSubmission(requestData)) shouldBe Left(ErrorWrapper(correlationId, error))
+            await(service.deleteHistoricUkPropertyAnnualSubmission(requestData)) shouldBe Left(ErrorWrapper(correlationId, error))
           }
 
         val input = Seq(

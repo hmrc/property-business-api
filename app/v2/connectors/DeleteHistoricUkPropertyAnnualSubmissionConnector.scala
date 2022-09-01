@@ -24,14 +24,14 @@ import uk.gov.hmrc.http.{ HeaderCarrier, HttpClient }
 import v2.connectors.DownstreamUri.DesUri
 import v2.connectors.httpparsers.StandardIfsHttpParser._
 import v2.models.domain.HistoricPropertyType
-import v2.models.request.deleteHistoricFhlUkPropertyAnnualSubmission.DeleteHistoricFhlUkPropertyAnnualSubmissionRequest
+import v2.models.request.deleteHistoricUkPropertyAnnualSubmission.DeleteHistoricUkPropertyAnnualSubmissionRequest
 
 import scala.concurrent.{ ExecutionContext, Future }
 
 @Singleton
-class DeleteHistoricFhlUkPropertyAnnualSubmissionConnector @Inject()(val http: HttpClient, val appConfig: AppConfig) extends BaseDownstreamConnector {
+class DeleteHistoricUkPropertyAnnualSubmissionConnector @Inject()(val http: HttpClient, val appConfig: AppConfig) extends BaseDownstreamConnector {
 
-  def deleteHistoricFhlUkPropertyAnnualSubmission(request: DeleteHistoricFhlUkPropertyAnnualSubmissionRequest)(
+  def deleteHistoricUkPropertyAnnualSubmission(request: DeleteHistoricUkPropertyAnnualSubmissionRequest)(
       implicit hc: HeaderCarrier,
       ec: ExecutionContext,
       correlationId: String): Future[DownstreamOutcome[Unit]] = {

@@ -22,27 +22,27 @@ import cats.data.EitherT
 import javax.inject.{ Inject, Singleton }
 import uk.gov.hmrc.http.HeaderCarrier
 import utils.Logging
-import v2.connectors.DeleteHistoricFhlUkPropertyAnnualSubmissionConnector
+import v2.connectors.DeleteHistoricUkPropertyAnnualSubmissionConnector
 import v2.controllers.EndpointLogContext
 import v2.models.errors.{ InternalError, NinoFormatError, NotFoundError, TaxYearFormatError }
-import v2.models.request.deleteHistoricFhlUkPropertyAnnualSubmission.DeleteHistoricFhlUkPropertyAnnualSubmissionRequest
+import v2.models.request.deleteHistoricUkPropertyAnnualSubmission.DeleteHistoricUkPropertyAnnualSubmissionRequest
 import v2.support.DownstreamResponseMappingSupport
 
 import scala.concurrent.{ ExecutionContext, Future }
 
 @Singleton
-class DeleteHistoricFhlUkPropertyAnnualSubmissionService @Inject()(connector: DeleteHistoricFhlUkPropertyAnnualSubmissionConnector)
+class DeleteHistoricUkPropertyAnnualSubmissionService @Inject()(connector: DeleteHistoricUkPropertyAnnualSubmissionConnector)
     extends DownstreamResponseMappingSupport
     with Logging {
 
-  def deleteHistoricFhlUkPropertyAnnualSubmission(request: DeleteHistoricFhlUkPropertyAnnualSubmissionRequest)(
+  def deleteHistoricUkPropertyAnnualSubmission(request: DeleteHistoricUkPropertyAnnualSubmissionRequest)(
       implicit hc: HeaderCarrier,
       ec: ExecutionContext,
       logContext: EndpointLogContext,
       correlationId: String): Future[ServiceOutcome[Unit]] = {
 
     val result = for {
-      desResponseWrapper <- EitherT(connector.deleteHistoricFhlUkPropertyAnnualSubmission(request)).leftMap(mapDownstreamErrors(desErrorMap))
+      desResponseWrapper <- EitherT(connector.deleteHistoricUkPropertyAnnualSubmission(request)).leftMap(mapDownstreamErrors(desErrorMap))
     } yield desResponseWrapper
 
     result.value

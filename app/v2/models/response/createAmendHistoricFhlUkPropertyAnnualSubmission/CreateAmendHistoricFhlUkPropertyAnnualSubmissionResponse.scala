@@ -31,7 +31,8 @@ object CreateAmendHistoricFhlUkPropertyAnnualSubmissionResponse extends HateoasL
     (_: CreateAmendHistoricFhlUkPropertyAnnualSubmissionResponse) => Json.obj()
 
   implicit object CreateAmendHistoricFhlUkPropertyLinksFactory
-      extends HateoasLinksFactory[CreateAmendHistoricFhlUkPropertyAnnualSubmissionResponse, CreateAmendHistoricFhlUkPropertyAnnualSubmissionHateoasData] {
+      extends HateoasLinksFactory[CreateAmendHistoricFhlUkPropertyAnnualSubmissionResponse,
+                                  CreateAmendHistoricFhlUkPropertyAnnualSubmissionHateoasData] {
     override def links(appConfig: AppConfig, data: CreateAmendHistoricFhlUkPropertyAnnualSubmissionHateoasData): Seq[Link] = {
       import data._
       Seq(

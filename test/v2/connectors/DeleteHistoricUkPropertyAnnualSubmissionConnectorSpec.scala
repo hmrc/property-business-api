@@ -21,18 +21,18 @@ import play.api.libs.json.JsObject
 import v2.mocks.MockHttpClient
 import v2.models.domain.{ HistoricPropertyType, Nino, TaxYear }
 import v2.models.outcomes.ResponseWrapper
-import v2.models.request.deleteHistoricFhlUkPropertyAnnualSubmission.DeleteHistoricFhlUkPropertyAnnualSubmissionRequest
+import v2.models.request.deleteHistoricUkPropertyAnnualSubmission.DeleteHistoricUkPropertyAnnualSubmissionRequest
 
 import scala.concurrent.Future
 
-class DeleteHistoricFhlUkPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec {
+class DeleteHistoricUkPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec {
 
   val nino: String       = "AA123456A"
   val mtdTaxYear: String = "2021-22"
   val taxYear: TaxYear   = TaxYear.fromMtd(mtdTaxYear)
 
-  def request(propertyType: HistoricPropertyType): DeleteHistoricFhlUkPropertyAnnualSubmissionRequest =
-    DeleteHistoricFhlUkPropertyAnnualSubmissionRequest(
+  def request(propertyType: HistoricPropertyType): DeleteHistoricUkPropertyAnnualSubmissionRequest =
+    DeleteHistoricUkPropertyAnnualSubmissionRequest(
       nino = Nino(nino),
       taxYear = taxYear,
       propertyType
@@ -40,7 +40,7 @@ class DeleteHistoricFhlUkPropertyAnnualSubmissionConnectorSpec extends Connector
 
   class Test extends MockHttpClient with MockAppConfig {
 
-    val connector: DeleteHistoricFhlUkPropertyAnnualSubmissionConnector = new DeleteHistoricFhlUkPropertyAnnualSubmissionConnector(
+    val connector: DeleteHistoricUkPropertyAnnualSubmissionConnector = new DeleteHistoricUkPropertyAnnualSubmissionConnector(
       http = mockHttpClient,
       appConfig = mockAppConfig
     )
@@ -65,7 +65,7 @@ class DeleteHistoricFhlUkPropertyAnnualSubmissionConnectorSpec extends Connector
         )
         .returns(Future.successful(outcome))
 
-      await(connector.deleteHistoricFhlUkPropertyAnnualSubmission(request(HistoricPropertyType.Fhl))) shouldBe outcome
+      await(connector.deleteHistoricUkPropertyAnnualSubmission(request(HistoricPropertyType.Fhl))) shouldBe outcome
     }
 
     "send a request and return no content for non-FHL" in new Test {
@@ -81,7 +81,7 @@ class DeleteHistoricFhlUkPropertyAnnualSubmissionConnectorSpec extends Connector
         )
         .returns(Future.successful(outcome))
 
-      await(connector.deleteHistoricFhlUkPropertyAnnualSubmission(request(HistoricPropertyType.NonFhl))) shouldBe outcome
+      await(connector.deleteHistoricUkPropertyAnnualSubmission(request(HistoricPropertyType.NonFhl))) shouldBe outcome
     }
   }
 }

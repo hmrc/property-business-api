@@ -19,23 +19,23 @@ package v2.mocks.connectors
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
 import uk.gov.hmrc.http.HeaderCarrier
-import v2.connectors.{ DeleteHistoricFhlUkPropertyAnnualSubmissionConnector, DownstreamOutcome }
-import v2.models.request.deleteHistoricFhlUkPropertyAnnualSubmission.DeleteHistoricFhlUkPropertyAnnualSubmissionRequest
+import v2.connectors.{ DeleteHistoricUkPropertyAnnualSubmissionConnector, DownstreamOutcome }
+import v2.models.request.deleteHistoricUkPropertyAnnualSubmission.DeleteHistoricUkPropertyAnnualSubmissionRequest
 
 import scala.concurrent.{ ExecutionContext, Future }
 
-trait MockDeleteHistoricFhlUkPropertyAnnualSubmissionConnector extends MockFactory {
+trait MockDeleteHistoricUkPropertyAnnualSubmissionConnector extends MockFactory {
 
-  val mockDeleteHistoricFhlUkPropertyAnnualSubmissionConnector: DeleteHistoricFhlUkPropertyAnnualSubmissionConnector =
-    mock[DeleteHistoricFhlUkPropertyAnnualSubmissionConnector]
+  val mockDeleteHistoricUkPropertyAnnualSubmissionConnector: DeleteHistoricUkPropertyAnnualSubmissionConnector =
+    mock[DeleteHistoricUkPropertyAnnualSubmissionConnector]
 
-  object MockDeleteHistoricFhlUkPropertyAnnualSubmissionConnector {
+  object MockDeleteHistoricUkPropertyAnnualSubmissionConnector {
 
-    def deleteHistoricFhlUkPropertyAnnualSubmission(
-        requestData: DeleteHistoricFhlUkPropertyAnnualSubmissionRequest): CallHandler[Future[DownstreamOutcome[Unit]]] = {
+    def deleteHistoricUkPropertyAnnualSubmission(
+        requestData: DeleteHistoricUkPropertyAnnualSubmissionRequest): CallHandler[Future[DownstreamOutcome[Unit]]] = {
       (
-        mockDeleteHistoricFhlUkPropertyAnnualSubmissionConnector
-          .deleteHistoricFhlUkPropertyAnnualSubmission(_: DeleteHistoricFhlUkPropertyAnnualSubmissionRequest)(
+        mockDeleteHistoricUkPropertyAnnualSubmissionConnector
+          .deleteHistoricUkPropertyAnnualSubmission(_: DeleteHistoricUkPropertyAnnualSubmissionRequest)(
             _: HeaderCarrier,
             _: ExecutionContext,
             _: String

@@ -21,23 +21,23 @@ import cats.implicits._
 import play.api.libs.json.Json
 import play.api.mvc.{ Action, AnyContent, ControllerComponents }
 import utils.{ IdGenerator, Logging }
-import v2.controllers.requestParsers.DeleteHistoricFhlUkPropertyAnnualSubmissionRequestParser
+import v2.controllers.requestParsers.DeleteHistoricUkPropertyAnnualSubmissionRequestParser
 import v2.models.domain.HistoricPropertyType
 import v2.models.errors._
-import v2.models.request.deleteHistoricFhlUkPropertyAnnualSubmission.DeleteHistoricFhlUkPropertyAnnualSubmissionRawData
-import v2.services.{ AuditService, DeleteHistoricFhlUkPropertyAnnualSubmissionService, EnrolmentsAuthService, MtdIdLookupService }
+import v2.models.request.deleteHistoricUkPropertyAnnualSubmission.DeleteHistoricUkPropertyAnnualSubmissionRawData
+import v2.services.{ AuditService, DeleteHistoricUkPropertyAnnualSubmissionService, EnrolmentsAuthService, MtdIdLookupService }
 
 import javax.inject.{ Inject, Singleton }
 import scala.concurrent.{ ExecutionContext, Future }
 
 @Singleton
-class DeleteHistoricFhlUkPropertyAnnualSubmissionController @Inject()(val authService: EnrolmentsAuthService,
-                                                                      val lookupService: MtdIdLookupService,
-                                                                      parser: DeleteHistoricFhlUkPropertyAnnualSubmissionRequestParser,
-                                                                      service: DeleteHistoricFhlUkPropertyAnnualSubmissionService,
-                                                                      auditService: AuditService,
-                                                                      cc: ControllerComponents,
-                                                                      idGenerator: IdGenerator)(implicit ec: ExecutionContext)
+class DeleteHistoricUkPropertyAnnualSubmissionController @Inject()(val authService: EnrolmentsAuthService,
+                                                                   val lookupService: MtdIdLookupService,
+                                                                   parser: DeleteHistoricUkPropertyAnnualSubmissionRequestParser,
+                                                                   service: DeleteHistoricUkPropertyAnnualSubmissionService,
+                                                                   auditService: AuditService,
+                                                                   cc: ControllerComponents,
+                                                                   idGenerator: IdGenerator)(implicit ec: ExecutionContext)
     extends AuthorisedController(cc)
     with BaseController
     with Logging {
@@ -65,11 +65,11 @@ class DeleteHistoricFhlUkPropertyAnnualSubmissionController @Inject()(val authSe
       logger.info(
         message = s"[${endpointLogContext.controllerName}][${endpointLogContext.endpointName}] " +
           s"with correlationId : $correlationId")
-      val rawData = DeleteHistoricFhlUkPropertyAnnualSubmissionRawData(nino, taxYear, propertyType)
+      val rawData = DeleteHistoricUkPropertyAnnualSubmissionRawData(nino, taxYear, propertyType)
       val result =
         for {
           parsedRequest   <- EitherT.fromEither[Future](parser.parseRequest(rawData))
-          serviceResponse <- EitherT(service.deleteHistoricFhlUkPropertyAnnualSubmission(parsedRequest))
+          serviceResponse <- EitherT(service.deleteHistoricUkPropertyAnnualSubmission(parsedRequest))
         } yield {
           logger.info(
             s"[${endpointLogContext.controllerName}][${endpointLogContext.endpointName}] - " +

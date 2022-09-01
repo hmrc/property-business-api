@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-package v2.models.request.deleteHistoricFhlUkPropertyAnnualSubmission
+package v2.models.request.deleteHistoricUkPropertyAnnualSubmission
 
 import v2.models.domain.HistoricPropertyType
 import v2.models.request.RawData
 
-case class DeleteHistoricFhlUkPropertyAnnualSubmissionRawData(nino: String, taxYear: String, propertyType: HistoricPropertyType) extends RawData
+case class DeleteHistoricUkPropertyAnnualSubmissionRawData(nino: String, taxYear: String, propertyType: HistoricPropertyType) extends RawData

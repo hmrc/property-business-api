@@ -20,30 +20,30 @@ import play.api.libs.json.Json
 import play.api.mvc.{ Action, AnyContent, Result }
 import uk.gov.hmrc.http.HeaderCarrier
 import v2.mocks.MockIdGenerator
-import v2.mocks.requestParsers.MockDeleteHistoricFhlUkPropertyAnnualSubmissionRequestParser
+import v2.mocks.requestParsers.MockDeleteHistoricUkPropertyAnnualSubmissionRequestParser
 import v2.mocks.services.{
   MockAuditService,
-  MockDeleteHistoricFhlUkPropertyAnnualSubmissionService,
+  MockDeleteHistoricUkPropertyAnnualSubmissionService,
   MockEnrolmentsAuthService,
   MockMtdIdLookupService
 }
 import v2.models.domain.{ HistoricPropertyType, Nino, TaxYear }
 import v2.models.errors._
 import v2.models.outcomes.ResponseWrapper
-import v2.models.request.deleteHistoricFhlUkPropertyAnnualSubmission.{
-  DeleteHistoricFhlUkPropertyAnnualSubmissionRawData,
-  DeleteHistoricFhlUkPropertyAnnualSubmissionRequest
+import v2.models.request.deleteHistoricUkPropertyAnnualSubmission.{
+  DeleteHistoricUkPropertyAnnualSubmissionRawData,
+  DeleteHistoricUkPropertyAnnualSubmissionRequest
 }
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-class DeleteHistoricFhlUkPropertyAnnualSubmissionControllerSpec
+class DeleteHistoricUkPropertyAnnualSubmissionControllerSpec
     extends ControllerBaseSpec
     with MockEnrolmentsAuthService
     with MockMtdIdLookupService
-    with MockDeleteHistoricFhlUkPropertyAnnualSubmissionService
-    with MockDeleteHistoricFhlUkPropertyAnnualSubmissionRequestParser
+    with MockDeleteHistoricUkPropertyAnnualSubmissionService
+    with MockDeleteHistoricUkPropertyAnnualSubmissionRequestParser
     with MockAuditService
     with MockIdGenerator {
 
@@ -51,11 +51,11 @@ class DeleteHistoricFhlUkPropertyAnnualSubmissionControllerSpec
   private val taxYear       = "2021-22"
   private val correlationId = "X-123"
 
-  val controller = new DeleteHistoricFhlUkPropertyAnnualSubmissionController(
+  val controller = new DeleteHistoricUkPropertyAnnualSubmissionController(
     authService = mockEnrolmentsAuthService,
     lookupService = mockMtdIdLookupService,
-    parser = mockDeleteHistoricFhlUkPropertyAnnualSubmissionRequestParser,
-    service = mockDeleteHistoricFhlUkPropertyAnnualSubmissionService,
+    parser = mockDeleteHistoricUkPropertyAnnualSubmissionRequestParser,
+    service = mockDeleteHistoricUkPropertyAnnualSubmissionService,
     auditService = mockAuditService,
     cc = cc,
     idGenerator = mockIdGenerator
@@ -69,20 +69,20 @@ class DeleteHistoricFhlUkPropertyAnnualSubmissionControllerSpec
     MockIdGenerator.getCorrelationId.returns(correlationId)
   }
 
-  private def rawData(propertyType: HistoricPropertyType) = DeleteHistoricFhlUkPropertyAnnualSubmissionRawData(nino, taxYear, propertyType)
+  private def rawData(propertyType: HistoricPropertyType) = DeleteHistoricUkPropertyAnnualSubmissionRawData(nino, taxYear, propertyType)
   private def requestData(propertyType: HistoricPropertyType) =
-    DeleteHistoricFhlUkPropertyAnnualSubmissionRequest(Nino(nino), TaxYear.fromMtd(taxYear), propertyType)
+    DeleteHistoricUkPropertyAnnualSubmissionRequest(Nino(nino), TaxYear.fromMtd(taxYear), propertyType)
 
   "handleRequest" should {
     "return No Content" when {
       def success(handler: Action[AnyContent], propertyType: HistoricPropertyType): Unit =
         "the request is valid and processed successfully" in new Test {
-          MockDeleteHistoricFhlUkPropertyAnnualSubmissionRequestParser
+          MockDeleteHistoricUkPropertyAnnualSubmissionRequestParser
             .parse(rawData(propertyType))
             .returns(Right(requestData(propertyType)))
 
-          MockDeleteHistoricFhlUkPropertyAnnualSubmissionService
-            .deleteHistoricFhlUkPropertyAnnualSubmission(requestData(propertyType))
+          MockDeleteHistoricUkPropertyAnnualSubmissionService
+            .deleteHistoricUkPropertyAnnualSubmission(requestData(propertyType))
             .returns(Future.successful(Right(ResponseWrapper(correlationId, ()))))
 
           val result: Future[Result] = handler(fakeRequest)
@@ -101,7 +101,7 @@ class DeleteHistoricFhlUkPropertyAnnualSubmissionControllerSpec
           def parseError(error: MtdError, expectedStatus: Int): Unit = {
             s"a ${error.code} error is returned from the parser" in new Test {
 
-              MockDeleteHistoricFhlUkPropertyAnnualSubmissionRequestParser
+              MockDeleteHistoricUkPropertyAnnualSubmissionRequestParser
                 .parse(rawData(propertyType))
                 .returns(Left(ErrorWrapper(correlationId, error, None)))
 
@@ -132,12 +132,12 @@ class DeleteHistoricFhlUkPropertyAnnualSubmissionControllerSpec
           def serviceError(mtdError: MtdError, expectedStatus: Int): Unit = {
             s"a $mtdError error is returned from the service" in new Test {
 
-              MockDeleteHistoricFhlUkPropertyAnnualSubmissionRequestParser
+              MockDeleteHistoricUkPropertyAnnualSubmissionRequestParser
                 .parse(rawData(propertyType))
                 .returns(Right(requestData(propertyType)))
 
-              MockDeleteHistoricFhlUkPropertyAnnualSubmissionService
-                .deleteHistoricFhlUkPropertyAnnualSubmission(requestData(propertyType))
+              MockDeleteHistoricUkPropertyAnnualSubmissionService
+                .deleteHistoricUkPropertyAnnualSubmission(requestData(propertyType))
                 .returns(Future.successful(Left(ErrorWrapper(correlationId, mtdError))))
 
               val result: Future[Result] = handler(fakeRequest)

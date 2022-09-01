@@ -18,14 +18,13 @@ package v2.connectors
 
 import config.AppConfig
 import play.api.libs.json.JsObject
-
-import javax.inject.{ Inject, Singleton }
 import uk.gov.hmrc.http.{ HeaderCarrier, HttpClient }
-import v2.connectors.DownstreamUri.DesUri
+import v2.connectors.DownstreamUri.IfsUri
 import v2.connectors.httpparsers.StandardIfsHttpParser._
 import v2.models.domain.HistoricPropertyType
 import v2.models.request.deleteHistoricUkPropertyAnnualSubmission.DeleteHistoricUkPropertyAnnualSubmissionRequest
 
+import javax.inject.{ Inject, Singleton }
 import scala.concurrent.{ ExecutionContext, Future }
 
 @Singleton
@@ -46,7 +45,7 @@ class DeleteHistoricUkPropertyAnnualSubmissionConnector @Inject()(val http: Http
 
     put(
       body = JsObject.empty,
-      uri = DesUri[Unit](
+      uri = IfsUri[Unit](
         s"income-tax/nino/$nino/uk-properties/$propertyTypeName/annual-summaries/$taxYear"
       )
     )

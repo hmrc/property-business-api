@@ -45,10 +45,10 @@ class DeleteHistoricUkPropertyAnnualSubmissionConnectorSpec extends ConnectorSpe
       appConfig = mockAppConfig
     )
 
-    MockAppConfig.desBaseUrl returns baseUrl
-    MockAppConfig.desToken returns "des-token"
-    MockAppConfig.desEnvironment returns "des-environment"
-    MockAppConfig.desEnvironmentHeaders returns Some(allowedDownstreamHeaders)
+    MockAppConfig.ifsBaseUrl returns baseUrl
+    MockAppConfig.ifsToken returns "ifs-token"
+    MockAppConfig.ifsEnvironment returns "ifs-environment"
+    MockAppConfig.ifsEnvironmentHeaders returns Some(allowedDownstreamHeaders)
   }
 
   "connector" must {
@@ -58,9 +58,9 @@ class DeleteHistoricUkPropertyAnnualSubmissionConnectorSpec extends ConnectorSpe
       MockHttpClient
         .put(
           url = s"$baseUrl/income-tax/nino/$nino/uk-properties/furnished-holiday-lettings/annual-summaries/${taxYear.toDownstream}",
-          config = dummyDesHeaderCarrierConfig,
+          config = dummyIfsHeaderCarrierConfig,
           body = JsObject.empty,
-          requiredHeaders = requiredDesHeaders,
+          requiredHeaders = requiredIfsHeaders,
           excludedHeaders = Seq("AnotherHeader" -> "HeaderValue")
         )
         .returns(Future.successful(outcome))
@@ -74,9 +74,9 @@ class DeleteHistoricUkPropertyAnnualSubmissionConnectorSpec extends ConnectorSpe
       MockHttpClient
         .put(
           url = s"$baseUrl/income-tax/nino/$nino/uk-properties/other/annual-summaries/${taxYear.toDownstream}",
-          config = dummyDesHeaderCarrierConfig,
+          config = dummyIfsHeaderCarrierConfig,
           body = JsObject.empty,
-          requiredHeaders = requiredDesHeaders,
+          requiredHeaders = requiredIfsHeaders,
           excludedHeaders = Seq("AnotherHeader" -> "HeaderValue")
         )
         .returns(Future.successful(outcome))

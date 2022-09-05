@@ -18,20 +18,20 @@ package v2.mocks.validators
 
 import org.scalamock.handlers.CallHandler1
 import org.scalamock.scalatest.MockFactory
-import v2.controllers.requestParsers.validators.DeleteHistoricFhlUkPropertyAnnualSubmissionValidator
+import v2.controllers.requestParsers.validators.DeleteHistoricUkPropertyAnnualSubmissionValidator
 import v2.models.errors.MtdError
-import v2.models.request.deleteHistoricFhlUkPropertyAnnualSubmission.DeleteHistoricFhlUkPropertyAnnualSubmissionRawData
+import v2.models.request.deleteHistoricUkPropertyAnnualSubmission.DeleteHistoricUkPropertyAnnualSubmissionRawData
 
-class MockDeleteHistoricFhlUkPropertyAnnualSubmissionValidator extends MockFactory {
+class MockDeleteHistoricUkPropertyAnnualSubmissionValidator extends MockFactory {
 
-  val mockValidator: DeleteHistoricFhlUkPropertyAnnualSubmissionValidator = mock[DeleteHistoricFhlUkPropertyAnnualSubmissionValidator]
+  val mockValidator: DeleteHistoricUkPropertyAnnualSubmissionValidator = mock[DeleteHistoricUkPropertyAnnualSubmissionValidator]
 
-  object MockDeleteHistoricFhlUkPropertyAnnualSubmissionValidator {
+  object MockDeleteHistoricUkPropertyAnnualSubmissionValidator {
 
-    def validate(data: DeleteHistoricFhlUkPropertyAnnualSubmissionRawData)
-      : CallHandler1[DeleteHistoricFhlUkPropertyAnnualSubmissionRawData, List[MtdError]] = {
+    def validate(data: DeleteHistoricUkPropertyAnnualSubmissionRawData)
+      : CallHandler1[DeleteHistoricUkPropertyAnnualSubmissionRawData, List[MtdError]] = {
       (mockValidator
-        .validate(_: DeleteHistoricFhlUkPropertyAnnualSubmissionRawData))
+        .validate(_: DeleteHistoricUkPropertyAnnualSubmissionRawData))
         .expects(data)
     }
   }

@@ -22,23 +22,23 @@ import uk.gov.hmrc.http.HeaderCarrier
 import v2.controllers.EndpointLogContext
 import v2.models.errors.ErrorWrapper
 import v2.models.outcomes.ResponseWrapper
-import v2.models.request.deleteHistoricFhlUkPropertyAnnualSubmission.DeleteHistoricFhlUkPropertyAnnualSubmissionRequest
-import v2.services.DeleteHistoricFhlUkPropertyAnnualSubmissionService
+import v2.models.request.deleteHistoricUkPropertyAnnualSubmission.DeleteHistoricUkPropertyAnnualSubmissionRequest
+import v2.services.DeleteHistoricUkPropertyAnnualSubmissionService
 
 import scala.concurrent.{ ExecutionContext, Future }
 
-trait MockDeleteHistoricFhlUkPropertyAnnualSubmissionService extends MockFactory {
+trait MockDeleteHistoricUkPropertyAnnualSubmissionService extends MockFactory {
 
-  val mockDeleteHistoricFhlUkPropertyAnnualSubmissionService: DeleteHistoricFhlUkPropertyAnnualSubmissionService =
-    mock[DeleteHistoricFhlUkPropertyAnnualSubmissionService]
+  val mockDeleteHistoricUkPropertyAnnualSubmissionService: DeleteHistoricUkPropertyAnnualSubmissionService =
+    mock[DeleteHistoricUkPropertyAnnualSubmissionService]
 
-  object MockDeleteHistoricFhlUkPropertyAnnualSubmissionService {
+  object MockDeleteHistoricUkPropertyAnnualSubmissionService {
 
-    def deleteHistoricFhlUkPropertyAnnualSubmission(
-        requestData: DeleteHistoricFhlUkPropertyAnnualSubmissionRequest): CallHandler[Future[Either[ErrorWrapper, ResponseWrapper[Unit]]]] = {
+    def deleteHistoricUkPropertyAnnualSubmission(
+        requestData: DeleteHistoricUkPropertyAnnualSubmissionRequest): CallHandler[Future[Either[ErrorWrapper, ResponseWrapper[Unit]]]] = {
       (
-        mockDeleteHistoricFhlUkPropertyAnnualSubmissionService
-          .deleteHistoricFhlUkPropertyAnnualSubmission(_: DeleteHistoricFhlUkPropertyAnnualSubmissionRequest)(
+        mockDeleteHistoricUkPropertyAnnualSubmissionService
+          .deleteHistoricUkPropertyAnnualSubmission(_: DeleteHistoricUkPropertyAnnualSubmissionRequest)(
             _: HeaderCarrier,
             _: ExecutionContext,
             _: EndpointLogContext,

@@ -27,16 +27,16 @@ import support.V2IntegrationBaseSpec
 import v2.models.errors._
 import v2.stubs.{ AuditStub, AuthStub, DownstreamStub, MtdIdLookupStub }
 
-class DeleteHistoricFhlUkPropertyAnnualSubmissionControllerISpec extends V2IntegrationBaseSpec {
+class DeleteHistoricNonFhlUkPropertyAnnualSubmissionControllerISpec extends V2IntegrationBaseSpec {
 
   private trait Test {
 
     val nino: String    = "AA123456A"
     val taxYear: String = "2021-22"
 
-    def uri: String = s"/uk/annual/furnished-holiday-lettings/$nino/$taxYear"
+    def uri: String = s"/uk/annual/non-furnished-holiday-lettings/$nino/$taxYear"
 
-    def downstreamUri: String = s"/income-tax/nino/$nino/uk-properties/furnished-holiday-lettings/annual-summaries/2022"
+    def downstreamUri: String = s"/income-tax/nino/$nino/uk-properties/other/annual-summaries/2022"
 
     def setupStubs(): StubMapping
 
@@ -58,7 +58,7 @@ class DeleteHistoricFhlUkPropertyAnnualSubmissionControllerISpec extends V2Integ
        """.stripMargin
   }
 
-  "calling the delete historic FHL UK property annual submission endpoint" should {
+  "calling the delete historic non-FHL UK property annual submission endpoint" should {
     "return a 204 status code" when {
       "any valid request is made" in new Test {
 

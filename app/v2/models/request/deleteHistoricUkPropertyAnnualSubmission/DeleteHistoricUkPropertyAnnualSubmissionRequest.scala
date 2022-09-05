@@ -14,21 +14,8 @@
  * limitations under the License.
  */
 
-package v2.models.request.deleteHistoricFhlUkPropertyAnnualSubmission
+package v2.models.request.deleteHistoricUkPropertyAnnualSubmission
 
-import play.api.libs.json.Json
-import support.UnitSpec
+import v2.models.domain.{ HistoricPropertyType, Nino, TaxYear }
 
-class DeleteHistoricFhlUkPropertyAnnualSubmissionRawDataSpec extends UnitSpec {
-  "writes" must {
-    "work" in {
-      Json.toJson(DeleteHistoricFhlUkPropertyAnnualSubmissionRawData(nino = "someNino", taxYear = "someTaxYear")) shouldBe
-        Json.parse("""
-            |{
-            |  "nino": "someNino",
-            |  "taxYear": "someTaxYear"
-            |}
-         """.stripMargin)
-    }
-  }
-}
+case class DeleteHistoricUkPropertyAnnualSubmissionRequest(nino: Nino, taxYear: TaxYear, propertyType: HistoricPropertyType)

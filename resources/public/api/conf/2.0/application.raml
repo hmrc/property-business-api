@@ -135,6 +135,13 @@ documentation:
               type: string
               example: TC663795B
           post: !include historic_uk_non_fhl_period_summary_create.raml
+          /{periodId}:
+            uriParameters:
+              periodId:
+                description: An identifier for the update period, unique to the customer's UK property business.
+                type: string
+                example: 2017-04-06_2017-07-04
+            get: !include historic_uk_non_fhl_period_summary_retrieve.raml
   /foreign:
     /{nino}:
       uriParameters:

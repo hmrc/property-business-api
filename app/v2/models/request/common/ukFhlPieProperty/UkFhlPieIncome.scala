@@ -17,19 +17,14 @@
 package v2.models.request.common.ukFhlPieProperty
 
 import play.api.libs.functional.syntax.{ toFunctionalBuilderOps, unlift }
-import play.api.libs.json.{ JsPath, Reads, Writes, __ }
+import play.api.libs.json.{ JsPath, Json, Reads, Writes }
 import v2.models.request.common.ukPropertyRentARoom.UkPropertyIncomeRentARoom
 
-case class UkFhlPieIncome(periodAmount: Option[BigDecimal], taxDeducted: Option[BigDecimal], ukRentARoom: Option[UkPropertyIncomeRentARoom])
+case class UkFhlPieIncome(periodAmount: Option[BigDecimal], taxDeducted: Option[BigDecimal], rentARoom: Option[UkPropertyIncomeRentARoom])
 
 object UkFhlPieIncome {
 
-  implicit val mtdReads: Reads[UkFhlPieIncome] =
-    (
-      (__ \ "periodAmount").readNullable[BigDecimal] and
-        (__ \ "taxDeducted").readNullable[BigDecimal] and
-        (__ \ "rentARoom").readNullable[UkPropertyIncomeRentARoom]
-    )(UkFhlPieIncome.apply _)
+  implicit val mtdReads: Reads[UkFhlPieIncome] = Json.reads
 
   implicit val downstreamWrites: Writes[UkFhlPieIncome] = (
     (JsPath \ "rentIncome" \ "amount").writeNullable[BigDecimal] and

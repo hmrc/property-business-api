@@ -63,7 +63,7 @@ class CreateHistoricFhlUkPiePeriodSummaryValidator @Inject() extends Validator[C
         import income._
         validateOptional(periodAmount, "/income/periodAmount") ++
           validateOptional(taxDeducted, "/income/taxDeducted") ++
-          validateOptional(ukRentARoom.flatMap(_.rentsReceived), "/income/rentARoom/rentsReceived")
+          validateOptional(rentARoom.flatMap(_.rentsReceived), "/income/rentARoom/rentsReceived")
       }
       .getOrElse(Nil)
 

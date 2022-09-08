@@ -47,10 +47,10 @@ class PeriodExpensesSpec extends UnitSpec with JsonErrorValidators {
       |    "professionalFees": 4997.99,
       |    "costOfServices": 4996.99,
       |    "other": 4995.99,
-      |    "travelCosts": 4994.99,
-      |    "residentialFinancialCost": 4993.99,
-      |    "residentialFinancialCostsCarriedForward": 4992.99,
-      |    "consolidatedExpenses": 4991.99,
+      |    "consolidatedExpenses": 4994.99,
+      |    "travelCosts": 4993.99,
+      |    "residentialFinancialCost": 4992.99,
+      |    "residentialFinancialCostsCarriedForward": 4991.99,
       |    "rentARoom":{
       |      "amountClaimed":4990.99
       |    }
@@ -65,10 +65,10 @@ class PeriodExpensesSpec extends UnitSpec with JsonErrorValidators {
             |         "professionalFees": 4997.99,
             |         "costOfServices": 4996.99,
             |         "other": 4995.99,
-            |         "travelCosts": 4994.99,
-            |         "residentialFinancialCost": 4993.99,
-            |         "residentialFinancialCostsCarriedForward": 4992.99,         
-            |         "consolidatedExpenses": 4991.99,
+            |         "consolidatedExpenses": 4994.99,
+            |         "travelCosts": 4993.99,
+            |         "residentialFinancialCost": 4992.99,
+            |         "residentialFinancialCostsCarriedForward": 4991.99,         
             |         "ukRentARoom": {
             |            "amountClaimed": 4990.99
             |         }

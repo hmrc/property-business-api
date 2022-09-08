@@ -17,7 +17,7 @@
 package v2.models.response.retrieveHistoricNonFhlUkPiePeriodSummary
 
 import config.AppConfig
-import play.api.libs.json.{ JsPath, Json, OWrites, Reads, __ }
+import play.api.libs.json.{ JsPath, Json, OWrites, Reads }
 import play.api.libs.functional.syntax._
 import v2.hateoas.{ HateoasLinks, HateoasLinksFactory }
 import v2.models.hateoas.{ HateoasData, Link }
@@ -33,7 +33,7 @@ object RetrieveHistoricNonFhlUkPiePeriodSummaryResponse extends HateoasLinks {
   implicit val reads: Reads[RetrieveHistoricNonFhlUkPiePeriodSummaryResponse] = (
     (JsPath \ "from").read[String] and
       (JsPath \ "to").read[String] and
-      (__ \ "financials" \ "incomes").readNullable[PeriodIncome] and
+      (JsPath \ "financials" \ "incomes").readNullable[PeriodIncome] and
       (JsPath \ "financials" \ "deductions").readNullable[PeriodExpenses]
   )(RetrieveHistoricNonFhlUkPiePeriodSummaryResponse.apply _)
 

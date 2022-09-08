@@ -20,10 +20,10 @@ import play.api.libs.functional.syntax._
 import play.api.libs.json.{ JsPath, Json, OWrites, Reads }
 
 case class PeriodIncome(periodAmount: Option[BigDecimal],
-                        taxDeducted: Option[BigDecimal],
                         premiumsOfLeaseGrant: Option[BigDecimal],
                         reversePremiums: Option[BigDecimal],
                         otherIncome: Option[BigDecimal],
+                        taxDeducted: Option[BigDecimal],
                         rentARoom: Option[RentARoomIncome])
 
 case object PeriodIncome {

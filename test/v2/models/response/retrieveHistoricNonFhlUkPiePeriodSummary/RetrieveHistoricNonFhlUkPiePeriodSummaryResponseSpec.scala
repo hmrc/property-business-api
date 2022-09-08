@@ -19,7 +19,6 @@ package v2.models.response.retrieveHistoricNonFhlUkPiePeriodSummary
 import mocks.MockAppConfig
 import play.api.libs.json.{ JsValue, Json }
 import support.UnitSpec
-import v2.models.hateoas.{ Link, Method }
 
 class RetrieveHistoricNonFhlUkPiePeriodSummaryResponseSpec extends UnitSpec with MockAppConfig {
 
@@ -28,10 +27,10 @@ class RetrieveHistoricNonFhlUkPiePeriodSummaryResponseSpec extends UnitSpec with
   val periodIncome: PeriodIncome =
     PeriodIncome(
       decimal("5000.99"),
-      decimal("4996.99"),
       decimal("4999.99"),
       decimal("4998.99"),
       decimal("4997.99"),
+      decimal("4996.99"),
       Option(RentARoomIncome(Some(4995.99)))
     )
 
@@ -50,18 +49,29 @@ class RetrieveHistoricNonFhlUkPiePeriodSummaryResponseSpec extends UnitSpec with
       Option(RentARoomExpenses(Some(4990.99)))
     )
 
+  val model: RetrieveHistoricNonFhlUkPiePeriodSummaryResponse = RetrieveHistoricNonFhlUkPiePeriodSummaryResponse(
+    fromDate = "2021-01-01",
+    toDate = "2021-02-01",
+    income = Some(
+      periodIncome
+    ),
+    expenses = Some(
+      periodExpenses
+    )
+  )
+
   val readsJson: JsValue = Json.parse("""{
                                              |   "from": "2021-01-01",
                                              |   "to": "2021-02-01",
                                              |   "financials": {
                                              |      "incomes": {
-                                     |                 "rentIncome": {
+                                             |        "rentIncome": {
                                              |            "amount": 5000.99,
-                                             |            "taxDeducted": 4996.99
+                                             |            "taxDeducted": 4999.99
                                              |        },
-                                             |        "premiumsOfLeaseGrant": 4999.99,
-                                             |        "reversePremiums": 4998.99,
-                                             |        "otherIncome": 4997.99,
+                                             |        "premiumsOfLeaseGrant": 4998.99,
+                                             |        "reversePremiums": 4997.99,
+                                             |        "otherIncome": 4996.99,
                                              |        "ukRentARoom": {
                                              |            "rentsReceived": 4995.99
                                              |         }
@@ -73,10 +83,10 @@ class RetrieveHistoricNonFhlUkPiePeriodSummaryResponseSpec extends UnitSpec with
                                              |         "professionalFees": 4997.99,
                                              |         "costOfServices": 4996.99,
                                              |         "other": 4995.99,
-                                             |         "travelCosts": 4994.99,
-                                             |         "residentialFinancialCost": 4993.99,
-                                             |         "residentialFinancialCostsCarriedForward": 4992.99,         
-                                             |         "consolidatedExpenses": 4991.99,
+                                             |         "consolidatedExpenses": 4994.99,
+                                             |         "travelCosts": 4993.99,
+                                             |         "residentialFinancialCost": 4992.99,
+                                             |         "residentialFinancialCostsCarriedForward": 4991.99,         
                                              |         "ukRentARoom": {
                                              |            "amountClaimed": 4990.99
                                              |         }
@@ -89,14 +99,14 @@ class RetrieveHistoricNonFhlUkPiePeriodSummaryResponseSpec extends UnitSpec with
                    |      "fromDate": "2021-01-01",
                    |      "toDate": "2021-02-01",             
                    |      "income": {
-                   |          "periodAmount": 5000.99,
-                   |          "premiumsOfLeaseGrant": 4999.99,
-                   |          "reversePremiums": 4998.99,
-                   |          "otherIncome": 4997.99,
-                   |          "taxDeducted": 4996.99,
-                   |          "rentARoom":{
-                   |              "rentsReceived": 4995.99
-                   |          }
+                   |        "periodAmount": 5000.99,
+                   |        "premiumsOfLeaseGrant": 4999.99,
+                   |        "reversePremiums": 4998.99,
+                   |        "otherIncome": 4997.99,
+                   |        "taxDeducted": 4996.99,
+                   |        "rentARoom":{
+                   |          "rentsReceived": 4995.99
+                   |        }
                    |      },
                    |      "expenses": {
                    |          "premisesRunningCosts": 5000.99,
@@ -105,27 +115,16 @@ class RetrieveHistoricNonFhlUkPiePeriodSummaryResponseSpec extends UnitSpec with
                    |          "professionalFees": 4997.99,
                    |          "costOfServices": 4996.99,
                    |          "other": 4995.99,
-                   |          "travelCosts": 4994.99,
-                   |          "residentialFinancialCost": 4993.99,
-                   |          "residentialFinancialCostsCarriedForward": 4992.99,
-                   |          "consolidatedExpenses": 4991.99,
+                   |          "consolidatedExpenses": 4994.99,
+                   |          "travelCosts": 4993.99,
+                   |          "residentialFinancialCost": 4992.99,
+                   |          "residentialFinancialCostsCarriedForward": 4991.99,
                    |          "rentARoom":{
                    |              "amountClaimed":4990.99
                    |          }
                    |      }
                    |}
                    |""".stripMargin)
-
-  val model: RetrieveHistoricNonFhlUkPiePeriodSummaryResponse = RetrieveHistoricNonFhlUkPiePeriodSummaryResponse(
-    fromDate = "2021-01-01",
-    toDate = "2021-02-01",
-    income = Some(
-      periodIncome
-    ),
-    expenses = Some(
-      periodExpenses
-    )
-  )
 
   "reads" should {
     "read the JSON object from downstream into a case class" in {
@@ -138,28 +137,6 @@ class RetrieveHistoricNonFhlUkPiePeriodSummaryResponseSpec extends UnitSpec with
     "passed valid model" should {
       "return valid JSON" in {
         Json.toJson(model) shouldBe writesJson
-      }
-    }
-  }
-
-  "LinksFactory" should {
-    "produce the correct links" when {
-      "called" in {
-        val data: RetrieveHistoricNonFhlUkPiePeriodSummaryHateoasData = RetrieveHistoricNonFhlUkPiePeriodSummaryHateoasData("myNino", "myPeriodId")
-
-        MockAppConfig.apiGatewayContext.returns("my/context").anyNumberOfTimes()
-
-        RetrieveHistoricNonFhlUkPiePeriodSummaryResponse.RetrieveNonFhlUkPiePeriodSummaryLinksFactory.links(mockAppConfig, data) shouldBe Seq(
-          Link(
-            href = s"/my/context/uk/period/non-furnished-holiday-lettings/${data.nino}/${data.periodId}",
-            method = Method.PUT,
-            rel = "amend-uk-property-historic-non-fhl-period-summary"
-          ),
-          Link(href = s"/my/context/uk/period/non-furnished-holiday-lettings/${data.nino}/${data.periodId}", method = Method.GET, rel = "self"),
-          Link(href = s"/my/context/uk/period/non-furnished-holiday-lettings/${data.nino}",
-               method = Method.GET,
-               rel = "list-uk-property-historic-non-fhl-period-summaries")
-        )
       }
     }
   }

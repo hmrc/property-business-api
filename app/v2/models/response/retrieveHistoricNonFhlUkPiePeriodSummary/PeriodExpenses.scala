@@ -25,10 +25,10 @@ case class PeriodExpenses(premisesRunningCosts: Option[BigDecimal],
                           professionalFees: Option[BigDecimal],
                           costOfServices: Option[BigDecimal],
                           other: Option[BigDecimal],
+                          consolidatedExpenses: Option[BigDecimal],
                           travelCosts: Option[BigDecimal],
                           residentialFinancialCost: Option[BigDecimal],
                           residentialFinancialCostsCarriedForward: Option[BigDecimal],
-                          consolidatedExpenses: Option[BigDecimal],
                           rentARoom: Option[RentARoomExpenses])
 
 case object PeriodExpenses {
@@ -41,10 +41,10 @@ case object PeriodExpenses {
       (JsPath \ "professionalFees").readNullable[BigDecimal] and
       (JsPath \ "costOfServices").readNullable[BigDecimal] and
       (JsPath \ "other").readNullable[BigDecimal] and
+      (JsPath \ "consolidatedExpenses").readNullable[BigDecimal] and
       (JsPath \ "travelCosts").readNullable[BigDecimal] and
       (JsPath \ "residentialFinancialCost").readNullable[BigDecimal] and
       (JsPath \ "residentialFinancialCostsCarriedForward").readNullable[BigDecimal] and
-      (JsPath \ "consolidatedExpenses").readNullable[BigDecimal] and
       (JsPath \ "ukRentARoom").readNullable[RentARoomExpenses]
   )(PeriodExpenses.apply _)
 }

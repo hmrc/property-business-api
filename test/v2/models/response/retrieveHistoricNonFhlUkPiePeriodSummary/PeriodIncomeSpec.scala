@@ -27,10 +27,10 @@ class PeriodIncomeSpec extends UnitSpec with JsonErrorValidators {
   val periodIncome: PeriodIncome =
     PeriodIncome(
       decimal("5000.99"),
-      decimal("4996.99"),
       decimal("4999.99"),
       decimal("4998.99"),
       decimal("4997.99"),
+      decimal("4996.99"),
       Option(RentARoomIncome(Some(4995.99)))
     )
 
@@ -51,11 +51,11 @@ class PeriodIncomeSpec extends UnitSpec with JsonErrorValidators {
   val readsJson: JsValue = Json.parse(""" {
                                         |        "rentIncome": {
                                         |            "amount": 5000.99,
-                                        |            "taxDeducted": 4996.99
+                                        |            "taxDeducted": 4999.99
                                         |        },
-                                        |        "premiumsOfLeaseGrant": 4999.99,
-                                        |        "reversePremiums": 4998.99,
-                                        |        "otherIncome": 4997.99,
+                                        |        "premiumsOfLeaseGrant": 4998.99,
+                                        |        "reversePremiums": 4997.99,
+                                        |        "otherIncome": 4996.99,
                                         |        "ukRentARoom": {
                                         |            "rentsReceived": 4995.99
                                         |         }

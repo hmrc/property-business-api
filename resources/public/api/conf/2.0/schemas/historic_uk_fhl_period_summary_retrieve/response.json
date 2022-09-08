@@ -99,35 +99,38 @@
     },
     "links": {
       "type": "array",
-      "items": [
-        {
-          "type": "object",
-          "properties": {
-            "href": {
-              "description": "The relative url of the endpoint",
-              "type": "string",
-              "example": "/individuals/business/property/uk/period/furnished-holiday-lettings/TC663795B/2017-04-06_2017-07-04"
-            },
-            "method": {
-              "description": "The HTTP method type for the endpoint",
-              "type": "string",
-              "enum": [
-                "PUT",
-                "GET"
-              ]
-            },
-            "rel": {
-              "description": "A label for the endpoint, which describes how it is related to the current resource. The rel will be self where the action is retrieval of the same resource",
-              "type": "string",
-              "enum": [
-                "amend-uk-property-historic-fhl-period-summary",
-                "self",
-                "list-uk-property-historic-fhl-period-summaries"
-              ]
-            }
+      "items": {
+        "type": "object",
+        "properties": {
+          "href": {
+            "description": "The relative url of the endpoint",
+            "type": "string",
+            "example": "/individuals/business/property/uk/period/furnished-holiday-lettings/TC663795B/2017-04-06_2017-07-04"
+          },
+          "method": {
+            "description": "The HTTP method type for the endpoint",
+            "type": "string",
+            "enum": [
+              "PUT",
+              "GET"
+            ]
+          },
+          "rel": {
+            "description": "A label for the endpoint, which describes how it is related to the current resource. The rel will be self where the action is retrieval of the same resource",
+            "type": "string",
+            "enum": [
+              "amend-uk-property-historic-fhl-period-summary",
+              "self",
+              "list-uk-property-historic-fhl-period-summaries"
+            ]
           }
-        }
-      ]
+        },
+        "required": [
+          "href",
+          "rel",
+          "method"
+        ]
+      }
     }
   },
   "required": [

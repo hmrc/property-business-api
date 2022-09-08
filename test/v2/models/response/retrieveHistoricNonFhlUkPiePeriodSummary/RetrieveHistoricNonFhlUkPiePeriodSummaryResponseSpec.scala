@@ -19,6 +19,7 @@ package v2.models.response.retrieveHistoricNonFhlUkPiePeriodSummary
 import mocks.MockAppConfig
 import play.api.libs.json.{ JsValue, Json }
 import support.UnitSpec
+import v2.models.hateoas.{ Link, Method }
 
 class RetrieveHistoricNonFhlUkPiePeriodSummaryResponseSpec extends UnitSpec with MockAppConfig {
 
@@ -137,6 +138,28 @@ class RetrieveHistoricNonFhlUkPiePeriodSummaryResponseSpec extends UnitSpec with
     "passed valid model" should {
       "return valid JSON" in {
         Json.toJson(model) shouldBe writesJson
+      }
+    }
+  }
+
+  "LinksFactory" should {
+    "produce the correct links" when {
+      "called" in {
+        val data: RetrieveHistoricNonFhlUkPiePeriodSummaryHateoasData = RetrieveHistoricNonFhlUkPiePeriodSummaryHateoasData("myNino", "myPeriodId")
+
+        MockAppConfig.apiGatewayContext.returns("my/context").anyNumberOfTimes()
+
+        RetrieveHistoricNonFhlUkPiePeriodSummaryResponse.RetrieveNonFhlUkPiePeriodSummaryLinksFactory.links(mockAppConfig, data) shouldBe Seq(
+          Link(
+            href = s"/my/context/uk/period/non-furnished-holiday-lettings/${data.nino}/${data.periodId}",
+            method = Method.PUT,
+            rel = "amend-uk-property-historic-non-fhl-period-summary"
+          ),
+          Link(href = s"/my/context/uk/period/non-furnished-holiday-lettings/${data.nino}/${data.periodId}", method = Method.GET, rel = "self"),
+          Link(href = s"/my/context/uk/period/non-furnished-holiday-lettings/${data.nino}",
+               method = Method.GET,
+               rel = "list-uk-property-historic-non-fhl-period-summaries")
+        )
       }
     }
   }

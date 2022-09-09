@@ -181,6 +181,9 @@ trait HateoasLinks {
          method = PUT,
          rel = "amend-uk-property-historic-non-fhl-period-summary")
 
+  def listUkHistoricNonFHLPiePeriodSummary(appConfig: AppConfig, nino: String): Link =
+    Link(href = ukHistoricNonFhlPiePeriodSummaryUri(appConfig, nino, None), method = GET, rel = "list-uk-property-historic-non-fhl-period-summaries")
+
   // Generic
   def listPropertyPeriodSummaries(appConfig: AppConfig, nino: String, businessId: String, taxYear: String, self: Boolean): Link = {
     val rel = if (self) SELF else "list-property-period-summaries"

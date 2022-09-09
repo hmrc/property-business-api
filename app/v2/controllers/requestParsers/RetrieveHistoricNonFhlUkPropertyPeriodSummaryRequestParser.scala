@@ -18,6 +18,10 @@ package v2.controllers.requestParsers
 
 import v2.controllers.requestParsers.validators.RetrieveHistoricNonFhlUkPropertyPeriodSummaryValidator
 import v2.models.domain.{ Nino, PeriodId }
+import v2.models.request.retrieveHistoricNonFhlUkPiePeriodSummary.{
+  RetrieveHistoricNonFhlUkPiePeriodSummaryRawData,
+  RetrieveHistoricNonFhlUkPiePeriodSummaryRequest
+}
 
 import javax.inject.Inject
 

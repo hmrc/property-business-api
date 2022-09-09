@@ -23,6 +23,8 @@ import utils.Logging
 import v2.connectors.RetrieveHistoricNonFhlUkPropertyPeriodSummaryConnector
 import v2.controllers.EndpointLogContext
 import v2.models.errors._
+import v2.models.request.retrieveHistoricNonFhlUkPiePeriodSummary.RetrieveHistoricNonFhlUkPiePeriodSummaryRequest
+import v2.models.response.retrieveHistoricNonFhlUkPiePeriodSummary.RetrieveHistoricNonFhlUkPiePeriodSummaryResponse
 import v2.support.DownstreamResponseMappingSupport
 
 import javax.inject.{ Inject, Singleton }
@@ -45,11 +47,11 @@ class RetrieveHistoricNonFhlUkPropertyPeriodSummaryService @Inject()(connector: 
       "SERVICE_UNAVAILABLE" -> InternalError
     )
 
-  def retrieve(request: RetrieveHistoricNonFhlUkPropertyPeriodSummaryRequest)(
+  def retrieve(request: RetrieveHistoricNonFhlUkPiePeriodSummaryRequest)(
       implicit hc: HeaderCarrier,
       ec: ExecutionContext,
       logContext: EndpointLogContext,
-      correlationId: String): Future[ServiceOutcome[RetrieveHistoricNonFhlUkPropertyPeriodSummaryResponse]] = {
+      correlationId: String): Future[ServiceOutcome[RetrieveHistoricNonFhlUkPiePeriodSummaryResponse]] = {
 
     val result = for {
       resultWrapper <- EitherT(connector.retrieve(request)).leftMap(mapDownstreamErrors(downstreamErrorMap))

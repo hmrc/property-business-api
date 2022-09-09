@@ -18,6 +18,9 @@ package v2.connectors
 import config.AppConfig
 import uk.gov.hmrc.http.{ HeaderCarrier, HttpClient }
 import v2.connectors.DownstreamUri.DesUri
+import v2.connectors.httpparsers.StandardIfsHttpParser._
+import v2.models.request.retrieveHistoricNonFhlUkPiePeriodSummary.RetrieveHistoricNonFhlUkPiePeriodSummaryRequest
+import v2.models.response.retrieveHistoricNonFhlUkPiePeriodSummary.RetrieveHistoricNonFhlUkPiePeriodSummaryResponse
 
 import javax.inject.{ Inject, Singleton }
 import scala.concurrent.{ ExecutionContext, Future }
@@ -26,16 +29,16 @@ import scala.concurrent.{ ExecutionContext, Future }
 class RetrieveHistoricNonFhlUkPropertyPeriodSummaryConnector @Inject()(val http: HttpClient, val appConfig: AppConfig)
     extends BaseDownstreamConnector {
 
-  def retrieve(request: RetrieveHistoricNonFhlUkPropertyPeriodSummaryRequest)(
+  def retrieve(request: RetrieveHistoricNonFhlUkPiePeriodSummaryRequest)(
       implicit hc: HeaderCarrier,
       ec: ExecutionContext,
-      correlationId: String): Future[DownstreamOutcome[RetrieveHistoricNonFhlUkPropertyPeriodSummaryResponse]] = {
+      correlationId: String): Future[DownstreamOutcome[RetrieveHistoricNonFhlUkPiePeriodSummaryResponse]] = {
 
     val nino     = request.nino.value
     val periodId = request.periodId
 
     val response = get(
-      uri = DesUri[RetrieveHistoricNonFhlUkPropertyPeriodSummaryResponse](
+      uri = DesUri[RetrieveHistoricNonFhlUkPiePeriodSummaryResponse](
         s"income-tax/nino/$nino/uk-properties/other/periodic-summary-detail?from=${periodId.from}&to=${periodId.to}")
     )
 

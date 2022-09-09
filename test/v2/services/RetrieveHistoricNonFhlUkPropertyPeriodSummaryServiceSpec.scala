@@ -19,24 +19,29 @@ package v2.services
 import support.UnitSpec
 import uk.gov.hmrc.http.HeaderCarrier
 import v2.controllers.EndpointLogContext
+import v2.mocks.connectors.MockRetrieveHistoricNonFhlUkPropertyPeriodSummaryConnector
 import v2.models.domain.{ Nino, PeriodId }
 import v2.models.errors._
 import v2.models.outcomes.ResponseWrapper
+import v2.models.request.retrieveHistoricNonFhlUkPiePeriodSummary.RetrieveHistoricNonFhlUkPiePeriodSummaryRequest
+import v2.models.response.retrieveHistoricNonFhlUkPiePeriodSummary.{ PeriodExpenses, PeriodIncome, RetrieveHistoricNonFhlUkPiePeriodSummaryResponse }
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-class RetrieveHistoricNonFhlUkPropertyPeriodSummaryService extends UnitSpec {
+class RetrieveHistoricNonFhlUkPropertyPeriodSummaryServiceSpec extends UnitSpec {
 
   val nino: String                   = "AA123456A"
-  val periodId: String               = "2017-04-06_2017-07-04"
+  val from: String                   = "2017-04-06"
+  val to: String                     = "2017-07-04"
+  val periodId: String               = s"${from}_$to"
   implicit val correlationId: String = "X-123"
 
-  val periodExpenses: PeriodExpenses = PeriodExpenses(None, None, None, None, None, None, None, None, None)
-  val periodIncome: PeriodIncome     = PeriodIncome(None, None, None)
+  val periodIncome: PeriodIncome     = PeriodIncome(None, None, None, None, None, None)
+  val periodExpenses: PeriodExpenses = PeriodExpenses(None, None, None, None, None, None, None, None, None, None, None)
 
-  private val request  = RetrieveHistoricNonFhlUkPropertyPeriodSummaryRequest(Nino(nino), PeriodId(periodId))
-  private val response = RetrieveHistoricNonFhlUkPropertyPeriodSummaryResponse("2017-04-06", "2017-07-04", Some(periodIncome), Some(periodExpenses))
+  private val request  = RetrieveHistoricNonFhlUkPiePeriodSummaryRequest(Nino(nino), PeriodId(periodId))
+  private val response = RetrieveHistoricNonFhlUkPiePeriodSummaryResponse(from, to, Some(periodIncome), Some(periodExpenses))
 
   trait Test extends MockRetrieveHistoricNonFhlUkPropertyPeriodSummaryConnector {
     implicit val hc: HeaderCarrier              = HeaderCarrier()

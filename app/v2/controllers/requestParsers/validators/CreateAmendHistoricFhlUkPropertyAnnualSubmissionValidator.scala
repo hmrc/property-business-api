@@ -34,6 +34,7 @@ class CreateAmendHistoricFhlUkPropertyAnnualSubmissionValidator @Inject()(appCon
     extends Validator[CreateAmendHistoricFhlUkPropertyAnnualSubmissionRawData] {
 
   lazy private val minTaxYear = appConfig.minimumTaxHistoric
+  lazy private val maxTaxYear = appConfig.maximumTaxHistoric
 
   override def validate(data: CreateAmendHistoricFhlUkPropertyAnnualSubmissionRawData): List[MtdError] = {
     (for {
@@ -46,7 +47,7 @@ class CreateAmendHistoricFhlUkPropertyAnnualSubmissionValidator @Inject()(appCon
   private def validatePathParams(data: CreateAmendHistoricFhlUkPropertyAnnualSubmissionRawData): Either[List[MtdError], Unit] = {
     val errors =
       NinoValidation.validate(data.nino) ++
-        TaxYearValidation.validate(minTaxYear, data.taxYear)
+        TaxYearValidation.validateHistoric(minTaxYear, maxTaxYear, data.taxYear)
 
     errorsResult(errors)
   }
@@ -69,7 +70,7 @@ class CreateAmendHistoricFhlUkPropertyAnnualSubmissionValidator @Inject()(appCon
         import annualAllowances._
 
         optionalNumber(annualInvestmentAllowance, "/annualAllowances/annualInvestmentAllowance") ++
-          optionalNumber(propertyIncomeAllowance, "/annualAllowances/propertyIncomeAllowance") ++
+          optionalNumber(propertyIncomeAllowance, "/annualAllowances/propertyIncomeAllowance", max = 1000) ++
           optionalNumber(otherCapitalAllowance, "/annualAllowances/otherCapitalAllowance") ++
           optionalNumber(businessPremisesRenovationAllowance, "/annualAllowances/businessPremisesRenovationAllowance")
 

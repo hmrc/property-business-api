@@ -98,7 +98,7 @@
             },
             "consolidatedExpenses": {
               "type": "number",
-              "description": "The sum of all expenses for the specified period. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
+              "description": "The sum of all expenses for the specified period. You can either submit a consolidatedExpenses value or individual expenses (premisesRunningCosts, repairsAndMaintenance, financialCosts, professionalFees, costOfServices, other, travelCosts, rentARoom). The value must be between 0 and 99999999999.99 up to 2 decimal places.",
               "example": "5000.99"
             }
           },
@@ -215,7 +215,7 @@
             },
             "consolidatedExpenses": {
               "type": "number",
-              "description": "The sum of all expenses for the specified period. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
+              "description": "The sum of all expenses for the specified period. You can either submit a consolidatedExpenses value or individual expenses (premisesRunningCosts, repairsAndMaintenance, financialCosts, professionalFees, costOfServices, other, residentialFinancialCost, travelCosts, residentialFinancialCostsCarriedForward, rentARoom). The value must be between 0 and 99999999999.99 up to 2 decimal places.",
               "example": "5000.99"
             }
           },

@@ -33,7 +33,12 @@
               "amend-uk-property-historic-non-fhl-period-summary"
             ]
           }
-        }
+        },
+        "required": [
+          "href",
+          "rel",
+          "method"
+        ]
       }
     }
   },

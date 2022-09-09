@@ -4,7 +4,8 @@
   "properties": {
     "submissions": {
       "type": "array",
-      "items": [
+      "description": "Array containing details about non FHL UK property update periods",
+      "items":
         {
           "type": "object",
           "description": "Array containing details about non FHL UK property update periods",
@@ -26,10 +27,10 @@
             },
             "links": {
               "type": "array",
-              "items": [
+              "description": "A list of endpoint links that indicate possible actions related to the current resource.",
+              "items":Ω
                 {
                   "type": "object",
-                  "description": "A list of endpoint links that indicate possible actions related to the current resource.",
                   "properties": {
                     "href": {
                       "description": "The relative url of the endpoint.",
@@ -59,7 +60,6 @@
                     "rel"
                   ]
                 }
-              ]
             }
           },
           "required": [
@@ -70,11 +70,10 @@
           ],
           "additionalProperties": false
         }
-      ]
     },
     "links": {
       "type": "array",
-      "items": [
+      "items":
         {
           "type": "object",
           "properties": {
@@ -108,7 +107,6 @@
           ],
           "additionalProperties": false
         }
-      ]
     }
   },
   "required": [

@@ -22,12 +22,12 @@ import v2.models.request.common.ukPropertyRentARoom.UkPropertyAdjustmentsRentARo
 
 class HistoricNonFhlAnnualAdjustmentsSpec extends UnitSpec {
 
-  val requestBody: HistoricNonFhlAnnualAdjustments =
+  val annualAdjustments: HistoricNonFhlAnnualAdjustments =
     HistoricNonFhlAnnualAdjustments(
-      lossBroughtForward = Some(200.00),
+      lossBroughtForward = Some(100.00),
       privateUseAdjustment = Some(200.00),
-      balancingCharge = Some(200.00),
-      businessPremisesRenovationAllowanceBalancingCharges = Some(80.02),
+      balancingCharge = Some(300.00),
+      businessPremisesRenovationAllowanceBalancingCharges = Some(400.00),
       nonResidentLandlord = true,
       rentARoom = Some(UkPropertyAdjustmentsRentARoom(jointlyLet = true))
     )
@@ -35,10 +35,10 @@ class HistoricNonFhlAnnualAdjustmentsSpec extends UnitSpec {
   val validMtdJson: JsValue = Json.parse(
     """
       |{
-      |      "lossBroughtForward": 200.00,
+      |      "lossBroughtForward": 100.00,
       |      "privateUseAdjustment": 200.00,
-      |      "balancingCharge": 200.00,
-      |      "businessPremisesRenovationAllowanceBalancingCharges": 80.02,
+      |      "balancingCharge": 300.00,
+      |      "businessPremisesRenovationAllowanceBalancingCharges": 400.00,
       |      "nonResidentLandlord": true,
       |      "rentARoom": {
       |         "jointlyLet": true
@@ -50,10 +50,10 @@ class HistoricNonFhlAnnualAdjustmentsSpec extends UnitSpec {
   val validDownstreamJson: JsValue = Json.parse(
     """
       |{
-      |      "lossBroughtForward": 200.00,
+      |      "lossBroughtForward": 100.00,
       |      "privateUseAdjustment": 200.00,
-      |      "balancingCharge": 200.00,
-      |      "businessPremisesRenovationAllowanceBalancingCharges": 80.02,
+      |      "balancingCharge": 300.00,
+      |      "businessPremisesRenovationAllowanceBalancingCharges": 400.00,
       |      "nonResidentLandlord": true,
       |      "ukRentARoom": {
       |         "jointlyLet": true
@@ -65,7 +65,7 @@ class HistoricNonFhlAnnualAdjustmentsSpec extends UnitSpec {
   "reads" when {
     "passed a valid JSON" should {
       "return a valid model" in {
-        validMtdJson.as[HistoricNonFhlAnnualAdjustments] shouldBe requestBody
+        validMtdJson.as[HistoricNonFhlAnnualAdjustments] shouldBe annualAdjustments
       }
     }
   }
@@ -73,7 +73,7 @@ class HistoricNonFhlAnnualAdjustmentsSpec extends UnitSpec {
   "writes" when {
     "passed valid model" should {
       "return valid JSON" in {
-        Json.toJson(requestBody) shouldBe validDownstreamJson
+        Json.toJson(annualAdjustments) shouldBe validDownstreamJson
       }
     }
   }

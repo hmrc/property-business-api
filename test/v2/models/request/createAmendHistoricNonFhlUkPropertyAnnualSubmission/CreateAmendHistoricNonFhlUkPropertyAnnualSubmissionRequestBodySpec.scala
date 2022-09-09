@@ -22,49 +22,51 @@ import v2.models.request.common.ukPropertyRentARoom.UkPropertyAdjustmentsRentARo
 
 class CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestBodySpec extends UnitSpec {
 
+  val annualAdjustments: HistoricNonFhlAnnualAdjustments =
+    HistoricNonFhlAnnualAdjustments(
+      lossBroughtForward = Some(100.00),
+      privateUseAdjustment = Some(200.00),
+      balancingCharge = Some(300.00),
+      businessPremisesRenovationAllowanceBalancingCharges = Some(400.00),
+      nonResidentLandlord = true,
+      rentARoom = Some(UkPropertyAdjustmentsRentARoom(true))
+    )
+
+  val annualAllowances: HistoricNonFhlAnnualAllowances =
+    HistoricNonFhlAnnualAllowances(
+      annualInvestmentAllowance = Some(500.00),
+      zeroEmissionGoodsVehicleAllowance = Some(600.00),
+      businessPremisesRenovationAllowance = Some(700.00),
+      otherCapitalAllowance = Some(800.00),
+      costOfReplacingDomesticGoods = Some(900.00),
+      propertyIncomeAllowance = Some(1000.00)
+    )
+
   val requestBody: CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestBody =
     CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestBody(
-      annualAdjustments = Some(
-        HistoricNonFhlAnnualAdjustments(
-          lossBroughtForward = Some(200.00),
-          privateUseAdjustment = Some(200.00),
-          balancingCharge = Some(200.00),
-          businessPremisesRenovationAllowanceBalancingCharges = Some(80.02),
-          nonResidentLandlord = true,
-          rentARoom = Some(UkPropertyAdjustmentsRentARoom(true))
-        )
-      ),
-      annualAllowances = Some(
-        HistoricNonFhlAnnualAllowances(
-          annualInvestmentAllowance = Some(200.00),
-          otherCapitalAllowance = Some(200.00),
-          zeroEmissionGoodsVehicleAllowance = Some(200.00),
-          businessPremisesRenovationAllowance = Some(200.00),
-          costOfReplacingDomesticGoods = Some(200.00),
-          propertyIncomeAllowance = Some(30.02)
-        )
-      )
+      Some(annualAdjustments),
+      Some(annualAllowances)
     )
 
   val validMtdJson: JsValue = Json.parse("""
       |{
       |   "annualAdjustments": {
-      |      "lossBroughtForward": 200.00,
-      |      "balancingCharge": 200.00,
+      |      "lossBroughtForward": 100.00,
       |      "privateUseAdjustment": 200.00,
-      |      "businessPremisesRenovationAllowanceBalancingCharges": 80.02,
+      |      "balancingCharge": 300.00,
+      |      "businessPremisesRenovationAllowanceBalancingCharges": 400.00,
       |      "nonResidentLandlord": true,
       |      "rentARoom": {
       |         "jointlyLet": true
       |      }
       |   },
       |   "annualAllowances": {
-      |      "annualInvestmentAllowance": 200.00,
-      |      "otherCapitalAllowance": 200.00,
-      |      "zeroEmissionGoodsVehicleAllowance": 200.00,
-      |      "businessPremisesRenovationAllowance": 200.00,
-      |      "costOfReplacingDomesticGoods": 200.00,
-      |      "propertyIncomeAllowance": 30.02
+      |      "annualInvestmentAllowance": 500.00,
+      |      "zeroEmissionGoodsVehicleAllowance": 600.00,
+      |      "businessPremisesRenovationAllowance": 700.00,
+      |      "otherCapitalAllowance": 800.00,
+      |      "costOfReplacingDomesticGoods": 900.00,
+      |      "propertyIncomeAllowance": 1000.00
       |   }
       |}
       |""".stripMargin)
@@ -72,22 +74,22 @@ class CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestBodySpec extends
   val validDownstreamJson: JsValue = Json.parse("""
       |{
       |   "annualAdjustments": {
-      |      "lossBroughtForward": 200.00,
-      |      "balancingCharge": 200.00,
+      |      "lossBroughtForward": 100.00,
       |      "privateUseAdjustment": 200.00,
-      |      "businessPremisesRenovationAllowanceBalancingCharges": 80.02,
+      |      "balancingCharge": 300.00,
+      |      "businessPremisesRenovationAllowanceBalancingCharges": 400.00,
       |      "nonResidentLandlord": true,
       |      "ukRentARoom": {
       |         "jointlyLet": true
       |      }
       |   },
       |   "annualAllowances": {
-      |      "annualInvestmentAllowance": 200.00,
-      |      "otherCapitalAllowance": 200.00,
-      |      "zeroEmissionGoodsVehicleAllowance": 200.00,
-      |      "businessPremisesRenovationAllowance": 200.00,
-      |      "costOfReplacingDomGoods": 200.00,
-      |      "propertyIncomeAllowance": 30.02
+      |      "annualInvestmentAllowance": 500.00,
+      |      "zeroEmissionGoodsVehicleAllowance": 600.00,
+      |      "businessPremisesRenovationAllowance": 700.00,
+      |      "otherCapitalAllowance": 800.00,
+      |      "costOfReplacingDomGoods": 900.00,
+      |      "propertyIncomeAllowance": 1000.00
       |   }
       |}
       |""".stripMargin)

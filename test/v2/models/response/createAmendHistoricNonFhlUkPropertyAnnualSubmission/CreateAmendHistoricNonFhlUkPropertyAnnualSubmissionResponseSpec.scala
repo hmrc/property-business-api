@@ -25,7 +25,7 @@ class CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionResponseSpec extends Un
     transactionReference = Some("0000000000000001")
   )
 
-  val desJson: JsValue = Json.parse("""{
+  val downstreamJson: JsValue = Json.parse("""{
       |  "transactionReference": "0000000000000001"
       |}""".stripMargin)
 
@@ -33,7 +33,7 @@ class CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionResponseSpec extends Un
 
   "reads" should {
     "return a valid model" in {
-      desJson.as[CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionResponse] shouldBe model
+      downstreamJson.as[CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionResponse] shouldBe model
     }
   }
 

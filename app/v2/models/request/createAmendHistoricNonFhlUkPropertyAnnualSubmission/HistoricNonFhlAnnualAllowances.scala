@@ -16,14 +16,14 @@
 
 package v2.models.request.createAmendHistoricNonFhlUkPropertyAnnualSubmission
 
-import play.api.libs.functional.syntax.{toFunctionalBuilderOps, unlift}
-import play.api.libs.json.{JsPath, Json, OWrites, Reads}
+import play.api.libs.functional.syntax.{ toFunctionalBuilderOps, unlift }
+import play.api.libs.json.{ JsPath, Json, OWrites, Reads }
 
 case class HistoricNonFhlAnnualAllowances(
     annualInvestmentAllowance: Option[BigDecimal],
-    otherCapitalAllowance: Option[BigDecimal],
     zeroEmissionGoodsVehicleAllowance: Option[BigDecimal],
     businessPremisesRenovationAllowance: Option[BigDecimal],
+    otherCapitalAllowance: Option[BigDecimal],
     costOfReplacingDomesticGoods: Option[BigDecimal],
     propertyIncomeAllowance: Option[BigDecimal]
 )
@@ -33,11 +33,11 @@ object HistoricNonFhlAnnualAllowances {
 
   implicit val writes: OWrites[HistoricNonFhlAnnualAllowances] = (
     (JsPath \ "annualInvestmentAllowance").writeNullable[BigDecimal] and
-    (JsPath \ "otherCapitalAllowance").writeNullable[BigDecimal] and
-    (JsPath \ "zeroEmissionGoodsVehicleAllowance").writeNullable[BigDecimal] and
-    (JsPath \ "businessPremisesRenovationAllowance").writeNullable[BigDecimal] and
-    (JsPath \ "costOfReplacingDomGoods").writeNullable[BigDecimal] and
-    (JsPath \ "propertyIncomeAllowance").writeNullable[BigDecimal]
+      (JsPath \ "zeroEmissionGoodsVehicleAllowance").writeNullable[BigDecimal] and
+      (JsPath \ "businessPremisesRenovationAllowance").writeNullable[BigDecimal] and
+      (JsPath \ "otherCapitalAllowance").writeNullable[BigDecimal] and
+      (JsPath \ "costOfReplacingDomGoods").writeNullable[BigDecimal] and
+      (JsPath \ "propertyIncomeAllowance").writeNullable[BigDecimal]
   )(unlift(HistoricNonFhlAnnualAllowances.unapply))
 
 }

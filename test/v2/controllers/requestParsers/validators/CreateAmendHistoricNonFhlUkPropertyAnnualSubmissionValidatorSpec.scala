@@ -16,7 +16,7 @@ class CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionValidatorSpec extends U
   private val validNino    = "AA123456A"
   private val validTaxYear = "2021-22"
   MockAppConfig.minimumTaxHistoric returns 2017 anyNumberOfTimes ()
-  MockAppConfig.maximumTaxHistoric returns 2020 anyNumberOfTimes ()
+  MockAppConfig.maximumTaxHistoric returns 2022 anyNumberOfTimes ()
 
   val validator = new CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionValidator(mockAppConfig)
 
@@ -152,7 +152,7 @@ class CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionValidatorSpec extends U
       }
 
       "the tax year is too late" in {
-        validator.validate(data(validNino, "2022-23", body)) should contain only RuleHistoricTaxYearNotSupportedError
+        validator.validate(data(validNino, "2023-24", body)) should contain only RuleHistoricTaxYearNotSupportedError
       }
     }
 

@@ -31,10 +31,10 @@ case object PeriodIncome {
 
   implicit val reads: Reads[PeriodIncome] = (
     (JsPath \ "rentIncome" \ "amount").readNullable[BigDecimal] and
-      (JsPath \ "rentIncome" \ "taxDeducted").readNullable[BigDecimal] and
       (JsPath \ "premiumsOfLeaseGrant").readNullable[BigDecimal] and
       (JsPath \ "reversePremiums").readNullable[BigDecimal] and
       (JsPath \ "otherIncome").readNullable[BigDecimal] and
+      (JsPath \ "rentIncome" \ "taxDeducted").readNullable[BigDecimal] and
       (JsPath \ "ukRentARoom").readNullable[RentARoomIncome]
   )(PeriodIncome.apply _)
 

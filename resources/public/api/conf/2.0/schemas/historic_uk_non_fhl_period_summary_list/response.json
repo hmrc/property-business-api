@@ -28,7 +28,7 @@
             "links": {
               "type": "array",
               "description": "A list of endpoint links that indicate possible actions related to the current resource.",
-              "items":Ω
+              "items":
                 {
                   "type": "object",
                   "properties": {

@@ -16,7 +16,7 @@
 
 package v2.models.response.createAmendHistoricFhlUkPropertyAnnualSubmission
 
-import play.api.libs.json.{JsObject, JsValue, Json}
+import play.api.libs.json.{ JsObject, JsValue, Json }
 import support.UnitSpec
 
 class CreateAmendHistoricFhlUkPropertyAnnualSubmissionResponseSpec extends UnitSpec {
@@ -25,8 +25,7 @@ class CreateAmendHistoricFhlUkPropertyAnnualSubmissionResponseSpec extends UnitS
     transactionReference = Some("0000000000000001")
   )
 
-  val desJson: JsValue = Json.parse(
-    """{
+  val desJson: JsValue = Json.parse("""{
       |  "transactionReference": "0000000000000001"
       |}""".stripMargin)
 

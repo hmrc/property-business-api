@@ -20,27 +20,26 @@ import cats.data.EitherT
 import cats.implicits._
 import uk.gov.hmrc.http.HeaderCarrier
 import utils.Logging
-import v2.connectors.CreateAmendHistoricFhlUkPropertyAnnualSubmissionConnector
+import v2.connectors.CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionConnector
 import v2.controllers.EndpointLogContext
 import v2.models.errors._
-import v2.models.request.createAmendHistoricFhlUkPropertyAnnualSubmission.CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequest
-import v2.models.response.createAmendHistoricFhlUkPropertyAnnualSubmission.CreateAmendHistoricFhlUkPropertyAnnualSubmissionResponse
+import v2.models.request.createAmendHistoricNonFhlUkPropertyAnnualSubmission.CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequest
+import v2.models.response.createAmendHistoricNonFhlUkPropertyAnnualSubmission.CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionResponse
 import v2.support.DownstreamResponseMappingSupport
 
 import javax.inject.{ Inject, Singleton }
 import scala.concurrent.{ ExecutionContext, Future }
 
 @Singleton
-class CreateAmendHistoricFhlUkPropertyAnnualSubmissionService @Inject()(connector: CreateAmendHistoricFhlUkPropertyAnnualSubmissionConnector)
+class CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionService @Inject()(connector: CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionConnector)
     extends DownstreamResponseMappingSupport
     with Logging {
 
-  def amend(request: CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequest)(
+  def amend(request: CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequest)(
       implicit hc: HeaderCarrier,
       ec: ExecutionContext,
       logContext: EndpointLogContext,
-      correlationId: String): Future[ServiceOutcome[CreateAmendHistoricFhlUkPropertyAnnualSubmissionResponse]] = {
-
+      correlationId: String): Future[ServiceOutcome[CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionResponse]] = {
     val result = for {
       desResponseWrapper <- EitherT(connector.amend(request)).leftMap(mapDownstreamErrors(desErrorMap))
     } yield desResponseWrapper

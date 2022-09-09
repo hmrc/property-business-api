@@ -16,7 +16,7 @@
 
 package v2.connectors
 
-import fixtures.CreateAmendFhlUkPropertyAnnualSubmission.ResponseModelsFixture
+import fixtures.CreateAmendNonFhlUkPropertyAnnualSubmission.ResponseModelsFixture
 import mocks.MockAppConfig
 import uk.gov.hmrc.http.HeaderCarrier
 import v2.mocks.MockHttpClient
@@ -25,11 +25,11 @@ import v2.models.response.createAmendHistoricFhlUkPropertyAnnualSubmission.Creat
 
 import scala.concurrent.Future
 
-class CreateAmendHistoricFhlUkPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec with ResponseModelsFixture {
+class CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec with ResponseModelsFixture {
 
   class Test extends MockHttpClient with MockAppConfig {
 
-    val connector = new CreateAmendHistoricFhlUkPropertyAnnualSubmissionConnector(
+    val connector = new CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionConnector(
       http = mockHttpClient,
       appConfig = mockAppConfig
     )
@@ -46,11 +46,12 @@ class CreateAmendHistoricFhlUkPropertyAnnualSubmissionConnectorSpec extends Conn
   }
 
   "connector" must {
-    "put an fhl body and return a 200" in new Test {
+
+    "put a non-fhl body and return a 200" in new Test {
 
       MockHttpClient
         .put(
-          url = s"$baseUrl/income-tax/nino/$nino/uk-properties/furnished-holiday-lettings/annual-summaries/$downstreamTaxYear",
+          url = s"$baseUrl/income-tax/nino/$nino/uk-properties/other/annual-summaries/$downstreamTaxYear",
           config = dummyDesHeaderCarrierConfig,
           body = Body,
           requiredHeaders = requiredDesHeadersPut,
@@ -61,6 +62,5 @@ class CreateAmendHistoricFhlUkPropertyAnnualSubmissionConnectorSpec extends Conn
       await(connector.amend(Request)) shouldBe outcome
 
     }
-
   }
 }

@@ -72,15 +72,15 @@ class CreateAmendHistoricFhlUkPropertyAnnualSubmissionControllerSpec
   private val testHateoasLink = Link(href = s"/individuals/business/property/annual/$nino/annual/$taxYear", method = GET, rel = "self")
 
   val hateoasResponse: JsValue = Json.parse(s"""
-       |{
-       |   "links": [
-       |      {
-       |         "href": "/individuals/business/property/annual/$nino/annual/$taxYear",
-       |         "method": "GET",
-       |         "rel": "self"
-       |      }
-       |   ]
-       |}
+                                               |{
+                                               |   "links": [
+                                               |      {
+                                               |         "href": "/individuals/business/property/annual/$nino/annual/$taxYear",
+                                               |         "method": "GET",
+                                               |         "rel": "self"
+                                               |      }
+                                               |   ]
+                                               |}
     """.stripMargin)
 
   private val requestJson = Json.parse(
@@ -145,8 +145,10 @@ class CreateAmendHistoricFhlUkPropertyAnnualSubmissionControllerSpec
           .returns(Future.successful(Right(ResponseWrapper(correlationId, CreateAmendHistoricFhlUkPropertyAnnualSubmissionResponse(None)))))
 
         MockHateoasFactory
-          .wrap(CreateAmendHistoricFhlUkPropertyAnnualSubmissionResponse(None),
-                CreateAmendHistoricFhlUkPropertyAnnualSubmissionHateoasData(nino, taxYear))
+          .wrap(
+            CreateAmendHistoricFhlUkPropertyAnnualSubmissionResponse(None),
+            CreateAmendHistoricFhlUkPropertyAnnualSubmissionHateoasData(nino, taxYear)
+          )
           .returns(HateoasWrapper(CreateAmendHistoricFhlUkPropertyAnnualSubmissionResponse(None), Seq(testHateoasLink)))
 
         val result: Future[Result] = controller.handleRequest(nino, taxYear)(fakeRequestWithBody(requestJson))

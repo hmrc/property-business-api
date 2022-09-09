@@ -19,11 +19,11 @@ package v2.mocks.connectors
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
 import uk.gov.hmrc.http.HeaderCarrier
-import v2.connectors.{CreateAmendHistoricFhlUkPropertyAnnualSubmissionConnector, DownstreamOutcome}
+import v2.connectors.{ CreateAmendHistoricFhlUkPropertyAnnualSubmissionConnector, DownstreamOutcome }
 import v2.models.request.createAmendHistoricFhlUkPropertyAnnualSubmission.CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequest
 import v2.models.response.createAmendHistoricFhlUkPropertyAnnualSubmission.CreateAmendHistoricFhlUkPropertyAnnualSubmissionResponse
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.{ ExecutionContext, Future }
 
 trait MockCreateAmendHistoricFhlUkPropertyAnnualSubmissionConnector extends MockFactory {
 
@@ -32,8 +32,8 @@ trait MockCreateAmendHistoricFhlUkPropertyAnnualSubmissionConnector extends Mock
 
   object MockCreateAmendHistoricFhlUkPropertyAnnualSubmissionConnector {
 
-    def amend(requestData: CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequest):
-    CallHandler[Future[DownstreamOutcome[CreateAmendHistoricFhlUkPropertyAnnualSubmissionResponse]]] = {
+    def amend(requestData: CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequest)
+      : CallHandler[Future[DownstreamOutcome[CreateAmendHistoricFhlUkPropertyAnnualSubmissionResponse]]] = {
       (
         mockCreateAmendHistoricFhlUkPropertyAnnualSubmissionConnector
           .amend(_: CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequest)(

@@ -59,6 +59,16 @@ class RetrieveHistoricFhlUkPropertyAnnualSubmissionControllerISpec extends V2Int
          |         "href": "/individuals/business/property/uk/annual/furnished-holiday-lettings/AA123456A/2020-21",
          |         "method": "GET",
          |         "rel": "self"
+         |      },
+         |      {
+         |         "href": "/individuals/business/property/uk/annual/furnished-holiday-lettings/AA123456A/2020-21",
+         |         "method": "PUT",
+         |         "rel": "create-and-amend-uk-property-historic-fhl-annual-submission"
+         |      },
+         |      {
+         |         "href": "/individuals/business/property/uk/annual/furnished-holiday-lettings/AA123456A/2020-21",
+         |         "method": "DELETE",
+         |         "rel": "delete-uk-property-historic-fhl-annual-submission"
          |      }
          |   ]
          |}

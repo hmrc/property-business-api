@@ -71,12 +71,12 @@ class CreateAmendHistoricFhlUkPropertyAnnualSubmissionControllerISpec extends V2
          |        {
          |            "href": "/individuals/business/property/uk/annual/furnished-holiday-lettings/TC663795B/2020-21",
          |            "method": "PUT",
-         |            "rel": "create-and-amend-historic-fhl-uk-property-annual-submission"
+         |            "rel": "create-and-amend-uk-property-historic-fhl-annual-submission"
          |        },
          |        {
          |            "href": "/individuals/business/property/uk/annual/furnished-holiday-lettings/TC663795B/2020-21",
          |            "method": "DELETE",
-         |            "rel": "delete-historic-fhl-uk-property-annual-submission"
+         |            "rel": "delete-uk-property-historic-fhl-annual-submission"
          |        }
          |    ]
          |}

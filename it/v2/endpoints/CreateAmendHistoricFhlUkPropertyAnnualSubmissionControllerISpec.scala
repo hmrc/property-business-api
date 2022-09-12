@@ -19,7 +19,7 @@ package v2.endpoints
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import play.api.http.HeaderNames.ACCEPT
 import play.api.http.Status._
-import play.api.libs.json.{ JsValue, Json }
+import play.api.libs.json.{ JsObject, JsValue, Json }
 import play.api.libs.ws.{ WSRequest, WSResponse }
 import play.api.test.Helpers.AUTHORIZATION
 import support.V2IntegrationBaseSpec
@@ -155,8 +155,7 @@ class CreateAmendHistoricFhlUkPropertyAnnualSubmissionControllerISpec extends V2
             |   "annualAllowances": {
             |      "annualInvestmentAllowance": 111111111111111200.00,
             |      "otherCapitalAllowance": 200.00,
-            |      "businessPremisesRenovationAllowance": 100.02,
-            |      "propertyIncomeAllowance": -10.02
+            |      "businessPremisesRenovationAllowance": 100.02
             |   }
             |}
             |""".stripMargin)
@@ -167,8 +166,7 @@ class CreateAmendHistoricFhlUkPropertyAnnualSubmissionControllerISpec extends V2
               "/annualAdjustments/lossBroughtForward",
               "/annualAdjustments/privateUseAdjustment",
               "/annualAdjustments/balancingCharge",
-              "/annualAllowances/annualInvestmentAllowance",
-              "/annualAllowances/propertyIncomeAllowance"
+              "/annualAllowances/annualInvestmentAllowance"
             ))
         )
 
@@ -231,11 +229,11 @@ class CreateAmendHistoricFhlUkPropertyAnnualSubmissionControllerISpec extends V2
         }
       }
       val input = Seq(
-        ("AA1123A", "2022-23", requestJson, BAD_REQUEST, NinoFormatError),
+        ("AA1123A", "2021-22", requestJson, BAD_REQUEST, NinoFormatError),
         ("AA123456A", "202362-23", requestJson, BAD_REQUEST, TaxYearFormatError),
         ("AA123456A", "2021-24", requestJson, BAD_REQUEST, RuleTaxYearRangeInvalidError),
-        ("AA123456A", "2015-16", requestJson, BAD_REQUEST, RuleTaxYearNotSupportedError),
-        ("AA123456A", "2022-23", Json.parse(s"""{}""".stripMargin), BAD_REQUEST, RuleIncorrectOrEmptyBodyError),
+        ("AA123456A", "2015-16", requestJson, BAD_REQUEST, RuleHistoricTaxYearNotSupportedError),
+        ("AA123456A", "2021-22", JsObject.empty, BAD_REQUEST, RuleIncorrectOrEmptyBodyError),
       )
       input.foreach(args => (validationErrorTest _).tupled(args))
     }

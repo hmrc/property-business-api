@@ -155,7 +155,7 @@ class AmendHistoricFhlUkPiePeriodSummaryValidatorSpec extends UnitSpec with Json
         result should contain only expected
       }
       "given an empty rentARoom sub-object" in {
-        val expected = RuleIncorrectOrEmptyBodyError.copy(paths = Some(List("/income/ukRentARoom")))
+        val expected = RuleIncorrectOrEmptyBodyError.copy(paths = Some(List("/income/rentARoom")))
         val result =
           validator.validate(AmendHistoricFhlUkPiePeriodSummaryRawData(validNino, validPeriodId, requestBodyWithEmptyRentARoom))
         result should contain only expected

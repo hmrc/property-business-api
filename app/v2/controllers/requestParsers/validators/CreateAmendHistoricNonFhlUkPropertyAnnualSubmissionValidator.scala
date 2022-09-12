@@ -17,46 +17,16 @@
 package v2.controllers.requestParsers.validators
 import com.google.inject.Inject
 import config.AppConfig
-import play.api.libs.json.{ JsValue, Json, Reads }
 import v2.controllers.requestParsers.validators.validations.JsonFormatValidation.validateAndCheckNonEmptyOrRead
 import v2.controllers.requestParsers.validators.validations.NumberValidation.{ validateOptional => optionalNumber }
 import v2.controllers.requestParsers.validators.validations.{ NinoValidation, TaxYearValidation }
 import v2.models.errors.MtdError
-import v2.models.request.RawData
-import v2.models.request.common.ukPropertyRentARoom.UkPropertyAdjustmentsRentARoom
+import v2.models.request.createAmendHistoricNonFhlUkPropertyAnnualSubmission.{
+  CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRawData,
+  CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestBody
+}
 
 import javax.inject.Singleton
-
-// FIXME replace with real ones
-case class CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRawData(nino: String, taxYear: String, body: JsValue) extends RawData
-
-case class CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestBody(annualAdjustments: Option[HistoricNonFhlAnnualAdjustments],
-                                                                          annualAllowances: Option[HistoricNonFhlAnnualAllowances])
-
-object CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestBody {
-  implicit val reads: Reads[CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestBody] = Json.reads
-}
-
-case class HistoricNonFhlAnnualAdjustments(lossBroughtForward: Option[BigDecimal],
-                                           privateUseAdjustment: Option[BigDecimal],
-                                           balancingCharge: Option[BigDecimal],
-                                           businessPremisesRenovationAllowanceBalancingCharges: Option[BigDecimal],
-                                           nonResidentLandlord: Boolean,
-                                           rentARoom: Option[UkPropertyAdjustmentsRentARoom])
-
-object HistoricNonFhlAnnualAdjustments {
-  implicit val reads: Reads[HistoricNonFhlAnnualAdjustments] = Json.reads
-}
-case class HistoricNonFhlAnnualAllowances(annualInvestmentAllowance: Option[BigDecimal],
-                                          businessPremisesRenovationAllowance: Option[BigDecimal],
-                                          otherCapitalAllowance: Option[BigDecimal],
-                                          propertyIncomeAllowance: Option[BigDecimal],
-                                          zeroEmissionGoodsVehicleAllowance: Option[BigDecimal],
-                                          costOfReplacingDomesticGoods: Option[BigDecimal])
-
-object HistoricNonFhlAnnualAllowances {
-  implicit val reads: Reads[HistoricNonFhlAnnualAllowances] = Json.reads
-}
 
 @Singleton
 class CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionValidator @Inject()(appConfig: AppConfig)

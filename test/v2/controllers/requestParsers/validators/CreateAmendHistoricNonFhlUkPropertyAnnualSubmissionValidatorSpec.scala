@@ -20,6 +20,7 @@ import mocks.MockAppConfig
 import play.api.libs.json.{ JsNumber, JsObject, JsValue, Json }
 import support.UnitSpec
 import v2.models.errors._
+import v2.models.request.createAmendHistoricNonFhlUkPropertyAnnualSubmission.CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRawData
 import v2.models.utils.JsonErrorValidators
 
 class CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec with MockAppConfig with JsonErrorValidators {

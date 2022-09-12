@@ -37,12 +37,10 @@ class RetrieveHistoricNonFhlUkPropertyPeriodSummaryConnector @Inject()(val http:
     val nino     = request.nino.value
     val periodId = request.periodId
 
-    val response = get(
+    get(
       uri = DesUri[RetrieveHistoricNonFhlUkPiePeriodSummaryResponse](
         s"income-tax/nino/$nino/uk-properties/other/periodic-summary-detail?from=${periodId.from}&to=${periodId.to}")
     )
-
-    response
 
   }
 

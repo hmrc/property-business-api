@@ -25,6 +25,7 @@ import v2.controllers.EndpointLogContext
 import v2.models.errors._
 import v2.models.request.retrieveHistoricNonFhlUkPiePeriodSummary.RetrieveHistoricNonFhlUkPiePeriodSummaryRequest
 import v2.models.response.retrieveHistoricNonFhlUkPiePeriodSummary.RetrieveHistoricNonFhlUkPiePeriodSummaryResponse
+import v2.services.RetrieveHistoricNonFhlUkPropertyPeriodSummaryService.downstreamErrorMap
 import v2.support.DownstreamResponseMappingSupport
 
 import javax.inject.{ Inject, Singleton }
@@ -34,18 +35,6 @@ import scala.concurrent.{ ExecutionContext, Future }
 class RetrieveHistoricNonFhlUkPropertyPeriodSummaryService @Inject()(connector: RetrieveHistoricNonFhlUkPropertyPeriodSummaryConnector)
     extends DownstreamResponseMappingSupport
     with Logging {
-
-  private val downstreamErrorMap =
-    Map(
-      "INVALID_NINO"        -> NinoFormatError,
-      "INVALID_TYPE"        -> InternalError,
-      "INVALID_DATE_FROM"   -> PeriodIdFormatError,
-      "INVALID_DATE_TO"     -> PeriodIdFormatError,
-      "NOT_FOUND_PROPERTY"  -> NotFoundError,
-      "NOT_FOUND_PERIOD"    -> NotFoundError,
-      "SERVER_ERROR"        -> InternalError,
-      "SERVICE_UNAVAILABLE" -> InternalError
-    )
 
   def retrieve(request: RetrieveHistoricNonFhlUkPiePeriodSummaryRequest)(
       implicit hc: HeaderCarrier,
@@ -60,4 +49,19 @@ class RetrieveHistoricNonFhlUkPropertyPeriodSummaryService @Inject()(connector: 
     result.value
   }
 
+}
+
+object RetrieveHistoricNonFhlUkPropertyPeriodSummaryService {
+
+  val downstreamErrorMap: Map[String, MtdError] =
+    Map(
+      "INVALID_NINO"        -> NinoFormatError,
+      "INVALID_TYPE"        -> InternalError,
+      "INVALID_DATE_FROM"   -> PeriodIdFormatError,
+      "INVALID_DATE_TO"     -> PeriodIdFormatError,
+      "NOT_FOUND_PROPERTY"  -> NotFoundError,
+      "NOT_FOUND_PERIOD"    -> NotFoundError,
+      "SERVER_ERROR"        -> InternalError,
+      "SERVICE_UNAVAILABLE" -> InternalError
+    )
 }

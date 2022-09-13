@@ -181,7 +181,7 @@ trait AmendHistoricNonFhlUkPiePeriodSummaryFixtures {
       |      "otherIncome": 4997.99,
       |      "taxDeducted": -4996.99,
       |      "rentARoom":{
-      |         "rentsReceived": 9999999.99
+      |         "rentsReceived": 999999999999.99
       |       }
       |   },
       |   "expenses":{

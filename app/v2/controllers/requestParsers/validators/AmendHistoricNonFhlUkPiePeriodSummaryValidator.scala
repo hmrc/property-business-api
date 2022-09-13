@@ -58,10 +58,10 @@ class AmendHistoricNonFhlUkPiePeriodSummaryValidator @Inject()(appConfig: AppCon
       .map { income =>
         import income._
         validateOptional(periodAmount, "/income/periodAmount") ++
-          validateOptional(taxDeducted, "/income/taxDeducted") ++
           validateOptional(premiumsOfLeaseGrant, "/income/premiumsOfLeaseGrant") ++
           validateOptional(reversePremiums, "/income/reversePremiums") ++
           validateOptional(otherIncome, "/income/otherIncome") ++
+          validateOptional(taxDeducted, "/income/taxDeducted") ++
           validateOptional(rentARoom.flatMap(_.rentsReceived), "/income/rentARoom/rentsReceived")
       }
       .getOrElse(Nil)
@@ -72,7 +72,7 @@ class AmendHistoricNonFhlUkPiePeriodSummaryValidator @Inject()(appConfig: AppCon
 
         validateOptional(premisesRunningCosts, "/expenses/premisesRunningCosts") ++
           validateOptional(repairsAndMaintenance, "/expenses/repairsAndMaintenance") ++
-          validateOptional(financialCosts, "/expenses/financialCosts") ++
+          validateOptional(financialCosts, "/expenses/premisesCosts") ++
           validateOptional(professionalFees, "/expenses/professionalFees") ++
           validateOptional(costOfServices, "/expenses/costOfServices") ++
           validateOptional(other, "/expenses/other") ++

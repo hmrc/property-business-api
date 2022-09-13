@@ -19,7 +19,7 @@ package v2.connectors
 import config.AppConfig
 import play.api.libs.json.Format.GenericFormat
 import uk.gov.hmrc.http.{ HeaderCarrier, HttpClient }
-import v2.connectors.DownstreamUri.DesUri
+import v2.connectors.DownstreamUri.IfsUri
 import v2.connectors.httpparsers.StandardIfsHttpParser._
 import v2.models.request.createAmendHistoricNonFhlUkPropertyAnnualSubmission.CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequest
 import v2.models.response.createAmendHistoricNonFhlUkPropertyAnnualSubmission.CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionResponse
@@ -38,7 +38,7 @@ class CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionConnector @Inject()(val
 
     put(
       body = request.body,
-      uri = DesUri[CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionResponse](
+      uri = IfsUri[CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionResponse](
         s"income-tax/nino/${request.nino.nino}/uk-properties/other/annual-summaries/${request.taxYear.toDownstream}")
     )
   }

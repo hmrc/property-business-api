@@ -18,7 +18,7 @@ package v2.connectors
 
 import config.AppConfig
 import uk.gov.hmrc.http.{ HeaderCarrier, HttpClient }
-import v2.connectors.DownstreamUri.DesUri
+import v2.connectors.DownstreamUri.IfsUri
 import v2.connectors.httpparsers.StandardIfsHttpParser._
 import v2.models.request.createAmendHistoricFhlUkPropertyAnnualSubmission.CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequest
 import v2.models.response.createAmendHistoricFhlUkPropertyAnnualSubmission.CreateAmendHistoricFhlUkPropertyAnnualSubmissionResponse
@@ -40,7 +40,7 @@ class CreateAmendHistoricFhlUkPropertyAnnualSubmissionConnector @Inject()(val ht
 
     put(
       body = request.body,
-      uri = DesUri[CreateAmendHistoricFhlUkPropertyAnnualSubmissionResponse](
+      uri = IfsUri[CreateAmendHistoricFhlUkPropertyAnnualSubmissionResponse](
         s"income-tax/nino/$nino/uk-properties/furnished-holiday-lettings/annual-summaries/$taxYear")
     )
   }

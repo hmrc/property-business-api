@@ -21,10 +21,6 @@ import v2.controllers.requestParsers.validators.validations.JsonFormatValidation
 import v2.controllers.requestParsers.validators.validations.{ ConsolidatedExpensesValidation, HistoricPeriodIdValidation, NinoValidation }
 import v2.controllers.requestParsers.validators.validations.NumberValidation.validateOptional
 import v2.models.errors.MtdError
-import v2.models.request.amendHistoricFhlUkPiePeriodSummary.{
-  AmendHistoricFhlUkPiePeriodSummaryRawData,
-  AmendHistoricFhlUkPiePeriodSummaryRequestBody
-}
 
 import javax.inject.{ Inject, Singleton }
 

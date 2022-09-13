@@ -16,109 +16,30 @@
 
 package v2.controllers.requestParsers
 
-import play.api.libs.json.{ JsValue, Json }
 import support.UnitSpec
+import v2.mocks.validators.MockAmendHistoricNonFhlUkPiePeriodSummaryValidator
 import v2.models.domain.{ Nino, PeriodId }
 import v2.models.errors.{ BadRequestError, ErrorWrapper, NinoFormatError, RuleBothExpensesSuppliedError }
+import v2.models.request.amendHistoricNonFhlUkPiePeriodSummary.{
+  AmendHistoricNonFhlUkPiePeriodSummaryFixtures,
+  AmendHistoricNonFhlUkPiePeriodSummaryRawData,
+  AmendHistoricNonFhlUkPiePeriodSummaryRequest
+}
 
-class AmendHistoricNonFhlUkPiePeriodSummaryRequestParserSpec extends UnitSpec {
+class AmendHistoricNonFhlUkPiePeriodSummaryRequestParserSpec extends UnitSpec with AmendHistoricNonFhlUkPiePeriodSummaryFixtures {
 
   private val nino                   = "AA123456A"
   private val periodId               = "2017-04-06_2017-07-04"
   implicit val correlationId: String = "X-123"
 
-  val requestBody: AmendHistoricNonFhlUkPiePeriodSummaryRequestBody =
-    AmendHistoricNonFhlUkPiePeriodSummaryRequestBody(
-      Some(income),
-      Some(expenses)
-    )
-
-  val consolidatedRequestBody: AmendHistoricNonFhlUkPiePeriodSummaryRequestBody =
-    AmendHistoricNonFhlUkPiePeriodSummaryRequestBody(
-      Some(income),
-      Some(consolidatedExpenses)
-    )
-
-  val requestBodyJson: JsValue = Json.parse(
-    """
-      |{
-      |   "income":{
-      |      "periodAmount": 5000.99,
-      |      "premiumsOfLeaseGrant": 4999.99,
-      |      "reversePremiums": 4998.99,
-      |      "otherIncome": 4997.99,
-      |      "taxDeducted": 4996.99,
-      |      "rentARoom":{
-      |         "rentsReceived": 4995.99
-      |       }
-      |   },
-      |   "expenses":{
-      |      "premisesRunningCosts": 5000.99,
-      |      "repairsAndMaintenance": 4999.99,
-      |      "financialCosts": 4998.99,
-      |      "professionalFees": 4997.99,
-      |      "costOfServices": 4996.99,
-      |      "other": 4995.99,
-      |      "travelCosts": 4994.99,
-      |      "residentialFinancialCostsCarriedForward": 4993.99,
-      |      "residentialFinancialCost": 4992.99,
-      |      "rentARoom":{
-      |         "amountClaimed": 4991.99
-      |       }
-      |   }
-      |}
-      |""".stripMargin
-  )
-
-  val consolidatedRequestBodyJson: JsValue = Json.parse(
-    """
-      |{
-      |   "income":{
-      |      "periodAmount": 5000.99,
-      |      "premiumsOfLeaseGrant": 4999.99,
-      |      "reversePremiums": 4998.99,
-      |      "otherIncome": 4997.99,
-      |      "taxDeducted": 4996.99,
-      |      "rentARoom":{
-      |         "rentsReceived": 4995.99
-      |       }
-      |   },
-      |   "expenses":{
-      |      "consolidatedExpenses": 5000.99
-      |    }
-      |}
-      |""".stripMargin
-  )
-
-  val invalidRequestBodyJson: JsValue = Json.parse(
-    """
-      |{
-      |   "income":{
-      |      "periodAmount": 5000.99,
-      |      "premiumsOfLeaseGrant": 4999.99,
-      |      "reversePremiums": 4998.99,
-      |      "otherIncome": 4997.99,
-      |      "taxDeducted": 4996.99,
-      |      "rentARoom":{
-      |         "rentsReceived": 4995.99
-      |       }
-      |   },
-      |   "expenses":{
-      |      "repairsAndMaintenance":424.65,
-      |      "consolidatedExpenses":135.78
-      |    }
-      |}
-      |""".stripMargin
-  )
-
   val inputData: AmendHistoricNonFhlUkPiePeriodSummaryRawData =
-    AmendHistoricNonFhlUkPiePeriodSummaryRawData(nino, periodId, requestBodyJson)
+    AmendHistoricNonFhlUkPiePeriodSummaryRawData(nino, periodId, mtdJsonRequestFull)
 
   val consolidatedInputData: AmendHistoricNonFhlUkPiePeriodSummaryRawData =
-    AmendHistoricNonFhlUkPiePeriodSummaryRawData(nino, periodId, consolidatedRequestBodyJson)
+    AmendHistoricNonFhlUkPiePeriodSummaryRawData(nino, periodId, mtdJsonRequestConsolidated)
 
   val invalidInputData: AmendHistoricNonFhlUkPiePeriodSummaryRawData =
-    AmendHistoricNonFhlUkPiePeriodSummaryRawData(nino, periodId, invalidRequestBodyJson)
+    AmendHistoricNonFhlUkPiePeriodSummaryRawData(nino, periodId, invalidMtdRequestBodyJson)
 
   trait Test extends MockAmendHistoricNonFhlUkPiePeriodSummaryValidator {
     lazy val parser = new AmendHistoricNonFhlUkPiePeriodSummaryRequestParser(mockValidator)
@@ -131,14 +52,14 @@ class AmendHistoricNonFhlUkPiePeriodSummaryRequestParserSpec extends UnitSpec {
         MockAmendHistoricNonFhlUkPiePeriodSummaryValidator.validate(inputData).returns(Nil)
         val result: Either[ErrorWrapper, AmendHistoricNonFhlUkPiePeriodSummaryRequest] = parser.parseRequest(inputData)
 
-        result shouldBe Right(AmendHistoricNonFhlUkPiePeriodSummaryRequest(Nino(nino), PeriodId(periodId), requestBody))
+        result shouldBe Right(AmendHistoricNonFhlUkPiePeriodSummaryRequest(Nino(nino), PeriodId(periodId), requestBodyFull))
       }
 
       "valid consolidated request data is supplied" in new Test {
         MockAmendHistoricNonFhlUkPiePeriodSummaryValidator.validate(consolidatedInputData).returns(Nil)
         val result: Either[ErrorWrapper, AmendHistoricNonFhlUkPiePeriodSummaryRequest] = parser.parseRequest(consolidatedInputData)
 
-        result shouldBe Right(AmendHistoricNonFhlUkPiePeriodSummaryRequest(Nino(nino), PeriodId(periodId), consolidatedRequestBody))
+        result shouldBe Right(AmendHistoricNonFhlUkPiePeriodSummaryRequest(Nino(nino), PeriodId(periodId), requestBodyConsolidated))
       }
     }
 

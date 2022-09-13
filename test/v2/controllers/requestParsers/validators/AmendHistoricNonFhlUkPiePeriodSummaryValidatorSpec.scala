@@ -17,12 +17,20 @@
 package v2.controllers.requestParsers.validators
 
 import mocks.MockAppConfig
-import play.api.libs.json.{ JsObject, JsValue, Json }
+import play.api.libs.json.JsObject
 import support.UnitSpec
 import v2.models.errors.{ NinoFormatError, PeriodIdFormatError, RuleIncorrectOrEmptyBodyError, ValueFormatError }
+import v2.models.request.amendHistoricNonFhlUkPiePeriodSummary.{
+  AmendHistoricNonFhlUkPiePeriodSummaryFixtures,
+  AmendHistoricNonFhlUkPiePeriodSummaryRawData
+}
 import v2.models.utils.JsonErrorValidators
 
-class AmendHistoricNonFhlUkPiePeriodSummaryValidatorSpec extends UnitSpec with JsonErrorValidators with MockAppConfig {
+class AmendHistoricNonFhlUkPiePeriodSummaryValidatorSpec
+    extends UnitSpec
+    with JsonErrorValidators
+    with MockAppConfig
+    with AmendHistoricNonFhlUkPiePeriodSummaryFixtures {
 
   private val validNino     = "AA123456A"
   private val validPeriodId = "2017-04-06_2017-07-04"
@@ -32,118 +40,20 @@ class AmendHistoricNonFhlUkPiePeriodSummaryValidatorSpec extends UnitSpec with J
 
   val validator = new AmendHistoricNonFhlUkPiePeriodSummaryValidator(mockAppConfig)
 
-  val validRequestBodyJson: JsValue = Json.parse(
-    """
-      |{
-      |   "income":{
-      |      "periodAmount": 5000.99,
-      |      "premiumsOfLeaseGrant": 4999.99,
-      |      "reversePremiums": 4998.99,
-      |      "otherIncome": 4997.99,
-      |      "taxDeducted": 4996.99,
-      |      "rentARoom":{
-      |         "rentsReceived": 4995.99
-      |       }
-      |   },
-      |   "expenses":{
-      |      "premisesRunningCosts": 5000.99,
-      |      "repairsAndMaintenance": 4999.99,
-      |      "financialCosts": 4998.99,
-      |      "professionalFees": 4997.99,
-      |      "costOfServices": 4996.99,
-      |      "other": 4995.99,
-      |      "travelCosts": 4994.99,
-      |      "residentialFinancialCostsCarriedForward": 4993.99,
-      |      "residentialFinancialCost": 4992.99,
-      |      "rentARoom":{
-      |         "amountClaimed": 4991.99
-      |       }
-      |   }
-      |}
-      |""".stripMargin
-  )
-
-  val validConsolidatedRequestBodyJson: JsValue = Json.parse(
-    """
-      |{
-      |   "income":{
-      |      "periodAmount": 5000.99,
-      |      "premiumsOfLeaseGrant": 4999.99,
-      |      "reversePremiums": 4998.99,
-      |      "otherIncome": 4997.99,
-      |      "taxDeducted": 4996.99,
-      |      "rentARoom":{
-      |         "rentsReceived": 4995.99
-      |       }
-      |   },
-      |   "expenses":{
-      |      "consolidatedExpenses": 5000.99
-      |    }
-      |}
-      |""".stripMargin
-  )
-
-  val requestBodyJsonWithInvalidAmounts: JsValue = Json.parse(
-    """
-      |{
-      |   "income":{
-      |      "periodAmount": 5000.99,
-      |      "premiumsOfLeaseGrant": 4999.99,
-      |      "reversePremiums": 4998.99,
-      |      "otherIncome": 4997.99,
-      |      "taxDeducted": -4996.99,
-      |      "rentARoom":{
-      |         "rentsReceived": 9999999.99
-      |       }
-      |   },
-      |   "expenses":{
-      |      "consolidatedExpenses": 5000.99
-      |    }
-      |}
-      |""".stripMargin
-  )
-
-  val requestBodyJsonWithEmptySubObjects: JsValue = Json.parse(
-    """
-      |{
-      |   "income":{},
-      |   "expenses":{}
-      |}
-      |""".stripMargin
-  )
-
-  val requestBodyWithEmptyRentARoom: JsValue = Json.parse(
-    """
-      |{
-      |   "income":{
-      |      "periodAmount": 5000.99,
-      |      "premiumsOfLeaseGrant": 4999.99,
-      |      "reversePremiums": 4998.99,
-      |      "otherIncome": 4997.99,
-      |      "taxDeducted": 4996.99,
-      |      "rentARoom":{}
-      |   },
-      |   "expenses":{
-      |      "consolidatedExpenses": 5000.99
-      |    }
-      |}
-      |""".stripMargin
-  )
-
   "The validator" should {
     "return no errors" when {
       "given a valid request" in {
-        val result = validator.validate(AmendHistoricNonFhlUkPiePeriodSummaryRawData(validNino, validPeriodId, validRequestBodyJson))
+        val result = validator.validate(AmendHistoricNonFhlUkPiePeriodSummaryRawData(validNino, validPeriodId, mtdJsonRequestFull))
         result shouldBe empty
       }
       "given a valid request with consolidated expenses" in {
-        val result = validator.validate(AmendHistoricNonFhlUkPiePeriodSummaryRawData(validNino, validPeriodId, validConsolidatedRequestBodyJson))
+        val result = validator.validate(AmendHistoricNonFhlUkPiePeriodSummaryRawData(validNino, validPeriodId, mtdJsonRequestConsolidated))
         result shouldBe empty
       }
     }
     "return multiple errors" when {
       "a multiple fields failed validation" in {
-        val result = validator.validate(AmendHistoricNonFhlUkPiePeriodSummaryRawData("AA1234A", "20123", validRequestBodyJson))
+        val result = validator.validate(AmendHistoricNonFhlUkPiePeriodSummaryRawData("AA1234A", "20123", mtdJsonRequestFull))
         result shouldBe List(NinoFormatError, PeriodIdFormatError)
       }
     }
@@ -152,7 +62,7 @@ class AmendHistoricNonFhlUkPiePeriodSummaryValidatorSpec extends UnitSpec with J
         val expected =
           ValueFormatError.copy(paths = Some(List("/income/taxDeducted", "/income/rentARoom/rentsReceived")))
         val result =
-          validator.validate(AmendHistoricNonFhlUkPiePeriodSummaryRawData(validNino, validPeriodId, requestBodyJsonWithInvalidAmounts))
+          validator.validate(AmendHistoricNonFhlUkPiePeriodSummaryRawData(validNino, validPeriodId, mtdJsonRequestWithInvalidAmounts))
         result should contain only expected
       }
     }
@@ -164,37 +74,37 @@ class AmendHistoricNonFhlUkPiePeriodSummaryValidatorSpec extends UnitSpec with J
       "given empty income and expenses sub-objects" in {
         val expected = RuleIncorrectOrEmptyBodyError.copy(paths = Some(List("/income", "/expenses")))
         val result =
-          validator.validate(AmendHistoricNonFhlUkPiePeriodSummaryRawData(validNino, validPeriodId, requestBodyJsonWithEmptySubObjects))
+          validator.validate(AmendHistoricNonFhlUkPiePeriodSummaryRawData(validNino, validPeriodId, mtdJsonRequestWithEmptySubObjects))
         result should contain only expected
       }
       "given an empty rentARoom sub-object" in {
         val expected = RuleIncorrectOrEmptyBodyError.copy(paths = Some(List("/income/rentARoom")))
         val result =
-          validator.validate(AmendHistoricNonFhlUkPiePeriodSummaryRawData(validNino, validPeriodId, requestBodyWithEmptyRentARoom))
+          validator.validate(AmendHistoricNonFhlUkPiePeriodSummaryRawData(validNino, validPeriodId, mtdJsonRequestWithEmptyRentARoom))
         result should contain only expected
       }
     }
     "return PeriodIdFormatError error" when {
       "given a periodId with invalid format" in {
         val result =
-          validator.validate(AmendHistoricNonFhlUkPiePeriodSummaryRawData(validNino, periodId = "20A7-04-06_2017-07-04", validRequestBodyJson))
+          validator.validate(AmendHistoricNonFhlUkPiePeriodSummaryRawData(validNino, periodId = "20A7-04-06_2017-07-04", mtdJsonRequestFull))
         result should contain only PeriodIdFormatError
       }
       "given a periodId with a non-historic year" in {
         val result =
-          validator.validate(AmendHistoricNonFhlUkPiePeriodSummaryRawData(validNino, periodId = "2012-04-06_2012-07-04", validRequestBodyJson))
+          validator.validate(AmendHistoricNonFhlUkPiePeriodSummaryRawData(validNino, periodId = "2012-04-06_2012-07-04", mtdJsonRequestFull))
         result should contain only PeriodIdFormatError
       }
       "given a periodId with the toDate before fromDate" in {
         val result =
-          validator.validate(AmendHistoricNonFhlUkPiePeriodSummaryRawData(validNino, periodId = "2019-07-04_2019-04-06", validRequestBodyJson))
+          validator.validate(AmendHistoricNonFhlUkPiePeriodSummaryRawData(validNino, periodId = "2019-07-04_2019-04-06", mtdJsonRequestFull))
         result should contain only PeriodIdFormatError
       }
     }
     "return only the path-param errors" when {
       "given a request with both invalid path params and an invalid body" in {
         val result =
-          validator.validate(AmendHistoricNonFhlUkPiePeriodSummaryRawData("BAD-NINO", validPeriodId, requestBodyJsonWithInvalidAmounts))
+          validator.validate(AmendHistoricNonFhlUkPiePeriodSummaryRawData("BAD-NINO", validPeriodId, mtdJsonRequestWithInvalidAmounts))
         result should contain only NinoFormatError
       }
     }

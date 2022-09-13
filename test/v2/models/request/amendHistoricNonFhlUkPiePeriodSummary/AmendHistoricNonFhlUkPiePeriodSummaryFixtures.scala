@@ -170,4 +170,72 @@ trait AmendHistoricNonFhlUkPiePeriodSummaryFixtures {
        |    "deductions": $downstreamJsonExpensesConsolidated
        |} 
        |""".stripMargin)
+
+  val mtdJsonRequestWithInvalidAmounts: JsValue = Json.parse(
+    """
+      |{
+      |   "income":{
+      |      "periodAmount": 5000.99,
+      |      "premiumsOfLeaseGrant": 4999.99,
+      |      "reversePremiums": 4998.99,
+      |      "otherIncome": 4997.99,
+      |      "taxDeducted": -4996.99,
+      |      "rentARoom":{
+      |         "rentsReceived": 9999999.99
+      |       }
+      |   },
+      |   "expenses":{
+      |      "consolidatedExpenses": 5000.99
+      |    }
+      |}
+      |""".stripMargin
+  )
+
+  val mtdJsonRequestWithEmptySubObjects: JsValue = Json.parse(
+    """
+      |{
+      |   "income":{},
+      |   "expenses":{}
+      |}
+      |""".stripMargin
+  )
+
+  val mtdJsonRequestWithEmptyRentARoom: JsValue = Json.parse(
+    """
+      |{
+      |   "income":{
+      |      "periodAmount": 5000.99,
+      |      "premiumsOfLeaseGrant": 4999.99,
+      |      "reversePremiums": 4998.99,
+      |      "otherIncome": 4997.99,
+      |      "taxDeducted": 4996.99,
+      |      "rentARoom":{}
+      |   },
+      |   "expenses":{
+      |      "consolidatedExpenses": 5000.99
+      |    }
+      |}
+      |""".stripMargin
+  )
+
+  val invalidMtdRequestBodyJson: JsValue = Json.parse(
+    """
+      |{
+      |   "income":{
+      |      "periodAmount": 5000.99,
+      |      "premiumsOfLeaseGrant": 4999.99,
+      |      "reversePremiums": 4998.99,
+      |      "otherIncome": 4997.99,
+      |      "taxDeducted": 4996.99,
+      |      "rentARoom":{
+      |         "rentsReceived": 4995.99
+      |       }
+      |   },
+      |   "expenses":{
+      |      "repairsAndMaintenance":424.65,
+      |      "consolidatedExpenses":135.78
+      |    }
+      |}
+      |""".stripMargin
+  )
 }

@@ -16,16 +16,27 @@
 
 package v2.controllers.requestParsers.validators
 import mocks.MockAppConfig
-import play.api.libs.json.{JsObject, JsValue, Json}
+import play.api.libs.json.{ JsNumber, JsObject, JsValue, Json }
 import support.UnitSpec
-import v2.models.errors.{NinoFormatError, RuleIncorrectOrEmptyBodyError, TaxYearFormatError, ValueFormatError}
+import v2.models.errors.{
+  NinoFormatError,
+  RuleHistoricTaxYearNotSupportedError,
+  RuleIncorrectOrEmptyBodyError,
+  RuleTaxYearRangeInvalidError,
+  TaxYearFormatError,
+  ValueFormatError
+}
 import v2.models.request.createAmendHistoricFhlUkPropertyAnnualSubmission.CreateAmendHistoricFhlUkPropertyAnnualSubmissionRawData
-class CreateAmendHistoricFhlUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec with MockAppConfig {
+import v2.models.utils.JsonErrorValidators
+
+class CreateAmendHistoricFhlUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec with MockAppConfig with JsonErrorValidators {
   private val validNino    = "AA123456A"
   private val validTaxYear = "2021-22"
-  MockAppConfig.minimumTaxHistoric returns 2017
-  val validator = new CreateAmendHistoricFhlUkPropertyAnnualSubmissionValidator(mockAppConfig)
-  val validRequestBody: JsValue = Json.parse("""
+  MockAppConfig.minimumTaxHistoric returns 2017 anyNumberOfTimes ()
+  MockAppConfig.maximumTaxHistoric returns 2022 anyNumberOfTimes ()
+
+  val validator                                        = new CreateAmendHistoricFhlUkPropertyAnnualSubmissionValidator(mockAppConfig)
+  val validRequestBody: JsValue                        = Json.parse("""
                                                | {
                                                |   "annualAdjustments": {
                                                |      "lossBroughtForward": 200.00,
@@ -61,7 +72,7 @@ class CreateAmendHistoricFhlUkPropertyAnnualSubmissionValidatorSpec extends Unit
                                                                       |   }
                                                                       | }
                                                                       |""".stripMargin)
-  val requestBodyWithInvalidAmounts: JsValue = Json.parse("""
+  val requestBodyWithInvalidAmounts: JsValue           = Json.parse("""
                                                             | {
                                                             |   "annualAdjustments": {
                                                             |      "lossBroughtForward": 200.123,
@@ -76,7 +87,7 @@ class CreateAmendHistoricFhlUkPropertyAnnualSubmissionValidatorSpec extends Unit
                                                             |   }
                                                             | }
                                                             |""".stripMargin)
-  val incompleteRequestBody: JsValue = Json.parse("""
+  val incompleteRequestBody: JsValue                   = Json.parse("""
                                                     | {
                                                     |   "annualAdjustments": {
                                                     |      "lossBroughtForward": 200.00,
@@ -91,7 +102,7 @@ class CreateAmendHistoricFhlUkPropertyAnnualSubmissionValidatorSpec extends Unit
                                                     |   }
                                                     | }
                                                     |""".stripMargin)
-  val requestBodyWithEmptySubObjects: JsValue = Json.parse("""
+  val requestBodyWithEmptySubObjects: JsValue          = Json.parse("""
                                                              | {
                                                              |   "annualAdjustments": {
                                                              |   },
@@ -99,7 +110,7 @@ class CreateAmendHistoricFhlUkPropertyAnnualSubmissionValidatorSpec extends Unit
                                                              |   }
                                                              | }
                                                              |""".stripMargin)
-  val requestBodyWithEmptyRentARoom: JsValue = Json.parse("""
+  val requestBodyWithEmptyRentARoom: JsValue           = Json.parse("""
                                                             | {
                                                             |   "annualAdjustments": {
                                                             |      "lossBroughtForward": 200.00,
@@ -127,7 +138,7 @@ class CreateAmendHistoricFhlUkPropertyAnnualSubmissionValidatorSpec extends Unit
     }
     "return multiple errors" when {
       "a multiple fields failed validation" in {
-        val result   = validator.validate(CreateAmendHistoricFhlUkPropertyAnnualSubmissionRawData("AA1234A", "20123", validRequestBody))
+        val result = validator.validate(CreateAmendHistoricFhlUkPropertyAnnualSubmissionRawData("AA1234A", "20123", validRequestBody))
         result shouldBe List(NinoFormatError, TaxYearFormatError)
       }
     }
@@ -149,6 +160,18 @@ class CreateAmendHistoricFhlUkPropertyAnnualSubmissionValidatorSpec extends Unit
         result should contain only expected
       }
     }
+
+    "return ValueFormatError for propertyIncomeAllowance" when {
+      "given a value over 1000" in {
+        validator.validate(
+          CreateAmendHistoricFhlUkPropertyAnnualSubmissionRawData(validNino,
+                                                                  validTaxYear,
+                                                                  validRequestBody.update("/annualAllowances/propertyIncomeAllowance",
+                                                                                          JsNumber(1000.01)))) should
+          contain only ValueFormatError.forPathAndRange("/annualAllowances/propertyIncomeAllowance", min = "0", max = "1000")
+      }
+    }
+
     "return RuleIncorrectOrEmptyBodyError" when {
       "given an empty body" in {
         val result = validator.validate(CreateAmendHistoricFhlUkPropertyAnnualSubmissionRawData(validNino, validTaxYear, JsObject.empty))
@@ -174,6 +197,26 @@ class CreateAmendHistoricFhlUkPropertyAnnualSubmissionValidatorSpec extends Unit
         result should contain only TaxYearFormatError
       }
     }
+
+    "return HistoricTaxYearNotSupportedError error" when {
+      "the tax year is too early" in {
+        validator.validate(CreateAmendHistoricFhlUkPropertyAnnualSubmissionRawData(validNino, "2016-17", validRequestBody)) should
+          contain only RuleHistoricTaxYearNotSupportedError
+      }
+
+      "the tax year is too late" in {
+        validator.validate(CreateAmendHistoricFhlUkPropertyAnnualSubmissionRawData(validNino, "2023-24", validRequestBody)) should
+          contain only RuleHistoricTaxYearNotSupportedError
+      }
+    }
+
+    "return RuleTaxYearRangeInvalidError" when {
+      "given an invalid taxYear range" in {
+        validator.validate(CreateAmendHistoricFhlUkPropertyAnnualSubmissionRawData(validNino, "2020-22", validRequestBody)) should
+          contain only RuleTaxYearRangeInvalidError
+      }
+    }
+
     "return only the path-param errors" when {
       "given a request with both invalid path params and an invalid body" in {
         val result =

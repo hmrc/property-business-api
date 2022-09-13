@@ -43,7 +43,7 @@ object JsonFormatValidation {
       case _ => Nil
     }
 
-  def validateOrRead[A: OFormat](data: JsValue): Either[List[MtdError], A] = {
+  def validateOrRead[A: Reads](data: JsValue): Either[List[MtdError], A] = {
     if (data == JsObject.empty) {
       Left(List(RuleIncorrectOrEmptyBodyError))
     } else {
@@ -54,7 +54,7 @@ object JsonFormatValidation {
     }
   }
 
-  def validateAndCheckNonEmptyOrRead[A: OFormat: EmptinessChecker](data: JsValue): Either[List[MtdError], A] =
+  def validateAndCheckNonEmptyOrRead[A: Reads: EmptinessChecker](data: JsValue): Either[List[MtdError], A] =
     validateOrRead[A](data) match {
       case Left(schemaErrors) => Left(schemaErrors)
       case Right(body) =>

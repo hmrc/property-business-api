@@ -16,30 +16,42 @@
 
 package v2.controllers.requestParsers.validators.validations
 
-import v2.models.errors.{ MtdError, RuleTaxYearNotSupportedError, RuleTaxYearRangeInvalidError, TaxYearFormatError }
+import v2.models.errors.{
+  MtdError,
+  RuleHistoricTaxYearNotSupportedError,
+  RuleTaxYearNotSupportedError,
+  RuleTaxYearRangeInvalidError,
+  TaxYearFormatError
+}
 
 object TaxYearValidation {
 
   val taxYearFormat = "20[1-9][0-9]\\-[1-9][0-9]"
 
-  def validate(minimumTaxYear: Int, taxYear: String): List[MtdError] = {
-    if (taxYear.matches(taxYearFormat)) {
+  def validate(minimumTaxYear: Int, taxYear: String): List[MtdError] =
+    doValidate(taxYear) { startYear =>
+      if (startYear >= minimumTaxYear) Nil else List(RuleTaxYearNotSupportedError)
+    }
 
-      val start     = taxYear.substring(2, 4).toInt
-      val end       = taxYear.substring(5, 7).toInt
-      val startYear = taxYear.substring(0, 4).toInt
+  // Historic endpoints have min and max
+  def validateHistoric(minimumTaxYear: Int, maximumTaxYear: Int, taxYear: String): List[MtdError] =
+    doValidate(taxYear) { startYear =>
+      if (startYear >= minimumTaxYear && startYear <= maximumTaxYear) Nil else List(RuleHistoricTaxYearNotSupportedError)
+    }
+
+  private def doValidate(taxYear: String)(supportValidator: Int => List[MtdError]) =
+    if (taxYear.matches(taxYearFormat)) {
+      val start = taxYear.substring(2, 4).toInt
+      val end   = taxYear.substring(5, 7).toInt
 
       if (end - start == 1) {
-        if (startYear >= minimumTaxYear) {
-          NoValidationErrors
-        } else {
-          List(RuleTaxYearNotSupportedError)
-        }
+        val startYear = taxYear.substring(0, 4).toInt
+
+        supportValidator(startYear)
       } else {
         List(RuleTaxYearRangeInvalidError)
       }
     } else {
       List(TaxYearFormatError)
     }
-  }
 }

@@ -21,25 +21,25 @@ import support.UnitSpec
 
 class HistoricNonFhlAnnualAllowancesSpec extends UnitSpec {
 
-  val requestBody: HistoricNonFhlAnnualAllowances =
+  val annualAllowances: HistoricNonFhlAnnualAllowances =
     HistoricNonFhlAnnualAllowances(
-      annualInvestmentAllowance = Some(200.00),
-      otherCapitalAllowance = Some(200.00),
+      annualInvestmentAllowance = Some(100.00),
       zeroEmissionGoodsVehicleAllowance = Some(200.00),
-      businessPremisesRenovationAllowance = Some(200.00),
-      costOfReplacingDomesticGoods = Some(200.00),
-      propertyIncomeAllowance = Some(30.02),
+      businessPremisesRenovationAllowance = Some(300.00),
+      otherCapitalAllowance = Some(400.00),
+      costOfReplacingDomesticGoods = Some(500.00),
+      propertyIncomeAllowance = Some(600.00),
     )
 
   val validMtdJson: JsValue = Json.parse(
     """
       |{
-      |      "annualInvestmentAllowance": 200.00,
-      |      "otherCapitalAllowance": 200.00,
+      |      "annualInvestmentAllowance": 100.00,
       |      "zeroEmissionGoodsVehicleAllowance": 200.00,
-      |      "businessPremisesRenovationAllowance": 200.00,
-      |      "costOfReplacingDomesticGoods": 200.00,
-      |      "propertyIncomeAllowance": 30.02
+      |      "businessPremisesRenovationAllowance": 300.00,
+      |      "otherCapitalAllowance": 400.00,
+      |      "costOfReplacingDomesticGoods": 500.00,
+      |      "propertyIncomeAllowance": 600.00
       |}
       |""".stripMargin
   )
@@ -47,12 +47,12 @@ class HistoricNonFhlAnnualAllowancesSpec extends UnitSpec {
   val validDownstreamJson: JsValue = Json.parse(
     """
       |{
-      |      "annualInvestmentAllowance": 200.00,
-      |      "otherCapitalAllowance": 200.00,
+      |      "annualInvestmentAllowance": 100.00,
       |      "zeroEmissionGoodsVehicleAllowance": 200.00,
-      |      "businessPremisesRenovationAllowance": 200.00,
-      |      "costOfReplacingDomGoods": 200.00,
-      |      "propertyIncomeAllowance": 30.02
+      |      "businessPremisesRenovationAllowance": 300.00,
+      |      "otherCapitalAllowance": 400.00,
+      |      "costOfReplacingDomGoods": 500.00,
+      |      "propertyIncomeAllowance": 600.00
       |}
       |""".stripMargin
   )
@@ -60,7 +60,7 @@ class HistoricNonFhlAnnualAllowancesSpec extends UnitSpec {
   "reads" when {
     "passed a valid JSON" should {
       "return a valid model" in {
-        validMtdJson.as[HistoricNonFhlAnnualAllowances] shouldBe requestBody
+        validMtdJson.as[HistoricNonFhlAnnualAllowances] shouldBe annualAllowances
       }
     }
   }
@@ -68,7 +68,7 @@ class HistoricNonFhlAnnualAllowancesSpec extends UnitSpec {
   "writes" when {
     "passed valid model" should {
       "return valid JSON" in {
-        Json.toJson(requestBody) shouldBe validDownstreamJson
+        Json.toJson(annualAllowances) shouldBe validDownstreamJson
       }
     }
   }

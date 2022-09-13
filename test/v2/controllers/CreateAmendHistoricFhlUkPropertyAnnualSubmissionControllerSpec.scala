@@ -178,7 +178,7 @@ class CreateAmendHistoricFhlUkPropertyAnnualSubmissionControllerSpec
           (BadRequestError, BAD_REQUEST),
           (NinoFormatError, BAD_REQUEST),
           (TaxYearFormatError, BAD_REQUEST),
-          (RuleTaxYearNotSupportedError, BAD_REQUEST),
+          (RuleHistoricTaxYearNotSupportedError, BAD_REQUEST),
           (RuleTaxYearRangeInvalidError, BAD_REQUEST),
           (ValueFormatError.copy(
              paths = Some(

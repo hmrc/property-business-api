@@ -16,11 +16,10 @@
 
 package v2.models.request.createAmendHistoricNonFhlUkPropertyAnnualSubmission
 
-import play.api.libs.json.{ JsValue, Json }
-import support.UnitSpec
+import play.api.libs.json.{JsValue, Json}
 import v2.models.request.common.ukPropertyRentARoom.UkPropertyAdjustmentsRentARoom
 
-class HistoricNonFhlAnnualAdjustmentsSpec extends UnitSpec {
+trait CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionFixture {
 
   val annualAdjustments: HistoricNonFhlAnnualAdjustments =
     HistoricNonFhlAnnualAdjustments(
@@ -29,12 +28,29 @@ class HistoricNonFhlAnnualAdjustmentsSpec extends UnitSpec {
       balancingCharge = Some(300.00),
       businessPremisesRenovationAllowanceBalancingCharges = Some(400.00),
       nonResidentLandlord = true,
-      rentARoom = Some(UkPropertyAdjustmentsRentARoom(jointlyLet = true))
+      rentARoom = Some(UkPropertyAdjustmentsRentARoom(true))
+    )
+
+  val annualAllowances: HistoricNonFhlAnnualAllowances =
+    HistoricNonFhlAnnualAllowances(
+      annualInvestmentAllowance = Some(500.00),
+      zeroEmissionGoodsVehicleAllowance = Some(600.00),
+      businessPremisesRenovationAllowance = Some(700.00),
+      otherCapitalAllowance = Some(800.00),
+      costOfReplacingDomesticGoods = Some(900.00),
+      propertyIncomeAllowance = Some(1000.00)
+    )
+
+  val requestBody: CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestBody =
+    CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestBody(
+      Some(annualAdjustments),
+      Some(annualAllowances)
     )
 
   val validMtdJson: JsValue = Json.parse(
     """
       |{
+      |   "annualAdjustments": {
       |      "lossBroughtForward": 100.00,
       |      "privateUseAdjustment": 200.00,
       |      "balancingCharge": 300.00,
@@ -43,13 +59,22 @@ class HistoricNonFhlAnnualAdjustmentsSpec extends UnitSpec {
       |      "rentARoom": {
       |         "jointlyLet": true
       |      }
+      |   },
+      |   "annualAllowances": {
+      |      "annualInvestmentAllowance": 500.00,
+      |      "zeroEmissionGoodsVehicleAllowance": 600.00,
+      |      "businessPremisesRenovationAllowance": 700.00,
+      |      "otherCapitalAllowance": 800.00,
+      |      "costOfReplacingDomesticGoods": 900.00,
+      |      "propertyIncomeAllowance": 1000.00
+      |   }
       |}
-      |""".stripMargin
-  )
+      |""".stripMargin)
 
   val validDownstreamJson: JsValue = Json.parse(
     """
       |{
+      |   "annualAdjustments": {
       |      "lossBroughtForward": 100.00,
       |      "privateUseAdjustment": 200.00,
       |      "balancingCharge": 300.00,
@@ -58,23 +83,15 @@ class HistoricNonFhlAnnualAdjustmentsSpec extends UnitSpec {
       |      "ukRentARoom": {
       |         "jointlyLet": true
       |      }
+      |   },
+      |   "annualAllowances": {
+      |      "annualInvestmentAllowance": 500.00,
+      |      "zeroEmissionGoodsVehicleAllowance": 600.00,
+      |      "businessPremisesRenovationAllowance": 700.00,
+      |      "otherCapitalAllowance": 800.00,
+      |      "costOfReplacingDomGoods": 900.00,
+      |      "propertyIncomeAllowance": 1000.00
+      |   }
       |}
-      |""".stripMargin
-  )
-
-  "reads" when {
-    "passed a valid JSON" should {
-      "return a valid model" in {
-        validMtdJson.as[HistoricNonFhlAnnualAdjustments] shouldBe annualAdjustments
-      }
-    }
-  }
-
-  "writes" when {
-    "passed valid model" should {
-      "return valid JSON" in {
-        Json.toJson(annualAdjustments) shouldBe validDownstreamJson
-      }
-    }
-  }
+      |""".stripMargin)
 }

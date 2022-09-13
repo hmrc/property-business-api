@@ -38,6 +38,8 @@ object RetrieveHistoricFhlUkPropertyAnnualSubmissionResponse extends HateoasLink
       import data._
       Seq(
         retrieveHistoricFhlUkPropertyAnnualSubmission(appConfig, nino, taxYear, self = true),
+        createAmendHistoricFhlUkPropertyAnnualSubmission(appConfig, nino, taxYear),
+        deleteHistoricFhlUkPropertyAnnualSubmission(appConfig, nino, taxYear)
       )
     }
   }

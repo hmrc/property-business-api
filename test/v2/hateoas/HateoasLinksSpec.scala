@@ -164,6 +164,66 @@ class HateoasLinksSpec extends UnitSpec with MockAppConfig with HateoasLinks {
       }
     }
 
+    "for a Historic Uk Property Annual Submission" must {
+      "fhl" must {
+        "return the HATEOAS link for retrieve" in new Test {
+          val result: Link = retrieveHistoricFhlUkPropertyAnnualSubmission(mockAppConfig, nino = nino, taxYear = taxYear, true)
+
+          result shouldBe
+            Link("/individuals/business/property/uk/annual/furnished-holiday-lettings/{nino}/{taxYear}", GET, "self")
+        }
+
+        "return the HATEOAS link for create + amend" in new Test {
+          val result: Link = createAmendHistoricFhlUkPropertyAnnualSubmission(mockAppConfig, nino = nino, taxYear = taxYear)
+
+          result shouldBe Link(
+            "/individuals/business/property/uk/annual/furnished-holiday-lettings/{nino}/{taxYear}",
+            PUT,
+            "create-and-amend-uk-property-historic-fhl-annual-submission"
+          )
+        }
+
+        "return the HATEOAS link for delete" in new Test {
+          val result: Link = deleteHistoricFhlUkPropertyAnnualSubmission(mockAppConfig, nino = nino, taxYear = taxYear)
+
+          result shouldBe Link(
+            "/individuals/business/property/uk/annual/furnished-holiday-lettings/{nino}/{taxYear}",
+            DELETE,
+            "delete-uk-property-historic-fhl-annual-submission"
+          )
+        }
+      }
+
+      "non-fhl" must {
+        "return the HATEOAS link for retrieve" in new Test {
+          val result: Link = retrieveHistoricNonFhlUkPropertyAnnualSubmission(mockAppConfig, nino = nino, taxYear = taxYear, true)
+
+          result shouldBe
+            Link("/individuals/business/property/uk/annual/non-furnished-holiday-lettings/{nino}/{taxYear}", GET, "self")
+        }
+
+        "return the HATEOAS link for create + amend" in new Test {
+          val result: Link = createAmendHistoricNonFhlUkPropertyAnnualSubmission(mockAppConfig, nino = nino, taxYear = taxYear)
+
+          result shouldBe Link(
+            "/individuals/business/property/uk/annual/non-furnished-holiday-lettings/{nino}/{taxYear}",
+            PUT,
+            "create-and-amend-uk-property-historic-non-fhl-annual-submission"
+          )
+        }
+
+        "return the HATEOAS link for delete" in new Test {
+          val result: Link = deleteHistoricNonFhlUkPropertyAnnualSubmission(mockAppConfig, nino = nino, taxYear = taxYear)
+
+          result shouldBe Link(
+            "/individuals/business/property/uk/annual/non-furnished-holiday-lettings/{nino}/{taxYear}",
+            DELETE,
+            "delete-uk-property-historic-non-fhl-annual-submission"
+          )
+        }
+      }
+    }
+
     "produce the correct links" when {
       "called" in {
         val data: RetrieveHistoricNonFhlUkPiePeriodSummaryHateoasData = RetrieveHistoricNonFhlUkPiePeriodSummaryHateoasData("myNino", "myPeriodId")

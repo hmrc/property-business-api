@@ -14,9 +14,8 @@
  * limitations under the License.
  */
 
-package v2.models.request.amendHistoricFhlUkPiePeriodSummary
+package v2.models.request.amendHistoricNonFhlUkPiePeriodSummary
 
-import play.api.libs.json.JsValue
-import v2.models.request.RawData
+import v2.models.domain.{ Nino, PeriodId }
 
-case class AmendHistoricFhlUkPiePeriodSummaryRawData(nino: String, periodId: String, body: JsValue) extends RawData
+case class AmendHistoricNonFhlUkPiePeriodSummaryRequest(nino: Nino, periodId: PeriodId, body: AmendHistoricNonFhlUkPiePeriodSummaryRequestBody)

@@ -255,13 +255,17 @@ class CreateAmendHistoricFhlUkPropertyAnnualSubmissionControllerISpec extends V2
       }
 
       val input = Seq(
-        (NO_CONTENT, "NO_CONTENT", INTERNAL_SERVER_ERROR, InternalError),
         (BAD_REQUEST, "INVALID_NINO", BAD_REQUEST, NinoFormatError),
         (BAD_REQUEST, "INVALID_TYPE", INTERNAL_SERVER_ERROR, InternalError),
-        (BAD_REQUEST, "INVALID_PAYLOAD", INTERNAL_SERVER_ERROR, InternalError),
         (BAD_REQUEST, "INVALID_TAX_YEAR", BAD_REQUEST, TaxYearFormatError),
+        (BAD_REQUEST, "INVALID_PAYLOAD", INTERNAL_SERVER_ERROR, InternalError),
+        (BAD_REQUEST, "INVALID_CORRELATIONID", INTERNAL_SERVER_ERROR, InternalError),
         (NOT_FOUND, "NOT_FOUND_PROPERTY", NOT_FOUND, NotFoundError),
-        (GONE, "GONE", INTERNAL_SERVER_ERROR, InternalError)
+        (NOT_FOUND, "NOT_FOUND", NOT_FOUND, NotFoundError),
+        (GONE, "GONE", INTERNAL_SERVER_ERROR, InternalError),
+        (UNPROCESSABLE_ENTITY, "TAX_YEAR_NOT_SUPPORTED", BAD_REQUEST, RuleHistoricTaxYearNotSupportedError),
+        (INTERNAL_SERVER_ERROR, "SERVER_ERROR", INTERNAL_SERVER_ERROR, InternalError),
+        (SERVICE_UNAVAILABLE, "SERVICE_UNAVAILABLE", INTERNAL_SERVER_ERROR, InternalError)
       )
       input.foreach(args => (serviceErrorTest _).tupled(args))
     }

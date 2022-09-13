@@ -27,19 +27,19 @@ import v2.models.request.createAmendHistoricFhlUkPropertyAnnualSubmission.Create
 import v2.models.response.createAmendHistoricFhlUkPropertyAnnualSubmission.CreateAmendHistoricFhlUkPropertyAnnualSubmissionResponse
 import v2.support.DownstreamResponseMappingSupport
 
-import javax.inject.{Inject, Singleton}
-import scala.concurrent.{ExecutionContext, Future}
+import javax.inject.{ Inject, Singleton }
+import scala.concurrent.{ ExecutionContext, Future }
 
 @Singleton
 class CreateAmendHistoricFhlUkPropertyAnnualSubmissionService @Inject()(connector: CreateAmendHistoricFhlUkPropertyAnnualSubmissionConnector)
     extends DownstreamResponseMappingSupport
     with Logging {
 
-  def amend(request: CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequest)(implicit hc: HeaderCarrier,
-                                                                              ec: ExecutionContext,
-                                                                              logContext: EndpointLogContext,
-                                                                              correlationId: String):
-  Future[ServiceOutcome[CreateAmendHistoricFhlUkPropertyAnnualSubmissionResponse]] = {
+  def amend(request: CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequest)(
+      implicit hc: HeaderCarrier,
+      ec: ExecutionContext,
+      logContext: EndpointLogContext,
+      correlationId: String): Future[ServiceOutcome[CreateAmendHistoricFhlUkPropertyAnnualSubmissionResponse]] = {
 
     val result = for {
       desResponseWrapper <- EitherT(connector.amend(request)).leftMap(mapDownstreamErrors(desErrorMap))
@@ -50,13 +50,16 @@ class CreateAmendHistoricFhlUkPropertyAnnualSubmissionService @Inject()(connecto
 
   private def desErrorMap: Map[String, MtdError] =
     Map(
-      "INVALID_NINO"        -> NinoFormatError,
-      "INVALID_TYPE"        -> InternalError,
-      "INVALID_TAX_YEAR"    -> TaxYearFormatError,
-      "INVALID_PAYLOAD"     -> InternalError,
-      "NOT_FOUND_PROPERTY"  -> NotFoundError,
-      "GONE"                -> InternalError,
-      "SERVER_ERROR"        -> InternalError,
-      "SERVICE_UNAVAILABLE" -> InternalError
+      "INVALID_NINO"           -> NinoFormatError,
+      "INVALID_TYPE"           -> InternalError,
+      "INVALID_TAX_YEAR"       -> TaxYearFormatError,
+      "INVALID_PAYLOAD"        -> InternalError,
+      "INVALID_CORRELATIONID"  -> InternalError,
+      "NOT_FOUND_PROPERTY"     -> NotFoundError,
+      "NOT_FOUND"              -> NotFoundError,
+      "GONE"                   -> InternalError,
+      "TAX_YEAR_NOT_SUPPORTED" -> RuleHistoricTaxYearNotSupportedError,
+      "SERVER_ERROR"           -> InternalError,
+      "SERVICE_UNAVAILABLE"    -> InternalError
     )
 }

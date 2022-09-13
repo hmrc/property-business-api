@@ -87,9 +87,9 @@ class CreateAmendHistoricFhlUkPropertyAnnualSubmissionControllerISpec extends V2
 
     def uri: String = s"/uk/annual/furnished-holiday-lettings/$nino/$taxYear"
 
-    def desUri: String = s"/income-tax/nino/$nino/uk-properties/furnished-holiday-lettings/annual-summaries/2021"
+    def downstreamUri: String = s"/income-tax/nino/$nino/uk-properties/furnished-holiday-lettings/annual-summaries/2021"
 
-    val desResponse: JsValue = Json.parse("""
+    val downstreamResponse: JsValue = Json.parse("""
         |{
         |   "transactionReference": "0000000000000001"
         |}
@@ -108,7 +108,7 @@ class CreateAmendHistoricFhlUkPropertyAnnualSubmissionControllerISpec extends V2
       s"""
          |{
          |  "code": "$code",
-         |  "reason": "des message"
+         |  "reason": "downstream message"
          |}
        """.stripMargin
   }
@@ -120,7 +120,7 @@ class CreateAmendHistoricFhlUkPropertyAnnualSubmissionControllerISpec extends V2
           AuthStub.authorised()
           AuditStub.audit()
           MtdIdLookupStub.ninoFound(nino)
-          DownstreamStub.onSuccess(DownstreamStub.PUT, desUri, OK, desResponse)
+          DownstreamStub.onSuccess(DownstreamStub.PUT, downstreamUri, OK, downstreamResponse)
         }
 
         val response: WSResponse = await(request().put(requestBodyJson))
@@ -239,13 +239,13 @@ class CreateAmendHistoricFhlUkPropertyAnnualSubmissionControllerISpec extends V2
     }
 
     "downstream service error" when {
-      def serviceErrorTest(desStatus: Int, downstreamCode: String, expectedStatus: Int, expectedBody: MtdError): Unit = {
-        s"downstream returns an $downstreamCode error and status $desStatus" in new Test {
+      def serviceErrorTest(downstreamStatus: Int, downstreamCode: String, expectedStatus: Int, expectedBody: MtdError): Unit = {
+        s"downstream returns an $downstreamCode error and status $downstreamStatus" in new Test {
 
           override def setupStubs(): StubMapping = {
             AuthStub.authorised()
             MtdIdLookupStub.ninoFound(nino)
-            DownstreamStub.onError(DownstreamStub.PUT, desUri, desStatus, errorBody(downstreamCode))
+            DownstreamStub.onError(DownstreamStub.PUT, downstreamUri, downstreamStatus, errorBody(downstreamCode))
           }
 
           val response: WSResponse = await(request().put(requestBodyJson))

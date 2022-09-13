@@ -42,13 +42,13 @@ class CreateAmendHistoricFhlUkPropertyAnnualSubmissionService @Inject()(connecto
       correlationId: String): Future[ServiceOutcome[CreateAmendHistoricFhlUkPropertyAnnualSubmissionResponse]] = {
 
     val result = for {
-      desResponseWrapper <- EitherT(connector.amend(request)).leftMap(mapDownstreamErrors(desErrorMap))
-    } yield desResponseWrapper
+      responseWrapper <- EitherT(connector.amend(request)).leftMap(mapDownstreamErrors(downstreamErrorMap))
+    } yield responseWrapper
 
     result.value
   }
 
-  private def desErrorMap: Map[String, MtdError] =
+  private val downstreamErrorMap: Map[String, MtdError] =
     Map(
       "INVALID_NINO"           -> NinoFormatError,
       "INVALID_TYPE"           -> InternalError,

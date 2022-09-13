@@ -169,7 +169,7 @@ class RetrieveHistoricNonFhlUkPropertyAnnualSubmissionControllerISpec extends V2
         response.header("Content-Type") shouldBe Some("application/json")
       }
 
-      "any valid request is made but received empty json from des" in new Test {
+      "any valid request is made but received empty json from downstream" in new Test {
 
         override def setupStubs(): StubMapping = {
           AuditStub.audit()

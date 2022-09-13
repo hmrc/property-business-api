@@ -14,9 +14,15 @@
  * limitations under the License.
  */
 
-package v2.models.request.amendHistoricFhlUkPiePeriodSummary
+package v2.models.response.amendHistoricNonFhlUkPiePeriodSummary
 
-import play.api.libs.json.JsValue
-import v2.models.request.RawData
+import play.api.libs.json.{ Json, Reads }
+import v2.hateoas.HateoasLinks
 
-case class AmendHistoricFhlUkPiePeriodSummaryRawData(nino: String, periodId: String, body: JsValue) extends RawData
+case class AmendHistoricNonFhlUkPiePeriodSummaryResponse(transactionReference: String)
+
+object AmendHistoricNonFhlUkPiePeriodSummaryResponse extends HateoasLinks {
+
+  implicit val reads: Reads[AmendHistoricNonFhlUkPiePeriodSummaryResponse] = Json.reads[AmendHistoricNonFhlUkPiePeriodSummaryResponse]
+
+}

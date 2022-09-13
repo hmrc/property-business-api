@@ -14,9 +14,26 @@
  * limitations under the License.
  */
 
-package v2.models.request.amendHistoricFhlUkPiePeriodSummary
+package v2.models.request.amendHistoricNonFhlUkPiePeriodSummary
 
-import play.api.libs.json.JsValue
-import v2.models.request.RawData
+import play.api.libs.json.Json
+import support.UnitSpec
 
-case class AmendHistoricFhlUkPiePeriodSummaryRawData(nino: String, periodId: String, body: JsValue) extends RawData
+class UkNonFhlPieIncomeSpec extends UnitSpec with AmendHistoricNonFhlUkPiePeriodSummaryFixtures {
+
+  "reads" when {
+    "passed a valid JSON" should {
+      "return a valid model" in {
+        mtdJsonIncome.as[UkNonFhlPieIncome] shouldBe ukNonFhlPieIncome
+      }
+    }
+  }
+
+  "writes" when {
+    "passed valid model" should {
+      "return valid JSON" in {
+        Json.toJson(ukNonFhlPieIncome) shouldBe downstreamJsonIncome
+      }
+    }
+  }
+}

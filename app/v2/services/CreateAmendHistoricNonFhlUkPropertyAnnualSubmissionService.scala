@@ -25,7 +25,6 @@ import v2.controllers.EndpointLogContext
 import v2.models.errors._
 import v2.models.request.createAmendHistoricNonFhlUkPropertyAnnualSubmission.CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequest
 import v2.models.response.createAmendHistoricNonFhlUkPropertyAnnualSubmission.CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionResponse
-import v2.services.RetrieveHistoricNonFhlUkPropertyPeriodSummaryService.downstreamErrorMap
 import v2.support.DownstreamResponseMappingSupport
 
 import javax.inject.{ Inject, Singleton }
@@ -48,21 +47,18 @@ class CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionService @Inject()(conne
     result.value
   }
 
-  object CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionService {
-
-    def ifsErrorMap: Map[String, MtdError] =
-      Map(
-        "INVALID_NINO"           -> NinoFormatError,
-        "INVALID_TYPE"           -> InternalError,
-        "INVALID_TAX_YEAR"       -> TaxYearFormatError,
-        "INVALID_PAYLOAD"        -> InternalError,
-        "INVALID_CORRELATIONID"  -> InternalError,
-        "NOT_FOUND_PROPERTY"     -> NotFoundError,
-        "NOT_FOUND"              -> NotFoundError,
-        "GONE"                   -> InternalError,
-        "TAX_YEAR_NOT_SUPPORTED" -> RuleTaxYearNotSupportedError,
-        "SERVER_ERROR"           -> InternalError,
-        "SERVICE_UNAVAILABLE"    -> InternalError
-      )
-  }
+  val downstreamErrorMap: Map[String, MtdError] =
+    Map(
+      "INVALID_NINO"           -> NinoFormatError,
+      "INVALID_TYPE"           -> InternalError,
+      "INVALID_TAX_YEAR"       -> TaxYearFormatError,
+      "INVALID_PAYLOAD"        -> InternalError,
+      "INVALID_CORRELATIONID"  -> InternalError,
+      "NOT_FOUND_PROPERTY"     -> NotFoundError,
+      "NOT_FOUND"              -> NotFoundError,
+      "GONE"                   -> InternalError,
+      "TAX_YEAR_NOT_SUPPORTED" -> RuleTaxYearNotSupportedError,
+      "SERVER_ERROR"           -> InternalError,
+      "SERVICE_UNAVAILABLE"    -> InternalError
+    )
 }

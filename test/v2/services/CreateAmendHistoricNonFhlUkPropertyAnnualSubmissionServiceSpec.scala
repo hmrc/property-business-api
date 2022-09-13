@@ -24,6 +24,7 @@ import v2.mocks.connectors.MockCreateAmendHistoricNonFhlUkPropertyAnnualSubmissi
 import v2.models.errors._
 import v2.models.outcomes.ResponseWrapper
 import v2.models.response.createAmendHistoricNonFhlUkPropertyAnnualSubmission.CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionResponse
+import v2.services.RetrieveHistoricNonFhlUkPropertyPeriodSummaryService.downstreamErrorMap
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -39,20 +40,6 @@ class CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionServiceSpec extends Uni
       connector = mockCreateAmendHistoricNonFhlUkPropertyAnnualSubmissionConnector
     )
   }
-
-  val errors = Seq(
-    "INVALID_NINO"           -> NinoFormatError,
-    "INVALID_TYPE"           -> InternalError,
-    "INVALID_TAX_YEAR"       -> TaxYearFormatError,
-    "INVALID_PAYLOAD"        -> InternalError,
-    "INVALID_CORRELATIONID"  -> InternalError,
-    "NOT_FOUND_PROPERTY"     -> NotFoundError,
-    "NOT_FOUND"              -> NotFoundError,
-    "GONE"                   -> InternalError,
-    "TAX_YEAR_NOT_SUPPORTED" -> RuleTaxYearNotSupportedError,
-    "SERVER_ERROR"           -> InternalError,
-    "SERVICE_UNAVAILABLE"    -> InternalError
-  )
 
   "service" should {
     "service call successful" when {
@@ -80,7 +67,7 @@ class CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionServiceSpec extends Uni
 
           await(service.amend(Request)) shouldBe Left(ErrorWrapper(correlationId, error))
         }
-      errors.foreach(args => (serviceError _).tupled(args))
+      downstreamErrorMap.foreach(args => (serviceError _).tupled(args))
     }
   }
 }

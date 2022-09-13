@@ -25,6 +25,7 @@ import v2.controllers.EndpointLogContext
 import v2.models.errors._
 import v2.models.request.createAmendHistoricFhlUkPropertyAnnualSubmission.CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequest
 import v2.models.response.createAmendHistoricFhlUkPropertyAnnualSubmission.CreateAmendHistoricFhlUkPropertyAnnualSubmissionResponse
+import v2.services.CreateAmendHistoricFhlUkPropertyAnnualSubmissionService.downstreamErrorMap
 import v2.support.DownstreamResponseMappingSupport
 
 import javax.inject.{ Inject, Singleton }
@@ -42,13 +43,16 @@ class CreateAmendHistoricFhlUkPropertyAnnualSubmissionService @Inject()(connecto
       correlationId: String): Future[ServiceOutcome[CreateAmendHistoricFhlUkPropertyAnnualSubmissionResponse]] = {
 
     val result = for {
-      desResponseWrapper <- EitherT(connector.amend(request)).leftMap(mapDownstreamErrors(desErrorMap))
+      desResponseWrapper <- EitherT(connector.amend(request)).leftMap(mapDownstreamErrors(downstreamErrorMap))
     } yield desResponseWrapper
 
     result.value
   }
+}
 
-  private def desErrorMap: Map[String, MtdError] =
+object CreateAmendHistoricFhlUkPropertyAnnualSubmissionService {
+
+  def downstreamErrorMap: Map[String, MtdError] =
     Map(
       "INVALID_NINO"           -> NinoFormatError,
       "INVALID_TYPE"           -> InternalError,

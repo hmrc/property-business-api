@@ -87,9 +87,9 @@ class CreateAmendHistoricFhlUkPropertyAnnualSubmissionControllerISpec extends V2
 
     def uri: String = s"/uk/annual/furnished-holiday-lettings/$nino/$taxYear"
 
-    def desUri: String = s"/income-tax/nino/$nino/uk-properties/furnished-holiday-lettings/annual-summaries/2021"
+    def downstreamUri: String = s"/income-tax/nino/$nino/uk-properties/furnished-holiday-lettings/annual-summaries/2021"
 
-    val desResponse: JsValue = Json.parse("""
+    val downstreamResponse: JsValue = Json.parse("""
         |{
         |   "transactionReference": "0000000000000001"
         |}
@@ -120,7 +120,7 @@ class CreateAmendHistoricFhlUkPropertyAnnualSubmissionControllerISpec extends V2
           AuthStub.authorised()
           AuditStub.audit()
           MtdIdLookupStub.ninoFound(nino)
-          DownstreamStub.onSuccess(DownstreamStub.PUT, desUri, OK, desResponse)
+          DownstreamStub.onSuccess(DownstreamStub.PUT, downstreamUri, OK, downstreamResponse)
         }
 
         val response: WSResponse = await(request().put(requestBodyJson))
@@ -239,13 +239,13 @@ class CreateAmendHistoricFhlUkPropertyAnnualSubmissionControllerISpec extends V2
     }
 
     "downstream service error" when {
-      def serviceErrorTest(desStatus: Int, downstreamCode: String, expectedStatus: Int, expectedBody: MtdError): Unit = {
-        s"downstream returns an $downstreamCode error and status $desStatus" in new Test {
+      def serviceErrorTest(downstreamStatus: Int, downstreamCode: String, expectedStatus: Int, expectedBody: MtdError): Unit = {
+        s"downstream returns an $downstreamCode error and status $downstreamStatus" in new Test {
 
           override def setupStubs(): StubMapping = {
             AuthStub.authorised()
             MtdIdLookupStub.ninoFound(nino)
-            DownstreamStub.onError(DownstreamStub.PUT, desUri, desStatus, errorBody(downstreamCode))
+            DownstreamStub.onError(DownstreamStub.PUT, downstreamUri, downstreamStatus, errorBody(downstreamCode))
           }
 
           val response: WSResponse = await(request().put(requestBodyJson))
@@ -254,16 +254,17 @@ class CreateAmendHistoricFhlUkPropertyAnnualSubmissionControllerISpec extends V2
         }
       }
 
-      val input = Seq(
-        (NO_CONTENT, "NO_CONTENT", INTERNAL_SERVER_ERROR, InternalError),
-        (BAD_REQUEST, "INVALID_NINO", BAD_REQUEST, NinoFormatError),
-        (BAD_REQUEST, "INVALID_TYPE", INTERNAL_SERVER_ERROR, InternalError),
-        (BAD_REQUEST, "INVALID_PAYLOAD", INTERNAL_SERVER_ERROR, InternalError),
-        (BAD_REQUEST, "INVALID_TAX_YEAR", BAD_REQUEST, TaxYearFormatError),
-        (NOT_FOUND, "NOT_FOUND_PROPERTY", NOT_FOUND, NotFoundError),
-        (GONE, "GONE", INTERNAL_SERVER_ERROR, InternalError)
-      )
-      input.foreach(args => (serviceErrorTest _).tupled(args))
+      def errors: Seq[(Int, String, Int, MtdError)] =
+        Seq(
+          (BAD_REQUEST, "INVALID_NINO", BAD_REQUEST, NinoFormatError),
+          (BAD_REQUEST, "INVALID_TYPE", INTERNAL_SERVER_ERROR, InternalError),
+          (BAD_REQUEST, "INVALID_TAX_YEAR", BAD_REQUEST, TaxYearFormatError),
+          (BAD_REQUEST, "INVALID_PAYLOAD", INTERNAL_SERVER_ERROR, InternalError),
+          (NOT_FOUND, "NOT_FOUND_PROPERTY", NOT_FOUND, NotFoundError),
+          (GONE, "GONE", INTERNAL_SERVER_ERROR, InternalError)
+        )
+
+      errors.foreach(args => (serviceErrorTest _).tupled(args))
     }
   }
 }

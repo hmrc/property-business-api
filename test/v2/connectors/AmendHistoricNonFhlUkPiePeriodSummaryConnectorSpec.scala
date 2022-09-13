@@ -19,8 +19,10 @@ package v2.connectors
 import mocks.MockAppConfig
 import org.scalamock.handlers.CallHandler
 import v2.mocks.MockHttpClient
-import v2.models.domain.{ Nino, PeriodId }
+import v2.models.domain.{Nino, PeriodId}
 import v2.models.outcomes.ResponseWrapper
+import v2.models.request.amendHistoricNonFhlUkPiePeriodSummary.{AmendHistoricNonFhlUkPiePeriodSummaryRequest, AmendHistoricNonFhlUkPiePeriodSummaryRequestBody}
+import v2.models.response.amendHistoricNonFhlUkPiePeriodSummary.AmendHistoricNonFhlUkPiePeriodSummaryResponse
 
 import scala.concurrent.Future
 

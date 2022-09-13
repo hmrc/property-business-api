@@ -16,12 +16,12 @@
 
 package v2.controllers.requestParsers
 
+import fixtures.AmendHistoricNonFhlUkPiePeriodSummary.AmendHistoricNonFhlUkPiePeriodSummaryFixtures
 import support.UnitSpec
 import v2.mocks.validators.MockAmendHistoricNonFhlUkPiePeriodSummaryValidator
 import v2.models.domain.{ Nino, PeriodId }
 import v2.models.errors.{ BadRequestError, ErrorWrapper, NinoFormatError, RuleBothExpensesSuppliedError }
 import v2.models.request.amendHistoricNonFhlUkPiePeriodSummary.{
-  AmendHistoricNonFhlUkPiePeriodSummaryFixtures,
   AmendHistoricNonFhlUkPiePeriodSummaryRawData,
   AmendHistoricNonFhlUkPiePeriodSummaryRequest
 }

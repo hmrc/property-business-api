@@ -14,14 +14,15 @@
  * limitations under the License.
  */
 
-package v2.models.request.amendHistoricNonFhlUkPiePeriodSummary
+package fixtures.AmendHistoricNonFhlUkPiePeriodSummary
 
-import play.api.libs.json.{ JsValue, Json }
-import v2.models.request.common.ukPropertyRentARoom.{ UkPropertyExpensesRentARoom, UkPropertyIncomeRentARoom }
+import play.api.libs.json.{JsValue, Json}
+import v2.models.request.amendHistoricNonFhlUkPiePeriodSummary.{AmendHistoricNonFhlUkPiePeriodSummaryRequestBody, UkNonFhlPieExpenses, UkNonFhlPieIncome}
+import v2.models.request.common.ukPropertyRentARoom.{UkPropertyExpensesRentARoom, UkPropertyIncomeRentARoom}
 
 trait AmendHistoricNonFhlUkPiePeriodSummaryFixtures {
   val rentARoomExpenses: UkPropertyExpensesRentARoom = UkPropertyExpensesRentARoom(Some(1000.00))
-  val rentARoomIncome: UkPropertyIncomeRentARoom     = UkPropertyIncomeRentARoom(Some(600.00))
+  val rentARoomIncome: UkPropertyIncomeRentARoom = UkPropertyIncomeRentARoom(Some(600.00))
 
   val ukNonFhlPieExpensesFull: UkNonFhlPieExpenses =
     UkNonFhlPieExpenses(
@@ -69,7 +70,8 @@ trait AmendHistoricNonFhlUkPiePeriodSummaryFixtures {
   val requestBodyConsolidated: AmendHistoricNonFhlUkPiePeriodSummaryRequestBody =
     AmendHistoricNonFhlUkPiePeriodSummaryRequestBody(income = Some(ukNonFhlPieIncome), expenses = Some(ukNonFhlPieExpensesConsolidated))
 
-  val mtdJsonExpensesFull: JsValue = Json.parse("""
+  val mtdJsonExpensesFull: JsValue = Json.parse(
+    """
       |{
       |    "premisesRunningCosts": 100.00,
       |    "repairsAndMaintenance": 200.00,
@@ -86,13 +88,15 @@ trait AmendHistoricNonFhlUkPiePeriodSummaryFixtures {
       |}
       |""".stripMargin)
 
-  val mtdJsonExpensesConsolidated: JsValue = Json.parse("""
+  val mtdJsonExpensesConsolidated: JsValue = Json.parse(
+    """
       |{
       |    "consolidatedExpenses": 100.00
       |}
       |""".stripMargin)
 
-  val mtdJsonIncome: JsValue = Json.parse("""
+  val mtdJsonIncome: JsValue = Json.parse(
+    """
       |{
       |    "periodAmount": 100.00,
       |    "premiumsOfLeaseGrant": 200.00,
@@ -101,25 +105,28 @@ trait AmendHistoricNonFhlUkPiePeriodSummaryFixtures {
       |    "taxDeducted": 500.00,
       |    "rentARoom": {
       |        "rentsReceived": 600.00
-      |    }  
+      |    }
       |}
       |""".stripMargin)
 
-  val mtdJsonRequestFull: JsValue = Json.parse(s"""
+  val mtdJsonRequestFull: JsValue = Json.parse(
+    s"""
        |{
        |    "income": $mtdJsonIncome,
        |    "expenses": $mtdJsonExpensesFull
        |}
        |""".stripMargin)
 
-  val mtdJsonRequestConsolidated: JsValue = Json.parse(s"""
+  val mtdJsonRequestConsolidated: JsValue = Json.parse(
+    s"""
        |{
        |    "income": $mtdJsonIncome,
        |    "expenses": $mtdJsonExpensesConsolidated
        |}
        |""".stripMargin)
 
-  val downstreamJsonExpensesFull: JsValue = Json.parse("""
+  val downstreamJsonExpensesFull: JsValue = Json.parse(
+    """
       |{
       |    "premisesRunningCosts": 100.00,
       |    "repairsAndMaintenance": 200.00,
@@ -136,13 +143,15 @@ trait AmendHistoricNonFhlUkPiePeriodSummaryFixtures {
       |}
       |""".stripMargin)
 
-  val downstreamJsonExpensesConsolidated: JsValue = Json.parse("""
+  val downstreamJsonExpensesConsolidated: JsValue = Json.parse(
+    """
       |{
       |    "consolidatedExpenses": 100.00
       |}
       |""".stripMargin)
 
-  val downstreamJsonIncome: JsValue = Json.parse("""
+  val downstreamJsonIncome: JsValue = Json.parse(
+    """
       |{
       |    "rentIncome": {
       |        "amount": 100.00,
@@ -153,22 +162,24 @@ trait AmendHistoricNonFhlUkPiePeriodSummaryFixtures {
       |    "otherIncome": 400.00,
       |    "ukRentARoom": {
       |        "rentsReceived": 600.00
-      |    }  
+      |    }
       |}
       |""".stripMargin)
 
-  val downstreamJsonRequestFull: JsValue = Json.parse(s"""
+  val downstreamJsonRequestFull: JsValue = Json.parse(
+    s"""
        |{
        |    "incomes": $downstreamJsonIncome,
        |    "deductions": $downstreamJsonExpensesFull
        |}
        |""".stripMargin)
 
-  val downstreamJsonRequestConsolidated: JsValue = Json.parse(s"""
+  val downstreamJsonRequestConsolidated: JsValue = Json.parse(
+    s"""
        |{
        |    "incomes": $downstreamJsonIncome,
        |    "deductions": $downstreamJsonExpensesConsolidated
-       |} 
+       |}
        |""".stripMargin)
 
   val mtdJsonRequestWithInvalidAmounts: JsValue = Json.parse(

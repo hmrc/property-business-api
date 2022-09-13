@@ -16,14 +16,12 @@
 
 package v2.controllers.requestParsers.validators
 
+import fixtures.AmendHistoricNonFhlUkPiePeriodSummary.AmendHistoricNonFhlUkPiePeriodSummaryFixtures
 import mocks.MockAppConfig
 import play.api.libs.json.JsObject
 import support.UnitSpec
 import v2.models.errors.{ NinoFormatError, PeriodIdFormatError, RuleIncorrectOrEmptyBodyError, ValueFormatError }
-import v2.models.request.amendHistoricNonFhlUkPiePeriodSummary.{
-  AmendHistoricNonFhlUkPiePeriodSummaryFixtures,
-  AmendHistoricNonFhlUkPiePeriodSummaryRawData
-}
+import v2.models.request.amendHistoricNonFhlUkPiePeriodSummary.AmendHistoricNonFhlUkPiePeriodSummaryRawData
 import v2.models.utils.JsonErrorValidators
 
 class AmendHistoricNonFhlUkPiePeriodSummaryValidatorSpec

@@ -16,6 +16,7 @@
 
 package v2.models.request.amendHistoricNonFhlUkPiePeriodSummary
 
+import fixtures.AmendHistoricNonFhlUkPiePeriodSummary.AmendHistoricNonFhlUkPiePeriodSummaryFixtures
 import play.api.libs.json.Json
 import support.UnitSpec
 

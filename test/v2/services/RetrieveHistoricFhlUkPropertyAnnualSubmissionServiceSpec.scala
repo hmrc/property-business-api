@@ -20,11 +20,16 @@ import support.UnitSpec
 import uk.gov.hmrc.http.HeaderCarrier
 import v2.controllers.EndpointLogContext
 import v2.mocks.connectors.MockRetrieveHistoricFhlUkPropertyAnnualSubmissionConnector
-import v2.models.domain.{Nino, TaxYear}
+import v2.models.domain.{ Nino, TaxYear }
 import v2.models.errors._
 import v2.models.outcomes.ResponseWrapper
 import v2.models.request.retrieveHistoricFhlUkPropertyAnnualSubmission.RetrieveHistoricFhlUkPropertyAnnualSubmissionRequest
-import v2.models.response.retrieveHistoricFhlUkPropertyAnnualSubmission.{AnnualAdjustments, AnnualAllowances, RentARoom, RetrieveHistoricFhlUkPropertyAnnualSubmissionResponse}
+import v2.models.response.retrieveHistoricFhlUkPropertyAnnualSubmission.{
+  AnnualAdjustments,
+  AnnualAllowances,
+  RentARoom,
+  RetrieveHistoricFhlUkPropertyAnnualSubmissionResponse
+}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -92,13 +97,15 @@ class RetrieveHistoricFhlUkPropertyAnnualSubmissionServiceSpec extends UnitSpec 
           }
 
         val input = Seq(
-          "INVALID_NINO"        -> NinoFormatError,
-          "INVALID_TYPE"        -> InternalError,
-          "INVALID_TAX_YEAR"    -> TaxYearFormatError,
-          "NOT_FOUND_PROPERTY"  -> NotFoundError,
-          "NOT_FOUND_PERIOD"    -> NotFoundError,
-          "SERVER_ERROR"        -> InternalError,
-          "SERVICE_UNAVAILABLE" -> InternalError
+          "INVALID_NINO"            -> NinoFormatError,
+          "INVALID_TYPE"            -> InternalError,
+          "INVALID_TAX_YEAR"        -> TaxYearFormatError,
+          "INVALID_CORRELATIONID"   -> InternalError,
+          "INCOME_SOURCE_NOT_FOUND" -> NotFoundError,
+          "NOT_FOUND_PERIOD"        -> NotFoundError,
+          "TAX_YEAR_NOT_SUPPORTED"  -> RuleHistoricTaxYearNotSupportedError,
+          "SERVER_ERROR"            -> InternalError,
+          "SERVICE_UNAVAILABLE"     -> InternalError
         )
 
         input.foreach(args => (serviceError _).tupled(args))

@@ -16,11 +16,7 @@
 
 package v2.models.request.amendHistoricFhlUkPiePeriodSummary
 
-import play.api.libs.json.{ JsValue, Json, OWrites }
+import play.api.libs.json.JsValue
 import v2.models.request.RawData
 
 case class AmendHistoricFhlUkPiePeriodSummaryRawData(nino: String, periodId: String, body: JsValue) extends RawData
-
-object AmendHistoricFhlUkPiePeriodSummaryRawData {
-  implicit val writes: OWrites[AmendHistoricFhlUkPiePeriodSummaryRawData] = Json.writes[AmendHistoricFhlUkPiePeriodSummaryRawData]
-}

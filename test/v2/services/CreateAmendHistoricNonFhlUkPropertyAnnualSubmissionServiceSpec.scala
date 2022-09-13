@@ -16,49 +16,52 @@
 
 package v2.services
 
-import fixtures.CreateAmendFhlUkPropertyAnnualSubmission.ResponseModelsFixture
+import fixtures.CreateAmendNonFhlUkPropertyAnnualSubmission.ResponseModelsFixture
 import support.UnitSpec
 import uk.gov.hmrc.http.HeaderCarrier
 import v2.controllers.EndpointLogContext
-import v2.mocks.connectors.MockCreateAmendHistoricFhlUkPropertyAnnualSubmissionConnector
+import v2.mocks.connectors.MockCreateAmendHistoricNonFhlUkPropertyAnnualSubmissionConnector
 import v2.models.errors._
 import v2.models.outcomes.ResponseWrapper
-import v2.models.response.createAmendHistoricFhlUkPropertyAnnualSubmission.CreateAmendHistoricFhlUkPropertyAnnualSubmissionResponse
-import v2.services.CreateAmendHistoricFhlUkPropertyAnnualSubmissionService.downstreamErrorMap
+import v2.models.response.createAmendHistoricNonFhlUkPropertyAnnualSubmission.CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionResponse
+import v2.services.RetrieveHistoricNonFhlUkPropertyPeriodSummaryService.downstreamErrorMap
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-class CreateAmendHistoricFhlUkPropertyAnnualSubmissionServiceSpec extends UnitSpec with ResponseModelsFixture {
+class CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionServiceSpec extends UnitSpec with ResponseModelsFixture {
 
-  trait Test extends MockCreateAmendHistoricFhlUkPropertyAnnualSubmissionConnector {
+  trait Test extends MockCreateAmendHistoricNonFhlUkPropertyAnnualSubmissionConnector {
     implicit val hc: HeaderCarrier              = HeaderCarrier()
     implicit val logContext: EndpointLogContext = EndpointLogContext("c", "ep")
     implicit val correlationId: String          = "someCorrelationId"
 
-    val service = new CreateAmendHistoricFhlUkPropertyAnnualSubmissionService(
-      connector = mockCreateAmendHistoricFhlUkPropertyAnnualSubmissionConnector
+    val service = new CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionService(
+      connector = mockCreateAmendHistoricNonFhlUkPropertyAnnualSubmissionConnector
     )
   }
 
   "service" should {
     "service call successful" when {
-      "return mapped fhl result" in new Test {
-        MockCreateAmendHistoricFhlUkPropertyAnnualSubmissionConnector
-          .amend(Request)
-          .returns(Future.successful(Right(ResponseWrapper(correlationId, CreateAmendHistoricFhlUkPropertyAnnualSubmissionResponse(None)))))
 
-        await(service.amend(Request)) shouldBe Right(ResponseWrapper(correlationId, CreateAmendHistoricFhlUkPropertyAnnualSubmissionResponse(None)))
+      "return mapped non-fhl result" in new Test {
+        MockCreateAmendHistoricNonFhlUkPropertyAnnualSubmissionConnector
+          .amend(Request)
+          .returns(Future.successful(Right(ResponseWrapper(correlationId, CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionResponse(None)))))
+
+        await(service.amend(Request)) shouldBe Right(
+          ResponseWrapper(correlationId, CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionResponse(None)))
       }
     }
   }
 
   "unsuccessful" should {
-    "map fhl errors according to spec" when {
+
+    "map non fhl errors according to spec" when {
       def serviceError(ifsErrorCode: String, error: MtdError): Unit =
         s"a $ifsErrorCode error is returned from the service" in new Test {
 
-          MockCreateAmendHistoricFhlUkPropertyAnnualSubmissionConnector
+          MockCreateAmendHistoricNonFhlUkPropertyAnnualSubmissionConnector
             .amend(Request)
             .returns(Future.successful(Left(ResponseWrapper(correlationId, DownstreamErrors.single(DownstreamErrorCode(ifsErrorCode))))))
 

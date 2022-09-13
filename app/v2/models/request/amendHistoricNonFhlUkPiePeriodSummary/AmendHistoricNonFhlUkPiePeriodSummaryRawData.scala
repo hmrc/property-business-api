@@ -14,10 +14,9 @@
  * limitations under the License.
  */
 
-package v2.models.request.createAmendHistoricFhlUkPropertyAnnualSubmission
+package v2.models.request.amendHistoricNonFhlUkPiePeriodSummary
 
-import v2.models.domain.{ Nino, TaxYear }
+import play.api.libs.json.JsValue
+import v2.models.request.RawData
 
-case class CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequest(nino: Nino,
-                                                                   taxYear: TaxYear,
-                                                                   body: CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequestBody)
+case class AmendHistoricNonFhlUkPiePeriodSummaryRawData(nino: String, periodId: String, body: JsValue) extends RawData

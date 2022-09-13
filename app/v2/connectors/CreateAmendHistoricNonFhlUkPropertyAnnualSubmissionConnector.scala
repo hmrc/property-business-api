@@ -17,31 +17,30 @@
 package v2.connectors
 
 import config.AppConfig
+import play.api.libs.json.Format.GenericFormat
 import uk.gov.hmrc.http.{ HeaderCarrier, HttpClient }
 import v2.connectors.DownstreamUri.IfsUri
 import v2.connectors.httpparsers.StandardIfsHttpParser._
-import v2.models.request.createAmendHistoricFhlUkPropertyAnnualSubmission.CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequest
-import v2.models.response.createAmendHistoricFhlUkPropertyAnnualSubmission.CreateAmendHistoricFhlUkPropertyAnnualSubmissionResponse
+import v2.models.request.createAmendHistoricNonFhlUkPropertyAnnualSubmission.CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequest
+import v2.models.response.createAmendHistoricNonFhlUkPropertyAnnualSubmission.CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionResponse
 
 import javax.inject.{ Inject, Singleton }
 import scala.concurrent.{ ExecutionContext, Future }
 
 @Singleton
-class CreateAmendHistoricFhlUkPropertyAnnualSubmissionConnector @Inject()(val http: HttpClient, val appConfig: AppConfig)
+class CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionConnector @Inject()(val http: HttpClient, val appConfig: AppConfig)
     extends BaseDownstreamConnector {
 
-  def amend(request: CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequest)(
+  def amend(request: CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequest)(
       implicit hc: HeaderCarrier,
       ec: ExecutionContext,
-      correlationId: String): Future[DownstreamOutcome[CreateAmendHistoricFhlUkPropertyAnnualSubmissionResponse]] = {
-
-    val nino    = request.nino.nino
-    val taxYear = request.taxYear.toDownstream
+      correlationId: String): Future[DownstreamOutcome[CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionResponse]] = {
 
     put(
       body = request.body,
-      uri = IfsUri[CreateAmendHistoricFhlUkPropertyAnnualSubmissionResponse](
-        s"income-tax/nino/$nino/uk-properties/furnished-holiday-lettings/annual-summaries/$taxYear")
+      uri = IfsUri[CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionResponse](
+        s"income-tax/nino/${request.nino.nino}/uk-properties/other/annual-summaries/${request.taxYear.toDownstream}")
     )
   }
+
 }

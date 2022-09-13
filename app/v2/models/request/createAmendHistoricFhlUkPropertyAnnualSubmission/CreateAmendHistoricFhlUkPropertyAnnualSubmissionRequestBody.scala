@@ -17,7 +17,7 @@
 package v2.models.request.createAmendHistoricFhlUkPropertyAnnualSubmission
 
 import play.api.libs.functional.syntax._
-import play.api.libs.json.{JsPath, Json, OWrites, Reads}
+import play.api.libs.json.{ JsPath, Json, OWrites, Reads }
 
 case class CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequestBody(annualAdjustments: Option[HistoricFhlAnnualAdjustments],
                                                                        annualAllowances: Option[HistoricFhlAnnualAllowances])
@@ -29,5 +29,5 @@ object CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequestBody {
   implicit val writes: OWrites[CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequestBody] = (
     (JsPath \ "annualAdjustments").writeNullable[HistoricFhlAnnualAdjustments] and
       (JsPath \ "annualAllowances").writeNullable[HistoricFhlAnnualAllowances]
-    )(unlift(CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequestBody.unapply))
+  )(unlift(CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequestBody.unapply))
 }

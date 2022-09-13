@@ -14,10 +14,15 @@
  * limitations under the License.
  */
 
-package v2.models.request.createAmendHistoricFhlUkPropertyAnnualSubmission
+package v2.models.response.amendHistoricNonFhlUkPiePeriodSummary
 
-import v2.models.domain.{ Nino, TaxYear }
+import play.api.libs.json.{ Json, Reads }
+import v2.hateoas.HateoasLinks
 
-case class CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequest(nino: Nino,
-                                                                   taxYear: TaxYear,
-                                                                   body: CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequestBody)
+case class AmendHistoricNonFhlUkPiePeriodSummaryResponse(transactionReference: String)
+
+object AmendHistoricNonFhlUkPiePeriodSummaryResponse extends HateoasLinks {
+
+  implicit val reads: Reads[AmendHistoricNonFhlUkPiePeriodSummaryResponse] = Json.reads[AmendHistoricNonFhlUkPiePeriodSummaryResponse]
+
+}

@@ -14,33 +14,25 @@
  * limitations under the License.
  */
 
-package v2.models.response.createAmendHistoricFhlUkPropertyAnnualSubmission
+package v2.models.request.amendHistoricNonFhlUkPiePeriodSummary
 
-import play.api.libs.json.{ JsObject, JsValue, Json }
+import play.api.libs.json.Json
 import support.UnitSpec
 
-class CreateAmendHistoricFhlUkPropertyAnnualSubmissionResponseSpec extends UnitSpec {
+class UkNonFhlPieIncomeSpec extends UnitSpec with AmendHistoricNonFhlUkPiePeriodSummaryFixtures {
 
-  private val model = CreateAmendHistoricFhlUkPropertyAnnualSubmissionResponse(
-    transactionReference = Some("0000000000000001")
-  )
-
-  val desJson: JsValue = Json.parse("""{
-      |  "transactionReference": "0000000000000001"
-      |}""".stripMargin)
-
-  val mtdJson: JsObject = Json.obj()
-
-  "reads" should {
-    "return a valid model" in {
-      desJson.as[CreateAmendHistoricFhlUkPropertyAnnualSubmissionResponse] shouldBe model
+  "reads" when {
+    "passed a valid JSON" should {
+      "return a valid model" in {
+        mtdJsonIncome.as[UkNonFhlPieIncome] shouldBe ukNonFhlPieIncome
+      }
     }
   }
 
   "writes" when {
     "passed valid model" should {
       "return valid JSON" in {
-        Json.toJson(model) shouldBe mtdJson
+        Json.toJson(ukNonFhlPieIncome) shouldBe downstreamJsonIncome
       }
     }
   }

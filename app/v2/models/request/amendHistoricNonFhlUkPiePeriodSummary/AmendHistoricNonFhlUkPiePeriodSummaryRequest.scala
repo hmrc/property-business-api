@@ -14,10 +14,8 @@
  * limitations under the License.
  */
 
-package v2.models.request.createAmendHistoricFhlUkPropertyAnnualSubmission
+package v2.models.request.amendHistoricNonFhlUkPiePeriodSummary
 
-import v2.models.domain.{ Nino, TaxYear }
+import v2.models.domain.{ Nino, PeriodId }
 
-case class CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequest(nino: Nino,
-                                                                   taxYear: TaxYear,
-                                                                   body: CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequestBody)
+case class AmendHistoricNonFhlUkPiePeriodSummaryRequest(nino: Nino, periodId: PeriodId, body: AmendHistoricNonFhlUkPiePeriodSummaryRequestBody)

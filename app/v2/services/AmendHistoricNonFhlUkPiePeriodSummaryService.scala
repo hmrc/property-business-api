@@ -40,9 +40,7 @@ class AmendHistoricNonFhlUkPiePeriodSummaryService @Inject()(connector: AmendHis
                                                                    logContext: EndpointLogContext,
                                                                    correlationId: String): Future[ServiceOutcome[Unit]] = {
 
-    val result = for {
-      downstreamResponseWrapper <- EitherT(connector.amend(request)).leftMap(mapDownstreamErrors(downstreamErrorMap))
-    } yield downstreamResponseWrapper
+    val result = EitherT(connector.amend(request)).leftMap(mapDownstreamErrors(downstreamErrorMap))
 
     result.value
   }

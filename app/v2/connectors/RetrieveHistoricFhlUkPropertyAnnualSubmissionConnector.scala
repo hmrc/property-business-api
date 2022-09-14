@@ -17,13 +17,14 @@
 package v2.connectors
 
 import config.AppConfig
-import uk.gov.hmrc.http.{ HeaderCarrier, HttpClient }
-import v2.connectors.DownstreamUri.DesUri
+import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
+import v2.connectors.DownstreamUri.IfsUri
 import v2.connectors.httpparsers.StandardIfsHttpParser._
 import v2.models.request.retrieveHistoricFhlUkPropertyAnnualSubmission.RetrieveHistoricFhlUkPropertyAnnualSubmissionRequest
 import v2.models.response.retrieveHistoricFhlUkPropertyAnnualSubmission.RetrieveHistoricFhlUkPropertyAnnualSubmissionResponse
-import javax.inject.{ Inject, Singleton }
-import scala.concurrent.{ ExecutionContext, Future }
+
+import javax.inject.{Inject, Singleton}
+import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class RetrieveHistoricFhlUkPropertyAnnualSubmissionConnector @Inject()(val http: HttpClient, val appConfig: AppConfig)
@@ -37,7 +38,7 @@ class RetrieveHistoricFhlUkPropertyAnnualSubmissionConnector @Inject()(val http:
     val nino    = request.nino.value
     val taxYear = request.taxYear.toDownstream
     val response = get(
-      uri = DesUri[RetrieveHistoricFhlUkPropertyAnnualSubmissionResponse](
+      uri = IfsUri[RetrieveHistoricFhlUkPropertyAnnualSubmissionResponse](
         s"income-tax/nino/$nino/uk-properties/furnished-holiday-lettings/annual-summaries/$taxYear")
     )
 

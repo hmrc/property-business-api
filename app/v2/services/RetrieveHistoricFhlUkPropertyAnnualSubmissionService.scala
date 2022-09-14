@@ -27,8 +27,8 @@ import v2.models.request.retrieveHistoricFhlUkPropertyAnnualSubmission.RetrieveH
 import v2.models.response.retrieveHistoricFhlUkPropertyAnnualSubmission.RetrieveHistoricFhlUkPropertyAnnualSubmissionResponse
 import v2.support.DownstreamResponseMappingSupport
 
-import javax.inject.{Inject, Singleton}
-import scala.concurrent.{ExecutionContext, Future}
+import javax.inject.{ Inject, Singleton }
+import scala.concurrent.{ ExecutionContext, Future }
 
 @Singleton
 class RetrieveHistoricFhlUkPropertyAnnualSubmissionService @Inject()(connector: RetrieveHistoricFhlUkPropertyAnnualSubmissionConnector)
@@ -37,13 +37,15 @@ class RetrieveHistoricFhlUkPropertyAnnualSubmissionService @Inject()(connector: 
 
   private val downstreamErrorMap =
     Map(
-      "INVALID_NINO"        -> NinoFormatError,
-      "INVALID_TYPE"        -> InternalError,
-      "INVALID_TAX_YEAR"    -> TaxYearFormatError,
-      "NOT_FOUND_PROPERTY"  -> NotFoundError,
-      "NOT_FOUND_PERIOD"    -> NotFoundError,
-      "SERVER_ERROR"        -> InternalError,
-      "SERVICE_UNAVAILABLE" -> InternalError
+      "INVALID_NINO"            -> NinoFormatError,
+      "INVALID_TYPE"            -> InternalError,
+      "INVALID_TAX_YEAR"        -> TaxYearFormatError,
+      "INVALID_CORRELATIONID"   -> InternalError,
+      "INCOME_SOURCE_NOT_FOUND" -> NotFoundError,
+      "NOT_FOUND_PERIOD"        -> NotFoundError,
+      "TAX_YEAR_NOT_SUPPORTED"  -> RuleHistoricTaxYearNotSupportedError,
+      "SERVER_ERROR"            -> InternalError,
+      "SERVICE_UNAVAILABLE"     -> InternalError
     )
 
   def retrieve(request: RetrieveHistoricFhlUkPropertyAnnualSubmissionRequest)(

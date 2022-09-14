@@ -16,25 +16,58 @@
 
 package v2.services
 
-import fixtures.CreateAmendFhlUkPropertyAnnualSubmission.ResponseModelsFixture
 import support.UnitSpec
 import uk.gov.hmrc.http.HeaderCarrier
 import v2.controllers.EndpointLogContext
 import v2.mocks.connectors.MockCreateAmendHistoricFhlUkPropertyAnnualSubmissionConnector
+import v2.models.domain.{ Nino, TaxYear }
 import v2.models.errors._
 import v2.models.outcomes.ResponseWrapper
+import v2.models.request.common.ukPropertyRentARoom.UkPropertyAdjustmentsRentARoom
+import v2.models.request.createAmendHistoricFhlUkPropertyAnnualSubmission.{
+  CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequest,
+  CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequestBody,
+  HistoricFhlAnnualAdjustments,
+  HistoricFhlAnnualAllowances
+}
 import v2.models.response.createAmendHistoricFhlUkPropertyAnnualSubmission.CreateAmendHistoricFhlUkPropertyAnnualSubmissionResponse
-import v2.services.CreateAmendHistoricFhlUkPropertyAnnualSubmissionService.downstreamErrorMap
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-class CreateAmendHistoricFhlUkPropertyAnnualSubmissionServiceSpec extends UnitSpec with ResponseModelsFixture {
+class CreateAmendHistoricFhlUkPropertyAnnualSubmissionServiceSpec extends UnitSpec {
+
+  val nino: String                   = "AA123456A"
+  val taxYear: String                = "2022-23"
+  implicit val correlationId: String = "X-123"
+
+  private val annualAdjustments = HistoricFhlAnnualAdjustments(
+    Some(BigDecimal("105.11")),
+    Some(BigDecimal("200.11")),
+    Some(BigDecimal("120.11")),
+    true,
+    Some(BigDecimal("101.11")),
+    false,
+    Some(UkPropertyAdjustmentsRentARoom(true))
+  )
+
+  private val annualAllowances = HistoricFhlAnnualAllowances(
+    Some(BigDecimal("100.11")),
+    Some(BigDecimal("200.11")),
+    Some(BigDecimal("425.11")),
+    Some(BigDecimal("550.11"))
+  )
+
+  val body: CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequestBody = CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequestBody(
+    Some(annualAdjustments),
+    Some(annualAllowances)
+  )
+
+  private val request = CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequest(Nino(nino), TaxYear.fromMtd(taxYear), body)
 
   trait Test extends MockCreateAmendHistoricFhlUkPropertyAnnualSubmissionConnector {
     implicit val hc: HeaderCarrier              = HeaderCarrier()
     implicit val logContext: EndpointLogContext = EndpointLogContext("c", "ep")
-    implicit val correlationId: String          = "someCorrelationId"
 
     val service = new CreateAmendHistoricFhlUkPropertyAnnualSubmissionService(
       connector = mockCreateAmendHistoricFhlUkPropertyAnnualSubmissionConnector
@@ -43,28 +76,44 @@ class CreateAmendHistoricFhlUkPropertyAnnualSubmissionServiceSpec extends UnitSp
 
   "service" should {
     "service call successful" when {
-      "return mapped fhl result" in new Test {
+      "return mapped result" in new Test {
         MockCreateAmendHistoricFhlUkPropertyAnnualSubmissionConnector
-          .amend(Request)
+          .amend(request)
           .returns(Future.successful(Right(ResponseWrapper(correlationId, CreateAmendHistoricFhlUkPropertyAnnualSubmissionResponse(None)))))
 
-        await(service.amend(Request)) shouldBe Right(ResponseWrapper(correlationId, CreateAmendHistoricFhlUkPropertyAnnualSubmissionResponse(None)))
+        await(service.amend(request)) shouldBe Right(ResponseWrapper(correlationId, CreateAmendHistoricFhlUkPropertyAnnualSubmissionResponse(None)))
       }
     }
   }
 
   "unsuccessful" should {
-    "map fhl errors according to spec" when {
+    "map errors according to spec" when {
+
       def serviceError(ifsErrorCode: String, error: MtdError): Unit =
         s"a $ifsErrorCode error is returned from the service" in new Test {
 
           MockCreateAmendHistoricFhlUkPropertyAnnualSubmissionConnector
-            .amend(Request)
+            .amend(request)
             .returns(Future.successful(Left(ResponseWrapper(correlationId, DownstreamErrors.single(DownstreamErrorCode(ifsErrorCode))))))
 
-          await(service.amend(Request)) shouldBe Left(ErrorWrapper(correlationId, error))
+          await(service.amend(request)) shouldBe Left(ErrorWrapper(correlationId, error))
         }
-      downstreamErrorMap.foreach(args => (serviceError _).tupled(args))
+
+      val input = Seq(
+        "INVALID_NINO"           -> NinoFormatError,
+        "INVALID_TYPE"           -> InternalError,
+        "INVALID_TAX_YEAR"       -> TaxYearFormatError,
+        "INVALID_PAYLOAD"        -> InternalError,
+        "INVALID_CORRELATIONID"  -> InternalError,
+        "NOT_FOUND_PROPERTY"     -> NotFoundError,
+        "NOT_FOUND"              -> NotFoundError,
+        "GONE"                   -> InternalError,
+        "TAX_YEAR_NOT_SUPPORTED" -> RuleHistoricTaxYearNotSupportedError,
+        "SERVER_ERROR"           -> InternalError,
+        "SERVICE_UNAVAILABLE"    -> InternalError
+      )
+
+      input.foreach(args => (serviceError _).tupled(args))
     }
   }
 }

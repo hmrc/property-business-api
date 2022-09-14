@@ -56,18 +56,18 @@ class RetrieveHistoricFhlUkPropertyAnnualSubmissionConnectorSpec extends Connect
       appConfig = mockAppConfig
     )
 
-    MockAppConfig.desBaseUrl returns baseUrl
-    MockAppConfig.desToken returns "des-token"
-    MockAppConfig.desEnvironment returns "des-environment"
-    MockAppConfig.desEnvironmentHeaders returns Some(allowedDownstreamHeaders)
+    MockAppConfig.ifsBaseUrl returns baseUrl
+    MockAppConfig.ifsToken returns "ifs-token"
+    MockAppConfig.ifsEnvironment returns "ifs-environment"
+    MockAppConfig.ifsEnvironmentHeaders returns Some(allowedDownstreamHeaders)
 
     def stubHttpResponse(outcome: DownstreamOutcome[RetrieveHistoricFhlUkPropertyAnnualSubmissionResponse])
       : CallHandler[Future[DownstreamOutcome[RetrieveHistoricFhlUkPropertyAnnualSubmissionResponse]]]#Derived = {
       MockHttpClient
         .get(
           url = s"$baseUrl/income-tax/nino/$nino/uk-properties/furnished-holiday-lettings/annual-summaries/$downstreamTaxYear",
-          config = dummyDesHeaderCarrierConfig,
-          requiredHeaders = requiredDesHeaders,
+          config = dummyIfsHeaderCarrierConfig,
+          requiredHeaders = requiredIfsHeaders,
         )
         .returns(Future.successful(outcome))
     }
@@ -88,42 +88,6 @@ class RetrieveHistoricFhlUkPropertyAnnualSubmissionConnectorSpec extends Connect
       "response is an error" must {
         "return an error" in new Test {
           val outcome = Left(ResponseWrapper(correlationId, DownstreamErrors.single(DownstreamErrorCode("SOME_ERROR"))))
-
-          stubHttpResponse(outcome)
-
-          val result = await(connector.retrieve(request))
-          result shouldBe outcome
-        }
-      }
-
-      "response has annualAdjustments only" must {
-        "return a valid result" in new Test {
-          val response = responseWith(Some(annualAdjustments), None)
-          val outcome  = Right(ResponseWrapper(correlationId, response))
-
-          stubHttpResponse(outcome)
-
-          val result = await(connector.retrieve(request))
-          result shouldBe outcome
-        }
-      }
-
-      "response has annualAllowances only" must {
-        "return a valid result" in new Test {
-          val response = responseWith(None, Some(annualAllowances))
-          val outcome  = Right(ResponseWrapper(correlationId, response))
-
-          stubHttpResponse(outcome)
-
-          val result = await(connector.retrieve(request))
-          result shouldBe outcome
-        }
-      }
-
-      "response has neither annualAdjustments nor annualAllowances" must {
-        "return a valid result" in new Test {
-          val response = responseWith(None, None)
-          val outcome  = Right(ResponseWrapper(correlationId, response))
 
           stubHttpResponse(outcome)
 

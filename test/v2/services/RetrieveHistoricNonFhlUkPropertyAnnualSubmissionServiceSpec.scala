@@ -20,20 +20,24 @@ import support.UnitSpec
 import uk.gov.hmrc.http.HeaderCarrier
 import v2.controllers.EndpointLogContext
 import v2.mocks.connectors.MockRetrieveHistoricNonFhlUkPropertyAnnualSubmissionConnector
-import v2.models.domain.{Nino, TaxYear}
+import v2.models.domain.{ Nino, TaxYear }
 import v2.models.errors._
 import v2.models.outcomes.ResponseWrapper
 import v2.models.request.retrieveHistoricNonFhlUkPropertyAnnualSubmission.RetrieveHistoricNonFhlUkPropertyAnnualSubmissionRequest
-import v2.models.response.retrieveHistoricNonFhlUkPropertyAnnualSubmissionResponse.{AnnualAdjustments,
-  AnnualAllowances, RentARoom, RetrieveHistoricNonFhlUkPropertyAnnualSubmissionResponse}
+import v2.models.response.retrieveHistoricNonFhlUkPropertyAnnualSubmissionResponse.{
+  AnnualAdjustments,
+  AnnualAllowances,
+  RentARoom,
+  RetrieveHistoricNonFhlUkPropertyAnnualSubmissionResponse
+}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class RetrieveHistoricNonFhlUkPropertyAnnualSubmissionServiceSpec extends UnitSpec {
 
-  val nino: String = "AA123456A"
-  val taxYear: String = "2019-20"
+  val nino: String                   = "AA123456A"
+  val taxYear: String                = "2019-20"
   implicit val correlationId: String = "X-123"
 
   val annualAdjustments: AnnualAdjustments = AnnualAdjustments(
@@ -51,7 +55,7 @@ class RetrieveHistoricNonFhlUkPropertyAnnualSubmissionServiceSpec extends UnitSp
     zeroEmissionGoodsVehicleAllowance = Option(BigDecimal("405.11")),
     businessPremisesRenovationAllowance = Option(BigDecimal("550.11")),
     costOfReplacingDomesticGoods = Option(BigDecimal("550.11")),
-    propertyIncomeAllowance  = Option(BigDecimal("550.11"))
+    propertyIncomeAllowance = Option(BigDecimal("550.11"))
   )
 
   private val response =
@@ -60,7 +64,7 @@ class RetrieveHistoricNonFhlUkPropertyAnnualSubmissionServiceSpec extends UnitSp
   private val request = RetrieveHistoricNonFhlUkPropertyAnnualSubmissionRequest(Nino(nino), TaxYear.fromMtd(taxYear))
 
   trait Test extends MockRetrieveHistoricNonFhlUkPropertyAnnualSubmissionConnector {
-    implicit val hc: HeaderCarrier = HeaderCarrier()
+    implicit val hc: HeaderCarrier              = HeaderCarrier()
     implicit val logContext: EndpointLogContext = EndpointLogContext("c", "ep")
 
     val service = new RetrieveHistoricNonFhlUkPropertyAnnualSubmissionService(
@@ -92,13 +96,15 @@ class RetrieveHistoricNonFhlUkPropertyAnnualSubmissionServiceSpec extends UnitSp
         }
 
       val input = Seq(
-        "INVALID_NINO" -> NinoFormatError,
-        "INVALID_TYPE" -> InternalError,
-        "INVALID_TAX_YEAR" -> TaxYearFormatError,
-        "NOT_FOUND_PROPERTY" -> NotFoundError,
-        "NOT_FOUND_PERIOD" -> NotFoundError,
-        "SERVER_ERROR" -> InternalError,
-        "SERVICE_UNAVAILABLE" -> InternalError
+        "INVALID_NINO"            -> NinoFormatError,
+        "INVALID_TYPE"            -> InternalError,
+        "INVALID_TAX_YEAR"        -> TaxYearFormatError,
+        "INVALID_CORRELATIONID"   -> InternalError,
+        "INCOME_SOURCE_NOT_FOUND" -> NotFoundError,
+        "NOT_FOUND_PERIOD"        -> NotFoundError,
+        "TAX_YEAR_NOT_SUPPORTED"  -> RuleHistoricTaxYearNotSupportedError,
+        "SERVER_ERROR"            -> InternalError,
+        "SERVICE_UNAVAILABLE"     -> InternalError
       )
 
       input.foreach(args => (serviceError _).tupled(args))

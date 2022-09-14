@@ -16,16 +16,55 @@
 
 package v2.connectors
 
-import fixtures.CreateAmendFhlUkPropertyAnnualSubmission.ResponseModelsFixture
 import mocks.MockAppConfig
 import uk.gov.hmrc.http.HeaderCarrier
 import v2.mocks.MockHttpClient
+import v2.models.domain.{ Nino, TaxYear }
 import v2.models.outcomes.ResponseWrapper
+import v2.models.request.common.ukPropertyRentARoom.UkPropertyAdjustmentsRentARoom
+import v2.models.request.createAmendHistoricFhlUkPropertyAnnualSubmission.{
+  CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequest,
+  CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequestBody,
+  HistoricFhlAnnualAdjustments,
+  HistoricFhlAnnualAllowances
+}
 import v2.models.response.createAmendHistoricFhlUkPropertyAnnualSubmission.CreateAmendHistoricFhlUkPropertyAnnualSubmissionResponse
 
 import scala.concurrent.Future
 
-class CreateAmendHistoricFhlUkPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec with ResponseModelsFixture {
+class CreateAmendHistoricFhlUkPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec {
+
+  val nino: String              = "AA123456A"
+  val mtdTaxYear: String        = "2019-20"
+  val downstreamTaxYear: String = "2020"
+
+  private val annualAdjustments = HistoricFhlAnnualAdjustments(
+    Some(BigDecimal("105.11")),
+    Some(BigDecimal("200.11")),
+    Some(BigDecimal("120.11")),
+    true,
+    Some(BigDecimal("101.11")),
+    false,
+    Some(UkPropertyAdjustmentsRentARoom(true))
+  )
+
+  private val annualAllowances = HistoricFhlAnnualAllowances(
+    Some(BigDecimal("100.11")),
+    Some(BigDecimal("200.11")),
+    Some(BigDecimal("425.11")),
+    Some(BigDecimal("550.11"))
+  )
+
+  val body: CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequestBody = CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequestBody(
+    Some(annualAdjustments),
+    Some(annualAllowances)
+  )
+
+  val request: CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequest = CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequest(
+    nino = Nino(nino),
+    taxYear = TaxYear.fromMtd(mtdTaxYear),
+    body = body
+  )
 
   class Test extends MockHttpClient with MockAppConfig {
 
@@ -38,31 +77,27 @@ class CreateAmendHistoricFhlUkPropertyAnnualSubmissionConnectorSpec extends Conn
     MockAppConfig.ifsToken returns "ifs-token"
     MockAppConfig.ifsEnvironment returns "ifs-environment"
     MockAppConfig.ifsEnvironmentHeaders returns Some(allowedDownstreamHeaders)
-
-    val outcome                    = Right(ResponseWrapper(correlationId, CreateAmendHistoricFhlUkPropertyAnnualSubmissionResponse(None)))
-    implicit val hc: HeaderCarrier = HeaderCarrier(otherHeaders = otherHeaders ++ Seq("Content-Type" -> "application/json"))
-
-    val requiredDownstreamHeadersPut: Seq[(String, String)] =
-      requiredIfsHeaders ++ Seq("Content-Type" -> "application/json")
-
   }
 
   "connector" must {
-    "put an fhl body and return a 200" in new Test {
+    "put a body and return a 204" in new Test {
+      private val outcome = Right(ResponseWrapper(correlationId, CreateAmendHistoricFhlUkPropertyAnnualSubmissionResponse(None)))
+
+      implicit val hc: HeaderCarrier                   = HeaderCarrier(otherHeaders = otherHeaders ++ Seq("Content-Type" -> "application/json"))
+      val requiredIfsHeadersPut: Seq[(String, String)] = requiredIfsHeaders ++ Seq("Content-Type" -> "application/json")
 
       MockHttpClient
         .put(
           url = s"$baseUrl/income-tax/nino/$nino/uk-properties/furnished-holiday-lettings/annual-summaries/$downstreamTaxYear",
           config = dummyIfsHeaderCarrierConfig,
-          body = Body,
-          requiredHeaders = requiredDownstreamHeadersPut,
+          body = body,
+          requiredHeaders = requiredIfsHeadersPut,
           excludedHeaders = Seq("AnotherHeader" -> "HeaderValue")
         )
         .returns(Future.successful(outcome))
 
-      await(connector.amend(Request)) shouldBe outcome
+      await(connector.amend(request)) shouldBe outcome
 
     }
-
   }
 }

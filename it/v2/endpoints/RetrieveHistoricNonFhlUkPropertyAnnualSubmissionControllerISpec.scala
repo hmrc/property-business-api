@@ -169,7 +169,7 @@ class RetrieveHistoricNonFhlUkPropertyAnnualSubmissionControllerISpec extends V2
         response.header("Content-Type") shouldBe Some("application/json")
       }
 
-      "any valid request is made but received empty json from des" in new Test {
+      "any valid request is made but received empty json from downstream" in new Test {
 
         override def setupStubs(): StubMapping = {
           AuditStub.audit()
@@ -236,8 +236,10 @@ class RetrieveHistoricNonFhlUkPropertyAnnualSubmissionControllerISpec extends V2
           (Status.BAD_REQUEST, "INVALID_NINO", Status.BAD_REQUEST, NinoFormatError),
           (Status.BAD_REQUEST, "INVALID_TYPE", Status.INTERNAL_SERVER_ERROR, InternalError),
           (Status.BAD_REQUEST, "INVALID_TAX_YEAR", Status.BAD_REQUEST, TaxYearFormatError),
-          (Status.NOT_FOUND, "NOT_FOUND_PROPERTY", Status.NOT_FOUND, NotFoundError),
+          (Status.BAD_REQUEST, "INVALID_CORRELATIONID", Status.INTERNAL_SERVER_ERROR, InternalError),
+          (Status.NOT_FOUND, "INCOME_SOURCE_NOT_FOUND", Status.NOT_FOUND, NotFoundError),
           (Status.NOT_FOUND, "NOT_FOUND_PERIOD", Status.NOT_FOUND, NotFoundError),
+          (Status.UNPROCESSABLE_ENTITY, "TAX_YEAR_NOT_SUPPORTED", Status.BAD_REQUEST, RuleHistoricTaxYearNotSupportedError),
           (Status.INTERNAL_SERVER_ERROR, "SERVER_ERROR", Status.INTERNAL_SERVER_ERROR, InternalError),
           (Status.SERVICE_UNAVAILABLE, "SERVICE_UNAVAILABLE", Status.INTERNAL_SERVER_ERROR, InternalError)
         )

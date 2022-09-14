@@ -25,7 +25,6 @@ import v2.controllers.EndpointLogContext
 import v2.models.errors._
 import v2.models.request.createAmendHistoricFhlUkPropertyAnnualSubmission.CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequest
 import v2.models.response.createAmendHistoricFhlUkPropertyAnnualSubmission.CreateAmendHistoricFhlUkPropertyAnnualSubmissionResponse
-import v2.services.CreateAmendHistoricFhlUkPropertyAnnualSubmissionService.downstreamErrorMap
 import v2.support.DownstreamResponseMappingSupport
 
 import javax.inject.{ Inject, Singleton }
@@ -43,16 +42,13 @@ class CreateAmendHistoricFhlUkPropertyAnnualSubmissionService @Inject()(connecto
       correlationId: String): Future[ServiceOutcome[CreateAmendHistoricFhlUkPropertyAnnualSubmissionResponse]] = {
 
     val result = for {
-      desResponseWrapper <- EitherT(connector.amend(request)).leftMap(mapDownstreamErrors(downstreamErrorMap))
-    } yield desResponseWrapper
+      responseWrapper <- EitherT(connector.amend(request)).leftMap(mapDownstreamErrors(downstreamErrorMap))
+    } yield responseWrapper
 
     result.value
   }
-}
 
-object CreateAmendHistoricFhlUkPropertyAnnualSubmissionService {
-
-  def downstreamErrorMap: Map[String, MtdError] =
+  private val downstreamErrorMap: Map[String, MtdError] =
     Map(
       "INVALID_NINO"           -> NinoFormatError,
       "INVALID_TYPE"           -> InternalError,
@@ -62,7 +58,7 @@ object CreateAmendHistoricFhlUkPropertyAnnualSubmissionService {
       "NOT_FOUND_PROPERTY"     -> NotFoundError,
       "NOT_FOUND"              -> NotFoundError,
       "GONE"                   -> InternalError,
-      "TAX_YEAR_NOT_SUPPORTED" -> RuleTaxYearNotSupportedError,
+      "TAX_YEAR_NOT_SUPPORTED" -> RuleHistoricTaxYearNotSupportedError,
       "SERVER_ERROR"           -> InternalError,
       "SERVICE_UNAVAILABLE"    -> InternalError
     )

@@ -21,42 +21,43 @@ import uk.gov.hmrc.http.HeaderCarrier
 import utils.Logging
 import v2.connectors.RetrieveHistoricNonFhlUkPropertyAnnualSubmissionConnector
 import v2.controllers.EndpointLogContext
-import v2.models.errors.{InternalError, MtdError, NinoFormatError, NotFoundError, TaxYearFormatError}
+import v2.models.errors.{ InternalError, MtdError, NinoFormatError, NotFoundError, RuleHistoricTaxYearNotSupportedError, TaxYearFormatError }
 import v2.models.request.retrieveHistoricNonFhlUkPropertyAnnualSubmission.RetrieveHistoricNonFhlUkPropertyAnnualSubmissionRequest
 import v2.models.response.retrieveHistoricNonFhlUkPropertyAnnualSubmissionResponse.RetrieveHistoricNonFhlUkPropertyAnnualSubmissionResponse
 import v2.support.DownstreamResponseMappingSupport
 
-import javax.inject.{Inject, Singleton}
-import scala.concurrent.{ExecutionContext, Future}
+import javax.inject.{ Inject, Singleton }
+import scala.concurrent.{ ExecutionContext, Future }
 
 @Singleton
 class RetrieveHistoricNonFhlUkPropertyAnnualSubmissionService @Inject()(connector: RetrieveHistoricNonFhlUkPropertyAnnualSubmissionConnector)
-  extends DownstreamResponseMappingSupport
-  with Logging {
+    extends DownstreamResponseMappingSupport
+    with Logging {
 
-    private val downstreamErrorMap: Map[String, MtdError] =
-      Map(
-        "INVALID_NINO"        -> NinoFormatError,
-        "INVALID_TYPE"        -> InternalError,
-        "INVALID_TAX_YEAR"    -> TaxYearFormatError,
-        "NOT_FOUND_PROPERTY"  -> NotFoundError,
-        "NOT_FOUND_PERIOD"    -> NotFoundError,
-        "SERVER_ERROR"        -> InternalError,
-        "SERVICE_UNAVAILABLE" -> InternalError
-      )
+  private val downstreamErrorMap: Map[String, MtdError] =
+    Map(
+      "INVALID_NINO"            -> NinoFormatError,
+      "INVALID_TYPE"            -> InternalError,
+      "INVALID_TAX_YEAR"        -> TaxYearFormatError,
+      "INVALID_CORRELATIONID"   -> InternalError,
+      "INCOME_SOURCE_NOT_FOUND" -> NotFoundError,
+      "NOT_FOUND_PERIOD"        -> NotFoundError,
+      "TAX_YEAR_NOT_SUPPORTED"  -> RuleHistoricTaxYearNotSupportedError,
+      "SERVER_ERROR"            -> InternalError,
+      "SERVICE_UNAVAILABLE"     -> InternalError
+    )
 
-    def retrieve(request: RetrieveHistoricNonFhlUkPropertyAnnualSubmissionRequest)(
+  def retrieve(request: RetrieveHistoricNonFhlUkPropertyAnnualSubmissionRequest)(
       implicit hc: HeaderCarrier,
       ec: ExecutionContext,
       logContext: EndpointLogContext,
       correlationId: String): Future[ServiceOutcome[RetrieveHistoricNonFhlUkPropertyAnnualSubmissionResponse]] = {
 
-      val result = for {
-        resultWrapper <- EitherT(connector.retrieve(request)).leftMap(mapDownstreamErrors(downstreamErrorMap))
-      } yield resultWrapper
+    val result = for {
+      resultWrapper <- EitherT(connector.retrieve(request)).leftMap(mapDownstreamErrors(downstreamErrorMap))
+    } yield resultWrapper
 
-      result.value
-    }
-
+    result.value
+  }
 
 }

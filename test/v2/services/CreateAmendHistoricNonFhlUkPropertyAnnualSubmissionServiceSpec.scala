@@ -76,7 +76,7 @@ class CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionServiceSpec extends Uni
         "NOT_FOUND_PROPERTY"     -> NotFoundError,
         "NOT_FOUND"              -> NotFoundError,
         "GONE"                   -> InternalError,
-        "TAX_YEAR_NOT_SUPPORTED" -> RuleTaxYearNotSupportedError,
+        "TAX_YEAR_NOT_SUPPORTED" -> RuleHistoricTaxYearNotSupportedError,
         "SERVER_ERROR"           -> InternalError,
         "SERVICE_UNAVAILABLE"    -> InternalError
       ).foreach(args => (serviceError _).tupled(args))

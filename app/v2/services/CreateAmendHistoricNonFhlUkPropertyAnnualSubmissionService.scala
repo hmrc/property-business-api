@@ -57,7 +57,7 @@ class CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionService @Inject()(conne
       "NOT_FOUND_PROPERTY"     -> NotFoundError,
       "NOT_FOUND"              -> NotFoundError,
       "GONE"                   -> InternalError,
-      "TAX_YEAR_NOT_SUPPORTED" -> RuleTaxYearNotSupportedError,
+      "TAX_YEAR_NOT_SUPPORTED" -> RuleHistoricTaxYearNotSupportedError,
       "SERVER_ERROR"           -> InternalError,
       "SERVICE_UNAVAILABLE"    -> InternalError
     )

@@ -28,7 +28,8 @@ GET        /uk/period/furnished-holiday-lettings/:nino                v2.control
 PUT        /uk/period/furnished-holiday-lettings/:nino/:periodId      v2.controllers.AmendHistoricFhlUkPropertyPeriodSummaryController.handleRequest(nino, periodId)
 GET        /uk/period/furnished-holiday-lettings/:nino/:periodId      v2.controllers.RetrieveHistoricFhlUkPiePeriodSummaryController.handleRequest(nino, periodId)
 
-GET        /uk/period/non-furnished-holiday-lettings/:nino/:periodId      v2.controllers.RetrieveHistoricNonFhlUkPiePeriodSummaryController.handleRequest(nino, periodId)
+PUT        /uk/period/non-furnished-holiday-lettings/:nino/:periodId  v2.controllers.AmendHistoricNonFhlUkPropertyPeriodSummaryController.handleRequest(nino, periodId)
+GET        /uk/period/non-furnished-holiday-lettings/:nino/:periodId  v2.controllers.RetrieveHistoricNonFhlUkPiePeriodSummaryController.handleRequest(nino, periodId)
 
 POST       /uk/period/non-furnished-holiday-lettings/:nino            v2.controllers.CreateHistoricNonFHLUkPiePeriodSummaryController.handleRequest(nino: String)
 

@@ -55,13 +55,13 @@ class CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionConnectorSpec extends C
         .put(
           url = s"$baseUrl/income-tax/nino/$nino/uk-properties/other/annual-summaries/$downstreamTaxYear",
           config = dummyIfsHeaderCarrierConfig,
-          body = Body,
+          body = body,
           requiredHeaders = requiredDownstreamHeadersPut,
           excludedHeaders = Seq("AnotherHeader" -> "HeaderValue")
         )
         .returns(Future.successful(outcome))
 
-      await(connector.amend(Request)) shouldBe outcome
+      await(connector.amend(request)) shouldBe outcome
 
     }
   }

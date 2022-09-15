@@ -50,14 +50,14 @@ trait ResponseModelsFixture {
     Some(BigDecimal("550.11"))
   )
 
-  val Body: CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestBody = CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestBody(
+  val body: CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestBody = CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestBody(
     Some(annualAdjustments),
     Some(annualAllowances)
   )
 
-  val Request = CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequest(
+  val request = CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequest(
     Nino(nino),
     TaxYear.fromMtd(taxYear),
-    Body
+    body
   )
 }

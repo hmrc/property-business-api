@@ -14,10 +14,15 @@
  * limitations under the License.
  */
 
-package v2.models.request.createAmendHistoricNonFhlUkPropertyAnnualSubmission
+package fixtures.CreateAmendNonFhlUkPropertyAnnualSubmission
 
-import play.api.libs.json.{JsValue, Json}
+import play.api.libs.json.{ JsValue, Json }
 import v2.models.request.common.ukPropertyRentARoom.UkPropertyAdjustmentsRentARoom
+import v2.models.request.createAmendHistoricNonFhlUkPropertyAnnualSubmission.{
+  CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestBody,
+  HistoricNonFhlAnnualAdjustments,
+  HistoricNonFhlAnnualAllowances
+}
 
 trait CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionFixture {
 
@@ -47,8 +52,7 @@ trait CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionFixture {
       Some(annualAllowances)
     )
 
-  val validMtdJson: JsValue = Json.parse(
-    """
+  val validMtdJson: JsValue = Json.parse("""
       |{
       |   "annualAdjustments": {
       |      "lossBroughtForward": 100.00,
@@ -71,8 +75,7 @@ trait CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionFixture {
       |}
       |""".stripMargin)
 
-  val validDownstreamJson: JsValue = Json.parse(
-    """
+  val validDownstreamJson: JsValue = Json.parse("""
       |{
       |   "annualAdjustments": {
       |      "lossBroughtForward": 100.00,

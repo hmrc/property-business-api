@@ -45,10 +45,10 @@ class CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionServiceSpec extends Uni
 
       "return mapped non-fhl result" in new Test {
         MockCreateAmendHistoricNonFhlUkPropertyAnnualSubmissionConnector
-          .amend(Request)
+          .amend(request)
           .returns(Future.successful(Right(ResponseWrapper(correlationId, CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionResponse(None)))))
 
-        await(service.amend(Request)) shouldBe Right(
+        await(service.amend(request)) shouldBe Right(
           ResponseWrapper(correlationId, CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionResponse(None)))
       }
     }
@@ -61,10 +61,10 @@ class CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionServiceSpec extends Uni
         s"a $ifsErrorCode error is returned from the service" in new Test {
 
           MockCreateAmendHistoricNonFhlUkPropertyAnnualSubmissionConnector
-            .amend(Request)
+            .amend(request)
             .returns(Future.successful(Left(ResponseWrapper(correlationId, DownstreamErrors.single(DownstreamErrorCode(ifsErrorCode))))))
 
-          await(service.amend(Request)) shouldBe Left(ErrorWrapper(correlationId, error))
+          await(service.amend(request)) shouldBe Left(ErrorWrapper(correlationId, error))
         }
 
       Seq(

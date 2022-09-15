@@ -16,6 +16,7 @@
 
 package v2.controllers.requestParsers
 
+import fixtures.CreateAmendNonFhlUkPropertyAnnualSubmission.CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionFixture
 import support.UnitSpec
 import v2.mocks.validators.MockCreateAmendHistoricNonFhlUkPropertyAnnualSubmissionValidator
 import v2.models.domain.{ Nino, TaxYear }

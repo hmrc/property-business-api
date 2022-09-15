@@ -18,27 +18,28 @@ package v2.controllers
 
 import cats.data.EitherT
 import cats.implicits._
-import play.api.libs.json.{JsValue, Json}
-import play.api.mvc.{Action, ControllerComponents}
-import utils.{IdGenerator, Logging}
+import play.api.libs.json.{ JsValue, Json }
+import play.api.mvc.{ Action, ControllerComponents }
+import utils.{ IdGenerator, Logging }
 import v2.controllers.requestParsers.CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestParser
 import v2.hateoas.HateoasFactory
 import v2.models.errors._
 import v2.models.request.createAmendHistoricNonFhlUkPropertyAnnualSubmission.CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRawData
 import v2.models.response.createAmendHistoricNonFhlUkPropertyAnnualSubmission.CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionHateoasData
-import v2.services.{CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionService, EnrolmentsAuthService, MtdIdLookupService}
+import v2.services.{ CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionService, EnrolmentsAuthService, MtdIdLookupService }
 
-import javax.inject.{Inject, Singleton}
-import scala.concurrent.{ExecutionContext, Future}
+import javax.inject.{ Inject, Singleton }
+import scala.concurrent.{ ExecutionContext, Future }
 
 @Singleton
-class CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionController @Inject()(val authService: EnrolmentsAuthService,
-                                                                              val lookupService: MtdIdLookupService,
-                                                                              parser: CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestParser,
-                                                                              service: CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionService,
-                                                                              hateoasFactory: HateoasFactory,
-                                                                              cc: ControllerComponents,
-                                                                              idGenerator: IdGenerator)(implicit ec: ExecutionContext)
+class CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionController @Inject()(
+    val authService: EnrolmentsAuthService,
+    val lookupService: MtdIdLookupService,
+    parser: CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestParser,
+    service: CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionService,
+    hateoasFactory: HateoasFactory,
+    cc: ControllerComponents,
+    idGenerator: IdGenerator)(implicit ec: ExecutionContext)
     extends AuthorisedController(cc)
     with BaseController
     with Logging {
@@ -89,13 +90,16 @@ class CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionController @Inject()(va
   private def errorResult(errorWrapper: ErrorWrapper) =
     errorWrapper.error match {
       case _
-        if errorWrapper.containsAnyOf(BadRequestError,
-          NinoFormatError,
-          TaxYearFormatError,
-          RuleTaxYearRangeInvalidError,
-          RuleHistoricTaxYearNotSupportedError,
-          ValueFormatError,
-          RuleIncorrectOrEmptyBodyError) => BadRequest(Json.toJson(errorWrapper))
+          if errorWrapper.containsAnyOf(
+            BadRequestError,
+            NinoFormatError,
+            TaxYearFormatError,
+            RuleTaxYearRangeInvalidError,
+            RuleHistoricTaxYearNotSupportedError,
+            ValueFormatError,
+            RuleIncorrectOrEmptyBodyError
+          ) =>
+        BadRequest(Json.toJson(errorWrapper))
       case NotFoundError => NotFound(Json.toJson(errorWrapper))
       case InternalError => InternalServerError(Json.toJson(errorWrapper))
       case _             => unhandledError(errorWrapper)

@@ -88,14 +88,14 @@ class CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionController @Inject()(va
 
   private def errorResult(errorWrapper: ErrorWrapper) =
     errorWrapper.error match {
-      case BadRequestError
-           | NinoFormatError
-           | TaxYearFormatError
-           | RuleTaxYearRangeInvalidError
-           | RuleHistoricTaxYearNotSupportedError
-           | MtdErrorWithCode(ValueFormatError.code)
-           | MtdErrorWithCode(RuleIncorrectOrEmptyBodyError.code) =>
-        BadRequest(Json.toJson(errorWrapper))
+      case _
+        if errorWrapper.containsAnyOf(BadRequestError,
+          NinoFormatError,
+          TaxYearFormatError,
+          RuleTaxYearRangeInvalidError,
+          RuleHistoricTaxYearNotSupportedError,
+          ValueFormatError,
+          RuleIncorrectOrEmptyBodyError) => BadRequest(Json.toJson(errorWrapper))
       case NotFoundError => NotFound(Json.toJson(errorWrapper))
       case InternalError => InternalServerError(Json.toJson(errorWrapper))
       case _             => unhandledError(errorWrapper)

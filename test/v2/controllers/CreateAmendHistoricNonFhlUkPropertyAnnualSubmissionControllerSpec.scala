@@ -82,32 +82,7 @@ class CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionControllerSpec
        |}
     """.stripMargin)
 
-  private val requestJson = Json.parse(
-    """
-      |{
-      |   "annualAdjustments": {
-      |      "lossBroughtForward": 200.00,
-      |      "balancingCharge": 200.00,
-      |      "privateUseAdjustment": 200.00,
-      |      "businessPremisesRenovationAllowanceBalancingCharges": 80.02,
-      |      "nonResidentLandlord": true,
-      |      "rentARoom": {
-      |         "jointlyLet": true
-      |      }
-      |   },
-      |   "annualAllowances": {
-      |      "annualInvestmentAllowance": 200.00,
-      |      "zeroEmissionGoodsVehicleAllowance": 200.00,
-      |      "businessPremisesRenovationAllowance": 200.00,
-      |      "otherCapitalAllowance": 200.00,
-      |      "costOfReplacingDomesticGoods": 200.00,
-      |      "propertyIncomeAllowance": 30.02
-      |   }
-      |}
-      |""".stripMargin
-  )
-
-  private val rawData = CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRawData(nino, taxYear, requestJson)
+  private val rawData = CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRawData(nino, taxYear, validMtdJson)
   private val request = CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequest(Nino(nino), TaxYear.fromMtd(taxYear), requestBody)
 
   "handleRequest" should {
@@ -127,7 +102,7 @@ class CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionControllerSpec
                 CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionHateoasData(nino, taxYear))
           .returns(HateoasWrapper(CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionResponse(None), Seq(testHateoasLink)))
 
-        val result: Future[Result] = controller.handleRequest(nino, taxYear)(fakeRequestWithBody(requestJson))
+        val result: Future[Result] = controller.handleRequest(nino, taxYear)(fakeRequestWithBody(validMtdJson))
         status(result) shouldBe OK
         contentAsJson(result) shouldBe hateoasResponse
         header("X-CorrelationId", result) shouldBe Some(correlationId)
@@ -142,7 +117,7 @@ class CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionControllerSpec
               .parseRequest(rawData)
               .returns(Left(ErrorWrapper(correlationId, error, None)))
 
-            val result: Future[Result] = controller.handleRequest(nino, taxYear)(fakeRequestWithBody(requestJson))
+            val result: Future[Result] = controller.handleRequest(nino, taxYear)(fakeRequestWithBody(validMtdJson))
 
             status(result) shouldBe expectedStatus
             contentAsJson(result) shouldBe Json.toJson(error)
@@ -183,7 +158,7 @@ class CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionControllerSpec
               .amend(request)
               .returns(Future.successful(Left(ErrorWrapper(correlationId, mtdError))))
 
-            val result: Future[Result] = controller.handleRequest(nino, taxYear)(fakeRequestWithBody(requestJson))
+            val result: Future[Result] = controller.handleRequest(nino, taxYear)(fakeRequestWithBody(validMtdJson))
 
             status(result) shouldBe expectedStatus
             contentAsJson(result) shouldBe Json.toJson(mtdError)

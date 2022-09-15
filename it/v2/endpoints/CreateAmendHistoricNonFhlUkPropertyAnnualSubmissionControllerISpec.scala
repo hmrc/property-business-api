@@ -31,8 +31,8 @@ class CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionControllerISpec extends
 
   private trait Test {
 
-    val nino: String          = "AA999999A"
-    val taxYear: String       = "2020-21"
+    val nino: String = "AA999999A"
+    val taxYear: String = "2020-21"
     val correlationId: String = "X-123"
 
     val requestBodyJson: JsValue = Json.parse(
@@ -88,9 +88,10 @@ class CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionControllerISpec extends
 
     def uri: String = s"/uk/annual/non-furnished-holiday-lettings/$nino/$taxYear"
 
-    def desUri: String = s"/income-tax/nino/$nino/uk-properties/other/annual-summaries/2021"
+    def downstreamUri: String = s"/income-tax/nino/$nino/uk-properties/other/annual-summaries/2021"
 
-    val desResponse: JsValue = Json.parse("""
+    val downstreamResponse: JsValue = Json.parse(
+      """
         |{
         |   "transactionReference": "0000000000000001"
         |}
@@ -109,7 +110,7 @@ class CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionControllerISpec extends
       s"""
          |{
          |  "code": "$code",
-         |  "reason": "des message"
+         |  "reason": "downstream message"
          |}
        """.stripMargin
   }
@@ -121,7 +122,7 @@ class CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionControllerISpec extends
           AuthStub.authorised()
           AuditStub.audit()
           MtdIdLookupStub.ninoFound(nino)
-          DownstreamStub.onSuccess(DownstreamStub.PUT, desUri, OK, desResponse)
+          DownstreamStub.onSuccess(DownstreamStub.PUT, downstreamUri, OK, downstreamResponse)
         }
 
         val response: WSResponse = await(request().put(requestBodyJson))
@@ -140,7 +141,8 @@ class CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionControllerISpec extends
           MtdIdLookupStub.ninoFound(nino)
         }
 
-        val invalidFieldsRequestBodyJson: JsValue = Json.parse("""
+        val invalidFieldsRequestBodyJson: JsValue = Json.parse(
+          """
             |{
             |   "annualAdjustments": {
             |      "lossBroughtForward": -200.00,
@@ -218,8 +220,8 @@ class CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionControllerISpec extends
                               expectedBody: MtdError): Unit = {
         s"validation fails with ${expectedBody.code} error" in new Test {
 
-          override val nino: String             = requestNino
-          override val taxYear: String          = requestTaxYear
+          override val nino: String = requestNino
+          override val taxYear: String = requestTaxYear
           override val requestBodyJson: JsValue = requestBody
 
           override def setupStubs(): StubMapping = {
@@ -232,6 +234,7 @@ class CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionControllerISpec extends
           response.json shouldBe Json.toJson(expectedBody)
         }
       }
+
       val input = Seq(
         ("AA1123A", "2021-22", requestJson, BAD_REQUEST, NinoFormatError),
         ("AA123456A", "202362-23", requestJson, BAD_REQUEST, TaxYearFormatError),
@@ -243,13 +246,13 @@ class CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionControllerISpec extends
     }
 
     "downstream service error" when {
-      def serviceErrorTest(desStatus: Int, downstreamCode: String, expectedStatus: Int, expectedBody: MtdError): Unit = {
-        s"downstream returns an $downstreamCode error and status $desStatus" in new Test {
+      def serviceErrorTest(downstreamStatus: Int, downstreamCode: String, expectedStatus: Int, expectedBody: MtdError): Unit = {
+        s"downstream returns an $downstreamCode error and status $downstreamStatus" in new Test {
 
           override def setupStubs(): StubMapping = {
             AuthStub.authorised()
             MtdIdLookupStub.ninoFound(nino)
-            DownstreamStub.onError(DownstreamStub.PUT, desUri, desStatus, errorBody(downstreamCode))
+            DownstreamStub.onError(DownstreamStub.PUT, downstreamUri, downstreamStatus, errorBody(downstreamCode))
           }
 
           val response: WSResponse = await(request().put(requestBodyJson))

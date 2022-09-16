@@ -16,7 +16,7 @@
 
 package v2.connectors
 
-import fixtures.CreateAmendNonFhlUkPropertyAnnualSubmission.RequestResponseModelsFixture
+import fixtures.CreateAmendNonFhlUkPropertyAnnualSubmission.RequestResponseModelFixtures
 import mocks.MockAppConfig
 import uk.gov.hmrc.http.HeaderCarrier
 import v2.mocks.MockHttpClient
@@ -27,17 +27,17 @@ import v2.models.response.createAmendHistoricFhlUkPropertyAnnualSubmission.Creat
 
 import scala.concurrent.Future
 
-class CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec with RequestResponseModelsFixture {
+class CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec with RequestResponseModelFixtures {
 
   val nino: String              = "AA123456A"
   val taxYear: String           = "2019-20"
   val mtdTaxYear: String        = "2019-20"
   val downstreamTaxYear: String = "2020"
 
-  val request = CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequest(
+  val request: CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequest = CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequest(
     Nino(nino),
     TaxYear.fromMtd(taxYear),
-    body
+    requestBody
   )
 
   class Test extends MockHttpClient with MockAppConfig {
@@ -68,7 +68,7 @@ class CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionConnectorSpec extends C
         .put(
           url = s"$baseUrl/income-tax/nino/$nino/uk-properties/other/annual-summaries/$downstreamTaxYear",
           config = dummyIfsHeaderCarrierConfig,
-          body = body,
+          body = requestBody,
           requiredHeaders = requiredDownstreamHeadersPut,
           excludedHeaders = Seq("AnotherHeader" -> "HeaderValue")
         )

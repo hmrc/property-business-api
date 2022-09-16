@@ -24,12 +24,7 @@ import v2.models.request.createAmendHistoricNonFhlUkPropertyAnnualSubmission.{
   HistoricNonFhlAnnualAllowances
 }
 
-trait RequestResponseModelsFixture {
-
-  val body: CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestBody = CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestBody(
-    Some(annualAdjustments),
-    Some(annualAllowances)
-  )
+trait RequestResponseModelFixtures {
 
   val annualAdjustments: HistoricNonFhlAnnualAdjustments =
     HistoricNonFhlAnnualAdjustments(

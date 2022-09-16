@@ -16,7 +16,7 @@
 
 package v2.services
 
-import fixtures.CreateAmendNonFhlUkPropertyAnnualSubmission.RequestResponseModelsFixture
+import fixtures.CreateAmendNonFhlUkPropertyAnnualSubmission.RequestResponseModelFixtures
 import support.UnitSpec
 import uk.gov.hmrc.http.HeaderCarrier
 import v2.controllers.EndpointLogContext
@@ -30,7 +30,7 @@ import v2.models.response.createAmendHistoricNonFhlUkPropertyAnnualSubmission.Cr
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-class CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionServiceSpec extends UnitSpec with RequestResponseModelsFixture {
+class CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionServiceSpec extends UnitSpec with RequestResponseModelFixtures {
 
   val nino: String              = "AA123456A"
   val taxYear: String           = "2019-20"
@@ -40,7 +40,7 @@ class CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionServiceSpec extends Uni
   val request: CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequest = CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequest(
     Nino(nino),
     TaxYear.fromMtd(taxYear),
-    body
+    requestBody
   )
 
   trait Test extends MockCreateAmendHistoricNonFhlUkPropertyAnnualSubmissionConnector {

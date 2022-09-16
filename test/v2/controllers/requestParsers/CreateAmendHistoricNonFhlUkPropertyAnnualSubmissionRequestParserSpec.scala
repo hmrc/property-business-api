@@ -16,16 +16,14 @@
 
 package v2.controllers.requestParsers
 
-import fixtures.CreateAmendNonFhlUkPropertyAnnualSubmission.CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionFixture
+import fixtures.CreateAmendNonFhlUkPropertyAnnualSubmission.RequestResponseModelsFixture
 import support.UnitSpec
 import v2.mocks.validators.MockCreateAmendHistoricNonFhlUkPropertyAnnualSubmissionValidator
 import v2.models.domain.{ Nino, TaxYear }
 import v2.models.errors.{ BadRequestError, DateFormatError, ErrorWrapper, NinoFormatError }
 import v2.models.request.createAmendHistoricNonFhlUkPropertyAnnualSubmission._
 
-class CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestParserSpec
-    extends UnitSpec
-    with CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionFixture {
+class CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestParserSpec extends UnitSpec with RequestResponseModelsFixture {
 
   val nino: String                   = "AA123456B"
   val mtdTaxYear: String             = "2022-23"

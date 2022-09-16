@@ -16,16 +16,29 @@
 
 package v2.connectors
 
-import fixtures.CreateAmendNonFhlUkPropertyAnnualSubmission.ResponseModelsFixture
+import fixtures.CreateAmendNonFhlUkPropertyAnnualSubmission.RequestResponseModelsFixture
 import mocks.MockAppConfig
 import uk.gov.hmrc.http.HeaderCarrier
 import v2.mocks.MockHttpClient
+import v2.models.domain.{ Nino, TaxYear }
 import v2.models.outcomes.ResponseWrapper
+import v2.models.request.createAmendHistoricNonFhlUkPropertyAnnualSubmission.CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequest
 import v2.models.response.createAmendHistoricFhlUkPropertyAnnualSubmission.CreateAmendHistoricFhlUkPropertyAnnualSubmissionResponse
 
 import scala.concurrent.Future
 
-class CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec with ResponseModelsFixture {
+class CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec with RequestResponseModelsFixture {
+
+  val nino: String              = "AA123456A"
+  val taxYear: String           = "2019-20"
+  val mtdTaxYear: String        = "2019-20"
+  val downstreamTaxYear: String = "2020"
+
+  val request = CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequest(
+    Nino(nino),
+    TaxYear.fromMtd(taxYear),
+    body
+  )
 
   class Test extends MockHttpClient with MockAppConfig {
 

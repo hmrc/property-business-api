@@ -16,7 +16,7 @@
 
 package v2.controllers
 
-import fixtures.CreateAmendNonFhlUkPropertyAnnualSubmission.CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionFixture
+import fixtures.CreateAmendNonFhlUkPropertyAnnualSubmission.RequestResponseModelsFixture
 import play.api.libs.json.{ JsValue, Json }
 import play.api.mvc.Result
 import uk.gov.hmrc.http.HeaderCarrier
@@ -49,7 +49,7 @@ class CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionControllerSpec
     with MockCreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestParser
     with MockHateoasFactory
     with MockIdGenerator
-    with CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionFixture {
+    with RequestResponseModelsFixture {
 
   private val nino          = "AA123456A"
   private val taxYear       = "2022-23"

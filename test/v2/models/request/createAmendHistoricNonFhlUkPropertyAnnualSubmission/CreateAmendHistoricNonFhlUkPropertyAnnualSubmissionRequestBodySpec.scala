@@ -16,10 +16,11 @@
 
 package v2.models.request.createAmendHistoricNonFhlUkPropertyAnnualSubmission
 
+import fixtures.CreateAmendNonFhlUkPropertyAnnualSubmission.RequestResponseModelFixtures
 import play.api.libs.json.Json
 import support.UnitSpec
 
-class CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestBodySpec extends UnitSpec with CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionFixture {
+class CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestBodySpec extends UnitSpec with RequestResponseModelFixtures {
 
   "reads" when {
     "passed a valid JSON" should {

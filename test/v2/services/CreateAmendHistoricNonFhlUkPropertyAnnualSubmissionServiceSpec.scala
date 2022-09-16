@@ -16,19 +16,32 @@
 
 package v2.services
 
-import fixtures.CreateAmendNonFhlUkPropertyAnnualSubmission.ResponseModelsFixture
+import fixtures.CreateAmendNonFhlUkPropertyAnnualSubmission.RequestResponseModelFixtures
 import support.UnitSpec
 import uk.gov.hmrc.http.HeaderCarrier
 import v2.controllers.EndpointLogContext
 import v2.mocks.connectors.MockCreateAmendHistoricNonFhlUkPropertyAnnualSubmissionConnector
+import v2.models.domain.{ Nino, TaxYear }
 import v2.models.errors._
 import v2.models.outcomes.ResponseWrapper
+import v2.models.request.createAmendHistoricNonFhlUkPropertyAnnualSubmission.CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequest
 import v2.models.response.createAmendHistoricNonFhlUkPropertyAnnualSubmission.CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionResponse
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-class CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionServiceSpec extends UnitSpec with ResponseModelsFixture {
+class CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionServiceSpec extends UnitSpec with RequestResponseModelFixtures {
+
+  val nino: String              = "AA123456A"
+  val taxYear: String           = "2019-20"
+  val mtdTaxYear: String        = "2019-20"
+  val downstreamTaxYear: String = "2020"
+
+  val request: CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequest = CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequest(
+    Nino(nino),
+    TaxYear.fromMtd(taxYear),
+    requestBody
+  )
 
   trait Test extends MockCreateAmendHistoricNonFhlUkPropertyAnnualSubmissionConnector {
     implicit val hc: HeaderCarrier              = HeaderCarrier()
@@ -45,10 +58,10 @@ class CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionServiceSpec extends Uni
 
       "return mapped non-fhl result" in new Test {
         MockCreateAmendHistoricNonFhlUkPropertyAnnualSubmissionConnector
-          .amend(Request)
+          .amend(request)
           .returns(Future.successful(Right(ResponseWrapper(correlationId, CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionResponse(None)))))
 
-        await(service.amend(Request)) shouldBe Right(
+        await(service.amend(request)) shouldBe Right(
           ResponseWrapper(correlationId, CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionResponse(None)))
       }
     }
@@ -61,10 +74,10 @@ class CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionServiceSpec extends Uni
         s"a $ifsErrorCode error is returned from the service" in new Test {
 
           MockCreateAmendHistoricNonFhlUkPropertyAnnualSubmissionConnector
-            .amend(Request)
+            .amend(request)
             .returns(Future.successful(Left(ResponseWrapper(correlationId, DownstreamErrors.single(DownstreamErrorCode(ifsErrorCode))))))
 
-          await(service.amend(Request)) shouldBe Left(ErrorWrapper(correlationId, error))
+          await(service.amend(request)) shouldBe Left(ErrorWrapper(correlationId, error))
         }
 
       Seq(

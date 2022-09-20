@@ -1,0 +1,6 @@
+put:
+  $ref: "./historic_uk_fhl_annual_submission_create_and_amend.yaml"
+get:
+  $ref: "./historic_uk_fhl_annual_submission_retrieve.yaml"
+delete:
+  $ref: "./historic_uk_fhl_annual_submission_delete.yaml"

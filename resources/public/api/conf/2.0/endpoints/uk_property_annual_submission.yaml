@@ -1,0 +1,4 @@
+get:
+  $ref: "./uk_property_annual_submission_retrieve.yaml"
+put:
+  $ref: "./uk_property_annual_submission_create_and_amend.yaml"

@@ -1,0 +1,98 @@
+get:
+  summary: Retrieve a Historic Non-FHL UK Property Income and Expenses Period Summary [test only]
+  description: |
+    This endpoint enables you to retrieve income and expenses for a non-furnished holiday lettings (non-FHL) UK property business for tax years from 2017-18 to 2021-22. A National Insurance number and period ID must be provided. Use this endpoint only for the specified tax year range; for current tax year submissions, use the Retrieve a UK Property Income & Expenses Period Summary endpoint.
+
+    ### Test data
+    <p>Scenario simulations using Gov-Test-Scenario headers is only available in the sandbox environment.</p>
+    <table>
+        <thead>
+            <tr>
+                <th>Header Value (Gov-Test-Scenario)</th>
+                <th>Scenario</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><p>N/A - DEFAULT</p></td>
+                <td><p>Simulates a success response.</p></td>
+            </tr>
+        </tbody>
+        <tbody>
+            <tr>
+                <td><p>NOT_FOUND</p></td>
+                <td><p>Simulates the scenario where no data is found.</p></td>
+            </tr>
+        </tbody>
+        <tbody>
+            <tr>
+                <td><p>CONSOLIDATED</p></td>
+                <td><p>Simulates the scenario where success response containing consolidated expenses is found.</p></td>
+            </tr>
+        </tbody>
+    </table>
+
+  tags:
+    - Historic non-FHL UK Property Income & Expenses Period Summary
+
+  parameters:
+    - $ref: '../pathParameters.yaml#/components/parameters/nino'
+    - $ref: '../pathParameters.yaml#/components/parameters/periodId'
+    - $ref: '../headers.yaml#/components/parameters/acceptHeader'
+    - $ref: '../headers.yaml#/components/parameters/testScenarioHeader'
+    - $ref: '../headers.yaml#/components/parameters/authorizationReadScopeHeader'
+
+  security:
+    - User-Restricted:
+        - read:self-assessment
+
+  responses:
+    "200":
+      description: Successfully retrieved UK Property Business Annual Submission
+      headers:
+        X-CorrelationId:
+          $ref: '../headers.yaml#/components/parameters/correlationId'
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/historic_uk_non_fhl_period_summary_retrieve/response.json'
+          examples:
+            full-response:
+              description: Example Response
+              externalValue: './examples/historic_uk_non_fhl_period_summary_retrieve/response.json'
+            consolidated-response:
+              description: Consolidated Response
+              externalValue: './examples/historic_uk_non_fhl_period_summary_retrieve/consolidated_response.json'
+
+    "400":
+      description: Bad request
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/error-response.yaml'
+          examples:
+            FORMAT_NINO:
+              $ref: '../errors.yaml#/components/examples/formatNino'
+            FORMAT_PERIOD_ID:
+              $ref: '../errors.yaml#/components/examples/formatPeriodId'
+
+    "403":
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/error-response.yaml'
+          examples:
+            CLIENT_OR_AGENT_NOT_AUTHORISED:
+              $ref: '../errors.yaml#/components/examples/clientOrAgentNotAuthorised'
+
+    "404":
+      description: Not Found
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/error-response.yaml'
+          examples:
+            MATCHING_RESOURCE_NOT_FOUND:
+              $ref: '../errors.yaml#/components/examples/notFound'
+

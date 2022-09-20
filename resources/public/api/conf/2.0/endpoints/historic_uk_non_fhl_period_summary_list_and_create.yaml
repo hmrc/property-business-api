@@ -1,0 +1,4 @@
+get:
+  $ref: "./historic_uk_non_fhl_period_summary_list.yaml"
+post:
+  $ref: "./historic_uk_non_fhl_period_summary_create.yaml"

@@ -1,0 +1,4 @@
+put:
+  $ref: "./historic_uk_fhl_period_summary_amend.yaml"
+get:
+  $ref: "./historic_uk_fhl_period_summary_retrieve.yaml"

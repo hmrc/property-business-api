@@ -1,0 +1,4 @@
+get:
+  $ref: "./foreign_property_period_summary_retrieve.yaml"
+put:
+  $ref: "./foreign_property_period_summary_amend.yaml"

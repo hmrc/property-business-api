@@ -1,0 +1,34 @@
+is:
+  - headers.testScenarioHeader
+  - errors.formatNino
+  - errors.formatPeriodId
+  - errors.formatFhlValue
+  - errors.ruleIncorrectOrEmptyBody
+  - errors.ruleBothExpensesSupplied
+  - errors.clientOrAgentNotAuthorised
+  - errors.notFound
+displayName: Amend a Historic Non-FHL UK Property Income & Expenses Period Summary [test only]
+description: This endpoint allows you to amend income and expenses for non-FHL UK property business and make periodic submission for tax years from 2017-18 to 2021-22. A National Insurance number and a period ID must be provided. To amend submissions for the current tax year, use the Amend a UK Property Income & Expenses Period Summary endpoint.
+(annotations.sandboxData): !include scenarios/default_and_not_found_scenarios.md
+(annotations.scope): "write:self-assessment"
+securedBy: [ sec.oauth_2_0: { scopes: [ "write:self-assessment" ] } ]
+body:
+  application/json:
+    type: !include schemas/historic_uk_non_fhl_period_summary_amend/request.json
+    examples:
+     example-1:
+      description: Full Expenditure request
+      value: !include examples/historic_uk_non_fhl_period_summary_amend/request.json
+     example-2:
+      description: Consolidated Expenditure request
+      value: !include examples/historic_uk_non_fhl_period_summary_amend/consolidated_request.json
+responses:
+  200:
+    body:
+      application/json:
+        type: !include schemas/historic_uk_non_fhl_period_summary_amend/response.json
+        example: !include examples/historic_uk_non_fhl_period_summary_amend/response.json
+    headers:
+      X-CorrelationId:
+        example: a1e8057e-fbbc-47a8-a8b4-78d9f015c253
+        description: Unique ID for operation tracking <br> String, 36 characters.

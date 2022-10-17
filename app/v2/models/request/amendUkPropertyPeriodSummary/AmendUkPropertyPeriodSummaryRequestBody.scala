@@ -17,18 +17,18 @@
 package v2.models.request.amendUkPropertyPeriodSummary
 
 import play.api.libs.functional.syntax._
-import play.api.libs.json.{JsPath, Json, OWrites, Reads}
-import v2.models.request.common.ukFhlProperty.UkFhlProperty
-import v2.models.request.common.ukNonFhlProperty.UkNonFhlProperty
+import play.api.libs.json.{ JsPath, Json, OWrites, Reads }
+import v2.models.request.amendUkPropertyPeriodSummary.amendUkNonFhlProperty.AmendUkNonFhlProperty
+import v2.models.request.amendUkPropertyPeriodSummary.amendUkFhlProperty.AmendUkFhlProperty
 
-case class AmendUkPropertyPeriodSummaryRequestBody(ukFhlProperty: Option[UkFhlProperty], ukNonFhlProperty: Option[UkNonFhlProperty])
+case class AmendUkPropertyPeriodSummaryRequestBody(ukFhlProperty: Option[AmendUkFhlProperty], ukNonFhlProperty: Option[AmendUkNonFhlProperty])
 
 object AmendUkPropertyPeriodSummaryRequestBody {
   implicit val reads: Reads[AmendUkPropertyPeriodSummaryRequestBody] = Json.reads[AmendUkPropertyPeriodSummaryRequestBody]
 
   implicit val writes: OWrites[AmendUkPropertyPeriodSummaryRequestBody] = (
-      (JsPath \ "ukFhlProperty").writeNullable[UkFhlProperty] and
-      (JsPath \ "ukOtherProperty").writeNullable[UkNonFhlProperty]
-    ) (unlift(AmendUkPropertyPeriodSummaryRequestBody.unapply))
+    (JsPath \ "ukFhlProperty").writeNullable[AmendUkFhlProperty] and
+      (JsPath \ "ukOtherProperty").writeNullable[AmendUkNonFhlProperty]
+  )(unlift(AmendUkPropertyPeriodSummaryRequestBody.unapply))
 
 }

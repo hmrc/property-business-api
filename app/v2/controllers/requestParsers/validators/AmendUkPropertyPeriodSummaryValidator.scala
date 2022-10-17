@@ -20,9 +20,9 @@ import com.google.inject.Inject
 import config.AppConfig
 import v2.controllers.requestParsers.validators.validations._
 import v2.models.errors.MtdError
-import v2.models.request.amendUkPropertyPeriodSummary.{AmendUkPropertyPeriodSummaryRawData, AmendUkPropertyPeriodSummaryRequestBody}
-import v2.models.request.common.ukFhlProperty.UkFhlProperty
-import v2.models.request.common.ukNonFhlProperty.UkNonFhlProperty
+import v2.models.request.amendUkPropertyPeriodSummary.amendUkFhlProperty.AmendUkFhlProperty
+import v2.models.request.amendUkPropertyPeriodSummary.amendUkNonFhlProperty.AmendUkNonFhlProperty
+import v2.models.request.amendUkPropertyPeriodSummary.{ AmendUkPropertyPeriodSummaryRawData, AmendUkPropertyPeriodSummaryRequestBody }
 
 import javax.inject.Singleton
 
@@ -44,7 +44,7 @@ class AmendUkPropertyPeriodSummaryValidator @Inject()(appConfig: AppConfig) exte
 
   private def bodyFormatValidation: AmendUkPropertyPeriodSummaryRawData => List[List[MtdError]] = { data =>
     JsonFormatValidation.validateAndCheckNonEmpty[AmendUkPropertyPeriodSummaryRequestBody](data.body) match {
-      case Nil => NoValidationErrors
+      case Nil          => NoValidationErrors
       case schemaErrors => List(schemaErrors)
     }
   }
@@ -69,7 +69,7 @@ class AmendUkPropertyPeriodSummaryValidator @Inject()(appConfig: AppConfig) exte
 
   }
 
-  private def validateFhlMonetaryValues(property: UkFhlProperty): List[MtdError] = {
+  private def validateFhlMonetaryValues(property: AmendUkFhlProperty): List[MtdError] = {
     List(
       NumberValidation.validateOptional(
         field = property.income.flatMap(_.periodAmount),
@@ -122,7 +122,7 @@ class AmendUkPropertyPeriodSummaryValidator @Inject()(appConfig: AppConfig) exte
     ).flatten
   }
 
-  private def validateNonFhlMonetaryValues(property: UkNonFhlProperty): List[MtdError] = {
+  private def validateNonFhlMonetaryValues(property: AmendUkNonFhlProperty): List[MtdError] = {
     List(
       NumberValidation.validateOptional(
         field = property.income.flatMap(_.premiumsOfLeaseGrant),

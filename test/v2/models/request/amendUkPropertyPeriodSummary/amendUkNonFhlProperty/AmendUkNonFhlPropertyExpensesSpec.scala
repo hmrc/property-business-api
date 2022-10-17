@@ -14,40 +14,33 @@
  * limitations under the License.
  */
 
-package v2.models.request.amendUkPropertyPeriodSummary
+package v2.models.request.amendUkPropertyPeriodSummary.amendUkNonFhlProperty
 
 import play.api.libs.json.Json
 import support.UnitSpec
-import v2.models.request.amendUkPropertyPeriodSummary.AmendUkPropertyPeriodSummaryFixture.{
-  amendUkPropertyPeriodSummaryRequestBody,
-  downstreamConsolidatedExpensesRequestBodyJson,
-  downstreamRequestBodyJson,
-  mtdConsolidatedRequestJson,
-  mtdNonConsolidatedRequestJson,
-  amendUkPropertyPeriodSummaryRequestConsolidatedBody
-}
+import v2.models.request.amendUkPropertyPeriodSummary.AmendUkPropertyPeriodSummaryFixture._
 import v2.models.utils.JsonErrorValidators
 
-class AmendUkPropertyPeriodSummaryRequestBodySpec extends UnitSpec with JsonErrorValidators {
+class AmendUkNonFhlPropertyExpensesSpec extends UnitSpec with JsonErrorValidators {
   "reads" when {
     "passed a valid JSON" should {
       "return a valid model" in {
-        mtdNonConsolidatedRequestJson.as[AmendUkPropertyPeriodSummaryRequestBody] shouldBe amendUkPropertyPeriodSummaryRequestBody
+        mtdAmendUkNonFhlPropertyExpensesJson.as[AmendUkNonFhlPropertyExpenses] shouldBe amendUkNonFhlPropertyExpenses
       }
 
       "return a valid model with consolidated expenses" in {
-        mtdConsolidatedRequestJson.as[AmendUkPropertyPeriodSummaryRequestBody] shouldBe amendUkPropertyPeriodSummaryRequestConsolidatedBody
+        mtdConsolidatedExpensesJson.as[AmendUkNonFhlPropertyExpenses] shouldBe amendUkNonFhlPropertyConsolidatedExpenses
       }
     }
   }
   "writes" when {
     "passed valid model" should {
       "return valid JSON" in {
-        Json.toJson(amendUkPropertyPeriodSummaryRequestBody) shouldBe downstreamRequestBodyJson
+        Json.toJson(amendUkNonFhlPropertyExpenses) shouldBe downstreamAmendUkNonFhlPropertyExpensesJson
       }
 
       "return a valid JSON with consolidatedExpense" in {
-        Json.toJson(amendUkPropertyPeriodSummaryRequestConsolidatedBody) shouldBe downstreamConsolidatedExpensesRequestBodyJson
+        Json.toJson(amendUkNonFhlPropertyConsolidatedExpenses) shouldBe downstreamConsolidatedExpensesJson
 
       }
     }

@@ -29,5 +29,5 @@ object AmendUkPropertyPeriodSummaryRawData {
       (JsPath \ "businessId").write[String] and
       (JsPath \ "submissionId").write[String] and
       (JsPath \ "request").write[JsValue]
-  )(unlift(AmendUkPropertyPeriodSummaryRawData.unapply))
+  )(unlift(AmendUkPropertyPeriodSummaryRawData.unapply _))
 }

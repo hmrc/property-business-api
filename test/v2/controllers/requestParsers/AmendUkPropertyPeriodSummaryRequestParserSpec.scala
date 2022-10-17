@@ -19,10 +19,11 @@ package v2.controllers.requestParsers
 import play.api.libs.json.Json
 import support.UnitSpec
 import v2.models.domain.Nino
-import v2.models.errors.{BadRequestError, BusinessIdFormatError, ErrorWrapper, NinoFormatError}
+import v2.models.errors.{ BadRequestError, BusinessIdFormatError, ErrorWrapper, NinoFormatError }
 import v2.models.request.amendUkPropertyPeriodSummary._
 import v2.models.request.common.ukFhlProperty._
 import v2.mocks.validators.MockAmendUkPropertyPeriodSummaryValidator
+import v2.models.request.amendUkPropertyPeriodSummary.amendUkFhlProperty.AmendUkFhlProperty
 
 class AmendUkPropertyPeriodSummaryRequestParserSpec extends UnitSpec {
 
@@ -58,7 +59,7 @@ class AmendUkPropertyPeriodSummaryRequestParserSpec extends UnitSpec {
 
         val model: AmendUkPropertyPeriodSummaryRequestBody = AmendUkPropertyPeriodSummaryRequestBody(
           ukFhlProperty = Some(
-            UkFhlProperty(
+            AmendUkFhlProperty(
               income = Some(UkFhlPropertyIncome(periodAmount = Some(5000.99), None, None)),
               expenses = None
             )),

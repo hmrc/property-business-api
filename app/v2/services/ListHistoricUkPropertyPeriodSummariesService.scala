@@ -52,6 +52,7 @@ class ListHistoricUkPropertyPeriodSummariesService @Inject()(connector: ListHist
     "INVALID_NINO"           -> NinoFormatError,
     "INVALID_CORRELATIONID"  -> InternalError,
     "TAX_YEAR_NOT_SUPPORTED" -> InternalError,
+    "INVALID_TYPE"           -> InternalError,
     "SERVER_ERROR"           -> InternalError,
     "SERVICE_UNAVAILABLE"    -> InternalError
   )

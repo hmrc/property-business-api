@@ -75,7 +75,7 @@ class ListHistoricNonFhlUkPropertyPeriodSummariesControllerISpec extends V2Integ
 
     val ifsResponseBody: JsValue = Json.parse(
       s"""{
-         |  "annualAdjustments": [
+         |  "periods": [
          |    {
          |      "transactionReference": "ignored",
          |      "from": "$fromDate",

@@ -16,10 +16,9 @@
 
 package v2.connectors
 
-import mocks.MockAppConfig
+import mocks.{MockAppConfig, MockHttpClient}
 import org.scalamock.handlers.CallHandler
 import v2.connectors.RetrieveForeignPropertyPeriodSummaryConnector.{ForeignResult, NonForeignResult}
-import v2.mocks.MockHttpClient
 import v2.models.domain.Nino
 import v2.models.errors.{DownstreamErrorCode, DownstreamErrors}
 import v2.models.outcomes.ResponseWrapper
@@ -61,15 +60,15 @@ class RetrieveForeignPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
     MockAppConfig.ifsBaseUrl returns baseUrl
     MockAppConfig.ifsToken returns "ifs-token"
     MockAppConfig.ifsEnvironment returns "ifs-environment"
-    MockAppConfig.ifsEnvironmentHeaders returns Some(allowedDownstreamHeaders)
+    MockAppConfig.ifsEnvironmentHeaders returns Some(allowedIfsHeaders)
 
     def stubHttpResponse(outcome: DownstreamOutcome[RetrieveForeignPropertyPeriodSummaryResponse])
     : CallHandler[Future[DownstreamOutcome[RetrieveForeignPropertyPeriodSummaryResponse]]]#Derived = {
       MockHttpClient
         .get(
           url = s"$baseUrl/income-tax/business/property/periodic",
-          config = dummyIfsHeaderCarrierConfig,
-          queryParams = Seq("taxableEntityId" -> nino, "incomeSourceId" -> businessId, "taxYear" -> taxYear, "submissionId" -> submissionId),
+          config = dummyHeaderCarrierConfig,
+          parameters = Seq("taxableEntityId" -> nino, "incomeSourceId" -> businessId, "taxYear" -> taxYear, "submissionId" -> submissionId),
           requiredHeaders = requiredIfsHeaders,
           excludedHeaders = Seq("AnotherHeader" -> "HeaderValue")
         )

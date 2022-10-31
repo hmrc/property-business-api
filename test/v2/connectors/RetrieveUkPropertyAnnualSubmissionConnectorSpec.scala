@@ -16,10 +16,9 @@
 
 package v2.connectors
 
-import mocks.MockAppConfig
+import mocks.{MockAppConfig, MockHttpClient}
 import org.scalamock.handlers.CallHandler
 import v2.connectors.RetrieveUkPropertyAnnualSubmissionConnector._
-import v2.mocks.MockHttpClient
 import v2.models.domain.Nino
 import v2.models.errors.{ DownstreamErrorCode, DownstreamErrors }
 import v2.models.outcomes.ResponseWrapper
@@ -58,15 +57,15 @@ class RetrieveUkPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec {
     MockAppConfig.ifsBaseUrl returns baseUrl
     MockAppConfig.ifsToken returns "ifs-token"
     MockAppConfig.ifsEnvironment returns "ifs-environment"
-    MockAppConfig.ifsEnvironmentHeaders returns Some(allowedDownstreamHeaders)
+    MockAppConfig.ifsEnvironmentHeaders returns Some(allowedIfsHeaders)
 
     def stubHttpResponse(outcome: DownstreamOutcome[RetrieveUkPropertyAnnualSubmissionResponse])
       : CallHandler[Future[DownstreamOutcome[RetrieveUkPropertyAnnualSubmissionResponse]]]#Derived = {
       MockHttpClient
         .get(
           url = s"$baseUrl/income-tax/business/property/annual",
-          config = dummyIfsHeaderCarrierConfig,
-          queryParams = Seq("taxableEntityId" -> nino, "incomeSourceId" -> businessId, "taxYear" -> taxYear),
+          config = dummyHeaderCarrierConfig,
+          parameters = Seq("taxableEntityId" -> nino, "incomeSourceId" -> businessId, "taxYear" -> taxYear),
           requiredHeaders = requiredIfsHeaders,
           excludedHeaders = Seq("AnotherHeader" -> "HeaderValue")
         )

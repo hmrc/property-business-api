@@ -16,9 +16,8 @@
 
 package v2.connectors
 
-import mocks.MockAppConfig
+import mocks.{MockAppConfig, MockHttpClient}
 import org.scalamock.handlers.CallHandler
-import v2.mocks.MockHttpClient
 import v2.models.domain.{ Nino, PeriodId }
 import v2.models.outcomes.ResponseWrapper
 import v2.models.request.amendHistoricFhlUkPiePeriodSummary.{
@@ -57,7 +56,7 @@ class AmendHistoricFhlUkPiePeriodSummaryConnectorSpec extends ConnectorSpec {
       appConfig = mockAppConfig
     )
 
-    MockAppConfig.ifsEnvironmentHeaders returns Some(allowedDownstreamHeaders)
+    MockAppConfig.ifsEnvironmentHeaders returns Some(allowedIfsHeaders)
     MockAppConfig.ifsToken returns "ifs-token"
     MockAppConfig.ifsBaseUrl returns baseUrl
     MockAppConfig.ifsEnvironment returns "ifs-environment"
@@ -75,7 +74,7 @@ class AmendHistoricFhlUkPiePeriodSummaryConnectorSpec extends ConnectorSpec {
       MockHttpClient
         .put(
           url = s"$baseUrl/$path",
-          config = dummyIfsHeaderCarrierConfig,
+          config = dummyHeaderCarrierConfig,
           requiredHeaders = requiredIfsHeaders,
           body = requestBody
         )

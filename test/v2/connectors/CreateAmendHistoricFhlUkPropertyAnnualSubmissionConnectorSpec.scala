@@ -16,9 +16,8 @@
 
 package v2.connectors
 
-import mocks.MockAppConfig
+import mocks.{MockAppConfig, MockHttpClient}
 import uk.gov.hmrc.http.HeaderCarrier
-import v2.mocks.MockHttpClient
 import v2.models.domain.{ Nino, TaxYear }
 import v2.models.outcomes.ResponseWrapper
 import v2.models.request.common.ukPropertyRentARoom.UkPropertyAdjustmentsRentARoom
@@ -42,9 +41,9 @@ class CreateAmendHistoricFhlUkPropertyAnnualSubmissionConnectorSpec extends Conn
     Some(BigDecimal("105.11")),
     Some(BigDecimal("200.11")),
     Some(BigDecimal("120.11")),
-    true,
+    periodOfGraceAdjustment = true,
     Some(BigDecimal("101.11")),
-    false,
+    nonResidentLandlord = false,
     Some(UkPropertyAdjustmentsRentARoom(true))
   )
 
@@ -76,7 +75,7 @@ class CreateAmendHistoricFhlUkPropertyAnnualSubmissionConnectorSpec extends Conn
     MockAppConfig.ifsBaseUrl returns baseUrl
     MockAppConfig.ifsToken returns "ifs-token"
     MockAppConfig.ifsEnvironment returns "ifs-environment"
-    MockAppConfig.ifsEnvironmentHeaders returns Some(allowedDownstreamHeaders)
+    MockAppConfig.ifsEnvironmentHeaders returns Some(allowedIfsHeaders)
   }
 
   "connector" must {
@@ -89,7 +88,7 @@ class CreateAmendHistoricFhlUkPropertyAnnualSubmissionConnectorSpec extends Conn
       MockHttpClient
         .put(
           url = s"$baseUrl/income-tax/nino/$nino/uk-properties/furnished-holiday-lettings/annual-summaries/$downstreamTaxYear",
-          config = dummyIfsHeaderCarrierConfig,
+          config = dummyHeaderCarrierConfig,
           body = body,
           requiredHeaders = requiredIfsHeadersPut,
           excludedHeaders = Seq("AnotherHeader" -> "HeaderValue")

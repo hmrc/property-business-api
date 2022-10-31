@@ -16,8 +16,7 @@
 
 package v2.connectors
 
-import mocks.MockAppConfig
-import v2.mocks.MockHttpClient
+import mocks.{MockAppConfig, MockHttpClient}
 import v2.models.domain.Nino
 import v2.models.outcomes.ResponseWrapper
 import v2.models.request.deletePropertyAnnualSubmission.DeletePropertyAnnualSubmissionRequest
@@ -46,7 +45,7 @@ class DeletePropertyAnnualSubmissionConnectorSpec extends ConnectorSpec {
     MockAppConfig.ifsBaseUrl returns baseUrl
     MockAppConfig.ifsToken returns "ifs-token"
     MockAppConfig.ifsEnvironment returns "ifs-environment"
-    MockAppConfig.ifsEnvironmentHeaders returns Some(allowedDownstreamHeaders)
+    MockAppConfig.ifsEnvironmentHeaders returns Some(allowedIfsHeaders)
   }
 
   "connector" must {
@@ -56,7 +55,7 @@ class DeletePropertyAnnualSubmissionConnectorSpec extends ConnectorSpec {
       MockHttpClient
         .delete(
           url = s"$baseUrl/income-tax/business/property/annual?taxableEntityId=$nino&incomeSourceId=$businessId&taxYear=$taxYear",
-          config = dummyIfsHeaderCarrierConfig,
+          config = dummyHeaderCarrierConfig,
           requiredHeaders = requiredIfsHeaders,
           excludedHeaders = Seq("AnotherHeader" -> "HeaderValue")
         )

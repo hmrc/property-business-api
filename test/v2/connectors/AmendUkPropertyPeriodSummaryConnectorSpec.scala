@@ -16,9 +16,8 @@
 
 package v2.connectors
 
-import mocks.MockAppConfig
+import mocks.{MockAppConfig, MockHttpClient}
 import uk.gov.hmrc.http.HeaderCarrier
-import v2.mocks.MockHttpClient
 import v2.models.domain.Nino
 import v2.models.outcomes.ResponseWrapper
 import v2.models.request.amendUkPropertyPeriodSummary.{AmendUkPropertyPeriodSummaryRequest, AmendUkPropertyPeriodSummaryRequestBody}
@@ -104,7 +103,7 @@ class AmendUkPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
     MockAppConfig.ifsBaseUrl returns baseUrl
     MockAppConfig.ifsToken returns "ifs-token"
     MockAppConfig.ifsEnvironment returns "ifs-environment"
-    MockAppConfig.ifsEnvironmentHeaders returns Some(allowedDownstreamHeaders)
+    MockAppConfig.ifsEnvironmentHeaders returns Some(allowedIfsHeaders)
   }
 
   "AmendUkPropertyPeriodSummaryConnector" must {
@@ -118,7 +117,7 @@ class AmendUkPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
         .put(
           url = s"$baseUrl/income-tax/business/property/periodic?" +
             s"taxableEntityId=$nino&taxYear=$taxYear&incomeSourceId=$businessId&submissionId=$submissionId",
-          config = dummyIfsHeaderCarrierConfig,
+          config = dummyHeaderCarrierConfig,
           body = requestBody,
           requiredHeaders = requiredIfsHeadersPut,
           excludedHeaders = Seq("AnotherHeader" -> "HeaderValue")

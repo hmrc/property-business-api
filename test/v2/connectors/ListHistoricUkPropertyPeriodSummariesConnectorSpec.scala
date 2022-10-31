@@ -16,8 +16,7 @@
 
 package v2.connectors
 
-import mocks.MockAppConfig
-import v2.mocks.MockHttpClient
+import mocks.{MockAppConfig, MockHttpClient}
 import v2.models.domain.{ HistoricPropertyType, Nino }
 import v2.models.outcomes.ResponseWrapper
 import v2.models.request.listHistoricUkPropertyPeriodSummaries.ListHistoricUkPropertyPeriodSummariesRequest
@@ -48,7 +47,7 @@ class ListHistoricUkPropertyPeriodSummariesConnectorSpec extends ConnectorSpec {
     MockAppConfig.ifsBaseUrl returns baseUrl
     MockAppConfig.ifsToken returns "ifs-token"
     MockAppConfig.ifsEnvironment returns "ifs-environment"
-    MockAppConfig.ifsEnvironmentHeaders returns Some(allowedDownstreamHeaders)
+    MockAppConfig.ifsEnvironmentHeaders returns Some(allowedIfsHeaders)
   }
 
   "connector" must {
@@ -58,7 +57,7 @@ class ListHistoricUkPropertyPeriodSummariesConnectorSpec extends ConnectorSpec {
       MockHttpClient
         .get(
           url = s"$baseUrl/income-tax/nino/$nino/uk-properties/furnished-holiday-lettings/periodic-summaries",
-          config = dummyIfsHeaderCarrierConfig,
+          config = dummyHeaderCarrierConfig,
           requiredHeaders = requiredIfsHeaders,
           excludedHeaders = Seq("AnotherHeader" -> "HeaderValue")
         )
@@ -71,7 +70,7 @@ class ListHistoricUkPropertyPeriodSummariesConnectorSpec extends ConnectorSpec {
       MockHttpClient
         .get(
           url = s"$baseUrl/income-tax/nino/$nino/uk-properties/other/periodic-summaries",
-          config = dummyIfsHeaderCarrierConfig,
+          config = dummyHeaderCarrierConfig,
           requiredHeaders = requiredIfsHeaders,
           excludedHeaders = Seq("AnotherHeader" -> "HeaderValue")
         )

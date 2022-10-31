@@ -16,9 +16,8 @@
 
 package v2.connectors
 
-import mocks.MockAppConfig
+import mocks.{MockAppConfig, MockHttpClient}
 import uk.gov.hmrc.http.HeaderCarrier
-import v2.mocks.MockHttpClient
 import v2.models.domain.Nino
 import v2.models.outcomes.ResponseWrapper
 import v2.models.request.amendUkPropertyAnnualSubmission._
@@ -59,7 +58,7 @@ class AmendUkPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec {
       Some(5000.99),
       Some(5000.99),
       Some(5000.99),
-      true,
+      nonResidentLandlord = true,
       Some(UkPropertyAdjustmentsRentARoom(true))
     )),
     Some(UkNonFhlPropertyAllowances(
@@ -119,7 +118,7 @@ class AmendUkPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec {
     MockAppConfig.ifsBaseUrl returns baseUrl
     MockAppConfig.ifsToken returns "ifs-token"
     MockAppConfig.ifsEnvironment returns "ifs-environment"
-    MockAppConfig.ifsEnvironmentHeaders returns Some(allowedDownstreamHeaders)
+    MockAppConfig.ifsEnvironmentHeaders returns Some(allowedIfsHeaders)
   }
 
   "connector" must {
@@ -132,7 +131,7 @@ class AmendUkPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec {
       MockHttpClient
         .put(
           url = s"$baseUrl/income-tax/business/property/annual?taxableEntityId=$nino&incomeSourceId=$businessId&taxYear=$taxYear",
-          config = dummyIfsHeaderCarrierConfig,
+          config = dummyHeaderCarrierConfig,
           body = body,
           requiredHeaders = requiredIfsHeadersPut,
           excludedHeaders = Seq("AnotherHeader" -> "HeaderValue")

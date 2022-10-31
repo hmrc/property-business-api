@@ -16,9 +16,8 @@
 
 package v2.connectors
 
-import mocks.MockAppConfig
+import mocks.{MockAppConfig, MockHttpClient}
 import uk.gov.hmrc.http.HeaderCarrier
-import v2.mocks.MockHttpClient
 import v2.models.domain.Nino
 import v2.models.outcomes.ResponseWrapper
 import v2.models.request.common.ukPropertyRentARoom.{UkPropertyExpensesRentARoom, UkPropertyIncomeRentARoom}
@@ -90,7 +89,7 @@ class CreateHistoricNonFhlUkPropertyPeriodSummaryConnectorSpec extends Connector
     MockAppConfig.ifsBaseUrl returns baseUrl
     MockAppConfig.ifsToken returns "ifs-token"
     MockAppConfig.ifsEnvironment returns "ifs-environment"
-    MockAppConfig.ifsEnvironmentHeaders returns Some(allowedDownstreamHeaders)
+    MockAppConfig.ifsEnvironmentHeaders returns Some(allowedIfsHeaders)
   }
 
   "connector" must {
@@ -104,7 +103,7 @@ class CreateHistoricNonFhlUkPropertyPeriodSummaryConnectorSpec extends Connector
       MockHttpClient
         .post(
           url = url,
-          config = dummyIfsHeaderCarrierConfig,
+          config = dummyHeaderCarrierConfig,
           body = requestBody,
           requiredHeaders = requiredIfsHeadersPost,
           excludedHeaders = Seq("Some-Header" -> "some-value")
@@ -124,7 +123,7 @@ class CreateHistoricNonFhlUkPropertyPeriodSummaryConnectorSpec extends Connector
       MockHttpClient
         .post(
           url = url,
-          config = dummyIfsHeaderCarrierConfig,
+          config = dummyHeaderCarrierConfig,
           body = consolidatedRequestBody,
           requiredHeaders = requiredIfsHeadersPost,
           excludedHeaders = Seq("Some-Header" -> "some-value")

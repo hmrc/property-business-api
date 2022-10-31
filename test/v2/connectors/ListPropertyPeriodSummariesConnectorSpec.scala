@@ -16,8 +16,7 @@
 
 package v2.connectors
 
-import mocks.MockAppConfig
-import v2.mocks.MockHttpClient
+import mocks.{MockAppConfig, MockHttpClient}
 import v2.models.domain.Nino
 import v2.models.outcomes.ResponseWrapper
 import v2.models.request.listPropertyPeriodSummaries.ListPropertyPeriodSummariesRequest
@@ -52,7 +51,7 @@ class ListPropertyPeriodSummariesConnectorSpec extends ConnectorSpec {
     MockAppConfig.ifsBaseUrl returns baseUrl
     MockAppConfig.ifsToken returns "ifs-token"
     MockAppConfig.ifsEnvironment returns "ifs-environment"
-    MockAppConfig.ifsEnvironmentHeaders returns Some(allowedDownstreamHeaders)
+    MockAppConfig.ifsEnvironmentHeaders returns Some(allowedIfsHeaders)
   }
 
   "connector" must {
@@ -62,8 +61,8 @@ class ListPropertyPeriodSummariesConnectorSpec extends ConnectorSpec {
       MockHttpClient
         .get(
           url = s"$baseUrl/income-tax/business/property/$nino/$businessId/period",
-          queryParams = Seq("taxYear" -> taxYear),
-          config = dummyIfsHeaderCarrierConfig,
+          parameters = Seq("taxYear" -> taxYear),
+          config = dummyHeaderCarrierConfig,
           requiredHeaders = requiredIfsHeaders,
           excludedHeaders = Seq("AnotherHeader" -> "HeaderValue")
         )

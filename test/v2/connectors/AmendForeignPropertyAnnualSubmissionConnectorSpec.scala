@@ -16,12 +16,11 @@
 
 package v2.connectors
 
-import mocks.MockAppConfig
+import mocks.{MockAppConfig, MockHttpClient}
 import uk.gov.hmrc.http.HeaderCarrier
-import v2.mocks.MockHttpClient
 import v2.models.domain.Nino
 import v2.models.outcomes.ResponseWrapper
-import v2.models.request.amendForeignPropertyAnnualSubmission.{AmendForeignPropertyAnnualSubmissionFixture, _}
+import v2.models.request.amendForeignPropertyAnnualSubmission._
 
 import scala.concurrent.Future
 
@@ -49,7 +48,7 @@ class AmendForeignPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec wi
     MockAppConfig.ifsBaseUrl returns baseUrl
     MockAppConfig.ifsToken returns "ifs-token"
     MockAppConfig.ifsEnvironment returns "ifs-environment"
-    MockAppConfig.ifsEnvironmentHeaders returns Some(allowedDownstreamHeaders)
+    MockAppConfig.ifsEnvironmentHeaders returns Some(allowedIfsHeaders)
   }
 
   "connector" must {
@@ -62,7 +61,7 @@ class AmendForeignPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec wi
       MockHttpClient
         .put(
           url = s"$baseUrl/income-tax/business/property/annual?taxableEntityId=$nino&incomeSourceId=$businessId&taxYear=$taxYear",
-          config = dummyIfsHeaderCarrierConfig,
+          config = dummyHeaderCarrierConfig,
           body = body,
           requiredHeaders = requiredIfsHeadersPut,
           excludedHeaders = Seq("AnotherHeader" -> "HeaderValue")

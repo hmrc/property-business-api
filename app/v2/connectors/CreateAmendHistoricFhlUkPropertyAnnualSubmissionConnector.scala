@@ -36,7 +36,7 @@ class CreateAmendHistoricFhlUkPropertyAnnualSubmissionConnector @Inject()(val ht
       correlationId: String): Future[DownstreamOutcome[CreateAmendHistoricFhlUkPropertyAnnualSubmissionResponse]] = {
 
     val nino    = request.nino.nino
-    val taxYear = request.taxYear.toDownstream
+    val taxYear = request.taxYear.asDownstream
 
     put(
       body = request.body,

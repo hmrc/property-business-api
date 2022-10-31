@@ -39,7 +39,7 @@ class CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionConnector @Inject()(val
     put(
       body = request.body,
       uri = IfsUri[CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionResponse](
-        s"income-tax/nino/${request.nino.nino}/uk-properties/other/annual-summaries/${request.taxYear.toDownstream}")
+        s"income-tax/nino/${request.nino.nino}/uk-properties/other/annual-summaries/${request.taxYear.asDownstream}")
     )
   }
 

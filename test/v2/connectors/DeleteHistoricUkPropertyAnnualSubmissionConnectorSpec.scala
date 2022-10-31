@@ -57,7 +57,7 @@ class DeleteHistoricUkPropertyAnnualSubmissionConnectorSpec extends ConnectorSpe
 
       MockHttpClient
         .put(
-          url = s"$baseUrl/income-tax/nino/$nino/uk-properties/furnished-holiday-lettings/annual-summaries/${taxYear.toDownstream}",
+          url = s"$baseUrl/income-tax/nino/$nino/uk-properties/furnished-holiday-lettings/annual-summaries/2022",
           config = dummyIfsHeaderCarrierConfig,
           body = JsObject.empty,
           requiredHeaders = requiredIfsHeaders,
@@ -73,7 +73,7 @@ class DeleteHistoricUkPropertyAnnualSubmissionConnectorSpec extends ConnectorSpe
 
       MockHttpClient
         .put(
-          url = s"$baseUrl/income-tax/nino/$nino/uk-properties/other/annual-summaries/${taxYear.toDownstream}",
+          url = s"$baseUrl/income-tax/nino/$nino/uk-properties/other/annual-summaries/2022",
           config = dummyIfsHeaderCarrierConfig,
           body = JsObject.empty,
           requiredHeaders = requiredIfsHeaders,

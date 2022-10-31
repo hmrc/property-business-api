@@ -36,7 +36,7 @@ class DeleteHistoricUkPropertyAnnualSubmissionConnector @Inject()(val http: Http
       correlationId: String): Future[DownstreamOutcome[Unit]] = {
 
     val nino    = request.nino.nino
-    val taxYear = request.taxYear.toDownstream
+    val taxYear = request.taxYear.asDownstream
 
     val propertyTypeName = request.propertyType match {
       case HistoricPropertyType.Fhl    => "furnished-holiday-lettings"

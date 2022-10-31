@@ -36,7 +36,7 @@ class RetrieveHistoricNonFhlUkPropertyAnnualSubmissionConnector @Inject()(val ht
       correlationId: String): Future[DownstreamOutcome[RetrieveHistoricNonFhlUkPropertyAnnualSubmissionResponse]] = {
 
     val nino    = request.nino.nino
-    val taxYear = request.taxYear.toDownstream
+    val taxYear = request.taxYear.asDownstream
 
     val response = get(
       uri = IfsUri[RetrieveHistoricNonFhlUkPropertyAnnualSubmissionResponse](s"income-tax/nino/$nino/uk-properties/other/annual-summaries/$taxYear")

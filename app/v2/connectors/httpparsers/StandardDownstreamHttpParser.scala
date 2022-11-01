@@ -27,7 +27,7 @@ object StandardDownstreamHttpParser extends HttpParser {
 
   case class SuccessCode(status: Int) extends AnyVal
 
-  // Return Right[IfsResponse[Unit]] as success response has no body - no need to assign it a value
+  // Return HttpReads[DownstreamOutcome[Unit]] as success response has no body - no need to assign it a value
   implicit def readsEmpty(implicit successCode: SuccessCode = SuccessCode(NO_CONTENT)): HttpReads[DownstreamOutcome[Unit]] =
     (_: String, url: String, response: HttpResponse) =>
       doRead(url, response) { correlationId =>

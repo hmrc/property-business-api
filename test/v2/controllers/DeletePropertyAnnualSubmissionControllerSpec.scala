@@ -23,7 +23,7 @@ import v2.mocks.MockIdGenerator
 import v2.mocks.requestParsers.MockDeletePropertyAnnualSubmissionRequestParser
 import v2.mocks.services.{MockAuditService, MockDeletePropertyAnnualSubmissionService, MockEnrolmentsAuthService, MockMtdIdLookupService}
 import v2.models.audit.{AuditError, AuditEvent, AuditResponse, GenericAuditDetail}
-import v2.models.domain.Nino
+import v2.models.domain.{Nino, TaxYear}
 import v2.models.errors._
 import v2.models.outcomes.ResponseWrapper
 import v2.models.request.deletePropertyAnnualSubmission._
@@ -64,7 +64,7 @@ class DeletePropertyAnnualSubmissionControllerSpec
   }
 
   private val rawData     = DeletePropertyAnnualSubmissionRawData(nino, businessId, taxYear)
-  private val requestData = DeletePropertyAnnualSubmissionRequest(Nino(nino), businessId, taxYear)
+  private val requestData = DeletePropertyAnnualSubmissionRequest(Nino(nino), businessId, TaxYear.fromMtd(taxYear))
 
   def event(auditResponse: AuditResponse): AuditEvent[GenericAuditDetail] =
     AuditEvent(

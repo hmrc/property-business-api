@@ -33,7 +33,7 @@ class VersionRoutingMapSpec extends UnitSpec with MockAppConfig with GuiceOneApp
   val v2r7cRoutes: v2r7c.Routes = app.injector.instanceOf[v2r7c.Routes]
 
   private def newVersionRoutingMap(v2r7cEnabled: Boolean) = {
-    MockAppConfig.featureSwitch.returns(Some(Configuration(ConfigFactory.parseString(s"v2r7c-endpoints.enabled = $v2r7cEnabled"))))
+    MockAppConfig.featureSwitches.returns(Configuration(ConfigFactory.parseString(s"v2r7c-endpoints.enabled = $v2r7cEnabled")))
 
     VersionRoutingMapImpl(
       appConfig = mockAppConfig,

@@ -16,11 +16,9 @@
 
 package v2.connectors
 
-import mocks.MockAppConfig
 import org.scalamock.handlers.CallHandler
 import v2.connectors.RetrieveForeignPropertyAnnualSubmissionConnector.{ForeignResult, NonForeignResult}
-import v2.mocks.MockHttpClient
-import v2.models.domain.Nino
+import v2.models.domain.{Nino, TaxYear}
 import v2.models.errors.{DownstreamErrorCode, DownstreamErrors}
 import v2.models.outcomes.ResponseWrapper
 import v2.models.request.retrieveForeignPropertyAnnualSubmission.RetrieveForeignPropertyAnnualSubmissionRequest
@@ -40,7 +38,7 @@ class RetrieveForeignPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec
     RetrieveForeignPropertyAnnualSubmissionRequest(
       Nino(nino),
       businessId,
-      taxYear
+      TaxYear.fromMtd(taxYear)
 
     )
   val countryCode: String = "FRA"
@@ -51,26 +49,18 @@ class RetrieveForeignPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec
   def responseWith(foreignFhlEea: Option[ForeignFhlEeaEntry], foreignNonFhlProperty: Option[Seq[ForeignPropertyEntry]]): RetrieveForeignPropertyAnnualSubmissionResponse =
     RetrieveForeignPropertyAnnualSubmissionResponse("2020-06-17T10:53:38Z", foreignFhlEea, foreignNonFhlProperty)
 
-  class Test extends MockHttpClient with MockAppConfig {
+  trait Test {
+    _: ConnectorTest =>
     val connector: RetrieveForeignPropertyAnnualSubmissionConnector = new RetrieveForeignPropertyAnnualSubmissionConnector(
       http = mockHttpClient,
       appConfig = mockAppConfig
     )
 
-    MockAppConfig.ifsBaseUrl returns baseUrl
-    MockAppConfig.ifsToken returns "ifs-token"
-    MockAppConfig.ifsEnvironment returns "ifs-environment"
-    MockAppConfig.ifsEnvironmentHeaders returns Some(allowedDownstreamHeaders)
-
     def stubHttpResponse(outcome: DownstreamOutcome[RetrieveForeignPropertyAnnualSubmissionResponse])
     : CallHandler[Future[DownstreamOutcome[RetrieveForeignPropertyAnnualSubmissionResponse]]]#Derived = {
-      MockHttpClient
-        .get(
+      willGet(
           url = s"$baseUrl/income-tax/business/property/annual",
-          config = dummyIfsHeaderCarrierConfig,
-          queryParams = Seq("taxableEntityId" -> nino, "incomeSourceId" -> businessId, "taxYear" -> taxYear),
-          requiredHeaders = requiredIfsHeaders,
-          excludedHeaders = Seq("AnotherHeader" -> "HeaderValue")
+          parameters = Seq("taxableEntityId" -> nino, "incomeSourceId" -> businessId, "taxYear" -> "2019-20")
         )
         .returns(Future.successful(outcome))
     }
@@ -78,7 +68,7 @@ class RetrieveForeignPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec
 
   "connector" when {
     "response has a foreign fhl details" must {
-      "return a foreign result" in new Test {
+      "return a foreign result" in new IfsTest with Test {
         val response: RetrieveForeignPropertyAnnualSubmissionResponse = responseWith(foreignFhlEea = Some(foreignFhlEea), foreignNonFhlProperty = None)
         val outcome                                                = Right(ResponseWrapper(correlationId, response))
 
@@ -89,7 +79,7 @@ class RetrieveForeignPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec
     }
 
     "response has foreign non-fhl details" must {
-      "return a foreign result" in new Test {
+      "return a foreign result" in new IfsTest with Test {
         val response: RetrieveForeignPropertyAnnualSubmissionResponse = responseWith(foreignFhlEea = None, foreignNonFhlProperty = Some(Seq(foreignNonFhlProperty)))
         val outcome                                                = Right(ResponseWrapper(correlationId, response))
 
@@ -100,7 +90,7 @@ class RetrieveForeignPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec
     }
 
     "response has foreign fhl and non-fhl details" must {
-      "return a foreign result" in new Test {
+      "return a foreign result" in new IfsTest with Test {
         val response: RetrieveForeignPropertyAnnualSubmissionResponse = responseWith(foreignFhlEea = Some(foreignFhlEea), foreignNonFhlProperty = Some(Seq(foreignNonFhlProperty)))
         val outcome =  Right(ResponseWrapper(correlationId, response))
 
@@ -110,7 +100,7 @@ class RetrieveForeignPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec
       }
     }
     "response has no details" must {
-      "return a non-foreign result" in new Test{
+      "return a non-foreign result" in new IfsTest with Test{
         val response: RetrieveForeignPropertyAnnualSubmissionResponse = responseWith(None, None)
         val outcome                                                = Right(ResponseWrapper(correlationId, response))
 
@@ -121,7 +111,7 @@ class RetrieveForeignPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec
     }
 
     "response is an error" must {
-      "return the error" in new Test {
+      "return the error" in new IfsTest with Test {
         val outcome = Left(ResponseWrapper(correlationId, DownstreamErrors.single(DownstreamErrorCode("SOME_ERROR"))))
 
         stubHttpResponse(outcome)

@@ -23,7 +23,7 @@ import v2.mocks.MockIdGenerator
 import v2.mocks.hateoas.MockHateoasFactory
 import v2.mocks.requestParsers.MockListPropertyPeriodSummariesRequestParser
 import v2.mocks.services.{MockAuditService, MockEnrolmentsAuthService, MockListPropertyPeriodSummariesService, MockMtdIdLookupService}
-import v2.models.domain.Nino
+import v2.models.domain.{Nino, TaxYear}
 import v2.models.errors._
 import v2.models.hateoas.Method._
 import v2.models.hateoas.{HateoasWrapper, Link}
@@ -68,7 +68,7 @@ class ListPropertyPeriodSummariesControllerSpec
   }
 
   private val rawData     = ListPropertyPeriodSummariesRawData(nino, businessId, taxYear)
-  private val requestData = ListPropertyPeriodSummariesRequest(Nino(nino), businessId, taxYear)
+  private val requestData = ListPropertyPeriodSummariesRequest(Nino(nino), businessId, TaxYear.fromMtd(taxYear))
 
   private val testHateoasLink = Link("/someLink", GET, "some-relation")
 

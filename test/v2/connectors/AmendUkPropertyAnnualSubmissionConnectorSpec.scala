@@ -16,16 +16,13 @@
 
 package v2.connectors
 
-import mocks.MockAppConfig
-import uk.gov.hmrc.http.HeaderCarrier
-import v2.mocks.MockHttpClient
-import v2.models.domain.Nino
+import v2.models.domain.{Nino, TaxYear}
 import v2.models.outcomes.ResponseWrapper
 import v2.models.request.amendUkPropertyAnnualSubmission._
 import v2.models.request.amendUkPropertyAnnualSubmission.ukFhlProperty._
 import v2.models.request.amendUkPropertyAnnualSubmission.ukNonFhlProperty._
-import v2.models.request.common.{Building, FirstYear, StructuredBuildingAllowance}
 import v2.models.request.common.ukPropertyRentARoom.UkPropertyAdjustmentsRentARoom
+import v2.models.request.common.{Building, FirstYear, StructuredBuildingAllowance}
 
 import scala.concurrent.Future
 
@@ -39,9 +36,9 @@ class AmendUkPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec {
     Some(UkFhlPropertyAdjustments(
       Some(5000.99),
       Some(5000.99),
-      true,
+      periodOfGraceAdjustment = true,
       Some(5000.99),
-      true,
+      nonResidentLandlord = true,
       Some(UkPropertyAdjustmentsRentARoom(true))
     )),
     Some(UkFhlPropertyAllowances(
@@ -59,7 +56,7 @@ class AmendUkPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec {
       Some(5000.99),
       Some(5000.99),
       Some(5000.99),
-      true,
+      nonResidentLandlord = true,
       Some(UkPropertyAdjustmentsRentARoom(true))
     )),
     Some(UkNonFhlPropertyAllowances(
@@ -106,36 +103,25 @@ class AmendUkPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec {
   val request: AmendUkPropertyAnnualSubmissionRequest = AmendUkPropertyAnnualSubmissionRequest(
     nino = Nino(nino),
     businessId = businessId,
-    taxYear = taxYear,
+    taxYear = TaxYear.fromMtd(taxYear),
     body = body
   )
 
-  class Test extends MockHttpClient with MockAppConfig {
+  trait Test {
+    _: ConnectorTest =>
     val connector = new AmendUkPropertyAnnualSubmissionConnector(
       http = mockHttpClient,
       appConfig = mockAppConfig
     )
-
-    MockAppConfig.ifsBaseUrl returns baseUrl
-    MockAppConfig.ifsToken returns "ifs-token"
-    MockAppConfig.ifsEnvironment returns "ifs-environment"
-    MockAppConfig.ifsEnvironmentHeaders returns Some(allowedDownstreamHeaders)
   }
 
   "connector" must {
-    "put a body and return a 204" in new Test {
+    "put a body and return a 204" in new IfsTest with Test {
       val outcome = Right(ResponseWrapper(correlationId, ()))
 
-      implicit val hc: HeaderCarrier = HeaderCarrier(otherHeaders = otherHeaders ++ Seq("Content-Type" -> "application/json"))
-      val requiredIfsHeadersPut: Seq[(String, String)] = requiredIfsHeaders ++ Seq("Content-Type" -> "application/json")
-
-      MockHttpClient
-        .put(
-          url = s"$baseUrl/income-tax/business/property/annual?taxableEntityId=$nino&incomeSourceId=$businessId&taxYear=$taxYear",
-          config = dummyIfsHeaderCarrierConfig,
-          body = body,
-          requiredHeaders = requiredIfsHeadersPut,
-          excludedHeaders = Seq("AnotherHeader" -> "HeaderValue")
+      willPut(
+          url = s"$baseUrl/income-tax/business/property/annual?taxableEntityId=$nino&incomeSourceId=$businessId&taxYear=2022-23",
+          body = body
         )
         .returns(Future.successful(outcome))
 

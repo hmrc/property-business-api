@@ -37,6 +37,8 @@ trait IntegrationBaseSpec extends UnitSpec with WireMockHelper with GuiceOneServ
     "microservice.services.des.port"           -> mockPort,
     "microservice.services.ifs.host"           -> mockHost,
     "microservice.services.ifs.port"           -> mockPort,
+    "microservice.services.tys-ifs.host"       -> mockHost,
+    "microservice.services.tys-ifs.port"       -> mockPort,
     "microservice.services.mtd-id-lookup.host" -> mockHost,
     "microservice.services.mtd-id-lookup.port" -> mockPort,
     "microservice.services.auth.host"          -> mockHost,
@@ -62,7 +64,6 @@ trait IntegrationBaseSpec extends UnitSpec with WireMockHelper with GuiceOneServ
 
   /** Creates downstream request body by reading JSON and then writing it back via a model class `A` */
   def downstreamBody[A: Format](json: JsValue): JsValue = Json.toJson(json.as[A])
-
 
   /** Creates downstream request body by reading JSON and then writing it back via a model class `A` */
   def downstreamBody[A: Format](json: String): String = downstreamBody(Json.parse(json)).toString()

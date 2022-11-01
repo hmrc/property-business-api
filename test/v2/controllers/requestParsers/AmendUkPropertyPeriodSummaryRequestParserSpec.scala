@@ -18,7 +18,7 @@ package v2.controllers.requestParsers
 
 import play.api.libs.json.Json
 import support.UnitSpec
-import v2.models.domain.Nino
+import v2.models.domain.{Nino, TaxYear}
 import v2.models.errors.{BadRequestError, BusinessIdFormatError, ErrorWrapper, NinoFormatError}
 import v2.models.request.amendUkPropertyPeriodSummary._
 import v2.models.request.common.ukFhlProperty._
@@ -66,7 +66,7 @@ class AmendUkPropertyPeriodSummaryRequestParserSpec extends UnitSpec {
         )
 
         parser.parseRequest(inputData) shouldBe
-          Right(AmendUkPropertyPeriodSummaryRequest(Nino(nino), taxYear, businessId, submissionId, model))
+          Right(AmendUkPropertyPeriodSummaryRequest(Nino(nino), TaxYear.fromMtd(taxYear), businessId, submissionId, model))
       }
     }
 

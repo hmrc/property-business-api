@@ -22,7 +22,7 @@ import javax.inject.{ Inject, Singleton }
 import uk.gov.hmrc.http.{ HeaderCarrier, HttpClient }
 import v2.connectors.DownstreamUri.IfsUri
 import v2.connectors.RetrieveForeignPropertyPeriodSummaryConnector._
-import v2.connectors.httpparsers.StandardIfsHttpParser._
+import v2.connectors.httpparsers.StandardDownstreamHttpParser._
 import v2.models.outcomes.ResponseWrapper
 import v2.models.request.retrieveForeignPropertyPeriodSummary.RetrieveForeignPropertyPeriodSummaryRequest
 import v2.models.response.retrieveForeignPropertyPeriodSummary.RetrieveForeignPropertyPeriodSummaryResponse
@@ -44,10 +44,11 @@ class RetrieveForeignPropertyPeriodSummaryConnector @Inject()(val http: HttpClie
   def retrieveForeignProperty(request: RetrieveForeignPropertyPeriodSummaryRequest)(implicit hc: HeaderCarrier,
                                                                                     ec: ExecutionContext,
                                                                                     correlationId: String): Future[DownstreamOutcome[Result]] = {
+    // Note that MTD tax year format is used
     val response = get(
       uri = IfsUri[RetrieveForeignPropertyPeriodSummaryResponse]("income-tax/business/property/periodic"),
       queryParams = Seq("taxableEntityId" -> request.nino.value,
-                        "taxYear"         -> request.taxYear,
+                        "taxYear"         -> request.taxYear.asMtd,
                         "incomeSourceId"  -> request.businessId,
                         "submissionId"    -> request.submissionId)
     )

@@ -14,8 +14,11 @@
  * limitations under the License.
  */
 
-package v2.models.request.amendForeignPropertyPeriodSummary
+package config
 
-import v2.models.domain.{Nino, TaxYear}
-
-case class AmendForeignPropertyPeriodSummaryRequest(nino: Nino, businessId: String, taxYear: TaxYear, submissionId: String, body: AmendForeignPropertyPeriodSummaryRequestBody)
+case class DownstreamConfig(
+    baseUrl: String,
+    env: String,
+    token: String,
+    environmentHeaders: Option[Seq[String]]
+)

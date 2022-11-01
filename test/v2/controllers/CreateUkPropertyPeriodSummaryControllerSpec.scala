@@ -24,7 +24,7 @@ import v2.mocks.hateoas.MockHateoasFactory
 import v2.mocks.requestParsers.MockCreateUkPropertyPeriodSummaryRequestParser
 import v2.mocks.services.{MockAuditService, MockCreateUkPropertyPeriodSummaryService, MockEnrolmentsAuthService, MockMtdIdLookupService}
 import v2.models.audit.{AuditError, AuditEvent, AuditResponse, GenericAuditDetail}
-import v2.models.domain.Nino
+import v2.models.domain.{Nino, TaxYear}
 import v2.models.errors._
 import v2.models.hateoas.Method.GET
 import v2.models.hateoas.{HateoasWrapper, Link}
@@ -278,7 +278,7 @@ class CreateUkPropertyPeriodSummaryControllerSpec
       |""".stripMargin
   )
 
-  private val requestData = CreateUkPropertyPeriodSummaryRequest(Nino(nino), taxYear, businessId, requestBody)
+  private val requestData = CreateUkPropertyPeriodSummaryRequest(Nino(nino), TaxYear.fromMtd(taxYear), businessId, requestBody)
   private val rawData     = CreateUkPropertyPeriodSummaryRawData(nino, taxYear, businessId, requestBodyJson)
 
   val hateoasResponse: JsValue = Json.parse(

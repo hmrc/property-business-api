@@ -16,12 +16,10 @@
 
 package v2.connectors
 
-import mocks.MockAppConfig
-import v2.mocks.MockHttpClient
-import v2.models.domain.Nino
+import v2.models.domain.{Nino, TaxYear}
 import v2.models.outcomes.ResponseWrapper
 import v2.models.request.listPropertyPeriodSummaries.ListPropertyPeriodSummariesRequest
-import v2.models.response.listPropertyPeriodSummaries.{ ListPropertyPeriodSummariesResponse, SubmissionPeriod }
+import v2.models.response.listPropertyPeriodSummaries.{ListPropertyPeriodSummariesResponse, SubmissionPeriod}
 
 import scala.concurrent.Future
 
@@ -34,7 +32,7 @@ class ListPropertyPeriodSummariesConnectorSpec extends ConnectorSpec {
   val request: ListPropertyPeriodSummariesRequest = ListPropertyPeriodSummariesRequest(
     nino = Nino(nino),
     businessId = businessId,
-    taxYear = taxYear
+    taxYear = TaxYear.fromMtd(taxYear)
   )
 
   private val response = ListPropertyPeriodSummariesResponse(
@@ -42,32 +40,23 @@ class ListPropertyPeriodSummariesConnectorSpec extends ConnectorSpec {
       SubmissionPeriod("4557ecb5-fd32-48cc-81f5-e6acd1099f3c", "2020-06-22", "2020-06-22")
     ))
 
-  class Test extends MockHttpClient with MockAppConfig {
+  trait Test {
+    _: ConnectorTest =>
 
     val connector: ListPropertyPeriodSummariesConnector = new ListPropertyPeriodSummariesConnector(
       http = mockHttpClient,
       appConfig = mockAppConfig
     )
-
-    MockAppConfig.ifsBaseUrl returns baseUrl
-    MockAppConfig.ifsToken returns "ifs-token"
-    MockAppConfig.ifsEnvironment returns "ifs-environment"
-    MockAppConfig.ifsEnvironmentHeaders returns Some(allowedDownstreamHeaders)
   }
 
   "connector" must {
-    "send a request and return a body" in new Test {
+    "send a request and return a body" in new IfsTest with Test {
       val outcome = Right(ResponseWrapper(correlationId, response))
 
-      MockHttpClient
-        .get(
-          url = s"$baseUrl/income-tax/business/property/$nino/$businessId/period",
-          queryParams = Seq("taxYear" -> taxYear),
-          config = dummyIfsHeaderCarrierConfig,
-          requiredHeaders = requiredIfsHeaders,
-          excludedHeaders = Seq("AnotherHeader" -> "HeaderValue")
-        )
-        .returns(Future.successful(outcome))
+      willGet(
+        url = s"$baseUrl/income-tax/business/property/$nino/$businessId/period",
+        parameters = Seq("taxYear" -> "2022-23")
+      ).returns(Future.successful(outcome))
 
       await(connector.listPeriodSummaries(request)) shouldBe outcome
 

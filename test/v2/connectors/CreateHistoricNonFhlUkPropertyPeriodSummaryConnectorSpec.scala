@@ -16,9 +16,6 @@
 
 package v2.connectors
 
-import mocks.MockAppConfig
-import uk.gov.hmrc.http.HeaderCarrier
-import v2.mocks.MockHttpClient
 import v2.models.domain.Nino
 import v2.models.outcomes.ResponseWrapper
 import v2.models.request.common.ukPropertyRentARoom.{UkPropertyExpensesRentARoom, UkPropertyIncomeRentARoom}
@@ -53,9 +50,6 @@ class CreateHistoricNonFhlUkPropertyPeriodSummaryConnectorSpec extends Connector
     None
   )
 
-  val consolidatedExpenses: UkNonFhlPropertyExpenses =
-    UkNonFhlPropertyExpenses(None, None, None, None, None, None, None, None, None, None, Some(235.78))
-
   val url: String = s"$baseUrl/income-tax/nino/$nino/uk-properties/other/periodic-summaries"
 
   val requestBody: CreateHistoricNonFhlUkPropertyPeriodSummaryRequestBody =
@@ -66,72 +60,30 @@ class CreateHistoricNonFhlUkPropertyPeriodSummaryConnectorSpec extends Connector
       Some(expenses)
     )
 
-  val consolidatedRequestBody: CreateHistoricNonFhlUkPropertyPeriodSummaryRequestBody =
-    CreateHistoricNonFhlUkPropertyPeriodSummaryRequestBody(
-      fromDate,
-      toDate,
-      Some(income),
-      Some(consolidatedExpenses)
-    )
-
   val requestData: CreateHistoricNonFhlUkPropertyPeriodSummaryRequest =
     CreateHistoricNonFhlUkPropertyPeriodSummaryRequest(Nino(nino), requestBody)
 
-  val consolidatedRequestData: CreateHistoricNonFhlUkPropertyPeriodSummaryRequest =
-    CreateHistoricNonFhlUkPropertyPeriodSummaryRequest(Nino(nino), consolidatedRequestBody)
-
-  class Test extends MockHttpClient with MockAppConfig {
+  trait Test {
+    _: ConnectorTest =>
 
     val connector: CreateHistoricNonFhlUkPropertyPeriodSummaryConnector = new CreateHistoricNonFhlUkPropertyPeriodSummaryConnector(
       http = mockHttpClient,
       appConfig = mockAppConfig
     )
-
-    MockAppConfig.ifsBaseUrl returns baseUrl
-    MockAppConfig.ifsToken returns "ifs-token"
-    MockAppConfig.ifsEnvironment returns "ifs-environment"
-    MockAppConfig.ifsEnvironmentHeaders returns Some(allowedDownstreamHeaders)
   }
 
   "connector" must {
 
-    "post a body with dates, income and expenses and return a 202 with the Period ID added" in new Test {
+    "post a body with dates, income and expenses and return a 202 with the Period ID added" in new IfsTest with Test {
       val downstreamOutcome = Right(ResponseWrapper(correlationId, ()))
 
-      implicit val hc: HeaderCarrier                    = HeaderCarrier(otherHeaders = otherHeaders ++ Seq("Content-Type" -> "application/json"))
-      val requiredIfsHeadersPost: Seq[(String, String)] = requiredIfsHeaders ++ Seq("Content-Type" -> "application/json")
-
-      MockHttpClient
-        .post(
+      willPost(
           url = url,
-          config = dummyIfsHeaderCarrierConfig,
-          body = requestBody,
-          requiredHeaders = requiredIfsHeadersPost,
-          excludedHeaders = Seq("Some-Header" -> "some-value")
+          body = requestBody
         )
         .returns(Future.successful(downstreamOutcome))
 
       val result = await(connector.createPeriodSummary(requestData))
-      result shouldBe downstreamOutcome
-    }
-
-    "post a body with dates, income and consolidated expenses and return a 202 with the Period ID added" in new Test {
-      val downstreamOutcome = Right(ResponseWrapper(correlationId, ()))
-
-      implicit val hc: HeaderCarrier                    = HeaderCarrier(otherHeaders = otherHeaders ++ Seq("Content-Type" -> "application/json"))
-      val requiredIfsHeadersPost: Seq[(String, String)] = requiredIfsHeaders ++ Seq("Content-Type" -> "application/json")
-
-      MockHttpClient
-        .post(
-          url = url,
-          config = dummyIfsHeaderCarrierConfig,
-          body = consolidatedRequestBody,
-          requiredHeaders = requiredIfsHeadersPost,
-          excludedHeaders = Seq("Some-Header" -> "some-value")
-        )
-        .returns(Future.successful(downstreamOutcome))
-
-      val result = await(connector.createPeriodSummary(consolidatedRequestData))
       result shouldBe downstreamOutcome
     }
   }

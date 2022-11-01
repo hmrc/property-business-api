@@ -18,12 +18,12 @@ package v2.controllers.requestParsers
 
 import javax.inject.Inject
 import v2.controllers.requestParsers.validators.RetrieveForeignPropertyAnnualSubmissionValidator
-import v2.models.domain.Nino
+import v2.models.domain.{ Nino, TaxYear }
 import v2.models.request.retrieveForeignPropertyAnnualSubmission._
 
 class RetrieveForeignPropertyAnnualSubmissionRequestParser @Inject()(val validator: RetrieveForeignPropertyAnnualSubmissionValidator)
-  extends RequestParser[RetrieveForeignPropertyAnnualSubmissionRawData, RetrieveForeignPropertyAnnualSubmissionRequest] {
+    extends RequestParser[RetrieveForeignPropertyAnnualSubmissionRawData, RetrieveForeignPropertyAnnualSubmissionRequest] {
 
   override protected def requestFor(data: RetrieveForeignPropertyAnnualSubmissionRawData): RetrieveForeignPropertyAnnualSubmissionRequest =
-    RetrieveForeignPropertyAnnualSubmissionRequest(Nino(data.nino), data.businessId, data.taxYear)
+    RetrieveForeignPropertyAnnualSubmissionRequest(Nino(data.nino), data.businessId, TaxYear.fromMtd(data.taxYear))
 }

@@ -17,11 +17,9 @@
 package v2.connectors
 
 import fixtures.RetrieveUkPropertyPeriodSummary.ResponseModelsFixture
-import mocks.MockAppConfig
 import org.scalamock.handlers.CallHandler
 import v2.connectors.RetrieveUkPropertyPeriodSummaryConnector._
-import v2.mocks.MockHttpClient
-import v2.models.domain.Nino
+import v2.models.domain.{Nino, TaxYear}
 import v2.models.errors.{DownstreamErrorCode, DownstreamErrors}
 import v2.models.outcomes.ResponseWrapper
 import v2.models.request.retrieveUkPropertyPeriodSummary.RetrieveUkPropertyPeriodSummaryRequest
@@ -40,7 +38,7 @@ class RetrieveUkPropertyPeriodSummaryConnectorSpec extends ConnectorSpec with Re
     RetrieveUkPropertyPeriodSummaryRequest(
       Nino(nino),
       businessId,
-      taxYear,
+      TaxYear.fromMtd(taxYear),
       submissionId)
 
   val ukFhlProperty: UkFhlProperty       = UkFhlProperty(None, None)
@@ -49,25 +47,17 @@ class RetrieveUkPropertyPeriodSummaryConnectorSpec extends ConnectorSpec with Re
   def responseWith(ukFhlProperty: Option[UkFhlProperty], ukNonFhlProperty: Option[UkNonFhlProperty]): RetrieveUkPropertyPeriodSummaryResponse =
     RetrieveUkPropertyPeriodSummaryResponse("2020-06-17T10:53:38Z", "2019-01-29", "2020-03-29", ukFhlProperty, ukNonFhlProperty)
 
-  class Test extends MockHttpClient with MockAppConfig {
+  trait Test {
+    _: ConnectorTest =>
     val connector: RetrieveUkPropertyPeriodSummaryConnector = new RetrieveUkPropertyPeriodSummaryConnector(
       http = mockHttpClient,
       appConfig = mockAppConfig
     )
 
-    MockAppConfig.ifsBaseUrl returns baseUrl
-    MockAppConfig.ifsToken returns "ifs-token"
-    MockAppConfig.ifsEnvironment returns "ifs-environment"
-    MockAppConfig.ifsEnvironmentHeaders returns Some(allowedDownstreamHeaders)
-
     def stubHttpResponse(outcome: DownstreamOutcome[RetrieveUkPropertyPeriodSummaryResponse])
     : CallHandler[Future[DownstreamOutcome[RetrieveUkPropertyPeriodSummaryResponse]]]#Derived = {
-      MockHttpClient
-        .get(
-          url = s"$baseUrl/income-tax/business/property/periodic?taxableEntityId=$nino&taxYear=$taxYear&incomeSourceId=$businessId&submissionId=$submissionId",
-          config = dummyIfsHeaderCarrierConfig,
-          requiredHeaders = requiredIfsHeaders,
-          excludedHeaders = Seq("AnotherHeader" -> "HeaderValue")
+      willGet(
+          url = s"$baseUrl/income-tax/business/property/periodic?taxableEntityId=$nino&taxYear=2019-20&incomeSourceId=$businessId&submissionId=$submissionId",
         )
         .returns(Future.successful(outcome))
     }
@@ -75,7 +65,7 @@ class RetrieveUkPropertyPeriodSummaryConnectorSpec extends ConnectorSpec with Re
 
   "connector" when {
     "response has uk fhl details" must {
-      "return a uk result" in new Test {
+      "return a uk result" in new IfsTest with Test {
         val response: RetrieveUkPropertyPeriodSummaryResponse = responseWith(ukFhlProperty = Some(ukFhlProperty), ukNonFhlProperty = None)
         val outcome                                              = Right(ResponseWrapper(correlationId, response))
 
@@ -86,7 +76,7 @@ class RetrieveUkPropertyPeriodSummaryConnectorSpec extends ConnectorSpec with Re
     }
 
     "response has uk non-fhl details" must {
-      "return a uk result" in new Test {
+      "return a uk result" in new IfsTest with Test {
         val response: RetrieveUkPropertyPeriodSummaryResponse = responseWith(ukFhlProperty = None, ukNonFhlProperty = Some(ukNonFhlProperty))
         val outcome                                              = Right(ResponseWrapper(correlationId, response))
 
@@ -97,7 +87,7 @@ class RetrieveUkPropertyPeriodSummaryConnectorSpec extends ConnectorSpec with Re
     }
 
     "response has uk fhl and non-fhl details" must {
-      "return a uk result" in new Test {
+      "return a uk result" in new IfsTest with Test {
         val response: RetrieveUkPropertyPeriodSummaryResponse =
           responseWith(ukFhlProperty = Some(ukFhlProperty), ukNonFhlProperty = Some(ukNonFhlProperty))
         val outcome = Right(ResponseWrapper(correlationId, response))
@@ -109,7 +99,7 @@ class RetrieveUkPropertyPeriodSummaryConnectorSpec extends ConnectorSpec with Re
     }
 
     "response has no details" must {
-      "return a non-uk result" in new Test {
+      "return a non-uk result" in new IfsTest with Test {
         val response: RetrieveUkPropertyPeriodSummaryResponse = responseWith(None, None)
         val outcome                                              = Right(ResponseWrapper(correlationId, response))
 
@@ -120,7 +110,7 @@ class RetrieveUkPropertyPeriodSummaryConnectorSpec extends ConnectorSpec with Re
     }
 
     "response is an error" must {
-      "return the error" in new Test {
+      "return the error" in new IfsTest with Test {
         val outcome = Left(ResponseWrapper(correlationId, DownstreamErrors.single(DownstreamErrorCode("SOME_ERROR"))))
 
         stubHttpResponse(outcome)

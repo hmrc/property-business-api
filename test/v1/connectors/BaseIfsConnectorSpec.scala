@@ -17,9 +17,8 @@
 package v1.connectors
 
 import config.AppConfig
-import mocks.MockAppConfig
-import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, HttpReads}
-import v1.mocks.MockHttpClient
+import mocks.{ MockAppConfig, MockHttpClient }
+import uk.gov.hmrc.http.{ HeaderCarrier, HttpClient, HttpReads }
 import v1.models.outcomes.ResponseWrapper
 
 import scala.concurrent.Future
@@ -29,17 +28,18 @@ class BaseIfsConnectorSpec extends ConnectorSpec {
   case class Result(value: Int)
 
   // WLOG
-  val body = "body"
+  val body    = "body"
   val outcome = Right(ResponseWrapper(correlationId, Result(2)))
 
-  val url = "some/url?param=value"
+  val url         = "some/url?param=value"
   val absoluteUrl = s"$baseUrl/$url"
 
   implicit val httpReads: HttpReads[IfsOutcome[Result]] = mock[HttpReads[IfsOutcome[Result]]]
 
   class Test(ifsEnvironmentHeaders: Option[Seq[String]]) extends MockHttpClient with MockAppConfig {
+
     val connector: BaseIfsConnector = new BaseIfsConnector {
-      val http: HttpClient = mockHttpClient
+      val http: HttpClient     = mockHttpClient
       val appConfig: AppConfig = mockAppConfig
     }
 
@@ -51,10 +51,10 @@ class BaseIfsConnectorSpec extends ConnectorSpec {
 
   "BaseIfsConnector" when {
     val requiredHeaders: Seq[(String, String)] = Seq(
-      "Environment" -> "ifs-environment",
-      "Authorization" -> s"Bearer ifs-token",
-      "User-Agent" -> "property-business-api",
-      "CorrelationId" -> correlationId,
+      "Environment"       -> "ifs-environment",
+      "Authorization"     -> s"Bearer ifs-token",
+      "User-Agent"        -> "property-business-api",
+      "CorrelationId"     -> correlationId,
       "Gov-Test-Scenario" -> "DEFAULT"
     )
 
@@ -67,9 +67,9 @@ class BaseIfsConnectorSpec extends ConnectorSpec {
 
       "exclude all `otherHeaders` when no external service header allow-list is found" should {
         val requiredHeaders: Seq[(String, String)] = Seq(
-          "Environment" -> "ifs-environment",
+          "Environment"   -> "ifs-environment",
           "Authorization" -> s"Bearer ifs-token",
-          "User-Agent" -> "property-business-api",
+          "User-Agent"    -> "property-business-api",
           "CorrelationId" -> correlationId,
         )
 
@@ -86,7 +86,7 @@ class BaseIfsConnectorSpec extends ConnectorSpec {
     "complete the request successfully with the required headers" when {
       "GET" in new Test(ifsEnvironmentHeaders) {
         MockHttpClient
-          .get(absoluteUrl, config, requiredHeaders, excludedHeaders)
+          .get(url = absoluteUrl, config = config, requiredHeaders = requiredHeaders, excludedHeaders = excludedHeaders)
           .returns(Future.successful(outcome))
 
         await(connector.get(IfsUri[Result](url))) shouldBe outcome
@@ -101,20 +101,22 @@ class BaseIfsConnectorSpec extends ConnectorSpec {
       }
 
       "POST" in new Test(ifsEnvironmentHeaders) {
-        implicit val hc: HeaderCarrier = HeaderCarrier(otherHeaders = otherHeaders ++ Seq("Content-Type" -> "application/json"))
+        implicit val hc: HeaderCarrier                 = HeaderCarrier(otherHeaders = otherHeaders ++ Seq("Content-Type" -> "application/json"))
         val requiredHeadersPost: Seq[(String, String)] = requiredHeaders ++ Seq("Content-Type" -> "application/json")
 
-        MockHttpClient.post(absoluteUrl, config, body, requiredHeadersPost, excludedHeaders)
+        MockHttpClient
+          .post(url = absoluteUrl, config = config, body = body, requiredHeaders = requiredHeadersPost, excludedHeaders = excludedHeaders)
           .returns(Future.successful(outcome))
 
         await(connector.post(body, IfsUri[Result](url))) shouldBe outcome
       }
 
       "PUT" in new Test(ifsEnvironmentHeaders) {
-        implicit val hc: HeaderCarrier = HeaderCarrier(otherHeaders = otherHeaders ++ Seq("Content-Type" -> "application/json"))
+        implicit val hc: HeaderCarrier                = HeaderCarrier(otherHeaders = otherHeaders ++ Seq("Content-Type" -> "application/json"))
         val requiredHeadersPut: Seq[(String, String)] = requiredHeaders ++ Seq("Content-Type" -> "application/json")
 
-        MockHttpClient.put(absoluteUrl, config, body, requiredHeadersPut, excludedHeaders)
+        MockHttpClient
+          .put(url = absoluteUrl, config = config, body = body, requiredHeaders = requiredHeadersPut, excludedHeaders = excludedHeaders)
           .returns(Future.successful(outcome))
 
         await(connector.put(body, IfsUri[Result](url))) shouldBe outcome

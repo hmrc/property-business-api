@@ -18,8 +18,8 @@ package v2.controllers.requestParsers
 
 import support.UnitSpec
 import v2.mocks.validators.MockAmendForeignPropertyAnnualSubmissionValidator
-import v2.models.domain.Nino
-import v2.models.errors.{ BadRequestError, BusinessIdFormatError, ErrorWrapper, NinoFormatError }
+import v2.models.domain.{Nino, TaxYear}
+import v2.models.errors.{BadRequestError, BusinessIdFormatError, ErrorWrapper, NinoFormatError}
 import v2.models.request.amendForeignPropertyAnnualSubmission._
 
 class AmendForeignPropertyAnnualSubmissionRequestParserSpec extends UnitSpec with AmendForeignPropertyAnnualSubmissionFixture {
@@ -48,7 +48,7 @@ class AmendForeignPropertyAnnualSubmissionRequestParserSpec extends UnitSpec wit
           Right(
             AmendForeignPropertyAnnualSubmissionRequest(nino = Nino(nino),
                                                         businessId = businessId,
-                                                        taxYear = taxYear,
+                                                        taxYear = TaxYear.fromMtd(taxYear),
                                                         body = amendForeignPropertyAnnualSubmissionRequestBody))
       }
     }

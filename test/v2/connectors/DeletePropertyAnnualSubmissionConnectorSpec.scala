@@ -16,7 +16,6 @@
 
 package v2.connectors
 
-import mocks.{MockAppConfig, MockHttpClient}
 import v2.models.domain.{Nino, TaxYear}
 import v2.models.outcomes.ResponseWrapper
 import v2.models.request.deletePropertyAnnualSubmission.DeletePropertyAnnualSubmissionRequest
@@ -35,31 +34,22 @@ class DeletePropertyAnnualSubmissionConnectorSpec extends ConnectorSpec {
     taxYear = TaxYear.fromMtd(taxYear)
   )
 
-  class Test extends MockHttpClient with MockAppConfig {
+  trait Test {
+    _: ConnectorTest =>
 
     val connector: DeletePropertyAnnualSubmissionConnector = new DeletePropertyAnnualSubmissionConnector(
       http = mockHttpClient,
       appConfig = mockAppConfig
     )
-
-    MockAppConfig.ifsBaseUrl returns baseUrl
-    MockAppConfig.ifsToken returns "ifs-token"
-    MockAppConfig.ifsEnvironment returns "ifs-environment"
-    MockAppConfig.ifsEnvironmentHeaders returns Some(allowedIfsHeaders)
   }
 
   "connector" must {
-    "send a request and return no content" in new Test {
+    "send a request and return no content" in new IfsTest with Test {
       val outcome = Right(ResponseWrapper(correlationId, ()))
 
-      MockHttpClient
-        .delete(
-          url = s"$baseUrl/income-tax/business/property/annual?taxableEntityId=$nino&incomeSourceId=$businessId&taxYear=2021-22",
-          config = dummyHeaderCarrierConfig,
-          requiredHeaders = requiredIfsHeaders,
-          excludedHeaders = Seq("AnotherHeader" -> "HeaderValue")
-        )
-        .returns(Future.successful(outcome))
+      willDelete(
+        url = s"$baseUrl/income-tax/business/property/annual?taxableEntityId=$nino&incomeSourceId=$businessId&taxYear=2021-22"
+      ).returns(Future.successful(outcome))
 
       await(connector.deletePropertyAnnualSubmission(request)) shouldBe outcome
 

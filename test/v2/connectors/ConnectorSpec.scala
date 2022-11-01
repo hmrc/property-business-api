@@ -113,6 +113,17 @@ trait ConnectorSpec extends UnitSpec with Status with MimeTypes with HeaderNames
         )
     }
 
+    protected def willGet[T](url: String, parameters : Seq[(String, String)]): CallHandler[Future[T]] = {
+      MockHttpClient
+        .get(
+          url = url,
+          parameters = parameters,
+          config = dummyHeaderCarrierConfig,
+          requiredHeaders = requiredHeaders,
+          excludedHeaders = Seq("AnotherHeader" -> "HeaderValue")
+        )
+    }
+
     protected def willPost[BODY, T](url: String, body: BODY): CallHandler[Future[T]] = {
       MockHttpClient
         .post(

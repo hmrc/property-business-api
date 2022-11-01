@@ -16,7 +16,6 @@
 
 package v2.connectors
 
-import mocks.{MockAppConfig, MockHttpClient}
 import org.scalamock.handlers.CallHandler
 import v2.connectors.RetrieveUkPropertyAnnualSubmissionConnector._
 import v2.models.domain.{Nino, TaxYear}
@@ -47,27 +46,19 @@ class RetrieveUkPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec {
   def responseWith(ukFhlProperty: Option[UkFhlProperty], ukNonFhlProperty: Option[UkNonFhlProperty]): RetrieveUkPropertyAnnualSubmissionResponse =
     RetrieveUkPropertyAnnualSubmissionResponse("2020-01-01", ukFhlProperty, ukNonFhlProperty)
 
-  class Test extends MockHttpClient with MockAppConfig {
+  trait Test {
+    _: ConnectorTest =>
 
     val connector: RetrieveUkPropertyAnnualSubmissionConnector = new RetrieveUkPropertyAnnualSubmissionConnector(
       http = mockHttpClient,
       appConfig = mockAppConfig
     )
 
-    MockAppConfig.ifsBaseUrl returns baseUrl
-    MockAppConfig.ifsToken returns "ifs-token"
-    MockAppConfig.ifsEnvironment returns "ifs-environment"
-    MockAppConfig.ifsEnvironmentHeaders returns Some(allowedIfsHeaders)
-
     def stubHttpResponse(outcome: DownstreamOutcome[RetrieveUkPropertyAnnualSubmissionResponse])
       : CallHandler[Future[DownstreamOutcome[RetrieveUkPropertyAnnualSubmissionResponse]]]#Derived = {
-      MockHttpClient
-        .get(
+      willGet(
           url = s"$baseUrl/income-tax/business/property/annual",
-          config = dummyHeaderCarrierConfig,
-          parameters = Seq("taxableEntityId" -> nino, "incomeSourceId" -> businessId, "taxYear" -> "2019-20"),
-          requiredHeaders = requiredIfsHeaders,
-          excludedHeaders = Seq("AnotherHeader" -> "HeaderValue")
+          parameters = Seq("taxableEntityId" -> nino, "incomeSourceId" -> businessId, "taxYear" -> "2019-20")
         )
         .returns(Future.successful(outcome))
     }
@@ -75,7 +66,7 @@ class RetrieveUkPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec {
 
   "connector" when {
     "response has uk fhl details" must {
-      "return a uk result" in new Test {
+      "return a uk result" in new IfsTest with Test {
         val response: RetrieveUkPropertyAnnualSubmissionResponse = responseWith(ukFhlProperty = Some(ukFhlProperty), ukNonFhlProperty = None)
         val outcome                                              = Right(ResponseWrapper(correlationId, response))
 
@@ -86,7 +77,7 @@ class RetrieveUkPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec {
     }
 
     "response has uk non-fhl details" must {
-      "return a uk result" in new Test {
+      "return a uk result" in new IfsTest with Test {
         val response: RetrieveUkPropertyAnnualSubmissionResponse = responseWith(ukFhlProperty = None, ukNonFhlProperty = Some(ukNonFhlProperty))
         val outcome                                              = Right(ResponseWrapper(correlationId, response))
 
@@ -97,7 +88,7 @@ class RetrieveUkPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec {
     }
 
     "response has uk fhl and non-fhl details" must {
-      "return a uk result" in new Test {
+      "return a uk result" in new IfsTest with Test {
         val response: RetrieveUkPropertyAnnualSubmissionResponse =
           responseWith(ukFhlProperty = Some(ukFhlProperty), ukNonFhlProperty = Some(ukNonFhlProperty))
         val outcome = Right(ResponseWrapper(correlationId, response))
@@ -109,7 +100,7 @@ class RetrieveUkPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec {
     }
 
     "response has no details" must {
-      "return a non-uk result" in new Test {
+      "return a non-uk result" in new IfsTest with Test {
         val response: RetrieveUkPropertyAnnualSubmissionResponse = responseWith(None, None)
         val outcome                                              = Right(ResponseWrapper(correlationId, response))
 
@@ -120,7 +111,7 @@ class RetrieveUkPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec {
     }
 
     "response is an error" must {
-      "return the error" in new Test {
+      "return the error" in new IfsTest with Test {
         val outcome = Left(ResponseWrapper(correlationId, DownstreamErrors.single(DownstreamErrorCode("SOME_ERROR"))))
 
         stubHttpResponse(outcome)

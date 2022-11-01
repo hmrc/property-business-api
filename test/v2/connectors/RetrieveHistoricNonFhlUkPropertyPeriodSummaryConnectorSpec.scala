@@ -16,13 +16,12 @@
 
 package v2.connectors
 
-import mocks.{MockAppConfig, MockHttpClient}
 import org.scalamock.handlers.CallHandler
-import v2.models.domain.{ Nino, PeriodId }
-import v2.models.errors.{ DownstreamErrorCode, DownstreamErrors }
+import v2.models.domain.{Nino, PeriodId}
+import v2.models.errors.{DownstreamErrorCode, DownstreamErrors}
 import v2.models.outcomes.ResponseWrapper
 import v2.models.request.retrieveHistoricNonFhlUkPiePeriodSummary.RetrieveHistoricNonFhlUkPiePeriodSummaryRequest
-import v2.models.response.retrieveHistoricNonFhlUkPiePeriodSummary.{ RetrieveHistoricNonFhlUkPiePeriodSummaryResponse, PeriodExpenses, PeriodIncome }
+import v2.models.response.retrieveHistoricNonFhlUkPiePeriodSummary.{PeriodExpenses, PeriodIncome, RetrieveHistoricNonFhlUkPiePeriodSummaryResponse}
 
 import scala.concurrent.Future
 
@@ -42,33 +41,25 @@ class RetrieveHistoricNonFhlUkPropertyPeriodSummaryConnectorSpec extends Connect
   def responseWith(periodIncome: Option[PeriodIncome], periodExpenses: Option[PeriodExpenses]): RetrieveHistoricNonFhlUkPiePeriodSummaryResponse =
     RetrieveHistoricNonFhlUkPiePeriodSummaryResponse(periodIdFrom, periodIdTo, periodIncome, periodExpenses)
 
-  class Test extends MockHttpClient with MockAppConfig {
+  trait Test {
+    _: ConnectorTest =>
 
     val connector: RetrieveHistoricNonFhlUkPropertyPeriodSummaryConnector = new RetrieveHistoricNonFhlUkPropertyPeriodSummaryConnector(
       http = mockHttpClient,
       appConfig = mockAppConfig
     )
 
-    MockAppConfig.desBaseUrl returns baseUrl
-    MockAppConfig.desToken returns "des-token"
-    MockAppConfig.desEnvironment returns "des-environment"
-    MockAppConfig.desEnvironmentHeaders returns Some(allowedDesHeaders)
-
     def stubHttpResponse(outcome: DownstreamOutcome[RetrieveHistoricNonFhlUkPiePeriodSummaryResponse])
       : CallHandler[Future[DownstreamOutcome[RetrieveHistoricNonFhlUkPiePeriodSummaryResponse]]]#Derived = {
-      MockHttpClient
-        .get(
-          url = s"$baseUrl/income-tax/nino/$nino/uk-properties/other/periodic-summary-detail?from=$periodIdFrom&to=$periodIdTo",
-          config = dummyHeaderCarrierConfig,
-          requiredHeaders = requiredDesHeaders,
-        )
-        .returns(Future.successful(outcome))
+      willGet(
+        url = s"$baseUrl/income-tax/nino/$nino/uk-properties/other/periodic-summary-detail?from=$periodIdFrom&to=$periodIdTo"
+      ).returns(Future.successful(outcome))
     }
   }
 
   "connector" when {
     "request for a historic Non-FHL UK Property Income and Expenses Period summary" must {
-      "return a valid result" in new Test {
+      "return a valid result" in new DesTest with Test {
         val response: RetrieveHistoricNonFhlUkPiePeriodSummaryResponse = responseWith(Some(periodIncome), Some(periodExpenses))
         val outcome                                                    = Right(ResponseWrapper(correlationId, response))
 
@@ -80,7 +71,7 @@ class RetrieveHistoricNonFhlUkPropertyPeriodSummaryConnectorSpec extends Connect
     }
 
     "response is an error" must {
-      "return the error" in new Test {
+      "return the error" in new DesTest with Test {
         val outcome = Left(ResponseWrapper(correlationId, DownstreamErrors.single(DownstreamErrorCode("SOME_ERROR"))))
 
         stubHttpResponse(outcome)

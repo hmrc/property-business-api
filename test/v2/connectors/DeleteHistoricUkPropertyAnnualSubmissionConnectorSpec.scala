@@ -16,9 +16,8 @@
 
 package v2.connectors
 
-import mocks.{MockAppConfig, MockHttpClient}
 import play.api.libs.json.JsObject
-import v2.models.domain.{ HistoricPropertyType, Nino, TaxYear }
+import v2.models.domain.{HistoricPropertyType, Nino, TaxYear}
 import v2.models.outcomes.ResponseWrapper
 import v2.models.request.deleteHistoricUkPropertyAnnualSubmission.DeleteHistoricUkPropertyAnnualSubmissionRequest
 
@@ -37,46 +36,34 @@ class DeleteHistoricUkPropertyAnnualSubmissionConnectorSpec extends ConnectorSpe
       propertyType
     )
 
-  class Test extends MockHttpClient with MockAppConfig {
+  trait Test {
+    _: ConnectorTest =>
 
     val connector: DeleteHistoricUkPropertyAnnualSubmissionConnector = new DeleteHistoricUkPropertyAnnualSubmissionConnector(
       http = mockHttpClient,
       appConfig = mockAppConfig
     )
-
-    MockAppConfig.ifsBaseUrl returns baseUrl
-    MockAppConfig.ifsToken returns "ifs-token"
-    MockAppConfig.ifsEnvironment returns "ifs-environment"
-    MockAppConfig.ifsEnvironmentHeaders returns Some(allowedIfsHeaders)
   }
 
   "connector" must {
-    "send a request and return no content for FHL" in new Test {
+    "send a request and return no content for FHL" in new IfsTest with Test {
       val outcome = Right(ResponseWrapper(correlationId, ()))
 
-      MockHttpClient
-        .put(
+      willPut(
           url = s"$baseUrl/income-tax/nino/$nino/uk-properties/furnished-holiday-lettings/annual-summaries/2022",
-          config = dummyHeaderCarrierConfig,
-          body = JsObject.empty,
-          requiredHeaders = requiredIfsHeaders,
-          excludedHeaders = Seq("AnotherHeader" -> "HeaderValue")
+          body = JsObject.empty
         )
         .returns(Future.successful(outcome))
 
       await(connector.deleteHistoricUkPropertyAnnualSubmission(request(HistoricPropertyType.Fhl))) shouldBe outcome
     }
 
-    "send a request and return no content for non-FHL" in new Test {
+    "send a request and return no content for non-FHL" in new IfsTest with Test {
       val outcome = Right(ResponseWrapper(correlationId, ()))
 
-      MockHttpClient
-        .put(
+      willPut(
           url = s"$baseUrl/income-tax/nino/$nino/uk-properties/other/annual-summaries/2022",
-          config = dummyHeaderCarrierConfig,
-          body = JsObject.empty,
-          requiredHeaders = requiredIfsHeaders,
-          excludedHeaders = Seq("AnotherHeader" -> "HeaderValue")
+          body = JsObject.empty
         )
         .returns(Future.successful(outcome))
 

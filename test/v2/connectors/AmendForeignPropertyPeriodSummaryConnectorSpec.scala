@@ -16,8 +16,6 @@
 
 package v2.connectors
 
-import mocks.{MockAppConfig, MockHttpClient}
-import uk.gov.hmrc.http.HeaderCarrier
 import v2.models.domain.{Nino, TaxYear}
 import v2.models.outcomes.ResponseWrapper
 import v2.models.request.amendForeignPropertyPeriodSummary._
@@ -88,33 +86,22 @@ class AmendForeignPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
     body = requestBody
   )
 
-  class Test extends MockHttpClient with MockAppConfig {
+  trait Test {
+    _: ConnectorTest =>
     val connector: AmendForeignPropertyPeriodSummaryConnector = new AmendForeignPropertyPeriodSummaryConnector(
       http = mockHttpClient,
       appConfig = mockAppConfig
     )
-
-    MockAppConfig.ifsBaseUrl returns baseUrl
-    MockAppConfig.ifsToken returns "ifs-token"
-    MockAppConfig.ifsEnvironment returns "ifs-environment"
-    MockAppConfig.ifsEnvironmentHeaders returns Some(allowedIfsHeaders)
   }
 
   "AmendForeignPropertyPeriodSummaryConnector" must {
-    "send a request and return 204 no content" in new Test {
+    "send a request and return 204 no content" in new IfsTest with Test {
       val outcome = Right(ResponseWrapper(correlationId, ()))
 
-      implicit val hc: HeaderCarrier = HeaderCarrier(otherHeaders = otherHeaders ++ Seq("Content-Type" -> "application/json"))
-      val requiredIfsHeadersPut: Seq[(String, String)] = requiredIfsHeaders ++ Seq("Content-Type" -> "application/json")
-
-      MockHttpClient
-        .put(
+      willPut(
           url = s"$baseUrl/income-tax/business/property/periodic?" +
             s"taxableEntityId=$nino&taxYear=2022-23&incomeSourceId=$businessId&submissionId=$submissionId",
-          config = dummyHeaderCarrierConfig,
-          body = requestBody,
-          requiredHeaders = requiredIfsHeadersPut,
-          excludedHeaders = Seq("AnotherHeader" -> "HeaderValue")
+          body = requestBody
         ).returns(Future.successful(outcome))
 
       await(connector.amendForeignPropertyPeriodSummary(request)) shouldBe outcome

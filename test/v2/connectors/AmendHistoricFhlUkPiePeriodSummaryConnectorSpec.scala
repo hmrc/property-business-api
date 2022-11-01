@@ -16,14 +16,10 @@
 
 package v2.connectors
 
-import mocks.{MockAppConfig, MockHttpClient}
 import org.scalamock.handlers.CallHandler
-import v2.models.domain.{ Nino, PeriodId }
+import v2.models.domain.{Nino, PeriodId}
 import v2.models.outcomes.ResponseWrapper
-import v2.models.request.amendHistoricFhlUkPiePeriodSummary.{
-  AmendHistoricFhlUkPiePeriodSummaryRequest,
-  AmendHistoricFhlUkPiePeriodSummaryRequestBody
-}
+import v2.models.request.amendHistoricFhlUkPiePeriodSummary.{AmendHistoricFhlUkPiePeriodSummaryRequest, AmendHistoricFhlUkPiePeriodSummaryRequestBody}
 import v2.models.response.amendHistoricFhlUkPiePeriodSummary.AmendHistoricFhlUkPiePeriodSummaryResponse
 
 import scala.concurrent.Future
@@ -38,7 +34,7 @@ class AmendHistoricFhlUkPiePeriodSummaryConnectorSpec extends ConnectorSpec {
 
   "The connector" when {
     "sending a valid amend request" should {
-      "return the ok result" in new Test {
+      "return the ok result" in new IfsTest with Test {
         val response = AmendHistoricFhlUkPiePeriodSummaryResponse(transactionReference = "2017090920170909")
         val outcome  = Right(ResponseWrapper(correlationId, response))
         stubHttpResponse(outcome)
@@ -49,17 +45,14 @@ class AmendHistoricFhlUkPiePeriodSummaryConnectorSpec extends ConnectorSpec {
     }
   }
 
-  class Test extends MockHttpClient with MockAppConfig {
+  trait Test {
+    _: ConnectorTest =>
 
     val connector: AmendHistoricFhlUkPiePeriodSummaryConnector = new AmendHistoricFhlUkPiePeriodSummaryConnector(
       http = mockHttpClient,
       appConfig = mockAppConfig
     )
 
-    MockAppConfig.ifsEnvironmentHeaders returns Some(allowedIfsHeaders)
-    MockAppConfig.ifsToken returns "ifs-token"
-    MockAppConfig.ifsBaseUrl returns baseUrl
-    MockAppConfig.ifsEnvironment returns "ifs-environment"
 
     def pathFrom(request: AmendHistoricFhlUkPiePeriodSummaryRequest): String =
       s"income-tax/nino/${request.nino.value}/uk-properties/furnished-holiday-lettings/periodic-summaries" +
@@ -71,11 +64,8 @@ class AmendHistoricFhlUkPiePeriodSummaryConnectorSpec extends ConnectorSpec {
 
       val path = pathFrom(request)
 
-      MockHttpClient
-        .put(
+      willPut(
           url = s"$baseUrl/$path",
-          config = dummyHeaderCarrierConfig,
-          requiredHeaders = requiredIfsHeaders,
           body = requestBody
         )
         .returns(Future.successful(outcome))

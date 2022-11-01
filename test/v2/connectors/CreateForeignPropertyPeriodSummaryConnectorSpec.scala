@@ -16,9 +16,7 @@
 
 package v2.connectors
 
-import mocks.{ MockAppConfig, MockHttpClient }
-import uk.gov.hmrc.http.HeaderCarrier
-import v2.models.domain.{ Nino, TaxYear }
+import v2.models.domain.{Nino, TaxYear}
 import v2.models.outcomes.ResponseWrapper
 import v2.models.request.common.foreignFhlEea._
 import v2.models.request.common.foreignPropertyEntry._
@@ -84,33 +82,22 @@ class CreateForeignPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
   private val regularExpensesRequestData =
     CreateForeignPropertyPeriodSummaryRequest(Nino(nino), businessId, TaxYear.fromMtd(taxYear), regularExpensesBody)
 
-  class Test extends MockHttpClient with MockAppConfig {
+  trait Test {
+    _: ConnectorTest =>
 
     val connector: CreateForeignPropertyPeriodSummaryConnector = new CreateForeignPropertyPeriodSummaryConnector(
       http = mockHttpClient,
       appConfig = mockAppConfig
     )
-
-    MockAppConfig.ifsBaseUrl returns baseUrl
-    MockAppConfig.ifsToken returns "ifs-token"
-    MockAppConfig.ifsEnvironment returns "ifs-environment"
-    MockAppConfig.ifsEnvironmentHeaders returns Some(allowedIfsHeaders)
   }
 
   "connector" must {
-    "post a valid body and return 200 with submissionId" in new Test {
+    "post a valid body and return 200 with submissionId" in new IfsTest with Test {
       val outcome = Right(ResponseWrapper(correlationId, response))
 
-      implicit val hc: HeaderCarrier                    = HeaderCarrier(otherHeaders = otherHeaders ++ Seq("Content-Type" -> "application/json"))
-      val requiredIfsHeadersPost: Seq[(String, String)] = requiredIfsHeaders ++ Seq("Content-Type" -> "application/json")
-
-      MockHttpClient
-        .post(
+      willPost(
           url = s"$baseUrl/income-tax/business/property/periodic?taxableEntityId=$nino&taxYear=2019-20&incomeSourceId=$businessId",
-          config = dummyHeaderCarrierConfig,
-          body = regularExpensesBody,
-          requiredHeaders = requiredIfsHeadersPost,
-          excludedHeaders = Seq("AnotherHeader" -> "HeaderValue")
+          body = regularExpensesBody
         )
         .returns(Future.successful(outcome))
 

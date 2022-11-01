@@ -93,7 +93,7 @@ object RuleBothAllowancesSuppliedError
 
 object RuleTaxYearNotSupportedError
     extends MtdError("RULE_TAX_YEAR_NOT_SUPPORTED",
-                     "The specified tax year is not supported. The tax year specified is before the minimum tax year value")
+                     "The tax year specified does not lie within the supported range")
 
 object RuleHistoricTaxYearNotSupportedError
     extends MtdError("RULE_TAX_YEAR_NOT_SUPPORTED", "The tax year specified does not lie within the supported range")

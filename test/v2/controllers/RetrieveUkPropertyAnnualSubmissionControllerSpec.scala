@@ -23,7 +23,7 @@ import v2.mocks.MockIdGenerator
 import v2.mocks.hateoas.MockHateoasFactory
 import v2.mocks.requestParsers.MockRetrieveUkPropertyAnnualSubmissionRequestParser
 import v2.mocks.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService, MockRetrieveUkPropertyAnnualSubmissionService}
-import v2.models.domain.Nino
+import v2.models.domain.{Nino, TaxYear}
 import v2.models.errors._
 import v2.models.hateoas.Method.GET
 import v2.models.hateoas.{HateoasWrapper, Link}
@@ -70,7 +70,7 @@ class RetrieveUkPropertyAnnualSubmissionControllerSpec
   }
 
   private val rawData = RetrieveUkPropertyAnnualSubmissionRawData(nino, businessId, taxYear)
-  private val requestData = RetrieveUkPropertyAnnualSubmissionRequest(Nino(nino), businessId, taxYear)
+  private val requestData = RetrieveUkPropertyAnnualSubmissionRequest(Nino(nino), businessId, TaxYear.fromMtd(taxYear))
 
   private val testHateoasLink = Link(href = s"Individuals/business/property/uk/$nino/$businessId/annual/$taxYear", method = GET, rel = "self")
 

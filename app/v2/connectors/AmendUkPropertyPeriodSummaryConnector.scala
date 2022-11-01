@@ -33,10 +33,11 @@ class AmendUkPropertyPeriodSummaryConnector @Inject()(val http: HttpClient, val 
                                                                                  ec: ExecutionContext,
                                                                                  correlationId: String): Future[DownstreamOutcome[Unit]] = {
 
+    // Note that MTD tax year format is used
     put(
       body = request.body,
       uri = IfsUri[Unit](s"income-tax/business/property/periodic?" +
-        s"taxableEntityId=${request.nino.nino}&taxYear=${request.taxYear}&incomeSourceId=${request.businessId}&submissionId=${request.submissionId}")
+        s"taxableEntityId=${request.nino.nino}&taxYear=${request.taxYear.asMtd}&incomeSourceId=${request.businessId}&submissionId=${request.submissionId}")
     )
   }
 }

@@ -18,7 +18,7 @@ package v2.controllers.requestParsers
 
 import support.UnitSpec
 import v2.mocks.validators.MockRetrieveUkPropertyAnnualSubmissionValidator
-import v2.models.domain.Nino
+import v2.models.domain.{Nino, TaxYear}
 import v2.models.errors.{BadRequestError, BusinessIdFormatError, ErrorWrapper, NinoFormatError}
 import v2.models.request.retrieveUkPropertyAnnualSubmission._
 
@@ -41,7 +41,7 @@ class RetrieveUkPropertyAnnualSubmissionRequestParserSpec extends UnitSpec {
       "valid request data is supplied" in new Test {
         MockRetrieveUkPropertyAnnualSubmissionValidator.validate(inputData).returns(Nil)
 
-        parser.parseRequest(inputData) shouldBe Right(RetrieveUkPropertyAnnualSubmissionRequest(Nino(nino), businessId, taxYear))
+        parser.parseRequest(inputData) shouldBe Right(RetrieveUkPropertyAnnualSubmissionRequest(Nino(nino), businessId, TaxYear.fromMtd(taxYear)))
       }
     }
 

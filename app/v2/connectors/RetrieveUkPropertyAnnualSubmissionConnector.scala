@@ -44,10 +44,10 @@ class RetrieveUkPropertyAnnualSubmissionConnector @Inject()(val http: HttpClient
   def retrieveUkProperty(request: RetrieveUkPropertyAnnualSubmissionRequest)(implicit hc: HeaderCarrier,
                                                                              ec: ExecutionContext,
                                                                              correlationId: String): Future[DownstreamOutcome[Result]] = {
-
+    // Note that MTD tax year format is used
     val response = get(
       uri = IfsUri[RetrieveUkPropertyAnnualSubmissionResponse]("income-tax/business/property/annual"),
-      queryParams = Seq("taxableEntityId" -> request.nino.value, "incomeSourceId" -> request.businessId, "taxYear" -> request.taxYear)
+      queryParams = Seq("taxableEntityId" -> request.nino.value, "incomeSourceId" -> request.businessId, "taxYear" -> request.taxYear.asMtd)
     )
 
     response.map {

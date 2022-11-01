@@ -19,7 +19,7 @@ package v2.connectors
 import mocks.{MockAppConfig, MockHttpClient}
 import org.scalamock.handlers.CallHandler
 import v2.connectors.RetrieveForeignPropertyAnnualSubmissionConnector.{ForeignResult, NonForeignResult}
-import v2.models.domain.Nino
+import v2.models.domain.{Nino, TaxYear}
 import v2.models.errors.{DownstreamErrorCode, DownstreamErrors}
 import v2.models.outcomes.ResponseWrapper
 import v2.models.request.retrieveForeignPropertyAnnualSubmission.RetrieveForeignPropertyAnnualSubmissionRequest
@@ -39,7 +39,7 @@ class RetrieveForeignPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec
     RetrieveForeignPropertyAnnualSubmissionRequest(
       Nino(nino),
       businessId,
-      taxYear
+      TaxYear.fromMtd(taxYear)
 
     )
   val countryCode: String = "FRA"
@@ -67,7 +67,7 @@ class RetrieveForeignPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec
         .get(
           url = s"$baseUrl/income-tax/business/property/annual",
           config = dummyHeaderCarrierConfig,
-          parameters = Seq("taxableEntityId" -> nino, "incomeSourceId" -> businessId, "taxYear" -> taxYear),
+          parameters = Seq("taxableEntityId" -> nino, "incomeSourceId" -> businessId, "taxYear" -> "2019-20"),
           requiredHeaders = requiredIfsHeaders,
           excludedHeaders = Seq("AnotherHeader" -> "HeaderValue")
         )

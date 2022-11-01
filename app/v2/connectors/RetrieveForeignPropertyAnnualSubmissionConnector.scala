@@ -45,9 +45,10 @@ class RetrieveForeignPropertyAnnualSubmissionConnector @Inject()(val http: HttpC
                                                                                        ec: ExecutionContext,
                                                                                        correlationId: String): Future[DownstreamOutcome[Result]] = {
 
+    // Note that MTD tax year format is used
     val response = get(
       uri = IfsUri[RetrieveForeignPropertyAnnualSubmissionResponse]("income-tax/business/property/annual"),
-      queryParams = Seq("taxableEntityId" -> request.nino.value, "incomeSourceId" -> request.businessId, "taxYear" -> request.taxYear)
+      queryParams = Seq("taxableEntityId" -> request.nino.value, "incomeSourceId" -> request.businessId, "taxYear" -> request.taxYear.asMtd)
     )
 
     response.map {

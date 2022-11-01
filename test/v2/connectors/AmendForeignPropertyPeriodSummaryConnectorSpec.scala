@@ -18,7 +18,7 @@ package v2.connectors
 
 import mocks.{MockAppConfig, MockHttpClient}
 import uk.gov.hmrc.http.HeaderCarrier
-import v2.models.domain.Nino
+import v2.models.domain.{Nino, TaxYear}
 import v2.models.outcomes.ResponseWrapper
 import v2.models.request.amendForeignPropertyPeriodSummary._
 import v2.models.request.common.foreignFhlEea._
@@ -83,7 +83,7 @@ class AmendForeignPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
   private val request: AmendForeignPropertyPeriodSummaryRequest = AmendForeignPropertyPeriodSummaryRequest(
     nino = Nino(nino),
     businessId = businessId,
-    taxYear = taxYear,
+    taxYear = TaxYear.fromMtd(taxYear),
     submissionId = submissionId,
     body = requestBody
   )
@@ -110,7 +110,7 @@ class AmendForeignPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
       MockHttpClient
         .put(
           url = s"$baseUrl/income-tax/business/property/periodic?" +
-            s"taxableEntityId=$nino&taxYear=$taxYear&incomeSourceId=$businessId&submissionId=$submissionId",
+            s"taxableEntityId=$nino&taxYear=2022-23&incomeSourceId=$businessId&submissionId=$submissionId",
           config = dummyHeaderCarrierConfig,
           body = requestBody,
           requiredHeaders = requiredIfsHeadersPut,

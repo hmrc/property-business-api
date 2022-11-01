@@ -17,10 +17,10 @@
 package v2.connectors
 
 import mocks.{MockAppConfig, MockHttpClient}
-import v2.models.domain.Nino
+import v2.models.domain.{Nino, TaxYear}
 import v2.models.outcomes.ResponseWrapper
 import v2.models.request.listPropertyPeriodSummaries.ListPropertyPeriodSummariesRequest
-import v2.models.response.listPropertyPeriodSummaries.{ ListPropertyPeriodSummariesResponse, SubmissionPeriod }
+import v2.models.response.listPropertyPeriodSummaries.{ListPropertyPeriodSummariesResponse, SubmissionPeriod}
 
 import scala.concurrent.Future
 
@@ -33,7 +33,7 @@ class ListPropertyPeriodSummariesConnectorSpec extends ConnectorSpec {
   val request: ListPropertyPeriodSummariesRequest = ListPropertyPeriodSummariesRequest(
     nino = Nino(nino),
     businessId = businessId,
-    taxYear = taxYear
+    taxYear = TaxYear.fromMtd(taxYear)
   )
 
   private val response = ListPropertyPeriodSummariesResponse(
@@ -61,7 +61,7 @@ class ListPropertyPeriodSummariesConnectorSpec extends ConnectorSpec {
       MockHttpClient
         .get(
           url = s"$baseUrl/income-tax/business/property/$nino/$businessId/period",
-          parameters = Seq("taxYear" -> taxYear),
+          parameters = Seq("taxYear" -> "2022-23"),
           config = dummyHeaderCarrierConfig,
           requiredHeaders = requiredIfsHeaders,
           excludedHeaders = Seq("AnotherHeader" -> "HeaderValue")

@@ -18,7 +18,7 @@ package v2.controllers.requestParsers
 
 import support.UnitSpec
 import v2.mocks.validators.MockRetrieveUkPropertyPeriodSummaryValidator
-import v2.models.domain.Nino
+import v2.models.domain.{Nino, TaxYear}
 import v2.models.errors._
 import v2.models.request.retrieveUkPropertyPeriodSummary.{RetrieveUkPropertyPeriodSummaryRawData, RetrieveUkPropertyPeriodSummaryRequest}
 
@@ -46,7 +46,7 @@ class RetrieveUkPropertyPeriodSummaryRequestParserSpec extends UnitSpec {
       "valid request data is supplied" in new Test {
         MockRetrieveUkPropertyPeriodSummaryValidator.validate(inputData).returns(Nil)
 
-        parser.parseRequest(inputData) shouldBe Right(RetrieveUkPropertyPeriodSummaryRequest(Nino(nino), businessId, taxYear, submissionId))
+        parser.parseRequest(inputData) shouldBe Right(RetrieveUkPropertyPeriodSummaryRequest(Nino(nino), businessId, TaxYear.fromMtd(taxYear), submissionId))
       }
     }
 

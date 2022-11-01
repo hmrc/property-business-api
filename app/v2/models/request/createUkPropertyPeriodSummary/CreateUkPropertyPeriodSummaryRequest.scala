@@ -16,6 +16,6 @@
 
 package v2.models.request.createUkPropertyPeriodSummary
 
-import v2.models.domain.Nino
+import v2.models.domain.{Nino, TaxYear}
 
-case class CreateUkPropertyPeriodSummaryRequest(nino: Nino, taxYear: String, businessId: String, body: CreateUkPropertyPeriodSummaryRequestBody)
+case class CreateUkPropertyPeriodSummaryRequest(nino: Nino, taxYear: TaxYear, businessId: String, body: CreateUkPropertyPeriodSummaryRequestBody)

@@ -18,7 +18,7 @@ package v2.controllers.requestParsers
 
 import javax.inject.Inject
 import v2.controllers.requestParsers.validators.AmendForeignPropertyPeriodSummaryValidator
-import v2.models.domain.Nino
+import v2.models.domain.{Nino, TaxYear}
 import v2.models.request.amendForeignPropertyPeriodSummary._
 
 class AmendForeignPropertyPeriodSummaryRequestParser @Inject()(val validator: AmendForeignPropertyPeriodSummaryValidator)
@@ -27,7 +27,7 @@ class AmendForeignPropertyPeriodSummaryRequestParser @Inject()(val validator: Am
   override protected def requestFor(data: AmendForeignPropertyPeriodSummaryRawData): AmendForeignPropertyPeriodSummaryRequest =
     AmendForeignPropertyPeriodSummaryRequest(
       nino = Nino(data.nino),
-      taxYear = data.taxYear,
+      taxYear = TaxYear.fromMtd(data.taxYear),
       businessId = data.businessId,
       submissionId = data.submissionId,
       body = data.body.as[AmendForeignPropertyPeriodSummaryRequestBody]

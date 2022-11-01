@@ -20,7 +20,7 @@ import fixtures.RetrieveUkPropertyPeriodSummary.ResponseModelsFixture
 import mocks.{MockAppConfig, MockHttpClient}
 import org.scalamock.handlers.CallHandler
 import v2.connectors.RetrieveUkPropertyPeriodSummaryConnector._
-import v2.models.domain.Nino
+import v2.models.domain.{Nino, TaxYear}
 import v2.models.errors.{DownstreamErrorCode, DownstreamErrors}
 import v2.models.outcomes.ResponseWrapper
 import v2.models.request.retrieveUkPropertyPeriodSummary.RetrieveUkPropertyPeriodSummaryRequest
@@ -39,7 +39,7 @@ class RetrieveUkPropertyPeriodSummaryConnectorSpec extends ConnectorSpec with Re
     RetrieveUkPropertyPeriodSummaryRequest(
       Nino(nino),
       businessId,
-      taxYear,
+      TaxYear.fromMtd(taxYear),
       submissionId)
 
   val ukFhlProperty: UkFhlProperty       = UkFhlProperty(None, None)
@@ -63,7 +63,7 @@ class RetrieveUkPropertyPeriodSummaryConnectorSpec extends ConnectorSpec with Re
     : CallHandler[Future[DownstreamOutcome[RetrieveUkPropertyPeriodSummaryResponse]]]#Derived = {
       MockHttpClient
         .get(
-          url = s"$baseUrl/income-tax/business/property/periodic?taxableEntityId=$nino&taxYear=$taxYear&incomeSourceId=$businessId&submissionId=$submissionId",
+          url = s"$baseUrl/income-tax/business/property/periodic?taxableEntityId=$nino&taxYear=2019-20&incomeSourceId=$businessId&submissionId=$submissionId",
           config = dummyHeaderCarrierConfig,
           requiredHeaders = requiredIfsHeaders,
           excludedHeaders = Seq("AnotherHeader" -> "HeaderValue")

@@ -33,9 +33,10 @@ class DeletePropertyAnnualSubmissionConnector @Inject()(val http: HttpClient, va
                                                                                      ec: ExecutionContext,
                                                                                      correlationId: String): Future[DownstreamOutcome[Unit]] = {
 
+    // Note that MTD tax year format is used
     delete(
       uri = IfsUri[Unit](
-        s"income-tax/business/property/annual?taxableEntityId=${request.nino.nino}&incomeSourceId=${request.businessId}&taxYear=${request.taxYear}")
+        s"income-tax/business/property/annual?taxableEntityId=${request.nino.nino}&incomeSourceId=${request.businessId}&taxYear=${request.taxYear.asMtd}")
     )
   }
 }

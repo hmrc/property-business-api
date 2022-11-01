@@ -17,7 +17,7 @@
 package v2.controllers.requestParsers
 
 import v2.controllers.requestParsers.validators.CreateUkPropertyPeriodSummaryValidator
-import v2.models.domain.Nino
+import v2.models.domain.{ Nino, TaxYear }
 import v2.models.request.createUkPropertyPeriodSummary._
 
 import javax.inject.Inject
@@ -26,5 +26,8 @@ class CreateUkPropertyPeriodSummaryRequestParser @Inject()(val validator: Create
     extends RequestParser[CreateUkPropertyPeriodSummaryRawData, CreateUkPropertyPeriodSummaryRequest] {
 
   override protected def requestFor(data: CreateUkPropertyPeriodSummaryRawData): CreateUkPropertyPeriodSummaryRequest =
-    CreateUkPropertyPeriodSummaryRequest(Nino(data.nino), data.taxYear, data.businessId, data.body.as[CreateUkPropertyPeriodSummaryRequestBody])
+    CreateUkPropertyPeriodSummaryRequest(Nino(data.nino),
+                                         TaxYear.fromMtd(data.taxYear),
+                                         data.businessId,
+                                         data.body.as[CreateUkPropertyPeriodSummaryRequestBody])
 }

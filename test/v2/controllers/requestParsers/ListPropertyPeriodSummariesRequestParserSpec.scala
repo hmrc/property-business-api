@@ -18,7 +18,7 @@ package v2.controllers.requestParsers
 
 import support.UnitSpec
 import v2.mocks.validators.MockListPropertyPeriodSummariesValidator
-import v2.models.domain.Nino
+import v2.models.domain.{Nino, TaxYear}
 import v2.models.errors.{BadRequestError, BusinessIdFormatError, ErrorWrapper, NinoFormatError}
 import v2.models.request.listPropertyPeriodSummaries._
 
@@ -40,7 +40,7 @@ class ListPropertyPeriodSummariesRequestParserSpec extends UnitSpec {
       "valid raw data is supplied" in new Test {
         MockListPropertyPeriodSummariesValidator.validate(rawData).returns(Nil)
 
-        parser.parseRequest(rawData) shouldBe Right(ListPropertyPeriodSummariesRequest(Nino(nino), businessId, taxYear))
+        parser.parseRequest(rawData) shouldBe Right(ListPropertyPeriodSummariesRequest(Nino(nino), businessId, TaxYear.fromMtd(taxYear)))
       }
     }
 

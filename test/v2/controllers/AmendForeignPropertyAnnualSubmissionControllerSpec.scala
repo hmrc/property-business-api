@@ -24,7 +24,7 @@ import v2.mocks.hateoas.MockHateoasFactory
 import v2.mocks.requestParsers.MockAmendForeignPropertyAnnualSubmissionRequestParser
 import v2.mocks.services.{MockAmendForeignPropertyAnnualSubmissionService, MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService}
 import v2.models.audit.{AuditError, AuditEvent, AuditResponse, GenericAuditDetail}
-import v2.models.domain.Nino
+import v2.models.domain.{Nino, TaxYear}
 import v2.models.errors._
 import v2.models.hateoas.Method.GET
 import v2.models.hateoas.{HateoasWrapper, Link}
@@ -94,7 +94,7 @@ class AmendForeignPropertyAnnualSubmissionControllerSpec
         versionNumber = "2.0",
         userType = "Individual",
         agentReferenceNumber = None,
-        params = Json.obj("nino" -> nino, "businessId" -> businessId, "taxYear" -> taxYear, "request" -> requestJson),
+        params = Json.obj("nino" -> nino, "businessId" -> businessId, "taxYear" -> "2019-20", "request" -> requestJson),
         correlationId = correlationId,
         response = auditResponse
       )
@@ -105,7 +105,7 @@ class AmendForeignPropertyAnnualSubmissionControllerSpec
   val body: AmendForeignPropertyAnnualSubmissionRequestBody = amendForeignPropertyAnnualSubmissionRequestBody
 
   private val rawData = AmendForeignPropertyAnnualSubmissionRawData(nino, businessId, taxYear, requestJson)
-  private val request = AmendForeignPropertyAnnualSubmissionRequest(Nino(nino), businessId, taxYear, body)
+  private val request = AmendForeignPropertyAnnualSubmissionRequest(Nino(nino), businessId, TaxYear.fromMtd(taxYear), body)
 
   "handleRequest" should {
     "return Ok" when {

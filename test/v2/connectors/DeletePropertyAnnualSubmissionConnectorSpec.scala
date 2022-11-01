@@ -17,7 +17,7 @@
 package v2.connectors
 
 import mocks.{MockAppConfig, MockHttpClient}
-import v2.models.domain.Nino
+import v2.models.domain.{Nino, TaxYear}
 import v2.models.outcomes.ResponseWrapper
 import v2.models.request.deletePropertyAnnualSubmission.DeletePropertyAnnualSubmissionRequest
 
@@ -32,7 +32,7 @@ class DeletePropertyAnnualSubmissionConnectorSpec extends ConnectorSpec {
   val request: DeletePropertyAnnualSubmissionRequest = DeletePropertyAnnualSubmissionRequest(
     nino = Nino(nino),
     businessId = businessId,
-    taxYear = taxYear
+    taxYear = TaxYear.fromMtd(taxYear)
   )
 
   class Test extends MockHttpClient with MockAppConfig {
@@ -54,7 +54,7 @@ class DeletePropertyAnnualSubmissionConnectorSpec extends ConnectorSpec {
 
       MockHttpClient
         .delete(
-          url = s"$baseUrl/income-tax/business/property/annual?taxableEntityId=$nino&incomeSourceId=$businessId&taxYear=$taxYear",
+          url = s"$baseUrl/income-tax/business/property/annual?taxableEntityId=$nino&incomeSourceId=$businessId&taxYear=2021-22",
           config = dummyHeaderCarrierConfig,
           requiredHeaders = requiredIfsHeaders,
           excludedHeaders = Seq("AnotherHeader" -> "HeaderValue")

@@ -35,10 +35,11 @@ class CreateUkPropertyPeriodSummaryConnector @Inject()(val http: HttpClient, val
       ec: ExecutionContext,
       correlationId: String): Future[DownstreamOutcome[CreateUkPropertyPeriodSummaryResponse]] = {
 
+    // Note that MTD tax year format is used
     post(
       body = request.body,
       uri = IfsUri[CreateUkPropertyPeriodSummaryResponse](
-        s"income-tax/business/property/periodic?taxableEntityId=${request.nino.nino}&taxYear=${request.taxYear}&incomeSourceId=${request.businessId}")
+        s"income-tax/business/property/periodic?taxableEntityId=${request.nino.nino}&taxYear=${request.taxYear.asMtd}&incomeSourceId=${request.businessId}")
     )
   }
 }

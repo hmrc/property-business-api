@@ -16,15 +16,15 @@
 
 package v2.controllers
 
-import play.api.libs.json.{ JsObject, Json }
+import play.api.libs.json.{JsObject, Json}
 import play.api.mvc.Result
 import uk.gov.hmrc.http.HeaderCarrier
 import v2.mocks.MockIdGenerator
 import v2.mocks.hateoas.MockHateoasFactory
 import v2.mocks.requestParsers.MockCreateForeignPropertyPeriodSummaryRequestParser
-import v2.mocks.services.{ MockAuditService, MockCreateForeignPropertyPeriodSummaryService, MockEnrolmentsAuthService, MockMtdIdLookupService }
-import v2.models.audit.{ AuditError, AuditEvent, AuditResponse, GenericAuditDetail }
-import v2.models.domain.Nino
+import v2.mocks.services.{MockAuditService, MockCreateForeignPropertyPeriodSummaryService, MockEnrolmentsAuthService, MockMtdIdLookupService}
+import v2.models.audit.{AuditError, AuditEvent, AuditResponse, GenericAuditDetail}
+import v2.models.domain.{Nino, TaxYear}
 import v2.models.errors._
 import v2.models.hateoas.HateoasWrapper
 import v2.models.outcomes.ResponseWrapper
@@ -81,7 +81,7 @@ class CreateForeignPropertyPeriodSummaryControllerSpec
   )
 
   private val requestData =
-    CreateForeignPropertyPeriodSummaryRequest(nino = Nino(nino), businessId = businessId, taxYear = taxYear, body = requestBody)
+    CreateForeignPropertyPeriodSummaryRequest(nino = Nino(nino), businessId = businessId, taxYear = TaxYear.fromMtd(taxYear), body = requestBody)
   private val rawData = CreateForeignPropertyPeriodSummaryRawData(nino = nino, businessId = businessId, taxYear = taxYear, body = requestBodyJson)
 
   private val hateoasResponse = Json

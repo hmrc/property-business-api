@@ -37,9 +37,10 @@ class ListPropertyPeriodSummariesConnector @Inject()(val http: HttpClient, val a
 
     val url = s"income-tax/business/property/${request.nino.nino}/${request.businessId}/period"
 
+    // Note that MTD tax year format is used
     get(
       uri = IfsUri[ListPropertyPeriodSummariesResponse](url),
-      queryParams = Seq("taxYear" -> request.taxYear)
+      queryParams = Seq("taxYear" -> request.taxYear.asMtd)
     )
   }
 }

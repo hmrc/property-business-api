@@ -18,7 +18,7 @@ package v2.connectors
 
 import mocks.{MockAppConfig, MockHttpClient}
 import uk.gov.hmrc.http.HeaderCarrier
-import v2.models.domain.Nino
+import v2.models.domain.{Nino, TaxYear}
 import v2.models.outcomes.ResponseWrapper
 import v2.models.request.common.ukPropertyRentARoom.{UkPropertyExpensesRentARoom, UkPropertyIncomeRentARoom}
 import v2.models.request.createUkPropertyPeriodSummary._
@@ -88,61 +88,10 @@ class CreateUkPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
     ))
   )
 
-  val consolidatedExpensesBody: CreateUkPropertyPeriodSummaryRequestBody = CreateUkPropertyPeriodSummaryRequestBody(
-    "2020-01-01",
-    "2020-01-31",
-    Some(UkFhlProperty(
-      Some(UkFhlPropertyIncome(
-        Some(5000.99),
-        Some(3123.21),
-        Some(UkPropertyIncomeRentARoom(
-          Some(532.12)
-        ))
-      )),
-      Some(UkFhlPropertyExpenses(
-        None,
-        None,
-        None,
-        None,
-        None,
-        None,
-        consolidatedExpenses = Some(41.12),
-        None,
-        None
-      ))
-    )),
-    Some(UkNonFhlProperty(
-      Some(UkNonFhlPropertyIncome(
-        Some(41.12),
-        Some(84.31),
-        Some(9884.93),
-        Some(842.99),
-        Some(31.44),
-        Some(UkPropertyIncomeRentARoom(
-          Some(947.66)
-        ))
-      )),
-      Some(UkNonFhlPropertyExpenses(
-        None,
-        None,
-        None,
-        None,
-        None,
-        None,
-        None,
-        None,
-        None,
-        None,
-        consolidatedExpenses = Some(947.66)
-      ))
-    ))
-  )
 
   private val response = CreateUkPropertyPeriodSummaryResponse("4557ecb5-fd32-48cc-81f5-e6acd1099f3c")
 
-  private val regularExpensesRequestData = CreateUkPropertyPeriodSummaryRequest(Nino(nino), taxYear, businessId, regularExpensesBody)
-
-  private val consolidatedExpensesRequestData = CreateUkPropertyPeriodSummaryRequest(Nino(nino), taxYear, businessId, consolidatedExpensesBody)
+  private val regularExpensesRequestData = CreateUkPropertyPeriodSummaryRequest(Nino(nino), TaxYear.fromMtd(taxYear), businessId, regularExpensesBody)
 
   class Test extends MockHttpClient with MockAppConfig {
     val connector: CreateUkPropertyPeriodSummaryConnector = new CreateUkPropertyPeriodSummaryConnector(
@@ -165,7 +114,7 @@ class CreateUkPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
 
       MockHttpClient
         .post(
-          url = s"$baseUrl/income-tax/business/property/periodic?taxableEntityId=$nino&taxYear=$taxYear&incomeSourceId=$businessId",
+          url = s"$baseUrl/income-tax/business/property/periodic?taxableEntityId=$nino&taxYear=2022-23&incomeSourceId=$businessId",
           config = dummyHeaderCarrierConfig,
           body = regularExpensesBody,
           requiredHeaders = requiredIfsHeadersPost,
@@ -174,26 +123,6 @@ class CreateUkPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
         .returns(Future.successful(outcome))
 
       await(connector.createUkProperty(regularExpensesRequestData)) shouldBe outcome
-
-    }
-
-    "post a body with consolidated expenses and return 200 with submissionId" in new Test {
-      val outcome = Right(ResponseWrapper(correlationId, response))
-
-      implicit val hc: HeaderCarrier = HeaderCarrier(otherHeaders = otherHeaders ++ Seq("Content-Type" -> "application/json"))
-      val requiredIfsHeadersPost: Seq[(String, String)] = requiredIfsHeaders ++ Seq("Content-Type" -> "application/json")
-
-      MockHttpClient
-        .post(
-          url = s"$baseUrl/income-tax/business/property/periodic?taxableEntityId=$nino&taxYear=$taxYear&incomeSourceId=$businessId",
-          config = dummyHeaderCarrierConfig,
-          body = consolidatedExpensesBody,
-          requiredHeaders = requiredIfsHeadersPost,
-          excludedHeaders = Seq("AnotherHeader" -> "HeaderValue")
-        )
-        .returns(Future.successful(outcome))
-
-      await(connector.createUkProperty(consolidatedExpensesRequestData)) shouldBe outcome
 
     }
   }

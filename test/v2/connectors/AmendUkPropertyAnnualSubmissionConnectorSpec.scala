@@ -18,7 +18,7 @@ package v2.connectors
 
 import mocks.{MockAppConfig, MockHttpClient}
 import uk.gov.hmrc.http.HeaderCarrier
-import v2.models.domain.Nino
+import v2.models.domain.{Nino, TaxYear}
 import v2.models.outcomes.ResponseWrapper
 import v2.models.request.amendUkPropertyAnnualSubmission._
 import v2.models.request.amendUkPropertyAnnualSubmission.ukFhlProperty._
@@ -38,9 +38,9 @@ class AmendUkPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec {
     Some(UkFhlPropertyAdjustments(
       Some(5000.99),
       Some(5000.99),
-      true,
+      periodOfGraceAdjustment = true,
       Some(5000.99),
-      true,
+      nonResidentLandlord = true,
       Some(UkPropertyAdjustmentsRentARoom(true))
     )),
     Some(UkFhlPropertyAllowances(
@@ -105,7 +105,7 @@ class AmendUkPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec {
   val request: AmendUkPropertyAnnualSubmissionRequest = AmendUkPropertyAnnualSubmissionRequest(
     nino = Nino(nino),
     businessId = businessId,
-    taxYear = taxYear,
+    taxYear = TaxYear.fromMtd(taxYear),
     body = body
   )
 
@@ -130,7 +130,7 @@ class AmendUkPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec {
 
       MockHttpClient
         .put(
-          url = s"$baseUrl/income-tax/business/property/annual?taxableEntityId=$nino&incomeSourceId=$businessId&taxYear=$taxYear",
+          url = s"$baseUrl/income-tax/business/property/annual?taxableEntityId=$nino&incomeSourceId=$businessId&taxYear=2022-23",
           config = dummyHeaderCarrierConfig,
           body = body,
           requiredHeaders = requiredIfsHeadersPut,

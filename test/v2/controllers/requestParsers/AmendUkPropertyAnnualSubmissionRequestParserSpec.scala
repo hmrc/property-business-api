@@ -19,7 +19,7 @@ package v2.controllers.requestParsers
 import play.api.libs.json.{JsValue, Json}
 import support.UnitSpec
 import v2.mocks.validators.MockAmendUkPropertyAnnualSubmissionValidator
-import v2.models.domain.Nino
+import v2.models.domain.{Nino, TaxYear}
 import v2.models.errors.{BadRequestError, BusinessIdFormatError, ErrorWrapper, NinoFormatError}
 import v2.models.request.amendUkPropertyAnnualSubmission.ukFhlProperty.{UkFhlProperty, UkFhlPropertyAdjustments, UkFhlPropertyAllowances}
 import v2.models.request.amendUkPropertyAnnualSubmission.ukNonFhlProperty.{UkNonFhlProperty, UkNonFhlPropertyAdjustments, UkNonFhlPropertyAllowances}
@@ -127,9 +127,9 @@ class AmendUkPropertyAnnualSubmissionRequestParserSpec extends UnitSpec {
                   UkFhlPropertyAdjustments(
                     Some(454.45),
                     Some(231.45),
-                    true,
+                    periodOfGraceAdjustment = true,
                     Some(567.67),
-                    true,
+                    nonResidentLandlord = true,
                     Some(
                       UkPropertyAdjustmentsRentARoom(true)))),
                 Some(
@@ -146,7 +146,7 @@ class AmendUkPropertyAnnualSubmissionRequestParserSpec extends UnitSpec {
                   Some(565.34),
                   Some(533.54),
                   Some(563.34),
-                  true,
+                  nonResidentLandlord = true,
                   Some(UkPropertyAdjustmentsRentARoom(true)))),
                 Some(UkNonFhlPropertyAllowances(
                   Some(678.45),
@@ -175,7 +175,7 @@ class AmendUkPropertyAnnualSubmissionRequestParserSpec extends UnitSpec {
           )
 
         parser.parseRequest(inputData) shouldBe
-          Right(AmendUkPropertyAnnualSubmissionRequest(Nino(nino), businessId, taxYear, amendUkPropertyAnnualSubmissionRequestBody))
+          Right(AmendUkPropertyAnnualSubmissionRequest(Nino(nino), businessId, TaxYear.fromMtd(taxYear), amendUkPropertyAnnualSubmissionRequestBody))
       }
     }
     "return an ErrrorWrapper" when {

@@ -22,7 +22,7 @@ import uk.gov.hmrc.http.HeaderCarrier
 import v2.connectors.RetrieveUkPropertyPeriodSummaryConnector.{NonUkResult, UkResult}
 import v2.controllers.EndpointLogContext
 import v2.mocks.connectors.MockRetrieveUkPropertyPeriodSummaryConnector
-import v2.models.domain.Nino
+import v2.models.domain.{Nino, TaxYear}
 import v2.models.errors._
 import v2.models.outcomes.ResponseWrapper
 import v2.models.request.retrieveUkPropertyPeriodSummary.RetrieveUkPropertyPeriodSummaryRequest
@@ -34,7 +34,7 @@ class RetrieveUkPropertyPeriodSummaryServiceSpec extends UnitSpec with ResponseM
 
   val nino: String = "AA123456A"
   val businessId: String = "XAIS12345678910"
-  val taxYear: String = "2019-20"
+  val taxYear: TaxYear = TaxYear.fromMtd("2020-21")
   val submissionId: String = "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
   implicit val correlationId: String = "X-123"
 

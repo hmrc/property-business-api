@@ -16,11 +16,9 @@
 
 package v2.connectors
 
-import mocks.MockAppConfig
 import org.scalamock.handlers.CallHandler
 import v2.connectors.RetrieveForeignPropertyPeriodSummaryConnector.{ForeignResult, NonForeignResult}
-import v2.mocks.MockHttpClient
-import v2.models.domain.Nino
+import v2.models.domain.{Nino, TaxYear}
 import v2.models.errors.{DownstreamErrorCode, DownstreamErrors}
 import v2.models.outcomes.ResponseWrapper
 import v2.models.request.retrieveForeignPropertyPeriodSummary.RetrieveForeignPropertyPeriodSummaryRequest
@@ -41,7 +39,7 @@ class RetrieveForeignPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
     RetrieveForeignPropertyPeriodSummaryRequest(
       Nino(nino),
       businessId,
-      taxYear,
+      TaxYear.fromMtd(taxYear),
       submissionId
     )
   val countryCode: String = "FRA"
@@ -52,26 +50,18 @@ class RetrieveForeignPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
   def responseWith(foreignFhlEea: Option[ForeignFhlEea], foreignNonFhlProperty: Option[Seq[ForeignNonFhlProperty]]): RetrieveForeignPropertyPeriodSummaryResponse =
     RetrieveForeignPropertyPeriodSummaryResponse("2020-06-17T10:53:38Z", "2019-01-29", "2020-03-29", foreignFhlEea, foreignNonFhlProperty)
 
-  class Test extends MockHttpClient with MockAppConfig {
+  trait Test {
+    _: ConnectorTest =>
     val connector: RetrieveForeignPropertyPeriodSummaryConnector = new RetrieveForeignPropertyPeriodSummaryConnector(
       http = mockHttpClient,
       appConfig = mockAppConfig
     )
 
-    MockAppConfig.ifsBaseUrl returns baseUrl
-    MockAppConfig.ifsToken returns "ifs-token"
-    MockAppConfig.ifsEnvironment returns "ifs-environment"
-    MockAppConfig.ifsEnvironmentHeaders returns Some(allowedDownstreamHeaders)
-
     def stubHttpResponse(outcome: DownstreamOutcome[RetrieveForeignPropertyPeriodSummaryResponse])
     : CallHandler[Future[DownstreamOutcome[RetrieveForeignPropertyPeriodSummaryResponse]]]#Derived = {
-      MockHttpClient
-        .get(
+      willGet(
           url = s"$baseUrl/income-tax/business/property/periodic",
-          config = dummyIfsHeaderCarrierConfig,
-          queryParams = Seq("taxableEntityId" -> nino, "incomeSourceId" -> businessId, "taxYear" -> taxYear, "submissionId" -> submissionId),
-          requiredHeaders = requiredIfsHeaders,
-          excludedHeaders = Seq("AnotherHeader" -> "HeaderValue")
+          parameters = Seq("taxableEntityId" -> nino, "incomeSourceId" -> businessId, "taxYear" -> "2022-23", "submissionId" -> submissionId)
         )
         .returns(Future.successful(outcome))
     }
@@ -79,7 +69,7 @@ class RetrieveForeignPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
 
   "connector" when {
     "response has a foreign fhl details" must {
-      "return a foreign result" in new Test {
+      "return a foreign result" in new IfsTest with Test {
         val response: RetrieveForeignPropertyPeriodSummaryResponse = responseWith(foreignFhlEea = Some(foreignFhlEea), foreignNonFhlProperty = None)
         val outcome                                                = Right(ResponseWrapper(correlationId, response))
 
@@ -90,7 +80,7 @@ class RetrieveForeignPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
     }
 
     "response has foreign non-fhl details" must {
-      "return a foreign result" in new Test {
+      "return a foreign result" in new IfsTest with Test {
         val response: RetrieveForeignPropertyPeriodSummaryResponse = responseWith(foreignFhlEea = None, foreignNonFhlProperty = Some(Seq(foreignNonFhlProperty)))
         val outcome                                                = Right(ResponseWrapper(correlationId, response))
 
@@ -101,7 +91,7 @@ class RetrieveForeignPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
     }
 
     "response has foreign fhl and non-fhl details" must {
-      "return a foreign result" in new Test {
+      "return a foreign result" in new IfsTest with Test {
         val response: RetrieveForeignPropertyPeriodSummaryResponse = responseWith(foreignFhlEea = Some(foreignFhlEea), foreignNonFhlProperty = Some(Seq(foreignNonFhlProperty)))
         val outcome =  Right(ResponseWrapper(correlationId, response))
 
@@ -111,7 +101,7 @@ class RetrieveForeignPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
       }
     }
     "response has no details" must {
-      "return a non-foreign result" in new Test{
+      "return a non-foreign result" in new IfsTest with Test{
         val response: RetrieveForeignPropertyPeriodSummaryResponse = responseWith(None, None)
         val outcome                                                = Right(ResponseWrapper(correlationId, response))
 
@@ -122,7 +112,7 @@ class RetrieveForeignPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
     }
 
     "response is an error" must {
-      "return the error" in new Test {
+      "return the error" in new IfsTest with Test {
         val outcome = Left(ResponseWrapper(correlationId, DownstreamErrors.single(DownstreamErrorCode("SOME_ERROR"))))
 
         stubHttpResponse(outcome)

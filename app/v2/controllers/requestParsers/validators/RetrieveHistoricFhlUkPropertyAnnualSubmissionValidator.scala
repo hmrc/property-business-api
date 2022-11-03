@@ -19,7 +19,7 @@ package v2.controllers.requestParsers.validators
 import config.AppConfig
 
 import javax.inject.{Inject, Singleton}
-import v2.controllers.requestParsers.validators.validations.{HistoricTaxYearValidation, NinoValidation}
+import v2.controllers.requestParsers.validators.validations.{NinoValidation, TaxYearValidation}
 import v2.models.errors.MtdError
 import v2.models.request.retrieveHistoricFhlUkPropertyAnnualSubmission.RetrieveHistoricFhlUkPropertyAnnualSubmissionRawData
 
@@ -35,7 +35,7 @@ class RetrieveHistoricFhlUkPropertyAnnualSubmissionValidator @Inject()(appConfig
     (data: RetrieveHistoricFhlUkPropertyAnnualSubmissionRawData) => {
       List(
         NinoValidation.validate(data.nino),
-        HistoricTaxYearValidation.validate(minTaxYear, maxTaxYear, data.taxYear),
+        TaxYearValidation.validateHistoric(minTaxYear, maxTaxYear, data.taxYear),
       )
     }
 

@@ -16,9 +16,7 @@
 
 package v2.connectors
 
-import mocks.MockAppConfig
 import org.scalamock.handlers.CallHandler
-import v2.mocks.MockHttpClient
 import v2.models.domain.{Nino, PeriodId}
 import v2.models.errors.{DownstreamErrorCode, DownstreamErrors}
 import v2.models.outcomes.ResponseWrapper
@@ -45,24 +43,17 @@ class RetrieveHistoricFhlUKPropertyPeriodSummaryConnectorSpec extends ConnectorS
   def responseWith(periodIncome: Option[PeriodIncome], periodExpenses: Option[PeriodExpenses]): RetrieveHistoricFhlUkPiePeriodSummaryResponse =
     RetrieveHistoricFhlUkPiePeriodSummaryResponse("2017-04-06", "2017-07-04", periodIncome, periodExpenses)
 
-  class Test extends MockHttpClient with MockAppConfig {
+  trait Test {
+    _: ConnectorTest =>
     val connector: RetrieveHistoricFhlUkPropertyPeriodSummaryConnector = new RetrieveHistoricFhlUkPropertyPeriodSummaryConnector(
       http = mockHttpClient,
       appConfig = mockAppConfig
     )
 
-    MockAppConfig.desBaseUrl returns baseUrl
-    MockAppConfig.desToken returns "des-token"
-    MockAppConfig.desEnvironment returns "des-environment"
-    MockAppConfig.desEnvironmentHeaders returns Some(allowedDownstreamHeaders)
-
     def stubHttpResponse(outcome: DownstreamOutcome[RetrieveHistoricFhlUkPiePeriodSummaryResponse])
     : CallHandler[Future[DownstreamOutcome[RetrieveHistoricFhlUkPiePeriodSummaryResponse]]]#Derived = {
-      MockHttpClient
-        .get(
-          url = s"$baseUrl/income-tax/nino/$nino/uk-properties/furnished-holiday-lettings/periodic-summary-detail?from=$periodIdFrom&to=$periodIdTo",
-          config = dummyDesHeaderCarrierConfig,
-          requiredHeaders = requiredDesHeaders,
+      willGet(
+          url = s"$baseUrl/income-tax/nino/$nino/uk-properties/furnished-holiday-lettings/periodic-summary-detail?from=$periodIdFrom&to=$periodIdTo"
         )
         .returns(Future.successful(outcome))
     }
@@ -70,7 +61,7 @@ class RetrieveHistoricFhlUKPropertyPeriodSummaryConnectorSpec extends ConnectorS
 
   "connector" when {
     "request for a historic FHL UK Property Income and Expenses Period summary" must {
-      "return a valid result" in new Test {
+      "return a valid result" in new DesTest with Test {
         val response: RetrieveHistoricFhlUkPiePeriodSummaryResponse = responseWith(Some(periodIncome), Some(periodExpenses))
         val outcome = Right(ResponseWrapper(correlationId, response))
 
@@ -82,7 +73,7 @@ class RetrieveHistoricFhlUKPropertyPeriodSummaryConnectorSpec extends ConnectorS
     }
 
     "response is an error" must {
-      "return the error" in new Test {
+      "return the error" in new DesTest with Test {
         val outcome = Left(ResponseWrapper(correlationId, DownstreamErrors.single(DownstreamErrorCode("SOME_ERROR"))))
 
         stubHttpResponse(outcome)

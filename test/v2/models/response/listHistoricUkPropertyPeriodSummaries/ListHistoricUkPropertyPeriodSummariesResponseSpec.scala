@@ -32,11 +32,22 @@ class ListHistoricUkPropertyPeriodSummariesResponseSpec extends UnitSpec with Mo
     ))
 
   "reads from downstream" should {
+    "handle empty model" in {
+      Json
+        .parse(
+          """{
+          |  "periods": []
+          |}
+          """.stripMargin
+        )
+        .as[ListHistoricUkPropertyPeriodSummariesResponse[SubmissionPeriod]] shouldBe ListHistoricUkPropertyPeriodSummariesResponse(Nil)
+    }
+
     "return the correct model" in {
       Json
         .parse(
           """{
-          |  "annualAdjustments": [
+          |  "periods": [
           |    {
           |      "transactionReference": "ignored",
           |      "from": "2020-01-02",

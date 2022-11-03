@@ -19,7 +19,7 @@ package v2.connectors
 import config.AppConfig
 import uk.gov.hmrc.http.{ HeaderCarrier, HttpClient }
 import v2.connectors.DownstreamUri.IfsUri
-import v2.connectors.httpparsers.StandardIfsHttpParser._
+import v2.connectors.httpparsers.StandardDownstreamHttpParser._
 import v2.models.outcomes.ResponseWrapper
 import v2.models.request.retrieveUkPropertyAnnualSubmission.RetrieveUkPropertyAnnualSubmissionRequest
 import v2.models.response.retrieveUkPropertyAnnualSubmission.RetrieveUkPropertyAnnualSubmissionResponse
@@ -44,10 +44,10 @@ class RetrieveUkPropertyAnnualSubmissionConnector @Inject()(val http: HttpClient
   def retrieveUkProperty(request: RetrieveUkPropertyAnnualSubmissionRequest)(implicit hc: HeaderCarrier,
                                                                              ec: ExecutionContext,
                                                                              correlationId: String): Future[DownstreamOutcome[Result]] = {
-
+    // Note that MTD tax year format is used
     val response = get(
       uri = IfsUri[RetrieveUkPropertyAnnualSubmissionResponse]("income-tax/business/property/annual"),
-      queryParams = Seq("taxableEntityId" -> request.nino.value, "incomeSourceId" -> request.businessId, "taxYear" -> request.taxYear)
+      queryParams = Seq("taxableEntityId" -> request.nino.value, "incomeSourceId" -> request.businessId, "taxYear" -> request.taxYear.asMtd)
     )
 
     response.map {

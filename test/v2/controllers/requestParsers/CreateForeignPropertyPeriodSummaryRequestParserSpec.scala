@@ -19,7 +19,7 @@ package v2.controllers.requestParsers
 import play.api.libs.json.Json
 import support.UnitSpec
 import v2.mocks.validators.MockCreateForeignPropertyPeriodSummaryValidator
-import v2.models.domain.Nino
+import v2.models.domain.{Nino, TaxYear}
 import v2.models.errors.{BadRequestError, BusinessIdFormatError, ErrorWrapper, NinoFormatError}
 import v2.models.request.common.foreignFhlEea.{CreateForeignFhlEea, ForeignFhlEeaIncome}
 import v2.models.request.createForeignPropertyPeriodSummary._
@@ -71,7 +71,7 @@ class CreateForeignPropertyPeriodSummaryRequestParserSpec extends UnitSpec {
         )
 
         parser.parseRequest(inputData) shouldBe
-          Right(CreateForeignPropertyPeriodSummaryRequest(Nino(nino), businessId, taxYear, model))
+          Right(CreateForeignPropertyPeriodSummaryRequest(Nino(nino), businessId, TaxYear.fromMtd(taxYear), model))
       }
     }
 

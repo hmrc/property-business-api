@@ -27,7 +27,7 @@ import v2.models.response.retrieveForeignPropertyAnnualSubmission.foreignPropert
 import uk.gov.hmrc.http.HeaderCarrier
 import v2.connectors.RetrieveForeignPropertyAnnualSubmissionConnector.{ForeignResult, NonForeignResult}
 import v2.controllers.EndpointLogContext
-import v2.models.domain.Nino
+import v2.models.domain.{Nino, TaxYear}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -36,7 +36,7 @@ class RetrieveForeignPropertyAnnualSubmissionServiceSpec extends UnitSpec {
 
   val nino: String = "AA123456A"
   val businessId: String = "XAIS12345678910"
-  val taxYear: String = "2019-20"
+  val taxYear: TaxYear = TaxYear.fromMtd("2020-21")
   implicit val correlationId: String = "X-123"
 
   private val response = RetrieveForeignPropertyAnnualSubmissionResponse(

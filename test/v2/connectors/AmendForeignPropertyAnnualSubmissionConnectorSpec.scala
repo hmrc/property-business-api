@@ -16,12 +16,9 @@
 
 package v2.connectors
 
-import mocks.MockAppConfig
-import uk.gov.hmrc.http.HeaderCarrier
-import v2.mocks.MockHttpClient
-import v2.models.domain.Nino
+import v2.models.domain.{Nino, TaxYear}
 import v2.models.outcomes.ResponseWrapper
-import v2.models.request.amendForeignPropertyAnnualSubmission.{AmendForeignPropertyAnnualSubmissionFixture, _}
+import v2.models.request.amendForeignPropertyAnnualSubmission._
 
 import scala.concurrent.Future
 
@@ -36,37 +33,24 @@ class AmendForeignPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec wi
   val request: AmendForeignPropertyAnnualSubmissionRequest = AmendForeignPropertyAnnualSubmissionRequest(
     nino = Nino(nino),
     businessId = businessId,
-    taxYear = taxYear,
+    taxYear = TaxYear.fromMtd(taxYear),
     body = body
   )
 
-  class Test extends MockHttpClient with MockAppConfig {
+  trait Test {    _: ConnectorTest =>
     val connector = new AmendForeignPropertyAnnualSubmissionConnector(
       http = mockHttpClient,
       appConfig = mockAppConfig
     )
-
-    MockAppConfig.ifsBaseUrl returns baseUrl
-    MockAppConfig.ifsToken returns "ifs-token"
-    MockAppConfig.ifsEnvironment returns "ifs-environment"
-    MockAppConfig.ifsEnvironmentHeaders returns Some(allowedDownstreamHeaders)
   }
 
   "connector" must {
-    "put a body and return a 204" in new Test {
+    "put a body and return a 204" in new IfsTest with Test {
       val outcome = Right(ResponseWrapper(correlationId, ()))
 
-      implicit val hc: HeaderCarrier = HeaderCarrier(otherHeaders = otherHeaders ++ Seq("Content-Type" -> "application/json"))
-      val requiredIfsHeadersPut: Seq[(String, String)] = requiredIfsHeaders ++ Seq("Content-Type" -> "application/json")
-
-      MockHttpClient
-        .put(
-          url = s"$baseUrl/income-tax/business/property/annual?taxableEntityId=$nino&incomeSourceId=$businessId&taxYear=$taxYear",
-          config = dummyIfsHeaderCarrierConfig,
-          body = body,
-          requiredHeaders = requiredIfsHeadersPut,
-          excludedHeaders = Seq("AnotherHeader" -> "HeaderValue")
-        )
+      willPut(
+          url = s"$baseUrl/income-tax/business/property/annual?taxableEntityId=$nino&incomeSourceId=$businessId&taxYear=2020-21",
+          body = body)
         .returns(Future.successful(outcome))
 
       await(connector.amendForeignPropertyAnnualSubmission(request)) shouldBe outcome

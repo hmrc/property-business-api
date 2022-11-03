@@ -19,7 +19,7 @@ package v2.connectors
 import config.AppConfig
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
 import v2.connectors.DownstreamUri.IfsUri
-import v2.connectors.httpparsers.StandardIfsHttpParser._
+import v2.connectors.httpparsers.StandardDownstreamHttpParser._
 import v2.models.request.retrieveHistoricFhlUkPropertyAnnualSubmission.RetrieveHistoricFhlUkPropertyAnnualSubmissionRequest
 import v2.models.response.retrieveHistoricFhlUkPropertyAnnualSubmission.RetrieveHistoricFhlUkPropertyAnnualSubmissionResponse
 
@@ -36,7 +36,7 @@ class RetrieveHistoricFhlUkPropertyAnnualSubmissionConnector @Inject()(val http:
       correlationId: String): Future[DownstreamOutcome[RetrieveHistoricFhlUkPropertyAnnualSubmissionResponse]] = {
 
     val nino    = request.nino.value
-    val taxYear = request.taxYear.toDownstream
+    val taxYear = request.taxYear.asDownstream
     val response = get(
       uri = IfsUri[RetrieveHistoricFhlUkPropertyAnnualSubmissionResponse](
         s"income-tax/nino/$nino/uk-properties/furnished-holiday-lettings/annual-summaries/$taxYear")

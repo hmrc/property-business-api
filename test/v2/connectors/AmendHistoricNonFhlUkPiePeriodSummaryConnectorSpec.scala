@@ -16,9 +16,7 @@
 
 package v2.connectors
 
-import mocks.MockAppConfig
 import org.scalamock.handlers.CallHandler
-import v2.mocks.MockHttpClient
 import v2.models.domain.{Nino, PeriodId}
 import v2.models.outcomes.ResponseWrapper
 import v2.models.request.amendHistoricNonFhlUkPiePeriodSummary.{AmendHistoricNonFhlUkPiePeriodSummaryRequest, AmendHistoricNonFhlUkPiePeriodSummaryRequestBody}
@@ -36,7 +34,7 @@ class AmendHistoricNonFhlUkPiePeriodSummaryConnectorSpec extends ConnectorSpec {
 
   "The connector" when {
     "sending a valid amend request" should {
-      "return the ok result" in new Test {
+      "return the ok result" in new IfsTest with Test {
         val response = AmendHistoricNonFhlUkPiePeriodSummaryResponse(transactionReference = "2017090920170909")
         val outcome  = Right(ResponseWrapper(correlationId, response))
         stubHttpResponse(outcome)
@@ -47,17 +45,13 @@ class AmendHistoricNonFhlUkPiePeriodSummaryConnectorSpec extends ConnectorSpec {
     }
   }
 
-  class Test extends MockHttpClient with MockAppConfig {
+  trait Test {
+    _: ConnectorTest =>
 
     val connector: AmendHistoricNonFhlUkPiePeriodSummaryConnector = new AmendHistoricNonFhlUkPiePeriodSummaryConnector(
       http = mockHttpClient,
       appConfig = mockAppConfig
     )
-
-    MockAppConfig.ifsEnvironmentHeaders returns Some(allowedDownstreamHeaders)
-    MockAppConfig.ifsToken returns "ifs-token"
-    MockAppConfig.ifsBaseUrl returns baseUrl
-    MockAppConfig.ifsEnvironment returns "ifs-environment"
 
     def pathFrom(request: AmendHistoricNonFhlUkPiePeriodSummaryRequest): String =
       s"income-tax/nino/${request.nino.value}/uk-properties/other/periodic-summaries" +
@@ -69,11 +63,8 @@ class AmendHistoricNonFhlUkPiePeriodSummaryConnectorSpec extends ConnectorSpec {
 
       val path = pathFrom(request)
 
-      MockHttpClient
-        .put(
+      willPut(
           url = s"$baseUrl/$path",
-          config = dummyIfsHeaderCarrierConfig,
-          requiredHeaders = requiredIfsHeaders,
           body = requestBody
         )
         .returns(Future.successful(outcome))

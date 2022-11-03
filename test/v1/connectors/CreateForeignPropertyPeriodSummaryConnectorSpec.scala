@@ -16,9 +16,8 @@
 
 package v1.connectors
 
-import mocks.MockAppConfig
+import mocks.{MockAppConfig, MockHttpClient}
 import uk.gov.hmrc.http.HeaderCarrier
-import v1.mocks.MockHttpClient
 import v1.models.domain.Nino
 import v1.models.outcomes.ResponseWrapper
 import v1.models.request.common.foreignFhlEea._

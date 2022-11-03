@@ -18,12 +18,12 @@ package v2.controllers.requestParsers
 
 import javax.inject.Inject
 import v2.controllers.requestParsers.validators.RetrieveUkPropertyPeriodSummaryValidator
-import v2.models.domain.Nino
-import v2.models.request.retrieveUkPropertyPeriodSummary.{RetrieveUkPropertyPeriodSummaryRawData, RetrieveUkPropertyPeriodSummaryRequest}
+import v2.models.domain.{ Nino, TaxYear }
+import v2.models.request.retrieveUkPropertyPeriodSummary.{ RetrieveUkPropertyPeriodSummaryRawData, RetrieveUkPropertyPeriodSummaryRequest }
 
 class RetrieveUkPropertyPeriodSummaryRequestParser @Inject()(val validator: RetrieveUkPropertyPeriodSummaryValidator)
-  extends RequestParser[RetrieveUkPropertyPeriodSummaryRawData, RetrieveUkPropertyPeriodSummaryRequest] {
+    extends RequestParser[RetrieveUkPropertyPeriodSummaryRawData, RetrieveUkPropertyPeriodSummaryRequest] {
 
   override protected def requestFor(data: RetrieveUkPropertyPeriodSummaryRawData): RetrieveUkPropertyPeriodSummaryRequest =
-    RetrieveUkPropertyPeriodSummaryRequest(Nino(data.nino), data.businessId, data.taxYear, data.submissionId)
+    RetrieveUkPropertyPeriodSummaryRequest(Nino(data.nino), data.businessId, TaxYear.fromMtd(data.taxYear), data.submissionId)
 }

@@ -21,7 +21,7 @@ import config.AppConfig
 import javax.inject.{ Inject, Singleton }
 import uk.gov.hmrc.http.{ HeaderCarrier, HttpClient }
 import v2.connectors.DownstreamUri.IfsUri
-import v2.connectors.httpparsers.StandardIfsHttpParser._
+import v2.connectors.httpparsers.StandardDownstreamHttpParser._
 import v2.models.request.amendForeignPropertyAnnualSubmission.AmendForeignPropertyAnnualSubmissionRequest
 
 import scala.concurrent.{ ExecutionContext, Future }
@@ -34,11 +34,12 @@ class AmendForeignPropertyAnnualSubmissionConnector @Inject()(val http: HttpClie
       ec: ExecutionContext,
       correlationId: String): Future[DownstreamOutcome[Unit]] = {
 
+    // Note that MTD tax year format is used
     put(
       body = request.body,
       uri = IfsUri[Unit](
         "income-tax/business/property/annual?taxableEntityId=" +
-          s"${request.nino.nino}&incomeSourceId=${request.businessId}&taxYear=${request.taxYear}")
+          s"${request.nino.nino}&incomeSourceId=${request.businessId}&taxYear=${request.taxYear.asMtd}")
     )
   }
 }

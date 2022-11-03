@@ -16,6 +16,6 @@
 
 package v2.models.request.amendUkPropertyAnnualSubmission
 
-import v2.models.domain.Nino
+import v2.models.domain.{Nino, TaxYear}
 
-case class AmendUkPropertyAnnualSubmissionRequest(nino: Nino, businessId: String, taxYear: String, body: AmendUkPropertyAnnualSubmissionRequestBody)
+case class AmendUkPropertyAnnualSubmissionRequest(nino: Nino, businessId: String, taxYear: TaxYear, body: AmendUkPropertyAnnualSubmissionRequestBody)

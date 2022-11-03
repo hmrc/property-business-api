@@ -21,7 +21,7 @@ import config.AppConfig
 import javax.inject.{ Inject, Singleton }
 import uk.gov.hmrc.http.{ HeaderCarrier, HttpClient }
 import v2.connectors.DownstreamUri.IfsUri
-import v2.connectors.httpparsers.StandardIfsHttpParser._
+import v2.connectors.httpparsers.StandardDownstreamHttpParser._
 import v2.models.request.listPropertyPeriodSummaries.ListPropertyPeriodSummariesRequest
 import v2.models.response.listPropertyPeriodSummaries.ListPropertyPeriodSummariesResponse
 
@@ -37,9 +37,10 @@ class ListPropertyPeriodSummariesConnector @Inject()(val http: HttpClient, val a
 
     val url = s"income-tax/business/property/${request.nino.nino}/${request.businessId}/period"
 
+    // Note that MTD tax year format is used
     get(
       uri = IfsUri[ListPropertyPeriodSummariesResponse](url),
-      queryParams = Seq("taxYear" -> request.taxYear)
+      queryParams = Seq("taxYear" -> request.taxYear.asMtd)
     )
   }
 }

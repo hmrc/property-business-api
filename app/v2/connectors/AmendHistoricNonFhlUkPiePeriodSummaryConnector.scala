@@ -20,7 +20,7 @@ import config.AppConfig
 import play.api.http.Status.OK
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
 import v2.connectors.DownstreamUri.IfsUri
-import v2.connectors.httpparsers.StandardIfsHttpParser._
+import v2.connectors.httpparsers.StandardDownstreamHttpParser._
 import v2.models.request.amendHistoricNonFhlUkPiePeriodSummary.AmendHistoricNonFhlUkPiePeriodSummaryRequest
 
 import javax.inject.{Inject, Singleton}

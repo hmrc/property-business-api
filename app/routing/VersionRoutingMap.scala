@@ -17,7 +17,7 @@
 package routing
 
 import com.google.inject.ImplementedBy
-import config.{ AppConfig, FeatureSwitch }
+import config.{ AppConfig, FeatureSwitches }
 import definition.Versions.{ VERSION_1, VERSION_2 }
 import play.api.Logging
 import play.api.routing.Router
@@ -44,10 +44,11 @@ case class VersionRoutingMapImpl @Inject()(appConfig: AppConfig,
     extends VersionRoutingMap
     with Logging {
 
-  private val effectiveV2Router: Router = {
-    val featureSwitch: FeatureSwitch = FeatureSwitch(appConfig.featureSwitch)
+  val featureSwitches: FeatureSwitches = FeatureSwitches(appConfig.featureSwitches)
 
-    if (featureSwitch.isV2R7cRoutingEnabled) {
+
+  private val effectiveV2Router: Router = {
+    if (featureSwitches.isV2R7cRoutingEnabled) {
       logger.info("[VersionRoutingMap][map] including R7C endpoints in V2 routes")
       v2r7cRouter
     } else {

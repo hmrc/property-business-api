@@ -18,7 +18,7 @@ package v2.controllers.requestParsers
 
 import support.UnitSpec
 import v2.mocks.validators.MockRetrieveForeignPropertyPeriodSummaryValidator
-import v2.models.domain.Nino
+import v2.models.domain.{Nino, TaxYear}
 import v2.models.errors.{BadRequestError, BusinessIdFormatError, ErrorWrapper, NinoFormatError}
 import v2.models.request.retrieveForeignPropertyPeriodSummary._
 
@@ -42,7 +42,7 @@ class RetrieveForeignPropertyPeriodSummaryRequestParserSpec extends UnitSpec {
       "valid request data is supplied" in new Test {
         MockRetrieveForeignPropertyPeriodSummaryValidator.validate(inputData).returns(Nil)
 
-        parser.parseRequest(inputData) shouldBe Right(RetrieveForeignPropertyPeriodSummaryRequest(Nino(nino), businessId, taxYear, submissionId))
+        parser.parseRequest(inputData) shouldBe Right(RetrieveForeignPropertyPeriodSummaryRequest(Nino(nino), businessId, TaxYear.fromMtd(taxYear), submissionId))
       }
     }
     "return an ErrorWrapper" when {

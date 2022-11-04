@@ -37,7 +37,7 @@ class ListPropertyPeriodSummariesConnector @Inject()(val http: HttpClient, val a
 
     import request._
 
-    if (taxYear.isTys) {
+    if (taxYear.useTaxYearSpecificApi) {
       val url = s"income-tax/business/property/${taxYear.asTysDownstream}/${nino.nino}/${businessId}/period"
 
       get(uri = TaxYearSpecificIfsUri[ListPropertyPeriodSummariesResponse](url))

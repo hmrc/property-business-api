@@ -38,12 +38,12 @@ class ListPropertyPeriodSummariesConnector @Inject()(val http: HttpClient, val a
     import request._
 
     if (taxYear.useTaxYearSpecificApi) {
-      val url = s"income-tax/business/property/${taxYear.asTysDownstream}/${nino.nino}/${businessId}/period"
+      val url = s"income-tax/business/property/${taxYear.asTysDownstream}/${nino.nino}/$businessId/period"
 
       get(uri = TaxYearSpecificIfsUri[ListPropertyPeriodSummariesResponse](url))
     } else {
 
-      val url = s"income-tax/business/property/${nino.nino}/${businessId}/period"
+      val url = s"income-tax/business/property/${nino.nino}/$businessId/period"
 
       // Note that MTD tax year format is used
       get(

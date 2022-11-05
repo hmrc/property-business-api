@@ -83,7 +83,7 @@ class RetrieveUkPropertyPeriodSummaryServiceSpec extends UnitSpec with ResponseM
           await(service.retrieveUkProperty(requestData)) shouldBe Left(ErrorWrapper(correlationId, error))
         }
 
-      val input = Seq(
+      val ifsErrorMap = Seq(
         "INVALID_TAXABLE_ENTITY_ID" -> NinoFormatError,
         "INVALID_TAX_YEAR" -> TaxYearFormatError,
         "INVALID_INCOMESOURCEID" -> BusinessIdFormatError,
@@ -95,7 +95,14 @@ class RetrieveUkPropertyPeriodSummaryServiceSpec extends UnitSpec with ResponseM
         "INVALID_CORRELATIONID" -> InternalError
       )
 
-      input.foreach(args => (serviceError _).tupled(args))
+      val tysErrorMap =
+        Seq(
+          "INVALID_INCOMESOURCE_ID" -> BusinessIdFormatError,
+          "INVALID_CORRELATION_ID" -> InternalError
+        )
+
+
+      (ifsErrorMap ++ tysErrorMap).foreach(args => (serviceError _).tupled(args))
     }
   }
 }

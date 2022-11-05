@@ -19,20 +19,21 @@ package v2.endpoints
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import play.api.http.HeaderNames.ACCEPT
 import play.api.http.Status
-import play.api.libs.json.{JsValue, Json}
-import play.api.libs.ws.{WSRequest, WSResponse}
+import play.api.libs.json.{ Json, JsValue }
+import play.api.libs.ws.{ WSRequest, WSResponse }
 import play.api.test.Helpers.AUTHORIZATION
 import support.V2IntegrationBaseSpec
+import v2.models.domain.TaxYear
 import v2.models.errors._
-import v2.stubs.{AuditStub, AuthStub, DownstreamStub, MtdIdLookupStub}
+import v2.stubs.{ AuditStub, AuthStub, DownstreamStub, MtdIdLookupStub }
 
 class RetrieveUkPropertyPeriodSummaryControllerISpec extends V2IntegrationBaseSpec {
 
   private trait Test {
 
     val nino: String = "AA123456A"
-    val taxYear: String = "2022-23"
-    val businessId: String = "XAIS12345678910"
+    def taxYear: String
+    val businessId: String   = "XAIS12345678910"
     val submissionId: String = "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
 
     val responseBody: JsValue = Json.parse(
@@ -172,13 +173,11 @@ class RetrieveUkPropertyPeriodSummaryControllerISpec extends V2IntegrationBaseSp
 
     def uri: String = s"/uk/$nino/$businessId/period/$taxYear/$submissionId"
 
-    def ifsUri: String = s"/income-tax/business/property/periodic"
-
     def ifsQueryParams: Map[String, String] = Map(
       "taxableEntityId" -> nino,
-      "taxYear" -> taxYear,
-      "incomeSourceId" -> businessId,
-      "submissionId" -> submissionId
+      "taxYear"         -> taxYear,
+      "incomeSourceId"  -> businessId,
+      "submissionId"    -> submissionId
     )
 
     def setupStubs(): StubMapping
@@ -189,7 +188,7 @@ class RetrieveUkPropertyPeriodSummaryControllerISpec extends V2IntegrationBaseSp
         .withHttpHeaders(
           (ACCEPT, "application/vnd.hmrc.2.0+json"),
           (AUTHORIZATION, "Bearer 123") // some bearer token
-      )
+        )
     }
 
     def errorBody(code: String): String =
@@ -201,9 +200,21 @@ class RetrieveUkPropertyPeriodSummaryControllerISpec extends V2IntegrationBaseSp
        """.stripMargin
   }
 
+  private trait NonTysTest extends Test {
+    def taxYear: String = "2022-23"
+
+    def ifsUri: String = s"/income-tax/business/property/periodic"
+  }
+
+  private trait TysIfsTest extends Test {
+    def taxYear: String = "2023-24"
+
+    def tysUri: String = s"/income-tax/business/property/${TaxYear.fromMtd(taxYear).asTysDownstream}/$nino/$businessId/periodic/$submissionId"
+  }
+
   "Retrieve UK property period summary endpoint" should {
     "return a 200 status code" when {
-      "any valid request is made" in new Test {
+      "any valid request is made to the ifs endpoint" in new NonTysTest {
 
         override def setupStubs(): StubMapping = {
           AuditStub.audit()
@@ -218,18 +229,37 @@ class RetrieveUkPropertyPeriodSummaryControllerISpec extends V2IntegrationBaseSp
         response.header("X-CorrelationId").nonEmpty shouldBe true
         response.header("Content-Type") shouldBe Some("application/json")
       }
+
+      "any valid request is made to the tys endpoint" in new TysIfsTest {
+
+        override def setupStubs(): StubMapping = {
+          AuditStub.audit()
+          AuthStub.authorised()
+          MtdIdLookupStub.ninoFound(nino)
+          DownstreamStub.onSuccess(DownstreamStub.GET, tysUri, Status.OK, ifsResponseBody)
+        }
+
+        val response: WSResponse = await(request().get())
+        response.status shouldBe Status.OK
+        response.json shouldBe responseBody
+        response.header("X-CorrelationId").nonEmpty shouldBe true
+        response.header("Content-Type") shouldBe Some("application/json")
+      }
     }
 
     "return validation error according to spec" when {
-      def validationErrorTest(requestNino: String, requestBusinessId: String,
-                              requestTaxYear: String, requestSubmissionId: String,
-                              expectedStatus: Int, expectedBody: MtdError): Unit = {
-        s"validation fails with ${expectedBody.code} error" in new Test {
+      def validationErrorTest(requestNino: String,
+                              requestBusinessId: String,
+                              requestTaxYear: String,
+                              requestSubmissionId: String,
+                              expectedStatus: Int,
+                              expectedBody: MtdError): Unit = {
+        s"validation fails with ${expectedBody.code} error" in new NonTysTest {
 
-          override val nino: String = requestNino
-          override val businessId: String = requestBusinessId
+          override val nino: String         = requestNino
+          override val businessId: String   = requestBusinessId
           override val submissionId: String = requestSubmissionId
-          override val taxYear: String = requestTaxYear
+          override val taxYear: String      = requestTaxYear
 
           override def setupStubs(): StubMapping = {
             AuditStub.audit()
@@ -256,7 +286,7 @@ class RetrieveUkPropertyPeriodSummaryControllerISpec extends V2IntegrationBaseSp
 
     "return ifs service error" when {
       def serviceErrorTest(ifsStatus: Int, ifsCode: String, expectedStatus: Int, expectedBody: MtdError): Unit = {
-        s"ifs returns an $ifsCode error and status $ifsStatus" in new Test {
+        s"ifs returns an $ifsCode error and status $ifsStatus" in new NonTysTest {
 
           override def setupStubs(): StubMapping = {
             AuditStub.audit()
@@ -271,7 +301,7 @@ class RetrieveUkPropertyPeriodSummaryControllerISpec extends V2IntegrationBaseSp
         }
       }
 
-      val input = Seq(
+      val ifsInput = Seq(
         (Status.BAD_REQUEST, "INVALID_TAXABLE_ENTITY_ID", Status.BAD_REQUEST, NinoFormatError),
         (Status.BAD_REQUEST, "INVALID_TAX_YEAR", Status.BAD_REQUEST, TaxYearFormatError),
         (Status.BAD_REQUEST, "TAX_YEAR_NOT_SUPPORTED", Status.BAD_REQUEST, RuleTaxYearNotSupportedError),
@@ -282,7 +312,13 @@ class RetrieveUkPropertyPeriodSummaryControllerISpec extends V2IntegrationBaseSp
         (Status.INTERNAL_SERVER_ERROR, "SERVER_ERROR", Status.INTERNAL_SERVER_ERROR, InternalError),
         (Status.SERVICE_UNAVAILABLE, "SERVICE_UNAVAILABLE", Status.INTERNAL_SERVER_ERROR, InternalError)
       )
-      input.foreach(args => (serviceErrorTest _).tupled(args))
+
+      val tysInput = Seq(
+        (Status.BAD_REQUEST, "INVALID_INCOMESOURCE_ID", Status.BAD_REQUEST, BusinessIdFormatError),
+        (Status.BAD_REQUEST, "INVALID_CORRELATION_ID", Status.INTERNAL_SERVER_ERROR, InternalError),
+      )
+
+      (ifsInput ++ tysInput).foreach(args => (serviceErrorTest _).tupled(args))
     }
   }
 }

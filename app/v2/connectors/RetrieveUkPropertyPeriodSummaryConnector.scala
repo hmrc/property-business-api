@@ -20,7 +20,7 @@ import config.AppConfig
 
 import javax.inject.{ Inject, Singleton }
 import uk.gov.hmrc.http.{ HeaderCarrier, HttpClient }
-import v2.connectors.DownstreamUri.IfsUri
+import v2.connectors.DownstreamUri.{ IfsUri, TaxYearSpecificIfsUri }
 import v2.connectors.RetrieveUkPropertyPeriodSummaryConnector._
 import v2.connectors.httpparsers.StandardDownstreamHttpParser._
 import v2.models.outcomes.ResponseWrapper
@@ -46,10 +46,16 @@ class RetrieveUkPropertyPeriodSummaryConnector @Inject()(val http: HttpClient, v
                                                                           correlationId: String): Future[DownstreamOutcome[Result]] = {
 
     // Note that MTD tax year format is used
-    val response = get(
-      uri = IfsUri[RetrieveUkPropertyPeriodSummaryResponse](s"income-tax/business/property/periodic?" +
+
+    val requestUri = if (request.taxYear.useTaxYearSpecificApi) {
+      TaxYearSpecificIfsUri[RetrieveUkPropertyPeriodSummaryResponse](
+        s"income-tax/business/property/${request.taxYear.asTysDownstream}/${request.nino.nino}/${request.businessId}/periodic/${request.submissionId}")
+    } else {
+      IfsUri[RetrieveUkPropertyPeriodSummaryResponse](s"income-tax/business/property/periodic?" +
         s"taxableEntityId=${request.nino.nino}&taxYear=${request.taxYear.asMtd}&incomeSourceId=${request.businessId}&submissionId=${request.submissionId}")
-    )
+    }
+
+    val response = get(requestUri)
 
     response.map {
       case Right(ResponseWrapper(corId, resp)) if ukResult(resp) => Right(ResponseWrapper(corId, UkResult(resp)))

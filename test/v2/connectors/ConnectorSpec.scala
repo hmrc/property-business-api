@@ -16,14 +16,14 @@
 
 package v2.connectors
 
-import mocks.{MockAppConfig, MockHttpClient}
+import mocks.{ MockAppConfig, MockHttpClient }
 import org.scalamock.handlers.CallHandler
 import play.api.Configuration
-import play.api.http.{HeaderNames, MimeTypes, Status}
+import play.api.http.{ HeaderNames, MimeTypes, Status }
 import support.UnitSpec
 import uk.gov.hmrc.http.HeaderCarrier
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.{ ExecutionContext, Future }
 
 trait ConnectorSpec extends UnitSpec with Status with MimeTypes with HeaderNames {
 
@@ -103,17 +103,7 @@ trait ConnectorSpec extends UnitSpec with Status with MimeTypes with HeaderNames
 
     protected val requiredHeaders: Seq[(String, String)]
 
-    protected def willGet[T](url: String): CallHandler[Future[T]] = {
-      MockHttpClient
-        .get(
-          url = url,
-          config = dummyHeaderCarrierConfig,
-          requiredHeaders = requiredHeaders,
-          excludedHeaders = Seq("AnotherHeader" -> "HeaderValue")
-        )
-    }
-
-    protected def willGet[T](url: String, parameters : Seq[(String, String)]): CallHandler[Future[T]] = {
+    protected def willGet[T](url: String, parameters: Seq[(String, String)] = Seq.empty): CallHandler[Future[T]] = {
       MockHttpClient
         .get(
           url = url,
@@ -131,7 +121,7 @@ trait ConnectorSpec extends UnitSpec with Status with MimeTypes with HeaderNames
           config = dummyHeaderCarrierConfig,
           body = body,
           requiredHeaders = requiredHeaders ++ Seq("Content-Type" -> "application/json"),
-          excludedHeaders = Seq("AnotherHeader" -> "HeaderValue")
+          excludedHeaders = Seq("AnotherHeader"                   -> "HeaderValue")
         )
     }
 
@@ -142,7 +132,7 @@ trait ConnectorSpec extends UnitSpec with Status with MimeTypes with HeaderNames
           config = dummyHeaderCarrierConfig,
           body = body,
           requiredHeaders = requiredHeaders ++ Seq("Content-Type" -> "application/json"),
-          excludedHeaders = Seq("AnotherHeader" -> "HeaderValue")
+          excludedHeaders = Seq("AnotherHeader"                   -> "HeaderValue")
         )
     }
 

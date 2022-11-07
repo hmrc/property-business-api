@@ -70,7 +70,7 @@ class RetrieveUkPropertyPeriodSummaryConnectorSpec extends ConnectorSpec with Re
     def taxYear: String = "2023-24"
 
     val uri: String =
-      s"$baseUrl/income-tax/business/property/${TaxYear.fromMtd("2023-24").asTysDownstream}/$nino/$businessId/periodic/$submissionId"
+      s"$baseUrl/income-tax/business/property/23-24/$nino/$businessId/periodic/$submissionId"
 
   }
 

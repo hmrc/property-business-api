@@ -17,14 +17,13 @@
 package v2.connectors
 
 import config.AppConfig
-
-import javax.inject.{ Inject, Singleton }
-import uk.gov.hmrc.http.{ HeaderCarrier, HttpClient }
-import v2.connectors.DownstreamUri.IfsUri
+import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
+import v2.connectors.DownstreamUri.{IfsUri, TaxYearSpecificIfsUri}
 import v2.connectors.httpparsers.StandardDownstreamHttpParser._
 import v2.models.request.deletePropertyAnnualSubmission.DeletePropertyAnnualSubmissionRequest
 
-import scala.concurrent.{ ExecutionContext, Future }
+import javax.inject.{Inject, Singleton}
+import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class DeletePropertyAnnualSubmissionConnector @Inject()(val http: HttpClient, val appConfig: AppConfig) extends BaseDownstreamConnector {
@@ -33,10 +32,24 @@ class DeletePropertyAnnualSubmissionConnector @Inject()(val http: HttpClient, va
                                                                                      ec: ExecutionContext,
                                                                                      correlationId: String): Future[DownstreamOutcome[Unit]] = {
 
-    // Note that MTD tax year format is used
-    delete(
-      uri = IfsUri[Unit](
-        s"income-tax/business/property/annual?taxableEntityId=${request.nino.nino}&incomeSourceId=${request.businessId}&taxYear=${request.taxYear.asMtd}")
-    )
+    val (downstreamUri, queryParams) =
+      if (request.taxYear.useTaxYearSpecificApi) {
+        (
+          TaxYearSpecificIfsUri[Unit](s"income-tax/business/property/annual/${request.taxYear.asTysDownstream}/${request.nino.value}/${request.businessId}"),
+          Nil
+        )
+      } else {
+        (
+          IfsUri[Unit](s"income-tax/business/property/annual"),
+          List(
+            "taxableEntityId" -> request.nino.nino,
+            "incomeSourceId" -> request.businessId,
+            "taxYear" -> request.taxYear.asMtd // Note that MTD tax year format is used
+          )
+        )
+      }
+
+
+    delete(downstreamUri, queryParams)
   }
 }

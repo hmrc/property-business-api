@@ -16,7 +16,8 @@
 
 package v2.connectors
 
-import v2.models.domain.{Nino, TaxYear}
+import v2.models.domain.{ Nino, TaxYear }
+import v2.models.errors.{ DownstreamErrorCode, DownstreamErrors }
 import v2.models.outcomes.ResponseWrapper
 import v2.models.request.deletePropertyAnnualSubmission.DeletePropertyAnnualSubmissionRequest
 
@@ -24,35 +25,77 @@ import scala.concurrent.Future
 
 class DeletePropertyAnnualSubmissionConnectorSpec extends ConnectorSpec {
 
-  val nino: String       = "AA123456A"
-  val businessId: String = "XAIS12345678910"
-  val taxYear: String    = "2021-22"
+  val nino: String           = "AA123456A"
+  val businessId: String     = "XAIS12345678910"
+  val preTysTaxYear: TaxYear = TaxYear.fromMtd("2021-22")
+  val tysTaxYear: TaxYear    = TaxYear.fromMtd("2023-24")
 
-  val request: DeletePropertyAnnualSubmissionRequest = DeletePropertyAnnualSubmissionRequest(
-    nino = Nino(nino),
-    businessId = businessId,
-    taxYear = TaxYear.fromMtd(taxYear)
-  )
+  "connector" when {
+    "the downstream response is a success" must {
+      val outcome = Right(ResponseWrapper(correlationId, ()))
+
+      "return no content" in new IfsTest with Test {
+        def taxYear: TaxYear = preTysTaxYear
+        stubHttpResponse(outcome)
+
+        val result: DownstreamOutcome[Unit] = await(connector.deletePropertyAnnualSubmission(request))
+        result shouldBe outcome
+      }
+
+      "return no content given a TYS tax year request" in new TysIfsTest with Test {
+        def taxYear: TaxYear = tysTaxYear
+        stubTysHttpResponse(outcome)
+
+        val result: DownstreamOutcome[Unit] = await(connector.deletePropertyAnnualSubmission(request))
+        result shouldBe outcome
+      }
+    }
+
+    "the downstream response is an error" must {
+      val downstreamErrorResponse: DownstreamErrors =
+        DownstreamErrors.single(DownstreamErrorCode("SOME_ERROR"))
+      val outcome = Left(ResponseWrapper(correlationId, downstreamErrorResponse))
+
+      "return the error" in new IfsTest with Test {
+        def taxYear: TaxYear = preTysTaxYear
+        stubHttpResponse(outcome)
+
+        val result: DownstreamOutcome[Unit] = await(connector.deletePropertyAnnualSubmission(request))
+        result shouldBe outcome
+      }
+
+      "return the error given a TYS tax year request" in new TysIfsTest with Test {
+        def taxYear: TaxYear = tysTaxYear
+        stubTysHttpResponse(outcome)
+
+        val result: DownstreamOutcome[Unit] = await(connector.deletePropertyAnnualSubmission(request))
+        result shouldBe outcome
+      }
+    }
+  }
 
   trait Test {
     _: ConnectorTest =>
+
+    def taxYear: TaxYear
 
     val connector: DeletePropertyAnnualSubmissionConnector = new DeletePropertyAnnualSubmissionConnector(
       http = mockHttpClient,
       appConfig = mockAppConfig
     )
-  }
 
-  "connector" must {
-    "send a request and return no content" in new IfsTest with Test {
-      val outcome = Right(ResponseWrapper(correlationId, ()))
+    protected val request: DeletePropertyAnnualSubmissionRequest =
+      DeletePropertyAnnualSubmissionRequest(nino = Nino(nino), businessId = businessId, taxYear = taxYear)
 
+    protected def stubHttpResponse(outcome: DownstreamOutcome[Unit]): Unit =
       willDelete(
-        url = s"$baseUrl/income-tax/business/property/annual?taxableEntityId=$nino&incomeSourceId=$businessId&taxYear=2021-22"
+        url = s"$baseUrl/income-tax/business/property/annual",
+        parameters = List("taxableEntityId" -> nino, "incomeSourceId" -> businessId, "taxYear" -> taxYear.asMtd)
       ).returns(Future.successful(outcome))
 
-      await(connector.deletePropertyAnnualSubmission(request)) shouldBe outcome
-
-    }
+    protected def stubTysHttpResponse(outcome: DownstreamOutcome[Unit]): Unit =
+      willDelete(
+        url = s"$baseUrl/income-tax/business/property/annual/${request.taxYear.asTysDownstream}/${request.nino.value}/${request.businessId}"
+      ).returns(Future.successful(outcome))
   }
 }

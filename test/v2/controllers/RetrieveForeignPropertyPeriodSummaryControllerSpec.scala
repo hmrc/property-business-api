@@ -22,22 +22,22 @@ import uk.gov.hmrc.http.HeaderCarrier
 import v2.mocks.MockIdGenerator
 import v2.mocks.hateoas.MockHateoasFactory
 import v2.mocks.requestParsers.MockRetrieveForeignPropertyPeriodSummaryRequestParser
-import v2.mocks.services.{MockEnrolmentsAuthService, MockMtdIdLookupService, MockRetrieveForeignPropertyPeriodSummaryService}
-import v2.models.domain.{Nino, TaxYear}
+import v2.mocks.services.{ MockEnrolmentsAuthService, MockMtdIdLookupService, MockRetrieveForeignPropertyPeriodSummaryService }
+import v2.models.domain.{ Nino, TaxYear }
 import v2.models.errors._
 import v2.models.hateoas.Method.GET
-import v2.models.hateoas.{HateoasWrapper, Link}
+import v2.models.hateoas.{ HateoasWrapper, Link }
 import v2.models.outcomes.ResponseWrapper
 import v2.models.request.retrieveForeignPropertyPeriodSummary._
+import v2.models.response.retrieveForeignPropertyPeriodSummary._
 import v2.models.response.retrieveForeignPropertyPeriodSummary.foreignFhlEea._
 import v2.models.response.retrieveForeignPropertyPeriodSummary.foreignNonFhlProperty._
-import v2.models.response.retrieveForeignPropertyPeriodSummary._
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class RetrieveForeignPropertyPeriodSummaryControllerSpec
-  extends ControllerBaseSpec
+    extends ControllerBaseSpec
     with MockEnrolmentsAuthService
     with MockMtdIdLookupService
     with MockRetrieveForeignPropertyPeriodSummaryService
@@ -45,11 +45,11 @@ class RetrieveForeignPropertyPeriodSummaryControllerSpec
     with MockHateoasFactory
     with MockIdGenerator {
 
-  private val nino = "AA123456A"
-  private val businessId = "XAIS12345678910"
-  private val submissionId = "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
+  private val nino          = "AA123456A"
+  private val businessId    = "XAIS12345678910"
+  private val submissionId  = "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
   private val correlationId = "X-123"
-  private val taxYear = "2022-23"
+  private val taxYear       = "2022-23"
 
   trait Test {
     val hc: HeaderCarrier = HeaderCarrier()
@@ -69,57 +69,61 @@ class RetrieveForeignPropertyPeriodSummaryControllerSpec
     MockIdGenerator.getCorrelationId.returns(correlationId)
   }
 
-  private val rawData = RetrieveForeignPropertyPeriodSummaryRawData(nino, businessId, taxYear, submissionId)
+  private val rawData     = RetrieveForeignPropertyPeriodSummaryRawData(nino, businessId, taxYear, submissionId)
   private val requestData = RetrieveForeignPropertyPeriodSummaryRequest(Nino(nino), businessId, TaxYear.fromMtd(taxYear), submissionId)
 
-  private val testHateoasLink = Link(href = s"/individuals/business/property/$nino/$businessId/period/$taxYear/$submissionId", method = GET, rel = "self")
+  private val testHateoasLink =
+    Link(href = s"/individuals/business/property/$nino/$businessId/period/$taxYear/$submissionId", method = GET, rel = "self")
 
   private val responseBody = RetrieveForeignPropertyPeriodSummaryResponse(
     submittedOn = "",
     fromDate = "",
     toDate = "",
-    foreignFhlEea = Some(ForeignFhlEea(
-      income = Some(ForeignFhlEeaIncome(
-        rentAmount = Some(3426.34)
-      )),
-      expenses = Some(ForeignFhlEeaExpenses(
-        premisesRunningCosts = Some(1000.12),
-        repairsAndMaintenance = Some(1000.12),
-        financialCosts = Some(1000.12),
-        professionalFees = Some(1000.12),
-        costOfServices = Some(1000.12),
-        travelCosts = Some(1000.12),
-        other = Some(1000.12),
-        consolidatedExpenses = None
-      ))
-    )),
-    foreignNonFhlProperty = Some(Seq(
-      ForeignNonFhlProperty(
-        countryCode = "ZZZ",
-        income = Some(ForeignNonFhlPropertyIncome(
-          rentIncome = Some(ForeignNonFhlPropertyRentIncome(
-            rentAmount = Some(1000.12)
+    foreignFhlEea = Some(
+      ForeignFhlEea(
+        income = Some(
+          ForeignFhlEeaIncome(
+            rentAmount = Some(3426.34)
           )),
-          foreignTaxCreditRelief = true,
-          premiumsOfLeaseGrant = Some(1000.12),
-          otherPropertyIncome = Some(1000.12),
-          foreignTaxPaidOrDeducted = Some(1000.12),
-          specialWithholdingTaxOrUkTaxPaid = Some(1000.12)
-        )),
-        expenses = Some(ForeignNonFhlPropertyExpenses(
+        expenses = Some(ForeignFhlEeaExpenses(
           premisesRunningCosts = Some(1000.12),
           repairsAndMaintenance = Some(1000.12),
           financialCosts = Some(1000.12),
           professionalFees = Some(1000.12),
           costOfServices = Some(1000.12),
           travelCosts = Some(1000.12),
-          residentialFinancialCost = Some(1000.12),
-          broughtFwdResidentialFinancialCost = Some(1000.12),
           other = Some(1000.12),
           consolidatedExpenses = None
         ))
-      )
-    ))
+      )),
+    foreignNonFhlProperty = Some(
+      Seq(
+        ForeignNonFhlProperty(
+          countryCode = "ZZZ",
+          income = Some(ForeignNonFhlPropertyIncome(
+            rentIncome = Some(ForeignNonFhlPropertyRentIncome(
+              rentAmount = Some(1000.12)
+            )),
+            foreignTaxCreditRelief = true,
+            premiumsOfLeaseGrant = Some(1000.12),
+            otherPropertyIncome = Some(1000.12),
+            foreignTaxPaidOrDeducted = Some(1000.12),
+            specialWithholdingTaxOrUkTaxPaid = Some(1000.12)
+          )),
+          expenses = Some(ForeignNonFhlPropertyExpenses(
+            premisesRunningCosts = Some(1000.12),
+            repairsAndMaintenance = Some(1000.12),
+            financialCosts = Some(1000.12),
+            professionalFees = Some(1000.12),
+            costOfServices = Some(1000.12),
+            travelCosts = Some(1000.12),
+            residentialFinancialCost = Some(1000.12),
+            broughtFwdResidentialFinancialCost = Some(1000.12),
+            other = Some(1000.12),
+            consolidatedExpenses = None
+          ))
+        )
+      ))
   )
 
   "Retrieve Foreign property period summary" should {

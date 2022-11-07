@@ -21,34 +21,38 @@ import utils.UrlUtils.appendQueryParams
 
 class UrlUtilsSpec extends UnitSpec {
 
-  "appendQueryParams" should {
-    "given an empty queryParams list, return an unchanged URL" in {
-      val url         = "http://something/else"
-      val queryParams = List()
-      val result      = appendQueryParams(url, queryParams)
-      result shouldBe url
+  val url               = "http://something/else"
+  val urlWithQueryParam = "http://something/else?alreadyGot=this"
+
+  "appendQueryParams" when {
+    "given an empty queryParams list" should {
+      "return an unchanged URL" in {
+        val result = appendQueryParams(url, Nil)
+        result shouldBe url
+      }
     }
 
-    "given a URL with no query params of its own, return a URL with added queryParams" in {
-      val url         = "http://something/else"
-      val queryParams = List("taxYear" -> "23-24")
-      val result      = appendQueryParams(url, queryParams)
-      result shouldBe "http://something/else?taxYear=23-24"
+    "given a URL with no query params of its own" should {
+      "return a URL with added queryParams" in {
+        val queryParams = List("taxYear" -> "23-24")
+        val result      = appendQueryParams(url, queryParams)
+        result shouldBe "http://something/else?taxYear=23-24"
+      }
     }
 
-    "given a URL with query params, return a URL with no extra queryParams" in {
-      val url         = "http://something/else?alreadyGot=this"
-      val queryParams = List()
-      val result      = appendQueryParams(url, queryParams)
-      result shouldBe "http://something/else?alreadyGot=this"
+    "given a URL with query params" should {
+      "return a URL with no extra queryParams" in {
+        val result = appendQueryParams(urlWithQueryParam, Nil)
+        result shouldBe urlWithQueryParam
+      }
     }
 
-    "given a URL with query params, return a URL with added queryParams" in {
-      val url         = "http://something/else?alreadyGot=this"
-      val queryParams = List("taxYear" -> "23-24")
-      val result      = appendQueryParams(url, queryParams)
-      result shouldBe "http://something/else?alreadyGot=this&taxYear=23-24"
+    "given a URL with query params" should {
+      "return a URL with added queryParams" in {
+        val queryParams = List("taxYear" -> "23-24")
+        val result      = appendQueryParams(urlWithQueryParam, queryParams)
+        result shouldBe "http://something/else?alreadyGot=this&taxYear=23-24"
+      }
     }
-
   }
 }

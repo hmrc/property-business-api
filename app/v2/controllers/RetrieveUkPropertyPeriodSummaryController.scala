@@ -83,9 +83,17 @@ class RetrieveUkPropertyPeriodSummaryController @Inject()(val authService: Enrol
 
   private def errorResult(errorWrapper: ErrorWrapper) =
     errorWrapper.error match {
-      case BadRequestError | NinoFormatError | BusinessIdFormatError | SubmissionIdFormatError | TaxYearFormatError | RuleTaxYearRangeInvalidError |
-          RuleTaxYearNotSupportedError | RuleTypeOfBusinessIncorrectError =>
-        BadRequest(Json.toJson(errorWrapper))
+      case _
+        if errorWrapper.containsAnyOf(
+          BadRequestError,
+          NinoFormatError,
+          BusinessIdFormatError,
+          SubmissionIdFormatError,
+          TaxYearFormatError,
+          RuleTaxYearRangeInvalidError,
+          RuleTaxYearNotSupportedError,
+          RuleTypeOfBusinessIncorrectError
+        ) => BadRequest(Json.toJson(errorWrapper))
       case NotFoundError => NotFound(Json.toJson(errorWrapper))
       case InternalError => InternalServerError(Json.toJson(errorWrapper))
       case _             => unhandledError(errorWrapper)

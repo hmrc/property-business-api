@@ -112,7 +112,7 @@ class RetrieveUkPropertyPeriodSummaryControllerISpec extends V2IntegrationBaseSp
        """.stripMargin
     )
 
-    val ifsResponseBody: JsValue = Json.parse(
+    val downstreamResponseBody: JsValue = Json.parse(
       """
         |{
         |  "submittedOn": "2020-06-17T10:53:38Z",
@@ -220,7 +220,7 @@ class RetrieveUkPropertyPeriodSummaryControllerISpec extends V2IntegrationBaseSp
           AuditStub.audit()
           AuthStub.authorised()
           MtdIdLookupStub.ninoFound(nino)
-          DownstreamStub.onSuccess(DownstreamStub.GET, ifsUri, ifsQueryParams, Status.OK, ifsResponseBody)
+          DownstreamStub.onSuccess(DownstreamStub.GET, ifsUri, ifsQueryParams, Status.OK, downstreamResponseBody)
         }
 
         val response: WSResponse = await(request().get())
@@ -236,7 +236,7 @@ class RetrieveUkPropertyPeriodSummaryControllerISpec extends V2IntegrationBaseSp
           AuditStub.audit()
           AuthStub.authorised()
           MtdIdLookupStub.ninoFound(nino)
-          DownstreamStub.onSuccess(DownstreamStub.GET, tysUri, Status.OK, ifsResponseBody)
+          DownstreamStub.onSuccess(DownstreamStub.GET, tysUri, Status.OK, downstreamResponseBody)
         }
 
         val response: WSResponse = await(request().get())
@@ -285,14 +285,14 @@ class RetrieveUkPropertyPeriodSummaryControllerISpec extends V2IntegrationBaseSp
     }
 
     "return ifs service error" when {
-      def serviceErrorTest(ifsStatus: Int, ifsCode: String, expectedStatus: Int, expectedBody: MtdError): Unit = {
-        s"ifs returns an $ifsCode error and status $ifsStatus" in new NonTysTest {
+      def serviceErrorTest(downstreamStatus: Int, downstreamCode: String, expectedStatus: Int, expectedBody: MtdError): Unit = {
+        s"ifs returns an $downstreamCode error and status $downstreamStatus" in new NonTysTest {
 
           override def setupStubs(): StubMapping = {
             AuditStub.audit()
             AuthStub.authorised()
             MtdIdLookupStub.ninoFound(nino)
-            DownstreamStub.onError(DownstreamStub.GET, ifsUri, ifsStatus, errorBody(ifsCode))
+            DownstreamStub.onError(DownstreamStub.GET, ifsUri, downstreamStatus, errorBody(downstreamCode))
           }
 
           val response: WSResponse = await(request().get())
@@ -301,7 +301,7 @@ class RetrieveUkPropertyPeriodSummaryControllerISpec extends V2IntegrationBaseSp
         }
       }
 
-      val ifsInput = Seq(
+      val input = Seq(
         (Status.BAD_REQUEST, "INVALID_TAXABLE_ENTITY_ID", Status.BAD_REQUEST, NinoFormatError),
         (Status.BAD_REQUEST, "INVALID_TAX_YEAR", Status.BAD_REQUEST, TaxYearFormatError),
         (Status.BAD_REQUEST, "TAX_YEAR_NOT_SUPPORTED", Status.BAD_REQUEST, RuleTaxYearNotSupportedError),
@@ -318,7 +318,7 @@ class RetrieveUkPropertyPeriodSummaryControllerISpec extends V2IntegrationBaseSp
         (Status.BAD_REQUEST, "INVALID_CORRELATION_ID", Status.INTERNAL_SERVER_ERROR, InternalError),
       )
 
-      (ifsInput ++ tysInput).foreach(args => (serviceErrorTest _).tupled(args))
+      (input ++ tysInput).foreach(args => (serviceErrorTest _).tupled(args))
     }
   }
 }

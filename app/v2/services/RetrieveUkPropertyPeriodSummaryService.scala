@@ -51,7 +51,7 @@ class RetrieveUkPropertyPeriodSummaryService @Inject()(connector: RetrieveUkProp
   }
 
   private def errorMap: Map[String, MtdError] = {
-    val ifsErrorMap = Map(
+    val errorMap = Map(
       "INVALID_TAXABLE_ENTITY_ID" -> NinoFormatError,
       "INVALID_TAX_YEAR"          -> TaxYearFormatError,
       "INVALID_INCOMESOURCEID"    -> BusinessIdFormatError,
@@ -69,7 +69,7 @@ class RetrieveUkPropertyPeriodSummaryService @Inject()(connector: RetrieveUkProp
         "INVALID_CORRELATION_ID"  -> InternalError
       )
 
-    ifsErrorMap ++ tysErrorMap
+    errorMap ++ tysErrorMap
   }
 
   private def validateBusinessType(resultWrapper: ResponseWrapper[connectors.RetrieveUkPropertyPeriodSummaryConnector.Result]) =

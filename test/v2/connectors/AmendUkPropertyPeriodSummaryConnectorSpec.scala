@@ -28,7 +28,6 @@ import scala.concurrent.Future
 class AmendUkPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
 
   val nino: String         = "AA123456A"
-  val taxYear: String      = "2022-23"
   val businessId: String   = "XAIS12345678910"
   val submissionId: String = "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
 
@@ -87,34 +86,59 @@ class AmendUkPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
       ))
   )
 
-  private val request: AmendUkPropertyPeriodSummaryRequest = AmendUkPropertyPeriodSummaryRequest(
-    nino = Nino(nino),
-    taxYear = TaxYear.fromMtd(taxYear),
-    businessId = businessId,
-    submissionId = submissionId,
-    body = requestBody
-  )
-
   trait Test {
     _: ConnectorTest =>
+    def taxYear: TaxYear
 
     val connector: AmendUkPropertyPeriodSummaryConnector = new AmendUkPropertyPeriodSummaryConnector(
       http = mockHttpClient,
       appConfig = mockAppConfig
     )
+
+    val request: AmendUkPropertyPeriodSummaryRequest = AmendUkPropertyPeriodSummaryRequest(
+      nino = Nino(nino),
+      taxYear = taxYear,
+      businessId = businessId,
+      submissionId = submissionId,
+      body = requestBody
+    )
   }
 
-  "AmendUkPropertyPeriodSummaryConnector" must {
-    "send a request and return 204 no content" in new IfsTest with Test {
-      val outcome = Right(ResponseWrapper(correlationId, ()))
+  "AmendUkPropertyPeriodSummaryConnector" when {
+    "amendPeriodSubmission" must {
+      "send a request and return 204 no content" in new IfsTest with Test {
+        def taxYear: TaxYear = TaxYear.fromMtd("2022-23")
 
-      willPut(
-        url = s"$baseUrl/income-tax/business/property/periodic?" +
-          s"taxableEntityId=$nino&taxYear=2022-23&incomeSourceId=$businessId&submissionId=$submissionId",
-        body = requestBody,
-      ).returns(Future.successful(outcome))
+        val outcome = Right(ResponseWrapper(correlationId, ()))
 
-      await(connector.amendUkPropertyPeriodSummary(request)) shouldBe outcome
+        willPut(
+          url = s"$baseUrl/income-tax/business/property/periodic?" +
+            s"taxableEntityId=$nino&taxYear=${taxYear.asMtd}&incomeSourceId=$businessId&submissionId=$submissionId",
+          body = requestBody,
+        ).returns(Future.successful(outcome))
+
+        await(connector.amendUkPropertyPeriodSummary(request)) shouldBe outcome
+      }
     }
   }
+
+  "AmendUkPropertyPeriodSummaryConnector for a Tax Year Specific tax year" when {
+    "amendPeriodSubmission" must {
+      "send a request and return 204 no content" in new IfsTest with Test {
+        def taxYear: TaxYear = TaxYear.fromMtd("2023-24")
+
+        val outcome = Right(ResponseWrapper(correlationId, ()))
+
+        willPut(
+          url = s"$baseUrl/income-tax/business/property/periodic?" +
+            s"taxableEntityId=$nino&taxYear=${taxYear.asMtd}&incomeSourceId=$businessId&submissionId=$submissionId",
+          body = requestBody,
+        ).returns(Future.successful(outcome))
+
+        await(connector.amendUkPropertyPeriodSummary(request)) shouldBe outcome
+      }
+    }
+  }
+
+
 }

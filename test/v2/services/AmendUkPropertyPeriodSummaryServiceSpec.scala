@@ -120,17 +120,17 @@ class AmendUkPropertyPeriodSummaryServiceSpec extends ServiceSpec {
     "unsuccessful" should {
       "map errors according to spec" when {
 
-        def serviceError(ifsErrorCode: String, expectError: MtdError): Unit =
-          s"a $ifsErrorCode error is returned from the service" in new Test {
+        def serviceError(downstreamErrorCode: String, expectError: MtdError): Unit =
+          s"a $downstreamErrorCode error is returned from the service" in new Test {
 
             MockAmendUkPropertyPeriodSummaryConnector
               .amendUkPropertyPeriodSummary(request)
-              .returns(Future.successful(Left(ResponseWrapper(correlationId, DownstreamErrors.single(DownstreamErrorCode(ifsErrorCode))))))
+              .returns(Future.successful(Left(ResponseWrapper(correlationId, DownstreamErrors.single(DownstreamErrorCode(downstreamErrorCode))))))
 
             await(service.amendUkPropertyPeriodSummary(request)) shouldBe Left(ErrorWrapper(correlationId, expectError))
           }
 
-        val input = Seq(
+        val errors = Seq(
           "INVALID_TAXABLE_ENTITY_ID" -> NinoFormatError,
           "INVALID_TAX_YEAR" -> TaxYearFormatError,
           "INVALID_INCOMESOURCEID" -> BusinessIdFormatError,
@@ -147,7 +147,13 @@ class AmendUkPropertyPeriodSummaryServiceSpec extends ServiceSpec {
           "SERVICE_UNAVAILABLE" -> InternalError
         )
 
-        input.foreach(args => (serviceError _).tupled(args))
+        val extraTysErrors = Seq(
+          "INVALID_INCOMESOURCE_ID" -> BusinessIdFormatError,
+          "INVALID_CORRELATION_ID" -> InternalError,
+          "INCOME_SOURCE_NOT_COMPATIBLE" -> RuleTypeOfBusinessIncorrectError
+        )
+
+        (errors ++ extraTysErrors).foreach(args => (serviceError _).tupled(args))
       }
     }
   }

@@ -39,15 +39,14 @@ class AmendUkPropertyPeriodSummaryService @Inject()(connector: AmendUkPropertyPe
     logContext: EndpointLogContext,
     correlationId: String): Future[ServiceOutcome[Unit]] = {
 
-    val result = for {
-      ifsResponseWrapper <- EitherT(connector.amendUkPropertyPeriodSummary(request)).leftMap(mapDownstreamErrors(ifsErrorMap))
-    } yield ifsResponseWrapper
+    val result = EitherT(connector.amendUkPropertyPeriodSummary(request)).leftMap(mapDownstreamErrors(downstreamErrorMap))
+
 
     result.value
   }
 
-  private def ifsErrorMap =
-    Map(
+  private def downstreamErrorMap = {
+    val errors = Map(
       "INVALID_TAXABLE_ENTITY_ID" -> NinoFormatError,
       "INVALID_TAX_YEAR" -> TaxYearFormatError,
       "INVALID_INCOMESOURCEID" -> BusinessIdFormatError,
@@ -63,4 +62,13 @@ class AmendUkPropertyPeriodSummaryService @Inject()(connector: AmendUkPropertyPe
       "SERVER_ERROR" -> InternalError,
       "SERVICE_UNAVAILABLE" -> InternalError
     )
+
+    val extraTysErrors = Map(
+      "INVALID_INCOMESOURCE_ID" -> BusinessIdFormatError,
+      "INVALID_CORRELATION_ID" -> InternalError,
+      "INCOME_SOURCE_NOT_COMPATIBLE" -> RuleTypeOfBusinessIncorrectError
+    )
+
+    errors ++ extraTysErrors
+  }
 }

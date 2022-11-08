@@ -17,7 +17,6 @@
 package v2.controllers
 
 import cats.data.EitherT
-import cats.implicits.catsSyntaxEitherId
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.{Action, ControllerComponents}
 import uk.gov.hmrc.http.HeaderCarrier
@@ -62,12 +61,11 @@ class AmendUkPropertyPeriodSummaryController @Inject()(val authService: Enrolmen
         for {
           parsedRequest   <- EitherT.fromEither[Future](parser.parseRequest(rawData))
           serviceResponse <- EitherT(service.amendUkPropertyPeriodSummary(parsedRequest))
-          vendorResponse <- EitherT.fromEither[Future](
-            hateoasFactory
-              .wrap(serviceResponse.responseData, AmendUkPropertyPeriodSummaryHateoasData(nino, businessId, taxYear, submissionId))
-              .asRight[ErrorWrapper]
-          )
         } yield {
+          val hateoasData =
+            AmendUkPropertyPeriodSummaryHateoasData(parsedRequest.nino.nino, parsedRequest.businessId, parsedRequest.taxYear.asMtd, parsedRequest.submissionId)
+          val vendorResponse = hateoasFactory.wrap(serviceResponse.responseData, hateoasData)
+
           logger.info(
             s"[${endpointLogContext.controllerName}][${endpointLogContext.endpointName}] - " +
               s"Success response received with CorrelationId: ${serviceResponse.correlationId}")
@@ -96,9 +94,19 @@ class AmendUkPropertyPeriodSummaryController @Inject()(val authService: Enrolmen
 
   private def errorResult(errorWrapper: ErrorWrapper) =
     errorWrapper.error match {
-      case BadRequestError | NinoFormatError | TaxYearFormatError | BusinessIdFormatError | SubmissionIdFormatError | RuleTaxYearRangeInvalidError |
-          RuleTaxYearNotSupportedError | RuleIncorrectOrEmptyBodyError | RuleTypeOfBusinessIncorrectError | MtdErrorWithCode(ValueFormatError.code) |
-          MtdErrorWithCode(RuleBothExpensesSuppliedError.code) | MtdErrorWithCode(RuleIncorrectOrEmptyBodyError.code) =>
+      case _ if errorWrapper.containsAnyOf(
+        BadRequestError,
+        NinoFormatError,
+        TaxYearFormatError,
+        BusinessIdFormatError,
+        SubmissionIdFormatError,
+        ValueFormatError,
+        RuleBothExpensesSuppliedError,
+        RuleIncorrectOrEmptyBodyError,
+        RuleTaxYearRangeInvalidError,
+        RuleTaxYearNotSupportedError,
+        RuleTypeOfBusinessIncorrectError,
+      ) =>
         BadRequest(Json.toJson(errorWrapper))
       case NotFoundError   => NotFound(Json.toJson(errorWrapper))
       case InternalError => InternalServerError(Json.toJson(errorWrapper))

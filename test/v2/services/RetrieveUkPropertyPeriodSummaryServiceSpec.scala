@@ -74,16 +74,16 @@ class RetrieveUkPropertyPeriodSummaryServiceSpec extends UnitSpec with ResponseM
   "unsuccessful" should {
     "map errors according to spec" when {
 
-      def serviceError(ifsErrorCode: String, error: MtdError): Unit =
-        s"a $ifsErrorCode error is returned from the service" in new Test {
+      def serviceError(downStreamErrorCode: String, error: MtdError): Unit =
+        s"a $downStreamErrorCode error is returned from the service" in new Test {
 
           MockRetrieveUkPropertyConnector.retrieveUkProperty(requestData)
-            .returns(Future.successful(Left(ResponseWrapper(correlationId, DownstreamErrors.single(DownstreamErrorCode(ifsErrorCode))))))
+            .returns(Future.successful(Left(ResponseWrapper(correlationId, DownstreamErrors.single(DownstreamErrorCode(downStreamErrorCode))))))
 
           await(service.retrieveUkProperty(requestData)) shouldBe Left(ErrorWrapper(correlationId, error))
         }
 
-      val input = Seq(
+      val errorMap = Seq(
         "INVALID_TAXABLE_ENTITY_ID" -> NinoFormatError,
         "INVALID_TAX_YEAR" -> TaxYearFormatError,
         "INVALID_INCOMESOURCEID" -> BusinessIdFormatError,
@@ -95,7 +95,14 @@ class RetrieveUkPropertyPeriodSummaryServiceSpec extends UnitSpec with ResponseM
         "INVALID_CORRELATIONID" -> InternalError
       )
 
-      input.foreach(args => (serviceError _).tupled(args))
+      val tysErrorMap =
+        Seq(
+          "INVALID_INCOMESOURCE_ID" -> BusinessIdFormatError,
+          "INVALID_CORRELATION_ID" -> InternalError
+        )
+
+
+      (errorMap ++ tysErrorMap).foreach(args => (serviceError _).tupled(args))
     }
   }
 }

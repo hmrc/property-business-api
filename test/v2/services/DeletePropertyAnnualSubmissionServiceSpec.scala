@@ -19,7 +19,7 @@ package v2.services
 import uk.gov.hmrc.http.HeaderCarrier
 import v2.controllers.EndpointLogContext
 import v2.mocks.connectors.MockDeletePropertyAnnualSubmissionConnector
-import v2.models.domain.{Nino, TaxYear}
+import v2.models.domain.{ Nino, TaxYear }
 import v2.models.errors._
 import v2.models.outcomes.ResponseWrapper
 import v2.models.request.deletePropertyAnnualSubmission.DeletePropertyAnnualSubmissionRequest
@@ -30,7 +30,7 @@ class DeletePropertyAnnualSubmissionServiceSpec extends ServiceSpec {
 
   val nino: String                   = "AA123456A"
   val businessId: String             = "XAIS12345678910"
-  val taxYear: TaxYear = TaxYear.fromMtd("2020-21")
+  val taxYear: TaxYear               = TaxYear.fromMtd("2020-21")
   implicit val correlationId: String = "X-123"
 
   private val requestData = DeletePropertyAnnualSubmissionRequest(Nino(nino), businessId, taxYear)
@@ -45,8 +45,8 @@ class DeletePropertyAnnualSubmissionServiceSpec extends ServiceSpec {
   }
 
   "service" when {
-    "service call successful" should {
-      "return mapped result" in new Test {
+    "the downstream call is successful" should {
+      "return the mapped result" in new Test {
         MockDeletePropertyAnnualSubmissionConnector
           .deletePropertyAnnualSubmission(requestData)
           .returns(Future.successful(Right(ResponseWrapper(correlationId, ()))))
@@ -55,8 +55,8 @@ class DeletePropertyAnnualSubmissionServiceSpec extends ServiceSpec {
       }
     }
 
-    "unsuccessful" should {
-      "map errors according to spec" when {
+    "he downstream call is unsuccessful" should {
+      "map errors according to the spec" when {
 
         def serviceError(ifsErrorCode: String, error: MtdError): Unit =
           s"a $ifsErrorCode error is returned from the service" in new Test {
@@ -68,7 +68,7 @@ class DeletePropertyAnnualSubmissionServiceSpec extends ServiceSpec {
             await(service.deletePropertyAnnualSubmission(requestData)) shouldBe Left(ErrorWrapper(correlationId, error))
           }
 
-        val input = Seq(
+        val errors = Seq(
           "INVALID_TAXABLE_ENTITY_ID" -> NinoFormatError,
           "INVALID_TAX_YEAR"          -> TaxYearFormatError,
           "INVALID_INCOMESOURCEID"    -> BusinessIdFormatError,
@@ -78,7 +78,14 @@ class DeletePropertyAnnualSubmissionServiceSpec extends ServiceSpec {
           "SERVICE_UNAVAILABLE"       -> InternalError
         )
 
-        input.foreach(args => (serviceError _).tupled(args))
+        val extraTysErrors = List(
+          "INVALID_INCOMESOURCE_ID" -> BusinessIdFormatError,
+          "INVALID_CORRELATION_ID"  -> InternalError,
+          "NOT_FOUND"               -> NotFoundError,
+          "TAX_YEAR_NOT_SUPPORTED"  -> RuleTaxYearNotSupportedError
+        )
+
+        (errors ++ extraTysErrors).foreach(args => (serviceError _).tupled(args))
       }
     }
   }

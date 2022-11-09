@@ -16,65 +16,41 @@
 
 package v2.endpoints
 
-import play.api.http.HeaderNames.ACCEPT
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
+import play.api.http.HeaderNames.ACCEPT
 import play.api.http.Status
-import play.api.libs.json.{JsObject, Json}
-import play.api.libs.ws.{WSRequest, WSResponse}
+import play.api.libs.json.{ JsObject, Json }
+import play.api.libs.ws.{ WSRequest, WSResponse }
 import play.api.test.Helpers.AUTHORIZATION
 import support.V2IntegrationBaseSpec
 import v2.models.errors._
-import v2.stubs.{AuditStub, AuthStub, DownstreamStub, MtdIdLookupStub}
+import v2.stubs.{ AuditStub, AuthStub, DownstreamStub, MtdIdLookupStub }
 
 class DeletePropertyAnnualSubmissionControllerISpec extends V2IntegrationBaseSpec {
 
-  private trait Test {
-
-    val nino: String = "AA123456A"
-    val businessId: String = "XAIS12345678910"
-    val taxYear: String = "2021-22"
-
-    def uri: String = s"/$nino/$businessId/annual/$taxYear"
-
-    def ifsUri: String = s"/income-tax/business/property/annual"
-
-    def setupStubs(): StubMapping
-
-    def request(): WSRequest = {
-      setupStubs()
-      buildRequest(uri)
-        .withHttpHeaders(
-          (ACCEPT, "application/vnd.hmrc.2.0+json"),
-          (AUTHORIZATION, "Bearer 123") // some bearer token
-      )
-    }
-
-    def ifsQueryParams: Map[String, String] = Map(
-      "taxableEntityId" -> nino,
-      "incomeSourceId" -> businessId,
-      "taxYear" -> taxYear
-    )
-
-    def errorBody(code: String): String =
-      s"""
-         |{
-         |  "code": "$code",
-         |  "reason": "ifs message"
-         |}
-       """.stripMargin
-  }
-
-  "calling the delete property annual submission endpoint" should {
-
+  "The delete property annual submission endpoint" should {
     "return a 204 status code" when {
-
-      "any valid request is made" in new Test {
+      "any valid request is made" in new NonTysTest {
 
         override def setupStubs(): StubMapping = {
           AuditStub.audit()
           AuthStub.authorised()
           MtdIdLookupStub.ninoFound(nino)
-          DownstreamStub.onSuccess(DownstreamStub.DELETE, ifsUri, ifsQueryParams, Status.NO_CONTENT, JsObject.empty)
+          DownstreamStub.onSuccess(DownstreamStub.DELETE, downstreamUri, downstreamQueryParams, Status.NO_CONTENT, JsObject.empty)
+        }
+
+        val response: WSResponse = await(request().delete())
+        response.status shouldBe Status.NO_CONTENT
+        response.header("X-CorrelationId").nonEmpty shouldBe true
+      }
+
+      "any valid request is made with a Tax Year Specific year" in new TysIfsTest {
+
+        override def setupStubs(): StubMapping = {
+          AuditStub.audit()
+          AuthStub.authorised()
+          MtdIdLookupStub.ninoFound(nino)
+          DownstreamStub.onSuccess(DownstreamStub.DELETE, downstreamUri, downstreamQueryParams, Status.NO_CONTENT, JsObject.empty)
         }
 
         val response: WSResponse = await(request().delete())
@@ -82,15 +58,20 @@ class DeletePropertyAnnualSubmissionControllerISpec extends V2IntegrationBaseSpe
         response.header("X-CorrelationId").nonEmpty shouldBe true
       }
     }
-    "return error according to spec" when {
+
+    "return a validation error according to spec" when {
 
       "validation error" when {
-        def validationErrorTest(requestNino: String, requestBusinessId: String, requestTaxYear: String, expectedStatus: Int, expectedBody: MtdError): Unit = {
-          s"validation fails with ${expectedBody.code} error" in new Test {
+        def validationErrorTest(requestNino: String,
+                                requestBusinessId: String,
+                                requestTaxYear: String,
+                                expectedStatus: Int,
+                                expectedBody: MtdError): Unit = {
+          s"validation fails with ${expectedBody.code}" in new NonTysTest {
 
-            override val nino: String = requestNino
-            override val businessId: String = requestBusinessId
-            override val taxYear: String = requestTaxYear
+            override def nino: String       = requestNino
+            override def businessId: String = requestBusinessId
+            override def taxYear: String    = requestTaxYear
 
             override def setupStubs(): StubMapping = {
               AuditStub.audit()
@@ -114,24 +95,27 @@ class DeletePropertyAnnualSubmissionControllerISpec extends V2IntegrationBaseSpe
         input.foreach(args => (validationErrorTest _).tupled(args))
       }
 
-      "ifs service error" when {
-        def serviceErrorTest(ifsStatus: Int, ifsCode: String, expectedStatus: Int, expectedBody: MtdError): Unit = {
-          s"ifs returns an $ifsCode error and status $ifsStatus" in new Test {
+      "return an MTD error mapped from a downstream error" when {
+        def serviceErrorTest(downstreamStatus: Int, downstreamErrorCode: String, expectedStatus: Int, expectedBody: MtdError): Unit = {
 
+          trait HasTest { _: Test =>
             override def setupStubs(): StubMapping = {
               AuditStub.audit()
               AuthStub.authorised()
               MtdIdLookupStub.ninoFound(nino)
-              DownstreamStub.onError(DownstreamStub.DELETE, ifsUri, ifsQueryParams, ifsStatus, errorBody(ifsCode))
+              DownstreamStub.onError(DownstreamStub.DELETE, downstreamUri, downstreamQueryParams, downstreamStatus, errorBody(downstreamErrorCode))
             }
 
             val response: WSResponse = await(request().delete())
             response.status shouldBe expectedStatus
             response.json shouldBe Json.toJson(expectedBody)
           }
+
+          s"downstream returns $downstreamErrorCode with status $downstreamStatus" in new NonTysTest with HasTest
+          s"TYS downstream returns $downstreamErrorCode with status $downstreamStatus" in new TysIfsTest with HasTest
         }
 
-        val input = Seq(
+        val errors = List(
           (Status.BAD_REQUEST, "INVALID_TAXABLE_ENTITY_ID", Status.BAD_REQUEST, NinoFormatError),
           (Status.BAD_REQUEST, "INVALID_INCOMESOURCEID", Status.BAD_REQUEST, BusinessIdFormatError),
           (Status.BAD_REQUEST, "INVALID_TAX_YEAR", Status.BAD_REQUEST, TaxYearFormatError),
@@ -140,8 +124,69 @@ class DeletePropertyAnnualSubmissionControllerISpec extends V2IntegrationBaseSpe
           (Status.INTERNAL_SERVER_ERROR, "SERVER_ERROR", Status.INTERNAL_SERVER_ERROR, InternalError),
           (Status.SERVICE_UNAVAILABLE, "SERVICE_UNAVAILABLE", Status.INTERNAL_SERVER_ERROR, InternalError)
         )
-        input.foreach(args => (serviceErrorTest _).tupled(args))
+
+        val extraTysErrors = List(
+          (Status.BAD_REQUEST, "INVALID_INCOMESOURCE_ID", Status.BAD_REQUEST, BusinessIdFormatError),
+          (Status.BAD_REQUEST, "TAX_YEAR_NOT_SUPPORTED", Status.BAD_REQUEST, RuleTaxYearNotSupportedError),
+          (Status.BAD_REQUEST, "INVALID_CORRELATION_ID", Status.INTERNAL_SERVER_ERROR, InternalError),
+          (Status.NOT_FOUND, "NOT_FOUND", Status.NOT_FOUND, NotFoundError)
+        )
+
+        (errors ++ extraTysErrors).foreach(args => (serviceErrorTest _).tupled(args))
       }
     }
   }
+
+  private trait Test {
+
+    def taxYear: String
+    def downstreamUri: String
+
+    def nino: String       = "AA123456A"
+    def businessId: String = "XAIS12345678910"
+
+    val mtdUri: String = s"/$nino/$businessId/annual/$taxYear"
+
+    def setupStubs(): StubMapping
+
+    def request(): WSRequest = {
+      setupStubs()
+      buildRequest(mtdUri)
+        .withHttpHeaders(
+          (ACCEPT, "application/vnd.hmrc.2.0+json"),
+          (AUTHORIZATION, "Bearer 123") // some bearer token
+        )
+    }
+
+    def downstreamQueryParams: Map[String, String]
+
+    def errorBody(code: String): String =
+      s"""
+         |{
+         |  "code": "$code",
+         |  "reason": "ifs message"
+         |}
+       """.stripMargin
+  }
+
+  private trait NonTysTest extends Test {
+    def taxYear: String           = "2021-22"
+    def downstreamTaxYear: String = taxYear
+    def downstreamUri: String     = s"/income-tax/business/property/annual"
+
+    def downstreamQueryParams: Map[String, String] = Map(
+      "taxableEntityId" -> nino,
+      "incomeSourceId"  -> businessId,
+      "taxYear"         -> downstreamTaxYear
+    )
+  }
+
+  private trait TysIfsTest extends Test {
+    def taxYear: String           = "2023-24"
+    def downstreamTaxYear: String = "23-24"
+    def downstreamUri: String     = s"/income-tax/business/property/annual/$downstreamTaxYear/$nino/$businessId"
+
+    def downstreamQueryParams: Map[String, String] = Map.empty
+  }
+
 }

@@ -22,6 +22,7 @@ import play.api.Configuration
 import play.api.http.{ HeaderNames, MimeTypes, Status }
 import support.UnitSpec
 import uk.gov.hmrc.http.HeaderCarrier
+import utils.UrlUtils
 
 import scala.concurrent.{ ExecutionContext, Future }
 
@@ -103,7 +104,7 @@ trait ConnectorSpec extends UnitSpec with Status with MimeTypes with HeaderNames
 
     protected val requiredHeaders: Seq[(String, String)]
 
-    protected def willGet[T](url: String, parameters: Seq[(String, String)] = Seq.empty): CallHandler[Future[T]] = {
+    protected def willGet[T](url: String, parameters: Seq[(String, String)] = Nil): CallHandler[Future[T]] = {
       MockHttpClient
         .get(
           url = url,
@@ -136,10 +137,12 @@ trait ConnectorSpec extends UnitSpec with Status with MimeTypes with HeaderNames
         )
     }
 
-    protected def willDelete[T](url: String): CallHandler[Future[T]] = {
+    protected def willDelete[T](url: String, parameters: Seq[(String, String)] = Nil): CallHandler[Future[T]] = {
+      val fullUrl = UrlUtils.appendQueryParams(url, parameters)
+
       MockHttpClient
         .delete(
-          url = url,
+          url = fullUrl,
           config = dummyHeaderCarrierConfig,
           requiredHeaders = requiredHeaders,
           excludedHeaders = Seq("AnotherHeader" -> "HeaderValue")

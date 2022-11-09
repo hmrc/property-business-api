@@ -150,8 +150,8 @@ class RetrieveForeignPropertyPeriodSummaryServiceSpec extends UnitSpec {
       )
 
       val extraTysErrors = List(
-        ("INVALID_INCOMESOURCE_ID", BusinessIdFormatError),
-        ("INVALID_CORRELATION_ID", InternalError)
+        "INVALID_INCOMESOURCE_ID" -> BusinessIdFormatError,
+        "INVALID_CORRELATION_ID"  -> InternalError
       )
 
       (errors ++ extraTysErrors).foreach(args => (serviceError _).tupled(args))

@@ -9,7 +9,9 @@ is:
   - errors.clientOrAgentNotAuthorised
   - errors.notFound
 displayName: Delete a Property Annual Submission
-description: This endpoint allows the developer to delete the adjustments and allowances for a UK or Foreign property business in a tax year. A National Insurance number, business ID and tax year must be provided.
+description: |
+    This endpoint enables you to delete the adjustments and allowances for a UK or Foreign property business for a particular tax year.
+    A National Insurance number, business ID and tax year must be provided.
 (annotations.sandboxData): !include scenarios/default_and_not_found_scenarios.md
 (annotations.scope): "write:self-assessment"
 securedBy: [ sec.oauth_2_0: { scopes: [ "write:self-assessment" ] } ]

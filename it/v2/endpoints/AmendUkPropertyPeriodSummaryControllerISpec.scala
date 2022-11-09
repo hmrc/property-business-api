@@ -267,22 +267,27 @@ class AmendUkPropertyPeriodSummaryControllerISpec extends V2IntegrationBaseSpec 
 
   private trait Test {
     val nino: String         = "AA123456A"
-    val taxYear: String      = "2022-23"
     val businessId: String   = "XAIS12345678910"
     val submissionId: String = "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
+
+    def taxYear: String
+    def downstreamTaxYear: String
 
     def setupStubs(): StubMapping
 
     def uri: String = s"/uk/$nino/$businessId/period/$taxYear/$submissionId"
 
-    def ifsUri: String = s"/income-tax/business/property/periodic"
+    def baseUri: String = s"/income-tax/business/property/periodic"
+    def downstreamUri: String
 
-    def ifsQueryParams: Map[String, String] = Map(
+    def commonQueryParams: Map[String, String] = Map(
       "taxableEntityId" -> nino,
-      "taxYear"         -> taxYear,
       "incomeSourceId"  -> businessId,
       "submissionId"    -> submissionId
     )
+
+    def downstreamQueryParams: Map[String, String]
+
 
     def request(): WSRequest = {
       setupStubs()
@@ -326,16 +331,33 @@ class AmendUkPropertyPeriodSummaryControllerISpec extends V2IntegrationBaseSpec 
       """.stripMargin
   }
 
+  private trait NonTysTest extends Test {
+    def taxYear: String      = "2022-23"
+    def downstreamTaxYear: String = "2022-23"
+    def downstreamQueryParams: Map[String, String] = Map("taxYear" -> downstreamTaxYear) ++ commonQueryParams
+
+    override def downstreamUri: String = baseUri
+  }
+
+  private trait TysIfsTest extends Test {
+    def taxYear: String      = "2023-24"
+    def downstreamTaxYear: String = "23-24"
+    def downstreamQueryParams: Map[String, String] = commonQueryParams
+
+    override def downstreamUri: String = baseUri + s"/$downstreamTaxYear"
+  }
+
   "calling the amend uk property period summary endpoint" should {
 
     "return a 200 status code" when {
 
-      "any valid unconsolidated request is made" in new Test {
+      "any valid unconsolidated request is made" in new NonTysTest {
 
         override def setupStubs(): StubMapping = {
+          AuditStub.audit()
           AuthStub.authorised()
           MtdIdLookupStub.ninoFound(nino)
-          DownstreamStub.onSuccess(DownstreamStub.PUT, ifsUri, ifsQueryParams, NO_CONTENT, JsObject.empty)
+          DownstreamStub.onSuccess(DownstreamStub.PUT, downstreamUri, downstreamQueryParams, NO_CONTENT, JsObject.empty)
         }
 
         val response: WSResponse = await(request().put(requestBodyJson))
@@ -344,12 +366,41 @@ class AmendUkPropertyPeriodSummaryControllerISpec extends V2IntegrationBaseSpec 
         response.header("X-CorrelationId").nonEmpty shouldBe true
       }
 
-      "any valid consolidated request is made" in new Test {
+      "any valid unconsolidated request is made with a Tax Year Specific tax year" in new TysIfsTest {
+
         override def setupStubs(): StubMapping = {
           AuditStub.audit()
           AuthStub.authorised()
           MtdIdLookupStub.ninoFound(nino)
-          DownstreamStub.onSuccess(DownstreamStub.PUT, ifsUri, ifsQueryParams, NO_CONTENT, JsObject.empty)
+          DownstreamStub.onSuccess(DownstreamStub.PUT, downstreamUri, downstreamQueryParams, NO_CONTENT, JsObject.empty)
+        }
+
+        val response: WSResponse = await(request().put(requestBodyJson))
+        response.status shouldBe OK
+        response.json shouldBe responseBody
+        response.header("X-CorrelationId").nonEmpty shouldBe true
+      }
+
+      "any valid consolidated request is made" in new NonTysTest {
+        override def setupStubs(): StubMapping = {
+          AuditStub.audit()
+          AuthStub.authorised()
+          MtdIdLookupStub.ninoFound(nino)
+          DownstreamStub.onSuccess(DownstreamStub.PUT, downstreamUri, downstreamQueryParams, NO_CONTENT, JsObject.empty)
+        }
+
+        val response: WSResponse = await(request().put(requestBodyJsonConsolidatedExpenses))
+        response.status shouldBe OK
+        response.json shouldBe responseBody
+        response.header("Content-Type").nonEmpty shouldBe true
+      }
+
+      "any valid consolidated request is made with a Tax Year Specific tax year" in new TysIfsTest {
+        override def setupStubs(): StubMapping = {
+          AuditStub.audit()
+          AuthStub.authorised()
+          MtdIdLookupStub.ninoFound(nino)
+          DownstreamStub.onSuccess(DownstreamStub.PUT, downstreamUri, downstreamQueryParams, NO_CONTENT, JsObject.empty)
         }
 
         val response: WSResponse = await(request().put(requestBodyJsonConsolidatedExpenses))
@@ -360,7 +411,7 @@ class AmendUkPropertyPeriodSummaryControllerISpec extends V2IntegrationBaseSpec 
     }
 
     "return bad request error" when {
-      "field validations fail on the request body" in new Test {
+      "field validations fail on the request body" in new NonTysTest {
         private val json =
           s"""
              |{
@@ -387,7 +438,7 @@ class AmendUkPropertyPeriodSummaryControllerISpec extends V2IntegrationBaseSpec 
                               requestBody: JsValue,
                               expectedStatus: Int,
                               expectedBody: MtdError): Unit = {
-        s"validation fails with ${expectedBody.code} error" in new Test {
+        s"validation fails with ${expectedBody.code} error" in new NonTysTest {
 
           override val nino: String         = requestNino
           override val taxYear: String      = requestTaxYear
@@ -395,6 +446,7 @@ class AmendUkPropertyPeriodSummaryControllerISpec extends V2IntegrationBaseSpec 
           override val submissionId: String = requestSubmissionId
 
           override def setupStubs(): StubMapping = {
+            AuditStub.audit()
             AuthStub.authorised()
             MtdIdLookupStub.ninoFound(nino)
           }
@@ -463,12 +515,13 @@ class AmendUkPropertyPeriodSummaryControllerISpec extends V2IntegrationBaseSpec 
 
     "return downstream service error" when {
       def serviceErrorTest(downstreamStatus: Int, downstreamCode: String, expectedStatus: Int, expectedBody: MtdError): Unit = {
-        s"downstream returns an $downstreamCode error and status $downstreamStatus" in new Test {
+        s"downstream returns an $downstreamCode error and status $downstreamStatus" in new NonTysTest {
 
           override def setupStubs(): StubMapping = {
+            AuditStub.audit()
             AuthStub.authorised()
             MtdIdLookupStub.ninoFound(nino)
-            DownstreamStub.onError(DownstreamStub.PUT, ifsUri, ifsQueryParams, downstreamStatus, errorBody(downstreamCode))
+            DownstreamStub.onError(DownstreamStub.PUT, downstreamUri, downstreamQueryParams, downstreamStatus, errorBody(downstreamCode))
           }
 
           val response: WSResponse = await(request().put(requestBodyJson))
@@ -477,7 +530,7 @@ class AmendUkPropertyPeriodSummaryControllerISpec extends V2IntegrationBaseSpec 
         }
       }
 
-      val input = Seq(
+      val errors = Seq(
         (BAD_REQUEST, "INVALID_TAXABLE_ENTITY_ID", BAD_REQUEST, NinoFormatError),
         (BAD_REQUEST, "INVALID_TAX_YEAR", BAD_REQUEST, TaxYearFormatError),
         (BAD_REQUEST, "INVALID_INCOMESOURCEID", BAD_REQUEST, BusinessIdFormatError),
@@ -493,7 +546,14 @@ class AmendUkPropertyPeriodSummaryControllerISpec extends V2IntegrationBaseSpec 
         (INTERNAL_SERVER_ERROR, "SERVER_ERROR", INTERNAL_SERVER_ERROR, InternalError),
         (SERVICE_UNAVAILABLE, "SERVICE_UNAVAILABLE", INTERNAL_SERVER_ERROR, InternalError)
       )
-      input.foreach(args => (serviceErrorTest _).tupled(args))
+
+      val extraTysErrors = Seq(
+        (BAD_REQUEST, "INVALID_INCOMESOURCE_ID", BAD_REQUEST, BusinessIdFormatError),
+        (BAD_REQUEST, "INVALID_CORRELATION_ID", INTERNAL_SERVER_ERROR, InternalError),
+        (BAD_REQUEST, "INCOME_SOURCE_NOT_COMPATIBLE", BAD_REQUEST, RuleTypeOfBusinessIncorrectError)
+      )
+
+      (errors ++ extraTysErrors).foreach(args => (serviceErrorTest _).tupled(args))
     }
   }
 }

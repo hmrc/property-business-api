@@ -321,7 +321,7 @@ class AmendUkPropertyPeriodSummaryControllerISpec extends V2IntegrationBaseSpec 
       s"""
          |{
          |   "code": "$code",
-         |   "reason": "ifs message"
+         |   "reason": "downstream message"
          |}
       """.stripMargin
   }
@@ -461,14 +461,14 @@ class AmendUkPropertyPeriodSummaryControllerISpec extends V2IntegrationBaseSpec 
       input.foreach(args => (validationErrorTest _).tupled(args))
     }
 
-    "return ifs service error" when {
-      def serviceErrorTest(ifsStatus: Int, ifsCode: String, expectedStatus: Int, expectedBody: MtdError): Unit = {
-        s"ifs returns an $ifsCode error and status $ifsStatus" in new Test {
+    "return downstream service error" when {
+      def serviceErrorTest(downstreamStatus: Int, downstreamCode: String, expectedStatus: Int, expectedBody: MtdError): Unit = {
+        s"downstream returns an $downstreamCode error and status $downstreamStatus" in new Test {
 
           override def setupStubs(): StubMapping = {
             AuthStub.authorised()
             MtdIdLookupStub.ninoFound(nino)
-            DownstreamStub.onError(DownstreamStub.PUT, ifsUri, ifsQueryParams, ifsStatus, errorBody(ifsCode))
+            DownstreamStub.onError(DownstreamStub.PUT, ifsUri, ifsQueryParams, downstreamStatus, errorBody(downstreamCode))
           }
 
           val response: WSResponse = await(request().put(requestBodyJson))

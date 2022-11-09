@@ -44,7 +44,7 @@ class DeletePropertyAnnualSubmissionControllerISpec extends V2IntegrationBaseSpe
         response.header("X-CorrelationId").nonEmpty shouldBe true
       }
 
-      "any valid request is madewith a Tax Year Specific year" in new TysIfsTest {
+      "any valid request is made with a Tax Year Specific year" in new TysIfsTest {
 
         override def setupStubs(): StubMapping = {
           AuditStub.audit()

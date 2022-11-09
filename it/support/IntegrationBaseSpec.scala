@@ -62,6 +62,11 @@ trait IntegrationBaseSpec extends UnitSpec with WireMockHelper with GuiceOneServ
     super.afterAll()
   }
 
+  override def beforeEach(): Unit = {
+    super.beforeEach()
+    resetWireMock()
+  }
+
   /** Creates downstream request body by reading JSON and then writing it back via a model class `A` */
   def downstreamBody[A: Format](json: JsValue): JsValue = Json.toJson(json.as[A])
 

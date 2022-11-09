@@ -41,14 +41,14 @@ class CreateUkPropertyPeriodSummaryService @Inject()(connector: CreateUkProperty
     correlationId: String): Future[ServiceOutcome[CreateUkPropertyPeriodSummaryResponse]] = {
 
     val result = for {
-      ifsResponseWrapper <- EitherT(connector.createUkProperty(request)).leftMap(mapDownstreamErrors(ifsErrorMap))
+      ifsResponseWrapper <- EitherT(connector.createUkProperty(request)).leftMap(mapDownstreamErrors(errorMap))
     } yield ifsResponseWrapper
 
     result.value
   }
 
-  private def ifsErrorMap =
-    Map(
+  private val errorMap = {
+    val errors = Map(
       "INVALID_TAXABLE_ENTITY_ID" -> NinoFormatError,
       "INVALID_INCOMESOURCEID" -> BusinessIdFormatError,
       "INVALID_TAX_YEAR" -> TaxYearFormatError,
@@ -66,5 +66,15 @@ class CreateUkPropertyPeriodSummaryService @Inject()(connector: CreateUkProperty
       "SERVER_ERROR" -> InternalError,
       "SERVICE_UNAVAILABLE" -> InternalError
     )
+
+    val extraTysErrors  = Map(
+      "INVALID_INCOMESOURCE_ID" -> BusinessIdFormatError,
+      "INVALID_CORRELATION_ID" -> InternalError,
+      "PERIOD_NOT_ALIGNED" -> RuleMisalignedPeriodError,
+      "PERIOD_OVERLAPS" -> RuleOverlappingPeriodError
+    )
+
+    errors ++ extraTysErrors
+  }
 
 }

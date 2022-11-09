@@ -19,13 +19,10 @@ package v2.services
 import uk.gov.hmrc.http.HeaderCarrier
 import v2.controllers.EndpointLogContext
 import v2.mocks.connectors.MockCreateUkPropertyPeriodSummaryConnector
-import v2.models.domain.{ Nino, TaxYear }
+import v2.models.domain.{Nino, TaxYear}
 import v2.models.errors._
 import v2.models.outcomes.ResponseWrapper
-import v2.models.request.common.ukPropertyRentARoom.{ UkPropertyExpensesRentARoom, UkPropertyIncomeRentARoom }
 import v2.models.request.createUkPropertyPeriodSummary._
-import v2.models.request.common.ukFhlProperty._
-import v2.models.request.common.ukNonFhlProperty._
 import v2.models.response.createUkPropertyPeriodSummary.CreateUkPropertyPeriodSummaryResponse
 
 import scala.concurrent.Future
@@ -40,59 +37,8 @@ class CreateUkPropertyPeriodSummaryServiceSpec extends ServiceSpec {
   private val regularExpensesBody = CreateUkPropertyPeriodSummaryRequestBody(
     "2020-01-01",
     "2020-01-31",
-    Some(
-      UkFhlProperty(
-        Some(
-          UkFhlPropertyIncome(
-            Some(5000.99),
-            Some(3123.21),
-            Some(UkPropertyIncomeRentARoom(
-              Some(532.12)
-            ))
-          )),
-        Some(UkFhlPropertyExpenses(
-          Some(3123.21),
-          Some(928.42),
-          Some(842.99),
-          Some(8831.12),
-          Some(484.12),
-          Some(99282.52),
-          consolidatedExpenses = None,
-          Some(974.47),
-          Some(UkPropertyExpensesRentARoom(
-            Some(8842.43)
-          ))
-        ))
-      )),
-    Some(
-      UkNonFhlProperty(
-        Some(
-          UkNonFhlPropertyIncome(
-            Some(41.12),
-            Some(84.31),
-            Some(9884.93),
-            Some(842.99),
-            Some(31.44),
-            Some(UkPropertyIncomeRentARoom(
-              Some(947.66)
-            ))
-          )),
-        Some(UkNonFhlPropertyExpenses(
-          Some(3123.21),
-          Some(928.42),
-          Some(842.99),
-          Some(8831.12),
-          Some(484.12),
-          Some(99282.00),
-          Some(999.99),
-          Some(974.47),
-          Some(8831.12),
-          Some(UkPropertyExpensesRentARoom(
-            Some(947.66)
-          )),
-          consolidatedExpenses = None
-        ))
-      ))
+    None,
+    None
   )
 
   val response: CreateUkPropertyPeriodSummaryResponse = CreateUkPropertyPeriodSummaryResponse(
@@ -134,7 +80,7 @@ class CreateUkPropertyPeriodSummaryServiceSpec extends ServiceSpec {
             await(service.createUkProperty(regularExpensesRequestData)) shouldBe Left(ErrorWrapper(correlationId, error))
           }
 
-        val input = Seq(
+        val errors = Seq(
           "INVALID_TAXABLE_ENTITY_ID" -> NinoFormatError,
           "INVALID_INCOMESOURCEID"    -> BusinessIdFormatError,
           "INVALID_TAX_YEAR"          -> TaxYearFormatError,
@@ -153,7 +99,14 @@ class CreateUkPropertyPeriodSummaryServiceSpec extends ServiceSpec {
           "SERVICE_UNAVAILABLE"       -> InternalError
         )
 
-        input.foreach(args => (serviceError _).tupled(args))
+        val extraTysErrors = Seq(
+          "INVALID_INCOMESOURCE_ID" -> BusinessIdFormatError,
+          "INVALID_CORRELATION_ID" -> InternalError,
+          "PERIOD_NOT_ALIGNED" -> RuleMisalignedPeriodError,
+          "PERIOD_OVERLAPS" -> RuleOverlappingPeriodError
+        )
+
+        (errors ++ extraTysErrors).foreach(args => (serviceError _).tupled(args))
       }
     }
   }

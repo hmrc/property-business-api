@@ -2,6 +2,10 @@ Property Business API
 ========================
 The Property Business API allows software packages to create, retrieve, amend and delete data for a property business.
 
+- UK Property (Fhl & Non-Fhl)
+- Foreign Property (Fhl & Non-Fhl)
+- Historic UK Property (Fhl & Non-Fhl)
+
 ## Requirements
 
 - Scala 2.12.x

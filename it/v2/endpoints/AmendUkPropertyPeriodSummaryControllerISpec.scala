@@ -288,7 +288,6 @@ class AmendUkPropertyPeriodSummaryControllerISpec extends V2IntegrationBaseSpec 
 
     def downstreamQueryParams: Map[String, String]
 
-
     def request(): WSRequest = {
       setupStubs()
       buildRequest(uri)
@@ -332,16 +331,16 @@ class AmendUkPropertyPeriodSummaryControllerISpec extends V2IntegrationBaseSpec 
   }
 
   private trait NonTysTest extends Test {
-    def taxYear: String      = "2022-23"
-    def downstreamTaxYear: String = "2022-23"
+    def taxYear: String                            = "2022-23"
+    def downstreamTaxYear: String                  = "2022-23"
     def downstreamQueryParams: Map[String, String] = Map("taxYear" -> downstreamTaxYear) ++ commonQueryParams
 
     override def downstreamUri: String = baseUri
   }
 
   private trait TysIfsTest extends Test {
-    def taxYear: String      = "2023-24"
-    def downstreamTaxYear: String = "23-24"
+    def taxYear: String                            = "2023-24"
+    def downstreamTaxYear: String                  = "23-24"
     def downstreamQueryParams: Map[String, String] = commonQueryParams
 
     override def downstreamUri: String = baseUri + s"/$downstreamTaxYear"

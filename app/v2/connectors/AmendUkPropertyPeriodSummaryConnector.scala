@@ -18,13 +18,13 @@ package v2.connectors
 
 import config.AppConfig
 
-import javax.inject.{Inject, Singleton}
-import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
-import v2.connectors.DownstreamUri.{IfsUri, TaxYearSpecificIfsUri}
+import javax.inject.{ Inject, Singleton }
+import uk.gov.hmrc.http.{ HeaderCarrier, HttpClient }
+import v2.connectors.DownstreamUri.{ IfsUri, TaxYearSpecificIfsUri }
 import v2.connectors.httpparsers.StandardDownstreamHttpParser._
 import v2.models.request.amendUkPropertyPeriodSummary.AmendUkPropertyPeriodSummaryRequest
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.{ ExecutionContext, Future }
 
 @Singleton
 class AmendUkPropertyPeriodSummaryConnector @Inject()(val http: HttpClient, val appConfig: AppConfig) extends BaseDownstreamConnector {
@@ -36,12 +36,14 @@ class AmendUkPropertyPeriodSummaryConnector @Inject()(val http: HttpClient, val 
 
     val downstreamUri =
       if (taxYear.useTaxYearSpecificApi) {
-        TaxYearSpecificIfsUri[Unit](s"income-tax/business/property/periodic/${taxYear.asTysDownstream}?" +
-          s"taxableEntityId=${nino.nino}&incomeSourceId=$businessId&submissionId=$submissionId")
+        TaxYearSpecificIfsUri[Unit](
+          s"income-tax/business/property/periodic/${taxYear.asTysDownstream}?" +
+            s"taxableEntityId=${nino.nino}&incomeSourceId=$businessId&submissionId=$submissionId")
       } else {
         // Note that MTD tax year format is used
-        IfsUri[Unit](s"income-tax/business/property/periodic?" +
-          s"taxableEntityId=${nino.nino}&taxYear=${taxYear.asMtd}&incomeSourceId=$businessId&submissionId=$submissionId")
+        IfsUri[Unit](
+          s"income-tax/business/property/periodic?" +
+            s"taxableEntityId=${nino.nino}&taxYear=${taxYear.asMtd}&incomeSourceId=$businessId&submissionId=$submissionId")
       }
 
     put(

@@ -2,9 +2,9 @@ Property Business API
 ========================
 The Property Business API allows software packages to create, retrieve, amend and delete data for a property business.
 
-- UK Property (Fhl & Non-Fhl)
-- Foreign Property (Fhl & Non-Fhl)
-- Historic UK Property (Fhl & Non-Fhl)
+- UK Property (FHL & Non-FHL)
+- Foreign Property (FHL & Non-FHL)
+- Historic UK Property (FHL & Non-FHL)
 
 ## Requirements
 

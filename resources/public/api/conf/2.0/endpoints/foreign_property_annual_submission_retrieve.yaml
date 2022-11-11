@@ -3,7 +3,7 @@ description: |
   This endpoint allows a developer to retrieve adjustments and allowances for a foreign property business. For either or both of Furnished Holiday Letting (FHL) in the European Economic Area (EEA) and Non FHL Foreign property submissions. A National Insurance number, business ID and tax year are required.
 
   ### Test data
-  <p>Scenario simulations using Gov-Test-Scenario headers is only available in the sandbox environment.</p>
+  <p>Scenario simulations using <code>Gov-Test-Scenario</code> headers is only available in the sandbox environment.</p>
   <table>
       <thead>
           <tr>
@@ -53,8 +53,8 @@ parameters:
   - $ref: '../pathParameters.yaml#/components/parameters/businessId'
   - $ref: '../pathParameters.yaml#/components/parameters/taxYear'
   - $ref: '../headers.yaml#/components/parameters/acceptHeader'
-  - $ref: '../headers.yaml#/components/parameters/testScenarioHeader'
   - $ref: '../headers.yaml#/components/parameters/authorizationReadScopeHeader'
+  - $ref: '../headers.yaml#/components/parameters/testScenarioHeader'
 
 security:
   - User-Restricted:
@@ -62,7 +62,7 @@ security:
 
 responses:
   "200":
-    description: Successfully retrieved UK Property Business Annual Submission
+    description: Success
     headers:
       X-CorrelationId:
         $ref: '../headers.yaml#/components/parameters/correlationId'
@@ -73,10 +73,12 @@ responses:
         examples:
           all-other-allowances-response:
             description: All Other Allowances Response
-            externalValue: './examples/foreign_property_annual_submission_retrieve/all_other_allowances_response.json'
+            value:
+              $ref: '../examples/foreign_property_annual_submission_retrieve/all_other_allowances_response.json'
           property-allowance-response:
             description: Property Allowance Response
-            externalValue: './examples/foreign_property_annual_submission_retrieve/property_allowance_response.json'
+            value:
+              $ref: '../examples/foreign_property_annual_submission_retrieve/property_allowance_response.json'
 
   "400":
     description: Bad request

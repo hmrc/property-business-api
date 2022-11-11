@@ -3,7 +3,7 @@ description: |
   This endpoint enables you to create and amend the income from adjustments and allowances for a non-furnished holiday lettings (non-FHL) UK property business for tax years from 2017-18 to 2021-22. A National Insurance number and tax year must be provided. Use this endpoint only for the specified tax year range; for current tax year submissions, use the Create and Amend a UK Property Business Annual Submission endpoint.
   
   ### Test data
-  <p>Scenario simulations using Gov-Test-Scenario headers is only available in the sandbox environment.</p>
+  <p>Scenario simulations using <code>Gov-Test-Scenario</code> headers is only available in the sandbox environment.</p>
   <table>
       <thead>
           <tr>
@@ -31,8 +31,8 @@ parameters:
   - $ref: '../pathParameters.yaml#/components/parameters/taxYear'
   - $ref: '../headers.yaml#/components/parameters/acceptHeader'
   - $ref: '../headers.yaml#/components/parameters/contentTypeJson'
-  - $ref: '../headers.yaml#/components/parameters/testScenarioHeader'
   - $ref: '../headers.yaml#/components/parameters/authorizationWriteScopeHeader'
+  - $ref: '../headers.yaml#/components/parameters/testScenarioHeader'
 
 security:
   - User-Restricted:
@@ -46,11 +46,12 @@ requestBody:
       examples:
         property-allowance-request:
           description: Property Allowance request
-          externalValue: './examples/historic_uk_non_fhl_annual_submission_create_and_amend/request.json'
+          value:
+            $ref: '../examples/historic_uk_non_fhl_annual_submission_create_and_amend/request.json'
 
 responses:
   "200":
-    description: Successfully retrieved Historic non-FHL UK Property Business Annual Submission
+    description: Success
     headers:
       X-CorrelationId:
         $ref: '../headers.yaml#/components/parameters/correlationId'
@@ -61,7 +62,8 @@ responses:
         examples:
           example-response:
             description: Example Response
-            externalValue: './examples/historic_uk_non_fhl_annual_submission_create_and_amend/response.json'
+            value:
+              $ref: '../examples/historic_uk_non_fhl_annual_submission_create_and_amend/response.json'
   "400":
     description: Bad request
     content:

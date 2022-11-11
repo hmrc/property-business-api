@@ -3,7 +3,7 @@ description: |
   This endpoint enables you to create a periodic submission of income and expenses for a non-furnished holiday lettings (non-FHL) UK property business for tax years from 2017-18 to 2021-22. A National Insurance number must be provided. For a periodic submission for the current tax year, use the Create a UK Property Income & Expenses Period Summary endpoint.
 
   ### Test data
-  <p>Scenario simulations using Gov-Test-Scenario headers is only available in the sandbox environment.</p>
+  <p>Scenario simulations using <code>Gov-Test-Scenario</code> headers is only available in the sandbox environment.</p>
   <table>
       <thead>
           <tr>
@@ -51,8 +51,8 @@ parameters:
   - $ref: '../pathParameters.yaml#/components/parameters/nino'
   - $ref: '../headers.yaml#/components/parameters/acceptHeader'
   - $ref: '../headers.yaml#/components/parameters/contentTypeJson'
-  - $ref: '../headers.yaml#/components/parameters/testScenarioHeader'
   - $ref: '../headers.yaml#/components/parameters/authorizationWriteScopeHeader'
+  - $ref: '../headers.yaml#/components/parameters/testScenarioHeader'
 
 security:
   - User-Restricted:
@@ -66,14 +66,16 @@ requestBody:
       examples:
         full-income-expenses-request:
           description: Full income and expenses request
-          externalValue: './examples/historic_uk_non_fhl_period_summary_create/request.json'
+          value:
+            $ref: '../examples/historic_uk_non_fhl_period_summary_create/request.json'
         consolidated-income-expenses-request:
           description: Consolidated income and expenses request
-          externalValue: './examples/historic_uk_non_fhl_period_summary_create/consolidated_request.json'
+          value:
+            $ref: '../examples/historic_uk_non_fhl_period_summary_create/consolidated_request.json'
 
 responses:
   "200":
-    description: Successfully created Historic FHL UK Property Income & Expenses Period Summary
+    description: Success
     headers:
       X-CorrelationId:
         $ref: '../headers.yaml#/components/parameters/correlationId'
@@ -84,7 +86,8 @@ responses:
         examples:
           example-response:
             description: Example Response
-            externalValue: './examples/historic_uk_non_fhl_period_summary_create/response.json'
+            value:
+              $ref: '../examples/historic_uk_non_fhl_period_summary_create/response.json'
   "400":
     description: Bad request
     content:

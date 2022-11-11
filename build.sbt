@@ -15,10 +15,13 @@
  */
 
 import sbt._
+import sbt.complete.DefaultParsers._
 import uk.gov.hmrc.DefaultBuildSettings.{ addTestReportOption, defaultSettings }
 import uk.gov.hmrc.sbtdistributables.SbtDistributablesPlugin.publishingSettings
 import uk.gov.hmrc.versioning.SbtGitVersioning.autoImport.majorVersion
 import uk.gov.hmrc.SbtAutoBuildPlugin
+import scala.sys.process._
+import play.sbt.PlayImport.PlayKeys._
 
 val appName = "property-business-api"
 
@@ -60,3 +63,17 @@ lazy val microservice = Project(appName, file("."))
   )
   .settings(PlayKeys.playDefaultPort := 7798)
 
+lazy val oasMerge = inputKey[Unit]("Runs 'speccy resolve <<input_oas_modular_application.yaml>> -o <<output_oas_merged.yaml>>' to merge OpenAPI spec files")
+
+oasMerge := {
+  val args = spaceDelimited("<arg>").parsed
+  if (args.size != 2) {
+    throw new MessageOnlyException("""Run "sbt 'oasMerge <<input_oas_modular_application.yaml>> <<output_oas_merged.yaml>>'" to merge OpenAPI spec files""")
+  }
+  val inputFile = args.head
+  val outputFile = args.last
+  val exitCode = (s"speccy resolve $inputFile -o $outputFile").!
+  if (exitCode != 0) {
+    throw new MessageOnlyException("OpenAPI spec merge failed, Run speccy manually using: 'speccy resolve <<input_oas_modular_application.yaml>> -o <<output_oas_merged.yaml>>'")
+  }
+}

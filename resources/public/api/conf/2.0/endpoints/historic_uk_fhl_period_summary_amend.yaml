@@ -3,7 +3,7 @@ description: |
   This endpoint enables you to amend income and expenses for a periodic submission relating to a furnished holiday lettings UK property business for tax years from 2017-18 to 2021-22. A National Insurance number and a period ID must be provided.  To amend submissions for the current tax year, use the Amend a UK Property Income & Expenses Period Summary endpoint.
 
   ### Test data
-  <p>Scenario simulations using Gov-Test-Scenario headers is only available in the sandbox environment.</p>
+  <p>Scenario simulations using <code>Gov-Test-Scenario</code> headers is only available in the sandbox environment.</p>
   <table>
       <thead>
           <tr>
@@ -33,8 +33,8 @@ parameters:
   - $ref: '../pathParameters.yaml#/components/parameters/periodId'
   - $ref: '../headers.yaml#/components/parameters/acceptHeader'
   - $ref: '../headers.yaml#/components/parameters/contentTypeJson'
-  - $ref: '../headers.yaml#/components/parameters/testScenarioHeader'
   - $ref: '../headers.yaml#/components/parameters/authorizationWriteScopeHeader'
+  - $ref: '../headers.yaml#/components/parameters/testScenarioHeader'
 
 security:
   - User-Restricted:
@@ -48,14 +48,16 @@ requestBody:
       examples:
         full-expenses-request:
           description: Full Expenses request
-          externalValue: './examples/historic_uk_fhl_period_summary_amend/request.json'
+          value:
+            $ref: '../examples/historic_uk_fhl_period_summary_amend/request.json'
         consolidated-expenses-request:
           description: Consolidated Expenses request
-          externalValue: './examples/historic_uk_fhl_period_summary_amend/consolidated_request.json'
+          value:
+            $ref: '../examples/historic_uk_fhl_period_summary_amend/consolidated_request.json'
 
 responses:
   "200":
-    description: Successfully amended Historic FHL UK Property Income & Expenses Period Summary
+    description: Success
     headers:
       X-CorrelationId:
         $ref: '../headers.yaml#/components/parameters/correlationId'
@@ -66,7 +68,8 @@ responses:
         examples:
           example-response:
             description: Example Response
-            externalValue: './examples/historic_uk_fhl_period_summary_amend/response.json'
+            value:
+              $ref: '../examples/historic_uk_fhl_period_summary_amend/response.json'
   "400":
     description: Bad request
     content:

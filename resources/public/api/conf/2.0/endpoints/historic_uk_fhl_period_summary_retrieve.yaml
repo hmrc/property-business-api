@@ -3,7 +3,7 @@ description: |
   This endpoint enables you to retrieve income and expenses for a FHL UK property business for tax years from 2017-18 to 2021-22. A National Insurance number and a period ID must be provided. Use this endpoint only for the specified tax year range; for current tax year submissions, use the Retrieve a UK Property Income & Expenses Period Summary endpoint.
   
   ### Test data
-  <p>Scenario simulations using Gov-Test-Scenario headers is only available in the sandbox environment.</p>
+  <p>Scenario simulations using <code>Gov-Test-Scenario</code> headers is only available in the sandbox environment.</p>
   <table>
       <thead>
           <tr>
@@ -50,8 +50,8 @@ parameters:
   - $ref: '../pathParameters.yaml#/components/parameters/nino'
   - $ref: '../pathParameters.yaml#/components/parameters/periodId'
   - $ref: '../headers.yaml#/components/parameters/acceptHeader'
-  - $ref: '../headers.yaml#/components/parameters/testScenarioHeader'
   - $ref: '../headers.yaml#/components/parameters/authorizationReadScopeHeader'
+  - $ref: '../headers.yaml#/components/parameters/testScenarioHeader'
 
 security:
   - User-Restricted:
@@ -59,7 +59,7 @@ security:
 
 responses:
   "200":
-    description: Successfully retrieved UK Property Business Annual Submission
+    description: Success
     headers:
       X-CorrelationId:
         $ref: '../headers.yaml#/components/parameters/correlationId'
@@ -70,10 +70,12 @@ responses:
         examples:
           all-other-response:
             description: Full Expenditure response
-            externalValue: './examples/uk_property_period_summary_retrieve/response.json'
+            value:
+              $ref: '../examples/uk_property_period_summary_retrieve/response.json'
           property-allowance-response:
             description: Consolidated Expenditure response
-            externalValue: './examples/uk_property_period_summary_retrieve/consolidated_response.json'
+            value:
+              $ref: '../examples/uk_property_period_summary_retrieve/consolidated_response.json'
   "400":
     description: Bad request
     content:

@@ -7,7 +7,7 @@ description: |
     use the Delete a UK Property Business Annual Submission endpoint.
     
   ### Test data
-  <p>Scenario simulations using Gov-Test-Scenario headers is only available in the sandbox environment.</p>
+  <p>Scenario simulations using <code>Gov-Test-Scenario</code> headers is only available in the sandbox environment.</p>
   <table>
       <thead>
           <tr>
@@ -36,8 +36,8 @@ parameters:
   - $ref: '../pathParameters.yaml#/components/parameters/nino'
   - $ref: '../pathParameters.yaml#/components/parameters/taxYear'
   - $ref: '../headers.yaml#/components/parameters/acceptHeader'
-  - $ref: '../headers.yaml#/components/parameters/testScenarioHeader'
   - $ref: '../headers.yaml#/components/parameters/authorizationWriteScopeHeader'
+  - $ref: '../headers.yaml#/components/parameters/testScenarioHeader'
 
 security:
   - User-Restricted:
@@ -45,18 +45,11 @@ security:
 
 responses:
   "204":
-    description: Successfully retrieved UK Property Business Annual Submission
+    description: Success(No Content)
     headers:
       X-CorrelationId:
         $ref: '../headers.yaml#/components/parameters/correlationId'
-    content:
-      application/json:
-        schema:
-          $ref: '../schemas/historic_uk_fhl_annual_submission_retrieve/response.json'
-        examples:
-          example:
-            description: Example Response
-            externalValue: './examples/historic_uk_fhl_annual_submission_retrieve/response.json'
+    content: {}
 
   "400":
     description: Bad request

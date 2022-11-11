@@ -7,7 +7,7 @@ description: |
 
 
   ### Test data
-  <p>Scenario simulations using Gov-Test-Scenario headers is only available in the sandbox environment.</p>
+  <p>Scenario simulations using <code>Gov-Test-Scenario</code> headers is only available in the sandbox environment.</p>
   <table>
       <thead>
           <tr>
@@ -42,8 +42,8 @@ parameters:
   - $ref: '../pathParameters.yaml#/components/parameters/submissionId'
   - $ref: '../headers.yaml#/components/parameters/acceptHeader'
   - $ref: '../headers.yaml#/components/parameters/contentTypeJson'
-  - $ref: '../headers.yaml#/components/parameters/testScenarioHeader'
   - $ref: '../headers.yaml#/components/parameters/authorizationWriteScopeHeader'
+  - $ref: '../headers.yaml#/components/parameters/testScenarioHeader'
 
 security:
   - User-Restricted:
@@ -57,14 +57,16 @@ requestBody:
       examples:
         full-expenses-request:
           description: Full Expenses request
-          externalValue: './examples/foreign_property_period_summary_amend/request.json'
+          value:
+            $ref: '../examples/foreign_property_period_summary_amend/request.json'
         consolidated-expenses-request:
           description: Consolidated Expenses request
-          externalValue: './examples/foreign_property_period_summary_amend/consolidated_request.json'
+          value:
+            $ref: '../examples/foreign_property_period_summary_amend/consolidated_request.json'
 
 responses:
   "200":
-    description: Successfully amended Foreign Property Income & Expenses Period Summary
+    description: Success
     headers:
       X-CorrelationId:
         $ref: '../headers.yaml#/components/parameters/correlationId'
@@ -75,7 +77,8 @@ responses:
         examples:
           example-response:
             description: Example Response
-            externalValue: './examples/foreign_property_period_summary_amend/response.json'
+            value:
+              $ref: '../examples/foreign_property_period_summary_amend/response.json'
   "400":
     description: Bad request
     content:

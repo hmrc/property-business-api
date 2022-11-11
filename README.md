@@ -32,6 +32,14 @@ Then go to http://localhost:9680/api-documentation/docs/api/preview and use this
 http://localhost:7798/api/conf/2.0/application.raml
 ```
 
+## Merging modular OAS spec files into a single large file
+Install node, npm if not already installed: `brew install node`
+
+Install speccy it not already installed: `npm install speccy -g`
+
+Run the sbt task to merge files: `sbt 'oasMerge resources/public/api/conf/2.0/application.yaml  resources/public/api/conf/2.0/open-api.yaml`
+
+
 ## Changelog
 
 You can see our changelog [here](https://github.com/hmrc/income-tax-mtd-changelog/wiki)
@@ -40,7 +48,7 @@ You can see our changelog [here](https://github.com/hmrc/income-tax-mtd-changelo
 
 You can create a GitHub issue [here](https://github.com/hmrc/income-tax-mtd-changelog/issues)
 
-## API Reference / Documentation 
+## API Reference / Documentation
 Available on the [HMRC Developer Hub](https://https://developer.service.hmrc.gov.uk/api-documentation/docs/api/service/property-business-api/1.0)
 
 

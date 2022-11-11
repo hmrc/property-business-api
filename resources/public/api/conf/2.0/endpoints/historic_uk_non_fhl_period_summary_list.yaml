@@ -3,7 +3,7 @@ description: |
   This endpoint enables you to list the income and expenses for a non-furnished holiday lettings (non-FHL) UK property business for a specific period for tax years from 2017-18 to 2021-22.. A National Insurance number is required. To list summaries from the current tax year, use the List Property Income & Expenses Period Summaries endpoint.
   
   ### Test data
-  <p>Scenario simulations using Gov-Test-Scenario headers is only available in the sandbox environment.</p>
+  <p>Scenario simulations using <code>Gov-Test-Scenario</code> headers is only available in the sandbox environment.</p>
   <table>
       <thead>
           <tr>
@@ -31,8 +31,8 @@ tags:
 parameters:
   - $ref: '../pathParameters.yaml#/components/parameters/nino'
   - $ref: '../headers.yaml#/components/parameters/acceptHeader'
-  - $ref: '../headers.yaml#/components/parameters/testScenarioHeader'
   - $ref: '../headers.yaml#/components/parameters/authorizationReadScopeHeader'
+  - $ref: '../headers.yaml#/components/parameters/testScenarioHeader'
 
 security:
   - User-Restricted:
@@ -40,7 +40,7 @@ security:
 
 responses:
   "200":
-    description: Successfully retrieved Historic FHL UK Property Income & Expenses Period Summary
+    description: Success
     headers:
       X-CorrelationId:
         $ref: '../headers.yaml#/components/parameters/correlationId'
@@ -51,7 +51,8 @@ responses:
         examples:
           example:
             description: Default Example
-            externalValue: './examples/historic_uk_non_fhl_period_summary_list/response.json'
+            value:
+              $ref: '../examples/historic_uk_non_fhl_period_summary_list/response.json'
 
   "403":
     description: Forbidden

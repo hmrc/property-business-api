@@ -84,7 +84,7 @@ class DocumentationControllerISpec extends V2IntegrationBaseSpec {
     "return the documentation" in {
       val response: WSResponse = await(buildRequest("/api/conf/2.0/application.yaml").get())
       response.status shouldBe Status.OK
-      response.body[String] should startWith("openapi: \"3.0.3\"")
+      response.body[String] should startWith regex ("openapi: .*3.0.3.*")
     }
   }
 

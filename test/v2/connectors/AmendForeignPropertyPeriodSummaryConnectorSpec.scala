@@ -28,7 +28,6 @@ class AmendForeignPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
 
   val nino: String = "AA123456A"
   val businessId: String = "XAIS12345678910"
-  val taxYear: String = "2022-23"
   val submissionId: String = "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
 
   private val foreignFhlEea: AmendForeignFhlEea = AmendForeignFhlEea(
@@ -78,33 +77,57 @@ class AmendForeignPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
     foreignNonFhlProperty = Some(Seq(foreignNonFhlPropertyEntry))
   )
 
-  private val request: AmendForeignPropertyPeriodSummaryRequest = AmendForeignPropertyPeriodSummaryRequest(
-    nino = Nino(nino),
-    businessId = businessId,
-    taxYear = TaxYear.fromMtd(taxYear),
-    submissionId = submissionId,
-    body = requestBody
-  )
-
   trait Test {
     _: ConnectorTest =>
-    val connector: AmendForeignPropertyPeriodSummaryConnector = new AmendForeignPropertyPeriodSummaryConnector(
+    def taxYear: TaxYear
+
+    protected val connector: AmendForeignPropertyPeriodSummaryConnector = new AmendForeignPropertyPeriodSummaryConnector(
       http = mockHttpClient,
       appConfig = mockAppConfig
+    )
+
+    protected val request: AmendForeignPropertyPeriodSummaryRequest = AmendForeignPropertyPeriodSummaryRequest(
+      nino = Nino(nino),
+      businessId = businessId,
+      taxYear = taxYear,
+      submissionId = submissionId,
+      body = requestBody
     )
   }
 
   "AmendForeignPropertyPeriodSummaryConnector" must {
     "send a request and return 204 no content" in new IfsTest with Test {
+      def taxYear: TaxYear = TaxYear.fromMtd("2019-20")
+
       val outcome = Right(ResponseWrapper(correlationId, ()))
 
       willPut(
           url = s"$baseUrl/income-tax/business/property/periodic?" +
-            s"taxableEntityId=$nino&taxYear=2022-23&incomeSourceId=$businessId&submissionId=$submissionId",
+            s"taxableEntityId=$nino&taxYear=${taxYear.asMtd}&incomeSourceId=$businessId&submissionId=$submissionId",
           body = requestBody
         ).returns(Future.successful(outcome))
 
-      await(connector.amendForeignPropertyPeriodSummary(request)) shouldBe outcome
+      val result = await(connector.amendForeignPropertyPeriodSummary(request))
+
+      result shouldBe outcome
+    }
+  }
+
+  "AmendForeignPropertyPeriodSummaryConnector called for a Tax Year Specific tax year" must {
+    "send a request and return 204 no content" in new TysIfsTest with Test {
+      def taxYear: TaxYear = TaxYear.fromMtd("2023-24")
+
+      val outcome = Right(ResponseWrapper(correlationId, ()))
+
+      willPut(
+        url = s"$baseUrl/income-tax/business/property/periodic/${taxYear.asTysDownstream}?" +
+          s"taxableEntityId=$nino&incomeSourceId=$businessId&submissionId=$submissionId",
+        body = requestBody
+      ).returns(Future.successful(outcome))
+
+      val result = await(connector.amendForeignPropertyPeriodSummary(request))
+
+      result shouldBe outcome
     }
   }
 }

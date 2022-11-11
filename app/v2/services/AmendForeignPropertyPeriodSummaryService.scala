@@ -40,14 +40,14 @@ class AmendForeignPropertyPeriodSummaryService @Inject()(connector: AmendForeign
     correlationId: String): Future[ServiceOutcome[Unit]] = {
 
     val result = for {
-      ifsResponseWrapper <- EitherT(connector.amendForeignPropertyPeriodSummary(request)).leftMap(mapDownstreamErrors(ifsErrorMap))
+      ifsResponseWrapper <- EitherT(connector.amendForeignPropertyPeriodSummary(request)).leftMap(mapDownstreamErrors(downstreamErrorMap))
     } yield ifsResponseWrapper
 
     result.value
   }
 
-  private def ifsErrorMap =
-    Map(
+  private def downstreamErrorMap = {
+    val errors = Map(
       "INVALID_TAXABLE_ENTITY_ID" -> NinoFormatError,
       "INVALID_TAX_YEAR" -> TaxYearFormatError,
       "INVALID_INCOMESOURCEID" -> BusinessIdFormatError,
@@ -63,4 +63,13 @@ class AmendForeignPropertyPeriodSummaryService @Inject()(connector: AmendForeign
       "SERVER_ERROR" -> InternalError,
       "SERVICE_UNAVAILABLE" -> InternalError
     )
+
+    val extraTysErrors = Map(
+      "INVALID_INCOMESOURCE_ID" -> BusinessIdFormatError,
+      "INVALID_CORRELATION_ID" -> InternalError,
+      "INCOME_SOURCE_NOT_COMPATIBLE" -> RuleTypeOfBusinessIncorrectError
+    )
+
+    errors ++ extraTysErrors
+  }
 }

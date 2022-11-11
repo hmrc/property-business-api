@@ -96,11 +96,24 @@ class AmendForeignPropertyPeriodSummaryController @Inject()(val authService: Enr
 
   private def errorResult(errorWrapper: ErrorWrapper) =
     errorWrapper.error match {
-      case BadRequestError | NinoFormatError | TaxYearFormatError | BusinessIdFormatError | SubmissionIdFormatError | RuleTaxYearRangeInvalidError |
-          RuleTaxYearNotSupportedError | RuleIncorrectOrEmptyBodyError | RuleTypeOfBusinessIncorrectError | MtdErrorWithCode(
-            CountryCodeFormatError.code) | MtdErrorWithCode(RuleCountryCodeError.code) | MtdErrorWithCode(ValueFormatError.code) | MtdErrorWithCode(
-            RuleBothExpensesSuppliedError.code) | MtdErrorWithCode(RuleIncorrectOrEmptyBodyError.code) | MtdErrorWithCode(
-            RuleDuplicateCountryCodeError.code) =>
+      case _
+        if errorWrapper.containsAnyOf(
+          BadRequestError,
+          NinoFormatError,
+          TaxYearFormatError,
+          BusinessIdFormatError,
+          SubmissionIdFormatError,
+          RuleTaxYearRangeInvalidError,
+          RuleTaxYearNotSupportedError,
+          RuleIncorrectOrEmptyBodyError,
+          RuleTypeOfBusinessIncorrectError,
+          CountryCodeFormatError,
+          RuleCountryCodeError,
+          ValueFormatError,
+          RuleBothExpensesSuppliedError,
+          RuleIncorrectOrEmptyBodyError,
+          RuleDuplicateCountryCodeError
+        ) =>
         BadRequest(Json.toJson(errorWrapper))
       case NotFoundError   => NotFound(Json.toJson(errorWrapper))
       case InternalError => InternalServerError(Json.toJson(errorWrapper))

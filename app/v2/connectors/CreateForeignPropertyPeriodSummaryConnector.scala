@@ -21,7 +21,7 @@ import config.AppConfig
 import javax.inject.{ Inject, Singleton }
 import play.api.http.Status
 import uk.gov.hmrc.http.{ HeaderCarrier, HttpClient }
-import v2.connectors.DownstreamUri.IfsUri
+import v2.connectors.DownstreamUri.{ IfsUri, TaxYearSpecificIfsUri }
 import v2.connectors.httpparsers.StandardDownstreamHttpParser._
 import v2.models.request.createForeignPropertyPeriodSummary.CreateForeignPropertyPeriodSummaryRequest
 import v2.models.response.createForeignPropertyPeriodSummary.CreateForeignPropertyPeriodSummaryResponse
@@ -36,13 +36,21 @@ class CreateForeignPropertyPeriodSummaryConnector @Inject()(val http: HttpClient
       ec: ExecutionContext,
       correlationId: String): Future[DownstreamOutcome[CreateForeignPropertyPeriodSummaryResponse]] = {
 
+    import request._
+
     implicit val successCode: SuccessCode = SuccessCode(Status.OK)
 
-    // Note that MTD tax year format is used
-    post(
-      body = request.body,
-      uri = IfsUri[CreateForeignPropertyPeriodSummaryResponse](
-        s"income-tax/business/property/periodic?taxableEntityId=${request.nino.nino}&taxYear=${request.taxYear.asMtd}&incomeSourceId=${request.businessId}")
-    )
+    val downstreamUri = if (taxYear.useTaxYearSpecificApi) {
+      TaxYearSpecificIfsUri[CreateForeignPropertyPeriodSummaryResponse](
+        s"income-tax/business/property/periodic/${taxYear.asTysDownstream}?taxableEntityId=${nino.nino}&incomeSourceId=$businessId"
+      )
+    } else {
+      IfsUri[CreateForeignPropertyPeriodSummaryResponse](
+        // Note that MTD tax year format is used
+        s"income-tax/business/property/periodic?taxableEntityId=${nino.nino}&taxYear=${taxYear.asMtd}&incomeSourceId=$businessId"
+      )
+    }
+
+    post(body = body, uri = downstreamUri)
   }
 }

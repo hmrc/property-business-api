@@ -298,6 +298,8 @@ class AmendForeignPropertyPeriodSummaryControllerISpec extends V2IntegrationBase
 
     def uri: String = s"/foreign/$nino/$businessId/period/$taxYear/$submissionId"
 
+    def baseUri: String = s"/income-tax/business/property/periodic"
+
     def commonQueryParams: Map[String, String] = Map(
       "taxableEntityId" -> nino,
       "incomeSourceId" -> businessId,
@@ -341,7 +343,7 @@ class AmendForeignPropertyPeriodSummaryControllerISpec extends V2IntegrationBase
       s"""
          |{
          |   "code": "$code",
-         |   "reason": "ifs message"
+         |   "reason": "Downstream message"
          |}
       """.stripMargin
   }
@@ -352,7 +354,7 @@ class AmendForeignPropertyPeriodSummaryControllerISpec extends V2IntegrationBase
     def downstreamTaxYear: String                  = "2022-23"
     def downstreamQueryParams: Map[String, String] = Map("taxYear" -> downstreamTaxYear) ++ commonQueryParams
 
-    override def downstreamUri: String = s"/income-tax/business/property/periodic"
+    override def downstreamUri: String = baseUri
   }
 
   private trait TysIfsTest extends Test {
@@ -360,7 +362,7 @@ class AmendForeignPropertyPeriodSummaryControllerISpec extends V2IntegrationBase
     def downstreamTaxYear: String                  = "23-24"
     def downstreamQueryParams: Map[String, String] = commonQueryParams
 
-    override def downstreamUri: String = s"/income-tax/business/property/periodic/$downstreamTaxYear"
+    override def downstreamUri: String = baseUri + s"/$downstreamTaxYear"
   }
 
   "calling the amend foreign property period summary endpoint" should {

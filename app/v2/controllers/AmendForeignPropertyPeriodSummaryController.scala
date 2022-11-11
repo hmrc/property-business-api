@@ -62,12 +62,10 @@ class AmendForeignPropertyPeriodSummaryController @Inject()(val authService: Enr
         for {
           parsedRequest   <- EitherT.fromEither[Future](parser.parseRequest(rawData))
           serviceResponse <- EitherT(service.amendForeignPropertyPeriodSummary(parsedRequest))
-          vendorResponse <- EitherT.fromEither[Future](
-            hateoasFactory
-              .wrap(serviceResponse.responseData, AmendForeignPropertyPeriodSummaryHateoasData(nino, businessId, taxYear, submissionId))
-              .asRight[ErrorWrapper]
-          )
         } yield {
+          val hateoasData    = AmendForeignPropertyPeriodSummaryHateoasData(nino, businessId, taxYear, submissionId)
+          val vendorResponse = hateoasFactory.wrap(serviceResponse.responseData, hateoasData)
+
           logger.info(
             s"[${endpointLogContext.controllerName}][${endpointLogContext.endpointName}] - " +
               s"Success response received with CorrelationId: ${serviceResponse.correlationId}")

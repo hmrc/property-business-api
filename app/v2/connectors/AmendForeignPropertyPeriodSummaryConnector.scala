@@ -46,7 +46,7 @@ class AmendForeignPropertyPeriodSummaryConnector @Inject()(val http: HttpClient,
       }
 
     put(
-      body = request.body,
+      body = body,
       uri = downstreamUri
     )
   }

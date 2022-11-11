@@ -16,14 +16,15 @@
 
 package v2.connectors
 
-import config.{AppConfig, FeatureSwitches}
-import play.api.http.{HeaderNames, MimeTypes}
+import config.{ AppConfig, FeatureSwitches }
+import play.api.http.{ HeaderNames, MimeTypes }
 import play.api.libs.json.Writes
-import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, HttpReads}
+import uk.gov.hmrc.http.{ HeaderCarrier, HttpClient, HttpReads }
 import utils.Logging
-import v2.connectors.DownstreamUri.{DesUri, IfsUri, TaxYearSpecificIfsUri}
+import utils.UrlUtils.appendQueryParams
+import v2.connectors.DownstreamUri.{ DesUri, IfsUri, TaxYearSpecificIfsUri }
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.{ ExecutionContext, Future }
 
 trait BaseDownstreamConnector extends Logging {
   val http: HttpClient
@@ -46,23 +47,11 @@ trait BaseDownstreamConnector extends Logging {
     doPost(getBackendHeaders(uri, hc, correlationId, jsonContentTypeHeader))
   }
 
-  def get[Resp](uri: DownstreamUri[Resp])(implicit
-                                          ec: ExecutionContext,
-                                          hc: HeaderCarrier,
-                                          httpReads: HttpReads[DownstreamOutcome[Resp]],
-                                          correlationId: String): Future[DownstreamOutcome[Resp]] = {
-
-    def doGet(implicit hc: HeaderCarrier): Future[DownstreamOutcome[Resp]] =
-      http.GET(getBackendUri(uri))
-
-    doGet(getBackendHeaders(uri, hc, correlationId))
-  }
-
-  def get[Resp](uri: DownstreamUri[Resp], queryParams: Seq[(String, String)])(implicit
-                                                                              ec: ExecutionContext,
-                                                                              hc: HeaderCarrier,
-                                                                              httpReads: HttpReads[DownstreamOutcome[Resp]],
-                                                                              correlationId: String): Future[DownstreamOutcome[Resp]] = {
+  def get[Resp](uri: DownstreamUri[Resp], queryParams: Seq[(String, String)] = Nil)(implicit
+                                                                                    ec: ExecutionContext,
+                                                                                    hc: HeaderCarrier,
+                                                                                    httpReads: HttpReads[DownstreamOutcome[Resp]],
+                                                                                    correlationId: String): Future[DownstreamOutcome[Resp]] = {
 
     def doGet(implicit hc: HeaderCarrier): Future[DownstreamOutcome[Resp]] = {
       http.GET(getBackendUri(uri), queryParams)
@@ -84,14 +73,16 @@ trait BaseDownstreamConnector extends Logging {
     doPut(getBackendHeaders(uri, hc, correlationId, jsonContentTypeHeader))
   }
 
-  def delete[Resp](uri: DownstreamUri[Resp])(implicit
-                                             ec: ExecutionContext,
-                                             hc: HeaderCarrier,
-                                             httpReads: HttpReads[DownstreamOutcome[Resp]],
-                                             correlationId: String): Future[DownstreamOutcome[Resp]] = {
+  def delete[Resp](uri: DownstreamUri[Resp], queryParams: Seq[(String, String)] = Nil)(implicit
+                                                                                       ec: ExecutionContext,
+                                                                                       hc: HeaderCarrier,
+                                                                                       httpReads: HttpReads[DownstreamOutcome[Resp]],
+                                                                                       correlationId: String): Future[DownstreamOutcome[Resp]] = {
 
     def doDelete(implicit hc: HeaderCarrier): Future[DownstreamOutcome[Resp]] = {
-      http.DELETE(getBackendUri(uri))
+      // http.DELETE doesn't accept query params (unlike http.GET), so need to construct the query here:
+      val downstreamUri = appendQueryParams(getBackendUri(uri), queryParams)
+      http.DELETE(downstreamUri)
     }
 
     doDelete(getBackendHeaders(uri, hc, correlationId))

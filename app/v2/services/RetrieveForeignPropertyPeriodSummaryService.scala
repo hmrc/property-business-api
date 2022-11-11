@@ -64,7 +64,7 @@ class RetrieveForeignPropertyPeriodSummaryService @Inject()(connector: RetrieveF
       "SERVICE_UNAVAILABLE"       -> InternalError
     )
 
-    val extraTysErrors: Map[String, MtdError] = Map(
+    val extraTysErrors = Map(
       "INVALID_INCOMESOURCE_ID" -> BusinessIdFormatError,
       "INVALID_CORRELATION_ID"  -> InternalError
     )

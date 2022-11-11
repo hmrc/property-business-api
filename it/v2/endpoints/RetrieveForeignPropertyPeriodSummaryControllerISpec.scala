@@ -101,14 +101,14 @@ class RetrieveForeignPropertyPeriodSummaryControllerISpec extends V2IntegrationB
     }
 
     "return an MTD error mapped from a downstream error" when {
-      def serviceErrorTest(ifsStatus: Int, ifsCode: String, expectedStatus: Int, expectedBody: MtdError): Unit = {
+      def serviceErrorTest(downstreamStatus: Int, downstreamErrorCode: String, expectedStatus: Int, expectedBody: MtdError): Unit = {
 
         trait HasTest { _: Test =>
           override def setupStubs(): StubMapping = {
             AuditStub.audit()
             AuthStub.authorised()
             MtdIdLookupStub.ninoFound(nino)
-            DownstreamStub.onError(DownstreamStub.GET, downstreamUri, ifsStatus, errorBody(ifsCode))
+            DownstreamStub.onError(DownstreamStub.GET, downstreamUri, downstreamQueryParams, downstreamStatus, errorBody(downstreamErrorCode))
           }
 
           val response: WSResponse = await(request().get())
@@ -116,8 +116,8 @@ class RetrieveForeignPropertyPeriodSummaryControllerISpec extends V2IntegrationB
           response.json shouldBe Json.toJson(expectedBody)
         }
 
-        s"downstream returns $ifsCode with status $ifsStatus" in new NonTysTest with HasTest
-        s"TYS downstream returns $ifsCode with status $ifsStatus" in new TysIfsTest with HasTest
+        s"downstream returns $downstreamErrorCode with status $downstreamStatus" in new NonTysTest with HasTest
+        s"TYS downstream returns $downstreamErrorCode with status $downstreamStatus" in new TysIfsTest with HasTest
       }
 
       val errors = List(
@@ -145,6 +145,7 @@ class RetrieveForeignPropertyPeriodSummaryControllerISpec extends V2IntegrationB
 
     def taxYear: String
     def downstreamUri: String
+    def downstreamQueryParams: Map[String, String]
 
     def nino: String         = "AA123456A"
     def businessId: String   = "XAIS12345678910"

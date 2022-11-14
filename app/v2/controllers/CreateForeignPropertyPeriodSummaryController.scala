@@ -101,12 +101,30 @@ class CreateForeignPropertyPeriodSummaryController @Inject()(val authService: En
 
   private def errorResult(errorWrapper: ErrorWrapper) =
     errorWrapper.error match {
-      case BadRequestError | NinoFormatError | TaxYearFormatError | BusinessIdFormatError | RuleTaxYearRangeInvalidError |
-          RuleTaxYearNotSupportedError | MtdErrorWithCode(RuleIncorrectOrEmptyBodyError.code) | ToDateFormatError | FromDateFormatError |
-          MtdErrorWithCode(ValueFormatError.code) | MtdErrorWithCode(RuleBothExpensesSuppliedError.code) | RuleToDateBeforeFromDateError |
-          RuleOverlappingPeriodError | RuleMisalignedPeriodError | RuleNotContiguousPeriodError |
-          MtdErrorWithCode(RuleIncorrectOrEmptyBodyError.code) | RuleDuplicateSubmissionError | MtdErrorWithCode(CountryCodeFormatError.code) |
-          MtdErrorWithCode(RuleCountryCodeError.code) | MtdErrorWithCode(RuleDuplicateCountryCodeError.code) | RuleTypeOfBusinessIncorrectError =>
+      case _
+          if errorWrapper.containsAnyOf(
+            BadRequestError,
+            NinoFormatError,
+            TaxYearFormatError,
+            BusinessIdFormatError,
+            RuleTaxYearRangeInvalidError,
+            RuleTaxYearNotSupportedError,
+            RuleIncorrectOrEmptyBodyError,
+            ToDateFormatError,
+            FromDateFormatError,
+            ValueFormatError,
+            RuleBothExpensesSuppliedError,
+            RuleToDateBeforeFromDateError,
+            RuleOverlappingPeriodError,
+            RuleMisalignedPeriodError,
+            RuleNotContiguousPeriodError,
+            RuleIncorrectOrEmptyBodyError,
+            RuleDuplicateSubmissionError,
+            CountryCodeFormatError,
+            RuleCountryCodeError,
+            RuleDuplicateCountryCodeError,
+            RuleTypeOfBusinessIncorrectError
+          ) =>
         BadRequest(Json.toJson(errorWrapper))
       case NotFoundError => NotFound(Json.toJson(errorWrapper))
       case InternalError => InternalServerError(Json.toJson(errorWrapper))

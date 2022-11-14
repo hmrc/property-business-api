@@ -33,11 +33,18 @@ http://localhost:7798/api/conf/2.0/application.raml
 ```
 
 ## Merging modular OAS spec files into a single large file
+
+### Install node/npm for Mac OS X:
 Install node, npm if not already installed: `brew install node`
 
-Install speccy it not already installed: `npm install speccy -g`
+### Install node/npm for Ubuntu/Unix:
+Install node, npm if not already installed: `sudo apt install nodejs npm`
 
-Run the sbt task to merge files: `sbt 'oasMerge resources/public/api/conf/2.0/application.yaml  resources/public/api/conf/2.0/open-api.yaml`
+Install speccy locally `npm install`
+
+Run the sbt task or npm script to merge files: `sbt oasMerge` or `VERSION=2.0 npm run oasMerge`
+
+Run the sbt task or npm script  merge files in verbose mode: `sbt oasMergeVerbose` or `VERSION=2.0 npm run oasMergeVerbose`
 
 
 ## Changelog

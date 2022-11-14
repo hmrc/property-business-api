@@ -37,8 +37,22 @@ class RetrieveUkPropertyAnnualSubmissionService @Inject()(connector: RetrieveUkP
     extends DownstreamResponseMappingSupport
     with Logging {
 
-  private val ifsErrorMap =
-    Map(
+  def retrieveUkProperty(request: RetrieveUkPropertyAnnualSubmissionRequest)(
+      implicit hc: HeaderCarrier,
+      ec: ExecutionContext,
+      logContext: EndpointLogContext,
+      correlationId: String): Future[ServiceOutcome[RetrieveUkPropertyAnnualSubmissionResponse]] = {
+
+    val result = for {
+      connectorResultWrapper <- EitherT(connector.retrieveUkProperty(request)).leftMap(mapDownstreamErrors(errorMap))
+      mtdResponseWrapper     <- EitherT.fromEither[Future](validateBusinessType(connectorResultWrapper))
+    } yield mtdResponseWrapper
+
+    result.value
+  }
+
+  private def errorMap: Map[String, MtdError] = {
+    val downstreamErrors = Map(
       "INVALID_TAXABLE_ENTITY_ID" -> NinoFormatError,
       "INVALID_INCOMESOURCEID"    -> BusinessIdFormatError,
       "INVALID_TAX_YEAR"          -> TaxYearFormatError,
@@ -49,18 +63,13 @@ class RetrieveUkPropertyAnnualSubmissionService @Inject()(connector: RetrieveUkP
       "SERVICE_UNAVAILABLE"       -> InternalError
     )
 
-  def retrieveUkProperty(request: RetrieveUkPropertyAnnualSubmissionRequest)(
-      implicit hc: HeaderCarrier,
-      ec: ExecutionContext,
-      logContext: EndpointLogContext,
-      correlationId: String): Future[ServiceOutcome[RetrieveUkPropertyAnnualSubmissionResponse]] = {
+    val extraTysErrors =
+      Map(
+        "INVALID_INCOMESOURCE_ID" -> BusinessIdFormatError,
+        "INVALID_CORRELATION_ID"  -> InternalError
+      )
 
-    val result = for {
-      connectorResultWrapper <- EitherT(connector.retrieveUkProperty(request)).leftMap(mapDownstreamErrors(ifsErrorMap))
-      mtdResponseWrapper     <- EitherT.fromEither[Future](validateBusinessType(connectorResultWrapper))
-    } yield mtdResponseWrapper
-
-    result.value
+    downstreamErrors ++ extraTysErrors
   }
 
   private def validateBusinessType(resultWrapper: ResponseWrapper[RetrieveUkPropertyAnnualSubmissionConnector.Result]) =

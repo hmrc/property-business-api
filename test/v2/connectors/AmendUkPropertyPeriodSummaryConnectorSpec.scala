@@ -16,21 +16,108 @@
 
 package v2.connectors
 
-import v2.models.domain.{Nino, TaxYear}
+import org.scalamock.handlers.CallHandler
+import v2.models.domain.{ Nino, TaxYear }
+import v2.models.errors.{ DownstreamErrorCode, DownstreamErrors }
 import v2.models.outcomes.ResponseWrapper
-import v2.models.request.amendUkPropertyPeriodSummary.{AmendUkPropertyPeriodSummaryRequest, AmendUkPropertyPeriodSummaryRequestBody}
+import v2.models.request.amendUkPropertyPeriodSummary.{ AmendUkPropertyPeriodSummaryRequest, AmendUkPropertyPeriodSummaryRequestBody }
 import v2.models.request.common.ukFhlProperty._
 import v2.models.request.common.ukNonFhlProperty._
-import v2.models.request.common.ukPropertyRentARoom.{UkPropertyExpensesRentARoom, UkPropertyIncomeRentARoom}
+import v2.models.request.common.ukPropertyRentARoom.{ UkPropertyExpensesRentARoom, UkPropertyIncomeRentARoom }
 
 import scala.concurrent.Future
 
 class AmendUkPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
 
   val nino: String         = "AA123456A"
-  val taxYear: String      = "2022-23"
   val businessId: String   = "XAIS12345678910"
   val submissionId: String = "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
+
+  private val preTysTaxYear = TaxYear.fromMtd("2022-23")
+  private val tysTaxYear    = TaxYear.fromMtd("2023-24")
+
+  "AmendUkPropertyPeriodSummaryConnector" when {
+    val outcome = Right(ResponseWrapper(correlationId, ()))
+
+    "amendUkPropertyPeriodSummary" must {
+      "send a request and return 204 no content" in new IfsTest with Test {
+        def taxYear: TaxYear = preTysTaxYear
+
+        stubHttpResponse(outcome)
+
+        await(connector.amendUkPropertyPeriodSummary(request)) shouldBe outcome
+      }
+    }
+
+    "amendUkPropertyPeriodSummary is called with a TYS tax year" must {
+      "send a request and return 204 no content" in new TysIfsTest with Test {
+        def taxYear: TaxYear = tysTaxYear
+
+        stubTysHttpResponse(outcome)
+
+        await(connector.amendUkPropertyPeriodSummary(request)) shouldBe outcome
+      }
+    }
+
+    "response is an error" must {
+
+      val downstreamErrorResponse: DownstreamErrors =
+        DownstreamErrors.single(DownstreamErrorCode("SOME_ERROR"))
+      val outcome = Left(ResponseWrapper(correlationId, downstreamErrorResponse))
+
+      "return the error" in new IfsTest with Test {
+        def taxYear: TaxYear = preTysTaxYear
+        stubHttpResponse(outcome)
+
+        val result: DownstreamOutcome[Unit] =
+          await(connector.amendUkPropertyPeriodSummary(request))
+        result shouldBe outcome
+      }
+
+      "return the error given a TYS tax year request" in new TysIfsTest with Test {
+        def taxYear: TaxYear = tysTaxYear
+        stubTysHttpResponse(outcome)
+
+        val result: DownstreamOutcome[Unit] =
+          await(connector.amendUkPropertyPeriodSummary(request))
+        result shouldBe outcome
+      }
+    }
+  }
+
+  trait Test {
+    _: ConnectorTest =>
+    def taxYear: TaxYear
+
+    val connector: AmendUkPropertyPeriodSummaryConnector = new AmendUkPropertyPeriodSummaryConnector(
+      http = mockHttpClient,
+      appConfig = mockAppConfig
+    )
+
+    val request: AmendUkPropertyPeriodSummaryRequest = AmendUkPropertyPeriodSummaryRequest(
+      nino = Nino(nino),
+      taxYear = taxYear,
+      businessId = businessId,
+      submissionId = submissionId,
+      body = requestBody
+    )
+
+    protected def stubHttpResponse(outcome: DownstreamOutcome[Unit]): CallHandler[Future[DownstreamOutcome[Unit]]]#Derived = {
+      willPut(
+        url = s"$baseUrl/income-tax/business/property/periodic?" +
+          s"taxableEntityId=$nino&taxYear=${taxYear.asMtd}&incomeSourceId=$businessId&submissionId=$submissionId",
+        body = requestBody,
+      ).returns(Future.successful(outcome))
+    }
+
+    protected def stubTysHttpResponse(outcome: DownstreamOutcome[Unit]): CallHandler[Future[DownstreamOutcome[Unit]]]#Derived = {
+      willPut(
+        url = s"$baseUrl/income-tax/business/property/periodic/${taxYear.asTysDownstream}?" +
+          s"taxableEntityId=$nino&incomeSourceId=$businessId&submissionId=$submissionId",
+        body = requestBody,
+      ).returns(Future.successful(outcome))
+    }
+  }
 
   private val requestBody: AmendUkPropertyPeriodSummaryRequestBody = AmendUkPropertyPeriodSummaryRequestBody(
     ukFhlProperty = Some(
@@ -87,34 +174,4 @@ class AmendUkPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
       ))
   )
 
-  private val request: AmendUkPropertyPeriodSummaryRequest = AmendUkPropertyPeriodSummaryRequest(
-    nino = Nino(nino),
-    taxYear = TaxYear.fromMtd(taxYear),
-    businessId = businessId,
-    submissionId = submissionId,
-    body = requestBody
-  )
-
-  trait Test {
-    _: ConnectorTest =>
-
-    val connector: AmendUkPropertyPeriodSummaryConnector = new AmendUkPropertyPeriodSummaryConnector(
-      http = mockHttpClient,
-      appConfig = mockAppConfig
-    )
-  }
-
-  "AmendUkPropertyPeriodSummaryConnector" must {
-    "send a request and return 204 no content" in new IfsTest with Test {
-      val outcome = Right(ResponseWrapper(correlationId, ()))
-
-      willPut(
-        url = s"$baseUrl/income-tax/business/property/periodic?" +
-          s"taxableEntityId=$nino&taxYear=2022-23&incomeSourceId=$businessId&submissionId=$submissionId",
-        body = requestBody,
-      ).returns(Future.successful(outcome))
-
-      await(connector.amendUkPropertyPeriodSummary(request)) shouldBe outcome
-    }
-  }
 }

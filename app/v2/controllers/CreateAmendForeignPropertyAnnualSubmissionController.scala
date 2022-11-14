@@ -49,7 +49,8 @@ class CreateAmendForeignPropertyAnnualSubmissionController @Inject()(val authSer
     with Logging {
 
   implicit val endpointLogContext: EndpointLogContext =
-    EndpointLogContext(controllerName = "CreateAmendForeignPropertyAnnualSubmissionController", endpointName = "CreateAmendForeignPropertyAnnualSubmission")
+    EndpointLogContext(controllerName = "CreateAmendForeignPropertyAnnualSubmissionController",
+                       endpointName = "CreateAmendForeignPropertyAnnualSubmission")
 
   def handleRequest(nino: String, businessId: String, taxYear: String): Action[JsValue] =
     authorisedAction(nino).async(parse.json) { implicit request =>

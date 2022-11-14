@@ -16,77 +16,35 @@
 
 package v2.services
 
+import fixtures.CreateForeignPropertyPeriodSummaryFixtures.CreateForeignPropertyPeriodSummaryFixtures
 import support.UnitSpec
 import uk.gov.hmrc.http.HeaderCarrier
 import v2.controllers.EndpointLogContext
 import v2.mocks.connectors.MockCreateForeignPropertyPeriodSummaryConnector
-import v2.models.domain.{Nino, TaxYear}
+import v2.models.domain.{ Nino, TaxYear }
 import v2.models.errors._
 import v2.models.outcomes.ResponseWrapper
-import v2.models.request.common.foreignFhlEea._
-import v2.models.request.common.foreignPropertyEntry._
 import v2.models.request.createForeignPropertyPeriodSummary._
 import v2.models.response.createForeignPropertyPeriodSummary.CreateForeignPropertyPeriodSummaryResponse
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-class CreateForeignPropertyPeriodSummaryServiceSpec extends UnitSpec {
+class CreateForeignPropertyPeriodSummaryServiceSpec extends UnitSpec with CreateForeignPropertyPeriodSummaryFixtures {
 
-  val businessId: String = "XAIS12345678910"
-  val nino: String = "AA123456A"
-  val taxYear: TaxYear = TaxYear.fromMtd("2020-21")
+  val businessId: String             = "XAIS12345678910"
+  val nino: String                   = "AA123456A"
+  val taxYear: TaxYear               = TaxYear.fromMtd("2020-21")
   implicit val correlationId: String = "X-123"
-
-  private val expensesBody = CreateForeignPropertyPeriodSummaryRequestBody(
-    "2020-01-01",
-    "2020-01-31",
-    Some(CreateForeignFhlEea(
-      Some(ForeignFhlEeaIncome(Some(5000.99))),
-      Some(CreateForeignFhlEeaExpenses(
-        Some(5000.99),
-        Some(5000.99),
-        Some(5000.99),
-        Some(5000.99),
-        Some(5000.99),
-        Some(5000.99),
-        Some(5000.99),
-        None
-      ))
-    )),
-    Some(Seq(CreateForeignNonFhlPropertyEntry("FRA",
-      Some(ForeignNonFhlPropertyIncome(
-        Some(ForeignNonFhlPropertyRentIncome(Some(5000.99))),
-        foreignTaxCreditRelief = false,
-        Some(5000.99),
-        Some(5000.99),
-        Some(5000.99),
-        Some(5000.99)
-      )),
-      Some(CreateForeignNonFhlPropertyExpenses(
-        Some(5000.99),
-        Some(5000.99),
-        Some(5000.99),
-        Some(5000.99),
-        Some(5000.99),
-        Some(5000.99),
-        Some(5000.99),
-        Some(5000.99),
-        Some(5000.99),
-        None
-      ))))
-    ))
-
 
   val response: CreateForeignPropertyPeriodSummaryResponse = CreateForeignPropertyPeriodSummaryResponse(
     submissionId = "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
   )
 
-  private val expensesRequestData = CreateForeignPropertyPeriodSummaryRequest(Nino(nino), businessId, taxYear, expensesBody)
-
+  private val expensesRequestData = CreateForeignPropertyPeriodSummaryRequest(Nino(nino), businessId, taxYear, regularExpensesRequestBody)
 
   trait Test extends MockCreateForeignPropertyPeriodSummaryConnector {
-    implicit val hc: HeaderCarrier = HeaderCarrier()
+    implicit val hc: HeaderCarrier              = HeaderCarrier()
     implicit val logContext: EndpointLogContext = EndpointLogContext("c", "ep")
 
     val service = new CreateForeignPropertyPeriodSummaryService(
@@ -97,7 +55,8 @@ class CreateForeignPropertyPeriodSummaryServiceSpec extends UnitSpec {
   "service" should {
     "service call successful" when {
       "return mapped result" in new Test {
-        MockCreateForeignPropertyConnector.createForeignProperty(expensesRequestData)
+        MockCreateForeignPropertyConnector
+          .createForeignProperty(expensesRequestData)
           .returns(Future.successful(Right(ResponseWrapper(correlationId, response))))
 
         await(service.createForeignProperty(expensesRequestData)) shouldBe Right(ResponseWrapper(correlationId, response))
@@ -108,36 +67,44 @@ class CreateForeignPropertyPeriodSummaryServiceSpec extends UnitSpec {
   "unsuccessful" should {
     "map errors according to spec" when {
 
-      def serviceError(ifsErrorCode: String, error: MtdError): Unit =
-        s"a $ifsErrorCode error is returned from the service" in new Test {
+      def serviceError(downstreamErrorCode: String, error: MtdError): Unit =
+        s"a $downstreamErrorCode error is returned from the service" in new Test {
 
-          MockCreateForeignPropertyConnector.createForeignProperty(expensesRequestData)
-            .returns(Future.successful(Left(ResponseWrapper(correlationId, DownstreamErrors.single(DownstreamErrorCode(ifsErrorCode))))))
+          MockCreateForeignPropertyConnector
+            .createForeignProperty(expensesRequestData)
+            .returns(Future.successful(Left(ResponseWrapper(correlationId, DownstreamErrors.single(DownstreamErrorCode(downstreamErrorCode))))))
 
           await(service.createForeignProperty(expensesRequestData)) shouldBe Left(ErrorWrapper(correlationId, error))
         }
 
-      val input = Seq(
+      val errors = List(
         "INVALID_TAXABLE_ENTITY_ID" -> NinoFormatError,
-        "INVALID_INCOMESOURCEID" -> BusinessIdFormatError,
-        "INVALID_TAX_YEAR" -> TaxYearFormatError,
-        "DUPLICATE_COUNTRY_CODE" -> RuleDuplicateCountryCodeError,
-        "INVALID_PAYLOAD" -> InternalError,
-        "INVALID_CORRELATIONID" -> InternalError,
-        "OVERLAPS_IN_PERIOD" -> RuleOverlappingPeriodError,
-        "NOT_ALIGN_PERIOD" -> RuleMisalignedPeriodError,
-        "GAPS_IN_PERIOD" -> RuleNotContiguousPeriodError,
-        "INVALID_DATE_RANGE" -> RuleToDateBeforeFromDateError,
-        "DUPLICATE_SUBMISSION" -> RuleDuplicateSubmissionError,
-        "INCOME_SOURCE_NOT_FOUND" -> NotFoundError,
-        "INCOMPATIBLE_PAYLOAD" -> RuleTypeOfBusinessIncorrectError,
-        "TAX_YEAR_NOT_SUPPORTED" -> RuleTaxYearNotSupportedError,
-        "MISSING_EXPENSES" -> InternalError,
-        "SERVER_ERROR" -> InternalError,
-        "SERVICE_UNAVAILABLE" -> InternalError
+        "INVALID_INCOMESOURCEID"    -> BusinessIdFormatError,
+        "INVALID_TAX_YEAR"          -> TaxYearFormatError,
+        "DUPLICATE_COUNTRY_CODE"    -> RuleDuplicateCountryCodeError,
+        "INVALID_PAYLOAD"           -> InternalError,
+        "INVALID_CORRELATIONID"     -> InternalError,
+        "OVERLAPS_IN_PERIOD"        -> RuleOverlappingPeriodError,
+        "NOT_ALIGN_PERIOD"          -> RuleMisalignedPeriodError,
+        "GAPS_IN_PERIOD"            -> RuleNotContiguousPeriodError,
+        "INVALID_DATE_RANGE"        -> RuleToDateBeforeFromDateError,
+        "DUPLICATE_SUBMISSION"      -> RuleDuplicateSubmissionError,
+        "INCOME_SOURCE_NOT_FOUND"   -> NotFoundError,
+        "INCOMPATIBLE_PAYLOAD"      -> RuleTypeOfBusinessIncorrectError,
+        "TAX_YEAR_NOT_SUPPORTED"    -> RuleTaxYearNotSupportedError,
+        "MISSING_EXPENSES"          -> InternalError,
+        "SERVER_ERROR"              -> InternalError,
+        "SERVICE_UNAVAILABLE"       -> InternalError
       )
 
-      input.foreach(args => (serviceError _).tupled(args))
+      val extraTysErrors = List(
+        "INVALID_INCOMESOURCE_ID" -> BusinessIdFormatError,
+        "INVALID_CORRELATION_ID"  -> InternalError,
+        "PERIOD_NOT_ALIGNED"      -> RuleMisalignedPeriodError,
+        "PERIOD_OVERLAPS"         -> RuleOverlappingPeriodError
+      )
+
+      (errors ++ extraTysErrors).foreach(args => (serviceError _).tupled(args))
     }
   }
 }

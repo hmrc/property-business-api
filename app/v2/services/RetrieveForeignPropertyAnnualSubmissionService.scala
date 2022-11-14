@@ -51,8 +51,8 @@ class RetrieveForeignPropertyAnnualSubmissionService @Inject()(connector: Retrie
     result.value
   }
 
-  private def ifsErrorMap =
-    Map(
+  private val ifsErrorMap = {
+    val errors = Map(
       "INVALID_TAXABLE_ENTITY_ID" -> NinoFormatError,
       "INVALID_TAX_YEAR" -> TaxYearFormatError,
       "INVALID_INCOMESOURCEID" -> BusinessIdFormatError,
@@ -62,6 +62,14 @@ class RetrieveForeignPropertyAnnualSubmissionService @Inject()(connector: Retrie
       "SERVER_ERROR" -> InternalError,
       "SERVICE_UNAVAILABLE" -> InternalError
     )
+
+    val extraTysErrors = Map(
+      "INVALID_INCOMESOURCE_ID" -> BusinessIdFormatError,
+      "INVALID_CORRELATION_ID" -> InternalError
+    )
+
+    errors ++ extraTysErrors
+  }
 
 
   private def validateBusinessType(resultWrapper: ResponseWrapper[connectors.RetrieveForeignPropertyAnnualSubmissionConnector.Result]) =

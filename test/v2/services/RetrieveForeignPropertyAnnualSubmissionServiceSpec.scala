@@ -121,7 +121,7 @@ class RetrieveForeignPropertyAnnualSubmissionServiceSpec extends UnitSpec {
           await(service.retrieveForeignProperty(requestData)) shouldBe Left(ErrorWrapper(correlationId, error))
         }
 
-      val input = Seq(
+      val errors = Seq(
         "INVALID_TAXABLE_ENTITY_ID" -> NinoFormatError,
         "INVALID_TAX_YEAR" -> TaxYearFormatError,
         "INVALID_INCOMESOURCEID" -> BusinessIdFormatError,
@@ -132,7 +132,12 @@ class RetrieveForeignPropertyAnnualSubmissionServiceSpec extends UnitSpec {
         "SERVICE_UNAVAILABLE" -> InternalError
       )
 
-      input.foreach(args => (serviceError _).tupled(args))
+      val extraTysErrors = Seq(
+        "INVALID_INCOMESOURCE_ID" -> BusinessIdFormatError,
+        "INVALID_CORRELATION_ID" -> InternalError
+      )
+
+      (errors ++ extraTysErrors).foreach(args => (serviceError _).tupled(args))
     }
   }
 }

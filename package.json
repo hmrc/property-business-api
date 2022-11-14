@@ -1,0 +1,13 @@
+{
+  "name": "property-business-api",
+  "version": "1.0.0",
+  "description": "property-business-api using speccy to merge modular OAS spec files.",
+  "scripts": {
+    "oasMerge": "speccy resolve resources/public/api/conf/$API_VERSION/application_modular.yaml -o target/scala-$SCALA_VERSION/classes/public/api/conf/$API_VERSION/application.yaml",
+    "oasMergeVerbose": "speccy resolve resources/public/api/conf/$API_VERSION/application_modular.yaml -o target/scala-$SCALA_VERSION/classes/public/api/conf/$API_VERSION/application.yaml -v"
+  },
+  "preferGlobal": true,
+  "devDependencies": {
+    "speccy": "^0.11.0"
+  }
+}

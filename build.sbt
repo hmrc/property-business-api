@@ -41,6 +41,9 @@ lazy val microservice = Project(appName, file("."))
     )
   )
   .settings(
+    Compile / compile := ((Compile / compile) dependsOn oasMergeVerbose).value
+  )
+  .settings(
     Compile / unmanagedResourceDirectories += baseDirectory.value / "resources"
   )
   .settings(majorVersion := 0)
@@ -63,17 +66,19 @@ lazy val microservice = Project(appName, file("."))
   )
   .settings(PlayKeys.playDefaultPort := 7798)
 
-lazy val oasMerge = inputKey[Unit]("Runs 'speccy resolve <<input_oas_modular_application.yaml>> -o <<output_oas_merged.yaml>>' to merge OpenAPI spec files")
-
+lazy val oasMerge = taskKey[Unit]("""Runs './run_oas_merge.sh 2.0' to merge OpenAPI spec files""")
 oasMerge := {
-  val args = spaceDelimited("<arg>").parsed
-  if (args.size != 2) {
-    throw new MessageOnlyException("""Run "sbt 'oasMerge <<input_oas_modular_application.yaml>> <<output_oas_merged.yaml>>'" to merge OpenAPI spec files""")
-  }
-  val inputFile = args.head
-  val outputFile = args.last
-  val exitCode = (s"speccy resolve $inputFile -o $outputFile").!
+  val exitCode = (s"./run_oas_merge.sh 2.0").!
   if (exitCode != 0) {
-    throw new MessageOnlyException("OpenAPI spec merge failed, Run speccy manually using: 'speccy resolve <<input_oas_modular_application.yaml>> -o <<output_oas_merged.yaml>>'")
+    throw new MessageOnlyException("OpenAPI merge failed, run using verbose: sbt oasMergeVerbose")
   }
 }
+
+lazy val oasMergeVerbose = taskKey[Unit]("""Runs './run_oas_merge.sh 2.0 -v' to merge OpenAPI spec files in verbose""")
+oasMergeVerbose := {
+  val exitCode = (s"./run_oas_merge.sh 2.0 -v").!
+  if (exitCode != 0) {
+    throw new MessageOnlyException("OpenAPI merge failed!")
+  }
+}
+

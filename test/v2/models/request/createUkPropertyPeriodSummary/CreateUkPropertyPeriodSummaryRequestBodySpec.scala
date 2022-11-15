@@ -16,9 +16,9 @@
 
 package v2.models.request.createUkPropertyPeriodSummary
 
-import play.api.libs.json.{JsValue, Json}
+import play.api.libs.json.{ JsValue, Json }
 import support.UnitSpec
-import v2.models.request.common.ukPropertyRentARoom.{UkPropertyExpensesRentARoom, UkPropertyIncomeRentARoom}
+import v2.models.request.common.ukPropertyRentARoom.{ UkPropertyExpensesRentARoom, UkPropertyIncomeRentARoom }
 import v2.models.request.common.ukFhlProperty._
 import v2.models.request.common.ukNonFhlProperty._
 
@@ -28,57 +28,61 @@ class CreateUkPropertyPeriodSummaryRequestBodySpec extends UnitSpec {
     CreateUkPropertyPeriodSummaryRequestBody(
       "2020-01-01",
       "2020-01-31",
-      Some(UkFhlProperty(
-        Some(UkFhlPropertyIncome(
-          Some(5000.99),
-          Some(3123.21),
-          Some(UkPropertyIncomeRentARoom(
-            Some(532.12)
+      Some(
+        UkFhlProperty(
+          Some(
+            UkFhlPropertyIncome(
+              Some(5000.99),
+              Some(3123.21),
+              Some(UkPropertyIncomeRentARoom(
+                Some(532.12)
+              ))
+            )),
+          Some(UkFhlPropertyExpenses(
+            Some(3123.21),
+            Some(928.42),
+            Some(842.99),
+            Some(8831.12),
+            Some(484.12),
+            Some(99282),
+            Some(999.99),
+            Some(974.47),
+            Some(UkPropertyExpensesRentARoom(
+              Some(8842.43)
+            ))
           ))
         )),
-        Some(UkFhlPropertyExpenses(
-          Some(3123.21),
-          Some(928.42),
-          Some(842.99),
-          Some(8831.12),
-          Some(484.12),
-          Some(99282),
-          Some(999.99),
-          Some(974.47),
-          Some(UkPropertyExpensesRentARoom(
-            Some(8842.43)
-          ))
+      Some(
+        UkNonFhlProperty(
+          Some(
+            UkNonFhlPropertyIncome(
+              Some(41.12),
+              Some(84.31),
+              Some(9884.93),
+              Some(842.99),
+              Some(31.44),
+              Some(UkPropertyIncomeRentARoom(
+                Some(947.66)
+              ))
+            )),
+          Some(
+            UkNonFhlPropertyExpenses(
+              None,
+              None,
+              None,
+              None,
+              None,
+              None,
+              None,
+              None,
+              None,
+              None,
+              Some(988.18)
+            ))
         ))
-      )),
-      Some(UkNonFhlProperty(
-        Some(UkNonFhlPropertyIncome(
-          Some(41.12),
-          Some(84.31),
-          Some(9884.93),
-          Some(842.99),
-          Some(31.44),
-          Some(UkPropertyIncomeRentARoom(
-            Some(947.66)
-          ))
-        )),
-        Some(UkNonFhlPropertyExpenses(
-          None,
-          None,
-          None,
-          None,
-          None,
-          None,
-          None,
-          None,
-          None,
-          None,
-          Some(988.18)
-        ))
-      ))
     )
 
-  val mtdJson: JsValue =  Json.parse(
-    """
+  val mtdJson: JsValue = Json.parse("""
       |{
       |    "fromDate": "2020-01-01",
       |    "toDate": "2020-01-31",
@@ -122,8 +126,7 @@ class CreateUkPropertyPeriodSummaryRequestBodySpec extends UnitSpec {
       |}
       |""".stripMargin)
 
-  val desJson: JsValue = Json.parse(
-    """
+  val desJson: JsValue = Json.parse("""
       |{
       |    "fromDate": "2020-01-01",
       |    "toDate": "2020-01-31",

@@ -16,52 +16,56 @@
 
 package v1.models.request.amendForeignPropertyAnnualSubmission.foreignProperty
 
-import play.api.libs.json.{JsValue, Json}
+import play.api.libs.json.{ JsValue, Json }
 import support.UnitSpec
 import v1.models.utils.JsonErrorValidators
 
-class ForeignPropertyEntrySpec extends UnitSpec with JsonErrorValidators{
+class ForeignPropertyEntrySpec extends UnitSpec with JsonErrorValidators {
 
   val foreignProperty: ForeignPropertyEntry =
     ForeignPropertyEntry(
       "GER",
-      Some(ForeignPropertyAdjustments(
-        Some(100.25),
-        Some(100.25)
-      )),
-      Some(ForeignPropertyAllowances(
-        Some(100.25),
-        Some(100.25),
-        Some(100.25),
-        Some(100.25),
-        Some(100.25),
-        Some(200.65),
-        Some(100.25)
-      ))
+      Some(
+        ForeignPropertyAdjustments(
+          Some(100.25),
+          Some(100.25)
+        )),
+      Some(
+        ForeignPropertyAllowances(
+          Some(100.25),
+          Some(100.25),
+          Some(100.25),
+          Some(100.25),
+          Some(100.25),
+          Some(200.65),
+          Some(100.25)
+        ))
     )
 
   val foreignPropertyNoAdjustments: ForeignPropertyEntry =
     ForeignPropertyEntry(
       "GER",
       None,
-      Some(ForeignPropertyAllowances(
-        Some(100.25),
-        Some(100.25),
-        Some(100.25),
-        Some(100.25),
-        Some(100.25),
-        Some(300.45),
-        Some(100.25)
-      ))
+      Some(
+        ForeignPropertyAllowances(
+          Some(100.25),
+          Some(100.25),
+          Some(100.25),
+          Some(100.25),
+          Some(100.25),
+          Some(300.45),
+          Some(100.25)
+        ))
     )
 
   val foreignPropertyNoAllowances: ForeignPropertyEntry =
     ForeignPropertyEntry(
       "GER",
-      Some(ForeignPropertyAdjustments(
-        Some(100.25),
-        Some(100.25)
-      )),
+      Some(
+        ForeignPropertyAdjustments(
+          Some(100.25),
+          Some(100.25)
+        )),
       None
     )
 

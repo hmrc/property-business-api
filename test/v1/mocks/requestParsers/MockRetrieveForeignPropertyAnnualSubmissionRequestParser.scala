@@ -21,15 +21,19 @@ import org.scalamock.scalatest.MockFactory
 import v1.controllers.requestParsers.RetrieveForeignPropertyAnnualSubmissionRequestParser
 import v1.models.errors.ErrorWrapper
 import v1.models.request.retrieveForeignPropertyAnnualSubmission._
+
 trait MockRetrieveForeignPropertyAnnualSubmissionRequestParser extends MockFactory {
 
-
-  val mockRetrieveForeignPropertyAnnualSubmissionRequestParser:
-    RetrieveForeignPropertyAnnualSubmissionRequestParser = mock[RetrieveForeignPropertyAnnualSubmissionRequestParser]
+  val mockRetrieveForeignPropertyAnnualSubmissionRequestParser: RetrieveForeignPropertyAnnualSubmissionRequestParser =
+    mock[RetrieveForeignPropertyAnnualSubmissionRequestParser]
 
   object MockRetrieveForeignPropertyRequestParser {
-    def parse(data: RetrieveForeignPropertyAnnualSubmissionRawData): CallHandler[Either[ErrorWrapper, RetrieveForeignPropertyAnnualSubmissionRequest]] = {
-      (mockRetrieveForeignPropertyAnnualSubmissionRequestParser.parseRequest(_: RetrieveForeignPropertyAnnualSubmissionRawData)(_: String)).expects(data, *)
+
+    def parse(
+        data: RetrieveForeignPropertyAnnualSubmissionRawData): CallHandler[Either[ErrorWrapper, RetrieveForeignPropertyAnnualSubmissionRequest]] = {
+      (mockRetrieveForeignPropertyAnnualSubmissionRequestParser
+        .parseRequest(_: RetrieveForeignPropertyAnnualSubmissionRawData)(_: String))
+        .expects(data, *)
     }
   }
 }

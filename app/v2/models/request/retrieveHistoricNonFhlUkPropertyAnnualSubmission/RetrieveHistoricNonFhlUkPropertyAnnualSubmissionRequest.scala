@@ -16,7 +16,7 @@
 
 package v2.models.request.retrieveHistoricNonFhlUkPropertyAnnualSubmission
 
-import v2.models.domain.{Nino, TaxYear}
+import v2.models.domain.{ Nino, TaxYear }
 import v2.models.request.RawData
 
 case class RetrieveHistoricNonFhlUkPropertyAnnualSubmissionRawData(nino: String, taxYear: String) extends RawData

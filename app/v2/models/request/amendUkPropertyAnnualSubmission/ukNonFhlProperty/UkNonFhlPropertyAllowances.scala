@@ -17,7 +17,7 @@
 package v2.models.request.amendUkPropertyAnnualSubmission.ukNonFhlProperty
 
 import play.api.libs.functional.syntax._
-import play.api.libs.json.{JsPath, Json, Reads, Writes}
+import play.api.libs.json.{ JsPath, Json, Reads, Writes }
 import v2.models.request.common.StructuredBuildingAllowance
 
 case class UkNonFhlPropertyAllowances(annualInvestmentAllowance: Option[BigDecimal],
@@ -30,7 +30,7 @@ case class UkNonFhlPropertyAllowances(annualInvestmentAllowance: Option[BigDecim
                                       propertyIncomeAllowance: Option[BigDecimal],
                                       structuredBuildingAllowance: Option[Seq[StructuredBuildingAllowance]],
                                       enhancedStructuredBuildingAllowance: Option[Seq[StructuredBuildingAllowance]],
-                                     )
+)
 
 object UkNonFhlPropertyAllowances {
   implicit val reads: Reads[UkNonFhlPropertyAllowances] = Json.reads[UkNonFhlPropertyAllowances]
@@ -46,5 +46,5 @@ object UkNonFhlPropertyAllowances {
       (JsPath \ "propertyIncomeAllowance").writeNullable[BigDecimal] and
       (JsPath \ "structuredBuildingAllowance").writeNullable[Seq[StructuredBuildingAllowance]] and
       (JsPath \ "enhancedStructuredBuildingAllowance").writeNullable[Seq[StructuredBuildingAllowance]]
-    ) (unlift(UkNonFhlPropertyAllowances.unapply))
+  )(unlift(UkNonFhlPropertyAllowances.unapply))
 }

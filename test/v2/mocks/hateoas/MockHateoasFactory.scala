@@ -19,8 +19,8 @@ package v2.mocks.hateoas
 import cats.Functor
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
-import v2.hateoas.{HateoasFactory, HateoasLinksFactory, HateoasListLinksFactory}
-import v2.models.hateoas.{HateoasData, HateoasWrapper}
+import v2.hateoas.{ HateoasFactory, HateoasLinksFactory, HateoasListLinksFactory }
+import v2.models.hateoas.{ HateoasData, HateoasWrapper }
 
 import scala.language.higherKinds
 

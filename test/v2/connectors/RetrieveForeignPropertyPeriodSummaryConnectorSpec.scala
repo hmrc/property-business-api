@@ -16,7 +16,6 @@
 
 package v2.connectors
 
-import org.scalamock.handlers.CallHandler
 import v2.connectors.RetrieveForeignPropertyPeriodSummaryConnector.{ ForeignResult, NonForeignResult }
 import v2.models.domain.{ Nino, TaxYear }
 import v2.models.errors.{ DownstreamErrorCode, DownstreamErrors }
@@ -185,19 +184,15 @@ class RetrieveForeignPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
     protected val request: RetrieveForeignPropertyPeriodSummaryRequest =
       RetrieveForeignPropertyPeriodSummaryRequest(Nino(nino), businessId, taxYear, submissionId)
 
-    protected def stubHttpResponse(outcome: DownstreamOutcome[RetrieveForeignPropertyPeriodSummaryResponse])
-      : CallHandler[Future[DownstreamOutcome[RetrieveForeignPropertyPeriodSummaryResponse]]]#Derived = {
+    protected def stubHttpResponse(outcome: DownstreamOutcome[RetrieveForeignPropertyPeriodSummaryResponse]): Unit =
       willGet(
         url = s"$baseUrl/income-tax/business/property/periodic",
         parameters = List("taxableEntityId" -> nino, "incomeSourceId" -> businessId, "taxYear" -> taxYear.asMtd, "submissionId" -> submissionId)
       ).returns(Future.successful(outcome))
-    }
 
-    protected def stubTysHttpResponse(outcome: DownstreamOutcome[RetrieveForeignPropertyPeriodSummaryResponse])
-      : CallHandler[Future[DownstreamOutcome[RetrieveForeignPropertyPeriodSummaryResponse]]]#Derived = {
+    protected def stubTysHttpResponse(outcome: DownstreamOutcome[RetrieveForeignPropertyPeriodSummaryResponse]): Unit =
       willGet(
         url = s"$baseUrl/income-tax/business/property/${taxYear.asTysDownstream}/${nino}/${businessId}/periodic/${submissionId}"
       ).returns(Future.successful(outcome))
-    }
   }
 }

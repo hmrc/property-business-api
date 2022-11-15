@@ -28,8 +28,7 @@ class ForeignPropertyAdjustmentsSpec extends UnitSpec with JsonErrorValidators {
       Some(100.25)
     )
 
-  val jsonBody = Json.parse(
-    """
+  val jsonBody = Json.parse("""
       |{
       |    "privateUseAdjustment":100.25,
       |    "balancingCharge":100.25
@@ -41,7 +40,6 @@ class ForeignPropertyAdjustmentsSpec extends UnitSpec with JsonErrorValidators {
       |{}
       |""".stripMargin
   )
-
 
   "reads" when {
     "passed a valid JSON" should {

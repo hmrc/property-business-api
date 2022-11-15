@@ -16,23 +16,25 @@
 
 package v2.models.request.amendUkPropertyAnnualSubmission.ukNonFhlProperty
 
-import play.api.libs.json.{JsValue, Json}
+import play.api.libs.json.{ JsValue, Json }
 import support.UnitSpec
-import v2.models.request.common.{Building, FirstYear, StructuredBuildingAllowance}
+import v2.models.request.common.{ Building, FirstYear, StructuredBuildingAllowance }
 import v2.models.request.common.ukPropertyRentARoom.UkPropertyAdjustmentsRentARoom
 
 class UkNonFhlPropertySpec extends UnitSpec {
 
   val requestBody: UkNonFhlProperty =
-      UkNonFhlProperty(
-        Some(UkNonFhlPropertyAdjustments(
+    UkNonFhlProperty(
+      Some(
+        UkNonFhlPropertyAdjustments(
           Some(2000.20),
           Some(2000.30),
           Some(2000.40),
           true,
           Some(UkPropertyAdjustmentsRentARoom(true))
         )),
-        Some(UkNonFhlPropertyAllowances(
+      Some(
+        UkNonFhlPropertyAllowances(
           Some(2000.50),
           Some(2000.60),
           Some(2000.70),
@@ -41,35 +43,38 @@ class UkNonFhlPropertySpec extends UnitSpec {
           Some(3000.10),
           Some(3000.20),
           None,
-          Some(Seq(StructuredBuildingAllowance(
-            3000.30,
-            Some(FirstYear(
-              "2020-01-01",
-              3000.40
-            )),
-            Building(
-              Some("house name"),
-              None,
-              "GF49JH"
-            )
-          ))),
-          Some(Seq(StructuredBuildingAllowance(
-            3000.50,
-            Some(FirstYear(
-              "2020-01-01",
-              3000.60
-            )),
-            Building(
-              None,
-              Some("house number"),
-              "GF49JH"
-            )
-          )))
+          Some(
+            Seq(
+              StructuredBuildingAllowance(
+                3000.30,
+                Some(FirstYear(
+                  "2020-01-01",
+                  3000.40
+                )),
+                Building(
+                  Some("house name"),
+                  None,
+                  "GF49JH"
+                )
+              ))),
+          Some(
+            Seq(
+              StructuredBuildingAllowance(
+                3000.50,
+                Some(FirstYear(
+                  "2020-01-01",
+                  3000.60
+                )),
+                Building(
+                  None,
+                  Some("house number"),
+                  "GF49JH"
+                )
+              )))
         ))
-      )
+    )
 
-  val validMtdJson: JsValue = Json.parse(
-    """
+  val validMtdJson: JsValue = Json.parse("""
       |{
       |    "allowances": {
       |      "annualInvestmentAllowance": 2000.50,
@@ -118,8 +123,7 @@ class UkNonFhlPropertySpec extends UnitSpec {
       |}
       |""".stripMargin)
 
-  val validDownstreamJson: JsValue = Json.parse(
-    """
+  val validDownstreamJson: JsValue = Json.parse("""
       |{
       |    "ukOtherPropertyAnnualAllowances": {
       |      "annualInvestmentAllowance": 2000.50,

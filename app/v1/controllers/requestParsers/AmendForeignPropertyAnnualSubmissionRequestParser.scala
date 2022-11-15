@@ -22,8 +22,11 @@ import v1.models.domain.Nino
 import v1.models.request.amendForeignPropertyAnnualSubmission._
 
 class AmendForeignPropertyAnnualSubmissionRequestParser @Inject()(val validator: AmendForeignPropertyAnnualSubmissionValidator)
-  extends RequestParser[AmendForeignPropertyAnnualSubmissionRawData, AmendForeignPropertyAnnualSubmissionRequest] {
+    extends RequestParser[AmendForeignPropertyAnnualSubmissionRawData, AmendForeignPropertyAnnualSubmissionRequest] {
 
   override protected def requestFor(data: AmendForeignPropertyAnnualSubmissionRawData): AmendForeignPropertyAnnualSubmissionRequest =
-    AmendForeignPropertyAnnualSubmissionRequest(Nino(data.nino), data.businessId, data.taxYear, data.body.as[AmendForeignPropertyAnnualSubmissionRequestBody])
+    AmendForeignPropertyAnnualSubmissionRequest(Nino(data.nino),
+                                                data.businessId,
+                                                data.taxYear,
+                                                data.body.as[AmendForeignPropertyAnnualSubmissionRequestBody])
 }

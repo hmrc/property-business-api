@@ -18,9 +18,9 @@ package v2.models.response.retrieveUkPropertyPeriodSummary
 
 import config.AppConfig
 import play.api.libs.functional.syntax._
-import play.api.libs.json.{Json, OWrites, Reads, __}
-import v2.hateoas.{HateoasLinks, HateoasLinksFactory}
-import v2.models.hateoas.{HateoasData, Link}
+import play.api.libs.json.{ Json, OWrites, Reads, __ }
+import v2.hateoas.{ HateoasLinks, HateoasLinksFactory }
+import v2.models.hateoas.{ HateoasData, Link }
 
 case class RetrieveUkPropertyPeriodSummaryResponse(submittedOn: String,
                                                    fromDate: String,
@@ -37,9 +37,10 @@ object RetrieveUkPropertyPeriodSummaryResponse extends HateoasLinks {
       (__ \ "toDate").read[String] and
       (__ \ "ukFhlProperty").readNullable[UkFhlProperty] and
       (__ \ "ukOtherProperty").readNullable[UkNonFhlProperty]
-    ) (RetrieveUkPropertyPeriodSummaryResponse.apply _)
+  )(RetrieveUkPropertyPeriodSummaryResponse.apply _)
 
-  implicit object hateoasLinksFactory extends HateoasLinksFactory[RetrieveUkPropertyPeriodSummaryResponse, RetrieveUkPropertyPeriodSummaryHateoasData] {
+  implicit object hateoasLinksFactory
+      extends HateoasLinksFactory[RetrieveUkPropertyPeriodSummaryResponse, RetrieveUkPropertyPeriodSummaryHateoasData] {
     override def links(appConfig: AppConfig, data: RetrieveUkPropertyPeriodSummaryHateoasData): Seq[Link] = {
       import data._
       Seq(

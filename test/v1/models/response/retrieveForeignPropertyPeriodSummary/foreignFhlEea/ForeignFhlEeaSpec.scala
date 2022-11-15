@@ -24,20 +24,20 @@ class ForeignFhlEeaSpec extends UnitSpec with JsonErrorValidators {
 
   val foreignFhlEea = ForeignFhlEea(
     Some(ForeignFhlEeaIncome(Some(5000.99))),
-    Some(ForeignFhlEeaExpenditure(
-      Some(5000.99),
-      Some(5000.99),
-      Some(5000.99),
-      Some(5000.99),
-      Some(5000.99),
-      Some(5000.99),
-      Some(5000.99),
-      Some(5000.99)
-    ))
+    Some(
+      ForeignFhlEeaExpenditure(
+        Some(5000.99),
+        Some(5000.99),
+        Some(5000.99),
+        Some(5000.99),
+        Some(5000.99),
+        Some(5000.99),
+        Some(5000.99),
+        Some(5000.99)
+      ))
   )
 
-  val writesJson = Json.parse(
-    """{
+  val writesJson = Json.parse("""{
       |    "income": {
       |      "rentAmount": 5000.99
       |    },
@@ -53,8 +53,7 @@ class ForeignFhlEeaSpec extends UnitSpec with JsonErrorValidators {
       |    }
       |  }""".stripMargin)
 
-  val readsJson = Json.parse(
-    """{
+  val readsJson = Json.parse("""{
       |    "income": {
       |      "rentAmount": 5000.99
       |    },
@@ -69,7 +68,6 @@ class ForeignFhlEeaSpec extends UnitSpec with JsonErrorValidators {
       |      "consolidatedExpense": 5000.99
       |    }
       |  }""".stripMargin)
-
 
   "reads" when {
     "passed a valid JSON" should {

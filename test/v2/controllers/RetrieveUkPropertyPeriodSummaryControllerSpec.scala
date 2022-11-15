@@ -23,20 +23,20 @@ import uk.gov.hmrc.http.HeaderCarrier
 import v2.mocks.MockIdGenerator
 import v2.mocks.hateoas.MockHateoasFactory
 import v2.mocks.requestParsers.MockRetrieveUkPropertyPeriodSummaryRequestParser
-import v2.mocks.services.{MockEnrolmentsAuthService, MockMtdIdLookupService, MockRetrieveUkPropertyPeriodSummaryService}
-import v2.models.domain.{Nino, TaxYear}
+import v2.mocks.services.{ MockEnrolmentsAuthService, MockMtdIdLookupService, MockRetrieveUkPropertyPeriodSummaryService }
+import v2.models.domain.{ Nino, TaxYear }
 import v2.models.errors._
 import v2.models.hateoas.Method.GET
-import v2.models.hateoas.{HateoasWrapper, Link}
+import v2.models.hateoas.{ HateoasWrapper, Link }
 import v2.models.outcomes.ResponseWrapper
-import v2.models.request.retrieveUkPropertyPeriodSummary.{RetrieveUkPropertyPeriodSummaryRawData, RetrieveUkPropertyPeriodSummaryRequest}
+import v2.models.request.retrieveUkPropertyPeriodSummary.{ RetrieveUkPropertyPeriodSummaryRawData, RetrieveUkPropertyPeriodSummaryRequest }
 import v2.models.response.retrieveUkPropertyPeriodSummary.RetrieveUkPropertyPeriodSummaryHateoasData
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class RetrieveUkPropertyPeriodSummaryControllerSpec
-  extends ControllerBaseSpec
+    extends ControllerBaseSpec
     with MockEnrolmentsAuthService
     with MockMtdIdLookupService
     with MockRetrieveUkPropertyPeriodSummaryService
@@ -45,11 +45,11 @@ class RetrieveUkPropertyPeriodSummaryControllerSpec
     with MockIdGenerator
     with ResponseModelsFixture {
 
-  private val nino = "AA123456A"
-  private val businessId = "XAIS12345678910"
-  private val submissionId = "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
+  private val nino          = "AA123456A"
+  private val businessId    = "XAIS12345678910"
+  private val submissionId  = "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
   private val correlationId = "X-123"
-  private val taxYear = "2022-23"
+  private val taxYear       = "2022-23"
 
   trait Test {
     val hc: HeaderCarrier = HeaderCarrier()
@@ -69,10 +69,11 @@ class RetrieveUkPropertyPeriodSummaryControllerSpec
     MockIdGenerator.getCorrelationId.returns(correlationId)
   }
 
-  private val rawData = RetrieveUkPropertyPeriodSummaryRawData(nino, businessId, taxYear, submissionId)
+  private val rawData     = RetrieveUkPropertyPeriodSummaryRawData(nino, businessId, taxYear, submissionId)
   private val requestData = RetrieveUkPropertyPeriodSummaryRequest(Nino(nino), businessId, TaxYear.fromMtd(taxYear), submissionId)
 
-  private val testHateoasLink = Link(href = s"/individuals/business/property/$nino/$businessId/period/$taxYear/$submissionId", method = GET, rel = "self")
+  private val testHateoasLink =
+    Link(href = s"/individuals/business/property/$nino/$businessId/period/$taxYear/$submissionId", method = GET, rel = "self")
 
   private val responseBody = fullResponseModel
 

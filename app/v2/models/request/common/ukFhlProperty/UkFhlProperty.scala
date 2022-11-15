@@ -16,10 +16,9 @@
 
 package v2.models.request.common.ukFhlProperty
 
-import play.api.libs.json.{Json, OFormat}
+import play.api.libs.json.{ Json, OFormat }
 
 case class UkFhlProperty(income: Option[UkFhlPropertyIncome], expenses: Option[UkFhlPropertyExpenses])
-
 
 object UkFhlProperty {
   implicit val format: OFormat[UkFhlProperty] = Json.format[UkFhlProperty]

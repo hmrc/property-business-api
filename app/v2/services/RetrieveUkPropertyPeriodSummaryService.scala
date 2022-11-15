@@ -22,7 +22,7 @@ import uk.gov.hmrc.http.HeaderCarrier
 import utils.Logging
 import v2.connectors
 import v2.connectors.RetrieveUkPropertyPeriodSummaryConnector
-import v2.connectors.RetrieveUkPropertyPeriodSummaryConnector.{NonUkResult, UkResult}
+import v2.connectors.RetrieveUkPropertyPeriodSummaryConnector.{ NonUkResult, UkResult }
 import v2.controllers.EndpointLogContext
 import v2.models.errors._
 import v2.models.outcomes.ResponseWrapper
@@ -30,37 +30,47 @@ import v2.models.request.retrieveUkPropertyPeriodSummary.RetrieveUkPropertyPerio
 import v2.models.response.retrieveUkPropertyPeriodSummary.RetrieveUkPropertyPeriodSummaryResponse
 import v2.support.DownstreamResponseMappingSupport
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.{ ExecutionContext, Future }
 
 class RetrieveUkPropertyPeriodSummaryService @Inject()(connector: RetrieveUkPropertyPeriodSummaryConnector)
-  extends DownstreamResponseMappingSupport with Logging {
+    extends DownstreamResponseMappingSupport
+    with Logging {
 
   def retrieveUkProperty(request: RetrieveUkPropertyPeriodSummaryRequest)(
-    implicit hc: HeaderCarrier,
-    ec: ExecutionContext,
-    logContext: EndpointLogContext,
-    correlationId: String): Future[ServiceOutcome[RetrieveUkPropertyPeriodSummaryResponse]] = {
+      implicit hc: HeaderCarrier,
+      ec: ExecutionContext,
+      logContext: EndpointLogContext,
+      correlationId: String): Future[ServiceOutcome[RetrieveUkPropertyPeriodSummaryResponse]] = {
 
     val result = for {
-      connectorResultWrapper <- EitherT(connector.retrieveUkProperty(request)).leftMap(mapDownstreamErrors(ifsErrorMap))
+      connectorResultWrapper <- EitherT(connector.retrieveUkProperty(request)).leftMap(mapDownstreamErrors(errorMap))
       mtdResponseWrapper     <- EitherT.fromEither[Future](validateBusinessType(connectorResultWrapper))
     } yield mtdResponseWrapper
 
     result.value
   }
 
-  private def ifsErrorMap =
-    Map(
+  private def errorMap: Map[String, MtdError] = {
+    val errorMap = Map(
       "INVALID_TAXABLE_ENTITY_ID" -> NinoFormatError,
-      "INVALID_TAX_YEAR" -> TaxYearFormatError,
-      "INVALID_INCOMESOURCEID" -> BusinessIdFormatError,
-      "INVALID_SUBMISSION_ID" -> SubmissionIdFormatError,
-      "TAX_YEAR_NOT_SUPPORTED" -> RuleTaxYearNotSupportedError,
-      "NO_DATA_FOUND" -> NotFoundError,
-      "SERVER_ERROR" -> InternalError,
-      "SERVICE_UNAVAILABLE" -> InternalError,
-      "INVALID_CORRELATIONID" -> InternalError
+      "INVALID_TAX_YEAR"          -> TaxYearFormatError,
+      "INVALID_INCOMESOURCEID"    -> BusinessIdFormatError,
+      "INVALID_SUBMISSION_ID"     -> SubmissionIdFormatError,
+      "TAX_YEAR_NOT_SUPPORTED"    -> RuleTaxYearNotSupportedError,
+      "NO_DATA_FOUND"             -> NotFoundError,
+      "SERVER_ERROR"              -> InternalError,
+      "SERVICE_UNAVAILABLE"       -> InternalError,
+      "INVALID_CORRELATIONID"     -> InternalError
     )
+
+    val tysErrorMap =
+      Map(
+        "INVALID_INCOMESOURCE_ID" -> BusinessIdFormatError,
+        "INVALID_CORRELATION_ID"  -> InternalError
+      )
+
+    errorMap ++ tysErrorMap
+  }
 
   private def validateBusinessType(resultWrapper: ResponseWrapper[connectors.RetrieveUkPropertyPeriodSummaryConnector.Result]) =
     resultWrapper.responseData match {

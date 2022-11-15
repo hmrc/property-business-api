@@ -18,7 +18,7 @@ package v2.services
 
 import cats.data.EitherT
 import cats.implicits._
-import javax.inject.{Inject, Singleton}
+import javax.inject.{ Inject, Singleton }
 import uk.gov.hmrc.http.HeaderCarrier
 import utils.Logging
 import v2.connectors.CreateUkPropertyPeriodSummaryConnector
@@ -28,43 +28,54 @@ import v2.models.request.createUkPropertyPeriodSummary.CreateUkPropertyPeriodSum
 import v2.models.response.createUkPropertyPeriodSummary.CreateUkPropertyPeriodSummaryResponse
 import v2.support.DownstreamResponseMappingSupport
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.{ ExecutionContext, Future }
 
 @Singleton
 class CreateUkPropertyPeriodSummaryService @Inject()(connector: CreateUkPropertyPeriodSummaryConnector)
-  extends DownstreamResponseMappingSupport with Logging {
+    extends DownstreamResponseMappingSupport
+    with Logging {
 
   def createUkProperty(request: CreateUkPropertyPeriodSummaryRequest)(
-    implicit hc: HeaderCarrier,
-    ec: ExecutionContext,
-    logContext: EndpointLogContext,
-    correlationId: String): Future[ServiceOutcome[CreateUkPropertyPeriodSummaryResponse]] = {
+      implicit hc: HeaderCarrier,
+      ec: ExecutionContext,
+      logContext: EndpointLogContext,
+      correlationId: String): Future[ServiceOutcome[CreateUkPropertyPeriodSummaryResponse]] = {
 
     val result = for {
-      ifsResponseWrapper <- EitherT(connector.createUkProperty(request)).leftMap(mapDownstreamErrors(ifsErrorMap))
+      ifsResponseWrapper <- EitherT(connector.createUkProperty(request)).leftMap(mapDownstreamErrors(errorMap))
     } yield ifsResponseWrapper
 
     result.value
   }
 
-  private def ifsErrorMap =
-    Map(
+  private val errorMap = {
+    val errors = Map(
       "INVALID_TAXABLE_ENTITY_ID" -> NinoFormatError,
-      "INVALID_INCOMESOURCEID" -> BusinessIdFormatError,
-      "INVALID_TAX_YEAR" -> TaxYearFormatError,
-      "TAX_YEAR_NOT_SUPPORTED" -> RuleTaxYearNotSupportedError,
-      "INCOMPATIBLE_PAYLOAD" -> RuleTypeOfBusinessIncorrectError,
-      "INVALID_PAYLOAD" -> InternalError,
-      "INVALID_CORRELATIONID" -> InternalError,
-      "INCOME_SOURCE_NOT_FOUND" -> NotFoundError,
-      "DUPLICATE_SUBMISSION" -> RuleDuplicateSubmissionError,
-      "NOT_ALIGN_PERIOD" -> RuleMisalignedPeriodError,
-      "OVERLAPS_IN_PERIOD" -> RuleOverlappingPeriodError,
-      "GAPS_IN_PERIOD" -> RuleNotContiguousPeriodError,
-      "INVALID_DATE_RANGE" -> RuleToDateBeforeFromDateError,
-      "MISSING_EXPENSES" -> InternalError,
-      "SERVER_ERROR" -> InternalError,
-      "SERVICE_UNAVAILABLE" -> InternalError
+      "INVALID_INCOMESOURCEID"    -> BusinessIdFormatError,
+      "INVALID_TAX_YEAR"          -> TaxYearFormatError,
+      "TAX_YEAR_NOT_SUPPORTED"    -> RuleTaxYearNotSupportedError,
+      "INCOMPATIBLE_PAYLOAD"      -> RuleTypeOfBusinessIncorrectError,
+      "INVALID_PAYLOAD"           -> InternalError,
+      "INVALID_CORRELATIONID"     -> InternalError,
+      "INCOME_SOURCE_NOT_FOUND"   -> NotFoundError,
+      "DUPLICATE_SUBMISSION"      -> RuleDuplicateSubmissionError,
+      "NOT_ALIGN_PERIOD"          -> RuleMisalignedPeriodError,
+      "OVERLAPS_IN_PERIOD"        -> RuleOverlappingPeriodError,
+      "GAPS_IN_PERIOD"            -> RuleNotContiguousPeriodError,
+      "INVALID_DATE_RANGE"        -> RuleToDateBeforeFromDateError,
+      "MISSING_EXPENSES"          -> InternalError,
+      "SERVER_ERROR"              -> InternalError,
+      "SERVICE_UNAVAILABLE"       -> InternalError
     )
+
+    val extraTysErrors = Map(
+      "INVALID_INCOMESOURCE_ID" -> BusinessIdFormatError,
+      "INVALID_CORRELATION_ID"  -> InternalError,
+      "PERIOD_NOT_ALIGNED"      -> RuleMisalignedPeriodError,
+      "PERIOD_OVERLAPS"         -> RuleOverlappingPeriodError
+    )
+
+    errors ++ extraTysErrors
+  }
 
 }

@@ -91,9 +91,7 @@ object RuleBothExpensesSuppliedError
 object RuleBothAllowancesSuppliedError
     extends MtdError("RULE_BOTH_ALLOWANCES_SUPPLIED", "Both allowances and property allowances must not be present at the same time")
 
-object RuleTaxYearNotSupportedError
-    extends MtdError("RULE_TAX_YEAR_NOT_SUPPORTED",
-                     "The tax year specified does not lie within the supported range")
+object RuleTaxYearNotSupportedError extends MtdError("RULE_TAX_YEAR_NOT_SUPPORTED", "The tax year specified does not lie within the supported range")
 
 object RuleHistoricTaxYearNotSupportedError
     extends MtdError("RULE_TAX_YEAR_NOT_SUPPORTED", "The tax year specified does not lie within the supported range")

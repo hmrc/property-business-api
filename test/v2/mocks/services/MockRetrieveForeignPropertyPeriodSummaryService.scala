@@ -26,16 +26,25 @@ import v2.models.request.retrieveForeignPropertyPeriodSummary.RetrieveForeignPro
 import v2.models.response.retrieveForeignPropertyPeriodSummary.RetrieveForeignPropertyPeriodSummaryResponse
 import v2.services.RetrieveForeignPropertyPeriodSummaryService
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.{ ExecutionContext, Future }
 
 trait MockRetrieveForeignPropertyPeriodSummaryService extends MockFactory {
 
   val mockRetrieveForeignPropertyService: RetrieveForeignPropertyPeriodSummaryService = mock[RetrieveForeignPropertyPeriodSummaryService]
 
   object MockRetrieveForeignPropertyService {
-    def retrieve(requestData: RetrieveForeignPropertyPeriodSummaryRequest): CallHandler[Future[Either[ErrorWrapper, ResponseWrapper[RetrieveForeignPropertyPeriodSummaryResponse]]]] = {
-      (mockRetrieveForeignPropertyService
-        .retrieveForeignProperty(_: RetrieveForeignPropertyPeriodSummaryRequest)(_: HeaderCarrier, _: ExecutionContext, _: EndpointLogContext, _: String))
+
+    def retrieve(requestData: RetrieveForeignPropertyPeriodSummaryRequest)
+      : CallHandler[Future[Either[ErrorWrapper, ResponseWrapper[RetrieveForeignPropertyPeriodSummaryResponse]]]] = {
+      (
+        mockRetrieveForeignPropertyService
+          .retrieveForeignProperty(_: RetrieveForeignPropertyPeriodSummaryRequest)(
+            _: HeaderCarrier,
+            _: ExecutionContext,
+            _: EndpointLogContext,
+            _: String
+          )
+        )
         .expects(requestData, *, *, *, *)
     }
   }

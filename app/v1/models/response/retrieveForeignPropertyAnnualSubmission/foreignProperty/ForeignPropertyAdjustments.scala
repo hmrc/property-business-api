@@ -16,11 +16,10 @@
 
 package v1.models.response.retrieveForeignPropertyAnnualSubmission.foreignProperty
 
-import play.api.libs.json.{Json, OFormat}
+import play.api.libs.json.{ Json, OFormat }
 
-case class ForeignPropertyAdjustments(privateUseAdjustment: Option[BigDecimal],
-                                      balancingCharge: Option[BigDecimal])
+case class ForeignPropertyAdjustments(privateUseAdjustment: Option[BigDecimal], balancingCharge: Option[BigDecimal])
 
 object ForeignPropertyAdjustments {
-  implicit  val format: OFormat[ForeignPropertyAdjustments] = Json.format[ForeignPropertyAdjustments]
+  implicit val format: OFormat[ForeignPropertyAdjustments] = Json.format[ForeignPropertyAdjustments]
 }

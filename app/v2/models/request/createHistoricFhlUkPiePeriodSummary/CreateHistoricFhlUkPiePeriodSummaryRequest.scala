@@ -18,7 +18,4 @@ package v2.models.request.createHistoricFhlUkPiePeriodSummary
 
 import v2.models.domain.Nino
 
-case class CreateHistoricFhlUkPiePeriodSummaryRequest (nino: Nino, body: CreateHistoricFhlUkPiePeriodSummaryRequestBody)
-
-
-
+case class CreateHistoricFhlUkPiePeriodSummaryRequest(nino: Nino, body: CreateHistoricFhlUkPiePeriodSummaryRequestBody)

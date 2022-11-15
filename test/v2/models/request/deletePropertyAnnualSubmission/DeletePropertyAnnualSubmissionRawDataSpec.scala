@@ -23,12 +23,8 @@ class DeletePropertyAnnualSubmissionRawDataSpec extends UnitSpec {
 
   "writes" must {
     "work" in {
-      Json.toJson(
-        DeletePropertyAnnualSubmissionRawData(nino = "someNino",
-          businessId = "someBusinessId",
-          taxYear = "someTaxYear")) shouldBe
-        Json.parse(
-          """
+      Json.toJson(DeletePropertyAnnualSubmissionRawData(nino = "someNino", businessId = "someBusinessId", taxYear = "someTaxYear")) shouldBe
+        Json.parse("""
             |{
             |  "nino": "someNino",
             |  "businessId": "someBusinessId",

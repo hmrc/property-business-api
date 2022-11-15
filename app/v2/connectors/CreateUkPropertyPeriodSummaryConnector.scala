@@ -20,7 +20,7 @@ import config.AppConfig
 
 import javax.inject.{ Inject, Singleton }
 import uk.gov.hmrc.http.{ HeaderCarrier, HttpClient }
-import v2.connectors.DownstreamUri.IfsUri
+import v2.connectors.DownstreamUri.{ IfsUri, TaxYearSpecificIfsUri }
 import v2.connectors.httpparsers.StandardDownstreamHttpParser._
 import v2.models.request.createUkPropertyPeriodSummary.CreateUkPropertyPeriodSummaryRequest
 import v2.models.response.createUkPropertyPeriodSummary.CreateUkPropertyPeriodSummaryResponse
@@ -35,11 +35,16 @@ class CreateUkPropertyPeriodSummaryConnector @Inject()(val http: HttpClient, val
       ec: ExecutionContext,
       correlationId: String): Future[DownstreamOutcome[CreateUkPropertyPeriodSummaryResponse]] = {
 
-    // Note that MTD tax year format is used
-    post(
-      body = request.body,
-      uri = IfsUri[CreateUkPropertyPeriodSummaryResponse](
-        s"income-tax/business/property/periodic?taxableEntityId=${request.nino.nino}&taxYear=${request.taxYear.asMtd}&incomeSourceId=${request.businessId}")
-    )
+    import request._
+
+    val uri: DownstreamUri[CreateUkPropertyPeriodSummaryResponse] = if (taxYear.useTaxYearSpecificApi) {
+      TaxYearSpecificIfsUri(
+        s"income-tax/business/property/periodic/${taxYear.asTysDownstream}?taxableEntityId=${nino.nino}&incomeSourceId=${request.businessId}")
+    } else {
+      // Note that MTD tax year format is used pre-TYS
+      IfsUri(s"income-tax/business/property/periodic?taxableEntityId=${nino.nino}&taxYear=${taxYear.asMtd}&incomeSourceId=$businessId")
+    }
+
+    post(body, uri)
   }
 }

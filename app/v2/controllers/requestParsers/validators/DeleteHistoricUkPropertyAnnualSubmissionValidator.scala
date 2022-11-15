@@ -17,11 +17,11 @@
 package v2.controllers.requestParsers.validators
 
 import config.AppConfig
-import v2.controllers.requestParsers.validators.validations.{NinoValidation, TaxYearValidation}
+import v2.controllers.requestParsers.validators.validations.{ NinoValidation, TaxYearValidation }
 import v2.models.errors.MtdError
 import v2.models.request.deleteHistoricUkPropertyAnnualSubmission.DeleteHistoricUkPropertyAnnualSubmissionRawData
 
-import javax.inject.{Inject, Singleton}
+import javax.inject.{ Inject, Singleton }
 
 @Singleton
 class DeleteHistoricUkPropertyAnnualSubmissionValidator @Inject()(appConfig: AppConfig)

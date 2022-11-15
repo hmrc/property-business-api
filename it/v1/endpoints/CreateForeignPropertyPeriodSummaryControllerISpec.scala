@@ -19,12 +19,12 @@ package v1.endpoints
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import play.api.http.HeaderNames.ACCEPT
 import play.api.http.Status
-import play.api.libs.json.{JsValue, Json}
-import play.api.libs.ws.{WSRequest, WSResponse}
+import play.api.libs.json.{ JsValue, Json }
+import play.api.libs.ws.{ WSRequest, WSResponse }
 import play.api.test.Helpers.AUTHORIZATION
 import support.V1IntegrationBaseSpec
 import v1.models.errors._
-import v1.stubs.{AuditStub, AuthStub, IfsStub, MtdIdLookupStub}
+import v1.stubs.{ AuditStub, AuthStub, IfsStub, MtdIdLookupStub }
 
 class CreateForeignPropertyPeriodSummaryControllerISpec extends V1IntegrationBaseSpec {
 
@@ -261,7 +261,7 @@ class CreateForeignPropertyPeriodSummaryControllerISpec extends V1IntegrationBas
     """.stripMargin
   )
 
-  val invalidValueRequestJson:  JsValue = Json.parse(
+  val invalidValueRequestJson: JsValue = Json.parse(
     """
       |{
       |  "fromDate": "2018-04-06",
@@ -461,53 +461,57 @@ class CreateForeignPropertyPeriodSummaryControllerISpec extends V1IntegrationBas
 
   val allInvalidValueRequestError: MtdError = ValueFormatError.copy(
     message = "One or more monetary fields are invalid",
-    paths = Some(List(
-      "/foreignFhlEea/income/rentAmount",
-      "/foreignFhlEea/expenditure/premisesRunningCosts",
-      "/foreignFhlEea/expenditure/repairsAndMaintenance",
-      "/foreignFhlEea/expenditure/financialCosts",
-      "/foreignFhlEea/expenditure/professionalFees",
-      "/foreignFhlEea/expenditure/costsOfServices",
-      "/foreignFhlEea/expenditure/travelCosts",
-      "/foreignFhlEea/expenditure/other",
-      "/foreignProperty/0/income/rentIncome/rentAmount",
-      "/foreignProperty/0/income/premiumOfLeaseGrant",
-      "/foreignProperty/0/income/otherPropertyIncome",
-      "/foreignProperty/0/income/foreignTaxTakenOff",
-      "/foreignProperty/0/income/specialWithholdingTaxOrUKTaxPaid",
-      "/foreignProperty/0/expenditure/premisesRunningCosts",
-      "/foreignProperty/0/expenditure/repairsAndMaintenance",
-      "/foreignProperty/0/expenditure/financialCosts",
-      "/foreignProperty/0/expenditure/professionalFees",
-      "/foreignProperty/0/expenditure/costsOfServices",
-      "/foreignProperty/0/expenditure/travelCosts",
-      "/foreignProperty/0/expenditure/residentialFinancialCost",
-      "/foreignProperty/0/expenditure/broughtFwdResidentialFinancialCost",
-      "/foreignProperty/0/expenditure/other"
-    ))
+    paths = Some(
+      List(
+        "/foreignFhlEea/income/rentAmount",
+        "/foreignFhlEea/expenditure/premisesRunningCosts",
+        "/foreignFhlEea/expenditure/repairsAndMaintenance",
+        "/foreignFhlEea/expenditure/financialCosts",
+        "/foreignFhlEea/expenditure/professionalFees",
+        "/foreignFhlEea/expenditure/costsOfServices",
+        "/foreignFhlEea/expenditure/travelCosts",
+        "/foreignFhlEea/expenditure/other",
+        "/foreignProperty/0/income/rentIncome/rentAmount",
+        "/foreignProperty/0/income/premiumOfLeaseGrant",
+        "/foreignProperty/0/income/otherPropertyIncome",
+        "/foreignProperty/0/income/foreignTaxTakenOff",
+        "/foreignProperty/0/income/specialWithholdingTaxOrUKTaxPaid",
+        "/foreignProperty/0/expenditure/premisesRunningCosts",
+        "/foreignProperty/0/expenditure/repairsAndMaintenance",
+        "/foreignProperty/0/expenditure/financialCosts",
+        "/foreignProperty/0/expenditure/professionalFees",
+        "/foreignProperty/0/expenditure/costsOfServices",
+        "/foreignProperty/0/expenditure/travelCosts",
+        "/foreignProperty/0/expenditure/residentialFinancialCost",
+        "/foreignProperty/0/expenditure/broughtFwdResidentialFinancialCost",
+        "/foreignProperty/0/expenditure/other"
+      ))
   )
 
   val allInvalidCountryCodeRequestError: MtdError = CountryCodeFormatError.copy(
-    paths = Some(List(
-      "/foreignProperty/0/countryCode"
-    ))
+    paths = Some(
+      List(
+        "/foreignProperty/0/countryCode"
+      ))
   )
 
   val allRuleCountryCodeRequestError: MtdError = RuleCountryCodeError.copy(
-    paths = Some(List(
-      "/foreignProperty/0/countryCode"
-    ))
+    paths = Some(
+      List(
+        "/foreignProperty/0/countryCode"
+      ))
   )
 
   val RuleBothExpensesSuppliedRequestError: MtdError = RuleBothExpensesSuppliedError.copy(
-    paths = Some(List(
-      "/foreignFhlEea/expenditure",
-      "/foreignProperty/0/expenditure"
-    ))
+    paths = Some(
+      List(
+        "/foreignFhlEea/expenditure",
+        "/foreignProperty/0/expenditure"
+      ))
   )
 
   private trait Test {
-    val nino: String = "TC663795B"
+    val nino: String       = "TC663795B"
     val businessId: String = "XAIS12345678910"
 
     def setupStubs(): StubMapping
@@ -520,7 +524,7 @@ class CreateForeignPropertyPeriodSummaryControllerISpec extends V1IntegrationBas
         .withHttpHeaders(
           (ACCEPT, "application/vnd.hmrc.1.0+json"),
           (AUTHORIZATION, "Bearer 123") // some bearer token
-      )
+        )
     }
 
     val responseBody: JsValue = Json.parse(
@@ -618,10 +622,14 @@ class CreateForeignPropertyPeriodSummaryControllerISpec extends V1IntegrationBas
 
     "return error according to spec" when {
       "validation error" when {
-        def validationErrorTest(requestNino: String, requestBusinessId: String, requestBody: JsValue, expectedStatus: Int, expectedBody: MtdError): Unit = {
+        def validationErrorTest(requestNino: String,
+                                requestBusinessId: String,
+                                requestBody: JsValue,
+                                expectedStatus: Int,
+                                expectedBody: MtdError): Unit = {
           s"validation fails with ${expectedBody.code} error" in new CreateTest {
 
-            override val nino: String = requestNino
+            override val nino: String       = requestNino
             override val businessId: String = requestBusinessId
 
             override def setupStubs(): StubMapping = {

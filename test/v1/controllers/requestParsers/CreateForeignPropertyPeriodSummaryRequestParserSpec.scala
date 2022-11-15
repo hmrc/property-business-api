@@ -20,19 +20,18 @@ import play.api.libs.json.Json
 import support.UnitSpec
 import v1.mocks.validators.MockCreateForeignPropertyPeriodSummaryValidator
 import v1.models.domain.Nino
-import v1.models.errors.{BadRequestError, BusinessIdFormatError, ErrorWrapper, NinoFormatError}
+import v1.models.errors.{ BadRequestError, BusinessIdFormatError, ErrorWrapper, NinoFormatError }
 import v1.models.request.common.foreignFhlEea._
 import v1.models.request.common.foreignPropertyEntry._
 import v1.models.request.createForeignPropertyPeriodSummary._
 
 class CreateForeignPropertyPeriodSummaryRequestParserSpec extends UnitSpec {
 
-  val nino: String = "AA123456B"
-  val businessId: String = "XAIS12345678901"
+  val nino: String                   = "AA123456B"
+  val businessId: String             = "XAIS12345678901"
   implicit val correlationId: String = "X-123"
 
-  private val requestBodyJson = Json.parse(
-    """{
+  private val requestBodyJson = Json.parse("""{
       |   "fromDate":"2020-01-01",
       |   "toDate":"2020-01-31",
       |   "foreignFhlEea":{
@@ -93,40 +92,43 @@ class CreateForeignPropertyPeriodSummaryRequestParserSpec extends UnitSpec {
 
         val foreignFhlEea: ForeignFhlEea = ForeignFhlEea(
           income = Some(ForeignFhlEeaIncome(Some(567.83))),
-          expenditure = Some(ForeignFhlEeaExpenditure(
-            premisesRunningCosts = Some(4567.98),
-            repairsAndMaintenance = Some(98765.67),
-            financialCosts = Some(4566.95),
-            professionalFees = Some(23.65),
-            costsOfServices = Some(4567.77),
-            travelCosts = Some(456.77),
-            other = Some(567.67),
-            consolidatedExpenses = None
-          ))
+          expenditure = Some(
+            ForeignFhlEeaExpenditure(
+              premisesRunningCosts = Some(4567.98),
+              repairsAndMaintenance = Some(98765.67),
+              financialCosts = Some(4566.95),
+              professionalFees = Some(23.65),
+              costsOfServices = Some(4567.77),
+              travelCosts = Some(456.77),
+              other = Some(567.67),
+              consolidatedExpenses = None
+            ))
         )
 
         val foreignProperty: ForeignPropertyEntry = ForeignPropertyEntry(
           countryCode = "GBR",
-          income = Some(ForeignPropertyIncome(
-            rentIncome = Some(ForeignPropertyRentIncome(rentAmount = Some(34456.30))),
-            foreignTaxCreditRelief = true,
-            premiumOfLeaseGrant = Some(2543.43),
-            otherPropertyIncome = Some(54325.30),
-            foreignTaxTakenOff = Some(6543.01),
-            specialWithholdingTaxOrUKTaxPaid = Some(643245.00)
-          )),
-          expenditure = Some(ForeignPropertyExpenditure(
-            premisesRunningCosts = Some(5635.43),
-            repairsAndMaintenance = Some(3456.65),
-            financialCosts = Some(34532.21),
-            professionalFees = Some(32465.32),
-            costsOfServices = Some(2567.21),
-            travelCosts = Some(2345.76),
-            residentialFinancialCost = None,
-            broughtFwdResidentialFinancialCost = None,
-            other = Some(2425.11),
-            consolidatedExpenses = None
-          ))
+          income = Some(
+            ForeignPropertyIncome(
+              rentIncome = Some(ForeignPropertyRentIncome(rentAmount = Some(34456.30))),
+              foreignTaxCreditRelief = true,
+              premiumOfLeaseGrant = Some(2543.43),
+              otherPropertyIncome = Some(54325.30),
+              foreignTaxTakenOff = Some(6543.01),
+              specialWithholdingTaxOrUKTaxPaid = Some(643245.00)
+            )),
+          expenditure = Some(
+            ForeignPropertyExpenditure(
+              premisesRunningCosts = Some(5635.43),
+              repairsAndMaintenance = Some(3456.65),
+              financialCosts = Some(34532.21),
+              professionalFees = Some(32465.32),
+              costsOfServices = Some(2567.21),
+              travelCosts = Some(2345.76),
+              residentialFinancialCost = None,
+              broughtFwdResidentialFinancialCost = None,
+              other = Some(2425.11),
+              consolidatedExpenses = None
+            ))
         )
 
         val model: CreateForeignPropertyPeriodSummaryRequestBody = CreateForeignPropertyPeriodSummaryRequestBody(
@@ -144,7 +146,8 @@ class CreateForeignPropertyPeriodSummaryRequestParserSpec extends UnitSpec {
     "return an ErrorWrapper" when {
 
       "a single validation error occurs" in new Test {
-        MockCreateForeignPropertyValidator.validate(inputData)
+        MockCreateForeignPropertyValidator
+          .validate(inputData)
           .returns(List(NinoFormatError))
 
         parser.parseRequest(inputData) shouldBe
@@ -152,7 +155,8 @@ class CreateForeignPropertyPeriodSummaryRequestParserSpec extends UnitSpec {
       }
 
       "multiple validation errors occur" in new Test {
-        MockCreateForeignPropertyValidator.validate(inputData)
+        MockCreateForeignPropertyValidator
+          .validate(inputData)
           .returns(List(NinoFormatError, BusinessIdFormatError))
 
         parser.parseRequest(inputData) shouldBe

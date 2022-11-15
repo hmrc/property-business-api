@@ -22,10 +22,9 @@ import v2.models.utils.JsonErrorValidators
 
 class RentARoomSpec extends UnitSpec with JsonErrorValidators {
 
-  val rentARoomIncome =RentARoomIncome(Some(5000.99))
+  val rentARoomIncome = RentARoomIncome(Some(5000.99))
 
   val rentARoomExpenses = RentARoomExpenses(Some(5000.99))
-
 
   val writesIncomeJson: JsValue = Json.parse(
     """{
@@ -54,7 +53,6 @@ class RentARoomSpec extends UnitSpec with JsonErrorValidators {
       |    }
       |""".stripMargin
   )
-
 
   "reads" when {
     "passed a valid Income JSON" should {

@@ -17,10 +17,10 @@
 package v2.models.response.retrieveHistoricFhlUkPiePeriodSummary
 
 import config.AppConfig
-import play.api.libs.json.{JsPath, Json, OWrites, Reads, __}
+import play.api.libs.json.{ JsPath, Json, OWrites, Reads, __ }
 import play.api.libs.functional.syntax._
-import v2.hateoas.{HateoasLinks, HateoasLinksFactory}
-import v2.models.hateoas.{HateoasData, Link}
+import v2.hateoas.{ HateoasLinks, HateoasLinksFactory }
+import v2.models.hateoas.{ HateoasData, Link }
 
 case class RetrieveHistoricFhlUkPiePeriodSummaryResponse(fromDate: String,
                                                          toDate: String,
@@ -33,27 +33,22 @@ object RetrieveHistoricFhlUkPiePeriodSummaryResponse extends HateoasLinks {
   implicit val reads: Reads[RetrieveHistoricFhlUkPiePeriodSummaryResponse] = (
     (JsPath \ "from").read[String] and
       (JsPath \ "to").read[String] and
-      (__ \ "financials" \ "incomes" ).readNullable[PeriodIncome] and
+      (__ \ "financials" \ "incomes").readNullable[PeriodIncome] and
       (JsPath \ "financials" \ "deductions").readNullable[PeriodExpenses]
-    )(RetrieveHistoricFhlUkPiePeriodSummaryResponse.apply _)
+  )(RetrieveHistoricFhlUkPiePeriodSummaryResponse.apply _)
 
-
-  implicit object RetrieveFhlUkPiePeriodSummaryLinksFactory extends
-    HateoasLinksFactory[RetrieveHistoricFhlUkPiePeriodSummaryResponse, RetrieveHistoricFhlUkPiePeriodSummaryHateoasData] {
+  implicit object RetrieveFhlUkPiePeriodSummaryLinksFactory
+      extends HateoasLinksFactory[RetrieveHistoricFhlUkPiePeriodSummaryResponse, RetrieveHistoricFhlUkPiePeriodSummaryHateoasData] {
     override def links(appConfig: AppConfig, data: RetrieveHistoricFhlUkPiePeriodSummaryHateoasData): Seq[Link] = {
       import data._
 
       Seq(
         amendHistoricFhlUkPiePeriodSummary(appConfig, nino, periodId),
         retrieveHistoricFhlUkPiePeriodSummary(appConfig, nino, periodId),
-        listHistoricFhlUkPiePeriodSummaries(appConfig, nino, self=false)
+        listHistoricFhlUkPiePeriodSummaries(appConfig, nino, self = false)
       )
     }
   }
 }
 
 case class RetrieveHistoricFhlUkPiePeriodSummaryHateoasData(nino: String, periodId: String) extends HateoasData
-
-
-
-

@@ -25,17 +25,26 @@ import v1.models.outcomes.ResponseWrapper
 import v1.models.request.deleteForeignPropertyAnnualSubmission.DeleteForeignPropertyAnnualSubmissionRequest
 import v1.services.DeleteForeignPropertyAnnualSubmissionService
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.{ ExecutionContext, Future }
 
 trait MockDeleteForeignPropertyAnnualSubmissionService extends MockFactory {
 
-  val mockDeleteForeignPropertyAnnualSubmissionService: DeleteForeignPropertyAnnualSubmissionService = mock[DeleteForeignPropertyAnnualSubmissionService]
+  val mockDeleteForeignPropertyAnnualSubmissionService: DeleteForeignPropertyAnnualSubmissionService =
+    mock[DeleteForeignPropertyAnnualSubmissionService]
 
   object MockDeleteForeignPropertyAnnualSubmissionService {
 
-    def deleteForeignPropertyAnnualSubmissionService(requestData: DeleteForeignPropertyAnnualSubmissionRequest): CallHandler[Future[Either[ErrorWrapper, ResponseWrapper[Unit]]]] = {
-      (mockDeleteForeignPropertyAnnualSubmissionService
-        .deleteForeignPropertyAnnualSubmission(_: DeleteForeignPropertyAnnualSubmissionRequest)(_: HeaderCarrier, _: ExecutionContext, _: EndpointLogContext, _: String))
+    def deleteForeignPropertyAnnualSubmissionService(
+        requestData: DeleteForeignPropertyAnnualSubmissionRequest): CallHandler[Future[Either[ErrorWrapper, ResponseWrapper[Unit]]]] = {
+      (
+        mockDeleteForeignPropertyAnnualSubmissionService
+          .deleteForeignPropertyAnnualSubmission(_: DeleteForeignPropertyAnnualSubmissionRequest)(
+            _: HeaderCarrier,
+            _: ExecutionContext,
+            _: EndpointLogContext,
+            _: String
+          )
+        )
         .expects(requestData, *, *, *, *)
     }
   }

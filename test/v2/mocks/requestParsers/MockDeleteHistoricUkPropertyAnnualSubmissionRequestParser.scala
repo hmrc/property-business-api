@@ -32,8 +32,8 @@ trait MockDeleteHistoricUkPropertyAnnualSubmissionRequestParser extends MockFact
 
   object MockDeleteHistoricUkPropertyAnnualSubmissionRequestParser {
 
-    def parse(data: DeleteHistoricUkPropertyAnnualSubmissionRawData)
-      : CallHandler[Either[ErrorWrapper, DeleteHistoricUkPropertyAnnualSubmissionRequest]] = {
+    def parse(
+        data: DeleteHistoricUkPropertyAnnualSubmissionRawData): CallHandler[Either[ErrorWrapper, DeleteHistoricUkPropertyAnnualSubmissionRequest]] = {
       (mockDeleteHistoricUkPropertyAnnualSubmissionRequestParser
         .parseRequest(_: DeleteHistoricUkPropertyAnnualSubmissionRawData)(_: String))
         .expects(data, *)

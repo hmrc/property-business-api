@@ -25,44 +25,50 @@ import v2.models.utils.JsonErrorValidators
 class AmendForeignPropertyPeriodSummaryRequestBodySpec extends UnitSpec with JsonErrorValidators {
 
   val amendForeignPropertyRequestBody: AmendForeignPropertyPeriodSummaryRequestBody = AmendForeignPropertyPeriodSummaryRequestBody(
-    Some(AmendForeignFhlEea(
-      Some(ForeignFhlEeaIncome(Some(5000.99))),
-      Some(AmendForeignFhlEeaExpenses(
-        Some(5000.99),
-        Some(5000.99),
-        Some(5000.99),
-        Some(5000.99),
-        Some(5000.99),
-        Some(5000.99),
-        Some(5000.99),
-        Some(5000.99)
-      ))
-    )),
-    Some(Seq(AmendForeignNonFhlPropertyEntry("FRA",
-      Some(ForeignNonFhlPropertyIncome(
-        Some(ForeignNonFhlPropertyRentIncome(Some(5000.99))),
-        false,
-        Some(5000.99),
-        Some(5000.99),
-        Some(5000.99),
-        Some(5000.99)
+    Some(
+      AmendForeignFhlEea(
+        Some(ForeignFhlEeaIncome(Some(5000.99))),
+        Some(
+          AmendForeignFhlEeaExpenses(
+            Some(5000.99),
+            Some(5000.99),
+            Some(5000.99),
+            Some(5000.99),
+            Some(5000.99),
+            Some(5000.99),
+            Some(5000.99),
+            Some(5000.99)
+          ))
       )),
-      Some(AmendForeignNonFhlPropertyExpenses(
-        Some(5000.99),
-        Some(5000.99),
-        Some(5000.99),
-        Some(5000.99),
-        Some(5000.99),
-        Some(5000.99),
-        Some(5000.99),
-        Some(5000.99),
-        Some(5000.99),
-        Some(5000.99)
-      ))))
-    ))
+    Some(
+      Seq(AmendForeignNonFhlPropertyEntry(
+        "FRA",
+        Some(
+          ForeignNonFhlPropertyIncome(
+            Some(ForeignNonFhlPropertyRentIncome(Some(5000.99))),
+            false,
+            Some(5000.99),
+            Some(5000.99),
+            Some(5000.99),
+            Some(5000.99)
+          )),
+        Some(
+          AmendForeignNonFhlPropertyExpenses(
+            Some(5000.99),
+            Some(5000.99),
+            Some(5000.99),
+            Some(5000.99),
+            Some(5000.99),
+            Some(5000.99),
+            Some(5000.99),
+            Some(5000.99),
+            Some(5000.99),
+            Some(5000.99)
+          ))
+      )))
+  )
 
-  val readsJson = Json.parse(
-    """{
+  val readsJson = Json.parse("""{
       |  "foreignFhlEea": {
       |    "income": {
       |      "rentAmount": 5000.99
@@ -107,8 +113,7 @@ class AmendForeignPropertyPeriodSummaryRequestBodySpec extends UnitSpec with Jso
       |  ]
       |}""".stripMargin)
 
-  val writesJson = Json.parse(
-    """{
+  val writesJson = Json.parse("""{
       |  "foreignFhlEea": {
       |    "income": {
       |      "rentAmount": 5000.99

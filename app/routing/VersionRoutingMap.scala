@@ -46,7 +46,6 @@ case class VersionRoutingMapImpl @Inject()(appConfig: AppConfig,
 
   val featureSwitches: FeatureSwitches = FeatureSwitches(appConfig.featureSwitches)
 
-
   private val effectiveV2Router: Router = {
     if (featureSwitches.isV2R7cRoutingEnabled) {
       logger.info("[VersionRoutingMap][map] including R7C endpoints in V2 routes")

@@ -17,11 +17,15 @@
 package v2.connectors
 
 import org.scalamock.handlers.CallHandler
-import v2.models.domain.{Nino, TaxYear}
-import v2.models.errors.{DownstreamErrorCode, DownstreamErrors}
+import v2.models.domain.{ Nino, TaxYear }
+import v2.models.errors.{ DownstreamErrorCode, DownstreamErrors }
 import v2.models.outcomes.ResponseWrapper
 import v2.models.request.retrieveHistoricFhlUkPropertyAnnualSubmission.RetrieveHistoricFhlUkPropertyAnnualSubmissionRequest
-import v2.models.response.retrieveHistoricFhlUkPropertyAnnualSubmission.{AnnualAdjustments, AnnualAllowances, RetrieveHistoricFhlUkPropertyAnnualSubmissionResponse}
+import v2.models.response.retrieveHistoricFhlUkPropertyAnnualSubmission.{
+  AnnualAdjustments,
+  AnnualAllowances,
+  RetrieveHistoricFhlUkPropertyAnnualSubmissionResponse
+}
 
 import scala.concurrent.Future
 

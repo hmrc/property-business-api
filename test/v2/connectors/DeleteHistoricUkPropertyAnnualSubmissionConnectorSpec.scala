@@ -17,7 +17,7 @@
 package v2.connectors
 
 import play.api.libs.json.JsObject
-import v2.models.domain.{HistoricPropertyType, Nino, TaxYear}
+import v2.models.domain.{ HistoricPropertyType, Nino, TaxYear }
 import v2.models.outcomes.ResponseWrapper
 import v2.models.request.deleteHistoricUkPropertyAnnualSubmission.DeleteHistoricUkPropertyAnnualSubmissionRequest
 
@@ -50,10 +50,9 @@ class DeleteHistoricUkPropertyAnnualSubmissionConnectorSpec extends ConnectorSpe
       val outcome = Right(ResponseWrapper(correlationId, ()))
 
       willPut(
-          url = s"$baseUrl/income-tax/nino/$nino/uk-properties/furnished-holiday-lettings/annual-summaries/2022",
-          body = JsObject.empty
-        )
-        .returns(Future.successful(outcome))
+        url = s"$baseUrl/income-tax/nino/$nino/uk-properties/furnished-holiday-lettings/annual-summaries/2022",
+        body = JsObject.empty
+      ).returns(Future.successful(outcome))
 
       await(connector.deleteHistoricUkPropertyAnnualSubmission(request(HistoricPropertyType.Fhl))) shouldBe outcome
     }
@@ -62,10 +61,9 @@ class DeleteHistoricUkPropertyAnnualSubmissionConnectorSpec extends ConnectorSpe
       val outcome = Right(ResponseWrapper(correlationId, ()))
 
       willPut(
-          url = s"$baseUrl/income-tax/nino/$nino/uk-properties/other/annual-summaries/2022",
-          body = JsObject.empty
-        )
-        .returns(Future.successful(outcome))
+        url = s"$baseUrl/income-tax/nino/$nino/uk-properties/other/annual-summaries/2022",
+        body = JsObject.empty
+      ).returns(Future.successful(outcome))
 
       await(connector.deleteHistoricUkPropertyAnnualSubmission(request(HistoricPropertyType.NonFhl))) shouldBe outcome
     }

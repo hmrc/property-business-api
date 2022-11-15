@@ -18,18 +18,18 @@ package v2.controllers
 
 import cats.data.EitherT
 import cats.implicits._
-import javax.inject.{Inject, Singleton}
+import javax.inject.{ Inject, Singleton }
 import play.api.libs.json.Json
-import play.api.mvc.{Action, AnyContent, ControllerComponents}
-import utils.{IdGenerator, Logging}
+import play.api.mvc.{ Action, AnyContent, ControllerComponents }
+import utils.{ IdGenerator, Logging }
 import v2.controllers.requestParsers.RetrieveUkPropertyPeriodSummaryRequestParser
 import v2.hateoas.HateoasFactory
 import v2.models.errors._
 import v2.models.request.retrieveUkPropertyPeriodSummary.RetrieveUkPropertyPeriodSummaryRawData
 import v2.models.response.retrieveUkPropertyPeriodSummary.RetrieveUkPropertyPeriodSummaryHateoasData
-import v2.services.{EnrolmentsAuthService, MtdIdLookupService, RetrieveUkPropertyPeriodSummaryService}
+import v2.services.{ EnrolmentsAuthService, MtdIdLookupService, RetrieveUkPropertyPeriodSummaryService }
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.{ ExecutionContext, Future }
 
 @Singleton
 class RetrieveUkPropertyPeriodSummaryController @Inject()(val authService: EnrolmentsAuthService,
@@ -39,7 +39,9 @@ class RetrieveUkPropertyPeriodSummaryController @Inject()(val authService: Enrol
                                                           hateoasFactory: HateoasFactory,
                                                           cc: ControllerComponents,
                                                           idGenerator: IdGenerator)(implicit ec: ExecutionContext)
-  extends AuthorisedController(cc) with BaseController with Logging {
+    extends AuthorisedController(cc)
+    with BaseController
+    with Logging {
 
   implicit val endpointLogContext: EndpointLogContext =
     EndpointLogContext(controllerName = "RetrieveUkPropertyController", endpointName = "retrieveUkProperty")
@@ -47,16 +49,18 @@ class RetrieveUkPropertyPeriodSummaryController @Inject()(val authService: Enrol
   def handleRequest(nino: String, businessId: String, taxYear: String, submissionId: String): Action[AnyContent] =
     authorisedAction(nino).async { implicit request =>
       implicit val correlationId: String = idGenerator.getCorrelationId
-      logger.info(message = s"[${endpointLogContext.controllerName}][${endpointLogContext.endpointName}] " +
-        s"with correlationId : $correlationId")
+      logger.info(
+        message = s"[${endpointLogContext.controllerName}][${endpointLogContext.endpointName}] " +
+          s"with correlationId : $correlationId")
       val rawData = RetrieveUkPropertyPeriodSummaryRawData(nino, businessId, taxYear, submissionId)
       val result =
         for {
-          parsedRequest <- EitherT.fromEither[Future](parser.parseRequest(rawData))
+          parsedRequest   <- EitherT.fromEither[Future](parser.parseRequest(rawData))
           serviceResponse <- EitherT(service.retrieveUkProperty(parsedRequest))
           vendorResponse <- EitherT.fromEither[Future](
-            hateoasFactory.wrap(serviceResponse.responseData,
-              RetrieveUkPropertyPeriodSummaryHateoasData(nino, businessId, taxYear, submissionId)).asRight[ErrorWrapper])
+            hateoasFactory
+              .wrap(serviceResponse.responseData, RetrieveUkPropertyPeriodSummaryHateoasData(nino, businessId, taxYear, submissionId))
+              .asRight[ErrorWrapper])
         } yield {
           logger.info(
             s"[${endpointLogContext.controllerName}][${endpointLogContext.endpointName}] - " +
@@ -68,7 +72,7 @@ class RetrieveUkPropertyPeriodSummaryController @Inject()(val authService: Enrol
         }
       result.leftMap { errorWrapper =>
         val resCorrelationId = errorWrapper.correlationId
-        val result = errorResult(errorWrapper).withApiHeaders(resCorrelationId)
+        val result           = errorResult(errorWrapper).withApiHeaders(resCorrelationId)
 
         logger.warn(
           s"[${endpointLogContext.controllerName}][${endpointLogContext.endpointName}] - " +
@@ -79,17 +83,20 @@ class RetrieveUkPropertyPeriodSummaryController @Inject()(val authService: Enrol
 
   private def errorResult(errorWrapper: ErrorWrapper) =
     errorWrapper.error match {
-      case BadRequestError |
-           NinoFormatError |
-           BusinessIdFormatError |
-           SubmissionIdFormatError |
-           TaxYearFormatError |
-           RuleTaxYearRangeInvalidError |
-           RuleTaxYearNotSupportedError |
-           RuleTypeOfBusinessIncorrectError =>
+      case _
+          if errorWrapper.containsAnyOf(
+            BadRequestError,
+            NinoFormatError,
+            BusinessIdFormatError,
+            SubmissionIdFormatError,
+            TaxYearFormatError,
+            RuleTaxYearRangeInvalidError,
+            RuleTaxYearNotSupportedError,
+            RuleTypeOfBusinessIncorrectError
+          ) =>
         BadRequest(Json.toJson(errorWrapper))
       case NotFoundError => NotFound(Json.toJson(errorWrapper))
       case InternalError => InternalServerError(Json.toJson(errorWrapper))
-      case _ => unhandledError(errorWrapper)
+      case _             => unhandledError(errorWrapper)
     }
 }

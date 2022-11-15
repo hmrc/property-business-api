@@ -24,7 +24,7 @@ import v1.models.outcomes.ResponseWrapper
 
 class IfsResponseMappingSupportSpec extends UnitSpec {
 
-  implicit val logContext: EndpointLogContext = EndpointLogContext("ctrl", "ep")
+  implicit val logContext: EndpointLogContext         = EndpointLogContext("ctrl", "ep")
   val mapping: IfsResponseMappingSupport with Logging = new IfsResponseMappingSupport with Logging {}
 
   val correlationId = "someCorrelationId"
@@ -37,10 +37,10 @@ class IfsResponseMappingSupportSpec extends UnitSpec {
 
   object ErrorBvr extends MtdError("msg", "bvr")
 
-  val errorCodeMap : PartialFunction[String, MtdError] = {
+  val errorCodeMap: PartialFunction[String, MtdError] = {
     case "ERR1" => Error1
     case "ERR2" => Error2
-    case "DS" => DownstreamError
+    case "DS"   => DownstreamError
   }
 
   "mapping Ifs errors" when {
@@ -54,7 +54,7 @@ class IfsResponseMappingSupportSpec extends UnitSpec {
 
       "the error code is not in the map provided" must {
         "default to DownstreamError and wrap" in {
-          mapping.mapIfsErrors (errorCodeMap)(ResponseWrapper(correlationId, IfsErrors.single(IfsErrorCode("UNKNOWN")))) shouldBe
+          mapping.mapIfsErrors(errorCodeMap)(ResponseWrapper(correlationId, IfsErrors.single(IfsErrorCode("UNKNOWN")))) shouldBe
             ErrorWrapper(correlationId, DownstreamError)
         }
       }

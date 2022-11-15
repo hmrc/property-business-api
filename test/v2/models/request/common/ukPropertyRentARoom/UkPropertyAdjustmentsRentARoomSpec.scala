@@ -16,7 +16,7 @@
 
 package v2.models.request.common.ukPropertyRentARoom
 
-import play.api.libs.json.{JsValue, Json}
+import play.api.libs.json.{ JsValue, Json }
 import support.UnitSpec
 
 class UkPropertyAdjustmentsRentARoomSpec extends UnitSpec {
@@ -24,8 +24,7 @@ class UkPropertyAdjustmentsRentARoomSpec extends UnitSpec {
   val requestBody: UkPropertyAdjustmentsRentARoom =
     UkPropertyAdjustmentsRentARoom(true)
 
-  val validJson: JsValue = Json.parse(
-    """
+  val validJson: JsValue = Json.parse("""
       |{
       |    "jointlyLet": true
       |}

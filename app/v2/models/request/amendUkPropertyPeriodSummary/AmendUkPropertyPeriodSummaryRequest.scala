@@ -16,7 +16,7 @@
 
 package v2.models.request.amendUkPropertyPeriodSummary
 
-import v2.models.domain.{Nino, TaxYear}
+import v2.models.domain.{ Nino, TaxYear }
 
 case class AmendUkPropertyPeriodSummaryRequest(nino: Nino,
                                                taxYear: TaxYear,

@@ -21,9 +21,8 @@ import support.UnitSpec
 
 class DeleteForeignPropertyAnnualAuditDetailSpec extends UnitSpec {
 
-
-val validJson = Json.parse(
-  """
+  val validJson = Json.parse(
+    """
     |{
     | "userType":"Agent",
     | "agentReferenceNumber":"012345678",
@@ -35,7 +34,7 @@ val validJson = Json.parse(
     |  "httpStatus":204
     | }
     |}""".stripMargin
-)
+  )
 
   val validBody = DeleteForeignPropertyAnnualAuditDetail(
     userType = "Agent",

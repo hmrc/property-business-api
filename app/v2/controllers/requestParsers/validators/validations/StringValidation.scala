@@ -16,20 +16,19 @@
 
 package v2.controllers.requestParsers.validators.validations
 
-import v2.models.errors.{MtdError, StringFormatError}
+import v2.models.errors.{ MtdError, StringFormatError }
 
 object StringValidation {
 
   def validateOptional(field: Option[String], path: String) = {
     field match {
-      case None => NoValidationErrors
+      case None        => NoValidationErrors
       case Some(value) => validate(value, path)
     }
   }
 
-
   def validate(field: String, path: String): List[MtdError] = {
     val regex = "^[0-9a-zA-Z{À-˿’}\\- _&`():.'^]{1,90}$"
-    if(field.matches(regex)) NoValidationErrors else List(StringFormatError.copy(paths = Some(Seq(path))))
+    if (field.matches(regex)) NoValidationErrors else List(StringFormatError.copy(paths = Some(Seq(path))))
   }
 }

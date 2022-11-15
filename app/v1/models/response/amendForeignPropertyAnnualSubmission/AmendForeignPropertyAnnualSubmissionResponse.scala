@@ -17,8 +17,8 @@
 package v1.models.response.amendForeignPropertyAnnualSubmission
 
 import config.AppConfig
-import v1.hateoas.{HateoasLinks, HateoasLinksFactory}
-import v1.models.hateoas.{HateoasData, Link}
+import v1.hateoas.{ HateoasLinks, HateoasLinksFactory }
+import v1.models.hateoas.{ HateoasData, Link }
 
 object AmendForeignPropertyAnnualSubmissionResponse extends HateoasLinks {
 
@@ -33,6 +33,5 @@ object AmendForeignPropertyAnnualSubmissionResponse extends HateoasLinks {
     }
   }
 }
-
 
 case class AmendForeignPropertyAnnualSubmissionHateoasData(nino: String, businessId: String, taxYear: String) extends HateoasData

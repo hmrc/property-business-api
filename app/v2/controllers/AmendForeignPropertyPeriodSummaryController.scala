@@ -18,22 +18,22 @@ package v2.controllers
 
 import cats.data.EitherT
 import cats.implicits._
-import play.api.libs.json.{JsValue, Json}
-import play.api.mvc.{Action, ControllerComponents}
+import play.api.libs.json.{ JsValue, Json }
+import play.api.mvc.{ Action, ControllerComponents }
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.audit.http.connector.AuditResult
-import utils.{IdGenerator, Logging}
+import utils.{ IdGenerator, Logging }
 import v2.controllers.requestParsers.AmendForeignPropertyPeriodSummaryRequestParser
 import v2.hateoas.HateoasFactory
-import v2.models.audit.{AuditEvent, AuditResponse, GenericAuditDetail}
+import v2.models.audit.{ AuditEvent, AuditResponse, GenericAuditDetail }
 import v2.models.errors._
 import v2.models.request.amendForeignPropertyPeriodSummary.AmendForeignPropertyPeriodSummaryRawData
 import v2.models.response.amendForeignPropertyPeriodSummary.AmendForeignPropertyPeriodSummaryHateoasData
 import v2.models.response.amendForeignPropertyPeriodSummary.AmendForeignPropertyPeriodSummaryResponse.AmendForeignPropertyLinksFactory
-import v2.services.{AmendForeignPropertyPeriodSummaryService, AuditService, EnrolmentsAuthService, MtdIdLookupService}
+import v2.services.{ AmendForeignPropertyPeriodSummaryService, AuditService, EnrolmentsAuthService, MtdIdLookupService }
 
-import javax.inject.{Inject, Singleton}
-import scala.concurrent.{ExecutionContext, Future}
+import javax.inject.{ Inject, Singleton }
+import scala.concurrent.{ ExecutionContext, Future }
 
 @Singleton
 class AmendForeignPropertyPeriodSummaryController @Inject()(val authService: EnrolmentsAuthService,
@@ -62,12 +62,10 @@ class AmendForeignPropertyPeriodSummaryController @Inject()(val authService: Enr
         for {
           parsedRequest   <- EitherT.fromEither[Future](parser.parseRequest(rawData))
           serviceResponse <- EitherT(service.amendForeignPropertyPeriodSummary(parsedRequest))
-          vendorResponse <- EitherT.fromEither[Future](
-            hateoasFactory
-              .wrap(serviceResponse.responseData, AmendForeignPropertyPeriodSummaryHateoasData(nino, businessId, taxYear, submissionId))
-              .asRight[ErrorWrapper]
-          )
         } yield {
+          val hateoasData    = AmendForeignPropertyPeriodSummaryHateoasData(nino, businessId, taxYear, submissionId)
+          val vendorResponse = hateoasFactory.wrap(serviceResponse.responseData, hateoasData)
+
           logger.info(
             s"[${endpointLogContext.controllerName}][${endpointLogContext.endpointName}] - " +
               s"Success response received with CorrelationId: ${serviceResponse.correlationId}")
@@ -96,15 +94,28 @@ class AmendForeignPropertyPeriodSummaryController @Inject()(val authService: Enr
 
   private def errorResult(errorWrapper: ErrorWrapper) =
     errorWrapper.error match {
-      case BadRequestError | NinoFormatError | TaxYearFormatError | BusinessIdFormatError | SubmissionIdFormatError | RuleTaxYearRangeInvalidError |
-          RuleTaxYearNotSupportedError | RuleIncorrectOrEmptyBodyError | RuleTypeOfBusinessIncorrectError | MtdErrorWithCode(
-            CountryCodeFormatError.code) | MtdErrorWithCode(RuleCountryCodeError.code) | MtdErrorWithCode(ValueFormatError.code) | MtdErrorWithCode(
-            RuleBothExpensesSuppliedError.code) | MtdErrorWithCode(RuleIncorrectOrEmptyBodyError.code) | MtdErrorWithCode(
-            RuleDuplicateCountryCodeError.code) =>
+      case _
+          if errorWrapper.containsAnyOf(
+            BadRequestError,
+            NinoFormatError,
+            TaxYearFormatError,
+            BusinessIdFormatError,
+            SubmissionIdFormatError,
+            RuleTaxYearRangeInvalidError,
+            RuleTaxYearNotSupportedError,
+            RuleIncorrectOrEmptyBodyError,
+            RuleTypeOfBusinessIncorrectError,
+            CountryCodeFormatError,
+            RuleCountryCodeError,
+            ValueFormatError,
+            RuleBothExpensesSuppliedError,
+            RuleIncorrectOrEmptyBodyError,
+            RuleDuplicateCountryCodeError
+          ) =>
         BadRequest(Json.toJson(errorWrapper))
-      case NotFoundError   => NotFound(Json.toJson(errorWrapper))
+      case NotFoundError => NotFound(Json.toJson(errorWrapper))
       case InternalError => InternalServerError(Json.toJson(errorWrapper))
-      case _ => unhandledError(errorWrapper)
+      case _             => unhandledError(errorWrapper)
     }
 
   private def auditSubmission(details: GenericAuditDetail)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[AuditResult] = {

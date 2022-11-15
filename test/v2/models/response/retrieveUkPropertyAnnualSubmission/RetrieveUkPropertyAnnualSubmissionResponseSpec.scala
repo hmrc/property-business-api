@@ -17,9 +17,9 @@
 package v2.models.response.retrieveUkPropertyAnnualSubmission
 
 import mocks.MockAppConfig
-import play.api.libs.json.{JsValue, Json}
+import play.api.libs.json.{ JsValue, Json }
 import support.UnitSpec
-import v2.models.hateoas.{Link, Method}
+import v2.models.hateoas.{ Link, Method }
 import v2.models.response.retrieveUkPropertyAnnualSubmission.ukFhlProperty._
 import v2.models.response.retrieveUkPropertyAnnualSubmission.ukNonFhlProperty._
 

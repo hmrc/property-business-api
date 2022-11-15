@@ -54,7 +54,8 @@ class DeleteHistoricUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec wit
           RuleHistoricTaxYearNotSupportedError)
       }
       "multiple format errors are made" in {
-        validator.validate(DeleteHistoricUkPropertyAnnualSubmissionRawData("ABC", "21-22", propertyType)) shouldBe List(NinoFormatError, TaxYearFormatError)
+        validator.validate(DeleteHistoricUkPropertyAnnualSubmissionRawData("ABC", "21-22", propertyType)) shouldBe List(NinoFormatError,
+                                                                                                                        TaxYearFormatError)
       }
     }
   }

@@ -18,16 +18,16 @@ package v2.controllers.requestParsers
 
 import support.UnitSpec
 import v2.mocks.validators.MockRetrieveForeignPropertyPeriodSummaryValidator
-import v2.models.domain.{Nino, TaxYear}
-import v2.models.errors.{BadRequestError, BusinessIdFormatError, ErrorWrapper, NinoFormatError}
+import v2.models.domain.{ Nino, TaxYear }
+import v2.models.errors.{ BadRequestError, BusinessIdFormatError, ErrorWrapper, NinoFormatError }
 import v2.models.request.retrieveForeignPropertyPeriodSummary._
 
 class RetrieveForeignPropertyPeriodSummaryRequestParserSpec extends UnitSpec {
 
-  val nino: String = "AA123456B"
-  val businessId: String = "XAIS12345678901"
-  val taxYear: String = "2021-22"
-  val submissionId: String = "12345678-1234-4123-9123-123456789012"
+  val nino: String                   = "AA123456B"
+  val businessId: String             = "XAIS12345678901"
+  val taxYear: String                = "2021-22"
+  val submissionId: String           = "12345678-1234-4123-9123-123456789012"
   implicit val correlationId: String = "X-123"
 
   val inputData: RetrieveForeignPropertyPeriodSummaryRawData =
@@ -42,19 +42,22 @@ class RetrieveForeignPropertyPeriodSummaryRequestParserSpec extends UnitSpec {
       "valid request data is supplied" in new Test {
         MockRetrieveForeignPropertyPeriodSummaryValidator.validate(inputData).returns(Nil)
 
-        parser.parseRequest(inputData) shouldBe Right(RetrieveForeignPropertyPeriodSummaryRequest(Nino(nino), businessId, TaxYear.fromMtd(taxYear), submissionId))
+        parser.parseRequest(inputData) shouldBe Right(
+          RetrieveForeignPropertyPeriodSummaryRequest(Nino(nino), businessId, TaxYear.fromMtd(taxYear), submissionId))
       }
     }
     "return an ErrorWrapper" when {
       "a single validation error occurs" in new Test {
-        MockRetrieveForeignPropertyPeriodSummaryValidator.validate(inputData)
+        MockRetrieveForeignPropertyPeriodSummaryValidator
+          .validate(inputData)
           .returns(List(NinoFormatError))
 
         parser.parseRequest(inputData) shouldBe
           Left(ErrorWrapper(correlationId, NinoFormatError, None))
       }
       "multiple validation errors occur" in new Test {
-        MockRetrieveForeignPropertyPeriodSummaryValidator.validate(inputData)
+        MockRetrieveForeignPropertyPeriodSummaryValidator
+          .validate(inputData)
           .returns(List(NinoFormatError, BusinessIdFormatError))
 
         parser.parseRequest(inputData) shouldBe

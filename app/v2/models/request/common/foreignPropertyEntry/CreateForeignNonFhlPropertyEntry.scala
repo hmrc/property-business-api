@@ -17,19 +17,19 @@
 package v2.models.request.common.foreignPropertyEntry
 
 import play.api.libs.functional.syntax._
-import play.api.libs.json.{JsPath, Json, Reads, Writes}
+import play.api.libs.json.{ JsPath, Json, Reads, Writes }
 import shapeless.HNil
 import utils.EmptinessChecker
 
 case class CreateForeignNonFhlPropertyEntry(
-                                 countryCode: String,
-                                 income: Option[ForeignNonFhlPropertyIncome],
-                                 expenses: Option[CreateForeignNonFhlPropertyExpenses]
-                               )
+    countryCode: String,
+    income: Option[ForeignNonFhlPropertyIncome],
+    expenses: Option[CreateForeignNonFhlPropertyExpenses]
+)
 
 object CreateForeignNonFhlPropertyEntry {
   implicit val emptinessChecker: EmptinessChecker[CreateForeignNonFhlPropertyEntry] = EmptinessChecker.use { body =>
-    "income" -> body.income ::
+    "income"     -> body.income ::
       "expenses" -> body.expenses :: HNil
   }
 
@@ -39,5 +39,5 @@ object CreateForeignNonFhlPropertyEntry {
     (JsPath \ "countryCode").write[String] and
       (JsPath \ "income").writeNullable[ForeignNonFhlPropertyIncome] and
       (JsPath \ "expenses").writeNullable[CreateForeignNonFhlPropertyExpenses]
-    ) (unlift(CreateForeignNonFhlPropertyEntry.unapply))
+  )(unlift(CreateForeignNonFhlPropertyEntry.unapply))
 }

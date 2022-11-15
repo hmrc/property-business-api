@@ -18,22 +18,22 @@ package v2.controllers
 
 import cats.data.EitherT
 import cats.implicits._
-import play.api.libs.json.{JsValue, Json}
-import play.api.mvc.{Action, ControllerComponents}
+import play.api.libs.json.{ JsValue, Json }
+import play.api.mvc.{ Action, ControllerComponents }
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.audit.http.connector.AuditResult
-import utils.{IdGenerator, Logging}
+import utils.{ IdGenerator, Logging }
 import v2.controllers.requestParsers.AmendUkPropertyAnnualSubmissionRequestParser
 import v2.hateoas.HateoasFactory
-import v2.models.audit.{AuditEvent, AuditResponse, GenericAuditDetail}
+import v2.models.audit.{ AuditEvent, AuditResponse, GenericAuditDetail }
 import v2.models.errors._
 import v2.models.request.amendUkPropertyAnnualSubmission.AmendUkPropertyAnnualSubmissionRawData
 import v2.models.response.amendUkPropertyAnnualSubmission.AmendUkPropertyAnnualSubmissionHateoasData
 import v2.models.response.amendUkPropertyAnnualSubmission.AmendUkPropertyAnnualSubmissionResponse.AmendUkPropertyLinksFactory
-import v2.services.{AmendUkPropertyAnnualSubmissionService, AuditService, EnrolmentsAuthService, MtdIdLookupService}
+import v2.services.{ AmendUkPropertyAnnualSubmissionService, AuditService, EnrolmentsAuthService, MtdIdLookupService }
 
-import javax.inject.{Inject, Singleton}
-import scala.concurrent.{ExecutionContext, Future}
+import javax.inject.{ Inject, Singleton }
+import scala.concurrent.{ ExecutionContext, Future }
 
 @Singleton
 class AmendUkPropertyAnnualSubmissionController @Inject()(val authService: EnrolmentsAuthService,
@@ -102,12 +102,11 @@ class AmendUkPropertyAnnualSubmissionController @Inject()(val authService: Enrol
           MtdErrorWithCode(StringFormatError.code) =>
         BadRequest(Json.toJson(errorWrapper))
       case InternalError => InternalServerError(Json.toJson(errorWrapper))
-      case NotFoundError   => NotFound(Json.toJson(errorWrapper))
-      case _ => unhandledError(errorWrapper)
+      case NotFoundError => NotFound(Json.toJson(errorWrapper))
+      case _             => unhandledError(errorWrapper)
     }
 
-  private def auditSubmission(details: GenericAuditDetail)(implicit hc: HeaderCarrier,
-                                                                                ec: ExecutionContext): Future[AuditResult] = {
+  private def auditSubmission(details: GenericAuditDetail)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[AuditResult] = {
     val event = AuditEvent("CreateAmendUKPropertyAnnualSubmission", "create-amend-uk-property-annual-submission", details)
     auditService.auditEvent(event)
   }

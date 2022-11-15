@@ -24,8 +24,7 @@ class ForeignNonFhlPropertyRentIncomeSpec extends UnitSpec with JsonErrorValidat
 
   val rentIncome = ForeignNonFhlPropertyRentIncome(Some(5000.99))
 
-  val json = Json.parse(
-    """{
+  val json = Json.parse("""{
       |  "rentAmount": 5000.99
       |}""".stripMargin)
 

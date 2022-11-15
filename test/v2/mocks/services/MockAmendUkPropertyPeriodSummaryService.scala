@@ -25,7 +25,7 @@ import v2.models.outcomes.ResponseWrapper
 import v2.models.request.amendUkPropertyPeriodSummary.AmendUkPropertyPeriodSummaryRequest
 import v2.services.AmendUkPropertyPeriodSummaryService
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.{ ExecutionContext, Future }
 
 trait MockAmendUkPropertyPeriodSummaryService extends MockFactory {
 
@@ -35,7 +35,10 @@ trait MockAmendUkPropertyPeriodSummaryService extends MockFactory {
 
     def amend(requestData: AmendUkPropertyPeriodSummaryRequest): CallHandler[Future[Either[ErrorWrapper, ResponseWrapper[Unit]]]] = {
       (mockService
-        .amendUkPropertyPeriodSummary(_: AmendUkPropertyPeriodSummaryRequest)(_: HeaderCarrier, _: ExecutionContext, _: EndpointLogContext, _: String))
+        .amendUkPropertyPeriodSummary(_: AmendUkPropertyPeriodSummaryRequest)(_: HeaderCarrier,
+                                                                              _: ExecutionContext,
+                                                                              _: EndpointLogContext,
+                                                                              _: String))
         .expects(requestData, *, *, *, *)
     }
   }

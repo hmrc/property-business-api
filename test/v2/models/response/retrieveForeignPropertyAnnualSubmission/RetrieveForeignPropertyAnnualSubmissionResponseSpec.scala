@@ -19,62 +19,70 @@ package v2.models.response.retrieveForeignPropertyAnnualSubmission
 import mocks.MockAppConfig
 import play.api.libs.json.Json
 import support.UnitSpec
-import v2.models.hateoas.{Link, Method}
-import v2.models.response.retrieveForeignPropertyAnnualSubmission.foreignFhlEea.{ForeignFhlEeaAdjustments, ForeignFhlEeaAllowances, ForeignFhlEeaEntry}
-import v2.models.response.retrieveForeignPropertyAnnualSubmission.foreignProperty.{Building, FirstYear, ForeignPropertyAdjustments, ForeignPropertyAllowances, ForeignPropertyEntry, StructuredBuildingAllowance}
+import v2.models.hateoas.{ Link, Method }
+import v2.models.response.retrieveForeignPropertyAnnualSubmission.foreignFhlEea.{
+  ForeignFhlEeaAdjustments,
+  ForeignFhlEeaAllowances,
+  ForeignFhlEeaEntry
+}
+import v2.models.response.retrieveForeignPropertyAnnualSubmission.foreignProperty.{
+  Building,
+  FirstYear,
+  ForeignPropertyAdjustments,
+  ForeignPropertyAllowances,
+  ForeignPropertyEntry,
+  StructuredBuildingAllowance
+}
 
 class RetrieveForeignPropertyAnnualSubmissionResponseSpec extends UnitSpec with MockAppConfig {
 
   private val retrieveForeignPropertyAnnualSubmissionResponseBody = RetrieveForeignPropertyAnnualSubmissionResponse(
     "2020-07-07T10:59:47.544Z",
-    Some(ForeignFhlEeaEntry(
-      Some(ForeignFhlEeaAdjustments(
-        Some(100.25),
-        Some(100.25),
-        Some(true))),
-      Some(ForeignFhlEeaAllowances(
-        Some(100.25),
-        Some(100.25),
-        Some(100.25),
-        Some(100.25),
-        Some(100.25)))
-    )),
-    Some(Seq(ForeignPropertyEntry(
-      "GER",
-      Some(ForeignPropertyAdjustments(
-        Some(100.25),
-        Some(100.25))),
-      Some(ForeignPropertyAllowances(
-        Some(100.25),
-        Some(100.25),
-        Some(100.25),
-        Some(100.25),
-        Some(100.25),
-        Some(100.25),
-        Some(100.25),
-        Some(Seq(StructuredBuildingAllowance(
-          100.25,
-          Some(FirstYear(
-            "2020-03-29",
-            100.25
-          )),
-          Building(
-            Some("Building Name"),
-            Some("12"),
-            "TF3 4GH"
-          )
-        )))))
-    )))
+    Some(
+      ForeignFhlEeaEntry(
+        Some(ForeignFhlEeaAdjustments(Some(100.25), Some(100.25), Some(true))),
+        Some(ForeignFhlEeaAllowances(Some(100.25), Some(100.25), Some(100.25), Some(100.25), Some(100.25)))
+      )),
+    Some(
+      Seq(ForeignPropertyEntry(
+        "GER",
+        Some(ForeignPropertyAdjustments(Some(100.25), Some(100.25))),
+        Some(ForeignPropertyAllowances(
+          Some(100.25),
+          Some(100.25),
+          Some(100.25),
+          Some(100.25),
+          Some(100.25),
+          Some(100.25),
+          Some(100.25),
+          Some(
+            Seq(
+              StructuredBuildingAllowance(
+                100.25,
+                Some(FirstYear(
+                  "2020-03-29",
+                  100.25
+                )),
+                Building(
+                  Some("Building Name"),
+                  Some("12"),
+                  "TF3 4GH"
+                )
+              )))
+        ))
+      )))
   )
 
   private val retrieveForeignPropertyAnnualSubmissionResponseBodyMinimum = RetrieveForeignPropertyAnnualSubmissionResponse(
     "2020-07-07T10:59:47.544Z",
     None,
-    Some(Seq(ForeignPropertyEntry(
-      "GER",
-      None,
-      None
-    )))
+    Some(
+      Seq(
+        ForeignPropertyEntry(
+          "GER",
+          None,
+          None
+        )))
   )
 
   private val jsonBody = Json.parse(
@@ -131,8 +139,7 @@ class RetrieveForeignPropertyAnnualSubmissionResponseSpec extends UnitSpec with 
      """.stripMargin
   )
 
-  private val ifsJson = Json.parse(
-    """
+  private val ifsJson = Json.parse("""
       |{
       |    "submittedOn": "2020-07-07T10:59:47.544Z",
       |    "deletedOn": "2021-11-04T08:23:42Z",
@@ -239,9 +246,15 @@ class RetrieveForeignPropertyAnnualSubmissionResponseSpec extends UnitSpec with 
         MockAppConfig.apiGatewayContext.returns("my/context").anyNumberOfTimes()
 
         RetrieveForeignPropertyAnnualSubmissionResponse.RetrieveAnnualSubmissionLinksFactory.links(mockAppConfig, data) shouldBe Seq(
-          Link(href = s"/my/context/foreign/${data.nino}/${data.businessId}/annual/${data.taxYear}", method = Method.PUT, rel = "create-and-amend-foreign-property-annual-submission"),
+          Link(
+            href = s"/my/context/foreign/${data.nino}/${data.businessId}/annual/${data.taxYear}",
+            method = Method.PUT,
+            rel = "create-and-amend-foreign-property-annual-submission"
+          ),
           Link(href = s"/my/context/foreign/${data.nino}/${data.businessId}/annual/${data.taxYear}", method = Method.GET, rel = "self"),
-          Link(href = s"/my/context/${data.nino}/${data.businessId}/annual/${data.taxYear}", method = Method.DELETE, rel = "delete-property-annual-submission")
+          Link(href = s"/my/context/${data.nino}/${data.businessId}/annual/${data.taxYear}",
+               method = Method.DELETE,
+               rel = "delete-property-annual-submission")
         )
       }
     }

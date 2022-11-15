@@ -18,8 +18,8 @@ package v2.connectors
 
 import org.scalamock.handlers.CallHandler
 import v2.connectors.RetrieveUkPropertyAnnualSubmissionConnector._
-import v2.models.domain.{Nino, TaxYear}
-import v2.models.errors.{DownstreamErrorCode, DownstreamErrors}
+import v2.models.domain.{ Nino, TaxYear }
+import v2.models.errors.{ DownstreamErrorCode, DownstreamErrors }
 import v2.models.outcomes.ResponseWrapper
 import v2.models.request.retrieveUkPropertyAnnualSubmission.RetrieveUkPropertyAnnualSubmissionRequest
 import v2.models.response.retrieveUkPropertyAnnualSubmission.RetrieveUkPropertyAnnualSubmissionResponse
@@ -32,13 +32,9 @@ class RetrieveUkPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec {
 
   val nino: String       = "AA123456A"
   val businessId: String = "XAIS12345678910"
-  val taxYear: String    = "2019-20"
+  //val taxYear: String    = "2019-20"
 
-  val request: RetrieveUkPropertyAnnualSubmissionRequest = RetrieveUkPropertyAnnualSubmissionRequest(
-    nino = Nino(nino),
-    businessId = businessId,
-    taxYear = TaxYear.fromMtd(taxYear)
-  )
+
 
   val ukFhlProperty: UkFhlProperty       = UkFhlProperty(None, None)
   val ukNonFhlProperty: UkNonFhlProperty = UkNonFhlProperty(None, None)
@@ -54,13 +50,23 @@ class RetrieveUkPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec {
       appConfig = mockAppConfig
     )
 
-    def stubHttpResponse(outcome: DownstreamOutcome[RetrieveUkPropertyAnnualSubmissionResponse])
+    val taxYear: String
+
+    val request: RetrieveUkPropertyAnnualSubmissionRequest = RetrieveUkPropertyAnnualSubmissionRequest(
+      nino = Nino(nino),
+      businessId = businessId,
+      taxYear = TaxYear.fromMtd(taxYear)
+    )
+
+    trait StandardTest extends TysIfsTest with Test {
+
+      def stubHttpResponse(outcome: DownstreamOutcome[RetrieveUkPropertyAnnualSubmissionResponse])
       : CallHandler[Future[DownstreamOutcome[RetrieveUkPropertyAnnualSubmissionResponse]]]#Derived = {
-      willGet(
+        willGet(
           url = s"$baseUrl/income-tax/business/property/annual",
           parameters = Seq("taxableEntityId" -> nino, "incomeSourceId" -> businessId, "taxYear" -> "2019-20")
-        )
-        .returns(Future.successful(outcome))
+        ).returns(Future.successful(outcome))
+      }
     }
   }
 

@@ -17,8 +17,8 @@
 package v2.controllers.requestParsers.validators
 
 import config.AppConfig
-import javax.inject.{Inject, Singleton}
-import v2.controllers.requestParsers.validators.validations.{BusinessIdValidation, NinoValidation, SubmissionIdValidation, TaxYearValidation}
+import javax.inject.{ Inject, Singleton }
+import v2.controllers.requestParsers.validators.validations.{ BusinessIdValidation, NinoValidation, SubmissionIdValidation, TaxYearValidation }
 import v2.models.errors.MtdError
 import v2.models.request.retrieveUkPropertyPeriodSummary.RetrieveUkPropertyPeriodSummaryRawData
 

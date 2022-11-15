@@ -18,7 +18,7 @@ package v2.controllers.requestParsers
 
 import javax.inject.Inject
 import v2.controllers.requestParsers.validators.AmendForeignPropertyPeriodSummaryValidator
-import v2.models.domain.{Nino, TaxYear}
+import v2.models.domain.{ Nino, TaxYear }
 import v2.models.request.amendForeignPropertyPeriodSummary._
 
 class AmendForeignPropertyPeriodSummaryRequestParser @Inject()(val validator: AmendForeignPropertyPeriodSummaryValidator)

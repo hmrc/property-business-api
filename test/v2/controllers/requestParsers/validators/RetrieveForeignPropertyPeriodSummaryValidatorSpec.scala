@@ -23,9 +23,9 @@ import v2.models.request.retrieveForeignPropertyPeriodSummary.RetrieveForeignPro
 
 class RetrieveForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with MockAppConfig {
 
-  private val validNino = "AA123456A"
-  private val validBusinessId = "XAIS12345678901"
-  private val validTaxYear = "2022-23"
+  private val validNino         = "AA123456A"
+  private val validBusinessId   = "XAIS12345678901"
+  private val validTaxYear      = "2022-23"
   private val validSubmissionId = "12345678-1234-4123-9123-123456789012"
 
   MockAppConfig.minimumTaxV2Foreign returns 2022
@@ -39,25 +39,34 @@ class RetrieveForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with Mo
     }
     "return a path parameter format error" when {
       "an invalid nino is supplied" in {
-        validator.validate(RetrieveForeignPropertyPeriodSummaryRawData("Walrus", validBusinessId, validTaxYear, validSubmissionId)) shouldBe List(NinoFormatError)
+        validator.validate(RetrieveForeignPropertyPeriodSummaryRawData("Walrus", validBusinessId, validTaxYear, validSubmissionId)) shouldBe List(
+          NinoFormatError)
       }
       "an invalid businessId is supplied" in {
-        validator.validate(RetrieveForeignPropertyPeriodSummaryRawData(validNino, "Beans", validTaxYear, validSubmissionId)) shouldBe List(BusinessIdFormatError)
+        validator.validate(RetrieveForeignPropertyPeriodSummaryRawData(validNino, "Beans", validTaxYear, validSubmissionId)) shouldBe List(
+          BusinessIdFormatError)
       }
       "a taxYear with an invalid format is supplied" in {
-        validator.validate(RetrieveForeignPropertyPeriodSummaryRawData(validNino, validBusinessId, "2022/2023", validSubmissionId)) shouldBe List(TaxYearFormatError)
+        validator.validate(RetrieveForeignPropertyPeriodSummaryRawData(validNino, validBusinessId, "2022/2023", validSubmissionId)) shouldBe List(
+          TaxYearFormatError)
       }
       "a taxYear with an invalid range is supplied" in {
-        validator.validate(RetrieveForeignPropertyPeriodSummaryRawData(validNino, validBusinessId, "2022-24", validSubmissionId)) shouldBe List(RuleTaxYearRangeInvalidError)
+        validator.validate(RetrieveForeignPropertyPeriodSummaryRawData(validNino, validBusinessId, "2022-24", validSubmissionId)) shouldBe List(
+          RuleTaxYearRangeInvalidError)
       }
       "an unsupported taxYear is supplied" in {
-        validator.validate(RetrieveForeignPropertyPeriodSummaryRawData(validNino, validBusinessId, "2020-21", validSubmissionId)) shouldBe List(RuleTaxYearNotSupportedError)
+        validator.validate(RetrieveForeignPropertyPeriodSummaryRawData(validNino, validBusinessId, "2020-21", validSubmissionId)) shouldBe List(
+          RuleTaxYearNotSupportedError)
       }
       "an invalid submissionId is supplied" in {
-        validator.validate(RetrieveForeignPropertyPeriodSummaryRawData(validNino, validBusinessId, validTaxYear, "ABCDEFGHIJKLMNOPQRSTUVWXYZ")) shouldBe List(SubmissionIdFormatError)
+        validator.validate(RetrieveForeignPropertyPeriodSummaryRawData(validNino, validBusinessId, validTaxYear, "ABCDEFGHIJKLMNOPQRSTUVWXYZ")) shouldBe List(
+          SubmissionIdFormatError)
       }
       "multiple format errors are made" in {
-        validator.validate(RetrieveForeignPropertyPeriodSummaryRawData("Walrus", "Beans", validTaxYear, "ABCDEFGHIJKLMNOPQRSTUVWXYZ")) shouldBe List(NinoFormatError, BusinessIdFormatError,SubmissionIdFormatError)
+        validator.validate(RetrieveForeignPropertyPeriodSummaryRawData("Walrus", "Beans", validTaxYear, "ABCDEFGHIJKLMNOPQRSTUVWXYZ")) shouldBe List(
+          NinoFormatError,
+          BusinessIdFormatError,
+          SubmissionIdFormatError)
       }
     }
   }

@@ -16,82 +16,90 @@
 
 package v2.models.request.amendUkPropertyAnnualSubmission
 
-import play.api.libs.json.{JsValue, Json}
+import play.api.libs.json.{ JsValue, Json }
 import support.UnitSpec
 import v2.models.request.amendUkPropertyAnnualSubmission.ukFhlProperty._
 import v2.models.request.amendUkPropertyAnnualSubmission.ukNonFhlProperty._
-import v2.models.request.common.{Building, FirstYear, StructuredBuildingAllowance}
+import v2.models.request.common.{ Building, FirstYear, StructuredBuildingAllowance }
 import v2.models.request.common.ukPropertyRentARoom.UkPropertyAdjustmentsRentARoom
 
 class AmendUkPropertyAnnualSubmissionRequestBodySpec extends UnitSpec {
 
   val requestBody: AmendUkPropertyAnnualSubmissionRequestBody =
     AmendUkPropertyAnnualSubmissionRequestBody(
-      Some(UkFhlProperty(
-        Some(UkFhlPropertyAdjustments(
-          Some(1000.20),
-          Some(1000.30),
-          true,
-          Some(1000.40),
-          true,
-          Some(UkPropertyAdjustmentsRentARoom(true))
-        )),
-        Some(UkFhlPropertyAllowances(
-          Some(1000.50),
-          Some(1000.60),
-          Some(1000.70),
-          Some(1000.80),
-          Some(1000.90),
-          None
-        ))
-      )),
-      Some(UkNonFhlProperty(
-        Some(UkNonFhlPropertyAdjustments(
-          Some(2000.20),
-          Some(2000.30),
-          Some(2000.40),
-          true,
-          Some(UkPropertyAdjustmentsRentARoom(true))
-        )),
-        Some(UkNonFhlPropertyAllowances(
-          Some(2000.50),
-          Some(2000.60),
-          Some(2000.70),
-          Some(2000.80),
-          Some(2000.90),
-          Some(3000.10),
-          Some(3000.20),
-          None,
-          Some(Seq(StructuredBuildingAllowance(
-            3000.30,
-            Some(FirstYear(
-              "2020-01-01",
-              3000.40
+      Some(
+        UkFhlProperty(
+          Some(
+            UkFhlPropertyAdjustments(
+              Some(1000.20),
+              Some(1000.30),
+              true,
+              Some(1000.40),
+              true,
+              Some(UkPropertyAdjustmentsRentARoom(true))
             )),
-            Building(
-              Some("house name"),
-              None,
-              "GF49JH"
-            )
-          ))),
-          Some(Seq(StructuredBuildingAllowance(
-            3000.50,
-            Some(FirstYear(
-              "2020-01-01",
-              3000.60
+          Some(
+            UkFhlPropertyAllowances(
+              Some(1000.50),
+              Some(1000.60),
+              Some(1000.70),
+              Some(1000.80),
+              Some(1000.90),
+              None
+            ))
+        )),
+      Some(
+        UkNonFhlProperty(
+          Some(
+            UkNonFhlPropertyAdjustments(
+              Some(2000.20),
+              Some(2000.30),
+              Some(2000.40),
+              true,
+              Some(UkPropertyAdjustmentsRentARoom(true))
             )),
-            Building(
-              None,
-              Some("house number"),
-              "GF49JH"
-            )
-          )))
+          Some(UkNonFhlPropertyAllowances(
+            Some(2000.50),
+            Some(2000.60),
+            Some(2000.70),
+            Some(2000.80),
+            Some(2000.90),
+            Some(3000.10),
+            Some(3000.20),
+            None,
+            Some(
+              Seq(
+                StructuredBuildingAllowance(
+                  3000.30,
+                  Some(FirstYear(
+                    "2020-01-01",
+                    3000.40
+                  )),
+                  Building(
+                    Some("house name"),
+                    None,
+                    "GF49JH"
+                  )
+                ))),
+            Some(
+              Seq(
+                StructuredBuildingAllowance(
+                  3000.50,
+                  Some(FirstYear(
+                    "2020-01-01",
+                    3000.60
+                  )),
+                  Building(
+                    None,
+                    Some("house number"),
+                    "GF49JH"
+                  )
+                )))
+          ))
         ))
-      ))
     )
 
-  val validMtdJson: JsValue = Json.parse(
-    """
+  val validMtdJson: JsValue = Json.parse("""
       |{
       |  "ukFhlProperty": {
       |    "allowances": {
@@ -161,8 +169,7 @@ class AmendUkPropertyAnnualSubmissionRequestBodySpec extends UnitSpec {
       |}
       |""".stripMargin)
 
-  val validDownstreamJson: JsValue = Json.parse(
-    """
+  val validDownstreamJson: JsValue = Json.parse("""
       |{
       |  "ukFhlProperty": {
       |    "allowances": {

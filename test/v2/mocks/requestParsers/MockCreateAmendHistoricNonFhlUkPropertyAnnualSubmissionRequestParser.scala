@@ -20,8 +20,10 @@ import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
 import v2.controllers.requestParsers.CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestParser
 import v2.models.errors.ErrorWrapper
-import v2.models.request.createAmendHistoricNonFhlUkPropertyAnnualSubmission.{CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRawData,
-  CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequest}
+import v2.models.request.createAmendHistoricNonFhlUkPropertyAnnualSubmission.{
+  CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRawData,
+  CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequest
+}
 
 trait MockCreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestParser extends MockFactory {
 

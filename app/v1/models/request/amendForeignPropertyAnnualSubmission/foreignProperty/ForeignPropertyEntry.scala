@@ -16,11 +16,9 @@
 
 package v1.models.request.amendForeignPropertyAnnualSubmission.foreignProperty
 
-import play.api.libs.json.{Json, OFormat}
+import play.api.libs.json.{ Json, OFormat }
 
-case class ForeignPropertyEntry(countryCode: String,
-                                adjustments: Option[ForeignPropertyAdjustments],
-                                allowances: Option[ForeignPropertyAllowances])
+case class ForeignPropertyEntry(countryCode: String, adjustments: Option[ForeignPropertyAdjustments], allowances: Option[ForeignPropertyAllowances])
 
 object ForeignPropertyEntry {
   implicit val format: OFormat[ForeignPropertyEntry] = Json.format[ForeignPropertyEntry]

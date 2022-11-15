@@ -85,16 +85,16 @@ class AppConfigImpl @Inject()(config: ServicesConfig, configuration: Configurati
   val ifsEnvironmentHeaders: Option[Seq[String]] = configuration.getOptional[Seq[String]]("microservice.services.ifs.environmentHeaders")
 
   // Tax Year Specific (TYS) IFS Config
-  val tysIfsBaseUrl: String = config.baseUrl("tys-ifs")
-  val tysIfsEnv: String = config.getString("microservice.services.tys-ifs.env")
-  val tysIfsToken: String = config.getString("microservice.services.tys-ifs.token")
+  val tysIfsBaseUrl: String                         = config.baseUrl("tys-ifs")
+  val tysIfsEnv: String                             = config.getString("microservice.services.tys-ifs.env")
+  val tysIfsToken: String                           = config.getString("microservice.services.tys-ifs.token")
   val tysIfsEnvironmentHeaders: Option[Seq[String]] = configuration.getOptional[Seq[String]]("microservice.services.tys-ifs.environmentHeaders")
 
   // API Config
   val apiGatewayContext: String                    = config.getString("api.gateway.context")
   val confidenceLevelConfig: ConfidenceLevelConfig = configuration.get[ConfidenceLevelConfig](s"api.confidence-level-check")
   def apiStatus(version: String): String           = config.getString(s"api.$version.status")
-  def featureSwitches: Configuration = configuration.getOptional[Configuration](s"feature-switch").getOrElse(Configuration.empty)
+  def featureSwitches: Configuration               = configuration.getOptional[Configuration](s"feature-switch").getOrElse(Configuration.empty)
   def endpointsEnabled(version: String): Boolean   = config.getBoolean(s"api.$version.endpoints.enabled")
 
   val minimumTaxV2Foreign: Int = config.getInt("minimum-tax-year.version-2.foreign")

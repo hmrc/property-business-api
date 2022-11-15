@@ -18,40 +18,44 @@ package v1.controllers
 
 import cats.data.EitherT
 import cats.implicits._
-import javax.inject.{Inject, Singleton}
+import javax.inject.{ Inject, Singleton }
 import play.api.libs.json.Json
-import play.api.mvc.{Action, AnyContent, ControllerComponents}
-import utils.{IdGenerator, Logging}
+import play.api.mvc.{ Action, AnyContent, ControllerComponents }
+import utils.{ IdGenerator, Logging }
 import v1.controllers.requestParsers.ListForeignPropertiesPeriodSummariesRequestParser
 import v1.hateoas.HateoasFactory
 import v1.models.errors._
 import v1.models.request.listForeignPropertiesPeriodSummaries.ListForeignPropertiesPeriodSummariesRawData
 import v1.models.response.listForeignPropertiesPeriodSummaries.ListForeignPropertiesPeriodSummariesHateoasData
-import v1.services.{EnrolmentsAuthService, ListForeignPropertiesPeriodSummariesService, MtdIdLookupService}
+import v1.services.{ EnrolmentsAuthService, ListForeignPropertiesPeriodSummariesService, MtdIdLookupService }
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.{ ExecutionContext, Future }
 
 @Singleton
-class ListForeignPropertiesPeriodSummariesController  @Inject()(val authService: EnrolmentsAuthService,
-                                                                val lookupService: MtdIdLookupService,
-                                                                parser: ListForeignPropertiesPeriodSummariesRequestParser,
-                                                                service: ListForeignPropertiesPeriodSummariesService,
-                                                                hateoasFactory: HateoasFactory,
-                                                                cc: ControllerComponents,
-                                                                idGenerator: IdGenerator)(implicit ec: ExecutionContext)
-  extends AuthorisedController(cc) with BaseController with Logging {
+class ListForeignPropertiesPeriodSummariesController @Inject()(val authService: EnrolmentsAuthService,
+                                                               val lookupService: MtdIdLookupService,
+                                                               parser: ListForeignPropertiesPeriodSummariesRequestParser,
+                                                               service: ListForeignPropertiesPeriodSummariesService,
+                                                               hateoasFactory: HateoasFactory,
+                                                               cc: ControllerComponents,
+                                                               idGenerator: IdGenerator)(implicit ec: ExecutionContext)
+    extends AuthorisedController(cc)
+    with BaseController
+    with Logging {
 
   implicit val endpointLogContext: EndpointLogContext =
     EndpointLogContext(controllerName = "ListForeignPropertiesController", endpointName = "listForeignProperties")
+
   def handleRequest(nino: String, businessId: String, fromDate: Option[String], toDate: Option[String]): Action[AnyContent] =
     authorisedAction(nino).async { implicit request =>
       implicit val correlationId: String = idGenerator.getCorrelationId
-      logger.info(message = s"[${endpointLogContext.controllerName}][${endpointLogContext.endpointName}] " +
-        s"with correlationId : $correlationId")
+      logger.info(
+        message = s"[${endpointLogContext.controllerName}][${endpointLogContext.endpointName}] " +
+          s"with correlationId : $correlationId")
       val rawData = ListForeignPropertiesPeriodSummariesRawData(nino, businessId, fromDate, toDate)
       val result =
         for {
-          parsedRequest <- EitherT.fromEither[Future](parser.parseRequest(rawData))
+          parsedRequest   <- EitherT.fromEither[Future](parser.parseRequest(rawData))
           serviceResponse <- EitherT(service.listForeignProperties(parsedRequest))
           vendorResponse <- EitherT.fromEither[Future](
             hateoasFactory
@@ -69,7 +73,7 @@ class ListForeignPropertiesPeriodSummariesController  @Inject()(val authService:
 
       result.leftMap { errorWrapper =>
         val resCorrelationId = errorWrapper.correlationId
-        val result = errorResult(errorWrapper).withApiHeaders(resCorrelationId)
+        val result           = errorResult(errorWrapper).withApiHeaders(resCorrelationId)
 
         logger.warn(
           s"[${endpointLogContext.controllerName}][${endpointLogContext.endpointName}] - " +
@@ -80,16 +84,11 @@ class ListForeignPropertiesPeriodSummariesController  @Inject()(val authService:
 
   private def errorResult(errorWrapper: ErrorWrapper) =
     errorWrapper.error match {
-      case BadRequestError |
-           NinoFormatError |
-           BusinessIdFormatError |
-           ToDateFormatError |
-           FromDateFormatError |
-           RuleToDateBeforeFromDateError |
-           MissingToDateError |
-           MissingFromDateError => BadRequest(Json.toJson(errorWrapper))
+      case BadRequestError | NinoFormatError | BusinessIdFormatError | ToDateFormatError | FromDateFormatError | RuleToDateBeforeFromDateError |
+          MissingToDateError | MissingFromDateError =>
+        BadRequest(Json.toJson(errorWrapper))
       case DownstreamError => InternalServerError(Json.toJson(errorWrapper))
-      case NotFoundError => NotFound(Json.toJson(errorWrapper))
-      case _ => unhandledError(errorWrapper)
+      case NotFoundError   => NotFound(Json.toJson(errorWrapper))
+      case _               => unhandledError(errorWrapper)
     }
 }

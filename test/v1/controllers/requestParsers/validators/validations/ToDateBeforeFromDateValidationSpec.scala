@@ -19,7 +19,7 @@ package v1.controllers.requestParsers.validators.validations
 import support.UnitSpec
 import v1.models.errors.RuleToDateBeforeFromDateError
 
-class ToDateBeforeFromDateValidationSpec extends UnitSpec{
+class ToDateBeforeFromDateValidationSpec extends UnitSpec {
 
   val date1 = "2019-03-12"
   val date2 = "2020-01-01"

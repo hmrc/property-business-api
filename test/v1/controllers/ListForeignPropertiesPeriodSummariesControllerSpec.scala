@@ -22,11 +22,11 @@ import uk.gov.hmrc.http.HeaderCarrier
 import v1.mocks.MockIdGenerator
 import v1.mocks.hateoas.MockHateoasFactory
 import v1.mocks.requestParsers.MockListForeignPropertiesPeriodSummariesRequestParser
-import v1.mocks.services.{MockAuditService, MockEnrolmentsAuthService, MockListForeignPropertiesPeriodSummariesService, MockMtdIdLookupService}
+import v1.mocks.services.{ MockAuditService, MockEnrolmentsAuthService, MockListForeignPropertiesPeriodSummariesService, MockMtdIdLookupService }
 import v1.models.domain.Nino
 import v1.models.errors._
 import v1.models.hateoas.Method.GET
-import v1.models.hateoas.{HateoasWrapper, Link}
+import v1.models.hateoas.{ HateoasWrapper, Link }
 import v1.models.outcomes.ResponseWrapper
 import v1.models.request.listForeignPropertiesPeriodSummaries._
 import v1.models.response.listForeignPropertiesPeriodSummaries._
@@ -36,7 +36,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class ListForeignPropertiesPeriodSummariesControllerSpec
-  extends ControllerBaseSpec
+    extends ControllerBaseSpec
     with MockEnrolmentsAuthService
     with MockMtdIdLookupService
     with MockListForeignPropertiesPeriodSummariesService
@@ -45,10 +45,10 @@ class ListForeignPropertiesPeriodSummariesControllerSpec
     with MockAuditService
     with MockIdGenerator {
 
-  private val nino = "AA123456A"
-  private val businessId = "XAIS12345678910"
-  private val fromDate = "2020-06-01"
-  private val toDate = "2020-08-31"
+  private val nino          = "AA123456A"
+  private val businessId    = "XAIS12345678910"
+  private val fromDate      = "2020-06-01"
+  private val toDate        = "2020-08-31"
   private val correlationId = "X-123"
 
   trait Test {
@@ -89,24 +89,23 @@ class ListForeignPropertiesPeriodSummariesControllerSpec
   private val hateoasResponse = ListForeignPropertiesPeriodSummariesResponse(
     Seq(
       HateoasWrapper(responseModel1,
-        Seq(
-          responseModel1TestHateoasLink
-        )
-      ),
+                     Seq(
+                       responseModel1TestHateoasLink
+                     )),
       HateoasWrapper(responseModel2,
-        Seq(
-          responseModel2TestHateoasLink
-        )
-      )
+                     Seq(
+                       responseModel2TestHateoasLink
+                     ))
     )
   )
 
-  private val serviceResponse = ListForeignPropertiesPeriodSummariesResponse(Seq(
-    SubmissionPeriod("4557ecb5-fd32-48cc-81f5-e6acd1099f3c", "2020-06-22", "2020-06-22"),
-    SubmissionPeriod("4557ecb5-fd32-48cc-81f5-e6acd1099f3d", "2020-08-22", "2020-08-22")
-  ))
+  private val serviceResponse = ListForeignPropertiesPeriodSummariesResponse(
+    Seq(
+      SubmissionPeriod("4557ecb5-fd32-48cc-81f5-e6acd1099f3c", "2020-06-22", "2020-06-22"),
+      SubmissionPeriod("4557ecb5-fd32-48cc-81f5-e6acd1099f3d", "2020-08-22", "2020-08-22")
+    ))
 
-  private val rawData = ListForeignPropertiesPeriodSummariesRawData(nino, businessId, Some(fromDate), Some(toDate))
+  private val rawData     = ListForeignPropertiesPeriodSummariesRawData(nino, businessId, Some(fromDate), Some(toDate))
   private val requestData = ListForeignPropertiesPeriodSummariesRequest(Nino(nino), businessId, fromDate, toDate)
 
   "handleRequest" should {

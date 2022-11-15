@@ -16,7 +16,7 @@
 
 package v1.models.response.retrieveForeignPropertyPeriodSummary.foreignProperty
 
-import play.api.libs.json.{JsPath, Json, Reads, Writes}
+import play.api.libs.json.{ JsPath, Json, Reads, Writes }
 import play.api.libs.functional.syntax._
 
 case class ForeignPropertyIncome(rentIncome: Option[ForeignPropertyRentIncome],
@@ -35,5 +35,5 @@ object ForeignPropertyIncome {
       (JsPath \ "otherPropertyIncome").readNullable[BigDecimal] and
       (JsPath \ "foreignTaxPaidOrDeducted").readNullable[BigDecimal] and
       (JsPath \ "specialWithholdingTaxOrUkTaxPaid").readNullable[BigDecimal]
-    )(ForeignPropertyIncome.apply _)
+  )(ForeignPropertyIncome.apply _)
 }

@@ -17,7 +17,7 @@
 package v2.models.response.retrieveHistoricNonFhlUkPropertyAnnualSubmissionResponse
 
 import play.api.libs.functional.syntax.toFunctionalBuilderOps
-import play.api.libs.json.{JsPath, Json, OWrites, Reads}
+import play.api.libs.json.{ JsPath, Json, OWrites, Reads }
 
 case class RentARoom(jointlyLet: Boolean)
 
@@ -34,7 +34,7 @@ case class AnnualAdjustments(lossBroughtForward: Option[BigDecimal],
                              nonResidentLandlord: Boolean,
                              rentARoom: Option[RentARoom])
 
-object AnnualAdjustments{
+object AnnualAdjustments {
   implicit val writes: OWrites[AnnualAdjustments] = Json.writes[AnnualAdjustments]
 
   implicit val reads: Reads[AnnualAdjustments] = (
@@ -44,5 +44,5 @@ object AnnualAdjustments{
       (JsPath \ "businessPremisesRenovationAllowanceBalancingCharges").readNullable[BigDecimal] and
       (JsPath \ "nonResidentLandlord").read[Boolean] and
       (JsPath \ "ukRentARoom").readNullable[RentARoom]
-    )(AnnualAdjustments.apply _)
+  )(AnnualAdjustments.apply _)
 }

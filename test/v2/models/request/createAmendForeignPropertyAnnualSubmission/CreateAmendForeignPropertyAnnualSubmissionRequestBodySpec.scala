@@ -16,11 +16,14 @@
 
 package v2.models.request.createAmendForeignPropertyAnnualSubmission
 
-import play.api.libs.json.{JsValue, Json}
+import play.api.libs.json.{ JsValue, Json }
 import support.UnitSpec
 import v2.models.utils.JsonErrorValidators
 
-class CreateAmendForeignPropertyAnnualSubmissionRequestBodySpec extends UnitSpec with JsonErrorValidators with CreateAmendForeignPropertyAnnualSubmissionFixture {
+class CreateAmendForeignPropertyAnnualSubmissionRequestBodySpec
+    extends UnitSpec
+    with JsonErrorValidators
+    with CreateAmendForeignPropertyAnnualSubmissionFixture {
 
   private val fhlModel: CreateAmendForeignPropertyAnnualSubmissionRequestBody =
     CreateAmendForeignPropertyAnnualSubmissionRequestBody(foreignFhlEea = Some(foreignFhlEea), foreignNonFhlProperty = None)
@@ -40,7 +43,7 @@ class CreateAmendForeignPropertyAnnualSubmissionRequestBodySpec extends UnitSpec
   private val nonFhlModel: CreateAmendForeignPropertyAnnualSubmissionRequestBody =
     CreateAmendForeignPropertyAnnualSubmissionRequestBody(foreignFhlEea = None, foreignNonFhlProperty = Some(Seq(foreignNonFhlEntry)))
 
-  private val nonFhlMtdJson: JsValue        = Json.parse(s"""
+  private val nonFhlMtdJson: JsValue = Json.parse(s"""
       |{
       |   "foreignNonFhlProperty":[ $foreignNonFhlEntryMtdJson ]
       |}

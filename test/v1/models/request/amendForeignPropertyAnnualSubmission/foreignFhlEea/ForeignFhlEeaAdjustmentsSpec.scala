@@ -29,8 +29,7 @@ class ForeignFhlEeaAdjustmentsSpec extends UnitSpec with JsonErrorValidators {
       Some(true)
     )
 
-  val jsonBody = Json.parse(
-    """
+  val jsonBody = Json.parse("""
       |{
       |    "privateUseAdjustment":100.25,
       |    "balancingCharge":100.25,

@@ -23,6 +23,7 @@ import support.UnitSpec
 class RetrieveHistoricFhlUkPiePeriodSummaryResponseSpec extends UnitSpec with MockAppConfig {
 
   val periodIncome = PeriodIncome(Some(5000.99), Some(5000.99), Option(RentARoomIncome(Some(5000.99))))
+
   val periodExpenses = PeriodExpenses(
     Some(5000.99),
     Some(5000.99),
@@ -78,7 +79,7 @@ class RetrieveHistoricFhlUkPiePeriodSummaryResponseSpec extends UnitSpec with Mo
     ),
     expenses = Some(
       periodExpenses
-      )
+    )
   )
 
   "reads" should {

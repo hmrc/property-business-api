@@ -20,7 +20,9 @@ import play.api.libs.json._
 import v1.models.request.amendForeignPropertyAnnualSubmission.foreignFhlEea.ForeignFhlEea
 import v1.models.request.amendForeignPropertyAnnualSubmission.foreignProperty.ForeignPropertyEntry
 case class AmendForeignPropertyAnnualSubmissionRequestBody(foreignFhlEea: Option[ForeignFhlEea], foreignProperty: Option[Seq[ForeignPropertyEntry]]) {
-  def isEmpty: Boolean = (foreignFhlEea.isEmpty && foreignProperty.isEmpty) ||
+
+  def isEmpty: Boolean =
+    (foreignFhlEea.isEmpty && foreignProperty.isEmpty) ||
     foreignFhlEea.exists(_.isEmpty) ||
     foreignProperty.exists(_.isEmpty)
 }

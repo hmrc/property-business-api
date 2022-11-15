@@ -16,7 +16,7 @@
 
 package v2.models.request.common.ukPropertyRentARoom
 
-import play.api.libs.json.{JsValue, Json}
+import play.api.libs.json.{ JsValue, Json }
 import support.UnitSpec
 
 class UkPropertyExpensesRentARoomSpec extends UnitSpec {
@@ -24,8 +24,7 @@ class UkPropertyExpensesRentARoomSpec extends UnitSpec {
   val requestBody: UkPropertyExpensesRentARoom =
     UkPropertyExpensesRentARoom(Some(947.66))
 
-  val validJson: JsValue = Json.parse(
-    """
+  val validJson: JsValue = Json.parse("""
       |{
       |    "amountClaimed": 947.66
       |}

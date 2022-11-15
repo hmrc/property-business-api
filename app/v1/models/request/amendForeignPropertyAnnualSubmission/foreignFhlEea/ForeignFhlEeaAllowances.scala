@@ -16,13 +16,15 @@
 
 package v1.models.request.amendForeignPropertyAnnualSubmission.foreignFhlEea
 
-import play.api.libs.json.{Json, OFormat}
+import play.api.libs.json.{ Json, OFormat }
 
 case class ForeignFhlEeaAllowances(annualInvestmentAllowance: Option[BigDecimal],
                                    otherCapitalAllowance: Option[BigDecimal],
                                    propertyAllowance: Option[BigDecimal],
                                    electricChargePointAllowance: Option[BigDecimal]) {
-  def isEmpty: Boolean = annualInvestmentAllowance.isEmpty &&
+
+  def isEmpty: Boolean =
+    annualInvestmentAllowance.isEmpty &&
     otherCapitalAllowance.isEmpty &&
     propertyAllowance.isEmpty &&
     electricChargePointAllowance.isEmpty

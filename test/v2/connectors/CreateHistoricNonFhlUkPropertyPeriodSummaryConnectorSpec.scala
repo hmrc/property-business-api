@@ -18,7 +18,7 @@ package v2.connectors
 
 import v2.models.domain.Nino
 import v2.models.outcomes.ResponseWrapper
-import v2.models.request.common.ukPropertyRentARoom.{UkPropertyExpensesRentARoom, UkPropertyIncomeRentARoom}
+import v2.models.request.common.ukPropertyRentARoom.{ UkPropertyExpensesRentARoom, UkPropertyIncomeRentARoom }
 import v2.models.request.createHistoricNonFhlUkPropertyPeriodSummary._
 
 import scala.concurrent.Future
@@ -78,10 +78,9 @@ class CreateHistoricNonFhlUkPropertyPeriodSummaryConnectorSpec extends Connector
       val downstreamOutcome = Right(ResponseWrapper(correlationId, ()))
 
       willPost(
-          url = url,
-          body = requestBody
-        )
-        .returns(Future.successful(downstreamOutcome))
+        url = url,
+        body = requestBody
+      ).returns(Future.successful(downstreamOutcome))
 
       val result = await(connector.createPeriodSummary(requestData))
       result shouldBe downstreamOutcome

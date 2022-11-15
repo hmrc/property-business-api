@@ -17,14 +17,14 @@
 package v1.models.response.retrieveForeignPropertyPeriodSummary
 
 import config.AppConfig
-import play.api.libs.json.{Json, OFormat}
-import v1.hateoas.{HateoasLinks, HateoasLinksFactory}
-import v1.models.hateoas.{HateoasData, Link}
+import play.api.libs.json.{ Json, OFormat }
+import v1.hateoas.{ HateoasLinks, HateoasLinksFactory }
+import v1.models.hateoas.{ HateoasData, Link }
 import v1.models.hateoas.RelType.LIST_PROPERTY_PERIOD_SUMMARIES
 import v1.models.response.retrieveForeignPropertyPeriodSummary.foreignFhlEea.ForeignFhlEea
 import v1.models.response.retrieveForeignPropertyPeriodSummary.foreignProperty.ForeignProperty
 
-case class  RetrieveForeignPropertyPeriodSummaryResponse(fromDate: String,
+case class RetrieveForeignPropertyPeriodSummaryResponse(fromDate: String,
                                                         toDate: String,
                                                         foreignFhlEea: Option[ForeignFhlEea],
                                                         foreignProperty: Option[Seq[ForeignProperty]])
@@ -32,7 +32,8 @@ case class  RetrieveForeignPropertyPeriodSummaryResponse(fromDate: String,
 object RetrieveForeignPropertyPeriodSummaryResponse extends HateoasLinks {
   implicit val format: OFormat[RetrieveForeignPropertyPeriodSummaryResponse] = Json.format[RetrieveForeignPropertyPeriodSummaryResponse]
 
-  implicit object RetrieveForeignPropertyLinksFactory extends HateoasLinksFactory[RetrieveForeignPropertyPeriodSummaryResponse, RetrieveForeignPropertyPeriodSummaryHateoasData] {
+  implicit object RetrieveForeignPropertyLinksFactory
+      extends HateoasLinksFactory[RetrieveForeignPropertyPeriodSummaryResponse, RetrieveForeignPropertyPeriodSummaryHateoasData] {
     override def links(appConfig: AppConfig, data: RetrieveForeignPropertyPeriodSummaryHateoasData): Seq[Link] = {
       import data._
       Seq(

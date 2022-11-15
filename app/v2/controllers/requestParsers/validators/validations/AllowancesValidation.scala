@@ -16,7 +16,7 @@
 
 package v2.controllers.requestParsers.validators.validations
 
-import v2.models.errors.{MtdError, RuleBothAllowancesSuppliedError}
+import v2.models.errors.{ MtdError, RuleBothAllowancesSuppliedError }
 import v2.models.request.createAmendForeignPropertyAnnualSubmission.foreignFhlEea.ForeignFhlEeaAllowances
 import v2.models.request.createAmendForeignPropertyAnnualSubmission.foreignNonFhl.ForeignNonFhlAllowances
 import v2.models.request.amendUkPropertyAnnualSubmission.ukFhlProperty.UkFhlPropertyAllowances
@@ -24,44 +24,47 @@ import v2.models.request.amendUkPropertyAnnualSubmission.ukNonFhlProperty.UkNonF
 
 object AllowancesValidation {
 
-
   def validateUkFhl(allowances: UkFhlPropertyAllowances, path: String): List[MtdError] = {
     allowances.propertyIncomeAllowance match {
       case None => NoValidationErrors
-      case Some(_) => allowances match {
-        case UkFhlPropertyAllowances(None, None, None, None, None, Some(_)) => NoValidationErrors
-        case _ => List(RuleBothAllowancesSuppliedError.copy(paths = Some(Seq(path))))
-      }
+      case Some(_) =>
+        allowances match {
+          case UkFhlPropertyAllowances(None, None, None, None, None, Some(_)) => NoValidationErrors
+          case _                                                              => List(RuleBothAllowancesSuppliedError.copy(paths = Some(Seq(path))))
+        }
     }
   }
+
   def validateUkNonFhl(allowances: UkNonFhlPropertyAllowances, path: String): List[MtdError] = {
     allowances.propertyIncomeAllowance match {
       case None => NoValidationErrors
-      case Some(_) => allowances match {
-        case UkNonFhlPropertyAllowances(None, None, None, None, None, None, None, Some(_), None, None) => NoValidationErrors
-        case _ => List(RuleBothAllowancesSuppliedError.copy(paths = Some(Seq(path))))
-      }
+      case Some(_) =>
+        allowances match {
+          case UkNonFhlPropertyAllowances(None, None, None, None, None, None, None, Some(_), None, None) => NoValidationErrors
+          case _                                                                                         => List(RuleBothAllowancesSuppliedError.copy(paths = Some(Seq(path))))
+        }
     }
   }
 
-
-  def validateForeignFhl(allowances: ForeignFhlEeaAllowances, path: String): List[MtdError] =  {
+  def validateForeignFhl(allowances: ForeignFhlEeaAllowances, path: String): List[MtdError] = {
     allowances.propertyIncomeAllowance match {
       case None => NoValidationErrors
-      case Some(_) => allowances match {
-        case ForeignFhlEeaAllowances(None, None,  None, None, Some(_)) => NoValidationErrors
-        case _ => List(RuleBothAllowancesSuppliedError.copy(paths = Some(Seq(path))))
-      }
+      case Some(_) =>
+        allowances match {
+          case ForeignFhlEeaAllowances(None, None, None, None, Some(_)) => NoValidationErrors
+          case _                                                        => List(RuleBothAllowancesSuppliedError.copy(paths = Some(Seq(path))))
+        }
     }
   }
 
-  def validateForeignNonFhl(allowances: ForeignNonFhlAllowances, path: String): List[MtdError] =  {
+  def validateForeignNonFhl(allowances: ForeignNonFhlAllowances, path: String): List[MtdError] = {
     allowances.propertyIncomeAllowance match {
       case None => NoValidationErrors
-      case Some(_) => allowances match {
-        case ForeignNonFhlAllowances(None, None, None, None, None, None,  Some(_), None) => NoValidationErrors
-        case _ => List(RuleBothAllowancesSuppliedError.copy(paths = Some(Seq(path))))
-      }
+      case Some(_) =>
+        allowances match {
+          case ForeignNonFhlAllowances(None, None, None, None, None, None, Some(_), None) => NoValidationErrors
+          case _                                                                          => List(RuleBothAllowancesSuppliedError.copy(paths = Some(Seq(path))))
+        }
     }
   }
 }

@@ -18,8 +18,8 @@ package v2.controllers.requestParsers
 
 import support.UnitSpec
 import v2.mocks.validators.MockCreateAmendForeignPropertyAnnualSubmissionValidator
-import v2.models.domain.{Nino, TaxYear}
-import v2.models.errors.{BadRequestError, BusinessIdFormatError, ErrorWrapper, NinoFormatError}
+import v2.models.domain.{ Nino, TaxYear }
+import v2.models.errors.{ BadRequestError, BusinessIdFormatError, ErrorWrapper, NinoFormatError }
 import v2.models.request.createAmendForeignPropertyAnnualSubmission._
 
 class CreateAmendForeignPropertyAnnualSubmissionRequestParserSpec extends UnitSpec with CreateAmendForeignPropertyAnnualSubmissionFixture {
@@ -31,9 +31,9 @@ class CreateAmendForeignPropertyAnnualSubmissionRequestParserSpec extends UnitSp
 
   val inputData: CreateAmendForeignPropertyAnnualSubmissionRawData =
     CreateAmendForeignPropertyAnnualSubmissionRawData(nino = nino,
-                                                businessId = businessId,
-                                                taxYear = taxYear,
-                                                body = createAmendForeignPropertyAnnualSubmissionRequestBodyMtdJson)
+                                                      businessId = businessId,
+                                                      taxYear = taxYear,
+                                                      body = createAmendForeignPropertyAnnualSubmissionRequestBodyMtdJson)
 
   trait Test extends MockCreateAmendForeignPropertyAnnualSubmissionValidator {
     lazy val parser = new CreateAmendForeignPropertyAnnualSubmissionRequestParser(mockValidator)
@@ -47,9 +47,9 @@ class CreateAmendForeignPropertyAnnualSubmissionRequestParserSpec extends UnitSp
         parser.parseRequest(inputData) shouldBe
           Right(
             CreateAmendForeignPropertyAnnualSubmissionRequest(nino = Nino(nino),
-                                                        businessId = businessId,
-                                                        taxYear = TaxYear.fromMtd(taxYear),
-                                                        body = createAmendForeignPropertyAnnualSubmissionRequestBody))
+                                                              businessId = businessId,
+                                                              taxYear = TaxYear.fromMtd(taxYear),
+                                                              body = createAmendForeignPropertyAnnualSubmissionRequestBody))
       }
     }
     "return an ErrorWrapper" when {

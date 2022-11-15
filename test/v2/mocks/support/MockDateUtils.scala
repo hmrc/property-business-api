@@ -24,6 +24,7 @@ trait MockDateUtils extends MockFactory {
   val mockDateUtils: DateUtils = mock[DateUtils]
 
   object MockDateUtils {
+
     def currentTaxYearStart(): CallHandler0[String] =
       (mockDateUtils.currentTaxYearStart _: () => String).expects()
 

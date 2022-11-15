@@ -18,14 +18,14 @@ package v2.controllers.requestParsers
 
 import support.UnitSpec
 import v2.mocks.validators.MockRetrieveHistoricFhlUkPropertyAnnualSubmissionValidator
-import v2.models.domain.{Nino, TaxYear}
-import v2.models.errors.{BadRequestError, ErrorWrapper, NinoFormatError, TaxYearFormatError}
+import v2.models.domain.{ Nino, TaxYear }
+import v2.models.errors.{ BadRequestError, ErrorWrapper, NinoFormatError, TaxYearFormatError }
 import v2.models.request.retrieveHistoricFhlUkPropertyAnnualSubmission._
 
 class RetrieveHistoricFhlUkPropertyAnnualSubmissionRequestParserRequestParserSpec extends UnitSpec {
 
-  val nino: String = "AA123456B"
-  val taxYear: String = "2021-22"
+  val nino: String                   = "AA123456B"
+  val taxYear: String                = "2021-22"
   implicit val correlationId: String = "X-12345"
 
   val inputData: RetrieveHistoricFhlUkPropertyAnnualSubmissionRawData =
@@ -46,7 +46,8 @@ class RetrieveHistoricFhlUkPropertyAnnualSubmissionRequestParserRequestParserSpe
 
     "return an ErrorWrapper" when {
       "a single validation error occurs" in new Test {
-        MockRetrieveHistoricFhlUkPropertyAnnualSubmissionValidator.validate(inputData)
+        MockRetrieveHistoricFhlUkPropertyAnnualSubmissionValidator
+          .validate(inputData)
           .returns(List(NinoFormatError))
 
         parser.parseRequest(inputData) shouldBe
@@ -54,7 +55,8 @@ class RetrieveHistoricFhlUkPropertyAnnualSubmissionRequestParserRequestParserSpe
       }
 
       "multiple validation errors occur" in new Test {
-        MockRetrieveHistoricFhlUkPropertyAnnualSubmissionValidator.validate(inputData)
+        MockRetrieveHistoricFhlUkPropertyAnnualSubmissionValidator
+          .validate(inputData)
           .returns(List(NinoFormatError, TaxYearFormatError))
 
         parser.parseRequest(inputData) shouldBe

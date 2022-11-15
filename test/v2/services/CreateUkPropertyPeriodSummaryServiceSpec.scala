@@ -19,7 +19,7 @@ package v2.services
 import uk.gov.hmrc.http.HeaderCarrier
 import v2.controllers.EndpointLogContext
 import v2.mocks.connectors.MockCreateUkPropertyPeriodSummaryConnector
-import v2.models.domain.{Nino, TaxYear}
+import v2.models.domain.{ Nino, TaxYear }
 import v2.models.errors._
 import v2.models.outcomes.ResponseWrapper
 import v2.models.request.createUkPropertyPeriodSummary._
@@ -101,9 +101,9 @@ class CreateUkPropertyPeriodSummaryServiceSpec extends ServiceSpec {
 
         val extraTysErrors = Seq(
           "INVALID_INCOMESOURCE_ID" -> BusinessIdFormatError,
-          "INVALID_CORRELATION_ID" -> InternalError,
-          "PERIOD_NOT_ALIGNED" -> RuleMisalignedPeriodError,
-          "PERIOD_OVERLAPS" -> RuleOverlappingPeriodError
+          "INVALID_CORRELATION_ID"  -> InternalError,
+          "PERIOD_NOT_ALIGNED"      -> RuleMisalignedPeriodError,
+          "PERIOD_OVERLAPS"         -> RuleOverlappingPeriodError
         )
 
         (errors ++ extraTysErrors).foreach(args => (serviceError _).tupled(args))

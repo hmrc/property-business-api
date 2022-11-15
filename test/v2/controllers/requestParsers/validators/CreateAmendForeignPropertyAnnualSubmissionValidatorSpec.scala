@@ -127,16 +127,18 @@ class CreateAmendForeignPropertyAnnualSubmissionValidatorSpec extends UnitSpec w
   "running a validation" should {
     "return no errors" when {
       "a valid request is supplied" in {
-        validator.validate(
-          CreateAmendForeignPropertyAnnualSubmissionRawData(nino = validNino, businessId = validBusinessId, taxYear = taxYear, body = body)) shouldBe Nil
+        validator.validate(CreateAmendForeignPropertyAnnualSubmissionRawData(nino = validNino,
+                                                                             businessId = validBusinessId,
+                                                                             taxYear = taxYear,
+                                                                             body = body)) shouldBe Nil
       }
 
       "a valid propertyIncomeAllowance request is supplied" in {
         validator.validate(
           CreateAmendForeignPropertyAnnualSubmissionRawData(nino = validNino,
-                                                      businessId = validBusinessId,
-                                                      taxYear = taxYear,
-                                                      body = propertyIncomeAllowanceBody)) shouldBe Nil
+                                                            businessId = validBusinessId,
+                                                            taxYear = taxYear,
+                                                            body = propertyIncomeAllowanceBody)) shouldBe Nil
       }
 
       "a minimal fhl request is supplied" in {
@@ -227,23 +229,28 @@ class CreateAmendForeignPropertyAnnualSubmissionValidatorSpec extends UnitSpec w
 
     "return TaxYearFormatError" when {
       "an invalid tax year is supplied" in {
-        validator.validate(CreateAmendForeignPropertyAnnualSubmissionRawData(nino = validNino, businessId = validBusinessId, taxYear = "2020", body = body)) shouldBe
+        validator.validate(
+          CreateAmendForeignPropertyAnnualSubmissionRawData(nino = validNino, businessId = validBusinessId, taxYear = "2020", body = body)) shouldBe
           List(TaxYearFormatError)
       }
     }
 
     "return RuleTaxYearNotSupportedError" when {
       "a tax year that is too early is supplied" in {
-        validator.validate(
-          CreateAmendForeignPropertyAnnualSubmissionRawData(nino = validNino, businessId = validBusinessId, taxYear = "2020-21", body = body)) shouldBe
+        validator.validate(CreateAmendForeignPropertyAnnualSubmissionRawData(nino = validNino,
+                                                                             businessId = validBusinessId,
+                                                                             taxYear = "2020-21",
+                                                                             body = body)) shouldBe
           List(RuleTaxYearNotSupportedError)
       }
     }
 
     "return RuleTaxYearRangeInvalidError" when {
       "a tax year range is more than 1 year" in {
-        validator.validate(
-          CreateAmendForeignPropertyAnnualSubmissionRawData(nino = validNino, businessId = validBusinessId, taxYear = "2019-21", body = body)) shouldBe
+        validator.validate(CreateAmendForeignPropertyAnnualSubmissionRawData(nino = validNino,
+                                                                             businessId = validBusinessId,
+                                                                             taxYear = "2019-21",
+                                                                             body = body)) shouldBe
           List(RuleTaxYearRangeInvalidError)
       }
     }
@@ -257,10 +264,11 @@ class CreateAmendForeignPropertyAnnualSubmissionValidatorSpec extends UnitSpec w
 
     "return RuleIncorrectOrEmptyBodyError" when {
       "an empty body is submitted" in {
-        validator.validate(CreateAmendForeignPropertyAnnualSubmissionRawData(nino = validNino,
-                                                                       businessId = validBusinessId,
-                                                                       taxYear = taxYear,
-                                                                       body = Json.parse("""{}"""))) shouldBe List(RuleIncorrectOrEmptyBodyError)
+        validator.validate(
+          CreateAmendForeignPropertyAnnualSubmissionRawData(nino = validNino,
+                                                            businessId = validBusinessId,
+                                                            taxYear = taxYear,
+                                                            body = Json.parse("""{}"""))) shouldBe List(RuleIncorrectOrEmptyBodyError)
       }
 
       "an object/array is empty or mandatory field is missing" when {
@@ -579,14 +587,14 @@ class CreateAmendForeignPropertyAnnualSubmissionValidatorSpec extends UnitSpec w
         }
 
         "propertyIncomeAllowance and separate allowances are provided for non-fhl" in {
-          validator.validate(
-            CreateAmendForeignPropertyAnnualSubmissionRawData(
-              nino = validNino,
-              businessId = validBusinessId,
-              taxYear = taxYear,
-              body = bodyWith(entry.update("/allowances/propertyIncomeAllowance", JsNumber(123.45))
-                .removeProperty("/adjustments/privateUseAdjustment"))
-            )) shouldBe
+          validator.validate(CreateAmendForeignPropertyAnnualSubmissionRawData(
+            nino = validNino,
+            businessId = validBusinessId,
+            taxYear = taxYear,
+            body = bodyWith(entry
+              .update("/allowances/propertyIncomeAllowance", JsNumber(123.45))
+              .removeProperty("/adjustments/privateUseAdjustment"))
+          )) shouldBe
             List(RuleBothAllowancesSuppliedError.copy(paths = Some(Seq("/foreignNonFhlProperty/0/allowances"))))
         }
       }
@@ -658,19 +666,20 @@ class CreateAmendForeignPropertyAnnualSubmissionValidatorSpec extends UnitSpec w
         }
 
         "propertyIncomeAllowance is supplied with privateUseAdjustment for non-fhl" in {
-          validator.validate(
-            CreateAmendForeignPropertyAnnualSubmissionRawData(
-              nino = validNino,
-              businessId = validBusinessId,
-              taxYear = taxYear,
-              body = bodyWith(entryPropertyIncomeAllowance.update("/adjustments/privateUseAdjustment", JsNumber(123.45))))) shouldBe
+          validator.validate(CreateAmendForeignPropertyAnnualSubmissionRawData(
+            nino = validNino,
+            businessId = validBusinessId,
+            taxYear = taxYear,
+            body = bodyWith(entryPropertyIncomeAllowance.update("/adjustments/privateUseAdjustment", JsNumber(123.45)))
+          )) shouldBe
             List(RulePropertyIncomeAllowanceError.copy(paths = Some(Seq("/foreignNonFhlProperty/0"))))
         }
       }
 
       "return multiple errors" when {
         "request supplied has multiple errors" in {
-          validator.validate(CreateAmendForeignPropertyAnnualSubmissionRawData(nino = "A12344A", businessId = "20178", taxYear = taxYear, body = body)) shouldBe
+          validator.validate(
+            CreateAmendForeignPropertyAnnualSubmissionRawData(nino = "A12344A", businessId = "20178", taxYear = taxYear, body = body)) shouldBe
             List(NinoFormatError, BusinessIdFormatError)
         }
       }

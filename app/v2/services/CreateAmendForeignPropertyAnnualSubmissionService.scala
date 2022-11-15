@@ -18,7 +18,7 @@ package v2.services
 
 import cats.implicits._
 import cats.data.EitherT
-import javax.inject.{Inject, Singleton}
+import javax.inject.{ Inject, Singleton }
 import uk.gov.hmrc.http.HeaderCarrier
 import utils.Logging
 import v2.connectors.CreateAmendForeignPropertyAnnualSubmissionConnector
@@ -27,17 +27,18 @@ import v2.models.errors._
 import v2.models.request.createAmendForeignPropertyAnnualSubmission.CreateAmendForeignPropertyAnnualSubmissionRequest
 import v2.support.DownstreamResponseMappingSupport
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.{ ExecutionContext, Future }
 
 @Singleton
 class CreateAmendForeignPropertyAnnualSubmissionService @Inject()(connector: CreateAmendForeignPropertyAnnualSubmissionConnector)
-  extends DownstreamResponseMappingSupport with Logging {
+    extends DownstreamResponseMappingSupport
+    with Logging {
 
   def createAmendForeignPropertyAnnualSubmission(request: CreateAmendForeignPropertyAnnualSubmissionRequest)(
-    implicit hc: HeaderCarrier,
-    ec: ExecutionContext,
-    logContext: EndpointLogContext,
-    correlationId: String): Future[ServiceOutcome[Unit]] = {
+      implicit hc: HeaderCarrier,
+      ec: ExecutionContext,
+      logContext: EndpointLogContext,
+      correlationId: String): Future[ServiceOutcome[Unit]] = {
 
     val result = for {
       ifsResponseWrapper <- EitherT(connector.createAmendForeignPropertyAnnualSubmission(request)).leftMap(mapDownstreamErrors(ifsErrorMap))
@@ -48,18 +49,18 @@ class CreateAmendForeignPropertyAnnualSubmissionService @Inject()(connector: Cre
 
   private def ifsErrorMap =
     Map(
-      "INVALID_TAXABLE_ENTITY_ID" -> NinoFormatError,
-      "INVALID_INCOMESOURCEID" -> BusinessIdFormatError,
-      "INVALID_TAX_YEAR" -> TaxYearFormatError,
-      "INCOMPATIBLE_PAYLOAD" -> RuleTypeOfBusinessIncorrectError,
-      "TAX_YEAR_NOT_SUPPORTED" -> RuleTaxYearNotSupportedError,
+      "INVALID_TAXABLE_ENTITY_ID"   -> NinoFormatError,
+      "INVALID_INCOMESOURCEID"      -> BusinessIdFormatError,
+      "INVALID_TAX_YEAR"            -> TaxYearFormatError,
+      "INCOMPATIBLE_PAYLOAD"        -> RuleTypeOfBusinessIncorrectError,
+      "TAX_YEAR_NOT_SUPPORTED"      -> RuleTaxYearNotSupportedError,
       "BUSINESS_VALIDATION_FAILURE" -> RulePropertyIncomeAllowanceError,
-      "INCOME_SOURCE_NOT_FOUND" -> NotFoundError,
-      "MISSING_ALLOWANCES" -> InternalError,
-      "INVALID_PAYLOAD" -> InternalError,
-      "INVALID_CORRELATIONID" -> InternalError,
-      "DUPLICATE_COUNTRY_CODE" -> RuleDuplicateCountryCodeError,
-      "SERVER_ERROR" -> InternalError,
-      "SERVICE_UNAVAILABLE" -> InternalError
+      "INCOME_SOURCE_NOT_FOUND"     -> NotFoundError,
+      "MISSING_ALLOWANCES"          -> InternalError,
+      "INVALID_PAYLOAD"             -> InternalError,
+      "INVALID_CORRELATIONID"       -> InternalError,
+      "DUPLICATE_COUNTRY_CODE"      -> RuleDuplicateCountryCodeError,
+      "SERVER_ERROR"                -> InternalError,
+      "SERVICE_UNAVAILABLE"         -> InternalError
     )
 }

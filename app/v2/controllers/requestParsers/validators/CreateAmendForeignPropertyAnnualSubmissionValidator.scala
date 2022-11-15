@@ -30,7 +30,8 @@ import v2.models.request.common.StructuredBuildingAllowance
 import javax.inject.{ Inject, Singleton }
 
 @Singleton
-class CreateAmendForeignPropertyAnnualSubmissionValidator @Inject()(appConfig: AppConfig) extends Validator[CreateAmendForeignPropertyAnnualSubmissionRawData] {
+class CreateAmendForeignPropertyAnnualSubmissionValidator @Inject()(appConfig: AppConfig)
+    extends Validator[CreateAmendForeignPropertyAnnualSubmissionRawData] {
 
   private lazy val minTaxYear = appConfig.minimumTaxV2Foreign
   private val validationSet   = List(parameterFormatValidation, bodyFormatValidation, bodyFieldValidation)

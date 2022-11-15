@@ -26,7 +26,7 @@ import v2.models.request.createForeignPropertyPeriodSummary.CreateForeignPropert
 import v2.models.response.createForeignPropertyPeriodSummary.CreateForeignPropertyPeriodSummaryResponse
 import v2.services.CreateForeignPropertyPeriodSummaryService
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.{ ExecutionContext, Future }
 
 trait MockCreateForeignPropertyPeriodSummaryService extends MockFactory {
 
@@ -34,9 +34,17 @@ trait MockCreateForeignPropertyPeriodSummaryService extends MockFactory {
 
   object MockCreateForeignPropertyService {
 
-    def createForeignProperty(requestData: CreateForeignPropertyPeriodSummaryRequest): CallHandler[Future[Either[ErrorWrapper, ResponseWrapper[CreateForeignPropertyPeriodSummaryResponse]]]] = {
-      (mockCreateForeignPropertyService
-        .createForeignProperty(_: CreateForeignPropertyPeriodSummaryRequest)(_: HeaderCarrier, _: ExecutionContext, _: EndpointLogContext, _: String))
+    def createForeignProperty(requestData: CreateForeignPropertyPeriodSummaryRequest)
+      : CallHandler[Future[Either[ErrorWrapper, ResponseWrapper[CreateForeignPropertyPeriodSummaryResponse]]]] = {
+      (
+        mockCreateForeignPropertyService
+          .createForeignProperty(_: CreateForeignPropertyPeriodSummaryRequest)(
+            _: HeaderCarrier,
+            _: ExecutionContext,
+            _: EndpointLogContext,
+            _: String
+          )
+        )
         .expects(requestData, *, *, *, *)
     }
   }

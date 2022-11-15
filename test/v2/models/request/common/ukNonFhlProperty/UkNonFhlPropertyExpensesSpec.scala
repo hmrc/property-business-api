@@ -16,7 +16,7 @@
 
 package v2.models.request.common.ukNonFhlProperty
 
-import play.api.libs.json.{JsValue, Json}
+import play.api.libs.json.{ JsValue, Json }
 import support.UnitSpec
 import v2.models.request.common.ukPropertyRentARoom.UkPropertyExpensesRentARoom
 
@@ -33,14 +33,14 @@ class UkNonFhlPropertyExpensesSpec extends UnitSpec {
       Some(9884.93),
       Some(842.99),
       Some(31.44),
-      Some(UkPropertyExpensesRentARoom(
-        Some(947.66)
-      )),
+      Some(
+        UkPropertyExpensesRentARoom(
+          Some(947.66)
+        )),
       None
     )
 
-  val mtdJson: JsValue = Json.parse(
-    """
+  val mtdJson: JsValue = Json.parse("""
       |{
       |    "premisesRunningCosts": 41.12,
       |    "repairsAndMaintenance": 84.31,
@@ -57,8 +57,7 @@ class UkNonFhlPropertyExpensesSpec extends UnitSpec {
       |}
       |""".stripMargin)
 
-  val desJson: JsValue = Json.parse(
-    """
+  val desJson: JsValue = Json.parse("""
       |{
       |    "premisesRunningCosts": 41.12,
       |    "repairsAndMaintenance": 84.31,

@@ -28,7 +28,8 @@ class MockCreateAmendForeignPropertyAnnualSubmissionValidator extends MockFactor
 
   object MockAmendForeignPropertyValidator {
 
-    def validate(data: CreateAmendForeignPropertyAnnualSubmissionRawData): CallHandler1[CreateAmendForeignPropertyAnnualSubmissionRawData, List[MtdError]] = {
+    def validate(
+        data: CreateAmendForeignPropertyAnnualSubmissionRawData): CallHandler1[CreateAmendForeignPropertyAnnualSubmissionRawData, List[MtdError]] = {
       (mockValidator
         .validate(_: CreateAmendForeignPropertyAnnualSubmissionRawData))
         .expects(data)

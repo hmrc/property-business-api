@@ -16,7 +16,7 @@
 
 package v2.models.request.createAmendForeignPropertyAnnualSubmission.foreignFhlEea
 
-import play.api.libs.json.{Json, OFormat}
+import play.api.libs.json.{ Json, OFormat }
 
 case class ForeignFhlEea(adjustments: Option[ForeignFhlEeaAdjustments], allowances: Option[ForeignFhlEeaAllowances])
 

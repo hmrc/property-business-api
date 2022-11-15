@@ -16,10 +16,9 @@
 
 package v2.models.request.createAmendForeignPropertyAnnualSubmission.foreignNonFhl
 
-import play.api.libs.json.{Json, OFormat}
+import play.api.libs.json.{ Json, OFormat }
 
-case class ForeignNonFhlAdjustments(privateUseAdjustment: Option[BigDecimal],
-                                    balancingCharge: Option[BigDecimal])
+case class ForeignNonFhlAdjustments(privateUseAdjustment: Option[BigDecimal], balancingCharge: Option[BigDecimal])
 
 object ForeignNonFhlAdjustments {
   implicit val format: OFormat[ForeignNonFhlAdjustments] = Json.format[ForeignNonFhlAdjustments]

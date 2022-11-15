@@ -28,8 +28,8 @@ class MockRetrieveHistoricFhlUkPropertyAnnualSubmissionValidator extends MockFac
 
   object MockRetrieveHistoricFhlUkPropertyAnnualSubmissionValidator {
 
-    def validate(data: RetrieveHistoricFhlUkPropertyAnnualSubmissionRawData):
-      CallHandler1[RetrieveHistoricFhlUkPropertyAnnualSubmissionRawData, List[MtdError]] = {
+    def validate(data: RetrieveHistoricFhlUkPropertyAnnualSubmissionRawData)
+      : CallHandler1[RetrieveHistoricFhlUkPropertyAnnualSubmissionRawData, List[MtdError]] = {
       (mockValidator
         .validate(_: RetrieveHistoricFhlUkPropertyAnnualSubmissionRawData))
         .expects(data)

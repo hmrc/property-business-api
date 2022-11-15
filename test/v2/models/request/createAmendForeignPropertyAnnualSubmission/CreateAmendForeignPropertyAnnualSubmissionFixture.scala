@@ -18,7 +18,11 @@ package v2.models.request.createAmendForeignPropertyAnnualSubmission
 
 import play.api.libs.json.{ JsValue, Json }
 import v2.models.request.createAmendForeignPropertyAnnualSubmission.foreignFhlEea.{ ForeignFhlEea, ForeignFhlEeaAdjustments, ForeignFhlEeaAllowances }
-import v2.models.request.createAmendForeignPropertyAnnualSubmission.foreignNonFhl.{ ForeignNonFhlAdjustments, ForeignNonFhlAllowances, ForeignNonFhlEntry }
+import v2.models.request.createAmendForeignPropertyAnnualSubmission.foreignNonFhl.{
+  ForeignNonFhlAdjustments,
+  ForeignNonFhlAllowances,
+  ForeignNonFhlEntry
+}
 import v2.models.request.common.StructuredBuildingAllowanceFixture
 
 trait CreateAmendForeignPropertyAnnualSubmissionFixture extends StructuredBuildingAllowanceFixture {

@@ -19,20 +19,27 @@ package v2.mocks.connectors
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
 import uk.gov.hmrc.http.HeaderCarrier
-import v2.connectors.{CreateAmendForeignPropertyAnnualSubmissionConnector, DownstreamOutcome}
+import v2.connectors.{ CreateAmendForeignPropertyAnnualSubmissionConnector, DownstreamOutcome }
 import v2.models.request.createAmendForeignPropertyAnnualSubmission.CreateAmendForeignPropertyAnnualSubmissionRequest
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.{ ExecutionContext, Future }
 
 trait MockCreateAmendForeignPropertyAnnualSubmissionConnector extends MockFactory {
 
-  val mockAmendForeignPropertyAnnualSubmissionConnector: CreateAmendForeignPropertyAnnualSubmissionConnector = mock[CreateAmendForeignPropertyAnnualSubmissionConnector]
+  val mockAmendForeignPropertyAnnualSubmissionConnector: CreateAmendForeignPropertyAnnualSubmissionConnector =
+    mock[CreateAmendForeignPropertyAnnualSubmissionConnector]
 
   object MockAmendForeignPropertyAnnualSubmissionConnector {
 
     def amendForeignProperty(requestData: CreateAmendForeignPropertyAnnualSubmissionRequest): CallHandler[Future[DownstreamOutcome[Unit]]] = {
-      (mockAmendForeignPropertyAnnualSubmissionConnector
-        .createAmendForeignPropertyAnnualSubmission(_: CreateAmendForeignPropertyAnnualSubmissionRequest)(_: HeaderCarrier, _: ExecutionContext, _: String))
+      (
+        mockAmendForeignPropertyAnnualSubmissionConnector
+          .createAmendForeignPropertyAnnualSubmission(_: CreateAmendForeignPropertyAnnualSubmissionRequest)(
+            _: HeaderCarrier,
+            _: ExecutionContext,
+            _: String
+          )
+        )
         .expects(requestData, *, *, *)
     }
   }

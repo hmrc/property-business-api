@@ -17,7 +17,7 @@
 package v2.models.request.createAmendForeignPropertyAnnualSubmission.foreignFhlEea
 
 import play.api.libs.functional.syntax._
-import play.api.libs.json.{JsPath, Json, Reads, Writes}
+import play.api.libs.json.{ JsPath, Json, Reads, Writes }
 
 case class ForeignFhlEeaAllowances(annualInvestmentAllowance: Option[BigDecimal],
                                    otherCapitalAllowance: Option[BigDecimal],
@@ -34,5 +34,5 @@ object ForeignFhlEeaAllowances {
       (JsPath \ "electricChargePointAllowance").writeNullable[BigDecimal] and
       (JsPath \ "zeroEmissionsCarAllowance").writeNullable[BigDecimal] and
       (JsPath \ "propertyAllowance").writeNullable[BigDecimal]
-    )(unlift(ForeignFhlEeaAllowances.unapply))
+  )(unlift(ForeignFhlEeaAllowances.unapply))
 }

@@ -20,45 +20,49 @@ import play.api.libs.json.Json
 import support.UnitSpec
 import v1.models.utils.JsonErrorValidators
 
-class ForeignPropertyEntrySpec extends UnitSpec with JsonErrorValidators{
+class ForeignPropertyEntrySpec extends UnitSpec with JsonErrorValidators {
 
   private val foreignProperty = ForeignPropertyEntry(
     "GER",
-    Some(ForeignPropertyAdjustments(
-      Some(100.25),
-      Some(100.25)
-    )),
-    Some(ForeignPropertyAllowances(
-      Some(100.25),
-      Some(100.25),
-      Some(100.25),
-      Some(100.25),
-      Some(100.25),
-      Some(100.25),
-      Some(100.25)
-    ))
+    Some(
+      ForeignPropertyAdjustments(
+        Some(100.25),
+        Some(100.25)
+      )),
+    Some(
+      ForeignPropertyAllowances(
+        Some(100.25),
+        Some(100.25),
+        Some(100.25),
+        Some(100.25),
+        Some(100.25),
+        Some(100.25),
+        Some(100.25)
+      ))
   )
 
   private val foreignPropertyNoAdjustments = ForeignPropertyEntry(
     "GER",
     None,
-    Some(ForeignPropertyAllowances(
-      Some(100.25),
-      Some(100.25),
-      Some(100.25),
-      Some(100.25),
-      Some(100.25),
-      Some(100.25),
-      Some(100.25)
-    ))
+    Some(
+      ForeignPropertyAllowances(
+        Some(100.25),
+        Some(100.25),
+        Some(100.25),
+        Some(100.25),
+        Some(100.25),
+        Some(100.25),
+        Some(100.25)
+      ))
   )
 
   private val foreignPropertyNoAllowances = ForeignPropertyEntry(
     "GER",
-    Some(ForeignPropertyAdjustments(
-      Some(100.25),
-      Some(100.25)
-    )),
+    Some(
+      ForeignPropertyAdjustments(
+        Some(100.25),
+        Some(100.25)
+      )),
     None
   )
 

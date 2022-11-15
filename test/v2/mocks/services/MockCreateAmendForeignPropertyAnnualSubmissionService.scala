@@ -25,7 +25,7 @@ import v2.models.outcomes.ResponseWrapper
 import v2.models.request.createAmendForeignPropertyAnnualSubmission.CreateAmendForeignPropertyAnnualSubmissionRequest
 import v2.services.CreateAmendForeignPropertyAnnualSubmissionService
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.{ ExecutionContext, Future }
 
 trait MockCreateAmendForeignPropertyAnnualSubmissionService extends MockFactory {
 
@@ -34,8 +34,15 @@ trait MockCreateAmendForeignPropertyAnnualSubmissionService extends MockFactory 
   object MockAmendForeignPropertyAnnualSubmissionService {
 
     def amend(requestData: CreateAmendForeignPropertyAnnualSubmissionRequest): CallHandler[Future[Either[ErrorWrapper, ResponseWrapper[Unit]]]] = {
-      (mockService
-        .createAmendForeignPropertyAnnualSubmission(_: CreateAmendForeignPropertyAnnualSubmissionRequest)(_: HeaderCarrier, _: ExecutionContext, _: EndpointLogContext, _: String))
+      (
+        mockService
+          .createAmendForeignPropertyAnnualSubmission(_: CreateAmendForeignPropertyAnnualSubmissionRequest)(
+            _: HeaderCarrier,
+            _: ExecutionContext,
+            _: EndpointLogContext,
+            _: String
+          )
+        )
         .expects(requestData, *, *, *, *)
     }
   }

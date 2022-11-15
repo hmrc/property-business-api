@@ -16,7 +16,7 @@
 
 package v2.models.request.createAmendForeignPropertyAnnualSubmission.foreignNonFhl
 
-import play.api.libs.json.{JsValue, Json}
+import play.api.libs.json.{ JsValue, Json }
 import support.UnitSpec
 import v2.models.request.createAmendForeignPropertyAnnualSubmission.CreateAmendForeignPropertyAnnualSubmissionFixture
 import v2.models.utils.JsonErrorValidators

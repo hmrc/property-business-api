@@ -20,7 +20,7 @@ import support.UnitSpec
 import uk.gov.hmrc.http.HeaderCarrier
 import v2.controllers.EndpointLogContext
 import v2.mocks.connectors.MockCreateAmendForeignPropertyAnnualSubmissionConnector
-import v2.models.domain.{Nino, TaxYear}
+import v2.models.domain.{ Nino, TaxYear }
 import v2.models.errors._
 import v2.models.outcomes.ResponseWrapper
 import v2.models.request.createAmendForeignPropertyAnnualSubmission._
@@ -32,9 +32,9 @@ import scala.concurrent.Future
 
 class CreateAmendForeignPropertyAnnualSubmissionServiceSpec extends UnitSpec {
 
-  val nino: String = "AA123456A"
-  val businessId: String = "XAIS12345678910"
-  val taxYear: TaxYear = TaxYear.fromMtd("2020-21")
+  val nino: String                   = "AA123456A"
+  val businessId: String             = "XAIS12345678910"
+  val taxYear: TaxYear               = TaxYear.fromMtd("2020-21")
   implicit val correlationId: String = "X-123"
 
   private val foreignFhlEea = ForeignFhlEea(None, None)
@@ -49,7 +49,7 @@ class CreateAmendForeignPropertyAnnualSubmissionServiceSpec extends UnitSpec {
   private val request = CreateAmendForeignPropertyAnnualSubmissionRequest(Nino(nino), businessId, taxYear, body)
 
   trait Test extends MockCreateAmendForeignPropertyAnnualSubmissionConnector {
-    implicit val hc: HeaderCarrier = HeaderCarrier()
+    implicit val hc: HeaderCarrier              = HeaderCarrier()
     implicit val logContext: EndpointLogContext = EndpointLogContext("c", "ep")
 
     val service = new CreateAmendForeignPropertyAnnualSubmissionService(
@@ -60,7 +60,8 @@ class CreateAmendForeignPropertyAnnualSubmissionServiceSpec extends UnitSpec {
   "service" should {
     "service call successful" when {
       "return mapped result" in new Test {
-        MockAmendForeignPropertyAnnualSubmissionConnector.amendForeignProperty(request)
+        MockAmendForeignPropertyAnnualSubmissionConnector
+          .amendForeignProperty(request)
           .returns(Future.successful(Right(ResponseWrapper(correlationId, ()))))
 
         await(service.createAmendForeignPropertyAnnualSubmission(request)) shouldBe Right(ResponseWrapper(correlationId, ()))
@@ -74,26 +75,27 @@ class CreateAmendForeignPropertyAnnualSubmissionServiceSpec extends UnitSpec {
       def serviceError(ifsErrorCode: String, error: MtdError): Unit =
         s"a $ifsErrorCode error is returned from the service" in new Test {
 
-          MockAmendForeignPropertyAnnualSubmissionConnector.amendForeignProperty(request)
+          MockAmendForeignPropertyAnnualSubmissionConnector
+            .amendForeignProperty(request)
             .returns(Future.successful(Left(ResponseWrapper(correlationId, DownstreamErrors.single(DownstreamErrorCode(ifsErrorCode))))))
 
           await(service.createAmendForeignPropertyAnnualSubmission(request)) shouldBe Left(ErrorWrapper(correlationId, error))
         }
 
       val input = Seq(
-        "INVALID_TAXABLE_ENTITY_ID" -> NinoFormatError,
-        "INVALID_INCOMESOURCEID" -> BusinessIdFormatError,
-        "INVALID_TAX_YEAR" -> TaxYearFormatError,
-        "INCOMPATIBLE_PAYLOAD" -> RuleTypeOfBusinessIncorrectError,
-        "TAX_YEAR_NOT_SUPPORTED" -> RuleTaxYearNotSupportedError,
+        "INVALID_TAXABLE_ENTITY_ID"   -> NinoFormatError,
+        "INVALID_INCOMESOURCEID"      -> BusinessIdFormatError,
+        "INVALID_TAX_YEAR"            -> TaxYearFormatError,
+        "INCOMPATIBLE_PAYLOAD"        -> RuleTypeOfBusinessIncorrectError,
+        "TAX_YEAR_NOT_SUPPORTED"      -> RuleTaxYearNotSupportedError,
         "BUSINESS_VALIDATION_FAILURE" -> RulePropertyIncomeAllowanceError,
-        "INCOME_SOURCE_NOT_FOUND" -> NotFoundError,
-        "MISSING_ALLOWANCES" -> InternalError,
-        "INVALID_PAYLOAD" -> InternalError,
-        "INVALID_CORRELATIONID" -> InternalError,
-        "DUPLICATE_COUNTRY_CODE" -> RuleDuplicateCountryCodeError,
-        "SERVER_ERROR" -> InternalError,
-        "SERVICE_UNAVAILABLE" -> InternalError
+        "INCOME_SOURCE_NOT_FOUND"     -> NotFoundError,
+        "MISSING_ALLOWANCES"          -> InternalError,
+        "INVALID_PAYLOAD"             -> InternalError,
+        "INVALID_CORRELATIONID"       -> InternalError,
+        "DUPLICATE_COUNTRY_CODE"      -> RuleDuplicateCountryCodeError,
+        "SERVER_ERROR"                -> InternalError,
+        "SERVICE_UNAVAILABLE"         -> InternalError
       )
 
       input.foreach(args => (serviceError _).tupled(args))

@@ -16,7 +16,7 @@
 
 package v2.models.request.createAmendForeignPropertyAnnualSubmission.foreignNonFhl
 
-import play.api.libs.json.{Json, OFormat}
+import play.api.libs.json.{ Json, OFormat }
 import shapeless.HNil
 import utils.EmptinessChecker
 

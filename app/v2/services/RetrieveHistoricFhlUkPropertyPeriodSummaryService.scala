@@ -27,20 +27,20 @@ import v2.models.request.retrieveHistoricFhlUkPiePeriodSummary.RetrieveHistoricF
 import v2.models.response.retrieveHistoricFhlUkPiePeriodSummary.RetrieveHistoricFhlUkPiePeriodSummaryResponse
 import v2.support.DownstreamResponseMappingSupport
 
-import javax.inject.{Inject, Singleton}
-import scala.concurrent.{ExecutionContext, Future}
+import javax.inject.{ Inject, Singleton }
+import scala.concurrent.{ ExecutionContext, Future }
 
 @Singleton
 class RetrieveHistoricFhlUkPropertyPeriodSummaryService @Inject()(connector: RetrieveHistoricFhlUkPropertyPeriodSummaryConnector)
-  extends DownstreamResponseMappingSupport
+    extends DownstreamResponseMappingSupport
     with Logging {
 
   private val downstreamErrorMap =
     Map(
       "INVALID_NINO"        -> NinoFormatError,
       "INVALID_DATE_FROM"   -> PeriodIdFormatError,
-      "INVALID_DATE_TO"   -> PeriodIdFormatError,
-      "INVALID_TYPE"    -> InternalError,
+      "INVALID_DATE_TO"     -> PeriodIdFormatError,
+      "INVALID_TYPE"        -> InternalError,
       "NOT_FOUND_PROPERTY"  -> NotFoundError,
       "NOT_FOUND_PERIOD"    -> NotFoundError,
       "SERVER_ERROR"        -> InternalError,
@@ -48,10 +48,10 @@ class RetrieveHistoricFhlUkPropertyPeriodSummaryService @Inject()(connector: Ret
     )
 
   def retrieve(request: RetrieveHistoricFhlUkPiePeriodSummaryRequest)(
-    implicit hc: HeaderCarrier,
-    ec: ExecutionContext,
-    logContext: EndpointLogContext,
-    correlationId: String): Future[ServiceOutcome[RetrieveHistoricFhlUkPiePeriodSummaryResponse]] = {
+      implicit hc: HeaderCarrier,
+      ec: ExecutionContext,
+      logContext: EndpointLogContext,
+      correlationId: String): Future[ServiceOutcome[RetrieveHistoricFhlUkPiePeriodSummaryResponse]] = {
 
     val result = for {
       resultWrapper <- EitherT(connector.retrieve(request)).leftMap(mapDownstreamErrors(downstreamErrorMap))

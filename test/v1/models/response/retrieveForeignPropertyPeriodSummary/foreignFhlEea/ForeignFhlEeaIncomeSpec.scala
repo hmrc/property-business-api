@@ -24,8 +24,7 @@ class ForeignFhlEeaIncomeSpec extends UnitSpec with JsonErrorValidators {
 
   val foreignFhlEeaIncome = ForeignFhlEeaIncome(Some(5000.99))
 
-  val json = Json.parse(
-    """{
+  val json = Json.parse("""{
       |  "rentAmount": 5000.99
       |}""".stripMargin)
 

@@ -274,78 +274,32 @@ class CreateAmendForeignPropertyAnnualSubmissionControllerISpec extends V2Integr
       |}
       |""".stripMargin)
 
-  private trait Test {
-
-    val nino: String          = "TC663795B"
-    val businessId: String    = "XAIS12345678910"
-    val taxYear: String       = "2021-22"
-    val correlationId: String = "X-123"
-
-    def setupStubs(): StubMapping
-
-    def uri: String = s"/foreign/$nino/$businessId/annual/$taxYear"
-
-    def ifsUri: String = s"/income-tax/business/property/annual"
-
-    def ifsQueryParams: Map[String, String] = Map(
-      "taxableEntityId" -> nino,
-      "incomeSourceId"  -> businessId,
-      "taxYear"         -> taxYear
-    )
-
-    def request(): WSRequest = {
-      setupStubs()
-      buildRequest(uri)
-        .withHttpHeaders(
-          (ACCEPT, "application/vnd.hmrc.2.0+json"),
-          (AUTHORIZATION, "Bearer 123") // some bearer token
-        )
-    }
-
-    val responseBody: JsValue = Json.parse(
-      s"""
-         |{
-         |  "links":[
-         |    {
-         |      "href":"/individuals/business/property/foreign/$nino/$businessId/annual/$taxYear",
-         |      "method":"PUT",
-         |      "rel":"create-and-amend-foreign-property-annual-submission"
-         |    },
-         |    {
-         |      "href":"/individuals/business/property/foreign/$nino/$businessId/annual/$taxYear",
-         |      "method":"GET",
-         |      "rel":"self"
-         |    },
-         |    {
-         |      "href":"/individuals/business/property/$nino/$businessId/annual/$taxYear",
-         |      "method":"DELETE",
-         |      "rel":"delete-property-annual-submission"
-         |    }
-         |  ]
-         |}
-      """.stripMargin
-    )
-
-    def errorBody(code: String): String =
-      s"""
-         |{
-         |  "code": "$code",
-         |  "reason": "ifs message"
-         |}
-       """.stripMargin
-  }
-
   "Calling the amend foreign property annual submission endpoint" should {
 
     "return a 200 status code" when {
 
-      "any valid request is made" in new Test {
+      "any valid request is made" in new NonTysTest {
 
         override def setupStubs(): StubMapping = {
           AuditStub.audit()
           AuthStub.authorised()
           MtdIdLookupStub.ninoFound(nino)
-          DownstreamStub.onSuccess(DownstreamStub.PUT, ifsUri, ifsQueryParams, NO_CONTENT, JsObject.empty)
+          DownstreamStub.onSuccess(DownstreamStub.PUT, downstreamUri, downstreamQueryParams, NO_CONTENT, JsObject.empty)
+        }
+
+        val response: WSResponse = await(request().put(requestBodyJson))
+        response.status shouldBe OK
+        response.json shouldBe responseBody
+        response.header("X-CorrelationId").nonEmpty shouldBe true
+      }
+
+      "any valid request is made for a Tax Year Specific (TYS) tax year" in new TysIfsTest {
+
+        override def setupStubs(): StubMapping = {
+          AuditStub.audit()
+          AuthStub.authorised()
+          MtdIdLookupStub.ninoFound(nino)
+          DownstreamStub.onSuccess(DownstreamStub.PUT, downstreamUri, downstreamQueryParams, NO_CONTENT, JsObject.empty)
         }
 
         val response: WSResponse = await(request().put(requestBodyJson))
@@ -356,7 +310,7 @@ class CreateAmendForeignPropertyAnnualSubmissionControllerISpec extends V2Integr
     }
 
     "return a 400 with multiple errors" when {
-      "field type validations fail on the request body" in new Test {
+      "field type validations fail on the request body" in new NonTysTest {
 
         val errorResponseJson: JsValue =
           Json.parse("""
@@ -390,7 +344,7 @@ class CreateAmendForeignPropertyAnnualSubmissionControllerISpec extends V2Integr
         response.json shouldBe errorResponseJson
       }
 
-      "field data validations fail on the request body" in new Test {
+      "field data validations fail on the request body" in new NonTysTest {
 
         val allInvalidFieldsRequestErrors: List[MtdError] = List(
           ValueFormatError.copy(
@@ -446,7 +400,7 @@ class CreateAmendForeignPropertyAnnualSubmissionControllerISpec extends V2Integr
                               requestBody: JsValue,
                               expectedStatus: Int,
                               expectedBody: MtdError): Unit = {
-        s"validation fails with ${expectedBody.code} error" in new Test {
+        s"validation fails with ${expectedBody.code} error" in new NonTysTest {
 
           override val nino: String       = requestNino
           override val businessId: String = requestBusinessId
@@ -522,14 +476,14 @@ class CreateAmendForeignPropertyAnnualSubmissionControllerISpec extends V2Integr
     }
 
     "downstream service error" when {
-      def serviceErrorTest(ifsStatus: Int, downstreamCode: String, expectedStatus: Int, expectedBody: MtdError): Unit = {
-        s"downstream returns an $downstreamCode error and status $ifsStatus" in new Test {
+      def serviceErrorTest(downstreamStatus: Int, downstreamCode: String, expectedStatus: Int, expectedBody: MtdError): Unit = {
+        s"downstream returns an $downstreamCode error and status $downstreamStatus" in new NonTysTest {
 
           override def setupStubs(): StubMapping = {
             AuditStub.audit()
             AuthStub.authorised()
             MtdIdLookupStub.ninoFound(nino)
-            DownstreamStub.onError(DownstreamStub.PUT, ifsUri, ifsStatus, errorBody(downstreamCode))
+            DownstreamStub.onError(DownstreamStub.PUT, downstreamUri, downstreamStatus, errorBody(downstreamCode))
           }
 
           val response: WSResponse = await(request().put(requestBodyJson))
@@ -538,7 +492,7 @@ class CreateAmendForeignPropertyAnnualSubmissionControllerISpec extends V2Integr
         }
       }
 
-      val input = Seq(
+      val errors = List(
         (BAD_REQUEST, "INVALID_TAXABLE_ENTITY_ID", BAD_REQUEST, NinoFormatError),
         (BAD_REQUEST, "INVALID_INCOMESOURCEID", BAD_REQUEST, BusinessIdFormatError),
         (BAD_REQUEST, "INVALID_TAX_YEAR", BAD_REQUEST, TaxYearFormatError),
@@ -553,7 +507,86 @@ class CreateAmendForeignPropertyAnnualSubmissionControllerISpec extends V2Integr
         (INTERNAL_SERVER_ERROR, "SERVER_ERROR", INTERNAL_SERVER_ERROR, InternalError),
         (SERVICE_UNAVAILABLE, "SERVICE_UNAVAILABLE", INTERNAL_SERVER_ERROR, InternalError)
       )
-      input.foreach(args => (serviceErrorTest _).tupled(args))
+
+      val extraTysErrors = List(
+        (UNPROCESSABLE_ENTITY, "MISSING_EXPENSES", INTERNAL_SERVER_ERROR, InternalError),
+        (UNPROCESSABLE_ENTITY, "FIELD_CONFLICT", BAD_REQUEST, RulePropertyIncomeAllowanceError)
+      )
+
+      (errors ++ extraTysErrors).foreach(args => (serviceErrorTest _).tupled(args))
     }
+  }
+
+  private trait Test {
+
+    val nino: String          = "TC663795B"
+    val businessId: String    = "XAIS12345678910"
+    val correlationId: String = "X-123"
+
+    def setupStubs(): StubMapping
+
+    def taxYear: String
+    def downstreamUri: String
+    def downstreamQueryParams: Map[String, String]
+
+    def mtdUri: String = s"/foreign/$nino/$businessId/annual/$taxYear"
+
+    def request(): WSRequest = {
+      setupStubs()
+      buildRequest(mtdUri)
+        .withHttpHeaders(
+          (ACCEPT, "application/vnd.hmrc.2.0+json"),
+          (AUTHORIZATION, "Bearer 123") // some bearer token
+        )
+    }
+
+    val responseBody: JsValue = Json.parse(
+      s"""
+         |{
+         |  "links":[
+         |    {
+         |      "href":"/individuals/business/property/foreign/$nino/$businessId/annual/$taxYear",
+         |      "method":"PUT",
+         |      "rel":"create-and-amend-foreign-property-annual-submission"
+         |    },
+         |    {
+         |      "href":"/individuals/business/property/foreign/$nino/$businessId/annual/$taxYear",
+         |      "method":"GET",
+         |      "rel":"self"
+         |    },
+         |    {
+         |      "href":"/individuals/business/property/$nino/$businessId/annual/$taxYear",
+         |      "method":"DELETE",
+         |      "rel":"delete-property-annual-submission"
+         |    }
+         |  ]
+         |}
+      """.stripMargin
+    )
+
+    def errorBody(code: String): String =
+      s"""
+         |{
+         |  "code": "$code",
+         |  "reason": "downstream error message"
+         |}
+       """.stripMargin
+  }
+
+  private trait TysIfsTest extends Test {
+    def taxYear: String                            = "2023-24"
+    def downstreamUri: String                      = s"/income-tax/business/property/annual/23-24/$nino/$businessId"
+    def downstreamQueryParams: Map[String, String] = Map()
+  }
+
+  private trait NonTysTest extends Test {
+    def taxYear: String       = "2022-23"
+    def downstreamUri: String = s"/income-tax/business/property/annual"
+
+    def downstreamQueryParams: Map[String, String] = Map(
+      "taxableEntityId" -> nino,
+      "incomeSourceId"  -> businessId,
+      "taxYear"         -> "2022-23"
+    )
   }
 }

@@ -72,17 +72,17 @@ class CreateAmendForeignPropertyAnnualSubmissionServiceSpec extends UnitSpec {
   "unsuccessful" should {
     "map errors according to spec" when {
 
-      def serviceError(ifsErrorCode: String, error: MtdError): Unit =
-        s"a $ifsErrorCode error is returned from the service" in new Test {
+      def serviceError(downstreamErrorCode: String, error: MtdError): Unit =
+        s"a $downstreamErrorCode error is returned from the service" in new Test {
 
           MockAmendForeignPropertyAnnualSubmissionConnector
             .amendForeignProperty(request)
-            .returns(Future.successful(Left(ResponseWrapper(correlationId, DownstreamErrors.single(DownstreamErrorCode(ifsErrorCode))))))
+            .returns(Future.successful(Left(ResponseWrapper(correlationId, DownstreamErrors.single(DownstreamErrorCode(downstreamErrorCode))))))
 
           await(service.createAmendForeignPropertyAnnualSubmission(request)) shouldBe Left(ErrorWrapper(correlationId, error))
         }
 
-      val input = Seq(
+      val errors = List(
         "INVALID_TAXABLE_ENTITY_ID"   -> NinoFormatError,
         "INVALID_INCOMESOURCEID"      -> BusinessIdFormatError,
         "INVALID_TAX_YEAR"            -> TaxYearFormatError,
@@ -98,7 +98,12 @@ class CreateAmendForeignPropertyAnnualSubmissionServiceSpec extends UnitSpec {
         "SERVICE_UNAVAILABLE"         -> InternalError
       )
 
-      input.foreach(args => (serviceError _).tupled(args))
+      val extraTysErrors = List(
+        "MISSING_EXPENSES" -> InternalError,
+        "FIELD_CONFLICT"   -> RulePropertyIncomeAllowanceError
+      )
+
+      (errors ++ extraTysErrors).foreach(args => (serviceError _).tupled(args))
     }
   }
 }

@@ -25,7 +25,7 @@ trait IfsResponseMappingSupport {
   self: Logging =>
 
   final def mapIfsErrors[D](errorCodeMap: PartialFunction[String, MtdError])(ifsResponseWrapper: ResponseWrapper[IfsError])(
-    implicit logContext: EndpointLogContext): ErrorWrapper = {
+      implicit logContext: EndpointLogContext): ErrorWrapper = {
 
     lazy val defaultErrorCodeMapping: String => MtdError = { code =>
       logger.warn(s"[${logContext.controllerName}] [${logContext.endpointName}] - No mapping found for error code $code")

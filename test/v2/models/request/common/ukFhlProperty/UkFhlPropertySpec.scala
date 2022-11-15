@@ -16,38 +16,41 @@
 
 package v2.models.request.common.ukFhlProperty
 
-import play.api.libs.json.{JsValue, Json}
+import play.api.libs.json.{ JsValue, Json }
 import support.UnitSpec
-import v2.models.request.common.ukPropertyRentARoom.{UkPropertyExpensesRentARoom, UkPropertyIncomeRentARoom}
+import v2.models.request.common.ukPropertyRentARoom.{ UkPropertyExpensesRentARoom, UkPropertyIncomeRentARoom }
 
 class UkFhlPropertySpec extends UnitSpec {
 
   val requestBody: UkFhlProperty =
     UkFhlProperty(
-      Some(UkFhlPropertyIncome(
-        Some(5000.99),
-        Some(3123.21),
-        Some(UkPropertyIncomeRentARoom(
-          Some(532.12)
+      Some(
+        UkFhlPropertyIncome(
+          Some(5000.99),
+          Some(3123.21),
+          Some(
+            UkPropertyIncomeRentARoom(
+              Some(532.12)
+            ))
+        )),
+      Some(
+        UkFhlPropertyExpenses(
+          Some(3123.21),
+          Some(928.42),
+          Some(842.99),
+          Some(8831.12),
+          Some(484.12),
+          Some(99282),
+          Some(999.99),
+          Some(974.47),
+          Some(
+            UkPropertyExpensesRentARoom(
+              Some(8842.43)
+            ))
         ))
-      )),
-      Some(UkFhlPropertyExpenses(
-        Some(3123.21),
-        Some(928.42),
-        Some(842.99),
-        Some(8831.12),
-        Some(484.12),
-        Some(99282),
-        Some(999.99),
-        Some(974.47),
-        Some(UkPropertyExpensesRentARoom(
-          Some(8842.43)
-        ))
-      ))
     )
 
-  val mtdJson: JsValue = Json.parse(
-    """
+  val mtdJson: JsValue = Json.parse("""
       |{
       |    "income": {
       |        "periodAmount": 5000.99,
@@ -72,9 +75,7 @@ class UkFhlPropertySpec extends UnitSpec {
       |}
       |""".stripMargin)
 
-
-  val desJson: JsValue = Json.parse(
-    """
+  val desJson: JsValue = Json.parse("""
       |{
       |    "income": {
       |        "periodAmount": 5000.99,

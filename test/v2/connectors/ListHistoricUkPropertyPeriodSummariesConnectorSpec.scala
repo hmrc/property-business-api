@@ -16,10 +16,10 @@
 
 package v2.connectors
 
-import v2.models.domain.{HistoricPropertyType, Nino}
+import v2.models.domain.{ HistoricPropertyType, Nino }
 import v2.models.outcomes.ResponseWrapper
 import v2.models.request.listHistoricUkPropertyPeriodSummaries.ListHistoricUkPropertyPeriodSummariesRequest
-import v2.models.response.listHistoricUkPropertyPeriodSummaries.{ListHistoricUkPropertyPeriodSummariesResponse, SubmissionPeriod}
+import v2.models.response.listHistoricUkPropertyPeriodSummaries.{ ListHistoricUkPropertyPeriodSummariesResponse, SubmissionPeriod }
 
 import scala.concurrent.Future
 
@@ -50,18 +50,16 @@ class ListHistoricUkPropertyPeriodSummariesConnectorSpec extends ConnectorSpec {
 
     "send a request and return a body for FHL" in new IfsTest with Test {
       willGet(
-          url = s"$baseUrl/income-tax/nino/$nino/uk-properties/furnished-holiday-lettings/periodic-summaries"
-        )
-        .returns(Future.successful(outcome))
+        url = s"$baseUrl/income-tax/nino/$nino/uk-properties/furnished-holiday-lettings/periodic-summaries"
+      ).returns(Future.successful(outcome))
 
       await(connector.listPeriodSummaries(request, HistoricPropertyType.Fhl)) shouldBe outcome
     }
 
     "send a request and return a body for non-FHL" in new IfsTest with Test {
       willGet(
-          url = s"$baseUrl/income-tax/nino/$nino/uk-properties/other/periodic-summaries"
-        )
-        .returns(Future.successful(outcome))
+        url = s"$baseUrl/income-tax/nino/$nino/uk-properties/other/periodic-summaries"
+      ).returns(Future.successful(outcome))
 
       await(connector.listPeriodSummaries(request, HistoricPropertyType.NonFhl)) shouldBe outcome
     }

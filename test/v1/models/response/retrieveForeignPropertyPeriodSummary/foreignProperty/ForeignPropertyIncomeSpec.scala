@@ -31,8 +31,7 @@ class ForeignPropertyIncomeSpec extends UnitSpec with JsonErrorValidators {
     Some(5000.99)
   )
 
-  val writesJson = Json.parse(
-    """{
+  val writesJson = Json.parse("""{
       |    "rentIncome": {
       |      "rentAmount": 5000.99
       |    },
@@ -43,8 +42,7 @@ class ForeignPropertyIncomeSpec extends UnitSpec with JsonErrorValidators {
       |    "specialWithholdingTaxOrUKTaxPaid": 5000.99
       |  }""".stripMargin)
 
-  val readsJson = Json.parse(
-    """{
+  val readsJson = Json.parse("""{
       |    "rentIncome": {
       |      "rentAmount": 5000.99
       |    },
@@ -54,7 +52,6 @@ class ForeignPropertyIncomeSpec extends UnitSpec with JsonErrorValidators {
       |    "foreignTaxPaidOrDeducted": 5000.99,
       |    "specialWithholdingTaxOrUkTaxPaid": 5000.99
       |  }""".stripMargin)
-
 
   "reads" when {
     "passed a valid JSON" should {

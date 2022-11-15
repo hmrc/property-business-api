@@ -19,20 +19,20 @@ package v2.endpoints
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import play.api.http.HeaderNames.ACCEPT
 import play.api.http.Status._
-import play.api.libs.json.{JsObject, JsValue, Json}
-import play.api.libs.ws.{WSRequest, WSResponse}
+import play.api.libs.json.{ JsObject, JsValue, Json }
+import play.api.libs.ws.{ WSRequest, WSResponse }
 import play.api.test.Helpers.AUTHORIZATION
 import support.V2IntegrationBaseSpec
 import v2.models.errors._
-import v2.stubs.{AuthStub, DownstreamStub, MtdIdLookupStub}
+import v2.stubs.{ AuthStub, DownstreamStub, MtdIdLookupStub }
 
 class AmendUkPropertyAnnualSubmissionControllerISpec extends V2IntegrationBaseSpec {
 
   private trait Test {
 
-    val nino: String = "TC663795B"
-    val businessId: String = "XAIS12345678910"
-    val taxYear: String = "2022-23"
+    val nino: String          = "TC663795B"
+    val businessId: String    = "XAIS12345678910"
+    val taxYear: String       = "2022-23"
     val correlationId: String = "X-123"
 
     val requestBodyJson: JsValue = Json.parse(
@@ -137,11 +137,11 @@ class AmendUkPropertyAnnualSubmissionControllerISpec extends V2IntegrationBaseSp
 
     def ifsUri: String = s"/income-tax/business/property/annual"
 
-      def ifsQueryParams: Map[String, String] = Map(
+    def ifsQueryParams: Map[String, String] = Map(
       "taxableEntityId" -> nino,
-      "incomeSourceId" -> businessId,
-      "taxYear" -> taxYear
-      )
+      "incomeSourceId"  -> businessId,
+      "taxYear"         -> taxYear
+    )
 
     def request(): WSRequest = {
       setupStubs()
@@ -149,7 +149,7 @@ class AmendUkPropertyAnnualSubmissionControllerISpec extends V2IntegrationBaseSp
         .withHttpHeaders(
           (ACCEPT, "application/vnd.hmrc.2.0+json"),
           (AUTHORIZATION, "Bearer 123") // some bearer token
-      )
+        )
     }
 
     def errorBody(code: String): String =
@@ -183,8 +183,7 @@ class AmendUkPropertyAnnualSubmissionControllerISpec extends V2IntegrationBaseSp
     "return a 400 with multiple errors" when {
       "all field validations fail on the request body" in new Test {
 
-        val allInvalidFieldsRequestBodyJson: JsValue = Json.parse(
-          """
+        val allInvalidFieldsRequestBodyJson: JsValue = Json.parse("""
             |{
             |  "ukFhlProperty": {
             |    "allowances": {
@@ -256,44 +255,47 @@ class AmendUkPropertyAnnualSubmissionControllerISpec extends V2IntegrationBaseSp
 
         val allInvalidFieldsRequestError: List[MtdError] = List(
           ValueFormatError.copy(
-            paths = Some(List(
-              "/ukFhlProperty/adjustments/balancingCharge",
-              "/ukFhlProperty/adjustments/privateUseAdjustment",
-              "/ukFhlProperty/adjustments/businessPremisesRenovationAllowanceBalancingCharges",
-              "/ukFhlProperty/allowances/annualInvestmentAllowance",
-              "/ukFhlProperty/allowances/businessPremisesRenovationAllowance",
-              "/ukFhlProperty/allowances/otherCapitalAllowance",
-              "/ukFhlProperty/allowances/electricChargePointAllowance",
-              "/ukFhlProperty/allowances/zeroEmissionsCarAllowance",
-              "/ukNonFhlProperty/adjustments/balancingCharge",
-              "/ukNonFhlProperty/adjustments/privateUseAdjustment",
-              "/ukNonFhlProperty/adjustments/businessPremisesRenovationAllowanceBalancingCharges",
-              "/ukNonFhlProperty/allowances/annualInvestmentAllowance",
-              "/ukNonFhlProperty/allowances/zeroEmissionsGoodsVehicleAllowance",
-              "/ukNonFhlProperty/allowances/businessPremisesRenovationAllowance",
-              "/ukNonFhlProperty/allowances/otherCapitalAllowance",
-              "/ukNonFhlProperty/allowances/costOfReplacingDomesticGoods",
-              "/ukNonFhlProperty/allowances/electricChargePointAllowance",
-              "/ukNonFhlProperty/allowances/zeroEmissionsCarAllowance",
-              "/ukNonFhlProperty/allowances/structuredBuildingAllowance/0/amount",
-              "/ukNonFhlProperty/allowances/structuredBuildingAllowance/0/firstYear/qualifyingAmountExpenditure",
-              "/ukNonFhlProperty/allowances/enhancedStructuredBuildingAllowance/0/amount",
-              "/ukNonFhlProperty/allowances/enhancedStructuredBuildingAllowance/0/firstYear/qualifyingAmountExpenditure"
-            ))
+            paths = Some(
+              List(
+                "/ukFhlProperty/adjustments/balancingCharge",
+                "/ukFhlProperty/adjustments/privateUseAdjustment",
+                "/ukFhlProperty/adjustments/businessPremisesRenovationAllowanceBalancingCharges",
+                "/ukFhlProperty/allowances/annualInvestmentAllowance",
+                "/ukFhlProperty/allowances/businessPremisesRenovationAllowance",
+                "/ukFhlProperty/allowances/otherCapitalAllowance",
+                "/ukFhlProperty/allowances/electricChargePointAllowance",
+                "/ukFhlProperty/allowances/zeroEmissionsCarAllowance",
+                "/ukNonFhlProperty/adjustments/balancingCharge",
+                "/ukNonFhlProperty/adjustments/privateUseAdjustment",
+                "/ukNonFhlProperty/adjustments/businessPremisesRenovationAllowanceBalancingCharges",
+                "/ukNonFhlProperty/allowances/annualInvestmentAllowance",
+                "/ukNonFhlProperty/allowances/zeroEmissionsGoodsVehicleAllowance",
+                "/ukNonFhlProperty/allowances/businessPremisesRenovationAllowance",
+                "/ukNonFhlProperty/allowances/otherCapitalAllowance",
+                "/ukNonFhlProperty/allowances/costOfReplacingDomesticGoods",
+                "/ukNonFhlProperty/allowances/electricChargePointAllowance",
+                "/ukNonFhlProperty/allowances/zeroEmissionsCarAllowance",
+                "/ukNonFhlProperty/allowances/structuredBuildingAllowance/0/amount",
+                "/ukNonFhlProperty/allowances/structuredBuildingAllowance/0/firstYear/qualifyingAmountExpenditure",
+                "/ukNonFhlProperty/allowances/enhancedStructuredBuildingAllowance/0/amount",
+                "/ukNonFhlProperty/allowances/enhancedStructuredBuildingAllowance/0/firstYear/qualifyingAmountExpenditure"
+              ))
           ),
           DateFormatError.copy(
-            paths = Some(List(
-              "/ukNonFhlProperty/allowances/structuredBuildingAllowance/0/firstYear/qualifyingDate",
-              "/ukNonFhlProperty/allowances/enhancedStructuredBuildingAllowance/0/firstYear/qualifyingDate"
-            ))
+            paths = Some(
+              List(
+                "/ukNonFhlProperty/allowances/structuredBuildingAllowance/0/firstYear/qualifyingDate",
+                "/ukNonFhlProperty/allowances/enhancedStructuredBuildingAllowance/0/firstYear/qualifyingDate"
+              ))
           ),
           StringFormatError.copy(
-            paths = Some(List(
-              "/ukNonFhlProperty/allowances/structuredBuildingAllowance/0/building/name",
-              "/ukNonFhlProperty/allowances/structuredBuildingAllowance/0/building/postcode",
-              "/ukNonFhlProperty/allowances/enhancedStructuredBuildingAllowance/0/building/number",
-              "/ukNonFhlProperty/allowances/enhancedStructuredBuildingAllowance/0/building/postcode"
-            ))
+            paths = Some(
+              List(
+                "/ukNonFhlProperty/allowances/structuredBuildingAllowance/0/building/name",
+                "/ukNonFhlProperty/allowances/structuredBuildingAllowance/0/building/postcode",
+                "/ukNonFhlProperty/allowances/enhancedStructuredBuildingAllowance/0/building/number",
+                "/ukNonFhlProperty/allowances/enhancedStructuredBuildingAllowance/0/building/postcode"
+              ))
           ),
         )
 
@@ -315,8 +317,7 @@ class AmendUkPropertyAnnualSubmissionControllerISpec extends V2IntegrationBaseSp
     }
     "return an error according to spec" when {
 
-      val validRequestBodyJson = Json.parse(
-        """
+      val validRequestBodyJson = Json.parse("""
           |{
           |  "ukFhlProperty": {
           |    "allowances": {
@@ -386,8 +387,7 @@ class AmendUkPropertyAnnualSubmissionControllerISpec extends V2IntegrationBaseSp
           |}
           |""".stripMargin)
 
-      val allInvalidValueRequestBodyJson = Json.parse(
-        """
+      val allInvalidValueRequestBodyJson = Json.parse("""
           |{
           |  "ukFhlProperty": {
           |    "allowances": {
@@ -457,8 +457,7 @@ class AmendUkPropertyAnnualSubmissionControllerISpec extends V2IntegrationBaseSp
           |}
           |""".stripMargin)
 
-      val allInvalidDateFormatRequestBodyJson = Json.parse(
-        """
+      val allInvalidDateFormatRequestBodyJson = Json.parse("""
           |{
           |  "ukFhlProperty": {
           |    "allowances": {
@@ -528,8 +527,7 @@ class AmendUkPropertyAnnualSubmissionControllerISpec extends V2IntegrationBaseSp
           |}
           |""".stripMargin)
 
-      val allInvalidStringRequestBodyJson = Json.parse(
-        """
+      val allInvalidStringRequestBodyJson = Json.parse("""
           |{
           |  "ukFhlProperty": {
           |    "allowances": {
@@ -599,8 +597,7 @@ class AmendUkPropertyAnnualSubmissionControllerISpec extends V2IntegrationBaseSp
           |}
           |""".stripMargin)
 
-      val buildingNameNumberBodyJson = Json.parse(
-        """
+      val buildingNameNumberBodyJson = Json.parse("""
           |{
           |  "ukFhlProperty": {
           |    "allowances": {
@@ -668,8 +665,7 @@ class AmendUkPropertyAnnualSubmissionControllerISpec extends V2IntegrationBaseSp
           |}
           |""".stripMargin)
 
-      val bothAllowancesSuppliedBodyJson = Json.parse(
-        """
+      val bothAllowancesSuppliedBodyJson = Json.parse("""
           |{
           |  "ukFhlProperty": {
           |    "allowances": {
@@ -739,8 +735,7 @@ class AmendUkPropertyAnnualSubmissionControllerISpec extends V2IntegrationBaseSp
           |}
           |""".stripMargin)
 
-      val propertyIncomeAllowanceBodyJson = Json.parse(
-        """
+      val propertyIncomeAllowanceBodyJson = Json.parse("""
           |{
           |  "ukFhlProperty": {
           |    "allowances": {
@@ -757,64 +752,69 @@ class AmendUkPropertyAnnualSubmissionControllerISpec extends V2IntegrationBaseSp
 
       val allInvalidValueRequestError: MtdError = ValueFormatError.copy(
         message = "The value must be between 0 and 99999999999.99",
-        paths = Some(List(
-          "/ukFhlProperty/adjustments/balancingCharge",
-          "/ukFhlProperty/adjustments/privateUseAdjustment",
-          "/ukFhlProperty/adjustments/businessPremisesRenovationAllowanceBalancingCharges",
-          "/ukFhlProperty/allowances/annualInvestmentAllowance",
-          "/ukFhlProperty/allowances/businessPremisesRenovationAllowance",
-          "/ukFhlProperty/allowances/otherCapitalAllowance",
-          "/ukFhlProperty/allowances/electricChargePointAllowance",
-          "/ukFhlProperty/allowances/zeroEmissionsCarAllowance",
-          "/ukNonFhlProperty/adjustments/balancingCharge",
-          "/ukNonFhlProperty/adjustments/privateUseAdjustment",
-          "/ukNonFhlProperty/adjustments/businessPremisesRenovationAllowanceBalancingCharges",
-          "/ukNonFhlProperty/allowances/annualInvestmentAllowance",
-          "/ukNonFhlProperty/allowances/zeroEmissionsGoodsVehicleAllowance",
-          "/ukNonFhlProperty/allowances/businessPremisesRenovationAllowance",
-          "/ukNonFhlProperty/allowances/otherCapitalAllowance",
-          "/ukNonFhlProperty/allowances/costOfReplacingDomesticGoods",
-          "/ukNonFhlProperty/allowances/electricChargePointAllowance",
-          "/ukNonFhlProperty/allowances/zeroEmissionsCarAllowance",
-          "/ukNonFhlProperty/allowances/structuredBuildingAllowance/0/amount",
-          "/ukNonFhlProperty/allowances/structuredBuildingAllowance/0/firstYear/qualifyingAmountExpenditure",
-          "/ukNonFhlProperty/allowances/enhancedStructuredBuildingAllowance/0/amount",
-          "/ukNonFhlProperty/allowances/enhancedStructuredBuildingAllowance/0/firstYear/qualifyingAmountExpenditure"
-        ))
+        paths = Some(
+          List(
+            "/ukFhlProperty/adjustments/balancingCharge",
+            "/ukFhlProperty/adjustments/privateUseAdjustment",
+            "/ukFhlProperty/adjustments/businessPremisesRenovationAllowanceBalancingCharges",
+            "/ukFhlProperty/allowances/annualInvestmentAllowance",
+            "/ukFhlProperty/allowances/businessPremisesRenovationAllowance",
+            "/ukFhlProperty/allowances/otherCapitalAllowance",
+            "/ukFhlProperty/allowances/electricChargePointAllowance",
+            "/ukFhlProperty/allowances/zeroEmissionsCarAllowance",
+            "/ukNonFhlProperty/adjustments/balancingCharge",
+            "/ukNonFhlProperty/adjustments/privateUseAdjustment",
+            "/ukNonFhlProperty/adjustments/businessPremisesRenovationAllowanceBalancingCharges",
+            "/ukNonFhlProperty/allowances/annualInvestmentAllowance",
+            "/ukNonFhlProperty/allowances/zeroEmissionsGoodsVehicleAllowance",
+            "/ukNonFhlProperty/allowances/businessPremisesRenovationAllowance",
+            "/ukNonFhlProperty/allowances/otherCapitalAllowance",
+            "/ukNonFhlProperty/allowances/costOfReplacingDomesticGoods",
+            "/ukNonFhlProperty/allowances/electricChargePointAllowance",
+            "/ukNonFhlProperty/allowances/zeroEmissionsCarAllowance",
+            "/ukNonFhlProperty/allowances/structuredBuildingAllowance/0/amount",
+            "/ukNonFhlProperty/allowances/structuredBuildingAllowance/0/firstYear/qualifyingAmountExpenditure",
+            "/ukNonFhlProperty/allowances/enhancedStructuredBuildingAllowance/0/amount",
+            "/ukNonFhlProperty/allowances/enhancedStructuredBuildingAllowance/0/firstYear/qualifyingAmountExpenditure"
+          ))
       )
 
       val allInvalidDateFormatRequestError: MtdError = DateFormatError.copy(
         message = "The supplied date format is not valid",
-        paths = Some(List(
-          "/ukNonFhlProperty/allowances/structuredBuildingAllowance/0/firstYear/qualifyingDate",
-          "/ukNonFhlProperty/allowances/enhancedStructuredBuildingAllowance/0/firstYear/qualifyingDate"
-        ))
+        paths = Some(
+          List(
+            "/ukNonFhlProperty/allowances/structuredBuildingAllowance/0/firstYear/qualifyingDate",
+            "/ukNonFhlProperty/allowances/enhancedStructuredBuildingAllowance/0/firstYear/qualifyingDate"
+          ))
       )
 
       val allInvalidStringRequestError: MtdError = StringFormatError.copy(
         message = "The supplied string format is not valid",
-        paths = Some(List(
-          "/ukNonFhlProperty/allowances/structuredBuildingAllowance/0/building/name",
-          "/ukNonFhlProperty/allowances/structuredBuildingAllowance/0/building/postcode",
-          "/ukNonFhlProperty/allowances/enhancedStructuredBuildingAllowance/0/building/number",
-          "/ukNonFhlProperty/allowances/enhancedStructuredBuildingAllowance/0/building/postcode"
-        ))
+        paths = Some(
+          List(
+            "/ukNonFhlProperty/allowances/structuredBuildingAllowance/0/building/name",
+            "/ukNonFhlProperty/allowances/structuredBuildingAllowance/0/building/postcode",
+            "/ukNonFhlProperty/allowances/enhancedStructuredBuildingAllowance/0/building/number",
+            "/ukNonFhlProperty/allowances/enhancedStructuredBuildingAllowance/0/building/postcode"
+          ))
       )
 
       val buildingNameNumberError: MtdError = RuleBuildingNameNumberError.copy(
         message = "Postcode must be supplied along with at least one of name or number",
-        paths = Some(List(
-          "/ukNonFhlProperty/allowances/structuredBuildingAllowance/0/building",
-          "/ukNonFhlProperty/allowances/enhancedStructuredBuildingAllowance/0/building"
-        ))
+        paths = Some(
+          List(
+            "/ukNonFhlProperty/allowances/structuredBuildingAllowance/0/building",
+            "/ukNonFhlProperty/allowances/enhancedStructuredBuildingAllowance/0/building"
+          ))
       )
 
       val bothAllowancesSuppliedError: MtdError = RuleBothAllowancesSuppliedError.copy(
         message = "Both allowances and property allowances must not be present at the same time",
-        paths = Some(List(
-          "/ukFhlProperty/allowances",
-          "/ukNonFhlProperty/allowances"
-        ))
+        paths = Some(
+          List(
+            "/ukFhlProperty/allowances",
+            "/ukNonFhlProperty/allowances"
+          ))
       )
 
       val propertyIncomeAllowanceError: MtdError = RulePropertyIncomeAllowanceError.copy(paths = Some(List("/ukFhlProperty")))
@@ -828,9 +828,9 @@ class AmendUkPropertyAnnualSubmissionControllerISpec extends V2IntegrationBaseSp
                                 expectedBody: MtdError): Unit = {
           s"validation fails with ${expectedBody.code} error" in new Test {
 
-            override val nino: String = requestNino
-            override val businessId: String = requestBusinessId
-            override val taxYear: String = requestTaxYear
+            override val nino: String             = requestNino
+            override val businessId: String       = requestBusinessId
+            override val taxYear: String          = requestTaxYear
             override val requestBodyJson: JsValue = requestBody
 
             override def setupStubs(): StubMapping = {

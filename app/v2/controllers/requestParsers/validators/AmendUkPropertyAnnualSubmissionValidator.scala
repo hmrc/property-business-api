@@ -19,18 +19,18 @@ package v2.controllers.requestParsers.validators
 import config.AppConfig
 import v2.controllers.requestParsers.validators.validations._
 import v2.models.errors._
-import v2.models.request.amendUkPropertyAnnualSubmission.ukFhlProperty.{UkFhlProperty, UkFhlPropertyAllowances}
-import v2.models.request.amendUkPropertyAnnualSubmission.ukNonFhlProperty.{UkNonFhlProperty, UkNonFhlPropertyAllowances}
-import v2.models.request.amendUkPropertyAnnualSubmission.{AmendUkPropertyAnnualSubmissionRawData, AmendUkPropertyAnnualSubmissionRequestBody}
+import v2.models.request.amendUkPropertyAnnualSubmission.ukFhlProperty.{ UkFhlProperty, UkFhlPropertyAllowances }
+import v2.models.request.amendUkPropertyAnnualSubmission.ukNonFhlProperty.{ UkNonFhlProperty, UkNonFhlPropertyAllowances }
+import v2.models.request.amendUkPropertyAnnualSubmission.{ AmendUkPropertyAnnualSubmissionRawData, AmendUkPropertyAnnualSubmissionRequestBody }
 import v2.models.request.common.StructuredBuildingAllowance
 
-import javax.inject.{Inject, Singleton}
+import javax.inject.{ Inject, Singleton }
 
 @Singleton
 class AmendUkPropertyAnnualSubmissionValidator @Inject()(appConfig: AppConfig) extends Validator[AmendUkPropertyAnnualSubmissionRawData] {
 
   private lazy val minTaxYear = appConfig.minimumTaxV2Uk
-  private val validationSet = List(parameterFormatValidation, bodyFormatValidation, bodyFieldValidation)
+  private val validationSet   = List(parameterFormatValidation, bodyFormatValidation, bodyFieldValidation)
 
   private def parameterFormatValidation: AmendUkPropertyAnnualSubmissionRawData => List[List[MtdError]] =
     (data: AmendUkPropertyAnnualSubmissionRawData) => {
@@ -43,7 +43,7 @@ class AmendUkPropertyAnnualSubmissionValidator @Inject()(appConfig: AppConfig) e
 
   private def bodyFormatValidation: AmendUkPropertyAnnualSubmissionRawData => List[List[MtdError]] = { data =>
     JsonFormatValidation.validateAndCheckNonEmpty[AmendUkPropertyAnnualSubmissionRequestBody](data.body) match {
-      case Nil => NoValidationErrors
+      case Nil          => NoValidationErrors
       case schemaErrors => List(schemaErrors)
     }
   }
@@ -53,17 +53,22 @@ class AmendUkPropertyAnnualSubmissionValidator @Inject()(appConfig: AppConfig) e
 
     List(
       flattenErrors(
-        List(body.ukFhlProperty.map(validateUkFhlProperty).getOrElse(NoValidationErrors),
-        body.ukNonFhlProperty.map(validateukNonFhlProperty).getOrElse(NoValidationErrors),
+        List(
+          body.ukFhlProperty.map(validateUkFhlProperty).getOrElse(NoValidationErrors),
+          body.ukNonFhlProperty.map(validateukNonFhlProperty).getOrElse(NoValidationErrors),
           body.ukFhlProperty.flatMap(_.allowances).map(validateFhlAllowances).getOrElse(NoValidationErrors),
           body.ukNonFhlProperty.flatMap(_.allowances).map(validateNonFhlAllowances).getOrElse(NoValidationErrors),
-          body.ukNonFhlProperty.flatMap(_.allowances.flatMap(_.structuredBuildingAllowance)).map(_.zipWithIndex.toList.flatMap {
-            case (entry, i) => validateStructuredBuildingAllowance(entry, i)
-          })
+          body.ukNonFhlProperty
+            .flatMap(_.allowances.flatMap(_.structuredBuildingAllowance))
+            .map(_.zipWithIndex.toList.flatMap {
+              case (entry, i) => validateStructuredBuildingAllowance(entry, i)
+            })
             .getOrElse(NoValidationErrors),
-          body.ukNonFhlProperty.flatMap(_.allowances.flatMap(_.enhancedStructuredBuildingAllowance)).map(_.zipWithIndex.toList.flatMap {
-            case (entry, i) => validateEnhancedStructuredBuildingAllowance(entry, i)
-          })
+          body.ukNonFhlProperty
+            .flatMap(_.allowances.flatMap(_.enhancedStructuredBuildingAllowance))
+            .map(_.zipWithIndex.toList.flatMap {
+              case (entry, i) => validateEnhancedStructuredBuildingAllowance(entry, i)
+            })
             .getOrElse(NoValidationErrors)
         )
       )
@@ -106,7 +111,8 @@ class AmendUkPropertyAnnualSubmissionValidator @Inject()(appConfig: AppConfig) e
       ),
       NumberValidation.validateOptional(
         field = ukFhlProperty.allowances.flatMap(_.propertyIncomeAllowance),
-        path = "/ukFhlProperty/allowances/propertyIncomeAllowance", max = 1000
+        path = "/ukFhlProperty/allowances/propertyIncomeAllowance",
+        max = 1000
       ),
       validateFhlPropertyIncomeAllowance(ukFhlProperty)
     ).flatten
@@ -156,7 +162,8 @@ class AmendUkPropertyAnnualSubmissionValidator @Inject()(appConfig: AppConfig) e
       ),
       NumberValidation.validateOptional(
         field = ukNonFhlProperty.allowances.flatMap(_.propertyIncomeAllowance),
-        path = "/ukNonFhlProperty/allowances/propertyIncomeAllowance", max = 1000
+        path = "/ukNonFhlProperty/allowances/propertyIncomeAllowance",
+        max = 1000
       ),
       validateNonFhlPropertyIncomeAllowance(ukNonFhlProperty)
     ).flatten
@@ -164,10 +171,10 @@ class AmendUkPropertyAnnualSubmissionValidator @Inject()(appConfig: AppConfig) e
 
   private def validateStructuredBuildingAllowance(buildingAllowance: StructuredBuildingAllowance, index: Int): List[MtdError] = {
     List(
-    NumberValidation.validate(
-      field = buildingAllowance.amount,
-      path = s"/ukNonFhlProperty/allowances/structuredBuildingAllowance/$index/amount"
-    ),
+      NumberValidation.validate(
+        field = buildingAllowance.amount,
+        path = s"/ukNonFhlProperty/allowances/structuredBuildingAllowance/$index/amount"
+      ),
       DateValidation.validateOtherDate(
         field = buildingAllowance.firstYear.map(_.qualifyingDate),
         path = s"/ukNonFhlProperty/allowances/structuredBuildingAllowance/$index/firstYear/qualifyingDate"
@@ -196,10 +203,10 @@ class AmendUkPropertyAnnualSubmissionValidator @Inject()(appConfig: AppConfig) e
   }
   private def validateEnhancedStructuredBuildingAllowance(buildingAllowance: StructuredBuildingAllowance, index: Int): List[MtdError] = {
     List(
-    NumberValidation.validate(
-      field = buildingAllowance.amount,
-      path = s"/ukNonFhlProperty/allowances/enhancedStructuredBuildingAllowance/$index/amount"
-    ),
+      NumberValidation.validate(
+        field = buildingAllowance.amount,
+        path = s"/ukNonFhlProperty/allowances/enhancedStructuredBuildingAllowance/$index/amount"
+      ),
       DateValidation.validateOtherDate(
         field = buildingAllowance.firstYear.map(_.qualifyingDate),
         path = s"/ukNonFhlProperty/allowances/enhancedStructuredBuildingAllowance/$index/firstYear/qualifyingDate"
@@ -227,14 +234,14 @@ class AmendUkPropertyAnnualSubmissionValidator @Inject()(appConfig: AppConfig) e
     ).flatten
   }
 
-  private def validateFhlAllowances(allowances: UkFhlPropertyAllowances) : List[MtdError] = {
+  private def validateFhlAllowances(allowances: UkFhlPropertyAllowances): List[MtdError] = {
     AllowancesValidation.validateUkFhl(
       allowances = allowances,
       path = s"/ukFhlProperty/allowances"
     )
   }
 
-  private def validateNonFhlAllowances(allowances: UkNonFhlPropertyAllowances) : List[MtdError] = {
+  private def validateNonFhlAllowances(allowances: UkNonFhlPropertyAllowances): List[MtdError] = {
     AllowancesValidation.validateUkNonFhl(
       allowances = allowances,
       path = s"/ukNonFhlProperty/allowances"

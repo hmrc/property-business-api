@@ -16,12 +16,12 @@
 
 package v2.models.request.createAmendHistoricFhlUkPropertyAnnualSubmission
 
-import play.api.libs.json.{Format, Json}
+import play.api.libs.json.{ Format, Json }
 
 case class HistoricFhlAnnualAllowances(annualInvestmentAllowance: Option[BigDecimal],
-                                   businessPremisesRenovationAllowance: Option[BigDecimal],
-                                   otherCapitalAllowance: Option[BigDecimal],
-                                   propertyIncomeAllowance: Option[BigDecimal])
+                                       businessPremisesRenovationAllowance: Option[BigDecimal],
+                                       otherCapitalAllowance: Option[BigDecimal],
+                                       propertyIncomeAllowance: Option[BigDecimal])
 
 object HistoricFhlAnnualAllowances {
   implicit val format: Format[HistoricFhlAnnualAllowances] = Json.format[HistoricFhlAnnualAllowances]

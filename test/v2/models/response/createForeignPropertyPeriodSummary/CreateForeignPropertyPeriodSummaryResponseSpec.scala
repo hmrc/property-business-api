@@ -26,8 +26,7 @@ class CreateForeignPropertyPeriodSummaryResponseSpec extends UnitSpec with JsonE
     "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
   )
 
-  val json = Json.parse(
-    """{
+  val json = Json.parse("""{
       |  "submissionId": "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
       |}""".stripMargin)
 

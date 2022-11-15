@@ -18,14 +18,14 @@ package v2.controllers.requestParsers.validators
 
 import config.AppConfig
 
-import javax.inject.{Inject, Singleton}
-import v2.controllers.requestParsers.validators.validations.{NinoValidation, TaxYearValidation}
+import javax.inject.{ Inject, Singleton }
+import v2.controllers.requestParsers.validators.validations.{ NinoValidation, TaxYearValidation }
 import v2.models.errors.MtdError
 import v2.models.request.retrieveHistoricFhlUkPropertyAnnualSubmission.RetrieveHistoricFhlUkPropertyAnnualSubmissionRawData
 
 @Singleton
-class RetrieveHistoricFhlUkPropertyAnnualSubmissionValidator @Inject()(appConfig: AppConfig) extends
-  Validator[RetrieveHistoricFhlUkPropertyAnnualSubmissionRawData] {
+class RetrieveHistoricFhlUkPropertyAnnualSubmissionValidator @Inject()(appConfig: AppConfig)
+    extends Validator[RetrieveHistoricFhlUkPropertyAnnualSubmissionRawData] {
 
   private lazy val minTaxYear = appConfig.minimumTaxHistoric
   private lazy val maxTaxYear = appConfig.maximumTaxHistoric

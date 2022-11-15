@@ -16,19 +16,18 @@
 
 package v2.models.request.common
 
-import play.api.libs.json.{JsValue, Json}
+import play.api.libs.json.{ JsValue, Json }
 import support.UnitSpec
 
 class FirstYearSpec extends UnitSpec {
 
   val requestBody: FirstYear =
     FirstYear(
-        "2020-01-01",
-        3000.40
-      )
+      "2020-01-01",
+      3000.40
+    )
 
-  val validJson: JsValue = Json.parse(
-    """
+  val validJson: JsValue = Json.parse("""
       |{
       |  "qualifyingDate": "2020-01-01",
       |  "qualifyingAmountExpenditure": 3000.40

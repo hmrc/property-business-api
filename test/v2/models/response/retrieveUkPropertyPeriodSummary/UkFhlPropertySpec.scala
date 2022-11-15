@@ -17,14 +17,14 @@
 package v2.models.response.retrieveUkPropertyPeriodSummary
 
 import fixtures.RetrieveUkPropertyPeriodSummary.ResponseModelsFixture
-import play.api.libs.json.{JsValue, Json}
+import play.api.libs.json.{ JsValue, Json }
 import support.UnitSpec
 
 class UkFhlPropertySpec extends UnitSpec with ResponseModelsFixture {
   "UkFhlProperty" when {
     val downstreamJson: JsValue = (fullDownstreamJson \ "ukFhlProperty").get
-    val mtdJson: JsValue = (fullMtdJson \ "ukFhlProperty").get
-    val model: UkFhlProperty = ukFhlPropertyModel
+    val mtdJson: JsValue        = (fullMtdJson \ "ukFhlProperty").get
+    val model: UkFhlProperty    = ukFhlPropertyModel
     "read from valid JSON" should {
       "return the expected model" in {
         downstreamJson.as[UkFhlProperty] shouldBe model

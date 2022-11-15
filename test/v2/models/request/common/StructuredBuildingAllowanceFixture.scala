@@ -16,17 +16,18 @@
 
 package v2.models.request.common
 
-import play.api.libs.json.{JsValue, Json}
+import play.api.libs.json.{ JsValue, Json }
 
 trait StructuredBuildingAllowanceFixture {
 
   val structuredBuildingAllowance: StructuredBuildingAllowance =
     StructuredBuildingAllowance(
       3000.30,
-      Some(FirstYear(
-        "2020-01-01",
-        3000.40
-      )),
+      Some(
+        FirstYear(
+          "2020-01-01",
+          3000.40
+        )),
       Building(
         Some("house name"),
         Some("house number"),
@@ -34,8 +35,7 @@ trait StructuredBuildingAllowanceFixture {
       )
     )
 
-  val structuredBuildingAllowanceMtdJson: JsValue = Json.parse(
-    """
+  val structuredBuildingAllowanceMtdJson: JsValue = Json.parse("""
       |{
       |  "amount": 3000.30,
       |  "firstYear": {
@@ -50,8 +50,7 @@ trait StructuredBuildingAllowanceFixture {
       |}
       |""".stripMargin)
 
-  val structuredBuildingAllowanceDownstreamJson: JsValue = Json.parse(
-    """
+  val structuredBuildingAllowanceDownstreamJson: JsValue = Json.parse("""
       |{
       |  "amount": 3000.30,
       |  "firstYear": {

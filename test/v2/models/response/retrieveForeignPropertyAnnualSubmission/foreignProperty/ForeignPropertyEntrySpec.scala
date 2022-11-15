@@ -24,63 +24,73 @@ class ForeignPropertyEntrySpec extends UnitSpec with JsonErrorValidators {
 
   private val foreignProperty = ForeignPropertyEntry(
     "GER",
-    Some(ForeignPropertyAdjustments(
-      Some(100.25),
-      Some(100.25)
-    )),
-    Some(ForeignPropertyAllowances(
-      Some(100.25),
-      Some(100.25),
-      Some(100.25),
-      Some(100.25),
-      Some(100.25),
-      Some(100.25),
-      Some(100.25),
-      Some(Seq(StructuredBuildingAllowance(
-        100.25,
-        Some(FirstYear(
-          "2020-03-29",
-          100.25
-        )),
-        Building(
-          Some("Building Name"),
-          Some("12"),
-          "TF3 4GH"
-        )
-      )))))
+    Some(
+      ForeignPropertyAdjustments(
+        Some(100.25),
+        Some(100.25)
+      )),
+    Some(
+      ForeignPropertyAllowances(
+        Some(100.25),
+        Some(100.25),
+        Some(100.25),
+        Some(100.25),
+        Some(100.25),
+        Some(100.25),
+        Some(100.25),
+        Some(
+          Seq(
+            StructuredBuildingAllowance(
+              100.25,
+              Some(FirstYear(
+                "2020-03-29",
+                100.25
+              )),
+              Building(
+                Some("Building Name"),
+                Some("12"),
+                "TF3 4GH"
+              )
+            )))
+      ))
   )
 
   private val foreignPropertyNoAdjustments = ForeignPropertyEntry(
     "GER",
     None,
-    Some(ForeignPropertyAllowances(
-      Some(100.25),
-      Some(100.25),
-      Some(100.25),
-      Some(100.25),
-      Some(100.25),
-      Some(100.25),
-      Some(100.25),
-      Some(Seq(StructuredBuildingAllowance(
-        100.25,
-        Some(FirstYear(
-          "2020-03-29",
-          100.25
-        )),
-        Building(
-          Some("Building Name"),
-          Some("12"),
-          "TF3 4GH"
-        )
-      )))))
+    Some(
+      ForeignPropertyAllowances(
+        Some(100.25),
+        Some(100.25),
+        Some(100.25),
+        Some(100.25),
+        Some(100.25),
+        Some(100.25),
+        Some(100.25),
+        Some(
+          Seq(
+            StructuredBuildingAllowance(
+              100.25,
+              Some(FirstYear(
+                "2020-03-29",
+                100.25
+              )),
+              Building(
+                Some("Building Name"),
+                Some("12"),
+                "TF3 4GH"
+              )
+            )))
+      ))
   )
 
   private val foreignPropertyNoAllowances = ForeignPropertyEntry(
     "GER",
-    Some(ForeignPropertyAdjustments(
-      Some(100.25),
-      Some(100.25)
-    )),
+    Some(
+      ForeignPropertyAdjustments(
+        Some(100.25),
+        Some(100.25)
+      )),
     None
   )
 

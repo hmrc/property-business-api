@@ -16,17 +16,17 @@
 
 package v1.controllers
 
-import play.api.libs.json.{JsValue, Json}
+import play.api.libs.json.{ JsValue, Json }
 import play.api.mvc.Result
 import uk.gov.hmrc.http.HeaderCarrier
 import v1.mocks.MockIdGenerator
 import v1.mocks.hateoas.MockHateoasFactory
 import v1.mocks.requestParsers.MockAmendForeignPropertyAnnualSubmissionRequestParser
-import v1.mocks.services.{MockAmendForeignPropertyAnnualSubmissionService, MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService}
-import v1.models.audit.{AuditError, AuditEvent, AuditResponse, CreateAndAmendForeignPropertyAnnualAuditDetail}
+import v1.mocks.services.{ MockAmendForeignPropertyAnnualSubmissionService, MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService }
+import v1.models.audit.{ AuditError, AuditEvent, AuditResponse, CreateAndAmendForeignPropertyAnnualAuditDetail }
 import v1.models.domain.Nino
 import v1.models.errors._
-import v1.models.hateoas.{HateoasWrapper, Link}
+import v1.models.hateoas.{ HateoasWrapper, Link }
 import v1.models.hateoas.Method.GET
 import v1.models.outcomes.ResponseWrapper
 import v1.models.request.amendForeignPropertyAnnualSubmission._
@@ -38,7 +38,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class AmendForeignPropertyAnnualSubmissionControllerSpec
-  extends ControllerBaseSpec
+    extends ControllerBaseSpec
     with MockEnrolmentsAuthService
     with MockMtdIdLookupService
     with MockAmendForeignPropertyAnnualSubmissionService
@@ -47,9 +47,9 @@ class AmendForeignPropertyAnnualSubmissionControllerSpec
     with MockAuditService
     with MockIdGenerator {
 
-  private val nino = "AA123456A"
-  private val businessId = "XAIS12345678910"
-  private val taxYear = "2019-20"
+  private val nino          = "AA123456A"
+  private val businessId    = "XAIS12345678910"
+  private val taxYear       = "2019-20"
   private val correlationId = "X-123"
 
   trait Test {
@@ -142,34 +142,38 @@ class AmendForeignPropertyAnnualSubmissionControllerSpec
   )
 
   private val foreignFhlEea = ForeignFhlEea(
-    Some(ForeignFhlEeaAdjustments(
-      Some(5000.99),
-      Some(5000.99),
-      Some(true)
-    )),
-    Some(ForeignFhlEeaAllowances(
-      Some(5000.99),
-      Some(5000.99),
-      Some(5000.99),
-      Some(5000.99)
-    ))
+    Some(
+      ForeignFhlEeaAdjustments(
+        Some(5000.99),
+        Some(5000.99),
+        Some(true)
+      )),
+    Some(
+      ForeignFhlEeaAllowances(
+        Some(5000.99),
+        Some(5000.99),
+        Some(5000.99),
+        Some(5000.99)
+      ))
   )
 
   private val foreignPropertyEntry = ForeignPropertyEntry(
     "FRA",
-    Some(ForeignPropertyAdjustments(
-      Some(5000.99),
-      Some(5000.99)
-    )),
-    Some(ForeignPropertyAllowances(
-      Some(5000.99),
-      Some(5000.99),
-      Some(5000.99),
-      Some(5000.99),
-      Some(5000.99),
-      Some(3000.99),
-      Some(5000.99)
-    ))
+    Some(
+      ForeignPropertyAdjustments(
+        Some(5000.99),
+        Some(5000.99)
+      )),
+    Some(
+      ForeignPropertyAllowances(
+        Some(5000.99),
+        Some(5000.99),
+        Some(5000.99),
+        Some(5000.99),
+        Some(5000.99),
+        Some(3000.99),
+        Some(5000.99)
+      ))
   )
 
   val body: AmendForeignPropertyAnnualSubmissionRequestBody = AmendForeignPropertyAnnualSubmissionRequestBody(
@@ -231,28 +235,28 @@ class AmendForeignPropertyAnnualSubmissionControllerSpec
           (TaxYearFormatError, BAD_REQUEST),
           (RuleTaxYearNotSupportedError, BAD_REQUEST),
           (RuleTaxYearRangeInvalidError, BAD_REQUEST),
-          (CountryCodeFormatError.copy(paths = Some(Seq(
-            "foreignProperty/0/countryCode"))), BAD_REQUEST),
-          (ValueFormatError.copy(paths = Some(Seq(
-            "foreignFhlEea/adjustments/privateUseAdjustment",
-            "foreignFhlEea/adjustments/balancingCharge",
-            "foreignFhlEea/allowances/annualInvestmentAllowance",
-            "foreignFhlEea/allowances/otherCapitalAllowance",
-            "foreignFhlEea/allowances/propertyAllowance",
-            "foreignFhlEea/allowances/electricChargePointAllowance",
-            "foreignProperty/adjustments/privateUseAdjustment",
-            "foreignProperty/adjustments/balancingCharge",
-            "foreignProperty/allowances/annualInvestmentAllowance",
-            "foreignProperty/allowances/costOfReplacingDomesticItems",
-            "foreignProperty/allowances/zeroEmissionsGoodsVehicleAllowance",
-            "foreignProperty/allowances/propertyAllowance",
-            "foreignProperty/allowances/otherCapitalAllowance",
-            "foreignProperty/allowances/structureAndBuildingAllowance",
-            "foreignProperty/allowances/electricChargePointAllowance"
-          ))), BAD_REQUEST),
+          (CountryCodeFormatError.copy(paths = Some(Seq("foreignProperty/0/countryCode"))), BAD_REQUEST),
+          (ValueFormatError.copy(
+             paths = Some(Seq(
+               "foreignFhlEea/adjustments/privateUseAdjustment",
+               "foreignFhlEea/adjustments/balancingCharge",
+               "foreignFhlEea/allowances/annualInvestmentAllowance",
+               "foreignFhlEea/allowances/otherCapitalAllowance",
+               "foreignFhlEea/allowances/propertyAllowance",
+               "foreignFhlEea/allowances/electricChargePointAllowance",
+               "foreignProperty/adjustments/privateUseAdjustment",
+               "foreignProperty/adjustments/balancingCharge",
+               "foreignProperty/allowances/annualInvestmentAllowance",
+               "foreignProperty/allowances/costOfReplacingDomesticItems",
+               "foreignProperty/allowances/zeroEmissionsGoodsVehicleAllowance",
+               "foreignProperty/allowances/propertyAllowance",
+               "foreignProperty/allowances/otherCapitalAllowance",
+               "foreignProperty/allowances/structureAndBuildingAllowance",
+               "foreignProperty/allowances/electricChargePointAllowance"
+             ))),
+           BAD_REQUEST),
           (RuleIncorrectOrEmptyBodyError, BAD_REQUEST),
-          (RuleCountryCodeError.copy(paths = Some(Seq(
-            "foreignProperty/0/countryCode"))), BAD_REQUEST)
+          (RuleCountryCodeError.copy(paths = Some(Seq("foreignProperty/0/countryCode"))), BAD_REQUEST)
         )
 
         input.foreach(args => (errorsFromParserTester _).tupled(args))
@@ -275,7 +279,6 @@ class AmendForeignPropertyAnnualSubmissionControllerSpec
             status(result) shouldBe expectedStatus
             contentAsJson(result) shouldBe Json.toJson(mtdError)
             header("X-CorrelationId", result) shouldBe Some(correlationId)
-
 
             val auditResponse: AuditResponse = AuditResponse(expectedStatus, Some(Seq(AuditError(mtdError.code))), None)
             MockedAuditService.verifyAuditEvent(event(auditResponse)).once

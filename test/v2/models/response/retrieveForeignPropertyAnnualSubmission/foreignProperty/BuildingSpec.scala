@@ -16,7 +16,7 @@
 
 package v2.models.response.retrieveForeignPropertyAnnualSubmission.foreignProperty
 
-import play.api.libs.json.{JsValue, Json}
+import play.api.libs.json.{ JsValue, Json }
 import support.UnitSpec
 
 class BuildingSpec extends UnitSpec {
@@ -28,8 +28,7 @@ class BuildingSpec extends UnitSpec {
       "GF49JH"
     )
 
-  val validMtdJson: JsValue = Json.parse(
-    """
+  val validMtdJson: JsValue = Json.parse("""
       |{
       |  "name": "house name",
       |  "number": "house number",
@@ -37,8 +36,7 @@ class BuildingSpec extends UnitSpec {
       |}
       |""".stripMargin)
 
-  val validDownstreamJson: JsValue = Json.parse(
-    """
+  val validDownstreamJson: JsValue = Json.parse("""
       |{
       |  "name": "house name",
       |  "number": "house number",

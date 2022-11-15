@@ -17,11 +17,16 @@
 package v2.connectors
 
 import org.scalamock.handlers.CallHandler
-import v2.models.domain.{Nino, TaxYear}
-import v2.models.errors.{DownstreamErrorCode, DownstreamErrors}
+import v2.models.domain.{ Nino, TaxYear }
+import v2.models.errors.{ DownstreamErrorCode, DownstreamErrors }
 import v2.models.outcomes.ResponseWrapper
 import v2.models.request.retrieveHistoricNonFhlUkPropertyAnnualSubmission.RetrieveHistoricNonFhlUkPropertyAnnualSubmissionRequest
-import v2.models.response.retrieveHistoricNonFhlUkPropertyAnnualSubmissionResponse.{AnnualAdjustments, AnnualAllowances, RentARoom, RetrieveHistoricNonFhlUkPropertyAnnualSubmissionResponse}
+import v2.models.response.retrieveHistoricNonFhlUkPropertyAnnualSubmissionResponse.{
+  AnnualAdjustments,
+  AnnualAllowances,
+  RentARoom,
+  RetrieveHistoricNonFhlUkPropertyAnnualSubmissionResponse
+}
 
 import scala.concurrent.Future
 
@@ -70,9 +75,8 @@ class RetrieveHistoricNonFhlUkPropertyAnnualSubmissionConnectorSpec extends Conn
     def stubHttpResponse(outcome: DownstreamOutcome[RetrieveHistoricNonFhlUkPropertyAnnualSubmissionResponse])
       : CallHandler[Future[DownstreamOutcome[RetrieveHistoricNonFhlUkPropertyAnnualSubmissionResponse]]]#Derived = {
       willGet(
-          url = s"$baseUrl/income-tax/nino/$nino/uk-properties/other/annual-summaries/$downstreamTaxYear"
-        )
-        .returns(Future.successful(outcome))
+        url = s"$baseUrl/income-tax/nino/$nino/uk-properties/other/annual-summaries/$downstreamTaxYear"
+      ).returns(Future.successful(outcome))
     }
   }
 

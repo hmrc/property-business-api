@@ -16,7 +16,7 @@
 
 package v1.models.response.listForeignPropertiesPeriodSummaries
 
-import play.api.libs.json.{JsObject, JsPath, Json, OWrites, Reads}
+import play.api.libs.json.{ JsObject, JsPath, Json, OWrites, Reads }
 import play.api.libs.functional.syntax._
 
 case class SubmissionPeriod(submissionId: String, fromDate: String, toDate: String)
@@ -24,13 +24,12 @@ case class SubmissionPeriod(submissionId: String, fromDate: String, toDate: Stri
 object SubmissionPeriod {
   implicit val reads: Reads[SubmissionPeriod] = {
     val objectReads = (JsPath \ "foreignProperty").read[JsObject] or (JsPath \ "foreignFhlEea").read[JsObject]
-    objectReads.andThen {
-      obj =>
-        (
-          (obj \ "submissionId").validate[String] and
-            (obj \ "fromDate").validate[String] and
-            (obj \ "toDate").validate[String]
-          ) (SubmissionPeriod.apply _)
+    objectReads.andThen { obj =>
+      (
+        (obj \ "submissionId").validate[String] and
+          (obj \ "fromDate").validate[String] and
+          (obj \ "toDate").validate[String]
+      )(SubmissionPeriod.apply _)
     }
   }
 

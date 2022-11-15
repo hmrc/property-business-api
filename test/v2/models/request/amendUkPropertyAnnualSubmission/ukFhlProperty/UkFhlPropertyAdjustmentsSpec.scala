@@ -16,25 +16,23 @@
 
 package v2.models.request.amendUkPropertyAnnualSubmission.ukFhlProperty
 
-import play.api.libs.json.{JsValue, Json}
+import play.api.libs.json.{ JsValue, Json }
 import support.UnitSpec
 import v2.models.request.common.ukPropertyRentARoom.UkPropertyAdjustmentsRentARoom
 
 class UkFhlPropertyAdjustmentsSpec extends UnitSpec {
 
   val requestBody: UkFhlPropertyAdjustments =
-      UkFhlPropertyAdjustments(
-        Some(1000.20),
-        Some(1000.30),
-        true,
-        Some(1000.40),
-        true,
-        Some(UkPropertyAdjustmentsRentARoom(true))
-      )
+    UkFhlPropertyAdjustments(
+      Some(1000.20),
+      Some(1000.30),
+      true,
+      Some(1000.40),
+      true,
+      Some(UkPropertyAdjustmentsRentARoom(true))
+    )
 
-
-  val validMtdJson: JsValue = Json.parse(
-    """
+  val validMtdJson: JsValue = Json.parse("""
       |{
       |  "privateUseAdjustment": 1000.20,
       |  "balancingCharge": 1000.30,
@@ -47,8 +45,7 @@ class UkFhlPropertyAdjustmentsSpec extends UnitSpec {
       |}
       |""".stripMargin)
 
-  val validDownstreamJson: JsValue = Json.parse(
-    """
+  val validDownstreamJson: JsValue = Json.parse("""
       |{
       |  "privateUseAdjustment": 1000.20,
       |  "balancingCharge": 1000.30,

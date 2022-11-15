@@ -17,11 +17,9 @@
 package v2.models.request.common
 
 import play.api.libs.functional.syntax._
-import play.api.libs.json.{JsPath, Json, Reads, Writes}
+import play.api.libs.json.{ JsPath, Json, Reads, Writes }
 
-case class Building(name: Option[String],
-                    number: Option[String],
-                    postcode: String)
+case class Building(name: Option[String], number: Option[String], postcode: String)
 
 object Building {
   implicit val reads: Reads[Building] = Json.reads[Building]
@@ -30,5 +28,5 @@ object Building {
     (JsPath \ "name").writeNullable[String] and
       (JsPath \ "number").writeNullable[String] and
       (JsPath \ "postCode").write[String]
-    ) (unlift(Building.unapply))
+  )(unlift(Building.unapply))
 }

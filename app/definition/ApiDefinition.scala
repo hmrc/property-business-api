@@ -16,7 +16,7 @@
 
 package definition
 
-import play.api.libs.json.{Format, Json, OFormat}
+import play.api.libs.json.{ Format, Json, OFormat }
 import uk.gov.hmrc.auth.core.ConfidenceLevel
 import utils.enums.Enums
 
@@ -43,7 +43,7 @@ object APIStatus extends Enumeration {
   case object RETIRED extends APIStatus
 
   implicit val formatApiVersion: Format[APIStatus] = Enums.format[APIStatus]
-  val parser: PartialFunction[String, APIStatus] = Enums.parser[APIStatus]
+  val parser: PartialFunction[String, APIStatus]   = Enums.parser[APIStatus]
 }
 
 case class APIVersion(version: String, status: APIStatus, endpointsEnabled: Boolean) {

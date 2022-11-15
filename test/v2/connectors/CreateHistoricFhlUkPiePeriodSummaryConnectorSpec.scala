@@ -18,9 +18,12 @@ package v2.connectors
 
 import v2.models.domain.Nino
 import v2.models.outcomes.ResponseWrapper
-import v2.models.request.common.ukFhlPieProperty.{UkFhlPieExpenses, UkFhlPieIncome}
-import v2.models.request.common.ukPropertyRentARoom.{UkPropertyExpensesRentARoom, UkPropertyIncomeRentARoom}
-import v2.models.request.createHistoricFhlUkPiePeriodSummary.{CreateHistoricFhlUkPiePeriodSummaryRequest, CreateHistoricFhlUkPiePeriodSummaryRequestBody}
+import v2.models.request.common.ukFhlPieProperty.{ UkFhlPieExpenses, UkFhlPieIncome }
+import v2.models.request.common.ukPropertyRentARoom.{ UkPropertyExpensesRentARoom, UkPropertyIncomeRentARoom }
+import v2.models.request.createHistoricFhlUkPiePeriodSummary.{
+  CreateHistoricFhlUkPiePeriodSummaryRequest,
+  CreateHistoricFhlUkPiePeriodSummaryRequestBody
+}
 
 import scala.concurrent.Future
 
@@ -74,10 +77,9 @@ class CreateHistoricFhlUkPiePeriodSummaryConnectorSpec extends ConnectorSpec {
       val downstreamOutcome = Right(ResponseWrapper(correlationId, ()))
 
       willPost(
-          url = url,
-          body = requestBody
-        )
-        .returns(Future.successful(downstreamOutcome))
+        url = url,
+        body = requestBody
+      ).returns(Future.successful(downstreamOutcome))
 
       val result = await(connector.createPeriodSummary(requestData))
       result shouldBe downstreamOutcome
@@ -87,10 +89,9 @@ class CreateHistoricFhlUkPiePeriodSummaryConnectorSpec extends ConnectorSpec {
       val downstreamOutcome = Right(ResponseWrapper(correlationId, ()))
 
       willPost(
-          url = url,
-          body = consolidatedBody
-        )
-        .returns(Future.successful(downstreamOutcome))
+        url = url,
+        body = consolidatedBody
+      ).returns(Future.successful(downstreamOutcome))
 
       await(connector.createPeriodSummary(consolidatedRequestData)) shouldBe downstreamOutcome
     }

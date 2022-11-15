@@ -17,8 +17,8 @@
 package v2.models.response.amendUkPropertyAnnualSubmission
 
 import config.AppConfig
-import v2.hateoas.{HateoasLinks, HateoasLinksFactory}
-import v2.models.hateoas.{HateoasData, Link}
+import v2.hateoas.{ HateoasLinks, HateoasLinksFactory }
+import v2.models.hateoas.{ HateoasData, Link }
 
 object AmendUkPropertyAnnualSubmissionResponse extends HateoasLinks {
 
@@ -33,6 +33,5 @@ object AmendUkPropertyAnnualSubmissionResponse extends HateoasLinks {
     }
   }
 }
-
 
 case class AmendUkPropertyAnnualSubmissionHateoasData(nino: String, businessId: String, taxYear: String) extends HateoasData

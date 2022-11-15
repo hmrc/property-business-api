@@ -35,8 +35,7 @@ class ForeignNonFhlPropertyExpensesSpec extends UnitSpec with JsonErrorValidator
     Some(5000.99)
   )
 
-  val writesJson = Json.parse(
-    """{
+  val writesJson = Json.parse("""{
       |  "premisesRunningCosts": 5000.99,
       |  "repairsAndMaintenance": 5000.99,
       |  "financialCosts": 5000.99,
@@ -49,8 +48,7 @@ class ForeignNonFhlPropertyExpensesSpec extends UnitSpec with JsonErrorValidator
       |  "consolidatedExpenses": 5000.99
       |}""".stripMargin)
 
-  val readsJson = Json.parse(
-    """{
+  val readsJson = Json.parse("""{
       |  "premisesRunningCosts": 5000.99,
       |  "repairsAndMaintenance": 5000.99,
       |  "financialCosts": 5000.99,
@@ -62,7 +60,6 @@ class ForeignNonFhlPropertyExpensesSpec extends UnitSpec with JsonErrorValidator
       |  "other": 5000.99,
       |  "consolidatedExpense": 5000.99
       |}""".stripMargin)
-
 
   "reads" when {
     "passed a valid JSON" should {

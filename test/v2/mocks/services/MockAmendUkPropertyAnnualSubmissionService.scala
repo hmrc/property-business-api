@@ -25,7 +25,7 @@ import v2.models.outcomes.ResponseWrapper
 import v2.models.request.amendUkPropertyAnnualSubmission.AmendUkPropertyAnnualSubmissionRequest
 import v2.services.AmendUkPropertyAnnualSubmissionService
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.{ ExecutionContext, Future }
 
 trait MockAmendUkPropertyAnnualSubmissionService extends MockFactory {
 
@@ -34,8 +34,15 @@ trait MockAmendUkPropertyAnnualSubmissionService extends MockFactory {
   object MockAmendUkPropertyAnnualSubmissionService {
 
     def amend(requestData: AmendUkPropertyAnnualSubmissionRequest): CallHandler[Future[Either[ErrorWrapper, ResponseWrapper[Unit]]]] = {
-      (mockService
-        .amendUkPropertyAnnualSubmission(_: AmendUkPropertyAnnualSubmissionRequest)(_: HeaderCarrier, _: ExecutionContext, _: EndpointLogContext, _: String))
+      (
+        mockService
+          .amendUkPropertyAnnualSubmission(_: AmendUkPropertyAnnualSubmissionRequest)(
+            _: HeaderCarrier,
+            _: ExecutionContext,
+            _: EndpointLogContext,
+            _: String
+          )
+        )
         .expects(requestData, *, *, *, *)
     }
   }

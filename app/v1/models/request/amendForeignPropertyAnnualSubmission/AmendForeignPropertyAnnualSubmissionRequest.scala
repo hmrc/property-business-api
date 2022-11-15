@@ -18,4 +18,7 @@ package v1.models.request.amendForeignPropertyAnnualSubmission
 
 import v1.models.domain.Nino
 
-case class AmendForeignPropertyAnnualSubmissionRequest(nino: Nino, businessId: String, taxYear: String, body: AmendForeignPropertyAnnualSubmissionRequestBody)
+case class AmendForeignPropertyAnnualSubmissionRequest(nino: Nino,
+                                                       businessId: String,
+                                                       taxYear: String,
+                                                       body: AmendForeignPropertyAnnualSubmissionRequestBody)

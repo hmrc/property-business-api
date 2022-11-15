@@ -17,45 +17,43 @@
 package v2.connectors
 
 import org.scalamock.handlers.CallHandler
-import v2.models.domain.{Nino, PeriodId}
-import v2.models.errors.{DownstreamErrorCode, DownstreamErrors}
+import v2.models.domain.{ Nino, PeriodId }
+import v2.models.errors.{ DownstreamErrorCode, DownstreamErrors }
 import v2.models.outcomes.ResponseWrapper
 import v2.models.request.retrieveHistoricFhlUkPiePeriodSummary.RetrieveHistoricFhlUkPiePeriodSummaryRequest
-import v2.models.response.retrieveHistoricFhlUkPiePeriodSummary.{PeriodExpenses, PeriodIncome, RetrieveHistoricFhlUkPiePeriodSummaryResponse}
+import v2.models.response.retrieveHistoricFhlUkPiePeriodSummary.{ PeriodExpenses, PeriodIncome, RetrieveHistoricFhlUkPiePeriodSummaryResponse }
 
 import scala.concurrent.Future
 
 class RetrieveHistoricFhlUKPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
 
-  val nino: String = "AA123456A"
-  val periodId: String = "2017-04-06_2017-07-04"
+  val nino: String         = "AA123456A"
+  val periodId: String     = "2017-04-06_2017-07-04"
   val periodIdFrom: String = "2017-04-06"
-  val periodIdTo: String = "2017-07-04"
+  val periodIdTo: String   = "2017-07-04"
 
   val request: RetrieveHistoricFhlUkPiePeriodSummaryRequest =
-    RetrieveHistoricFhlUkPiePeriodSummaryRequest(
-      Nino(nino),
-      PeriodId(periodId))
+    RetrieveHistoricFhlUkPiePeriodSummaryRequest(Nino(nino), PeriodId(periodId))
 
   val periodExpenses: PeriodExpenses = PeriodExpenses(None, None, None, None, None, None, None, None, None)
-  val periodIncome: PeriodIncome = PeriodIncome(None, None , None)
+  val periodIncome: PeriodIncome     = PeriodIncome(None, None, None)
 
   def responseWith(periodIncome: Option[PeriodIncome], periodExpenses: Option[PeriodExpenses]): RetrieveHistoricFhlUkPiePeriodSummaryResponse =
     RetrieveHistoricFhlUkPiePeriodSummaryResponse("2017-04-06", "2017-07-04", periodIncome, periodExpenses)
 
   trait Test {
     _: ConnectorTest =>
+
     val connector: RetrieveHistoricFhlUkPropertyPeriodSummaryConnector = new RetrieveHistoricFhlUkPropertyPeriodSummaryConnector(
       http = mockHttpClient,
       appConfig = mockAppConfig
     )
 
     def stubHttpResponse(outcome: DownstreamOutcome[RetrieveHistoricFhlUkPiePeriodSummaryResponse])
-    : CallHandler[Future[DownstreamOutcome[RetrieveHistoricFhlUkPiePeriodSummaryResponse]]]#Derived = {
+      : CallHandler[Future[DownstreamOutcome[RetrieveHistoricFhlUkPiePeriodSummaryResponse]]]#Derived = {
       willGet(
-          url = s"$baseUrl/income-tax/nino/$nino/uk-properties/furnished-holiday-lettings/periodic-summary-detail?from=$periodIdFrom&to=$periodIdTo"
-        )
-        .returns(Future.successful(outcome))
+        url = s"$baseUrl/income-tax/nino/$nino/uk-properties/furnished-holiday-lettings/periodic-summary-detail?from=$periodIdFrom&to=$periodIdTo"
+      ).returns(Future.successful(outcome))
     }
   }
 
@@ -63,7 +61,7 @@ class RetrieveHistoricFhlUKPropertyPeriodSummaryConnectorSpec extends ConnectorS
     "request for a historic FHL UK Property Income and Expenses Period summary" must {
       "return a valid result" in new DesTest with Test {
         val response: RetrieveHistoricFhlUkPiePeriodSummaryResponse = responseWith(Some(periodIncome), Some(periodExpenses))
-        val outcome = Right(ResponseWrapper(correlationId, response))
+        val outcome                                                 = Right(ResponseWrapper(correlationId, response))
 
         stubHttpResponse(outcome)
 
@@ -79,7 +77,7 @@ class RetrieveHistoricFhlUKPropertyPeriodSummaryConnectorSpec extends ConnectorS
         stubHttpResponse(outcome)
 
         val result = await(connector.retrieve(request))
-          result shouldBe outcome
+        result shouldBe outcome
       }
     }
   }

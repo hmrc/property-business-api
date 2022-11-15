@@ -22,7 +22,7 @@ import v1.models.domain.Nino
 import v1.models.request.createForeignPropertyPeriodSummary._
 
 class CreateForeignPropertyPeriodSummaryRequestParser @Inject()(val validator: CreateForeignPropertyPeriodSummaryValidator)
-  extends RequestParser[CreateForeignPropertyPeriodSummaryRawData, CreateForeignPropertyPeriodSummaryRequest] {
+    extends RequestParser[CreateForeignPropertyPeriodSummaryRawData, CreateForeignPropertyPeriodSummaryRequest] {
 
   override protected def requestFor(data: CreateForeignPropertyPeriodSummaryRawData): CreateForeignPropertyPeriodSummaryRequest =
     CreateForeignPropertyPeriodSummaryRequest(Nino(data.nino), data.businessId, data.body.as[CreateForeignPropertyPeriodSummaryRequestBody])

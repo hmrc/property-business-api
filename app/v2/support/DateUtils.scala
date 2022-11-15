@@ -22,13 +22,13 @@ import javax.inject.Singleton
 
 @Singleton
 class DateUtils {
-  def currentDate: LocalDate = LocalDate.now()
+  def currentDate: LocalDate   = LocalDate.now()
   private def limit: LocalDate = LocalDate.parse(s"${currentDate.getYear}-04-06", DateTimeFormatter.ISO_DATE)
 
   def currentTaxYearStart: String =
-    if(currentDate.isBefore(limit)) limit.minusYears(1).toString else limit.toString
+    if (currentDate.isBefore(limit)) limit.minusYears(1).toString else limit.toString
 
   def currentTaxYearEnd: String =
-    if(currentDate.isBefore(limit)) limit.minusDays(1).toString else limit.plusYears(1).minusDays(1).toString
+    if (currentDate.isBefore(limit)) limit.minusDays(1).toString else limit.plusYears(1).minusDays(1).toString
 
 }

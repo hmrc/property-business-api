@@ -31,7 +31,7 @@ class DeleteHistoricUkPropertyAnnualSubmissionRequestParserSpec extends UnitSpec
   val taxYear: String                    = "2021-22"
   val propertyType: HistoricPropertyType = HistoricPropertyType.Fhl
 
-  implicit val correlationId: String     = "X-123"
+  implicit val correlationId: String = "X-123"
 
   val inputData: DeleteHistoricUkPropertyAnnualSubmissionRawData =
     DeleteHistoricUkPropertyAnnualSubmissionRawData(nino, taxYear, propertyType)

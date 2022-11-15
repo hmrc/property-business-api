@@ -30,40 +30,44 @@ import scala.concurrent.Future
 
 class AmendForeignPropertyAnnualSubmissionServiceSpec extends ServiceSpec {
 
-  val nino: String = "AA123456A"
-  val businessId: String = "XAIS12345678910"
-  val taxYear: String = "2020-21"
+  val nino: String                   = "AA123456A"
+  val businessId: String             = "XAIS12345678910"
+  val taxYear: String                = "2020-21"
   implicit val correlationId: String = "X-123"
 
   private val foreignFhlEea = ForeignFhlEea(
-    Some(ForeignFhlEeaAdjustments(
-      Some(5000.99),
-      Some(5000.99),
-      Some(true)
-    )),
-    Some(ForeignFhlEeaAllowances(
-      Some(5000.99),
-      Some(5000.99),
-      Some(5000.99),
-      Some(5000.99)
-    ))
+    Some(
+      ForeignFhlEeaAdjustments(
+        Some(5000.99),
+        Some(5000.99),
+        Some(true)
+      )),
+    Some(
+      ForeignFhlEeaAllowances(
+        Some(5000.99),
+        Some(5000.99),
+        Some(5000.99),
+        Some(5000.99)
+      ))
   )
 
   private val foreignPropertyEntry = ForeignPropertyEntry(
     "FRA",
-    Some(ForeignPropertyAdjustments(
-      Some(5000.99),
-      Some(5000.99)
-    )),
-    Some(ForeignPropertyAllowances(
-      Some(5000.99),
-      Some(5000.99),
-      Some(5000.99),
-      Some(5000.99),
-      Some(5000.99),
-      Some(4000.99),
-      Some(5000.99)
-    ))
+    Some(
+      ForeignPropertyAdjustments(
+        Some(5000.99),
+        Some(5000.99)
+      )),
+    Some(
+      ForeignPropertyAllowances(
+        Some(5000.99),
+        Some(5000.99),
+        Some(5000.99),
+        Some(5000.99),
+        Some(5000.99),
+        Some(4000.99),
+        Some(5000.99)
+      ))
   )
 
   val body: AmendForeignPropertyAnnualSubmissionRequestBody = AmendForeignPropertyAnnualSubmissionRequestBody(
@@ -74,7 +78,7 @@ class AmendForeignPropertyAnnualSubmissionServiceSpec extends ServiceSpec {
   private val request = AmendForeignPropertyAnnualSubmissionRequest(Nino(nino), businessId, taxYear, body)
 
   trait Test extends MockAmendForeignPropertyAnnualSubmissionConnector {
-    implicit val hc: HeaderCarrier = HeaderCarrier()
+    implicit val hc: HeaderCarrier              = HeaderCarrier()
     implicit val logContext: EndpointLogContext = EndpointLogContext("c", "ep")
 
     val service = new AmendForeignPropertyAnnualSubmissionService(
@@ -85,7 +89,8 @@ class AmendForeignPropertyAnnualSubmissionServiceSpec extends ServiceSpec {
   "service" should {
     "service call successful" when {
       "return mapped result" in new Test {
-        MockAmendForeignPropertyAnnualSubmissionConnector.amendForeignProperty(request)
+        MockAmendForeignPropertyAnnualSubmissionConnector
+          .amendForeignProperty(request)
           .returns(Future.successful(Right(ResponseWrapper(correlationId, ()))))
 
         await(service.amendForeignPropertyAnnualSubmission(request)) shouldBe Right(ResponseWrapper(correlationId, ()))
@@ -99,7 +104,8 @@ class AmendForeignPropertyAnnualSubmissionServiceSpec extends ServiceSpec {
       def serviceError(ifsErrorCode: String, error: MtdError): Unit =
         s"a $ifsErrorCode error is returned from the service" in new Test {
 
-          MockAmendForeignPropertyAnnualSubmissionConnector.amendForeignProperty(request)
+          MockAmendForeignPropertyAnnualSubmissionConnector
+            .amendForeignProperty(request)
             .returns(Future.successful(Left(ResponseWrapper(correlationId, IfsErrors.single(IfsErrorCode(ifsErrorCode))))))
 
           await(service.amendForeignPropertyAnnualSubmission(request)) shouldBe Left(ErrorWrapper(correlationId, error))
@@ -107,14 +113,14 @@ class AmendForeignPropertyAnnualSubmissionServiceSpec extends ServiceSpec {
 
       val input = Seq(
         "INVALID_TAXABLE_ENTITY_ID" -> NinoFormatError,
-        "INVALID_INCOME_SOURCE_ID" -> BusinessIdFormatError,
-        "INVALID_SUBMISSION_ID" -> BusinessIdFormatError,
-        "INVALID_TAX_YEAR" -> DownstreamError,
-        "INVALID_PAYLOAD" -> DownstreamError,
-        "INVALID_CORRELATION_ID" -> DownstreamError,
-        "UNPROCESSABLE_ENTITY" -> DownstreamError,
-        "SERVER_ERROR" -> DownstreamError,
-        "SERVICE_UNAVAILABLE" -> DownstreamError
+        "INVALID_INCOME_SOURCE_ID"  -> BusinessIdFormatError,
+        "INVALID_SUBMISSION_ID"     -> BusinessIdFormatError,
+        "INVALID_TAX_YEAR"          -> DownstreamError,
+        "INVALID_PAYLOAD"           -> DownstreamError,
+        "INVALID_CORRELATION_ID"    -> DownstreamError,
+        "UNPROCESSABLE_ENTITY"      -> DownstreamError,
+        "SERVER_ERROR"              -> DownstreamError,
+        "SERVICE_UNAVAILABLE"       -> DownstreamError
       )
 
       input.foreach(args => (serviceError _).tupled(args))

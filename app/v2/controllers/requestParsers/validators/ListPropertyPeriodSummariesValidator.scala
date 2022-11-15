@@ -17,7 +17,7 @@
 package v2.controllers.requestParsers.validators
 
 import config.AppConfig
-import javax.inject.{Inject, Singleton}
+import javax.inject.{ Inject, Singleton }
 import v2.controllers.requestParsers.validators.validations._
 import v2.models.errors.MtdError
 import v2.models.request.listPropertyPeriodSummaries.ListPropertyPeriodSummariesRawData
@@ -26,7 +26,7 @@ import v2.models.request.listPropertyPeriodSummaries.ListPropertyPeriodSummaries
 class ListPropertyPeriodSummariesValidator @Inject()(appConfig: AppConfig) extends Validator[ListPropertyPeriodSummariesRawData] {
 
   private lazy val minTaxYear = appConfig.minimumTaxV2Foreign
-  private val validationSet = List(parameterFormatValidation)
+  private val validationSet   = List(parameterFormatValidation)
 
   private def parameterFormatValidation: ListPropertyPeriodSummariesRawData => List[List[MtdError]] =
     (data: ListPropertyPeriodSummariesRawData) => {

@@ -26,7 +26,7 @@ import v2.models.request.createUkPropertyPeriodSummary.CreateUkPropertyPeriodSum
 import v2.models.response.createUkPropertyPeriodSummary.CreateUkPropertyPeriodSummaryResponse
 import v2.services.CreateUkPropertyPeriodSummaryService
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.{ ExecutionContext, Future }
 
 trait MockCreateUkPropertyPeriodSummaryService extends MockFactory {
 
@@ -34,10 +34,17 @@ trait MockCreateUkPropertyPeriodSummaryService extends MockFactory {
 
   object MockCreateUkPropertyService {
 
-    def createUkProperty(requestData: CreateUkPropertyPeriodSummaryRequest):
-    CallHandler[Future[Either[ErrorWrapper, ResponseWrapper[CreateUkPropertyPeriodSummaryResponse]]]] = {
-      (mockCreateUkPropertyService
-        .createUkProperty(_: CreateUkPropertyPeriodSummaryRequest)(_: HeaderCarrier, _: ExecutionContext, _: EndpointLogContext, _: String))
+    def createUkProperty(requestData: CreateUkPropertyPeriodSummaryRequest)
+      : CallHandler[Future[Either[ErrorWrapper, ResponseWrapper[CreateUkPropertyPeriodSummaryResponse]]]] = {
+      (
+        mockCreateUkPropertyService
+          .createUkProperty(_: CreateUkPropertyPeriodSummaryRequest)(
+            _: HeaderCarrier,
+            _: ExecutionContext,
+            _: EndpointLogContext,
+            _: String
+          )
+        )
         .expects(requestData, *, *, *, *)
     }
   }

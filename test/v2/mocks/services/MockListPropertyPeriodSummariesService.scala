@@ -26,7 +26,7 @@ import v2.models.request.listPropertyPeriodSummaries.ListPropertyPeriodSummaries
 import v2.models.response.listPropertyPeriodSummaries.ListPropertyPeriodSummariesResponse
 import v2.services.ListPropertyPeriodSummariesService
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.{ ExecutionContext, Future }
 
 trait MockListPropertyPeriodSummariesService extends MockFactory {
 
@@ -34,8 +34,8 @@ trait MockListPropertyPeriodSummariesService extends MockFactory {
 
   object MockListPropertyPeriodSummariesService {
 
-    def listPeriodSummaries(requestData: ListPropertyPeriodSummariesRequest):
-    CallHandler[Future[Either[ErrorWrapper, ResponseWrapper[ListPropertyPeriodSummariesResponse]]]] = {
+    def listPeriodSummaries(requestData: ListPropertyPeriodSummariesRequest)
+      : CallHandler[Future[Either[ErrorWrapper, ResponseWrapper[ListPropertyPeriodSummariesResponse]]]] = {
       (mockService
         .listPeriodSummaries(_: ListPropertyPeriodSummariesRequest)(_: HeaderCarrier, _: ExecutionContext, _: EndpointLogContext, _: String))
         .expects(requestData, *, *, *, *)

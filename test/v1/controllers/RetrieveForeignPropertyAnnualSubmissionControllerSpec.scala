@@ -22,10 +22,10 @@ import uk.gov.hmrc.http.HeaderCarrier
 import v1.mocks.MockIdGenerator
 import v1.mocks.hateoas.MockHateoasFactory
 import v1.mocks.requestParsers.MockRetrieveForeignPropertyAnnualSubmissionRequestParser
-import v1.mocks.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService, MockRetrieveForeignPropertyAnnualSubmissionService}
+import v1.mocks.services.{ MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService, MockRetrieveForeignPropertyAnnualSubmissionService }
 import v1.models.domain.Nino
 import v1.models.errors._
-import v1.models.hateoas.{HateoasWrapper, Link}
+import v1.models.hateoas.{ HateoasWrapper, Link }
 import v1.models.hateoas.Method.GET
 import v1.models.outcomes.ResponseWrapper
 import v1.models.request.retrieveForeignPropertyAnnualSubmission._
@@ -37,7 +37,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class RetrieveForeignPropertyAnnualSubmissionControllerSpec
-  extends ControllerBaseSpec
+    extends ControllerBaseSpec
     with MockEnrolmentsAuthService
     with MockMtdIdLookupService
     with MockRetrieveForeignPropertyAnnualSubmissionService
@@ -46,9 +46,9 @@ class RetrieveForeignPropertyAnnualSubmissionControllerSpec
     with MockAuditService
     with MockIdGenerator {
 
-  private val nino = "AA123456A"
-  private val businessId = "XAIS12345678910"
-  private val taxYear = "2020-21"
+  private val nino          = "AA123456A"
+  private val businessId    = "XAIS12345678910"
+  private val taxYear       = "2020-21"
   private val correlationId = "X-123"
 
   trait Test {
@@ -69,40 +69,44 @@ class RetrieveForeignPropertyAnnualSubmissionControllerSpec
     MockIdGenerator.getCorrelationId.returns(correlationId)
   }
 
-  private val rawData = RetrieveForeignPropertyAnnualSubmissionRawData(nino, businessId, taxYear)
+  private val rawData     = RetrieveForeignPropertyAnnualSubmissionRawData(nino, businessId, taxYear)
   private val requestData = RetrieveForeignPropertyAnnualSubmissionRequest(Nino(nino), businessId, taxYear)
 
   private val testHateoasLink = Link(href = s"Individuals/business/property/$nino/$businessId/annual/$taxYear", method = GET, rel = "self")
 
   private val foreignFhlEeaEntry = ForeignFhlEeaEntry(
-    Some(ForeignFhlEeaAdjustments(
-      Some(5000.99),
-      Some(5000.99),
-      Some(true)
-    )),
-    Some(ForeignFhlEeaAllowances(
-      Some(5000.99),
-      Some(5000.99),
-      Some(5000.99),
-      Some(5000.99)
-    ))
+    Some(
+      ForeignFhlEeaAdjustments(
+        Some(5000.99),
+        Some(5000.99),
+        Some(true)
+      )),
+    Some(
+      ForeignFhlEeaAllowances(
+        Some(5000.99),
+        Some(5000.99),
+        Some(5000.99),
+        Some(5000.99)
+      ))
   )
 
   private val foreignPropertyEntry = ForeignPropertyEntry(
     "FRA",
-    Some(ForeignPropertyAdjustments(
-      Some(5000.99),
-      Some(5000.99)
-    )),
-    Some(ForeignPropertyAllowances(
-      Some(5000.99),
-      Some(5000.99),
-      Some(5000.99),
-      Some(5000.99),
-      Some(5000.99),
-      Some(5000.99),
-      Some(5000.99)
-    ))
+    Some(
+      ForeignPropertyAdjustments(
+        Some(5000.99),
+        Some(5000.99)
+      )),
+    Some(
+      ForeignPropertyAllowances(
+        Some(5000.99),
+        Some(5000.99),
+        Some(5000.99),
+        Some(5000.99),
+        Some(5000.99),
+        Some(5000.99),
+        Some(5000.99)
+      ))
   )
 
   val responseBody: RetrieveForeignPropertyAnnualSubmissionResponse = RetrieveForeignPropertyAnnualSubmissionResponse(

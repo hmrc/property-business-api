@@ -16,7 +16,7 @@
 
 package v2.models.request.common.foreignFhlEea
 
-import play.api.libs.json.{JsValue, Json}
+import play.api.libs.json.{ JsValue, Json }
 import support.UnitSpec
 
 class AmendForeignFhlEeaSpec extends UnitSpec {
@@ -43,16 +43,17 @@ class AmendForeignFhlEeaSpec extends UnitSpec {
 
   val model: AmendForeignFhlEea = AmendForeignFhlEea(
     income = Some(ForeignFhlEeaIncome(rentAmount = Some(567.83))),
-    expenses = Some(AmendForeignFhlEeaExpenses(
-      premisesRunningCosts = Some(4567.98),
-      repairsAndMaintenance = Some(98765.67),
-      financialCosts = Some(4566.95),
-      professionalFees = Some(23.65),
-      costOfServices = Some(4567.77),
-      travelCosts = Some(456.77),
-      other = Some(567.67),
-      consolidatedExpenses = Some(456.98)
-    ))
+    expenses = Some(
+      AmendForeignFhlEeaExpenses(
+        premisesRunningCosts = Some(4567.98),
+        repairsAndMaintenance = Some(98765.67),
+        financialCosts = Some(4566.95),
+        professionalFees = Some(23.65),
+        costOfServices = Some(4567.77),
+        travelCosts = Some(456.77),
+        other = Some(567.67),
+        consolidatedExpenses = Some(456.98)
+      ))
   )
 
   val ifsJson: JsValue = Json.parse(

@@ -54,8 +54,8 @@ class DeletePropertyAnnualSubmissionValidatorSpec extends UnitSpec with MockAppC
       }
       "multiple format errors are made" in {
         validator.validate(DeletePropertyAnnualSubmissionRawData("Walrus", "Beans", "2021/22")) shouldBe List(NinoFormatError,
-                                                                                                      BusinessIdFormatError,
-                                                                                                      TaxYearFormatError)
+                                                                                                              BusinessIdFormatError,
+                                                                                                              TaxYearFormatError)
       }
     }
   }

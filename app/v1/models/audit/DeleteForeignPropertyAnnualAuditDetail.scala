@@ -16,7 +16,7 @@
 
 package v1.models.audit
 
-import play.api.libs.json.{Json, Writes}
+import play.api.libs.json.{ Json, Writes }
 import v1.models.auth.UserDetails
 
 case class DeleteForeignPropertyAnnualAuditDetail(userType: String,
@@ -48,4 +48,3 @@ object DeleteForeignPropertyAnnualAuditDetail {
     )
   }
 }
-

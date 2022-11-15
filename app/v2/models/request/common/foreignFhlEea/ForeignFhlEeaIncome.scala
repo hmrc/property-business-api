@@ -16,11 +16,11 @@
 
 package v2.models.request.common.foreignFhlEea
 
-import play.api.libs.json.{Json, Reads, Writes}
+import play.api.libs.json.{ Json, Reads, Writes }
 
 case class ForeignFhlEeaIncome(rentAmount: Option[BigDecimal])
 
 object ForeignFhlEeaIncome {
-  implicit val reads: Reads[ForeignFhlEeaIncome] = Json.reads[ForeignFhlEeaIncome]
+  implicit val reads: Reads[ForeignFhlEeaIncome]   = Json.reads[ForeignFhlEeaIncome]
   implicit val writes: Writes[ForeignFhlEeaIncome] = Json.writes[ForeignFhlEeaIncome]
 }

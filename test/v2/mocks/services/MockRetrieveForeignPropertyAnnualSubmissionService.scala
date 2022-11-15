@@ -26,19 +26,27 @@ import v2.models.request.retrieveForeignPropertyAnnualSubmission.RetrieveForeign
 import v2.models.response.retrieveForeignPropertyAnnualSubmission.RetrieveForeignPropertyAnnualSubmissionResponse
 import v2.services.RetrieveForeignPropertyAnnualSubmissionService
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.{ ExecutionContext, Future }
 
 trait MockRetrieveForeignPropertyAnnualSubmissionService extends MockFactory {
 
-  val mockRetrieveForeignPropertyAnnualSubmissionService: RetrieveForeignPropertyAnnualSubmissionService = mock[RetrieveForeignPropertyAnnualSubmissionService]
+  val mockRetrieveForeignPropertyAnnualSubmissionService: RetrieveForeignPropertyAnnualSubmissionService =
+    mock[RetrieveForeignPropertyAnnualSubmissionService]
 
   object MockRetrieveForeignPropertyService {
-    def retrieve(requestData: RetrieveForeignPropertyAnnualSubmissionRequest):
-    CallHandler[Future[Either[ErrorWrapper, ResponseWrapper[RetrieveForeignPropertyAnnualSubmissionResponse]]]] = {
-      (mockRetrieveForeignPropertyAnnualSubmissionService
-        .retrieveForeignProperty(_: RetrieveForeignPropertyAnnualSubmissionRequest)(_: HeaderCarrier, _: ExecutionContext, _: EndpointLogContext, _: String))
+
+    def retrieve(requestData: RetrieveForeignPropertyAnnualSubmissionRequest)
+      : CallHandler[Future[Either[ErrorWrapper, ResponseWrapper[RetrieveForeignPropertyAnnualSubmissionResponse]]]] = {
+      (
+        mockRetrieveForeignPropertyAnnualSubmissionService
+          .retrieveForeignProperty(_: RetrieveForeignPropertyAnnualSubmissionRequest)(
+            _: HeaderCarrier,
+            _: ExecutionContext,
+            _: EndpointLogContext,
+            _: String
+          )
+        )
         .expects(requestData, *, *, *, *)
     }
   }
 }
-

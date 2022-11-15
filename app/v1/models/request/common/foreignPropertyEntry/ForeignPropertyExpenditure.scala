@@ -17,21 +17,23 @@
 package v1.models.request.common.foreignPropertyEntry
 
 import play.api.libs.functional.syntax._
-import play.api.libs.json.{JsPath, Json, Reads, Writes}
+import play.api.libs.json.{ JsPath, Json, Reads, Writes }
 
 case class ForeignPropertyExpenditure(
-                        premisesRunningCosts: Option[BigDecimal],
-                        repairsAndMaintenance: Option[BigDecimal],
-                        financialCosts: Option[BigDecimal],
-                        professionalFees: Option[BigDecimal],
-                        costsOfServices: Option[BigDecimal],
-                        travelCosts: Option[BigDecimal],
-                        residentialFinancialCost: Option[BigDecimal],
-                        broughtFwdResidentialFinancialCost: Option[BigDecimal],
-                        other: Option[BigDecimal],
-                        consolidatedExpenses: Option[BigDecimal]
-                      ) {
-  def isEmpty: Boolean = premisesRunningCosts.isEmpty &&
+    premisesRunningCosts: Option[BigDecimal],
+    repairsAndMaintenance: Option[BigDecimal],
+    financialCosts: Option[BigDecimal],
+    professionalFees: Option[BigDecimal],
+    costsOfServices: Option[BigDecimal],
+    travelCosts: Option[BigDecimal],
+    residentialFinancialCost: Option[BigDecimal],
+    broughtFwdResidentialFinancialCost: Option[BigDecimal],
+    other: Option[BigDecimal],
+    consolidatedExpenses: Option[BigDecimal]
+) {
+
+  def isEmpty: Boolean =
+    premisesRunningCosts.isEmpty &&
     repairsAndMaintenance.isEmpty &&
     financialCosts.isEmpty &&
     professionalFees.isEmpty &&
@@ -57,5 +59,5 @@ object ForeignPropertyExpenditure {
       (JsPath \ "broughtFwdResidentialFinancialCost").writeNullable[BigDecimal] and
       (JsPath \ "other").writeNullable[BigDecimal] and
       (JsPath \ "consolidatedExpense").writeNullable[BigDecimal]
-    ) (unlift(ForeignPropertyExpenditure.unapply))
+  )(unlift(ForeignPropertyExpenditure.unapply))
 }

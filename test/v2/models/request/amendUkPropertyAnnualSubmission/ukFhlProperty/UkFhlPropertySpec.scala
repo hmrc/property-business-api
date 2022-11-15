@@ -16,15 +16,16 @@
 
 package v2.models.request.amendUkPropertyAnnualSubmission.ukFhlProperty
 
-import play.api.libs.json.{JsValue, Json}
+import play.api.libs.json.{ JsValue, Json }
 import support.UnitSpec
 import v2.models.request.common.ukPropertyRentARoom.UkPropertyAdjustmentsRentARoom
 
 class UkFhlPropertySpec extends UnitSpec {
 
   val requestBody: UkFhlProperty =
-      UkFhlProperty(
-        Some(UkFhlPropertyAdjustments(
+    UkFhlProperty(
+      Some(
+        UkFhlPropertyAdjustments(
           Some(1000.20),
           Some(1000.30),
           true,
@@ -32,7 +33,8 @@ class UkFhlPropertySpec extends UnitSpec {
           true,
           Some(UkPropertyAdjustmentsRentARoom(true))
         )),
-        Some(UkFhlPropertyAllowances(
+      Some(
+        UkFhlPropertyAllowances(
           Some(1000.50),
           Some(1000.60),
           Some(1000.70),
@@ -40,10 +42,9 @@ class UkFhlPropertySpec extends UnitSpec {
           Some(1000.90),
           None
         ))
-      )
+    )
 
-  val validMtdJson: JsValue = Json.parse(
-    """
+  val validMtdJson: JsValue = Json.parse("""
       |{
       |  "allowances": {
       |    "annualInvestmentAllowance": 1000.50,
@@ -65,8 +66,7 @@ class UkFhlPropertySpec extends UnitSpec {
       |}
       |""".stripMargin)
 
-  val validDownstreamJson: JsValue = Json.parse(
-    """
+  val validDownstreamJson: JsValue = Json.parse("""
       |{
       |  "allowances": {
       |    "annualInvestmentAllowance": 1000.50,

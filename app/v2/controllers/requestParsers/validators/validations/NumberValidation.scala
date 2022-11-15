@@ -23,7 +23,7 @@ object NumberValidation {
   def validateOptional(field: Option[BigDecimal], path: String, min: BigDecimal = 0, max: BigDecimal = 99999999999.99): List[MtdError] = {
     field match {
       case None        => NoValidationErrors
-      case Some(value) => validate(value, path, min,max)
+      case Some(value) => validate(value, path, min, max)
     }
   }
 

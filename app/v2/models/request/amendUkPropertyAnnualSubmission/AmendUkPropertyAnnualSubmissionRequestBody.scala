@@ -16,13 +16,12 @@
 
 package v2.models.request.amendUkPropertyAnnualSubmission
 
-import play.api.libs.json.{JsPath, Json, OWrites, Reads}
+import play.api.libs.json.{ JsPath, Json, OWrites, Reads }
 import play.api.libs.functional.syntax._
 import v2.models.request.amendUkPropertyAnnualSubmission.ukFhlProperty.UkFhlProperty
 import v2.models.request.amendUkPropertyAnnualSubmission.ukNonFhlProperty.UkNonFhlProperty
 
-case class AmendUkPropertyAnnualSubmissionRequestBody(ukFhlProperty: Option[UkFhlProperty],
-                                                      ukNonFhlProperty: Option[UkNonFhlProperty])
+case class AmendUkPropertyAnnualSubmissionRequestBody(ukFhlProperty: Option[UkFhlProperty], ukNonFhlProperty: Option[UkNonFhlProperty])
 
 object AmendUkPropertyAnnualSubmissionRequestBody {
   implicit val reads: Reads[AmendUkPropertyAnnualSubmissionRequestBody] = Json.reads[AmendUkPropertyAnnualSubmissionRequestBody]
@@ -30,5 +29,5 @@ object AmendUkPropertyAnnualSubmissionRequestBody {
   implicit val writes: OWrites[AmendUkPropertyAnnualSubmissionRequestBody] = (
     (JsPath \ "ukFhlProperty").writeNullable[UkFhlProperty] and
       (JsPath \ "ukOtherProperty").writeNullable[UkNonFhlProperty]
-    ) (unlift(AmendUkPropertyAnnualSubmissionRequestBody.unapply))
+  )(unlift(AmendUkPropertyAnnualSubmissionRequestBody.unapply))
 }

@@ -16,7 +16,7 @@
 
 package v1.connectors
 
-import mocks.{MockAppConfig, MockHttpClient}
+import mocks.{ MockAppConfig, MockHttpClient }
 import v1.models.domain.Nino
 import v1.models.outcomes.ResponseWrapper
 import v1.models.request.retrieveForeignPropertyAnnualSubmission.RetrieveForeignPropertyAnnualSubmissionRequest
@@ -28,9 +28,9 @@ import scala.concurrent.Future
 
 class RetrieveForeignPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec {
 
-  val nino: String = "AA123456A"
+  val nino: String       = "AA123456A"
   val businessId: String = "XAIS12345678910"
-  val taxYear: String = "2019-20"
+  val taxYear: String    = "2019-20"
 
   val request: RetrieveForeignPropertyAnnualSubmissionRequest = RetrieveForeignPropertyAnnualSubmissionRequest(
     nino = Nino(nino),
@@ -39,31 +39,21 @@ class RetrieveForeignPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec
   )
 
   private val response = RetrieveForeignPropertyAnnualSubmissionResponse(
-    Some(ForeignFhlEeaEntry(
-      Some(ForeignFhlEeaAdjustments(
-      Some(100.25),
-      Some(100.25),
-      Some(true))),
-      Some(ForeignFhlEeaAllowances(
-        Some(100.25),
-        Some(100.25),
-        Some(100.25),
-        Some(100.25))))),
-      Some(Seq(ForeignPropertyEntry(
+    Some(
+      ForeignFhlEeaEntry(
+        Some(ForeignFhlEeaAdjustments(Some(100.25), Some(100.25), Some(true))),
+        Some(ForeignFhlEeaAllowances(Some(100.25), Some(100.25), Some(100.25), Some(100.25)))
+      )),
+    Some(
+      Seq(ForeignPropertyEntry(
         "GER",
-        Some(ForeignPropertyAdjustments(
-          Some(100.25),
-          Some(100.25))),
-        Some(ForeignPropertyAllowances(
-          Some(100.25),
-          Some(100.25),
-          Some(100.25),
-          Some(100.25),
-          Some(100.25),
-          Some(100.25),
-          Some(100.25)))))))
+        Some(ForeignPropertyAdjustments(Some(100.25), Some(100.25))),
+        Some(ForeignPropertyAllowances(Some(100.25), Some(100.25), Some(100.25), Some(100.25), Some(100.25), Some(100.25), Some(100.25)))
+      )))
+  )
 
   class Test extends MockHttpClient with MockAppConfig {
+
     val connector: RetrieveForeignPropertyAnnualSubmissionConnector = new RetrieveForeignPropertyAnnualSubmissionConnector(
       http = mockHttpClient,
       appConfig = mockAppConfig

@@ -22,7 +22,7 @@ import v2.controllers.requestParsers.validators.validations._
 import v2.models.errors.MtdError
 import v2.models.request.common.ukFhlProperty.UkFhlProperty
 import v2.models.request.common.ukNonFhlProperty.UkNonFhlProperty
-import v2.models.request.createUkPropertyPeriodSummary.{CreateUkPropertyPeriodSummaryRawData, CreateUkPropertyPeriodSummaryRequestBody}
+import v2.models.request.createUkPropertyPeriodSummary.{ CreateUkPropertyPeriodSummaryRawData, CreateUkPropertyPeriodSummaryRequestBody }
 
 import javax.inject.Singleton
 
@@ -43,7 +43,7 @@ class CreateUkPropertyPeriodSummaryValidator @Inject()(appConfig: AppConfig) ext
 
   private def bodyFormatValidation: CreateUkPropertyPeriodSummaryRawData => List[List[MtdError]] = { data =>
     JsonFormatValidation.validateAndCheckNonEmpty[CreateUkPropertyPeriodSummaryRequestBody](data.body) match {
-      case Nil => NoValidationErrors
+      case Nil          => NoValidationErrors
       case schemaErrors => List(schemaErrors)
     }
   }

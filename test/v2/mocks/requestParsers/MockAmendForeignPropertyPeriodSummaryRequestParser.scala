@@ -20,13 +20,15 @@ import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
 import v2.controllers.requestParsers.AmendForeignPropertyPeriodSummaryRequestParser
 import v2.models.errors.ErrorWrapper
-import v2.models.request.amendForeignPropertyPeriodSummary.{AmendForeignPropertyPeriodSummaryRawData, AmendForeignPropertyPeriodSummaryRequest}
+import v2.models.request.amendForeignPropertyPeriodSummary.{ AmendForeignPropertyPeriodSummaryRawData, AmendForeignPropertyPeriodSummaryRequest }
 
 trait MockAmendForeignPropertyPeriodSummaryRequestParser extends MockFactory {
 
-  val mockAmendForeignPropertyPeriodSummaryRequestParser: AmendForeignPropertyPeriodSummaryRequestParser = mock[AmendForeignPropertyPeriodSummaryRequestParser]
+  val mockAmendForeignPropertyPeriodSummaryRequestParser: AmendForeignPropertyPeriodSummaryRequestParser =
+    mock[AmendForeignPropertyPeriodSummaryRequestParser]
 
   object MockAmendForeignPropertyRequestParser {
+
     def parseRequest(data: AmendForeignPropertyPeriodSummaryRawData): CallHandler[Either[ErrorWrapper, AmendForeignPropertyPeriodSummaryRequest]] = {
       (mockAmendForeignPropertyPeriodSummaryRequestParser.parseRequest(_: AmendForeignPropertyPeriodSummaryRawData)(_: String)).expects(data, *)
     }

@@ -45,7 +45,6 @@ class RetrieveUkPropertyPeriodSummaryConnector @Inject()(val http: HttpClient, v
                                                                           ec: ExecutionContext,
                                                                           correlationId: String): Future[DownstreamOutcome[Result]] = {
 
-
     import request._
 
     val requestUri = if (taxYear.useTaxYearSpecificApi) {
@@ -53,8 +52,9 @@ class RetrieveUkPropertyPeriodSummaryConnector @Inject()(val http: HttpClient, v
         s"income-tax/business/property/${taxYear.asTysDownstream}/${nino.nino}/${businessId}/periodic/$submissionId")
     } else {
       // Note that MTD tax year format is used
-      IfsUri[RetrieveUkPropertyPeriodSummaryResponse](s"income-tax/business/property/periodic?" +
-        s"taxableEntityId=${nino.nino}&taxYear=${taxYear.asMtd}&incomeSourceId=$businessId&submissionId=$submissionId")
+      IfsUri[RetrieveUkPropertyPeriodSummaryResponse](
+        s"income-tax/business/property/periodic?" +
+          s"taxableEntityId=${nino.nino}&taxYear=${taxYear.asMtd}&incomeSourceId=$businessId&submissionId=$submissionId")
     }
 
     val response = get(requestUri)

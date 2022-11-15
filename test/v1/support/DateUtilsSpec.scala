@@ -21,15 +21,19 @@ import java.time.LocalDate
 import support.UnitSpec
 
 class DateUtilsSpec extends UnitSpec {
+
   class TestDateUtilsAprilFourth extends DateUtils {
     override lazy val currentDate: LocalDate = LocalDate.parse("2020-04-04")
   }
+
   class TestDateUtilsAprilFifth extends DateUtils {
     override lazy val currentDate: LocalDate = LocalDate.parse("2020-04-05")
   }
+
   class TestDateUtilsAprilSixth extends DateUtils {
     override lazy val currentDate: LocalDate = LocalDate.parse("2020-04-06")
   }
+
   class TestDateUtilsAprilSeventh extends DateUtils {
     override lazy val currentDate: LocalDate = LocalDate.parse("2020-04-07")
   }

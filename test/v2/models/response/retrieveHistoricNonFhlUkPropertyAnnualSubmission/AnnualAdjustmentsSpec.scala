@@ -16,12 +16,11 @@
 
 package v2.models.response.retrieveHistoricNonFhlUkPropertyAnnualSubmission
 
-import play.api.libs.json.{JsValue, Json}
+import play.api.libs.json.{ JsValue, Json }
 import support.UnitSpec
-import v2.models.response.retrieveHistoricNonFhlUkPropertyAnnualSubmissionResponse.{AnnualAdjustments, RentARoom}
+import v2.models.response.retrieveHistoricNonFhlUkPropertyAnnualSubmissionResponse.{ AnnualAdjustments, RentARoom }
 
-
-class AnnualAdjustmentsSpec extends UnitSpec{
+class AnnualAdjustmentsSpec extends UnitSpec {
 
   private def decimal(value: String): Option[BigDecimal] = Option(BigDecimal(value))
 
@@ -37,7 +36,7 @@ class AnnualAdjustmentsSpec extends UnitSpec{
                                              |      }
                                              |   }
                                              |""".stripMargin)
-  val mtdJson: JsValue = Json.parse("""
+  val mtdJson: JsValue        = Json.parse("""
                                              |   {
                                              |      "lossBroughtForward": 200.00,
                                              |      "balancingCharge": 300.00,
@@ -56,18 +55,19 @@ class AnnualAdjustmentsSpec extends UnitSpec{
     privateUseAdjustment = decimal("400.00"),
     businessPremisesRenovationAllowanceBalancingCharges = decimal("80.02"),
     nonResidentLandlord = true,
-    rentARoom = Option(RentARoom(jointlyLet = true)))
+    rentARoom = Option(RentARoom(jointlyLet = true))
+  )
 
-  "reads" should{
+  "reads" should {
     "return an expected object" when {
-      "a correct Json is passed as an input" in{
+      "a correct Json is passed as an input" in {
         val result = downstreamJson.as[AnnualAdjustments]
         result shouldBe model
       }
     }
   }
 
-  "writes" should{
+  "writes" should {
     "return a correct Json" in {
       Json.toJson(model) shouldBe mtdJson
     }

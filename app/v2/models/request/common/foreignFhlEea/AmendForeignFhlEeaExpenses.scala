@@ -17,18 +17,18 @@
 package v2.models.request.common.foreignFhlEea
 
 import play.api.libs.functional.syntax._
-import play.api.libs.json.{JsPath, Json, Reads, Writes}
+import play.api.libs.json.{ JsPath, Json, Reads, Writes }
 
 case class AmendForeignFhlEeaExpenses(
-                        premisesRunningCosts: Option[BigDecimal],
-                        repairsAndMaintenance: Option[BigDecimal],
-                        financialCosts: Option[BigDecimal],
-                        professionalFees: Option[BigDecimal],
-                        costOfServices: Option[BigDecimal],
-                        travelCosts: Option[BigDecimal],
-                        other: Option[BigDecimal],
-                        consolidatedExpenses: Option[BigDecimal]
-                      )
+    premisesRunningCosts: Option[BigDecimal],
+    repairsAndMaintenance: Option[BigDecimal],
+    financialCosts: Option[BigDecimal],
+    professionalFees: Option[BigDecimal],
+    costOfServices: Option[BigDecimal],
+    travelCosts: Option[BigDecimal],
+    other: Option[BigDecimal],
+    consolidatedExpenses: Option[BigDecimal]
+)
 
 object AmendForeignFhlEeaExpenses {
   implicit val reads: Reads[AmendForeignFhlEeaExpenses] = Json.reads[AmendForeignFhlEeaExpenses]
@@ -42,5 +42,5 @@ object AmendForeignFhlEeaExpenses {
       (JsPath \ "travelCosts").writeNullable[BigDecimal] and
       (JsPath \ "other").writeNullable[BigDecimal] and
       (JsPath \ "consolidatedExpense").writeNullable[BigDecimal]
-    ) (unlift(AmendForeignFhlEeaExpenses.unapply))
+  )(unlift(AmendForeignFhlEeaExpenses.unapply))
 }

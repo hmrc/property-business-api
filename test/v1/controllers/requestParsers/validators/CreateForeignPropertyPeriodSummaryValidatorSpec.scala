@@ -18,12 +18,23 @@ package v1.controllers.requestParsers.validators
 
 import play.api.libs.json.Json
 import support.UnitSpec
-import v1.models.errors.{BusinessIdFormatError, CountryCodeFormatError, FromDateFormatError, NinoFormatError, RuleBothExpensesSuppliedError, RuleCountryCodeError, RuleIncorrectOrEmptyBodyError, RuleToDateBeforeFromDateError, ToDateFormatError, ValueFormatError}
+import v1.models.errors.{
+  BusinessIdFormatError,
+  CountryCodeFormatError,
+  FromDateFormatError,
+  NinoFormatError,
+  RuleBothExpensesSuppliedError,
+  RuleCountryCodeError,
+  RuleIncorrectOrEmptyBodyError,
+  RuleToDateBeforeFromDateError,
+  ToDateFormatError,
+  ValueFormatError
+}
 import v1.models.request.createForeignPropertyPeriodSummary.CreateForeignPropertyPeriodSummaryRawData
 
 class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec {
 
-  private val validNino = "AA123456A"
+  private val validNino       = "AA123456A"
   private val validBusinessId = "XAIS12345678901"
   private val requestBodyJson = Json.parse(
     """
@@ -133,8 +144,11 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec {
         validator.validate(CreateForeignPropertyPeriodSummaryRawData(validNino, validBusinessId, requestBodyConsolidationExpenseJson)) shouldBe Nil
       }
       "a minimal foreignFhlEea request is supplied" in {
-        validator.validate(CreateForeignPropertyPeriodSummaryRawData(validNino, validBusinessId, Json.parse(
-          """
+        validator.validate(
+          CreateForeignPropertyPeriodSummaryRawData(
+            validNino,
+            validBusinessId,
+            Json.parse("""
             |{
             |  "fromDate": "2020-01-01",
             |  "toDate": "2020-01-31",
@@ -144,11 +158,15 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec {
             |    }
             |  }
             |}
-            |""".stripMargin))) shouldBe Nil
+            |""".stripMargin)
+          )) shouldBe Nil
       }
       "a minimal foreignProperty request is supplied" in {
-        validator.validate(CreateForeignPropertyPeriodSummaryRawData(validNino, validBusinessId, Json.parse(
-          """
+        validator.validate(
+          CreateForeignPropertyPeriodSummaryRawData(
+            validNino,
+            validBusinessId,
+            Json.parse("""
             |{
             |  "fromDate": "2020-01-01",
             |  "toDate": "2020-01-31",
@@ -164,7 +182,8 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec {
             |    }
             |  ]
             |}
-            |""".stripMargin))) shouldBe Nil
+            |""".stripMargin)
+          )) shouldBe Nil
       }
     }
 
@@ -184,21 +203,29 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec {
 
     "return RuleIncorrectOrEmptyBodyError" when {
       "an empty body is submitted" in {
-        validator.validate(CreateForeignPropertyPeriodSummaryRawData(validNino, validBusinessId, Json.parse("""{}"""))) shouldBe List(RuleIncorrectOrEmptyBodyError)
+        validator.validate(CreateForeignPropertyPeriodSummaryRawData(validNino, validBusinessId, Json.parse("""{}"""))) shouldBe List(
+          RuleIncorrectOrEmptyBodyError)
       }
       "an empty foreignFhlEea is submitted" in {
-        validator.validate(CreateForeignPropertyPeriodSummaryRawData(validNino, validBusinessId, Json.parse(
-          """
+        validator.validate(
+          CreateForeignPropertyPeriodSummaryRawData(
+            validNino,
+            validBusinessId,
+            Json.parse("""
             |{
             |  "fromDate": "2020-01-01",
             |  "toDate": "2020-01-31",
             |  "foreignFhlEea": {}
             |}
-            |""".stripMargin))) shouldBe List(RuleIncorrectOrEmptyBodyError)
+            |""".stripMargin)
+          )) shouldBe List(RuleIncorrectOrEmptyBodyError)
       }
       "foreignFhlEea.expenditure is empty" in {
-        validator.validate(CreateForeignPropertyPeriodSummaryRawData(validNino, validBusinessId, Json.parse(
-          """
+        validator.validate(
+          CreateForeignPropertyPeriodSummaryRawData(
+            validNino,
+            validBusinessId,
+            Json.parse("""
             |{
             |  "fromDate": "2020-01-01",
             |  "toDate": "2020-01-31",
@@ -206,40 +233,56 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec {
             |    "expenditure": {}
             |  }
             |}
-            |""".stripMargin))) shouldBe List(RuleIncorrectOrEmptyBodyError)
+            |""".stripMargin)
+          )) shouldBe List(RuleIncorrectOrEmptyBodyError)
       }
       "an empty foreignProperty is submitted" in {
-        validator.validate(CreateForeignPropertyPeriodSummaryRawData(validNino, validBusinessId, Json.parse(
-          """{
+        validator.validate(
+          CreateForeignPropertyPeriodSummaryRawData(
+            validNino,
+            validBusinessId,
+            Json.parse("""{
             |  "fromDate": "2020-01-01",
             |  "toDate": "2020-01-31",
             |  "foreignProperty": []
-            |}""".stripMargin))) shouldBe List(RuleIncorrectOrEmptyBodyError)
+            |}""".stripMargin)
+          )) shouldBe List(RuleIncorrectOrEmptyBodyError)
       }
       "a foreignProperty array is submitted with an empty body in it" in {
-        validator.validate(CreateForeignPropertyPeriodSummaryRawData(validNino, validBusinessId, Json.parse(
-          """{
+        validator.validate(
+          CreateForeignPropertyPeriodSummaryRawData(
+            validNino,
+            validBusinessId,
+            Json.parse("""{
             |  "fromDate": "2020-01-01",
             |  "toDate": "2020-01-31",
             |  "foreignProperty": [
             |    {}
             |  ]
-            |}""".stripMargin))) shouldBe List(RuleIncorrectOrEmptyBodyError)
+            |}""".stripMargin)
+          )) shouldBe List(RuleIncorrectOrEmptyBodyError)
       }
       "an empty foreignPropertyEntry is submitted" in {
-        validator.validate(CreateForeignPropertyPeriodSummaryRawData(validNino, validBusinessId, Json.parse(
-          """{
+        validator.validate(
+          CreateForeignPropertyPeriodSummaryRawData(
+            validNino,
+            validBusinessId,
+            Json.parse("""{
             |  "fromDate": "2020-01-01",
             |  "toDate": "2020-01-31",
             |  "foreignProperty": [
             |    {
             |    }
             |  ]
-            |}""".stripMargin))) shouldBe List(RuleIncorrectOrEmptyBodyError)
+            |}""".stripMargin)
+          )) shouldBe List(RuleIncorrectOrEmptyBodyError)
       }
       "foreignProperty[].income is empty" in {
-        validator.validate(CreateForeignPropertyPeriodSummaryRawData(validNino, validBusinessId, Json.parse(
-          """{
+        validator.validate(
+          CreateForeignPropertyPeriodSummaryRawData(
+            validNino,
+            validBusinessId,
+            Json.parse("""{
             |  "fromDate": "2020-01-01",
             |  "toDate": "2020-01-31",
             |  "foreignProperty": [
@@ -247,11 +290,15 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec {
             |      "income": {}
             |    }
             |  ]
-            |}""".stripMargin))) shouldBe List(RuleIncorrectOrEmptyBodyError)
+            |}""".stripMargin)
+          )) shouldBe List(RuleIncorrectOrEmptyBodyError)
       }
       "foreignProperty[].expenditure is empty" in {
-        validator.validate(CreateForeignPropertyPeriodSummaryRawData(validNino, validBusinessId, Json.parse(
-          """{
+        validator.validate(
+          CreateForeignPropertyPeriodSummaryRawData(
+            validNino,
+            validBusinessId,
+            Json.parse("""{
             |  "fromDate": "2020-01-01",
             |  "toDate": "2020-01-31",
             |  "foreignProperty": [
@@ -259,14 +306,19 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec {
             |      "expenditure": {}
             |    }
             |  ]
-            |}""".stripMargin))) shouldBe List(RuleIncorrectOrEmptyBodyError)
+            |}""".stripMargin)
+          )) shouldBe List(RuleIncorrectOrEmptyBodyError)
       }
     }
 
     "return Date Errors" when {
       "the fromDate format is invalid" in {
-        validator.validate(CreateForeignPropertyPeriodSummaryRawData(validNino, validBusinessId, Json.parse(
-          """
+        validator.validate(
+          CreateForeignPropertyPeriodSummaryRawData(
+            validNino,
+            validBusinessId,
+            Json.parse(
+              """
             |{
             |   "fromDate":"01-01-2023",
             |   "toDate":"2020-01-31",
@@ -312,11 +364,16 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec {
             |   ]
             |}
             |""".stripMargin
-        ))) shouldBe List(FromDateFormatError)
+            )
+          )) shouldBe List(FromDateFormatError)
       }
       "the toDate format is invalid" in {
-        validator.validate(CreateForeignPropertyPeriodSummaryRawData(validNino, validBusinessId, Json.parse(
-          """
+        validator.validate(
+          CreateForeignPropertyPeriodSummaryRawData(
+            validNino,
+            validBusinessId,
+            Json.parse(
+              """
             |{
             |   "fromDate":"2020-01-01",
             |   "toDate":"2020.10.01",
@@ -362,12 +419,17 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec {
             |   ]
             |}
             |""".stripMargin
-        ))) shouldBe List(ToDateFormatError)
+            )
+          )) shouldBe List(ToDateFormatError)
 
       }
       "toDate is before fromDate" in {
-        validator.validate(CreateForeignPropertyPeriodSummaryRawData(validNino, validBusinessId, Json.parse(
-          """
+        validator.validate(
+          CreateForeignPropertyPeriodSummaryRawData(
+            validNino,
+            validBusinessId,
+            Json.parse(
+              """
             |{
             |   "fromDate":"2020-01-31",
             |   "toDate":"2020-01-01",
@@ -413,14 +475,18 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec {
             |   ]
             |}
             |""".stripMargin
-        ))) shouldBe List(RuleToDateBeforeFromDateError)
+            )
+          )) shouldBe List(RuleToDateBeforeFromDateError)
       }
     }
 
     "return ValueFormatError" when {
       "foreignFhlEea/income/rentAmount is invalid" in {
-        validator.validate(CreateForeignPropertyPeriodSummaryRawData(validNino, validBusinessId, Json.parse(
-          """
+        validator.validate(
+          CreateForeignPropertyPeriodSummaryRawData(
+            validNino,
+            validBusinessId,
+            Json.parse("""
             |{
             |  "fromDate": "2020-01-01",
             |  "toDate": "2020-01-31",
@@ -463,13 +529,17 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec {
             |    }
             |  ]
             |}
-            |""".stripMargin))) shouldBe List(
+            |""".stripMargin)
+          )) shouldBe List(
           ValueFormatError.copy(paths = Some(Seq("/foreignFhlEea/income/rentAmount")))
         )
       }
       "foreignFhlEea/expenditure/premisesRunningCosts is invalid" in {
-        validator.validate(CreateForeignPropertyPeriodSummaryRawData(validNino, validBusinessId, Json.parse(
-          """
+        validator.validate(
+          CreateForeignPropertyPeriodSummaryRawData(
+            validNino,
+            validBusinessId,
+            Json.parse("""
             |{
             |  "fromDate": "2020-01-01",
             |  "toDate": "2020-01-31",
@@ -512,13 +582,17 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec {
             |    }
             |  ]
             |}
-            |""".stripMargin))) shouldBe List(
+            |""".stripMargin)
+          )) shouldBe List(
           ValueFormatError.copy(paths = Some(Seq("/foreignFhlEea/expenditure/premisesRunningCosts")))
         )
       }
       "foreignFhlEea/expenditure/repairsAndMaintenance is invalid" in {
-        validator.validate(CreateForeignPropertyPeriodSummaryRawData(validNino, validBusinessId, Json.parse(
-          """
+        validator.validate(
+          CreateForeignPropertyPeriodSummaryRawData(
+            validNino,
+            validBusinessId,
+            Json.parse("""
             |{
             |  "fromDate": "2020-01-01",
             |  "toDate": "2020-01-31",
@@ -561,13 +635,17 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec {
             |    }
             |  ]
             |}
-            |""".stripMargin))) shouldBe List(
+            |""".stripMargin)
+          )) shouldBe List(
           ValueFormatError.copy(paths = Some(Seq("/foreignFhlEea/expenditure/repairsAndMaintenance")))
         )
       }
       "foreignFhlEea/expenditure/financialCosts is invalid" in {
-        validator.validate(CreateForeignPropertyPeriodSummaryRawData(validNino, validBusinessId, Json.parse(
-          """
+        validator.validate(
+          CreateForeignPropertyPeriodSummaryRawData(
+            validNino,
+            validBusinessId,
+            Json.parse("""
             |{
             |  "fromDate": "2020-01-01",
             |  "toDate": "2020-01-31",
@@ -610,13 +688,17 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec {
             |    }
             |  ]
             |}
-            |""".stripMargin))) shouldBe List(
+            |""".stripMargin)
+          )) shouldBe List(
           ValueFormatError.copy(paths = Some(Seq("/foreignFhlEea/expenditure/financialCosts")))
         )
       }
       "foreignFhlEea/expenditure/professionalFees is invalid" in {
-        validator.validate(CreateForeignPropertyPeriodSummaryRawData(validNino, validBusinessId, Json.parse(
-          """
+        validator.validate(
+          CreateForeignPropertyPeriodSummaryRawData(
+            validNino,
+            validBusinessId,
+            Json.parse("""
             |{
             |  "fromDate": "2020-01-01",
             |  "toDate": "2020-01-31",
@@ -661,13 +743,17 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec {
             |    }
             |  ]
             |}
-            |""".stripMargin))) shouldBe List(
+            |""".stripMargin)
+          )) shouldBe List(
           ValueFormatError.copy(paths = Some(Seq("/foreignFhlEea/expenditure/professionalFees")))
         )
       }
       "foreignFhlEea/expenditure/costsOfServices is invalid" in {
-        validator.validate(CreateForeignPropertyPeriodSummaryRawData(validNino, validBusinessId, Json.parse(
-          """
+        validator.validate(
+          CreateForeignPropertyPeriodSummaryRawData(
+            validNino,
+            validBusinessId,
+            Json.parse("""
             |{
             |  "fromDate": "2020-01-01",
             |  "toDate": "2020-01-31",
@@ -710,13 +796,17 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec {
             |    }
             |  ]
             |}
-            |""".stripMargin))) shouldBe List(
+            |""".stripMargin)
+          )) shouldBe List(
           ValueFormatError.copy(paths = Some(Seq("/foreignFhlEea/expenditure/costsOfServices")))
         )
       }
       "foreignFhlEea/expenditure/travelCosts is invalid" in {
-        validator.validate(CreateForeignPropertyPeriodSummaryRawData(validNino, validBusinessId, Json.parse(
-          """
+        validator.validate(
+          CreateForeignPropertyPeriodSummaryRawData(
+            validNino,
+            validBusinessId,
+            Json.parse("""
             |{
             |  "fromDate": "2020-01-01",
             |  "toDate": "2020-01-31",
@@ -759,13 +849,17 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec {
             |    }
             |  ]
             |}
-            |""".stripMargin))) shouldBe List(
+            |""".stripMargin)
+          )) shouldBe List(
           ValueFormatError.copy(paths = Some(Seq("/foreignFhlEea/expenditure/travelCosts")))
         )
       }
       "foreignFhlEea/expenditure/other is invalid" in {
-        validator.validate(CreateForeignPropertyPeriodSummaryRawData(validNino, validBusinessId, Json.parse(
-          """
+        validator.validate(
+          CreateForeignPropertyPeriodSummaryRawData(
+            validNino,
+            validBusinessId,
+            Json.parse("""
             |{
             |  "fromDate": "2020-01-01",
             |  "toDate": "2020-01-31",
@@ -808,13 +902,17 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec {
             |    }
             |  ]
             |}
-            |""".stripMargin))) shouldBe List(
+            |""".stripMargin)
+          )) shouldBe List(
           ValueFormatError.copy(paths = Some(Seq("/foreignFhlEea/expenditure/other")))
         )
       }
       "foreignFhlEea/expenditure/consolidatedExpenses is invalid" in {
-        validator.validate(CreateForeignPropertyPeriodSummaryRawData(validNino, validBusinessId, Json.parse(
-          """
+        validator.validate(
+          CreateForeignPropertyPeriodSummaryRawData(
+            validNino,
+            validBusinessId,
+            Json.parse("""
             |{
             |  "fromDate": "2020-01-01",
             |  "toDate": "2020-01-31",
@@ -851,13 +949,17 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec {
             |    }
             |  ]
             |}
-            |""".stripMargin))) shouldBe List(
+            |""".stripMargin)
+          )) shouldBe List(
           ValueFormatError.copy(paths = Some(Seq("/foreignFhlEea/expenditure/consolidatedExpenses")))
         )
       }
       "foreignProperty/0/income/rentIncome/rentAmount is invalid" in {
-        validator.validate(CreateForeignPropertyPeriodSummaryRawData(validNino, validBusinessId, Json.parse(
-          """
+        validator.validate(
+          CreateForeignPropertyPeriodSummaryRawData(
+            validNino,
+            validBusinessId,
+            Json.parse("""
             |{
             |  "fromDate": "2020-01-01",
             |  "toDate": "2020-01-31",
@@ -900,13 +1002,17 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec {
             |    }
             |  ]
             |}
-            |""".stripMargin))) shouldBe List(
+            |""".stripMargin)
+          )) shouldBe List(
           ValueFormatError.copy(paths = Some(Seq("/foreignProperty/0/income/rentIncome/rentAmount")))
         )
       }
       "foreignProperty/0/income/premiumOfLeaseGrant is invalid" in {
-        validator.validate(CreateForeignPropertyPeriodSummaryRawData(validNino, validBusinessId, Json.parse(
-          """
+        validator.validate(
+          CreateForeignPropertyPeriodSummaryRawData(
+            validNino,
+            validBusinessId,
+            Json.parse("""
             |{
             |  "fromDate": "2020-01-01",
             |  "toDate": "2020-01-31",
@@ -949,13 +1055,17 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec {
             |    }
             |  ]
             |}
-            |""".stripMargin))) shouldBe List(
+            |""".stripMargin)
+          )) shouldBe List(
           ValueFormatError.copy(paths = Some(Seq("/foreignProperty/0/income/premiumOfLeaseGrant")))
         )
       }
       "foreignProperty/0/income/otherPropertyIncome is invalid" in {
-        validator.validate(CreateForeignPropertyPeriodSummaryRawData(validNino, validBusinessId, Json.parse(
-          """
+        validator.validate(
+          CreateForeignPropertyPeriodSummaryRawData(
+            validNino,
+            validBusinessId,
+            Json.parse("""
             |{
             |  "fromDate": "2020-01-01",
             |  "toDate": "2020-01-31",
@@ -998,13 +1108,17 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec {
             |    }
             |  ]
             |}
-            |""".stripMargin))) shouldBe List(
+            |""".stripMargin)
+          )) shouldBe List(
           ValueFormatError.copy(paths = Some(Seq("/foreignProperty/0/income/otherPropertyIncome")))
         )
       }
       "foreignProperty/0/income/foreignTaxTakenOff is invalid" in {
-        validator.validate(CreateForeignPropertyPeriodSummaryRawData(validNino, validBusinessId, Json.parse(
-          """
+        validator.validate(
+          CreateForeignPropertyPeriodSummaryRawData(
+            validNino,
+            validBusinessId,
+            Json.parse("""
             |{
             |  "fromDate": "2020-01-01",
             |  "toDate": "2020-01-31",
@@ -1047,13 +1161,17 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec {
             |    }
             |  ]
             |}
-            |""".stripMargin))) shouldBe List(
+            |""".stripMargin)
+          )) shouldBe List(
           ValueFormatError.copy(paths = Some(Seq("/foreignProperty/0/income/foreignTaxTakenOff")))
         )
       }
       "foreignProperty/0/income/specialWithholdingTaxOrUKTaxPaid is invalid" in {
-        validator.validate(CreateForeignPropertyPeriodSummaryRawData(validNino, validBusinessId, Json.parse(
-          """
+        validator.validate(
+          CreateForeignPropertyPeriodSummaryRawData(
+            validNino,
+            validBusinessId,
+            Json.parse("""
             |{
             |  "fromDate": "2020-01-01",
             |  "toDate": "2020-01-31",
@@ -1096,13 +1214,17 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec {
             |    }
             |  ]
             |}
-            |""".stripMargin))) shouldBe List(
+            |""".stripMargin)
+          )) shouldBe List(
           ValueFormatError.copy(paths = Some(Seq("/foreignProperty/0/income/specialWithholdingTaxOrUKTaxPaid")))
         )
       }
       "foreignProperty/0/expenditure/premisesRunningCosts is invalid" in {
-        validator.validate(CreateForeignPropertyPeriodSummaryRawData(validNino, validBusinessId, Json.parse(
-          """
+        validator.validate(
+          CreateForeignPropertyPeriodSummaryRawData(
+            validNino,
+            validBusinessId,
+            Json.parse("""
             |{
             |  "fromDate": "2020-01-01",
             |  "toDate": "2020-01-31",
@@ -1145,13 +1267,17 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec {
             |    }
             |  ]
             |}
-            |""".stripMargin))) shouldBe List(
+            |""".stripMargin)
+          )) shouldBe List(
           ValueFormatError.copy(paths = Some(Seq("/foreignProperty/0/expenditure/premisesRunningCosts")))
         )
       }
       "foreignProperty/0/expenditure/repairsAndMaintenance is invalid" in {
-        validator.validate(CreateForeignPropertyPeriodSummaryRawData(validNino, validBusinessId, Json.parse(
-          """
+        validator.validate(
+          CreateForeignPropertyPeriodSummaryRawData(
+            validNino,
+            validBusinessId,
+            Json.parse("""
             |{
             |  "fromDate": "2020-01-01",
             |  "toDate": "2020-01-31",
@@ -1194,13 +1320,17 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec {
             |    }
             |  ]
             |}
-            |""".stripMargin))) shouldBe List(
+            |""".stripMargin)
+          )) shouldBe List(
           ValueFormatError.copy(paths = Some(Seq("/foreignProperty/0/expenditure/repairsAndMaintenance")))
         )
       }
       "foreignProperty/0/expenditure/financialCosts is invalid" in {
-        validator.validate(CreateForeignPropertyPeriodSummaryRawData(validNino, validBusinessId, Json.parse(
-          """
+        validator.validate(
+          CreateForeignPropertyPeriodSummaryRawData(
+            validNino,
+            validBusinessId,
+            Json.parse("""
             |{
             |  "fromDate": "2020-01-01",
             |  "toDate": "2020-01-31",
@@ -1243,13 +1373,17 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec {
             |    }
             |  ]
             |}
-            |""".stripMargin))) shouldBe List(
+            |""".stripMargin)
+          )) shouldBe List(
           ValueFormatError.copy(paths = Some(Seq("/foreignProperty/0/expenditure/financialCosts")))
         )
       }
       "foreignProperty/0/expenditure/professionalFees is invalid" in {
-        validator.validate(CreateForeignPropertyPeriodSummaryRawData(validNino, validBusinessId, Json.parse(
-          """
+        validator.validate(
+          CreateForeignPropertyPeriodSummaryRawData(
+            validNino,
+            validBusinessId,
+            Json.parse("""
             |{
             |  "fromDate": "2020-01-01",
             |  "toDate": "2020-01-31",
@@ -1292,13 +1426,17 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec {
             |    }
             |  ]
             |}
-            |""".stripMargin))) shouldBe List(
+            |""".stripMargin)
+          )) shouldBe List(
           ValueFormatError.copy(paths = Some(Seq("/foreignProperty/0/expenditure/professionalFees")))
         )
       }
       "foreignProperty/0/expenditure/costsOfServices is invalid" in {
-        validator.validate(CreateForeignPropertyPeriodSummaryRawData(validNino, validBusinessId, Json.parse(
-          """
+        validator.validate(
+          CreateForeignPropertyPeriodSummaryRawData(
+            validNino,
+            validBusinessId,
+            Json.parse("""
             |{
             |  "fromDate": "2020-01-01",
             |  "toDate": "2020-01-31",
@@ -1341,13 +1479,17 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec {
             |    }
             |  ]
             |}
-            |""".stripMargin))) shouldBe List(
+            |""".stripMargin)
+          )) shouldBe List(
           ValueFormatError.copy(paths = Some(Seq("/foreignProperty/0/expenditure/costsOfServices")))
         )
       }
       "foreignProperty/0/expenditure/travelCosts is invalid" in {
-        validator.validate(CreateForeignPropertyPeriodSummaryRawData(validNino, validBusinessId, Json.parse(
-          """
+        validator.validate(
+          CreateForeignPropertyPeriodSummaryRawData(
+            validNino,
+            validBusinessId,
+            Json.parse("""
             |{
             |  "fromDate": "2020-01-01",
             |  "toDate": "2020-01-31",
@@ -1390,13 +1532,17 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec {
             |    }
             |  ]
             |}
-            |""".stripMargin))) shouldBe List(
+            |""".stripMargin)
+          )) shouldBe List(
           ValueFormatError.copy(paths = Some(Seq("/foreignProperty/0/expenditure/travelCosts")))
         )
       }
       "foreignProperty/0/expenditure/other is invalid" in {
-        validator.validate(CreateForeignPropertyPeriodSummaryRawData(validNino, validBusinessId, Json.parse(
-          """
+        validator.validate(
+          CreateForeignPropertyPeriodSummaryRawData(
+            validNino,
+            validBusinessId,
+            Json.parse("""
             |{
             |  "fromDate": "2020-01-01",
             |  "toDate": "2020-01-31",
@@ -1439,13 +1585,17 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec {
             |    }
             |  ]
             |}
-            |""".stripMargin))) shouldBe List(
+            |""".stripMargin)
+          )) shouldBe List(
           ValueFormatError.copy(paths = Some(Seq("/foreignProperty/0/expenditure/other")))
         )
       }
       "foreignProperty/0/expenditure/residentialFinancialCost is invalid" in {
-        validator.validate(CreateForeignPropertyPeriodSummaryRawData(validNino, validBusinessId, Json.parse(
-          """
+        validator.validate(
+          CreateForeignPropertyPeriodSummaryRawData(
+            validNino,
+            validBusinessId,
+            Json.parse("""
             |{
             |  "fromDate": "2020-01-01",
             |  "toDate": "2020-01-31",
@@ -1478,13 +1628,17 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec {
             |    }
             |  ]
             |}
-            |""".stripMargin))) shouldBe List(
+            |""".stripMargin)
+          )) shouldBe List(
           ValueFormatError.copy(paths = Some(Seq("/foreignProperty/0/expenditure/residentialFinancialCost")))
         )
       }
       "foreignProperty/0/expenditure/broughtFwdResidentialFinancialCost is invalid" in {
-        validator.validate(CreateForeignPropertyPeriodSummaryRawData(validNino, validBusinessId, Json.parse(
-          """
+        validator.validate(
+          CreateForeignPropertyPeriodSummaryRawData(
+            validNino,
+            validBusinessId,
+            Json.parse("""
             |{
             |  "fromDate": "2020-01-01",
             |  "toDate": "2020-01-31",
@@ -1517,13 +1671,17 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec {
             |    }
             |  ]
             |}
-            |""".stripMargin))) shouldBe List(
+            |""".stripMargin)
+          )) shouldBe List(
           ValueFormatError.copy(paths = Some(Seq("/foreignProperty/0/expenditure/broughtFwdResidentialFinancialCost")))
         )
       }
       "foreignProperty/0/expenditure/consolidatedExpenses is invalid" in {
-        validator.validate(CreateForeignPropertyPeriodSummaryRawData(validNino, validBusinessId, Json.parse(
-          """
+        validator.validate(
+          CreateForeignPropertyPeriodSummaryRawData(
+            validNino,
+            validBusinessId,
+            Json.parse("""
             |{
             |  "fromDate": "2020-01-01",
             |  "toDate": "2020-01-31",
@@ -1556,13 +1714,17 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec {
             |    }
             |  ]
             |}
-            |""".stripMargin))) shouldBe List(
+            |""".stripMargin)
+          )) shouldBe List(
           ValueFormatError.copy(paths = Some(Seq("/foreignProperty/0/expenditure/consolidatedExpenses")))
         )
       }
       "multiple fields are invalid" in {
-        validator.validate(CreateForeignPropertyPeriodSummaryRawData(validNino, validBusinessId, Json.parse(
-          """
+        validator.validate(
+          CreateForeignPropertyPeriodSummaryRawData(
+            validNino,
+            validBusinessId,
+            Json.parse("""
             |{
             |  "fromDate": "2020-01-01",
             |  "toDate": "2020-01-31",
@@ -1628,7 +1790,8 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec {
             |    }
             |  ]
             |}
-            |""".stripMargin))) shouldBe List(
+            |""".stripMargin)
+          )) shouldBe List(
           ValueFormatError.copy(paths = Some(Seq(
             "/foreignFhlEea/expenditure/travelCosts",
             "/foreignProperty/0/income/premiumOfLeaseGrant",
@@ -1641,8 +1804,12 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec {
 
     "return RuleCountryCodeError" when {
       "an invalid country code is provided" in {
-        validator.validate(CreateForeignPropertyPeriodSummaryRawData(validNino, validBusinessId, Json.parse(
-          """
+        validator.validate(
+          CreateForeignPropertyPeriodSummaryRawData(
+            validNino,
+            validBusinessId,
+            Json.parse(
+              """
             |{
             |  "fromDate": "2020-01-01",
             |  "toDate": "2020-01-31",
@@ -1686,11 +1853,16 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec {
             |  ]
             |}
             |""".stripMargin
-        ))) shouldBe List(RuleCountryCodeError.copy(paths = Some(Seq("/foreignProperty/0/countryCode"))))
+            )
+          )) shouldBe List(RuleCountryCodeError.copy(paths = Some(Seq("/foreignProperty/0/countryCode"))))
       }
       "multiple invalid country codes are provided" in {
-        validator.validate(CreateForeignPropertyPeriodSummaryRawData(validNino, validBusinessId, Json.parse(
-          """
+        validator.validate(
+          CreateForeignPropertyPeriodSummaryRawData(
+            validNino,
+            validBusinessId,
+            Json.parse(
+              """
             |{
             |  "fromDate": "2020-01-01",
             |  "toDate": "2020-01-31",
@@ -1757,14 +1929,19 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec {
             |  ]
             |}
             |""".stripMargin
-        ))) shouldBe List(RuleCountryCodeError.copy(paths = Some(Seq("/foreignProperty/0/countryCode", "/foreignProperty/1/countryCode"))))
+            )
+          )) shouldBe List(RuleCountryCodeError.copy(paths = Some(Seq("/foreignProperty/0/countryCode", "/foreignProperty/1/countryCode"))))
       }
     }
 
     "return CountryCodeFormatError" when {
       "an invalid country code is provided" in {
-        validator.validate(CreateForeignPropertyPeriodSummaryRawData(validNino, validBusinessId, Json.parse(
-          """
+        validator.validate(
+          CreateForeignPropertyPeriodSummaryRawData(
+            validNino,
+            validBusinessId,
+            Json.parse(
+              """
             |{
             |  "fromDate": "2020-01-01",
             |  "toDate": "2020-01-31",
@@ -1808,11 +1985,16 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec {
             |  ]
             |}
             |""".stripMargin
-        ))) shouldBe List(CountryCodeFormatError.copy(paths = Some(Seq("/foreignProperty/0/countryCode"))))
+            )
+          )) shouldBe List(CountryCodeFormatError.copy(paths = Some(Seq("/foreignProperty/0/countryCode"))))
       }
       "multiple invalid country codes are provided" in {
-        validator.validate(CreateForeignPropertyPeriodSummaryRawData(validNino, validBusinessId, Json.parse(
-          """
+        validator.validate(
+          CreateForeignPropertyPeriodSummaryRawData(
+            validNino,
+            validBusinessId,
+            Json.parse(
+              """
             |{
             |  "fromDate": "2020-01-01",
             |  "toDate": "2020-01-31",
@@ -1879,14 +2061,19 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec {
             |  ]
             |}
             |""".stripMargin
-        ))) shouldBe List(CountryCodeFormatError.copy(paths = Some(Seq("/foreignProperty/0/countryCode", "/foreignProperty/1/countryCode"))))
+            )
+          )) shouldBe List(CountryCodeFormatError.copy(paths = Some(Seq("/foreignProperty/0/countryCode", "/foreignProperty/1/countryCode"))))
       }
     }
 
     "return RuleBothExpensesSuppliedError" when {
       "foreignFhlEea/expenditure is invalid" in {
-        validator.validate(CreateForeignPropertyPeriodSummaryRawData(validNino, validBusinessId, Json.parse(
-          """
+        validator.validate(
+          CreateForeignPropertyPeriodSummaryRawData(
+            validNino,
+            validBusinessId,
+            Json.parse(
+              """
             |{
             |  "fromDate": "2020-01-01",
             |  "toDate": "2020-01-31",
@@ -1921,11 +2108,16 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec {
             |  ]
             |}
             |""".stripMargin
-        ))) shouldBe List(RuleBothExpensesSuppliedError.copy(paths = Some(Seq("/foreignFhlEea/expenditure"))))
+            )
+          )) shouldBe List(RuleBothExpensesSuppliedError.copy(paths = Some(Seq("/foreignFhlEea/expenditure"))))
       }
       "foreignProperty/0/expenditure is invalid" in {
-        validator.validate(CreateForeignPropertyPeriodSummaryRawData(validNino, validBusinessId, Json.parse(
-          """
+        validator.validate(
+          CreateForeignPropertyPeriodSummaryRawData(
+            validNino,
+            validBusinessId,
+            Json.parse(
+              """
             |{
             |  "fromDate": "2020-01-01",
             |  "toDate": "2020-01-31",
@@ -1960,11 +2152,16 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec {
             |  ]
             |}
             |""".stripMargin
-        ))) shouldBe List(RuleBothExpensesSuppliedError.copy(paths = Some(Seq("/foreignProperty/0/expenditure"))))
+            )
+          )) shouldBe List(RuleBothExpensesSuppliedError.copy(paths = Some(Seq("/foreignProperty/0/expenditure"))))
       }
       "multiple expenditure objects are invalid" in {
-        validator.validate(CreateForeignPropertyPeriodSummaryRawData(validNino, validBusinessId, Json.parse(
-          """
+        validator.validate(
+          CreateForeignPropertyPeriodSummaryRawData(
+            validNino,
+            validBusinessId,
+            Json.parse(
+              """
             |{
             |  "fromDate": "2020-01-01",
             |  "toDate": "2020-01-31",
@@ -2020,11 +2217,15 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec {
             |  ]
             |}
             |""".stripMargin
-        ))) shouldBe List(RuleBothExpensesSuppliedError.copy(paths = Some(Seq(
-          "/foreignFhlEea/expenditure",
-          "/foreignProperty/0/expenditure",
-          "/foreignProperty/1/expenditure"
-        ))))
+            )
+          )) shouldBe List(
+          RuleBothExpensesSuppliedError.copy(
+            paths = Some(
+              Seq(
+                "/foreignFhlEea/expenditure",
+                "/foreignProperty/0/expenditure",
+                "/foreignProperty/1/expenditure"
+              ))))
       }
     }
 

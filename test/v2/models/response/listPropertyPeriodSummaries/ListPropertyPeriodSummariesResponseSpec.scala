@@ -19,7 +19,7 @@ package v2.models.response.listPropertyPeriodSummaries
 import mocks.MockAppConfig
 import play.api.libs.json.Json
 import support.UnitSpec
-import v2.models.hateoas.{Link, Method}
+import v2.models.hateoas.{ Link, Method }
 
 class ListPropertyPeriodSummariesResponseSpec extends UnitSpec with MockAppConfig {
 
@@ -37,9 +37,10 @@ class ListPropertyPeriodSummariesResponseSpec extends UnitSpec with MockAppConfi
         """.stripMargin
       )
 
-      val model = ListPropertyPeriodSummariesResponse(Seq(
-        SubmissionPeriod("4557ecb5-fd32-48cc-81f5-e6acd1099f3c", "2022-06-22", "2023-06-22")
-      ))
+      val model = ListPropertyPeriodSummariesResponse(
+        Seq(
+          SubmissionPeriod("4557ecb5-fd32-48cc-81f5-e6acd1099f3c", "2022-06-22", "2023-06-22")
+        ))
 
       ifsJson.as[ListPropertyPeriodSummariesResponse] shouldBe model
     }
@@ -62,10 +63,11 @@ class ListPropertyPeriodSummariesResponseSpec extends UnitSpec with MockAppConfi
         """.stripMargin
       )
 
-      val model = ListPropertyPeriodSummariesResponse(Seq(
-        SubmissionPeriod("4557ecb5-fd32-48cc-81f5-e6acd1099f3c", "2022-06-22", "2022-06-22"),
-        SubmissionPeriod("4557ecb5-fd32-48cc-81f5-e6acd1099f3d", "2022-08-22", "2022-08-22")
-      ))
+      val model = ListPropertyPeriodSummariesResponse(
+        Seq(
+          SubmissionPeriod("4557ecb5-fd32-48cc-81f5-e6acd1099f3c", "2022-06-22", "2022-06-22"),
+          SubmissionPeriod("4557ecb5-fd32-48cc-81f5-e6acd1099f3d", "2022-08-22", "2022-08-22")
+        ))
 
       ifsJson.as[ListPropertyPeriodSummariesResponse] shouldBe model
     }
@@ -87,9 +89,10 @@ class ListPropertyPeriodSummariesResponseSpec extends UnitSpec with MockAppConfi
 
   "writes" should {
     "write to JSON" in {
-      val model = ListPropertyPeriodSummariesResponse(Seq(
-        SubmissionPeriod("4557ecb5-fd32-48cc-81f5-e6acd1099f3c", "2022-06-22", "2022-06-22")
-      ))
+      val model = ListPropertyPeriodSummariesResponse(
+        Seq(
+          SubmissionPeriod("4557ecb5-fd32-48cc-81f5-e6acd1099f3c", "2022-06-22", "2022-06-22")
+        ))
 
       val mtdJson = Json.parse(
         """

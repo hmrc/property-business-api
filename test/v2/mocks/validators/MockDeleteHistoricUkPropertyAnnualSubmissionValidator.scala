@@ -28,8 +28,8 @@ class MockDeleteHistoricUkPropertyAnnualSubmissionValidator extends MockFactory 
 
   object MockDeleteHistoricUkPropertyAnnualSubmissionValidator {
 
-    def validate(data: DeleteHistoricUkPropertyAnnualSubmissionRawData)
-      : CallHandler1[DeleteHistoricUkPropertyAnnualSubmissionRawData, List[MtdError]] = {
+    def validate(
+        data: DeleteHistoricUkPropertyAnnualSubmissionRawData): CallHandler1[DeleteHistoricUkPropertyAnnualSubmissionRawData, List[MtdError]] = {
       (mockValidator
         .validate(_: DeleteHistoricUkPropertyAnnualSubmissionRawData))
         .expects(data)

@@ -16,7 +16,7 @@
 
 package v1.models.response.retrieveForeignPropertyPeriodSummary.foreignFhlEea
 
-import play.api.libs.json.{Json, OFormat}
+import play.api.libs.json.{ Json, OFormat }
 
 case class ForeignFhlEeaIncome(rentAmount: Option[BigDecimal])
 

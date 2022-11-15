@@ -16,6 +16,10 @@
 
 package v2.models.request.amendForeignPropertyPeriodSummary
 
-import v2.models.domain.{Nino, TaxYear}
+import v2.models.domain.{ Nino, TaxYear }
 
-case class AmendForeignPropertyPeriodSummaryRequest(nino: Nino, businessId: String, taxYear: TaxYear, submissionId: String, body: AmendForeignPropertyPeriodSummaryRequestBody)
+case class AmendForeignPropertyPeriodSummaryRequest(nino: Nino,
+                                                    businessId: String,
+                                                    taxYear: TaxYear,
+                                                    submissionId: String,
+                                                    body: AmendForeignPropertyPeriodSummaryRequestBody)

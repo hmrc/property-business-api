@@ -17,16 +17,16 @@
 package v2.models.request.createUkPropertyPeriodSummary
 
 import play.api.libs.functional.syntax._
-import play.api.libs.json.{JsPath, JsValue, OWrites}
+import play.api.libs.json.{ JsPath, JsValue, OWrites }
 import v2.models.request.RawData
 
 case class CreateUkPropertyPeriodSummaryRawData(nino: String, taxYear: String, businessId: String, body: JsValue) extends RawData
 
-object CreateUkPropertyPeriodSummaryRawData{
+object CreateUkPropertyPeriodSummaryRawData {
   implicit val writes: OWrites[CreateUkPropertyPeriodSummaryRawData] = (
     (JsPath \ "nino").write[String] and
       (JsPath \ "taxYear").write[String] and
       (JsPath \ "businessId").write[String] and
       (JsPath \ "request").write[JsValue]
-    )(unlift(CreateUkPropertyPeriodSummaryRawData.unapply))
+  )(unlift(CreateUkPropertyPeriodSummaryRawData.unapply))
 }

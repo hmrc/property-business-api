@@ -16,7 +16,7 @@
 
 package v2.models.request.common.ukPropertyRentARoom
 
-import play.api.libs.json.{JsValue, Json}
+import play.api.libs.json.{ JsValue, Json }
 import support.UnitSpec
 
 class UkPropertyIncomeRentARoomSpec extends UnitSpec {
@@ -24,13 +24,11 @@ class UkPropertyIncomeRentARoomSpec extends UnitSpec {
   val requestBody: UkPropertyIncomeRentARoom =
     UkPropertyIncomeRentARoom(Some(947.66))
 
-  val validJson: JsValue = Json.parse(
-    """
+  val validJson: JsValue = Json.parse("""
       |{
       |    "rentsReceived": 947.66
       |}
       |""".stripMargin)
-
 
   "reads" when {
     "passed a valid JSON" should {

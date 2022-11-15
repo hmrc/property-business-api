@@ -16,7 +16,7 @@
 
 package v2.models.hateoas
 
-import play.api.libs.json.{Json, OWrites}
+import play.api.libs.json.{ Json, OWrites }
 import support.UnitSpec
 import v2.models.hateoas.Method.GET
 

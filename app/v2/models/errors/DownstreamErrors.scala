@@ -16,7 +16,7 @@
 
 package v2.models.errors
 
-import play.api.libs.json.{Json, Reads}
+import play.api.libs.json.{ Json, Reads }
 
 case class DownstreamErrorCode(code: String) {
   def toMtd: MtdError = MtdError(code = code, message = "")
@@ -29,7 +29,6 @@ object DownstreamErrorCode {
 sealed trait DownstreamError
 
 case class DownstreamErrors(errors: List[DownstreamErrorCode]) extends DownstreamError
-
 
 object DownstreamErrors {
   def single(error: DownstreamErrorCode): DownstreamErrors = DownstreamErrors(List(error))

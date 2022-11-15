@@ -20,16 +20,16 @@ import play.api.libs.json.Json
 import support.UnitSpec
 import v1.mocks.validators.MockAmendForeignPropertyAnnualSubmissionValidator
 import v1.models.domain.Nino
-import v1.models.errors.{BadRequestError, BusinessIdFormatError, ErrorWrapper, NinoFormatError}
+import v1.models.errors.{ BadRequestError, BusinessIdFormatError, ErrorWrapper, NinoFormatError }
 import v1.models.request.amendForeignPropertyAnnualSubmission._
 import v1.models.request.amendForeignPropertyAnnualSubmission.foreignFhlEea._
 import v1.models.request.amendForeignPropertyAnnualSubmission.foreignProperty._
 
 class AmendForeignPropertyAnnualSubmissionRequestParserSpec extends UnitSpec {
 
-  val nino: String = "AA123456B"
-  val businessId: String = "XAIS12345678901"
-  val taxYear: String = "2021-22"
+  val nino: String                   = "AA123456B"
+  val businessId: String             = "XAIS12345678901"
+  val taxYear: String                = "2021-22"
   implicit val correlationId: String = "X-123"
 
   private val requestBodyJson = Json.parse(
@@ -87,33 +87,37 @@ class AmendForeignPropertyAnnualSubmissionRequestParserSpec extends UnitSpec {
 
         val amendForeignPropertyAnnualSubmissionRequestBody: AmendForeignPropertyAnnualSubmissionRequestBody =
           AmendForeignPropertyAnnualSubmissionRequestBody(
-            Some(ForeignFhlEea(
-              Some(ForeignFhlEeaAdjustments(
-                Some(100.25),
-                Some(100.25),
-                Some(true)
+            Some(
+              ForeignFhlEea(
+                Some(
+                  ForeignFhlEeaAdjustments(
+                    Some(100.25),
+                    Some(100.25),
+                    Some(true)
+                  )),
+                Some(
+                  ForeignFhlEeaAllowances(
+                    Some(100.25),
+                    Some(100.25),
+                    Some(100.25),
+                    Some(100.25)
+                  ))
               )),
-              Some(ForeignFhlEeaAllowances(
-                Some(100.25),
-                Some(100.25),
-                Some(100.25),
-                Some(100.25)
-              ))
-            )),
-            Some(Seq(ForeignPropertyEntry(
-              "GER",
-              Some(ForeignPropertyAdjustments(
-                Some(100.25),
-                Some(100.25))),
-              Some(ForeignPropertyAllowances(
-                Some(100.25),
-                Some(100.25),
-                Some(100.25),
-                Some(100.25),
-                Some(100.25),
-                Some(103.45),
-                Some(100.25)
-              )))))
+            Some(
+              Seq(ForeignPropertyEntry(
+                "GER",
+                Some(ForeignPropertyAdjustments(Some(100.25), Some(100.25))),
+                Some(
+                  ForeignPropertyAllowances(
+                    Some(100.25),
+                    Some(100.25),
+                    Some(100.25),
+                    Some(100.25),
+                    Some(100.25),
+                    Some(103.45),
+                    Some(100.25)
+                  ))
+              )))
           )
 
         parser.parseRequest(inputData) shouldBe
@@ -122,7 +126,8 @@ class AmendForeignPropertyAnnualSubmissionRequestParserSpec extends UnitSpec {
     }
     "return an ErrorWrapper" when {
       "a single validation error occurs" in new Test {
-        MockAmendForeignPropertyValidator.validate(inputData)
+        MockAmendForeignPropertyValidator
+          .validate(inputData)
           .returns(List(NinoFormatError))
 
         parser.parseRequest(inputData) shouldBe
@@ -130,7 +135,8 @@ class AmendForeignPropertyAnnualSubmissionRequestParserSpec extends UnitSpec {
       }
 
       "multiple validation errors occur" in new Test {
-        MockAmendForeignPropertyValidator.validate(inputData)
+        MockAmendForeignPropertyValidator
+          .validate(inputData)
           .returns(List(NinoFormatError, BusinessIdFormatError))
 
         parser.parseRequest(inputData) shouldBe

@@ -22,11 +22,11 @@ import uk.gov.hmrc.http.HeaderCarrier
 import v2.mocks.MockIdGenerator
 import v2.mocks.hateoas.MockHateoasFactory
 import v2.mocks.requestParsers.MockRetrieveUkPropertyAnnualSubmissionRequestParser
-import v2.mocks.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService, MockRetrieveUkPropertyAnnualSubmissionService}
-import v2.models.domain.{Nino, TaxYear}
+import v2.mocks.services.{ MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService, MockRetrieveUkPropertyAnnualSubmissionService }
+import v2.models.domain.{ Nino, TaxYear }
 import v2.models.errors._
 import v2.models.hateoas.Method.GET
-import v2.models.hateoas.{HateoasWrapper, Link}
+import v2.models.hateoas.{ HateoasWrapper, Link }
 import v2.models.outcomes.ResponseWrapper
 import v2.models.request.retrieveUkPropertyAnnualSubmission._
 import v2.models.response.retrieveUkPropertyAnnualSubmission._
@@ -37,7 +37,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class RetrieveUkPropertyAnnualSubmissionControllerSpec
-  extends ControllerBaseSpec
+    extends ControllerBaseSpec
     with MockEnrolmentsAuthService
     with MockMtdIdLookupService
     with MockRetrieveUkPropertyAnnualSubmissionService
@@ -46,9 +46,9 @@ class RetrieveUkPropertyAnnualSubmissionControllerSpec
     with MockAuditService
     with MockIdGenerator {
 
-  private val nino = "AA123456A"
-  private val businessId = "XAIS12345678910"
-  private val taxYear = "2020-21"
+  private val nino          = "AA123456A"
+  private val businessId    = "XAIS12345678910"
+  private val taxYear       = "2020-21"
   private val correlationId = "X-123"
 
   trait Test {
@@ -69,7 +69,7 @@ class RetrieveUkPropertyAnnualSubmissionControllerSpec
     MockIdGenerator.getCorrelationId.returns(correlationId)
   }
 
-  private val rawData = RetrieveUkPropertyAnnualSubmissionRawData(nino, businessId, taxYear)
+  private val rawData     = RetrieveUkPropertyAnnualSubmissionRawData(nino, businessId, taxYear)
   private val requestData = RetrieveUkPropertyAnnualSubmissionRequest(Nino(nino), businessId, TaxYear.fromMtd(taxYear))
 
   private val testHateoasLink = Link(href = s"Individuals/business/property/uk/$nino/$businessId/annual/$taxYear", method = GET, rel = "self")
@@ -162,7 +162,9 @@ class RetrieveUkPropertyAnnualSubmissionControllerSpec
   )
 
   val responseBody: RetrieveUkPropertyAnnualSubmissionResponse = RetrieveUkPropertyAnnualSubmissionResponse(
-    submittedOn = "2020-06-17T10:53:38Z", ukFhlProperty = Some(ukFhlProperty), ukNonFhlProperty = Some(ukNonFhlProperty)
+    submittedOn = "2020-06-17T10:53:38Z",
+    ukFhlProperty = Some(ukFhlProperty),
+    ukNonFhlProperty = Some(ukNonFhlProperty)
   )
 
   "handleRequest" should {

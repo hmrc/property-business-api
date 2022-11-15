@@ -19,20 +19,20 @@ package v2.endpoints
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import play.api.http.HeaderNames.ACCEPT
 import play.api.http.Status
-import play.api.libs.json.{JsValue, Json}
-import play.api.libs.ws.{WSRequest, WSResponse}
+import play.api.libs.json.{ JsValue, Json }
+import play.api.libs.ws.{ WSRequest, WSResponse }
 import play.api.test.Helpers.AUTHORIZATION
 import support.V2IntegrationBaseSpec
 import v2.models.errors._
-import v2.stubs.{AuditStub, AuthStub, DownstreamStub, MtdIdLookupStub}
+import v2.stubs.{ AuditStub, AuthStub, DownstreamStub, MtdIdLookupStub }
 
 class RetrieveUkPropertyAnnualSubmissionControllerISpec extends V2IntegrationBaseSpec {
 
   private trait Test {
 
-    val nino: String = "AA123456A"
+    val nino: String       = "AA123456A"
     val businessId: String = "XAIS12345678910"
-    val taxYear: String = "2022-23"
+    val taxYear: String    = "2022-23"
 
     val responseBody: JsValue = Json.parse(
       s"""
@@ -213,8 +213,8 @@ class RetrieveUkPropertyAnnualSubmissionControllerISpec extends V2IntegrationBas
 
     def ifsQueryParams: Map[String, String] = Map(
       "taxableEntityId" -> nino,
-      "incomeSourceId" -> businessId,
-      "taxYear" -> taxYear
+      "incomeSourceId"  -> businessId,
+      "taxYear"         -> taxYear
     )
 
     def request(): WSRequest = {
@@ -223,7 +223,7 @@ class RetrieveUkPropertyAnnualSubmissionControllerISpec extends V2IntegrationBas
         .withHttpHeaders(
           (ACCEPT, "application/vnd.hmrc.2.0+json"),
           (AUTHORIZATION, "Bearer 123") // some bearer token
-      )
+        )
     }
 
     def errorBody(code: String): String =
@@ -258,14 +258,16 @@ class RetrieveUkPropertyAnnualSubmissionControllerISpec extends V2IntegrationBas
 
     "return error according to spec" when {
       "validation error" when {
-        def validationErrorTest(requestNino: String, requestBusinessId: String, requestTaxYear: String,
-                                expectedStatus: Int, expectedBody: MtdError): Unit = {
+        def validationErrorTest(requestNino: String,
+                                requestBusinessId: String,
+                                requestTaxYear: String,
+                                expectedStatus: Int,
+                                expectedBody: MtdError): Unit = {
           s"validation fails with ${expectedBody.code} error" in new Test {
 
-            override val nino: String = requestNino
+            override val nino: String       = requestNino
             override val businessId: String = requestBusinessId
-            override val taxYear: String = requestTaxYear
-
+            override val taxYear: String    = requestTaxYear
 
             override def setupStubs(): StubMapping = {
               AuditStub.audit()
@@ -292,7 +294,6 @@ class RetrieveUkPropertyAnnualSubmissionControllerISpec extends V2IntegrationBas
       "ifs service error" when {
         def serviceErrorTest(ifsStatus: Int, ifsCode: String, expectedStatus: Int, expectedBody: MtdError): Unit = {
           s"ifs returns an $ifsCode error and status $ifsStatus" in new Test {
-
 
             override def setupStubs(): StubMapping = {
               AuditStub.audit()
@@ -321,8 +322,7 @@ class RetrieveUkPropertyAnnualSubmissionControllerISpec extends V2IntegrationBas
       }
 
       "ifs returns no UK properties" in new Test {
-        override val downstreamResponseBody: JsValue = Json.parse(
-          """
+        override val downstreamResponseBody: JsValue = Json.parse("""
             |{
             |  "submittedOn":"2022-06-17T10:53:38Z",
             |  "foreignProperty": [

@@ -22,10 +22,10 @@ import shapeless.HNil
 import utils.EmptinessChecker
 
 case class AmendForeignNonFhlPropertyEntry(
-                                 countryCode: String,
-                                 income: Option[ForeignNonFhlPropertyIncome],
-                                 expenses: Option[AmendForeignNonFhlPropertyExpenses]
-                               )
+    countryCode: String,
+    income: Option[ForeignNonFhlPropertyIncome],
+    expenses: Option[AmendForeignNonFhlPropertyExpenses]
+)
 
 object AmendForeignNonFhlPropertyEntry {
   implicit val emptinessChecker: EmptinessChecker[AmendForeignNonFhlPropertyEntry] = EmptinessChecker.use { body =>
@@ -39,5 +39,5 @@ object AmendForeignNonFhlPropertyEntry {
     (JsPath \ "countryCode").write[String] and
       (JsPath \ "income").writeNullable[ForeignNonFhlPropertyIncome] and
       (JsPath \ "expenses").writeNullable[AmendForeignNonFhlPropertyExpenses]
-    ) (unlift(AmendForeignNonFhlPropertyEntry.unapply))
+  )(unlift(AmendForeignNonFhlPropertyEntry.unapply))
 }

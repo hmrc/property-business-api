@@ -19,17 +19,17 @@ package v2.controllers
 import cats.data.EitherT
 import cats.implicits._
 import play.api.libs.json.Json
-import play.api.mvc.{Action, AnyContent, ControllerComponents}
-import utils.{IdGenerator, Logging}
+import play.api.mvc.{ Action, AnyContent, ControllerComponents }
+import utils.{ IdGenerator, Logging }
 import v2.controllers.requestParsers.RetrieveUkPropertyAnnualSubmissionRequestParser
 import v2.hateoas.HateoasFactory
 import v2.models.errors._
 import v2.models.request.retrieveUkPropertyAnnualSubmission.RetrieveUkPropertyAnnualSubmissionRawData
 import v2.models.response.retrieveUkPropertyAnnualSubmission.RetrieveUkPropertyAnnualSubmissionHateoasData
-import v2.services.{EnrolmentsAuthService, MtdIdLookupService, RetrieveUkPropertyAnnualSubmissionService}
+import v2.services.{ EnrolmentsAuthService, MtdIdLookupService, RetrieveUkPropertyAnnualSubmissionService }
 
-import javax.inject.{Inject, Singleton}
-import scala.concurrent.{ExecutionContext, Future}
+import javax.inject.{ Inject, Singleton }
+import scala.concurrent.{ ExecutionContext, Future }
 
 @Singleton
 class RetrieveUkPropertyAnnualSubmissionController @Inject()(val authService: EnrolmentsAuthService,
@@ -39,7 +39,9 @@ class RetrieveUkPropertyAnnualSubmissionController @Inject()(val authService: En
                                                              hateoasFactory: HateoasFactory,
                                                              cc: ControllerComponents,
                                                              idGenerator: IdGenerator)(implicit ec: ExecutionContext)
-  extends AuthorisedController(cc) with BaseController with Logging {
+    extends AuthorisedController(cc)
+    with BaseController
+    with Logging {
 
   implicit val endpointLogContext: EndpointLogContext =
     EndpointLogContext(controllerName = "RetrieveUkPropertyAnnualSubmissionController", endpointName = "retrieveUkPropertyAnnualSubmission")
@@ -47,16 +49,18 @@ class RetrieveUkPropertyAnnualSubmissionController @Inject()(val authService: En
   def handleRequest(nino: String, businessId: String, taxYear: String): Action[AnyContent] =
     authorisedAction(nino).async { implicit request =>
       implicit val correlationId: String = idGenerator.getCorrelationId
-      logger.info(message = s"[${endpointLogContext.controllerName}][${endpointLogContext.endpointName}] " +
-        s"with correlationId : $correlationId")
+      logger.info(
+        message = s"[${endpointLogContext.controllerName}][${endpointLogContext.endpointName}] " +
+          s"with correlationId : $correlationId")
       val rawData = RetrieveUkPropertyAnnualSubmissionRawData(nino, businessId, taxYear)
       val result =
         for {
-          parsedRequest <- EitherT.fromEither[Future](parser.parseRequest(rawData))
+          parsedRequest   <- EitherT.fromEither[Future](parser.parseRequest(rawData))
           serviceResponse <- EitherT(service.retrieveUkProperty(parsedRequest))
           vendorResponse <- EitherT.fromEither[Future](
-            hateoasFactory.wrap(serviceResponse.responseData,
-              RetrieveUkPropertyAnnualSubmissionHateoasData(nino, businessId, taxYear)).asRight[ErrorWrapper]
+            hateoasFactory
+              .wrap(serviceResponse.responseData, RetrieveUkPropertyAnnualSubmissionHateoasData(nino, businessId, taxYear))
+              .asRight[ErrorWrapper]
           )
         } yield {
           logger.info(
@@ -68,7 +72,7 @@ class RetrieveUkPropertyAnnualSubmissionController @Inject()(val authService: En
         }
       result.leftMap { errorWrapper =>
         val resCorrelationId = errorWrapper.correlationId
-        val result = errorResult(errorWrapper).withApiHeaders(resCorrelationId)
+        val result           = errorResult(errorWrapper).withApiHeaders(resCorrelationId)
 
         logger.warn(
           s"[${endpointLogContext.controllerName}][${endpointLogContext.endpointName}] - " +
@@ -79,15 +83,11 @@ class RetrieveUkPropertyAnnualSubmissionController @Inject()(val authService: En
 
   private def errorResult(errorWrapper: ErrorWrapper) =
     errorWrapper.error match {
-      case NinoFormatError |
-           TaxYearFormatError |
-           BusinessIdFormatError |
-           RuleTaxYearRangeInvalidError |
-           RuleTaxYearNotSupportedError |
-           RuleTypeOfBusinessIncorrectError |
-           BadRequestError => BadRequest(Json.toJson(errorWrapper))
+      case NinoFormatError | TaxYearFormatError | BusinessIdFormatError | RuleTaxYearRangeInvalidError | RuleTaxYearNotSupportedError |
+          RuleTypeOfBusinessIncorrectError | BadRequestError =>
+        BadRequest(Json.toJson(errorWrapper))
       case InternalError => InternalServerError(Json.toJson(errorWrapper))
       case NotFoundError => NotFound(Json.toJson(errorWrapper))
-      case _ => unhandledError(errorWrapper)
+      case _             => unhandledError(errorWrapper)
     }
 }

@@ -20,7 +20,7 @@ import config.AppConfig
 
 import javax.inject.{ Inject, Singleton }
 import uk.gov.hmrc.http.{ HeaderCarrier, HttpClient }
-import v2.connectors.DownstreamUri.IfsUri
+import v2.connectors.DownstreamUri.{ IfsUri, TaxYearSpecificIfsUri }
 import v2.connectors.RetrieveForeignPropertyAnnualSubmissionConnector._
 import v2.connectors.httpparsers.StandardDownstreamHttpParser._
 import v2.models.outcomes.ResponseWrapper
@@ -45,11 +45,20 @@ class RetrieveForeignPropertyAnnualSubmissionConnector @Inject()(val http: HttpC
                                                                                        ec: ExecutionContext,
                                                                                        correlationId: String): Future[DownstreamOutcome[Result]] = {
 
-    // Note that MTD tax year format is used
-    val response = get(
-      uri = IfsUri[RetrieveForeignPropertyAnnualSubmissionResponse]("income-tax/business/property/annual"),
-      queryParams = Seq("taxableEntityId" -> request.nino.value, "incomeSourceId" -> request.businessId, "taxYear" -> request.taxYear.asMtd)
-    )
+    import request._
+
+    val response = if (taxYear.useTaxYearSpecificApi) {
+      get(
+        uri = TaxYearSpecificIfsUri[RetrieveForeignPropertyAnnualSubmissionResponse](
+          s"income-tax/business/property/annual/${taxYear.asTysDownstream}/${nino.value}/$businessId")
+      )
+    } else {
+      // Note that MTD tax year format is used pre-TYS
+      get(
+        uri = IfsUri[RetrieveForeignPropertyAnnualSubmissionResponse]("income-tax/business/property/annual"),
+        queryParams = Seq("taxableEntityId" -> nino.value, "incomeSourceId" -> businessId, "taxYear" -> taxYear.asMtd)
+      )
+    }
 
     response.map {
       case Right(ResponseWrapper(corId, resp)) if foreignResult(resp) => Right(ResponseWrapper(corId, ForeignResult(resp)))

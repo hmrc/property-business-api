@@ -29,7 +29,6 @@ import v2.stubs.{ AuditStub, AuthStub, DownstreamStub, MtdIdLookupStub }
 class AmendUkPropertyAnnualSubmissionControllerISpec extends V2IntegrationBaseSpec {
 
   private trait Test {
-
     val nino: String          = "TC663795B"
     val businessId: String    = "XAIS12345678910"
     val correlationId: String = "X-123"

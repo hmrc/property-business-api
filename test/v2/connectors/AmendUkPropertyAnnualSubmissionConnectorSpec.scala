@@ -15,7 +15,6 @@
  */
 
 package v2.connectors
-
 import org.scalamock.handlers.CallHandler
 import v2.models.domain.{ Nino, TaxYear }
 import v2.models.errors.{ DownstreamErrorCode, DownstreamErrors }

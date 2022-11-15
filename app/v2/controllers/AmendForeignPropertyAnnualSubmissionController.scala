@@ -62,11 +62,10 @@ class AmendForeignPropertyAnnualSubmissionController @Inject()(val authService: 
         for {
           parsedRequest   <- EitherT.fromEither[Future](parser.parseRequest(rawData))
           serviceResponse <- EitherT(service.amendForeignPropertyAnnualSubmission(parsedRequest))
-          vendorResponse <- EitherT.fromEither[Future](
-            hateoasFactory
-              .wrap(serviceResponse.responseData, AmendForeignPropertyAnnualSubmissionHateoasData(nino, businessId, taxYear))
-              .asRight[ErrorWrapper])
         } yield {
+          val hateoasData    = AmendForeignPropertyAnnualSubmissionHateoasData(nino, businessId, taxYear)
+          val vendorResponse = hateoasFactory.wrap(serviceResponse.responseData, hateoasData)
+
           logger.info(
             s"[${endpointLogContext.controllerName}][${endpointLogContext.endpointName}] - " +
               s"Success response received with CorrelationId: ${serviceResponse.correlationId}")

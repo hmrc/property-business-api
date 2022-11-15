@@ -18,18 +18,18 @@ package v2.controllers
 
 import cats.data.EitherT
 import cats.implicits._
-import javax.inject.{Inject, Singleton}
+import javax.inject.{ Inject, Singleton }
 import play.api.libs.json.Json
-import play.api.mvc.{Action, AnyContent, ControllerComponents}
-import utils.{IdGenerator, Logging}
+import play.api.mvc.{ Action, AnyContent, ControllerComponents }
+import utils.{ IdGenerator, Logging }
 import v2.controllers.requestParsers.RetrieveForeignPropertyAnnualSubmissionRequestParser
 import v2.hateoas.HateoasFactory
 import v2.models.errors._
 import v2.models.request.retrieveForeignPropertyAnnualSubmission.RetrieveForeignPropertyAnnualSubmissionRawData
 import v2.models.response.retrieveForeignPropertyAnnualSubmission.RetrieveForeignPropertyAnnualSubmissionHateoasData
-import v2.services.{EnrolmentsAuthService, MtdIdLookupService, RetrieveForeignPropertyAnnualSubmissionService}
+import v2.services.{ EnrolmentsAuthService, MtdIdLookupService, RetrieveForeignPropertyAnnualSubmissionService }
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.{ ExecutionContext, Future }
 
 @Singleton
 class RetrieveForeignPropertyAnnualSubmissionController @Inject()(val authService: EnrolmentsAuthService,
@@ -39,7 +39,9 @@ class RetrieveForeignPropertyAnnualSubmissionController @Inject()(val authServic
                                                                   hateoasFactory: HateoasFactory,
                                                                   cc: ControllerComponents,
                                                                   idGenerator: IdGenerator)(implicit ec: ExecutionContext)
-  extends AuthorisedController(cc) with BaseController with Logging {
+    extends AuthorisedController(cc)
+    with BaseController
+    with Logging {
 
   implicit val endpointLogContext: EndpointLogContext =
     EndpointLogContext(controllerName = "RetrieveForeignPropertyAnnualSubmissionController", endpointName = "retrieveForeignPropertyAnnualSubmission")
@@ -47,16 +49,18 @@ class RetrieveForeignPropertyAnnualSubmissionController @Inject()(val authServic
   def handleRequest(nino: String, businessId: String, taxYear: String): Action[AnyContent] =
     authorisedAction(nino).async { implicit request =>
       implicit val correlationId: String = idGenerator.getCorrelationId
-      logger.info(message = s"[${endpointLogContext.controllerName}][${endpointLogContext.endpointName}] " +
-        s"with correlationId : $correlationId")
+      logger.info(
+        message = s"[${endpointLogContext.controllerName}][${endpointLogContext.endpointName}] " +
+          s"with correlationId : $correlationId")
       val rawData = RetrieveForeignPropertyAnnualSubmissionRawData(nino, businessId, taxYear)
       val result =
         for {
-          parsedRequest <- EitherT.fromEither[Future](parser.parseRequest(rawData))
+          parsedRequest   <- EitherT.fromEither[Future](parser.parseRequest(rawData))
           serviceResponse <- EitherT(service.retrieveForeignProperty(parsedRequest))
           vendorResponse <- EitherT.fromEither[Future](
-            hateoasFactory.wrap(serviceResponse.responseData,
-              RetrieveForeignPropertyAnnualSubmissionHateoasData(nino, businessId, taxYear)).asRight[ErrorWrapper]
+            hateoasFactory
+              .wrap(serviceResponse.responseData, RetrieveForeignPropertyAnnualSubmissionHateoasData(nino, businessId, taxYear))
+              .asRight[ErrorWrapper]
           )
         } yield {
           logger.info(
@@ -69,7 +73,7 @@ class RetrieveForeignPropertyAnnualSubmissionController @Inject()(val authServic
 
       result.leftMap { errorWrapper =>
         val resCorrelationId = errorWrapper.correlationId
-        val result = errorResult(errorWrapper).withApiHeaders(resCorrelationId)
+        val result           = errorResult(errorWrapper).withApiHeaders(resCorrelationId)
 
         logger.warn(
           s"[${endpointLogContext.controllerName}][${endpointLogContext.endpointName}] - " +
@@ -80,15 +84,19 @@ class RetrieveForeignPropertyAnnualSubmissionController @Inject()(val authServic
 
   private def errorResult(errorWrapper: ErrorWrapper) =
     errorWrapper.error match {
-      case NinoFormatError |
-           BusinessIdFormatError |
-           TaxYearFormatError |
-           RuleTaxYearNotSupportedError |
-           RuleTaxYearRangeInvalidError |
-           RuleTypeOfBusinessIncorrectError |
-           BadRequestError => BadRequest(Json.toJson(errorWrapper))
+      case _
+          if errorWrapper.containsAnyOf(
+            NinoFormatError,
+            BusinessIdFormatError,
+            TaxYearFormatError,
+            RuleTaxYearNotSupportedError,
+            RuleTaxYearRangeInvalidError,
+            RuleTypeOfBusinessIncorrectError,
+            BadRequestError
+          ) =>
+        BadRequest(Json.toJson(errorWrapper))
       case InternalError => InternalServerError(Json.toJson(errorWrapper))
       case NotFoundError => NotFound(Json.toJson(errorWrapper))
-      case _ => unhandledError(errorWrapper)
+      case _             => unhandledError(errorWrapper)
     }
 }

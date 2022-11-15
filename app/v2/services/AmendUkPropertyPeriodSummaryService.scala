@@ -18,7 +18,7 @@ package v2.services
 
 import cats.data.EitherT
 import cats.implicits._
-import javax.inject.{Inject, Singleton}
+import javax.inject.{ Inject, Singleton }
 import uk.gov.hmrc.http.HeaderCarrier
 import utils.Logging
 import v2.connectors.AmendUkPropertyPeriodSummaryConnector
@@ -27,40 +27,47 @@ import v2.models.errors._
 import v2.models.request.amendUkPropertyPeriodSummary.AmendUkPropertyPeriodSummaryRequest
 import v2.support.DownstreamResponseMappingSupport
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.{ ExecutionContext, Future }
 
 @Singleton
 class AmendUkPropertyPeriodSummaryService @Inject()(connector: AmendUkPropertyPeriodSummaryConnector)
-  extends DownstreamResponseMappingSupport with Logging {
+    extends DownstreamResponseMappingSupport
+    with Logging {
 
-  def amendUkPropertyPeriodSummary(request: AmendUkPropertyPeriodSummaryRequest)(
-    implicit hc: HeaderCarrier,
-    ec: ExecutionContext,
-    logContext: EndpointLogContext,
-    correlationId: String): Future[ServiceOutcome[Unit]] = {
+  def amendUkPropertyPeriodSummary(request: AmendUkPropertyPeriodSummaryRequest)(implicit hc: HeaderCarrier,
+                                                                                 ec: ExecutionContext,
+                                                                                 logContext: EndpointLogContext,
+                                                                                 correlationId: String): Future[ServiceOutcome[Unit]] = {
 
-    val result = for {
-      ifsResponseWrapper <- EitherT(connector.amendUkPropertyPeriodSummary(request)).leftMap(mapDownstreamErrors(ifsErrorMap))
-    } yield ifsResponseWrapper
+    val result = EitherT(connector.amendUkPropertyPeriodSummary(request)).leftMap(mapDownstreamErrors(downstreamErrorMap))
 
     result.value
   }
 
-  private def ifsErrorMap =
-    Map(
-      "INVALID_TAXABLE_ENTITY_ID" -> NinoFormatError,
-      "INVALID_TAX_YEAR" -> TaxYearFormatError,
-      "INVALID_INCOMESOURCEID" -> BusinessIdFormatError,
-      "INVALID_SUBMISSION_ID" -> SubmissionIdFormatError,
-      "INVALID_PAYLOAD" -> InternalError,
-      "INVALID_CORRELATIONID" -> InternalError,
-      "NO_DATA_FOUND" -> NotFoundError,
-      "INCOMPATIBLE_PAYLOAD" -> RuleTypeOfBusinessIncorrectError,
-      "TAX_YEAR_NOT_SUPPORTED" -> RuleTaxYearNotSupportedError,
+  private def downstreamErrorMap = {
+    val errors = Map(
+      "INVALID_TAXABLE_ENTITY_ID"   -> NinoFormatError,
+      "INVALID_TAX_YEAR"            -> TaxYearFormatError,
+      "INVALID_INCOMESOURCEID"      -> BusinessIdFormatError,
+      "INVALID_SUBMISSION_ID"       -> SubmissionIdFormatError,
+      "INVALID_PAYLOAD"             -> InternalError,
+      "INVALID_CORRELATIONID"       -> InternalError,
+      "NO_DATA_FOUND"               -> NotFoundError,
+      "INCOMPATIBLE_PAYLOAD"        -> RuleTypeOfBusinessIncorrectError,
+      "TAX_YEAR_NOT_SUPPORTED"      -> RuleTaxYearNotSupportedError,
       "BUSINESS_VALIDATION_FAILURE" -> InternalError,
-      "DUPLICATE_COUNTRY_CODE" -> InternalError,
-      "MISSING_EXPENSES" -> InternalError,
-      "SERVER_ERROR" -> InternalError,
-      "SERVICE_UNAVAILABLE" -> InternalError
+      "DUPLICATE_COUNTRY_CODE"      -> InternalError,
+      "MISSING_EXPENSES"            -> InternalError,
+      "SERVER_ERROR"                -> InternalError,
+      "SERVICE_UNAVAILABLE"         -> InternalError
     )
+
+    val extraTysErrors = Map(
+      "INVALID_INCOMESOURCE_ID"      -> BusinessIdFormatError,
+      "INVALID_CORRELATION_ID"       -> InternalError,
+      "INCOME_SOURCE_NOT_COMPATIBLE" -> RuleTypeOfBusinessIncorrectError
+    )
+
+    errors ++ extraTysErrors
+  }
 }

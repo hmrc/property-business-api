@@ -40,15 +40,11 @@ class CreateAmendForeignPropertyAnnualSubmissionService @Inject()(connector: Cre
       logContext: EndpointLogContext,
       correlationId: String): Future[ServiceOutcome[Unit]] = {
 
-    val result = for {
-      ifsResponseWrapper <- EitherT(connector.createAmendForeignPropertyAnnualSubmission(request)).leftMap(mapDownstreamErrors(ifsErrorMap))
-    } yield ifsResponseWrapper
-
-    result.value
+    EitherT(connector.createAmendForeignPropertyAnnualSubmission(request)).leftMap(mapDownstreamErrors(downstreamErrorMap)).value
   }
 
-  private def ifsErrorMap =
-    Map(
+  private def downstreamErrorMap = {
+    val errors = Map(
       "INVALID_TAXABLE_ENTITY_ID"   -> NinoFormatError,
       "INVALID_INCOMESOURCEID"      -> BusinessIdFormatError,
       "INVALID_TAX_YEAR"            -> TaxYearFormatError,
@@ -63,4 +59,12 @@ class CreateAmendForeignPropertyAnnualSubmissionService @Inject()(connector: Cre
       "SERVER_ERROR"                -> InternalError,
       "SERVICE_UNAVAILABLE"         -> InternalError
     )
+
+    val extraTysErrors = Map(
+      "MISSING_EXPENSES" -> InternalError,
+      "FIELD_CONFLICT"   -> RulePropertyIncomeAllowanceError
+    )
+
+    errors ++ extraTysErrors
+  }
 }

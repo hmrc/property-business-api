@@ -230,12 +230,12 @@ class RetrieveUkPropertyAnnualSubmissionControllerISpec extends V2IntegrationBas
   }
 
   private trait NonTysTest extends Test {
-    def taxYear: String       = "2021-22"
+    def taxYear: String       = "2022-23"
     def downstreamUri: String = s"/income-tax/business/property/annual"
     def downstreamQueryParams: Map[String, String] = Map(
       "taxableEntityId" -> nino,
       "incomeSourceId"  -> businessId,
-      "taxYear"         -> "2021-22"
+      "taxYear"         -> taxYear
     )
   }
 

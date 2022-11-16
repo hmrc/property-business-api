@@ -24,16 +24,18 @@ import play.api.libs.ws.{ WSRequest, WSResponse }
 import play.api.test.Helpers.AUTHORIZATION
 import support.V2IntegrationBaseSpec
 import v2.models.errors._
-import v2.stubs.{ AuthStub, DownstreamStub, MtdIdLookupStub }
+import v2.stubs.{ AuditStub, AuthStub, DownstreamStub, MtdIdLookupStub }
 
 class AmendUkPropertyAnnualSubmissionControllerISpec extends V2IntegrationBaseSpec {
 
   private trait Test {
-
     val nino: String          = "TC663795B"
     val businessId: String    = "XAIS12345678910"
-    val taxYear: String       = "2022-23"
     val correlationId: String = "X-123"
+
+    def taxYear: String
+    def downstreamTaxYear: String
+    def downstreamUri: String
 
     val requestBodyJson: JsValue = Json.parse(
       """
@@ -108,21 +110,21 @@ class AmendUkPropertyAnnualSubmissionControllerISpec extends V2IntegrationBaseSp
     )
 
     val responseBody: JsValue = Json.parse(
-      """
+      s"""
         |{
         |  "links":[
         |    {
-        |      "href":"/individuals/business/property/uk/TC663795B/XAIS12345678910/annual/2022-23",
+        |      "href":"/individuals/business/property/uk/$nino/$businessId/annual/$taxYear",
         |      "method":"PUT",
         |      "rel":"create-and-amend-uk-property-annual-submission"
         |    },
         |    {
-        |      "href":"/individuals/business/property/uk/TC663795B/XAIS12345678910/annual/2022-23",
+        |      "href":"/individuals/business/property/uk/$nino/$businessId/annual/$taxYear",
         |      "method":"GET",
         |      "rel":"self"
         |    },
         |    {
-        |      "href":"/individuals/business/property/TC663795B/XAIS12345678910/annual/2022-23",
+        |      "href":"/individuals/business/property/$nino/$businessId/annual/$taxYear",
         |      "method":"DELETE",
         |      "rel":"delete-property-annual-submission"
         |    }
@@ -135,13 +137,7 @@ class AmendUkPropertyAnnualSubmissionControllerISpec extends V2IntegrationBaseSp
 
     def uri: String = s"/uk/$nino/$businessId/annual/$taxYear"
 
-    def ifsUri: String = s"/income-tax/business/property/annual"
-
-    def ifsQueryParams: Map[String, String] = Map(
-      "taxableEntityId" -> nino,
-      "incomeSourceId"  -> businessId,
-      "taxYear"         -> taxYear
-    )
+    def baseUri: String = s"/income-tax/business/property/annual"
 
     def request(): WSRequest = {
       setupStubs()
@@ -161,27 +157,65 @@ class AmendUkPropertyAnnualSubmissionControllerISpec extends V2IntegrationBaseSp
        """.stripMargin
   }
 
+  private trait NonTysTest extends Test {
+    def taxYear: String           = "2022-23"
+    def downstreamTaxYear: String = "2022-23"
+
+    def downstreamQueryParams: Map[String, String] = Map(
+      "taxableEntityId" -> nino,
+      "incomeSourceId"  -> businessId,
+      "taxYear"         -> taxYear
+    )
+
+    override def downstreamUri: String = baseUri
+  }
+
+  private trait TysIfsTest extends Test {
+    def taxYear: String           = "2023-24"
+    def downstreamTaxYear: String = "23-24"
+
+    override def downstreamUri: String = baseUri + s"/$downstreamTaxYear/$nino/$businessId"
+  }
+
   "Calling the amend uk property annual submission endpoint" should {
 
     "return a 200 status code" when {
 
-      "any valid request is made" in new Test {
+      "any valid request is made" in new NonTysTest {
 
         override def setupStubs(): StubMapping = {
+          AuditStub.audit()
           AuthStub.authorised()
           MtdIdLookupStub.ninoFound(nino)
-          DownstreamStub.onSuccess(DownstreamStub.PUT, ifsUri, ifsQueryParams, NO_CONTENT, JsObject.empty)
+          DownstreamStub.onSuccess(DownstreamStub.PUT, downstreamUri, downstreamQueryParams, NO_CONTENT, JsObject.empty)
         }
 
         val response: WSResponse = await(request().put(requestBodyJson))
         response.status shouldBe OK
         response.json shouldBe responseBody
+        response.header("Content-Type") shouldBe Some("application/json")
+        response.header("X-CorrelationId").nonEmpty shouldBe true
+      }
+
+      "any valid request is made with a Tax Year Specific tax year" in new TysIfsTest {
+
+        override def setupStubs(): StubMapping = {
+          AuditStub.audit()
+          AuthStub.authorised()
+          MtdIdLookupStub.ninoFound(nino)
+          DownstreamStub.onSuccess(DownstreamStub.PUT, downstreamUri, NO_CONTENT, JsObject.empty)
+        }
+
+        val response: WSResponse = await(request().put(requestBodyJson))
+        response.status shouldBe OK
+        response.json shouldBe responseBody
+        response.header("Content-Type") shouldBe Some("application/json")
         response.header("X-CorrelationId").nonEmpty shouldBe true
       }
     }
 
     "return a 400 with multiple errors" when {
-      "all field validations fail on the request body" in new Test {
+      "all field validations fail on the request body" in new NonTysTest {
 
         val allInvalidFieldsRequestBodyJson: JsValue = Json.parse("""
             |{
@@ -826,7 +860,7 @@ class AmendUkPropertyAnnualSubmissionControllerISpec extends V2IntegrationBaseSp
                                 requestBody: JsValue,
                                 expectedStatus: Int,
                                 expectedBody: MtdError): Unit = {
-          s"validation fails with ${expectedBody.code} error" in new Test {
+          s"validation fails with ${expectedBody.code} error" in new NonTysTest {
 
             override val nino: String             = requestNino
             override val businessId: String       = requestBusinessId
@@ -834,6 +868,7 @@ class AmendUkPropertyAnnualSubmissionControllerISpec extends V2IntegrationBaseSp
             override val requestBodyJson: JsValue = requestBody
 
             override def setupStubs(): StubMapping = {
+              AuditStub.audit()
               AuthStub.authorised()
               MtdIdLookupStub.ninoFound(nino)
             }
@@ -862,13 +897,14 @@ class AmendUkPropertyAnnualSubmissionControllerISpec extends V2IntegrationBaseSp
       }
 
       "downstream service error" when {
-        def serviceErrorTest(ifsStatus: Int, downstreamCode: String, expectedStatus: Int, expectedBody: MtdError): Unit = {
-          s"downstream returns an $downstreamCode error and status $ifsStatus" in new Test {
+        def serviceErrorTest(downstreamStatus: Int, downstreamCode: String, expectedStatus: Int, expectedBody: MtdError): Unit = {
+          s"downstream returns an $downstreamCode error and status $downstreamStatus" in new NonTysTest {
 
             override def setupStubs(): StubMapping = {
+              AuditStub.audit()
               AuthStub.authorised()
               MtdIdLookupStub.ninoFound(nino)
-              DownstreamStub.onError(DownstreamStub.PUT, ifsUri, ifsStatus, errorBody(downstreamCode))
+              DownstreamStub.onError(DownstreamStub.PUT, downstreamUri, downstreamStatus, errorBody(downstreamCode))
             }
 
             val response: WSResponse = await(request().put(requestBodyJson))
@@ -877,7 +913,7 @@ class AmendUkPropertyAnnualSubmissionControllerISpec extends V2IntegrationBaseSp
           }
         }
 
-        val input = Seq(
+        val errors = Seq(
           (BAD_REQUEST, "INVALID_TAXABLE_ENTITY_ID", BAD_REQUEST, NinoFormatError),
           (BAD_REQUEST, "INVALID_TAX_YEAR", BAD_REQUEST, TaxYearFormatError),
           (BAD_REQUEST, "INVALID_INCOMESOURCEID", BAD_REQUEST, BusinessIdFormatError),
@@ -892,7 +928,13 @@ class AmendUkPropertyAnnualSubmissionControllerISpec extends V2IntegrationBaseSp
           (INTERNAL_SERVER_ERROR, "SERVER_ERROR", INTERNAL_SERVER_ERROR, InternalError),
           (SERVICE_UNAVAILABLE, "SERVICE_UNAVAILABLE", INTERNAL_SERVER_ERROR, InternalError)
         )
-        input.foreach(args => (serviceErrorTest _).tupled(args))
+
+        val extraTysErrors = Seq(
+          (INTERNAL_SERVER_ERROR, "MISSING_EXPENSES", INTERNAL_SERVER_ERROR, InternalError),
+          (UNPROCESSABLE_ENTITY, "FIELD_CONFLICT", BAD_REQUEST, RulePropertyIncomeAllowanceError)
+        )
+
+        (errors ++ extraTysErrors).foreach(args => (serviceErrorTest _).tupled(args))
       }
     }
   }

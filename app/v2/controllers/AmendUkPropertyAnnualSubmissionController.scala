@@ -60,11 +60,9 @@ class AmendUkPropertyAnnualSubmissionController @Inject()(val authService: Enrol
         for {
           parsedRequest   <- EitherT.fromEither[Future](parser.parseRequest(rawData))
           serviceResponse <- EitherT(service.amendUkPropertyAnnualSubmission(parsedRequest))
-          vendorResponse <- EitherT.fromEither[Future](
-            hateoasFactory
-              .wrap(serviceResponse.responseData, AmendUkPropertyAnnualSubmissionHateoasData(nino, businessId, taxYear))
-              .asRight[ErrorWrapper])
         } yield {
+          val hateoasData    = AmendUkPropertyAnnualSubmissionHateoasData(nino, businessId, taxYear)
+          val vendorResponse = hateoasFactory.wrap(serviceResponse.responseData, hateoasData)
 
           logger.info(
             s"[${endpointLogContext.controllerName}][${endpointLogContext.endpointName}] - " +
@@ -95,11 +93,23 @@ class AmendUkPropertyAnnualSubmissionController @Inject()(val authService: Enrol
 
   private def errorResult(errorWrapper: ErrorWrapper) =
     errorWrapper.error match {
-      case BadRequestError | NinoFormatError | TaxYearFormatError | BusinessIdFormatError | RuleTaxYearRangeInvalidError |
-          RuleTaxYearNotSupportedError | MtdErrorWithCode(ValueFormatError.code) | MtdErrorWithCode(RuleIncorrectOrEmptyBodyError.code) |
-          RuleTypeOfBusinessIncorrectError | MtdErrorWithCode(RuleBothAllowancesSuppliedError.code) | MtdErrorWithCode(
-            RulePropertyIncomeAllowanceError.code) | MtdErrorWithCode(RuleBuildingNameNumberError.code) | MtdErrorWithCode(DateFormatError.code) |
-          MtdErrorWithCode(StringFormatError.code) =>
+      case _
+          if errorWrapper.containsAnyOf(
+            BadRequestError,
+            NinoFormatError,
+            TaxYearFormatError,
+            BusinessIdFormatError,
+            RuleTaxYearRangeInvalidError,
+            RuleTaxYearNotSupportedError,
+            ValueFormatError,
+            RuleIncorrectOrEmptyBodyError,
+            RuleTypeOfBusinessIncorrectError,
+            RuleBothAllowancesSuppliedError,
+            RulePropertyIncomeAllowanceError,
+            RuleBuildingNameNumberError,
+            DateFormatError,
+            StringFormatError
+          ) =>
         BadRequest(Json.toJson(errorWrapper))
       case InternalError => InternalServerError(Json.toJson(errorWrapper))
       case NotFoundError => NotFound(Json.toJson(errorWrapper))

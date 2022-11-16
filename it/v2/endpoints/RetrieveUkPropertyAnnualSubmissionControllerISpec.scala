@@ -206,11 +206,7 @@ class RetrieveUkPropertyAnnualSubmissionControllerISpec extends V2IntegrationBas
     )
 
     def setupStubs(): Unit = ()
-
-    def downstreamUri: String //= s"/uk/$nino/$businessId/annual/$taxYear"
-
-    //def ifsUri: String = s"/income-tax/business/property/annual"
-
+    def downstreamUri: String
     def downstreamQueryParams: Map[String, String]
 
     def request(): WSRequest = {

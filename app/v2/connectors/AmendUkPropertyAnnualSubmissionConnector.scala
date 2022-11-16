@@ -39,7 +39,7 @@ class AmendUkPropertyAnnualSubmissionConnector @Inject()(val http: HttpClient, v
       } else {
         // Note that MTD tax year format is used
         IfsUri[Unit](
-          s"income-tax/business/property/annual?taxableEntityId=${nino.nino}&incomeSourceId=$businessId&taxYear=${request.taxYear.asMtd}")
+          s"income-tax/business/property/annual?taxableEntityId=${nino.nino}&incomeSourceId=$businessId&taxYear=${taxYear.asMtd}")
       }
 
     put(

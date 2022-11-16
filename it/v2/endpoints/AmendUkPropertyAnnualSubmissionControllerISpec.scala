@@ -139,12 +139,6 @@ class AmendUkPropertyAnnualSubmissionControllerISpec extends V2IntegrationBaseSp
 
     def baseUri: String = s"/income-tax/business/property/annual"
 
-    def ifsQueryParams: Map[String, String] = Map(
-      "taxableEntityId" -> nino,
-      "incomeSourceId"  -> businessId,
-      "taxYear"         -> taxYear
-    )
-
     def request(): WSRequest = {
       setupStubs()
       buildRequest(uri)
@@ -164,9 +158,14 @@ class AmendUkPropertyAnnualSubmissionControllerISpec extends V2IntegrationBaseSp
   }
 
   private trait NonTysTest extends Test {
-    def taxYear: String                            = "2022-23"
-    def downstreamTaxYear: String                  = "2022-23"
-    def downstreamQueryParams: Map[String, String] = ifsQueryParams
+    def taxYear: String           = "2022-23"
+    def downstreamTaxYear: String = "2022-23"
+
+    def downstreamQueryParams: Map[String, String] = Map(
+      "taxableEntityId" -> nino,
+      "incomeSourceId"  -> businessId,
+      "taxYear"         -> taxYear
+    )
 
     override def downstreamUri: String = baseUri
   }

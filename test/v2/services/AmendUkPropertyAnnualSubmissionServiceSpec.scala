@@ -23,11 +23,7 @@ import v2.mocks.connectors.MockAmendUkPropertyAnnualSubmissionConnector
 import v2.models.domain.{ Nino, TaxYear }
 import v2.models.errors._
 import v2.models.outcomes.ResponseWrapper
-import v2.models.request.amendUkPropertyAnnualSubmission.ukFhlProperty._
-import v2.models.request.amendUkPropertyAnnualSubmission.ukNonFhlProperty._
 import v2.models.request.amendUkPropertyAnnualSubmission.{ AmendUkPropertyAnnualSubmissionRequest, AmendUkPropertyAnnualSubmissionRequestBody }
-import v2.models.request.common.ukPropertyRentARoom.UkPropertyAdjustmentsRentARoom
-import v2.models.request.common.{ Building, FirstYear, StructuredBuildingAllowance }
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -38,6 +34,10 @@ class AmendUkPropertyAnnualSubmissionServiceSpec extends UnitSpec {
   val businessId: String             = "XAIS12345678910"
   val taxYear: TaxYear               = TaxYear.fromMtd("2020-21")
   implicit val correlationId: String = "X-123"
+
+  val body: AmendUkPropertyAnnualSubmissionRequestBody = AmendUkPropertyAnnualSubmissionRequestBody(None, None)
+
+  private val request = AmendUkPropertyAnnualSubmissionRequest(Nino(nino), businessId, taxYear, body)
 
   "service" when {
     "service call successful" should {
@@ -88,84 +88,6 @@ class AmendUkPropertyAnnualSubmissionServiceSpec extends UnitSpec {
       }
     }
   }
-
-  private val ukFhlProperty = UkFhlProperty(
-    Some(
-      UkFhlPropertyAdjustments(
-        Some(5000.99),
-        Some(5000.99),
-        periodOfGraceAdjustment = true,
-        Some(5000.99),
-        nonResidentLandlord = true,
-        Some(UkPropertyAdjustmentsRentARoom(true))
-      )),
-    Some(
-      UkFhlPropertyAllowances(
-        Some(5000.99),
-        Some(5000.99),
-        Some(5000.99),
-        Some(5000.99),
-        Some(5000.99),
-        None
-      ))
-  )
-
-  private val ukNonFhlProperty = UkNonFhlProperty(
-    Some(
-      UkNonFhlPropertyAdjustments(
-        Some(5000.99),
-        Some(5000.99),
-        Some(5000.99),
-        nonResidentLandlord = true,
-        Some(UkPropertyAdjustmentsRentARoom(true))
-      )),
-    Some(
-      UkNonFhlPropertyAllowances(
-        Some(5000.99),
-        Some(5000.99),
-        Some(5000.99),
-        Some(5000.99),
-        Some(5000.99),
-        Some(5000.99),
-        Some(5000.99),
-        None,
-        Some(
-          Seq(
-            StructuredBuildingAllowance(
-              5000.99,
-              Some(FirstYear(
-                "2020-01-01",
-                5000.99
-              )),
-              Building(
-                Some("Green Oak's"),
-                None,
-                "GF49JH"
-              )
-            ))),
-        Some(
-          Seq(
-            StructuredBuildingAllowance(
-              3000.50,
-              Some(FirstYear(
-                "2020-01-01",
-                3000.60
-              )),
-              Building(
-                None,
-                Some("house number"),
-                "GF49JH"
-              )
-            )))
-      ))
-  )
-
-  val body: AmendUkPropertyAnnualSubmissionRequestBody = AmendUkPropertyAnnualSubmissionRequestBody(
-    Some(ukFhlProperty),
-    Some(ukNonFhlProperty)
-  )
-
-  private val request = AmendUkPropertyAnnualSubmissionRequest(Nino(nino), businessId, taxYear, body)
 
   trait Test extends MockAmendUkPropertyAnnualSubmissionConnector {
     implicit val hc: HeaderCarrier              = HeaderCarrier()

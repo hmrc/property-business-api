@@ -16,7 +16,7 @@
 
 package v2.endpoints
 
-//import com.github.tomakehurst.wiremock.stubbing.StubMapping
+import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import play.api.http.HeaderNames.ACCEPT
 import play.api.http.Status
 import play.api.libs.json.{ JsValue, Json }
@@ -205,7 +205,7 @@ class RetrieveUkPropertyAnnualSubmissionControllerISpec extends V2IntegrationBas
        """.stripMargin
     )
 
-    def setupStubs(): Unit = ()
+    def setupStubs(): StubMapping
     def downstreamUri: String
     def downstreamQueryParams: Map[String, String]
 
@@ -232,6 +232,7 @@ class RetrieveUkPropertyAnnualSubmissionControllerISpec extends V2IntegrationBas
   private trait NonTysTest extends Test {
     def taxYear: String       = "2022-23"
     def downstreamUri: String = s"/income-tax/business/property/annual"
+
     def downstreamQueryParams: Map[String, String] = Map(
       "taxableEntityId" -> nino,
       "incomeSourceId"  -> businessId,
@@ -249,9 +250,9 @@ class RetrieveUkPropertyAnnualSubmissionControllerISpec extends V2IntegrationBas
 
     "return a 200 status code" when {
 
-      "any valid request is made" in new Test with NonTysTest {
+      "any valid request is made" in new NonTysTest {
 
-        override def setupStubs(): Unit = {
+        override def setupStubs(): StubMapping = {
           AuditStub.audit()
           DownstreamStub.onSuccess(DownstreamStub.GET, downstreamUri, downstreamQueryParams, Status.OK, downstreamResponseBody)
         }
@@ -263,8 +264,8 @@ class RetrieveUkPropertyAnnualSubmissionControllerISpec extends V2IntegrationBas
         response.header("Content-Type") shouldBe Some("application/json")
       }
 
-      "any valid request is made for TYS" in new Test with TysIfsTest {
-        override def setupStubs(): Unit =
+      "any valid request is made for TYS" in new TysIfsTest {
+        override def setupStubs(): StubMapping =
           DownstreamStub.onSuccess(DownstreamStub.GET, downstreamUri, downstreamQueryParams, Status.OK, downstreamResponseBody)
 
         val response: WSResponse = await(request().get())
@@ -282,11 +283,13 @@ class RetrieveUkPropertyAnnualSubmissionControllerISpec extends V2IntegrationBas
                                 requestTaxYear: String,
                                 expectedStatus: Int,
                                 expectedBody: MtdError): Unit = {
-          s"validation fails with ${expectedBody.code} error" in new Test with NonTysTest {
+          s"validation fails with ${expectedBody.code} error" in new NonTysTest {
 
             override val nino: String       = requestNino
             override val businessId: String = requestBusinessId
             override val taxYear: String    = requestTaxYear
+
+            override def setupStubs(): StubMapping = AuthStub.authorised()
 
             val response: WSResponse = await(request().get())
             response.status shouldBe expectedStatus
@@ -306,9 +309,9 @@ class RetrieveUkPropertyAnnualSubmissionControllerISpec extends V2IntegrationBas
 
       "downstream service error" when {
         def serviceErrorTest(downstreamStatus: Int, downstreamCode: String, expectedStatus: Int, expectedBody: MtdError): Unit = {
-          s"downstream returns an $downstreamCode error and status $downstreamStatus" in new Test with NonTysTest {
+          s"downstream returns an $downstreamCode error and status $downstreamStatus" in new NonTysTest {
 
-            override def setupStubs(): Unit =
+            override def setupStubs(): StubMapping =
               DownstreamStub.onError(DownstreamStub.GET, downstreamUri, downstreamQueryParams, downstreamStatus, errorBody(downstreamCode))
 
             val response: WSResponse = await(request().get())
@@ -337,7 +340,7 @@ class RetrieveUkPropertyAnnualSubmissionControllerISpec extends V2IntegrationBas
 
       }
 
-      "downstream returns no UK properties" in new Test with NonTysTest {
+      "downstream returns no UK properties" in new NonTysTest {
         override val downstreamResponseBody: JsValue = Json.parse("""
             |{
             |  "submittedOn":"2022-06-17T10:53:38Z",
@@ -362,7 +365,7 @@ class RetrieveUkPropertyAnnualSubmissionControllerISpec extends V2IntegrationBas
             |}
             |""".stripMargin)
 
-        override def setupStubs(): Unit =
+        override def setupStubs(): StubMapping =
           DownstreamStub.onSuccess(DownstreamStub.GET, downstreamUri, downstreamQueryParams, Status.OK, downstreamResponseBody)
 
         val response: WSResponse = await(request().get())

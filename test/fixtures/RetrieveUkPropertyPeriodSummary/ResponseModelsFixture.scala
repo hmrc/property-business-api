@@ -16,10 +16,11 @@
 
 package fixtures.RetrieveUkPropertyPeriodSummary
 
-import play.api.libs.json.{JsValue, Json}
+import play.api.libs.json.{ JsValue, Json }
 import v2.models.response.retrieveUkPropertyPeriodSummary._
 
 trait ResponseModelsFixture {
+
   val fullDownstreamJson: JsValue = Json.parse(
     """
       |{

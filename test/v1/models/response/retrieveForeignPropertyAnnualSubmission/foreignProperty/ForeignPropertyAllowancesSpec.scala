@@ -20,7 +20,7 @@ import play.api.libs.json.Json
 import support.UnitSpec
 import v1.models.utils.JsonErrorValidators
 
-class ForeignPropertyAllowancesSpec extends UnitSpec with JsonErrorValidators{
+class ForeignPropertyAllowancesSpec extends UnitSpec with JsonErrorValidators {
 
   private val foreignPropertyAllowances = ForeignPropertyAllowances(
     Some(100.25),

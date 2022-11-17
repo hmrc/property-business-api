@@ -243,8 +243,7 @@ class CreateUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with JsonError
           "/ukNonFhlProperty/income/rentARoom",
           "/ukNonFhlProperty/expenses",
           "/ukNonFhlProperty/expenses/rentARoom",
-        )
-          .foreach(p => testEmpty(p))
+        ).foreach(p => testEmpty(p))
 
         def testEmpty(path: String): Unit =
           s"for $path" in {
@@ -268,12 +267,12 @@ class CreateUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with JsonError
                      |}""".stripMargin)
 
         validator.validate(
-        CreateUkPropertyPeriodSummaryRawData(
-          validNino,
-          taxYear,
-          validBusinessId,
-          json
-        )) shouldBe List(RuleIncorrectOrEmptyBodyError.copy(paths = Some(Seq("/ukFhlProperty"))))
+          CreateUkPropertyPeriodSummaryRawData(
+            validNino,
+            taxYear,
+            validBusinessId,
+            json
+          )) shouldBe List(RuleIncorrectOrEmptyBodyError.copy(paths = Some(Seq("/ukFhlProperty"))))
       }
 
       "fromDate is missing" in {

@@ -17,9 +17,12 @@
 package v2.connectors
 
 import org.scalamock.handlers.CallHandler
-import v2.models.domain.{Nino, PeriodId}
+import v2.models.domain.{ Nino, PeriodId }
 import v2.models.outcomes.ResponseWrapper
-import v2.models.request.amendHistoricNonFhlUkPiePeriodSummary.{AmendHistoricNonFhlUkPiePeriodSummaryRequest, AmendHistoricNonFhlUkPiePeriodSummaryRequestBody}
+import v2.models.request.amendHistoricNonFhlUkPiePeriodSummary.{
+  AmendHistoricNonFhlUkPiePeriodSummaryRequest,
+  AmendHistoricNonFhlUkPiePeriodSummaryRequestBody
+}
 import v2.models.response.amendHistoricNonFhlUkPiePeriodSummary.AmendHistoricNonFhlUkPiePeriodSummaryResponse
 
 import scala.concurrent.Future
@@ -64,10 +67,9 @@ class AmendHistoricNonFhlUkPiePeriodSummaryConnectorSpec extends ConnectorSpec {
       val path = pathFrom(request)
 
       willPut(
-          url = s"$baseUrl/$path",
-          body = requestBody
-        )
-        .returns(Future.successful(outcome))
+        url = s"$baseUrl/$path",
+        body = requestBody
+      ).returns(Future.successful(outcome))
     }
   }
 

@@ -25,7 +25,7 @@ import v1.models.outcomes.ResponseWrapper
 import v1.models.request.amendForeignPropertyPeriodSummary.AmendForeignPropertyPeriodSummaryRequest
 import v1.services.AmendForeignPropertyPeriodSummaryService
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.{ ExecutionContext, Future }
 
 trait MockAmendForeignPropertyPeriodSummaryService extends MockFactory {
 

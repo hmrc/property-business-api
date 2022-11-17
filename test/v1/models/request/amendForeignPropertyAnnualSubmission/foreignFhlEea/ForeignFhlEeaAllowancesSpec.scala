@@ -30,8 +30,7 @@ class ForeignFhlEeaAllowancesSpec extends UnitSpec with JsonErrorValidators {
       Some(100.25)
     )
 
-  val jsonBody = Json.parse(
-    """
+  val jsonBody = Json.parse("""
       |{
       |    "annualInvestmentAllowance":100.25,
       |    "otherCapitalAllowance":100.25,

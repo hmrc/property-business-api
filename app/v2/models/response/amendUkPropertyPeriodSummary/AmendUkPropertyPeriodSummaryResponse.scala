@@ -19,7 +19,7 @@ package v2.models.response.amendUkPropertyPeriodSummary
 import config.AppConfig
 import v2.hateoas.HateoasLinksFactory
 import v2.hateoas.HateoasLinks
-import v2.models.hateoas.{HateoasData, Link}
+import v2.models.hateoas.{ HateoasData, Link }
 
 case class AmendUkPropertyPeriodSummaryResponse(submissionId: String)
 
@@ -37,5 +37,4 @@ object AmendUkPropertyPeriodSummaryResponse extends HateoasLinks {
   }
 }
 
-
-case class AmendUkPropertyPeriodSummaryHateoasData(nino: String, businessId: String, taxYear:String, submissionId: String) extends HateoasData
+case class AmendUkPropertyPeriodSummaryHateoasData(nino: String, businessId: String, taxYear: String, submissionId: String) extends HateoasData

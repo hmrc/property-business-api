@@ -17,7 +17,7 @@
 package v2.models.audit
 
 import play.api.http.Status.OK
-import play.api.libs.json.{JsValue, Json, OWrites}
+import play.api.libs.json.{ JsValue, Json, OWrites }
 import support.UnitSpec
 import v2.models.auth.UserDetails
 

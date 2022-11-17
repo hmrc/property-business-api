@@ -19,23 +19,29 @@ package v2.mocks.connectors
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
 import uk.gov.hmrc.http.HeaderCarrier
-import v2.connectors.{DownstreamOutcome, RetrieveHistoricFhlUkPropertyAnnualSubmissionConnector}
+import v2.connectors.{ DownstreamOutcome, RetrieveHistoricFhlUkPropertyAnnualSubmissionConnector }
 import v2.models.request.retrieveHistoricFhlUkPropertyAnnualSubmission.RetrieveHistoricFhlUkPropertyAnnualSubmissionRequest
 import v2.models.response.retrieveHistoricFhlUkPropertyAnnualSubmission.RetrieveHistoricFhlUkPropertyAnnualSubmissionResponse
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.{ ExecutionContext, Future }
 
 trait MockRetrieveHistoricFhlUkPropertyAnnualSubmissionConnector extends MockFactory {
 
-  val mockRetrieveHistoricFhlUkPropertyConnector:
-    RetrieveHistoricFhlUkPropertyAnnualSubmissionConnector = mock[RetrieveHistoricFhlUkPropertyAnnualSubmissionConnector]
+  val mockRetrieveHistoricFhlUkPropertyConnector: RetrieveHistoricFhlUkPropertyAnnualSubmissionConnector =
+    mock[RetrieveHistoricFhlUkPropertyAnnualSubmissionConnector]
 
   object MockRetrieveHistoricFhlUkPropertyAnnualSubmissionConnector {
 
-    def retrieve(requestData: RetrieveHistoricFhlUkPropertyAnnualSubmissionRequest):
-      CallHandler[Future[DownstreamOutcome[RetrieveHistoricFhlUkPropertyAnnualSubmissionResponse]]] = {
-      (mockRetrieveHistoricFhlUkPropertyConnector
-        .retrieve(_: RetrieveHistoricFhlUkPropertyAnnualSubmissionRequest)(_: HeaderCarrier, _: ExecutionContext, _: String))
+    def retrieve(requestData: RetrieveHistoricFhlUkPropertyAnnualSubmissionRequest)
+      : CallHandler[Future[DownstreamOutcome[RetrieveHistoricFhlUkPropertyAnnualSubmissionResponse]]] = {
+      (
+        mockRetrieveHistoricFhlUkPropertyConnector
+          .retrieve(_: RetrieveHistoricFhlUkPropertyAnnualSubmissionRequest)(
+            _: HeaderCarrier,
+            _: ExecutionContext,
+            _: String
+          )
+        )
         .expects(requestData, *, *, *)
     }
   }

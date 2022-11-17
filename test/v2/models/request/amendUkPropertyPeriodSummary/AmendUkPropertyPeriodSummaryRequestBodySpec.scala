@@ -16,7 +16,7 @@
 
 package v2.models.request.amendUkPropertyPeriodSummary
 
-import play.api.libs.json.{JsValue, Json}
+import play.api.libs.json.{ JsValue, Json }
 import support.UnitSpec
 import v2.models.request.common.ukPropertyRentARoom._
 import v2.models.request.common.ukFhlProperty._
@@ -27,59 +27,62 @@ class AmendUkPropertyPeriodSummaryRequestBodySpec extends UnitSpec with JsonErro
 
   val amendForeignPropertyRequestBody: AmendUkPropertyPeriodSummaryRequestBody =
     AmendUkPropertyPeriodSummaryRequestBody(
-      Some(UkFhlProperty(
-        Some(UkFhlPropertyIncome(
-          Some(1234.12),
-          Some(1234.23),
-          Some(UkPropertyIncomeRentARoom(
-            Some(1234.34)
+      Some(
+        UkFhlProperty(
+          Some(
+            UkFhlPropertyIncome(
+              Some(1234.12),
+              Some(1234.23),
+              Some(UkPropertyIncomeRentARoom(
+                Some(1234.34)
+              ))
+            )),
+          Some(UkFhlPropertyExpenses(
+            Some(1234.45),
+            Some(1234.56),
+            Some(1234.67),
+            Some(1234.78),
+            Some(1234.89),
+            Some(1234.12),
+            consolidatedExpenses = None,
+            Some(1234.23),
+            Some(UkPropertyExpensesRentARoom(
+              Some(1234.34)
+            ))
           ))
         )),
-        Some(UkFhlPropertyExpenses(
-          Some(1234.45),
-          Some(1234.56),
-          Some(1234.67),
-          Some(1234.78),
-          Some(1234.89),
-          Some(1234.12),
-          consolidatedExpenses = None,
-          Some(1234.23),
-          Some(UkPropertyExpensesRentARoom(
-            Some(1234.34)
+      Some(
+        UkNonFhlProperty(
+          Some(
+            UkNonFhlPropertyIncome(
+              Some(9876.12),
+              Some(9876.23),
+              Some(9876.34),
+              Some(9876.45),
+              Some(9876.56),
+              Some(UkPropertyIncomeRentARoom(
+                Some(9876.67)
+              ))
+            )),
+          Some(UkNonFhlPropertyExpenses(
+            Some(9876.78),
+            Some(9876.89),
+            Some(9876.12),
+            Some(9876.23),
+            Some(9876.34),
+            Some(9876.45),
+            Some(9876.56),
+            Some(9876.67),
+            Some(9876.78),
+            Some(UkPropertyExpensesRentARoom(
+              Some(9876.89)
+            )),
+            None
           ))
         ))
-      )),
-      Some(UkNonFhlProperty(
-        Some(UkNonFhlPropertyIncome(
-          Some(9876.12),
-          Some(9876.23),
-          Some(9876.34),
-          Some(9876.45),
-          Some(9876.56),
-          Some(UkPropertyIncomeRentARoom(
-            Some(9876.67)
-          ))
-        )),
-        Some(UkNonFhlPropertyExpenses(
-          Some(9876.78),
-          Some(9876.89),
-          Some(9876.12),
-          Some(9876.23),
-          Some(9876.34),
-          Some(9876.45),
-          Some(9876.56),
-          Some(9876.67),
-          Some(9876.78),
-          Some(UkPropertyExpensesRentARoom(
-            Some(9876.89)
-          )),
-          None
-        ))
-      ))
     )
 
-  val readsJson: JsValue = Json.parse(
-    """{
+  val readsJson: JsValue = Json.parse("""{
       |  "ukFhlProperty": {
       |    "income": {
       |      "periodAmount": 1234.12,
@@ -130,8 +133,7 @@ class AmendUkPropertyPeriodSummaryRequestBodySpec extends UnitSpec with JsonErro
       |}
       |""".stripMargin)
 
-  val writesJson: JsValue = Json.parse(
-    """{
+  val writesJson: JsValue = Json.parse("""{
       |  "ukFhlProperty": {
       |    "income": {
       |      "periodAmount": 1234.12,

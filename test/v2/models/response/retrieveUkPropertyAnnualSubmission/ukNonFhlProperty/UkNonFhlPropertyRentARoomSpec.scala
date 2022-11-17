@@ -16,24 +16,22 @@
 
 package v2.models.response.retrieveUkPropertyAnnualSubmission.ukNonFhlProperty
 
-import play.api.libs.json.{JsValue, Json}
+import play.api.libs.json.{ JsValue, Json }
 import support.UnitSpec
 
 class UkNonFhlPropertyRentARoomSpec extends UnitSpec {
 
-  val downstreamJson: JsValue = Json.parse(
-    """
+  val downstreamJson: JsValue = Json.parse("""
       |{
       |   "jointlyLet":true
       |}
       |""".stripMargin)
 
   val model: UkNonFhlPropertyRentARoom = UkNonFhlPropertyRentARoom(
-        jointlyLet = true
-      )
+    jointlyLet = true
+  )
 
-  val mtdJson: JsValue = Json.parse(
-    """
+  val mtdJson: JsValue = Json.parse("""
       |{
       |   "jointlyLet":true
       |}

@@ -16,7 +16,7 @@
 
 package v2.models.request.createAmendHistoricFhlUkPropertyAnnualSubmission
 
-import play.api.libs.json.{JsValue, Json}
+import play.api.libs.json.{ JsValue, Json }
 import support.UnitSpec
 import v2.models.request.common.ukPropertyRentARoom.UkPropertyAdjustmentsRentARoom
 
@@ -33,9 +33,7 @@ class HistoricFhlAnnualAdjustmentsSpec extends UnitSpec {
       Some(UkPropertyAdjustmentsRentARoom(true))
     )
 
-
-  val validMtdJson: JsValue = Json.parse(
-    """
+  val validMtdJson: JsValue = Json.parse("""
       |{
       |   "lossBroughtForward": 200.00,
       |   "balancingCharge": 200.00,
@@ -49,8 +47,7 @@ class HistoricFhlAnnualAdjustmentsSpec extends UnitSpec {
       |}
       |""".stripMargin)
 
-  val validDownstreamJson: JsValue = Json.parse(
-    """
+  val validDownstreamJson: JsValue = Json.parse("""
       |{
       |   "lossBroughtForward": 200.00,
       |   "balancingCharge": 200.00,

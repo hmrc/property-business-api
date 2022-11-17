@@ -17,11 +17,11 @@
 package v2.connectors
 
 import org.scalamock.handlers.CallHandler
-import v2.models.domain.{Nino, PeriodId}
-import v2.models.errors.{DownstreamErrorCode, DownstreamErrors}
+import v2.models.domain.{ Nino, PeriodId }
+import v2.models.errors.{ DownstreamErrorCode, DownstreamErrors }
 import v2.models.outcomes.ResponseWrapper
 import v2.models.request.retrieveHistoricNonFhlUkPiePeriodSummary.RetrieveHistoricNonFhlUkPiePeriodSummaryRequest
-import v2.models.response.retrieveHistoricNonFhlUkPiePeriodSummary.{PeriodExpenses, PeriodIncome, RetrieveHistoricNonFhlUkPiePeriodSummaryResponse}
+import v2.models.response.retrieveHistoricNonFhlUkPiePeriodSummary.{ PeriodExpenses, PeriodIncome, RetrieveHistoricNonFhlUkPiePeriodSummaryResponse }
 
 import scala.concurrent.Future
 

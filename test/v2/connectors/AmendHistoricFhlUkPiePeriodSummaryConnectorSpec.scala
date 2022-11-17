@@ -17,9 +17,12 @@
 package v2.connectors
 
 import org.scalamock.handlers.CallHandler
-import v2.models.domain.{Nino, PeriodId}
+import v2.models.domain.{ Nino, PeriodId }
 import v2.models.outcomes.ResponseWrapper
-import v2.models.request.amendHistoricFhlUkPiePeriodSummary.{AmendHistoricFhlUkPiePeriodSummaryRequest, AmendHistoricFhlUkPiePeriodSummaryRequestBody}
+import v2.models.request.amendHistoricFhlUkPiePeriodSummary.{
+  AmendHistoricFhlUkPiePeriodSummaryRequest,
+  AmendHistoricFhlUkPiePeriodSummaryRequestBody
+}
 import v2.models.response.amendHistoricFhlUkPiePeriodSummary.AmendHistoricFhlUkPiePeriodSummaryResponse
 
 import scala.concurrent.Future
@@ -53,7 +56,6 @@ class AmendHistoricFhlUkPiePeriodSummaryConnectorSpec extends ConnectorSpec {
       appConfig = mockAppConfig
     )
 
-
     def pathFrom(request: AmendHistoricFhlUkPiePeriodSummaryRequest): String =
       s"income-tax/nino/${request.nino.value}/uk-properties/furnished-holiday-lettings/periodic-summaries" +
         s"?from=${request.periodId.from}" +
@@ -65,10 +67,9 @@ class AmendHistoricFhlUkPiePeriodSummaryConnectorSpec extends ConnectorSpec {
       val path = pathFrom(request)
 
       willPut(
-          url = s"$baseUrl/$path",
-          body = requestBody
-        )
-        .returns(Future.successful(outcome))
+        url = s"$baseUrl/$path",
+        body = requestBody
+      ).returns(Future.successful(outcome))
     }
   }
 

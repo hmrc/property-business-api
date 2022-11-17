@@ -16,10 +16,11 @@
 
 package v1.models.request.common.foreignFhlEea
 
-import play.api.libs.json.{JsValue, Json}
+import play.api.libs.json.{ JsValue, Json }
 import support.UnitSpec
 
 class ExpenditureSpec extends UnitSpec {
+
   val mtdJson: JsValue = Json.parse(
     """
       |{

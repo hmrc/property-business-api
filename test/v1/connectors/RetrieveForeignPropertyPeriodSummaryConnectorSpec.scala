@@ -16,7 +16,7 @@
 
 package v1.connectors
 
-import mocks.{MockAppConfig, MockHttpClient}
+import mocks.{ MockAppConfig, MockHttpClient }
 import v1.models.domain.Nino
 import v1.models.outcomes.ResponseWrapper
 import v1.models.request.retrieveForeignPropertyPeriodSummary.RetrieveForeignPropertyPeriodSummaryRequest
@@ -28,8 +28,8 @@ import scala.concurrent.Future
 
 class RetrieveForeignPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
 
-  val nino: String = "AA123456A"
-  val businessId: String = "XAIS12345678910"
+  val nino: String         = "AA123456A"
+  val businessId: String   = "XAIS12345678910"
   val submissionId: String = "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
 
   val request: RetrieveForeignPropertyPeriodSummaryRequest = RetrieveForeignPropertyPeriodSummaryRequest(
@@ -41,43 +41,50 @@ class RetrieveForeignPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
   private val response = RetrieveForeignPropertyPeriodSummaryResponse(
     "2020-01-01",
     "2020-01-31",
-    Some(ForeignFhlEea(
-    Some(ForeignFhlEeaIncome(Some(5000.99))),
-    Some(ForeignFhlEeaExpenditure(
-      Some(5000.99),
-      Some(5000.99),
-      Some(5000.99),
-      Some(5000.99),
-      Some(5000.99),
-      Some(5000.99),
-      Some(5000.99),
-      None
-    ))
-  )),
-  Some(Seq(ForeignProperty("FRA",
-    ForeignPropertyIncome(
-      Some(ForeignPropertyRentIncome(Some(5000.99))),
-      false,
-      Some(5000.99),
-      Some(5000.99),
-      Some(5000.99),
-      Some(5000.99)
-    ),
-    Some(ForeignPropertyExpenditure(
-      Some(5000.99),
-      Some(5000.99),
-      Some(5000.99),
-      Some(5000.99),
-      Some(5000.99),
-      Some(5000.99),
-      Some(5000.99),
-      Some(5000.99),
-      Some(5000.99),
-      None
-    ))))
-  ))
+    Some(
+      ForeignFhlEea(
+        Some(ForeignFhlEeaIncome(Some(5000.99))),
+        Some(
+          ForeignFhlEeaExpenditure(
+            Some(5000.99),
+            Some(5000.99),
+            Some(5000.99),
+            Some(5000.99),
+            Some(5000.99),
+            Some(5000.99),
+            Some(5000.99),
+            None
+          ))
+      )),
+    Some(
+      Seq(ForeignProperty(
+        "FRA",
+        ForeignPropertyIncome(
+          Some(ForeignPropertyRentIncome(Some(5000.99))),
+          false,
+          Some(5000.99),
+          Some(5000.99),
+          Some(5000.99),
+          Some(5000.99)
+        ),
+        Some(
+          ForeignPropertyExpenditure(
+            Some(5000.99),
+            Some(5000.99),
+            Some(5000.99),
+            Some(5000.99),
+            Some(5000.99),
+            Some(5000.99),
+            Some(5000.99),
+            Some(5000.99),
+            Some(5000.99),
+            None
+          ))
+      )))
+  )
 
   class Test extends MockHttpClient with MockAppConfig {
+
     val connector: RetrieveForeignPropertyPeriodSummaryConnector = new RetrieveForeignPropertyPeriodSummaryConnector(
       http = mockHttpClient,
       appConfig = mockAppConfig

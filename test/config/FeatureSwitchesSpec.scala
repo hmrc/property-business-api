@@ -26,14 +26,14 @@ class FeatureSwitchesSpec extends UnitSpec with ScalaCheckPropertyChecks {
     "be true" when {
 
       "absent from the config" in {
-        val configuration = Configuration.empty
+        val configuration   = Configuration.empty
         val featureSwitches = FeatureSwitches(configuration)
 
         featureSwitches.isTaxYearSpecificApiEnabled shouldBe true
       }
 
       "enabled" in {
-        val configuration = Configuration("tys-api.enabled" -> true)
+        val configuration   = Configuration("tys-api.enabled" -> true)
         val featureSwitches = FeatureSwitches(configuration)
 
         featureSwitches.isTaxYearSpecificApiEnabled shouldBe true
@@ -43,7 +43,7 @@ class FeatureSwitchesSpec extends UnitSpec with ScalaCheckPropertyChecks {
 
     "be false" when {
       "disabled" in {
-        val configuration = Configuration("tys-api.enabled" -> false)
+        val configuration   = Configuration("tys-api.enabled" -> false)
         val featureSwitches = FeatureSwitches(configuration)
 
         featureSwitches.isTaxYearSpecificApiEnabled shouldBe false
@@ -51,19 +51,18 @@ class FeatureSwitchesSpec extends UnitSpec with ScalaCheckPropertyChecks {
     }
   }
 
-
   "a isV2R7cRoutingEnabled feature switch" should {
     "be true" when {
 
       "absent from the config" in {
-        val configuration = Configuration.empty
+        val configuration   = Configuration.empty
         val featureSwitches = FeatureSwitches(configuration)
 
         featureSwitches.isV2R7cRoutingEnabled shouldBe true
       }
 
       "enabled" in {
-        val configuration = Configuration("v2r7c-endpoints.enabled" -> true)
+        val configuration   = Configuration("v2r7c-endpoints.enabled" -> true)
         val featureSwitches = FeatureSwitches(configuration)
 
         featureSwitches.isV2R7cRoutingEnabled shouldBe true
@@ -73,7 +72,7 @@ class FeatureSwitchesSpec extends UnitSpec with ScalaCheckPropertyChecks {
 
     "be false" when {
       "disabled" in {
-        val configuration = Configuration("v2r7c-endpoints.enabled" -> false)
+        val configuration   = Configuration("v2r7c-endpoints.enabled" -> false)
         val featureSwitches = FeatureSwitches(configuration)
 
         featureSwitches.isV2R7cRoutingEnabled shouldBe false

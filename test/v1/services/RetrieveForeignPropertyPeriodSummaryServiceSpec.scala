@@ -33,54 +33,60 @@ import scala.concurrent.Future
 
 class RetrieveForeignPropertyPeriodSummaryServiceSpec extends UnitSpec {
 
-  val nino: String = "AA123456A"
-  val businessId: String = "XAIS12345678910"
-  val submissionId: String = "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
+  val nino: String                   = "AA123456A"
+  val businessId: String             = "XAIS12345678910"
+  val submissionId: String           = "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
   implicit val correlationId: String = "X-123"
 
   private val response = RetrieveForeignPropertyPeriodSummaryResponse(
     "2020-01-01",
     "2020-01-31",
-    Some(ForeignFhlEea(
-      Some(ForeignFhlEeaIncome(Some(5000.99))),
-      Some(ForeignFhlEeaExpenditure(
-        Some(5000.99),
-        Some(5000.99),
-        Some(5000.99),
-        Some(5000.99),
-        Some(5000.99),
-        Some(5000.99),
-        Some(5000.99),
-        None
-      ))
-    )),
-    Some(Seq(ForeignProperty("FRA",
-      ForeignPropertyIncome(
-        Some(ForeignPropertyRentIncome(Some(5000.99))),
-        false,
-        Some(5000.99),
-        Some(5000.99),
-        Some(5000.99),
-        Some(5000.99)
-      ),
-      Some(ForeignPropertyExpenditure(
-        Some(5000.99),
-        Some(5000.99),
-        Some(5000.99),
-        Some(5000.99),
-        Some(5000.99),
-        Some(5000.99),
-        Some(5000.99),
-        Some(5000.99),
-        Some(5000.99),
-        None
-      ))))
-    ))
+    Some(
+      ForeignFhlEea(
+        Some(ForeignFhlEeaIncome(Some(5000.99))),
+        Some(
+          ForeignFhlEeaExpenditure(
+            Some(5000.99),
+            Some(5000.99),
+            Some(5000.99),
+            Some(5000.99),
+            Some(5000.99),
+            Some(5000.99),
+            Some(5000.99),
+            None
+          ))
+      )),
+    Some(
+      Seq(ForeignProperty(
+        "FRA",
+        ForeignPropertyIncome(
+          Some(ForeignPropertyRentIncome(Some(5000.99))),
+          false,
+          Some(5000.99),
+          Some(5000.99),
+          Some(5000.99),
+          Some(5000.99)
+        ),
+        Some(
+          ForeignPropertyExpenditure(
+            Some(5000.99),
+            Some(5000.99),
+            Some(5000.99),
+            Some(5000.99),
+            Some(5000.99),
+            Some(5000.99),
+            Some(5000.99),
+            Some(5000.99),
+            Some(5000.99),
+            None
+          ))
+      )))
+  )
 
   private val requestData = RetrieveForeignPropertyPeriodSummaryRequest(Nino(nino), businessId, submissionId)
 
   trait Test extends MockRetrieveForeignPropertyPeriodSummaryConnector {
-    implicit val hc: HeaderCarrier = HeaderCarrier()
+    implicit val hc: HeaderCarrier              = HeaderCarrier()
     implicit val logContext: EndpointLogContext = EndpointLogContext("c", "ep")
 
     val service = new RetrieveForeignPropertyPeriodSummaryService(
@@ -91,7 +97,8 @@ class RetrieveForeignPropertyPeriodSummaryServiceSpec extends UnitSpec {
   "service" should {
     "service call successful" when {
       "return mapped result" in new Test {
-        MockRetrieveForeignPropertyConnector.retrieveForeignProperty(requestData)
+        MockRetrieveForeignPropertyConnector
+          .retrieveForeignProperty(requestData)
           .returns(Future.successful(Right(ResponseWrapper(correlationId, response))))
 
         await(service.retrieveForeignProperty(requestData)) shouldBe Right(ResponseWrapper(correlationId, response))
@@ -105,7 +112,8 @@ class RetrieveForeignPropertyPeriodSummaryServiceSpec extends UnitSpec {
       def serviceError(ifsErrorCode: String, error: MtdError): Unit =
         s"a $ifsErrorCode error is returned from the service" in new Test {
 
-          MockRetrieveForeignPropertyConnector.retrieveForeignProperty(requestData)
+          MockRetrieveForeignPropertyConnector
+            .retrieveForeignProperty(requestData)
             .returns(Future.successful(Left(ResponseWrapper(correlationId, IfsErrors.single(IfsErrorCode(ifsErrorCode))))))
 
           await(service.retrieveForeignProperty(requestData)) shouldBe Left(ErrorWrapper(correlationId, error))
@@ -113,12 +121,12 @@ class RetrieveForeignPropertyPeriodSummaryServiceSpec extends UnitSpec {
 
       val input = Seq(
         "INVALID_TAXABLE_ENTITY_ID" -> NinoFormatError,
-        "INVALID_INCOMESOURCE_ID" -> BusinessIdFormatError,
-        "INVALID_SUBMISSION_ID" -> SubmissionIdFormatError,
-        "NO_DATA_FOUND" -> NotFoundError,
-        "SERVER_ERROR" -> DownstreamError,
-        "SERVICE_UNAVAILABLE" -> DownstreamError,
-        "INVALID_CORRELATIONID" -> DownstreamError
+        "INVALID_INCOMESOURCE_ID"   -> BusinessIdFormatError,
+        "INVALID_SUBMISSION_ID"     -> SubmissionIdFormatError,
+        "NO_DATA_FOUND"             -> NotFoundError,
+        "SERVER_ERROR"              -> DownstreamError,
+        "SERVICE_UNAVAILABLE"       -> DownstreamError,
+        "INVALID_CORRELATIONID"     -> DownstreamError
       )
 
       input.foreach(args => (serviceError _).tupled(args))

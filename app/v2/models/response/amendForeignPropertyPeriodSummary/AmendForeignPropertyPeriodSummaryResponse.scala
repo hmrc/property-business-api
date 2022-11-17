@@ -17,8 +17,8 @@
 package v2.models.response.amendForeignPropertyPeriodSummary
 
 import config.AppConfig
-import v2.hateoas.{HateoasLinks, HateoasLinksFactory}
-import v2.models.hateoas.{HateoasData, Link}
+import v2.hateoas.{ HateoasLinks, HateoasLinksFactory }
+import v2.models.hateoas.{ HateoasData, Link }
 
 object AmendForeignPropertyPeriodSummaryResponse extends HateoasLinks {
 
@@ -33,6 +33,5 @@ object AmendForeignPropertyPeriodSummaryResponse extends HateoasLinks {
     }
   }
 }
-
 
 case class AmendForeignPropertyPeriodSummaryHateoasData(nino: String, businessId: String, taxYear: String, submissionId: String) extends HateoasData

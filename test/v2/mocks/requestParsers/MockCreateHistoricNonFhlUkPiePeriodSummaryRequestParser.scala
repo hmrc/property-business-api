@@ -18,17 +18,25 @@ package v2.mocks.requestParsers
 
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
-import v2.controllers.requestParsers.{CreateHistoricNonFhlUkPropertyPeriodSummaryRequestParser}
+import v2.controllers.requestParsers.{ CreateHistoricNonFhlUkPropertyPeriodSummaryRequestParser }
 import v2.models.errors.ErrorWrapper
-import v2.models.request.createHistoricNonFhlUkPropertyPeriodSummary.{CreateHistoricNonFhlUkPropertyPeriodSummaryRawData, CreateHistoricNonFhlUkPropertyPeriodSummaryRequest}
+import v2.models.request.createHistoricNonFhlUkPropertyPeriodSummary.{
+  CreateHistoricNonFhlUkPropertyPeriodSummaryRawData,
+  CreateHistoricNonFhlUkPropertyPeriodSummaryRequest
+}
 
 trait MockCreateHistoricNonFhlUkPiePeriodSummaryRequestParser extends MockFactory {
 
-  val mockCreateHistoricNonFhlUkPiePeriodSummaryRequestParser: CreateHistoricNonFhlUkPropertyPeriodSummaryRequestParser = mock[CreateHistoricNonFhlUkPropertyPeriodSummaryRequestParser]
+  val mockCreateHistoricNonFhlUkPiePeriodSummaryRequestParser: CreateHistoricNonFhlUkPropertyPeriodSummaryRequestParser =
+    mock[CreateHistoricNonFhlUkPropertyPeriodSummaryRequestParser]
 
   object MockCreateHistoricNonFhlUkPiePeriodSummaryRequestParser {
-    def requestFor(data: CreateHistoricNonFhlUkPropertyPeriodSummaryRawData): CallHandler[Either[ErrorWrapper, CreateHistoricNonFhlUkPropertyPeriodSummaryRequest]] = {
-      (mockCreateHistoricNonFhlUkPiePeriodSummaryRequestParser.parseRequest(_: CreateHistoricNonFhlUkPropertyPeriodSummaryRawData)(_: String)).expects(data, *)
+
+    def requestFor(data: CreateHistoricNonFhlUkPropertyPeriodSummaryRawData)
+      : CallHandler[Either[ErrorWrapper, CreateHistoricNonFhlUkPropertyPeriodSummaryRequest]] = {
+      (mockCreateHistoricNonFhlUkPiePeriodSummaryRequestParser
+        .parseRequest(_: CreateHistoricNonFhlUkPropertyPeriodSummaryRawData)(_: String))
+        .expects(data, *)
     }
   }
 }

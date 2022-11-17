@@ -16,7 +16,7 @@
 
 package v1.models.response.retrieveForeignPropertyPeriodSummary.foreignFhlEea
 
-import play.api.libs.json.{JsPath, Json, Reads, Writes}
+import play.api.libs.json.{ JsPath, Json, Reads, Writes }
 import play.api.libs.functional.syntax._
 
 case class ForeignFhlEea(income: Option[ForeignFhlEeaIncome], expenditure: Option[ForeignFhlEeaExpenditure])
@@ -26,5 +26,5 @@ object ForeignFhlEea {
   implicit val reads: Reads[ForeignFhlEea] = (
     (JsPath \ "income").readNullable[ForeignFhlEeaIncome] and
       (JsPath \ "expenses").readNullable[ForeignFhlEeaExpenditure]
-    )(ForeignFhlEea.apply _)
+  )(ForeignFhlEea.apply _)
 }

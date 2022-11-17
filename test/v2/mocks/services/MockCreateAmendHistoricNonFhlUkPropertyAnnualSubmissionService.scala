@@ -26,7 +26,7 @@ import v2.models.request.createAmendHistoricNonFhlUkPropertyAnnualSubmission.Cre
 import v2.models.response.createAmendHistoricNonFhlUkPropertyAnnualSubmission.CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionResponse
 import v2.services.CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionService
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.{ ExecutionContext, Future }
 
 trait MockCreateAmendHistoricNonFhlUkPropertyAnnualSubmissionService extends MockFactory {
 

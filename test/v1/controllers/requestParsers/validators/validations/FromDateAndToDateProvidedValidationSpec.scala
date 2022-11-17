@@ -17,7 +17,7 @@
 package v1.controllers.requestParsers.validators.validations
 
 import support.UnitSpec
-import v1.models.errors.{MissingFromDateError, MissingToDateError}
+import v1.models.errors.{ MissingFromDateError, MissingToDateError }
 
 class FromDateAndToDateProvidedValidationSpec extends UnitSpec {
   "validation" should {

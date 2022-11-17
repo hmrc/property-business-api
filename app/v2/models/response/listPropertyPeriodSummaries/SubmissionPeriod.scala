@@ -26,7 +26,7 @@ object SubmissionPeriod {
     (JsPath \ "submissionId").read[String] and
       (JsPath \ "fromDate").read[String] and
       (JsPath \ "toDate").read[String]
-    ) (SubmissionPeriod.apply _)
+  )(SubmissionPeriod.apply _)
 
   implicit val writes: OWrites[SubmissionPeriod] = Json.writes[SubmissionPeriod]
 }

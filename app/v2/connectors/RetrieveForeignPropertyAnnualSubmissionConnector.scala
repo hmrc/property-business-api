@@ -18,16 +18,16 @@ package v2.connectors
 
 import config.AppConfig
 
-import javax.inject.{Inject, Singleton}
-import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
-import v2.connectors.DownstreamUri.{IfsUri, TaxYearSpecificIfsUri}
+import javax.inject.{ Inject, Singleton }
+import uk.gov.hmrc.http.{ HeaderCarrier, HttpClient }
+import v2.connectors.DownstreamUri.{ IfsUri, TaxYearSpecificIfsUri }
 import v2.connectors.RetrieveForeignPropertyAnnualSubmissionConnector._
 import v2.connectors.httpparsers.StandardDownstreamHttpParser._
 import v2.models.outcomes.ResponseWrapper
 import v2.models.request.retrieveForeignPropertyAnnualSubmission.RetrieveForeignPropertyAnnualSubmissionRequest
 import v2.models.response.retrieveForeignPropertyAnnualSubmission.RetrieveForeignPropertyAnnualSubmissionResponse
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.{ ExecutionContext, Future }
 
 object RetrieveForeignPropertyAnnualSubmissionConnector {
 
@@ -49,7 +49,8 @@ class RetrieveForeignPropertyAnnualSubmissionConnector @Inject()(val http: HttpC
 
     val response = if (taxYear.useTaxYearSpecificApi) {
       get(
-        uri = TaxYearSpecificIfsUri[RetrieveForeignPropertyAnnualSubmissionResponse](s"income-tax/business/property/annual/${taxYear.asTysDownstream}/${nino.value}/$businessId")
+        uri = TaxYearSpecificIfsUri[RetrieveForeignPropertyAnnualSubmissionResponse](
+          s"income-tax/business/property/annual/${taxYear.asTysDownstream}/${nino.value}/$businessId")
       )
     } else {
       // Note that MTD tax year format is used pre-TYS

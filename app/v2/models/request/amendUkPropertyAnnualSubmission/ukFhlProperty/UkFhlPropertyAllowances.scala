@@ -16,14 +16,14 @@
 
 package v2.models.request.amendUkPropertyAnnualSubmission.ukFhlProperty
 
-import play.api.libs.json.{Json, OFormat}
+import play.api.libs.json.{ Json, OFormat }
 
 case class UkFhlPropertyAllowances(annualInvestmentAllowance: Option[BigDecimal],
-                                    businessPremisesRenovationAllowance: Option[BigDecimal],
-                                    otherCapitalAllowance: Option[BigDecimal],
-                                    electricChargePointAllowance: Option[BigDecimal],
-                                    zeroEmissionsCarAllowance: Option[BigDecimal],
-                                    propertyIncomeAllowance: Option[BigDecimal])
+                                   businessPremisesRenovationAllowance: Option[BigDecimal],
+                                   otherCapitalAllowance: Option[BigDecimal],
+                                   electricChargePointAllowance: Option[BigDecimal],
+                                   zeroEmissionsCarAllowance: Option[BigDecimal],
+                                   propertyIncomeAllowance: Option[BigDecimal])
 
 object UkFhlPropertyAllowances {
   implicit val format: OFormat[UkFhlPropertyAllowances] = Json.format[UkFhlPropertyAllowances]

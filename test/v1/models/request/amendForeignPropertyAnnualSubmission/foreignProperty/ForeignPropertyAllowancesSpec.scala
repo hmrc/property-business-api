@@ -16,11 +16,11 @@
 
 package v1.models.request.amendForeignPropertyAnnualSubmission.foreignProperty
 
-import play.api.libs.json.{JsValue, Json}
+import play.api.libs.json.{ JsValue, Json }
 import support.UnitSpec
 import v1.models.utils.JsonErrorValidators
 
-class ForeignPropertyAllowancesSpec extends UnitSpec with JsonErrorValidators{
+class ForeignPropertyAllowancesSpec extends UnitSpec with JsonErrorValidators {
 
   val foreignPropertyAllowances: ForeignPropertyAllowances =
     ForeignPropertyAllowances(

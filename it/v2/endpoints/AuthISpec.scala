@@ -20,16 +20,16 @@ import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import play.api.http.HeaderNames.ACCEPT
 import play.api.http.Status
 import play.api.libs.json.JsObject
-import play.api.libs.ws.{WSRequest, WSResponse}
+import play.api.libs.ws.{ WSRequest, WSResponse }
 import play.api.test.Helpers.AUTHORIZATION
 import support.V2IntegrationBaseSpec
-import v2.stubs.{AuditStub, AuthStub, DownstreamStub, MtdIdLookupStub}
+import v2.stubs.{ AuditStub, AuthStub, DownstreamStub, MtdIdLookupStub }
 
 class AuthISpec extends V2IntegrationBaseSpec {
 
   private trait Test {
-    val nino: String = "AA123456A"
-    val taxYear: String = "2022-23"
+    val nino: String       = "AA123456A"
+    val taxYear: String    = "2022-23"
     val businessId: String = "XAIS12345678910"
 
     def uri: String = s"/$nino/$businessId/annual/$taxYear"
@@ -44,13 +44,13 @@ class AuthISpec extends V2IntegrationBaseSpec {
         .withHttpHeaders(
           (ACCEPT, "application/vnd.hmrc.2.0+json"),
           (AUTHORIZATION, "Bearer 123") // some bearer token
-      )
+        )
     }
 
     def ifsQueryParams: Map[String, String] = Map(
       "taxableEntityId" -> nino,
-      "incomeSourceId" -> businessId,
-      "taxYear" -> taxYear
+      "incomeSourceId"  -> businessId,
+      "taxYear"         -> taxYear
     )
   }
 

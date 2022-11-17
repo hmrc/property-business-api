@@ -18,14 +18,14 @@ package v1.controllers.requestParsers.validators.validations
 
 import java.time.LocalDate
 
-import v1.models.errors.{MtdError, RuleToDateBeforeFromDateError}
+import v1.models.errors.{ MtdError, RuleToDateBeforeFromDateError }
 
 object ToDateBeforeFromDateValidation {
 
   def validate(from: String, to: String): List[MtdError] = {
 
     val fromDate = LocalDate.parse(from, dateFormat)
-    val toDate = LocalDate.parse(to, dateFormat)
+    val toDate   = LocalDate.parse(to, dateFormat)
 
     if (toDate.isBefore(fromDate)) List(RuleToDateBeforeFromDateError) else Nil
 

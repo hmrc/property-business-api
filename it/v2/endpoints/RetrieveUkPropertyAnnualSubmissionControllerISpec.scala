@@ -283,13 +283,18 @@ class RetrieveUkPropertyAnnualSubmissionControllerISpec extends V2IntegrationBas
                                 requestTaxYear: String,
                                 expectedStatus: Int,
                                 expectedBody: MtdError): Unit = {
+
           s"validation fails with ${expectedBody.code} error" in new NonTysTest {
 
             override val nino: String       = requestNino
             override val businessId: String = requestBusinessId
             override val taxYear: String    = requestTaxYear
 
-            override def setupStubs(): StubMapping = AuthStub.authorised()
+            override def setupStubs(): StubMapping = {
+              AuditStub.audit()
+              AuthStub.authorised()
+              MtdIdLookupStub.ninoFound(requestNino)
+            }
 
             val response: WSResponse = await(request().get())
             response.status shouldBe expectedStatus
@@ -339,6 +344,7 @@ class RetrieveUkPropertyAnnualSubmissionControllerISpec extends V2IntegrationBas
         (errors ++ extraTysErrors).foreach(args => (serviceErrorTest _).tupled(args))
 
       }
+
 
       "downstream returns no UK properties" in new NonTysTest {
         override val downstreamResponseBody: JsValue = Json.parse("""

@@ -16,12 +16,11 @@
 
 package v2.models.response.retrieveHistoricNonFhlUkPropertyAnnualSubmission
 
-import play.api.libs.json.{JsValue, Json}
+import play.api.libs.json.{ JsValue, Json }
 import support.UnitSpec
 import v2.models.response.retrieveHistoricNonFhlUkPropertyAnnualSubmissionResponse.AnnualAllowances
 
-
-class AnnualAllowancesSpec extends UnitSpec{
+class AnnualAllowancesSpec extends UnitSpec {
 
   private def decimal(value: String): Option[BigDecimal] = Option(BigDecimal(value))
 
@@ -35,7 +34,7 @@ class AnnualAllowancesSpec extends UnitSpec{
                                              |      "propertyIncomeAllowance": 30.02
                                              |   }
                                              |""".stripMargin)
-  val mtdJson: JsValue = Json.parse("""
+  val mtdJson: JsValue        = Json.parse("""
                                       |   {
                                       |     "annualInvestmentAllowance": 200.00,
                                       |      "otherCapitalAllowance": 300.00,
@@ -52,18 +51,19 @@ class AnnualAllowancesSpec extends UnitSpec{
     zeroEmissionGoodsVehicleAllowance = decimal("400.00"),
     businessPremisesRenovationAllowance = decimal("200.00"),
     costOfReplacingDomesticGoods = decimal("200.00"),
-    propertyIncomeAllowance = decimal("30.02"))
+    propertyIncomeAllowance = decimal("30.02")
+  )
 
-  "reads" should{
+  "reads" should {
     "return an expected object" when {
-      "a correct Json is passed as an input" in{
+      "a correct Json is passed as an input" in {
         val result = downstreamJson.as[AnnualAllowances]
         result shouldBe model
       }
     }
   }
 
-  "writes" should{
+  "writes" should {
     "return a correct Json" in {
       Json.toJson(model) shouldBe mtdJson
     }

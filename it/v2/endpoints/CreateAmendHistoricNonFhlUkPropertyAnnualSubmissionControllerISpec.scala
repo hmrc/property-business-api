@@ -19,20 +19,20 @@ package v2.endpoints
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import play.api.http.HeaderNames.ACCEPT
 import play.api.http.Status._
-import play.api.libs.json.{JsObject, JsValue, Json}
-import play.api.libs.ws.{WSRequest, WSResponse}
+import play.api.libs.json.{ JsObject, JsValue, Json }
+import play.api.libs.ws.{ WSRequest, WSResponse }
 import play.api.test.Helpers.AUTHORIZATION
 import support.V2IntegrationBaseSpec
 import v1.stubs.AuditStub
 import v2.models.errors._
-import v2.stubs.{AuthStub, DownstreamStub, MtdIdLookupStub}
+import v2.stubs.{ AuthStub, DownstreamStub, MtdIdLookupStub }
 
 class CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionControllerISpec extends V2IntegrationBaseSpec {
 
   private trait Test {
 
-    val nino: String = "AA999999A"
-    val taxYear: String = "2020-21"
+    val nino: String          = "AA999999A"
+    val taxYear: String       = "2020-21"
     val correlationId: String = "X-123"
 
     val requestBodyJson: JsValue = Json.parse(
@@ -90,8 +90,7 @@ class CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionControllerISpec extends
 
     def downstreamUri: String = s"/income-tax/nino/$nino/uk-properties/other/annual-summaries/2021"
 
-    val downstreamResponse: JsValue = Json.parse(
-      """
+    val downstreamResponse: JsValue = Json.parse("""
         |{
         |   "transactionReference": "0000000000000001"
         |}
@@ -141,8 +140,7 @@ class CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionControllerISpec extends
           MtdIdLookupStub.ninoFound(nino)
         }
 
-        val invalidFieldsRequestBodyJson: JsValue = Json.parse(
-          """
+        val invalidFieldsRequestBodyJson: JsValue = Json.parse("""
             |{
             |   "annualAdjustments": {
             |      "lossBroughtForward": -200.00,
@@ -220,8 +218,8 @@ class CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionControllerISpec extends
                               expectedBody: MtdError): Unit = {
         s"validation fails with ${expectedBody.code} error" in new Test {
 
-          override val nino: String = requestNino
-          override val taxYear: String = requestTaxYear
+          override val nino: String             = requestNino
+          override val taxYear: String          = requestTaxYear
           override val requestBodyJson: JsValue = requestBody
 
           override def setupStubs(): StubMapping = {

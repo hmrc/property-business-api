@@ -16,20 +16,19 @@
 
 package v2.models.request.common
 
-import play.api.libs.json.{JsValue, Json}
+import play.api.libs.json.{ JsValue, Json }
 import support.UnitSpec
 
 class BuildingSpec extends UnitSpec {
 
   val requestBody: Building =
-      Building(
-        Some("house name"),
-        Some("house number"),
-        "GF49JH"
-      )
+    Building(
+      Some("house name"),
+      Some("house number"),
+      "GF49JH"
+    )
 
-  val validMtdJson: JsValue = Json.parse(
-    """
+  val validMtdJson: JsValue = Json.parse("""
       |{
       |  "name": "house name",
       |  "number": "house number",
@@ -37,8 +36,7 @@ class BuildingSpec extends UnitSpec {
       |}
       |""".stripMargin)
 
-  val validDownstreamJson: JsValue = Json.parse(
-    """
+  val validDownstreamJson: JsValue = Json.parse("""
       |{
       |  "name": "house name",
       |  "number": "house number",

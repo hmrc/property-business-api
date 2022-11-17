@@ -16,11 +16,11 @@
 
 package v2.models.request.deletePropertyAnnualSubmission
 
-import play.api.libs.json.{Json, OWrites}
+import play.api.libs.json.{ Json, OWrites }
 import v2.models.request.RawData
 
 case class DeletePropertyAnnualSubmissionRawData(nino: String, businessId: String, taxYear: String) extends RawData
 
-object DeletePropertyAnnualSubmissionRawData{
+object DeletePropertyAnnualSubmissionRawData {
   implicit val writes: OWrites[DeletePropertyAnnualSubmissionRawData] = Json.writes
 }

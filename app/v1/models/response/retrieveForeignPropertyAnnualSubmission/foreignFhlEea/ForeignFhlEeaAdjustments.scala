@@ -16,12 +16,12 @@
 
 package v1.models.response.retrieveForeignPropertyAnnualSubmission.foreignFhlEea
 
-import play.api.libs.json.{Json, OFormat}
+import play.api.libs.json.{ Json, OFormat }
 
 case class ForeignFhlEeaAdjustments(privateUseAdjustment: Option[BigDecimal],
                                     balancingCharge: Option[BigDecimal],
                                     periodOfGraceAdjustment: Option[Boolean])
 
 object ForeignFhlEeaAdjustments {
-  implicit  val format: OFormat[ForeignFhlEeaAdjustments] = Json.format[ForeignFhlEeaAdjustments]
+  implicit val format: OFormat[ForeignFhlEeaAdjustments] = Json.format[ForeignFhlEeaAdjustments]
 }

@@ -78,7 +78,7 @@ class RetrieveUkPropertyPeriodSummaryConnectorSpec extends ConnectorSpec with Re
 
     "response has uk fhl details" must {
       "return a uk ifs result" in new NonTysTest {
-        val response: RetrieveUkPropertyPeriodSummaryResponse = responseWith(ukFhlProperty = Some(ukFhlProperty), ukNonFhlProperty = None)
+        val response: RetrieveUkPropertyPeriodSummaryResponse                                 = responseWith(ukFhlProperty = Some(ukFhlProperty), ukNonFhlProperty = None)
         val outcome: Right[Nothing, ResponseWrapper[RetrieveUkPropertyPeriodSummaryResponse]] = Right(ResponseWrapper(correlationId, response))
 
         stubHttpResponse(uri, outcome)
@@ -99,7 +99,7 @@ class RetrieveUkPropertyPeriodSummaryConnectorSpec extends ConnectorSpec with Re
 
     "response has uk non-fhl details" must {
       "return a uk result" in new NonTysTest {
-        val response: RetrieveUkPropertyPeriodSummaryResponse = responseWith(ukFhlProperty = None, ukNonFhlProperty = Some(ukNonFhlProperty))
+        val response: RetrieveUkPropertyPeriodSummaryResponse                                 = responseWith(ukFhlProperty = None, ukNonFhlProperty = Some(ukNonFhlProperty))
         val outcome: Right[Nothing, ResponseWrapper[RetrieveUkPropertyPeriodSummaryResponse]] = Right(ResponseWrapper(correlationId, response))
 
         stubHttpResponse(uri, outcome)
@@ -108,7 +108,7 @@ class RetrieveUkPropertyPeriodSummaryConnectorSpec extends ConnectorSpec with Re
       }
 
       "the tys endpoint should return a uk result" in new TysTest {
-        val response: RetrieveUkPropertyPeriodSummaryResponse = responseWith(ukFhlProperty = None, ukNonFhlProperty = Some(ukNonFhlProperty))
+        val response: RetrieveUkPropertyPeriodSummaryResponse                                 = responseWith(ukFhlProperty = None, ukNonFhlProperty = Some(ukNonFhlProperty))
         val outcome: Right[Nothing, ResponseWrapper[RetrieveUkPropertyPeriodSummaryResponse]] = Right(ResponseWrapper(correlationId, response))
 
         stubHttpResponse(uri, outcome)
@@ -141,7 +141,7 @@ class RetrieveUkPropertyPeriodSummaryConnectorSpec extends ConnectorSpec with Re
 
     "response has no details" must {
       "return a non-uk result" in new NonTysTest {
-        val response: RetrieveUkPropertyPeriodSummaryResponse = responseWith(None, None)
+        val response: RetrieveUkPropertyPeriodSummaryResponse                                 = responseWith(None, None)
         val outcome: Right[Nothing, ResponseWrapper[RetrieveUkPropertyPeriodSummaryResponse]] = Right(ResponseWrapper(correlationId, response))
 
         stubHttpResponse(uri, outcome)
@@ -150,7 +150,7 @@ class RetrieveUkPropertyPeriodSummaryConnectorSpec extends ConnectorSpec with Re
       }
 
       "the tys endpoint return a non-uk result" in new TysTest {
-        val response: RetrieveUkPropertyPeriodSummaryResponse = responseWith(None, None)
+        val response: RetrieveUkPropertyPeriodSummaryResponse                                 = responseWith(None, None)
         val outcome: Right[Nothing, ResponseWrapper[RetrieveUkPropertyPeriodSummaryResponse]] = Right(ResponseWrapper(correlationId, response))
 
         stubHttpResponse(uri, outcome)

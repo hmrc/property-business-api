@@ -16,17 +16,17 @@
 
 package v1.controllers
 
-import play.api.libs.json.{JsValue, Json}
+import play.api.libs.json.{ JsValue, Json }
 import play.api.mvc.Result
 import uk.gov.hmrc.http.HeaderCarrier
 import v1.mocks.MockIdGenerator
 import v1.mocks.hateoas.MockHateoasFactory
 import v1.mocks.requestParsers.MockAmendForeignPropertyPeriodSummaryRequestParser
-import v1.mocks.services.{MockAmendForeignPropertyPeriodSummaryService, MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService}
-import v1.models.audit.{AmendForeignPropertyPeriodicAuditDetail, AuditError, AuditEvent, AuditResponse}
+import v1.mocks.services.{ MockAmendForeignPropertyPeriodSummaryService, MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService }
+import v1.models.audit.{ AmendForeignPropertyPeriodicAuditDetail, AuditError, AuditEvent, AuditResponse }
 import v1.models.domain.Nino
 import v1.models.errors._
-import v1.models.hateoas.{HateoasWrapper, Link}
+import v1.models.hateoas.{ HateoasWrapper, Link }
 import v1.models.hateoas.Method.GET
 import v1.models.outcomes.ResponseWrapper
 import v1.models.request.amendForeignPropertyPeriodSummary._
@@ -38,7 +38,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class AmendForeignPropertyPeriodSummaryControllerSpec
-  extends ControllerBaseSpec
+    extends ControllerBaseSpec
     with MockEnrolmentsAuthService
     with MockMtdIdLookupService
     with MockAmendForeignPropertyPeriodSummaryService
@@ -47,9 +47,9 @@ class AmendForeignPropertyPeriodSummaryControllerSpec
     with MockAuditService
     with MockIdGenerator {
 
-  private val nino = "AA123456A"
-  private val businessId = "XAIS12345678910"
-  private val submissionId = "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
+  private val nino          = "AA123456A"
+  private val businessId    = "XAIS12345678910"
+  private val submissionId  = "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
   private val correlationId = "X-123"
 
   trait Test {
@@ -123,40 +123,43 @@ class AmendForeignPropertyPeriodSummaryControllerSpec
 
   private val foreignFhlEea: ForeignFhlEea = ForeignFhlEea(
     income = Some(ForeignFhlEeaIncome(rentAmount = Some(567.83))),
-    expenditure = Some(ForeignFhlEeaExpenditure(
-      premisesRunningCosts = Some(4567.98),
-      repairsAndMaintenance = Some(98765.67),
-      financialCosts = Some(4566.95),
-      professionalFees = Some(23.65),
-      costsOfServices = Some(4567.77),
-      travelCosts = Some(456.77),
-      other = Some(567.67),
-      consolidatedExpenses = None
-    ))
+    expenditure = Some(
+      ForeignFhlEeaExpenditure(
+        premisesRunningCosts = Some(4567.98),
+        repairsAndMaintenance = Some(98765.67),
+        financialCosts = Some(4566.95),
+        professionalFees = Some(23.65),
+        costsOfServices = Some(4567.77),
+        travelCosts = Some(456.77),
+        other = Some(567.67),
+        consolidatedExpenses = None
+      ))
   )
 
   private val foreignProperty: ForeignPropertyEntry = ForeignPropertyEntry(
     countryCode = "zzz",
-    income = Some(ForeignPropertyIncome(
-      rentIncome = Some(ForeignPropertyRentIncome(rentAmount = Some(34456.30))),
-      foreignTaxCreditRelief = true,
-      premiumOfLeaseGrant = Some(2543.43),
-      otherPropertyIncome = Some(54325.30),
-      foreignTaxTakenOff = Some(6543.01),
-      specialWithholdingTaxOrUKTaxPaid = Some(643245.00)
-    )),
-    expenditure = Some(ForeignPropertyExpenditure(
-      premisesRunningCosts = Some(5635.43),
-      repairsAndMaintenance = Some(3456.65),
-      financialCosts = Some(34532.21),
-      professionalFees = Some(32465.32),
-      costsOfServices = Some(2567.21),
-      travelCosts = Some(2345.76),
-      residentialFinancialCost = Some(21235.22),
-      broughtFwdResidentialFinancialCost = Some(12556.00),
-      other = Some(2425.11),
-      consolidatedExpenses = None
-    ))
+    income = Some(
+      ForeignPropertyIncome(
+        rentIncome = Some(ForeignPropertyRentIncome(rentAmount = Some(34456.30))),
+        foreignTaxCreditRelief = true,
+        premiumOfLeaseGrant = Some(2543.43),
+        otherPropertyIncome = Some(54325.30),
+        foreignTaxTakenOff = Some(6543.01),
+        specialWithholdingTaxOrUKTaxPaid = Some(643245.00)
+      )),
+    expenditure = Some(
+      ForeignPropertyExpenditure(
+        premisesRunningCosts = Some(5635.43),
+        repairsAndMaintenance = Some(3456.65),
+        financialCosts = Some(34532.21),
+        professionalFees = Some(32465.32),
+        costsOfServices = Some(2567.21),
+        travelCosts = Some(2345.76),
+        residentialFinancialCost = Some(21235.22),
+        broughtFwdResidentialFinancialCost = Some(12556.00),
+        other = Some(2425.11),
+        consolidatedExpenses = None
+      ))
   )
 
   val requestBody: AmendForeignPropertyPeriodSummaryRequestBody = AmendForeignPropertyPeriodSummaryRequestBody(
@@ -164,7 +167,7 @@ class AmendForeignPropertyPeriodSummaryControllerSpec
     foreignProperty = Some(Seq(foreignProperty))
   )
 
-  private val rawData = AmendForeignPropertyPeriodSummaryRawData(nino, businessId, submissionId, requestJson)
+  private val rawData     = AmendForeignPropertyPeriodSummaryRawData(nino, businessId, submissionId, requestJson)
   private val requestData = AmendForeignPropertyPeriodSummaryRequest(Nino(nino), businessId, submissionId, requestBody)
 
   val hateoasResponse: JsValue = Json.parse(
@@ -246,20 +249,21 @@ class AmendForeignPropertyPeriodSummaryControllerSpec
           (NinoFormatError, BAD_REQUEST),
           (BusinessIdFormatError, BAD_REQUEST),
           (SubmissionIdFormatError, BAD_REQUEST),
-          (CountryCodeFormatError.copy(paths = Some(Seq(
-            "foreignProperty/0/countryCode"))), BAD_REQUEST),
-          (ValueFormatError.copy(paths = Some(Seq(
-            "foreignFhlEea/income/rentAmount",
-            "foreignFhlEea/expenditure/repairsAndMaintenance",
-            "foreignFhlEea/expenditure/professionalFees",
-            "foreignFhlEea/expenditure/other",
-            "foreignProperty/income/rentIncome/rentAmount",
-            "foreignProperty/expenditure/professionalFees",
-            "foreignProperty/expenditure/other"))), BAD_REQUEST),
+          (CountryCodeFormatError.copy(paths = Some(Seq("foreignProperty/0/countryCode"))), BAD_REQUEST),
+          (ValueFormatError.copy(
+             paths = Some(Seq(
+               "foreignFhlEea/income/rentAmount",
+               "foreignFhlEea/expenditure/repairsAndMaintenance",
+               "foreignFhlEea/expenditure/professionalFees",
+               "foreignFhlEea/expenditure/other",
+               "foreignProperty/income/rentIncome/rentAmount",
+               "foreignProperty/expenditure/professionalFees",
+               "foreignProperty/expenditure/other"
+             ))),
+           BAD_REQUEST),
           (RuleIncorrectOrEmptyBodyError, BAD_REQUEST),
           (RuleBothExpensesSuppliedError, BAD_REQUEST),
-          (RuleCountryCodeError.copy(paths = Some(Seq(
-            "foreignProperty/0/countryCode"))), BAD_REQUEST)
+          (RuleCountryCodeError.copy(paths = Some(Seq("foreignProperty/0/countryCode"))), BAD_REQUEST)
         )
 
         input.foreach(args => (errorsFromParserTester _).tupled(args))

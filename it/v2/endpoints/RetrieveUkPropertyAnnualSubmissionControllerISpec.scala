@@ -18,7 +18,7 @@ package v2.endpoints
 
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import play.api.http.HeaderNames.ACCEPT
-import play.api.http.Status
+import play.api.http.Status._
 import play.api.libs.json.{ JsValue, Json }
 import play.api.libs.ws.{ WSRequest, WSResponse }
 import play.api.test.Helpers.AUTHORIZATION
@@ -254,11 +254,11 @@ class RetrieveUkPropertyAnnualSubmissionControllerISpec extends V2IntegrationBas
 
         override def setupStubs(): StubMapping = {
           AuditStub.audit()
-          DownstreamStub.onSuccess(DownstreamStub.GET, downstreamUri, downstreamQueryParams, Status.OK, downstreamResponseBody)
+          DownstreamStub.onSuccess(DownstreamStub.GET, downstreamUri, downstreamQueryParams, OK, downstreamResponseBody)
         }
 
         val response: WSResponse = await(request().get())
-        response.status shouldBe Status.OK
+        response.status shouldBe OK
         response.json shouldBe responseBody
         response.header("X-CorrelationId").nonEmpty shouldBe true
         response.header("Content-Type") shouldBe Some("application/json")
@@ -266,10 +266,10 @@ class RetrieveUkPropertyAnnualSubmissionControllerISpec extends V2IntegrationBas
 
       "any valid request is made for TYS" in new TysIfsTest {
         override def setupStubs(): StubMapping =
-          DownstreamStub.onSuccess(DownstreamStub.GET, downstreamUri, downstreamQueryParams, Status.OK, downstreamResponseBody)
+          DownstreamStub.onSuccess(DownstreamStub.GET, downstreamUri, downstreamQueryParams, OK, downstreamResponseBody)
 
         val response: WSResponse = await(request().get())
-        response.status shouldBe Status.OK
+        response.status shouldBe OK
         response.json shouldBe responseBody
         response.header("X-CorrelationId").nonEmpty shouldBe true
         response.header("Content-Type") shouldBe Some("application/json")
@@ -303,11 +303,11 @@ class RetrieveUkPropertyAnnualSubmissionControllerISpec extends V2IntegrationBas
         }
 
         val input = Seq(
-          ("AA123", "XAIS12345678910", "2022-23", Status.BAD_REQUEST, NinoFormatError),
-          ("AA123456A", "XAIS12345678910", "2020", Status.BAD_REQUEST, TaxYearFormatError),
-          ("AA123456A", "203100", "2022-23", Status.BAD_REQUEST, BusinessIdFormatError),
-          ("AA123456A", "XAIS12345678910", "2020-23", Status.BAD_REQUEST, RuleTaxYearRangeInvalidError),
-          ("AA123456A", "XAIS12345678910", "2019-20", Status.BAD_REQUEST, RuleTaxYearNotSupportedError)
+          ("AA123", "XAIS12345678910", "2022-23", BAD_REQUEST, NinoFormatError),
+          ("AA123456A", "XAIS12345678910", "2020", BAD_REQUEST, TaxYearFormatError),
+          ("AA123456A", "203100", "2022-23", BAD_REQUEST, BusinessIdFormatError),
+          ("AA123456A", "XAIS12345678910", "2020-23", BAD_REQUEST, RuleTaxYearRangeInvalidError),
+          ("AA123456A", "XAIS12345678910", "2019-20", BAD_REQUEST, RuleTaxYearNotSupportedError)
         )
         input.foreach(args => (validationErrorTest _).tupled(args))
       }
@@ -326,25 +326,24 @@ class RetrieveUkPropertyAnnualSubmissionControllerISpec extends V2IntegrationBas
         }
 
         val errors = Seq(
-          (Status.BAD_REQUEST, "INVALID_TAXABLE_ENTITY_ID", Status.BAD_REQUEST, NinoFormatError),
-          (Status.BAD_REQUEST, "INVALID_INCOMESOURCEID", Status.BAD_REQUEST, BusinessIdFormatError),
-          (Status.BAD_REQUEST, "INVALID_TAX_YEAR", Status.BAD_REQUEST, TaxYearFormatError),
-          (Status.BAD_REQUEST, "INVALID_CORRELATIONID", Status.INTERNAL_SERVER_ERROR, InternalError),
-          (Status.NOT_FOUND, "NO_DATA_FOUND", Status.NOT_FOUND, NotFoundError),
-          (Status.UNPROCESSABLE_ENTITY, "TAX_YEAR_NOT_SUPPORTED", Status.BAD_REQUEST, RuleTaxYearNotSupportedError),
-          (Status.INTERNAL_SERVER_ERROR, "SERVER_ERROR", Status.INTERNAL_SERVER_ERROR, InternalError),
-          (Status.SERVICE_UNAVAILABLE, "SERVICE_UNAVAILABLE", Status.INTERNAL_SERVER_ERROR, InternalError)
+          (BAD_REQUEST, "INVALID_TAXABLE_ENTITY_ID", BAD_REQUEST, NinoFormatError),
+          (BAD_REQUEST, "INVALID_INCOMESOURCEID", BAD_REQUEST, BusinessIdFormatError),
+          (BAD_REQUEST, "INVALID_TAX_YEAR", BAD_REQUEST, TaxYearFormatError),
+          (BAD_REQUEST, "INVALID_CORRELATIONID", INTERNAL_SERVER_ERROR, InternalError),
+          (NOT_FOUND, "NO_DATA_FOUND", NOT_FOUND, NotFoundError),
+          (UNPROCESSABLE_ENTITY, "TAX_YEAR_NOT_SUPPORTED", BAD_REQUEST, RuleTaxYearNotSupportedError),
+          (INTERNAL_SERVER_ERROR, "SERVER_ERROR", INTERNAL_SERVER_ERROR, InternalError),
+          (SERVICE_UNAVAILABLE, "SERVICE_UNAVAILABLE", INTERNAL_SERVER_ERROR, InternalError)
         )
 
         val extraTysErrors = Seq(
-          (Status.BAD_REQUEST, "INVALID_INCOMESOURCE_ID", Status.BAD_REQUEST, BusinessIdFormatError),
-          (Status.BAD_REQUEST, "INVALID_CORRELATION_ID", Status.INTERNAL_SERVER_ERROR, InternalError),
+          (BAD_REQUEST, "INVALID_INCOMESOURCE_ID", BAD_REQUEST, BusinessIdFormatError),
+          (BAD_REQUEST, "INVALID_CORRELATION_ID", INTERNAL_SERVER_ERROR, InternalError),
         )
 
         (errors ++ extraTysErrors).foreach(args => (serviceErrorTest _).tupled(args))
 
       }
-
 
       "downstream returns no UK properties" in new NonTysTest {
         override val downstreamResponseBody: JsValue = Json.parse("""
@@ -372,10 +371,10 @@ class RetrieveUkPropertyAnnualSubmissionControllerISpec extends V2IntegrationBas
             |""".stripMargin)
 
         override def setupStubs(): StubMapping =
-          DownstreamStub.onSuccess(DownstreamStub.GET, downstreamUri, downstreamQueryParams, Status.OK, downstreamResponseBody)
+          DownstreamStub.onSuccess(DownstreamStub.GET, downstreamUri, downstreamQueryParams, OK, downstreamResponseBody)
 
         val response: WSResponse = await(request().get())
-        response.status shouldBe Status.BAD_REQUEST
+        response.status shouldBe BAD_REQUEST
         response.json shouldBe Json.toJson(RuleTypeOfBusinessIncorrectError)
       }
     }

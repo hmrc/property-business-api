@@ -32,7 +32,6 @@ class RetrieveUkPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec {
 
   val nino: String       = "AA123456A"
   val businessId: String = "XAIS12345678910"
-  //val taxYear: String    = "2019-20"
 
   val ukFhlProperty: UkFhlProperty       = UkFhlProperty(None, None)
   val ukNonFhlProperty: UkNonFhlProperty = UkNonFhlProperty(None, None)
@@ -126,7 +125,7 @@ class RetrieveUkPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec {
     }
 
     "request is for a pre-TYS tax year" must {
-      "use the TYS URL" in new IfsTest with Test {
+      "use the pre-TYS URL" in new IfsTest with Test {
         lazy val taxYear: String = "2019-20"
 
         val response: RetrieveUkPropertyAnnualSubmissionResponse =

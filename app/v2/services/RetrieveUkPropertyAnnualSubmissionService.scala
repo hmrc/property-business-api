@@ -44,15 +44,15 @@ class RetrieveUkPropertyAnnualSubmissionService @Inject()(connector: RetrieveUkP
       correlationId: String): Future[ServiceOutcome[RetrieveUkPropertyAnnualSubmissionResponse]] = {
 
     val result = for {
-      connectorResultWrapper <- EitherT(connector.retrieveUkProperty(request)).leftMap(mapDownstreamErrors(errorMap))
+      connectorResultWrapper <- EitherT(connector.retrieveUkProperty(request)).leftMap(mapDownstreamErrors(downstreamErrorMap))
       mtdResponseWrapper     <- EitherT.fromEither[Future](validateBusinessType(connectorResultWrapper))
     } yield mtdResponseWrapper
 
     result.value
   }
 
-  private def errorMap: Map[String, MtdError] = {
-    val downstreamErrors = Map(
+  private def downstreamErrorMap: Map[String, MtdError] = {
+    val errors = Map(
       "INVALID_TAXABLE_ENTITY_ID" -> NinoFormatError,
       "INVALID_INCOMESOURCEID"    -> BusinessIdFormatError,
       "INVALID_TAX_YEAR"          -> TaxYearFormatError,
@@ -69,7 +69,7 @@ class RetrieveUkPropertyAnnualSubmissionService @Inject()(connector: RetrieveUkP
         "INVALID_CORRELATION_ID"  -> InternalError
       )
 
-    downstreamErrors ++ extraTysErrors
+    errors ++ extraTysErrors
   }
 
   private def validateBusinessType(resultWrapper: ResponseWrapper[RetrieveUkPropertyAnnualSubmissionConnector.Result]) =

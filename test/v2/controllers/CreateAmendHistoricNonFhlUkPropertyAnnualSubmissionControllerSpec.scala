@@ -23,9 +23,12 @@ import uk.gov.hmrc.http.HeaderCarrier
 import v2.mocks.MockIdGenerator
 import v2.mocks.hateoas.MockHateoasFactory
 import v2.mocks.requestParsers.MockCreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestParser
-import v2.mocks.services.{ MockCreateAmendHistoricNonFhlUkPropertyAnnualSubmissionService, MockEnrolmentsAuthService, MockMtdIdLookupService }
+import v2.mocks.services.{ MockCreateAmendHistoricNonFhlUkPropertyAnnualSubmissionService, MockEnrolmentsAuthService, MockMtdIdLookupService, MockAuditService }
 import v2.models.domain.{ Nino, TaxYear }
 import v2.models.errors._
+import v2.models.audit.GenericAuditDetail.FlattenedGenericAuditDetail
+import v2.models.audit.{AuditEvent, AuditResponse}
+import v2.models.auth.UserDetails
 import v2.models.hateoas.Method.GET
 import v2.models.hateoas.{ HateoasWrapper, Link }
 import v2.models.outcomes.ResponseWrapper
@@ -42,7 +45,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionControllerSpec
-    extends ControllerBaseSpec
+    extends ControllerBaseSpec with MockAuditService
     with MockEnrolmentsAuthService
     with MockMtdIdLookupService
     with MockCreateAmendHistoricNonFhlUkPropertyAnnualSubmissionService
@@ -55,6 +58,8 @@ class CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionControllerSpec
   private val taxYear       = "2022-23"
   private val correlationId = "X-123"
 
+  val mtdId: String = "test-mtd-id"
+
   trait Test {
     val hc: HeaderCarrier = HeaderCarrier()
 
@@ -64,6 +69,7 @@ class CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionControllerSpec
       parser = mockCreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestParser,
       service = mockCreateAmendHistoricService,
       hateoasFactory = mockHateoasFactory,
+      auditService = mockAuditService,
       cc = cc,
       idGenerator = mockIdGenerator
     )
@@ -86,6 +92,20 @@ class CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionControllerSpec
        |   ]
        |}
     """.stripMargin)
+
+  def event(auditResponse: AuditResponse): AuditEvent[FlattenedGenericAuditDetail] =
+    AuditEvent(
+      auditType = "AddUkSavingsAccount",
+      transactionName = "add-uk-savings-account",
+      detail = FlattenedGenericAuditDetail(
+        versionNumber = Some("1.0"),
+        userDetails = UserDetails(mtdId, "Individual", None),
+        params = Map("nino" -> nino),
+        request = Some(requestBodyJson),
+        `X-CorrelationId` = correlationId,
+        auditResponse = auditResponse
+      )
+    )
 
   private val rawData = CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRawData(nino, taxYear, validMtdJson)
   private val request = CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequest(Nino(nino), TaxYear.fromMtd(taxYear), requestBody)
@@ -111,6 +131,9 @@ class CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionControllerSpec
         status(result) shouldBe OK
         contentAsJson(result) shouldBe hateoasResponse
         header("X-CorrelationId", result) shouldBe Some(correlationId)
+
+        val auditResponse: AuditResponse = AuditResponse(OK, None, Some(Json.toJson(responseData)))
+        MockedAuditService.verifyAuditEvent(event(auditResponse)).once
       }
     }
     "return the error as per spec" when {
@@ -127,6 +150,9 @@ class CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionControllerSpec
             status(result) shouldBe expectedStatus
             contentAsJson(result) shouldBe Json.toJson(error)
             header("X-CorrelationId", result) shouldBe Some(correlationId)
+
+            val auditResponse: AuditResponse = AuditResponse(expectedStatus, Some(Seq(AuditError(error.code))), None)
+            MockedAuditService.verifyAuditEvent(event(auditResponse)).once
           }
         }
 
@@ -168,6 +194,9 @@ class CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionControllerSpec
             status(result) shouldBe expectedStatus
             contentAsJson(result) shouldBe Json.toJson(mtdError)
             header("X-CorrelationId", result) shouldBe Some(correlationId)
+
+            val auditResponse: AuditResponse = AuditResponse(expectedStatus, Some(Seq(AuditError(mtdError.code))), None)
+            MockedAuditService.verifyAuditEvent(event(auditResponse)).once()
           }
         }
 

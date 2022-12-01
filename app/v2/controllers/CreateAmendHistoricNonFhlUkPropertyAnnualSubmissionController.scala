@@ -49,9 +49,10 @@ class CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionController @Inject()(
     with BaseController
     with Logging {
 
-  implicit val endpointLogContext: EndpointLogContext =
+  implicit val endpointLogContext: EndpointLogContext = {
     EndpointLogContext(controllerName = "CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionController",
-                       endpointName = "CreateAmendHistoricNonFhlUkPropertyAnnualSubmission")
+      endpointName = "CreateAmendHistoricNonFhlUkPropertyAnnualSubmission")
+  }
 
   def handleRequest(nino: String, taxYear: String): Action[JsValue] =
     authorisedAction(nino).async(parse.json) { implicit request =>
@@ -62,7 +63,7 @@ class CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionController @Inject()(
       val rawData = CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRawData(nino, taxYear, request.body)
       val result =
         for {
-          parsedRequest   <- EitherT.fromEither[Future](parser.parseRequest(rawData))
+          parsedRequest <- EitherT.fromEither[Future](parser.parseRequest(rawData))
           serviceResponse <- EitherT(service.amend(parsedRequest))
           vendorResponse <- EitherT.fromEither[Future](
             hateoasFactory
@@ -79,10 +80,10 @@ class CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionController @Inject()(
             FlattenedGenericAuditDetail(
               versionNumber = Some("2.0"),
               request.userDetails,
-              Map("nino" -> nino),
+              Map("nino" -> nino, "taxYear" -> taxYear),
               Some(request.body),
               serviceResponse.correlationId,
-              AuditResponse(httpStatus = OK, response = Right(Some(Json.toJson(serviceResponse.responseData))))
+              AuditResponse(httpStatus = OK, response = Right(None))
             )
           )
 
@@ -95,7 +96,7 @@ class CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionController @Inject()(
 
       result.leftMap { errorWrapper =>
         val resCorrelationId = errorWrapper.correlationId
-        val result           = errorResult(errorWrapper).withApiHeaders(resCorrelationId)
+        val result = errorResult(errorWrapper).withApiHeaders(resCorrelationId)
 
         logger.warn(
           s"[${endpointLogContext.controllerName}][${endpointLogContext.endpointName}] - " +
@@ -105,7 +106,7 @@ class CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionController @Inject()(
           FlattenedGenericAuditDetail(
             Some("2.0"),
             request.userDetails,
-            Map("nino" -> nino),
+            Map("nino" -> nino, "taxYear" -> taxYear),
             Some(request.body),
             resCorrelationId,
             AuditResponse(httpStatus = result.header.status, response = Left(errorWrapper.auditErrors))
@@ -119,22 +120,22 @@ class CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionController @Inject()(
   private def errorResult(errorWrapper: ErrorWrapper) =
     errorWrapper.error match {
       case _
-          if errorWrapper.containsAnyOf(
-            BadRequestError,
-            NinoFormatError,
-            TaxYearFormatError,
-            RuleTaxYearRangeInvalidError,
-            RuleHistoricTaxYearNotSupportedError,
-            ValueFormatError,
-            RuleIncorrectOrEmptyBodyError
-          ) =>
+        if errorWrapper.containsAnyOf(
+          BadRequestError,
+          NinoFormatError,
+          TaxYearFormatError,
+          RuleTaxYearRangeInvalidError,
+          RuleHistoricTaxYearNotSupportedError,
+          ValueFormatError,
+          RuleIncorrectOrEmptyBodyError
+        ) =>
         BadRequest(Json.toJson(errorWrapper))
       case NotFoundError => NotFound(Json.toJson(errorWrapper))
       case InternalError => InternalServerError(Json.toJson(errorWrapper))
-      case _             => unhandledError(errorWrapper)
+      case _ => unhandledError(errorWrapper)
     }
   private def auditSubmission(details: FlattenedGenericAuditDetail)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[AuditResult] = {
-    val event = AuditEvent("CreateAmendHistoricNonFhlUkPropertyAnnualSubmission", "create-amend-historic-non-fhl-uk-property-annual-submission", details)
+    val event = AuditEvent("CreateAndAmendHistoricNonFhlUkPropertyAnnualSubmission", "CreateAndAmendHistoricNonFhlUkPropertyAnnualSubmission", details)
     auditService.auditEvent(event)
   }
 }

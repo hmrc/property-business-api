@@ -17,28 +17,23 @@
 package v2.controllers
 
 import fixtures.CreateAmendNonFhlUkPropertyAnnualSubmission.RequestResponseModelFixtures
-import play.api.libs.json.{ JsValue, Json }
+import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.Result
 import uk.gov.hmrc.http.HeaderCarrier
 import v2.mocks.MockIdGenerator
 import v2.mocks.hateoas.MockHateoasFactory
 import v2.mocks.requestParsers.MockCreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestParser
-import v2.mocks.services.{ MockCreateAmendHistoricNonFhlUkPropertyAnnualSubmissionService, MockEnrolmentsAuthService, MockMtdIdLookupService, MockAuditService }
-import v2.models.audit.{ AuditError, AuditEvent, AuditResponse, FlattenedGenericAuditDetail }
+import v2.mocks.services.{MockAuditService, MockCreateAmendHistoricNonFhlUkPropertyAnnualSubmissionService, MockEnrolmentsAuthService, MockMtdIdLookupService}
+import v2.models.audit.GenericAuditDetail.FlattenedGenericAuditDetail
+import v2.models.audit.{AuditError, AuditEvent, AuditResponse}
 import v2.models.auth.UserDetails
-import v2.models.domain.{ Nino, TaxYear }
+import v2.models.domain.{Nino, TaxYear}
 import v2.models.errors._
 import v2.models.hateoas.Method.GET
-import v2.models.hateoas.{ HateoasWrapper, Link }
+import v2.models.hateoas.{HateoasWrapper, Link}
 import v2.models.outcomes.ResponseWrapper
-import v2.models.request.createAmendHistoricNonFhlUkPropertyAnnualSubmission.{
-  CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRawData,
-  CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequest
-}
-import v2.models.response.createAmendHistoricNonFhlUkPropertyAnnualSubmission.{
-  CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionHateoasData,
-  CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionResponse
-}
+import v2.models.request.createAmendHistoricNonFhlUkPropertyAnnualSubmission.{CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRawData, CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequest}
+import v2.models.response.createAmendHistoricNonFhlUkPropertyAnnualSubmission.{CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionHateoasData, CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionResponse}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -97,8 +92,8 @@ class CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionControllerSpec
 
   def event(auditResponse: AuditResponse): AuditEvent[FlattenedGenericAuditDetail] =
     AuditEvent(
-      auditType = "CreateAndAmendHistoricNonFhlPropertyBusinessAnnualSubmission",
-      transactionName = "CreateAndAmendHistoricNonFhlPropertyBusinessAnnualSubmission",
+      auditType = "CreateAmendHistoricNonFhlPropertyBusinessAnnualSubmission",
+      transactionName = "CreateAmendHistoricNonFhlPropertyBusinessAnnualSubmission",
       detail = FlattenedGenericAuditDetail(
         versionNumber = Some("2.0"),
         userDetails = UserDetails(mtdId, "Individual", None),

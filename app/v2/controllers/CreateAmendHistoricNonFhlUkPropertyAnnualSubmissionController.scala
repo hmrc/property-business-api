@@ -37,15 +37,15 @@ import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionController @Inject()(
-    val authService: EnrolmentsAuthService,
-    val lookupService: MtdIdLookupService,
-    parser: CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestParser,
-    service: CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionService,
-    auditService: AuditService,
-    hateoasFactory: HateoasFactory,
-    cc: ControllerComponents,
-    idGenerator: IdGenerator)(implicit ec: ExecutionContext)
-    extends AuthorisedController(cc)
+                                                                               val authService: EnrolmentsAuthService,
+                                                                               val lookupService: MtdIdLookupService,
+                                                                               parser: CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestParser,
+                                                                               service: CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionService,
+                                                                               auditService: AuditService,
+                                                                               hateoasFactory: HateoasFactory,
+                                                                               cc: ControllerComponents,
+                                                                               idGenerator: IdGenerator)(implicit ec: ExecutionContext)
+  extends AuthorisedController(cc)
     with BaseController
     with Logging {
 
@@ -63,7 +63,7 @@ class CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionController @Inject()(
       val rawData = CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRawData(nino, taxYear, request.body)
       val result =
         for {
-          parsedRequest <- EitherT.fromEither[Future](parser.parseRequest(rawData))
+          parsedRequest   <- EitherT.fromEither[Future](parser.parseRequest(rawData))
           serviceResponse <- EitherT(service.amend(parsedRequest))
           vendorResponse <- EitherT.fromEither[Future](
             hateoasFactory
@@ -96,7 +96,7 @@ class CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionController @Inject()(
 
       result.leftMap { errorWrapper =>
         val resCorrelationId = errorWrapper.correlationId
-        val result = errorResult(errorWrapper).withApiHeaders(resCorrelationId)
+        val result           = errorResult(errorWrapper).withApiHeaders(resCorrelationId)
 
         logger.warn(
           s"[${endpointLogContext.controllerName}][${endpointLogContext.endpointName}] - " +
@@ -132,10 +132,10 @@ class CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionController @Inject()(
         BadRequest(Json.toJson(errorWrapper))
       case NotFoundError => NotFound(Json.toJson(errorWrapper))
       case InternalError => InternalServerError(Json.toJson(errorWrapper))
-      case _ => unhandledError(errorWrapper)
+      case _             => unhandledError(errorWrapper)
     }
   private def auditSubmission(details: FlattenedGenericAuditDetail)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[AuditResult] = {
-    val event = AuditEvent("CreateAndAmendHistoricNonFhlUkPropertyAnnualSubmission", "CreateAndAmendHistoricNonFhlUkPropertyAnnualSubmission", details)
+    val event = AuditEvent("CreateAmendHistoricNonFhlUkPropertyAnnualSubmission", "CreateAmendHistoricNonFhlUkPropertyAnnualSubmission", details)
     auditService.auditEvent(event)
   }
 }

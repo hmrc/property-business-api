@@ -51,6 +51,7 @@ object GenericAuditDetail {
   }
 }
 
+
 case class FlattenedGenericAuditDetail(versionNumber: Option[String],
                                        userType: String,
                                        agentReferenceNumber: Option[String],
@@ -75,7 +76,7 @@ object FlattenedGenericAuditDetail {
       (JsPath \ "httpStatusCode").write[Int] and
       (JsPath \ "errorCodes").writeNullable[Seq[String]] and
       JsPath.writeNullable[JsValue]
-  )(unlift(FlattenedGenericAuditDetail.unapply))
+    )(unlift(FlattenedGenericAuditDetail.unapply))
 
   def apply(versionNumber: Option[String] = None,
             userDetails: UserDetails,

@@ -20,13 +20,16 @@ import cats.data.EitherT
 import cats.implicits._
 import play.api.libs.json.{ JsValue, Json }
 import play.api.mvc.{ Action, ControllerComponents }
+import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.play.audit.http.connector.AuditResult
 import utils.{ IdGenerator, Logging }
 import v2.controllers.requestParsers.CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequestParser
 import v2.hateoas.HateoasFactory
+import v2.models.audit.{ AuditEvent, AuditResponse, FlattenedGenericAuditDetail }
 import v2.models.errors._
 import v2.models.request.createAmendHistoricFhlUkPropertyAnnualSubmission.CreateAmendHistoricFhlUkPropertyAnnualSubmissionRawData
 import v2.models.response.createAmendHistoricFhlUkPropertyAnnualSubmission.CreateAmendHistoricFhlUkPropertyAnnualSubmissionHateoasData
-import v2.services.{ CreateAmendHistoricFhlUkPropertyAnnualSubmissionService, EnrolmentsAuthService, MtdIdLookupService }
+import v2.services.{ AuditService, CreateAmendHistoricFhlUkPropertyAnnualSubmissionService, EnrolmentsAuthService, MtdIdLookupService }
 
 import javax.inject.{ Inject, Singleton }
 import scala.concurrent.{ ExecutionContext, Future }
@@ -36,6 +39,7 @@ class CreateAmendHistoricFhlUkPropertyAnnualSubmissionController @Inject()(val a
                                                                            val lookupService: MtdIdLookupService,
                                                                            parser: CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequestParser,
                                                                            service: CreateAmendHistoricFhlUkPropertyAnnualSubmissionService,
+                                                                           auditService: AuditService,
                                                                            hateoasFactory: HateoasFactory,
                                                                            cc: ControllerComponents,
                                                                            idGenerator: IdGenerator)(implicit ec: ExecutionContext)
@@ -70,6 +74,17 @@ class CreateAmendHistoricFhlUkPropertyAnnualSubmissionController @Inject()(val a
 
           val response = Json.toJson(vendorResponse)
 
+          auditSubmission(
+            FlattenedGenericAuditDetail(
+              versionNumber = Some("2.0"),
+              request.userDetails,
+              Map("nino" -> nino, "taxYear" -> taxYear),
+              Some(request.body),
+              serviceResponse.correlationId,
+              AuditResponse(httpStatus = OK, response = Right(None))
+            )
+          )
+
           Ok(response)
             .withApiHeaders(serviceResponse.correlationId)
         }
@@ -81,6 +96,17 @@ class CreateAmendHistoricFhlUkPropertyAnnualSubmissionController @Inject()(val a
         logger.warn(
           s"[${endpointLogContext.controllerName}][${endpointLogContext.endpointName}] - " +
             s"Error response received with CorrelationId: $resCorrelationId")
+
+        auditSubmission(
+          FlattenedGenericAuditDetail(
+            Some("2.0"),
+            request.userDetails,
+            Map("nino" -> nino, "taxYear" -> taxYear),
+            Some(request.body),
+            resCorrelationId,
+            AuditResponse(httpStatus = result.header.status, response = Left(errorWrapper.auditErrors))
+          )
+        )
 
         result
       }.merge
@@ -95,4 +121,10 @@ class CreateAmendHistoricFhlUkPropertyAnnualSubmissionController @Inject()(val a
       case InternalError => InternalServerError(Json.toJson(errorWrapper))
       case _             => unhandledError(errorWrapper)
     }
+
+  private def auditSubmission(details: FlattenedGenericAuditDetail)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[AuditResult] = {
+    val event =
+      AuditEvent("CreateAndAmendHistoricFhlPropertyBusinessAnnualSubmission", "CreateAndAmendHistoricFhlPropertyBusinessAnnualSubmission", details)
+    auditService.auditEvent(event)
+  }
 }

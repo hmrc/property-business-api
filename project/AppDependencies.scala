@@ -20,24 +20,24 @@ import sbt._
 
 object AppDependencies {
 
-  val bootstrap_28_version = "7.8.0"
+  val bootstrap_28_version = "7.11.0"
 
   val compile: Seq[ModuleID] = Seq(
     ws,
     "uk.gov.hmrc"                  %% "bootstrap-backend-play-28" % bootstrap_28_version,
-    "org.typelevel"                %% "cats-core"                 % "2.7.0",
+    "org.typelevel"                %% "cats-core"                 % "2.8.0",
     "com.chuusai"                  %% "shapeless"                 % "2.4.0-M1",
     "com.neovisionaries"           % "nv-i18n"                    % "1.29",
-    "com.fasterxml.jackson.module" %% "jackson-module-scala"      % "2.13.2"
+    "com.fasterxml.jackson.module" %% "jackson-module-scala"      % "2.14.0"
   )
 
   def test(scope: String = "test, it"): Seq[sbt.ModuleID] = Seq(
-    "org.scalatest"          %% "scalatest"              % "3.2.12"             % scope,
+    "org.scalatest"          %% "scalatest"              % "3.2.14"             % scope,
     "com.vladsch.flexmark"   % "flexmark-all"            % "0.62.2"             % scope,
     "org.scalatestplus"      %% "scalacheck-1-15"        % "3.2.10.0"           % scope,
     "org.scalamock"          %% "scalamock"              % "5.2.0"              % scope,
     "com.typesafe.play"      %% "play-test"              % PlayVersion.current  % scope,
     "uk.gov.hmrc"            %% "bootstrap-test-play-28" % bootstrap_28_version % scope,
-    "com.github.tomakehurst" % "wiremock-jre8"           % "2.33.2"             % scope
+    "com.github.tomakehurst" % "wiremock-jre8"           % "2.35.0"             % scope
   )
 }

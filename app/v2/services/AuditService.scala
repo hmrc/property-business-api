@@ -43,8 +43,6 @@ class AuditService @Inject()(auditConnector: AuditConnector, appNameConfiguratio
       detail = Json.toJson(event.detail),
       tags = eventTags
     )
-
-    println(" dataEvent ----- detail :::: " + dataEvent.detail)
     auditConnector.sendExtendedEvent(dataEvent)
   }
 }

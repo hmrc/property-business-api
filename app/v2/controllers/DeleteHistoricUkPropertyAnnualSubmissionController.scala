@@ -21,6 +21,7 @@ import cats.implicits._
 import play.api.libs.json.Json
 import play.api.mvc.{ Action, AnyContent, ControllerComponents }
 import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.play.audit.http.connector.AuditResult
 import utils.{ IdGenerator, Logging }
 import v2.models.audit.{ AuditEvent, AuditResponse, FlattenedGenericAuditDetail }
 import v2.controllers.requestParsers.DeleteHistoricUkPropertyAnnualSubmissionRequestParser
@@ -79,6 +80,7 @@ class DeleteHistoricUkPropertyAnnualSubmissionController @Inject()(val authServi
               s"Success response received with CorrelationId: ${serviceResponse.correlationId}")
 
           auditSubmission(
+            s"${propertyType.toString}",
             FlattenedGenericAuditDetail(
               versionNumber = Some("2.0"),
               request.userDetails,
@@ -101,6 +103,7 @@ class DeleteHistoricUkPropertyAnnualSubmissionController @Inject()(val authServi
             s"Error response received with CorrelationId: $resCorrelationId")
 
         auditSubmission(
+          s"${propertyType.toString}",
           FlattenedGenericAuditDetail(
             versionNumber = Some("2.0"),
             request.userDetails,
@@ -129,12 +132,9 @@ class DeleteHistoricUkPropertyAnnualSubmissionController @Inject()(val authServi
       case _             => unhandledError(errorWrapper)
     }
 
-  private def auditSubmission(
-      details: FlattenedGenericAuditDetail)(implicit endpointLogContext: EndpointLogContext, hc: HeaderCarrier, ec: ExecutionContext): Unit = {
-    val propertyType: String = endpointLogContext.endpointName match {
-      case "deleteHistoricFhlUkPropertyAnnualSubmission" => "Fhl"
-      case _                                             => "NonFhl"
-    }
+  private def auditSubmission(propertyType: String, details: FlattenedGenericAuditDetail)(implicit hc: HeaderCarrier,
+                                                                                          ec: ExecutionContext): Future[AuditResult] = {
+
     val auditType: String       = s"DeleteHistoric${propertyType}PropertyBusinessAnnualSubmission"
     val transactionName: String = s"DeleteHistoric${propertyType}PropertyBusinessAnnualSubmission"
     val event                   = AuditEvent(auditType, transactionName, details)

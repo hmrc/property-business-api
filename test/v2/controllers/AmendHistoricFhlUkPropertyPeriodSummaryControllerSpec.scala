@@ -16,14 +16,16 @@
 
 package v2.controllers
 
-import play.api.libs.json.{ JsObject, Json }
+import play.api.libs.json.{JsObject, Json}
 import play.api.mvc.Result
 import uk.gov.hmrc.http.HeaderCarrier
 import v2.mocks.MockIdGenerator
 import v2.mocks.hateoas.MockHateoasFactory
 import v2.mocks.requestParsers.MockAmendHistoricFhlUkPiePeriodSummaryRequestParser
-import v2.mocks.services.{ MockAmendHistoricFhlUkPropertyPeriodSummaryService, MockEnrolmentsAuthService, MockMtdIdLookupService }
-import v2.models.domain.{ Nino, PeriodId }
+import v2.mocks.services.{MockAmendHistoricFhlUkPropertyPeriodSummaryService, MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService}
+import v2.models.audit.{ AuditError, AuditEvent, AuditResponse, FlattenedGenericAuditDetail }
+import v2.models.domain.{Nino, PeriodId}
+import v2.models.auth.UserDetails
 import v2.models.errors._
 import v2.models.hateoas.HateoasWrapper
 import v2.models.outcomes.ResponseWrapper
@@ -40,11 +42,13 @@ class AmendHistoricFhlUkPropertyPeriodSummaryControllerSpec
     with MockAmendHistoricFhlUkPropertyPeriodSummaryService
     with MockAmendHistoricFhlUkPiePeriodSummaryRequestParser
     with MockHateoasFactory
-    with MockIdGenerator {
+    with MockIdGenerator
+    with MockAuditService {
 
   private val nino          = "AA123456A"
   private val periodId      = "somePeriodId"
   private val correlationId = "X-123"
+  val mtdId: String         = "test-mtd-id"
 
   trait Test {
     val hc: HeaderCarrier = HeaderCarrier()
@@ -54,12 +58,13 @@ class AmendHistoricFhlUkPropertyPeriodSummaryControllerSpec
       lookupService = mockMtdIdLookupService,
       parser = mockAmendHistoricFhlUkPropertyPeriodSummaryRequestParser,
       service = mockService,
+      auditService = mockAuditService,
       hateoasFactory = mockHateoasFactory,
       cc = cc,
       idGenerator = mockIdGenerator
     )
 
-    MockMtdIdLookupService.lookup(nino).returns(Future.successful(Right("test-mtd-id")))
+    MockMtdIdLookupService.lookup(nino).returns(Future.successful(Right(mtdId)))
     MockedEnrolmentsAuthService.authoriseUser()
     MockIdGenerator.getCorrelationId.returns(correlationId)
   }
@@ -70,6 +75,20 @@ class AmendHistoricFhlUkPropertyPeriodSummaryControllerSpec
 
   private val rawData = AmendHistoricFhlUkPiePeriodSummaryRawData(nino, periodId, requestBodyJson)
   private val request = AmendHistoricFhlUkPiePeriodSummaryRequest(Nino(nino), PeriodId(periodId), requestBody)
+
+  def event(auditResponse: AuditResponse): AuditEvent[FlattenedGenericAuditDetail] =
+    AuditEvent(
+      auditType = "AmendHistoricFhlUkPropertyPeriodSummary",
+      transactionName = "AmendHistoricFhlUkPropertyPeriodSummary",
+      detail = FlattenedGenericAuditDetail(
+        versionNumber = Some("2.0"),
+        userDetails = UserDetails(mtdId, "Individual", None),
+        params = Map("nino" -> nino, "periodId" -> periodId),
+        request = Some(requestBodyJson),
+        `X-CorrelationId` = correlationId,
+        auditResponse = auditResponse
+    )
+    )
 
   "handleRequest" should {
     "return Ok" when {
@@ -91,7 +110,9 @@ class AmendHistoricFhlUkPropertyPeriodSummaryControllerSpec
         status(result) shouldBe OK
         contentAsJson(result) shouldBe testHateoasLinksJson
         header("X-CorrelationId", result) shouldBe Some(correlationId)
-      }
+
+        val auditResponse: AuditResponse = AuditResponse(OK, None, None)
+        MockedAuditService.verifyAuditEvent(event(auditResponse)).once      }
     }
 
     "return the error as per spec" when {
@@ -108,6 +129,10 @@ class AmendHistoricFhlUkPropertyPeriodSummaryControllerSpec
             status(result) shouldBe expectedStatus
             contentAsJson(result) shouldBe Json.toJson(error)
             header("X-CorrelationId", result) shouldBe Some(correlationId)
+
+
+            val auditResponse: AuditResponse = AuditResponse(expectedStatus, Some(Seq(AuditError(error.code))), None)
+            MockedAuditService.verifyAuditEvent(event(auditResponse)).once
           }
         }
 
@@ -140,6 +165,8 @@ class AmendHistoricFhlUkPropertyPeriodSummaryControllerSpec
             status(result) shouldBe expectedStatus
             contentAsJson(result) shouldBe Json.toJson(mtdError)
             header("X-CorrelationId", result) shouldBe Some(correlationId)
+            val auditResponse: AuditResponse = AuditResponse(expectedStatus, Some(Seq(AuditError(mtdError.code))), None)
+            MockedAuditService.verifyAuditEvent(event(auditResponse)).once
           }
         }
 

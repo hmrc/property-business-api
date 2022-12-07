@@ -58,7 +58,7 @@ class CreateAmendHistoricFhlUkPropertyAnnualSubmissionControllerSpec
   private val nino          = "AA123456A"
   private val taxYear       = "2022-23"
   private val correlationId = "X-123"
-  val mtdId: String         = "test-mtd-id"
+  private val mtdId: String = "test-mtd-id"
 
   trait Test {
     val hc: HeaderCarrier = HeaderCarrier()

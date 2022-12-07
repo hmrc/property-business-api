@@ -106,8 +106,8 @@ class CreateHistoricNonFhlUkPiePeriodSummaryControllerSpec
 
   def event(auditResponse: AuditResponse): AuditEvent[FlattenedGenericAuditDetail] =
     AuditEvent(
-      auditType = "CreateHistoricFhlPropertyIncomeExpensesPeriodSummary",
-      transactionName = "CreateHistoricFhlPropertyIncomeExpensesPeriodSummary",
+      auditType = "CreateHistoricNonFhlPropertyIncomeExpensesPeriodSummary",
+      transactionName = "CreateHistoricNonFhlPropertyIncomeExpensesPeriodSummary",
       detail = FlattenedGenericAuditDetail(
         versionNumber = Some("2.0"),
         userDetails = UserDetails(mtdId, "Individual", None),

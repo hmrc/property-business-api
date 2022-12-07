@@ -144,7 +144,7 @@ class CreateHistoricNonFHLUkPiePeriodSummaryController @Inject()(val authService
 
   private def auditSubmission(details: FlattenedGenericAuditDetail)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[AuditResult] = {
     val event =
-      AuditEvent("CreateHistoricFhlPropertyIncomeExpensesPeriodSummary", "CreateHistoricFhlPropertyIncomeExpensesPeriodSummary", details)
+      AuditEvent("CreateHistoricNonFhlPropertyIncomeExpensesPeriodSummary", "CreateHistoricNonFhlPropertyIncomeExpensesPeriodSummary", details)
     auditService.auditEvent(event)
   }
 }

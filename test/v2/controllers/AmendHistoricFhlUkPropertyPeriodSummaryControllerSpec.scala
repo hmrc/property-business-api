@@ -16,14 +16,16 @@
 
 package v2.controllers
 
-import play.api.libs.json.{ JsObject, Json }
+import play.api.libs.json.{JsObject, Json}
 import play.api.mvc.Result
 import uk.gov.hmrc.http.HeaderCarrier
 import v2.mocks.MockIdGenerator
 import v2.mocks.hateoas.MockHateoasFactory
 import v2.mocks.requestParsers.MockAmendHistoricFhlUkPiePeriodSummaryRequestParser
-import v2.mocks.services.{ MockAmendHistoricFhlUkPropertyPeriodSummaryService, MockEnrolmentsAuthService, MockMtdIdLookupService }
-import v2.models.domain.{ Nino, PeriodId }
+import v2.mocks.services.{MockAmendHistoricFhlUkPropertyPeriodSummaryService, MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService}
+import v2.models.audit.{ AuditError, AuditEvent, AuditResponse, FlattenedGenericAuditDetail }
+import v2.models.domain.{Nino, PeriodId}
+import v2.models.auth.UserDetails
 import v2.models.errors._
 import v2.models.hateoas.HateoasWrapper
 import v2.models.outcomes.ResponseWrapper
@@ -40,11 +42,13 @@ class AmendHistoricFhlUkPropertyPeriodSummaryControllerSpec
     with MockAmendHistoricFhlUkPropertyPeriodSummaryService
     with MockAmendHistoricFhlUkPiePeriodSummaryRequestParser
     with MockHateoasFactory
-    with MockIdGenerator {
+    with MockIdGenerator
+    with MockAuditService {
 
   private val nino          = "AA123456A"
   private val periodId      = "somePeriodId"
   private val correlationId = "X-123"
+  private val mtdId: String = "test-mtd-id"
 
   trait Test {
     val hc: HeaderCarrier = HeaderCarrier()
@@ -54,12 +58,13 @@ class AmendHistoricFhlUkPropertyPeriodSummaryControllerSpec
       lookupService = mockMtdIdLookupService,
       parser = mockAmendHistoricFhlUkPropertyPeriodSummaryRequestParser,
       service = mockService,
+      auditService = mockAuditService,
       hateoasFactory = mockHateoasFactory,
       cc = cc,
       idGenerator = mockIdGenerator
     )
 
-    MockMtdIdLookupService.lookup(nino).returns(Future.successful(Right("test-mtd-id")))
+    MockMtdIdLookupService.lookup(nino).returns(Future.successful(Right(mtdId)))
     MockedEnrolmentsAuthService.authoriseUser()
     MockIdGenerator.getCorrelationId.returns(correlationId)
   }
@@ -70,6 +75,20 @@ class AmendHistoricFhlUkPropertyPeriodSummaryControllerSpec
 
   private val rawData = AmendHistoricFhlUkPiePeriodSummaryRawData(nino, periodId, requestBodyJson)
   private val request = AmendHistoricFhlUkPiePeriodSummaryRequest(Nino(nino), PeriodId(periodId), requestBody)
+
+  def event(auditResponse: AuditResponse): AuditEvent[FlattenedGenericAuditDetail] =
+    AuditEvent(
+      auditType = "AmendHistoricFhlPropertyIncomeExpensesPeriodSummary",
+      transactionName = "AmendHistoricFhlPropertyIncomeExpensesPeriodSummary",
+      detail = FlattenedGenericAuditDetail(
+        versionNumber = Some("2.0"),
+        userDetails = UserDetails(mtdId, "Individual", None),
+        params = Map("nino" -> nino, "periodId" -> periodId),
+        request = Some(requestBodyJson),
+        `X-CorrelationId` = correlationId,
+        auditResponse = auditResponse
+      )
+    )
 
   "handleRequest" should {
     "return Ok" when {
@@ -91,67 +110,77 @@ class AmendHistoricFhlUkPropertyPeriodSummaryControllerSpec
         status(result) shouldBe OK
         contentAsJson(result) shouldBe testHateoasLinksJson
         header("X-CorrelationId", result) shouldBe Some(correlationId)
-      }
-    }
 
-    "return the error as per spec" when {
-      "parser errors occur" should {
-        def errorsFromParserTester(error: MtdError, expectedStatus: Int): Unit = {
-          s"a ${error.code} error is returned from the parser" in new Test {
-
-            MockAmendHistoricFhlUkPropertyPeriodSummaryRequestParser
-              .parseRequest(rawData)
-              .returns(Left(ErrorWrapper(correlationId, error, None)))
-
-            val result: Future[Result] = controller.handleRequest(nino, periodId)(fakeRequestWithBody(requestBodyJson))
-
-            status(result) shouldBe expectedStatus
-            contentAsJson(result) shouldBe Json.toJson(error)
-            header("X-CorrelationId", result) shouldBe Some(correlationId)
-          }
-        }
-
-        val input = Seq(
-          (BadRequestError, BAD_REQUEST),
-          (NinoFormatError, BAD_REQUEST),
-          (withPath(RuleBothExpensesSuppliedError), BAD_REQUEST),
-          (withPath(ValueFormatError), BAD_REQUEST),
-          (withPath(RuleIncorrectOrEmptyBodyError), BAD_REQUEST),
-          (PeriodIdFormatError, BAD_REQUEST),
-        )
-
-        input.foreach(args => (errorsFromParserTester _).tupled(args))
+        val auditResponse: AuditResponse = AuditResponse(OK, None, None)
+        MockedAuditService.verifyAuditEvent(event(auditResponse)).once
       }
 
-      "service errors occur" should {
-        def serviceErrors(mtdError: MtdError, expectedStatus: Int): Unit = {
-          s"a $mtdError error is returned from the service" in new Test {
+      "return the error as per spec" when {
+        "parser errors occur" should {
+          def errorsFromParserTester(error: MtdError, expectedStatus: Int): Unit = {
+            s"a ${error.code} error is returned from the parser" in new Test {
 
-            MockAmendHistoricFhlUkPropertyPeriodSummaryRequestParser
-              .parseRequest(rawData)
-              .returns(Right(request))
+              MockAmendHistoricFhlUkPropertyPeriodSummaryRequestParser
+                .parseRequest(rawData)
+                .returns(Left(ErrorWrapper(correlationId, error, None)))
 
-            MockAmendHistoricFhlUkPropertyPeriodSummaryService
-              .amend(request)
-              .returns(Future.successful(Left(ErrorWrapper(correlationId, mtdError))))
+              val result: Future[Result] = controller.handleRequest(nino, periodId)(fakeRequestWithBody(requestBodyJson))
 
-            val result: Future[Result] = controller.handleRequest(nino, periodId)(fakeRequestWithBody(requestBodyJson))
+              status(result) shouldBe expectedStatus
+              contentAsJson(result) shouldBe Json.toJson(error)
+              header("X-CorrelationId", result) shouldBe Some(correlationId)
 
-            status(result) shouldBe expectedStatus
-            contentAsJson(result) shouldBe Json.toJson(mtdError)
-            header("X-CorrelationId", result) shouldBe Some(correlationId)
+
+              val auditResponse: AuditResponse = AuditResponse(expectedStatus, Some(Seq(AuditError(error.code))), None)
+              MockedAuditService.verifyAuditEvent(event(auditResponse)).once
+            }
           }
+
+          val input = Seq(
+            (BadRequestError, BAD_REQUEST),
+            (NinoFormatError, BAD_REQUEST),
+            (withPath(RuleBothExpensesSuppliedError), BAD_REQUEST),
+            (withPath(ValueFormatError), BAD_REQUEST),
+            (withPath(RuleIncorrectOrEmptyBodyError), BAD_REQUEST),
+            (PeriodIdFormatError, BAD_REQUEST),
+          )
+
+          input.foreach(args => (errorsFromParserTester _).tupled(args))
         }
 
-        val input = Seq(
-          (NinoFormatError, BAD_REQUEST),
-          (PeriodIdFormatError, BAD_REQUEST),
-          (NotFoundError, NOT_FOUND),
-          (RuleBothExpensesSuppliedError, BAD_REQUEST),
-          (InternalError, INTERNAL_SERVER_ERROR)
-        )
+        "service errors occur" should {
+          def serviceErrors(mtdError: MtdError, expectedStatus: Int): Unit = {
+            s"a $mtdError error is returned from the service" in new Test {
 
-        input.foreach(args => (serviceErrors _).tupled(args))
+              MockAmendHistoricFhlUkPropertyPeriodSummaryRequestParser
+                .parseRequest(rawData)
+                .returns(Right(request))
+
+              MockAmendHistoricFhlUkPropertyPeriodSummaryService
+                .amend(request)
+                .returns(Future.successful(Left(ErrorWrapper(correlationId, mtdError))))
+
+              val result: Future[Result] = controller.handleRequest(nino, periodId)(fakeRequestWithBody(requestBodyJson))
+
+              status(result) shouldBe expectedStatus
+              contentAsJson(result) shouldBe Json.toJson(mtdError)
+              header("X-CorrelationId", result) shouldBe Some(correlationId)
+
+              val auditResponse: AuditResponse = AuditResponse(expectedStatus, Some(Seq(AuditError(mtdError.code))), None)
+              MockedAuditService.verifyAuditEvent(event(auditResponse)).once
+            }
+          }
+
+          val input = Seq(
+            (NinoFormatError, BAD_REQUEST),
+            (PeriodIdFormatError, BAD_REQUEST),
+            (NotFoundError, NOT_FOUND),
+            (RuleBothExpensesSuppliedError, BAD_REQUEST),
+            (InternalError, INTERNAL_SERVER_ERROR)
+          )
+
+          input.foreach(args => (serviceErrors _).tupled(args))
+        }
       }
     }
   }

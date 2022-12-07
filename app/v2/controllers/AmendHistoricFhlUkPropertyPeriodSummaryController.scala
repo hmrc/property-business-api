@@ -18,18 +18,22 @@ package v2.controllers
 
 import cats.data.EitherT
 import cats.implicits._
-import play.api.libs.json.{ JsValue, Json }
-import play.api.mvc.{ Action, ControllerComponents }
-import utils.{ IdGenerator, Logging }
+import play.api.libs.json.{JsValue, Json}
+import play.api.mvc.{Action, ControllerComponents}
+import utils.{IdGenerator, Logging}
 import v2.controllers.requestParsers.AmendHistoricFhlUkPiePeriodSummaryRequestParser
 import v2.hateoas.HateoasFactory
+import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.play.audit.http.connector.AuditResult
+import v2.models.audit.FlattenedGenericAuditDetail
 import v2.models.errors._
 import v2.models.request.amendHistoricFhlUkPiePeriodSummary.AmendHistoricFhlUkPiePeriodSummaryRawData
 import v2.models.response.amendHistoricFhlUkPiePeriodSummary.AmendHistoricFhlUkPropertyPeriodSummaryHateoasData
-import v2.services.{ AmendHistoricFhlUkPiePeriodSummaryService, EnrolmentsAuthService, MtdIdLookupService }
+import v2.services.{AmendHistoricFhlUkPiePeriodSummaryService, AuditService, EnrolmentsAuthService, MtdIdLookupService}
+import v2.models.audit.{ AuditEvent, AuditResponse, FlattenedGenericAuditDetail}
 
-import javax.inject.{ Inject, Singleton }
-import scala.concurrent.{ ExecutionContext, Future }
+import javax.inject.{Inject, Singleton}
+import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class AmendHistoricFhlUkPropertyPeriodSummaryController @Inject()(val authService: EnrolmentsAuthService,
@@ -37,6 +41,7 @@ class AmendHistoricFhlUkPropertyPeriodSummaryController @Inject()(val authServic
                                                                   parser: AmendHistoricFhlUkPiePeriodSummaryRequestParser,
                                                                   service: AmendHistoricFhlUkPiePeriodSummaryService,
                                                                   hateoasFactory: HateoasFactory,
+                                                                  auditService: AuditService,
                                                                   cc: ControllerComponents,
                                                                   idGenerator: IdGenerator)(implicit ec: ExecutionContext)
     extends AuthorisedController(cc)
@@ -69,6 +74,17 @@ class AmendHistoricFhlUkPropertyPeriodSummaryController @Inject()(val authServic
 
           val response = Json.toJson(vendorResponse)
 
+          auditSubmission(
+            FlattenedGenericAuditDetail(
+              versionNumber = Some("2.0"),
+              request.userDetails,
+              Map("nino" -> nino, "periodId" -> periodId),
+              Some(request.body),
+              serviceResponse.correlationId,
+              AuditResponse(httpStatus = OK, response = Right(None))
+            )
+          )
+
           Ok(response)
             .withApiHeaders(serviceResponse.correlationId)
         }
@@ -80,6 +96,17 @@ class AmendHistoricFhlUkPropertyPeriodSummaryController @Inject()(val authServic
         logger.warn(
           s"[${endpointLogContext.controllerName}][${endpointLogContext.endpointName}] - " +
             s"Error response received with CorrelationId: $resCorrelationId")
+
+        auditSubmission(
+          FlattenedGenericAuditDetail(
+            versionNumber = Some("2.0"),
+            request.userDetails,
+            Map("nino" -> nino, "periodId" -> periodId),
+            Some(request.body),
+            resCorrelationId,
+            AuditResponse(httpStatus = result.header.status, response = Left(errorWrapper.auditErrors))
+          )
+        )
 
         result
       }.merge
@@ -99,5 +126,11 @@ class AmendHistoricFhlUkPropertyPeriodSummaryController @Inject()(val authServic
     case NotFoundError => NotFound(Json.toJson(errorWrapper))
     case InternalError => InternalServerError(Json.toJson(errorWrapper))
     case _             => unhandledError(errorWrapper)
+  }
+
+  private def auditSubmission(details: FlattenedGenericAuditDetail)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[AuditResult] = {
+    val event =
+      AuditEvent("AmendHistoricFhlPropertyIncomeExpensesPeriodSummary", "AmendHistoricFhlPropertyIncomeExpensesPeriodSummary", details)
+    auditService.auditEvent(event)
   }
 }

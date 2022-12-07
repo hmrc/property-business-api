@@ -32,21 +32,6 @@ Then go to http://localhost:9680/api-documentation/docs/api/preview and use this
 http://localhost:7798/api/conf/2.0/application.raml
 ```
 
-## Merging modular OAS spec files into a single large file
-
-### Install node/npm for Mac OS X:
-Install node, npm if not already installed: `brew install node`
-
-### Install node/npm for Ubuntu/Unix:
-Install node, npm if not already installed: `sudo apt install nodejs npm`
-
-Install speccy locally `npm install`
-
-Run the sbt task or npm script to merge files: `sbt oasMerge` or `VERSION=2.0 npm run oasMerge`
-
-Run the sbt task or npm script  merge files in verbose mode: `sbt oasMergeVerbose` or `VERSION=2.0 npm run oasMergeVerbose`
-
-
 ## Changelog
 
 You can see our changelog [here](https://github.com/hmrc/income-tax-mtd-changelog/wiki)

@@ -41,9 +41,6 @@ lazy val microservice = Project(appName, file("."))
     )
   )
   .settings(
-    Compile / compile := ((Compile / compile) dependsOn oasMergeVerbose).value
-  )
-  .settings(
     Compile / unmanagedResourceDirectories += baseDirectory.value / "resources"
   )
   .settings(majorVersion := 0)
@@ -66,21 +63,4 @@ lazy val microservice = Project(appName, file("."))
   )
   .settings(PlayKeys.playDefaultPort := 7798)
 
-lazy val oasMerge = taskKey[Unit]("""Runs './run_oas_merge.sh 2.0 <<scala_version>>' to merge OpenAPI spec files""")
-oasMerge := {
-  val version =  scalaVersion.value.split("\\.").take(2).mkString(".")
-  val exitCode = (s"./run_oas_merge.sh 2.0 $version").!
-  if (exitCode != 0) {
-    throw new MessageOnlyException("OpenAPI merge failed, run using verbose: sbt oasMergeVerbose")
-  }
-}
-
-lazy val oasMergeVerbose = taskKey[Unit](s"""Runs './run_oas_merge.sh 2.0 <<scala_version>> -v' to merge OpenAPI spec files in verbose""")
-oasMergeVerbose := {
-  val version =  scalaVersion.value.split("\\.").take(2).mkString(".")
-  val exitCode = (s"./run_oas_merge.sh 2.0 $version -v").!
-  if (exitCode != 0) {
-    throw new MessageOnlyException("OpenAPI merge failed!")
-  }
-}
 

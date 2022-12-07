@@ -47,5 +47,4 @@ project/.bloop/property-business-api-build.json
 .bloop/*
 .vscode/*
 .gitignore
-application.yaml
 package-lock.json

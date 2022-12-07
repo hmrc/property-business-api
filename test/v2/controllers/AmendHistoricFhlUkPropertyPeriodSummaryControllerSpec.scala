@@ -45,10 +45,10 @@ class AmendHistoricFhlUkPropertyPeriodSummaryControllerSpec
     with MockIdGenerator
     with MockAuditService {
 
-  private val nino = "AA123456A"
-  private val periodId = "somePeriodId"
+  private val nino          = "AA123456A"
+  private val periodId      = "somePeriodId"
   private val correlationId = "X-123"
-  val mtdId: String = "test-mtd-id"
+  private val mtdId: String = "test-mtd-id"
 
   trait Test {
     val hc: HeaderCarrier = HeaderCarrier()
@@ -71,7 +71,7 @@ class AmendHistoricFhlUkPropertyPeriodSummaryControllerSpec
 
   // Doesn't matter what there are: parser is mocked
   private val requestBodyJson = JsObject.empty
-  private val requestBody = AmendHistoricFhlUkPiePeriodSummaryRequestBody(None, None)
+  private val requestBody     = AmendHistoricFhlUkPiePeriodSummaryRequestBody(None, None)
 
   private val rawData = AmendHistoricFhlUkPiePeriodSummaryRawData(nino, periodId, requestBodyJson)
   private val request = AmendHistoricFhlUkPiePeriodSummaryRequest(Nino(nino), PeriodId(periodId), requestBody)
@@ -165,6 +165,7 @@ class AmendHistoricFhlUkPropertyPeriodSummaryControllerSpec
               status(result) shouldBe expectedStatus
               contentAsJson(result) shouldBe Json.toJson(mtdError)
               header("X-CorrelationId", result) shouldBe Some(correlationId)
+
               val auditResponse: AuditResponse = AuditResponse(expectedStatus, Some(Seq(AuditError(mtdError.code))), None)
               MockedAuditService.verifyAuditEvent(event(auditResponse)).once
             }

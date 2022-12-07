@@ -130,7 +130,7 @@ class AmendHistoricFhlUkPropertyPeriodSummaryController @Inject()(val authServic
 
   private def auditSubmission(details: FlattenedGenericAuditDetail)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[AuditResult] = {
     val event =
-      AuditEvent("AmendHistoricFhlUkPropertyPeriodSummary", "AmendHistoricFhlUkPropertyPeriodSummary", details)
+      AuditEvent("AmendHistoricFhlPropertyIncomeExpensesPeriodSummary", "AmendHistoricFhlPropertyIncomeExpensesPeriodSummary", details)
     auditService.auditEvent(event)
   }
 }

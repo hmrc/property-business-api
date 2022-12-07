@@ -78,8 +78,8 @@ class AmendHistoricFhlUkPropertyPeriodSummaryControllerSpec
 
   def event(auditResponse: AuditResponse): AuditEvent[FlattenedGenericAuditDetail] =
     AuditEvent(
-      auditType = "AmendHistoricFhlUkPropertyPeriodSummary",
-      transactionName = "AmendHistoricFhlUkPropertyPeriodSummary",
+      auditType = "AmendHistoricFhlPropertyIncomeExpensesPeriodSummary",
+      transactionName = "AmendHistoricFhlPropertyIncomeExpensesPeriodSummary",
       detail = FlattenedGenericAuditDetail(
         versionNumber = Some("2.0"),
         userDetails = UserDetails(mtdId, "Individual", None),

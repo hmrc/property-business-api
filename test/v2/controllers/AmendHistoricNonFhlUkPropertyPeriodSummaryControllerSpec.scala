@@ -63,7 +63,7 @@ class AmendHistoricNonFhlUkPropertyPeriodSummaryControllerSpec
   private val nino          = "AA123456A"
   private val periodId      = "somePeriodId"
   private val correlationId = "X-123"
-  val mtdId: String         = "test-mtd-id"
+  private val mtdId: String  = "test-mtd-id"
 
   trait Test {
     val hc: HeaderCarrier = HeaderCarrier()
@@ -79,7 +79,7 @@ class AmendHistoricNonFhlUkPropertyPeriodSummaryControllerSpec
       idGenerator = mockIdGenerator
     )
 
-    MockMtdIdLookupService.lookup(nino).returns(Future.successful(Right("test-mtd-id")))
+    MockMtdIdLookupService.lookup(nino).returns(Future.successful(Right(mtdId)))
     MockedEnrolmentsAuthService.authoriseUser()
     MockIdGenerator.getCorrelationId.returns(correlationId)
   }

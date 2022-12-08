@@ -92,8 +92,8 @@ class AmendHistoricNonFhlUkPropertyPeriodSummaryControllerSpec
   private val request = AmendHistoricNonFhlUkPiePeriodSummaryRequest(Nino(nino), PeriodId(periodId), requestBody)
   def event(auditResponse: AuditResponse): AuditEvent[FlattenedGenericAuditDetail] =
     AuditEvent(
-      auditType = "AmendHistoricNonFhlUkPropertyPeriodSummary",
-      transactionName = "AmendHistoricNonFhlUkPropertyPeriodSummary",
+      auditType = "AmendHistoricNonFhlPropertyIncomeExpensesPeriodSummary",
+      transactionName = "AmendHistoricNonFhlPropertyIncomeExpensesPeriodSummary",
       detail = FlattenedGenericAuditDetail(
         versionNumber = Some("2.0"),
         userDetails = UserDetails(mtdId, "Individual", None),

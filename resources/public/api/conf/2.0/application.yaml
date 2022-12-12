@@ -207,7 +207,7 @@ paths:
   "/individuals/business/property/uk/{nino}/{businessId}/annual/{taxYear}":
     get:
       summary: Retrieve a UK Property Business Annual Submission
-      description: >
+      description:
         This endpoint allows a developer to retrieve adjustments and allowances
         for a UK property business. For either or both of Furnished Holiday
         Letting (FHL) or other UK property submissions. A National Insurance
@@ -3375,8 +3375,7 @@ paths:
                     cation~1json/examples/MATCHING_RESOURCE_NOT_FOUND"
   "/individuals/business/property/uk/annual/furnished-holiday-lettings/{nino}/{taxYear}":
     put:
-      summary: Create and Amend a Historic FHL UK Property Business Annual Submission
-        [test only]
+      summary: Create and Amend a Historic FHL UK Property Business Annual Submissino       
       description: >
         This endpoint enables you to create and amend the income from
         adjustments and allowances for a furnished holiday lettings (FHL) UK
@@ -3705,8 +3704,7 @@ paths:
                     %7D~1period~1%7BtaxYear%7D/post/responses/404/content/appli\
                     cation~1json/examples/MATCHING_RESOURCE_NOT_FOUND"
     get:
-      summary: Retrieve a Historic FHL UK Property Business Annual Submission [test
-        only]
+      summary: Retrieve a Historic FHL UK Property Business Annual Submission
       description: >
         This endpoint enables you to retrieve the income from adjustments and
         allowances for a furnished holiday lettings (FHL) UK property business
@@ -3970,8 +3968,7 @@ paths:
                     %7D~1period~1%7BtaxYear%7D/post/responses/404/content/appli\
                     cation~1json/examples/MATCHING_RESOURCE_NOT_FOUND"
     delete:
-      summary: Delete a Historic FHL UK Property Business Annual Submission [test only]
-      description: >
+      summary: Delete a Historic FHL UK Property Business Annual Submission      description: >
         This endpoint enables you to delete the income from adjustments and
         allowances for a furnished holiday lettings (FHL) UK property business
         for tax years from 2017-18 to 2021-22. A National Insurance number and
@@ -4083,7 +4080,7 @@ paths:
   "/individuals/business/property/uk/annual/non-furnished-holiday-lettings/{nino}/{taxYear}":
     put:
       summary: Create and Amend a Historic Non-FHL UK Property Business Annual
-        Submission [test only]
+        Submission
       description: >
         This endpoint enables you to create and amend the income from
         adjustments and allowances for a non-furnished holiday lettings
@@ -4432,7 +4429,6 @@ paths:
                     cation~1json/examples/MATCHING_RESOURCE_NOT_FOUND"
     get:
       summary: Retrieve a Historic Non-FHL UK Property Business Annual Submission
-        [test only]
       description: >
         This endpoint allows a developer to retrieve the income and expenses for
         a UK property business, that occurred between tax year. A National
@@ -4998,7 +4994,6 @@ paths:
                     cation~1json/examples/CLIENT_OR_AGENT_NOT_AUTHORISED"
     post:
       summary: Create a Historic FHL UK Property Income & Expenses Period Summary
-        [test only]
       description: >
         This endpoint enables you to create income and expenses for a furnished
         holiday lettings (FHL) UK property business and make periodic
@@ -5682,7 +5677,6 @@ paths:
                     cation~1json/examples/MATCHING_RESOURCE_NOT_FOUND"
     get:
       summary: Retrieve a Historic FHL UK Property Income & Expenses Period Summary
-        [test only]
       description: >
         This endpoint enables you to retrieve income and expenses for a FHL UK
         property business for tax years from 2017-18 to 2021-22. A National
@@ -5846,8 +5840,8 @@ paths:
   "/individuals/business/property/uk/period/non-furnished-holiday-lettings/{nino}":
     get:
       summary: List Historic Non-FHL UK Property Income & Expenses Period Summary
-        [test only]
-      description: >
+
+      description:
         This endpoint enables you to list the income and expenses for a
         non-furnished holiday lettings (non-FHL) UK property business for a
         specific period for tax years from 2017-18 to 2021-22.. A National
@@ -6040,7 +6034,6 @@ paths:
                     cation~1json/examples/CLIENT_OR_AGENT_NOT_AUTHORISED"
     post:
       summary: Create a Historic Non-FHL UK Property Income & Expenses Period Summary
-        [test only]
       description: >
         This endpoint enables you to create a periodic submission of income and
         expenses for a non-furnished holiday lettings (non-FHL) UK property
@@ -6462,8 +6455,8 @@ paths:
   "/individuals/business/property/uk/period/non-furnished-holiday-lettings/{nino}/{periodId}":
     get:
       summary: Retrieve a Historic Non-FHL UK Property Income and Expenses Period
-        Summary [test only]
-      description: >
+        Summary
+      description:
         This endpoint enables you to retrieve income and expenses for a
         non-furnished holiday lettings (non-FHL) UK property business for tax
         years from 2017-18 to 2021-22. A National Insurance number and period ID

@@ -19,7 +19,14 @@ is:
 displayName: Create a Historic Non-FHL UK Property Income & Expenses Period Summary
 (annotations.sandboxData): !include scenarios/historic_uk_period_summary_create_scenarios.md
 (annotations.scope): "write:self-assessment"
-description: This endpoint enables you to create a periodic submission of income and expenses for a non-furnished holiday lettings (non-FHL) UK property business for tax years from 2017-18 to 2021-22. A National Insurance number must be provided. For a periodic submission for the current tax year, use the Create a UK Property Income & Expenses Period Summary endpoint.
+description: |
+    This endpoint enables you to create a periodic submission of income and expenses for
+    a non-furnished holiday lettings (non-FHL)
+    UK property business for tax years from 2017-18 to 2021-22.
+    A National Insurance number must be provided.
+
+    For a periodic submission for the current tax year,
+    use the Create a UK Property Income & Expenses Period Summary endpoint.
 securedBy: [ sec.oauth_2_0: { scopes: [ "write:self-assessment" ] } ]
 body:
   application/json:

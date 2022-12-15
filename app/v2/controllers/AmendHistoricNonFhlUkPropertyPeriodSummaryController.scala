@@ -19,13 +19,16 @@ package v2.controllers
 import cats.data.EitherT
 import play.api.libs.json.{ JsValue, Json }
 import play.api.mvc.{ Action, ControllerComponents }
+import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.play.audit.http.connector.AuditResult
 import utils.{ IdGenerator, Logging }
 import v2.controllers.requestParsers.AmendHistoricNonFhlUkPiePeriodSummaryRequestParser
 import v2.hateoas.HateoasFactory
 import v2.models.errors._
 import v2.models.request.amendHistoricNonFhlUkPiePeriodSummary.AmendHistoricNonFhlUkPiePeriodSummaryRawData
 import v2.models.response.amendHistoricNonFhlUkPiePeriodSummary.AmendHistoricNonFhlUkPropertyPeriodSummaryHateoasData
-import v2.services.{ AmendHistoricNonFhlUkPiePeriodSummaryService, EnrolmentsAuthService, MtdIdLookupService }
+import v2.services.{ AmendHistoricNonFhlUkPiePeriodSummaryService, EnrolmentsAuthService, MtdIdLookupService, AuditService }
+import v2.models.audit.{ AuditEvent, AuditResponse, FlattenedGenericAuditDetail}
 
 import javax.inject.Inject
 import scala.concurrent.{ ExecutionContext, Future }
@@ -36,6 +39,7 @@ class AmendHistoricNonFhlUkPropertyPeriodSummaryController @Inject()(
     parser: AmendHistoricNonFhlUkPiePeriodSummaryRequestParser,
     service: AmendHistoricNonFhlUkPiePeriodSummaryService,
     hateoasFactory: HateoasFactory,
+    auditService: AuditService,
     cc: ControllerComponents,
     idGenerator: IdGenerator
 )(implicit ec: ExecutionContext)
@@ -67,6 +71,17 @@ class AmendHistoricNonFhlUkPropertyPeriodSummaryController @Inject()(
             s"[${endpointLogContext.controllerName}][${endpointLogContext.endpointName}] - " +
               s"Success response received with CorrelationId: ${serviceResponse.correlationId}")
 
+          auditSubmission(
+            FlattenedGenericAuditDetail(
+              versionNumber = Some("2.0"),
+              request.userDetails,
+              Map("nino" -> nino, "periodId" -> periodId),
+              Some(request.body),
+              serviceResponse.correlationId,
+              AuditResponse(httpStatus = OK, response = Right(None))
+            )
+          )
+
           val response = Json.toJson(vendorResponse)
 
           Ok(response).withApiHeaders(serviceResponse.correlationId)
@@ -79,6 +94,17 @@ class AmendHistoricNonFhlUkPropertyPeriodSummaryController @Inject()(
         logger.warn(
           s"[${endpointLogContext.controllerName}][${endpointLogContext.endpointName}] - " +
             s"Error response received with CorrelationId: $resCorrelationId")
+
+        auditSubmission(
+          FlattenedGenericAuditDetail(
+            versionNumber = Some("2.0"),
+            request.userDetails,
+            Map("nino" -> nino, "periodId" -> periodId),
+            Some(request.body),
+            resCorrelationId,
+            AuditResponse(httpStatus = result.header.status, response = Left(errorWrapper.auditErrors))
+          )
+        )
 
         result
       }.merge
@@ -99,4 +125,8 @@ class AmendHistoricNonFhlUkPropertyPeriodSummaryController @Inject()(
     case InternalError => InternalServerError(Json.toJson(errorWrapper))
     case _             => unhandledError(errorWrapper)
   }
-}
+  private def auditSubmission(details: FlattenedGenericAuditDetail)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[AuditResult] = {
+    val event =
+      AuditEvent("AmendHistoricNonFhlPropertyIncomeExpensesPeriodSummary", "AmendHistoricNonFhlPropertyIncomeExpensesPeriodSummary", details)
+    auditService.auditEvent(event)
+  }}

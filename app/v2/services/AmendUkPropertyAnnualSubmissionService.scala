@@ -18,7 +18,6 @@ package v2.services
 
 import cats.data.EitherT
 import cats.implicits._
-import javax.inject.{ Inject, Singleton }
 import uk.gov.hmrc.http.HeaderCarrier
 import utils.Logging
 import v2.connectors.AmendUkPropertyAnnualSubmissionConnector
@@ -27,6 +26,7 @@ import v2.models.errors._
 import v2.models.request.amendUkPropertyAnnualSubmission.AmendUkPropertyAnnualSubmissionRequest
 import v2.support.DownstreamResponseMappingSupport
 
+import javax.inject.{ Inject, Singleton }
 import scala.concurrent.{ ExecutionContext, Future }
 
 @Singleton
@@ -39,15 +39,13 @@ class AmendUkPropertyAnnualSubmissionService @Inject()(connector: AmendUkPropert
                                                                                        logContext: EndpointLogContext,
                                                                                        correlationId: String): Future[ServiceOutcome[Unit]] = {
 
-    val result = for {
-      ifsResponseWrapper <- EitherT(connector.amendUkPropertyAnnualSubmission(request)).leftMap(mapDownstreamErrors(ifsErrorMap))
-    } yield ifsResponseWrapper
+    val result = EitherT(connector.amendUkPropertyAnnualSubmission(request)).leftMap(mapDownstreamErrors(downstreamErrorMap))
 
     result.value
   }
 
-  private def ifsErrorMap =
-    Map(
+  private def downstreamErrorMap: Map[String, MtdError] = {
+    val errors = Map(
       "INVALID_TAXABLE_ENTITY_ID"   -> NinoFormatError,
       "INVALID_TAX_YEAR"            -> TaxYearFormatError,
       "INVALID_INCOMESOURCEID"      -> BusinessIdFormatError,
@@ -62,4 +60,12 @@ class AmendUkPropertyAnnualSubmissionService @Inject()(connector: AmendUkPropert
       "SERVER_ERROR"                -> InternalError,
       "SERVICE_UNAVAILABLE"         -> InternalError
     )
+
+    val extraTysErrors = Map(
+      "MISSING_EXPENSES" -> InternalError,
+      "FIELD_CONFLICT"   -> RulePropertyIncomeAllowanceError,
+    )
+
+    errors ++ extraTysErrors
+  }
 }

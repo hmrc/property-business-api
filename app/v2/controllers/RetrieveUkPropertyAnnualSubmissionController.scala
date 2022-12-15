@@ -83,11 +83,20 @@ class RetrieveUkPropertyAnnualSubmissionController @Inject()(val authService: En
 
   private def errorResult(errorWrapper: ErrorWrapper) =
     errorWrapper.error match {
-      case NinoFormatError | TaxYearFormatError | BusinessIdFormatError | RuleTaxYearRangeInvalidError | RuleTaxYearNotSupportedError |
-          RuleTypeOfBusinessIncorrectError | BadRequestError =>
+      case _
+          if errorWrapper.containsAnyOf(
+            NinoFormatError,
+            TaxYearFormatError,
+            BusinessIdFormatError,
+            RuleTaxYearRangeInvalidError,
+            RuleTaxYearNotSupportedError,
+            RuleTypeOfBusinessIncorrectError,
+            BadRequestError
+          ) =>
         BadRequest(Json.toJson(errorWrapper))
       case InternalError => InternalServerError(Json.toJson(errorWrapper))
       case NotFoundError => NotFound(Json.toJson(errorWrapper))
       case _             => unhandledError(errorWrapper)
     }
+
 }

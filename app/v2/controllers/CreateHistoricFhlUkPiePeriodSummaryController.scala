@@ -20,13 +20,16 @@ import cats.data.EitherT
 import cats.implicits.catsSyntaxEitherId
 import play.api.libs.json.{ JsValue, Json }
 import play.api.mvc.{ Action, ControllerComponents }
+import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.play.audit.http.connector.AuditResult
 import utils.{ IdGenerator, Logging }
 import v2.controllers.requestParsers.CreateHistoricFhlUkPiePeriodSummaryRequestParser
 import v2.hateoas.HateoasFactory
+import v2.models.audit.{ AuditEvent, AuditResponse, FlattenedGenericAuditDetail }
 import v2.models.errors._
 import v2.models.request.createHistoricFhlUkPiePeriodSummary.CreateHistoricFhlUkPiePeriodSummaryRawData
 import v2.models.response.createHistoricFhlUkPiePeriodSummary.CreateHistoricFhlUkPiePeriodSummaryHateoasData
-import v2.services.{ CreateHistoricFhlUkPiePeriodSummaryService, EnrolmentsAuthService, MtdIdLookupService }
+import v2.services.{ AuditService, CreateHistoricFhlUkPiePeriodSummaryService, EnrolmentsAuthService, MtdIdLookupService }
 
 import javax.inject.{ Inject, Singleton }
 import scala.concurrent.{ ExecutionContext, Future }
@@ -39,6 +42,7 @@ class CreateHistoricFhlUkPiePeriodSummaryController @Inject()(val authService: E
                                                               val lookupService: MtdIdLookupService,
                                                               parser: CreateHistoricFhlUkPiePeriodSummaryRequestParser,
                                                               service: CreateHistoricFhlUkPiePeriodSummaryService,
+                                                              auditService: AuditService,
                                                               hateoasFactory: HateoasFactory,
                                                               cc: ControllerComponents,
                                                               idGenerator: IdGenerator)(implicit ec: ExecutionContext)
@@ -75,12 +79,33 @@ class CreateHistoricFhlUkPiePeriodSummaryController @Inject()(val authService: E
         } yield {
           logger.info(s"Success response received with CorrelationId: ${serviceResponse.correlationId}")
 
+          auditSubmission(
+            FlattenedGenericAuditDetail(
+              versionNumber = Some("2.0"),
+              request.userDetails,
+              Map("nino" -> nino),
+              Some(request.body),
+              serviceResponse.correlationId,
+              AuditResponse(httpStatus = OK, response = Right(None))
+            )
+          )
           Created(Json.toJson(vendorResponse))
             .withApiHeaders(serviceResponse.correlationId)
         }
       result.leftMap { errorWrapper =>
         val resCorrelationId = errorWrapper.correlationId
         val result           = errorResult(errorWrapper).withApiHeaders(resCorrelationId)
+
+        auditSubmission(
+          FlattenedGenericAuditDetail(
+            Some("2.0"),
+            request.userDetails,
+            Map("nino" -> nino),
+            Some(request.body),
+            resCorrelationId,
+            AuditResponse(httpStatus = result.header.status, response = Left(errorWrapper.auditErrors))
+          )
+        )
 
         logger.warn(
           s"[${endpointLogContext.controllerName}][${endpointLogContext.endpointName}] - " +
@@ -116,5 +141,11 @@ class CreateHistoricFhlUkPiePeriodSummaryController @Inject()(val authService: E
       case _                 => unhandledError(errorWrapper)
 
     }
+  }
+
+  private def auditSubmission(details: FlattenedGenericAuditDetail)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[AuditResult] = {
+    val event =
+      AuditEvent("CreateHistoricFhlPropertyIncomeExpensesPeriodSummary", "CreateHistoricFhlPropertyIncomeExpensesPeriodSummary", details)
+    auditService.auditEvent(event)
   }
 }

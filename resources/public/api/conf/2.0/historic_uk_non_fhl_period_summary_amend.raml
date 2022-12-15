@@ -8,7 +8,14 @@ is:
   - errors.clientOrAgentNotAuthorised
   - errors.notFound
 displayName: Amend a Historic Non-FHL UK Property Income & Expenses Period Summary
-description: This endpoint allows you to amend income and expenses for non-FHL UK property business and make periodic submission for tax years from 2017-18 to 2021-22. A National Insurance number and a period ID must be provided. To amend submissions for the current tax year, use the Amend a UK Property Income & Expenses Period Summary endpoint.
+description: |
+    This endpoint allows you to amend income and expenses for
+    a non-FHL UK property business
+    and make periodic submission for tax years from 2017-18 to 2021-22.
+    A National Insurance number and a period ID must be provided.
+
+    To amend submissions for the current tax year,
+    use the Amend a UK Property Income & Expenses Period Summary endpoint.
 (annotations.sandboxData): !include scenarios/default_and_not_found_scenarios.md
 (annotations.scope): "write:self-assessment"
 securedBy: [ sec.oauth_2_0: { scopes: [ "write:self-assessment" ] } ]

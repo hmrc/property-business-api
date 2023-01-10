@@ -1,0 +1,65 @@
+summary: List Historic FHL UK property Income & Expenses Period Summary [test only]
+description: |
+  This endpoint enables you to list the income and expenses for a furnished holiday lettings (FHL) UK property business for a specific period within tax years 2017-18 to 2021-22. A National Insurance number is required. To list summaries from the current tax year, use the List Property Income & Expenses Period Summaries endpoint.
+
+  ### Test data
+  <p>Scenario simulations using <code>Gov-Test-Scenario</code> headers is only available in the sandbox environment.</p>
+  <table>
+      <thead>
+          <tr>
+              <th>Header Value (Gov-Test-Scenario)</th>
+              <th>Scenario</th>
+          </tr>
+      </thead>
+      <tbody>
+          <tr>
+              <td><p>N/A - DEFAULT</p></td>
+              <td><p>Simulate success response.</p></td>
+          </tr>
+          <tr>
+              <td><p>EMPTY</p></td>
+              <td><p>Simulates the scenario where no data is found.</p></td>
+          </tr>
+      </tbody>
+  </table>
+
+
+tags:
+  - Historic FHL UK Property Income & Expenses Period Summary
+
+parameters:
+  - $ref: './common/pathParameters.yaml#/components/parameters/nino'
+  - $ref: './common/headers.yaml#/components/parameters/acceptHeader'
+  - $ref: './common/headers.yaml#/components/parameters/authorizationReadScopeHeader'
+  - $ref: './common/headers.yaml#/components/parameters/testScenarioHeader'
+
+security:
+  - User-Restricted:
+      - read:self-assessment
+
+responses:
+  "200":
+    description: Success
+    headers:
+      X-CorrelationId:
+        $ref: './common/headers.yaml#/components/parameters/correlationId'
+    content:
+      application/json:
+        schema:
+          $ref: './schemas/historic_uk_fhl_period_summary_list/response.json'
+        examples:
+          example:
+            description: Default Example
+            value:
+              $ref: './examples/historic_uk_fhl_period_summary_list/response.json'
+
+  "403":
+    description: Forbidden
+    content:
+      application/json:
+        schema:
+          $ref: './schemas/error-response.yaml'
+        examples:
+          CLIENT_OR_AGENT_NOT_AUTHORISED:
+            $ref: './common/errors.yaml#/components/examples/clientOrAgentNotAuthorised'
+

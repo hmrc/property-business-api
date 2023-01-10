@@ -1,4 +1,0 @@
-get:
-  $ref: "./foreign_property_annual_submission_retrieve.yaml"
-put:
-  $ref: "./foreign_property_annual_submission_create_and_amend.yaml"

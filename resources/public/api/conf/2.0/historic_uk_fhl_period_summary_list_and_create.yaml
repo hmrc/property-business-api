@@ -1,0 +1,12 @@
+get:
+  $ref: "./historic_uk_fhl_period_summary_list.yaml"
+  summary: List Historic FHL UK property Income & Expenses Period Summary [test only]
+  security:
+    - User-Restricted:
+        - read:self-assessment
+post:
+  $ref: "./historic_uk_fhl_period_summary_create.yaml"
+  summary: Create a Historic FHL UK Property Income & Expenses Period Summary [test only]
+  security:
+    - User-Restricted:
+        - write:self-assessment

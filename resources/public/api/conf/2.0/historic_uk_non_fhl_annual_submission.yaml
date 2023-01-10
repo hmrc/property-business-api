@@ -1,0 +1,20 @@
+put:
+  $ref: "./historic_uk_non_fhl_annual_submission_create_and_amend.yaml"
+  summary: Create and Amend a Historic Non-FHL UK Property Business Annual Submission [test only]
+  security:
+    - User-Restricted:
+        - write:self-assessment
+
+get:
+  $ref: "./historic_uk_non_fhl_annual_submission_retrieve.yaml"
+  summary: Retrieve a Historic Non-FHL UK Property Business Annual Submission [test only]
+  security:
+    - User-Restricted:
+        - read:self-assessment
+
+delete:
+  $ref: "./historic_uk_non_fhl_annual_submission_delete.yaml"
+  summary: Delete a Historic Non-FHL UK Property Business Annual Submission [test only]
+  security:
+    - User-Restricted:
+        - write:self-assessment

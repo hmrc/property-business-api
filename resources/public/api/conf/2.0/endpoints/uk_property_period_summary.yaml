@@ -1,4 +1,0 @@
-get:
-  $ref: "./uk_property_period_summary_retrieve.yaml"
-put:
-  $ref: "./uk_property_period_summary_amend.yaml"

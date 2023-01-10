@@ -58,8 +58,8 @@ class DocumentationControllerISpec extends V2IntegrationBaseSpec {
     |         },
     |         {
     |            "version":"2.0",
-    |            "status":"ALPHA",
-    |            "endpointsEnabled":false
+    |            "status":"BETA",
+    |            "endpointsEnabled":true
     |         }
     |      ]
     |   }

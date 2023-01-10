@@ -29,10 +29,10 @@ tags:
   - Historic non-FHL UK Property Income & Expenses Period Summary
 
 parameters:
-  - $ref: '../pathParameters.yaml#/components/parameters/nino'
-  - $ref: '../headers.yaml#/components/parameters/acceptHeader'
-  - $ref: '../headers.yaml#/components/parameters/authorizationReadScopeHeader'
-  - $ref: '../headers.yaml#/components/parameters/testScenarioHeader'
+  - $ref: './common/pathParameters.yaml#/components/parameters/nino'
+  - $ref: './common/headers.yaml#/components/parameters/acceptHeader'
+  - $ref: './common/headers.yaml#/components/parameters/authorizationReadScopeHeader'
+  - $ref: './common/headers.yaml#/components/parameters/testScenarioHeader'
 
 security:
   - User-Restricted:
@@ -43,24 +43,24 @@ responses:
     description: Success
     headers:
       X-CorrelationId:
-        $ref: '../headers.yaml#/components/parameters/correlationId'
+        $ref: './common/headers.yaml#/components/parameters/correlationId'
     content:
       application/json:
         schema:
-          $ref: '../schemas/historic_uk_non_fhl_period_summary_list/response.json'
+          $ref: './schemas/historic_uk_non_fhl_period_summary_list/response.json'
         examples:
           example:
             description: Default Example
             value:
-              $ref: '../examples/historic_uk_non_fhl_period_summary_list/response.json'
+              $ref: './examples/historic_uk_non_fhl_period_summary_list/response.json'
 
   "403":
     description: Forbidden
     content:
       application/json:
         schema:
-          $ref: '../schemas/error-response.yaml'
+          $ref: './schemas/error-response.yaml'
         examples:
           CLIENT_OR_AGENT_NOT_AUTHORISED:
-            $ref: '../errors.yaml#/components/examples/clientOrAgentNotAuthorised'
+            $ref: './common/errors.yaml#/components/examples/clientOrAgentNotAuthorised'
 

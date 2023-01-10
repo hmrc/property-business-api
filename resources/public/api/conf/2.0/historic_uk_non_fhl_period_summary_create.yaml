@@ -48,11 +48,11 @@ tags:
   - Historic non-FHL UK Property Income & Expenses Period Summary
 
 parameters:
-  - $ref: '../pathParameters.yaml#/components/parameters/nino'
-  - $ref: '../headers.yaml#/components/parameters/acceptHeader'
-  - $ref: '../headers.yaml#/components/parameters/contentTypeJson'
-  - $ref: '../headers.yaml#/components/parameters/authorizationWriteScopeHeader'
-  - $ref: '../headers.yaml#/components/parameters/testScenarioHeader'
+  - $ref: './common/pathParameters.yaml#/components/parameters/nino'
+  - $ref: './common/headers.yaml#/components/parameters/acceptHeader'
+  - $ref: './common/headers.yaml#/components/parameters/contentTypeJson'
+  - $ref: './common/headers.yaml#/components/parameters/authorizationWriteScopeHeader'
+  - $ref: './common/headers.yaml#/components/parameters/testScenarioHeader'
 
 security:
   - User-Restricted:
@@ -62,81 +62,81 @@ requestBody:
   content:
     application/json:
       schema:
-        $ref: '../schemas/historic_uk_non_fhl_period_summary_create/request.json'
+        $ref: './schemas/historic_uk_non_fhl_period_summary_create/request.json'
       examples:
         full-income-expenses-request:
           description: Full income and expenses request
           value:
-            $ref: '../examples/historic_uk_non_fhl_period_summary_create/request.json'
+            $ref: './examples/historic_uk_non_fhl_period_summary_create/request.json'
         consolidated-income-expenses-request:
           description: Consolidated income and expenses request
           value:
-            $ref: '../examples/historic_uk_non_fhl_period_summary_create/consolidated_request.json'
+            $ref: './examples/historic_uk_non_fhl_period_summary_create/consolidated_request.json'
 
 responses:
   "200":
     description: Success
     headers:
       X-CorrelationId:
-        $ref: '../headers.yaml#/components/parameters/correlationId'
+        $ref: './common/headers.yaml#/components/parameters/correlationId'
     content:
       application/json:
         schema:
-          $ref: '../schemas/historic_uk_non_fhl_period_summary_create/response.json'
+          $ref: './schemas/historic_uk_non_fhl_period_summary_create/response.json'
         examples:
           example-response:
             description: Example Response
             value:
-              $ref: '../examples/historic_uk_non_fhl_period_summary_create/response.json'
+              $ref: './examples/historic_uk_non_fhl_period_summary_create/response.json'
   "400":
     description: Bad request
     content:
       application/json:
         schema:
-          $ref: '../schemas/error-response.yaml'
+          $ref: './schemas/error-response.yaml'
         examples:
           FORMAT_NINO:
-            $ref: '../errors.yaml#/components/examples/formatNino'
+            $ref: './common/errors.yaml#/components/examples/formatNino'
           FORMAT_FROM_DATE:
-            $ref: '../errors.yaml#/components/examples/formatFromDate' 
+            $ref: './common/errors.yaml#/components/examples/formatFromDate' 
           FORMAT_TO_DATE:
-            $ref: '../errors.yaml#/components/examples/formatToDate' 
+            $ref: './common/errors.yaml#/components/examples/formatToDate' 
           FORMAT_VALUE:
-            $ref: '../errors.yaml#/components/examples/formatValue' 
+            $ref: './common/errors.yaml#/components/examples/formatValue' 
           RULE_BOTH_EXPENSES_SUPPLIED:
-            $ref: '../errors.yaml#/components/examples/ruleBothExpensesSupplied' 
+            $ref: './common/errors.yaml#/components/examples/ruleBothExpensesSupplied' 
           RULE_INCORRECT_OR_EMPTY_BODY_SUBMITTED:
-            $ref: '../errors.yaml#/components/examples/ruleIncorrectOrEmptyBody' 
+            $ref: './common/errors.yaml#/components/examples/ruleIncorrectOrEmptyBody' 
           RULE_TO_DATE_BEFORE_FROM_DATE:
-            $ref: '../errors.yaml#/components/examples/ruleToDateBeforeFromDate' 
+            $ref: './common/errors.yaml#/components/examples/ruleToDateBeforeFromDate' 
           RULE_OVERLAPPING_PERIOD:
-            $ref: '../errors.yaml#/components/examples/ruleOverlappingPeriod' 
+            $ref: './common/errors.yaml#/components/examples/ruleOverlappingPeriod' 
           RULE_MISALIGNED_PERIOD:
-            $ref: '../errors.yaml#/components/examples/ruleMisalignedPeriod'          
+            $ref: './common/errors.yaml#/components/examples/ruleMisalignedPeriod'          
           RULE_NOT_CONTIGUOUS_PERIOD:
-            $ref: '../errors.yaml#/components/examples/ruleNotContiguousPeriod' 
+            $ref: './common/errors.yaml#/components/examples/ruleNotContiguousPeriod' 
           RULE_DUPLICATE_SUBMISSION:
-            $ref: '../errors.yaml#/components/examples/ruleDuplicateSubmission' 
+            $ref: './common/errors.yaml#/components/examples/ruleDuplicateSubmission' 
           RULE_TAX_YEAR_NOT_SUPPORTED:
-            $ref: '../errors.yaml#/components/examples/rulePeriodTaxYearNotSupported' 
+            $ref: './common/errors.yaml#/components/examples/rulePeriodTaxYearNotSupported' 
 
   "403":
     description: Forbidden
     content:
       application/json:
         schema:
-          $ref: '../schemas/error-response.yaml'
+          $ref: './schemas/error-response.yaml'
         examples:
           CLIENT_OR_AGENT_NOT_AUTHORISED:
-            $ref: '../errors.yaml#/components/examples/clientOrAgentNotAuthorised'
+            $ref: './common/errors.yaml#/components/examples/clientOrAgentNotAuthorised'
 
   "404":
     description: Not Found
     content:
       application/json:
         schema:
-          $ref: '../schemas/error-response.yaml'
+          $ref: './schemas/error-response.yaml'
         examples:
           MATCHING_RESOURCE_NOT_FOUND:
-            $ref: '../errors.yaml#/components/examples/notFound'
+            $ref: './common/errors.yaml#/components/examples/notFound'
 

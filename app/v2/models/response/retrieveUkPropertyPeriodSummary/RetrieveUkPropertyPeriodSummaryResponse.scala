@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,6 +25,7 @@ import v2.models.hateoas.{ HateoasData, Link }
 case class RetrieveUkPropertyPeriodSummaryResponse(submittedOn: String,
                                                    fromDate: String,
                                                    toDate: String,
+                                                   periodCreationDate: Option[String],
                                                    ukFhlProperty: Option[UkFhlProperty],
                                                    ukNonFhlProperty: Option[UkNonFhlProperty])
 
@@ -35,6 +36,7 @@ object RetrieveUkPropertyPeriodSummaryResponse extends HateoasLinks {
     (__ \ "submittedOn").read[String] and
       (__ \ "fromDate").read[String] and
       (__ \ "toDate").read[String] and
+      (__ \ "periodCreationDate").readNullable[String] and
       (__ \ "ukFhlProperty").readNullable[UkFhlProperty] and
       (__ \ "ukOtherProperty").readNullable[UkNonFhlProperty]
   )(RetrieveUkPropertyPeriodSummaryResponse.apply _)

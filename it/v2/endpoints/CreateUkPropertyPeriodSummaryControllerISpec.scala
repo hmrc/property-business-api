@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -570,6 +570,8 @@ class CreateUkPropertyPeriodSummaryControllerISpec extends V2IntegrationBaseSpec
           (Status.BAD_REQUEST, "INVALID_CORRELATION_ID", Status.INTERNAL_SERVER_ERROR, InternalError),
           (Status.UNPROCESSABLE_ENTITY, "PERIOD_NOT_ALIGNED", Status.BAD_REQUEST, RuleMisalignedPeriodError),
           (Status.UNPROCESSABLE_ENTITY, "PERIOD_OVERLAPS", Status.BAD_REQUEST, RuleOverlappingPeriodError),
+          (Status.UNPROCESSABLE_ENTITY, "INVALID_SUBMISSION_PERIOD", Status.BAD_REQUEST, RuleInvalidSubmissionPeriodError),
+          (Status.UNPROCESSABLE_ENTITY, "INVALID_SUBMISSION_END_DATE", Status.BAD_REQUEST, RuleInvalidSubmissionEndDateError)
         )
 
         (errors ++ extraTysErrors).foreach(args => (serviceErrorTest _).tupled(args))

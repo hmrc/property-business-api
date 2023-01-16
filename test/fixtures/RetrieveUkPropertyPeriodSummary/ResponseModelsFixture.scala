@@ -27,6 +27,7 @@ trait ResponseModelsFixture {
       |  "submittedOn": "2020-06-17T10:53:38Z",
       |  "fromDate": "2019-01-29",
       |  "toDate": "2020-03-29",
+      |  "periodCreationDate": "2020-06-17T10:53:38Z",
       |  "ukFhlProperty": {
       |    "income": {
       |      "periodAmount": 1.11,
@@ -86,6 +87,7 @@ trait ResponseModelsFixture {
       |  "submittedOn": "2020-06-17T10:53:38Z",
       |  "fromDate": "2019-01-29",
       |  "toDate": "2020-03-29",
+      |  "periodCreationDate": "2020-06-17T10:53:38Z",
       |  "ukFhlProperty": {
       |    "income": {
       |      "periodAmount": 1.11,
@@ -210,7 +212,7 @@ trait ResponseModelsFixture {
     submittedOn = "2020-06-17T10:53:38Z",
     fromDate = "2019-01-29",
     toDate = "2020-03-29",
-    None,
+    periodCreationDate = Some("2020-06-17T10:53:38Z"),
     ukFhlProperty = Some(ukFhlPropertyModel),
     ukNonFhlProperty = Some(ukNonFhlPropertyModel)
   )

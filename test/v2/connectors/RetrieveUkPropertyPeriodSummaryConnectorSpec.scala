@@ -36,7 +36,7 @@ class RetrieveUkPropertyPeriodSummaryConnectorSpec extends ConnectorSpec with Re
   val ukNonFhlProperty: UkNonFhlProperty = UkNonFhlProperty(None, None)
 
   def responseWith(ukFhlProperty: Option[UkFhlProperty], ukNonFhlProperty: Option[UkNonFhlProperty]): RetrieveUkPropertyPeriodSummaryResponse =
-    RetrieveUkPropertyPeriodSummaryResponse("2020-06-17T10:53:38Z", "2019-01-29", "2020-03-29", ukFhlProperty, ukNonFhlProperty)
+    RetrieveUkPropertyPeriodSummaryResponse("2020-06-17T10:53:38Z", "2019-01-29", "2020-03-29", Some("2020-06-17T10:53:38Z"), ukFhlProperty, ukNonFhlProperty)
 
   trait Test extends ConnectorTest {
 

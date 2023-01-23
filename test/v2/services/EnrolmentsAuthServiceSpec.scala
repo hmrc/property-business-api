@@ -52,7 +52,7 @@ class EnrolmentsAuthServiceSpec extends ServiceSpec with MockAppConfig {
     _,
     AlternatePredicate(
       AlternatePredicate(
-        CompositePredicate(AffinityGroup.Individual, ConfidenceLevel.L200),
+        CompositePredicate(AffinityGroup.Individual, ConfidenceLevel.L250),
         AffinityGroup.Organisation
       ),
       AffinityGroup.Agent
@@ -61,7 +61,7 @@ class EnrolmentsAuthServiceSpec extends ServiceSpec with MockAppConfig {
 
   "calling .buildPredicate" when {
     "confidence level checks are on" should {
-      "return a Predicate containing confidence level 200 on top of the provided Predicate" when {
+      "return a Predicate containing confidence level 250 on top of the provided Predicate" when {
         "passed a simple Individual Predicate" in new Test {
           MockAppConfig.confidenceLevelCheckEnabled.returns(ConfidenceLevelConfig(definitionEnabled = true, authValidationEnabled = true))
 

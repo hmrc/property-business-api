@@ -112,7 +112,7 @@ class ApiDefinitionFactorySpec extends UnitSpec {
 
     "the 'apiStatus' parameter is present and invalid" should {
       "default to alpha" in new Test {
-        MockAppConfig.apiStatus("1.0") returns "ALPHA"
+        MockAppConfig.apiStatus("1.0") returns "ALPHO"
         apiDefinitionFactory.buildAPIStatus(version = "1.0") shouldBe ALPHA
       }
     }

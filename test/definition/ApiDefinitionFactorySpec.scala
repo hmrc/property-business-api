@@ -31,7 +31,7 @@ class ApiDefinitionFactorySpec extends UnitSpec {
     MockAppConfig.apiGatewayContext returns "individuals/business/property"
   }
 
-  private val confidenceLevel: ConfidenceLevel = ConfidenceLevel.L250
+  private val confidenceLevel: ConfidenceLevel = ConfidenceLevel.L200
 
   "definition" when {
     "called" should {
@@ -88,7 +88,7 @@ class ApiDefinitionFactorySpec extends UnitSpec {
 
   "confidenceLevel" when {
     Seq(
-      (true, ConfidenceLevel.L250),
+      (true, ConfidenceLevel.L200),
       (false, ConfidenceLevel.L50)
     ).foreach {
       case (definitionEnabled, cl) =>
@@ -112,7 +112,7 @@ class ApiDefinitionFactorySpec extends UnitSpec {
 
     "the 'apiStatus' parameter is present and invalid" should {
       "default to alpha" in new Test {
-        MockAppConfig.apiStatus("1.0") returns "ALPHA"
+        MockAppConfig.apiStatus("1.0") returns "ALPHO"
         apiDefinitionFactory.buildAPIStatus(version = "1.0") shouldBe ALPHA
       }
     }

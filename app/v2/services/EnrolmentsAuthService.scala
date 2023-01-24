@@ -48,7 +48,7 @@ class EnrolmentsAuthService @Inject()(val connector: AuthConnector, val appConfi
 
   def buildPredicate(predicate: Predicate): Predicate =
     if (appConfig.confidenceLevelConfig.authValidationEnabled) {
-      predicate and ((Individual and ConfidenceLevel.L250) or Organisation or Agent)
+      predicate and ((Individual and ConfidenceLevel.L200) or Organisation or Agent)
     } else {
       predicate
     }

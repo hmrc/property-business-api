@@ -31,7 +31,7 @@ class ApiDefinitionFactorySpec extends UnitSpec {
     MockAppConfig.apiGatewayContext returns "individuals/business/property"
   }
 
-  private val confidenceLevel: ConfidenceLevel = ConfidenceLevel.L200
+  private val confidenceLevel: ConfidenceLevel = ConfidenceLevel.L250
 
   "definition" when {
     "called" should {
@@ -88,7 +88,7 @@ class ApiDefinitionFactorySpec extends UnitSpec {
 
   "confidenceLevel" when {
     Seq(
-      (true, ConfidenceLevel.L200),
+      (true, ConfidenceLevel.L250),
       (false, ConfidenceLevel.L50)
     ).foreach {
       case (definitionEnabled, cl) =>

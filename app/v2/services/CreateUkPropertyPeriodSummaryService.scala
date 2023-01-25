@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -69,10 +69,12 @@ class CreateUkPropertyPeriodSummaryService @Inject()(connector: CreateUkProperty
     )
 
     val extraTysErrors = Map(
-      "INVALID_INCOMESOURCE_ID" -> BusinessIdFormatError,
-      "INVALID_CORRELATION_ID"  -> InternalError,
-      "PERIOD_NOT_ALIGNED"      -> RuleMisalignedPeriodError,
-      "PERIOD_OVERLAPS"         -> RuleOverlappingPeriodError
+      "INVALID_INCOMESOURCE_ID"     -> BusinessIdFormatError,
+      "INVALID_CORRELATION_ID"      -> InternalError,
+      "PERIOD_NOT_ALIGNED"          -> RuleMisalignedPeriodError,
+      "PERIOD_OVERLAPS"             -> RuleOverlappingPeriodError,
+      "INVALID_SUBMISSION_PERIOD"   -> RuleInvalidSubmissionPeriodError,
+      "INVALID_SUBMISSION_END_DATE" -> RuleInvalidSubmissionEndDateError
     )
 
     errors ++ extraTysErrors

@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -112,6 +112,10 @@ object NotFoundError extends MtdError("MATCHING_RESOURCE_NOT_FOUND", "Matching r
 
 object SubmissionIdNotFoundError extends MtdError("SUBMISSION_ID_NOT_FOUND", "Submission ID not found")
 
+object RuleInvalidSubmissionPeriodError
+    extends MtdError("RULE_INVALID_SUBMISSION_PERIOD", "Property income and expenses submissions cannot be more than 10 days before the end of the Period")
+
+object RuleInvalidSubmissionEndDateError extends MtdError("RULE_INVALID_SUBMISSION_END_DATE", "The submitted end date must be the end of the quarter")
 object InternalError extends MtdError("INTERNAL_SERVER_ERROR", "An internal server error occurred")
 
 object BadRequestError extends MtdError("INVALID_REQUEST", "Invalid request")

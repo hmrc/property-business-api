@@ -19,6 +19,12 @@
       "description": "The last day that the income and expenses period summary covers. Must conform to the format YYYY-MM-DD",
       "example": "2020-01-31"
     },
+    ,
+    "periodCreationDate": {
+      "type": "string",
+      "description": "[Test only] The date and time when the income and expenses period was created. This is only available from the tax year 2023-24.",
+      "example": "2023-07-06T14:15:22.000Z"
+    },
     "ukFhlProperty": {
       "type": "object",
       "description": "Object holding the income and expenses of the user's Furnished Holiday Letting (FHL) in the United Kingdom for the period. (At least one of income or expenses should be present).",

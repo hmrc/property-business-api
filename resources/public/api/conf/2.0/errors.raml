@@ -395,3 +395,25 @@ traits:
                 description: The To date parameter is missing.
                 value:
                   code: MISSING_TO_DATE
+  invalidSubmissionEndDate:
+    responses:
+      400:
+        body:
+          application/json:
+            type: types.errorResponse
+            examples:
+              invalidSubmissionEndDate:
+                description: The submitted end date must be the end of the quarter.
+                value:
+                  code: RULE_INVALID_SUBMISSION_END_DATE
+  invalidSubmissionPeriod:
+    responses:
+      400:
+        body:
+          application/json:
+            type: types.errorResponse
+            examples:
+              invalidSubmissionPeriod:
+                description: Property income and expenses submissions cannot be more than 10 days before the end of the Period.
+                value:
+                  code: RULE_INVALID_SUBMISSION_PERIOD

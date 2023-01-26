@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,8 +22,11 @@ import v1.models.domain.Nino
 import v1.models.request.amendForeignPropertyAnnualSubmission._
 
 class AmendForeignPropertyAnnualSubmissionRequestParser @Inject()(val validator: AmendForeignPropertyAnnualSubmissionValidator)
-  extends RequestParser[AmendForeignPropertyAnnualSubmissionRawData, AmendForeignPropertyAnnualSubmissionRequest] {
+    extends RequestParser[AmendForeignPropertyAnnualSubmissionRawData, AmendForeignPropertyAnnualSubmissionRequest] {
 
   override protected def requestFor(data: AmendForeignPropertyAnnualSubmissionRawData): AmendForeignPropertyAnnualSubmissionRequest =
-    AmendForeignPropertyAnnualSubmissionRequest(Nino(data.nino), data.businessId, data.taxYear, data.body.as[AmendForeignPropertyAnnualSubmissionRequestBody])
+    AmendForeignPropertyAnnualSubmissionRequest(Nino(data.nino),
+                                                data.businessId,
+                                                data.taxYear,
+                                                data.body.as[AmendForeignPropertyAnnualSubmissionRequestBody])
 }

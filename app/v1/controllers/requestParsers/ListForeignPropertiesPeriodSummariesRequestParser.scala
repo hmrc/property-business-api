@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,11 +23,11 @@ import v1.models.request.listForeignPropertiesPeriodSummaries._
 import v1.support.DateUtils
 
 class ListForeignPropertiesPeriodSummariesRequestParser @Inject()(val validator: ListForeignPropertiesPeriodSummariesValidator, dateUtils: DateUtils)
-  extends RequestParser[ListForeignPropertiesPeriodSummariesRawData, ListForeignPropertiesPeriodSummariesRequest] {
+    extends RequestParser[ListForeignPropertiesPeriodSummariesRawData, ListForeignPropertiesPeriodSummariesRequest] {
 
   override protected def requestFor(data: ListForeignPropertiesPeriodSummariesRawData): ListForeignPropertiesPeriodSummariesRequest = {
     val fromDate = data.fromDate.getOrElse(dateUtils.currentTaxYearStart)
-    val toDate = data.toDate.getOrElse(dateUtils.currentTaxYearEnd)
+    val toDate   = data.toDate.getOrElse(dateUtils.currentTaxYearEnd)
     ListForeignPropertiesPeriodSummariesRequest(Nino(data.nino), data.businessId, fromDate, toDate)
   }
 }

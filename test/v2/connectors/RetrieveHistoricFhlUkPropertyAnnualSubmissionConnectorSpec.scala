@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,9 +16,7 @@
 
 package v2.connectors
 
-import mocks.MockAppConfig
 import org.scalamock.handlers.CallHandler
-import v2.mocks.MockHttpClient
 import v2.models.domain.{ Nino, TaxYear }
 import v2.models.errors.{ DownstreamErrorCode, DownstreamErrors }
 import v2.models.outcomes.ResponseWrapper
@@ -42,31 +40,27 @@ class RetrieveHistoricFhlUkPropertyAnnualSubmissionConnectorSpec extends Connect
     taxYear = TaxYear.fromMtd(mtdTaxYear)
   )
 
-  val annualAdjustments = AnnualAdjustments(None, None, None, true, None, false, None)
+  val annualAdjustments = AnnualAdjustments(None, None, None, periodOfGraceAdjustment = true, None, nonResidentLandlord = false, None)
   val annualAllowances  = AnnualAllowances(None, None, None, None)
 
   def responseWith(annualAdjustments: Option[AnnualAdjustments],
                    annualAllowances: Option[AnnualAllowances]): RetrieveHistoricFhlUkPropertyAnnualSubmissionResponse =
     RetrieveHistoricFhlUkPropertyAnnualSubmissionResponse(annualAdjustments, annualAllowances)
 
-  class Test extends MockHttpClient with MockAppConfig {
+  trait Test {
+    _: ConnectorTest =>
 
     val connector: RetrieveHistoricFhlUkPropertyAnnualSubmissionConnector = new RetrieveHistoricFhlUkPropertyAnnualSubmissionConnector(
       http = mockHttpClient,
       appConfig = mockAppConfig
     )
 
-    MockAppConfig.ifsBaseUrl returns baseUrl
-    MockAppConfig.ifsToken returns "ifs-token"
-    MockAppConfig.ifsEnvironment returns "ifs-environment"
-    MockAppConfig.ifsEnvironmentHeaders returns Some(allowedDownstreamHeaders)
-
     def stubHttpResponse(outcome: DownstreamOutcome[RetrieveHistoricFhlUkPropertyAnnualSubmissionResponse])
       : CallHandler[Future[DownstreamOutcome[RetrieveHistoricFhlUkPropertyAnnualSubmissionResponse]]]#Derived = {
       MockHttpClient
         .get(
           url = s"$baseUrl/income-tax/nino/$nino/uk-properties/furnished-holiday-lettings/annual-summaries/$downstreamTaxYear",
-          config = dummyIfsHeaderCarrierConfig,
+          config = dummyHeaderCarrierConfig,
           requiredHeaders = requiredIfsHeaders,
         )
         .returns(Future.successful(outcome))
@@ -75,7 +69,7 @@ class RetrieveHistoricFhlUkPropertyAnnualSubmissionConnectorSpec extends Connect
 
   "connector" when {
     "request asks for a historic FHL UK property annual submission" must {
-      "return a valid result" in new Test {
+      "return a valid result" in new IfsTest with Test {
         val response = responseWith(Some(annualAdjustments), Some(annualAllowances))
         val outcome  = Right(ResponseWrapper(correlationId, response))
 
@@ -86,7 +80,7 @@ class RetrieveHistoricFhlUkPropertyAnnualSubmissionConnectorSpec extends Connect
       }
 
       "response is an error" must {
-        "return an error" in new Test {
+        "return an error" in new IfsTest with Test {
           val outcome = Left(ResponseWrapper(correlationId, DownstreamErrors.single(DownstreamErrorCode("SOME_ERROR"))))
 
           stubHttpResponse(outcome)

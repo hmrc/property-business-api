@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 
 package v2.models.response.retrieveForeignPropertyAnnualSubmission.foreignProperty
 
-import play.api.libs.json.{JsValue, Json}
+import play.api.libs.json.{ JsValue, Json }
 import support.UnitSpec
 
 class StructuredBuildingAllowanceSpec extends UnitSpec {
@@ -24,10 +24,11 @@ class StructuredBuildingAllowanceSpec extends UnitSpec {
   val responseBody: StructuredBuildingAllowance =
     StructuredBuildingAllowance(
       3000.30,
-      Some(FirstYear(
-        "2020-01-01",
-        3000.40
-      )),
+      Some(
+        FirstYear(
+          "2020-01-01",
+          3000.40
+        )),
       Building(
         Some("house name"),
         Some("house number"),
@@ -35,8 +36,7 @@ class StructuredBuildingAllowanceSpec extends UnitSpec {
       )
     )
 
-  val validJson: JsValue = Json.parse(
-    """
+  val validJson: JsValue = Json.parse("""
       |{
       |  "amount": 3000.30,
       |  "firstYear": {
@@ -51,8 +51,7 @@ class StructuredBuildingAllowanceSpec extends UnitSpec {
       |}
       |""".stripMargin)
 
-  val validIfsJson: JsValue = Json.parse(
-    """
+  val validIfsJson: JsValue = Json.parse("""
       |{
       |  "amount": 3000.30,
       |  "firstYear": {

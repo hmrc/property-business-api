@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,11 +16,11 @@
 
 package v2.models.request.common.foreignFhlEea
 
-import play.api.libs.json.{Json, Reads, Writes}
+import play.api.libs.json.{ Json, Reads, Writes }
 
 case class ForeignFhlEeaIncome(rentAmount: Option[BigDecimal])
 
 object ForeignFhlEeaIncome {
-  implicit val reads: Reads[ForeignFhlEeaIncome] = Json.reads[ForeignFhlEeaIncome]
+  implicit val reads: Reads[ForeignFhlEeaIncome]   = Json.reads[ForeignFhlEeaIncome]
   implicit val writes: Writes[ForeignFhlEeaIncome] = Json.writes[ForeignFhlEeaIncome]
 }

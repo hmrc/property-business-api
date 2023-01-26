@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,19 +20,20 @@ import support.UnitSpec
 import v1.mocks.support.MockDateUtils
 import v1.mocks.validators.MockListForeignPropertiesPeriodSummariesValidator
 import v1.models.domain.Nino
-import v1.models.errors.{BadRequestError, BusinessIdFormatError, ErrorWrapper, NinoFormatError}
+import v1.models.errors.{ BadRequestError, BusinessIdFormatError, ErrorWrapper, NinoFormatError }
 import v1.models.request.listForeignPropertiesPeriodSummaries._
 
 class ListForeignPropertiesPeriodSummariesRequestParserSpec extends UnitSpec {
 
-  val nino: String = "AA123456B"
-  val businessId: String = "XAIS12345678901"
-  val fromDate: String = "2020-06-06"
-  val toDate: String = "2020-08-06"
+  val nino: String                   = "AA123456B"
+  val businessId: String             = "XAIS12345678901"
+  val fromDate: String               = "2020-06-06"
+  val toDate: String                 = "2020-08-06"
   implicit val correlationId: String = "X-123"
 
   val inputData: ListForeignPropertiesPeriodSummariesRawData =
     ListForeignPropertiesPeriodSummariesRawData(nino, businessId, Some(fromDate), Some(toDate))
+
   val inputDataWithoutDates: ListForeignPropertiesPeriodSummariesRawData =
     ListForeignPropertiesPeriodSummariesRawData(nino, businessId, None, None)
 
@@ -57,14 +58,16 @@ class ListForeignPropertiesPeriodSummariesRequestParserSpec extends UnitSpec {
     }
     "return an ErrorWrapper" when {
       "a single validation error occurs" in new Test {
-        MockListForeignPropertiesValidator.validate(inputData)
+        MockListForeignPropertiesValidator
+          .validate(inputData)
           .returns(List(NinoFormatError))
 
         parser.parseRequest(inputData) shouldBe
           Left(ErrorWrapper(correlationId, NinoFormatError, None))
       }
       "multiple validation errors occur" in new Test {
-        MockListForeignPropertiesValidator.validate(inputData)
+        MockListForeignPropertiesValidator
+          .validate(inputData)
           .returns(List(NinoFormatError, BusinessIdFormatError))
 
         parser.parseRequest(inputData) shouldBe

@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,12 +16,14 @@
 
 package v1.models.request.amendForeignPropertyPeriodSummary
 
-import play.api.libs.json.{Json, Reads, Writes}
+import play.api.libs.json.{ Json, Reads, Writes }
 import v1.models.request.common.foreignFhlEea.ForeignFhlEea
 import v1.models.request.common.foreignPropertyEntry.ForeignPropertyEntry
 
 case class AmendForeignPropertyPeriodSummaryRequestBody(foreignFhlEea: Option[ForeignFhlEea], foreignProperty: Option[Seq[ForeignPropertyEntry]]) {
-  def isEmpty: Boolean = (foreignFhlEea.isEmpty && foreignProperty.isEmpty) ||
+
+  def isEmpty: Boolean =
+    (foreignFhlEea.isEmpty && foreignProperty.isEmpty) ||
     foreignFhlEea.flatMap(_.expenditure.map(_.isEmpty)).getOrElse(false) ||
     foreignProperty.exists(_.isEmpty) ||
     foreignFhlEea.exists(_.isEmpty) ||
@@ -29,8 +31,6 @@ case class AmendForeignPropertyPeriodSummaryRequestBody(foreignFhlEea: Option[Fo
 }
 
 object AmendForeignPropertyPeriodSummaryRequestBody {
-  implicit val reads: Reads[AmendForeignPropertyPeriodSummaryRequestBody] = Json.reads[AmendForeignPropertyPeriodSummaryRequestBody]
+  implicit val reads: Reads[AmendForeignPropertyPeriodSummaryRequestBody]   = Json.reads[AmendForeignPropertyPeriodSummaryRequestBody]
   implicit val writes: Writes[AmendForeignPropertyPeriodSummaryRequestBody] = Json.writes[AmendForeignPropertyPeriodSummaryRequestBody]
 }
-
-

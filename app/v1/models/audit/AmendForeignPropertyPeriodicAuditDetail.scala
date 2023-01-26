@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,17 +16,17 @@
 
 package v1.models.audit
 
-import play.api.libs.json.{JsValue, Json, Writes}
+import play.api.libs.json.{ JsValue, Json, Writes }
 import v1.models.auth.UserDetails
 
 case class AmendForeignPropertyPeriodicAuditDetail(userType: String,
-                                                          agentReferenceNumber: Option[String],
-                                                          nino: String,
-                                                          businessId: String,
-                                                          submissionId: String,
-                                                          request: JsValue,
-                                                          `X-CorrelationId`: String,
-                                                          response: AuditResponse)
+                                                   agentReferenceNumber: Option[String],
+                                                   nino: String,
+                                                   businessId: String,
+                                                   submissionId: String,
+                                                   request: JsValue,
+                                                   `X-CorrelationId`: String,
+                                                   response: AuditResponse)
 
 object AmendForeignPropertyPeriodicAuditDetail {
   implicit val writes: Writes[AmendForeignPropertyPeriodicAuditDetail] = Json.writes[AmendForeignPropertyPeriodicAuditDetail]

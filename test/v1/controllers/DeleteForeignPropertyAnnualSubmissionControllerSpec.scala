@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,8 +21,8 @@ import play.api.mvc.Result
 import uk.gov.hmrc.http.HeaderCarrier
 import v1.mocks.MockIdGenerator
 import v1.mocks.requestParsers.MockDeleteForeignPropertyAnnualSubmissionRequestParser
-import v1.mocks.services.{MockAuditService, MockDeleteForeignPropertyAnnualSubmissionService, MockEnrolmentsAuthService, MockMtdIdLookupService}
-import v1.models.audit.{AuditError, AuditEvent, AuditResponse, DeleteForeignPropertyAnnualAuditDetail}
+import v1.mocks.services.{ MockAuditService, MockDeleteForeignPropertyAnnualSubmissionService, MockEnrolmentsAuthService, MockMtdIdLookupService }
+import v1.models.audit.{ AuditError, AuditEvent, AuditResponse, DeleteForeignPropertyAnnualAuditDetail }
 import v1.models.domain.Nino
 import v1.models.errors._
 import v1.models.outcomes.ResponseWrapper
@@ -32,7 +32,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class DeleteForeignPropertyAnnualSubmissionControllerSpec
-  extends ControllerBaseSpec
+    extends ControllerBaseSpec
     with MockEnrolmentsAuthService
     with MockMtdIdLookupService
     with MockDeleteForeignPropertyAnnualSubmissionService
@@ -40,9 +40,9 @@ class DeleteForeignPropertyAnnualSubmissionControllerSpec
     with MockAuditService
     with MockIdGenerator {
 
-  private val nino = "AA123456A"
-  private val businessId = "XAIS12345678910"
-  private val taxYear = "2021-22"
+  private val nino          = "AA123456A"
+  private val businessId    = "XAIS12345678910"
+  private val taxYear       = "2021-22"
   private val correlationId = "X-123"
 
   trait Test {
@@ -63,7 +63,7 @@ class DeleteForeignPropertyAnnualSubmissionControllerSpec
     MockIdGenerator.getCorrelationId.returns(correlationId)
   }
 
-  private val rawData = DeleteForeignPropertyAnnualSubmissionRawData(nino, businessId, taxYear)
+  private val rawData     = DeleteForeignPropertyAnnualSubmissionRawData(nino, businessId, taxYear)
   private val requestData = DeleteForeignPropertyAnnualSubmissionRequest(Nino(nino), businessId, taxYear)
 
   def event(auditResponse: AuditResponse): AuditEvent[DeleteForeignPropertyAnnualAuditDetail] =

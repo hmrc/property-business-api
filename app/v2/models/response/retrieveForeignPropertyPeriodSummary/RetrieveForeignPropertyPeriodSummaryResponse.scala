@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,18 +17,18 @@
 package v2.models.response.retrieveForeignPropertyPeriodSummary
 
 import config.AppConfig
-import play.api.libs.json.{JsPath, Json, Reads, OWrites}
+import play.api.libs.json.{ JsPath, Json, Reads, OWrites }
 import play.api.libs.functional.syntax._
-import v2.hateoas.{HateoasLinks, HateoasLinksFactory}
-import v2.models.hateoas.{HateoasData, Link}
+import v2.hateoas.{ HateoasLinks, HateoasLinksFactory }
+import v2.models.hateoas.{ HateoasData, Link }
 import v2.models.response.retrieveForeignPropertyPeriodSummary.foreignFhlEea.ForeignFhlEea
 import v2.models.response.retrieveForeignPropertyPeriodSummary.foreignNonFhlProperty.ForeignNonFhlProperty
 
-case class  RetrieveForeignPropertyPeriodSummaryResponse(submittedOn: String,
-                                                         fromDate: String,
-                                                         toDate: String,
-                                                         foreignFhlEea: Option[ForeignFhlEea],
-                                                         foreignNonFhlProperty: Option[Seq[ForeignNonFhlProperty]])
+case class RetrieveForeignPropertyPeriodSummaryResponse(submittedOn: String,
+                                                        fromDate: String,
+                                                        toDate: String,
+                                                        foreignFhlEea: Option[ForeignFhlEea],
+                                                        foreignNonFhlProperty: Option[Seq[ForeignNonFhlProperty]])
 
 object RetrieveForeignPropertyPeriodSummaryResponse extends HateoasLinks {
   implicit val writes: OWrites[RetrieveForeignPropertyPeriodSummaryResponse] = Json.writes[RetrieveForeignPropertyPeriodSummaryResponse]
@@ -38,10 +38,10 @@ object RetrieveForeignPropertyPeriodSummaryResponse extends HateoasLinks {
       (JsPath \ "toDate").read[String] and
       (JsPath \ "foreignFhlEea").readNullable[ForeignFhlEea] and
       (JsPath \ "foreignProperty").readNullable[Seq[ForeignNonFhlProperty]]
-    )(RetrieveForeignPropertyPeriodSummaryResponse.apply _)
+  )(RetrieveForeignPropertyPeriodSummaryResponse.apply _)
 
-  implicit object RetrieveForeignPropertyLinksFactory extends
-    HateoasLinksFactory[RetrieveForeignPropertyPeriodSummaryResponse, RetrieveForeignPropertyPeriodSummaryHateoasData] {
+  implicit object RetrieveForeignPropertyLinksFactory
+      extends HateoasLinksFactory[RetrieveForeignPropertyPeriodSummaryResponse, RetrieveForeignPropertyPeriodSummaryHateoasData] {
     override def links(appConfig: AppConfig, data: RetrieveForeignPropertyPeriodSummaryHateoasData): Seq[Link] = {
       import data._
 
@@ -54,4 +54,5 @@ object RetrieveForeignPropertyPeriodSummaryResponse extends HateoasLinks {
   }
 }
 
-case class RetrieveForeignPropertyPeriodSummaryHateoasData(nino: String, businessId: String, taxYear: String, submissionId: String) extends HateoasData
+case class RetrieveForeignPropertyPeriodSummaryHateoasData(nino: String, businessId: String, taxYear: String, submissionId: String)
+    extends HateoasData

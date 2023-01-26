@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,20 +19,20 @@ package v1.endpoints
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import play.api.http.HeaderNames.ACCEPT
 import play.api.http.Status._
-import play.api.libs.json.{JsObject, JsValue, Json}
-import play.api.libs.ws.{WSRequest, WSResponse}
+import play.api.libs.json.{ JsObject, JsValue, Json }
+import play.api.libs.ws.{ WSRequest, WSResponse }
 import play.api.test.Helpers.AUTHORIZATION
 import support.V1IntegrationBaseSpec
 import v1.models.errors._
-import v1.stubs.{AuditStub, AuthStub, IfsStub, MtdIdLookupStub}
+import v1.stubs.{ AuditStub, AuthStub, IfsStub, MtdIdLookupStub }
 
 class AmendForeignPropertyAnnualSubmissionControllerISpec extends V1IntegrationBaseSpec {
 
   private trait Test {
 
-    val nino: String = "TC663795B"
-    val businessId: String = "XAIS12345678910"
-    val taxYear: String = "2021-22"
+    val nino: String          = "TC663795B"
+    val businessId: String    = "XAIS12345678910"
+    val taxYear: String       = "2021-22"
     val correlationId: String = "X-123"
 
     val requestBodyJson: JsValue = Json.parse(
@@ -109,7 +109,7 @@ class AmendForeignPropertyAnnualSubmissionControllerISpec extends V1IntegrationB
         .withHttpHeaders(
           (ACCEPT, "application/vnd.hmrc.1.0+json"),
           (AUTHORIZATION, "Bearer 123") // some bearer token
-      )
+        )
     }
 
     def errorBody(code: String): String =
@@ -184,29 +184,31 @@ class AmendForeignPropertyAnnualSubmissionControllerISpec extends V1IntegrationB
         val allInvalidFieldsRequestError: List[MtdError] = List(
           ValueFormatError.copy(
             message = "One or more monetary fields are invalid",
-            paths = Some(List(
-              "/foreignFhlEea/adjustments/privateUseAdjustment",
-              "/foreignFhlEea/adjustments/balancingCharge",
-              "/foreignFhlEea/allowances/annualInvestmentAllowance",
-              "/foreignFhlEea/allowances/otherCapitalAllowance",
-              "/foreignFhlEea/allowances/propertyAllowance",
-              "/foreignFhlEea/allowances/electricChargePointAllowance",
-              "/foreignProperty/0/adjustments/privateUseAdjustment",
-              "/foreignProperty/0/adjustments/balancingCharge",
-              "/foreignProperty/0/allowances/annualInvestmentAllowance",
-              "/foreignProperty/0/allowances/costOfReplacingDomesticItems",
-              "/foreignProperty/0/allowances/zeroEmissionsGoodsVehicleAllowance",
-              "/foreignProperty/0/allowances/propertyAllowance",
-              "/foreignProperty/0/allowances/otherCapitalAllowance",
-              "/foreignProperty/0/allowances/structureAndBuildingAllowance",
-              "/foreignProperty/0/allowances/electricChargePointAllowance"
-            ))
+            paths = Some(
+              List(
+                "/foreignFhlEea/adjustments/privateUseAdjustment",
+                "/foreignFhlEea/adjustments/balancingCharge",
+                "/foreignFhlEea/allowances/annualInvestmentAllowance",
+                "/foreignFhlEea/allowances/otherCapitalAllowance",
+                "/foreignFhlEea/allowances/propertyAllowance",
+                "/foreignFhlEea/allowances/electricChargePointAllowance",
+                "/foreignProperty/0/adjustments/privateUseAdjustment",
+                "/foreignProperty/0/adjustments/balancingCharge",
+                "/foreignProperty/0/allowances/annualInvestmentAllowance",
+                "/foreignProperty/0/allowances/costOfReplacingDomesticItems",
+                "/foreignProperty/0/allowances/zeroEmissionsGoodsVehicleAllowance",
+                "/foreignProperty/0/allowances/propertyAllowance",
+                "/foreignProperty/0/allowances/otherCapitalAllowance",
+                "/foreignProperty/0/allowances/structureAndBuildingAllowance",
+                "/foreignProperty/0/allowances/electricChargePointAllowance"
+              ))
           ),
           CountryCodeFormatError.copy(
             message = "The provided Country code is invalid",
-            paths = Some(List(
-              "/foreignProperty/0/countryCode"
-            ))
+            paths = Some(
+              List(
+                "/foreignProperty/0/countryCode"
+              ))
           ),
         )
 
@@ -345,30 +347,32 @@ class AmendForeignPropertyAnnualSubmissionControllerISpec extends V1IntegrationB
 
         val allInvalidValueRequestError: MtdError = ValueFormatError.copy(
           message = "One or more monetary fields are invalid",
-          paths = Some(List(
-            "/foreignFhlEea/adjustments/privateUseAdjustment",
-            "/foreignFhlEea/adjustments/balancingCharge",
-            "/foreignFhlEea/allowances/annualInvestmentAllowance",
-            "/foreignFhlEea/allowances/otherCapitalAllowance",
-            "/foreignFhlEea/allowances/propertyAllowance",
-            "/foreignFhlEea/allowances/electricChargePointAllowance",
-            "/foreignProperty/0/adjustments/privateUseAdjustment",
-            "/foreignProperty/0/adjustments/balancingCharge",
-            "/foreignProperty/0/allowances/annualInvestmentAllowance",
-            "/foreignProperty/0/allowances/costOfReplacingDomesticItems",
-            "/foreignProperty/0/allowances/zeroEmissionsGoodsVehicleAllowance",
-            "/foreignProperty/0/allowances/propertyAllowance",
-            "/foreignProperty/0/allowances/otherCapitalAllowance",
-            "/foreignProperty/0/allowances/structureAndBuildingAllowance",
-            "/foreignProperty/0/allowances/electricChargePointAllowance"
-          ))
+          paths = Some(
+            List(
+              "/foreignFhlEea/adjustments/privateUseAdjustment",
+              "/foreignFhlEea/adjustments/balancingCharge",
+              "/foreignFhlEea/allowances/annualInvestmentAllowance",
+              "/foreignFhlEea/allowances/otherCapitalAllowance",
+              "/foreignFhlEea/allowances/propertyAllowance",
+              "/foreignFhlEea/allowances/electricChargePointAllowance",
+              "/foreignProperty/0/adjustments/privateUseAdjustment",
+              "/foreignProperty/0/adjustments/balancingCharge",
+              "/foreignProperty/0/allowances/annualInvestmentAllowance",
+              "/foreignProperty/0/allowances/costOfReplacingDomesticItems",
+              "/foreignProperty/0/allowances/zeroEmissionsGoodsVehicleAllowance",
+              "/foreignProperty/0/allowances/propertyAllowance",
+              "/foreignProperty/0/allowances/otherCapitalAllowance",
+              "/foreignProperty/0/allowances/structureAndBuildingAllowance",
+              "/foreignProperty/0/allowances/electricChargePointAllowance"
+            ))
         )
 
         val allInvalidCountryCodeRequestError: MtdError = CountryCodeFormatError.copy(
           message = "The provided Country code is invalid",
-          paths = Some(List(
-            "/foreignProperty/0/countryCode"
-          ))
+          paths = Some(
+            List(
+              "/foreignProperty/0/countryCode"
+            ))
         )
 
         "validation error occurs" when {
@@ -380,9 +384,9 @@ class AmendForeignPropertyAnnualSubmissionControllerISpec extends V1IntegrationB
                                   expectedBody: MtdError): Unit = {
             s"validation fails with ${expectedBody.code} error" in new Test {
 
-              override val nino: String = requestNino
-              override val businessId: String = requestBusinessId
-              override val taxYear: String = requestTaxYear
+              override val nino: String             = requestNino
+              override val businessId: String       = requestBusinessId
+              override val taxYear: String          = requestTaxYear
               override val requestBodyJson: JsValue = requestBody
 
               override def setupStubs(): StubMapping = {
@@ -402,7 +406,12 @@ class AmendForeignPropertyAnnualSubmissionControllerISpec extends V1IntegrationB
             ("AA123456A", "XAIS1234dfxgchjbn5678910", "2021-22", validRequestBodyJson, BAD_REQUEST, BusinessIdFormatError),
             ("AA123456A", "XAIS12345678910", "2021-24", validRequestBodyJson, BAD_REQUEST, RuleTaxYearRangeInvalidError),
             ("AA123456A", "XAIS12345678910", "2019-20", validRequestBodyJson, BAD_REQUEST, RuleTaxYearNotSupportedError),
-            ("AA123456A", "XAIS12345678910", "2021-22", Json.parse(s"""{"foreignFhlEea": 2342314}""".stripMargin), BAD_REQUEST, RuleIncorrectOrEmptyBodyError),
+            ("AA123456A",
+             "XAIS12345678910",
+             "2021-22",
+             Json.parse(s"""{"foreignFhlEea": 2342314}""".stripMargin),
+             BAD_REQUEST,
+             RuleIncorrectOrEmptyBodyError),
             ("AA123456A", "XAIS12345678910", "2021-22", allInvalidValueRequestBodyJson, BAD_REQUEST, allInvalidValueRequestError),
             ("AA123456A", "XAIS12345678910", "2021-22", allInvalidCountryCodeRequestBodyJson, BAD_REQUEST, allInvalidCountryCodeRequestError)
           )
@@ -435,7 +444,8 @@ class AmendForeignPropertyAnnualSubmissionControllerISpec extends V1IntegrationB
             (INTERNAL_SERVER_ERROR, "INVALID_CORRELATION_ID", INTERNAL_SERVER_ERROR, DownstreamError),
             (INTERNAL_SERVER_ERROR, "UNPROCESSABLE_ENTITY", INTERNAL_SERVER_ERROR, DownstreamError),
             (INTERNAL_SERVER_ERROR, "SERVER_ERROR", INTERNAL_SERVER_ERROR, DownstreamError),
-            (SERVICE_UNAVAILABLE, "SERVICE_UNAVAILABLE", INTERNAL_SERVER_ERROR, DownstreamError))
+            (SERVICE_UNAVAILABLE, "SERVICE_UNAVAILABLE", INTERNAL_SERVER_ERROR, DownstreamError)
+          )
 
           input.foreach(args => (serviceErrorTest _).tupled(args))
         }

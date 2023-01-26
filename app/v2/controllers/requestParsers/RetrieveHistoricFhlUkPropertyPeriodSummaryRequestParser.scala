@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +20,10 @@ import v2.controllers.requestParsers.validators.RetrieveHistoricFhlUkPropertyPer
 
 import javax.inject.Inject
 import v2.models.domain.{ Nino, PeriodId }
-import v2.models.request.retrieveHistoricFhlUkPiePeriodSummary.{RetrieveHistoricFhlUkPiePeriodSummaryRawData, RetrieveHistoricFhlUkPiePeriodSummaryRequest}
+import v2.models.request.retrieveHistoricFhlUkPiePeriodSummary.{
+  RetrieveHistoricFhlUkPiePeriodSummaryRawData,
+  RetrieveHistoricFhlUkPiePeriodSummaryRequest
+}
 
 class RetrieveHistoricFhlUkPropertyPeriodSummaryRequestParser @Inject()(val validator: RetrieveHistoricFhlUkPropertyPeriodSummaryValidator)
     extends RequestParser[RetrieveHistoricFhlUkPiePeriodSummaryRawData, RetrieveHistoricFhlUkPiePeriodSummaryRequest] {

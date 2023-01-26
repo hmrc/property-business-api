@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,8 +16,7 @@
 
 package v1.connectors
 
-import mocks.MockAppConfig
-import v1.mocks.MockHttpClient
+import mocks.{ MockAppConfig, MockHttpClient }
 import v1.models.domain.Nino
 import v1.models.outcomes.ResponseWrapper
 import v1.models.request.deleteForeignPropertyAnnualSubmission.DeleteForeignPropertyAnnualSubmissionRequest
@@ -26,9 +25,9 @@ import scala.concurrent.Future
 
 class DeleteForeignPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec {
 
-  val nino: String = "AA123456A"
+  val nino: String       = "AA123456A"
   val businessId: String = "XAIS12345678910"
-  val taxYear: String = "2021-22"
+  val taxYear: String    = "2021-22"
 
   val request: DeleteForeignPropertyAnnualSubmissionRequest = DeleteForeignPropertyAnnualSubmissionRequest(
     nino = Nino(nino),
@@ -37,6 +36,7 @@ class DeleteForeignPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec {
   )
 
   class Test extends MockHttpClient with MockAppConfig {
+
     val connector: DeleteForeignPropertyAnnualSubmissionConnector = new DeleteForeignPropertyAnnualSubmissionConnector(
       http = mockHttpClient,
       appConfig = mockAppConfig

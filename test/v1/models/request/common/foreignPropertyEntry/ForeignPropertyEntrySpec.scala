@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,13 +16,13 @@
 
 package v1.models.request.common.foreignPropertyEntry
 
-import play.api.libs.json.{JsValue, Json}
+import play.api.libs.json.{ JsValue, Json }
 import support.UnitSpec
 
 class ForeignPropertyEntrySpec extends UnitSpec {
 
   val mtdJson: JsValue = Json.parse(
-     """
+    """
        |{
        |  "countryCode": "zzz",
        |  "income": {
@@ -53,30 +53,32 @@ class ForeignPropertyEntrySpec extends UnitSpec {
 
   val model: ForeignPropertyEntry = ForeignPropertyEntry(
     countryCode = "zzz",
-    income = Some(ForeignPropertyIncome(
-      rentIncome = Some(ForeignPropertyRentIncome(rentAmount = Some(34456.30))),
-      foreignTaxCreditRelief = true,
-      premiumOfLeaseGrant = Some(2543.43),
-      otherPropertyIncome = Some(54325.30),
-      foreignTaxTakenOff = Some(6543.01),
-      specialWithholdingTaxOrUKTaxPaid = Some(643245.00)
-    )),
-    expenditure = Some(ForeignPropertyExpenditure(
-      premisesRunningCosts = Some(5635.43),
-      repairsAndMaintenance = Some(3456.65),
-      financialCosts = Some(34532.21),
-      professionalFees = Some(32465.32),
-      costsOfServices = Some(2567.21),
-      travelCosts = Some(2345.76),
-      residentialFinancialCost = Some(21235.22),
-      broughtFwdResidentialFinancialCost = Some(12556.00),
-      other = Some(2425.11),
-      consolidatedExpenses = Some(352.66)
-    ))
+    income = Some(
+      ForeignPropertyIncome(
+        rentIncome = Some(ForeignPropertyRentIncome(rentAmount = Some(34456.30))),
+        foreignTaxCreditRelief = true,
+        premiumOfLeaseGrant = Some(2543.43),
+        otherPropertyIncome = Some(54325.30),
+        foreignTaxTakenOff = Some(6543.01),
+        specialWithholdingTaxOrUKTaxPaid = Some(643245.00)
+      )),
+    expenditure = Some(
+      ForeignPropertyExpenditure(
+        premisesRunningCosts = Some(5635.43),
+        repairsAndMaintenance = Some(3456.65),
+        financialCosts = Some(34532.21),
+        professionalFees = Some(32465.32),
+        costsOfServices = Some(2567.21),
+        travelCosts = Some(2345.76),
+        residentialFinancialCost = Some(21235.22),
+        broughtFwdResidentialFinancialCost = Some(12556.00),
+        other = Some(2425.11),
+        consolidatedExpenses = Some(352.66)
+      ))
   )
 
   val ifsJson: JsValue = Json.parse(
-     """
+    """
        |{
        |  "countryCode": "zzz",
        |  "income": {

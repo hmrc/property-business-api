@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,52 +16,57 @@
 
 package v1.models.request.amendForeignPropertyAnnualSubmission
 
-import play.api.libs.json.{JsValue, Json}
+import play.api.libs.json.{ JsValue, Json }
 import support.UnitSpec
-import v1.models.request.amendForeignPropertyAnnualSubmission.foreignFhlEea.{ForeignFhlEea, ForeignFhlEeaAdjustments, ForeignFhlEeaAllowances}
-import v1.models.request.amendForeignPropertyAnnualSubmission.foreignProperty.{ForeignPropertyAdjustments, ForeignPropertyAllowances, ForeignPropertyEntry}
+import v1.models.request.amendForeignPropertyAnnualSubmission.foreignFhlEea.{ ForeignFhlEea, ForeignFhlEeaAdjustments, ForeignFhlEeaAllowances }
+import v1.models.request.amendForeignPropertyAnnualSubmission.foreignProperty.{
+  ForeignPropertyAdjustments,
+  ForeignPropertyAllowances,
+  ForeignPropertyEntry
+}
 import v1.models.utils.JsonErrorValidators
 
 class AmendForeignPropertyAnnualSubmissionRequestBodySpec extends UnitSpec with JsonErrorValidators {
 
   val amendForeignPropertyAnnualSubmissionRequestBody: AmendForeignPropertyAnnualSubmissionRequestBody =
     AmendForeignPropertyAnnualSubmissionRequestBody(
-      Some(ForeignFhlEea(
-        Some(ForeignFhlEeaAdjustments(
-          Some(100.25),
-          Some(100.25),
-          Some(true)
+      Some(
+        ForeignFhlEea(
+          Some(
+            ForeignFhlEeaAdjustments(
+              Some(100.25),
+              Some(100.25),
+              Some(true)
+            )),
+          Some(
+            ForeignFhlEeaAllowances(
+              Some(100.25),
+              Some(100.25),
+              Some(100.25),
+              Some(100.25)
+            ))
         )),
-        Some(ForeignFhlEeaAllowances(
-          Some(100.25),
-          Some(100.25),
-          Some(100.25),
-          Some(100.25)
-        ))
-      )),
-      Some(Seq(ForeignPropertyEntry(
-        "GER",
-        Some(ForeignPropertyAdjustments(
-          Some(100.25),
-          Some(100.25))),
-        Some(ForeignPropertyAllowances(
-          Some(100.25),
-          Some(100.25),
-          Some(100.25),
-          Some(100.25),
-          Some(100.25),
-          Some(160.85),
-          Some(100.25)
-        )))))
+      Some(
+        Seq(ForeignPropertyEntry(
+          "GER",
+          Some(ForeignPropertyAdjustments(Some(100.25), Some(100.25))),
+          Some(
+            ForeignPropertyAllowances(
+              Some(100.25),
+              Some(100.25),
+              Some(100.25),
+              Some(100.25),
+              Some(100.25),
+              Some(160.85),
+              Some(100.25)
+            ))
+        )))
     )
 
   val amendForeignPropertyAnnualSubmissionRequestBodyMinimum: AmendForeignPropertyAnnualSubmissionRequestBody =
     AmendForeignPropertyAnnualSubmissionRequestBody(
       None,
-      Some(Seq(ForeignPropertyEntry(
-        "GER",
-        None,
-        None)))
+      Some(Seq(ForeignPropertyEntry("GER", None, None)))
     )
 
   val jsonBody: JsValue = Json.parse(

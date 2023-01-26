@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,13 +16,12 @@
 
 package v2.models.request.common.ukFhlProperty
 
-import play.api.libs.json.{JsPath, Json, Reads, Writes}
+import play.api.libs.json.{ JsPath, Json, Reads, Writes }
 import play.api.libs.functional.syntax._
 import v2.models.request.common.ukPropertyRentARoom.UkPropertyIncomeRentARoom
 
-case class UkFhlPropertyIncome(periodAmount: Option[BigDecimal],
-                               taxDeducted: Option[BigDecimal],
-                               rentARoom: Option[UkPropertyIncomeRentARoom])
+case class UkFhlPropertyIncome(periodAmount: Option[BigDecimal], taxDeducted: Option[BigDecimal], rentARoom: Option[UkPropertyIncomeRentARoom])
+
 object UkFhlPropertyIncome {
   implicit val reads: Reads[UkFhlPropertyIncome] = Json.reads[UkFhlPropertyIncome]
 
@@ -30,6 +29,6 @@ object UkFhlPropertyIncome {
     (JsPath \ "periodAmount").writeNullable[BigDecimal] and
       (JsPath \ "taxDeducted").writeNullable[BigDecimal] and
       (JsPath \ "ukFhlRentARoom").writeNullable[UkPropertyIncomeRentARoom]
-    ) (unlift(UkFhlPropertyIncome.unapply))
+  )(unlift(UkFhlPropertyIncome.unapply))
 
 }

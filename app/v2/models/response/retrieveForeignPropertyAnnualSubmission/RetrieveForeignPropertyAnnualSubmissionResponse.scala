@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,28 +17,27 @@
 package v2.models.response.retrieveForeignPropertyAnnualSubmission
 
 import config.AppConfig
-import play.api.libs.json.{JsPath, Json, OWrites, Reads}
-import v2.hateoas.{HateoasLinks, HateoasLinksFactory}
+import play.api.libs.json.{ JsPath, Json, OWrites, Reads }
+import v2.hateoas.{ HateoasLinks, HateoasLinksFactory }
 import play.api.libs.functional.syntax._
-import v2.models.hateoas.{HateoasData, Link}
+import v2.models.hateoas.{ HateoasData, Link }
 import v2.models.response.retrieveForeignPropertyAnnualSubmission.foreignFhlEea.ForeignFhlEeaEntry
 import v2.models.response.retrieveForeignPropertyAnnualSubmission.foreignProperty.ForeignPropertyEntry
 
-case class RetrieveForeignPropertyAnnualSubmissionResponse(
-                                                            submittedOn: String,
-                                                            foreignFhlEea: Option[ForeignFhlEeaEntry],
-                                                            foreignNonFhlProperty: Option[Seq[ForeignPropertyEntry]])
+case class RetrieveForeignPropertyAnnualSubmissionResponse(submittedOn: String,
+                                                           foreignFhlEea: Option[ForeignFhlEeaEntry],
+                                                           foreignNonFhlProperty: Option[Seq[ForeignPropertyEntry]])
 
 object RetrieveForeignPropertyAnnualSubmissionResponse extends HateoasLinks {
-  implicit  val writes: OWrites[RetrieveForeignPropertyAnnualSubmissionResponse] = Json.writes[RetrieveForeignPropertyAnnualSubmissionResponse]
-  implicit  val reads: Reads[RetrieveForeignPropertyAnnualSubmissionResponse] = (
+  implicit val writes: OWrites[RetrieveForeignPropertyAnnualSubmissionResponse] = Json.writes[RetrieveForeignPropertyAnnualSubmissionResponse]
+  implicit val reads: Reads[RetrieveForeignPropertyAnnualSubmissionResponse] = (
     (JsPath \ "submittedOn").read[String] and
       (JsPath \ "foreignFhlEea").readNullable[ForeignFhlEeaEntry] and
       (JsPath \ "foreignProperty").readNullable[Seq[ForeignPropertyEntry]]
   )(RetrieveForeignPropertyAnnualSubmissionResponse.apply _)
 
-  implicit object RetrieveAnnualSubmissionLinksFactory extends
-    HateoasLinksFactory[RetrieveForeignPropertyAnnualSubmissionResponse, RetrieveForeignPropertyAnnualSubmissionHateoasData] {
+  implicit object RetrieveAnnualSubmissionLinksFactory
+      extends HateoasLinksFactory[RetrieveForeignPropertyAnnualSubmissionResponse, RetrieveForeignPropertyAnnualSubmissionHateoasData] {
     override def links(appConfig: AppConfig, data: RetrieveForeignPropertyAnnualSubmissionHateoasData): Seq[Link] = {
       import data._
       Seq(

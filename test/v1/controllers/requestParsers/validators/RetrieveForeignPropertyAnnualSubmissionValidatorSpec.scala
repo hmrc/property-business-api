@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,9 +22,9 @@ import v1.models.request.retrieveForeignPropertyAnnualSubmission.RetrieveForeign
 
 class RetrieveForeignPropertyAnnualSubmissionValidatorSpec extends UnitSpec {
 
-  private val validNino = "AA123456A"
+  private val validNino       = "AA123456A"
   private val validBusinessId = "XAIS12345678901"
-  private val validTaxYear = "2021-22"
+  private val validTaxYear    = "2021-22"
 
   private val validator = new RetrieveForeignPropertyAnnualSubmissionValidator
 
@@ -45,13 +45,17 @@ class RetrieveForeignPropertyAnnualSubmissionValidatorSpec extends UnitSpec {
         validator.validate(RetrieveForeignPropertyAnnualSubmissionRawData(validNino, validBusinessId, "2021/22")) shouldBe List(TaxYearFormatError)
       }
       "an unsupported taxYear is supplied" in {
-        validator.validate(RetrieveForeignPropertyAnnualSubmissionRawData(validNino, validBusinessId, "2019-20")) shouldBe List(RuleTaxYearNotSupportedError)
+        validator.validate(RetrieveForeignPropertyAnnualSubmissionRawData(validNino, validBusinessId, "2019-20")) shouldBe List(
+          RuleTaxYearNotSupportedError)
       }
       "an invalid taxYear range is supplied" in {
-        validator.validate(RetrieveForeignPropertyAnnualSubmissionRawData(validNino, validBusinessId, "2021-23")) shouldBe List(RuleTaxYearRangeInvalidError)
+        validator.validate(RetrieveForeignPropertyAnnualSubmissionRawData(validNino, validBusinessId, "2021-23")) shouldBe List(
+          RuleTaxYearRangeInvalidError)
       }
       "multiple format errors are made" in {
-        validator.validate(RetrieveForeignPropertyAnnualSubmissionRawData("Walrus", "Beans", "2021/22")) shouldBe List(NinoFormatError, BusinessIdFormatError, TaxYearFormatError)
+        validator.validate(RetrieveForeignPropertyAnnualSubmissionRawData("Walrus", "Beans", "2021/22")) shouldBe List(NinoFormatError,
+                                                                                                                       BusinessIdFormatError,
+                                                                                                                       TaxYearFormatError)
       }
     }
   }

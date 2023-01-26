@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,14 +20,15 @@ import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
 import v2.controllers.requestParsers.AmendUkPropertyAnnualSubmissionRequestParser
 import v2.models.errors.ErrorWrapper
-import v2.models.request.amendUkPropertyAnnualSubmission.{AmendUkPropertyAnnualSubmissionRawData, AmendUkPropertyAnnualSubmissionRequest}
+import v2.models.request.amendUkPropertyAnnualSubmission.{ AmendUkPropertyAnnualSubmissionRawData, AmendUkPropertyAnnualSubmissionRequest }
 
 trait MockAmendUkPropertyAnnualSubmissionRequestParser extends MockFactory {
 
-  val mockAmendUkPropertyAnnualSubmissionRequestParser:
-    AmendUkPropertyAnnualSubmissionRequestParser = mock[AmendUkPropertyAnnualSubmissionRequestParser]
+  val mockAmendUkPropertyAnnualSubmissionRequestParser: AmendUkPropertyAnnualSubmissionRequestParser =
+    mock[AmendUkPropertyAnnualSubmissionRequestParser]
 
   object MockAmendUkPropertyAnnualSubmissionRequestParser {
+
     def parseRequest(data: AmendUkPropertyAnnualSubmissionRawData): CallHandler[Either[ErrorWrapper, AmendUkPropertyAnnualSubmissionRequest]] = {
       (mockAmendUkPropertyAnnualSubmissionRequestParser.parseRequest(_: AmendUkPropertyAnnualSubmissionRawData)(_: String)).expects(data, *)
     }

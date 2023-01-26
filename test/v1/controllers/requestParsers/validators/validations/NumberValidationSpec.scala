@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,10 +21,10 @@ import v1.models.errors.ValueFormatError
 
 class NumberValidationSpec extends UnitSpec {
 
-  val validNumber: Option[BigDecimal] = Some(9000.42)
-  val lowestAllowedNumber: Option[BigDecimal] = Some(0)
+  val validNumber: Option[BigDecimal]          = Some(9000.42)
+  val lowestAllowedNumber: Option[BigDecimal]  = Some(0)
   val highestAllowedNumber: Option[BigDecimal] = Some(99999999999.99)
-  val invalidNumber: Option[BigDecimal] = Some(-9000.42)
+  val invalidNumber: Option[BigDecimal]        = Some(-9000.42)
 
   "validate" should {
     "return no errors" when {

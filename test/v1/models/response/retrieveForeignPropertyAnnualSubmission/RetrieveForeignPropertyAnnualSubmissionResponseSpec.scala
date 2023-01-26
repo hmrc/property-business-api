@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,47 +19,43 @@ package v1.models.response.retrieveForeignPropertyAnnualSubmission
 import mocks.MockAppConfig
 import play.api.libs.json.Json
 import support.UnitSpec
-import v1.models.hateoas.{Link, Method}
-import v1.models.response.retrieveForeignPropertyAnnualSubmission.foreignFhlEea.{ForeignFhlEeaAdjustments, ForeignFhlEeaAllowances, ForeignFhlEeaEntry}
-import v1.models.response.retrieveForeignPropertyAnnualSubmission.foreignProperty.{ForeignPropertyAdjustments, ForeignPropertyAllowances, ForeignPropertyEntry}
+import v1.models.hateoas.{ Link, Method }
+import v1.models.response.retrieveForeignPropertyAnnualSubmission.foreignFhlEea.{
+  ForeignFhlEeaAdjustments,
+  ForeignFhlEeaAllowances,
+  ForeignFhlEeaEntry
+}
+import v1.models.response.retrieveForeignPropertyAnnualSubmission.foreignProperty.{
+  ForeignPropertyAdjustments,
+  ForeignPropertyAllowances,
+  ForeignPropertyEntry
+}
 
 class RetrieveForeignPropertyAnnualSubmissionResponseSpec extends UnitSpec with MockAppConfig {
 
   private val retrieveForeignPropertyAnnualSubmissionRequestBody = RetrieveForeignPropertyAnnualSubmissionResponse(
-    Some(ForeignFhlEeaEntry(
-      Some(ForeignFhlEeaAdjustments(
-        Some(100.25),
-        Some(100.25),
-        Some(true))),
-      Some(ForeignFhlEeaAllowances(
-        Some(100.25),
-        Some(100.25),
-        Some(100.25),
-        Some(100.25)))
-    )),
-    Some(Seq(ForeignPropertyEntry(
-      "GER",
-      Some(ForeignPropertyAdjustments(
-        Some(100.25),
-        Some(100.25))),
-      Some(ForeignPropertyAllowances(
-        Some(100.25),
-        Some(100.25),
-        Some(100.25),
-        Some(100.25),
-        Some(100.25),
-        Some(100.25),
-        Some(100.25)))
-    )))
+    Some(
+      ForeignFhlEeaEntry(
+        Some(ForeignFhlEeaAdjustments(Some(100.25), Some(100.25), Some(true))),
+        Some(ForeignFhlEeaAllowances(Some(100.25), Some(100.25), Some(100.25), Some(100.25)))
+      )),
+    Some(
+      Seq(ForeignPropertyEntry(
+        "GER",
+        Some(ForeignPropertyAdjustments(Some(100.25), Some(100.25))),
+        Some(ForeignPropertyAllowances(Some(100.25), Some(100.25), Some(100.25), Some(100.25), Some(100.25), Some(100.25), Some(100.25)))
+      )))
   )
 
   private val retrieveForeignPropertyAnnualSubmissionRequestBodyMinimum = RetrieveForeignPropertyAnnualSubmissionResponse(
     None,
-    Some(Seq(ForeignPropertyEntry(
-      "GER",
-      None,
-      None
-    )))
+    Some(
+      Seq(
+        ForeignPropertyEntry(
+          "GER",
+          None,
+          None
+        )))
   )
 
   private val jsonBody = Json.parse(
@@ -143,9 +139,13 @@ class RetrieveForeignPropertyAnnualSubmissionResponseSpec extends UnitSpec with 
         MockAppConfig.apiGatewayContext.returns("my/context").anyNumberOfTimes()
 
         RetrieveForeignPropertyAnnualSubmissionResponse.RetrieveAnnualSubmissionLinksFactory.links(mockAppConfig, data) shouldBe Seq(
-          Link(href = s"/my/context/${data.nino}/${data.businessId}/annual/${data.taxYear}", method = Method.PUT, rel = "amend-property-annual-submission"),
+          Link(href = s"/my/context/${data.nino}/${data.businessId}/annual/${data.taxYear}",
+               method = Method.PUT,
+               rel = "amend-property-annual-submission"),
           Link(href = s"/my/context/${data.nino}/${data.businessId}/annual/${data.taxYear}", method = Method.GET, rel = "self"),
-          Link(href = s"/my/context/${data.nino}/${data.businessId}/annual/${data.taxYear}", method = Method.DELETE, rel = "delete-property-annual-submission")
+          Link(href = s"/my/context/${data.nino}/${data.businessId}/annual/${data.taxYear}",
+               method = Method.DELETE,
+               rel = "delete-property-annual-submission")
         )
       }
     }

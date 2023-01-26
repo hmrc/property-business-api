@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,26 +18,27 @@ package v1.services
 
 import cats.implicits._
 import cats.data.EitherT
-import javax.inject.{Inject, Singleton}
+import javax.inject.{ Inject, Singleton }
 import uk.gov.hmrc.http.HeaderCarrier
 import utils.Logging
 import v1.connectors.RetrieveForeignPropertyAnnualSubmissionConnector
 import v1.controllers.EndpointLogContext
-import v1.models.errors.{BusinessIdFormatError, DownstreamError, NinoFormatError, NotFoundError}
+import v1.models.errors.{ BusinessIdFormatError, DownstreamError, NinoFormatError, NotFoundError }
 import v1.models.request.retrieveForeignPropertyAnnualSubmission.RetrieveForeignPropertyAnnualSubmissionRequest
 import v1.support.IfsResponseMappingSupport
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.{ ExecutionContext, Future }
 
 @Singleton
 class RetrieveForeignPropertyAnnualSubmissionService @Inject()(connector: RetrieveForeignPropertyAnnualSubmissionConnector)
-  extends IfsResponseMappingSupport with Logging {
+    extends IfsResponseMappingSupport
+    with Logging {
 
   def retrieveForeignProperty(request: RetrieveForeignPropertyAnnualSubmissionRequest)(
-    implicit hc: HeaderCarrier,
-    ec: ExecutionContext,
-    logContext: EndpointLogContext,
-    correlationId: String): Future[RetrieveForeignPropertyAnnualSubmissionServiceOutcome] = {
+      implicit hc: HeaderCarrier,
+      ec: ExecutionContext,
+      logContext: EndpointLogContext,
+      correlationId: String): Future[RetrieveForeignPropertyAnnualSubmissionServiceOutcome] = {
 
     val result = for {
       ifsResponseWrapper <- EitherT(connector.retrieveForeignProperty(request)).leftMap(mapIfsErrors(ifsErrorMap))
@@ -49,13 +50,13 @@ class RetrieveForeignPropertyAnnualSubmissionService @Inject()(connector: Retrie
   private def ifsErrorMap =
     Map(
       "INVALID_TAXABLE_ENTITY_ID" -> NinoFormatError,
-      "INVALID_INCOMESOURCEID" -> BusinessIdFormatError,
-      "NO_DATA_FOUND" -> NotFoundError,
-      "INVALID_CORRELATIONID" -> DownstreamError,
-      "INVALID_PAYLOAD" -> DownstreamError,
-      "INVALID_TAX_YEAR" -> DownstreamError,
-      "SERVER_ERROR" -> DownstreamError,
-      "SERVICE_UNAVAILABLE" -> DownstreamError
+      "INVALID_INCOMESOURCEID"    -> BusinessIdFormatError,
+      "NO_DATA_FOUND"             -> NotFoundError,
+      "INVALID_CORRELATIONID"     -> DownstreamError,
+      "INVALID_PAYLOAD"           -> DownstreamError,
+      "INVALID_TAX_YEAR"          -> DownstreamError,
+      "SERVER_ERROR"              -> DownstreamError,
+      "SERVICE_UNAVAILABLE"       -> DownstreamError
     )
 
 }

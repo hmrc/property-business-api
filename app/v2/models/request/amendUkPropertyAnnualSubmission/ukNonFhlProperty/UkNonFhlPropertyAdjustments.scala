@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 
 package v2.models.request.amendUkPropertyAnnualSubmission.ukNonFhlProperty
 
-import play.api.libs.json.{JsPath, Json, Reads, Writes}
+import play.api.libs.json.{ JsPath, Json, Reads, Writes }
 import play.api.libs.functional.syntax._
 import v2.models.request.common.ukPropertyRentARoom.UkPropertyAdjustmentsRentARoom
 
@@ -31,9 +31,9 @@ object UkNonFhlPropertyAdjustments {
 
   implicit val writes: Writes[UkNonFhlPropertyAdjustments] = (
     (JsPath \ "balancingCharge").writeNullable[BigDecimal] and
-    (JsPath \ "privateUseAdjustment").writeNullable[BigDecimal] and
-    (JsPath \ "businessPremisesRenovationAllowanceBalancingCharges").writeNullable[BigDecimal] and
-    (JsPath \ "nonResidentLandlord").write[Boolean] and
+      (JsPath \ "privateUseAdjustment").writeNullable[BigDecimal] and
+      (JsPath \ "businessPremisesRenovationAllowanceBalancingCharges").writeNullable[BigDecimal] and
+      (JsPath \ "nonResidentLandlord").write[Boolean] and
       (JsPath \ "ukOtherRentARoom").writeNullable[UkPropertyAdjustmentsRentARoom]
-    ) (unlift(UkNonFhlPropertyAdjustments.unapply))
+  )(unlift(UkNonFhlPropertyAdjustments.unapply))
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,18 +18,21 @@ package v2.controllers.requestParsers.validators
 
 import config.AppConfig
 import v2.controllers.requestParsers.validators.validations._
-import v2.models.errors.{MtdError, RuleDuplicateCountryCodeError}
-import v2.models.request.createForeignPropertyPeriodSummary.{CreateForeignPropertyPeriodSummaryRawData, CreateForeignPropertyPeriodSummaryRequestBody}
+import v2.models.errors.{ MtdError, RuleDuplicateCountryCodeError }
+import v2.models.request.createForeignPropertyPeriodSummary.{
+  CreateForeignPropertyPeriodSummaryRawData,
+  CreateForeignPropertyPeriodSummaryRequestBody
+}
 
-import javax.inject.{Inject, Singleton}
-import v2.models.request.common.foreignFhlEea.{CreateForeignFhlEea, CreateForeignFhlEeaExpenses}
-import v2.models.request.common.foreignPropertyEntry.{CreateForeignNonFhlPropertyEntry, CreateForeignNonFhlPropertyExpenses}
+import javax.inject.{ Inject, Singleton }
+import v2.models.request.common.foreignFhlEea.{ CreateForeignFhlEea, CreateForeignFhlEeaExpenses }
+import v2.models.request.common.foreignPropertyEntry.{ CreateForeignNonFhlPropertyEntry, CreateForeignNonFhlPropertyExpenses }
 
 @Singleton
 class CreateForeignPropertyPeriodSummaryValidator @Inject()(appConfig: AppConfig) extends Validator[CreateForeignPropertyPeriodSummaryRawData] {
 
   private lazy val minTaxYear = appConfig.minimumTaxV2Foreign
-  private val validationSet = List(parameterFormatValidation, bodyFormatValidation, bodyFieldFormatValidation, dateRangeValidation)
+  private val validationSet   = List(parameterFormatValidation, bodyFormatValidation, bodyFieldFormatValidation, dateRangeValidation)
 
   private def parameterFormatValidation: CreateForeignPropertyPeriodSummaryRawData => List[List[MtdError]] =
     (data: CreateForeignPropertyPeriodSummaryRawData) => {
@@ -42,7 +45,7 @@ class CreateForeignPropertyPeriodSummaryValidator @Inject()(appConfig: AppConfig
 
   private def bodyFormatValidation: CreateForeignPropertyPeriodSummaryRawData => List[List[MtdError]] = { data =>
     JsonFormatValidation.validateAndCheckNonEmpty[CreateForeignPropertyPeriodSummaryRequestBody](data.body) match {
-      case Nil => NoValidationErrors
+      case Nil          => NoValidationErrors
       case schemaErrors => List(schemaErrors)
     }
   }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +20,7 @@ import com.google.inject.Inject
 import config.AppConfig
 import v2.controllers.requestParsers.validators.validations._
 import v2.models.errors.MtdError
-import v2.models.request.amendUkPropertyPeriodSummary.{AmendUkPropertyPeriodSummaryRawData, AmendUkPropertyPeriodSummaryRequestBody}
+import v2.models.request.amendUkPropertyPeriodSummary.{ AmendUkPropertyPeriodSummaryRawData, AmendUkPropertyPeriodSummaryRequestBody }
 import v2.models.request.common.ukFhlProperty.UkFhlProperty
 import v2.models.request.common.ukNonFhlProperty.UkNonFhlProperty
 
@@ -44,7 +44,7 @@ class AmendUkPropertyPeriodSummaryValidator @Inject()(appConfig: AppConfig) exte
 
   private def bodyFormatValidation: AmendUkPropertyPeriodSummaryRawData => List[List[MtdError]] = { data =>
     JsonFormatValidation.validateAndCheckNonEmpty[AmendUkPropertyPeriodSummaryRequestBody](data.body) match {
-      case Nil => NoValidationErrors
+      case Nil          => NoValidationErrors
       case schemaErrors => List(schemaErrors)
     }
   }

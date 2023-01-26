@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,13 +20,14 @@ import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
 import v2.controllers.requestParsers.AmendUkPropertyPeriodSummaryRequestParser
 import v2.models.errors.ErrorWrapper
-import v2.models.request.amendUkPropertyPeriodSummary.{AmendUkPropertyPeriodSummaryRawData, AmendUkPropertyPeriodSummaryRequest}
+import v2.models.request.amendUkPropertyPeriodSummary.{ AmendUkPropertyPeriodSummaryRawData, AmendUkPropertyPeriodSummaryRequest }
 
 trait MockAmendUkPropertyPeriodSummaryRequestParser extends MockFactory {
 
   val mockAmendUkPropertyRequestParser: AmendUkPropertyPeriodSummaryRequestParser = mock[AmendUkPropertyPeriodSummaryRequestParser]
 
   object MockAmendUkPropertyRequestParser {
+
     def requestFor(data: AmendUkPropertyPeriodSummaryRawData): CallHandler[Either[ErrorWrapper, AmendUkPropertyPeriodSummaryRequest]] = {
       (mockAmendUkPropertyRequestParser.parseRequest(_: AmendUkPropertyPeriodSummaryRawData)(_: String)).expects(data, *)
     }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,9 +18,9 @@ package v1.models.response.listForeignPropertiesPeriodSummaries
 
 import cats.Functor
 import config.AppConfig
-import play.api.libs.json.{Json, OWrites, Reads, Writes}
-import v1.hateoas.{HateoasLinks, HateoasListLinksFactory}
-import v1.models.hateoas.{HateoasData, Link}
+import play.api.libs.json.{ Json, OWrites, Reads, Writes }
+import v1.hateoas.{ HateoasLinks, HateoasListLinksFactory }
+import v1.models.hateoas.{ HateoasData, Link }
 
 case class ListForeignPropertiesPeriodSummariesResponse[I](submissions: Seq[I])
 
@@ -29,9 +29,11 @@ object ListForeignPropertiesPeriodSummariesResponse extends HateoasLinks {
   implicit def reads: Reads[ListForeignPropertiesPeriodSummariesResponse[SubmissionPeriod]] =
     implicitly[Reads[Seq[SubmissionPeriod]]].map(ListForeignPropertiesPeriodSummariesResponse(_))
 
-  implicit def writes[I: Writes]: OWrites[ListForeignPropertiesPeriodSummariesResponse[I]] = Json.writes[ListForeignPropertiesPeriodSummariesResponse[I]]
+  implicit def writes[I: Writes]: OWrites[ListForeignPropertiesPeriodSummariesResponse[I]] =
+    Json.writes[ListForeignPropertiesPeriodSummariesResponse[I]]
 
-  implicit object LinksFactory extends HateoasListLinksFactory[ListForeignPropertiesPeriodSummariesResponse, SubmissionPeriod, ListForeignPropertiesPeriodSummariesHateoasData] {
+  implicit object LinksFactory
+      extends HateoasListLinksFactory[ListForeignPropertiesPeriodSummariesResponse, SubmissionPeriod, ListForeignPropertiesPeriodSummariesHateoasData] {
 
     override def itemLinks(appConfig: AppConfig, data: ListForeignPropertiesPeriodSummariesHateoasData, item: SubmissionPeriod): Seq[Link] =
       Seq(retrieveForeignPropertyPeriodSummary(appConfig, data.nino, data.businessId, item.submissionId))

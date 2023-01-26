@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,18 +19,18 @@ package v2.controllers
 import cats.data.EitherT
 import cats.implicits._
 import play.api.libs.json.Json
-import play.api.mvc.{Action, AnyContent, ControllerComponents}
+import play.api.mvc.{ Action, AnyContent, ControllerComponents }
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.audit.http.connector.AuditResult
-import utils.{IdGenerator, Logging}
+import utils.{ IdGenerator, Logging }
 import v2.controllers.requestParsers.DeletePropertyAnnualSubmissionRequestParser
-import v2.models.audit.{AuditEvent, AuditResponse, GenericAuditDetail}
+import v2.models.audit.{ AuditEvent, AuditResponse, GenericAuditDetail }
 import v2.models.errors._
 import v2.models.request.deletePropertyAnnualSubmission.DeletePropertyAnnualSubmissionRawData
-import v2.services.{AuditService, DeletePropertyAnnualSubmissionService, EnrolmentsAuthService, MtdIdLookupService}
+import v2.services.{ AuditService, DeletePropertyAnnualSubmissionService, EnrolmentsAuthService, MtdIdLookupService }
 
-import javax.inject.{Inject, Singleton}
-import scala.concurrent.{ExecutionContext, Future}
+import javax.inject.{ Inject, Singleton }
+import scala.concurrent.{ ExecutionContext, Future }
 
 @Singleton
 class DeletePropertyAnnualSubmissionController @Inject()(val authService: EnrolmentsAuthService,
@@ -84,12 +84,20 @@ class DeletePropertyAnnualSubmissionController @Inject()(val authService: Enrolm
 
   private def errorResult(errorWrapper: ErrorWrapper) =
     errorWrapper.error match {
-      case NinoFormatError | BusinessIdFormatError | TaxYearFormatError | RuleTaxYearNotSupportedError | RuleTaxYearRangeInvalidError |
-          BadRequestError =>
+      case _
+          if errorWrapper.containsAnyOf(
+            NinoFormatError,
+            BusinessIdFormatError,
+            TaxYearFormatError,
+            RuleTaxYearNotSupportedError,
+            RuleTaxYearRangeInvalidError,
+            BadRequestError
+          ) =>
         BadRequest(Json.toJson(errorWrapper))
+
+      case NotFoundError => NotFound(Json.toJson(errorWrapper))
       case InternalError => InternalServerError(Json.toJson(errorWrapper))
-      case NotFoundError   => NotFound(Json.toJson(errorWrapper))
-      case _ => unhandledError(errorWrapper)
+      case _             => unhandledError(errorWrapper)
     }
 
   private def auditSubmission(details: GenericAuditDetail)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[AuditResult] = {

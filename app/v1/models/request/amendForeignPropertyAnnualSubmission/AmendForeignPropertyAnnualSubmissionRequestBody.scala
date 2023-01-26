@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +20,9 @@ import play.api.libs.json._
 import v1.models.request.amendForeignPropertyAnnualSubmission.foreignFhlEea.ForeignFhlEea
 import v1.models.request.amendForeignPropertyAnnualSubmission.foreignProperty.ForeignPropertyEntry
 case class AmendForeignPropertyAnnualSubmissionRequestBody(foreignFhlEea: Option[ForeignFhlEea], foreignProperty: Option[Seq[ForeignPropertyEntry]]) {
-  def isEmpty: Boolean = (foreignFhlEea.isEmpty && foreignProperty.isEmpty) ||
+
+  def isEmpty: Boolean =
+    (foreignFhlEea.isEmpty && foreignProperty.isEmpty) ||
     foreignFhlEea.exists(_.isEmpty) ||
     foreignProperty.exists(_.isEmpty)
 }

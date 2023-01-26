@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,16 +16,18 @@
 
 package fixtures.RetrieveUkPropertyPeriodSummary
 
-import play.api.libs.json.{JsValue, Json}
+import play.api.libs.json.{ JsValue, Json }
 import v2.models.response.retrieveUkPropertyPeriodSummary._
 
 trait ResponseModelsFixture {
+
   val fullDownstreamJson: JsValue = Json.parse(
     """
       |{
       |  "submittedOn": "2020-06-17T10:53:38Z",
       |  "fromDate": "2019-01-29",
       |  "toDate": "2020-03-29",
+      |  "periodCreationDate": "2020-06-17T10:53:38Z",
       |  "ukFhlProperty": {
       |    "income": {
       |      "periodAmount": 1.11,
@@ -85,6 +87,7 @@ trait ResponseModelsFixture {
       |  "submittedOn": "2020-06-17T10:53:38Z",
       |  "fromDate": "2019-01-29",
       |  "toDate": "2020-03-29",
+      |  "periodCreationDate": "2020-06-17T10:53:38Z",
       |  "ukFhlProperty": {
       |    "income": {
       |      "periodAmount": 1.11,
@@ -209,6 +212,7 @@ trait ResponseModelsFixture {
     submittedOn = "2020-06-17T10:53:38Z",
     fromDate = "2019-01-29",
     toDate = "2020-03-29",
+    periodCreationDate = Some("2020-06-17T10:53:38Z"),
     ukFhlProperty = Some(ukFhlPropertyModel),
     ukNonFhlProperty = Some(ukNonFhlPropertyModel)
   )

@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,21 +18,21 @@ package v2.controllers
 
 import cats.data.EitherT
 import cats.implicits._
-import play.api.libs.json.{JsValue, Json}
-import play.api.mvc.{Action, ControllerComponents}
+import play.api.libs.json.{ JsValue, Json }
+import play.api.mvc.{ Action, ControllerComponents }
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.audit.http.connector.AuditResult
-import utils.{IdGenerator, Logging}
+import utils.{ IdGenerator, Logging }
 import v2.controllers.requestParsers.CreateUkPropertyPeriodSummaryRequestParser
 import v2.hateoas.HateoasFactory
-import v2.models.audit.{AuditEvent, AuditResponse, GenericAuditDetail}
+import v2.models.audit.{ AuditEvent, AuditResponse, GenericAuditDetail }
 import v2.models.errors._
 import v2.models.request.createUkPropertyPeriodSummary.CreateUkPropertyPeriodSummaryRawData
 import v2.models.response.createUkPropertyPeriodSummary.CreateUkPropertyPeriodSummaryHateoasData
 import v2.services._
 
-import javax.inject.{Inject, Singleton}
-import scala.concurrent.{ExecutionContext, Future}
+import javax.inject.{ Inject, Singleton }
+import scala.concurrent.{ ExecutionContext, Future }
 
 @Singleton
 class CreateUkPropertyPeriodSummaryController @Inject()(val authService: EnrolmentsAuthService,
@@ -101,11 +101,12 @@ class CreateUkPropertyPeriodSummaryController @Inject()(val authService: Enrolme
           RuleTaxYearRangeInvalidError | RuleTaxYearNotSupportedError | RuleIncorrectOrEmptyBodyError | ToDateFormatError | FromDateFormatError |
           MtdErrorWithCode(ValueFormatError.code) | MtdErrorWithCode(RuleBothExpensesSuppliedError.code) | RuleToDateBeforeFromDateError |
           RuleOverlappingPeriodError | RuleMisalignedPeriodError | RuleNotContiguousPeriodError |
-          MtdErrorWithCode(RuleIncorrectOrEmptyBodyError.code) | RuleDuplicateSubmissionError =>
+          MtdErrorWithCode(RuleIncorrectOrEmptyBodyError.code) | RuleDuplicateSubmissionError | RuleInvalidSubmissionPeriodError |
+          RuleInvalidSubmissionEndDateError =>
         BadRequest(Json.toJson(errorWrapper))
-      case NotFoundError   => NotFound(Json.toJson(errorWrapper))
+      case NotFoundError => NotFound(Json.toJson(errorWrapper))
       case InternalError => InternalServerError(Json.toJson(errorWrapper))
-      case _ => unhandledError(errorWrapper)
+      case _             => unhandledError(errorWrapper)
     }
 
   private def auditSubmission(details: GenericAuditDetail)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[AuditResult] = {

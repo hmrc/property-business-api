@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +18,6 @@ package v2.services
 
 import cats.data.EitherT
 import cats.implicits._
-import javax.inject.{Inject, Singleton}
 import uk.gov.hmrc.http.HeaderCarrier
 import utils.Logging
 import v2.connectors.AmendForeignPropertyPeriodSummaryConnector
@@ -27,40 +26,48 @@ import v2.models.errors._
 import v2.models.request.amendForeignPropertyPeriodSummary.AmendForeignPropertyPeriodSummaryRequest
 import v2.support.DownstreamResponseMappingSupport
 
-import scala.concurrent.{ExecutionContext, Future}
+import javax.inject.{ Inject, Singleton }
+import scala.concurrent.{ ExecutionContext, Future }
 
 @Singleton
 class AmendForeignPropertyPeriodSummaryService @Inject()(connector: AmendForeignPropertyPeriodSummaryConnector)
-  extends DownstreamResponseMappingSupport with Logging {
+    extends DownstreamResponseMappingSupport
+    with Logging {
 
-  def amendForeignPropertyPeriodSummary(request: AmendForeignPropertyPeriodSummaryRequest)(
-    implicit hc: HeaderCarrier,
-    ec: ExecutionContext,
-    logContext: EndpointLogContext,
-    correlationId: String): Future[ServiceOutcome[Unit]] = {
+  def amendForeignPropertyPeriodSummary(request: AmendForeignPropertyPeriodSummaryRequest)(implicit hc: HeaderCarrier,
+                                                                                           ec: ExecutionContext,
+                                                                                           logContext: EndpointLogContext,
+                                                                                           correlationId: String): Future[ServiceOutcome[Unit]] = {
 
-    val result = for {
-      ifsResponseWrapper <- EitherT(connector.amendForeignPropertyPeriodSummary(request)).leftMap(mapDownstreamErrors(ifsErrorMap))
-    } yield ifsResponseWrapper
+    val result = EitherT(connector.amendForeignPropertyPeriodSummary(request)).leftMap(mapDownstreamErrors(downstreamErrorMap))
 
     result.value
   }
 
-  private def ifsErrorMap =
-    Map(
-      "INVALID_TAXABLE_ENTITY_ID" -> NinoFormatError,
-      "INVALID_TAX_YEAR" -> TaxYearFormatError,
-      "INVALID_INCOMESOURCEID" -> BusinessIdFormatError,
-      "INVALID_SUBMISSION_ID" -> SubmissionIdFormatError,
-      "INVALID_PAYLOAD" -> InternalError,
-      "INVALID_CORRELATIONID" -> InternalError,
-      "NO_DATA_FOUND" -> NotFoundError,
-      "INCOMPATIBLE_PAYLOAD" -> RuleTypeOfBusinessIncorrectError,
-      "TAX_YEAR_NOT_SUPPORTED" -> RuleTaxYearNotSupportedError,
-      "MISSING_EXPENSES" -> InternalError,
+  private def downstreamErrorMap = {
+    val errors = Map(
+      "INVALID_TAXABLE_ENTITY_ID"   -> NinoFormatError,
+      "INVALID_TAX_YEAR"            -> TaxYearFormatError,
+      "INVALID_INCOMESOURCEID"      -> BusinessIdFormatError,
+      "INVALID_SUBMISSION_ID"       -> SubmissionIdFormatError,
+      "INVALID_PAYLOAD"             -> InternalError,
+      "INVALID_CORRELATIONID"       -> InternalError,
+      "NO_DATA_FOUND"               -> NotFoundError,
+      "INCOMPATIBLE_PAYLOAD"        -> RuleTypeOfBusinessIncorrectError,
+      "TAX_YEAR_NOT_SUPPORTED"      -> RuleTaxYearNotSupportedError,
+      "MISSING_EXPENSES"            -> InternalError,
       "BUSINESS_VALIDATION_FAILURE" -> InternalError,
-      "DUPLICATE_COUNTRY_CODE" -> RuleDuplicateCountryCodeError,
-      "SERVER_ERROR" -> InternalError,
-      "SERVICE_UNAVAILABLE" -> InternalError
+      "DUPLICATE_COUNTRY_CODE"      -> RuleDuplicateCountryCodeError,
+      "SERVER_ERROR"                -> InternalError,
+      "SERVICE_UNAVAILABLE"         -> InternalError
     )
+
+    val extraTysErrors = Map(
+      "INVALID_INCOMESOURCE_ID"      -> BusinessIdFormatError,
+      "INVALID_CORRELATION_ID"       -> InternalError,
+      "INCOME_SOURCE_NOT_COMPATIBLE" -> RuleTypeOfBusinessIncorrectError
+    )
+
+    errors ++ extraTysErrors
+  }
 }

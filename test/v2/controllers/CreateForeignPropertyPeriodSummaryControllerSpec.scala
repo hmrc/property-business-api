@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,6 +16,7 @@
 
 package v2.controllers
 
+import fixtures.CreateForeignPropertyPeriodSummaryFixtures.CreateForeignPropertyPeriodSummaryFixtures
 import play.api.libs.json.{ JsObject, Json }
 import play.api.mvc.Result
 import uk.gov.hmrc.http.HeaderCarrier
@@ -24,7 +25,7 @@ import v2.mocks.hateoas.MockHateoasFactory
 import v2.mocks.requestParsers.MockCreateForeignPropertyPeriodSummaryRequestParser
 import v2.mocks.services.{ MockAuditService, MockCreateForeignPropertyPeriodSummaryService, MockEnrolmentsAuthService, MockMtdIdLookupService }
 import v2.models.audit.{ AuditError, AuditEvent, AuditResponse, GenericAuditDetail }
-import v2.models.domain.Nino
+import v2.models.domain.{ Nino, TaxYear }
 import v2.models.errors._
 import v2.models.hateoas.HateoasWrapper
 import v2.models.outcomes.ResponseWrapper
@@ -42,7 +43,8 @@ class CreateForeignPropertyPeriodSummaryControllerSpec
     with MockCreateForeignPropertyPeriodSummaryRequestParser
     with MockAuditService
     with MockHateoasFactory
-    with MockIdGenerator {
+    with MockIdGenerator
+    with CreateForeignPropertyPeriodSummaryFixtures {
 
   private val nino          = "AA123456A"
   private val taxYear       = "2020-21"
@@ -69,20 +71,13 @@ class CreateForeignPropertyPeriodSummaryControllerSpec
     MockIdGenerator.getCorrelationId.returns(correlationId)
   }
 
-  private val requestBody =
-    CreateForeignPropertyPeriodSummaryRequestBody("2020-01-01", "2020-01-31", None, None)
-
-  private val requestBodyJson = Json.parse(
-    """{
-      |    "fromDate": "2020-01-01",
-      |    "toDate": "2020-01-31"
-      |}
-      |""".stripMargin
-  )
-
   private val requestData =
-    CreateForeignPropertyPeriodSummaryRequest(nino = Nino(nino), businessId = businessId, taxYear = taxYear, body = requestBody)
-  private val rawData = CreateForeignPropertyPeriodSummaryRawData(nino = nino, businessId = businessId, taxYear = taxYear, body = requestBodyJson)
+    CreateForeignPropertyPeriodSummaryRequest(nino = Nino(nino),
+                                              businessId = businessId,
+                                              taxYear = TaxYear.fromMtd(taxYear),
+                                              body = regularExpensesRequestBody)
+  private val rawData =
+    CreateForeignPropertyPeriodSummaryRawData(nino = nino, businessId = businessId, taxYear = taxYear, body = regularMtdRequestJson)
 
   private val hateoasResponse = Json
     .parse(
@@ -104,7 +99,7 @@ class CreateForeignPropertyPeriodSummaryControllerSpec
         versionNumber = "2.0",
         userType = "Individual",
         agentReferenceNumber = None,
-        params = Json.obj("nino" -> nino, "businessId" -> businessId, "taxYear" -> taxYear, "request" -> requestBodyJson),
+        params = Json.obj("nino" -> nino, "businessId" -> businessId, "taxYear" -> taxYear, "request" -> regularMtdRequestJson),
         correlationId = correlationId,
         response = auditResponse
       )
@@ -114,7 +109,8 @@ class CreateForeignPropertyPeriodSummaryControllerSpec
     "return a successful response" when {
       "the request received is valid" in new Test {
         MockCreateForeignPropertyRequestParser
-          .requestFor(CreateForeignPropertyPeriodSummaryRawData(nino = nino, businessId = businessId, taxYear = taxYear, body = requestBodyJson))
+          .requestFor(
+            CreateForeignPropertyPeriodSummaryRawData(nino = nino, businessId = businessId, taxYear = taxYear, body = regularMtdRequestJson))
           .returns(Right(requestData))
 
         MockCreateForeignPropertyService
@@ -126,7 +122,7 @@ class CreateForeignPropertyPeriodSummaryControllerSpec
                 CreateForeignPropertyPeriodSummaryHateoasData(nino = nino, businessId = businessId, taxYear = taxYear, submissionId = submissionId))
           .returns(HateoasWrapper(response, testHateoasLinks))
 
-        val result: Future[Result] = controller.handleRequest(nino, businessId, taxYear)(fakeRequestWithBody(requestBodyJson))
+        val result: Future[Result] = controller.handleRequest(nino, businessId, taxYear)(fakeRequestWithBody(regularMtdRequestJson))
 
         contentAsJson(result) shouldBe hateoasResponse
         status(result) shouldBe CREATED
@@ -146,7 +142,7 @@ class CreateForeignPropertyPeriodSummaryControllerSpec
               .returns(Left(ErrorWrapper(correlationId, error, None)))
 
             val result: Future[Result] =
-              controller.handleRequest(nino = nino, businessId = businessId, taxYear = taxYear)(fakeRequestWithBody(requestBodyJson))
+              controller.handleRequest(nino = nino, businessId = businessId, taxYear = taxYear)(fakeRequestWithBody(regularMtdRequestJson))
 
             contentAsJson(result) shouldBe Json.toJson(error)
             status(result) shouldBe expectedStatus
@@ -193,7 +189,7 @@ class CreateForeignPropertyPeriodSummaryControllerSpec
               .returns(Future.successful(Left(ErrorWrapper(correlationId, mtdError))))
 
             val result: Future[Result] =
-              controller.handleRequest(nino = nino, businessId = businessId, taxYear = taxYear)(fakeRequestWithBody(requestBodyJson))
+              controller.handleRequest(nino = nino, businessId = businessId, taxYear = taxYear)(fakeRequestWithBody(regularMtdRequestJson))
 
             contentAsJson(result) shouldBe Json.toJson(mtdError)
             status(result) shouldBe expectedStatus

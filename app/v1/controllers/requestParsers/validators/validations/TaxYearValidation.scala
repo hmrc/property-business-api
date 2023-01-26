@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 
 package v1.controllers.requestParsers.validators.validations
 
-import v1.models.errors.{MtdError, RuleTaxYearNotSupportedError, RuleTaxYearRangeInvalidError, TaxYearFormatError}
+import v1.models.errors.{ MtdError, RuleTaxYearNotSupportedError, RuleTaxYearRangeInvalidError, TaxYearFormatError }
 
 object TaxYearValidation {
 
@@ -25,12 +25,12 @@ object TaxYearValidation {
   def validate(taxYear: String): List[MtdError] = {
     if (taxYear.matches(taxYearFormat)) {
 
-      val start = taxYear.substring(2, 4).toInt
-      val end   = taxYear.substring(5, 7).toInt
+      val start     = taxYear.substring(2, 4).toInt
+      val end       = taxYear.substring(5, 7).toInt
       val startYear = taxYear.substring(0, 4).toInt
 
       if (end - start == 1) {
-        if (startYear >= minimumTaxYear){
+        if (startYear >= minimumTaxYear) {
           NoValidationErrors
         } else {
           List(RuleTaxYearNotSupportedError)

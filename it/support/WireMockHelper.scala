@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,13 +20,13 @@ import com.github.tomakehurst.wiremock.WireMockServer
 import com.github.tomakehurst.wiremock.client.WireMock
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration._
-import org.scalatest.concurrent.{Eventually, IntegrationPatience}
+import org.scalatest.concurrent.{ Eventually, IntegrationPatience }
 import org.scalatestplus.play.guice.GuiceOneServerPerSuite
 
 object WireMockHelper extends Eventually with IntegrationPatience {
 
   val wireMockPort: Int = 11111
-  val host: String = "localhost"
+  val host: String      = "localhost"
 }
 
 trait WireMockHelper {
@@ -36,7 +36,7 @@ trait WireMockHelper {
   import WireMockHelper._
 
   lazy val wireMockConf: WireMockConfiguration = wireMockConfig.port(wireMockPort)
-  lazy val wireMockServer: WireMockServer = new WireMockServer(wireMockConf)
+  lazy val wireMockServer: WireMockServer      = new WireMockServer(wireMockConf)
 
   def startWireMock(): Unit = {
     wireMockServer.start()

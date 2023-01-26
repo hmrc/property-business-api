@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,20 +17,20 @@
 package v2.models.request.common.foreignPropertyEntry
 
 import play.api.libs.functional.syntax._
-import play.api.libs.json.{JsPath, Json, Reads, Writes}
+import play.api.libs.json.{ JsPath, Json, Reads, Writes }
 
 case class AmendForeignNonFhlPropertyExpenses(
-                        premisesRunningCosts: Option[BigDecimal],
-                        repairsAndMaintenance: Option[BigDecimal],
-                        financialCosts: Option[BigDecimal],
-                        professionalFees: Option[BigDecimal],
-                        costOfServices: Option[BigDecimal],
-                        travelCosts: Option[BigDecimal],
-                        residentialFinancialCost: Option[BigDecimal],
-                        broughtFwdResidentialFinancialCost: Option[BigDecimal],
-                        other: Option[BigDecimal],
-                        consolidatedExpenses: Option[BigDecimal]
-                      )
+    premisesRunningCosts: Option[BigDecimal],
+    repairsAndMaintenance: Option[BigDecimal],
+    financialCosts: Option[BigDecimal],
+    professionalFees: Option[BigDecimal],
+    costOfServices: Option[BigDecimal],
+    travelCosts: Option[BigDecimal],
+    residentialFinancialCost: Option[BigDecimal],
+    broughtFwdResidentialFinancialCost: Option[BigDecimal],
+    other: Option[BigDecimal],
+    consolidatedExpenses: Option[BigDecimal]
+)
 
 object AmendForeignNonFhlPropertyExpenses {
   implicit val reads: Reads[AmendForeignNonFhlPropertyExpenses] = Json.reads[AmendForeignNonFhlPropertyExpenses]
@@ -46,5 +46,5 @@ object AmendForeignNonFhlPropertyExpenses {
       (JsPath \ "broughtFwdResidentialFinancialCost").writeNullable[BigDecimal] and
       (JsPath \ "other").writeNullable[BigDecimal] and
       (JsPath \ "consolidatedExpense").writeNullable[BigDecimal]
-    ) (unlift(AmendForeignNonFhlPropertyExpenses.unapply))
+  )(unlift(AmendForeignNonFhlPropertyExpenses.unapply))
 }

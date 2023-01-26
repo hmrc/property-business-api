@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,10 +25,10 @@ class AmendForeignPropertyPeriodSummaryRawDataSpec extends UnitSpec {
     "work" in {
       Json.toJson(
         AmendForeignPropertyPeriodSummaryRawData(nino = "someNino",
-          businessId = "someBusinessId",
-          submissionId = "someSubmissionId",
-          taxYear = "someTaxYear",
-          body = Json.obj("bodyField" -> "value"))) shouldBe
+                                                 businessId = "someBusinessId",
+                                                 submissionId = "someSubmissionId",
+                                                 taxYear = "someTaxYear",
+                                                 body = Json.obj("bodyField" -> "value"))) shouldBe
         Json.parse("""
                      |{
                      |  "nino": "someNino",

@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,10 +23,10 @@ import v1.controllers.EndpointLogContext
 import v1.models.errors.ErrorWrapper
 import v1.models.outcomes.ResponseWrapper
 import v1.models.request.listForeignPropertiesPeriodSummaries.ListForeignPropertiesPeriodSummariesRequest
-import v1.models.response.listForeignPropertiesPeriodSummaries.{ListForeignPropertiesPeriodSummariesResponse, SubmissionPeriod}
+import v1.models.response.listForeignPropertiesPeriodSummaries.{ ListForeignPropertiesPeriodSummariesResponse, SubmissionPeriod }
 import v1.services.ListForeignPropertiesPeriodSummariesService
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.{ ExecutionContext, Future }
 
 trait MockListForeignPropertiesPeriodSummariesService extends MockFactory {
 
@@ -34,10 +34,13 @@ trait MockListForeignPropertiesPeriodSummariesService extends MockFactory {
 
   object MockListForeignPropertiesService {
 
-    def listForeignProperties(requestData: ListForeignPropertiesPeriodSummariesRequest):
-    CallHandler[Future[Either[ErrorWrapper, ResponseWrapper[ListForeignPropertiesPeriodSummariesResponse[SubmissionPeriod]]]]] = {
+    def listForeignProperties(requestData: ListForeignPropertiesPeriodSummariesRequest)
+      : CallHandler[Future[Either[ErrorWrapper, ResponseWrapper[ListForeignPropertiesPeriodSummariesResponse[SubmissionPeriod]]]]] = {
       (mockService
-        .listForeignProperties(_: ListForeignPropertiesPeriodSummariesRequest)(_: HeaderCarrier, _: ExecutionContext, _: EndpointLogContext, _: String))
+        .listForeignProperties(_: ListForeignPropertiesPeriodSummariesRequest)(_: HeaderCarrier,
+                                                                               _: ExecutionContext,
+                                                                               _: EndpointLogContext,
+                                                                               _: String))
         .expects(requestData, *, *, *, *)
     }
   }

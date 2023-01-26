@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,9 +21,9 @@ import play.api.mvc.Result
 import uk.gov.hmrc.http.HeaderCarrier
 import v2.mocks.MockIdGenerator
 import v2.mocks.requestParsers.MockDeletePropertyAnnualSubmissionRequestParser
-import v2.mocks.services.{MockAuditService, MockDeletePropertyAnnualSubmissionService, MockEnrolmentsAuthService, MockMtdIdLookupService}
-import v2.models.audit.{AuditError, AuditEvent, AuditResponse, GenericAuditDetail}
-import v2.models.domain.Nino
+import v2.mocks.services.{ MockAuditService, MockDeletePropertyAnnualSubmissionService, MockEnrolmentsAuthService, MockMtdIdLookupService }
+import v2.models.audit.{ AuditError, AuditEvent, AuditResponse, GenericAuditDetail }
+import v2.models.domain.{ Nino, TaxYear }
 import v2.models.errors._
 import v2.models.outcomes.ResponseWrapper
 import v2.models.request.deletePropertyAnnualSubmission._
@@ -42,7 +42,7 @@ class DeletePropertyAnnualSubmissionControllerSpec
 
   private val nino          = "AA123456A"
   private val businessId    = "XAIS12345678910"
-  private val taxYear       = "2021-22"
+  private val taxYear       = "2023-24"
   private val correlationId = "X-123"
 
   trait Test {
@@ -64,7 +64,7 @@ class DeletePropertyAnnualSubmissionControllerSpec
   }
 
   private val rawData     = DeletePropertyAnnualSubmissionRawData(nino, businessId, taxYear)
-  private val requestData = DeletePropertyAnnualSubmissionRequest(Nino(nino), businessId, taxYear)
+  private val requestData = DeletePropertyAnnualSubmissionRequest(Nino(nino), businessId, TaxYear.fromMtd(taxYear))
 
   def event(auditResponse: AuditResponse): AuditEvent[GenericAuditDetail] =
     AuditEvent(
@@ -100,7 +100,9 @@ class DeletePropertyAnnualSubmissionControllerSpec
         MockedAuditService.verifyAuditEvent(event(auditResponse)).once
       }
     }
+
     "return the error as per spec" when {
+
       "parser errors occur" should {
         def errorsFromParserTester(error: MtdError, expectedStatus: Int): Unit = {
           s"a ${error.code} error is returned from the parser" in new Test {
@@ -131,6 +133,7 @@ class DeletePropertyAnnualSubmissionControllerSpec
 
         input.foreach(args => (errorsFromParserTester _).tupled(args))
       }
+
       "service errors occur" should {
         def serviceErrors(mtdError: MtdError, expectedStatus: Int): Unit = {
           s"a $mtdError error is returned from the service" in new Test {
@@ -158,6 +161,7 @@ class DeletePropertyAnnualSubmissionControllerSpec
           (NinoFormatError, BAD_REQUEST),
           (TaxYearFormatError, BAD_REQUEST),
           (BusinessIdFormatError, BAD_REQUEST),
+          (RuleTaxYearNotSupportedError, BAD_REQUEST),
           (NotFoundError, NOT_FOUND),
           (InternalError, INTERNAL_SERVER_ERROR)
         )

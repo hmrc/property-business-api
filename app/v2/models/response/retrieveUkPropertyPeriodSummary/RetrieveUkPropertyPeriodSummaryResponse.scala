@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,13 +18,14 @@ package v2.models.response.retrieveUkPropertyPeriodSummary
 
 import config.AppConfig
 import play.api.libs.functional.syntax._
-import play.api.libs.json.{Json, OWrites, Reads, __}
-import v2.hateoas.{HateoasLinks, HateoasLinksFactory}
-import v2.models.hateoas.{HateoasData, Link}
+import play.api.libs.json.{ Json, OWrites, Reads, __ }
+import v2.hateoas.{ HateoasLinks, HateoasLinksFactory }
+import v2.models.hateoas.{ HateoasData, Link }
 
 case class RetrieveUkPropertyPeriodSummaryResponse(submittedOn: String,
                                                    fromDate: String,
                                                    toDate: String,
+                                                   periodCreationDate: Option[String],
                                                    ukFhlProperty: Option[UkFhlProperty],
                                                    ukNonFhlProperty: Option[UkNonFhlProperty])
 
@@ -35,11 +36,13 @@ object RetrieveUkPropertyPeriodSummaryResponse extends HateoasLinks {
     (__ \ "submittedOn").read[String] and
       (__ \ "fromDate").read[String] and
       (__ \ "toDate").read[String] and
+      (__ \ "periodCreationDate").readNullable[String] and
       (__ \ "ukFhlProperty").readNullable[UkFhlProperty] and
       (__ \ "ukOtherProperty").readNullable[UkNonFhlProperty]
-    ) (RetrieveUkPropertyPeriodSummaryResponse.apply _)
+  )(RetrieveUkPropertyPeriodSummaryResponse.apply _)
 
-  implicit object hateoasLinksFactory extends HateoasLinksFactory[RetrieveUkPropertyPeriodSummaryResponse, RetrieveUkPropertyPeriodSummaryHateoasData] {
+  implicit object hateoasLinksFactory
+      extends HateoasLinksFactory[RetrieveUkPropertyPeriodSummaryResponse, RetrieveUkPropertyPeriodSummaryHateoasData] {
     override def links(appConfig: AppConfig, data: RetrieveUkPropertyPeriodSummaryHateoasData): Seq[Link] = {
       import data._
       Seq(

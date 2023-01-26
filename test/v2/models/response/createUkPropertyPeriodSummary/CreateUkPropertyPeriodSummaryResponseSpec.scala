@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,8 +25,7 @@ class CreateUkPropertyPeriodSummaryResponseSpec extends UnitSpec {
     "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
   )
 
-  val json = Json.parse(
-    """{
+  val json = Json.parse("""{
       |  "submissionId": "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
       |}""".stripMargin)
 
@@ -45,4 +44,3 @@ class CreateUkPropertyPeriodSummaryResponseSpec extends UnitSpec {
     }
   }
 }
-

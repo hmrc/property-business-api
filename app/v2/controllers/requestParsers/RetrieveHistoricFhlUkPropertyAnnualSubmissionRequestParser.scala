@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,12 +18,13 @@ package v2.controllers.requestParsers
 
 import javax.inject.Inject
 import v2.controllers.requestParsers.validators.RetrieveHistoricFhlUkPropertyAnnualSubmissionValidator
-import v2.models.domain.{Nino, TaxYear}
+import v2.models.domain.{ Nino, TaxYear }
 import v2.models.request.retrieveHistoricFhlUkPropertyAnnualSubmission._
 
 class RetrieveHistoricFhlUkPropertyAnnualSubmissionRequestParser @Inject()(val validator: RetrieveHistoricFhlUkPropertyAnnualSubmissionValidator)
-  extends RequestParser[RetrieveHistoricFhlUkPropertyAnnualSubmissionRawData, RetrieveHistoricFhlUkPropertyAnnualSubmissionRequest] {
+    extends RequestParser[RetrieveHistoricFhlUkPropertyAnnualSubmissionRawData, RetrieveHistoricFhlUkPropertyAnnualSubmissionRequest] {
 
-  override protected def requestFor(data: RetrieveHistoricFhlUkPropertyAnnualSubmissionRawData): RetrieveHistoricFhlUkPropertyAnnualSubmissionRequest =
+  override protected def requestFor(
+      data: RetrieveHistoricFhlUkPropertyAnnualSubmissionRawData): RetrieveHistoricFhlUkPropertyAnnualSubmissionRequest =
     RetrieveHistoricFhlUkPropertyAnnualSubmissionRequest(Nino(data.nino), TaxYear.fromMtd(data.taxYear))
 }

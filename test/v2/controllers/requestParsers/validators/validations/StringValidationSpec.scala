@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,14 +24,14 @@ class StringValidationSpec extends UnitSpec {
   "validate" should {
     "return no errors" when {
       "a valid string is provided" in {
-        val string = "valid string"
+        val string           = "valid string"
         val validationResult = StringValidation.validate(string, "path")
         validationResult.isEmpty shouldBe true
       }
     }
     "return StringFormatError error" when {
       "an invalid name is provided" in {
-        val string = "valid string *"
+        val string           = "valid string *"
         val validationResult = StringValidation.validate(string, "path")
         validationResult.length shouldBe 1
         validationResult.head shouldBe StringFormatError.copy(paths = Some(Seq("path")))
@@ -42,7 +42,7 @@ class StringValidationSpec extends UnitSpec {
   "validateOptional" should {
     "return no errors" when {
       "a valid string is provided" in {
-        val string = "valid string"
+        val string           = "valid string"
         val validationResult = StringValidation.validateOptional(Some(string), "path")
         validationResult.isEmpty shouldBe true
       }
@@ -53,7 +53,7 @@ class StringValidationSpec extends UnitSpec {
     }
     "return StringFormatError error" when {
       "an invalid name is provided" in {
-        val string = "valid string *"
+        val string           = "valid string *"
         val validationResult = StringValidation.validateOptional(Some(string), "path")
         validationResult.length shouldBe 1
         validationResult.head shouldBe StringFormatError.copy(paths = Some(Seq("path")))

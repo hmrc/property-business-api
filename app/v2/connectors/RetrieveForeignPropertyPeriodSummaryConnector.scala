@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,16 +17,15 @@
 package v2.connectors
 
 import config.AppConfig
-
-import javax.inject.{ Inject, Singleton }
 import uk.gov.hmrc.http.{ HeaderCarrier, HttpClient }
-import v2.connectors.DownstreamUri.IfsUri
+import v2.connectors.DownstreamUri.{ IfsUri, TaxYearSpecificIfsUri }
 import v2.connectors.RetrieveForeignPropertyPeriodSummaryConnector._
-import v2.connectors.httpparsers.StandardIfsHttpParser._
+import v2.connectors.httpparsers.StandardDownstreamHttpParser._
 import v2.models.outcomes.ResponseWrapper
 import v2.models.request.retrieveForeignPropertyPeriodSummary.RetrieveForeignPropertyPeriodSummaryRequest
 import v2.models.response.retrieveForeignPropertyPeriodSummary.RetrieveForeignPropertyPeriodSummaryResponse
 
+import javax.inject.{ Inject, Singleton }
 import scala.concurrent.{ ExecutionContext, Future }
 
 object RetrieveForeignPropertyPeriodSummaryConnector {
@@ -44,19 +43,32 @@ class RetrieveForeignPropertyPeriodSummaryConnector @Inject()(val http: HttpClie
   def retrieveForeignProperty(request: RetrieveForeignPropertyPeriodSummaryRequest)(implicit hc: HeaderCarrier,
                                                                                     ec: ExecutionContext,
                                                                                     correlationId: String): Future[DownstreamOutcome[Result]] = {
-    val response = get(
-      uri = IfsUri[RetrieveForeignPropertyPeriodSummaryResponse]("income-tax/business/property/periodic"),
-      queryParams = Seq("taxableEntityId" -> request.nino.value,
-                        "taxYear"         -> request.taxYear,
-                        "incomeSourceId"  -> request.businessId,
-                        "submissionId"    -> request.submissionId)
-    )
 
-    response.map {
-      case Right(ResponseWrapper(corId, resp)) if foreignResult(resp) => Right(ResponseWrapper(corId, ForeignResult(resp)))
-      case Right(ResponseWrapper(corId, _))                           => Right(ResponseWrapper(corId, NonForeignResult))
-      case Left(e)                                                    => Left(e)
-    }
+    val (downstreamUri, queryParams) =
+      if (request.taxYear.useTaxYearSpecificApi) {
+        (
+          TaxYearSpecificIfsUri[RetrieveForeignPropertyPeriodSummaryResponse](
+            s"income-tax/business/property/${request.taxYear.asTysDownstream}/${request.nino.value}/${request.businessId}/periodic/${request.submissionId}"),
+          Nil
+        )
+      } else {
+        (
+          IfsUri[RetrieveForeignPropertyPeriodSummaryResponse]("income-tax/business/property/periodic"),
+          List(
+            "taxableEntityId" -> request.nino.value,
+            "taxYear"         -> request.taxYear.asMtd, // Note that MTD tax year format is used
+            "incomeSourceId"  -> request.businessId,
+            "submissionId"    -> request.submissionId
+          )
+        )
+      }
+
+    val response = get(downstreamUri, queryParams)
+
+    response.map(_.right.map {
+      case ResponseWrapper(corId, resp) if foreignResult(resp) => ResponseWrapper(corId, ForeignResult(resp))
+      case ResponseWrapper(corId, _)                           => ResponseWrapper(corId, NonForeignResult)
+    })
   }
 
   //The same API#1595 IF endpoint is used for both uk and foreign properties.

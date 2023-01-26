@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,19 +26,26 @@ import v2.models.request.retrieveUkPropertyAnnualSubmission.RetrieveUkPropertyAn
 import v2.models.response.retrieveUkPropertyAnnualSubmission.RetrieveUkPropertyAnnualSubmissionResponse
 import v2.services.RetrieveUkPropertyAnnualSubmissionService
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.{ ExecutionContext, Future }
 
 trait MockRetrieveUkPropertyAnnualSubmissionService extends MockFactory {
 
   val mockRetrieveUkPropertyAnnualSubmissionService: RetrieveUkPropertyAnnualSubmissionService = mock[RetrieveUkPropertyAnnualSubmissionService]
 
   object MockRetrieveUkPropertyService {
-    def retrieve(requestData: RetrieveUkPropertyAnnualSubmissionRequest):
-    CallHandler[Future[Either[ErrorWrapper, ResponseWrapper[RetrieveUkPropertyAnnualSubmissionResponse]]]] = {
-      (mockRetrieveUkPropertyAnnualSubmissionService
-        .retrieveUkProperty(_: RetrieveUkPropertyAnnualSubmissionRequest)(_: HeaderCarrier, _: ExecutionContext, _: EndpointLogContext, _: String))
+
+    def retrieve(requestData: RetrieveUkPropertyAnnualSubmissionRequest)
+      : CallHandler[Future[Either[ErrorWrapper, ResponseWrapper[RetrieveUkPropertyAnnualSubmissionResponse]]]] = {
+      (
+        mockRetrieveUkPropertyAnnualSubmissionService
+          .retrieveUkProperty(_: RetrieveUkPropertyAnnualSubmissionRequest)(
+            _: HeaderCarrier,
+            _: ExecutionContext,
+            _: EndpointLogContext,
+            _: String
+          )
+        )
         .expects(requestData, *, *, *, *)
     }
   }
 }
-

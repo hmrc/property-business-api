@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,10 +19,10 @@ package v2.services
 import fixtures.RetrieveUkPropertyPeriodSummary.ResponseModelsFixture
 import support.UnitSpec
 import uk.gov.hmrc.http.HeaderCarrier
-import v2.connectors.RetrieveUkPropertyPeriodSummaryConnector.{NonUkResult, UkResult}
+import v2.connectors.RetrieveUkPropertyPeriodSummaryConnector.{ NonUkResult, UkResult }
 import v2.controllers.EndpointLogContext
 import v2.mocks.connectors.MockRetrieveUkPropertyPeriodSummaryConnector
-import v2.models.domain.Nino
+import v2.models.domain.{ Nino, TaxYear }
 import v2.models.errors._
 import v2.models.outcomes.ResponseWrapper
 import v2.models.request.retrieveUkPropertyPeriodSummary.RetrieveUkPropertyPeriodSummaryRequest
@@ -32,17 +32,16 @@ import scala.concurrent.Future
 
 class RetrieveUkPropertyPeriodSummaryServiceSpec extends UnitSpec with ResponseModelsFixture {
 
-  val nino: String = "AA123456A"
-  val businessId: String = "XAIS12345678910"
-  val taxYear: String = "2019-20"
-  val submissionId: String = "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
+  val nino: String                   = "AA123456A"
+  val businessId: String             = "XAIS12345678910"
+  val taxYear: TaxYear               = TaxYear.fromMtd("2020-21")
+  val submissionId: String           = "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
   implicit val correlationId: String = "X-123"
-
 
   private val requestData = RetrieveUkPropertyPeriodSummaryRequest(Nino(nino), businessId, taxYear, submissionId)
 
   trait Test extends MockRetrieveUkPropertyPeriodSummaryConnector {
-    implicit val hc: HeaderCarrier = HeaderCarrier()
+    implicit val hc: HeaderCarrier              = HeaderCarrier()
     implicit val logContext: EndpointLogContext = EndpointLogContext("c", "ep")
 
     val service = new RetrieveUkPropertyPeriodSummaryService(
@@ -53,7 +52,8 @@ class RetrieveUkPropertyPeriodSummaryServiceSpec extends UnitSpec with ResponseM
   "service" should {
     "service call successful" when {
       "return mapped result" in new Test {
-        MockRetrieveUkPropertyConnector.retrieveUkProperty(requestData)
+        MockRetrieveUkPropertyConnector
+          .retrieveUkProperty(requestData)
           .returns(Future.successful(Right(ResponseWrapper(correlationId, UkResult(fullResponseModel)))))
 
         await(service.retrieveUkProperty(requestData)) shouldBe Right(ResponseWrapper(correlationId, fullResponseModel))
@@ -74,28 +74,35 @@ class RetrieveUkPropertyPeriodSummaryServiceSpec extends UnitSpec with ResponseM
   "unsuccessful" should {
     "map errors according to spec" when {
 
-      def serviceError(ifsErrorCode: String, error: MtdError): Unit =
-        s"a $ifsErrorCode error is returned from the service" in new Test {
+      def serviceError(downStreamErrorCode: String, error: MtdError): Unit =
+        s"a $downStreamErrorCode error is returned from the service" in new Test {
 
-          MockRetrieveUkPropertyConnector.retrieveUkProperty(requestData)
-            .returns(Future.successful(Left(ResponseWrapper(correlationId, DownstreamErrors.single(DownstreamErrorCode(ifsErrorCode))))))
+          MockRetrieveUkPropertyConnector
+            .retrieveUkProperty(requestData)
+            .returns(Future.successful(Left(ResponseWrapper(correlationId, DownstreamErrors.single(DownstreamErrorCode(downStreamErrorCode))))))
 
           await(service.retrieveUkProperty(requestData)) shouldBe Left(ErrorWrapper(correlationId, error))
         }
 
-      val input = Seq(
+      val errorMap = Seq(
         "INVALID_TAXABLE_ENTITY_ID" -> NinoFormatError,
-        "INVALID_TAX_YEAR" -> TaxYearFormatError,
-        "INVALID_INCOMESOURCEID" -> BusinessIdFormatError,
-        "INVALID_SUBMISSION_ID" -> SubmissionIdFormatError,
-        "TAX_YEAR_NOT_SUPPORTED" -> RuleTaxYearNotSupportedError,
-        "NO_DATA_FOUND" -> NotFoundError,
-        "SERVER_ERROR" -> InternalError,
-        "SERVICE_UNAVAILABLE" -> InternalError,
-        "INVALID_CORRELATIONID" -> InternalError
+        "INVALID_TAX_YEAR"          -> TaxYearFormatError,
+        "INVALID_INCOMESOURCEID"    -> BusinessIdFormatError,
+        "INVALID_SUBMISSION_ID"     -> SubmissionIdFormatError,
+        "TAX_YEAR_NOT_SUPPORTED"    -> RuleTaxYearNotSupportedError,
+        "NO_DATA_FOUND"             -> NotFoundError,
+        "SERVER_ERROR"              -> InternalError,
+        "SERVICE_UNAVAILABLE"       -> InternalError,
+        "INVALID_CORRELATIONID"     -> InternalError
       )
 
-      input.foreach(args => (serviceError _).tupled(args))
+      val tysErrorMap =
+        Seq(
+          "INVALID_INCOMESOURCE_ID" -> BusinessIdFormatError,
+          "INVALID_CORRELATION_ID"  -> InternalError
+        )
+
+      (errorMap ++ tysErrorMap).foreach(args => (serviceError _).tupled(args))
     }
   }
 }

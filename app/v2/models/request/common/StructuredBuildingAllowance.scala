@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,11 +16,9 @@
 
 package v2.models.request.common
 
-import play.api.libs.json.{Json, OFormat}
+import play.api.libs.json.{ Json, OFormat }
 
-case class StructuredBuildingAllowance(amount: BigDecimal,
-                                       firstYear: Option[FirstYear],
-                                       building: Building)
+case class StructuredBuildingAllowance(amount: BigDecimal, firstYear: Option[FirstYear], building: Building)
 
 object StructuredBuildingAllowance {
   implicit val format: OFormat[StructuredBuildingAllowance] = Json.format[StructuredBuildingAllowance]

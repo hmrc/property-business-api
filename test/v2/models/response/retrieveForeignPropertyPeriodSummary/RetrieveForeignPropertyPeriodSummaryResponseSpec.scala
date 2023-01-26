@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,9 +17,9 @@
 package v2.models.response.retrieveForeignPropertyPeriodSummary
 
 import mocks.MockAppConfig
-import play.api.libs.json.{JsValue, Json}
+import play.api.libs.json.{ JsValue, Json }
 import support.UnitSpec
-import v2.models.hateoas.{Link, Method}
+import v2.models.hateoas.{ Link, Method }
 import v2.models.response.retrieveForeignPropertyPeriodSummary.foreignFhlEea._
 import v2.models.response.retrieveForeignPropertyPeriodSummary.foreignNonFhlProperty._
 import v2.models.utils.JsonErrorValidators
@@ -30,42 +30,48 @@ class RetrieveForeignPropertyPeriodSummaryResponseSpec extends UnitSpec with Jso
     "2021-06-17T10:53:38Z",
     "2020-01-01",
     "2020-01-31",
-    Some(ForeignFhlEea(
-      Some(ForeignFhlEeaIncome(Some(5000.99))),
-      Some(ForeignFhlEeaExpenses(
-        Some(5000.99),
-        Some(5000.99),
-        Some(5000.99),
-        Some(5000.99),
-        Some(5000.99),
-        Some(5000.99),
-        Some(5000.99),
-        Some(5000.99)
-      ))
-    )),
-    Some(Seq(ForeignNonFhlProperty(
-      "FRA",
-      Some(ForeignNonFhlPropertyIncome(
-        Some(ForeignNonFhlPropertyRentIncome(Some(5000.99))),
-        false,
-        Some(5000.99),
-        Some(5000.99),
-        Some(5000.99),
-        Some(5000.99)
+    Some(
+      ForeignFhlEea(
+        Some(ForeignFhlEeaIncome(Some(5000.99))),
+        Some(
+          ForeignFhlEeaExpenses(
+            Some(5000.99),
+            Some(5000.99),
+            Some(5000.99),
+            Some(5000.99),
+            Some(5000.99),
+            Some(5000.99),
+            Some(5000.99),
+            Some(5000.99)
+          ))
       )),
-      Some(ForeignNonFhlPropertyExpenses(
-        Some(5000.99),
-        Some(5000.99),
-        Some(5000.99),
-        Some(5000.99),
-        Some(5000.99),
-        Some(5000.99),
-        Some(5000.99),
-        Some(5000.99),
-        Some(5000.99),
-        Some(5000.99)
-      ))))
-    ))
+    Some(
+      Seq(ForeignNonFhlProperty(
+        "FRA",
+        Some(
+          ForeignNonFhlPropertyIncome(
+            Some(ForeignNonFhlPropertyRentIncome(Some(5000.99))),
+            false,
+            Some(5000.99),
+            Some(5000.99),
+            Some(5000.99),
+            Some(5000.99)
+          )),
+        Some(
+          ForeignNonFhlPropertyExpenses(
+            Some(5000.99),
+            Some(5000.99),
+            Some(5000.99),
+            Some(5000.99),
+            Some(5000.99),
+            Some(5000.99),
+            Some(5000.99),
+            Some(5000.99),
+            Some(5000.99),
+            Some(5000.99)
+          ))
+      )))
+  )
 
   val writesJson: JsValue = Json.parse(
     """
@@ -189,14 +195,23 @@ class RetrieveForeignPropertyPeriodSummaryResponseSpec extends UnitSpec with Jso
   "LinksFactory" should {
     "produce the correct links" when {
       "called" in {
-        val data: RetrieveForeignPropertyPeriodSummaryHateoasData = RetrieveForeignPropertyPeriodSummaryHateoasData("myNino", "myBusinessId", "myTaxYear", "mySubmissionId")
+        val data: RetrieveForeignPropertyPeriodSummaryHateoasData =
+          RetrieveForeignPropertyPeriodSummaryHateoasData("myNino", "myBusinessId", "myTaxYear", "mySubmissionId")
 
         MockAppConfig.apiGatewayContext.returns("my/context").anyNumberOfTimes()
 
         RetrieveForeignPropertyPeriodSummaryResponse.RetrieveForeignPropertyLinksFactory.links(mockAppConfig, data) shouldBe Seq(
-          Link(href = s"/my/context/foreign/${data.nino}/${data.businessId}/period/${data.taxYear}/${data.submissionId}", method = Method.PUT, rel = "amend-foreign-property-period-summary"),
-          Link(href = s"/my/context/foreign/${data.nino}/${data.businessId}/period/${data.taxYear}/${data.submissionId}", method = Method.GET, rel = "self"),
-          Link(href = s"/my/context/${data.nino}/${data.businessId}/period/${data.taxYear}", method = Method.GET, rel = "list-property-period-summaries")
+          Link(
+            href = s"/my/context/foreign/${data.nino}/${data.businessId}/period/${data.taxYear}/${data.submissionId}",
+            method = Method.PUT,
+            rel = "amend-foreign-property-period-summary"
+          ),
+          Link(href = s"/my/context/foreign/${data.nino}/${data.businessId}/period/${data.taxYear}/${data.submissionId}",
+               method = Method.GET,
+               rel = "self"),
+          Link(href = s"/my/context/${data.nino}/${data.businessId}/period/${data.taxYear}",
+               method = Method.GET,
+               rel = "list-property-period-summaries")
         )
       }
     }

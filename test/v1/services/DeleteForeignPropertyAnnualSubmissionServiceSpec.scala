@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,15 +30,15 @@ import scala.concurrent.Future
 
 class DeleteForeignPropertyAnnualSubmissionServiceSpec extends UnitSpec {
 
-  val nino: String = "AA123456A"
-  val businessId: String = "XAIS12345678910"
-  val taxYear: String = "2021-22"
+  val nino: String                   = "AA123456A"
+  val businessId: String             = "XAIS12345678910"
+  val taxYear: String                = "2021-22"
   implicit val correlationId: String = "X-123"
 
   private val requestData = DeleteForeignPropertyAnnualSubmissionRequest(Nino(nino), businessId, taxYear)
 
   trait Test extends MockDeleteForeignPropertyAnnualSubmissionConnector {
-    implicit val hc: HeaderCarrier = HeaderCarrier()
+    implicit val hc: HeaderCarrier              = HeaderCarrier()
     implicit val logContext: EndpointLogContext = EndpointLogContext("c", "ep")
 
     val service = new DeleteForeignPropertyAnnualSubmissionService(
@@ -49,7 +49,8 @@ class DeleteForeignPropertyAnnualSubmissionServiceSpec extends UnitSpec {
   "service" should {
     "service call successful" when {
       "return mapped result" in new Test {
-        MockDeleteForeignPropertyAnnualSubmissionConnector.deleteForeignProperty(requestData)
+        MockDeleteForeignPropertyAnnualSubmissionConnector
+          .deleteForeignProperty(requestData)
           .returns(Future.successful(Right(ResponseWrapper(correlationId, ()))))
 
         await(service.deleteForeignPropertyAnnualSubmission(requestData)) shouldBe Right(ResponseWrapper(correlationId, ()))
@@ -63,7 +64,8 @@ class DeleteForeignPropertyAnnualSubmissionServiceSpec extends UnitSpec {
       def serviceError(ifsErrorCode: String, error: MtdError): Unit =
         s"a $ifsErrorCode error is returned from the service" in new Test {
 
-          MockDeleteForeignPropertyAnnualSubmissionConnector.deleteForeignProperty(requestData)
+          MockDeleteForeignPropertyAnnualSubmissionConnector
+            .deleteForeignProperty(requestData)
             .returns(Future.successful(Left(ResponseWrapper(correlationId, IfsErrors.single(IfsErrorCode(ifsErrorCode))))))
 
           await(service.deleteForeignPropertyAnnualSubmission(requestData)) shouldBe Left(ErrorWrapper(correlationId, error))
@@ -71,12 +73,12 @@ class DeleteForeignPropertyAnnualSubmissionServiceSpec extends UnitSpec {
 
       val input = Seq(
         "INVALID_TAXABLE_ENTITY_ID" -> NinoFormatError,
-        "INVALID_INCOME_SOURCE_ID" -> BusinessIdFormatError,
-        "INVALID_TAX_YEAR" -> DownstreamError,
-        "INVALID_CORRELATIONID" -> DownstreamError,
-        "NO_DATA_FOUND" -> NotFoundError,
-        "SERVER_ERROR" -> DownstreamError,
-        "SERVICE_UNAVAILABLE" -> DownstreamError
+        "INVALID_INCOME_SOURCE_ID"  -> BusinessIdFormatError,
+        "INVALID_TAX_YEAR"          -> DownstreamError,
+        "INVALID_CORRELATIONID"     -> DownstreamError,
+        "NO_DATA_FOUND"             -> NotFoundError,
+        "SERVER_ERROR"              -> DownstreamError,
+        "SERVICE_UNAVAILABLE"       -> DownstreamError
       )
 
       input.foreach(args => (serviceError _).tupled(args))

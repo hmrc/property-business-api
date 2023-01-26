@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +19,7 @@ package v2.controllers.requestParsers
 import play.api.libs.json.Json
 import support.UnitSpec
 import v2.mocks.validators.MockAmendForeignPropertyPeriodSummaryValidator
-import v2.models.domain.Nino
+import v2.models.domain.{ Nino, TaxYear }
 import v2.models.errors._
 import v2.models.request.amendForeignPropertyPeriodSummary._
 import v2.models.request.common.foreignFhlEea._
@@ -44,7 +44,7 @@ class AmendForeignPropertyPeriodSummaryRequestParserSpec extends UnitSpec {
   )
 
   val inputData: AmendForeignPropertyPeriodSummaryRawData =
-    AmendForeignPropertyPeriodSummaryRawData(nino, taxYear, businessId, submissionId, requestBodyJson)
+    AmendForeignPropertyPeriodSummaryRawData(nino, businessId, taxYear, submissionId, requestBodyJson)
 
   trait Test extends MockAmendForeignPropertyPeriodSummaryValidator {
     lazy val parser = new AmendForeignPropertyPeriodSummaryRequestParser(mockValidator)
@@ -66,7 +66,7 @@ class AmendForeignPropertyPeriodSummaryRequestParserSpec extends UnitSpec {
         )
 
         parser.parseRequest(inputData) shouldBe
-          Right(AmendForeignPropertyPeriodSummaryRequest(Nino(nino), taxYear, businessId, submissionId, model))
+          Right(AmendForeignPropertyPeriodSummaryRequest(Nino(nino), businessId, TaxYear.fromMtd(taxYear), submissionId, model))
       }
     }
 

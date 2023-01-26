@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,9 +16,8 @@
 
 package v1.connectors
 
-import mocks.MockAppConfig
+import mocks.{ MockAppConfig, MockHttpClient }
 import uk.gov.hmrc.http.HeaderCarrier
-import v1.mocks.MockHttpClient
 import v1.models.domain.Nino
 import v1.models.outcomes.ResponseWrapper
 import v1.models.request.common.foreignFhlEea._
@@ -31,85 +30,99 @@ import scala.concurrent.Future
 class CreateForeignPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
 
   val businessId: String = "XAIS12345678910"
-  val nino: String = "AA123456A"
+  val nino: String       = "AA123456A"
 
   val regularExpensesBody: CreateForeignPropertyPeriodSummaryRequestBody = CreateForeignPropertyPeriodSummaryRequestBody(
     "2020-01-01",
     "2020-01-31",
-    Some(ForeignFhlEea(
-      Some(ForeignFhlEeaIncome(Some(5000.99))),
-      Some(ForeignFhlEeaExpenditure(
-        Some(5000.99),
-        Some(5000.99),
-        Some(5000.99),
-        Some(5000.99),
-        Some(5000.99),
-        Some(5000.99),
-        Some(5000.99),
-        None
-      ))
-    )),
-    Some(Seq(ForeignPropertyEntry("FRA",
-      Some(ForeignPropertyIncome(
-        Some(ForeignPropertyRentIncome(Some(5000.99))),
-        false,
-        Some(5000.99),
-        Some(5000.99),
-        Some(5000.99),
-        Some(5000.99)
+    Some(
+      ForeignFhlEea(
+        Some(ForeignFhlEeaIncome(Some(5000.99))),
+        Some(
+          ForeignFhlEeaExpenditure(
+            Some(5000.99),
+            Some(5000.99),
+            Some(5000.99),
+            Some(5000.99),
+            Some(5000.99),
+            Some(5000.99),
+            Some(5000.99),
+            None
+          ))
       )),
-      Some(ForeignPropertyExpenditure(
-        Some(5000.99),
-        Some(5000.99),
-        Some(5000.99),
-        Some(5000.99),
-        Some(5000.99),
-        Some(5000.99),
-        Some(5000.99),
-        Some(5000.99),
-        Some(5000.99),
-        None
-      ))))
-    ))
+    Some(
+      Seq(ForeignPropertyEntry(
+        "FRA",
+        Some(
+          ForeignPropertyIncome(
+            Some(ForeignPropertyRentIncome(Some(5000.99))),
+            false,
+            Some(5000.99),
+            Some(5000.99),
+            Some(5000.99),
+            Some(5000.99)
+          )),
+        Some(
+          ForeignPropertyExpenditure(
+            Some(5000.99),
+            Some(5000.99),
+            Some(5000.99),
+            Some(5000.99),
+            Some(5000.99),
+            Some(5000.99),
+            Some(5000.99),
+            Some(5000.99),
+            Some(5000.99),
+            None
+          ))
+      )))
+  )
 
   val consolidatedExpensesBody: CreateForeignPropertyPeriodSummaryRequestBody = CreateForeignPropertyPeriodSummaryRequestBody(
     "2020-01-01",
     "2020-01-31",
-    Some(ForeignFhlEea(
-      Some(ForeignFhlEeaIncome(Some(5000.99))),
-      Some(ForeignFhlEeaExpenditure(
-        None,
-        None,
-        None,
-        None,
-        None,
-        None,
-        None,
-        Some(3653.35)
-      ))
-    )),
-    Some(Seq(ForeignPropertyEntry("FRA",
-      Some(ForeignPropertyIncome(
-        Some(ForeignPropertyRentIncome(Some(5000.99))),
-        false,
-        Some(5000.99),
-        Some(5000.99),
-        Some(5000.99),
-        Some(5000.99)
+    Some(
+      ForeignFhlEea(
+        Some(ForeignFhlEeaIncome(Some(5000.99))),
+        Some(
+          ForeignFhlEeaExpenditure(
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            Some(3653.35)
+          ))
       )),
-      Some(ForeignPropertyExpenditure(
-        None,
-        None,
-        None,
-        None,
-        None,
-        None,
-        None,
-        None,
-        None,
-        Some(235324.23)
-      ))))
-    ))
+    Some(
+      Seq(ForeignPropertyEntry(
+        "FRA",
+        Some(
+          ForeignPropertyIncome(
+            Some(ForeignPropertyRentIncome(Some(5000.99))),
+            false,
+            Some(5000.99),
+            Some(5000.99),
+            Some(5000.99),
+            Some(5000.99)
+          )),
+        Some(
+          ForeignPropertyExpenditure(
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            Some(235324.23)
+          ))
+      )))
+  )
 
   private val response = CreateForeignPropertyPeriodSummaryResponse("4557ecb5-fd32-48cc-81f5-e6acd1099f3c")
 
@@ -118,6 +131,7 @@ class CreateForeignPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
   private val consolidatedExpensesRequestData = CreateForeignPropertyPeriodSummaryRequest(Nino(nino), businessId, consolidatedExpensesBody)
 
   class Test extends MockHttpClient with MockAppConfig {
+
     val connector: CreateForeignPropertyPeriodSummaryConnector = new CreateForeignPropertyPeriodSummaryConnector(
       http = mockHttpClient,
       appConfig = mockAppConfig
@@ -133,7 +147,7 @@ class CreateForeignPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
     "post a body with regular expenses and return 200 with submissionId" in new Test {
       val outcome = Right(ResponseWrapper(correlationId, response))
 
-      implicit val hc: HeaderCarrier = HeaderCarrier(otherHeaders = otherHeaders ++ Seq("Content-Type" -> "application/json"))
+      implicit val hc: HeaderCarrier                    = HeaderCarrier(otherHeaders = otherHeaders ++ Seq("Content-Type" -> "application/json"))
       val requiredIfsHeadersPost: Seq[(String, String)] = requiredIfsHeaders ++ Seq("Content-Type" -> "application/json")
 
       MockHttpClient
@@ -153,7 +167,7 @@ class CreateForeignPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
     "post a body with consolidated expenses and return 200 with submissionId" in new Test {
       val outcome = Right(ResponseWrapper(correlationId, response))
 
-      implicit val hc: HeaderCarrier = HeaderCarrier(otherHeaders = otherHeaders ++ Seq("Content-Type" -> "application/json"))
+      implicit val hc: HeaderCarrier                    = HeaderCarrier(otherHeaders = otherHeaders ++ Seq("Content-Type" -> "application/json"))
       val requiredIfsHeadersPost: Seq[(String, String)] = requiredIfsHeaders ++ Seq("Content-Type" -> "application/json")
 
       MockHttpClient

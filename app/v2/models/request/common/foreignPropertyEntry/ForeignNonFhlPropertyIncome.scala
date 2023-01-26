@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,16 +17,16 @@
 package v2.models.request.common.foreignPropertyEntry
 
 import play.api.libs.functional.syntax._
-import play.api.libs.json.{JsPath, Json, Reads, Writes}
+import play.api.libs.json.{ JsPath, Json, Reads, Writes }
 
 case class ForeignNonFhlPropertyIncome(
-                                        rentIncome: Option[ForeignNonFhlPropertyRentIncome],
-                                        foreignTaxCreditRelief: Boolean,
-                                        premiumsOfLeaseGrant: Option[BigDecimal],
-                                        otherPropertyIncome: Option[BigDecimal],
-                                        foreignTaxPaidOrDeducted: Option[BigDecimal],
-                                        specialWithholdingTaxOrUkTaxPaid: Option[BigDecimal]
-                                )
+    rentIncome: Option[ForeignNonFhlPropertyRentIncome],
+    foreignTaxCreditRelief: Boolean,
+    premiumsOfLeaseGrant: Option[BigDecimal],
+    otherPropertyIncome: Option[BigDecimal],
+    foreignTaxPaidOrDeducted: Option[BigDecimal],
+    specialWithholdingTaxOrUkTaxPaid: Option[BigDecimal]
+)
 
 object ForeignNonFhlPropertyIncome {
   implicit val reads: Reads[ForeignNonFhlPropertyIncome] = Json.reads[ForeignNonFhlPropertyIncome]
@@ -38,5 +38,5 @@ object ForeignNonFhlPropertyIncome {
       (JsPath \ "otherPropertyIncome").writeNullable[BigDecimal] and
       (JsPath \ "foreignTaxPaidOrDeducted").writeNullable[BigDecimal] and
       (JsPath \ "specialWithholdingTaxOrUkTaxPaid").writeNullable[BigDecimal]
-    ) (unlift(ForeignNonFhlPropertyIncome.unapply))
+  )(unlift(ForeignNonFhlPropertyIncome.unapply))
 }

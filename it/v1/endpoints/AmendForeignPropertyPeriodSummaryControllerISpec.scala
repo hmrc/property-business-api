@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,20 +19,20 @@ package v1.endpoints
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import play.api.http.HeaderNames.ACCEPT
 import play.api.http.Status._
-import play.api.libs.json.{JsObject, JsValue, Json}
-import play.api.libs.ws.{WSRequest, WSResponse}
+import play.api.libs.json.{ JsObject, JsValue, Json }
+import play.api.libs.ws.{ WSRequest, WSResponse }
 import play.api.test.Helpers.AUTHORIZATION
 import support.V1IntegrationBaseSpec
 import v1.models.errors._
-import v1.stubs.{AuditStub, AuthStub, IfsStub, MtdIdLookupStub}
+import v1.stubs.{ AuditStub, AuthStub, IfsStub, MtdIdLookupStub }
 
 class AmendForeignPropertyPeriodSummaryControllerISpec extends V1IntegrationBaseSpec {
 
   private trait Test {
 
-    val nino: String = "AA123456A"
-    val businessId: String = "XAIS12345678910"
-    val submissionId: String = "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
+    val nino: String          = "AA123456A"
+    val businessId: String    = "XAIS12345678910"
+    val submissionId: String  = "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
     val correlationId: String = "X-123"
 
     val requestBodyJson: JsValue = Json.parse(
@@ -117,7 +117,7 @@ class AmendForeignPropertyPeriodSummaryControllerISpec extends V1IntegrationBase
         .withHttpHeaders(
           (ACCEPT, "application/vnd.hmrc.1.0+json"),
           (AUTHORIZATION, "Bearer 123") // some bearer token
-      )
+        )
     }
 
     def errorBody(code: String): String =
@@ -186,22 +186,24 @@ class AmendForeignPropertyPeriodSummaryControllerISpec extends V1IntegrationBase
         val allInvalidFieldsRequestError: List[MtdError] = List(
           ValueFormatError.copy(
             message = "One or more monetary fields are invalid",
-            paths = Some(List(
-              "/foreignFhlEea/income/rentAmount",
-              "/foreignFhlEea/expenditure/consolidatedExpenses",
-              "/foreignProperty/0/income/rentIncome/rentAmount",
-              "/foreignProperty/0/income/premiumOfLeaseGrant",
-              "/foreignProperty/0/income/otherPropertyIncome",
-              "/foreignProperty/0/income/foreignTaxTakenOff",
-              "/foreignProperty/0/income/specialWithholdingTaxOrUKTaxPaid",
-              "/foreignProperty/0/expenditure/consolidatedExpenses"
-            ))
+            paths = Some(
+              List(
+                "/foreignFhlEea/income/rentAmount",
+                "/foreignFhlEea/expenditure/consolidatedExpenses",
+                "/foreignProperty/0/income/rentIncome/rentAmount",
+                "/foreignProperty/0/income/premiumOfLeaseGrant",
+                "/foreignProperty/0/income/otherPropertyIncome",
+                "/foreignProperty/0/income/foreignTaxTakenOff",
+                "/foreignProperty/0/income/specialWithholdingTaxOrUKTaxPaid",
+                "/foreignProperty/0/expenditure/consolidatedExpenses"
+              ))
           ),
           CountryCodeFormatError.copy(
             message = "The provided Country code is invalid",
-            paths = Some(List(
-              "/foreignProperty/0/countryCode"
-            ))
+            paths = Some(
+              List(
+                "/foreignProperty/0/countryCode"
+              ))
           ),
         )
 
@@ -368,35 +370,36 @@ class AmendForeignPropertyPeriodSummaryControllerISpec extends V1IntegrationBase
            """.stripMargin
         )
 
-
         val allInvalidValueRequestError: MtdError = ValueFormatError.copy(
           message = "One or more monetary fields are invalid",
-          paths = Some(List(
-            "/foreignFhlEea/income/rentAmount",
-            "/foreignFhlEea/expenditure/consolidatedExpenses",
-            "/foreignProperty/0/income/rentIncome/rentAmount",
-            "/foreignProperty/0/income/premiumOfLeaseGrant",
-            "/foreignProperty/0/income/otherPropertyIncome",
-            "/foreignProperty/0/income/foreignTaxTakenOff",
-            "/foreignProperty/0/income/specialWithholdingTaxOrUKTaxPaid",
-            "/foreignProperty/0/expenditure/consolidatedExpenses"
-          ))
+          paths = Some(
+            List(
+              "/foreignFhlEea/income/rentAmount",
+              "/foreignFhlEea/expenditure/consolidatedExpenses",
+              "/foreignProperty/0/income/rentIncome/rentAmount",
+              "/foreignProperty/0/income/premiumOfLeaseGrant",
+              "/foreignProperty/0/income/otherPropertyIncome",
+              "/foreignProperty/0/income/foreignTaxTakenOff",
+              "/foreignProperty/0/income/specialWithholdingTaxOrUKTaxPaid",
+              "/foreignProperty/0/expenditure/consolidatedExpenses"
+            ))
         )
 
         val allInvalidCountryCodeRequestError: MtdError = CountryCodeFormatError.copy(
           message = "The provided Country code is invalid",
-          paths = Some(List(
-            "/foreignProperty/0/countryCode"
-          ))
+          paths = Some(
+            List(
+              "/foreignProperty/0/countryCode"
+            ))
         )
 
         val RuleBothExpensesSuppliedRequestError: MtdError = RuleBothExpensesSuppliedError.copy(
           message = "Both expenses and consolidatedExpenses can not be present at the same time",
-          paths = Some(List(
-            "/foreignFhlEea/expenditure"
-          ))
+          paths = Some(
+            List(
+              "/foreignFhlEea/expenditure"
+            ))
         )
-
 
         "validation error occurs" when {
           def validationErrorTest(requestNino: String,
@@ -407,9 +410,9 @@ class AmendForeignPropertyPeriodSummaryControllerISpec extends V1IntegrationBase
                                   expectedBody: MtdError): Unit = {
             s"validation fails with ${expectedBody.code} error" in new Test {
 
-              override val nino: String = requestNino
-              override val businessId: String = requestBusinessId
-              override val submissionId: String = requestSubmissionId
+              override val nino: String             = requestNino
+              override val businessId: String       = requestBusinessId
+              override val submissionId: String     = requestSubmissionId
               override val requestBodyJson: JsValue = requestBody
 
               override def setupStubs(): StubMapping = {
@@ -426,12 +429,42 @@ class AmendForeignPropertyPeriodSummaryControllerISpec extends V1IntegrationBase
 
           val input = Seq(
             ("AA1123A", "XAIS12345678910", "4557ecb5-fd32-48cc-81f5-e6acd1099f3c", validRequestBodyJson, BAD_REQUEST, NinoFormatError),
-            ("AA123456A", "XAIS1234dfxgchjbn5678910", "4557ecb5-fd32-48cc-81f5-e6acd1099f3c", validRequestBodyJson, BAD_REQUEST, BusinessIdFormatError),
-            ("AA123456A", "XAIS12345678910", "4557ecb5-fd32-awefwaef48cc-81f5-e6acd1099f3c", validRequestBodyJson, BAD_REQUEST, SubmissionIdFormatError),
-            ("AA123456A", "XAIS12345678910", "4557ecb5-fd32-48cc-81f5-e6acd1099f3c", Json.parse(s"""{"foreignFhlEea": 2342314}""".stripMargin), BAD_REQUEST, RuleIncorrectOrEmptyBodyError),
-            ("AA123456A", "XAIS12345678910", "4557ecb5-fd32-48cc-81f5-e6acd1099f3c", bothExpensesTypesProvidedJson, BAD_REQUEST, RuleBothExpensesSuppliedRequestError),
-            ("AA123456A", "XAIS12345678910", "4557ecb5-fd32-48cc-81f5-e6acd1099f3c", allInvalidValueRequestBodyJson, BAD_REQUEST, allInvalidValueRequestError),
-            ("AA123456A", "XAIS12345678910", "4557ecb5-fd32-48cc-81f5-e6acd1099f3c", allInvalidCountryCodeRequestBodyJson, BAD_REQUEST, allInvalidCountryCodeRequestError)
+            ("AA123456A",
+             "XAIS1234dfxgchjbn5678910",
+             "4557ecb5-fd32-48cc-81f5-e6acd1099f3c",
+             validRequestBodyJson,
+             BAD_REQUEST,
+             BusinessIdFormatError),
+            ("AA123456A",
+             "XAIS12345678910",
+             "4557ecb5-fd32-awefwaef48cc-81f5-e6acd1099f3c",
+             validRequestBodyJson,
+             BAD_REQUEST,
+             SubmissionIdFormatError),
+            ("AA123456A",
+             "XAIS12345678910",
+             "4557ecb5-fd32-48cc-81f5-e6acd1099f3c",
+             Json.parse(s"""{"foreignFhlEea": 2342314}""".stripMargin),
+             BAD_REQUEST,
+             RuleIncorrectOrEmptyBodyError),
+            ("AA123456A",
+             "XAIS12345678910",
+             "4557ecb5-fd32-48cc-81f5-e6acd1099f3c",
+             bothExpensesTypesProvidedJson,
+             BAD_REQUEST,
+             RuleBothExpensesSuppliedRequestError),
+            ("AA123456A",
+             "XAIS12345678910",
+             "4557ecb5-fd32-48cc-81f5-e6acd1099f3c",
+             allInvalidValueRequestBodyJson,
+             BAD_REQUEST,
+             allInvalidValueRequestError),
+            ("AA123456A",
+             "XAIS12345678910",
+             "4557ecb5-fd32-48cc-81f5-e6acd1099f3c",
+             allInvalidCountryCodeRequestBodyJson,
+             BAD_REQUEST,
+             allInvalidCountryCodeRequestError)
           )
           input.foreach(args => (validationErrorTest _).tupled(args))
         }

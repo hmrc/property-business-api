@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,28 +24,29 @@ import v1.models.domain.Nino
 import v1.models.errors._
 import v1.models.outcomes.ResponseWrapper
 import v1.models.request.listForeignPropertiesPeriodSummaries.ListForeignPropertiesPeriodSummariesRequest
-import v1.models.response.listForeignPropertiesPeriodSummaries.{ListForeignPropertiesPeriodSummariesResponse, SubmissionPeriod}
+import v1.models.response.listForeignPropertiesPeriodSummaries.{ ListForeignPropertiesPeriodSummariesResponse, SubmissionPeriod }
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class ListForeignPropertiesPeriodSummariesServiceSpec extends UnitSpec {
 
-  val nino: String = "AA123456A"
-  val businessId: String = "XAIS12345678910"
-  val fromDate: String = "2020-06-01"
-  val toDate: String = "2020-08-31"
+  val nino: String                   = "AA123456A"
+  val businessId: String             = "XAIS12345678910"
+  val fromDate: String               = "2020-06-01"
+  val toDate: String                 = "2020-08-31"
   implicit val correlationId: String = "X-123"
 
   private val request = ListForeignPropertiesPeriodSummariesRequest(Nino(nino), businessId, fromDate, toDate)
 
-  private val response = ListForeignPropertiesPeriodSummariesResponse(Seq(
-    SubmissionPeriod("4557ecb5-fd32-48cc-81f5-e6acd1099f3c", "2020-06-22", "2020-06-22"),
-    SubmissionPeriod("4557ecb5-fd32-48cc-81f5-e6acd1099f3d", "2020-08-22", "2020-08-22")
-  ))
+  private val response = ListForeignPropertiesPeriodSummariesResponse(
+    Seq(
+      SubmissionPeriod("4557ecb5-fd32-48cc-81f5-e6acd1099f3c", "2020-06-22", "2020-06-22"),
+      SubmissionPeriod("4557ecb5-fd32-48cc-81f5-e6acd1099f3d", "2020-08-22", "2020-08-22")
+    ))
 
   trait Test extends MockListForeignPropertiesPeriodSummariesConnector {
-    implicit val hc: HeaderCarrier = HeaderCarrier()
+    implicit val hc: HeaderCarrier              = HeaderCarrier()
     implicit val logContext: EndpointLogContext = EndpointLogContext("c", "ep")
 
     val service = new ListForeignPropertiesPeriodSummariesService(
@@ -56,7 +57,8 @@ class ListForeignPropertiesPeriodSummariesServiceSpec extends UnitSpec {
   "service" should {
     "service call successful" when {
       "return mapped result" in new Test {
-        MockListForeignPropertiesConnector.listForeignProperties(request)
+        MockListForeignPropertiesConnector
+          .listForeignProperties(request)
           .returns(Future.successful(Right(ResponseWrapper(correlationId, response))))
 
         await(service.listForeignProperties(request)) shouldBe Right(ResponseWrapper(correlationId, response))
@@ -70,7 +72,8 @@ class ListForeignPropertiesPeriodSummariesServiceSpec extends UnitSpec {
       def serviceError(ifsErrorCode: String, error: MtdError): Unit =
         s"a $ifsErrorCode error is returned from the service" in new Test {
 
-          MockListForeignPropertiesConnector.listForeignProperties(request)
+          MockListForeignPropertiesConnector
+            .listForeignProperties(request)
             .returns(Future.successful(Left(ResponseWrapper(correlationId, IfsErrors.single(IfsErrorCode(ifsErrorCode))))))
 
           await(service.listForeignProperties(request)) shouldBe Left(ErrorWrapper(correlationId, error))
@@ -78,14 +81,14 @@ class ListForeignPropertiesPeriodSummariesServiceSpec extends UnitSpec {
 
       val input = Seq(
         "INVALID_TAXABLE_ENTITY_ID" -> NinoFormatError,
-        "INVALID_INCOMESOURCEID" -> BusinessIdFormatError,
-        "NO_DATA_FOUND" -> NotFoundError,
-        "INVALID_FROM_DATE" -> DownstreamError,
-        "INVALID_TO_DATE" -> DownstreamError,
-        "INVALID_DATE_REQUEST" -> DownstreamError,
-        "INVALID_CORRELATIONID" -> DownstreamError,
-        "SERVER_ERROR" -> DownstreamError,
-        "SERVICE_UNAVAILABLE" -> DownstreamError
+        "INVALID_INCOMESOURCEID"    -> BusinessIdFormatError,
+        "NO_DATA_FOUND"             -> NotFoundError,
+        "INVALID_FROM_DATE"         -> DownstreamError,
+        "INVALID_TO_DATE"           -> DownstreamError,
+        "INVALID_DATE_REQUEST"      -> DownstreamError,
+        "INVALID_CORRELATIONID"     -> DownstreamError,
+        "SERVER_ERROR"              -> DownstreamError,
+        "SERVICE_UNAVAILABLE"       -> DownstreamError
       )
 
       input.foreach(args => (serviceError _).tupled(args))

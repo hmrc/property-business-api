@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,13 +20,14 @@ import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
 import v2.controllers.requestParsers.ListPropertyPeriodSummariesRequestParser
 import v2.models.errors.ErrorWrapper
-import v2.models.request.listPropertyPeriodSummaries.{ListPropertyPeriodSummariesRawData, ListPropertyPeriodSummariesRequest}
+import v2.models.request.listPropertyPeriodSummaries.{ ListPropertyPeriodSummariesRawData, ListPropertyPeriodSummariesRequest }
 
 trait MockListPropertyPeriodSummariesRequestParser extends MockFactory {
 
   val mockListPropertyPeriodSummariesRequestParser: ListPropertyPeriodSummariesRequestParser = mock[ListPropertyPeriodSummariesRequestParser]
 
   object MockListPropertyPeriodSummariesRequestParser {
+
     def parseRequest(data: ListPropertyPeriodSummariesRawData): CallHandler[Either[ErrorWrapper, ListPropertyPeriodSummariesRequest]] = {
       (mockListPropertyPeriodSummariesRequestParser.parseRequest(_: ListPropertyPeriodSummariesRawData)(_: String)).expects(data, *)
     }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,14 +19,14 @@ package v1.controllers.requestParsers
 import support.UnitSpec
 import v1.mocks.validators.MockRetrieveForeignPropertyPeriodSummaryValidator
 import v1.models.domain.Nino
-import v1.models.errors.{BadRequestError, BusinessIdFormatError, ErrorWrapper, NinoFormatError}
+import v1.models.errors.{ BadRequestError, BusinessIdFormatError, ErrorWrapper, NinoFormatError }
 import v1.models.request.retrieveForeignPropertyPeriodSummary._
 
 class RetrieveForeignPropertyPeriodSummaryRequestParserSpec extends UnitSpec {
 
-  val nino: String = "AA123456B"
-  val businessId: String = "XAIS12345678901"
-  val submissionId: String = "12345678-1234-4123-9123-123456789012"
+  val nino: String                   = "AA123456B"
+  val businessId: String             = "XAIS12345678901"
+  val submissionId: String           = "12345678-1234-4123-9123-123456789012"
   implicit val correlationId: String = "X-123"
 
   val inputData: RetrieveForeignPropertyPeriodSummaryRawData =
@@ -46,14 +46,16 @@ class RetrieveForeignPropertyPeriodSummaryRequestParserSpec extends UnitSpec {
     }
     "return an ErrorWrapper" when {
       "a single validation error occurs" in new Test {
-        MockRetrieveForeignPropertyValidator.validate(inputData)
+        MockRetrieveForeignPropertyValidator
+          .validate(inputData)
           .returns(List(NinoFormatError))
 
         parser.parseRequest(inputData) shouldBe
           Left(ErrorWrapper(correlationId, NinoFormatError, None))
       }
       "multiple validation errors occur" in new Test {
-        MockRetrieveForeignPropertyValidator.validate(inputData)
+        MockRetrieveForeignPropertyValidator
+          .validate(inputData)
           .returns(List(NinoFormatError, BusinessIdFormatError))
 
         parser.parseRequest(inputData) shouldBe

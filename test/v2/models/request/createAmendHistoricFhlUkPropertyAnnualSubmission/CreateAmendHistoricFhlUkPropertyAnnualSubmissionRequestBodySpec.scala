@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 
 package v2.models.request.createAmendHistoricFhlUkPropertyAnnualSubmission
 
-import play.api.libs.json.{JsValue, Json}
+import play.api.libs.json.{ JsValue, Json }
 import support.UnitSpec
 import v2.models.request.common.ukPropertyRentARoom.UkPropertyAdjustmentsRentARoom
 
@@ -26,25 +26,19 @@ class CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequestBodySpec extends Un
     CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequestBody(
       Some(
         HistoricFhlAnnualAdjustments(
-        Some(200.00),
-        Some(200.00),
-        Some(200.00),
-        periodOfGraceAdjustment = true,
-        Some(200.00),
-        nonResidentLandlord = true,
-        Some(UkPropertyAdjustmentsRentARoom(true))
+          Some(200.00),
+          Some(200.00),
+          Some(200.00),
+          periodOfGraceAdjustment = true,
+          Some(200.00),
+          nonResidentLandlord = true,
+          Some(UkPropertyAdjustmentsRentARoom(true))
         )
       ),
-      Some(HistoricFhlAnnualAllowances(
-        Some(200.00),
-        Some(100.00),
-        Some(200.00),
-        Some(20.00))
-      )
+      Some(HistoricFhlAnnualAllowances(Some(200.00), Some(100.00), Some(200.00), Some(20.00)))
     )
 
-  val validMtdJson: JsValue = Json.parse(
-    """
+  val validMtdJson: JsValue = Json.parse("""
       |{
       |   "annualAdjustments": {
       |      "lossBroughtForward": 200.00,
@@ -66,8 +60,7 @@ class CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequestBodySpec extends Un
       |}
       |""".stripMargin)
 
-  val validDownstreamJson: JsValue = Json.parse(
-    """
+  val validDownstreamJson: JsValue = Json.parse("""
       |{
       |   "annualAdjustments": {
       |      "lossBroughtForward": 200.00,

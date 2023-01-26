@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +18,7 @@ package v1.services
 
 import cats.implicits._
 import cats.data.EitherT
-import javax.inject.{Inject, Singleton}
+import javax.inject.{ Inject, Singleton }
 import uk.gov.hmrc.http.HeaderCarrier
 import utils.Logging
 import v1.connectors.RetrieveForeignPropertyPeriodSummaryConnector
@@ -27,17 +27,18 @@ import v1.models.errors._
 import v1.models.request.retrieveForeignPropertyPeriodSummary.RetrieveForeignPropertyPeriodSummaryRequest
 import v1.support.IfsResponseMappingSupport
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.{ ExecutionContext, Future }
 
 @Singleton
 class RetrieveForeignPropertyPeriodSummaryService @Inject()(connector: RetrieveForeignPropertyPeriodSummaryConnector)
-  extends IfsResponseMappingSupport with Logging {
+    extends IfsResponseMappingSupport
+    with Logging {
 
   def retrieveForeignProperty(request: RetrieveForeignPropertyPeriodSummaryRequest)(
-    implicit hc: HeaderCarrier,
-    ec: ExecutionContext,
-    logContext: EndpointLogContext,
-    correlationId: String): Future[RetrieveForeignPropertyPeriodSummaryServiceOutcome] = {
+      implicit hc: HeaderCarrier,
+      ec: ExecutionContext,
+      logContext: EndpointLogContext,
+      correlationId: String): Future[RetrieveForeignPropertyPeriodSummaryServiceOutcome] = {
 
     val result = for {
       ifsResponseWrapper <- EitherT(connector.retrieveForeignProperty(request)).leftMap(mapIfsErrors(ifsErrorMap))
@@ -49,12 +50,12 @@ class RetrieveForeignPropertyPeriodSummaryService @Inject()(connector: RetrieveF
   private def ifsErrorMap =
     Map(
       "INVALID_TAXABLE_ENTITY_ID" -> NinoFormatError,
-      "INVALID_INCOMESOURCE_ID" -> BusinessIdFormatError,
-      "INVALID_SUBMISSION_ID" -> SubmissionIdFormatError,
-      "NO_DATA_FOUND" -> NotFoundError,
-      "SERVER_ERROR" -> DownstreamError,
-      "SERVICE_UNAVAILABLE" -> DownstreamError,
-      "INVALID_CORRELATIONID" -> DownstreamError
+      "INVALID_INCOMESOURCE_ID"   -> BusinessIdFormatError,
+      "INVALID_SUBMISSION_ID"     -> SubmissionIdFormatError,
+      "NO_DATA_FOUND"             -> NotFoundError,
+      "SERVER_ERROR"              -> DownstreamError,
+      "SERVICE_UNAVAILABLE"       -> DownstreamError,
+      "INVALID_CORRELATIONID"     -> DownstreamError
     )
 
 }

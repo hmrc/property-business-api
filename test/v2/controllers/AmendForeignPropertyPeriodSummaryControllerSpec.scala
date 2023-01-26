@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,7 +24,7 @@ import v2.mocks.hateoas.MockHateoasFactory
 import v2.mocks.requestParsers.MockAmendForeignPropertyPeriodSummaryRequestParser
 import v2.mocks.services.{ MockAmendForeignPropertyPeriodSummaryService, MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService }
 import v2.models.audit.{ AuditError, AuditEvent, AuditResponse, GenericAuditDetail }
-import v2.models.domain.Nino
+import v2.models.domain.{ Nino, TaxYear }
 import v2.models.errors._
 import v2.models.hateoas.HateoasWrapper
 import v2.models.outcomes.ResponseWrapper
@@ -245,7 +245,7 @@ class AmendForeignPropertyPeriodSummaryControllerSpec
     """.stripMargin
   )
 
-  private val requestData = AmendForeignPropertyPeriodSummaryRequest(Nino(nino), businessId, taxYear, submissionId, requestBody)
+  private val requestData = AmendForeignPropertyPeriodSummaryRequest(Nino(nino), businessId, TaxYear.fromMtd(taxYear), submissionId, requestBody)
   private val rawData     = AmendForeignPropertyPeriodSummaryRawData(nino, businessId, taxYear, submissionId, requestBodyJson)
 
   val hateoasResponse: JsValue = testHateoasLinksJson

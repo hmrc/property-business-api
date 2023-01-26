@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,10 +16,11 @@
 
 package v2.models.request.createAmendHistoricNonFhlUkPropertyAnnualSubmission
 
+import fixtures.CreateAmendNonFhlUkPropertyAnnualSubmission.RequestResponseModelFixtures
 import play.api.libs.json.Json
 import support.UnitSpec
 
-class CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestBodySpec extends UnitSpec with CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionFixture {
+class CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestBodySpec extends UnitSpec with RequestResponseModelFixtures {
 
   "reads" when {
     "passed a valid JSON" should {

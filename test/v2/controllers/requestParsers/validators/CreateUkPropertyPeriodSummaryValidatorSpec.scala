@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -243,8 +243,7 @@ class CreateUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with JsonError
           "/ukNonFhlProperty/income/rentARoom",
           "/ukNonFhlProperty/expenses",
           "/ukNonFhlProperty/expenses/rentARoom",
-        )
-          .foreach(p => testEmpty(p))
+        ).foreach(p => testEmpty(p))
 
         def testEmpty(path: String): Unit =
           s"for $path" in {
@@ -268,12 +267,12 @@ class CreateUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with JsonError
                      |}""".stripMargin)
 
         validator.validate(
-        CreateUkPropertyPeriodSummaryRawData(
-          validNino,
-          taxYear,
-          validBusinessId,
-          json
-        )) shouldBe List(RuleIncorrectOrEmptyBodyError.copy(paths = Some(Seq("/ukFhlProperty"))))
+          CreateUkPropertyPeriodSummaryRawData(
+            validNino,
+            taxYear,
+            validBusinessId,
+            json
+          )) shouldBe List(RuleIncorrectOrEmptyBodyError.copy(paths = Some(Seq("/ukFhlProperty"))))
       }
 
       "fromDate is missing" in {

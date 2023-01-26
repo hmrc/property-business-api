@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,13 +17,13 @@
 package v2.models.response.retrieveUkPropertyPeriodSummary
 
 import fixtures.RetrieveUkPropertyPeriodSummary.ResponseModelsFixture
-import play.api.libs.json.{JsValue, Json}
+import play.api.libs.json.{ JsValue, Json }
 import support.UnitSpec
 
 class FhlPropertyIncomeSpec extends UnitSpec with ResponseModelsFixture {
   "FhlPropertyIncome" when {
-    val downstreamJson: JsValue = (fullDownstreamJson \ "ukFhlProperty" \ "income").get
-    val mtdJson: JsValue = (fullMtdJson \ "ukFhlProperty" \ "income").get
+    val downstreamJson: JsValue  = (fullDownstreamJson \ "ukFhlProperty" \ "income").get
+    val mtdJson: JsValue         = (fullMtdJson \ "ukFhlProperty" \ "income").get
     val model: FhlPropertyIncome = fhlPropertyIncomeModel
     "read from valid JSON" should {
       "return the expected model" in {

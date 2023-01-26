@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 
 package v2.models.request.common.ukFhlProperty
 
-import play.api.libs.json.{JsValue, Json}
+import play.api.libs.json.{ JsValue, Json }
 import support.UnitSpec
 import v2.models.request.common.ukPropertyRentARoom.UkPropertyIncomeRentARoom
 
@@ -26,13 +26,13 @@ class UkFhlPropertyIncomeSpec extends UnitSpec {
     UkFhlPropertyIncome(
       Some(5000.99),
       Some(3123.21),
-      Some(UkPropertyIncomeRentARoom(
-        Some(532.12)
-      ))
+      Some(
+        UkPropertyIncomeRentARoom(
+          Some(532.12)
+        ))
     )
 
-  val mtdJson: JsValue = Json.parse(
-    """
+  val mtdJson: JsValue = Json.parse("""
       |{
       |    "periodAmount": 5000.99,
       |    "taxDeducted": 3123.21,
@@ -42,9 +42,7 @@ class UkFhlPropertyIncomeSpec extends UnitSpec {
       |}
       |""".stripMargin)
 
-
-  val desJson: JsValue = Json.parse(
-    """
+  val desJson: JsValue = Json.parse("""
       |{
       |    "periodAmount": 5000.99,
       |    "taxDeducted": 3123.21,
@@ -53,7 +51,6 @@ class UkFhlPropertyIncomeSpec extends UnitSpec {
       |    }
       |}
       |""".stripMargin)
-
 
   "reads" when {
     "passed a valid JSON" should {

@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,11 +16,12 @@
 
 package v2.controllers.requestParsers.validators.validations
 
-import v2.models.errors.{BusinessIdFormatError, MtdError}
+import v2.models.errors.{ BusinessIdFormatError, MtdError }
 
 object BusinessIdValidation {
+
   def validate(id: String): List[MtdError] = {
     val idRegex = "^X[A-Z0-9]{1}IS[0-9]{11}$"
-    if(id.matches(idRegex)) NoValidationErrors else List(BusinessIdFormatError)
+    if (id.matches(idRegex)) NoValidationErrors else List(BusinessIdFormatError)
   }
 }

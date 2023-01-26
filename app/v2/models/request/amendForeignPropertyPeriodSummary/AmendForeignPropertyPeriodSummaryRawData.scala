@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +17,7 @@
 package v2.models.request.amendForeignPropertyPeriodSummary
 
 import play.api.libs.functional.syntax._
-import play.api.libs.json.{JsPath, JsValue, OWrites}
+import play.api.libs.json.{ JsPath, JsValue, OWrites }
 import v2.models.request.RawData
 
 case class AmendForeignPropertyPeriodSummaryRawData(nino: String, businessId: String, taxYear: String, submissionId: String, body: JsValue)
@@ -30,5 +30,5 @@ object AmendForeignPropertyPeriodSummaryRawData {
       (JsPath \ "taxYear").write[String] and
       (JsPath \ "submissionId").write[String] and
       (JsPath \ "request").write[JsValue]
-    )(unlift(AmendForeignPropertyPeriodSummaryRawData.unapply))
+  )(unlift(AmendForeignPropertyPeriodSummaryRawData.unapply))
 }

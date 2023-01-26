@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +20,7 @@ import config.AppConfig
 import play.api.libs.json.JsObject
 import uk.gov.hmrc.http.{ HeaderCarrier, HttpClient }
 import v2.connectors.DownstreamUri.IfsUri
-import v2.connectors.httpparsers.StandardIfsHttpParser._
+import v2.connectors.httpparsers.StandardDownstreamHttpParser._
 import v2.models.domain.HistoricPropertyType
 import v2.models.request.deleteHistoricUkPropertyAnnualSubmission.DeleteHistoricUkPropertyAnnualSubmissionRequest
 
@@ -36,7 +36,7 @@ class DeleteHistoricUkPropertyAnnualSubmissionConnector @Inject()(val http: Http
       correlationId: String): Future[DownstreamOutcome[Unit]] = {
 
     val nino    = request.nino.nino
-    val taxYear = request.taxYear.toDownstream
+    val taxYear = request.taxYear.asDownstream
 
     val propertyTypeName = request.propertyType match {
       case HistoricPropertyType.Fhl    => "furnished-holiday-lettings"

@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 
 package v2.models.response.retrieveUkPropertyAnnualSubmission.ukNonFhlProperty
 
-import play.api.libs.json.{JsPath, Json, OWrites, Reads}
+import play.api.libs.json.{ JsPath, Json, OWrites, Reads }
 import play.api.libs.functional.syntax._
 
 case class UkNonFhlPropertyAllowances(
@@ -33,7 +33,7 @@ case class UkNonFhlPropertyAllowances(
 )
 
 object UkNonFhlPropertyAllowances {
-  implicit  val writes: OWrites[UkNonFhlPropertyAllowances] = Json.writes[UkNonFhlPropertyAllowances]
+  implicit val writes: OWrites[UkNonFhlPropertyAllowances] = Json.writes[UkNonFhlPropertyAllowances]
 
   implicit val reads: Reads[UkNonFhlPropertyAllowances] = (
     (JsPath \ "annualInvestmentAllowance").readNullable[BigDecimal] and
@@ -46,5 +46,5 @@ object UkNonFhlPropertyAllowances {
       (JsPath \ "structuredBuildingAllowance").readNullable[Seq[UkNonFhlPropertyStructuredBuildingAllowance]] and
       (JsPath \ "enhancedStructuredBuildingAllowance").readNullable[Seq[UkNonFhlPropertyStructuredBuildingAllowance]] and
       (JsPath \ "zeroEmissionsCarAllowance").readNullable[BigDecimal]
-    )(UkNonFhlPropertyAllowances.apply _)
+  )(UkNonFhlPropertyAllowances.apply _)
 }

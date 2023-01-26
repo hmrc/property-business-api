@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,7 +21,7 @@ import uk.gov.hmrc.http.HeaderCarrier
 import v2.connectors.RetrieveUkPropertyAnnualSubmissionConnector._
 import v2.controllers.EndpointLogContext
 import v2.mocks.connectors.MockRetrieveUkPropertyAnnualSubmissionConnector
-import v2.models.domain.Nino
+import v2.models.domain.{ Nino, TaxYear }
 import v2.models.errors._
 import v2.models.outcomes.ResponseWrapper
 import v2.models.request.retrieveUkPropertyAnnualSubmission.RetrieveUkPropertyAnnualSubmissionRequest
@@ -36,7 +36,7 @@ class RetrieveUkPropertyAnnualSubmissionServiceSpec extends UnitSpec {
 
   val nino: String                   = "AA123456A"
   val businessId: String             = "XAIS12345678910"
-  val taxYear: String                = "2019-20"
+  val taxYear: TaxYear               = TaxYear.fromMtd("2020-21")
   implicit val correlationId: String = "X-123"
 
   val ukFhlProperty: UkFhlProperty       = UkFhlProperty(None, None)
@@ -88,7 +88,7 @@ class RetrieveUkPropertyAnnualSubmissionServiceSpec extends UnitSpec {
             await(service.retrieveUkProperty(request)) shouldBe Left(ErrorWrapper(correlationId, error))
           }
 
-        val input = Seq(
+        val errors = Seq(
           "INVALID_TAXABLE_ENTITY_ID" -> NinoFormatError,
           "INVALID_INCOMESOURCEID"    -> BusinessIdFormatError,
           "INVALID_TAX_YEAR"          -> TaxYearFormatError,
@@ -99,7 +99,12 @@ class RetrieveUkPropertyAnnualSubmissionServiceSpec extends UnitSpec {
           "SERVICE_UNAVAILABLE"       -> InternalError
         )
 
-        input.foreach(args => (serviceError _).tupled(args))
+        val extraTysErrors = Seq(
+          "INVALID_INCOMESOURCE_ID" -> BusinessIdFormatError,
+          "INVALID_CORRELATION_ID"  -> InternalError
+        )
+
+        (errors ++ extraTysErrors).foreach(args => (serviceError _).tupled(args))
       }
     }
   }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,7 +22,9 @@ import uk.gov.hmrc.http.HeaderCarrier
 import v2.mocks.MockIdGenerator
 import v2.mocks.hateoas.MockHateoasFactory
 import v2.mocks.requestParsers.MockCreateHistoricNonFhlUkPiePeriodSummaryRequestParser
-import v2.mocks.services.{ MockCreateHistoricNonFhlUkPiePeriodSummaryService, MockEnrolmentsAuthService, MockMtdIdLookupService }
+import v2.mocks.services.{ MockAuditService, MockCreateHistoricNonFhlUkPiePeriodSummaryService, MockEnrolmentsAuthService, MockMtdIdLookupService }
+import v2.models.audit.{ AuditError, AuditEvent, AuditResponse, FlattenedGenericAuditDetail }
+import v2.models.auth.UserDetails
 import v2.models.domain.{ Nino, PeriodId }
 import v2.models.errors._
 import v2.models.hateoas.HateoasWrapper
@@ -47,11 +49,13 @@ class CreateHistoricNonFhlUkPiePeriodSummaryControllerSpec
     with MockCreateHistoricNonFhlUkPiePeriodSummaryService
     with MockCreateHistoricNonFhlUkPiePeriodSummaryRequestParser
     with MockHateoasFactory
-    with MockIdGenerator {
+    with MockIdGenerator
+    with MockAuditService {
 
   private val nino          = "AA123456A"
   private val periodId      = "2019-03-11_2020-04-23"
   private val correlationId = "a1e8057e-fbbc-47a8-a8b4-78d9f015c253"
+  private val mtdId: String = "test-mtd-id"
 
   trait Test {
     val hc: HeaderCarrier = HeaderCarrier()
@@ -60,6 +64,7 @@ class CreateHistoricNonFhlUkPiePeriodSummaryControllerSpec
       authService = mockEnrolmentsAuthService,
       lookupService = mockMtdIdLookupService,
       service = mockCreateHistoricNonFhlUkPiePeriodSummaryService,
+      auditService = mockAuditService,
       parser = mockCreateHistoricNonFhlUkPiePeriodSummaryRequestParser,
       hateoasFactory = mockHateoasFactory,
       cc = cc,
@@ -99,6 +104,20 @@ class CreateHistoricNonFhlUkPiePeriodSummaryControllerSpec
     """.stripMargin
   )
 
+  def event(auditResponse: AuditResponse): AuditEvent[FlattenedGenericAuditDetail] =
+    AuditEvent(
+      auditType = "CreateHistoricNonFhlPropertyIncomeExpensesPeriodSummary",
+      transactionName = "CreateHistoricNonFhlPropertyIncomeExpensesPeriodSummary",
+      detail = FlattenedGenericAuditDetail(
+        versionNumber = Some("2.0"),
+        userDetails = UserDetails(mtdId, "Individual", None),
+        params = Map("nino" -> nino),
+        request = Some(requestBodyJson),
+        `X-CorrelationId` = correlationId,
+        auditResponse = auditResponse
+      )
+    )
+
   private val response = CreateHistoricNonFhlUkPiePeriodSummaryResponse(PeriodId(periodId))
 
   "create" should {
@@ -122,6 +141,8 @@ class CreateHistoricNonFhlUkPiePeriodSummaryControllerSpec
         status(result) shouldBe CREATED
         header("X-CorrelationId", result) shouldBe Some(correlationId)
 
+        val auditResponse: AuditResponse = AuditResponse(OK, None, None)
+        MockedAuditService.verifyAuditEvent(event(auditResponse)).once
       }
     }
 
@@ -140,6 +161,8 @@ class CreateHistoricNonFhlUkPiePeriodSummaryControllerSpec
             status(result) shouldBe expectedStatus
             header("X-CorrelationId", result) shouldBe Some(correlationId)
 
+            val auditResponse: AuditResponse = AuditResponse(expectedStatus, Some(Seq(AuditError(error.code))), None)
+            MockedAuditService.verifyAuditEvent(event(auditResponse)).once
           }
         }
 
@@ -174,6 +197,9 @@ class CreateHistoricNonFhlUkPiePeriodSummaryControllerSpec
             contentAsJson(result) shouldBe Json.toJson(mtdError)
             status(result) shouldBe expectedStatus
             header("X-CorrelationId", result) shouldBe Some(correlationId)
+
+            val auditResponse: AuditResponse = AuditResponse(expectedStatus, Some(Seq(AuditError(mtdError.code))), None)
+            MockedAuditService.verifyAuditEvent(event(auditResponse)).once
           }
         }
 

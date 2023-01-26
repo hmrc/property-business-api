@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +20,7 @@ import config.AppConfig
 import play.api.libs.json.Format.GenericFormat
 import uk.gov.hmrc.http.{ HeaderCarrier, HttpClient }
 import v2.connectors.DownstreamUri.IfsUri
-import v2.connectors.httpparsers.StandardIfsHttpParser._
+import v2.connectors.httpparsers.StandardDownstreamHttpParser._
 import v2.models.request.createAmendHistoricNonFhlUkPropertyAnnualSubmission.CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequest
 import v2.models.response.createAmendHistoricNonFhlUkPropertyAnnualSubmission.CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionResponse
 
@@ -39,7 +39,7 @@ class CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionConnector @Inject()(val
     put(
       body = request.body,
       uri = IfsUri[CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionResponse](
-        s"income-tax/nino/${request.nino.nino}/uk-properties/other/annual-summaries/${request.taxYear.toDownstream}")
+        s"income-tax/nino/${request.nino.nino}/uk-properties/other/annual-summaries/${request.taxYear.asDownstream}")
     )
   }
 

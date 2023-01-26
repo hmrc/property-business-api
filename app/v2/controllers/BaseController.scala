@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +20,7 @@ import play.api.libs.json.Json
 import play.api.mvc.Result
 import play.api.mvc.Results.InternalServerError
 import utils.Logging
-import v2.models.errors.{InternalError, ErrorWrapper}
+import v2.models.errors.{ InternalError, ErrorWrapper }
 
 trait BaseController {
   self: Logging =>
@@ -37,7 +37,7 @@ trait BaseController {
     def withApiHeaders(correlationId: String, responseHeaders: (String, String)*): Result = {
 
       val newHeaders: Seq[(String, String)] = responseHeaders ++ Seq(
-        "X-CorrelationId" -> correlationId,
+        "X-CorrelationId"        -> correlationId,
         "X-Content-Type-Options" -> "nosniff"
       )
 
@@ -45,5 +45,3 @@ trait BaseController {
     }
   }
 }
-
-

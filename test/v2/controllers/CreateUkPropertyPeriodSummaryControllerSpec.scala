@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,22 +16,22 @@
 
 package v2.controllers
 
-import play.api.libs.json.{JsValue, Json}
+import play.api.libs.json.{ JsValue, Json }
 import play.api.mvc.Result
 import uk.gov.hmrc.http.HeaderCarrier
 import v2.mocks.MockIdGenerator
 import v2.mocks.hateoas.MockHateoasFactory
 import v2.mocks.requestParsers.MockCreateUkPropertyPeriodSummaryRequestParser
-import v2.mocks.services.{MockAuditService, MockCreateUkPropertyPeriodSummaryService, MockEnrolmentsAuthService, MockMtdIdLookupService}
-import v2.models.audit.{AuditError, AuditEvent, AuditResponse, GenericAuditDetail}
-import v2.models.domain.Nino
+import v2.mocks.services.{ MockAuditService, MockCreateUkPropertyPeriodSummaryService, MockEnrolmentsAuthService, MockMtdIdLookupService }
+import v2.models.audit.{ AuditError, AuditEvent, AuditResponse, GenericAuditDetail }
+import v2.models.domain.{ Nino, TaxYear }
 import v2.models.errors._
 import v2.models.hateoas.Method.GET
-import v2.models.hateoas.{HateoasWrapper, Link}
+import v2.models.hateoas.{ HateoasWrapper, Link }
 import v2.models.outcomes.ResponseWrapper
-import v2.models.request.common.ukFhlProperty.{UkFhlProperty, UkFhlPropertyExpenses, UkFhlPropertyIncome}
-import v2.models.request.common.ukNonFhlProperty.{UkNonFhlProperty, UkNonFhlPropertyExpenses, UkNonFhlPropertyIncome}
-import v2.models.request.common.ukPropertyRentARoom.{UkPropertyExpensesRentARoom, UkPropertyIncomeRentARoom}
+import v2.models.request.common.ukFhlProperty.{ UkFhlProperty, UkFhlPropertyExpenses, UkFhlPropertyIncome }
+import v2.models.request.common.ukNonFhlProperty.{ UkNonFhlProperty, UkNonFhlPropertyExpenses, UkNonFhlPropertyIncome }
+import v2.models.request.common.ukPropertyRentARoom.{ UkPropertyExpensesRentARoom, UkPropertyIncomeRentARoom }
 import v2.models.request.createUkPropertyPeriodSummary._
 import v2.models.response.createUkPropertyPeriodSummary._
 
@@ -278,7 +278,7 @@ class CreateUkPropertyPeriodSummaryControllerSpec
       |""".stripMargin
   )
 
-  private val requestData = CreateUkPropertyPeriodSummaryRequest(Nino(nino), taxYear, businessId, requestBody)
+  private val requestData = CreateUkPropertyPeriodSummaryRequest(Nino(nino), TaxYear.fromMtd(taxYear), businessId, requestBody)
   private val rawData     = CreateUkPropertyPeriodSummaryRawData(nino, taxYear, businessId, requestBodyJson)
 
   val hateoasResponse: JsValue = Json.parse(

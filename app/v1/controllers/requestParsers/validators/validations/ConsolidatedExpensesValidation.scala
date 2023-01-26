@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,28 +16,31 @@
 
 package v1.controllers.requestParsers.validators.validations
 
-import v1.models.errors.{MtdError, RuleBothExpensesSuppliedError}
+import v1.models.errors.{ MtdError, RuleBothExpensesSuppliedError }
 import v1.models.request.common.foreignFhlEea._
 import v1.models.request.common.foreignPropertyEntry._
 
 object ConsolidatedExpensesValidation {
+
   def validate(expenditure: ForeignPropertyExpenditure, path: String): List[MtdError] = {
     expenditure.consolidatedExpenses match {
       case None => NoValidationErrors
-      case Some(_) => expenditure match {
-        case ForeignPropertyExpenditure(None, None, None, None, None, None, _, _, None, Some(_)) => NoValidationErrors
-        case _ => List(RuleBothExpensesSuppliedError.copy(paths = Some(Seq(path))))
-      }
+      case Some(_) =>
+        expenditure match {
+          case ForeignPropertyExpenditure(None, None, None, None, None, None, _, _, None, Some(_)) => NoValidationErrors
+          case _                                                                                   => List(RuleBothExpensesSuppliedError.copy(paths = Some(Seq(path))))
+        }
     }
   }
 
   def validate(expenditure: ForeignFhlEeaExpenditure, path: String): List[MtdError] = {
     expenditure.consolidatedExpenses match {
       case None => NoValidationErrors
-      case Some(_) => expenditure match {
-        case ForeignFhlEeaExpenditure(None, None, None, None, None, None, None, Some(_)) => NoValidationErrors
-        case _ => List(RuleBothExpensesSuppliedError.copy(paths = Some(Seq(path))))
-      }
+      case Some(_) =>
+        expenditure match {
+          case ForeignFhlEeaExpenditure(None, None, None, None, None, None, None, Some(_)) => NoValidationErrors
+          case _                                                                           => List(RuleBothExpensesSuppliedError.copy(paths = Some(Seq(path))))
+        }
     }
   }
 }

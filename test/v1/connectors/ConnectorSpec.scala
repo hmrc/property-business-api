@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,26 +16,23 @@
 
 package v1.connectors
 
-import play.api.http.{HeaderNames, MimeTypes, Status}
+import play.api.http.{ HeaderNames, MimeTypes, Status }
 import support.UnitSpec
 import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.ExecutionContext
 
-trait ConnectorSpec extends UnitSpec
-  with Status
-  with MimeTypes
-  with HeaderNames {
+trait ConnectorSpec extends UnitSpec with Status with MimeTypes with HeaderNames {
 
-  lazy val baseUrl = "http://test-BaseUrl"
+  lazy val baseUrl                   = "http://test-BaseUrl"
   implicit val correlationId: String = "a1e8057e-fbbc-47a8-a8b4-78d9f015c253"
 
   val otherHeaders: Seq[(String, String)] = Seq(
     "Gov-Test-Scenario" -> "DEFAULT",
-    "AnotherHeader" -> "HeaderValue"
+    "AnotherHeader"     -> "HeaderValue"
   )
 
-  implicit val hc: HeaderCarrier = HeaderCarrier(otherHeaders = otherHeaders)
+  implicit val hc: HeaderCarrier    = HeaderCarrier(otherHeaders = otherHeaders)
   implicit val ec: ExecutionContext = scala.concurrent.ExecutionContext.global
 
   val dummyIfsHeaderCarrierConfig: HeaderCarrier.Config =
@@ -46,10 +43,10 @@ trait ConnectorSpec extends UnitSpec
     )
 
   val requiredIfsHeaders: Seq[(String, String)] = Seq(
-    "Authorization" -> "Bearer ifs-token",
-    "Environment" -> "ifs-environment",
-    "User-Agent" -> "property-business-api",
-    "CorrelationId" -> correlationId,
+    "Authorization"     -> "Bearer ifs-token",
+    "Environment"       -> "ifs-environment",
+    "User-Agent"        -> "property-business-api",
+    "CorrelationId"     -> correlationId,
     "Gov-Test-Scenario" -> "DEFAULT"
   )
 

@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,12 +24,14 @@ class ForeignFhlEeaSpec extends UnitSpec with JsonErrorValidators {
 
   val foreignFhlEea =
     ForeignFhlEea(
-        Some(ForeignFhlEeaAdjustments(
+      Some(
+        ForeignFhlEeaAdjustments(
           Some(100.25),
           Some(100.25),
           Some(true)
         )),
-        Some(ForeignFhlEeaAllowances(
+      Some(
+        ForeignFhlEeaAllowances(
           Some(100.25),
           Some(100.25),
           Some(100.25),
@@ -40,26 +42,27 @@ class ForeignFhlEeaSpec extends UnitSpec with JsonErrorValidators {
   val foreignFhlEeaNoAdjustments =
     ForeignFhlEea(
       None,
-      Some(ForeignFhlEeaAllowances(
-        Some(100.25),
-        Some(100.25),
-        Some(100.25),
-        Some(100.25)
-      ))
+      Some(
+        ForeignFhlEeaAllowances(
+          Some(100.25),
+          Some(100.25),
+          Some(100.25),
+          Some(100.25)
+        ))
     )
 
   val foreignFhlEeaNoAllowances =
     ForeignFhlEea(
-      Some(ForeignFhlEeaAdjustments(
-        Some(100.25),
-        Some(100.25),
-        Some(true)
-      )),
+      Some(
+        ForeignFhlEeaAdjustments(
+          Some(100.25),
+          Some(100.25),
+          Some(true)
+        )),
       None
     )
 
-  val jsonBody = Json.parse(
-    """
+  val jsonBody = Json.parse("""
       |{
       |   "adjustments":{
       |      "privateUseAdjustment":100.25,
@@ -75,8 +78,7 @@ class ForeignFhlEeaSpec extends UnitSpec with JsonErrorValidators {
       |}
       |""".stripMargin)
 
-  val jsonBodyNoAdjustments = Json.parse(
-    """
+  val jsonBodyNoAdjustments = Json.parse("""
       |{
       |   "allowances":{
       |      "annualInvestmentAllowance":100.25,
@@ -87,8 +89,7 @@ class ForeignFhlEeaSpec extends UnitSpec with JsonErrorValidators {
       |}
       |""".stripMargin)
 
-  val jsonBodyNoAllowances = Json.parse(
-    """
+  val jsonBodyNoAllowances = Json.parse("""
       |{
       |   "adjustments":{
       |       "privateUseAdjustment":100.25,
@@ -97,7 +98,6 @@ class ForeignFhlEeaSpec extends UnitSpec with JsonErrorValidators {
       |   }
       |}
       |""".stripMargin)
-
 
   "reads" when {
     "passed a valid JSON" should {

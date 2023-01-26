@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,22 +18,21 @@ package v1.connectors
 
 import config.AppConfig
 
-import javax.inject.{Inject, Singleton}
-import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
+import javax.inject.{ Inject, Singleton }
+import uk.gov.hmrc.http.{ HeaderCarrier, HttpClient }
 import v1.connectors.httpparsers.StandardIfsHttpParser._
 import v1.models.request.retrieveForeignPropertyAnnualSubmission.RetrieveForeignPropertyAnnualSubmissionRequest
 import v1.models.response.retrieveForeignPropertyAnnualSubmission.RetrieveForeignPropertyAnnualSubmissionResponse
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.{ ExecutionContext, Future }
 
 @Singleton
-class RetrieveForeignPropertyAnnualSubmissionConnector @Inject()(val http: HttpClient,
-                                                                 val appConfig: AppConfig) extends BaseIfsConnector {
+class RetrieveForeignPropertyAnnualSubmissionConnector @Inject()(val http: HttpClient, val appConfig: AppConfig) extends BaseIfsConnector {
 
   def retrieveForeignProperty(request: RetrieveForeignPropertyAnnualSubmissionRequest)(
-    implicit hc: HeaderCarrier,
-    ec: ExecutionContext,
-    correlationId: String): Future[IfsOutcome[RetrieveForeignPropertyAnnualSubmissionResponse]] = {
+      implicit hc: HeaderCarrier,
+      ec: ExecutionContext,
+      correlationId: String): Future[IfsOutcome[RetrieveForeignPropertyAnnualSubmissionResponse]] = {
 
     val url = s"income-tax/business/property/annual/${request.nino.nino}/${request.businessId}/${request.taxYear}"
 

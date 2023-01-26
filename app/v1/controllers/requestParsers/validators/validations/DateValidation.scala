@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,21 +18,23 @@ package v1.controllers.requestParsers.validators.validations
 
 import java.time.LocalDate
 
-import v1.models.errors.{FromDateFormatError, MtdError, ToDateFormatError}
+import v1.models.errors.{ FromDateFormatError, MtdError, ToDateFormatError }
 
-import scala.util.{Failure, Success, Try}
+import scala.util.{ Failure, Success, Try }
 
 object DateValidation {
 
-  def validate(field: String, isFromDate: Boolean): List[MtdError] = Try {
-    LocalDate.parse(field, dateFormat)
-  } match {
-    case Success(_) => NoValidationErrors
-    case Failure(_) => if (isFromDate) {
-      List(FromDateFormatError)
-    } else {
-      List(ToDateFormatError)
+  def validate(field: String, isFromDate: Boolean): List[MtdError] =
+    Try {
+      LocalDate.parse(field, dateFormat)
+    } match {
+      case Success(_) => NoValidationErrors
+      case Failure(_) =>
+        if (isFromDate) {
+          List(FromDateFormatError)
+        } else {
+          List(ToDateFormatError)
+        }
     }
-  }
 
 }

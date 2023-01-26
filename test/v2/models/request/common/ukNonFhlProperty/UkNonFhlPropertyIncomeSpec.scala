@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 
 package v2.models.request.common.ukNonFhlProperty
 
-import play.api.libs.json.{JsValue, Json}
+import play.api.libs.json.{ JsValue, Json }
 import support.UnitSpec
 import v2.models.request.common.ukPropertyRentARoom.UkPropertyIncomeRentARoom
 
@@ -29,13 +29,13 @@ class UkNonFhlPropertyIncomeSpec extends UnitSpec {
       Some(9884.93),
       Some(842.99),
       Some(31.44),
-      Some(UkPropertyIncomeRentARoom(
-        Some(947.66)
-      ))
+      Some(
+        UkPropertyIncomeRentARoom(
+          Some(947.66)
+        ))
     )
 
-  val mtdJson: JsValue = Json.parse(
-    """
+  val mtdJson: JsValue = Json.parse("""
       |{
       |    "premiumsOfLeaseGrant": 41.12,
       |    "reversePremiums": 84.31,
@@ -48,8 +48,7 @@ class UkNonFhlPropertyIncomeSpec extends UnitSpec {
       |}
       |""".stripMargin)
 
-  val desJson: JsValue = Json.parse(
-    """
+  val desJson: JsValue = Json.parse("""
       |{
       |    "premiumsOfLeaseGrant": 41.12,
       |    "reversePremiums": 84.31,

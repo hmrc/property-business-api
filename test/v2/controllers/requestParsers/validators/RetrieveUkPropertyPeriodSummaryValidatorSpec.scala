@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -83,7 +83,7 @@ class RetrieveUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with MockApp
     "return return NinoFormatError, BusinessIdFormatError, TaxYearFormatError and SubmissionIdFormatError errors" when {
       "invalid nino, business ID, tax year format and submission ID are supplied" in {
         validator.validate(RetrieveUkPropertyPeriodSummaryRawData("A12344B", "ab-123-cd", "2021/22", "X/124")) shouldBe
-          List(NinoFormatError, BusinessIdFormatError, TaxYearFormatError,SubmissionIdFormatError)
+          List(NinoFormatError, BusinessIdFormatError, TaxYearFormatError, SubmissionIdFormatError)
       }
     }
   }

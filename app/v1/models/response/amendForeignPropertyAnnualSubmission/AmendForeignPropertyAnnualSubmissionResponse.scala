@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,8 +17,8 @@
 package v1.models.response.amendForeignPropertyAnnualSubmission
 
 import config.AppConfig
-import v1.hateoas.{HateoasLinks, HateoasLinksFactory}
-import v1.models.hateoas.{HateoasData, Link}
+import v1.hateoas.{ HateoasLinks, HateoasLinksFactory }
+import v1.models.hateoas.{ HateoasData, Link }
 
 object AmendForeignPropertyAnnualSubmissionResponse extends HateoasLinks {
 
@@ -33,6 +33,5 @@ object AmendForeignPropertyAnnualSubmissionResponse extends HateoasLinks {
     }
   }
 }
-
 
 case class AmendForeignPropertyAnnualSubmissionHateoasData(nino: String, businessId: String, taxYear: String) extends HateoasData

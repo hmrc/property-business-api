@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,21 +18,21 @@ package v2.controllers
 
 import cats.data.EitherT
 import cats.implicits._
-import play.api.libs.json.{JsValue, Json}
-import play.api.mvc.{Action, ControllerComponents}
+import play.api.libs.json.{ JsValue, Json }
+import play.api.mvc.{ Action, ControllerComponents }
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.audit.http.connector.AuditResult
-import utils.{IdGenerator, Logging}
+import utils.{ IdGenerator, Logging }
 import v2.controllers.requestParsers.CreateForeignPropertyPeriodSummaryRequestParser
 import v2.hateoas.HateoasFactory
-import v2.models.audit.{AuditEvent, AuditResponse, GenericAuditDetail}
+import v2.models.audit.{ AuditEvent, AuditResponse, GenericAuditDetail }
 import v2.models.errors._
 import v2.models.request.createForeignPropertyPeriodSummary.CreateForeignPropertyPeriodSummaryRawData
 import v2.models.response.createForeignPropertyPeriodSummary.CreateForeignPropertyPeriodSummaryHateoasData
 import v2.services._
 
-import javax.inject.{Inject, Singleton}
-import scala.concurrent.{ExecutionContext, Future}
+import javax.inject.{ Inject, Singleton }
+import scala.concurrent.{ ExecutionContext, Future }
 
 @Singleton
 class CreateForeignPropertyPeriodSummaryController @Inject()(val authService: EnrolmentsAuthService,
@@ -62,18 +62,16 @@ class CreateForeignPropertyPeriodSummaryController @Inject()(val authService: En
         for {
           parsedRequest   <- EitherT.fromEither[Future](parser.parseRequest(rawData))
           serviceResponse <- EitherT(service.createForeignProperty(parsedRequest))
-          vendorResponse <- EitherT.fromEither[Future](
-            hateoasFactory
-              .wrap(
-                serviceResponse.responseData,
-                CreateForeignPropertyPeriodSummaryHateoasData(nino = nino,
-                                                              businessId = businessId,
-                                                              taxYear = taxYear,
-                                                              submissionId = serviceResponse.responseData.submissionId)
-              )
-              .asRight[ErrorWrapper]
-          )
         } yield {
+          val hateoasData = CreateForeignPropertyPeriodSummaryHateoasData(
+            nino = nino,
+            businessId = businessId,
+            taxYear = taxYear,
+            submissionId = serviceResponse.responseData.submissionId
+          )
+
+          val vendorResponse = hateoasFactory.wrap(serviceResponse.responseData, hateoasData)
+
           logger.info(
             s"[${endpointLogContext.controllerName}][${endpointLogContext.endpointName}] - " +
               s"Success response received with CorrelationId: ${serviceResponse.correlationId}")
@@ -103,16 +101,34 @@ class CreateForeignPropertyPeriodSummaryController @Inject()(val authService: En
 
   private def errorResult(errorWrapper: ErrorWrapper) =
     errorWrapper.error match {
-      case BadRequestError | NinoFormatError | TaxYearFormatError | BusinessIdFormatError | RuleTaxYearRangeInvalidError |
-          RuleTaxYearNotSupportedError | MtdErrorWithCode(RuleIncorrectOrEmptyBodyError.code) | ToDateFormatError | FromDateFormatError |
-          MtdErrorWithCode(ValueFormatError.code) | MtdErrorWithCode(RuleBothExpensesSuppliedError.code) | RuleToDateBeforeFromDateError |
-          RuleOverlappingPeriodError | RuleMisalignedPeriodError | RuleNotContiguousPeriodError |
-          MtdErrorWithCode(RuleIncorrectOrEmptyBodyError.code) | RuleDuplicateSubmissionError | MtdErrorWithCode(CountryCodeFormatError.code) |
-          MtdErrorWithCode(RuleCountryCodeError.code) | MtdErrorWithCode(RuleDuplicateCountryCodeError.code) | RuleTypeOfBusinessIncorrectError =>
+      case _
+          if errorWrapper.containsAnyOf(
+            BadRequestError,
+            NinoFormatError,
+            TaxYearFormatError,
+            BusinessIdFormatError,
+            RuleTaxYearRangeInvalidError,
+            RuleTaxYearNotSupportedError,
+            RuleIncorrectOrEmptyBodyError,
+            ToDateFormatError,
+            FromDateFormatError,
+            ValueFormatError,
+            RuleBothExpensesSuppliedError,
+            RuleToDateBeforeFromDateError,
+            RuleOverlappingPeriodError,
+            RuleMisalignedPeriodError,
+            RuleNotContiguousPeriodError,
+            RuleIncorrectOrEmptyBodyError,
+            RuleDuplicateSubmissionError,
+            CountryCodeFormatError,
+            RuleCountryCodeError,
+            RuleDuplicateCountryCodeError,
+            RuleTypeOfBusinessIncorrectError
+          ) =>
         BadRequest(Json.toJson(errorWrapper))
-      case NotFoundError   => NotFound(Json.toJson(errorWrapper))
+      case NotFoundError => NotFound(Json.toJson(errorWrapper))
       case InternalError => InternalServerError(Json.toJson(errorWrapper))
-      case _ => unhandledError(errorWrapper)
+      case _             => unhandledError(errorWrapper)
     }
 
   private def auditSubmission(details: GenericAuditDetail)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[AuditResult] = {

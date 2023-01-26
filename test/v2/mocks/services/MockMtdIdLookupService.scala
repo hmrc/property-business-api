@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,15 +22,17 @@ import uk.gov.hmrc.http.HeaderCarrier
 import v2.connectors.MtdIdLookupOutcome
 import v2.services.MtdIdLookupService
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.{ ExecutionContext, Future }
 
 trait MockMtdIdLookupService extends MockFactory {
 
   val mockMtdIdLookupService: MtdIdLookupService = mock[MtdIdLookupService]
 
   object MockMtdIdLookupService {
+
     def lookup(nino: String): CallHandler[Future[MtdIdLookupOutcome]] = {
-      (mockMtdIdLookupService.lookup(_: String)(_: HeaderCarrier, _: ExecutionContext))
+      (mockMtdIdLookupService
+        .lookup(_: String)(_: HeaderCarrier, _: ExecutionContext))
         .expects(nino, *, *)
     }
   }

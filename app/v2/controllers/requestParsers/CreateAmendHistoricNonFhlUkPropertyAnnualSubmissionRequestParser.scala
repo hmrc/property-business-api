@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +17,7 @@
 package v2.controllers.requestParsers
 
 import v2.controllers.requestParsers.validators.CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionValidator
-import v2.models.domain.{Nino, TaxYear}
+import v2.models.domain.{ Nino, TaxYear }
 import v2.models.request.createAmendHistoricNonFhlUkPropertyAnnualSubmission._
 
 import javax.inject.Inject
@@ -30,7 +30,7 @@ class CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestParser @Inject()
       data: CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRawData): CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequest = {
 
     CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequest(Nino(data.nino),
-                                                            TaxYear.fromMtd(data.taxYear),
-                                                            data.body.as[CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestBody])
+                                                               TaxYear.fromMtd(data.taxYear),
+                                                               data.body.as[CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestBody])
   }
 }

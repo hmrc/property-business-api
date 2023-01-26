@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,7 +22,7 @@ import v1.models.domain.Nino
 import v1.models.request.retrieveForeignPropertyPeriodSummary._
 
 class RetrieveForeignPropertyPeriodSummaryRequestParser @Inject()(val validator: RetrieveForeignPropertyPeriodSummaryValidator)
-  extends RequestParser[RetrieveForeignPropertyPeriodSummaryRawData, RetrieveForeignPropertyPeriodSummaryRequest] {
+    extends RequestParser[RetrieveForeignPropertyPeriodSummaryRawData, RetrieveForeignPropertyPeriodSummaryRequest] {
 
   override protected def requestFor(data: RetrieveForeignPropertyPeriodSummaryRawData): RetrieveForeignPropertyPeriodSummaryRequest =
     RetrieveForeignPropertyPeriodSummaryRequest(Nino(data.nino), data.businessId, data.submissionId)

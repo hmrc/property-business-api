@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,16 +17,17 @@
 package v1.models.response.createForeignPropertyPeriodSummary
 
 import config.AppConfig
-import play.api.libs.json.{Json, OFormat}
-import v1.hateoas.{HateoasLinksFactory, HateoasLinks}
-import v1.models.hateoas.{HateoasData, Link}
+import play.api.libs.json.{ Json, OFormat }
+import v1.hateoas.{ HateoasLinksFactory, HateoasLinks }
+import v1.models.hateoas.{ HateoasData, Link }
 
 case class CreateForeignPropertyPeriodSummaryResponse(submissionId: String)
 
-object CreateForeignPropertyPeriodSummaryResponse extends HateoasLinks{
+object CreateForeignPropertyPeriodSummaryResponse extends HateoasLinks {
   implicit val format: OFormat[CreateForeignPropertyPeriodSummaryResponse] = Json.format[CreateForeignPropertyPeriodSummaryResponse]
 
-  implicit object LinksFactory extends HateoasLinksFactory[CreateForeignPropertyPeriodSummaryResponse, CreateForeignPropertyPeriodSummaryHateoasData] {
+  implicit object LinksFactory
+      extends HateoasLinksFactory[CreateForeignPropertyPeriodSummaryResponse, CreateForeignPropertyPeriodSummaryHateoasData] {
     override def links(appConfig: AppConfig, data: CreateForeignPropertyPeriodSummaryHateoasData): Seq[Link] = {
       import data._
       Seq(retrieveForeignPropertyPeriodSummary(appConfig, nino, businessId, submissionId))

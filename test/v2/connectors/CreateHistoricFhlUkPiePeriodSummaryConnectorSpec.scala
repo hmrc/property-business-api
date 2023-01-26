@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,9 +16,6 @@
 
 package v2.connectors
 
-import mocks.MockAppConfig
-import uk.gov.hmrc.http.HeaderCarrier
-import v2.mocks.MockHttpClient
 import v2.models.domain.Nino
 import v2.models.outcomes.ResponseWrapper
 import v2.models.request.common.ukFhlPieProperty.{ UkFhlPieExpenses, UkFhlPieIncome }
@@ -65,56 +62,36 @@ class CreateHistoricFhlUkPiePeriodSummaryConnectorSpec extends ConnectorSpec {
 
   val consolidatedRequestData: CreateHistoricFhlUkPiePeriodSummaryRequest = CreateHistoricFhlUkPiePeriodSummaryRequest(Nino(nino), consolidatedBody)
 
-  class Test extends MockHttpClient with MockAppConfig {
+  trait Test {
+    _: ConnectorTest =>
 
     val connector: CreateHistoricFhlUkPiePeriodSummaryConnector = new CreateHistoricFhlUkPiePeriodSummaryConnector(
       http = mockHttpClient,
       appConfig = mockAppConfig
     )
-
-    MockAppConfig.ifsBaseUrl returns baseUrl
-    MockAppConfig.ifsToken returns "ifs-token"
-    MockAppConfig.ifsEnvironment returns "ifs-environment"
-    MockAppConfig.ifsEnvironmentHeaders returns Some(allowedDownstreamHeaders)
   }
 
   "connector" must {
 
-    "post a body with dates, income and expenses and return a 202 with the Period ID added" in new Test {
+    "post a body with dates, income and expenses and return a 202 with the Period ID added" in new IfsTest with Test {
       val downstreamOutcome = Right(ResponseWrapper(correlationId, ()))
 
-      implicit val hc: HeaderCarrier                    = HeaderCarrier(otherHeaders = otherHeaders ++ Seq("Content-Type" -> "application/json"))
-      val requiredIfsHeadersPost: Seq[(String, String)] = requiredIfsHeaders ++ Seq("Content-Type" -> "application/json")
-
-      MockHttpClient
-        .post(
-          url = url,
-          config = dummyIfsHeaderCarrierConfig,
-          body = requestBody,
-          requiredHeaders = requiredIfsHeadersPost,
-          excludedHeaders = Seq("Some-Header" -> "some-value")
-        )
-        .returns(Future.successful(downstreamOutcome))
+      willPost(
+        url = url,
+        body = requestBody
+      ).returns(Future.successful(downstreamOutcome))
 
       val result = await(connector.createPeriodSummary(requestData))
       result shouldBe downstreamOutcome
     }
 
-    "post a body with dates, income and consolidated expenses and return a 202 with the Period ID added" in new Test {
+    "post a body with dates, income and consolidated expenses and return a 202 with the Period ID added" in new IfsTest with Test {
       val downstreamOutcome = Right(ResponseWrapper(correlationId, ()))
 
-      implicit val hc: HeaderCarrier                    = HeaderCarrier(otherHeaders = otherHeaders ++ Seq("Content-Type" -> "application/json"))
-      val requiredIfsHeadersPost: Seq[(String, String)] = requiredIfsHeaders ++ Seq("Content-Type" -> "application/json")
-
-      MockHttpClient
-        .post(
-          url = url,
-          config = dummyIfsHeaderCarrierConfig,
-          body = consolidatedBody,
-          requiredHeaders = requiredIfsHeadersPost,
-          excludedHeaders = Seq("Some-Header" -> "some-value")
-        )
-        .returns(Future.successful(downstreamOutcome))
+      willPost(
+        url = url,
+        body = consolidatedBody
+      ).returns(Future.successful(downstreamOutcome))
 
       await(connector.createPeriodSummary(consolidatedRequestData)) shouldBe downstreamOutcome
     }

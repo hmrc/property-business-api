@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,11 +32,22 @@ class ListHistoricUkPropertyPeriodSummariesResponseSpec extends UnitSpec with Mo
     ))
 
   "reads from downstream" should {
+    "handle empty model" in {
+      Json
+        .parse(
+          """{
+          |  "periods": []
+          |}
+          """.stripMargin
+        )
+        .as[ListHistoricUkPropertyPeriodSummariesResponse[SubmissionPeriod]] shouldBe ListHistoricUkPropertyPeriodSummariesResponse(Nil)
+    }
+
     "return the correct model" in {
       Json
         .parse(
           """{
-          |  "annualAdjustments": [
+          |  "periods": [
           |    {
           |      "transactionReference": "ignored",
           |      "from": "2020-01-02",

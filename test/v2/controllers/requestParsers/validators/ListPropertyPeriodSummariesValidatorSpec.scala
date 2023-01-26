@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,9 +23,9 @@ import v2.models.request.listPropertyPeriodSummaries.ListPropertyPeriodSummaries
 
 class ListPropertyPeriodSummariesValidatorSpec extends UnitSpec with MockAppConfig {
 
-  private val validNino = "AA123456A"
+  private val validNino       = "AA123456A"
   private val validBusinessId = "XAIS12345678901"
-  private val validTaxYear = "2021-22"
+  private val validTaxYear    = "2021-22"
 
   MockAppConfig.minimumTaxV2Foreign returns 2021
   private val validator = new ListPropertyPeriodSummariesValidator(mockAppConfig)
@@ -51,7 +51,8 @@ class ListPropertyPeriodSummariesValidatorSpec extends UnitSpec with MockAppConf
       }
 
       "raw data contains multiple errors" in {
-        validator.validate(ListPropertyPeriodSummariesRawData("AA12345", "XAIS12345678", validTaxYear)) shouldBe List(NinoFormatError, BusinessIdFormatError)
+        validator.validate(ListPropertyPeriodSummariesRawData("AA12345", "XAIS12345678", validTaxYear)) shouldBe List(NinoFormatError,
+                                                                                                                      BusinessIdFormatError)
       }
 
       "raw data contains rule tax year errors" in {

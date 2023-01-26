@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,8 +19,8 @@ package v2.models.response.retrieveUkPropertyAnnualSubmission
 import config.AppConfig
 import play.api.libs.functional.syntax._
 import play.api.libs.json._
-import v2.hateoas.{HateoasLinks, HateoasLinksFactory}
-import v2.models.hateoas.{HateoasData, Link}
+import v2.hateoas.{ HateoasLinks, HateoasLinksFactory }
+import v2.models.hateoas.{ HateoasData, Link }
 import v2.models.response.retrieveUkPropertyAnnualSubmission.ukFhlProperty.UkFhlProperty
 import v2.models.response.retrieveUkPropertyAnnualSubmission.ukNonFhlProperty.UkNonFhlProperty
 
@@ -37,8 +37,8 @@ object RetrieveUkPropertyAnnualSubmissionResponse extends HateoasLinks {
       (__ \ "ukOtherProperty").readNullable[UkNonFhlProperty]
   )(RetrieveUkPropertyAnnualSubmissionResponse.apply _)
 
-  implicit object RetrieveAnnualSubmissionLinksFactory extends
-    HateoasLinksFactory[RetrieveUkPropertyAnnualSubmissionResponse, RetrieveUkPropertyAnnualSubmissionHateoasData] {
+  implicit object RetrieveAnnualSubmissionLinksFactory
+      extends HateoasLinksFactory[RetrieveUkPropertyAnnualSubmissionResponse, RetrieveUkPropertyAnnualSubmissionHateoasData] {
     override def links(appConfig: AppConfig, data: RetrieveUkPropertyAnnualSubmissionHateoasData): Seq[Link] = {
       import data._
       Seq(

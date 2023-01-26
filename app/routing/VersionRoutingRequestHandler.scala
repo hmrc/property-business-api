@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,15 +16,15 @@
 
 package routing
 
-import config.{AppConfig, FeatureSwitch}
+import config.{ AppConfig, FeatureSwitches }
 import definition.Versions
-import javax.inject.{Inject, Singleton}
-import play.api.http.{DefaultHttpRequestHandler, HttpConfiguration, HttpErrorHandler, HttpFilters}
+import javax.inject.{ Inject, Singleton }
+import play.api.http.{ DefaultHttpRequestHandler, HttpConfiguration, HttpErrorHandler, HttpFilters }
 import play.api.libs.json.Json
-import play.api.mvc.{DefaultActionBuilder, Handler, RequestHeader, Results}
+import play.api.mvc.{ DefaultActionBuilder, Handler, RequestHeader, Results }
 import play.api.routing.Router
 import play.core.DefaultWebCommands
-import v1.models.errors.{InvalidAcceptHeaderError, UnsupportedVersionError}
+import v1.models.errors.{ InvalidAcceptHeaderError, UnsupportedVersionError }
 
 @Singleton
 class VersionRoutingRequestHandler @Inject()(versionRoutingMap: VersionRoutingMap,
@@ -33,16 +33,16 @@ class VersionRoutingRequestHandler @Inject()(versionRoutingMap: VersionRoutingMa
                                              config: AppConfig,
                                              filters: HttpFilters,
                                              action: DefaultActionBuilder)
-  extends DefaultHttpRequestHandler(
-    webCommands = new DefaultWebCommands,
-    optDevContext = None,
-    router = versionRoutingMap.defaultRouter,
-    errorHandler = errorHandler,
-    configuration = httpConfiguration,
-    filters = filters.filters
-  ) {
+    extends DefaultHttpRequestHandler(
+      webCommands = new DefaultWebCommands,
+      optDevContext = None,
+      router = versionRoutingMap.defaultRouter,
+      errorHandler = errorHandler,
+      configuration = httpConfiguration,
+      filters = filters.filters
+    ) {
 
-  private val featureSwitch = FeatureSwitch(config.featureSwitch)
+  private val featureSwitches = FeatureSwitches(config.featureSwitches)
 
   private val unsupportedVersionAction = action(Results.NotFound(Json.toJson(UnsupportedVersionError)))
 
@@ -55,9 +55,9 @@ class VersionRoutingRequestHandler @Inject()(versionRoutingMap: VersionRoutingMa
     def apiHandler: Option[Handler] = Versions.getFromRequest(request) match {
       case Some(version) =>
         versionRoutingMap.versionRouter(version) match {
-          case Some(versionRouter) if featureSwitch.isVersionEnabled(version) => routeWith(versionRouter)(request)
-          case Some(_) => Some(unsupportedVersionAction)
-          case None => Some(unsupportedVersionAction)
+          case Some(versionRouter) if featureSwitches.isVersionEnabled(version) => routeWith(versionRouter)(request)
+          case Some(_)                                                          => Some(unsupportedVersionAction)
+          case None                                                             => Some(unsupportedVersionAction)
         }
       case None => Some(invalidAcceptHeaderError)
     }

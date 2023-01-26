@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,7 +25,7 @@ import v2.models.outcomes.ResponseWrapper
 import v2.models.request.amendForeignPropertyPeriodSummary.AmendForeignPropertyPeriodSummaryRequest
 import v2.services.AmendForeignPropertyPeriodSummaryService
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.{ ExecutionContext, Future }
 
 trait MockAmendForeignPropertyPeriodSummaryService extends MockFactory {
 
@@ -34,8 +34,15 @@ trait MockAmendForeignPropertyPeriodSummaryService extends MockFactory {
   object MockAmendForeignPropertyService {
 
     def amend(requestData: AmendForeignPropertyPeriodSummaryRequest): CallHandler[Future[Either[ErrorWrapper, ResponseWrapper[Unit]]]] = {
-      (mockService
-        .amendForeignPropertyPeriodSummary(_: AmendForeignPropertyPeriodSummaryRequest)(_: HeaderCarrier, _: ExecutionContext, _: EndpointLogContext, _: String))
+      (
+        mockService
+          .amendForeignPropertyPeriodSummary(_: AmendForeignPropertyPeriodSummaryRequest)(
+            _: HeaderCarrier,
+            _: ExecutionContext,
+            _: EndpointLogContext,
+            _: String
+          )
+        )
         .expects(requestData, *, *, *, *)
     }
   }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,12 +17,11 @@
 package v2.services
 
 import cats.data.EitherT
-import javax.inject.{Inject, Singleton}
 import uk.gov.hmrc.http.HeaderCarrier
 import utils.Logging
 import v2.connectors
 import v2.connectors.RetrieveForeignPropertyPeriodSummaryConnector
-import v2.connectors.RetrieveForeignPropertyPeriodSummaryConnector.{ForeignResult, NonForeignResult}
+import v2.connectors.RetrieveForeignPropertyPeriodSummaryConnector.{ ForeignResult, NonForeignResult }
 import v2.controllers.EndpointLogContext
 import v2.models.errors._
 import v2.models.outcomes.ResponseWrapper
@@ -30,28 +29,30 @@ import v2.models.request.retrieveForeignPropertyPeriodSummary.RetrieveForeignPro
 import v2.models.response.retrieveForeignPropertyPeriodSummary.RetrieveForeignPropertyPeriodSummaryResponse
 import v2.support.DownstreamResponseMappingSupport
 
-import scala.concurrent.{ExecutionContext, Future}
+import javax.inject.{ Inject, Singleton }
+import scala.concurrent.{ ExecutionContext, Future }
 
 @Singleton
 class RetrieveForeignPropertyPeriodSummaryService @Inject()(connector: RetrieveForeignPropertyPeriodSummaryConnector)
-  extends DownstreamResponseMappingSupport with Logging {
+    extends DownstreamResponseMappingSupport
+    with Logging {
 
   def retrieveForeignProperty(request: RetrieveForeignPropertyPeriodSummaryRequest)(
-    implicit hc: HeaderCarrier,
-    ec: ExecutionContext,
-    logContext: EndpointLogContext,
-    correlationId: String): Future[ServiceOutcome[RetrieveForeignPropertyPeriodSummaryResponse]] = {
+      implicit hc: HeaderCarrier,
+      ec: ExecutionContext,
+      logContext: EndpointLogContext,
+      correlationId: String): Future[ServiceOutcome[RetrieveForeignPropertyPeriodSummaryResponse]] = {
 
     val result = for {
-      connectorResultWrapper <- EitherT(connector.retrieveForeignProperty(request)).leftMap(mapDownstreamErrors(ifsErrorMap))
+      connectorResultWrapper <- EitherT(connector.retrieveForeignProperty(request)).leftMap(mapDownstreamErrors(errorMap))
       mtdResponseWrapper     <- EitherT.fromEither[Future](validateBusinessType(connectorResultWrapper))
     } yield mtdResponseWrapper
 
     result.value
   }
 
-  private def ifsErrorMap =
-    Map(
+  private val errorMap = {
+    val downstreamErrors = Map(
       "INVALID_TAXABLE_ENTITY_ID" -> NinoFormatError,
       "INVALID_TAX_YEAR"          -> TaxYearFormatError,
       "INVALID_INCOMESOURCEID"    -> BusinessIdFormatError,
@@ -62,6 +63,14 @@ class RetrieveForeignPropertyPeriodSummaryService @Inject()(connector: RetrieveF
       "SERVER_ERROR"              -> InternalError,
       "SERVICE_UNAVAILABLE"       -> InternalError
     )
+
+    val extraTysErrors = Map(
+      "INVALID_INCOMESOURCE_ID" -> BusinessIdFormatError,
+      "INVALID_CORRELATION_ID"  -> InternalError
+    )
+
+    downstreamErrors ++ extraTysErrors
+  }
 
   private def validateBusinessType(resultWrapper: ResponseWrapper[connectors.RetrieveForeignPropertyPeriodSummaryConnector.Result]) =
     resultWrapper.responseData match {

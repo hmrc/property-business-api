@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,19 +19,19 @@ package v1.endpoints
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import play.api.http.HeaderNames.ACCEPT
 import play.api.http.Status
-import play.api.libs.json.{JsValue, Json}
-import play.api.libs.ws.{WSRequest, WSResponse}
+import play.api.libs.json.{ JsValue, Json }
+import play.api.libs.ws.{ WSRequest, WSResponse }
 import play.api.test.Helpers.AUTHORIZATION
 import support.V1IntegrationBaseSpec
-import v1.models.errors.{BusinessIdFormatError, DownstreamError, MtdError, NinoFormatError, NotFoundError, SubmissionIdFormatError}
-import v1.stubs.{AuditStub, AuthStub, IfsStub, MtdIdLookupStub}
+import v1.models.errors.{ BusinessIdFormatError, DownstreamError, MtdError, NinoFormatError, NotFoundError, SubmissionIdFormatError }
+import v1.stubs.{ AuditStub, AuthStub, IfsStub, MtdIdLookupStub }
 
 class RetrieveForeignPropertyPeriodSummaryControllerISpec extends V1IntegrationBaseSpec {
 
   private trait Test {
 
-    val nino: String = "AA123456A"
-    val businessId: String = "XAIS12345678910"
+    val nino: String         = "AA123456A"
+    val businessId: String   = "XAIS12345678910"
     val submissionId: String = "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
 
     val responseBody: JsValue = Json.parse(
@@ -99,7 +99,7 @@ class RetrieveForeignPropertyPeriodSummaryControllerISpec extends V1IntegrationB
     )
 
     val ifsResponseBody: JsValue = Json.parse(
-       """
+      """
          |{
          |  "fromDate": "2019-04-06",
          |  "toDate": "2019-07-06",
@@ -157,7 +157,7 @@ class RetrieveForeignPropertyPeriodSummaryControllerISpec extends V1IntegrationB
         .withHttpHeaders(
           (ACCEPT, "application/vnd.hmrc.1.0+json"),
           (AUTHORIZATION, "Bearer 123") // some bearer token
-      )
+        )
     }
 
     def errorBody(code: String): String =
@@ -192,12 +192,15 @@ class RetrieveForeignPropertyPeriodSummaryControllerISpec extends V1IntegrationB
     "return error according to spec" when {
 
       "validation error" when {
-        def validationErrorTest(requestNino: String, requestBusinessId: String, requestSubmissionId: String,
-                                expectedStatus: Int, expectedBody: MtdError): Unit = {
+        def validationErrorTest(requestNino: String,
+                                requestBusinessId: String,
+                                requestSubmissionId: String,
+                                expectedStatus: Int,
+                                expectedBody: MtdError): Unit = {
           s"validation fails with ${expectedBody.code} error" in new Test {
 
-            override val nino: String = requestNino
-            override val businessId: String = requestBusinessId
+            override val nino: String         = requestNino
+            override val businessId: String   = requestBusinessId
             override val submissionId: String = requestSubmissionId
 
             override def setupStubs(): StubMapping = {

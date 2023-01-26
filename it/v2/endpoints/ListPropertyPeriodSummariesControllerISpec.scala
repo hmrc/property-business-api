@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,95 +19,44 @@ package v2.endpoints
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import play.api.http.HeaderNames.ACCEPT
 import play.api.http.Status
-import play.api.libs.json.{JsValue, Json}
-import play.api.libs.ws.{WSRequest, WSResponse}
+import play.api.libs.json.{ JsValue, Json }
+import play.api.libs.ws.{ WSRequest, WSResponse }
 import play.api.test.Helpers.AUTHORIZATION
 import support.V2IntegrationBaseSpec
 import v2.models.errors._
-import v2.stubs.{AuditStub, AuthStub, DownstreamStub, MtdIdLookupStub}
+import v2.stubs.{ AuditStub, AuthStub, DownstreamStub, MtdIdLookupStub }
 
 class ListPropertyPeriodSummariesControllerISpec extends V2IntegrationBaseSpec {
 
-  private trait Test {
-
-    val nino       = "AA123456A"
-    val taxYear    = "2022-23"
-    val businessId = "XAIS12345678910"
-
-    private val fromDate     = "2022-08-18"
-    private val toDate       = "2022-09-18"
-    private val submissionId = "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
-
-    val responseBody: JsValue = Json.parse(
-      s"""{
-         |   "submissions":[
-         |      {
-         |         "submissionId":"$submissionId",
-         |         "fromDate":"$fromDate",
-         |         "toDate":"$toDate"
-         |      }
-         |   ],
-         |   "links":[
-         |      {
-         |         "href":"/individuals/business/property/$nino/$businessId/period/$taxYear",
-         |         "method":"GET",
-         |         "rel":"self"
-         |      }
-         |   ]
-         |}
-       """.stripMargin
-    )
-
-    val ifsResponseBody: JsValue = Json.parse(
-      s"""[
-        |   {
-        |      "submissionId": "$submissionId",
-        |      "fromDate": "$fromDate",
-        |      "toDate": "$toDate"
-        |   }
-        |]
-       """.stripMargin
-    )
-
-    def ifsUri: String = s"/income-tax/business/property/$nino/$businessId/period"
-
-    def ifsQueryParams: Map[String, String] = Map(
-      "taxYear" -> taxYear
-    )
-
-    def setupStubs(): StubMapping
-
-    def request(): WSRequest = {
-      setupStubs()
-      buildRequest(s"/$nino/$businessId/period/$taxYear")
-        .withHttpHeaders(
-          (ACCEPT, "application/vnd.hmrc.2.0+json"),
-          (AUTHORIZATION, "Bearer 123") // some bearer token
-      )
-    }
-
-    def errorBody(code: String): String =
-      s"""
-         |{
-         |  "code": "$code",
-         |  "reason": "ifs message"
-         |}
-       """.stripMargin
-  }
-
   "List Property Period Summaries endpoint" should {
     "return a 200 status code" when {
-      "any valid request is made" in new Test {
+      "any valid request is made for a non-tys tax year" in new NonTysTest {
 
         override def setupStubs(): StubMapping = {
           AuditStub.audit()
           AuthStub.authorised()
           MtdIdLookupStub.ninoFound(nino)
-          DownstreamStub.onSuccess(DownstreamStub.GET, ifsUri, ifsQueryParams, Status.OK, ifsResponseBody)
+          DownstreamStub.onSuccess(DownstreamStub.GET, downstreamUri, downstreamQueryParams, Status.OK, downstreamResponseBody)
         }
 
         val response: WSResponse = await(request().get())
-        response.json shouldBe responseBody
+        response.json shouldBe mtdResponseBody
+        response.status shouldBe Status.OK
+        response.header("X-CorrelationId").nonEmpty shouldBe true
+        response.header("Content-Type") shouldBe Some("application/json")
+      }
+
+      "any valid request is made for a tys tax year" in new TysIfsTest {
+
+        override def setupStubs(): StubMapping = {
+          AuditStub.audit()
+          AuthStub.authorised()
+          MtdIdLookupStub.ninoFound(nino)
+          DownstreamStub.onSuccess(DownstreamStub.GET, downstreamUri, downstreamQueryParams, Status.OK, downstreamResponseBody)
+        }
+
+        val response: WSResponse = await(request().get())
+        response.json shouldBe mtdResponseBody
         response.status shouldBe Status.OK
         response.header("X-CorrelationId").nonEmpty shouldBe true
         response.header("Content-Type") shouldBe Some("application/json")
@@ -120,7 +69,7 @@ class ListPropertyPeriodSummariesControllerISpec extends V2IntegrationBaseSpec {
                               requestTaxYear: String,
                               expectedStatus: Int,
                               expectedBody: MtdError): Unit = {
-        s"validation fails with ${expectedBody.code} error" in new Test {
+        s"validation fails with ${expectedBody.code} error" in new NonTysTest {
 
           override val nino: String       = requestNino
           override val businessId: String = requestBusinessId
@@ -148,15 +97,15 @@ class ListPropertyPeriodSummariesControllerISpec extends V2IntegrationBaseSpec {
       input.foreach(args => (validationErrorTest _).tupled(args))
     }
 
-    "return ifs service error" when {
-      def serviceErrorTest(ifsStatus: Int, ifsCode: String, expectedStatus: Int, expectedBody: MtdError): Unit = {
-        s"ifs returns an $ifsCode error and status $ifsStatus" in new Test {
+    "return downstream service error" when {
+      def serviceErrorTest(downstreamStatus: Int, downstreamErrorCode: String, expectedStatus: Int, expectedBody: MtdError): Unit = {
+        s"downstream returns an $downstreamErrorCode error and status $downstreamStatus" in new NonTysTest {
 
           override def setupStubs(): StubMapping = {
             AuditStub.audit()
             AuthStub.authorised()
             MtdIdLookupStub.ninoFound(nino)
-            DownstreamStub.onError(DownstreamStub.GET, ifsUri, ifsStatus, errorBody(ifsCode))
+            DownstreamStub.onError(DownstreamStub.GET, downstreamUri, downstreamStatus, errorBody(downstreamErrorCode))
           }
 
           val response: WSResponse = await(request().get())
@@ -177,5 +126,91 @@ class ListPropertyPeriodSummariesControllerISpec extends V2IntegrationBaseSpec {
       )
       input.foreach(args => (serviceErrorTest _).tupled(args))
     }
+  }
+
+  private trait Test {
+
+    val nino       = "AA123456A"
+    val businessId = "XAIS12345678910"
+    def taxYear: String
+    def downstreamTaxYear: String
+    def downstreamUri: String
+    def downstreamQueryParams: Map[String, String]
+
+    private val fromDate     = "2022-08-18"
+    private val toDate       = "2022-09-18"
+    private val submissionId = "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
+
+    val mtdResponseBody: JsValue = Json.parse(
+      s"""{
+         |   "submissions":[
+         |      {
+         |         "submissionId":"$submissionId",
+         |         "fromDate":"$fromDate",
+         |         "toDate":"$toDate"
+         |      }
+         |   ],
+         |   "links":[
+         |      {
+         |         "href":"/individuals/business/property/$nino/$businessId/period/$taxYear",
+         |         "method":"GET",
+         |         "rel":"self"
+         |      }
+         |   ]
+         |}
+       """.stripMargin
+    )
+
+    val downstreamResponseBody: JsValue = Json.parse(
+      s"""[
+         |   {
+         |      "submissionId": "$submissionId",
+         |      "fromDate": "$fromDate",
+         |      "toDate": "$toDate"
+         |   }
+         |]
+       """.stripMargin
+    )
+
+    def setupStubs(): StubMapping
+
+    def request(): WSRequest = {
+      setupStubs()
+      buildRequest(s"/$nino/$businessId/period/$taxYear")
+        .withHttpHeaders(
+          (ACCEPT, "application/vnd.hmrc.2.0+json"),
+          (AUTHORIZATION, "Bearer 123") // some bearer token
+        )
+    }
+
+    def errorBody(code: String): String =
+      s"""
+         |{
+         |  "code": "$code",
+         |  "reason": "ifs message"
+         |}
+       """.stripMargin
+  }
+
+  private trait TysIfsTest extends Test {
+    def taxYear: String = "2023-24"
+
+    def downstreamTaxYear: String = "23-24"
+
+    def downstreamUri: String = s"/income-tax/business/property/23-24/$nino/$businessId/period"
+
+    def downstreamQueryParams: Map[String, String] = Map()
+  }
+
+  private trait NonTysTest extends Test {
+    def taxYear: String = "2022-23"
+
+    def downstreamTaxYear: String = "2023"
+
+    def downstreamUri: String = s"/income-tax/business/property/$nino/$businessId/period"
+
+    def downstreamQueryParams: Map[String, String] = Map(
+      "taxYear" -> taxYear
+    )
   }
 }

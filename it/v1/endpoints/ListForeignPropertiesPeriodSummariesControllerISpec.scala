@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,21 +19,21 @@ package v1.endpoints
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import play.api.http.HeaderNames.ACCEPT
 import play.api.http.Status
-import play.api.libs.json.{JsValue, Json}
-import play.api.libs.ws.{WSRequest, WSResponse}
+import play.api.libs.json.{ JsValue, Json }
+import play.api.libs.ws.{ WSRequest, WSResponse }
 import play.api.test.Helpers.AUTHORIZATION
 import support.V1IntegrationBaseSpec
 import v1.models.errors._
-import v1.stubs.{AuditStub, AuthStub, IfsStub, MtdIdLookupStub}
+import v1.stubs.{ AuditStub, AuthStub, IfsStub, MtdIdLookupStub }
 
 class ListForeignPropertiesPeriodSummariesControllerISpec extends V1IntegrationBaseSpec {
 
   private trait Test {
 
-    val nino: String = "AA123456A"
+    val nino: String       = "AA123456A"
     val businessId: String = "XAIS12345678910"
-    val fromDate: String = "2020-05-22"
-    val toDate: String = "2020-09-22"
+    val fromDate: String   = "2020-05-22"
+    val toDate: String     = "2020-09-22"
 
     val responseBody: JsValue = Json.parse(
       s"""
@@ -81,7 +81,7 @@ class ListForeignPropertiesPeriodSummariesControllerISpec extends V1IntegrationB
     )
 
     val ifsResponseBody: JsValue = Json.parse(
-       """
+      """
          |[
          |  {
          |    "submittedOn": "2020-06-22T22:00:20Z",
@@ -112,7 +112,7 @@ class ListForeignPropertiesPeriodSummariesControllerISpec extends V1IntegrationB
 
     def queryParams: Map[String, String] = Map(
       "fromDate" -> fromDate,
-      "toDate" -> toDate
+      "toDate"   -> toDate
     )
 
     def ifsUri: String = s"/income-tax/business/property/${nino}/${businessId}/period"
@@ -125,7 +125,7 @@ class ListForeignPropertiesPeriodSummariesControllerISpec extends V1IntegrationB
         .withHttpHeaders(
           (ACCEPT, "application/vnd.hmrc.1.0+json"),
           (AUTHORIZATION, "Bearer 123") // some bearer token
-      )
+        )
     }
 
     def errorBody(code: String): String =
@@ -160,19 +160,18 @@ class ListForeignPropertiesPeriodSummariesControllerISpec extends V1IntegrationB
     "return error according to spec" when {
 
       "validation error" when {
-        def validationErrorTest(
-                                 requestNino: String,
-                                 requestBusinessId: String,
-                                 requestFromDate: String,
-                                 requestToDate: String,
-                                 expectedStatus: Int,
-                                 expectedBody: MtdError): Unit = {
+        def validationErrorTest(requestNino: String,
+                                requestBusinessId: String,
+                                requestFromDate: String,
+                                requestToDate: String,
+                                expectedStatus: Int,
+                                expectedBody: MtdError): Unit = {
           s"validation fails with ${expectedBody.code} error" in new Test {
 
-            override val nino: String = requestNino
+            override val nino: String       = requestNino
             override val businessId: String = requestBusinessId
-            override val fromDate: String = requestFromDate
-            override val toDate: String = requestToDate
+            override val fromDate: String   = requestFromDate
+            override val toDate: String     = requestToDate
 
             override def setupStubs(): StubMapping = {
               AuditStub.audit()

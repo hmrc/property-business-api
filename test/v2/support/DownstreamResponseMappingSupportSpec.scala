@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,7 +24,7 @@ import v2.models.outcomes.ResponseWrapper
 
 class DownstreamResponseMappingSupportSpec extends UnitSpec {
 
-  implicit val logContext: EndpointLogContext = EndpointLogContext("ctrl", "ep")
+  implicit val logContext: EndpointLogContext                = EndpointLogContext("ctrl", "ep")
   val mapping: DownstreamResponseMappingSupport with Logging = new DownstreamResponseMappingSupport with Logging {}
 
   val correlationId = "someCorrelationId"
@@ -37,10 +37,10 @@ class DownstreamResponseMappingSupportSpec extends UnitSpec {
 
   object ErrorBvr extends MtdError("msg", "bvr")
 
-  val errorCodeMap : PartialFunction[String, MtdError] = {
+  val errorCodeMap: PartialFunction[String, MtdError] = {
     case "ERR1" => Error1
     case "ERR2" => Error2
-    case "DS" => InternalError
+    case "DS"   => InternalError
   }
 
   "mapping Ifs errors" when {
@@ -54,7 +54,7 @@ class DownstreamResponseMappingSupportSpec extends UnitSpec {
 
       "the error code is not in the map provided" must {
         "default to DownstreamError and wrap" in {
-          mapping.mapDownstreamErrors (errorCodeMap)(ResponseWrapper(correlationId, DownstreamErrors.single(DownstreamErrorCode("UNKNOWN")))) shouldBe
+          mapping.mapDownstreamErrors(errorCodeMap)(ResponseWrapper(correlationId, DownstreamErrors.single(DownstreamErrorCode("UNKNOWN")))) shouldBe
             ErrorWrapper(correlationId, InternalError)
         }
       }
@@ -63,21 +63,24 @@ class DownstreamResponseMappingSupportSpec extends UnitSpec {
     "multiple errors" when {
       "the error codes is in the map provided" must {
         "use the mapping and wrap with main error type of BadRequest" in {
-          mapping.mapDownstreamErrors(errorCodeMap)(ResponseWrapper(correlationId, DownstreamErrors(List(DownstreamErrorCode("ERR1"), DownstreamErrorCode("ERR2"))))) shouldBe
+          mapping.mapDownstreamErrors(errorCodeMap)(
+            ResponseWrapper(correlationId, DownstreamErrors(List(DownstreamErrorCode("ERR1"), DownstreamErrorCode("ERR2"))))) shouldBe
             ErrorWrapper(correlationId, BadRequestError, Some(Seq(Error1, Error2)))
         }
       }
 
       "the error code is not in the map provided" must {
         "default main error to DownstreamError ignore other errors" in {
-          mapping.mapDownstreamErrors(errorCodeMap)(ResponseWrapper(correlationId, DownstreamErrors(List(DownstreamErrorCode("ERR1"), DownstreamErrorCode("UNKNOWN"))))) shouldBe
+          mapping.mapDownstreamErrors(errorCodeMap)(
+            ResponseWrapper(correlationId, DownstreamErrors(List(DownstreamErrorCode("ERR1"), DownstreamErrorCode("UNKNOWN"))))) shouldBe
             ErrorWrapper(correlationId, InternalError)
         }
       }
 
       "one of the mapped errors is DownstreamError" must {
         "wrap the errors with main error type of DownstreamError" in {
-          mapping.mapDownstreamErrors(errorCodeMap)(ResponseWrapper(correlationId, DownstreamErrors(List(DownstreamErrorCode("ERR1"), DownstreamErrorCode("DS"))))) shouldBe
+          mapping.mapDownstreamErrors(errorCodeMap)(
+            ResponseWrapper(correlationId, DownstreamErrors(List(DownstreamErrorCode("ERR1"), DownstreamErrorCode("DS"))))) shouldBe
             ErrorWrapper(correlationId, InternalError)
         }
       }

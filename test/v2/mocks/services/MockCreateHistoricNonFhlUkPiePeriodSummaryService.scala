@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,18 +26,26 @@ import v2.models.request.createHistoricNonFhlUkPropertyPeriodSummary.CreateHisto
 import v2.models.response.createHistoricNonFhlUkPiePeriodSummary.CreateHistoricNonFhlUkPiePeriodSummaryResponse
 import v2.services.CreateHistoricNonFhlUkPropertyPeriodSummaryService
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.{ ExecutionContext, Future }
 
 trait MockCreateHistoricNonFhlUkPiePeriodSummaryService extends MockFactory {
 
-  val mockCreateHistoricNonFhlUkPiePeriodSummaryService: CreateHistoricNonFhlUkPropertyPeriodSummaryService = mock[CreateHistoricNonFhlUkPropertyPeriodSummaryService]
+  val mockCreateHistoricNonFhlUkPiePeriodSummaryService: CreateHistoricNonFhlUkPropertyPeriodSummaryService =
+    mock[CreateHistoricNonFhlUkPropertyPeriodSummaryService]
 
   object MockCreateHistoricNonFhlUkPiePeriodSummaryService {
 
-    def createPeriodSummary(requestData: CreateHistoricNonFhlUkPropertyPeriodSummaryRequest):
-    CallHandler[Future[Either[ErrorWrapper, ResponseWrapper[CreateHistoricNonFhlUkPiePeriodSummaryResponse]]]] = {
-      (mockCreateHistoricNonFhlUkPiePeriodSummaryService
-        .createPeriodSummary(_: CreateHistoricNonFhlUkPropertyPeriodSummaryRequest)(_: HeaderCarrier, _: ExecutionContext, _: EndpointLogContext, _: String))
+    def createPeriodSummary(requestData: CreateHistoricNonFhlUkPropertyPeriodSummaryRequest)
+      : CallHandler[Future[Either[ErrorWrapper, ResponseWrapper[CreateHistoricNonFhlUkPiePeriodSummaryResponse]]]] = {
+      (
+        mockCreateHistoricNonFhlUkPiePeriodSummaryService
+          .createPeriodSummary(_: CreateHistoricNonFhlUkPropertyPeriodSummaryRequest)(
+            _: HeaderCarrier,
+            _: ExecutionContext,
+            _: EndpointLogContext,
+            _: String
+          )
+        )
         .expects(requestData, *, *, *, *)
     }
   }

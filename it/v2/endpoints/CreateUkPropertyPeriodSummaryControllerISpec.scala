@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,16 +16,15 @@
 
 package v2.endpoints
 
-import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import play.api.http.HeaderNames.ACCEPT
 import play.api.http.Status
 import play.api.http.Status.BAD_REQUEST
-import play.api.libs.json.{JsValue, Json}
-import play.api.libs.ws.{WSRequest, WSResponse}
+import play.api.libs.json.{ JsValue, Json }
+import play.api.libs.ws.{ WSRequest, WSResponse }
 import play.api.test.Helpers.AUTHORIZATION
 import support.V2IntegrationBaseSpec
 import v2.models.errors._
-import v2.stubs.{AuditStub, AuthStub, DownstreamStub, MtdIdLookupStub}
+import v2.stubs.{ AuditStub, AuthStub, DownstreamStub, MtdIdLookupStub }
 
 class CreateUkPropertyPeriodSummaryControllerISpec extends V2IntegrationBaseSpec {
 
@@ -147,7 +146,7 @@ class CreateUkPropertyPeriodSummaryControllerISpec extends V2IntegrationBaseSpec
     """.stripMargin
   )
 
-  val invalidValueRequestJson:  JsValue = Json.parse(
+  val invalidValueRequestJson: JsValue = Json.parse(
     """
       |{
       |  "fromDate": "2018-04-06",
@@ -318,82 +317,82 @@ class CreateUkPropertyPeriodSummaryControllerISpec extends V2IntegrationBaseSpec
   )
 
   val allInvalidValueRequestError: MtdError = ValueFormatError.copy(
-    paths = Some(List(
-      "/ukFhlProperty/income/periodAmount",
-      "/ukFhlProperty/income/taxDeducted",
-      "/ukFhlProperty/income/rentARoom/rentsReceived",
-      "/ukFhlProperty/expenses/premisesRunningCosts",
-      "/ukFhlProperty/expenses/repairsAndMaintenance",
-      "/ukFhlProperty/expenses/financialCosts",
-      "/ukFhlProperty/expenses/professionalFees",
-      "/ukFhlProperty/expenses/costOfServices",
-      "/ukFhlProperty/expenses/other",
-      "/ukFhlProperty/expenses/travelCosts",
-      "/ukFhlProperty/expenses/rentARoom/amountClaimed",
-      "/ukNonFhlProperty/income/premiumsOfLeaseGrant",
-      "/ukNonFhlProperty/income/reversePremiums",
-      "/ukNonFhlProperty/income/periodAmount",
-      "/ukNonFhlProperty/income/taxDeducted",
-      "/ukNonFhlProperty/income/otherIncome",
-      "/ukNonFhlProperty/income/rentARoom/rentsReceived",
-      "/ukNonFhlProperty/expenses/premisesRunningCosts",
-      "/ukNonFhlProperty/expenses/repairsAndMaintenance",
-      "/ukNonFhlProperty/expenses/financialCosts",
-      "/ukNonFhlProperty/expenses/professionalFees",
-      "/ukNonFhlProperty/expenses/costOfServices",
-      "/ukNonFhlProperty/expenses/other",
-      "/ukNonFhlProperty/expenses/residentialFinancialCost",
-      "/ukNonFhlProperty/expenses/travelCosts",
-      "/ukNonFhlProperty/expenses/residentialFinancialCostsCarriedForward",
-      "/ukNonFhlProperty/expenses/rentARoom/amountClaimed"
-    ))
+    paths = Some(
+      List(
+        "/ukFhlProperty/income/periodAmount",
+        "/ukFhlProperty/income/taxDeducted",
+        "/ukFhlProperty/income/rentARoom/rentsReceived",
+        "/ukFhlProperty/expenses/premisesRunningCosts",
+        "/ukFhlProperty/expenses/repairsAndMaintenance",
+        "/ukFhlProperty/expenses/financialCosts",
+        "/ukFhlProperty/expenses/professionalFees",
+        "/ukFhlProperty/expenses/costOfServices",
+        "/ukFhlProperty/expenses/other",
+        "/ukFhlProperty/expenses/travelCosts",
+        "/ukFhlProperty/expenses/rentARoom/amountClaimed",
+        "/ukNonFhlProperty/income/premiumsOfLeaseGrant",
+        "/ukNonFhlProperty/income/reversePremiums",
+        "/ukNonFhlProperty/income/periodAmount",
+        "/ukNonFhlProperty/income/taxDeducted",
+        "/ukNonFhlProperty/income/otherIncome",
+        "/ukNonFhlProperty/income/rentARoom/rentsReceived",
+        "/ukNonFhlProperty/expenses/premisesRunningCosts",
+        "/ukNonFhlProperty/expenses/repairsAndMaintenance",
+        "/ukNonFhlProperty/expenses/financialCosts",
+        "/ukNonFhlProperty/expenses/professionalFees",
+        "/ukNonFhlProperty/expenses/costOfServices",
+        "/ukNonFhlProperty/expenses/other",
+        "/ukNonFhlProperty/expenses/residentialFinancialCost",
+        "/ukNonFhlProperty/expenses/travelCosts",
+        "/ukNonFhlProperty/expenses/residentialFinancialCostsCarriedForward",
+        "/ukNonFhlProperty/expenses/rentARoom/amountClaimed"
+      ))
   )
 
   val RuleBothExpensesSuppliedRequestError: MtdError = RuleBothExpensesSuppliedError.copy(
-    paths = Some(List(
-      "/ukFhlProperty/expenses",
-      "/ukNonFhlProperty/expenses"
-    ))
+    paths = Some(
+      List(
+        "/ukFhlProperty/expenses",
+        "/ukNonFhlProperty/expenses"
+      ))
   )
 
   private trait Test {
-    val nino: String = "TC663795B"
+    val nino: String       = "TC663795B"
     val businessId: String = "XAIS12345678910"
-    val taxYear = "2022-23"
+    val submissionId       = "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
+    def taxYear: String
 
-    def setupStubs(): StubMapping
+    def setupStubs(): Unit = ()
 
-    def uri: String = s"/uk/$nino/$businessId/period/$taxYear"
+    def downstreamUri: String
 
-    def ifsUri: String = s"/income-tax/business/property/periodic"
-
-    def ifsQueryParams: Map[String, String] = Map(
-      "taxableEntityId" -> nino,
-      "incomeSourceId" -> businessId,
-      "taxYear" -> taxYear
-    )
+    def downstreamQueryParams: Map[String, String]
 
     def request(): WSRequest = {
+      AuditStub.audit()
+      AuthStub.authorised()
+      MtdIdLookupStub.ninoFound(nino)
       setupStubs()
-      buildRequest(uri)
+      buildRequest(s"/uk/$nino/$businessId/period/$taxYear")
         .withHttpHeaders(
           (ACCEPT, "application/vnd.hmrc.2.0+json"),
           (AUTHORIZATION, "Bearer 123") // some bearer token
-      )
+        )
     }
 
     val responseBody: JsValue = Json.parse(
       s"""
         |{
-        |  "submissionId": "4557ecb5-fd32-48cc-81f5-e6acd1099f3c",
+        |  "submissionId": "$submissionId",
         |  "links": [
         |    {
-        |      "href":"/individuals/business/property/uk/$nino/$businessId/period/$taxYear/4557ecb5-fd32-48cc-81f5-e6acd1099f3c",
+        |      "href":"/individuals/business/property/uk/$nino/$businessId/period/$taxYear/$submissionId",
         |      "method":"PUT",
         |      "rel":"amend-uk-property-period-summary"
         |    },
         |    {
-        |      "href":"/individuals/business/property/uk/$nino/$businessId/period/$taxYear/4557ecb5-fd32-48cc-81f5-e6acd1099f3c",
+        |      "href":"/individuals/business/property/uk/$nino/$businessId/period/$taxYear/$submissionId",
         |      "method":"GET",
         |      "rel":"self"
         |    }
@@ -403,9 +402,9 @@ class CreateUkPropertyPeriodSummaryControllerISpec extends V2IntegrationBaseSpec
     )
 
     val ifsResponse: JsValue = Json.parse(
-      """
+      s"""
         |{
-        |  "submissionId": "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
+        |  "submissionId": "$submissionId"
         |}
         """.stripMargin
     )
@@ -419,16 +418,34 @@ class CreateUkPropertyPeriodSummaryControllerISpec extends V2IntegrationBaseSpec
        """.stripMargin
   }
 
+  private trait TysIfsTest extends Test {
+    def taxYear: String       = "2023-24"
+    def downstreamUri: String = s"/income-tax/business/property/periodic/23-24"
+
+    def downstreamQueryParams: Map[String, String] = Map(
+      "taxableEntityId" -> nino,
+      "incomeSourceId"  -> businessId
+    )
+  }
+
+  private trait NonTysTest extends Test {
+    def taxYear: String       = "2022-23"
+    def downstreamUri: String = s"/income-tax/business/property/periodic"
+
+    def downstreamQueryParams: Map[String, String] = Map(
+      "taxableEntityId" -> nino,
+      "incomeSourceId"  -> businessId,
+      "taxYear"         -> "2022-23"
+    )
+  }
+
   "calling the create endpoint" should {
 
     "return a 201 status" when {
 
-      "any valid unconsolidated request is made" in new Test {
-        override def setupStubs(): StubMapping = {
-          AuditStub.audit()
-          AuthStub.authorised()
-          MtdIdLookupStub.ninoFound(nino)
-          DownstreamStub.onSuccess(DownstreamStub.POST, ifsUri, ifsQueryParams, Status.OK, ifsResponse)
+      "any valid unconsolidated request is made" in new NonTysTest {
+        override def setupStubs(): Unit = {
+          DownstreamStub.onSuccess(DownstreamStub.POST, downstreamUri, downstreamQueryParams, Status.OK, ifsResponse)
         }
 
         val response: WSResponse = await(request().post(requestBodyJson))
@@ -437,13 +454,20 @@ class CreateUkPropertyPeriodSummaryControllerISpec extends V2IntegrationBaseSpec
         response.header("Content-Type") shouldBe Some("application/json")
       }
 
-      "any valid consolidated request is made" in new Test {
-        override def setupStubs(): StubMapping = {
-          AuditStub.audit()
-          AuthStub.authorised()
-          MtdIdLookupStub.ninoFound(nino)
-          DownstreamStub.onSuccess(DownstreamStub.POST, ifsUri, ifsQueryParams, Status.OK, ifsResponse)
+      "any valid consolidated request is made" in new NonTysTest {
+        override def setupStubs(): Unit = {
+          DownstreamStub.onSuccess(DownstreamStub.POST, downstreamUri, downstreamQueryParams, Status.OK, ifsResponse)
+        }
 
+        val response: WSResponse = await(request().post(requestBodyJsonConsolidatedExpense))
+        response.status shouldBe Status.CREATED
+        response.json shouldBe responseBody
+        response.header("Content-Type") shouldBe Some("application/json")
+      }
+
+      "any valid request is made for TYS" in new TysIfsTest {
+        override def setupStubs(): Unit = {
+          DownstreamStub.onSuccess(DownstreamStub.POST, downstreamUri, downstreamQueryParams, Status.OK, ifsResponse)
         }
 
         val response: WSResponse = await(request().post(requestBodyJsonConsolidatedExpense))
@@ -454,7 +478,7 @@ class CreateUkPropertyPeriodSummaryControllerISpec extends V2IntegrationBaseSpec
     }
 
     "return bad request error" when {
-      "badly formed json body" in new Test {
+      "badly formed json body" in new NonTysTest {
         private val json =
           s"""
              |{
@@ -462,11 +486,6 @@ class CreateUkPropertyPeriodSummaryControllerISpec extends V2IntegrationBaseSpec
              | }
            """.stripMargin
 
-        override def setupStubs(): StubMapping = {
-          AuditStub.audit()
-          AuthStub.authorised()
-          MtdIdLookupStub.ninoFound(nino)
-        }
         val response: WSResponse = await(request().addHttpHeaders(("Content-Type", "application/json")).post(json))
         response.status shouldBe Status.BAD_REQUEST
         response.json shouldBe Json.toJson(BadRequestError)
@@ -475,19 +494,16 @@ class CreateUkPropertyPeriodSummaryControllerISpec extends V2IntegrationBaseSpec
 
     "return error according to spec" when {
       "validation error" when {
-        def validationErrorTest(requestNino: String, requestBusinessId: String,
-                                requestTaxYear: String, requestBody: JsValue, expectedStatus: Int, expectedBody: MtdError): Unit = {
-          s"validation fails with ${expectedBody.code} error" in new Test {
-
-            override val nino: String = requestNino
+        def validationErrorTest(requestNino: String,
+                                requestBusinessId: String,
+                                requestTaxYear: String,
+                                requestBody: JsValue,
+                                expectedStatus: Int,
+                                expectedBody: MtdError): Unit = {
+          s"validation fails with ${expectedBody.code} error" in new NonTysTest {
+            override val nino: String       = requestNino
             override val businessId: String = requestBusinessId
-            override val taxYear: String = requestTaxYear
-
-            override def setupStubs(): StubMapping = {
-              AuditStub.audit()
-              AuthStub.authorised()
-              MtdIdLookupStub.ninoFound(nino)
-            }
+            override val taxYear: String    = requestTaxYear
 
             val response: WSResponse = await(request().post(requestBody))
             response.status shouldBe expectedStatus
@@ -503,26 +519,25 @@ class CreateUkPropertyPeriodSummaryControllerISpec extends V2IntegrationBaseSpec
           ("AA123456A", "XA***IS1", "2022-23", requestBodyJson, Status.BAD_REQUEST, BusinessIdFormatError),
           ("AA123456A", "XAIS12345678910", "2022-23", invalidToDateRequestJson, Status.BAD_REQUEST, ToDateFormatError),
           ("AA123456A", "XAIS12345678910", "2022-23", invalidFromDateRequestJson, Status.BAD_REQUEST, FromDateFormatError),
-          ("AA123456A", "XAIS12345678910", "2022-23", Json.parse(s"""{ "fromDate": "2020-04-06",
-                                                                    |  "toDate": "2019-04-06",
-                                                                    |  "ukFhlProperty": {}
-                                                                    |  }""".stripMargin), BAD_REQUEST,
-            RuleIncorrectOrEmptyBodyError.copy(paths = Some(Seq("/ukFhlProperty")))),
+          ("AA123456A",
+           "XAIS12345678910",
+           "2022-23",
+           Json.parse(s"""{ "fromDate": "2020-04-06", "toDate": "2019-04-06", "ukFhlProperty": {} }""".stripMargin),
+           BAD_REQUEST,
+           RuleIncorrectOrEmptyBodyError.copy(paths = Some(Seq("/ukFhlProperty")))),
           ("AA123456A", "XAIS12345678910", "2022-23", invalidValueRequestJson, Status.BAD_REQUEST, allInvalidValueRequestError),
           ("AA123456A", "XAIS12345678910", "2022-23", bothExpensesSuppliedRequestJson, Status.BAD_REQUEST, RuleBothExpensesSuppliedRequestError),
           ("AA123456A", "XAIS12345678910", "2022-23", toDateBeforeFromDateRequestJson, Status.BAD_REQUEST, RuleToDateBeforeFromDateError)
         )
         input.foreach(args => (validationErrorTest _).tupled(args))
       }
+
       "ifs service error" when {
         def serviceErrorTest(ifsStatus: Int, ifsCode: String, expectedStatus: Int, expectedBody: MtdError): Unit = {
-          s"ifs returns an $ifsCode error and status $ifsStatus" in new Test {
+          s"ifs returns an $ifsCode error and status $ifsStatus" in new NonTysTest {
 
-            override def setupStubs(): StubMapping = {
-              AuditStub.audit()
-              AuthStub.authorised()
-              MtdIdLookupStub.ninoFound(nino)
-              DownstreamStub.onError(DownstreamStub.POST, ifsUri, ifsQueryParams, ifsStatus, errorBody(ifsCode))
+            override def setupStubs(): Unit = {
+              DownstreamStub.onError(DownstreamStub.POST, downstreamUri, downstreamQueryParams, ifsStatus, errorBody(ifsCode))
             }
 
             val response: WSResponse = await(request().post(requestBodyJson))
@@ -531,7 +546,7 @@ class CreateUkPropertyPeriodSummaryControllerISpec extends V2IntegrationBaseSpec
           }
         }
 
-        val input = Seq(
+        val errors = Seq(
           (Status.SERVICE_UNAVAILABLE, "SERVICE_UNAVAILABLE", Status.INTERNAL_SERVER_ERROR, InternalError),
           (Status.INTERNAL_SERVER_ERROR, "SERVER_ERROR", Status.INTERNAL_SERVER_ERROR, InternalError),
           (Status.NOT_FOUND, "INCOME_SOURCE_NOT_FOUND", Status.NOT_FOUND, NotFoundError),
@@ -549,7 +564,17 @@ class CreateUkPropertyPeriodSummaryControllerISpec extends V2IntegrationBaseSpec
           (Status.UNPROCESSABLE_ENTITY, "GAPS_IN_PERIOD", Status.BAD_REQUEST, RuleNotContiguousPeriodError),
           (Status.UNPROCESSABLE_ENTITY, "INVALID_DATE_RANGE", Status.BAD_REQUEST, RuleToDateBeforeFromDateError)
         )
-        input.foreach(args => (serviceErrorTest _).tupled(args))
+
+        val extraTysErrors = Seq(
+          (Status.BAD_REQUEST, "INVALID_INCOMESOURCE_ID", Status.BAD_REQUEST, BusinessIdFormatError),
+          (Status.BAD_REQUEST, "INVALID_CORRELATION_ID", Status.INTERNAL_SERVER_ERROR, InternalError),
+          (Status.UNPROCESSABLE_ENTITY, "PERIOD_NOT_ALIGNED", Status.BAD_REQUEST, RuleMisalignedPeriodError),
+          (Status.UNPROCESSABLE_ENTITY, "PERIOD_OVERLAPS", Status.BAD_REQUEST, RuleOverlappingPeriodError),
+          (Status.UNPROCESSABLE_ENTITY, "INVALID_SUBMISSION_PERIOD", Status.BAD_REQUEST, RuleInvalidSubmissionPeriodError),
+          (Status.UNPROCESSABLE_ENTITY, "INVALID_SUBMISSION_END_DATE", Status.BAD_REQUEST, RuleInvalidSubmissionEndDateError)
+        )
+
+        (errors ++ extraTysErrors).foreach(args => (serviceErrorTest _).tupled(args))
       }
     }
   }

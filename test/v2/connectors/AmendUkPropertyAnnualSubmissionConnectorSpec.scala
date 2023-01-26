@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,87 +15,149 @@
  */
 
 package v2.connectors
-
-import mocks.MockAppConfig
-import uk.gov.hmrc.http.HeaderCarrier
-import v2.mocks.MockHttpClient
-import v2.models.domain.Nino
+import org.scalamock.handlers.CallHandler
+import v2.models.domain.{ Nino, TaxYear }
+import v2.models.errors.{ DownstreamErrorCode, DownstreamErrors }
 import v2.models.outcomes.ResponseWrapper
 import v2.models.request.amendUkPropertyAnnualSubmission._
 import v2.models.request.amendUkPropertyAnnualSubmission.ukFhlProperty._
 import v2.models.request.amendUkPropertyAnnualSubmission.ukNonFhlProperty._
-import v2.models.request.common.{Building, FirstYear, StructuredBuildingAllowance}
 import v2.models.request.common.ukPropertyRentARoom.UkPropertyAdjustmentsRentARoom
+import v2.models.request.common.{ Building, FirstYear, StructuredBuildingAllowance }
 
 import scala.concurrent.Future
 
 class AmendUkPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec {
 
-  val nino: String = "AA123456A"
-  val businessId: String = "XAIS12345678910"
-  val taxYear: String = "2022-23"
+  val nino: String          = "AA123456A"
+  val businessId: String    = "XAIS12345678910"
+  private val preTysTaxYear = TaxYear.fromMtd("2022-23")
+  private val tysTaxYear    = TaxYear.fromMtd("2023-24")
+
+  "AmendUkPropertyAnnualSubmissionConnector" when {
+    val outcome = Right(ResponseWrapper(correlationId, ()))
+
+    "amendUkPropertyAnnualSubmissionConnector" must {
+      "put a body and return a 204" in new IfsTest with Test {
+        def taxYear: TaxYear = preTysTaxYear
+
+        stubHttpResponse(outcome)
+
+        val result = await(connector.amendUkPropertyAnnualSubmission(request))
+
+        result shouldBe outcome
+      }
+    }
+
+    "amendUkPropertyAnnualSubmissionConnector called for a Tax Year Specific tax year" must {
+      "put a body and return a 204" in new IfsTest with Test {
+        def taxYear: TaxYear = tysTaxYear
+
+        stubHttpResponse(outcome)
+
+        val result = await(connector.amendUkPropertyAnnualSubmission(request))
+
+        result shouldBe outcome
+      }
+    }
+
+    "response is an error" must {
+
+      val downstreamErrorResponse: DownstreamErrors =
+        DownstreamErrors.single(DownstreamErrorCode("SOME_ERROR"))
+      val outcome = Left(ResponseWrapper(correlationId, downstreamErrorResponse))
+
+      "return the error" in new IfsTest with Test {
+        def taxYear: TaxYear = preTysTaxYear
+
+        stubHttpResponse(outcome)
+
+        val result: DownstreamOutcome[Unit] =
+          await(connector.amendUkPropertyAnnualSubmission(request))
+        result shouldBe outcome
+      }
+
+      "return the error given a TYS tax year request" in new TysIfsTest with Test {
+        def taxYear: TaxYear = tysTaxYear
+
+        stubTysHttpResponse(outcome)
+
+        val result: DownstreamOutcome[Unit] =
+          await(connector.amendUkPropertyAnnualSubmission(request))
+        result shouldBe outcome
+      }
+    }
+  }
 
   private val ukFhlProperty = UkFhlProperty(
-    Some(UkFhlPropertyAdjustments(
-      Some(5000.99),
-      Some(5000.99),
-      true,
-      Some(5000.99),
-      true,
-      Some(UkPropertyAdjustmentsRentARoom(true))
-    )),
-    Some(UkFhlPropertyAllowances(
-      Some(5000.99),
-      Some(5000.99),
-      Some(5000.99),
-      Some(5000.99),
-      Some(5000.99),
-      None
-    ))
+    Some(
+      UkFhlPropertyAdjustments(
+        Some(5000.99),
+        Some(5000.99),
+        periodOfGraceAdjustment = true,
+        Some(5000.99),
+        nonResidentLandlord = true,
+        Some(UkPropertyAdjustmentsRentARoom(true))
+      )),
+    Some(
+      UkFhlPropertyAllowances(
+        Some(5000.99),
+        Some(5000.99),
+        Some(5000.99),
+        Some(5000.99),
+        Some(5000.99),
+        None
+      ))
   )
 
   private val ukNonFhlProperty = UkNonFhlProperty(
-    Some(UkNonFhlPropertyAdjustments(
-      Some(5000.99),
-      Some(5000.99),
-      Some(5000.99),
-      true,
-      Some(UkPropertyAdjustmentsRentARoom(true))
-    )),
-    Some(UkNonFhlPropertyAllowances(
-      Some(5000.99),
-      Some(5000.99),
-      Some(5000.99),
-      Some(5000.99),
-      Some(5000.99),
-      Some(5000.99),
-      Some(5000.99),
-      None,
-      Some(Seq(StructuredBuildingAllowance(
-        5000.99,
-        Some(FirstYear(
-          "2020-01-01",
-          5000.99
-        )),
-        Building(
-          Some("Green Oak's"),
-          None,
-          "GF49JH"
-        )
-      ))),
-      Some(Seq(StructuredBuildingAllowance(
-        3000.50,
-        Some(FirstYear(
-          "2020-01-01",
-          3000.60
-        )),
-        Building(
-          None,
-          Some("house number"),
-          "GF49JH"
-        )
-      )))
-    ))
+    Some(
+      UkNonFhlPropertyAdjustments(
+        Some(5000.99),
+        Some(5000.99),
+        Some(5000.99),
+        nonResidentLandlord = true,
+        Some(UkPropertyAdjustmentsRentARoom(true))
+      )),
+    Some(
+      UkNonFhlPropertyAllowances(
+        Some(5000.99),
+        Some(5000.99),
+        Some(5000.99),
+        Some(5000.99),
+        Some(5000.99),
+        Some(5000.99),
+        Some(5000.99),
+        None,
+        Some(
+          Seq(
+            StructuredBuildingAllowance(
+              5000.99,
+              Some(FirstYear(
+                "2020-01-01",
+                5000.99
+              )),
+              Building(
+                Some("Green Oak's"),
+                None,
+                "GF49JH"
+              )
+            ))),
+        Some(
+          Seq(
+            StructuredBuildingAllowance(
+              3000.50,
+              Some(FirstYear(
+                "2020-01-01",
+                3000.60
+              )),
+              Building(
+                None,
+                Some("house number"),
+                "GF49JH"
+              )
+            )))
+      ))
   )
 
   val body: AmendUkPropertyAnnualSubmissionRequestBody = AmendUkPropertyAnnualSubmissionRequestBody(
@@ -103,44 +165,35 @@ class AmendUkPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec {
     Some(ukNonFhlProperty)
   )
 
-  val request: AmendUkPropertyAnnualSubmissionRequest = AmendUkPropertyAnnualSubmissionRequest(
-    nino = Nino(nino),
-    businessId = businessId,
-    taxYear = taxYear,
-    body = body
-  )
+  trait Test {
+    _: ConnectorTest =>
+    def taxYear: TaxYear
 
-  class Test extends MockHttpClient with MockAppConfig {
-    val connector = new AmendUkPropertyAnnualSubmissionConnector(
+    protected val connector: AmendUkPropertyAnnualSubmissionConnector = new AmendUkPropertyAnnualSubmissionConnector(
       http = mockHttpClient,
       appConfig = mockAppConfig
     )
 
-    MockAppConfig.ifsBaseUrl returns baseUrl
-    MockAppConfig.ifsToken returns "ifs-token"
-    MockAppConfig.ifsEnvironment returns "ifs-environment"
-    MockAppConfig.ifsEnvironmentHeaders returns Some(allowedDownstreamHeaders)
-  }
+    val request: AmendUkPropertyAnnualSubmissionRequest = AmendUkPropertyAnnualSubmissionRequest(
+      nino = Nino(nino),
+      businessId = businessId,
+      taxYear = taxYear,
+      body = body
+    )
 
-  "connector" must {
-    "put a body and return a 204" in new Test {
-      val outcome = Right(ResponseWrapper(correlationId, ()))
+    protected def stubHttpResponse(outcome: DownstreamOutcome[Unit]): CallHandler[Future[DownstreamOutcome[Unit]]]#Derived = {
+      willPut(
+        url = s"$baseUrl/income-tax/business/property/annual?" +
+          s"taxableEntityId=$nino&incomeSourceId=$businessId&taxYear=${taxYear.asMtd}",
+        body = body,
+      ).returns(Future.successful(outcome))
+    }
 
-      implicit val hc: HeaderCarrier = HeaderCarrier(otherHeaders = otherHeaders ++ Seq("Content-Type" -> "application/json"))
-      val requiredIfsHeadersPut: Seq[(String, String)] = requiredIfsHeaders ++ Seq("Content-Type" -> "application/json")
-
-      MockHttpClient
-        .put(
-          url = s"$baseUrl/income-tax/business/property/annual?taxableEntityId=$nino&incomeSourceId=$businessId&taxYear=$taxYear",
-          config = dummyIfsHeaderCarrierConfig,
-          body = body,
-          requiredHeaders = requiredIfsHeadersPut,
-          excludedHeaders = Seq("AnotherHeader" -> "HeaderValue")
-        )
-        .returns(Future.successful(outcome))
-
-      await(connector.amendUkPropertyAnnualSubmission(request)) shouldBe outcome
-
+    protected def stubTysHttpResponse(outcome: DownstreamOutcome[Unit]): CallHandler[Future[DownstreamOutcome[Unit]]]#Derived = {
+      willPut(
+        url = s"$baseUrl/income-tax/business/property/annual/${taxYear.asTysDownstream}/$nino/$businessId",
+        body = body,
+      ).returns(Future.successful(outcome))
     }
   }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +18,7 @@ package v2.controllers.requestParsers
 
 import support.UnitSpec
 import v2.mocks.validators.MockDeletePropertyAnnualSubmissionValidator
-import v2.models.domain.Nino
+import v2.models.domain.{ Nino, TaxYear }
 import v2.models.errors.{ BadRequestError, BusinessIdFormatError, ErrorWrapper, NinoFormatError }
 import v2.models.request.deletePropertyAnnualSubmission._
 
@@ -41,7 +41,7 @@ class DeletePropertyAnnualSubmissionRequestParserSpec extends UnitSpec {
       "valid request data is supplied" in new Test {
         MockDeletePropertyAnnualSubmissionValidator.validate(inputData).returns(Nil)
 
-        parser.parseRequest(inputData) shouldBe Right(DeletePropertyAnnualSubmissionRequest(Nino(nino), businessId, taxYear))
+        parser.parseRequest(inputData) shouldBe Right(DeletePropertyAnnualSubmissionRequest(Nino(nino), businessId, TaxYear.fromMtd(taxYear)))
       }
     }
     "return an ErrorWrapper" when {

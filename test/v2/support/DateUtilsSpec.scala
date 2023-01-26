@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,15 +21,19 @@ import java.time.LocalDate
 import support.UnitSpec
 
 class DateUtilsSpec extends UnitSpec {
+
   class TestDateUtilsAprilFourth extends DateUtils {
     override lazy val currentDate: LocalDate = LocalDate.parse("2020-04-04")
   }
+
   class TestDateUtilsAprilFifth extends DateUtils {
     override lazy val currentDate: LocalDate = LocalDate.parse("2020-04-05")
   }
+
   class TestDateUtilsAprilSixth extends DateUtils {
     override lazy val currentDate: LocalDate = LocalDate.parse("2020-04-06")
   }
+
   class TestDateUtilsAprilSeventh extends DateUtils {
     override lazy val currentDate: LocalDate = LocalDate.parse("2020-04-07")
   }

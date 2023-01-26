@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,63 +25,61 @@ import v2.models.response.retrieveForeignPropertyAnnualSubmission.RetrieveForeig
 import v2.models.response.retrieveForeignPropertyAnnualSubmission.foreignFhlEea._
 import v2.models.response.retrieveForeignPropertyAnnualSubmission.foreignProperty._
 import uk.gov.hmrc.http.HeaderCarrier
-import v2.connectors.RetrieveForeignPropertyAnnualSubmissionConnector.{ForeignResult, NonForeignResult}
+import v2.connectors.RetrieveForeignPropertyAnnualSubmissionConnector.{ ForeignResult, NonForeignResult }
 import v2.controllers.EndpointLogContext
-import v2.models.domain.Nino
+import v2.models.domain.{ Nino, TaxYear }
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class RetrieveForeignPropertyAnnualSubmissionServiceSpec extends UnitSpec {
 
-  val nino: String = "AA123456A"
-  val businessId: String = "XAIS12345678910"
-  val taxYear: String = "2019-20"
+  val nino: String                   = "AA123456A"
+  val businessId: String             = "XAIS12345678910"
+  val taxYear: TaxYear               = TaxYear.fromMtd("2020-21")
   implicit val correlationId: String = "X-123"
 
   private val response = RetrieveForeignPropertyAnnualSubmissionResponse(
     "2020-07-07T10:59:47.544Z",
-    Some(ForeignFhlEeaEntry(
-      Some(ForeignFhlEeaAdjustments(
-        Some(100.25),
-        Some(100.25),
-        Some(true))),
-      Some(ForeignFhlEeaAllowances(
-        Some(100.25),
-        Some(100.25),
-        Some(100.25),
-        Some(100.25),
-        Some(100.25))))),
-    Some(Seq(ForeignPropertyEntry(
-      "GER",
-      Some(ForeignPropertyAdjustments(
-        Some(100.25),
-        Some(100.25))),
-      Some(ForeignPropertyAllowances(
-        Some(100.25),
-        Some(100.25),
-        Some(100.25),
-        Some(100.25),
-        Some(100.25),
-        Some(100.25),
-        Some(100.25),
-        Some(Seq(StructuredBuildingAllowance(
-          3545.12,
-          Some(FirstYear(
-            "2020-03-29",
-            3453.34
-          )),
-          Building(
-            Some("Building Name"),
-            Some("12"),
-            "TF3 4GH"
-          )
-        )))))))))
+    Some(
+      ForeignFhlEeaEntry(
+        Some(ForeignFhlEeaAdjustments(Some(100.25), Some(100.25), Some(true))),
+        Some(ForeignFhlEeaAllowances(Some(100.25), Some(100.25), Some(100.25), Some(100.25), Some(100.25)))
+      )),
+    Some(
+      Seq(ForeignPropertyEntry(
+        "GER",
+        Some(ForeignPropertyAdjustments(Some(100.25), Some(100.25))),
+        Some(ForeignPropertyAllowances(
+          Some(100.25),
+          Some(100.25),
+          Some(100.25),
+          Some(100.25),
+          Some(100.25),
+          Some(100.25),
+          Some(100.25),
+          Some(
+            Seq(
+              StructuredBuildingAllowance(
+                3545.12,
+                Some(FirstYear(
+                  "2020-03-29",
+                  3453.34
+                )),
+                Building(
+                  Some("Building Name"),
+                  Some("12"),
+                  "TF3 4GH"
+                )
+              )))
+        ))
+      )))
+  )
 
   private val requestData = RetrieveForeignPropertyAnnualSubmissionRequest(Nino(nino), businessId, taxYear)
 
   trait Test extends MockRetrieveForeignPropertyAnnualSubmissionConnector {
-    implicit val hc: HeaderCarrier = HeaderCarrier()
+    implicit val hc: HeaderCarrier              = HeaderCarrier()
     implicit val logContext: EndpointLogContext = EndpointLogContext("c", "ep")
 
     val service = new RetrieveForeignPropertyAnnualSubmissionService(
@@ -92,7 +90,8 @@ class RetrieveForeignPropertyAnnualSubmissionServiceSpec extends UnitSpec {
   "service" should {
     "service call successful" when {
       "return mapped result" in new Test {
-        MockRetrieveForeignPropertyConnector.retrieveForeignProperty(requestData)
+        MockRetrieveForeignPropertyConnector
+          .retrieveForeignProperty(requestData)
           .returns(Future.successful(Right(ResponseWrapper(correlationId, ForeignResult(response)))))
 
         await(service.retrieveForeignProperty(requestData)) shouldBe Right(ResponseWrapper(correlationId, response))
@@ -115,24 +114,30 @@ class RetrieveForeignPropertyAnnualSubmissionServiceSpec extends UnitSpec {
       def serviceError(ifsErrorCode: String, error: MtdError): Unit =
         s"a $ifsErrorCode error is returned from the service" in new Test {
 
-          MockRetrieveForeignPropertyConnector.retrieveForeignProperty(requestData)
+          MockRetrieveForeignPropertyConnector
+            .retrieveForeignProperty(requestData)
             .returns(Future.successful(Left(ResponseWrapper(correlationId, DownstreamErrors.single(DownstreamErrorCode(ifsErrorCode))))))
 
           await(service.retrieveForeignProperty(requestData)) shouldBe Left(ErrorWrapper(correlationId, error))
         }
 
-      val input = Seq(
+      val errors = Seq(
         "INVALID_TAXABLE_ENTITY_ID" -> NinoFormatError,
-        "INVALID_TAX_YEAR" -> TaxYearFormatError,
-        "INVALID_INCOMESOURCEID" -> BusinessIdFormatError,
-        "INVALID_CORRELATIONID" -> InternalError,
-        "NO_DATA_FOUND" -> NotFoundError,
-        "TAX_YEAR_NOT_SUPPORTED" -> RuleTaxYearNotSupportedError,
-        "SERVER_ERROR" -> InternalError,
-        "SERVICE_UNAVAILABLE" -> InternalError
+        "INVALID_TAX_YEAR"          -> TaxYearFormatError,
+        "INVALID_INCOMESOURCEID"    -> BusinessIdFormatError,
+        "INVALID_CORRELATIONID"     -> InternalError,
+        "NO_DATA_FOUND"             -> NotFoundError,
+        "TAX_YEAR_NOT_SUPPORTED"    -> RuleTaxYearNotSupportedError,
+        "SERVER_ERROR"              -> InternalError,
+        "SERVICE_UNAVAILABLE"       -> InternalError
       )
 
-      input.foreach(args => (serviceError _).tupled(args))
+      val extraTysErrors = Seq(
+        "INVALID_INCOMESOURCE_ID" -> BusinessIdFormatError,
+        "INVALID_CORRELATION_ID"  -> InternalError
+      )
+
+      (errors ++ extraTysErrors).foreach(args => (serviceError _).tupled(args))
     }
   }
 }

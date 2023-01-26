@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,8 +27,7 @@ class AuditErrorSpec extends UnitSpec {
     "passed an audit error model" should {
       "produce valid json" in {
 
-         val json = Json.parse(
-          s"""
+        val json = Json.parse(s"""
              |{
              |  "errorCode": "FORMAT_NINO"
              |}

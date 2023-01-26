@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,12 +16,9 @@
 
 package v2.connectors
 
-import mocks.MockAppConfig
-import org.scalamock.handlers.CallHandler
-import v2.connectors.RetrieveForeignPropertyPeriodSummaryConnector.{ForeignResult, NonForeignResult}
-import v2.mocks.MockHttpClient
-import v2.models.domain.Nino
-import v2.models.errors.{DownstreamErrorCode, DownstreamErrors}
+import v2.connectors.RetrieveForeignPropertyPeriodSummaryConnector.{ ForeignResult, NonForeignResult }
+import v2.models.domain.{ Nino, TaxYear }
+import v2.models.errors.{ DownstreamErrorCode, DownstreamErrors }
 import v2.models.outcomes.ResponseWrapper
 import v2.models.request.retrieveForeignPropertyPeriodSummary.RetrieveForeignPropertyPeriodSummaryRequest
 import v2.models.response.retrieveForeignPropertyPeriodSummary.RetrieveForeignPropertyPeriodSummaryResponse
@@ -32,104 +29,170 @@ import scala.concurrent.Future
 
 class RetrieveForeignPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
 
-  val nino: String = "AA123456A"
-  val businessId: String = "XAIS12345678910"
-  val taxYear: String = "2022-23"
+  val nino: String         = "AA123456A"
+  val businessId: String   = "XAIS12345678910"
   val submissionId: String = "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
+  val countryCode: String  = "FRA"
 
-  val request: RetrieveForeignPropertyPeriodSummaryRequest =
-    RetrieveForeignPropertyPeriodSummaryRequest(
-      Nino(nino),
-      businessId,
-      taxYear,
-      submissionId
-    )
-  val countryCode: String = "FRA"
-
-  val foreignFhlEea: ForeignFhlEea = ForeignFhlEea(None, None)
+  val foreignFhlEea: ForeignFhlEea                 = ForeignFhlEea(None, None)
   val foreignNonFhlProperty: ForeignNonFhlProperty = ForeignNonFhlProperty(countryCode, None, None)
 
-  def responseWith(foreignFhlEea: Option[ForeignFhlEea], foreignNonFhlProperty: Option[Seq[ForeignNonFhlProperty]]): RetrieveForeignPropertyPeriodSummaryResponse =
+  private val preTysTaxYear = TaxYear.fromMtd("2022-23")
+  private val tysTaxYear    = TaxYear.fromMtd("2023-24")
+
+  def responseWith(foreignFhlEea: Option[ForeignFhlEea],
+                   foreignNonFhlProperty: Option[Seq[ForeignNonFhlProperty]]): RetrieveForeignPropertyPeriodSummaryResponse =
     RetrieveForeignPropertyPeriodSummaryResponse("2020-06-17T10:53:38Z", "2019-01-29", "2020-03-29", foreignFhlEea, foreignNonFhlProperty)
 
-  class Test extends MockHttpClient with MockAppConfig {
+  "connector" when {
+
+    "response has foreign FHL details" must {
+
+      val downstreamResponse: RetrieveForeignPropertyPeriodSummaryResponse =
+        responseWith(foreignFhlEea = Some(foreignFhlEea), foreignNonFhlProperty = None)
+      val outcome = Right(ResponseWrapper(correlationId, downstreamResponse))
+
+      "return a foreign result" in new IfsTest with Test {
+        def taxYear: TaxYear = preTysTaxYear
+        stubHttpResponse(outcome)
+
+        val result: DownstreamOutcome[RetrieveForeignPropertyPeriodSummaryConnector.Result] =
+          await(connector.retrieveForeignProperty(request))
+        result shouldBe Right(ResponseWrapper(correlationId, ForeignResult(downstreamResponse)))
+      }
+
+      "return a foreign result given a TYS tax year request" in new TysIfsTest with Test {
+        def taxYear: TaxYear = tysTaxYear
+        stubTysHttpResponse(outcome)
+
+        val result: DownstreamOutcome[RetrieveForeignPropertyPeriodSummaryConnector.Result] =
+          await(connector.retrieveForeignProperty(request))
+        result shouldBe Right(ResponseWrapper(correlationId, ForeignResult(downstreamResponse)))
+      }
+    }
+
+    "response has foreign non-FHL details" must {
+
+      val downstreamResponse: RetrieveForeignPropertyPeriodSummaryResponse =
+        responseWith(foreignFhlEea = None, foreignNonFhlProperty = Some(Seq(foreignNonFhlProperty)))
+      val outcome = Right(ResponseWrapper(correlationId, downstreamResponse))
+
+      "return a foreign result" in new IfsTest with Test {
+        def taxYear: TaxYear = preTysTaxYear
+        stubHttpResponse(outcome)
+
+        val result: DownstreamOutcome[RetrieveForeignPropertyPeriodSummaryConnector.Result] =
+          await(connector.retrieveForeignProperty(request))
+        result shouldBe Right(ResponseWrapper(correlationId, ForeignResult(downstreamResponse)))
+      }
+
+      "return a foreign result given a TYS tax year request" in new TysIfsTest with Test {
+        def taxYear: TaxYear = tysTaxYear
+        stubTysHttpResponse(outcome)
+
+        val result: DownstreamOutcome[RetrieveForeignPropertyPeriodSummaryConnector.Result] =
+          await(connector.retrieveForeignProperty(request))
+        result shouldBe Right(ResponseWrapper(correlationId, ForeignResult(downstreamResponse)))
+      }
+    }
+
+    "response has foreign FHL and non-FHL details" must {
+
+      val downstreamResponse: RetrieveForeignPropertyPeriodSummaryResponse =
+        responseWith(foreignFhlEea = Some(foreignFhlEea), foreignNonFhlProperty = Some(Seq(foreignNonFhlProperty)))
+      val outcome = Right(ResponseWrapper(correlationId, downstreamResponse))
+
+      "return a foreign result" in new IfsTest with Test {
+        def taxYear: TaxYear = preTysTaxYear
+        stubHttpResponse(outcome)
+
+        val result: DownstreamOutcome[RetrieveForeignPropertyPeriodSummaryConnector.Result] =
+          await(connector.retrieveForeignProperty(request))
+        result shouldBe Right(ResponseWrapper(correlationId, ForeignResult(downstreamResponse)))
+      }
+
+      "return a foreign result given a TYS tax year request" in new TysIfsTest with Test {
+        def taxYear: TaxYear = tysTaxYear
+        stubTysHttpResponse(outcome)
+
+        val result: DownstreamOutcome[RetrieveForeignPropertyPeriodSummaryConnector.Result] =
+          await(connector.retrieveForeignProperty(request))
+        result shouldBe Right(ResponseWrapper(correlationId, ForeignResult(downstreamResponse)))
+      }
+    }
+
+    "response has no details" must {
+
+      val downstreamResponse: RetrieveForeignPropertyPeriodSummaryResponse =
+        responseWith(None, None)
+      val outcome = Right(ResponseWrapper(correlationId, downstreamResponse))
+
+      "return a non-foreign result" in new IfsTest with Test {
+        def taxYear: TaxYear = preTysTaxYear
+        stubHttpResponse(outcome)
+
+        val result: DownstreamOutcome[RetrieveForeignPropertyPeriodSummaryConnector.Result] =
+          await(connector.retrieveForeignProperty(request))
+        result shouldBe Right(ResponseWrapper(correlationId, NonForeignResult))
+      }
+
+      "return a non-foreign result given a TYS tax year request" in new TysIfsTest with Test {
+        def taxYear: TaxYear = tysTaxYear
+        stubTysHttpResponse(outcome)
+
+        val result: DownstreamOutcome[RetrieveForeignPropertyPeriodSummaryConnector.Result] =
+          await(connector.retrieveForeignProperty(request))
+        result shouldBe Right(ResponseWrapper(correlationId, NonForeignResult))
+      }
+    }
+
+    "response is an error" must {
+
+      val downstreamErrorResponse: DownstreamErrors =
+        DownstreamErrors.single(DownstreamErrorCode("SOME_ERROR"))
+      val outcome = Left(ResponseWrapper(correlationId, downstreamErrorResponse))
+
+      "return the error" in new IfsTest with Test {
+        def taxYear: TaxYear = preTysTaxYear
+        stubHttpResponse(outcome)
+
+        val result: DownstreamOutcome[RetrieveForeignPropertyPeriodSummaryConnector.Result] =
+          await(connector.retrieveForeignProperty(request))
+        result shouldBe outcome
+      }
+
+      "return the error given a TYS tax year request" in new TysIfsTest with Test {
+        def taxYear: TaxYear = tysTaxYear
+        stubTysHttpResponse(outcome)
+
+        val result: DownstreamOutcome[RetrieveForeignPropertyPeriodSummaryConnector.Result] =
+          await(connector.retrieveForeignProperty(request))
+        result shouldBe outcome
+      }
+    }
+  }
+
+  trait Test { _: ConnectorTest =>
+
+    def taxYear: TaxYear
+
     val connector: RetrieveForeignPropertyPeriodSummaryConnector = new RetrieveForeignPropertyPeriodSummaryConnector(
       http = mockHttpClient,
       appConfig = mockAppConfig
     )
 
-    MockAppConfig.ifsBaseUrl returns baseUrl
-    MockAppConfig.ifsToken returns "ifs-token"
-    MockAppConfig.ifsEnvironment returns "ifs-environment"
-    MockAppConfig.ifsEnvironmentHeaders returns Some(allowedDownstreamHeaders)
+    protected val request: RetrieveForeignPropertyPeriodSummaryRequest =
+      RetrieveForeignPropertyPeriodSummaryRequest(Nino(nino), businessId, taxYear, submissionId)
 
-    def stubHttpResponse(outcome: DownstreamOutcome[RetrieveForeignPropertyPeriodSummaryResponse])
-    : CallHandler[Future[DownstreamOutcome[RetrieveForeignPropertyPeriodSummaryResponse]]]#Derived = {
-      MockHttpClient
-        .get(
-          url = s"$baseUrl/income-tax/business/property/periodic",
-          config = dummyIfsHeaderCarrierConfig,
-          queryParams = Seq("taxableEntityId" -> nino, "incomeSourceId" -> businessId, "taxYear" -> taxYear, "submissionId" -> submissionId),
-          requiredHeaders = requiredIfsHeaders,
-          excludedHeaders = Seq("AnotherHeader" -> "HeaderValue")
-        )
-        .returns(Future.successful(outcome))
-    }
-  }
+    protected def stubHttpResponse(outcome: DownstreamOutcome[RetrieveForeignPropertyPeriodSummaryResponse]): Unit =
+      willGet(
+        url = s"$baseUrl/income-tax/business/property/periodic",
+        parameters = List("taxableEntityId" -> nino, "incomeSourceId" -> businessId, "taxYear" -> taxYear.asMtd, "submissionId" -> submissionId)
+      ).returns(Future.successful(outcome))
 
-  "connector" when {
-    "response has a foreign fhl details" must {
-      "return a foreign result" in new Test {
-        val response: RetrieveForeignPropertyPeriodSummaryResponse = responseWith(foreignFhlEea = Some(foreignFhlEea), foreignNonFhlProperty = None)
-        val outcome                                                = Right(ResponseWrapper(correlationId, response))
-
-        stubHttpResponse(outcome)
-
-        await(connector.retrieveForeignProperty(request)) shouldBe Right(ResponseWrapper(correlationId, ForeignResult(response)))
-      }
-    }
-
-    "response has foreign non-fhl details" must {
-      "return a foreign result" in new Test {
-        val response: RetrieveForeignPropertyPeriodSummaryResponse = responseWith(foreignFhlEea = None, foreignNonFhlProperty = Some(Seq(foreignNonFhlProperty)))
-        val outcome                                                = Right(ResponseWrapper(correlationId, response))
-
-        stubHttpResponse(outcome)
-
-        await(connector.retrieveForeignProperty(request)) shouldBe Right(ResponseWrapper(correlationId, ForeignResult(response)))
-      }
-    }
-
-    "response has foreign fhl and non-fhl details" must {
-      "return a foreign result" in new Test {
-        val response: RetrieveForeignPropertyPeriodSummaryResponse = responseWith(foreignFhlEea = Some(foreignFhlEea), foreignNonFhlProperty = Some(Seq(foreignNonFhlProperty)))
-        val outcome =  Right(ResponseWrapper(correlationId, response))
-
-        stubHttpResponse(outcome)
-
-        await(connector.retrieveForeignProperty(request)) shouldBe Right(ResponseWrapper(correlationId,ForeignResult(response)))
-      }
-    }
-    "response has no details" must {
-      "return a non-foreign result" in new Test{
-        val response: RetrieveForeignPropertyPeriodSummaryResponse = responseWith(None, None)
-        val outcome                                                = Right(ResponseWrapper(correlationId, response))
-
-        stubHttpResponse(outcome)
-
-        await(connector.retrieveForeignProperty(request)) shouldBe Right(ResponseWrapper(correlationId, NonForeignResult))
-      }
-    }
-
-    "response is an error" must {
-      "return the error" in new Test {
-        val outcome = Left(ResponseWrapper(correlationId, DownstreamErrors.single(DownstreamErrorCode("SOME_ERROR"))))
-
-        stubHttpResponse(outcome)
-
-        await(connector.retrieveForeignProperty(request)) shouldBe
-          Left(ResponseWrapper(correlationId, DownstreamErrors.single(DownstreamErrorCode("SOME_ERROR"))))
-      }
-    }
+    protected def stubTysHttpResponse(outcome: DownstreamOutcome[RetrieveForeignPropertyPeriodSummaryResponse]): Unit =
+      willGet(
+        url = s"$baseUrl/income-tax/business/property/${taxYear.asTysDownstream}/${nino}/${businessId}/periodic/${submissionId}"
+      ).returns(Future.successful(outcome))
   }
 }

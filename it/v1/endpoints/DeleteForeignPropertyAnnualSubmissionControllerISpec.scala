@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,20 +19,20 @@ package v1.endpoints
 import play.api.http.HeaderNames.ACCEPT
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import play.api.http.Status
-import play.api.libs.json.{JsObject, Json}
-import play.api.libs.ws.{WSRequest, WSResponse}
+import play.api.libs.json.{ JsObject, Json }
+import play.api.libs.ws.{ WSRequest, WSResponse }
 import play.api.test.Helpers.AUTHORIZATION
 import support.V1IntegrationBaseSpec
 import v1.models.errors._
-import v1.stubs.{AuditStub, AuthStub, IfsStub, MtdIdLookupStub}
+import v1.stubs.{ AuditStub, AuthStub, IfsStub, MtdIdLookupStub }
 
 class DeleteForeignPropertyAnnualSubmissionControllerISpec extends V1IntegrationBaseSpec {
 
   private trait Test {
 
-    val nino: String = "AA123456A"
+    val nino: String       = "AA123456A"
     val businessId: String = "XAIS12345678910"
-    val taxYear: String = "2021-22"
+    val taxYear: String    = "2021-22"
 
     def uri: String = s"/$nino/$businessId/annual/$taxYear"
 
@@ -46,7 +46,7 @@ class DeleteForeignPropertyAnnualSubmissionControllerISpec extends V1Integration
         .withHttpHeaders(
           (ACCEPT, "application/vnd.hmrc.1.0+json"),
           (AUTHORIZATION, "Bearer 123") // some bearer token
-      )
+        )
     }
 
     def errorBody(code: String): String =
@@ -79,12 +79,16 @@ class DeleteForeignPropertyAnnualSubmissionControllerISpec extends V1Integration
     "return error according to spec" when {
 
       "validation error" when {
-        def validationErrorTest(requestNino: String, requestBusinessId: String, requestTaxYear: String, expectedStatus: Int, expectedBody: MtdError): Unit = {
+        def validationErrorTest(requestNino: String,
+                                requestBusinessId: String,
+                                requestTaxYear: String,
+                                expectedStatus: Int,
+                                expectedBody: MtdError): Unit = {
           s"validation fails with ${expectedBody.code} error" in new Test {
 
-            override val nino: String = requestNino
+            override val nino: String       = requestNino
             override val businessId: String = requestBusinessId
-            override val taxYear: String = requestTaxYear
+            override val taxYear: String    = requestTaxYear
 
             override def setupStubs(): StubMapping = {
               AuditStub.audit()

@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,10 +20,10 @@ import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
 import uk.gov.hmrc.http.HeaderCarrier
 import v2.connectors.RetrieveForeignPropertyAnnualSubmissionConnector.Result
-import v2.connectors.{DownstreamOutcome, RetrieveForeignPropertyAnnualSubmissionConnector}
+import v2.connectors.{ DownstreamOutcome, RetrieveForeignPropertyAnnualSubmissionConnector }
 import v2.models.request.retrieveForeignPropertyAnnualSubmission.RetrieveForeignPropertyAnnualSubmissionRequest
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.{ ExecutionContext, Future }
 
 trait MockRetrieveForeignPropertyAnnualSubmissionConnector extends MockFactory {
 
@@ -31,10 +31,15 @@ trait MockRetrieveForeignPropertyAnnualSubmissionConnector extends MockFactory {
 
   object MockRetrieveForeignPropertyConnector {
 
-    def retrieveForeignProperty(requestData: RetrieveForeignPropertyAnnualSubmissionRequest):
-    CallHandler[Future[DownstreamOutcome[Result]]] = {
-      (mockRetrieveForeignPropertyConnector
-        .retrieveForeignProperty(_: RetrieveForeignPropertyAnnualSubmissionRequest)(_: HeaderCarrier, _: ExecutionContext, _: String))
+    def retrieveForeignProperty(requestData: RetrieveForeignPropertyAnnualSubmissionRequest): CallHandler[Future[DownstreamOutcome[Result]]] = {
+      (
+        mockRetrieveForeignPropertyConnector
+          .retrieveForeignProperty(_: RetrieveForeignPropertyAnnualSubmissionRequest)(
+            _: HeaderCarrier,
+            _: ExecutionContext,
+            _: String
+          )
+        )
         .expects(requestData, *, *, *)
     }
   }

@@ -8,7 +8,7 @@ tmp
 .history
 dist
 .DS_Store
-**/.DS_Store
+**/*.DS_Store
 /.bsp
 /.idea
 /*.iml

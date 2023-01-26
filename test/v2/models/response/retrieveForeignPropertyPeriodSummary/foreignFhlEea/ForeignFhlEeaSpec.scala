@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,20 +24,20 @@ class ForeignFhlEeaSpec extends UnitSpec with JsonErrorValidators {
 
   val foreignFhlEea = ForeignFhlEea(
     Some(ForeignFhlEeaIncome(Some(5000.99))),
-    Some(ForeignFhlEeaExpenses(
-      Some(5000.99),
-      Some(5000.99),
-      Some(5000.99),
-      Some(5000.99),
-      Some(5000.99),
-      Some(5000.99),
-      Some(5000.99),
-      Some(5000.99)
-    ))
+    Some(
+      ForeignFhlEeaExpenses(
+        Some(5000.99),
+        Some(5000.99),
+        Some(5000.99),
+        Some(5000.99),
+        Some(5000.99),
+        Some(5000.99),
+        Some(5000.99),
+        Some(5000.99)
+      ))
   )
 
-  val writesJson = Json.parse(
-    """{
+  val writesJson = Json.parse("""{
       |    "income": {
       |      "rentAmount": 5000.99
       |    },
@@ -53,8 +53,7 @@ class ForeignFhlEeaSpec extends UnitSpec with JsonErrorValidators {
       |    }
       |  }""".stripMargin)
 
-  val readsJson = Json.parse(
-    """{
+  val readsJson = Json.parse("""{
       |    "income": {
       |      "rentAmount": 5000.99
       |    },
@@ -69,7 +68,6 @@ class ForeignFhlEeaSpec extends UnitSpec with JsonErrorValidators {
       |      "consolidatedExpense": 5000.99
       |    }
       |  }""".stripMargin)
-
 
   "reads" when {
     "passed a valid JSON" should {

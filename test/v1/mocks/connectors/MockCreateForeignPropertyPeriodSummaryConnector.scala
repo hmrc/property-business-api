@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,11 +19,11 @@ package v1.mocks.connectors
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
 import uk.gov.hmrc.http.HeaderCarrier
-import v1.connectors.{CreateForeignPropertyPeriodSummaryConnector, IfsOutcome}
+import v1.connectors.{ CreateForeignPropertyPeriodSummaryConnector, IfsOutcome }
 import v1.models.request.createForeignPropertyPeriodSummary.CreateForeignPropertyPeriodSummaryRequest
 import v1.models.response.createForeignPropertyPeriodSummary.CreateForeignPropertyPeriodSummaryResponse
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.{ ExecutionContext, Future }
 
 trait MockCreateForeignPropertyPeriodSummaryConnector extends MockFactory {
 
@@ -31,8 +31,8 @@ trait MockCreateForeignPropertyPeriodSummaryConnector extends MockFactory {
 
   object MockCreateForeignPropertyConnector {
 
-    def createForeignProperty(requestData: CreateForeignPropertyPeriodSummaryRequest):
-    CallHandler[Future[IfsOutcome[CreateForeignPropertyPeriodSummaryResponse]]] = {
+    def createForeignProperty(
+        requestData: CreateForeignPropertyPeriodSummaryRequest): CallHandler[Future[IfsOutcome[CreateForeignPropertyPeriodSummaryResponse]]] = {
       (mockCreateForeignPropertyConnector
         .createForeignProperty(_: CreateForeignPropertyPeriodSummaryRequest)(_: HeaderCarrier, _: ExecutionContext, _: String))
         .expects(requestData, *, *, *)

@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,18 +16,17 @@
 
 package v2.services
 
-import cats.implicits._
 import cats.data.EitherT
-
-import javax.inject.{ Inject, Singleton }
+import cats.implicits._
 import uk.gov.hmrc.http.HeaderCarrier
 import utils.Logging
 import v2.connectors.DeletePropertyAnnualSubmissionConnector
 import v2.controllers.EndpointLogContext
-import v2.models.errors.{ BusinessIdFormatError, InternalError, NinoFormatError, NotFoundError, TaxYearFormatError }
+import v2.models.errors.{ BusinessIdFormatError, InternalError, NinoFormatError, NotFoundError, RuleTaxYearNotSupportedError, TaxYearFormatError }
 import v2.models.request.deletePropertyAnnualSubmission.DeletePropertyAnnualSubmissionRequest
 import v2.support.DownstreamResponseMappingSupport
 
+import javax.inject.{ Inject, Singleton }
 import scala.concurrent.{ ExecutionContext, Future }
 
 @Singleton
@@ -35,21 +34,20 @@ class DeletePropertyAnnualSubmissionService @Inject()(connector: DeletePropertyA
     extends DownstreamResponseMappingSupport
     with Logging {
 
-  def deletePropertyAnnualSubmission(request: DeletePropertyAnnualSubmissionRequest)(
-      implicit hc: HeaderCarrier,
-      ec: ExecutionContext,
-      logContext: EndpointLogContext,
-      correlationId: String): Future[ServiceOutcome[Unit]] = {
+  def deletePropertyAnnualSubmission(request: DeletePropertyAnnualSubmissionRequest)(implicit hc: HeaderCarrier,
+                                                                                     ec: ExecutionContext,
+                                                                                     logContext: EndpointLogContext,
+                                                                                     correlationId: String): Future[ServiceOutcome[Unit]] = {
 
     val result = for {
-      ifsResponseWrapper <- EitherT(connector.deletePropertyAnnualSubmission(request)).leftMap(mapDownstreamErrors(ifsErrorMap))
+      ifsResponseWrapper <- EitherT(connector.deletePropertyAnnualSubmission(request)).leftMap(mapDownstreamErrors(errorMap))
     } yield ifsResponseWrapper
 
     result.value
   }
 
-  private def ifsErrorMap =
-    Map(
+  private val errorMap = {
+    val downstreamErrors = Map(
       "INVALID_TAXABLE_ENTITY_ID" -> NinoFormatError,
       "INVALID_TAX_YEAR"          -> TaxYearFormatError,
       "INVALID_INCOMESOURCEID"    -> BusinessIdFormatError,
@@ -58,5 +56,15 @@ class DeletePropertyAnnualSubmissionService @Inject()(connector: DeletePropertyA
       "SERVER_ERROR"              -> InternalError,
       "SERVICE_UNAVAILABLE"       -> InternalError
     )
+
+    val extraTysErrors = Map(
+      "INVALID_INCOMESOURCE_ID" -> BusinessIdFormatError,
+      "INVALID_CORRELATION_ID"  -> InternalError,
+      "NOT_FOUND"               -> NotFoundError,
+      "TAX_YEAR_NOT_SUPPORTED"  -> RuleTaxYearNotSupportedError
+    )
+
+    downstreamErrors ++ extraTysErrors
+  }
 
 }

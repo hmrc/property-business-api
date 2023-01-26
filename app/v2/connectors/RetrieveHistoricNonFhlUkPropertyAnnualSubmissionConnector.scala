@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,14 +17,14 @@
 package v2.connectors
 
 import config.AppConfig
-import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
+import uk.gov.hmrc.http.{ HeaderCarrier, HttpClient }
 import v2.connectors.DownstreamUri.IfsUri
-import v2.connectors.httpparsers.StandardIfsHttpParser._
+import v2.connectors.httpparsers.StandardDownstreamHttpParser._
 import v2.models.request.retrieveHistoricNonFhlUkPropertyAnnualSubmission.RetrieveHistoricNonFhlUkPropertyAnnualSubmissionRequest
 import v2.models.response.retrieveHistoricNonFhlUkPropertyAnnualSubmissionResponse.RetrieveHistoricNonFhlUkPropertyAnnualSubmissionResponse
 
-import javax.inject.{Inject, Singleton}
-import scala.concurrent.{ExecutionContext, Future}
+import javax.inject.{ Inject, Singleton }
+import scala.concurrent.{ ExecutionContext, Future }
 
 @Singleton
 class RetrieveHistoricNonFhlUkPropertyAnnualSubmissionConnector @Inject()(val http: HttpClient, val appConfig: AppConfig)
@@ -36,7 +36,7 @@ class RetrieveHistoricNonFhlUkPropertyAnnualSubmissionConnector @Inject()(val ht
       correlationId: String): Future[DownstreamOutcome[RetrieveHistoricNonFhlUkPropertyAnnualSubmissionResponse]] = {
 
     val nino    = request.nino.nino
-    val taxYear = request.taxYear.toDownstream
+    val taxYear = request.taxYear.asDownstream
 
     val response = get(
       uri = IfsUri[RetrieveHistoricNonFhlUkPropertyAnnualSubmissionResponse](s"income-tax/nino/$nino/uk-properties/other/annual-summaries/$taxYear")

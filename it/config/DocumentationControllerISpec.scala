@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +17,7 @@
 package config
 
 import play.api.http.Status
-import play.api.libs.json.{JsValue, Json}
+import play.api.libs.json.{ JsValue, Json }
 import play.api.libs.ws.WSResponse
 import support.V2IntegrationBaseSpec
 import io.swagger.v3.parser.OpenAPIV3Parser
@@ -94,7 +94,7 @@ class DocumentationControllerISpec extends V2IntegrationBaseSpec {
 
       val openAPI = Option(parserResult.get.getOpenAPI)
       openAPI.isEmpty shouldBe false
-      openAPI.get.getOpenapi  shouldBe "3.0.3"
+      openAPI.get.getOpenapi shouldBe "3.0.3"
       openAPI.get.getInfo.getTitle shouldBe "Property Business (MTD)"
       openAPI.get.getInfo.getVersion shouldBe "2.0"
     }

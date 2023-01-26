@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +17,7 @@
 package v2.models.request.amendUkPropertyAnnualSubmission
 
 import play.api.libs.functional.syntax._
-import play.api.libs.json.{JsPath, JsValue, OWrites}
+import play.api.libs.json.{ JsPath, JsValue, OWrites }
 import v2.models.request.RawData
 
 case class AmendUkPropertyAnnualSubmissionRawData(nino: String, businessId: String, taxYear: String, body: JsValue) extends RawData
@@ -28,5 +28,5 @@ object AmendUkPropertyAnnualSubmissionRawData {
       (JsPath \ "businessId").write[String] and
       (JsPath \ "taxYear").write[String] and
       (JsPath \ "request").write[JsValue]
-    )(unlift(AmendUkPropertyAnnualSubmissionRawData.unapply))
+  )(unlift(AmendUkPropertyAnnualSubmissionRawData.unapply))
 }

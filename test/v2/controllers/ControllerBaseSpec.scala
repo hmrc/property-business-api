@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,21 +16,17 @@
 
 package v2.controllers
 
-import play.api.http.{HeaderNames, MimeTypes, Status}
-import play.api.libs.json.{JsObject, Json}
-import play.api.mvc.{AnyContentAsEmpty, ControllerComponents}
+import play.api.http.{ HeaderNames, MimeTypes, Status }
+import play.api.libs.json.{ JsObject, Json }
+import play.api.mvc.{ AnyContentAsEmpty, ControllerComponents }
 import play.api.test.Helpers.stubControllerComponents
-import play.api.test.{FakeRequest, ResultExtractors}
+import play.api.test.{ FakeRequest, ResultExtractors }
 import support.UnitSpec
 import v2.models.errors.MtdError
 import v2.models.hateoas.Link
 import v2.models.hateoas.Method.GET
 
-class ControllerBaseSpec extends UnitSpec
-  with Status
-  with MimeTypes
-  with HeaderNames
-  with ResultExtractors {
+class ControllerBaseSpec extends UnitSpec with Status with MimeTypes with HeaderNames with ResultExtractors {
 
   implicit lazy val fakeRequest: FakeRequest[AnyContentAsEmpty.type] = FakeRequest()
 
@@ -45,8 +41,7 @@ class ControllerBaseSpec extends UnitSpec
   val testHateoasLinks: Seq[Link] = Seq(Link(href = "/some/link", method = GET, rel = "someRel"))
 
   val testHateoasLinksJson: JsObject = Json
-    .parse(
-      """{
+    .parse("""{
         |  "links": [ { "href":"/some/link", "method":"GET", "rel":"someRel" } ]
         |}
         |""".stripMargin)

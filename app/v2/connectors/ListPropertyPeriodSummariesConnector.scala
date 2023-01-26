@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,8 +20,8 @@ import config.AppConfig
 
 import javax.inject.{ Inject, Singleton }
 import uk.gov.hmrc.http.{ HeaderCarrier, HttpClient }
-import v2.connectors.DownstreamUri.IfsUri
-import v2.connectors.httpparsers.StandardIfsHttpParser._
+import v2.connectors.DownstreamUri.{ IfsUri, TaxYearSpecificIfsUri }
+import v2.connectors.httpparsers.StandardDownstreamHttpParser._
 import v2.models.request.listPropertyPeriodSummaries.ListPropertyPeriodSummariesRequest
 import v2.models.response.listPropertyPeriodSummaries.ListPropertyPeriodSummariesResponse
 
@@ -35,11 +35,21 @@ class ListPropertyPeriodSummariesConnector @Inject()(val http: HttpClient, val a
       ec: ExecutionContext,
       correlationId: String): Future[DownstreamOutcome[ListPropertyPeriodSummariesResponse]] = {
 
-    val url = s"income-tax/business/property/${request.nino.nino}/${request.businessId}/period"
+    import request._
 
-    get(
-      uri = IfsUri[ListPropertyPeriodSummariesResponse](url),
-      queryParams = Seq("taxYear" -> request.taxYear)
-    )
+    if (taxYear.useTaxYearSpecificApi) {
+      val url = s"income-tax/business/property/${taxYear.asTysDownstream}/${nino.nino}/$businessId/period"
+
+      get(uri = TaxYearSpecificIfsUri[ListPropertyPeriodSummariesResponse](url))
+    } else {
+
+      val url = s"income-tax/business/property/${nino.nino}/$businessId/period"
+
+      // Note that MTD tax year format is used
+      get(
+        uri = IfsUri[ListPropertyPeriodSummariesResponse](url),
+        queryParams = Seq("taxYear" -> taxYear.asMtd)
+      )
+    }
   }
 }

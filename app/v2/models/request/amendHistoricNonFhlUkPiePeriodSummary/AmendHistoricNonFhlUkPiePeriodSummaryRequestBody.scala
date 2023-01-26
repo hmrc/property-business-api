@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,8 +16,8 @@
 
 package v2.models.request.amendHistoricNonFhlUkPiePeriodSummary
 
-import play.api.libs.functional.syntax.{toFunctionalBuilderOps, unlift}
-import play.api.libs.json.{JsPath, Json, Reads, Writes}
+import play.api.libs.functional.syntax.{ toFunctionalBuilderOps, unlift }
+import play.api.libs.json.{ JsPath, Json, Reads, Writes }
 
 case class AmendHistoricNonFhlUkPiePeriodSummaryRequestBody(income: Option[UkNonFhlPieIncome], expenses: Option[UkNonFhlPieExpenses])
 
@@ -26,6 +26,6 @@ object AmendHistoricNonFhlUkPiePeriodSummaryRequestBody {
 
   implicit val writes: Writes[AmendHistoricNonFhlUkPiePeriodSummaryRequestBody] = (
     (JsPath \ "incomes").writeNullable[UkNonFhlPieIncome] and
-    (JsPath \ "deductions").writeNullable[UkNonFhlPieExpenses]
+      (JsPath \ "deductions").writeNullable[UkNonFhlPieExpenses]
   )(unlift(AmendHistoricNonFhlUkPiePeriodSummaryRequestBody.unapply))
 }

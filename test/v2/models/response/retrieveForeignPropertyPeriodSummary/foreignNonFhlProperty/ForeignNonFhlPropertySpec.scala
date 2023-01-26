@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,30 +24,31 @@ class ForeignNonFhlPropertySpec extends UnitSpec with JsonErrorValidators {
 
   val foreignNonFhlProperty = ForeignNonFhlProperty(
     "FRA",
-    Some(ForeignNonFhlPropertyIncome(
-      Some(ForeignNonFhlPropertyRentIncome(Some(5000.99))),
-      false,
-      Some(5000.99),
-      Some(5000.99),
-      Some(5000.99),
-      Some(5000.99)
-    )),
-    Some(ForeignNonFhlPropertyExpenses(
-      Some(5000.99),
-      Some(5000.99),
-      Some(5000.99),
-      Some(5000.99),
-      Some(5000.99),
-      Some(5000.99),
-      Some(5000.99),
-      Some(5000.99),
-      Some(5000.99),
-      Some(5000.99)
-    ))
+    Some(
+      ForeignNonFhlPropertyIncome(
+        Some(ForeignNonFhlPropertyRentIncome(Some(5000.99))),
+        false,
+        Some(5000.99),
+        Some(5000.99),
+        Some(5000.99),
+        Some(5000.99)
+      )),
+    Some(
+      ForeignNonFhlPropertyExpenses(
+        Some(5000.99),
+        Some(5000.99),
+        Some(5000.99),
+        Some(5000.99),
+        Some(5000.99),
+        Some(5000.99),
+        Some(5000.99),
+        Some(5000.99),
+        Some(5000.99),
+        Some(5000.99)
+      ))
   )
 
-  val writesJson = Json.parse(
-    """{
+  val writesJson = Json.parse("""{
       |  "countryCode": "FRA",
       |  "income": {
       |    "rentIncome": {
@@ -73,8 +74,7 @@ class ForeignNonFhlPropertySpec extends UnitSpec with JsonErrorValidators {
       |  }
       |}""".stripMargin)
 
-  val readsJson = Json.parse(
-    """{
+  val readsJson = Json.parse("""{
       |  "countryCode": "FRA",
       |  "income": {
       |    "rentIncome": {
@@ -99,7 +99,6 @@ class ForeignNonFhlPropertySpec extends UnitSpec with JsonErrorValidators {
       |    "consolidatedExpense": 5000.99
       |  }
       |}""".stripMargin)
-
 
   "reads" when {
     "passed a valid JSON" should {

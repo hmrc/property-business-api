@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,9 +16,9 @@
 
 package v2.models.request.amendUkPropertyAnnualSubmission.ukNonFhlProperty
 
-import play.api.libs.json.{JsValue, Json}
+import play.api.libs.json.{ JsValue, Json }
 import support.UnitSpec
-import v2.models.request.common.{Building, FirstYear, StructuredBuildingAllowance}
+import v2.models.request.common.{ Building, FirstYear, StructuredBuildingAllowance }
 
 class UkNonFhlPropertyAllowancesSpec extends UnitSpec {
 
@@ -32,34 +32,39 @@ class UkNonFhlPropertyAllowancesSpec extends UnitSpec {
       Some(3000.10),
       Some(3000.20),
       None,
-      Some(Seq(StructuredBuildingAllowance(
-        3000.30,
-        Some(FirstYear(
-          "2020-01-01",
-          3000.40
-        )),
-        Building(
-          Some("house name"),
-          None,
-          "GF49JH"
-        )
-      ))),
-      Some(Seq(StructuredBuildingAllowance(
-        3000.50,
-        Some(FirstYear(
-          "2020-01-01",
-          3000.60
-        )),
-        Building(
-          None,
-          Some("house number"),
-          "GF49JH"
-        )
-      )))
+      Some(
+        Seq(
+          StructuredBuildingAllowance(
+            3000.30,
+            Some(
+              FirstYear(
+                "2020-01-01",
+                3000.40
+              )),
+            Building(
+              Some("house name"),
+              None,
+              "GF49JH"
+            )
+          ))),
+      Some(
+        Seq(
+          StructuredBuildingAllowance(
+            3000.50,
+            Some(
+              FirstYear(
+                "2020-01-01",
+                3000.60
+              )),
+            Building(
+              None,
+              Some("house number"),
+              "GF49JH"
+            )
+          )))
     )
 
-  val validMtdJson: JsValue = Json.parse(
-    """
+  val validMtdJson: JsValue = Json.parse("""
       |{
       |      "annualInvestmentAllowance": 2000.50,
       |      "zeroEmissionsGoodsVehicleAllowance": 2000.60,
@@ -97,8 +102,7 @@ class UkNonFhlPropertyAllowancesSpec extends UnitSpec {
       |}
       |""".stripMargin)
 
-  val validDownstreamJson: JsValue = Json.parse(
-    """
+  val validDownstreamJson: JsValue = Json.parse("""
       |{
       |      "annualInvestmentAllowance": 2000.50,
       |      "zeroEmissionGoodsVehicleAllowance": 2000.60,

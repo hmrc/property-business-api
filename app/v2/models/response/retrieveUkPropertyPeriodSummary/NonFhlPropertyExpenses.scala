@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +17,7 @@
 package v2.models.response.retrieveUkPropertyPeriodSummary
 
 import play.api.libs.functional.syntax._
-import play.api.libs.json.{JsPath, Json, OWrites, Reads}
+import play.api.libs.json.{ JsPath, Json, OWrites, Reads }
 
 case class NonFhlPropertyExpenses(premisesRunningCosts: Option[BigDecimal],
                                   repairsAndMaintenance: Option[BigDecimal],
@@ -46,5 +46,5 @@ object NonFhlPropertyExpenses {
       (JsPath \ "residentialFinancialCostsCarriedForward").readNullable[BigDecimal] and
       (JsPath \ "ukOtherRentARoom").readNullable[RentARoomExpenses] and
       (JsPath \ "consolidatedExpense").readNullable[BigDecimal]
-    ) (NonFhlPropertyExpenses.apply _)
+  )(NonFhlPropertyExpenses.apply _)
 }

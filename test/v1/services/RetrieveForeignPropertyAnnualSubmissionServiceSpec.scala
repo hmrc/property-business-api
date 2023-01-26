@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,40 +33,29 @@ import scala.concurrent.Future
 
 class RetrieveForeignPropertyAnnualSubmissionServiceSpec extends UnitSpec {
 
-  val nino: String = "AA123456A"
-  val businessId: String = "XAIS12345678910"
-  val taxYear: String = "2019-20"
+  val nino: String                   = "AA123456A"
+  val businessId: String             = "XAIS12345678910"
+  val taxYear: String                = "2019-20"
   implicit val correlationId: String = "X-123"
 
   private val response = RetrieveForeignPropertyAnnualSubmissionResponse(
-    Some(ForeignFhlEeaEntry(
-      Some(ForeignFhlEeaAdjustments(
-        Some(100.25),
-        Some(100.25),
-        Some(true))),
-      Some(ForeignFhlEeaAllowances(
-        Some(100.25),
-        Some(100.25),
-        Some(100.25),
-        Some(100.25))))),
-    Some(Seq(ForeignPropertyEntry(
-      "GER",
-      Some(ForeignPropertyAdjustments(
-        Some(100.25),
-        Some(100.25))),
-      Some(ForeignPropertyAllowances(
-        Some(100.25),
-        Some(100.25),
-        Some(100.25),
-        Some(100.25),
-        Some(100.25),
-        Some(100.25),
-        Some(100.25)))))))
+    Some(
+      ForeignFhlEeaEntry(
+        Some(ForeignFhlEeaAdjustments(Some(100.25), Some(100.25), Some(true))),
+        Some(ForeignFhlEeaAllowances(Some(100.25), Some(100.25), Some(100.25), Some(100.25)))
+      )),
+    Some(
+      Seq(ForeignPropertyEntry(
+        "GER",
+        Some(ForeignPropertyAdjustments(Some(100.25), Some(100.25))),
+        Some(ForeignPropertyAllowances(Some(100.25), Some(100.25), Some(100.25), Some(100.25), Some(100.25), Some(100.25), Some(100.25)))
+      )))
+  )
 
   private val requestData = RetrieveForeignPropertyAnnualSubmissionRequest(Nino(nino), businessId, taxYear)
 
   trait Test extends MockRetrieveForeignPropertyAnnualSubmissionConnector {
-    implicit val hc: HeaderCarrier = HeaderCarrier()
+    implicit val hc: HeaderCarrier              = HeaderCarrier()
     implicit val logContext: EndpointLogContext = EndpointLogContext("c", "ep")
 
     val service = new RetrieveForeignPropertyAnnualSubmissionService(
@@ -77,7 +66,8 @@ class RetrieveForeignPropertyAnnualSubmissionServiceSpec extends UnitSpec {
   "service" should {
     "service call successful" when {
       "return mapped result" in new Test {
-        MockRetrieveForeignPropertyConnector.retrieveForeignProperty(requestData)
+        MockRetrieveForeignPropertyConnector
+          .retrieveForeignProperty(requestData)
           .returns(Future.successful(Right(ResponseWrapper(correlationId, response))))
 
         await(service.retrieveForeignProperty(requestData)) shouldBe Right(ResponseWrapper(correlationId, response))
@@ -91,7 +81,8 @@ class RetrieveForeignPropertyAnnualSubmissionServiceSpec extends UnitSpec {
       def serviceError(ifsErrorCode: String, error: MtdError): Unit =
         s"a $ifsErrorCode error is returned from the service" in new Test {
 
-          MockRetrieveForeignPropertyConnector.retrieveForeignProperty(requestData)
+          MockRetrieveForeignPropertyConnector
+            .retrieveForeignProperty(requestData)
             .returns(Future.successful(Left(ResponseWrapper(correlationId, IfsErrors.single(IfsErrorCode(ifsErrorCode))))))
 
           await(service.retrieveForeignProperty(requestData)) shouldBe Left(ErrorWrapper(correlationId, error))
@@ -99,13 +90,13 @@ class RetrieveForeignPropertyAnnualSubmissionServiceSpec extends UnitSpec {
 
       val input = Seq(
         "INVALID_TAXABLE_ENTITY_ID" -> NinoFormatError,
-        "INVALID_INCOMESOURCEID" -> BusinessIdFormatError,
-        "NO_DATA_FOUND" -> NotFoundError,
-        "INVALID_CORRELATIONID" -> DownstreamError,
-        "INVALID_PAYLOAD" -> DownstreamError,
-        "INVALID_TAX_YEAR" -> DownstreamError,
-        "SERVER_ERROR" -> DownstreamError,
-        "SERVICE_UNAVAILABLE" -> DownstreamError
+        "INVALID_INCOMESOURCEID"    -> BusinessIdFormatError,
+        "NO_DATA_FOUND"             -> NotFoundError,
+        "INVALID_CORRELATIONID"     -> DownstreamError,
+        "INVALID_PAYLOAD"           -> DownstreamError,
+        "INVALID_TAX_YEAR"          -> DownstreamError,
+        "SERVER_ERROR"              -> DownstreamError,
+        "SERVICE_UNAVAILABLE"       -> DownstreamError
       )
 
       input.foreach(args => (serviceError _).tupled(args))

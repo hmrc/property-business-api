@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,17 +16,16 @@
 
 package v1.controllers.requestParsers.validators.validations
 
-import v1.models.errors.{ValueFormatError, MtdError}
+import v1.models.errors.{ ValueFormatError, MtdError }
 
 object NumberValidation {
 
   def validateOptional(field: Option[BigDecimal], path: String): List[MtdError] = {
     field match {
-      case None => NoValidationErrors
+      case None        => NoValidationErrors
       case Some(value) => validate(value, path)
     }
   }
-
 
   private def validate(field: BigDecimal, path: String): List[MtdError] = {
     if (field >= 0 && field < 100000000000.00 && field.scale <= 2) {

@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,22 +32,22 @@ class ForeignPropertySpec extends UnitSpec with JsonErrorValidators {
       Some(5000.99),
       Some(5000.99)
     ),
-    Some(ForeignPropertyExpenditure(
-      Some(5000.99),
-      Some(5000.99),
-      Some(5000.99),
-      Some(5000.99),
-      Some(5000.99),
-      Some(5000.99),
-      Some(5000.99),
-      Some(5000.99),
-      Some(5000.99),
-      Some(5000.99)
-    ))
+    Some(
+      ForeignPropertyExpenditure(
+        Some(5000.99),
+        Some(5000.99),
+        Some(5000.99),
+        Some(5000.99),
+        Some(5000.99),
+        Some(5000.99),
+        Some(5000.99),
+        Some(5000.99),
+        Some(5000.99),
+        Some(5000.99)
+      ))
   )
 
-  val writesJson = Json.parse(
-    """{
+  val writesJson = Json.parse("""{
       |  "countryCode": "FRA",
       |  "income": {
       |    "rentIncome": {
@@ -73,8 +73,7 @@ class ForeignPropertySpec extends UnitSpec with JsonErrorValidators {
       |  }
       |}""".stripMargin)
 
-  val readsJson = Json.parse(
-    """{
+  val readsJson = Json.parse("""{
       |  "countryCode": "FRA",
       |  "income": {
       |    "rentIncome": {
@@ -99,7 +98,6 @@ class ForeignPropertySpec extends UnitSpec with JsonErrorValidators {
       |    "consolidatedExpense": 5000.99
       |  }
       |}""".stripMargin)
-
 
   "reads" when {
     "passed a valid JSON" should {

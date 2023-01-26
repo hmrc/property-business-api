@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -38,14 +38,16 @@ trait Validator[A <: RawData] {
   }
 
   def flattenErrors(errors: List[List[MtdError]]): List[MtdError] = {
-    errors.flatten.groupBy(_.message).map { case (_, errors) =>
+    errors.flatten
+      .groupBy(_.message)
+      .map {
+        case (_, errors) =>
+          val baseError = errors.head.copy(paths = Some(Seq.empty[String]))
 
-      val baseError = errors.head.copy(paths = Some(Seq.empty[String]))
-
-      errors.fold(baseError)(
-        (error1, error2) =>
-          error1.copy(paths = Some(error1.paths.getOrElse(Seq.empty[String]) ++ error2.paths.getOrElse(Seq.empty[String])))
-      )
-    }.toList
+          errors.fold(baseError)(
+            (error1, error2) => error1.copy(paths = Some(error1.paths.getOrElse(Seq.empty[String]) ++ error2.paths.getOrElse(Seq.empty[String])))
+          )
+      }
+      .toList
   }
 }

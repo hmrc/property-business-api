@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,14 +16,15 @@
 
 package v1.controllers.requestParsers.validators.validations
 
-import v1.models.errors.{MtdError, MissingFromDateError, MissingToDateError}
+import v1.models.errors.{ MtdError, MissingFromDateError, MissingToDateError }
 
 object FromDateAndToDateProvidedValidation {
+
   def validate(fromDate: Option[String], toDate: Option[String]): List[MtdError] = {
     (fromDate, toDate) match {
       case (Some(_), None) => List(MissingToDateError)
       case (None, Some(_)) => List(MissingFromDateError)
-      case _ => NoValidationErrors
+      case _               => NoValidationErrors
     }
   }
 }

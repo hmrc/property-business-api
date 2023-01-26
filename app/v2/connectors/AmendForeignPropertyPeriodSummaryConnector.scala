@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,13 +17,12 @@
 package v2.connectors
 
 import config.AppConfig
-
-import javax.inject.{ Inject, Singleton }
 import uk.gov.hmrc.http.{ HeaderCarrier, HttpClient }
-import v2.connectors.DownstreamUri.IfsUri
-import v2.connectors.httpparsers.StandardIfsHttpParser._
+import v2.connectors.DownstreamUri.{ IfsUri, TaxYearSpecificIfsUri }
+import v2.connectors.httpparsers.StandardDownstreamHttpParser._
 import v2.models.request.amendForeignPropertyPeriodSummary.AmendForeignPropertyPeriodSummaryRequest
 
+import javax.inject.{ Inject, Singleton }
 import scala.concurrent.{ ExecutionContext, Future }
 
 @Singleton
@@ -32,11 +31,23 @@ class AmendForeignPropertyPeriodSummaryConnector @Inject()(val http: HttpClient,
   def amendForeignPropertyPeriodSummary(request: AmendForeignPropertyPeriodSummaryRequest)(implicit hc: HeaderCarrier,
                                                                                            ec: ExecutionContext,
                                                                                            correlationId: String): Future[DownstreamOutcome[Unit]] = {
+    import request._
+
+    val downstreamUri =
+      if (taxYear.useTaxYearSpecificApi) {
+        TaxYearSpecificIfsUri[Unit](
+          s"income-tax/business/property/periodic/${taxYear.asTysDownstream}?" +
+            s"taxableEntityId=${nino.nino}&incomeSourceId=$businessId&submissionId=$submissionId")
+      } else {
+        // Note that MTD tax year format is used
+        IfsUri[Unit](
+          s"income-tax/business/property/periodic?" +
+            s"taxableEntityId=${nino.nino}&taxYear=${taxYear.asMtd}&incomeSourceId=$businessId&submissionId=$submissionId")
+      }
 
     put(
-      body = request.body,
-      uri = IfsUri[Unit](s"income-tax/business/property/periodic?" +
-        s"taxableEntityId=${request.nino.nino}&taxYear=${request.taxYear}&incomeSourceId=${request.businessId}&submissionId=${request.submissionId}")
+      body = body,
+      uri = downstreamUri
     )
   }
 }

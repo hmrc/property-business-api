@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,14 +18,14 @@ package v1.controllers.requestParsers.validators.validations
 
 import java.time.LocalDate
 
-import v1.models.errors.{MtdError, RuleToDateBeforeFromDateError}
+import v1.models.errors.{ MtdError, RuleToDateBeforeFromDateError }
 
 object ToDateBeforeFromDateValidation {
 
   def validate(from: String, to: String): List[MtdError] = {
 
     val fromDate = LocalDate.parse(from, dateFormat)
-    val toDate = LocalDate.parse(to, dateFormat)
+    val toDate   = LocalDate.parse(to, dateFormat)
 
     if (toDate.isBefore(fromDate)) List(RuleToDateBeforeFromDateError) else Nil
 

@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +17,7 @@
 package v2.models.response.retrieveHistoricNonFhlUkPropertyAnnualSubmission
 
 import mocks.MockAppConfig
-import play.api.libs.json.{JsValue, Json}
+import play.api.libs.json.{ JsValue, Json }
 import support.UnitSpec
 import v2.models.response.retrieveHistoricNonFhlUkPropertyAnnualSubmissionResponse._
 
@@ -47,7 +47,7 @@ class RetrieveHistoricNonFhlUkPropertyAnnualSubmissionResponseSpec extends UnitS
       |}
       |""".stripMargin)
 
-  val mtdJson: JsValue = Json.parse("""
+  val mtdJson: JsValue                                   = Json.parse("""
        |{
        |   "annualAdjustments":
        |   {
@@ -80,7 +80,8 @@ class RetrieveHistoricNonFhlUkPropertyAnnualSubmissionResponseSpec extends UnitS
         privateUseAdjustment = decimal("400.00"),
         businessPremisesRenovationAllowanceBalancingCharges = decimal("80.02"),
         nonResidentLandlord = true,
-        rentARoom = Option(RentARoom(jointlyLet = true)))),
+        rentARoom = Option(RentARoom(jointlyLet = true))
+      )),
     Some(
       AnnualAllowances(
         annualInvestmentAllowance = decimal("200.00"),
@@ -88,8 +89,10 @@ class RetrieveHistoricNonFhlUkPropertyAnnualSubmissionResponseSpec extends UnitS
         zeroEmissionGoodsVehicleAllowance = decimal("400.00"),
         businessPremisesRenovationAllowance = decimal("200.00"),
         costOfReplacingDomesticGoods = decimal("200.00"),
-        propertyIncomeAllowance = decimal("30.02"))
-  ))
+        propertyIncomeAllowance = decimal("30.02")
+      )
+    )
+  )
 
   "reads" should {
     "return a correct object" when {

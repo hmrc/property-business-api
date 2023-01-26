@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,22 +16,21 @@
 
 package v1.services
 
-import javax.inject.{Inject, Singleton}
-import play.api.libs.json.{Json, Writes}
+import javax.inject.{ Inject, Singleton }
+import play.api.libs.json.{ Json, Writes }
 import play.api.Configuration
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.audit.AuditExtensions
-import uk.gov.hmrc.play.audit.http.connector.{AuditConnector, AuditResult}
+import uk.gov.hmrc.play.audit.http.connector.{ AuditConnector, AuditResult }
 import uk.gov.hmrc.play.audit.model.ExtendedDataEvent
 import uk.gov.hmrc.play.bootstrap.config.AppName
 import utils.Logging
 import v1.models.audit.AuditEvent
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.{ ExecutionContext, Future }
 
 @Singleton
-class AuditService @Inject()(auditConnector: AuditConnector,
-                             appNameConfiguration: Configuration) extends Logging {
+class AuditService @Inject()(auditConnector: AuditConnector, appNameConfiguration: Configuration) extends Logging {
 
   def auditEvent[T](event: AuditEvent[T])(implicit hc: HeaderCarrier, ec: ExecutionContext, writer: Writes[T]): Future[AuditResult] = {
 

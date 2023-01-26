@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,21 +24,24 @@ import v1.models.auth.UserDetails
 import v1.models.outcomes.AuthOutcome
 import v1.services.EnrolmentsAuthService
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.{ ExecutionContext, Future }
 
 trait MockEnrolmentsAuthService extends MockFactory {
 
   val mockEnrolmentsAuthService: EnrolmentsAuthService = mock[EnrolmentsAuthService]
 
   object MockedEnrolmentsAuthService {
+
     def authoriseUser(): Unit = {
-      (mockEnrolmentsAuthService.authorised(_: Predicate)(_: HeaderCarrier, _: ExecutionContext))
+      (mockEnrolmentsAuthService
+        .authorised(_: Predicate)(_: HeaderCarrier, _: ExecutionContext))
         .expects(*, *, *)
         .returns(Future.successful(Right(UserDetails("mtd-id", "Individual", None))))
     }
 
     def authorised(predicate: Predicate): CallHandler[Future[AuthOutcome]] = {
-      (mockEnrolmentsAuthService.authorised(_: Predicate)(_: HeaderCarrier, _: ExecutionContext))
+      (mockEnrolmentsAuthService
+        .authorised(_: Predicate)(_: HeaderCarrier, _: ExecutionContext))
         .expects(predicate, *, *)
     }
   }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,12 +18,15 @@ package v2.controllers.requestParsers
 
 import javax.inject.Inject
 import v2.controllers.requestParsers.validators.CreateForeignPropertyPeriodSummaryValidator
-import v2.models.domain.Nino
+import v2.models.domain.{ Nino, TaxYear }
 import v2.models.request.createForeignPropertyPeriodSummary._
 
 class CreateForeignPropertyPeriodSummaryRequestParser @Inject()(val validator: CreateForeignPropertyPeriodSummaryValidator)
     extends RequestParser[CreateForeignPropertyPeriodSummaryRawData, CreateForeignPropertyPeriodSummaryRequest] {
 
   override protected def requestFor(data: CreateForeignPropertyPeriodSummaryRawData): CreateForeignPropertyPeriodSummaryRequest =
-    CreateForeignPropertyPeriodSummaryRequest(Nino(data.nino), data.businessId, data.taxYear, data.body.as[CreateForeignPropertyPeriodSummaryRequestBody])
+    CreateForeignPropertyPeriodSummaryRequest(Nino(data.nino),
+                                              data.businessId,
+                                              TaxYear.fromMtd(data.taxYear),
+                                              data.body.as[CreateForeignPropertyPeriodSummaryRequestBody])
 }

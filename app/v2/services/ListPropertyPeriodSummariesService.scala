@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,35 +27,43 @@ import v2.models.request.listPropertyPeriodSummaries.ListPropertyPeriodSummaries
 import v2.models.response.listPropertyPeriodSummaries.ListPropertyPeriodSummariesResponse
 import v2.support.DownstreamResponseMappingSupport
 
-import javax.inject.{Inject, Singleton}
-import scala.concurrent.{ExecutionContext, Future}
+import javax.inject.{ Inject, Singleton }
+import scala.concurrent.{ ExecutionContext, Future }
 
 @Singleton
 class ListPropertyPeriodSummariesService @Inject()(connector: ListPropertyPeriodSummariesConnector)
-  extends DownstreamResponseMappingSupport with Logging {
+    extends DownstreamResponseMappingSupport
+    with Logging {
 
   def listPeriodSummaries(request: ListPropertyPeriodSummariesRequest)(
-    implicit hc: HeaderCarrier,
-    ec: ExecutionContext,
-    logContext: EndpointLogContext,
-    correlationId: String): Future[ServiceOutcome[ListPropertyPeriodSummariesResponse]] = {
+      implicit hc: HeaderCarrier,
+      ec: ExecutionContext,
+      logContext: EndpointLogContext,
+      correlationId: String): Future[ServiceOutcome[ListPropertyPeriodSummariesResponse]] = {
 
-    val result = for {
-      ifsResponseWrapper <- EitherT(connector.listPeriodSummaries(request)).leftMap(mapDownstreamErrors(ifsErrorMap))
-    } yield ifsResponseWrapper
+    val result = EitherT(connector.listPeriodSummaries(request)).leftMap(mapDownstreamErrors(downstreamErrorMap))
 
     result.value
   }
 
-  private def ifsErrorMap =
-    Map(
+  private def downstreamErrorMap = {
+    val errors = Map(
       "INVALID_TAXABLE_ENTITY_ID" -> NinoFormatError,
-      "INVALID_INCOMESOURCEID" -> BusinessIdFormatError,
-      "INVALID_TAX_YEAR" -> TaxYearFormatError,
-      "NO_DATA_FOUND" -> NotFoundError,
-      "TAX_YEAR_NOT_SUPPORTED" -> RuleTaxYearNotSupportedError,
-      "INVALID_CORRELATIONID" -> InternalError,
-      "SERVER_ERROR" -> InternalError,
-      "SERVICE_UNAVAILABLE" -> InternalError
+      "INVALID_INCOMESOURCEID"    -> BusinessIdFormatError,
+      "INVALID_TAX_YEAR"          -> TaxYearFormatError,
+      "NO_DATA_FOUND"             -> NotFoundError,
+      "TAX_YEAR_NOT_SUPPORTED"    -> RuleTaxYearNotSupportedError,
+      "INVALID_CORRELATIONID"     -> InternalError,
+      "SERVER_ERROR"              -> InternalError,
+      "SERVICE_UNAVAILABLE"       -> InternalError
     )
+
+    val extraTysErrors = Map(
+      "INVALID_INCOMESOURCE_ID" -> BusinessIdFormatError,
+      "NOT_FOUND"               -> NotFoundError,
+      "INVALID_CORRELATION_ID"  -> InternalError,
+    )
+
+    errors ++ extraTysErrors
+  }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,8 +16,7 @@
 
 package v1.connectors
 
-import mocks.MockAppConfig
-import v1.mocks.MockHttpClient
+import mocks.{ MockAppConfig, MockHttpClient }
 import v1.models.errors.DownstreamError
 
 import scala.concurrent.Future
@@ -25,6 +24,7 @@ import scala.concurrent.Future
 class MtdIdLookupConnectorSpec extends ConnectorSpec {
 
   class Test extends MockHttpClient with MockAppConfig {
+
     val connector = new MtdIdLookupConnector(
       http = mockHttpClient,
       appConfig = mockAppConfig
@@ -32,16 +32,18 @@ class MtdIdLookupConnectorSpec extends ConnectorSpec {
     MockAppConfig.mtdIdBaseUrl returns baseUrl
   }
 
-  val nino = "test-nino"
+  val nino  = "test-nino"
   val mtdId = "test-mtdId"
 
   "getMtdId" should {
     "return an MtdId" when {
       "the http client returns a mtd id" in new Test {
-        MockHttpClient.get[MtdIdLookupOutcome](
-          url = s"$baseUrl/mtd-identifier-lookup/nino/$nino",
-          config = dummyIfsHeaderCarrierConfig
-        ).returns(Future.successful(Right(mtdId)))
+        MockHttpClient
+          .get[MtdIdLookupOutcome](
+            url = s"$baseUrl/mtd-identifier-lookup/nino/$nino",
+            config = dummyIfsHeaderCarrierConfig
+          )
+          .returns(Future.successful(Right(mtdId)))
 
         val result: MtdIdLookupOutcome = await(connector.getMtdId(nino))
         result shouldBe Right(mtdId)
@@ -50,10 +52,12 @@ class MtdIdLookupConnectorSpec extends ConnectorSpec {
 
     "return a DownstreamError" when {
       "the http client returns a DownstreamError" in new Test {
-        MockHttpClient.get[MtdIdLookupOutcome](
-          url = s"$baseUrl/mtd-identifier-lookup/nino/$nino",
-          config = dummyIfsHeaderCarrierConfig
-        ).returns(Future.successful(Left(DownstreamError)))
+        MockHttpClient
+          .get[MtdIdLookupOutcome](
+            url = s"$baseUrl/mtd-identifier-lookup/nino/$nino",
+            config = dummyIfsHeaderCarrierConfig
+          )
+          .returns(Future.successful(Left(DownstreamError)))
 
         val result: MtdIdLookupOutcome = await(connector.getMtdId(nino))
         result shouldBe Left(DownstreamError)

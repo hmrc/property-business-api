@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +20,7 @@ import play.api.libs.json.Json
 import support.UnitSpec
 import v2.models.utils.JsonErrorValidators
 
-class ForeignPropertyAllowancesSpec extends UnitSpec with JsonErrorValidators{
+class ForeignPropertyAllowancesSpec extends UnitSpec with JsonErrorValidators {
 
   private val foreignPropertyAllowances = ForeignPropertyAllowances(
     Some(100.25),
@@ -30,18 +30,22 @@ class ForeignPropertyAllowancesSpec extends UnitSpec with JsonErrorValidators{
     Some(100.25),
     Some(100.25),
     Some(100.25),
-    Some(Seq(StructuredBuildingAllowance(
-      100.25,
-      Some(FirstYear(
-        "2020-03-29",
-        100.25
-      )),
-      Building(
-        Some("Building Name"),
-        Some("12"),
-        "TF3 4GH"
-      )
-    ))))
+    Some(
+      Seq(
+        StructuredBuildingAllowance(
+          100.25,
+          Some(
+            FirstYear(
+              "2020-03-29",
+              100.25
+            )),
+          Building(
+            Some("Building Name"),
+            Some("12"),
+            "TF3 4GH"
+          )
+        )))
+  )
 
   private val jsonBody = Json.parse(
     """

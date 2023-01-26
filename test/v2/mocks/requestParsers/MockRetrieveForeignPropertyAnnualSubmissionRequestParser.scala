@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,15 +21,19 @@ import org.scalamock.scalatest.MockFactory
 import v2.controllers.requestParsers.RetrieveForeignPropertyAnnualSubmissionRequestParser
 import v2.models.errors.ErrorWrapper
 import v2.models.request.retrieveForeignPropertyAnnualSubmission._
+
 trait MockRetrieveForeignPropertyAnnualSubmissionRequestParser extends MockFactory {
 
-
-  val mockRetrieveForeignPropertyAnnualSubmissionRequestParser:
-    RetrieveForeignPropertyAnnualSubmissionRequestParser = mock[RetrieveForeignPropertyAnnualSubmissionRequestParser]
+  val mockRetrieveForeignPropertyAnnualSubmissionRequestParser: RetrieveForeignPropertyAnnualSubmissionRequestParser =
+    mock[RetrieveForeignPropertyAnnualSubmissionRequestParser]
 
   object MockRetrieveForeignPropertyRequestParser {
-    def parse(data: RetrieveForeignPropertyAnnualSubmissionRawData): CallHandler[Either[ErrorWrapper, RetrieveForeignPropertyAnnualSubmissionRequest]] = {
-      (mockRetrieveForeignPropertyAnnualSubmissionRequestParser.parseRequest(_: RetrieveForeignPropertyAnnualSubmissionRawData)(_: String)).expects(data, *)
+
+    def parse(
+        data: RetrieveForeignPropertyAnnualSubmissionRawData): CallHandler[Either[ErrorWrapper, RetrieveForeignPropertyAnnualSubmissionRequest]] = {
+      (mockRetrieveForeignPropertyAnnualSubmissionRequestParser
+        .parseRequest(_: RetrieveForeignPropertyAnnualSubmissionRawData)(_: String))
+        .expects(data, *)
     }
   }
 }

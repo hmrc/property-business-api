@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,6 +21,7 @@ sealed trait DownstreamUri[Resp] {
 }
 
 object DownstreamUri {
-  final case class DesUri[Resp](value: String) extends DownstreamUri[Resp]
-  final case class IfsUri[Resp](value: String) extends DownstreamUri[Resp]
+  final case class DesUri[Resp](value: String)          extends DownstreamUri[Resp]
+  final case class IfsUri[Resp](value: String)          extends DownstreamUri[Resp]
+  case class TaxYearSpecificIfsUri[Resp](value: String) extends DownstreamUri[Resp]
 }

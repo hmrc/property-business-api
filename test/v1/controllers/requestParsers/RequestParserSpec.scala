@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,12 +19,12 @@ package v1.controllers.requestParsers
 import support.UnitSpec
 import v1.controllers.requestParsers.validators.Validator
 import v1.models.domain.Nino
-import v1.models.errors.{BadRequestError, ErrorWrapper, NinoFormatError, RuleIncorrectOrEmptyBodyError}
+import v1.models.errors.{ BadRequestError, ErrorWrapper, NinoFormatError, RuleIncorrectOrEmptyBodyError }
 import v1.models.request.RawData
 
 class RequestParserSpec extends UnitSpec {
 
-  private val nino = "AA123456A"
+  private val nino                   = "AA123456A"
   implicit val correlationId: String = "X-123"
   case class Raw(nino: String) extends RawData
   case class Request(nino: Nino)
@@ -62,7 +62,8 @@ class RequestParserSpec extends UnitSpec {
       "the validator returns multiple errors" in new Test {
         lazy val validator: Validator[Raw] = (_: Raw) => List(NinoFormatError, RuleIncorrectOrEmptyBodyError)
 
-        parser.parseRequest(Raw(nino)) shouldBe Left(ErrorWrapper(correlationId, BadRequestError, Some(Seq(NinoFormatError, RuleIncorrectOrEmptyBodyError))))
+        parser.parseRequest(Raw(nino)) shouldBe Left(
+          ErrorWrapper(correlationId, BadRequestError, Some(Seq(NinoFormatError, RuleIncorrectOrEmptyBodyError))))
       }
     }
   }

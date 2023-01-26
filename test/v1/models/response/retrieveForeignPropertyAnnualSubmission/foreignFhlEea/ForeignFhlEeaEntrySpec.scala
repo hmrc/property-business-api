@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,40 +23,38 @@ import v1.models.utils.JsonErrorValidators
 class ForeignFhlEeaEntrySpec extends UnitSpec with JsonErrorValidators {
 
   private val foreignFhlEea = ForeignFhlEeaEntry(
-    Some(ForeignFhlEeaAdjustments(
-      Some(100.25),
-      Some(100.25),
-      Some(true)
-    )),
-    Some(ForeignFhlEeaAllowances(
-      Some(100.25),
-      Some(100.25),
-      Some(100.25),
-      Some(100.25)
-    ))
+    Some(
+      ForeignFhlEeaAdjustments(
+        Some(100.25),
+        Some(100.25),
+        Some(true)
+      )),
+    Some(
+      ForeignFhlEeaAllowances(
+        Some(100.25),
+        Some(100.25),
+        Some(100.25),
+        Some(100.25)
+      ))
   )
 
   private val foreignFhlEeaNoAdjustments = ForeignFhlEeaEntry(
     None,
-    Some(ForeignFhlEeaAllowances(
-      Some(100.25),
-      Some(100.25),
-      Some(100.25),
-      Some(100.25))
-    )
+    Some(ForeignFhlEeaAllowances(Some(100.25), Some(100.25), Some(100.25), Some(100.25)))
   )
 
   private val foreignFhlEeaNoAllowances = ForeignFhlEeaEntry(
-    Some(ForeignFhlEeaAdjustments(
-      Some(100.25),
-      Some(100.25),
-      Some(true)
-    )),
+    Some(
+      ForeignFhlEeaAdjustments(
+        Some(100.25),
+        Some(100.25),
+        Some(true)
+      )),
     None
   )
 
   private val jsonBody = Json.parse(
-  """
+    """
     |{
     |   "adjustments":{
     |      "privateUseAdjustment":100.25,
@@ -74,7 +72,7 @@ class ForeignFhlEeaEntrySpec extends UnitSpec with JsonErrorValidators {
   )
 
   private val jsonBodyNoAdjustments = Json.parse(
-  """
+    """
     |{
     |   "allowances":{
     |      "annualInvestmentAllowance":100.25,
@@ -87,7 +85,7 @@ class ForeignFhlEeaEntrySpec extends UnitSpec with JsonErrorValidators {
   )
 
   private val jsonBodyNoAllowances = Json.parse(
-  """
+    """
     |{
     |   "adjustments":{
     |       "privateUseAdjustment":100.25,

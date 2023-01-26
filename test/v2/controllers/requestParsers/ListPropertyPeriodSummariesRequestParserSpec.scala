@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,15 +18,15 @@ package v2.controllers.requestParsers
 
 import support.UnitSpec
 import v2.mocks.validators.MockListPropertyPeriodSummariesValidator
-import v2.models.domain.Nino
-import v2.models.errors.{BadRequestError, BusinessIdFormatError, ErrorWrapper, NinoFormatError}
+import v2.models.domain.{ Nino, TaxYear }
+import v2.models.errors.{ BadRequestError, BusinessIdFormatError, ErrorWrapper, NinoFormatError }
 import v2.models.request.listPropertyPeriodSummaries._
 
 class ListPropertyPeriodSummariesRequestParserSpec extends UnitSpec {
 
-  val nino: String = "AA123456B"
-  val businessId: String = "XAIS12345678901"
-  val taxYear: String = "2021-22"
+  val nino: String                   = "AA123456B"
+  val businessId: String             = "XAIS12345678901"
+  val taxYear: String                = "2021-22"
   implicit val correlationId: String = "X-123"
 
   val rawData: ListPropertyPeriodSummariesRawData = ListPropertyPeriodSummariesRawData(nino, businessId, taxYear)
@@ -40,14 +40,15 @@ class ListPropertyPeriodSummariesRequestParserSpec extends UnitSpec {
       "valid raw data is supplied" in new Test {
         MockListPropertyPeriodSummariesValidator.validate(rawData).returns(Nil)
 
-        parser.parseRequest(rawData) shouldBe Right(ListPropertyPeriodSummariesRequest(Nino(nino), businessId, taxYear))
+        parser.parseRequest(rawData) shouldBe Right(ListPropertyPeriodSummariesRequest(Nino(nino), businessId, TaxYear.fromMtd(taxYear)))
       }
     }
 
     "return an ErrorWrapper object" when {
       "the raw data contains single validation error" in new Test {
 
-        MockListPropertyPeriodSummariesValidator.validate(rawData)
+        MockListPropertyPeriodSummariesValidator
+          .validate(rawData)
           .returns(List(NinoFormatError))
 
         parser.parseRequest(rawData) shouldBe
@@ -55,7 +56,8 @@ class ListPropertyPeriodSummariesRequestParserSpec extends UnitSpec {
       }
 
       "the raw data contains multiple validation errors" in new Test {
-        MockListPropertyPeriodSummariesValidator.validate(rawData)
+        MockListPropertyPeriodSummariesValidator
+          .validate(rawData)
           .returns(List(NinoFormatError, BusinessIdFormatError))
 
         parser.parseRequest(rawData) shouldBe

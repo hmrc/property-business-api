@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 
 package v2.models.errors
 
-import play.api.libs.json.{Json, Reads}
+import play.api.libs.json.{ Json, Reads }
 
 case class DownstreamErrorCode(code: String) {
   def toMtd: MtdError = MtdError(code = code, message = "")
@@ -29,7 +29,6 @@ object DownstreamErrorCode {
 sealed trait DownstreamError
 
 case class DownstreamErrors(errors: List[DownstreamErrorCode]) extends DownstreamError
-
 
 object DownstreamErrors {
   def single(error: DownstreamErrorCode): DownstreamErrors = DownstreamErrors(List(error))

@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,12 +20,12 @@ import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import play.api.http.HeaderNames.ACCEPT
 import play.api.http.Status
 import play.api.libs.json._
-import play.api.libs.ws.{WSRequest, WSResponse}
+import play.api.libs.ws.{ WSRequest, WSResponse }
 import play.api.test.Helpers.AUTHORIZATION
 import support.V2IntegrationBaseSpec
 import v2.models.errors._
 import v2.models.utils.JsonErrorValidators
-import v2.stubs.{AuditStub, AuthStub, DownstreamStub, MtdIdLookupStub}
+import v2.stubs.{ AuditStub, AuthStub, DownstreamStub, MtdIdLookupStub }
 
 class CreateForeignPropertyPeriodSummaryControllerISpec extends V2IntegrationBaseSpec with JsonErrorValidators {
 
@@ -56,89 +56,41 @@ class CreateForeignPropertyPeriodSummaryControllerISpec extends V2IntegrationBas
   private val nonFhlEntry = nonFhlEntryWith("AFG")
   private val requestBody = requestBodyWith(nonFhlEntry)
 
-  private trait Test {
-    val nino: String       = "TC663795B"
-    val businessId: String = "XAIS12345678910"
-    val taxYear            = "2022-23"
-    val submissionId       = "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
-
-    def setupStubs(): StubMapping
-
-    def ifsUri: String = "/income-tax/business/property/periodic"
-
-    def ifsQueryParams: Map[String, String] = Map(
-      "taxableEntityId" -> nino,
-      "incomeSourceId"  -> businessId,
-      "taxYear" -> taxYear
-    )
-
-    def request(): WSRequest = {
-      setupStubs()
-      buildRequest(s"/foreign/$nino/$businessId/period/$taxYear")
-        .withHttpHeaders(
-          (ACCEPT, "application/vnd.hmrc.2.0+json"),
-          (AUTHORIZATION, "Bearer 123") // some bearer token
-      )
-    }
-
-    val responseBody: JsValue = Json.parse(
-      s"""
-        |{
-        |  "submissionId": "$submissionId",
-        |  "links": [
-        |    {
-        |      "href":"/individuals/business/property/foreign/$nino/$businessId/period/$taxYear/$submissionId",
-        |      "method":"GET",
-        |      "rel":"self"
-        |    },
-        |    {
-        |      "href":"/individuals/business/property/foreign/$nino/$businessId/period/$taxYear/$submissionId",
-        |      "method":"PUT",
-        |      "rel":"amend-foreign-property-period-summary"
-        |    }
-        |  ]
-        |}
-      """.stripMargin
-    )
-
-    val ifsResponse: JsValue = Json.parse(
-      s"""
-        |{
-        |  "submissionId": "$submissionId"
-        |}
-        """.stripMargin
-    )
-
-    def errorBody(code: String): String =
-      s"""
-         |{
-         |   "code": "$code",
-         |   "reason": "ifs message"
-         |}
-       """.stripMargin
-  }
-
   "calling the create endpoint" should {
 
     "return a 201 status" when {
 
-      "any valid request is made" in new Test {
+      "any valid request is made" in new NonTysTest {
         override def setupStubs(): StubMapping = {
           AuditStub.audit()
           AuthStub.authorised()
           MtdIdLookupStub.ninoFound(nino)
-          DownstreamStub.onSuccess(DownstreamStub.POST, ifsUri, ifsQueryParams, Status.OK, ifsResponse)
+          DownstreamStub.onSuccess(DownstreamStub.POST, downstreamUri, downstreamQueryParams, Status.OK, downstreamResponseBody)
         }
 
         val response: WSResponse = await(request().post(requestBody))
-        response.json shouldBe responseBody
+        response.json shouldBe mtdResponseBody
+        response.status shouldBe Status.CREATED
+        response.header("Content-Type") shouldBe Some("application/json")
+      }
+
+      "any valid request is made for a Tax Year Specific (TYS) tax year" in new TysIfsTest {
+        override def setupStubs(): StubMapping = {
+          AuditStub.audit()
+          AuthStub.authorised()
+          MtdIdLookupStub.ninoFound(nino)
+          DownstreamStub.onSuccess(DownstreamStub.POST, downstreamUri, downstreamQueryParams, Status.OK, downstreamResponseBody)
+        }
+
+        val response: WSResponse = await(request().post(requestBody))
+        response.json shouldBe mtdResponseBody
         response.status shouldBe Status.CREATED
         response.header("Content-Type") shouldBe Some("application/json")
       }
     }
 
     "return bad request error" when {
-      "badly formed json body" in new Test {
+      "badly formed json body" in new NonTysTest {
         override def setupStubs(): StubMapping = {
           AuditStub.audit()
           AuthStub.authorised()
@@ -158,11 +110,11 @@ class CreateForeignPropertyPeriodSummaryControllerISpec extends V2IntegrationBas
                                 requestBody: JsValue,
                                 expectedStatus: Int,
                                 expectedBody: MtdError): Unit = {
-          s"validation fails with ${expectedBody.code} error" in new Test {
+          s"validation fails with ${expectedBody.code} error" in new NonTysTest {
 
             override val nino: String       = requestNino
             override val businessId: String = requestBusinessId
-            override val taxYear: String    = requestTaxYear
+            override val mtdTaxYear: String = requestTaxYear
 
             override def setupStubs(): StubMapping = {
               AuditStub.audit()
@@ -182,23 +134,47 @@ class CreateForeignPropertyPeriodSummaryControllerISpec extends V2IntegrationBas
           ("AA123456A", "XA***IS1", "2022-23", requestBody, Status.BAD_REQUEST, BusinessIdFormatError),
           ("AA123456A", "XAIS12345678910", "2021-23", requestBody, Status.BAD_REQUEST, RuleTaxYearRangeInvalidError),
           ("AA123456A", "XAIS12345678910", "2020-21", requestBody, Status.BAD_REQUEST, RuleTaxYearNotSupportedError),
-          ("AA123456A", "XAIS12345678910", "2021-22",
+          ("AA123456A",
+           "XAIS12345678910",
+           "2021-22",
            requestBody.update("/foreignFhlEea/expenses/premisesRunningCosts", JsNumber(1.234)),
            Status.BAD_REQUEST,
            ValueFormatError.copy(paths = Some(Seq("/foreignFhlEea/expenses/premisesRunningCosts")))),
-          ("AA123456A", "XAIS12345678910", "2022-23",
+          ("AA123456A",
+           "XAIS12345678910",
+           "2022-23",
            requestBody.update("/foreignFhlEea/expenses/consolidatedExpenses", JsNumber(1.23)),
            Status.BAD_REQUEST,
            RuleBothExpensesSuppliedError.copy(paths = Some(Seq("/foreignFhlEea/expenses")))),
           ("AA123456A", "XAIS12345678910", "2021-22", JsObject.empty, Status.BAD_REQUEST, RuleIncorrectOrEmptyBodyError),
           ("AA123456A", "XAIS12345678910", "2022-23", requestBody.update("/fromDate", JsString("XX")), Status.BAD_REQUEST, FromDateFormatError),
           ("AA123456A", "XAIS12345678910", "2022-23", requestBody.update("/toDate", JsString("XX")), Status.BAD_REQUEST, ToDateFormatError),
-          ("AA123456A", "XAIS12345678910", "2022-23", requestBody.update("/toDate", JsString("1999-01-01")), Status.BAD_REQUEST, RuleToDateBeforeFromDateError),
-          ("AA123456A", "XAIS12345678910", "2022-23", requestBodyWith(nonFhlEntryWith("France")), Status.BAD_REQUEST, CountryCodeFormatError.copy(paths = Some(Seq("/foreignNonFhlProperty/0/countryCode")))),
-          ("AA123456A", "XAIS12345678910", "2022-23", requestBodyWith(nonFhlEntryWith("QQQ")), Status.BAD_REQUEST,
+          ("AA123456A",
+           "XAIS12345678910",
+           "2022-23",
+           requestBody.update("/toDate", JsString("1999-01-01")),
+           Status.BAD_REQUEST,
+           RuleToDateBeforeFromDateError),
+          ("AA123456A",
+           "XAIS12345678910",
+           "2022-23",
+           requestBodyWith(nonFhlEntryWith("France")),
+           Status.BAD_REQUEST,
+           CountryCodeFormatError.copy(paths = Some(Seq("/foreignNonFhlProperty/0/countryCode")))),
+          ("AA123456A",
+           "XAIS12345678910",
+           "2022-23",
+           requestBodyWith(nonFhlEntryWith("QQQ")),
+           Status.BAD_REQUEST,
            RuleCountryCodeError.copy(paths = Some(Seq("/foreignNonFhlProperty/0/countryCode")))),
-          ("AA123456A", "XAIS12345678910", "2022-23", requestBodyWith(nonFhlEntry, nonFhlEntry), Status.BAD_REQUEST, RuleDuplicateCountryCodeError.forDuplicatedCodesAndPaths("AFG", Seq("/foreignNonFhlProperty/0/countryCode",
-            "/foreignNonFhlProperty/1/countryCode")),
+          ("AA123456A",
+           "XAIS12345678910",
+           "2022-23",
+           requestBodyWith(nonFhlEntry, nonFhlEntry),
+           Status.BAD_REQUEST,
+           RuleDuplicateCountryCodeError.forDuplicatedCodesAndPaths("AFG",
+                                                                    Seq("/foreignNonFhlProperty/0/countryCode",
+                                                                        "/foreignNonFhlProperty/1/countryCode")),
           )
         )
         input.foreach(args => (validationErrorTest _).tupled(args))
@@ -206,13 +182,13 @@ class CreateForeignPropertyPeriodSummaryControllerISpec extends V2IntegrationBas
 
       "ifs service error" when {
         def serviceErrorTest(ifsStatus: Int, ifsCode: String, expectedStatus: Int, expectedBody: MtdError): Unit = {
-          s"ifs returns an $ifsCode error and status $ifsStatus" in new Test {
+          s"ifs returns an $ifsCode error and status $ifsStatus" in new NonTysTest {
 
             override def setupStubs(): StubMapping = {
               AuditStub.audit()
               AuthStub.authorised()
               MtdIdLookupStub.ninoFound(nino)
-              DownstreamStub.onError(DownstreamStub.POST, ifsUri, ifsQueryParams, ifsStatus, errorBody(ifsCode))
+              DownstreamStub.onError(DownstreamStub.POST, downstreamUri, downstreamQueryParams, ifsStatus, errorBody(ifsCode))
             }
 
             val response: WSResponse = await(request().post(requestBody))
@@ -221,7 +197,7 @@ class CreateForeignPropertyPeriodSummaryControllerISpec extends V2IntegrationBas
           }
         }
 
-        val input = Seq(
+        val errors = List(
           (Status.BAD_REQUEST, "INVALID_TAXABLE_ENTITY_ID", Status.BAD_REQUEST, NinoFormatError),
           (Status.BAD_REQUEST, "INVALID_INCOMESOURCEID", Status.BAD_REQUEST, BusinessIdFormatError),
           (Status.BAD_REQUEST, "INVALID_PAYLOAD", Status.INTERNAL_SERVER_ERROR, InternalError),
@@ -240,8 +216,96 @@ class CreateForeignPropertyPeriodSummaryControllerISpec extends V2IntegrationBas
           (Status.INTERNAL_SERVER_ERROR, "SERVER_ERROR", Status.INTERNAL_SERVER_ERROR, InternalError),
           (Status.SERVICE_UNAVAILABLE, "SERVICE_UNAVAILABLE", Status.INTERNAL_SERVER_ERROR, InternalError),
         )
-        input.foreach(args => (serviceErrorTest _).tupled(args))
+
+        val extraTysErrors = List(
+          (Status.BAD_REQUEST, "INVALID_INCOMESOURCE_ID", Status.BAD_REQUEST, BusinessIdFormatError),
+          (Status.BAD_REQUEST, "INVALID_CORRELATION_ID", Status.INTERNAL_SERVER_ERROR, InternalError),
+          (Status.UNPROCESSABLE_ENTITY, "PERIOD_NOT_ALIGNED", Status.BAD_REQUEST, RuleMisalignedPeriodError),
+          (Status.UNPROCESSABLE_ENTITY, "PERIOD_OVERLAPS", Status.BAD_REQUEST, RuleOverlappingPeriodError),
+        )
+
+        (errors ++ extraTysErrors).foreach(args => (serviceErrorTest _).tupled(args))
       }
     }
+  }
+
+  private trait Test {
+    val nino: String       = "TC663795B"
+    val businessId: String = "XAIS12345678910"
+    val submissionId       = "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
+
+    def mtdTaxYear: String
+    def setupStubs(): StubMapping
+    def downstreamUri: String
+    def downstreamQueryParams: Map[String, String]
+
+    def request(): WSRequest = {
+      setupStubs()
+      buildRequest(s"/foreign/$nino/$businessId/period/$mtdTaxYear")
+        .withHttpHeaders(
+          (ACCEPT, "application/vnd.hmrc.2.0+json"),
+          (AUTHORIZATION, "Bearer 123") // some bearer token
+        )
+    }
+
+    val mtdResponseBody: JsValue = Json.parse(
+      s"""
+         |{
+         |  "submissionId": "$submissionId",
+         |  "links": [
+         |    {
+         |      "href":"/individuals/business/property/foreign/$nino/$businessId/period/$mtdTaxYear/$submissionId",
+         |      "method":"GET",
+         |      "rel":"self"
+         |    },
+         |    {
+         |      "href":"/individuals/business/property/foreign/$nino/$businessId/period/$mtdTaxYear/$submissionId",
+         |      "method":"PUT",
+         |      "rel":"amend-foreign-property-period-summary"
+         |    }
+         |  ]
+         |}
+      """.stripMargin
+    )
+
+    val downstreamResponseBody: JsValue = Json.parse(
+      s"""
+         |{
+         |  "submissionId": "$submissionId"
+         |}
+        """.stripMargin
+    )
+
+    def errorBody(code: String): String =
+      s"""
+         |{
+         |   "code": "$code",
+         |   "reason": "ifs message"
+         |}
+       """.stripMargin
+  }
+
+  private trait TysIfsTest extends Test {
+    def mtdTaxYear: String = "2023-24"
+
+    def downstreamUri: String = "/income-tax/business/property/periodic/23-24"
+
+    def downstreamQueryParams: Map[String, String] = Map(
+      "taxableEntityId" -> nino,
+      "incomeSourceId"  -> businessId,
+    )
+
+  }
+
+  private trait NonTysTest extends Test {
+    def mtdTaxYear: String = "2022-23"
+
+    def downstreamUri: String = "/income-tax/business/property/periodic"
+
+    def downstreamQueryParams: Map[String, String] = Map(
+      "taxableEntityId" -> nino,
+      "incomeSourceId"  -> businessId,
+      "taxYear"         -> mtdTaxYear
+    )
   }
 }

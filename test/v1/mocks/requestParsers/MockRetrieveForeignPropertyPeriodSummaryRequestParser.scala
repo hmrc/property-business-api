@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,13 +20,18 @@ import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
 import v1.controllers.requestParsers.RetrieveForeignPropertyPeriodSummaryRequestParser
 import v1.models.errors.ErrorWrapper
-import v1.models.request.retrieveForeignPropertyPeriodSummary.{RetrieveForeignPropertyPeriodSummaryRawData, RetrieveForeignPropertyPeriodSummaryRequest}
+import v1.models.request.retrieveForeignPropertyPeriodSummary.{
+  RetrieveForeignPropertyPeriodSummaryRawData,
+  RetrieveForeignPropertyPeriodSummaryRequest
+}
 
 trait MockRetrieveForeignPropertyPeriodSummaryRequestParser extends MockFactory {
 
-  val mockRetrieveForeignPropertyRequestParser: RetrieveForeignPropertyPeriodSummaryRequestParser = mock[RetrieveForeignPropertyPeriodSummaryRequestParser]
+  val mockRetrieveForeignPropertyRequestParser: RetrieveForeignPropertyPeriodSummaryRequestParser =
+    mock[RetrieveForeignPropertyPeriodSummaryRequestParser]
 
   object MockRetrieveForeignPropertyRequestParser {
+
     def parse(data: RetrieveForeignPropertyPeriodSummaryRawData): CallHandler[Either[ErrorWrapper, RetrieveForeignPropertyPeriodSummaryRequest]] = {
       (mockRetrieveForeignPropertyRequestParser.parseRequest(_: RetrieveForeignPropertyPeriodSummaryRawData)(_: String)).expects(data, *)
     }

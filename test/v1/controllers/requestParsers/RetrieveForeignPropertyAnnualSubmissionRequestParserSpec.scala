@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,14 +19,14 @@ package v1.controllers.requestParsers
 import support.UnitSpec
 import v1.mocks.validators.MockRetrieveForeignPropertyAnnualSubmissionValidator
 import v1.models.domain.Nino
-import v1.models.errors.{BadRequestError, BusinessIdFormatError, ErrorWrapper, NinoFormatError}
+import v1.models.errors.{ BadRequestError, BusinessIdFormatError, ErrorWrapper, NinoFormatError }
 import v1.models.request.retrieveForeignPropertyAnnualSubmission._
 
 class RetrieveForeignPropertyAnnualSubmissionRequestParserSpec extends UnitSpec {
 
-  val nino: String = "AA123456B"
-  val businessId: String = "XAIS12345678901"
-  val taxYear: String = "2021-22"
+  val nino: String                   = "AA123456B"
+  val businessId: String             = "XAIS12345678901"
+  val taxYear: String                = "2021-22"
   implicit val correlationId: String = "X-123"
 
   val inputData: RetrieveForeignPropertyAnnualSubmissionRawData =
@@ -46,14 +46,16 @@ class RetrieveForeignPropertyAnnualSubmissionRequestParserSpec extends UnitSpec 
     }
     "return an ErrorWrapper" when {
       "a single validation error occurs" in new Test {
-        MockRetrieveForeignPropertyAnnualSubmissionValidator.validate(inputData)
+        MockRetrieveForeignPropertyAnnualSubmissionValidator
+          .validate(inputData)
           .returns(List(NinoFormatError))
 
         parser.parseRequest(inputData) shouldBe
           Left(ErrorWrapper(correlationId, NinoFormatError, None))
       }
       "multiple validation errors occur" in new Test {
-        MockRetrieveForeignPropertyAnnualSubmissionValidator.validate(inputData)
+        MockRetrieveForeignPropertyAnnualSubmissionValidator
+          .validate(inputData)
           .returns(List(NinoFormatError, BusinessIdFormatError))
 
         parser.parseRequest(inputData) shouldBe

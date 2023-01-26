@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,19 +17,18 @@
 package v2.models.request.common.foreignPropertyEntry
 
 import play.api.libs.functional.syntax._
-import play.api.libs.json.{JsPath, Json, Reads, Writes}
+import play.api.libs.json.{ JsPath, Json, Reads, Writes }
 
-case class CreateForeignNonFhlPropertyExpenses(
-                        premisesRunningCosts: Option[BigDecimal],
-                        repairsAndMaintenance: Option[BigDecimal],
-                        financialCosts: Option[BigDecimal],
-                        professionalFees: Option[BigDecimal],
-                        costOfServices: Option[BigDecimal],
-                        travelCosts: Option[BigDecimal],
-                        residentialFinancialCost: Option[BigDecimal],
-                        broughtFwdResidentialFinancialCost: Option[BigDecimal],
-                        other: Option[BigDecimal],
-                        consolidatedExpenses: Option[BigDecimal])
+case class CreateForeignNonFhlPropertyExpenses(premisesRunningCosts: Option[BigDecimal],
+                                               repairsAndMaintenance: Option[BigDecimal],
+                                               financialCosts: Option[BigDecimal],
+                                               professionalFees: Option[BigDecimal],
+                                               costOfServices: Option[BigDecimal],
+                                               travelCosts: Option[BigDecimal],
+                                               residentialFinancialCost: Option[BigDecimal],
+                                               broughtFwdResidentialFinancialCost: Option[BigDecimal],
+                                               other: Option[BigDecimal],
+                                               consolidatedExpenses: Option[BigDecimal])
 
 object CreateForeignNonFhlPropertyExpenses {
   implicit val reads: Reads[CreateForeignNonFhlPropertyExpenses] = Json.reads[CreateForeignNonFhlPropertyExpenses]
@@ -45,5 +44,5 @@ object CreateForeignNonFhlPropertyExpenses {
       (JsPath \ "broughtFwdResidentialFinancialCost").writeNullable[BigDecimal] and
       (JsPath \ "other").writeNullable[BigDecimal] and
       (JsPath \ "consolidatedExpenseAmount").writeNullable[BigDecimal]
-    ) (unlift(CreateForeignNonFhlPropertyExpenses.unapply))
+  )(unlift(CreateForeignNonFhlPropertyExpenses.unapply))
 }

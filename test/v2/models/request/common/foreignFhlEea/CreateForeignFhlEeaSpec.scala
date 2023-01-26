@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 
 package v2.models.request.common.foreignFhlEea
 
-import play.api.libs.json.{JsValue, Json}
+import play.api.libs.json.{ JsValue, Json }
 import support.UnitSpec
 
 class CreateForeignFhlEeaSpec extends UnitSpec {
@@ -43,16 +43,17 @@ class CreateForeignFhlEeaSpec extends UnitSpec {
 
   val model: CreateForeignFhlEea = CreateForeignFhlEea(
     income = Some(ForeignFhlEeaIncome(rentAmount = Some(567.83))),
-    expenses = Some(CreateForeignFhlEeaExpenses(
-      premisesRunningCosts = Some(4567.98),
-      repairsAndMaintenance = Some(98765.67),
-      financialCosts = Some(4566.95),
-      professionalFees = Some(23.65),
-      costOfServices = Some(4567.77),
-      travelCosts = Some(456.77),
-      other = Some(567.67),
-      consolidatedExpenses = Some(456.98)
-    ))
+    expenses = Some(
+      CreateForeignFhlEeaExpenses(
+        premisesRunningCosts = Some(4567.98),
+        repairsAndMaintenance = Some(98765.67),
+        financialCosts = Some(4566.95),
+        professionalFees = Some(23.65),
+        costOfServices = Some(4567.77),
+        travelCosts = Some(456.77),
+        other = Some(567.67),
+        consolidatedExpenses = Some(456.98)
+      ))
   )
 
   val ifsJson: JsValue = Json.parse(

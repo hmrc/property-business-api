@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,14 +17,18 @@
 package v2.controllers.requestParsers
 
 import v2.controllers.requestParsers.validators.AmendUkPropertyPeriodSummaryValidator
-import v2.models.domain.Nino
+import v2.models.domain.{ Nino, TaxYear }
 import v2.models.request.amendUkPropertyPeriodSummary._
+
 import javax.inject.Inject
 
 class AmendUkPropertyPeriodSummaryRequestParser @Inject()(val validator: AmendUkPropertyPeriodSummaryValidator)
     extends RequestParser[AmendUkPropertyPeriodSummaryRawData, AmendUkPropertyPeriodSummaryRequest] {
 
   override protected def requestFor(data: AmendUkPropertyPeriodSummaryRawData): AmendUkPropertyPeriodSummaryRequest =
-    AmendUkPropertyPeriodSummaryRequest(Nino(data.nino), data.taxYear, data.businessId,
-      data.submissionId, data.body.as[AmendUkPropertyPeriodSummaryRequestBody])
+    AmendUkPropertyPeriodSummaryRequest(Nino(data.nino),
+                                        TaxYear.fromMtd(data.taxYear),
+                                        data.businessId,
+                                        data.submissionId,
+                                        data.body.as[AmendUkPropertyPeriodSummaryRequestBody])
 }

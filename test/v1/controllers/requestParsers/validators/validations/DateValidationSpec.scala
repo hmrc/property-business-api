@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +17,7 @@
 package v1.controllers.requestParsers.validators.validations
 
 import support.UnitSpec
-import v1.models.errors.{FromDateFormatError, ToDateFormatError}
+import v1.models.errors.{ FromDateFormatError, ToDateFormatError }
 
 class DateValidationSpec extends UnitSpec {
 
@@ -25,7 +25,7 @@ class DateValidationSpec extends UnitSpec {
     "return no errors" when {
       "when a valid fromDate is supplied" in {
 
-        val validDate = "2020-01-01"
+        val validDate        = "2020-01-01"
         val validationResult = DateValidation.validate(validDate, isFromDate = true)
         validationResult.isEmpty shouldBe true
 
@@ -33,7 +33,7 @@ class DateValidationSpec extends UnitSpec {
 
       "when a valid toDate is supplied" in {
 
-        val validDate = "2020-03-12"
+        val validDate        = "2020-03-12"
         val validationResult = DateValidation.validate(validDate, isFromDate = true)
         validationResult.isEmpty shouldBe true
 
@@ -43,7 +43,7 @@ class DateValidationSpec extends UnitSpec {
       "when an invalid fromDate is supplied" in {
 
         val invalidBusinessId = "01-01-2020"
-        val validationResult = DateValidation.validate(invalidBusinessId, isFromDate = true)
+        val validationResult  = DateValidation.validate(invalidBusinessId, isFromDate = true)
         validationResult.isEmpty shouldBe false
         validationResult.length shouldBe 1
         validationResult.head shouldBe FromDateFormatError
@@ -53,7 +53,7 @@ class DateValidationSpec extends UnitSpec {
       "when an invalid toDate is supplied" in {
 
         val invalidBusinessId = "30-01-2020"
-        val validationResult = DateValidation.validate(invalidBusinessId, isFromDate = false)
+        val validationResult  = DateValidation.validate(invalidBusinessId, isFromDate = false)
         validationResult.isEmpty shouldBe false
         validationResult.length shouldBe 1
         validationResult.head shouldBe ToDateFormatError

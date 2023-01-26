@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,10 +22,10 @@ import uk.gov.hmrc.http.HeaderCarrier
 import v1.mocks.MockIdGenerator
 import v1.mocks.hateoas.MockHateoasFactory
 import v1.mocks.requestParsers.MockRetrieveForeignPropertyPeriodSummaryRequestParser
-import v1.mocks.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService, MockRetrieveForeignPropertyPeriodSummaryService}
+import v1.mocks.services.{ MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService, MockRetrieveForeignPropertyPeriodSummaryService }
 import v1.models.domain.Nino
 import v1.models.errors._
-import v1.models.hateoas.{HateoasWrapper, Link}
+import v1.models.hateoas.{ HateoasWrapper, Link }
 import v1.models.hateoas.Method.GET
 import v1.models.outcomes.ResponseWrapper
 import v1.models.request.retrieveForeignPropertyPeriodSummary._
@@ -37,7 +37,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class RetrieveForeignPropertyPeriodSummaryControllerSpec
-  extends ControllerBaseSpec
+    extends ControllerBaseSpec
     with MockEnrolmentsAuthService
     with MockMtdIdLookupService
     with MockRetrieveForeignPropertyPeriodSummaryService
@@ -46,9 +46,9 @@ class RetrieveForeignPropertyPeriodSummaryControllerSpec
     with MockAuditService
     with MockIdGenerator {
 
-  private val nino = "AA123456A"
-  private val businessId = "XAIS12345678910"
-  private val submissionId = "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
+  private val nino          = "AA123456A"
+  private val businessId    = "XAIS12345678910"
+  private val submissionId  = "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
   private val correlationId = "X-123"
 
   trait Test {
@@ -69,49 +69,56 @@ class RetrieveForeignPropertyPeriodSummaryControllerSpec
     MockIdGenerator.getCorrelationId.returns(correlationId)
   }
 
-  private val rawData = RetrieveForeignPropertyPeriodSummaryRawData(nino, businessId, submissionId)
+  private val rawData     = RetrieveForeignPropertyPeriodSummaryRawData(nino, businessId, submissionId)
   private val requestData = RetrieveForeignPropertyPeriodSummaryRequest(Nino(nino), businessId, submissionId)
 
-  private val testHateoasLink = Link(href = s"/individuals/business/property/${nino}/${businessId}/period/${submissionId}", method = GET, rel = "self")
+  private val testHateoasLink =
+    Link(href = s"/individuals/business/property/${nino}/${businessId}/period/${submissionId}", method = GET, rel = "self")
 
   private val responseBody = RetrieveForeignPropertyPeriodSummaryResponse(
     "2020-01-01",
     "2020-01-31",
-    Some(ForeignFhlEea(
-      Some(ForeignFhlEeaIncome(Some(5000.99))),
-      Some(ForeignFhlEeaExpenditure(
-        Some(5000.99),
-        Some(5000.99),
-        Some(5000.99),
-        Some(5000.99),
-        Some(5000.99),
-        Some(5000.99),
-        Some(5000.99),
-        None
-      ))
-    )),
-    Some(Seq(ForeignProperty("FRA",
-      ForeignPropertyIncome(
-        Some(ForeignPropertyRentIncome(Some(5000.99))),
-        false,
-        Some(5000.99),
-        Some(5000.99),
-        Some(5000.99),
-        Some(5000.99)
-      ),
-      Some(ForeignPropertyExpenditure(
-        Some(5000.99),
-        Some(5000.99),
-        Some(5000.99),
-        Some(5000.99),
-        Some(5000.99),
-        Some(5000.99),
-        Some(5000.99),
-        Some(5000.99),
-        Some(5000.99),
-        None
-      ))))
-    ))
+    Some(
+      ForeignFhlEea(
+        Some(ForeignFhlEeaIncome(Some(5000.99))),
+        Some(
+          ForeignFhlEeaExpenditure(
+            Some(5000.99),
+            Some(5000.99),
+            Some(5000.99),
+            Some(5000.99),
+            Some(5000.99),
+            Some(5000.99),
+            Some(5000.99),
+            None
+          ))
+      )),
+    Some(
+      Seq(ForeignProperty(
+        "FRA",
+        ForeignPropertyIncome(
+          Some(ForeignPropertyRentIncome(Some(5000.99))),
+          false,
+          Some(5000.99),
+          Some(5000.99),
+          Some(5000.99),
+          Some(5000.99)
+        ),
+        Some(
+          ForeignPropertyExpenditure(
+            Some(5000.99),
+            Some(5000.99),
+            Some(5000.99),
+            Some(5000.99),
+            Some(5000.99),
+            Some(5000.99),
+            Some(5000.99),
+            Some(5000.99),
+            Some(5000.99),
+            None
+          ))
+      )))
+  )
 
   "handleRequest" should {
     "return Ok" when {

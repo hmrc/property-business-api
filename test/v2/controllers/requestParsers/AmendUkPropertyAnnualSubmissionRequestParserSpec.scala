@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,26 +16,29 @@
 
 package v2.controllers.requestParsers
 
-import play.api.libs.json.{JsValue, Json}
+import play.api.libs.json.{ JsValue, Json }
 import support.UnitSpec
 import v2.mocks.validators.MockAmendUkPropertyAnnualSubmissionValidator
-import v2.models.domain.Nino
-import v2.models.errors.{BadRequestError, BusinessIdFormatError, ErrorWrapper, NinoFormatError}
-import v2.models.request.amendUkPropertyAnnualSubmission.ukFhlProperty.{UkFhlProperty, UkFhlPropertyAdjustments, UkFhlPropertyAllowances}
-import v2.models.request.amendUkPropertyAnnualSubmission.ukNonFhlProperty.{UkNonFhlProperty, UkNonFhlPropertyAdjustments, UkNonFhlPropertyAllowances}
+import v2.models.domain.{ Nino, TaxYear }
+import v2.models.errors.{ BadRequestError, BusinessIdFormatError, ErrorWrapper, NinoFormatError }
+import v2.models.request.amendUkPropertyAnnualSubmission.ukFhlProperty.{ UkFhlProperty, UkFhlPropertyAdjustments, UkFhlPropertyAllowances }
+import v2.models.request.amendUkPropertyAnnualSubmission.ukNonFhlProperty.{
+  UkNonFhlProperty,
+  UkNonFhlPropertyAdjustments,
+  UkNonFhlPropertyAllowances
+}
 import v2.models.request.amendUkPropertyAnnualSubmission._
 import v2.models.request.common.ukPropertyRentARoom.UkPropertyAdjustmentsRentARoom
-import v2.models.request.common.{Building, FirstYear, StructuredBuildingAllowance}
+import v2.models.request.common.{ Building, FirstYear, StructuredBuildingAllowance }
 
 class AmendUkPropertyAnnualSubmissionRequestParserSpec extends UnitSpec {
 
-  val nino: String = "AA123456B"
-  val businessId: String = "XAIS12345678901"
-  val taxYear: String = "2021-22"
+  val nino: String                   = "AA123456B"
+  val businessId: String             = "XAIS12345678901"
+  val taxYear: String                = "2021-22"
   implicit val correlationId: String = "X-123"
 
-  val requestBodyJson: JsValue = Json.parse(
-    """
+  val requestBodyJson: JsValue = Json.parse("""
       |{
       |  "ukFhlProperty": {
       |    "allowances": {
@@ -124,30 +127,22 @@ class AmendUkPropertyAnnualSubmissionRequestParserSpec extends UnitSpec {
             Some(
               UkFhlProperty(
                 Some(
-                  UkFhlPropertyAdjustments(
-                    Some(454.45),
-                    Some(231.45),
-                    true,
-                    Some(567.67),
-                    true,
-                    Some(
-                      UkPropertyAdjustmentsRentARoom(true)))),
-                Some(
-                  UkFhlPropertyAllowances(
-                    Some(123.45),
-                    Some(345.56),
-                    Some(345.34),
-                    Some(453.34),
-                    Some(123.12),
-                    None)))),
+                  UkFhlPropertyAdjustments(Some(454.45),
+                                           Some(231.45),
+                                           periodOfGraceAdjustment = true,
+                                           Some(567.67),
+                                           nonResidentLandlord = true,
+                                           Some(UkPropertyAdjustmentsRentARoom(true)))),
+                Some(UkFhlPropertyAllowances(Some(123.45), Some(345.56), Some(345.34), Some(453.34), Some(123.12), None))
+              )),
             Some(
               UkNonFhlProperty(
-                Some(UkNonFhlPropertyAdjustments(
-                  Some(565.34),
-                  Some(533.54),
-                  Some(563.34),
-                  true,
-                  Some(UkPropertyAdjustmentsRentARoom(true)))),
+                Some(
+                  UkNonFhlPropertyAdjustments(Some(565.34),
+                                              Some(533.54),
+                                              Some(563.34),
+                                              nonResidentLandlord = true,
+                                              Some(UkPropertyAdjustmentsRentARoom(true)))),
                 Some(UkNonFhlPropertyAllowances(
                   Some(678.45),
                   Some(456.34),
@@ -157,31 +152,30 @@ class AmendUkPropertyAnnualSubmissionRequestParserSpec extends UnitSpec {
                   Some(454.34),
                   Some(454.34),
                   None,
-                  Some(Seq(
-                    StructuredBuildingAllowance(
-                      234.34,
-                      Some(FirstYear("2020-03-29", 3434.45)),
-                      Building(Some("Plaza"), Some("1"), "TF3 4EH")))),
-                  Some(Seq(
-                    StructuredBuildingAllowance(
-                      234.45,
-                      Some(FirstYear("2020-05-29", 453.34)),
-                      Building(Some("Plaza 2"), Some("2"), "TF3 4ER")
-                    )
-                  ))
+                  Some(
+                    Seq(StructuredBuildingAllowance(234.34, Some(FirstYear("2020-03-29", 3434.45)), Building(Some("Plaza"), Some("1"), "TF3 4EH")))),
+                  Some(
+                    Seq(
+                      StructuredBuildingAllowance(
+                        234.45,
+                        Some(FirstYear("2020-05-29", 453.34)),
+                        Building(Some("Plaza 2"), Some("2"), "TF3 4ER")
+                      )
+                    ))
                 ))
               )
             )
           )
 
         parser.parseRequest(inputData) shouldBe
-          Right(AmendUkPropertyAnnualSubmissionRequest(Nino(nino), businessId, taxYear, amendUkPropertyAnnualSubmissionRequestBody))
+          Right(AmendUkPropertyAnnualSubmissionRequest(Nino(nino), businessId, TaxYear.fromMtd(taxYear), amendUkPropertyAnnualSubmissionRequestBody))
       }
     }
     "return an ErrrorWrapper" when {
 
       "a single validation error occurs" in new Test {
-        MockAmendUkPropertyValidator.validate(inputData)
+        MockAmendUkPropertyValidator
+          .validate(inputData)
           .returns(List(NinoFormatError))
 
         parser.parseRequest(inputData) shouldBe
@@ -189,7 +183,8 @@ class AmendUkPropertyAnnualSubmissionRequestParserSpec extends UnitSpec {
       }
 
       "multiple validation errors occur" in new Test {
-        MockAmendUkPropertyValidator.validate(inputData)
+        MockAmendUkPropertyValidator
+          .validate(inputData)
           .returns(List(NinoFormatError, BusinessIdFormatError))
 
         parser.parseRequest(inputData) shouldBe

@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -125,8 +125,7 @@ class CreateAndAmendForeignPropertyAnnualAuditDetailSpec extends UnitSpec {
     `X-CorrelationId` = "a1e8057e-fbbc-47a8-a8b4-78d9f015c253",
     response = AuditResponse(
       200,
-      Right(Some(Json.parse(
-        """{
+      Right(Some(Json.parse("""{
           |"links": [
           | {
           |  "href": "/Individuals/business/property/AA123456A/$businessId/annual/2019-20",

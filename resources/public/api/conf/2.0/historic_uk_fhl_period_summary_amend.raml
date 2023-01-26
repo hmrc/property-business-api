@@ -7,8 +7,15 @@ is:
   - errors.formatPeriodId
   - errors.clientOrAgentNotAuthorised
   - errors.notFound
-displayName: Amend a Historic FHL UK property Income & Expenses Period Summary [test only]
-description: This endpoint enables you to amend income and expenses for a periodic submission relating to a furnished holiday lettings UK property business for tax years from 2017-18 to 2021-22. A National Insurance number and a period ID must be provided.  To amend submissions for the current tax year, use the Amend a UK Property Income & Expenses Period Summary endpoint.
+displayName: Amend a Historic FHL UK property Income & Expenses Period Summary
+description: |
+    This endpoint enables you to amend income and expenses for a periodic submission relating to
+    a furnished holiday lettings
+    UK property business for tax years from 2017-18 to 2021-22.
+    A National Insurance number and a period ID must be provided.
+
+    To amend submissions for the current tax year,
+    use the Amend a UK Property Income & Expenses Period Summary endpoint.
 (annotations.sandboxData): !include scenarios/default_and_not_found_scenarios.md
 (annotations.scope): "write:self-assessment"
 securedBy: [ sec.oauth_2_0: { scopes: [ "write:self-assessment" ] } ]

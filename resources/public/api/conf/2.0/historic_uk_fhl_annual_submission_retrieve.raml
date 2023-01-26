@@ -6,8 +6,16 @@ is:
   - errors.ruleTaxYearNotSupportedMinMax
   - errors.clientOrAgentNotAuthorised
   - errors.notFound
-displayName: Retrieve a Historic FHL UK Property Business Annual Submission [test only]
-description: This endpoint enables you to retrieve the income from adjustments and allowances for a furnished holiday lettings (FHL) UK property business for tax years from 2017-18 to 2021-22. A National Insurance number and tax year must be provided. Use this endpoint only for the specified tax year range; for current tax year submissions, use the Retrieve a UK Property Business Annual Submission endpoint.
+displayName: Retrieve a Historic FHL UK Property Business Annual Submission
+description: |
+    This endpoint enables you to retrieve the income from adjustments and allowances for
+    a furnished holiday lettings (FHL)
+    UK property business for tax years from 2017-18 to 2021-22.
+    A National Insurance number and tax year must be provided.
+
+    Use this endpoint only for the specified tax year range;
+    for current tax year submissions,
+    use the Retrieve a UK Property Business Annual Submission endpoint.
 (annotations.sandboxData): !include scenarios/default_and_not_found_scenarios.md
 (annotations.scope): "read:self-assessment"
 securedBy: [ sec.oauth_2_0: { scopes: [ "read:self-assessment" ] } ]

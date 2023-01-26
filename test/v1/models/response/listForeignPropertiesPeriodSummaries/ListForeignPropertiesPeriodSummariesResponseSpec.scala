@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +20,7 @@ import mocks.MockAppConfig
 import play.api.libs.json.Json
 import support.UnitSpec
 import v1.models.hateoas.Link
-import v1.models.hateoas.Method.{GET, POST}
+import v1.models.hateoas.Method.{ GET, POST }
 
 class ListForeignPropertiesPeriodSummariesResponseSpec extends UnitSpec with MockAppConfig {
 
@@ -46,9 +46,10 @@ class ListForeignPropertiesPeriodSummariesResponseSpec extends UnitSpec with Moc
         """.stripMargin
       )
 
-      val model = ListForeignPropertiesPeriodSummariesResponse(Seq(
-        SubmissionPeriod("4557ecb5-fd32-48cc-81f5-e6acd1099f3c", "2020-06-22", "2020-06-22")
-      ))
+      val model = ListForeignPropertiesPeriodSummariesResponse(
+        Seq(
+          SubmissionPeriod("4557ecb5-fd32-48cc-81f5-e6acd1099f3c", "2020-06-22", "2020-06-22")
+        ))
 
       ifsJson.as[ListForeignPropertiesPeriodSummariesResponse[SubmissionPeriod]] shouldBe model
     }
@@ -81,10 +82,11 @@ class ListForeignPropertiesPeriodSummariesResponseSpec extends UnitSpec with Moc
         """.stripMargin
       )
 
-      val model = ListForeignPropertiesPeriodSummariesResponse(Seq(
-        SubmissionPeriod("4557ecb5-fd32-48cc-81f5-e6acd1099f3c", "2020-06-22", "2020-06-22"),
-        SubmissionPeriod("4557ecb5-fd32-48cc-81f5-e6acd1099f3d", "2020-08-22", "2020-08-22")
-      ))
+      val model = ListForeignPropertiesPeriodSummariesResponse(
+        Seq(
+          SubmissionPeriod("4557ecb5-fd32-48cc-81f5-e6acd1099f3c", "2020-06-22", "2020-06-22"),
+          SubmissionPeriod("4557ecb5-fd32-48cc-81f5-e6acd1099f3d", "2020-08-22", "2020-08-22")
+        ))
 
       ifsJson.as[ListForeignPropertiesPeriodSummariesResponse[SubmissionPeriod]] shouldBe model
     }
@@ -105,9 +107,10 @@ class ListForeignPropertiesPeriodSummariesResponseSpec extends UnitSpec with Moc
 
   "writes" should {
     "write to JSON" in {
-      val model = ListForeignPropertiesPeriodSummariesResponse(Seq(
-        SubmissionPeriod("4557ecb5-fd32-48cc-81f5-e6acd1099f3c", "2020-06-22", "2020-06-22")
-      ))
+      val model = ListForeignPropertiesPeriodSummariesResponse(
+        Seq(
+          SubmissionPeriod("4557ecb5-fd32-48cc-81f5-e6acd1099f3c", "2020-06-22", "2020-06-22")
+        ))
 
       val mtdJson = Json.parse(
         """
@@ -128,13 +131,14 @@ class ListForeignPropertiesPeriodSummariesResponseSpec extends UnitSpec with Moc
   }
 
   "Links Factory" should {
-    val nino = "mynino"
-    val businessId = "mysubmissionid"
+    val nino         = "mynino"
+    val businessId   = "mysubmissionid"
     val submissionId = "mysubmissionid"
 
     "expose the correct top level links for list" in {
       MockAppConfig.apiGatewayContext.returns("my/context").anyNumberOfTimes
-      ListForeignPropertiesPeriodSummariesResponse.LinksFactory.links(mockAppConfig, ListForeignPropertiesPeriodSummariesHateoasData(nino, businessId)) shouldBe
+      ListForeignPropertiesPeriodSummariesResponse.LinksFactory.links(mockAppConfig,
+                                                                      ListForeignPropertiesPeriodSummariesHateoasData(nino, businessId)) shouldBe
         Seq(
           Link(s"/my/context/$nino/$businessId/period", GET, "self"),
           Link(s"/my/context/$nino/$businessId/period", POST, "create-property-period-summary")
@@ -143,8 +147,9 @@ class ListForeignPropertiesPeriodSummariesResponseSpec extends UnitSpec with Moc
 
     "expose the correct item level links for list" in {
       MockAppConfig.apiGatewayContext.returns("my/context").anyNumberOfTimes
-      ListForeignPropertiesPeriodSummariesResponse.LinksFactory.itemLinks(mockAppConfig, ListForeignPropertiesPeriodSummariesHateoasData(nino, businessId),
-        SubmissionPeriod(submissionId, "", "")) shouldBe
+      ListForeignPropertiesPeriodSummariesResponse.LinksFactory.itemLinks(mockAppConfig,
+                                                                          ListForeignPropertiesPeriodSummariesHateoasData(nino, businessId),
+                                                                          SubmissionPeriod(submissionId, "", "")) shouldBe
         Seq(
           Link(s"/my/context/$nino/$businessId/period/$submissionId", GET, "self")
         )
@@ -153,8 +158,8 @@ class ListForeignPropertiesPeriodSummariesResponseSpec extends UnitSpec with Moc
 
   "Response Functor" should {
     "apply the map function" in {
-      ListForeignPropertiesPeriodSummariesResponse.ResponseFunctor.map(
-        ListForeignPropertiesPeriodSummariesResponse(Seq(1)))(_.toString) shouldBe ListForeignPropertiesPeriodSummariesResponse(Seq("1"))
+      ListForeignPropertiesPeriodSummariesResponse.ResponseFunctor.map(ListForeignPropertiesPeriodSummariesResponse(Seq(1)))(_.toString) shouldBe ListForeignPropertiesPeriodSummariesResponse(
+        Seq("1"))
     }
   }
 }

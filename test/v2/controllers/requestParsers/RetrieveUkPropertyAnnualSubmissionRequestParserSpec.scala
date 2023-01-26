@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,15 +18,15 @@ package v2.controllers.requestParsers
 
 import support.UnitSpec
 import v2.mocks.validators.MockRetrieveUkPropertyAnnualSubmissionValidator
-import v2.models.domain.Nino
-import v2.models.errors.{BadRequestError, BusinessIdFormatError, ErrorWrapper, NinoFormatError}
+import v2.models.domain.{ Nino, TaxYear }
+import v2.models.errors.{ BadRequestError, BusinessIdFormatError, ErrorWrapper, NinoFormatError }
 import v2.models.request.retrieveUkPropertyAnnualSubmission._
 
 class RetrieveUkPropertyAnnualSubmissionRequestParserSpec extends UnitSpec {
 
-  val nino: String = "AA123456B"
-  val businessId: String = "XAIS12345678901"
-  val taxYear: String = "2021-22"
+  val nino: String                   = "AA123456B"
+  val businessId: String             = "XAIS12345678901"
+  val taxYear: String                = "2021-22"
   implicit val correlationId: String = "X-123"
 
   val inputData: RetrieveUkPropertyAnnualSubmissionRawData =
@@ -41,13 +41,14 @@ class RetrieveUkPropertyAnnualSubmissionRequestParserSpec extends UnitSpec {
       "valid request data is supplied" in new Test {
         MockRetrieveUkPropertyAnnualSubmissionValidator.validate(inputData).returns(Nil)
 
-        parser.parseRequest(inputData) shouldBe Right(RetrieveUkPropertyAnnualSubmissionRequest(Nino(nino), businessId, taxYear))
+        parser.parseRequest(inputData) shouldBe Right(RetrieveUkPropertyAnnualSubmissionRequest(Nino(nino), businessId, TaxYear.fromMtd(taxYear)))
       }
     }
 
     "return an ErrorWrapper" when {
       "a single validation error occurs" in new Test {
-        MockRetrieveUkPropertyAnnualSubmissionValidator.validate(inputData)
+        MockRetrieveUkPropertyAnnualSubmissionValidator
+          .validate(inputData)
           .returns(List(NinoFormatError))
 
         parser.parseRequest(inputData) shouldBe
@@ -55,7 +56,8 @@ class RetrieveUkPropertyAnnualSubmissionRequestParserSpec extends UnitSpec {
       }
 
       "multiple validation errors occur" in new Test {
-        MockRetrieveUkPropertyAnnualSubmissionValidator.validate(inputData)
+        MockRetrieveUkPropertyAnnualSubmissionValidator
+          .validate(inputData)
           .returns(List(NinoFormatError, BusinessIdFormatError))
 
         parser.parseRequest(inputData) shouldBe

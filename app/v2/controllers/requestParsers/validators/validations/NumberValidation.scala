@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,7 +23,7 @@ object NumberValidation {
   def validateOptional(field: Option[BigDecimal], path: String, min: BigDecimal = 0, max: BigDecimal = 99999999999.99): List[MtdError] = {
     field match {
       case None        => NoValidationErrors
-      case Some(value) => validate(value, path, min,max)
+      case Some(value) => validate(value, path, min, max)
     }
   }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,9 +18,9 @@ package v2.controllers.requestParsers
 
 import support.UnitSpec
 import v2.mocks.validators.MockRetrieveUkPropertyPeriodSummaryValidator
-import v2.models.domain.Nino
+import v2.models.domain.{ Nino, TaxYear }
 import v2.models.errors._
-import v2.models.request.retrieveUkPropertyPeriodSummary.{RetrieveUkPropertyPeriodSummaryRawData, RetrieveUkPropertyPeriodSummaryRequest}
+import v2.models.request.retrieveUkPropertyPeriodSummary.{ RetrieveUkPropertyPeriodSummaryRawData, RetrieveUkPropertyPeriodSummaryRequest }
 
 class RetrieveUkPropertyPeriodSummaryRequestParserSpec extends UnitSpec {
 
@@ -46,13 +46,15 @@ class RetrieveUkPropertyPeriodSummaryRequestParserSpec extends UnitSpec {
       "valid request data is supplied" in new Test {
         MockRetrieveUkPropertyPeriodSummaryValidator.validate(inputData).returns(Nil)
 
-        parser.parseRequest(inputData) shouldBe Right(RetrieveUkPropertyPeriodSummaryRequest(Nino(nino), businessId, taxYear, submissionId))
+        parser.parseRequest(inputData) shouldBe Right(
+          RetrieveUkPropertyPeriodSummaryRequest(Nino(nino), businessId, TaxYear.fromMtd(taxYear), submissionId))
       }
     }
 
     "return an ErrorWrapper" when {
       "a single validation error occurs" in new Test {
-        MockRetrieveUkPropertyPeriodSummaryValidator.validate(inputData)
+        MockRetrieveUkPropertyPeriodSummaryValidator
+          .validate(inputData)
           .returns(List(NinoFormatError))
 
         parser.parseRequest(inputData) shouldBe
@@ -60,11 +62,15 @@ class RetrieveUkPropertyPeriodSummaryRequestParserSpec extends UnitSpec {
       }
 
       "multiple validation errors occur" in new Test {
-        MockRetrieveUkPropertyPeriodSummaryValidator.validate(inputData)
+        MockRetrieveUkPropertyPeriodSummaryValidator
+          .validate(inputData)
           .returns(List(NinoFormatError, BusinessIdFormatError, TaxYearFormatError, SubmissionIdFormatError))
 
         parser.parseRequest(inputData) shouldBe
-          Left(ErrorWrapper(correlationId, BadRequestError, Some(Seq(NinoFormatError, BusinessIdFormatError, TaxYearFormatError, SubmissionIdFormatError))))
+          Left(
+            ErrorWrapper(correlationId,
+                         BadRequestError,
+                         Some(Seq(NinoFormatError, BusinessIdFormatError, TaxYearFormatError, SubmissionIdFormatError))))
       }
     }
   }

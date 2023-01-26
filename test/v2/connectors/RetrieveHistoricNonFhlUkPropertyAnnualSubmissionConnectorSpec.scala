@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,9 +16,7 @@
 
 package v2.connectors
 
-import mocks.MockAppConfig
 import org.scalamock.handlers.CallHandler
-import v2.mocks.MockHttpClient
 import v2.models.domain.{ Nino, TaxYear }
 import v2.models.errors.{ DownstreamErrorCode, DownstreamErrors }
 import v2.models.outcomes.ResponseWrapper
@@ -66,33 +64,25 @@ class RetrieveHistoricNonFhlUkPropertyAnnualSubmissionConnectorSpec extends Conn
                    annualAllowances: Option[AnnualAllowances]): RetrieveHistoricNonFhlUkPropertyAnnualSubmissionResponse =
     RetrieveHistoricNonFhlUkPropertyAnnualSubmissionResponse(annualAdjustments, annualAllowances)
 
-  class Test extends MockHttpClient with MockAppConfig {
+  trait Test {
+    _: ConnectorTest =>
 
     val connector: RetrieveHistoricNonFhlUkPropertyAnnualSubmissionConnector = new RetrieveHistoricNonFhlUkPropertyAnnualSubmissionConnector(
       http = mockHttpClient,
       appConfig = mockAppConfig
     )
 
-    MockAppConfig.ifsBaseUrl returns baseUrl
-    MockAppConfig.ifsToken returns "ifs-token"
-    MockAppConfig.ifsEnvironment returns "ifs-environment"
-    MockAppConfig.ifsEnvironmentHeaders returns Some(allowedDownstreamHeaders)
-
     def stubHttpResponse(outcome: DownstreamOutcome[RetrieveHistoricNonFhlUkPropertyAnnualSubmissionResponse])
       : CallHandler[Future[DownstreamOutcome[RetrieveHistoricNonFhlUkPropertyAnnualSubmissionResponse]]]#Derived = {
-      MockHttpClient
-        .get(
-          url = s"$baseUrl/income-tax/nino/$nino/uk-properties/other/annual-summaries/$downstreamTaxYear",
-          config = dummyIfsHeaderCarrierConfig,
-          requiredHeaders = requiredIfsHeaders,
-        )
-        .returns(Future.successful(outcome))
+      willGet(
+        url = s"$baseUrl/income-tax/nino/$nino/uk-properties/other/annual-summaries/$downstreamTaxYear"
+      ).returns(Future.successful(outcome))
     }
   }
 
   "retrieve" should {
     "return a valid response" when {
-      "a valid request is supplied" in new Test {
+      "a valid request is supplied" in new IfsTest with Test {
         val response: RetrieveHistoricNonFhlUkPropertyAnnualSubmissionResponse =
           responseWith(Some(annualAdjustments), Some(annualAllowances))
         val outcome: Right[Nothing, ResponseWrapper[RetrieveHistoricNonFhlUkPropertyAnnualSubmissionResponse]] =
@@ -106,7 +96,7 @@ class RetrieveHistoricNonFhlUkPropertyAnnualSubmissionConnectorSpec extends Conn
     }
 
     "return an error as per the spec" when {
-      "an error response received" in new Test {
+      "an error response received" in new IfsTest with Test {
         private val outcome = Left(ResponseWrapper(correlationId, DownstreamErrors.single(DownstreamErrorCode("SOME_ERROR"))))
 
         stubHttpResponse(outcome)

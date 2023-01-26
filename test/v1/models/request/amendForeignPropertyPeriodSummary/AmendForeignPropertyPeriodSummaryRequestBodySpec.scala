@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,51 +18,62 @@ package v1.models.request.amendForeignPropertyPeriodSummary
 
 import play.api.libs.json.Json
 import support.UnitSpec
-import v1.models.request.common.foreignFhlEea.{ForeignFhlEea, ForeignFhlEeaExpenditure, ForeignFhlEeaIncome}
-import v1.models.request.common.foreignPropertyEntry.{ForeignPropertyEntry, ForeignPropertyExpenditure, ForeignPropertyIncome, ForeignPropertyRentIncome}
+import v1.models.request.common.foreignFhlEea.{ ForeignFhlEea, ForeignFhlEeaExpenditure, ForeignFhlEeaIncome }
+import v1.models.request.common.foreignPropertyEntry.{
+  ForeignPropertyEntry,
+  ForeignPropertyExpenditure,
+  ForeignPropertyIncome,
+  ForeignPropertyRentIncome
+}
 import v1.models.utils.JsonErrorValidators
 
 class AmendForeignPropertyPeriodSummaryRequestBodySpec extends UnitSpec with JsonErrorValidators {
 
   val amendForeignPropertyRequestBody = AmendForeignPropertyPeriodSummaryRequestBody(
-    Some(ForeignFhlEea(
-      Some(ForeignFhlEeaIncome(Some(5000.99))),
-      Some(ForeignFhlEeaExpenditure(
-        Some(5000.99),
-        Some(5000.99),
-        Some(5000.99),
-        Some(5000.99),
-        Some(5000.99),
-        Some(5000.99),
-        Some(5000.99),
-        Some(5000.99)
-      ))
-    )),
-    Some(Seq(ForeignPropertyEntry("FRA",
-      Some(ForeignPropertyIncome(
-        Some(ForeignPropertyRentIncome(Some(5000.99))),
-        false,
-        Some(5000.99),
-        Some(5000.99),
-        Some(5000.99),
-        Some(5000.99)
+    Some(
+      ForeignFhlEea(
+        Some(ForeignFhlEeaIncome(Some(5000.99))),
+        Some(
+          ForeignFhlEeaExpenditure(
+            Some(5000.99),
+            Some(5000.99),
+            Some(5000.99),
+            Some(5000.99),
+            Some(5000.99),
+            Some(5000.99),
+            Some(5000.99),
+            Some(5000.99)
+          ))
       )),
-      Some(ForeignPropertyExpenditure(
-        Some(5000.99),
-        Some(5000.99),
-        Some(5000.99),
-        Some(5000.99),
-        Some(5000.99),
-        Some(5000.99),
-        Some(5000.99),
-        Some(5000.99),
-        Some(5000.99),
-        Some(5000.99)
-      ))))
-    ))
+    Some(
+      Seq(ForeignPropertyEntry(
+        "FRA",
+        Some(
+          ForeignPropertyIncome(
+            Some(ForeignPropertyRentIncome(Some(5000.99))),
+            false,
+            Some(5000.99),
+            Some(5000.99),
+            Some(5000.99),
+            Some(5000.99)
+          )),
+        Some(
+          ForeignPropertyExpenditure(
+            Some(5000.99),
+            Some(5000.99),
+            Some(5000.99),
+            Some(5000.99),
+            Some(5000.99),
+            Some(5000.99),
+            Some(5000.99),
+            Some(5000.99),
+            Some(5000.99),
+            Some(5000.99)
+          ))
+      )))
+  )
 
-  val readsJson = Json.parse(
-    """{
+  val readsJson = Json.parse("""{
       |  "foreignFhlEea": {
       |    "income": {
       |      "rentAmount": 5000.99
@@ -107,8 +118,7 @@ class AmendForeignPropertyPeriodSummaryRequestBodySpec extends UnitSpec with Jso
       |  ]
       |}""".stripMargin)
 
-  val writesJson = Json.parse(
-    """{
+  val writesJson = Json.parse("""{
       |  "foreignFhlEea": {
       |    "income": {
       |      "rentAmount": 5000.99

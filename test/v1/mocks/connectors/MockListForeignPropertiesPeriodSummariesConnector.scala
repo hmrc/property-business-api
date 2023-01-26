@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,11 +19,11 @@ package v1.mocks.connectors
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
 import uk.gov.hmrc.http.HeaderCarrier
-import v1.connectors.{IfsOutcome, ListForeignPropertiesPeriodSummariesConnector}
+import v1.connectors.{ IfsOutcome, ListForeignPropertiesPeriodSummariesConnector }
 import v1.models.request.listForeignPropertiesPeriodSummaries.ListForeignPropertiesPeriodSummariesRequest
-import v1.models.response.listForeignPropertiesPeriodSummaries.{ListForeignPropertiesPeriodSummariesResponse, SubmissionPeriod}
+import v1.models.response.listForeignPropertiesPeriodSummaries.{ ListForeignPropertiesPeriodSummariesResponse, SubmissionPeriod }
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.{ ExecutionContext, Future }
 
 trait MockListForeignPropertiesPeriodSummariesConnector extends MockFactory {
 
@@ -31,8 +31,8 @@ trait MockListForeignPropertiesPeriodSummariesConnector extends MockFactory {
 
   object MockListForeignPropertiesConnector {
 
-    def listForeignProperties(requestData: ListForeignPropertiesPeriodSummariesRequest):
-    CallHandler[Future[IfsOutcome[ListForeignPropertiesPeriodSummariesResponse[SubmissionPeriod]]]] = {
+    def listForeignProperties(requestData: ListForeignPropertiesPeriodSummariesRequest)
+      : CallHandler[Future[IfsOutcome[ListForeignPropertiesPeriodSummariesResponse[SubmissionPeriod]]]] = {
       (mockListForeignPropertiesConnector
         .listForeignProperties(_: ListForeignPropertiesPeriodSummariesRequest)(_: HeaderCarrier, _: ExecutionContext, _: String))
         .expects(requestData, *, *, *)

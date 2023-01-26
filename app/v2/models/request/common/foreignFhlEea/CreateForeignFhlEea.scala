@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,10 +17,9 @@
 package v2.models.request.common.foreignFhlEea
 
 import play.api.libs.functional.syntax._
-import play.api.libs.json.{JsPath, Json, Reads, Writes}
+import play.api.libs.json.{ JsPath, Json, Reads, Writes }
 
 case class CreateForeignFhlEea(income: Option[ForeignFhlEeaIncome], expenses: Option[CreateForeignFhlEeaExpenses])
-
 
 object CreateForeignFhlEea {
   implicit val reads: Reads[CreateForeignFhlEea] = Json.reads[CreateForeignFhlEea]
@@ -28,5 +27,5 @@ object CreateForeignFhlEea {
   implicit val writes: Writes[CreateForeignFhlEea] = (
     (JsPath \ "income").writeNullable[ForeignFhlEeaIncome] and
       (JsPath \ "expenses").writeNullable[CreateForeignFhlEeaExpenses]
-    ) (unlift(CreateForeignFhlEea.unapply))
+  )(unlift(CreateForeignFhlEea.unapply))
 }

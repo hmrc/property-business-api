@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,26 +17,25 @@
 package utils
 
 import java.time.Instant
-
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.Configuration
 import play.api.http.Status
 import play.api.http.Status.UNSUPPORTED_MEDIA_TYPE
 import play.api.libs.json.Json
-import play.api.mvc.{AnyContentAsEmpty, RequestHeader}
+import play.api.mvc.{ AnyContentAsEmpty, RequestHeader }
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import support.UnitSpec
 import uk.gov.hmrc.auth.core.InsufficientEnrolments
-import uk.gov.hmrc.http.{HeaderCarrier, JsValidationException, NotFoundException}
+import uk.gov.hmrc.http.{ HeaderCarrier, JsValidationException, NotFoundException }
 import uk.gov.hmrc.play.audit.http.connector.AuditConnector
 import uk.gov.hmrc.play.audit.http.connector.AuditResult.Success
-import uk.gov.hmrc.play.audit.model.DataEvent
+import uk.gov.hmrc.play.audit.model.{ DataEvent, TruncationLog }
 import uk.gov.hmrc.play.bootstrap.config.HttpAuditEvent
 import v1.models.errors._
 
 import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.{ ExecutionContext, Future }
 import scala.util.control.NoStackTrace
 
 class ErrorHandlerSpec extends UnitSpec with GuiceOneAppPerSuite {
@@ -62,15 +61,19 @@ class ErrorHandlerSpec extends UnitSpec with GuiceOneAppPerSuite {
       generatedAt = Instant.now()
     )
 
-    (httpAuditEvent.dataEvent(_: String, _: String, _: RequestHeader, _: Map[String, String])(_: HeaderCarrier)).expects(*, *, *, *, *)
+    (httpAuditEvent
+      .dataEvent(_: String, _: String, _: RequestHeader, _: Map[String, String], _: TruncationLog)(_: HeaderCarrier))
+      .expects(*, *, *, *, *, *)
       .returns(dataEvent)
 
-    (auditConnector.sendEvent(_ : DataEvent)(_: HeaderCarrier, _: ExecutionContext)).expects(*, *, *)
+    (auditConnector
+      .sendEvent(_: DataEvent)(_: HeaderCarrier, _: ExecutionContext))
+      .expects(*, *, *)
       .returns(Future.successful(Success))
 
     val configuration: Configuration = Configuration(
-      "appName" -> "myApp",
-      "bootstrap.errorHandler.warnOnly.statusCodes" -> List.empty,
+      "appName"                                         -> "myApp",
+      "bootstrap.errorHandler.warnOnly.statusCodes"     -> List.empty,
       "bootstrap.errorHandler.suppress4xxErrorMessages" -> false,
       "bootstrap.errorHandler.suppress5xxErrorMessages" -> false
     )
@@ -148,7 +151,8 @@ class ErrorHandlerSpec extends UnitSpec with GuiceOneAppPerSuite {
 
     "return 400 with error body" when {
       "JsValidationException thrown" in new Test() {
-        private val result = handler.onServerError(requestHeader, new JsValidationException("test", "test", classOf[String], "errs") with NoStackTrace)
+        private val result =
+          handler.onServerError(requestHeader, new JsValidationException("test", "test", classOf[String], "errs") with NoStackTrace)
         status(result) shouldBe BAD_REQUEST
 
         contentAsJson(result) shouldBe Json.toJson(BadRequestError)

@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,9 +19,9 @@ package v2.controllers.requestParsers
 import play.api.libs.json.Json
 import support.UnitSpec
 import v2.mocks.validators.MockCreateUkPropertyPeriodSummaryValidator
-import v2.models.domain.Nino
-import v2.models.errors.{BadRequestError, BusinessIdFormatError, ErrorWrapper, NinoFormatError}
-import v2.models.request.common.ukFhlProperty.{UkFhlProperty, UkFhlPropertyIncome}
+import v2.models.domain.{ Nino, TaxYear }
+import v2.models.errors.{ BadRequestError, BusinessIdFormatError, ErrorWrapper, NinoFormatError }
+import v2.models.request.common.ukFhlProperty.{ UkFhlProperty, UkFhlPropertyIncome }
 import v2.models.request.createUkPropertyPeriodSummary._
 
 class CreateUkPropertyPeriodSummaryRequestParserSpec extends UnitSpec {
@@ -70,7 +70,7 @@ class CreateUkPropertyPeriodSummaryRequestParserSpec extends UnitSpec {
         )
 
         parser.parseRequest(inputData) shouldBe
-          Right(CreateUkPropertyPeriodSummaryRequest(Nino(nino), taxYear, businessId, model))
+          Right(CreateUkPropertyPeriodSummaryRequest(Nino(nino), TaxYear.fromMtd(taxYear), businessId, model))
       }
     }
 

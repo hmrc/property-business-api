@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,11 +16,9 @@
 
 package v2.connectors
 
-import mocks.MockAppConfig
 import org.scalamock.handlers.CallHandler
 import v2.connectors.RetrieveUkPropertyAnnualSubmissionConnector._
-import v2.mocks.MockHttpClient
-import v2.models.domain.Nino
+import v2.models.domain.{ Nino, TaxYear }
 import v2.models.errors.{ DownstreamErrorCode, DownstreamErrors }
 import v2.models.outcomes.ResponseWrapper
 import v2.models.request.retrieveUkPropertyAnnualSubmission.RetrieveUkPropertyAnnualSubmissionRequest
@@ -34,13 +32,6 @@ class RetrieveUkPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec {
 
   val nino: String       = "AA123456A"
   val businessId: String = "XAIS12345678910"
-  val taxYear: String    = "2019-20"
-
-  val request: RetrieveUkPropertyAnnualSubmissionRequest = RetrieveUkPropertyAnnualSubmissionRequest(
-    nino = Nino(nino),
-    businessId = businessId,
-    taxYear = taxYear
-  )
 
   val ukFhlProperty: UkFhlProperty       = UkFhlProperty(None, None)
   val ukNonFhlProperty: UkNonFhlProperty = UkNonFhlProperty(None, None)
@@ -48,35 +39,37 @@ class RetrieveUkPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec {
   def responseWith(ukFhlProperty: Option[UkFhlProperty], ukNonFhlProperty: Option[UkNonFhlProperty]): RetrieveUkPropertyAnnualSubmissionResponse =
     RetrieveUkPropertyAnnualSubmissionResponse("2020-01-01", ukFhlProperty, ukNonFhlProperty)
 
-  class Test extends MockHttpClient with MockAppConfig {
+  trait Test {
+    _: ConnectorTest =>
 
     val connector: RetrieveUkPropertyAnnualSubmissionConnector = new RetrieveUkPropertyAnnualSubmissionConnector(
       http = mockHttpClient,
       appConfig = mockAppConfig
     )
 
-    MockAppConfig.ifsBaseUrl returns baseUrl
-    MockAppConfig.ifsToken returns "ifs-token"
-    MockAppConfig.ifsEnvironment returns "ifs-environment"
-    MockAppConfig.ifsEnvironmentHeaders returns Some(allowedDownstreamHeaders)
+    val taxYear: String
+
+    val request: RetrieveUkPropertyAnnualSubmissionRequest = RetrieveUkPropertyAnnualSubmissionRequest(
+      nino = Nino(nino),
+      businessId = businessId,
+      taxYear = TaxYear.fromMtd(taxYear)
+    )
+  }
+
+  trait StandardTest extends TysIfsTest with Test {
 
     def stubHttpResponse(outcome: DownstreamOutcome[RetrieveUkPropertyAnnualSubmissionResponse])
       : CallHandler[Future[DownstreamOutcome[RetrieveUkPropertyAnnualSubmissionResponse]]]#Derived = {
-      MockHttpClient
-        .get(
-          url = s"$baseUrl/income-tax/business/property/annual",
-          config = dummyIfsHeaderCarrierConfig,
-          queryParams = Seq("taxableEntityId" -> nino, "incomeSourceId" -> businessId, "taxYear" -> taxYear),
-          requiredHeaders = requiredIfsHeaders,
-          excludedHeaders = Seq("AnotherHeader" -> "HeaderValue")
-        )
-        .returns(Future.successful(outcome))
+      willGet(
+        url = s"$baseUrl/income-tax/business/property/annual/23-24/$nino/$businessId"
+      ).returns(Future.successful(outcome))
     }
+    lazy val taxYear: String = "2023-24"
   }
 
   "connector" when {
     "response has uk fhl details" must {
-      "return a uk result" in new Test {
+      "return a uk result" in new StandardTest {
         val response: RetrieveUkPropertyAnnualSubmissionResponse = responseWith(ukFhlProperty = Some(ukFhlProperty), ukNonFhlProperty = None)
         val outcome                                              = Right(ResponseWrapper(correlationId, response))
 
@@ -87,7 +80,7 @@ class RetrieveUkPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec {
     }
 
     "response has uk non-fhl details" must {
-      "return a uk result" in new Test {
+      "return a uk result" in new StandardTest {
         val response: RetrieveUkPropertyAnnualSubmissionResponse = responseWith(ukFhlProperty = None, ukNonFhlProperty = Some(ukNonFhlProperty))
         val outcome                                              = Right(ResponseWrapper(correlationId, response))
 
@@ -98,7 +91,7 @@ class RetrieveUkPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec {
     }
 
     "response has uk fhl and non-fhl details" must {
-      "return a uk result" in new Test {
+      "return a uk result" in new StandardTest {
         val response: RetrieveUkPropertyAnnualSubmissionResponse =
           responseWith(ukFhlProperty = Some(ukFhlProperty), ukNonFhlProperty = Some(ukNonFhlProperty))
         val outcome = Right(ResponseWrapper(correlationId, response))
@@ -110,7 +103,7 @@ class RetrieveUkPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec {
     }
 
     "response has no details" must {
-      "return a non-uk result" in new Test {
+      "return a non-uk result" in new StandardTest {
         val response: RetrieveUkPropertyAnnualSubmissionResponse = responseWith(None, None)
         val outcome                                              = Right(ResponseWrapper(correlationId, response))
 
@@ -121,13 +114,30 @@ class RetrieveUkPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec {
     }
 
     "response is an error" must {
-      "return the error" in new Test {
+      "return the error" in new StandardTest {
         val outcome = Left(ResponseWrapper(correlationId, DownstreamErrors.single(DownstreamErrorCode("SOME_ERROR"))))
 
         stubHttpResponse(outcome)
 
         await(connector.retrieveUkProperty(request)) shouldBe
           Left(ResponseWrapper(correlationId, DownstreamErrors.single(DownstreamErrorCode("SOME_ERROR"))))
+      }
+    }
+
+    "request is for a pre-TYS tax year" must {
+      "use the pre-TYS URL" in new IfsTest with Test {
+        lazy val taxYear: String = "2019-20"
+
+        val response: RetrieveUkPropertyAnnualSubmissionResponse =
+          responseWith(Some(ukFhlProperty), ukNonFhlProperty = None)
+        val outcome = Right(ResponseWrapper(correlationId, response))
+
+        willGet(
+          url = s"$baseUrl/income-tax/business/property/annual",
+          parameters = Seq("taxableEntityId" -> nino, "incomeSourceId" -> businessId, "taxYear" -> "2019-20")
+        ).returns(Future.successful(outcome))
+
+        await(connector.retrieveUkProperty(request)) shouldBe Right(ResponseWrapper(correlationId, UkResult(response)))
       }
     }
   }

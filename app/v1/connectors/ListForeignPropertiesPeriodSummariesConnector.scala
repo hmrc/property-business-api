@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,22 +18,21 @@ package v1.connectors
 
 import config.AppConfig
 
-import javax.inject.{Inject, Singleton}
-import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
+import javax.inject.{ Inject, Singleton }
+import uk.gov.hmrc.http.{ HeaderCarrier, HttpClient }
 import v1.connectors.httpparsers.StandardIfsHttpParser._
 import v1.models.request.listForeignPropertiesPeriodSummaries.ListForeignPropertiesPeriodSummariesRequest
-import v1.models.response.listForeignPropertiesPeriodSummaries.{ListForeignPropertiesPeriodSummariesResponse, SubmissionPeriod}
+import v1.models.response.listForeignPropertiesPeriodSummaries.{ ListForeignPropertiesPeriodSummariesResponse, SubmissionPeriod }
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.{ ExecutionContext, Future }
 
 @Singleton
-class ListForeignPropertiesPeriodSummariesConnector @Inject()(val http: HttpClient,
-                                                              val appConfig: AppConfig) extends BaseIfsConnector {
+class ListForeignPropertiesPeriodSummariesConnector @Inject()(val http: HttpClient, val appConfig: AppConfig) extends BaseIfsConnector {
 
   def listForeignProperties(request: ListForeignPropertiesPeriodSummariesRequest)(
-    implicit hc: HeaderCarrier,
-    ec: ExecutionContext,
-    correlationId: String): Future[IfsOutcome[ListForeignPropertiesPeriodSummariesResponse[SubmissionPeriod]]] = {
+      implicit hc: HeaderCarrier,
+      ec: ExecutionContext,
+      correlationId: String): Future[IfsOutcome[ListForeignPropertiesPeriodSummariesResponse[SubmissionPeriod]]] = {
 
     val url = s"income-tax/business/property/${request.nino.nino}/${request.businessId}/period?fromDate=${request.fromDate}&toDate=${request.toDate}"
 

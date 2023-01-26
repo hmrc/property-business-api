@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,9 +16,6 @@
 
 package v2.connectors
 
-import mocks.MockAppConfig
-import uk.gov.hmrc.http.HeaderCarrier
-import v2.mocks.MockHttpClient
 import v2.models.domain.{ Nino, TaxYear }
 import v2.models.outcomes.ResponseWrapper
 import v2.models.request.common.ukPropertyRentARoom.UkPropertyAdjustmentsRentARoom
@@ -42,9 +39,9 @@ class CreateAmendHistoricFhlUkPropertyAnnualSubmissionConnectorSpec extends Conn
     Some(BigDecimal("105.11")),
     Some(BigDecimal("200.11")),
     Some(BigDecimal("120.11")),
-    true,
+    periodOfGraceAdjustment = true,
     Some(BigDecimal("101.11")),
-    false,
+    nonResidentLandlord = false,
     Some(UkPropertyAdjustmentsRentARoom(true))
   )
 
@@ -66,35 +63,23 @@ class CreateAmendHistoricFhlUkPropertyAnnualSubmissionConnectorSpec extends Conn
     body = body
   )
 
-  class Test extends MockHttpClient with MockAppConfig {
+  trait Test {
+    _: ConnectorTest =>
 
     val connector = new CreateAmendHistoricFhlUkPropertyAnnualSubmissionConnector(
       http = mockHttpClient,
       appConfig = mockAppConfig
     )
-
-    MockAppConfig.ifsBaseUrl returns baseUrl
-    MockAppConfig.ifsToken returns "ifs-token"
-    MockAppConfig.ifsEnvironment returns "ifs-environment"
-    MockAppConfig.ifsEnvironmentHeaders returns Some(allowedDownstreamHeaders)
   }
 
   "connector" must {
-    "put a body and return a 204" in new Test {
+    "put a body and return a 204" in new IfsTest with Test {
       private val outcome = Right(ResponseWrapper(correlationId, CreateAmendHistoricFhlUkPropertyAnnualSubmissionResponse(None)))
 
-      implicit val hc: HeaderCarrier                   = HeaderCarrier(otherHeaders = otherHeaders ++ Seq("Content-Type" -> "application/json"))
-      val requiredIfsHeadersPut: Seq[(String, String)] = requiredIfsHeaders ++ Seq("Content-Type" -> "application/json")
-
-      MockHttpClient
-        .put(
-          url = s"$baseUrl/income-tax/nino/$nino/uk-properties/furnished-holiday-lettings/annual-summaries/$downstreamTaxYear",
-          config = dummyIfsHeaderCarrierConfig,
-          body = body,
-          requiredHeaders = requiredIfsHeadersPut,
-          excludedHeaders = Seq("AnotherHeader" -> "HeaderValue")
-        )
-        .returns(Future.successful(outcome))
+      willPut(
+        url = s"$baseUrl/income-tax/nino/$nino/uk-properties/furnished-holiday-lettings/annual-summaries/$downstreamTaxYear",
+        body = body
+      ).returns(Future.successful(outcome))
 
       await(connector.amend(request)) shouldBe outcome
 

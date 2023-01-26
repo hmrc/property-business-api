@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,10 +22,10 @@ import uk.gov.hmrc.http.HeaderCarrier
 import v2.mocks.MockIdGenerator
 import v2.mocks.hateoas.MockHateoasFactory
 import v2.mocks.requestParsers.MockRetrieveForeignPropertyAnnualSubmissionRequestParser
-import v2.mocks.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService, MockRetrieveForeignPropertyAnnualSubmissionService}
-import v2.models.domain.Nino
+import v2.mocks.services.{ MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService, MockRetrieveForeignPropertyAnnualSubmissionService }
+import v2.models.domain.{ Nino, TaxYear }
 import v2.models.errors._
-import v2.models.hateoas.{HateoasWrapper, Link}
+import v2.models.hateoas.{ HateoasWrapper, Link }
 import v2.models.hateoas.Method.GET
 import v2.models.outcomes.ResponseWrapper
 import v2.models.request.retrieveForeignPropertyAnnualSubmission._
@@ -37,7 +37,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class RetrieveForeignPropertyAnnualSubmissionControllerSpec
-  extends ControllerBaseSpec
+    extends ControllerBaseSpec
     with MockEnrolmentsAuthService
     with MockMtdIdLookupService
     with MockRetrieveForeignPropertyAnnualSubmissionService
@@ -46,9 +46,9 @@ class RetrieveForeignPropertyAnnualSubmissionControllerSpec
     with MockAuditService
     with MockIdGenerator {
 
-  private val nino = "AA123456A"
-  private val businessId = "XAIS12345678910"
-  private val taxYear = "2020-21"
+  private val nino          = "AA123456A"
+  private val businessId    = "XAIS12345678910"
+  private val taxYear       = "2020-21"
   private val correlationId = "X-123"
 
   trait Test {
@@ -69,52 +69,59 @@ class RetrieveForeignPropertyAnnualSubmissionControllerSpec
     MockIdGenerator.getCorrelationId.returns(correlationId)
   }
 
-  private val rawData = RetrieveForeignPropertyAnnualSubmissionRawData(nino, businessId, taxYear)
-  private val requestData = RetrieveForeignPropertyAnnualSubmissionRequest(Nino(nino), businessId, taxYear)
+  private val rawData     = RetrieveForeignPropertyAnnualSubmissionRawData(nino, businessId, taxYear)
+  private val requestData = RetrieveForeignPropertyAnnualSubmissionRequest(Nino(nino), businessId, TaxYear.fromMtd(taxYear))
 
   private val testHateoasLink = Link(href = s"Individuals/business/property/foreign/$nino/$businessId/annual/$taxYear", method = GET, rel = "self")
 
   private val foreignFhlEeaEntry = ForeignFhlEeaEntry(
-    Some(ForeignFhlEeaAdjustments(
-      Some(5000.99),
-      Some(5000.99),
-      Some(true)
-    )),
-    Some(ForeignFhlEeaAllowances(
-      Some(5000.99),
-      Some(5000.99),
-      Some(5000.99),
-      Some(5000.99),
-      Some(5000.99)
-    ))
+    Some(
+      ForeignFhlEeaAdjustments(
+        Some(5000.99),
+        Some(5000.99),
+        Some(true)
+      )),
+    Some(
+      ForeignFhlEeaAllowances(
+        Some(5000.99),
+        Some(5000.99),
+        Some(5000.99),
+        Some(5000.99),
+        Some(5000.99)
+      ))
   )
 
   private val foreignPropertyEntry = ForeignPropertyEntry(
     "FRA",
-    Some(ForeignPropertyAdjustments(
-      Some(5000.99),
-      Some(5000.99)
-    )),
-    Some(ForeignPropertyAllowances(
-      Some(100.25),
-      Some(100.25),
-      Some(100.25),
-      Some(100.25),
-      Some(100.25),
-      Some(100.25),
-      Some(100.25),
-      Some(Seq(StructuredBuildingAllowance(
-        3545.12,
-        Some(FirstYear(
-          "2020-03-29",
-          3453.34
-        )),
-        Building(
-          Some("Building Name"),
-          Some("12"),
-          "TF3 4GH"
-        )
-      )))))
+    Some(
+      ForeignPropertyAdjustments(
+        Some(5000.99),
+        Some(5000.99)
+      )),
+    Some(
+      ForeignPropertyAllowances(
+        Some(100.25),
+        Some(100.25),
+        Some(100.25),
+        Some(100.25),
+        Some(100.25),
+        Some(100.25),
+        Some(100.25),
+        Some(
+          Seq(
+            StructuredBuildingAllowance(
+              3545.12,
+              Some(FirstYear(
+                "2020-03-29",
+                3453.34
+              )),
+              Building(
+                Some("Building Name"),
+                Some("12"),
+                "TF3 4GH"
+              )
+            )))
+      ))
   )
 
   val responseBody: RetrieveForeignPropertyAnnualSubmissionResponse = RetrieveForeignPropertyAnnualSubmissionResponse(

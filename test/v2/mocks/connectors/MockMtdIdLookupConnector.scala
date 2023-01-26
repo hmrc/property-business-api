@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,17 +19,19 @@ package v2.mocks.connectors
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
 import uk.gov.hmrc.http.HeaderCarrier
-import v2.connectors.{MtdIdLookupConnector, MtdIdLookupOutcome}
+import v2.connectors.{ MtdIdLookupConnector, MtdIdLookupOutcome }
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.{ ExecutionContext, Future }
 
 trait MockMtdIdLookupConnector extends MockFactory {
 
   val mockMtdIdLookupConnector: MtdIdLookupConnector = mock[MtdIdLookupConnector]
 
   object MockedMtdIdLookupConnector {
+
     def lookup(nino: String): CallHandler[Future[MtdIdLookupOutcome]] = {
-      (mockMtdIdLookupConnector.getMtdId(_: String)(_: HeaderCarrier, _: ExecutionContext))
+      (mockMtdIdLookupConnector
+        .getMtdId(_: String)(_: HeaderCarrier, _: ExecutionContext))
         .expects(nino, *, *)
     }
   }

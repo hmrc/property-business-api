@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -54,7 +54,8 @@ class DeleteHistoricUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec wit
           RuleHistoricTaxYearNotSupportedError)
       }
       "multiple format errors are made" in {
-        validator.validate(DeleteHistoricUkPropertyAnnualSubmissionRawData("ABC", "21-22", propertyType)) shouldBe List(NinoFormatError, TaxYearFormatError)
+        validator.validate(DeleteHistoricUkPropertyAnnualSubmissionRawData("ABC", "21-22", propertyType)) shouldBe List(NinoFormatError,
+                                                                                                                        TaxYearFormatError)
       }
     }
   }

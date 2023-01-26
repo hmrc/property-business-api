@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,87 +33,101 @@ import scala.concurrent.Future
 
 class CreateForeignPropertyPeriodSummaryServiceSpec extends UnitSpec {
 
-  val businessId: String = "XAIS12345678910"
-  val nino: String = "AA123456A"
+  val businessId: String             = "XAIS12345678910"
+  val nino: String                   = "AA123456A"
   implicit val correlationId: String = "X-123"
 
   private val regularExpensesBody = CreateForeignPropertyPeriodSummaryRequestBody(
     "2020-01-01",
     "2020-01-31",
-    Some(ForeignFhlEea(
-      Some(ForeignFhlEeaIncome(Some(5000.99))),
-      Some(ForeignFhlEeaExpenditure(
-        Some(5000.99),
-        Some(5000.99),
-        Some(5000.99),
-        Some(5000.99),
-        Some(5000.99),
-        Some(5000.99),
-        Some(5000.99),
-        None
-      ))
-    )),
-    Some(Seq(ForeignPropertyEntry("FRA",
-      Some(ForeignPropertyIncome(
-        Some(ForeignPropertyRentIncome(Some(5000.99))),
-        false,
-        Some(5000.99),
-        Some(5000.99),
-        Some(5000.99),
-        Some(5000.99)
+    Some(
+      ForeignFhlEea(
+        Some(ForeignFhlEeaIncome(Some(5000.99))),
+        Some(
+          ForeignFhlEeaExpenditure(
+            Some(5000.99),
+            Some(5000.99),
+            Some(5000.99),
+            Some(5000.99),
+            Some(5000.99),
+            Some(5000.99),
+            Some(5000.99),
+            None
+          ))
       )),
-      Some(ForeignPropertyExpenditure(
-        Some(5000.99),
-        Some(5000.99),
-        Some(5000.99),
-        Some(5000.99),
-        Some(5000.99),
-        Some(5000.99),
-        Some(5000.99),
-        Some(5000.99),
-        Some(5000.99),
-        None
-      ))))
-    ))
+    Some(
+      Seq(ForeignPropertyEntry(
+        "FRA",
+        Some(
+          ForeignPropertyIncome(
+            Some(ForeignPropertyRentIncome(Some(5000.99))),
+            false,
+            Some(5000.99),
+            Some(5000.99),
+            Some(5000.99),
+            Some(5000.99)
+          )),
+        Some(
+          ForeignPropertyExpenditure(
+            Some(5000.99),
+            Some(5000.99),
+            Some(5000.99),
+            Some(5000.99),
+            Some(5000.99),
+            Some(5000.99),
+            Some(5000.99),
+            Some(5000.99),
+            Some(5000.99),
+            None
+          ))
+      )))
+  )
 
   private val consolidatedExpensesBody = CreateForeignPropertyPeriodSummaryRequestBody(
     "2020-01-01",
     "2020-01-31",
-    Some(ForeignFhlEea(
-      Some(ForeignFhlEeaIncome(Some(5000.99))),
-      Some(ForeignFhlEeaExpenditure(
-        None,
-        None,
-        None,
-        None,
-        None,
-        None,
-        None,
-        Some(3653.35)
-      ))
-    )),
-    Some(Seq(ForeignPropertyEntry("FRA",
-      Some(ForeignPropertyIncome(
-        Some(ForeignPropertyRentIncome(Some(5000.99))),
-        false,
-        Some(5000.99),
-        Some(5000.99),
-        Some(5000.99),
-        Some(5000.99)
+    Some(
+      ForeignFhlEea(
+        Some(ForeignFhlEeaIncome(Some(5000.99))),
+        Some(
+          ForeignFhlEeaExpenditure(
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            Some(3653.35)
+          ))
       )),
-      Some(ForeignPropertyExpenditure(
-        None,
-        None,
-        None,
-        None,
-        None,
-        None,
-        None,
-        None,
-        None,
-        Some(235324.23)
-      ))))
-    ))
+    Some(
+      Seq(ForeignPropertyEntry(
+        "FRA",
+        Some(
+          ForeignPropertyIncome(
+            Some(ForeignPropertyRentIncome(Some(5000.99))),
+            false,
+            Some(5000.99),
+            Some(5000.99),
+            Some(5000.99),
+            Some(5000.99)
+          )),
+        Some(
+          ForeignPropertyExpenditure(
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            Some(235324.23)
+          ))
+      )))
+  )
 
   val response: CreateForeignPropertyPeriodSummaryResponse = CreateForeignPropertyPeriodSummaryResponse(
     submissionId = "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
@@ -124,7 +138,7 @@ class CreateForeignPropertyPeriodSummaryServiceSpec extends UnitSpec {
   private val consolidatedExpensesRequestData = CreateForeignPropertyPeriodSummaryRequest(Nino(nino), businessId, consolidatedExpensesBody)
 
   trait Test extends MockCreateForeignPropertyPeriodSummaryConnector {
-    implicit val hc: HeaderCarrier = HeaderCarrier()
+    implicit val hc: HeaderCarrier              = HeaderCarrier()
     implicit val logContext: EndpointLogContext = EndpointLogContext("c", "ep")
 
     val service = new CreateForeignPropertyPeriodSummaryService(
@@ -135,13 +149,15 @@ class CreateForeignPropertyPeriodSummaryServiceSpec extends UnitSpec {
   "service" should {
     "service call successful" when {
       "return mapped result for regular Expenses" in new Test {
-        MockCreateForeignPropertyConnector.createForeignProperty(regularExpensesRequestData)
+        MockCreateForeignPropertyConnector
+          .createForeignProperty(regularExpensesRequestData)
           .returns(Future.successful(Right(ResponseWrapper(correlationId, response))))
 
         await(service.createForeignProperty(regularExpensesRequestData)) shouldBe Right(ResponseWrapper(correlationId, response))
       }
       "return mapped result for consolidated Expenses" in new Test {
-        MockCreateForeignPropertyConnector.createForeignProperty(consolidatedExpensesRequestData)
+        MockCreateForeignPropertyConnector
+          .createForeignProperty(consolidatedExpensesRequestData)
           .returns(Future.successful(Right(ResponseWrapper(correlationId, response))))
 
         await(service.createForeignProperty(consolidatedExpensesRequestData)) shouldBe Right(ResponseWrapper(correlationId, response))
@@ -155,7 +171,8 @@ class CreateForeignPropertyPeriodSummaryServiceSpec extends UnitSpec {
       def serviceError(ifsErrorCode: String, error: MtdError): Unit =
         s"a $ifsErrorCode error is returned from the service" in new Test {
 
-          MockCreateForeignPropertyConnector.createForeignProperty(regularExpensesRequestData)
+          MockCreateForeignPropertyConnector
+            .createForeignProperty(regularExpensesRequestData)
             .returns(Future.successful(Left(ResponseWrapper(correlationId, IfsErrors.single(IfsErrorCode(ifsErrorCode))))))
 
           await(service.createForeignProperty(regularExpensesRequestData)) shouldBe Left(ErrorWrapper(correlationId, error))
@@ -163,17 +180,17 @@ class CreateForeignPropertyPeriodSummaryServiceSpec extends UnitSpec {
 
       val input = Seq(
         "INVALID_TAXABLE_ENTITY_ID" -> NinoFormatError,
-        "INVALID_INCOMESOURCEID" -> BusinessIdFormatError,
-        "INVALID_PAYLOAD" -> DownstreamError,
-        "INVALID_CORRELATIONID" -> DownstreamError,
-        "OVERLAPS_IN_PERIOD" -> RuleOverlappingPeriodError,
-        "NOT_ALIGN_PERIOD" -> RuleMisalignedPeriodError,
-        "GAPS_IN_PERIOD" -> RuleNotContiguousPeriodError,
-        "INVALID_DATE_RANGE" -> RuleToDateBeforeFromDateError,
-        "DUPLICATE_SUBMISSION" -> RuleDuplicateSubmission,
-        "INCOME_SOURCE_NOT_FOUND" -> NotFoundError,
-        "SERVER_ERROR" -> DownstreamError,
-        "SERVICE_UNAVAILABLE" -> DownstreamError
+        "INVALID_INCOMESOURCEID"    -> BusinessIdFormatError,
+        "INVALID_PAYLOAD"           -> DownstreamError,
+        "INVALID_CORRELATIONID"     -> DownstreamError,
+        "OVERLAPS_IN_PERIOD"        -> RuleOverlappingPeriodError,
+        "NOT_ALIGN_PERIOD"          -> RuleMisalignedPeriodError,
+        "GAPS_IN_PERIOD"            -> RuleNotContiguousPeriodError,
+        "INVALID_DATE_RANGE"        -> RuleToDateBeforeFromDateError,
+        "DUPLICATE_SUBMISSION"      -> RuleDuplicateSubmission,
+        "INCOME_SOURCE_NOT_FOUND"   -> NotFoundError,
+        "SERVER_ERROR"              -> DownstreamError,
+        "SERVICE_UNAVAILABLE"       -> DownstreamError
       )
 
       input.foreach(args => (serviceError _).tupled(args))

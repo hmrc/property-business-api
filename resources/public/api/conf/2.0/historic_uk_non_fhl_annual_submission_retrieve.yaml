@@ -1,4 +1,4 @@
-summary: Retrieve a Historic Non-FHL UK Property Business Annual Submission [test only]
+summary: Retrieve a Historic Non-FHL UK Property Business Annual Submission
 description: |
   This endpoint allows a developer to retrieve the income and expenses for a UK property business, that occurred between tax year. A National Insurance number and tax year are required.
 

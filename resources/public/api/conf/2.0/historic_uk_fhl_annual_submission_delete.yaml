@@ -1,4 +1,4 @@
-summary: Delete a Historic FHL UK Property Business Annual Submission [test only]
+summary: Delete a Historic FHL UK Property Business Annual Submission
 description: |
   This endpoint enables you to delete the income from adjustments and allowances for a furnished holiday lettings (FHL) UK property business for tax years from 2017-18 to 2021-22. A National Insurance number and tax year must be provided. Use this endpoint only for the specified tax year range; for current tax year submissions, use the Delete a UK Property Business Annual Submission endpoint.
   

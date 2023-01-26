@@ -181,6 +181,26 @@ components:
       value:
         code: FORMAT_COUNTRY_CODE
 
+    missingFromDate:
+      description: The From date parameter is missing.
+      value:
+        code: MISSING_FROM_DATE
+
+    missingToDate:
+      description: The To date parameter is missing.
+      value:
+        code: MISSING_TO_DATE
+
+    invalidSubmissionEndDate:
+      description: The submitted end date must be the end of the quarter.
+      value:
+        code: RULE_INVALID_SUBMISSION_END_DATE
+
+    invalidSubmissionPeriod:
+      description: Property income and expenses submissions cannot be more than 10 days before the end of the Period.
+      value:
+        code: RULE_INVALID_SUBMISSION_PERIOD
+
     ruleTaxYearNotSupportedMinMax:
       description: |
         The specified tax year is not supported.

@@ -1,21 +1,18 @@
-<<<<<<< HEAD
-
 openapi: "3.0.3"
 
 info:
   version: "2.0"
   title: Property Business (MTD)
-  description: >
+  description: |
     # Overview
 
     This API allows developers to:
-
-    - list, retrieve, create or amend an individual’s UK Property Income & Expenses Period Summaries
-    - retrieve, create, amend or delete an individual’s UK Property Annual Submissions
-    - list, retrieve, create or amend an individual’s Foreign Property Income & Expenses Period Summaries
-    - retrieve, create, amend or delete an individual’s Foreign Property Annual Submissions
-    - retrieve, create, amend or delete an individual’s Historic FHL and Non-FHL UK Property Business Annual Submissions
-    - list, retrieve, create or amend an individual’s Historic FHL and Non-FHL UK Property Business Income & Expenses Period Summaries
+      - list, retrieve, create or amend an individual’s UK Property Income & Expenses Period Summaries
+      - retrieve, create, amend or delete an individual’s UK Property Annual Submissions
+      - list, retrieve, create or amend an individual’s Foreign Property Income & Expenses Period Summaries
+      - retrieve, create, amend or delete an individual’s Foreign Property Annual Submissions
+      - retrieve, create, amend or delete an individual’s Historic FHL and Non-FHL UK Property Business Annual Submissions
+      - list, retrieve, create or amend an individual’s Historic FHL and Non-FHL UK Property Business Income & Expenses Period Summaries
 
     For information on how to connect to this API [see the Income Tax MTD end-to-end service guide](https://developer.service.hmrc.gov.uk/guides/income-tax-mtd-end-to-end-service-guide/).
 
@@ -33,7 +30,6 @@ info:
 
     [Check the data you need to send](/guides/fraud-prevention/). You can also use the [Test API](/api-documentation/docs/api/service/txm-fph-validator-api/1.0) during initial development and as part of your quality assurance checks.
 
-
     # Versioning
 
     When an API changes in a way that is backwards-incompatible, we increase the version number of the API. 
@@ -44,10 +40,9 @@ info:
     # Errors
 
     We use standard HTTP status codes to show whether an API request succeeded or not. They are usually in the range:
-
-    - 200 to 299 if it succeeded, including code 202 if it was accepted by an API that needs to wait for further action
-    - 400 to 499 if it failed because of a client error by your application
-    - 500 to 599 if it failed because of an error on our server
+      - 200 to 299 if it succeeded, including code 202 if it was accepted by an API that needs to wait for further action
+      - 400 to 499 if it failed because of a client error by your application
+      - 500 to 599 if it failed because of an error on our server
 
     Errors specific to each API are shown in the Endpoints section, under Response. See our [reference guide](https://developer.service.hmrc.gov.uk/api-documentation/docs/reference-guide#errors) for more on errors.
 
@@ -62,7 +57,8 @@ info:
 
     Where possible, multiple errors will be returned with `INVALID_REQUEST` in the following format:<br>
 
-    `{
+    ```
+    {
         "code": "INVALID_REQUEST",
         "message": "Invalid request",
         "errors": [
@@ -75,27 +71,27 @@ info:
                 "message": "The provided FieldName is invalid"
             }
         ]
-    }`
-
+    }
+    ```
 
     Where it is possible for the same error to be returned multiple times, `message` will describe the expected format and `paths` will show the fields which are invalid.<br>
 
-
     Where arrays are submitted a number indicates the object in the array sequence, for example, `/arrayName/1/fieldName`.
-
 
     An example with single error:<br>
 
-    `{
+    ```
+    {
         "code": "FORMAT_STRING_NAME",
         "message": "The provided field is not valid",
         "paths": [ "/arrayName/0/fieldName" ]
-    }`
-
+    }
+    ```
 
     An example with multiple errors:<br>
 
-    `{
+    ```
+    {
         "code": "INVALID_REQUEST",
         "message": "Invalid request",
         "errors": [
@@ -110,22 +106,19 @@ info:
                "paths": [ "/arrayName/0/fieldName3", "/arrayName/1/fieldName3" ]
             }
         ]
-    }`
-
+    }
+    ```
 
     # Changelog
     The changelog is available at: [income-tax-mtd-changelog](https://github.com/hmrc/income-tax-mtd-changelog).
-
     
     # Support
-    
-    * Raise non-technical or platform-related issues with the [Software Development Support Team (SDST)](https://developer.service.hmrc.gov.uk/developer/support).
-    * Raise technical issues on the [income-tax-mtd-changelog](https://github.com/hmrc/income-tax-mtd-changelog/issues) GitHub page.
+      - Raise non-technical or platform-related issues with the [Software Development Support Team (SDST)](https://developer.service.hmrc.gov.uk/developer/support).
+      - Raise technical issues on the [income-tax-mtd-changelog](https://github.com/hmrc/income-tax-mtd-changelog/issues) GitHub page.
 
 
     # Testing
-
-    You can use the sandbox environment to <a href="/api-documentation/docs/testing">test this API</a>. You can use the <a href="/api-documentation/docs/api/service/api-platform-test-user/1.0">Create Test User API</a> or it's frontend service to create test users.
+    You can use the sandbox environment to <a href="/api-documentation/docs/testing">test this API</a>. You can use the <a href="/api-documentation/docs/api/service/api-platform-test-user/1.0">Create Test User API</a> or its frontend service to create test users.
 
     It may not be possible to test all scenarios in the sandbox. You can test some scenarios by passing the `Gov-Test-Scenario` header. Documentation for each endpoint includes a **Test data** section, which explains the scenarios that you can simulate using the `Gov-Test-Scenario` header.
 
@@ -185,19 +178,19 @@ paths:
   /individuals/business/property/uk/annual/non-furnished-holiday-lettings/{nino}/{taxYear}:
     $ref: "./historic_uk_non_fhl_annual_submission.yaml"
   /individuals/business/property/uk/period/furnished-holiday-lettings/{nino}:
-    $ref: "./historic_uk_fhl_period_summary_list_and_create.yaml"
+    $ref: "./historic_uk_fhl_period_summary_1.yaml"
   /individuals/business/property/uk/period/furnished-holiday-lettings/{nino}/{periodId}:
-    $ref: "./historic_uk_fhl_period_summary_amend_and_retrieve.yaml"
+    $ref: "./historic_uk_fhl_period_summary_2.yaml"
   /individuals/business/property/uk/period/non-furnished-holiday-lettings/{nino}:
-    $ref: "./historic_uk_non_fhl_period_summary_list_and_create.yaml"
+    $ref: "./historic_uk_non_fhl_period_summary_1.yaml"
   /individuals/business/property/uk/period/non-furnished-holiday-lettings/{nino}/{periodId}:
-    $ref: "./historic_uk_non_fhl_period_summary_retrieve.yaml"
+    $ref: "./historic_uk_non_fhl_period_summary_2.yaml"
   /individuals/business/property/foreign/{nino}/{businessId}/period/{taxYear}:
     $ref: "./foreign_property_period_summary_create.yaml"
   /individuals/business/property/foreign/{nino}/{businessId}/period/{taxYear}/{submissionId}:
-    $ref: "./foreign_property_period_summary_amend_and_retrieve.yaml"
+    $ref: "./foreign_property_period_summary.yaml"
   /individuals/business/property/foreign/{nino}/{businessId}/annual/{taxYear}:
-    $ref: "./foreign_property_annual_submission_amend_and_retrieve.yaml"
+    $ref: "./foreign_property_annual_submission.yaml"
   /individuals/business/property/{nino}/{businessId}/annual/{taxYear}:
     $ref: "./uk_foreign_property_annual_submission_deletion.yaml"
   /individuals/business/property/{nino}/{businessId}/period/{taxYear}:

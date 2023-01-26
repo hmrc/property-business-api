@@ -1,6 +1,12 @@
-summary: Create a Historic Non-FHL UK Property Income & Expenses Period Summary
+summary: Amend a Historic Non-FHL UK Property Income & Expenses Period Summary
 description: |
-  This endpoint enables you to create a periodic submission of income and expenses for a non-furnished holiday lettings (non-FHL) UK property business for tax years from 2017-18 to 2021-22. A National Insurance number must be provided. For a periodic submission for the current tax year, use the Create a UK Property Income & Expenses Period Summary endpoint.
+  This endpoint allows you to amend income and expenses for
+    a non-FHL UK property business
+    and make periodic submission for tax years from 2017-18 to 2021-22.
+    A National Insurance number and a period ID must be provided.
+
+    To amend submissions for the current tax year,
+    use the Amend a UK Property Income & Expenses Period Summary endpoint.
 
   ### Test data
   <p>Scenario simulations using <code>Gov-Test-Scenario</code> headers is only available in the sandbox environment.</p>
@@ -20,26 +26,6 @@ description: |
               <td><p>NOT_FOUND</p></td>
               <td><p>Simulates the scenario where the given resource could not be found.</p></td>
           </tr>
-          <tr>
-              <td><p>OVERLAPPING</p></td>
-              <td><p>Simulates the scenario where the period summary overlaps with an existing period summary.</p></td>
-          </tr>
-          <tr>
-              <td><p>MISALIGNED</p></td>
-              <td><p>Simulates the scenario where the period summary isn't within the accounting period.</p></td>
-          </tr>
-          <tr>
-              <td><p>NOT_CONTIGUOUS</p></td>
-              <td><p>Simulates the scenario where the period summaries are not contiguous.</p></td>
-          </tr>
-          <tr>
-              <td><p>DUPLICATE_SUBMISSION</p></td>
-              <td><p>Simulates the scenario where a summary has already been submitted for the specified period.</p></td>
-          </tr>
-          <tr>
-              <td><p>TYPE_OF_BUSINESS_INCORRECT</p></td>
-              <td><p>Simulates the scenario where the supplied Business ID does not represent a foreign property business.</p></td>
-          </tr>        
       </tbody>
   </table>
 
@@ -49,6 +35,7 @@ tags:
 
 parameters:
   - $ref: './common/pathParameters.yaml#/components/parameters/nino'
+  - $ref: './common/pathParameters.yaml#/components/parameters/periodId'
   - $ref: './common/headers.yaml#/components/parameters/acceptHeader'
   - $ref: './common/headers.yaml#/components/parameters/contentTypeJson'
   - $ref: './common/headers.yaml#/components/parameters/authorizationWriteScopeHeader'
@@ -139,3 +126,4 @@ responses:
         examples:
           MATCHING_RESOURCE_NOT_FOUND:
             $ref: './common/errors.yaml#/components/examples/notFound'
+

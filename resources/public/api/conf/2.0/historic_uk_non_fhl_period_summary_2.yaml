@@ -1,0 +1,13 @@
+get:
+  $ref: "./historic_uk_non_fhl_period_summary_retrieve.yaml"
+  summary: Retrieve a Historic Non-FHL UK Property Income & Expenses Period Summary
+  security:
+    - User-Restricted:
+        - read:self-assessment
+
+put:
+  $ref: "./historic_uk_non_fhl_period_summary_amend.yaml"
+  summary: Amend a Historic Non-FHL UK Property Income & Expenses Period Summary
+  security:
+    - User-Restricted:
+        - write:self-assessment

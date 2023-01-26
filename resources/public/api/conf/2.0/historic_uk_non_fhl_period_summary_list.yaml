@@ -1,4 +1,4 @@
-summary: List Historic Non-FHL UK Property Income & Expenses Period Summary [test only]
+summary: List Historic Non-FHL UK Property Income & Expenses Period Summary
 description: |
   This endpoint enables you to list the income and expenses for a non-furnished holiday lettings (non-FHL) UK property business for a specific period for tax years from 2017-18 to 2021-22.. A National Insurance number is required. To list summaries from the current tax year, use the List Property Income & Expenses Period Summaries endpoint.
   
@@ -22,7 +22,6 @@ description: |
           </tr>
       </tbody>
   </table>
-
 
 
 tags:

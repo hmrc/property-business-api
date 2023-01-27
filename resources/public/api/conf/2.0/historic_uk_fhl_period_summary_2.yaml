@@ -1,6 +1,6 @@
 put:
   $ref: "./historic_uk_fhl_period_summary_amend.yaml"
-  summary: Amend a Historic FHL UK property Income & Expenses Period Summary
+  summary: Amend a Historic FHL UK Property Income & Expenses Period Summary
   security:
     - User-Restricted:
         - write:self-assessment

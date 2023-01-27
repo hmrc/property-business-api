@@ -1,6 +1,6 @@
 get:
   $ref: "./historic_uk_fhl_period_summary_list.yaml"
-  summary: List Historic FHL UK property Income & Expenses Period Summaries
+  summary: List Historic FHL UK Property Income & Expenses Period Summaries
   security:
     - User-Restricted:
         - read:self-assessment

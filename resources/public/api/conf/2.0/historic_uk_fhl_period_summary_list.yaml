@@ -1,4 +1,4 @@
-summary: List Historic FHL UK property Income & Expenses Period Summary
+summary: List Historic FHL UK property Income & Expenses Period Summaries
 description: |
   This endpoint enables you to list the income and expenses for a furnished holiday lettings (FHL) UK property business for a specific period within tax years 2017-18 to 2021-22. A National Insurance number is required. To list summaries from the current tax year, use the List Property Income & Expenses Period Summaries endpoint.
 
@@ -52,6 +52,16 @@ responses:
             description: Default Example
             value:
               $ref: './examples/historic_uk_fhl_period_summary_list/response.json'
+
+  "400":
+    description: Bad request
+    content:
+      application/json:
+        schema:
+          $ref: './schemas/error-response.yaml'
+        examples:
+          FORMAT_NINO:
+            $ref: './common/errors.yaml#/components/examples/formatNino'
 
   "403":
     description: Forbidden

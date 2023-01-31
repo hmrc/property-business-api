@@ -17,28 +17,12 @@ description: |
               <td><p>Simulates the scenario where no data is found.</p></td>
           </tr>
           <tr>
-              <td><p>UK_PROPERTY</p></td>
-              <td><p>Simulates the scenario with FHL and Non-FHL properties.</p></td>
+              <td><p>NOT_FOUND</p></td>
+              <td><p>Simulates the scenario where no data is found.</p></td>
           </tr>
           <tr>
-              <td><p>UK_FHL_FULL_EXPENSES</p></td>
-              <td><p>Simulates the scenario of a FHL property with full expenses.</p></td>
-          </tr>
-          <tr>
-              <td><p>UK_FHL_CONSOLIDATED</p></td>
-              <td><p>Simulates the scenario of a FHL property with consolidated expenses.</p></td>
-          </tr>
-          <tr>
-              <td><p>UK_NON_FHL_FULL_EXPENSES</p></td>
-              <td><p>Simulates the scenario of a Non-FHL property with full expenses.</p></td>
-          </tr>
-          <tr>
-              <td><p>UK_NON_FHL_CONSOLIDATED</p></td>
-              <td><p>Simulates the scenario of a Non-FHL property with consolidated expenses.</p></td>
-          </tr>
-          <tr>
-              <td><p>FOREIGN_PROPERTY</p></td>
-              <td><p>Simulates the scenario where the type of business is incorrect.</p></td>
+              <td><p>CONSOLIDATED</p></td>
+              <td><p>Simulates the scenario where success response containing consolidated expenses is found.</p></td>
           </tr>
       </tbody>
   </table>

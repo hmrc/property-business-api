@@ -1,0 +1,118 @@
+summary: Retrieve a Foreign Property Income & Expenses Period Summary
+description: |
+  This endpoint allows a developer to retrieve the income and expenses for a Foreign Property business, using the submission ID for either or both of Furnished Holiday Lettings (FHL) in the European Economic Area (EEA) and all other Foreign Property submissions. A National Insurance number, business ID, and tax year are required.
+
+  ### Test data
+  <p>Scenario simulations using <code>Gov-Test-Scenario</code> headers is only available in the sandbox environment.</p>
+  <table>
+      <thead>
+          <tr>
+              <th>Header Value (Gov-Test-Scenario)</th>
+              <th>Scenario</th>
+          </tr>
+      </thead>
+      <tbody>
+          <tr>
+              <td><p>N/A - DEFAULT</p></td>
+              <td><p>Simulates the scenario where no data is found.</p></td>
+          </tr>
+          <tr>
+              <td><p>FOREIGN_PROPERTY</p></td>
+              <td><p>Simulates success response with Foreign FHL and Non-FHL properties.</p></td>
+          </tr>
+          <tr>
+              <td><p>FOREIGN_FHL_FULL_EXPENSES</p></td>
+              <td><p>Simulates success response with Foreign FHL property.</p></td>
+          </tr>
+          <tr>
+              <td><p>FOREIGN_FHL_CONSOLIDATED</p></td>
+              <td><p>Simulates the scenario of a FHL property with consolidated expenses.</p></td>
+          </tr>
+          <tr>
+              <td><p>FOREIGN_NON_FHL_FULL_EXPENSES</p></td>
+              <td><p>Simulates success response with Foreign Non-FHL property.</p></td>
+          </tr>
+          <tr>
+              <td><p>FOREIGN_NON_FHL_CONSOLIDATED</p></td>
+              <td><p>Simulates the scenario of a Non-FHL property with consolidated expenses.</p></td>
+          </tr>
+          <tr>
+              <td><p>UK_PROPERTY</p></td>
+              <td><p>Simulates the scenario where wrong business type is returned.</p></td>
+          </tr>
+      </tbody>
+  </table>
+
+
+tags:
+  - Foreign Property Income & Expenses Period Summary
+
+parameters:
+  - $ref: './common/pathParameters.yaml#/components/parameters/nino'
+  - $ref: './common/pathParameters.yaml#/components/parameters/businessId'
+  - $ref: './common/pathParameters.yaml#/components/parameters/taxYear'
+  - $ref: './common/pathParameters.yaml#/components/parameters/submissionId'
+  - $ref: './common/headers.yaml#/components/parameters/acceptHeader'
+  - $ref: './common/headers.yaml#/components/parameters/authorizationReadScopeHeader'
+  - $ref: './common/headers.yaml#/components/parameters/testScenarioHeader'
+
+security:
+  - User-Restricted:
+      - read:self-assessment
+
+responses:
+  "200":
+    description: Success
+    headers:
+      X-CorrelationId:
+        $ref: './common/headers.yaml#/components/parameters/correlationId'
+    content:
+      application/json:
+        schema:
+          $ref: './schemas/foreign_property_period_summary_retrieve/response.json'
+        examples:
+          full-expenses-response:
+            description: Full Expenses response
+            value:
+              $ref: './examples/foreign_property_period_summary_retrieve/response.json'
+          consolidated-expenses-response:
+            description: Consolidated Expenses response
+            value:
+              $ref: './examples/foreign_property_period_summary_retrieve/consolidated_response.json'
+
+  "400":
+    description: Bad request
+    content:
+      application/json:
+        schema:
+          $ref: './schemas/error-response.yaml'
+        examples:
+          FORMAT_NINO:
+            $ref: './common/errors.yaml#/components/examples/formatNino'
+          FORMAT_BUSINESS_ID:
+            $ref: './common/errors.yaml#/components/examples/formatBusinessId'
+          FORMAT_SUBMISSION_ID:
+            $ref: './common/errors.yaml#/components/examples/formatSubmissionId' 
+          RULE_TYPE_OF_BUSINESS_INCORRECT:
+            $ref: './common/errors.yaml#/components/examples/ruleTypeOfBusinessIncorrectForeign' 
+
+  "403":
+    description: Forbidden
+    content:
+      application/json:
+        schema:
+          $ref: './schemas/error-response.yaml'
+        examples:
+          CLIENT_OR_AGENT_NOT_AUTHORISED:
+            $ref: './common/errors.yaml#/components/examples/clientOrAgentNotAuthorised'
+
+  "404":
+    description: Not Found
+    content:
+      application/json:
+        schema:
+          $ref: './schemas/error-response.yaml'
+        examples:
+          MATCHING_RESOURCE_NOT_FOUND:
+            $ref: './common/errors.yaml#/components/examples/notFound'
+

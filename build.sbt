@@ -15,10 +15,13 @@
  */
 
 import sbt._
+import sbt.complete.DefaultParsers._
 import uk.gov.hmrc.DefaultBuildSettings.{ addTestReportOption, defaultSettings }
 import uk.gov.hmrc.sbtdistributables.SbtDistributablesPlugin.publishingSettings
 import uk.gov.hmrc.versioning.SbtGitVersioning.autoImport.majorVersion
 import uk.gov.hmrc.SbtAutoBuildPlugin
+import scala.sys.process._
+import play.sbt.PlayImport.PlayKeys._
 
 val appName = "property-business-api"
 
@@ -59,4 +62,5 @@ lazy val microservice = Project(appName, file("."))
     resolvers += Resolver.jcenterRepo
   )
   .settings(PlayKeys.playDefaultPort := 7798)
+
 

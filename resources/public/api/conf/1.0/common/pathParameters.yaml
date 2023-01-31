@@ -23,7 +23,7 @@ components:
       name: businessId
       in: path
       description: |
-        An identifier for the business, unique to the customer.<p>Must conform to the regular expression `^X[A-Z0-9]{1}IS[0-9]{11}$`
+        An identifier for the business, unique to the customer.
       schema:
         type: string
         pattern: ^X[A-Z0-9]{1}IS[0-9]{11}$
@@ -33,7 +33,7 @@ components:
       name: submissionId
       in: path
       description: |
-        An identifier for the income and expenditure period summary.<p>Must conform to the regular expression `^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$`
+        An identifier for the income and expenditure period summary.
       schema:
         type: string
         pattern: ^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$

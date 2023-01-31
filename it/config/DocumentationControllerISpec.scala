@@ -21,6 +21,10 @@ import play.api.libs.json.{ JsValue, Json }
 import play.api.libs.ws.WSResponse
 import support.V2IntegrationBaseSpec
 
+import io.swagger.v3.parser.OpenAPIV3Parser
+
+import scala.util.Try
+
 class DocumentationControllerISpec extends V2IntegrationBaseSpec {
 
   val apiDefinitionJson: JsValue = Json.parse(
@@ -85,6 +89,23 @@ class DocumentationControllerISpec extends V2IntegrationBaseSpec {
       val response: WSResponse = await(buildRequest("/api/conf/2.0/application.yaml").get())
       response.status shouldBe Status.OK
       response.body[String] should startWith regex ("openapi: .*3.0.3.*")
+    }
+  }
+
+  "an OAS documentation request" must {
+    "return the documentation that passes OAS V3 parser" in {
+      val response: WSResponse = await(buildRequest("/api/conf/1.0/application.yaml").get())
+      response.status shouldBe Status.OK
+
+      val contents = response.body[String]
+      val parserResult = Try(new OpenAPIV3Parser().readContents(contents))
+      parserResult.isSuccess shouldBe true
+
+      val openAPI = Option(parserResult.get.getOpenAPI)
+      openAPI.isEmpty shouldBe false
+      openAPI.get.getOpenapi shouldBe "3.0.3"
+      openAPI.get.getInfo.getTitle shouldBe "Property Business (MTD)"
+      openAPI.get.getInfo.getVersion shouldBe "1.0"
     }
   }
 

@@ -1,0 +1,125 @@
+summary: Amend a Foreign Property Income & Expenditure Period Summary
+description: |
+  This endpoint allows a developer to re-submit the income and expenditure for a foreign property business that occurred between two dates. 
+  This submission is for either or both of Furnished Holiday Letting (FHL) in the European Economic Area (EEA) and all other foreign property submissions. 
+  A National Insurance number, business ID and submission ID are required.
+
+  ### Test data
+  <p>Scenario simulations using Gov-Test-Scenario headers is only available in the sandbox environment.</p>
+  <table>
+    <thead>
+        <tr>
+            <th>Header Value (Gov-Test-Scenario)</th>
+            <th>Scenario</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><p>N/A - DEFAULT</p></td>
+            <td><p>Simulate success response.</p></td>
+        </tr>
+    </tbody>
+    <tbody>
+        <tr>
+            <td><p>NOT_FOUND</p></td>
+            <td><p>Simulates the scenario where the given property could not be found.</p></td>
+        </tr>
+    </tbody>
+    <tbody>
+        <tr>
+            <td><p>INCOME_SOURCE_NOT_FOUND</p></td>
+            <td><p>Simulates the scenario where the given income source id could not be found.</p></td>
+        </tr>
+    </tbody>
+  </table>
+
+tags:
+  - Foreign Property Income & Expenditure Period Summary
+
+parameters:
+  - $ref: './common/pathParameters.yaml#/components/parameters/nino'
+  - $ref: './common/pathParameters.yaml#/components/parameters/businessId'
+  - $ref: './common/pathParameters.yaml#/components/parameters/submissionId'
+  - $ref: './common/headers.yaml#/components/parameters/acceptHeader'
+  - $ref: './common/headers.yaml#/components/parameters/contentTypeJson'
+  - $ref: './common/headers.yaml#/components/parameters/authorizationWriteScopeHeader'
+  - $ref: './common/headers.yaml#/components/parameters/testScenarioHeader'
+
+security:
+  - User-Restricted:
+      - write:self-assessment
+
+requestBody:
+  content:
+    application/json:
+      schema:
+        $ref: './schemas/foreign_property_period_summary_amend/request.json'
+      examples:
+        Full Expenditure Request:
+          description: Full Expenditure Request
+          value:
+            $ref: './examples/foreign_property_period_summary_amend/request.json'
+        Consolidated Expenditure Request:
+          description: Consolidated Expenditure Request
+          value:
+            $ref: './examples/foreign_property_period_summary_amend/consolidated_request.json'
+
+responses:
+  "200":
+    description: Success
+    headers:
+      X-CorrelationId:
+        $ref: './common/headers.yaml#/components/parameters/correlationId'
+    content:
+      application/json:
+        schema:
+          $ref: './schemas/foreign_property_period_summary_amend/response.json'
+        examples:
+          example-response:
+            description: Example Response
+            value:
+              $ref: './examples/foreign_property_period_summary_amend/response.json'
+
+  "400":
+    description: Bad request
+    content:
+      application/json:
+        schema:
+          $ref: './schemas/error-response.yaml'
+        examples:
+          FORMAT_NINO:
+            $ref: './common/errors.yaml#/components/examples/formatNino'
+          FORMAT_BUSINESS_ID:
+            $ref: './common/errors.yaml#/components/examples/formatBusinessId'
+          FORMAT_SUBMISSION_ID:
+            $ref: './common/errors.yaml#/components/examples/formatSubmissionId'
+          FORMAT_COUNTRY_CODE:
+            $ref: './common/errors.yaml#/components/examples/formatCountryCode'
+          FORMAT_VALUE:
+            $ref: './common/errors.yaml#/components/examples/formatValue'
+          RULE_INCORRECT_OR_EMPTY_BODY_SUBMITTED:
+            $ref: './common/errors.yaml#/components/examples/ruleIncorrectOrEmptyBody'
+          RULE_BOTH_EXPENSES_SUPPLIED:
+            $ref: './common/errors.yaml#/components/examples/ruleBothExpensesSupplied'
+          RULE_COUNTRY_CODE:
+            $ref: './common/errors.yaml#/components/examples/ruleCountryCode'
+
+  "403":
+    description: Forbidden
+    content:
+      application/json:
+        schema:
+          $ref: './schemas/error-response.yaml'
+        examples:
+          CLIENT_OR_AGENT_NOT_AUTHORISED:
+            $ref: './common/errors.yaml#/components/examples/clientOrAgentNotAuthorised'
+
+  "404":
+    description: Not Found
+    content:
+      application/json:
+        schema:
+          $ref: './schemas/error-response.yaml'
+        examples:
+          MATCHING_RESOURCE_NOT_FOUND:
+            $ref: './common/errors.yaml#/components/examples/notFound'

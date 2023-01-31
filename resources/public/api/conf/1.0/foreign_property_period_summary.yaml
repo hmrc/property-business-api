@@ -1,0 +1,16 @@
+get:
+  $ref: "./foreign_property_period_summary_list.yaml"
+  summary: List Foreign Property Income & Expenses Period Summaries
+  security:
+    - User-Restricted:
+      - read:self-assessment
+  parameters:
+    - $ref: './common/queryParameters.yaml#/components/parameters/fromDate'
+    - $ref: './common/queryParameters.yaml#/components/parameters/toDate'
+
+post:
+  $ref: "./foreign_property_period_summary_create.yaml"
+  summary: Create a Foreign Property Income & Expenditure Period Summary
+  security:
+    - User-Restricted:
+        - write:self-assessment

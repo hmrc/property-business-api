@@ -80,6 +80,7 @@ class AmendUkPropertyAnnualSubmissionController @Inject()(val authService: Enrol
         val resCorrelationId = errorWrapper.correlationId
         val result           = errorResult(errorWrapper).withApiHeaders(resCorrelationId)
 
+
         auditSubmission(
           GenericAuditDetail(request.userDetails, rawData, correlationId, AuditResponse(result.header.status, Left(errorWrapper.auditErrors))))
 

@@ -1,10 +1,9 @@
 is:
   - headers.acceptJson
-  - headers.contentTypeJson
   - headers.testScenarioHeader
   - errors.formatNino
   - errors.clientOrAgentNotAuthorised
-displayName: List Historic FHL UK Property Income & Expenses Period Summary
+displayName: List Historic FHL UK Property Income & Expenses Period Summaries
 description: |
     This endpoint enables you to list the income and expenses for
     a furnished holiday lettings (FHL)
@@ -14,8 +13,8 @@ description: |
     To list summaries from the current tax year,
     use the List Property Income & Expenses Period Summaries endpoint.
 (annotations.sandboxData): !include scenarios/historic_uk_period_summary_list_scenarios.md
-(annotations.scope): "write:self-assessment"
-securedBy: [ sec.oauth_2_0: { scopes: [ "write:self-assessment" ] } ]
+(annotations.scope): "read:self-assessment"
+securedBy: [ sec.oauth_2_0: { scopes: [ "read:self-assessment" ] } ]
 responses:
   200:
     body:

@@ -1,6 +1,8 @@
 summary: Create a Historic FHL UK Property Income & Expenses Period Summary
 description: |
   This endpoint enables you to create income and expenses for a furnished holiday lettings (FHL) UK property business and make periodic submissions for tax years from 2017-18 to 2021-22.  A National Insurance number must be provided. Use this endpoint only for the specified tax year range; for current tax year submissions, use the use the Create a UK Property Income & Expenses Period Summary endpoint.
+  At least one of the incomes or expenses must exist in the request.
+  If an income/expenses object exists in the request, at least one field must be populated.
 
   ### Test data
   <p>Scenario simulations using <code>Gov-Test-Scenario</code> headers is only available in the sandbox environment.</p>

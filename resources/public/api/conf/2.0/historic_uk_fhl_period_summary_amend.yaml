@@ -8,6 +8,9 @@ description: |
   To amend submissions for the current tax year,
   use the Amend a UK Property Income & Expenses Period Summary endpoint.
 
+  At least one of the incomes or expenses must exist in the request.
+  If an income/expenses object exists in the request, at least one field must be populated.
+
   ### Test data
   <p>Scenario simulations using <code>Gov-Test-Scenario</code> headers is only available in the sandbox environment.</p>
   <table>

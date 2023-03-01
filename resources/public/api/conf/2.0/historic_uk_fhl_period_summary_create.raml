@@ -26,6 +26,9 @@ description: |
     Use this endpoint only for the specified tax year range;
     for current tax year submissions,
     use the use the Create a UK Property Income & Expenses Period Summary endpoint.
+
+    At least one of the incomes or expenses must exist in the request.
+    If an income/expenses object exists in the request, at least one field must be populated.
 (annotations.sandboxData): !include scenarios/historic_uk_period_summary_create_scenarios.md
 (annotations.scope): "write:self-assessment"
 securedBy: [ sec.oauth_2_0: { scopes: [ "write:self-assessment" ] } ]

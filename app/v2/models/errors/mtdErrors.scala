@@ -113,10 +113,11 @@ object NotFoundError extends MtdError("MATCHING_RESOURCE_NOT_FOUND", "Matching r
 object SubmissionIdNotFoundError extends MtdError("SUBMISSION_ID_NOT_FOUND", "Submission ID not found")
 
 object RuleInvalidSubmissionPeriodError
-    extends MtdError("RULE_INVALID_SUBMISSION_PERIOD", "Property income and expenses submissions cannot be more than 10 days before the end of the Period")
+    extends MtdError("RULE_INVALID_SUBMISSION_PERIOD",
+                     "Property income and expenses submissions cannot be more than 10 days before the end of the Period")
 
 object RuleInvalidSubmissionEndDateError extends MtdError("RULE_INVALID_SUBMISSION_END_DATE", "The submitted end date must be the end of the quarter")
-object InternalError extends MtdError("INTERNAL_SERVER_ERROR", "An internal server error occurred")
+object InternalError                     extends MtdError("INTERNAL_SERVER_ERROR", "An internal server error occurred")
 
 object BadRequestError extends MtdError("INVALID_REQUEST", "Invalid request")
 
@@ -128,6 +129,13 @@ object ServiceUnavailableError extends MtdError("SERVICE_UNAVAILABLE", "Internal
 object UnauthorisedError extends MtdError("CLIENT_OR_AGENT_NOT_AUTHORISED", "The client and/or agent is not authorised")
 
 object InvalidBearerTokenError extends MtdError("UNAUTHORIZED", "Bearer token is missing or not authorized")
+
+//Stub errors
+object RuleIncorrectGovTestScenarioError
+    extends MtdError(
+      code = "RULE_INCORRECT_GOV_TEST_SCENARIO",
+      message = "The Gov-Test-Scenario was not found"
+    )
 
 // Accept header Errors
 object InvalidAcceptHeaderError extends MtdError("ACCEPT_HEADER_INVALID", "The accept header is missing or invalid")

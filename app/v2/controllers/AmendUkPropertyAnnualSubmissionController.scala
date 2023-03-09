@@ -109,7 +109,8 @@ class AmendUkPropertyAnnualSubmissionController @Inject()(val authService: Enrol
             RulePropertyIncomeAllowanceError,
             RuleBuildingNameNumberError,
             DateFormatError,
-            StringFormatError
+            StringFormatError,
+            RuleIncorrectGovTestScenarioError
           ) =>
         BadRequest(Json.toJson(errorWrapper))
       case InternalError => InternalServerError(Json.toJson(errorWrapper))

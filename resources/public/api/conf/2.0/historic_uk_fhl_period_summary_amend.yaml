@@ -95,7 +95,9 @@ responses:
           RULE_BOTH_EXPENSES_SUPPLIED:
             $ref: './common/errors.yaml#/components/examples/ruleBothExpensesSupplied' 
           RULE_INCORRECT_OR_EMPTY_BODY_SUBMITTED:
-            $ref: './common/errors.yaml#/components/examples/ruleIncorrectOrEmptyBody' 
+            $ref: './common/errors.yaml#/components/examples/ruleIncorrectOrEmptyBody'
+          RULE_INCORRECT_GOV_TEST_SCENARIO:
+            $ref: './common/errors.yaml#/components/examples/ruleIncorrectGovTestScenario'
 
 
   "403":

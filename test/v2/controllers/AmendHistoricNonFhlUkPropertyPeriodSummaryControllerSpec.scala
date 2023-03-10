@@ -16,35 +16,20 @@
 
 package v2.controllers
 
-import play.api.libs.json.{ JsObject, Json }
+import play.api.libs.json.{JsObject, Json}
 import play.api.mvc.Result
 import uk.gov.hmrc.http.HeaderCarrier
 import v2.mocks.MockIdGenerator
 import v2.mocks.hateoas.MockHateoasFactory
 import v2.mocks.requestParsers.MockAmendHistoricNonFhlUkPiePeriodSummaryRequestParser
-import v2.mocks.services.{ MockAmendHistoricNonFhlUkPropertyPeriodSummaryService, MockEnrolmentsAuthService, MockMtdIdLookupService, MockAuditService }
-import v2.models.domain.{ Nino, PeriodId }
-import v2.models.audit.{ AuditError, AuditEvent, AuditResponse, FlattenedGenericAuditDetail }
+import v2.mocks.services.{MockAmendHistoricNonFhlUkPropertyPeriodSummaryService, MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService}
+import v2.models.domain.{Nino, PeriodId}
+import v2.models.audit.{AuditError, AuditEvent, AuditResponse, FlattenedGenericAuditDetail}
 import v2.models.auth.UserDetails
-import v2.models.errors.{
-  BadRequestError,
-  ErrorWrapper,
-  MtdError,
-  NinoFormatError,
-  NotFoundError,
-  PeriodIdFormatError,
-  InternalError,
-  RuleBothExpensesSuppliedError,
-  RuleIncorrectOrEmptyBodyError,
-  ValueFormatError
-}
+import v2.models.errors.{BadRequestError, ErrorWrapper, InternalError, MtdError, NinoFormatError, NotFoundError, PeriodIdFormatError, RuleBothExpensesSuppliedError, RuleIncorrectGovTestScenarioError, RuleIncorrectOrEmptyBodyError, ValueFormatError}
 import v2.models.hateoas.HateoasWrapper
 import v2.models.outcomes.ResponseWrapper
-import v2.models.request.amendHistoricNonFhlUkPiePeriodSummary.{
-  AmendHistoricNonFhlUkPiePeriodSummaryRawData,
-  AmendHistoricNonFhlUkPiePeriodSummaryRequest,
-  AmendHistoricNonFhlUkPiePeriodSummaryRequestBody
-}
+import v2.models.request.amendHistoricNonFhlUkPiePeriodSummary.{AmendHistoricNonFhlUkPiePeriodSummaryRawData, AmendHistoricNonFhlUkPiePeriodSummaryRequest, AmendHistoricNonFhlUkPiePeriodSummaryRequestBody}
 import v2.models.response.amendHistoricNonFhlUkPiePeriodSummary.AmendHistoricNonFhlUkPropertyPeriodSummaryHateoasData
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -191,7 +176,9 @@ class AmendHistoricNonFhlUkPropertyPeriodSummaryControllerSpec
         (PeriodIdFormatError, BAD_REQUEST),
         (NotFoundError, NOT_FOUND),
         (RuleBothExpensesSuppliedError, BAD_REQUEST),
-        (InternalError, INTERNAL_SERVER_ERROR)
+        (InternalError, INTERNAL_SERVER_ERROR),
+        (RuleIncorrectGovTestScenarioError, BAD_REQUEST)
+
       )
 
       input.foreach(args => (serviceErrors _).tupled(args))

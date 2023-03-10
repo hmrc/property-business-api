@@ -92,7 +92,8 @@ class RetrieveUkPropertyPeriodSummaryController @Inject()(val authService: Enrol
             TaxYearFormatError,
             RuleTaxYearRangeInvalidError,
             RuleTaxYearNotSupportedError,
-            RuleTypeOfBusinessIncorrectError
+            RuleTypeOfBusinessIncorrectError,
+            RuleIncorrectGovTestScenarioError
           ) =>
         BadRequest(Json.toJson(errorWrapper))
       case NotFoundError => NotFound(Json.toJson(errorWrapper))

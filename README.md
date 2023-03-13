@@ -31,7 +31,7 @@ To view documentation locally ensure the Property Business API is running, and r
 `./run_local_with_dependencies.sh`
 
 Then go to http://localhost:9680/api-documentation/docs/openapi/preview and use this port and version:
-`http://localhost:7798/api/conf/1.0/application.yaml`
+`http://localhost:7798/api/conf/2.0/application.yaml`
 
 ## Changelog
 

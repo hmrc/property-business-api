@@ -135,6 +135,7 @@ class CreateHistoricNonFHLUkPiePeriodSummaryController @Inject()(val authService
             RuleOverlappingPeriodError,
             RuleNotContiguousPeriodError,
             RuleHistoricTaxYearNotSupportedError,
+            RuleIncorrectGovTestScenarioError
           ) =>
         BadRequest(Json.toJson(errorWrapper))
       case NotFoundError                           => NotFound(Json.toJson(errorWrapper))

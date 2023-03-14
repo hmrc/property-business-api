@@ -84,7 +84,7 @@ class RetrieveHistoricFhlUkPiePeriodSummaryController @Inject()(val authService:
 
   private def errorResult(errorWrapper: ErrorWrapper) = {
     errorWrapper.error match {
-      case NinoFormatError | PeriodIdFormatError | BadRequestError =>
+      case NinoFormatError | PeriodIdFormatError | BadRequestError | RuleIncorrectGovTestScenarioError =>
         BadRequest(Json.toJson(errorWrapper))
       case InternalError => InternalServerError(Json.toJson(errorWrapper))
       case NotFoundError => NotFound(Json.toJson(errorWrapper))

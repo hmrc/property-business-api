@@ -125,7 +125,9 @@ class DeleteHistoricUkPropertyAnnualSubmissionController @Inject()(val authServi
                                         TaxYearFormatError,
                                         RuleHistoricTaxYearNotSupportedError,
                                         RuleTaxYearRangeInvalidError,
-                                        BadRequestError) =>
+                                        BadRequestError,
+            RuleIncorrectGovTestScenarioError
+          ) =>
         BadRequest(Json.toJson(errorWrapper))
       case InternalError => InternalServerError(Json.toJson(errorWrapper))
       case NotFoundError => NotFound(Json.toJson(errorWrapper))

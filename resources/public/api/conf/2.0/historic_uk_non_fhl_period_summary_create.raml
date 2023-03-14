@@ -27,6 +27,9 @@ description: |
 
     For a periodic submission for the current tax year,
     use the Create a UK Property Income & Expenses Period Summary endpoint.
+
+    At least one of the incomes or expenses must exist in the request.
+    If an income/expenses object exists in the request, at least one field must be populated.
 securedBy: [ sec.oauth_2_0: { scopes: [ "write:self-assessment" ] } ]
 body:
   application/json:

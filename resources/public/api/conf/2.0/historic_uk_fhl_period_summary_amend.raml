@@ -19,7 +19,7 @@ description: |
 
     At least one of the incomes or expenses must exist in the request.
     If an income/expenses object exists in the request, at least one field must be populated.
-(annotations.sandboxData): !include scenarios/default_and_not_found_scenarios.md
+(annotations.sandboxData): !include scenarios/default_not_found_stateful_scenarios.md
 (annotations.scope): "write:self-assessment"
 securedBy: [ sec.oauth_2_0: { scopes: [ "write:self-assessment" ] } ]
 body:

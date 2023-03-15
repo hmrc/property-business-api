@@ -95,7 +95,7 @@ class ListHistoricUkPropertyPeriodSummariesController @Inject()(val authService:
 
   private def errorResult(errorWrapper: ErrorWrapper)(implicit endpointLogContext: EndpointLogContext) =
     errorWrapper.error match {
-      case _ if errorWrapper.containsAnyOf(NinoFormatError, BadRequestError) =>
+      case _ if errorWrapper.containsAnyOf(NinoFormatError, BadRequestError, RuleIncorrectGovTestScenarioError) =>
         BadRequest(Json.toJson(errorWrapper))
       case InternalError => InternalServerError(Json.toJson(errorWrapper))
       case _             => unhandledError(errorWrapper)

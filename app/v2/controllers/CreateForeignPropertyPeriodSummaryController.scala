@@ -123,7 +123,8 @@ class CreateForeignPropertyPeriodSummaryController @Inject()(val authService: En
             CountryCodeFormatError,
             RuleCountryCodeError,
             RuleDuplicateCountryCodeError,
-            RuleTypeOfBusinessIncorrectError
+            RuleTypeOfBusinessIncorrectError,
+            RuleIncorrectGovTestScenarioError
           ) =>
         BadRequest(Json.toJson(errorWrapper))
       case NotFoundError => NotFound(Json.toJson(errorWrapper))

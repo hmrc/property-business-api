@@ -443,7 +443,8 @@ class CreateUkPropertyPeriodSummaryControllerSpec
           (RuleMisalignedPeriodError, BAD_REQUEST),
           (RuleNotContiguousPeriodError, BAD_REQUEST),
           (RuleToDateBeforeFromDateError, BAD_REQUEST),
-          (RuleDuplicateSubmissionError, BAD_REQUEST)
+          (RuleDuplicateSubmissionError, BAD_REQUEST),
+          (RuleIncorrectGovTestScenarioError, BAD_REQUEST)
         )
 
         input.foreach(args => (serviceErrors _).tupled(args))

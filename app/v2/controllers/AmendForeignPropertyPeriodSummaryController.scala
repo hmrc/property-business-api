@@ -110,7 +110,8 @@ class AmendForeignPropertyPeriodSummaryController @Inject()(val authService: Enr
             ValueFormatError,
             RuleBothExpensesSuppliedError,
             RuleIncorrectOrEmptyBodyError,
-            RuleDuplicateCountryCodeError
+            RuleDuplicateCountryCodeError,
+            RuleIncorrectGovTestScenarioError
           ) =>
         BadRequest(Json.toJson(errorWrapper))
       case NotFoundError => NotFound(Json.toJson(errorWrapper))

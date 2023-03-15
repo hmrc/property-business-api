@@ -388,7 +388,8 @@ class AmendForeignPropertyPeriodSummaryControllerSpec
           (RuleTypeOfBusinessIncorrectError, BAD_REQUEST),
           (RuleTaxYearNotSupportedError, BAD_REQUEST),
           (RuleDuplicateCountryCodeError, BAD_REQUEST),
-          (InternalError, INTERNAL_SERVER_ERROR)
+          (InternalError, INTERNAL_SERVER_ERROR),
+          (RuleIncorrectGovTestScenarioError, BAD_REQUEST)
         )
 
         input.foreach(args => (serviceErrors _).tupled(args))

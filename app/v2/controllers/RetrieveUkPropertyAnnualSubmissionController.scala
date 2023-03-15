@@ -81,7 +81,8 @@ class RetrieveUkPropertyAnnualSubmissionController @Inject()(val authService: En
       }.merge
     }
 
-  private def errorResult(errorWrapper: ErrorWrapper) =
+  private def errorResult(errorWrapper: ErrorWrapper) = {
+
     errorWrapper.error match {
       case _
           if errorWrapper.containsAnyOf(
@@ -91,12 +92,14 @@ class RetrieveUkPropertyAnnualSubmissionController @Inject()(val authService: En
             RuleTaxYearRangeInvalidError,
             RuleTaxYearNotSupportedError,
             RuleTypeOfBusinessIncorrectError,
-            BadRequestError
+            BadRequestError,
+            RuleIncorrectGovTestScenarioError
           ) =>
         BadRequest(Json.toJson(errorWrapper))
       case InternalError => InternalServerError(Json.toJson(errorWrapper))
       case NotFoundError => NotFound(Json.toJson(errorWrapper))
       case _             => unhandledError(errorWrapper)
     }
+  }
 
 }

@@ -93,7 +93,8 @@ class RetrieveForeignPropertyPeriodSummaryController @Inject()(val authService: 
             SubmissionIdFormatError,
             RuleTaxYearRangeInvalidError,
             RuleTypeOfBusinessIncorrectError,
-            RuleTaxYearNotSupportedError
+            RuleTaxYearNotSupportedError,
+            RuleIncorrectGovTestScenarioError
           ) =>
         BadRequest(Json.toJson(errorWrapper))
 

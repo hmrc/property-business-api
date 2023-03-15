@@ -91,7 +91,8 @@ class DeletePropertyAnnualSubmissionController @Inject()(val authService: Enrolm
             TaxYearFormatError,
             RuleTaxYearNotSupportedError,
             RuleTaxYearRangeInvalidError,
-            BadRequestError
+            BadRequestError,
+            RuleIncorrectGovTestScenarioError
           ) =>
         BadRequest(Json.toJson(errorWrapper))
 

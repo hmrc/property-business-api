@@ -92,7 +92,8 @@ class RetrieveForeignPropertyAnnualSubmissionController @Inject()(val authServic
             RuleTaxYearNotSupportedError,
             RuleTaxYearRangeInvalidError,
             RuleTypeOfBusinessIncorrectError,
-            BadRequestError
+            BadRequestError,
+            RuleIncorrectGovTestScenarioError
           ) =>
         BadRequest(Json.toJson(errorWrapper))
       case InternalError => InternalServerError(Json.toJson(errorWrapper))

@@ -88,7 +88,8 @@ class ListPropertyPeriodSummariesController @Inject()(val authService: Enrolment
             BusinessIdFormatError,
             TaxYearFormatError,
             RuleTaxYearRangeInvalidError,
-            RuleTaxYearNotSupportedError
+            RuleTaxYearNotSupportedError,
+            RuleIncorrectGovTestScenarioError
           ) =>
         BadRequest(Json.toJson(errorWrapper))
       case NotFoundError => NotFound(Json.toJson(errorWrapper))

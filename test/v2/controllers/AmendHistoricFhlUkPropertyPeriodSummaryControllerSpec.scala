@@ -176,7 +176,8 @@ class AmendHistoricFhlUkPropertyPeriodSummaryControllerSpec
             (PeriodIdFormatError, BAD_REQUEST),
             (NotFoundError, NOT_FOUND),
             (RuleBothExpensesSuppliedError, BAD_REQUEST),
-            (InternalError, INTERNAL_SERVER_ERROR)
+            (InternalError, INTERNAL_SERVER_ERROR),
+            (RuleIncorrectGovTestScenarioError, BAD_REQUEST)
           )
 
           input.foreach(args => (serviceErrors _).tupled(args))

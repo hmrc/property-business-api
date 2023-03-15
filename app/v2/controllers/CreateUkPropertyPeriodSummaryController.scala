@@ -102,7 +102,7 @@ class CreateUkPropertyPeriodSummaryController @Inject()(val authService: Enrolme
           MtdErrorWithCode(ValueFormatError.code) | MtdErrorWithCode(RuleBothExpensesSuppliedError.code) | RuleToDateBeforeFromDateError |
           RuleOverlappingPeriodError | RuleMisalignedPeriodError | RuleNotContiguousPeriodError |
           MtdErrorWithCode(RuleIncorrectOrEmptyBodyError.code) | RuleDuplicateSubmissionError | RuleInvalidSubmissionPeriodError |
-          RuleInvalidSubmissionEndDateError =>
+          RuleIncorrectGovTestScenarioError | RuleInvalidSubmissionEndDateError =>
         BadRequest(Json.toJson(errorWrapper))
       case NotFoundError => NotFound(Json.toJson(errorWrapper))
       case InternalError => InternalServerError(Json.toJson(errorWrapper))

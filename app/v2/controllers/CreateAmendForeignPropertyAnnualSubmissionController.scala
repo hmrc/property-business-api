@@ -114,7 +114,8 @@ class CreateAmendForeignPropertyAnnualSubmissionController @Inject()(val authSer
             RuleTaxYearRangeInvalidError,
             RuleCountryCodeError,
             RuleDuplicateCountryCodeError,
-            RulePropertyIncomeAllowanceError
+            RulePropertyIncomeAllowanceError,
+            RuleIncorrectGovTestScenarioError
           ) =>
         BadRequest(Json.toJson(errorWrapper))
       case InternalError => InternalServerError(Json.toJson(errorWrapper))

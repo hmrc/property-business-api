@@ -118,7 +118,8 @@ class AmendHistoricNonFhlUkPropertyPeriodSummaryController @Inject()(
           PeriodIdFormatError,
           RuleBothExpensesSuppliedError,
           ValueFormatError,
-          RuleIncorrectOrEmptyBodyError
+          RuleIncorrectOrEmptyBodyError,
+          RuleIncorrectGovTestScenarioError
         ) =>
       BadRequest(Json.toJson(errorWrapper))
     case NotFoundError => NotFound(Json.toJson(errorWrapper))

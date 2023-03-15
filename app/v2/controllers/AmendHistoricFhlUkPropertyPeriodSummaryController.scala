@@ -120,7 +120,8 @@ class AmendHistoricFhlUkPropertyPeriodSummaryController @Inject()(val authServic
           PeriodIdFormatError,
           RuleBothExpensesSuppliedError,
           ValueFormatError,
-          RuleIncorrectOrEmptyBodyError
+          RuleIncorrectOrEmptyBodyError,
+          RuleIncorrectGovTestScenarioError
         ) =>
       BadRequest(Json.toJson(errorWrapper))
     case NotFoundError => NotFound(Json.toJson(errorWrapper))

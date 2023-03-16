@@ -132,7 +132,9 @@ post:
             RULE_NOT_CONTIGUOUS_PERIOD:
               $ref: './common/errors.yaml#/components/examples/ruleNotContiguousPeriod' 
             RULE_DUPLICATE_SUBMISSION:
-              $ref: './common/errors.yaml#/components/examples/ruleDuplicateSubmission' 
+              $ref: './common/errors.yaml#/components/examples/ruleDuplicateSubmission'
+            RULE_INCORRECT_GOV_TEST_SCENARIO:
+              $ref: './common/errors.yaml#/components/examples/ruleIncorrectGovTestScenario'
 
     "403":
       description: Forbidden

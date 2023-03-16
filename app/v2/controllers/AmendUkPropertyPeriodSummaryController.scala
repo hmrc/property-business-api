@@ -110,6 +110,7 @@ class AmendUkPropertyPeriodSummaryController @Inject()(val authService: Enrolmen
             RuleTaxYearRangeInvalidError,
             RuleTaxYearNotSupportedError,
             RuleTypeOfBusinessIncorrectError,
+            RuleIncorrectGovTestScenarioError
           ) =>
         BadRequest(Json.toJson(errorWrapper))
       case NotFoundError => NotFound(Json.toJson(errorWrapper))

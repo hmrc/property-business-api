@@ -423,7 +423,8 @@ class AmendUkPropertyPeriodSummaryControllerSpec
           (NotFoundError, NOT_FOUND),
           (RuleTypeOfBusinessIncorrectError, BAD_REQUEST),
           (RuleTaxYearNotSupportedError, BAD_REQUEST),
-          (InternalError, INTERNAL_SERVER_ERROR)
+          (InternalError, INTERNAL_SERVER_ERROR),
+          (RuleIncorrectGovTestScenarioError, BAD_REQUEST)
         )
 
         input.foreach(args => (serviceErrors _).tupled(args))

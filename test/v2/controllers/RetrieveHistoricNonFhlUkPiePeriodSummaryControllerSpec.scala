@@ -174,6 +174,8 @@ class RetrieveHistoricNonFhlUkPiePeriodSummaryControllerSpec
           (PeriodIdFormatError, BAD_REQUEST),
           (InternalError, INTERNAL_SERVER_ERROR),
           (NotFoundError, NOT_FOUND),
+          (RuleIncorrectGovTestScenarioError, BAD_REQUEST)
+
         )
 
         input.foreach(args => (serviceErrors _).tupled(args))

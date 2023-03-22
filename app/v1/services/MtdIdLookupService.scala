@@ -16,16 +16,16 @@
 
 package v1.services
 
-import javax.inject.{ Inject, Singleton }
+import javax.inject.{Inject, Singleton}
 import uk.gov.hmrc.http.HeaderCarrier
-import v1.connectors.{ MtdIdLookupConnector, MtdIdLookupOutcome }
+import v1.connectors.{MtdIdLookupConnector, MtdIdLookupOutcome}
 import v1.models.domain.Nino
 import v1.models.errors.NinoFormatError
 
-import scala.concurrent.{ ExecutionContext, Future }
+import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class MtdIdLookupService @Inject()(val connector: MtdIdLookupConnector) {
+class MtdIdLookupService @Inject() (val connector: MtdIdLookupConnector) {
 
   def lookup(nino: String)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[MtdIdLookupOutcome] = {
     if (Nino.isValid(nino)) {
@@ -34,4 +34,5 @@ class MtdIdLookupService @Inject()(val connector: MtdIdLookupConnector) {
       Future.successful(Left(NinoFormatError))
     }
   }
+
 }

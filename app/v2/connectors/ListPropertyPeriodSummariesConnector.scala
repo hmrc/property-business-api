@@ -18,20 +18,20 @@ package v2.connectors
 
 import config.AppConfig
 
-import javax.inject.{ Inject, Singleton }
-import uk.gov.hmrc.http.{ HeaderCarrier, HttpClient }
-import v2.connectors.DownstreamUri.{ IfsUri, TaxYearSpecificIfsUri }
+import javax.inject.{Inject, Singleton}
+import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
+import v2.connectors.DownstreamUri.{IfsUri, TaxYearSpecificIfsUri}
 import v2.connectors.httpparsers.StandardDownstreamHttpParser._
 import v2.models.request.listPropertyPeriodSummaries.ListPropertyPeriodSummariesRequest
 import v2.models.response.listPropertyPeriodSummaries.ListPropertyPeriodSummariesResponse
 
-import scala.concurrent.{ ExecutionContext, Future }
+import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class ListPropertyPeriodSummariesConnector @Inject()(val http: HttpClient, val appConfig: AppConfig) extends BaseDownstreamConnector {
+class ListPropertyPeriodSummariesConnector @Inject() (val http: HttpClient, val appConfig: AppConfig) extends BaseDownstreamConnector {
 
-  def listPeriodSummaries(request: ListPropertyPeriodSummariesRequest)(
-      implicit hc: HeaderCarrier,
+  def listPeriodSummaries(request: ListPropertyPeriodSummariesRequest)(implicit
+      hc: HeaderCarrier,
       ec: ExecutionContext,
       correlationId: String): Future[DownstreamOutcome[ListPropertyPeriodSummariesResponse]] = {
 
@@ -52,4 +52,5 @@ class ListPropertyPeriodSummariesConnector @Inject()(val http: HttpClient, val a
       )
     }
   }
+
 }

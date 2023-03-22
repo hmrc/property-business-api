@@ -28,7 +28,7 @@ trait DownstreamResponseMappingSupport {
       implicit logContext: EndpointLogContext): ErrorWrapper = {
 
     lazy val defaultErrorCodeMapping: String => MtdError = {
-      case "UNMATCHED_STUB_ERROR" =>{
+      case "UNMATCHED_STUB_ERROR" => {
         logger.warn(s"[${logContext.controllerName}] [${logContext.endpointName}] - No matching stub was found")
         RuleIncorrectGovTestScenarioError
       }
@@ -58,4 +58,5 @@ trait DownstreamResponseMappingSupport {
         ErrorWrapper(correlationId, error, errors)
     }
   }
+
 }

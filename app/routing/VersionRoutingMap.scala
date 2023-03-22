@@ -17,8 +17,8 @@
 package routing
 
 import com.google.inject.ImplementedBy
-import config.{ AppConfig, FeatureSwitches }
-import definition.Versions.{ VERSION_1, VERSION_2 }
+import config.{AppConfig, FeatureSwitches}
+import definition.Versions.{VERSION_1, VERSION_2}
 import play.api.Logging
 import play.api.routing.Router
 
@@ -36,11 +36,11 @@ trait VersionRoutingMap {
   final def versionRouter(version: String): Option[Router] = map.get(version)
 }
 
-case class VersionRoutingMapImpl @Inject()(appConfig: AppConfig,
-                                           defaultRouter: Router,
-                                           v1Router: v1.Routes,
-                                           v2Router: v2.Routes,
-                                           v2r7cRouter: v2r7c.Routes)
+case class VersionRoutingMapImpl @Inject() (appConfig: AppConfig,
+                                            defaultRouter: Router,
+                                            v1Router: v1.Routes,
+                                            v2Router: v2.Routes,
+                                            v2r7cRouter: v2r7c.Routes)
     extends VersionRoutingMap
     with Logging {
 

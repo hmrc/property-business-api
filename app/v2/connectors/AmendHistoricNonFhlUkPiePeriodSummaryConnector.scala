@@ -18,22 +18,23 @@ package v2.connectors
 
 import config.AppConfig
 import play.api.http.Status.OK
-import uk.gov.hmrc.http.{ HeaderCarrier, HttpClient }
+import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
 import v2.connectors.DownstreamUri.IfsUri
 import v2.connectors.httpparsers.StandardDownstreamHttpParser._
 import v2.models.request.amendHistoricNonFhlUkPiePeriodSummary.AmendHistoricNonFhlUkPiePeriodSummaryRequest
 
-import javax.inject.{ Inject, Singleton }
-import scala.concurrent.{ ExecutionContext, Future }
+import javax.inject.{Inject, Singleton}
+import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class AmendHistoricNonFhlUkPiePeriodSummaryConnector @Inject()(val http: HttpClient, val appConfig: AppConfig) extends BaseDownstreamConnector {
+class AmendHistoricNonFhlUkPiePeriodSummaryConnector @Inject() (val http: HttpClient, val appConfig: AppConfig) extends BaseDownstreamConnector {
 
   implicit val successCode: SuccessCode = SuccessCode(OK)
 
-  def amend(request: AmendHistoricNonFhlUkPiePeriodSummaryRequest)(implicit hc: HeaderCarrier,
-                                                                   ec: ExecutionContext,
-                                                                   correlationId: String): Future[DownstreamOutcome[Unit]] = {
+  def amend(request: AmendHistoricNonFhlUkPiePeriodSummaryRequest)(implicit
+      hc: HeaderCarrier,
+      ec: ExecutionContext,
+      correlationId: String): Future[DownstreamOutcome[Unit]] = {
 
     val path =
       s"income-tax/nino/${request.nino.value}/uk-properties/other/periodic-summaries" +
@@ -45,4 +46,5 @@ class AmendHistoricNonFhlUkPiePeriodSummaryConnector @Inject()(val http: HttpCli
       uri = IfsUri[Unit](path)
     )
   }
+
 }

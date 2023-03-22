@@ -18,27 +18,27 @@ package v2.controllers
 
 import cats.data.EitherT
 import cats.implicits._
-import javax.inject.{ Inject, Singleton }
+import javax.inject.{Inject, Singleton}
 import play.api.libs.json.Json
-import play.api.mvc.{ Action, AnyContent, ControllerComponents }
-import utils.{ IdGenerator, Logging }
+import play.api.mvc.{Action, AnyContent, ControllerComponents}
+import utils.{IdGenerator, Logging}
 import v2.controllers.requestParsers.RetrieveUkPropertyPeriodSummaryRequestParser
 import v2.hateoas.HateoasFactory
 import v2.models.errors._
 import v2.models.request.retrieveUkPropertyPeriodSummary.RetrieveUkPropertyPeriodSummaryRawData
 import v2.models.response.retrieveUkPropertyPeriodSummary.RetrieveUkPropertyPeriodSummaryHateoasData
-import v2.services.{ EnrolmentsAuthService, MtdIdLookupService, RetrieveUkPropertyPeriodSummaryService }
+import v2.services.{EnrolmentsAuthService, MtdIdLookupService, RetrieveUkPropertyPeriodSummaryService}
 
-import scala.concurrent.{ ExecutionContext, Future }
+import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class RetrieveUkPropertyPeriodSummaryController @Inject()(val authService: EnrolmentsAuthService,
-                                                          val lookupService: MtdIdLookupService,
-                                                          parser: RetrieveUkPropertyPeriodSummaryRequestParser,
-                                                          service: RetrieveUkPropertyPeriodSummaryService,
-                                                          hateoasFactory: HateoasFactory,
-                                                          cc: ControllerComponents,
-                                                          idGenerator: IdGenerator)(implicit ec: ExecutionContext)
+class RetrieveUkPropertyPeriodSummaryController @Inject() (val authService: EnrolmentsAuthService,
+                                                           val lookupService: MtdIdLookupService,
+                                                           parser: RetrieveUkPropertyPeriodSummaryRequestParser,
+                                                           service: RetrieveUkPropertyPeriodSummaryService,
+                                                           hateoasFactory: HateoasFactory,
+                                                           cc: ControllerComponents,
+                                                           idGenerator: IdGenerator)(implicit ec: ExecutionContext)
     extends AuthorisedController(cc)
     with BaseController
     with Logging {
@@ -100,4 +100,5 @@ class RetrieveUkPropertyPeriodSummaryController @Inject()(val authService: Enrol
       case InternalError => InternalServerError(Json.toJson(errorWrapper))
       case _             => unhandledError(errorWrapper)
     }
+
 }

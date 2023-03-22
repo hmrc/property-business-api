@@ -18,7 +18,7 @@ package v1.services
 
 import cats.implicits._
 import cats.data.EitherT
-import javax.inject.{ Inject, Singleton }
+import javax.inject.{Inject, Singleton}
 import uk.gov.hmrc.http.HeaderCarrier
 import utils.Logging
 import v1.connectors.AmendForeignPropertyPeriodSummaryConnector
@@ -27,15 +27,15 @@ import v1.models.errors._
 import v1.models.request.amendForeignPropertyPeriodSummary.AmendForeignPropertyPeriodSummaryRequest
 import v1.support.IfsResponseMappingSupport
 
-import scala.concurrent.{ ExecutionContext, Future }
+import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class AmendForeignPropertyPeriodSummaryService @Inject()(connector: AmendForeignPropertyPeriodSummaryConnector)
+class AmendForeignPropertyPeriodSummaryService @Inject() (connector: AmendForeignPropertyPeriodSummaryConnector)
     extends IfsResponseMappingSupport
     with Logging {
 
-  def amendForeignProperty(request: AmendForeignPropertyPeriodSummaryRequest)(
-      implicit hc: HeaderCarrier,
+  def amendForeignProperty(request: AmendForeignPropertyPeriodSummaryRequest)(implicit
+      hc: HeaderCarrier,
       ec: ExecutionContext,
       logContext: EndpointLogContext,
       correlationId: String): Future[AmendForeignPropertyPeriodSummaryServiceOutcome] = {
@@ -59,4 +59,5 @@ class AmendForeignPropertyPeriodSummaryService @Inject()(connector: AmendForeign
       "SERVER_ERROR"              -> DownstreamError,
       "SERVICE_UNAVAILABLE"       -> DownstreamError
     )
+
 }

@@ -18,7 +18,7 @@ package v1.services
 
 import cats.implicits._
 import cats.data.EitherT
-import javax.inject.{ Inject, Singleton }
+import javax.inject.{Inject, Singleton}
 import uk.gov.hmrc.http.HeaderCarrier
 import utils.Logging
 import v1.connectors.CreateForeignPropertyPeriodSummaryConnector
@@ -27,15 +27,15 @@ import v1.models.errors._
 import v1.models.request.createForeignPropertyPeriodSummary.CreateForeignPropertyPeriodSummaryRequest
 import v1.support.IfsResponseMappingSupport
 
-import scala.concurrent.{ ExecutionContext, Future }
+import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class CreateForeignPropertyPeriodSummaryService @Inject()(connector: CreateForeignPropertyPeriodSummaryConnector)
+class CreateForeignPropertyPeriodSummaryService @Inject() (connector: CreateForeignPropertyPeriodSummaryConnector)
     extends IfsResponseMappingSupport
     with Logging {
 
-  def createForeignProperty(request: CreateForeignPropertyPeriodSummaryRequest)(
-      implicit hc: HeaderCarrier,
+  def createForeignProperty(request: CreateForeignPropertyPeriodSummaryRequest)(implicit
+      hc: HeaderCarrier,
       ec: ExecutionContext,
       logContext: EndpointLogContext,
       correlationId: String): Future[CreateForeignPropertyPeriodSummaryServiceOutcome] = {

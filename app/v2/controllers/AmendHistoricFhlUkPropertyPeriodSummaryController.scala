@@ -30,20 +30,20 @@ import v2.models.errors._
 import v2.models.request.amendHistoricFhlUkPiePeriodSummary.AmendHistoricFhlUkPiePeriodSummaryRawData
 import v2.models.response.amendHistoricFhlUkPiePeriodSummary.AmendHistoricFhlUkPropertyPeriodSummaryHateoasData
 import v2.services.{AmendHistoricFhlUkPiePeriodSummaryService, AuditService, EnrolmentsAuthService, MtdIdLookupService}
-import v2.models.audit.{ AuditEvent, AuditResponse, FlattenedGenericAuditDetail}
+import v2.models.audit.{AuditEvent, AuditResponse, FlattenedGenericAuditDetail}
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class AmendHistoricFhlUkPropertyPeriodSummaryController @Inject()(val authService: EnrolmentsAuthService,
-                                                                  val lookupService: MtdIdLookupService,
-                                                                  parser: AmendHistoricFhlUkPiePeriodSummaryRequestParser,
-                                                                  service: AmendHistoricFhlUkPiePeriodSummaryService,
-                                                                  hateoasFactory: HateoasFactory,
-                                                                  auditService: AuditService,
-                                                                  cc: ControllerComponents,
-                                                                  idGenerator: IdGenerator)(implicit ec: ExecutionContext)
+class AmendHistoricFhlUkPropertyPeriodSummaryController @Inject() (val authService: EnrolmentsAuthService,
+                                                                   val lookupService: MtdIdLookupService,
+                                                                   parser: AmendHistoricFhlUkPiePeriodSummaryRequestParser,
+                                                                   service: AmendHistoricFhlUkPiePeriodSummaryService,
+                                                                   hateoasFactory: HateoasFactory,
+                                                                   auditService: AuditService,
+                                                                   cc: ControllerComponents,
+                                                                   idGenerator: IdGenerator)(implicit ec: ExecutionContext)
     extends AuthorisedController(cc)
     with BaseController
     with Logging {
@@ -134,4 +134,5 @@ class AmendHistoricFhlUkPropertyPeriodSummaryController @Inject()(val authServic
       AuditEvent("AmendHistoricFhlPropertyIncomeExpensesPeriodSummary", "AmendHistoricFhlPropertyIncomeExpensesPeriodSummary", details)
     auditService.auditEvent(event)
   }
+
 }

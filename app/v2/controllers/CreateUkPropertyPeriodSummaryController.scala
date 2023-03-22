@@ -18,31 +18,31 @@ package v2.controllers
 
 import cats.data.EitherT
 import cats.implicits._
-import play.api.libs.json.{ JsValue, Json }
-import play.api.mvc.{ Action, ControllerComponents }
+import play.api.libs.json.{JsValue, Json}
+import play.api.mvc.{Action, ControllerComponents}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.audit.http.connector.AuditResult
-import utils.{ IdGenerator, Logging }
+import utils.{IdGenerator, Logging}
 import v2.controllers.requestParsers.CreateUkPropertyPeriodSummaryRequestParser
 import v2.hateoas.HateoasFactory
-import v2.models.audit.{ AuditEvent, AuditResponse, GenericAuditDetail }
+import v2.models.audit.{AuditEvent, AuditResponse, GenericAuditDetail}
 import v2.models.errors._
 import v2.models.request.createUkPropertyPeriodSummary.CreateUkPropertyPeriodSummaryRawData
 import v2.models.response.createUkPropertyPeriodSummary.CreateUkPropertyPeriodSummaryHateoasData
 import v2.services._
 
-import javax.inject.{ Inject, Singleton }
-import scala.concurrent.{ ExecutionContext, Future }
+import javax.inject.{Inject, Singleton}
+import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class CreateUkPropertyPeriodSummaryController @Inject()(val authService: EnrolmentsAuthService,
-                                                        val lookupService: MtdIdLookupService,
-                                                        parser: CreateUkPropertyPeriodSummaryRequestParser,
-                                                        service: CreateUkPropertyPeriodSummaryService,
-                                                        auditService: AuditService,
-                                                        hateoasFactory: HateoasFactory,
-                                                        cc: ControllerComponents,
-                                                        idGenerator: IdGenerator)(implicit ec: ExecutionContext)
+class CreateUkPropertyPeriodSummaryController @Inject() (val authService: EnrolmentsAuthService,
+                                                         val lookupService: MtdIdLookupService,
+                                                         parser: CreateUkPropertyPeriodSummaryRequestParser,
+                                                         service: CreateUkPropertyPeriodSummaryService,
+                                                         auditService: AuditService,
+                                                         hateoasFactory: HateoasFactory,
+                                                         cc: ControllerComponents,
+                                                         idGenerator: IdGenerator)(implicit ec: ExecutionContext)
     extends AuthorisedController(cc)
     with BaseController
     with Logging {
@@ -63,8 +63,9 @@ class CreateUkPropertyPeriodSummaryController @Inject()(val authService: Enrolme
           serviceResponse <- EitherT(service.createUkProperty(parsedRequest))
           vendorResponse <- EitherT.fromEither[Future](
             hateoasFactory
-              .wrap(serviceResponse.responseData,
-                    CreateUkPropertyPeriodSummaryHateoasData(nino, businessId, taxYear, serviceResponse.responseData.submissionId))
+              .wrap(
+                serviceResponse.responseData,
+                CreateUkPropertyPeriodSummaryHateoasData(nino, businessId, taxYear, serviceResponse.responseData.submissionId))
               .asRight[ErrorWrapper]
           )
         } yield {
@@ -100,8 +101,8 @@ class CreateUkPropertyPeriodSummaryController @Inject()(val authService: Enrolme
       case BadRequestError | NinoFormatError | TaxYearFormatError | BusinessIdFormatError | RuleTypeOfBusinessIncorrectError |
           RuleTaxYearRangeInvalidError | RuleTaxYearNotSupportedError | RuleIncorrectOrEmptyBodyError | ToDateFormatError | FromDateFormatError |
           MtdErrorWithCode(ValueFormatError.code) | MtdErrorWithCode(RuleBothExpensesSuppliedError.code) | RuleToDateBeforeFromDateError |
-          RuleOverlappingPeriodError | RuleMisalignedPeriodError | RuleNotContiguousPeriodError |
-          MtdErrorWithCode(RuleIncorrectOrEmptyBodyError.code) | RuleDuplicateSubmissionError | RuleInvalidSubmissionPeriodError |
+          RuleOverlappingPeriodError | RuleMisalignedPeriodError | RuleNotContiguousPeriodError | MtdErrorWithCode(
+            RuleIncorrectOrEmptyBodyError.code) | RuleDuplicateSubmissionError | RuleInvalidSubmissionPeriodError |
           RuleIncorrectGovTestScenarioError | RuleInvalidSubmissionEndDateError =>
         BadRequest(Json.toJson(errorWrapper))
       case NotFoundError => NotFound(Json.toJson(errorWrapper))
@@ -113,4 +114,5 @@ class CreateUkPropertyPeriodSummaryController @Inject()(val authService: Enrolme
     val event = AuditEvent("CreateUKPropertyIncomeAndExpensesPeriodSummary", "create-uk-property-income-and-expenses-period-summary", details)
     auditService.auditEvent(event)
   }
+
 }

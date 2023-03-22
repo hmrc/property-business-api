@@ -19,33 +19,34 @@ package v2.controllers
 import cats.data.EitherT
 import cats.implicits._
 import play.api.libs.json.Json
-import play.api.mvc.{ Action, AnyContent, ControllerComponents }
-import utils.{ IdGenerator, Logging }
+import play.api.mvc.{Action, AnyContent, ControllerComponents}
+import utils.{IdGenerator, Logging}
 import v2.controllers.requestParsers.RetrieveHistoricNonFhlUkPropertyAnnualSubmissionRequestParser
 import v2.hateoas.HateoasFactory
 import v2.models.errors._
 import v2.models.request.retrieveHistoricNonFhlUkPropertyAnnualSubmission.RetrieveHistoricNonFhlUkPropertyAnnualSubmissionRawData
 import v2.models.response.retrieveHistoricNonFhlUkPropertyAnnualSubmissionResponse.RetrieveHistoricNonFhlUkPropertyAnnualSubmissionHateoasData
-import v2.services.{ EnrolmentsAuthService, MtdIdLookupService, RetrieveHistoricNonFhlUkPropertyAnnualSubmissionService }
+import v2.services.{EnrolmentsAuthService, MtdIdLookupService, RetrieveHistoricNonFhlUkPropertyAnnualSubmissionService}
 
-import javax.inject.{ Inject, Singleton }
-import scala.concurrent.{ ExecutionContext, Future }
+import javax.inject.{Inject, Singleton}
+import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class RetrieveHistoricNonFhlUkPropertyAnnualSubmissionController @Inject()(val authService: EnrolmentsAuthService,
-                                                                           val lookupService: MtdIdLookupService,
-                                                                           parser: RetrieveHistoricNonFhlUkPropertyAnnualSubmissionRequestParser,
-                                                                           service: RetrieveHistoricNonFhlUkPropertyAnnualSubmissionService,
-                                                                           hateoasFactory: HateoasFactory,
-                                                                           cc: ControllerComponents,
-                                                                           idGenerator: IdGenerator)(implicit ec: ExecutionContext)
+class RetrieveHistoricNonFhlUkPropertyAnnualSubmissionController @Inject() (val authService: EnrolmentsAuthService,
+                                                                            val lookupService: MtdIdLookupService,
+                                                                            parser: RetrieveHistoricNonFhlUkPropertyAnnualSubmissionRequestParser,
+                                                                            service: RetrieveHistoricNonFhlUkPropertyAnnualSubmissionService,
+                                                                            hateoasFactory: HateoasFactory,
+                                                                            cc: ControllerComponents,
+                                                                            idGenerator: IdGenerator)(implicit ec: ExecutionContext)
     extends AuthorisedController(cc)
     with BaseController
     with Logging {
 
   implicit val endpointLogContext: EndpointLogContext =
-    EndpointLogContext(controllerName = "RetrieveHistoricNonFhlUkPropertyAnnualSubmissionController",
-                       endpointName = "RetrieveHistoricNonFhlUkPropertyAnnualSubmission")
+    EndpointLogContext(
+      controllerName = "RetrieveHistoricNonFhlUkPropertyAnnualSubmissionController",
+      endpointName = "RetrieveHistoricNonFhlUkPropertyAnnualSubmission")
 
   def handleRequest(nino: String, taxYear: String): Action[AnyContent] =
     authorisedAction(nino).async { implicit request =>
@@ -91,4 +92,5 @@ class RetrieveHistoricNonFhlUkPropertyAnnualSubmissionController @Inject()(val a
       case NotFoundError => NotFound(Json.toJson(errorWrapper))
       case _             => unhandledError(errorWrapper)
     }
+
 }

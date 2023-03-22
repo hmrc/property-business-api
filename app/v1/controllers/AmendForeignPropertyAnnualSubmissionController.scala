@@ -18,31 +18,31 @@ package v1.controllers
 
 import cats.data.EitherT
 import cats.implicits._
-import javax.inject.{ Inject, Singleton }
-import play.api.libs.json.{ JsValue, Json }
-import play.api.mvc.{ Action, ControllerComponents }
+import javax.inject.{Inject, Singleton}
+import play.api.libs.json.{JsValue, Json}
+import play.api.mvc.{Action, ControllerComponents}
 import uk.gov.hmrc.http.HeaderCarrier
-import utils.{ IdGenerator, Logging }
+import utils.{IdGenerator, Logging}
 import v1.controllers.requestParsers.AmendForeignPropertyAnnualSubmissionRequestParser
 import v1.hateoas.HateoasFactory
-import v1.models.audit.{ AuditEvent, AuditResponse, CreateAndAmendForeignPropertyAnnualAuditDetail }
+import v1.models.audit.{AuditEvent, AuditResponse, CreateAndAmendForeignPropertyAnnualAuditDetail}
 import v1.models.errors._
 import v1.models.request.amendForeignPropertyAnnualSubmission.AmendForeignPropertyAnnualSubmissionRawData
 import v1.models.response.amendForeignPropertyAnnualSubmission.AmendForeignPropertyAnnualSubmissionResponse.AmendForeignPropertyLinksFactory
 import v1.models.response.amendForeignPropertyAnnualSubmission.AmendForeignPropertyAnnualSubmissionHateoasData
-import v1.services.{ AmendForeignPropertyAnnualSubmissionService, AuditService, EnrolmentsAuthService, MtdIdLookupService }
+import v1.services.{AmendForeignPropertyAnnualSubmissionService, AuditService, EnrolmentsAuthService, MtdIdLookupService}
 
-import scala.concurrent.{ ExecutionContext, Future }
+import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class AmendForeignPropertyAnnualSubmissionController @Inject()(val authService: EnrolmentsAuthService,
-                                                               val lookupService: MtdIdLookupService,
-                                                               parser: AmendForeignPropertyAnnualSubmissionRequestParser,
-                                                               service: AmendForeignPropertyAnnualSubmissionService,
-                                                               auditService: AuditService,
-                                                               hateoasFactory: HateoasFactory,
-                                                               cc: ControllerComponents,
-                                                               idGenerator: IdGenerator)(implicit ec: ExecutionContext)
+class AmendForeignPropertyAnnualSubmissionController @Inject() (val authService: EnrolmentsAuthService,
+                                                                val lookupService: MtdIdLookupService,
+                                                                parser: AmendForeignPropertyAnnualSubmissionRequestParser,
+                                                                service: AmendForeignPropertyAnnualSubmissionService,
+                                                                auditService: AuditService,
+                                                                hateoasFactory: HateoasFactory,
+                                                                cc: ControllerComponents,
+                                                                idGenerator: IdGenerator)(implicit ec: ExecutionContext)
     extends AuthorisedController(cc)
     with BaseController
     with Logging {
@@ -73,13 +73,14 @@ class AmendForeignPropertyAnnualSubmissionController @Inject()(val authService: 
           val response = Json.toJson(vendorResponse)
 
           auditSubmission(
-            CreateAndAmendForeignPropertyAnnualAuditDetail(request.userDetails,
-                                                           nino,
-                                                           businessId,
-                                                           taxYear,
-                                                           request.body,
-                                                           serviceResponse.correlationId,
-                                                           AuditResponse(OK, Right(Some(response)))))
+            CreateAndAmendForeignPropertyAnnualAuditDetail(
+              request.userDetails,
+              nino,
+              businessId,
+              taxYear,
+              request.body,
+              serviceResponse.correlationId,
+              AuditResponse(OK, Right(Some(response)))))
 
           Ok(Json.toJson(vendorResponse))
             .withApiHeaders(serviceResponse.correlationId)
@@ -94,13 +95,14 @@ class AmendForeignPropertyAnnualSubmissionController @Inject()(val authService: 
             s"Error response received with CorrelationId: $resCorrelationId")
 
         auditSubmission(
-          CreateAndAmendForeignPropertyAnnualAuditDetail(request.userDetails,
-                                                         nino,
-                                                         businessId,
-                                                         taxYear,
-                                                         request.body,
-                                                         correlationId,
-                                                         AuditResponse(result.header.status, Left(errorWrapper.auditErrors))))
+          CreateAndAmendForeignPropertyAnnualAuditDetail(
+            request.userDetails,
+            nino,
+            businessId,
+            taxYear,
+            request.body,
+            correlationId,
+            AuditResponse(result.header.status, Left(errorWrapper.auditErrors))))
 
         result
       }.merge
@@ -121,4 +123,5 @@ class AmendForeignPropertyAnnualSubmissionController @Inject()(val authService: 
     val event = AuditEvent("CreateAmendForeignPropertyAnnualSummary", "Create-Amend-Foreign-Property-Annual-Summary", details)
     auditService.auditEvent(event)
   }
+
 }

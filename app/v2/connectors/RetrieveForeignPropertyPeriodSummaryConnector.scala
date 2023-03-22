@@ -17,16 +17,16 @@
 package v2.connectors
 
 import config.AppConfig
-import uk.gov.hmrc.http.{ HeaderCarrier, HttpClient }
-import v2.connectors.DownstreamUri.{ IfsUri, TaxYearSpecificIfsUri }
+import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
+import v2.connectors.DownstreamUri.{IfsUri, TaxYearSpecificIfsUri}
 import v2.connectors.RetrieveForeignPropertyPeriodSummaryConnector._
 import v2.connectors.httpparsers.StandardDownstreamHttpParser._
 import v2.models.outcomes.ResponseWrapper
 import v2.models.request.retrieveForeignPropertyPeriodSummary.RetrieveForeignPropertyPeriodSummaryRequest
 import v2.models.response.retrieveForeignPropertyPeriodSummary.RetrieveForeignPropertyPeriodSummaryResponse
 
-import javax.inject.{ Inject, Singleton }
-import scala.concurrent.{ ExecutionContext, Future }
+import javax.inject.{Inject, Singleton}
+import scala.concurrent.{ExecutionContext, Future}
 
 object RetrieveForeignPropertyPeriodSummaryConnector {
 
@@ -38,11 +38,12 @@ object RetrieveForeignPropertyPeriodSummaryConnector {
 }
 
 @Singleton
-class RetrieveForeignPropertyPeriodSummaryConnector @Inject()(val http: HttpClient, val appConfig: AppConfig) extends BaseDownstreamConnector {
+class RetrieveForeignPropertyPeriodSummaryConnector @Inject() (val http: HttpClient, val appConfig: AppConfig) extends BaseDownstreamConnector {
 
-  def retrieveForeignProperty(request: RetrieveForeignPropertyPeriodSummaryRequest)(implicit hc: HeaderCarrier,
-                                                                                    ec: ExecutionContext,
-                                                                                    correlationId: String): Future[DownstreamOutcome[Result]] = {
+  def retrieveForeignProperty(request: RetrieveForeignPropertyPeriodSummaryRequest)(implicit
+      hc: HeaderCarrier,
+      ec: ExecutionContext,
+      correlationId: String): Future[DownstreamOutcome[Result]] = {
 
     val (downstreamUri, queryParams) =
       if (request.taxYear.useTaxYearSpecificApi) {
@@ -71,8 +72,9 @@ class RetrieveForeignPropertyPeriodSummaryConnector @Inject()(val http: HttpClie
     })
   }
 
-  //The same API#1595 IF endpoint is used for both uk and foreign properties.
-  //If a businessId of the right type is specified some of these optional fields will be present...
+  // The same API#1595 IF endpoint is used for both uk and foreign properties.
+  // If a businessId of the right type is specified some of these optional fields will be present...
   private def foreignResult(response: RetrieveForeignPropertyPeriodSummaryResponse): Boolean =
     response.foreignFhlEea.nonEmpty || response.foreignNonFhlProperty.nonEmpty
+
 }

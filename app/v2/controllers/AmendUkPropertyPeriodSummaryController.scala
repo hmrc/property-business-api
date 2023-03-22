@@ -17,32 +17,32 @@
 package v2.controllers
 
 import cats.data.EitherT
-import play.api.libs.json.{ JsValue, Json }
-import play.api.mvc.{ Action, ControllerComponents }
+import play.api.libs.json.{JsValue, Json}
+import play.api.mvc.{Action, ControllerComponents}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.audit.http.connector.AuditResult
-import utils.{ IdGenerator, Logging }
+import utils.{IdGenerator, Logging}
 import v2.controllers.requestParsers.AmendUkPropertyPeriodSummaryRequestParser
 import v2.hateoas.HateoasFactory
-import v2.models.audit.{ AuditEvent, AuditResponse, GenericAuditDetail }
+import v2.models.audit.{AuditEvent, AuditResponse, GenericAuditDetail}
 import v2.models.errors._
 import v2.models.request.amendUkPropertyPeriodSummary.AmendUkPropertyPeriodSummaryRawData
 import v2.models.response.amendUkPropertyPeriodSummary.AmendUkPropertyPeriodSummaryHateoasData
 import v2.models.response.amendUkPropertyPeriodSummary.AmendUkPropertyPeriodSummaryResponse.AmendUkPropertyLinksFactory
 import v2.services._
 
-import javax.inject.{ Inject, Singleton }
-import scala.concurrent.{ ExecutionContext, Future }
+import javax.inject.{Inject, Singleton}
+import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class AmendUkPropertyPeriodSummaryController @Inject()(val authService: EnrolmentsAuthService,
-                                                       val lookupService: MtdIdLookupService,
-                                                       parser: AmendUkPropertyPeriodSummaryRequestParser,
-                                                       service: AmendUkPropertyPeriodSummaryService,
-                                                       auditService: AuditService,
-                                                       hateoasFactory: HateoasFactory,
-                                                       cc: ControllerComponents,
-                                                       idGenerator: IdGenerator)(implicit ec: ExecutionContext)
+class AmendUkPropertyPeriodSummaryController @Inject() (val authService: EnrolmentsAuthService,
+                                                        val lookupService: MtdIdLookupService,
+                                                        parser: AmendUkPropertyPeriodSummaryRequestParser,
+                                                        service: AmendUkPropertyPeriodSummaryService,
+                                                        auditService: AuditService,
+                                                        hateoasFactory: HateoasFactory,
+                                                        cc: ControllerComponents,
+                                                        idGenerator: IdGenerator)(implicit ec: ExecutionContext)
     extends AuthorisedController(cc)
     with BaseController
     with Logging {
@@ -63,10 +63,11 @@ class AmendUkPropertyPeriodSummaryController @Inject()(val authService: Enrolmen
           serviceResponse <- EitherT(service.amendUkPropertyPeriodSummary(parsedRequest))
         } yield {
           val hateoasData =
-            AmendUkPropertyPeriodSummaryHateoasData(parsedRequest.nino.nino,
-                                                    parsedRequest.businessId,
-                                                    parsedRequest.taxYear.asMtd,
-                                                    parsedRequest.submissionId)
+            AmendUkPropertyPeriodSummaryHateoasData(
+              parsedRequest.nino.nino,
+              parsedRequest.businessId,
+              parsedRequest.taxYear.asMtd,
+              parsedRequest.submissionId)
           val vendorResponse = hateoasFactory.wrap(serviceResponse.responseData, hateoasData)
 
           logger.info(
@@ -122,4 +123,5 @@ class AmendUkPropertyPeriodSummaryController @Inject()(val authService: Enrolmen
     val event = AuditEvent("AmendUKPropertyIncomeAndExpensesPeriodSummary", "amend-uk-property-income-and-expenses-period-summary", details)
     auditService.auditEvent(event)
   }
+
 }

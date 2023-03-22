@@ -19,27 +19,27 @@ package v2.controllers
 import cats.data.EitherT
 import cats.implicits._
 import play.api.libs.json.Json
-import play.api.mvc.{ Action, AnyContent, ControllerComponents }
+import play.api.mvc.{Action, AnyContent, ControllerComponents}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.audit.http.connector.AuditResult
-import utils.{ IdGenerator, Logging }
+import utils.{IdGenerator, Logging}
 import v2.controllers.requestParsers.DeletePropertyAnnualSubmissionRequestParser
-import v2.models.audit.{ AuditEvent, AuditResponse, GenericAuditDetail }
+import v2.models.audit.{AuditEvent, AuditResponse, GenericAuditDetail}
 import v2.models.errors._
 import v2.models.request.deletePropertyAnnualSubmission.DeletePropertyAnnualSubmissionRawData
-import v2.services.{ AuditService, DeletePropertyAnnualSubmissionService, EnrolmentsAuthService, MtdIdLookupService }
+import v2.services.{AuditService, DeletePropertyAnnualSubmissionService, EnrolmentsAuthService, MtdIdLookupService}
 
-import javax.inject.{ Inject, Singleton }
-import scala.concurrent.{ ExecutionContext, Future }
+import javax.inject.{Inject, Singleton}
+import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class DeletePropertyAnnualSubmissionController @Inject()(val authService: EnrolmentsAuthService,
-                                                         val lookupService: MtdIdLookupService,
-                                                         parser: DeletePropertyAnnualSubmissionRequestParser,
-                                                         service: DeletePropertyAnnualSubmissionService,
-                                                         auditService: AuditService,
-                                                         cc: ControllerComponents,
-                                                         idGenerator: IdGenerator)(implicit ec: ExecutionContext)
+class DeletePropertyAnnualSubmissionController @Inject() (val authService: EnrolmentsAuthService,
+                                                          val lookupService: MtdIdLookupService,
+                                                          parser: DeletePropertyAnnualSubmissionRequestParser,
+                                                          service: DeletePropertyAnnualSubmissionService,
+                                                          auditService: AuditService,
+                                                          cc: ControllerComponents,
+                                                          idGenerator: IdGenerator)(implicit ec: ExecutionContext)
     extends AuthorisedController(cc)
     with BaseController
     with Logging {
@@ -105,4 +105,5 @@ class DeletePropertyAnnualSubmissionController @Inject()(val authService: Enrolm
     val event = AuditEvent("DeletePropertyAnnualSubmission", "delete-property-annual-submission", details)
     auditService.auditEvent(event)
   }
+
 }

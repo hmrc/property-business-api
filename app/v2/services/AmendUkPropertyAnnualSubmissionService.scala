@@ -26,18 +26,19 @@ import v2.models.errors._
 import v2.models.request.amendUkPropertyAnnualSubmission.AmendUkPropertyAnnualSubmissionRequest
 import v2.support.DownstreamResponseMappingSupport
 
-import javax.inject.{ Inject, Singleton }
-import scala.concurrent.{ ExecutionContext, Future }
+import javax.inject.{Inject, Singleton}
+import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class AmendUkPropertyAnnualSubmissionService @Inject()(connector: AmendUkPropertyAnnualSubmissionConnector)
+class AmendUkPropertyAnnualSubmissionService @Inject() (connector: AmendUkPropertyAnnualSubmissionConnector)
     extends DownstreamResponseMappingSupport
     with Logging {
 
-  def amendUkPropertyAnnualSubmission(request: AmendUkPropertyAnnualSubmissionRequest)(implicit hc: HeaderCarrier,
-                                                                                       ec: ExecutionContext,
-                                                                                       logContext: EndpointLogContext,
-                                                                                       correlationId: String): Future[ServiceOutcome[Unit]] = {
+  def amendUkPropertyAnnualSubmission(request: AmendUkPropertyAnnualSubmissionRequest)(implicit
+      hc: HeaderCarrier,
+      ec: ExecutionContext,
+      logContext: EndpointLogContext,
+      correlationId: String): Future[ServiceOutcome[Unit]] = {
 
     val result = EitherT(connector.amendUkPropertyAnnualSubmission(request)).leftMap(mapDownstreamErrors(downstreamErrorMap))
 
@@ -63,9 +64,10 @@ class AmendUkPropertyAnnualSubmissionService @Inject()(connector: AmendUkPropert
 
     val extraTysErrors = Map(
       "MISSING_EXPENSES" -> InternalError,
-      "FIELD_CONFLICT"   -> RulePropertyIncomeAllowanceError,
+      "FIELD_CONFLICT"   -> RulePropertyIncomeAllowanceError
     )
 
     errors ++ extraTysErrors
   }
+
 }

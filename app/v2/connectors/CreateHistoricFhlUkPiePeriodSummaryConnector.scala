@@ -18,24 +18,26 @@ package v2.connectors
 
 import config.AppConfig
 import play.api.http.Status
-import uk.gov.hmrc.http.{ HeaderCarrier, HttpClient }
+import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
 import v2.connectors.DownstreamUri.IfsUri
 import v2.connectors.httpparsers.StandardDownstreamHttpParser._
 import v2.models.request.createHistoricFhlUkPiePeriodSummary.CreateHistoricFhlUkPiePeriodSummaryRequest
 
-import javax.inject.{ Inject, Singleton }
-import scala.concurrent.{ ExecutionContext, Future }
+import javax.inject.{Inject, Singleton}
+import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class CreateHistoricFhlUkPiePeriodSummaryConnector @Inject()(val http: HttpClient, val appConfig: AppConfig) extends BaseDownstreamConnector {
+class CreateHistoricFhlUkPiePeriodSummaryConnector @Inject() (val http: HttpClient, val appConfig: AppConfig) extends BaseDownstreamConnector {
 
   implicit val successCode: SuccessCode = SuccessCode(Status.OK)
 
-  def createPeriodSummary(request: CreateHistoricFhlUkPiePeriodSummaryRequest)(implicit hc: HeaderCarrier,
-                                                                               ex: ExecutionContext,
-                                                                               correlationId: String): Future[DownstreamOutcome[Unit]] = {
+  def createPeriodSummary(request: CreateHistoricFhlUkPiePeriodSummaryRequest)(implicit
+      hc: HeaderCarrier,
+      ex: ExecutionContext,
+      correlationId: String): Future[DownstreamOutcome[Unit]] = {
 
     val path = s"income-tax/nino/${request.nino.nino}/uk-properties/furnished-holiday-lettings/periodic-summaries"
     post(request.body, IfsUri[Unit](path))
   }
+
 }

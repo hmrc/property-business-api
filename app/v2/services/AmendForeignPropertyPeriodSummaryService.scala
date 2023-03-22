@@ -26,18 +26,19 @@ import v2.models.errors._
 import v2.models.request.amendForeignPropertyPeriodSummary.AmendForeignPropertyPeriodSummaryRequest
 import v2.support.DownstreamResponseMappingSupport
 
-import javax.inject.{ Inject, Singleton }
-import scala.concurrent.{ ExecutionContext, Future }
+import javax.inject.{Inject, Singleton}
+import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class AmendForeignPropertyPeriodSummaryService @Inject()(connector: AmendForeignPropertyPeriodSummaryConnector)
+class AmendForeignPropertyPeriodSummaryService @Inject() (connector: AmendForeignPropertyPeriodSummaryConnector)
     extends DownstreamResponseMappingSupport
     with Logging {
 
-  def amendForeignPropertyPeriodSummary(request: AmendForeignPropertyPeriodSummaryRequest)(implicit hc: HeaderCarrier,
-                                                                                           ec: ExecutionContext,
-                                                                                           logContext: EndpointLogContext,
-                                                                                           correlationId: String): Future[ServiceOutcome[Unit]] = {
+  def amendForeignPropertyPeriodSummary(request: AmendForeignPropertyPeriodSummaryRequest)(implicit
+      hc: HeaderCarrier,
+      ec: ExecutionContext,
+      logContext: EndpointLogContext,
+      correlationId: String): Future[ServiceOutcome[Unit]] = {
 
     val result = EitherT(connector.amendForeignPropertyPeriodSummary(request)).leftMap(mapDownstreamErrors(downstreamErrorMap))
 
@@ -70,4 +71,5 @@ class AmendForeignPropertyPeriodSummaryService @Inject()(connector: AmendForeign
 
     errors ++ extraTysErrors
   }
+
 }

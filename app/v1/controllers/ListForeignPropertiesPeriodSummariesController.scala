@@ -18,27 +18,27 @@ package v1.controllers
 
 import cats.data.EitherT
 import cats.implicits._
-import javax.inject.{ Inject, Singleton }
+import javax.inject.{Inject, Singleton}
 import play.api.libs.json.Json
-import play.api.mvc.{ Action, AnyContent, ControllerComponents }
-import utils.{ IdGenerator, Logging }
+import play.api.mvc.{Action, AnyContent, ControllerComponents}
+import utils.{IdGenerator, Logging}
 import v1.controllers.requestParsers.ListForeignPropertiesPeriodSummariesRequestParser
 import v1.hateoas.HateoasFactory
 import v1.models.errors._
 import v1.models.request.listForeignPropertiesPeriodSummaries.ListForeignPropertiesPeriodSummariesRawData
 import v1.models.response.listForeignPropertiesPeriodSummaries.ListForeignPropertiesPeriodSummariesHateoasData
-import v1.services.{ EnrolmentsAuthService, ListForeignPropertiesPeriodSummariesService, MtdIdLookupService }
+import v1.services.{EnrolmentsAuthService, ListForeignPropertiesPeriodSummariesService, MtdIdLookupService}
 
-import scala.concurrent.{ ExecutionContext, Future }
+import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class ListForeignPropertiesPeriodSummariesController @Inject()(val authService: EnrolmentsAuthService,
-                                                               val lookupService: MtdIdLookupService,
-                                                               parser: ListForeignPropertiesPeriodSummariesRequestParser,
-                                                               service: ListForeignPropertiesPeriodSummariesService,
-                                                               hateoasFactory: HateoasFactory,
-                                                               cc: ControllerComponents,
-                                                               idGenerator: IdGenerator)(implicit ec: ExecutionContext)
+class ListForeignPropertiesPeriodSummariesController @Inject() (val authService: EnrolmentsAuthService,
+                                                                val lookupService: MtdIdLookupService,
+                                                                parser: ListForeignPropertiesPeriodSummariesRequestParser,
+                                                                service: ListForeignPropertiesPeriodSummariesService,
+                                                                hateoasFactory: HateoasFactory,
+                                                                cc: ControllerComponents,
+                                                                idGenerator: IdGenerator)(implicit ec: ExecutionContext)
     extends AuthorisedController(cc)
     with BaseController
     with Logging {
@@ -91,4 +91,5 @@ class ListForeignPropertiesPeriodSummariesController @Inject()(val authService: 
       case NotFoundError   => NotFound(Json.toJson(errorWrapper))
       case _               => unhandledError(errorWrapper)
     }
+
 }

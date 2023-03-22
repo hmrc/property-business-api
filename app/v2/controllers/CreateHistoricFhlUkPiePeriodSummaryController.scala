@@ -18,34 +18,33 @@ package v2.controllers
 
 import cats.data.EitherT
 import cats.implicits.catsSyntaxEitherId
-import play.api.libs.json.{ JsValue, Json }
-import play.api.mvc.{ Action, ControllerComponents }
+import play.api.libs.json.{JsValue, Json}
+import play.api.mvc.{Action, ControllerComponents}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.audit.http.connector.AuditResult
-import utils.{ IdGenerator, Logging }
+import utils.{IdGenerator, Logging}
 import v2.controllers.requestParsers.CreateHistoricFhlUkPiePeriodSummaryRequestParser
 import v2.hateoas.HateoasFactory
-import v2.models.audit.{ AuditEvent, AuditResponse, FlattenedGenericAuditDetail }
+import v2.models.audit.{AuditEvent, AuditResponse, FlattenedGenericAuditDetail}
 import v2.models.errors._
 import v2.models.request.createHistoricFhlUkPiePeriodSummary.CreateHistoricFhlUkPiePeriodSummaryRawData
 import v2.models.response.createHistoricFhlUkPiePeriodSummary.CreateHistoricFhlUkPiePeriodSummaryHateoasData
-import v2.services.{ AuditService, CreateHistoricFhlUkPiePeriodSummaryService, EnrolmentsAuthService, MtdIdLookupService }
+import v2.services.{AuditService, CreateHistoricFhlUkPiePeriodSummaryService, EnrolmentsAuthService, MtdIdLookupService}
 
-import javax.inject.{ Inject, Singleton }
-import scala.concurrent.{ ExecutionContext, Future }
+import javax.inject.{Inject, Singleton}
+import scala.concurrent.{ExecutionContext, Future}
 
-/**
-  * Controller for the Create a Historic UK Furnished Holiday Letting Property Income & Expenses Period Summary endpoint.
+/** Controller for the Create a Historic UK Furnished Holiday Letting Property Income & Expenses Period Summary endpoint.
   */
 @Singleton
-class CreateHistoricFhlUkPiePeriodSummaryController @Inject()(val authService: EnrolmentsAuthService,
-                                                              val lookupService: MtdIdLookupService,
-                                                              parser: CreateHistoricFhlUkPiePeriodSummaryRequestParser,
-                                                              service: CreateHistoricFhlUkPiePeriodSummaryService,
-                                                              auditService: AuditService,
-                                                              hateoasFactory: HateoasFactory,
-                                                              cc: ControllerComponents,
-                                                              idGenerator: IdGenerator)(implicit ec: ExecutionContext)
+class CreateHistoricFhlUkPiePeriodSummaryController @Inject() (val authService: EnrolmentsAuthService,
+                                                               val lookupService: MtdIdLookupService,
+                                                               parser: CreateHistoricFhlUkPiePeriodSummaryRequestParser,
+                                                               service: CreateHistoricFhlUkPiePeriodSummaryService,
+                                                               auditService: AuditService,
+                                                               hateoasFactory: HateoasFactory,
+                                                               cc: ControllerComponents,
+                                                               idGenerator: IdGenerator)(implicit ec: ExecutionContext)
     extends AuthorisedController(cc)
     with BaseController
     with Logging {
@@ -149,4 +148,5 @@ class CreateHistoricFhlUkPiePeriodSummaryController @Inject()(val authService: E
       AuditEvent("CreateHistoricFhlPropertyIncomeExpensesPeriodSummary", "CreateHistoricFhlPropertyIncomeExpensesPeriodSummary", details)
     auditService.auditEvent(event)
   }
+
 }

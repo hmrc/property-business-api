@@ -17,23 +17,23 @@
 package v2.controllers
 
 import cats.data.EitherT
-import play.api.libs.json.{ JsValue, Json }
-import play.api.mvc.{ Action, ControllerComponents }
+import play.api.libs.json.{JsValue, Json}
+import play.api.mvc.{Action, ControllerComponents}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.audit.http.connector.AuditResult
-import utils.{ IdGenerator, Logging }
+import utils.{IdGenerator, Logging}
 import v2.controllers.requestParsers.AmendHistoricNonFhlUkPiePeriodSummaryRequestParser
 import v2.hateoas.HateoasFactory
 import v2.models.errors._
 import v2.models.request.amendHistoricNonFhlUkPiePeriodSummary.AmendHistoricNonFhlUkPiePeriodSummaryRawData
 import v2.models.response.amendHistoricNonFhlUkPiePeriodSummary.AmendHistoricNonFhlUkPropertyPeriodSummaryHateoasData
-import v2.services.{ AmendHistoricNonFhlUkPiePeriodSummaryService, EnrolmentsAuthService, MtdIdLookupService, AuditService }
-import v2.models.audit.{ AuditEvent, AuditResponse, FlattenedGenericAuditDetail}
+import v2.services.{AmendHistoricNonFhlUkPiePeriodSummaryService, EnrolmentsAuthService, MtdIdLookupService, AuditService}
+import v2.models.audit.{AuditEvent, AuditResponse, FlattenedGenericAuditDetail}
 
 import javax.inject.Inject
-import scala.concurrent.{ ExecutionContext, Future }
+import scala.concurrent.{ExecutionContext, Future}
 
-class AmendHistoricNonFhlUkPropertyPeriodSummaryController @Inject()(
+class AmendHistoricNonFhlUkPropertyPeriodSummaryController @Inject() (
     val authService: EnrolmentsAuthService,
     val lookupService: MtdIdLookupService,
     parser: AmendHistoricNonFhlUkPiePeriodSummaryRequestParser,
@@ -47,8 +47,9 @@ class AmendHistoricNonFhlUkPropertyPeriodSummaryController @Inject()(
     with BaseController
     with Logging {
 
-  implicit val endpointLogContext: EndpointLogContext = EndpointLogContext(controllerName = "AmendHistoricNonFhlUkPropertyPeriodSummaryController",
-                                                                           endpointName = "AmendHistoricNonFhlUkPropertyPeriodSummary")
+  implicit val endpointLogContext: EndpointLogContext = EndpointLogContext(
+    controllerName = "AmendHistoricNonFhlUkPropertyPeriodSummaryController",
+    endpointName = "AmendHistoricNonFhlUkPropertyPeriodSummary")
 
   def handleRequest(nino: String, periodId: String): Action[JsValue] =
     authorisedAction(nino).async(parse.json) { implicit request =>
@@ -126,8 +127,11 @@ class AmendHistoricNonFhlUkPropertyPeriodSummaryController @Inject()(
     case InternalError => InternalServerError(Json.toJson(errorWrapper))
     case _             => unhandledError(errorWrapper)
   }
+
   private def auditSubmission(details: FlattenedGenericAuditDetail)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[AuditResult] = {
     val event =
       AuditEvent("AmendHistoricNonFhlPropertyIncomeExpensesPeriodSummary", "AmendHistoricNonFhlPropertyIncomeExpensesPeriodSummary", details)
     auditService.auditEvent(event)
-  }}
+  }
+
+}

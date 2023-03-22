@@ -18,38 +18,39 @@ package v2.controllers
 
 import cats.data.EitherT
 import cats.implicits._
-import play.api.libs.json.{ JsValue, Json }
-import play.api.mvc.{ Action, ControllerComponents }
+import play.api.libs.json.{JsValue, Json}
+import play.api.mvc.{Action, ControllerComponents}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.audit.http.connector.AuditResult
-import utils.{ IdGenerator, Logging }
+import utils.{IdGenerator, Logging}
 import v2.controllers.requestParsers.CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequestParser
 import v2.hateoas.HateoasFactory
-import v2.models.audit.{ AuditEvent, AuditResponse, FlattenedGenericAuditDetail }
+import v2.models.audit.{AuditEvent, AuditResponse, FlattenedGenericAuditDetail}
 import v2.models.errors._
 import v2.models.request.createAmendHistoricFhlUkPropertyAnnualSubmission.CreateAmendHistoricFhlUkPropertyAnnualSubmissionRawData
 import v2.models.response.createAmendHistoricFhlUkPropertyAnnualSubmission.CreateAmendHistoricFhlUkPropertyAnnualSubmissionHateoasData
-import v2.services.{ AuditService, CreateAmendHistoricFhlUkPropertyAnnualSubmissionService, EnrolmentsAuthService, MtdIdLookupService }
+import v2.services.{AuditService, CreateAmendHistoricFhlUkPropertyAnnualSubmissionService, EnrolmentsAuthService, MtdIdLookupService}
 
-import javax.inject.{ Inject, Singleton }
-import scala.concurrent.{ ExecutionContext, Future }
+import javax.inject.{Inject, Singleton}
+import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class CreateAmendHistoricFhlUkPropertyAnnualSubmissionController @Inject()(val authService: EnrolmentsAuthService,
-                                                                           val lookupService: MtdIdLookupService,
-                                                                           parser: CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequestParser,
-                                                                           service: CreateAmendHistoricFhlUkPropertyAnnualSubmissionService,
-                                                                           auditService: AuditService,
-                                                                           hateoasFactory: HateoasFactory,
-                                                                           cc: ControllerComponents,
-                                                                           idGenerator: IdGenerator)(implicit ec: ExecutionContext)
+class CreateAmendHistoricFhlUkPropertyAnnualSubmissionController @Inject() (val authService: EnrolmentsAuthService,
+                                                                            val lookupService: MtdIdLookupService,
+                                                                            parser: CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequestParser,
+                                                                            service: CreateAmendHistoricFhlUkPropertyAnnualSubmissionService,
+                                                                            auditService: AuditService,
+                                                                            hateoasFactory: HateoasFactory,
+                                                                            cc: ControllerComponents,
+                                                                            idGenerator: IdGenerator)(implicit ec: ExecutionContext)
     extends AuthorisedController(cc)
     with BaseController
     with Logging {
 
   implicit val endpointLogContext: EndpointLogContext =
-    EndpointLogContext(controllerName = "CreateAmendHistoricFhlUkPropertyAnnualSubmissionController",
-                       endpointName = "CreateAmendHistoricFhlUkPropertyAnnualSubmission")
+    EndpointLogContext(
+      controllerName = "CreateAmendHistoricFhlUkPropertyAnnualSubmissionController",
+      endpointName = "CreateAmendHistoricFhlUkPropertyAnnualSubmission")
 
   def handleRequest(nino: String, taxYear: String): Action[JsValue] =
     authorisedAction(nino).async(parse.json) { implicit request =>
@@ -115,8 +116,7 @@ class CreateAmendHistoricFhlUkPropertyAnnualSubmissionController @Inject()(val a
   private def errorResult(errorWrapper: ErrorWrapper) =
     errorWrapper.error match {
       case BadRequestError | NinoFormatError | TaxYearFormatError | RuleTaxYearRangeInvalidError | RuleHistoricTaxYearNotSupportedError |
-          MtdErrorWithCode(ValueFormatError.code) | MtdErrorWithCode(RuleIncorrectOrEmptyBodyError.code) |  RuleIncorrectGovTestScenarioError
-      =>
+          MtdErrorWithCode(ValueFormatError.code) | MtdErrorWithCode(RuleIncorrectOrEmptyBodyError.code) | RuleIncorrectGovTestScenarioError =>
         BadRequest(Json.toJson(errorWrapper))
       case NotFoundError => NotFound(Json.toJson(errorWrapper))
       case InternalError => InternalServerError(Json.toJson(errorWrapper))
@@ -128,4 +128,5 @@ class CreateAmendHistoricFhlUkPropertyAnnualSubmissionController @Inject()(val a
       AuditEvent("CreateAndAmendHistoricFhlPropertyBusinessAnnualSubmission", "CreateAndAmendHistoricFhlPropertyBusinessAnnualSubmission", details)
     auditService.auditEvent(event)
   }
+
 }

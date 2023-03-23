@@ -16,7 +16,7 @@
 
 package v2.models.request.createAmendHistoricNonFhlUkPropertyAnnualSubmission
 
+import api.models.RawData
 import play.api.libs.json.JsValue
-import v2.models.request.RawData
 
 case class CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRawData(nino: String, taxYear: String, body: JsValue) extends RawData

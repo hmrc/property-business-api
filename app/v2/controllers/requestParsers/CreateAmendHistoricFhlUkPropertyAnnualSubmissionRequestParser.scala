@@ -16,8 +16,10 @@
 
 package v2.controllers.requestParsers
 
+import api.controllers.requestParsers.RequestParser
+import api.models.domain.Nino
 import v2.controllers.requestParsers.validators.CreateAmendHistoricFhlUkPropertyAnnualSubmissionValidator
-import v2.models.domain.{ Nino, TaxYear }
+import v2.models.domain.TaxYear
 import v2.models.request.createAmendHistoricFhlUkPropertyAnnualSubmission.{
   CreateAmendHistoricFhlUkPropertyAnnualSubmissionRawData,
   CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequest,
@@ -26,15 +28,17 @@ import v2.models.request.createAmendHistoricFhlUkPropertyAnnualSubmission.{
 
 import javax.inject.Inject
 
-class CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequestParser @Inject()(
+class CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequestParser @Inject() (
     val validator: CreateAmendHistoricFhlUkPropertyAnnualSubmissionValidator)
     extends RequestParser[CreateAmendHistoricFhlUkPropertyAnnualSubmissionRawData, CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequest] {
 
   override protected def requestFor(
       data: CreateAmendHistoricFhlUkPropertyAnnualSubmissionRawData): CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequest = {
 
-    CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequest(Nino(data.nino),
-                                                            TaxYear.fromMtd(data.taxYear),
-                                                            data.body.as[CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequestBody])
+    CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequest(
+      Nino(data.nino),
+      TaxYear.fromMtd(data.taxYear),
+      data.body.as[CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequestBody])
   }
+
 }

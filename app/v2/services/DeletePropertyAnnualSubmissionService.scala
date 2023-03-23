@@ -20,14 +20,14 @@ import cats.data.EitherT
 import cats.implicits._
 import uk.gov.hmrc.http.HeaderCarrier
 import utils.Logging
-import v2.connectors.DeletePropertyAnnualSubmissionConnector
-import v2.controllers.EndpointLogContext
-import v2.models.errors.{ BusinessIdFormatError, InternalError, NinoFormatError, NotFoundError, RuleTaxYearNotSupportedError, TaxYearFormatError }
+import api.controllers.EndpointLogContext
+import api.models.errors.{BusinessIdFormatError, InternalError, NinoFormatError, NotFoundError, RuleTaxYearNotSupportedError, TaxYearFormatError}
 import v2.models.request.deletePropertyAnnualSubmission.DeletePropertyAnnualSubmissionRequest
-import v2.support.DownstreamResponseMappingSupport
+import api.services.{DownstreamResponseMappingSupport, ServiceOutcome}
+import v2.connectors.DeletePropertyAnnualSubmissionConnector
 
-import javax.inject.{ Inject, Singleton }
-import scala.concurrent.{ ExecutionContext, Future }
+import javax.inject.{Inject, Singleton}
+import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class DeletePropertyAnnualSubmissionService @Inject()(connector: DeletePropertyAnnualSubmissionConnector)

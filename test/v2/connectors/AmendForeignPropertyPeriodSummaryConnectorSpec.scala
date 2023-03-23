@@ -16,10 +16,12 @@
 
 package v2.connectors
 
+import api.connectors.{ConnectorSpec, DownstreamOutcome}
 import org.scalamock.handlers.CallHandler
-import v2.models.domain.{ Nino, TaxYear }
-import v2.models.errors.{ DownstreamErrorCode, DownstreamErrors }
-import v2.models.outcomes.ResponseWrapper
+import v2.models.domain.TaxYear
+import api.models.errors.{DownstreamErrorCode, DownstreamErrors}
+import api.models.ResponseWrapper
+import api.models.domain.Nino
 import v2.models.request.amendForeignPropertyPeriodSummary._
 import v2.models.request.common.foreignFhlEea._
 import v2.models.request.common.foreignPropertyEntry._

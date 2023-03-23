@@ -16,8 +16,8 @@
 
 package v2.controllers.requestParsers.validators.validations
 
+import api.models.errors.{CountryCodeFormatError, MtdError, RuleCountryCodeError}
 import com.neovisionaries.i18n.CountryCode
-import v2.models.errors.{ CountryCodeFormatError, RuleCountryCodeError, MtdError }
 
 object CountryCodeValidation {
 

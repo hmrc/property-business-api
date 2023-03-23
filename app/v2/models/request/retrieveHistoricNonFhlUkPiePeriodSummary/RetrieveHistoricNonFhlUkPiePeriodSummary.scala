@@ -16,8 +16,9 @@
 
 package v2.models.request.retrieveHistoricNonFhlUkPiePeriodSummary
 
-import v2.models.domain.{ Nino, PeriodId }
-import v2.models.request.RawData
+import api.models.domain.Nino
+import api.models.RawData
+import v2.models.domain.PeriodId
 
 case class RetrieveHistoricNonFhlUkPiePeriodSummaryRawData(nino: String, periodId: String) extends RawData
 

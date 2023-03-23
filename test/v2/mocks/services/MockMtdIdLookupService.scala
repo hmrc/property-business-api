@@ -19,10 +19,10 @@ package v2.mocks.services
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
 import uk.gov.hmrc.http.HeaderCarrier
-import v2.connectors.MtdIdLookupOutcome
-import v2.services.MtdIdLookupService
+import api.connectors.MtdIdLookupOutcome
+import api.services.MtdIdLookupService
 
-import scala.concurrent.{ ExecutionContext, Future }
+import scala.concurrent.{ExecutionContext, Future}
 
 trait MockMtdIdLookupService extends MockFactory {
 

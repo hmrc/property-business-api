@@ -16,8 +16,9 @@
 
 package v2.controllers.requestParsers
 
+import api.controllers.requestParsers.RequestParser
+import api.models.domain.Nino
 import v2.controllers.requestParsers.validators.CreateHistoricNonFhlUkPropertyPeriodSummaryValidator
-import v2.models.domain.Nino
 import v2.models.request.createHistoricNonFhlUkPropertyPeriodSummary.{
   CreateHistoricNonFhlUkPropertyPeriodSummaryRawData,
   CreateHistoricNonFhlUkPropertyPeriodSummaryRequest,
@@ -26,9 +27,10 @@ import v2.models.request.createHistoricNonFhlUkPropertyPeriodSummary.{
 
 import javax.inject.Inject
 
-class CreateHistoricNonFhlUkPropertyPeriodSummaryRequestParser @Inject()(val validator: CreateHistoricNonFhlUkPropertyPeriodSummaryValidator)
+class CreateHistoricNonFhlUkPropertyPeriodSummaryRequestParser @Inject() (val validator: CreateHistoricNonFhlUkPropertyPeriodSummaryValidator)
     extends RequestParser[CreateHistoricNonFhlUkPropertyPeriodSummaryRawData, CreateHistoricNonFhlUkPropertyPeriodSummaryRequest] {
 
   override protected def requestFor(data: CreateHistoricNonFhlUkPropertyPeriodSummaryRawData): CreateHistoricNonFhlUkPropertyPeriodSummaryRequest =
     CreateHistoricNonFhlUkPropertyPeriodSummaryRequest(Nino(data.nino), data.body.as[CreateHistoricNonFhlUkPropertyPeriodSummaryRequestBody])
+
 }

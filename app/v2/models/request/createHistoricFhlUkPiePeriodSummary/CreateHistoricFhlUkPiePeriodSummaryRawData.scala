@@ -16,9 +16,9 @@
 
 package v2.models.request.createHistoricFhlUkPiePeriodSummary
 
+import api.models.RawData
 import play.api.libs.functional.syntax.{ toFunctionalBuilderOps, unlift }
 import play.api.libs.json.{ JsPath, JsValue, OWrites }
-import v2.models.request.RawData
 
 /** Model name abbreviated for convenience.
   *  Create a Historic Furnished Holiday Lettings (Fhl) UK Property Income & Expenses (Pie) Period Summary

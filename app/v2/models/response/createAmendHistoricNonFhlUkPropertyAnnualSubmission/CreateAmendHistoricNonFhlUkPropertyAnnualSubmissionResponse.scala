@@ -16,14 +16,21 @@
 
 package v2.models.response.createAmendHistoricNonFhlUkPropertyAnnualSubmission
 
+import akka.actor.TypedActor.self
+import api.hateoas.{HateoasData, HateoasLinksFactory, Link}
 import config.AppConfig
-import play.api.libs.json.{ Json, OWrites, Reads }
-import v2.hateoas.{ HateoasLinks, HateoasLinksFactory }
-import v2.models.hateoas.{ HateoasData, Link }
+import play.api.libs.json.{Json, OWrites, Reads}
+import v1.hateoas.HateoasLinks
+import v2.models.response.listPropertyPeriodSummaries.ListPropertyPeriodSummariesResponse.{
+  createAmendHistoricNonFhlUkPropertyAnnualSubmission,
+  deleteHistoricNonFhlUkPropertyAnnualSubmission,
+  retrieveHistoricNonFhlUkPropertyAnnualSubmission
+}
 
 case class CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionResponse(transactionReference: Option[String])
 
 object CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionResponse extends HateoasLinks {
+
   implicit val reads: Reads[CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionResponse] =
     Json.reads[CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionResponse]
 
@@ -31,8 +38,10 @@ object CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionResponse extends Hateo
     (_: CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionResponse) => Json.obj()
 
   implicit object CreateAmendHistoricNonFhlUkPropertyLinksFactory
-      extends HateoasLinksFactory[CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionResponse,
-                                  CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionHateoasData] {
+      extends HateoasLinksFactory[
+        CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionResponse,
+        CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionHateoasData] {
+
     override def links(appConfig: AppConfig, data: CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionHateoasData): Seq[Link] = {
       import data._
       Seq(
@@ -41,7 +50,9 @@ object CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionResponse extends Hateo
         deleteHistoricNonFhlUkPropertyAnnualSubmission(appConfig, nino, taxYear)
       )
     }
+
   }
+
 }
 
 case class CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionHateoasData(nino: String, taxYear: String) extends HateoasData

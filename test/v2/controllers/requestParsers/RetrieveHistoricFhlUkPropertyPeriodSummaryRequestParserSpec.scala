@@ -16,14 +16,12 @@
 
 package v2.controllers.requestParsers
 
+import api.models.domain.Nino
 import support.UnitSpec
 import v2.mocks.validators.MockRetrieveHistoricFhlUkPropertyPeriodSummaryValidator
-import v2.models.domain.{ Nino, PeriodId }
-import v2.models.errors.{ BadRequestError, ErrorWrapper, NinoFormatError, PeriodIdFormatError }
-import v2.models.request.retrieveHistoricFhlUkPiePeriodSummary.{
-  RetrieveHistoricFhlUkPiePeriodSummaryRawData,
-  RetrieveHistoricFhlUkPiePeriodSummaryRequest
-}
+import v2.models.domain.PeriodId
+import api.models.errors.{BadRequestError, ErrorWrapper, NinoFormatError, PeriodIdFormatError}
+import v2.models.request.retrieveHistoricFhlUkPiePeriodSummary.{RetrieveHistoricFhlUkPiePeriodSummaryRawData, RetrieveHistoricFhlUkPiePeriodSummaryRequest}
 
 class RetrieveHistoricFhlUkPropertyPeriodSummaryRequestParserSpec extends UnitSpec {
 

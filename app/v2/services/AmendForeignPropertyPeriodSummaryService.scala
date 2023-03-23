@@ -16,15 +16,15 @@
 
 package v2.services
 
+import api.controllers.EndpointLogContext
+import api.models.errors._
+import api.services.{DownstreamResponseMappingSupport, ServiceOutcome}
 import cats.data.EitherT
 import cats.implicits._
 import uk.gov.hmrc.http.HeaderCarrier
 import utils.Logging
 import v2.connectors.AmendForeignPropertyPeriodSummaryConnector
-import v2.controllers.EndpointLogContext
-import v2.models.errors._
 import v2.models.request.amendForeignPropertyPeriodSummary.AmendForeignPropertyPeriodSummaryRequest
-import v2.support.DownstreamResponseMappingSupport
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}

@@ -16,10 +16,10 @@
 
 package v2.controllers.requestParsers.validators.validations
 
-import v2.models.errors.{ DateFormatError, FromDateFormatError, MtdError, ToDateFormatError }
+import api.models.errors.{DateFormatError, FromDateFormatError, MtdError, ToDateFormatError}
 
 import java.time.LocalDate
-import scala.util.{ Failure, Success, Try }
+import scala.util.{Failure, Success, Try}
 
 object DateValidation {
 

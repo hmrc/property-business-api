@@ -19,10 +19,10 @@ package v2.mocks.services
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
 import uk.gov.hmrc.http.HeaderCarrier
-import v2.controllers.EndpointLogContext
+import api.controllers.EndpointLogContext
 import v2.models.domain.HistoricPropertyType
-import v2.models.errors.ErrorWrapper
-import v2.models.outcomes.ResponseWrapper
+import api.models.errors.ErrorWrapper
+import api.models.ResponseWrapper
 import v2.models.request.listHistoricUkPropertyPeriodSummaries.ListHistoricUkPropertyPeriodSummariesRequest
 import v2.models.response.listHistoricUkPropertyPeriodSummaries.{ ListHistoricUkPropertyPeriodSummariesResponse, SubmissionPeriod }
 import v2.services.ListHistoricUkPropertyPeriodSummariesService

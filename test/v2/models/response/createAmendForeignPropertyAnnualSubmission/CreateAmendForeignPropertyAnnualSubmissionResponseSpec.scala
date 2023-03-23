@@ -18,8 +18,8 @@ package v2.models.response.createAmendForeignPropertyAnnualSubmission
 
 import mocks.MockAppConfig
 import support.UnitSpec
-import v2.models.hateoas.Link
-import v2.models.hateoas.Method.{ DELETE, GET, PUT }
+import api.hateoas.Link
+import api.hateoas.Method.{ DELETE, GET, PUT }
 
 class CreateAmendForeignPropertyAnnualSubmissionResponseSpec extends UnitSpec with MockAppConfig {
 

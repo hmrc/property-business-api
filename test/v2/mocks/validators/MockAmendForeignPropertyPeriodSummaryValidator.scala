@@ -19,7 +19,7 @@ package v2.mocks.validators
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
 import v2.controllers.requestParsers.validators.AmendForeignPropertyPeriodSummaryValidator
-import v2.models.errors.MtdError
+import api.models.errors.MtdError
 import v2.models.request.amendForeignPropertyPeriodSummary.AmendForeignPropertyPeriodSummaryRawData
 
 class MockAmendForeignPropertyPeriodSummaryValidator extends MockFactory {

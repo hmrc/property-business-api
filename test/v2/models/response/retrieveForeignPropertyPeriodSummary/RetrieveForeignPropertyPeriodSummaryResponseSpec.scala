@@ -19,7 +19,7 @@ package v2.models.response.retrieveForeignPropertyPeriodSummary
 import mocks.MockAppConfig
 import play.api.libs.json.{ JsValue, Json }
 import support.UnitSpec
-import v2.models.hateoas.{ Link, Method }
+import api.hateoas.{ Link, Method }
 import v2.models.response.retrieveForeignPropertyPeriodSummary.foreignFhlEea._
 import v2.models.response.retrieveForeignPropertyPeriodSummary.foreignNonFhlProperty._
 import v2.models.utils.JsonErrorValidators

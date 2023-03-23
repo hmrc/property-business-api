@@ -16,6 +16,7 @@
 
 package v2.controllers
 
+import api.controllers.ControllerBaseSpec
 import play.api.libs.json.{JsObject, Json}
 import play.api.mvc.Result
 import uk.gov.hmrc.http.HeaderCarrier
@@ -23,12 +24,14 @@ import v2.mocks.MockIdGenerator
 import v2.mocks.hateoas.MockHateoasFactory
 import v2.mocks.requestParsers.MockAmendHistoricNonFhlUkPiePeriodSummaryRequestParser
 import v2.mocks.services.{MockAmendHistoricNonFhlUkPropertyPeriodSummaryService, MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService}
-import v2.models.domain.{Nino, PeriodId}
-import v2.models.audit.{AuditError, AuditEvent, AuditResponse, FlattenedGenericAuditDetail}
-import v2.models.auth.UserDetails
-import v2.models.errors.{BadRequestError, ErrorWrapper, InternalError, MtdError, NinoFormatError, NotFoundError, PeriodIdFormatError, RuleBothExpensesSuppliedError, RuleIncorrectGovTestScenarioError, RuleIncorrectOrEmptyBodyError, ValueFormatError}
-import v2.models.hateoas.HateoasWrapper
-import v2.models.outcomes.ResponseWrapper
+import v2.models.domain.PeriodId
+import api.models.UserDetails
+import api.models.errors.{BadRequestError, ErrorWrapper, InternalError, MtdError, NinoFormatError, NotFoundError, PeriodIdFormatError, RuleBothExpensesSuppliedError, RuleIncorrectGovTestScenarioError, RuleIncorrectOrEmptyBodyError, ValueFormatError}
+import api.hateoas.HateoasWrapper
+import api.models.ResponseWrapper
+import api.models.audit.{AuditError, AuditResponse}
+import api.models.domain.Nino
+import v2.models.audit.{AuditEvent, FlattenedGenericAuditDetail}
 import v2.models.request.amendHistoricNonFhlUkPiePeriodSummary.{AmendHistoricNonFhlUkPiePeriodSummaryRawData, AmendHistoricNonFhlUkPiePeriodSummaryRequest, AmendHistoricNonFhlUkPiePeriodSummaryRequestBody}
 import v2.models.response.amendHistoricNonFhlUkPiePeriodSummary.AmendHistoricNonFhlUkPropertyPeriodSummaryHateoasData
 
@@ -48,7 +51,7 @@ class AmendHistoricNonFhlUkPropertyPeriodSummaryControllerSpec
   private val nino          = "AA123456A"
   private val periodId      = "somePeriodId"
   private val correlationId = "X-123"
-  private val mtdId: String  = "test-mtd-id"
+  private val mtdId: String = "test-mtd-id"
 
   trait Test {
     val hc: HeaderCarrier = HeaderCarrier()
@@ -75,6 +78,7 @@ class AmendHistoricNonFhlUkPropertyPeriodSummaryControllerSpec
 
   private val rawData = AmendHistoricNonFhlUkPiePeriodSummaryRawData(nino, periodId, requestBodyJson)
   private val request = AmendHistoricNonFhlUkPiePeriodSummaryRequest(Nino(nino), PeriodId(periodId), requestBody)
+
   def event(auditResponse: AuditResponse): AuditEvent[FlattenedGenericAuditDetail] =
     AuditEvent(
       auditType = "AmendHistoricNonFhlPropertyIncomeExpensesPeriodSummary",
@@ -142,7 +146,7 @@ class AmendHistoricNonFhlUkPropertyPeriodSummaryControllerSpec
         (withPath(RuleBothExpensesSuppliedError), BAD_REQUEST),
         (withPath(ValueFormatError), BAD_REQUEST),
         (withPath(RuleIncorrectOrEmptyBodyError), BAD_REQUEST),
-        (PeriodIdFormatError, BAD_REQUEST),
+        (PeriodIdFormatError, BAD_REQUEST)
       )
 
       input.foreach(args => (errorsFromParserTester _).tupled(args))
@@ -178,10 +182,10 @@ class AmendHistoricNonFhlUkPropertyPeriodSummaryControllerSpec
         (RuleBothExpensesSuppliedError, BAD_REQUEST),
         (InternalError, INTERNAL_SERVER_ERROR),
         (RuleIncorrectGovTestScenarioError, BAD_REQUEST)
-
       )
 
       input.foreach(args => (serviceErrors _).tupled(args))
     }
   }
+
 }

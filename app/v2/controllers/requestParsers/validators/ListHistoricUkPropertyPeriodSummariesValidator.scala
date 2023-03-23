@@ -16,11 +16,12 @@
 
 package v2.controllers.requestParsers.validators
 
+import api.controllers.requestParsers.validators.Validator
+import api.controllers.requestParsers.validators.validations.NinoValidation
 import config.AppConfig
 
-import javax.inject.{ Inject, Singleton }
-import v2.controllers.requestParsers.validators.validations._
-import v2.models.errors.MtdError
+import javax.inject.{Inject, Singleton}
+import api.models.errors.MtdError
 import v2.models.request.listHistoricUkPropertyPeriodSummaries.ListHistoricUkPropertyPeriodSummariesRawData
 
 @Singleton

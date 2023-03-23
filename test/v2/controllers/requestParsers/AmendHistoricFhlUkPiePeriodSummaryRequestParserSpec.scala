@@ -16,18 +16,15 @@
 
 package v2.controllers.requestParsers
 
-import play.api.libs.json.{ JsValue, Json }
+import api.models.domain.Nino
+import play.api.libs.json.{Json, JsValue}
 import support.UnitSpec
 import v2.mocks.validators.MockAmendHistoricFhlUkPiePeriodSummaryValidator
-import v2.models.domain.{ Nino, PeriodId }
-import v2.models.errors.{ BadRequestError, ErrorWrapper, NinoFormatError, RuleBothExpensesSuppliedError }
-import v2.models.request.amendHistoricFhlUkPiePeriodSummary.{
-  AmendHistoricFhlUkPiePeriodSummaryRawData,
-  AmendHistoricFhlUkPiePeriodSummaryRequest,
-  AmendHistoricFhlUkPiePeriodSummaryRequestBody
-}
-import v2.models.request.common.ukFhlPieProperty.{ UkFhlPieExpenses, UkFhlPieIncome }
-import v2.models.request.common.ukPropertyRentARoom.{ UkPropertyExpensesRentARoom, UkPropertyIncomeRentARoom }
+import v2.models.domain.PeriodId
+import api.models.errors.{BadRequestError, ErrorWrapper, NinoFormatError, RuleBothExpensesSuppliedError}
+import v2.models.request.amendHistoricFhlUkPiePeriodSummary.{AmendHistoricFhlUkPiePeriodSummaryRawData, AmendHistoricFhlUkPiePeriodSummaryRequest, AmendHistoricFhlUkPiePeriodSummaryRequestBody}
+import v2.models.request.common.ukFhlPieProperty.{UkFhlPieExpenses, UkFhlPieIncome}
+import v2.models.request.common.ukPropertyRentARoom.{UkPropertyExpensesRentARoom, UkPropertyIncomeRentARoom}
 
 class AmendHistoricFhlUkPiePeriodSummaryRequestParserSpec extends UnitSpec {
 

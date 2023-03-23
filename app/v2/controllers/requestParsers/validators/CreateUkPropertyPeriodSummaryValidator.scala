@@ -16,18 +16,20 @@
 
 package v2.controllers.requestParsers.validators
 
+import api.controllers.requestParsers.validators.Validator
+import api.controllers.requestParsers.validators.validations.{BusinessIdValidation, NinoValidation, ToDateBeforeFromDateValidation}
 import com.google.inject.Inject
 import config.AppConfig
 import v2.controllers.requestParsers.validators.validations._
-import v2.models.errors.MtdError
+import api.models.errors.MtdError
 import v2.models.request.common.ukFhlProperty.UkFhlProperty
 import v2.models.request.common.ukNonFhlProperty.UkNonFhlProperty
-import v2.models.request.createUkPropertyPeriodSummary.{ CreateUkPropertyPeriodSummaryRawData, CreateUkPropertyPeriodSummaryRequestBody }
+import v2.models.request.createUkPropertyPeriodSummary.{CreateUkPropertyPeriodSummaryRawData, CreateUkPropertyPeriodSummaryRequestBody}
 
 import javax.inject.Singleton
 
 @Singleton
-class CreateUkPropertyPeriodSummaryValidator @Inject()(appConfig: AppConfig) extends Validator[CreateUkPropertyPeriodSummaryRawData] {
+class CreateUkPropertyPeriodSummaryValidator @Inject() (appConfig: AppConfig) extends Validator[CreateUkPropertyPeriodSummaryRawData] {
 
   private lazy val minTaxYear = appConfig.minimumTaxV2Uk
   private val validationSet   = List(parameterFormatValidation, bodyFormatValidation, bodyFieldFormatValidation, dateRangeValidation)
@@ -66,7 +68,7 @@ class CreateUkPropertyPeriodSummaryValidator @Inject()(appConfig: AppConfig) ext
             .getOrElse(NoValidationErrors),
           body.ukNonFhlProperty
             .flatMap(_.expenses.map(ConsolidatedExpensesValidation.validate(_, "/ukNonFhlProperty/expenses")))
-            .getOrElse(NoValidationErrors),
+            .getOrElse(NoValidationErrors)
         )))
 
     regularErrors ++ pathErrors
@@ -122,7 +124,7 @@ class CreateUkPropertyPeriodSummaryValidator @Inject()(appConfig: AppConfig) ext
       NumberValidation.validateOptional(
         field = property.expenses.flatMap(_.rentARoom.flatMap(_.amountClaimed)),
         path = "/ukFhlProperty/expenses/rentARoom/amountClaimed"
-      ),
+      )
     ).flatten
   }
 
@@ -195,7 +197,7 @@ class CreateUkPropertyPeriodSummaryValidator @Inject()(appConfig: AppConfig) ext
       NumberValidation.validateOptional(
         field = property.expenses.flatMap(_.rentARoom.flatMap(_.amountClaimed)),
         path = "/ukNonFhlProperty/expenses/rentARoom/amountClaimed"
-      ),
+      )
     ).flatten
   }
 
@@ -208,4 +210,5 @@ class CreateUkPropertyPeriodSummaryValidator @Inject()(appConfig: AppConfig) ext
   override def validate(data: CreateUkPropertyPeriodSummaryRawData): List[MtdError] = {
     run(validationSet, data).distinct
   }
+
 }

@@ -16,11 +16,11 @@
 
 package v2.models.response.retrieveForeignPropertyAnnualSubmission
 
+import api.hateoas.{HateoasData, HateoasLinksFactory, Link}
 import config.AppConfig
-import play.api.libs.json.{ JsPath, Json, OWrites, Reads }
-import v2.hateoas.{ HateoasLinks, HateoasLinksFactory }
+import play.api.libs.json.{Json, JsPath, OWrites, Reads}
+import v2.hateoas.HateoasLinks
 import play.api.libs.functional.syntax._
-import v2.models.hateoas.{ HateoasData, Link }
 import v2.models.response.retrieveForeignPropertyAnnualSubmission.foreignFhlEea.ForeignFhlEeaEntry
 import v2.models.response.retrieveForeignPropertyAnnualSubmission.foreignProperty.ForeignPropertyEntry
 
@@ -30,6 +30,7 @@ case class RetrieveForeignPropertyAnnualSubmissionResponse(submittedOn: String,
 
 object RetrieveForeignPropertyAnnualSubmissionResponse extends HateoasLinks {
   implicit val writes: OWrites[RetrieveForeignPropertyAnnualSubmissionResponse] = Json.writes[RetrieveForeignPropertyAnnualSubmissionResponse]
+
   implicit val reads: Reads[RetrieveForeignPropertyAnnualSubmissionResponse] = (
     (JsPath \ "submittedOn").read[String] and
       (JsPath \ "foreignFhlEea").readNullable[ForeignFhlEeaEntry] and
@@ -38,6 +39,7 @@ object RetrieveForeignPropertyAnnualSubmissionResponse extends HateoasLinks {
 
   implicit object RetrieveAnnualSubmissionLinksFactory
       extends HateoasLinksFactory[RetrieveForeignPropertyAnnualSubmissionResponse, RetrieveForeignPropertyAnnualSubmissionHateoasData] {
+
     override def links(appConfig: AppConfig, data: RetrieveForeignPropertyAnnualSubmissionHateoasData): Seq[Link] = {
       import data._
       Seq(
@@ -46,7 +48,9 @@ object RetrieveForeignPropertyAnnualSubmissionResponse extends HateoasLinks {
         deletePropertyAnnualSubmission(appConfig, nino, businessId, taxYear)
       )
     }
+
   }
+
 }
 
 case class RetrieveForeignPropertyAnnualSubmissionHateoasData(nino: String, businessId: String, taxYear: String) extends HateoasData

@@ -16,6 +16,7 @@
 
 package v2.models.request.retrieveUkPropertyPeriodSummary
 
-import v2.models.domain.{ Nino, TaxYear }
+import api.models.domain.Nino
+import v2.models.domain.TaxYear
 
 case class RetrieveUkPropertyPeriodSummaryRequest(nino: Nino, businessId: String, taxYear: TaxYear, submissionId: String)

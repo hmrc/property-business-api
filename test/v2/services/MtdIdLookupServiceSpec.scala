@@ -17,7 +17,8 @@
 package v2.services
 
 import v2.mocks.connectors.MockMtdIdLookupConnector
-import v2.models.errors.{ InternalError, NinoFormatError, UnauthorisedError }
+import api.models.errors.{InternalError, NinoFormatError, UnauthorisedError}
+import api.services.MtdIdLookupService
 
 import scala.concurrent.Future
 

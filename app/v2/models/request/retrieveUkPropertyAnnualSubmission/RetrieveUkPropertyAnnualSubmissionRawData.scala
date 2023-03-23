@@ -16,6 +16,6 @@
 
 package v2.models.request.retrieveUkPropertyAnnualSubmission
 
-import v2.models.request.RawData
+import api.models.RawData
 
 case class RetrieveUkPropertyAnnualSubmissionRawData(nino: String, businessId: String, taxYear: String) extends RawData

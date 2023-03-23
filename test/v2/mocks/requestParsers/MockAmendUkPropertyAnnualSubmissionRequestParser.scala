@@ -19,7 +19,7 @@ package v2.mocks.requestParsers
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
 import v2.controllers.requestParsers.AmendUkPropertyAnnualSubmissionRequestParser
-import v2.models.errors.ErrorWrapper
+import api.models.errors.ErrorWrapper
 import v2.models.request.amendUkPropertyAnnualSubmission.{ AmendUkPropertyAnnualSubmissionRawData, AmendUkPropertyAnnualSubmissionRequest }
 
 trait MockAmendUkPropertyAnnualSubmissionRequestParser extends MockFactory {

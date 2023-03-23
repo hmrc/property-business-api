@@ -17,11 +17,12 @@
 package v2.services
 
 import uk.gov.hmrc.http.HeaderCarrier
-import v2.controllers.EndpointLogContext
+import api.controllers.EndpointLogContext
 import v2.mocks.connectors.MockDeleteHistoricUkPropertyAnnualSubmissionConnector
-import v2.models.domain.{ HistoricPropertyType, Nino, TaxYear }
-import v2.models.errors._
-import v2.models.outcomes.ResponseWrapper
+import v2.models.domain.{HistoricPropertyType, TaxYear}
+import api.models.errors._
+import api.models.ResponseWrapper
+import api.models.domain.Nino
 import v2.models.request.deleteHistoricUkPropertyAnnualSubmission.DeleteHistoricUkPropertyAnnualSubmissionRequest
 
 import scala.concurrent.Future

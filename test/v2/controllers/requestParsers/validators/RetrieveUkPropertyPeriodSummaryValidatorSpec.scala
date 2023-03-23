@@ -18,7 +18,7 @@ package v2.controllers.requestParsers.validators
 
 import mocks.MockAppConfig
 import support.UnitSpec
-import v2.models.errors._
+import api.models.errors._
 import v2.models.request.retrieveUkPropertyPeriodSummary.RetrieveUkPropertyPeriodSummaryRawData
 
 class RetrieveUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with MockAppConfig {

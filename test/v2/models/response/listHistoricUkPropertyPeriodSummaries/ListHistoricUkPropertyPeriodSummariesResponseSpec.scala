@@ -20,8 +20,8 @@ import mocks.MockAppConfig
 import play.api.libs.json.Json
 import support.UnitSpec
 import v2.models.domain.{ HistoricPropertyType, PeriodId }
-import v2.models.hateoas.Link
-import v2.models.hateoas.Method._
+import api.hateoas.Link
+import api.hateoas.Method._
 
 class ListHistoricUkPropertyPeriodSummariesResponseSpec extends UnitSpec with MockAppConfig {
 

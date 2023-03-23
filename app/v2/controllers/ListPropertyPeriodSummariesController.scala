@@ -16,17 +16,19 @@
 
 package v2.controllers
 
+import api.controllers.{AuthorisedController, BaseController, EndpointLogContext}
 import cats.data.EitherT
 import cats.implicits._
 import play.api.libs.json.Json
 import play.api.mvc.{Action, AnyContent, ControllerComponents}
 import utils.{IdGenerator, Logging}
 import v2.controllers.requestParsers.ListPropertyPeriodSummariesRequestParser
-import v2.hateoas.HateoasFactory
-import v2.models.errors._
+import api.hateoas.HateoasFactory
+import api.models.errors._
+import api.services.{EnrolmentsAuthService, MtdIdLookupService}
 import v2.models.request.listPropertyPeriodSummaries.ListPropertyPeriodSummariesRawData
 import v2.models.response.listPropertyPeriodSummaries.ListPropertyPeriodSummariesHateoasData
-import v2.services.{EnrolmentsAuthService, ListPropertyPeriodSummariesService, MtdIdLookupService}
+import v2.services.ListPropertyPeriodSummariesService
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}

@@ -16,9 +16,11 @@
 
 package v2.connectors
 
+import api.connectors.ConnectorSpec
 import fixtures.CreateAmendNonFhlUkPropertyAnnualSubmission.RequestResponseModelFixtures
-import v2.models.domain.{ Nino, TaxYear }
-import v2.models.outcomes.ResponseWrapper
+import v2.models.domain.TaxYear
+import api.models.domain.Nino
+import api.models.ResponseWrapper
 import v2.models.request.createAmendHistoricNonFhlUkPropertyAnnualSubmission.CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequest
 import v2.models.response.createAmendHistoricFhlUkPropertyAnnualSubmission.CreateAmendHistoricFhlUkPropertyAnnualSubmissionResponse
 

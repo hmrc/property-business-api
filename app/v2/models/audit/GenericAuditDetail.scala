@@ -16,9 +16,10 @@
 
 package v2.models.audit
 
+import api.models.audit.AuditResponse
+import api.models.UserDetails
 import play.api.libs.functional.syntax._
 import play.api.libs.json._
-import v2.models.auth.UserDetails
 
 case class GenericAuditDetail(versionNumber: String,
                               userType: String,

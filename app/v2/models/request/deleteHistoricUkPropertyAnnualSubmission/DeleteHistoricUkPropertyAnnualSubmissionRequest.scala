@@ -16,6 +16,7 @@
 
 package v2.models.request.deleteHistoricUkPropertyAnnualSubmission
 
-import v2.models.domain.{ HistoricPropertyType, Nino, TaxYear }
+import api.models.domain.Nino
+import v2.models.domain.{HistoricPropertyType, TaxYear}
 
 case class DeleteHistoricUkPropertyAnnualSubmissionRequest(nino: Nino, taxYear: TaxYear, propertyType: HistoricPropertyType)

@@ -24,7 +24,7 @@ import play.api.libs.ws.{ WSRequest, WSResponse }
 import play.api.test.Helpers.AUTHORIZATION
 import support.V2IntegrationBaseSpec
 import v1.stubs.AuditStub
-import v2.models.errors._
+import api.models.errors._
 import v2.stubs.{ AuthStub, DownstreamStub, MtdIdLookupStub }
 
 class CreateAmendHistoricFhlUkPropertyAnnualSubmissionControllerISpec extends V2IntegrationBaseSpec {

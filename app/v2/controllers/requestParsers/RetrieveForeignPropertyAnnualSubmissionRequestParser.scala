@@ -16,9 +16,12 @@
 
 package v2.controllers.requestParsers
 
+import api.controllers.requestParsers.RequestParser
+import api.models.domain.Nino
+
 import javax.inject.Inject
 import v2.controllers.requestParsers.validators.RetrieveForeignPropertyAnnualSubmissionValidator
-import v2.models.domain.{ Nino, TaxYear }
+import v2.models.domain.TaxYear
 import v2.models.request.retrieveForeignPropertyAnnualSubmission._
 
 class RetrieveForeignPropertyAnnualSubmissionRequestParser @Inject()(val validator: RetrieveForeignPropertyAnnualSubmissionValidator)

@@ -19,10 +19,11 @@ package v2.mocks.connectors
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
 import uk.gov.hmrc.http.HeaderCarrier
-import v2.connectors.{ AmendHistoricNonFhlUkPiePeriodSummaryConnector, DownstreamOutcome }
+import api.connectors.{DownstreamOutcome}
+import v2.connectors.AmendHistoricNonFhlUkPiePeriodSummaryConnector
 import v2.models.request.amendHistoricNonFhlUkPiePeriodSummary.AmendHistoricNonFhlUkPiePeriodSummaryRequest
 
-import scala.concurrent.{ ExecutionContext, Future }
+import scala.concurrent.{ExecutionContext, Future}
 
 trait MockAmendHistoricNonFhlUkPiePeriodSummaryConnector extends MockFactory {
 

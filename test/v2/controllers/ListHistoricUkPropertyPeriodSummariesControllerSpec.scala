@@ -16,26 +16,21 @@
 
 package v2.controllers
 
+import api.controllers.ControllerBaseSpec
 import play.api.libs.json.Json
-import play.api.mvc.{ Action, AnyContent, Result }
+import play.api.mvc.{Action, AnyContent, Result}
 import uk.gov.hmrc.http.HeaderCarrier
 import v2.mocks.MockIdGenerator
 import v2.mocks.hateoas.MockHateoasFactory
 import v2.mocks.requestParsers.MockListHistoricUkPropertyPeriodSummariesRequestParser
-import v2.mocks.services.{ MockAuditService, MockEnrolmentsAuthService, MockListHistoricUkPropertyPeriodSummariesService, MockMtdIdLookupService }
-import v2.models.domain.{ HistoricPropertyType, Nino }
-import v2.models.errors._
-import v2.models.hateoas.HateoasWrapper
-import v2.models.outcomes.ResponseWrapper
-import v2.models.request.listHistoricUkPropertyPeriodSummaries.{
-  ListHistoricUkPropertyPeriodSummariesRawData,
-  ListHistoricUkPropertyPeriodSummariesRequest
-}
-import v2.models.response.listHistoricUkPropertyPeriodSummaries.{
-  ListHistoricUkPropertyPeriodSummariesHateoasData,
-  ListHistoricUkPropertyPeriodSummariesResponse,
-  SubmissionPeriod
-}
+import v2.mocks.services.{MockAuditService, MockEnrolmentsAuthService, MockListHistoricUkPropertyPeriodSummariesService, MockMtdIdLookupService}
+import v2.models.domain.HistoricPropertyType
+import api.models.errors._
+import api.hateoas.HateoasWrapper
+import api.models.ResponseWrapper
+import api.models.domain.Nino
+import v2.models.request.listHistoricUkPropertyPeriodSummaries.{ListHistoricUkPropertyPeriodSummariesRawData, ListHistoricUkPropertyPeriodSummariesRequest}
+import v2.models.response.listHistoricUkPropertyPeriodSummaries.{ListHistoricUkPropertyPeriodSummariesHateoasData, ListHistoricUkPropertyPeriodSummariesResponse, SubmissionPeriod}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future

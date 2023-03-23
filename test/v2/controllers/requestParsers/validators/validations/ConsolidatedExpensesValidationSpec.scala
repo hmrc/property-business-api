@@ -17,7 +17,7 @@
 package v2.controllers.requestParsers.validators.validations
 
 import support.UnitSpec
-import v2.models.errors.RuleBothExpensesSuppliedError
+import api.models.errors.RuleBothExpensesSuppliedError
 import v2.models.request.common.foreignFhlEea.AmendForeignFhlEeaExpenses
 import v2.models.request.common.foreignPropertyEntry.AmendForeignNonFhlPropertyExpenses
 import v2.models.request.common.ukFhlPieProperty.UkFhlPieExpenses

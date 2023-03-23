@@ -17,12 +17,13 @@
 package v2.services
 
 import uk.gov.hmrc.http.HeaderCarrier
-import v2.controllers.EndpointLogContext
+import api.controllers.EndpointLogContext
 import v2.mocks.connectors.MockCreateHistoricNonFhlUkPropertyPeriodSummaryConnector
-import v2.models.domain.{ Nino, PeriodId }
-import v2.models.errors._
-import v2.models.outcomes.ResponseWrapper
-import v2.models.request.common.ukPropertyRentARoom.{ UkPropertyExpensesRentARoom, UkPropertyIncomeRentARoom }
+import v2.models.domain.PeriodId
+import api.models.errors._
+import api.models.ResponseWrapper
+import api.models.domain.Nino
+import v2.models.request.common.ukPropertyRentARoom.{UkPropertyExpensesRentARoom, UkPropertyIncomeRentARoom}
 import v2.models.request.createHistoricNonFhlUkPropertyPeriodSummary._
 import v2.models.response.createHistoricNonFhlUkPiePeriodSummary.CreateHistoricNonFhlUkPiePeriodSummaryResponse
 

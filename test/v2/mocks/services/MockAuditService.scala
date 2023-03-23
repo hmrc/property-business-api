@@ -21,10 +21,10 @@ import org.scalamock.scalatest.MockFactory
 import play.api.libs.json.Writes
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.audit.http.connector.AuditResult
+import api.services.AuditService
 import v2.models.audit.AuditEvent
-import v2.services.AuditService
 
-import scala.concurrent.{ ExecutionContext, Future }
+import scala.concurrent.{ExecutionContext, Future}
 
 trait MockAuditService extends MockFactory {
 

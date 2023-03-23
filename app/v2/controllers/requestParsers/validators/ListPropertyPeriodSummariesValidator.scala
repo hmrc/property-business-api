@@ -16,10 +16,13 @@
 
 package v2.controllers.requestParsers.validators
 
+import api.controllers.requestParsers.validators.Validator
+import api.controllers.requestParsers.validators.validations.{BusinessIdValidation, NinoValidation}
 import config.AppConfig
-import javax.inject.{ Inject, Singleton }
+
+import javax.inject.{Inject, Singleton}
 import v2.controllers.requestParsers.validators.validations._
-import v2.models.errors.MtdError
+import api.models.errors.MtdError
 import v2.models.request.listPropertyPeriodSummaries.ListPropertyPeriodSummariesRawData
 
 @Singleton

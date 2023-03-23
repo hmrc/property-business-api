@@ -16,6 +16,6 @@
 
 package v2.models.request.retrieveUkPropertyPeriodSummary
 
-import v2.models.request.RawData
+import api.models.RawData
 
 case class RetrieveUkPropertyPeriodSummaryRawData(nino: String, businessId: String, taxYear: String, submissionId: String) extends RawData

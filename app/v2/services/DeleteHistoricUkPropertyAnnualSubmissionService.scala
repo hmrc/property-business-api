@@ -19,16 +19,16 @@ package v2.services
 import cats.implicits._
 import cats.data.EitherT
 
-import javax.inject.{ Inject, Singleton }
+import javax.inject.{Inject, Singleton}
 import uk.gov.hmrc.http.HeaderCarrier
 import utils.Logging
-import v2.connectors.DeleteHistoricUkPropertyAnnualSubmissionConnector
-import v2.controllers.EndpointLogContext
-import v2.models.errors.{ InternalError, NinoFormatError, NotFoundError, RuleHistoricTaxYearNotSupportedError, TaxYearFormatError }
+import api.controllers.EndpointLogContext
+import api.models.errors.{InternalError, NinoFormatError, NotFoundError, RuleHistoricTaxYearNotSupportedError, TaxYearFormatError}
 import v2.models.request.deleteHistoricUkPropertyAnnualSubmission.DeleteHistoricUkPropertyAnnualSubmissionRequest
-import v2.support.DownstreamResponseMappingSupport
+import api.services.{DownstreamResponseMappingSupport, ServiceOutcome}
+import v2.connectors.DeleteHistoricUkPropertyAnnualSubmissionConnector
 
-import scala.concurrent.{ ExecutionContext, Future }
+import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class DeleteHistoricUkPropertyAnnualSubmissionService @Inject()(connector: DeleteHistoricUkPropertyAnnualSubmissionConnector)

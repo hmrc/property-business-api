@@ -16,27 +16,27 @@
 
 package v2.services
 
-import javax.inject.{ Inject, Singleton }
-import scala.concurrent.{ ExecutionContext, Future }
+import javax.inject.{Inject, Singleton}
+import scala.concurrent.{ExecutionContext, Future}
 import cats.data.EitherT
 import uk.gov.hmrc.http.HeaderCarrier
 import utils.Logging
-import v2.connectors.CreateHistoricNonFhlUkPropertyPeriodSummaryConnector
-import v2.controllers.EndpointLogContext
+import api.controllers.EndpointLogContext
 import v2.models.domain.PeriodId
-import v2.models.errors._
-import v2.models.outcomes.ResponseWrapper
+import api.models.errors._
+import api.models.ResponseWrapper
 import v2.models.request.createHistoricNonFhlUkPropertyPeriodSummary.CreateHistoricNonFhlUkPropertyPeriodSummaryRequest
 import v2.models.response.createHistoricNonFhlUkPiePeriodSummary.CreateHistoricNonFhlUkPiePeriodSummaryResponse
-import v2.support.DownstreamResponseMappingSupport
+import api.services.{DownstreamResponseMappingSupport, ServiceOutcome}
+import v2.connectors.CreateHistoricNonFhlUkPropertyPeriodSummaryConnector
 
 @Singleton
-class CreateHistoricNonFhlUkPropertyPeriodSummaryService @Inject()(connector: CreateHistoricNonFhlUkPropertyPeriodSummaryConnector)
+class CreateHistoricNonFhlUkPropertyPeriodSummaryService @Inject() (connector: CreateHistoricNonFhlUkPropertyPeriodSummaryConnector)
     extends DownstreamResponseMappingSupport
     with Logging {
 
-  def createPeriodSummary(request: CreateHistoricNonFhlUkPropertyPeriodSummaryRequest)(
-      implicit hc: HeaderCarrier,
+  def createPeriodSummary(request: CreateHistoricNonFhlUkPropertyPeriodSummaryRequest)(implicit
+      hc: HeaderCarrier,
       ec: ExecutionContext,
       logContext: EndpointLogContext,
       correlationId: String): Future[ServiceOutcome[CreateHistoricNonFhlUkPiePeriodSummaryResponse]] = {
@@ -71,4 +71,5 @@ class CreateHistoricNonFhlUkPropertyPeriodSummaryService @Inject()(connector: Cr
       "SERVER_ERROR"            -> InternalError,
       "SERVICE_UNAVAILABLE"     -> InternalError
     )
+
 }

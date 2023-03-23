@@ -16,6 +16,6 @@
 
 package v2.models.request.retrieveForeignPropertyAnnualSubmission
 
-import v2.models.request.RawData
+import api.models.RawData
 
 case class RetrieveForeignPropertyAnnualSubmissionRawData(nino: String, businessId: String, taxYear: String) extends RawData

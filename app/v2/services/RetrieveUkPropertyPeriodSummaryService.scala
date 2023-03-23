@@ -16,21 +16,20 @@
 
 package v2.services
 
+import api.controllers.EndpointLogContext
+import api.models.errors._
+import api.models.ResponseWrapper
+import api.services.{DownstreamResponseMappingSupport, ServiceOutcome}
 import cats.data.EitherT
-import javax.inject.Inject
 import uk.gov.hmrc.http.HeaderCarrier
 import utils.Logging
-import v2.connectors
 import v2.connectors.RetrieveUkPropertyPeriodSummaryConnector
-import v2.connectors.RetrieveUkPropertyPeriodSummaryConnector.{ NonUkResult, UkResult }
-import v2.controllers.EndpointLogContext
-import v2.models.errors._
-import v2.models.outcomes.ResponseWrapper
+import v2.connectors.RetrieveUkPropertyPeriodSummaryConnector.{NonUkResult, UkResult}
 import v2.models.request.retrieveUkPropertyPeriodSummary.RetrieveUkPropertyPeriodSummaryRequest
 import v2.models.response.retrieveUkPropertyPeriodSummary.RetrieveUkPropertyPeriodSummaryResponse
-import v2.support.DownstreamResponseMappingSupport
 
-import scala.concurrent.{ ExecutionContext, Future }
+import javax.inject.Inject
+import scala.concurrent.{ExecutionContext, Future}
 
 class RetrieveUkPropertyPeriodSummaryService @Inject()(connector: RetrieveUkPropertyPeriodSummaryConnector)
     extends DownstreamResponseMappingSupport
@@ -72,7 +71,7 @@ class RetrieveUkPropertyPeriodSummaryService @Inject()(connector: RetrieveUkProp
     errorMap ++ tysErrorMap
   }
 
-  private def validateBusinessType(resultWrapper: ResponseWrapper[connectors.RetrieveUkPropertyPeriodSummaryConnector.Result]) =
+  private def validateBusinessType(resultWrapper: ResponseWrapper[RetrieveUkPropertyPeriodSummaryConnector.Result]) =
     resultWrapper.responseData match {
       case UkResult(response) => Right(ResponseWrapper(resultWrapper.correlationId, response))
       case NonUkResult        => Left(ErrorWrapper(resultWrapper.correlationId, RuleTypeOfBusinessIncorrectError))

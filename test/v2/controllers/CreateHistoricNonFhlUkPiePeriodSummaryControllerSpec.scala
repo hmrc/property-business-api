@@ -16,28 +16,24 @@
 
 package v2.controllers
 
-import play.api.libs.json.{ JsValue, Json }
+import api.controllers.ControllerBaseSpec
+import play.api.libs.json.{Json, JsValue}
 import play.api.mvc.Result
 import uk.gov.hmrc.http.HeaderCarrier
 import v2.mocks.MockIdGenerator
 import v2.mocks.hateoas.MockHateoasFactory
 import v2.mocks.requestParsers.MockCreateHistoricNonFhlUkPiePeriodSummaryRequestParser
-import v2.mocks.services.{ MockAuditService, MockCreateHistoricNonFhlUkPiePeriodSummaryService, MockEnrolmentsAuthService, MockMtdIdLookupService }
-import v2.models.audit.{ AuditError, AuditEvent, AuditResponse, FlattenedGenericAuditDetail }
-import v2.models.auth.UserDetails
-import v2.models.domain.{ Nino, PeriodId }
-import v2.models.errors._
-import v2.models.hateoas.HateoasWrapper
-import v2.models.outcomes.ResponseWrapper
-import v2.models.request.createHistoricNonFhlUkPropertyPeriodSummary.{
-  CreateHistoricNonFhlUkPropertyPeriodSummaryRawData,
-  CreateHistoricNonFhlUkPropertyPeriodSummaryRequest,
-  CreateHistoricNonFhlUkPropertyPeriodSummaryRequestBody
-}
-import v2.models.response.createHistoricNonFhlUkPiePeriodSummary.{
-  CreateHistoricNonFhlUkPiePeriodSummaryHateoasData,
-  CreateHistoricNonFhlUkPiePeriodSummaryResponse
-}
+import v2.mocks.services.{MockAuditService, MockCreateHistoricNonFhlUkPiePeriodSummaryService, MockEnrolmentsAuthService, MockMtdIdLookupService}
+import api.models.UserDetails
+import v2.models.domain.PeriodId
+import api.models.errors._
+import api.hateoas.HateoasWrapper
+import api.models.ResponseWrapper
+import api.models.audit.{AuditError, AuditResponse}
+import api.models.domain.Nino
+import v2.models.audit.{AuditEvent, FlattenedGenericAuditDetail}
+import v2.models.request.createHistoricNonFhlUkPropertyPeriodSummary.{CreateHistoricNonFhlUkPropertyPeriodSummaryRawData, CreateHistoricNonFhlUkPropertyPeriodSummaryRequest, CreateHistoricNonFhlUkPropertyPeriodSummaryRequestBody}
+import v2.models.response.createHistoricNonFhlUkPiePeriodSummary.{CreateHistoricNonFhlUkPiePeriodSummaryHateoasData, CreateHistoricNonFhlUkPiePeriodSummaryResponse}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future

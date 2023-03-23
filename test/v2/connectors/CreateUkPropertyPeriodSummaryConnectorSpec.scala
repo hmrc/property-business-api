@@ -16,8 +16,10 @@
 
 package v2.connectors
 
-import v2.models.domain.{ Nino, TaxYear }
-import v2.models.outcomes.ResponseWrapper
+import api.connectors.ConnectorSpec
+import v2.models.domain.TaxYear
+import api.models.domain.Nino
+import api.models.ResponseWrapper
 import v2.models.request.createUkPropertyPeriodSummary._
 import v2.models.response.createUkPropertyPeriodSummary.CreateUkPropertyPeriodSummaryResponse
 

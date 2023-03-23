@@ -16,18 +16,17 @@
 
 package v2.controllers.requestParsers.validators
 
+import api.controllers.requestParsers.validators.Validator
+import api.controllers.requestParsers.validators.validations.{BusinessIdValidation, NinoValidation}
 import config.AppConfig
 import v2.controllers.requestParsers.validators.validations._
-import v2.models.errors._
+import api.models.errors._
 import v2.models.request.createAmendForeignPropertyAnnualSubmission.foreignFhlEea.ForeignFhlEea
 import v2.models.request.createAmendForeignPropertyAnnualSubmission.foreignNonFhl.ForeignNonFhlEntry
-import v2.models.request.createAmendForeignPropertyAnnualSubmission.{
-  CreateAmendForeignPropertyAnnualSubmissionRawData,
-  CreateAmendForeignPropertyAnnualSubmissionRequestBody
-}
+import v2.models.request.createAmendForeignPropertyAnnualSubmission.{CreateAmendForeignPropertyAnnualSubmissionRawData, CreateAmendForeignPropertyAnnualSubmissionRequestBody}
 import v2.models.request.common.StructuredBuildingAllowance
 
-import javax.inject.{ Inject, Singleton }
+import javax.inject.{Inject, Singleton}
 
 @Singleton
 class CreateAmendForeignPropertyAnnualSubmissionValidator @Inject()(appConfig: AppConfig)

@@ -20,15 +20,16 @@ import cats.data.EitherT
 import uk.gov.hmrc.http.HeaderCarrier
 import utils.Logging
 import v2.connectors.ListHistoricUkPropertyPeriodSummariesConnector
-import v2.controllers.EndpointLogContext
+import api.controllers.EndpointLogContext
 import v2.models.domain.HistoricPropertyType
-import v2.models.errors._
+import api.models.errors._
 import v2.models.request.listHistoricUkPropertyPeriodSummaries.ListHistoricUkPropertyPeriodSummariesRequest
-import v2.models.response.listHistoricUkPropertyPeriodSummaries.{ ListHistoricUkPropertyPeriodSummariesResponse, SubmissionPeriod }
-import v2.support.DownstreamResponseMappingSupport
+import v2.models.response.listHistoricUkPropertyPeriodSummaries.{ListHistoricUkPropertyPeriodSummariesResponse, SubmissionPeriod}
+import api.services.{DownstreamResponseMappingSupport, ServiceOutcome}
+import v2.connectors.ListHistoricUkPropertyPeriodSummariesConnector
 
-import javax.inject.{ Inject, Singleton }
-import scala.concurrent.{ ExecutionContext, Future }
+import javax.inject.{Inject, Singleton}
+import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class ListHistoricUkPropertyPeriodSummariesService @Inject()(connector: ListHistoricUkPropertyPeriodSummariesConnector)

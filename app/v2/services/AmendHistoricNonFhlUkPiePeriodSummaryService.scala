@@ -20,12 +20,12 @@ import cats.data.EitherT
 import cats.implicits._
 import uk.gov.hmrc.http.HeaderCarrier
 import utils.Logging
-import v2.connectors.AmendHistoricNonFhlUkPiePeriodSummaryConnector
-import v2.controllers.EndpointLogContext
-import v2.models.errors._
+import api.controllers.EndpointLogContext
+import api.models.errors._
 import v2.models.request.amendHistoricNonFhlUkPiePeriodSummary.AmendHistoricNonFhlUkPiePeriodSummaryRequest
 import v2.services.AmendHistoricNonFhlUkPiePeriodSummaryService.downstreamErrorMap
-import v2.support.DownstreamResponseMappingSupport
+import api.services.{DownstreamResponseMappingSupport, ServiceOutcome}
+import v2.connectors.AmendHistoricNonFhlUkPiePeriodSummaryConnector
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}

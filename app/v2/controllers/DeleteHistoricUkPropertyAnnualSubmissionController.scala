@@ -16,19 +16,21 @@
 
 package v2.controllers
 
+import api.controllers.{AuthorisedController, BaseController, EndpointLogContext}
+import api.models.audit.AuditResponse
 import cats.data.EitherT
-import cats.implicits._
 import play.api.libs.json.Json
 import play.api.mvc.{Action, AnyContent, ControllerComponents}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.audit.http.connector.AuditResult
 import utils.{IdGenerator, Logging}
-import v2.models.audit.{AuditEvent, AuditResponse, FlattenedGenericAuditDetail}
 import v2.controllers.requestParsers.DeleteHistoricUkPropertyAnnualSubmissionRequestParser
 import v2.models.domain.HistoricPropertyType
-import v2.models.errors._
+import api.models.errors._
+import api.services.{AuditService, EnrolmentsAuthService, MtdIdLookupService}
+import v2.models.audit.{AuditEvent, FlattenedGenericAuditDetail}
 import v2.models.request.deleteHistoricUkPropertyAnnualSubmission.DeleteHistoricUkPropertyAnnualSubmissionRawData
-import v2.services.{AuditService, DeleteHistoricUkPropertyAnnualSubmissionService, EnrolmentsAuthService, MtdIdLookupService}
+import v2.services.DeleteHistoricUkPropertyAnnualSubmissionService
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}

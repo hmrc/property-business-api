@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package v2.support
+package api.support
 
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter

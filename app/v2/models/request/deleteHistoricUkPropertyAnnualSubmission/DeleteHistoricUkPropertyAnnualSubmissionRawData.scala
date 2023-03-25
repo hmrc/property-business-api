@@ -16,7 +16,7 @@
 
 package v2.models.request.deleteHistoricUkPropertyAnnualSubmission
 
-import api.models.RawData
+import api.models.request.RawData
 import v2.models.domain.HistoricPropertyType
 
 case class DeleteHistoricUkPropertyAnnualSubmissionRawData(nino: String, taxYear: String, propertyType: HistoricPropertyType) extends RawData

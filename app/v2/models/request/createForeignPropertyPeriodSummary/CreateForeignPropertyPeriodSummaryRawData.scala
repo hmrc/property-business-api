@@ -16,7 +16,7 @@
 
 package v2.models.request.createForeignPropertyPeriodSummary
 
-import api.models.RawData
+import api.models.request.RawData
 import play.api.libs.functional.syntax._
 import play.api.libs.json.{ JsPath, JsValue, OWrites }
 

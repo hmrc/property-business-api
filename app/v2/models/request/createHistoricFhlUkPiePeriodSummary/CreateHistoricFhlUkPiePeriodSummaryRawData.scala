@@ -16,7 +16,7 @@
 
 package v2.models.request.createHistoricFhlUkPiePeriodSummary
 
-import api.models.RawData
+import api.models.request.RawData
 import play.api.libs.functional.syntax.{ toFunctionalBuilderOps, unlift }
 import play.api.libs.json.{ JsPath, JsValue, OWrites }
 

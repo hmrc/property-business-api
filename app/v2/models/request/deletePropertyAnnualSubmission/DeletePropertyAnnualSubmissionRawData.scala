@@ -16,7 +16,7 @@
 
 package v2.models.request.deletePropertyAnnualSubmission
 
-import api.models.RawData
+import api.models.request.RawData
 import play.api.libs.json.{ Json, OWrites }
 
 case class DeletePropertyAnnualSubmissionRawData(nino: String, businessId: String, taxYear: String) extends RawData

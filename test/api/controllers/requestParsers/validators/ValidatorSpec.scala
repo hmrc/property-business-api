@@ -16,8 +16,8 @@
 
 package api.controllers.requestParsers.validators
 
-import api.models.RawData
 import api.models.errors.MtdError
+import api.models.request.RawData
 import org.scalamock.scalatest.MockFactory
 import support.UnitSpec
 

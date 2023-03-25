@@ -19,7 +19,7 @@ package api.controllers.requestParsers
 import utils.Logging
 import api.controllers.requestParsers.validators.Validator
 import api.models.errors.{ BadRequestError, ErrorWrapper }
-import api.models.RawData
+import api.models.request.RawData
 
 trait RequestParser[Raw <: RawData, Request] extends Logging {
 

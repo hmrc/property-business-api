@@ -19,7 +19,8 @@ package v2.models.response.retrieveHistoricFhlUkPropertyAnnualSubmission
 import config.AppConfig
 import play.api.libs.json.{Json, OWrites, Reads}
 import v2.hateoas.HateoasLinks
-import api.hateoas.{HateoasData, HateoasLinksFactory, Link}
+import api.hateoas.HateoasLinksFactory
+import api.models.hateoas.{HateoasData, Link}
 
 case class RetrieveHistoricFhlUkPropertyAnnualSubmissionResponse(annualAdjustments: Option[AnnualAdjustments],
                                                                  annualAllowances: Option[AnnualAllowances])

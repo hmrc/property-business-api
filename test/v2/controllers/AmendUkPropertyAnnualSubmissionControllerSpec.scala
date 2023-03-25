@@ -17,12 +17,12 @@
 package v2.controllers
 
 import api.controllers.ControllerBaseSpec
-import api.hateoas.{HateoasWrapper, Link}
-import api.hateoas.Method.GET
+import api.models.hateoas.Method.GET
 import api.models.audit.{AuditError, AuditResponse}
 import api.models.domain.Nino
 import api.models.errors._
 import api.models.ResponseWrapper
+import api.models.hateoas.{HateoasWrapper, Link}
 import play.api.libs.json.{Json, JsValue}
 import play.api.mvc.Result
 import uk.gov.hmrc.http.HeaderCarrier

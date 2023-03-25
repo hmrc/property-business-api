@@ -20,7 +20,8 @@ import config.AppConfig
 import play.api.libs.json.{Json, JsPath, OWrites, Reads}
 import play.api.libs.functional.syntax._
 import v2.hateoas.HateoasLinks
-import api.hateoas.{HateoasData, HateoasLinksFactory, Link}
+import api.hateoas.HateoasLinksFactory
+import api.models.hateoas.{HateoasData, Link}
 
 case class RetrieveHistoricNonFhlUkPiePeriodSummaryResponse(fromDate: String,
                                                             toDate: String,

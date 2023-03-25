@@ -29,8 +29,8 @@ import api.models.audit.{AuditError, AuditResponse}
 import v2.models.domain.TaxYear
 import api.models.domain.Nino
 import api.models.errors._
-import api.hateoas.HateoasWrapper
 import api.models.ResponseWrapper
+import api.models.hateoas.HateoasWrapper
 import v2.models.audit.{AuditEvent, GenericAuditDetail}
 import v2.models.request.createForeignPropertyPeriodSummary._
 import v2.models.response.createForeignPropertyPeriodSummary._

@@ -16,7 +16,8 @@
 
 package api.hateoas
 
-import api.hateoas.Method._
+import api.models.hateoas.{Link, Method}
+import api.models.hateoas.Method._
 import mocks.MockAppConfig
 import support.UnitSpec
 import v2.hateoas.HateoasLinks

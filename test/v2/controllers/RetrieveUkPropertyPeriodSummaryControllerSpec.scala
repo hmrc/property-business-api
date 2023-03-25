@@ -28,9 +28,9 @@ import v2.mocks.services.{MockEnrolmentsAuthService, MockMtdIdLookupService, Moc
 import v2.models.domain.TaxYear
 import api.models.domain.Nino
 import api.models.errors._
-import api.hateoas.Method.GET
-import api.hateoas.{HateoasWrapper, Link}
+import api.models.hateoas.Method.GET
 import api.models.ResponseWrapper
+import api.models.hateoas.{HateoasWrapper, Link}
 import v2.models.request.retrieveUkPropertyPeriodSummary.{RetrieveUkPropertyPeriodSummaryRawData, RetrieveUkPropertyPeriodSummaryRequest}
 import v2.models.response.retrieveUkPropertyPeriodSummary.RetrieveUkPropertyPeriodSummaryHateoasData
 

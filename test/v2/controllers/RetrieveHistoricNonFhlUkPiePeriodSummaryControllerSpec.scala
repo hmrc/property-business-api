@@ -26,10 +26,10 @@ import v2.mocks.requestParsers.MockRetrieveHistoricNonFhlUkPiePeriodSummaryReque
 import v2.mocks.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService, MockRetrieveHistoricNonFhlUkPiePeriodSummaryService}
 import v2.models.domain.PeriodId
 import api.models.errors._
-import api.hateoas.Method.GET
-import api.hateoas.{HateoasWrapper, Link}
+import api.models.hateoas.Method.GET
 import api.models.ResponseWrapper
 import api.models.domain.Nino
+import api.models.hateoas.{HateoasWrapper, Link}
 import v2.models.request.retrieveHistoricNonFhlUkPiePeriodSummary.{RetrieveHistoricNonFhlUkPiePeriodSummaryRawData, RetrieveHistoricNonFhlUkPiePeriodSummaryRequest}
 import v2.models.response.retrieveHistoricNonFhlUkPiePeriodSummary._
 

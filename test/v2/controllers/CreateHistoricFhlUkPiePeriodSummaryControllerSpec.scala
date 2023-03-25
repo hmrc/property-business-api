@@ -27,11 +27,11 @@ import v2.mocks.services.{MockAuditService, MockCreateHistoricFhlUkPiePeriodSumm
 import api.models.UserDetails
 import v2.models.domain.PeriodId
 import api.models.errors.{ErrorWrapper, FromDateFormatError, InternalError, MtdError, NinoFormatError, NotFoundError, RuleBothExpensesSuppliedError, RuleDuplicateSubmissionError, RuleIncorrectGovTestScenarioError, RuleIncorrectOrEmptyBodyError, RuleMisalignedPeriodError, RuleNotContiguousPeriodError, RuleOverlappingPeriodError, RuleTaxYearNotSupportedError, RuleToDateBeforeFromDateError, ServiceUnavailableError, ToDateFormatError, ValueFormatError}
-import api.hateoas.Method.GET
-import api.hateoas.{HateoasWrapper, Link}
+import api.models.hateoas.Method.GET
 import api.models.ResponseWrapper
 import api.models.audit.{AuditError, AuditResponse}
 import api.models.domain.Nino
+import api.models.hateoas.{HateoasWrapper, Link}
 import v2.models.audit.{AuditEvent, FlattenedGenericAuditDetail}
 import v2.models.request.createHistoricFhlUkPiePeriodSummary.{CreateHistoricFhlUkPiePeriodSummaryRawData, CreateHistoricFhlUkPiePeriodSummaryRequest, CreateHistoricFhlUkPiePeriodSummaryRequestBody}
 import v2.models.response.createHistoricFhlUkPiePeriodSummary.{CreateHistoricFhlUkPiePeriodSummaryHateoasData, CreateHistoricFhlUkPiePeriodSummaryResponse}

@@ -16,7 +16,8 @@
 
 package api.hateoas
 
-import api.hateoas.Method.GET
+import api.models.hateoas.{HateoasData, HateoasWrapper, Link}
+import api.models.hateoas.Method.GET
 import cats.Functor
 import config.AppConfig
 import mocks.MockAppConfig

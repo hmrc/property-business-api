@@ -19,7 +19,7 @@ package v2.models.response.amendUkPropertyPeriodSummary
 import config.AppConfig
 import api.hateoas.HateoasLinksFactory
 import v2.hateoas.HateoasLinks
-import api.hateoas.{HateoasData, Link}
+import api.models.hateoas.{HateoasData, Link}
 
 case class AmendUkPropertyPeriodSummaryResponse(submissionId: String)
 

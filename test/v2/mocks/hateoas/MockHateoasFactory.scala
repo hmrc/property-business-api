@@ -20,7 +20,7 @@ import cats.Functor
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
 import api.hateoas.{ HateoasFactory, HateoasLinksFactory, HateoasListLinksFactory }
-import api.hateoas.{ HateoasData, HateoasWrapper }
+import api.models.hateoas.{HateoasData, HateoasWrapper}
 
 import scala.language.higherKinds
 

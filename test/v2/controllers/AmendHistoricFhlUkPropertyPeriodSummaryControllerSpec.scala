@@ -27,10 +27,10 @@ import v2.mocks.services.{MockAmendHistoricFhlUkPropertyPeriodSummaryService, Mo
 import v2.models.domain.PeriodId
 import api.models.UserDetails
 import api.models.errors._
-import api.hateoas.HateoasWrapper
 import api.models.ResponseWrapper
 import api.models.audit.{AuditError, AuditResponse}
 import api.models.domain.Nino
+import api.models.hateoas.HateoasWrapper
 import v2.models.audit.{AuditEvent, FlattenedGenericAuditDetail}
 import v2.models.request.amendHistoricFhlUkPiePeriodSummary._
 import v2.models.response.amendHistoricFhlUkPiePeriodSummary.AmendHistoricFhlUkPropertyPeriodSummaryHateoasData

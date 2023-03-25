@@ -16,11 +16,12 @@
 
 package api.hateoas
 
+import api.models.hateoas.{HateoasData, HateoasWrapper, Link}
 import cats.Functor
 import cats.implicits._
 import config.AppConfig
-import javax.inject.Inject
 
+import javax.inject.Inject
 import scala.language.higherKinds
 
 class HateoasFactory @Inject() (appConfig: AppConfig) {
@@ -28,13 +29,13 @@ class HateoasFactory @Inject() (appConfig: AppConfig) {
   def wrap[A, D <: HateoasData](payload: A, data: D)(implicit lf: HateoasLinksFactory[A, D]): HateoasWrapper[A] = {
     val links = lf.links(appConfig, data)
 
-    HateoasWrapper(payload, links)
+    api.models.hateoas.HateoasWrapper(payload, links)
   }
 
   def wrapList[A[_]: Functor, I, D](payload: A[I], data: D)(implicit lf: HateoasListLinksFactory[A, I, D]): HateoasWrapper[A[HateoasWrapper[I]]] = {
-    val hateoasList = payload.map(i => HateoasWrapper(i, lf.itemLinks(appConfig, data, i)))
+    val hateoasList = payload.map(i => api.models.hateoas.HateoasWrapper(i, lf.itemLinks(appConfig, data, i)))
 
-    HateoasWrapper(hateoasList, lf.links(appConfig, data))
+    api.models.hateoas.HateoasWrapper(hateoasList, lf.links(appConfig, data))
   }
 
 }

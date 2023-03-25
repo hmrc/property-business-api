@@ -16,9 +16,9 @@
 
 package api.controllers
 
-import api.hateoas.Link
-import api.hateoas.Method.GET
+import api.models.hateoas.Method.GET
 import api.models.errors.MtdError
+import api.models.hateoas.Link
 import play.api.http.{HeaderNames, MimeTypes, Status}
 import play.api.libs.json.{JsObject, Json}
 import play.api.mvc.{AnyContentAsEmpty, ControllerComponents}

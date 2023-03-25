@@ -20,7 +20,8 @@ import config.AppConfig
 import play.api.libs.functional.syntax._
 import play.api.libs.json._
 import v2.hateoas.HateoasLinks
-import api.hateoas.{HateoasData, HateoasLinksFactory, Link}
+import api.hateoas.HateoasLinksFactory
+import api.models.hateoas.{HateoasData, Link}
 import v2.models.response.retrieveUkPropertyAnnualSubmission.ukFhlProperty.UkFhlProperty
 import v2.models.response.retrieveUkPropertyAnnualSubmission.ukNonFhlProperty.UkNonFhlProperty
 

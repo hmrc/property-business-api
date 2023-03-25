@@ -17,7 +17,6 @@
 package v2.controllers
 
 import api.controllers.ControllerBaseSpec
-import api.hateoas.HateoasWrapper
 import play.api.libs.json.{Json, JsValue}
 import play.api.mvc.Result
 import uk.gov.hmrc.http.HeaderCarrier
@@ -30,6 +29,7 @@ import v2.models.domain.TaxYear
 import api.models.domain.Nino
 import api.models.errors._
 import api.models.ResponseWrapper
+import api.models.hateoas.HateoasWrapper
 import v2.models.audit.{AuditEvent, GenericAuditDetail}
 import v2.models.request.amendForeignPropertyPeriodSummary._
 import v2.models.request.common.foreignFhlEea.{AmendForeignFhlEea, AmendForeignFhlEeaExpenses, ForeignFhlEeaIncome}

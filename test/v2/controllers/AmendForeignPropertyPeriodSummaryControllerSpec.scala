@@ -24,13 +24,12 @@ import v2.mocks.MockIdGenerator
 import v2.mocks.hateoas.MockHateoasFactory
 import v2.mocks.requestParsers.MockAmendForeignPropertyPeriodSummaryRequestParser
 import v2.mocks.services.{MockAmendForeignPropertyPeriodSummaryService, MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService}
-import api.models.audit.{AuditError, AuditResponse}
+import api.models.audit.{AuditError, AuditEvent, AuditResponse, GenericAuditDetail}
 import v2.models.domain.TaxYear
 import api.models.domain.Nino
 import api.models.errors._
-import api.models.ResponseWrapper
 import api.models.hateoas.HateoasWrapper
-import v2.models.audit.{AuditEvent, GenericAuditDetail}
+import api.models.outcomes.ResponseWrapper
 import v2.models.request.amendForeignPropertyPeriodSummary._
 import v2.models.request.common.foreignFhlEea.{AmendForeignFhlEea, AmendForeignFhlEeaExpenses, ForeignFhlEeaIncome}
 import v2.models.request.common.foreignPropertyEntry._

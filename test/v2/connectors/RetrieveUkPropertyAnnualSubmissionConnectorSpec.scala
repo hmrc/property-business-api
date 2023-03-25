@@ -22,7 +22,7 @@ import v2.connectors.RetrieveUkPropertyAnnualSubmissionConnector._
 import v2.models.domain.TaxYear
 import api.models.domain.Nino
 import api.models.errors.{DownstreamErrorCode, DownstreamErrors}
-import api.models.ResponseWrapper
+import api.models.outcomes.ResponseWrapper
 import v2.models.request.retrieveUkPropertyAnnualSubmission.RetrieveUkPropertyAnnualSubmissionRequest
 import v2.models.response.retrieveUkPropertyAnnualSubmission.RetrieveUkPropertyAnnualSubmissionResponse
 import v2.models.response.retrieveUkPropertyAnnualSubmission.ukFhlProperty.UkFhlProperty

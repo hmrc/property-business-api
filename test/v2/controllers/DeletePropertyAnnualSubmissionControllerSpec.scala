@@ -23,12 +23,11 @@ import uk.gov.hmrc.http.HeaderCarrier
 import v2.mocks.MockIdGenerator
 import v2.mocks.requestParsers.MockDeletePropertyAnnualSubmissionRequestParser
 import v2.mocks.services.{MockAuditService, MockDeletePropertyAnnualSubmissionService, MockEnrolmentsAuthService, MockMtdIdLookupService}
-import api.models.audit.{AuditError, AuditResponse}
+import api.models.audit.{AuditError, AuditEvent, AuditResponse, GenericAuditDetail}
 import v2.models.domain.TaxYear
 import api.models.domain.Nino
 import api.models.errors._
-import api.models.ResponseWrapper
-import v2.models.audit.{AuditEvent, GenericAuditDetail}
+import api.models.outcomes.ResponseWrapper
 import v2.models.request.deletePropertyAnnualSubmission._
 
 import scala.concurrent.ExecutionContext.Implicits.global

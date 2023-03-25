@@ -20,7 +20,7 @@ import org.scalamock.handlers.CallHandler
 import v2.models.domain.TaxYear
 import api.models.domain.Nino
 import api.models.errors.{DownstreamErrorCode, DownstreamErrors}
-import api.models.ResponseWrapper
+import api.models.outcomes.ResponseWrapper
 import v2.models.request.amendUkPropertyAnnualSubmission._
 import v2.models.request.amendUkPropertyAnnualSubmission.ukFhlProperty._
 import v2.models.request.amendUkPropertyAnnualSubmission.ukNonFhlProperty._

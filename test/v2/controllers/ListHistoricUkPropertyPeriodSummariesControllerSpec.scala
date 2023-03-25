@@ -26,9 +26,9 @@ import v2.mocks.requestParsers.MockListHistoricUkPropertyPeriodSummariesRequestP
 import v2.mocks.services.{MockAuditService, MockEnrolmentsAuthService, MockListHistoricUkPropertyPeriodSummariesService, MockMtdIdLookupService}
 import v2.models.domain.HistoricPropertyType
 import api.models.errors._
-import api.models.ResponseWrapper
 import api.models.domain.Nino
 import api.models.hateoas.HateoasWrapper
+import api.models.outcomes.ResponseWrapper
 import v2.models.request.listHistoricUkPropertyPeriodSummaries.{ListHistoricUkPropertyPeriodSummariesRawData, ListHistoricUkPropertyPeriodSummariesRequest}
 import v2.models.response.listHistoricUkPropertyPeriodSummaries.{ListHistoricUkPropertyPeriodSummariesHateoasData, ListHistoricUkPropertyPeriodSummariesResponse, SubmissionPeriod}
 

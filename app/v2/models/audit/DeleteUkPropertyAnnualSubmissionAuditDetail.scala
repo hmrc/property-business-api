@@ -17,7 +17,7 @@
 package v2.models.audit
 
 import api.models.audit.AuditResponse
-import api.models.UserDetails
+import api.models.auth.UserDetails
 import play.api.libs.json.{Json, Writes}
 
 case class DeleteUkPropertyAnnualSubmissionAuditDetail(userType: String,

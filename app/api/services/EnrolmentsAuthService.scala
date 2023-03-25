@@ -16,6 +16,7 @@
 
 package api.services
 
+import api.models.auth.UserDetails
 import config.AppConfig
 
 import javax.inject.{Inject, Singleton}
@@ -25,7 +26,6 @@ import uk.gov.hmrc.auth.core.authorise.Predicate
 import uk.gov.hmrc.auth.core.retrieve.~
 import uk.gov.hmrc.http.HeaderCarrier
 import utils.Logging
-import api.models.UserDetails
 import api.models.errors.{InternalError, UnauthorisedError}
 import api.models.outcomes.AuthOutcome
 import uk.gov.hmrc.auth.core.retrieve.v2.Retrievals.{affinityGroup, authorisedEnrolments}

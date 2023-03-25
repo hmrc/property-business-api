@@ -17,7 +17,7 @@
 package v2.controllers
 
 import api.controllers.{AuthorisedController, BaseController, EndpointLogContext}
-import api.models.audit.AuditResponse
+import api.models.audit.{AuditEvent, AuditResponse, FlattenedGenericAuditDetail}
 import cats.data.EitherT
 import play.api.libs.json.Json
 import play.api.mvc.{Action, AnyContent, ControllerComponents}
@@ -28,7 +28,6 @@ import v2.controllers.requestParsers.DeleteHistoricUkPropertyAnnualSubmissionReq
 import v2.models.domain.HistoricPropertyType
 import api.models.errors._
 import api.services.{AuditService, EnrolmentsAuthService, MtdIdLookupService}
-import v2.models.audit.{AuditEvent, FlattenedGenericAuditDetail}
 import v2.models.request.deleteHistoricUkPropertyAnnualSubmission.DeleteHistoricUkPropertyAnnualSubmissionRawData
 import v2.services.DeleteHistoricUkPropertyAnnualSubmissionService
 

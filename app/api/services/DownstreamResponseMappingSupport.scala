@@ -27,7 +27,7 @@ import api.models.errors.{
   OutboundError,
   RuleIncorrectGovTestScenarioError
 }
-import api.models.ResponseWrapper
+import api.models.outcomes.ResponseWrapper
 import utils.Logging
 
 trait DownstreamResponseMappingSupport {

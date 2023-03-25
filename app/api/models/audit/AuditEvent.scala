@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package v1.models.audit
+package api.models.audit
 
 case class AuditEvent[T](
     auditType: String,

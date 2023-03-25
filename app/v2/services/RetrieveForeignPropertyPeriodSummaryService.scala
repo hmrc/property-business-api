@@ -21,7 +21,7 @@ import uk.gov.hmrc.http.HeaderCarrier
 import utils.Logging
 import api.controllers.EndpointLogContext
 import api.models.errors._
-import api.models.ResponseWrapper
+import api.models.outcomes.ResponseWrapper
 import v2.models.request.retrieveForeignPropertyPeriodSummary.RetrieveForeignPropertyPeriodSummaryRequest
 import v2.models.response.retrieveForeignPropertyPeriodSummary.RetrieveForeignPropertyPeriodSummaryResponse
 import api.services.{DownstreamResponseMappingSupport, ServiceOutcome}

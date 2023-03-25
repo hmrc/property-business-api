@@ -14,44 +14,11 @@
  * limitations under the License.
  */
 
-package v2.models.audit
+package api.models.audit
 
-import api.models.audit.AuditResponse
-import api.models.UserDetails
-import play.api.libs.functional.syntax._
-import play.api.libs.json._
-
-case class GenericAuditDetail(versionNumber: String,
-                              userType: String,
-                              agentReferenceNumber: Option[String],
-                              params: JsObject,
-                              correlationId: String,
-                              response: AuditResponse)
-
-object GenericAuditDetail {
-
-  implicit val writes: OWrites[GenericAuditDetail] = (
-    (JsPath \ "versionNumber").write[String] and
-      (JsPath \ "userType").write[String] and
-      (JsPath \ "agentReferenceNumber").writeNullable[String] and
-      JsPath.write[Map[String, JsValue]].contramap((p: JsObject) => p.value.toMap) and
-      (JsPath \ "X-CorrelationId").write[String] and
-      (JsPath \ "response").write[AuditResponse]
-  )(unlift(GenericAuditDetail.unapply))
-
-  def apply[A: OWrites](userDetails: UserDetails, params: A, correlationId: String, response: AuditResponse): GenericAuditDetail = {
-
-    GenericAuditDetail(
-      versionNumber = "2.0",
-      userType = userDetails.userType,
-      agentReferenceNumber = userDetails.agentReferenceNumber,
-      params = Json.toJsObject(params),
-      correlationId = correlationId,
-      response = response
-    )
-  }
-}
-
+import api.models.auth.UserDetails
+import play.api.libs.functional.syntax.{toFunctionalBuilderOps, unlift}
+import play.api.libs.json.{JsPath, JsValue, OWrites}
 
 case class FlattenedGenericAuditDetail(versionNumber: Option[String],
                                        userType: String,
@@ -77,7 +44,7 @@ object FlattenedGenericAuditDetail {
       (JsPath \ "httpStatusCode").write[Int] and
       (JsPath \ "errorCodes").writeNullable[Seq[String]] and
       JsPath.writeNullable[JsValue]
-    )(unlift(FlattenedGenericAuditDetail.unapply))
+  )(unlift(FlattenedGenericAuditDetail.unapply))
 
   def apply(versionNumber: Option[String] = None,
             userDetails: UserDetails,
@@ -99,4 +66,5 @@ object FlattenedGenericAuditDetail {
       responseBody = auditResponse.body
     )
   }
+
 }

@@ -20,8 +20,8 @@ import api.connectors.{ConnectorSpec, DownstreamOutcome}
 import org.scalamock.handlers.CallHandler
 import v2.models.domain.PeriodId
 import api.models.errors.{DownstreamErrorCode, DownstreamErrors}
-import api.models.ResponseWrapper
 import api.models.domain.Nino
+import api.models.outcomes.ResponseWrapper
 import v2.models.request.retrieveHistoricNonFhlUkPiePeriodSummary.RetrieveHistoricNonFhlUkPiePeriodSummaryRequest
 import v2.models.response.retrieveHistoricNonFhlUkPiePeriodSummary.{PeriodExpenses, PeriodIncome, RetrieveHistoricNonFhlUkPiePeriodSummaryResponse}
 

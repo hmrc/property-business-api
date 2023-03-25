@@ -21,7 +21,7 @@ import org.scalamock.scalatest.MockFactory
 import uk.gov.hmrc.http.HeaderCarrier
 import api.controllers.EndpointLogContext
 import api.models.errors.ErrorWrapper
-import api.models.ResponseWrapper
+import api.models.outcomes.ResponseWrapper
 import v2.models.request.listPropertyPeriodSummaries.ListPropertyPeriodSummariesRequest
 import v2.models.response.listPropertyPeriodSummaries.ListPropertyPeriodSummariesResponse
 import v2.services.ListPropertyPeriodSummariesService

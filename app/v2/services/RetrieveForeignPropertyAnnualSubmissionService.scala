@@ -35,7 +35,7 @@ import api.models.errors.{
   RuleTypeOfBusinessIncorrectError,
   TaxYearFormatError
 }
-import api.models.ResponseWrapper
+import api.models.outcomes.ResponseWrapper
 import v2.models.request.retrieveForeignPropertyAnnualSubmission.RetrieveForeignPropertyAnnualSubmissionRequest
 import v2.models.response.retrieveForeignPropertyAnnualSubmission.RetrieveForeignPropertyAnnualSubmissionResponse
 import api.services.{DownstreamResponseMappingSupport, ServiceOutcome}

@@ -22,7 +22,7 @@ import v2.connectors.RetrieveForeignPropertyAnnualSubmissionConnector.{ForeignRe
 import v2.models.domain.TaxYear
 import api.models.domain.Nino
 import api.models.errors.{DownstreamErrorCode, DownstreamErrors}
-import api.models.ResponseWrapper
+import api.models.outcomes.ResponseWrapper
 import v2.models.request.retrieveForeignPropertyAnnualSubmission.RetrieveForeignPropertyAnnualSubmissionRequest
 import v2.models.response.retrieveForeignPropertyAnnualSubmission.RetrieveForeignPropertyAnnualSubmissionResponse
 import v2.models.response.retrieveForeignPropertyAnnualSubmission.foreignFhlEea._

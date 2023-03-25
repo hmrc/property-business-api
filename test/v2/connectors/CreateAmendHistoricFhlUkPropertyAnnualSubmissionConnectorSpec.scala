@@ -19,7 +19,7 @@ package v2.connectors
 import api.connectors.ConnectorSpec
 import v2.models.domain.TaxYear
 import api.models.domain.Nino
-import api.models.ResponseWrapper
+import api.models.outcomes.ResponseWrapper
 import v2.models.request.common.ukPropertyRentARoom.UkPropertyAdjustmentsRentARoom
 import v2.models.request.createAmendHistoricFhlUkPropertyAnnualSubmission.{CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequest, CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequestBody, HistoricFhlAnnualAdjustments, HistoricFhlAnnualAllowances}
 import v2.models.response.createAmendHistoricFhlUkPropertyAnnualSubmission.CreateAmendHistoricFhlUkPropertyAnnualSubmissionResponse

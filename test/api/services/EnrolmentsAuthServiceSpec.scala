@@ -16,7 +16,7 @@
 
 package api.services
 
-import api.models.UserDetails
+import api.models.auth.UserDetails
 import api.models.errors.{InternalError, UnauthorisedError}
 import config.ConfidenceLevelConfig
 import mocks.MockAppConfig

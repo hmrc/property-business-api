@@ -16,11 +16,10 @@
 
 package api.models.audit
 
-import api.models.UserDetails
+import api.models.auth.UserDetails
 import play.api.http.Status.OK
 import play.api.libs.json.{Json, JsValue, OWrites}
 import support.UnitSpec
-import v2.models.audit.GenericAuditDetail
 
 case class Params(nino: String, businessId: String, request: JsValue)
 

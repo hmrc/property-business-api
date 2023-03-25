@@ -16,15 +16,15 @@
 
 package v1.services
 
+import api.models.outcomes.ResponseWrapper
 import support.UnitSpec
 import uk.gov.hmrc.http.HeaderCarrier
 import v1.controllers.EndpointLogContext
 import v1.mocks.connectors.MockListForeignPropertiesPeriodSummariesConnector
 import v1.models.domain.Nino
 import v1.models.errors._
-import v1.models.outcomes.ResponseWrapper
 import v1.models.request.listForeignPropertiesPeriodSummaries.ListForeignPropertiesPeriodSummariesRequest
-import v1.models.response.listForeignPropertiesPeriodSummaries.{ ListForeignPropertiesPeriodSummariesResponse, SubmissionPeriod }
+import v1.models.response.listForeignPropertiesPeriodSummaries.{ListForeignPropertiesPeriodSummariesResponse, SubmissionPeriod}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future

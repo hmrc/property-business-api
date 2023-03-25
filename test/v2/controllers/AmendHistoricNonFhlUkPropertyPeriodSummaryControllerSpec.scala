@@ -25,13 +25,12 @@ import v2.mocks.hateoas.MockHateoasFactory
 import v2.mocks.requestParsers.MockAmendHistoricNonFhlUkPiePeriodSummaryRequestParser
 import v2.mocks.services.{MockAmendHistoricNonFhlUkPropertyPeriodSummaryService, MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService}
 import v2.models.domain.PeriodId
-import api.models.UserDetails
 import api.models.errors.{BadRequestError, ErrorWrapper, InternalError, MtdError, NinoFormatError, NotFoundError, PeriodIdFormatError, RuleBothExpensesSuppliedError, RuleIncorrectGovTestScenarioError, RuleIncorrectOrEmptyBodyError, ValueFormatError}
-import api.models.ResponseWrapper
-import api.models.audit.{AuditError, AuditResponse}
+import api.models.audit.{AuditError, AuditEvent, AuditResponse, FlattenedGenericAuditDetail}
+import api.models.auth.UserDetails
 import api.models.domain.Nino
 import api.models.hateoas.HateoasWrapper
-import v2.models.audit.{AuditEvent, FlattenedGenericAuditDetail}
+import api.models.outcomes.ResponseWrapper
 import v2.models.request.amendHistoricNonFhlUkPiePeriodSummary.{AmendHistoricNonFhlUkPiePeriodSummaryRawData, AmendHistoricNonFhlUkPiePeriodSummaryRequest, AmendHistoricNonFhlUkPiePeriodSummaryRequestBody}
 import v2.models.response.amendHistoricNonFhlUkPiePeriodSummary.AmendHistoricNonFhlUkPropertyPeriodSummaryHateoasData
 

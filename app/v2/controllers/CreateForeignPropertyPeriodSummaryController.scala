@@ -26,10 +26,9 @@ import uk.gov.hmrc.play.audit.http.connector.AuditResult
 import utils.{IdGenerator, Logging}
 import v2.controllers.requestParsers.CreateForeignPropertyPeriodSummaryRequestParser
 import api.hateoas.HateoasFactory
-import api.models.audit.AuditResponse
+import api.models.audit.{AuditEvent, AuditResponse, GenericAuditDetail}
 import api.models.errors._
 import api.services.{AuditService, EnrolmentsAuthService, MtdIdLookupService}
-import v2.models.audit.{AuditEvent, GenericAuditDetail}
 import v2.models.request.createForeignPropertyPeriodSummary.CreateForeignPropertyPeriodSummaryRawData
 import v2.models.response.createForeignPropertyPeriodSummary.CreateForeignPropertyPeriodSummaryHateoasData
 import v2.services._

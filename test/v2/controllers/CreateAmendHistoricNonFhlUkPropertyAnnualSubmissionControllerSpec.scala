@@ -20,9 +20,10 @@ import api.controllers.ControllerBaseSpec
 import api.models.hateoas.Method.GET
 import api.models.domain.Nino
 import api.models.errors._
-import api.models.{ResponseWrapper, UserDetails}
-import api.models.audit.{AuditError, AuditResponse}
+import api.models.audit.{AuditError, AuditEvent, AuditResponse, FlattenedGenericAuditDetail}
+import api.models.auth.UserDetails
 import api.models.hateoas.{HateoasWrapper, Link}
+import api.models.outcomes.ResponseWrapper
 import fixtures.CreateAmendNonFhlUkPropertyAnnualSubmission.RequestResponseModelFixtures
 import play.api.libs.json.{Json, JsValue}
 import play.api.mvc.Result
@@ -31,7 +32,6 @@ import v2.mocks.MockIdGenerator
 import v2.mocks.hateoas.MockHateoasFactory
 import v2.mocks.requestParsers.MockCreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestParser
 import v2.mocks.services.{MockAuditService, MockCreateAmendHistoricNonFhlUkPropertyAnnualSubmissionService, MockEnrolmentsAuthService, MockMtdIdLookupService}
-import v2.models.audit.{AuditEvent, FlattenedGenericAuditDetail}
 import v2.models.domain.TaxYear
 import v2.models.request.createAmendHistoricNonFhlUkPropertyAnnualSubmission.{CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRawData, CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequest}
 import v2.models.response.createAmendHistoricNonFhlUkPropertyAnnualSubmission.{CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionHateoasData, CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionResponse}

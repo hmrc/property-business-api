@@ -21,7 +21,7 @@ import play.api.libs.json.Reads
 import uk.gov.hmrc.http.{ HttpReads, HttpResponse }
 import api.connectors.DownstreamOutcome
 import api.models.errors.{ InternalError, OutboundError }
-import api.models.ResponseWrapper
+import api.models.outcomes.ResponseWrapper
 
 object StandardDownstreamHttpParser extends HttpParser {
 

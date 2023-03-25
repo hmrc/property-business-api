@@ -21,7 +21,7 @@ import org.scalamock.handlers.CallHandler
 import v2.models.domain.TaxYear
 import api.models.domain.Nino
 import api.models.errors.{DownstreamErrorCode, DownstreamErrors}
-import api.models.ResponseWrapper
+import api.models.outcomes.ResponseWrapper
 import v2.models.request.retrieveHistoricNonFhlUkPropertyAnnualSubmission.RetrieveHistoricNonFhlUkPropertyAnnualSubmissionRequest
 import v2.models.response.retrieveHistoricNonFhlUkPropertyAnnualSubmissionResponse.{AnnualAdjustments, AnnualAllowances, RentARoom, RetrieveHistoricNonFhlUkPropertyAnnualSubmissionResponse}
 

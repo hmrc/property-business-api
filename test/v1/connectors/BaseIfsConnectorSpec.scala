@@ -16,10 +16,10 @@
 
 package v1.connectors
 
+import api.models.outcomes.ResponseWrapper
 import config.AppConfig
-import mocks.{ MockAppConfig, MockHttpClient }
-import uk.gov.hmrc.http.{ HeaderCarrier, HttpClient, HttpReads }
-import v1.models.outcomes.ResponseWrapper
+import mocks.{MockAppConfig, MockHttpClient}
+import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, HttpReads}
 
 import scala.concurrent.Future
 

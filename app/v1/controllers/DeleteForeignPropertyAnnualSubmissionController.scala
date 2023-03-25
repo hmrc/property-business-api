@@ -16,15 +16,17 @@
 
 package v1.controllers
 
+import api.models.audit.AuditEvent
 import cats.data.EitherT
 import cats.implicits._
+
 import javax.inject.{Inject, Singleton}
 import play.api.libs.json.Json
 import play.api.mvc.{Action, AnyContent, ControllerComponents}
 import uk.gov.hmrc.http.HeaderCarrier
 import utils.{IdGenerator, Logging}
 import v1.controllers.requestParsers.DeleteForeignPropertyAnnualSubmissionRequestParser
-import v1.models.audit.{AuditEvent, AuditResponse, DeleteForeignPropertyAnnualAuditDetail}
+import v1.models.audit.{AuditResponse, DeleteForeignPropertyAnnualAuditDetail}
 import v1.models.errors._
 import v1.models.request.deleteForeignPropertyAnnualSubmission.DeleteForeignPropertyAnnualSubmissionRawData
 import v1.services.{AuditService, DeleteForeignPropertyAnnualSubmissionService, EnrolmentsAuthService, MtdIdLookupService}

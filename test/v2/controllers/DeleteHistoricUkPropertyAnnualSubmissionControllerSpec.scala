@@ -23,14 +23,13 @@ import uk.gov.hmrc.http.HeaderCarrier
 import v2.mocks.MockIdGenerator
 import v2.mocks.requestParsers.MockDeleteHistoricUkPropertyAnnualSubmissionRequestParser
 import v2.mocks.services.{MockAuditService, MockDeleteHistoricUkPropertyAnnualSubmissionService, MockEnrolmentsAuthService, MockMtdIdLookupService}
-import api.models.UserDetails
 import v2.models.domain.HistoricPropertyType.{Fhl, NonFhl}
 import v2.models.domain.{HistoricPropertyType, TaxYear}
 import api.models.errors._
-import api.models.ResponseWrapper
-import api.models.audit.{AuditError, AuditResponse}
+import api.models.audit.{AuditError, AuditEvent, AuditResponse, FlattenedGenericAuditDetail}
+import api.models.auth.UserDetails
 import api.models.domain.Nino
-import v2.models.audit.{AuditEvent, FlattenedGenericAuditDetail}
+import api.models.outcomes.ResponseWrapper
 import v2.models.request.deleteHistoricUkPropertyAnnualSubmission.{DeleteHistoricUkPropertyAnnualSubmissionRawData, DeleteHistoricUkPropertyAnnualSubmissionRequest}
 
 import scala.concurrent.ExecutionContext.Implicits.global

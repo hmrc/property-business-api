@@ -21,8 +21,8 @@ import api.controllers.EndpointLogContext
 import v2.mocks.connectors.MockCreateHistoricFhlUkPiePeriodSummaryConnector
 import v2.models.domain.PeriodId
 import api.models.errors.{ErrorWrapper, _}
-import api.models.ResponseWrapper
 import api.models.domain.Nino
+import api.models.outcomes.ResponseWrapper
 import v2.models.request.common.ukFhlPieProperty.{UkFhlPieExpenses, UkFhlPieIncome}
 import v2.models.request.common.ukPropertyRentARoom.{UkPropertyExpensesRentARoom, UkPropertyIncomeRentARoom}
 import v2.models.request.createHistoricFhlUkPiePeriodSummary.{CreateHistoricFhlUkPiePeriodSummaryRequest, CreateHistoricFhlUkPiePeriodSummaryRequestBody}

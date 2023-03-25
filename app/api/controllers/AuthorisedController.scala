@@ -16,13 +16,13 @@
 
 package api.controllers
 
+import api.models.auth.UserDetails
 import play.api.libs.json.Json
 import play.api.mvc._
 import uk.gov.hmrc.auth.core.Enrolment
 import uk.gov.hmrc.auth.core.authorise.Predicate
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.backend.controller.BackendController
-import api.models.UserDetails
 import api.models.errors._
 import api.services.{EnrolmentsAuthService, MtdIdLookupService}
 

@@ -29,8 +29,8 @@ import v2.models.domain.TaxYear
 import api.models.domain.Nino
 import api.models.errors._
 import api.models.hateoas.Method.GET
-import api.models.ResponseWrapper
 import api.models.hateoas.{HateoasWrapper, Link}
+import api.models.outcomes.ResponseWrapper
 import v2.models.request.retrieveForeignPropertyAnnualSubmission._
 import v2.models.response.retrieveForeignPropertyAnnualSubmission.foreignFhlEea._
 import v2.models.response.retrieveForeignPropertyAnnualSubmission.foreignProperty._

@@ -21,7 +21,7 @@ import api.controllers.EndpointLogContext
 import v2.mocks.connectors.MockCreateUkPropertyPeriodSummaryConnector
 import v2.models.domain.TaxYear; import api.models.domain.Nino
 import api.models.errors._
-import api.models.ResponseWrapper
+import api.models.outcomes.ResponseWrapper
 import v2.models.request.createUkPropertyPeriodSummary._
 import v2.models.response.createUkPropertyPeriodSummary.CreateUkPropertyPeriodSummaryResponse
 

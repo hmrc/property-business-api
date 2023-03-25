@@ -19,7 +19,7 @@ package v2.connectors
 import api.connectors.ConnectorSpec
 import v2.models.domain.TaxYear
 import api.models.domain.Nino
-import api.models.ResponseWrapper
+import api.models.outcomes.ResponseWrapper
 import v2.models.request.listPropertyPeriodSummaries.ListPropertyPeriodSummariesRequest
 import v2.models.response.listPropertyPeriodSummaries.{ListPropertyPeriodSummariesResponse, SubmissionPeriod}
 

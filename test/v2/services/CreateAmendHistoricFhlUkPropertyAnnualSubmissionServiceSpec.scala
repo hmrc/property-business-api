@@ -22,7 +22,7 @@ import api.controllers.EndpointLogContext
 import v2.mocks.connectors.MockCreateAmendHistoricFhlUkPropertyAnnualSubmissionConnector
 import v2.models.domain.TaxYear; import api.models.domain.Nino
 import api.models.errors._
-import api.models.ResponseWrapper
+import api.models.outcomes.ResponseWrapper
 import v2.models.request.common.ukPropertyRentARoom.UkPropertyAdjustmentsRentARoom
 import v2.models.request.createAmendHistoricFhlUkPropertyAnnualSubmission.{
   CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequest,

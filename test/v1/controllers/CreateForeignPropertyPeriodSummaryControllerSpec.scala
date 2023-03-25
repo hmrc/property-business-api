@@ -16,19 +16,20 @@
 
 package v1.controllers
 
-import play.api.libs.json.{ JsValue, Json }
+import api.models.audit.AuditEvent
+import api.models.outcomes.ResponseWrapper
+import play.api.libs.json.{Json, JsValue}
 import play.api.mvc.Result
 import uk.gov.hmrc.http.HeaderCarrier
 import v1.mocks.MockIdGenerator
 import v1.mocks.hateoas.MockHateoasFactory
 import v1.mocks.requestParsers.MockCreateForeignPropertyPeriodSummaryRequestParser
-import v1.mocks.services.{ MockAuditService, MockCreateForeignPropertyPeriodSummaryService, MockEnrolmentsAuthService, MockMtdIdLookupService }
-import v1.models.audit.{ AuditError, AuditEvent, AuditResponse, CreateForeignPropertyPeriodicAuditDetail }
+import v1.mocks.services.{MockAuditService, MockCreateForeignPropertyPeriodSummaryService, MockEnrolmentsAuthService, MockMtdIdLookupService}
+import v1.models.audit.{AuditError, AuditResponse, CreateForeignPropertyPeriodicAuditDetail}
 import v1.models.domain.Nino
 import v1.models.errors._
 import v1.models.hateoas.Method.GET
-import v1.models.hateoas.{ HateoasWrapper, Link }
-import v1.models.outcomes.ResponseWrapper
+import v1.models.hateoas.{HateoasWrapper, Link}
 import v1.models.request.common.foreignFhlEea._
 import v1.models.request.common.foreignPropertyEntry._
 import v1.models.request.createForeignPropertyPeriodSummary._

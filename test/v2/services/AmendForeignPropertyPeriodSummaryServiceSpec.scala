@@ -21,7 +21,7 @@ import api.controllers.EndpointLogContext
 import v2.mocks.connectors.MockAmendForeignPropertyPeriodSummaryConnector
 import v2.models.domain.TaxYear; import api.models.domain.Nino
 import api.models.errors._
-import api.models.ResponseWrapper
+import api.models.outcomes.ResponseWrapper
 import v2.models.request.amendForeignPropertyPeriodSummary._
 import v2.models.request.common.foreignFhlEea._
 import v2.models.request.common.foreignPropertyEntry._

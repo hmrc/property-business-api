@@ -18,11 +18,11 @@ package v2.controllers
 
 import api.controllers.ControllerBaseSpec
 import api.models.hateoas.Method.GET
-import api.models.audit.{AuditError, AuditResponse}
+import api.models.audit.{AuditError, AuditEvent, AuditResponse, GenericAuditDetail}
 import api.models.domain.Nino
 import api.models.errors._
-import api.models.ResponseWrapper
 import api.models.hateoas.{HateoasWrapper, Link}
+import api.models.outcomes.ResponseWrapper
 import play.api.libs.json.{Json, JsValue}
 import play.api.mvc.Result
 import uk.gov.hmrc.http.HeaderCarrier
@@ -30,7 +30,6 @@ import v2.mocks.MockIdGenerator
 import v2.mocks.hateoas.MockHateoasFactory
 import v2.mocks.requestParsers.MockAmendUkPropertyAnnualSubmissionRequestParser
 import v2.mocks.services.{MockAmendUkPropertyAnnualSubmissionService, MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService}
-import v2.models.audit.{AuditEvent, GenericAuditDetail}
 import v2.models.domain.TaxYear
 import v2.models.request.amendUkPropertyAnnualSubmission._
 import v2.models.request.amendUkPropertyAnnualSubmission.ukFhlProperty._

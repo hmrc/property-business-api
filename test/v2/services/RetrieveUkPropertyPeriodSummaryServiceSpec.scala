@@ -24,7 +24,7 @@ import api.controllers.EndpointLogContext
 import v2.mocks.connectors.MockRetrieveUkPropertyPeriodSummaryConnector
 import v2.models.domain.TaxYear; import api.models.domain.Nino
 import api.models.errors._
-import api.models.ResponseWrapper
+import api.models.outcomes.ResponseWrapper
 import v2.models.request.retrieveUkPropertyPeriodSummary.RetrieveUkPropertyPeriodSummaryRequest
 
 import scala.concurrent.ExecutionContext.Implicits.global

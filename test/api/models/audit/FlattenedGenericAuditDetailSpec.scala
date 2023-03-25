@@ -16,13 +16,12 @@
 
 package api.models.audit
 
+import api.models.auth.UserDetails
+import api.models.errors.TaxYearFormatError
 import mocks.MockAppConfig
 import play.api.http.Status.{BAD_REQUEST, OK}
 import play.api.libs.json.{Json, JsValue}
 import support.UnitSpec
-import api.models.UserDetails
-import api.models.errors.TaxYearFormatError
-import v2.models.audit.FlattenedGenericAuditDetail
 
 class FlattenedGenericAuditDetailSpec extends UnitSpec with MockAppConfig {
 

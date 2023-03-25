@@ -17,7 +17,7 @@
 package api.connectors
 
 import api.connectors.DownstreamUri.{DesUri, IfsUri, TaxYearSpecificIfsUri}
-import api.models.ResponseWrapper
+import api.models.outcomes.ResponseWrapper
 import config.AppConfig
 import mocks.{MockAppConfig, MockHttpClient}
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, HttpReads}

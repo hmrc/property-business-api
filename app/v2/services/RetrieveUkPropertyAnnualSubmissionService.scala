@@ -24,7 +24,7 @@ import v2.connectors.RetrieveUkPropertyAnnualSubmissionConnector
 import v2.connectors.RetrieveUkPropertyAnnualSubmissionConnector.{NonUkResult, UkResult}
 import api.controllers.EndpointLogContext
 import api.models.errors._
-import api.models.ResponseWrapper
+import api.models.outcomes.ResponseWrapper
 import v2.models.request.retrieveUkPropertyAnnualSubmission.RetrieveUkPropertyAnnualSubmissionRequest
 import v2.models.response.retrieveUkPropertyAnnualSubmission.RetrieveUkPropertyAnnualSubmissionResponse
 import api.services.{DownstreamResponseMappingSupport, ServiceOutcome}

@@ -21,8 +21,8 @@ import api.controllers.EndpointLogContext
 import v2.mocks.connectors.MockAmendHistoricFhlUkPiePeriodSummaryConnector
 import v2.models.domain.PeriodId
 import api.models.errors._
-import api.models.ResponseWrapper
 import api.models.domain.Nino
+import api.models.outcomes.ResponseWrapper
 import api.services.ServiceOutcome
 import v2.models.request.amendHistoricFhlUkPiePeriodSummary.{AmendHistoricFhlUkPiePeriodSummaryRequest, AmendHistoricFhlUkPiePeriodSummaryRequestBody}
 

@@ -16,13 +16,13 @@
 
 package v2.mocks.services
 
+import api.models.audit.AuditEvent
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
 import play.api.libs.json.Writes
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.audit.http.connector.AuditResult
 import api.services.AuditService
-import v2.models.audit.AuditEvent
 
 import scala.concurrent.{ExecutionContext, Future}
 

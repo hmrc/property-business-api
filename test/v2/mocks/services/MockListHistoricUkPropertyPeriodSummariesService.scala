@@ -22,7 +22,7 @@ import uk.gov.hmrc.http.HeaderCarrier
 import api.controllers.EndpointLogContext
 import v2.models.domain.HistoricPropertyType
 import api.models.errors.ErrorWrapper
-import api.models.ResponseWrapper
+import api.models.outcomes.ResponseWrapper
 import v2.models.request.listHistoricUkPropertyPeriodSummaries.ListHistoricUkPropertyPeriodSummariesRequest
 import v2.models.response.listHistoricUkPropertyPeriodSummaries.{ ListHistoricUkPropertyPeriodSummariesResponse, SubmissionPeriod }
 import v2.services.ListHistoricUkPropertyPeriodSummariesService

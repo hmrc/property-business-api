@@ -16,9 +16,9 @@
 
 package v1.connectors
 
-import mocks.{ MockAppConfig, MockHttpClient }
+import api.models.outcomes.ResponseWrapper
+import mocks.{MockAppConfig, MockHttpClient}
 import v1.models.domain.Nino
-import v1.models.outcomes.ResponseWrapper
 import v1.models.request.listForeignPropertiesPeriodSummaries.ListForeignPropertiesPeriodSummariesRequest
 import v1.models.response.listForeignPropertiesPeriodSummaries._
 

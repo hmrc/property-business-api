@@ -16,6 +16,7 @@
 
 package api.services
 
+import api.models.audit.AuditEvent
 import javax.inject.{Inject, Singleton}
 import play.api.libs.json.{Json, Writes}
 import play.api.Configuration
@@ -25,7 +26,6 @@ import uk.gov.hmrc.play.audit.http.connector.{AuditConnector, AuditResult}
 import uk.gov.hmrc.play.audit.model.ExtendedDataEvent
 import uk.gov.hmrc.play.bootstrap.config.AppName
 import utils.Logging
-import v2.models.audit.AuditEvent
 
 import scala.concurrent.{ExecutionContext, Future}
 

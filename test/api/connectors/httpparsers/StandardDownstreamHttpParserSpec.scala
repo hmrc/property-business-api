@@ -22,7 +22,7 @@ import support.UnitSpec
 import uk.gov.hmrc.http.{ HttpReads, HttpResponse }
 import api.connectors.DownstreamOutcome
 import api.models.errors._
-import api.models.ResponseWrapper
+import api.models.outcomes.ResponseWrapper
 
 // WLOG if Reads tested elsewhere
 case class SomeModel(data: String)

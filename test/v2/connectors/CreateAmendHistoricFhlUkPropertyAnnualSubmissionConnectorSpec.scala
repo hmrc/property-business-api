@@ -16,15 +16,12 @@
 
 package v2.connectors
 
-import v2.models.domain.{ Nino, TaxYear }
-import v2.models.outcomes.ResponseWrapper
+import api.connectors.ConnectorSpec
+import v2.models.domain.TaxYear
+import api.models.domain.Nino
+import api.models.outcomes.ResponseWrapper
 import v2.models.request.common.ukPropertyRentARoom.UkPropertyAdjustmentsRentARoom
-import v2.models.request.createAmendHistoricFhlUkPropertyAnnualSubmission.{
-  CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequest,
-  CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequestBody,
-  HistoricFhlAnnualAdjustments,
-  HistoricFhlAnnualAllowances
-}
+import v2.models.request.createAmendHistoricFhlUkPropertyAnnualSubmission.{CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequest, CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequestBody, HistoricFhlAnnualAdjustments, HistoricFhlAnnualAllowances}
 import v2.models.response.createAmendHistoricFhlUkPropertyAnnualSubmission.CreateAmendHistoricFhlUkPropertyAnnualSubmissionResponse
 
 import scala.concurrent.Future

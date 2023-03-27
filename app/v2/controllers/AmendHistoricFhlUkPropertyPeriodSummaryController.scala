@@ -16,34 +16,35 @@
 
 package v2.controllers
 
+import api.controllers.{AuthorisedController, BaseController, EndpointLogContext}
+import api.hateoas.HateoasFactory
+import api.models.audit.{AuditEvent, AuditResponse, FlattenedGenericAuditDetail}
+import api.models.errors._
+import api.services.{AuditService, EnrolmentsAuthService, MtdIdLookupService}
 import cats.data.EitherT
 import cats.implicits._
-import play.api.libs.json.{JsValue, Json}
+import play.api.libs.json.{Json, JsValue}
 import play.api.mvc.{Action, ControllerComponents}
-import utils.{IdGenerator, Logging}
-import v2.controllers.requestParsers.AmendHistoricFhlUkPiePeriodSummaryRequestParser
-import v2.hateoas.HateoasFactory
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.audit.http.connector.AuditResult
-import v2.models.audit.FlattenedGenericAuditDetail
-import v2.models.errors._
+import utils.{IdGenerator, Logging}
+import v2.controllers.requestParsers.AmendHistoricFhlUkPiePeriodSummaryRequestParser
 import v2.models.request.amendHistoricFhlUkPiePeriodSummary.AmendHistoricFhlUkPiePeriodSummaryRawData
 import v2.models.response.amendHistoricFhlUkPiePeriodSummary.AmendHistoricFhlUkPropertyPeriodSummaryHateoasData
-import v2.services.{AmendHistoricFhlUkPiePeriodSummaryService, AuditService, EnrolmentsAuthService, MtdIdLookupService}
-import v2.models.audit.{ AuditEvent, AuditResponse, FlattenedGenericAuditDetail}
+import v2.services.AmendHistoricFhlUkPiePeriodSummaryService
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class AmendHistoricFhlUkPropertyPeriodSummaryController @Inject()(val authService: EnrolmentsAuthService,
-                                                                  val lookupService: MtdIdLookupService,
-                                                                  parser: AmendHistoricFhlUkPiePeriodSummaryRequestParser,
-                                                                  service: AmendHistoricFhlUkPiePeriodSummaryService,
-                                                                  hateoasFactory: HateoasFactory,
-                                                                  auditService: AuditService,
-                                                                  cc: ControllerComponents,
-                                                                  idGenerator: IdGenerator)(implicit ec: ExecutionContext)
+class AmendHistoricFhlUkPropertyPeriodSummaryController @Inject() (val authService: EnrolmentsAuthService,
+                                                                   val lookupService: MtdIdLookupService,
+                                                                   parser: AmendHistoricFhlUkPiePeriodSummaryRequestParser,
+                                                                   service: AmendHistoricFhlUkPiePeriodSummaryService,
+                                                                   hateoasFactory: HateoasFactory,
+                                                                   auditService: AuditService,
+                                                                   cc: ControllerComponents,
+                                                                   idGenerator: IdGenerator)(implicit ec: ExecutionContext)
     extends AuthorisedController(cc)
     with BaseController
     with Logging {
@@ -120,7 +121,8 @@ class AmendHistoricFhlUkPropertyPeriodSummaryController @Inject()(val authServic
           PeriodIdFormatError,
           RuleBothExpensesSuppliedError,
           ValueFormatError,
-          RuleIncorrectOrEmptyBodyError
+          RuleIncorrectOrEmptyBodyError,
+          RuleIncorrectGovTestScenarioError
         ) =>
       BadRequest(Json.toJson(errorWrapper))
     case NotFoundError => NotFound(Json.toJson(errorWrapper))
@@ -133,4 +135,5 @@ class AmendHistoricFhlUkPropertyPeriodSummaryController @Inject()(val authServic
       AuditEvent("AmendHistoricFhlPropertyIncomeExpensesPeriodSummary", "AmendHistoricFhlPropertyIncomeExpensesPeriodSummary", details)
     auditService.auditEvent(event)
   }
+
 }

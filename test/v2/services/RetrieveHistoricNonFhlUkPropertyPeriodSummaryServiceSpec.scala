@@ -18,13 +18,14 @@ package v2.services
 
 import support.UnitSpec
 import uk.gov.hmrc.http.HeaderCarrier
-import v2.controllers.EndpointLogContext
+import api.controllers.EndpointLogContext
 import v2.mocks.connectors.MockRetrieveHistoricNonFhlUkPropertyPeriodSummaryConnector
-import v2.models.domain.{ Nino, PeriodId }
-import v2.models.errors._
-import v2.models.outcomes.ResponseWrapper
+import v2.models.domain.PeriodId
+import api.models.errors._
+import api.models.domain.Nino
+import api.models.outcomes.ResponseWrapper
 import v2.models.request.retrieveHistoricNonFhlUkPiePeriodSummary.RetrieveHistoricNonFhlUkPiePeriodSummaryRequest
-import v2.models.response.retrieveHistoricNonFhlUkPiePeriodSummary.{ PeriodExpenses, PeriodIncome, RetrieveHistoricNonFhlUkPiePeriodSummaryResponse }
+import v2.models.response.retrieveHistoricNonFhlUkPiePeriodSummary.{PeriodExpenses, PeriodIncome, RetrieveHistoricNonFhlUkPiePeriodSummaryResponse}
 import v2.services.RetrieveHistoricNonFhlUkPropertyPeriodSummaryService.downstreamErrorMap
 
 import scala.concurrent.ExecutionContext.Implicits.global

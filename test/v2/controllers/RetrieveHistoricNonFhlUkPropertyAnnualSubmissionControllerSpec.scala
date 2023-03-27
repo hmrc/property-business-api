@@ -16,31 +16,22 @@
 
 package v2.controllers
 
+import api.controllers.ControllerBaseSpec
 import play.api.libs.json.Json
 import play.api.mvc.Result
 import uk.gov.hmrc.http.HeaderCarrier
 import v2.mocks.MockIdGenerator
 import v2.mocks.hateoas.MockHateoasFactory
 import v2.mocks.requestParsers.MockRetrieveHistoricNonFhlUkPropertyAnnualSubmissionRequestParser
-import v2.mocks.services.{
-  MockAuditService,
-  MockEnrolmentsAuthService,
-  MockMtdIdLookupService,
-  MockRetrieveHistoricNonFhlUkPropertyAnnualSubmissionService
-}
-import v2.models.domain.{ Nino, TaxYear }
-import v2.models.errors._
-import v2.models.hateoas.Method.GET
-import v2.models.hateoas.{ HateoasWrapper, Link }
-import v2.models.outcomes.ResponseWrapper
+import v2.mocks.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService, MockRetrieveHistoricNonFhlUkPropertyAnnualSubmissionService}
+import v2.models.domain.TaxYear
+import api.models.domain.Nino
+import api.models.errors._
+import api.models.hateoas.Method.GET
+import api.models.hateoas.{HateoasWrapper, Link}
+import api.models.outcomes.ResponseWrapper
 import v2.models.request.retrieveHistoricNonFhlUkPropertyAnnualSubmission._
-import v2.models.response.retrieveHistoricNonFhlUkPropertyAnnualSubmissionResponse.{
-  AnnualAdjustments,
-  AnnualAllowances,
-  RentARoom,
-  RetrieveHistoricNonFhlUkPropertyAnnualSubmissionHateoasData,
-  RetrieveHistoricNonFhlUkPropertyAnnualSubmissionResponse
-}
+import v2.models.response.retrieveHistoricNonFhlUkPropertyAnnualSubmissionResponse.{AnnualAdjustments, AnnualAllowances, RentARoom, RetrieveHistoricNonFhlUkPropertyAnnualSubmissionHateoasData, RetrieveHistoricNonFhlUkPropertyAnnualSubmissionResponse}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -177,7 +168,8 @@ class RetrieveHistoricNonFhlUkPropertyAnnualSubmissionControllerSpec
           (TaxYearFormatError, BAD_REQUEST),
           (RuleHistoricTaxYearNotSupportedError, BAD_REQUEST),
           (NotFoundError, NOT_FOUND),
-          (InternalError, INTERNAL_SERVER_ERROR)
+          (InternalError, INTERNAL_SERVER_ERROR),
+          (RuleIncorrectGovTestScenarioError, BAD_REQUEST)
         )
 
         input.foreach(args => (serviceErrors _).tupled(args))

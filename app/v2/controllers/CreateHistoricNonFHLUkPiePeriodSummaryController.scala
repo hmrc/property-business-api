@@ -16,43 +16,46 @@
 
 package v2.controllers
 
+import api.controllers.{AuthorisedController, BaseController, EndpointLogContext}
 import cats.data.EitherT
 import cats.implicits._
-import play.api.libs.json.{ JsValue, Json }
-import play.api.mvc.{ Action, ControllerComponents }
+import play.api.libs.json.{Json, JsValue}
+import play.api.mvc.{Action, ControllerComponents}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.audit.http.connector.AuditResult
-import utils.{ IdGenerator, Logging }
+import utils.{IdGenerator, Logging}
 import v2.controllers.requestParsers.CreateHistoricNonFhlUkPropertyPeriodSummaryRequestParser
-import v2.hateoas.HateoasFactory
-import v2.models.audit.{ AuditEvent, AuditResponse, FlattenedGenericAuditDetail }
-import v2.models.errors._
+import api.hateoas.HateoasFactory
+import api.models.audit.{AuditEvent, AuditResponse, FlattenedGenericAuditDetail}
+import api.models.errors._
+import api.services.{AuditService, EnrolmentsAuthService, MtdIdLookupService}
 import v2.models.request.createHistoricNonFhlUkPropertyPeriodSummary.CreateHistoricNonFhlUkPropertyPeriodSummaryRawData
 import v2.models.response.createHistoricNonFhlUkPiePeriodSummary.CreateHistoricNonFhlUkPiePeriodSummaryHateoasData
-import v2.services.{ AuditService, CreateHistoricNonFhlUkPropertyPeriodSummaryService, EnrolmentsAuthService, MtdIdLookupService }
+import v2.services.CreateHistoricNonFhlUkPropertyPeriodSummaryService
 
-import javax.inject.{ Inject, Singleton }
-import scala.concurrent.{ ExecutionContext, Future }
+import javax.inject.{Inject, Singleton}
+import scala.concurrent.{ExecutionContext, Future}
 
 /*
   Pie = Property Income & Expenses
  */
 @Singleton
-class CreateHistoricNonFHLUkPiePeriodSummaryController @Inject()(val authService: EnrolmentsAuthService,
-                                                                 val lookupService: MtdIdLookupService,
-                                                                 parser: CreateHistoricNonFhlUkPropertyPeriodSummaryRequestParser,
-                                                                 service: CreateHistoricNonFhlUkPropertyPeriodSummaryService,
-                                                                 auditService: AuditService,
-                                                                 hateoasFactory: HateoasFactory,
-                                                                 cc: ControllerComponents,
-                                                                 idGenerator: IdGenerator)(implicit ec: ExecutionContext)
+class CreateHistoricNonFHLUkPiePeriodSummaryController @Inject() (val authService: EnrolmentsAuthService,
+                                                                  val lookupService: MtdIdLookupService,
+                                                                  parser: CreateHistoricNonFhlUkPropertyPeriodSummaryRequestParser,
+                                                                  service: CreateHistoricNonFhlUkPropertyPeriodSummaryService,
+                                                                  auditService: AuditService,
+                                                                  hateoasFactory: HateoasFactory,
+                                                                  cc: ControllerComponents,
+                                                                  idGenerator: IdGenerator)(implicit ec: ExecutionContext)
     extends AuthorisedController(cc)
     with BaseController
     with Logging {
 
   implicit val endpointLogContext: EndpointLogContext =
-    EndpointLogContext(controllerName = "CreateAmendHistoricNonFHLUkPiePeriodSummaryController",
-                       endpointName = "CreateAmendHistoricNonFHLUkPropertyIncomeExpensesPeriodSummary")
+    EndpointLogContext(
+      controllerName = "CreateAmendHistoricNonFHLUkPiePeriodSummaryController",
+      endpointName = "CreateAmendHistoricNonFHLUkPropertyIncomeExpensesPeriodSummary")
 
   def handleRequest(nino: String): Action[JsValue] =
     authorisedAction(nino).async(parse.json) { implicit request =>
@@ -135,6 +138,7 @@ class CreateHistoricNonFHLUkPiePeriodSummaryController @Inject()(val authService
             RuleOverlappingPeriodError,
             RuleNotContiguousPeriodError,
             RuleHistoricTaxYearNotSupportedError,
+            RuleIncorrectGovTestScenarioError
           ) =>
         BadRequest(Json.toJson(errorWrapper))
       case NotFoundError                           => NotFound(Json.toJson(errorWrapper))
@@ -147,4 +151,5 @@ class CreateHistoricNonFHLUkPiePeriodSummaryController @Inject()(val authService
       AuditEvent("CreateHistoricNonFhlPropertyIncomeExpensesPeriodSummary", "CreateHistoricNonFhlPropertyIncomeExpensesPeriodSummary", details)
     auditService.auditEvent(event)
   }
+
 }

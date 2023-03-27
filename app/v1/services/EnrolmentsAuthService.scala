@@ -16,10 +16,11 @@
 
 package v1.services
 
+import api.models.auth.UserDetails
 import config.AppConfig
 
-import javax.inject.{ Inject, Singleton }
-import uk.gov.hmrc.auth.core.AffinityGroup.{ Agent, Individual, Organisation }
+import javax.inject.{Inject, Singleton}
+import uk.gov.hmrc.auth.core.AffinityGroup.{Agent, Individual, Organisation}
 import uk.gov.hmrc.auth.core._
 import uk.gov.hmrc.auth.core.authorise.Predicate
 import uk.gov.hmrc.auth.core.retrieve.v2.Retrievals
@@ -27,14 +28,13 @@ import uk.gov.hmrc.auth.core.retrieve.v2.Retrievals._
 import uk.gov.hmrc.auth.core.retrieve.~
 import uk.gov.hmrc.http.HeaderCarrier
 import utils.Logging
-import v1.models.auth.UserDetails
-import v1.models.errors.{ DownstreamError, UnauthorisedError }
+import v1.models.errors.{DownstreamError, UnauthorisedError}
 import v1.models.outcomes.AuthOutcome
 
-import scala.concurrent.{ ExecutionContext, Future }
+import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class EnrolmentsAuthService @Inject()(val connector: AuthConnector, val appConfig: AppConfig) extends Logging {
+class EnrolmentsAuthService @Inject() (val connector: AuthConnector, val appConfig: AppConfig) extends Logging {
 
   private val authFunction: AuthorisedFunctions = new AuthorisedFunctions {
     override def authConnector: AuthConnector = connector
@@ -89,4 +89,5 @@ class EnrolmentsAuthService @Inject()(val connector: AuthConnector, val appConfi
         case _ ~ enrolments => Future.successful(getAgentReferenceFromEnrolments(enrolments))
         case _              => Future.successful(None)
       }
+
 }

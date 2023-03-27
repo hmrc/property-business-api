@@ -20,25 +20,27 @@ import cats.data.EitherT
 import cats.implicits._
 import uk.gov.hmrc.http.HeaderCarrier
 import utils.Logging
-import v2.connectors.AmendHistoricNonFhlUkPiePeriodSummaryConnector
-import v2.controllers.EndpointLogContext
-import v2.models.errors._
+import api.controllers.EndpointLogContext
+import api.models.errors._
 import v2.models.request.amendHistoricNonFhlUkPiePeriodSummary.AmendHistoricNonFhlUkPiePeriodSummaryRequest
 import v2.services.AmendHistoricNonFhlUkPiePeriodSummaryService.downstreamErrorMap
-import v2.support.DownstreamResponseMappingSupport
+import api.services.ServiceOutcome
+import api.support.DownstreamResponseMappingSupport
+import v2.connectors.AmendHistoricNonFhlUkPiePeriodSummaryConnector
 
-import javax.inject.{ Inject, Singleton }
-import scala.concurrent.{ ExecutionContext, Future }
+import javax.inject.{Inject, Singleton}
+import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class AmendHistoricNonFhlUkPiePeriodSummaryService @Inject()(connector: AmendHistoricNonFhlUkPiePeriodSummaryConnector)
+class AmendHistoricNonFhlUkPiePeriodSummaryService @Inject() (connector: AmendHistoricNonFhlUkPiePeriodSummaryConnector)
     extends DownstreamResponseMappingSupport
     with Logging {
 
-  def amend(request: AmendHistoricNonFhlUkPiePeriodSummaryRequest)(implicit hc: HeaderCarrier,
-                                                                   ec: ExecutionContext,
-                                                                   logContext: EndpointLogContext,
-                                                                   correlationId: String): Future[ServiceOutcome[Unit]] = {
+  def amend(request: AmendHistoricNonFhlUkPiePeriodSummaryRequest)(implicit
+      hc: HeaderCarrier,
+      ec: ExecutionContext,
+      logContext: EndpointLogContext,
+      correlationId: String): Future[ServiceOutcome[Unit]] = {
 
     val result = EitherT(connector.amend(request)).leftMap(mapDownstreamErrors(downstreamErrorMap))
 
@@ -65,4 +67,5 @@ object AmendHistoricNonFhlUkPiePeriodSummaryService {
       "SERVER_ERROR"                -> InternalError,
       "SERVICE_UNAVAILABLE"         -> InternalError
     )
+
 }

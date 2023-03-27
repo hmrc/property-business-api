@@ -16,22 +16,24 @@
 
 package v2.controllers
 
-import play.api.libs.json.{ JsValue, Json }
+import api.controllers.ControllerBaseSpec
+import play.api.libs.json.{Json, JsValue}
 import play.api.mvc.Result
 import uk.gov.hmrc.http.HeaderCarrier
 import v2.mocks.MockIdGenerator
 import v2.mocks.hateoas.MockHateoasFactory
 import v2.mocks.requestParsers.MockCreateUkPropertyPeriodSummaryRequestParser
-import v2.mocks.services.{ MockAuditService, MockCreateUkPropertyPeriodSummaryService, MockEnrolmentsAuthService, MockMtdIdLookupService }
-import v2.models.audit.{ AuditError, AuditEvent, AuditResponse, GenericAuditDetail }
-import v2.models.domain.{ Nino, TaxYear }
-import v2.models.errors._
-import v2.models.hateoas.Method.GET
-import v2.models.hateoas.{ HateoasWrapper, Link }
-import v2.models.outcomes.ResponseWrapper
-import v2.models.request.common.ukFhlProperty.{ UkFhlProperty, UkFhlPropertyExpenses, UkFhlPropertyIncome }
-import v2.models.request.common.ukNonFhlProperty.{ UkNonFhlProperty, UkNonFhlPropertyExpenses, UkNonFhlPropertyIncome }
-import v2.models.request.common.ukPropertyRentARoom.{ UkPropertyExpensesRentARoom, UkPropertyIncomeRentARoom }
+import v2.mocks.services.{MockAuditService, MockCreateUkPropertyPeriodSummaryService, MockEnrolmentsAuthService, MockMtdIdLookupService}
+import api.models.audit.{AuditError, AuditEvent, AuditResponse, GenericAuditDetail}
+import v2.models.domain.TaxYear
+import api.models.domain.Nino
+import api.models.errors._
+import api.models.hateoas.Method.GET
+import api.models.hateoas.{HateoasWrapper, Link}
+import api.models.outcomes.ResponseWrapper
+import v2.models.request.common.ukFhlProperty.{UkFhlProperty, UkFhlPropertyExpenses, UkFhlPropertyIncome}
+import v2.models.request.common.ukNonFhlProperty.{UkNonFhlProperty, UkNonFhlPropertyExpenses, UkNonFhlPropertyIncome}
+import v2.models.request.common.ukPropertyRentARoom.{UkPropertyExpensesRentARoom, UkPropertyIncomeRentARoom}
 import v2.models.request.createUkPropertyPeriodSummary._
 import v2.models.response.createUkPropertyPeriodSummary._
 
@@ -443,7 +445,8 @@ class CreateUkPropertyPeriodSummaryControllerSpec
           (RuleMisalignedPeriodError, BAD_REQUEST),
           (RuleNotContiguousPeriodError, BAD_REQUEST),
           (RuleToDateBeforeFromDateError, BAD_REQUEST),
-          (RuleDuplicateSubmissionError, BAD_REQUEST)
+          (RuleDuplicateSubmissionError, BAD_REQUEST),
+          (RuleIncorrectGovTestScenarioError, BAD_REQUEST)
         )
 
         input.foreach(args => (serviceErrors _).tupled(args))

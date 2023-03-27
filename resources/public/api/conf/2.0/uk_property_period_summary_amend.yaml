@@ -100,7 +100,9 @@ responses:
           RULE_TYPE_OF_BUSINESS_INCORRECT:
             $ref: './common/errors.yaml#/components/examples/ruleTypeOfBusinessIncorrectUk' 
           RULE_INCORRECT_OR_EMPTY_BODY_SUBMITTED:
-            $ref: './common/errors.yaml#/components/examples/ruleIncorrectOrEmptyBody' 
+            $ref: './common/errors.yaml#/components/examples/ruleIncorrectOrEmptyBody'
+          RULE_INCORRECT_GOV_TEST_SCENARIO:
+            $ref: './common/errors.yaml#/components/examples/ruleIncorrectGovTestScenario'
 
 
   "403":

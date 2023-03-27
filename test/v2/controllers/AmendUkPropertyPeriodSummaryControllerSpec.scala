@@ -16,23 +16,25 @@
 
 package v2.controllers
 
-import play.api.libs.json.{ JsValue, Json }
+import api.controllers.ControllerBaseSpec
+import play.api.libs.json.{Json, JsValue}
 import play.api.mvc.Result
 import uk.gov.hmrc.http.HeaderCarrier
 import v2.mocks.MockIdGenerator
 import v2.mocks.hateoas.MockHateoasFactory
 import v2.mocks.requestParsers.MockAmendUkPropertyPeriodSummaryRequestParser
 import v2.mocks.services._
-import v2.models.audit.{ AuditError, AuditEvent, AuditResponse, GenericAuditDetail }
-import v2.models.domain.{ Nino, TaxYear }
-import v2.models.errors._
-import v2.models.hateoas.Method.GET
-import v2.models.hateoas.{ HateoasWrapper, Link }
-import v2.models.outcomes.ResponseWrapper
+import api.models.audit.{AuditError, AuditEvent, AuditResponse, GenericAuditDetail}
+import v2.models.domain.TaxYear
+import api.models.domain.Nino
+import api.models.errors._
+import api.models.hateoas.Method.GET
+import api.models.hateoas.{HateoasWrapper, Link}
+import api.models.outcomes.ResponseWrapper
 import v2.models.request.amendUkPropertyPeriodSummary._
 import v2.models.request.common.ukFhlProperty._
 import v2.models.request.common.ukNonFhlProperty._
-import v2.models.request.common.ukPropertyRentARoom.{ UkPropertyExpensesRentARoom, UkPropertyIncomeRentARoom }
+import v2.models.request.common.ukPropertyRentARoom.{UkPropertyExpensesRentARoom, UkPropertyIncomeRentARoom}
 import v2.models.response.amendUkPropertyPeriodSummary._
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -423,7 +425,8 @@ class AmendUkPropertyPeriodSummaryControllerSpec
           (NotFoundError, NOT_FOUND),
           (RuleTypeOfBusinessIncorrectError, BAD_REQUEST),
           (RuleTaxYearNotSupportedError, BAD_REQUEST),
-          (InternalError, INTERNAL_SERVER_ERROR)
+          (InternalError, INTERNAL_SERVER_ERROR),
+          (RuleIncorrectGovTestScenarioError, BAD_REQUEST)
         )
 
         input.foreach(args => (serviceErrors _).tupled(args))

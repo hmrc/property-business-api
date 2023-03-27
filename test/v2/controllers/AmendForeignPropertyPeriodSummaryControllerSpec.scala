@@ -16,20 +16,22 @@
 
 package v2.controllers
 
-import play.api.libs.json.{ JsValue, Json }
+import api.controllers.ControllerBaseSpec
+import play.api.libs.json.{Json, JsValue}
 import play.api.mvc.Result
 import uk.gov.hmrc.http.HeaderCarrier
 import v2.mocks.MockIdGenerator
 import v2.mocks.hateoas.MockHateoasFactory
 import v2.mocks.requestParsers.MockAmendForeignPropertyPeriodSummaryRequestParser
-import v2.mocks.services.{ MockAmendForeignPropertyPeriodSummaryService, MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService }
-import v2.models.audit.{ AuditError, AuditEvent, AuditResponse, GenericAuditDetail }
-import v2.models.domain.{ Nino, TaxYear }
-import v2.models.errors._
-import v2.models.hateoas.HateoasWrapper
-import v2.models.outcomes.ResponseWrapper
+import v2.mocks.services.{MockAmendForeignPropertyPeriodSummaryService, MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService}
+import api.models.audit.{AuditError, AuditEvent, AuditResponse, GenericAuditDetail}
+import v2.models.domain.TaxYear
+import api.models.domain.Nino
+import api.models.errors._
+import api.models.hateoas.HateoasWrapper
+import api.models.outcomes.ResponseWrapper
 import v2.models.request.amendForeignPropertyPeriodSummary._
-import v2.models.request.common.foreignFhlEea.{ AmendForeignFhlEea, AmendForeignFhlEeaExpenses, ForeignFhlEeaIncome }
+import v2.models.request.common.foreignFhlEea.{AmendForeignFhlEea, AmendForeignFhlEeaExpenses, ForeignFhlEeaIncome}
 import v2.models.request.common.foreignPropertyEntry._
 import v2.models.response.amendForeignPropertyPeriodSummary.AmendForeignPropertyPeriodSummaryHateoasData
 
@@ -388,7 +390,8 @@ class AmendForeignPropertyPeriodSummaryControllerSpec
           (RuleTypeOfBusinessIncorrectError, BAD_REQUEST),
           (RuleTaxYearNotSupportedError, BAD_REQUEST),
           (RuleDuplicateCountryCodeError, BAD_REQUEST),
-          (InternalError, INTERNAL_SERVER_ERROR)
+          (InternalError, INTERNAL_SERVER_ERROR),
+          (RuleIncorrectGovTestScenarioError, BAD_REQUEST)
         )
 
         input.foreach(args => (serviceErrors _).tupled(args))

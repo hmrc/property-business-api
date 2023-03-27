@@ -16,24 +16,26 @@
 
 package v2.connectors
 
+import api.connectors.{BaseDownstreamConnector, DownstreamOutcome}
+import api.connectors.httpparsers.StandardDownstreamHttpParser.{readsEmpty, SuccessCode}
+import api.connectors.DownstreamUri.IfsUri
 import config.AppConfig
 import play.api.http.Status.OK
-import uk.gov.hmrc.http.{ HeaderCarrier, HttpClient }
-import v2.connectors.DownstreamUri.IfsUri
-import v2.connectors.httpparsers.StandardDownstreamHttpParser._
+import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
 import v2.models.request.amendHistoricFhlUkPiePeriodSummary.AmendHistoricFhlUkPiePeriodSummaryRequest
 
-import javax.inject.{ Inject, Singleton }
-import scala.concurrent.{ ExecutionContext, Future }
+import javax.inject.{Inject, Singleton}
+import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class AmendHistoricFhlUkPiePeriodSummaryConnector @Inject()(val http: HttpClient, val appConfig: AppConfig) extends BaseDownstreamConnector {
+class AmendHistoricFhlUkPiePeriodSummaryConnector @Inject() (val http: HttpClient, val appConfig: AppConfig) extends BaseDownstreamConnector {
 
   implicit val successCode: SuccessCode = SuccessCode(OK)
 
-  def amend(request: AmendHistoricFhlUkPiePeriodSummaryRequest)(implicit hc: HeaderCarrier,
-                                                                ec: ExecutionContext,
-                                                                correlationId: String): Future[DownstreamOutcome[Unit]] = {
+  def amend(request: AmendHistoricFhlUkPiePeriodSummaryRequest)(implicit
+      hc: HeaderCarrier,
+      ec: ExecutionContext,
+      correlationId: String): Future[DownstreamOutcome[Unit]] = {
 
     val path =
       s"income-tax/nino/${request.nino.value}/uk-properties/furnished-holiday-lettings/periodic-summaries" +
@@ -45,4 +47,5 @@ class AmendHistoricFhlUkPiePeriodSummaryConnector @Inject()(val http: HttpClient
       uri = IfsUri[Unit](path)
     )
   }
+
 }

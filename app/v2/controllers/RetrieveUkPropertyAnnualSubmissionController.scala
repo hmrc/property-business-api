@@ -16,29 +16,31 @@
 
 package v2.controllers
 
+import api.controllers.{AuthorisedController, BaseController, EndpointLogContext}
 import cats.data.EitherT
 import cats.implicits._
 import play.api.libs.json.Json
-import play.api.mvc.{ Action, AnyContent, ControllerComponents }
-import utils.{ IdGenerator, Logging }
+import play.api.mvc.{Action, AnyContent, ControllerComponents}
+import utils.{IdGenerator, Logging}
 import v2.controllers.requestParsers.RetrieveUkPropertyAnnualSubmissionRequestParser
-import v2.hateoas.HateoasFactory
-import v2.models.errors._
+import api.hateoas.HateoasFactory
+import api.models.errors._
+import api.services.{EnrolmentsAuthService, MtdIdLookupService}
 import v2.models.request.retrieveUkPropertyAnnualSubmission.RetrieveUkPropertyAnnualSubmissionRawData
 import v2.models.response.retrieveUkPropertyAnnualSubmission.RetrieveUkPropertyAnnualSubmissionHateoasData
-import v2.services.{ EnrolmentsAuthService, MtdIdLookupService, RetrieveUkPropertyAnnualSubmissionService }
+import v2.services.RetrieveUkPropertyAnnualSubmissionService
 
-import javax.inject.{ Inject, Singleton }
-import scala.concurrent.{ ExecutionContext, Future }
+import javax.inject.{Inject, Singleton}
+import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class RetrieveUkPropertyAnnualSubmissionController @Inject()(val authService: EnrolmentsAuthService,
-                                                             val lookupService: MtdIdLookupService,
-                                                             parser: RetrieveUkPropertyAnnualSubmissionRequestParser,
-                                                             service: RetrieveUkPropertyAnnualSubmissionService,
-                                                             hateoasFactory: HateoasFactory,
-                                                             cc: ControllerComponents,
-                                                             idGenerator: IdGenerator)(implicit ec: ExecutionContext)
+class RetrieveUkPropertyAnnualSubmissionController @Inject() (val authService: EnrolmentsAuthService,
+                                                              val lookupService: MtdIdLookupService,
+                                                              parser: RetrieveUkPropertyAnnualSubmissionRequestParser,
+                                                              service: RetrieveUkPropertyAnnualSubmissionService,
+                                                              hateoasFactory: HateoasFactory,
+                                                              cc: ControllerComponents,
+                                                              idGenerator: IdGenerator)(implicit ec: ExecutionContext)
     extends AuthorisedController(cc)
     with BaseController
     with Logging {
@@ -81,7 +83,8 @@ class RetrieveUkPropertyAnnualSubmissionController @Inject()(val authService: En
       }.merge
     }
 
-  private def errorResult(errorWrapper: ErrorWrapper) =
+  private def errorResult(errorWrapper: ErrorWrapper) = {
+
     errorWrapper.error match {
       case _
           if errorWrapper.containsAnyOf(
@@ -91,12 +94,14 @@ class RetrieveUkPropertyAnnualSubmissionController @Inject()(val authService: En
             RuleTaxYearRangeInvalidError,
             RuleTaxYearNotSupportedError,
             RuleTypeOfBusinessIncorrectError,
-            BadRequestError
+            BadRequestError,
+            RuleIncorrectGovTestScenarioError
           ) =>
         BadRequest(Json.toJson(errorWrapper))
       case InternalError => InternalServerError(Json.toJson(errorWrapper))
       case NotFoundError => NotFound(Json.toJson(errorWrapper))
       case _             => unhandledError(errorWrapper)
     }
+  }
 
 }

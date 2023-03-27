@@ -16,40 +16,43 @@
 
 package v1.controllers
 
+import api.models.audit.AuditEvent
 import cats.data.EitherT
 import cats.implicits._
-import javax.inject.{ Inject, Singleton }
+
+import javax.inject.{Inject, Singleton}
 import play.api.http.MimeTypes
-import play.api.libs.json.{ JsValue, Json }
-import play.api.mvc.{ Action, ControllerComponents }
+import play.api.libs.json.{Json, JsValue}
+import play.api.mvc.{Action, ControllerComponents}
 import uk.gov.hmrc.http.HeaderCarrier
-import utils.{ IdGenerator, Logging }
+import utils.{IdGenerator, Logging}
 import v1.controllers.requestParsers.CreateForeignPropertyPeriodSummaryRequestParser
 import v1.hateoas.HateoasFactory
-import v1.models.audit.{ AuditEvent, AuditResponse, CreateForeignPropertyPeriodicAuditDetail }
+import v1.models.audit.{AuditResponse, CreateForeignPropertyPeriodicAuditDetail}
 import v1.models.errors._
 import v1.models.request.createForeignPropertyPeriodSummary.CreateForeignPropertyPeriodSummaryRawData
 import v1.models.response.createForeignPropertyPeriodSummary.CreateForeignPropertyPeriodSummaryHateoasData
 import v1.services._
 
-import scala.concurrent.{ ExecutionContext, Future }
+import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class CreateForeignPropertyPeriodSummaryController @Inject()(val authService: EnrolmentsAuthService,
-                                                             val lookupService: MtdIdLookupService,
-                                                             parser: CreateForeignPropertyPeriodSummaryRequestParser,
-                                                             service: CreateForeignPropertyPeriodSummaryService,
-                                                             auditService: AuditService,
-                                                             hateoasFactory: HateoasFactory,
-                                                             cc: ControllerComponents,
-                                                             idGenerator: IdGenerator)(implicit ec: ExecutionContext)
+class CreateForeignPropertyPeriodSummaryController @Inject() (val authService: EnrolmentsAuthService,
+                                                              val lookupService: MtdIdLookupService,
+                                                              parser: CreateForeignPropertyPeriodSummaryRequestParser,
+                                                              service: CreateForeignPropertyPeriodSummaryService,
+                                                              auditService: AuditService,
+                                                              hateoasFactory: HateoasFactory,
+                                                              cc: ControllerComponents,
+                                                              idGenerator: IdGenerator)(implicit ec: ExecutionContext)
     extends AuthorisedController(cc)
     with BaseController
     with Logging {
 
   implicit val endpointLogContext: EndpointLogContext =
-    EndpointLogContext(controllerName = "CreateForeignPropertyController",
-                       endpointName = "Create a Foreign Property Income & Expenditure Period Summary")
+    EndpointLogContext(
+      controllerName = "CreateForeignPropertyController",
+      endpointName = "Create a Foreign Property Income & Expenditure Period Summary")
 
   def handleRequest(nino: String, businessId: String): Action[JsValue] =
     authorisedAction(nino).async(parse.json) { implicit request =>
@@ -64,8 +67,9 @@ class CreateForeignPropertyPeriodSummaryController @Inject()(val authService: En
           serviceResponse <- EitherT(service.createForeignProperty(parsedRequest))
           vendorResponse <- EitherT.fromEither[Future](
             hateoasFactory
-              .wrap(serviceResponse.responseData,
-                    CreateForeignPropertyPeriodSummaryHateoasData(nino, businessId, serviceResponse.responseData.submissionId))
+              .wrap(
+                serviceResponse.responseData,
+                CreateForeignPropertyPeriodSummaryHateoasData(nino, businessId, serviceResponse.responseData.submissionId))
               .asRight[ErrorWrapper]
           )
         } yield {
@@ -76,12 +80,13 @@ class CreateForeignPropertyPeriodSummaryController @Inject()(val authService: En
           val response = Json.toJson(vendorResponse)
 
           auditSubmission(
-            CreateForeignPropertyPeriodicAuditDetail(request.userDetails,
-                                                     nino,
-                                                     businessId,
-                                                     request.body,
-                                                     serviceResponse.correlationId,
-                                                     AuditResponse(OK, Right(Some(response)))))
+            CreateForeignPropertyPeriodicAuditDetail(
+              request.userDetails,
+              nino,
+              businessId,
+              request.body,
+              serviceResponse.correlationId,
+              AuditResponse(OK, Right(Some(response)))))
 
           Created(Json.toJson(vendorResponse))
             .withApiHeaders(serviceResponse.correlationId)
@@ -93,12 +98,13 @@ class CreateForeignPropertyPeriodSummaryController @Inject()(val authService: En
         val result           = errorResult(errorWrapper).withApiHeaders(resCorrelationId)
 
         auditSubmission(
-          CreateForeignPropertyPeriodicAuditDetail(request.userDetails,
-                                                   nino,
-                                                   businessId,
-                                                   request.body,
-                                                   correlationId,
-                                                   AuditResponse(result.header.status, Left(errorWrapper.auditErrors))))
+          CreateForeignPropertyPeriodicAuditDetail(
+            request.userDetails,
+            nino,
+            businessId,
+            request.body,
+            correlationId,
+            AuditResponse(result.header.status, Left(errorWrapper.auditErrors))))
 
         logger.warn(
           s"[${endpointLogContext.controllerName}][${endpointLogContext.endpointName}] - " +
@@ -125,4 +131,5 @@ class CreateForeignPropertyPeriodSummaryController @Inject()(val authService: En
       AuditEvent("CreateForeignPropertyIncomeAndExpenditurePeriodSummary", "Create-Foreign-Property-Income-And-Expenditure-Period-Summary", details)
     auditService.auditEvent(event)
   }
+
 }

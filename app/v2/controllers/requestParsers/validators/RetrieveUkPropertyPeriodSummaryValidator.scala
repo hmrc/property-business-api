@@ -16,14 +16,17 @@
 
 package v2.controllers.requestParsers.validators
 
+import api.controllers.requestParsers.validators.Validator
+import api.controllers.requestParsers.validators.validations.{BusinessIdValidation, NinoValidation, SubmissionIdValidation}
 import config.AppConfig
-import javax.inject.{ Inject, Singleton }
-import v2.controllers.requestParsers.validators.validations.{ BusinessIdValidation, NinoValidation, SubmissionIdValidation, TaxYearValidation }
-import v2.models.errors.MtdError
+
+import javax.inject.{Inject, Singleton}
+import v2.controllers.requestParsers.validators.validations.TaxYearValidation
+import api.models.errors.MtdError
 import v2.models.request.retrieveUkPropertyPeriodSummary.RetrieveUkPropertyPeriodSummaryRawData
 
 @Singleton
-class RetrieveUkPropertyPeriodSummaryValidator @Inject()(appConfig: AppConfig) extends Validator[RetrieveUkPropertyPeriodSummaryRawData] {
+class RetrieveUkPropertyPeriodSummaryValidator @Inject() (appConfig: AppConfig) extends Validator[RetrieveUkPropertyPeriodSummaryRawData] {
 
   private lazy val minTaxYear = appConfig.minimumTaxV2Uk
   private val validationSet   = List(parameterFormatValidation)
@@ -41,4 +44,5 @@ class RetrieveUkPropertyPeriodSummaryValidator @Inject()(appConfig: AppConfig) e
   override def validate(data: RetrieveUkPropertyPeriodSummaryRawData): List[MtdError] = {
     run(validationSet, data).distinct
   }
+
 }

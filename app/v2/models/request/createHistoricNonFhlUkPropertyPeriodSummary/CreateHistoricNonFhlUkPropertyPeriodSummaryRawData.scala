@@ -16,9 +16,9 @@
 
 package v2.models.request.createHistoricNonFhlUkPropertyPeriodSummary
 
+import api.models.request.RawData
 import play.api.libs.functional.syntax._
 import play.api.libs.json.{ JsPath, JsValue, OWrites }
-import v2.models.request.RawData
 
 case class CreateHistoricNonFhlUkPropertyPeriodSummaryRawData(nino: String, body: JsValue) extends RawData
 

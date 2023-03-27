@@ -18,10 +18,10 @@ package utils
 
 import java.util.UUID
 
-import javax.inject.{ Inject, Singleton }
+import javax.inject.{Inject, Singleton}
 
 @Singleton
-class IdGenerator @Inject()() {
+class IdGenerator @Inject() () {
 
   def getCorrelationId: String = UUID.randomUUID().toString
 }

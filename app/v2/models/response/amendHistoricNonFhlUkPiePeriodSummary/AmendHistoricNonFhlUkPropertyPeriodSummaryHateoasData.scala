@@ -17,8 +17,9 @@
 package v2.models.response.amendHistoricNonFhlUkPiePeriodSummary
 
 import config.AppConfig
-import v2.hateoas.{ HateoasLinks, HateoasLinksFactory }
-import v2.models.hateoas.{ HateoasData, Link }
+import v2.hateoas.HateoasLinks
+import api.hateoas.HateoasLinksFactory
+import api.models.hateoas.{HateoasData, Link}
 
 object AmendHistoricNonFhlUkPropertyPeriodSummaryHateoasData extends HateoasLinks {
   implicit object LinksFactory extends HateoasLinksFactory[Unit, AmendHistoricNonFhlUkPropertyPeriodSummaryHateoasData] {

@@ -16,14 +16,16 @@
 
 package v2.models.response.createAmendHistoricFhlUkPropertyAnnualSubmission
 
+import api.hateoas.HateoasLinksFactory
+import api.models.hateoas.{HateoasData, Link}
 import config.AppConfig
-import play.api.libs.json.{ Json, OWrites, Reads }
-import v2.hateoas.{ HateoasLinks, HateoasLinksFactory }
-import v2.models.hateoas.{ HateoasData, Link }
+import play.api.libs.json.{Json, OWrites, Reads}
+import v2.hateoas.HateoasLinks
 
 case class CreateAmendHistoricFhlUkPropertyAnnualSubmissionResponse(transactionReference: Option[String])
 
 object CreateAmendHistoricFhlUkPropertyAnnualSubmissionResponse extends HateoasLinks {
+
   implicit val reads: Reads[CreateAmendHistoricFhlUkPropertyAnnualSubmissionResponse] =
     Json.reads[CreateAmendHistoricFhlUkPropertyAnnualSubmissionResponse]
 
@@ -31,8 +33,10 @@ object CreateAmendHistoricFhlUkPropertyAnnualSubmissionResponse extends HateoasL
     (_: CreateAmendHistoricFhlUkPropertyAnnualSubmissionResponse) => Json.obj()
 
   implicit object CreateAmendHistoricFhlUkPropertyLinksFactory
-      extends HateoasLinksFactory[CreateAmendHistoricFhlUkPropertyAnnualSubmissionResponse,
-                                  CreateAmendHistoricFhlUkPropertyAnnualSubmissionHateoasData] {
+      extends HateoasLinksFactory[
+        CreateAmendHistoricFhlUkPropertyAnnualSubmissionResponse,
+        CreateAmendHistoricFhlUkPropertyAnnualSubmissionHateoasData] {
+
     override def links(appConfig: AppConfig, data: CreateAmendHistoricFhlUkPropertyAnnualSubmissionHateoasData): Seq[Link] = {
       import data._
 
@@ -43,7 +47,9 @@ object CreateAmendHistoricFhlUkPropertyAnnualSubmissionResponse extends HateoasL
       )
 
     }
+
   }
+
 }
 
 case class CreateAmendHistoricFhlUkPropertyAnnualSubmissionHateoasData(nino: String, taxYear: String) extends HateoasData

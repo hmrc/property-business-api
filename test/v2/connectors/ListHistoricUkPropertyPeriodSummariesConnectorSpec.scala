@@ -16,10 +16,12 @@
 
 package v2.connectors
 
-import v2.models.domain.{ HistoricPropertyType, Nino }
-import v2.models.outcomes.ResponseWrapper
+import api.connectors.ConnectorSpec
+import v2.models.domain.HistoricPropertyType
+import api.models.domain.Nino
+import api.models.outcomes.ResponseWrapper
 import v2.models.request.listHistoricUkPropertyPeriodSummaries.ListHistoricUkPropertyPeriodSummariesRequest
-import v2.models.response.listHistoricUkPropertyPeriodSummaries.{ ListHistoricUkPropertyPeriodSummariesResponse, SubmissionPeriod }
+import v2.models.response.listHistoricUkPropertyPeriodSummaries.{ListHistoricUkPropertyPeriodSummariesResponse, SubmissionPeriod}
 
 import scala.concurrent.Future
 

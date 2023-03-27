@@ -19,7 +19,7 @@ package v2.controllers.requestParsers.validators
 import mocks.MockAppConfig
 import play.api.libs.json.{ JsArray, JsValue, Json }
 import support.UnitSpec
-import v2.models.errors._
+import api.models.errors._
 import v2.models.request.createForeignPropertyPeriodSummary.CreateForeignPropertyPeriodSummaryRawData
 
 class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with MockAppConfig {

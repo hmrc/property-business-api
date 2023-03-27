@@ -33,7 +33,7 @@ import v1.models.errors._
 import scala.concurrent._
 
 @Singleton
-class ErrorHandler @Inject()(config: Configuration, auditConnector: AuditConnector, httpAuditEvent: HttpAuditEvent)(implicit ec: ExecutionContext)
+class ErrorHandler @Inject() (config: Configuration, auditConnector: AuditConnector, httpAuditEvent: HttpAuditEvent)(implicit ec: ExecutionContext)
     extends JsonErrorHandler(auditConnector, httpAuditEvent, config)
     with Logging {
 
@@ -100,4 +100,5 @@ class ErrorHandler @Inject()(config: Configuration, auditConnector: AuditConnect
 
     Future.successful(Status(status)(Json.toJson(errorCode)))
   }
+
 }

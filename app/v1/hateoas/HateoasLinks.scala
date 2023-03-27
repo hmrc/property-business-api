@@ -23,7 +23,7 @@ import v1.models.hateoas.RelType._
 
 trait HateoasLinks {
 
-  //Domain URIs
+  // Domain URIs
 
   private def foreignPropertyUri(appConfig: AppConfig, nino: String, businessId: String): String =
     s"/${appConfig.apiGatewayContext}/$nino/$businessId/period"
@@ -34,7 +34,7 @@ trait HateoasLinks {
   private def foreignPropertySubmissionUri(appConfig: AppConfig, nino: String, businessId: String, submissionId: String): String =
     s"/${appConfig.apiGatewayContext}/$nino/$businessId/period/$submissionId"
 
-  //API resource links
+  // API resource links
   def listForeignPropertiesPeriodSummaries(appConfig: AppConfig, nino: String, businessId: String, rel: String = SELF): Link =
     Link(href = foreignPropertyUri(appConfig, nino, businessId), method = GET, rel = rel)
 
@@ -55,4 +55,5 @@ trait HateoasLinks {
 
   def deleteForeignPropertyAnnualSubmission(appConfig: AppConfig, nino: String, businessId: String, taxYear: String): Link =
     Link(href = foreignPropertyAnnualSubmissionUri(appConfig, nino, businessId, taxYear), method = DELETE, rel = DELETE_PROPERTY_ANNUAL_SUBMISSION)
+
 }

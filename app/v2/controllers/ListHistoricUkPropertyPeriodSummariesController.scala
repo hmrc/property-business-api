@@ -16,45 +16,49 @@
 
 package v2.controllers
 
+import api.controllers.{AuthorisedController, BaseController, EndpointLogContext}
 import cats.data.EitherT
 import cats.implicits._
 import play.api.libs.json.Json
-import play.api.mvc.{ Action, AnyContent, ControllerComponents }
-import utils.{ IdGenerator, Logging }
+import play.api.mvc.{Action, AnyContent, ControllerComponents}
+import utils.{IdGenerator, Logging}
 import v2.controllers.requestParsers.ListHistoricUkPropertyPeriodSummariesRequestParser
-import v2.hateoas.HateoasFactory
+import api.hateoas.HateoasFactory
 import v2.models.domain.HistoricPropertyType
-import v2.models.errors._
+import api.models.errors._
+import api.services.{EnrolmentsAuthService, MtdIdLookupService}
 import v2.models.request.listHistoricUkPropertyPeriodSummaries.ListHistoricUkPropertyPeriodSummariesRawData
 import v2.models.response.listHistoricUkPropertyPeriodSummaries.ListHistoricUkPropertyPeriodSummariesHateoasData
-import v2.services.{ EnrolmentsAuthService, ListHistoricUkPropertyPeriodSummariesService, MtdIdLookupService }
+import v2.services.ListHistoricUkPropertyPeriodSummariesService
 
-import javax.inject.{ Inject, Singleton }
-import scala.concurrent.{ ExecutionContext, Future }
+import javax.inject.{Inject, Singleton}
+import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class ListHistoricUkPropertyPeriodSummariesController @Inject()(val authService: EnrolmentsAuthService,
-                                                                val lookupService: MtdIdLookupService,
-                                                                service: ListHistoricUkPropertyPeriodSummariesService,
-                                                                parser: ListHistoricUkPropertyPeriodSummariesRequestParser,
-                                                                hateoasFactory: HateoasFactory,
-                                                                cc: ControllerComponents,
-                                                                idGenerator: IdGenerator)(implicit ec: ExecutionContext)
+class ListHistoricUkPropertyPeriodSummariesController @Inject() (val authService: EnrolmentsAuthService,
+                                                                 val lookupService: MtdIdLookupService,
+                                                                 service: ListHistoricUkPropertyPeriodSummariesService,
+                                                                 parser: ListHistoricUkPropertyPeriodSummariesRequestParser,
+                                                                 hateoasFactory: HateoasFactory,
+                                                                 cc: ControllerComponents,
+                                                                 idGenerator: IdGenerator)(implicit ec: ExecutionContext)
     extends AuthorisedController(cc)
     with BaseController
     with Logging {
 
   def handleFhlRequest(nino: String): Action[AnyContent] = {
     implicit val endpointLogContext: EndpointLogContext =
-      EndpointLogContext(controllerName = "ListHistoricUkPropertyPeriodSummariesController",
-                         endpointName = "ListHistoricFhlUkPropertyPeriodSummariesController")
+      EndpointLogContext(
+        controllerName = "ListHistoricUkPropertyPeriodSummariesController",
+        endpointName = "ListHistoricFhlUkPropertyPeriodSummariesController")
 
     handleRequest(nino, HistoricPropertyType.Fhl)
   }
 
   def handleNonFhlRequest(nino: String): Action[AnyContent] = {
-    implicit val endpointLogContext: EndpointLogContext = EndpointLogContext(controllerName = "ListHistoricUkPropertyPeriodSummariesController",
-                                                                             endpointName = "ListHistoricNonFhlUkPropertyPeriodSummariesController")
+    implicit val endpointLogContext: EndpointLogContext = EndpointLogContext(
+      controllerName = "ListHistoricUkPropertyPeriodSummariesController",
+      endpointName = "ListHistoricNonFhlUkPropertyPeriodSummariesController")
     handleRequest(nino, HistoricPropertyType.NonFhl)
   }
 
@@ -95,9 +99,10 @@ class ListHistoricUkPropertyPeriodSummariesController @Inject()(val authService:
 
   private def errorResult(errorWrapper: ErrorWrapper)(implicit endpointLogContext: EndpointLogContext) =
     errorWrapper.error match {
-      case _ if errorWrapper.containsAnyOf(NinoFormatError, BadRequestError) =>
+      case _ if errorWrapper.containsAnyOf(NinoFormatError, BadRequestError, RuleIncorrectGovTestScenarioError) =>
         BadRequest(Json.toJson(errorWrapper))
       case InternalError => InternalServerError(Json.toJson(errorWrapper))
       case _             => unhandledError(errorWrapper)
     }
+
 }

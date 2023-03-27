@@ -16,15 +16,15 @@
 
 package v2.hateoas
 
+import api.models.hateoas.Method._
+import api.models.hateoas.Link
 import config.AppConfig
-import v2.models.hateoas.Link
-import v2.models.hateoas.Method._
 
 trait HateoasLinks {
 
   val SELF = "self"
 
-  //Domain URIs
+  // Domain URIs
 
   private def foreignAnnualUri(appConfig: AppConfig, nino: String, businessId: String, taxYear: String): String =
     s"/${appConfig.apiGatewayContext}/foreign/$nino/$businessId/annual/$taxYear"
@@ -67,9 +67,10 @@ trait HateoasLinks {
     Link(href = foreignPeriodUri(appConfig, nino, businessId, taxYear), method = POST, rel = "create-foreign-property-period-summary")
 
   def amendForeignPropertyPeriodSummary(appConfig: AppConfig, nino: String, businessId: String, taxYear: String, submissionId: String): Link =
-    Link(href = foreignPeriodSubmissionUri(appConfig, nino, businessId, taxYear, submissionId),
-         method = PUT,
-         rel = "amend-foreign-property-period-summary")
+    Link(
+      href = foreignPeriodSubmissionUri(appConfig, nino, businessId, taxYear, submissionId),
+      method = PUT,
+      rel = "amend-foreign-property-period-summary")
 
   def retrieveForeignPropertyPeriodSummary(appConfig: AppConfig,
                                            nino: String,
@@ -130,9 +131,10 @@ trait HateoasLinks {
   }
 
   def createAmendHistoricNonFhlUkPropertyAnnualSubmission(appConfig: AppConfig, nino: String, taxYear: String): Link = {
-    Link(href = ukHistoricNonFhlAnnualUri(appConfig, nino, taxYear),
-         method = PUT,
-         rel = "create-and-amend-uk-property-historic-non-fhl-annual-submission")
+    Link(
+      href = ukHistoricNonFhlAnnualUri(appConfig, nino, taxYear),
+      method = PUT,
+      rel = "create-and-amend-uk-property-historic-non-fhl-annual-submission")
   }
 
   def retrieveHistoricNonFhlUkPropertyAnnualSubmission(appConfig: AppConfig, nino: String, taxYear: String, self: Boolean): Link = {
@@ -149,16 +151,17 @@ trait HateoasLinks {
     Link(href = ukHistoricNonFhlAnnualUri(appConfig, nino, taxYear), method = DELETE, rel = "delete-uk-property-historic-non-fhl-annual-submission")
   }
 
-  //Historic UK Periodic
+  // Historic UK Periodic
   // FHL:
 
   def createHistoricFhlUkPiePeriodSummary(appConfig: AppConfig, nino: String): Link =
     Link(href = ukHistoricFhlPiePeriodSummaryUri(appConfig, nino, None), method = POST, rel = "create-uk-property-historic-fhl-period-summary")
 
   def amendHistoricFhlUkPiePeriodSummary(appConfig: AppConfig, nino: String, periodId: String): Link =
-    Link(href = ukHistoricFhlPiePeriodSummaryUri(appConfig, nino, Some(periodId)),
-         method = PUT,
-         rel = "amend-uk-property-historic-fhl-period-summary")
+    Link(
+      href = ukHistoricFhlPiePeriodSummaryUri(appConfig, nino, Some(periodId)),
+      method = PUT,
+      rel = "amend-uk-property-historic-fhl-period-summary")
 
   def retrieveHistoricFhlUkPiePeriodSummary(appConfig: AppConfig, nino: String, periodId: String): Link =
     Link(href = ukHistoricFhlPiePeriodSummaryUri(appConfig, nino, Some(periodId)), method = GET, rel = SELF)
@@ -177,9 +180,10 @@ trait HateoasLinks {
     Link(href = ukHistoricNonFhlPiePeriodSummaryUri(appConfig, nino, None), method = POST, rel = "create-uk-property-historic-non-fhl-period-summary")
 
   def amendHistoricNonFhlUkPiePeriodSummary(appConfig: AppConfig, nino: String, periodId: String): Link =
-    Link(href = ukHistoricNonFhlPiePeriodSummaryUri(appConfig, nino, Some(periodId)),
-         method = PUT,
-         rel = "amend-uk-property-historic-non-fhl-period-summary")
+    Link(
+      href = ukHistoricNonFhlPiePeriodSummaryUri(appConfig, nino, Some(periodId)),
+      method = PUT,
+      rel = "amend-uk-property-historic-non-fhl-period-summary")
 
   def listUkHistoricNonFHLPiePeriodSummary(appConfig: AppConfig, nino: String): Link =
     Link(href = ukHistoricNonFhlPiePeriodSummaryUri(appConfig, nino, None), method = GET, rel = "list-uk-property-historic-non-fhl-period-summaries")
@@ -192,4 +196,5 @@ trait HateoasLinks {
 
   def deletePropertyAnnualSubmission(appConfig: AppConfig, nino: String, businessId: String, taxYear: String): Link =
     Link(href = s"/${appConfig.apiGatewayContext}/$nino/$businessId/annual/$taxYear", method = DELETE, rel = "delete-property-annual-submission")
+
 }

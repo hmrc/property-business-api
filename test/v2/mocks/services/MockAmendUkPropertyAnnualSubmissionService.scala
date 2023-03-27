@@ -19,9 +19,9 @@ package v2.mocks.services
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
 import uk.gov.hmrc.http.HeaderCarrier
-import v2.controllers.EndpointLogContext
-import v2.models.errors.ErrorWrapper
-import v2.models.outcomes.ResponseWrapper
+import api.controllers.EndpointLogContext
+import api.models.errors.ErrorWrapper
+import api.models.outcomes.ResponseWrapper
 import v2.models.request.amendUkPropertyAnnualSubmission.AmendUkPropertyAnnualSubmissionRequest
 import v2.services.AmendUkPropertyAnnualSubmissionService
 

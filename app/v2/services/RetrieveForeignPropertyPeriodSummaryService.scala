@@ -19,18 +19,18 @@ package v2.services
 import cats.data.EitherT
 import uk.gov.hmrc.http.HeaderCarrier
 import utils.Logging
-import v2.connectors
-import v2.connectors.RetrieveForeignPropertyPeriodSummaryConnector
-import v2.connectors.RetrieveForeignPropertyPeriodSummaryConnector.{ ForeignResult, NonForeignResult }
-import v2.controllers.EndpointLogContext
-import v2.models.errors._
-import v2.models.outcomes.ResponseWrapper
+import api.controllers.EndpointLogContext
+import api.models.errors._
+import api.models.outcomes.ResponseWrapper
 import v2.models.request.retrieveForeignPropertyPeriodSummary.RetrieveForeignPropertyPeriodSummaryRequest
 import v2.models.response.retrieveForeignPropertyPeriodSummary.RetrieveForeignPropertyPeriodSummaryResponse
-import v2.support.DownstreamResponseMappingSupport
+import api.services.ServiceOutcome
+import api.support.DownstreamResponseMappingSupport
+import v2.connectors.RetrieveForeignPropertyPeriodSummaryConnector
+import v2.connectors.RetrieveForeignPropertyPeriodSummaryConnector.{ForeignResult, NonForeignResult}
 
-import javax.inject.{ Inject, Singleton }
-import scala.concurrent.{ ExecutionContext, Future }
+import javax.inject.{Inject, Singleton}
+import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class RetrieveForeignPropertyPeriodSummaryService @Inject()(connector: RetrieveForeignPropertyPeriodSummaryConnector)
@@ -72,7 +72,7 @@ class RetrieveForeignPropertyPeriodSummaryService @Inject()(connector: RetrieveF
     downstreamErrors ++ extraTysErrors
   }
 
-  private def validateBusinessType(resultWrapper: ResponseWrapper[connectors.RetrieveForeignPropertyPeriodSummaryConnector.Result]) =
+  private def validateBusinessType(resultWrapper: ResponseWrapper[RetrieveForeignPropertyPeriodSummaryConnector.Result]) =
     resultWrapper.responseData match {
       case ForeignResult(response) => Right(ResponseWrapper(resultWrapper.correlationId, response))
       case NonForeignResult        => Left(ErrorWrapper(resultWrapper.correlationId, RuleTypeOfBusinessIncorrectError))

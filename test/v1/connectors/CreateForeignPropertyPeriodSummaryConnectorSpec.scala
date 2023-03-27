@@ -16,10 +16,10 @@
 
 package v1.connectors
 
-import mocks.{ MockAppConfig, MockHttpClient }
+import api.models.outcomes.ResponseWrapper
+import mocks.{MockAppConfig, MockHttpClient}
 import uk.gov.hmrc.http.HeaderCarrier
 import v1.models.domain.Nino
-import v1.models.outcomes.ResponseWrapper
 import v1.models.request.common.foreignFhlEea._
 import v1.models.request.common.foreignPropertyEntry._
 import v1.models.request.createForeignPropertyPeriodSummary._

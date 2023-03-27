@@ -16,36 +16,39 @@
 
 package v2.controllers
 
+import api.controllers.{AuthorisedController, BaseController, EndpointLogContext}
 import cats.data.EitherT
 import cats.implicits._
 import play.api.libs.json.Json
-import play.api.mvc.{ Action, AnyContent, ControllerComponents }
-import utils.{ IdGenerator, Logging }
+import play.api.mvc.{Action, AnyContent, ControllerComponents}
+import utils.{IdGenerator, Logging}
 import v2.controllers.requestParsers.RetrieveHistoricFhlUkPropertyAnnualSubmissionRequestParser
-import v2.hateoas.HateoasFactory
-import v2.models.errors._
+import api.hateoas.HateoasFactory
+import api.models.errors._
+import api.services.{EnrolmentsAuthService, MtdIdLookupService}
 import v2.models.request.retrieveHistoricFhlUkPropertyAnnualSubmission.RetrieveHistoricFhlUkPropertyAnnualSubmissionRawData
 import v2.models.response.retrieveHistoricFhlUkPropertyAnnualSubmission.RetrieveHistoricFhlUkPropertyAnnualSubmissionHateoasData
-import v2.services.{ EnrolmentsAuthService, MtdIdLookupService, RetrieveHistoricFhlUkPropertyAnnualSubmissionService }
+import v2.services.RetrieveHistoricFhlUkPropertyAnnualSubmissionService
 
-import javax.inject.{ Inject, Singleton }
-import scala.concurrent.{ ExecutionContext, Future }
+import javax.inject.{Inject, Singleton}
+import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class RetrieveHistoricFhlUkPropertyAnnualSubmissionController @Inject()(val authService: EnrolmentsAuthService,
-                                                                        val lookupService: MtdIdLookupService,
-                                                                        parser: RetrieveHistoricFhlUkPropertyAnnualSubmissionRequestParser,
-                                                                        service: RetrieveHistoricFhlUkPropertyAnnualSubmissionService,
-                                                                        hateoasFactory: HateoasFactory,
-                                                                        cc: ControllerComponents,
-                                                                        idGenerator: IdGenerator)(implicit ec: ExecutionContext)
+class RetrieveHistoricFhlUkPropertyAnnualSubmissionController @Inject() (val authService: EnrolmentsAuthService,
+                                                                         val lookupService: MtdIdLookupService,
+                                                                         parser: RetrieveHistoricFhlUkPropertyAnnualSubmissionRequestParser,
+                                                                         service: RetrieveHistoricFhlUkPropertyAnnualSubmissionService,
+                                                                         hateoasFactory: HateoasFactory,
+                                                                         cc: ControllerComponents,
+                                                                         idGenerator: IdGenerator)(implicit ec: ExecutionContext)
     extends AuthorisedController(cc)
     with BaseController
     with Logging {
 
   implicit val endpointLogContext: EndpointLogContext =
-    EndpointLogContext(controllerName = "RetrieveHistoricFhlUkPropertyAnnualSubmissionController",
-                       endpointName = "retrieveHistoricFhlUkPropertyAnnualSubmission")
+    EndpointLogContext(
+      controllerName = "RetrieveHistoricFhlUkPropertyAnnualSubmissionController",
+      endpointName = "retrieveHistoricFhlUkPropertyAnnualSubmission")
 
   def handleRequest(nino: String, taxYear: String): Action[AnyContent] =
     authorisedAction(nino).async { implicit request =>
@@ -84,11 +87,13 @@ class RetrieveHistoricFhlUkPropertyAnnualSubmissionController @Inject()(val auth
 
   private def errorResult(errorWrapper: ErrorWrapper) = {
     errorWrapper.error match {
-      case NinoFormatError | TaxYearFormatError | RuleTaxYearRangeInvalidError | RuleHistoricTaxYearNotSupportedError | BadRequestError =>
+      case NinoFormatError | TaxYearFormatError | RuleTaxYearRangeInvalidError | RuleHistoricTaxYearNotSupportedError |
+          RuleIncorrectGovTestScenarioError | BadRequestError =>
         BadRequest(Json.toJson(errorWrapper))
       case InternalError => InternalServerError(Json.toJson(errorWrapper))
       case NotFoundError => NotFound(Json.toJson(errorWrapper))
       case _             => unhandledError(errorWrapper)
     }
   }
+
 }

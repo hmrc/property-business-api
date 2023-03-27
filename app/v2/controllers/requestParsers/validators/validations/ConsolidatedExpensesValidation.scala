@@ -16,13 +16,13 @@
 
 package v2.controllers.requestParsers.validators.validations
 
-import v2.models.errors.{ MtdError, RuleBothExpensesSuppliedError }
+import api.models.errors.{MtdError, RuleBothExpensesSuppliedError}
 import v2.models.request.amendHistoricNonFhlUkPiePeriodSummary.UkNonFhlPieExpenses
 import v2.models.request.common.foreignFhlEea._
 import v2.models.request.common.foreignPropertyEntry._
 import v2.models.request.common.ukFhlPieProperty.UkFhlPieExpenses
-import v2.models.request.common.ukFhlProperty.{ UkFhlPropertyExpenses => CommonUkFhlPropertyExpenses }
-import v2.models.request.common.ukNonFhlProperty.{ UkNonFhlPropertyExpenses => CommonUkNonFhlPropertyExpenses }
+import v2.models.request.common.ukFhlProperty.{UkFhlPropertyExpenses => CommonUkFhlPropertyExpenses}
+import v2.models.request.common.ukNonFhlProperty.{UkNonFhlPropertyExpenses => CommonUkNonFhlPropertyExpenses}
 import v2.models.request.createHistoricNonFhlUkPropertyPeriodSummary.UkNonFhlPropertyExpenses
 
 object ConsolidatedExpensesValidation {

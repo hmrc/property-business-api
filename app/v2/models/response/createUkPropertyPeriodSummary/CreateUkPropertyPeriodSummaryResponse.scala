@@ -16,11 +16,11 @@
 
 package v2.models.response.createUkPropertyPeriodSummary
 
+import api.hateoas.HateoasLinksFactory
+import api.models.hateoas.{HateoasData, Link}
 import config.AppConfig
-import play.api.libs.json.{ Json, OFormat }
-import v2.hateoas.HateoasLinksFactory
+import play.api.libs.json.{Json, OFormat}
 import v2.hateoas.HateoasLinks
-import v2.models.hateoas.{ HateoasData, Link }
 
 case class CreateUkPropertyPeriodSummaryResponse(submissionId: String)
 

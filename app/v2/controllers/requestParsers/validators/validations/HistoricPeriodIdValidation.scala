@@ -16,7 +16,8 @@
 
 package v2.controllers.requestParsers.validators.validations
 
-import v2.models.errors.{ MtdError, PeriodIdFormatError }
+import api.controllers.requestParsers.validators.validations.ToDateBeforeFromDateValidation
+import api.models.errors.{MtdError, PeriodIdFormatError}
 
 object HistoricPeriodIdValidation {
 

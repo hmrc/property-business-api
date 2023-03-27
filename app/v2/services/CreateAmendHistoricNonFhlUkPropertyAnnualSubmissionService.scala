@@ -20,15 +20,16 @@ import cats.data.EitherT
 import cats.implicits._
 import uk.gov.hmrc.http.HeaderCarrier
 import utils.Logging
-import v2.connectors.CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionConnector
-import v2.controllers.EndpointLogContext
-import v2.models.errors._
+import api.controllers.EndpointLogContext
+import api.models.errors._
 import v2.models.request.createAmendHistoricNonFhlUkPropertyAnnualSubmission.CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequest
 import v2.models.response.createAmendHistoricNonFhlUkPropertyAnnualSubmission.CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionResponse
-import v2.support.DownstreamResponseMappingSupport
+import api.services.ServiceOutcome
+import api.support.DownstreamResponseMappingSupport
+import v2.connectors.CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionConnector
 
-import javax.inject.{ Inject, Singleton }
-import scala.concurrent.{ ExecutionContext, Future }
+import javax.inject.{Inject, Singleton}
+import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionService @Inject()(connector: CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionConnector)

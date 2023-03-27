@@ -16,31 +16,25 @@
 
 package v2.controllers
 
-import play.api.libs.json.{ JsValue, Json }
+import api.controllers.ControllerBaseSpec
+import api.models.hateoas.Method.GET
+import api.models.domain.Nino
+import api.models.errors._
+import api.models.audit.{AuditError, AuditEvent, AuditResponse, FlattenedGenericAuditDetail}
+import api.models.auth.UserDetails
+import api.models.hateoas.{HateoasWrapper, Link}
+import api.models.outcomes.ResponseWrapper
+import play.api.libs.json.{Json, JsValue}
 import play.api.mvc.Result
 import uk.gov.hmrc.http.HeaderCarrier
 import v2.mocks.MockIdGenerator
 import v2.mocks.hateoas.MockHateoasFactory
 import v2.mocks.requestParsers.MockCreateAmendHistoricFhlUkPropertyAnnualSubmissionRequestParser
-import v2.mocks.services.{
-  MockAuditService,
-  MockCreateAmendHistoricFhlUkPropertyAnnualSubmissionService,
-  MockEnrolmentsAuthService,
-  MockMtdIdLookupService
-}
-import v2.models.audit.{ AuditError, AuditEvent, AuditResponse, FlattenedGenericAuditDetail }
-import v2.models.auth.UserDetails
-import v2.models.domain.{ Nino, TaxYear }
-import v2.models.errors._
-import v2.models.hateoas.Method.GET
-import v2.models.hateoas.{ HateoasWrapper, Link }
-import v2.models.outcomes.ResponseWrapper
+import v2.mocks.services.{MockAuditService, MockCreateAmendHistoricFhlUkPropertyAnnualSubmissionService, MockEnrolmentsAuthService, MockMtdIdLookupService}
+import v2.models.domain.TaxYear
 import v2.models.request.common.ukPropertyRentARoom.UkPropertyAdjustmentsRentARoom
 import v2.models.request.createAmendHistoricFhlUkPropertyAnnualSubmission._
-import v2.models.response.createAmendHistoricFhlUkPropertyAnnualSubmission.{
-  CreateAmendHistoricFhlUkPropertyAnnualSubmissionHateoasData,
-  CreateAmendHistoricFhlUkPropertyAnnualSubmissionResponse
-}
+import v2.models.response.createAmendHistoricFhlUkPropertyAnnualSubmission.{CreateAmendHistoricFhlUkPropertyAnnualSubmissionHateoasData, CreateAmendHistoricFhlUkPropertyAnnualSubmissionResponse}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -210,15 +204,16 @@ class CreateAmendHistoricFhlUkPropertyAnnualSubmissionControllerSpec
           (TaxYearFormatError, BAD_REQUEST),
           (RuleHistoricTaxYearNotSupportedError, BAD_REQUEST),
           (RuleTaxYearRangeInvalidError, BAD_REQUEST),
-          (ValueFormatError.copy(
-             paths = Some(
-               List(
-                 "/annualAdjustments/lossBroughtForward",
-                 "/annualAdjustments/balancingCharge",
-                 "annualAllowances/annualInvestmentAllowance"
-               ))
-           ),
-           BAD_REQUEST),
+          (
+            ValueFormatError.copy(
+              paths = Some(
+                List(
+                  "/annualAdjustments/lossBroughtForward",
+                  "/annualAdjustments/balancingCharge",
+                  "annualAllowances/annualInvestmentAllowance"
+                ))
+            ),
+            BAD_REQUEST),
           (RuleIncorrectOrEmptyBodyError, BAD_REQUEST)
         )
 
@@ -252,11 +247,13 @@ class CreateAmendHistoricFhlUkPropertyAnnualSubmissionControllerSpec
           (NinoFormatError, BAD_REQUEST),
           (TaxYearFormatError, BAD_REQUEST),
           (NotFoundError, NOT_FOUND),
-          (InternalError, INTERNAL_SERVER_ERROR)
+          (InternalError, INTERNAL_SERVER_ERROR),
+          (RuleIncorrectGovTestScenarioError, BAD_REQUEST)
         )
 
         input.foreach(args => (serviceErrors _).tupled(args))
       }
     }
   }
+
 }

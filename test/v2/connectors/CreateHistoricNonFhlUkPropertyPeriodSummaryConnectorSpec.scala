@@ -16,9 +16,10 @@
 
 package v2.connectors
 
-import v2.models.domain.Nino
-import v2.models.outcomes.ResponseWrapper
-import v2.models.request.common.ukPropertyRentARoom.{ UkPropertyExpensesRentARoom, UkPropertyIncomeRentARoom }
+import api.connectors.ConnectorSpec
+import api.models.domain.Nino
+import api.models.outcomes.ResponseWrapper
+import v2.models.request.common.ukPropertyRentARoom.{UkPropertyExpensesRentARoom, UkPropertyIncomeRentARoom}
 import v2.models.request.createHistoricNonFhlUkPropertyPeriodSummary._
 
 import scala.concurrent.Future

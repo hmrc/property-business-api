@@ -16,16 +16,17 @@
 
 package v2.connectors
 
+import api.connectors.{BaseDownstreamConnector, DownstreamOutcome}
+import api.connectors.DownstreamUri.{IfsUri, TaxYearSpecificIfsUri}
+import api.connectors.httpparsers.StandardDownstreamHttpParser.reads
+import api.models.outcomes.ResponseWrapper
 import config.AppConfig
-import uk.gov.hmrc.http.{ HeaderCarrier, HttpClient }
-import v2.connectors.DownstreamUri.{ IfsUri, TaxYearSpecificIfsUri }
-import v2.connectors.httpparsers.StandardDownstreamHttpParser._
-import v2.models.outcomes.ResponseWrapper
+import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
 import v2.models.request.retrieveUkPropertyAnnualSubmission.RetrieveUkPropertyAnnualSubmissionRequest
 import v2.models.response.retrieveUkPropertyAnnualSubmission.RetrieveUkPropertyAnnualSubmissionResponse
 
-import javax.inject.{ Inject, Singleton }
-import scala.concurrent.{ ExecutionContext, Future }
+import javax.inject.{Inject, Singleton}
+import scala.concurrent.{ExecutionContext, Future}
 
 object RetrieveUkPropertyAnnualSubmissionConnector {
 
@@ -39,11 +40,12 @@ object RetrieveUkPropertyAnnualSubmissionConnector {
 import v2.connectors.RetrieveUkPropertyAnnualSubmissionConnector._
 
 @Singleton
-class RetrieveUkPropertyAnnualSubmissionConnector @Inject()(val http: HttpClient, val appConfig: AppConfig) extends BaseDownstreamConnector {
+class RetrieveUkPropertyAnnualSubmissionConnector @Inject() (val http: HttpClient, val appConfig: AppConfig) extends BaseDownstreamConnector {
 
-  def retrieveUkProperty(request: RetrieveUkPropertyAnnualSubmissionRequest)(implicit hc: HeaderCarrier,
-                                                                             ec: ExecutionContext,
-                                                                             correlationId: String): Future[DownstreamOutcome[Result]] = {
+  def retrieveUkProperty(request: RetrieveUkPropertyAnnualSubmissionRequest)(implicit
+      hc: HeaderCarrier,
+      ec: ExecutionContext,
+      correlationId: String): Future[DownstreamOutcome[Result]] = {
 
     import request._
 
@@ -71,4 +73,5 @@ class RetrieveUkPropertyAnnualSubmissionConnector @Inject()(val http: HttpClient
   // If a businessId of the right type is specified some of these optional fields will be present...
   private def ukResult(response: RetrieveUkPropertyAnnualSubmissionResponse): Boolean =
     response.ukFhlProperty.nonEmpty || response.ukNonFhlProperty.nonEmpty
+
 }

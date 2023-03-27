@@ -16,6 +16,7 @@
 
 package v2.models.request.retrieveUkPropertyAnnualSubmission
 
-import v2.models.domain.{ Nino, TaxYear }
+import api.models.domain.Nino
+import v2.models.domain.TaxYear
 
 case class RetrieveUkPropertyAnnualSubmissionRequest(nino: Nino, businessId: String, taxYear: TaxYear)

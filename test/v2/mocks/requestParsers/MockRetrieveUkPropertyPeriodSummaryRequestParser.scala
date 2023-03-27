@@ -19,7 +19,7 @@ package v2.mocks.requestParsers
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
 import v2.controllers.requestParsers.RetrieveUkPropertyPeriodSummaryRequestParser
-import v2.models.errors.ErrorWrapper
+import api.models.errors.ErrorWrapper
 import v2.models.request.retrieveUkPropertyPeriodSummary.{ RetrieveUkPropertyPeriodSummaryRawData, RetrieveUkPropertyPeriodSummaryRequest }
 
 trait MockRetrieveUkPropertyPeriodSummaryRequestParser extends MockFactory {

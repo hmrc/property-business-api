@@ -19,7 +19,8 @@ package v2.mocks.connectors
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
 import uk.gov.hmrc.http.HeaderCarrier
-import v2.connectors.{ DownstreamOutcome, RetrieveHistoricNonFhlUkPropertyAnnualSubmissionConnector }
+import api.connectors.DownstreamOutcome
+import v2.connectors.RetrieveHistoricNonFhlUkPropertyAnnualSubmissionConnector
 import v2.models.request.retrieveHistoricNonFhlUkPropertyAnnualSubmission.RetrieveHistoricNonFhlUkPropertyAnnualSubmissionRequest
 import v2.models.response.retrieveHistoricNonFhlUkPropertyAnnualSubmissionResponse.RetrieveHistoricNonFhlUkPropertyAnnualSubmissionResponse
 

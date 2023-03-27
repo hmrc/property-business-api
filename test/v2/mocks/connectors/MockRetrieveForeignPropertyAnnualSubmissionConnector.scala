@@ -20,7 +20,8 @@ import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
 import uk.gov.hmrc.http.HeaderCarrier
 import v2.connectors.RetrieveForeignPropertyAnnualSubmissionConnector.Result
-import v2.connectors.{ DownstreamOutcome, RetrieveForeignPropertyAnnualSubmissionConnector }
+import api.connectors.DownstreamOutcome
+import v2.connectors.RetrieveForeignPropertyAnnualSubmissionConnector
 import v2.models.request.retrieveForeignPropertyAnnualSubmission.RetrieveForeignPropertyAnnualSubmissionRequest
 
 import scala.concurrent.{ ExecutionContext, Future }

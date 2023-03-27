@@ -16,18 +16,20 @@
 
 package v2.controllers
 
+import api.controllers.ControllerBaseSpec
 import play.api.libs.json.Json
 import play.api.mvc.Result
 import uk.gov.hmrc.http.HeaderCarrier
 import v2.mocks.MockIdGenerator
 import v2.mocks.hateoas.MockHateoasFactory
 import v2.mocks.requestParsers.MockRetrieveHistoricFhlUkPiePeriodSummaryRequestParser
-import v2.mocks.services.{ MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService, MockRetrieveHistoricFhlUkPiePeriodSummaryService }
-import v2.models.domain.{ Nino, PeriodId }
-import v2.models.errors._
-import v2.models.hateoas.Method.GET
-import v2.models.hateoas.{ HateoasWrapper, Link }
-import v2.models.outcomes.ResponseWrapper
+import v2.mocks.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService, MockRetrieveHistoricFhlUkPiePeriodSummaryService}
+import v2.models.domain.PeriodId
+import api.models.errors._
+import api.models.hateoas.Method.GET
+import api.models.domain.Nino
+import api.models.hateoas.{HateoasWrapper, Link}
+import api.models.outcomes.ResponseWrapper
 import v2.models.request.retrieveHistoricFhlUkPiePeriodSummary._
 import v2.models.response.retrieveHistoricFhlUkPiePeriodSummary._
 
@@ -166,6 +168,7 @@ class RetrieveHistoricFhlUkPiePeriodSummaryControllerSpec
           (PeriodIdFormatError, BAD_REQUEST),
           (InternalError, INTERNAL_SERVER_ERROR),
           (NotFoundError, NOT_FOUND),
+          (RuleIncorrectGovTestScenarioError, BAD_REQUEST)
         )
 
         input.foreach(args => (serviceErrors _).tupled(args))

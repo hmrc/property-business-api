@@ -16,16 +16,16 @@
 
 package v1.support
 
+import api.models.outcomes.ResponseWrapper
 import utils.Logging
 import v1.controllers.EndpointLogContext
 import v1.models.errors._
-import v1.models.outcomes.ResponseWrapper
 
 trait IfsResponseMappingSupport {
   self: Logging =>
 
-  final def mapIfsErrors[D](errorCodeMap: PartialFunction[String, MtdError])(ifsResponseWrapper: ResponseWrapper[IfsError])(
-      implicit logContext: EndpointLogContext): ErrorWrapper = {
+  final def mapIfsErrors[D](errorCodeMap: PartialFunction[String, MtdError])(ifsResponseWrapper: ResponseWrapper[IfsError])(implicit
+      logContext: EndpointLogContext): ErrorWrapper = {
 
     lazy val defaultErrorCodeMapping: String => MtdError = { code =>
       logger.warn(s"[${logContext.controllerName}] [${logContext.endpointName}] - No mapping found for error code $code")
@@ -52,4 +52,5 @@ trait IfsResponseMappingSupport {
         ErrorWrapper(correlationId, error, errors)
     }
   }
+
 }

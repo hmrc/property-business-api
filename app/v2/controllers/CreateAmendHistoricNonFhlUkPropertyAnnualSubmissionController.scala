@@ -16,26 +16,28 @@
 
 package v2.controllers
 
+import api.controllers.{AuthorisedController, BaseController, EndpointLogContext}
+import api.hateoas.HateoasFactory
+import api.models.audit.{AuditEvent, AuditResponse, FlattenedGenericAuditDetail}
+import api.models.errors._
+import api.services.{AuditService, EnrolmentsAuthService, MtdIdLookupService}
 import cats.data.EitherT
 import cats.implicits._
-import play.api.libs.json.{ JsValue, Json }
-import play.api.mvc.{ Action, ControllerComponents }
+import play.api.libs.json.{Json, JsValue}
+import play.api.mvc.{Action, ControllerComponents}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.audit.http.connector.AuditResult
-import utils.{ IdGenerator, Logging }
+import utils.{IdGenerator, Logging}
 import v2.controllers.requestParsers.CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestParser
-import v2.hateoas.HateoasFactory
-import v2.models.audit.{ AuditEvent, AuditResponse, FlattenedGenericAuditDetail }
-import v2.models.errors._
 import v2.models.request.createAmendHistoricNonFhlUkPropertyAnnualSubmission.CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRawData
 import v2.models.response.createAmendHistoricNonFhlUkPropertyAnnualSubmission.CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionHateoasData
-import v2.services.{ CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionService, EnrolmentsAuthService, MtdIdLookupService, AuditService }
+import v2.services.CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionService
 
-import javax.inject.{ Inject, Singleton }
-import scala.concurrent.{ ExecutionContext, Future }
+import javax.inject.{Inject, Singleton}
+import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionController @Inject()(
+class CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionController @Inject() (
     val authService: EnrolmentsAuthService,
     val lookupService: MtdIdLookupService,
     parser: CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestParser,
@@ -49,8 +51,9 @@ class CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionController @Inject()(
     with Logging {
 
   implicit val endpointLogContext: EndpointLogContext =
-    EndpointLogContext(controllerName = "CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionController",
-                       endpointName = "CreateAmendHistoricNonFhlUkPropertyAnnualSubmission")
+    EndpointLogContext(
+      controllerName = "CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionController",
+      endpointName = "CreateAmendHistoricNonFhlUkPropertyAnnualSubmission")
 
   def handleRequest(nino: String, taxYear: String): Action[JsValue] =
     authorisedAction(nino).async(parse.json) { implicit request =>
@@ -74,7 +77,6 @@ class CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionController @Inject()(
               s"Success response received with CorrelationId: ${serviceResponse.correlationId}")
 
           val response = Json.toJson(vendorResponse)
-
 
           auditSubmission(
             FlattenedGenericAuditDetail(
@@ -124,7 +126,8 @@ class CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionController @Inject()(
             RuleTaxYearRangeInvalidError,
             RuleHistoricTaxYearNotSupportedError,
             ValueFormatError,
-            RuleIncorrectOrEmptyBodyError
+            RuleIncorrectOrEmptyBodyError,
+            RuleIncorrectGovTestScenarioError
           ) =>
         BadRequest(Json.toJson(errorWrapper))
       case NotFoundError => NotFound(Json.toJson(errorWrapper))
@@ -134,7 +137,11 @@ class CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionController @Inject()(
 
   private def auditSubmission(details: FlattenedGenericAuditDetail)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[AuditResult] = {
     val event =
-      AuditEvent("CreateAndAmendHistoricNonFhlPropertyBusinessAnnualSubmission", "CreateAndAmendHistoricNonFhlPropertyBusinessAnnualSubmission", details)
+      AuditEvent(
+        "CreateAndAmendHistoricNonFhlPropertyBusinessAnnualSubmission",
+        "CreateAndAmendHistoricNonFhlPropertyBusinessAnnualSubmission",
+        details)
     auditService.auditEvent(event)
   }
+
 }

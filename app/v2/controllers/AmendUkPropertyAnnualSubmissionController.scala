@@ -16,34 +16,36 @@
 
 package v2.controllers
 
+import api.controllers.{AuthorisedController, BaseController, EndpointLogContext}
+import api.hateoas.HateoasFactory
+import api.models.audit.{AuditEvent, AuditResponse, GenericAuditDetail}
+import api.models.errors._
+import api.services.{AuditService, EnrolmentsAuthService, MtdIdLookupService}
 import cats.data.EitherT
 import cats.implicits._
-import play.api.libs.json.{ JsValue, Json }
-import play.api.mvc.{ Action, ControllerComponents }
+import play.api.libs.json.{Json, JsValue}
+import play.api.mvc.{Action, ControllerComponents}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.audit.http.connector.AuditResult
-import utils.{ IdGenerator, Logging }
+import utils.{IdGenerator, Logging}
 import v2.controllers.requestParsers.AmendUkPropertyAnnualSubmissionRequestParser
-import v2.hateoas.HateoasFactory
-import v2.models.audit.{ AuditEvent, AuditResponse, GenericAuditDetail }
-import v2.models.errors._
 import v2.models.request.amendUkPropertyAnnualSubmission.AmendUkPropertyAnnualSubmissionRawData
 import v2.models.response.amendUkPropertyAnnualSubmission.AmendUkPropertyAnnualSubmissionHateoasData
 import v2.models.response.amendUkPropertyAnnualSubmission.AmendUkPropertyAnnualSubmissionResponse.AmendUkPropertyLinksFactory
-import v2.services.{ AmendUkPropertyAnnualSubmissionService, AuditService, EnrolmentsAuthService, MtdIdLookupService }
+import v2.services.AmendUkPropertyAnnualSubmissionService
 
-import javax.inject.{ Inject, Singleton }
-import scala.concurrent.{ ExecutionContext, Future }
+import javax.inject.{Inject, Singleton}
+import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class AmendUkPropertyAnnualSubmissionController @Inject()(val authService: EnrolmentsAuthService,
-                                                          val lookupService: MtdIdLookupService,
-                                                          parser: AmendUkPropertyAnnualSubmissionRequestParser,
-                                                          service: AmendUkPropertyAnnualSubmissionService,
-                                                          auditService: AuditService,
-                                                          hateoasFactory: HateoasFactory,
-                                                          cc: ControllerComponents,
-                                                          idGenerator: IdGenerator)(implicit ec: ExecutionContext)
+class AmendUkPropertyAnnualSubmissionController @Inject() (val authService: EnrolmentsAuthService,
+                                                           val lookupService: MtdIdLookupService,
+                                                           parser: AmendUkPropertyAnnualSubmissionRequestParser,
+                                                           service: AmendUkPropertyAnnualSubmissionService,
+                                                           auditService: AuditService,
+                                                           hateoasFactory: HateoasFactory,
+                                                           cc: ControllerComponents,
+                                                           idGenerator: IdGenerator)(implicit ec: ExecutionContext)
     extends AuthorisedController(cc)
     with BaseController
     with Logging {
@@ -80,7 +82,6 @@ class AmendUkPropertyAnnualSubmissionController @Inject()(val authService: Enrol
         val resCorrelationId = errorWrapper.correlationId
         val result           = errorResult(errorWrapper).withApiHeaders(resCorrelationId)
 
-
         auditSubmission(
           GenericAuditDetail(request.userDetails, rawData, correlationId, AuditResponse(result.header.status, Left(errorWrapper.auditErrors))))
 
@@ -109,7 +110,8 @@ class AmendUkPropertyAnnualSubmissionController @Inject()(val authService: Enrol
             RulePropertyIncomeAllowanceError,
             RuleBuildingNameNumberError,
             DateFormatError,
-            StringFormatError
+            StringFormatError,
+            RuleIncorrectGovTestScenarioError
           ) =>
         BadRequest(Json.toJson(errorWrapper))
       case InternalError => InternalServerError(Json.toJson(errorWrapper))
@@ -121,4 +123,5 @@ class AmendUkPropertyAnnualSubmissionController @Inject()(val authService: Enrol
     val event = AuditEvent("CreateAmendUKPropertyAnnualSubmission", "create-amend-uk-property-annual-submission", details)
     auditService.auditEvent(event)
   }
+
 }

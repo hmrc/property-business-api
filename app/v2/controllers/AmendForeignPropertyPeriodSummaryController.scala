@@ -16,34 +16,36 @@
 
 package v2.controllers
 
+import api.controllers.{AuthorisedController, BaseController, EndpointLogContext}
+import api.hateoas.HateoasFactory
+import api.models.audit.{AuditEvent, AuditResponse, GenericAuditDetail}
+import api.models.errors._
+import api.services.{AuditService, EnrolmentsAuthService, MtdIdLookupService}
 import cats.data.EitherT
 import cats.implicits._
-import play.api.libs.json.{ JsValue, Json }
-import play.api.mvc.{ Action, ControllerComponents }
+import play.api.libs.json.{Json, JsValue}
+import play.api.mvc.{Action, ControllerComponents}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.audit.http.connector.AuditResult
-import utils.{ IdGenerator, Logging }
+import utils.{IdGenerator, Logging}
 import v2.controllers.requestParsers.AmendForeignPropertyPeriodSummaryRequestParser
-import v2.hateoas.HateoasFactory
-import v2.models.audit.{ AuditEvent, AuditResponse, GenericAuditDetail }
-import v2.models.errors._
 import v2.models.request.amendForeignPropertyPeriodSummary.AmendForeignPropertyPeriodSummaryRawData
 import v2.models.response.amendForeignPropertyPeriodSummary.AmendForeignPropertyPeriodSummaryHateoasData
 import v2.models.response.amendForeignPropertyPeriodSummary.AmendForeignPropertyPeriodSummaryResponse.AmendForeignPropertyLinksFactory
-import v2.services.{ AmendForeignPropertyPeriodSummaryService, AuditService, EnrolmentsAuthService, MtdIdLookupService }
+import v2.services.AmendForeignPropertyPeriodSummaryService
 
-import javax.inject.{ Inject, Singleton }
-import scala.concurrent.{ ExecutionContext, Future }
+import javax.inject.{Inject, Singleton}
+import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class AmendForeignPropertyPeriodSummaryController @Inject()(val authService: EnrolmentsAuthService,
-                                                            val lookupService: MtdIdLookupService,
-                                                            parser: AmendForeignPropertyPeriodSummaryRequestParser,
-                                                            service: AmendForeignPropertyPeriodSummaryService,
-                                                            auditService: AuditService,
-                                                            hateoasFactory: HateoasFactory,
-                                                            cc: ControllerComponents,
-                                                            idGenerator: IdGenerator)(implicit ec: ExecutionContext)
+class AmendForeignPropertyPeriodSummaryController @Inject() (val authService: EnrolmentsAuthService,
+                                                             val lookupService: MtdIdLookupService,
+                                                             parser: AmendForeignPropertyPeriodSummaryRequestParser,
+                                                             service: AmendForeignPropertyPeriodSummaryService,
+                                                             auditService: AuditService,
+                                                             hateoasFactory: HateoasFactory,
+                                                             cc: ControllerComponents,
+                                                             idGenerator: IdGenerator)(implicit ec: ExecutionContext)
     extends AuthorisedController(cc)
     with BaseController
     with Logging {
@@ -110,7 +112,8 @@ class AmendForeignPropertyPeriodSummaryController @Inject()(val authService: Enr
             ValueFormatError,
             RuleBothExpensesSuppliedError,
             RuleIncorrectOrEmptyBodyError,
-            RuleDuplicateCountryCodeError
+            RuleDuplicateCountryCodeError,
+            RuleIncorrectGovTestScenarioError
           ) =>
         BadRequest(Json.toJson(errorWrapper))
       case NotFoundError => NotFound(Json.toJson(errorWrapper))
@@ -123,4 +126,5 @@ class AmendForeignPropertyPeriodSummaryController @Inject()(val authService: Enr
       AuditEvent("AmendForeignPropertyIncomeAndExpensesPeriodSummary", "amend-foreign-property-income-and-expenses-period-summary", details)
     auditService.auditEvent(event)
   }
+
 }

@@ -16,22 +16,24 @@
 
 package v2.connectors
 
+import api.connectors.{BaseDownstreamConnector, DownstreamOutcome}
+import api.connectors.DownstreamUri.{IfsUri, TaxYearSpecificIfsUri}
+import api.connectors.httpparsers.StandardDownstreamHttpParser.readsEmpty
 import config.AppConfig
 
-import javax.inject.{ Inject, Singleton }
-import uk.gov.hmrc.http.{ HeaderCarrier, HttpClient }
-import v2.connectors.DownstreamUri.{ IfsUri, TaxYearSpecificIfsUri }
-import v2.connectors.httpparsers.StandardDownstreamHttpParser._
+import javax.inject.{Inject, Singleton}
+import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
 import v2.models.request.amendUkPropertyPeriodSummary.AmendUkPropertyPeriodSummaryRequest
 
-import scala.concurrent.{ ExecutionContext, Future }
+import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class AmendUkPropertyPeriodSummaryConnector @Inject()(val http: HttpClient, val appConfig: AppConfig) extends BaseDownstreamConnector {
+class AmendUkPropertyPeriodSummaryConnector @Inject() (val http: HttpClient, val appConfig: AppConfig) extends BaseDownstreamConnector {
 
-  def amendUkPropertyPeriodSummary(request: AmendUkPropertyPeriodSummaryRequest)(implicit hc: HeaderCarrier,
-                                                                                 ec: ExecutionContext,
-                                                                                 correlationId: String): Future[DownstreamOutcome[Unit]] = {
+  def amendUkPropertyPeriodSummary(request: AmendUkPropertyPeriodSummaryRequest)(implicit
+      hc: HeaderCarrier,
+      ec: ExecutionContext,
+      correlationId: String): Future[DownstreamOutcome[Unit]] = {
     import request._
 
     val downstreamUri =
@@ -51,4 +53,5 @@ class AmendUkPropertyPeriodSummaryConnector @Inject()(val http: HttpClient, val 
       uri = downstreamUri
     )
   }
+
 }

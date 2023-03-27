@@ -16,26 +16,26 @@
 
 package v2.endpoints
 
+import api.models.errors.PeriodIdFormatError
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import play.api.http.HeaderNames.ACCEPT
-import play.api.http.Status.{ BAD_REQUEST, INTERNAL_SERVER_ERROR, NOT_FOUND, OK, SERVICE_UNAVAILABLE, UNPROCESSABLE_ENTITY }
-import play.api.libs.json.{ JsNumber, JsObject, JsValue, Json }
-import play.api.libs.ws.{ WSRequest, WSResponse }
+import play.api.http.Status.{BAD_REQUEST, INTERNAL_SERVER_ERROR, NOT_FOUND, OK, SERVICE_UNAVAILABLE, UNPROCESSABLE_ENTITY}
+import play.api.libs.json.{JsNumber, JsObject, JsValue, Json}
+import play.api.libs.ws.{WSRequest, WSResponse}
 import play.api.test.Helpers.AUTHORIZATION
 import support.V2IntegrationBaseSpec
-import v2.models.errors.{
+import api.models.errors.{
   MtdError,
   NinoFormatError,
   InternalError,
   NotFoundError,
-  PeriodIdFormatError,
   RuleBothExpensesSuppliedError,
   RuleIncorrectOrEmptyBodyError,
   ValueFormatError
 }
 import v2.models.request.amendHistoricNonFhlUkPiePeriodSummary.AmendHistoricNonFhlUkPiePeriodSummaryRequestBody
 import v2.models.utils.JsonErrorValidators
-import v2.stubs.{ AuthStub, DownstreamStub, MtdIdLookupStub }
+import v2.stubs.{AuthStub, DownstreamStub, MtdIdLookupStub}
 
 class AmendHistoricNonFhlUkPropertyPeriodSummaryControllerISpec extends V2IntegrationBaseSpec with JsonErrorValidators {
 
@@ -147,6 +147,7 @@ class AmendHistoricNonFhlUkPropertyPeriodSummaryControllerISpec extends V2Integr
         |   "transactionReference": "ignored"
         |}
         |""".stripMargin
+
   }
 
   "calling the amend uk property period summary endpoint" should {
@@ -208,16 +209,18 @@ class AmendHistoricNonFhlUkPropertyPeriodSummaryControllerISpec extends V2Integr
 
       val input = Seq(
         ("AA1123A", "2017-04-06_2017-07-04", requestBodyJson, BAD_REQUEST, NinoFormatError),
-        ("AA123456A",
-         "2017-04-06_2017-07-04",
-         requestBodyJsonConsolidatedExpenses.update("/expenses/premisesRunningCosts", JsNumber(1)),
-         BAD_REQUEST,
-         RuleBothExpensesSuppliedError.copy(paths = Some(Seq("/expenses/consolidatedExpenses")))),
-        ("AA123456A",
-         "2017-04-06_2017-07-04",
-         requestBodyJson.update("/expenses/premisesRunningCosts", JsNumber(-1)),
-         BAD_REQUEST,
-         ValueFormatError.forPathAndRange("/expenses/premisesRunningCosts", min = "0", max = "99999999999.99")),
+        (
+          "AA123456A",
+          "2017-04-06_2017-07-04",
+          requestBodyJsonConsolidatedExpenses.update("/expenses/premisesRunningCosts", JsNumber(1)),
+          BAD_REQUEST,
+          RuleBothExpensesSuppliedError.copy(paths = Some(Seq("/expenses/consolidatedExpenses")))),
+        (
+          "AA123456A",
+          "2017-04-06_2017-07-04",
+          requestBodyJson.update("/expenses/premisesRunningCosts", JsNumber(-1)),
+          BAD_REQUEST,
+          ValueFormatError.forPathAndRange("/expenses/premisesRunningCosts", min = "0", max = "99999999999.99")),
         ("AA123456A", "2017-04-06_2017-07-04", JsObject.empty, BAD_REQUEST, RuleIncorrectOrEmptyBodyError),
         ("AA123456A", "BAD_PERIOD_ID", requestBodyJson, BAD_REQUEST, PeriodIdFormatError)
       )
@@ -258,4 +261,5 @@ class AmendHistoricNonFhlUkPropertyPeriodSummaryControllerISpec extends V2Integr
       input.foreach(args => (serviceErrorTest _).tupled(args))
     }
   }
+
 }

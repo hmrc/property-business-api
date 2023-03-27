@@ -16,13 +16,16 @@
 
 package v2.controllers.requestParsers.validators
 
+import api.controllers.requestParsers.validators.Validator
+import api.controllers.requestParsers.validators.validations.{BusinessIdValidation, NinoValidation, SubmissionIdValidation}
+import api.models.errors.{MtdError, RuleDuplicateCountryCodeError}
 import config.AppConfig
 import v2.controllers.requestParsers.validators.validations._
-import v2.models.errors._
-import v2.models.request.amendForeignPropertyPeriodSummary.{ AmendForeignPropertyPeriodSummaryRawData, AmendForeignPropertyPeriodSummaryRequestBody }
-import v2.models.request.common.foreignFhlEea.{ AmendForeignFhlEea, AmendForeignFhlEeaExpenses }
-import v2.models.request.common.foreignPropertyEntry.{ AmendForeignNonFhlPropertyEntry, AmendForeignNonFhlPropertyExpenses }
-import javax.inject.{ Inject, Singleton }
+import v2.models.request.amendForeignPropertyPeriodSummary.{AmendForeignPropertyPeriodSummaryRawData, AmendForeignPropertyPeriodSummaryRequestBody}
+import v2.models.request.common.foreignFhlEea.{AmendForeignFhlEea, AmendForeignFhlEeaExpenses}
+import v2.models.request.common.foreignPropertyEntry.{AmendForeignNonFhlPropertyEntry, AmendForeignNonFhlPropertyExpenses}
+
+import javax.inject.{Inject, Singleton}
 
 @Singleton
 class AmendForeignPropertyPeriodSummaryValidator @Inject()(appConfig: AppConfig) extends Validator[AmendForeignPropertyPeriodSummaryRawData] {

@@ -16,22 +16,23 @@
 
 package v2.connectors
 
+import api.connectors.{BaseDownstreamConnector, DownstreamOutcome}
+import api.connectors.DownstreamUri.IfsUri
+import api.connectors.httpparsers.StandardDownstreamHttpParser.reads
 import config.AppConfig
-import uk.gov.hmrc.http.{ HeaderCarrier, HttpClient }
-import v2.connectors.DownstreamUri.IfsUri
-import v2.connectors.httpparsers.StandardDownstreamHttpParser._
+import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
 import v2.models.request.createAmendHistoricFhlUkPropertyAnnualSubmission.CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequest
 import v2.models.response.createAmendHistoricFhlUkPropertyAnnualSubmission.CreateAmendHistoricFhlUkPropertyAnnualSubmissionResponse
 
-import javax.inject.{ Inject, Singleton }
-import scala.concurrent.{ ExecutionContext, Future }
+import javax.inject.{Inject, Singleton}
+import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class CreateAmendHistoricFhlUkPropertyAnnualSubmissionConnector @Inject()(val http: HttpClient, val appConfig: AppConfig)
+class CreateAmendHistoricFhlUkPropertyAnnualSubmissionConnector @Inject() (val http: HttpClient, val appConfig: AppConfig)
     extends BaseDownstreamConnector {
 
-  def amend(request: CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequest)(
-      implicit hc: HeaderCarrier,
+  def amend(request: CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequest)(implicit
+      hc: HeaderCarrier,
       ec: ExecutionContext,
       correlationId: String): Future[DownstreamOutcome[CreateAmendHistoricFhlUkPropertyAnnualSubmissionResponse]] = {
 
@@ -44,4 +45,5 @@ class CreateAmendHistoricFhlUkPropertyAnnualSubmissionConnector @Inject()(val ht
         s"income-tax/nino/$nino/uk-properties/furnished-holiday-lettings/annual-summaries/$taxYear")
     )
   }
+
 }

@@ -16,21 +16,23 @@
 
 package v2.connectors
 
+import api.connectors.{BaseDownstreamConnector, DownstreamOutcome}
+import api.connectors.DownstreamUri.{IfsUri, TaxYearSpecificIfsUri}
+import api.connectors.httpparsers.StandardDownstreamHttpParser.readsEmpty
 import config.AppConfig
-import uk.gov.hmrc.http.{ HeaderCarrier, HttpClient }
-import v2.connectors.DownstreamUri.{ IfsUri, TaxYearSpecificIfsUri }
-import v2.connectors.httpparsers.StandardDownstreamHttpParser._
+import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
 import v2.models.request.amendUkPropertyAnnualSubmission.AmendUkPropertyAnnualSubmissionRequest
 
-import javax.inject.{ Inject, Singleton }
-import scala.concurrent.{ ExecutionContext, Future }
+import javax.inject.{Inject, Singleton}
+import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class AmendUkPropertyAnnualSubmissionConnector @Inject()(val http: HttpClient, val appConfig: AppConfig) extends BaseDownstreamConnector {
+class AmendUkPropertyAnnualSubmissionConnector @Inject() (val http: HttpClient, val appConfig: AppConfig) extends BaseDownstreamConnector {
 
-  def amendUkPropertyAnnualSubmission(request: AmendUkPropertyAnnualSubmissionRequest)(implicit hc: HeaderCarrier,
-                                                                                       ec: ExecutionContext,
-                                                                                       correlationId: String): Future[DownstreamOutcome[Unit]] = {
+  def amendUkPropertyAnnualSubmission(request: AmendUkPropertyAnnualSubmissionRequest)(implicit
+      hc: HeaderCarrier,
+      ec: ExecutionContext,
+      correlationId: String): Future[DownstreamOutcome[Unit]] = {
     import request._
 
     val downstreamUri =
@@ -38,8 +40,7 @@ class AmendUkPropertyAnnualSubmissionConnector @Inject()(val http: HttpClient, v
         TaxYearSpecificIfsUri[Unit](s"income-tax/business/property/annual/${taxYear.asTysDownstream}/${nino.nino}/$businessId")
       } else {
         // Note that MTD tax year format is used
-        IfsUri[Unit](
-          s"income-tax/business/property/annual?taxableEntityId=${nino.nino}&incomeSourceId=$businessId&taxYear=${taxYear.asMtd}")
+        IfsUri[Unit](s"income-tax/business/property/annual?taxableEntityId=${nino.nino}&incomeSourceId=$businessId&taxYear=${taxYear.asMtd}")
       }
 
     put(
@@ -47,4 +48,5 @@ class AmendUkPropertyAnnualSubmissionConnector @Inject()(val http: HttpClient, v
       uri = downstreamUri
     )
   }
+
 }

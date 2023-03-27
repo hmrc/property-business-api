@@ -19,7 +19,7 @@ package v2.controllers.requestParsers.validators
 import mocks.MockAppConfig
 import play.api.libs.json._
 import support.UnitSpec
-import v2.models.errors._
+import api.models.errors._
 import v2.models.request.amendUkPropertyAnnualSubmission.AmendUkPropertyAnnualSubmissionRawData
 import v2.models.utils.JsonErrorValidators
 

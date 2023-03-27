@@ -18,7 +18,7 @@ package v2.controllers.requestParsers.validators
 import mocks.MockAppConfig
 import play.api.libs.json.{ JsNumber, JsObject, JsValue, Json }
 import support.UnitSpec
-import v2.models.errors.{
+import api.models.errors.{
   NinoFormatError,
   RuleHistoricTaxYearNotSupportedError,
   RuleIncorrectOrEmptyBodyError,

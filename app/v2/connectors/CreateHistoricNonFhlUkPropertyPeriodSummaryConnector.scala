@@ -16,26 +16,30 @@
 
 package v2.connectors
 
+import api.connectors.{BaseDownstreamConnector, DownstreamOutcome}
+import api.connectors.httpparsers.StandardDownstreamHttpParser.{readsEmpty, SuccessCode}
+import api.connectors.DownstreamUri.IfsUri
 import config.AppConfig
 import play.api.http.Status
-import uk.gov.hmrc.http.{ HeaderCarrier, HttpClient }
-import v2.connectors.DownstreamUri.IfsUri
-import v2.connectors.httpparsers.StandardDownstreamHttpParser._
+import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
 import v2.models.request.createHistoricNonFhlUkPropertyPeriodSummary.CreateHistoricNonFhlUkPropertyPeriodSummaryRequest
 
-import javax.inject.{ Inject, Singleton }
-import scala.concurrent.{ ExecutionContext, Future }
+import javax.inject.{Inject, Singleton}
+import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class CreateHistoricNonFhlUkPropertyPeriodSummaryConnector @Inject()(val http: HttpClient, val appConfig: AppConfig) extends BaseDownstreamConnector {
+class CreateHistoricNonFhlUkPropertyPeriodSummaryConnector @Inject() (val http: HttpClient, val appConfig: AppConfig)
+    extends BaseDownstreamConnector {
 
   implicit val successCode: SuccessCode = SuccessCode(Status.OK)
 
-  def createPeriodSummary(request: CreateHistoricNonFhlUkPropertyPeriodSummaryRequest)(implicit hc: HeaderCarrier,
-                                                                                       ex: ExecutionContext,
-                                                                                       correlationId: String): Future[DownstreamOutcome[Unit]] = {
+  def createPeriodSummary(request: CreateHistoricNonFhlUkPropertyPeriodSummaryRequest)(implicit
+      hc: HeaderCarrier,
+      ex: ExecutionContext,
+      correlationId: String): Future[DownstreamOutcome[Unit]] = {
 
     val path = s"income-tax/nino/${request.nino.nino}/uk-properties/other/periodic-summaries"
     post(request.body, IfsUri[Unit](path))
   }
+
 }

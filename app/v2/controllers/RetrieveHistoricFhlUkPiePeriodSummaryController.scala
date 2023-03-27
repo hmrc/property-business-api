@@ -16,36 +16,39 @@
 
 package v2.controllers
 
+import api.controllers.{AuthorisedController, BaseController, EndpointLogContext}
 import cats.data.EitherT
 import cats.implicits._
 import play.api.libs.json.Json
-import play.api.mvc.{ Action, AnyContent, ControllerComponents }
-import utils.{ IdGenerator, Logging }
+import play.api.mvc.{Action, AnyContent, ControllerComponents}
+import utils.{IdGenerator, Logging}
 import v2.controllers.requestParsers.RetrieveHistoricFhlUkPropertyPeriodSummaryRequestParser
-import v2.hateoas.HateoasFactory
-import v2.models.errors._
+import api.hateoas.HateoasFactory
+import api.models.errors._
+import api.services.{EnrolmentsAuthService, MtdIdLookupService}
 import v2.models.request.retrieveHistoricFhlUkPiePeriodSummary.RetrieveHistoricFhlUkPiePeriodSummaryRawData
 import v2.models.response.retrieveHistoricFhlUkPiePeriodSummary.RetrieveHistoricFhlUkPiePeriodSummaryHateoasData
-import v2.services.{ EnrolmentsAuthService, MtdIdLookupService, RetrieveHistoricFhlUkPropertyPeriodSummaryService }
+import v2.services.RetrieveHistoricFhlUkPropertyPeriodSummaryService
 
-import javax.inject.{ Inject, Singleton }
-import scala.concurrent.{ ExecutionContext, Future }
+import javax.inject.{Inject, Singleton}
+import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class RetrieveHistoricFhlUkPiePeriodSummaryController @Inject()(val authService: EnrolmentsAuthService,
-                                                                val lookupService: MtdIdLookupService,
-                                                                parser: RetrieveHistoricFhlUkPropertyPeriodSummaryRequestParser,
-                                                                service: RetrieveHistoricFhlUkPropertyPeriodSummaryService,
-                                                                hateoasFactory: HateoasFactory,
-                                                                cc: ControllerComponents,
-                                                                idGenerator: IdGenerator)(implicit ec: ExecutionContext)
+class RetrieveHistoricFhlUkPiePeriodSummaryController @Inject() (val authService: EnrolmentsAuthService,
+                                                                 val lookupService: MtdIdLookupService,
+                                                                 parser: RetrieveHistoricFhlUkPropertyPeriodSummaryRequestParser,
+                                                                 service: RetrieveHistoricFhlUkPropertyPeriodSummaryService,
+                                                                 hateoasFactory: HateoasFactory,
+                                                                 cc: ControllerComponents,
+                                                                 idGenerator: IdGenerator)(implicit ec: ExecutionContext)
     extends AuthorisedController(cc)
     with BaseController
     with Logging {
 
   implicit val endpointLogContext: EndpointLogContext =
-    EndpointLogContext(controllerName = "RetrieveHistoricFhlUkPiePeriodSummaryController",
-                       endpointName = "retrieveHistoricFhlUkPropertyPeriodSummary")
+    EndpointLogContext(
+      controllerName = "RetrieveHistoricFhlUkPiePeriodSummaryController",
+      endpointName = "retrieveHistoricFhlUkPropertyPeriodSummary")
 
   def handleRequest(nino: String, periodId: String): Action[AnyContent] =
     authorisedAction(nino).async { implicit request =>
@@ -84,11 +87,12 @@ class RetrieveHistoricFhlUkPiePeriodSummaryController @Inject()(val authService:
 
   private def errorResult(errorWrapper: ErrorWrapper) = {
     errorWrapper.error match {
-      case NinoFormatError | PeriodIdFormatError | BadRequestError =>
+      case NinoFormatError | PeriodIdFormatError | BadRequestError | RuleIncorrectGovTestScenarioError =>
         BadRequest(Json.toJson(errorWrapper))
       case InternalError => InternalServerError(Json.toJson(errorWrapper))
       case NotFoundError => NotFound(Json.toJson(errorWrapper))
       case _             => unhandledError(errorWrapper)
     }
   }
+
 }

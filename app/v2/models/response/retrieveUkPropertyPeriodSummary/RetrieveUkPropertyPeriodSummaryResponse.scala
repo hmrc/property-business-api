@@ -16,11 +16,12 @@
 
 package v2.models.response.retrieveUkPropertyPeriodSummary
 
+import api.hateoas.HateoasLinksFactory
+import api.models.hateoas.{HateoasData, Link}
 import config.AppConfig
 import play.api.libs.functional.syntax._
-import play.api.libs.json.{ Json, OWrites, Reads, __ }
-import v2.hateoas.{ HateoasLinks, HateoasLinksFactory }
-import v2.models.hateoas.{ HateoasData, Link }
+import play.api.libs.json.{__, Json, OWrites, Reads}
+import v2.hateoas.HateoasLinks
 
 case class RetrieveUkPropertyPeriodSummaryResponse(submittedOn: String,
                                                    fromDate: String,
@@ -43,6 +44,7 @@ object RetrieveUkPropertyPeriodSummaryResponse extends HateoasLinks {
 
   implicit object hateoasLinksFactory
       extends HateoasLinksFactory[RetrieveUkPropertyPeriodSummaryResponse, RetrieveUkPropertyPeriodSummaryHateoasData] {
+
     override def links(appConfig: AppConfig, data: RetrieveUkPropertyPeriodSummaryHateoasData): Seq[Link] = {
       import data._
       Seq(
@@ -51,6 +53,7 @@ object RetrieveUkPropertyPeriodSummaryResponse extends HateoasLinks {
         listPropertyPeriodSummaries(appConfig, nino, businessId, taxYear, self = false)
       )
     }
+
   }
 
 }

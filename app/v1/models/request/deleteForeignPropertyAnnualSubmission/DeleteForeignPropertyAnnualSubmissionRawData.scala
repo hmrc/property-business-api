@@ -16,6 +16,6 @@
 
 package v1.models.request.deleteForeignPropertyAnnualSubmission
 
-import v1.models.request.RawData
+import api.models.request.RawData
 
 case class DeleteForeignPropertyAnnualSubmissionRawData(nino: String, businessId: String, taxYear: String) extends RawData

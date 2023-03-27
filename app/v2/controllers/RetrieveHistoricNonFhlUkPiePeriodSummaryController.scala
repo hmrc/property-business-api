@@ -16,36 +16,39 @@
 
 package v2.controllers
 
+import api.controllers.{AuthorisedController, BaseController, EndpointLogContext}
 import cats.data.EitherT
 import cats.implicits._
 import play.api.libs.json.Json
-import play.api.mvc.{ Action, AnyContent, ControllerComponents }
-import utils.{ IdGenerator, Logging }
+import play.api.mvc.{Action, AnyContent, ControllerComponents}
+import utils.{IdGenerator, Logging}
 import v2.controllers.requestParsers.RetrieveHistoricNonFhlUkPropertyPeriodSummaryRequestParser
-import v2.hateoas.HateoasFactory
-import v2.models.errors._
+import api.hateoas.HateoasFactory
+import api.models.errors._
+import api.services.{EnrolmentsAuthService, MtdIdLookupService}
 import v2.models.request.retrieveHistoricNonFhlUkPiePeriodSummary.RetrieveHistoricNonFhlUkPiePeriodSummaryRawData
 import v2.models.response.retrieveHistoricNonFhlUkPiePeriodSummary.RetrieveHistoricNonFhlUkPiePeriodSummaryHateoasData
-import v2.services.{ EnrolmentsAuthService, MtdIdLookupService, RetrieveHistoricNonFhlUkPropertyPeriodSummaryService }
+import v2.services.RetrieveHistoricNonFhlUkPropertyPeriodSummaryService
 
-import javax.inject.{ Inject, Singleton }
-import scala.concurrent.{ ExecutionContext, Future }
+import javax.inject.{Inject, Singleton}
+import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class RetrieveHistoricNonFhlUkPiePeriodSummaryController @Inject()(val authService: EnrolmentsAuthService,
-                                                                   val lookupService: MtdIdLookupService,
-                                                                   parser: RetrieveHistoricNonFhlUkPropertyPeriodSummaryRequestParser,
-                                                                   service: RetrieveHistoricNonFhlUkPropertyPeriodSummaryService,
-                                                                   hateoasFactory: HateoasFactory,
-                                                                   cc: ControllerComponents,
-                                                                   idGenerator: IdGenerator)(implicit ec: ExecutionContext)
+class RetrieveHistoricNonFhlUkPiePeriodSummaryController @Inject() (val authService: EnrolmentsAuthService,
+                                                                    val lookupService: MtdIdLookupService,
+                                                                    parser: RetrieveHistoricNonFhlUkPropertyPeriodSummaryRequestParser,
+                                                                    service: RetrieveHistoricNonFhlUkPropertyPeriodSummaryService,
+                                                                    hateoasFactory: HateoasFactory,
+                                                                    cc: ControllerComponents,
+                                                                    idGenerator: IdGenerator)(implicit ec: ExecutionContext)
     extends AuthorisedController(cc)
     with BaseController
     with Logging {
 
   implicit val endpointLogContext: EndpointLogContext =
-    EndpointLogContext(controllerName = "RetrieveHistoricNonFhlUkPiePeriodSummaryController",
-                       endpointName = "retrieveHistoricNonFhlUkPropertyPeriodSummary")
+    EndpointLogContext(
+      controllerName = "RetrieveHistoricNonFhlUkPiePeriodSummaryController",
+      endpointName = "retrieveHistoricNonFhlUkPropertyPeriodSummary")
 
   def handleRequest(nino: String, periodId: String): Action[AnyContent] =
     authorisedAction(nino).async { implicit request =>
@@ -84,11 +87,12 @@ class RetrieveHistoricNonFhlUkPiePeriodSummaryController @Inject()(val authServi
 
   private def errorResult(errorWrapper: ErrorWrapper) = {
     errorWrapper.error match {
-      case NinoFormatError | PeriodIdFormatError | BadRequestError =>
+      case NinoFormatError | PeriodIdFormatError | RuleIncorrectGovTestScenarioError | BadRequestError =>
         BadRequest(Json.toJson(errorWrapper))
       case InternalError => InternalServerError(Json.toJson(errorWrapper))
       case NotFoundError => NotFound(Json.toJson(errorWrapper))
       case _             => unhandledError(errorWrapper)
     }
   }
+
 }

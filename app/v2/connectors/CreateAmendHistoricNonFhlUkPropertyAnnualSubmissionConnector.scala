@@ -16,23 +16,24 @@
 
 package v2.connectors
 
+import api.connectors.{BaseDownstreamConnector, DownstreamOutcome}
+import api.connectors.DownstreamUri.IfsUri
+import api.connectors.httpparsers.StandardDownstreamHttpParser.reads
 import config.AppConfig
 import play.api.libs.json.Format.GenericFormat
-import uk.gov.hmrc.http.{ HeaderCarrier, HttpClient }
-import v2.connectors.DownstreamUri.IfsUri
-import v2.connectors.httpparsers.StandardDownstreamHttpParser._
+import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
 import v2.models.request.createAmendHistoricNonFhlUkPropertyAnnualSubmission.CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequest
 import v2.models.response.createAmendHistoricNonFhlUkPropertyAnnualSubmission.CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionResponse
 
-import javax.inject.{ Inject, Singleton }
-import scala.concurrent.{ ExecutionContext, Future }
+import javax.inject.{Inject, Singleton}
+import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionConnector @Inject()(val http: HttpClient, val appConfig: AppConfig)
+class CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionConnector @Inject() (val http: HttpClient, val appConfig: AppConfig)
     extends BaseDownstreamConnector {
 
-  def amend(request: CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequest)(
-      implicit hc: HeaderCarrier,
+  def amend(request: CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequest)(implicit
+      hc: HeaderCarrier,
       ec: ExecutionContext,
       correlationId: String): Future[DownstreamOutcome[CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionResponse]] = {
 

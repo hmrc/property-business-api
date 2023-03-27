@@ -16,17 +16,16 @@
 
 package v2.controllers.requestParsers.validators
 
+import api.controllers.requestParsers.validators.Validator
+import api.controllers.requestParsers.validators.validations.{BusinessIdValidation, NinoValidation, ToDateBeforeFromDateValidation}
+import api.models.errors.{MtdError, RuleDuplicateCountryCodeError}
 import config.AppConfig
 import v2.controllers.requestParsers.validators.validations._
-import v2.models.errors.{ MtdError, RuleDuplicateCountryCodeError }
-import v2.models.request.createForeignPropertyPeriodSummary.{
-  CreateForeignPropertyPeriodSummaryRawData,
-  CreateForeignPropertyPeriodSummaryRequestBody
-}
+import v2.models.request.createForeignPropertyPeriodSummary.{CreateForeignPropertyPeriodSummaryRawData, CreateForeignPropertyPeriodSummaryRequestBody}
 
-import javax.inject.{ Inject, Singleton }
-import v2.models.request.common.foreignFhlEea.{ CreateForeignFhlEea, CreateForeignFhlEeaExpenses }
-import v2.models.request.common.foreignPropertyEntry.{ CreateForeignNonFhlPropertyEntry, CreateForeignNonFhlPropertyExpenses }
+import javax.inject.{Inject, Singleton}
+import v2.models.request.common.foreignFhlEea.{CreateForeignFhlEea, CreateForeignFhlEeaExpenses}
+import v2.models.request.common.foreignPropertyEntry.{CreateForeignNonFhlPropertyEntry, CreateForeignNonFhlPropertyExpenses}
 
 @Singleton
 class CreateForeignPropertyPeriodSummaryValidator @Inject()(appConfig: AppConfig) extends Validator[CreateForeignPropertyPeriodSummaryRawData] {

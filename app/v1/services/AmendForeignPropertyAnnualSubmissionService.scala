@@ -18,7 +18,7 @@ package v1.services
 
 import cats.implicits._
 import cats.data.EitherT
-import javax.inject.{ Inject, Singleton }
+import javax.inject.{Inject, Singleton}
 import uk.gov.hmrc.http.HeaderCarrier
 import utils.Logging
 import v1.connectors.AmendForeignPropertyAnnualSubmissionConnector
@@ -27,15 +27,15 @@ import v1.models.errors._
 import v1.models.request.amendForeignPropertyAnnualSubmission.AmendForeignPropertyAnnualSubmissionRequest
 import v1.support.IfsResponseMappingSupport
 
-import scala.concurrent.{ ExecutionContext, Future }
+import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class AmendForeignPropertyAnnualSubmissionService @Inject()(connector: AmendForeignPropertyAnnualSubmissionConnector)
+class AmendForeignPropertyAnnualSubmissionService @Inject() (connector: AmendForeignPropertyAnnualSubmissionConnector)
     extends IfsResponseMappingSupport
     with Logging {
 
-  def amendForeignPropertyAnnualSubmission(request: AmendForeignPropertyAnnualSubmissionRequest)(
-      implicit hc: HeaderCarrier,
+  def amendForeignPropertyAnnualSubmission(request: AmendForeignPropertyAnnualSubmissionRequest)(implicit
+      hc: HeaderCarrier,
       ec: ExecutionContext,
       logContext: EndpointLogContext,
       correlationId: String): Future[AmendForeignPropertyAnnualSubmissionServiceOutcome] = {
@@ -59,4 +59,5 @@ class AmendForeignPropertyAnnualSubmissionService @Inject()(connector: AmendFore
       "SERVER_ERROR"              -> DownstreamError,
       "SERVICE_UNAVAILABLE"       -> DownstreamError
     )
+
 }

@@ -16,15 +16,15 @@
 
 package v1.services
 
+import api.models.audit.AuditEvent
 import play.api.Configuration
 import play.api.libs.json.Json
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.audit.http.connector.AuditResult.Success
-import uk.gov.hmrc.play.audit.http.connector.{ AuditConnector, AuditResult }
+import uk.gov.hmrc.play.audit.http.connector.{AuditConnector, AuditResult}
 import uk.gov.hmrc.play.audit.model.ExtendedDataEvent
-import v1.models.audit.AuditEvent
 
-import scala.concurrent.{ ExecutionContext, Future }
+import scala.concurrent.{ExecutionContext, Future}
 
 class AuditServiceSpec extends ServiceSpec {
 

@@ -94,7 +94,9 @@ responses:
           FORMAT_SUBMISSION_ID:
             $ref: './common/errors.yaml#/components/examples/formatSubmissionId' 
           RULE_TYPE_OF_BUSINESS_INCORRECT:
-            $ref: './common/errors.yaml#/components/examples/ruleTypeOfBusinessIncorrectForeign' 
+            $ref: './common/errors.yaml#/components/examples/ruleTypeOfBusinessIncorrectForeign'
+          RULE_INCORRECT_GOV_TEST_SCENARIO:
+            $ref: './common/errors.yaml#/components/examples/ruleIncorrectGovTestScenario'
 
   "403":
     description: Forbidden

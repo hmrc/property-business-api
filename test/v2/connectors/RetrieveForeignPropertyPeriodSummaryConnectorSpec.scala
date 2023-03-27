@@ -16,10 +16,12 @@
 
 package v2.connectors
 
-import v2.connectors.RetrieveForeignPropertyPeriodSummaryConnector.{ ForeignResult, NonForeignResult }
-import v2.models.domain.{ Nino, TaxYear }
-import v2.models.errors.{ DownstreamErrorCode, DownstreamErrors }
-import v2.models.outcomes.ResponseWrapper
+import api.connectors.{ConnectorSpec, DownstreamOutcome}
+import v2.connectors.RetrieveForeignPropertyPeriodSummaryConnector.{ForeignResult, NonForeignResult}
+import v2.models.domain.TaxYear
+import api.models.domain.Nino
+import api.models.errors.{DownstreamErrorCode, DownstreamErrors}
+import api.models.outcomes.ResponseWrapper
 import v2.models.request.retrieveForeignPropertyPeriodSummary.RetrieveForeignPropertyPeriodSummaryRequest
 import v2.models.response.retrieveForeignPropertyPeriodSummary.RetrieveForeignPropertyPeriodSummaryResponse
 import v2.models.response.retrieveForeignPropertyPeriodSummary.foreignFhlEea._

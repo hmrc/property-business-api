@@ -21,23 +21,25 @@ import cats.implicits._
 import uk.gov.hmrc.http.HeaderCarrier
 import utils.Logging
 import v2.connectors.AmendHistoricFhlUkPiePeriodSummaryConnector
-import v2.controllers.EndpointLogContext
-import v2.models.errors._
+import api.controllers.EndpointLogContext
+import api.models.errors._
+import api.services.ServiceOutcome
+import api.support.DownstreamResponseMappingSupport
 import v2.models.request.amendHistoricFhlUkPiePeriodSummary.AmendHistoricFhlUkPiePeriodSummaryRequest
-import v2.support.DownstreamResponseMappingSupport
 
-import javax.inject.{ Inject, Singleton }
-import scala.concurrent.{ ExecutionContext, Future }
+import javax.inject.{Inject, Singleton}
+import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class AmendHistoricFhlUkPiePeriodSummaryService @Inject()(connector: AmendHistoricFhlUkPiePeriodSummaryConnector)
+class AmendHistoricFhlUkPiePeriodSummaryService @Inject() (connector: AmendHistoricFhlUkPiePeriodSummaryConnector)
     extends DownstreamResponseMappingSupport
     with Logging {
 
-  def amend(request: AmendHistoricFhlUkPiePeriodSummaryRequest)(implicit hc: HeaderCarrier,
-                                                                ec: ExecutionContext,
-                                                                logContext: EndpointLogContext,
-                                                                correlationId: String): Future[ServiceOutcome[Unit]] = {
+  def amend(request: AmendHistoricFhlUkPiePeriodSummaryRequest)(implicit
+      hc: HeaderCarrier,
+      ec: ExecutionContext,
+      logContext: EndpointLogContext,
+      correlationId: String): Future[ServiceOutcome[Unit]] = {
 
     val result = for {
       downstreamResponseWrapper <- EitherT(connector.amend(request)).leftMap(mapDownstreamErrors(downstreamErrorMap))
@@ -62,4 +64,5 @@ class AmendHistoricFhlUkPiePeriodSummaryService @Inject()(connector: AmendHistor
       "SERVER_ERROR"                -> InternalError,
       "SERVICE_UNAVAILABLE"         -> InternalError
     )
+
 }

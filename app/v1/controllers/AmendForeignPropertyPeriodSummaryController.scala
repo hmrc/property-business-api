@@ -16,33 +16,35 @@
 
 package v1.controllers
 
+import api.models.audit.AuditEvent
 import cats.data.EitherT
 import cats.implicits._
-import javax.inject.{ Inject, Singleton }
-import play.api.libs.json.{ JsValue, Json }
-import play.api.mvc.{ Action, ControllerComponents }
+
+import javax.inject.{Inject, Singleton}
+import play.api.libs.json.{Json, JsValue}
+import play.api.mvc.{Action, ControllerComponents}
 import uk.gov.hmrc.http.HeaderCarrier
-import utils.{ IdGenerator, Logging }
+import utils.{IdGenerator, Logging}
 import v1.controllers.requestParsers.AmendForeignPropertyPeriodSummaryRequestParser
 import v1.hateoas.HateoasFactory
-import v1.models.audit.{ AmendForeignPropertyPeriodicAuditDetail, AuditEvent, AuditResponse }
+import v1.models.audit.{AmendForeignPropertyPeriodicAuditDetail, AuditResponse}
 import v1.models.errors._
 import v1.models.request.amendForeignPropertyPeriodSummary.AmendForeignPropertyPeriodSummaryRawData
 import v1.models.response.amendForeignPropertyPeriodSummary.AmendForeignPropertyPeriodSummaryHateoasData
 import v1.models.response.amendForeignPropertyPeriodSummary.AmendForeignPropertyPeriodSummaryResponse.AmendForeignPropertyLinksFactory
-import v1.services.{ AmendForeignPropertyPeriodSummaryService, AuditService, EnrolmentsAuthService, MtdIdLookupService }
+import v1.services.{AmendForeignPropertyPeriodSummaryService, AuditService, EnrolmentsAuthService, MtdIdLookupService}
 
-import scala.concurrent.{ ExecutionContext, Future }
+import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class AmendForeignPropertyPeriodSummaryController @Inject()(val authService: EnrolmentsAuthService,
-                                                            val lookupService: MtdIdLookupService,
-                                                            parser: AmendForeignPropertyPeriodSummaryRequestParser,
-                                                            service: AmendForeignPropertyPeriodSummaryService,
-                                                            auditService: AuditService,
-                                                            hateoasFactory: HateoasFactory,
-                                                            cc: ControllerComponents,
-                                                            idGenerator: IdGenerator)(implicit ec: ExecutionContext)
+class AmendForeignPropertyPeriodSummaryController @Inject() (val authService: EnrolmentsAuthService,
+                                                             val lookupService: MtdIdLookupService,
+                                                             parser: AmendForeignPropertyPeriodSummaryRequestParser,
+                                                             service: AmendForeignPropertyPeriodSummaryService,
+                                                             auditService: AuditService,
+                                                             hateoasFactory: HateoasFactory,
+                                                             cc: ControllerComponents,
+                                                             idGenerator: IdGenerator)(implicit ec: ExecutionContext)
     extends AuthorisedController(cc)
     with BaseController
     with Logging {
@@ -73,13 +75,14 @@ class AmendForeignPropertyPeriodSummaryController @Inject()(val authService: Enr
           val response = Json.toJson(vendorResponse)
 
           auditSubmission(
-            AmendForeignPropertyPeriodicAuditDetail(request.userDetails,
-                                                    nino,
-                                                    businessId,
-                                                    submissionId,
-                                                    request.body,
-                                                    serviceResponse.correlationId,
-                                                    AuditResponse(OK, Right(Some(response)))))
+            AmendForeignPropertyPeriodicAuditDetail(
+              request.userDetails,
+              nino,
+              businessId,
+              submissionId,
+              request.body,
+              serviceResponse.correlationId,
+              AuditResponse(OK, Right(Some(response)))))
 
           Ok(Json.toJson(vendorResponse))
             .withApiHeaders(serviceResponse.correlationId)
@@ -94,13 +97,14 @@ class AmendForeignPropertyPeriodSummaryController @Inject()(val authService: Enr
             s"Error response received with CorrelationId: $resCorrelationId")
 
         auditSubmission(
-          AmendForeignPropertyPeriodicAuditDetail(request.userDetails,
-                                                  nino,
-                                                  businessId,
-                                                  submissionId,
-                                                  request.body,
-                                                  correlationId,
-                                                  AuditResponse(result.header.status, Left(errorWrapper.auditErrors))))
+          AmendForeignPropertyPeriodicAuditDetail(
+            request.userDetails,
+            nino,
+            businessId,
+            submissionId,
+            request.body,
+            correlationId,
+            AuditResponse(result.header.status, Left(errorWrapper.auditErrors))))
 
         result
       }.merge
@@ -122,4 +126,5 @@ class AmendForeignPropertyPeriodSummaryController @Inject()(val authService: Enr
       AuditEvent("AmendForeignPropertyIncomeAndExpenditurePeriodSummary", "Amend-Foreign-Property-Income-And-Expenditure-Period-Summary", details)
     auditService.auditEvent(event)
   }
+
 }

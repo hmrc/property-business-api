@@ -16,39 +16,41 @@
 
 package v2.controllers
 
+import api.controllers.{AuthorisedController, BaseController, EndpointLogContext}
+import api.models.audit.{AuditEvent, AuditResponse, FlattenedGenericAuditDetail}
 import cats.data.EitherT
-import cats.implicits._
 import play.api.libs.json.Json
-import play.api.mvc.{ Action, AnyContent, ControllerComponents }
+import play.api.mvc.{Action, AnyContent, ControllerComponents}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.audit.http.connector.AuditResult
-import utils.{ IdGenerator, Logging }
-import v2.models.audit.{ AuditEvent, AuditResponse, FlattenedGenericAuditDetail }
+import utils.{IdGenerator, Logging}
 import v2.controllers.requestParsers.DeleteHistoricUkPropertyAnnualSubmissionRequestParser
 import v2.models.domain.HistoricPropertyType
-import v2.models.errors._
+import api.models.errors._
+import api.services.{AuditService, EnrolmentsAuthService, MtdIdLookupService}
 import v2.models.request.deleteHistoricUkPropertyAnnualSubmission.DeleteHistoricUkPropertyAnnualSubmissionRawData
-import v2.services.{ AuditService, DeleteHistoricUkPropertyAnnualSubmissionService, EnrolmentsAuthService, MtdIdLookupService }
+import v2.services.DeleteHistoricUkPropertyAnnualSubmissionService
 
-import javax.inject.{ Inject, Singleton }
-import scala.concurrent.{ ExecutionContext, Future }
+import javax.inject.{Inject, Singleton}
+import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class DeleteHistoricUkPropertyAnnualSubmissionController @Inject()(val authService: EnrolmentsAuthService,
-                                                                   val lookupService: MtdIdLookupService,
-                                                                   parser: DeleteHistoricUkPropertyAnnualSubmissionRequestParser,
-                                                                   service: DeleteHistoricUkPropertyAnnualSubmissionService,
-                                                                   auditService: AuditService,
-                                                                   cc: ControllerComponents,
-                                                                   idGenerator: IdGenerator)(implicit ec: ExecutionContext)
+class DeleteHistoricUkPropertyAnnualSubmissionController @Inject() (val authService: EnrolmentsAuthService,
+                                                                    val lookupService: MtdIdLookupService,
+                                                                    parser: DeleteHistoricUkPropertyAnnualSubmissionRequestParser,
+                                                                    service: DeleteHistoricUkPropertyAnnualSubmissionService,
+                                                                    auditService: AuditService,
+                                                                    cc: ControllerComponents,
+                                                                    idGenerator: IdGenerator)(implicit ec: ExecutionContext)
     extends AuthorisedController(cc)
     with BaseController
     with Logging {
 
   def handleFhlRequest(nino: String, taxYear: String): Action[AnyContent] = {
     implicit val endpointLogContext: EndpointLogContext = {
-      EndpointLogContext(controllerName = "DeleteHistoricUkPropertyAnnualSubmissionController",
-                         endpointName = "deleteHistoricFhlUkPropertyAnnualSubmission")
+      EndpointLogContext(
+        controllerName = "DeleteHistoricUkPropertyAnnualSubmissionController",
+        endpointName = "deleteHistoricFhlUkPropertyAnnualSubmission")
     }
 
     handleRequest(nino, taxYear, HistoricPropertyType.Fhl)
@@ -56,14 +58,15 @@ class DeleteHistoricUkPropertyAnnualSubmissionController @Inject()(val authServi
 
   def handleNonFhlRequest(nino: String, taxYear: String): Action[AnyContent] = {
     implicit val endpointLogContext: EndpointLogContext =
-      EndpointLogContext(controllerName = "DeleteHistoricUkPropertyAnnualSubmissionController",
-                         endpointName = "deleteHistoricNonFhlUkPropertyAnnualSubmission")
+      EndpointLogContext(
+        controllerName = "DeleteHistoricUkPropertyAnnualSubmissionController",
+        endpointName = "deleteHistoricNonFhlUkPropertyAnnualSubmission")
 
     handleRequest(nino, taxYear, HistoricPropertyType.NonFhl)
   }
 
-  def handleRequest(nino: String, taxYear: String, propertyType: HistoricPropertyType)(
-      implicit endpointLogContext: EndpointLogContext): Action[AnyContent] =
+  def handleRequest(nino: String, taxYear: String, propertyType: HistoricPropertyType)(implicit
+      endpointLogContext: EndpointLogContext): Action[AnyContent] =
     authorisedAction(nino).async { implicit request =>
       implicit val correlationId: String = idGenerator.getCorrelationId
       logger.info(
@@ -121,23 +124,28 @@ class DeleteHistoricUkPropertyAnnualSubmissionController @Inject()(val authServi
   private def errorResult(errorWrapper: ErrorWrapper)(implicit endpointLogContext: EndpointLogContext) =
     errorWrapper.error match {
       case _
-          if errorWrapper.containsAnyOf(NinoFormatError,
-                                        TaxYearFormatError,
-                                        RuleHistoricTaxYearNotSupportedError,
-                                        RuleTaxYearRangeInvalidError,
-                                        BadRequestError) =>
+          if errorWrapper.containsAnyOf(
+            NinoFormatError,
+            TaxYearFormatError,
+            RuleHistoricTaxYearNotSupportedError,
+            RuleTaxYearRangeInvalidError,
+            BadRequestError,
+            RuleIncorrectGovTestScenarioError
+          ) =>
         BadRequest(Json.toJson(errorWrapper))
       case InternalError => InternalServerError(Json.toJson(errorWrapper))
       case NotFoundError => NotFound(Json.toJson(errorWrapper))
       case _             => unhandledError(errorWrapper)
     }
 
-  private def auditSubmission(propertyType: String, details: FlattenedGenericAuditDetail)(implicit hc: HeaderCarrier,
-                                                                                          ec: ExecutionContext): Future[AuditResult] = {
+  private def auditSubmission(propertyType: String, details: FlattenedGenericAuditDetail)(implicit
+      hc: HeaderCarrier,
+      ec: ExecutionContext): Future[AuditResult] = {
 
     val auditType: String       = s"DeleteHistoric${propertyType}PropertyBusinessAnnualSubmission"
     val transactionName: String = s"DeleteHistoric${propertyType}PropertyBusinessAnnualSubmission"
     val event                   = AuditEvent(auditType, transactionName, details)
     auditService.auditEvent(event)
   }
+
 }

@@ -20,7 +20,7 @@ import play.api.libs.json.{ Json, OFormat }
 import shapeless.HNil
 import support.UnitSpec
 import utils.EmptinessChecker
-import v2.models.errors.RuleIncorrectOrEmptyBodyError
+import api.models.errors.RuleIncorrectOrEmptyBodyError
 import v2.models.utils.JsonErrorValidators
 
 class JsonFormatValidationSpec extends UnitSpec with JsonErrorValidators {

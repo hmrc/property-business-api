@@ -19,7 +19,7 @@ package v2.models.response.retrieveForeignPropertyAnnualSubmission
 import mocks.MockAppConfig
 import play.api.libs.json.Json
 import support.UnitSpec
-import v2.models.hateoas.{ Link, Method }
+import api.models.hateoas.{Link, Method}
 import v2.models.response.retrieveForeignPropertyAnnualSubmission.foreignFhlEea.{
   ForeignFhlEeaAdjustments,
   ForeignFhlEeaAllowances,

@@ -31,7 +31,7 @@ import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import routing.{ VersionRoutingMap, VersionRoutingRequestHandler }
 import support.UnitSpec
-import v2.models.errors.{ InvalidAcceptHeaderError, UnsupportedVersionError }
+import api.models.errors.{ InvalidAcceptHeaderError, UnsupportedVersionError }
 
 class VersionRoutingRequestHandlerSpec extends UnitSpec with Inside with MockAppConfig with GuiceOneAppPerSuite {
   test =>

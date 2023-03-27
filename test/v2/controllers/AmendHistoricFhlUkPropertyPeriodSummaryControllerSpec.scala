@@ -16,6 +16,7 @@
 
 package v2.controllers
 
+import api.controllers.ControllerBaseSpec
 import play.api.libs.json.{JsObject, Json}
 import play.api.mvc.Result
 import uk.gov.hmrc.http.HeaderCarrier
@@ -23,12 +24,13 @@ import v2.mocks.MockIdGenerator
 import v2.mocks.hateoas.MockHateoasFactory
 import v2.mocks.requestParsers.MockAmendHistoricFhlUkPiePeriodSummaryRequestParser
 import v2.mocks.services.{MockAmendHistoricFhlUkPropertyPeriodSummaryService, MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService}
-import v2.models.audit.{ AuditError, AuditEvent, AuditResponse, FlattenedGenericAuditDetail }
-import v2.models.domain.{Nino, PeriodId}
-import v2.models.auth.UserDetails
-import v2.models.errors._
-import v2.models.hateoas.HateoasWrapper
-import v2.models.outcomes.ResponseWrapper
+import v2.models.domain.PeriodId
+import api.models.errors._
+import api.models.audit.{AuditError, AuditEvent, AuditResponse, FlattenedGenericAuditDetail}
+import api.models.auth.UserDetails
+import api.models.domain.Nino
+import api.models.hateoas.HateoasWrapper
+import api.models.outcomes.ResponseWrapper
 import v2.models.request.amendHistoricFhlUkPiePeriodSummary._
 import v2.models.response.amendHistoricFhlUkPiePeriodSummary.AmendHistoricFhlUkPropertyPeriodSummaryHateoasData
 
@@ -176,7 +178,8 @@ class AmendHistoricFhlUkPropertyPeriodSummaryControllerSpec
             (PeriodIdFormatError, BAD_REQUEST),
             (NotFoundError, NOT_FOUND),
             (RuleBothExpensesSuppliedError, BAD_REQUEST),
-            (InternalError, INTERNAL_SERVER_ERROR)
+            (InternalError, INTERNAL_SERVER_ERROR),
+            (RuleIncorrectGovTestScenarioError, BAD_REQUEST)
           )
 
           input.foreach(args => (serviceErrors _).tupled(args))

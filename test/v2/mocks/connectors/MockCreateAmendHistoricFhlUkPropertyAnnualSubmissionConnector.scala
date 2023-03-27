@@ -19,7 +19,8 @@ package v2.mocks.connectors
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
 import uk.gov.hmrc.http.HeaderCarrier
-import v2.connectors.{ CreateAmendHistoricFhlUkPropertyAnnualSubmissionConnector, DownstreamOutcome }
+import api.connectors.{ DownstreamOutcome }
+import v2.connectors.CreateAmendHistoricFhlUkPropertyAnnualSubmissionConnector
 import v2.models.request.createAmendHistoricFhlUkPropertyAnnualSubmission.CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequest
 import v2.models.response.createAmendHistoricFhlUkPropertyAnnualSubmission.CreateAmendHistoricFhlUkPropertyAnnualSubmissionResponse
 

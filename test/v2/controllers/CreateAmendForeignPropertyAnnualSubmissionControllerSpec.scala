@@ -16,24 +16,21 @@
 
 package v2.controllers
 
-import play.api.libs.json.{ JsValue, Json }
+import api.controllers.ControllerBaseSpec
+import play.api.libs.json.{Json, JsValue}
 import play.api.mvc.Result
 import uk.gov.hmrc.http.HeaderCarrier
 import v2.mocks.MockIdGenerator
 import v2.mocks.hateoas.MockHateoasFactory
 import v2.mocks.requestParsers.MockCreateAmendForeignPropertyAnnualSubmissionRequestParser
-import v2.mocks.services.{
-  MockCreateAmendForeignPropertyAnnualSubmissionService,
-  MockAuditService,
-  MockEnrolmentsAuthService,
-  MockMtdIdLookupService
-}
-import v2.models.audit.{ AuditError, AuditEvent, AuditResponse, GenericAuditDetail }
-import v2.models.domain.{ Nino, TaxYear }
-import v2.models.errors._
-import v2.models.hateoas.Method.GET
-import v2.models.hateoas.{ HateoasWrapper, Link }
-import v2.models.outcomes.ResponseWrapper
+import v2.mocks.services.{MockAuditService, MockCreateAmendForeignPropertyAnnualSubmissionService, MockEnrolmentsAuthService, MockMtdIdLookupService}
+import api.models.audit.{AuditError, AuditEvent, AuditResponse, GenericAuditDetail}
+import v2.models.domain.TaxYear
+import api.models.domain.Nino
+import api.models.errors._
+import api.models.hateoas.Method.GET
+import api.models.hateoas.{HateoasWrapper, Link}
+import api.models.outcomes.ResponseWrapper
 import v2.models.request.createAmendForeignPropertyAnnualSubmission._
 import v2.models.response.createAmendForeignPropertyAnnualSubmission.CreateAmendForeignPropertyAnnualSubmissionHateoasData
 

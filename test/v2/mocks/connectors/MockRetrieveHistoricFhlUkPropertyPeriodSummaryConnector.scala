@@ -19,11 +19,12 @@ package v2.mocks.connectors
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
 import uk.gov.hmrc.http.HeaderCarrier
-import v2.connectors.{ DownstreamOutcome, RetrieveHistoricFhlUkPropertyPeriodSummaryConnector }
+import api.connectors.DownstreamOutcome
+import v2.connectors.RetrieveHistoricFhlUkPropertyPeriodSummaryConnector
 import v2.models.request.retrieveHistoricFhlUkPiePeriodSummary.RetrieveHistoricFhlUkPiePeriodSummaryRequest
 import v2.models.response.retrieveHistoricFhlUkPiePeriodSummary.RetrieveHistoricFhlUkPiePeriodSummaryResponse
 
-import scala.concurrent.{ ExecutionContext, Future }
+import scala.concurrent.{ExecutionContext, Future}
 
 trait MockRetrieveHistoricFhlUkPropertyPeriodSummaryConnector extends MockFactory {
 

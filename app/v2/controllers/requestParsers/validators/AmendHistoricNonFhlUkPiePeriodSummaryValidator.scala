@@ -16,20 +16,23 @@
 
 package v2.controllers.requestParsers.validators
 
+import api.controllers.requestParsers.validators.Validator
+import api.controllers.requestParsers.validators.validations.NinoValidation
+import api.models.errors.MtdError
 import config.AppConfig
 import v2.controllers.requestParsers.validators.validations.JsonFormatValidation.validateAndCheckNonEmptyOrRead
-import v2.controllers.requestParsers.validators.validations.{ ConsolidatedExpensesValidation, HistoricPeriodIdValidation, NinoValidation }
+import v2.controllers.requestParsers.validators.validations.{ConsolidatedExpensesValidation, HistoricPeriodIdValidation}
 import v2.controllers.requestParsers.validators.validations.NumberValidation.validateOptional
-import v2.models.errors.MtdError
 import v2.models.request.amendHistoricNonFhlUkPiePeriodSummary.{
   AmendHistoricNonFhlUkPiePeriodSummaryRawData,
   AmendHistoricNonFhlUkPiePeriodSummaryRequestBody
 }
 
-import javax.inject.{ Inject, Singleton }
+import javax.inject.{Inject, Singleton}
 
 @Singleton
-class AmendHistoricNonFhlUkPiePeriodSummaryValidator @Inject()(appConfig: AppConfig) extends Validator[AmendHistoricNonFhlUkPiePeriodSummaryRawData] {
+class AmendHistoricNonFhlUkPiePeriodSummaryValidator @Inject() (appConfig: AppConfig)
+    extends Validator[AmendHistoricNonFhlUkPiePeriodSummaryRawData] {
 
   lazy private val minTaxYear = appConfig.minimumTaxHistoric
   lazy private val maxTaxYear = appConfig.maximumTaxHistoric
@@ -88,4 +91,5 @@ class AmendHistoricNonFhlUkPiePeriodSummaryValidator @Inject()(appConfig: AppCon
 
     errorsResult(incomeFormatErrors ++ expensesFormatErrors ++ bothExpensesErrors)
   }
+
 }

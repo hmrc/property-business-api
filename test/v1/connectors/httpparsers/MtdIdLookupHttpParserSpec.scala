@@ -22,7 +22,7 @@ import play.api.test.Helpers.{ FORBIDDEN, INTERNAL_SERVER_ERROR, OK, UNAUTHORIZE
 import support.UnitSpec
 import uk.gov.hmrc.http.HttpResponse
 import v1.connectors.MtdIdLookupOutcome
-import v1.connectors.httpparsers.MtdIdLookupHttpParser.mtdIdLookupHttpReads
+import MtdIdLookupHttpParser.mtdIdLookupHttpReads
 import v1.models.errors.{ DownstreamError, InvalidBearerTokenError, NinoFormatError }
 
 class MtdIdLookupHttpParserSpec extends UnitSpec {

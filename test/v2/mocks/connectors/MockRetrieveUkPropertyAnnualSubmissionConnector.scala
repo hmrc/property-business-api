@@ -19,11 +19,12 @@ package v2.mocks.connectors
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
 import uk.gov.hmrc.http.HeaderCarrier
-import v2.connectors.RetrieveUkPropertyAnnualSubmissionConnector._
-import v2.connectors.{ DownstreamOutcome, RetrieveUkPropertyAnnualSubmissionConnector }
+import api.connectors.DownstreamOutcome
+import v2.connectors.RetrieveUkPropertyAnnualSubmissionConnector
 import v2.models.request.retrieveUkPropertyAnnualSubmission.RetrieveUkPropertyAnnualSubmissionRequest
+import v2.connectors.RetrieveUkPropertyAnnualSubmissionConnector._
 
-import scala.concurrent.{ ExecutionContext, Future }
+import scala.concurrent.{ExecutionContext, Future}
 
 trait MockRetrieveUkPropertyAnnualSubmissionConnector extends MockFactory {
 
@@ -36,5 +37,7 @@ trait MockRetrieveUkPropertyAnnualSubmissionConnector extends MockFactory {
         .retrieveUkProperty(_: RetrieveUkPropertyAnnualSubmissionRequest)(_: HeaderCarrier, _: ExecutionContext, _: String))
         .expects(requestData, *, *, *)
     }
+
   }
+
 }

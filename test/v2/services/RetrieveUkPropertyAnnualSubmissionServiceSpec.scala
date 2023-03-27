@@ -19,11 +19,12 @@ package v2.services
 import support.UnitSpec
 import uk.gov.hmrc.http.HeaderCarrier
 import v2.connectors.RetrieveUkPropertyAnnualSubmissionConnector._
-import v2.controllers.EndpointLogContext
+import api.controllers.EndpointLogContext
 import v2.mocks.connectors.MockRetrieveUkPropertyAnnualSubmissionConnector
-import v2.models.domain.{ Nino, TaxYear }
-import v2.models.errors._
-import v2.models.outcomes.ResponseWrapper
+import v2.models.domain.TaxYear
+import api.models.domain.Nino
+import api.models.errors._
+import api.models.outcomes.ResponseWrapper
 import v2.models.request.retrieveUkPropertyAnnualSubmission.RetrieveUkPropertyAnnualSubmissionRequest
 import v2.models.response.retrieveUkPropertyAnnualSubmission.RetrieveUkPropertyAnnualSubmissionResponse
 import v2.models.response.retrieveUkPropertyAnnualSubmission.ukFhlProperty.UkFhlProperty

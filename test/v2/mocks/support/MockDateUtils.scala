@@ -16,9 +16,9 @@
 
 package v2.mocks.support
 
+import api.support.DateUtils
 import org.scalamock.handlers.CallHandler0
 import org.scalamock.scalatest.MockFactory
-import v2.support.DateUtils
 
 trait MockDateUtils extends MockFactory {
   val mockDateUtils: DateUtils = mock[DateUtils]

@@ -16,18 +16,21 @@
 
 package v2.controllers.requestParsers
 
+import api.controllers.requestParsers.RequestParser
+import api.models.domain.Nino
 import v2.controllers.requestParsers.validators.RetrieveHistoricFhlUkPropertyPeriodSummaryValidator
 
 import javax.inject.Inject
-import v2.models.domain.{ Nino, PeriodId }
+import v2.models.domain.PeriodId
 import v2.models.request.retrieveHistoricFhlUkPiePeriodSummary.{
   RetrieveHistoricFhlUkPiePeriodSummaryRawData,
   RetrieveHistoricFhlUkPiePeriodSummaryRequest
 }
 
-class RetrieveHistoricFhlUkPropertyPeriodSummaryRequestParser @Inject()(val validator: RetrieveHistoricFhlUkPropertyPeriodSummaryValidator)
+class RetrieveHistoricFhlUkPropertyPeriodSummaryRequestParser @Inject() (val validator: RetrieveHistoricFhlUkPropertyPeriodSummaryValidator)
     extends RequestParser[RetrieveHistoricFhlUkPiePeriodSummaryRawData, RetrieveHistoricFhlUkPiePeriodSummaryRequest] {
 
   override protected def requestFor(data: RetrieveHistoricFhlUkPiePeriodSummaryRawData): RetrieveHistoricFhlUkPiePeriodSummaryRequest =
     RetrieveHistoricFhlUkPiePeriodSummaryRequest(Nino(data.nino), PeriodId(data.periodId))
+
 }

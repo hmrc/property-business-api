@@ -16,22 +16,21 @@
 
 package v2.controllers
 
+import api.controllers.ControllerBaseSpec
 import play.api.libs.json.Json
 import play.api.mvc.Result
 import uk.gov.hmrc.http.HeaderCarrier
-import v2.models.audit.{ AuditError, AuditEvent, AuditResponse, FlattenedGenericAuditDetail }
 import v2.mocks.MockIdGenerator
 import v2.mocks.requestParsers.MockDeleteHistoricUkPropertyAnnualSubmissionRequestParser
-import v2.mocks.services.{ MockAuditService, MockDeleteHistoricUkPropertyAnnualSubmissionService, MockEnrolmentsAuthService, MockMtdIdLookupService }
-import v2.models.auth.UserDetails
-import v2.models.domain.HistoricPropertyType.{ Fhl, NonFhl }
-import v2.models.domain.{ HistoricPropertyType, Nino, TaxYear }
-import v2.models.errors._
-import v2.models.outcomes.ResponseWrapper
-import v2.models.request.deleteHistoricUkPropertyAnnualSubmission.{
-  DeleteHistoricUkPropertyAnnualSubmissionRawData,
-  DeleteHistoricUkPropertyAnnualSubmissionRequest
-}
+import v2.mocks.services.{MockAuditService, MockDeleteHistoricUkPropertyAnnualSubmissionService, MockEnrolmentsAuthService, MockMtdIdLookupService}
+import v2.models.domain.HistoricPropertyType.{Fhl, NonFhl}
+import v2.models.domain.{HistoricPropertyType, TaxYear}
+import api.models.errors._
+import api.models.audit.{AuditError, AuditEvent, AuditResponse, FlattenedGenericAuditDetail}
+import api.models.auth.UserDetails
+import api.models.domain.Nino
+import api.models.outcomes.ResponseWrapper
+import v2.models.request.deleteHistoricUkPropertyAnnualSubmission.{DeleteHistoricUkPropertyAnnualSubmissionRawData, DeleteHistoricUkPropertyAnnualSubmissionRequest}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future

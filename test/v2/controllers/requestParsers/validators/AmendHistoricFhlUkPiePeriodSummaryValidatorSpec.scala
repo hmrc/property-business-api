@@ -19,7 +19,7 @@ package v2.controllers.requestParsers.validators
 import mocks.MockAppConfig
 import play.api.libs.json.{ JsObject, JsValue, Json }
 import support.UnitSpec
-import v2.models.errors.{ NinoFormatError, PeriodIdFormatError, RuleIncorrectOrEmptyBodyError, ValueFormatError }
+import api.models.errors.{ NinoFormatError, PeriodIdFormatError, RuleIncorrectOrEmptyBodyError, ValueFormatError }
 import v2.models.request.amendHistoricFhlUkPiePeriodSummary.AmendHistoricFhlUkPiePeriodSummaryRawData
 import v2.models.utils.JsonErrorValidators
 

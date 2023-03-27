@@ -19,12 +19,12 @@ package v2.endpoints
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import play.api.http.HeaderNames.ACCEPT
 import play.api.http.Status
-import play.api.libs.json.{ JsValue, Json }
-import play.api.libs.ws.{ WSRequest, WSResponse }
+import play.api.libs.json.{JsValue, Json}
+import play.api.libs.ws.{WSRequest, WSResponse}
 import play.api.test.Helpers.AUTHORIZATION
 import support.V2IntegrationBaseSpec
-import v2.models.errors.{ InternalError, MtdError, NinoFormatError, NotFoundError, PeriodIdFormatError }
-import v2.stubs.{ AuditStub, AuthStub, DownstreamStub, MtdIdLookupStub }
+import api.models.errors.{InternalError, MtdError, NinoFormatError, NotFoundError, PeriodIdFormatError}
+import v2.stubs.{AuditStub, AuthStub, DownstreamStub, MtdIdLookupStub}
 
 class RetrieveHistoricNonFhlUkPiePeriodSummaryControllerISpec extends V2IntegrationBaseSpec {
 
@@ -141,6 +141,7 @@ class RetrieveHistoricNonFhlUkPiePeriodSummaryControllerISpec extends V2Integrat
          |  "reason": "error message from downstream"
          |}
        """.stripMargin
+
   }
 
   "calling the retrieve UK historic non-FHL property income and expenses period summary endpoint" should {
@@ -186,7 +187,7 @@ class RetrieveHistoricNonFhlUkPiePeriodSummaryControllerISpec extends V2Integrat
 
         val input = Seq(
           ("AA123", "2020-01-01_2020-01-31", Status.BAD_REQUEST, NinoFormatError),
-          ("AA123456A", "2020-01-31_2020-01-01", Status.BAD_REQUEST, PeriodIdFormatError),
+          ("AA123456A", "2020-01-31_2020-01-01", Status.BAD_REQUEST, PeriodIdFormatError)
         )
         input.foreach(args => (validationErrorTest _).tupled(args))
       }
@@ -222,4 +223,5 @@ class RetrieveHistoricNonFhlUkPiePeriodSummaryControllerISpec extends V2Integrat
       }
     }
   }
+
 }

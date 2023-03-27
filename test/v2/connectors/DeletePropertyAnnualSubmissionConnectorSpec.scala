@@ -16,9 +16,11 @@
 
 package v2.connectors
 
-import v2.models.domain.{ Nino, TaxYear }
-import v2.models.errors.{ DownstreamErrorCode, DownstreamErrors }
-import v2.models.outcomes.ResponseWrapper
+import api.connectors.{ConnectorSpec, DownstreamOutcome}
+import v2.models.domain.TaxYear
+import api.models.domain.Nino
+import api.models.errors.{DownstreamErrorCode, DownstreamErrors}
+import api.models.outcomes.ResponseWrapper
 import v2.models.request.deletePropertyAnnualSubmission.DeletePropertyAnnualSubmissionRequest
 
 import scala.concurrent.Future

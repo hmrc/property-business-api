@@ -16,7 +16,7 @@
 
 package v2.controllers.requestParsers.validators.validations
 
-import v2.models.errors.{ MtdError, RuleBothAllowancesSuppliedError }
+import api.models.errors.{MtdError, RuleBothAllowancesSuppliedError}
 import v2.models.request.createAmendForeignPropertyAnnualSubmission.foreignFhlEea.ForeignFhlEeaAllowances
 import v2.models.request.createAmendForeignPropertyAnnualSubmission.foreignNonFhl.ForeignNonFhlAllowances
 import v2.models.request.amendUkPropertyAnnualSubmission.ukFhlProperty.UkFhlPropertyAllowances

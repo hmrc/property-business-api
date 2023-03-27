@@ -16,35 +16,32 @@
 
 package v2.controllers
 
+import api.controllers.ControllerBaseSpec
+import api.models.hateoas.Method.GET
+import api.models.domain.Nino
+import api.models.errors._
+import api.models.audit.{AuditError, AuditEvent, AuditResponse, FlattenedGenericAuditDetail}
+import api.models.auth.UserDetails
+import api.models.hateoas.{HateoasWrapper, Link}
+import api.models.outcomes.ResponseWrapper
 import fixtures.CreateAmendNonFhlUkPropertyAnnualSubmission.RequestResponseModelFixtures
-import play.api.libs.json.{ JsValue, Json }
+import play.api.libs.json.{Json, JsValue}
 import play.api.mvc.Result
 import uk.gov.hmrc.http.HeaderCarrier
 import v2.mocks.MockIdGenerator
 import v2.mocks.hateoas.MockHateoasFactory
 import v2.mocks.requestParsers.MockCreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestParser
-import v2.mocks.services.{ MockCreateAmendHistoricNonFhlUkPropertyAnnualSubmissionService, MockEnrolmentsAuthService, MockMtdIdLookupService, MockAuditService }
-import v2.models.domain.{ Nino, TaxYear }
-import v2.models.errors._
-import v2.models.audit.{ AuditError, AuditEvent, AuditResponse, FlattenedGenericAuditDetail }
-import v2.models.auth.UserDetails
-import v2.models.hateoas.Method.GET
-import v2.models.hateoas.{ HateoasWrapper, Link }
-import v2.models.outcomes.ResponseWrapper
-import v2.models.request.createAmendHistoricNonFhlUkPropertyAnnualSubmission.{
-  CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRawData,
-  CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequest
-}
-import v2.models.response.createAmendHistoricNonFhlUkPropertyAnnualSubmission.{
-  CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionHateoasData,
-  CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionResponse
-}
+import v2.mocks.services.{MockAuditService, MockCreateAmendHistoricNonFhlUkPropertyAnnualSubmissionService, MockEnrolmentsAuthService, MockMtdIdLookupService}
+import v2.models.domain.TaxYear
+import v2.models.request.createAmendHistoricNonFhlUkPropertyAnnualSubmission.{CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRawData, CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequest}
+import v2.models.response.createAmendHistoricNonFhlUkPropertyAnnualSubmission.{CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionHateoasData, CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionResponse}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionControllerSpec
-    extends ControllerBaseSpec with MockAuditService
+    extends ControllerBaseSpec
+    with MockAuditService
     with MockEnrolmentsAuthService
     with MockMtdIdLookupService
     with MockCreateAmendHistoricNonFhlUkPropertyAnnualSubmissionService
@@ -121,8 +118,9 @@ class CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionControllerSpec
           .returns(Future.successful(Right(ResponseWrapper(correlationId, CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionResponse(None)))))
 
         MockHateoasFactory
-          .wrap(CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionResponse(None),
-                CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionHateoasData(nino, taxYear))
+          .wrap(
+            CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionResponse(None),
+            CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionHateoasData(nino, taxYear))
           .returns(HateoasWrapper(CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionResponse(None), Seq(testHateoasLink)))
 
         val result: Future[Result] = controller.handleRequest(nino, taxYear)(fakeRequestWithBody(validMtdJson))
@@ -160,15 +158,16 @@ class CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionControllerSpec
           (TaxYearFormatError, BAD_REQUEST),
           (RuleHistoricTaxYearNotSupportedError, BAD_REQUEST),
           (RuleTaxYearRangeInvalidError, BAD_REQUEST),
-          (ValueFormatError.copy(
-             paths = Some(
-               List(
-                 "/annualAdjustments/lossBroughtForward",
-                 "/annualAdjustments/balancingCharge",
-                 "annualAllowances/annualInvestmentAllowance"
-               ))
-           ),
-           BAD_REQUEST),
+          (
+            ValueFormatError.copy(
+              paths = Some(
+                List(
+                  "/annualAdjustments/lossBroughtForward",
+                  "/annualAdjustments/balancingCharge",
+                  "annualAllowances/annualInvestmentAllowance"
+                ))
+            ),
+            BAD_REQUEST),
           (RuleIncorrectOrEmptyBodyError, BAD_REQUEST)
         )
 
@@ -211,4 +210,5 @@ class CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionControllerSpec
       }
     }
   }
+
 }

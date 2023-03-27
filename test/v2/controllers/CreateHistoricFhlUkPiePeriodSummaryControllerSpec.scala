@@ -16,20 +16,22 @@
 
 package v2.controllers
 
-import play.api.libs.json.{JsValue, Json}
+import api.controllers.ControllerBaseSpec
+import play.api.libs.json.{Json, JsValue}
 import play.api.mvc.Result
 import uk.gov.hmrc.http.HeaderCarrier
 import v2.mocks.MockIdGenerator
 import v2.mocks.hateoas.MockHateoasFactory
 import v2.mocks.requestParsers.MockCreateHistoricFhlUkPiePeriodSummaryRequestParser
 import v2.mocks.services.{MockAuditService, MockCreateHistoricFhlUkPiePeriodSummaryService, MockEnrolmentsAuthService, MockMtdIdLookupService}
-import v2.models.audit.{AuditError, AuditEvent, AuditResponse, FlattenedGenericAuditDetail}
-import v2.models.auth.UserDetails
-import v2.models.domain.{Nino, PeriodId}
-import v2.models.errors.{ErrorWrapper, FromDateFormatError, InternalError, MtdError, NinoFormatError, NotFoundError, RuleBothExpensesSuppliedError, RuleDuplicateSubmissionError, RuleIncorrectGovTestScenarioError, RuleIncorrectOrEmptyBodyError, RuleMisalignedPeriodError, RuleNotContiguousPeriodError, RuleOverlappingPeriodError, RuleTaxYearNotSupportedError, RuleToDateBeforeFromDateError, ServiceUnavailableError, ToDateFormatError, ValueFormatError}
-import v2.models.hateoas.Method.GET
-import v2.models.hateoas.{HateoasWrapper, Link}
-import v2.models.outcomes.ResponseWrapper
+import v2.models.domain.PeriodId
+import api.models.errors.{ErrorWrapper, FromDateFormatError, InternalError, MtdError, NinoFormatError, NotFoundError, RuleBothExpensesSuppliedError, RuleDuplicateSubmissionError, RuleIncorrectGovTestScenarioError, RuleIncorrectOrEmptyBodyError, RuleMisalignedPeriodError, RuleNotContiguousPeriodError, RuleOverlappingPeriodError, RuleTaxYearNotSupportedError, RuleToDateBeforeFromDateError, ServiceUnavailableError, ToDateFormatError, ValueFormatError}
+import api.models.hateoas.Method.GET
+import api.models.audit.{AuditError, AuditEvent, AuditResponse, FlattenedGenericAuditDetail}
+import api.models.auth.UserDetails
+import api.models.domain.Nino
+import api.models.hateoas.{HateoasWrapper, Link}
+import api.models.outcomes.ResponseWrapper
 import v2.models.request.createHistoricFhlUkPiePeriodSummary.{CreateHistoricFhlUkPiePeriodSummaryRawData, CreateHistoricFhlUkPiePeriodSummaryRequest, CreateHistoricFhlUkPiePeriodSummaryRequestBody}
 import v2.models.response.createHistoricFhlUkPiePeriodSummary.{CreateHistoricFhlUkPiePeriodSummaryHateoasData, CreateHistoricFhlUkPiePeriodSummaryResponse}
 
@@ -83,7 +85,8 @@ class CreateHistoricFhlUkPiePeriodSummaryControllerSpec
     MockedEnrolmentsAuthService.authoriseUser()
     MockIdGenerator.getCorrelationId.returns(correlationId)
 
-    private val hateoasLinks: Seq[Link]  = Seq(Link(href = "/the-link/", method = GET, rel = "the-rel"))
+    private val hateoasLinks: Seq[Link] = Seq(Link(href = "/the-link/", method = GET, rel = "the-rel"))
+
     private val hateoasResponse: JsValue = Json.parse(s"""
          |{
          |  "links":[{
@@ -212,6 +215,7 @@ class CreateHistoricFhlUkPiePeriodSummaryControllerSpec
         }
       }
     }
+
   }
 
 }

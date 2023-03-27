@@ -16,7 +16,7 @@
 
 package v1.models.request.createForeignPropertyPeriodSummary
 
+import api.models.request.RawData
 import play.api.libs.json.JsValue
-import v1.models.request.RawData
 
 case class CreateForeignPropertyPeriodSummaryRawData(nino: String, businessId: String, body: JsValue) extends RawData

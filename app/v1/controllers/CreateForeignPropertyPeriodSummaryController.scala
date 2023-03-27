@@ -16,17 +16,19 @@
 
 package v1.controllers
 
+import api.models.audit.AuditEvent
 import cats.data.EitherT
 import cats.implicits._
+
 import javax.inject.{Inject, Singleton}
 import play.api.http.MimeTypes
-import play.api.libs.json.{JsValue, Json}
+import play.api.libs.json.{Json, JsValue}
 import play.api.mvc.{Action, ControllerComponents}
 import uk.gov.hmrc.http.HeaderCarrier
 import utils.{IdGenerator, Logging}
 import v1.controllers.requestParsers.CreateForeignPropertyPeriodSummaryRequestParser
 import v1.hateoas.HateoasFactory
-import v1.models.audit.{AuditEvent, AuditResponse, CreateForeignPropertyPeriodicAuditDetail}
+import v1.models.audit.{AuditResponse, CreateForeignPropertyPeriodicAuditDetail}
 import v1.models.errors._
 import v1.models.request.createForeignPropertyPeriodSummary.CreateForeignPropertyPeriodSummaryRawData
 import v1.models.response.createForeignPropertyPeriodSummary.CreateForeignPropertyPeriodSummaryHateoasData

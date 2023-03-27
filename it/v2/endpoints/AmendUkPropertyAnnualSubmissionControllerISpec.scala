@@ -16,15 +16,34 @@
 
 package v2.endpoints
 
+import api.models.errors.{
+  BadRequestError,
+  BusinessIdFormatError,
+  DateFormatError,
+  ErrorWrapper,
+  InternalError,
+  MtdError,
+  NinoFormatError,
+  NotFoundError,
+  RuleBothAllowancesSuppliedError,
+  RuleBuildingNameNumberError,
+  RuleIncorrectOrEmptyBodyError,
+  RulePropertyIncomeAllowanceError,
+  RuleTaxYearNotSupportedError,
+  RuleTaxYearRangeInvalidError,
+  RuleTypeOfBusinessIncorrectError,
+  StringFormatError,
+  TaxYearFormatError,
+  ValueFormatError
+}
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import play.api.http.HeaderNames.ACCEPT
 import play.api.http.Status._
-import play.api.libs.json.{ JsObject, JsValue, Json }
-import play.api.libs.ws.{ WSRequest, WSResponse }
+import play.api.libs.json.{JsObject, Json, JsValue}
+import play.api.libs.ws.{WSRequest, WSResponse}
 import play.api.test.Helpers.AUTHORIZATION
 import support.V2IntegrationBaseSpec
-import v2.models.errors._
-import v2.stubs.{ AuditStub, AuthStub, DownstreamStub, MtdIdLookupStub }
+import v2.stubs.{AuditStub, AuthStub, DownstreamStub, MtdIdLookupStub}
 
 class AmendUkPropertyAnnualSubmissionControllerISpec extends V2IntegrationBaseSpec {
 
@@ -155,6 +174,7 @@ class AmendUkPropertyAnnualSubmissionControllerISpec extends V2IntegrationBaseSp
          |  "reason": "ifs message"
          |}
        """.stripMargin
+
   }
 
   private trait NonTysTest extends Test {
@@ -330,7 +350,7 @@ class AmendUkPropertyAnnualSubmissionControllerISpec extends V2IntegrationBaseSp
                 "/ukNonFhlProperty/allowances/enhancedStructuredBuildingAllowance/0/building/number",
                 "/ukNonFhlProperty/allowances/enhancedStructuredBuildingAllowance/0/building/postcode"
               ))
-          ),
+          )
         )
 
         val wrappedErrors: ErrorWrapper = ErrorWrapper(
@@ -938,4 +958,5 @@ class AmendUkPropertyAnnualSubmissionControllerISpec extends V2IntegrationBaseSp
       }
     }
   }
+
 }

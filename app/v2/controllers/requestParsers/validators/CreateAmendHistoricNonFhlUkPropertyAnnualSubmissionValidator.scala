@@ -15,12 +15,15 @@
  */
 
 package v2.controllers.requestParsers.validators
+
+import api.controllers.requestParsers.validators.Validator
+import api.controllers.requestParsers.validators.validations.NinoValidation
 import com.google.inject.Inject
 import config.AppConfig
 import v2.controllers.requestParsers.validators.validations.JsonFormatValidation.validateAndCheckNonEmptyOrRead
-import v2.controllers.requestParsers.validators.validations.NumberValidation.{ validateOptional => optionalNumber }
-import v2.controllers.requestParsers.validators.validations.{ NinoValidation, TaxYearValidation }
-import v2.models.errors.MtdError
+import v2.controllers.requestParsers.validators.validations.NumberValidation.{validateOptional => optionalNumber}
+import v2.controllers.requestParsers.validators.validations.TaxYearValidation
+import api.models.errors.MtdError
 import v2.models.request.createAmendHistoricNonFhlUkPropertyAnnualSubmission.{
   CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRawData,
   CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestBody
@@ -29,7 +32,7 @@ import v2.models.request.createAmendHistoricNonFhlUkPropertyAnnualSubmission.{
 import javax.inject.Singleton
 
 @Singleton
-class CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionValidator @Inject()(appConfig: AppConfig)
+class CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionValidator @Inject() (appConfig: AppConfig)
     extends Validator[CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRawData] {
 
   lazy private val minTaxYear = appConfig.minimumTaxHistoric
@@ -59,8 +62,9 @@ class CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionValidator @Inject()(app
         optionalNumber(lossBroughtForward, "/annualAdjustments/lossBroughtForward") ++
           optionalNumber(privateUseAdjustment, "/annualAdjustments/privateUseAdjustment") ++
           optionalNumber(balancingCharge, "/annualAdjustments/balancingCharge") ++
-          optionalNumber(businessPremisesRenovationAllowanceBalancingCharges,
-                         "/annualAdjustments/businessPremisesRenovationAllowanceBalancingCharges")
+          optionalNumber(
+            businessPremisesRenovationAllowanceBalancingCharges,
+            "/annualAdjustments/businessPremisesRenovationAllowanceBalancingCharges")
       }
       .getOrElse(Nil)
 
@@ -79,4 +83,5 @@ class CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionValidator @Inject()(app
 
     errorsResult(annualAdjustmentErrors ++ annualAllowanceErrors)
   }
+
 }

@@ -16,8 +16,10 @@
 
 package v2.controllers.requestParsers
 
+import api.controllers.requestParsers.RequestParser
+import api.models.domain.Nino
 import v2.controllers.requestParsers.validators.DeleteHistoricUkPropertyAnnualSubmissionValidator
-import v2.models.domain.{ Nino, TaxYear }
+import v2.models.domain.TaxYear
 import v2.models.request.deleteHistoricUkPropertyAnnualSubmission.{
   DeleteHistoricUkPropertyAnnualSubmissionRawData,
   DeleteHistoricUkPropertyAnnualSubmissionRequest
@@ -25,8 +27,10 @@ import v2.models.request.deleteHistoricUkPropertyAnnualSubmission.{
 
 import javax.inject.Inject
 
-class DeleteHistoricUkPropertyAnnualSubmissionRequestParser @Inject()(val validator: DeleteHistoricUkPropertyAnnualSubmissionValidator)
+class DeleteHistoricUkPropertyAnnualSubmissionRequestParser @Inject() (val validator: DeleteHistoricUkPropertyAnnualSubmissionValidator)
     extends RequestParser[DeleteHistoricUkPropertyAnnualSubmissionRawData, DeleteHistoricUkPropertyAnnualSubmissionRequest] {
+
   override protected def requestFor(data: DeleteHistoricUkPropertyAnnualSubmissionRawData): DeleteHistoricUkPropertyAnnualSubmissionRequest =
     DeleteHistoricUkPropertyAnnualSubmissionRequest(Nino(data.nino), TaxYear.fromMtd(data.taxYear), data.propertyType)
+
 }

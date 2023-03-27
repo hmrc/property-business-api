@@ -19,7 +19,7 @@ package v2.controllers.requestParsers.validators.validations
 import org.scalacheck.Arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckDrivenPropertyChecks
 import support.UnitSpec
-import v2.models.errors.ValueFormatError
+import api.models.errors.ValueFormatError
 
 class NumberValidationSpec extends UnitSpec with ScalaCheckDrivenPropertyChecks {
   val path = "/some/path"

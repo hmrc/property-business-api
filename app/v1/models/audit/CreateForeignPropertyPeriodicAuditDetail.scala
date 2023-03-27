@@ -16,8 +16,8 @@
 
 package v1.models.audit
 
+import api.models.auth.UserDetails
 import play.api.libs.json.{ JsValue, Json, Writes }
-import v1.models.auth.UserDetails
 
 case class CreateForeignPropertyPeriodicAuditDetail(userType: String,
                                                     agentReferenceNumber: Option[String],

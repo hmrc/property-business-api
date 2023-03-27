@@ -16,21 +16,20 @@
 
 package v2.controllers.requestParsers.validators
 
+import api.controllers.requestParsers.validators.Validator
+import api.controllers.requestParsers.validators.validations.{NinoValidation, ToDateBeforeFromDateValidation}
 import com.google.inject.Inject
 import config.AppConfig
 import v2.controllers.requestParsers.validators.validations.JsonFormatValidation.validateAndCheckNonEmptyOrRead
 import v2.controllers.requestParsers.validators.validations.NumberValidation.validateOptional
 import v2.controllers.requestParsers.validators.validations._
-import v2.models.errors.MtdError
-import v2.models.request.createHistoricNonFhlUkPropertyPeriodSummary.{
-  CreateHistoricNonFhlUkPropertyPeriodSummaryRawData,
-  CreateHistoricNonFhlUkPropertyPeriodSummaryRequestBody
-}
+import api.models.errors.MtdError
+import v2.models.request.createHistoricNonFhlUkPropertyPeriodSummary.{CreateHistoricNonFhlUkPropertyPeriodSummaryRawData, CreateHistoricNonFhlUkPropertyPeriodSummaryRequestBody}
 
 import javax.inject.Singleton
 
 @Singleton
-class CreateHistoricNonFhlUkPropertyPeriodSummaryValidator @Inject()(appConfig: AppConfig)
+class CreateHistoricNonFhlUkPropertyPeriodSummaryValidator @Inject() (appConfig: AppConfig)
     extends Validator[CreateHistoricNonFhlUkPropertyPeriodSummaryRawData] {
 
   override def validate(data: CreateHistoricNonFhlUkPropertyPeriodSummaryRawData): List[MtdError] = {
@@ -94,4 +93,5 @@ class CreateHistoricNonFhlUkPropertyPeriodSummaryValidator @Inject()(appConfig: 
 
     errorsResult(formatDateErrors ++ ruleDateErrors ++ incomeFormatErrors ++ expensesFormatErrors ++ bothExpensesErrors)
   }
+
 }

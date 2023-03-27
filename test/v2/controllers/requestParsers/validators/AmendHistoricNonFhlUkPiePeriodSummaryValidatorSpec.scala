@@ -20,7 +20,7 @@ import fixtures.AmendHistoricNonFhlUkPiePeriodSummary.AmendHistoricNonFhlUkPiePe
 import mocks.MockAppConfig
 import play.api.libs.json.JsObject
 import support.UnitSpec
-import v2.models.errors.{ NinoFormatError, PeriodIdFormatError, RuleIncorrectOrEmptyBodyError, ValueFormatError }
+import api.models.errors.{ NinoFormatError, PeriodIdFormatError, RuleIncorrectOrEmptyBodyError, ValueFormatError }
 import v2.models.request.amendHistoricNonFhlUkPiePeriodSummary.AmendHistoricNonFhlUkPiePeriodSummaryRawData
 import v2.models.utils.JsonErrorValidators
 

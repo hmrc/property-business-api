@@ -19,10 +19,11 @@ package v2.mocks.connectors
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
 import uk.gov.hmrc.http.HeaderCarrier
-import v2.connectors.{ DeleteHistoricUkPropertyAnnualSubmissionConnector, DownstreamOutcome }
+import api.connectors.{DownstreamOutcome}
+import v2.connectors.DeleteHistoricUkPropertyAnnualSubmissionConnector
 import v2.models.request.deleteHistoricUkPropertyAnnualSubmission.DeleteHistoricUkPropertyAnnualSubmissionRequest
 
-import scala.concurrent.{ ExecutionContext, Future }
+import scala.concurrent.{ExecutionContext, Future}
 
 trait MockDeleteHistoricUkPropertyAnnualSubmissionConnector extends MockFactory {
 

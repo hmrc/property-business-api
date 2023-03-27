@@ -18,7 +18,7 @@ package v2.controllers.requestParsers.validators
 
 import mocks.MockAppConfig
 import support.UnitSpec
-import v2.models.errors.{ BusinessIdFormatError, NinoFormatError, RuleTaxYearNotSupportedError, RuleTaxYearRangeInvalidError, TaxYearFormatError }
+import api.models.errors.{ BusinessIdFormatError, NinoFormatError, RuleTaxYearNotSupportedError, RuleTaxYearRangeInvalidError, TaxYearFormatError }
 import v2.models.request.deletePropertyAnnualSubmission.DeletePropertyAnnualSubmissionRawData
 
 class DeletePropertyAnnualSubmissionValidatorSpec extends UnitSpec with MockAppConfig {

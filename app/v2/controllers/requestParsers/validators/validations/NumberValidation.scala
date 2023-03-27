@@ -16,7 +16,7 @@
 
 package v2.controllers.requestParsers.validators.validations
 
-import v2.models.errors.{ ValueFormatError, MtdError }
+import api.models.errors.{MtdError, ValueFormatError}
 
 object NumberValidation {
 

@@ -17,15 +17,14 @@
 package v2.services
 
 import uk.gov.hmrc.http.HeaderCarrier
-import v2.controllers.EndpointLogContext
+import api.controllers.EndpointLogContext
 import v2.mocks.connectors.MockAmendHistoricNonFhlUkPiePeriodSummaryConnector
-import v2.models.domain.{ Nino, PeriodId }
-import v2.models.errors._
-import v2.models.outcomes.ResponseWrapper
-import v2.models.request.amendHistoricNonFhlUkPiePeriodSummary.{
-  AmendHistoricNonFhlUkPiePeriodSummaryRequest,
-  AmendHistoricNonFhlUkPiePeriodSummaryRequestBody
-}
+import v2.models.domain.PeriodId
+import api.models.errors._
+import api.models.domain.Nino
+import api.models.outcomes.ResponseWrapper
+import api.services.{ServiceOutcome, ServiceSpec}
+import v2.models.request.amendHistoricNonFhlUkPiePeriodSummary.{AmendHistoricNonFhlUkPiePeriodSummaryRequest, AmendHistoricNonFhlUkPiePeriodSummaryRequestBody}
 import v2.services.AmendHistoricNonFhlUkPiePeriodSummaryService.downstreamErrorMap
 
 import scala.concurrent.Future

@@ -21,24 +21,25 @@ import cats.implicits._
 import uk.gov.hmrc.http.HeaderCarrier
 import utils.Logging
 import v2.connectors.RetrieveUkPropertyAnnualSubmissionConnector
-import v2.connectors.RetrieveUkPropertyAnnualSubmissionConnector.{ NonUkResult, UkResult }
-import v2.controllers.EndpointLogContext
-import v2.models.errors._
-import v2.models.outcomes.ResponseWrapper
+import v2.connectors.RetrieveUkPropertyAnnualSubmissionConnector.{NonUkResult, UkResult}
+import api.controllers.EndpointLogContext
+import api.models.errors._
+import api.models.outcomes.ResponseWrapper
 import v2.models.request.retrieveUkPropertyAnnualSubmission.RetrieveUkPropertyAnnualSubmissionRequest
 import v2.models.response.retrieveUkPropertyAnnualSubmission.RetrieveUkPropertyAnnualSubmissionResponse
-import v2.support.DownstreamResponseMappingSupport
+import api.services.ServiceOutcome
+import api.support.DownstreamResponseMappingSupport
 
-import javax.inject.{ Inject, Singleton }
-import scala.concurrent.{ ExecutionContext, Future }
+import javax.inject.{Inject, Singleton}
+import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class RetrieveUkPropertyAnnualSubmissionService @Inject()(connector: RetrieveUkPropertyAnnualSubmissionConnector)
+class RetrieveUkPropertyAnnualSubmissionService @Inject() (connector: RetrieveUkPropertyAnnualSubmissionConnector)
     extends DownstreamResponseMappingSupport
     with Logging {
 
-  def retrieveUkProperty(request: RetrieveUkPropertyAnnualSubmissionRequest)(
-      implicit hc: HeaderCarrier,
+  def retrieveUkProperty(request: RetrieveUkPropertyAnnualSubmissionRequest)(implicit
+      hc: HeaderCarrier,
       ec: ExecutionContext,
       logContext: EndpointLogContext,
       correlationId: String): Future[ServiceOutcome[RetrieveUkPropertyAnnualSubmissionResponse]] = {

@@ -16,15 +16,17 @@
 
 package v2.controllers.requestParsers.validators
 
+import api.controllers.requestParsers.validators.Validator
+import api.controllers.requestParsers.validators.validations.{BusinessIdValidation, NinoValidation}
+import api.models.errors.{MtdError, RulePropertyIncomeAllowanceError}
 import config.AppConfig
 import v2.controllers.requestParsers.validators.validations._
-import v2.models.errors._
-import v2.models.request.amendUkPropertyAnnualSubmission.ukFhlProperty.{ UkFhlProperty, UkFhlPropertyAllowances }
-import v2.models.request.amendUkPropertyAnnualSubmission.ukNonFhlProperty.{ UkNonFhlProperty, UkNonFhlPropertyAllowances }
-import v2.models.request.amendUkPropertyAnnualSubmission.{ AmendUkPropertyAnnualSubmissionRawData, AmendUkPropertyAnnualSubmissionRequestBody }
+import v2.models.request.amendUkPropertyAnnualSubmission.ukFhlProperty.{UkFhlProperty, UkFhlPropertyAllowances}
+import v2.models.request.amendUkPropertyAnnualSubmission.ukNonFhlProperty.{UkNonFhlProperty, UkNonFhlPropertyAllowances}
+import v2.models.request.amendUkPropertyAnnualSubmission.{AmendUkPropertyAnnualSubmissionRawData, AmendUkPropertyAnnualSubmissionRequestBody}
 import v2.models.request.common.StructuredBuildingAllowance
 
-import javax.inject.{ Inject, Singleton }
+import javax.inject.{Inject, Singleton}
 
 @Singleton
 class AmendUkPropertyAnnualSubmissionValidator @Inject()(appConfig: AppConfig) extends Validator[AmendUkPropertyAnnualSubmissionRawData] {

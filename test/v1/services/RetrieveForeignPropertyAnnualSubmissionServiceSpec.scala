@@ -16,10 +16,10 @@
 
 package v1.services
 
+import api.models.outcomes.ResponseWrapper
 import support.UnitSpec
 import v1.mocks.connectors.MockRetrieveForeignPropertyAnnualSubmissionConnector
 import v1.models.errors._
-import v1.models.outcomes.ResponseWrapper
 import v1.models.request.retrieveForeignPropertyAnnualSubmission.RetrieveForeignPropertyAnnualSubmissionRequest
 import v1.models.response.retrieveForeignPropertyAnnualSubmission.RetrieveForeignPropertyAnnualSubmissionResponse
 import v1.models.response.retrieveForeignPropertyAnnualSubmission.foreignFhlEea._

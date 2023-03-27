@@ -20,14 +20,16 @@ import cats.data.EitherT
 import uk.gov.hmrc.http.HeaderCarrier
 import utils.Logging
 import v2.connectors.RetrieveHistoricNonFhlUkPropertyAnnualSubmissionConnector
-import v2.controllers.EndpointLogContext
-import v2.models.errors.{ InternalError, MtdError, NinoFormatError, NotFoundError, RuleHistoricTaxYearNotSupportedError, TaxYearFormatError }
+import api.controllers.EndpointLogContext
+import api.models.errors.RuleHistoricTaxYearNotSupportedError
+import api.models.errors.{InternalError, MtdError, NinoFormatError, NotFoundError, TaxYearFormatError}
 import v2.models.request.retrieveHistoricNonFhlUkPropertyAnnualSubmission.RetrieveHistoricNonFhlUkPropertyAnnualSubmissionRequest
 import v2.models.response.retrieveHistoricNonFhlUkPropertyAnnualSubmissionResponse.RetrieveHistoricNonFhlUkPropertyAnnualSubmissionResponse
-import v2.support.DownstreamResponseMappingSupport
+import api.services.ServiceOutcome
+import api.support.DownstreamResponseMappingSupport
 
-import javax.inject.{ Inject, Singleton }
-import scala.concurrent.{ ExecutionContext, Future }
+import javax.inject.{Inject, Singleton}
+import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class RetrieveHistoricNonFhlUkPropertyAnnualSubmissionService @Inject()(connector: RetrieveHistoricNonFhlUkPropertyAnnualSubmissionConnector)

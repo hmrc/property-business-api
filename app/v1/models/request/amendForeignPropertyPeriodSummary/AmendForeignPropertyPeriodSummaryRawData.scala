@@ -16,7 +16,7 @@
 
 package v1.models.request.amendForeignPropertyPeriodSummary
 
+import api.models.request.RawData
 import play.api.libs.json.JsValue
-import v1.models.request.RawData
 
 case class AmendForeignPropertyPeriodSummaryRawData(nino: String, businessId: String, submissionId: String, body: JsValue) extends RawData

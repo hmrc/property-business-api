@@ -16,8 +16,9 @@
 
 package v2.models.request.retrieveHistoricFhlUkPropertyAnnualSubmission
 
-import v2.models.domain.{ Nino, TaxYear }
-import v2.models.request.RawData
+import api.models.domain.Nino
+import api.models.request.RawData
+import v2.models.domain.TaxYear
 
 case class RetrieveHistoricFhlUkPropertyAnnualSubmissionRawData(nino: String, taxYear: String) extends RawData
 

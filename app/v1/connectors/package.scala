@@ -16,8 +16,8 @@
 
 package v1
 
+import api.models.outcomes.ResponseWrapper
 import v1.models.errors.{IfsError, MtdError}
-import v1.models.outcomes.ResponseWrapper
 
 package object connectors {
 

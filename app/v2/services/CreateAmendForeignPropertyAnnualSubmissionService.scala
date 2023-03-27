@@ -18,16 +18,18 @@ package v2.services
 
 import cats.implicits._
 import cats.data.EitherT
-import javax.inject.{ Inject, Singleton }
+
+import javax.inject.{Inject, Singleton}
 import uk.gov.hmrc.http.HeaderCarrier
 import utils.Logging
-import v2.connectors.CreateAmendForeignPropertyAnnualSubmissionConnector
-import v2.controllers.EndpointLogContext
-import v2.models.errors._
+import api.controllers.EndpointLogContext
+import api.models.errors._
 import v2.models.request.createAmendForeignPropertyAnnualSubmission.CreateAmendForeignPropertyAnnualSubmissionRequest
-import v2.support.DownstreamResponseMappingSupport
+import api.services.ServiceOutcome
+import api.support.DownstreamResponseMappingSupport
+import v2.connectors.CreateAmendForeignPropertyAnnualSubmissionConnector
 
-import scala.concurrent.{ ExecutionContext, Future }
+import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class CreateAmendForeignPropertyAnnualSubmissionService @Inject()(connector: CreateAmendForeignPropertyAnnualSubmissionConnector)

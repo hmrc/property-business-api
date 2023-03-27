@@ -19,7 +19,7 @@ package v2.mocks.validators
 import org.scalamock.handlers.CallHandler1
 import org.scalamock.scalatest.MockFactory
 import v2.controllers.requestParsers.validators.DeleteHistoricUkPropertyAnnualSubmissionValidator
-import v2.models.errors.MtdError
+import api.models.errors.MtdError
 import v2.models.request.deleteHistoricUkPropertyAnnualSubmission.DeleteHistoricUkPropertyAnnualSubmissionRawData
 
 class MockDeleteHistoricUkPropertyAnnualSubmissionValidator extends MockFactory {

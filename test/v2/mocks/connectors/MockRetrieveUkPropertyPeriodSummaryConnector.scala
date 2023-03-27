@@ -20,7 +20,8 @@ import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
 import uk.gov.hmrc.http.HeaderCarrier
 import v2.connectors.RetrieveUkPropertyPeriodSummaryConnector.Result
-import v2.connectors.{ DownstreamOutcome, RetrieveUkPropertyPeriodSummaryConnector }
+import api.connectors.DownstreamOutcome
+import v2.connectors.RetrieveUkPropertyPeriodSummaryConnector
 import v2.models.request.retrieveUkPropertyPeriodSummary.RetrieveUkPropertyPeriodSummaryRequest
 
 import scala.concurrent.{ ExecutionContext, Future }

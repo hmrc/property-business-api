@@ -16,6 +16,6 @@
 
 package v2.models.request.createHistoricNonFhlUkPropertyPeriodSummary
 
-import v2.models.domain.Nino
+import api.models.domain.Nino
 
 case class CreateHistoricNonFhlUkPropertyPeriodSummaryRequest(nino: Nino, body: CreateHistoricNonFhlUkPropertyPeriodSummaryRequestBody)

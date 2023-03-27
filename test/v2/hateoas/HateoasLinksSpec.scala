@@ -16,14 +16,11 @@
 
 package v2.hateoas
 
+import api.models.hateoas.{Link, Method}
+import api.models.hateoas.Method._
 import mocks.MockAppConfig
 import support.UnitSpec
-import v2.models.hateoas.{ Link, Method }
-import v2.models.hateoas.Method._
-import v2.models.response.retrieveHistoricNonFhlUkPiePeriodSummary.{
-  RetrieveHistoricNonFhlUkPiePeriodSummaryHateoasData,
-  RetrieveHistoricNonFhlUkPiePeriodSummaryResponse
-}
+import v2.models.response.retrieveHistoricNonFhlUkPiePeriodSummary.{RetrieveHistoricNonFhlUkPiePeriodSummaryHateoasData, RetrieveHistoricNonFhlUkPiePeriodSummaryResponse}
 
 class HateoasLinksSpec extends UnitSpec with MockAppConfig with HateoasLinks {
 

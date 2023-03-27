@@ -19,7 +19,7 @@ package v2.controllers.requestParsers.validators.validations
 import org.scalacheck.Gen
 import org.scalatestplus.scalacheck.ScalaCheckDrivenPropertyChecks
 import support.UnitSpec
-import v2.models.errors._
+import api.models.errors._
 
 class TaxYearValidationSpec extends UnitSpec with ScalaCheckDrivenPropertyChecks {
 

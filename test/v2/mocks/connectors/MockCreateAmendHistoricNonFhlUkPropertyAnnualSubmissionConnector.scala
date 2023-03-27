@@ -19,11 +19,12 @@ package v2.mocks.connectors
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
 import uk.gov.hmrc.http.HeaderCarrier
-import v2.connectors.{ CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionConnector, DownstreamOutcome }
+import api.connectors.{DownstreamOutcome}
+import v2.connectors.CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionConnector
 import v2.models.request.createAmendHistoricNonFhlUkPropertyAnnualSubmission.CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequest
 import v2.models.response.createAmendHistoricNonFhlUkPropertyAnnualSubmission.CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionResponse
 
-import scala.concurrent.{ ExecutionContext, Future }
+import scala.concurrent.{ExecutionContext, Future}
 
 trait MockCreateAmendHistoricNonFhlUkPropertyAnnualSubmissionConnector extends MockFactory {
 

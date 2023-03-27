@@ -16,16 +16,17 @@
 
 package v2.models.response.retrieveHistoricNonFhlUkPropertyAnnualSubmissionResponse
 
+import api.hateoas.HateoasLinksFactory
+import api.models.hateoas.{HateoasData, Link}
 import config.AppConfig
-import play.api.libs.json.{ Json, OWrites, Reads }
-import v2.hateoas.HateoasLinksFactory
-import v2.models.hateoas.{ HateoasData, Link }
+import play.api.libs.json.{Json, OWrites, Reads}
 import v2.hateoas.HateoasLinks
 
 case class RetrieveHistoricNonFhlUkPropertyAnnualSubmissionResponse(annualAdjustments: Option[AnnualAdjustments],
                                                                     annualAllowances: Option[AnnualAllowances])
 
 object RetrieveHistoricNonFhlUkPropertyAnnualSubmissionResponse extends HateoasLinks {
+
   implicit val writes: OWrites[RetrieveHistoricNonFhlUkPropertyAnnualSubmissionResponse] =
     Json.writes[RetrieveHistoricNonFhlUkPropertyAnnualSubmissionResponse]
 
@@ -33,8 +34,10 @@ object RetrieveHistoricNonFhlUkPropertyAnnualSubmissionResponse extends HateoasL
     Json.reads[RetrieveHistoricNonFhlUkPropertyAnnualSubmissionResponse]
 
   implicit object RetrieveHistoricNonFhlUkPropertyAnnualSubmissionLinksFactory
-      extends HateoasLinksFactory[RetrieveHistoricNonFhlUkPropertyAnnualSubmissionResponse,
-                                  RetrieveHistoricNonFhlUkPropertyAnnualSubmissionHateoasData] {
+      extends HateoasLinksFactory[
+        RetrieveHistoricNonFhlUkPropertyAnnualSubmissionResponse,
+        RetrieveHistoricNonFhlUkPropertyAnnualSubmissionHateoasData] {
+
     override def links(appConfig: AppConfig, data: RetrieveHistoricNonFhlUkPropertyAnnualSubmissionHateoasData): Seq[Link] = {
       import data._
       Seq(
@@ -43,7 +46,9 @@ object RetrieveHistoricNonFhlUkPropertyAnnualSubmissionResponse extends HateoasL
         deleteHistoricNonFhlUkPropertyAnnualSubmission(appConfig, nino, taxYear)
       )
     }
+
   }
+
 }
 
 case class RetrieveHistoricNonFhlUkPropertyAnnualSubmissionHateoasData(nino: String, taxYear: String) extends HateoasData

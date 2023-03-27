@@ -16,12 +16,13 @@
 
 package v2.connectors
 
+import api.connectors.{BaseDownstreamConnector, DownstreamOutcome}
+import api.connectors.DownstreamUri.{IfsUri, TaxYearSpecificIfsUri}
+import api.connectors.httpparsers.StandardDownstreamHttpParser.reads
+import api.models.outcomes.ResponseWrapper
 import config.AppConfig
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
-import v2.connectors.DownstreamUri.{IfsUri, TaxYearSpecificIfsUri}
-import v2.connectors.RetrieveForeignPropertyPeriodSummaryConnector._
-import v2.connectors.httpparsers.StandardDownstreamHttpParser._
-import v2.models.outcomes.ResponseWrapper
+import v2.connectors.RetrieveForeignPropertyPeriodSummaryConnector.{ForeignResult, NonForeignResult, Result}
 import v2.models.request.retrieveForeignPropertyPeriodSummary.RetrieveForeignPropertyPeriodSummaryRequest
 import v2.models.response.retrieveForeignPropertyPeriodSummary.RetrieveForeignPropertyPeriodSummaryResponse
 

@@ -18,14 +18,16 @@ package v2.services
 
 import cats.data.EitherT
 import cats.implicits._
+
 import javax.inject.{Inject, Singleton}
 import uk.gov.hmrc.http.HeaderCarrier
 import utils.Logging
-import v2.connectors.AmendUkPropertyPeriodSummaryConnector
-import v2.controllers.EndpointLogContext
-import v2.models.errors._
+import api.controllers.EndpointLogContext
+import api.models.errors._
 import v2.models.request.amendUkPropertyPeriodSummary.AmendUkPropertyPeriodSummaryRequest
-import v2.support.DownstreamResponseMappingSupport
+import api.services.ServiceOutcome
+import api.support.DownstreamResponseMappingSupport
+import v2.connectors.AmendUkPropertyPeriodSummaryConnector
 
 import scala.concurrent.{ExecutionContext, Future}
 

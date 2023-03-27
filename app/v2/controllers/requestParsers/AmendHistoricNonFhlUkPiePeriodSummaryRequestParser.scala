@@ -16,13 +16,11 @@
 
 package v2.controllers.requestParsers
 
+import api.controllers.requestParsers.RequestParser
+import api.models.domain.Nino
 import v2.controllers.requestParsers.validators.AmendHistoricNonFhlUkPiePeriodSummaryValidator
-import v2.models.domain.{ Nino, PeriodId }
-import v2.models.request.amendHistoricNonFhlUkPiePeriodSummary.{
-  AmendHistoricNonFhlUkPiePeriodSummaryRawData,
-  AmendHistoricNonFhlUkPiePeriodSummaryRequest,
-  AmendHistoricNonFhlUkPiePeriodSummaryRequestBody
-}
+import v2.models.domain.PeriodId
+import v2.models.request.amendHistoricNonFhlUkPiePeriodSummary.{AmendHistoricNonFhlUkPiePeriodSummaryRawData, AmendHistoricNonFhlUkPiePeriodSummaryRequest, AmendHistoricNonFhlUkPiePeriodSummaryRequestBody}
 
 import javax.inject.Inject
 

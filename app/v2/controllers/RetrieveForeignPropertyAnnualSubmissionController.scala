@@ -16,18 +16,21 @@
 
 package v2.controllers
 
+import api.controllers.{AuthorisedController, BaseController, EndpointLogContext}
 import cats.data.EitherT
 import cats.implicits._
+
 import javax.inject.{Inject, Singleton}
 import play.api.libs.json.Json
 import play.api.mvc.{Action, AnyContent, ControllerComponents}
 import utils.{IdGenerator, Logging}
 import v2.controllers.requestParsers.RetrieveForeignPropertyAnnualSubmissionRequestParser
-import v2.hateoas.HateoasFactory
-import v2.models.errors._
+import api.hateoas.HateoasFactory
+import api.models.errors._
+import api.services.{EnrolmentsAuthService, MtdIdLookupService}
 import v2.models.request.retrieveForeignPropertyAnnualSubmission.RetrieveForeignPropertyAnnualSubmissionRawData
 import v2.models.response.retrieveForeignPropertyAnnualSubmission.RetrieveForeignPropertyAnnualSubmissionHateoasData
-import v2.services.{EnrolmentsAuthService, MtdIdLookupService, RetrieveForeignPropertyAnnualSubmissionService}
+import v2.services.RetrieveForeignPropertyAnnualSubmissionService
 
 import scala.concurrent.{ExecutionContext, Future}
 

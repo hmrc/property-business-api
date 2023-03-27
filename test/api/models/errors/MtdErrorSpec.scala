@@ -16,6 +16,7 @@
 
 package api.models.errors
 
+import play.api.http.Status.{BAD_REQUEST, UNAUTHORIZED}
 import play.api.libs.json.Json
 import support.UnitSpec
 
@@ -23,11 +24,12 @@ class MtdErrorSpec extends UnitSpec {
 
   "writes" should {
     "generate the correct JSON" in {
-      Json.toJson(MtdError("CODE", "some message")) shouldBe Json.parse(
+      Json.toJson(MtdError("CODE", "some message", UNAUTHORIZED)) shouldBe Json.parse(
         """
           |{
           |   "code": "CODE",
-          |   "message": "some message"
+          |   "message": "some message",
+          |   "httpStatus":401
           |}
         """.stripMargin
       )
@@ -36,7 +38,8 @@ class MtdErrorSpec extends UnitSpec {
 
   "MtdErrorWithCode.unapply" should {
     "return the error code" in {
-      MtdErrorWithCode.unapply(MtdError("CODE", "message")) shouldBe Some("CODE")
+      MtdErrorWithCode.unapply(MtdError("CODE", "message", BAD_REQUEST)) shouldBe Some("CODE")
     }
   }
+
 }

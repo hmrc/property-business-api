@@ -22,16 +22,15 @@ import mocks.MockAppConfig
 import org.scalatest.Inside
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.Configuration
+import play.api.http.{HttpConfiguration, HttpErrorHandler, HttpFilters}
 import play.api.http.HeaderNames.ACCEPT
-import play.api.http.{ HttpConfiguration, HttpErrorHandler, HttpFilters }
 import play.api.libs.json.Json
-import play.api.mvc.{ EssentialAction, _ }
+import play.api.mvc._
 import play.api.routing.Router
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import routing.{ VersionRoutingMap, VersionRoutingRequestHandler }
+import routing.{VersionRoutingMap, VersionRoutingRequestHandler}
 import support.UnitSpec
-import v1.models.errors.{ InvalidAcceptHeaderError, UnsupportedVersionError }
 
 class VersionRoutingRequestHandlerSpec extends UnitSpec with Inside with MockAppConfig with GuiceOneAppPerSuite {
   test =>
@@ -155,7 +154,7 @@ class VersionRoutingRequestHandlerSpec extends UnitSpec with Inside with MockApp
           val result = a.apply(request)
 
           status(result) shouldBe NOT_ACCEPTABLE
-          contentAsJson(result) shouldBe Json.toJson(InvalidAcceptHeaderError)
+          contentAsJson(result) shouldBe Json.toJson(api.models.errors.InvalidAcceptHeaderError)
       }
     }
   }
@@ -171,7 +170,7 @@ class VersionRoutingRequestHandlerSpec extends UnitSpec with Inside with MockApp
           val result = a.apply(request)
 
           status(result) shouldBe NOT_FOUND
-          contentAsJson(result) shouldBe Json.toJson(UnsupportedVersionError)
+          contentAsJson(result) shouldBe Json.toJson(api.models.errors.UnsupportedVersionError)
       }
     }
   }
@@ -188,7 +187,7 @@ class VersionRoutingRequestHandlerSpec extends UnitSpec with Inside with MockApp
             val result = a.apply(request)
 
             status(result) shouldBe NOT_FOUND
-            contentAsJson(result) shouldBe Json.toJson(UnsupportedVersionError)
+            contentAsJson(result) shouldBe Json.toJson(api.models.errors.UnsupportedVersionError)
 
         }
       }

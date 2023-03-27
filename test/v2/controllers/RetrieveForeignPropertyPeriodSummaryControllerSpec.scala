@@ -18,11 +18,11 @@ package v2.controllers
 
 import akka.http.scaladsl.model.headers.LinkParams.rel
 import api.controllers.ControllerBaseSpec
+import api.mocks.hateoas.MockHateoasFactory
 import play.api.libs.json.Json
 import play.api.mvc.Result
 import uk.gov.hmrc.http.HeaderCarrier
 import v2.mocks.MockIdGenerator
-import v2.mocks.hateoas.MockHateoasFactory
 import v2.mocks.requestParsers.MockRetrieveForeignPropertyPeriodSummaryRequestParser
 import v2.mocks.services.{MockEnrolmentsAuthService, MockMtdIdLookupService, MockRetrieveForeignPropertyPeriodSummaryService}
 import v2.models.domain.TaxYear

@@ -16,9 +16,9 @@
 
 package v2.controllers.requestParsers
 
+import api.mocks.validators.MockCreateHistoricNonFhlUkPropertyPeriodSummaryValidator
 import play.api.libs.json.{ JsValue, Json }
 import support.UnitSpec
-import v2.mocks.validators.MockCreateHistoricNonFhlUkPropertyPeriodSummaryValidator
 import api.models.domain.Nino
 import api.models.errors.{ BadRequestError, ErrorWrapper, NinoFormatError, RuleBothExpensesSuppliedError }
 import v2.models.request.common.ukPropertyRentARoom.{ UkPropertyExpensesRentARoom, UkPropertyIncomeRentARoom }

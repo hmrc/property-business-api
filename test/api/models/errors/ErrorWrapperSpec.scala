@@ -31,7 +31,8 @@ class ErrorWrapperSpec extends UnitSpec {
       """
         |{
         |   "code": "FORMAT_NINO",
-        |   "message": "The provided NINO is invalid"
+        |   "message": "The provided NINO is invalid",
+        |   "httpStatus":400
         |}
       """.stripMargin
     )
@@ -48,7 +49,8 @@ class ErrorWrapperSpec extends UnitSpec {
       """
         |{
         |   "code": "FORMAT_NINO",
-        |   "message": "The provided NINO is invalid"
+        |   "message": "The provided NINO is invalid",
+        |   "httpStatus":400
         |}
       """.stripMargin
     )
@@ -73,14 +75,17 @@ class ErrorWrapperSpec extends UnitSpec {
         |{
         |   "code": "INVALID_REQUEST",
         |   "message": "Invalid request",
+        |   "httpStatus":400,
         |   "errors": [
         |       {
         |         "code": "FORMAT_NINO",
-        |         "message": "The provided NINO is invalid"
+        |         "message": "The provided NINO is invalid",
+        |         "httpStatus":400
         |       },
         |       {
         |         "code": "FORMAT_BUSINESS_ID",
-        |         "message": "The provided Business ID is invalid"
+        |         "message": "The provided Business ID is invalid",
+        |         "httpStatus":400
         |       }
         |   ]
         |}

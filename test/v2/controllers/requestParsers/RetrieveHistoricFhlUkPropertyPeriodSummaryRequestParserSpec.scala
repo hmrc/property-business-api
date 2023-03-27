@@ -16,9 +16,9 @@
 
 package v2.controllers.requestParsers
 
+import api.mocks.validators.MockRetrieveHistoricFhlUkPropertyPeriodSummaryValidator
 import api.models.domain.Nino
 import support.UnitSpec
-import v2.mocks.validators.MockRetrieveHistoricFhlUkPropertyPeriodSummaryValidator
 import v2.models.domain.PeriodId
 import api.models.errors.{BadRequestError, ErrorWrapper, NinoFormatError, PeriodIdFormatError}
 import v2.models.request.retrieveHistoricFhlUkPiePeriodSummary.{RetrieveHistoricFhlUkPiePeriodSummaryRawData, RetrieveHistoricFhlUkPiePeriodSummaryRequest}

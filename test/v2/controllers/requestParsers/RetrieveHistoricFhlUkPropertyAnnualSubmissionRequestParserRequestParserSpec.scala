@@ -16,8 +16,8 @@
 
 package v2.controllers.requestParsers
 
+import api.mocks.validators.MockRetrieveHistoricFhlUkPropertyAnnualSubmissionValidator
 import support.UnitSpec
-import v2.mocks.validators.MockRetrieveHistoricFhlUkPropertyAnnualSubmissionValidator
 import v2.models.domain.TaxYear; import api.models.domain.Nino
 import api.models.errors.{ BadRequestError, ErrorWrapper, NinoFormatError, TaxYearFormatError }
 import v2.models.request.retrieveHistoricFhlUkPropertyAnnualSubmission._

@@ -17,6 +17,8 @@
 package v2.controllers
 
 import api.controllers.ControllerBaseSpec
+import api.mocks.hateoas.MockHateoasFactory
+import api.mocks.services.MockAuditService
 import api.models.hateoas.Method.GET
 import api.models.audit.{AuditError, AuditEvent, AuditResponse, GenericAuditDetail}
 import api.models.domain.Nino
@@ -27,9 +29,8 @@ import play.api.libs.json.{Json, JsValue}
 import play.api.mvc.Result
 import uk.gov.hmrc.http.HeaderCarrier
 import v2.mocks.MockIdGenerator
-import v2.mocks.hateoas.MockHateoasFactory
 import v2.mocks.requestParsers.MockAmendUkPropertyAnnualSubmissionRequestParser
-import v2.mocks.services.{MockAmendUkPropertyAnnualSubmissionService, MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService}
+import v2.mocks.services.{MockAmendUkPropertyAnnualSubmissionService, MockEnrolmentsAuthService, MockMtdIdLookupService}
 import v2.models.domain.TaxYear
 import v2.models.request.amendUkPropertyAnnualSubmission._
 import v2.models.request.amendUkPropertyAnnualSubmission.ukFhlProperty._

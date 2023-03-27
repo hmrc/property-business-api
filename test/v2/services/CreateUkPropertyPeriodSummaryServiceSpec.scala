@@ -19,9 +19,11 @@ package v2.services
 import uk.gov.hmrc.http.HeaderCarrier
 import api.controllers.EndpointLogContext
 import v2.mocks.connectors.MockCreateUkPropertyPeriodSummaryConnector
-import v2.models.domain.TaxYear; import api.models.domain.Nino
+import v2.models.domain.TaxYear
+import api.models.domain.Nino
 import api.models.errors._
 import api.models.outcomes.ResponseWrapper
+import api.services.ServiceSpec
 import v2.models.request.createUkPropertyPeriodSummary._
 import v2.models.response.createUkPropertyPeriodSummary.CreateUkPropertyPeriodSummaryResponse
 

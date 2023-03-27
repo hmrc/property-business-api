@@ -23,6 +23,7 @@ import v2.models.domain.{HistoricPropertyType, TaxYear}
 import api.models.errors._
 import api.models.domain.Nino
 import api.models.outcomes.ResponseWrapper
+import api.services.ServiceSpec
 import v2.models.request.deleteHistoricUkPropertyAnnualSubmission.DeleteHistoricUkPropertyAnnualSubmissionRequest
 
 import scala.concurrent.Future

@@ -23,7 +23,7 @@ import v2.models.domain.PeriodId
 import api.models.errors._
 import api.models.domain.Nino
 import api.models.outcomes.ResponseWrapper
-import api.services.ServiceOutcome
+import api.services.{ServiceOutcome, ServiceSpec}
 import v2.models.request.amendHistoricFhlUkPiePeriodSummary.{AmendHistoricFhlUkPiePeriodSummaryRequest, AmendHistoricFhlUkPiePeriodSummaryRequestBody}
 
 import scala.concurrent.Future

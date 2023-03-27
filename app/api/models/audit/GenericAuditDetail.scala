@@ -38,10 +38,14 @@ object GenericAuditDetail {
       (JsPath \ "response").write[AuditResponse]
   )(unlift(GenericAuditDetail.unapply))
 
-  def apply[A: OWrites](userDetails: UserDetails, params: A, correlationId: String, response: AuditResponse): GenericAuditDetail = {
+  def apply[A: OWrites](userDetails: UserDetails,
+                        params: A,
+                        correlationId: String,
+                        response: AuditResponse,
+                        versionNumber: String = "2.0"): GenericAuditDetail = {
 
     GenericAuditDetail(
-      versionNumber = "2.0",
+      versionNumber = versionNumber,
       userType = userDetails.userType,
       agentReferenceNumber = userDetails.agentReferenceNumber,
       params = Json.toJsObject(params),
@@ -49,4 +53,5 @@ object GenericAuditDetail {
       response = response
     )
   }
+
 }

@@ -21,13 +21,8 @@ import play.api.http.Status.OK
 import play.api.libs.json.{Json, JsValue, OWrites}
 import support.UnitSpec
 
-case class Params(nino: String, businessId: String, request: JsValue)
-
-object Params {
-  implicit val writes: OWrites[Params] = Json.writes
-}
-
 class GenericAuditDetailSpec extends UnitSpec {
+
   "writes" must {
     "work" in {
       val userDetails = UserDetails(mtdId = "ignoredMtdId", userType = "Agent", agentReferenceNumber = Some("someARN"))
@@ -61,4 +56,11 @@ class GenericAuditDetailSpec extends UnitSpec {
           |}""".stripMargin)
     }
   }
+
+  case class Params(nino: String, businessId: String, request: JsValue)
+
+  object Params {
+    implicit val writes: OWrites[Params] = Json.writes
+  }
+
 }

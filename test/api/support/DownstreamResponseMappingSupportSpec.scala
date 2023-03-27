@@ -14,12 +14,11 @@
  * limitations under the License.
  */
 
-package api.services
+package api.support
 
 import api.controllers.EndpointLogContext
 import api.models.errors._
 import api.models.outcomes.ResponseWrapper
-import api.support.DownstreamResponseMappingSupport
 import support.UnitSpec
 import utils.Logging
 

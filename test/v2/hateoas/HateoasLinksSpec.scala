@@ -14,13 +14,12 @@
  * limitations under the License.
  */
 
-package api.hateoas
+package v2.hateoas
 
 import api.models.hateoas.{Link, Method}
 import api.models.hateoas.Method._
 import mocks.MockAppConfig
 import support.UnitSpec
-import v2.hateoas.HateoasLinks
 import v2.models.response.retrieveHistoricNonFhlUkPiePeriodSummary.{RetrieveHistoricNonFhlUkPiePeriodSummaryHateoasData, RetrieveHistoricNonFhlUkPiePeriodSummaryResponse}
 
 class HateoasLinksSpec extends UnitSpec with MockAppConfig with HateoasLinks {

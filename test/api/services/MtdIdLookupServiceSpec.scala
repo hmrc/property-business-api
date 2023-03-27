@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 
-package v2.services
+package api.services
 
-import v2.mocks.connectors.MockMtdIdLookupConnector
+import api.mocks.connectors.MockMtdIdLookupConnector
 import api.models.errors.{InternalError, NinoFormatError, UnauthorisedError}
-import api.services.MtdIdLookupService
+import v2.services.ServiceSpec
 
 import scala.concurrent.Future
 

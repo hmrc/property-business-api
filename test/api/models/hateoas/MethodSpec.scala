@@ -14,6 +14,12 @@
  * limitations under the License.
  */
 
-package api.controllers.requestParsers.validators.validations
+package api.models.hateoas
 
-trait Validation
+import api.models.hateoas.Method._
+import support.UnitSpec
+import utils.enums.EnumJsonSpecSupport
+
+class MethodSpec extends UnitSpec with EnumJsonSpecSupport {
+  testRoundTrip[Method](("GET", GET), ("POST", POST), ("DELETE", DELETE))
+}

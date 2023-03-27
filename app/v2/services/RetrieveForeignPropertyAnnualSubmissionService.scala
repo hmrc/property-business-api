@@ -38,7 +38,8 @@ import api.models.errors.{
 import api.models.outcomes.ResponseWrapper
 import v2.models.request.retrieveForeignPropertyAnnualSubmission.RetrieveForeignPropertyAnnualSubmissionRequest
 import v2.models.response.retrieveForeignPropertyAnnualSubmission.RetrieveForeignPropertyAnnualSubmissionResponse
-import api.services.{DownstreamResponseMappingSupport, ServiceOutcome}
+import api.services.ServiceOutcome
+import api.support.DownstreamResponseMappingSupport
 import v2.connectors.RetrieveForeignPropertyAnnualSubmissionConnector
 import v2.connectors.RetrieveForeignPropertyAnnualSubmissionConnector
 

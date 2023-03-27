@@ -24,7 +24,8 @@ import api.models.errors._
 import api.models.outcomes.ResponseWrapper
 import v2.models.request.retrieveForeignPropertyPeriodSummary.RetrieveForeignPropertyPeriodSummaryRequest
 import v2.models.response.retrieveForeignPropertyPeriodSummary.RetrieveForeignPropertyPeriodSummaryResponse
-import api.services.{DownstreamResponseMappingSupport, ServiceOutcome}
+import api.services.ServiceOutcome
+import api.support.DownstreamResponseMappingSupport
 import v2.connectors.RetrieveForeignPropertyPeriodSummaryConnector
 import v2.connectors.RetrieveForeignPropertyPeriodSummaryConnector.{ForeignResult, NonForeignResult}
 

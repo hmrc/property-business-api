@@ -27,7 +27,8 @@ import api.controllers.EndpointLogContext
 import api.models.errors._
 import v2.models.request.createForeignPropertyPeriodSummary.CreateForeignPropertyPeriodSummaryRequest
 import v2.models.response.createForeignPropertyPeriodSummary.CreateForeignPropertyPeriodSummaryResponse
-import api.services.{DownstreamResponseMappingSupport, ServiceOutcome}
+import api.services.ServiceOutcome
+import api.support.DownstreamResponseMappingSupport
 
 import scala.concurrent.{ExecutionContext, Future}
 

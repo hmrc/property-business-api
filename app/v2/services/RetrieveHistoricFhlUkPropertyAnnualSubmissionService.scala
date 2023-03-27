@@ -25,7 +25,8 @@ import api.controllers.EndpointLogContext
 import api.models.errors._
 import v2.models.request.retrieveHistoricFhlUkPropertyAnnualSubmission.RetrieveHistoricFhlUkPropertyAnnualSubmissionRequest
 import v2.models.response.retrieveHistoricFhlUkPropertyAnnualSubmission.RetrieveHistoricFhlUkPropertyAnnualSubmissionResponse
-import api.services.{DownstreamResponseMappingSupport, ServiceOutcome}
+import api.services.ServiceOutcome
+import api.support.DownstreamResponseMappingSupport
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}

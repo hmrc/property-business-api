@@ -24,7 +24,8 @@ import api.controllers.EndpointLogContext
 import api.models.errors._
 import v2.models.request.createAmendHistoricNonFhlUkPropertyAnnualSubmission.CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequest
 import v2.models.response.createAmendHistoricNonFhlUkPropertyAnnualSubmission.CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionResponse
-import api.services.{DownstreamResponseMappingSupport, ServiceOutcome}
+import api.services.ServiceOutcome
+import api.support.DownstreamResponseMappingSupport
 import v2.connectors.CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionConnector
 
 import javax.inject.{Inject, Singleton}

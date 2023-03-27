@@ -22,7 +22,8 @@ import uk.gov.hmrc.http.HeaderCarrier
 import utils.Logging
 import api.controllers.EndpointLogContext
 import api.models.errors._
-import api.services.{DownstreamResponseMappingSupport, ServiceOutcome}
+import api.services.ServiceOutcome
+import api.support.DownstreamResponseMappingSupport
 import v2.connectors.ListPropertyPeriodSummariesConnector
 import v2.models.request.listPropertyPeriodSummaries.ListPropertyPeriodSummariesRequest
 import v2.models.response.listPropertyPeriodSummaries.ListPropertyPeriodSummariesResponse

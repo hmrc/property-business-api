@@ -25,7 +25,8 @@ import utils.Logging
 import api.controllers.EndpointLogContext
 import api.models.errors._
 import v2.models.request.createAmendForeignPropertyAnnualSubmission.CreateAmendForeignPropertyAnnualSubmissionRequest
-import api.services.{DownstreamResponseMappingSupport, ServiceOutcome}
+import api.services.ServiceOutcome
+import api.support.DownstreamResponseMappingSupport
 import v2.connectors.CreateAmendForeignPropertyAnnualSubmissionConnector
 
 import scala.concurrent.{ExecutionContext, Future}

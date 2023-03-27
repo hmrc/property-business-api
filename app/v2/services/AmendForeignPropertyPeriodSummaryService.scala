@@ -18,7 +18,8 @@ package v2.services
 
 import api.controllers.EndpointLogContext
 import api.models.errors._
-import api.services.{DownstreamResponseMappingSupport, ServiceOutcome}
+import api.services.ServiceOutcome
+import api.support.DownstreamResponseMappingSupport
 import cats.data.EitherT
 import cats.implicits._
 import uk.gov.hmrc.http.HeaderCarrier

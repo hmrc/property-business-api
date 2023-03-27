@@ -23,7 +23,8 @@ import utils.Logging
 import api.controllers.EndpointLogContext
 import api.models.errors._
 import v2.models.request.amendUkPropertyAnnualSubmission.AmendUkPropertyAnnualSubmissionRequest
-import api.services.{DownstreamResponseMappingSupport, ServiceOutcome}
+import api.services.ServiceOutcome
+import api.support.DownstreamResponseMappingSupport
 import v2.connectors.AmendUkPropertyAnnualSubmissionConnector
 import v2.connectors.AmendUkPropertyAnnualSubmissionConnector
 

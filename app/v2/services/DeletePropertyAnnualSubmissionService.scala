@@ -23,7 +23,8 @@ import utils.Logging
 import api.controllers.EndpointLogContext
 import api.models.errors.{BusinessIdFormatError, InternalError, NinoFormatError, NotFoundError, RuleTaxYearNotSupportedError, TaxYearFormatError}
 import v2.models.request.deletePropertyAnnualSubmission.DeletePropertyAnnualSubmissionRequest
-import api.services.{DownstreamResponseMappingSupport, ServiceOutcome}
+import api.services.ServiceOutcome
+import api.support.DownstreamResponseMappingSupport
 import v2.connectors.DeletePropertyAnnualSubmissionConnector
 
 import javax.inject.{Inject, Singleton}

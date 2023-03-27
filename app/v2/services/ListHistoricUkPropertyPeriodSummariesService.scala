@@ -25,7 +25,8 @@ import v2.models.domain.HistoricPropertyType
 import api.models.errors._
 import v2.models.request.listHistoricUkPropertyPeriodSummaries.ListHistoricUkPropertyPeriodSummariesRequest
 import v2.models.response.listHistoricUkPropertyPeriodSummaries.{ListHistoricUkPropertyPeriodSummariesResponse, SubmissionPeriod}
-import api.services.{DownstreamResponseMappingSupport, ServiceOutcome}
+import api.services.ServiceOutcome
+import api.support.DownstreamResponseMappingSupport
 import v2.connectors.ListHistoricUkPropertyPeriodSummariesConnector
 
 import javax.inject.{Inject, Singleton}

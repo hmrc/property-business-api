@@ -26,7 +26,8 @@ import api.controllers.EndpointLogContext
 import api.models.errors._
 import v2.models.request.createUkPropertyPeriodSummary.CreateUkPropertyPeriodSummaryRequest
 import v2.models.response.createUkPropertyPeriodSummary.CreateUkPropertyPeriodSummaryResponse
-import api.services.{DownstreamResponseMappingSupport, ServiceOutcome}
+import api.services.ServiceOutcome
+import api.support.DownstreamResponseMappingSupport
 import v2.connectors.CreateUkPropertyPeriodSummaryConnector
 
 import scala.concurrent.{ExecutionContext, Future}

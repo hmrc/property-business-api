@@ -24,7 +24,8 @@ import api.controllers.EndpointLogContext
 import api.models.errors._
 import v2.models.request.amendHistoricNonFhlUkPiePeriodSummary.AmendHistoricNonFhlUkPiePeriodSummaryRequest
 import v2.services.AmendHistoricNonFhlUkPiePeriodSummaryService.downstreamErrorMap
-import api.services.{DownstreamResponseMappingSupport, ServiceOutcome}
+import api.services.ServiceOutcome
+import api.support.DownstreamResponseMappingSupport
 import v2.connectors.AmendHistoricNonFhlUkPiePeriodSummaryConnector
 
 import javax.inject.{Inject, Singleton}

@@ -23,7 +23,8 @@ import utils.Logging
 import v2.connectors.AmendHistoricFhlUkPiePeriodSummaryConnector
 import api.controllers.EndpointLogContext
 import api.models.errors._
-import api.services.{DownstreamResponseMappingSupport, ServiceOutcome}
+import api.services.ServiceOutcome
+import api.support.DownstreamResponseMappingSupport
 import v2.models.request.amendHistoricFhlUkPiePeriodSummary.AmendHistoricFhlUkPiePeriodSummaryRequest
 
 import javax.inject.{Inject, Singleton}

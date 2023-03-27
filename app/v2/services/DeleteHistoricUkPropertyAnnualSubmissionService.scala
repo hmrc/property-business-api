@@ -25,7 +25,8 @@ import utils.Logging
 import api.controllers.EndpointLogContext
 import api.models.errors.{InternalError, NinoFormatError, NotFoundError, RuleHistoricTaxYearNotSupportedError, TaxYearFormatError}
 import v2.models.request.deleteHistoricUkPropertyAnnualSubmission.DeleteHistoricUkPropertyAnnualSubmissionRequest
-import api.services.{DownstreamResponseMappingSupport, ServiceOutcome}
+import api.services.ServiceOutcome
+import api.support.DownstreamResponseMappingSupport
 import v2.connectors.DeleteHistoricUkPropertyAnnualSubmissionConnector
 
 import scala.concurrent.{ExecutionContext, Future}

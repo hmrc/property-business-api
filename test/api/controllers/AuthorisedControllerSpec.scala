@@ -117,7 +117,7 @@ class AuthorisedControllerSpec extends ControllerBaseSpec {
 
       MockMtdIdLookupService
         .lookup(nino)
-        .returns(Future.successful(Left(ClientNotAuthenticatedError)))
+        .returns(Future.successful(Left(ClientNotAuthorisedError)))
 
       private val result = target.action(nino)(fakeGetRequest)
       status(result) shouldBe FORBIDDEN

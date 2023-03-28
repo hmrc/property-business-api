@@ -28,8 +28,7 @@ class MtdErrorSpec extends UnitSpec {
         """
           |{
           |   "code": "CODE",
-          |   "message": "some message",
-          |   "httpStatus":401
+          |   "message": "some message"
           |}
         """.stripMargin
       )
@@ -38,7 +37,7 @@ class MtdErrorSpec extends UnitSpec {
 
   "MtdErrorWithCode.unapply" should {
     "return the error code" in {
-      MtdErrorWithCode.unapply(MtdError("CODE", "message", BAD_REQUEST)) shouldBe Some("CODE")
+      CustomMtdError.unapply(MtdError("CODE", "message", BAD_REQUEST)) shouldBe Some("CODE")
     }
   }
 

@@ -616,7 +616,7 @@ class CreateForeignPropertyPeriodSummaryControllerISpec extends V1IntegrationBas
         }
         val response: WSResponse = await(request().addHttpHeaders(("Content-Type", "application/json")).post(json))
         response.status shouldBe Status.BAD_REQUEST
-        response.json shouldBe Json.toJson(BadRequestError)
+        response.json shouldBe Json.toJson(api.models.errors.BadRequestError)
       }
     }
 

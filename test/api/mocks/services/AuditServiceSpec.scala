@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package v2.services
+package api.mocks.services
 
 import api.models.audit.AuditEvent
 import api.services.{AuditService, ServiceSpec}

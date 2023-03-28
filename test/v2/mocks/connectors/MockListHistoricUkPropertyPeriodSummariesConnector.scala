@@ -19,9 +19,9 @@ package v2.mocks.connectors
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
 import uk.gov.hmrc.http.HeaderCarrier
-import api.connectors.{DownstreamOutcome}
+import api.connectors.DownstreamOutcome
+import api.models.domain.HistoricPropertyType
 import v2.connectors.ListHistoricUkPropertyPeriodSummariesConnector
-import v2.models.domain.HistoricPropertyType
 import v2.models.request.listHistoricUkPropertyPeriodSummaries.ListHistoricUkPropertyPeriodSummariesRequest
 import v2.models.response.listHistoricUkPropertyPeriodSummaries.{ListHistoricUkPropertyPeriodSummariesResponse, SubmissionPeriod}
 

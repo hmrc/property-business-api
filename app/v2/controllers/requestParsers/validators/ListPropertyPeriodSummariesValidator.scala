@@ -17,11 +17,10 @@
 package v2.controllers.requestParsers.validators
 
 import api.controllers.requestParsers.validators.Validator
-import api.controllers.requestParsers.validators.validations.{BusinessIdValidation, NinoValidation}
+import api.controllers.requestParsers.validators.validations.{BusinessIdValidation, NinoValidation, TaxYearValidation}
 import config.AppConfig
 
 import javax.inject.{Inject, Singleton}
-import v2.controllers.requestParsers.validators.validations._
 import api.models.errors.MtdError
 import v2.models.request.listPropertyPeriodSummaries.ListPropertyPeriodSummariesRawData
 

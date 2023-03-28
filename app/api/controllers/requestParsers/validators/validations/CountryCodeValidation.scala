@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package v2.controllers.requestParsers.validators.validations
+package api.controllers.requestParsers.validators.validations
 
 import api.models.errors.{CountryCodeFormatError, MtdError, RuleCountryCodeError}
 import com.neovisionaries.i18n.CountryCode
@@ -35,4 +35,5 @@ object CountryCodeValidation {
       }
     }
   }
+
 }

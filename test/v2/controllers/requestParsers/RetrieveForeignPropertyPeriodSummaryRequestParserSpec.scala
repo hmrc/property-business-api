@@ -18,7 +18,7 @@ package v2.controllers.requestParsers
 
 import api.mocks.validators.MockRetrieveForeignPropertyPeriodSummaryValidator
 import support.UnitSpec
-import v2.models.domain.TaxYear; import api.models.domain.Nino
+import api.models.domain.{Nino, TaxYear}
 import api.models.errors.{ BadRequestError, BusinessIdFormatError, ErrorWrapper, NinoFormatError }
 import v2.models.request.retrieveForeignPropertyPeriodSummary._
 

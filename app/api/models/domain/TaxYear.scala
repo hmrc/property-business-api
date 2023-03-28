@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package v2.models.domain
+package api.models.domain
 
 import config.FeatureSwitches
 

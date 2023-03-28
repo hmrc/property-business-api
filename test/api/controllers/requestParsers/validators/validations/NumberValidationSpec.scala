@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-package v2.controllers.requestParsers.validators.validations
+package api.controllers.requestParsers.validators.validations
 
+import api.models.errors.ValueFormatError
 import org.scalacheck.Arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckDrivenPropertyChecks
 import support.UnitSpec
-import api.models.errors.ValueFormatError
 
 class NumberValidationSpec extends UnitSpec with ScalaCheckDrivenPropertyChecks {
   val path = "/some/path"

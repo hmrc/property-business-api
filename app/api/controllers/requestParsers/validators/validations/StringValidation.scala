@@ -14,14 +14,22 @@
  * limitations under the License.
  */
 
-package v2.controllers.requestParsers.validators
+package api.controllers.requestParsers.validators.validations
 
-import java.time.format.DateTimeFormatter
+import api.models.errors.{MtdError, StringFormatError}
 
-package object validations {
+object StringValidation {
 
-  val dateFormat: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
-  val NoValidationErrors            = List()
-  val minimumTaxYear                = 2021
+  def validateOptional(field: Option[String], path: String) = {
+    field match {
+      case None        => NoValidationErrors
+      case Some(value) => validate(value, path)
+    }
+  }
+
+  def validate(field: String, path: String): List[MtdError] = {
+    val regex = "^[0-9a-zA-Z{À-˿’}\\- _&`():.'^]{1,90}$"
+    if (field.matches(regex)) NoValidationErrors else List(StringFormatError.copy(paths = Some(Seq(path))))
+  }
 
 }

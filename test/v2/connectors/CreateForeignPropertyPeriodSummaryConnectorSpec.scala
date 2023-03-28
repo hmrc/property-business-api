@@ -18,8 +18,7 @@ package v2.connectors
 
 import api.connectors.ConnectorSpec
 import fixtures.CreateForeignPropertyPeriodSummaryFixtures.CreateForeignPropertyPeriodSummaryFixtures
-import v2.models.domain.TaxYear
-import api.models.domain.Nino
+import api.models.domain.{Nino, TaxYear}
 import api.models.outcomes.ResponseWrapper
 import v2.models.request.createForeignPropertyPeriodSummary._
 import v2.models.response.createForeignPropertyPeriodSummary.CreateForeignPropertyPeriodSummaryResponse

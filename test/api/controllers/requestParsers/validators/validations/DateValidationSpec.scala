@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-package v2.controllers.requestParsers.validators.validations
+package api.controllers.requestParsers.validators.validations
 
+import api.models.errors.{FromDateFormatError, ToDateFormatError}
 import support.UnitSpec
-import api.models.errors.{ FromDateFormatError, ToDateFormatError }
 
 class DateValidationSpec extends UnitSpec {
 

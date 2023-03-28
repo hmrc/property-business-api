@@ -14,11 +14,28 @@
  * limitations under the License.
  */
 
-package v2.models.domain
+package api.models.domain
 
-sealed trait HistoricPropertyType
+import play.api.libs.json.{JsString, Writes}
 
-object HistoricPropertyType {
-  case object NonFhl extends HistoricPropertyType
-  case object Fhl    extends HistoricPropertyType
+case class PeriodId(value: String) {
+
+  val (from, to): (String, String) = {
+    if (value.length == 21) {
+      val f = value.substring(0, 10)
+      val t = value.substring(11, 21)
+      (f, t)
+    } else {
+      ("", "")
+    }
+  }
+
+}
+
+object PeriodId {
+  implicit val writes: Writes[PeriodId] = Writes(x => JsString(x.value))
+
+  def apply(from: String, to: String): PeriodId = {
+    PeriodId(s"${from}_$to")
+  }
 }

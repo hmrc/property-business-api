@@ -60,14 +60,12 @@ abstract class AuthorisedController(cc: ControllerComponents)(implicit ec: Execu
       implicit val headerCarrier: HeaderCarrier = hc(request)
 
       lookupService.lookup(nino).flatMap[Result] {
-        case Right(mtdId)                  => invokeBlockWithAuthCheck(mtdId, request, block)
-        case Left(NinoFormatError)         => Future.successful(BadRequest(Json.toJson(NinoFormatError)))
-        case Left(UnauthorisedError)       => Future.successful(Forbidden(Json.toJson(UnauthorisedError)))
-        case Left(InvalidBearerTokenError) => Future.successful(Unauthorized(Json.toJson(InvalidBearerTokenError)))
-        case Left(_)                       => Future.successful(InternalServerError(Json.toJson(InternalError)))
+        case Right(mtdId) => invokeBlockWithAuthCheck(mtdId, request, block)
+        case Left(mtdError) => errorResponse(mtdError)
       }
     }
 
+    private def errorResponse[A](mtdError: MtdError): Future[Result] = Future.successful(Status(mtdError.httpStatus)(mtdError.asJson))
   }
 
 }

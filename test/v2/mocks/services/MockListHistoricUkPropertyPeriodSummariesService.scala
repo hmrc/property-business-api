@@ -20,7 +20,7 @@ import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
 import uk.gov.hmrc.http.HeaderCarrier
 import api.controllers.EndpointLogContext
-import v2.models.domain.HistoricPropertyType
+import api.models.domain.HistoricPropertyType
 import api.models.errors.ErrorWrapper
 import api.models.outcomes.ResponseWrapper
 import v2.models.request.listHistoricUkPropertyPeriodSummaries.ListHistoricUkPropertyPeriodSummariesRequest

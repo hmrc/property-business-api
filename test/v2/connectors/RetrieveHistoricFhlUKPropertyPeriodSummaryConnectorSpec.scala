@@ -18,9 +18,8 @@ package v2.connectors
 
 import api.connectors.{ConnectorSpec, DownstreamOutcome}
 import org.scalamock.handlers.CallHandler
-import v2.models.domain.PeriodId
 import api.models.errors.{DownstreamErrorCode, DownstreamErrors}
-import api.models.domain.Nino
+import api.models.domain.{Nino, PeriodId}
 import api.models.outcomes.ResponseWrapper
 import v2.models.request.retrieveHistoricFhlUkPiePeriodSummary.RetrieveHistoricFhlUkPiePeriodSummaryRequest
 import v2.models.response.retrieveHistoricFhlUkPiePeriodSummary.{PeriodExpenses, PeriodIncome, RetrieveHistoricFhlUkPiePeriodSummaryResponse}

@@ -22,7 +22,7 @@ import uk.gov.hmrc.http.HeaderCarrier
 import v2.connectors.RetrieveUkPropertyPeriodSummaryConnector.{ NonUkResult, UkResult }
 import api.controllers.EndpointLogContext
 import v2.mocks.connectors.MockRetrieveUkPropertyPeriodSummaryConnector
-import v2.models.domain.TaxYear; import api.models.domain.Nino
+import api.models.domain.{Nino, TaxYear}
 import api.models.errors._
 import api.models.outcomes.ResponseWrapper
 import v2.models.request.retrieveUkPropertyPeriodSummary.RetrieveUkPropertyPeriodSummaryRequest

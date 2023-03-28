@@ -17,7 +17,7 @@
 package v2.controllers.requestParsers.validators
 
 import api.controllers.requestParsers.validators.Validator
-import api.controllers.requestParsers.validators.validations.{BusinessIdValidation, NinoValidation, SubmissionIdValidation}
+import api.controllers.requestParsers.validators.validations.{BusinessIdValidation, JsonFormatValidation, NinoValidation, NumberValidation, SubmissionIdValidation, TaxYearValidation}
 import com.google.inject.Inject
 import config.AppConfig
 import v2.controllers.requestParsers.validators.validations._

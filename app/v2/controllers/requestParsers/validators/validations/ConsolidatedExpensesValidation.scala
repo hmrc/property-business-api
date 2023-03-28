@@ -24,6 +24,7 @@ import v2.models.request.common.ukFhlPieProperty.UkFhlPieExpenses
 import v2.models.request.common.ukFhlProperty.{UkFhlPropertyExpenses => CommonUkFhlPropertyExpenses}
 import v2.models.request.common.ukNonFhlProperty.{UkNonFhlPropertyExpenses => CommonUkNonFhlPropertyExpenses}
 import v2.models.request.createHistoricNonFhlUkPropertyPeriodSummary.UkNonFhlPropertyExpenses
+import api.controllers.requestParsers.validators.validations.NoValidationErrors
 
 object ConsolidatedExpensesValidation {
 

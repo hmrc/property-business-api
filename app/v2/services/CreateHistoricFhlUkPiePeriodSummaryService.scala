@@ -21,7 +21,7 @@ import cats.implicits._
 import uk.gov.hmrc.http.HeaderCarrier
 import utils.Logging
 import api.controllers.EndpointLogContext
-import v2.models.domain.PeriodId
+import api.models.domain.PeriodId
 import api.models.errors._
 import api.models.outcomes.ResponseWrapper
 import v2.models.request.createHistoricFhlUkPiePeriodSummary.CreateHistoricFhlUkPiePeriodSummaryRequest

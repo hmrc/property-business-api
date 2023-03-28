@@ -14,22 +14,27 @@
  * limitations under the License.
  */
 
-package v2.controllers.requestParsers.validators.validations
+package api.controllers.requestParsers.validators.validations
 
-import api.models.errors.{MtdError, StringFormatError}
+import api.models.errors.{MtdError, ValueFormatError}
 
+object NumberValidation {
 
-object StringValidation {
-
-  def validateOptional(field: Option[String], path: String) = {
+  def validateOptional(field: Option[BigDecimal], path: String, min: BigDecimal = 0, max: BigDecimal = 99999999999.99): List[MtdError] = {
     field match {
       case None        => NoValidationErrors
-      case Some(value) => validate(value, path)
+      case Some(value) => validate(value, path, min, max)
     }
   }
 
-  def validate(field: String, path: String): List[MtdError] = {
-    val regex = "^[0-9a-zA-Z{À-˿’}\\- _&`():.'^]{1,90}$"
-    if (field.matches(regex)) NoValidationErrors else List(StringFormatError.copy(paths = Some(Seq(path))))
+  def validate(field: BigDecimal, path: String, min: BigDecimal = 0, max: BigDecimal = 99999999999.99): List[MtdError] = {
+    if (field >= min && field <= max && field.scale <= 2) {
+      Nil
+    } else {
+      List(
+        ValueFormatError.forPathAndRange(path, min.toString, max.toString)
+      )
+    }
   }
+
 }

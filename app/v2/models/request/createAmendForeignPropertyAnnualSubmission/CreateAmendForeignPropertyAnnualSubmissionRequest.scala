@@ -16,8 +16,7 @@
 
 package v2.models.request.createAmendForeignPropertyAnnualSubmission
 
-import api.models.domain.Nino
-import v2.models.domain.TaxYear
+import api.models.domain.{Nino, TaxYear}
 
 case class CreateAmendForeignPropertyAnnualSubmissionRequest(nino: Nino,
                                                              businessId: String,

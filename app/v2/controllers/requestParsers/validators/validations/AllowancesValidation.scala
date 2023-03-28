@@ -21,6 +21,7 @@ import v2.models.request.createAmendForeignPropertyAnnualSubmission.foreignFhlEe
 import v2.models.request.createAmendForeignPropertyAnnualSubmission.foreignNonFhl.ForeignNonFhlAllowances
 import v2.models.request.amendUkPropertyAnnualSubmission.ukFhlProperty.UkFhlPropertyAllowances
 import v2.models.request.amendUkPropertyAnnualSubmission.ukNonFhlProperty.UkNonFhlPropertyAllowances
+import api.controllers.requestParsers.validators.validations.NoValidationErrors
 
 object AllowancesValidation {
 
@@ -41,7 +42,7 @@ object AllowancesValidation {
       case Some(_) =>
         allowances match {
           case UkNonFhlPropertyAllowances(None, None, None, None, None, None, None, Some(_), None, None) => NoValidationErrors
-          case _                                                                                         => List(RuleBothAllowancesSuppliedError.copy(paths = Some(Seq(path))))
+          case _ => List(RuleBothAllowancesSuppliedError.copy(paths = Some(Seq(path))))
         }
     }
   }
@@ -63,8 +64,9 @@ object AllowancesValidation {
       case Some(_) =>
         allowances match {
           case ForeignNonFhlAllowances(None, None, None, None, None, None, Some(_), None) => NoValidationErrors
-          case _                                                                          => List(RuleBothAllowancesSuppliedError.copy(paths = Some(Seq(path))))
+          case _ => List(RuleBothAllowancesSuppliedError.copy(paths = Some(Seq(path))))
         }
     }
   }
+
 }

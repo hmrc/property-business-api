@@ -18,6 +18,7 @@ package v2.controllers
 
 import api.controllers.{AuthorisedController, BaseController, EndpointLogContext}
 import api.models.audit.{AuditEvent, AuditResponse, FlattenedGenericAuditDetail}
+import api.models.domain.HistoricPropertyType
 import cats.data.EitherT
 import play.api.libs.json.Json
 import play.api.mvc.{Action, AnyContent, ControllerComponents}
@@ -25,7 +26,6 @@ import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.audit.http.connector.AuditResult
 import utils.{IdGenerator, Logging}
 import v2.controllers.requestParsers.DeleteHistoricUkPropertyAnnualSubmissionRequestParser
-import v2.models.domain.HistoricPropertyType
 import api.models.errors._
 import api.services.{AuditService, EnrolmentsAuthService, MtdIdLookupService}
 import v2.models.request.deleteHistoricUkPropertyAnnualSubmission.DeleteHistoricUkPropertyAnnualSubmissionRawData

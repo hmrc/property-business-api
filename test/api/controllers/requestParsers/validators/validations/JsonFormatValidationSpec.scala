@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-package v2.controllers.requestParsers.validators.validations
+package api.controllers.requestParsers.validators.validations
 
-import play.api.libs.json.{ Json, OFormat }
+import api.models.errors.RuleIncorrectOrEmptyBodyError
+import play.api.libs.json.{Json, OFormat}
 import shapeless.HNil
 import support.UnitSpec
 import utils.EmptinessChecker
-import api.models.errors.RuleIncorrectOrEmptyBodyError
 import v2.models.utils.JsonErrorValidators
 
 class JsonFormatValidationSpec extends UnitSpec with JsonErrorValidators {

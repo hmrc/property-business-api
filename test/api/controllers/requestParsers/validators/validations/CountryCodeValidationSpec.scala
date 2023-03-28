@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-package v2.controllers.requestParsers.validators.validations
+package api.controllers.requestParsers.validators.validations
 
+import api.models.errors.{CountryCodeFormatError, RuleCountryCodeError}
 import support.UnitSpec
-import api.models.errors.{ CountryCodeFormatError, RuleCountryCodeError }
 
 class CountryCodeValidationSpec extends UnitSpec {
   "CountryCodeValidation" when {

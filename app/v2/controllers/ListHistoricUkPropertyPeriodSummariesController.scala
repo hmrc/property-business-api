@@ -24,7 +24,7 @@ import play.api.mvc.{Action, AnyContent, ControllerComponents}
 import utils.{IdGenerator, Logging}
 import v2.controllers.requestParsers.ListHistoricUkPropertyPeriodSummariesRequestParser
 import api.hateoas.HateoasFactory
-import v2.models.domain.HistoricPropertyType
+import api.models.domain.HistoricPropertyType
 import api.models.errors._
 import api.services.{EnrolmentsAuthService, MtdIdLookupService}
 import v2.models.request.listHistoricUkPropertyPeriodSummaries.ListHistoricUkPropertyPeriodSummariesRawData

@@ -16,9 +16,9 @@
 
 package v2.models.response.listHistoricUkPropertyPeriodSummaries
 
+import api.models.domain.PeriodId
 import play.api.libs.functional.syntax._
 import play.api.libs.json._
-import v2.models.domain.PeriodId
 
 case class SubmissionPeriod(fromDate: String, toDate: String) {
   def periodId: PeriodId = PeriodId(fromDate, toDate)

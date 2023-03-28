@@ -19,10 +19,10 @@ package v2.connectors
 import api.connectors.{BaseDownstreamConnector, DownstreamOutcome}
 import api.connectors.DownstreamUri.IfsUri
 import api.connectors.httpparsers.StandardDownstreamHttpParser.readsEmpty
+import api.models.domain.HistoricPropertyType
 import config.AppConfig
 import play.api.libs.json.JsObject
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
-import v2.models.domain.HistoricPropertyType
 import v2.models.request.deleteHistoricUkPropertyAnnualSubmission.DeleteHistoricUkPropertyAnnualSubmissionRequest
 
 import javax.inject.{Inject, Singleton}

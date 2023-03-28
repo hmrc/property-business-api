@@ -16,7 +16,6 @@
 
 package v2.models.request.listPropertyPeriodSummaries
 
-import api.models.domain.Nino
-import v2.models.domain.TaxYear
+import api.models.domain.{Nino, TaxYear}
 
 case class ListPropertyPeriodSummariesRequest(nino: Nino, businessId: String, taxYear: TaxYear)

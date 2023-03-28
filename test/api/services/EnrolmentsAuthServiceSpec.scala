@@ -17,7 +17,7 @@
 package api.services
 
 import api.models.auth.UserDetails
-import api.models.errors.{InternalError, UnauthorisedError}
+import api.models.errors.{InternalError, ClientNotAuthenticatedError}
 import config.ConfidenceLevelConfig
 import mocks.MockAppConfig
 import org.scalamock.handlers.CallHandler
@@ -208,7 +208,7 @@ class EnrolmentsAuthServiceSpec extends ServiceSpec with MockAppConfig {
 
         MockAppConfig.confidenceLevelCheckEnabled.returns(ConfidenceLevelConfig(definitionEnabled = true, authValidationEnabled = false))
 
-        val expected = Left(UnauthorisedError)
+        val expected = Left(ClientNotAuthenticatedError)
 
         MockedAuthConnector
           .authorised(EmptyPredicate, authRetrievals)
@@ -225,7 +225,7 @@ class EnrolmentsAuthServiceSpec extends ServiceSpec with MockAppConfig {
 
         MockAppConfig.confidenceLevelCheckEnabled.returns(ConfidenceLevelConfig(definitionEnabled = true, authValidationEnabled = false))
 
-        val expected = Left(UnauthorisedError)
+        val expected = Left(ClientNotAuthenticatedError)
 
         MockedAuthConnector
           .authorised(EmptyPredicate, authRetrievals)

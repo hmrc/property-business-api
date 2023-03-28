@@ -18,8 +18,7 @@ package v2.connectors
 
 import api.connectors.ConnectorSpec
 import play.api.libs.json.JsObject
-import v2.models.domain.{HistoricPropertyType, TaxYear}
-import api.models.domain.Nino
+import api.models.domain.{HistoricPropertyType, Nino, TaxYear}
 import api.models.outcomes.ResponseWrapper
 import v2.models.request.deleteHistoricUkPropertyAnnualSubmission.DeleteHistoricUkPropertyAnnualSubmissionRequest
 

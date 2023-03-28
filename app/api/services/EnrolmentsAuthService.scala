@@ -26,7 +26,7 @@ import uk.gov.hmrc.auth.core.authorise.Predicate
 import uk.gov.hmrc.auth.core.retrieve.~
 import uk.gov.hmrc.http.HeaderCarrier
 import utils.Logging
-import api.models.errors.{InternalError, UnauthorisedError}
+import api.models.errors.{InternalError, ClientNotAuthenticatedError}
 import api.models.outcomes.AuthOutcome
 import uk.gov.hmrc.auth.core.retrieve.v2.Retrievals.{affinityGroup, authorisedEnrolments}
 import uk.gov.hmrc.auth.core.retrieve.v2.Retrievals
@@ -72,10 +72,10 @@ class EnrolmentsAuthService @Inject() (val connector: AuthConnector, val appConf
         }
       case _ =>
         logger.warn(s"[EnrolmentsAuthService][authorised] Invalid AffinityGroup.")
-        Future.successful(Left(UnauthorisedError))
+        Future.successful(Left(ClientNotAuthenticatedError))
     } recoverWith {
-      case _: MissingBearerToken     => Future.successful(Left(UnauthorisedError))
-      case _: AuthorisationException => Future.successful(Left(UnauthorisedError))
+      case _: MissingBearerToken     => Future.successful(Left(ClientNotAuthenticatedError))
+      case _: AuthorisationException => Future.successful(Left(ClientNotAuthenticatedError))
       case error =>
         logger.warn(s"[EnrolmentsAuthService][authorised] An unexpected error occurred: $error")
         Future.successful(Left(InternalError))

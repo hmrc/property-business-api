@@ -17,9 +17,8 @@
 package v2.controllers.requestParsers
 
 import api.controllers.requestParsers.RequestParser
-import api.models.domain.Nino
+import api.models.domain.{Nino, TaxYear}
 import v2.controllers.requestParsers.validators.CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionValidator
-import v2.models.domain.TaxYear
 import v2.models.request.createAmendHistoricNonFhlUkPropertyAnnualSubmission._
 
 import javax.inject.Inject

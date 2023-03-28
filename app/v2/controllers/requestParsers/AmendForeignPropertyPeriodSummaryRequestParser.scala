@@ -17,11 +17,10 @@
 package v2.controllers.requestParsers
 
 import api.controllers.requestParsers.RequestParser
-import api.models.domain.Nino
+import api.models.domain.{Nino, TaxYear}
 
 import javax.inject.Inject
 import v2.controllers.requestParsers.validators.AmendForeignPropertyPeriodSummaryValidator
-import v2.models.domain.TaxYear
 import v2.models.request.amendForeignPropertyPeriodSummary._
 
 class AmendForeignPropertyPeriodSummaryRequestParser @Inject()(val validator: AmendForeignPropertyPeriodSummaryValidator)

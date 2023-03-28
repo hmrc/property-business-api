@@ -17,9 +17,8 @@
 package v2.controllers.requestParsers
 
 import api.controllers.requestParsers.RequestParser
-import api.models.domain.Nino
+import api.models.domain.{Nino, TaxYear}
 import v2.controllers.requestParsers.validators.CreateUkPropertyPeriodSummaryValidator
-import v2.models.domain.TaxYear
 import v2.models.request.createUkPropertyPeriodSummary._
 
 import javax.inject.Inject

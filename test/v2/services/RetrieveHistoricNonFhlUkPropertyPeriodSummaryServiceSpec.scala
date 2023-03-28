@@ -20,9 +20,8 @@ import support.UnitSpec
 import uk.gov.hmrc.http.HeaderCarrier
 import api.controllers.EndpointLogContext
 import v2.mocks.connectors.MockRetrieveHistoricNonFhlUkPropertyPeriodSummaryConnector
-import v2.models.domain.PeriodId
 import api.models.errors._
-import api.models.domain.Nino
+import api.models.domain.{Nino, PeriodId}
 import api.models.outcomes.ResponseWrapper
 import v2.models.request.retrieveHistoricNonFhlUkPiePeriodSummary.RetrieveHistoricNonFhlUkPiePeriodSummaryRequest
 import v2.models.response.retrieveHistoricNonFhlUkPiePeriodSummary.{PeriodExpenses, PeriodIncome, RetrieveHistoricNonFhlUkPiePeriodSummaryResponse}

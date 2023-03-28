@@ -16,7 +16,7 @@
 
 package fixtures.CreateAmendFhlUkPropertyAnnualSubmission
 
-import v2.models.domain.TaxYear; import api.models.domain.Nino
+import api.models.domain.TaxYear; import api.models.domain.Nino
 import v2.models.request.common.ukPropertyRentARoom.UkPropertyAdjustmentsRentARoom
 import v2.models.request.createAmendHistoricFhlUkPropertyAnnualSubmission.{
   CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequest,

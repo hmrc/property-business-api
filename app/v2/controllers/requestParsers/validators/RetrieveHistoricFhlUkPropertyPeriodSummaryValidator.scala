@@ -17,11 +17,10 @@
 package v2.controllers.requestParsers.validators
 
 import api.controllers.requestParsers.validators.Validator
-import api.controllers.requestParsers.validators.validations.NinoValidation
+import api.controllers.requestParsers.validators.validations.{HistoricPeriodIdValidation, NinoValidation}
 import config.AppConfig
 
 import javax.inject.{Inject, Singleton}
-import v2.controllers.requestParsers.validators.validations.HistoricPeriodIdValidation
 import api.models.errors.MtdError
 import v2.models.request.retrieveHistoricFhlUkPiePeriodSummary.RetrieveHistoricFhlUkPiePeriodSummaryRawData
 

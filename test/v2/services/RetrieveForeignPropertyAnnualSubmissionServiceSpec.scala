@@ -26,7 +26,7 @@ import v2.models.response.retrieveForeignPropertyAnnualSubmission.foreignPropert
 import uk.gov.hmrc.http.HeaderCarrier
 import v2.connectors.RetrieveForeignPropertyAnnualSubmissionConnector.{ ForeignResult, NonForeignResult }
 import api.controllers.EndpointLogContext
-import v2.models.domain.TaxYear; import api.models.domain.Nino
+import api.models.domain.{Nino, TaxYear}
 import api.models.outcomes.ResponseWrapper
 
 import scala.concurrent.ExecutionContext.Implicits.global

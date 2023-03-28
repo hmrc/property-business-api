@@ -18,6 +18,7 @@ package v2.controllers.requestParsers.validators.validations
 
 import api.models.errors.{MtdError, RuleBuildingNameNumberError}
 import v2.models.request.common.Building
+import api.controllers.requestParsers.validators.validations.NoValidationErrors
 
 object BuildingValidation {
 

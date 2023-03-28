@@ -17,16 +17,16 @@
 package v2.controllers
 
 import api.controllers.ControllerBaseSpec
+import api.mocks.hateoas.MockHateoasFactory
+import api.mocks.services.MockAuditService
+import api.mocks.MockIdGenerator
 import play.api.libs.json.Json
 import play.api.mvc.{Action, AnyContent, Result}
 import uk.gov.hmrc.http.HeaderCarrier
-import v2.mocks.MockIdGenerator
-import v2.mocks.hateoas.MockHateoasFactory
 import v2.mocks.requestParsers.MockListHistoricUkPropertyPeriodSummariesRequestParser
-import v2.mocks.services.{MockAuditService, MockEnrolmentsAuthService, MockListHistoricUkPropertyPeriodSummariesService, MockMtdIdLookupService}
-import v2.models.domain.HistoricPropertyType
+import v2.mocks.services.{MockEnrolmentsAuthService, MockListHistoricUkPropertyPeriodSummariesService, MockMtdIdLookupService}
 import api.models.errors._
-import api.models.domain.Nino
+import api.models.domain.{HistoricPropertyType, Nino}
 import api.models.hateoas.HateoasWrapper
 import api.models.outcomes.ResponseWrapper
 import v2.models.request.listHistoricUkPropertyPeriodSummaries.{ListHistoricUkPropertyPeriodSummariesRawData, ListHistoricUkPropertyPeriodSummariesRequest}

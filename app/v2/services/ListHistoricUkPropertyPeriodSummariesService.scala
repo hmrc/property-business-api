@@ -21,7 +21,7 @@ import uk.gov.hmrc.http.HeaderCarrier
 import utils.Logging
 import v2.connectors.ListHistoricUkPropertyPeriodSummariesConnector
 import api.controllers.EndpointLogContext
-import v2.models.domain.HistoricPropertyType
+import api.models.domain.HistoricPropertyType
 import api.models.errors._
 import v2.models.request.listHistoricUkPropertyPeriodSummaries.ListHistoricUkPropertyPeriodSummariesRequest
 import v2.models.response.listHistoricUkPropertyPeriodSummaries.{ListHistoricUkPropertyPeriodSummariesResponse, SubmissionPeriod}

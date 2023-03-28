@@ -16,9 +16,9 @@
 
 package v2.controllers.requestParsers.validators
 
+import api.models.domain.HistoricPropertyType
 import mocks.MockAppConfig
 import support.UnitSpec
-import v2.models.domain.HistoricPropertyType
 import api.models.errors._
 import v2.models.request.deleteHistoricUkPropertyAnnualSubmission.DeleteHistoricUkPropertyAnnualSubmissionRawData
 

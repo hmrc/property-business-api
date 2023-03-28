@@ -16,10 +16,10 @@
 
 package v2.models.response.listHistoricUkPropertyPeriodSummaries
 
+import api.models.domain.{HistoricPropertyType, PeriodId}
 import mocks.MockAppConfig
 import play.api.libs.json.Json
 import support.UnitSpec
-import v2.models.domain.{ HistoricPropertyType, PeriodId }
 import api.models.hateoas.Method._
 import api.models.hateoas.Link
 

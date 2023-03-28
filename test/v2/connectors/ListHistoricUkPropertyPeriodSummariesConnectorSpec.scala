@@ -17,8 +17,7 @@
 package v2.connectors
 
 import api.connectors.ConnectorSpec
-import v2.models.domain.HistoricPropertyType
-import api.models.domain.Nino
+import api.models.domain.{HistoricPropertyType, Nino}
 import api.models.outcomes.ResponseWrapper
 import v2.models.request.listHistoricUkPropertyPeriodSummaries.ListHistoricUkPropertyPeriodSummariesRequest
 import v2.models.response.listHistoricUkPropertyPeriodSummaries.{ListHistoricUkPropertyPeriodSummariesResponse, SubmissionPeriod}

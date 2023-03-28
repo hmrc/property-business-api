@@ -101,11 +101,11 @@ class CreateUkPropertyPeriodSummaryController @Inject() (val authService: Enrolm
   private def errorResult(errorWrapper: ErrorWrapper) =
     errorWrapper.error match {
       case BadRequestError | NinoFormatError | TaxYearFormatError | BusinessIdFormatError | RuleTypeOfBusinessIncorrectError |
-          RuleTaxYearRangeInvalidError | RuleTaxYearNotSupportedError | RuleIncorrectOrEmptyBodyError | ToDateFormatError | FromDateFormatError |
-          MtdErrorWithCode(ValueFormatError.code) | MtdErrorWithCode(RuleBothExpensesSuppliedError.code) | RuleToDateBeforeFromDateError |
-          RuleOverlappingPeriodError | RuleMisalignedPeriodError | RuleNotContiguousPeriodError | MtdErrorWithCode(
+           RuleTaxYearRangeInvalidError | RuleTaxYearNotSupportedError | RuleIncorrectOrEmptyBodyError | ToDateFormatError | FromDateFormatError |
+           CustomMtdError(ValueFormatError.code) | CustomMtdError(RuleBothExpensesSuppliedError.code) | RuleToDateBeforeFromDateError |
+           RuleOverlappingPeriodError | RuleMisalignedPeriodError | RuleNotContiguousPeriodError | CustomMtdError(
             RuleIncorrectOrEmptyBodyError.code) | RuleDuplicateSubmissionError | RuleInvalidSubmissionPeriodError |
-          RuleIncorrectGovTestScenarioError | RuleInvalidSubmissionEndDateError =>
+           RuleIncorrectGovTestScenarioError | RuleInvalidSubmissionEndDateError =>
         BadRequest(Json.toJson(errorWrapper))
       case NotFoundError => NotFound(Json.toJson(errorWrapper))
       case InternalError => InternalServerError(Json.toJson(errorWrapper))

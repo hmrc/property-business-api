@@ -317,6 +317,7 @@ class CreateAmendForeignPropertyAnnualSubmissionControllerISpec extends V2Integr
             |{
             |   "code":"RULE_INCORRECT_OR_EMPTY_BODY_SUBMITTED",
             |   "message":"An empty or non-matching body was submitted",
+            |   "httpStatus":400,
             |   "paths":[
             |      "/foreignNonFhlProperty/0/adjustments/privateUseAdjustment",
             |      "/foreignNonFhlProperty/0/allowances/structuredBuildingAllowance/0/firstYear/qualifyingDate",

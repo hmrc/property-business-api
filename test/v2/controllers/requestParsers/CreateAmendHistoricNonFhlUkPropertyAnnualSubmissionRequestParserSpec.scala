@@ -16,11 +16,11 @@
 
 package v2.controllers.requestParsers
 
-import api.mocks.validators.MockCreateAmendHistoricNonFhlUkPropertyAnnualSubmissionValidator
 import fixtures.CreateAmendNonFhlUkPropertyAnnualSubmission.RequestResponseModelFixtures
 import support.UnitSpec
 import api.models.domain.{Nino, TaxYear}
 import api.models.errors.{ BadRequestError, DateFormatError, ErrorWrapper, NinoFormatError }
+import v2.mocks.validators.MockCreateAmendHistoricNonFhlUkPropertyAnnualSubmissionValidator
 import v2.models.request.createAmendHistoricNonFhlUkPropertyAnnualSubmission._
 
 class CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestParserSpec extends UnitSpec with RequestResponseModelFixtures {

@@ -14,23 +14,24 @@
  * limitations under the License.
  */
 
-package api.mocks.validators
+package v2.mocks.validators
 
 import org.scalamock.handlers.CallHandler1
 import org.scalamock.scalatest.MockFactory
-import v2.controllers.requestParsers.validators.RetrieveForeignPropertyPeriodSummaryValidator
+import v2.controllers.requestParsers.validators.DeleteHistoricUkPropertyAnnualSubmissionValidator
 import api.models.errors.MtdError
-import v2.models.request.retrieveForeignPropertyPeriodSummary.RetrieveForeignPropertyPeriodSummaryRawData
+import v2.models.request.deleteHistoricUkPropertyAnnualSubmission.DeleteHistoricUkPropertyAnnualSubmissionRawData
 
-class MockRetrieveForeignPropertyPeriodSummaryValidator extends MockFactory {
+class MockDeleteHistoricUkPropertyAnnualSubmissionValidator extends MockFactory {
 
-  val mockValidator: RetrieveForeignPropertyPeriodSummaryValidator = mock[RetrieveForeignPropertyPeriodSummaryValidator]
+  val mockValidator: DeleteHistoricUkPropertyAnnualSubmissionValidator = mock[DeleteHistoricUkPropertyAnnualSubmissionValidator]
 
-  object MockRetrieveForeignPropertyPeriodSummaryValidator {
+  object MockDeleteHistoricUkPropertyAnnualSubmissionValidator {
 
-    def validate(data: RetrieveForeignPropertyPeriodSummaryRawData): CallHandler1[RetrieveForeignPropertyPeriodSummaryRawData, List[MtdError]] = {
+    def validate(
+        data: DeleteHistoricUkPropertyAnnualSubmissionRawData): CallHandler1[DeleteHistoricUkPropertyAnnualSubmissionRawData, List[MtdError]] = {
       (mockValidator
-        .validate(_: RetrieveForeignPropertyPeriodSummaryRawData))
+        .validate(_: DeleteHistoricUkPropertyAnnualSubmissionRawData))
         .expects(data)
     }
   }

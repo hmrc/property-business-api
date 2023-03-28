@@ -16,11 +16,11 @@
 
 package v2.controllers.requestParsers
 
-import api.mocks.validators.MockCreateAmendHistoricFhlUkPropertyAnnualSubmissionValidator
 import play.api.libs.json.Json
 import support.UnitSpec
 import api.models.domain.{Nino, TaxYear}
 import api.models.errors.{ BadRequestError, DateFormatError, ErrorWrapper, NinoFormatError }
+import v2.mocks.validators.MockCreateAmendHistoricFhlUkPropertyAnnualSubmissionValidator
 import v2.models.request.common.ukPropertyRentARoom.UkPropertyAdjustmentsRentARoom
 import v2.models.request.createAmendHistoricFhlUkPropertyAnnualSubmission._
 

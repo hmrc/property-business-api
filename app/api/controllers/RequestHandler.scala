@@ -188,12 +188,12 @@ object RequestHandler {
         InternalServerError(InternalError.asJson)
       }
 
-      def auditIfRequired(httpStatus: Int, response: Either[ErrorWrapper, Option[JsValue]])(implicit
+      def auditIfRequired(httpStatus: Int, response: Either[ErrorWrapper, Option[JsValue]], versionNumber: String = "2.0")(implicit
           ctx: RequestContext,
           request: UserRequest[_],
           ec: ExecutionContext): Unit =
         auditHandler.foreach { creator =>
-          creator.performAudit(request.userDetails, httpStatus, response)
+          creator.performAudit(request.userDetails, httpStatus, response, versionNumber)
         }
 
     }

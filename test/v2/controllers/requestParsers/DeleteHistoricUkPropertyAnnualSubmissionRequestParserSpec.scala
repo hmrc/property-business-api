@@ -16,10 +16,10 @@
 
 package v2.controllers.requestParsers
 
-import api.mocks.validators.MockDeleteHistoricUkPropertyAnnualSubmissionValidator
 import api.models.domain.{HistoricPropertyType, Nino, TaxYear}
 import support.UnitSpec
 import api.models.errors._
+import v2.mocks.validators.MockDeleteHistoricUkPropertyAnnualSubmissionValidator
 import v2.models.request.deleteHistoricUkPropertyAnnualSubmission.{
   DeleteHistoricUkPropertyAnnualSubmissionRawData,
   DeleteHistoricUkPropertyAnnualSubmissionRequest

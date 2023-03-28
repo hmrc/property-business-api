@@ -14,9 +14,10 @@
  * limitations under the License.
  */
 
-package v1.routing
+package routing
 
 import akka.actor.ActorSystem
+import api.models.errors.{InvalidAcceptHeaderError, UnsupportedVersionError}
 import com.typesafe.config.ConfigFactory
 import mocks.MockAppConfig
 import org.scalatest.Inside
@@ -29,7 +30,6 @@ import play.api.mvc._
 import play.api.routing.Router
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import routing.{VersionRoutingMap, VersionRoutingRequestHandler}
 import support.UnitSpec
 
 class VersionRoutingRequestHandlerSpec extends UnitSpec with Inside with MockAppConfig with GuiceOneAppPerSuite {
@@ -154,7 +154,7 @@ class VersionRoutingRequestHandlerSpec extends UnitSpec with Inside with MockApp
           val result = a.apply(request)
 
           status(result) shouldBe NOT_ACCEPTABLE
-          contentAsJson(result) shouldBe Json.toJson(api.models.errors.InvalidAcceptHeaderError)
+          contentAsJson(result) shouldBe Json.toJson(InvalidAcceptHeaderError)
       }
     }
   }
@@ -170,7 +170,7 @@ class VersionRoutingRequestHandlerSpec extends UnitSpec with Inside with MockApp
           val result = a.apply(request)
 
           status(result) shouldBe NOT_FOUND
-          contentAsJson(result) shouldBe Json.toJson(api.models.errors.UnsupportedVersionError)
+          contentAsJson(result) shouldBe Json.toJson(UnsupportedVersionError)
       }
     }
   }
@@ -187,7 +187,7 @@ class VersionRoutingRequestHandlerSpec extends UnitSpec with Inside with MockApp
             val result = a.apply(request)
 
             status(result) shouldBe NOT_FOUND
-            contentAsJson(result) shouldBe Json.toJson(api.models.errors.UnsupportedVersionError)
+            contentAsJson(result) shouldBe Json.toJson(UnsupportedVersionError)
 
         }
       }

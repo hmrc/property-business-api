@@ -14,24 +14,23 @@
  * limitations under the License.
  */
 
-package api.mocks.validators
+package v2.mocks.validators
 
 import org.scalamock.handlers.CallHandler1
 import org.scalamock.scalatest.MockFactory
-import v2.controllers.requestParsers.validators.CreateAmendForeignPropertyAnnualSubmissionValidator
+import v2.controllers.requestParsers.validators.AmendHistoricFhlUkPiePeriodSummaryValidator
 import api.models.errors.MtdError
-import v2.models.request.createAmendForeignPropertyAnnualSubmission.CreateAmendForeignPropertyAnnualSubmissionRawData
+import v2.models.request.amendHistoricFhlUkPiePeriodSummary.AmendHistoricFhlUkPiePeriodSummaryRawData
 
-class MockCreateAmendForeignPropertyAnnualSubmissionValidator extends MockFactory {
+class MockAmendHistoricFhlUkPiePeriodSummaryValidator extends MockFactory {
 
-  val mockValidator: CreateAmendForeignPropertyAnnualSubmissionValidator = mock[CreateAmendForeignPropertyAnnualSubmissionValidator]
+  val mockValidator: AmendHistoricFhlUkPiePeriodSummaryValidator = mock[AmendHistoricFhlUkPiePeriodSummaryValidator]
 
-  object MockAmendForeignPropertyValidator {
+  object MockAmendHistoricFhlUkPiePeriodSummaryValidator {
 
-    def validate(
-        data: CreateAmendForeignPropertyAnnualSubmissionRawData): CallHandler1[CreateAmendForeignPropertyAnnualSubmissionRawData, List[MtdError]] = {
+    def validate(data: AmendHistoricFhlUkPiePeriodSummaryRawData): CallHandler1[AmendHistoricFhlUkPiePeriodSummaryRawData, List[MtdError]] = {
       (mockValidator
-        .validate(_: CreateAmendForeignPropertyAnnualSubmissionRawData))
+        .validate(_: AmendHistoricFhlUkPiePeriodSummaryRawData))
         .expects(data)
     }
   }

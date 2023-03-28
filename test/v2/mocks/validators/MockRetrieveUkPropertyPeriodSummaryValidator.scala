@@ -14,25 +14,24 @@
  * limitations under the License.
  */
 
-package api.mocks.validators
+package v2.mocks.validators
 
 import org.scalamock.handlers.CallHandler1
 import org.scalamock.scalatest.MockFactory
-import v2.controllers.requestParsers.validators.DeletePropertyAnnualSubmissionValidator
+import v2.controllers.requestParsers.validators.RetrieveUkPropertyPeriodSummaryValidator
 import api.models.errors.MtdError
-import v2.models.request.deletePropertyAnnualSubmission.DeletePropertyAnnualSubmissionRawData
+import v2.models.request.retrieveUkPropertyPeriodSummary.RetrieveUkPropertyPeriodSummaryRawData
 
-class MockDeletePropertyAnnualSubmissionValidator extends MockFactory {
+class MockRetrieveUkPropertyPeriodSummaryValidator extends MockFactory {
 
-  val mockValidator: DeletePropertyAnnualSubmissionValidator = mock[DeletePropertyAnnualSubmissionValidator]
+  val mockValidator: RetrieveUkPropertyPeriodSummaryValidator = mock[RetrieveUkPropertyPeriodSummaryValidator]
 
-  object MockDeletePropertyAnnualSubmissionValidator {
+  object MockRetrieveUkPropertyPeriodSummaryValidator {
 
-    def validate(data: DeletePropertyAnnualSubmissionRawData): CallHandler1[DeletePropertyAnnualSubmissionRawData, List[MtdError]] = {
+    def validate(data: RetrieveUkPropertyPeriodSummaryRawData): CallHandler1[RetrieveUkPropertyPeriodSummaryRawData, List[MtdError]] = {
       (mockValidator
-        .validate(_: DeletePropertyAnnualSubmissionRawData))
+        .validate(_: RetrieveUkPropertyPeriodSummaryRawData))
         .expects(data)
     }
   }
-
 }

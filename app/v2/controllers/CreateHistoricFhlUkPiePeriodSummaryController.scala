@@ -137,7 +137,7 @@ class CreateHistoricFhlUkPiePeriodSummaryController @Inject() (val authService: 
           ) =>
         BadRequest(Json.toJson(errorWrapper))
 
-      case UnauthorisedError => Unauthorized(Json.toJson(errorWrapper))
+      case ClientNotAuthenticatedError => Unauthorized(Json.toJson(errorWrapper))
       case NotFoundError     => NotFound(Json.toJson(errorWrapper))
       case InternalError     => InternalServerError(Json.toJson(errorWrapper))
       case _                 => unhandledError(errorWrapper)

@@ -17,6 +17,7 @@
 package api.controllers
 
 import api.models.errors._
+import api.models.errors.{InvalidBearerTokenError, ClientNotAuthenticatedError, InternalError}
 import api.services.{EnrolmentsAuthService, MtdIdLookupService}
 import play.api.libs.json.Json
 import play.api.mvc.{Action, AnyContent}
@@ -40,6 +41,7 @@ class AuthorisedControllerSpec extends ControllerBaseSpec {
       def action(nino: String): Action[AnyContent] = authorisedAction(nino).async {
         Future.successful(Ok(Json.obj()))
       }
+
     }
 
     lazy val target = new TestController()
@@ -115,7 +117,7 @@ class AuthorisedControllerSpec extends ControllerBaseSpec {
 
       MockMtdIdLookupService
         .lookup(nino)
-        .returns(Future.successful(Left(UnauthorisedError)))
+        .returns(Future.successful(Left(ClientNotAuthenticatedError)))
 
       private val result = target.action(nino)(fakeGetRequest)
       status(result) shouldBe FORBIDDEN
@@ -143,7 +145,7 @@ class AuthorisedControllerSpec extends ControllerBaseSpec {
 
       MockedEnrolmentsAuthService
         .authorised(predicate)
-        .returns(Future.successful(Left(UnauthorisedError)))
+        .returns(Future.successful(Left(ClientNotAuthenticatedError)))
 
       private val result = target.action(nino)(fakeGetRequest)
       status(result) shouldBe FORBIDDEN
@@ -159,10 +161,11 @@ class AuthorisedControllerSpec extends ControllerBaseSpec {
 
       MockedEnrolmentsAuthService
         .authorised(predicate)
-        .returns(Future.successful(Left(UnauthorisedError)))
+        .returns(Future.successful(Left(ClientNotAuthenticatedError)))
 
       private val result = target.action(nino)(fakeGetRequest)
       status(result) shouldBe FORBIDDEN
     }
   }
+
 }

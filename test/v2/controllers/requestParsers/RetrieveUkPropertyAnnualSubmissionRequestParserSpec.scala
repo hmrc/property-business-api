@@ -16,10 +16,10 @@
 
 package v2.controllers.requestParsers
 
-import api.mocks.validators.MockRetrieveUkPropertyAnnualSubmissionValidator
 import support.UnitSpec
 import api.models.domain.{Nino, TaxYear}
 import api.models.errors.{ BadRequestError, BusinessIdFormatError, ErrorWrapper, NinoFormatError }
+import v2.mocks.validators.MockRetrieveUkPropertyAnnualSubmissionValidator
 import v2.models.request.retrieveUkPropertyAnnualSubmission._
 
 class RetrieveUkPropertyAnnualSubmissionRequestParserSpec extends UnitSpec {

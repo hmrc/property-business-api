@@ -14,18 +14,22 @@
  * limitations under the License.
  */
 
-package api.mocks
+package api.models.errors
 
-import org.scalamock.handlers.CallHandler
-import org.scalamock.scalatest.MockFactory
-import utils.IdGenerator
+import play.api.libs.json.{JsObject, Json, OWrites}
 
-trait MockIdGenerator extends MockFactory {
+case class MtdError(code: String, message: String, httpStatus: Int, paths: Option[Seq[String]] = None) {
+  val asJson: JsObject = Json.toJson(this).as[JsObject]
+}
 
-  val mockIdGenerator: IdGenerator = mock[IdGenerator]
+object MtdError {
+  implicit val writes: OWrites[MtdError] = Json.writes[MtdError]
 
-  object MockIdGenerator {
-    def getCorrelationId: CallHandler[String] = (mockIdGenerator.getCorrelationId _).expects()
-  }
+  implicit def genericWrites[T <: MtdError]: OWrites[T] =
+    writes.contramap[T](c => c: MtdError)
 
+}
+
+object MtdErrorWithCode {
+  def unapply(arg: MtdError): Option[String] = Some(arg.code)
 }

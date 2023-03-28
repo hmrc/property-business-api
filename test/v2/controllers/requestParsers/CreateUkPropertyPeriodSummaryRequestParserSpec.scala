@@ -16,11 +16,11 @@
 
 package v2.controllers.requestParsers
 
-import api.mocks.validators.MockCreateUkPropertyPeriodSummaryValidator
 import play.api.libs.json.Json
 import support.UnitSpec
 import api.models.domain.{Nino, TaxYear}
 import api.models.errors.{ BadRequestError, BusinessIdFormatError, ErrorWrapper, NinoFormatError }
+import v2.mocks.validators.MockCreateUkPropertyPeriodSummaryValidator
 import v2.models.request.common.ukFhlProperty.{ UkFhlProperty, UkFhlPropertyIncome }
 import v2.models.request.createUkPropertyPeriodSummary._
 

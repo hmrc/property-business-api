@@ -14,23 +14,23 @@
  * limitations under the License.
  */
 
-package api.mocks.validators
+package v2.mocks.validators
 
 import org.scalamock.handlers.CallHandler1
 import org.scalamock.scalatest.MockFactory
-import v2.controllers.requestParsers.validators.RetrieveUkPropertyAnnualSubmissionValidator
+import v2.controllers.requestParsers.validators.ListPropertyPeriodSummariesValidator
 import api.models.errors.MtdError
-import v2.models.request.retrieveUkPropertyAnnualSubmission.RetrieveUkPropertyAnnualSubmissionRawData
+import v2.models.request.listPropertyPeriodSummaries.ListPropertyPeriodSummariesRawData
 
-class MockRetrieveUkPropertyAnnualSubmissionValidator extends MockFactory {
+class MockListPropertyPeriodSummariesValidator extends MockFactory {
 
-  val mockValidator: RetrieveUkPropertyAnnualSubmissionValidator = mock[RetrieveUkPropertyAnnualSubmissionValidator]
+  val mockValidator: ListPropertyPeriodSummariesValidator = mock[ListPropertyPeriodSummariesValidator]
 
-  object MockRetrieveUkPropertyAnnualSubmissionValidator {
+  object MockListPropertyPeriodSummariesValidator {
 
-    def validate(data: RetrieveUkPropertyAnnualSubmissionRawData): CallHandler1[RetrieveUkPropertyAnnualSubmissionRawData, List[MtdError]] = {
+    def validate(data: ListPropertyPeriodSummariesRawData): CallHandler1[ListPropertyPeriodSummariesRawData, List[MtdError]] = {
       (mockValidator
-        .validate(_: RetrieveUkPropertyAnnualSubmissionRawData))
+        .validate(_: ListPropertyPeriodSummariesRawData))
         .expects(data)
     }
   }

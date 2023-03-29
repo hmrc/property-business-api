@@ -16,17 +16,13 @@
 
 package v2.mocks.services
 
+import api.controllers.RequestContext
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
-import uk.gov.hmrc.http.HeaderCarrier
-import api.controllers.EndpointLogContext
-import api.models.errors.ErrorWrapper
-import api.models.outcomes.ResponseWrapper
 import v2.models.request.createUkPropertyPeriodSummary.CreateUkPropertyPeriodSummaryRequest
-import v2.models.response.createUkPropertyPeriodSummary.CreateUkPropertyPeriodSummaryResponse
-import v2.services.CreateUkPropertyPeriodSummaryService
+import v2.services.{CreateUkPropertyPeriodSummaryService, CreateUkPropertyPeriodSummaryServiceOutcome}
 
-import scala.concurrent.{ ExecutionContext, Future }
+import scala.concurrent.{ExecutionContext, Future}
 
 trait MockCreateUkPropertyPeriodSummaryService extends MockFactory {
 
@@ -34,18 +30,17 @@ trait MockCreateUkPropertyPeriodSummaryService extends MockFactory {
 
   object MockCreateUkPropertyService {
 
-    def createUkProperty(requestData: CreateUkPropertyPeriodSummaryRequest)
-      : CallHandler[Future[Either[ErrorWrapper, ResponseWrapper[CreateUkPropertyPeriodSummaryResponse]]]] = {
+    def createUkProperty(requestData: CreateUkPropertyPeriodSummaryRequest): CallHandler[Future[CreateUkPropertyPeriodSummaryServiceOutcome]] = {
       (
         mockCreateUkPropertyService
           .createUkProperty(_: CreateUkPropertyPeriodSummaryRequest)(
-            _: HeaderCarrier,
-            _: ExecutionContext,
-            _: EndpointLogContext,
-            _: String
+            _: RequestContext,
+            _: ExecutionContext
           )
         )
-        .expects(requestData, *, *, *, *)
+        .expects(requestData, *, *)
     }
+
   }
+
 }

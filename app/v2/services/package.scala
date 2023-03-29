@@ -17,10 +17,26 @@
 package v2
 
 import api.services.ServiceOutcome
+import v2.models.response.createUkPropertyPeriodSummary.CreateUkPropertyPeriodSummaryResponse
+import v2.models.response.listPropertyPeriodSummaries.ListPropertyPeriodSummariesResponse
+import v2.models.response.retrieveUkPropertyAnnualSubmission.RetrieveUkPropertyAnnualSubmissionResponse
+import v2.models.response.retrieveUkPropertyPeriodSummary.RetrieveUkPropertyPeriodSummaryResponse
 
 package object services {
 
   // FHL
   type AmendHistoricFhlUkPiePeriodSummaryServiceOutcome = ServiceOutcome[Unit]
+
+  // Property Annual Submission
+  type AmendUkPropertyAnnualSubmissionServiceOutcome          = ServiceOutcome[Unit]
+  type RetrieveUkPropertyAnnualSubmissionServiceOutcome       = ServiceOutcome[RetrieveUkPropertyAnnualSubmissionResponse]
+  type DeletePropertyAnnualSubmissionServiceOutcome           = ServiceOutcome[Unit]
+  type DeleteHistoricUkPropertyAnnualSubmissionServiceOutcome = ServiceOutcome[Unit]
+
+  // Property Period Summary
+  type AmendUkPropertyPeriodSummaryServiceOutcome    = ServiceOutcome[Unit]
+  type CreateUkPropertyPeriodSummaryServiceOutcome   = ServiceOutcome[CreateUkPropertyPeriodSummaryResponse]
+  type RetrieveUkPropertyPeriodSummaryServiceOutcome = ServiceOutcome[RetrieveUkPropertyPeriodSummaryResponse]
+  type ListPropertyPeriodSummariesServiceOutcome     = ServiceOutcome[ListPropertyPeriodSummariesResponse]
 
 }

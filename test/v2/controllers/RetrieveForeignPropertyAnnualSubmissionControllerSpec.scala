@@ -19,13 +19,13 @@ package v2.controllers
 import akka.http.scaladsl.model.headers.LinkParams.rel
 import api.controllers.ControllerBaseSpec
 import api.mocks.hateoas.MockHateoasFactory
-import api.mocks.services.MockAuditService
+import api.mocks.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService}
 import api.mocks.MockIdGenerator
 import play.api.libs.json.Json
 import play.api.mvc.Result
 import uk.gov.hmrc.http.HeaderCarrier
 import v2.mocks.requestParsers.MockRetrieveForeignPropertyAnnualSubmissionRequestParser
-import v2.mocks.services.{MockEnrolmentsAuthService, MockMtdIdLookupService, MockRetrieveForeignPropertyAnnualSubmissionService}
+import v2.mocks.services.MockRetrieveForeignPropertyAnnualSubmissionService
 import api.models.domain.{Nino, TaxYear}
 import api.models.errors._
 import api.models.hateoas.Method.GET
@@ -217,4 +217,5 @@ class RetrieveForeignPropertyAnnualSubmissionControllerSpec
       }
     }
   }
+
 }

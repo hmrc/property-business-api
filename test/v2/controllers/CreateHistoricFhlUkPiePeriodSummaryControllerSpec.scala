@@ -18,22 +18,48 @@ package v2.controllers
 
 import api.controllers.ControllerBaseSpec
 import api.mocks.hateoas.MockHateoasFactory
-import api.mocks.services.MockAuditService
+import api.mocks.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService}
 import api.mocks.MockIdGenerator
 import play.api.libs.json.{Json, JsValue}
 import play.api.mvc.Result
 import uk.gov.hmrc.http.HeaderCarrier
 import v2.mocks.requestParsers.MockCreateHistoricFhlUkPiePeriodSummaryRequestParser
-import v2.mocks.services.{MockCreateHistoricFhlUkPiePeriodSummaryService, MockEnrolmentsAuthService, MockMtdIdLookupService}
-import api.models.errors.{ErrorWrapper, FromDateFormatError, InternalError, MtdError, NinoFormatError, NotFoundError, RuleBothExpensesSuppliedError, RuleDuplicateSubmissionError, RuleIncorrectGovTestScenarioError, RuleIncorrectOrEmptyBodyError, RuleMisalignedPeriodError, RuleNotContiguousPeriodError, RuleOverlappingPeriodError, RuleTaxYearNotSupportedError, RuleToDateBeforeFromDateError, ServiceUnavailableError, ToDateFormatError, ValueFormatError}
+import v2.mocks.services.MockCreateHistoricFhlUkPiePeriodSummaryService
+import api.models.errors.{
+  ErrorWrapper,
+  FromDateFormatError,
+  InternalError,
+  MtdError,
+  NinoFormatError,
+  NotFoundError,
+  RuleBothExpensesSuppliedError,
+  RuleDuplicateSubmissionError,
+  RuleIncorrectGovTestScenarioError,
+  RuleIncorrectOrEmptyBodyError,
+  RuleMisalignedPeriodError,
+  RuleNotContiguousPeriodError,
+  RuleOverlappingPeriodError,
+  RuleTaxYearNotSupportedError,
+  RuleToDateBeforeFromDateError,
+  ServiceUnavailableError,
+  ToDateFormatError,
+  ValueFormatError
+}
 import api.models.hateoas.Method.GET
 import api.models.audit.{AuditError, AuditEvent, AuditResponse, FlattenedGenericAuditDetail}
 import api.models.auth.UserDetails
 import api.models.domain.{Nino, PeriodId}
 import api.models.hateoas.{HateoasWrapper, Link}
 import api.models.outcomes.ResponseWrapper
-import v2.models.request.createHistoricFhlUkPiePeriodSummary.{CreateHistoricFhlUkPiePeriodSummaryRawData, CreateHistoricFhlUkPiePeriodSummaryRequest, CreateHistoricFhlUkPiePeriodSummaryRequestBody}
-import v2.models.response.createHistoricFhlUkPiePeriodSummary.{CreateHistoricFhlUkPiePeriodSummaryHateoasData, CreateHistoricFhlUkPiePeriodSummaryResponse}
+import v2.models.request.createHistoricFhlUkPiePeriodSummary.{
+  CreateHistoricFhlUkPiePeriodSummaryRawData,
+  CreateHistoricFhlUkPiePeriodSummaryRequest,
+  CreateHistoricFhlUkPiePeriodSummaryRequestBody
+}
+import v2.models.response.createHistoricFhlUkPiePeriodSummary.{
+  CreateHistoricFhlUkPiePeriodSummaryHateoasData,
+  CreateHistoricFhlUkPiePeriodSummaryResponse
+}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future

@@ -18,13 +18,13 @@ package v2.controllers
 
 import api.controllers.ControllerBaseSpec
 import api.mocks.hateoas.MockHateoasFactory
-import api.mocks.services.MockAuditService
+import api.mocks.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService}
 import api.mocks.MockIdGenerator
 import play.api.libs.json.Json
 import play.api.mvc.Result
 import uk.gov.hmrc.http.HeaderCarrier
 import v2.mocks.requestParsers.MockRetrieveUkPropertyAnnualSubmissionRequestParser
-import v2.mocks.services.{MockEnrolmentsAuthService, MockMtdIdLookupService, MockRetrieveUkPropertyAnnualSubmissionService}
+import v2.mocks.services.MockRetrieveUkPropertyAnnualSubmissionService
 import api.models.domain.{Nino, TaxYear}
 import api.models.errors._
 import api.models.hateoas.Method.GET
@@ -87,7 +87,7 @@ class RetrieveUkPropertyAnnualSubmissionControllerSpec
         rentARoom = Some(
           UkFhlPropertyRentARoom(
             jointlyLet = true
-          )),
+          ))
       )
     ),
     allowances = Some(
@@ -253,4 +253,5 @@ class RetrieveUkPropertyAnnualSubmissionControllerSpec
       }
     }
   }
+
 }

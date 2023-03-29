@@ -20,11 +20,12 @@ import akka.http.scaladsl.model.headers.LinkParams.rel
 import api.controllers.ControllerBaseSpec
 import api.mocks.hateoas.MockHateoasFactory
 import api.mocks.MockIdGenerator
+import api.mocks.services.{MockEnrolmentsAuthService, MockMtdIdLookupService}
 import play.api.libs.json.Json
 import play.api.mvc.Result
 import uk.gov.hmrc.http.HeaderCarrier
 import v2.mocks.requestParsers.MockRetrieveForeignPropertyPeriodSummaryRequestParser
-import v2.mocks.services.{MockEnrolmentsAuthService, MockMtdIdLookupService, MockRetrieveForeignPropertyPeriodSummaryService}
+import v2.mocks.services.MockRetrieveForeignPropertyPeriodSummaryService
 import api.models.domain.{Nino, TaxYear}
 import api.models.errors._
 import api.models.hateoas.Method.GET
@@ -214,4 +215,5 @@ class RetrieveForeignPropertyPeriodSummaryControllerSpec
       input.foreach(args => (serviceErrors _).tupled(args))
     }
   }
+
 }

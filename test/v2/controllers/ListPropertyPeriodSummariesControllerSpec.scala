@@ -18,13 +18,13 @@ package v2.controllers
 
 import api.controllers.ControllerBaseSpec
 import api.mocks.hateoas.MockHateoasFactory
-import api.mocks.services.MockAuditService
+import api.mocks.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService}
 import api.mocks.MockIdGenerator
 import play.api.libs.json.Json
 import play.api.mvc.Result
 import uk.gov.hmrc.http.HeaderCarrier
 import v2.mocks.requestParsers.MockListPropertyPeriodSummariesRequestParser
-import v2.mocks.services.{MockEnrolmentsAuthService, MockListPropertyPeriodSummariesService, MockMtdIdLookupService}
+import v2.mocks.services.MockListPropertyPeriodSummariesService
 import api.models.domain.{Nino, TaxYear}
 import api.models.errors._
 import api.models.hateoas.Method._
@@ -166,4 +166,5 @@ class ListPropertyPeriodSummariesControllerSpec
       }
     }
   }
+
 }

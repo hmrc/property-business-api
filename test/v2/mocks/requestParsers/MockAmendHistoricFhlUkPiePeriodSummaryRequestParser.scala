@@ -20,20 +20,21 @@ import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
 import v2.controllers.requestParsers.AmendHistoricFhlUkPiePeriodSummaryRequestParser
 import api.models.errors.ErrorWrapper
-import v2.models.request.amendHistoricFhlUkPiePeriodSummary.{ AmendHistoricFhlUkPiePeriodSummaryRawData, AmendHistoricFhlUkPiePeriodSummaryRequest }
+import v2.models.request.amendHistoricFhlUkPiePeriodSummary.{AmendHistoricFhlUkPiePeriodSummaryRawData, AmendHistoricFhlUkPiePeriodSummaryRequest}
 
 trait MockAmendHistoricFhlUkPiePeriodSummaryRequestParser extends MockFactory {
 
   val mockAmendHistoricFhlUkPropertyPeriodSummaryRequestParser: AmendHistoricFhlUkPiePeriodSummaryRequestParser =
     mock[AmendHistoricFhlUkPiePeriodSummaryRequestParser]
 
-  object MockAmendHistoricFhlUkPropertyPeriodSummaryRequestParser {
+  object MockAmendHistoricFhlUkPiePeriodSummaryRequestParser {
 
-    def parseRequest(
-        data: AmendHistoricFhlUkPiePeriodSummaryRawData): CallHandler[Either[ErrorWrapper, AmendHistoricFhlUkPiePeriodSummaryRequest]] = {
+    def parse(data: AmendHistoricFhlUkPiePeriodSummaryRawData): CallHandler[Either[ErrorWrapper, AmendHistoricFhlUkPiePeriodSummaryRequest]] = {
       (mockAmendHistoricFhlUkPropertyPeriodSummaryRequestParser
         .parseRequest(_: AmendHistoricFhlUkPiePeriodSummaryRawData)(_: String))
         .expects(data, *)
     }
+
   }
+
 }

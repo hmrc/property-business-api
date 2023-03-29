@@ -18,13 +18,13 @@ package v2.controllers
 
 import api.controllers.ControllerBaseSpec
 import api.mocks.hateoas.MockHateoasFactory
-import api.mocks.services.MockAuditService
+import api.mocks.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService}
 import api.mocks.MockIdGenerator
 import play.api.libs.json.{Json, JsValue}
 import play.api.mvc.Result
 import uk.gov.hmrc.http.HeaderCarrier
 import v2.mocks.requestParsers.MockCreateAmendForeignPropertyAnnualSubmissionRequestParser
-import v2.mocks.services.{MockCreateAmendForeignPropertyAnnualSubmissionService, MockEnrolmentsAuthService, MockMtdIdLookupService}
+import v2.mocks.services.MockCreateAmendForeignPropertyAnnualSubmissionService
 import api.models.audit.{AuditError, AuditEvent, AuditResponse, GenericAuditDetail}
 import api.models.domain.{Nino, TaxYear}
 import api.models.errors._
@@ -163,23 +163,24 @@ class CreateAmendForeignPropertyAnnualSubmissionControllerSpec
           (RuleTaxYearNotSupportedError, BAD_REQUEST),
           (RuleTaxYearRangeInvalidError, BAD_REQUEST),
           (CountryCodeFormatError.copy(paths = Some(Seq("foreignNonFhlProperty/0/countryCode"))), BAD_REQUEST),
-          (ValueFormatError.copy(
-             paths = Some(Seq(
-               "foreignFhlEea/adjustments/privateUseAdjustment",
-               "foreignFhlEea/adjustments/balancingCharge",
-               "foreignFhlEea/allowances/annualInvestmentAllowance",
-               "foreignFhlEea/allowances/otherCapitalAllowance",
-               "foreignFhlEea/allowances/propertyIncomeAllowance",
-               "foreignFhlEea/allowances/electricChargePointAllowance",
-               "foreignNonFhlProperty/adjustments/privateUseAdjustment",
-               "foreignNonFhlProperty/adjustments/balancingCharge",
-               "foreignNonFhlProperty/allowances/annualInvestmentAllowance",
-               "foreignNonFhlProperty/allowances/costOfReplacingDomesticItems",
-               "foreignNonFhlProperty/allowances/zeroEmissionsGoodsVehicleAllowance",
-               "foreignNonFhlProperty/allowances/propertyIncomeAllowance",
-               "foreignNonFhlProperty/allowances/electricChargePointAllowance"
-             ))),
-           BAD_REQUEST),
+          (
+            ValueFormatError.copy(
+              paths = Some(Seq(
+                "foreignFhlEea/adjustments/privateUseAdjustment",
+                "foreignFhlEea/adjustments/balancingCharge",
+                "foreignFhlEea/allowances/annualInvestmentAllowance",
+                "foreignFhlEea/allowances/otherCapitalAllowance",
+                "foreignFhlEea/allowances/propertyIncomeAllowance",
+                "foreignFhlEea/allowances/electricChargePointAllowance",
+                "foreignNonFhlProperty/adjustments/privateUseAdjustment",
+                "foreignNonFhlProperty/adjustments/balancingCharge",
+                "foreignNonFhlProperty/allowances/annualInvestmentAllowance",
+                "foreignNonFhlProperty/allowances/costOfReplacingDomesticItems",
+                "foreignNonFhlProperty/allowances/zeroEmissionsGoodsVehicleAllowance",
+                "foreignNonFhlProperty/allowances/propertyIncomeAllowance",
+                "foreignNonFhlProperty/allowances/electricChargePointAllowance"
+              ))),
+            BAD_REQUEST),
           (RuleIncorrectOrEmptyBodyError, BAD_REQUEST),
           (RuleCountryCodeError.copy(paths = Some(Seq("foreignNonFhlProperty/0/countryCode"))), BAD_REQUEST)
         )
@@ -227,4 +228,5 @@ class CreateAmendForeignPropertyAnnualSubmissionControllerSpec
       }
     }
   }
+
 }

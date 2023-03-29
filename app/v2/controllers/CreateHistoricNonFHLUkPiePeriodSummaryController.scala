@@ -36,9 +36,6 @@ import v2.services.CreateHistoricNonFhlUkPropertyPeriodSummaryService
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
-/*
-  Pie = Property Income & Expenses
- */
 @Singleton
 class CreateHistoricNonFHLUkPiePeriodSummaryController @Inject() (val authService: EnrolmentsAuthService,
                                                                   val lookupService: MtdIdLookupService,

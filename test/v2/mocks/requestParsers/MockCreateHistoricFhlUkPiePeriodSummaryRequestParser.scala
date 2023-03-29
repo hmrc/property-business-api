@@ -20,10 +20,7 @@ import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
 import v2.controllers.requestParsers.CreateHistoricFhlUkPiePeriodSummaryRequestParser
 import api.models.errors.ErrorWrapper
-import v2.models.request.createHistoricFhlUkPiePeriodSummary.{
-  CreateHistoricFhlUkPiePeriodSummaryRawData,
-  CreateHistoricFhlUkPiePeriodSummaryRequest
-}
+import v2.models.request.createHistoricFhlUkPiePeriodSummary.{CreateHistoricFhlUkPiePeriodSummaryRawData, CreateHistoricFhlUkPiePeriodSummaryRequest}
 
 trait MockCreateHistoricFhlUkPiePeriodSummaryRequestParser extends MockFactory {
 
@@ -32,11 +29,12 @@ trait MockCreateHistoricFhlUkPiePeriodSummaryRequestParser extends MockFactory {
 
   object MockCreateHistoricFhlUkPiePeriodSummaryRequestParser {
 
-    def parseRequest(
-        data: CreateHistoricFhlUkPiePeriodSummaryRawData): CallHandler[Either[ErrorWrapper, CreateHistoricFhlUkPiePeriodSummaryRequest]] = {
+    def parse(data: CreateHistoricFhlUkPiePeriodSummaryRawData): CallHandler[Either[ErrorWrapper, CreateHistoricFhlUkPiePeriodSummaryRequest]] = {
       (mockCreateHistoricFhlUkPiePeriodSummaryRequestParser
         .parseRequest(_: CreateHistoricFhlUkPiePeriodSummaryRawData)(_: String))
         .expects(data, *)
     }
+
   }
+
 }

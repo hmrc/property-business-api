@@ -66,59 +66,6 @@ class AmendHistoricFhlUkPropertyPeriodSummaryController @Inject() (val authServi
           .withHateoasResult(hateoasFactory)(AmendHistoricFhlUkPropertyPeriodSummaryHateoasData(nino, periodId))
 
       requestHandler.handleRequest(rawData)
-
-//      val result =
-//        for {
-//          parsedRequest   <- EitherT.fromEither[Future](parser.parseRequest(rawData))
-//          serviceResponse <- EitherT(service.amend(parsedRequest))
-//          vendorResponse <- EitherT.fromEither[Future](
-//            hateoasFactory
-//              .wrap(serviceResponse.responseData, AmendHistoricFhlUkPropertyPeriodSummaryHateoasData(nino, periodId))
-//              .asRight[ErrorWrapper])
-//        } yield {
-//
-//          logger.info(
-//            s"[${endpointLogContext.controllerName}][${endpointLogContext.endpointName}] - " +
-//              s"Success response received with CorrelationId: ${serviceResponse.correlationId}")
-//
-//          val response = Json.toJson(vendorResponse)
-//
-//          auditSubmission(
-//            FlattenedGenericAuditDetail(
-//              versionNumber = Some("2.0"),
-//              request.userDetails,
-//              Map("nino" -> nino, "periodId" -> periodId),
-//              Some(request.body),
-//              serviceResponse.correlationId,
-//              AuditResponse(httpStatus = OK, response = Right(None))
-//            )
-//          )
-//
-//          Ok(response)
-//            .withApiHeaders(serviceResponse.correlationId)
-//        }
-//
-//      result.leftMap { errorWrapper =>
-//        val resCorrelationId = errorWrapper.correlationId
-//        val result           = errorResult(errorWrapper).withApiHeaders(resCorrelationId)
-//
-//        logger.warn(
-//          s"[${endpointLogContext.controllerName}][${endpointLogContext.endpointName}] - " +
-//            s"Error response received with CorrelationId: $resCorrelationId")
-//
-//        auditSubmission(
-//          FlattenedGenericAuditDetail(
-//            versionNumber = Some("2.0"),
-//            request.userDetails,
-//            Map("nino" -> nino, "periodId" -> periodId),
-//            Some(request.body),
-//            resCorrelationId,
-//            AuditResponse(httpStatus = result.header.status, response = Left(errorWrapper.auditErrors))
-//          )
-//        )
-//
-//        result
-//      }.merge
     }
 
   private def auditHandler(nino: String, periodId: String, request: UserRequest[JsValue]): AuditHandler = {
@@ -140,7 +87,7 @@ class AmendHistoricFhlUkPropertyPeriodSummaryController @Inject() (val authServi
               )
             )
 
-          case Right(resp: Option[JsValue]) =>
+          case Right(_) =>
             auditSubmission(
               FlattenedGenericAuditDetail(
                 versionNumber = Some("2.0"),

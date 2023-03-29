@@ -16,39 +16,28 @@
 
 package v2.services
 
-import cats.data.EitherT
-import cats.implicits._
-import uk.gov.hmrc.http.HeaderCarrier
-import utils.Logging
-import api.controllers.EndpointLogContext
+import api.controllers.RequestContext
 import api.models.errors._
-import v2.models.request.createAmendHistoricNonFhlUkPropertyAnnualSubmission.CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequest
-import v2.models.response.createAmendHistoricNonFhlUkPropertyAnnualSubmission.CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionResponse
-import api.services.ServiceOutcome
-import api.support.DownstreamResponseMappingSupport
+import api.services.BaseService
+import cats.implicits._
 import v2.connectors.CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionConnector
+import v2.models.request.createAmendHistoricNonFhlUkPropertyAnnualSubmission.CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequest
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionService @Inject()(connector: CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionConnector)
-    extends DownstreamResponseMappingSupport
-    with Logging {
+class CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionService @Inject() (connector: CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionConnector)
+    extends BaseService {
 
-  def amend(request: CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequest)(
-      implicit hc: HeaderCarrier,
-      ec: ExecutionContext,
-      logContext: EndpointLogContext,
-      correlationId: String): Future[ServiceOutcome[CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionResponse]] = {
-    val result = for {
-      downstreamResponseWrapper <- EitherT(connector.amend(request)).leftMap(mapDownstreamErrors(downstreamErrorMap))
-    } yield downstreamResponseWrapper
+  def amend(request: CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequest)(implicit
+      ctx: RequestContext,
+      ec: ExecutionContext): Future[CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionServiceOutcome] = {
 
-    result.value
+    connector.amend(request).map(_.leftMap(mapDownstreamErrors(downstreamErrorMap)))
   }
 
-  val downstreamErrorMap: Map[String, MtdError] =
+  private val downstreamErrorMap: Map[String, MtdError] =
     Map(
       "INVALID_NINO"           -> NinoFormatError,
       "INVALID_TYPE"           -> InternalError,
@@ -62,4 +51,5 @@ class CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionService @Inject()(conne
       "SERVER_ERROR"           -> InternalError,
       "SERVICE_UNAVAILABLE"    -> InternalError
     )
+
 }

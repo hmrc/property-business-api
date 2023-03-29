@@ -17,13 +17,17 @@
 package v2
 
 import api.services.ServiceOutcome
+import v2.models.response.createAmendHistoricFhlUkPropertyAnnualSubmission.CreateAmendHistoricFhlUkPropertyAnnualSubmissionResponse
+import v2.models.response.createAmendHistoricNonFhlUkPropertyAnnualSubmission.CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionResponse
 
 package object services {
 
   // FHL
-  type AmendHistoricFhlUkPiePeriodSummaryServiceOutcome = ServiceOutcome[Unit]
+  type AmendHistoricFhlUkPiePeriodSummaryServiceOutcome               = ServiceOutcome[Unit]
+  type CreateAmendHistoricFhlUkPropertyAnnualSubmissionServiceOutcome = ServiceOutcome[CreateAmendHistoricFhlUkPropertyAnnualSubmissionResponse]
 
   // Non-FHL
-  type AmendHistoricNonFhlUkPiePeriodSummaryServiceOutcome = ServiceOutcome[Unit]
+  type AmendHistoricNonFhlUkPiePeriodSummaryServiceOutcome               = ServiceOutcome[Unit]
+  type CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionServiceOutcome = ServiceOutcome[CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionResponse]
 
 }

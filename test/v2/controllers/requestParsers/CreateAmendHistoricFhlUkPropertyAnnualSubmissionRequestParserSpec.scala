@@ -16,10 +16,10 @@
 
 package v2.controllers.requestParsers
 
-import play.api.libs.json.Json
+import play.api.libs.json.{JsValue, Json}
 import support.UnitSpec
 import api.models.domain.{Nino, TaxYear}
-import api.models.errors.{ BadRequestError, DateFormatError, ErrorWrapper, NinoFormatError }
+import api.models.errors.{BadRequestError, DateFormatError, ErrorWrapper, NinoFormatError}
 import v2.mocks.validators.MockCreateAmendHistoricFhlUkPropertyAnnualSubmissionValidator
 import v2.models.request.common.ukPropertyRentARoom.UkPropertyAdjustmentsRentARoom
 import v2.models.request.createAmendHistoricFhlUkPropertyAnnualSubmission._
@@ -31,8 +31,41 @@ class CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequestParserSpec extends 
   val taxYear: TaxYear               = TaxYear.fromMtd(mtdTaxYear)
   implicit val correlationId: String = "X-123"
 
-  private val requestBodyJson = Json.parse(
-    """
+  "The request parser" should {
+    "return a parsed request object" when {
+      "given valid request data" in new Test {
+        MockCreateAmendHistoricFhlUkPropertyAnnualSubmissionValidator.validate(rawData).returns(Nil)
+
+        parser.parseRequest(rawData) shouldBe Right(request)
+      }
+    }
+
+    "return an ErrorWrapper" when {
+      "a single validation error occurs" in new Test {
+        MockCreateAmendHistoricFhlUkPropertyAnnualSubmissionValidator
+          .validate(rawData)
+          .returns(List(NinoFormatError))
+
+        parser.parseRequest(rawData) shouldBe
+          Left(ErrorWrapper(correlationId, NinoFormatError, None))
+      }
+
+      "multiple validation errors occur" in new Test {
+        MockCreateAmendHistoricFhlUkPropertyAnnualSubmissionValidator
+          .validate(rawData)
+          .returns(List(NinoFormatError, DateFormatError))
+
+        parser.parseRequest(rawData) shouldBe
+          Left(ErrorWrapper(correlationId, BadRequestError, Some(Seq(NinoFormatError, DateFormatError))))
+      }
+    }
+  }
+
+  trait Test extends MockCreateAmendHistoricFhlUkPropertyAnnualSubmissionValidator {
+    lazy val parser = new CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequestParser(mockValidator)
+
+    protected val requestBodyJson: JsValue = Json.parse(
+      """
       |  {
       |     "annualAdjustments": {
       |        "lossBroughtForward": 111.50,
@@ -52,60 +85,30 @@ class CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequestParserSpec extends 
       |     }
       |  }
       |""".stripMargin
-  )
+    )
 
-  val inputData: CreateAmendHistoricFhlUkPropertyAnnualSubmissionRawData =
-    CreateAmendHistoricFhlUkPropertyAnnualSubmissionRawData(nino, mtdTaxYear, requestBodyJson)
+    protected def number(n: String): Option[BigDecimal] = Option(BigDecimal(n))
 
-  trait Test extends MockCreateAmendHistoricFhlUkPropertyAnnualSubmissionValidator {
-    lazy val parser = new CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequestParser(mockValidator)
-  }
+    protected val rawData: CreateAmendHistoricFhlUkPropertyAnnualSubmissionRawData =
+      CreateAmendHistoricFhlUkPropertyAnnualSubmissionRawData(nino, mtdTaxYear, requestBodyJson)
 
-  private def number(n: String): Option[BigDecimal] = Option(BigDecimal(n))
+    protected val requestBody: CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequestBody =
+      CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequestBody(
+        Some(
+          HistoricFhlAnnualAdjustments(
+            number("111.50"),
+            number("222.00"),
+            number("333.00"),
+            periodOfGraceAdjustment = true,
+            number("444.00"),
+            nonResidentLandlord = false,
+            Some(UkPropertyAdjustmentsRentARoom(true))
+          )),
+        Some(HistoricFhlAnnualAllowances(number("111.00"), number("222.00"), number("333.00"), None))
+      )
 
-  "The request parser" should {
-
-    "return a parsed request object" when {
-      "given valid request data" in new Test {
-        MockCreateAmendHistoricFhlUkPropertyAnnualSubmissionValidator.validate(inputData).returns(Nil)
-
-        val model = CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequestBody(
-          Option(
-            HistoricFhlAnnualAdjustments(number("111.50"),
-                                         number("222.00"),
-                                         number("333.00"),
-                                         true,
-                                         number("444.00"),
-                                         false,
-                                         Some(UkPropertyAdjustmentsRentARoom(true)))),
-          Option(HistoricFhlAnnualAllowances(number("111.00"), number("222.00"), number("333.00"), None))
-        )
-
-        parser.parseRequest(inputData) shouldBe
-          Right(CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequest(Nino(nino), taxYear, model))
-      }
-    }
-
-    "return an ErrorWrapper" when {
-
-      "a single validation error occurs" in new Test {
-        MockCreateAmendHistoricFhlUkPropertyAnnualSubmissionValidator
-          .validate(inputData)
-          .returns(List(NinoFormatError))
-
-        parser.parseRequest(inputData) shouldBe
-          Left(ErrorWrapper(correlationId, NinoFormatError, None))
-      }
-
-      "multiple validation errors occur" in new Test {
-        MockCreateAmendHistoricFhlUkPropertyAnnualSubmissionValidator
-          .validate(inputData)
-          .returns(List(NinoFormatError, DateFormatError))
-
-        parser.parseRequest(inputData) shouldBe
-          Left(ErrorWrapper(correlationId, BadRequestError, Some(Seq(NinoFormatError, DateFormatError))))
-      }
-    }
+    protected val request: CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequest =
+      CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequest(Nino(nino), taxYear, requestBody)
 
   }
 

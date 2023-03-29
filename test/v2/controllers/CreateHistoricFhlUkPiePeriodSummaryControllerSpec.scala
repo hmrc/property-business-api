@@ -51,7 +51,7 @@ class CreateHistoricFhlUkPiePeriodSummaryControllerSpec
   private val mtdId: String = "test-mtd-id"
 
   "CreateHistoricFhlUkPiePeriodSummaryController" should {
-    "return a successful response with status 200 (OK)" when {
+    "return a successful response with status 201 (CREATED)" when {
       "the request received is valid" in new Test {
         MockCreateHistoricFhlUkPiePeriodSummaryRequestParser
           .parse(rawData)
@@ -65,7 +65,7 @@ class CreateHistoricFhlUkPiePeriodSummaryControllerSpec
           .wrap(responseData, hateoasData)
           .returns(HateoasWrapper(responseData, testHateoasLinks))
 
-        runOkTest(expectedStatus = OK, maybeExpectedResponseBody = Some(responseBodyJsonWithHateoas))
+        runOkTest(expectedStatus = CREATED, maybeExpectedResponseBody = Some(responseBodyJsonWithHateoas))
       }
     }
 

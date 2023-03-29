@@ -21,6 +21,7 @@ import v2.models.response.createAmendHistoricFhlUkPropertyAnnualSubmission.Creat
 import v2.models.response.createAmendHistoricNonFhlUkPropertyAnnualSubmission.CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionResponse
 import v2.models.response.createHistoricFhlUkPiePeriodSummary.CreateHistoricFhlUkPiePeriodSummaryResponse
 import v2.models.response.createHistoricNonFhlUkPiePeriodSummary.CreateHistoricNonFhlUkPiePeriodSummaryResponse
+import v2.models.response.retrieveHistoricFhlUkPiePeriodSummary.RetrieveHistoricFhlUkPiePeriodSummaryResponse
 
 package object services {
 
@@ -28,6 +29,7 @@ package object services {
   type AmendHistoricFhlUkPiePeriodSummaryServiceOutcome               = ServiceOutcome[Unit]
   type CreateAmendHistoricFhlUkPropertyAnnualSubmissionServiceOutcome = ServiceOutcome[CreateAmendHistoricFhlUkPropertyAnnualSubmissionResponse]
   type CreateHistoricFhlUkPiePeriodSummaryServiceOutcome              = ServiceOutcome[CreateHistoricFhlUkPiePeriodSummaryResponse]
+  type RetrieveHistoricFhlUkPropertyPeriodSummaryServiceOutcome       = ServiceOutcome[RetrieveHistoricFhlUkPiePeriodSummaryResponse]
 
   // Non-FHL
   type AmendHistoricNonFhlUkPiePeriodSummaryServiceOutcome               = ServiceOutcome[Unit]

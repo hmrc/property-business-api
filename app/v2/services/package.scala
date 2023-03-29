@@ -22,6 +22,9 @@ import v2.models.response.createAmendHistoricNonFhlUkPropertyAnnualSubmission.Cr
 import v2.models.response.createHistoricFhlUkPiePeriodSummary.CreateHistoricFhlUkPiePeriodSummaryResponse
 import v2.models.response.createHistoricNonFhlUkPiePeriodSummary.CreateHistoricNonFhlUkPiePeriodSummaryResponse
 import v2.models.response.retrieveHistoricFhlUkPiePeriodSummary.RetrieveHistoricFhlUkPiePeriodSummaryResponse
+import v2.models.response.retrieveHistoricFhlUkPropertyAnnualSubmission.RetrieveHistoricFhlUkPropertyAnnualSubmissionResponse
+import v2.models.response.retrieveHistoricNonFhlUkPiePeriodSummary.RetrieveHistoricNonFhlUkPiePeriodSummaryResponse
+import v2.models.response.retrieveHistoricNonFhlUkPropertyAnnualSubmissionResponse.RetrieveHistoricNonFhlUkPropertyAnnualSubmissionResponse
 
 package object services {
 
@@ -30,10 +33,13 @@ package object services {
   type CreateAmendHistoricFhlUkPropertyAnnualSubmissionServiceOutcome = ServiceOutcome[CreateAmendHistoricFhlUkPropertyAnnualSubmissionResponse]
   type CreateHistoricFhlUkPiePeriodSummaryServiceOutcome              = ServiceOutcome[CreateHistoricFhlUkPiePeriodSummaryResponse]
   type RetrieveHistoricFhlUkPropertyPeriodSummaryServiceOutcome       = ServiceOutcome[RetrieveHistoricFhlUkPiePeriodSummaryResponse]
+  type RetrieveHistoricFhlUkPropertyAnnualSubmissionServiceOutcome    = ServiceOutcome[RetrieveHistoricFhlUkPropertyAnnualSubmissionResponse]
 
   // Non-FHL
   type AmendHistoricNonFhlUkPiePeriodSummaryServiceOutcome               = ServiceOutcome[Unit]
   type CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionServiceOutcome = ServiceOutcome[CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionResponse]
   type CreateHistoricNonFhlUkPropertyPeriodSummaryServiceOutcome         = ServiceOutcome[CreateHistoricNonFhlUkPiePeriodSummaryResponse]
+  type RetrieveHistoricNonFhlUkPropertyPeriodSummaryServiceOutcome       = ServiceOutcome[RetrieveHistoricNonFhlUkPiePeriodSummaryResponse]
+  type RetrieveHistoricNonFhlUkPropertyAnnualSubmissionServiceOutcome    = ServiceOutcome[RetrieveHistoricNonFhlUkPropertyAnnualSubmissionResponse]
 
 }

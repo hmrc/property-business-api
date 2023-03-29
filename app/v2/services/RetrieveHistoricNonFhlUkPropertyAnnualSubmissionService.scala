@@ -16,25 +16,27 @@
 
 package v2.services
 
-import cats.data.EitherT
-import uk.gov.hmrc.http.HeaderCarrier
-import utils.Logging
+import api.controllers.RequestContext
+import api.models.errors.{InternalError, MtdError, NinoFormatError, NotFoundError, RuleHistoricTaxYearNotSupportedError, TaxYearFormatError}
+import api.services.BaseService
+import cats.implicits.toBifunctorOps
 import v2.connectors.RetrieveHistoricNonFhlUkPropertyAnnualSubmissionConnector
-import api.controllers.EndpointLogContext
-import api.models.errors.RuleHistoricTaxYearNotSupportedError
-import api.models.errors.{InternalError, MtdError, NinoFormatError, NotFoundError, TaxYearFormatError}
 import v2.models.request.retrieveHistoricNonFhlUkPropertyAnnualSubmission.RetrieveHistoricNonFhlUkPropertyAnnualSubmissionRequest
-import v2.models.response.retrieveHistoricNonFhlUkPropertyAnnualSubmissionResponse.RetrieveHistoricNonFhlUkPropertyAnnualSubmissionResponse
-import api.services.ServiceOutcome
-import api.support.DownstreamResponseMappingSupport
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class RetrieveHistoricNonFhlUkPropertyAnnualSubmissionService @Inject()(connector: RetrieveHistoricNonFhlUkPropertyAnnualSubmissionConnector)
-    extends DownstreamResponseMappingSupport
-    with Logging {
+class RetrieveHistoricNonFhlUkPropertyAnnualSubmissionService @Inject() (connector: RetrieveHistoricNonFhlUkPropertyAnnualSubmissionConnector)
+    extends BaseService {
+
+  def retrieve(request: RetrieveHistoricNonFhlUkPropertyAnnualSubmissionRequest)(implicit
+      ctx: RequestContext,
+      ec: ExecutionContext): Future[RetrieveHistoricNonFhlUkPropertyAnnualSubmissionServiceOutcome] = {
+
+    connector.retrieve(request).map(_.leftMap(mapDownstreamErrors(downstreamErrorMap)))
+
+  }
 
   private val downstreamErrorMap: Map[String, MtdError] =
     Map(
@@ -48,18 +50,5 @@ class RetrieveHistoricNonFhlUkPropertyAnnualSubmissionService @Inject()(connecto
       "SERVER_ERROR"            -> InternalError,
       "SERVICE_UNAVAILABLE"     -> InternalError
     )
-
-  def retrieve(request: RetrieveHistoricNonFhlUkPropertyAnnualSubmissionRequest)(
-      implicit hc: HeaderCarrier,
-      ec: ExecutionContext,
-      logContext: EndpointLogContext,
-      correlationId: String): Future[ServiceOutcome[RetrieveHistoricNonFhlUkPropertyAnnualSubmissionResponse]] = {
-
-    val result = for {
-      resultWrapper <- EitherT(connector.retrieve(request)).leftMap(mapDownstreamErrors(downstreamErrorMap))
-    } yield resultWrapper
-
-    result.value
-  }
 
 }

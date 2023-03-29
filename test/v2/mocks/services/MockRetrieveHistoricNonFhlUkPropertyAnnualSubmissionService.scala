@@ -16,17 +16,16 @@
 
 package v2.mocks.services
 
-import org.scalamock.handlers.CallHandler
-import org.scalamock.scalatest.MockFactory
-import uk.gov.hmrc.http.HeaderCarrier
-import api.controllers.EndpointLogContext
+import api.controllers.RequestContext
 import api.models.errors.ErrorWrapper
 import api.models.outcomes.ResponseWrapper
+import org.scalamock.handlers.CallHandler
+import org.scalamock.scalatest.MockFactory
 import v2.models.request.retrieveHistoricNonFhlUkPropertyAnnualSubmission.RetrieveHistoricNonFhlUkPropertyAnnualSubmissionRequest
 import v2.models.response.retrieveHistoricNonFhlUkPropertyAnnualSubmissionResponse.RetrieveHistoricNonFhlUkPropertyAnnualSubmissionResponse
 import v2.services.RetrieveHistoricNonFhlUkPropertyAnnualSubmissionService
 
-import scala.concurrent.{ ExecutionContext, Future }
+import scala.concurrent.{ExecutionContext, Future}
 
 trait MockRetrieveHistoricNonFhlUkPropertyAnnualSubmissionService extends MockFactory {
 
@@ -36,17 +35,17 @@ trait MockRetrieveHistoricNonFhlUkPropertyAnnualSubmissionService extends MockFa
   object MockRetrieveHistoricNonFhlUkPropertyAnnualSubmissionService {
 
     def retrieve(requestData: RetrieveHistoricNonFhlUkPropertyAnnualSubmissionRequest)
-      : CallHandler[Future[Either[ErrorWrapper, ResponseWrapper[RetrieveHistoricNonFhlUkPropertyAnnualSubmissionResponse]]]] = {
+        : CallHandler[Future[Either[ErrorWrapper, ResponseWrapper[RetrieveHistoricNonFhlUkPropertyAnnualSubmissionResponse]]]] = {
       (
         mockRetrieveHistoricNonFhlUkPropertyAnnualSubmissionService
           .retrieve(_: RetrieveHistoricNonFhlUkPropertyAnnualSubmissionRequest)(
-            _: HeaderCarrier,
-            _: ExecutionContext,
-            _: EndpointLogContext,
-            _: String
+            _: RequestContext,
+            _: ExecutionContext
           )
         )
-        .expects(requestData, *, *, *, *)
+        .expects(requestData, *, *)
     }
+
   }
+
 }

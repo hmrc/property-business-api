@@ -23,8 +23,7 @@ import api.models.errors._
 import api.models.domain.{Nino, PeriodId}
 import api.models.outcomes.ResponseWrapper
 import api.services.{ServiceOutcome, ServiceSpec}
-import v2.models.request.amendHistoricNonFhlUkPiePeriodSummary.{AmendHistoricNonFhlUkPiePeriodSummaryRequest, AmendHistoricNonFhlUkPiePeriodSummaryRequestBody}
-import v2.services.AmendHistoricNonFhlUkPiePeriodSummaryService.downstreamErrorMap
+import v2.models.request.amendHistoricNonFhlUkPiePeriodSummary._
 
 import scala.concurrent.Future
 
@@ -63,7 +62,23 @@ class AmendHistoricNonFhlUkPiePeriodSummaryServiceSpec extends ServiceSpec {
           result shouldBe Left(ErrorWrapper(correlationId, error))
         }
 
-      downstreamErrorMap.foreach(args => (serviceError _).tupled(args))
+      val input = Seq(
+        "INVALID_NINO"                -> NinoFormatError,
+        "INVALID_TYPE"                -> InternalError,
+        "INVALID_PAYLOAD"             -> InternalError,
+        "INVALID_DATE_FROM"           -> PeriodIdFormatError,
+        "INVALID_DATE_TO"             -> PeriodIdFormatError,
+        "INVALID_CORRELATIONID"       -> InternalError,
+        "SUBMISSION_PERIOD_NOT_FOUND" -> NotFoundError,
+        "NOT_FOUND_PROPERTY"          -> NotFoundError,
+        "NOT_FOUND_INCOME_SOURCE"     -> NotFoundError,
+        "NOT_FOUND"                   -> NotFoundError,
+        "BOTH_EXPENSES_SUPPLIED"      -> RuleBothExpensesSuppliedError,
+        "SERVER_ERROR"                -> InternalError,
+        "SERVICE_UNAVAILABLE"         -> InternalError
+      )
+
+      input.foreach(args => (serviceError _).tupled(args))
     }
   }
 
@@ -74,6 +89,7 @@ class AmendHistoricNonFhlUkPiePeriodSummaryServiceSpec extends ServiceSpec {
     val service = new AmendHistoricNonFhlUkPiePeriodSummaryService(
       connector = mockConnector
     )
+
   }
 
 }

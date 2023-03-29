@@ -23,4 +23,7 @@ package object services {
   // FHL
   type AmendHistoricFhlUkPiePeriodSummaryServiceOutcome = ServiceOutcome[Unit]
 
+  // Non-FHL
+  type AmendHistoricNonFhlUkPiePeriodSummaryServiceOutcome = ServiceOutcome[Unit]
+
 }

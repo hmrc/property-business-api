@@ -17,13 +17,10 @@
 package v2.mocks.services
 
 import api.controllers.RequestContext
-import api.models.errors.ErrorWrapper
-import api.models.outcomes.ResponseWrapper
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
 import v2.models.request.createAmendHistoricNonFhlUkPropertyAnnualSubmission.CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequest
-import v2.models.response.createAmendHistoricNonFhlUkPropertyAnnualSubmission.CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionResponse
-import v2.services.CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionService
+import v2.services.{CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionService, CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionServiceOutcome}
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -35,7 +32,7 @@ trait MockCreateAmendHistoricNonFhlUkPropertyAnnualSubmissionService extends Moc
   object MockCreateAmendHistoricNonFhlUkPropertyAnnualSubmissionService {
 
     def amend(requestData: CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequest)
-        : CallHandler[Future[Either[ErrorWrapper, ResponseWrapper[CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionResponse]]]] = {
+        : CallHandler[Future[CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionServiceOutcome]] = {
       (
         mockCreateAmendHistoricNonFhlUkPropertyAnnualSubmissionService
           .amend(_: CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequest)(

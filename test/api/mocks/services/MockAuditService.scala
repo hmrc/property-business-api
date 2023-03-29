@@ -36,6 +36,7 @@ trait MockAuditService extends MockFactory {
       (mockAuditService
         .auditEvent(_: AuditEvent[T])(_: HeaderCarrier, _: ExecutionContext, _: Writes[T]))
         .verify(event, *, *, *)
+        .returning(Future.successful(AuditResult.Success))
     }
 
   }

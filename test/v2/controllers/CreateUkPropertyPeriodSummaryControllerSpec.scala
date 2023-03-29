@@ -18,13 +18,13 @@ package v2.controllers
 
 import api.controllers.ControllerBaseSpec
 import api.mocks.hateoas.MockHateoasFactory
-import api.mocks.services.MockAuditService
+import api.mocks.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService}
 import api.mocks.MockIdGenerator
 import play.api.libs.json.{Json, JsValue}
 import play.api.mvc.Result
 import uk.gov.hmrc.http.HeaderCarrier
 import v2.mocks.requestParsers.MockCreateUkPropertyPeriodSummaryRequestParser
-import v2.mocks.services.{MockCreateUkPropertyPeriodSummaryService, MockEnrolmentsAuthService, MockMtdIdLookupService}
+import v2.mocks.services.MockCreateUkPropertyPeriodSummaryService
 import api.models.audit.{AuditError, AuditEvent, AuditResponse, GenericAuditDetail}
 import api.models.domain.{Nino, TaxYear}
 import api.models.errors._
@@ -317,9 +317,10 @@ class CreateUkPropertyPeriodSummaryControllerSpec
   )
 
   private val testHateoasLink =
-    Link(href = s"/individuals/business/property/uk/$nino/$businessId/period/$taxYear/4557ecb5-fd32-48cc-81f5-e6acd1099f3c",
-         method = GET,
-         rel = "self")
+    Link(
+      href = s"/individuals/business/property/uk/$nino/$businessId/period/$taxYear/4557ecb5-fd32-48cc-81f5-e6acd1099f3c",
+      method = GET,
+      rel = "self")
 
   "create" should {
     "return a successful response from a consolidated request" when {
@@ -453,4 +454,5 @@ class CreateUkPropertyPeriodSummaryControllerSpec
       }
     }
   }
+
 }

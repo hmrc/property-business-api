@@ -19,12 +19,13 @@ package v2.controllers
 import api.controllers.ControllerBaseSpec
 import api.mocks.hateoas.MockHateoasFactory
 import api.mocks.MockIdGenerator
+import api.mocks.services.{MockEnrolmentsAuthService, MockMtdIdLookupService}
 import fixtures.RetrieveUkPropertyPeriodSummary.ResponseModelsFixture
 import play.api.libs.json.Json
 import play.api.mvc.Result
 import uk.gov.hmrc.http.HeaderCarrier
 import v2.mocks.requestParsers.MockRetrieveUkPropertyPeriodSummaryRequestParser
-import v2.mocks.services.{MockEnrolmentsAuthService, MockMtdIdLookupService, MockRetrieveUkPropertyPeriodSummaryService}
+import v2.mocks.services.MockRetrieveUkPropertyPeriodSummaryService
 import api.models.domain.{Nino, TaxYear}
 import api.models.errors._
 import api.models.hateoas.Method.GET
@@ -164,4 +165,5 @@ class RetrieveUkPropertyPeriodSummaryControllerSpec
       input.foreach(args => (serviceErrors _).tupled(args))
     }
   }
+
 }

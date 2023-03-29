@@ -18,9 +18,9 @@ package v2.controllers
 
 import api.controllers.ControllerBaseSpec
 import api.mocks.hateoas.MockHateoasFactory
-import api.mocks.services.MockAuditService
+import api.mocks.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService}
 import api.mocks.MockIdGenerator
-import play.api.libs.json.{Json, JsValue}
+import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.Result
 import uk.gov.hmrc.http.HeaderCarrier
 import v2.mocks.requestParsers.MockAmendUkPropertyPeriodSummaryRequestParser
@@ -238,6 +238,7 @@ class AmendUkPropertyPeriodSummaryControllerSpec
       |}
       |""".stripMargin
   )
+
   private val requestBodyJsonConsolidatedExpenses = Json.parse(
     """{
       |    "ukFhlProperty":{
@@ -433,4 +434,5 @@ class AmendUkPropertyPeriodSummaryControllerSpec
       }
     }
   }
+
 }

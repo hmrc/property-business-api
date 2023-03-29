@@ -17,13 +17,13 @@
 package v2.controllers
 
 import api.controllers.ControllerBaseSpec
-import api.mocks.services.MockAuditService
+import api.mocks.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService}
 import api.mocks.MockIdGenerator
 import play.api.libs.json.Json
 import play.api.mvc.Result
 import uk.gov.hmrc.http.HeaderCarrier
 import v2.mocks.requestParsers.MockDeletePropertyAnnualSubmissionRequestParser
-import v2.mocks.services.{MockDeletePropertyAnnualSubmissionService, MockEnrolmentsAuthService, MockMtdIdLookupService}
+import v2.mocks.services.MockDeletePropertyAnnualSubmissionService
 import api.models.audit.{AuditError, AuditEvent, AuditResponse, GenericAuditDetail}
 import api.models.domain.{Nino, TaxYear}
 import api.models.errors._
@@ -173,4 +173,5 @@ class DeletePropertyAnnualSubmissionControllerSpec
       }
     }
   }
+
 }

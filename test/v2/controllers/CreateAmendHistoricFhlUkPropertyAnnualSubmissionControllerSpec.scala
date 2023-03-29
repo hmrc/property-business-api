@@ -18,7 +18,7 @@ package v2.controllers
 
 import api.controllers.ControllerBaseSpec
 import api.mocks.hateoas.MockHateoasFactory
-import api.mocks.services.MockAuditService
+import api.mocks.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService}
 import api.mocks.MockIdGenerator
 import api.models.hateoas.Method.GET
 import api.models.domain.{Nino, TaxYear}
@@ -31,10 +31,13 @@ import play.api.libs.json.{Json, JsValue}
 import play.api.mvc.Result
 import uk.gov.hmrc.http.HeaderCarrier
 import v2.mocks.requestParsers.MockCreateAmendHistoricFhlUkPropertyAnnualSubmissionRequestParser
-import v2.mocks.services.{MockCreateAmendHistoricFhlUkPropertyAnnualSubmissionService, MockEnrolmentsAuthService, MockMtdIdLookupService}
+import v2.mocks.services.MockCreateAmendHistoricFhlUkPropertyAnnualSubmissionService
 import v2.models.request.common.ukPropertyRentARoom.UkPropertyAdjustmentsRentARoom
 import v2.models.request.createAmendHistoricFhlUkPropertyAnnualSubmission._
-import v2.models.response.createAmendHistoricFhlUkPropertyAnnualSubmission.{CreateAmendHistoricFhlUkPropertyAnnualSubmissionHateoasData, CreateAmendHistoricFhlUkPropertyAnnualSubmissionResponse}
+import v2.models.response.createAmendHistoricFhlUkPropertyAnnualSubmission.{
+  CreateAmendHistoricFhlUkPropertyAnnualSubmissionHateoasData,
+  CreateAmendHistoricFhlUkPropertyAnnualSubmissionResponse
+}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future

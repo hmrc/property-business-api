@@ -18,19 +18,22 @@ package v2.controllers
 
 import api.controllers.ControllerBaseSpec
 import api.mocks.hateoas.MockHateoasFactory
-import api.mocks.services.MockAuditService
+import api.mocks.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService}
 import api.mocks.MockIdGenerator
 import play.api.libs.json.Json
 import play.api.mvc.Result
 import uk.gov.hmrc.http.HeaderCarrier
 import v2.mocks.requestParsers.MockRetrieveHistoricFhlUkPropertyAnnualSubmissionRequestParser
-import v2.mocks.services.{MockEnrolmentsAuthService, MockMtdIdLookupService, MockRetrieveHistoricFhlUkPropertyAnnualSubmissionService}
+import v2.mocks.services.MockRetrieveHistoricFhlUkPropertyAnnualSubmissionService
 import api.models.domain.{Nino, TaxYear}
 import api.models.errors._
 import api.models.hateoas.Method.GET
 import api.models.hateoas.{HateoasWrapper, Link}
 import api.models.outcomes.ResponseWrapper
-import v2.models.request.retrieveHistoricFhlUkPropertyAnnualSubmission.{RetrieveHistoricFhlUkPropertyAnnualSubmissionRawData, RetrieveHistoricFhlUkPropertyAnnualSubmissionRequest}
+import v2.models.request.retrieveHistoricFhlUkPropertyAnnualSubmission.{
+  RetrieveHistoricFhlUkPropertyAnnualSubmissionRawData,
+  RetrieveHistoricFhlUkPropertyAnnualSubmissionRequest
+}
 import v2.models.response.retrieveHistoricFhlUkPropertyAnnualSubmission._
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -172,12 +175,12 @@ class RetrieveHistoricFhlUkPropertyAnnualSubmissionControllerSpec
           (RuleHistoricTaxYearNotSupportedError, BAD_REQUEST),
           (NotFoundError, NOT_FOUND),
           (InternalError, INTERNAL_SERVER_ERROR),
-            (RuleIncorrectGovTestScenarioError, BAD_REQUEST)
-
+          (RuleIncorrectGovTestScenarioError, BAD_REQUEST)
         )
 
         input.foreach(args => (serviceErrors _).tupled(args))
       }
     }
   }
+
 }

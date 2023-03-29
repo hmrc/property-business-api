@@ -18,20 +18,26 @@ package v2.controllers
 
 import api.controllers.ControllerBaseSpec
 import api.mocks.hateoas.MockHateoasFactory
-import api.mocks.services.MockAuditService
+import api.mocks.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService}
 import api.mocks.MockIdGenerator
 import play.api.libs.json.Json
 import play.api.mvc.Result
 import uk.gov.hmrc.http.HeaderCarrier
 import v2.mocks.requestParsers.MockRetrieveHistoricNonFhlUkPropertyAnnualSubmissionRequestParser
-import v2.mocks.services.{MockEnrolmentsAuthService, MockMtdIdLookupService, MockRetrieveHistoricNonFhlUkPropertyAnnualSubmissionService}
+import v2.mocks.services.MockRetrieveHistoricNonFhlUkPropertyAnnualSubmissionService
 import api.models.domain.{Nino, TaxYear}
 import api.models.errors._
 import api.models.hateoas.Method.GET
 import api.models.hateoas.{HateoasWrapper, Link}
 import api.models.outcomes.ResponseWrapper
 import v2.models.request.retrieveHistoricNonFhlUkPropertyAnnualSubmission._
-import v2.models.response.retrieveHistoricNonFhlUkPropertyAnnualSubmissionResponse.{AnnualAdjustments, AnnualAllowances, RentARoom, RetrieveHistoricNonFhlUkPropertyAnnualSubmissionHateoasData, RetrieveHistoricNonFhlUkPropertyAnnualSubmissionResponse}
+import v2.models.response.retrieveHistoricNonFhlUkPropertyAnnualSubmissionResponse.{
+  AnnualAdjustments,
+  AnnualAllowances,
+  RentARoom,
+  RetrieveHistoricNonFhlUkPropertyAnnualSubmissionHateoasData,
+  RetrieveHistoricNonFhlUkPropertyAnnualSubmissionResponse
+}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -176,4 +182,5 @@ class RetrieveHistoricNonFhlUkPropertyAnnualSubmissionControllerSpec
       }
     }
   }
+
 }

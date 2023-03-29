@@ -18,13 +18,13 @@ package v2.controllers
 
 import api.controllers.ControllerBaseSpec
 import api.mocks.hateoas.MockHateoasFactory
-import api.mocks.services.MockAuditService
+import api.mocks.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService}
 import api.mocks.MockIdGenerator
 import play.api.libs.json.{Json, JsValue}
 import play.api.mvc.Result
 import uk.gov.hmrc.http.HeaderCarrier
 import v2.mocks.requestParsers.MockAmendForeignPropertyPeriodSummaryRequestParser
-import v2.mocks.services.{MockAmendForeignPropertyPeriodSummaryService, MockEnrolmentsAuthService, MockMtdIdLookupService}
+import v2.mocks.services.MockAmendForeignPropertyPeriodSummaryService
 import api.models.audit.{AuditError, AuditEvent, AuditResponse, GenericAuditDetail}
 import api.models.domain.{Nino, TaxYear}
 import api.models.errors._
@@ -398,4 +398,5 @@ class AmendForeignPropertyPeriodSummaryControllerSpec
       }
     }
   }
+
 }

@@ -18,13 +18,13 @@ package v2.controllers
 
 import api.controllers.ControllerBaseSpec
 import api.mocks.hateoas.MockHateoasFactory
-import api.mocks.services.MockAuditService
+import api.mocks.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService}
 import api.mocks.MockIdGenerator
 import play.api.libs.json.Json
 import play.api.mvc.Result
 import uk.gov.hmrc.http.HeaderCarrier
 import v2.mocks.requestParsers.MockRetrieveHistoricFhlUkPiePeriodSummaryRequestParser
-import v2.mocks.services.{MockEnrolmentsAuthService, MockMtdIdLookupService, MockRetrieveHistoricFhlUkPiePeriodSummaryService}
+import v2.mocks.services.MockRetrieveHistoricFhlUkPiePeriodSummaryService
 import api.models.errors._
 import api.models.hateoas.Method.GET
 import api.models.domain.{Nino, PeriodId}
@@ -80,15 +80,16 @@ class RetrieveHistoricFhlUkPiePeriodSummaryControllerSpec
 
   val periodIncome: PeriodIncome = PeriodIncome(Some(5000.99), Some(5000.99), Some(RentARoomIncome(Some(5000.99))))
 
-  val periodExpenses: PeriodExpenses = PeriodExpenses(Some(5000.99),
-                                                      Some(5000.99),
-                                                      Some(5000.99),
-                                                      Some(5000.99),
-                                                      Some(5000.99),
-                                                      Some(5000.99),
-                                                      None,
-                                                      Some(5000.99),
-                                                      Some(RentARoomExpenses(Some(5000.99))))
+  val periodExpenses: PeriodExpenses = PeriodExpenses(
+    Some(5000.99),
+    Some(5000.99),
+    Some(5000.99),
+    Some(5000.99),
+    Some(5000.99),
+    Some(5000.99),
+    None,
+    Some(5000.99),
+    Some(RentARoomExpenses(Some(5000.99))))
 
   val responseBody: RetrieveHistoricFhlUkPiePeriodSummaryResponse = RetrieveHistoricFhlUkPiePeriodSummaryResponse(
     fromDate = from,
@@ -137,7 +138,7 @@ class RetrieveHistoricFhlUkPiePeriodSummaryControllerSpec
 
         val input = Seq(
           (NinoFormatError, BAD_REQUEST),
-          (PeriodIdFormatError, BAD_REQUEST),
+          (PeriodIdFormatError, BAD_REQUEST)
         )
 
         input.foreach(args => (errorsFromParserTester _).tupled(args))
@@ -175,4 +176,5 @@ class RetrieveHistoricFhlUkPiePeriodSummaryControllerSpec
       }
     }
   }
+
 }

@@ -18,7 +18,7 @@ package v2.controllers
 
 import api.controllers.ControllerBaseSpec
 import api.mocks.hateoas.MockHateoasFactory
-import api.mocks.services.MockAuditService
+import api.mocks.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService}
 import api.mocks.MockIdGenerator
 import api.models.hateoas.Method.GET
 import api.models.audit.{AuditError, AuditEvent, AuditResponse, GenericAuditDetail}
@@ -30,7 +30,7 @@ import play.api.libs.json.{Json, JsValue}
 import play.api.mvc.Result
 import uk.gov.hmrc.http.HeaderCarrier
 import v2.mocks.requestParsers.MockAmendUkPropertyAnnualSubmissionRequestParser
-import v2.mocks.services.{MockAmendUkPropertyAnnualSubmissionService, MockEnrolmentsAuthService, MockMtdIdLookupService}
+import v2.mocks.services.MockAmendUkPropertyAnnualSubmissionService
 import v2.models.request.amendUkPropertyAnnualSubmission._
 import v2.models.request.amendUkPropertyAnnualSubmission.ukFhlProperty._
 import v2.models.request.amendUkPropertyAnnualSubmission.ukNonFhlProperty._
@@ -307,55 +307,58 @@ class AmendUkPropertyAnnualSubmissionControllerSpec
           (RuleTaxYearNotSupportedError, BAD_REQUEST),
           (RuleTaxYearRangeInvalidError, BAD_REQUEST),
           (RulePropertyIncomeAllowanceError, BAD_REQUEST),
-          (ValueFormatError.copy(
-             paths = Some(
-               List(
-                 "/ukFhlProperty/adjustments/balancingCharge",
-                 "/ukFhlProperty/adjustments/privateUseAdjustment",
-                 "/ukFhlProperty/adjustments/businessPremisesRenovationAllowanceBalancingCharges",
-                 "/ukFhlProperty/allowances/annualInvestmentAllowance",
-                 "/ukFhlProperty/allowances/businessPremisesRenovationAllowance",
-                 "/ukFhlProperty/allowances/otherCapitalAllowance",
-                 "/ukFhlProperty/allowances/electricChargePointAllowance",
-                 "/ukFhlProperty/allowances/zeroEmissionsCarAllowance",
-                 "/ukNonFhlProperty/adjustments/balancingCharge",
-                 "/ukNonFhlProperty/adjustments/privateUseAdjustment",
-                 "/ukNonFhlProperty/adjustments/businessPremisesRenovationAllowanceBalancingCharges",
-                 "/ukNonFhlProperty/allowances/annualInvestmentAllowance",
-                 "/ukNonFhlProperty/allowances/zeroEmissionsGoodsVehicleAllowance",
-                 "/ukNonFhlProperty/allowances/businessPremisesRenovationAllowance",
-                 "/ukNonFhlProperty/allowances/otherCapitalAllowance",
-                 "/ukNonFhlProperty/allowances/costOfReplacingDomesticGoods",
-                 "/ukNonFhlProperty/allowances/electricChargePointAllowance",
-                 "/ukNonFhlProperty/allowances/zeroEmissionsCarAllowance",
-                 "/ukNonFhlProperty/allowances/structuredBuildingAllowance/0/amount",
-                 "/ukNonFhlProperty/allowances/structuredBuildingAllowance/0/firstYear/qualifyingAmountExpenditure",
-                 "/ukNonFhlProperty/allowances/enhancedStructuredBuildingAllowance/0/amount",
-                 "/ukNonFhlProperty/allowances/enhancedStructuredBuildingAllowance/0/firstYear/qualifyingAmountExpenditure"
-               ))
-           ),
-           BAD_REQUEST),
+          (
+            ValueFormatError.copy(
+              paths = Some(
+                List(
+                  "/ukFhlProperty/adjustments/balancingCharge",
+                  "/ukFhlProperty/adjustments/privateUseAdjustment",
+                  "/ukFhlProperty/adjustments/businessPremisesRenovationAllowanceBalancingCharges",
+                  "/ukFhlProperty/allowances/annualInvestmentAllowance",
+                  "/ukFhlProperty/allowances/businessPremisesRenovationAllowance",
+                  "/ukFhlProperty/allowances/otherCapitalAllowance",
+                  "/ukFhlProperty/allowances/electricChargePointAllowance",
+                  "/ukFhlProperty/allowances/zeroEmissionsCarAllowance",
+                  "/ukNonFhlProperty/adjustments/balancingCharge",
+                  "/ukNonFhlProperty/adjustments/privateUseAdjustment",
+                  "/ukNonFhlProperty/adjustments/businessPremisesRenovationAllowanceBalancingCharges",
+                  "/ukNonFhlProperty/allowances/annualInvestmentAllowance",
+                  "/ukNonFhlProperty/allowances/zeroEmissionsGoodsVehicleAllowance",
+                  "/ukNonFhlProperty/allowances/businessPremisesRenovationAllowance",
+                  "/ukNonFhlProperty/allowances/otherCapitalAllowance",
+                  "/ukNonFhlProperty/allowances/costOfReplacingDomesticGoods",
+                  "/ukNonFhlProperty/allowances/electricChargePointAllowance",
+                  "/ukNonFhlProperty/allowances/zeroEmissionsCarAllowance",
+                  "/ukNonFhlProperty/allowances/structuredBuildingAllowance/0/amount",
+                  "/ukNonFhlProperty/allowances/structuredBuildingAllowance/0/firstYear/qualifyingAmountExpenditure",
+                  "/ukNonFhlProperty/allowances/enhancedStructuredBuildingAllowance/0/amount",
+                  "/ukNonFhlProperty/allowances/enhancedStructuredBuildingAllowance/0/firstYear/qualifyingAmountExpenditure"
+                ))
+            ),
+            BAD_REQUEST),
           (RuleIncorrectOrEmptyBodyError, BAD_REQUEST),
           (RuleBothAllowancesSuppliedError, BAD_REQUEST),
           (RuleBuildingNameNumberError, BAD_REQUEST),
-          (StringFormatError.copy(
-             paths = Some(
-               List(
-                 "/ukNonFhlProperty/allowances/structuredBuildingAllowance/0/building/name",
-                 "/ukNonFhlProperty/allowances/structuredBuildingAllowance/0/building/postcode",
-                 "/ukNonFhlProperty/allowances/enhancedStructuredBuildingAllowance/0/building/number",
-                 "/ukNonFhlProperty/allowances/enhancedStructuredBuildingAllowance/0/building/postcode"
-               ))
-           ),
-           BAD_REQUEST),
-          (DateFormatError.copy(
-             paths = Some(
-               List(
-                 "/ukNonFhlProperty/allowances/structuredBuildingAllowance/0/firstYear/qualifyingDate",
-                 "/ukNonFhlProperty/allowances/enhancedStructuredBuildingAllowance/0/firstYear/qualifyingDate"
-               ))
-           ),
-           BAD_REQUEST)
+          (
+            StringFormatError.copy(
+              paths = Some(
+                List(
+                  "/ukNonFhlProperty/allowances/structuredBuildingAllowance/0/building/name",
+                  "/ukNonFhlProperty/allowances/structuredBuildingAllowance/0/building/postcode",
+                  "/ukNonFhlProperty/allowances/enhancedStructuredBuildingAllowance/0/building/number",
+                  "/ukNonFhlProperty/allowances/enhancedStructuredBuildingAllowance/0/building/postcode"
+                ))
+            ),
+            BAD_REQUEST),
+          (
+            DateFormatError.copy(
+              paths = Some(
+                List(
+                  "/ukNonFhlProperty/allowances/structuredBuildingAllowance/0/firstYear/qualifyingDate",
+                  "/ukNonFhlProperty/allowances/enhancedStructuredBuildingAllowance/0/firstYear/qualifyingDate"
+                ))
+            ),
+            BAD_REQUEST)
         )
 
         input.foreach(args => (errorsFromParserTester _).tupled(args))
@@ -400,4 +403,5 @@ class AmendUkPropertyAnnualSubmissionControllerSpec
       }
     }
   }
+
 }

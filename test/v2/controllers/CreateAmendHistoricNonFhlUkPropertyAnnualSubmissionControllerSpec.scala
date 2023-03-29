@@ -18,7 +18,7 @@ package v2.controllers
 
 import api.controllers.ControllerBaseSpec
 import api.mocks.hateoas.MockHateoasFactory
-import api.mocks.services.MockAuditService
+import api.mocks.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService}
 import api.mocks.MockIdGenerator
 import api.models.hateoas.Method.GET
 import api.models.domain.{Nino, TaxYear}
@@ -32,9 +32,15 @@ import play.api.libs.json.{Json, JsValue}
 import play.api.mvc.Result
 import uk.gov.hmrc.http.HeaderCarrier
 import v2.mocks.requestParsers.MockCreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestParser
-import v2.mocks.services.{MockCreateAmendHistoricNonFhlUkPropertyAnnualSubmissionService, MockEnrolmentsAuthService, MockMtdIdLookupService}
-import v2.models.request.createAmendHistoricNonFhlUkPropertyAnnualSubmission.{CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRawData, CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequest}
-import v2.models.response.createAmendHistoricNonFhlUkPropertyAnnualSubmission.{CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionHateoasData, CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionResponse}
+import v2.mocks.services.MockCreateAmendHistoricNonFhlUkPropertyAnnualSubmissionService
+import v2.models.request.createAmendHistoricNonFhlUkPropertyAnnualSubmission.{
+  CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRawData,
+  CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequest
+}
+import v2.models.response.createAmendHistoricNonFhlUkPropertyAnnualSubmission.{
+  CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionHateoasData,
+  CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionResponse
+}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future

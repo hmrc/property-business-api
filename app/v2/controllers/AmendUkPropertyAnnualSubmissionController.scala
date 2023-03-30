@@ -18,9 +18,14 @@ package v2.controllers
 
 import api.controllers._
 import api.hateoas.HateoasFactory
+import api.models.audit.{AuditEvent, AuditResponse, GenericAuditDetail}
+import api.models.auth.UserDetails
+import api.models.errors.ErrorWrapper
 import api.services.{AuditService, EnrolmentsAuthService, MtdIdLookupService}
-import play.api.libs.json.JsValue
+import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.{Action, ControllerComponents}
+import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.play.audit.http.connector.AuditResult
 import utils.IdGenerator
 import v2.controllers.requestParsers.AmendUkPropertyAnnualSubmissionRequestParser
 import v2.models.request.amendUkPropertyAnnualSubmission.AmendUkPropertyAnnualSubmissionRawData
@@ -29,7 +34,7 @@ import v2.models.response.amendUkPropertyAnnualSubmission.AmendUkPropertyAnnualS
 import v2.services.AmendUkPropertyAnnualSubmissionService
 
 import javax.inject.{Inject, Singleton}
-import scala.concurrent.ExecutionContext
+import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class AmendUkPropertyAnnualSubmissionController @Inject() (val authService: EnrolmentsAuthService,
@@ -54,18 +59,47 @@ class AmendUkPropertyAnnualSubmissionController @Inject() (val authService: Enro
       val requestHandler = RequestHandler
         .withParser(parser)
         .withService(service.amendUkPropertyAnnualSubmission)
-        .withAuditing(AuditHandler(
-          auditService = auditService,
-          auditType = "CreateAmendUKPropertyAnnualSubmission",
-          transactionName = "create-amend-uk-property-annual-submission",
-          params = Map("nino" -> nino, "businessId" -> businessId, "taxYear" -> taxYear, "request" -> request.body.as[String]),
-          requestBody = None,
-          includeResponse = true
-        ))
+        .withAuditing(auditHandler(nino, businessId, taxYear, request))
         .withHateoasResult(hateoasFactory)(AmendUkPropertyAnnualSubmissionHateoasData(nino, businessId, taxYear))
 
       requestHandler.handleRequest(rawData)
 
     }
+
+  private def auditHandler(nino: String, businessId: String, taxYear: String, request: UserRequest[JsValue]): AuditHandler = {
+    new AuditHandler() {
+      override def performAudit(userDetails: UserDetails, httpStatus: Int, response: Either[ErrorWrapper, Option[JsValue]], versionNumber: String)(
+          implicit
+          ctx: RequestContext,
+          ec: ExecutionContext): Unit = {
+        response match {
+          case Left(err: ErrorWrapper) =>
+            auditSubmission(
+              GenericAuditDetail(
+                userDetails = request.userDetails,
+                params = Json.obj("nino" -> nino, "businessId" -> businessId, "taxYear" -> taxYear, "request" -> request.body),
+                correlationId = ctx.correlationId,
+                response = AuditResponse(httpStatus = httpStatus, response = Left(err.auditErrors))
+              )
+            )
+
+          case Right(resp: Option[JsValue]) =>
+            auditSubmission(
+              GenericAuditDetail(
+                userDetails = request.userDetails,
+                params = Json.obj("nino" -> nino, "businessId" -> businessId, "taxYear" -> taxYear, "request" -> request.body),
+                correlationId = ctx.correlationId,
+                response = AuditResponse(httpStatus = OK, response = Right(resp))
+              )
+            )
+        }
+      }
+    }
+  }
+
+  private def auditSubmission(details: GenericAuditDetail)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[AuditResult] = {
+    val event = AuditEvent("CreateAmendUKPropertyAnnualSubmission", "create-amend-uk-property-annual-submission", details)
+    auditService.auditEvent(event)
+  }
 
 }

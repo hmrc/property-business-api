@@ -245,7 +245,7 @@ class AmendUkPropertyAnnualSubmissionControllerSpec
           .parseRequest(rawData)
           .returns(Left(ErrorWrapper(correlationId, NinoFormatError, None)))
 
-        runErrorTestWithAudit(NinoFormatError, Some(requestJson))
+        runErrorTestWithAudit(NinoFormatError, None)
       }
 
       "the service returns an error" in new Test {
@@ -257,7 +257,7 @@ class AmendUkPropertyAnnualSubmissionControllerSpec
           .amend(request)
           .returns(Future.successful(Left(ErrorWrapper(correlationId, RuleTaxYearNotSupportedError))))
 
-        runErrorTestWithAudit(RuleTaxYearNotSupportedError, Some(requestJson))
+        runErrorTestWithAudit(RuleTaxYearNotSupportedError, None)
       }
     }
   }

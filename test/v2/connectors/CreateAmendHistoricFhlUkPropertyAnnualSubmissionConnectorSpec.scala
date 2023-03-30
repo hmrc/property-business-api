@@ -19,8 +19,7 @@ package v2.connectors
 import api.connectors.ConnectorSpec
 import api.models.domain.{Nino, TaxYear}
 import api.models.outcomes.ResponseWrapper
-import v2.models.request.common.ukPropertyRentARoom.UkPropertyAdjustmentsRentARoom
-import v2.models.request.createAmendHistoricFhlUkPropertyAnnualSubmission.{CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequest, CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequestBody, HistoricFhlAnnualAdjustments, HistoricFhlAnnualAllowances}
+import v2.models.request.createAmendHistoricFhlUkPropertyAnnualSubmission._
 import v2.models.response.createAmendHistoricFhlUkPropertyAnnualSubmission.CreateAmendHistoricFhlUkPropertyAnnualSubmissionResponse
 
 import scala.concurrent.Future
@@ -31,27 +30,7 @@ class CreateAmendHistoricFhlUkPropertyAnnualSubmissionConnectorSpec extends Conn
   val mtdTaxYear: String        = "2019-20"
   val downstreamTaxYear: String = "2020"
 
-  private val annualAdjustments = HistoricFhlAnnualAdjustments(
-    Some(BigDecimal("105.11")),
-    Some(BigDecimal("200.11")),
-    Some(BigDecimal("120.11")),
-    periodOfGraceAdjustment = true,
-    Some(BigDecimal("101.11")),
-    nonResidentLandlord = false,
-    Some(UkPropertyAdjustmentsRentARoom(true))
-  )
-
-  private val annualAllowances = HistoricFhlAnnualAllowances(
-    Some(BigDecimal("100.11")),
-    Some(BigDecimal("200.11")),
-    Some(BigDecimal("425.11")),
-    Some(BigDecimal("550.11"))
-  )
-
-  val body: CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequestBody = CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequestBody(
-    Some(annualAdjustments),
-    Some(annualAllowances)
-  )
+  val body: CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequestBody = CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequestBody(None, None)
 
   val request: CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequest = CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequest(
     nino = Nino(nino),
@@ -66,6 +45,7 @@ class CreateAmendHistoricFhlUkPropertyAnnualSubmissionConnectorSpec extends Conn
       http = mockHttpClient,
       appConfig = mockAppConfig
     )
+
   }
 
   "connector" must {
@@ -78,7 +58,7 @@ class CreateAmendHistoricFhlUkPropertyAnnualSubmissionConnectorSpec extends Conn
       ).returns(Future.successful(outcome))
 
       await(connector.amend(request)) shouldBe outcome
-
     }
   }
+
 }

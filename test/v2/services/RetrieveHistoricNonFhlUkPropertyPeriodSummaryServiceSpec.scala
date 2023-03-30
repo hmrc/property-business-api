@@ -25,7 +25,6 @@ import api.models.domain.{Nino, PeriodId}
 import api.models.outcomes.ResponseWrapper
 import v2.models.request.retrieveHistoricNonFhlUkPiePeriodSummary.RetrieveHistoricNonFhlUkPiePeriodSummaryRequest
 import v2.models.response.retrieveHistoricNonFhlUkPiePeriodSummary.{PeriodExpenses, PeriodIncome, RetrieveHistoricNonFhlUkPiePeriodSummaryResponse}
-import v2.services.RetrieveHistoricNonFhlUkPropertyPeriodSummaryService.downstreamErrorMap
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -51,6 +50,7 @@ class RetrieveHistoricNonFhlUkPropertyPeriodSummaryServiceSpec extends UnitSpec 
     val service = new RetrieveHistoricNonFhlUkPropertyPeriodSummaryService(
       connector = mockRetrieveHistoricNonFhlUkPropertyPeriodSummaryConnector
     )
+
   }
 
   "retrieve" should {
@@ -76,7 +76,19 @@ class RetrieveHistoricNonFhlUkPropertyPeriodSummaryServiceSpec extends UnitSpec 
           result shouldBe Left(ErrorWrapper(correlationId, error))
         }
 
-      downstreamErrorMap.foreach(args => (serviceError _).tupled(args))
+      val input = Seq(
+        "INVALID_NINO"        -> NinoFormatError,
+        "INVALID_TYPE"        -> InternalError,
+        "INVALID_DATE_FROM"   -> PeriodIdFormatError,
+        "INVALID_DATE_TO"     -> PeriodIdFormatError,
+        "NOT_FOUND_PROPERTY"  -> NotFoundError,
+        "NOT_FOUND_PERIOD"    -> NotFoundError,
+        "SERVER_ERROR"        -> InternalError,
+        "SERVICE_UNAVAILABLE" -> InternalError
+      )
+
+      input.foreach(args => (serviceError _).tupled(args))
     }
   }
+
 }

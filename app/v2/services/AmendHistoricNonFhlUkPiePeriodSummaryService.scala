@@ -16,42 +16,27 @@
 
 package v2.services
 
-import cats.data.EitherT
-import cats.implicits._
-import uk.gov.hmrc.http.HeaderCarrier
-import utils.Logging
-import api.controllers.EndpointLogContext
+import api.controllers.RequestContext
 import api.models.errors._
-import v2.models.request.amendHistoricNonFhlUkPiePeriodSummary.AmendHistoricNonFhlUkPiePeriodSummaryRequest
-import v2.services.AmendHistoricNonFhlUkPiePeriodSummaryService.downstreamErrorMap
-import api.services.ServiceOutcome
-import api.support.DownstreamResponseMappingSupport
+import api.services.BaseService
+import cats.implicits._
 import v2.connectors.AmendHistoricNonFhlUkPiePeriodSummaryConnector
+import v2.models.request.amendHistoricNonFhlUkPiePeriodSummary.AmendHistoricNonFhlUkPiePeriodSummaryRequest
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class AmendHistoricNonFhlUkPiePeriodSummaryService @Inject() (connector: AmendHistoricNonFhlUkPiePeriodSummaryConnector)
-    extends DownstreamResponseMappingSupport
-    with Logging {
+class AmendHistoricNonFhlUkPiePeriodSummaryService @Inject() (connector: AmendHistoricNonFhlUkPiePeriodSummaryConnector) extends BaseService {
 
   def amend(request: AmendHistoricNonFhlUkPiePeriodSummaryRequest)(implicit
-      hc: HeaderCarrier,
-      ec: ExecutionContext,
-      logContext: EndpointLogContext,
-      correlationId: String): Future[ServiceOutcome[Unit]] = {
+      ctx: RequestContext,
+      ec: ExecutionContext): Future[AmendHistoricNonFhlUkPiePeriodSummaryServiceOutcome] = {
 
-    val result = EitherT(connector.amend(request)).leftMap(mapDownstreamErrors(downstreamErrorMap))
-
-    result.value
+    connector.amend(request).map(_.leftMap(mapDownstreamErrors(downstreamErrorMap)))
   }
 
-}
-
-object AmendHistoricNonFhlUkPiePeriodSummaryService {
-
-  val downstreamErrorMap: Map[String, MtdError] =
+  private val downstreamErrorMap: Map[String, MtdError] =
     Map(
       "INVALID_NINO"                -> NinoFormatError,
       "INVALID_TYPE"                -> InternalError,

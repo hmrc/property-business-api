@@ -16,37 +16,33 @@
 
 package v2.mocks.services
 
+import api.controllers.RequestContext
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
-import uk.gov.hmrc.http.HeaderCarrier
-import api.controllers.EndpointLogContext
-import api.models.errors.ErrorWrapper
-import api.models.outcomes.ResponseWrapper
 import v2.models.request.createAmendHistoricNonFhlUkPropertyAnnualSubmission.CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequest
-import v2.models.response.createAmendHistoricNonFhlUkPropertyAnnualSubmission.CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionResponse
-import v2.services.CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionService
+import v2.services.{CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionService, CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionServiceOutcome}
 
-import scala.concurrent.{ ExecutionContext, Future }
+import scala.concurrent.{ExecutionContext, Future}
 
 trait MockCreateAmendHistoricNonFhlUkPropertyAnnualSubmissionService extends MockFactory {
 
-  val mockCreateAmendHistoricService: CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionService =
+  val mockCreateAmendHistoricNonFhlUkPropertyAnnualSubmissionService: CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionService =
     mock[CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionService]
 
   object MockCreateAmendHistoricNonFhlUkPropertyAnnualSubmissionService {
 
     def amend(requestData: CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequest)
-      : CallHandler[Future[Either[ErrorWrapper, ResponseWrapper[CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionResponse]]]] = {
+        : CallHandler[Future[CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionServiceOutcome]] = {
       (
-        mockCreateAmendHistoricService
+        mockCreateAmendHistoricNonFhlUkPropertyAnnualSubmissionService
           .amend(_: CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequest)(
-            _: HeaderCarrier,
-            _: ExecutionContext,
-            _: EndpointLogContext,
-            _: String
+            _: RequestContext,
+            _: ExecutionContext
           )
         )
-        .expects(requestData, *, *, *, *)
+        .expects(requestData, *, *)
     }
+
   }
+
 }

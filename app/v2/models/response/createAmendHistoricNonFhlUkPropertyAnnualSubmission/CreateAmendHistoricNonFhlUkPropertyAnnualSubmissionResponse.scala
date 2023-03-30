@@ -16,17 +16,12 @@
 
 package v2.models.response.createAmendHistoricNonFhlUkPropertyAnnualSubmission
 
-import akka.actor.TypedActor.self
 import api.hateoas.HateoasLinksFactory
 import api.models.hateoas.{HateoasData, Link}
 import config.AppConfig
 import play.api.libs.json.{Json, OWrites, Reads}
 import v1.hateoas.HateoasLinks
-import v2.models.response.listPropertyPeriodSummaries.ListPropertyPeriodSummariesResponse.{
-  createAmendHistoricNonFhlUkPropertyAnnualSubmission,
-  deleteHistoricNonFhlUkPropertyAnnualSubmission,
-  retrieveHistoricNonFhlUkPropertyAnnualSubmission
-}
+import v2.models.response.listPropertyPeriodSummaries.ListPropertyPeriodSummariesResponse._
 
 case class CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionResponse(transactionReference: Option[String])
 

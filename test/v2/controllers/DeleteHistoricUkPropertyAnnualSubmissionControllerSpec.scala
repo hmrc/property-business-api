@@ -17,19 +17,19 @@
 package v2.controllers
 
 import api.controllers.ControllerBaseSpec
-import api.mocks.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService}
 import api.mocks.MockIdGenerator
+import api.mocks.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService}
+import api.models.audit.{AuditError, AuditEvent, AuditResponse, FlattenedGenericAuditDetail}
+import api.models.auth.UserDetails
+import api.models.domain.HistoricPropertyType.{Fhl, NonFhl}
+import api.models.domain.{HistoricPropertyType, Nino, TaxYear}
+import api.models.errors._
+import api.models.outcomes.ResponseWrapper
 import play.api.libs.json.Json
 import play.api.mvc.Result
 import uk.gov.hmrc.http.HeaderCarrier
 import v2.mocks.requestParsers.MockDeleteHistoricUkPropertyAnnualSubmissionRequestParser
 import v2.mocks.services.MockDeleteHistoricUkPropertyAnnualSubmissionService
-import api.models.domain.HistoricPropertyType.{Fhl, NonFhl}
-import api.models.errors._
-import api.models.audit.{AuditError, AuditEvent, AuditResponse, FlattenedGenericAuditDetail}
-import api.models.auth.UserDetails
-import api.models.domain.{HistoricPropertyType, Nino, TaxYear}
-import api.models.outcomes.ResponseWrapper
 import v2.models.request.deleteHistoricUkPropertyAnnualSubmission.{
   DeleteHistoricUkPropertyAnnualSubmissionRawData,
   DeleteHistoricUkPropertyAnnualSubmissionRequest

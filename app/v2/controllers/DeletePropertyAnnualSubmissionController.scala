@@ -16,23 +16,16 @@
 
 package v2.controllers
 
-import api.controllers.{AuthorisedController, BaseController, EndpointLogContext}
-import api.models.audit.{AuditEvent, AuditResponse, GenericAuditDetail}
-import cats.data.EitherT
-import cats.implicits._
-import play.api.libs.json.Json
-import play.api.mvc.{Action, AnyContent, ControllerComponents}
-import uk.gov.hmrc.http.HeaderCarrier
-import uk.gov.hmrc.play.audit.http.connector.AuditResult
-import utils.{IdGenerator, Logging}
-import v2.controllers.requestParsers.DeletePropertyAnnualSubmissionRequestParser
-import api.models.errors._
+import api.controllers._
 import api.services.{AuditService, EnrolmentsAuthService, MtdIdLookupService}
+import play.api.mvc.{Action, AnyContent, ControllerComponents}
+import utils.IdGenerator
+import v2.controllers.requestParsers.DeletePropertyAnnualSubmissionRequestParser
 import v2.models.request.deletePropertyAnnualSubmission.DeletePropertyAnnualSubmissionRawData
 import v2.services.DeletePropertyAnnualSubmissionService
 
 import javax.inject.{Inject, Singleton}
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.ExecutionContext
 
 @Singleton
 class DeletePropertyAnnualSubmissionController @Inject() (val authService: EnrolmentsAuthService,
@@ -42,70 +35,29 @@ class DeletePropertyAnnualSubmissionController @Inject() (val authService: Enrol
                                                           auditService: AuditService,
                                                           cc: ControllerComponents,
                                                           idGenerator: IdGenerator)(implicit ec: ExecutionContext)
-    extends AuthorisedController(cc)
-    with BaseController
-    with Logging {
+    extends AuthorisedController(cc) {
 
   implicit val endpointLogContext: EndpointLogContext =
     EndpointLogContext(controllerName = "DeletePropertyAnnualSubmissionController", endpointName = "deletePropertyAnnualSubmission")
 
   def handleRequest(nino: String, businessId: String, taxYear: String): Action[AnyContent] =
     authorisedAction(nino).async { implicit request =>
-      implicit val correlationId: String = idGenerator.getCorrelationId
-      logger.info(
-        message = s"[${endpointLogContext.controllerName}][${endpointLogContext.endpointName}] " +
-          s"with correlationId : $correlationId")
+      implicit val ctx: RequestContext = RequestContext.from(idGenerator, endpointLogContext)
+
       val rawData = DeletePropertyAnnualSubmissionRawData(nino, businessId, taxYear)
-      val result =
-        for {
-          parsedRequest   <- EitherT.fromEither[Future](parser.parseRequest(rawData))
-          serviceResponse <- EitherT(service.deletePropertyAnnualSubmission(parsedRequest))
-        } yield {
-          logger.info(
-            s"[${endpointLogContext.controllerName}][${endpointLogContext.endpointName}] - " +
-              s"Success response received with CorrelationId: ${serviceResponse.correlationId}")
 
-          auditSubmission(GenericAuditDetail(request.userDetails, rawData, serviceResponse.correlationId, AuditResponse(NO_CONTENT, Right(None))))
+      val requestHandler = RequestHandler
+        .withParser(parser)
+        .withService(service.deletePropertyAnnualSubmission)
+        .withAuditing(AuditHandler(
+          auditService = auditService,
+          auditType = "DeletePropertyAnnualSubmission",
+          transactionName = "delete-property-annual-submission",
+          params = Map("nino" -> nino, "businessId" -> businessId, "taxYear" -> taxYear),
+          requestBody = None
+        ))
 
-          NoContent.withApiHeaders(serviceResponse.correlationId)
-
-        }
-      result.leftMap { errorWrapper =>
-        val resCorrelationId = errorWrapper.correlationId
-        val result           = errorResult(errorWrapper).withApiHeaders(resCorrelationId)
-
-        auditSubmission(
-          GenericAuditDetail(request.userDetails, rawData, correlationId, AuditResponse(result.header.status, Left(errorWrapper.auditErrors))))
-
-        logger.warn(
-          s"[${endpointLogContext.controllerName}][${endpointLogContext.endpointName}] - " +
-            s"Error response received with CorrelationId: $resCorrelationId")
-        result
-      }.merge
+      requestHandler.handleRequest(rawData)
     }
-
-  private def errorResult(errorWrapper: ErrorWrapper) =
-    errorWrapper.error match {
-      case _
-          if errorWrapper.containsAnyOf(
-            NinoFormatError,
-            BusinessIdFormatError,
-            TaxYearFormatError,
-            RuleTaxYearNotSupportedError,
-            RuleTaxYearRangeInvalidError,
-            BadRequestError,
-            RuleIncorrectGovTestScenarioError
-          ) =>
-        BadRequest(Json.toJson(errorWrapper))
-
-      case NotFoundError => NotFound(Json.toJson(errorWrapper))
-      case InternalError => InternalServerError(Json.toJson(errorWrapper))
-      case _             => unhandledError(errorWrapper)
-    }
-
-  private def auditSubmission(details: GenericAuditDetail)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[AuditResult] = {
-    val event = AuditEvent("DeletePropertyAnnualSubmission", "delete-property-annual-submission", details)
-    auditService.auditEvent(event)
-  }
 
 }

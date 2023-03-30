@@ -16,21 +16,19 @@
 
 package v2.controllers
 
-import api.controllers.ControllerBaseSpec
+import api.controllers.{ControllerBaseSpec, ControllerTestRunner}
 import api.mocks.hateoas.MockHateoasFactory
-import api.mocks.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService}
-import api.mocks.MockIdGenerator
-import play.api.libs.json.{JsValue, Json}
-import play.api.mvc.Result
-import uk.gov.hmrc.http.HeaderCarrier
-import v2.mocks.requestParsers.MockAmendUkPropertyPeriodSummaryRequestParser
-import v2.mocks.services._
-import api.models.audit.{AuditError, AuditEvent, AuditResponse, GenericAuditDetail}
+import api.mocks.services.MockAuditService
+import api.models.audit.{AuditEvent, AuditResponse, GenericAuditDetail}
 import api.models.domain.{Nino, TaxYear}
 import api.models.errors._
 import api.models.hateoas.Method.GET
 import api.models.hateoas.{HateoasWrapper, Link}
 import api.models.outcomes.ResponseWrapper
+import play.api.libs.json.{JsValue, Json}
+import play.api.mvc.Result
+import v2.mocks.requestParsers.MockAmendUkPropertyPeriodSummaryRequestParser
+import v2.mocks.services._
 import v2.models.request.amendUkPropertyPeriodSummary._
 import v2.models.request.common.ukFhlProperty._
 import v2.models.request.common.ukNonFhlProperty._
@@ -42,38 +40,15 @@ import scala.concurrent.Future
 
 class AmendUkPropertyPeriodSummaryControllerSpec
     extends ControllerBaseSpec
-    with MockEnrolmentsAuthService
-    with MockMtdIdLookupService
+    with ControllerTestRunner
     with MockAmendUkPropertyPeriodSummaryService
     with MockAmendUkPropertyPeriodSummaryRequestParser
     with MockAuditService
-    with MockHateoasFactory
-    with MockIdGenerator {
+    with MockHateoasFactory {
 
-  private val nino          = "AA123456A"
-  private val businessId    = "XAIS12345678910"
-  private val taxYear       = "2020-21"
-  private val submissionId  = "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
-  private val correlationId = "a1e8057e-fbbc-47a8-a8b4-78d9f015c253"
-
-  trait Test {
-    val hc: HeaderCarrier = HeaderCarrier()
-
-    val controller = new AmendUkPropertyPeriodSummaryController(
-      authService = mockEnrolmentsAuthService,
-      lookupService = mockMtdIdLookupService,
-      parser = mockAmendUkPropertyRequestParser,
-      service = mockService,
-      auditService = mockAuditService,
-      hateoasFactory = mockHateoasFactory,
-      cc = cc,
-      idGenerator = mockIdGenerator
-    )
-
-    MockMtdIdLookupService.lookup(nino).returns(Future.successful(Right("test-mtd-id")))
-    MockedEnrolmentsAuthService.authoriseUser()
-    MockIdGenerator.getCorrelationId.returns(correlationId)
-  }
+  private val businessId   = "XAIS12345678910"
+  private val taxYear      = "2020-21"
+  private val submissionId = "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
 
   val requestBody: AmendUkPropertyPeriodSummaryRequestBody =
     AmendUkPropertyPeriodSummaryRequestBody(
@@ -296,24 +271,9 @@ class AmendUkPropertyPeriodSummaryControllerSpec
   private val testHateoasLink =
     Link(href = s"/individuals/business/property/uk/$nino/$businessId/period/$taxYear/$submissionId", method = GET, rel = "self")
 
-  def event(requestBody: JsValue, auditResponse: AuditResponse): AuditEvent[GenericAuditDetail] =
-    AuditEvent(
-      auditType = "AmendUKPropertyIncomeAndExpensesPeriodSummary",
-      transactionName = "amend-uk-property-income-and-expenses-period-summary",
-      detail = GenericAuditDetail(
-        versionNumber = "2.0",
-        userType = "Individual",
-        agentReferenceNumber = None,
-        params = Json.obj("nino" -> nino, "businessId" -> businessId, "taxYear" -> taxYear, "submissionId" -> submissionId, "request" -> requestBody),
-        correlationId = correlationId,
-        response = auditResponse
-      )
-    )
-
-  "amend" should {
+  "AmendUkPropertyPeriodSummaryController" should {
     "return a successful response from a consolidated request" when {
       "the request received is valid" in new Test {
-
         MockAmendUkPropertyRequestParser
           .requestFor(AmendUkPropertyPeriodSummaryRawData(nino, taxYear, businessId, submissionId, requestBodyJsonConsolidatedExpenses))
           .returns(Right(requestData))
@@ -326,20 +286,20 @@ class AmendUkPropertyPeriodSummaryControllerSpec
           .wrap((), AmendUkPropertyPeriodSummaryHateoasData(nino, businessId, taxYear, submissionId))
           .returns(HateoasWrapper((), Seq(testHateoasLink)))
 
-        val result: Future[Result] =
-          controller.handleRequest(nino, businessId, taxYear, submissionId)(fakeRequestWithBody(requestBodyJsonConsolidatedExpenses))
-        status(result) shouldBe OK
-        contentAsJson(result) shouldBe hateoasResponse
-        header("X-CorrelationId", result) shouldBe Some(correlationId)
+        override def callController(): Future[Result] =
+          controller.handleRequest(nino, businessId, taxYear, submissionId)(fakePutRequest(requestBodyJsonConsolidatedExpenses))
 
-        val auditResponse: AuditResponse = AuditResponse(OK, None, Some(hateoasResponse))
-        MockedAuditService.verifyAuditEvent(event(requestBodyJsonConsolidatedExpenses, auditResponse)).once
+        runOkTestWithAudit(
+          expectedStatus = OK,
+          maybeAuditRequestBody = Some(requestBodyJsonConsolidatedExpenses),
+          maybeExpectedResponseBody = Some(hateoasResponse),
+          maybeAuditResponseBody = Some(hateoasResponse)
+        )
       }
     }
 
     "return a successful response from an unconsolidated request" when {
       "the request received is valid" in new Test {
-
         MockAmendUkPropertyRequestParser
           .requestFor(AmendUkPropertyPeriodSummaryRawData(nino, taxYear, businessId, submissionId, requestBodyJson))
           .returns(Right(requestData))
@@ -352,87 +312,69 @@ class AmendUkPropertyPeriodSummaryControllerSpec
           .wrap((), AmendUkPropertyPeriodSummaryHateoasData(nino, businessId, taxYear, submissionId))
           .returns(HateoasWrapper((), Seq(testHateoasLink)))
 
-        val result: Future[Result] = controller.handleRequest(nino, businessId, taxYear, submissionId)(fakeRequestWithBody(requestBodyJson))
-        status(result) shouldBe OK
-        contentAsJson(result) shouldBe hateoasResponse
-        header("X-CorrelationId", result) shouldBe Some(correlationId)
-
-        val auditResponse: AuditResponse = AuditResponse(OK, None, Some(hateoasResponse))
-        MockedAuditService.verifyAuditEvent(event(requestBodyJson, auditResponse)).once
-
+        runOkTestWithAudit(
+          expectedStatus = OK,
+          maybeAuditRequestBody = Some(requestBodyJson),
+          maybeExpectedResponseBody = Some(hateoasResponse),
+          maybeAuditResponseBody = Some(hateoasResponse)
+        )
       }
     }
 
     "return the error as per spec" when {
-      "parser errors occur" should {
-        def errorsFromParserTester(error: MtdError, expectedStatus: Int): Unit = {
-          s"a ${error.code} error is returned from the parser" in new Test {
+      "the parser validation fails" in new Test {
+        MockAmendUkPropertyRequestParser
+          .requestFor(rawData)
+          .returns(Left(ErrorWrapper(correlationId, NinoFormatError, None)))
 
-            MockAmendUkPropertyRequestParser
-              .requestFor(rawData.copy(body = requestBodyJson))
-              .returns(Left(ErrorWrapper(correlationId, error, None)))
-
-            val result: Future[Result] =
-              controller.handleRequest(nino, businessId, taxYear, submissionId)(fakeRequestWithBody(requestBodyJson))
-
-            status(result) shouldBe expectedStatus
-            contentAsJson(result) shouldBe Json.toJson(error)
-            header("X-CorrelationId", result) shouldBe Some(correlationId)
-
-            val auditResponse: AuditResponse = AuditResponse(expectedStatus, Some(Seq(AuditError(error.code))), None)
-            MockedAuditService.verifyAuditEvent(event(requestBodyJson, auditResponse)).once
-          }
-        }
-
-        val input = Seq(
-          (BadRequestError, BAD_REQUEST),
-          (NinoFormatError, BAD_REQUEST),
-          (TaxYearFormatError, BAD_REQUEST),
-          (BusinessIdFormatError, BAD_REQUEST),
-          (SubmissionIdFormatError, BAD_REQUEST),
-          (RuleTaxYearNotSupportedError, BAD_REQUEST),
-          (RuleTypeOfBusinessIncorrectError, BAD_REQUEST),
-          (InternalError, INTERNAL_SERVER_ERROR)
-        )
-
-        input.foreach(args => (errorsFromParserTester _).tupled(args))
+        runErrorTestWithAudit(NinoFormatError, Some(requestBodyJson))
       }
 
-      "service errors occur" should {
-        def serviceErrors(mtdError: MtdError, expectedStatus: Int): Unit = {
-          s"a $mtdError error is returned from the service" in new Test {
+      "the service returns an error" in new Test {
+        MockAmendUkPropertyRequestParser
+          .requestFor(rawData)
+          .returns(Right(requestData))
 
-            MockAmendUkPropertyRequestParser
-              .requestFor(rawData)
-              .returns(Right(requestData))
+        MockAmendUkPropertyService
+          .amend(requestData)
+          .returns(Future.successful(Left(ErrorWrapper(correlationId, RuleTaxYearNotSupportedError))))
 
-            MockAmendUkPropertyService
-              .amend(requestData)
-              .returns(Future.successful(Left(ErrorWrapper(correlationId, mtdError))))
-
-            val result: Future[Result] = controller.handleRequest(nino, businessId, taxYear, submissionId)(fakeRequestWithBody(requestBodyJson))
-
-            status(result) shouldBe expectedStatus
-            contentAsJson(result) shouldBe Json.toJson(mtdError)
-            header("X-CorrelationId", result) shouldBe Some(correlationId)
-          }
-        }
-
-        val input = Seq(
-          (NinoFormatError, BAD_REQUEST),
-          (TaxYearFormatError, BAD_REQUEST),
-          (BusinessIdFormatError, BAD_REQUEST),
-          (SubmissionIdFormatError, BAD_REQUEST),
-          (NotFoundError, NOT_FOUND),
-          (RuleTypeOfBusinessIncorrectError, BAD_REQUEST),
-          (RuleTaxYearNotSupportedError, BAD_REQUEST),
-          (InternalError, INTERNAL_SERVER_ERROR),
-          (RuleIncorrectGovTestScenarioError, BAD_REQUEST)
-        )
-
-        input.foreach(args => (serviceErrors _).tupled(args))
+        runErrorTestWithAudit(RuleTaxYearNotSupportedError, Some(requestBodyJson))
       }
     }
+  }
+
+  trait Test extends ControllerTest with AuditEventChecking[GenericAuditDetail] {
+
+    val controller = new AmendUkPropertyPeriodSummaryController(
+      authService = mockEnrolmentsAuthService,
+      lookupService = mockMtdIdLookupService,
+      parser = mockAmendUkPropertyRequestParser,
+      service = mockService,
+      auditService = mockAuditService,
+      hateoasFactory = mockHateoasFactory,
+      cc = cc,
+      idGenerator = mockIdGenerator
+    )
+
+    protected def callController(): Future[Result] =
+      controller.handleRequest(nino, businessId, taxYear, submissionId)(fakePutRequest(requestBodyJson))
+
+    def event(auditResponse: AuditResponse, requestBody: Option[JsValue]): AuditEvent[GenericAuditDetail] =
+      AuditEvent(
+        auditType = "AmendUKPropertyIncomeAndExpensesPeriodSummary",
+        transactionName = "amend-uk-property-income-and-expenses-period-summary",
+        detail = GenericAuditDetail(
+          versionNumber = "2.0",
+          userType = "Individual",
+          agentReferenceNumber = None,
+          params =
+            Json.obj("nino" -> nino, "businessId" -> businessId, "taxYear" -> taxYear, "submissionId" -> submissionId, "request" -> requestBody),
+          correlationId = correlationId,
+          response = auditResponse
+        )
+      )
+
   }
 
 }

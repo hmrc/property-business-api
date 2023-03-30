@@ -16,33 +16,25 @@
 
 package v2.services
 
+import api.controllers.RequestContext
+import api.models.errors._
+import api.services.{BaseService, ServiceOutcome}
 import cats.implicits._
-import cats.data.EitherT
+import v2.connectors.CreateAmendForeignPropertyAnnualSubmissionConnector
+import v2.models.request.createAmendForeignPropertyAnnualSubmission.CreateAmendForeignPropertyAnnualSubmissionRequest
 
 import javax.inject.{Inject, Singleton}
-import uk.gov.hmrc.http.HeaderCarrier
-import utils.Logging
-import api.controllers.EndpointLogContext
-import api.models.errors._
-import v2.models.request.createAmendForeignPropertyAnnualSubmission.CreateAmendForeignPropertyAnnualSubmissionRequest
-import api.services.ServiceOutcome
-import api.support.DownstreamResponseMappingSupport
-import v2.connectors.CreateAmendForeignPropertyAnnualSubmissionConnector
-
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class CreateAmendForeignPropertyAnnualSubmissionService @Inject()(connector: CreateAmendForeignPropertyAnnualSubmissionConnector)
-    extends DownstreamResponseMappingSupport
-    with Logging {
+class CreateAmendForeignPropertyAnnualSubmissionService @Inject() (connector: CreateAmendForeignPropertyAnnualSubmissionConnector)
+    extends BaseService {
 
-  def createAmendForeignPropertyAnnualSubmission(request: CreateAmendForeignPropertyAnnualSubmissionRequest)(
-      implicit hc: HeaderCarrier,
-      ec: ExecutionContext,
-      logContext: EndpointLogContext,
-      correlationId: String): Future[ServiceOutcome[Unit]] = {
+  def createAmendForeignPropertyAnnualSubmission(request: CreateAmendForeignPropertyAnnualSubmissionRequest)(implicit
+      ctx: RequestContext,
+      ec: ExecutionContext): Future[ServiceOutcome[Unit]] = {
 
-    EitherT(connector.createAmendForeignPropertyAnnualSubmission(request)).leftMap(mapDownstreamErrors(downstreamErrorMap)).value
+    connector.createAmendForeignPropertyAnnualSubmission(request).map(_.leftMap(mapDownstreamErrors(downstreamErrorMap)))
   }
 
   private def downstreamErrorMap = {
@@ -69,4 +61,5 @@ class CreateAmendForeignPropertyAnnualSubmissionService @Inject()(connector: Cre
 
     errors ++ extraTysErrors
   }
+
 }

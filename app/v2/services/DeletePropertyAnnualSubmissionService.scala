@@ -16,35 +16,27 @@
 
 package v2.services
 
-import cats.data.EitherT
-import cats.implicits._
-import uk.gov.hmrc.http.HeaderCarrier
-import utils.Logging
-import api.controllers.EndpointLogContext
+import api.controllers.RequestContext
 import api.models.errors.{BusinessIdFormatError, InternalError, NinoFormatError, NotFoundError, RuleTaxYearNotSupportedError, TaxYearFormatError}
-import v2.models.request.deletePropertyAnnualSubmission.DeletePropertyAnnualSubmissionRequest
-import api.services.ServiceOutcome
-import api.support.DownstreamResponseMappingSupport
+import api.services.{BaseService, ServiceOutcome}
+import cats.implicits._
 import v2.connectors.DeletePropertyAnnualSubmissionConnector
+import v2.models.request.deletePropertyAnnualSubmission.DeletePropertyAnnualSubmissionRequest
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class DeletePropertyAnnualSubmissionService @Inject()(connector: DeletePropertyAnnualSubmissionConnector)
-    extends DownstreamResponseMappingSupport
-    with Logging {
+class DeletePropertyAnnualSubmissionService @Inject() (connector: DeletePropertyAnnualSubmissionConnector) extends BaseService {
 
-  def deletePropertyAnnualSubmission(request: DeletePropertyAnnualSubmissionRequest)(implicit hc: HeaderCarrier,
-                                                                                     ec: ExecutionContext,
-                                                                                     logContext: EndpointLogContext,
-                                                                                     correlationId: String): Future[ServiceOutcome[Unit]] = {
+  def deletePropertyAnnualSubmission(
+      request: DeletePropertyAnnualSubmissionRequest)(implicit ctx: RequestContext, ec: ExecutionContext): Future[ServiceOutcome[Unit]] = {
 
     val result = for {
-      ifsResponseWrapper <- EitherT(connector.deletePropertyAnnualSubmission(request)).leftMap(mapDownstreamErrors(errorMap))
+      ifsResponseWrapper <- connector.deletePropertyAnnualSubmission(request).map(_.leftMap(mapDownstreamErrors(errorMap)))
     } yield ifsResponseWrapper
 
-    result.value
+    result
   }
 
   private val errorMap = {

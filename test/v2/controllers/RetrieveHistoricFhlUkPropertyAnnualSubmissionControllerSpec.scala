@@ -16,24 +16,19 @@
 
 package v2.controllers
 
-import api.controllers.ControllerBaseSpec
+import api.controllers.{ControllerBaseSpec, ControllerTestRunner}
+import api.mocks.MockIdGenerator
 import api.mocks.hateoas.MockHateoasFactory
 import api.mocks.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService}
-import api.mocks.MockIdGenerator
-import play.api.libs.json.Json
-import play.api.mvc.Result
-import uk.gov.hmrc.http.HeaderCarrier
-import v2.mocks.requestParsers.MockRetrieveHistoricFhlUkPropertyAnnualSubmissionRequestParser
-import v2.mocks.services.MockRetrieveHistoricFhlUkPropertyAnnualSubmissionService
 import api.models.domain.{Nino, TaxYear}
 import api.models.errors._
-import api.models.hateoas.Method.GET
-import api.models.hateoas.{HateoasWrapper, Link}
+import api.models.hateoas.HateoasWrapper
 import api.models.outcomes.ResponseWrapper
-import v2.models.request.retrieveHistoricFhlUkPropertyAnnualSubmission.{
-  RetrieveHistoricFhlUkPropertyAnnualSubmissionRawData,
-  RetrieveHistoricFhlUkPropertyAnnualSubmissionRequest
-}
+import play.api.libs.json.{JsObject, JsValue, Json}
+import play.api.mvc.Result
+import v2.mocks.requestParsers.MockRetrieveHistoricFhlUkPropertyAnnualSubmissionRequestParser
+import v2.mocks.services.MockRetrieveHistoricFhlUkPropertyAnnualSubmissionService
+import v2.models.request.retrieveHistoricFhlUkPropertyAnnualSubmission._
 import v2.models.response.retrieveHistoricFhlUkPropertyAnnualSubmission._
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -41,6 +36,7 @@ import scala.concurrent.Future
 
 class RetrieveHistoricFhlUkPropertyAnnualSubmissionControllerSpec
     extends ControllerBaseSpec
+    with ControllerTestRunner
     with MockEnrolmentsAuthService
     with MockMtdIdLookupService
     with MockRetrieveHistoricFhlUkPropertyAnnualSubmissionService
@@ -49,13 +45,52 @@ class RetrieveHistoricFhlUkPropertyAnnualSubmissionControllerSpec
     with MockAuditService
     with MockIdGenerator {
 
-  private val nino          = "AA123456A"
-  private val mtdTaxYear    = "2020-21"
-  private val taxYear       = TaxYear.fromMtd(mtdTaxYear)
-  private val correlationId = "X-123"
+  private val mtdTaxYear = "2020-21"
+  private val taxYear    = TaxYear.fromMtd(mtdTaxYear)
 
-  trait Test {
-    val hc: HeaderCarrier = HeaderCarrier()
+  "RetrieveHistoricFhlUkPropertyAnnualSubmissionController" should {
+    "return OK" when {
+      "the request is valid" in new Test {
+        MockRetrieveHistoricFhlUkPropertyAnnualSubmissionRequestParser
+          .parse(rawData)
+          .returns(Right(requestData))
+
+        MockRetrieveHistoricFhlUkPropertyAnnualSubmissionService
+          .retrieve(requestData)
+          .returns(Future.successful(Right(ResponseWrapper(correlationId, responseData))))
+
+        MockHateoasFactory
+          .wrap(responseData, hateoasData)
+          .returns(HateoasWrapper(responseData, testHateoasLinks))
+
+        runOkTest(expectedStatus = OK, maybeExpectedResponseBody = Some(responseBodyJsonWithHateoas))
+      }
+    }
+
+    "return the error as per spec" when {
+      "the parser validation fails" in new Test {
+        MockRetrieveHistoricFhlUkPropertyAnnualSubmissionRequestParser
+          .parse(rawData)
+          .returns(Left(ErrorWrapper(correlationId, NinoFormatError, None)))
+
+        runErrorTest(NinoFormatError)
+      }
+
+      "the service returns an error" in new Test {
+        MockRetrieveHistoricFhlUkPropertyAnnualSubmissionRequestParser
+          .parse(rawData)
+          .returns(Right(requestData))
+
+        MockRetrieveHistoricFhlUkPropertyAnnualSubmissionService
+          .retrieve(requestData)
+          .returns(Future.successful(Left(ErrorWrapper(correlationId, RuleTaxYearNotSupportedError))))
+
+        runErrorTest(RuleTaxYearNotSupportedError)
+      }
+    }
+  }
+
+  trait Test extends ControllerTest {
 
     val controller = new RetrieveHistoricFhlUkPropertyAnnualSubmissionController(
       authService = mockEnrolmentsAuthService,
@@ -67,120 +102,61 @@ class RetrieveHistoricFhlUkPropertyAnnualSubmissionControllerSpec
       idGenerator = mockIdGenerator
     )
 
-    MockMtdIdLookupService.lookup(nino).returns(Future.successful(Right("test-mtd-id")))
-    MockedEnrolmentsAuthService.authoriseUser()
-    MockIdGenerator.getCorrelationId.returns(correlationId)
-  }
+    protected def callController(): Future[Result] = controller.handleRequest(nino, mtdTaxYear)(fakeGetRequest)
 
-  private val rawData     = RetrieveHistoricFhlUkPropertyAnnualSubmissionRawData(nino, mtdTaxYear)
-  private val requestData = RetrieveHistoricFhlUkPropertyAnnualSubmissionRequest(Nino(nino), taxYear)
+    protected val rawData: RetrieveHistoricFhlUkPropertyAnnualSubmissionRawData =
+      RetrieveHistoricFhlUkPropertyAnnualSubmissionRawData(nino, mtdTaxYear)
 
-  val annualAdjustments: AnnualAdjustments = AnnualAdjustments(
-    Option(BigDecimal("100.11")),
-    Option(BigDecimal("200.11")),
-    Option(BigDecimal("105.11")),
-    true,
-    Option(BigDecimal("100.11")),
-    false,
-    Option(RentARoom(true))
-  )
+    protected val requestData: RetrieveHistoricFhlUkPropertyAnnualSubmissionRequest =
+      RetrieveHistoricFhlUkPropertyAnnualSubmissionRequest(Nino(nino), taxYear)
 
-  val annualAllowances: AnnualAllowances = AnnualAllowances(
-    Option(BigDecimal("100.11")),
-    Option(BigDecimal("300.11")),
-    Option(BigDecimal("405.11")),
-    Option(BigDecimal("550.11"))
-  )
+    private val annualAdjustments: AnnualAdjustments = AnnualAdjustments(
+      Some(BigDecimal("100.11")),
+      Some(BigDecimal("200.11")),
+      Some(BigDecimal("105.11")),
+      periodOfGraceAdjustment = true,
+      Some(BigDecimal("100.11")),
+      nonResidentLandlord = false,
+      Some(RentARoom(true))
+    )
 
-  private val mockHateoasLink =
-    Link(href = s"individuals/business/property/uk/annual/furnished-holiday-lettings/$nino/$mtdTaxYear", method = GET, rel = "self")
+    private val annualAllowances: AnnualAllowances = AnnualAllowances(
+      Some(BigDecimal("100.11")),
+      Some(BigDecimal("300.11")),
+      Some(BigDecimal("405.11")),
+      Some(BigDecimal("550.11"))
+    )
 
-  val responseBody: RetrieveHistoricFhlUkPropertyAnnualSubmissionResponse = RetrieveHistoricFhlUkPropertyAnnualSubmissionResponse(
-    Some(annualAdjustments),
-    Some(annualAllowances)
-  )
+    protected val responseData: RetrieveHistoricFhlUkPropertyAnnualSubmissionResponse =
+      RetrieveHistoricFhlUkPropertyAnnualSubmissionResponse(Some(annualAdjustments), Some(annualAllowances))
 
-  "handleRequest" should {
-    "return Ok" when {
-      "the request received is valid" in new Test {
+    protected val hateoasData: RetrieveHistoricFhlUkPropertyAnnualSubmissionHateoasData =
+      RetrieveHistoricFhlUkPropertyAnnualSubmissionHateoasData(nino, mtdTaxYear)
 
-        MockRetrieveHistoricFhlUkPropertyRequestParser
-          .parseRequest(rawData)
-          .returns(Right(requestData))
+    private val responseBodyJson: JsValue = Json.parse("""
+        |{
+        | "annualAdjustments": {
+        |     "lossBroughtForward":100.11,
+        |     "privateUseAdjustment":200.11,
+        |     "balancingCharge":105.11,
+        |     "periodOfGraceAdjustment":true,
+        |     "businessPremisesRenovationAllowanceBalancingCharges":100.11,
+        |     "nonResidentLandlord":false,
+        |     "rentARoom": {
+        |       "jointlyLet":true
+        |      }
+        |  },
+        |  "annualAllowances": {
+        |     "annualInvestmentAllowance":100.11,
+        |     "businessPremisesRenovationAllowance":300.11,
+        |     "otherCapitalAllowance":405.11,
+        |     "propertyIncomeAllowance":550.11
+        |  }
+        |}
+        |""".stripMargin)
 
-        MockRetrieveHistoricFhlUkPropertyService
-          .retrieve(requestData)
-          .returns(Future.successful(Right(ResponseWrapper(correlationId, responseBody))))
+    protected val responseBodyJsonWithHateoas: JsObject = responseBodyJson.as[JsObject] ++ testHateoasLinksJson
 
-        MockHateoasFactory
-          .wrap(responseBody, RetrieveHistoricFhlUkPropertyAnnualSubmissionHateoasData(nino, mtdTaxYear))
-          .returns(HateoasWrapper(responseBody, Seq(mockHateoasLink)))
-
-        val result: Future[Result] = controller.handleRequest(nino, mtdTaxYear)(fakeRequest)
-        status(result) shouldBe OK
-        header("X-CorrelationId", result) shouldBe Some(correlationId)
-      }
-    }
-    "return an error as per spec" when {
-      "parser errors occur" should {
-        def errorsFromParserTester(error: MtdError, expectedStatus: Int): Unit = {
-          s"a ${error.code} error is returned from the parser" in new Test {
-
-            MockRetrieveHistoricFhlUkPropertyRequestParser
-              .parseRequest(rawData)
-              .returns(Left(ErrorWrapper(correlationId, error, None)))
-
-            val result: Future[Result] = controller.handleRequest(nino, mtdTaxYear)(fakeRequest)
-
-            status(result) shouldBe expectedStatus
-            contentAsJson(result) shouldBe Json.toJson(error)
-            header("X-CorrelationId", result) shouldBe Some(correlationId)
-          }
-        }
-
-        val input = Seq(
-          (BadRequestError, BAD_REQUEST),
-          (NinoFormatError, BAD_REQUEST),
-          (TaxYearFormatError, BAD_REQUEST),
-          (RuleTaxYearRangeInvalidError, BAD_REQUEST),
-          (RuleHistoricTaxYearNotSupportedError, BAD_REQUEST)
-        )
-
-        input.foreach(args => (errorsFromParserTester _).tupled(args))
-      }
-
-      "service errors occur" should {
-        def serviceErrors(mtdError: MtdError, expectedStatus: Int): Unit = {
-          s"a $mtdError error is returned from the service" in new Test {
-
-            MockRetrieveHistoricFhlUkPropertyRequestParser
-              .parseRequest(rawData)
-              .returns(Right(requestData))
-
-            MockRetrieveHistoricFhlUkPropertyService
-              .retrieve(requestData)
-              .returns(Future.successful(Left(ErrorWrapper(correlationId, mtdError))))
-
-            val result: Future[Result] = controller.handleRequest(nino, mtdTaxYear)(fakeRequest)
-
-            status(result) shouldBe expectedStatus
-            contentAsJson(result) shouldBe Json.toJson(mtdError)
-            header("X-CorrelationId", result) shouldBe Some(correlationId)
-          }
-        }
-
-        val input = Seq(
-          (NinoFormatError, BAD_REQUEST),
-          (TaxYearFormatError, BAD_REQUEST),
-          (RuleHistoricTaxYearNotSupportedError, BAD_REQUEST),
-          (NotFoundError, NOT_FOUND),
-          (InternalError, INTERNAL_SERVER_ERROR),
-          (RuleIncorrectGovTestScenarioError, BAD_REQUEST)
-        )
-
-        input.foreach(args => (serviceErrors _).tupled(args))
-      }
-    }
   }
 
 }

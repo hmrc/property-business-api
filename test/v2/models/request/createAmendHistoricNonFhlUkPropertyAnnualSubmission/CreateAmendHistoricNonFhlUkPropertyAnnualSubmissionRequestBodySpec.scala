@@ -16,24 +16,102 @@
 
 package v2.models.request.createAmendHistoricNonFhlUkPropertyAnnualSubmission
 
-import fixtures.CreateAmendNonFhlUkPropertyAnnualSubmission.RequestResponseModelFixtures
-import play.api.libs.json.Json
+import play.api.libs.json.{JsValue, Json}
 import support.UnitSpec
+import v2.models.request.common.ukPropertyRentARoom.UkPropertyAdjustmentsRentARoom
 
-class CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestBodySpec extends UnitSpec with RequestResponseModelFixtures {
+class CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestBodySpec extends UnitSpec {
 
   "reads" when {
     "passed a valid JSON" should {
-      "return a valid model" in {
+      "return a valid model" in new Test {
         validMtdJson.as[CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestBody] shouldBe requestBody
       }
     }
   }
+
   "writes" when {
     "passed valid model" should {
-      "return valid JSON" in {
+      "return valid JSON" in new Test {
         Json.toJson(requestBody) shouldBe validDownstreamJson
       }
     }
   }
+
+  trait Test {
+
+    private val annualAdjustments: HistoricNonFhlAnnualAdjustments =
+      HistoricNonFhlAnnualAdjustments(
+        lossBroughtForward = Some(100.00),
+        privateUseAdjustment = Some(200.00),
+        balancingCharge = Some(300.00),
+        businessPremisesRenovationAllowanceBalancingCharges = Some(400.00),
+        nonResidentLandlord = true,
+        rentARoom = Some(UkPropertyAdjustmentsRentARoom(true))
+      )
+
+    private val annualAllowances: HistoricNonFhlAnnualAllowances =
+      HistoricNonFhlAnnualAllowances(
+        annualInvestmentAllowance = Some(500.00),
+        zeroEmissionGoodsVehicleAllowance = Some(600.00),
+        businessPremisesRenovationAllowance = Some(700.00),
+        otherCapitalAllowance = Some(800.00),
+        costOfReplacingDomesticGoods = Some(900.00),
+        propertyIncomeAllowance = Some(1000.00)
+      )
+
+    protected val requestBody: CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestBody =
+      CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestBody(
+        Some(annualAdjustments),
+        Some(annualAllowances)
+      )
+
+    protected val validMtdJson: JsValue = Json.parse("""
+     |{
+     |   "annualAdjustments": {
+     |      "lossBroughtForward": 100.00,
+     |      "privateUseAdjustment": 200.00,
+     |      "balancingCharge": 300.00,
+     |      "businessPremisesRenovationAllowanceBalancingCharges": 400.00,
+     |      "nonResidentLandlord": true,
+     |      "rentARoom": {
+     |         "jointlyLet": true
+     |      }
+     |   },
+     |   "annualAllowances": {
+     |      "annualInvestmentAllowance": 500.00,
+     |      "zeroEmissionGoodsVehicleAllowance": 600.00,
+     |      "businessPremisesRenovationAllowance": 700.00,
+     |      "otherCapitalAllowance": 800.00,
+     |      "costOfReplacingDomesticGoods": 900.00,
+     |      "propertyIncomeAllowance": 1000.00
+     |   }
+     |}
+     |""".stripMargin)
+
+    protected val validDownstreamJson: JsValue = Json.parse("""
+      |{
+      |   "annualAdjustments": {
+      |      "lossBroughtForward": 100.00,
+      |      "privateUseAdjustment": 200.00,
+      |      "balancingCharge": 300.00,
+      |      "businessPremisesRenovationAllowanceBalancingCharges": 400.00,
+      |      "nonResidentLandlord": true,
+      |      "ukRentARoom": {
+      |         "jointlyLet": true
+      |      }
+      |   },
+      |   "annualAllowances": {
+      |      "annualInvestmentAllowance": 500.00,
+      |      "zeroEmissionGoodsVehicleAllowance": 600.00,
+      |      "businessPremisesRenovationAllowance": 700.00,
+      |      "otherCapitalAllowance": 800.00,
+      |      "costOfReplacingDomGoods": 900.00,
+      |      "propertyIncomeAllowance": 1000.00
+      |   }
+      |}
+      |""".stripMargin)
+
+  }
+
 }

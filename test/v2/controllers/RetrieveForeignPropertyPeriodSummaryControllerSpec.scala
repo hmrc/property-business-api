@@ -21,10 +21,11 @@ import api.mocks.hateoas.MockHateoasFactory
 import api.mocks.MockIdGenerator
 import api.mocks.services.{MockEnrolmentsAuthService, MockMtdIdLookupService}
 import api.models.domain.{Nino, TaxYear}
-import api.models.hateoas.{HateoasWrapper, Link}
+import api.models.hateoas._
+import api.models.hateoas.Link
 import api.models.hateoas.Method.GET
 import api.models.outcomes.ResponseWrapper
-import play.api.libs.json.JsObject
+import play.api.libs.json.{Json, JsValue}
 import play.api.mvc.Result
 import v2.mocks.requestParsers.MockRetrieveForeignPropertyPeriodSummaryRequestParser
 import v2.mocks.services.MockRetrieveForeignPropertyPeriodSummaryService
@@ -63,10 +64,13 @@ class RetrieveForeignPropertyPeriodSummaryControllerSpec
           .returns(Future.successful(Right(ResponseWrapper(correlationId, responseBody))))
 
         MockHateoasFactory
-          .wrap(responseBody, RetrieveForeignPropertyPeriodSummaryHateoasData(nino, businessId, taxYear, submissionId))
+          .wrap(
+            responseBody,
+            RetrieveForeignPropertyPeriodSummaryHateoasData(nino = nino, businessId = businessId, submissionId = submissionId, taxYear = taxYear))
           .returns(HateoasWrapper(responseBody, Seq(testHateoasLink)))
 
-        runOkTest(expectedStatus = 1, maybeExpectedResponseBody = Some(JsObject.empty))
+        val expectedResponseBody: JsValue = Json.toJson(HateoasWrapper(responseBody, Seq(testHateoasLink)))
+        runOkTest(expectedStatus = OK, maybeExpectedResponseBody = Some(expectedResponseBody))
       }
     }
   }
@@ -83,13 +87,11 @@ class RetrieveForeignPropertyPeriodSummaryControllerSpec
       idGenerator = mockIdGenerator
     )
 
-    protected def callController(): Future[Result] = controller.handleRequest(nino, businessId, submissionId, taxYear)(fakeGetRequest)
+    protected def callController(): Future[Result] =
+      controller.handleRequest(nino = nino, businessId = businessId, taxYear = taxYear, submissionId = submissionId)(fakeGetRequest)
 
     protected val rawData: RetrieveForeignPropertyPeriodSummaryRawData =
-      RetrieveForeignPropertyPeriodSummaryRawData(nino,
-        businessId,
-        taxYear,
-        submissionId)
+      RetrieveForeignPropertyPeriodSummaryRawData(nino = nino, businessId = businessId, taxYear = taxYear, submissionId = submissionId)
 
     protected val requestData: RetrieveForeignPropertyPeriodSummaryRequest =
       RetrieveForeignPropertyPeriodSummaryRequest(Nino(nino), businessId, TaxYear.fromMtd(taxYear), submissionId)
@@ -122,30 +124,34 @@ class RetrieveForeignPropertyPeriodSummaryControllerSpec
         Seq(
           ForeignNonFhlProperty(
             countryCode = "ZZZ",
-            income = Some(ForeignNonFhlPropertyIncome(
-              rentIncome = Some(ForeignNonFhlPropertyRentIncome(
-                rentAmount = Some(1000.12)
+            income = Some(
+              ForeignNonFhlPropertyIncome(
+                rentIncome = Some(
+                  ForeignNonFhlPropertyRentIncome(
+                    rentAmount = Some(1000.12)
+                  )),
+                foreignTaxCreditRelief = true,
+                premiumsOfLeaseGrant = Some(1000.12),
+                otherPropertyIncome = Some(1000.12),
+                foreignTaxPaidOrDeducted = Some(1000.12),
+                specialWithholdingTaxOrUkTaxPaid = Some(1000.12)
               )),
-              foreignTaxCreditRelief = true,
-              premiumsOfLeaseGrant = Some(1000.12),
-              otherPropertyIncome = Some(1000.12),
-              foreignTaxPaidOrDeducted = Some(1000.12),
-              specialWithholdingTaxOrUkTaxPaid = Some(1000.12)
-            )),
-            expenses = Some(ForeignNonFhlPropertyExpenses(
-              premisesRunningCosts = Some(1000.12),
-              repairsAndMaintenance = Some(1000.12),
-              financialCosts = Some(1000.12),
-              professionalFees = Some(1000.12),
-              costOfServices = Some(1000.12),
-              travelCosts = Some(1000.12),
-              residentialFinancialCost = Some(1000.12),
-              broughtFwdResidentialFinancialCost = Some(1000.12),
-              other = Some(1000.12),
-              consolidatedExpenses = None
-            ))
+            expenses = Some(
+              ForeignNonFhlPropertyExpenses(
+                premisesRunningCosts = Some(1000.12),
+                repairsAndMaintenance = Some(1000.12),
+                financialCosts = Some(1000.12),
+                professionalFees = Some(1000.12),
+                costOfServices = Some(1000.12),
+                travelCosts = Some(1000.12),
+                residentialFinancialCost = Some(1000.12),
+                broughtFwdResidentialFinancialCost = Some(1000.12),
+                other = Some(1000.12),
+                consolidatedExpenses = None
+              ))
           )
-        ))
+        )
+      )
     )
 
   }

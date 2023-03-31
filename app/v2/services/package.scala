@@ -19,6 +19,7 @@ package v2
 import api.services.ServiceOutcome
 import v2.models.response.createAmendHistoricFhlUkPropertyAnnualSubmission.CreateAmendHistoricFhlUkPropertyAnnualSubmissionResponse
 import v2.models.response.createAmendHistoricNonFhlUkPropertyAnnualSubmission.CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionResponse
+import v2.models.response.createForeignPropertyPeriodSummary.CreateForeignPropertyPeriodSummaryResponse
 import v2.models.response.createHistoricFhlUkPiePeriodSummary.CreateHistoricFhlUkPiePeriodSummaryResponse
 import v2.models.response.createHistoricNonFhlUkPiePeriodSummary.CreateHistoricNonFhlUkPiePeriodSummaryResponse
 import v2.models.response.retrieveHistoricFhlUkPiePeriodSummary.RetrieveHistoricFhlUkPiePeriodSummaryResponse
@@ -41,5 +42,5 @@ package object services {
   type CreateHistoricNonFhlUkPropertyPeriodSummaryServiceOutcome         = ServiceOutcome[CreateHistoricNonFhlUkPiePeriodSummaryResponse]
   type RetrieveHistoricNonFhlUkPropertyPeriodSummaryServiceOutcome       = ServiceOutcome[RetrieveHistoricNonFhlUkPiePeriodSummaryResponse]
   type RetrieveHistoricNonFhlUkPropertyAnnualSubmissionServiceOutcome    = ServiceOutcome[RetrieveHistoricNonFhlUkPropertyAnnualSubmissionResponse]
-
+  type CreateForeignPropertyPeriodSummaryServiceOutcome                  = ServiceOutcome[CreateForeignPropertyPeriodSummaryResponse]
 }

@@ -16,21 +16,18 @@
 
 package v2.controllers
 
-import akka.http.scaladsl.model.headers.LinkParams.rel
-import api.controllers.ControllerBaseSpec
+import api.controllers.{ControllerBaseSpec, ControllerTestRunner}
 import api.mocks.hateoas.MockHateoasFactory
 import api.mocks.MockIdGenerator
 import api.mocks.services.{MockEnrolmentsAuthService, MockMtdIdLookupService}
-import play.api.libs.json.Json
+import api.models.domain.{Nino, TaxYear}
+import api.models.hateoas.{HateoasWrapper, Link}
+import api.models.hateoas.Method.GET
+import api.models.outcomes.ResponseWrapper
+import play.api.libs.json.JsObject
 import play.api.mvc.Result
-import uk.gov.hmrc.http.HeaderCarrier
 import v2.mocks.requestParsers.MockRetrieveForeignPropertyPeriodSummaryRequestParser
 import v2.mocks.services.MockRetrieveForeignPropertyPeriodSummaryService
-import api.models.domain.{Nino, TaxYear}
-import api.models.errors._
-import api.models.hateoas.Method.GET
-import api.models.hateoas.{HateoasWrapper, Link}
-import api.models.outcomes.ResponseWrapper
 import v2.models.request.retrieveForeignPropertyPeriodSummary._
 import v2.models.response.retrieveForeignPropertyPeriodSummary._
 import v2.models.response.retrieveForeignPropertyPeriodSummary.foreignFhlEea._
@@ -41,6 +38,7 @@ import scala.concurrent.Future
 
 class RetrieveForeignPropertyPeriodSummaryControllerSpec
     extends ControllerBaseSpec
+    with ControllerTestRunner
     with MockEnrolmentsAuthService
     with MockMtdIdLookupService
     with MockRetrieveForeignPropertyPeriodSummaryService
@@ -48,86 +46,9 @@ class RetrieveForeignPropertyPeriodSummaryControllerSpec
     with MockHateoasFactory
     with MockIdGenerator {
 
-  private val nino          = "AA123456A"
-  private val businessId    = "XAIS12345678910"
-  private val submissionId  = "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
-  private val correlationId = "X-123"
-  private val taxYear       = "2022-23"
-
-  trait Test {
-    val hc: HeaderCarrier = HeaderCarrier()
-
-    val controller = new RetrieveForeignPropertyPeriodSummaryController(
-      authService = mockEnrolmentsAuthService,
-      lookupService = mockMtdIdLookupService,
-      parser = mockRetrieveForeignPropertyRequestParser,
-      service = mockRetrieveForeignPropertyService,
-      hateoasFactory = mockHateoasFactory,
-      cc = cc,
-      idGenerator = mockIdGenerator
-    )
-
-    MockMtdIdLookupService.lookup(nino).returns(Future.successful(Right("test-mtd-id")))
-    MockedEnrolmentsAuthService.authoriseUser()
-    MockIdGenerator.getCorrelationId.returns(correlationId)
-  }
-
-  private val rawData     = RetrieveForeignPropertyPeriodSummaryRawData(nino, businessId, taxYear, submissionId)
-  private val requestData = RetrieveForeignPropertyPeriodSummaryRequest(Nino(nino), businessId, TaxYear.fromMtd(taxYear), submissionId)
-
-  private val testHateoasLink =
-    Link(href = s"/individuals/business/property/$nino/$businessId/period/$taxYear/$submissionId", method = GET, rel = "self")
-
-  private val responseBody = RetrieveForeignPropertyPeriodSummaryResponse(
-    submittedOn = "",
-    fromDate = "",
-    toDate = "",
-    foreignFhlEea = Some(
-      ForeignFhlEea(
-        income = Some(
-          ForeignFhlEeaIncome(
-            rentAmount = Some(3426.34)
-          )),
-        expenses = Some(ForeignFhlEeaExpenses(
-          premisesRunningCosts = Some(1000.12),
-          repairsAndMaintenance = Some(1000.12),
-          financialCosts = Some(1000.12),
-          professionalFees = Some(1000.12),
-          costOfServices = Some(1000.12),
-          travelCosts = Some(1000.12),
-          other = Some(1000.12),
-          consolidatedExpenses = None
-        ))
-      )),
-    foreignNonFhlProperty = Some(
-      Seq(
-        ForeignNonFhlProperty(
-          countryCode = "ZZZ",
-          income = Some(ForeignNonFhlPropertyIncome(
-            rentIncome = Some(ForeignNonFhlPropertyRentIncome(
-              rentAmount = Some(1000.12)
-            )),
-            foreignTaxCreditRelief = true,
-            premiumsOfLeaseGrant = Some(1000.12),
-            otherPropertyIncome = Some(1000.12),
-            foreignTaxPaidOrDeducted = Some(1000.12),
-            specialWithholdingTaxOrUkTaxPaid = Some(1000.12)
-          )),
-          expenses = Some(ForeignNonFhlPropertyExpenses(
-            premisesRunningCosts = Some(1000.12),
-            repairsAndMaintenance = Some(1000.12),
-            financialCosts = Some(1000.12),
-            professionalFees = Some(1000.12),
-            costOfServices = Some(1000.12),
-            travelCosts = Some(1000.12),
-            residentialFinancialCost = Some(1000.12),
-            broughtFwdResidentialFinancialCost = Some(1000.12),
-            other = Some(1000.12),
-            consolidatedExpenses = None
-          ))
-        )
-      ))
-  )
+  private val businessId   = "XAIS12345678910"
+  private val submissionId = "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
+  private val taxYear      = "2022-23"
 
   "Retrieve Foreign property period summary" should {
     "return (OK) 200 status" when {
@@ -145,75 +66,88 @@ class RetrieveForeignPropertyPeriodSummaryControllerSpec
           .wrap(responseBody, RetrieveForeignPropertyPeriodSummaryHateoasData(nino, businessId, taxYear, submissionId))
           .returns(HateoasWrapper(responseBody, Seq(testHateoasLink)))
 
-        val result: Future[Result] = controller.handleRequest(nino, businessId, taxYear, submissionId)(fakeRequest)
-        status(result) shouldBe OK
-        header("X-CorrelationId", result) shouldBe Some(correlationId)
+        runOkTest(expectedStatus = 1, maybeExpectedResponseBody = Some(JsObject.empty))
       }
     }
+  }
 
-    "return validation error as per spec" when {
-      def errorsFromParserTester(error: MtdError, expectedStatus: Int): Unit = {
-        s"a ${error.code} error is returned from the parser" in new Test {
+  trait Test extends ControllerTest {
 
-          MockRetrieveForeignPropertyRequestParser
-            .parse(rawData)
-            .returns(Left(ErrorWrapper(correlationId, error, None)))
+    val controller = new RetrieveForeignPropertyPeriodSummaryController(
+      authService = mockEnrolmentsAuthService,
+      lookupService = mockMtdIdLookupService,
+      parser = mockRetrieveForeignPropertyRequestParser,
+      service = mockRetrieveForeignPropertyService,
+      hateoasFactory = mockHateoasFactory,
+      cc = cc,
+      idGenerator = mockIdGenerator
+    )
 
-          val result: Future[Result] = controller.handleRequest(nino, businessId, taxYear, submissionId)(fakeRequest)
+    protected def callController(): Future[Result] = controller.handleRequest(nino, businessId, submissionId, taxYear)(fakeGetRequest)
 
-          status(result) shouldBe expectedStatus
-          contentAsJson(result) shouldBe Json.toJson(error)
-          header("X-CorrelationId", result) shouldBe Some(correlationId)
-        }
-      }
+    protected val rawData: RetrieveForeignPropertyPeriodSummaryRawData =
+      RetrieveForeignPropertyPeriodSummaryRawData(nino,
+        businessId,
+        taxYear,
+        submissionId)
 
-      val input = Seq(
-        (BadRequestError, BAD_REQUEST),
-        (NinoFormatError, BAD_REQUEST),
-        (TaxYearFormatError, BAD_REQUEST),
-        (BusinessIdFormatError, BAD_REQUEST),
-        (SubmissionIdFormatError, BAD_REQUEST),
-        (RuleTaxYearNotSupportedError, BAD_REQUEST),
-        (RuleTaxYearRangeInvalidError, BAD_REQUEST)
-      )
+    protected val requestData: RetrieveForeignPropertyPeriodSummaryRequest =
+      RetrieveForeignPropertyPeriodSummaryRequest(Nino(nino), businessId, TaxYear.fromMtd(taxYear), submissionId)
 
-      input.foreach(args => (errorsFromParserTester _).tupled(args))
-    }
+    protected val testHateoasLink: Link =
+      Link(href = s"/individuals/business/property/$nino/$businessId/period/$taxYear/$submissionId", method = GET, rel = "self")
 
-    "return service errors occur" when {
-      def serviceErrors(mtdError: MtdError, expectedStatus: Int): Unit = {
-        s"a $mtdError error is returned from the service" in new Test {
+    protected val responseBody: RetrieveForeignPropertyPeriodSummaryResponse = RetrieveForeignPropertyPeriodSummaryResponse(
+      submittedOn = "",
+      fromDate = "",
+      toDate = "",
+      foreignFhlEea = Some(
+        ForeignFhlEea(
+          income = Some(
+            ForeignFhlEeaIncome(
+              rentAmount = Some(3426.34)
+            )),
+          expenses = Some(ForeignFhlEeaExpenses(
+            premisesRunningCosts = Some(1000.12),
+            repairsAndMaintenance = Some(1000.12),
+            financialCosts = Some(1000.12),
+            professionalFees = Some(1000.12),
+            costOfServices = Some(1000.12),
+            travelCosts = Some(1000.12),
+            other = Some(1000.12),
+            consolidatedExpenses = None
+          ))
+        )),
+      foreignNonFhlProperty = Some(
+        Seq(
+          ForeignNonFhlProperty(
+            countryCode = "ZZZ",
+            income = Some(ForeignNonFhlPropertyIncome(
+              rentIncome = Some(ForeignNonFhlPropertyRentIncome(
+                rentAmount = Some(1000.12)
+              )),
+              foreignTaxCreditRelief = true,
+              premiumsOfLeaseGrant = Some(1000.12),
+              otherPropertyIncome = Some(1000.12),
+              foreignTaxPaidOrDeducted = Some(1000.12),
+              specialWithholdingTaxOrUkTaxPaid = Some(1000.12)
+            )),
+            expenses = Some(ForeignNonFhlPropertyExpenses(
+              premisesRunningCosts = Some(1000.12),
+              repairsAndMaintenance = Some(1000.12),
+              financialCosts = Some(1000.12),
+              professionalFees = Some(1000.12),
+              costOfServices = Some(1000.12),
+              travelCosts = Some(1000.12),
+              residentialFinancialCost = Some(1000.12),
+              broughtFwdResidentialFinancialCost = Some(1000.12),
+              other = Some(1000.12),
+              consolidatedExpenses = None
+            ))
+          )
+        ))
+    )
 
-          MockRetrieveForeignPropertyRequestParser
-            .parse(rawData)
-            .returns(Right(requestData))
-
-          MockRetrieveForeignPropertyService
-            .retrieve(requestData)
-            .returns(Future.successful(Left(ErrorWrapper(correlationId, mtdError))))
-
-          val result: Future[Result] = controller.handleRequest(nino, businessId, taxYear, submissionId)(fakeRequest)
-
-          status(result) shouldBe expectedStatus
-          contentAsJson(result) shouldBe Json.toJson(mtdError)
-          header("X-CorrelationId", result) shouldBe Some(correlationId)
-        }
-      }
-
-      val input = Seq(
-        (NinoFormatError, BAD_REQUEST),
-        (BusinessIdFormatError, BAD_REQUEST),
-        (SubmissionIdFormatError, BAD_REQUEST),
-        (TaxYearFormatError, BAD_REQUEST),
-        (RuleTaxYearNotSupportedError, BAD_REQUEST),
-        (RuleTypeOfBusinessIncorrectError, BAD_REQUEST),
-        (NotFoundError, NOT_FOUND),
-        (InternalError, INTERNAL_SERVER_ERROR),
-        (RuleIncorrectGovTestScenarioError, BAD_REQUEST)
-      )
-
-      input.foreach(args => (serviceErrors _).tupled(args))
-    }
   }
 
 }

@@ -16,18 +16,17 @@
 
 package v2.controllers
 
-import api.controllers.ControllerBaseSpec
+import api.controllers.{ControllerBaseSpec, ControllerTestRunner}
 import api.mocks.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService}
 import api.mocks.MockIdGenerator
-import play.api.libs.json.Json
-import play.api.mvc.Result
-import uk.gov.hmrc.http.HeaderCarrier
-import v2.mocks.requestParsers.MockDeletePropertyAnnualSubmissionRequestParser
-import v2.mocks.services.MockDeletePropertyAnnualSubmissionService
-import api.models.audit.{AuditError, AuditEvent, AuditResponse, GenericAuditDetail}
+import api.models.audit.{AuditEvent, AuditResponse, GenericAuditDetail}
 import api.models.domain.{Nino, TaxYear}
 import api.models.errors._
 import api.models.outcomes.ResponseWrapper
+import play.api.libs.json.{Json, JsValue}
+import play.api.mvc.Result
+import v2.mocks.requestParsers.MockDeletePropertyAnnualSubmissionRequestParser
+import v2.mocks.services.MockDeletePropertyAnnualSubmissionService
 import v2.models.request.deletePropertyAnnualSubmission._
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -35,6 +34,7 @@ import scala.concurrent.Future
 
 class DeletePropertyAnnualSubmissionControllerSpec
     extends ControllerBaseSpec
+    with ControllerTestRunner
     with MockEnrolmentsAuthService
     with MockMtdIdLookupService
     with MockDeletePropertyAnnualSubmissionService
@@ -42,13 +42,10 @@ class DeletePropertyAnnualSubmissionControllerSpec
     with MockAuditService
     with MockIdGenerator {
 
-  private val nino          = "AA123456A"
-  private val businessId    = "XAIS12345678910"
-  private val taxYear       = "2023-24"
-  private val correlationId = "X-123"
+  private val businessId = "XAIS12345678910"
+  private val taxYear    = "2023-24"
 
-  trait Test {
-    val hc: HeaderCarrier = HeaderCarrier()
+  trait Test extends ControllerTest {
 
     val controller = new DeletePropertyAnnualSubmissionController(
       authService = mockEnrolmentsAuthService,
@@ -60,27 +57,28 @@ class DeletePropertyAnnualSubmissionControllerSpec
       idGenerator = mockIdGenerator
     )
 
-    MockMtdIdLookupService.lookup(nino).returns(Future.successful(Right("test-mtd-id")))
-    MockedEnrolmentsAuthService.authoriseUser()
-    MockIdGenerator.getCorrelationId.returns(correlationId)
-  }
+    protected def callController(): Future[Result] = controller.handleRequest(nino, businessId, taxYear)(fakeRequest)
 
-  private val rawData     = DeletePropertyAnnualSubmissionRawData(nino, businessId, taxYear)
-  private val requestData = DeletePropertyAnnualSubmissionRequest(Nino(nino), businessId, TaxYear.fromMtd(taxYear))
+    protected val rawData: DeletePropertyAnnualSubmissionRawData = DeletePropertyAnnualSubmissionRawData(nino, businessId, taxYear)
 
-  def event(auditResponse: AuditResponse): AuditEvent[GenericAuditDetail] =
-    AuditEvent(
-      auditType = "DeletePropertyAnnualSubmission",
-      transactionName = "delete-property-annual-submission",
-      detail = GenericAuditDetail(
-        versionNumber = "2.0",
-        userType = "Individual",
-        agentReferenceNumber = None,
-        params = Json.obj("nino" -> nino, "businessId" -> businessId, "taxYear" -> taxYear),
-        correlationId = correlationId,
-        response = auditResponse
+    protected val requestData: DeletePropertyAnnualSubmissionRequest =
+      DeletePropertyAnnualSubmissionRequest(Nino(nino), businessId, TaxYear.fromMtd(taxYear))
+
+    protected def event(auditResponse: AuditResponse, maybeRequestBody: Option[JsValue]): AuditEvent[GenericAuditDetail] =
+      AuditEvent(
+        auditType = "DeletePropertyAnnualSubmission",
+        transactionName = "delete-property-annual-submission",
+        detail = GenericAuditDetail(
+          versionNumber = "2.0",
+          userType = "Individual",
+          agentReferenceNumber = None,
+          params = Json.obj("nino" -> nino, "businessId" -> businessId, "taxYear" -> taxYear),
+          correlationId = correlationId,
+          response = auditResponse
+        )
       )
-    )
+
+  }
 
   "handleRequest" should {
     "return No Content" when {
@@ -94,84 +92,34 @@ class DeletePropertyAnnualSubmissionControllerSpec
           .deletePropertyAnnualSubmission(requestData)
           .returns(Future.successful(Right(ResponseWrapper(correlationId, ()))))
 
-        val result: Future[Result] = controller.handleRequest(nino, businessId, taxYear)(fakeRequest)
-        status(result) shouldBe NO_CONTENT
-        header("X-CorrelationId", result) shouldBe Some(correlationId)
-
-        val auditResponse: AuditResponse = AuditResponse(NO_CONTENT, None, None)
-        MockedAuditService.verifyAuditEvent(event(auditResponse)).once
+        runOkTest(expectedStatus = NO_CONTENT, maybeExpectedResponseBody = None)
       }
     }
 
     "return the error as per spec" when {
+      "parser errors occur" in new Test {
 
-      "parser errors occur" should {
-        def errorsFromParserTester(error: MtdError, expectedStatus: Int): Unit = {
-          s"a ${error.code} error is returned from the parser" in new Test {
+        MockDeletePropertyAnnualSubmissionRequestParser
+          .parse(rawData)
+          .returns(Left(ErrorWrapper(correlationId, TaxYearFormatError, None)))
 
-            MockDeletePropertyAnnualSubmissionRequestParser
-              .parse(rawData)
-              .returns(Left(ErrorWrapper(correlationId, error, None)))
-
-            val result: Future[Result] = controller.handleRequest(nino, businessId, taxYear)(fakeRequest)
-
-            status(result) shouldBe expectedStatus
-            contentAsJson(result) shouldBe Json.toJson(error)
-            header("X-CorrelationId", result) shouldBe Some(correlationId)
-
-            val auditResponse: AuditResponse = AuditResponse(expectedStatus, Some(Seq(AuditError(error.code))), None)
-            MockedAuditService.verifyAuditEvent(event(auditResponse)).once
-          }
-        }
-
-        val input = Seq(
-          (BadRequestError, BAD_REQUEST),
-          (NinoFormatError, BAD_REQUEST),
-          (BusinessIdFormatError, BAD_REQUEST),
-          (TaxYearFormatError, BAD_REQUEST),
-          (RuleTaxYearNotSupportedError, BAD_REQUEST),
-          (RuleTaxYearRangeInvalidError, BAD_REQUEST)
-        )
-
-        input.foreach(args => (errorsFromParserTester _).tupled(args))
+        runErrorTest(TaxYearFormatError)
       }
 
-      "service errors occur" should {
-        def serviceErrors(mtdError: MtdError, expectedStatus: Int): Unit = {
-          s"a $mtdError error is returned from the service" in new Test {
+      "service errors returns an error" in new Test {
 
-            MockDeletePropertyAnnualSubmissionRequestParser
-              .parse(rawData)
-              .returns(Right(requestData))
+        MockDeletePropertyAnnualSubmissionRequestParser
+          .parse(rawData)
+          .returns(Right(requestData))
 
-            MockDeletePropertyAnnualSubmissionService
-              .deletePropertyAnnualSubmission(requestData)
-              .returns(Future.successful(Left(ErrorWrapper(correlationId, mtdError))))
+        MockDeletePropertyAnnualSubmissionService
+          .deletePropertyAnnualSubmission(requestData)
+          .returns(Future.successful(Left(ErrorWrapper(correlationId, RuleIncorrectGovTestScenarioError))))
 
-            val result: Future[Result] = controller.handleRequest(nino, businessId, taxYear)(fakeRequest)
-
-            status(result) shouldBe expectedStatus
-            contentAsJson(result) shouldBe Json.toJson(mtdError)
-            header("X-CorrelationId", result) shouldBe Some(correlationId)
-
-            val auditResponse: AuditResponse = AuditResponse(expectedStatus, Some(Seq(AuditError(mtdError.code))), None)
-            MockedAuditService.verifyAuditEvent(event(auditResponse)).once
-          }
-        }
-
-        val input = Seq(
-          (NinoFormatError, BAD_REQUEST),
-          (TaxYearFormatError, BAD_REQUEST),
-          (BusinessIdFormatError, BAD_REQUEST),
-          (RuleTaxYearNotSupportedError, BAD_REQUEST),
-          (NotFoundError, NOT_FOUND),
-          (InternalError, INTERNAL_SERVER_ERROR),
-          (RuleIncorrectGovTestScenarioError, BAD_REQUEST)
-        )
-
-        input.foreach(args => (serviceErrors _).tupled(args))
+        runErrorTest(RuleIncorrectGovTestScenarioError)
       }
     }
+
   }
 
 }

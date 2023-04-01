@@ -147,7 +147,7 @@ class RetrieveForeignPropertyAnnualSubmissionControllerSpec
           .wrap(responseBody, RetrieveForeignPropertyAnnualSubmissionHateoasData(nino, businessId, taxYear))
           .returns(HateoasWrapper(responseBody, Seq(testHateoasLink)))
 
-        runOkTest(expectedStatus = CREATED, maybeExpectedResponseBody = Some(Json.toJson(HateoasWrapper(responseBody, Seq(testHateoasLink)))))
+        runOkTest(expectedStatus = OK, maybeExpectedResponseBody = Some(Json.toJson(HateoasWrapper(responseBody, Seq(testHateoasLink)))))
       }
     }
 

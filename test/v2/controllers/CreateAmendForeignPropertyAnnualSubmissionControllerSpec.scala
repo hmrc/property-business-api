@@ -48,63 +48,8 @@ class CreateAmendForeignPropertyAnnualSubmissionControllerSpec
     with MockIdGenerator
     with CreateAmendForeignPropertyAnnualSubmissionFixture {
 
-  private val businessId    = "XAIS12345678910"
-  private val taxYear       = "2019-20"
-
-  trait Test extends ControllerTest with AuditEventChecking[GenericAuditDetail] {
-
-    val controller = new CreateAmendForeignPropertyAnnualSubmissionController(
-      authService = mockEnrolmentsAuthService,
-      lookupService = mockMtdIdLookupService,
-      parser = mockCreateAmendForeignPropertyAnnualSubmissionRequestParser,
-      service = mockService,
-      auditService = mockAuditService,
-      hateoasFactory = mockHateoasFactory,
-      cc = cc,
-      idGenerator = mockIdGenerator
-    )
-
-    protected def callController(): Future[Result] = controller.handleRequest(nino, businessId, taxYear)(fakeRequestWithBody(requestJson))
-    protected val requestJson: JsValue = createAmendForeignPropertyAnnualSubmissionRequestBodyMtdJson
-
-    protected val testHateoasLink: Link = Link(href = s"/individuals/business/property/$nino/$businessId/annual/$taxYear", method = GET, rel = "self")
-
-    protected val hateoasResponse: JsValue = Json.parse(
-      s"""
-         |{
-         |   "links": [
-         |      {
-         |         "href": "/individuals/business/property/$nino/$businessId/annual/$taxYear",
-         |         "method": "GET",
-         |         "rel": "self"
-         |      }
-         |   ]
-         |}
-      """.stripMargin
-    )
-
-    protected def event(auditResponse: AuditResponse, maybeRequestBody: Option[JsValue]): AuditEvent[GenericAuditDetail] =
-      AuditEvent(
-        auditType = "CreateAmendForeignPropertyAnnualSubmission",
-        transactionName = "create-amend-foreign-property-annual-submission",
-        detail = GenericAuditDetail(
-          versionNumber = "2.0",
-          userType = "Individual",
-          agentReferenceNumber = None,
-          params = Json.obj("nino" -> nino, "businessId" -> businessId, "taxYear" -> "2019-20", "request" -> requestJson),
-          correlationId = correlationId,
-          response = auditResponse
-        )
-      )
-
-    val body: CreateAmendForeignPropertyAnnualSubmissionRequestBody = createAmendForeignPropertyAnnualSubmissionRequestBody
-
-    protected val rawData: CreateAmendForeignPropertyAnnualSubmissionRawData =
-      CreateAmendForeignPropertyAnnualSubmissionRawData(nino, businessId, taxYear, requestJson)
-
-    protected val request: CreateAmendForeignPropertyAnnualSubmissionRequest =
-      CreateAmendForeignPropertyAnnualSubmissionRequest(Nino(nino), businessId, TaxYear.fromMtd(taxYear), body)
-  }
+  private val businessId = "XAIS12345678910"
+  private val taxYear    = "2019-20"
 
   "handleRequest" should {
     "return Ok" when {
@@ -121,7 +66,7 @@ class CreateAmendForeignPropertyAnnualSubmissionControllerSpec
           .wrap((), CreateAmendForeignPropertyAnnualSubmissionHateoasData(nino, businessId, taxYear))
           .returns(HateoasWrapper((), Seq(testHateoasLink)))
 
-        runOkTest(expectedStatus = CREATED, maybeExpectedResponseBody = Some(hateoasResponse))
+        runOkTest(expectedStatus = OK, maybeExpectedResponseBody = Some(hateoasResponse))
       }
     }
 
@@ -148,6 +93,63 @@ class CreateAmendForeignPropertyAnnualSubmissionControllerSpec
         runErrorTest(InternalError)
       }
     }
+  }
+
+  trait Test extends ControllerTest with AuditEventChecking[GenericAuditDetail] {
+
+    val controller = new CreateAmendForeignPropertyAnnualSubmissionController(
+      authService = mockEnrolmentsAuthService,
+      lookupService = mockMtdIdLookupService,
+      parser = mockCreateAmendForeignPropertyAnnualSubmissionRequestParser,
+      service = mockService,
+      auditService = mockAuditService,
+      hateoasFactory = mockHateoasFactory,
+      cc = cc,
+      idGenerator = mockIdGenerator
+    )
+
+    protected def callController(): Future[Result] = controller.handleRequest(nino, businessId, taxYear)(fakeRequestWithBody(requestJson))
+
+    protected val requestJson: JsValue = createAmendForeignPropertyAnnualSubmissionRequestBodyMtdJson
+
+    protected val testHateoasLink: Link = Link(href = s"/individuals/business/property/$nino/$businessId/annual/$taxYear", method = GET, rel = "self")
+
+    protected val hateoasResponse: JsValue = Json.parse(
+      s"""
+         |{
+         |   "links": [
+         |      {
+         |         "href": "/individuals/business/property/$nino/$businessId/annual/$taxYear",
+         |         "method": "GET",
+         |         "rel": "self"
+         |      }
+         |   ]
+         |}
+    """.stripMargin
+    )
+
+    protected def event(auditResponse: AuditResponse, maybeRequestBody: Option[JsValue]): AuditEvent[GenericAuditDetail] =
+      AuditEvent(
+        auditType = "CreateAmendForeignPropertyAnnualSubmission",
+        transactionName = "create-amend-foreign-property-annual-submission",
+        detail = GenericAuditDetail(
+          versionNumber = "2.0",
+          userType = "Individual",
+          agentReferenceNumber = None,
+          params = Json.obj("nino" -> nino, "businessId" -> businessId, "taxYear" -> "2019-20", "request" -> requestJson),
+          correlationId = correlationId,
+          response = auditResponse
+        )
+      )
+
+    val body: CreateAmendForeignPropertyAnnualSubmissionRequestBody = createAmendForeignPropertyAnnualSubmissionRequestBody
+
+    protected val rawData: CreateAmendForeignPropertyAnnualSubmissionRawData =
+      CreateAmendForeignPropertyAnnualSubmissionRawData(nino, businessId, taxYear, requestJson)
+
+    protected val request: CreateAmendForeignPropertyAnnualSubmissionRequest =
+      CreateAmendForeignPropertyAnnualSubmissionRequest(Nino(nino), businessId, TaxYear.fromMtd(taxYear), body)
+
   }
 
 }

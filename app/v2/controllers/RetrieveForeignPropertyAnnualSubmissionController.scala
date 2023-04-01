@@ -52,7 +52,7 @@ class RetrieveForeignPropertyAnnualSubmissionController @Inject() (val authServi
         RequestHandler
           .withParser(parser)
           .withService(service.retrieveForeignProperty)
-          .withHateoasResult(hateoasFactory)(RetrieveForeignPropertyAnnualSubmissionHateoasData(nino, businessId, taxYear), CREATED)
+          .withHateoasResult(hateoasFactory)(RetrieveForeignPropertyAnnualSubmissionHateoasData(nino, businessId, taxYear), OK)
 
       requestHandler.handleRequest(rawData)
     }

@@ -87,7 +87,6 @@ trait ResponseModelsFixture {
       |  "submittedOn": "2020-06-17T10:53:38Z",
       |  "fromDate": "2019-01-29",
       |  "toDate": "2020-03-29",
-      |  "periodCreationDate": "2020-06-17T10:53:38Z",
       |  "ukFhlProperty": {
       |    "income": {
       |      "periodAmount": 1.11,
@@ -212,7 +211,7 @@ trait ResponseModelsFixture {
     submittedOn = "2020-06-17T10:53:38Z",
     fromDate = "2019-01-29",
     toDate = "2020-03-29",
-    periodCreationDate = Some("2020-06-17T10:53:38Z"),
+//    periodCreationDate = Some("2020-06-17T10:53:38Z"), // To be reinstated, see MTDSA-15575
     ukFhlProperty = Some(ukFhlPropertyModel),
     ukNonFhlProperty = Some(ukNonFhlPropertyModel)
   )

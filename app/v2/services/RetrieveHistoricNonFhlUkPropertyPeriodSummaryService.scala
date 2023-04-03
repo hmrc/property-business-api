@@ -16,45 +16,29 @@
 
 package v2.services
 
-import cats.data.EitherT
-import cats.implicits._
-import uk.gov.hmrc.http.HeaderCarrier
-import utils.Logging
-import v2.connectors.RetrieveHistoricNonFhlUkPropertyPeriodSummaryConnector
-import api.controllers.EndpointLogContext
+import api.controllers.RequestContext
 import api.models.errors._
+import api.services.BaseService
+import cats.implicits._
+import v2.connectors.RetrieveHistoricNonFhlUkPropertyPeriodSummaryConnector
 import v2.models.request.retrieveHistoricNonFhlUkPiePeriodSummary.RetrieveHistoricNonFhlUkPiePeriodSummaryRequest
-import v2.models.response.retrieveHistoricNonFhlUkPiePeriodSummary.RetrieveHistoricNonFhlUkPiePeriodSummaryResponse
-import v2.services.RetrieveHistoricNonFhlUkPropertyPeriodSummaryService.downstreamErrorMap
-import api.services.ServiceOutcome
-import api.support.DownstreamResponseMappingSupport
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class RetrieveHistoricNonFhlUkPropertyPeriodSummaryService @Inject()(connector: RetrieveHistoricNonFhlUkPropertyPeriodSummaryConnector)
-    extends DownstreamResponseMappingSupport
-    with Logging {
+class RetrieveHistoricNonFhlUkPropertyPeriodSummaryService @Inject() (connector: RetrieveHistoricNonFhlUkPropertyPeriodSummaryConnector)
+    extends BaseService {
 
-  def retrieve(request: RetrieveHistoricNonFhlUkPiePeriodSummaryRequest)(
-      implicit hc: HeaderCarrier,
-      ec: ExecutionContext,
-      logContext: EndpointLogContext,
-      correlationId: String): Future[ServiceOutcome[RetrieveHistoricNonFhlUkPiePeriodSummaryResponse]] = {
+  def retrieve(request: RetrieveHistoricNonFhlUkPiePeriodSummaryRequest)(implicit
+      ctx: RequestContext,
+      ec: ExecutionContext): Future[RetrieveHistoricNonFhlUkPropertyPeriodSummaryServiceOutcome] = {
 
-    val result = for {
-      resultWrapper <- EitherT(connector.retrieve(request)).leftMap(mapDownstreamErrors(downstreamErrorMap))
-    } yield resultWrapper
+    connector.retrieve(request).map(_.leftMap(mapDownstreamErrors(downstreamErrorMap)))
 
-    result.value
   }
 
-}
-
-object RetrieveHistoricNonFhlUkPropertyPeriodSummaryService {
-
-  val downstreamErrorMap: Map[String, MtdError] =
+  private val downstreamErrorMap: Map[String, MtdError] =
     Map(
       "INVALID_NINO"        -> NinoFormatError,
       "INVALID_TYPE"        -> InternalError,
@@ -65,4 +49,5 @@ object RetrieveHistoricNonFhlUkPropertyPeriodSummaryService {
       "SERVER_ERROR"        -> InternalError,
       "SERVICE_UNAVAILABLE" -> InternalError
     )
+
 }

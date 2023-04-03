@@ -17,25 +17,27 @@
 package v2.connectors
 
 import api.connectors.ConnectorSpec
-import fixtures.CreateAmendNonFhlUkPropertyAnnualSubmission.RequestResponseModelFixtures
 import api.models.domain.{Nino, TaxYear}
 import api.models.outcomes.ResponseWrapper
-import v2.models.request.createAmendHistoricNonFhlUkPropertyAnnualSubmission.CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequest
+import v2.models.request.createAmendHistoricNonFhlUkPropertyAnnualSubmission._
 import v2.models.response.createAmendHistoricFhlUkPropertyAnnualSubmission.CreateAmendHistoricFhlUkPropertyAnnualSubmissionResponse
 
 import scala.concurrent.Future
 
-class CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec with RequestResponseModelFixtures {
+class CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec {
 
   val nino: String              = "AA123456A"
   val taxYear: String           = "2019-20"
   val mtdTaxYear: String        = "2019-20"
   val downstreamTaxYear: String = "2020"
 
+  val body: CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestBody =
+    CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestBody(None, None)
+
   val request: CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequest = CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequest(
     Nino(nino),
     TaxYear.fromMtd(taxYear),
-    requestBody
+    body
   )
 
   trait Test {
@@ -46,20 +48,19 @@ class CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionConnectorSpec extends C
       appConfig = mockAppConfig
     )
 
-    val outcome = Right(ResponseWrapper(correlationId, CreateAmendHistoricFhlUkPropertyAnnualSubmissionResponse(None)))
   }
 
   "connector" must {
-
     "put a non-fhl body and return a 200" in new IfsTest with Test {
+      private val outcome = Right(ResponseWrapper(correlationId, CreateAmendHistoricFhlUkPropertyAnnualSubmissionResponse(None)))
 
       willPut(
         url = s"$baseUrl/income-tax/nino/$nino/uk-properties/other/annual-summaries/$downstreamTaxYear",
-        body = requestBody
+        body = body
       ).returns(Future.successful(outcome))
 
       await(connector.amend(request)) shouldBe outcome
-
     }
   }
+
 }

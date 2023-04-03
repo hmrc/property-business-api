@@ -32,11 +32,13 @@ trait MockCreateAmendHistoricFhlUkPropertyAnnualSubmissionRequestParser extends 
 
   object MockCreateAmendHistoricFhlUkPropertyAnnualSubmissionRequestParser {
 
-    def parseRequest(data: CreateAmendHistoricFhlUkPropertyAnnualSubmissionRawData)
-      : CallHandler[Either[ErrorWrapper, CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequest]] = {
+    def parse(data: CreateAmendHistoricFhlUkPropertyAnnualSubmissionRawData)
+        : CallHandler[Either[ErrorWrapper, CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequest]] = {
       (mockCreateAmendHistoricFhlUkPropertyAnnualSubmissionRequestParser
         .parseRequest(_: CreateAmendHistoricFhlUkPropertyAnnualSubmissionRawData)(_: String))
         .expects(data, *)
     }
+
   }
+
 }

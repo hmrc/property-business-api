@@ -16,38 +16,21 @@
 
 package v2.controllers
 
-import api.controllers.ControllerBaseSpec
+import api.controllers.{ControllerBaseSpec, ControllerTestRunner}
+import api.mocks.MockIdGenerator
 import api.mocks.hateoas.MockHateoasFactory
 import api.mocks.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService}
-import api.mocks.MockIdGenerator
-import play.api.libs.json.{JsObject, Json}
-import play.api.mvc.Result
-import uk.gov.hmrc.http.HeaderCarrier
-import v2.mocks.requestParsers.MockAmendHistoricNonFhlUkPiePeriodSummaryRequestParser
-import v2.mocks.services.MockAmendHistoricNonFhlUkPropertyPeriodSummaryService
-import api.models.errors.{
-  BadRequestError,
-  ErrorWrapper,
-  InternalError,
-  MtdError,
-  NinoFormatError,
-  NotFoundError,
-  PeriodIdFormatError,
-  RuleBothExpensesSuppliedError,
-  RuleIncorrectGovTestScenarioError,
-  RuleIncorrectOrEmptyBodyError,
-  ValueFormatError
-}
-import api.models.audit.{AuditError, AuditEvent, AuditResponse, FlattenedGenericAuditDetail}
+import api.models.audit.{AuditEvent, AuditResponse, FlattenedGenericAuditDetail}
 import api.models.auth.UserDetails
 import api.models.domain.{Nino, PeriodId}
+import api.models.errors.{ErrorWrapper, NinoFormatError, RuleMisalignedPeriodError}
 import api.models.hateoas.HateoasWrapper
 import api.models.outcomes.ResponseWrapper
-import v2.models.request.amendHistoricNonFhlUkPiePeriodSummary.{
-  AmendHistoricNonFhlUkPiePeriodSummaryRawData,
-  AmendHistoricNonFhlUkPiePeriodSummaryRequest,
-  AmendHistoricNonFhlUkPiePeriodSummaryRequestBody
-}
+import play.api.libs.json.{JsObject, JsValue}
+import play.api.mvc.Result
+import v2.mocks.requestParsers.MockAmendHistoricNonFhlUkPiePeriodSummaryRequestParser
+import v2.mocks.services.MockAmendHistoricNonFhlUkPropertyPeriodSummaryService
+import v2.models.request.amendHistoricNonFhlUkPiePeriodSummary._
 import v2.models.response.amendHistoricNonFhlUkPiePeriodSummary.AmendHistoricNonFhlUkPropertyPeriodSummaryHateoasData
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -55,6 +38,7 @@ import scala.concurrent.Future
 
 class AmendHistoricNonFhlUkPropertyPeriodSummaryControllerSpec
     extends ControllerBaseSpec
+    with ControllerTestRunner
     with MockEnrolmentsAuthService
     with MockMtdIdLookupService
     with MockAmendHistoricNonFhlUkPropertyPeriodSummaryService
@@ -63,144 +47,92 @@ class AmendHistoricNonFhlUkPropertyPeriodSummaryControllerSpec
     with MockIdGenerator
     with MockAuditService {
 
-  private val nino          = "AA123456A"
   private val periodId      = "somePeriodId"
-  private val correlationId = "X-123"
   private val mtdId: String = "test-mtd-id"
 
-  trait Test {
-    val hc: HeaderCarrier = HeaderCarrier()
+  "AmendHistoricNonFhlUkPropertyPeriodSummaryController" should {
+    "return a successful response with status 200 (OK)" when {
+      "the request received is valid" in new Test {
+        MockAmendHistoricNonFhlUkPiePeriodSummaryRequestParser
+          .parse(rawData)
+          .returns(Right(requestData))
 
-    val controller = new AmendHistoricNonFhlUkPropertyPeriodSummaryController(
+        MockAmendHistoricNonFhlUkPropertyPeriodSummaryService
+          .amend(requestData)
+          .returns(Future.successful(Right(ResponseWrapper(correlationId, ()))))
+
+        MockHateoasFactory
+          .wrap((), hateoasData)
+          .returns(HateoasWrapper((), testHateoasLinks))
+
+        runOkTest(expectedStatus = OK, maybeExpectedResponseBody = Some(testHateoasLinksJson))
+      }
+    }
+    "return the error as per spec" when {
+      "the parser validation fails" in new Test {
+        MockAmendHistoricNonFhlUkPiePeriodSummaryRequestParser
+          .parse(rawData)
+          .returns(Left(ErrorWrapper(correlationId, NinoFormatError, None)))
+
+        runErrorTest(NinoFormatError)
+      }
+
+      "the service returns an error" in new Test {
+        MockAmendHistoricNonFhlUkPiePeriodSummaryRequestParser
+          .parse(rawData)
+          .returns(Right(requestData))
+
+        MockAmendHistoricNonFhlUkPropertyPeriodSummaryService
+          .amend(requestData)
+          .returns(Future.successful(Left(ErrorWrapper(correlationId, RuleMisalignedPeriodError))))
+
+        runErrorTest(RuleMisalignedPeriodError)
+      }
+    }
+  }
+
+  trait Test extends ControllerTest with AuditEventChecking[FlattenedGenericAuditDetail] {
+
+    private val controller = new AmendHistoricNonFhlUkPropertyPeriodSummaryController(
       authService = mockEnrolmentsAuthService,
       lookupService = mockMtdIdLookupService,
       parser = mockAmendHistoricNonFhlUkPropertyPeriodSummaryRequestParser,
-      service = mockService,
+      service = mockAmendHistoricNonFhlUkPropertyPeriodSummaryService,
       hateoasFactory = mockHateoasFactory,
       auditService = mockAuditService,
       cc = cc,
       idGenerator = mockIdGenerator
     )
 
-    MockMtdIdLookupService.lookup(nino).returns(Future.successful(Right(mtdId)))
-    MockedEnrolmentsAuthService.authoriseUser()
-    MockIdGenerator.getCorrelationId.returns(correlationId)
-  }
+    protected def callController(): Future[Result] = controller.handleRequest(nino, periodId)(fakePutRequest(requestBodyJson))
 
-  // Doesn't matter what there are: parser is mocked
-  private val requestBodyJson = JsObject.empty
-  private val requestBody     = AmendHistoricNonFhlUkPiePeriodSummaryRequestBody(None, None)
-
-  private val rawData = AmendHistoricNonFhlUkPiePeriodSummaryRawData(nino, periodId, requestBodyJson)
-  private val request = AmendHistoricNonFhlUkPiePeriodSummaryRequest(Nino(nino), PeriodId(periodId), requestBody)
-
-  def event(auditResponse: AuditResponse): AuditEvent[FlattenedGenericAuditDetail] =
-    AuditEvent(
-      auditType = "AmendHistoricNonFhlPropertyIncomeExpensesPeriodSummary",
-      transactionName = "AmendHistoricNonFhlPropertyIncomeExpensesPeriodSummary",
-      detail = FlattenedGenericAuditDetail(
-        versionNumber = Some("2.0"),
-        userDetails = UserDetails(mtdId, "Individual", None),
-        params = Map("nino" -> nino, "periodId" -> periodId),
-        request = Some(requestBodyJson),
-        `X-CorrelationId` = correlationId,
-        auditResponse = auditResponse
-      )
-    )
-
-  "handleRequest" should {
-    "return Ok" when {
-      "the request received is valid" in new Test {
-
-        MockAmendHistoricNonFhlUkPropertyPeriodSummaryRequestParser
-          .parseRequest(rawData)
-          .returns(Right(request))
-
-        MockAmendHistoricNonFhlUkPropertyPeriodSummaryService
-          .amend(request)
-          .returns(Future.successful(Right(ResponseWrapper(correlationId, ()))))
-
-        MockHateoasFactory
-          .wrap((), AmendHistoricNonFhlUkPropertyPeriodSummaryHateoasData(nino, periodId))
-          .returns(HateoasWrapper((), testHateoasLinks))
-
-        val result: Future[Result] = controller.handleRequest(nino, periodId)(fakeRequestWithBody(requestBodyJson))
-        status(result) shouldBe OK
-        contentAsJson(result) shouldBe testHateoasLinksJson
-        header("X-CorrelationId", result) shouldBe Some(correlationId)
-
-        val auditResponse: AuditResponse = AuditResponse(OK, None, None)
-        MockedAuditService.verifyAuditEvent(event(auditResponse)).once
-      }
-    }
-  }
-
-  "return the error as per spec" when {
-    "parser errors occur" should {
-      def errorsFromParserTester(error: MtdError, expectedStatus: Int): Unit = {
-        s"a ${error.code} error is returned from the parser" in new Test {
-
-          MockAmendHistoricNonFhlUkPropertyPeriodSummaryRequestParser
-            .parseRequest(rawData)
-            .returns(Left(ErrorWrapper(correlationId, error, None)))
-
-          val result: Future[Result] = controller.handleRequest(nino, periodId)(fakeRequestWithBody(requestBodyJson))
-
-          status(result) shouldBe expectedStatus
-          contentAsJson(result) shouldBe Json.toJson(error)
-          header("X-CorrelationId", result) shouldBe Some(correlationId)
-
-          val auditResponse: AuditResponse = AuditResponse(expectedStatus, Some(Seq(AuditError(error.code))), None)
-          MockedAuditService.verifyAuditEvent(event(auditResponse)).once
-        }
-      }
-
-      val input = Seq(
-        (BadRequestError, BAD_REQUEST),
-        (NinoFormatError, BAD_REQUEST),
-        (withPath(RuleBothExpensesSuppliedError), BAD_REQUEST),
-        (withPath(ValueFormatError), BAD_REQUEST),
-        (withPath(RuleIncorrectOrEmptyBodyError), BAD_REQUEST),
-        (PeriodIdFormatError, BAD_REQUEST)
+    protected def event(auditResponse: AuditResponse, maybeRequestBody: Option[JsValue]): AuditEvent[FlattenedGenericAuditDetail] =
+      AuditEvent(
+        auditType = "AmendHistoricFhlPropertyIncomeExpensesPeriodSummary",
+        transactionName = "AmendHistoricFhlPropertyIncomeExpensesPeriodSummary",
+        detail = FlattenedGenericAuditDetail(
+          versionNumber = Some("2.0"),
+          userDetails = UserDetails(mtdId, "Individual", None),
+          params = Map("nino" -> nino, "periodId" -> periodId),
+          request = Some(requestBodyJson),
+          `X-CorrelationId` = correlationId,
+          auditResponse = auditResponse
+        )
       )
 
-      input.foreach(args => (errorsFromParserTester _).tupled(args))
-    }
+    private val requestBodyJson: JsValue = JsObject.empty
 
-    "service errors occur" should {
-      def serviceErrors(mtdError: MtdError, expectedStatus: Int): Unit = {
-        s"a $mtdError error is returned from the service" in new Test {
+    protected val rawData: AmendHistoricNonFhlUkPiePeriodSummaryRawData =
+      AmendHistoricNonFhlUkPiePeriodSummaryRawData(nino, periodId, requestBodyJson)
 
-          MockAmendHistoricNonFhlUkPropertyPeriodSummaryRequestParser
-            .parseRequest(rawData)
-            .returns(Right(request))
+    protected val requestBody: AmendHistoricNonFhlUkPiePeriodSummaryRequestBody = AmendHistoricNonFhlUkPiePeriodSummaryRequestBody(None, None)
 
-          MockAmendHistoricNonFhlUkPropertyPeriodSummaryService
-            .amend(request)
-            .returns(Future.successful(Left(ErrorWrapper(correlationId, mtdError))))
+    protected val requestData: AmendHistoricNonFhlUkPiePeriodSummaryRequest =
+      AmendHistoricNonFhlUkPiePeriodSummaryRequest(Nino(nino), PeriodId(periodId), requestBody)
 
-          val result: Future[Result] = controller.handleRequest(nino, periodId)(fakeRequestWithBody(requestBodyJson))
+    protected val hateoasData: AmendHistoricNonFhlUkPropertyPeriodSummaryHateoasData =
+      AmendHistoricNonFhlUkPropertyPeriodSummaryHateoasData(nino, periodId)
 
-          status(result) shouldBe expectedStatus
-          contentAsJson(result) shouldBe Json.toJson(mtdError)
-          header("X-CorrelationId", result) shouldBe Some(correlationId)
-
-          val auditResponse: AuditResponse = AuditResponse(expectedStatus, Some(Seq(AuditError(mtdError.code))), None)
-          MockedAuditService.verifyAuditEvent(event(auditResponse)).once
-        }
-      }
-
-      val input = Seq(
-        (NinoFormatError, BAD_REQUEST),
-        (PeriodIdFormatError, BAD_REQUEST),
-        (NotFoundError, NOT_FOUND),
-        (RuleBothExpensesSuppliedError, BAD_REQUEST),
-        (InternalError, INTERNAL_SERVER_ERROR),
-        (RuleIncorrectGovTestScenarioError, BAD_REQUEST)
-      )
-
-      input.foreach(args => (serviceErrors _).tupled(args))
-    }
   }
 
 }

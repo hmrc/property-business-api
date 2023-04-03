@@ -27,13 +27,14 @@ trait MockRetrieveHistoricFhlUkPiePeriodSummaryRequestParser extends MockFactory
   val mockRetrieveHistoricFhlUkPiePeriodSummaryRequestParser: RetrieveHistoricFhlUkPropertyPeriodSummaryRequestParser =
     mock[RetrieveHistoricFhlUkPropertyPeriodSummaryRequestParser]
 
-  object MockRetrieveHistoricFhlUkPropertyRequestParser {
+  object MockRetrieveHistoricFhlUkPiePeriodSummaryRequestParser {
 
-    def parseRequest(
-        data: RetrieveHistoricFhlUkPiePeriodSummaryRawData): CallHandler[Either[ErrorWrapper, RetrieveHistoricFhlUkPiePeriodSummaryRequest]] = {
+    def parse(data: RetrieveHistoricFhlUkPiePeriodSummaryRawData): CallHandler[Either[ErrorWrapper, RetrieveHistoricFhlUkPiePeriodSummaryRequest]] = {
       (mockRetrieveHistoricFhlUkPiePeriodSummaryRequestParser
         .parseRequest(_: RetrieveHistoricFhlUkPiePeriodSummaryRawData)(_: String))
         .expects(data, *)
     }
+
   }
+
 }

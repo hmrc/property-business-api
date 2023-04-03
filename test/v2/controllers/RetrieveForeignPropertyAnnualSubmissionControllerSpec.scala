@@ -22,8 +22,7 @@ import api.mocks.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdI
 import api.mocks.MockIdGenerator
 import api.models.domain.{Nino, TaxYear}
 import api.models.errors._
-import api.models.hateoas.{HateoasWrapper, Link}
-import api.models.hateoas.Method.GET
+import api.models.hateoas.HateoasWrapper
 import api.models.outcomes.ResponseWrapper
 import play.api.libs.json.Json
 import play.api.mvc.Result
@@ -38,7 +37,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class RetrieveForeignPropertyAnnualSubmissionControllerSpec
-    extends ControllerBaseSpec
+  extends ControllerBaseSpec
     with ControllerTestRunner
     with MockEnrolmentsAuthService
     with MockMtdIdLookupService
@@ -49,7 +48,7 @@ class RetrieveForeignPropertyAnnualSubmissionControllerSpec
     with MockIdGenerator {
 
   private val businessId = "XAIS12345678910"
-  private val taxYear    = "2020-21"
+  private val taxYear = "2020-21"
 
   "RetrieveForeignPropertyAnnualSubmissionController" should {
     "return a successful response with status 200 (OK)" when {
@@ -65,9 +64,9 @@ class RetrieveForeignPropertyAnnualSubmissionControllerSpec
 
         MockHateoasFactory
           .wrap(responseBody, RetrieveForeignPropertyAnnualSubmissionHateoasData(nino, businessId, taxYear))
-          .returns(HateoasWrapper(responseBody, Seq(testHateoasLink)))
+          .returns(HateoasWrapper(responseBody, testHateoasLinks))
 
-        runOkTest(expectedStatus = OK, maybeExpectedResponseBody = Some(Json.toJson(HateoasWrapper(responseBody, Seq(testHateoasLink)))))
+        runOkTest(expectedStatus = OK, maybeExpectedResponseBody = Some(Json.toJson(HateoasWrapper(responseBody, testHateoasLinks))))
       }
     }
 
@@ -116,9 +115,6 @@ class RetrieveForeignPropertyAnnualSubmissionControllerSpec
 
     protected val requestData: RetrieveForeignPropertyAnnualSubmissionRequest =
       RetrieveForeignPropertyAnnualSubmissionRequest(Nino(nino), businessId, TaxYear.fromMtd(taxYear))
-
-    protected val testHateoasLink: Link =
-      Link(href = s"Individuals/business/property/foreign/$nino/$businessId/annual/$taxYear", method = GET, rel = "self")
 
     protected val foreignFhlEeaEntry: ForeignFhlEeaEntry = ForeignFhlEeaEntry(
       Some(

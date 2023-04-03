@@ -66,9 +66,9 @@ class RetrieveForeignPropertyPeriodSummaryControllerSpec
           .wrap(
             responseBody,
             RetrieveForeignPropertyPeriodSummaryHateoasData(nino = nino, businessId = businessId, submissionId = submissionId, taxYear = taxYear))
-          .returns(HateoasWrapper(responseBody, Seq(testHateoasLink)))
+          .returns(HateoasWrapper(responseBody, testHateoasLinks))
 
-        val expectedResponseBody: JsValue = Json.toJson(HateoasWrapper(responseBody, Seq(testHateoasLink)))
+        val expectedResponseBody: JsValue = Json.toJson(HateoasWrapper(responseBody, testHateoasLinks))
         runOkTest(expectedStatus = OK, maybeExpectedResponseBody = Some(expectedResponseBody))
       }
     }

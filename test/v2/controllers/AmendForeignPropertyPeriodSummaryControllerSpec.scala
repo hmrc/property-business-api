@@ -68,7 +68,7 @@ class AmendForeignPropertyPeriodSummaryControllerSpec
           .wrap((), AmendForeignPropertyPeriodSummaryHateoasData(nino, businessId, taxYear, submissionId))
           .returns(HateoasWrapper((), testHateoasLinks))
 
-        runOkTest(expectedStatus = OK, maybeExpectedResponseBody = Some(hateoasResponse))
+        runOkTest(expectedStatus = OK, maybeExpectedResponseBody = Some(testHateoasLinksJson))
       }
     }
 
@@ -87,7 +87,7 @@ class AmendForeignPropertyPeriodSummaryControllerSpec
           .wrap((), AmendForeignPropertyPeriodSummaryHateoasData(nino, businessId, taxYear, submissionId))
           .returns(HateoasWrapper((), testHateoasLinks))
 
-        runOkTest(expectedStatus = OK, maybeExpectedResponseBody = Some(hateoasResponse))
+        runOkTest(expectedStatus = OK, maybeExpectedResponseBody = Some(testHateoasLinksJson))
       }
     }
 
@@ -230,8 +230,6 @@ class AmendForeignPropertyPeriodSummaryControllerSpec
 
     protected val rawData: AmendForeignPropertyPeriodSummaryRawData =
       AmendForeignPropertyPeriodSummaryRawData(nino, businessId, taxYear, submissionId, requestBodyJson)
-
-    val hateoasResponse: JsValue = testHateoasLinksJson
 
     protected def event(auditResponse: AuditResponse, requestBody: Option[JsValue]): AuditEvent[GenericAuditDetail] =
       AuditEvent(

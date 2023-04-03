@@ -1,6 +1,6 @@
 # DELETE and DELETE_STATEFUL
 
-Investigation triggered by [this github issue](https://github.com/hmrc/property-business-api/pull/372/files#r1153009256).
+Investigation triggered by [this github comment](https://github.com/hmrc/property-business-api/pull/372/files#r1153009256).
 
 #### The Ask: Currently vendors must add a "DELETE" gov-test-scenario header to test a DELETE endpoint. How can we simplify this and let vendors just use a DEFAULT gov-test-scenario instead?
 

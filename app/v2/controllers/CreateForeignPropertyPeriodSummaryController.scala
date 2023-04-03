@@ -61,14 +61,15 @@ class CreateForeignPropertyPeriodSummaryController @Inject() (val authService: E
         RequestHandler
           .withParser(parser)
           .withService(service.createForeignProperty)
-          .withAuditing(auditHandler(nino, businessId, taxYear, request))
-          .withHateoasResultFrom(hateoasFactory)((_, response) =>
-            CreateForeignPropertyPeriodSummaryHateoasData(nino, businessId, taxYear, response.submissionId), CREATED)
+          .withAuditing(auditHandler(rawData, request))
+          .withHateoasResultFrom(hateoasFactory)(
+            (_, response) => CreateForeignPropertyPeriodSummaryHateoasData(nino, businessId, taxYear, response.submissionId),
+            CREATED)
 
       requestHandler.handleRequest(rawData)
     }
 
-  private def auditHandler(nino: String, businessId: String, taxYear: String, request: UserRequest[JsValue]): AuditHandler = {
+  private def auditHandler(rawData: CreateForeignPropertyPeriodSummaryRawData, request: UserRequest[JsValue]): AuditHandler = {
     new AuditHandler() {
       override def performAudit(userDetails: UserDetails, httpStatus: Int, response: Either[ErrorWrapper, Option[JsValue]], versionNumber: String)(
           implicit
@@ -79,7 +80,7 @@ class CreateForeignPropertyPeriodSummaryController @Inject() (val authService: E
             auditSubmission(
               GenericAuditDetail(
                 request.userDetails,
-                Map("nino" -> nino, "businessId" -> businessId, "taxYear" -> taxYear),
+                rawData,
                 ctx.correlationId,
                 AuditResponse(httpStatus = httpStatus, response = Left(err.auditErrors))
               )
@@ -88,7 +89,7 @@ class CreateForeignPropertyPeriodSummaryController @Inject() (val authService: E
             auditSubmission(
               GenericAuditDetail(
                 request.userDetails,
-                Map("nino" -> nino, "businessId" -> businessId, "taxYear" -> taxYear),
+                rawData,
                 ctx.correlationId,
                 AuditResponse(httpStatus = OK, response = Right(None))
               )

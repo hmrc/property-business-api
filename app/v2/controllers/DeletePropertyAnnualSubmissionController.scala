@@ -56,24 +56,13 @@ class DeletePropertyAnnualSubmissionController @Inject() (val authService: Enrol
         .withParser(parser)
         .withService(service.deletePropertyAnnualSubmission)
         .withAuditing(
-          auditHandler(
-            rawData = rawData,
-            correlationId = ctx.correlationId,
-            nino = nino,
-            businessId = businessId,
-            taxYear = taxYear,
-            request = request)
+          auditHandler(rawData = rawData, correlationId = ctx.correlationId, request = request)
         )
 
       requestHandler.handleRequest(rawData)
     }
 
-  private def auditHandler(rawData: DeletePropertyAnnualSubmissionRawData,
-                           correlationId: String,
-                           nino: String,
-                           businessId: String,
-                           taxYear: String,
-                           request: UserRequest[AnyContent]): AuditHandler = {
+  private def auditHandler(rawData: DeletePropertyAnnualSubmissionRawData, correlationId: String, request: UserRequest[AnyContent]) = {
     new AuditHandler() {
       override def performAudit(userDetails: UserDetails, httpStatus: Int, response: Either[ErrorWrapper, Option[JsValue]], versionNumber: String)(
           implicit
@@ -84,7 +73,7 @@ class DeletePropertyAnnualSubmissionController @Inject() (val authService: Enrol
             auditSubmission(
               details = GenericAuditDetail(
                 userDetails = request.userDetails,
-                params = Map("nino" -> nino, "businessId" -> businessId, "taxYear" -> taxYear),
+                params = rawData,
                 correlationId = correlationId,
                 response = AuditResponse(httpStatus, Left(err.auditErrors))
               )
@@ -94,7 +83,7 @@ class DeletePropertyAnnualSubmissionController @Inject() (val authService: Enrol
             auditSubmission(
               GenericAuditDetail(
                 request.userDetails,
-                Map("nino" -> nino, "businessId" -> businessId, "taxYear" -> taxYear),
+                rawData,
                 ctx.correlationId,
                 AuditResponse(httpStatus = OK, response = Right(None))
               )

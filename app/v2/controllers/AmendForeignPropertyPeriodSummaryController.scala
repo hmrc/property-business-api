@@ -22,11 +22,11 @@ import api.models.audit.{AuditEvent, AuditResponse, GenericAuditDetail}
 import api.models.auth.UserDetails
 import api.models.errors._
 import api.services.{AuditService, EnrolmentsAuthService, MtdIdLookupService}
-import play.api.libs.json.{JsValue}
+import play.api.libs.json.JsValue
 import play.api.mvc.{Action, ControllerComponents}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.audit.http.connector.AuditResult
-import utils.{IdGenerator}
+import utils.IdGenerator
 import v2.controllers.requestParsers.AmendForeignPropertyPeriodSummaryRequestParser
 import v2.models.request.amendForeignPropertyPeriodSummary.AmendForeignPropertyPeriodSummaryRawData
 import v2.models.response.amendForeignPropertyPeriodSummary.AmendForeignPropertyPeriodSummaryHateoasData
@@ -45,7 +45,7 @@ class AmendForeignPropertyPeriodSummaryController @Inject() (val authService: En
                                                              hateoasFactory: HateoasFactory,
                                                              cc: ControllerComponents,
                                                              idGenerator: IdGenerator)(implicit ec: ExecutionContext)
-  extends AuthorisedController(cc) {
+    extends AuthorisedController(cc) {
 
   implicit val endpointLogContext: EndpointLogContext =
     EndpointLogContext(controllerName = "AmendForeignPropertyPeriodSummaryController", endpointName = "amendForeignPropertyPeriodSummary")
@@ -60,37 +60,30 @@ class AmendForeignPropertyPeriodSummaryController @Inject() (val authService: En
         RequestHandler
           .withParser(parser)
           .withService(service.amendForeignPropertyPeriodSummary)
-          .withAuditing(auditHandler(nino, businessId, taxYear, submissionId, request))
+          .withAuditing(auditHandler(rawData, request))
           .withHateoasResult(hateoasFactory)(AmendForeignPropertyPeriodSummaryHateoasData(nino, businessId, taxYear, submissionId))
 
       requestHandler.handleRequest(rawData)
     }
 
-  private def auditHandler(nino: String, businessId: String, taxYear: String, submissionId: String, request: UserRequest[JsValue]): AuditHandler = {
+  private def auditHandler(rawData: AmendForeignPropertyPeriodSummaryRawData, request: UserRequest[JsValue]): AuditHandler = {
     new AuditHandler() {
       override def performAudit(userDetails: UserDetails, httpStatus: Int, response: Either[ErrorWrapper, Option[JsValue]], versionNumber: String)(
-        implicit
-        ctx: RequestContext,
-        ec: ExecutionContext): Unit = {
+          implicit
+          ctx: RequestContext,
+          ec: ExecutionContext): Unit = {
         response match {
           case Left(err: ErrorWrapper) =>
             auditSubmission(
               GenericAuditDetail(
                 userDetails = request.userDetails,
-                params = Map("nino" -> nino, "businessId" -> businessId, "taxYear" -> taxYear, "submissionId" -> submissionId),
+                params = rawData,
                 correlationId = ctx.correlationId,
                 response = AuditResponse(httpStatus = httpStatus, response = Left(err.auditErrors))
-              )
-            )
+              ))
           case Right(_) =>
             auditSubmission(
-              GenericAuditDetail(
-                request.userDetails,
-                Map("nino" -> nino, "businessId" -> businessId, "taxYear" -> taxYear, "submissionId" -> submissionId),
-                ctx.correlationId,
-                AuditResponse(httpStatus = OK, response = Right(None))
-              )
-            )
+              GenericAuditDetail(request.userDetails, rawData, ctx.correlationId, AuditResponse(httpStatus = OK, response = Right(None))))
         }
       }
     }

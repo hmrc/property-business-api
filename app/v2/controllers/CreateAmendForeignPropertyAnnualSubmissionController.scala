@@ -61,19 +61,13 @@ class CreateAmendForeignPropertyAnnualSubmissionController @Inject() (val authSe
       val requestHandler = RequestHandler
         .withParser(parser)
         .withService(service.createAmendForeignPropertyAnnualSubmission)
-        .withAuditing(
-          auditHandler(rawData = rawData, correlationId = ctx.correlationId, nino = nino, businessId = businessId, taxYear = taxYear, request = request))
+        .withAuditing(auditHandler(rawData = rawData, correlationId = ctx.correlationId, request = request))
         .withHateoasResult(hateoasFactory)(CreateAmendForeignPropertyAnnualSubmissionHateoasData(nino, businessId, taxYear), OK)
 
       requestHandler.handleRequest(rawData)
     }
 
-  private def auditHandler(rawData: CreateAmendForeignPropertyAnnualSubmissionRawData,
-                           correlationId: String,
-                           nino: String,
-                           businessId: String,
-                           taxYear: String,
-                           request: UserRequest[JsValue]): AuditHandler = {
+  private def auditHandler(rawData: CreateAmendForeignPropertyAnnualSubmissionRawData, correlationId: String, request: UserRequest[JsValue]) = {
     new AuditHandler() {
       override def performAudit(userDetails: UserDetails, httpStatus: Int, response: Either[ErrorWrapper, Option[JsValue]], versionNumber: String)(
           implicit
@@ -84,7 +78,7 @@ class CreateAmendForeignPropertyAnnualSubmissionController @Inject() (val authSe
             auditSubmission(
               details = GenericAuditDetail(
                 userDetails = request.userDetails,
-                params = Map("nino" -> nino, "businessId" -> businessId, "taxYear" -> taxYear),
+                params = rawData,
                 correlationId = correlationId,
                 response = AuditResponse(httpStatus, Left(err.auditErrors))
               )
@@ -94,7 +88,7 @@ class CreateAmendForeignPropertyAnnualSubmissionController @Inject() (val authSe
             auditSubmission(
               GenericAuditDetail(
                 request.userDetails,
-                Map("nino" -> nino, "businessId" -> businessId, "taxYear" -> taxYear),
+                rawData,
                 ctx.correlationId,
                 AuditResponse(httpStatus = OK, response = Right(None))
               )

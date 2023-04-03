@@ -307,7 +307,7 @@ class CreateUkPropertyPeriodSummaryControllerSpec
           controller.handleRequest(nino, businessId, taxYear)(fakePostRequest(requestBodyJsonConsolidatedExpense))
 
         runOkTestWithAudit(
-          expectedStatus = OK,
+          expectedStatus = CREATED,
           maybeAuditRequestBody = Some(requestBodyJsonConsolidatedExpense),
           maybeExpectedResponseBody = Some(hateoasResponse),
           maybeAuditResponseBody = Some(hateoasResponse)
@@ -330,7 +330,7 @@ class CreateUkPropertyPeriodSummaryControllerSpec
           .returns(HateoasWrapper(response, Seq(testHateoasLink)))
 
         runOkTestWithAudit(
-          expectedStatus = OK,
+          expectedStatus = CREATED,
           maybeAuditRequestBody = Some(requestBodyJson),
           maybeExpectedResponseBody = Some(hateoasResponse),
           maybeAuditResponseBody = Some(hateoasResponse)

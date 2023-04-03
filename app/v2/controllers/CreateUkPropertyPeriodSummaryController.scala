@@ -59,7 +59,9 @@ class CreateUkPropertyPeriodSummaryController @Inject() (val authService: Enrolm
         .withParser(parser)
         .withService(service.createUkProperty)
         .withAuditing(auditHandler(nino, businessId, taxYear, request))
-        .withHateoasResultFrom(hateoasFactory)((_, resp) => CreateUkPropertyPeriodSummaryHateoasData(nino, businessId, taxYear, resp.submissionId))
+        .withHateoasResultFrom(hateoasFactory)(
+          (_, resp) => CreateUkPropertyPeriodSummaryHateoasData(nino, businessId, taxYear, resp.submissionId),
+          CREATED)
 
       requestHandler.handleRequest(rawData)
 
@@ -88,7 +90,7 @@ class CreateUkPropertyPeriodSummaryController @Inject() (val authService: Enrolm
                 userDetails = request.userDetails,
                 params = Json.obj("nino" -> nino, "taxYear" -> taxYear, "businessId" -> businessId, "request" -> request.body),
                 correlationId = ctx.correlationId,
-                response = AuditResponse(httpStatus = OK, response = Right(resp))
+                response = AuditResponse(httpStatus = CREATED, response = Right(resp))
               )
             )
         }

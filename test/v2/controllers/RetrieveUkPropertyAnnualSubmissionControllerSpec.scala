@@ -16,20 +16,17 @@
 
 package v2.controllers
 
-import api.controllers.ControllerBaseSpec
+import api.controllers.{ControllerBaseSpec, ControllerTestRunner}
 import api.mocks.hateoas.MockHateoasFactory
-import api.mocks.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService}
-import api.mocks.MockIdGenerator
-import play.api.libs.json.Json
-import play.api.mvc.Result
-import uk.gov.hmrc.http.HeaderCarrier
-import v2.mocks.requestParsers.MockRetrieveUkPropertyAnnualSubmissionRequestParser
-import v2.mocks.services.MockRetrieveUkPropertyAnnualSubmissionService
 import api.models.domain.{Nino, TaxYear}
 import api.models.errors._
 import api.models.hateoas.Method.GET
 import api.models.hateoas.{HateoasWrapper, Link}
 import api.models.outcomes.ResponseWrapper
+import play.api.libs.json.{JsValue, Json}
+import play.api.mvc.Result
+import v2.mocks.requestParsers.MockRetrieveUkPropertyAnnualSubmissionRequestParser
+import v2.mocks.services.MockRetrieveUkPropertyAnnualSubmissionService
 import v2.models.request.retrieveUkPropertyAnnualSubmission._
 import v2.models.response.retrieveUkPropertyAnnualSubmission._
 import v2.models.response.retrieveUkPropertyAnnualSubmission.ukFhlProperty._
@@ -40,41 +37,18 @@ import scala.concurrent.Future
 
 class RetrieveUkPropertyAnnualSubmissionControllerSpec
     extends ControllerBaseSpec
-    with MockEnrolmentsAuthService
-    with MockMtdIdLookupService
+    with ControllerTestRunner
     with MockRetrieveUkPropertyAnnualSubmissionService
     with MockRetrieveUkPropertyAnnualSubmissionRequestParser
-    with MockHateoasFactory
-    with MockAuditService
-    with MockIdGenerator {
+    with MockHateoasFactory {
 
-  private val nino          = "AA123456A"
-  private val businessId    = "XAIS12345678910"
-  private val taxYear       = "2020-21"
-  private val correlationId = "X-123"
-
-  trait Test {
-    val hc: HeaderCarrier = HeaderCarrier()
-
-    val controller = new RetrieveUkPropertyAnnualSubmissionController(
-      authService = mockEnrolmentsAuthService,
-      lookupService = mockMtdIdLookupService,
-      parser = mockRetrieveUkPropertyAnnualSubmissionRequestParser,
-      service = mockRetrieveUkPropertyAnnualSubmissionService,
-      hateoasFactory = mockHateoasFactory,
-      cc = cc,
-      idGenerator = mockIdGenerator
-    )
-
-    MockMtdIdLookupService.lookup(nino).returns(Future.successful(Right("test-mtd-id")))
-    MockedEnrolmentsAuthService.authoriseUser()
-    MockIdGenerator.getCorrelationId.returns(correlationId)
-  }
+  private val businessId = "XAIS12345678910"
+  private val taxYear    = "2020-21"
 
   private val rawData     = RetrieveUkPropertyAnnualSubmissionRawData(nino, businessId, taxYear)
   private val requestData = RetrieveUkPropertyAnnualSubmissionRequest(Nino(nino), businessId, TaxYear.fromMtd(taxYear))
 
-  private val testHateoasLink = Link(href = s"Individuals/business/property/uk/$nino/$businessId/annual/$taxYear", method = GET, rel = "self")
+  private val testHateoasLink = Link(href = s"/individuals/business/property/uk/$nino/$businessId/annual/$taxYear", method = GET, rel = "self")
 
   private val ukFhlProperty = UkFhlProperty(
     adjustments = Some(
@@ -95,7 +69,7 @@ class RetrieveUkPropertyAnnualSubmissionControllerSpec
         Some(123.45),
         Some(345.56),
         Some(345.34),
-        Some(453.45),
+        None,
         Some(453.34),
         Some(123.12)
       )
@@ -122,7 +96,7 @@ class RetrieveUkPropertyAnnualSubmissionControllerSpec
         businessPremisesRenovationAllowance = Some(573.45),
         otherCapitalAllowance = Some(452.34),
         costOfReplacingDomesticGoods = Some(567.34),
-        propertyIncomeAllowance = Some(342.34),
+        propertyIncomeAllowance = None,
         electricChargePointAllowance = Some(454.34),
         structuredBuildingAllowance = Some(
           Seq(
@@ -163,16 +137,97 @@ class RetrieveUkPropertyAnnualSubmissionControllerSpec
     )
   )
 
+  val mtdResponse: JsValue = Json.parse(
+    """
+      |{
+      |   "submittedOn":"2020-06-17T10:53:38Z",
+      |   "ukFhlProperty":{
+      |      "adjustments":{
+      |         "privateUseAdjustment":454.45,
+      |         "balancingCharge":231.45,
+      |         "periodOfGraceAdjustment":true,
+      |         "businessPremisesRenovationAllowanceBalancingCharges":567.67,
+      |         "nonResidentLandlord":true,
+      |         "rentARoom":{
+      |            "jointlyLet":true
+      |         }
+      |      },
+      |      "allowances":{
+      |         "annualInvestmentAllowance":123.45,
+      |         "businessPremisesRenovationAllowance":345.56,
+      |         "otherCapitalAllowance":345.34,
+      |         "electricChargePointAllowance":453.34,
+      |         "zeroEmissionsCarAllowance":123.12
+      |      }
+      |   },
+      |   "ukNonFhlProperty":{
+      |      "adjustments":{
+      |         "balancingCharge":565.34,
+      |         "privateUseAdjustment":533.54,
+      |         "businessPremisesRenovationAllowanceBalancingCharges":563.34,
+      |         "nonResidentLandlord":true,
+      |         "rentARoom":{
+      |            "jointlyLet":true
+      |         }
+      |      },
+      |      "allowances":{
+      |         "annualInvestmentAllowance":678.45,
+      |         "zeroEmissionsGoodsVehicleAllowance":456.34,
+      |         "businessPremisesRenovationAllowance":573.45,
+      |         "otherCapitalAllowance":452.34,
+      |         "costOfReplacingDomesticGoods":567.34,
+      |         "electricChargePointAllowance":454.34,
+      |         "structuredBuildingAllowance":[
+      |            {
+      |               "amount":234.34,
+      |               "firstYear":{
+      |                  "qualifyingDate":"2020-03-29",
+      |                  "qualifyingAmountExpenditure":3434.45
+      |               },
+      |               "building":{
+      |                  "name":"Plaza",
+      |                  "number":"1",
+      |                  "postcode":"TF3 4EH"
+      |               }
+      |            }
+      |         ],
+      |         "enhancedStructuredBuildingAllowance":[
+      |            {
+      |               "amount":234.45,
+      |               "firstYear":{
+      |                  "qualifyingDate":"2020-05-29",
+      |                  "qualifyingAmountExpenditure":453.34
+      |               },
+      |               "building":{
+      |                  "name":"Plaza 2",
+      |                  "number":"2",
+      |                  "postcode":"TF3 4ER"
+      |               }
+      |            }
+      |         ],
+      |         "zeroEmissionsCarAllowance":454.34
+      |      }
+      |   },
+      |   "links":[
+      |      {
+      |         "href":"/individuals/business/property/uk/AA123456A/XAIS12345678910/annual/2020-21",
+      |         "method":"GET",
+      |         "rel":"self"
+      |      }
+      |   ]
+      |}
+    """.stripMargin
+  )
+
   val responseBody: RetrieveUkPropertyAnnualSubmissionResponse = RetrieveUkPropertyAnnualSubmissionResponse(
     submittedOn = "2020-06-17T10:53:38Z",
     ukFhlProperty = Some(ukFhlProperty),
     ukNonFhlProperty = Some(ukNonFhlProperty)
   )
 
-  "handleRequest" should {
+  "RetrieveUkPropertyAnnualSubmissionController" should {
     "return Ok" when {
       "the request received is valid" in new Test {
-
         MockRetrieveUkPropertyRequestParser
           .parse(rawData)
           .returns(Right(requestData))
@@ -185,73 +240,46 @@ class RetrieveUkPropertyAnnualSubmissionControllerSpec
           .wrap(responseBody, RetrieveUkPropertyAnnualSubmissionHateoasData(nino, businessId, taxYear))
           .returns(HateoasWrapper(responseBody, Seq(testHateoasLink)))
 
-        val result: Future[Result] = controller.handleRequest(nino, businessId, taxYear)(fakeRequest)
-        status(result) shouldBe OK
-        header("X-CorrelationId", result) shouldBe Some(correlationId)
+        runOkTest(expectedStatus = OK, maybeExpectedResponseBody = Some(mtdResponse))
       }
     }
     "return an error as per spec" when {
-      "parser errors occur" should {
-        def errorsFromParserTester(error: MtdError, expectedStatus: Int): Unit = {
-          s"a ${error.code} error is returned from the parser" in new Test {
+      "the parser validation fails" in new Test {
+        MockRetrieveUkPropertyRequestParser
+          .parse(rawData)
+          .returns(Left(ErrorWrapper(correlationId, NinoFormatError, None)))
 
-            MockRetrieveUkPropertyRequestParser
-              .parse(rawData)
-              .returns(Left(ErrorWrapper(correlationId, error, None)))
-
-            val result: Future[Result] = controller.handleRequest(nino, businessId, taxYear)(fakeRequest)
-
-            status(result) shouldBe expectedStatus
-            contentAsJson(result) shouldBe Json.toJson(error)
-            header("X-CorrelationId", result) shouldBe Some(correlationId)
-          }
-        }
-
-        val input = Seq(
-          (BadRequestError, BAD_REQUEST),
-          (NinoFormatError, BAD_REQUEST),
-          (TaxYearFormatError, BAD_REQUEST),
-          (BusinessIdFormatError, BAD_REQUEST),
-          (RuleTaxYearRangeInvalidError, BAD_REQUEST),
-          (RuleTaxYearNotSupportedError, BAD_REQUEST)
-        )
-
-        input.foreach(args => (errorsFromParserTester _).tupled(args))
+        runErrorTest(NinoFormatError)
       }
-      "service errors occur" should {
-        def serviceErrors(mtdError: MtdError, expectedStatus: Int): Unit = {
-          s"a $mtdError error is returned from the service" in new Test {
 
-            MockRetrieveUkPropertyRequestParser
-              .parse(rawData)
-              .returns(Right(requestData))
+      "the service returns an error" in new Test {
+        MockRetrieveUkPropertyRequestParser
+          .parse(rawData)
+          .returns(Right(requestData))
 
-            MockRetrieveUkPropertyService
-              .retrieve(requestData)
-              .returns(Future.successful(Left(ErrorWrapper(correlationId, mtdError))))
+        MockRetrieveUkPropertyService
+          .retrieve(requestData)
+          .returns(Future.successful(Left(ErrorWrapper(correlationId, RuleTaxYearNotSupportedError))))
 
-            val result: Future[Result] = controller.handleRequest(nino, businessId, taxYear)(fakeRequest)
-
-            status(result) shouldBe expectedStatus
-            contentAsJson(result) shouldBe Json.toJson(mtdError)
-            header("X-CorrelationId", result) shouldBe Some(correlationId)
-          }
-        }
-
-        val input = Seq(
-          (NinoFormatError, BAD_REQUEST),
-          (TaxYearFormatError, BAD_REQUEST),
-          (BusinessIdFormatError, BAD_REQUEST),
-          (RuleTaxYearNotSupportedError, BAD_REQUEST),
-          (RuleTypeOfBusinessIncorrectError, BAD_REQUEST),
-          (NotFoundError, NOT_FOUND),
-          (InternalError, INTERNAL_SERVER_ERROR),
-          (RuleIncorrectGovTestScenarioError, BAD_REQUEST)
-        )
-
-        input.foreach(args => (serviceErrors _).tupled(args))
+        runErrorTest(RuleTaxYearNotSupportedError)
       }
     }
+  }
+
+  trait Test extends ControllerTest {
+
+    val controller = new RetrieveUkPropertyAnnualSubmissionController(
+      authService = mockEnrolmentsAuthService,
+      lookupService = mockMtdIdLookupService,
+      parser = mockRetrieveUkPropertyAnnualSubmissionRequestParser,
+      service = mockRetrieveUkPropertyAnnualSubmissionService,
+      hateoasFactory = mockHateoasFactory,
+      cc = cc,
+      idGenerator = mockIdGenerator
+    )
+
+    protected def callController(): Future[Result] = controller.handleRequest(nino, businessId, taxYear)(fakeGetRequest)
+
   }
 
 }

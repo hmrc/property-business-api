@@ -16,9 +16,9 @@
 
 package v2.connectors
 
-import api.connectors.{BaseDownstreamConnector, DownstreamOutcome}
 import api.connectors.DownstreamUri.{IfsUri, TaxYearSpecificIfsUri}
 import api.connectors.httpparsers.StandardDownstreamHttpParser.reads
+import api.connectors.{BaseDownstreamConnector, DownstreamOutcome}
 import api.models.outcomes.ResponseWrapper
 import config.AppConfig
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
@@ -52,7 +52,7 @@ class RetrieveUkPropertyAnnualSubmissionConnector @Inject() (val http: HttpClien
     val response = if (taxYear.useTaxYearSpecificApi) {
       get(
         uri = TaxYearSpecificIfsUri[RetrieveUkPropertyAnnualSubmissionResponse](
-          s"income-tax/business/property/annual/${taxYear.asTysDownstream}/${nino.nino}/${businessId}")
+          s"income-tax/business/property/annual/${taxYear.asTysDownstream}/${nino.nino}/$businessId")
       )
     } else {
       // Note that MTD tax year format is used

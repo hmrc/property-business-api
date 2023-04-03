@@ -16,7 +16,7 @@
 
 package fixtures.RetrieveUkPropertyPeriodSummary
 
-import play.api.libs.json.{ JsValue, Json }
+import play.api.libs.json.{JsObject, JsValue, Json}
 import v2.models.response.retrieveUkPropertyPeriodSummary._
 
 trait ResponseModelsFixture {
@@ -216,4 +216,20 @@ trait ResponseModelsFixture {
     ukFhlProperty = Some(ukFhlPropertyModel),
     ukNonFhlProperty = Some(ukNonFhlPropertyModel)
   )
+
+   val mtdResponseWithHateoas: JsObject = fullMtdJson.as[JsObject] ++ Json
+    .parse(
+      s"""
+         |{
+         |   "links":[
+         |      {
+         |         "href":"/individuals/business/property/AA123456A/XAIS12345678910/period/2022-23/4557ecb5-fd32-48cc-81f5-e6acd1099f3c",
+         |         "method":"GET",
+         |         "rel":"self"
+         |      }
+         |   ]
+         |}
+    """.stripMargin
+    )
+    .as[JsObject]
 }

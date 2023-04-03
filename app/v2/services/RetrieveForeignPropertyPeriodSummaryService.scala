@@ -35,13 +35,11 @@ class RetrieveForeignPropertyPeriodSummaryService @Inject() (connector: Retrieve
       ctx: RequestContext,
       ec: ExecutionContext): Future[RetrieveForeignPropertyPeriodSummaryServiceOutcome] = {
 
-    val result = for {
+    for {
       connectorResultWrapper <- connector.retrieveForeignProperty(request).map(_.leftMap(mapDownstreamErrors(downstreamErrorMap)))
       mtdResponseWrapper     <- Future.successful(connectorResultWrapper.flatMap(wrappedResult => validateBusinessType(wrappedResult)))
 
     } yield mtdResponseWrapper
-
-    result
   }
 
   private val downstreamErrorMap: Map[String, MtdError] = {

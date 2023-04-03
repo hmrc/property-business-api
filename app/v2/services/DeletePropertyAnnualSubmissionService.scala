@@ -33,11 +33,7 @@ class DeletePropertyAnnualSubmissionService @Inject() (connector: DeleteProperty
       ctx: RequestContext,
       ec: ExecutionContext): Future[DeletePropertyAnnualSubmissionServiceOutcome] = {
 
-    val result = for {
-      ifsResponseWrapper <- connector.deletePropertyAnnualSubmission(request).map(_.leftMap(mapDownstreamErrors(downstreamErrorMap)))
-    } yield ifsResponseWrapper
-
-    result
+    connector.deletePropertyAnnualSubmission(request).map(_.leftMap(mapDownstreamErrors(downstreamErrorMap)))
   }
 
   private val downstreamErrorMap: Map[String, MtdError] = {

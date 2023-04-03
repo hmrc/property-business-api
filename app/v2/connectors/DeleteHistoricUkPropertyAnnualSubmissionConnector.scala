@@ -30,8 +30,7 @@ import scala.concurrent.{ExecutionContext, Future}
 @Singleton
 class DeleteHistoricUkPropertyAnnualSubmissionConnector @Inject() (val http: HttpClient, val appConfig: AppConfig) extends BaseDownstreamConnector {
 
-  def deleteHistoricUkPropertyAnnualSubmission(request: DeleteHistoricUkPropertyAnnualSubmissionRequest)(implicit
-      hc: HeaderCarrier,
+  def deleteHistoricUkPropertyAnnualSubmission(request: DeleteHistoricUkPropertyAnnualSubmissionRequest, hc:HeaderCarrier)(implicit
       ec: ExecutionContext,
       correlationId: String): Future[DownstreamOutcome[Unit]] = {
 
@@ -43,11 +42,12 @@ class DeleteHistoricUkPropertyAnnualSubmissionConnector @Inject() (val http: Htt
       case HistoricPropertyType.NonFhl => "other"
     }
 
-    put(
+    explicitPut(
       body = JsObject.empty,
       uri = IfsUri[Unit](
         s"income-tax/nino/$nino/uk-properties/$propertyTypeName/annual-summaries/$taxYear"
-      )
+      ),
+      hc
     )
   }
 

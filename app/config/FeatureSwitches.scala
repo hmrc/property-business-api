@@ -40,6 +40,8 @@ case class FeatureSwitches(featureSwitchConfig: Configuration) {
   val isV2R7cRoutingEnabled: Boolean       = isEnabled("v2r7c-endpoints.enabled")
   val isTaxYearSpecificApiEnabled: Boolean = isEnabled("tys-api.enabled")
 
+  val isSandboxEnabled:Boolean             = isEnabled("sandbox.enabled")
+
   private def isEnabled(key: String): Boolean = featureSwitchConfig.getOptional[Boolean](key).getOrElse(true)
 
 }

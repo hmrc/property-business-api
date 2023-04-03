@@ -19,30 +19,46 @@ package v2.services
 import cats.implicits._
 import cats.data.EitherT
 
-import javax.inject.{ Inject, Singleton }
+import javax.inject.{Inject, Singleton}
 import uk.gov.hmrc.http.HeaderCarrier
 import utils.Logging
 import v2.connectors.DeleteHistoricUkPropertyAnnualSubmissionConnector
 import v2.controllers.EndpointLogContext
-import v2.models.errors.{ InternalError, NinoFormatError, NotFoundError, RuleHistoricTaxYearNotSupportedError, TaxYearFormatError }
+import v2.models.errors.{InternalError, NinoFormatError, NotFoundError, RuleHistoricTaxYearNotSupportedError, TaxYearFormatError}
 import v2.models.request.deleteHistoricUkPropertyAnnualSubmission.DeleteHistoricUkPropertyAnnualSubmissionRequest
 import v2.support.DownstreamResponseMappingSupport
 
-import scala.concurrent.{ ExecutionContext, Future }
+import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class DeleteHistoricUkPropertyAnnualSubmissionService @Inject()(connector: DeleteHistoricUkPropertyAnnualSubmissionConnector)
+class DeleteHistoricUkPropertyAnnualSubmissionService @Inject() (connector: DeleteHistoricUkPropertyAnnualSubmissionConnector)
     extends DownstreamResponseMappingSupport
     with Logging {
 
-  def deleteHistoricUkPropertyAnnualSubmission(request: DeleteHistoricUkPropertyAnnualSubmissionRequest)(
-      implicit hc: HeaderCarrier,
+  def deleteHistoricUkPropertyAnnualSubmission(request: DeleteHistoricUkPropertyAnnualSubmissionRequest)(implicit
+      hc: HeaderCarrier,
       ec: ExecutionContext,
       logContext: EndpointLogContext,
       correlationId: String): Future[ServiceOutcome[Unit]] = {
 
+    // def isGovTestScenarioRequired(implicit featureSwitches: FeatureSwitches): Boolean = featureSwitches.isSandboxEnabled
+
+
+    val existingGTSHeader = hc.otherHeaders.find(e => e.toString.contains("Gov-Test-Scenario")).getOrElse(("ignored", "unused"))
+    val indexToReplace             = hc.otherHeaders.indexOf(existingGTSHeader)
+
+    val updatedOtherHeaders = if(existingGTSHeader.toString() == "(Gov-Test-Scenario,STATEFUL)"){
+      //Change "STATEFUL" to "STATEFUL_DELETE"
+      hc.otherHeaders.updated(indexToReplace, ("Gov-Test-Scenario", "STATEFUL_DELETE"))
+    }else{
+      //Add in "DELETE" GTS header
+      ("Gov-Test-Scenario", "DELETE") +: hc.otherHeaders
+    }
+
+    val requiredHeaders = hc. copy(otherHeaders = updatedOtherHeaders)
+
     val result = for {
-      downstreamResponseWrapper <- EitherT(connector.deleteHistoricUkPropertyAnnualSubmission(request))
+      downstreamResponseWrapper <- EitherT(connector.deleteHistoricUkPropertyAnnualSubmission(request, requiredHeaders))
         .leftMap(mapDownstreamErrors(downstreamErrorMap))
     } yield downstreamResponseWrapper
 

@@ -45,43 +45,8 @@ class DeletePropertyAnnualSubmissionControllerSpec
   private val businessId = "XAIS12345678910"
   private val taxYear    = "2023-24"
 
-  trait Test extends ControllerTest {
-
-    val controller = new DeletePropertyAnnualSubmissionController(
-      authService = mockEnrolmentsAuthService,
-      lookupService = mockMtdIdLookupService,
-      parser = mockDeletePropertyAnnualSubmissionRequestParser,
-      service = mockDeletePropertyAnnualSubmissionService,
-      auditService = mockAuditService,
-      cc = cc,
-      idGenerator = mockIdGenerator
-    )
-
-    protected def callController(): Future[Result] = controller.handleRequest(nino, businessId, taxYear)(fakeRequest)
-
-    protected val rawData: DeletePropertyAnnualSubmissionRawData = DeletePropertyAnnualSubmissionRawData(nino, businessId, taxYear)
-
-    protected val requestData: DeletePropertyAnnualSubmissionRequest =
-      DeletePropertyAnnualSubmissionRequest(Nino(nino), businessId, TaxYear.fromMtd(taxYear))
-
-    protected def event(auditResponse: AuditResponse, maybeRequestBody: Option[JsValue]): AuditEvent[GenericAuditDetail] =
-      AuditEvent(
-        auditType = "DeletePropertyAnnualSubmission",
-        transactionName = "delete-property-annual-submission",
-        detail = GenericAuditDetail(
-          versionNumber = "2.0",
-          userType = "Individual",
-          agentReferenceNumber = None,
-          params = Json.obj("nino" -> nino, "businessId" -> businessId, "taxYear" -> taxYear),
-          correlationId = correlationId,
-          response = auditResponse
-        )
-      )
-
-  }
-
-  "handleRequest" should {
-    "return No Content" when {
+  "DeletePropertyAnnualSubmissionControllerSpec" should {
+    "return a successful response with status 204 (NO_CONTENT)" when {
       "the request received is valid" in new Test {
 
         MockDeletePropertyAnnualSubmissionRequestParser
@@ -119,6 +84,41 @@ class DeletePropertyAnnualSubmissionControllerSpec
         runErrorTest(RuleIncorrectGovTestScenarioError)
       }
     }
+
+  }
+
+  trait Test extends ControllerTest {
+
+    val controller = new DeletePropertyAnnualSubmissionController(
+      authService = mockEnrolmentsAuthService,
+      lookupService = mockMtdIdLookupService,
+      parser = mockDeletePropertyAnnualSubmissionRequestParser,
+      service = mockDeletePropertyAnnualSubmissionService,
+      auditService = mockAuditService,
+      cc = cc,
+      idGenerator = mockIdGenerator
+    )
+
+    protected def callController(): Future[Result] = controller.handleRequest(nino, businessId, taxYear)(fakeRequest)
+
+    protected val rawData: DeletePropertyAnnualSubmissionRawData = DeletePropertyAnnualSubmissionRawData(nino, businessId, taxYear)
+
+    protected val requestData: DeletePropertyAnnualSubmissionRequest =
+      DeletePropertyAnnualSubmissionRequest(Nino(nino), businessId, TaxYear.fromMtd(taxYear))
+
+    protected def event(auditResponse: AuditResponse, maybeRequestBody: Option[JsValue]): AuditEvent[GenericAuditDetail] =
+      AuditEvent(
+        auditType = "DeletePropertyAnnualSubmission",
+        transactionName = "delete-property-annual-submission",
+        detail = GenericAuditDetail(
+          versionNumber = "2.0",
+          userType = "Individual",
+          agentReferenceNumber = None,
+          params = Json.obj("nino" -> nino, "businessId" -> businessId, "taxYear" -> taxYear),
+          correlationId = correlationId,
+          response = auditResponse
+        )
+      )
 
   }
 

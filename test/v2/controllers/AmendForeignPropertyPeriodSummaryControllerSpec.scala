@@ -52,8 +52,8 @@ class AmendForeignPropertyPeriodSummaryControllerSpec
   private val taxYear      = "2022-23"
   private val submissionId = "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
 
-  "amend" should {
-    "return a successful response from a consolidated request" when {
+  "AmendForeignPropertyPeriodSummaryController" should {
+    "return a successful response with status 200 (OK)" when {
       "the request received is valid" in new Test {
 
         MockAmendForeignPropertyRequestParser
@@ -102,10 +102,12 @@ class AmendForeignPropertyPeriodSummaryControllerSpec
       }
 
       "the service returns an error" in new Test {
-        MockAmendForeignPropertyRequestParser.parseRequest(rawData)
+        MockAmendForeignPropertyRequestParser
+          .parseRequest(rawData)
           .returns(Right(requestData))
 
-        MockAmendForeignPropertyService.amend(requestData)
+        MockAmendForeignPropertyService
+          .amend(requestData)
           .returns(Future.successful(Left(ErrorWrapper(correlationId, RuleMisalignedPeriodError))))
 
         runErrorTest(RuleMisalignedPeriodError)
@@ -173,7 +175,6 @@ class AmendForeignPropertyPeriodSummaryControllerSpec
               ))
           )))
       )
-
 
     protected val requestBodyJson: JsValue = Json.parse(
       """

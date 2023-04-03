@@ -62,8 +62,9 @@ class CreateForeignPropertyPeriodSummaryController @Inject() (val authService: E
           .withParser(parser)
           .withService(service.createForeignProperty)
           .withAuditing(auditHandler(rawData, request))
-          .withHateoasResultFrom(hateoasFactory)((_, response) =>
-            CreateForeignPropertyPeriodSummaryHateoasData(nino, businessId, taxYear, response.submissionId))
+          .withHateoasResultFrom(hateoasFactory)(
+            (_, response) => CreateForeignPropertyPeriodSummaryHateoasData(nino, businessId, taxYear, response.submissionId),
+            CREATED)
 
       requestHandler.handleRequest(rawData)
     }

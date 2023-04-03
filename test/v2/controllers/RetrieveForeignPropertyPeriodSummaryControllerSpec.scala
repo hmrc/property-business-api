@@ -22,7 +22,6 @@ import api.mocks.MockIdGenerator
 import api.mocks.services.{MockEnrolmentsAuthService, MockMtdIdLookupService}
 import api.models.domain.{Nino, TaxYear}
 import api.models.hateoas._
-import api.models.hateoas.Link
 import api.models.hateoas.Method.GET
 import api.models.outcomes.ResponseWrapper
 import play.api.libs.json.{Json, JsValue}
@@ -51,8 +50,8 @@ class RetrieveForeignPropertyPeriodSummaryControllerSpec
   private val submissionId = "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
   private val taxYear      = "2022-23"
 
-  "Retrieve Foreign property period summary" should {
-    "return (OK) 200 status" when {
+  "RetrieveForeignPropertyPeriodSummaryController" should {
+    "return a successful response with status 200 (OK)" when {
       "the request received is valid" in new Test {
 
         MockRetrieveForeignPropertyRequestParser

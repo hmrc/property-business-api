@@ -23,8 +23,7 @@ import api.mocks.MockIdGenerator
 import api.models.audit.{AuditEvent, AuditResponse, GenericAuditDetail}
 import api.models.domain.{Nino, TaxYear}
 import api.models.errors._
-import api.models.hateoas.{HateoasWrapper, Link}
-import api.models.hateoas.Method.GET
+import api.models.hateoas.HateoasWrapper
 import api.models.outcomes.ResponseWrapper
 import play.api.libs.json.{Json, JsValue}
 import play.api.mvc.Result
@@ -51,22 +50,22 @@ class CreateAmendForeignPropertyAnnualSubmissionControllerSpec
   private val businessId = "XAIS12345678910"
   private val taxYear    = "2019-20"
 
-  "handleRequest" should {
-    "return Ok" when {
+  "CreateAmendForeignPropertyAnnualSubmissionController" should {
+    "return a successful response with status 200 (OK)" when {
       "the request received is valid" in new Test {
         MockAmendForeignPropertyAnnualSubmissionRequestParser
           .parseRequest(rawData)
-          .returns(Right(request))
+          .returns(Right(requestData))
 
         MockAmendForeignPropertyAnnualSubmissionService
-          .amend(request)
+          .amend(requestData)
           .returns(Future.successful(Right(ResponseWrapper(correlationId, ()))))
 
         MockHateoasFactory
-          .wrap((), CreateAmendForeignPropertyAnnualSubmissionHateoasData(nino, businessId, taxYear))
-          .returns(HateoasWrapper((), Seq(testHateoasLink)))
+          .wrap((), hateoasData)
+          .returns(HateoasWrapper((), testHateoasLinks))
 
-        runOkTest(expectedStatus = OK, maybeExpectedResponseBody = Some(hateoasResponse))
+        runOkTest(expectedStatus = OK, maybeExpectedResponseBody = Some(testHateoasLinksJson))
       }
     }
 
@@ -84,10 +83,10 @@ class CreateAmendForeignPropertyAnnualSubmissionControllerSpec
       "the service returns an error" in new Test {
         MockAmendForeignPropertyAnnualSubmissionRequestParser
           .parseRequest(rawData)
-          .returns(Right(request))
+          .returns(Right(requestData))
 
         MockAmendForeignPropertyAnnualSubmissionService
-          .amend(request)
+          .amend(requestData)
           .returns(Future.successful(Left(ErrorWrapper(correlationId, InternalError))))
 
         runErrorTest(InternalError)
@@ -112,22 +111,6 @@ class CreateAmendForeignPropertyAnnualSubmissionControllerSpec
 
     protected val requestJson: JsValue = createAmendForeignPropertyAnnualSubmissionRequestBodyMtdJson
 
-    protected val testHateoasLink: Link = Link(href = s"/individuals/business/property/$nino/$businessId/annual/$taxYear", method = GET, rel = "self")
-
-    protected val hateoasResponse: JsValue = Json.parse(
-      s"""
-         |{
-         |   "links": [
-         |      {
-         |         "href": "/individuals/business/property/$nino/$businessId/annual/$taxYear",
-         |         "method": "GET",
-         |         "rel": "self"
-         |      }
-         |   ]
-         |}
-    """.stripMargin
-    )
-
     protected def event(auditResponse: AuditResponse, maybeRequestBody: Option[JsValue]): AuditEvent[GenericAuditDetail] =
       AuditEvent(
         auditType = "CreateAmendForeignPropertyAnnualSubmission",
@@ -142,13 +125,16 @@ class CreateAmendForeignPropertyAnnualSubmissionControllerSpec
         )
       )
 
-    val body: CreateAmendForeignPropertyAnnualSubmissionRequestBody = createAmendForeignPropertyAnnualSubmissionRequestBody
+    private val requestBody: CreateAmendForeignPropertyAnnualSubmissionRequestBody = createAmendForeignPropertyAnnualSubmissionRequestBody
 
     protected val rawData: CreateAmendForeignPropertyAnnualSubmissionRawData =
       CreateAmendForeignPropertyAnnualSubmissionRawData(nino, businessId, taxYear, requestJson)
 
-    protected val request: CreateAmendForeignPropertyAnnualSubmissionRequest =
-      CreateAmendForeignPropertyAnnualSubmissionRequest(Nino(nino), businessId, TaxYear.fromMtd(taxYear), body)
+    protected val requestData: CreateAmendForeignPropertyAnnualSubmissionRequest =
+      CreateAmendForeignPropertyAnnualSubmissionRequest(Nino(nino), businessId, TaxYear.fromMtd(taxYear), requestBody)
+
+    protected val hateoasData: CreateAmendForeignPropertyAnnualSubmissionHateoasData =
+      CreateAmendForeignPropertyAnnualSubmissionHateoasData(nino, businessId, taxYear)
 
   }
 

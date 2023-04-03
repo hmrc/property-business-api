@@ -52,8 +52,8 @@ class CreateForeignPropertyPeriodSummaryControllerSpec
   private val businessId   = "XAIS12345678910"
   private val submissionId = "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
 
-  "create" should {
-    "return a successful response" when {
+  "CreateForeignPropertyPeriodSummaryControllerSpec" should {
+    "return a successful response with status 201 (CREATED)" when {
       "the request received is valid" in new Test {
         MockCreateForeignPropertyRequestParser
           .requestFor(rawData)

@@ -51,6 +51,53 @@ class RetrieveForeignPropertyAnnualSubmissionControllerSpec
   private val businessId = "XAIS12345678910"
   private val taxYear    = "2020-21"
 
+  "RetrieveForeignPropertyAnnualSubmissionController" should {
+    "return a successful response with status 200 (OK)" when {
+      "the request received is valid" in new Test {
+
+        MockRetrieveForeignPropertyRequestParser
+          .parse(rawData)
+          .returns(Right(requestData))
+
+        MockRetrieveForeignPropertyService
+          .retrieve(requestData)
+          .returns(Future.successful(Right(ResponseWrapper(correlationId, responseBody))))
+
+        MockHateoasFactory
+          .wrap(responseBody, RetrieveForeignPropertyAnnualSubmissionHateoasData(nino, businessId, taxYear))
+          .returns(HateoasWrapper(responseBody, Seq(testHateoasLink)))
+
+        runOkTest(expectedStatus = OK, maybeExpectedResponseBody = Some(Json.toJson(HateoasWrapper(responseBody, Seq(testHateoasLink)))))
+      }
+    }
+
+    "return an error as per spec" when {
+      "the parser validation fails" in new Test {
+
+        MockRetrieveForeignPropertyRequestParser
+          .parse(rawData)
+          .returns(Left(ErrorWrapper(correlationId, BadRequestError, None)))
+
+        runErrorTest(BadRequestError)
+      }
+
+      "service errors occur" should {
+        "the service returns an error" in new Test {
+
+          MockRetrieveForeignPropertyRequestParser
+            .parse(rawData)
+            .returns(Right(requestData))
+
+          MockRetrieveForeignPropertyService
+            .retrieve(requestData)
+            .returns(Future.successful(Left(ErrorWrapper(correlationId, NotFoundError))))
+
+          runErrorTest(NotFoundError)
+        }
+      }
+    }
+  }
+
   trait Test extends ControllerTest {
 
     val controller = new RetrieveForeignPropertyAnnualSubmissionController(
@@ -129,53 +176,6 @@ class RetrieveForeignPropertyAnnualSubmissionControllerSpec
       foreignNonFhlProperty = Some(Seq(foreignPropertyEntry))
     )
 
-  }
-
-  "handleRequest" should {
-    "return Ok" when {
-      "the request received is valid" in new Test {
-
-        MockRetrieveForeignPropertyRequestParser
-          .parse(rawData)
-          .returns(Right(requestData))
-
-        MockRetrieveForeignPropertyService
-          .retrieve(requestData)
-          .returns(Future.successful(Right(ResponseWrapper(correlationId, responseBody))))
-
-        MockHateoasFactory
-          .wrap(responseBody, RetrieveForeignPropertyAnnualSubmissionHateoasData(nino, businessId, taxYear))
-          .returns(HateoasWrapper(responseBody, Seq(testHateoasLink)))
-
-        runOkTest(expectedStatus = OK, maybeExpectedResponseBody = Some(Json.toJson(HateoasWrapper(responseBody, Seq(testHateoasLink)))))
-      }
-    }
-
-    "return an error as per spec" when {
-      "the parser validation fails" in new Test {
-
-        MockRetrieveForeignPropertyRequestParser
-          .parse(rawData)
-          .returns(Left(ErrorWrapper(correlationId, BadRequestError, None)))
-
-        runErrorTest(BadRequestError)
-      }
-
-      "service errors occur" should {
-        "the service returns an error" in new Test {
-
-          MockRetrieveForeignPropertyRequestParser
-            .parse(rawData)
-            .returns(Right(requestData))
-
-          MockRetrieveForeignPropertyService
-            .retrieve(requestData)
-            .returns(Future.successful(Left(ErrorWrapper(correlationId, NotFoundError))))
-
-          runErrorTest(NotFoundError)
-        }
-      }
-    }
   }
 
 }

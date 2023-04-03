@@ -19,9 +19,8 @@ package v2.mocks.services
 import api.controllers.RequestContext
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
-import v2.services.CreateForeignPropertyPeriodSummaryServiceOutcome
 import v2.models.request.createForeignPropertyPeriodSummary.CreateForeignPropertyPeriodSummaryRequest
-import v2.services.CreateForeignPropertyPeriodSummaryService
+import v2.services.{CreateForeignPropertyPeriodSummaryService, CreateForeignPropertyPeriodSummaryServiceOutcome}
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -31,8 +30,8 @@ trait MockCreateForeignPropertyPeriodSummaryService extends MockFactory {
 
   object MockCreateForeignPropertyService {
 
-    def createForeignProperty(requestData: CreateForeignPropertyPeriodSummaryRequest)
-      : CallHandler[Future[CreateForeignPropertyPeriodSummaryServiceOutcome]] = {
+    def createForeignProperty(
+        requestData: CreateForeignPropertyPeriodSummaryRequest): CallHandler[Future[CreateForeignPropertyPeriodSummaryServiceOutcome]] = {
       (
         mockCreateForeignPropertyService
           .createForeignProperty(_: CreateForeignPropertyPeriodSummaryRequest)(
@@ -42,5 +41,7 @@ trait MockCreateForeignPropertyPeriodSummaryService extends MockFactory {
         )
         .expects(requestData, *, *)
     }
+
   }
+
 }

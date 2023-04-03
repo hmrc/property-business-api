@@ -17,23 +17,13 @@
 package v2.services
 
 import api.controllers.RequestContext
-import api.models.errors.{
-  BusinessIdFormatError,
-  ErrorWrapper,
-  InternalError,
-  NinoFormatError,
-  NotFoundError,
-  RuleTaxYearNotSupportedError,
-  RuleTypeOfBusinessIncorrectError,
-  TaxYearFormatError
-}
+import api.models.errors.{BusinessIdFormatError, ErrorWrapper, InternalError, NinoFormatError, NotFoundError, RuleTaxYearNotSupportedError, RuleTypeOfBusinessIncorrectError, TaxYearFormatError}
 import api.models.outcomes.ResponseWrapper
-import api.services.{BaseService, ServiceOutcome}
+import api.services.BaseService
 import cats.implicits._
 import v2.connectors.RetrieveForeignPropertyAnnualSubmissionConnector
 import v2.connectors.RetrieveForeignPropertyAnnualSubmissionConnector.{ForeignResult, NonForeignResult}
 import v2.models.request.retrieveForeignPropertyAnnualSubmission.RetrieveForeignPropertyAnnualSubmissionRequest
-import v2.models.response.retrieveForeignPropertyAnnualSubmission.RetrieveForeignPropertyAnnualSubmissionResponse
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
@@ -43,7 +33,7 @@ class RetrieveForeignPropertyAnnualSubmissionService @Inject() (connector: Retri
 
   def retrieveForeignProperty(request: RetrieveForeignPropertyAnnualSubmissionRequest)(implicit
       ctx: RequestContext,
-      ec: ExecutionContext): Future[ServiceOutcome[RetrieveForeignPropertyAnnualSubmissionResponse]] = {
+      ec: ExecutionContext): Future[RetrieveForeignPropertyAnnualSubmissionServiceOutcome] = {
 
     val result = for {
       connectorResultWrapper <- connector.retrieveForeignProperty(request).map(_.leftMap(mapDownstreamErrors(errorMap)))

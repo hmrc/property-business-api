@@ -19,12 +19,11 @@ package v2.services
 import api.controllers.RequestContext
 import api.models.errors._
 import api.models.outcomes.ResponseWrapper
-import api.services.{BaseService, ServiceOutcome}
+import api.services.BaseService
 import cats.implicits.toBifunctorOps
 import v2.connectors.RetrieveForeignPropertyPeriodSummaryConnector
 import v2.connectors.RetrieveForeignPropertyPeriodSummaryConnector.{ForeignResult, NonForeignResult}
 import v2.models.request.retrieveForeignPropertyPeriodSummary.RetrieveForeignPropertyPeriodSummaryRequest
-import v2.models.response.retrieveForeignPropertyPeriodSummary.RetrieveForeignPropertyPeriodSummaryResponse
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
@@ -34,7 +33,7 @@ class RetrieveForeignPropertyPeriodSummaryService @Inject() (connector: Retrieve
 
   def retrieveForeignProperty(request: RetrieveForeignPropertyPeriodSummaryRequest)(implicit
       ctx: RequestContext,
-      ec: ExecutionContext): Future[ServiceOutcome[RetrieveForeignPropertyPeriodSummaryResponse]] = {
+      ec: ExecutionContext): Future[RetrieveForeignPropertyPeriodSummaryServiceOutcome] = {
 
     val result = for {
       connectorResultWrapper <- connector.retrieveForeignProperty(request).map(_.leftMap(mapDownstreamErrors(errorMap)))

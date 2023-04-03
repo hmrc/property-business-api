@@ -62,7 +62,7 @@ class CreateAmendForeignPropertyAnnualSubmissionController @Inject() (val authSe
         .withParser(parser)
         .withService(service.createAmendForeignPropertyAnnualSubmission)
         .withAuditing(auditHandler(rawData = rawData, correlationId = ctx.correlationId, request = request))
-        .withHateoasResult(hateoasFactory)(CreateAmendForeignPropertyAnnualSubmissionHateoasData(nino, businessId, taxYear), OK)
+        .withHateoasResult(hateoasFactory)(CreateAmendForeignPropertyAnnualSubmissionHateoasData(nino, businessId, taxYear))
 
       requestHandler.handleRequest(rawData)
     }

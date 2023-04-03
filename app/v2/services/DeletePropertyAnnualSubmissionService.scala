@@ -18,7 +18,7 @@ package v2.services
 
 import api.controllers.RequestContext
 import api.models.errors.{BusinessIdFormatError, InternalError, NinoFormatError, NotFoundError, RuleTaxYearNotSupportedError, TaxYearFormatError}
-import api.services.{BaseService, ServiceOutcome}
+import api.services.BaseService
 import cats.implicits._
 import v2.connectors.DeletePropertyAnnualSubmissionConnector
 import v2.models.request.deletePropertyAnnualSubmission.DeletePropertyAnnualSubmissionRequest
@@ -29,8 +29,9 @@ import scala.concurrent.{ExecutionContext, Future}
 @Singleton
 class DeletePropertyAnnualSubmissionService @Inject() (connector: DeletePropertyAnnualSubmissionConnector) extends BaseService {
 
-  def deletePropertyAnnualSubmission(
-      request: DeletePropertyAnnualSubmissionRequest)(implicit ctx: RequestContext, ec: ExecutionContext): Future[ServiceOutcome[Unit]] = {
+  def deletePropertyAnnualSubmission(request: DeletePropertyAnnualSubmissionRequest)(implicit
+      ctx: RequestContext,
+      ec: ExecutionContext): Future[DeletePropertyAnnualSubmissionServiceOutcome] = {
 
     val result = for {
       ifsResponseWrapper <- connector.deletePropertyAnnualSubmission(request).map(_.leftMap(mapDownstreamErrors(errorMap)))

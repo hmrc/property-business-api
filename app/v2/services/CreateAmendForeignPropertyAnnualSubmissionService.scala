@@ -18,7 +18,7 @@ package v2.services
 
 import api.controllers.RequestContext
 import api.models.errors._
-import api.services.{BaseService, ServiceOutcome}
+import api.services.BaseService
 import cats.implicits._
 import v2.connectors.CreateAmendForeignPropertyAnnualSubmissionConnector
 import v2.models.request.createAmendForeignPropertyAnnualSubmission.CreateAmendForeignPropertyAnnualSubmissionRequest
@@ -32,7 +32,7 @@ class CreateAmendForeignPropertyAnnualSubmissionService @Inject() (connector: Cr
 
   def createAmendForeignPropertyAnnualSubmission(request: CreateAmendForeignPropertyAnnualSubmissionRequest)(implicit
       ctx: RequestContext,
-      ec: ExecutionContext): Future[ServiceOutcome[Unit]] = {
+      ec: ExecutionContext): Future[CreateAmendForeignPropertyAnnualSubmissionServiceOutcome] = {
 
     connector.createAmendForeignPropertyAnnualSubmission(request).map(_.leftMap(mapDownstreamErrors(downstreamErrorMap)))
   }

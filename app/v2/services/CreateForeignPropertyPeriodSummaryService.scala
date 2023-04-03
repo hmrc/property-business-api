@@ -27,17 +27,16 @@ import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class CreateForeignPropertyPeriodSummaryService @Inject()(connector: CreateForeignPropertyPeriodSummaryConnector)
-    extends BaseService {
+class CreateForeignPropertyPeriodSummaryService @Inject() (connector: CreateForeignPropertyPeriodSummaryConnector) extends BaseService {
 
-  def createForeignProperty(request: CreateForeignPropertyPeriodSummaryRequest)(
-      implicit ctx: RequestContext,
+  def createForeignProperty(request: CreateForeignPropertyPeriodSummaryRequest)(implicit
+      ctx: RequestContext,
       ec: ExecutionContext): Future[CreateForeignPropertyPeriodSummaryServiceOutcome] = {
 
     connector.createForeignProperty(request).map(_.leftMap(mapDownstreamErrors(downstreamErrorMap)))
   }
 
-  private def downstreamErrorMap = {
+  private val downstreamErrorMap: Map[String, MtdError] = {
     val errors = Map(
       "INVALID_TAXABLE_ENTITY_ID" -> NinoFormatError,
       "INVALID_INCOMESOURCEID"    -> BusinessIdFormatError,
@@ -62,7 +61,7 @@ class CreateForeignPropertyPeriodSummaryService @Inject()(connector: CreateForei
       "INVALID_INCOMESOURCE_ID" -> BusinessIdFormatError,
       "INVALID_CORRELATION_ID"  -> InternalError,
       "PERIOD_NOT_ALIGNED"      -> RuleMisalignedPeriodError,
-      "PERIOD_OVERLAPS"         -> RuleOverlappingPeriodError,
+      "PERIOD_OVERLAPS"         -> RuleOverlappingPeriodError
     )
 
     errors ++ extraTysErrors

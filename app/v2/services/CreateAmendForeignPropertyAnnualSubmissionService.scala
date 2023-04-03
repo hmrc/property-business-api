@@ -37,7 +37,7 @@ class CreateAmendForeignPropertyAnnualSubmissionService @Inject() (connector: Cr
     connector.createAmendForeignPropertyAnnualSubmission(request).map(_.leftMap(mapDownstreamErrors(downstreamErrorMap)))
   }
 
-  private def downstreamErrorMap = {
+  private val downstreamErrorMap: Map[String, MtdError] = {
     val errors = Map(
       "INVALID_TAXABLE_ENTITY_ID"   -> NinoFormatError,
       "INVALID_INCOMESOURCEID"      -> BusinessIdFormatError,

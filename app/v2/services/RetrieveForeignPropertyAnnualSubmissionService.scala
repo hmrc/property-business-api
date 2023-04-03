@@ -17,7 +17,7 @@
 package v2.services
 
 import api.controllers.RequestContext
-import api.models.errors.{BusinessIdFormatError, ErrorWrapper, InternalError, NinoFormatError, NotFoundError, RuleTaxYearNotSupportedError, RuleTypeOfBusinessIncorrectError, TaxYearFormatError}
+import api.models.errors.{BusinessIdFormatError, ErrorWrapper, InternalError, MtdError, NinoFormatError, NotFoundError, RuleTaxYearNotSupportedError, RuleTypeOfBusinessIncorrectError, TaxYearFormatError}
 import api.models.outcomes.ResponseWrapper
 import api.services.BaseService
 import cats.implicits._
@@ -36,14 +36,14 @@ class RetrieveForeignPropertyAnnualSubmissionService @Inject() (connector: Retri
       ec: ExecutionContext): Future[RetrieveForeignPropertyAnnualSubmissionServiceOutcome] = {
 
     val result = for {
-      connectorResultWrapper <- connector.retrieveForeignProperty(request).map(_.leftMap(mapDownstreamErrors(errorMap)))
+      connectorResultWrapper <- connector.retrieveForeignProperty(request).map(_.leftMap(mapDownstreamErrors(downstreamErrorMap)))
       mtdResponseWrapper     <- Future.successful(connectorResultWrapper.flatMap(wrappedResult => validateBusinessType(wrappedResult)))
     } yield mtdResponseWrapper
 
     result
   }
 
-  private val errorMap = {
+  private val downstreamErrorMap: Map[String, MtdError] = {
     val errors = Map(
       "INVALID_TAXABLE_ENTITY_ID" -> NinoFormatError,
       "INVALID_TAX_YEAR"          -> TaxYearFormatError,

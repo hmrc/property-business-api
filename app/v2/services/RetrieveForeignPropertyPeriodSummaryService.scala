@@ -36,7 +36,7 @@ class RetrieveForeignPropertyPeriodSummaryService @Inject() (connector: Retrieve
       ec: ExecutionContext): Future[RetrieveForeignPropertyPeriodSummaryServiceOutcome] = {
 
     val result = for {
-      connectorResultWrapper <- connector.retrieveForeignProperty(request).map(_.leftMap(mapDownstreamErrors(errorMap)))
+      connectorResultWrapper <- connector.retrieveForeignProperty(request).map(_.leftMap(mapDownstreamErrors(downstreamErrorMap)))
       mtdResponseWrapper     <- Future.successful(connectorResultWrapper.flatMap(wrappedResult => validateBusinessType(wrappedResult)))
 
     } yield mtdResponseWrapper
@@ -44,7 +44,7 @@ class RetrieveForeignPropertyPeriodSummaryService @Inject() (connector: Retrieve
     result
   }
 
-  private val errorMap = {
+  private val downstreamErrorMap: Map[String, MtdError] = {
     val downstreamErrors = Map(
       "INVALID_TAXABLE_ENTITY_ID" -> NinoFormatError,
       "INVALID_TAX_YEAR"          -> TaxYearFormatError,

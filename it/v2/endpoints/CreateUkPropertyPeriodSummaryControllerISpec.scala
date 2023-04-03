@@ -19,12 +19,12 @@ package v2.endpoints
 import play.api.http.HeaderNames.ACCEPT
 import play.api.http.Status
 import play.api.http.Status.BAD_REQUEST
-import play.api.libs.json.{ JsValue, Json }
-import play.api.libs.ws.{ WSRequest, WSResponse }
+import play.api.libs.json.{JsValue, Json}
+import play.api.libs.ws.{WSRequest, WSResponse}
 import play.api.test.Helpers.AUTHORIZATION
 import support.V2IntegrationBaseSpec
 import api.models.errors._
-import v2.stubs.{ AuditStub, AuthStub, DownstreamStub, MtdIdLookupStub }
+import v2.stubs.{AuditStub, AuthStub, DownstreamStub, MtdIdLookupStub}
 
 class CreateUkPropertyPeriodSummaryControllerISpec extends V2IntegrationBaseSpec {
 
@@ -416,6 +416,7 @@ class CreateUkPropertyPeriodSummaryControllerISpec extends V2IntegrationBaseSpec
          |   "reason": "ifs message"
          |}
        """.stripMargin
+
   }
 
   private trait TysIfsTest extends Test {
@@ -426,6 +427,7 @@ class CreateUkPropertyPeriodSummaryControllerISpec extends V2IntegrationBaseSpec
       "taxableEntityId" -> nino,
       "incomeSourceId"  -> businessId
     )
+
   }
 
   private trait NonTysTest extends Test {
@@ -437,6 +439,7 @@ class CreateUkPropertyPeriodSummaryControllerISpec extends V2IntegrationBaseSpec
       "incomeSourceId"  -> businessId,
       "taxYear"         -> "2022-23"
     )
+
   }
 
   "calling the create endpoint" should {
@@ -519,12 +522,13 @@ class CreateUkPropertyPeriodSummaryControllerISpec extends V2IntegrationBaseSpec
           ("AA123456A", "XA***IS1", "2022-23", requestBodyJson, Status.BAD_REQUEST, BusinessIdFormatError),
           ("AA123456A", "XAIS12345678910", "2022-23", invalidToDateRequestJson, Status.BAD_REQUEST, ToDateFormatError),
           ("AA123456A", "XAIS12345678910", "2022-23", invalidFromDateRequestJson, Status.BAD_REQUEST, FromDateFormatError),
-          ("AA123456A",
-           "XAIS12345678910",
-           "2022-23",
-           Json.parse(s"""{ "fromDate": "2020-04-06", "toDate": "2019-04-06", "ukFhlProperty": {} }""".stripMargin),
-           BAD_REQUEST,
-           RuleIncorrectOrEmptyBodyError.copy(paths = Some(Seq("/ukFhlProperty")))),
+          (
+            "AA123456A",
+            "XAIS12345678910",
+            "2022-23",
+            Json.parse(s"""{ "fromDate": "2020-04-06", "toDate": "2019-04-06", "ukFhlProperty": {} }""".stripMargin),
+            BAD_REQUEST,
+            RuleIncorrectOrEmptyBodyError.copy(paths = Some(Seq("/ukFhlProperty")))),
           ("AA123456A", "XAIS12345678910", "2022-23", invalidValueRequestJson, Status.BAD_REQUEST, allInvalidValueRequestError),
           ("AA123456A", "XAIS12345678910", "2022-23", bothExpensesSuppliedRequestJson, Status.BAD_REQUEST, RuleBothExpensesSuppliedRequestError),
           ("AA123456A", "XAIS12345678910", "2022-23", toDateBeforeFromDateRequestJson, Status.BAD_REQUEST, RuleToDateBeforeFromDateError)
@@ -569,13 +573,15 @@ class CreateUkPropertyPeriodSummaryControllerISpec extends V2IntegrationBaseSpec
           (Status.BAD_REQUEST, "INVALID_INCOMESOURCE_ID", Status.BAD_REQUEST, BusinessIdFormatError),
           (Status.BAD_REQUEST, "INVALID_CORRELATION_ID", Status.INTERNAL_SERVER_ERROR, InternalError),
           (Status.UNPROCESSABLE_ENTITY, "PERIOD_NOT_ALIGNED", Status.BAD_REQUEST, RuleMisalignedPeriodError),
-          (Status.UNPROCESSABLE_ENTITY, "PERIOD_OVERLAPS", Status.BAD_REQUEST, RuleOverlappingPeriodError),
-          (Status.UNPROCESSABLE_ENTITY, "INVALID_SUBMISSION_PERIOD", Status.BAD_REQUEST, RuleInvalidSubmissionPeriodError),
-          (Status.UNPROCESSABLE_ENTITY, "INVALID_SUBMISSION_END_DATE", Status.BAD_REQUEST, RuleInvalidSubmissionEndDateError)
+          (Status.UNPROCESSABLE_ENTITY, "PERIOD_OVERLAPS", Status.BAD_REQUEST, RuleOverlappingPeriodError)
+//          (Status.UNPROCESSABLE_ENTITY, "INVALID_SUBMISSION_PERIOD", Status.BAD_REQUEST, RuleInvalidSubmissionPeriodError),
+//          (Status.UNPROCESSABLE_ENTITY, "INVALID_SUBMISSION_END_DATE", Status.BAD_REQUEST, RuleInvalidSubmissionEndDateError)
+//          To be reinstated, see MTDSA-15575
         )
 
         (errors ++ extraTysErrors).foreach(args => (serviceErrorTest _).tupled(args))
       }
     }
   }
+
 }

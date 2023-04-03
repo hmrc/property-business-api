@@ -33,12 +33,12 @@ import v2.connectors.CreateUkPropertyPeriodSummaryConnector
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class CreateUkPropertyPeriodSummaryService @Inject()(connector: CreateUkPropertyPeriodSummaryConnector)
+class CreateUkPropertyPeriodSummaryService @Inject() (connector: CreateUkPropertyPeriodSummaryConnector)
     extends DownstreamResponseMappingSupport
     with Logging {
 
-  def createUkProperty(request: CreateUkPropertyPeriodSummaryRequest)(
-      implicit hc: HeaderCarrier,
+  def createUkProperty(request: CreateUkPropertyPeriodSummaryRequest)(implicit
+      hc: HeaderCarrier,
       ec: ExecutionContext,
       logContext: EndpointLogContext,
       correlationId: String): Future[ServiceOutcome[CreateUkPropertyPeriodSummaryResponse]] = {
@@ -71,12 +71,13 @@ class CreateUkPropertyPeriodSummaryService @Inject()(connector: CreateUkProperty
     )
 
     val extraTysErrors = Map(
-      "INVALID_INCOMESOURCE_ID"     -> BusinessIdFormatError,
-      "INVALID_CORRELATION_ID"      -> InternalError,
-      "PERIOD_NOT_ALIGNED"          -> RuleMisalignedPeriodError,
-      "PERIOD_OVERLAPS"             -> RuleOverlappingPeriodError,
-      "INVALID_SUBMISSION_PERIOD"   -> RuleInvalidSubmissionPeriodError,
-      "INVALID_SUBMISSION_END_DATE" -> RuleInvalidSubmissionEndDateError
+      "INVALID_INCOMESOURCE_ID" -> BusinessIdFormatError,
+      "INVALID_CORRELATION_ID"  -> InternalError,
+      "PERIOD_NOT_ALIGNED"      -> RuleMisalignedPeriodError,
+      "PERIOD_OVERLAPS"         -> RuleOverlappingPeriodError
+//      "INVALID_SUBMISSION_PERIOD"   -> RuleInvalidSubmissionPeriodError,
+//      "INVALID_SUBMISSION_END_DATE" -> RuleInvalidSubmissionEndDateError
+//      To be reinstated, see MTDSA-15575
     )
 
     errors ++ extraTysErrors

@@ -1,0 +1,4 @@
+```
+-J-Xmx3G
+-J-XX:+UseG1GC
+```

@@ -57,12 +57,13 @@ class CreateUkPropertyPeriodSummaryService @Inject() (connector: CreateUkPropert
     )
 
     val extraTysErrors = Map(
-      "INVALID_INCOMESOURCE_ID"     -> BusinessIdFormatError,
-      "INVALID_CORRELATION_ID"      -> InternalError,
-      "PERIOD_NOT_ALIGNED"          -> RuleMisalignedPeriodError,
-      "PERIOD_OVERLAPS"             -> RuleOverlappingPeriodError,
-      "INVALID_SUBMISSION_PERIOD"   -> RuleInvalidSubmissionPeriodError,
-      "INVALID_SUBMISSION_END_DATE" -> RuleInvalidSubmissionEndDateError
+      "INVALID_INCOMESOURCE_ID" -> BusinessIdFormatError,
+      "INVALID_CORRELATION_ID"  -> InternalError,
+      "PERIOD_NOT_ALIGNED"      -> RuleMisalignedPeriodError,
+      "PERIOD_OVERLAPS"         -> RuleOverlappingPeriodError
+//      "INVALID_SUBMISSION_PERIOD"   -> RuleInvalidSubmissionPeriodError,
+//      "INVALID_SUBMISSION_END_DATE" -> RuleInvalidSubmissionEndDateError
+//      To be reinstated, see MTDSA-15575
     )
 
     errors ++ extraTysErrors

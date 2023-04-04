@@ -36,10 +36,9 @@ class RetrieveUkPropertyAnnualSubmissionService @Inject() (connector: RetrieveUk
       ctx: RequestContext,
       ec: ExecutionContext): Future[RetrieveUkPropertyAnnualSubmissionServiceOutcome] = {
 
-    val result = for {
-      connectorResultWrapper <- EitherT(connector.retrieveUkProperty(request)).leftMap(mapDownstreamErrors(downstreamErrorMap))
-      mtdResponseWrapper     <- EitherT.fromEither[Future](validateBusinessType(connectorResultWrapper))
-    } yield mtdResponseWrapper
+    val result = EitherT(connector.retrieveUkProperty(request))
+      .leftMap(mapDownstreamErrors(downstreamErrorMap))
+      .flatMap(connectorResultWrapper => EitherT.fromEither(validateBusinessType(connectorResultWrapper)))
 
     result.value
   }

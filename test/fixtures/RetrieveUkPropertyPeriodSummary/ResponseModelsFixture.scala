@@ -217,7 +217,7 @@ trait ResponseModelsFixture {
     ukNonFhlProperty = Some(ukNonFhlPropertyModel)
   )
 
-   val mtdResponseWithHateoas: JsObject = fullMtdJson.as[JsObject] ++ Json
+  val mtdResponseWithHateoas: JsObject = fullMtdJson.as[JsObject] ++ Json
     .parse(
       s"""
          |{
@@ -232,4 +232,5 @@ trait ResponseModelsFixture {
     """.stripMargin
     )
     .as[JsObject]
+
 }

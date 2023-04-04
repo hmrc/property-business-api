@@ -22,7 +22,7 @@ import api.models.audit.{AuditEvent, AuditResponse, GenericAuditDetail}
 import api.models.auth.UserDetails
 import api.models.errors.ErrorWrapper
 import api.services.{AuditService, EnrolmentsAuthService, MtdIdLookupService}
-import play.api.libs.json.{JsValue, Json}
+import play.api.libs.json.JsValue
 import play.api.mvc.{Action, ControllerComponents}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.audit.http.connector.AuditResult
@@ -59,14 +59,14 @@ class AmendUkPropertyAnnualSubmissionController @Inject() (val authService: Enro
       val requestHandler = RequestHandler
         .withParser(parser)
         .withService(service.amendUkPropertyAnnualSubmission)
-        .withAuditing(auditHandler(nino, businessId, taxYear, request))
+        .withAuditing(auditHandler(rawData, request))
         .withHateoasResult(hateoasFactory)(AmendUkPropertyAnnualSubmissionHateoasData(nino, businessId, taxYear))
 
       requestHandler.handleRequest(rawData)
 
     }
 
-  private def auditHandler(nino: String, businessId: String, taxYear: String, request: UserRequest[JsValue]): AuditHandler = {
+  private def auditHandler(rawData: AmendUkPropertyAnnualSubmissionRawData, request: UserRequest[JsValue]): AuditHandler = {
     new AuditHandler() {
       override def performAudit(userDetails: UserDetails, httpStatus: Int, response: Either[ErrorWrapper, Option[JsValue]], versionNumber: String)(
           implicit
@@ -77,7 +77,7 @@ class AmendUkPropertyAnnualSubmissionController @Inject() (val authService: Enro
             auditSubmission(
               GenericAuditDetail(
                 userDetails = request.userDetails,
-                params = Json.obj("nino" -> nino, "businessId" -> businessId, "taxYear" -> taxYear, "request" -> request.body),
+                params = rawData,
                 correlationId = ctx.correlationId,
                 response = AuditResponse(httpStatus = httpStatus, response = Left(err.auditErrors))
               )
@@ -87,7 +87,7 @@ class AmendUkPropertyAnnualSubmissionController @Inject() (val authService: Enro
             auditSubmission(
               GenericAuditDetail(
                 userDetails = request.userDetails,
-                params = Json.obj("nino" -> nino, "businessId" -> businessId, "taxYear" -> taxYear, "request" -> request.body),
+                params = rawData,
                 correlationId = ctx.correlationId,
                 response = AuditResponse(httpStatus = OK, response = Right(resp))
               )

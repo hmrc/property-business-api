@@ -28,7 +28,7 @@ import play.api.mvc.Result
 import v2.mocks.requestParsers.MockRetrieveUkPropertyPeriodSummaryRequestParser
 import v2.mocks.services.MockRetrieveUkPropertyPeriodSummaryService
 import v2.models.request.retrieveUkPropertyPeriodSummary.{RetrieveUkPropertyPeriodSummaryRawData, RetrieveUkPropertyPeriodSummaryRequest}
-import v2.models.response.retrieveUkPropertyPeriodSummary.RetrieveUkPropertyPeriodSummaryHateoasData
+import v2.models.response.retrieveUkPropertyPeriodSummary.{RetrieveUkPropertyPeriodSummaryHateoasData, RetrieveUkPropertyPeriodSummaryResponse}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -45,14 +45,6 @@ class RetrieveUkPropertyPeriodSummaryControllerSpec
   private val submissionId = "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
   private val taxYear      = "2022-23"
 
-  private val rawData     = RetrieveUkPropertyPeriodSummaryRawData(nino, businessId, taxYear, submissionId)
-  private val requestData = RetrieveUkPropertyPeriodSummaryRequest(Nino(nino), businessId, TaxYear.fromMtd(taxYear), submissionId)
-
-  private val testHateoasLink =
-    Link(href = s"/individuals/business/property/$nino/$businessId/period/$taxYear/$submissionId", method = GET, rel = "self")
-
-  private val responseBody = fullResponseModel
-
   "RetrieveUkPropertyPeriodSummaryController" should {
     "return (OK) 200 status" when {
       "the request received is valid" in new Test {
@@ -62,11 +54,11 @@ class RetrieveUkPropertyPeriodSummaryControllerSpec
 
         MockRetrieveUkPropertyService
           .retrieve(requestData)
-          .returns(Future.successful(Right(ResponseWrapper(correlationId, responseBody))))
+          .returns(Future.successful(Right(ResponseWrapper(correlationId, responseData))))
 
         MockHateoasFactory
-          .wrap(responseBody, RetrieveUkPropertyPeriodSummaryHateoasData(nino, businessId, taxYear, submissionId))
-          .returns(HateoasWrapper(responseBody, Seq(testHateoasLink)))
+          .wrap(responseData, hateoasData)
+          .returns(HateoasWrapper(responseData, Seq(testHateoasLink)))
 
         runOkTest(expectedStatus = OK, maybeExpectedResponseBody = Some(mtdResponseWithHateoas))
       }
@@ -108,6 +100,19 @@ class RetrieveUkPropertyPeriodSummaryControllerSpec
     )
 
     protected def callController(): Future[Result] = controller.handleRequest(nino, businessId, taxYear, submissionId)(fakeGetRequest)
+
+    protected val rawData: RetrieveUkPropertyPeriodSummaryRawData = RetrieveUkPropertyPeriodSummaryRawData(nino, businessId, taxYear, submissionId)
+
+    protected val requestData: RetrieveUkPropertyPeriodSummaryRequest =
+      RetrieveUkPropertyPeriodSummaryRequest(Nino(nino), businessId, TaxYear.fromMtd(taxYear), submissionId)
+
+    protected val testHateoasLink: Link =
+      Link(href = s"/individuals/business/property/$nino/$businessId/period/$taxYear/$submissionId", method = GET, rel = "self")
+
+    protected val hateoasData: RetrieveUkPropertyPeriodSummaryHateoasData =
+      RetrieveUkPropertyPeriodSummaryHateoasData(nino, businessId, taxYear, submissionId)
+
+    protected val responseData: RetrieveUkPropertyPeriodSummaryResponse = fullResponseModel
   }
 
 }

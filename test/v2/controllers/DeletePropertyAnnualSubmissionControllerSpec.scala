@@ -41,9 +41,6 @@ class DeletePropertyAnnualSubmissionControllerSpec
   private val businessId = "XAIS12345678910"
   private val taxYear    = "2023-24"
 
-  private val rawData     = DeletePropertyAnnualSubmissionRawData(nino, businessId, taxYear)
-  private val requestData = DeletePropertyAnnualSubmissionRequest(Nino(nino), businessId, TaxYear.fromMtd(taxYear))
-
   "DeletePropertyAnnualSubmissionController" should {
     "return No Content" when {
       "the request received is valid" in new Test {
@@ -109,6 +106,11 @@ class DeletePropertyAnnualSubmissionControllerSpec
           response = auditResponse
         )
       )
+
+    protected val rawData: DeletePropertyAnnualSubmissionRawData = DeletePropertyAnnualSubmissionRawData(nino, businessId, taxYear)
+
+    protected val requestData: DeletePropertyAnnualSubmissionRequest =
+      DeletePropertyAnnualSubmissionRequest(Nino(nino), businessId, TaxYear.fromMtd(taxYear))
 
   }
 

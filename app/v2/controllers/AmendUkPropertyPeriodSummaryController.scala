@@ -22,7 +22,7 @@ import api.models.audit.{AuditEvent, AuditResponse, GenericAuditDetail}
 import api.models.auth.UserDetails
 import api.models.errors._
 import api.services.{AuditService, EnrolmentsAuthService, MtdIdLookupService}
-import play.api.libs.json.{JsValue, Json}
+import play.api.libs.json.JsValue
 import play.api.mvc.{Action, ControllerComponents}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.audit.http.connector.AuditResult
@@ -59,14 +59,14 @@ class AmendUkPropertyPeriodSummaryController @Inject() (val authService: Enrolme
       val requestHandler = RequestHandler
         .withParser(parser)
         .withService(service.amendUkPropertyPeriodSummary)
-        .withAuditing(auditHandler(nino, businessId, taxYear, submissionId, request))
+        .withAuditing(auditHandler(rawData, request))
         .withHateoasResult(hateoasFactory)(AmendUkPropertyPeriodSummaryHateoasData(nino, businessId, taxYear, submissionId))
 
       requestHandler.handleRequest(rawData)
 
     }
 
-  private def auditHandler(nino: String, businessId: String, taxYear: String, submissionId: String, request: UserRequest[JsValue]): AuditHandler = {
+  private def auditHandler(rawData: AmendUkPropertyPeriodSummaryRawData, request: UserRequest[JsValue]): AuditHandler = {
     new AuditHandler() {
       override def performAudit(userDetails: UserDetails, httpStatus: Int, response: Either[ErrorWrapper, Option[JsValue]], versionNumber: String)(
           implicit
@@ -77,12 +77,7 @@ class AmendUkPropertyPeriodSummaryController @Inject() (val authService: Enrolme
             auditSubmission(
               GenericAuditDetail(
                 userDetails = request.userDetails,
-                params = Json.obj(
-                  "nino"         -> nino,
-                  "businessId"   -> businessId,
-                  "taxYear"      -> taxYear,
-                  "submissionId" -> submissionId,
-                  "request"      -> request.body),
+                params = rawData,
                 correlationId = ctx.correlationId,
                 response = AuditResponse(httpStatus = httpStatus, response = Left(err.auditErrors))
               )
@@ -92,12 +87,7 @@ class AmendUkPropertyPeriodSummaryController @Inject() (val authService: Enrolme
             auditSubmission(
               GenericAuditDetail(
                 userDetails = request.userDetails,
-                params = Json.obj(
-                  "nino"         -> nino,
-                  "businessId"   -> businessId,
-                  "taxYear"      -> taxYear,
-                  "submissionId" -> submissionId,
-                  "request"      -> request.body),
+                params = rawData,
                 correlationId = ctx.correlationId,
                 response = AuditResponse(httpStatus = OK, response = Right(resp))
               )

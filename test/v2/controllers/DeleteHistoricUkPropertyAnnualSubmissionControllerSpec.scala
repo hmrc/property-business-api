@@ -45,11 +45,6 @@ class DeleteHistoricUkPropertyAnnualSubmissionControllerSpec
 
   private val taxYear = "2021-22"
 
-  private def rawData(propertyType: HistoricPropertyType) = DeleteHistoricUkPropertyAnnualSubmissionRawData(nino, taxYear, propertyType)
-
-  private def requestData(propertyType: HistoricPropertyType) =
-    DeleteHistoricUkPropertyAnnualSubmissionRequest(Nino(nino), TaxYear.fromMtd(taxYear), propertyType)
-
   "DeleteHistoricUkPropertyAnnualSubmissionController" should {
     "return No Content" when {
       def success(propertyType: HistoricPropertyType): Unit = {
@@ -145,6 +140,12 @@ class DeleteHistoricUkPropertyAnnualSubmissionControllerSpec
         )
       )
     }
+
+    protected def rawData(propertyType: HistoricPropertyType): DeleteHistoricUkPropertyAnnualSubmissionRawData =
+      DeleteHistoricUkPropertyAnnualSubmissionRawData(nino, taxYear, propertyType)
+
+    protected def requestData(propertyType: HistoricPropertyType): DeleteHistoricUkPropertyAnnualSubmissionRequest =
+      DeleteHistoricUkPropertyAnnualSubmissionRequest(Nino(nino), TaxYear.fromMtd(taxYear), propertyType)
 
   }
 

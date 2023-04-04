@@ -22,10 +22,9 @@ import api.mocks.services.MockAuditService
 import api.models.audit.{AuditEvent, AuditResponse, GenericAuditDetail}
 import api.models.domain.{Nino, TaxYear}
 import api.models.errors._
-import api.models.hateoas.Method.GET
-import api.models.hateoas.{HateoasWrapper, Link}
+import api.models.hateoas.HateoasWrapper
 import api.models.outcomes.ResponseWrapper
-import play.api.libs.json.{JsValue, Json}
+import play.api.libs.json.{JsObject, JsValue, Json}
 import play.api.mvc.Result
 import v2.mocks.requestParsers.MockCreateUkPropertyPeriodSummaryRequestParser
 import v2.mocks.services.MockCreateUkPropertyPeriodSummaryService
@@ -50,244 +49,6 @@ class CreateUkPropertyPeriodSummaryControllerSpec
   private val businessId   = "XAIS12345678910"
   private val submissionId = "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
 
-  val requestBody: CreateUkPropertyPeriodSummaryRequestBody =
-    CreateUkPropertyPeriodSummaryRequestBody(
-      "2020-01-01",
-      "2020-01-31",
-      Some(
-        UkFhlProperty(
-          Some(
-            UkFhlPropertyIncome(
-              Some(5000.99),
-              Some(3123.21),
-              Some(UkPropertyIncomeRentARoom(
-                Some(532.12)
-              ))
-            )),
-          Some(UkFhlPropertyExpenses(
-            Some(3123.21),
-            Some(928.42),
-            Some(842.99),
-            Some(8831.12),
-            Some(484.12),
-            Some(99282),
-            Some(999.99),
-            Some(974.47),
-            Some(UkPropertyExpensesRentARoom(
-              Some(8842.43)
-            ))
-          ))
-        )),
-      Some(
-        UkNonFhlProperty(
-          Some(
-            UkNonFhlPropertyIncome(
-              Some(41.12),
-              Some(84.31),
-              Some(9884.93),
-              Some(842.99),
-              Some(31.44),
-              Some(UkPropertyIncomeRentARoom(
-                Some(947.66)
-              ))
-            )),
-          Some(
-            UkNonFhlPropertyExpenses(
-              None,
-              None,
-              None,
-              None,
-              None,
-              None,
-              None,
-              None,
-              None,
-              None,
-              Some(988.18)
-            ))
-        ))
-    )
-
-  val requestBodyWithConsolidatedExpense: CreateUkPropertyPeriodSummaryRequestBody =
-    CreateUkPropertyPeriodSummaryRequestBody(
-      "2020-01-01",
-      "2020-01-31",
-      Some(
-        UkFhlProperty(
-          Some(
-            UkFhlPropertyIncome(
-              Some(5000.99),
-              Some(3123.21),
-              Some(UkPropertyIncomeRentARoom(
-                Some(532.12)
-              ))
-            )),
-          Some(
-            UkFhlPropertyExpenses(
-              None,
-              None,
-              None,
-              None,
-              None,
-              None,
-              Some(988.18),
-              None,
-              None
-            ))
-        )),
-      Some(
-        UkNonFhlProperty(
-          Some(
-            UkNonFhlPropertyIncome(
-              Some(41.12),
-              Some(84.31),
-              Some(9884.93),
-              Some(842.99),
-              Some(31.44),
-              Some(UkPropertyIncomeRentARoom(
-                Some(947.66)
-              ))
-            )),
-          Some(
-            UkNonFhlPropertyExpenses(
-              None,
-              None,
-              None,
-              None,
-              None,
-              None,
-              None,
-              None,
-              None,
-              None,
-              Some(988.18)
-            ))
-        ))
-    )
-
-  private val requestBodyJson = Json.parse(
-    """{
-      |    "fromDate": "2020-01-01",
-      |    "toDate": "2020-01-31",
-      |    "ukFhlProperty":{
-      |        "income": {
-      |            "periodAmount": 5000.99,
-      |            "taxDeducted": 3123.21,
-      |            "rentARoom": {
-      |                "rentsReceived": 532.12
-      |            }
-      |        },
-      |        "expenses": {
-      |            "premisesRunningCosts": 3123.21,
-      |            "repairsAndMaintenance": 928.42,
-      |            "financialCosts": 842.99,
-      |            "professionalFees": 8831.12,
-      |            "costOfServices": 484.12,
-      |            "other": 99282,
-      |            "travelCosts": 974.47,
-      |            "rentARoom": {
-      |                "amountClaimed": 8842.43
-      |            }
-      |        }
-      |    },
-      |    "ukNonFhlProperty": {
-      |        "income": {
-      |            "premiumsOfLeaseGrant": 42.12,
-      |            "reversePremiums": 84.31,
-      |            "periodAmount": 9884.93,
-      |            "taxDeducted": 842.99,
-      |            "otherIncome": 31.44,
-      |            "rentARoom": {
-      |                "rentsReceived": 947.66
-      |            }
-      |        },
-      |        "expenses": {
-      |            "premisesRunningCosts": 3123.21,
-      |            "repairsAndMaintenance": 928.42,
-      |            "financialCosts": 842.99,
-      |            "professionalFees": 8831.12,
-      |            "costOfServices": 484.12,
-      |            "other": 99282,
-      |            "residentialFinancialCost": 12.34,
-      |            "travelCosts": 974.47,
-      |            "residentialFinancialCostsCarriedForward": 12.34,
-      |            "rentARoom": {
-      |                "amountClaimed": 8842.43
-      |            }
-      |        }
-      |    }
-      |}
-      |""".stripMargin
-  )
-
-  private val requestBodyJsonConsolidatedExpense = Json.parse(
-    """{
-      |    "fromDate": "2020-01-01",
-      |    "toDate": "2020-01-31",
-      |    "ukFhlProperty":{
-      |        "income": {
-      |            "periodAmount": 5000.99,
-      |            "taxDeducted": 3123.21,
-      |            "rentARoom": {
-      |                "rentsReceived": 532.12
-      |            }
-      |        },
-      |        "expenses": {
-      |            "consolidatedExpenses": 988.18
-      |        }
-      |    },
-      |    "ukNonFhlProperty": {
-      |        "income": {
-      |            "premiumsOfLeaseGrant": 42.12,
-      |            "reversePremiums": 84.31,
-      |            "periodAmount": 9884.93,
-      |            "taxDeducted": 842.99,
-      |            "otherIncome": 31.44,
-      |            "rentARoom": {
-      |                "rentsReceived": 947.66
-      |            }
-      |        },
-      |        "expenses": {
-      |            "consolidatedExpenses": 988.18
-      |        }
-      |    }
-      |}
-      |""".stripMargin
-  )
-
-  private val requestData = CreateUkPropertyPeriodSummaryRequest(Nino(nino), TaxYear.fromMtd(taxYear), businessId, requestBody)
-  private val rawData     = CreateUkPropertyPeriodSummaryRawData(nino, taxYear, businessId, requestBodyJson)
-
-  private val requestDataConsolidatedExpense =
-    CreateUkPropertyPeriodSummaryRequest(Nino(nino), TaxYear.fromMtd(taxYear), businessId, requestBodyWithConsolidatedExpense)
-
-  private val rawDataConsolidatedExpense = CreateUkPropertyPeriodSummaryRawData(nino, taxYear, businessId, requestBodyJsonConsolidatedExpense)
-
-  val hateoasResponse: JsValue = Json.parse(
-    s"""
-       |{
-       |  "submissionId": "4557ecb5-fd32-48cc-81f5-e6acd1099f3c",
-       |  "links": [
-       |    {
-       |      "href":"/individuals/business/property/uk/$nino/$businessId/period/$taxYear/$submissionId",
-       |      "method":"GET",
-       |      "rel":"self"
-       |    }
-       |  ]
-       |}
-    """.stripMargin
-  )
-
-  val response: CreateUkPropertyPeriodSummaryResponse = CreateUkPropertyPeriodSummaryResponse(
-    submissionId = "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
-  )
-
-  private val testHateoasLink =
-    Link(
-      href = s"/individuals/business/property/uk/$nino/$businessId/period/$taxYear/4557ecb5-fd32-48cc-81f5-e6acd1099f3c",
-      method = GET,
-      rel = "self")
-
   "CreateUkPropertyPeriodSummaryController" should {
     "return a successful response from a consolidated request" when {
       "the request received is valid" in new Test {
@@ -297,11 +58,11 @@ class CreateUkPropertyPeriodSummaryControllerSpec
 
         MockCreateUkPropertyService
           .createUkProperty(requestDataConsolidatedExpense)
-          .returns(Future.successful(Right(ResponseWrapper(correlationId, response))))
+          .returns(Future.successful(Right(ResponseWrapper(correlationId, responseData))))
 
         MockHateoasFactory
-          .wrap(response, CreateUkPropertyPeriodSummaryHateoasData(nino, businessId, taxYear, submissionId))
-          .returns(HateoasWrapper(response, Seq(testHateoasLink)))
+          .wrap(responseData, hateoasData)
+          .returns(HateoasWrapper(responseData, testHateoasLinks))
 
         override def callController(): Future[Result] =
           controller.handleRequest(nino, businessId, taxYear)(fakePostRequest(requestBodyJsonConsolidatedExpense))
@@ -309,8 +70,8 @@ class CreateUkPropertyPeriodSummaryControllerSpec
         runOkTestWithAudit(
           expectedStatus = CREATED,
           maybeAuditRequestBody = Some(requestBodyJsonConsolidatedExpense),
-          maybeExpectedResponseBody = Some(hateoasResponse),
-          maybeAuditResponseBody = Some(hateoasResponse)
+          maybeExpectedResponseBody = Some(responseBodyJsonWithHateoas),
+          maybeAuditResponseBody = Some(responseBodyJsonWithHateoas)
         )
       }
     }
@@ -323,17 +84,17 @@ class CreateUkPropertyPeriodSummaryControllerSpec
 
         MockCreateUkPropertyService
           .createUkProperty(requestData)
-          .returns(Future.successful(Right(ResponseWrapper(correlationId, response))))
+          .returns(Future.successful(Right(ResponseWrapper(correlationId, responseData))))
 
         MockHateoasFactory
-          .wrap(response, CreateUkPropertyPeriodSummaryHateoasData(nino, businessId, taxYear, submissionId))
-          .returns(HateoasWrapper(response, Seq(testHateoasLink)))
+          .wrap(responseData, hateoasData)
+          .returns(HateoasWrapper(responseData, testHateoasLinks))
 
         runOkTestWithAudit(
           expectedStatus = CREATED,
           maybeAuditRequestBody = Some(requestBodyJson),
-          maybeExpectedResponseBody = Some(hateoasResponse),
-          maybeAuditResponseBody = Some(hateoasResponse)
+          maybeExpectedResponseBody = Some(responseBodyJsonWithHateoas),
+          maybeAuditResponseBody = Some(responseBodyJsonWithHateoas)
         )
       }
     }
@@ -389,6 +150,239 @@ class CreateUkPropertyPeriodSummaryControllerSpec
           response = auditResponse
         )
       )
+
+    private val requestBody: CreateUkPropertyPeriodSummaryRequestBody =
+      CreateUkPropertyPeriodSummaryRequestBody(
+        "2020-01-01",
+        "2020-01-31",
+        Some(
+          UkFhlProperty(
+            Some(
+              UkFhlPropertyIncome(
+                Some(5000.99),
+                Some(3123.21),
+                Some(UkPropertyIncomeRentARoom(
+                  Some(532.12)
+                ))
+              )),
+            Some(UkFhlPropertyExpenses(
+              Some(3123.21),
+              Some(928.42),
+              Some(842.99),
+              Some(8831.12),
+              Some(484.12),
+              Some(99282),
+              Some(999.99),
+              Some(974.47),
+              Some(UkPropertyExpensesRentARoom(
+                Some(8842.43)
+              ))
+            ))
+          )),
+        Some(
+          UkNonFhlProperty(
+            Some(
+              UkNonFhlPropertyIncome(
+                Some(41.12),
+                Some(84.31),
+                Some(9884.93),
+                Some(842.99),
+                Some(31.44),
+                Some(UkPropertyIncomeRentARoom(
+                  Some(947.66)
+                ))
+              )),
+            Some(
+              UkNonFhlPropertyExpenses(
+                None,
+                None,
+                None,
+                None,
+                None,
+                None,
+                None,
+                None,
+                None,
+                None,
+                Some(988.18)
+              ))
+          ))
+      )
+
+    private val requestBodyWithConsolidatedExpense: CreateUkPropertyPeriodSummaryRequestBody =
+      CreateUkPropertyPeriodSummaryRequestBody(
+        "2020-01-01",
+        "2020-01-31",
+        Some(
+          UkFhlProperty(
+            Some(
+              UkFhlPropertyIncome(
+                Some(5000.99),
+                Some(3123.21),
+                Some(UkPropertyIncomeRentARoom(
+                  Some(532.12)
+                ))
+              )),
+            Some(
+              UkFhlPropertyExpenses(
+                None,
+                None,
+                None,
+                None,
+                None,
+                None,
+                Some(988.18),
+                None,
+                None
+              ))
+          )),
+        Some(
+          UkNonFhlProperty(
+            Some(
+              UkNonFhlPropertyIncome(
+                Some(41.12),
+                Some(84.31),
+                Some(9884.93),
+                Some(842.99),
+                Some(31.44),
+                Some(UkPropertyIncomeRentARoom(
+                  Some(947.66)
+                ))
+              )),
+            Some(
+              UkNonFhlPropertyExpenses(
+                None,
+                None,
+                None,
+                None,
+                None,
+                None,
+                None,
+                None,
+                None,
+                None,
+                Some(988.18)
+              ))
+          ))
+      )
+
+    protected val requestBodyJson: JsValue = Json.parse(
+      """{
+        |    "fromDate": "2020-01-01",
+        |    "toDate": "2020-01-31",
+        |    "ukFhlProperty":{
+        |        "income": {
+        |            "periodAmount": 5000.99,
+        |            "taxDeducted": 3123.21,
+        |            "rentARoom": {
+        |                "rentsReceived": 532.12
+        |            }
+        |        },
+        |        "expenses": {
+        |            "premisesRunningCosts": 3123.21,
+        |            "repairsAndMaintenance": 928.42,
+        |            "financialCosts": 842.99,
+        |            "professionalFees": 8831.12,
+        |            "costOfServices": 484.12,
+        |            "other": 99282,
+        |            "travelCosts": 974.47,
+        |            "rentARoom": {
+        |                "amountClaimed": 8842.43
+        |            }
+        |        }
+        |    },
+        |    "ukNonFhlProperty": {
+        |        "income": {
+        |            "premiumsOfLeaseGrant": 42.12,
+        |            "reversePremiums": 84.31,
+        |            "periodAmount": 9884.93,
+        |            "taxDeducted": 842.99,
+        |            "otherIncome": 31.44,
+        |            "rentARoom": {
+        |                "rentsReceived": 947.66
+        |            }
+        |        },
+        |        "expenses": {
+        |            "premisesRunningCosts": 3123.21,
+        |            "repairsAndMaintenance": 928.42,
+        |            "financialCosts": 842.99,
+        |            "professionalFees": 8831.12,
+        |            "costOfServices": 484.12,
+        |            "other": 99282,
+        |            "residentialFinancialCost": 12.34,
+        |            "travelCosts": 974.47,
+        |            "residentialFinancialCostsCarriedForward": 12.34,
+        |            "rentARoom": {
+        |                "amountClaimed": 8842.43
+        |            }
+        |        }
+        |    }
+        |}
+        |""".stripMargin
+    )
+
+    protected val requestBodyJsonConsolidatedExpense: JsValue = Json.parse(
+      """{
+        |    "fromDate": "2020-01-01",
+        |    "toDate": "2020-01-31",
+        |    "ukFhlProperty":{
+        |        "income": {
+        |            "periodAmount": 5000.99,
+        |            "taxDeducted": 3123.21,
+        |            "rentARoom": {
+        |                "rentsReceived": 532.12
+        |            }
+        |        },
+        |        "expenses": {
+        |            "consolidatedExpenses": 988.18
+        |        }
+        |    },
+        |    "ukNonFhlProperty": {
+        |        "income": {
+        |            "premiumsOfLeaseGrant": 42.12,
+        |            "reversePremiums": 84.31,
+        |            "periodAmount": 9884.93,
+        |            "taxDeducted": 842.99,
+        |            "otherIncome": 31.44,
+        |            "rentARoom": {
+        |                "rentsReceived": 947.66
+        |            }
+        |        },
+        |        "expenses": {
+        |            "consolidatedExpenses": 988.18
+        |        }
+        |    }
+        |}
+        |""".stripMargin
+    )
+
+    protected val rawData: CreateUkPropertyPeriodSummaryRawData = CreateUkPropertyPeriodSummaryRawData(nino, taxYear, businessId, requestBodyJson)
+
+    protected val requestData: CreateUkPropertyPeriodSummaryRequest =
+      CreateUkPropertyPeriodSummaryRequest(Nino(nino), TaxYear.fromMtd(taxYear), businessId, requestBody)
+
+    protected val rawDataConsolidatedExpense: CreateUkPropertyPeriodSummaryRawData =
+      CreateUkPropertyPeriodSummaryRawData(nino, taxYear, businessId, requestBodyJsonConsolidatedExpense)
+
+    protected val requestDataConsolidatedExpense: CreateUkPropertyPeriodSummaryRequest =
+      CreateUkPropertyPeriodSummaryRequest(Nino(nino), TaxYear.fromMtd(taxYear), businessId, requestBodyWithConsolidatedExpense)
+
+    protected val responseBodyJson: JsValue = Json.parse(
+      s"""
+         |{
+         |  "submissionId": "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
+         |}
+    """.stripMargin
+    )
+
+    protected val responseData: CreateUkPropertyPeriodSummaryResponse = CreateUkPropertyPeriodSummaryResponse(
+      submissionId = "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
+    )
+
+    protected val hateoasData: CreateUkPropertyPeriodSummaryHateoasData =
+      CreateUkPropertyPeriodSummaryHateoasData(nino, businessId, taxYear, submissionId)
+
+    protected val responseBodyJsonWithHateoas: JsObject = responseBodyJson.as[JsObject] ++ testHateoasLinksJson
 
   }
 

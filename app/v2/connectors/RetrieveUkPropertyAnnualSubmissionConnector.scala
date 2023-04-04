@@ -52,7 +52,7 @@ class RetrieveUkPropertyAnnualSubmissionConnector @Inject() (val http: HttpClien
     val response = if (taxYear.useTaxYearSpecificApi) {
       get(
         uri = TaxYearSpecificIfsUri[RetrieveUkPropertyAnnualSubmissionResponse](
-          s"income-tax/business/property/annual/${taxYear.asTysDownstream}/${nino.nino}/$businessId")
+          s"income-tax/business/property/annual/${taxYear.asTysDownstream}/$nino/$businessId")
       )
     } else {
       // Note that MTD tax year format is used

@@ -22,8 +22,7 @@ import api.mocks.services.MockAuditService
 import api.models.audit.{AuditEvent, AuditResponse, GenericAuditDetail}
 import api.models.domain.{Nino, TaxYear}
 import api.models.errors._
-import api.models.hateoas.Method.GET
-import api.models.hateoas.{HateoasWrapper, Link}
+import api.models.hateoas.HateoasWrapper
 import api.models.outcomes.ResponseWrapper
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.Result
@@ -50,191 +49,26 @@ class AmendUkPropertyAnnualSubmissionControllerSpec
   private val businessId = "XAIS12345678910"
   private val taxYear    = "2022-23"
 
-  private val testHateoasLink = Link(href = s"/individuals/business/property/$nino/$businessId/annual/$taxYear", method = GET, rel = "self")
-
-  val hateoasResponse: JsValue = Json.parse(s"""
-       |{
-       |   "links": [
-       |      {
-       |         "href": "/individuals/business/property/$nino/$businessId/annual/$taxYear",
-       |         "method": "GET",
-       |         "rel": "self"
-       |      }
-       |   ]
-       |}
-    """.stripMargin)
-
-  private val requestJson = Json.parse(
-    """
-      |{
-      |  "ukFhlProperty": {
-      |    "allowances": {
-      |      "annualInvestmentAllowance": 1000.50,
-      |      "businessPremisesRenovationAllowance": 1000.60,
-      |      "otherCapitalAllowance": 1000.70,
-      |      "electricChargePointAllowance": 1000.80,
-      |      "zeroEmissionsCarAllowance": 1000.90
-      |    },
-      |    "adjustments": {
-      |      "privateUseAdjustment": 1000.20,
-      |      "balancingCharge": 1000.30,
-      |      "periodOfGraceAdjustment": true,
-      |      "businessPremisesRenovationAllowanceBalancingCharges": 1000.40,
-      |      "nonResidentLandlord": true,
-      |      "rentARoom": {
-      |        "jointlyLet": true
-      |      }
-      |    }
-      |  },
-      |  "ukNonFhlProperty": {
-      |    "allowances": {
-      |      "annualInvestmentAllowance": 2000.50,
-      |      "zeroEmissionsGoodsVehicleAllowance": 2000.60,
-      |      "businessPremisesRenovationAllowance": 2000.70,
-      |      "otherCapitalAllowance": 2000.80,
-      |      "costOfReplacingDomesticGoods": 2000.90,
-      |      "electricChargePointAllowance": 3000.10,
-      |      "structuredBuildingAllowance": [
-      |        {
-      |          "amount": 3000.30,
-      |          "firstYear": {
-      |            "qualifyingDate": "2020-01-01",
-      |            "qualifyingAmountExpenditure": 3000.40
-      |          },
-      |          "building": {
-      |            "name": "house name",
-      |            "postcode": "GF49JH"
-      |          }
-      |        }
-      |      ],
-      |      "enhancedStructuredBuildingAllowance": [
-      |        {
-      |          "amount": 3000.50,
-      |          "firstYear": {
-      |            "qualifyingDate": "2020-01-01",
-      |            "qualifyingAmountExpenditure": 3000.60
-      |          },
-      |          "building": {
-      |            "number": "house number",
-      |            "postcode": "GF49JH"
-      |          }
-      |        }
-      |      ],
-      |      "zeroEmissionsCarAllowance": 3000.20
-      |    },
-      |    "adjustments": {
-      |      "balancingCharge": 2000.20,
-      |      "privateUseAdjustment": 2000.30,
-      |      "businessPremisesRenovationAllowanceBalancingCharges": 2000.40,
-      |      "nonResidentLandlord": true,
-      |      "rentARoom": {
-      |        "jointlyLet": true
-      |      }
-      |    }
-      |  }
-      |}
-      |""".stripMargin
-  )
-
-  private val ukFhlProperty: UkFhlProperty = UkFhlProperty(
-    Some(
-      UkFhlPropertyAdjustments(
-        Some(1000.20),
-        Some(1000.30),
-        periodOfGraceAdjustment = true,
-        Some(1000.40),
-        nonResidentLandlord = true,
-        Some(UkPropertyAdjustmentsRentARoom(true))
-      )),
-    Some(
-      UkFhlPropertyAllowances(
-        Some(1000.50),
-        Some(1000.60),
-        Some(1000.70),
-        Some(1000.80),
-        Some(1000.90),
-        None
-      ))
-  )
-
-  private val ukNonFhlProperty: UkNonFhlProperty = UkNonFhlProperty(
-    Some(
-      UkNonFhlPropertyAdjustments(
-        Some(2000.20),
-        Some(2000.30),
-        Some(2000.40),
-        nonResidentLandlord = true,
-        Some(UkPropertyAdjustmentsRentARoom(true))
-      )),
-    Some(
-      UkNonFhlPropertyAllowances(
-        Some(2000.50),
-        Some(2000.60),
-        Some(2000.70),
-        Some(2000.80),
-        Some(2000.90),
-        Some(3000.10),
-        Some(3000.20),
-        None,
-        Some(
-          Seq(
-            StructuredBuildingAllowance(
-              3000.30,
-              Some(FirstYear(
-                "2020-01-01",
-                3000.40
-              )),
-              Building(
-                Some("house name"),
-                None,
-                "GF49JH"
-              )
-            ))),
-        Some(
-          Seq(
-            StructuredBuildingAllowance(
-              3000.50,
-              Some(FirstYear(
-                "2020-01-01",
-                3000.60
-              )),
-              Building(
-                None,
-                Some("house number"),
-                "GF49JH"
-              )
-            )))
-      ))
-  )
-
-  val body: AmendUkPropertyAnnualSubmissionRequestBody = AmendUkPropertyAnnualSubmissionRequestBody(
-    Some(ukFhlProperty),
-    Some(ukNonFhlProperty)
-  )
-
-  private val rawData = AmendUkPropertyAnnualSubmissionRawData(nino, businessId, taxYear, requestJson)
-  private val request = AmendUkPropertyAnnualSubmissionRequest(Nino(nino), businessId, TaxYear.fromMtd(taxYear), body)
-
   "AmendUkPropertyAnnualSubmissionController" should {
     "return a successful response with status 200 (OK)" when {
       "the request received is valid" in new Test {
         MockAmendUkPropertyAnnualSubmissionRequestParser
           .parseRequest(rawData)
-          .returns(Right(request))
+          .returns(Right(requestData))
 
         MockAmendUkPropertyAnnualSubmissionService
-          .amend(request)
+          .amend(requestData)
           .returns(Future.successful(Right(ResponseWrapper(correlationId, ()))))
 
         MockHateoasFactory
-          .wrap((), AmendUkPropertyAnnualSubmissionHateoasData(nino, businessId, taxYear))
-          .returns(HateoasWrapper((), Seq(testHateoasLink)))
+          .wrap((), hateoasData)
+          .returns(HateoasWrapper((), testHateoasLinks))
 
         runOkTestWithAudit(
           expectedStatus = OK,
           maybeAuditRequestBody = None,
-          maybeExpectedResponseBody = Some(hateoasResponse),
-          maybeAuditResponseBody = Some(hateoasResponse)
+          maybeExpectedResponseBody = Some(testHateoasLinksJson),
+          maybeAuditResponseBody = Some(testHateoasLinksJson)
         )
       }
     }
@@ -251,10 +85,10 @@ class AmendUkPropertyAnnualSubmissionControllerSpec
       "the service returns an error" in new Test {
         MockAmendUkPropertyAnnualSubmissionRequestParser
           .parseRequest(rawData)
-          .returns(Right(request))
+          .returns(Right(requestData))
 
         MockAmendUkPropertyAnnualSubmissionService
-          .amend(request)
+          .amend(requestData)
           .returns(Future.successful(Left(ErrorWrapper(correlationId, RuleTaxYearNotSupportedError))))
 
         runErrorTestWithAudit(RuleTaxYearNotSupportedError, None)
@@ -275,7 +109,7 @@ class AmendUkPropertyAnnualSubmissionControllerSpec
       idGenerator = mockIdGenerator
     )
 
-    protected def callController(): Future[Result] = controller.handleRequest(nino, businessId, taxYear)(fakePutRequest(requestJson))
+    protected def callController(): Future[Result] = controller.handleRequest(nino, businessId, taxYear)(fakePutRequest(requestBodyJson))
 
     def event(auditResponse: AuditResponse, requestBody: Option[JsValue]): AuditEvent[GenericAuditDetail] =
       AuditEvent(
@@ -285,11 +119,166 @@ class AmendUkPropertyAnnualSubmissionControllerSpec
           versionNumber = "2.0",
           userType = "Individual",
           agentReferenceNumber = None,
-          params = Json.obj("nino" -> nino, "businessId" -> businessId, "taxYear" -> taxYear, "request" -> requestJson),
+          params = Json.obj("nino" -> nino, "businessId" -> businessId, "taxYear" -> taxYear, "request" -> requestBodyJson),
           correlationId = correlationId,
           response = auditResponse
         )
       )
+
+    private val ukFhlProperty: UkFhlProperty = UkFhlProperty(
+      Some(
+        UkFhlPropertyAdjustments(
+          Some(1000.20),
+          Some(1000.30),
+          periodOfGraceAdjustment = true,
+          Some(1000.40),
+          nonResidentLandlord = true,
+          Some(UkPropertyAdjustmentsRentARoom(true))
+        )),
+      Some(
+        UkFhlPropertyAllowances(
+          Some(1000.50),
+          Some(1000.60),
+          Some(1000.70),
+          Some(1000.80),
+          Some(1000.90),
+          None
+        ))
+    )
+
+    private val ukNonFhlProperty: UkNonFhlProperty = UkNonFhlProperty(
+      Some(
+        UkNonFhlPropertyAdjustments(
+          Some(2000.20),
+          Some(2000.30),
+          Some(2000.40),
+          nonResidentLandlord = true,
+          Some(UkPropertyAdjustmentsRentARoom(true))
+        )),
+      Some(
+        UkNonFhlPropertyAllowances(
+          Some(2000.50),
+          Some(2000.60),
+          Some(2000.70),
+          Some(2000.80),
+          Some(2000.90),
+          Some(3000.10),
+          Some(3000.20),
+          None,
+          Some(
+            Seq(
+              StructuredBuildingAllowance(
+                3000.30,
+                Some(FirstYear(
+                  "2020-01-01",
+                  3000.40
+                )),
+                Building(
+                  Some("house name"),
+                  None,
+                  "GF49JH"
+                )
+              ))),
+          Some(
+            Seq(
+              StructuredBuildingAllowance(
+                3000.50,
+                Some(FirstYear(
+                  "2020-01-01",
+                  3000.60
+                )),
+                Building(
+                  None,
+                  Some("house number"),
+                  "GF49JH"
+                )
+              )))
+        ))
+    )
+
+    private val requestBodyJson = Json.parse(
+      """
+        |{
+        |  "ukFhlProperty": {
+        |    "allowances": {
+        |      "annualInvestmentAllowance": 1000.50,
+        |      "businessPremisesRenovationAllowance": 1000.60,
+        |      "otherCapitalAllowance": 1000.70,
+        |      "electricChargePointAllowance": 1000.80,
+        |      "zeroEmissionsCarAllowance": 1000.90
+        |    },
+        |    "adjustments": {
+        |      "privateUseAdjustment": 1000.20,
+        |      "balancingCharge": 1000.30,
+        |      "periodOfGraceAdjustment": true,
+        |      "businessPremisesRenovationAllowanceBalancingCharges": 1000.40,
+        |      "nonResidentLandlord": true,
+        |      "rentARoom": {
+        |        "jointlyLet": true
+        |      }
+        |    }
+        |  },
+        |  "ukNonFhlProperty": {
+        |    "allowances": {
+        |      "annualInvestmentAllowance": 2000.50,
+        |      "zeroEmissionsGoodsVehicleAllowance": 2000.60,
+        |      "businessPremisesRenovationAllowance": 2000.70,
+        |      "otherCapitalAllowance": 2000.80,
+        |      "costOfReplacingDomesticGoods": 2000.90,
+        |      "electricChargePointAllowance": 3000.10,
+        |      "structuredBuildingAllowance": [
+        |        {
+        |          "amount": 3000.30,
+        |          "firstYear": {
+        |            "qualifyingDate": "2020-01-01",
+        |            "qualifyingAmountExpenditure": 3000.40
+        |          },
+        |          "building": {
+        |            "name": "house name",
+        |            "postcode": "GF49JH"
+        |          }
+        |        }
+        |      ],
+        |      "enhancedStructuredBuildingAllowance": [
+        |        {
+        |          "amount": 3000.50,
+        |          "firstYear": {
+        |            "qualifyingDate": "2020-01-01",
+        |            "qualifyingAmountExpenditure": 3000.60
+        |          },
+        |          "building": {
+        |            "number": "house number",
+        |            "postcode": "GF49JH"
+        |          }
+        |        }
+        |      ],
+        |      "zeroEmissionsCarAllowance": 3000.20
+        |    },
+        |    "adjustments": {
+        |      "balancingCharge": 2000.20,
+        |      "privateUseAdjustment": 2000.30,
+        |      "businessPremisesRenovationAllowanceBalancingCharges": 2000.40,
+        |      "nonResidentLandlord": true,
+        |      "rentARoom": {
+        |        "jointlyLet": true
+        |      }
+        |    }
+        |  }
+        |}
+        |""".stripMargin
+    )
+
+    private val body: AmendUkPropertyAnnualSubmissionRequestBody = AmendUkPropertyAnnualSubmissionRequestBody(
+      Some(ukFhlProperty),
+      Some(ukNonFhlProperty)
+    )
+
+    protected val rawData: AmendUkPropertyAnnualSubmissionRawData = AmendUkPropertyAnnualSubmissionRawData(nino, businessId, taxYear, requestBodyJson)
+
+    protected val requestData: AmendUkPropertyAnnualSubmissionRequest =
+      AmendUkPropertyAnnualSubmissionRequest(Nino(nino), businessId, TaxYear.fromMtd(taxYear), body)
+
+    protected val hateoasData: AmendUkPropertyAnnualSubmissionHateoasData = AmendUkPropertyAnnualSubmissionHateoasData(nino, businessId, taxYear)
 
   }
 

@@ -20,8 +20,7 @@ import api.controllers.{ControllerBaseSpec, ControllerTestRunner}
 import api.mocks.hateoas.MockHateoasFactory
 import api.models.domain.{Nino, TaxYear}
 import api.models.errors._
-import api.models.hateoas.Method._
-import api.models.hateoas.{HateoasWrapper, Link}
+import api.models.hateoas.HateoasWrapper
 import api.models.outcomes.ResponseWrapper
 import play.api.libs.json.Json
 import play.api.mvc.Result
@@ -43,16 +42,6 @@ class ListPropertyPeriodSummariesControllerSpec
   private val businessId = "XAIS12345678910"
   private val taxYear    = "2020-21"
 
-  private val rawData     = ListPropertyPeriodSummariesRawData(nino, businessId, taxYear)
-  private val requestData = ListPropertyPeriodSummariesRequest(Nino(nino), businessId, TaxYear.fromMtd(taxYear))
-
-  private val testHateoasLink = Link("/someLink", GET, "some-relation")
-
-  val response: ListPropertyPeriodSummariesResponse =
-    ListPropertyPeriodSummariesResponse(Seq(SubmissionPeriod("someId", "fromDate", "toDate")))
-
-  val responseWithLinks: HateoasWrapper[ListPropertyPeriodSummariesResponse] = HateoasWrapper(response, Seq(testHateoasLink))
-
   "ListPropertyPeriodSummariesController" should {
     "return Ok" when {
       "the request received is valid" in new Test {
@@ -62,13 +51,13 @@ class ListPropertyPeriodSummariesControllerSpec
 
         MockListPropertyPeriodSummariesService
           .listPeriodSummaries(requestData)
-          .returns(Future.successful(Right(ResponseWrapper(correlationId, response))))
+          .returns(Future.successful(Right(ResponseWrapper(correlationId, responseData))))
 
         MockHateoasFactory
-          .wrap(response, ListPropertyPeriodSummariesHateoasData(nino, businessId, taxYear))
-          .returns(responseWithLinks)
+          .wrap(responseData, hateoasData)
+          .returns(responseDataWithHateoas)
 
-        runOkTest(expectedStatus = OK, maybeExpectedResponseBody = Some(Json.toJson(responseWithLinks)))
+        runOkTest(expectedStatus = OK, maybeExpectedResponseBody = Some(Json.toJson(responseDataWithHateoas)))
       }
     }
 
@@ -109,6 +98,18 @@ class ListPropertyPeriodSummariesControllerSpec
     )
 
     protected def callController(): Future[Result] = controller.handleRequest(nino, businessId, taxYear)(fakeGetRequest)
+
+    protected val rawData: ListPropertyPeriodSummariesRawData = ListPropertyPeriodSummariesRawData(nino, businessId, taxYear)
+
+    protected val requestData: ListPropertyPeriodSummariesRequest =
+      ListPropertyPeriodSummariesRequest(Nino(nino), businessId, TaxYear.fromMtd(taxYear))
+
+    protected val responseData: ListPropertyPeriodSummariesResponse =
+      ListPropertyPeriodSummariesResponse(Seq(SubmissionPeriod("someId", "fromDate", "toDate")))
+
+    protected val hateoasData: ListPropertyPeriodSummariesHateoasData = ListPropertyPeriodSummariesHateoasData(nino, businessId, taxYear)
+
+    val responseDataWithHateoas: HateoasWrapper[ListPropertyPeriodSummariesResponse] = HateoasWrapper(responseData, testHateoasLinks)
   }
 
 }

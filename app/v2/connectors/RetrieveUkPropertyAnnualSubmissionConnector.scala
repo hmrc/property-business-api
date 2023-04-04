@@ -59,7 +59,7 @@ class RetrieveUkPropertyAnnualSubmissionConnector @Inject() (val http: HttpClien
       // Note that MTD tax year format is used
       (
         IfsUri[RetrieveUkPropertyAnnualSubmissionResponse](s"income-tax/business/property/annual"),
-        List("taxableEntityId" -> nino.value, "incomeSourceId" -> businessId, "taxYear" -> taxYear.asMtd)
+        List("taxableEntityId" -> nino.nino, "incomeSourceId" -> businessId, "taxYear" -> taxYear.asMtd)
       )
     }
 

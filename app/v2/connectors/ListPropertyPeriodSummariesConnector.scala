@@ -41,12 +41,12 @@ class ListPropertyPeriodSummariesConnector @Inject() (val http: HttpClient, val 
     val (downstreamUri, queryParams) = if (taxYear.useTaxYearSpecificApi) {
       (
         TaxYearSpecificIfsUri[ListPropertyPeriodSummariesResponse](
-          s"income-tax/business/property/${taxYear.asTysDownstream}/${nino.nino}/$businessId/period"),
+          s"income-tax/business/property/${taxYear.asTysDownstream}/$nino/$businessId/period"),
         Nil
       )
     } else {
       (
-        IfsUri[ListPropertyPeriodSummariesResponse](s"income-tax/business/property/${nino.nino}/$businessId/period"),
+        IfsUri[ListPropertyPeriodSummariesResponse](s"income-tax/business/property/$nino/$businessId/period"),
         // Note that MTD tax year format is used
         List("taxYear" -> taxYear.asMtd)
       )

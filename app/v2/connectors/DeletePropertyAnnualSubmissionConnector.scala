@@ -34,20 +34,21 @@ class DeletePropertyAnnualSubmissionConnector @Inject() (val http: HttpClient, v
       ec: ExecutionContext,
       correlationId: String): Future[DownstreamOutcome[Unit]] = {
 
+    import request._
+
     val (downstreamUri, queryParams) =
-      if (request.taxYear.useTaxYearSpecificApi) {
+      if (taxYear.useTaxYearSpecificApi) {
         (
-          TaxYearSpecificIfsUri[Unit](
-            s"income-tax/business/property/annual/${request.taxYear.asTysDownstream}/${request.nino.value}/${request.businessId}"),
+          TaxYearSpecificIfsUri[Unit](s"income-tax/business/property/annual/${taxYear.asTysDownstream}/$nino/$businessId"),
           Nil
         )
       } else {
         (
           IfsUri[Unit](s"income-tax/business/property/annual"),
           List(
-            "taxableEntityId" -> request.nino.nino,
-            "incomeSourceId"  -> request.businessId,
-            "taxYear"         -> request.taxYear.asMtd // Note that MTD tax year format is used
+            "taxableEntityId" -> nino.nino,
+            "incomeSourceId"  -> businessId,
+            "taxYear"         -> taxYear.asMtd // Note that MTD tax year format is used
           )
         )
       }

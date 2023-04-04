@@ -19,11 +19,12 @@ package v2.services
 import api.controllers.RequestContext
 import api.models.errors._
 import api.models.outcomes.ResponseWrapper
-import api.services.BaseService
-import cats.implicits.toBifunctorOps
+import api.services.{BaseService, ServiceOutcome}
+import cats.data.EitherT
 import v2.connectors.RetrieveForeignPropertyPeriodSummaryConnector
 import v2.connectors.RetrieveForeignPropertyPeriodSummaryConnector.{ForeignResult, NonForeignResult}
 import v2.models.request.retrieveForeignPropertyPeriodSummary.RetrieveForeignPropertyPeriodSummaryRequest
+import v2.models.response.retrieveForeignPropertyPeriodSummary.RetrieveForeignPropertyPeriodSummaryResponse
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
@@ -33,13 +34,13 @@ class RetrieveForeignPropertyPeriodSummaryService @Inject() (connector: Retrieve
 
   def retrieveForeignProperty(request: RetrieveForeignPropertyPeriodSummaryRequest)(implicit
       ctx: RequestContext,
-      ec: ExecutionContext): Future[RetrieveForeignPropertyPeriodSummaryServiceOutcome] = {
+      ec: ExecutionContext): Future[ServiceOutcome[RetrieveForeignPropertyPeriodSummaryResponse]] = {
 
-    for {
-      connectorResultWrapper <- connector.retrieveForeignProperty(request).map(_.leftMap(mapDownstreamErrors(downstreamErrorMap)))
-      mtdResponseWrapper     <- Future.successful(connectorResultWrapper.flatMap(wrappedResult => validateBusinessType(wrappedResult)))
+    val result = EitherT(connector.retrieveForeignProperty(request))
+      .leftMap(mapDownstreamErrors(downstreamErrorMap))
+      .flatMap(connectorResultWrapper => EitherT.fromEither(validateBusinessType(connectorResultWrapper)))
 
-    } yield mtdResponseWrapper
+    result.value
   }
 
   private val downstreamErrorMap: Map[String, MtdError] = {

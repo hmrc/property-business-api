@@ -16,61 +16,25 @@
 
 package v2.services
 
-import support.UnitSpec
-import uk.gov.hmrc.http.HeaderCarrier
 import api.controllers.EndpointLogContext
-import v2.mocks.connectors.MockRetrieveHistoricNonFhlUkPropertyAnnualSubmissionConnector
 import api.models.domain.{Nino, TaxYear}
 import api.models.errors._
 import api.models.outcomes.ResponseWrapper
+import support.UnitSpec
+import uk.gov.hmrc.http.HeaderCarrier
+import v2.mocks.connectors.MockRetrieveHistoricNonFhlUkPropertyAnnualSubmissionConnector
 import v2.models.request.retrieveHistoricNonFhlUkPropertyAnnualSubmission.RetrieveHistoricNonFhlUkPropertyAnnualSubmissionRequest
-import v2.models.response.retrieveHistoricNonFhlUkPropertyAnnualSubmissionResponse.{
-  AnnualAdjustments,
-  AnnualAllowances,
-  RentARoom,
-  RetrieveHistoricNonFhlUkPropertyAnnualSubmissionResponse
-}
+import v2.models.response.retrieveHistoricNonFhlUkPropertyAnnualSubmissionResponse.RetrieveHistoricNonFhlUkPropertyAnnualSubmissionResponse
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class RetrieveHistoricNonFhlUkPropertyAnnualSubmissionServiceSpec extends UnitSpec {
 
-  val nino: String                   = "AA123456A"
-  val taxYear: String                = "2019-20"
-  implicit val correlationId: String = "X-123"
+  private val nino: String    = "AA123456A"
+  private val taxYear: String = "2019-20"
 
-  val annualAdjustments: AnnualAdjustments = AnnualAdjustments(
-    lossBroughtForward = Option(BigDecimal("100.11")),
-    privateUseAdjustment = Option(BigDecimal("200.11")),
-    balancingCharge = Option(BigDecimal("105.11")),
-    businessPremisesRenovationAllowanceBalancingCharges = Option(BigDecimal("100.11")),
-    nonResidentLandlord = false,
-    rentARoom = Option(RentARoom(true))
-  )
-
-  val annualAllowances: AnnualAllowances = AnnualAllowances(
-    annualInvestmentAllowance = Option(BigDecimal("100.11")),
-    otherCapitalAllowance = Option(BigDecimal("300.11")),
-    zeroEmissionGoodsVehicleAllowance = Option(BigDecimal("405.11")),
-    businessPremisesRenovationAllowance = Option(BigDecimal("550.11")),
-    costOfReplacingDomesticGoods = Option(BigDecimal("550.11")),
-    propertyIncomeAllowance = Option(BigDecimal("550.11"))
-  )
-
-  private val response =
-    RetrieveHistoricNonFhlUkPropertyAnnualSubmissionResponse(Some(annualAdjustments), Some(annualAllowances))
-
-  private val request = RetrieveHistoricNonFhlUkPropertyAnnualSubmissionRequest(Nino(nino), TaxYear.fromMtd(taxYear))
-
-  trait Test extends MockRetrieveHistoricNonFhlUkPropertyAnnualSubmissionConnector {
-    implicit val hc: HeaderCarrier              = HeaderCarrier()
-    implicit val logContext: EndpointLogContext = EndpointLogContext("c", "ep")
-
-    val service = new RetrieveHistoricNonFhlUkPropertyAnnualSubmissionService(
-      connector = mockRetrieveHistoricNonFhlUkPropertyConnector
-    )
-  }
+  implicit private val correlationId: String = "X-123"
 
   "retrieve" should {
     "return a success result" when {
@@ -95,7 +59,7 @@ class RetrieveHistoricNonFhlUkPropertyAnnualSubmissionServiceSpec extends UnitSp
           result shouldBe Left(ErrorWrapper(correlationId, error))
         }
 
-      val input = Seq(
+      val input = List(
         "INVALID_NINO"            -> NinoFormatError,
         "INVALID_TYPE"            -> InternalError,
         "INVALID_TAX_YEAR"        -> TaxYearFormatError,
@@ -110,4 +74,21 @@ class RetrieveHistoricNonFhlUkPropertyAnnualSubmissionServiceSpec extends UnitSp
       input.foreach(args => (serviceError _).tupled(args))
     }
   }
+
+  trait Test extends MockRetrieveHistoricNonFhlUkPropertyAnnualSubmissionConnector {
+    implicit protected val hc: HeaderCarrier              = HeaderCarrier()
+    implicit protected val logContext: EndpointLogContext = EndpointLogContext("c", "ep")
+
+    protected val service = new RetrieveHistoricNonFhlUkPropertyAnnualSubmissionService(
+      connector = mockRetrieveHistoricNonFhlUkPropertyConnector
+    )
+
+    protected val response: RetrieveHistoricNonFhlUkPropertyAnnualSubmissionResponse =
+      RetrieveHistoricNonFhlUkPropertyAnnualSubmissionResponse(None, None)
+
+    protected val request: RetrieveHistoricNonFhlUkPropertyAnnualSubmissionRequest =
+      RetrieveHistoricNonFhlUkPropertyAnnualSubmissionRequest(Nino(nino), TaxYear.fromMtd(taxYear))
+
+  }
+
 }

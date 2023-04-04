@@ -16,7 +16,7 @@
 
 package v2.connectors
 
-import api.connectors.ConnectorSpec
+import api.connectors.{ConnectorSpec, DownstreamOutcome}
 import api.models.domain.{HistoricPropertyType, Nino}
 import api.models.outcomes.ResponseWrapper
 import v2.models.request.listHistoricUkPropertyPeriodSummaries.ListHistoricUkPropertyPeriodSummariesRequest
@@ -26,35 +26,17 @@ import scala.concurrent.Future
 
 class ListHistoricUkPropertyPeriodSummariesConnectorSpec extends ConnectorSpec {
 
-  val nino: String = "AA123456A"
-
-  val request: ListHistoricUkPropertyPeriodSummariesRequest = ListHistoricUkPropertyPeriodSummariesRequest(
-    nino = Nino(nino)
-  )
-
-  private val response = ListHistoricUkPropertyPeriodSummariesResponse(
-    Seq(
-      SubmissionPeriod("2020-06-22", "2020-06-22")
-    ))
-
-  trait Test {
-    _: ConnectorTest =>
-
-    val connector: ListHistoricUkPropertyPeriodSummariesConnector = new ListHistoricUkPropertyPeriodSummariesConnector(
-      http = mockHttpClient,
-      appConfig = mockAppConfig
-    )
-  }
+  private val nino: String = "AA123456A"
 
   "connector" must {
-    val outcome = Right(ResponseWrapper(correlationId, response))
-
     "send a request and return a body for FHL" in new IfsTest with Test {
       willGet(
         url = s"$baseUrl/income-tax/nino/$nino/uk-properties/furnished-holiday-lettings/periodic-summaries"
       ).returns(Future.successful(outcome))
 
-      await(connector.listPeriodSummaries(request, HistoricPropertyType.Fhl)) shouldBe outcome
+      val result: DownstreamOutcome[ListHistoricUkPropertyPeriodSummariesResponse[SubmissionPeriod]] =
+        await(connector.listPeriodSummaries(request, HistoricPropertyType.Fhl))
+      result shouldBe outcome
     }
 
     "send a request and return a body for non-FHL" in new IfsTest with Test {
@@ -62,7 +44,28 @@ class ListHistoricUkPropertyPeriodSummariesConnectorSpec extends ConnectorSpec {
         url = s"$baseUrl/income-tax/nino/$nino/uk-properties/other/periodic-summaries"
       ).returns(Future.successful(outcome))
 
-      await(connector.listPeriodSummaries(request, HistoricPropertyType.NonFhl)) shouldBe outcome
+      val result: DownstreamOutcome[ListHistoricUkPropertyPeriodSummariesResponse[SubmissionPeriod]] =
+        await(connector.listPeriodSummaries(request, HistoricPropertyType.NonFhl))
+      result shouldBe outcome
     }
   }
+
+  trait Test { _: ConnectorTest =>
+
+    protected val connector: ListHistoricUkPropertyPeriodSummariesConnector = new ListHistoricUkPropertyPeriodSummariesConnector(
+      http = mockHttpClient,
+      appConfig = mockAppConfig
+    )
+
+    protected val request: ListHistoricUkPropertyPeriodSummariesRequest =
+      ListHistoricUkPropertyPeriodSummariesRequest(Nino(nino))
+
+    private val response =
+      ListHistoricUkPropertyPeriodSummariesResponse(Seq(SubmissionPeriod("2020-06-22", "2020-06-22")))
+
+    protected val outcome: Right[Nothing, ResponseWrapper[ListHistoricUkPropertyPeriodSummariesResponse[SubmissionPeriod]]] = Right(
+      ResponseWrapper(correlationId, response))
+
+  }
+
 }

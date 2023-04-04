@@ -59,13 +59,13 @@ class AmendHistoricNonFhlUkPropertyPeriodSummaryController @Inject() (val authSe
         RequestHandler
           .withParser(parser)
           .withService(service.amend)
-          .withAuditing(auditHandler(nino, periodId, request))
+          .withAuditing(auditHandler(nino, periodId, ctx.correlationId, request))
           .withHateoasResult(hateoasFactory)(AmendHistoricNonFhlUkPropertyPeriodSummaryHateoasData(nino, periodId))
 
       requestHandler.handleRequest(rawData)
     }
 
-  private def auditHandler(nino: String, periodId: String, request: UserRequest[JsValue]): AuditHandler = {
+  private def auditHandler(nino: String, periodId: String, correlationId: String, request: UserRequest[JsValue]): AuditHandler = {
     new AuditHandler() {
       override def performAudit(userDetails: UserDetails, httpStatus: Int, response: Either[ErrorWrapper, Option[JsValue]], versionNumber: String)(
           implicit
@@ -75,23 +75,23 @@ class AmendHistoricNonFhlUkPropertyPeriodSummaryController @Inject() (val authSe
           case Left(err: ErrorWrapper) =>
             auditSubmission(
               FlattenedGenericAuditDetail(
-                versionNumber = Some("2.0"),
+                Some("2.0"),
                 request.userDetails,
                 Map("nino" -> nino, "periodId" -> periodId),
                 Some(request.body),
-                ctx.correlationId,
-                AuditResponse(httpStatus = httpStatus, response = Left(err.auditErrors))
+                correlationId,
+                AuditResponse(httpStatus, Left(err.auditErrors))
               )
             )
           case Right(_) =>
             auditSubmission(
               FlattenedGenericAuditDetail(
-                versionNumber = Some("2.0"),
+                Some("2.0"),
                 request.userDetails,
                 Map("nino" -> nino, "periodId" -> periodId),
                 Some(request.body),
-                ctx.correlationId,
-                AuditResponse(httpStatus = OK, response = Right(None))
+                correlationId,
+                AuditResponse(OK, Right(None))
               )
             )
         }

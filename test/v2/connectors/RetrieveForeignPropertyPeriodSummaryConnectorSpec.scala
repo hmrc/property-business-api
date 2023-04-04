@@ -46,7 +46,6 @@ class RetrieveForeignPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
     RetrieveForeignPropertyPeriodSummaryResponse("2020-06-17T10:53:38Z", "2019-01-29", "2020-03-29", foreignFhlEea, foreignNonFhlProperty)
 
   "connector" when {
-
     "response has foreign FHL details" must {
 
       val downstreamResponse: RetrieveForeignPropertyPeriodSummaryResponse =
@@ -54,7 +53,8 @@ class RetrieveForeignPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
       val outcome = Right(ResponseWrapper(correlationId, downstreamResponse))
 
       "return a foreign result" in new IfsTest with Test {
-        def taxYear: TaxYear = preTysTaxYear
+        lazy val taxYear: TaxYear = preTysTaxYear
+
         stubHttpResponse(outcome)
 
         val result: DownstreamOutcome[RetrieveForeignPropertyPeriodSummaryConnector.Result] =
@@ -63,7 +63,8 @@ class RetrieveForeignPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
       }
 
       "return a foreign result given a TYS tax year request" in new TysIfsTest with Test {
-        def taxYear: TaxYear = tysTaxYear
+        lazy val taxYear: TaxYear = tysTaxYear
+
         stubTysHttpResponse(outcome)
 
         val result: DownstreamOutcome[RetrieveForeignPropertyPeriodSummaryConnector.Result] =
@@ -79,7 +80,8 @@ class RetrieveForeignPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
       val outcome = Right(ResponseWrapper(correlationId, downstreamResponse))
 
       "return a foreign result" in new IfsTest with Test {
-        def taxYear: TaxYear = preTysTaxYear
+        lazy val taxYear: TaxYear = preTysTaxYear
+
         stubHttpResponse(outcome)
 
         val result: DownstreamOutcome[RetrieveForeignPropertyPeriodSummaryConnector.Result] =
@@ -88,7 +90,8 @@ class RetrieveForeignPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
       }
 
       "return a foreign result given a TYS tax year request" in new TysIfsTest with Test {
-        def taxYear: TaxYear = tysTaxYear
+        lazy val taxYear: TaxYear = tysTaxYear
+
         stubTysHttpResponse(outcome)
 
         val result: DownstreamOutcome[RetrieveForeignPropertyPeriodSummaryConnector.Result] =
@@ -104,7 +107,8 @@ class RetrieveForeignPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
       val outcome = Right(ResponseWrapper(correlationId, downstreamResponse))
 
       "return a foreign result" in new IfsTest with Test {
-        def taxYear: TaxYear = preTysTaxYear
+        lazy val taxYear: TaxYear = preTysTaxYear
+
         stubHttpResponse(outcome)
 
         val result: DownstreamOutcome[RetrieveForeignPropertyPeriodSummaryConnector.Result] =
@@ -113,7 +117,8 @@ class RetrieveForeignPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
       }
 
       "return a foreign result given a TYS tax year request" in new TysIfsTest with Test {
-        def taxYear: TaxYear = tysTaxYear
+        lazy val taxYear: TaxYear = tysTaxYear
+
         stubTysHttpResponse(outcome)
 
         val result: DownstreamOutcome[RetrieveForeignPropertyPeriodSummaryConnector.Result] =
@@ -129,7 +134,7 @@ class RetrieveForeignPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
       val outcome = Right(ResponseWrapper(correlationId, downstreamResponse))
 
       "return a non-foreign result" in new IfsTest with Test {
-        def taxYear: TaxYear = preTysTaxYear
+        lazy val taxYear: TaxYear = preTysTaxYear
         stubHttpResponse(outcome)
 
         val result: DownstreamOutcome[RetrieveForeignPropertyPeriodSummaryConnector.Result] =
@@ -138,7 +143,8 @@ class RetrieveForeignPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
       }
 
       "return a non-foreign result given a TYS tax year request" in new TysIfsTest with Test {
-        def taxYear: TaxYear = tysTaxYear
+        lazy val taxYear: TaxYear = tysTaxYear
+
         stubTysHttpResponse(outcome)
 
         val result: DownstreamOutcome[RetrieveForeignPropertyPeriodSummaryConnector.Result] =
@@ -154,7 +160,8 @@ class RetrieveForeignPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
       val outcome = Left(ResponseWrapper(correlationId, downstreamErrorResponse))
 
       "return the error" in new IfsTest with Test {
-        def taxYear: TaxYear = preTysTaxYear
+        lazy val taxYear: TaxYear = preTysTaxYear
+
         stubHttpResponse(outcome)
 
         val result: DownstreamOutcome[RetrieveForeignPropertyPeriodSummaryConnector.Result] =
@@ -163,7 +170,8 @@ class RetrieveForeignPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
       }
 
       "return the error given a TYS tax year request" in new TysIfsTest with Test {
-        def taxYear: TaxYear = tysTaxYear
+        lazy val taxYear: TaxYear = tysTaxYear
+
         stubTysHttpResponse(outcome)
 
         val result: DownstreamOutcome[RetrieveForeignPropertyPeriodSummaryConnector.Result] =
@@ -175,9 +183,9 @@ class RetrieveForeignPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
 
   trait Test { _: ConnectorTest =>
 
-    def taxYear: TaxYear
+    protected val taxYear: TaxYear
 
-    val connector: RetrieveForeignPropertyPeriodSummaryConnector = new RetrieveForeignPropertyPeriodSummaryConnector(
+    protected val connector: RetrieveForeignPropertyPeriodSummaryConnector = new RetrieveForeignPropertyPeriodSummaryConnector(
       http = mockHttpClient,
       appConfig = mockAppConfig
     )
@@ -193,7 +201,9 @@ class RetrieveForeignPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
 
     protected def stubTysHttpResponse(outcome: DownstreamOutcome[RetrieveForeignPropertyPeriodSummaryResponse]): Unit =
       willGet(
-        url = s"$baseUrl/income-tax/business/property/${taxYear.asTysDownstream}/${nino}/${businessId}/periodic/${submissionId}"
+        url = s"$baseUrl/income-tax/business/property/${taxYear.asTysDownstream}/$nino/$businessId/periodic/$submissionId"
       ).returns(Future.successful(outcome))
+
   }
+
 }

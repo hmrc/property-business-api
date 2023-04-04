@@ -62,13 +62,13 @@ class CreateHistoricFhlUkPiePeriodSummaryController @Inject() (val authService: 
         RequestHandler
           .withParser(parser)
           .withService(service.createPeriodSummary)
-          .withAuditing(auditHandler(nino, request))
+          .withAuditing(auditHandler(nino, ctx.correlationId, request))
           .withHateoasResultFrom(hateoasFactory)((_, response) => CreateHistoricFhlUkPiePeriodSummaryHateoasData(nino, response.periodId), CREATED)
 
       requestHandler.handleRequest(rawData)
     }
 
-  private def auditHandler(nino: String, request: UserRequest[JsValue]): AuditHandler = {
+  private def auditHandler(nino: String, correlationId: String, request: UserRequest[JsValue]): AuditHandler = {
     new AuditHandler() {
       override def performAudit(userDetails: UserDetails, httpStatus: Int, response: Either[ErrorWrapper, Option[JsValue]], versionNumber: String)(
           implicit
@@ -82,19 +82,19 @@ class CreateHistoricFhlUkPiePeriodSummaryController @Inject() (val authService: 
                 request.userDetails,
                 Map("nino" -> nino),
                 Some(request.body),
-                ctx.correlationId,
-                AuditResponse(httpStatus = httpStatus, response = Left(err.auditErrors))
+                correlationId,
+                AuditResponse(httpStatus, Left(err.auditErrors))
               )
             )
           case Right(_) =>
             auditSubmission(
               FlattenedGenericAuditDetail(
-                versionNumber = Some("2.0"),
+                Some("2.0"),
                 request.userDetails,
                 Map("nino" -> nino),
                 Some(request.body),
-                ctx.correlationId,
-                AuditResponse(httpStatus = CREATED, response = Right(None))
+                correlationId,
+                AuditResponse(CREATED, Right(None))
               )
             )
         }

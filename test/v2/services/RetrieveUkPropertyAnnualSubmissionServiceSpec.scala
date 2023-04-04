@@ -16,45 +16,27 @@
 
 package v2.services
 
-import support.UnitSpec
-import uk.gov.hmrc.http.HeaderCarrier
-import v2.connectors.RetrieveUkPropertyAnnualSubmissionConnector._
 import api.controllers.EndpointLogContext
-import v2.mocks.connectors.MockRetrieveUkPropertyAnnualSubmissionConnector
 import api.models.domain.{Nino, TaxYear}
 import api.models.errors._
 import api.models.outcomes.ResponseWrapper
+import support.UnitSpec
+import uk.gov.hmrc.http.HeaderCarrier
+import v2.connectors.RetrieveUkPropertyAnnualSubmissionConnector._
+import v2.mocks.connectors.MockRetrieveUkPropertyAnnualSubmissionConnector
 import v2.models.request.retrieveUkPropertyAnnualSubmission.RetrieveUkPropertyAnnualSubmissionRequest
 import v2.models.response.retrieveUkPropertyAnnualSubmission.RetrieveUkPropertyAnnualSubmissionResponse
-import v2.models.response.retrieveUkPropertyAnnualSubmission.ukFhlProperty.UkFhlProperty
-import v2.models.response.retrieveUkPropertyAnnualSubmission.ukNonFhlProperty.UkNonFhlProperty
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class RetrieveUkPropertyAnnualSubmissionServiceSpec extends UnitSpec {
 
-  val nino: String                   = "AA123456A"
-  val businessId: String             = "XAIS12345678910"
-  val taxYear: TaxYear               = TaxYear.fromMtd("2020-21")
-  implicit val correlationId: String = "X-123"
+  private val nino: String       = "AA123456A"
+  private val businessId: String = "XAIS12345678910"
+  private val taxYear: TaxYear   = TaxYear.fromMtd("2020-21")
 
-  val ukFhlProperty: UkFhlProperty       = UkFhlProperty(None, None)
-  val ukNonFhlProperty: UkNonFhlProperty = UkNonFhlProperty(None, None)
-
-  private val response =
-    RetrieveUkPropertyAnnualSubmissionResponse("2020-01-01", Some(ukFhlProperty), Some(ukNonFhlProperty))
-
-  private val request = RetrieveUkPropertyAnnualSubmissionRequest(Nino(nino), businessId, taxYear)
-
-  trait Test extends MockRetrieveUkPropertyAnnualSubmissionConnector {
-    implicit val hc: HeaderCarrier              = HeaderCarrier()
-    implicit val logContext: EndpointLogContext = EndpointLogContext("c", "ep")
-
-    val service = new RetrieveUkPropertyAnnualSubmissionService(
-      connector = mockRetrieveUkPropertyConnector
-    )
-  }
+  implicit private val correlationId: String = "X-123"
 
   "service" when {
     "a uk result is found" should {
@@ -78,17 +60,17 @@ class RetrieveUkPropertyAnnualSubmissionServiceSpec extends UnitSpec {
     "unsuccessful" should {
       "map errors according to spec" when {
 
-        def serviceError(ifsErrorCode: String, error: MtdError): Unit =
-          s"a $ifsErrorCode error is returned from the service" in new Test {
+        def serviceError(downstreamErrorCode: String, error: MtdError): Unit =
+          s"a $downstreamErrorCode error is returned from the service" in new Test {
 
             MockRetrieveUkPropertyConnector
               .retrieve(request)
-              .returns(Future.successful(Left(ResponseWrapper(correlationId, DownstreamErrors.single(DownstreamErrorCode(ifsErrorCode))))))
+              .returns(Future.successful(Left(ResponseWrapper(correlationId, DownstreamErrors.single(DownstreamErrorCode(downstreamErrorCode))))))
 
             await(service.retrieveUkProperty(request)) shouldBe Left(ErrorWrapper(correlationId, error))
           }
 
-        val errors = Seq(
+        val errors = List(
           "INVALID_TAXABLE_ENTITY_ID" -> NinoFormatError,
           "INVALID_INCOMESOURCEID"    -> BusinessIdFormatError,
           "INVALID_TAX_YEAR"          -> TaxYearFormatError,
@@ -99,7 +81,7 @@ class RetrieveUkPropertyAnnualSubmissionServiceSpec extends UnitSpec {
           "SERVICE_UNAVAILABLE"       -> InternalError
         )
 
-        val extraTysErrors = Seq(
+        val extraTysErrors = List(
           "INVALID_INCOMESOURCE_ID" -> BusinessIdFormatError,
           "INVALID_CORRELATION_ID"  -> InternalError
         )
@@ -108,4 +90,19 @@ class RetrieveUkPropertyAnnualSubmissionServiceSpec extends UnitSpec {
       }
     }
   }
+
+  trait Test extends MockRetrieveUkPropertyAnnualSubmissionConnector {
+    implicit protected val hc: HeaderCarrier              = HeaderCarrier()
+    implicit protected val logContext: EndpointLogContext = EndpointLogContext("c", "ep")
+
+    protected val service = new RetrieveUkPropertyAnnualSubmissionService(
+      connector = mockRetrieveUkPropertyConnector
+    )
+
+    protected val response: RetrieveUkPropertyAnnualSubmissionResponse =
+      RetrieveUkPropertyAnnualSubmissionResponse("2020-01-01", None, None)
+
+    protected val request: RetrieveUkPropertyAnnualSubmissionRequest = RetrieveUkPropertyAnnualSubmissionRequest(Nino(nino), businessId, taxYear)
+  }
+
 }

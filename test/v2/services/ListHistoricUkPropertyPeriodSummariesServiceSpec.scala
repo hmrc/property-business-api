@@ -24,33 +24,16 @@ import api.models.errors._
 import api.models.domain.{HistoricPropertyType, Nino}
 import api.models.outcomes.ResponseWrapper
 import v2.models.request.listHistoricUkPropertyPeriodSummaries.ListHistoricUkPropertyPeriodSummariesRequest
-import v2.models.response.listHistoricUkPropertyPeriodSummaries.{ ListHistoricUkPropertyPeriodSummariesResponse, SubmissionPeriod }
+import v2.models.response.listHistoricUkPropertyPeriodSummaries.{ListHistoricUkPropertyPeriodSummariesResponse, SubmissionPeriod}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class ListHistoricUkPropertyPeriodSummariesServiceSpec extends UnitSpec {
 
-  val nino: String                   = "AA123456A"
-  val businessId: String             = "XAIS12345678910"
-  val taxYear: String                = "2021-22"
-  implicit val correlationId: String = "X-123"
+  private val nino: String = "AA123456A"
 
-  private val request = ListHistoricUkPropertyPeriodSummariesRequest(Nino(nino))
-
-  private val response = ListHistoricUkPropertyPeriodSummariesResponse(
-    Seq(
-      SubmissionPeriod("2020-08-22", "2020-08-22")
-    ))
-
-  trait Test extends MockListHistoricUkPropertyPeriodSummariesConnector {
-    implicit val hc: HeaderCarrier              = HeaderCarrier()
-    implicit val logContext: EndpointLogContext = EndpointLogContext("c", "ep")
-
-    val service = new ListHistoricUkPropertyPeriodSummariesService(
-      connector = mockListHistoricUkPropertyPeriodSummariesConnector
-    )
-  }
+  implicit private val correlationId: String = "X-123"
 
   "service" when {
     "service call successful" must {
@@ -76,18 +59,18 @@ class ListHistoricUkPropertyPeriodSummariesServiceSpec extends UnitSpec {
     "service call unsuccessful" must {
       "map errors according to spec" when {
 
-        def serviceError(ifsErrorCode: String, error: MtdError): Unit =
-          s"a $ifsErrorCode error is returned from the service" in new Test {
+        def serviceError(downstreamErrorCode: String, error: MtdError): Unit =
+          s"a $downstreamErrorCode error is returned from the service" in new Test {
             val propertyType: HistoricPropertyType = HistoricPropertyType.Fhl
 
             MockListHistoricUkPropertyPeriodSummariesConnector
               .listPeriodSummaries(request, propertyType)
-              .returns(Future.successful(Left(ResponseWrapper(correlationId, DownstreamErrors.single(DownstreamErrorCode(ifsErrorCode))))))
+              .returns(Future.successful(Left(ResponseWrapper(correlationId, DownstreamErrors.single(DownstreamErrorCode(downstreamErrorCode))))))
 
             await(service.listPeriodSummaries(request, propertyType)) shouldBe Left(ErrorWrapper(correlationId, error))
           }
 
-        val input = Seq(
+        val input = List(
           "INVALID_NINO"           -> NinoFormatError,
           "INVALID_CORRELATIONID"  -> InternalError,
           "TAX_YEAR_NOT_SUPPORTED" -> InternalError,
@@ -100,4 +83,20 @@ class ListHistoricUkPropertyPeriodSummariesServiceSpec extends UnitSpec {
       }
     }
   }
+
+  trait Test extends MockListHistoricUkPropertyPeriodSummariesConnector {
+    implicit protected val hc: HeaderCarrier              = HeaderCarrier()
+    implicit protected val logContext: EndpointLogContext = EndpointLogContext("c", "ep")
+
+    protected val service = new ListHistoricUkPropertyPeriodSummariesService(
+      connector = mockListHistoricUkPropertyPeriodSummariesConnector
+    )
+
+    protected val request: ListHistoricUkPropertyPeriodSummariesRequest = ListHistoricUkPropertyPeriodSummariesRequest(Nino(nino))
+
+    protected val response: ListHistoricUkPropertyPeriodSummariesResponse[SubmissionPeriod] = ListHistoricUkPropertyPeriodSummariesResponse(
+      Seq(SubmissionPeriod("2020-08-22", "2020-08-22")))
+
+  }
+
 }

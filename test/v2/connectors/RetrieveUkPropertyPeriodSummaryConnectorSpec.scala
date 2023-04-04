@@ -30,61 +30,13 @@ import scala.concurrent.Future
 
 class RetrieveUkPropertyPeriodSummaryConnectorSpec extends ConnectorSpec with ResponseModelsFixture {
 
-  val nino: String                       = "AA123456A"
-  val businessId: String                 = "XAIS12345678910"
-  val submissionId: String               = "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
-  val ukFhlProperty: UkFhlProperty       = UkFhlProperty(None, None)
-  val ukNonFhlProperty: UkNonFhlProperty = UkNonFhlProperty(None, None)
-
-  def responseWith(ukFhlProperty: Option[UkFhlProperty], ukNonFhlProperty: Option[UkNonFhlProperty]): RetrieveUkPropertyPeriodSummaryResponse =
-    RetrieveUkPropertyPeriodSummaryResponse(
-      "2020-06-17T10:53:38Z",
-      "2019-01-29",
-      "2020-03-29",
-//      Some("2020-06-17T10:53:38Z"), // To be reinstated, see MTDSA-15575
-      ukFhlProperty,
-      ukNonFhlProperty)
-
-  trait Test extends ConnectorTest {
-
-    def taxYear: String
-    def uri: String
-
-    val connector: RetrieveUkPropertyPeriodSummaryConnector = new RetrieveUkPropertyPeriodSummaryConnector(
-      http = mockHttpClient,
-      appConfig = mockAppConfig
-    )
-
-    val request: RetrieveUkPropertyPeriodSummaryRequest =
-      RetrieveUkPropertyPeriodSummaryRequest(Nino(nino), businessId, TaxYear.fromMtd(taxYear), submissionId)
-
-    def stubHttpResponse(uri: String, outcome: DownstreamOutcome[RetrieveUkPropertyPeriodSummaryResponse])
-        : CallHandler[Future[DownstreamOutcome[RetrieveUkPropertyPeriodSummaryResponse]]]#Derived = {
-      willGet(
-        url = uri
-      ).returns(Future.successful(outcome))
-    }
-
-  }
-
-  trait NonTysTest extends Test with IfsTest {
-    def taxYear: String = "2019-20"
-
-    val uri: String = s"$baseUrl/income-tax/business/property/periodic?taxableEntityId=" +
-      s"$nino&taxYear=2019-20&incomeSourceId=$businessId&submissionId=$submissionId"
-
-  }
-
-  trait TysTest extends Test with TysIfsTest {
-    def taxYear: String = "2023-24"
-
-    val uri: String =
-      s"$baseUrl/income-tax/business/property/23-24/$nino/$businessId/periodic/$submissionId"
-
-  }
+  private val nino: String                       = "AA123456A"
+  private val businessId: String                 = "XAIS12345678910"
+  private val submissionId: String               = "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
+  private val ukFhlProperty: UkFhlProperty       = UkFhlProperty(None, None)
+  private val ukNonFhlProperty: UkNonFhlProperty = UkNonFhlProperty(None, None)
 
   "connector" when {
-
     "response has uk fhl details" must {
       "return a uk ifs result" in new NonTysTest {
         val response: RetrieveUkPropertyPeriodSummaryResponse = responseWith(ukFhlProperty = Some(ukFhlProperty), ukNonFhlProperty = None)
@@ -92,7 +44,8 @@ class RetrieveUkPropertyPeriodSummaryConnectorSpec extends ConnectorSpec with Re
 
         stubHttpResponse(uri, outcome)
 
-        await(connector.retrieveUkProperty(request)) shouldBe Right(ResponseWrapper(correlationId, UkResult(response)))
+        val result: DownstreamOutcome[Result] = await(connector.retrieveUkProperty(request))
+        result shouldBe Right(ResponseWrapper(correlationId, UkResult(response)))
       }
 
       "return a uk tys result" in new TysTest {
@@ -102,7 +55,8 @@ class RetrieveUkPropertyPeriodSummaryConnectorSpec extends ConnectorSpec with Re
 
         stubHttpResponse(uri, outcome)
 
-        await(connector.retrieveUkProperty(request)) shouldBe Right(ResponseWrapper(correlationId, UkResult(response)))
+        val result: DownstreamOutcome[Result] = await(connector.retrieveUkProperty(request))
+        result shouldBe Right(ResponseWrapper(correlationId, UkResult(response)))
       }
     }
 
@@ -113,7 +67,8 @@ class RetrieveUkPropertyPeriodSummaryConnectorSpec extends ConnectorSpec with Re
 
         stubHttpResponse(uri, outcome)
 
-        await(connector.retrieveUkProperty(request)) shouldBe Right(ResponseWrapper(correlationId, UkResult(response)))
+        val result: DownstreamOutcome[Result] = await(connector.retrieveUkProperty(request))
+        result shouldBe Right(ResponseWrapper(correlationId, UkResult(response)))
       }
 
       "the tys endpoint should return a uk result" in new TysTest {
@@ -122,7 +77,8 @@ class RetrieveUkPropertyPeriodSummaryConnectorSpec extends ConnectorSpec with Re
 
         stubHttpResponse(uri, outcome)
 
-        await(connector.retrieveUkProperty(request)) shouldBe Right(ResponseWrapper(correlationId, UkResult(response)))
+        val result: DownstreamOutcome[Result] = await(connector.retrieveUkProperty(request))
+        result shouldBe Right(ResponseWrapper(correlationId, UkResult(response)))
       }
     }
 
@@ -134,7 +90,8 @@ class RetrieveUkPropertyPeriodSummaryConnectorSpec extends ConnectorSpec with Re
 
         stubHttpResponse(uri, outcome)
 
-        await(connector.retrieveUkProperty(request)) shouldBe Right(ResponseWrapper(correlationId, UkResult(response)))
+        val result: DownstreamOutcome[Result] = await(connector.retrieveUkProperty(request))
+        result shouldBe Right(ResponseWrapper(correlationId, UkResult(response)))
       }
 
       "the tys endpoint should return a uk result" in new TysTest {
@@ -144,7 +101,8 @@ class RetrieveUkPropertyPeriodSummaryConnectorSpec extends ConnectorSpec with Re
 
         stubHttpResponse(uri, outcome)
 
-        await(connector.retrieveUkProperty(request)) shouldBe Right(ResponseWrapper(correlationId, UkResult(response)))
+        val result: DownstreamOutcome[Result] = await(connector.retrieveUkProperty(request))
+        result shouldBe Right(ResponseWrapper(correlationId, UkResult(response)))
       }
     }
 
@@ -155,7 +113,8 @@ class RetrieveUkPropertyPeriodSummaryConnectorSpec extends ConnectorSpec with Re
 
         stubHttpResponse(uri, outcome)
 
-        await(connector.retrieveUkProperty(request)) shouldBe Right(ResponseWrapper(correlationId, NonUkResult))
+        val result: DownstreamOutcome[Result] = await(connector.retrieveUkProperty(request))
+        result shouldBe Right(ResponseWrapper(correlationId, NonUkResult))
       }
 
       "the tys endpoint return a non-uk result" in new TysTest {
@@ -164,7 +123,8 @@ class RetrieveUkPropertyPeriodSummaryConnectorSpec extends ConnectorSpec with Re
 
         stubHttpResponse(uri, outcome)
 
-        await(connector.retrieveUkProperty(request)) shouldBe Right(ResponseWrapper(correlationId, NonUkResult))
+        val result: DownstreamOutcome[Result] = await(connector.retrieveUkProperty(request))
+        result shouldBe Right(ResponseWrapper(correlationId, NonUkResult))
       }
     }
 
@@ -175,8 +135,8 @@ class RetrieveUkPropertyPeriodSummaryConnectorSpec extends ConnectorSpec with Re
 
         stubHttpResponse(uri, outcome)
 
-        await(connector.retrieveUkProperty(request)) shouldBe
-          Left(ResponseWrapper(correlationId, DownstreamErrors.single(DownstreamErrorCode("SOME_ERROR"))))
+        val result: DownstreamOutcome[Result] = await(connector.retrieveUkProperty(request))
+        result shouldBe Left(ResponseWrapper(correlationId, DownstreamErrors.single(DownstreamErrorCode("SOME_ERROR"))))
       }
 
       "the tys endpoint should return the error" in new TysTest {
@@ -185,10 +145,58 @@ class RetrieveUkPropertyPeriodSummaryConnectorSpec extends ConnectorSpec with Re
 
         stubHttpResponse(uri, outcome)
 
-        await(connector.retrieveUkProperty(request)) shouldBe
-          Left(ResponseWrapper(correlationId, DownstreamErrors.single(DownstreamErrorCode("SOME_ERROR"))))
+        val result: DownstreamOutcome[Result] = await(connector.retrieveUkProperty(request))
+        result shouldBe Left(ResponseWrapper(correlationId, DownstreamErrors.single(DownstreamErrorCode("SOME_ERROR"))))
       }
     }
+  }
+
+  trait Test extends ConnectorTest {
+
+    protected val taxYear: String
+    protected val uri: String
+
+    protected val connector: RetrieveUkPropertyPeriodSummaryConnector = new RetrieveUkPropertyPeriodSummaryConnector(
+      http = mockHttpClient,
+      appConfig = mockAppConfig
+    )
+
+    protected val request: RetrieveUkPropertyPeriodSummaryRequest =
+      RetrieveUkPropertyPeriodSummaryRequest(Nino(nino), businessId, TaxYear.fromMtd(taxYear), submissionId)
+
+    def stubHttpResponse(uri: String, outcome: DownstreamOutcome[RetrieveUkPropertyPeriodSummaryResponse])
+        : CallHandler[Future[DownstreamOutcome[RetrieveUkPropertyPeriodSummaryResponse]]]#Derived = {
+      willGet(
+        url = uri
+      ).returns(Future.successful(outcome))
+    }
+
+    def responseWith(ukFhlProperty: Option[UkFhlProperty], ukNonFhlProperty: Option[UkNonFhlProperty]): RetrieveUkPropertyPeriodSummaryResponse =
+      RetrieveUkPropertyPeriodSummaryResponse(
+        "2020-06-17T10:53:38Z",
+        "2019-01-29",
+        "2020-03-29",
+        //      Some("2020-06-17T10:53:38Z"), // To be reinstated, see MTDSA-15575
+        ukFhlProperty,
+        ukNonFhlProperty
+      )
+
+  }
+
+  trait NonTysTest extends Test with IfsTest {
+    protected lazy val taxYear: String = "2019-20"
+
+    protected lazy val uri: String = s"$baseUrl/income-tax/business/property/periodic?taxableEntityId=" +
+      s"$nino&taxYear=2019-20&incomeSourceId=$businessId&submissionId=$submissionId"
+
+  }
+
+  trait TysTest extends Test with TysIfsTest {
+    protected lazy val taxYear: String = "2023-24"
+
+    protected lazy val uri: String =
+      s"$baseUrl/income-tax/business/property/23-24/$nino/$businessId/periodic/$submissionId"
+
   }
 
 }

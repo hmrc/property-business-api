@@ -17,10 +17,12 @@
 package v2.mocks.services
 
 import api.controllers.RequestContext
+import api.services.ServiceOutcome
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
 import v2.models.request.retrieveUkPropertyPeriodSummary.RetrieveUkPropertyPeriodSummaryRequest
-import v2.services.{RetrieveUkPropertyPeriodSummaryService, RetrieveUkPropertyPeriodSummaryServiceOutcome}
+import v2.models.response.retrieveUkPropertyPeriodSummary.RetrieveUkPropertyPeriodSummaryResponse
+import v2.services.RetrieveUkPropertyPeriodSummaryService
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -30,7 +32,8 @@ trait MockRetrieveUkPropertyPeriodSummaryService extends MockFactory {
 
   object MockRetrieveUkPropertyService {
 
-    def retrieve(requestData: RetrieveUkPropertyPeriodSummaryRequest): CallHandler[Future[RetrieveUkPropertyPeriodSummaryServiceOutcome]] = {
+    def retrieve(
+        requestData: RetrieveUkPropertyPeriodSummaryRequest): CallHandler[Future[ServiceOutcome[RetrieveUkPropertyPeriodSummaryResponse]]] = {
       (
         mockRetrieveUkPropertyService
           .retrieveUkProperty(_: RetrieveUkPropertyPeriodSummaryRequest)(

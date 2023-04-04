@@ -16,7 +16,7 @@
 
 package v2.connectors
 
-import api.connectors.ConnectorSpec
+import api.connectors.{ConnectorSpec, DownstreamOutcome}
 import play.api.libs.json.JsObject
 import api.models.domain.{HistoricPropertyType, Nino, TaxYear}
 import api.models.outcomes.ResponseWrapper
@@ -26,47 +26,52 @@ import scala.concurrent.Future
 
 class DeleteHistoricUkPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec {
 
-  val nino: String       = "AA123456A"
-  val mtdTaxYear: String = "2021-22"
-  val taxYear: TaxYear   = TaxYear.fromMtd(mtdTaxYear)
-
-  def request(propertyType: HistoricPropertyType): DeleteHistoricUkPropertyAnnualSubmissionRequest =
-    DeleteHistoricUkPropertyAnnualSubmissionRequest(
-      nino = Nino(nino),
-      taxYear = taxYear,
-      propertyType
-    )
-
-  trait Test {
-    _: ConnectorTest =>
-
-    val connector: DeleteHistoricUkPropertyAnnualSubmissionConnector = new DeleteHistoricUkPropertyAnnualSubmissionConnector(
-      http = mockHttpClient,
-      appConfig = mockAppConfig
-    )
-  }
+  private val nino: String       = "AA123456A"
+  private val mtdTaxYear: String = "2021-22"
+  private val taxYear: TaxYear   = TaxYear.fromMtd(mtdTaxYear)
 
   "connector" must {
     "send a request and return no content for FHL" in new IfsTest with Test {
-      val outcome = Right(ResponseWrapper(correlationId, ()))
+      lazy val propertyType: HistoricPropertyType = HistoricPropertyType.Fhl
+
+      val outcome: Right[Nothing, ResponseWrapper[Unit]] = Right(ResponseWrapper(correlationId, ()))
 
       willPut(
         url = s"$baseUrl/income-tax/nino/$nino/uk-properties/furnished-holiday-lettings/annual-summaries/2022",
         body = JsObject.empty
       ).returns(Future.successful(outcome))
 
-      await(connector.deleteHistoricUkPropertyAnnualSubmission(request(HistoricPropertyType.Fhl))) shouldBe outcome
+      val result: DownstreamOutcome[Unit] = await(connector.deleteHistoricUkPropertyAnnualSubmission(request))
+      result shouldBe outcome
     }
 
     "send a request and return no content for non-FHL" in new IfsTest with Test {
-      val outcome = Right(ResponseWrapper(correlationId, ()))
+      lazy val propertyType: HistoricPropertyType = HistoricPropertyType.NonFhl
+
+      val outcome: Right[Nothing, ResponseWrapper[Unit]] = Right(ResponseWrapper(correlationId, ()))
 
       willPut(
         url = s"$baseUrl/income-tax/nino/$nino/uk-properties/other/annual-summaries/2022",
         body = JsObject.empty
       ).returns(Future.successful(outcome))
 
-      await(connector.deleteHistoricUkPropertyAnnualSubmission(request(HistoricPropertyType.NonFhl))) shouldBe outcome
+      val result: DownstreamOutcome[Unit] = await(connector.deleteHistoricUkPropertyAnnualSubmission(request))
+      result shouldBe outcome
     }
   }
+
+  trait Test { _: ConnectorTest =>
+
+    protected val propertyType: HistoricPropertyType
+
+    val connector: DeleteHistoricUkPropertyAnnualSubmissionConnector = new DeleteHistoricUkPropertyAnnualSubmissionConnector(
+      http = mockHttpClient,
+      appConfig = mockAppConfig
+    )
+
+    protected val request: DeleteHistoricUkPropertyAnnualSubmissionRequest =
+      DeleteHistoricUkPropertyAnnualSubmissionRequest(Nino(nino), taxYear, propertyType)
+
+  }
+
 }

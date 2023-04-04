@@ -55,13 +55,13 @@ class CreateForeignPropertyPeriodSummaryController @Inject() (val authService: E
     authorisedAction(nino).async(parse.json) { implicit request =>
       implicit val ctx: RequestContext = RequestContext.from(idGenerator, endpointLogContext)
 
-      val rawData = CreateForeignPropertyPeriodSummaryRawData(nino = nino, businessId = businessId, taxYear = taxYear, body = request.body)
+      val rawData = CreateForeignPropertyPeriodSummaryRawData(nino, businessId, taxYear, request.body)
 
       val requestHandler =
         RequestHandler
           .withParser(parser)
           .withService(service.createForeignProperty)
-          .withAuditing(auditHandler(rawData, request))
+          .withAuditing(auditHandler(rawData, ctx.correlationId, request))
           .withHateoasResultFrom(hateoasFactory)(
             (_, response) => CreateForeignPropertyPeriodSummaryHateoasData(nino, businessId, taxYear, response.submissionId),
             CREATED)
@@ -69,7 +69,7 @@ class CreateForeignPropertyPeriodSummaryController @Inject() (val authService: E
       requestHandler.handleRequest(rawData)
     }
 
-  private def auditHandler(rawData: CreateForeignPropertyPeriodSummaryRawData, request: UserRequest[JsValue]): AuditHandler = {
+  private def auditHandler(rawData: CreateForeignPropertyPeriodSummaryRawData, correlationId: String, request: UserRequest[JsValue]): AuditHandler = {
     new AuditHandler() {
       override def performAudit(userDetails: UserDetails, httpStatus: Int, response: Either[ErrorWrapper, Option[JsValue]], versionNumber: String)(
           implicit
@@ -78,21 +78,11 @@ class CreateForeignPropertyPeriodSummaryController @Inject() (val authService: E
         response match {
           case Left(err: ErrorWrapper) =>
             auditSubmission(
-              GenericAuditDetail(
-                request.userDetails,
-                rawData,
-                ctx.correlationId,
-                AuditResponse(httpStatus = httpStatus, response = Left(err.auditErrors))
-              )
+              GenericAuditDetail(request.userDetails, rawData, correlationId, AuditResponse(httpStatus, Left(err.auditErrors)))
             )
           case Right(_) =>
             auditSubmission(
-              GenericAuditDetail(
-                request.userDetails,
-                rawData,
-                ctx.correlationId,
-                AuditResponse(httpStatus = OK, response = Right(None))
-              )
+              GenericAuditDetail(request.userDetails, rawData, correlationId, AuditResponse(OK, Right(None)))
             )
         }
       }

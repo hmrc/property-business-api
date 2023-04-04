@@ -29,21 +29,11 @@ import scala.concurrent.Future
 
 class DeletePropertyAnnualSubmissionServiceSpec extends ServiceSpec {
 
-  val nino: String                   = "AA123456A"
-  val businessId: String             = "XAIS12345678910"
-  val taxYear: TaxYear               = TaxYear.fromMtd("2020-21")
-  implicit val correlationId: String = "X-123"
+  private val nino: String       = "AA123456A"
+  private val businessId: String = "XAIS12345678910"
+  private val taxYear: TaxYear   = TaxYear.fromMtd("2020-21")
 
-  private val requestData = DeletePropertyAnnualSubmissionRequest(Nino(nino), businessId, taxYear)
-
-  trait Test extends MockDeletePropertyAnnualSubmissionConnector {
-    implicit val hc: HeaderCarrier              = HeaderCarrier()
-    implicit val logContext: EndpointLogContext = EndpointLogContext("c", "ep")
-
-    val service = new DeletePropertyAnnualSubmissionService(
-      connector = mockDeletePropertyAnnualSubmissionConnector
-    )
-  }
+  implicit private val correlationId: String = "X-123"
 
   "service" when {
     "the downstream call is successful" should {
@@ -59,17 +49,17 @@ class DeletePropertyAnnualSubmissionServiceSpec extends ServiceSpec {
     "he downstream call is unsuccessful" should {
       "map errors according to the spec" when {
 
-        def serviceError(ifsErrorCode: String, error: MtdError): Unit =
-          s"a $ifsErrorCode error is returned from the service" in new Test {
+        def serviceError(downstreamErrorCode: String, error: MtdError): Unit =
+          s"a $downstreamErrorCode error is returned from the service" in new Test {
 
             MockDeletePropertyAnnualSubmissionConnector
               .deletePropertyAnnualSubmission(requestData)
-              .returns(Future.successful(Left(ResponseWrapper(correlationId, DownstreamErrors.single(DownstreamErrorCode(ifsErrorCode))))))
+              .returns(Future.successful(Left(ResponseWrapper(correlationId, DownstreamErrors.single(DownstreamErrorCode(downstreamErrorCode))))))
 
             await(service.deletePropertyAnnualSubmission(requestData)) shouldBe Left(ErrorWrapper(correlationId, error))
           }
 
-        val errors = Seq(
+        val errors = List(
           "INVALID_TAXABLE_ENTITY_ID" -> NinoFormatError,
           "INVALID_TAX_YEAR"          -> TaxYearFormatError,
           "INVALID_INCOMESOURCEID"    -> BusinessIdFormatError,
@@ -90,4 +80,17 @@ class DeletePropertyAnnualSubmissionServiceSpec extends ServiceSpec {
       }
     }
   }
+
+  trait Test extends MockDeletePropertyAnnualSubmissionConnector {
+    implicit protected val hc: HeaderCarrier              = HeaderCarrier()
+    implicit protected val logContext: EndpointLogContext = EndpointLogContext("c", "ep")
+
+    protected val service = new DeletePropertyAnnualSubmissionService(
+      connector = mockDeletePropertyAnnualSubmissionConnector
+    )
+
+    protected val requestData: DeletePropertyAnnualSubmissionRequest = DeletePropertyAnnualSubmissionRequest(Nino(nino), businessId, taxYear)
+
+  }
+
 }

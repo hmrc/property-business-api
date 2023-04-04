@@ -38,15 +38,14 @@ class CreateUkPropertyPeriodSummaryConnector @Inject() (val http: HttpClient, va
 
     import request._
 
-    val uri: DownstreamUri[CreateUkPropertyPeriodSummaryResponse] = if (taxYear.useTaxYearSpecificApi) {
-      TaxYearSpecificIfsUri(
-        s"income-tax/business/property/periodic/${taxYear.asTysDownstream}?taxableEntityId=${nino.nino}&incomeSourceId=${request.businessId}")
+    val downstreamUri: DownstreamUri[CreateUkPropertyPeriodSummaryResponse] = if (taxYear.useTaxYearSpecificApi) {
+      TaxYearSpecificIfsUri(s"income-tax/business/property/periodic/${taxYear.asTysDownstream}?taxableEntityId=$nino&incomeSourceId=${businessId}")
     } else {
       // Note that MTD tax year format is used pre-TYS
-      IfsUri(s"income-tax/business/property/periodic?taxableEntityId=${nino.nino}&taxYear=${taxYear.asMtd}&incomeSourceId=$businessId")
+      IfsUri(s"income-tax/business/property/periodic?taxableEntityId=$nino&taxYear=${taxYear.asMtd}&incomeSourceId=$businessId")
     }
 
-    post(body, uri)
+    post(body, downstreamUri)
   }
 
 }

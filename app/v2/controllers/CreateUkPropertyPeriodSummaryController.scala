@@ -58,7 +58,7 @@ class CreateUkPropertyPeriodSummaryController @Inject() (val authService: Enrolm
       val requestHandler = RequestHandler
         .withParser(parser)
         .withService(service.createUkProperty)
-        .withAuditing(auditHandler(rawData, request))
+        .withAuditing(auditHandler(rawData, ctx.correlationId, request))
         .withHateoasResultFrom(hateoasFactory)(
           (_, resp) => CreateUkPropertyPeriodSummaryHateoasData(nino, businessId, taxYear, resp.submissionId),
           CREATED)
@@ -67,7 +67,7 @@ class CreateUkPropertyPeriodSummaryController @Inject() (val authService: Enrolm
 
     }
 
-  private def auditHandler(rawData: CreateUkPropertyPeriodSummaryRawData, request: UserRequest[JsValue]): AuditHandler = {
+  private def auditHandler(rawData: CreateUkPropertyPeriodSummaryRawData, correlationId: String, request: UserRequest[JsValue]): AuditHandler = {
     new AuditHandler() {
       override def performAudit(userDetails: UserDetails, httpStatus: Int, response: Either[ErrorWrapper, Option[JsValue]], versionNumber: String)(
           implicit
@@ -76,22 +76,11 @@ class CreateUkPropertyPeriodSummaryController @Inject() (val authService: Enrolm
         response match {
           case Left(err: ErrorWrapper) =>
             auditSubmission(
-              GenericAuditDetail(
-                userDetails = request.userDetails,
-                params = rawData,
-                correlationId = ctx.correlationId,
-                response = AuditResponse(httpStatus = httpStatus, response = Left(err.auditErrors))
-              )
+              GenericAuditDetail(request.userDetails, rawData, correlationId, AuditResponse(httpStatus, Left(err.auditErrors)))
             )
-
           case Right(resp: Option[JsValue]) =>
             auditSubmission(
-              GenericAuditDetail(
-                userDetails = request.userDetails,
-                params = rawData,
-                correlationId = ctx.correlationId,
-                response = AuditResponse(httpStatus = CREATED, response = Right(resp))
-              )
+              GenericAuditDetail(request.userDetails, rawData, correlationId, AuditResponse(httpStatus = CREATED, response = Right(resp)))
             )
         }
       }

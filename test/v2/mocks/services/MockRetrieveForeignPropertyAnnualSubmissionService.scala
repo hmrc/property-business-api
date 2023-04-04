@@ -17,10 +17,12 @@
 package v2.mocks.services
 
 import api.controllers.RequestContext
+import api.services.ServiceOutcome
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
 import v2.models.request.retrieveForeignPropertyAnnualSubmission.RetrieveForeignPropertyAnnualSubmissionRequest
-import v2.services.{RetrieveForeignPropertyAnnualSubmissionService, RetrieveForeignPropertyAnnualSubmissionServiceOutcome}
+import v2.models.response.retrieveForeignPropertyAnnualSubmission.RetrieveForeignPropertyAnnualSubmissionResponse
+import v2.services.RetrieveForeignPropertyAnnualSubmissionService
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -31,8 +33,8 @@ trait MockRetrieveForeignPropertyAnnualSubmissionService extends MockFactory {
 
   object MockRetrieveForeignPropertyService {
 
-    def retrieve(
-        requestData: RetrieveForeignPropertyAnnualSubmissionRequest): CallHandler[Future[RetrieveForeignPropertyAnnualSubmissionServiceOutcome]] = {
+    def retrieve(requestData: RetrieveForeignPropertyAnnualSubmissionRequest)
+        : CallHandler[Future[ServiceOutcome[RetrieveForeignPropertyAnnualSubmissionResponse]]] = {
       (
         mockRetrieveForeignPropertyAnnualSubmissionService
           .retrieveForeignProperty(_: RetrieveForeignPropertyAnnualSubmissionRequest)(

@@ -73,13 +73,17 @@ class DeleteHistoricUkPropertyAnnualSubmissionController @Inject() (val authServ
       val requestHandler = RequestHandler
         .withParser(parser)
         .withService(service.deleteHistoricUkPropertyAnnualSubmission)
-        .withAuditing(auditHandler(nino, taxYear, propertyType, request))
+        .withAuditing(auditHandler(nino, taxYear, propertyType, ctx.correlationId, request))
 
       requestHandler.handleRequest(rawData)
 
     }
 
-  private def auditHandler(nino: String, taxYear: String, propertyType: HistoricPropertyType, request: UserRequest[AnyContent]): AuditHandler = {
+  private def auditHandler(nino: String,
+                           taxYear: String,
+                           propertyType: HistoricPropertyType,
+                           correlationId: String,
+                           request: UserRequest[AnyContent]): AuditHandler = {
     new AuditHandler() {
       override def performAudit(userDetails: UserDetails, httpStatus: Int, response: Either[ErrorWrapper, Option[JsValue]], versionNumber: String)(
           implicit
@@ -90,25 +94,24 @@ class DeleteHistoricUkPropertyAnnualSubmissionController @Inject() (val authServ
             auditSubmission(
               propertyType.toString,
               FlattenedGenericAuditDetail(
-                versionNumber = Some("2.0"),
+                Some("2.0"),
                 request.userDetails,
                 Map("nino" -> nino, "taxYear" -> taxYear),
                 None,
-                ctx.correlationId,
-                AuditResponse(httpStatus = httpStatus, response = Left(err.auditErrors))
+                correlationId,
+                AuditResponse(httpStatus, Left(err.auditErrors))
               )
             )
-
           case Right(_) =>
             auditSubmission(
               propertyType.toString,
               FlattenedGenericAuditDetail(
-                versionNumber = Some("2.0"),
+                Some("2.0"),
                 request.userDetails,
                 Map("nino" -> nino, "taxYear" -> taxYear),
                 None,
-                ctx.correlationId,
-                AuditResponse(httpStatus = NO_CONTENT, response = Right(None))
+                correlationId,
+                AuditResponse(NO_CONTENT, Right(None))
               )
             )
         }

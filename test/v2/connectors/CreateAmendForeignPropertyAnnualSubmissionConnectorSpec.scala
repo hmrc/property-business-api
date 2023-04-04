@@ -16,55 +16,73 @@
 
 package v2.connectors
 
-import api.connectors.ConnectorSpec
+import api.connectors.{ConnectorSpec, DownstreamOutcome}
 import api.models.domain.{Nino, TaxYear}
 import api.models.outcomes.ResponseWrapper
+import org.scalamock.handlers.CallHandler
 import v2.models.request.createAmendForeignPropertyAnnualSubmission._
 
 import scala.concurrent.Future
 
 class CreateAmendForeignPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec with CreateAmendForeignPropertyAnnualSubmissionFixture {
 
-  val nino: String       = "AA123456A"
-  val businessId: String = "XAIS12345678910"
+  private val nino: String       = "AA123456A"
+  private val businessId: String = "XAIS12345678910"
 
-  val body: CreateAmendForeignPropertyAnnualSubmissionRequestBody = createAmendForeignPropertyAnnualSubmissionRequestBody
+  private val preTysTaxYear = TaxYear.fromMtd("2020-21")
+  private val tysTaxYear    = TaxYear.fromMtd("2023-24")
 
-  def makeRequest(taxYear: String): CreateAmendForeignPropertyAnnualSubmissionRequest = CreateAmendForeignPropertyAnnualSubmissionRequest(
-    nino = Nino(nino),
-    businessId = businessId,
-    taxYear = TaxYear.fromMtd(taxYear),
-    body = body
-  )
+  "CreateAmendForeignPropertyAnnualSubmissionConnector" must {
 
-  private val nonTysRequest = makeRequest("2020-21")
-  private val tysRequest    = makeRequest("2023-24")
+    val outcome = Right(ResponseWrapper(correlationId, ()))
 
-  trait Test { _: ConnectorTest =>
-
-    val connector = new CreateAmendForeignPropertyAnnualSubmissionConnector(
-      http = mockHttpClient,
-      appConfig = mockAppConfig
-    )
-  }
-
-  "connector" must {
     "put a body and return a 204" in new IfsTest with Test {
-      val outcome     = Right(ResponseWrapper(correlationId, ()))
-      val expectedUrl = s"$baseUrl/income-tax/business/property/annual?taxableEntityId=$nino&incomeSourceId=$businessId&taxYear=2020-21"
+      def taxYear: TaxYear = preTysTaxYear
 
-      willPut(url = expectedUrl, body = body).returns(Future.successful(outcome))
+      stubHttpResponse(outcome)
 
-      await(connector.createAmendForeignPropertyAnnualSubmission(nonTysRequest)) shouldBe outcome
+      val result: DownstreamOutcome[Unit] = await(connector.createAmendForeignPropertyAnnualSubmission(request))
+      result shouldBe outcome
     }
 
     "put a body and return a 204 for a TYS tax year" in new TysIfsTest with Test {
-      val outcome     = Right(ResponseWrapper(correlationId, ()))
-      val expectedUrl = s"$baseUrl/income-tax/business/property/annual/23-24/$nino/$businessId"
+      def taxYear: TaxYear = tysTaxYear
 
-      willPut(url = expectedUrl, body = body).returns(Future.successful(outcome))
+      stubTysHttpResponse(outcome)
 
-      await(connector.createAmendForeignPropertyAnnualSubmission(tysRequest)) shouldBe outcome
+      val result: DownstreamOutcome[Unit] = await(connector.createAmendForeignPropertyAnnualSubmission(request))
+      result shouldBe outcome
     }
   }
+
+  trait Test { _: ConnectorTest =>
+
+    def taxYear: TaxYear
+
+    protected val connector = new CreateAmendForeignPropertyAnnualSubmissionConnector(
+      http = mockHttpClient,
+      appConfig = mockAppConfig
+    )
+
+    private val requestBody: CreateAmendForeignPropertyAnnualSubmissionRequestBody = CreateAmendForeignPropertyAnnualSubmissionRequestBody(None, None)
+
+    protected val request: CreateAmendForeignPropertyAnnualSubmissionRequest =
+      CreateAmendForeignPropertyAnnualSubmissionRequest(Nino(nino), businessId, taxYear, requestBody)
+
+    protected def stubHttpResponse(outcome: DownstreamOutcome[Unit]): CallHandler[Future[DownstreamOutcome[Unit]]]#Derived = {
+      willPut(
+        url = s"$baseUrl/income-tax/business/property/annual?taxableEntityId=$nino&incomeSourceId=$businessId&taxYear=2020-21",
+        body = requestBody
+      ).returns(Future.successful(outcome))
+    }
+
+    protected def stubTysHttpResponse(outcome: DownstreamOutcome[Unit]): CallHandler[Future[DownstreamOutcome[Unit]]]#Derived = {
+      willPut(
+        url = s"$baseUrl/income-tax/business/property/annual/23-24/$nino/$businessId",
+        body = requestBody
+      ).returns(Future.successful(outcome))
+    }
+
+  }
+
 }

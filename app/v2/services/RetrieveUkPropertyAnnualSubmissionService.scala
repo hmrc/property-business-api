@@ -19,12 +19,13 @@ package v2.services
 import api.controllers.RequestContext
 import api.models.errors._
 import api.models.outcomes.ResponseWrapper
-import api.services.BaseService
+import api.services.{BaseService, ServiceOutcome}
 import cats.data.EitherT
 import cats.implicits._
 import v2.connectors.RetrieveUkPropertyAnnualSubmissionConnector
 import v2.connectors.RetrieveUkPropertyAnnualSubmissionConnector.{NonUkResult, UkResult}
 import v2.models.request.retrieveUkPropertyAnnualSubmission.RetrieveUkPropertyAnnualSubmissionRequest
+import v2.models.response.retrieveUkPropertyAnnualSubmission.RetrieveUkPropertyAnnualSubmissionResponse
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
@@ -34,7 +35,7 @@ class RetrieveUkPropertyAnnualSubmissionService @Inject() (connector: RetrieveUk
 
   def retrieveUkProperty(request: RetrieveUkPropertyAnnualSubmissionRequest)(implicit
       ctx: RequestContext,
-      ec: ExecutionContext): Future[RetrieveUkPropertyAnnualSubmissionServiceOutcome] = {
+      ec: ExecutionContext): Future[ServiceOutcome[RetrieveUkPropertyAnnualSubmissionResponse]] = {
 
     val result = EitherT(connector.retrieveUkProperty(request))
       .leftMap(mapDownstreamErrors(downstreamErrorMap))

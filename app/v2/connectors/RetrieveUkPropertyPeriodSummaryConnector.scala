@@ -50,17 +50,17 @@ class RetrieveUkPropertyPeriodSummaryConnector @Inject() (val http: HttpClient, 
 
     import request._
 
-    val requestUri = if (taxYear.useTaxYearSpecificApi) {
+    val downstreamUri = if (taxYear.useTaxYearSpecificApi) {
       TaxYearSpecificIfsUri[RetrieveUkPropertyPeriodSummaryResponse](
-        s"income-tax/business/property/${taxYear.asTysDownstream}/${nino.nino}/${businessId}/periodic/$submissionId")
+        s"income-tax/business/property/${taxYear.asTysDownstream}/$nino/${businessId}/periodic/$submissionId")
     } else {
       // Note that MTD tax year format is used
       IfsUri[RetrieveUkPropertyPeriodSummaryResponse](
         s"income-tax/business/property/periodic?" +
-          s"taxableEntityId=${nino.nino}&taxYear=${taxYear.asMtd}&incomeSourceId=$businessId&submissionId=$submissionId")
+          s"taxableEntityId=$nino&taxYear=${taxYear.asMtd}&incomeSourceId=$businessId&submissionId=$submissionId")
     }
 
-    val response = get(requestUri)
+    val response = get(downstreamUri)
 
     response.map {
       case Right(ResponseWrapper(corId, resp)) if ukResult(resp) => Right(ResponseWrapper(corId, UkResult(resp)))

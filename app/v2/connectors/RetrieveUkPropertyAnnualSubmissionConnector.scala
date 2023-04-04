@@ -49,18 +49,21 @@ class RetrieveUkPropertyAnnualSubmissionConnector @Inject() (val http: HttpClien
 
     import request._
 
-    val response = if (taxYear.useTaxYearSpecificApi) {
-      get(
-        uri = TaxYearSpecificIfsUri[RetrieveUkPropertyAnnualSubmissionResponse](
-          s"income-tax/business/property/annual/${taxYear.asTysDownstream}/$nino/$businessId")
+    val (downstreamUri, queryParams) = if (taxYear.useTaxYearSpecificApi) {
+      (
+        TaxYearSpecificIfsUri[RetrieveUkPropertyAnnualSubmissionResponse](
+          s"income-tax/business/property/annual/${taxYear.asTysDownstream}/$nino/$businessId"),
+        Nil
       )
     } else {
       // Note that MTD tax year format is used
-      get(
-        uri = IfsUri[RetrieveUkPropertyAnnualSubmissionResponse](s"income-tax/business/property/annual"),
-        queryParams = Seq("taxableEntityId" -> nino.value, "incomeSourceId" -> businessId, "taxYear" -> taxYear.asMtd)
+      (
+        IfsUri[RetrieveUkPropertyAnnualSubmissionResponse](s"income-tax/business/property/annual"),
+        List("taxableEntityId" -> nino.nino, "incomeSourceId" -> businessId, "taxYear" -> taxYear.asMtd)
       )
     }
+
+    val response = get(downstreamUri, queryParams)
 
     response.map {
       case Right(ResponseWrapper(corId, resp)) if ukResult(resp) => Right(ResponseWrapper(corId, UkResult(resp)))

@@ -17,70 +17,24 @@
 package v2.connectors
 
 import api.connectors.{ConnectorSpec, DownstreamOutcome}
-import org.scalamock.handlers.CallHandler
 import api.models.domain.{Nino, TaxYear}
 import api.models.errors.{DownstreamErrorCode, DownstreamErrors}
 import api.models.outcomes.ResponseWrapper
+import org.scalamock.handlers.CallHandler
 import v2.models.request.retrieveHistoricNonFhlUkPropertyAnnualSubmission.RetrieveHistoricNonFhlUkPropertyAnnualSubmissionRequest
-import v2.models.response.retrieveHistoricNonFhlUkPropertyAnnualSubmissionResponse.{AnnualAdjustments, AnnualAllowances, RentARoom, RetrieveHistoricNonFhlUkPropertyAnnualSubmissionResponse}
+import v2.models.response.retrieveHistoricNonFhlUkPropertyAnnualSubmissionResponse.RetrieveHistoricNonFhlUkPropertyAnnualSubmissionResponse
 
 import scala.concurrent.Future
 
 class RetrieveHistoricNonFhlUkPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec {
 
-  val nino: String              = "AA123456A"
-  val mtdTaxYear: String        = "2019-20"
-  val downstreamTaxYear: String = "2020"
-
-  val request: RetrieveHistoricNonFhlUkPropertyAnnualSubmissionRequest = RetrieveHistoricNonFhlUkPropertyAnnualSubmissionRequest(
-    nino = Nino(nino),
-    taxYear = TaxYear.fromMtd(mtdTaxYear)
-  )
-
-  val annualAdjustments: AnnualAdjustments = AnnualAdjustments(
-    lossBroughtForward = Some(200.00),
-    balancingCharge = Some(200.00),
-    privateUseAdjustment = Some(200.00),
-    businessPremisesRenovationAllowanceBalancingCharges = Some(200.00),
-    nonResidentLandlord = false,
-    rentARoom = Some(RentARoom(false))
-  )
-
-  val annualAllowances: AnnualAllowances =
-    AnnualAllowances(
-      annualInvestmentAllowance = Some(200.00),
-      otherCapitalAllowance = Some(200.00),
-      zeroEmissionGoodsVehicleAllowance = Some(200.00),
-      businessPremisesRenovationAllowance = Some(200.00),
-      costOfReplacingDomesticGoods = Some(200.00),
-      propertyIncomeAllowance = Some(200.00)
-    )
-
-  def responseWith(annualAdjustments: Option[AnnualAdjustments],
-                   annualAllowances: Option[AnnualAllowances]): RetrieveHistoricNonFhlUkPropertyAnnualSubmissionResponse =
-    RetrieveHistoricNonFhlUkPropertyAnnualSubmissionResponse(annualAdjustments, annualAllowances)
-
-  trait Test {
-    _: ConnectorTest =>
-
-    val connector: RetrieveHistoricNonFhlUkPropertyAnnualSubmissionConnector = new RetrieveHistoricNonFhlUkPropertyAnnualSubmissionConnector(
-      http = mockHttpClient,
-      appConfig = mockAppConfig
-    )
-
-    def stubHttpResponse(outcome: DownstreamOutcome[RetrieveHistoricNonFhlUkPropertyAnnualSubmissionResponse])
-      : CallHandler[Future[DownstreamOutcome[RetrieveHistoricNonFhlUkPropertyAnnualSubmissionResponse]]]#Derived = {
-      willGet(
-        url = s"$baseUrl/income-tax/nino/$nino/uk-properties/other/annual-summaries/$downstreamTaxYear"
-      ).returns(Future.successful(outcome))
-    }
-  }
+  private val nino: String              = "AA123456A"
+  private val mtdTaxYear: String        = "2019-20"
+  private val downstreamTaxYear: String = "2020"
 
   "retrieve" should {
     "return a valid response" when {
       "a valid request is supplied" in new IfsTest with Test {
-        val response: RetrieveHistoricNonFhlUkPropertyAnnualSubmissionResponse =
-          responseWith(Some(annualAdjustments), Some(annualAllowances))
         val outcome: Right[Nothing, ResponseWrapper[RetrieveHistoricNonFhlUkPropertyAnnualSubmissionResponse]] =
           Right(ResponseWrapper(correlationId, response))
 
@@ -102,4 +56,28 @@ class RetrieveHistoricNonFhlUkPropertyAnnualSubmissionConnectorSpec extends Conn
       }
     }
   }
+
+  trait Test { _: ConnectorTest =>
+
+    protected val connector: RetrieveHistoricNonFhlUkPropertyAnnualSubmissionConnector =
+      new RetrieveHistoricNonFhlUkPropertyAnnualSubmissionConnector(
+        http = mockHttpClient,
+        appConfig = mockAppConfig
+      )
+
+    def stubHttpResponse(outcome: DownstreamOutcome[RetrieveHistoricNonFhlUkPropertyAnnualSubmissionResponse])
+        : CallHandler[Future[DownstreamOutcome[RetrieveHistoricNonFhlUkPropertyAnnualSubmissionResponse]]]#Derived = {
+      willGet(
+        url = s"$baseUrl/income-tax/nino/$nino/uk-properties/other/annual-summaries/$downstreamTaxYear"
+      ).returns(Future.successful(outcome))
+    }
+
+    protected val request: RetrieveHistoricNonFhlUkPropertyAnnualSubmissionRequest =
+      RetrieveHistoricNonFhlUkPropertyAnnualSubmissionRequest(Nino(nino), TaxYear.fromMtd(mtdTaxYear))
+
+    protected val response: RetrieveHistoricNonFhlUkPropertyAnnualSubmissionResponse =
+      RetrieveHistoricNonFhlUkPropertyAnnualSubmissionResponse(None, None)
+
+  }
+
 }

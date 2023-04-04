@@ -52,8 +52,7 @@ class RetrieveForeignPropertyPeriodSummaryController @Inject() (val authService:
         RequestHandler
           .withParser(parser)
           .withService(service.retrieveForeignProperty)
-          .withHateoasResult(hateoasFactory)(
-            RetrieveForeignPropertyPeriodSummaryHateoasData(nino = nino, businessId = businessId, taxYear = taxYear, submissionId = submissionId))
+          .withHateoasResult(hateoasFactory)(RetrieveForeignPropertyPeriodSummaryHateoasData(nino, businessId, taxYear, submissionId))
 
       requestHandler.handleRequest(rawData)
     }

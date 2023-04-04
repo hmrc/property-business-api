@@ -18,7 +18,7 @@ package v2.services
 
 import api.controllers.RequestContext
 import api.models.errors._
-import api.services.BaseService
+import api.services.{BaseService, ServiceOutcome}
 import cats.implicits._
 import v2.connectors.DeletePropertyAnnualSubmissionConnector
 import v2.models.request.deletePropertyAnnualSubmission.DeletePropertyAnnualSubmissionRequest
@@ -29,9 +29,8 @@ import scala.concurrent.{ExecutionContext, Future}
 @Singleton
 class DeletePropertyAnnualSubmissionService @Inject() (connector: DeletePropertyAnnualSubmissionConnector) extends BaseService {
 
-  def deletePropertyAnnualSubmission(request: DeletePropertyAnnualSubmissionRequest)(implicit
-      ctx: RequestContext,
-      ec: ExecutionContext): Future[DeletePropertyAnnualSubmissionServiceOutcome] = {
+  def deletePropertyAnnualSubmission(
+      request: DeletePropertyAnnualSubmissionRequest)(implicit ctx: RequestContext, ec: ExecutionContext): Future[ServiceOutcome[Unit]] = {
 
     connector.deletePropertyAnnualSubmission(request).map(_.leftMap(mapDownstreamErrors(downstreamErrorMap)))
 

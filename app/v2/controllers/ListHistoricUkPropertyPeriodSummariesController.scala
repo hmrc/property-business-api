@@ -16,23 +16,19 @@
 
 package v2.controllers
 
-import api.controllers.{AuthorisedController, BaseController, EndpointLogContext}
-import cats.data.EitherT
-import cats.implicits._
-import play.api.libs.json.Json
-import play.api.mvc.{Action, AnyContent, ControllerComponents}
-import utils.{IdGenerator, Logging}
-import v2.controllers.requestParsers.ListHistoricUkPropertyPeriodSummariesRequestParser
+import api.controllers._
 import api.hateoas.HateoasFactory
 import api.models.domain.HistoricPropertyType
-import api.models.errors._
 import api.services.{EnrolmentsAuthService, MtdIdLookupService}
+import play.api.mvc.{Action, AnyContent, ControllerComponents}
+import utils.IdGenerator
+import v2.controllers.requestParsers.ListHistoricUkPropertyPeriodSummariesRequestParser
 import v2.models.request.listHistoricUkPropertyPeriodSummaries.ListHistoricUkPropertyPeriodSummariesRawData
 import v2.models.response.listHistoricUkPropertyPeriodSummaries.ListHistoricUkPropertyPeriodSummariesHateoasData
 import v2.services.ListHistoricUkPropertyPeriodSummariesService
 
 import javax.inject.{Inject, Singleton}
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.ExecutionContext
 
 @Singleton
 class ListHistoricUkPropertyPeriodSummariesController @Inject() (val authService: EnrolmentsAuthService,
@@ -42,9 +38,7 @@ class ListHistoricUkPropertyPeriodSummariesController @Inject() (val authService
                                                                  hateoasFactory: HateoasFactory,
                                                                  cc: ControllerComponents,
                                                                  idGenerator: IdGenerator)(implicit ec: ExecutionContext)
-    extends AuthorisedController(cc)
-    with BaseController
-    with Logging {
+    extends AuthorisedController(cc) {
 
   def handleFhlRequest(nino: String): Action[AnyContent] = {
     implicit val endpointLogContext: EndpointLogContext =
@@ -64,45 +58,20 @@ class ListHistoricUkPropertyPeriodSummariesController @Inject() (val authService
 
   private def handleRequest(nino: String, propertyType: HistoricPropertyType)(implicit endpointLogContext: EndpointLogContext): Action[AnyContent] =
     authorisedAction(nino).async { implicit request =>
-      implicit val correlationId: String = idGenerator.getCorrelationId
-      logger.info(
-        message = s"[${endpointLogContext.controllerName}][${endpointLogContext.endpointName}] " +
-          s"with correlationId : $correlationId")
+      implicit val ctx: RequestContext = RequestContext.from(idGenerator, endpointLogContext)
+
       val rawData = ListHistoricUkPropertyPeriodSummariesRawData(nino)
-      val result =
-        for {
-          parsedRequest   <- EitherT.fromEither[Future](parser.parseRequest(rawData))
-          serviceResponse <- EitherT(service.listPeriodSummaries(parsedRequest, propertyType))
-          vendorResponse <- EitherT.fromEither[Future](
-            hateoasFactory
-              .wrapList(serviceResponse.responseData, ListHistoricUkPropertyPeriodSummariesHateoasData(nino, propertyType))
-              .asRight[ErrorWrapper])
-        } yield {
-          logger.info(
-            s"[${endpointLogContext.controllerName}][${endpointLogContext.endpointName}] - " +
-              s"Success response received with CorrelationId: ${serviceResponse.correlationId}")
 
-          Ok(Json.toJson(vendorResponse))
-            .withApiHeaders(serviceResponse.correlationId)
-        }
+      val requestHandler = RequestHandler
+        .withParser(parser)
+        .withService({ req =>
+          service.listPeriodSummaries(req, propertyType)
+        })
+        .withResultCreator(ResultCreator.hateoasListWrapping(hateoasFactory)((_, _) =>
+          ListHistoricUkPropertyPeriodSummariesHateoasData(nino, propertyType)))
 
-      result.leftMap { errorWrapper =>
-        val resCorrelationId = errorWrapper.correlationId
-        val result           = errorResult(errorWrapper).withApiHeaders(resCorrelationId)
+      requestHandler.handleRequest(rawData)
 
-        logger.warn(
-          s"[${endpointLogContext.controllerName}][${endpointLogContext.endpointName}] - " +
-            s"Error response received with CorrelationId: $resCorrelationId")
-        result
-      }.merge
-    }
-
-  private def errorResult(errorWrapper: ErrorWrapper)(implicit endpointLogContext: EndpointLogContext) =
-    errorWrapper.error match {
-      case _ if errorWrapper.containsAnyOf(NinoFormatError, BadRequestError, RuleIncorrectGovTestScenarioError) =>
-        BadRequest(Json.toJson(errorWrapper))
-      case InternalError => InternalServerError(Json.toJson(errorWrapper))
-      case _             => unhandledError(errorWrapper)
     }
 
 }

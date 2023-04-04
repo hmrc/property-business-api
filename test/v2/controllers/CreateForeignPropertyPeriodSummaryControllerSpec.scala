@@ -99,7 +99,7 @@ class CreateForeignPropertyPeriodSummaryControllerSpec
 
   trait Test extends ControllerTest with AuditEventChecking[GenericAuditDetail] {
 
-    val controller = new CreateForeignPropertyPeriodSummaryController(
+    private val controller = new CreateForeignPropertyPeriodSummaryController(
       authService = mockEnrolmentsAuthService,
       lookupService = mockMtdIdLookupService,
       service = mockCreateForeignPropertyService,
@@ -111,9 +111,6 @@ class CreateForeignPropertyPeriodSummaryControllerSpec
     )
 
     protected def callController(): Future[Result] = controller.handleRequest(nino, businessId, taxYear)(fakePostRequest(requestBody))
-
-    val rawData: CreateForeignPropertyPeriodSummaryRawData =
-      CreateForeignPropertyPeriodSummaryRawData(nino = nino, businessId = businessId, taxYear = taxYear, body = JsObject.empty)
 
     protected def event(auditResponse: AuditResponse, maybeRequestBody: Option[JsValue]): AuditEvent[GenericAuditDetail] =
       AuditEvent(
@@ -129,7 +126,10 @@ class CreateForeignPropertyPeriodSummaryControllerSpec
         )
       )
 
-    val requestBody: JsObject = JsObject.empty
+    protected val requestBody: JsObject = JsObject.empty
+
+    protected val rawData: CreateForeignPropertyPeriodSummaryRawData =
+      CreateForeignPropertyPeriodSummaryRawData(nino, businessId, taxYear, requestBody)
 
     protected val requestData: CreateForeignPropertyPeriodSummaryRequest =
       CreateForeignPropertyPeriodSummaryRequest(

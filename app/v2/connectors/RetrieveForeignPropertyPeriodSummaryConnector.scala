@@ -46,21 +46,23 @@ class RetrieveForeignPropertyPeriodSummaryConnector @Inject() (val http: HttpCli
       ec: ExecutionContext,
       correlationId: String): Future[DownstreamOutcome[Result]] = {
 
+    import request._
+
     val (downstreamUri, queryParams) =
-      if (request.taxYear.useTaxYearSpecificApi) {
+      if (taxYear.useTaxYearSpecificApi) {
         (
           TaxYearSpecificIfsUri[RetrieveForeignPropertyPeriodSummaryResponse](
-            s"income-tax/business/property/${request.taxYear.asTysDownstream}/${request.nino.value}/${request.businessId}/periodic/${request.submissionId}"),
+            s"income-tax/business/property/${taxYear.asTysDownstream}/$nino/$businessId/periodic/$submissionId"),
           Nil
         )
       } else {
         (
           IfsUri[RetrieveForeignPropertyPeriodSummaryResponse]("income-tax/business/property/periodic"),
           List(
-            "taxableEntityId" -> request.nino.value,
-            "taxYear"         -> request.taxYear.asMtd, // Note that MTD tax year format is used
-            "incomeSourceId"  -> request.businessId,
-            "submissionId"    -> request.submissionId
+            "taxableEntityId" -> nino.nino,
+            "taxYear"         -> taxYear.asMtd, // Note that MTD tax year format is used
+            "incomeSourceId"  -> businessId,
+            "submissionId"    -> submissionId
           )
         )
       }

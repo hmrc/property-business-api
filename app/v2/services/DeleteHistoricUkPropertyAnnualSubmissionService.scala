@@ -18,7 +18,7 @@ package v2.services
 
 import api.controllers.RequestContext
 import api.models.errors.{InternalError, NinoFormatError, NotFoundError, RuleHistoricTaxYearNotSupportedError, TaxYearFormatError}
-import api.services.BaseService
+import api.services.{BaseService, ServiceOutcome}
 import cats.implicits._
 import v2.connectors.DeleteHistoricUkPropertyAnnualSubmissionConnector
 import v2.models.request.deleteHistoricUkPropertyAnnualSubmission.DeleteHistoricUkPropertyAnnualSubmissionRequest
@@ -29,9 +29,8 @@ import scala.concurrent.{ExecutionContext, Future}
 @Singleton
 class DeleteHistoricUkPropertyAnnualSubmissionService @Inject() (connector: DeleteHistoricUkPropertyAnnualSubmissionConnector) extends BaseService {
 
-  def deleteHistoricUkPropertyAnnualSubmission(request: DeleteHistoricUkPropertyAnnualSubmissionRequest)(implicit
-      ctx: RequestContext,
-      ec: ExecutionContext): Future[DeleteHistoricUkPropertyAnnualSubmissionServiceOutcome] = {
+  def deleteHistoricUkPropertyAnnualSubmission(
+      request: DeleteHistoricUkPropertyAnnualSubmissionRequest)(implicit ctx: RequestContext, ec: ExecutionContext): Future[ServiceOutcome[Unit]] = {
 
     connector.deleteHistoricUkPropertyAnnualSubmission(request).map(_.leftMap(mapDownstreamErrors(downstreamErrorMap)))
   }

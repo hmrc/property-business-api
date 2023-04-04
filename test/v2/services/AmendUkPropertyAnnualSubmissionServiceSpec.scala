@@ -23,21 +23,18 @@ import v2.mocks.connectors.MockAmendUkPropertyAnnualSubmissionConnector
 import api.models.domain.{Nino, TaxYear}
 import api.models.errors._
 import api.models.outcomes.ResponseWrapper
-import v2.models.request.amendUkPropertyAnnualSubmission.{ AmendUkPropertyAnnualSubmissionRequest, AmendUkPropertyAnnualSubmissionRequestBody }
+import v2.models.request.amendUkPropertyAnnualSubmission.{AmendUkPropertyAnnualSubmissionRequest, AmendUkPropertyAnnualSubmissionRequestBody}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class AmendUkPropertyAnnualSubmissionServiceSpec extends UnitSpec {
 
-  val nino: String                   = "AA123456A"
-  val businessId: String             = "XAIS12345678910"
-  val taxYear: TaxYear               = TaxYear.fromMtd("2020-21")
-  implicit val correlationId: String = "X-123"
+  private val nino: String       = "AA123456A"
+  private val businessId: String = "XAIS12345678910"
+  private val taxYear: TaxYear   = TaxYear.fromMtd("2020-21")
 
-  val body: AmendUkPropertyAnnualSubmissionRequestBody = AmendUkPropertyAnnualSubmissionRequestBody(None, None)
-
-  private val request = AmendUkPropertyAnnualSubmissionRequest(Nino(nino), businessId, taxYear, body)
+  implicit private val correlationId: String = "X-123"
 
   "service" when {
     "service call successful" should {
@@ -52,7 +49,6 @@ class AmendUkPropertyAnnualSubmissionServiceSpec extends UnitSpec {
 
     "unsuccessful" should {
       "map errors according to spec" when {
-
         def serviceError(downstreamErrorCode: String, error: MtdError): Unit =
           s"a $downstreamErrorCode error is returned from the service" in new Test {
 
@@ -63,7 +59,7 @@ class AmendUkPropertyAnnualSubmissionServiceSpec extends UnitSpec {
             await(service.amendUkPropertyAnnualSubmission(request)) shouldBe Left(ErrorWrapper(correlationId, error))
           }
 
-        val errors = Seq(
+        val errors = List(
           "INVALID_TAXABLE_ENTITY_ID"   -> NinoFormatError,
           "INVALID_TAX_YEAR"            -> TaxYearFormatError,
           "INVALID_INCOMESOURCEID"      -> BusinessIdFormatError,
@@ -79,9 +75,9 @@ class AmendUkPropertyAnnualSubmissionServiceSpec extends UnitSpec {
           "SERVICE_UNAVAILABLE"         -> InternalError
         )
 
-        val extraTysErrors = Map(
+        val extraTysErrors = List(
           "MISSING_EXPENSES" -> InternalError,
-          "FIELD_CONFLICT"   -> RulePropertyIncomeAllowanceError,
+          "FIELD_CONFLICT"   -> RulePropertyIncomeAllowanceError
         )
 
         (errors ++ extraTysErrors).foreach(args => (serviceError _).tupled(args))
@@ -90,11 +86,16 @@ class AmendUkPropertyAnnualSubmissionServiceSpec extends UnitSpec {
   }
 
   trait Test extends MockAmendUkPropertyAnnualSubmissionConnector {
-    implicit val hc: HeaderCarrier              = HeaderCarrier()
-    implicit val logContext: EndpointLogContext = EndpointLogContext("c", "ep")
+    implicit protected val hc: HeaderCarrier              = HeaderCarrier()
+    implicit protected val logContext: EndpointLogContext = EndpointLogContext("c", "ep")
 
-    val service = new AmendUkPropertyAnnualSubmissionService(
+    protected val service = new AmendUkPropertyAnnualSubmissionService(
       connector = mockAmendUkPropertyAnnualSubmissionConnector
     )
+
+    private val body: AmendUkPropertyAnnualSubmissionRequestBody = AmendUkPropertyAnnualSubmissionRequestBody(None, None)
+
+    protected val request: AmendUkPropertyAnnualSubmissionRequest = AmendUkPropertyAnnualSubmissionRequest(Nino(nino), businessId, taxYear, body)
   }
+
 }

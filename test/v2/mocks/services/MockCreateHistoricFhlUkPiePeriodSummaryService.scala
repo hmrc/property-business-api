@@ -17,10 +17,12 @@
 package v2.mocks.services
 
 import api.controllers.RequestContext
+import api.services.ServiceOutcome
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
 import v2.models.request.createHistoricFhlUkPiePeriodSummary.CreateHistoricFhlUkPiePeriodSummaryRequest
-import v2.services.{CreateHistoricFhlUkPiePeriodSummaryService, CreateHistoricFhlUkPiePeriodSummaryServiceOutcome}
+import v2.models.response.createHistoricFhlUkPiePeriodSummary.CreateHistoricFhlUkPiePeriodSummaryResponse
+import v2.services.CreateHistoricFhlUkPiePeriodSummaryService
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -31,7 +33,7 @@ trait MockCreateHistoricFhlUkPiePeriodSummaryService extends MockFactory {
   object MockCreateHistoricFhlUkPiePeriodSummaryService {
 
     def createPeriodSummary(
-        requestData: CreateHistoricFhlUkPiePeriodSummaryRequest): CallHandler[Future[CreateHistoricFhlUkPiePeriodSummaryServiceOutcome]] = {
+        requestData: CreateHistoricFhlUkPiePeriodSummaryRequest): CallHandler[Future[ServiceOutcome[CreateHistoricFhlUkPiePeriodSummaryResponse]]] = {
       (
         mockCreateHistoricFhlUkPiePeriodSummaryService
           .createPeriodSummary(_: CreateHistoricFhlUkPiePeriodSummaryRequest)(

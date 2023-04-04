@@ -98,7 +98,7 @@ class AmendUkPropertyAnnualSubmissionControllerSpec
 
   trait Test extends ControllerTest with AuditEventChecking[GenericAuditDetail] {
 
-    val controller = new AmendUkPropertyAnnualSubmissionController(
+    private val controller = new AmendUkPropertyAnnualSubmissionController(
       authService = mockEnrolmentsAuthService,
       lookupService = mockMtdIdLookupService,
       parser = mockAmendUkPropertyAnnualSubmissionRequestParser,
@@ -111,7 +111,7 @@ class AmendUkPropertyAnnualSubmissionControllerSpec
 
     protected def callController(): Future[Result] = controller.handleRequest(nino, businessId, taxYear)(fakePutRequest(requestBodyJson))
 
-    def event(auditResponse: AuditResponse, requestBody: Option[JsValue]): AuditEvent[GenericAuditDetail] =
+    protected def event(auditResponse: AuditResponse, requestBody: Option[JsValue]): AuditEvent[GenericAuditDetail] =
       AuditEvent(
         auditType = "CreateAmendUKPropertyAnnualSubmission",
         transactionName = "create-amend-uk-property-annual-submission",

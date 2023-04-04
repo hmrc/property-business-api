@@ -89,7 +89,7 @@ class RetrieveUkPropertyPeriodSummaryControllerSpec
 
   trait Test extends ControllerTest {
 
-    val controller = new RetrieveUkPropertyPeriodSummaryController(
+    private val controller = new RetrieveUkPropertyPeriodSummaryController(
       authService = mockEnrolmentsAuthService,
       lookupService = mockMtdIdLookupService,
       parser = mockRetrieveUkPropertyRequestParser,

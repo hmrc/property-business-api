@@ -59,14 +59,14 @@ class AmendUkPropertyAnnualSubmissionController @Inject() (val authService: Enro
       val requestHandler = RequestHandler
         .withParser(parser)
         .withService(service.amendUkPropertyAnnualSubmission)
-        .withAuditing(auditHandler(rawData, request))
+        .withAuditing(auditHandler(rawData, ctx.correlationId, request))
         .withHateoasResult(hateoasFactory)(AmendUkPropertyAnnualSubmissionHateoasData(nino, businessId, taxYear))
 
       requestHandler.handleRequest(rawData)
 
     }
 
-  private def auditHandler(rawData: AmendUkPropertyAnnualSubmissionRawData, request: UserRequest[JsValue]): AuditHandler = {
+  private def auditHandler(rawData: AmendUkPropertyAnnualSubmissionRawData, correlationId: String, request: UserRequest[JsValue]): AuditHandler = {
     new AuditHandler() {
       override def performAudit(userDetails: UserDetails, httpStatus: Int, response: Either[ErrorWrapper, Option[JsValue]], versionNumber: String)(
           implicit
@@ -75,22 +75,11 @@ class AmendUkPropertyAnnualSubmissionController @Inject() (val authService: Enro
         response match {
           case Left(err: ErrorWrapper) =>
             auditSubmission(
-              GenericAuditDetail(
-                userDetails = request.userDetails,
-                params = rawData,
-                correlationId = ctx.correlationId,
-                response = AuditResponse(httpStatus = httpStatus, response = Left(err.auditErrors))
-              )
+              GenericAuditDetail(request.userDetails, rawData, correlationId, AuditResponse(httpStatus, Left(err.auditErrors)))
             )
-
           case Right(resp: Option[JsValue]) =>
             auditSubmission(
-              GenericAuditDetail(
-                userDetails = request.userDetails,
-                params = rawData,
-                correlationId = ctx.correlationId,
-                response = AuditResponse(httpStatus = OK, response = Right(resp))
-              )
+              GenericAuditDetail(request.userDetails, rawData, correlationId, AuditResponse(OK, Right(resp)))
             )
         }
       }

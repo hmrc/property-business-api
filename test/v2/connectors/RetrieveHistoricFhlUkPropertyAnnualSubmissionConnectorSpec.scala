@@ -22,70 +22,68 @@ import api.models.domain.{Nino, TaxYear}
 import api.models.errors.{DownstreamErrorCode, DownstreamErrors}
 import api.models.outcomes.ResponseWrapper
 import v2.models.request.retrieveHistoricFhlUkPropertyAnnualSubmission.RetrieveHistoricFhlUkPropertyAnnualSubmissionRequest
-import v2.models.response.retrieveHistoricFhlUkPropertyAnnualSubmission.{AnnualAdjustments, AnnualAllowances, RetrieveHistoricFhlUkPropertyAnnualSubmissionResponse}
+import v2.models.response.retrieveHistoricFhlUkPropertyAnnualSubmission.RetrieveHistoricFhlUkPropertyAnnualSubmissionResponse
 
 import scala.concurrent.Future
 
 class RetrieveHistoricFhlUkPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec {
 
-  val nino: String              = "AA123456A"
-  val mtdTaxYear: String        = "2019-20"
-  val downstreamTaxYear: String = "2020"
-
-  val request: RetrieveHistoricFhlUkPropertyAnnualSubmissionRequest = RetrieveHistoricFhlUkPropertyAnnualSubmissionRequest(
-    nino = Nino(nino),
-    taxYear = TaxYear.fromMtd(mtdTaxYear)
-  )
-
-  val annualAdjustments = AnnualAdjustments(None, None, None, periodOfGraceAdjustment = true, None, nonResidentLandlord = false, None)
-  val annualAllowances  = AnnualAllowances(None, None, None, None)
-
-  def responseWith(annualAdjustments: Option[AnnualAdjustments],
-                   annualAllowances: Option[AnnualAllowances]): RetrieveHistoricFhlUkPropertyAnnualSubmissionResponse =
-    RetrieveHistoricFhlUkPropertyAnnualSubmissionResponse(annualAdjustments, annualAllowances)
-
-  trait Test {
-    _: ConnectorTest =>
-
-    val connector: RetrieveHistoricFhlUkPropertyAnnualSubmissionConnector = new RetrieveHistoricFhlUkPropertyAnnualSubmissionConnector(
-      http = mockHttpClient,
-      appConfig = mockAppConfig
-    )
-
-    def stubHttpResponse(outcome: DownstreamOutcome[RetrieveHistoricFhlUkPropertyAnnualSubmissionResponse])
-      : CallHandler[Future[DownstreamOutcome[RetrieveHistoricFhlUkPropertyAnnualSubmissionResponse]]]#Derived = {
-      MockHttpClient
-        .get(
-          url = s"$baseUrl/income-tax/nino/$nino/uk-properties/furnished-holiday-lettings/annual-summaries/$downstreamTaxYear",
-          config = dummyHeaderCarrierConfig,
-          requiredHeaders = requiredIfsHeaders,
-        )
-        .returns(Future.successful(outcome))
-    }
-  }
+  private val nino: String              = "AA123456A"
+  private val mtdTaxYear: String        = "2019-20"
+  private val downstreamTaxYear: String = "2020"
 
   "connector" when {
     "request asks for a historic FHL UK property annual submission" must {
       "return a valid result" in new IfsTest with Test {
-        val response = responseWith(Some(annualAdjustments), Some(annualAllowances))
-        val outcome  = Right(ResponseWrapper(correlationId, response))
+        val outcome: Right[Nothing, ResponseWrapper[RetrieveHistoricFhlUkPropertyAnnualSubmissionResponse]] =
+          Right(ResponseWrapper(correlationId, response))
 
         stubHttpResponse(outcome)
 
-        val result = await(connector.retrieve(request))
+        val result: DownstreamOutcome[RetrieveHistoricFhlUkPropertyAnnualSubmissionResponse] = await(connector.retrieve(request))
         result shouldBe outcome
       }
 
       "response is an error" must {
         "return an error" in new IfsTest with Test {
-          val outcome = Left(ResponseWrapper(correlationId, DownstreamErrors.single(DownstreamErrorCode("SOME_ERROR"))))
+          val outcome: Left[ResponseWrapper[DownstreamErrors], Nothing] =
+            Left(ResponseWrapper(correlationId, DownstreamErrors.single(DownstreamErrorCode("SOME_ERROR"))))
 
           stubHttpResponse(outcome)
 
-          val result = await(connector.retrieve(request))
+          val result: DownstreamOutcome[RetrieveHistoricFhlUkPropertyAnnualSubmissionResponse] = await(connector.retrieve(request))
           result shouldBe outcome
         }
       }
     }
   }
+
+  trait Test { _: ConnectorTest =>
+
+    protected val connector: RetrieveHistoricFhlUkPropertyAnnualSubmissionConnector = new RetrieveHistoricFhlUkPropertyAnnualSubmissionConnector(
+      http = mockHttpClient,
+      appConfig = mockAppConfig
+    )
+
+    def stubHttpResponse(outcome: DownstreamOutcome[RetrieveHistoricFhlUkPropertyAnnualSubmissionResponse])
+        : CallHandler[Future[DownstreamOutcome[RetrieveHistoricFhlUkPropertyAnnualSubmissionResponse]]]#Derived = {
+      MockHttpClient
+        .get(
+          url = s"$baseUrl/income-tax/nino/$nino/uk-properties/furnished-holiday-lettings/annual-summaries/$downstreamTaxYear",
+          config = dummyHeaderCarrierConfig,
+          requiredHeaders = requiredIfsHeaders
+        )
+        .returns(Future.successful(outcome))
+    }
+
+    protected val request: RetrieveHistoricFhlUkPropertyAnnualSubmissionRequest = RetrieveHistoricFhlUkPropertyAnnualSubmissionRequest(
+      nino = Nino(nino),
+      taxYear = TaxYear.fromMtd(mtdTaxYear)
+    )
+
+    protected val response: RetrieveHistoricFhlUkPropertyAnnualSubmissionResponse =
+      RetrieveHistoricFhlUkPropertyAnnualSubmissionResponse(None, None)
+
+  }
+
 }

@@ -239,8 +239,7 @@ class AmendForeignPropertyPeriodSummaryControllerSpec
           versionNumber = "2.0",
           userType = "Individual",
           agentReferenceNumber = None,
-          params =
-            Json.obj("nino" -> nino, "businessId" -> businessId, "taxYear" -> taxYear, "submissionId" -> submissionId, "request" -> requestBody),
+          params = Json.toJsObject(rawData),
           correlationId = correlationId,
           response = auditResponse
         )

@@ -119,7 +119,7 @@ class CreateAmendForeignPropertyAnnualSubmissionControllerSpec
           versionNumber = "2.0",
           userType = "Individual",
           agentReferenceNumber = None,
-          params = Json.obj("nino" -> nino, "businessId" -> businessId, "taxYear" -> "2019-20", "request" -> requestJson),
+          params = Json.toJsObject(rawData),
           correlationId = correlationId,
           response = auditResponse
         )

@@ -123,7 +123,7 @@ class CreateForeignPropertyPeriodSummaryControllerSpec
           versionNumber = "2.0",
           userType = "Individual",
           agentReferenceNumber = None,
-          params = Json.obj("nino" -> nino, "businessId" -> businessId, "taxYear" -> taxYear, "request" -> regularMtdRequestJson),
+          params = Json.toJsObject(rawData),
           correlationId = correlationId,
           response = auditResponse
         )

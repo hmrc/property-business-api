@@ -22,12 +22,16 @@ import v2.models.response.createAmendHistoricNonFhlUkPropertyAnnualSubmission.Cr
 import v2.models.response.createForeignPropertyPeriodSummary.CreateForeignPropertyPeriodSummaryResponse
 import v2.models.response.createHistoricFhlUkPiePeriodSummary.CreateHistoricFhlUkPiePeriodSummaryResponse
 import v2.models.response.createHistoricNonFhlUkPiePeriodSummary.CreateHistoricNonFhlUkPiePeriodSummaryResponse
+import v2.models.response.createUkPropertyPeriodSummary.CreateUkPropertyPeriodSummaryResponse
+import v2.models.response.listPropertyPeriodSummaries.ListPropertyPeriodSummariesResponse
 import v2.models.response.retrieveForeignPropertyAnnualSubmission.RetrieveForeignPropertyAnnualSubmissionResponse
 import v2.models.response.retrieveForeignPropertyPeriodSummary.RetrieveForeignPropertyPeriodSummaryResponse
 import v2.models.response.retrieveHistoricFhlUkPiePeriodSummary.RetrieveHistoricFhlUkPiePeriodSummaryResponse
 import v2.models.response.retrieveHistoricFhlUkPropertyAnnualSubmission.RetrieveHistoricFhlUkPropertyAnnualSubmissionResponse
 import v2.models.response.retrieveHistoricNonFhlUkPiePeriodSummary.RetrieveHistoricNonFhlUkPiePeriodSummaryResponse
 import v2.models.response.retrieveHistoricNonFhlUkPropertyAnnualSubmissionResponse.RetrieveHistoricNonFhlUkPropertyAnnualSubmissionResponse
+import v2.models.response.retrieveUkPropertyAnnualSubmission.RetrieveUkPropertyAnnualSubmissionResponse
+import v2.models.response.retrieveUkPropertyPeriodSummary.RetrieveUkPropertyPeriodSummaryResponse
 
 package object services {
 
@@ -45,11 +49,22 @@ package object services {
   type RetrieveHistoricNonFhlUkPropertyPeriodSummaryServiceOutcome       = ServiceOutcome[RetrieveHistoricNonFhlUkPiePeriodSummaryResponse]
   type RetrieveHistoricNonFhlUkPropertyAnnualSubmissionServiceOutcome    = ServiceOutcome[RetrieveHistoricNonFhlUkPropertyAnnualSubmissionResponse]
 
+  // Property Annual Submission
+  type AmendUkPropertyAnnualSubmissionServiceOutcome          = ServiceOutcome[Unit]
+  type RetrieveUkPropertyAnnualSubmissionServiceOutcome       = ServiceOutcome[RetrieveUkPropertyAnnualSubmissionResponse]
+  type DeletePropertyAnnualSubmissionServiceOutcome           = ServiceOutcome[Unit]
+  type DeleteHistoricUkPropertyAnnualSubmissionServiceOutcome = ServiceOutcome[Unit]
+
+  // Property Period Summary
+  type AmendUkPropertyPeriodSummaryServiceOutcome    = ServiceOutcome[Unit]
+  type CreateUkPropertyPeriodSummaryServiceOutcome   = ServiceOutcome[CreateUkPropertyPeriodSummaryResponse]
+  type RetrieveUkPropertyPeriodSummaryServiceOutcome = ServiceOutcome[RetrieveUkPropertyPeriodSummaryResponse]
+  type ListPropertyPeriodSummariesServiceOutcome     = ServiceOutcome[ListPropertyPeriodSummariesResponse]
+
   // Foreign Property
   type AmendForeignPropertyPeriodSummaryServiceOutcome          = ServiceOutcome[Unit]
   type CreateForeignPropertyPeriodSummaryServiceOutcome         = ServiceOutcome[CreateForeignPropertyPeriodSummaryResponse]
   type CreateAmendForeignPropertyAnnualSubmissionServiceOutcome = ServiceOutcome[Unit]
-  type DeletePropertyAnnualSubmissionServiceOutcome             = ServiceOutcome[Unit]
   type RetrieveForeignPropertyPeriodSummaryServiceOutcome       = ServiceOutcome[RetrieveForeignPropertyPeriodSummaryResponse]
   type RetrieveForeignPropertyAnnualSubmissionServiceOutcome    = ServiceOutcome[RetrieveForeignPropertyAnnualSubmissionResponse]
 }

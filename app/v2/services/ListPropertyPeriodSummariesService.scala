@@ -16,38 +16,27 @@
 
 package v2.services
 
-import cats.data.EitherT
-import cats.implicits._
-import uk.gov.hmrc.http.HeaderCarrier
-import utils.Logging
-import api.controllers.EndpointLogContext
+import api.controllers.RequestContext
 import api.models.errors._
-import api.services.ServiceOutcome
-import api.support.DownstreamResponseMappingSupport
+import api.services.BaseService
+import cats.implicits._
 import v2.connectors.ListPropertyPeriodSummariesConnector
 import v2.models.request.listPropertyPeriodSummaries.ListPropertyPeriodSummariesRequest
-import v2.models.response.listPropertyPeriodSummaries.ListPropertyPeriodSummariesResponse
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class ListPropertyPeriodSummariesService @Inject()(connector: ListPropertyPeriodSummariesConnector)
-    extends DownstreamResponseMappingSupport
-    with Logging {
+class ListPropertyPeriodSummariesService @Inject() (connector: ListPropertyPeriodSummariesConnector) extends BaseService {
 
-  def listPeriodSummaries(request: ListPropertyPeriodSummariesRequest)(
-      implicit hc: HeaderCarrier,
-      ec: ExecutionContext,
-      logContext: EndpointLogContext,
-      correlationId: String): Future[ServiceOutcome[ListPropertyPeriodSummariesResponse]] = {
+  def listPeriodSummaries(request: ListPropertyPeriodSummariesRequest)(implicit
+      ctx: RequestContext,
+      ec: ExecutionContext): Future[ListPropertyPeriodSummariesServiceOutcome] = {
 
-    val result = EitherT(connector.listPeriodSummaries(request)).leftMap(mapDownstreamErrors(downstreamErrorMap))
-
-    result.value
+    connector.listPeriodSummaries(request).map(_.leftMap(mapDownstreamErrors(downstreamErrorMap)))
   }
 
-  private def downstreamErrorMap = {
+  private val downstreamErrorMap = {
     val errors = Map(
       "INVALID_TAXABLE_ENTITY_ID" -> NinoFormatError,
       "INVALID_INCOMESOURCEID"    -> BusinessIdFormatError,
@@ -62,9 +51,10 @@ class ListPropertyPeriodSummariesService @Inject()(connector: ListPropertyPeriod
     val extraTysErrors = Map(
       "INVALID_INCOMESOURCE_ID" -> BusinessIdFormatError,
       "NOT_FOUND"               -> NotFoundError,
-      "INVALID_CORRELATION_ID"  -> InternalError,
+      "INVALID_CORRELATION_ID"  -> InternalError
     )
 
     errors ++ extraTysErrors
   }
+
 }

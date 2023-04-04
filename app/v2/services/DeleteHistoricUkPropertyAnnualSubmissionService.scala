@@ -16,41 +16,27 @@
 
 package v2.services
 
+import api.controllers.RequestContext
+import api.models.errors.{InternalError, NinoFormatError, NotFoundError, RuleHistoricTaxYearNotSupportedError, TaxYearFormatError}
+import api.services.BaseService
 import cats.implicits._
-import cats.data.EitherT
+import v2.connectors.DeleteHistoricUkPropertyAnnualSubmissionConnector
+import v2.models.request.deleteHistoricUkPropertyAnnualSubmission.DeleteHistoricUkPropertyAnnualSubmissionRequest
 
 import javax.inject.{Inject, Singleton}
-import uk.gov.hmrc.http.HeaderCarrier
-import utils.Logging
-import api.controllers.EndpointLogContext
-import api.models.errors.{InternalError, NinoFormatError, NotFoundError, RuleHistoricTaxYearNotSupportedError, TaxYearFormatError}
-import v2.models.request.deleteHistoricUkPropertyAnnualSubmission.DeleteHistoricUkPropertyAnnualSubmissionRequest
-import api.services.ServiceOutcome
-import api.support.DownstreamResponseMappingSupport
-import v2.connectors.DeleteHistoricUkPropertyAnnualSubmissionConnector
-
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class DeleteHistoricUkPropertyAnnualSubmissionService @Inject()(connector: DeleteHistoricUkPropertyAnnualSubmissionConnector)
-    extends DownstreamResponseMappingSupport
-    with Logging {
+class DeleteHistoricUkPropertyAnnualSubmissionService @Inject() (connector: DeleteHistoricUkPropertyAnnualSubmissionConnector) extends BaseService {
 
-  def deleteHistoricUkPropertyAnnualSubmission(request: DeleteHistoricUkPropertyAnnualSubmissionRequest)(
-      implicit hc: HeaderCarrier,
-      ec: ExecutionContext,
-      logContext: EndpointLogContext,
-      correlationId: String): Future[ServiceOutcome[Unit]] = {
+  def deleteHistoricUkPropertyAnnualSubmission(request: DeleteHistoricUkPropertyAnnualSubmissionRequest)(implicit
+      ctx: RequestContext,
+      ec: ExecutionContext): Future[DeleteHistoricUkPropertyAnnualSubmissionServiceOutcome] = {
 
-    val result = for {
-      downstreamResponseWrapper <- EitherT(connector.deleteHistoricUkPropertyAnnualSubmission(request))
-        .leftMap(mapDownstreamErrors(downstreamErrorMap))
-    } yield downstreamResponseWrapper
-
-    result.value
+    connector.deleteHistoricUkPropertyAnnualSubmission(request).map(_.leftMap(mapDownstreamErrors(downstreamErrorMap)))
   }
 
-  private def downstreamErrorMap =
+  private val downstreamErrorMap =
     Map(
       "INVALID_NINO"           -> NinoFormatError,
       "INVALID_TAX_YEAR"       -> TaxYearFormatError,

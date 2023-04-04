@@ -16,16 +16,13 @@
 
 package v2.mocks.services
 
+import api.controllers.RequestContext
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
-import uk.gov.hmrc.http.HeaderCarrier
-import api.controllers.EndpointLogContext
-import api.models.errors.ErrorWrapper
-import api.models.outcomes.ResponseWrapper
 import v2.models.request.deleteHistoricUkPropertyAnnualSubmission.DeleteHistoricUkPropertyAnnualSubmissionRequest
-import v2.services.DeleteHistoricUkPropertyAnnualSubmissionService
+import v2.services.{DeleteHistoricUkPropertyAnnualSubmissionService, DeleteHistoricUkPropertyAnnualSubmissionServiceOutcome}
 
-import scala.concurrent.{ ExecutionContext, Future }
+import scala.concurrent.{ExecutionContext, Future}
 
 trait MockDeleteHistoricUkPropertyAnnualSubmissionService extends MockFactory {
 
@@ -35,17 +32,17 @@ trait MockDeleteHistoricUkPropertyAnnualSubmissionService extends MockFactory {
   object MockDeleteHistoricUkPropertyAnnualSubmissionService {
 
     def deleteHistoricUkPropertyAnnualSubmission(
-        requestData: DeleteHistoricUkPropertyAnnualSubmissionRequest): CallHandler[Future[Either[ErrorWrapper, ResponseWrapper[Unit]]]] = {
+        requestData: DeleteHistoricUkPropertyAnnualSubmissionRequest): CallHandler[Future[DeleteHistoricUkPropertyAnnualSubmissionServiceOutcome]] = {
       (
         mockDeleteHistoricUkPropertyAnnualSubmissionService
           .deleteHistoricUkPropertyAnnualSubmission(_: DeleteHistoricUkPropertyAnnualSubmissionRequest)(
-            _: HeaderCarrier,
-            _: ExecutionContext,
-            _: EndpointLogContext,
-            _: String
+            _: RequestContext,
+            _: ExecutionContext
           )
         )
-        .expects(requestData, *, *, *, *)
+        .expects(requestData, *, *)
     }
+
   }
+
 }

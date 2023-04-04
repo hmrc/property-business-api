@@ -16,17 +16,13 @@
 
 package v2.mocks.services
 
+import api.controllers.RequestContext
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
-import uk.gov.hmrc.http.HeaderCarrier
-import api.controllers.EndpointLogContext
-import api.models.errors.ErrorWrapper
-import api.models.outcomes.ResponseWrapper
 import v2.models.request.listPropertyPeriodSummaries.ListPropertyPeriodSummariesRequest
-import v2.models.response.listPropertyPeriodSummaries.ListPropertyPeriodSummariesResponse
-import v2.services.ListPropertyPeriodSummariesService
+import v2.services.{ListPropertyPeriodSummariesService, ListPropertyPeriodSummariesServiceOutcome}
 
-import scala.concurrent.{ ExecutionContext, Future }
+import scala.concurrent.{ExecutionContext, Future}
 
 trait MockListPropertyPeriodSummariesService extends MockFactory {
 
@@ -34,12 +30,12 @@ trait MockListPropertyPeriodSummariesService extends MockFactory {
 
   object MockListPropertyPeriodSummariesService {
 
-    def listPeriodSummaries(requestData: ListPropertyPeriodSummariesRequest)
-      : CallHandler[Future[Either[ErrorWrapper, ResponseWrapper[ListPropertyPeriodSummariesResponse]]]] = {
+    def listPeriodSummaries(requestData: ListPropertyPeriodSummariesRequest): CallHandler[Future[ListPropertyPeriodSummariesServiceOutcome]] = {
       (mockService
-        .listPeriodSummaries(_: ListPropertyPeriodSummariesRequest)(_: HeaderCarrier, _: ExecutionContext, _: EndpointLogContext, _: String))
-        .expects(requestData, *, *, *, *)
+        .listPeriodSummaries(_: ListPropertyPeriodSummariesRequest)(_: RequestContext, _: ExecutionContext))
+        .expects(requestData, *, *)
     }
+
   }
 
 }

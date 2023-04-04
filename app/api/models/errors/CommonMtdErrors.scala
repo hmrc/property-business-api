@@ -120,7 +120,7 @@ object ClientNotAuthorisedError    extends MtdError("CLIENT_OR_AGENT_NOT_AUTHORI
 
 //Stub errors
 object RuleIncorrectGovTestScenarioError
-    extends MtdError(code = "RULE_INCORRECT_GOV_TEST_SCENARIO", message = "The Gov-Test-Scenario was not found", NOT_FOUND)
+    extends MtdError(code = "RULE_INCORRECT_GOV_TEST_SCENARIO", message = "The Gov-Test-Scenario was not found", BAD_REQUEST)
 
 // Accept header Errors
 object InvalidAcceptHeaderError extends MtdError("ACCEPT_HEADER_INVALID", "The accept header is missing or invalid", NOT_ACCEPTABLE)

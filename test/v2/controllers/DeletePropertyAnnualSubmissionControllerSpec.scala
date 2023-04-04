@@ -17,13 +17,12 @@
 package v2.controllers
 
 import api.controllers.{ControllerBaseSpec, ControllerTestRunner}
-import api.mocks.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService}
-import api.mocks.MockIdGenerator
+import api.mocks.services.MockAuditService
 import api.models.audit.{AuditEvent, AuditResponse, GenericAuditDetail}
 import api.models.domain.{Nino, TaxYear}
 import api.models.errors._
 import api.models.outcomes.ResponseWrapper
-import play.api.libs.json.{Json, JsValue}
+import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.Result
 import v2.mocks.requestParsers.MockDeletePropertyAnnualSubmissionRequestParser
 import v2.mocks.services.MockDeletePropertyAnnualSubmissionService
@@ -35,12 +34,9 @@ import scala.concurrent.Future
 class DeletePropertyAnnualSubmissionControllerSpec
     extends ControllerBaseSpec
     with ControllerTestRunner
-    with MockEnrolmentsAuthService
-    with MockMtdIdLookupService
     with MockDeletePropertyAnnualSubmissionService
     with MockDeletePropertyAnnualSubmissionRequestParser
-    with MockAuditService
-    with MockIdGenerator {
+    with MockAuditService {
 
   private val businessId = "XAIS12345678910"
   private val taxYear    = "2023-24"
@@ -48,7 +44,6 @@ class DeletePropertyAnnualSubmissionControllerSpec
   "DeletePropertyAnnualSubmissionControllerSpec" should {
     "return a successful response with status 204 (NO_CONTENT)" when {
       "the request received is valid" in new Test {
-
         MockDeletePropertyAnnualSubmissionRequestParser
           .parse(rawData)
           .returns(Right(requestData))
@@ -62,32 +57,29 @@ class DeletePropertyAnnualSubmissionControllerSpec
     }
 
     "return the error as per spec" when {
-      "parser errors occur" in new Test {
-
+      "the parser validation fails" in new Test {
         MockDeletePropertyAnnualSubmissionRequestParser
           .parse(rawData)
-          .returns(Left(ErrorWrapper(correlationId, TaxYearFormatError, None)))
+          .returns(Left(ErrorWrapper(correlationId, NinoFormatError, None)))
 
-        runErrorTest(TaxYearFormatError)
+        runErrorTestWithAudit(NinoFormatError)
       }
 
-      "service errors returns an error" in new Test {
-
+      "service returns an error" in new Test {
         MockDeletePropertyAnnualSubmissionRequestParser
           .parse(rawData)
           .returns(Right(requestData))
 
         MockDeletePropertyAnnualSubmissionService
           .deletePropertyAnnualSubmission(requestData)
-          .returns(Future.successful(Left(ErrorWrapper(correlationId, RuleIncorrectGovTestScenarioError))))
+          .returns(Future.successful(Left(ErrorWrapper(correlationId, RuleTaxYearNotSupportedError))))
 
-        runErrorTest(RuleIncorrectGovTestScenarioError)
+        runErrorTestWithAudit(RuleTaxYearNotSupportedError)
       }
     }
-
   }
 
-  trait Test extends ControllerTest {
+  trait Test extends ControllerTest with AuditEventChecking[GenericAuditDetail] {
 
     val controller = new DeletePropertyAnnualSubmissionController(
       authService = mockEnrolmentsAuthService,
@@ -99,12 +91,7 @@ class DeletePropertyAnnualSubmissionControllerSpec
       idGenerator = mockIdGenerator
     )
 
-    protected def callController(): Future[Result] = controller.handleRequest(nino, businessId, taxYear)(fakeRequest)
-
-    protected val rawData: DeletePropertyAnnualSubmissionRawData = DeletePropertyAnnualSubmissionRawData(nino, businessId, taxYear)
-
-    protected val requestData: DeletePropertyAnnualSubmissionRequest =
-      DeletePropertyAnnualSubmissionRequest(Nino(nino), businessId, TaxYear.fromMtd(taxYear))
+    protected def callController(): Future[Result] = controller.handleRequest(nino, businessId, taxYear)(fakeDeleteRequest)
 
     protected def event(auditResponse: AuditResponse, maybeRequestBody: Option[JsValue]): AuditEvent[GenericAuditDetail] =
       AuditEvent(
@@ -119,6 +106,11 @@ class DeletePropertyAnnualSubmissionControllerSpec
           response = auditResponse
         )
       )
+
+    protected val rawData: DeletePropertyAnnualSubmissionRawData = DeletePropertyAnnualSubmissionRawData(nino, businessId, taxYear)
+
+    protected val requestData: DeletePropertyAnnualSubmissionRequest =
+      DeletePropertyAnnualSubmissionRequest(Nino(nino), businessId, TaxYear.fromMtd(taxYear))
 
   }
 

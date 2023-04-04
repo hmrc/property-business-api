@@ -59,13 +59,13 @@ class AmendHistoricNonFhlUkPropertyPeriodSummaryController @Inject() (val authSe
         RequestHandler
           .withParser(parser)
           .withService(service.amend)
-          .withAuditing(auditHandler(nino, periodId, request))
+          .withAuditing(auditHandler(nino, periodId, ctx.correlationId, request))
           .withHateoasResult(hateoasFactory)(AmendHistoricNonFhlUkPropertyPeriodSummaryHateoasData(nino, periodId))
 
       requestHandler.handleRequest(rawData)
     }
 
-  private def auditHandler(nino: String, periodId: String, request: UserRequest[JsValue]): AuditHandler = {
+  private def auditHandler(nino: String, periodId: String, correlationId: String, request: UserRequest[JsValue]): AuditHandler = {
     new AuditHandler() {
       override def performAudit(userDetails: UserDetails, httpStatus: Int, response: Either[ErrorWrapper, Option[JsValue]], versionNumber: String)(
           implicit
@@ -79,7 +79,7 @@ class AmendHistoricNonFhlUkPropertyPeriodSummaryController @Inject() (val authSe
                 request.userDetails,
                 Map("nino" -> nino, "periodId" -> periodId),
                 Some(request.body),
-                ctx.correlationId,
+                correlationId,
                 AuditResponse(httpStatus, Left(err.auditErrors))
               )
             )
@@ -90,7 +90,7 @@ class AmendHistoricNonFhlUkPropertyPeriodSummaryController @Inject() (val authSe
                 request.userDetails,
                 Map("nino" -> nino, "periodId" -> periodId),
                 Some(request.body),
-                ctx.correlationId,
+                correlationId,
                 AuditResponse(OK, Right(None))
               )
             )

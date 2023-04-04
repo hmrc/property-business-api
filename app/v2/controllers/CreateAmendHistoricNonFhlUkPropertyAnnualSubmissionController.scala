@@ -62,14 +62,14 @@ class CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionController @Inject() (
         RequestHandler
           .withParser(parser)
           .withService(service.amend)
-          .withAuditing(auditHandler(nino, taxYear, request))
+          .withAuditing(auditHandler(nino, taxYear, ctx.correlationId, request))
           .withHateoasResult(hateoasFactory)(CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionHateoasData(nino, taxYear))
 
       requestHandler.handleRequest(rawData)
 
     }
 
-  private def auditHandler(nino: String, taxYear: String, request: UserRequest[JsValue]): AuditHandler = {
+  private def auditHandler(nino: String, taxYear: String, correlationId: String, request: UserRequest[JsValue]): AuditHandler = {
     new AuditHandler() {
       override def performAudit(userDetails: UserDetails, httpStatus: Int, response: Either[ErrorWrapper, Option[JsValue]], versionNumber: String)(
           implicit
@@ -83,7 +83,7 @@ class CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionController @Inject() (
                 request.userDetails,
                 Map("nino" -> nino, "taxYear" -> taxYear),
                 Some(request.body),
-                ctx.correlationId,
+                correlationId,
                 AuditResponse(httpStatus, Left(err.auditErrors))
               )
             )
@@ -94,7 +94,7 @@ class CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionController @Inject() (
                 request.userDetails,
                 Map("nino" -> nino, "taxYear" -> taxYear),
                 Some(request.body),
-                ctx.correlationId,
+                correlationId,
                 AuditResponse(OK, Right(None))
               )
             )

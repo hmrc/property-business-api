@@ -60,13 +60,13 @@ class AmendForeignPropertyPeriodSummaryController @Inject() (val authService: En
         RequestHandler
           .withParser(parser)
           .withService(service.amendForeignPropertyPeriodSummary)
-          .withAuditing(auditHandler(rawData, request))
+          .withAuditing(auditHandler(rawData, ctx.correlationId, request))
           .withHateoasResult(hateoasFactory)(AmendForeignPropertyPeriodSummaryHateoasData(nino, businessId, taxYear, submissionId))
 
       requestHandler.handleRequest(rawData)
     }
 
-  private def auditHandler(rawData: AmendForeignPropertyPeriodSummaryRawData, request: UserRequest[JsValue]): AuditHandler = {
+  private def auditHandler(rawData: AmendForeignPropertyPeriodSummaryRawData, correlationId: String, request: UserRequest[JsValue]): AuditHandler = {
     new AuditHandler() {
       override def performAudit(userDetails: UserDetails, httpStatus: Int, response: Either[ErrorWrapper, Option[JsValue]], versionNumber: String)(
           implicit
@@ -74,9 +74,9 @@ class AmendForeignPropertyPeriodSummaryController @Inject() (val authService: En
           ec: ExecutionContext): Unit = {
         response match {
           case Left(err: ErrorWrapper) =>
-            auditSubmission(GenericAuditDetail(request.userDetails, rawData, ctx.correlationId, AuditResponse(httpStatus, Left(err.auditErrors))))
+            auditSubmission(GenericAuditDetail(request.userDetails, rawData, correlationId, AuditResponse(httpStatus, Left(err.auditErrors))))
           case Right(_) =>
-            auditSubmission(GenericAuditDetail(request.userDetails, rawData, ctx.correlationId, AuditResponse(OK, Right(None))))
+            auditSubmission(GenericAuditDetail(request.userDetails, rawData, correlationId, AuditResponse(OK, Right(None))))
         }
       }
     }

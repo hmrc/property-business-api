@@ -57,7 +57,7 @@ object RequestHandler {
       service: Input => Future[Either[ErrorWrapper, ResponseWrapper[Output]]],
       errorHandling: ErrorHandling = ErrorHandling.Default,
       resultCreator: ResultCreator[InputRaw, Input, Output] = ResultCreator.noContent[InputRaw, Input, Output](),
-       auditHandler: Option[AuditHandler] = None
+      auditHandler: Option[AuditHandler] = None
   ) extends RequestHandler[InputRaw] {
 
     def handleRequest(rawData: InputRaw)(implicit ctx: RequestContext, request: UserRequest[_], ec: ExecutionContext): Future[Result] =

@@ -16,12 +16,11 @@
 
 package v2.mocks.services
 
-import api.controllers.EndpointLogContext
+import api.controllers.RequestContext
 import api.models.domain.HistoricPropertyType
 import api.services.ServiceOutcome
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
-import uk.gov.hmrc.http.HeaderCarrier
 import v2.models.request.listHistoricUkPropertyPeriodSummaries.ListHistoricUkPropertyPeriodSummariesRequest
 import v2.models.response.listHistoricUkPropertyPeriodSummaries.{ListHistoricUkPropertyPeriodSummariesResponse, SubmissionPeriod}
 import v2.services.ListHistoricUkPropertyPeriodSummariesService
@@ -40,13 +39,11 @@ trait MockListHistoricUkPropertyPeriodSummariesService extends MockFactory {
       (
         mockService
           .listPeriodSummaries(_: ListHistoricUkPropertyPeriodSummariesRequest, _: HistoricPropertyType)(
-            _: HeaderCarrier,
-            _: ExecutionContext,
-            _: EndpointLogContext,
-            _: String
+            _: RequestContext,
+            _: ExecutionContext
           )
         )
-        .expects(requestData, propertyType, *, *, *, *)
+        .expects(requestData, propertyType, *, *)
     }
 
   }

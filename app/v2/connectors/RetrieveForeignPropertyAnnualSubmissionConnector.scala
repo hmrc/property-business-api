@@ -49,18 +49,21 @@ class RetrieveForeignPropertyAnnualSubmissionConnector @Inject() (val http: Http
 
     import request._
 
-    val response = if (taxYear.useTaxYearSpecificApi) {
-      get(
-        uri = TaxYearSpecificIfsUri[RetrieveForeignPropertyAnnualSubmissionResponse](
-          s"income-tax/business/property/annual/${taxYear.asTysDownstream}/${nino.value}/$businessId")
+    val (downstreamUri, queryParams) = if (taxYear.useTaxYearSpecificApi) {
+      (
+        TaxYearSpecificIfsUri[RetrieveForeignPropertyAnnualSubmissionResponse](
+          s"income-tax/business/property/annual/${taxYear.asTysDownstream}/${nino.value}/$businessId"),
+        Nil
       )
     } else {
       // Note that MTD tax year format is used pre-TYS
-      get(
-        uri = IfsUri[RetrieveForeignPropertyAnnualSubmissionResponse]("income-tax/business/property/annual"),
-        queryParams = Seq("taxableEntityId" -> nino.value, "incomeSourceId" -> businessId, "taxYear" -> taxYear.asMtd)
+      (
+        IfsUri[RetrieveForeignPropertyAnnualSubmissionResponse]("income-tax/business/property/annual"),
+        Seq("taxableEntityId" -> nino.nino, "incomeSourceId" -> businessId, "taxYear" -> taxYear.asMtd)
       )
     }
+
+    val response = get(downstreamUri, queryParams)
 
     response.map {
       case Right(ResponseWrapper(corId, resp)) if foreignResult(resp) => Right(ResponseWrapper(corId, ForeignResult(resp)))

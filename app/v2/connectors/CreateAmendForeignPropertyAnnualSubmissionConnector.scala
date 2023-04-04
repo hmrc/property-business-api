@@ -40,10 +40,10 @@ class CreateAmendForeignPropertyAnnualSubmissionConnector @Inject() (val http: H
       TaxYearSpecificIfsUri[Unit](s"income-tax/business/property/annual/${taxYear.asTysDownstream}/${nino.nino}/$businessId")
     } else {
       // Note that MTD tax year format is used
-      IfsUri[Unit](s"income-tax/business/property/annual?taxableEntityId=${nino.nino}&incomeSourceId=$businessId&taxYear=${taxYear.asMtd}")
+      IfsUri[Unit](s"income-tax/business/property/annual?taxableEntityId=$nino&incomeSourceId=$businessId&taxYear=${taxYear.asMtd}")
     }
 
-    put(body = body, uri = downstreamUri)
+    put(body, downstreamUri)
   }
 
 }

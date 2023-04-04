@@ -35,15 +35,12 @@ class RetrieveHistoricFhlUkPropertyPeriodSummaryConnector @Inject() (val http: H
       ec: ExecutionContext,
       correlationId: String): Future[DownstreamOutcome[RetrieveHistoricFhlUkPiePeriodSummaryResponse]] = {
 
-    val nino     = request.nino.value
-    val periodId = request.periodId
+    import request._
 
-    val response = get(
-      uri = DesUri[RetrieveHistoricFhlUkPiePeriodSummaryResponse](
-        s"income-tax/nino/$nino/uk-properties/furnished-holiday-lettings/periodic-summary-detail?from=${periodId.from}&to=${periodId.to}")
-    )
+    val downstreamUri = DesUri[RetrieveHistoricFhlUkPiePeriodSummaryResponse](
+      s"income-tax/nino/$nino/uk-properties/furnished-holiday-lettings/periodic-summary-detail?from=${periodId.from}&to=${periodId.to}")
 
-    response
+    get(downstreamUri)
 
   }
 

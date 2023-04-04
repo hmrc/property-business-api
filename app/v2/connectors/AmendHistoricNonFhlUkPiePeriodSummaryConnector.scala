@@ -37,15 +37,15 @@ class AmendHistoricNonFhlUkPiePeriodSummaryConnector @Inject() (val http: HttpCl
       ec: ExecutionContext,
       correlationId: String): Future[DownstreamOutcome[Unit]] = {
 
-    val path =
-      s"income-tax/nino/${request.nino.value}/uk-properties/other/periodic-summaries" +
-        s"?from=${request.periodId.from}" +
-        s"&to=${request.periodId.to}"
+    import request._
 
-    put(
-      body = request.body,
-      uri = IfsUri[Unit](path)
-    )
+    val downstreamUri =
+      IfsUri[Unit](
+        s"income-tax/nino/$nino/uk-properties/other/periodic-summaries" +
+          s"?from=${periodId.from}" +
+          s"&to=${periodId.to}")
+
+    put(body, downstreamUri)
   }
 
 }

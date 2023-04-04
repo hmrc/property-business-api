@@ -36,16 +36,17 @@ class ListHistoricUkPropertyPeriodSummariesConnector @Inject() (val http: HttpCl
       ec: ExecutionContext,
       correlationId: String): Future[DownstreamOutcome[ListHistoricUkPropertyPeriodSummariesResponse[SubmissionPeriod]]] = {
 
+    import request._
+
     val propertyTypeName = propertyType match {
       case HistoricPropertyType.Fhl    => "furnished-holiday-lettings"
       case HistoricPropertyType.NonFhl => "other"
     }
 
-    val url = s"income-tax/nino/${request.nino.nino}/uk-properties/$propertyTypeName/periodic-summaries"
+    val downstreamUri = IfsUri[ListHistoricUkPropertyPeriodSummariesResponse[SubmissionPeriod]](
+      s"income-tax/nino/$nino/uk-properties/$propertyTypeName/periodic-summaries")
 
-    get(
-      uri = IfsUri[ListHistoricUkPropertyPeriodSummariesResponse[SubmissionPeriod]](url)
-    )
+    get(downstreamUri)
   }
 
 }

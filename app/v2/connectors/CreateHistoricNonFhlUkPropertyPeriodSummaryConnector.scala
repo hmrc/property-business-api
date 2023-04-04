@@ -38,8 +38,11 @@ class CreateHistoricNonFhlUkPropertyPeriodSummaryConnector @Inject() (val http: 
       ex: ExecutionContext,
       correlationId: String): Future[DownstreamOutcome[Unit]] = {
 
-    val path = s"income-tax/nino/${request.nino.nino}/uk-properties/other/periodic-summaries"
-    post(request.body, IfsUri[Unit](path))
+    import request._
+
+    val downstreamUri = IfsUri[Unit](s"income-tax/nino/$nino/uk-properties/other/periodic-summaries")
+
+    post(body, downstreamUri)
   }
 
 }

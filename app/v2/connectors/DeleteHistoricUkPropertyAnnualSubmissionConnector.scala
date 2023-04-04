@@ -36,20 +36,16 @@ class DeleteHistoricUkPropertyAnnualSubmissionConnector @Inject() (val http: Htt
       ec: ExecutionContext,
       correlationId: String): Future[DownstreamOutcome[Unit]] = {
 
-    val nino    = request.nino.nino
-    val taxYear = request.taxYear.asDownstream
+    import request._
 
-    val propertyTypeName = request.propertyType match {
+    val propertyTypeName = propertyType match {
       case HistoricPropertyType.Fhl    => "furnished-holiday-lettings"
       case HistoricPropertyType.NonFhl => "other"
     }
 
-    put(
-      body = JsObject.empty,
-      uri = IfsUri[Unit](
-        s"income-tax/nino/$nino/uk-properties/$propertyTypeName/annual-summaries/$taxYear"
-      )
-    )
+    val downstreamUri = IfsUri[Unit](s"income-tax/nino/$nino/uk-properties/$propertyTypeName/annual-summaries/${taxYear.asDownstream}")
+
+    put(JsObject.empty, downstreamUri)
   }
 
 }

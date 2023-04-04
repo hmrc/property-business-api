@@ -17,10 +17,11 @@
 package v2.mocks.services
 
 import api.controllers.RequestContext
+import api.services.ServiceOutcome
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
 import v2.models.request.amendForeignPropertyPeriodSummary.AmendForeignPropertyPeriodSummaryRequest
-import v2.services.{AmendForeignPropertyPeriodSummaryService, AmendForeignPropertyPeriodSummaryServiceOutcome}
+import v2.services.AmendForeignPropertyPeriodSummaryService
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -30,7 +31,7 @@ trait MockAmendForeignPropertyPeriodSummaryService extends MockFactory {
 
   object MockAmendForeignPropertyService {
 
-    def amend(requestData: AmendForeignPropertyPeriodSummaryRequest): CallHandler[Future[AmendForeignPropertyPeriodSummaryServiceOutcome]] = {
+    def amend(requestData: AmendForeignPropertyPeriodSummaryRequest): CallHandler[Future[ServiceOutcome[Unit]]] = {
       (
         mockService
           .amendForeignPropertyPeriodSummary(_: AmendForeignPropertyPeriodSummaryRequest)(

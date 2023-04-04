@@ -18,10 +18,11 @@ package v2.services
 
 import api.controllers.RequestContext
 import api.models.errors._
-import api.services.BaseService
+import api.services.{BaseService, ServiceOutcome}
 import cats.implicits._
 import v2.connectors.ListPropertyPeriodSummariesConnector
 import v2.models.request.listPropertyPeriodSummaries.ListPropertyPeriodSummariesRequest
+import v2.models.response.listPropertyPeriodSummaries.ListPropertyPeriodSummariesResponse
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
@@ -31,7 +32,7 @@ class ListPropertyPeriodSummariesService @Inject() (connector: ListPropertyPerio
 
   def listPeriodSummaries(request: ListPropertyPeriodSummariesRequest)(implicit
       ctx: RequestContext,
-      ec: ExecutionContext): Future[ListPropertyPeriodSummariesServiceOutcome] = {
+      ec: ExecutionContext): Future[ServiceOutcome[ListPropertyPeriodSummariesResponse]] = {
 
     connector.listPeriodSummaries(request).map(_.leftMap(mapDownstreamErrors(downstreamErrorMap)))
   }

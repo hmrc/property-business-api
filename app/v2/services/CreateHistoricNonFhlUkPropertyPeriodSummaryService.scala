@@ -20,7 +20,7 @@ import api.controllers.RequestContext
 import api.models.domain.PeriodId
 import api.models.errors._
 import api.models.outcomes.ResponseWrapper
-import api.services.BaseService
+import api.services.{BaseService, ServiceOutcome}
 import cats.implicits.toBifunctorOps
 import v2.connectors.CreateHistoricNonFhlUkPropertyPeriodSummaryConnector
 import v2.models.request.createHistoricNonFhlUkPropertyPeriodSummary.CreateHistoricNonFhlUkPropertyPeriodSummaryRequest
@@ -35,7 +35,7 @@ class CreateHistoricNonFhlUkPropertyPeriodSummaryService @Inject() (connector: C
 
   def createPeriodSummary(request: CreateHistoricNonFhlUkPropertyPeriodSummaryRequest)(implicit
       ctx: RequestContext,
-      ec: ExecutionContext): Future[CreateHistoricNonFhlUkPropertyPeriodSummaryServiceOutcome] = {
+      ec: ExecutionContext): Future[ServiceOutcome[CreateHistoricNonFhlUkPiePeriodSummaryResponse]] = {
 
     def toResponse(wrapper: ResponseWrapper[Unit]): ResponseWrapper[CreateHistoricNonFhlUkPiePeriodSummaryResponse] =
       wrapper

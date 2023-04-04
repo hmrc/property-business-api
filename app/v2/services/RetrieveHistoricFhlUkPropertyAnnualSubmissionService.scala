@@ -18,10 +18,11 @@ package v2.services
 
 import api.controllers.RequestContext
 import api.models.errors._
-import api.services.BaseService
+import api.services.{BaseService, ServiceOutcome}
 import cats.implicits._
 import v2.connectors.RetrieveHistoricFhlUkPropertyAnnualSubmissionConnector
 import v2.models.request.retrieveHistoricFhlUkPropertyAnnualSubmission.RetrieveHistoricFhlUkPropertyAnnualSubmissionRequest
+import v2.models.response.retrieveHistoricFhlUkPropertyAnnualSubmission.RetrieveHistoricFhlUkPropertyAnnualSubmissionResponse
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
@@ -32,7 +33,7 @@ class RetrieveHistoricFhlUkPropertyAnnualSubmissionService @Inject() (connector:
 
   def retrieve(request: RetrieveHistoricFhlUkPropertyAnnualSubmissionRequest)(implicit
       ctx: RequestContext,
-      ec: ExecutionContext): Future[RetrieveHistoricFhlUkPropertyAnnualSubmissionServiceOutcome] = {
+      ec: ExecutionContext): Future[ServiceOutcome[RetrieveHistoricFhlUkPropertyAnnualSubmissionResponse]] = {
 
     connector.retrieve(request).map(_.leftMap(mapDownstreamErrors(downstreamErrorMap)))
 

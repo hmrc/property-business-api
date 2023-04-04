@@ -18,7 +18,7 @@ package v2.services
 
 import api.controllers.RequestContext
 import api.models.errors._
-import api.services.BaseService
+import api.services.{BaseService, ServiceOutcome}
 import cats.implicits._
 import v2.connectors.AmendHistoricFhlUkPiePeriodSummaryConnector
 import v2.models.request.amendHistoricFhlUkPiePeriodSummary.AmendHistoricFhlUkPiePeriodSummaryRequest
@@ -29,9 +29,7 @@ import scala.concurrent.{ExecutionContext, Future}
 @Singleton
 class AmendHistoricFhlUkPiePeriodSummaryService @Inject() (connector: AmendHistoricFhlUkPiePeriodSummaryConnector) extends BaseService {
 
-  def amend(request: AmendHistoricFhlUkPiePeriodSummaryRequest)(implicit
-      ctx: RequestContext,
-      ec: ExecutionContext): Future[AmendHistoricFhlUkPiePeriodSummaryServiceOutcome] = {
+  def amend(request: AmendHistoricFhlUkPiePeriodSummaryRequest)(implicit ctx: RequestContext, ec: ExecutionContext): Future[ServiceOutcome[Unit]] = {
 
     connector.amend(request).map(_.leftMap(mapDownstreamErrors(downstreamErrorMap)))
 

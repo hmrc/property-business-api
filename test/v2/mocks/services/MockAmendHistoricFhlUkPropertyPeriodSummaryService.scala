@@ -17,10 +17,11 @@
 package v2.mocks.services
 
 import api.controllers.RequestContext
+import api.services.ServiceOutcome
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
 import v2.models.request.amendHistoricFhlUkPiePeriodSummary.AmendHistoricFhlUkPiePeriodSummaryRequest
-import v2.services.{AmendHistoricFhlUkPiePeriodSummaryService, AmendHistoricFhlUkPiePeriodSummaryServiceOutcome}
+import v2.services.AmendHistoricFhlUkPiePeriodSummaryService
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -30,7 +31,7 @@ trait MockAmendHistoricFhlUkPropertyPeriodSummaryService extends MockFactory {
 
   object MockAmendHistoricFhlUkPropertyPeriodSummaryService {
 
-    def amend(requestData: AmendHistoricFhlUkPiePeriodSummaryRequest): CallHandler[Future[AmendHistoricFhlUkPiePeriodSummaryServiceOutcome]] = {
+    def amend(requestData: AmendHistoricFhlUkPiePeriodSummaryRequest): CallHandler[Future[ServiceOutcome[Unit]]] = {
       (mockAmendHistoricFhlUkPropertyPeriodSummaryService
         .amend(_: AmendHistoricFhlUkPiePeriodSummaryRequest)(_: RequestContext, _: ExecutionContext))
         .expects(requestData, *, *)

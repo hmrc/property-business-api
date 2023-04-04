@@ -18,7 +18,7 @@ package v2.services
 
 import api.controllers.RequestContext
 import api.models.errors._
-import api.services.BaseService
+import api.services.{BaseService, ServiceOutcome}
 import cats.implicits._
 import v2.connectors.AmendUkPropertyPeriodSummaryConnector
 import v2.models.request.amendUkPropertyPeriodSummary.AmendUkPropertyPeriodSummaryRequest
@@ -29,9 +29,8 @@ import scala.concurrent.{ExecutionContext, Future}
 @Singleton
 class AmendUkPropertyPeriodSummaryService @Inject() (connector: AmendUkPropertyPeriodSummaryConnector) extends BaseService {
 
-  def amendUkPropertyPeriodSummary(request: AmendUkPropertyPeriodSummaryRequest)(implicit
-      ctx: RequestContext,
-      ec: ExecutionContext): Future[AmendUkPropertyPeriodSummaryServiceOutcome] = {
+  def amendUkPropertyPeriodSummary(
+      request: AmendUkPropertyPeriodSummaryRequest)(implicit ctx: RequestContext, ec: ExecutionContext): Future[ServiceOutcome[Unit]] = {
 
     connector.amendUkPropertyPeriodSummary(request).map(_.leftMap(mapDownstreamErrors(downstreamErrorMap)))
 

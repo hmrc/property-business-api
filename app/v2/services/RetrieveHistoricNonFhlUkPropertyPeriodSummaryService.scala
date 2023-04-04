@@ -18,10 +18,11 @@ package v2.services
 
 import api.controllers.RequestContext
 import api.models.errors._
-import api.services.BaseService
+import api.services.{BaseService, ServiceOutcome}
 import cats.implicits._
 import v2.connectors.RetrieveHistoricNonFhlUkPropertyPeriodSummaryConnector
 import v2.models.request.retrieveHistoricNonFhlUkPiePeriodSummary.RetrieveHistoricNonFhlUkPiePeriodSummaryRequest
+import v2.models.response.retrieveHistoricNonFhlUkPiePeriodSummary.RetrieveHistoricNonFhlUkPiePeriodSummaryResponse
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
@@ -32,7 +33,7 @@ class RetrieveHistoricNonFhlUkPropertyPeriodSummaryService @Inject() (connector:
 
   def retrieve(request: RetrieveHistoricNonFhlUkPiePeriodSummaryRequest)(implicit
       ctx: RequestContext,
-      ec: ExecutionContext): Future[RetrieveHistoricNonFhlUkPropertyPeriodSummaryServiceOutcome] = {
+      ec: ExecutionContext): Future[ServiceOutcome[RetrieveHistoricNonFhlUkPiePeriodSummaryResponse]] = {
 
     connector.retrieve(request).map(_.leftMap(mapDownstreamErrors(downstreamErrorMap)))
 

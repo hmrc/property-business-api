@@ -18,10 +18,11 @@ package v2.services
 
 import api.controllers.RequestContext
 import api.models.errors._
-import api.services.BaseService
+import api.services.{BaseService, ServiceOutcome}
 import cats.implicits._
 import v2.connectors.CreateAmendHistoricFhlUkPropertyAnnualSubmissionConnector
 import v2.models.request.createAmendHistoricFhlUkPropertyAnnualSubmission.CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequest
+import v2.models.response.createAmendHistoricFhlUkPropertyAnnualSubmission.CreateAmendHistoricFhlUkPropertyAnnualSubmissionResponse
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
@@ -32,7 +33,7 @@ class CreateAmendHistoricFhlUkPropertyAnnualSubmissionService @Inject() (connect
 
   def amend(request: CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequest)(implicit
       ctx: RequestContext,
-      ec: ExecutionContext): Future[CreateAmendHistoricFhlUkPropertyAnnualSubmissionServiceOutcome] = {
+      ec: ExecutionContext): Future[ServiceOutcome[CreateAmendHistoricFhlUkPropertyAnnualSubmissionResponse]] = {
 
     connector.amend(request).map(_.leftMap(mapDownstreamErrors(downstreamErrorMap)))
   }

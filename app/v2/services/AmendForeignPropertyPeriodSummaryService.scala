@@ -18,7 +18,7 @@ package v2.services
 
 import api.controllers.RequestContext
 import api.models.errors._
-import api.services.BaseService
+import api.services.{BaseService, ServiceOutcome}
 import cats.implicits._
 import v2.connectors.AmendForeignPropertyPeriodSummaryConnector
 import v2.models.request.amendForeignPropertyPeriodSummary.AmendForeignPropertyPeriodSummaryRequest
@@ -32,7 +32,7 @@ class AmendForeignPropertyPeriodSummaryService @Inject() (connector: AmendForeig
   def amendForeignPropertyPeriodSummary(request: AmendForeignPropertyPeriodSummaryRequest)(implicit
       ctx: RequestContext,
       ec: ExecutionContext
-  ): Future[AmendForeignPropertyPeriodSummaryServiceOutcome] = {
+  ): Future[ServiceOutcome[Unit]] = {
 
     connector.amendForeignPropertyPeriodSummary(request).map(_.leftMap(mapDownstreamErrors(downstreamErrorMap)))
   }

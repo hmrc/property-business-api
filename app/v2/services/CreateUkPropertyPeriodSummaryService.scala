@@ -18,10 +18,11 @@ package v2.services
 
 import api.controllers.RequestContext
 import api.models.errors._
-import api.services.BaseService
+import api.services.{BaseService, ServiceOutcome}
 import cats.implicits._
 import v2.connectors.CreateUkPropertyPeriodSummaryConnector
 import v2.models.request.createUkPropertyPeriodSummary.CreateUkPropertyPeriodSummaryRequest
+import v2.models.response.createUkPropertyPeriodSummary.CreateUkPropertyPeriodSummaryResponse
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
@@ -31,7 +32,7 @@ class CreateUkPropertyPeriodSummaryService @Inject() (connector: CreateUkPropert
 
   def createUkProperty(request: CreateUkPropertyPeriodSummaryRequest)(implicit
       ctx: RequestContext,
-      ec: ExecutionContext): Future[CreateUkPropertyPeriodSummaryServiceOutcome] = {
+      ec: ExecutionContext): Future[ServiceOutcome[CreateUkPropertyPeriodSummaryResponse]] = {
 
     connector.createUkProperty(request).map(_.leftMap(mapDownstreamErrors(downstreamErrorMap)))
   }

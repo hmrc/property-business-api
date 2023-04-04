@@ -19,11 +19,12 @@ package v2.services
 import api.controllers.RequestContext
 import api.models.errors._
 import api.models.outcomes.ResponseWrapper
-import api.services.BaseService
+import api.services.{BaseService, ServiceOutcome}
 import cats.data.EitherT
 import v2.connectors.RetrieveUkPropertyPeriodSummaryConnector
 import v2.connectors.RetrieveUkPropertyPeriodSummaryConnector.{NonUkResult, UkResult}
 import v2.models.request.retrieveUkPropertyPeriodSummary.RetrieveUkPropertyPeriodSummaryRequest
+import v2.models.response.retrieveUkPropertyPeriodSummary.RetrieveUkPropertyPeriodSummaryResponse
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
@@ -32,7 +33,7 @@ class RetrieveUkPropertyPeriodSummaryService @Inject() (connector: RetrieveUkPro
 
   def retrieveUkProperty(request: RetrieveUkPropertyPeriodSummaryRequest)(implicit
       ctx: RequestContext,
-      ec: ExecutionContext): Future[RetrieveUkPropertyPeriodSummaryServiceOutcome] = {
+      ec: ExecutionContext): Future[ServiceOutcome[RetrieveUkPropertyPeriodSummaryResponse]] = {
 
     val result = EitherT(connector.retrieveUkProperty(request))
       .leftMap(mapDownstreamErrors(downstreamErrorMap))

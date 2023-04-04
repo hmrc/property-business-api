@@ -16,29 +16,28 @@
 
 package v2.services
 
+import api.controllers.EndpointLogContext
+import api.models.domain.HistoricPropertyType
+import api.models.errors._
+import api.services.ServiceOutcome
+import api.support.DownstreamResponseMappingSupport
 import cats.data.EitherT
 import uk.gov.hmrc.http.HeaderCarrier
 import utils.Logging
 import v2.connectors.ListHistoricUkPropertyPeriodSummariesConnector
-import api.controllers.EndpointLogContext
-import api.models.domain.HistoricPropertyType
-import api.models.errors._
 import v2.models.request.listHistoricUkPropertyPeriodSummaries.ListHistoricUkPropertyPeriodSummariesRequest
 import v2.models.response.listHistoricUkPropertyPeriodSummaries.{ListHistoricUkPropertyPeriodSummariesResponse, SubmissionPeriod}
-import api.services.ServiceOutcome
-import api.support.DownstreamResponseMappingSupport
-import v2.connectors.ListHistoricUkPropertyPeriodSummariesConnector
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class ListHistoricUkPropertyPeriodSummariesService @Inject()(connector: ListHistoricUkPropertyPeriodSummariesConnector)
+class ListHistoricUkPropertyPeriodSummariesService @Inject() (connector: ListHistoricUkPropertyPeriodSummariesConnector)
     extends DownstreamResponseMappingSupport
     with Logging {
 
-  def listPeriodSummaries(request: ListHistoricUkPropertyPeriodSummariesRequest, propertyType: HistoricPropertyType)(
-      implicit hc: HeaderCarrier,
+  def listPeriodSummaries(request: ListHistoricUkPropertyPeriodSummariesRequest, propertyType: HistoricPropertyType)(implicit
+      hc: HeaderCarrier,
       ec: ExecutionContext,
       logContext: EndpointLogContext,
       correlationId: String): Future[ServiceOutcome[ListHistoricUkPropertyPeriodSummariesResponse[SubmissionPeriod]]] = {
@@ -58,4 +57,5 @@ class ListHistoricUkPropertyPeriodSummariesService @Inject()(connector: ListHist
     "SERVER_ERROR"           -> InternalError,
     "SERVICE_UNAVAILABLE"    -> InternalError
   )
+
 }

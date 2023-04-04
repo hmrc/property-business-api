@@ -17,10 +17,12 @@
 package v2.mocks.services
 
 import api.controllers.RequestContext
+import api.services.ServiceOutcome
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
 import v2.models.request.createUkPropertyPeriodSummary.CreateUkPropertyPeriodSummaryRequest
-import v2.services.{CreateUkPropertyPeriodSummaryService, CreateUkPropertyPeriodSummaryServiceOutcome}
+import v2.models.response.createUkPropertyPeriodSummary.CreateUkPropertyPeriodSummaryResponse
+import v2.services.CreateUkPropertyPeriodSummaryService
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -30,7 +32,8 @@ trait MockCreateUkPropertyPeriodSummaryService extends MockFactory {
 
   object MockCreateUkPropertyService {
 
-    def createUkProperty(requestData: CreateUkPropertyPeriodSummaryRequest): CallHandler[Future[CreateUkPropertyPeriodSummaryServiceOutcome]] = {
+    def createUkProperty(
+        requestData: CreateUkPropertyPeriodSummaryRequest): CallHandler[Future[ServiceOutcome[CreateUkPropertyPeriodSummaryResponse]]] = {
       (
         mockCreateUkPropertyService
           .createUkProperty(_: CreateUkPropertyPeriodSummaryRequest)(

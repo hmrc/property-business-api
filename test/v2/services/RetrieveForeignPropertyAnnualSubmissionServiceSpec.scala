@@ -38,22 +38,6 @@ class RetrieveForeignPropertyAnnualSubmissionServiceSpec extends UnitSpec {
 
   implicit private val correlationId: String = "X-123"
 
-  trait Test extends MockRetrieveForeignPropertyAnnualSubmissionConnector {
-    implicit protected val hc: HeaderCarrier              = HeaderCarrier()
-    implicit protected val logContext: EndpointLogContext = EndpointLogContext("c", "ep")
-
-    protected val service = new RetrieveForeignPropertyAnnualSubmissionService(
-      connector = mockRetrieveForeignPropertyConnector
-    )
-
-    protected val requestData: RetrieveForeignPropertyAnnualSubmissionRequest =
-      RetrieveForeignPropertyAnnualSubmissionRequest(Nino(nino), businessId, taxYear)
-
-    protected val response: RetrieveForeignPropertyAnnualSubmissionResponse =
-      RetrieveForeignPropertyAnnualSubmissionResponse("2020-07-07T10:59:47.544Z", None, None)
-
-  }
-
   "service" should {
     "service call successful" when {
       "return mapped result" in new Test {
@@ -106,6 +90,22 @@ class RetrieveForeignPropertyAnnualSubmissionServiceSpec extends UnitSpec {
 
       (errors ++ extraTysErrors).foreach(args => (serviceError _).tupled(args))
     }
+  }
+
+  trait Test extends MockRetrieveForeignPropertyAnnualSubmissionConnector {
+    implicit protected val hc: HeaderCarrier              = HeaderCarrier()
+    implicit protected val logContext: EndpointLogContext = EndpointLogContext("c", "ep")
+
+    protected val service = new RetrieveForeignPropertyAnnualSubmissionService(
+      connector = mockRetrieveForeignPropertyConnector
+    )
+
+    protected val requestData: RetrieveForeignPropertyAnnualSubmissionRequest =
+      RetrieveForeignPropertyAnnualSubmissionRequest(Nino(nino), businessId, taxYear)
+
+    protected val response: RetrieveForeignPropertyAnnualSubmissionResponse =
+      RetrieveForeignPropertyAnnualSubmissionResponse("2020-07-07T10:59:47.544Z", None, None)
+
   }
 
 }

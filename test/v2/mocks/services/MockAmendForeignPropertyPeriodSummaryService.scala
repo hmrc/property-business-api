@@ -16,16 +16,13 @@
 
 package v2.mocks.services
 
+import api.controllers.RequestContext
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
-import uk.gov.hmrc.http.HeaderCarrier
-import api.controllers.EndpointLogContext
-import api.models.errors.ErrorWrapper
-import api.models.outcomes.ResponseWrapper
 import v2.models.request.amendForeignPropertyPeriodSummary.AmendForeignPropertyPeriodSummaryRequest
-import v2.services.AmendForeignPropertyPeriodSummaryService
+import v2.services.{AmendForeignPropertyPeriodSummaryService, AmendForeignPropertyPeriodSummaryServiceOutcome}
 
-import scala.concurrent.{ ExecutionContext, Future }
+import scala.concurrent.{ExecutionContext, Future}
 
 trait MockAmendForeignPropertyPeriodSummaryService extends MockFactory {
 
@@ -33,17 +30,17 @@ trait MockAmendForeignPropertyPeriodSummaryService extends MockFactory {
 
   object MockAmendForeignPropertyService {
 
-    def amend(requestData: AmendForeignPropertyPeriodSummaryRequest): CallHandler[Future[Either[ErrorWrapper, ResponseWrapper[Unit]]]] = {
+    def amend(requestData: AmendForeignPropertyPeriodSummaryRequest): CallHandler[Future[AmendForeignPropertyPeriodSummaryServiceOutcome]] = {
       (
         mockService
           .amendForeignPropertyPeriodSummary(_: AmendForeignPropertyPeriodSummaryRequest)(
-            _: HeaderCarrier,
-            _: ExecutionContext,
-            _: EndpointLogContext,
-            _: String
+            _: RequestContext,
+            _: ExecutionContext
           )
         )
-        .expects(requestData, *, *, *, *)
+        .expects(requestData, *, *)
     }
+
   }
+
 }

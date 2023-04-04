@@ -16,37 +16,27 @@
 
 package v2.services
 
+import api.controllers.RequestContext
+import api.models.errors._
+import api.services.BaseService
 import cats.implicits._
-import cats.data.EitherT
+import v2.connectors.CreateForeignPropertyPeriodSummaryConnector
+import v2.models.request.createForeignPropertyPeriodSummary.CreateForeignPropertyPeriodSummaryRequest
 
 import javax.inject.{Inject, Singleton}
-import uk.gov.hmrc.http.HeaderCarrier
-import utils.Logging
-import v2.connectors.CreateForeignPropertyPeriodSummaryConnector
-import api.controllers.EndpointLogContext
-import api.models.errors._
-import v2.models.request.createForeignPropertyPeriodSummary.CreateForeignPropertyPeriodSummaryRequest
-import v2.models.response.createForeignPropertyPeriodSummary.CreateForeignPropertyPeriodSummaryResponse
-import api.services.ServiceOutcome
-import api.support.DownstreamResponseMappingSupport
-
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class CreateForeignPropertyPeriodSummaryService @Inject()(connector: CreateForeignPropertyPeriodSummaryConnector)
-    extends DownstreamResponseMappingSupport
-    with Logging {
+class CreateForeignPropertyPeriodSummaryService @Inject() (connector: CreateForeignPropertyPeriodSummaryConnector) extends BaseService {
 
-  def createForeignProperty(request: CreateForeignPropertyPeriodSummaryRequest)(
-      implicit hc: HeaderCarrier,
-      ec: ExecutionContext,
-      logContext: EndpointLogContext,
-      correlationId: String): Future[ServiceOutcome[CreateForeignPropertyPeriodSummaryResponse]] = {
+  def createForeignProperty(request: CreateForeignPropertyPeriodSummaryRequest)(implicit
+      ctx: RequestContext,
+      ec: ExecutionContext): Future[CreateForeignPropertyPeriodSummaryServiceOutcome] = {
 
-    EitherT(connector.createForeignProperty(request)).leftMap(mapDownstreamErrors(downstreamErrorMap)).value
+    connector.createForeignProperty(request).map(_.leftMap(mapDownstreamErrors(downstreamErrorMap)))
   }
 
-  private def downstreamErrorMap = {
+  private val downstreamErrorMap: Map[String, MtdError] = {
     val errors = Map(
       "INVALID_TAXABLE_ENTITY_ID" -> NinoFormatError,
       "INVALID_INCOMESOURCEID"    -> BusinessIdFormatError,
@@ -71,7 +61,7 @@ class CreateForeignPropertyPeriodSummaryService @Inject()(connector: CreateForei
       "INVALID_INCOMESOURCE_ID" -> BusinessIdFormatError,
       "INVALID_CORRELATION_ID"  -> InternalError,
       "PERIOD_NOT_ALIGNED"      -> RuleMisalignedPeriodError,
-      "PERIOD_OVERLAPS"         -> RuleOverlappingPeriodError,
+      "PERIOD_OVERLAPS"         -> RuleOverlappingPeriodError
     )
 
     errors ++ extraTysErrors

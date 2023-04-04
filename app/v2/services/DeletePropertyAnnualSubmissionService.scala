@@ -17,7 +17,7 @@
 package v2.services
 
 import api.controllers.RequestContext
-import api.models.errors.{BusinessIdFormatError, InternalError, NinoFormatError, NotFoundError, RuleTaxYearNotSupportedError, TaxYearFormatError}
+import api.models.errors._
 import api.services.BaseService
 import cats.implicits._
 import v2.connectors.DeletePropertyAnnualSubmissionConnector
@@ -37,7 +37,7 @@ class DeletePropertyAnnualSubmissionService @Inject() (connector: DeleteProperty
 
   }
 
-  private val downstreamErrorMap = {
+  private val downstreamErrorMap: Map[String, MtdError] = {
     val downstreamErrors = Map(
       "INVALID_TAXABLE_ENTITY_ID" -> NinoFormatError,
       "INVALID_TAX_YEAR"          -> TaxYearFormatError,

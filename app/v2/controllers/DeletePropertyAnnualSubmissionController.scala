@@ -17,15 +17,21 @@
 package v2.controllers
 
 import api.controllers._
+import api.models.audit.{AuditEvent, AuditResponse, GenericAuditDetail}
+import api.models.auth.UserDetails
+import api.models.errors._
 import api.services.{AuditService, EnrolmentsAuthService, MtdIdLookupService}
+import play.api.libs.json.JsValue
 import play.api.mvc.{Action, AnyContent, ControllerComponents}
+import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.play.audit.http.connector.AuditResult
 import utils.IdGenerator
 import v2.controllers.requestParsers.DeletePropertyAnnualSubmissionRequestParser
 import v2.models.request.deletePropertyAnnualSubmission.DeletePropertyAnnualSubmissionRawData
 import v2.services.DeletePropertyAnnualSubmissionService
 
 import javax.inject.{Inject, Singleton}
-import scala.concurrent.ExecutionContext
+import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class DeletePropertyAnnualSubmissionController @Inject() (val authService: EnrolmentsAuthService,
@@ -49,15 +55,47 @@ class DeletePropertyAnnualSubmissionController @Inject() (val authService: Enrol
       val requestHandler = RequestHandler
         .withParser(parser)
         .withService(service.deletePropertyAnnualSubmission)
-        .withAuditing(AuditHandler(
-          auditService = auditService,
-          auditType = "DeletePropertyAnnualSubmission",
-          transactionName = "delete-property-annual-submission",
-          params = Map("nino" -> nino, "businessId" -> businessId, "taxYear" -> taxYear),
-          requestBody = None
-        ))
+        .withAuditing(
+          auditHandler(rawData = rawData, correlationId = ctx.correlationId, request = request)
+        )
 
       requestHandler.handleRequest(rawData)
     }
+
+  private def auditHandler(rawData: DeletePropertyAnnualSubmissionRawData, correlationId: String, request: UserRequest[AnyContent]) = {
+    new AuditHandler() {
+      override def performAudit(userDetails: UserDetails, httpStatus: Int, response: Either[ErrorWrapper, Option[JsValue]], versionNumber: String)(
+          implicit
+          ctx: RequestContext,
+          ec: ExecutionContext): Unit = {
+        response match {
+          case Left(err: ErrorWrapper) =>
+            auditSubmission(
+              details = GenericAuditDetail(
+                userDetails = request.userDetails,
+                params = rawData,
+                correlationId = correlationId,
+                response = AuditResponse(httpStatus, Left(err.auditErrors))
+              )
+            )
+
+          case Right(_) =>
+            auditSubmission(
+              GenericAuditDetail(
+                request.userDetails,
+                rawData,
+                ctx.correlationId,
+                AuditResponse(httpStatus = OK, response = Right(None))
+              )
+            )
+        }
+      }
+    }
+  }
+
+  private def auditSubmission(details: GenericAuditDetail)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[AuditResult] = {
+    val event = AuditEvent("DeletePropertyAnnualSubmission", "delete-property-annual-submission", details)
+    auditService.auditEvent(event)
+  }
 
 }

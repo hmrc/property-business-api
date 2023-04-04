@@ -41,8 +41,8 @@ class DeletePropertyAnnualSubmissionControllerSpec
   private val businessId = "XAIS12345678910"
   private val taxYear    = "2023-24"
 
-  "DeletePropertyAnnualSubmissionController" should {
-    "return No Content" when {
+  "DeletePropertyAnnualSubmissionControllerSpec" should {
+    "return a successful response with status 204 (NO_CONTENT)" when {
       "the request received is valid" in new Test {
         MockDeletePropertyAnnualSubmissionRequestParser
           .parse(rawData)
@@ -52,7 +52,7 @@ class DeletePropertyAnnualSubmissionControllerSpec
           .deletePropertyAnnualSubmission(requestData)
           .returns(Future.successful(Right(ResponseWrapper(correlationId, ()))))
 
-        runOkTestWithAudit(expectedStatus = NO_CONTENT)
+        runOkTest(expectedStatus = NO_CONTENT, maybeExpectedResponseBody = None)
       }
     }
 
@@ -93,7 +93,7 @@ class DeletePropertyAnnualSubmissionControllerSpec
 
     protected def callController(): Future[Result] = controller.handleRequest(nino, businessId, taxYear)(fakeDeleteRequest)
 
-    def event(auditResponse: AuditResponse, requestBody: Option[JsValue]): AuditEvent[GenericAuditDetail] =
+    protected def event(auditResponse: AuditResponse, maybeRequestBody: Option[JsValue]): AuditEvent[GenericAuditDetail] =
       AuditEvent(
         auditType = "DeletePropertyAnnualSubmission",
         transactionName = "delete-property-annual-submission",
@@ -101,7 +101,7 @@ class DeletePropertyAnnualSubmissionControllerSpec
           versionNumber = "2.0",
           userType = "Individual",
           agentReferenceNumber = None,
-          params = Json.obj("nino" -> nino, "businessId" -> businessId, "taxYear" -> taxYear),
+          params = Json.toJsObject(rawData),
           correlationId = correlationId,
           response = auditResponse
         )

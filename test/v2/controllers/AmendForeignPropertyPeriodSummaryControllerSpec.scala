@@ -21,6 +21,7 @@ import api.mocks.hateoas.MockHateoasFactory
 import api.mocks.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService}
 import api.mocks.MockIdGenerator
 import api.models.audit.{AuditEvent, AuditResponse, GenericAuditDetail}
+import api.models.auth.UserDetails
 import api.models.domain.{Nino, TaxYear}
 import api.models.errors._
 import api.models.hateoas.HateoasWrapper
@@ -236,10 +237,8 @@ class AmendForeignPropertyPeriodSummaryControllerSpec
         auditType = "AmendForeignPropertyIncomeAndExpensesPeriodSummary",
         transactionName = "amend-foreign-property-income-and-expenses-period-summary",
         detail = GenericAuditDetail(
-          versionNumber = "2.0",
-          userType = "Individual",
-          agentReferenceNumber = None,
-          params = Json.toJsObject(rawData),
+          userDetails = UserDetails("test-mtd-id", "Individual", None),
+          params = rawData,
           correlationId = correlationId,
           response = auditResponse
         )

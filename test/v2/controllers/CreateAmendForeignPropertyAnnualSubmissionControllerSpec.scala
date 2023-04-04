@@ -21,11 +21,12 @@ import api.mocks.hateoas.MockHateoasFactory
 import api.mocks.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService}
 import api.mocks.MockIdGenerator
 import api.models.audit.{AuditEvent, AuditResponse, GenericAuditDetail}
+import api.models.auth.UserDetails
 import api.models.domain.{Nino, TaxYear}
 import api.models.errors._
 import api.models.hateoas.HateoasWrapper
 import api.models.outcomes.ResponseWrapper
-import play.api.libs.json.{Json, JsValue}
+import play.api.libs.json.JsValue
 import play.api.mvc.Result
 import v2.mocks.requestParsers.MockCreateAmendForeignPropertyAnnualSubmissionRequestParser
 import v2.mocks.services.MockCreateAmendForeignPropertyAnnualSubmissionService
@@ -116,10 +117,8 @@ class CreateAmendForeignPropertyAnnualSubmissionControllerSpec
         auditType = "CreateAmendForeignPropertyAnnualSubmission",
         transactionName = "create-amend-foreign-property-annual-submission",
         detail = GenericAuditDetail(
-          versionNumber = "2.0",
-          userType = "Individual",
-          agentReferenceNumber = None,
-          params = Json.toJsObject(rawData),
+          userDetails = UserDetails("test-mtd-id", "Individual", None),
+          params = rawData,
           correlationId = correlationId,
           response = auditResponse
         )

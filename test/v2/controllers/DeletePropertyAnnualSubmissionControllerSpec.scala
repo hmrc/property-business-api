@@ -20,10 +20,11 @@ import api.controllers.{ControllerBaseSpec, ControllerTestRunner}
 import api.mocks.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService}
 import api.mocks.MockIdGenerator
 import api.models.audit.{AuditEvent, AuditResponse, GenericAuditDetail}
+import api.models.auth.UserDetails
 import api.models.domain.{Nino, TaxYear}
 import api.models.errors._
 import api.models.outcomes.ResponseWrapper
-import play.api.libs.json.{Json, JsValue}
+import play.api.libs.json.JsValue
 import play.api.mvc.Result
 import v2.mocks.requestParsers.MockDeletePropertyAnnualSubmissionRequestParser
 import v2.mocks.services.MockDeletePropertyAnnualSubmissionService
@@ -111,10 +112,8 @@ class DeletePropertyAnnualSubmissionControllerSpec
         auditType = "DeletePropertyAnnualSubmission",
         transactionName = "delete-property-annual-submission",
         detail = GenericAuditDetail(
-          versionNumber = "2.0",
-          userType = "Individual",
-          agentReferenceNumber = None,
-          params = Json.toJsObject(rawData),
+          userDetails = UserDetails("test-mtd-id", "Individual", None),
+          params = rawData,
           correlationId = correlationId,
           response = auditResponse
         )

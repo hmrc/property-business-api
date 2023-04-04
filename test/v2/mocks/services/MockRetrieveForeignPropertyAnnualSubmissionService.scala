@@ -16,17 +16,13 @@
 
 package v2.mocks.services
 
+import api.controllers.RequestContext
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
-import uk.gov.hmrc.http.HeaderCarrier
-import api.controllers.EndpointLogContext
-import api.models.errors.ErrorWrapper
-import api.models.outcomes.ResponseWrapper
 import v2.models.request.retrieveForeignPropertyAnnualSubmission.RetrieveForeignPropertyAnnualSubmissionRequest
-import v2.models.response.retrieveForeignPropertyAnnualSubmission.RetrieveForeignPropertyAnnualSubmissionResponse
-import v2.services.RetrieveForeignPropertyAnnualSubmissionService
+import v2.services.{RetrieveForeignPropertyAnnualSubmissionService, RetrieveForeignPropertyAnnualSubmissionServiceOutcome}
 
-import scala.concurrent.{ ExecutionContext, Future }
+import scala.concurrent.{ExecutionContext, Future}
 
 trait MockRetrieveForeignPropertyAnnualSubmissionService extends MockFactory {
 
@@ -35,18 +31,18 @@ trait MockRetrieveForeignPropertyAnnualSubmissionService extends MockFactory {
 
   object MockRetrieveForeignPropertyService {
 
-    def retrieve(requestData: RetrieveForeignPropertyAnnualSubmissionRequest)
-      : CallHandler[Future[Either[ErrorWrapper, ResponseWrapper[RetrieveForeignPropertyAnnualSubmissionResponse]]]] = {
+    def retrieve(
+        requestData: RetrieveForeignPropertyAnnualSubmissionRequest): CallHandler[Future[RetrieveForeignPropertyAnnualSubmissionServiceOutcome]] = {
       (
         mockRetrieveForeignPropertyAnnualSubmissionService
           .retrieveForeignProperty(_: RetrieveForeignPropertyAnnualSubmissionRequest)(
-            _: HeaderCarrier,
-            _: ExecutionContext,
-            _: EndpointLogContext,
-            _: String
+            _: RequestContext,
+            _: ExecutionContext
           )
         )
-        .expects(requestData, *, *, *, *)
+        .expects(requestData, *, *)
     }
+
   }
+
 }

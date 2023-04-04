@@ -17,8 +17,6 @@
 package v2.connectors
 
 import api.connectors.{BaseDownstreamConnector, DownstreamOutcome}
-import api.connectors.DownstreamUri.TaxYearSpecificIfsUri
-import api.connectors.DownstreamOutcome
 import api.connectors.DownstreamUri.{IfsUri, TaxYearSpecificIfsUri}
 import api.connectors.httpparsers.StandardDownstreamHttpParser.readsEmpty
 import config.AppConfig

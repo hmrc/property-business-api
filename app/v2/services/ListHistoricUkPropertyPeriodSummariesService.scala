@@ -22,6 +22,7 @@ import api.models.errors._
 import api.services.ServiceOutcome
 import api.support.DownstreamResponseMappingSupport
 import cats.data.EitherT
+import cats.implicits.toBifunctorOps
 import uk.gov.hmrc.http.HeaderCarrier
 import utils.Logging
 import v2.connectors.ListHistoricUkPropertyPeriodSummariesConnector
@@ -42,14 +43,11 @@ class ListHistoricUkPropertyPeriodSummariesService @Inject() (connector: ListHis
       logContext: EndpointLogContext,
       correlationId: String): Future[ServiceOutcome[ListHistoricUkPropertyPeriodSummariesResponse[SubmissionPeriod]]] = {
 
-    val result = for {
-      ifsResponseWrapper <- EitherT(connector.listPeriodSummaries(request, propertyType)).leftMap(mapDownstreamErrors(ifsErrorMap))
-    } yield ifsResponseWrapper
+    connector.listPeriodSummaries(request, propertyType).map(_.leftMap(mapDownstreamErrors(downstreamErrorMap)))
 
-    result.value
   }
 
-  private def ifsErrorMap = Map(
+  private val downstreamErrorMap: Map[String, MtdError] = Map(
     "INVALID_NINO"           -> NinoFormatError,
     "INVALID_CORRELATIONID"  -> InternalError,
     "TAX_YEAR_NOT_SUPPORTED" -> InternalError,

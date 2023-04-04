@@ -16,41 +16,27 @@
 
 package v2.services
 
-import cats.data.EitherT
+import api.controllers.RequestContext
+import api.models.errors._
+import api.services.BaseService
 import cats.implicits._
+import v2.connectors.CreateUkPropertyPeriodSummaryConnector
+import v2.models.request.createUkPropertyPeriodSummary.CreateUkPropertyPeriodSummaryRequest
 
 import javax.inject.{Inject, Singleton}
-import uk.gov.hmrc.http.HeaderCarrier
-import utils.Logging
-import api.controllers.EndpointLogContext
-import api.models.errors._
-import v2.models.request.createUkPropertyPeriodSummary.CreateUkPropertyPeriodSummaryRequest
-import v2.models.response.createUkPropertyPeriodSummary.CreateUkPropertyPeriodSummaryResponse
-import api.services.ServiceOutcome
-import api.support.DownstreamResponseMappingSupport
-import v2.connectors.CreateUkPropertyPeriodSummaryConnector
-
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class CreateUkPropertyPeriodSummaryService @Inject() (connector: CreateUkPropertyPeriodSummaryConnector)
-    extends DownstreamResponseMappingSupport
-    with Logging {
+class CreateUkPropertyPeriodSummaryService @Inject() (connector: CreateUkPropertyPeriodSummaryConnector) extends BaseService {
 
   def createUkProperty(request: CreateUkPropertyPeriodSummaryRequest)(implicit
-      hc: HeaderCarrier,
-      ec: ExecutionContext,
-      logContext: EndpointLogContext,
-      correlationId: String): Future[ServiceOutcome[CreateUkPropertyPeriodSummaryResponse]] = {
+      ctx: RequestContext,
+      ec: ExecutionContext): Future[CreateUkPropertyPeriodSummaryServiceOutcome] = {
 
-    val result = for {
-      ifsResponseWrapper <- EitherT(connector.createUkProperty(request)).leftMap(mapDownstreamErrors(errorMap))
-    } yield ifsResponseWrapper
-
-    result.value
+    connector.createUkProperty(request).map(_.leftMap(mapDownstreamErrors(downstreamErrorMap)))
   }
 
-  private val errorMap = {
+  private val downstreamErrorMap = {
     val errors = Map(
       "INVALID_TAXABLE_ENTITY_ID" -> NinoFormatError,
       "INVALID_INCOMESOURCEID"    -> BusinessIdFormatError,

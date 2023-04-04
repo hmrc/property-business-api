@@ -16,38 +16,28 @@
 
 package v2.services
 
-import cats.data.EitherT
-import cats.implicits._
-import uk.gov.hmrc.http.HeaderCarrier
-import utils.Logging
-import api.controllers.EndpointLogContext
+import api.controllers.RequestContext
 import api.models.errors._
+import api.services.BaseService
+import cats.implicits._
+import v2.connectors.AmendUkPropertyAnnualSubmissionConnector
 import v2.models.request.amendUkPropertyAnnualSubmission.AmendUkPropertyAnnualSubmissionRequest
-import api.services.ServiceOutcome
-import api.support.DownstreamResponseMappingSupport
-import v2.connectors.AmendUkPropertyAnnualSubmissionConnector
-import v2.connectors.AmendUkPropertyAnnualSubmissionConnector
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class AmendUkPropertyAnnualSubmissionService @Inject() (connector: AmendUkPropertyAnnualSubmissionConnector)
-    extends DownstreamResponseMappingSupport
-    with Logging {
+class AmendUkPropertyAnnualSubmissionService @Inject() (connector: AmendUkPropertyAnnualSubmissionConnector) extends BaseService {
 
   def amendUkPropertyAnnualSubmission(request: AmendUkPropertyAnnualSubmissionRequest)(implicit
-      hc: HeaderCarrier,
-      ec: ExecutionContext,
-      logContext: EndpointLogContext,
-      correlationId: String): Future[ServiceOutcome[Unit]] = {
+      ctx: RequestContext,
+      ec: ExecutionContext): Future[AmendUkPropertyAnnualSubmissionServiceOutcome] = {
 
-    val result = EitherT(connector.amendUkPropertyAnnualSubmission(request)).leftMap(mapDownstreamErrors(downstreamErrorMap))
+    connector.amendUkPropertyAnnualSubmission(request).map(_.leftMap(mapDownstreamErrors(downstreamErrorMap)))
 
-    result.value
   }
 
-  private def downstreamErrorMap: Map[String, MtdError] = {
+  private val downstreamErrorMap: Map[String, MtdError] = {
     val errors = Map(
       "INVALID_TAXABLE_ENTITY_ID"   -> NinoFormatError,
       "INVALID_TAX_YEAR"            -> TaxYearFormatError,

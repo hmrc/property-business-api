@@ -16,17 +16,13 @@
 
 package v2.mocks.services
 
+import api.controllers.RequestContext
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
-import uk.gov.hmrc.http.HeaderCarrier
-import api.controllers.EndpointLogContext
-import api.models.errors.ErrorWrapper
-import api.models.outcomes.ResponseWrapper
 import v2.models.request.retrieveUkPropertyPeriodSummary.RetrieveUkPropertyPeriodSummaryRequest
-import v2.models.response.retrieveUkPropertyPeriodSummary.RetrieveUkPropertyPeriodSummaryResponse
-import v2.services.RetrieveUkPropertyPeriodSummaryService
+import v2.services.{RetrieveUkPropertyPeriodSummaryService, RetrieveUkPropertyPeriodSummaryServiceOutcome}
 
-import scala.concurrent.{ ExecutionContext, Future }
+import scala.concurrent.{ExecutionContext, Future}
 
 trait MockRetrieveUkPropertyPeriodSummaryService extends MockFactory {
 
@@ -34,18 +30,17 @@ trait MockRetrieveUkPropertyPeriodSummaryService extends MockFactory {
 
   object MockRetrieveUkPropertyService {
 
-    def retrieve(requestData: RetrieveUkPropertyPeriodSummaryRequest)
-      : CallHandler[Future[Either[ErrorWrapper, ResponseWrapper[RetrieveUkPropertyPeriodSummaryResponse]]]] = {
+    def retrieve(requestData: RetrieveUkPropertyPeriodSummaryRequest): CallHandler[Future[RetrieveUkPropertyPeriodSummaryServiceOutcome]] = {
       (
         mockRetrieveUkPropertyService
           .retrieveUkProperty(_: RetrieveUkPropertyPeriodSummaryRequest)(
-            _: HeaderCarrier,
-            _: ExecutionContext,
-            _: EndpointLogContext,
-            _: String
+            _: RequestContext,
+            _: ExecutionContext
           )
         )
-        .expects(requestData, *, *, *, *)
+        .expects(requestData, *, *)
     }
+
   }
+
 }

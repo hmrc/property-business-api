@@ -16,21 +16,20 @@
 
 package v2.controllers
 
-import api.controllers.ControllerBaseSpec
+import api.controllers.{ControllerBaseSpec, ControllerTestRunner}
 import api.mocks.hateoas.MockHateoasFactory
 import api.mocks.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService}
 import api.mocks.MockIdGenerator
-import fixtures.CreateForeignPropertyPeriodSummaryFixtures.CreateForeignPropertyPeriodSummaryFixtures
-import play.api.libs.json.{JsObject, Json}
-import play.api.mvc.Result
-import uk.gov.hmrc.http.HeaderCarrier
-import v2.mocks.requestParsers.MockCreateForeignPropertyPeriodSummaryRequestParser
-import v2.mocks.services.MockCreateForeignPropertyPeriodSummaryService
-import api.models.audit.{AuditError, AuditEvent, AuditResponse, GenericAuditDetail}
+import api.models.audit.{AuditEvent, AuditResponse, GenericAuditDetail}
 import api.models.domain.{Nino, TaxYear}
 import api.models.errors._
 import api.models.hateoas.HateoasWrapper
 import api.models.outcomes.ResponseWrapper
+import fixtures.CreateForeignPropertyPeriodSummaryFixtures.CreateForeignPropertyPeriodSummaryFixtures
+import play.api.libs.json.{JsObject, Json, JsValue}
+import play.api.mvc.Result
+import v2.mocks.requestParsers.MockCreateForeignPropertyPeriodSummaryRequestParser
+import v2.mocks.services.MockCreateForeignPropertyPeriodSummaryService
 import v2.models.request.createForeignPropertyPeriodSummary._
 import v2.models.response.createForeignPropertyPeriodSummary._
 
@@ -39,6 +38,7 @@ import scala.concurrent.Future
 
 class CreateForeignPropertyPeriodSummaryControllerSpec
     extends ControllerBaseSpec
+    with ControllerTestRunner
     with MockEnrolmentsAuthService
     with MockMtdIdLookupService
     with MockCreateForeignPropertyPeriodSummaryService
@@ -48,73 +48,15 @@ class CreateForeignPropertyPeriodSummaryControllerSpec
     with MockIdGenerator
     with CreateForeignPropertyPeriodSummaryFixtures {
 
-  private val nino          = "AA123456A"
-  private val taxYear       = "2020-21"
-  private val businessId    = "XAIS12345678910"
-  private val submissionId  = "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
-  private val correlationId = "a1e8057e-fbbc-47a8-a8b4-78d9f015c253"
+  private val taxYear      = "2020-21"
+  private val businessId   = "XAIS12345678910"
+  private val submissionId = "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
 
-  trait Test {
-    val hc: HeaderCarrier = HeaderCarrier()
-
-    val controller = new CreateForeignPropertyPeriodSummaryController(
-      authService = mockEnrolmentsAuthService,
-      lookupService = mockMtdIdLookupService,
-      service = mockCreateForeignPropertyService,
-      parser = mockCreateForeignPropertyRequestParser,
-      auditService = mockAuditService,
-      hateoasFactory = mockHateoasFactory,
-      cc = cc,
-      idGenerator = mockIdGenerator
-    )
-
-    MockMtdIdLookupService.lookup(nino).returns(Future.successful(Right("test-mtd-id")))
-    MockedEnrolmentsAuthService.authoriseUser()
-    MockIdGenerator.getCorrelationId.returns(correlationId)
-  }
-
-  private val requestData =
-    CreateForeignPropertyPeriodSummaryRequest(
-      nino = Nino(nino),
-      businessId = businessId,
-      taxYear = TaxYear.fromMtd(taxYear),
-      body = regularExpensesRequestBody)
-
-  private val rawData =
-    CreateForeignPropertyPeriodSummaryRawData(nino = nino, businessId = businessId, taxYear = taxYear, body = regularMtdRequestJson)
-
-  private val hateoasResponse = Json
-    .parse(
-      s"""
-       |{
-       |  "submissionId": "$submissionId"
-       |}
-    """.stripMargin
-    )
-    .as[JsObject] ++ testHateoasLinksJson
-
-  private val response = CreateForeignPropertyPeriodSummaryResponse(submissionId)
-
-  def event(auditResponse: AuditResponse): AuditEvent[GenericAuditDetail] =
-    AuditEvent(
-      auditType = "CreateForeignPropertyIncomeAndExpensesPeriodSummary",
-      transactionName = "create-foreign-property-income-and-expenses-period-summary",
-      detail = GenericAuditDetail(
-        versionNumber = "2.0",
-        userType = "Individual",
-        agentReferenceNumber = None,
-        params = Json.obj("nino" -> nino, "businessId" -> businessId, "taxYear" -> taxYear, "request" -> regularMtdRequestJson),
-        correlationId = correlationId,
-        response = auditResponse
-      )
-    )
-
-  "create" should {
-    "return a successful response" when {
+  "CreateForeignPropertyPeriodSummaryControllerSpec" should {
+    "return a successful response with status 201 (CREATED)" when {
       "the request received is valid" in new Test {
         MockCreateForeignPropertyRequestParser
-          .requestFor(
-            CreateForeignPropertyPeriodSummaryRawData(nino = nino, businessId = businessId, taxYear = taxYear, body = regularMtdRequestJson))
+          .requestFor(rawData)
           .returns(Right(requestData))
 
         MockCreateForeignPropertyService
@@ -127,104 +69,86 @@ class CreateForeignPropertyPeriodSummaryControllerSpec
             CreateForeignPropertyPeriodSummaryHateoasData(nino = nino, businessId = businessId, taxYear = taxYear, submissionId = submissionId))
           .returns(HateoasWrapper(response, testHateoasLinks))
 
-        val result: Future[Result] = controller.handleRequest(nino, businessId, taxYear)(fakeRequestWithBody(regularMtdRequestJson))
+        runOkTest(expectedStatus = CREATED, maybeExpectedResponseBody = Some(hateoasResponse))
 
-        contentAsJson(result) shouldBe hateoasResponse
-        status(result) shouldBe CREATED
-        header("X-CorrelationId", result) shouldBe Some(correlationId)
-
-        val auditResponse: AuditResponse = AuditResponse(CREATED, None, Some(hateoasResponse))
-        MockedAuditService.verifyAuditEvent(event(auditResponse)).once
       }
-    }
 
-    "return the error as per spec" when {
-      "parser errors occur" must {
-        def errorsFromParserTester(error: MtdError, expectedStatus: Int): Unit = {
-          s"a ${error.code} error is returned from the parser" in new Test {
-            MockCreateForeignPropertyRequestParser
-              .requestFor(rawData)
-              .returns(Left(ErrorWrapper(correlationId, error, None)))
+      "return the error as per spec" when {
+        "the parser validation fails" in new Test {
+          MockCreateForeignPropertyRequestParser
+            .requestFor(rawData)
+            .returns(Left(ErrorWrapper(correlationId, NinoFormatError, None)))
 
-            val result: Future[Result] =
-              controller.handleRequest(nino = nino, businessId = businessId, taxYear = taxYear)(fakeRequestWithBody(regularMtdRequestJson))
-
-            contentAsJson(result) shouldBe Json.toJson(error)
-            status(result) shouldBe expectedStatus
-            header("X-CorrelationId", result) shouldBe Some(correlationId)
-
-            val auditResponse: AuditResponse = AuditResponse(expectedStatus, Some(Seq(AuditError(error.code))), None)
-            MockedAuditService.verifyAuditEvent(event(auditResponse)).once
-          }
+          runErrorTest(NinoFormatError)
         }
 
-        val paths = Some(Seq("somePath"))
-        val input = Seq(
-          (NinoFormatError, BAD_REQUEST),
-          (TaxYearFormatError, BAD_REQUEST),
-          (BusinessIdFormatError, BAD_REQUEST),
-          (RuleTaxYearRangeInvalidError, BAD_REQUEST),
-          (RuleTaxYearNotSupportedError, BAD_REQUEST),
-          (ValueFormatError.copy(paths = paths), BAD_REQUEST),
-          (RuleBothExpensesSuppliedError.copy(paths = paths), BAD_REQUEST),
-          (RuleIncorrectOrEmptyBodyError.copy(paths = paths), BAD_REQUEST),
-          (ToDateFormatError, BAD_REQUEST),
-          (FromDateFormatError, BAD_REQUEST),
-          (RuleToDateBeforeFromDateError, BAD_REQUEST),
-          (CountryCodeFormatError.copy(paths = paths), BAD_REQUEST),
-          (RuleCountryCodeError.copy(paths = paths), BAD_REQUEST),
-          (RuleDuplicateCountryCodeError.copy(paths = paths), BAD_REQUEST),
-          (BadRequestError, BAD_REQUEST),
-          (InternalError, INTERNAL_SERVER_ERROR)
-        )
+        "the service returns an error" in new Test {
+          MockCreateForeignPropertyRequestParser
+            .requestFor(rawData)
+            .returns(Right(requestData))
 
-        input.foreach(args => (errorsFromParserTester _).tupled(args))
-      }
+          MockCreateForeignPropertyService
+            .createForeignProperty(requestData)
+            .returns(Future.successful(Left(ErrorWrapper(correlationId, RuleMisalignedPeriodError))))
 
-      "service errors occur" must {
-        def serviceErrors(mtdError: MtdError, expectedStatus: Int): Unit = {
-          s"a $mtdError error is returned from the service" in new Test {
-
-            MockCreateForeignPropertyRequestParser
-              .requestFor(rawData)
-              .returns(Right(requestData))
-
-            MockCreateForeignPropertyService
-              .createForeignProperty(requestData)
-              .returns(Future.successful(Left(ErrorWrapper(correlationId, mtdError))))
-
-            val result: Future[Result] =
-              controller.handleRequest(nino = nino, businessId = businessId, taxYear = taxYear)(fakeRequestWithBody(regularMtdRequestJson))
-
-            contentAsJson(result) shouldBe Json.toJson(mtdError)
-            status(result) shouldBe expectedStatus
-            header("X-CorrelationId", result) shouldBe Some(correlationId)
-
-            val auditResponse: AuditResponse = AuditResponse(expectedStatus, Some(Seq(AuditError(mtdError.code))), None)
-            MockedAuditService.verifyAuditEvent(event(auditResponse)).once
-          }
+          runErrorTest(RuleMisalignedPeriodError)
         }
-
-        val input = Seq(
-          (NinoFormatError, BAD_REQUEST),
-          (BusinessIdFormatError, BAD_REQUEST),
-          (TaxYearFormatError, BAD_REQUEST),
-          (NotFoundError, NOT_FOUND),
-          (InternalError, INTERNAL_SERVER_ERROR),
-          (RuleDuplicateSubmissionError, BAD_REQUEST),
-          (RuleMisalignedPeriodError, BAD_REQUEST),
-          (RuleOverlappingPeriodError, BAD_REQUEST),
-          (RuleNotContiguousPeriodError, BAD_REQUEST),
-          (RuleToDateBeforeFromDateError, BAD_REQUEST),
-          (RuleDuplicateCountryCodeError, BAD_REQUEST),
-          (RuleTypeOfBusinessIncorrectError, BAD_REQUEST),
-          (RuleTaxYearNotSupportedError, BAD_REQUEST),
-          (RuleIncorrectGovTestScenarioError, BAD_REQUEST)
-        )
-
-        input.foreach(args => (serviceErrors _).tupled(args))
       }
     }
+  }
+
+  trait Test extends ControllerTest with AuditEventChecking[GenericAuditDetail] {
+
+    val controller = new CreateForeignPropertyPeriodSummaryController(
+      authService = mockEnrolmentsAuthService,
+      lookupService = mockMtdIdLookupService,
+      service = mockCreateForeignPropertyService,
+      parser = mockCreateForeignPropertyRequestParser,
+      auditService = mockAuditService,
+      hateoasFactory = mockHateoasFactory,
+      cc = cc,
+      idGenerator = mockIdGenerator
+    )
+
+    protected def callController(): Future[Result] = controller.handleRequest(nino, businessId, taxYear)(fakePostRequest(requestBody))
+
+    val rawData: CreateForeignPropertyPeriodSummaryRawData =
+      CreateForeignPropertyPeriodSummaryRawData(nino = nino, businessId = businessId, taxYear = taxYear, body = JsObject.empty)
+
+    protected def event(auditResponse: AuditResponse, maybeRequestBody: Option[JsValue]): AuditEvent[GenericAuditDetail] =
+      AuditEvent(
+        auditType = "CreateForeignPropertyIncomeAndExpensesPeriodSummary",
+        transactionName = "create-foreign-property-income-and-expenses-period-summary",
+        detail = GenericAuditDetail(
+          versionNumber = "2.0",
+          userType = "Individual",
+          agentReferenceNumber = None,
+          params = Json.toJsObject(rawData),
+          correlationId = correlationId,
+          response = auditResponse
+        )
+      )
+
+    val requestBody: JsObject = JsObject.empty
+
+    protected val requestData: CreateForeignPropertyPeriodSummaryRequest =
+      CreateForeignPropertyPeriodSummaryRequest(
+        nino = Nino(nino),
+        businessId = businessId,
+        taxYear = TaxYear.fromMtd(taxYear),
+        body = regularExpensesRequestBody)
+
+    protected val hateoasResponse: JsObject = Json
+      .parse(
+        s"""
+             |{
+             |  "submissionId": "$submissionId"
+             |}
+      """.stripMargin
+      )
+      .as[JsObject] ++ testHateoasLinksJson
+
+    protected val response: CreateForeignPropertyPeriodSummaryResponse = CreateForeignPropertyPeriodSummaryResponse(submissionId)
   }
 
 }

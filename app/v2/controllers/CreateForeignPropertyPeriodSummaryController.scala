@@ -16,22 +16,21 @@
 
 package v2.controllers
 
-import api.controllers.{AuthorisedController, BaseController, EndpointLogContext}
-import cats.data.EitherT
-import cats.implicits._
-import play.api.libs.json.{Json, JsValue}
+import api.controllers._
+import api.hateoas.HateoasFactory
+import api.models.audit.{AuditEvent, AuditResponse, GenericAuditDetail}
+import api.models.auth.UserDetails
+import api.models.errors.ErrorWrapper
+import api.services.{AuditService, EnrolmentsAuthService, MtdIdLookupService}
+import play.api.libs.json.JsValue
 import play.api.mvc.{Action, ControllerComponents}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.audit.http.connector.AuditResult
-import utils.{IdGenerator, Logging}
+import utils.IdGenerator
 import v2.controllers.requestParsers.CreateForeignPropertyPeriodSummaryRequestParser
-import api.hateoas.HateoasFactory
-import api.models.audit.{AuditEvent, AuditResponse, GenericAuditDetail}
-import api.models.errors._
-import api.services.{AuditService, EnrolmentsAuthService, MtdIdLookupService}
 import v2.models.request.createForeignPropertyPeriodSummary.CreateForeignPropertyPeriodSummaryRawData
 import v2.models.response.createForeignPropertyPeriodSummary.CreateForeignPropertyPeriodSummaryHateoasData
-import v2.services._
+import v2.services.CreateForeignPropertyPeriodSummaryService
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
@@ -45,9 +44,7 @@ class CreateForeignPropertyPeriodSummaryController @Inject() (val authService: E
                                                               hateoasFactory: HateoasFactory,
                                                               cc: ControllerComponents,
                                                               idGenerator: IdGenerator)(implicit ec: ExecutionContext)
-    extends AuthorisedController(cc)
-    with BaseController
-    with Logging {
+    extends AuthorisedController(cc) {
 
   implicit val endpointLogContext: EndpointLogContext =
     EndpointLogContext(
@@ -56,84 +53,51 @@ class CreateForeignPropertyPeriodSummaryController @Inject() (val authService: E
 
   def handleRequest(nino: String, businessId: String, taxYear: String): Action[JsValue] =
     authorisedAction(nino).async(parse.json) { implicit request =>
-      implicit val correlationId: String = idGenerator.getCorrelationId
-      logger.info(
-        message = s"[${endpointLogContext.controllerName}][${endpointLogContext.endpointName}] " +
-          s"with correlationId : $correlationId")
+      implicit val ctx: RequestContext = RequestContext.from(idGenerator, endpointLogContext)
+
       val rawData = CreateForeignPropertyPeriodSummaryRawData(nino = nino, businessId = businessId, taxYear = taxYear, body = request.body)
-      val result =
-        for {
-          parsedRequest   <- EitherT.fromEither[Future](parser.parseRequest(rawData))
-          serviceResponse <- EitherT(service.createForeignProperty(parsedRequest))
-        } yield {
-          val hateoasData = CreateForeignPropertyPeriodSummaryHateoasData(
-            nino = nino,
-            businessId = businessId,
-            taxYear = taxYear,
-            submissionId = serviceResponse.responseData.submissionId
-          )
 
-          val vendorResponse = hateoasFactory.wrap(serviceResponse.responseData, hateoasData)
+      val requestHandler =
+        RequestHandler
+          .withParser(parser)
+          .withService(service.createForeignProperty)
+          .withAuditing(auditHandler(rawData, request))
+          .withHateoasResultFrom(hateoasFactory)(
+            (_, response) => CreateForeignPropertyPeriodSummaryHateoasData(nino, businessId, taxYear, response.submissionId),
+            CREATED)
 
-          logger.info(
-            s"[${endpointLogContext.controllerName}][${endpointLogContext.endpointName}] - " +
-              s"Success response received with CorrelationId: ${serviceResponse.correlationId}")
+      requestHandler.handleRequest(rawData)
+    }
 
-          val response = Json.toJson(vendorResponse)
-
-          auditSubmission(
-            GenericAuditDetail(request.userDetails, rawData, serviceResponse.correlationId, AuditResponse(CREATED, Right(Some(response)))))
-
-          Created(Json.toJson(vendorResponse))
-            .withApiHeaders(serviceResponse.correlationId)
+  private def auditHandler(rawData: CreateForeignPropertyPeriodSummaryRawData, request: UserRequest[JsValue]): AuditHandler = {
+    new AuditHandler() {
+      override def performAudit(userDetails: UserDetails, httpStatus: Int, response: Either[ErrorWrapper, Option[JsValue]], versionNumber: String)(
+          implicit
+          ctx: RequestContext,
+          ec: ExecutionContext): Unit = {
+        response match {
+          case Left(err: ErrorWrapper) =>
+            auditSubmission(
+              GenericAuditDetail(
+                request.userDetails,
+                rawData,
+                ctx.correlationId,
+                AuditResponse(httpStatus = httpStatus, response = Left(err.auditErrors))
+              )
+            )
+          case Right(_) =>
+            auditSubmission(
+              GenericAuditDetail(
+                request.userDetails,
+                rawData,
+                ctx.correlationId,
+                AuditResponse(httpStatus = OK, response = Right(None))
+              )
+            )
         }
-
-      result.leftMap { errorWrapper =>
-        val resCorrelationId = errorWrapper.correlationId
-        val result           = errorResult(errorWrapper).withApiHeaders(resCorrelationId)
-
-        auditSubmission(
-          GenericAuditDetail(request.userDetails, rawData, correlationId, AuditResponse(result.header.status, Left(errorWrapper.auditErrors))))
-
-        logger.warn(
-          s"[${endpointLogContext.controllerName}][${endpointLogContext.endpointName}] - " +
-            s"Error response received with CorrelationId: $resCorrelationId")
-        result
-      }.merge
+      }
     }
-
-  private def errorResult(errorWrapper: ErrorWrapper) =
-    errorWrapper.error match {
-      case _
-          if errorWrapper.containsAnyOf(
-            BadRequestError,
-            NinoFormatError,
-            TaxYearFormatError,
-            BusinessIdFormatError,
-            RuleTaxYearRangeInvalidError,
-            RuleTaxYearNotSupportedError,
-            RuleIncorrectOrEmptyBodyError,
-            ToDateFormatError,
-            FromDateFormatError,
-            ValueFormatError,
-            RuleBothExpensesSuppliedError,
-            RuleToDateBeforeFromDateError,
-            RuleOverlappingPeriodError,
-            RuleMisalignedPeriodError,
-            RuleNotContiguousPeriodError,
-            RuleIncorrectOrEmptyBodyError,
-            RuleDuplicateSubmissionError,
-            CountryCodeFormatError,
-            RuleCountryCodeError,
-            RuleDuplicateCountryCodeError,
-            RuleTypeOfBusinessIncorrectError,
-            RuleIncorrectGovTestScenarioError
-          ) =>
-        BadRequest(Json.toJson(errorWrapper))
-      case NotFoundError => NotFound(Json.toJson(errorWrapper))
-      case InternalError => InternalServerError(Json.toJson(errorWrapper))
-      case _             => unhandledError(errorWrapper)
-    }
+  }
 
   private def auditSubmission(details: GenericAuditDetail)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[AuditResult] = {
     val event =

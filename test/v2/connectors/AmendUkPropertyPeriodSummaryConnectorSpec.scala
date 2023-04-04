@@ -17,22 +17,19 @@
 package v2.connectors
 
 import api.connectors.{ConnectorSpec, DownstreamOutcome}
-import org.scalamock.handlers.CallHandler
 import api.models.domain.{Nino, TaxYear}
 import api.models.errors.{DownstreamErrorCode, DownstreamErrors}
 import api.models.outcomes.ResponseWrapper
+import org.scalamock.handlers.CallHandler
 import v2.models.request.amendUkPropertyPeriodSummary.{AmendUkPropertyPeriodSummaryRequest, AmendUkPropertyPeriodSummaryRequestBody}
-import v2.models.request.common.ukFhlProperty._
-import v2.models.request.common.ukNonFhlProperty._
-import v2.models.request.common.ukPropertyRentARoom.{UkPropertyExpensesRentARoom, UkPropertyIncomeRentARoom}
 
 import scala.concurrent.Future
 
 class AmendUkPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
 
-  val nino: String         = "AA123456A"
-  val businessId: String   = "XAIS12345678910"
-  val submissionId: String = "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
+  private val nino: String         = "AA123456A"
+  private val businessId: String   = "XAIS12345678910"
+  private val submissionId: String = "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
 
   private val preTysTaxYear = TaxYear.fromMtd("2022-23")
   private val tysTaxYear    = TaxYear.fromMtd("2023-24")
@@ -46,7 +43,8 @@ class AmendUkPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
 
         stubHttpResponse(outcome)
 
-        await(connector.amendUkPropertyPeriodSummary(request)) shouldBe outcome
+        val result: DownstreamOutcome[Unit] = await(connector.amendUkPropertyPeriodSummary(request))
+        result shouldBe outcome
       }
     }
 
@@ -56,7 +54,8 @@ class AmendUkPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
 
         stubTysHttpResponse(outcome)
 
-        await(connector.amendUkPropertyPeriodSummary(request)) shouldBe outcome
+        val result: DownstreamOutcome[Unit] = await(connector.amendUkPropertyPeriodSummary(request))
+        result shouldBe outcome
       }
     }
 
@@ -68,10 +67,10 @@ class AmendUkPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
 
       "return the error" in new IfsTest with Test {
         def taxYear: TaxYear = preTysTaxYear
+
         stubHttpResponse(outcome)
 
-        val result: DownstreamOutcome[Unit] =
-          await(connector.amendUkPropertyPeriodSummary(request))
+        val result: DownstreamOutcome[Unit] = await(connector.amendUkPropertyPeriodSummary(request))
         result shouldBe outcome
       }
 
@@ -79,35 +78,31 @@ class AmendUkPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
         def taxYear: TaxYear = tysTaxYear
         stubTysHttpResponse(outcome)
 
-        val result: DownstreamOutcome[Unit] =
-          await(connector.amendUkPropertyPeriodSummary(request))
+        val result: DownstreamOutcome[Unit] = await(connector.amendUkPropertyPeriodSummary(request))
         result shouldBe outcome
       }
     }
   }
 
-  trait Test {
-    _: ConnectorTest =>
+  trait Test { _: ConnectorTest =>
+
     def taxYear: TaxYear
 
-    val connector: AmendUkPropertyPeriodSummaryConnector = new AmendUkPropertyPeriodSummaryConnector(
+    protected val connector: AmendUkPropertyPeriodSummaryConnector = new AmendUkPropertyPeriodSummaryConnector(
       http = mockHttpClient,
       appConfig = mockAppConfig
     )
 
-    val request: AmendUkPropertyPeriodSummaryRequest = AmendUkPropertyPeriodSummaryRequest(
-      nino = Nino(nino),
-      taxYear = taxYear,
-      businessId = businessId,
-      submissionId = submissionId,
-      body = requestBody
-    )
+    private val requestBody: AmendUkPropertyPeriodSummaryRequestBody = AmendUkPropertyPeriodSummaryRequestBody(None, None)
+
+    protected val request: AmendUkPropertyPeriodSummaryRequest =
+      AmendUkPropertyPeriodSummaryRequest(Nino(nino), taxYear, businessId, submissionId, requestBody)
 
     protected def stubHttpResponse(outcome: DownstreamOutcome[Unit]): CallHandler[Future[DownstreamOutcome[Unit]]]#Derived = {
       willPut(
         url = s"$baseUrl/income-tax/business/property/periodic?" +
           s"taxableEntityId=$nino&taxYear=${taxYear.asMtd}&incomeSourceId=$businessId&submissionId=$submissionId",
-        body = requestBody,
+        body = requestBody
       ).returns(Future.successful(outcome))
     }
 
@@ -115,64 +110,10 @@ class AmendUkPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
       willPut(
         url = s"$baseUrl/income-tax/business/property/periodic/${taxYear.asTysDownstream}?" +
           s"taxableEntityId=$nino&incomeSourceId=$businessId&submissionId=$submissionId",
-        body = requestBody,
+        body = requestBody
       ).returns(Future.successful(outcome))
     }
-  }
 
-  private val requestBody: AmendUkPropertyPeriodSummaryRequestBody = AmendUkPropertyPeriodSummaryRequestBody(
-    ukFhlProperty = Some(
-      UkFhlProperty(
-        income = Some(
-          UkFhlPropertyIncome(
-            periodAmount = Some(5000.99),
-            taxDeducted = Some(3123.21),
-            rentARoom = Some(UkPropertyIncomeRentARoom(
-              rentsReceived = Some(532.12)
-            ))
-          )),
-        expenses = Some(UkFhlPropertyExpenses(
-          premisesRunningCosts = Some(3120.23),
-          repairsAndMaintenance = Some(928.42),
-          financialCosts = Some(842.99),
-          professionalFees = Some(8831.12),
-          costOfServices = Some(484.12),
-          other = Some(99282.52),
-          consolidatedExpenses = None,
-          travelCosts = Some(974.47),
-          rentARoom = Some(UkPropertyExpensesRentARoom(
-            amountClaimed = Some(8842.43)
-          ))
-        ))
-      )),
-    ukNonFhlProperty = Some(
-      UkNonFhlProperty(
-        income = Some(UkNonFhlPropertyIncome(
-          premiumsOfLeaseGrant = Some(41.12),
-          reversePremiums = Some(84.31),
-          periodAmount = Some(9884.93),
-          taxDeducted = Some(855.99),
-          otherIncome = Some(31.44),
-          rentARoom = Some(UkPropertyIncomeRentARoom(
-            rentsReceived = Some(947.66)
-          ))
-        )),
-        expenses = Some(UkNonFhlPropertyExpenses(
-          premisesRunningCosts = Some(3200.25),
-          repairsAndMaintenance = Some(950.45),
-          financialCosts = Some(830.99),
-          professionalFees = Some(7500.70),
-          costOfServices = Some(400.30),
-          other = Some(95000.55),
-          residentialFinancialCost = Some(999.99),
-          travelCosts = Some(960.75),
-          residentialFinancialCostsCarriedForward = Some(8500.12),
-          rentARoom = Some(UkPropertyExpensesRentARoom(
-            amountClaimed = Some(945.66)
-          )),
-          consolidatedExpenses = None
-        ))
-      ))
-  )
+  }
 
 }

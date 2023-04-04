@@ -17,69 +17,69 @@
 package v2.connectors
 
 import api.connectors.{ConnectorSpec, DownstreamOutcome}
-import org.scalamock.handlers.CallHandler
-import api.models.errors.{DownstreamErrorCode, DownstreamErrors}
 import api.models.domain.{Nino, PeriodId}
+import api.models.errors.{DownstreamErrorCode, DownstreamErrors}
 import api.models.outcomes.ResponseWrapper
+import org.scalamock.handlers.CallHandler
 import v2.models.request.retrieveHistoricNonFhlUkPiePeriodSummary.RetrieveHistoricNonFhlUkPiePeriodSummaryRequest
-import v2.models.response.retrieveHistoricNonFhlUkPiePeriodSummary.{PeriodExpenses, PeriodIncome, RetrieveHistoricNonFhlUkPiePeriodSummaryResponse}
+import v2.models.response.retrieveHistoricNonFhlUkPiePeriodSummary.RetrieveHistoricNonFhlUkPiePeriodSummaryResponse
 
 import scala.concurrent.Future
 
 class RetrieveHistoricNonFhlUkPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
 
-  val nino: String         = "AA123456A"
-  val periodIdFrom: String = "2017-04-06"
-  val periodIdTo: String   = "2017-07-04"
-  val periodId: String     = s"${periodIdFrom}_$periodIdTo"
-
-  val request: RetrieveHistoricNonFhlUkPiePeriodSummaryRequest =
-    RetrieveHistoricNonFhlUkPiePeriodSummaryRequest(Nino(nino), PeriodId(periodId))
-
-  val periodExpenses: PeriodExpenses = PeriodExpenses(None, None, None, None, None, None, None, None, None, None, None)
-  val periodIncome: PeriodIncome     = PeriodIncome(None, None, None, None, None, None)
-
-  def responseWith(periodIncome: Option[PeriodIncome], periodExpenses: Option[PeriodExpenses]): RetrieveHistoricNonFhlUkPiePeriodSummaryResponse =
-    RetrieveHistoricNonFhlUkPiePeriodSummaryResponse(periodIdFrom, periodIdTo, periodIncome, periodExpenses)
-
-  trait Test {
-    _: ConnectorTest =>
-
-    val connector: RetrieveHistoricNonFhlUkPropertyPeriodSummaryConnector = new RetrieveHistoricNonFhlUkPropertyPeriodSummaryConnector(
-      http = mockHttpClient,
-      appConfig = mockAppConfig
-    )
-
-    def stubHttpResponse(outcome: DownstreamOutcome[RetrieveHistoricNonFhlUkPiePeriodSummaryResponse])
-      : CallHandler[Future[DownstreamOutcome[RetrieveHistoricNonFhlUkPiePeriodSummaryResponse]]]#Derived = {
-      willGet(
-        url = s"$baseUrl/income-tax/nino/$nino/uk-properties/other/periodic-summary-detail?from=$periodIdFrom&to=$periodIdTo"
-      ).returns(Future.successful(outcome))
-    }
-  }
+  private val nino: String         = "AA123456A"
+  private val periodIdFrom: String = "2017-04-06"
+  private val periodIdTo: String   = "2017-07-04"
+  private val periodId: String     = s"${periodIdFrom}_$periodIdTo"
 
   "connector" when {
     "request for a historic Non-FHL UK Property Income and Expenses Period summary" must {
       "return a valid result" in new DesTest with Test {
-        val response: RetrieveHistoricNonFhlUkPiePeriodSummaryResponse = responseWith(Some(periodIncome), Some(periodExpenses))
-        val outcome                                                    = Right(ResponseWrapper(correlationId, response))
+        val outcome: Right[Nothing, ResponseWrapper[RetrieveHistoricNonFhlUkPiePeriodSummaryResponse]] =
+          Right(ResponseWrapper(correlationId, response))
 
         stubHttpResponse(outcome)
 
-        val result = await(connector.retrieve(request))
+        val result: DownstreamOutcome[RetrieveHistoricNonFhlUkPiePeriodSummaryResponse] = await(connector.retrieve(request))
         result shouldBe outcome
       }
     }
 
     "response is an error" must {
       "return the error" in new DesTest with Test {
-        val outcome = Left(ResponseWrapper(correlationId, DownstreamErrors.single(DownstreamErrorCode("SOME_ERROR"))))
+        val outcome: Left[ResponseWrapper[DownstreamErrors], Nothing] =
+          Left(ResponseWrapper(correlationId, DownstreamErrors.single(DownstreamErrorCode("SOME_ERROR"))))
 
         stubHttpResponse(outcome)
 
-        val result = await(connector.retrieve(request))
+        val result: DownstreamOutcome[RetrieveHistoricNonFhlUkPiePeriodSummaryResponse] = await(connector.retrieve(request))
         result shouldBe outcome
       }
     }
   }
+
+  trait Test {
+    _: ConnectorTest =>
+
+    protected val connector: RetrieveHistoricNonFhlUkPropertyPeriodSummaryConnector = new RetrieveHistoricNonFhlUkPropertyPeriodSummaryConnector(
+      http = mockHttpClient,
+      appConfig = mockAppConfig
+    )
+
+    def stubHttpResponse(outcome: DownstreamOutcome[RetrieveHistoricNonFhlUkPiePeriodSummaryResponse])
+        : CallHandler[Future[DownstreamOutcome[RetrieveHistoricNonFhlUkPiePeriodSummaryResponse]]]#Derived = {
+      willGet(
+        url = s"$baseUrl/income-tax/nino/$nino/uk-properties/other/periodic-summary-detail?from=$periodIdFrom&to=$periodIdTo"
+      ).returns(Future.successful(outcome))
+    }
+
+    protected val request: RetrieveHistoricNonFhlUkPiePeriodSummaryRequest =
+      RetrieveHistoricNonFhlUkPiePeriodSummaryRequest(Nino(nino), PeriodId(periodId))
+
+    protected val response: RetrieveHistoricNonFhlUkPiePeriodSummaryResponse =
+      RetrieveHistoricNonFhlUkPiePeriodSummaryResponse(periodIdFrom, periodIdTo, None, None)
+
+  }
+
 }

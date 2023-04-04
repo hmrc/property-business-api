@@ -16,7 +16,7 @@
 
 package v2.connectors
 
-import api.connectors.ConnectorSpec
+import api.connectors.{ConnectorSpec, DownstreamOutcome}
 import api.models.domain.{Nino, TaxYear}
 import api.models.outcomes.ResponseWrapper
 import v2.models.request.listPropertyPeriodSummaries.ListPropertyPeriodSummariesRequest
@@ -26,54 +26,55 @@ import scala.concurrent.Future
 
 class ListPropertyPeriodSummariesConnectorSpec extends ConnectorSpec {
 
-  val nino: String        = "AA123456A"
-  val businessId: String  = "XAIS12345678910"
-  val taxYear2023: String = "2022-23"
-  val taxYear2024: String = "2023-24"
-
-  def makeRequest(taxYear: String): ListPropertyPeriodSummariesRequest = ListPropertyPeriodSummariesRequest(
-    nino = Nino(nino),
-    businessId = businessId,
-    taxYear = TaxYear.fromMtd(taxYear)
-  )
-
-  val nonTysRequest = makeRequest(taxYear2023)
-  val tysRequest    = makeRequest(taxYear2024)
-
-  private val response = ListPropertyPeriodSummariesResponse(
-    Seq(
-      SubmissionPeriod("4557ecb5-fd32-48cc-81f5-e6acd1099f3c", "2020-06-22", "2020-06-22")
-    ))
-
-  trait Test {
-    _: ConnectorTest =>
-
-    val connector: ListPropertyPeriodSummariesConnector = new ListPropertyPeriodSummariesConnector(
-      http = mockHttpClient,
-      appConfig = mockAppConfig
-    )
-  }
+  private val nino: String          = "AA123456A"
+  private val businessId: String    = "XAIS12345678910"
+  private val preTysTaxYear: String = "2022-23"
+  private val tysTaxYear: String    = "2023-24"
 
   "connector" must {
     "send a request and return a body for a non-tys tax year" in new IfsTest with Test {
-      val outcome = Right(ResponseWrapper(correlationId, response))
+      lazy val taxYear: TaxYear = TaxYear.fromMtd(preTysTaxYear)
+
+      val outcome: Right[Nothing, ResponseWrapper[ListPropertyPeriodSummariesResponse]] = Right(ResponseWrapper(correlationId, response))
 
       willGet(
         url = s"$baseUrl/income-tax/business/property/$nino/$businessId/period",
         parameters = Seq("taxYear" -> "2022-23")
       ).returns(Future.successful(outcome))
 
-      await(connector.listPeriodSummaries(nonTysRequest)) shouldBe outcome
+      val result: DownstreamOutcome[ListPropertyPeriodSummariesResponse] = await(connector.listPeriodSummaries(request))
+      result shouldBe outcome
     }
 
     "send a request and return a body for a tys tax year" in new TysIfsTest with Test {
-      val outcome = Right(ResponseWrapper(correlationId, response))
+      lazy val taxYear: TaxYear = TaxYear.fromMtd(tysTaxYear)
+
+      val outcome: Right[Nothing, ResponseWrapper[ListPropertyPeriodSummariesResponse]] = Right(ResponseWrapper(correlationId, response))
 
       willGet(
-        url = s"$baseUrl/income-tax/business/property/23-24/$nino/$businessId/period",
+        url = s"$baseUrl/income-tax/business/property/23-24/$nino/$businessId/period"
       ).returns(Future.successful(outcome))
 
-      await(connector.listPeriodSummaries(tysRequest)) shouldBe outcome
+      val result: DownstreamOutcome[ListPropertyPeriodSummariesResponse] = await(connector.listPeriodSummaries(request))
+      result shouldBe outcome
     }
   }
+
+  trait Test {
+    _: ConnectorTest =>
+
+    protected val taxYear: TaxYear
+
+    protected val connector: ListPropertyPeriodSummariesConnector = new ListPropertyPeriodSummariesConnector(
+      http = mockHttpClient,
+      appConfig = mockAppConfig
+    )
+
+    protected val request: ListPropertyPeriodSummariesRequest = ListPropertyPeriodSummariesRequest(Nino(nino), businessId, taxYear)
+
+    protected val response: ListPropertyPeriodSummariesResponse = ListPropertyPeriodSummariesResponse(
+      Seq(SubmissionPeriod("4557ecb5-fd32-48cc-81f5-e6acd1099f3c", "2020-06-22", "2020-06-22")))
+
+  }
+
 }

@@ -16,7 +16,7 @@
 
 package v2.connectors
 
-import api.connectors.ConnectorSpec
+import api.connectors.{ConnectorSpec, DownstreamOutcome}
 import api.models.domain.{Nino, TaxYear}
 import api.models.outcomes.ResponseWrapper
 import v2.models.request.createAmendHistoricFhlUkPropertyAnnualSubmission._
@@ -26,27 +26,9 @@ import scala.concurrent.Future
 
 class CreateAmendHistoricFhlUkPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec {
 
-  val nino: String              = "AA123456A"
-  val mtdTaxYear: String        = "2019-20"
-  val downstreamTaxYear: String = "2020"
-
-  val body: CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequestBody = CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequestBody(None, None)
-
-  val request: CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequest = CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequest(
-    nino = Nino(nino),
-    taxYear = TaxYear.fromMtd(mtdTaxYear),
-    body = body
-  )
-
-  trait Test {
-    _: ConnectorTest =>
-
-    val connector = new CreateAmendHistoricFhlUkPropertyAnnualSubmissionConnector(
-      http = mockHttpClient,
-      appConfig = mockAppConfig
-    )
-
-  }
+  private val nino: String              = "AA123456A"
+  private val mtdTaxYear: String        = "2019-20"
+  private val downstreamTaxYear: String = "2020"
 
   "connector" must {
     "put a body and return a 204" in new IfsTest with Test {
@@ -54,11 +36,28 @@ class CreateAmendHistoricFhlUkPropertyAnnualSubmissionConnectorSpec extends Conn
 
       willPut(
         url = s"$baseUrl/income-tax/nino/$nino/uk-properties/furnished-holiday-lettings/annual-summaries/$downstreamTaxYear",
-        body = body
+        body = requestBody
       ).returns(Future.successful(outcome))
 
-      await(connector.amend(request)) shouldBe outcome
+      val result: DownstreamOutcome[CreateAmendHistoricFhlUkPropertyAnnualSubmissionResponse] = await(connector.amend(request))
+      result shouldBe outcome
     }
+  }
+
+  trait Test {
+    _: ConnectorTest =>
+
+    protected val connector = new CreateAmendHistoricFhlUkPropertyAnnualSubmissionConnector(
+      http = mockHttpClient,
+      appConfig = mockAppConfig
+    )
+
+    protected val requestBody: CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequestBody =
+      CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequestBody(None, None)
+
+    protected val request: CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequest =
+      CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequest(Nino(nino), TaxYear.fromMtd(mtdTaxYear), requestBody)
+
   }
 
 }

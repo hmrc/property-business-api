@@ -87,7 +87,7 @@ class ListPropertyPeriodSummariesControllerSpec
 
   trait Test extends ControllerTest {
 
-    val controller = new ListPropertyPeriodSummariesController(
+    private val controller = new ListPropertyPeriodSummariesController(
       authService = mockEnrolmentsAuthService,
       lookupService = mockMtdIdLookupService,
       parser = mockListPropertyPeriodSummariesRequestParser,
@@ -109,7 +109,7 @@ class ListPropertyPeriodSummariesControllerSpec
 
     protected val hateoasData: ListPropertyPeriodSummariesHateoasData = ListPropertyPeriodSummariesHateoasData(nino, businessId, taxYear)
 
-    val responseDataWithHateoas: HateoasWrapper[ListPropertyPeriodSummariesResponse] = HateoasWrapper(responseData, testHateoasLinks)
+    protected val responseDataWithHateoas: HateoasWrapper[ListPropertyPeriodSummariesResponse] = HateoasWrapper(responseData, testHateoasLinks)
   }
 
 }

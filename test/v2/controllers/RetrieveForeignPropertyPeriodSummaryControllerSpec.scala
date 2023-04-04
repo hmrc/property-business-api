@@ -76,7 +76,7 @@ class RetrieveForeignPropertyPeriodSummaryControllerSpec
 
   trait Test extends ControllerTest {
 
-    val controller = new RetrieveForeignPropertyPeriodSummaryController(
+    private val controller = new RetrieveForeignPropertyPeriodSummaryController(
       authService = mockEnrolmentsAuthService,
       lookupService = mockMtdIdLookupService,
       parser = mockRetrieveForeignPropertyRequestParser,

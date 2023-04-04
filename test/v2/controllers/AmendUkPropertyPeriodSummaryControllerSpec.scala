@@ -124,7 +124,7 @@ class AmendUkPropertyPeriodSummaryControllerSpec
 
   trait Test extends ControllerTest with AuditEventChecking[GenericAuditDetail] {
 
-    val controller = new AmendUkPropertyPeriodSummaryController(
+    protected val controller = new AmendUkPropertyPeriodSummaryController(
       authService = mockEnrolmentsAuthService,
       lookupService = mockMtdIdLookupService,
       parser = mockAmendUkPropertyRequestParser,
@@ -138,7 +138,7 @@ class AmendUkPropertyPeriodSummaryControllerSpec
     protected def callController(): Future[Result] =
       controller.handleRequest(nino, businessId, taxYear, submissionId)(fakePutRequest(requestBodyJson))
 
-    def event(auditResponse: AuditResponse, requestBody: Option[JsValue]): AuditEvent[GenericAuditDetail] =
+    protected def event(auditResponse: AuditResponse, requestBody: Option[JsValue]): AuditEvent[GenericAuditDetail] =
       AuditEvent(
         auditType = "AmendUKPropertyIncomeAndExpensesPeriodSummary",
         transactionName = "amend-uk-property-income-and-expenses-period-summary",

@@ -55,7 +55,6 @@ class AmendForeignPropertyPeriodSummaryControllerSpec
   "AmendForeignPropertyPeriodSummaryController" should {
     "return a successful response with status 200 (OK)" when {
       "the request received is valid" in new Test {
-
         MockAmendForeignPropertyRequestParser
           .parseRequest(AmendForeignPropertyPeriodSummaryRawData(nino, businessId, taxYear, submissionId, requestBodyJson))
           .returns(Right(requestData))
@@ -74,7 +73,6 @@ class AmendForeignPropertyPeriodSummaryControllerSpec
 
     "return a successful response from an unconsolidated request" when {
       "the request received is valid" in new Test {
-
         MockAmendForeignPropertyRequestParser
           .parseRequest(AmendForeignPropertyPeriodSummaryRawData(nino, businessId, taxYear, submissionId, requestBodyJson))
           .returns(Right(requestData))
@@ -117,7 +115,7 @@ class AmendForeignPropertyPeriodSummaryControllerSpec
 
   trait Test extends ControllerTest with AuditEventChecking[GenericAuditDetail] {
 
-    val controller = new AmendForeignPropertyPeriodSummaryController(
+    private val controller = new AmendForeignPropertyPeriodSummaryController(
       authService = mockEnrolmentsAuthService,
       lookupService = mockMtdIdLookupService,
       parser = mockAmendForeignPropertyPeriodSummaryRequestParser,

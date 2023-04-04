@@ -93,7 +93,7 @@ class RetrieveHistoricFhlUkPiePeriodSummaryControllerSpec
 
   trait Test extends ControllerTest {
 
-    val controller = new RetrieveHistoricFhlUkPiePeriodSummaryController(
+    private val controller = new RetrieveHistoricFhlUkPiePeriodSummaryController(
       authService = mockEnrolmentsAuthService,
       lookupService = mockMtdIdLookupService,
       parser = mockRetrieveHistoricFhlUkPiePeriodSummaryRequestParser,

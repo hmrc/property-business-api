@@ -92,7 +92,7 @@ class RetrieveHistoricFhlUkPropertyAnnualSubmissionControllerSpec
 
   trait Test extends ControllerTest {
 
-    val controller = new RetrieveHistoricFhlUkPropertyAnnualSubmissionController(
+    private val controller = new RetrieveHistoricFhlUkPropertyAnnualSubmissionController(
       authService = mockEnrolmentsAuthService,
       lookupService = mockMtdIdLookupService,
       parser = mockRetrieveHistoricFhlUkPropertyAnnualSubmissionRequestParser,

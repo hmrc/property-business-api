@@ -87,7 +87,7 @@ class RetrieveUkPropertyAnnualSubmissionControllerSpec
 
   trait Test extends ControllerTest {
 
-    val controller = new RetrieveUkPropertyAnnualSubmissionController(
+    private val controller = new RetrieveUkPropertyAnnualSubmissionController(
       authService = mockEnrolmentsAuthService,
       lookupService = mockMtdIdLookupService,
       parser = mockRetrieveUkPropertyAnnualSubmissionRequestParser,
@@ -200,7 +200,7 @@ class RetrieveUkPropertyAnnualSubmissionControllerSpec
     protected val hateoasData: RetrieveUkPropertyAnnualSubmissionHateoasData =
       RetrieveUkPropertyAnnualSubmissionHateoasData(nino, businessId, taxYear)
 
-    val responseBodyJson: JsValue = Json.parse(
+    protected val responseBodyJson: JsValue = Json.parse(
       """
         |{
         |   "submittedOn":"2020-06-17T10:53:38Z",

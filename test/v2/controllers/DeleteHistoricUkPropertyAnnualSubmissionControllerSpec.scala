@@ -101,9 +101,9 @@ class DeleteHistoricUkPropertyAnnualSubmissionControllerSpec
 
   trait Test extends ControllerTest with AuditEventChecking[FlattenedGenericAuditDetail] {
 
-    val propertyTypeValue: HistoricPropertyType
+    protected val propertyTypeValue: HistoricPropertyType
 
-    val controller = new DeleteHistoricUkPropertyAnnualSubmissionController(
+    private val controller = new DeleteHistoricUkPropertyAnnualSubmissionController(
       authService = mockEnrolmentsAuthService,
       lookupService = mockMtdIdLookupService,
       parser = mockDeleteHistoricUkPropertyAnnualSubmissionRequestParser,
@@ -121,7 +121,7 @@ class DeleteHistoricUkPropertyAnnualSubmissionControllerSpec
       handler(fakeDeleteRequest)
     }
 
-    def event(auditResponse: AuditResponse, requestBody: Option[JsValue]): AuditEvent[FlattenedGenericAuditDetail] = {
+    protected def event(auditResponse: AuditResponse, requestBody: Option[JsValue]): AuditEvent[FlattenedGenericAuditDetail] = {
       val fhlType: String = propertyTypeValue match {
         case HistoricPropertyType.Fhl => "Fhl"
         case _                        => "NonFhl"

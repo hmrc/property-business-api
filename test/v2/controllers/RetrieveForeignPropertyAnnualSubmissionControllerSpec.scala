@@ -37,7 +37,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class RetrieveForeignPropertyAnnualSubmissionControllerSpec
-  extends ControllerBaseSpec
+    extends ControllerBaseSpec
     with ControllerTestRunner
     with MockEnrolmentsAuthService
     with MockMtdIdLookupService
@@ -48,7 +48,7 @@ class RetrieveForeignPropertyAnnualSubmissionControllerSpec
     with MockIdGenerator {
 
   private val businessId = "XAIS12345678910"
-  private val taxYear = "2020-21"
+  private val taxYear    = "2020-21"
 
   "RetrieveForeignPropertyAnnualSubmissionController" should {
     "return a successful response with status 200 (OK)" when {
@@ -99,7 +99,7 @@ class RetrieveForeignPropertyAnnualSubmissionControllerSpec
 
   trait Test extends ControllerTest {
 
-    val controller = new RetrieveForeignPropertyAnnualSubmissionController(
+    private val controller = new RetrieveForeignPropertyAnnualSubmissionController(
       authService = mockEnrolmentsAuthService,
       lookupService = mockMtdIdLookupService,
       parser = mockRetrieveForeignPropertyAnnualSubmissionRequestParser,

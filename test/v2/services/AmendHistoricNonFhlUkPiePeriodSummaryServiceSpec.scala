@@ -32,10 +32,7 @@ class AmendHistoricNonFhlUkPiePeriodSummaryServiceSpec extends ServiceSpec {
   private val nino     = Nino("AA123456A")
   private val periodId = PeriodId(from = "2017-04-06", to = "2017-07-04")
 
-  private val requestBody = AmendHistoricNonFhlUkPiePeriodSummaryRequestBody(None, None)
-  private val request     = AmendHistoricNonFhlUkPiePeriodSummaryRequest(nino, periodId, requestBody)
-
-  implicit val correlationId: String = "X-123"
+  implicit private val correlationId: String = "X-123"
 
   "The service" when {
     "a downstream request is successful" should {
@@ -51,18 +48,18 @@ class AmendHistoricNonFhlUkPiePeriodSummaryServiceSpec extends ServiceSpec {
 
     "a downstream request returns an error code" should {
 
-      def serviceError(ifsErrorCode: String, error: MtdError): Unit =
-        s"map the $ifsErrorCode error" in new Test {
+      def serviceError(downstreamErrorCode: String, error: MtdError): Unit =
+        s"map the $downstreamErrorCode error" in new Test {
 
           MockAmendHistoricNonFhlUkPiePeriodSummaryConnector
             .amend(request)
-            .returns(Future.successful(Left(ResponseWrapper(correlationId, DownstreamErrors.single(DownstreamErrorCode(ifsErrorCode))))))
+            .returns(Future.successful(Left(ResponseWrapper(correlationId, DownstreamErrors.single(DownstreamErrorCode(downstreamErrorCode))))))
 
           val result: ServiceOutcome[Unit] = await(service.amend(request))
           result shouldBe Left(ErrorWrapper(correlationId, error))
         }
 
-      val input = Seq(
+      val input = List(
         "INVALID_NINO"                -> NinoFormatError,
         "INVALID_TYPE"                -> InternalError,
         "INVALID_PAYLOAD"             -> InternalError,
@@ -83,12 +80,15 @@ class AmendHistoricNonFhlUkPiePeriodSummaryServiceSpec extends ServiceSpec {
   }
 
   trait Test extends MockAmendHistoricNonFhlUkPiePeriodSummaryConnector {
-    implicit val hc: HeaderCarrier              = HeaderCarrier()
-    implicit val logContext: EndpointLogContext = EndpointLogContext("c", "ep")
+    implicit protected val hc: HeaderCarrier              = HeaderCarrier()
+    implicit protected val logContext: EndpointLogContext = EndpointLogContext("c", "ep")
 
-    val service = new AmendHistoricNonFhlUkPiePeriodSummaryService(
+    protected val service = new AmendHistoricNonFhlUkPiePeriodSummaryService(
       connector = mockConnector
     )
+
+    protected val requestBody: AmendHistoricNonFhlUkPiePeriodSummaryRequestBody = AmendHistoricNonFhlUkPiePeriodSummaryRequestBody(None, None)
+    protected val request: AmendHistoricNonFhlUkPiePeriodSummaryRequest = AmendHistoricNonFhlUkPiePeriodSummaryRequest(nino, periodId, requestBody)
 
   }
 

@@ -22,7 +22,7 @@ import v2.mocks.connectors.MockCreateHistoricNonFhlUkPropertyPeriodSummaryConnec
 import api.models.errors._
 import api.models.domain.{Nino, PeriodId}
 import api.models.outcomes.ResponseWrapper
-import api.services.ServiceSpec
+import api.services.{ServiceOutcome, ServiceSpec}
 import v2.models.request.common.ukPropertyRentARoom.{UkPropertyExpensesRentARoom, UkPropertyIncomeRentARoom}
 import v2.models.request.createHistoricNonFhlUkPropertyPeriodSummary._
 import v2.models.response.createHistoricNonFhlUkPiePeriodSummary.CreateHistoricNonFhlUkPiePeriodSummaryResponse
@@ -31,67 +31,12 @@ import scala.concurrent.Future
 
 class CreateHistoricNonFhlUkPropertyPeriodSummaryServiceSpec extends ServiceSpec {
 
-  implicit val correlationId: String = "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
+  private val nino     = "TC663795B"
+  private val fromDate = "2021-01-06"
+  private val toDate   = "2021-02-06"
+  private val periodId = "2021-01-06_2021-02-06"
 
-  val nino     = "TC663795B"
-  val fromDate = "2021-01-06"
-  val toDate   = "2021-02-06"
-  val periodId = "2021-01-06_2021-02-06"
-
-  val url: String = s"/income-tax/nino/$nino/uk-properties/other/periodic-summaries"
-
-  val income: UkNonFhlPropertyIncome =
-    UkNonFhlPropertyIncome(Some(2355.45), Some(454.56), Some(123.45), Some(234.53), Some(567.89), Some(UkPropertyIncomeRentARoom(Some(567.56))))
-
-  val expenses: UkNonFhlPropertyExpenses = UkNonFhlPropertyExpenses(
-    Some(567.53),
-    Some(324.65),
-    Some(453.56),
-    Some(535.78),
-    Some(678.34),
-    Some(682.34),
-    Some(1000.45),
-    Some(645.56),
-    Some(672.34),
-    Some(UkPropertyExpensesRentARoom(Some(545.9))),
-    None
-  )
-
-  val consolidatedExpenses: UkNonFhlPropertyExpenses =
-    UkNonFhlPropertyExpenses(None, None, None, None, None, None, None, None, None, None, Some(235.78))
-
-  val requestBody: CreateHistoricNonFhlUkPropertyPeriodSummaryRequestBody =
-    CreateHistoricNonFhlUkPropertyPeriodSummaryRequestBody(
-      fromDate,
-      toDate,
-      Some(income),
-      Some(expenses)
-    )
-
-  val consolidatedRequestBody: CreateHistoricNonFhlUkPropertyPeriodSummaryRequestBody =
-    CreateHistoricNonFhlUkPropertyPeriodSummaryRequestBody(
-      fromDate,
-      toDate,
-      Some(income),
-      Some(consolidatedExpenses)
-    )
-
-  private val requestData =
-    CreateHistoricNonFhlUkPropertyPeriodSummaryRequest(Nino(nino), requestBody)
-
-  private val consolidatedRequestData =
-    CreateHistoricNonFhlUkPropertyPeriodSummaryRequest(Nino(nino), consolidatedRequestBody)
-
-  private val responseData = CreateHistoricNonFhlUkPiePeriodSummaryResponse(PeriodId(periodId))
-
-  trait Test extends MockCreateHistoricNonFhlUkPropertyPeriodSummaryConnector {
-    implicit val hc: HeaderCarrier              = HeaderCarrier()
-    implicit val logContext: EndpointLogContext = EndpointLogContext("c", "ep")
-
-    val service = new CreateHistoricNonFhlUkPropertyPeriodSummaryService(
-      connector = mockCreateHistoricNonFhlUkPropertyPeriodSummaryConnector
-    )
-  }
+  implicit private val correlationId: String = "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
 
   "service" when {
     "service call successful" should {
@@ -100,7 +45,7 @@ class CreateHistoricNonFhlUkPropertyPeriodSummaryServiceSpec extends ServiceSpec
           .createHistoricNonFhlUkProperty(requestData)
           .returns(Future.successful(Right(ResponseWrapper(correlationId, ()))))
 
-        val result = await(service.createPeriodSummary(requestData))
+        val result: ServiceOutcome[CreateHistoricNonFhlUkPiePeriodSummaryResponse] = await(service.createPeriodSummary(requestData))
         result shouldBe Right(ResponseWrapper(correlationId, responseData))
       }
 
@@ -109,23 +54,23 @@ class CreateHistoricNonFhlUkPropertyPeriodSummaryServiceSpec extends ServiceSpec
           .createHistoricNonFhlUkProperty(consolidatedRequestData)
           .returns(Future.successful(Right(ResponseWrapper(correlationId, ()))))
 
-        val result = await(service.createPeriodSummary(consolidatedRequestData))
+        val result: ServiceOutcome[CreateHistoricNonFhlUkPiePeriodSummaryResponse] = await(service.createPeriodSummary(consolidatedRequestData))
         result shouldBe Right(ResponseWrapper(correlationId, responseData))
 
       }
     }
 
     "service call unsuccessful map" when {
-      def serviceError(ifsErrorCode: String, error: MtdError): Unit =
-        s" return a $ifsErrorCode from the service" in new Test {
+      def serviceError(downstreamErrorCode: String, error: MtdError): Unit =
+        s" return a $downstreamErrorCode from the service" in new Test {
           MockCreateHistoricNonFhlUkPropertyPeriodSummaryConnector
             .createHistoricNonFhlUkProperty(requestData)
-            .returns(Future.successful(Left(ResponseWrapper(correlationId, DownstreamErrors.single(DownstreamErrorCode(ifsErrorCode))))))
+            .returns(Future.successful(Left(ResponseWrapper(correlationId, DownstreamErrors.single(DownstreamErrorCode(downstreamErrorCode))))))
 
           await(service.createPeriodSummary(requestData)) shouldBe Left(ErrorWrapper(correlationId, error))
         }
 
-      val input = Seq(
+      val input = List(
         "INVALID_NINO"            -> NinoFormatError,
         "INVALID_TYPE"            -> InternalError,
         "INVALID_PAYLOAD"         -> InternalError,
@@ -141,7 +86,63 @@ class CreateHistoricNonFhlUkPropertyPeriodSummaryServiceSpec extends ServiceSpec
         "SERVER_ERROR"            -> InternalError,
         "SERVICE_UNAVAILABLE"     -> InternalError
       )
+
       input.foreach(args => (serviceError _).tupled(args))
     }
   }
+
+  trait Test extends MockCreateHistoricNonFhlUkPropertyPeriodSummaryConnector {
+    implicit protected val hc: HeaderCarrier              = HeaderCarrier()
+    implicit protected val logContext: EndpointLogContext = EndpointLogContext("c", "ep")
+
+    protected val service = new CreateHistoricNonFhlUkPropertyPeriodSummaryService(
+      connector = mockCreateHistoricNonFhlUkPropertyPeriodSummaryConnector
+    )
+
+    private val income: UkNonFhlPropertyIncome =
+      UkNonFhlPropertyIncome(Some(2355.45), Some(454.56), Some(123.45), Some(234.53), Some(567.89), Some(UkPropertyIncomeRentARoom(Some(567.56))))
+
+    private val expenses: UkNonFhlPropertyExpenses = UkNonFhlPropertyExpenses(
+      Some(567.53),
+      Some(324.65),
+      Some(453.56),
+      Some(535.78),
+      Some(678.34),
+      Some(682.34),
+      Some(1000.45),
+      Some(645.56),
+      Some(672.34),
+      Some(UkPropertyExpensesRentARoom(Some(545.9))),
+      None
+    )
+
+    private val consolidatedExpenses: UkNonFhlPropertyExpenses =
+      UkNonFhlPropertyExpenses(None, None, None, None, None, None, None, None, None, None, Some(235.78))
+
+    protected val requestBody: CreateHistoricNonFhlUkPropertyPeriodSummaryRequestBody =
+      CreateHistoricNonFhlUkPropertyPeriodSummaryRequestBody(
+        fromDate,
+        toDate,
+        Some(income),
+        Some(expenses)
+      )
+
+    protected val consolidatedRequestBody: CreateHistoricNonFhlUkPropertyPeriodSummaryRequestBody =
+      CreateHistoricNonFhlUkPropertyPeriodSummaryRequestBody(
+        fromDate,
+        toDate,
+        Some(income),
+        Some(consolidatedExpenses)
+      )
+
+    protected val requestData: CreateHistoricNonFhlUkPropertyPeriodSummaryRequest =
+      CreateHistoricNonFhlUkPropertyPeriodSummaryRequest(Nino(nino), requestBody)
+
+    protected val consolidatedRequestData: CreateHistoricNonFhlUkPropertyPeriodSummaryRequest =
+      CreateHistoricNonFhlUkPropertyPeriodSummaryRequest(Nino(nino), consolidatedRequestBody)
+
+    protected val responseData: CreateHistoricNonFhlUkPiePeriodSummaryResponse = CreateHistoricNonFhlUkPiePeriodSummaryResponse(PeriodId(periodId))
+
+  }
+
 }

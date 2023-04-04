@@ -21,10 +21,8 @@ import v2.mocks.connectors.MockRetrieveForeignPropertyAnnualSubmissionConnector
 import api.models.errors._
 import v2.models.request.retrieveForeignPropertyAnnualSubmission.RetrieveForeignPropertyAnnualSubmissionRequest
 import v2.models.response.retrieveForeignPropertyAnnualSubmission.RetrieveForeignPropertyAnnualSubmissionResponse
-import v2.models.response.retrieveForeignPropertyAnnualSubmission.foreignFhlEea._
-import v2.models.response.retrieveForeignPropertyAnnualSubmission.foreignProperty._
 import uk.gov.hmrc.http.HeaderCarrier
-import v2.connectors.RetrieveForeignPropertyAnnualSubmissionConnector.{ ForeignResult, NonForeignResult }
+import v2.connectors.RetrieveForeignPropertyAnnualSubmissionConnector.{ForeignResult, NonForeignResult}
 import api.controllers.EndpointLogContext
 import api.models.domain.{Nino, TaxYear}
 import api.models.outcomes.ResponseWrapper
@@ -34,57 +32,26 @@ import scala.concurrent.Future
 
 class RetrieveForeignPropertyAnnualSubmissionServiceSpec extends UnitSpec {
 
-  val nino: String                   = "AA123456A"
-  val businessId: String             = "XAIS12345678910"
-  val taxYear: TaxYear               = TaxYear.fromMtd("2020-21")
-  implicit val correlationId: String = "X-123"
+  private val nino: String       = "AA123456A"
+  private val businessId: String = "XAIS12345678910"
+  private val taxYear: TaxYear   = TaxYear.fromMtd("2020-21")
 
-  private val response = RetrieveForeignPropertyAnnualSubmissionResponse(
-    "2020-07-07T10:59:47.544Z",
-    Some(
-      ForeignFhlEeaEntry(
-        Some(ForeignFhlEeaAdjustments(Some(100.25), Some(100.25), Some(true))),
-        Some(ForeignFhlEeaAllowances(Some(100.25), Some(100.25), Some(100.25), Some(100.25), Some(100.25)))
-      )),
-    Some(
-      Seq(ForeignPropertyEntry(
-        "GER",
-        Some(ForeignPropertyAdjustments(Some(100.25), Some(100.25))),
-        Some(ForeignPropertyAllowances(
-          Some(100.25),
-          Some(100.25),
-          Some(100.25),
-          Some(100.25),
-          Some(100.25),
-          Some(100.25),
-          Some(100.25),
-          Some(
-            Seq(
-              StructuredBuildingAllowance(
-                3545.12,
-                Some(FirstYear(
-                  "2020-03-29",
-                  3453.34
-                )),
-                Building(
-                  Some("Building Name"),
-                  Some("12"),
-                  "TF3 4GH"
-                )
-              )))
-        ))
-      )))
-  )
-
-  private val requestData = RetrieveForeignPropertyAnnualSubmissionRequest(Nino(nino), businessId, taxYear)
+  implicit private val correlationId: String = "X-123"
 
   trait Test extends MockRetrieveForeignPropertyAnnualSubmissionConnector {
-    implicit val hc: HeaderCarrier              = HeaderCarrier()
-    implicit val logContext: EndpointLogContext = EndpointLogContext("c", "ep")
+    implicit protected val hc: HeaderCarrier              = HeaderCarrier()
+    implicit protected val logContext: EndpointLogContext = EndpointLogContext("c", "ep")
 
-    val service = new RetrieveForeignPropertyAnnualSubmissionService(
+    protected val service = new RetrieveForeignPropertyAnnualSubmissionService(
       connector = mockRetrieveForeignPropertyConnector
     )
+
+    protected val requestData: RetrieveForeignPropertyAnnualSubmissionRequest =
+      RetrieveForeignPropertyAnnualSubmissionRequest(Nino(nino), businessId, taxYear)
+
+    protected val response: RetrieveForeignPropertyAnnualSubmissionResponse =
+      RetrieveForeignPropertyAnnualSubmissionResponse("2020-07-07T10:59:47.544Z", None, None)
+
   }
 
   "service" should {
@@ -111,17 +78,17 @@ class RetrieveForeignPropertyAnnualSubmissionServiceSpec extends UnitSpec {
   "unsuccessful" should {
     "map errors according to spec" when {
 
-      def serviceError(ifsErrorCode: String, error: MtdError): Unit =
-        s"a $ifsErrorCode error is returned from the service" in new Test {
+      def serviceError(downstreamErrorCode: String, error: MtdError): Unit =
+        s"a $downstreamErrorCode error is returned from the service" in new Test {
 
           MockRetrieveForeignPropertyConnector
             .retrieveForeignProperty(requestData)
-            .returns(Future.successful(Left(ResponseWrapper(correlationId, DownstreamErrors.single(DownstreamErrorCode(ifsErrorCode))))))
+            .returns(Future.successful(Left(ResponseWrapper(correlationId, DownstreamErrors.single(DownstreamErrorCode(downstreamErrorCode))))))
 
           await(service.retrieveForeignProperty(requestData)) shouldBe Left(ErrorWrapper(correlationId, error))
         }
 
-      val errors = Seq(
+      val errors = List(
         "INVALID_TAXABLE_ENTITY_ID" -> NinoFormatError,
         "INVALID_TAX_YEAR"          -> TaxYearFormatError,
         "INVALID_INCOMESOURCEID"    -> BusinessIdFormatError,
@@ -132,7 +99,7 @@ class RetrieveForeignPropertyAnnualSubmissionServiceSpec extends UnitSpec {
         "SERVICE_UNAVAILABLE"       -> InternalError
       )
 
-      val extraTysErrors = Seq(
+      val extraTysErrors = List(
         "INVALID_INCOMESOURCE_ID" -> BusinessIdFormatError,
         "INVALID_CORRELATION_ID"  -> InternalError
       )
@@ -140,4 +107,5 @@ class RetrieveForeignPropertyAnnualSubmissionServiceSpec extends UnitSpec {
       (errors ++ extraTysErrors).foreach(args => (serviceError _).tupled(args))
     }
   }
+
 }

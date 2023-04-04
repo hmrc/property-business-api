@@ -16,39 +16,25 @@
 
 package v2.services
 
+import api.controllers.EndpointLogContext
+import api.models.domain.{Nino, PeriodId}
+import api.models.errors._
+import api.models.outcomes.ResponseWrapper
 import support.UnitSpec
 import uk.gov.hmrc.http.HeaderCarrier
-import api.controllers.EndpointLogContext
 import v2.mocks.connectors.MockRetrieveHistoricFhlUkPropertyPeriodSummaryConnector
-import api.models.errors._
-import api.models.domain.{Nino, PeriodId}
-import api.models.outcomes.ResponseWrapper
 import v2.models.request.retrieveHistoricFhlUkPiePeriodSummary.RetrieveHistoricFhlUkPiePeriodSummaryRequest
-import v2.models.response.retrieveHistoricFhlUkPiePeriodSummary.{PeriodExpenses, PeriodIncome, RetrieveHistoricFhlUkPiePeriodSummaryResponse}
+import v2.models.response.retrieveHistoricFhlUkPiePeriodSummary.RetrieveHistoricFhlUkPiePeriodSummaryResponse
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class RetrieveHistoricFhlUkPropertyPeriodSummaryServiceSpec extends UnitSpec {
 
-  val nino: String                   = "AA123456A"
-  val periodId                       = "2017-04-06_2017-07-04"
-  implicit val correlationId: String = "X-123"
+  private val nino: String = "AA123456A"
+  private val periodId     = "2017-04-06_2017-07-04"
 
-  val periodExpenses: PeriodExpenses = PeriodExpenses(None, None, None, None, None, None, None, None, None)
-  val periodIncome: PeriodIncome     = PeriodIncome(None, None, None)
-
-  private val request  = RetrieveHistoricFhlUkPiePeriodSummaryRequest(Nino(nino), PeriodId(periodId))
-  private val response = RetrieveHistoricFhlUkPiePeriodSummaryResponse("2017-04-06", "2017-07-04", Some(periodIncome), Some(periodExpenses))
-
-  trait Test extends MockRetrieveHistoricFhlUkPropertyPeriodSummaryConnector {
-    implicit val hc: HeaderCarrier              = HeaderCarrier()
-    implicit val logContext: EndpointLogContext = EndpointLogContext("c", "ep")
-
-    val service = new RetrieveHistoricFhlUkPropertyPeriodSummaryService(
-      connector = mockRetrieveHistoricFhlUkPropertyPeriodSummaryConnector
-    )
-  }
+  implicit private val correlationId: String = "X-123"
 
   "retrieve" should {
     "service call successful" when {
@@ -73,7 +59,7 @@ class RetrieveHistoricFhlUkPropertyPeriodSummaryServiceSpec extends UnitSpec {
           result shouldBe Left(ErrorWrapper(correlationId, error))
         }
 
-      val input = Seq(
+      val input = List(
         "INVALID_NINO"        -> NinoFormatError,
         "INVALID_DATE_FROM"   -> PeriodIdFormatError,
         "INVALID_DATE_TO"     -> PeriodIdFormatError,
@@ -87,4 +73,20 @@ class RetrieveHistoricFhlUkPropertyPeriodSummaryServiceSpec extends UnitSpec {
       input.foreach(args => (serviceError _).tupled(args))
     }
   }
+
+  trait Test extends MockRetrieveHistoricFhlUkPropertyPeriodSummaryConnector {
+    implicit protected val hc: HeaderCarrier              = HeaderCarrier()
+    implicit protected val logContext: EndpointLogContext = EndpointLogContext("c", "ep")
+
+    protected val service = new RetrieveHistoricFhlUkPropertyPeriodSummaryService(
+      connector = mockRetrieveHistoricFhlUkPropertyPeriodSummaryConnector
+    )
+
+    protected val request: RetrieveHistoricFhlUkPiePeriodSummaryRequest = RetrieveHistoricFhlUkPiePeriodSummaryRequest(Nino(nino), PeriodId(periodId))
+
+    protected val response: RetrieveHistoricFhlUkPiePeriodSummaryResponse =
+      RetrieveHistoricFhlUkPiePeriodSummaryResponse("2017-04-06", "2017-07-04", None, None)
+
+  }
+
 }

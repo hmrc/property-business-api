@@ -75,22 +75,11 @@ class AmendUkPropertyAnnualSubmissionController @Inject() (val authService: Enro
         response match {
           case Left(err: ErrorWrapper) =>
             auditSubmission(
-              GenericAuditDetail(
-                userDetails = request.userDetails,
-                params = rawData,
-                correlationId = ctx.correlationId,
-                response = AuditResponse(httpStatus = httpStatus, response = Left(err.auditErrors))
-              )
+              GenericAuditDetail(request.userDetails, rawData, ctx.correlationId, AuditResponse(httpStatus, Left(err.auditErrors)))
             )
-
           case Right(resp: Option[JsValue]) =>
             auditSubmission(
-              GenericAuditDetail(
-                userDetails = request.userDetails,
-                params = rawData,
-                correlationId = ctx.correlationId,
-                response = AuditResponse(httpStatus = OK, response = Right(resp))
-              )
+              GenericAuditDetail(request.userDetails, rawData, ctx.correlationId, AuditResponse(OK, Right(resp)))
             )
         }
       }

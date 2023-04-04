@@ -56,7 +56,7 @@ class DeletePropertyAnnualSubmissionController @Inject() (val authService: Enrol
         .withParser(parser)
         .withService(service.deletePropertyAnnualSubmission)
         .withAuditing(
-          auditHandler(rawData = rawData, correlationId = ctx.correlationId, request = request)
+          auditHandler(rawData, ctx.correlationId, request)
         )
 
       requestHandler.handleRequest(rawData)
@@ -71,22 +71,11 @@ class DeletePropertyAnnualSubmissionController @Inject() (val authService: Enrol
         response match {
           case Left(err: ErrorWrapper) =>
             auditSubmission(
-              details = GenericAuditDetail(
-                userDetails = request.userDetails,
-                params = rawData,
-                correlationId = correlationId,
-                response = AuditResponse(httpStatus, Left(err.auditErrors))
-              )
+              GenericAuditDetail(request.userDetails, rawData, correlationId, AuditResponse(httpStatus, Left(err.auditErrors)))
             )
-
           case Right(_) =>
             auditSubmission(
-              GenericAuditDetail(
-                request.userDetails,
-                rawData,
-                ctx.correlationId,
-                AuditResponse(httpStatus = OK, response = Right(None))
-              )
+              GenericAuditDetail(request.userDetails, rawData, correlationId, AuditResponse(OK, Right(None)))
             )
         }
       }

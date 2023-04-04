@@ -90,25 +90,24 @@ class DeleteHistoricUkPropertyAnnualSubmissionController @Inject() (val authServ
             auditSubmission(
               propertyType.toString,
               FlattenedGenericAuditDetail(
-                versionNumber = Some("2.0"),
+                Some("2.0"),
                 request.userDetails,
                 Map("nino" -> nino, "taxYear" -> taxYear),
                 None,
                 ctx.correlationId,
-                AuditResponse(httpStatus = httpStatus, response = Left(err.auditErrors))
+                AuditResponse(httpStatus, Left(err.auditErrors))
               )
             )
-
           case Right(_) =>
             auditSubmission(
               propertyType.toString,
               FlattenedGenericAuditDetail(
-                versionNumber = Some("2.0"),
+                Some("2.0"),
                 request.userDetails,
                 Map("nino" -> nino, "taxYear" -> taxYear),
                 None,
                 ctx.correlationId,
-                AuditResponse(httpStatus = NO_CONTENT, response = Right(None))
+                AuditResponse(NO_CONTENT, Right(None))
               )
             )
         }

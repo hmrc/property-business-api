@@ -74,16 +74,9 @@ class AmendForeignPropertyPeriodSummaryController @Inject() (val authService: En
           ec: ExecutionContext): Unit = {
         response match {
           case Left(err: ErrorWrapper) =>
-            auditSubmission(
-              GenericAuditDetail(
-                userDetails = request.userDetails,
-                params = rawData,
-                correlationId = ctx.correlationId,
-                response = AuditResponse(httpStatus = httpStatus, response = Left(err.auditErrors))
-              ))
+            auditSubmission(GenericAuditDetail(request.userDetails, rawData, ctx.correlationId, AuditResponse(httpStatus, Left(err.auditErrors))))
           case Right(_) =>
-            auditSubmission(
-              GenericAuditDetail(request.userDetails, rawData, ctx.correlationId, AuditResponse(httpStatus = OK, response = Right(None))))
+            auditSubmission(GenericAuditDetail(request.userDetails, rawData, ctx.correlationId, AuditResponse(OK, Right(None))))
         }
       }
     }

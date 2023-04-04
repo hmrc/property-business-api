@@ -55,7 +55,7 @@ class CreateForeignPropertyPeriodSummaryController @Inject() (val authService: E
     authorisedAction(nino).async(parse.json) { implicit request =>
       implicit val ctx: RequestContext = RequestContext.from(idGenerator, endpointLogContext)
 
-      val rawData = CreateForeignPropertyPeriodSummaryRawData(nino = nino, businessId = businessId, taxYear = taxYear, body = request.body)
+      val rawData = CreateForeignPropertyPeriodSummaryRawData(nino, businessId, taxYear, request.body)
 
       val requestHandler =
         RequestHandler
@@ -78,21 +78,11 @@ class CreateForeignPropertyPeriodSummaryController @Inject() (val authService: E
         response match {
           case Left(err: ErrorWrapper) =>
             auditSubmission(
-              GenericAuditDetail(
-                request.userDetails,
-                rawData,
-                ctx.correlationId,
-                AuditResponse(httpStatus = httpStatus, response = Left(err.auditErrors))
-              )
+              GenericAuditDetail(request.userDetails, rawData, ctx.correlationId, AuditResponse(httpStatus, Left(err.auditErrors)))
             )
           case Right(_) =>
             auditSubmission(
-              GenericAuditDetail(
-                request.userDetails,
-                rawData,
-                ctx.correlationId,
-                AuditResponse(httpStatus = OK, response = Right(None))
-              )
+              GenericAuditDetail(request.userDetails, rawData, ctx.correlationId, AuditResponse(OK, Right(None)))
             )
         }
       }

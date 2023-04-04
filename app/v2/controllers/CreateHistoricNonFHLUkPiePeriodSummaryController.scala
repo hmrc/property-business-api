@@ -82,18 +82,18 @@ class CreateHistoricNonFHLUkPiePeriodSummaryController @Inject() (val authServic
                 Map("nino" -> nino),
                 Some(request.body),
                 ctx.correlationId,
-                AuditResponse(httpStatus = httpStatus, response = Left(err.auditErrors))
+                AuditResponse(httpStatus, Left(err.auditErrors))
               )
             )
           case Right(_) =>
             auditSubmission(
               FlattenedGenericAuditDetail(
-                versionNumber = Some("2.0"),
+                Some("2.0"),
                 request.userDetails,
                 Map("nino" -> nino),
                 Some(request.body),
                 ctx.correlationId,
-                AuditResponse(httpStatus = CREATED, response = Right(None))
+                AuditResponse(CREATED, Right(None))
               )
             )
         }

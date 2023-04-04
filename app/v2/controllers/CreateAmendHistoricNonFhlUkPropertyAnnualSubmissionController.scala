@@ -84,18 +84,18 @@ class CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionController @Inject() (
                 Map("nino" -> nino, "taxYear" -> taxYear),
                 Some(request.body),
                 ctx.correlationId,
-                AuditResponse(httpStatus = httpStatus, response = Left(err.auditErrors))
+                AuditResponse(httpStatus, Left(err.auditErrors))
               )
             )
           case Right(_) =>
             auditSubmission(
               FlattenedGenericAuditDetail(
-                versionNumber = Some("2.0"),
+                Some("2.0"),
                 request.userDetails,
                 Map("nino" -> nino, "taxYear" -> taxYear),
                 Some(request.body),
                 ctx.correlationId,
-                AuditResponse(httpStatus = OK, response = Right(None))
+                AuditResponse(OK, Right(None))
               )
             )
         }

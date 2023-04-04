@@ -75,23 +75,23 @@ class AmendHistoricNonFhlUkPropertyPeriodSummaryController @Inject() (val authSe
           case Left(err: ErrorWrapper) =>
             auditSubmission(
               FlattenedGenericAuditDetail(
-                versionNumber = Some("2.0"),
+                Some("2.0"),
                 request.userDetails,
                 Map("nino" -> nino, "periodId" -> periodId),
                 Some(request.body),
                 ctx.correlationId,
-                AuditResponse(httpStatus = httpStatus, response = Left(err.auditErrors))
+                AuditResponse(httpStatus, Left(err.auditErrors))
               )
             )
           case Right(_) =>
             auditSubmission(
               FlattenedGenericAuditDetail(
-                versionNumber = Some("2.0"),
+                Some("2.0"),
                 request.userDetails,
                 Map("nino" -> nino, "periodId" -> periodId),
                 Some(request.body),
                 ctx.correlationId,
-                AuditResponse(httpStatus = OK, response = Right(None))
+                AuditResponse(OK, Right(None))
               )
             )
         }

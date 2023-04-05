@@ -95,7 +95,7 @@ We would also need to update `ConfigRespository`, specifically the `findEndpoint
 
 We may need to make similar changes to `findUrlsWith` too. 
 
-Note: "vendor-Intent" isn't limited to request methods like "DELETE". We can make it string we like, e.g. "FOREIGN_PROPERTY" if we think that is more descriptive. 
+Note: "vendor-Intent" isn't limited to request methods like "DELETE". We can make it any string we like, e.g. "FOREIGN_PROPERTY" if we think that is more descriptive. 
 
 ### Alternative solution considered - Modifying GTS Header 
 

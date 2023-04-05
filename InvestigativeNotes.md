@@ -99,7 +99,7 @@ Note: "vendor-Intent" isn't limited to request methods like "DELETE". We can mak
 
 ### Alternative solution considered - Modifying GTS Header 
 
-**Rejected** because it ties the APIs to closely to the sandbox. APIs would have to know what the GTS is and what it means, which introduces unnecessary fragility. 
+**Rejected** because it ties the APIs too closely to the sandbox. APIs would have to know what the GTS is and what it means, which introduces unnecessary fragility. 
 
 Summary: Instead of identifying if a vendor wishes to RETRIEVE or DELETE by a gov-test-scenario heading, we identify this by the request method. This eliminates the need for a special gov-test-scenario heading and also more closely imitates how the live environment behaves.
 

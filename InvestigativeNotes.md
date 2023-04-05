@@ -2,9 +2,9 @@
 
 Investigation triggered by [this github comment](https://github.com/hmrc/property-business-api/pull/372/files#r1153009256).
 
-#### The Ask: Currently vendors must add a "DELETE" gov-test-scenario header to test some DELETE endpoints. How can we simplify this and let vendors just use a DEFAULT gov-test-scenario instead?
+#### The Ask: Currently vendors must add a "DELETE" or "STATEFUL_DELETE" gov-test-scenario header to test some DELETE endpoints. How can we simplify this and let vendors just use a DEFAULT gov-test-scenario instead?
 
-###  Jeremy's solution
+###  Expansion of Jeremy's solution
 
 Summary: Instead of matching according to the request method, the API will add in a "vendor-intent" header before forwarding the request to the mtd-sa-api-stub.
 
@@ -35,7 +35,7 @@ So for example, `DeleteStateful.json` may look like this:
     "method": "PUT",
     "govTestScenario": "STATEFUL",
     "version": "2.0",
-    "vendor-intent": "DELETE"
+    "vendorIntent": "DELETE"
   },
   "state": {
     "action": "delete",

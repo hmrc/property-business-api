@@ -16,48 +16,26 @@
 
 package v2.services
 
-import fixtures.CreateAmendNonFhlUkPropertyAnnualSubmission.RequestResponseModelFixtures
 import support.UnitSpec
 import uk.gov.hmrc.http.HeaderCarrier
 import api.controllers.EndpointLogContext
 import v2.mocks.connectors.MockCreateAmendHistoricNonFhlUkPropertyAnnualSubmissionConnector
-import v2.models.domain.TaxYear
-import api.models.domain.Nino
+import api.models.domain.{Nino, TaxYear}
 import api.models.errors._
 import api.models.outcomes.ResponseWrapper
-import v2.models.request.createAmendHistoricNonFhlUkPropertyAnnualSubmission.CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequest
+import v2.models.request.createAmendHistoricNonFhlUkPropertyAnnualSubmission._
 import v2.models.response.createAmendHistoricNonFhlUkPropertyAnnualSubmission.CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionResponse
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-class CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionServiceSpec extends UnitSpec with RequestResponseModelFixtures {
+class CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionServiceSpec extends UnitSpec {
 
-  val nino: String              = "AA123456A"
-  val taxYear: String           = "2019-20"
-  val mtdTaxYear: String        = "2019-20"
-  val downstreamTaxYear: String = "2020"
-
-  val request: CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequest = CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequest(
-    Nino(nino),
-    TaxYear.fromMtd(taxYear),
-    requestBody
-  )
-
-  trait Test extends MockCreateAmendHistoricNonFhlUkPropertyAnnualSubmissionConnector {
-    implicit val hc: HeaderCarrier              = HeaderCarrier()
-    implicit val logContext: EndpointLogContext = EndpointLogContext("c", "ep")
-    implicit val correlationId: String          = "someCorrelationId"
-
-    val service = new CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionService(
-      connector = mockCreateAmendHistoricNonFhlUkPropertyAnnualSubmissionConnector
-    )
-
-  }
+  private val nino: String    = "AA123456A"
+  private val taxYear: String = "2019-20"
 
   "service" should {
     "service call successful" when {
-
       "return mapped non-fhl result" in new Test {
         MockCreateAmendHistoricNonFhlUkPropertyAnnualSubmissionConnector
           .amend(request)
@@ -70,19 +48,18 @@ class CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionServiceSpec extends Uni
   }
 
   "unsuccessful" should {
-
     "map non fhl errors according to spec" when {
-      def serviceError(ifsErrorCode: String, error: MtdError): Unit =
-        s"a $ifsErrorCode error is returned from the service" in new Test {
+      def serviceError(downstreamErrorCode: String, error: MtdError): Unit =
+        s"a $downstreamErrorCode error is returned from the service" in new Test {
 
           MockCreateAmendHistoricNonFhlUkPropertyAnnualSubmissionConnector
             .amend(request)
-            .returns(Future.successful(Left(ResponseWrapper(correlationId, DownstreamErrors.single(DownstreamErrorCode(ifsErrorCode))))))
+            .returns(Future.successful(Left(ResponseWrapper(correlationId, DownstreamErrors.single(DownstreamErrorCode(downstreamErrorCode))))))
 
           await(service.amend(request)) shouldBe Left(ErrorWrapper(correlationId, error))
         }
 
-      Seq(
+      val input = List(
         "INVALID_NINO"           -> NinoFormatError,
         "INVALID_TYPE"           -> InternalError,
         "INVALID_TAX_YEAR"       -> TaxYearFormatError,
@@ -94,8 +71,27 @@ class CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionServiceSpec extends Uni
         "TAX_YEAR_NOT_SUPPORTED" -> RuleHistoricTaxYearNotSupportedError,
         "SERVER_ERROR"           -> InternalError,
         "SERVICE_UNAVAILABLE"    -> InternalError
-      ).foreach(args => (serviceError _).tupled(args))
+      )
+
+      input.foreach(args => (serviceError _).tupled(args))
     }
+  }
+
+  trait Test extends MockCreateAmendHistoricNonFhlUkPropertyAnnualSubmissionConnector {
+    implicit protected val hc: HeaderCarrier              = HeaderCarrier()
+    implicit protected val logContext: EndpointLogContext = EndpointLogContext("c", "ep")
+    implicit protected val correlationId: String          = "someCorrelationId"
+
+    protected val service = new CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionService(
+      connector = mockCreateAmendHistoricNonFhlUkPropertyAnnualSubmissionConnector
+    )
+
+    protected val requestBody: CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestBody =
+      CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestBody(None, None)
+
+    protected val request: CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequest =
+      CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequest(Nino(nino), TaxYear.fromMtd(taxYear), requestBody)
+
   }
 
 }

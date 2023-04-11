@@ -16,17 +16,15 @@
 
 package v2.mocks.services
 
+import api.controllers.RequestContext
+import api.services.ServiceOutcome
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
-import uk.gov.hmrc.http.HeaderCarrier
-import api.controllers.EndpointLogContext
-import api.models.errors.ErrorWrapper
-import api.models.outcomes.ResponseWrapper
 import v2.models.request.createHistoricNonFhlUkPropertyPeriodSummary.CreateHistoricNonFhlUkPropertyPeriodSummaryRequest
 import v2.models.response.createHistoricNonFhlUkPiePeriodSummary.CreateHistoricNonFhlUkPiePeriodSummaryResponse
 import v2.services.CreateHistoricNonFhlUkPropertyPeriodSummaryService
 
-import scala.concurrent.{ ExecutionContext, Future }
+import scala.concurrent.{ExecutionContext, Future}
 
 trait MockCreateHistoricNonFhlUkPiePeriodSummaryService extends MockFactory {
 
@@ -36,17 +34,17 @@ trait MockCreateHistoricNonFhlUkPiePeriodSummaryService extends MockFactory {
   object MockCreateHistoricNonFhlUkPiePeriodSummaryService {
 
     def createPeriodSummary(requestData: CreateHistoricNonFhlUkPropertyPeriodSummaryRequest)
-      : CallHandler[Future[Either[ErrorWrapper, ResponseWrapper[CreateHistoricNonFhlUkPiePeriodSummaryResponse]]]] = {
+        : CallHandler[Future[ServiceOutcome[CreateHistoricNonFhlUkPiePeriodSummaryResponse]]] = {
       (
         mockCreateHistoricNonFhlUkPiePeriodSummaryService
           .createPeriodSummary(_: CreateHistoricNonFhlUkPropertyPeriodSummaryRequest)(
-            _: HeaderCarrier,
-            _: ExecutionContext,
-            _: EndpointLogContext,
-            _: String
+            _: RequestContext,
+            _: ExecutionContext
           )
         )
-        .expects(requestData, *, *, *, *)
+        .expects(requestData, *, *)
     }
+
   }
+
 }

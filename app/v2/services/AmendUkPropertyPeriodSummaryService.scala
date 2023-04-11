@@ -16,38 +16,27 @@
 
 package v2.services
 
-import cats.data.EitherT
+import api.controllers.RequestContext
+import api.models.errors._
+import api.services.{BaseService, ServiceOutcome}
 import cats.implicits._
+import v2.connectors.AmendUkPropertyPeriodSummaryConnector
+import v2.models.request.amendUkPropertyPeriodSummary.AmendUkPropertyPeriodSummaryRequest
 
 import javax.inject.{Inject, Singleton}
-import uk.gov.hmrc.http.HeaderCarrier
-import utils.Logging
-import api.controllers.EndpointLogContext
-import api.models.errors._
-import v2.models.request.amendUkPropertyPeriodSummary.AmendUkPropertyPeriodSummaryRequest
-import api.services.ServiceOutcome
-import api.support.DownstreamResponseMappingSupport
-import v2.connectors.AmendUkPropertyPeriodSummaryConnector
-
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class AmendUkPropertyPeriodSummaryService @Inject() (connector: AmendUkPropertyPeriodSummaryConnector)
-    extends DownstreamResponseMappingSupport
-    with Logging {
+class AmendUkPropertyPeriodSummaryService @Inject() (connector: AmendUkPropertyPeriodSummaryConnector) extends BaseService {
 
-  def amendUkPropertyPeriodSummary(request: AmendUkPropertyPeriodSummaryRequest)(implicit
-      hc: HeaderCarrier,
-      ec: ExecutionContext,
-      logContext: EndpointLogContext,
-      correlationId: String): Future[ServiceOutcome[Unit]] = {
+  def amendUkPropertyPeriodSummary(
+      request: AmendUkPropertyPeriodSummaryRequest)(implicit ctx: RequestContext, ec: ExecutionContext): Future[ServiceOutcome[Unit]] = {
 
-    val result = EitherT(connector.amendUkPropertyPeriodSummary(request)).leftMap(mapDownstreamErrors(downstreamErrorMap))
+    connector.amendUkPropertyPeriodSummary(request).map(_.leftMap(mapDownstreamErrors(downstreamErrorMap)))
 
-    result.value
   }
 
-  private def downstreamErrorMap = {
+  private val downstreamErrorMap = {
     val errors = Map(
       "INVALID_TAXABLE_ENTITY_ID"   -> NinoFormatError,
       "INVALID_TAX_YEAR"            -> TaxYearFormatError,

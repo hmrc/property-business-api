@@ -16,7 +16,6 @@
 
 package v2.models.request.deletePropertyAnnualSubmission
 
-import api.models.domain.Nino
-import v2.models.domain.TaxYear
+import api.models.domain.{Nino, TaxYear}
 
 case class DeletePropertyAnnualSubmissionRequest(nino: Nino, businessId: String, taxYear: TaxYear)

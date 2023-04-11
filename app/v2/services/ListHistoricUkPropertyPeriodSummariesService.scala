@@ -16,41 +16,30 @@
 
 package v2.services
 
-import cats.data.EitherT
-import uk.gov.hmrc.http.HeaderCarrier
-import utils.Logging
-import v2.connectors.ListHistoricUkPropertyPeriodSummariesConnector
-import api.controllers.EndpointLogContext
-import v2.models.domain.HistoricPropertyType
+import api.controllers.RequestContext
+import api.models.domain.HistoricPropertyType
 import api.models.errors._
+import api.services.{BaseService, ServiceOutcome}
+import cats.implicits.toBifunctorOps
+import v2.connectors.ListHistoricUkPropertyPeriodSummariesConnector
 import v2.models.request.listHistoricUkPropertyPeriodSummaries.ListHistoricUkPropertyPeriodSummariesRequest
 import v2.models.response.listHistoricUkPropertyPeriodSummaries.{ListHistoricUkPropertyPeriodSummariesResponse, SubmissionPeriod}
-import api.services.ServiceOutcome
-import api.support.DownstreamResponseMappingSupport
-import v2.connectors.ListHistoricUkPropertyPeriodSummariesConnector
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class ListHistoricUkPropertyPeriodSummariesService @Inject()(connector: ListHistoricUkPropertyPeriodSummariesConnector)
-    extends DownstreamResponseMappingSupport
-    with Logging {
+class ListHistoricUkPropertyPeriodSummariesService @Inject() (connector: ListHistoricUkPropertyPeriodSummariesConnector) extends BaseService {
 
-  def listPeriodSummaries(request: ListHistoricUkPropertyPeriodSummariesRequest, propertyType: HistoricPropertyType)(
-      implicit hc: HeaderCarrier,
-      ec: ExecutionContext,
-      logContext: EndpointLogContext,
-      correlationId: String): Future[ServiceOutcome[ListHistoricUkPropertyPeriodSummariesResponse[SubmissionPeriod]]] = {
+  def listPeriodSummaries(request: ListHistoricUkPropertyPeriodSummariesRequest, propertyType: HistoricPropertyType)(implicit
+      ctx: RequestContext,
+      ec: ExecutionContext): Future[ServiceOutcome[ListHistoricUkPropertyPeriodSummariesResponse[SubmissionPeriod]]] = {
 
-    val result = for {
-      ifsResponseWrapper <- EitherT(connector.listPeriodSummaries(request, propertyType)).leftMap(mapDownstreamErrors(ifsErrorMap))
-    } yield ifsResponseWrapper
+    connector.listPeriodSummaries(request, propertyType).map(_.leftMap(mapDownstreamErrors(downstreamErrorMap)))
 
-    result.value
   }
 
-  private def ifsErrorMap = Map(
+  private val downstreamErrorMap: Map[String, MtdError] = Map(
     "INVALID_NINO"           -> NinoFormatError,
     "INVALID_CORRELATIONID"  -> InternalError,
     "TAX_YEAR_NOT_SUPPORTED" -> InternalError,
@@ -58,4 +47,5 @@ class ListHistoricUkPropertyPeriodSummariesService @Inject()(connector: ListHist
     "SERVER_ERROR"           -> InternalError,
     "SERVICE_UNAVAILABLE"    -> InternalError
   )
+
 }

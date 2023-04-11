@@ -20,39 +20,22 @@ import support.UnitSpec
 import uk.gov.hmrc.http.HeaderCarrier
 import api.controllers.EndpointLogContext
 import v2.mocks.connectors.MockListPropertyPeriodSummariesConnector
-import v2.models.domain.TaxYear; import api.models.domain.Nino
+import api.models.domain.{Nino, TaxYear}
 import api.models.errors._
 import api.models.outcomes.ResponseWrapper
 import v2.models.request.listPropertyPeriodSummaries.ListPropertyPeriodSummariesRequest
-import v2.models.response.listPropertyPeriodSummaries.{ ListPropertyPeriodSummariesResponse, SubmissionPeriod }
+import v2.models.response.listPropertyPeriodSummaries.{ListPropertyPeriodSummariesResponse, SubmissionPeriod}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class ListPropertyPeriodSummariesServiceSpec extends UnitSpec {
 
-  val nino: String       = "AA123456A"
-  val businessId: String = "XAIS12345678910"
-  val taxYear: TaxYear   = TaxYear.fromMtd("2020-21")
+  private val nino: String       = "AA123456A"
+  private val businessId: String = "XAIS12345678910"
+  private val taxYear: TaxYear   = TaxYear.fromMtd("2020-21")
 
-  implicit val correlationId: String = "X-123"
-
-  private val request = ListPropertyPeriodSummariesRequest(Nino(nino), businessId, taxYear)
-
-  private val response = ListPropertyPeriodSummariesResponse(
-    Seq(
-      SubmissionPeriod("4557ecb5-fd32-48cc-81f5-e6acd1099f3c", "2020-06-22", "2020-06-22"),
-      SubmissionPeriod("4557ecb5-fd32-48cc-81f5-e6acd1099f3d", "2020-08-22", "2020-08-22")
-    ))
-
-  trait Test extends MockListPropertyPeriodSummariesConnector {
-    implicit val hc: HeaderCarrier              = HeaderCarrier()
-    implicit val logContext: EndpointLogContext = EndpointLogContext("c", "ep")
-
-    val service = new ListPropertyPeriodSummariesService(
-      connector = mockListPropertyPeriodSummariesConnector
-    )
-  }
+  implicit private val correlationId: String = "X-123"
 
   "service" should {
     "service call successful" when {
@@ -79,7 +62,7 @@ class ListPropertyPeriodSummariesServiceSpec extends UnitSpec {
           await(service.listPeriodSummaries(request)) shouldBe Left(ErrorWrapper(correlationId, error))
         }
 
-      val errors = Seq(
+      val errors = List(
         "INVALID_TAXABLE_ENTITY_ID" -> NinoFormatError,
         "INVALID_INCOMESOURCEID"    -> BusinessIdFormatError,
         "INVALID_TAX_YEAR"          -> TaxYearFormatError,
@@ -90,7 +73,7 @@ class ListPropertyPeriodSummariesServiceSpec extends UnitSpec {
         "SERVICE_UNAVAILABLE"       -> InternalError
       )
 
-      val extraTysErrors = Seq(
+      val extraTysErrors = List(
         "INVALID_INCOMESOURCE_ID" -> BusinessIdFormatError,
         "INVALID_CORRELATION_ID"  -> InternalError,
         "NOT_FOUND"               -> NotFoundError
@@ -99,4 +82,23 @@ class ListPropertyPeriodSummariesServiceSpec extends UnitSpec {
       (errors ++ extraTysErrors).foreach(args => (serviceError _).tupled(args))
     }
   }
+
+  trait Test extends MockListPropertyPeriodSummariesConnector {
+    implicit protected val hc: HeaderCarrier              = HeaderCarrier()
+    implicit protected val logContext: EndpointLogContext = EndpointLogContext("c", "ep")
+
+    protected val service = new ListPropertyPeriodSummariesService(
+      connector = mockListPropertyPeriodSummariesConnector
+    )
+
+    protected val request: ListPropertyPeriodSummariesRequest = ListPropertyPeriodSummariesRequest(Nino(nino), businessId, taxYear)
+
+    protected val response: ListPropertyPeriodSummariesResponse = ListPropertyPeriodSummariesResponse(
+      Seq(
+        SubmissionPeriod("4557ecb5-fd32-48cc-81f5-e6acd1099f3c", "2020-06-22", "2020-06-22"),
+        SubmissionPeriod("4557ecb5-fd32-48cc-81f5-e6acd1099f3d", "2020-08-22", "2020-08-22")
+      ))
+
+  }
+
 }

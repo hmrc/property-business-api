@@ -18,10 +18,12 @@ package v2.connectors
 
 import api.connectors.{ConnectorSpec, DownstreamOutcome}
 import org.scalamock.handlers.CallHandler
-import v2.models.domain.PeriodId
-import api.models.domain.Nino
+import api.models.domain.{Nino, PeriodId}
 import api.models.outcomes.ResponseWrapper
-import v2.models.request.amendHistoricNonFhlUkPiePeriodSummary.{AmendHistoricNonFhlUkPiePeriodSummaryRequest, AmendHistoricNonFhlUkPiePeriodSummaryRequestBody}
+import v2.models.request.amendHistoricNonFhlUkPiePeriodSummary.{
+  AmendHistoricNonFhlUkPiePeriodSummaryRequest,
+  AmendHistoricNonFhlUkPiePeriodSummaryRequestBody
+}
 import v2.models.response.amendHistoricNonFhlUkPiePeriodSummary.AmendHistoricNonFhlUkPiePeriodSummaryResponse
 
 import scala.concurrent.Future
@@ -31,14 +33,14 @@ class AmendHistoricNonFhlUkPiePeriodSummaryConnectorSpec extends ConnectorSpec {
   private val nino     = Nino("AA123456A")
   private val periodId = PeriodId(from = "2017-04-06", to = "2017-07-04")
 
-  private val requestBody = AmendHistoricNonFhlUkPiePeriodSummaryRequestBody(None, None)
-  private val request     = AmendHistoricNonFhlUkPiePeriodSummaryRequest(nino, periodId, requestBody)
-
   "The connector" when {
     "sending a valid amend request" should {
       "return the ok result" in new IfsTest with Test {
-        val response = AmendHistoricNonFhlUkPiePeriodSummaryResponse(transactionReference = "2017090920170909")
-        val outcome  = Right(ResponseWrapper(correlationId, response))
+        val response: AmendHistoricNonFhlUkPiePeriodSummaryResponse =
+          AmendHistoricNonFhlUkPiePeriodSummaryResponse(transactionReference = "2017090920170909")
+
+        val outcome: Right[Nothing, ResponseWrapper[AmendHistoricNonFhlUkPiePeriodSummaryResponse]] = Right(ResponseWrapper(correlationId, response))
+
         stubHttpResponse(outcome)
 
         val result: DownstreamOutcome[Unit] = await(connector.amend(request))
@@ -50,10 +52,13 @@ class AmendHistoricNonFhlUkPiePeriodSummaryConnectorSpec extends ConnectorSpec {
   trait Test {
     _: ConnectorTest =>
 
-    val connector: AmendHistoricNonFhlUkPiePeriodSummaryConnector = new AmendHistoricNonFhlUkPiePeriodSummaryConnector(
+    protected val connector: AmendHistoricNonFhlUkPiePeriodSummaryConnector = new AmendHistoricNonFhlUkPiePeriodSummaryConnector(
       http = mockHttpClient,
       appConfig = mockAppConfig
     )
+
+    private val requestBody: AmendHistoricNonFhlUkPiePeriodSummaryRequestBody = AmendHistoricNonFhlUkPiePeriodSummaryRequestBody(None, None)
+    protected val request: AmendHistoricNonFhlUkPiePeriodSummaryRequest = AmendHistoricNonFhlUkPiePeriodSummaryRequest(nino, periodId, requestBody)
 
     def pathFrom(request: AmendHistoricNonFhlUkPiePeriodSummaryRequest): String =
       s"income-tax/nino/${request.nino.value}/uk-properties/other/periodic-summaries" +
@@ -61,7 +66,7 @@ class AmendHistoricNonFhlUkPiePeriodSummaryConnectorSpec extends ConnectorSpec {
         s"&to=${request.periodId.to}"
 
     def stubHttpResponse(outcome: DownstreamOutcome[AmendHistoricNonFhlUkPiePeriodSummaryResponse])
-      : CallHandler[Future[DownstreamOutcome[AmendHistoricNonFhlUkPiePeriodSummaryResponse]]]#Derived = {
+        : CallHandler[Future[DownstreamOutcome[AmendHistoricNonFhlUkPiePeriodSummaryResponse]]]#Derived = {
 
       val path = pathFrom(request)
 
@@ -70,6 +75,7 @@ class AmendHistoricNonFhlUkPiePeriodSummaryConnectorSpec extends ConnectorSpec {
         body = requestBody
       ).returns(Future.successful(outcome))
     }
+
   }
 
 }

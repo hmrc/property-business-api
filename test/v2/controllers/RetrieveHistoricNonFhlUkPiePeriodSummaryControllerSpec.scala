@@ -16,21 +16,19 @@
 
 package v2.controllers
 
-import api.controllers.ControllerBaseSpec
-import play.api.libs.json.Json
-import play.api.mvc.Result
-import uk.gov.hmrc.http.HeaderCarrier
-import v2.mocks.MockIdGenerator
-import v2.mocks.hateoas.MockHateoasFactory
-import v2.mocks.requestParsers.MockRetrieveHistoricNonFhlUkPiePeriodSummaryRequestParser
-import v2.mocks.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService, MockRetrieveHistoricNonFhlUkPiePeriodSummaryService}
-import v2.models.domain.PeriodId
-import api.models.errors._
-import api.models.hateoas.Method.GET
-import api.models.domain.Nino
-import api.models.hateoas.{HateoasWrapper, Link}
+import api.controllers.{ControllerBaseSpec, ControllerTestRunner}
+import api.mocks.MockIdGenerator
+import api.mocks.hateoas.MockHateoasFactory
+import api.mocks.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService}
+import api.models.domain.{Nino, PeriodId}
+import api.models.errors.{ErrorWrapper, NinoFormatError, RuleTaxYearNotSupportedError}
+import api.models.hateoas.HateoasWrapper
 import api.models.outcomes.ResponseWrapper
-import v2.models.request.retrieveHistoricNonFhlUkPiePeriodSummary.{RetrieveHistoricNonFhlUkPiePeriodSummaryRawData, RetrieveHistoricNonFhlUkPiePeriodSummaryRequest}
+import play.api.libs.json.{JsObject, JsValue, Json}
+import play.api.mvc.Result
+import v2.mocks.requestParsers.MockRetrieveHistoricNonFhlUkPiePeriodSummaryRequestParser
+import v2.mocks.services.MockRetrieveHistoricNonFhlUkPiePeriodSummaryService
+import v2.models.request.retrieveHistoricNonFhlUkPiePeriodSummary._
 import v2.models.response.retrieveHistoricNonFhlUkPiePeriodSummary._
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -38,6 +36,7 @@ import scala.concurrent.Future
 
 class RetrieveHistoricNonFhlUkPiePeriodSummaryControllerSpec
     extends ControllerBaseSpec
+    with ControllerTestRunner
     with MockEnrolmentsAuthService
     with MockMtdIdLookupService
     with MockRetrieveHistoricNonFhlUkPiePeriodSummaryService
@@ -46,18 +45,55 @@ class RetrieveHistoricNonFhlUkPiePeriodSummaryControllerSpec
     with MockAuditService
     with MockIdGenerator {
 
-  private val nino = "AA123456A"
-
   private val from     = "2017-04-06"
   private val to       = "2017-07-04"
   private val periodId = s"${from}_$to"
 
-  private val correlationId = "X-123"
+  "RetrieveHistoricNonFhlUkPiePeriodSummaryController" should {
+    "return OK" when {
+      "the request is valid" in new Test {
+        MockRetrieveHistoricNonFhlUkPiePeriodSummaryRequestParser
+          .parse(rawData)
+          .returns(Right(requestData))
 
-  trait Test {
-    val hc: HeaderCarrier = HeaderCarrier()
+        MockRetrieveHistoricNonFhlUkPiePeriodSummaryService
+          .retrieve(requestData)
+          .returns(Future.successful(Right(ResponseWrapper(correlationId, responseData))))
 
-    val controller = new RetrieveHistoricNonFhlUkPiePeriodSummaryController(
+        MockHateoasFactory
+          .wrap(responseData, hateoasData)
+          .returns(HateoasWrapper(responseData, testHateoasLinks))
+
+        runOkTest(expectedStatus = OK, maybeExpectedResponseBody = Some(responseBodyJsonWithHateoas))
+      }
+    }
+
+    "return the error as per spec" when {
+      "the parser validation fails" in new Test {
+        MockRetrieveHistoricNonFhlUkPiePeriodSummaryRequestParser
+          .parse(rawData)
+          .returns(Left(ErrorWrapper(correlationId, NinoFormatError, None)))
+
+        runErrorTest(NinoFormatError)
+      }
+
+      "the service returns an error" in new Test {
+        MockRetrieveHistoricNonFhlUkPiePeriodSummaryRequestParser
+          .parse(rawData)
+          .returns(Right(requestData))
+
+        MockRetrieveHistoricNonFhlUkPiePeriodSummaryService
+          .retrieve(requestData)
+          .returns(Future.successful(Left(ErrorWrapper(correlationId, RuleTaxYearNotSupportedError))))
+
+        runErrorTest(RuleTaxYearNotSupportedError)
+      }
+    }
+  }
+
+  trait Test extends ControllerTest {
+
+    private val controller = new RetrieveHistoricNonFhlUkPiePeriodSummaryController(
       authService = mockEnrolmentsAuthService,
       lookupService = mockMtdIdLookupService,
       parser = mockRetrieveHistoricNonFhlUkPiePeriodSummaryRequestParser,
@@ -67,118 +103,65 @@ class RetrieveHistoricNonFhlUkPiePeriodSummaryControllerSpec
       idGenerator = mockIdGenerator
     )
 
-    MockMtdIdLookupService.lookup(nino).returns(Future.successful(Right("test-mtd-id")))
-    MockedEnrolmentsAuthService.authoriseUser()
-    MockIdGenerator.getCorrelationId.returns(correlationId)
+    protected def callController(): Future[Result] = controller.handleRequest(nino, periodId)(fakeGetRequest)
+
+    protected val rawData: RetrieveHistoricNonFhlUkPiePeriodSummaryRawData = RetrieveHistoricNonFhlUkPiePeriodSummaryRawData(nino, periodId)
+
+    protected val requestData: RetrieveHistoricNonFhlUkPiePeriodSummaryRequest =
+      RetrieveHistoricNonFhlUkPiePeriodSummaryRequest(Nino(nino), PeriodId(periodId))
+
+    private val periodIncome: PeriodIncome =
+      PeriodIncome(Some(5000.99), Some(5000.99), Some(5000.99), Some(5000.99), Some(5000.99), Some(RentARoomIncome(Some(5000.99))))
+
+    //@formatter:off
+    private val periodExpenses: PeriodExpenses = PeriodExpenses(
+      Some(5000.99), Some(5000.99), Some(5000.99), Some(5000.99), Some(5000.99), Some(5000.99),
+      None, Some(5000.99), Some(5000.99), Some(5000.99), Some(RentARoomExpenses(Some(5000.99)))
+    )
+    //@formatter:on
+
+    protected val responseData: RetrieveHistoricNonFhlUkPiePeriodSummaryResponse = RetrieveHistoricNonFhlUkPiePeriodSummaryResponse(
+      fromDate = from,
+      toDate = to,
+      Some(periodIncome),
+      Some(periodExpenses)
+    )
+
+    protected val hateoasData: RetrieveHistoricNonFhlUkPiePeriodSummaryHateoasData =
+      RetrieveHistoricNonFhlUkPiePeriodSummaryHateoasData(nino, periodId)
+
+    private val responseBodyJson: JsValue = Json.parse("""
+                                                         |{ 
+                                                         |  "fromDate": "2017-04-06",
+                                                         |  "toDate":"2017-07-04",
+                                                         |  "income": {
+                                                         |      "periodAmount": 5000.99,
+                                                         |      "premiumsOfLeaseGrant": 5000.99,
+                                                         |      "reversePremiums": 5000.99,
+                                                         |      "otherIncome": 5000.99,
+                                                         |      "taxDeducted": 5000.99,
+                                                         |      "rentARoom": {
+                                                         |        "rentsReceived":5000.99
+                                                         |       }
+                                                         |   },
+                                                         |   "expenses": {
+                                                         |      "premisesRunningCosts": 5000.99,
+                                                         |      "repairsAndMaintenance": 5000.99,
+                                                         |      "financialCosts": 5000.99,
+                                                         |      "professionalFees": 5000.99,
+                                                         |      "costOfServices": 5000.99,
+                                                         |      "other": 5000.99,
+                                                         |      "travelCosts": 5000.99,
+                                                         |      "residentialFinancialCost": 5000.99,
+                                                         |      "residentialFinancialCostsCarriedForward": 5000.99,
+                                                         |      "rentARoom": {
+                                                         |          "amountClaimed": 5000.99
+                                                         |      }
+                                                         |  }
+                                                         |}
+                                                         |""".stripMargin)
+
+    protected val responseBodyJsonWithHateoas: JsObject = responseBodyJson.as[JsObject] ++ testHateoasLinksJson
   }
 
-  private val rawData     = RetrieveHistoricNonFhlUkPiePeriodSummaryRawData(nino, periodId)
-  private val requestData = RetrieveHistoricNonFhlUkPiePeriodSummaryRequest(Nino(nino), PeriodId(periodId))
-
-  private val mockHateoasLink =
-    Link(href = s"individuals/business/property/uk/period/non-furnished-holiday-lettings/$nino/$periodId", method = GET, rel = "self")
-
-  val periodIncome: PeriodIncome =
-    PeriodIncome(Some(5000.99), Some(5000.99), Some(5000.99), Some(5000.99), Some(5000.99), Some(RentARoomIncome(Some(5000.99))))
-
-  val periodExpenses: PeriodExpenses = PeriodExpenses(
-    Some(5000.99),
-    Some(5000.99),
-    Some(5000.99),
-    Some(5000.99),
-    Some(5000.99),
-    Some(5000.99),
-    None,
-    Some(5000.99),
-    Some(5000.99),
-    Some(5000.99),
-    Some(RentARoomExpenses(Some(5000.99)))
-  )
-
-  val responseBody: RetrieveHistoricNonFhlUkPiePeriodSummaryResponse = RetrieveHistoricNonFhlUkPiePeriodSummaryResponse(
-    fromDate = from,
-    toDate = to,
-    Some(periodIncome),
-    Some(periodExpenses)
-  )
-
-  "handleRequest" should {
-    "return Ok" when {
-      "the request received is valid" in new Test {
-
-        MockRetrieveHistoricNonFhlUkPropertyRequestParser
-          .parseRequest(rawData)
-          .returns(Right(requestData))
-
-        MockRetrieveHistoricNonFhlUkPiePeriodSummaryService
-          .retrieve(requestData)
-          .returns(Future.successful(Right(ResponseWrapper(correlationId, responseBody))))
-
-        MockHateoasFactory
-          .wrap(responseBody, RetrieveHistoricNonFhlUkPiePeriodSummaryHateoasData(nino, periodId))
-          .returns(HateoasWrapper(responseBody, Seq(mockHateoasLink)))
-
-        val result: Future[Result] = controller.handleRequest(nino, periodId)(fakeRequest)
-        status(result) shouldBe OK
-        header("X-CorrelationId", result) shouldBe Some(correlationId)
-      }
-    }
-    "return an error as per spec" when {
-      "parser errors occur" should {
-        def errorsFromParserTester(error: MtdError, expectedStatus: Int): Unit = {
-          s"a ${error.code} error is returned from the parser" in new Test {
-
-            MockRetrieveHistoricNonFhlUkPropertyRequestParser
-              .parseRequest(rawData)
-              .returns(Left(ErrorWrapper(correlationId, error, None)))
-
-            val result: Future[Result] = controller.handleRequest(nino, periodId)(fakeRequest)
-
-            status(result) shouldBe expectedStatus
-            contentAsJson(result) shouldBe Json.toJson(error)
-            header("X-CorrelationId", result) shouldBe Some(correlationId)
-          }
-        }
-
-        val input = Seq(
-          (NinoFormatError, BAD_REQUEST),
-          (PeriodIdFormatError, BAD_REQUEST),
-        )
-
-        input.foreach(args => (errorsFromParserTester _).tupled(args))
-      }
-
-      "service errors occur" should {
-        def serviceErrors(mtdError: MtdError, expectedStatus: Int): Unit = {
-          s"a $mtdError error is returned from the service" in new Test {
-
-            MockRetrieveHistoricNonFhlUkPropertyRequestParser
-              .parseRequest(rawData)
-              .returns(Right(requestData))
-
-            MockRetrieveHistoricNonFhlUkPiePeriodSummaryService
-              .retrieve(requestData)
-              .returns(Future.successful(Left(ErrorWrapper(correlationId, mtdError))))
-
-            val result: Future[Result] = controller.handleRequest(nino, periodId)(fakeRequest)
-
-            status(result) shouldBe expectedStatus
-            contentAsJson(result) shouldBe Json.toJson(mtdError)
-            header("X-CorrelationId", result) shouldBe Some(correlationId)
-          }
-        }
-
-        val input = Seq(
-          (NinoFormatError, BAD_REQUEST),
-          (PeriodIdFormatError, BAD_REQUEST),
-          (InternalError, INTERNAL_SERVER_ERROR),
-          (NotFoundError, NOT_FOUND),
-          (RuleIncorrectGovTestScenarioError, BAD_REQUEST)
-
-        )
-
-        input.foreach(args => (serviceErrors _).tupled(args))
-      }
-    }
-  }
 }

@@ -16,7 +16,6 @@
 
 package v2.models.request.retrieveForeignPropertyAnnualSubmission
 
-import api.models.domain.Nino
-import v2.models.domain.TaxYear
+import api.models.domain.{Nino, TaxYear}
 
 case class RetrieveForeignPropertyAnnualSubmissionRequest(nino: Nino, businessId: String, taxYear: TaxYear)

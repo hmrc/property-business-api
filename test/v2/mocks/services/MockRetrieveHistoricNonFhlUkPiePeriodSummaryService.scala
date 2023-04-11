@@ -16,17 +16,15 @@
 
 package v2.mocks.services
 
+import api.controllers.RequestContext
+import api.services.ServiceOutcome
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
-import uk.gov.hmrc.http.HeaderCarrier
-import api.controllers.EndpointLogContext
-import api.models.errors.ErrorWrapper
-import api.models.outcomes.ResponseWrapper
 import v2.models.request.retrieveHistoricNonFhlUkPiePeriodSummary.RetrieveHistoricNonFhlUkPiePeriodSummaryRequest
 import v2.models.response.retrieveHistoricNonFhlUkPiePeriodSummary.RetrieveHistoricNonFhlUkPiePeriodSummaryResponse
 import v2.services.RetrieveHistoricNonFhlUkPropertyPeriodSummaryService
 
-import scala.concurrent.{ ExecutionContext, Future }
+import scala.concurrent.{ExecutionContext, Future}
 
 trait MockRetrieveHistoricNonFhlUkPiePeriodSummaryService extends MockFactory {
 
@@ -36,17 +34,17 @@ trait MockRetrieveHistoricNonFhlUkPiePeriodSummaryService extends MockFactory {
   object MockRetrieveHistoricNonFhlUkPiePeriodSummaryService {
 
     def retrieve(requestData: RetrieveHistoricNonFhlUkPiePeriodSummaryRequest)
-      : CallHandler[Future[Either[ErrorWrapper, ResponseWrapper[RetrieveHistoricNonFhlUkPiePeriodSummaryResponse]]]] = {
+        : CallHandler[Future[ServiceOutcome[RetrieveHistoricNonFhlUkPiePeriodSummaryResponse]]] = {
       (
         mockRetrieveHistoricNonFhlUkPiePeriodSummaryService
           .retrieve(_: RetrieveHistoricNonFhlUkPiePeriodSummaryRequest)(
-            _: HeaderCarrier,
-            _: ExecutionContext,
-            _: EndpointLogContext,
-            _: String
+            _: RequestContext,
+            _: ExecutionContext
           )
         )
-        .expects(requestData, *, *, *, *)
+        .expects(requestData, *, *)
     }
+
   }
+
 }

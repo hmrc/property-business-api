@@ -19,8 +19,7 @@ package v2.connectors
 import api.connectors.{ConnectorSpec, DownstreamOutcome}
 import org.scalamock.handlers.CallHandler
 import v2.connectors.RetrieveUkPropertyAnnualSubmissionConnector._
-import v2.models.domain.TaxYear
-import api.models.domain.Nino
+import api.models.domain.{Nino, TaxYear}
 import api.models.errors.{DownstreamErrorCode, DownstreamErrors}
 import api.models.outcomes.ResponseWrapper
 import v2.models.request.retrieveUkPropertyAnnualSubmission.RetrieveUkPropertyAnnualSubmissionRequest
@@ -32,63 +31,34 @@ import scala.concurrent.Future
 
 class RetrieveUkPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec {
 
-  val nino: String       = "AA123456A"
-  val businessId: String = "XAIS12345678910"
+  private val nino: String       = "AA123456A"
+  private val businessId: String = "XAIS12345678910"
 
-  val ukFhlProperty: UkFhlProperty       = UkFhlProperty(None, None)
-  val ukNonFhlProperty: UkNonFhlProperty = UkNonFhlProperty(None, None)
-
-  def responseWith(ukFhlProperty: Option[UkFhlProperty], ukNonFhlProperty: Option[UkNonFhlProperty]): RetrieveUkPropertyAnnualSubmissionResponse =
-    RetrieveUkPropertyAnnualSubmissionResponse("2020-01-01", ukFhlProperty, ukNonFhlProperty)
-
-  trait Test {
-    _: ConnectorTest =>
-
-    val connector: RetrieveUkPropertyAnnualSubmissionConnector = new RetrieveUkPropertyAnnualSubmissionConnector(
-      http = mockHttpClient,
-      appConfig = mockAppConfig
-    )
-
-    val taxYear: String
-
-    val request: RetrieveUkPropertyAnnualSubmissionRequest = RetrieveUkPropertyAnnualSubmissionRequest(
-      nino = Nino(nino),
-      businessId = businessId,
-      taxYear = TaxYear.fromMtd(taxYear)
-    )
-  }
-
-  trait StandardTest extends TysIfsTest with Test {
-
-    def stubHttpResponse(outcome: DownstreamOutcome[RetrieveUkPropertyAnnualSubmissionResponse])
-      : CallHandler[Future[DownstreamOutcome[RetrieveUkPropertyAnnualSubmissionResponse]]]#Derived = {
-      willGet(
-        url = s"$baseUrl/income-tax/business/property/annual/23-24/$nino/$businessId"
-      ).returns(Future.successful(outcome))
-    }
-    lazy val taxYear: String = "2023-24"
-  }
+  private val ukFhlProperty: UkFhlProperty       = UkFhlProperty(None, None)
+  private val ukNonFhlProperty: UkNonFhlProperty = UkNonFhlProperty(None, None)
 
   "connector" when {
     "response has uk fhl details" must {
       "return a uk result" in new StandardTest {
         val response: RetrieveUkPropertyAnnualSubmissionResponse = responseWith(ukFhlProperty = Some(ukFhlProperty), ukNonFhlProperty = None)
-        val outcome                                              = Right(ResponseWrapper(correlationId, response))
+        val outcome: Right[Nothing, ResponseWrapper[RetrieveUkPropertyAnnualSubmissionResponse]] = Right(ResponseWrapper(correlationId, response))
 
         stubHttpResponse(outcome)
 
-        await(connector.retrieveUkProperty(request)) shouldBe Right(ResponseWrapper(correlationId, UkResult(response)))
+        val result: DownstreamOutcome[Result] = await(connector.retrieveUkProperty(request))
+        result shouldBe Right(ResponseWrapper(correlationId, UkResult(response)))
       }
     }
 
     "response has uk non-fhl details" must {
       "return a uk result" in new StandardTest {
         val response: RetrieveUkPropertyAnnualSubmissionResponse = responseWith(ukFhlProperty = None, ukNonFhlProperty = Some(ukNonFhlProperty))
-        val outcome                                              = Right(ResponseWrapper(correlationId, response))
+        val outcome: Right[Nothing, ResponseWrapper[RetrieveUkPropertyAnnualSubmissionResponse]] = Right(ResponseWrapper(correlationId, response))
 
         stubHttpResponse(outcome)
 
-        await(connector.retrieveUkProperty(request)) shouldBe Right(ResponseWrapper(correlationId, UkResult(response)))
+        val result: DownstreamOutcome[Result] = await(connector.retrieveUkProperty(request))
+        result shouldBe Right(ResponseWrapper(correlationId, UkResult(response)))
       }
     }
 
@@ -96,33 +66,36 @@ class RetrieveUkPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec {
       "return a uk result" in new StandardTest {
         val response: RetrieveUkPropertyAnnualSubmissionResponse =
           responseWith(ukFhlProperty = Some(ukFhlProperty), ukNonFhlProperty = Some(ukNonFhlProperty))
-        val outcome = Right(ResponseWrapper(correlationId, response))
+        val outcome: Right[Nothing, ResponseWrapper[RetrieveUkPropertyAnnualSubmissionResponse]] = Right(ResponseWrapper(correlationId, response))
 
         stubHttpResponse(outcome)
 
-        await(connector.retrieveUkProperty(request)) shouldBe Right(ResponseWrapper(correlationId, UkResult(response)))
+        val result: DownstreamOutcome[Result] = await(connector.retrieveUkProperty(request))
+        result shouldBe Right(ResponseWrapper(correlationId, UkResult(response)))
       }
     }
 
     "response has no details" must {
       "return a non-uk result" in new StandardTest {
-        val response: RetrieveUkPropertyAnnualSubmissionResponse = responseWith(None, None)
-        val outcome                                              = Right(ResponseWrapper(correlationId, response))
+        val response: RetrieveUkPropertyAnnualSubmissionResponse                                 = responseWith(None, None)
+        val outcome: Right[Nothing, ResponseWrapper[RetrieveUkPropertyAnnualSubmissionResponse]] = Right(ResponseWrapper(correlationId, response))
 
         stubHttpResponse(outcome)
 
-        await(connector.retrieveUkProperty(request)) shouldBe Right(ResponseWrapper(correlationId, NonUkResult))
+        val result: DownstreamOutcome[Result] = await(connector.retrieveUkProperty(request))
+        result shouldBe Right(ResponseWrapper(correlationId, NonUkResult))
       }
     }
 
     "response is an error" must {
       "return the error" in new StandardTest {
-        val outcome = Left(ResponseWrapper(correlationId, DownstreamErrors.single(DownstreamErrorCode("SOME_ERROR"))))
+        val outcome: Left[ResponseWrapper[DownstreamErrors], Nothing] =
+          Left(ResponseWrapper(correlationId, DownstreamErrors.single(DownstreamErrorCode("SOME_ERROR"))))
 
         stubHttpResponse(outcome)
 
-        await(connector.retrieveUkProperty(request)) shouldBe
-          Left(ResponseWrapper(correlationId, DownstreamErrors.single(DownstreamErrorCode("SOME_ERROR"))))
+        val result: DownstreamOutcome[Result] = await(connector.retrieveUkProperty(request))
+        result shouldBe Left(ResponseWrapper(correlationId, DownstreamErrors.single(DownstreamErrorCode("SOME_ERROR"))))
       }
     }
 
@@ -132,15 +105,47 @@ class RetrieveUkPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec {
 
         val response: RetrieveUkPropertyAnnualSubmissionResponse =
           responseWith(Some(ukFhlProperty), ukNonFhlProperty = None)
-        val outcome = Right(ResponseWrapper(correlationId, response))
+        val outcome: Right[Nothing, ResponseWrapper[RetrieveUkPropertyAnnualSubmissionResponse]] = Right(ResponseWrapper(correlationId, response))
 
         willGet(
           url = s"$baseUrl/income-tax/business/property/annual",
           parameters = Seq("taxableEntityId" -> nino, "incomeSourceId" -> businessId, "taxYear" -> "2019-20")
         ).returns(Future.successful(outcome))
 
-        await(connector.retrieveUkProperty(request)) shouldBe Right(ResponseWrapper(correlationId, UkResult(response)))
+        val result: DownstreamOutcome[Result] = await(connector.retrieveUkProperty(request))
+        result shouldBe Right(ResponseWrapper(correlationId, UkResult(response)))
       }
     }
   }
+
+  trait Test {
+    _: ConnectorTest =>
+
+    protected val connector: RetrieveUkPropertyAnnualSubmissionConnector = new RetrieveUkPropertyAnnualSubmissionConnector(
+      http = mockHttpClient,
+      appConfig = mockAppConfig
+    )
+
+    protected val taxYear: String
+
+    protected val request: RetrieveUkPropertyAnnualSubmissionRequest =
+      RetrieveUkPropertyAnnualSubmissionRequest(Nino(nino), businessId, TaxYear.fromMtd(taxYear))
+
+    def responseWith(ukFhlProperty: Option[UkFhlProperty], ukNonFhlProperty: Option[UkNonFhlProperty]): RetrieveUkPropertyAnnualSubmissionResponse =
+      RetrieveUkPropertyAnnualSubmissionResponse("2020-01-01", ukFhlProperty, ukNonFhlProperty)
+
+  }
+
+  trait StandardTest extends TysIfsTest with Test {
+
+    def stubHttpResponse(outcome: DownstreamOutcome[RetrieveUkPropertyAnnualSubmissionResponse])
+        : CallHandler[Future[DownstreamOutcome[RetrieveUkPropertyAnnualSubmissionResponse]]]#Derived = {
+      willGet(
+        url = s"$baseUrl/income-tax/business/property/annual/23-24/$nino/$businessId"
+      ).returns(Future.successful(outcome))
+    }
+
+    protected lazy val taxYear: String = "2023-24"
+  }
+
 }

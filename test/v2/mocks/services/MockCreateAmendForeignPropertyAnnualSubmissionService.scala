@@ -16,16 +16,14 @@
 
 package v2.mocks.services
 
+import api.controllers.RequestContext
+import api.services.ServiceOutcome
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
-import uk.gov.hmrc.http.HeaderCarrier
-import api.controllers.EndpointLogContext
-import api.models.errors.ErrorWrapper
-import api.models.outcomes.ResponseWrapper
 import v2.models.request.createAmendForeignPropertyAnnualSubmission.CreateAmendForeignPropertyAnnualSubmissionRequest
 import v2.services.CreateAmendForeignPropertyAnnualSubmissionService
 
-import scala.concurrent.{ ExecutionContext, Future }
+import scala.concurrent.{ExecutionContext, Future}
 
 trait MockCreateAmendForeignPropertyAnnualSubmissionService extends MockFactory {
 
@@ -33,17 +31,17 @@ trait MockCreateAmendForeignPropertyAnnualSubmissionService extends MockFactory 
 
   object MockAmendForeignPropertyAnnualSubmissionService {
 
-    def amend(requestData: CreateAmendForeignPropertyAnnualSubmissionRequest): CallHandler[Future[Either[ErrorWrapper, ResponseWrapper[Unit]]]] = {
+    def amend(requestData: CreateAmendForeignPropertyAnnualSubmissionRequest): CallHandler[Future[ServiceOutcome[Unit]]] = {
       (
         mockService
           .createAmendForeignPropertyAnnualSubmission(_: CreateAmendForeignPropertyAnnualSubmissionRequest)(
-            _: HeaderCarrier,
-            _: ExecutionContext,
-            _: EndpointLogContext,
-            _: String
+            _: RequestContext,
+            _: ExecutionContext
           )
         )
-        .expects(requestData, *, *, *, *)
+        .expects(requestData, *, *)
     }
+
   }
+
 }

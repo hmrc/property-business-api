@@ -17,8 +17,6 @@
 package v2.connectors
 
 import api.connectors.{BaseDownstreamConnector, DownstreamOutcome}
-import api.connectors.DownstreamUri.TaxYearSpecificIfsUri
-import api.connectors.DownstreamOutcome
 import api.connectors.DownstreamUri.{IfsUri, TaxYearSpecificIfsUri}
 import api.connectors.httpparsers.StandardDownstreamHttpParser.readsEmpty
 import config.AppConfig
@@ -35,24 +33,22 @@ class AmendForeignPropertyPeriodSummaryConnector @Inject() (val http: HttpClient
       hc: HeaderCarrier,
       ec: ExecutionContext,
       correlationId: String): Future[DownstreamOutcome[Unit]] = {
+
     import request._
 
     val downstreamUri =
       if (taxYear.useTaxYearSpecificApi) {
         TaxYearSpecificIfsUri[Unit](
           s"income-tax/business/property/periodic/${taxYear.asTysDownstream}?" +
-            s"taxableEntityId=${nino.nino}&incomeSourceId=$businessId&submissionId=$submissionId")
+            s"taxableEntityId=$nino&incomeSourceId=$businessId&submissionId=$submissionId")
       } else {
         // Note that MTD tax year format is used
         IfsUri[Unit](
           s"income-tax/business/property/periodic?" +
-            s"taxableEntityId=${nino.nino}&taxYear=${taxYear.asMtd}&incomeSourceId=$businessId&submissionId=$submissionId")
+            s"taxableEntityId=$nino&taxYear=${taxYear.asMtd}&incomeSourceId=$businessId&submissionId=$submissionId")
       }
 
-    put(
-      body = body,
-      uri = downstreamUri
-    )
+    put(body, downstreamUri)
   }
 
 }

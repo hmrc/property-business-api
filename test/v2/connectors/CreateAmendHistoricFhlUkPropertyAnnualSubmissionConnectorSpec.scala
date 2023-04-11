@@ -16,58 +16,19 @@
 
 package v2.connectors
 
-import api.connectors.ConnectorSpec
-import v2.models.domain.TaxYear
-import api.models.domain.Nino
+import api.connectors.{ConnectorSpec, DownstreamOutcome}
+import api.models.domain.{Nino, TaxYear}
 import api.models.outcomes.ResponseWrapper
-import v2.models.request.common.ukPropertyRentARoom.UkPropertyAdjustmentsRentARoom
-import v2.models.request.createAmendHistoricFhlUkPropertyAnnualSubmission.{CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequest, CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequestBody, HistoricFhlAnnualAdjustments, HistoricFhlAnnualAllowances}
+import v2.models.request.createAmendHistoricFhlUkPropertyAnnualSubmission._
 import v2.models.response.createAmendHistoricFhlUkPropertyAnnualSubmission.CreateAmendHistoricFhlUkPropertyAnnualSubmissionResponse
 
 import scala.concurrent.Future
 
 class CreateAmendHistoricFhlUkPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec {
 
-  val nino: String              = "AA123456A"
-  val mtdTaxYear: String        = "2019-20"
-  val downstreamTaxYear: String = "2020"
-
-  private val annualAdjustments = HistoricFhlAnnualAdjustments(
-    Some(BigDecimal("105.11")),
-    Some(BigDecimal("200.11")),
-    Some(BigDecimal("120.11")),
-    periodOfGraceAdjustment = true,
-    Some(BigDecimal("101.11")),
-    nonResidentLandlord = false,
-    Some(UkPropertyAdjustmentsRentARoom(true))
-  )
-
-  private val annualAllowances = HistoricFhlAnnualAllowances(
-    Some(BigDecimal("100.11")),
-    Some(BigDecimal("200.11")),
-    Some(BigDecimal("425.11")),
-    Some(BigDecimal("550.11"))
-  )
-
-  val body: CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequestBody = CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequestBody(
-    Some(annualAdjustments),
-    Some(annualAllowances)
-  )
-
-  val request: CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequest = CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequest(
-    nino = Nino(nino),
-    taxYear = TaxYear.fromMtd(mtdTaxYear),
-    body = body
-  )
-
-  trait Test {
-    _: ConnectorTest =>
-
-    val connector = new CreateAmendHistoricFhlUkPropertyAnnualSubmissionConnector(
-      http = mockHttpClient,
-      appConfig = mockAppConfig
-    )
-  }
+  private val nino: String              = "AA123456A"
+  private val mtdTaxYear: String        = "2019-20"
+  private val downstreamTaxYear: String = "2020"
 
   "connector" must {
     "put a body and return a 204" in new IfsTest with Test {
@@ -75,11 +36,28 @@ class CreateAmendHistoricFhlUkPropertyAnnualSubmissionConnectorSpec extends Conn
 
       willPut(
         url = s"$baseUrl/income-tax/nino/$nino/uk-properties/furnished-holiday-lettings/annual-summaries/$downstreamTaxYear",
-        body = body
+        body = requestBody
       ).returns(Future.successful(outcome))
 
-      await(connector.amend(request)) shouldBe outcome
-
+      val result: DownstreamOutcome[CreateAmendHistoricFhlUkPropertyAnnualSubmissionResponse] = await(connector.amend(request))
+      result shouldBe outcome
     }
   }
+
+  trait Test {
+    _: ConnectorTest =>
+
+    protected val connector = new CreateAmendHistoricFhlUkPropertyAnnualSubmissionConnector(
+      http = mockHttpClient,
+      appConfig = mockAppConfig
+    )
+
+    protected val requestBody: CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequestBody =
+      CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequestBody(None, None)
+
+    protected val request: CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequest =
+      CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequest(Nino(nino), TaxYear.fromMtd(mtdTaxYear), requestBody)
+
+  }
+
 }

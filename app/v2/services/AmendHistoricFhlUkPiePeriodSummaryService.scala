@@ -16,39 +16,26 @@
 
 package v2.services
 
-import cats.data.EitherT
-import cats.implicits._
-import uk.gov.hmrc.http.HeaderCarrier
-import utils.Logging
-import v2.connectors.AmendHistoricFhlUkPiePeriodSummaryConnector
-import api.controllers.EndpointLogContext
+import api.controllers.RequestContext
 import api.models.errors._
-import api.services.ServiceOutcome
-import api.support.DownstreamResponseMappingSupport
+import api.services.{BaseService, ServiceOutcome}
+import cats.implicits._
+import v2.connectors.AmendHistoricFhlUkPiePeriodSummaryConnector
 import v2.models.request.amendHistoricFhlUkPiePeriodSummary.AmendHistoricFhlUkPiePeriodSummaryRequest
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class AmendHistoricFhlUkPiePeriodSummaryService @Inject() (connector: AmendHistoricFhlUkPiePeriodSummaryConnector)
-    extends DownstreamResponseMappingSupport
-    with Logging {
+class AmendHistoricFhlUkPiePeriodSummaryService @Inject() (connector: AmendHistoricFhlUkPiePeriodSummaryConnector) extends BaseService {
 
-  def amend(request: AmendHistoricFhlUkPiePeriodSummaryRequest)(implicit
-      hc: HeaderCarrier,
-      ec: ExecutionContext,
-      logContext: EndpointLogContext,
-      correlationId: String): Future[ServiceOutcome[Unit]] = {
+  def amend(request: AmendHistoricFhlUkPiePeriodSummaryRequest)(implicit ctx: RequestContext, ec: ExecutionContext): Future[ServiceOutcome[Unit]] = {
 
-    val result = for {
-      downstreamResponseWrapper <- EitherT(connector.amend(request)).leftMap(mapDownstreamErrors(downstreamErrorMap))
-    } yield downstreamResponseWrapper
+    connector.amend(request).map(_.leftMap(mapDownstreamErrors(downstreamErrorMap)))
 
-    result.value
   }
 
-  private def downstreamErrorMap =
+  private val downstreamErrorMap: Map[String, MtdError] =
     Map(
       "INVALID_NINO"                -> NinoFormatError,
       "INVALID_TYPE"                -> InternalError,

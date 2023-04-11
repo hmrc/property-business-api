@@ -16,22 +16,18 @@
 
 package v2.controllers
 
-import api.controllers.{AuthorisedController, BaseController, EndpointLogContext}
-import cats.data.EitherT
-import cats.implicits._
-import play.api.libs.json.Json
-import play.api.mvc.{Action, AnyContent, ControllerComponents}
-import utils.{IdGenerator, Logging}
-import v2.controllers.requestParsers.RetrieveForeignPropertyPeriodSummaryRequestParser
+import api.controllers.{AuthorisedController, EndpointLogContext, RequestContext, RequestHandler}
 import api.hateoas.HateoasFactory
-import api.models.errors._
 import api.services.{EnrolmentsAuthService, MtdIdLookupService}
+import play.api.mvc.{Action, AnyContent, ControllerComponents}
+import utils.IdGenerator
+import v2.controllers.requestParsers.RetrieveForeignPropertyPeriodSummaryRequestParser
 import v2.models.request.retrieveForeignPropertyPeriodSummary.RetrieveForeignPropertyPeriodSummaryRawData
 import v2.models.response.retrieveForeignPropertyPeriodSummary.RetrieveForeignPropertyPeriodSummaryHateoasData
 import v2.services.RetrieveForeignPropertyPeriodSummaryService
 
 import javax.inject.{Inject, Singleton}
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.ExecutionContext
 
 @Singleton
 class RetrieveForeignPropertyPeriodSummaryController @Inject() (val authService: EnrolmentsAuthService,
@@ -41,67 +37,24 @@ class RetrieveForeignPropertyPeriodSummaryController @Inject() (val authService:
                                                                 hateoasFactory: HateoasFactory,
                                                                 cc: ControllerComponents,
                                                                 idGenerator: IdGenerator)(implicit ec: ExecutionContext)
-    extends AuthorisedController(cc)
-    with BaseController
-    with Logging {
+    extends AuthorisedController(cc) {
 
   implicit val endpointLogContext: EndpointLogContext =
     EndpointLogContext(controllerName = "RetrieveForeignPropertyController", endpointName = "retrieveForeignProperty")
 
   def handleRequest(nino: String, businessId: String, taxYear: String, submissionId: String): Action[AnyContent] =
     authorisedAction(nino).async { implicit request =>
-      implicit val correlationId: String = idGenerator.getCorrelationId
-      logger.info(
-        message = s"[${endpointLogContext.controllerName}][${endpointLogContext.endpointName}] " +
-          s"with correlationId : $correlationId")
+      implicit val ctx: RequestContext = RequestContext.from(idGenerator, endpointLogContext)
+
       val rawData = RetrieveForeignPropertyPeriodSummaryRawData(nino, businessId, taxYear, submissionId)
-      val result =
-        for {
-          parsedRequest   <- EitherT.fromEither[Future](parser.parseRequest(rawData))
-          serviceResponse <- EitherT(service.retrieveForeignProperty(parsedRequest))
-          vendorResponse <- EitherT.fromEither[Future](
-            hateoasFactory
-              .wrap(serviceResponse.responseData, RetrieveForeignPropertyPeriodSummaryHateoasData(nino, businessId, taxYear, submissionId))
-              .asRight[ErrorWrapper])
-        } yield {
-          logger.info(
-            s"[${endpointLogContext.controllerName}][${endpointLogContext.endpointName}] - " +
-              s"Success response received with CorrelationId: ${serviceResponse.correlationId}")
 
-          Ok(Json.toJson(vendorResponse))
-            .withApiHeaders(serviceResponse.correlationId)
-        }
+      val requestHandler =
+        RequestHandler
+          .withParser(parser)
+          .withService(service.retrieveForeignProperty)
+          .withHateoasResult(hateoasFactory)(RetrieveForeignPropertyPeriodSummaryHateoasData(nino, businessId, taxYear, submissionId))
 
-      result.leftMap { errorWrapper =>
-        val resCorrelationId = errorWrapper.correlationId
-        val result           = errorResult(errorWrapper).withApiHeaders(resCorrelationId)
-
-        logger.warn(
-          s"[${endpointLogContext.controllerName}][${endpointLogContext.endpointName}] - " +
-            s"Error response received with CorrelationId: $resCorrelationId")
-        result
-      }.merge
-    }
-
-  private def errorResult(errorWrapper: ErrorWrapper) =
-    errorWrapper.error match {
-      case _
-          if errorWrapper.containsAnyOf(
-            BadRequestError,
-            NinoFormatError,
-            TaxYearFormatError,
-            BusinessIdFormatError,
-            SubmissionIdFormatError,
-            RuleTaxYearRangeInvalidError,
-            RuleTypeOfBusinessIncorrectError,
-            RuleTaxYearNotSupportedError,
-            RuleIncorrectGovTestScenarioError
-          ) =>
-        BadRequest(Json.toJson(errorWrapper))
-
-      case NotFoundError => NotFound(Json.toJson(errorWrapper))
-      case InternalError => InternalServerError(Json.toJson(errorWrapper))
-      case _             => unhandledError(errorWrapper)
+      requestHandler.handleRequest(rawData)
     }
 
 }

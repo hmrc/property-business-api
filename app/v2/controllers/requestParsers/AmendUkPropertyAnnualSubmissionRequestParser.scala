@@ -17,11 +17,10 @@
 package v2.controllers.requestParsers
 
 import api.controllers.requestParsers.RequestParser
-import api.models.domain.Nino
+import api.models.domain.{Nino, TaxYear}
 
 import javax.inject.Inject
 import v2.controllers.requestParsers.validators.AmendUkPropertyAnnualSubmissionValidator
-import v2.models.domain.TaxYear
 import v2.models.request.amendUkPropertyAnnualSubmission._
 
 class AmendUkPropertyAnnualSubmissionRequestParser @Inject()(val validator: AmendUkPropertyAnnualSubmissionValidator)

@@ -21,8 +21,7 @@ import support.UnitSpec
 import uk.gov.hmrc.http.HeaderCarrier
 import api.controllers.EndpointLogContext
 import v2.mocks.connectors.MockCreateForeignPropertyPeriodSummaryConnector
-import v2.models.domain.TaxYear
-import api.models.domain.Nino
+import api.models.domain.{Nino, TaxYear}
 import api.models.errors._
 import api.models.outcomes.ResponseWrapper
 import v2.models.request.createForeignPropertyPeriodSummary._
@@ -33,25 +32,11 @@ import scala.concurrent.Future
 
 class CreateForeignPropertyPeriodSummaryServiceSpec extends UnitSpec with CreateForeignPropertyPeriodSummaryFixtures {
 
-  val businessId: String             = "XAIS12345678910"
-  val nino: String                   = "AA123456A"
-  val taxYear: TaxYear               = TaxYear.fromMtd("2020-21")
-  implicit val correlationId: String = "X-123"
+  private val businessId: String = "XAIS12345678910"
+  private val nino: String       = "AA123456A"
+  private val taxYear: TaxYear   = TaxYear.fromMtd("2020-21")
 
-  val response: CreateForeignPropertyPeriodSummaryResponse = CreateForeignPropertyPeriodSummaryResponse(
-    submissionId = "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
-  )
-
-  private val expensesRequestData = CreateForeignPropertyPeriodSummaryRequest(Nino(nino), businessId, taxYear, regularExpensesRequestBody)
-
-  trait Test extends MockCreateForeignPropertyPeriodSummaryConnector {
-    implicit val hc: HeaderCarrier              = HeaderCarrier()
-    implicit val logContext: EndpointLogContext = EndpointLogContext("c", "ep")
-
-    val service = new CreateForeignPropertyPeriodSummaryService(
-      connector = mockCreateForeignPropertyConnector
-    )
-  }
+  implicit private val correlationId: String = "X-123"
 
   "service" should {
     "service call successful" when {
@@ -108,4 +93,21 @@ class CreateForeignPropertyPeriodSummaryServiceSpec extends UnitSpec with Create
       (errors ++ extraTysErrors).foreach(args => (serviceError _).tupled(args))
     }
   }
+
+  trait Test extends MockCreateForeignPropertyPeriodSummaryConnector {
+    implicit protected val hc: HeaderCarrier              = HeaderCarrier()
+    implicit protected val logContext: EndpointLogContext = EndpointLogContext("c", "ep")
+
+    protected val service = new CreateForeignPropertyPeriodSummaryService(
+      connector = mockCreateForeignPropertyConnector
+    )
+
+    protected val response: CreateForeignPropertyPeriodSummaryResponse =
+      CreateForeignPropertyPeriodSummaryResponse("4557ecb5-fd32-48cc-81f5-e6acd1099f3c")
+
+    protected val expensesRequestData: CreateForeignPropertyPeriodSummaryRequest =
+      CreateForeignPropertyPeriodSummaryRequest(Nino(nino), businessId, taxYear, regularExpensesRequestBody)
+
+  }
+
 }

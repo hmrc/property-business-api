@@ -16,11 +16,10 @@
 
 package v2.connectors
 
-import api.connectors.ConnectorSpec
-import fixtures.CreateForeignPropertyPeriodSummaryFixtures.CreateForeignPropertyPeriodSummaryFixtures
-import v2.models.domain.TaxYear
-import api.models.domain.Nino
+import api.connectors.{ConnectorSpec, DownstreamOutcome}
+import api.models.domain.{Nino, TaxYear}
 import api.models.outcomes.ResponseWrapper
+import fixtures.CreateForeignPropertyPeriodSummaryFixtures.CreateForeignPropertyPeriodSummaryFixtures
 import v2.models.request.createForeignPropertyPeriodSummary._
 import v2.models.response.createForeignPropertyPeriodSummary.CreateForeignPropertyPeriodSummaryResponse
 
@@ -28,50 +27,60 @@ import scala.concurrent.Future
 
 class CreateForeignPropertyPeriodSummaryConnectorSpec extends ConnectorSpec with CreateForeignPropertyPeriodSummaryFixtures {
 
-  val businessId: String = "XAIS12345678910"
-  val nino: String       = "AA123456A"
+  private val businessId: String = "XAIS12345678910"
+  private val nino: String       = "AA123456A"
 
-  private val response = CreateForeignPropertyPeriodSummaryResponse("4557ecb5-fd32-48cc-81f5-e6acd1099f3c")
-
-  private def makeRequest(taxYear: String) =
-    CreateForeignPropertyPeriodSummaryRequest(Nino(nino), businessId, TaxYear.fromMtd(taxYear), regularExpensesRequestBody)
-
-  val nonTysRequest = makeRequest("2019-20")
-  val tysRequest    = makeRequest("2023-24")
-
-  trait Test {
-    _: ConnectorTest =>
-
-    val connector: CreateForeignPropertyPeriodSummaryConnector = new CreateForeignPropertyPeriodSummaryConnector(
-      http = mockHttpClient,
-      appConfig = mockAppConfig
-    )
-  }
+  private val preTysTaxYear = "2019-20"
+  private val tysTaxYear    = "2023-24"
 
   "connector" must {
     "post a valid body and return 200 with submissionId" in new IfsTest with Test {
-      val outcome = Right(ResponseWrapper(correlationId, response))
+      def taxYear: TaxYear = TaxYear.fromMtd(preTysTaxYear)
+
+      val outcome: DownstreamOutcome[CreateForeignPropertyPeriodSummaryResponse] = Right(ResponseWrapper(correlationId, response))
 
       willPost(
         url = s"$baseUrl/income-tax/business/property/periodic?taxableEntityId=$nino&taxYear=2019-20&incomeSourceId=$businessId",
-        body = regularExpensesRequestBody
+        body = requestBody
       ).returns(Future.successful(outcome))
 
-      await(connector.createForeignProperty(nonTysRequest)) shouldBe outcome
+      val result: DownstreamOutcome[CreateForeignPropertyPeriodSummaryResponse] = await(connector.createForeignProperty(request))
+      result shouldBe outcome
 
     }
 
     "post a valid body and return 200 with submissionId for a TYS tax year" in new TysIfsTest with Test {
-      val outcome = Right(ResponseWrapper(correlationId, response))
+      def taxYear: TaxYear = TaxYear.fromMtd(tysTaxYear)
+
+      val outcome: DownstreamOutcome[CreateForeignPropertyPeriodSummaryResponse] = Right(ResponseWrapper(correlationId, response))
 
       willPost(
         url = s"$baseUrl/income-tax/business/property/periodic/23-24?taxableEntityId=$nino&incomeSourceId=$businessId",
-        body = regularExpensesRequestBody
+        body = requestBody
       ).returns(Future.successful(outcome))
 
-      await(connector.createForeignProperty(tysRequest)) shouldBe outcome
-
+      val result: DownstreamOutcome[CreateForeignPropertyPeriodSummaryResponse] = await(connector.createForeignProperty(request))
+      result shouldBe outcome
     }
+  }
+
+  trait Test { _: ConnectorTest =>
+
+    def taxYear: TaxYear
+
+    protected val connector: CreateForeignPropertyPeriodSummaryConnector = new CreateForeignPropertyPeriodSummaryConnector(
+      http = mockHttpClient,
+      appConfig = mockAppConfig
+    )
+
+    protected val requestBody: CreateForeignPropertyPeriodSummaryRequestBody = regularExpensesRequestBody
+
+    protected val request: CreateForeignPropertyPeriodSummaryRequest =
+      CreateForeignPropertyPeriodSummaryRequest(Nino(nino), businessId, taxYear, requestBody)
+
+    protected val response: CreateForeignPropertyPeriodSummaryResponse =
+      CreateForeignPropertyPeriodSummaryResponse("4557ecb5-fd32-48cc-81f5-e6acd1099f3c")
 
   }
+
 }

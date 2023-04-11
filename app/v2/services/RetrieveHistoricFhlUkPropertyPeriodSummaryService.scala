@@ -16,27 +16,31 @@
 
 package v2.services
 
-import cats.data.EitherT
-import cats.implicits._
-import uk.gov.hmrc.http.HeaderCarrier
-import utils.Logging
-import v2.connectors.RetrieveHistoricFhlUkPropertyPeriodSummaryConnector
-import api.controllers.EndpointLogContext
+import api.controllers.RequestContext
 import api.models.errors._
+import api.services.{BaseService, ServiceOutcome}
+import cats.implicits._
+import v2.connectors.RetrieveHistoricFhlUkPropertyPeriodSummaryConnector
 import v2.models.request.retrieveHistoricFhlUkPiePeriodSummary.RetrieveHistoricFhlUkPiePeriodSummaryRequest
 import v2.models.response.retrieveHistoricFhlUkPiePeriodSummary.RetrieveHistoricFhlUkPiePeriodSummaryResponse
-import api.services.ServiceOutcome
-import api.support.DownstreamResponseMappingSupport
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class RetrieveHistoricFhlUkPropertyPeriodSummaryService @Inject()(connector: RetrieveHistoricFhlUkPropertyPeriodSummaryConnector)
-    extends DownstreamResponseMappingSupport
-    with Logging {
+class RetrieveHistoricFhlUkPropertyPeriodSummaryService @Inject() (connector: RetrieveHistoricFhlUkPropertyPeriodSummaryConnector)
+    extends BaseService {
 
-  private val downstreamErrorMap =
+  def retrieve(request: RetrieveHistoricFhlUkPiePeriodSummaryRequest)(implicit
+      ctx: RequestContext,
+      ec: ExecutionContext
+  ): Future[ServiceOutcome[RetrieveHistoricFhlUkPiePeriodSummaryResponse]] = {
+
+    connector.retrieve(request).map(_.leftMap(mapDownstreamErrors(downstreamErrorMap)))
+
+  }
+
+  private val downstreamErrorMap: Map[String, MtdError] =
     Map(
       "INVALID_NINO"        -> NinoFormatError,
       "INVALID_DATE_FROM"   -> PeriodIdFormatError,
@@ -47,18 +51,5 @@ class RetrieveHistoricFhlUkPropertyPeriodSummaryService @Inject()(connector: Ret
       "SERVER_ERROR"        -> InternalError,
       "SERVICE_UNAVAILABLE" -> InternalError
     )
-
-  def retrieve(request: RetrieveHistoricFhlUkPiePeriodSummaryRequest)(
-      implicit hc: HeaderCarrier,
-      ec: ExecutionContext,
-      logContext: EndpointLogContext,
-      correlationId: String): Future[ServiceOutcome[RetrieveHistoricFhlUkPiePeriodSummaryResponse]] = {
-
-    val result = for {
-      resultWrapper <- EitherT(connector.retrieve(request)).leftMap(mapDownstreamErrors(downstreamErrorMap))
-    } yield resultWrapper
-
-    result.value
-  }
 
 }

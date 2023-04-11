@@ -17,9 +17,8 @@
 package v2.controllers.requestParsers
 
 import api.controllers.requestParsers.RequestParser
-import api.models.domain.Nino
+import api.models.domain.{Nino, PeriodId}
 import v2.controllers.requestParsers.validators.AmendHistoricFhlUkPiePeriodSummaryValidator
-import v2.models.domain.PeriodId
 import v2.models.request.amendHistoricFhlUkPiePeriodSummary.{
   AmendHistoricFhlUkPiePeriodSummaryRawData,
   AmendHistoricFhlUkPiePeriodSummaryRequest,

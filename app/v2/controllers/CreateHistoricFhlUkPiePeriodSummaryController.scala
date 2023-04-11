@@ -16,19 +16,18 @@
 
 package v2.controllers
 
-import api.controllers.{AuthorisedController, BaseController, EndpointLogContext}
-import cats.data.EitherT
-import cats.implicits.catsSyntaxEitherId
-import play.api.libs.json.{Json, JsValue}
+import api.controllers._
+import api.hateoas.HateoasFactory
+import api.models.audit.{AuditEvent, AuditResponse, FlattenedGenericAuditDetail}
+import api.models.auth.UserDetails
+import api.models.errors._
+import api.services.{AuditService, EnrolmentsAuthService, MtdIdLookupService}
+import play.api.libs.json.JsValue
 import play.api.mvc.{Action, ControllerComponents}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.audit.http.connector.AuditResult
-import utils.{IdGenerator, Logging}
+import utils.IdGenerator
 import v2.controllers.requestParsers.CreateHistoricFhlUkPiePeriodSummaryRequestParser
-import api.hateoas.HateoasFactory
-import api.models.audit.{AuditEvent, AuditResponse, FlattenedGenericAuditDetail}
-import api.models.errors._
-import api.services.{AuditService, EnrolmentsAuthService, MtdIdLookupService}
 import v2.models.request.createHistoricFhlUkPiePeriodSummary.CreateHistoricFhlUkPiePeriodSummaryRawData
 import v2.models.response.createHistoricFhlUkPiePeriodSummary.CreateHistoricFhlUkPiePeriodSummaryHateoasData
 import v2.services.CreateHistoricFhlUkPiePeriodSummaryService
@@ -36,8 +35,6 @@ import v2.services.CreateHistoricFhlUkPiePeriodSummaryService
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
-/** Controller for the Create a Historic UK Furnished Holiday Letting Property Income & Expenses Period Summary endpoint.
-  */
 @Singleton
 class CreateHistoricFhlUkPiePeriodSummaryController @Inject() (val authService: EnrolmentsAuthService,
                                                                val lookupService: MtdIdLookupService,
@@ -47,9 +44,7 @@ class CreateHistoricFhlUkPiePeriodSummaryController @Inject() (val authService: 
                                                                hateoasFactory: HateoasFactory,
                                                                cc: ControllerComponents,
                                                                idGenerator: IdGenerator)(implicit ec: ExecutionContext)
-    extends AuthorisedController(cc)
-    with BaseController
-    with Logging {
+    extends AuthorisedController(cc) {
 
   implicit val endpointLogContext: EndpointLogContext =
     EndpointLogContext(
@@ -59,89 +54,51 @@ class CreateHistoricFhlUkPiePeriodSummaryController @Inject() (val authService: 
 
   def handleRequest(nino: String): Action[JsValue] =
     authorisedAction(nino).async(parse.json) { implicit request =>
-      implicit val correlationId: String = idGenerator.getCorrelationId
-      logger.info(
-        message = s"[${endpointLogContext.controllerName}][${endpointLogContext.endpointName}] " +
-          s"with correlationId : $correlationId")
+      implicit val ctx: RequestContext = RequestContext.from(idGenerator, endpointLogContext)
 
       val rawData = CreateHistoricFhlUkPiePeriodSummaryRawData(nino, request.body)
-      val result =
-        for {
-          parsedRequest   <- EitherT.fromEither[Future](parser.parseRequest(rawData))
-          serviceResponse <- EitherT(service.createPeriodSummary(parsedRequest))
-          vendorResponse <- EitherT.fromEither[Future](
-            hateoasFactory
-              .wrap(
-                serviceResponse.responseData,
-                CreateHistoricFhlUkPiePeriodSummaryHateoasData(nino, serviceResponse.responseData.periodId)
-              )
-              .asRight[ErrorWrapper]
-          )
-        } yield {
-          logger.info(s"Success response received with CorrelationId: ${serviceResponse.correlationId}")
 
-          auditSubmission(
-            FlattenedGenericAuditDetail(
-              versionNumber = Some("2.0"),
-              request.userDetails,
-              Map("nino" -> nino),
-              Some(request.body),
-              serviceResponse.correlationId,
-              AuditResponse(httpStatus = OK, response = Right(None))
-            )
-          )
-          Created(Json.toJson(vendorResponse))
-            .withApiHeaders(serviceResponse.correlationId)
-        }
-      result.leftMap { errorWrapper =>
-        val resCorrelationId = errorWrapper.correlationId
-        val result           = errorResult(errorWrapper).withApiHeaders(resCorrelationId)
+      val requestHandler =
+        RequestHandler
+          .withParser(parser)
+          .withService(service.createPeriodSummary)
+          .withAuditing(auditHandler(nino, ctx.correlationId, request))
+          .withHateoasResultFrom(hateoasFactory)((_, response) => CreateHistoricFhlUkPiePeriodSummaryHateoasData(nino, response.periodId), CREATED)
 
-        auditSubmission(
-          FlattenedGenericAuditDetail(
-            Some("2.0"),
-            request.userDetails,
-            Map("nino" -> nino),
-            Some(request.body),
-            resCorrelationId,
-            AuditResponse(httpStatus = result.header.status, response = Left(errorWrapper.auditErrors))
-          )
-        )
-
-        logger.warn(
-          s"[${endpointLogContext.controllerName}][${endpointLogContext.endpointName}] - " +
-            s"Error response received with CorrelationId: $resCorrelationId")
-        result
-      }.merge
+      requestHandler.handleRequest(rawData)
     }
 
-  private def errorResult(errorWrapper: ErrorWrapper) = {
-    errorWrapper.error match {
-      case _
-          if errorWrapper.containsAnyOf(
-            BadRequestError,
-            ValueFormatError,
-            NinoFormatError,
-            FromDateFormatError,
-            ToDateFormatError,
-            RuleBothExpensesSuppliedError,
-            RuleIncorrectOrEmptyBodyError,
-            RuleToDateBeforeFromDateError,
-            RuleDuplicateSubmissionError,
-            RuleMisalignedPeriodError,
-            RuleOverlappingPeriodError,
-            RuleNotContiguousPeriodError,
-            RuleHistoricTaxYearNotSupportedError,
-            RuleIncorrectOrEmptyBodyError,
-            RuleIncorrectGovTestScenarioError
-          ) =>
-        BadRequest(Json.toJson(errorWrapper))
-
-      case UnauthorisedError => Unauthorized(Json.toJson(errorWrapper))
-      case NotFoundError     => NotFound(Json.toJson(errorWrapper))
-      case InternalError     => InternalServerError(Json.toJson(errorWrapper))
-      case _                 => unhandledError(errorWrapper)
-
+  private def auditHandler(nino: String, correlationId: String, request: UserRequest[JsValue]): AuditHandler = {
+    new AuditHandler() {
+      override def performAudit(userDetails: UserDetails, httpStatus: Int, response: Either[ErrorWrapper, Option[JsValue]], versionNumber: String)(
+          implicit
+          ctx: RequestContext,
+          ec: ExecutionContext): Unit = {
+        response match {
+          case Left(err: ErrorWrapper) =>
+            auditSubmission(
+              FlattenedGenericAuditDetail(
+                Some("2.0"),
+                request.userDetails,
+                Map("nino" -> nino),
+                Some(request.body),
+                correlationId,
+                AuditResponse(httpStatus, Left(err.auditErrors))
+              )
+            )
+          case Right(_) =>
+            auditSubmission(
+              FlattenedGenericAuditDetail(
+                Some("2.0"),
+                request.userDetails,
+                Map("nino" -> nino),
+                Some(request.body),
+                correlationId,
+                AuditResponse(CREATED, Right(None))
+              )
+            )
+        }
+      }
     }
   }
 

@@ -16,16 +16,14 @@
 
 package v2.mocks.services
 
+import api.controllers.RequestContext
+import api.services.ServiceOutcome
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
-import uk.gov.hmrc.http.HeaderCarrier
-import api.controllers.EndpointLogContext
-import api.models.errors.ErrorWrapper
-import api.models.outcomes.ResponseWrapper
 import v2.models.request.deletePropertyAnnualSubmission.DeletePropertyAnnualSubmissionRequest
 import v2.services.DeletePropertyAnnualSubmissionService
 
-import scala.concurrent.{ ExecutionContext, Future }
+import scala.concurrent.{ExecutionContext, Future}
 
 trait MockDeletePropertyAnnualSubmissionService extends MockFactory {
 
@@ -34,18 +32,17 @@ trait MockDeletePropertyAnnualSubmissionService extends MockFactory {
 
   object MockDeletePropertyAnnualSubmissionService {
 
-    def deletePropertyAnnualSubmission(
-        requestData: DeletePropertyAnnualSubmissionRequest): CallHandler[Future[Either[ErrorWrapper, ResponseWrapper[Unit]]]] = {
+    def deletePropertyAnnualSubmission(requestData: DeletePropertyAnnualSubmissionRequest): CallHandler[Future[ServiceOutcome[Unit]]] = {
       (
         mockDeletePropertyAnnualSubmissionService
           .deletePropertyAnnualSubmission(_: DeletePropertyAnnualSubmissionRequest)(
-            _: HeaderCarrier,
-            _: ExecutionContext,
-            _: EndpointLogContext,
-            _: String
+            _: RequestContext,
+            _: ExecutionContext
           )
         )
-        .expects(requestData, *, *, *, *)
+        .expects(requestData, *, *)
     }
+
   }
+
 }

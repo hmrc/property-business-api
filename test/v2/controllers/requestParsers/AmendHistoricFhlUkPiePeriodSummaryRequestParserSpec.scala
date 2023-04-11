@@ -16,12 +16,11 @@
 
 package v2.controllers.requestParsers
 
-import api.models.domain.Nino
+import api.models.domain.{Nino, PeriodId}
 import play.api.libs.json.{Json, JsValue}
 import support.UnitSpec
-import v2.mocks.validators.MockAmendHistoricFhlUkPiePeriodSummaryValidator
-import v2.models.domain.PeriodId
 import api.models.errors.{BadRequestError, ErrorWrapper, NinoFormatError, RuleBothExpensesSuppliedError}
+import v2.mocks.validators.MockAmendHistoricFhlUkPiePeriodSummaryValidator
 import v2.models.request.amendHistoricFhlUkPiePeriodSummary.{AmendHistoricFhlUkPiePeriodSummaryRawData, AmendHistoricFhlUkPiePeriodSummaryRequest, AmendHistoricFhlUkPiePeriodSummaryRequestBody}
 import v2.models.request.common.ukFhlPieProperty.{UkFhlPieExpenses, UkFhlPieIncome}
 import v2.models.request.common.ukPropertyRentARoom.{UkPropertyExpensesRentARoom, UkPropertyIncomeRentARoom}

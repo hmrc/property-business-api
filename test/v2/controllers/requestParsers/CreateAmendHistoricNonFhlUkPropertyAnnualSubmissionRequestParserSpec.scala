@@ -16,58 +16,111 @@
 
 package v2.controllers.requestParsers
 
-import fixtures.CreateAmendNonFhlUkPropertyAnnualSubmission.RequestResponseModelFixtures
+import api.models.domain.{Nino, TaxYear}
+import api.models.errors.{BadRequestError, DateFormatError, ErrorWrapper, NinoFormatError}
+import play.api.libs.json.{JsValue, Json}
 import support.UnitSpec
 import v2.mocks.validators.MockCreateAmendHistoricNonFhlUkPropertyAnnualSubmissionValidator
-import v2.models.domain.TaxYear; import api.models.domain.Nino
-import api.models.errors.{ BadRequestError, DateFormatError, ErrorWrapper, NinoFormatError }
+import v2.models.request.common.ukPropertyRentARoom.UkPropertyAdjustmentsRentARoom
 import v2.models.request.createAmendHistoricNonFhlUkPropertyAnnualSubmission._
 
-class CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestParserSpec extends UnitSpec with RequestResponseModelFixtures {
+class CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestParserSpec extends UnitSpec {
 
-  val nino: String                   = "AA123456B"
-  val mtdTaxYear: String             = "2022-23"
-  val taxYear: TaxYear               = TaxYear.fromMtd(mtdTaxYear)
+  val nino: String       = "AA123456B"
+  val mtdTaxYear: String = "2022-23"
+  val taxYear: TaxYear   = TaxYear.fromMtd(mtdTaxYear)
+
   implicit val correlationId: String = "X-123"
 
-  val inputData: CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRawData =
-    CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRawData(nino, mtdTaxYear, validMtdJson)
-
-  trait Test extends MockCreateAmendHistoricNonFhlUkPropertyAnnualSubmissionValidator {
-    lazy val parser = new CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestParser(mockValidator)
-  }
-
   "The request parser" should {
-
     "return a parsed request object" when {
       "given valid request data" in new Test {
-        MockCreateAmendHistoricNonFhlUkPropertyAnnualSubmissionValidator.validate(inputData).returns(Nil)
+        MockCreateAmendHistoricNonFhlUkPropertyAnnualSubmissionValidator.validate(rawData).returns(Nil)
 
-        parser.parseRequest(inputData) shouldBe
-          Right(CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequest(Nino(nino), taxYear, requestBody))
+        parser.parseRequest(rawData) shouldBe
+          Right(request)
       }
     }
 
     "return an ErrorWrapper" when {
-
       "a single validation error occurs" in new Test {
         MockCreateAmendHistoricNonFhlUkPropertyAnnualSubmissionValidator
-          .validate(inputData)
+          .validate(rawData)
           .returns(List(NinoFormatError))
 
-        parser.parseRequest(inputData) shouldBe
+        parser.parseRequest(rawData) shouldBe
           Left(ErrorWrapper(correlationId, NinoFormatError, None))
       }
 
       "multiple validation errors occur" in new Test {
         MockCreateAmendHistoricNonFhlUkPropertyAnnualSubmissionValidator
-          .validate(inputData)
+          .validate(rawData)
           .returns(List(NinoFormatError, DateFormatError))
 
-        parser.parseRequest(inputData) shouldBe
+        parser.parseRequest(rawData) shouldBe
           Left(ErrorWrapper(correlationId, BadRequestError, Some(Seq(NinoFormatError, DateFormatError))))
       }
     }
+
+  }
+
+  trait Test extends MockCreateAmendHistoricNonFhlUkPropertyAnnualSubmissionValidator {
+    lazy val parser = new CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestParser(mockValidator)
+
+    protected val requestBodyJson: JsValue = Json.parse("""
+      |{
+      |   "annualAdjustments": {
+      |      "lossBroughtForward": 100.00,
+      |      "privateUseAdjustment": 200.00,
+      |      "balancingCharge": 300.00,
+      |      "businessPremisesRenovationAllowanceBalancingCharges": 400.00,
+      |      "nonResidentLandlord": true,
+      |      "rentARoom": {
+      |         "jointlyLet": true
+      |      }
+      |   },
+      |   "annualAllowances": {
+      |      "annualInvestmentAllowance": 500.00,
+      |      "zeroEmissionGoodsVehicleAllowance": 600.00,
+      |      "businessPremisesRenovationAllowance": 700.00,
+      |      "otherCapitalAllowance": 800.00,
+      |      "costOfReplacingDomesticGoods": 900.00,
+      |      "propertyIncomeAllowance": 1000.00
+      |   }
+      |}
+      |""".stripMargin)
+
+    protected val rawData: CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRawData =
+      CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRawData(nino, mtdTaxYear, requestBodyJson)
+
+    private val annualAdjustments: HistoricNonFhlAnnualAdjustments =
+      HistoricNonFhlAnnualAdjustments(
+        lossBroughtForward = Some(100.00),
+        privateUseAdjustment = Some(200.00),
+        balancingCharge = Some(300.00),
+        businessPremisesRenovationAllowanceBalancingCharges = Some(400.00),
+        nonResidentLandlord = true,
+        rentARoom = Some(UkPropertyAdjustmentsRentARoom(true))
+      )
+
+    private val annualAllowances: HistoricNonFhlAnnualAllowances =
+      HistoricNonFhlAnnualAllowances(
+        annualInvestmentAllowance = Some(500.00),
+        zeroEmissionGoodsVehicleAllowance = Some(600.00),
+        businessPremisesRenovationAllowance = Some(700.00),
+        otherCapitalAllowance = Some(800.00),
+        costOfReplacingDomesticGoods = Some(900.00),
+        propertyIncomeAllowance = Some(1000.00)
+      )
+
+    protected val requestBody: CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestBody =
+      CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestBody(
+        Some(annualAdjustments),
+        Some(annualAllowances)
+      )
+
+    protected val request: CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequest =
+      CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequest(Nino(nino), taxYear, requestBody)
 
   }
 

@@ -17,9 +17,9 @@
 package v2.controllers.requestParsers
 
 import support.UnitSpec
-import v2.mocks.validators.MockListHistoricUkPropertyPeriodSummariesValidator
 import api.models.domain.Nino
 import api.models.errors.{ ErrorWrapper, NinoFormatError }
+import v2.mocks.validators.MockListHistoricUkPropertyPeriodSummariesValidator
 import v2.models.request.listHistoricUkPropertyPeriodSummaries.{
   ListHistoricUkPropertyPeriodSummariesRawData,
   ListHistoricUkPropertyPeriodSummariesRequest

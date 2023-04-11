@@ -16,199 +16,151 @@
 
 package v2.controllers
 
-import api.controllers.ControllerBaseSpec
-import api.models.hateoas.Method.GET
-import api.models.domain.Nino
-import api.models.errors._
-import api.models.audit.{AuditError, AuditEvent, AuditResponse, FlattenedGenericAuditDetail}
+import api.controllers.{ControllerBaseSpec, ControllerTestRunner}
+import api.mocks.MockIdGenerator
+import api.mocks.hateoas.MockHateoasFactory
+import api.mocks.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService}
+import api.models.audit.{AuditEvent, AuditResponse, FlattenedGenericAuditDetail}
 import api.models.auth.UserDetails
-import api.models.hateoas.{HateoasWrapper, Link}
+import api.models.domain.{Nino, TaxYear}
+import api.models.errors._
+import api.models.hateoas.HateoasWrapper
 import api.models.outcomes.ResponseWrapper
-import fixtures.CreateAmendNonFhlUkPropertyAnnualSubmission.RequestResponseModelFixtures
-import play.api.libs.json.{Json, JsValue}
+import play.api.libs.json.{JsObject, JsValue, Json}
 import play.api.mvc.Result
-import uk.gov.hmrc.http.HeaderCarrier
-import v2.mocks.MockIdGenerator
-import v2.mocks.hateoas.MockHateoasFactory
 import v2.mocks.requestParsers.MockCreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestParser
-import v2.mocks.services.{MockAuditService, MockCreateAmendHistoricNonFhlUkPropertyAnnualSubmissionService, MockEnrolmentsAuthService, MockMtdIdLookupService}
-import v2.models.domain.TaxYear
-import v2.models.request.createAmendHistoricNonFhlUkPropertyAnnualSubmission.{CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRawData, CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequest}
-import v2.models.response.createAmendHistoricNonFhlUkPropertyAnnualSubmission.{CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionHateoasData, CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionResponse}
+import v2.mocks.services.MockCreateAmendHistoricNonFhlUkPropertyAnnualSubmissionService
+import v2.models.request.createAmendHistoricNonFhlUkPropertyAnnualSubmission._
+import v2.models.response.createAmendHistoricNonFhlUkPropertyAnnualSubmission._
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionControllerSpec
     extends ControllerBaseSpec
+    with ControllerTestRunner
     with MockAuditService
     with MockEnrolmentsAuthService
     with MockMtdIdLookupService
     with MockCreateAmendHistoricNonFhlUkPropertyAnnualSubmissionService
     with MockCreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestParser
     with MockHateoasFactory
-    with MockIdGenerator
-    with RequestResponseModelFixtures {
+    with MockIdGenerator {
 
-  private val nino          = "AA123456A"
-  private val taxYear       = "2022-23"
-  private val correlationId = "X-123"
-  val mtdId: String         = "test-mtd-id"
+  private val taxYear              = "2022-23"
+  private val transactionReference = Some("transaction reference")
+  private val mtdId: String        = "test-mtd-id"
 
-  trait Test {
-    val hc: HeaderCarrier = HeaderCarrier()
+  "CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionController" should {
+    "return a successful response with status 200 (OK)" when {
+      "the request received is valid" in new Test {
+        MockCreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestParser
+          .parse(rawData)
+          .returns(Right(requestData))
 
-    val controller = new CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionController(
+        MockCreateAmendHistoricNonFhlUkPropertyAnnualSubmissionService
+          .amend(requestData)
+          .returns(Future.successful(Right(ResponseWrapper(correlationId, responseData))))
+
+        MockHateoasFactory
+          .wrap(responseData, hateoasData)
+          .returns(HateoasWrapper(responseData, testHateoasLinks))
+
+        runOkTest(expectedStatus = OK, maybeExpectedResponseBody = Some(testHateoasLinksJson))
+      }
+    }
+    "return the error as per spec" when {
+      "the parser validation fails" in new Test {
+        MockCreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestParser
+          .parse(rawData)
+          .returns(Left(ErrorWrapper(correlationId, NinoFormatError, None)))
+
+        runErrorTest(NinoFormatError)
+      }
+
+      "the service returns an error" in new Test {
+        MockCreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestParser
+          .parse(rawData)
+          .returns(Right(requestData))
+
+        MockCreateAmendHistoricNonFhlUkPropertyAnnualSubmissionService
+          .amend(requestData)
+          .returns(Future.successful(Left(ErrorWrapper(correlationId, RuleMisalignedPeriodError))))
+
+        runErrorTest(RuleMisalignedPeriodError)
+      }
+    }
+  }
+
+  trait Test extends ControllerTest with AuditEventChecking[FlattenedGenericAuditDetail] {
+
+    private val controller = new CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionController(
       authService = mockEnrolmentsAuthService,
       lookupService = mockMtdIdLookupService,
       parser = mockCreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestParser,
-      service = mockCreateAmendHistoricService,
+      service = mockCreateAmendHistoricNonFhlUkPropertyAnnualSubmissionService,
       hateoasFactory = mockHateoasFactory,
       auditService = mockAuditService,
       cc = cc,
       idGenerator = mockIdGenerator
     )
 
-    MockMtdIdLookupService.lookup(nino).returns(Future.successful(Right("test-mtd-id")))
-    MockedEnrolmentsAuthService.authoriseUser()
-    MockIdGenerator.getCorrelationId.returns(correlationId)
-  }
+    protected def callController(): Future[Result] = controller.handleRequest(nino, taxYear)(fakePutRequest(requestBodyJson))
 
-  private val testHateoasLink = Link(href = s"/individuals/business/property/annual/$nino/annual/$taxYear", method = GET, rel = "self")
-
-  val hateoasResponse: JsValue = Json.parse(s"""
-       |{
-       |   "links": [
-       |      {
-       |         "href": "/individuals/business/property/annual/$nino/annual/$taxYear",
-       |         "method": "GET",
-       |         "rel": "self"
-       |      }
-       |   ]
-       |}
-    """.stripMargin)
-
-  private val rawData = CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRawData(nino, taxYear, validMtdJson)
-  private val request = CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequest(Nino(nino), TaxYear.fromMtd(taxYear), requestBody)
-
-  def event(auditResponse: AuditResponse): AuditEvent[FlattenedGenericAuditDetail] =
-    AuditEvent(
-      auditType = "CreateAndAmendHistoricNonFhlPropertyBusinessAnnualSubmission",
-      transactionName = "CreateAndAmendHistoricNonFhlPropertyBusinessAnnualSubmission",
-      detail = FlattenedGenericAuditDetail(
-        versionNumber = Some("2.0"),
-        userDetails = UserDetails(mtdId, "Individual", None),
-        params = Map("nino" -> nino, "taxYear" -> taxYear),
-        request = Some(validMtdJson),
-        `X-CorrelationId` = correlationId,
-        auditResponse = auditResponse
+    protected def event(auditResponse: AuditResponse, maybeRequestBody: Option[JsValue]): AuditEvent[FlattenedGenericAuditDetail] =
+      AuditEvent(
+        auditType = "CreateAndAmendHistoricNonFhlPropertyBusinessAnnualSubmission",
+        transactionName = "CreateAndAmendHistoricNonFhlPropertyBusinessAnnualSubmission",
+        detail = FlattenedGenericAuditDetail(
+          versionNumber = Some("2.0"),
+          userDetails = UserDetails(mtdId, "Individual", None),
+          params = Map("nino" -> nino, "taxYear" -> taxYear),
+          request = Some(validMtdJson),
+          `X-CorrelationId` = correlationId,
+          auditResponse = auditResponse
+        )
       )
-    )
 
-  "handleRequest" should {
-    "return Ok" when {
-      "the request received is valid" in new Test {
+    private val requestBodyJson: JsValue = JsObject.empty
 
-        MockCreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestParser
-          .parseRequest(rawData)
-          .returns(Right(request))
+    protected val rawData: CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRawData =
+      CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRawData(nino, taxYear, requestBodyJson)
 
-        MockCreateAmendHistoricNonFhlUkPropertyAnnualSubmissionService
-          .amend(request)
-          .returns(Future.successful(Right(ResponseWrapper(correlationId, CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionResponse(None)))))
+    protected val requestBody: CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestBody =
+      CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestBody(None, None)
 
-        MockHateoasFactory
-          .wrap(
-            CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionResponse(None),
-            CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionHateoasData(nino, taxYear))
-          .returns(HateoasWrapper(CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionResponse(None), Seq(testHateoasLink)))
+    protected val requestData: CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequest =
+      CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequest(Nino(nino), TaxYear.fromMtd(taxYear), requestBody)
 
-        val result: Future[Result] = controller.handleRequest(nino, taxYear)(fakeRequestWithBody(validMtdJson))
-        status(result) shouldBe OK
-        contentAsJson(result) shouldBe hateoasResponse
-        header("X-CorrelationId", result) shouldBe Some(correlationId)
+    protected val hateoasData: CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionHateoasData =
+      CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionHateoasData(nino, taxYear)
 
-        val auditResponse: AuditResponse = AuditResponse(OK, None, None)
-        MockedAuditService.verifyAuditEvent(event(auditResponse)).once
-      }
-    }
-    "return the error as per spec" when {
-      "parser errors occur" should {
-        def errorsFromParserTester(error: MtdError, expectedStatus: Int): Unit = {
-          s"a ${error.code} error is returned from the parser" in new Test {
+    protected val responseData: CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionResponse =
+      CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionResponse(transactionReference)
 
-            MockCreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestParser
-              .parseRequest(rawData)
-              .returns(Left(ErrorWrapper(correlationId, error, None)))
+    protected val validMtdJson: JsValue = Json.parse("""
+     |{
+     |   "annualAdjustments": {
+     |      "lossBroughtForward": 100.00,
+     |      "privateUseAdjustment": 200.00,
+     |      "balancingCharge": 300.00,
+     |      "businessPremisesRenovationAllowanceBalancingCharges": 400.00,
+     |      "nonResidentLandlord": true,
+     |      "rentARoom": {
+     |         "jointlyLet": true
+     |      }
+     |   },
+     |   "annualAllowances": {
+     |      "annualInvestmentAllowance": 500.00,
+     |      "zeroEmissionGoodsVehicleAllowance": 600.00,
+     |      "businessPremisesRenovationAllowance": 700.00,
+     |      "otherCapitalAllowance": 800.00,
+     |      "costOfReplacingDomesticGoods": 900.00,
+     |      "propertyIncomeAllowance": 1000.00
+     |   }
+     |}
+     |""".stripMargin)
 
-            val result: Future[Result] = controller.handleRequest(nino, taxYear)(fakeRequestWithBody(validMtdJson))
-
-            status(result) shouldBe expectedStatus
-            contentAsJson(result) shouldBe Json.toJson(error)
-            header("X-CorrelationId", result) shouldBe Some(correlationId)
-
-            val auditResponse: AuditResponse = AuditResponse(expectedStatus, Some(Seq(AuditError(error.code))), None)
-            MockedAuditService.verifyAuditEvent(event(auditResponse)).once
-          }
-        }
-
-        val input = Seq(
-          (BadRequestError, BAD_REQUEST),
-          (NinoFormatError, BAD_REQUEST),
-          (TaxYearFormatError, BAD_REQUEST),
-          (RuleHistoricTaxYearNotSupportedError, BAD_REQUEST),
-          (RuleTaxYearRangeInvalidError, BAD_REQUEST),
-          (
-            ValueFormatError.copy(
-              paths = Some(
-                List(
-                  "/annualAdjustments/lossBroughtForward",
-                  "/annualAdjustments/balancingCharge",
-                  "annualAllowances/annualInvestmentAllowance"
-                ))
-            ),
-            BAD_REQUEST),
-          (RuleIncorrectOrEmptyBodyError, BAD_REQUEST)
-        )
-
-        input.foreach(args => (errorsFromParserTester _).tupled(args))
-      }
-
-      "service errors occur" should {
-        def serviceErrors(mtdError: MtdError, expectedStatus: Int): Unit = {
-          s"a $mtdError error is returned from the service" in new Test {
-
-            MockCreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestParser
-              .parseRequest(rawData)
-              .returns(Right(request))
-
-            MockCreateAmendHistoricNonFhlUkPropertyAnnualSubmissionService
-              .amend(request)
-              .returns(Future.successful(Left(ErrorWrapper(correlationId, mtdError))))
-
-            val result: Future[Result] = controller.handleRequest(nino, taxYear)(fakeRequestWithBody(validMtdJson))
-
-            status(result) shouldBe expectedStatus
-            contentAsJson(result) shouldBe Json.toJson(mtdError)
-            header("X-CorrelationId", result) shouldBe Some(correlationId)
-
-            val auditResponse: AuditResponse = AuditResponse(expectedStatus, Some(Seq(AuditError(mtdError.code))), None)
-            MockedAuditService.verifyAuditEvent(event(auditResponse)).once
-          }
-        }
-
-        val input = Seq(
-          (NinoFormatError, BAD_REQUEST),
-          (TaxYearFormatError, BAD_REQUEST),
-          (RuleHistoricTaxYearNotSupportedError, BAD_REQUEST),
-          (NotFoundError, NOT_FOUND),
-          (InternalError, INTERNAL_SERVER_ERROR),
-          (RuleIncorrectGovTestScenarioError, BAD_REQUEST)
-        )
-
-        input.foreach(args => (serviceErrors _).tupled(args))
-      }
-    }
   }
 
 }

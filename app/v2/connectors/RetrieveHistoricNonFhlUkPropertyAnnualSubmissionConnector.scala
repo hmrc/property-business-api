@@ -36,14 +36,14 @@ class RetrieveHistoricNonFhlUkPropertyAnnualSubmissionConnector @Inject() (val h
       ec: ExecutionContext,
       correlationId: String): Future[DownstreamOutcome[RetrieveHistoricNonFhlUkPropertyAnnualSubmissionResponse]] = {
 
-    val nino    = request.nino.nino
-    val taxYear = request.taxYear.asDownstream
+    import request._
 
-    val response = get(
-      uri = IfsUri[RetrieveHistoricNonFhlUkPropertyAnnualSubmissionResponse](s"income-tax/nino/$nino/uk-properties/other/annual-summaries/$taxYear")
-    )
+    val downstreamUri =
+      IfsUri[RetrieveHistoricNonFhlUkPropertyAnnualSubmissionResponse](
+        s"income-tax/nino/$nino/uk-properties/other/annual-summaries/${taxYear.asDownstream}")
 
-    response
+    get(downstreamUri)
+
   }
 
 }

@@ -18,9 +18,9 @@ package v2.controllers.requestParsers
 
 import play.api.libs.json.Json
 import support.UnitSpec
-import v2.mocks.validators.MockAmendForeignPropertyPeriodSummaryValidator
-import v2.models.domain.TaxYear; import api.models.domain.Nino
+import api.models.domain.{Nino, TaxYear}
 import api.models.errors._
+import v2.mocks.validators.MockAmendForeignPropertyPeriodSummaryValidator
 import v2.models.request.amendForeignPropertyPeriodSummary._
 import v2.models.request.common.foreignFhlEea._
 

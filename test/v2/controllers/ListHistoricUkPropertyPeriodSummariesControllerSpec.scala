@@ -16,27 +16,27 @@
 
 package v2.controllers
 
-import api.controllers.ControllerBaseSpec
-import play.api.libs.json.Json
-import play.api.mvc.{Action, AnyContent, Result}
-import uk.gov.hmrc.http.HeaderCarrier
-import v2.mocks.MockIdGenerator
-import v2.mocks.hateoas.MockHateoasFactory
-import v2.mocks.requestParsers.MockListHistoricUkPropertyPeriodSummariesRequestParser
-import v2.mocks.services.{MockAuditService, MockEnrolmentsAuthService, MockListHistoricUkPropertyPeriodSummariesService, MockMtdIdLookupService}
-import v2.models.domain.HistoricPropertyType
-import api.models.errors._
-import api.models.domain.Nino
+import api.controllers.{ControllerBaseSpec, ControllerTestRunner}
+import api.mocks.MockIdGenerator
+import api.mocks.hateoas.MockHateoasFactory
+import api.mocks.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService}
+import api.models.domain.{HistoricPropertyType, Nino}
+import api.models.errors.{ErrorWrapper, NinoFormatError, RuleTaxYearNotSupportedError}
 import api.models.hateoas.HateoasWrapper
 import api.models.outcomes.ResponseWrapper
-import v2.models.request.listHistoricUkPropertyPeriodSummaries.{ListHistoricUkPropertyPeriodSummariesRawData, ListHistoricUkPropertyPeriodSummariesRequest}
-import v2.models.response.listHistoricUkPropertyPeriodSummaries.{ListHistoricUkPropertyPeriodSummariesHateoasData, ListHistoricUkPropertyPeriodSummariesResponse, SubmissionPeriod}
+import play.api.libs.json.Json
+import play.api.mvc.Result
+import v2.mocks.requestParsers.MockListHistoricUkPropertyPeriodSummariesRequestParser
+import v2.mocks.services.MockListHistoricUkPropertyPeriodSummariesService
+import v2.models.request.listHistoricUkPropertyPeriodSummaries._
+import v2.models.response.listHistoricUkPropertyPeriodSummaries._
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class ListHistoricUkPropertyPeriodSummariesControllerSpec
     extends ControllerBaseSpec
+    with ControllerTestRunner
     with MockEnrolmentsAuthService
     with MockMtdIdLookupService
     with MockListHistoricUkPropertyPeriodSummariesService
@@ -45,121 +45,114 @@ class ListHistoricUkPropertyPeriodSummariesControllerSpec
     with MockAuditService
     with MockIdGenerator {
 
-  private val nino          = "AA123456A"
-  private val correlationId = "X-123"
+  "ListHistoricUkPropertyPeriodSummariesController" should {
+    "return OK" when {
+      "the valid request received is for a Fhl HistoricPropertyType" in new Test {
+        lazy val propertyType: HistoricPropertyType = HistoricPropertyType.Fhl
 
-  val hc: HeaderCarrier = HeaderCarrier()
+        MockListHistoricUkPropertyPeriodSummariesRequestParser
+          .parseRequest(rawData)
+          .returns(Right(requestData))
 
-  val controller = new ListHistoricUkPropertyPeriodSummariesController(
-    authService = mockEnrolmentsAuthService,
-    lookupService = mockMtdIdLookupService,
-    parser = mockListHistoricUkPropertyPeriodSummariesRequestParser,
-    service = mockService,
-    hateoasFactory = mockHateoasFactory,
-    cc = cc,
-    idGenerator = mockIdGenerator
-  )
+        MockListHistoricUkPropertyPeriodSummariesService
+          .listPeriodSummaries(requestData, propertyType)
+          .returns(Future.successful(Right(ResponseWrapper(correlationId, responseData))))
 
-  trait Test {
-    MockMtdIdLookupService.lookup(nino) returns Future.successful(Right("test-mtd-id"))
-    MockedEnrolmentsAuthService.authoriseUser()
-    MockIdGenerator.getCorrelationId returns correlationId
-  }
+        MockHateoasFactory
+          .wrapList(responseData, hateoasData)
+          .returns(responseDataWithHateoas)
 
-  private val rawData     = ListHistoricUkPropertyPeriodSummariesRawData(nino)
-  private val requestData = ListHistoricUkPropertyPeriodSummariesRequest(Nino(nino))
+        runOkTest(expectedStatus = OK, maybeExpectedResponseBody = Some(Json.toJson(responseDataWithHateoas)))
+      }
 
-  private val submissionPeriod = SubmissionPeriod("fromDate", "toDate")
-  private val response         = ListHistoricUkPropertyPeriodSummariesResponse(Seq(submissionPeriod))
+      "the valid request received is for a non-Fhl HistoricPropertyType" in new Test {
+        lazy val propertyType: HistoricPropertyType = HistoricPropertyType.NonFhl
 
-  "handleRequest" should {
-    "return Ok" when {
+        MockListHistoricUkPropertyPeriodSummariesRequestParser
+          .parseRequest(rawData)
+          .returns(Right(requestData))
 
-      def success(handler: Action[AnyContent], propertyType: HistoricPropertyType): Unit =
-        "the request is valid and processed successfully" in new Test {
+        MockListHistoricUkPropertyPeriodSummariesService
+          .listPeriodSummaries(requestData, propertyType)
+          .returns(Future.successful(Right(ResponseWrapper(correlationId, responseData))))
 
-          MockListHistoricUkPropertyPeriodSummariesRequestParser
-            .parseRequest(rawData) returns Right(requestData)
+        MockHateoasFactory
+          .wrapList(responseData, hateoasData)
+          .returns(responseDataWithHateoas)
 
-          MockListHistoricUkPropertyPeriodSummariesService
-            .listPeriodSummaries(requestData, propertyType) returns Future.successful(Right(ResponseWrapper(correlationId, response)))
-
-          val responseWithLinks: HateoasWrapper[ListHistoricUkPropertyPeriodSummariesResponse[HateoasWrapper[SubmissionPeriod]]] =
-            HateoasWrapper(ListHistoricUkPropertyPeriodSummariesResponse(Seq(HateoasWrapper(submissionPeriod, testHateoasLinks))), testHateoasLinks)
-
-          MockHateoasFactory
-            .wrapList(response, ListHistoricUkPropertyPeriodSummariesHateoasData(nino, propertyType)) returns responseWithLinks
-
-          val result: Future[Result] = handler(fakeRequest)
-
-          contentAsJson(result) shouldBe Json.toJson(responseWithLinks)
-          status(result) shouldBe OK
-          header("X-CorrelationId", result) shouldBe Some(correlationId)
-
-        }
-
-      "FHL" when success(controller.handleFhlRequest(nino), HistoricPropertyType.Fhl)
-      "Non-FHL" when success(controller.handleNonFhlRequest(nino), HistoricPropertyType.NonFhl)
+        runOkTest(expectedStatus = OK, maybeExpectedResponseBody = Some(Json.toJson(responseDataWithHateoas)))
+      }
     }
 
     "return an error as per spec" when {
+      def parserErrorTest(property: HistoricPropertyType): Unit = {
+        "the parser validation fails for a Fhl HistoricPropertyType" in new Test {
+          lazy val propertyType: HistoricPropertyType = property
 
-      def parseErrors(handler: Action[AnyContent]): Unit =
-        "parser errors occur" should {
-          def parseError(error: MtdError, expectedStatus: Int): Unit = {
-            s"a ${error.code} error is returned from the parser" in new Test {
+          MockListHistoricUkPropertyPeriodSummariesRequestParser
+            .parseRequest(rawData)
+            .returns(Left(ErrorWrapper(correlationId, NinoFormatError, None)))
 
-              MockListHistoricUkPropertyPeriodSummariesRequestParser
-                .parseRequest(rawData) returns Left(ErrorWrapper(correlationId, error, None))
-
-              val result: Future[Result] = handler(fakeRequest)
-
-              contentAsJson(result) shouldBe Json.toJson(error)
-              status(result) shouldBe expectedStatus
-              header("X-CorrelationId", result) shouldBe Some(correlationId)
-            }
-          }
-
-          val input = Seq(
-            (BadRequestError, BAD_REQUEST),
-            (NinoFormatError, BAD_REQUEST)
-          )
-
-          input.foreach(args => (parseError _).tupled(args))
+          runErrorTest(NinoFormatError)
         }
 
-      "FHL" when parseErrors(controller.handleFhlRequest(nino))
-      "Non-FHL" when parseErrors(controller.handleNonFhlRequest(nino))
-
-      def serviceErrors(handler: Action[AnyContent], propertyType: HistoricPropertyType): Unit = "service errors occur" should {
-        def serviceError(mtdError: MtdError, expectedStatus: Int): Unit = {
-          s"a $mtdError error is returned from the service" in new Test {
+        def serviceErrorTest(property: HistoricPropertyType): Unit = {
+          "the service returns an error" in new Test {
+            lazy val propertyType: HistoricPropertyType = property
 
             MockListHistoricUkPropertyPeriodSummariesRequestParser
-              .parseRequest(rawData) returns Right(requestData)
+              .parseRequest(rawData)
+              .returns(Right(requestData))
 
             MockListHistoricUkPropertyPeriodSummariesService
-              .listPeriodSummaries(requestData, propertyType) returns Future.successful(Left(ErrorWrapper(correlationId, mtdError)))
+              .listPeriodSummaries(requestData, propertyType)
+              .returns(Future.successful(Left(ErrorWrapper(correlationId, RuleTaxYearNotSupportedError))))
 
-            val result: Future[Result] = handler(fakeRequest)
-
-            contentAsJson(result) shouldBe Json.toJson(mtdError)
-            status(result) shouldBe expectedStatus
-            header("X-CorrelationId", result) shouldBe Some(correlationId)
+            runErrorTest(RuleTaxYearNotSupportedError)
           }
+
+          Seq(HistoricPropertyType.Fhl, HistoricPropertyType.NonFhl)
+            .foreach(propertyType => {
+              parserErrorTest(propertyType)
+              serviceErrorTest(propertyType)
+            })
         }
-
-        val input = Seq(
-          (NinoFormatError, BAD_REQUEST),
-          (InternalError, INTERNAL_SERVER_ERROR),
-          (RuleIncorrectGovTestScenarioError, BAD_REQUEST)
-        )
-
-        input.foreach(args => (serviceError _).tupled(args))
       }
-
-      "FHL" when serviceErrors(controller.handleFhlRequest(nino), HistoricPropertyType.Fhl)
-      "Non-FHL" when serviceErrors(controller.handleNonFhlRequest(nino), HistoricPropertyType.NonFhl)
     }
   }
+
+  trait Test extends ControllerTest {
+
+    protected val propertyType: HistoricPropertyType
+
+    private val controller = new ListHistoricUkPropertyPeriodSummariesController(
+      authService = mockEnrolmentsAuthService,
+      lookupService = mockMtdIdLookupService,
+      parser = mockListHistoricUkPropertyPeriodSummariesRequestParser,
+      service = mockService,
+      hateoasFactory = mockHateoasFactory,
+      cc = cc,
+      idGenerator = mockIdGenerator
+    )
+
+    protected def callController(): Future[Result] = propertyType match {
+      case HistoricPropertyType.Fhl    => controller.handleFhlRequest(nino)(fakeGetRequest)
+      case HistoricPropertyType.NonFhl => controller.handleNonFhlRequest(nino)(fakeGetRequest)
+    }
+
+    protected val rawData: ListHistoricUkPropertyPeriodSummariesRawData     = ListHistoricUkPropertyPeriodSummariesRawData(nino)
+    protected val requestData: ListHistoricUkPropertyPeriodSummariesRequest = ListHistoricUkPropertyPeriodSummariesRequest(Nino(nino))
+
+    protected val submissionPeriod: SubmissionPeriod = SubmissionPeriod("fromDate", "toDate")
+
+    protected val responseData: ListHistoricUkPropertyPeriodSummariesResponse[SubmissionPeriod] =
+      ListHistoricUkPropertyPeriodSummariesResponse(Seq(submissionPeriod))
+
+    protected val hateoasData: ListHistoricUkPropertyPeriodSummariesHateoasData = ListHistoricUkPropertyPeriodSummariesHateoasData(nino, propertyType)
+
+    protected val responseDataWithHateoas: HateoasWrapper[ListHistoricUkPropertyPeriodSummariesResponse[HateoasWrapper[SubmissionPeriod]]] =
+      HateoasWrapper(ListHistoricUkPropertyPeriodSummariesResponse(Seq(HateoasWrapper(submissionPeriod, testHateoasLinks))), testHateoasLinks)
+
+  }
+
 }

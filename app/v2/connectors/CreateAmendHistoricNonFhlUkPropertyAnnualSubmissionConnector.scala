@@ -37,11 +37,12 @@ class CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionConnector @Inject() (va
       ec: ExecutionContext,
       correlationId: String): Future[DownstreamOutcome[CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionResponse]] = {
 
-    put(
-      body = request.body,
-      uri = IfsUri[CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionResponse](
-        s"income-tax/nino/${request.nino.nino}/uk-properties/other/annual-summaries/${request.taxYear.asDownstream}")
-    )
+    import request._
+
+    val downstreamUri = IfsUri[CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionResponse](
+      s"income-tax/nino/$nino/uk-properties/other/annual-summaries/${taxYear.asDownstream}")
+
+    put(body, downstreamUri)
   }
 
 }

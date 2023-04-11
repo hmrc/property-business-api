@@ -19,9 +19,9 @@ package v2.connectors
 import api.connectors.{BaseDownstreamConnector, DownstreamOutcome}
 import api.connectors.DownstreamUri.IfsUri
 import api.connectors.httpparsers.StandardDownstreamHttpParser.reads
+import api.models.domain.HistoricPropertyType
 import config.AppConfig
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
-import v2.models.domain.HistoricPropertyType
 import v2.models.request.listHistoricUkPropertyPeriodSummaries.ListHistoricUkPropertyPeriodSummariesRequest
 import v2.models.response.listHistoricUkPropertyPeriodSummaries.{ListHistoricUkPropertyPeriodSummariesResponse, SubmissionPeriod}
 
@@ -36,16 +36,17 @@ class ListHistoricUkPropertyPeriodSummariesConnector @Inject() (val http: HttpCl
       ec: ExecutionContext,
       correlationId: String): Future[DownstreamOutcome[ListHistoricUkPropertyPeriodSummariesResponse[SubmissionPeriod]]] = {
 
+    import request._
+
     val propertyTypeName = propertyType match {
       case HistoricPropertyType.Fhl    => "furnished-holiday-lettings"
       case HistoricPropertyType.NonFhl => "other"
     }
 
-    val url = s"income-tax/nino/${request.nino.nino}/uk-properties/$propertyTypeName/periodic-summaries"
+    val downstreamUri = IfsUri[ListHistoricUkPropertyPeriodSummariesResponse[SubmissionPeriod]](
+      s"income-tax/nino/$nino/uk-properties/$propertyTypeName/periodic-summaries")
 
-    get(
-      uri = IfsUri[ListHistoricUkPropertyPeriodSummariesResponse[SubmissionPeriod]](url)
-    )
+    get(downstreamUri)
   }
 
 }

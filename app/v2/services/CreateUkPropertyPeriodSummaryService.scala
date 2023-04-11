@@ -16,41 +16,28 @@
 
 package v2.services
 
-import cats.data.EitherT
-import cats.implicits._
-
-import javax.inject.{Inject, Singleton}
-import uk.gov.hmrc.http.HeaderCarrier
-import utils.Logging
-import api.controllers.EndpointLogContext
+import api.controllers.RequestContext
 import api.models.errors._
+import api.services.{BaseService, ServiceOutcome}
+import cats.implicits._
+import v2.connectors.CreateUkPropertyPeriodSummaryConnector
 import v2.models.request.createUkPropertyPeriodSummary.CreateUkPropertyPeriodSummaryRequest
 import v2.models.response.createUkPropertyPeriodSummary.CreateUkPropertyPeriodSummaryResponse
-import api.services.ServiceOutcome
-import api.support.DownstreamResponseMappingSupport
-import v2.connectors.CreateUkPropertyPeriodSummaryConnector
 
+import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class CreateUkPropertyPeriodSummaryService @Inject()(connector: CreateUkPropertyPeriodSummaryConnector)
-    extends DownstreamResponseMappingSupport
-    with Logging {
+class CreateUkPropertyPeriodSummaryService @Inject() (connector: CreateUkPropertyPeriodSummaryConnector) extends BaseService {
 
-  def createUkProperty(request: CreateUkPropertyPeriodSummaryRequest)(
-      implicit hc: HeaderCarrier,
-      ec: ExecutionContext,
-      logContext: EndpointLogContext,
-      correlationId: String): Future[ServiceOutcome[CreateUkPropertyPeriodSummaryResponse]] = {
+  def createUkProperty(request: CreateUkPropertyPeriodSummaryRequest)(implicit
+      ctx: RequestContext,
+      ec: ExecutionContext): Future[ServiceOutcome[CreateUkPropertyPeriodSummaryResponse]] = {
 
-    val result = for {
-      ifsResponseWrapper <- EitherT(connector.createUkProperty(request)).leftMap(mapDownstreamErrors(errorMap))
-    } yield ifsResponseWrapper
-
-    result.value
+    connector.createUkProperty(request).map(_.leftMap(mapDownstreamErrors(downstreamErrorMap)))
   }
 
-  private val errorMap = {
+  private val downstreamErrorMap = {
     val errors = Map(
       "INVALID_TAXABLE_ENTITY_ID" -> NinoFormatError,
       "INVALID_INCOMESOURCEID"    -> BusinessIdFormatError,
@@ -71,12 +58,13 @@ class CreateUkPropertyPeriodSummaryService @Inject()(connector: CreateUkProperty
     )
 
     val extraTysErrors = Map(
-      "INVALID_INCOMESOURCE_ID"     -> BusinessIdFormatError,
-      "INVALID_CORRELATION_ID"      -> InternalError,
-      "PERIOD_NOT_ALIGNED"          -> RuleMisalignedPeriodError,
-      "PERIOD_OVERLAPS"             -> RuleOverlappingPeriodError,
-      "INVALID_SUBMISSION_PERIOD"   -> RuleInvalidSubmissionPeriodError,
-      "INVALID_SUBMISSION_END_DATE" -> RuleInvalidSubmissionEndDateError
+      "INVALID_INCOMESOURCE_ID" -> BusinessIdFormatError,
+      "INVALID_CORRELATION_ID"  -> InternalError,
+      "PERIOD_NOT_ALIGNED"      -> RuleMisalignedPeriodError,
+      "PERIOD_OVERLAPS"         -> RuleOverlappingPeriodError
+//      "INVALID_SUBMISSION_PERIOD"   -> RuleInvalidSubmissionPeriodError,
+//      "INVALID_SUBMISSION_END_DATE" -> RuleInvalidSubmissionEndDateError
+//      To be reinstated, see MTDSA-15575
     )
 
     errors ++ extraTysErrors

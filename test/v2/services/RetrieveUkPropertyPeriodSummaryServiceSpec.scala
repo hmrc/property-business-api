@@ -19,10 +19,10 @@ package v2.services
 import fixtures.RetrieveUkPropertyPeriodSummary.ResponseModelsFixture
 import support.UnitSpec
 import uk.gov.hmrc.http.HeaderCarrier
-import v2.connectors.RetrieveUkPropertyPeriodSummaryConnector.{ NonUkResult, UkResult }
+import v2.connectors.RetrieveUkPropertyPeriodSummaryConnector.{NonUkResult, UkResult}
 import api.controllers.EndpointLogContext
 import v2.mocks.connectors.MockRetrieveUkPropertyPeriodSummaryConnector
-import v2.models.domain.TaxYear; import api.models.domain.Nino
+import api.models.domain.{Nino, TaxYear}
 import api.models.errors._
 import api.models.outcomes.ResponseWrapper
 import v2.models.request.retrieveUkPropertyPeriodSummary.RetrieveUkPropertyPeriodSummaryRequest
@@ -32,22 +32,12 @@ import scala.concurrent.Future
 
 class RetrieveUkPropertyPeriodSummaryServiceSpec extends UnitSpec with ResponseModelsFixture {
 
-  val nino: String                   = "AA123456A"
-  val businessId: String             = "XAIS12345678910"
-  val taxYear: TaxYear               = TaxYear.fromMtd("2020-21")
-  val submissionId: String           = "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
-  implicit val correlationId: String = "X-123"
+  private val nino: String         = "AA123456A"
+  private val businessId: String   = "XAIS12345678910"
+  private val taxYear: TaxYear     = TaxYear.fromMtd("2020-21")
+  private val submissionId: String = "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
 
-  private val requestData = RetrieveUkPropertyPeriodSummaryRequest(Nino(nino), businessId, taxYear, submissionId)
-
-  trait Test extends MockRetrieveUkPropertyPeriodSummaryConnector {
-    implicit val hc: HeaderCarrier              = HeaderCarrier()
-    implicit val logContext: EndpointLogContext = EndpointLogContext("c", "ep")
-
-    val service = new RetrieveUkPropertyPeriodSummaryService(
-      connector = mockConnector
-    )
-  }
+  implicit private val correlationId: String = "X-123"
 
   "service" should {
     "service call successful" when {
@@ -84,7 +74,7 @@ class RetrieveUkPropertyPeriodSummaryServiceSpec extends UnitSpec with ResponseM
           await(service.retrieveUkProperty(requestData)) shouldBe Left(ErrorWrapper(correlationId, error))
         }
 
-      val errorMap = Seq(
+      val errorMap = List(
         "INVALID_TAXABLE_ENTITY_ID" -> NinoFormatError,
         "INVALID_TAX_YEAR"          -> TaxYearFormatError,
         "INVALID_INCOMESOURCEID"    -> BusinessIdFormatError,
@@ -97,7 +87,7 @@ class RetrieveUkPropertyPeriodSummaryServiceSpec extends UnitSpec with ResponseM
       )
 
       val tysErrorMap =
-        Seq(
+        List(
           "INVALID_INCOMESOURCE_ID" -> BusinessIdFormatError,
           "INVALID_CORRELATION_ID"  -> InternalError
         )
@@ -105,4 +95,18 @@ class RetrieveUkPropertyPeriodSummaryServiceSpec extends UnitSpec with ResponseM
       (errorMap ++ tysErrorMap).foreach(args => (serviceError _).tupled(args))
     }
   }
+
+  trait Test extends MockRetrieveUkPropertyPeriodSummaryConnector {
+    implicit val hc: HeaderCarrier              = HeaderCarrier()
+    implicit val logContext: EndpointLogContext = EndpointLogContext("c", "ep")
+
+    val service = new RetrieveUkPropertyPeriodSummaryService(
+      connector = mockConnector
+    )
+
+    protected val requestData: RetrieveUkPropertyPeriodSummaryRequest =
+      RetrieveUkPropertyPeriodSummaryRequest(Nino(nino), businessId, taxYear, submissionId)
+
+  }
+
 }

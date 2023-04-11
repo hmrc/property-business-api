@@ -16,27 +16,27 @@
 
 package v2.mocks.services
 
+import api.controllers.RequestContext
+import api.services.ServiceOutcome
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
-import uk.gov.hmrc.http.HeaderCarrier
-import api.controllers.EndpointLogContext
-import api.models.errors.ErrorWrapper
-import api.models.outcomes.ResponseWrapper
 import v2.models.request.amendHistoricFhlUkPiePeriodSummary.AmendHistoricFhlUkPiePeriodSummaryRequest
 import v2.services.AmendHistoricFhlUkPiePeriodSummaryService
 
-import scala.concurrent.{ ExecutionContext, Future }
+import scala.concurrent.{ExecutionContext, Future}
 
 trait MockAmendHistoricFhlUkPropertyPeriodSummaryService extends MockFactory {
 
-  val mockService: AmendHistoricFhlUkPiePeriodSummaryService = mock[AmendHistoricFhlUkPiePeriodSummaryService]
+  val mockAmendHistoricFhlUkPropertyPeriodSummaryService: AmendHistoricFhlUkPiePeriodSummaryService = mock[AmendHistoricFhlUkPiePeriodSummaryService]
 
   object MockAmendHistoricFhlUkPropertyPeriodSummaryService {
 
-    def amend(requestData: AmendHistoricFhlUkPiePeriodSummaryRequest): CallHandler[Future[Either[ErrorWrapper, ResponseWrapper[Unit]]]] = {
-      (mockService
-        .amend(_: AmendHistoricFhlUkPiePeriodSummaryRequest)(_: HeaderCarrier, _: ExecutionContext, _: EndpointLogContext, _: String))
-        .expects(requestData, *, *, *, *)
+    def amend(requestData: AmendHistoricFhlUkPiePeriodSummaryRequest): CallHandler[Future[ServiceOutcome[Unit]]] = {
+      (mockAmendHistoricFhlUkPropertyPeriodSummaryService
+        .amend(_: AmendHistoricFhlUkPiePeriodSummaryRequest)(_: RequestContext, _: ExecutionContext))
+        .expects(requestData, *, *)
     }
+
   }
+
 }

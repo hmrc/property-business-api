@@ -16,48 +16,34 @@
 
 package v2.services
 
-import cats.data.EitherT
-import cats.implicits._
-import uk.gov.hmrc.http.HeaderCarrier
-import utils.Logging
-import api.controllers.EndpointLogContext
-import v2.models.domain.PeriodId
+import api.controllers.RequestContext
+import api.models.domain.PeriodId
 import api.models.errors._
 import api.models.outcomes.ResponseWrapper
+import api.services.{BaseService, ServiceOutcome}
+import cats.implicits._
+import v2.connectors.CreateHistoricFhlUkPiePeriodSummaryConnector
 import v2.models.request.createHistoricFhlUkPiePeriodSummary.CreateHistoricFhlUkPiePeriodSummaryRequest
 import v2.models.response.createHistoricFhlUkPiePeriodSummary.CreateHistoricFhlUkPiePeriodSummaryResponse
-import api.services.ServiceOutcome
-import api.support.DownstreamResponseMappingSupport
-import v2.connectors.CreateHistoricFhlUkPiePeriodSummaryConnector
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class CreateHistoricFhlUkPiePeriodSummaryService @Inject()(connector: CreateHistoricFhlUkPiePeriodSummaryConnector)
-    extends DownstreamResponseMappingSupport
-    with Logging {
+class CreateHistoricFhlUkPiePeriodSummaryService @Inject() (connector: CreateHistoricFhlUkPiePeriodSummaryConnector) extends BaseService {
 
-  def createPeriodSummary(request: CreateHistoricFhlUkPiePeriodSummaryRequest)(
-      implicit hc: HeaderCarrier,
-      ec: ExecutionContext,
-      logContext: EndpointLogContext,
-      correlationId: String): Future[ServiceOutcome[CreateHistoricFhlUkPiePeriodSummaryResponse]] = {
+  def createPeriodSummary(request: CreateHistoricFhlUkPiePeriodSummaryRequest)(implicit
+      ctx: RequestContext,
+      ec: ExecutionContext): Future[ServiceOutcome[CreateHistoricFhlUkPiePeriodSummaryResponse]] = {
 
     def toResponse(wrapper: ResponseWrapper[Unit]): ResponseWrapper[CreateHistoricFhlUkPiePeriodSummaryResponse] =
       wrapper
         .map(_ => CreateHistoricFhlUkPiePeriodSummaryResponse(PeriodId(request.body.fromDate, request.body.toDate)))
 
-    val result = for {
-      ifsResponseWrapper <- EitherT(connector.createPeriodSummary(request))
-        .map(toResponse)
-        .leftMap(mapDownstreamErrors(ifsErrorMap))
-    } yield ifsResponseWrapper
-
-    result.value
+    connector.createPeriodSummary(request).map(_.map(toResponse).leftMap(mapDownstreamErrors(downstreamErrorMap)))
   }
 
-  private def ifsErrorMap: Map[String, MtdError] =
+  private val downstreamErrorMap: Map[String, MtdError] =
     Map(
       "INVALID_NINO"            -> NinoFormatError,
       "INVALID_TYPE"            -> InternalError,
@@ -74,4 +60,5 @@ class CreateHistoricFhlUkPiePeriodSummaryService @Inject()(connector: CreateHist
       "SERVER_ERROR"            -> InternalError,
       "SERVICE_UNAVAILABLE"     -> InternalError
     )
+
 }

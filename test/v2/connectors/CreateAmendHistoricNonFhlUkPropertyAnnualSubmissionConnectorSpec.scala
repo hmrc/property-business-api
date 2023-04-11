@@ -16,51 +16,49 @@
 
 package v2.connectors
 
-import api.connectors.ConnectorSpec
-import fixtures.CreateAmendNonFhlUkPropertyAnnualSubmission.RequestResponseModelFixtures
-import v2.models.domain.TaxYear
-import api.models.domain.Nino
+import api.connectors.{ConnectorSpec, DownstreamOutcome}
+import api.models.domain.{Nino, TaxYear}
 import api.models.outcomes.ResponseWrapper
-import v2.models.request.createAmendHistoricNonFhlUkPropertyAnnualSubmission.CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequest
+import v2.models.request.createAmendHistoricNonFhlUkPropertyAnnualSubmission._
 import v2.models.response.createAmendHistoricFhlUkPropertyAnnualSubmission.CreateAmendHistoricFhlUkPropertyAnnualSubmissionResponse
+import v2.models.response.createAmendHistoricNonFhlUkPropertyAnnualSubmission.CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionResponse
 
 import scala.concurrent.Future
 
-class CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec with RequestResponseModelFixtures {
+class CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec {
 
-  val nino: String              = "AA123456A"
-  val taxYear: String           = "2019-20"
-  val mtdTaxYear: String        = "2019-20"
-  val downstreamTaxYear: String = "2020"
+  private val nino: String              = "AA123456A"
+  private val taxYear: String           = "2019-20"
+  private val downstreamTaxYear: String = "2020"
 
-  val request: CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequest = CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequest(
-    Nino(nino),
-    TaxYear.fromMtd(taxYear),
-    requestBody
-  )
+  "connector" must {
+    "put a non-fhl body and return a 200" in new IfsTest with Test {
+      private val outcome = Right(ResponseWrapper(correlationId, CreateAmendHistoricFhlUkPropertyAnnualSubmissionResponse(None)))
+
+      willPut(
+        url = s"$baseUrl/income-tax/nino/$nino/uk-properties/other/annual-summaries/$downstreamTaxYear",
+        body = body
+      ).returns(Future.successful(outcome))
+
+      val result: DownstreamOutcome[CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionResponse] = await(connector.amend(request))
+      result shouldBe outcome
+    }
+  }
 
   trait Test {
     _: ConnectorTest =>
 
-    val connector = new CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionConnector(
+    protected val connector = new CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionConnector(
       http = mockHttpClient,
       appConfig = mockAppConfig
     )
 
-    val outcome = Right(ResponseWrapper(correlationId, CreateAmendHistoricFhlUkPropertyAnnualSubmissionResponse(None)))
+    protected val body: CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestBody =
+      CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestBody(None, None)
+
+    protected val request: CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequest =
+      CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequest(Nino(nino), TaxYear.fromMtd(taxYear), body)
+
   }
 
-  "connector" must {
-
-    "put a non-fhl body and return a 200" in new IfsTest with Test {
-
-      willPut(
-        url = s"$baseUrl/income-tax/nino/$nino/uk-properties/other/annual-summaries/$downstreamTaxYear",
-        body = requestBody
-      ).returns(Future.successful(outcome))
-
-      await(connector.amend(request)) shouldBe outcome
-
-    }
-  }
 }

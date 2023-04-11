@@ -19,8 +19,7 @@ package v2.connectors
 import api.connectors.{ConnectorSpec, DownstreamOutcome}
 import org.scalamock.handlers.CallHandler
 import v2.connectors.RetrieveForeignPropertyAnnualSubmissionConnector.{ForeignResult, NonForeignResult}
-import v2.models.domain.TaxYear
-import api.models.domain.Nino
+import api.models.domain.{Nino, TaxYear}
 import api.models.errors.{DownstreamErrorCode, DownstreamErrors}
 import api.models.outcomes.ResponseWrapper
 import v2.models.request.retrieveForeignPropertyAnnualSubmission.RetrieveForeignPropertyAnnualSubmissionRequest
@@ -32,57 +31,30 @@ import scala.concurrent.Future
 
 class RetrieveForeignPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec {
 
-  val nino: String       = "AA123456A"
-  val businessId: String = "XAIS12345678910"
+  private val nino: String       = "AA123456A"
+  private val businessId: String = "XAIS12345678910"
 
-  val countryCode: String = "FRA"
+  private val countryCode: String = "FRA"
 
-  val foreignFhlEea: ForeignFhlEeaEntry           = ForeignFhlEeaEntry(None, None)
-  val foreignNonFhlProperty: ForeignPropertyEntry = ForeignPropertyEntry(countryCode, None, None)
+  private val foreignFhlEea: ForeignFhlEeaEntry           = ForeignFhlEeaEntry(None, None)
+  private val foreignNonFhlProperty: ForeignPropertyEntry = ForeignPropertyEntry(countryCode, None, None)
 
   def responseWith(foreignFhlEea: Option[ForeignFhlEeaEntry],
                    foreignNonFhlProperty: Option[Seq[ForeignPropertyEntry]]): RetrieveForeignPropertyAnnualSubmissionResponse =
     RetrieveForeignPropertyAnnualSubmissionResponse("2020-06-17T10:53:38Z", foreignFhlEea, foreignNonFhlProperty)
-
-  trait Test {
-    _: ConnectorTest =>
-
-    val connector: RetrieveForeignPropertyAnnualSubmissionConnector = new RetrieveForeignPropertyAnnualSubmissionConnector(
-      http = mockHttpClient,
-      appConfig = mockAppConfig
-    )
-
-    val taxYear: String
-
-    val request: RetrieveForeignPropertyAnnualSubmissionRequest =
-      RetrieveForeignPropertyAnnualSubmissionRequest(
-        Nino(nino),
-        businessId,
-        TaxYear.fromMtd(taxYear)
-      )
-  }
-
-  trait StandardTest extends TysIfsTest with Test {
-
-    def stubHttpResponse(outcome: DownstreamOutcome[RetrieveForeignPropertyAnnualSubmissionResponse])
-      : CallHandler[Future[DownstreamOutcome[RetrieveForeignPropertyAnnualSubmissionResponse]]]#Derived =
-      willGet(
-        url = s"$baseUrl/income-tax/business/property/annual/23-24/$nino/$businessId"
-      ).returns(Future.successful(outcome))
-
-    lazy val taxYear: String = "2023-24"
-  }
 
   "connector" when {
     "response has a foreign fhl details" must {
       "return a foreign result" in new StandardTest {
         val response: RetrieveForeignPropertyAnnualSubmissionResponse =
           responseWith(foreignFhlEea = Some(foreignFhlEea), foreignNonFhlProperty = None)
-        val outcome = Right(ResponseWrapper(correlationId, response))
+        val outcome: Right[Nothing, ResponseWrapper[RetrieveForeignPropertyAnnualSubmissionResponse]] =
+          Right(ResponseWrapper(correlationId, response))
 
         stubHttpResponse(outcome)
 
-        await(connector.retrieveForeignProperty(request)) shouldBe Right(ResponseWrapper(correlationId, ForeignResult(response)))
+        val result: DownstreamOutcome[RetrieveForeignPropertyAnnualSubmissionConnector.Result] = await(connector.retrieveForeignProperty(request))
+        result shouldBe Right(ResponseWrapper(correlationId, ForeignResult(response)))
       }
     }
 
@@ -90,11 +62,13 @@ class RetrieveForeignPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec
       "return a foreign result" in new StandardTest {
         val response: RetrieveForeignPropertyAnnualSubmissionResponse =
           responseWith(foreignFhlEea = None, foreignNonFhlProperty = Some(Seq(foreignNonFhlProperty)))
-        val outcome = Right(ResponseWrapper(correlationId, response))
+        val outcome: Right[Nothing, ResponseWrapper[RetrieveForeignPropertyAnnualSubmissionResponse]] =
+          Right(ResponseWrapper(correlationId, response))
 
         stubHttpResponse(outcome)
 
-        await(connector.retrieveForeignProperty(request)) shouldBe Right(ResponseWrapper(correlationId, ForeignResult(response)))
+        val result: DownstreamOutcome[RetrieveForeignPropertyAnnualSubmissionConnector.Result] = await(connector.retrieveForeignProperty(request))
+        result shouldBe Right(ResponseWrapper(correlationId, ForeignResult(response)))
       }
     }
 
@@ -102,30 +76,37 @@ class RetrieveForeignPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec
       "return a foreign result" in new StandardTest {
         val response: RetrieveForeignPropertyAnnualSubmissionResponse =
           responseWith(foreignFhlEea = Some(foreignFhlEea), foreignNonFhlProperty = Some(Seq(foreignNonFhlProperty)))
-        val outcome = Right(ResponseWrapper(correlationId, response))
+        val outcome: Right[Nothing, ResponseWrapper[RetrieveForeignPropertyAnnualSubmissionResponse]] =
+          Right(ResponseWrapper(correlationId, response))
 
         stubHttpResponse(outcome)
 
-        await(connector.retrieveForeignProperty(request)) shouldBe Right(ResponseWrapper(correlationId, ForeignResult(response)))
+        val result: DownstreamOutcome[RetrieveForeignPropertyAnnualSubmissionConnector.Result] = await(connector.retrieveForeignProperty(request))
+        result shouldBe Right(ResponseWrapper(correlationId, ForeignResult(response)))
       }
     }
     "response has no details" must {
       "return a non-foreign result" in new StandardTest {
         val response: RetrieveForeignPropertyAnnualSubmissionResponse = responseWith(None, None)
-        val outcome                                                   = Right(ResponseWrapper(correlationId, response))
+        val outcome: Right[Nothing, ResponseWrapper[RetrieveForeignPropertyAnnualSubmissionResponse]] =
+          Right(ResponseWrapper(correlationId, response))
 
         stubHttpResponse(outcome)
 
-        await(connector.retrieveForeignProperty(request)) shouldBe Right(ResponseWrapper(correlationId, NonForeignResult))
+        val result: DownstreamOutcome[RetrieveForeignPropertyAnnualSubmissionConnector.Result] = await(connector.retrieveForeignProperty(request))
+        result shouldBe Right(ResponseWrapper(correlationId, NonForeignResult))
       }
     }
 
     "response is an error" must {
       "return the error" in new StandardTest {
-        val outcome = Left(ResponseWrapper(correlationId, DownstreamErrors.single(DownstreamErrorCode("SOME_ERROR"))))
+        val outcome: Left[ResponseWrapper[DownstreamErrors], Nothing] =
+          Left(ResponseWrapper(correlationId, DownstreamErrors.single(DownstreamErrorCode("SOME_ERROR"))))
 
         stubHttpResponse(outcome)
-        await(connector.retrieveForeignProperty(request)) shouldBe
+
+        val result: DownstreamOutcome[RetrieveForeignPropertyAnnualSubmissionConnector.Result] = await(connector.retrieveForeignProperty(request))
+        result shouldBe
           Left(ResponseWrapper(correlationId, DownstreamErrors.single(DownstreamErrorCode("SOME_ERROR"))))
       }
     }
@@ -136,15 +117,44 @@ class RetrieveForeignPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec
 
         val response: RetrieveForeignPropertyAnnualSubmissionResponse =
           responseWith(foreignFhlEea = Some(foreignFhlEea), foreignNonFhlProperty = None)
-        val outcome = Right(ResponseWrapper(correlationId, response))
+        val outcome: Right[Nothing, ResponseWrapper[RetrieveForeignPropertyAnnualSubmissionResponse]] =
+          Right(ResponseWrapper(correlationId, response))
 
         willGet(
           url = s"$baseUrl/income-tax/business/property/annual",
           parameters = Seq("taxableEntityId" -> nino, "incomeSourceId" -> businessId, "taxYear" -> "2019-20")
         ).returns(Future.successful(outcome))
 
-        await(connector.retrieveForeignProperty(request)) shouldBe Right(ResponseWrapper(correlationId, ForeignResult(response)))
+        val result: DownstreamOutcome[RetrieveForeignPropertyAnnualSubmissionConnector.Result] = await(connector.retrieveForeignProperty(request))
+        result shouldBe Right(ResponseWrapper(correlationId, ForeignResult(response)))
       }
     }
   }
+
+  trait Test {
+    _: ConnectorTest =>
+
+    protected val connector: RetrieveForeignPropertyAnnualSubmissionConnector = new RetrieveForeignPropertyAnnualSubmissionConnector(
+      http = mockHttpClient,
+      appConfig = mockAppConfig
+    )
+
+    protected val taxYear: String
+
+    protected val request: RetrieveForeignPropertyAnnualSubmissionRequest =
+      RetrieveForeignPropertyAnnualSubmissionRequest(Nino(nino), businessId, TaxYear.fromMtd(taxYear))
+
+  }
+
+  trait StandardTest extends TysIfsTest with Test {
+
+    def stubHttpResponse(outcome: DownstreamOutcome[RetrieveForeignPropertyAnnualSubmissionResponse])
+        : CallHandler[Future[DownstreamOutcome[RetrieveForeignPropertyAnnualSubmissionResponse]]]#Derived =
+      willGet(
+        url = s"$baseUrl/income-tax/business/property/annual/23-24/$nino/$businessId"
+      ).returns(Future.successful(outcome))
+
+    lazy val taxYear: String = "2023-24"
+  }
+
 }

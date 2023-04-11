@@ -17,9 +17,9 @@
 package v2.controllers.requestParsers
 
 import support.UnitSpec
-import v2.mocks.validators.MockRetrieveUkPropertyPeriodSummaryValidator
-import v2.models.domain.TaxYear; import api.models.domain.Nino
+import api.models.domain.{Nino, TaxYear}
 import api.models.errors._
+import v2.mocks.validators.MockRetrieveUkPropertyPeriodSummaryValidator
 import v2.models.request.retrieveUkPropertyPeriodSummary.{ RetrieveUkPropertyPeriodSummaryRawData, RetrieveUkPropertyPeriodSummaryRequest }
 
 class RetrieveUkPropertyPeriodSummaryRequestParserSpec extends UnitSpec {

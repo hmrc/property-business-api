@@ -17,10 +17,9 @@
 package v2.controllers.requestParsers.validators
 
 import api.controllers.requestParsers.validators.Validator
-import api.controllers.requestParsers.validators.validations.{BusinessIdValidation, NinoValidation}
+import api.controllers.requestParsers.validators.validations.{BusinessIdValidation, NinoValidation, TaxYearValidation}
 import com.google.inject.Inject
 import config.AppConfig
-import v2.controllers.requestParsers.validators.validations.TaxYearValidation
 import api.models.errors.MtdError
 import v2.models.request.retrieveUkPropertyAnnualSubmission.RetrieveUkPropertyAnnualSubmissionRawData
 

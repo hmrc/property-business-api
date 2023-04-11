@@ -19,10 +19,10 @@ package v2.connectors
 import api.connectors.{BaseDownstreamConnector, DownstreamOutcome}
 import api.connectors.DownstreamUri.IfsUri
 import api.connectors.httpparsers.StandardDownstreamHttpParser.readsEmpty
+import api.models.domain.HistoricPropertyType
 import config.AppConfig
 import play.api.libs.json.JsObject
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
-import v2.models.domain.HistoricPropertyType
 import v2.models.request.deleteHistoricUkPropertyAnnualSubmission.DeleteHistoricUkPropertyAnnualSubmissionRequest
 
 import javax.inject.{Inject, Singleton}
@@ -36,20 +36,16 @@ class DeleteHistoricUkPropertyAnnualSubmissionConnector @Inject() (val http: Htt
       ec: ExecutionContext,
       correlationId: String): Future[DownstreamOutcome[Unit]] = {
 
-    val nino    = request.nino.nino
-    val taxYear = request.taxYear.asDownstream
+    import request._
 
-    val propertyTypeName = request.propertyType match {
+    val propertyTypeName = propertyType match {
       case HistoricPropertyType.Fhl    => "furnished-holiday-lettings"
       case HistoricPropertyType.NonFhl => "other"
     }
 
-    put(
-      body = JsObject.empty,
-      uri = IfsUri[Unit](
-        s"income-tax/nino/$nino/uk-properties/$propertyTypeName/annual-summaries/$taxYear"
-      )
-    )
+    val downstreamUri = IfsUri[Unit](s"income-tax/nino/$nino/uk-properties/$propertyTypeName/annual-summaries/${taxYear.asDownstream}")
+
+    put(JsObject.empty, downstreamUri)
   }
 
 }

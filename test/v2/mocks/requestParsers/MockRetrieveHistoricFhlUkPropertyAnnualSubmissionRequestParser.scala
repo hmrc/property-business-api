@@ -30,13 +30,15 @@ trait MockRetrieveHistoricFhlUkPropertyAnnualSubmissionRequestParser extends Moc
   val mockRetrieveHistoricFhlUkPropertyAnnualSubmissionRequestParser: RetrieveHistoricFhlUkPropertyAnnualSubmissionRequestParser =
     mock[RetrieveHistoricFhlUkPropertyAnnualSubmissionRequestParser]
 
-  object MockRetrieveHistoricFhlUkPropertyRequestParser {
+  object MockRetrieveHistoricFhlUkPropertyAnnualSubmissionRequestParser {
 
-    def parseRequest(data: RetrieveHistoricFhlUkPropertyAnnualSubmissionRawData)
-      : CallHandler[Either[ErrorWrapper, RetrieveHistoricFhlUkPropertyAnnualSubmissionRequest]] = {
+    def parse(data: RetrieveHistoricFhlUkPropertyAnnualSubmissionRawData)
+        : CallHandler[Either[ErrorWrapper, RetrieveHistoricFhlUkPropertyAnnualSubmissionRequest]] = {
       (mockRetrieveHistoricFhlUkPropertyAnnualSubmissionRequestParser
         .parseRequest(_: RetrieveHistoricFhlUkPropertyAnnualSubmissionRawData)(_: String))
         .expects(data, *)
     }
+
   }
+
 }

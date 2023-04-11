@@ -16,27 +16,30 @@
 
 package v2.services
 
-import cats.data.EitherT
-import cats.implicits._
-import uk.gov.hmrc.http.HeaderCarrier
-import utils.Logging
-import v2.connectors.RetrieveHistoricFhlUkPropertyAnnualSubmissionConnector
-import api.controllers.EndpointLogContext
+import api.controllers.RequestContext
 import api.models.errors._
+import api.services.{BaseService, ServiceOutcome}
+import cats.implicits._
+import v2.connectors.RetrieveHistoricFhlUkPropertyAnnualSubmissionConnector
 import v2.models.request.retrieveHistoricFhlUkPropertyAnnualSubmission.RetrieveHistoricFhlUkPropertyAnnualSubmissionRequest
 import v2.models.response.retrieveHistoricFhlUkPropertyAnnualSubmission.RetrieveHistoricFhlUkPropertyAnnualSubmissionResponse
-import api.services.ServiceOutcome
-import api.support.DownstreamResponseMappingSupport
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class RetrieveHistoricFhlUkPropertyAnnualSubmissionService @Inject()(connector: RetrieveHistoricFhlUkPropertyAnnualSubmissionConnector)
-    extends DownstreamResponseMappingSupport
-    with Logging {
+class RetrieveHistoricFhlUkPropertyAnnualSubmissionService @Inject() (connector: RetrieveHistoricFhlUkPropertyAnnualSubmissionConnector)
+    extends BaseService {
 
-  private val downstreamErrorMap =
+  def retrieve(request: RetrieveHistoricFhlUkPropertyAnnualSubmissionRequest)(implicit
+      ctx: RequestContext,
+      ec: ExecutionContext): Future[ServiceOutcome[RetrieveHistoricFhlUkPropertyAnnualSubmissionResponse]] = {
+
+    connector.retrieve(request).map(_.leftMap(mapDownstreamErrors(downstreamErrorMap)))
+
+  }
+
+  private val downstreamErrorMap: Map[String, MtdError] =
     Map(
       "INVALID_NINO"            -> NinoFormatError,
       "INVALID_TYPE"            -> InternalError,
@@ -48,18 +51,5 @@ class RetrieveHistoricFhlUkPropertyAnnualSubmissionService @Inject()(connector: 
       "SERVER_ERROR"            -> InternalError,
       "SERVICE_UNAVAILABLE"     -> InternalError
     )
-
-  def retrieve(request: RetrieveHistoricFhlUkPropertyAnnualSubmissionRequest)(
-      implicit hc: HeaderCarrier,
-      ec: ExecutionContext,
-      logContext: EndpointLogContext,
-      correlationId: String): Future[ServiceOutcome[RetrieveHistoricFhlUkPropertyAnnualSubmissionResponse]] = {
-
-    val result = for {
-      resultWrapper <- EitherT(connector.retrieve(request)).leftMap(mapDownstreamErrors(downstreamErrorMap))
-    } yield resultWrapper
-
-    result.value
-  }
 
 }

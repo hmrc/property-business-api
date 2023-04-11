@@ -43,16 +43,16 @@ class CreateForeignPropertyPeriodSummaryConnector @Inject() (val http: HttpClien
 
     val downstreamUri = if (taxYear.useTaxYearSpecificApi) {
       TaxYearSpecificIfsUri[CreateForeignPropertyPeriodSummaryResponse](
-        s"income-tax/business/property/periodic/${taxYear.asTysDownstream}?taxableEntityId=${nino.nino}&incomeSourceId=$businessId"
+        s"income-tax/business/property/periodic/${taxYear.asTysDownstream}?taxableEntityId=$nino&incomeSourceId=$businessId"
       )
     } else {
       IfsUri[CreateForeignPropertyPeriodSummaryResponse](
         // Note that MTD tax year format is used
-        s"income-tax/business/property/periodic?taxableEntityId=${nino.nino}&taxYear=${taxYear.asMtd}&incomeSourceId=$businessId"
+        s"income-tax/business/property/periodic?taxableEntityId=$nino&taxYear=${taxYear.asMtd}&incomeSourceId=$businessId"
       )
     }
 
-    post(body = body, uri = downstreamUri)
+    post(body, downstreamUri)
   }
 
 }

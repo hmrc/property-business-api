@@ -16,18 +16,17 @@
 
 package v2.controllers
 
-import api.controllers.{AuthorisedController, BaseController, EndpointLogContext}
+import api.controllers._
 import api.hateoas.HateoasFactory
 import api.models.audit.{AuditEvent, AuditResponse, FlattenedGenericAuditDetail}
+import api.models.auth.UserDetails
 import api.models.errors._
 import api.services.{AuditService, EnrolmentsAuthService, MtdIdLookupService}
-import cats.data.EitherT
-import cats.implicits._
-import play.api.libs.json.{Json, JsValue}
+import play.api.libs.json.JsValue
 import play.api.mvc.{Action, ControllerComponents}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.audit.http.connector.AuditResult
-import utils.{IdGenerator, Logging}
+import utils.IdGenerator
 import v2.controllers.requestParsers.AmendHistoricFhlUkPiePeriodSummaryRequestParser
 import v2.models.request.amendHistoricFhlUkPiePeriodSummary.AmendHistoricFhlUkPiePeriodSummaryRawData
 import v2.models.response.amendHistoricFhlUkPiePeriodSummary.AmendHistoricFhlUkPropertyPeriodSummaryHateoasData
@@ -45,89 +44,63 @@ class AmendHistoricFhlUkPropertyPeriodSummaryController @Inject() (val authServi
                                                                    auditService: AuditService,
                                                                    cc: ControllerComponents,
                                                                    idGenerator: IdGenerator)(implicit ec: ExecutionContext)
-    extends AuthorisedController(cc)
-    with BaseController
-    with Logging {
+    extends AuthorisedController(cc) {
 
   implicit val endpointLogContext: EndpointLogContext =
-    EndpointLogContext(controllerName = "AmendHistoricFhlUkPropertyPeriodSummaryController", endpointName = "AmendHistoricFhlUkPropertyPeriodSummary")
+    EndpointLogContext(
+      controllerName = "AmendHistoricFhlUkPropertyPeriodSummaryController",
+      endpointName = "AmendHistoricFhlUkPropertyPeriodSummary"
+    )
 
   def handleRequest(nino: String, periodId: String): Action[JsValue] =
-    authorisedAction(nino).async(parse.json) { implicit request =>
-      implicit val correlationId: String = idGenerator.getCorrelationId
-
-      logger.info(message = s"[${endpointLogContext.controllerName}][${endpointLogContext.endpointName}] with correlationId : $correlationId")
+    authorisedAction(nino).async(parse.json) { implicit request: UserRequest[JsValue] =>
+      implicit val ctx: RequestContext = RequestContext.from(idGenerator, endpointLogContext)
 
       val rawData = AmendHistoricFhlUkPiePeriodSummaryRawData(nino, periodId, request.body)
-      val result =
-        for {
-          parsedRequest   <- EitherT.fromEither[Future](parser.parseRequest(rawData))
-          serviceResponse <- EitherT(service.amend(parsedRequest))
-          vendorResponse <- EitherT.fromEither[Future](
-            hateoasFactory
-              .wrap(serviceResponse.responseData, AmendHistoricFhlUkPropertyPeriodSummaryHateoasData(nino, periodId))
-              .asRight[ErrorWrapper])
-        } yield {
 
-          logger.info(
-            s"[${endpointLogContext.controllerName}][${endpointLogContext.endpointName}] - " +
-              s"Success response received with CorrelationId: ${serviceResponse.correlationId}")
+      val requestHandler =
+        RequestHandler
+          .withParser(parser)
+          .withService(service.amend)
+          .withAuditing(auditHandler(nino, periodId, ctx.correlationId, request))
+          .withHateoasResult(hateoasFactory)(AmendHistoricFhlUkPropertyPeriodSummaryHateoasData(nino, periodId))
 
-          val response = Json.toJson(vendorResponse)
-
-          auditSubmission(
-            FlattenedGenericAuditDetail(
-              versionNumber = Some("2.0"),
-              request.userDetails,
-              Map("nino" -> nino, "periodId" -> periodId),
-              Some(request.body),
-              serviceResponse.correlationId,
-              AuditResponse(httpStatus = OK, response = Right(None))
-            )
-          )
-
-          Ok(response)
-            .withApiHeaders(serviceResponse.correlationId)
-        }
-
-      result.leftMap { errorWrapper =>
-        val resCorrelationId = errorWrapper.correlationId
-        val result           = errorResult(errorWrapper).withApiHeaders(resCorrelationId)
-
-        logger.warn(
-          s"[${endpointLogContext.controllerName}][${endpointLogContext.endpointName}] - " +
-            s"Error response received with CorrelationId: $resCorrelationId")
-
-        auditSubmission(
-          FlattenedGenericAuditDetail(
-            versionNumber = Some("2.0"),
-            request.userDetails,
-            Map("nino" -> nino, "periodId" -> periodId),
-            Some(request.body),
-            resCorrelationId,
-            AuditResponse(httpStatus = result.header.status, response = Left(errorWrapper.auditErrors))
-          )
-        )
-
-        result
-      }.merge
+      requestHandler.handleRequest(rawData)
     }
 
-  private def errorResult(errorWrapper: ErrorWrapper) = errorWrapper.error match {
-    case _
-        if errorWrapper.containsAnyOf(
-          BadRequestError,
-          NinoFormatError,
-          PeriodIdFormatError,
-          RuleBothExpensesSuppliedError,
-          ValueFormatError,
-          RuleIncorrectOrEmptyBodyError,
-          RuleIncorrectGovTestScenarioError
-        ) =>
-      BadRequest(Json.toJson(errorWrapper))
-    case NotFoundError => NotFound(Json.toJson(errorWrapper))
-    case InternalError => InternalServerError(Json.toJson(errorWrapper))
-    case _             => unhandledError(errorWrapper)
+  private def auditHandler(nino: String, periodId: String, correlationId: String, request: UserRequest[JsValue]): AuditHandler = {
+    new AuditHandler() {
+      override def performAudit(userDetails: UserDetails, httpStatus: Int, response: Either[ErrorWrapper, Option[JsValue]], versionNumber: String)(
+          implicit
+          ctx: RequestContext,
+          ec: ExecutionContext): Unit = {
+        response match {
+          case Left(err: ErrorWrapper) =>
+            auditSubmission(
+              FlattenedGenericAuditDetail(
+                Some("2.0"),
+                request.userDetails,
+                Map("nino" -> nino, "periodId" -> periodId),
+                Some(request.body),
+                correlationId,
+                AuditResponse(httpStatus, Left(err.auditErrors))
+              )
+            )
+
+          case Right(_) =>
+            auditSubmission(
+              FlattenedGenericAuditDetail(
+                Some("2.0"),
+                request.userDetails,
+                Map("nino" -> nino, "periodId" -> periodId),
+                Some(request.body),
+                correlationId,
+                AuditResponse(OK, Right(None))
+              )
+            )
+        }
+      }
+    }
   }
 
   private def auditSubmission(details: FlattenedGenericAuditDetail)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[AuditResult] = {

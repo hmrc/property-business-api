@@ -16,18 +16,18 @@
 
 package v2.controllers
 
-import api.controllers.{AuthorisedController, BaseController, EndpointLogContext}
+import api.controllers._
 import api.models.audit.{AuditEvent, AuditResponse, FlattenedGenericAuditDetail}
-import cats.data.EitherT
-import play.api.libs.json.Json
+import api.models.auth.UserDetails
+import api.models.domain.HistoricPropertyType
+import api.models.errors._
+import api.services.{AuditService, EnrolmentsAuthService, MtdIdLookupService}
+import play.api.libs.json.JsValue
 import play.api.mvc.{Action, AnyContent, ControllerComponents}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.audit.http.connector.AuditResult
-import utils.{IdGenerator, Logging}
+import utils.IdGenerator
 import v2.controllers.requestParsers.DeleteHistoricUkPropertyAnnualSubmissionRequestParser
-import v2.models.domain.HistoricPropertyType
-import api.models.errors._
-import api.services.{AuditService, EnrolmentsAuthService, MtdIdLookupService}
 import v2.models.request.deleteHistoricUkPropertyAnnualSubmission.DeleteHistoricUkPropertyAnnualSubmissionRawData
 import v2.services.DeleteHistoricUkPropertyAnnualSubmissionService
 
@@ -42,9 +42,7 @@ class DeleteHistoricUkPropertyAnnualSubmissionController @Inject() (val authServ
                                                                     auditService: AuditService,
                                                                     cc: ControllerComponents,
                                                                     idGenerator: IdGenerator)(implicit ec: ExecutionContext)
-    extends AuthorisedController(cc)
-    with BaseController
-    with Logging {
+    extends AuthorisedController(cc) {
 
   def handleFhlRequest(nino: String, taxYear: String): Action[AnyContent] = {
     implicit val endpointLogContext: EndpointLogContext = {
@@ -68,75 +66,58 @@ class DeleteHistoricUkPropertyAnnualSubmissionController @Inject() (val authServ
   def handleRequest(nino: String, taxYear: String, propertyType: HistoricPropertyType)(implicit
       endpointLogContext: EndpointLogContext): Action[AnyContent] =
     authorisedAction(nino).async { implicit request =>
-      implicit val correlationId: String = idGenerator.getCorrelationId
-      logger.info(
-        message = s"[${endpointLogContext.controllerName}][${endpointLogContext.endpointName}] " +
-          s"with correlationId : $correlationId")
+      implicit val ctx: RequestContext = RequestContext.from(idGenerator, endpointLogContext)
+
       val rawData = DeleteHistoricUkPropertyAnnualSubmissionRawData(nino, taxYear, propertyType)
-      val result =
-        for {
-          parsedRequest   <- EitherT.fromEither[Future](parser.parseRequest(rawData))
-          serviceResponse <- EitherT(service.deleteHistoricUkPropertyAnnualSubmission(parsedRequest))
-        } yield {
-          logger.info(
-            s"[${endpointLogContext.controllerName}][${endpointLogContext.endpointName}] - " +
-              s"Success response received with CorrelationId: ${serviceResponse.correlationId}")
 
-          auditSubmission(
-            s"${propertyType.toString}",
-            FlattenedGenericAuditDetail(
-              versionNumber = Some("2.0"),
-              request.userDetails,
-              Map("nino" -> nino, "taxYear" -> taxYear),
-              None,
-              serviceResponse.correlationId,
-              AuditResponse(httpStatus = NO_CONTENT, response = Right(None))
+      val requestHandler = RequestHandler
+        .withParser(parser)
+        .withService(service.deleteHistoricUkPropertyAnnualSubmission)
+        .withAuditing(auditHandler(nino, taxYear, propertyType, ctx.correlationId, request))
+
+      requestHandler.handleRequest(rawData)
+
+    }
+
+  private def auditHandler(nino: String,
+                           taxYear: String,
+                           propertyType: HistoricPropertyType,
+                           correlationId: String,
+                           request: UserRequest[AnyContent]): AuditHandler = {
+    new AuditHandler() {
+      override def performAudit(userDetails: UserDetails, httpStatus: Int, response: Either[ErrorWrapper, Option[JsValue]], versionNumber: String)(
+          implicit
+          ctx: RequestContext,
+          ec: ExecutionContext): Unit = {
+        response match {
+          case Left(err: ErrorWrapper) =>
+            auditSubmission(
+              propertyType.toString,
+              FlattenedGenericAuditDetail(
+                Some("2.0"),
+                request.userDetails,
+                Map("nino" -> nino, "taxYear" -> taxYear),
+                None,
+                correlationId,
+                AuditResponse(httpStatus, Left(err.auditErrors))
+              )
             )
-          )
-
-          NoContent.withApiHeaders(serviceResponse.correlationId)
+          case Right(_) =>
+            auditSubmission(
+              propertyType.toString,
+              FlattenedGenericAuditDetail(
+                Some("2.0"),
+                request.userDetails,
+                Map("nino" -> nino, "taxYear" -> taxYear),
+                None,
+                correlationId,
+                AuditResponse(NO_CONTENT, Right(None))
+              )
+            )
         }
-
-      result.leftMap { errorWrapper =>
-        val resCorrelationId = errorWrapper.correlationId
-        val result           = errorResult(errorWrapper).withApiHeaders(resCorrelationId)
-
-        logger.warn(
-          s"[${endpointLogContext.controllerName}][${endpointLogContext.endpointName}] - " +
-            s"Error response received with CorrelationId: $resCorrelationId")
-
-        auditSubmission(
-          s"${propertyType.toString}",
-          FlattenedGenericAuditDetail(
-            versionNumber = Some("2.0"),
-            request.userDetails,
-            Map("nino" -> nino, "taxYear" -> taxYear),
-            None,
-            resCorrelationId,
-            AuditResponse(httpStatus = result.header.status, response = Left(errorWrapper.auditErrors))
-          )
-        )
-
-        result
-      }.merge
+      }
     }
-
-  private def errorResult(errorWrapper: ErrorWrapper)(implicit endpointLogContext: EndpointLogContext) =
-    errorWrapper.error match {
-      case _
-          if errorWrapper.containsAnyOf(
-            NinoFormatError,
-            TaxYearFormatError,
-            RuleHistoricTaxYearNotSupportedError,
-            RuleTaxYearRangeInvalidError,
-            BadRequestError,
-            RuleIncorrectGovTestScenarioError
-          ) =>
-        BadRequest(Json.toJson(errorWrapper))
-      case InternalError => InternalServerError(Json.toJson(errorWrapper))
-      case NotFoundError => NotFound(Json.toJson(errorWrapper))
-      case _             => unhandledError(errorWrapper)
-    }
+  }
 
   private def auditSubmission(propertyType: String, details: FlattenedGenericAuditDetail)(implicit
       hc: HeaderCarrier,

@@ -17,12 +17,12 @@
 package v2.models.response.listHistoricUkPropertyPeriodSummaries
 
 import api.hateoas.HateoasListLinksFactory
+import api.models.domain.HistoricPropertyType
 import api.models.hateoas.{HateoasData, Link}
 import cats.Functor
 import config.AppConfig
 import play.api.libs.json.{__, Json, OWrites, Reads, Writes}
 import v2.hateoas.HateoasLinks
-import v2.models.domain.HistoricPropertyType
 
 case class ListHistoricUkPropertyPeriodSummariesResponse[I](submissions: Seq[I])
 

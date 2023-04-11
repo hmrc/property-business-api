@@ -16,76 +16,46 @@
 
 package v2.connectors
 
-import api.connectors.ConnectorSpec
+import api.connectors.{ConnectorSpec, DownstreamOutcome}
 import api.models.domain.Nino
 import api.models.outcomes.ResponseWrapper
-import v2.models.request.common.ukPropertyRentARoom.{UkPropertyExpensesRentARoom, UkPropertyIncomeRentARoom}
 import v2.models.request.createHistoricNonFhlUkPropertyPeriodSummary._
 
 import scala.concurrent.Future
 
 class CreateHistoricNonFhlUkPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
 
-  val nino: String = "TC663795B"
-  val fromDate     = "2021-01-06"
-  val toDate       = "2021-02-06"
-
-  val income: UkNonFhlPropertyIncome =
-    UkNonFhlPropertyIncome(Some(2355.45), Some(454.56), Some(123.45), Some(234.53), Some(567.89), Some(UkPropertyIncomeRentARoom(Some(567.56))))
-
-  val expenses: UkNonFhlPropertyExpenses = UkNonFhlPropertyExpenses(
-    Some(567.53),
-    Some(324.65),
-    Some(453.56),
-    Some(535.78),
-    Some(678.34),
-    Some(682.34),
-    Some(1000.45),
-    Some(645.56),
-    Some(672.34),
-    Some(
-      UkPropertyExpensesRentARoom(
-        Some(545.9)
-      )
-    ),
-    None
-  )
-
-  val url: String = s"$baseUrl/income-tax/nino/$nino/uk-properties/other/periodic-summaries"
-
-  val requestBody: CreateHistoricNonFhlUkPropertyPeriodSummaryRequestBody =
-    CreateHistoricNonFhlUkPropertyPeriodSummaryRequestBody(
-      fromDate,
-      toDate,
-      Some(income),
-      Some(expenses)
-    )
-
-  val requestData: CreateHistoricNonFhlUkPropertyPeriodSummaryRequest =
-    CreateHistoricNonFhlUkPropertyPeriodSummaryRequest(Nino(nino), requestBody)
-
-  trait Test {
-    _: ConnectorTest =>
-
-    val connector: CreateHistoricNonFhlUkPropertyPeriodSummaryConnector = new CreateHistoricNonFhlUkPropertyPeriodSummaryConnector(
-      http = mockHttpClient,
-      appConfig = mockAppConfig
-    )
-  }
+  private val nino: String = "TC663795B"
+  private val fromDate     = "2021-01-06"
+  private val toDate       = "2021-02-06"
 
   "connector" must {
-
     "post a body with dates, income and expenses and return a 202 with the Period ID added" in new IfsTest with Test {
-      val downstreamOutcome = Right(ResponseWrapper(correlationId, ()))
+      val downstreamOutcome: Right[Nothing, ResponseWrapper[Unit]] = Right(ResponseWrapper(correlationId, ()))
 
       willPost(
-        url = url,
+        url = s"$baseUrl/income-tax/nino/$nino/uk-properties/other/periodic-summaries",
         body = requestBody
       ).returns(Future.successful(downstreamOutcome))
 
-      val result = await(connector.createPeriodSummary(requestData))
+      val result: DownstreamOutcome[Unit] = await(connector.createPeriodSummary(requestData))
       result shouldBe downstreamOutcome
     }
+  }
+
+  trait Test { _: ConnectorTest =>
+
+    protected val connector: CreateHistoricNonFhlUkPropertyPeriodSummaryConnector = new CreateHistoricNonFhlUkPropertyPeriodSummaryConnector(
+      http = mockHttpClient,
+      appConfig = mockAppConfig
+    )
+
+    protected val requestBody: CreateHistoricNonFhlUkPropertyPeriodSummaryRequestBody =
+      CreateHistoricNonFhlUkPropertyPeriodSummaryRequestBody(fromDate, toDate, None, None)
+
+    protected val requestData: CreateHistoricNonFhlUkPropertyPeriodSummaryRequest =
+      CreateHistoricNonFhlUkPropertyPeriodSummaryRequest(Nino(nino), requestBody)
+
   }
 
 }

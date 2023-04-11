@@ -16,17 +16,15 @@
 
 package v2.mocks.services
 
+import api.controllers.RequestContext
+import api.services.ServiceOutcome
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
-import uk.gov.hmrc.http.HeaderCarrier
-import api.controllers.EndpointLogContext
-import api.models.errors.ErrorWrapper
-import api.models.outcomes.ResponseWrapper
 import v2.models.request.retrieveHistoricFhlUkPiePeriodSummary.RetrieveHistoricFhlUkPiePeriodSummaryRequest
 import v2.models.response.retrieveHistoricFhlUkPiePeriodSummary.RetrieveHistoricFhlUkPiePeriodSummaryResponse
 import v2.services.RetrieveHistoricFhlUkPropertyPeriodSummaryService
 
-import scala.concurrent.{ ExecutionContext, Future }
+import scala.concurrent.{ExecutionContext, Future}
 
 trait MockRetrieveHistoricFhlUkPiePeriodSummaryService extends MockFactory {
 
@@ -36,17 +34,17 @@ trait MockRetrieveHistoricFhlUkPiePeriodSummaryService extends MockFactory {
   object MockRetrieveHistoricFhlUkPiePeriodSummaryService {
 
     def retrieve(requestData: RetrieveHistoricFhlUkPiePeriodSummaryRequest)
-      : CallHandler[Future[Either[ErrorWrapper, ResponseWrapper[RetrieveHistoricFhlUkPiePeriodSummaryResponse]]]] = {
+        : CallHandler[Future[ServiceOutcome[RetrieveHistoricFhlUkPiePeriodSummaryResponse]]] = {
       (
         mockRetrieveHistoricFhlUkPiePeriodSummaryService
           .retrieve(_: RetrieveHistoricFhlUkPiePeriodSummaryRequest)(
-            _: HeaderCarrier,
-            _: ExecutionContext,
-            _: EndpointLogContext,
-            _: String
+            _: RequestContext,
+            _: ExecutionContext
           )
         )
-        .expects(requestData, *, *, *, *)
+        .expects(requestData, *, *)
     }
+
   }
+
 }

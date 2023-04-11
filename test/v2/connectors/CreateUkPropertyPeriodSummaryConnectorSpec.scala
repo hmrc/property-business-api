@@ -16,9 +16,8 @@
 
 package v2.connectors
 
-import api.connectors.ConnectorSpec
-import v2.models.domain.TaxYear
-import api.models.domain.Nino
+import api.connectors.{ConnectorSpec, DownstreamOutcome}
+import api.models.domain.{Nino, TaxYear}
 import api.models.outcomes.ResponseWrapper
 import v2.models.request.createUkPropertyPeriodSummary._
 import v2.models.response.createUkPropertyPeriodSummary.CreateUkPropertyPeriodSummaryResponse
@@ -27,26 +26,8 @@ import scala.concurrent.Future
 
 class CreateUkPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
 
-  val businessId: String = "XAIS12345678910"
-  val nino: String       = "AA123456A"
-
-  val body: CreateUkPropertyPeriodSummaryRequestBody = CreateUkPropertyPeriodSummaryRequestBody("2020-01-01", "2020-01-31", None, None)
-
-  trait Test {
-    _: ConnectorTest =>
-
-    val taxYear: TaxYear
-
-    val requestData: CreateUkPropertyPeriodSummaryRequest = CreateUkPropertyPeriodSummaryRequest(Nino(nino), taxYear, businessId, body)
-
-    val response: CreateUkPropertyPeriodSummaryResponse = CreateUkPropertyPeriodSummaryResponse("4557ecb5-fd32-48cc-81f5-e6acd1099f3c")
-    val outcome                                         = Right(ResponseWrapper(correlationId, response))
-
-    val connector: CreateUkPropertyPeriodSummaryConnector = new CreateUkPropertyPeriodSummaryConnector(
-      http = mockHttpClient,
-      appConfig = mockAppConfig
-    )
-  }
+  private val businessId: String = "XAIS12345678910"
+  private val nino: String       = "AA123456A"
 
   "connector" must {
     "post a body and return 200 with submissionId" in new IfsTest with Test {
@@ -54,10 +35,11 @@ class CreateUkPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
 
       willPost(
         url = s"$baseUrl/income-tax/business/property/periodic?taxableEntityId=$nino&taxYear=2022-23&incomeSourceId=$businessId",
-        body = body
+        body = requestBody
       ) returns Future.successful(outcome)
 
-      await(connector.createUkProperty(requestData)) shouldBe outcome
+      val result: DownstreamOutcome[CreateUkPropertyPeriodSummaryResponse] = await(connector.createUkProperty(requestData))
+      result shouldBe outcome
     }
 
     "post a body and return 200 with submissionId for TYS" in new TysIfsTest with Test {
@@ -65,10 +47,32 @@ class CreateUkPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
 
       willPost(
         url = s"$baseUrl/income-tax/business/property/periodic/23-24?taxableEntityId=$nino&incomeSourceId=$businessId",
-        body = body
+        body = requestBody
       ) returns Future.successful(outcome)
 
-      await(connector.createUkProperty(requestData)) shouldBe outcome
+      val result: DownstreamOutcome[CreateUkPropertyPeriodSummaryResponse] = await(connector.createUkProperty(requestData))
+      result shouldBe outcome
     }
   }
+
+  trait Test { _: ConnectorTest =>
+
+    protected val taxYear: TaxYear
+
+    protected val requestBody: CreateUkPropertyPeriodSummaryRequestBody =
+      CreateUkPropertyPeriodSummaryRequestBody("2020-01-01", "2020-01-31", None, None)
+
+    protected val requestData: CreateUkPropertyPeriodSummaryRequest =
+      CreateUkPropertyPeriodSummaryRequest(Nino(nino), taxYear, businessId, requestBody)
+
+    protected val response: CreateUkPropertyPeriodSummaryResponse = CreateUkPropertyPeriodSummaryResponse("4557ecb5-fd32-48cc-81f5-e6acd1099f3c")
+    protected val outcome: Right[Nothing, ResponseWrapper[CreateUkPropertyPeriodSummaryResponse]] = Right(ResponseWrapper(correlationId, response))
+
+    protected val connector: CreateUkPropertyPeriodSummaryConnector = new CreateUkPropertyPeriodSummaryConnector(
+      http = mockHttpClient,
+      appConfig = mockAppConfig
+    )
+
+  }
+
 }

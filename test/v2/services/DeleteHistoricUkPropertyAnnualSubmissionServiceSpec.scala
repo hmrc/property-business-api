@@ -19,9 +19,8 @@ package v2.services
 import uk.gov.hmrc.http.HeaderCarrier
 import api.controllers.EndpointLogContext
 import v2.mocks.connectors.MockDeleteHistoricUkPropertyAnnualSubmissionConnector
-import v2.models.domain.{HistoricPropertyType, TaxYear}
 import api.models.errors._
-import api.models.domain.Nino
+import api.models.domain.{HistoricPropertyType, Nino, TaxYear}
 import api.models.outcomes.ResponseWrapper
 import api.services.ServiceSpec
 import v2.models.request.deleteHistoricUkPropertyAnnualSubmission.DeleteHistoricUkPropertyAnnualSubmissionRequest
@@ -30,23 +29,12 @@ import scala.concurrent.Future
 
 class DeleteHistoricUkPropertyAnnualSubmissionServiceSpec extends ServiceSpec {
 
-  val nino: String                       = "AA123456A"
-  val mtdTaxYear: String                 = "2021-22"
-  val taxYear: TaxYear                   = TaxYear.fromMtd(mtdTaxYear)
-  val propertyType: HistoricPropertyType = HistoricPropertyType.Fhl
+  private val nino: String                       = "AA123456A"
+  private val mtdTaxYear: String                 = "2021-22"
+  private val taxYear: TaxYear                   = TaxYear.fromMtd(mtdTaxYear)
+  private val propertyType: HistoricPropertyType = HistoricPropertyType.Fhl
 
-  implicit val correlationId: String = "X-123"
-
-  private val requestData = DeleteHistoricUkPropertyAnnualSubmissionRequest(Nino(nino), taxYear, propertyType)
-
-  trait Test extends MockDeleteHistoricUkPropertyAnnualSubmissionConnector {
-    implicit val hc: HeaderCarrier              = HeaderCarrier()
-    implicit val logContext: EndpointLogContext = EndpointLogContext("c", "ep")
-
-    val service = new DeleteHistoricUkPropertyAnnualSubmissionService(
-      connector = mockDeleteHistoricUkPropertyAnnualSubmissionConnector
-    )
-  }
+  implicit private val correlationId: String = "X-123"
 
   "service" when {
     "service call successful" should {
@@ -71,7 +59,7 @@ class DeleteHistoricUkPropertyAnnualSubmissionServiceSpec extends ServiceSpec {
             await(service.deleteHistoricUkPropertyAnnualSubmission(requestData)) shouldBe Left(ErrorWrapper(correlationId, error))
           }
 
-        val input = Seq(
+        val input = List(
           "INVALID_NINO"           -> NinoFormatError,
           "INVALID_TAX_YEAR"       -> TaxYearFormatError,
           "INVALID_TYPE"           -> InternalError,
@@ -89,4 +77,18 @@ class DeleteHistoricUkPropertyAnnualSubmissionServiceSpec extends ServiceSpec {
       }
     }
   }
+
+  trait Test extends MockDeleteHistoricUkPropertyAnnualSubmissionConnector {
+    implicit protected val hc: HeaderCarrier              = HeaderCarrier()
+    implicit protected val logContext: EndpointLogContext = EndpointLogContext("c", "ep")
+
+    protected val service = new DeleteHistoricUkPropertyAnnualSubmissionService(
+      connector = mockDeleteHistoricUkPropertyAnnualSubmissionConnector
+    )
+
+    protected val requestData: DeleteHistoricUkPropertyAnnualSubmissionRequest =
+      DeleteHistoricUkPropertyAnnualSubmissionRequest(Nino(nino), taxYear, propertyType)
+
+  }
+
 }

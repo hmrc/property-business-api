@@ -38,20 +38,21 @@ class ListPropertyPeriodSummariesConnector @Inject() (val http: HttpClient, val 
 
     import request._
 
-    if (taxYear.useTaxYearSpecificApi) {
-      val url = s"income-tax/business/property/${taxYear.asTysDownstream}/${nino.nino}/$businessId/period"
-
-      get(uri = TaxYearSpecificIfsUri[ListPropertyPeriodSummariesResponse](url))
+    val (downstreamUri, queryParams) = if (taxYear.useTaxYearSpecificApi) {
+      (
+        TaxYearSpecificIfsUri[ListPropertyPeriodSummariesResponse](
+          s"income-tax/business/property/${taxYear.asTysDownstream}/$nino/$businessId/period"),
+        Nil
+      )
     } else {
-
-      val url = s"income-tax/business/property/${nino.nino}/$businessId/period"
-
-      // Note that MTD tax year format is used
-      get(
-        uri = IfsUri[ListPropertyPeriodSummariesResponse](url),
-        queryParams = Seq("taxYear" -> taxYear.asMtd)
+      (
+        IfsUri[ListPropertyPeriodSummariesResponse](s"income-tax/business/property/$nino/$businessId/period"),
+        // Note that MTD tax year format is used
+        List("taxYear" -> taxYear.asMtd)
       )
     }
+
+    get(downstreamUri, queryParams)
   }
 
 }

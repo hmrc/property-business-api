@@ -16,55 +16,35 @@
 
 package v2.services
 
-import cats.implicits._
+import api.controllers.RequestContext
+import api.models.errors._
+import api.models.outcomes.ResponseWrapper
+import api.services.{BaseService, ServiceOutcome}
 import cats.data.EitherT
-
-import javax.inject.{Inject, Singleton}
-import uk.gov.hmrc.http.HeaderCarrier
-import utils.Logging
+import cats.implicits._
 import v2.connectors.RetrieveForeignPropertyAnnualSubmissionConnector
 import v2.connectors.RetrieveForeignPropertyAnnualSubmissionConnector.{ForeignResult, NonForeignResult}
-import api.controllers.EndpointLogContext
-import api.models.errors.{
-  BusinessIdFormatError,
-  ErrorWrapper,
-  InternalError,
-  NinoFormatError,
-  NotFoundError,
-  RuleTaxYearNotSupportedError,
-  RuleTypeOfBusinessIncorrectError,
-  TaxYearFormatError
-}
-import api.models.outcomes.ResponseWrapper
 import v2.models.request.retrieveForeignPropertyAnnualSubmission.RetrieveForeignPropertyAnnualSubmissionRequest
 import v2.models.response.retrieveForeignPropertyAnnualSubmission.RetrieveForeignPropertyAnnualSubmissionResponse
-import api.services.ServiceOutcome
-import api.support.DownstreamResponseMappingSupport
-import v2.connectors.RetrieveForeignPropertyAnnualSubmissionConnector
-import v2.connectors.RetrieveForeignPropertyAnnualSubmissionConnector
 
+import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class RetrieveForeignPropertyAnnualSubmissionService @Inject() (connector: RetrieveForeignPropertyAnnualSubmissionConnector)
-    extends DownstreamResponseMappingSupport
-    with Logging {
+class RetrieveForeignPropertyAnnualSubmissionService @Inject() (connector: RetrieveForeignPropertyAnnualSubmissionConnector) extends BaseService {
 
   def retrieveForeignProperty(request: RetrieveForeignPropertyAnnualSubmissionRequest)(implicit
-      hc: HeaderCarrier,
-      ec: ExecutionContext,
-      logContext: EndpointLogContext,
-      correlationId: String): Future[ServiceOutcome[RetrieveForeignPropertyAnnualSubmissionResponse]] = {
+      ctx: RequestContext,
+      ec: ExecutionContext): Future[ServiceOutcome[RetrieveForeignPropertyAnnualSubmissionResponse]] = {
 
-    val result = for {
-      connectorResultWrapper <- EitherT(connector.retrieveForeignProperty(request)).leftMap(mapDownstreamErrors(errorMap))
-      mtdResponseWrapper     <- EitherT.fromEither[Future](validateBusinessType(connectorResultWrapper))
-    } yield mtdResponseWrapper
+    val result = EitherT(connector.retrieveForeignProperty(request))
+      .leftMap(mapDownstreamErrors(downstreamErrorMap))
+      .flatMap(connectorResultWrapper => EitherT.fromEither(validateBusinessType(connectorResultWrapper)))
 
     result.value
   }
 
-  private val errorMap = {
+  private val downstreamErrorMap: Map[String, MtdError] = {
     val errors = Map(
       "INVALID_TAXABLE_ENTITY_ID" -> NinoFormatError,
       "INVALID_TAX_YEAR"          -> TaxYearFormatError,

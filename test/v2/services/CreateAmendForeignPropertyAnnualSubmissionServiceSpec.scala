@@ -16,46 +16,25 @@
 
 package v2.services
 
-import support.UnitSpec
-import uk.gov.hmrc.http.HeaderCarrier
 import api.controllers.EndpointLogContext
-import v2.mocks.connectors.MockCreateAmendForeignPropertyAnnualSubmissionConnector
-import v2.models.domain.TaxYear; import api.models.domain.Nino
+import api.models.domain.{Nino, TaxYear}
 import api.models.errors._
 import api.models.outcomes.ResponseWrapper
+import support.UnitSpec
+import uk.gov.hmrc.http.HeaderCarrier
+import v2.mocks.connectors.MockCreateAmendForeignPropertyAnnualSubmissionConnector
 import v2.models.request.createAmendForeignPropertyAnnualSubmission._
-import v2.models.request.createAmendForeignPropertyAnnualSubmission.foreignFhlEea._
-import v2.models.request.createAmendForeignPropertyAnnualSubmission.foreignNonFhl._
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class CreateAmendForeignPropertyAnnualSubmissionServiceSpec extends UnitSpec {
 
-  val nino: String                   = "AA123456A"
-  val businessId: String             = "XAIS12345678910"
-  val taxYear: TaxYear               = TaxYear.fromMtd("2020-21")
-  implicit val correlationId: String = "X-123"
+  private val nino: String       = "AA123456A"
+  private val businessId: String = "XAIS12345678910"
+  private val taxYear: TaxYear   = TaxYear.fromMtd("2020-21")
 
-  private val foreignFhlEea = ForeignFhlEea(None, None)
-
-  private val foreignPropertyEntry = ForeignNonFhlEntry("FRA", None, None)
-
-  val body: CreateAmendForeignPropertyAnnualSubmissionRequestBody = CreateAmendForeignPropertyAnnualSubmissionRequestBody(
-    Some(foreignFhlEea),
-    Some(Seq(foreignPropertyEntry))
-  )
-
-  private val request = CreateAmendForeignPropertyAnnualSubmissionRequest(Nino(nino), businessId, taxYear, body)
-
-  trait Test extends MockCreateAmendForeignPropertyAnnualSubmissionConnector {
-    implicit val hc: HeaderCarrier              = HeaderCarrier()
-    implicit val logContext: EndpointLogContext = EndpointLogContext("c", "ep")
-
-    val service = new CreateAmendForeignPropertyAnnualSubmissionService(
-      connector = mockAmendForeignPropertyAnnualSubmissionConnector
-    )
-  }
+  implicit private val correlationId: String = "X-123"
 
   "service" should {
     "service call successful" when {
@@ -71,7 +50,6 @@ class CreateAmendForeignPropertyAnnualSubmissionServiceSpec extends UnitSpec {
 
   "unsuccessful" should {
     "map errors according to spec" when {
-
       def serviceError(downstreamErrorCode: String, error: MtdError): Unit =
         s"a $downstreamErrorCode error is returned from the service" in new Test {
 
@@ -106,4 +84,20 @@ class CreateAmendForeignPropertyAnnualSubmissionServiceSpec extends UnitSpec {
       (errors ++ extraTysErrors).foreach(args => (serviceError _).tupled(args))
     }
   }
+
+  trait Test extends MockCreateAmendForeignPropertyAnnualSubmissionConnector {
+    implicit protected val hc: HeaderCarrier              = HeaderCarrier()
+    implicit protected val logContext: EndpointLogContext = EndpointLogContext("c", "ep")
+
+    protected val service = new CreateAmendForeignPropertyAnnualSubmissionService(
+      connector = mockAmendForeignPropertyAnnualSubmissionConnector
+    )
+
+    private val body: CreateAmendForeignPropertyAnnualSubmissionRequestBody = CreateAmendForeignPropertyAnnualSubmissionRequestBody(None, None)
+
+    protected val request: CreateAmendForeignPropertyAnnualSubmissionRequest =
+      CreateAmendForeignPropertyAnnualSubmissionRequest(Nino(nino), businessId, taxYear, body)
+
+  }
+
 }

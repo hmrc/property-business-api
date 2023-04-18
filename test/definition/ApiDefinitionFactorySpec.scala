@@ -17,9 +17,9 @@
 package definition
 
 import config.ConfidenceLevelConfig
-import definition.APIStatus.{ ALPHA, BETA }
-import definition.Versions.{ VERSION_1, VERSION_2 }
-import mocks.{ MockAppConfig, MockHttpClient }
+import definition.APIStatus.{ALPHA, BETA}
+import definition.Versions.{VERSION_1, VERSION_2}
+import mocks.{MockAppConfig, MockHttpClient}
 import play.api.Configuration
 import support.UnitSpec
 import uk.gov.hmrc.auth.core.ConfidenceLevel
@@ -41,7 +41,10 @@ class ApiDefinitionFactorySpec extends UnitSpec {
         MockAppConfig.apiStatus("2.0") returns "ALPHA"
         MockAppConfig.endpointsEnabled("1.0") returns true anyNumberOfTimes ()
         MockAppConfig.endpointsEnabled("2.0") returns true anyNumberOfTimes ()
-        MockAppConfig.confidenceLevelCheckEnabled returns ConfidenceLevelConfig(definitionEnabled = true, authValidationEnabled = true) anyNumberOfTimes ()
+        MockAppConfig.confidenceLevelCheckEnabled returns ConfidenceLevelConfig(
+          confidenceLevel = confidenceLevel,
+          definitionEnabled = true,
+          authValidationEnabled = true) anyNumberOfTimes ()
 
         private val readScope  = "read:self-assessment"
         private val writeScope = "write:self-assessment"
@@ -88,17 +91,19 @@ class ApiDefinitionFactorySpec extends UnitSpec {
 
   "confidenceLevel" when {
     Seq(
-      (true, ConfidenceLevel.L200),
-      (false, ConfidenceLevel.L50)
-    ).foreach {
-      case (definitionEnabled, cl) =>
-        s"confidence-level-check.definition.enabled is $definitionEnabled in config" should {
-          s"return $cl" in new Test {
-            MockAppConfig.confidenceLevelCheckEnabled returns ConfidenceLevelConfig(definitionEnabled = definitionEnabled,
-                                                                                    authValidationEnabled = true)
-            apiDefinitionFactory.confidenceLevel shouldBe cl
-          }
+      (true, ConfidenceLevel.L250, ConfidenceLevel.L250),
+      (true, ConfidenceLevel.L200, ConfidenceLevel.L200),
+      (false, ConfidenceLevel.L200, ConfidenceLevel.L50)
+    ).foreach { case (definitionEnabled, configCL, expectedDefinitionCL) =>
+      s"confidence-level-check.definition.enabled is $definitionEnabled and confidence-level = $configCL" should {
+        s"return confidence level $expectedDefinitionCL" in new Test {
+          MockAppConfig.confidenceLevelCheckEnabled returns ConfidenceLevelConfig(
+            confidenceLevel = configCL,
+            definitionEnabled = definitionEnabled,
+            authValidationEnabled = true)
+          apiDefinitionFactory.confidenceLevel shouldBe expectedDefinitionCL
         }
+      }
     }
   }
 
@@ -117,4 +122,5 @@ class ApiDefinitionFactorySpec extends UnitSpec {
       }
     }
   }
+
 }

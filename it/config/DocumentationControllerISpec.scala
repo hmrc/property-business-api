@@ -18,52 +18,56 @@ package config
 
 import io.swagger.v3.parser.OpenAPIV3Parser
 import play.api.http.Status
-import play.api.libs.json.{ JsValue, Json }
+import play.api.libs.json.{Json, JsValue}
 import play.api.libs.ws.WSResponse
 import support.V2IntegrationBaseSpec
+import uk.gov.hmrc.auth.core.ConfidenceLevel
 
 import scala.util.Try
 
 class DocumentationControllerISpec extends V2IntegrationBaseSpec {
 
+  val config: AppConfig = app.injector.instanceOf[AppConfig]
+  val confidenceLevel: ConfidenceLevel = config.confidenceLevelConfig.confidenceLevel
+
   val apiDefinitionJson: JsValue = Json.parse(
-    """
-    |{
-    |   "scopes":[
-    |      {
-    |         "key":"read:self-assessment",
-    |         "name":"View your Self Assessment information",
-    |         "description":"Allow read access to self assessment data",
-    |         "confidenceLevel": 200
-    |      },
-    |      {
-    |         "key":"write:self-assessment",
-    |         "name":"Change your Self Assessment information",
-    |         "description":"Allow write access to self assessment data",
-    |         "confidenceLevel": 200
-    |      }
-    |   ],
-    |   "api":{
-    |      "name":"Property Business (MTD)",
-    |      "description":"An API for providing property business data",
-    |      "context":"individuals/business/property",
-    |      "categories":[
-    |         "INCOME_TAX_MTD"
-    |      ],
-    |      "versions":[
-    |         {
-    |            "version":"1.0",
-    |            "status":"DEPRECATED",
-    |            "endpointsEnabled":true
-    |         },
-    |         {
-    |            "version":"2.0",
-    |            "status":"BETA",
-    |            "endpointsEnabled":true
-    |         }
-    |      ]
-    |   }
-    |}
+    s"""
+       |{
+       |   "scopes":[
+       |      {
+       |         "key":"read:self-assessment",
+       |         "name":"View your Self Assessment information",
+       |         "description":"Allow read access to self assessment data",
+       |         "confidenceLevel": $confidenceLevel
+       |      },
+       |      {
+       |         "key":"write:self-assessment",
+       |         "name":"Change your Self Assessment information",
+       |         "description":"Allow write access to self assessment data",
+       |         "confidenceLevel": $confidenceLevel
+       |      }
+       |   ],
+       |   "api":{
+       |      "name":"Property Business (MTD)",
+       |      "description":"An API for providing property business data",
+       |      "context":"individuals/business/property",
+       |      "categories":[
+       |         "INCOME_TAX_MTD"
+       |      ],
+       |      "versions":[
+       |         {
+       |            "version":"1.0",
+       |            "status":"DEPRECATED",
+       |            "endpointsEnabled":true
+       |         },
+       |         {
+       |            "version":"2.0",
+       |            "status":"BETA",
+       |            "endpointsEnabled":true
+       |         }
+       |      ]
+       |   }
+       |}
     """.stripMargin
   )
 
@@ -80,7 +84,7 @@ class DocumentationControllerISpec extends V2IntegrationBaseSpec {
       val response: WSResponse = await(buildRequest("/api/conf/1.0/application.yaml").get())
       response.status shouldBe Status.OK
 
-      val contents     = response.body[String]
+      val contents = response.body[String]
       val parserResult = Try(new OpenAPIV3Parser().readContents(contents))
       parserResult.isSuccess shouldBe true
 
@@ -97,7 +101,7 @@ class DocumentationControllerISpec extends V2IntegrationBaseSpec {
       val response: WSResponse = await(buildRequest("/api/conf/2.0/application.yaml").get())
       response.status shouldBe Status.OK
 
-      val contents     = response.body[String]
+      val contents = response.body[String]
       val parserResult = Try(new OpenAPIV3Parser().readContents(contents))
       parserResult.isSuccess shouldBe true
 

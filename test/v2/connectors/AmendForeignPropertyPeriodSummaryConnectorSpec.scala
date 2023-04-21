@@ -54,9 +54,10 @@ class AmendForeignPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
         stubHttpResponse(outcome)
         val vendorHc: HeaderCarrier = hc.copy(otherHeaders = otherHeaders :+ ("Content-Type" -> "some-other-content-type"))
 
-        val result: DownstreamOutcome[Unit] = await(connector.amendForeignPropertyPeriodSummary(request)(vendorHc, ec, correlationId))
-        result shouldBe outcome
-
+        withClue("If the Content-Type isn't set correctly, the downstream mock will fail") {
+          val result: DownstreamOutcome[Unit] = await(connector.amendForeignPropertyPeriodSummary(request)(vendorHc, ec, correlationId))
+          result shouldBe outcome
+        }
       }
     }
 

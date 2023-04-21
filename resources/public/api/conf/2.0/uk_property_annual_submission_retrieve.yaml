@@ -26,7 +26,7 @@ description: |
           </tr>
           <tr>
               <td><p>UK_FHL_PROPERTY_ALLOWANCE</p></td>
-              <td><p>Simulates success response with UK Non-FHL property.</p></td>
+              <td><p>Simulates the scenario of a FHL property with property allowance.</p></td>
           </tr>
           <tr>
               <td><p>UK_NON_FHL_ALL_OTHER_ALLOWANCES</p></td>
@@ -92,9 +92,9 @@ responses:
           FORMAT_TAX_YEAR:
             $ref: './common/errors.yaml#/components/examples/formatTaxYear'
           RULE_TAX_YEAR_NOT_SUPPORTED:
-            $ref: './common/errors.yaml#/components/examples/ruleTaxYearNotSupported' 
+            $ref: './common/errors.yaml#/components/examples/ruleTaxYearNotSupported'
           RULE_TAX_YEAR_RANGE_INVALID:
-            $ref: './common/errors.yaml#/components/examples/ruleTaxYearRangeInvalid' 
+            $ref: './common/errors.yaml#/components/examples/ruleTaxYearRangeInvalid'
           RULE_TYPE_OF_BUSINESS_INCORRECT:
             $ref: './common/errors.yaml#/components/examples/ruleTypeOfBusinessIncorrectUk'
           RULE_INCORRECT_GOV_TEST_SCENARIO:

@@ -21,6 +21,7 @@ import api.models.domain.{Nino, TaxYear}
 import api.models.errors.{DownstreamErrorCode, DownstreamErrors}
 import api.models.outcomes.ResponseWrapper
 import org.scalamock.handlers.CallHandler
+import uk.gov.hmrc.http.HeaderCarrier
 import v2.models.request.amendForeignPropertyPeriodSummary._
 
 import scala.concurrent.Future
@@ -33,11 +34,11 @@ class AmendForeignPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
   private val preTysTaxYear        = TaxYear.fromMtd("2022-23")
   private val tysTaxYear           = TaxYear.fromMtd("2023-24")
 
-  "AmendForeignPropertyPeriodSummaryConnector" when {
-    val outcome = Right(ResponseWrapper(correlationId, ()))
+  private val outcome = Right(ResponseWrapper(correlationId, ()))
 
-    "amendForeignPropertyPeriodSummaryConnector" must {
-      "send a request and return 204 no content" in new IfsTest with Test {
+  "amendForeignPropertyPeriodSummary()" when {
+    "sending a request which results in a 204 response" must {
+      "return the expected result" in new IfsTest with Test {
         def taxYear: TaxYear = preTysTaxYear
 
         stubHttpResponse(outcome)
@@ -47,7 +48,19 @@ class AmendForeignPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
       }
     }
 
-    "amendForeignPropertyPeriodSummaryConnector called for a Tax Year Specific tax year" must {
+    "the vendor request has a different content-type" must {
+      "send the downstream request with the correct application/json content-type" in new IfsTest with Test {
+        def taxYear: TaxYear = tysTaxYear
+        stubHttpResponse(outcome)
+        val vendorHc: HeaderCarrier = hc.copy(otherHeaders = otherHeaders :+ ("Content-Type" -> "some-other-content-type"))
+
+        val result: DownstreamOutcome[Unit] = await(connector.amendForeignPropertyPeriodSummary(request)(vendorHc, ec, correlationId))
+        result shouldBe outcome
+
+      }
+    }
+
+    " called for a Tax Year Specific tax year" must {
       "send a request and return 204 no content" in new TysIfsTest with Test {
         def taxYear: TaxYear = tysTaxYear
 
@@ -58,7 +71,7 @@ class AmendForeignPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
       }
     }
 
-    "response is an error" must {
+    "the response is an error" must {
 
       val downstreamErrorResponse: DownstreamErrors =
         DownstreamErrors.single(DownstreamErrorCode("SOME_ERROR"))

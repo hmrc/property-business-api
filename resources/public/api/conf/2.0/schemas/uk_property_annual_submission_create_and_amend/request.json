@@ -57,11 +57,16 @@
                 }
               },
               "additionalProperties": false,
-              "required": ["jointlyLet"]
+              "required": [
+                "jointlyLet"
+              ]
             }
           },
           "additionalProperties": false,
-          "required": ["periodOfGraceAdjustment", "nonResidentLandlord"]
+          "required": [
+            "periodOfGraceAdjustment",
+            "nonResidentLandlord"
+          ]
         },
         "allowances": {
           "type": "object",
@@ -160,7 +165,7 @@
             },
             "rentARoom": {
               "type": "object",
-              "description": "Object holding Non UK FHL Rent A Room income shared.",
+              "description": "Object holding UK Non FHL Rent A Room income shared.",
               "properties": {
                 "jointlyLet": {
                   "type": "boolean",
@@ -169,11 +174,15 @@
                 }
               },
               "additionalProperties": false,
-              "required": ["jointlyLet"]
+              "required": [
+                "jointlyLet"
+              ]
             }
           },
           "additionalProperties": false,
-          "required": ["nonResidentLandlord"]
+          "required": [
+            "nonResidentLandlord"
+          ]
         },
         "allowances": {
           "type": "object",
@@ -276,7 +285,10 @@
                       }
                     },
                     "additionalProperties": false,
-                    "required": ["qualifyingDate", "qualifyingAmountExpenditure"]
+                    "required": [
+                      "qualifyingDate",
+                      "qualifyingAmountExpenditure"
+                    ]
                   },
                   "building": {
                     "type": "object",
@@ -302,11 +314,16 @@
                       }
                     },
                     "additionalProperties": false,
-                    "required": ["postcode"]
+                    "required": [
+                      "postcode"
+                    ]
                   }
                 },
                 "additionalProperties": false,
-                "required": ["amount", "building"]
+                "required": [
+                  "amount",
+                  "building"
+                ]
               },
               "additionalItems": false
             },
@@ -343,7 +360,10 @@
                       }
                     },
                     "additionalProperties": false,
-                    "required": ["qualifyingDate", "qualifyingAmountExpenditure"]
+                    "required": [
+                      "qualifyingDate",
+                      "qualifyingAmountExpenditure"
+                    ]
                   },
                   "building": {
                     "type": "object",
@@ -369,11 +389,16 @@
                       }
                     },
                     "additionalProperties": false,
-                    "required": ["postcode"]
+                    "required": [
+                      "postcode"
+                    ]
                   }
                 },
                 "additionalProperties": false,
-                "required": ["amount", "building"]
+                "required": [
+                  "amount",
+                  "building"
+                ]
               },
               "additionalItems": false
             }

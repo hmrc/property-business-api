@@ -133,7 +133,7 @@
             },
             "rentARoom": {
               "type": "object",
-              "description": "Object holding Non UK FHL Rent A Room income shared.",
+              "description": "Object holding UK Non FHL Rent A Room income shared.",
               "properties": {
                 "jointlyLet": {
                   "type": "boolean",
@@ -191,10 +191,10 @@
               "example": "5000.99"
             },
             "structuredBuildingAllowance": {
-              "type":  "array",
+              "type": "array",
               "description": "Details about structured building allowance.",
               "items": {
-               "type": "object",
+                "type": "object",
                 "properties": {
                   "amount": {
                     "type": "number",

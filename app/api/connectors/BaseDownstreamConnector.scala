@@ -16,13 +16,13 @@
 
 package api.connectors
 
+import api.connectors.DownstreamUri.{DesUri, IfsUri, TaxYearSpecificIfsUri}
 import config.{AppConfig, FeatureSwitches}
 import play.api.http.{HeaderNames, MimeTypes}
 import play.api.libs.json.Writes
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, HttpReads}
 import utils.Logging
 import utils.UrlUtils.appendQueryParams
-import api.connectors.DownstreamUri.{DesUri, IfsUri, TaxYearSpecificIfsUri}
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -98,13 +98,13 @@ trait BaseDownstreamConnector extends Logging {
     val downstreamConfig = configFor(uri)
 
     val passThroughHeaders = hc
-      .headers(downstreamConfig.environmentHeaders.getOrElse(Seq.empty))
+      .headers(downstreamConfig.environmentHeaders.getOrElse(Nil))
       .filterNot(hdr => additionalHeaders.exists(_._1.equalsIgnoreCase(hdr._1)))
 
     HeaderCarrier(
       extraHeaders = hc.extraHeaders ++
         // Contract headers
-        Seq(
+        List(
           "Authorization" -> s"Bearer ${downstreamConfig.token}",
           "Environment"   -> downstreamConfig.env,
           "CorrelationId" -> correlationId

@@ -24,6 +24,10 @@ description: |
               <td><p>TYPE_OF_BUSINESS_INCORRECT</p></td>
               <td><p>Simulates the scenario where a businessId for something other than a UK property is supplied.</p></td>
           </tr>
+          <tr>
+              <td><p>PROPERTY_INCOME_ALLOWANCE</p></td>
+              <td><p>Simulates the scenario where the propertyIncomeAllowance is submitted when privateUseAdjustment is supplied</p></td>
+          </tr>
       </tbody>
   </table>
 
@@ -104,6 +108,8 @@ responses:
             $ref: './common/errors.yaml#/components/examples/ruleTaxYearNotSupported' 
           RULE_TYPE_OF_BUSINESS_INCORRECT:
             $ref: './common/errors.yaml#/components/examples/ruleTypeOfBusinessIncorrectUk'
+          RULE_PROPERTY_INCOME_ALLOWANCE:
+            $ref: './common/errors.yaml#/components/examples/rulePropertyIncomeAllowance'
           RULE_INCORRECT_GOV_TEST_SCENARIO:
             $ref: './common/errors.yaml#/components/examples/ruleIncorrectGovTestScenario'
 

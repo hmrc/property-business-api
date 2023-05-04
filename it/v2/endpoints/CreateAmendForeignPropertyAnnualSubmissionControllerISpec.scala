@@ -30,234 +30,249 @@ import v2.stubs.{ AuditStub, AuthStub, DownstreamStub, MtdIdLookupStub }
 class CreateAmendForeignPropertyAnnualSubmissionControllerISpec extends V2IntegrationBaseSpec with CreateAmendForeignPropertyAnnualSubmissionFixture {
 
   val requestBodyJson: JsValue = Json.parse("""
-      |{
-      |   "foreignFhlEea":{
-      |      "adjustments":{
-      |         "privateUseAdjustment":1.25,
-      |         "balancingCharge":2.25,
-      |         "periodOfGraceAdjustment":true
-      |      },
-      |      "allowances":{
-      |         "annualInvestmentAllowance":1.25,
-      |         "otherCapitalAllowance":2.25,
-      |         "electricChargePointAllowance":3.25,
-      |         "zeroEmissionsCarAllowance":4.25
-      |      }
-      |   },
-      |   "foreignNonFhlProperty":[
-      |      {
-      |         "countryCode":"IND",
-      |         "adjustments":{
-      |            "privateUseAdjustment":1.25,
-      |            "balancingCharge":2.25
-      |         },
-      |         "allowances":{
-      |            "annualInvestmentAllowance":1.25,
-      |            "costOfReplacingDomesticItems":2.25,
-      |            "zeroEmissionsGoodsVehicleAllowance":3.25,
-      |            "otherCapitalAllowance":4.25,
-      |            "electricChargePointAllowance":5.25,
-      |            "zeroEmissionsCarAllowance":6.25,
-      |            "structuredBuildingAllowance":[
-      |               {
-      |                  "amount":3000.3,
-      |                  "firstYear":{
-      |                     "qualifyingDate":"2020-01-01",
-      |                     "qualifyingAmountExpenditure":3000.4
-      |                  },
-      |                  "building":{
-      |                     "name":"house name",
-      |                     "number":"house number",
-      |                     "postcode":"GF49JH"
-      |                  }
-      |               }
-      |            ]
-      |         }
-      |      }
-      |   ]
-      |}
-      |""".stripMargin)
+                                              |{
+                                              |   "foreignFhlEea":{
+                                              |      "adjustments":{
+                                              |         "privateUseAdjustment":1.25,
+                                              |         "balancingCharge":2.25,
+                                              |         "periodOfGraceAdjustment":true
+                                              |      },
+                                              |      "allowances":{
+                                              |         "annualInvestmentAllowance":1.25,
+                                              |         "otherCapitalAllowance":2.25,
+                                              |         "electricChargePointAllowance":3.25,
+                                              |         "zeroEmissionsCarAllowance":4.25
+                                              |      }
+                                              |   },
+                                              |   "foreignNonFhlProperty":[
+                                              |      {
+                                              |         "countryCode":"IND",
+                                              |         "adjustments":{
+                                              |            "privateUseAdjustment":1.25,
+                                              |            "balancingCharge":2.25
+                                              |         },
+                                              |         "allowances":{
+                                              |            "annualInvestmentAllowance":1.25,
+                                              |            "costOfReplacingDomesticItems":2.25,
+                                              |            "zeroEmissionsGoodsVehicleAllowance":3.25,
+                                              |            "otherCapitalAllowance":4.25,
+                                              |            "electricChargePointAllowance":5.25,
+                                              |            "zeroEmissionsCarAllowance":6.25,
+                                              |            "structuredBuildingAllowance":[
+                                              |               {
+                                              |                  "amount":3000.3,
+                                              |                  "firstYear":{
+                                              |                     "qualifyingDate":"2020-01-01",
+                                              |                     "qualifyingAmountExpenditure":3000.4
+                                              |                  },
+                                              |                  "building":{
+                                              |                     "name":"house name",
+                                              |                     "number":"house number",
+                                              |                     "postcode":"GF49JH"
+                                              |                  }
+                                              |               }
+                                              |            ]
+                                              |         }
+                                              |      }
+                                              |   ]
+                                              |}
+                                              |""".stripMargin)
 
   val invalidFieldsTypeRequestBodyJson: JsValue = Json.parse("""
-      |{
-      |   "foreignFhlEea":{
-      |      "adjustments":{
-      |         "privateUseAdjustment":"OK",
-      |         "balancingCharge":"OK",
-      |         "periodOfGraceAdjustment":true
-      |      },
-      |      "allowances":{
-      |         "annualInvestmentAllowance":"OK",
-      |         "otherCapitalAllowance":"OK",
-      |         "electricChargePointAllowance":3.25,
-      |         "zeroEmissionsCarAllowance":4.25
-      |      }
-      |   },
-      |   "foreignNonFhlProperty":[
-      |      {
-      |         "countryCode":"IND",
-      |         "adjustments":{
-      |            "privateUseAdjustment":"OK",
-      |            "balancingCharge":"OK"
-      |         },
-      |         "allowances":{
-      |            "annualInvestmentAllowance":"OK",
-      |            "costOfReplacingDomesticItems":2.25,
-      |            "zeroEmissionsGoodsVehicleAllowance":3.25,
-      |            "otherCapitalAllowance":4.25,
-      |            "electricChargePointAllowance":5.25,
-      |            "zeroEmissionsCarAllowance":6.25,
-      |            "structuredBuildingAllowance":[
-      |               {
-      |                  "amount":3000.3,
-      |                  "firstYear":{
-      |                     "qualifyingDate":1.25,
-      |                     "qualifyingAmountExpenditure":3000.4
-      |                  },
-      |                  "building":{
-      |                     "name":11,
-      |                     "number":44,
-      |                     "postcode":99
-      |                  }
-      |               }
-      |            ]
-      |         }
-      |      }
-      |   ]
-      |}
-      |""".stripMargin)
+                                                               |{
+                                                               |   "foreignFhlEea":{
+                                                               |      "adjustments":{
+                                                               |         "privateUseAdjustment":"OK",
+                                                               |         "balancingCharge":"OK",
+                                                               |         "periodOfGraceAdjustment":true
+                                                               |      },
+                                                               |      "allowances":{
+                                                               |         "annualInvestmentAllowance":"OK",
+                                                               |         "otherCapitalAllowance":"OK",
+                                                               |         "electricChargePointAllowance":3.25,
+                                                               |         "zeroEmissionsCarAllowance":4.25
+                                                               |      }
+                                                               |   },
+                                                               |   "foreignNonFhlProperty":[
+                                                               |      {
+                                                               |         "countryCode":"IND",
+                                                               |         "adjustments":{
+                                                               |            "privateUseAdjustment":"OK",
+                                                               |            "balancingCharge":"OK"
+                                                               |         },
+                                                               |         "allowances":{
+                                                               |            "annualInvestmentAllowance":"OK",
+                                                               |            "costOfReplacingDomesticItems":2.25,
+                                                               |            "zeroEmissionsGoodsVehicleAllowance":3.25,
+                                                               |            "otherCapitalAllowance":4.25,
+                                                               |            "electricChargePointAllowance":5.25,
+                                                               |            "zeroEmissionsCarAllowance":6.25,
+                                                               |            "structuredBuildingAllowance":[
+                                                               |               {
+                                                               |                  "amount":3000.3,
+                                                               |                  "firstYear":{
+                                                               |                     "qualifyingDate":1.25,
+                                                               |                     "qualifyingAmountExpenditure":3000.4
+                                                               |                  },
+                                                               |                  "building":{
+                                                               |                     "name":11,
+                                                               |                     "number":44,
+                                                               |                     "postcode":99
+                                                               |                  }
+                                                               |               }
+                                                               |            ]
+                                                               |         }
+                                                               |      }
+                                                               |   ]
+                                                               |}
+                                                               |""".stripMargin)
 
   val invalidFieldsRequestBodyJson: JsValue = Json.parse("""
-      |{
-      |   "foreignFhlEea":{
-      |      "adjustments":{
-      |         "privateUseAdjustment":123.456,
-      |         "balancingCharge":123.456,
-      |         "periodOfGraceAdjustment":true
-      |      },
-      |      "allowances":{
-      |         "annualInvestmentAllowance":123.456,
-      |         "otherCapitalAllowance":123.456,
-      |         "electricChargePointAllowance":3.25,
-      |         "zeroEmissionsCarAllowance":4.25
-      |      }
-      |   },
-      |   "foreignNonFhlProperty":[
-      |      {
-      |         "countryCode":"IND",
-      |         "adjustments":{
-      |            "privateUseAdjustment":123.456,
-      |            "balancingCharge":123.456
-      |         },
-      |         "allowances":{
-      |            "annualInvestmentAllowance":123.456,
-      |            "costOfReplacingDomesticItems":2.25,
-      |            "zeroEmissionsGoodsVehicleAllowance":3.25,
-      |            "otherCapitalAllowance":4.25,
-      |            "electricChargePointAllowance":5.25,
-      |            "zeroEmissionsCarAllowance":6.25,
-      |            "structuredBuildingAllowance":[
-      |               {
-      |                  "amount":3000.3,
-      |                  "firstYear":{
-      |                     "qualifyingDate":"9999-99-99",
-      |                     "qualifyingAmountExpenditure":3000.4
-      |                  },
-      |                  "building":{
-      |                     "name": "x * 91",
-      |                     "number":"x * 91",
-      |                     "postcode":"x * 91"
-      |                  }
-      |               }
-      |            ]
-      |         }
-      |      }
-      |   ]
-      |}
-      |""".stripMargin)
+                                                           |{
+                                                           |   "foreignFhlEea":{
+                                                           |      "adjustments":{
+                                                           |         "privateUseAdjustment":123.456,
+                                                           |         "balancingCharge":123.456,
+                                                           |         "periodOfGraceAdjustment":true
+                                                           |      },
+                                                           |      "allowances":{
+                                                           |         "annualInvestmentAllowance":123.456,
+                                                           |         "otherCapitalAllowance":123.456,
+                                                           |         "electricChargePointAllowance":3.25,
+                                                           |         "zeroEmissionsCarAllowance":4.25
+                                                           |      }
+                                                           |   },
+                                                           |   "foreignNonFhlProperty":[
+                                                           |      {
+                                                           |         "countryCode":"IND",
+                                                           |         "adjustments":{
+                                                           |            "privateUseAdjustment":123.456,
+                                                           |            "balancingCharge":123.456
+                                                           |         },
+                                                           |         "allowances":{
+                                                           |            "annualInvestmentAllowance":123.456,
+                                                           |            "costOfReplacingDomesticItems":2.25,
+                                                           |            "zeroEmissionsGoodsVehicleAllowance":3.25,
+                                                           |            "otherCapitalAllowance":4.25,
+                                                           |            "electricChargePointAllowance":5.25,
+                                                           |            "zeroEmissionsCarAllowance":6.25,
+                                                           |            "structuredBuildingAllowance":[
+                                                           |               {
+                                                           |                  "amount":3000.3,
+                                                           |                  "firstYear":{
+                                                           |                     "qualifyingDate":"9999-99-99",
+                                                           |                     "qualifyingAmountExpenditure":3000.4
+                                                           |                  },
+                                                           |                  "building":{
+                                                           |                     "name": "x * 91",
+                                                           |                     "number":"x * 91",
+                                                           |                     "postcode":"x * 91"
+                                                           |                  }
+                                                           |               }
+                                                           |            ]
+                                                           |         }
+                                                           |      }
+                                                           |   ]
+                                                           |}
+                                                           |""".stripMargin)
 
   val ruleCountryCodeErrorRequestJson: JsValue = Json.parse("""
-      |{
-      |   "foreignNonFhlProperty":[
-      |      {
-      |         "countryCode":"QQQ",
-      |         "adjustments":{
-      |            "privateUseAdjustment":1.25,
-      |            "balancingCharge":2.25
-      |         }
-      |      }
-      |   ]
-      |}
-      |""".stripMargin)
+                                                              |{
+                                                              |   "foreignNonFhlProperty":[
+                                                              |      {
+                                                              |         "countryCode":"QQQ",
+                                                              |         "adjustments":{
+                                                              |            "privateUseAdjustment":1.25,
+                                                              |            "balancingCharge":2.25
+                                                              |         }
+                                                              |      }
+                                                              |   ]
+                                                              |}
+                                                              |""".stripMargin)
 
   val formatCountryCodeErrorRequestJson: JsValue = Json.parse("""
-      |{
-      |   "foreignNonFhlProperty":[
-      |      {
-      |         "countryCode":"QQQQ",
-      |         "adjustments":{
-      |            "privateUseAdjustment":1.25,
-      |            "balancingCharge":2.25
-      |         }
-      |      }
-      |   ]
-      |}
-      |""".stripMargin)
+                                                                |{
+                                                                |   "foreignNonFhlProperty":[
+                                                                |      {
+                                                                |         "countryCode":"QQQQ",
+                                                                |         "adjustments":{
+                                                                |            "privateUseAdjustment":1.25,
+                                                                |            "balancingCharge":2.25
+                                                                |         }
+                                                                |      }
+                                                                |   ]
+                                                                |}
+                                                                |""".stripMargin)
 
   val duplicateCountryCodeErrorRequestJson: JsValue = Json.parse("""
-      |{
-      |   "foreignNonFhlProperty":[
-      |      {
-      |         "countryCode":"IND",
-      |         "adjustments":{
-      |            "privateUseAdjustment":1.25,
-      |            "balancingCharge":2.25
-      |         }
-      |      },
-      |      {
-      |         "countryCode":"IND",
-      |         "adjustments":{
-      |            "privateUseAdjustment":1.25,
-      |            "balancingCharge":2.25
-      |         }
-      |      }
-      |   ]
-      |}
-      |""".stripMargin)
+                                                                   |{
+                                                                   |   "foreignNonFhlProperty":[
+                                                                   |      {
+                                                                   |         "countryCode":"IND",
+                                                                   |         "adjustments":{
+                                                                   |            "privateUseAdjustment":1.25,
+                                                                   |            "balancingCharge":2.25
+                                                                   |         }
+                                                                   |      },
+                                                                   |      {
+                                                                   |         "countryCode":"IND",
+                                                                   |         "adjustments":{
+                                                                   |            "privateUseAdjustment":1.25,
+                                                                   |            "balancingCharge":2.25
+                                                                   |         }
+                                                                   |      }
+                                                                   |   ]
+                                                                   |}
+                                                                   |""".stripMargin)
+
+  val rulePropertyIncomeAllowanceErrorRequestJson: JsValue = Json.parse("""
+                                                                          |{
+                                                                          |   "foreignFhlEea":{
+                                                                          |      "adjustments":{
+                                                                          |         "privateUseAdjustment":4.25,
+                                                                          |         "balancingCharge":5.25,
+                                                                          |         "periodOfGraceAdjustment":true
+                                                                          |      },
+                                                                          |      "allowances":{
+                                                                          |         "propertyIncomeAllowance":5.25
+                                                                          |      }
+                                                                          |   }
+                                                                          |}
+                                                                          |""".stripMargin)
 
   val bothAllowancesSuppliedErrorRequestJson: JsValue = Json.parse("""
-      |{
-      |   "foreignFhlEea":{
-      |      "allowances":{
-      |         "annualInvestmentAllowance":3.25,
-      |         "otherCapitalAllowance":4.25,
-      |         "electricChargePointAllowance":3.25,
-      |         "zeroEmissionsCarAllowance":4.25,
-      |         "propertyIncomeAllowance":5.25
-      |      }
-      |   }
-      |}
-      |""".stripMargin)
+                                                                     |{
+                                                                     |   "foreignFhlEea":{
+                                                                     |      "allowances":{
+                                                                     |         "annualInvestmentAllowance":3.25,
+                                                                     |         "otherCapitalAllowance":4.25,
+                                                                     |         "electricChargePointAllowance":3.25,
+                                                                     |         "zeroEmissionsCarAllowance":4.25,
+                                                                     |         "propertyIncomeAllowance":5.25
+                                                                     |      }
+                                                                     |   }
+                                                                     |}
+                                                                     |""".stripMargin)
 
   val ruleBuildingNameOrNumberErrorRequestJson: JsValue = Json.parse("""
-      |{
-      |   "foreignNonFhlProperty":[
-      |      {
-      |        "countryCode":"IND",
-      |        "allowances":{
-      |            "structuredBuildingAllowance":[
-      |               {
-      |                  "amount":3000.3,
-      |                  "building":{
-      |                    "postcode":"GF49JH"
-      |                  }
-      |               }
-      |            ]
-      |         }
-      |      }
-      |   ]
-      |}
-      |""".stripMargin)
+                                                                       |{
+                                                                       |   "foreignNonFhlProperty":[
+                                                                       |      {
+                                                                       |        "countryCode":"IND",
+                                                                       |        "allowances":{
+                                                                       |            "structuredBuildingAllowance":[
+                                                                       |               {
+                                                                       |                  "amount":3000.3,
+                                                                       |                  "building":{
+                                                                       |                    "postcode":"GF49JH"
+                                                                       |                  }
+                                                                       |               }
+                                                                       |            ]
+                                                                       |         }
+                                                                       |      }
+                                                                       |   ]
+                                                                       |}
+                                                                       |""".stripMargin)
 
   "Calling the amend foreign property annual submission endpoint" should {
 
@@ -299,24 +314,24 @@ class CreateAmendForeignPropertyAnnualSubmissionControllerISpec extends V2Integr
 
         val errorResponseJson: JsValue =
           Json.parse("""
-            |{
-            |   "code":"RULE_INCORRECT_OR_EMPTY_BODY_SUBMITTED",
-            |   "message":"An empty or non-matching body was submitted",
-            |   "paths":[
-            |      "/foreignNonFhlProperty/0/adjustments/privateUseAdjustment",
-            |      "/foreignNonFhlProperty/0/allowances/structuredBuildingAllowance/0/firstYear/qualifyingDate",
-            |      "/foreignFhlEea/allowances/otherCapitalAllowance",
-            |      "/foreignNonFhlProperty/0/allowances/structuredBuildingAllowance/0/building/name",
-            |      "/foreignNonFhlProperty/0/adjustments/balancingCharge",
-            |      "/foreignNonFhlProperty/0/allowances/annualInvestmentAllowance",
-            |      "/foreignNonFhlProperty/0/allowances/structuredBuildingAllowance/0/building/postcode",
-            |      "/foreignNonFhlProperty/0/allowances/structuredBuildingAllowance/0/building/number",
-            |      "/foreignFhlEea/adjustments/privateUseAdjustment",
-            |      "/foreignFhlEea/adjustments/balancingCharge",
-            |      "/foreignFhlEea/allowances/annualInvestmentAllowance"
-            |   ]
-            |}
-            |""".stripMargin)
+                       |{
+                       |   "code":"RULE_INCORRECT_OR_EMPTY_BODY_SUBMITTED",
+                       |   "message":"An empty or non-matching body was submitted",
+                       |   "paths":[
+                       |      "/foreignNonFhlProperty/0/adjustments/privateUseAdjustment",
+                       |      "/foreignNonFhlProperty/0/allowances/structuredBuildingAllowance/0/firstYear/qualifyingDate",
+                       |      "/foreignFhlEea/allowances/otherCapitalAllowance",
+                       |      "/foreignNonFhlProperty/0/allowances/structuredBuildingAllowance/0/building/name",
+                       |      "/foreignNonFhlProperty/0/adjustments/balancingCharge",
+                       |      "/foreignNonFhlProperty/0/allowances/annualInvestmentAllowance",
+                       |      "/foreignNonFhlProperty/0/allowances/structuredBuildingAllowance/0/building/postcode",
+                       |      "/foreignNonFhlProperty/0/allowances/structuredBuildingAllowance/0/building/number",
+                       |      "/foreignFhlEea/adjustments/privateUseAdjustment",
+                       |      "/foreignFhlEea/adjustments/balancingCharge",
+                       |      "/foreignFhlEea/allowances/annualInvestmentAllowance"
+                       |   ]
+                       |}
+                       |""".stripMargin)
 
         override def setupStubs(): StubMapping = {
           AuditStub.audit()
@@ -410,37 +425,37 @@ class CreateAmendForeignPropertyAnnualSubmissionControllerISpec extends V2Integr
         ("AA123456A", "XAIS12345678910", "2021-24", requestBodyJson, BAD_REQUEST, RuleTaxYearRangeInvalidError),
         ("AA123456A", "XAIS12345678910", "2018-19", requestBodyJson, BAD_REQUEST, RuleTaxYearNotSupportedError),
         ("AA123456A",
-         "XAIS12345678910",
-         "2021-22",
-         Json.parse(s"""{
-             |
-             |}""".stripMargin),
-         BAD_REQUEST,
-         RuleIncorrectOrEmptyBodyError),
+          "XAIS12345678910",
+          "2021-22",
+          Json.parse(s"""{
+                        |
+                        |}""".stripMargin),
+          BAD_REQUEST,
+          RuleIncorrectOrEmptyBodyError),
         ("AA123456A",
-         "XAIS12345678910",
-         "2021-22",
-         ruleCountryCodeErrorRequestJson,
-         BAD_REQUEST,
-         RuleCountryCodeError.copy(paths = Some(Seq("/foreignNonFhlProperty/0/countryCode")))),
+          "XAIS12345678910",
+          "2021-22",
+          ruleCountryCodeErrorRequestJson,
+          BAD_REQUEST,
+          RuleCountryCodeError.copy(paths = Some(Seq("/foreignNonFhlProperty/0/countryCode")))),
         ("AA123456A",
-         "XAIS12345678910",
-         "2021-22",
-         formatCountryCodeErrorRequestJson,
-         BAD_REQUEST,
-         CountryCodeFormatError.copy(paths = Some(Seq("/foreignNonFhlProperty/0/countryCode")))),
+          "XAIS12345678910",
+          "2021-22",
+          formatCountryCodeErrorRequestJson,
+          BAD_REQUEST,
+          CountryCodeFormatError.copy(paths = Some(Seq("/foreignNonFhlProperty/0/countryCode")))),
         ("AA123456A",
-         "XAIS12345678910",
-         "2021-22",
-         bothAllowancesSuppliedErrorRequestJson,
-         BAD_REQUEST,
-         RuleBothAllowancesSuppliedError.copy(paths = Some(Seq("/foreignFhlEea/allowances")))),
+          "XAIS12345678910",
+          "2021-22",
+          bothAllowancesSuppliedErrorRequestJson,
+          BAD_REQUEST,
+          RuleBothAllowancesSuppliedError.copy(paths = Some(Seq("/foreignFhlEea/allowances")))),
         ("AA123456A",
-         "XAIS12345678910",
-         "2022-23",
-         ruleBuildingNameOrNumberErrorRequestJson,
-         BAD_REQUEST,
-         RuleBuildingNameNumberError.copy(paths = Some(Seq("/foreignNonFhlProperty/0/allowances/structuredBuildingAllowance/0/building"))))
+          "XAIS12345678910",
+          "2022-23",
+          ruleBuildingNameOrNumberErrorRequestJson,
+          BAD_REQUEST,
+          RuleBuildingNameNumberError.copy(paths = Some(Seq("/foreignNonFhlProperty/0/allowances/structuredBuildingAllowance/0/building"))))
       )
       input.foreach(args => (validationErrorTest _).tupled(args))
     }
@@ -472,12 +487,14 @@ class CreateAmendForeignPropertyAnnualSubmissionControllerISpec extends V2Integr
         (BAD_REQUEST, "INVALID_CORRELATIONID", INTERNAL_SERVER_ERROR, InternalError),
         (NOT_FOUND, "INCOME_SOURCE_NOT_FOUND", NOT_FOUND, NotFoundError),
         (UNPROCESSABLE_ENTITY, "MISSING_ALLOWANCES", INTERNAL_SERVER_ERROR, InternalError),
+        (UNPROCESSABLE_ENTITY, "DUPLICATE_COUNTRY_CODE", BAD_REQUEST, RuleDuplicateCountryCodeError),
         (INTERNAL_SERVER_ERROR, "SERVER_ERROR", INTERNAL_SERVER_ERROR, InternalError),
         (SERVICE_UNAVAILABLE, "SERVICE_UNAVAILABLE", INTERNAL_SERVER_ERROR, InternalError)
       )
 
       val extraTysErrors = List(
-        (UNPROCESSABLE_ENTITY, "MISSING_EXPENSES", INTERNAL_SERVER_ERROR, InternalError)
+        (UNPROCESSABLE_ENTITY, "MISSING_EXPENSES", INTERNAL_SERVER_ERROR, InternalError),
+        (UNPROCESSABLE_ENTITY, "FIELD_CONFLICT", BAD_REQUEST, RulePropertyIncomeAllowanceError)
       )
 
       (errors ++ extraTysErrors).foreach(args => (serviceErrorTest _).tupled(args))

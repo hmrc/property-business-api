@@ -48,6 +48,7 @@ class CreateAmendForeignPropertyAnnualSubmissionService @Inject() (connector: Cr
       "MISSING_ALLOWANCES"          -> InternalError,
       "INVALID_PAYLOAD"             -> InternalError,
       "INVALID_CORRELATIONID"       -> InternalError,
+      "DUPLICATE_COUNTRY_CODE"      -> RuleDuplicateCountryCodeError,
       "SERVER_ERROR"                -> InternalError,
       "SERVICE_UNAVAILABLE"         -> InternalError
     )

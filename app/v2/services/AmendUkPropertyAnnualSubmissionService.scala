@@ -53,7 +53,8 @@ class AmendUkPropertyAnnualSubmissionService @Inject() (connector: AmendUkProper
     )
 
     val extraTysErrors = Map(
-      "MISSING_EXPENSES" -> InternalError
+      "MISSING_EXPENSES" -> InternalError,
+      "FIELD_CONFLICT"   -> RulePropertyIncomeAllowanceError
     )
 
     errors ++ extraTysErrors

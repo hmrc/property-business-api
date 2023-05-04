@@ -53,7 +53,8 @@ class CreateAmendForeignPropertyAnnualSubmissionService @Inject() (connector: Cr
     )
 
     val extraTysErrors = Map(
-      "MISSING_EXPENSES" -> InternalError
+      "MISSING_EXPENSES" -> InternalError,
+      "FIELD_CONFLICT"   -> RulePropertyIncomeAllowanceError
     )
 
     errors ++ extraTysErrors

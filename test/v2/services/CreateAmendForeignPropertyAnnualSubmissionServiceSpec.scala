@@ -76,6 +76,7 @@ class CreateAmendForeignPropertyAnnualSubmissionServiceSpec extends UnitSpec {
 
       val extraTysErrors = List(
         "MISSING_EXPENSES" -> InternalError,
+        "FIELD_CONFLICT"   -> RulePropertyIncomeAllowanceError
       )
 
       (errors ++ extraTysErrors).foreach(args => (serviceError _).tupled(args))

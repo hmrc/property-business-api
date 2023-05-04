@@ -111,10 +111,6 @@ responses:
             $ref: './common/errors.yaml#/components/examples/ruleBuildingNameNumber'
           RULE_COUNTRY_CODE:
             $ref: './common/errors.yaml#/components/examples/ruleCountryCode'
-          RULE_DUPLICATE_COUNTRY_CODE:
-            $ref: './common/errors.yaml#/components/examples/ruleDuplicateCountryCode'
-          RULE_PROPERTY_INCOME_ALLOWANCE:
-            $ref: './common/errors.yaml#/components/examples/rulePropertyIncomeAllowance'
           RULE_INCORRECT_GOV_TEST_SCENARIO:
             $ref: './common/errors.yaml#/components/examples/ruleIncorrectGovTestScenario'
 

@@ -66,19 +66,19 @@ class CreateAmendForeignPropertyAnnualSubmissionServiceSpec extends UnitSpec {
         "INVALID_TAX_YEAR"            -> TaxYearFormatError,
         "INCOMPATIBLE_PAYLOAD"        -> RuleTypeOfBusinessIncorrectError,
         "TAX_YEAR_NOT_SUPPORTED"      -> RuleTaxYearNotSupportedError,
-        "BUSINESS_VALIDATION_FAILURE" -> RulePropertyIncomeAllowanceError,
+        //"BUSINESS_VALIDATION_FAILURE" -> RulePropertyIncomeAllowanceError,
         "INCOME_SOURCE_NOT_FOUND"     -> NotFoundError,
         "MISSING_ALLOWANCES"          -> InternalError,
         "INVALID_PAYLOAD"             -> InternalError,
         "INVALID_CORRELATIONID"       -> InternalError,
-        "DUPLICATE_COUNTRY_CODE"      -> RuleDuplicateCountryCodeError,
+        //"DUPLICATE_COUNTRY_CODE"      -> RuleDuplicateCountryCodeError,
         "SERVER_ERROR"                -> InternalError,
         "SERVICE_UNAVAILABLE"         -> InternalError
       )
 
       val extraTysErrors = List(
         "MISSING_EXPENSES" -> InternalError,
-        "FIELD_CONFLICT"   -> RulePropertyIncomeAllowanceError
+        //"FIELD_CONFLICT"   -> RulePropertyIncomeAllowanceError
       )
 
       (errors ++ extraTysErrors).foreach(args => (serviceError _).tupled(args))

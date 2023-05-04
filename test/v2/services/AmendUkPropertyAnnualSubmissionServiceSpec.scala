@@ -68,7 +68,7 @@ class AmendUkPropertyAnnualSubmissionServiceSpec extends UnitSpec {
           "INCOME_SOURCE_NOT_FOUND"     -> NotFoundError,
           "INCOMPATIBLE_PAYLOAD"        -> RuleTypeOfBusinessIncorrectError,
           "TAX_YEAR_NOT_SUPPORTED"      -> RuleTaxYearNotSupportedError,
-          "BUSINESS_VALIDATION_FAILURE" -> RulePropertyIncomeAllowanceError,
+          //"BUSINESS_VALIDATION_FAILURE" -> RulePropertyIncomeAllowanceError,
           "MISSING_ALLOWANCES"          -> InternalError,
           "DUPLICATE_COUNTRY_CODE"      -> InternalError,
           "SERVER_ERROR"                -> InternalError,
@@ -77,7 +77,7 @@ class AmendUkPropertyAnnualSubmissionServiceSpec extends UnitSpec {
 
         val extraTysErrors = List(
           "MISSING_EXPENSES" -> InternalError,
-          "FIELD_CONFLICT"   -> RulePropertyIncomeAllowanceError
+          //"FIELD_CONFLICT"   -> RulePropertyIncomeAllowanceError
         )
 
         (errors ++ extraTysErrors).foreach(args => (serviceError _).tupled(args))

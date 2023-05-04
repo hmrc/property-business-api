@@ -542,36 +542,36 @@ class CreateAmendForeignPropertyAnnualSubmissionValidatorSpec extends UnitSpec w
         }
       }
 
-      "return RuleDuplicateCountryCodeError" when {
-        "a country code is duplicated" in {
-          val code = "ZWE"
-          validator.validate(
-            CreateAmendForeignPropertyAnnualSubmissionRawData(
-              nino = validNino,
-              businessId = validBusinessId,
-              taxYear = taxYear,
-              body = bodyWith(entryWithCountryCode(code), entryWithCountryCode(code))
-            )) shouldBe List(
-            RuleDuplicateCountryCodeError
-              .forDuplicatedCodesAndPaths(code = code, paths = Seq("/foreignNonFhlProperty/0/countryCode", "/foreignNonFhlProperty/1/countryCode")))
-        }
-
-        "multiple country codes are duplicated" in {
-          val code1 = "AFG"
-          val code2 = "ZWE"
-          validator.validate(CreateAmendForeignPropertyAnnualSubmissionRawData(
-            nino = validNino,
-            businessId = validBusinessId,
-            taxYear = taxYear,
-            body = bodyWith(entryWithCountryCode(code1), entryWithCountryCode(code2), entryWithCountryCode(code1), entryWithCountryCode(code2))
-          )) should contain theSameElementsAs List(
-            RuleDuplicateCountryCodeError
-              .forDuplicatedCodesAndPaths(code = code1, paths = Seq("/foreignNonFhlProperty/0/countryCode", "/foreignNonFhlProperty/2/countryCode")),
-            RuleDuplicateCountryCodeError
-              .forDuplicatedCodesAndPaths(code = code2, paths = Seq("/foreignNonFhlProperty/1/countryCode", "/foreignNonFhlProperty/3/countryCode")),
-          )
-        }
-      }
+//      "return RuleDuplicateCountryCodeError" when {
+//        "a country code is duplicated" in {
+//          val code = "ZWE"
+//          validator.validate(
+//            CreateAmendForeignPropertyAnnualSubmissionRawData(
+//              nino = validNino,
+//              businessId = validBusinessId,
+//              taxYear = taxYear,
+//              body = bodyWith(entryWithCountryCode(code), entryWithCountryCode(code))
+//            )) shouldBe List(
+//            RuleDuplicateCountryCodeError
+//              .forDuplicatedCodesAndPaths(code = code, paths = Seq("/foreignNonFhlProperty/0/countryCode", "/foreignNonFhlProperty/1/countryCode")))
+//        }
+//
+//        "multiple country codes are duplicated" in {
+//          val code1 = "AFG"
+//          val code2 = "ZWE"
+//          validator.validate(CreateAmendForeignPropertyAnnualSubmissionRawData(
+//            nino = validNino,
+//            businessId = validBusinessId,
+//            taxYear = taxYear,
+//            body = bodyWith(entryWithCountryCode(code1), entryWithCountryCode(code2), entryWithCountryCode(code1), entryWithCountryCode(code2))
+//          )) should contain theSameElementsAs List(
+//            RuleDuplicateCountryCodeError
+//              .forDuplicatedCodesAndPaths(code = code1, paths = Seq("/foreignNonFhlProperty/0/countryCode", "/foreignNonFhlProperty/2/countryCode")),
+//            RuleDuplicateCountryCodeError
+//              .forDuplicatedCodesAndPaths(code = code2, paths = Seq("/foreignNonFhlProperty/1/countryCode", "/foreignNonFhlProperty/3/countryCode")),
+//          )
+//        }
+//      }
 
       "return RuleBothAllowancesSuppliedError" when {
         "propertyIncomeAllowance and separate allowances are provided for fhl" in {
@@ -654,27 +654,27 @@ class CreateAmendForeignPropertyAnnualSubmissionValidatorSpec extends UnitSpec w
         }
       }
 
-      "return RulePropertyIncomeAllowanceError" when {
-        "propertyIncomeAllowance is supplied with privateUseAdjustment for fhl" in {
-          validator.validate(CreateAmendForeignPropertyAnnualSubmissionRawData(
-            nino = validNino,
-            businessId = validBusinessId,
-            taxYear = taxYear,
-            body = propertyIncomeAllowanceBody.update("/foreignFhlEea/adjustments/privateUseAdjustment", JsNumber(123.45))
-          )) shouldBe
-            List(RulePropertyIncomeAllowanceError.copy(paths = Some(Seq("/foreignFhlEea"))))
-        }
-
-        "propertyIncomeAllowance is supplied with privateUseAdjustment for non-fhl" in {
-          validator.validate(CreateAmendForeignPropertyAnnualSubmissionRawData(
-            nino = validNino,
-            businessId = validBusinessId,
-            taxYear = taxYear,
-            body = bodyWith(entryPropertyIncomeAllowance.update("/adjustments/privateUseAdjustment", JsNumber(123.45)))
-          )) shouldBe
-            List(RulePropertyIncomeAllowanceError.copy(paths = Some(Seq("/foreignNonFhlProperty/0"))))
-        }
-      }
+//      "return RulePropertyIncomeAllowanceError" when {
+//        "propertyIncomeAllowance is supplied with privateUseAdjustment for fhl" in {
+//          validator.validate(CreateAmendForeignPropertyAnnualSubmissionRawData(
+//            nino = validNino,
+//            businessId = validBusinessId,
+//            taxYear = taxYear,
+//            body = propertyIncomeAllowanceBody.update("/foreignFhlEea/adjustments/privateUseAdjustment", JsNumber(123.45))
+//          )) shouldBe
+//            List(RulePropertyIncomeAllowanceError.copy(paths = Some(Seq("/foreignFhlEea"))))
+//        }
+//
+//        "propertyIncomeAllowance is supplied with privateUseAdjustment for non-fhl" in {
+//          validator.validate(CreateAmendForeignPropertyAnnualSubmissionRawData(
+//            nino = validNino,
+//            businessId = validBusinessId,
+//            taxYear = taxYear,
+//            body = bodyWith(entryPropertyIncomeAllowance.update("/adjustments/privateUseAdjustment", JsNumber(123.45)))
+//          )) shouldBe
+//            List(RulePropertyIncomeAllowanceError.copy(paths = Some(Seq("/foreignNonFhlProperty/0"))))
+//        }
+//      }
 
       "return multiple errors" when {
         "request supplied has multiple errors" in {

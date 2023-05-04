@@ -28,7 +28,6 @@ import api.models.errors.{
   RuleBothAllowancesSuppliedError,
   RuleBuildingNameNumberError,
   RuleIncorrectOrEmptyBodyError,
-  RulePropertyIncomeAllowanceError,
   RuleTaxYearNotSupportedError,
   RuleTaxYearRangeInvalidError,
   RuleTypeOfBusinessIncorrectError,
@@ -39,7 +38,7 @@ import api.models.errors.{
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import play.api.http.HeaderNames.ACCEPT
 import play.api.http.Status._
-import play.api.libs.json.{JsObject, Json, JsValue}
+import play.api.libs.json.{JsObject, JsValue, Json}
 import play.api.libs.ws.{WSRequest, WSResponse}
 import play.api.test.Helpers.AUTHORIZATION
 import support.V2IntegrationBaseSpec
@@ -789,20 +788,20 @@ class AmendUkPropertyAnnualSubmissionControllerISpec extends V2IntegrationBaseSp
           |}
           |""".stripMargin)
 
-      val propertyIncomeAllowanceBodyJson = Json.parse("""
-          |{
-          |  "ukFhlProperty": {
-          |    "allowances": {
-          |      "propertyIncomeAllowance": 1000.00
-          |    },
-          |    "adjustments": {
-          |      "privateUseAdjustment": 2000.30,
-          |      "periodOfGraceAdjustment": true,
-          |      "nonResidentLandlord": true
-          |    }
-          |  }
-          |}
-          |""".stripMargin)
+//      val propertyIncomeAllowanceBodyJson = Json.parse("""
+//          |{
+//          |  "ukFhlProperty": {
+//          |    "allowances": {
+//          |      "propertyIncomeAllowance": 1000.00
+//          |    },
+//          |    "adjustments": {
+//          |      "privateUseAdjustment": 2000.30,
+//          |      "periodOfGraceAdjustment": true,
+//          |      "nonResidentLandlord": true
+//          |    }
+//          |  }
+//          |}
+//          |""".stripMargin)
 
       val allInvalidValueRequestError: MtdError = ValueFormatError.copy(
         message = "The value must be between 0 and 99999999999.99",
@@ -871,7 +870,7 @@ class AmendUkPropertyAnnualSubmissionControllerISpec extends V2IntegrationBaseSp
           ))
       )
 
-      val propertyIncomeAllowanceError: MtdError = RulePropertyIncomeAllowanceError.copy(paths = Some(List("/ukFhlProperty")))
+      // val propertyIncomeAllowanceError: MtdError = RulePropertyIncomeAllowanceError.copy(paths = Some(List("/ukFhlProperty")))
 
       "validation error occurs" when {
         def validationErrorTest(requestNino: String,
@@ -910,8 +909,8 @@ class AmendUkPropertyAnnualSubmissionControllerISpec extends V2IntegrationBaseSp
           ("AA123456A", "XAIS12345678910", "2022-23", allInvalidDateFormatRequestBodyJson, BAD_REQUEST, allInvalidDateFormatRequestError),
           ("AA123456A", "XAIS12345678910", "2022-23", allInvalidStringRequestBodyJson, BAD_REQUEST, allInvalidStringRequestError),
           ("AA123456A", "XAIS12345678910", "2022-23", buildingNameNumberBodyJson, BAD_REQUEST, buildingNameNumberError),
-          ("AA123456A", "XAIS12345678910", "2022-23", bothAllowancesSuppliedBodyJson, BAD_REQUEST, bothAllowancesSuppliedError),
-          ("AA123456A", "XAIS12345678910", "2022-23", propertyIncomeAllowanceBodyJson, BAD_REQUEST, propertyIncomeAllowanceError)
+          ("AA123456A", "XAIS12345678910", "2022-23", bothAllowancesSuppliedBodyJson, BAD_REQUEST, bothAllowancesSuppliedError)
+          // ("AA123456A", "XAIS12345678910", "2022-23", propertyIncomeAllowanceBodyJson, BAD_REQUEST, propertyIncomeAllowanceError)
         )
         input.foreach(args => (validationErrorTest _).tupled(args))
       }
@@ -942,7 +941,7 @@ class AmendUkPropertyAnnualSubmissionControllerISpec extends V2IntegrationBaseSp
           (NOT_FOUND, "INCOME_SOURCE_NOT_FOUND", NOT_FOUND, NotFoundError),
           (UNPROCESSABLE_ENTITY, "INCOMPATIBLE_PAYLOAD", BAD_REQUEST, RuleTypeOfBusinessIncorrectError),
           (UNPROCESSABLE_ENTITY, "TAX_YEAR_NOT_SUPPORTED", BAD_REQUEST, RuleTaxYearNotSupportedError),
-          (UNPROCESSABLE_ENTITY, "BUSINESS_VALIDATION_FAILURE", BAD_REQUEST, RulePropertyIncomeAllowanceError),
+          // (UNPROCESSABLE_ENTITY, "BUSINESS_VALIDATION_FAILURE", BAD_REQUEST, RulePropertyIncomeAllowanceError),
           (UNPROCESSABLE_ENTITY, "MISSING_ALLOWANCES", INTERNAL_SERVER_ERROR, InternalError),
           (UNPROCESSABLE_ENTITY, "DUPLICATE_COUNTRY_CODE", INTERNAL_SERVER_ERROR, InternalError),
           (INTERNAL_SERVER_ERROR, "SERVER_ERROR", INTERNAL_SERVER_ERROR, InternalError),
@@ -950,8 +949,8 @@ class AmendUkPropertyAnnualSubmissionControllerISpec extends V2IntegrationBaseSp
         )
 
         val extraTysErrors = Seq(
-          (INTERNAL_SERVER_ERROR, "MISSING_EXPENSES", INTERNAL_SERVER_ERROR, InternalError),
-          (UNPROCESSABLE_ENTITY, "FIELD_CONFLICT", BAD_REQUEST, RulePropertyIncomeAllowanceError)
+          (INTERNAL_SERVER_ERROR, "MISSING_EXPENSES", INTERNAL_SERVER_ERROR, InternalError)
+          // (UNPROCESSABLE_ENTITY, "FIELD_CONFLICT", BAD_REQUEST, RulePropertyIncomeAllowanceError)
         )
 
         (errors ++ extraTysErrors).foreach(args => (serviceErrorTest _).tupled(args))

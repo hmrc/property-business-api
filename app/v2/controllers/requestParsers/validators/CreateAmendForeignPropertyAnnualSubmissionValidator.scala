@@ -63,7 +63,6 @@ class CreateAmendForeignPropertyAnnualSubmissionValidator @Inject()(appConfig: A
               case (entry, i) => validateForeignProperty(entry, i)
             })
             .getOrElse(NoValidationErrors)
-          //duplicateCountryCodeValidation(body)
         )))
   }
 
@@ -86,8 +85,7 @@ class CreateAmendForeignPropertyAnnualSubmissionValidator @Inject()(appConfig: A
                                         max = 1000),
       foreignFhlEea.allowances
         .map(allowances => AllowancesValidation.validateForeignFhl(allowances = allowances, path = "/foreignFhlEea/allowances"))
-        .getOrElse(Nil),
-      //validateFhlPropertyIncomeAllowance(foreignFhlEea)
+        .getOrElse(Nil)
     ).flatten
   }
 
@@ -124,8 +122,7 @@ class CreateAmendForeignPropertyAnnualSubmissionValidator @Inject()(appConfig: A
         .getOrElse(NoValidationErrors),
       entry.allowances
         .map(allowances => AllowancesValidation.validateForeignNonFhl(allowances = allowances, path = s"/foreignNonFhlProperty/$index/allowances"))
-        .getOrElse(Nil),
-      //validateNonFhlPropertyIncomeAllowance(entry, index)
+        .getOrElse(Nil)
     ).flatten
   }
 
@@ -161,47 +158,6 @@ class CreateAmendForeignPropertyAnnualSubmissionValidator @Inject()(appConfig: A
       ),
     ).flatten
   }
-
-//  private def validateFhlPropertyIncomeAllowance(foreignFhlEea: ForeignFhlEea): List[MtdError] = {
-//    (for {
-//      allowances  <- foreignFhlEea.allowances
-//      adjustments <- foreignFhlEea.adjustments
-//    } yield {
-//      (allowances.propertyIncomeAllowance, adjustments.privateUseAdjustment) match {
-//        case (Some(_), Some(_)) => List(RulePropertyIncomeAllowanceError.copy(paths = Some(Seq("/foreignFhlEea"))))
-//        case _                  => Nil
-//      }
-//    }).getOrElse(Nil)
-//  }
-
-//  private def validateNonFhlPropertyIncomeAllowance(foreignPropertyEntry: ForeignNonFhlEntry, index: Int): List[MtdError] = {
-//    (for {
-//      allowances  <- foreignPropertyEntry.allowances
-//      adjustments <- foreignPropertyEntry.adjustments
-//    } yield {
-//      (allowances.propertyIncomeAllowance, adjustments.privateUseAdjustment) match {
-//        case (Some(_), Some(_)) => List(RulePropertyIncomeAllowanceError.copy(paths = Some(Seq(s"/foreignNonFhlProperty/$index"))))
-//        case _                  => Nil
-//      }
-//    }).getOrElse(Nil)
-//  }
-
-//  private def duplicateCountryCodeValidation(body: CreateAmendForeignPropertyAnnualSubmissionRequestBody): List[MtdError] = {
-//    body.foreignNonFhlProperty
-//      .map { entries =>
-//        entries.zipWithIndex
-//          .map {
-//            case (entry, idx) => (entry.countryCode, s"/foreignNonFhlProperty/$idx/countryCode")
-//          }
-//          .groupBy(_._1)
-//          .collect {
-//            case (code, codeAndPaths) if codeAndPaths.size >= 2 =>
-//              RuleDuplicateCountryCodeError.forDuplicatedCodesAndPaths(code, codeAndPaths.map(_._2))
-//          }
-//          .toList
-//      }
-//      .getOrElse(Nil)
-//  }
 
   override def validate(data: CreateAmendForeignPropertyAnnualSubmissionRawData): List[MtdError] = {
     run(validationSet, data).distinct

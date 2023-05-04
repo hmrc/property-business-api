@@ -225,21 +225,6 @@ class CreateAmendForeignPropertyAnnualSubmissionControllerISpec extends V2Integr
       |}
       |""".stripMargin)
 
-//  val rulePropertyIncomeAllowanceErrorRequestJson: JsValue = Json.parse("""
-//      |{
-//      |   "foreignFhlEea":{
-//      |      "adjustments":{
-//      |         "privateUseAdjustment":4.25,
-//      |         "balancingCharge":5.25,
-//      |         "periodOfGraceAdjustment":true
-//      |      },
-//      |      "allowances":{
-//      |         "propertyIncomeAllowance":5.25
-//      |      }
-//      |   }
-//      |}
-//      |""".stripMargin)
-
   val bothAllowancesSuppliedErrorRequestJson: JsValue = Json.parse("""
       |{
       |   "foreignFhlEea":{
@@ -444,27 +429,12 @@ class CreateAmendForeignPropertyAnnualSubmissionControllerISpec extends V2Integr
          formatCountryCodeErrorRequestJson,
          BAD_REQUEST,
          CountryCodeFormatError.copy(paths = Some(Seq("/foreignNonFhlProperty/0/countryCode")))),
-//        ("AA123456A",
-//         "XAIS12345678910",
-//         "2021-22",
-//         duplicateCountryCodeErrorRequestJson,
-//         BAD_REQUEST,
-//         RuleDuplicateCountryCodeError.copy(
-//           message = "The country code 'IND' is duplicated for multiple properties",
-//           paths = Some(Seq("/foreignNonFhlProperty/0/countryCode", "/foreignNonFhlProperty/1/countryCode"))
-//         )),
         ("AA123456A",
          "XAIS12345678910",
          "2021-22",
          bothAllowancesSuppliedErrorRequestJson,
          BAD_REQUEST,
          RuleBothAllowancesSuppliedError.copy(paths = Some(Seq("/foreignFhlEea/allowances")))),
-//        ("AA123456A",
-//         "XAIS12345678910",
-//         "2021-22",
-//         rulePropertyIncomeAllowanceErrorRequestJson,
-//         BAD_REQUEST,
-//         RulePropertyIncomeAllowanceError.copy(paths = Some(Seq("/foreignFhlEea")))),
         ("AA123456A",
          "XAIS12345678910",
          "2022-23",
@@ -498,19 +468,16 @@ class CreateAmendForeignPropertyAnnualSubmissionControllerISpec extends V2Integr
         (BAD_REQUEST, "INVALID_TAX_YEAR", BAD_REQUEST, TaxYearFormatError),
         (UNPROCESSABLE_ENTITY, "INCOMPATIBLE_PAYLOAD", BAD_REQUEST, RuleTypeOfBusinessIncorrectError),
         (UNPROCESSABLE_ENTITY, "TAX_YEAR_NOT_SUPPORTED", BAD_REQUEST, RuleTaxYearNotSupportedError),
-        //(UNPROCESSABLE_ENTITY, "BUSINESS_VALIDATION_FAILURE", BAD_REQUEST, RulePropertyIncomeAllowanceError),
         (BAD_REQUEST, "INVALID_PAYLOAD", INTERNAL_SERVER_ERROR, InternalError),
         (BAD_REQUEST, "INVALID_CORRELATIONID", INTERNAL_SERVER_ERROR, InternalError),
         (NOT_FOUND, "INCOME_SOURCE_NOT_FOUND", NOT_FOUND, NotFoundError),
         (UNPROCESSABLE_ENTITY, "MISSING_ALLOWANCES", INTERNAL_SERVER_ERROR, InternalError),
-        //(UNPROCESSABLE_ENTITY, "DUPLICATE_COUNTRY_CODE", BAD_REQUEST, RuleDuplicateCountryCodeError),
         (INTERNAL_SERVER_ERROR, "SERVER_ERROR", INTERNAL_SERVER_ERROR, InternalError),
         (SERVICE_UNAVAILABLE, "SERVICE_UNAVAILABLE", INTERNAL_SERVER_ERROR, InternalError)
       )
 
       val extraTysErrors = List(
-        (UNPROCESSABLE_ENTITY, "MISSING_EXPENSES", INTERNAL_SERVER_ERROR, InternalError),
-        //(UNPROCESSABLE_ENTITY, "FIELD_CONFLICT", BAD_REQUEST, RulePropertyIncomeAllowanceError)
+        (UNPROCESSABLE_ENTITY, "MISSING_EXPENSES", INTERNAL_SERVER_ERROR, InternalError)
       )
 
       (errors ++ extraTysErrors).foreach(args => (serviceErrorTest _).tupled(args))

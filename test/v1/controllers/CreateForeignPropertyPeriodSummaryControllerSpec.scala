@@ -18,7 +18,7 @@ package v1.controllers
 
 import api.models.audit.AuditEvent
 import api.models.outcomes.ResponseWrapper
-import play.api.libs.json.{Json, JsValue}
+import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.Result
 import uk.gov.hmrc.http.HeaderCarrier
 import v1.mocks.MockIdGenerator
@@ -199,16 +199,17 @@ class CreateForeignPropertyPeriodSummaryControllerSpec
     "FRA",
     Some(ForeignPropertyIncome(Some(ForeignPropertyRentIncome(Some(2000.99))), true, Some(2000.99), Some(2000.99), Some(2000.99), Some(2000.99))),
     Some(
-      ForeignPropertyExpenditure(Some(2000.99),
-                                 Some(2000.99),
-                                 Some(2000.99),
-                                 Some(2000.99),
-                                 Some(2000.99),
-                                 Some(2000.99),
-                                 Some(2000.99),
-                                 Some(2000.99),
-                                 Some(2000.99),
-                                 Some(2000.99)))
+      ForeignPropertyExpenditure(
+        Some(2000.99),
+        Some(2000.99),
+        Some(2000.99),
+        Some(2000.99),
+        Some(2000.99),
+        Some(2000.99),
+        Some(2000.99),
+        Some(2000.99),
+        Some(2000.99),
+        Some(2000.99)))
   )
 
   private val requestBody = CreateForeignPropertyPeriodSummaryRequestBody("2019-01-01", "2018-01-01", Some(foreignFhlEea), Some(Seq(foreignProperty)))
@@ -390,4 +391,5 @@ class CreateForeignPropertyPeriodSummaryControllerSpec
       }
     }
   }
+
 }

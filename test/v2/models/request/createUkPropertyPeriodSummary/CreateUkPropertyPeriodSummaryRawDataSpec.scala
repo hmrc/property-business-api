@@ -24,10 +24,11 @@ class CreateUkPropertyPeriodSummaryRawDataSpec extends UnitSpec {
   "writes" must {
     "work" in {
       Json.toJson(
-        CreateUkPropertyPeriodSummaryRawData(nino = "someNino",
-                                             businessId = "someBusinessId",
-                                             taxYear = "someTaxYear",
-                                             body = Json.obj("bodyField" -> "value"))) shouldBe
+        CreateUkPropertyPeriodSummaryRawData(
+          nino = "someNino",
+          businessId = "someBusinessId",
+          taxYear = "someTaxYear",
+          body = Json.obj("bodyField" -> "value"))) shouldBe
         Json.parse("""
             |{
             |  "nino": "someNino",

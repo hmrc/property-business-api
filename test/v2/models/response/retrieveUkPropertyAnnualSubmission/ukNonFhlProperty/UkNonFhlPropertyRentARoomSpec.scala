@@ -16,7 +16,7 @@
 
 package v2.models.response.retrieveUkPropertyAnnualSubmission.ukNonFhlProperty
 
-import play.api.libs.json.{ JsValue, Json }
+import play.api.libs.json.{JsValue, Json}
 import support.UnitSpec
 
 class UkNonFhlPropertyRentARoomSpec extends UnitSpec {
@@ -48,4 +48,5 @@ class UkNonFhlPropertyRentARoomSpec extends UnitSpec {
       Json.toJson(model) shouldBe mtdJson
     }
   }
+
 }

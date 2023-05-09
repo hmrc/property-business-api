@@ -17,7 +17,7 @@
 package v2.models.response.retrieveHistoricFhlUkPiePeriodSummary
 
 import play.api.libs.functional.syntax.toFunctionalBuilderOps
-import play.api.libs.json.{ JsPath, Json, OWrites, Reads }
+import play.api.libs.json.{JsPath, Json, OWrites, Reads}
 
 case class PeriodExpenses(premisesRunningCosts: Option[BigDecimal],
                           repairsAndMaintenance: Option[BigDecimal],
@@ -43,4 +43,5 @@ case object PeriodExpenses {
       (JsPath \ "travelCosts").readNullable[BigDecimal] and
       (JsPath \ "ukRentARoom").readNullable[RentARoomExpenses]
   )(PeriodExpenses.apply _)
+
 }

@@ -24,10 +24,11 @@ class AmendUkPropertyAnnualSubmissionRawDataSpec extends UnitSpec {
   "writes" must {
     "work" in {
       Json.toJson(
-        AmendUkPropertyAnnualSubmissionRawData(nino = "someNino",
-                                               businessId = "someBusinessId",
-                                               taxYear = "someTaxYear",
-                                               body = Json.obj("bodyField" -> "value"))) shouldBe
+        AmendUkPropertyAnnualSubmissionRawData(
+          nino = "someNino",
+          businessId = "someBusinessId",
+          taxYear = "someTaxYear",
+          body = Json.obj("bodyField" -> "value"))) shouldBe
         Json.parse("""
             |{
             |  "nino": "someNino",
@@ -40,4 +41,5 @@ class AmendUkPropertyAnnualSubmissionRawDataSpec extends UnitSpec {
          """.stripMargin)
     }
   }
+
 }

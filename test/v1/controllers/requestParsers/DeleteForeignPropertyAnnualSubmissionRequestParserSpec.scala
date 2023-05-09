@@ -19,7 +19,7 @@ package v1.controllers.requestParsers
 import support.UnitSpec
 import v1.mocks.validators.MockDeleteForeignPropertyAnnualSubmissionValidator
 import v1.models.domain.Nino
-import v1.models.errors.{ BadRequestError, BusinessIdFormatError, ErrorWrapper, NinoFormatError }
+import v1.models.errors.{BadRequestError, BusinessIdFormatError, ErrorWrapper, NinoFormatError}
 import v1.models.request.deleteForeignPropertyAnnualSubmission._
 
 class DeleteForeignPropertyAnnualSubmissionRequestParserSpec extends UnitSpec {
@@ -63,4 +63,5 @@ class DeleteForeignPropertyAnnualSubmissionRequestParserSpec extends UnitSpec {
       }
     }
   }
+
 }

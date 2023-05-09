@@ -17,9 +17,9 @@
 package v2.controllers
 
 import api.controllers.{ControllerBaseSpec, ControllerTestRunner}
+import api.mocks.MockIdGenerator
 import api.mocks.hateoas.MockHateoasFactory
 import api.mocks.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService}
-import api.mocks.MockIdGenerator
 import api.models.domain.{Nino, TaxYear}
 import api.models.errors._
 import api.models.hateoas.HateoasWrapper

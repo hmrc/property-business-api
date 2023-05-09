@@ -39,18 +39,18 @@ class CreateAmendForeignPropertyAnnualSubmissionService @Inject() (connector: Cr
 
   private val downstreamErrorMap: Map[String, MtdError] = {
     val errors = Map(
-      "INVALID_TAXABLE_ENTITY_ID"   -> NinoFormatError,
-      "INVALID_INCOMESOURCEID"      -> BusinessIdFormatError,
-      "INVALID_TAX_YEAR"            -> TaxYearFormatError,
-      "INCOMPATIBLE_PAYLOAD"        -> RuleTypeOfBusinessIncorrectError,
-      "TAX_YEAR_NOT_SUPPORTED"      -> RuleTaxYearNotSupportedError,
-      "INCOME_SOURCE_NOT_FOUND"     -> NotFoundError,
-      "MISSING_ALLOWANCES"          -> InternalError,
-      "INVALID_PAYLOAD"             -> InternalError,
-      "INVALID_CORRELATIONID"       -> InternalError,
-      "DUPLICATE_COUNTRY_CODE"      -> RuleDuplicateCountryCodeError,
-      "SERVER_ERROR"                -> InternalError,
-      "SERVICE_UNAVAILABLE"         -> InternalError
+      "INVALID_TAXABLE_ENTITY_ID" -> NinoFormatError,
+      "INVALID_INCOMESOURCEID"    -> BusinessIdFormatError,
+      "INVALID_TAX_YEAR"          -> TaxYearFormatError,
+      "INCOMPATIBLE_PAYLOAD"      -> RuleTypeOfBusinessIncorrectError,
+      "TAX_YEAR_NOT_SUPPORTED"    -> RuleTaxYearNotSupportedError,
+      "INCOME_SOURCE_NOT_FOUND"   -> NotFoundError,
+      "MISSING_ALLOWANCES"        -> InternalError,
+      "INVALID_PAYLOAD"           -> InternalError,
+      "INVALID_CORRELATIONID"     -> InternalError,
+      "DUPLICATE_COUNTRY_CODE"    -> RuleDuplicateCountryCodeError,
+      "SERVER_ERROR"              -> InternalError,
+      "SERVICE_UNAVAILABLE"       -> InternalError
     )
 
     val extraTysErrors = Map(

@@ -49,4 +49,5 @@ class CreateForeignPropertyPeriodSummaryRequestBodySpec extends UnitSpec with Cr
       }
     }
   }
+
 }

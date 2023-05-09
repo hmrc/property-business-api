@@ -16,7 +16,7 @@
 
 package v2.models.response.retrieveForeignPropertyAnnualSubmission.foreignProperty
 
-import play.api.libs.json.{ JsValue, Json }
+import play.api.libs.json.{JsValue, Json}
 import support.UnitSpec
 
 class BuildingSpec extends UnitSpec {
@@ -51,6 +51,7 @@ class BuildingSpec extends UnitSpec {
       }
     }
   }
+
   "writes" when {
     "passed valid model" should {
       "return valid JSON" in {
@@ -58,4 +59,5 @@ class BuildingSpec extends UnitSpec {
       }
     }
   }
+
 }

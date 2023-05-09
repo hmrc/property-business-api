@@ -17,7 +17,7 @@
 package v2.models.request.createForeignPropertyPeriodSummary
 
 import play.api.libs.functional.syntax._
-import play.api.libs.json.{ JsPath, Json, OWrites, Reads }
+import play.api.libs.json.{JsPath, Json, OWrites, Reads}
 import shapeless.HNil
 import utils.EmptinessChecker
 import v2.models.request.common.foreignFhlEea.CreateForeignFhlEea
@@ -29,6 +29,7 @@ case class CreateForeignPropertyPeriodSummaryRequestBody(fromDate: String,
                                                          foreignNonFhlProperty: Option[Seq[CreateForeignNonFhlPropertyEntry]])
 
 object CreateForeignPropertyPeriodSummaryRequestBody {
+
   implicit val emptinessChecker: EmptinessChecker[CreateForeignPropertyPeriodSummaryRequestBody] = EmptinessChecker.use { body =>
     "foreignFhlEea"           -> body.foreignFhlEea ::
       "foreignNonFhlProperty" -> body.foreignNonFhlProperty :: HNil
@@ -42,4 +43,5 @@ object CreateForeignPropertyPeriodSummaryRequestBody {
       (JsPath \ "foreignFhlEea").writeNullable[CreateForeignFhlEea] and
       (JsPath \ "foreignProperty").writeNullable[Seq[CreateForeignNonFhlPropertyEntry]]
   )(unlift(CreateForeignPropertyPeriodSummaryRequestBody.unapply))
+
 }

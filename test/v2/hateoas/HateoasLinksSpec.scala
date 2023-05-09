@@ -16,8 +16,8 @@
 
 package v2.hateoas
 
-import api.models.hateoas.{Link, Method}
 import api.models.hateoas.Method._
+import api.models.hateoas.{Link, Method}
 import mocks.MockAppConfig
 import support.UnitSpec
 import v2.models.response.retrieveHistoricNonFhlUkPiePeriodSummary.{RetrieveHistoricNonFhlUkPiePeriodSummaryHateoasData, RetrieveHistoricNonFhlUkPiePeriodSummaryResponse}
@@ -42,37 +42,47 @@ class HateoasLinksSpec extends UnitSpec with MockAppConfig with HateoasLinks {
       }
 
       "work for FP3 'Amend FP Period Summary'" in new Test {
-        amendForeignPropertyPeriodSummary(mockAppConfig, nino = nino, businessId = businessId, taxYear = taxYear, submissionId = submissionId) shouldBe
-          Link("/individuals/business/property/foreign/{nino}/{businessId}/period/{taxYear}/{submissionId}",
-               PUT,
-               "amend-foreign-property-period-summary")
+        amendForeignPropertyPeriodSummary(
+          mockAppConfig,
+          nino = nino,
+          businessId = businessId,
+          taxYear = taxYear,
+          submissionId = submissionId) shouldBe
+          Link(
+            "/individuals/business/property/foreign/{nino}/{businessId}/period/{taxYear}/{submissionId}",
+            PUT,
+            "amend-foreign-property-period-summary")
       }
 
       "work for FP4 'Retrieve FP Period Summary'" in new Test {
-        retrieveForeignPropertyPeriodSummary(mockAppConfig,
-                                             nino = nino,
-                                             businessId = businessId,
-                                             taxYear = taxYear,
-                                             submissionId = submissionId,
-                                             self = true) shouldBe
+        retrieveForeignPropertyPeriodSummary(
+          mockAppConfig,
+          nino = nino,
+          businessId = businessId,
+          taxYear = taxYear,
+          submissionId = submissionId,
+          self = true) shouldBe
           Link("/individuals/business/property/foreign/{nino}/{businessId}/period/{taxYear}/{submissionId}", GET, "self")
 
-        retrieveForeignPropertyPeriodSummary(mockAppConfig,
-                                             nino = nino,
-                                             businessId = businessId,
-                                             taxYear = taxYear,
-                                             submissionId = submissionId,
-                                             self = false) shouldBe
-          Link("/individuals/business/property/foreign/{nino}/{businessId}/period/{taxYear}/{submissionId}",
-               GET,
-               "retrieve-foreign-property-period-summary")
+        retrieveForeignPropertyPeriodSummary(
+          mockAppConfig,
+          nino = nino,
+          businessId = businessId,
+          taxYear = taxYear,
+          submissionId = submissionId,
+          self = false) shouldBe
+          Link(
+            "/individuals/business/property/foreign/{nino}/{businessId}/period/{taxYear}/{submissionId}",
+            GET,
+            "retrieve-foreign-property-period-summary")
       }
 
       "work for FP5 'Create and Amend FP Annual Submission'" in new Test {
         createAmendForeignPropertyAnnualSubmission(mockAppConfig, nino = nino, businessId = businessId, taxYear = taxYear) shouldBe
-          Link("/individuals/business/property/foreign/{nino}/{businessId}/annual/{taxYear}",
-               PUT,
-               "create-and-amend-foreign-property-annual-submission")
+          Link(
+            "/individuals/business/property/foreign/{nino}/{businessId}/annual/{taxYear}",
+            PUT,
+            "create-and-amend-foreign-property-annual-submission")
       }
 
       "work for FP6 'Retrieve FP Annual Submission'" in new Test {
@@ -96,20 +106,22 @@ class HateoasLinksSpec extends UnitSpec with MockAppConfig with HateoasLinks {
       }
 
       "work for UKP4 'Retrieve UK Period Summary'" in new Test {
-        retrieveUkPropertyPeriodSummary(mockAppConfig,
-                                        nino = nino,
-                                        businessId = businessId,
-                                        taxYear = taxYear,
-                                        submissionId = submissionId,
-                                        self = true) shouldBe
+        retrieveUkPropertyPeriodSummary(
+          mockAppConfig,
+          nino = nino,
+          businessId = businessId,
+          taxYear = taxYear,
+          submissionId = submissionId,
+          self = true) shouldBe
           Link("/individuals/business/property/uk/{nino}/{businessId}/period/{taxYear}/{submissionId}", GET, "self")
 
-        retrieveUkPropertyPeriodSummary(mockAppConfig,
-                                        nino = nino,
-                                        businessId = businessId,
-                                        taxYear = taxYear,
-                                        submissionId = submissionId,
-                                        self = false) shouldBe
+        retrieveUkPropertyPeriodSummary(
+          mockAppConfig,
+          nino = nino,
+          businessId = businessId,
+          taxYear = taxYear,
+          submissionId = submissionId,
+          self = false) shouldBe
           Link("/individuals/business/property/uk/{nino}/{businessId}/period/{taxYear}/{submissionId}", GET, "retrieve-uk-property-period-summary")
       }
 
@@ -155,9 +167,10 @@ class HateoasLinksSpec extends UnitSpec with MockAppConfig with HateoasLinks {
         val result: Link = amendHistoricFhlUkPiePeriodSummary(mockAppConfig, nino = nino, periodId = periodId)
 
         result shouldBe
-          Link("/individuals/business/property/uk/period/furnished-holiday-lettings/{nino}/{periodId}",
-               PUT,
-               "amend-uk-property-historic-fhl-period-summary")
+          Link(
+            "/individuals/business/property/uk/period/furnished-holiday-lettings/{nino}/{periodId}",
+            PUT,
+            "amend-uk-property-historic-fhl-period-summary")
       }
     }
 
@@ -234,11 +247,13 @@ class HateoasLinksSpec extends UnitSpec with MockAppConfig with HateoasLinks {
             rel = "amend-uk-property-historic-non-fhl-period-summary"
           ),
           Link(href = s"/my/context/uk/period/non-furnished-holiday-lettings/${data.nino}/${data.periodId}", method = Method.GET, rel = "self"),
-          Link(href = s"/my/context/uk/period/non-furnished-holiday-lettings/${data.nino}",
-               method = Method.GET,
-               rel = "list-uk-property-historic-non-fhl-period-summaries")
+          Link(
+            href = s"/my/context/uk/period/non-furnished-holiday-lettings/${data.nino}",
+            method = Method.GET,
+            rel = "list-uk-property-historic-non-fhl-period-summaries")
         )
       }
     }
   }
+
 }

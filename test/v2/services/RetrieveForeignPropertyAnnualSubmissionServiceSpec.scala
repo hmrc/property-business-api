@@ -16,16 +16,16 @@
 
 package v2.services
 
-import support.UnitSpec
-import v2.mocks.connectors.MockRetrieveForeignPropertyAnnualSubmissionConnector
-import api.models.errors._
-import v2.models.request.retrieveForeignPropertyAnnualSubmission.RetrieveForeignPropertyAnnualSubmissionRequest
-import v2.models.response.retrieveForeignPropertyAnnualSubmission.RetrieveForeignPropertyAnnualSubmissionResponse
-import uk.gov.hmrc.http.HeaderCarrier
-import v2.connectors.RetrieveForeignPropertyAnnualSubmissionConnector.{ForeignResult, NonForeignResult}
 import api.controllers.EndpointLogContext
 import api.models.domain.{Nino, TaxYear}
+import api.models.errors._
 import api.models.outcomes.ResponseWrapper
+import support.UnitSpec
+import uk.gov.hmrc.http.HeaderCarrier
+import v2.connectors.RetrieveForeignPropertyAnnualSubmissionConnector.{ForeignResult, NonForeignResult}
+import v2.mocks.connectors.MockRetrieveForeignPropertyAnnualSubmissionConnector
+import v2.models.request.retrieveForeignPropertyAnnualSubmission.RetrieveForeignPropertyAnnualSubmissionRequest
+import v2.models.response.retrieveForeignPropertyAnnualSubmission.RetrieveForeignPropertyAnnualSubmissionResponse
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future

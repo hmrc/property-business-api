@@ -17,11 +17,11 @@
 package v2.models.response.listHistoricUkPropertyPeriodSummaries
 
 import api.models.domain.{HistoricPropertyType, PeriodId}
+import api.models.hateoas.Link
+import api.models.hateoas.Method._
 import mocks.MockAppConfig
 import play.api.libs.json.Json
 import support.UnitSpec
-import api.models.hateoas.Method._
-import api.models.hateoas.Link
 
 class ListHistoricUkPropertyPeriodSummariesResponseSpec extends UnitSpec with MockAppConfig {
 
@@ -145,12 +145,14 @@ class ListHistoricUkPropertyPeriodSummariesResponseSpec extends UnitSpec with Mo
 
         linksFactory.itemLinks(mockAppConfig, data, item) shouldBe
           Seq(
-            Link(s"/$context/uk/period/non-furnished-holiday-lettings/$nino/${periodId.value}",
-                 PUT,
-                 "amend-uk-property-historic-non-fhl-period-summary"),
+            Link(
+              s"/$context/uk/period/non-furnished-holiday-lettings/$nino/${periodId.value}",
+              PUT,
+              "amend-uk-property-historic-non-fhl-period-summary"),
             Link(s"/$context/uk/period/non-furnished-holiday-lettings/$nino/${periodId.value}", GET, "self")
           )
       }
     }
   }
+
 }

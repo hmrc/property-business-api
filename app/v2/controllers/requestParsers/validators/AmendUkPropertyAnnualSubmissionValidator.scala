@@ -18,7 +18,7 @@ package v2.controllers.requestParsers.validators
 
 import api.controllers.requestParsers.validators.Validator
 import api.controllers.requestParsers.validators.validations._
-import api.models.errors.MtdError
+import api.models.errors.{MtdError, RulePropertyIncomeAllowanceError}
 import config.AppConfig
 import v2.controllers.requestParsers.validators.validations._
 import v2.models.request.amendUkPropertyAnnualSubmission.ukFhlProperty.{UkFhlProperty, UkFhlPropertyAllowances}
@@ -115,7 +115,8 @@ class AmendUkPropertyAnnualSubmissionValidator @Inject() (appConfig: AppConfig) 
         field = ukFhlProperty.allowances.flatMap(_.propertyIncomeAllowance),
         path = "/ukFhlProperty/allowances/propertyIncomeAllowance",
         max = 1000
-      )
+      ),
+      validateFhlPropertyIncomeAllowance(ukFhlProperty)
     ).flatten
   }
 
@@ -165,7 +166,8 @@ class AmendUkPropertyAnnualSubmissionValidator @Inject() (appConfig: AppConfig) 
         field = ukNonFhlProperty.allowances.flatMap(_.propertyIncomeAllowance),
         path = "/ukNonFhlProperty/allowances/propertyIncomeAllowance",
         max = 1000
-      )
+      ),
+      validateNonFhlPropertyIncomeAllowance(ukNonFhlProperty)
     ).flatten
   }
 
@@ -247,6 +249,30 @@ class AmendUkPropertyAnnualSubmissionValidator @Inject() (appConfig: AppConfig) 
       allowances = allowances,
       path = s"/ukNonFhlProperty/allowances"
     )
+  }
+
+  private def validateFhlPropertyIncomeAllowance(property: UkFhlProperty): List[MtdError] = {
+    (for {
+      allowances  <- property.allowances
+      adjustments <- property.adjustments
+    } yield {
+      (allowances.propertyIncomeAllowance, adjustments.privateUseAdjustment) match {
+        case (Some(_), Some(_)) => List(RulePropertyIncomeAllowanceError.copy(paths = Some(Seq("/ukFhlProperty"))))
+        case _                  => Nil
+      }
+    }).getOrElse(Nil)
+  }
+
+  private def validateNonFhlPropertyIncomeAllowance(property: UkNonFhlProperty): List[MtdError] = {
+    (for {
+      allowances  <- property.allowances
+      adjustments <- property.adjustments
+    } yield {
+      (allowances.propertyIncomeAllowance, adjustments.privateUseAdjustment) match {
+        case (Some(_), Some(_)) => List(RulePropertyIncomeAllowanceError.copy(paths = Some(Seq(s"/ukNonFhlProperty"))))
+        case _                  => Nil
+      }
+    }).getOrElse(Nil)
   }
 
   override def validate(data: AmendUkPropertyAnnualSubmissionRawData): List[MtdError] = {

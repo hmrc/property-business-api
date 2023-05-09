@@ -38,6 +38,7 @@ trait MockAuditService extends MockFactory {
         .verify(event, *, *, *)
         .returning(Future.successful(AuditResult.Success))
     }
+
   }
 
 }

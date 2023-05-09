@@ -16,8 +16,8 @@
 
 package v2.models.request.common.ukFhlProperty
 
-import play.api.libs.json.{ JsPath, Json, Reads, Writes }
 import play.api.libs.functional.syntax._
+import play.api.libs.json.{JsPath, Json, Reads, Writes}
 import v2.models.request.common.ukPropertyRentARoom.UkPropertyExpensesRentARoom
 
 case class UkFhlPropertyExpenses(premisesRunningCosts: Option[BigDecimal],
@@ -44,4 +44,5 @@ object UkFhlPropertyExpenses {
       (JsPath \ "travelCosts").writeNullable[BigDecimal] and
       (JsPath \ "ukFhlRentARoom").writeNullable[UkPropertyExpensesRentARoom]
   )(unlift(UkFhlPropertyExpenses.unapply))
+
 }

@@ -16,11 +16,11 @@
 
 package api.connectors.httpparsers
 
-import play.api.http.Status.{ FORBIDDEN, OK, UNAUTHORIZED }
-import play.api.libs.json._
-import uk.gov.hmrc.http.{ HttpReads, HttpResponse }
 import api.connectors.MtdIdLookupOutcome
-import api.models.errors.{ InternalError, InvalidBearerTokenError, NinoFormatError }
+import api.models.errors.{InternalError, InvalidBearerTokenError, NinoFormatError}
+import play.api.http.Status.{FORBIDDEN, OK, UNAUTHORIZED}
+import play.api.libs.json._
+import uk.gov.hmrc.http.{HttpReads, HttpResponse}
 
 object MtdIdLookupHttpParser extends HttpParser {
 
@@ -38,4 +38,5 @@ object MtdIdLookupHttpParser extends HttpParser {
       case _            => Left(InternalError)
     }
   }
+
 }

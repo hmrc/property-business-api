@@ -36,7 +36,7 @@ trait MockRetrieveForeignPropertyAnnualSubmissionService extends MockFactory {
   object MockRetrieveForeignPropertyService {
 
     def retrieve(requestData: RetrieveForeignPropertyAnnualSubmissionRequest)
-      : CallHandler[Future[Either[ErrorWrapper, ResponseWrapper[RetrieveForeignPropertyAnnualSubmissionResponse]]]] = {
+        : CallHandler[Future[Either[ErrorWrapper, ResponseWrapper[RetrieveForeignPropertyAnnualSubmissionResponse]]]] = {
       (
         mockRetrieveForeignPropertyAnnualSubmissionService
           .retrieveForeignProperty(_: RetrieveForeignPropertyAnnualSubmissionRequest)(
@@ -48,5 +48,7 @@ trait MockRetrieveForeignPropertyAnnualSubmissionService extends MockFactory {
         )
         .expects(requestData, *, *, *, *)
     }
+
   }
+
 }

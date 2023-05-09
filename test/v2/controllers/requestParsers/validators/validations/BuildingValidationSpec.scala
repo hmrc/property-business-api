@@ -16,8 +16,8 @@
 
 package v2.controllers.requestParsers.validators.validations
 
-import support.UnitSpec
 import api.models.errors.RuleBuildingNameNumberError
+import support.UnitSpec
 import v2.models.request.common.Building
 
 class BuildingValidationSpec extends UnitSpec {
@@ -48,4 +48,5 @@ class BuildingValidationSpec extends UnitSpec {
       }
     }
   }
+
 }

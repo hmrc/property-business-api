@@ -16,9 +16,9 @@
 
 package v2.controllers.requestParsers.validators
 
+import api.models.errors._
 import mocks.MockAppConfig
 import support.UnitSpec
-import api.models.errors.{ BusinessIdFormatError, NinoFormatError, RuleTaxYearNotSupportedError, RuleTaxYearRangeInvalidError, TaxYearFormatError }
 import v2.models.request.deletePropertyAnnualSubmission.DeletePropertyAnnualSubmissionRawData
 
 class DeletePropertyAnnualSubmissionValidatorSpec extends UnitSpec with MockAppConfig {
@@ -53,10 +53,12 @@ class DeletePropertyAnnualSubmissionValidatorSpec extends UnitSpec with MockAppC
         validator.validate(DeletePropertyAnnualSubmissionRawData(validNino, validBusinessId, "2021-23")) shouldBe List(RuleTaxYearRangeInvalidError)
       }
       "multiple format errors are made" in {
-        validator.validate(DeletePropertyAnnualSubmissionRawData("Walrus", "Beans", "2021/22")) shouldBe List(NinoFormatError,
-                                                                                                              BusinessIdFormatError,
-                                                                                                              TaxYearFormatError)
+        validator.validate(DeletePropertyAnnualSubmissionRawData("Walrus", "Beans", "2021/22")) shouldBe List(
+          NinoFormatError,
+          BusinessIdFormatError,
+          TaxYearFormatError)
       }
     }
   }
+
 }

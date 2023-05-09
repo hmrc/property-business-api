@@ -16,7 +16,7 @@
 
 package v2.models.response.retrieveUkPropertyAnnualSubmission.ukFhlProperty
 
-import play.api.libs.json.{ Json, OFormat }
+import play.api.libs.json.{Json, OFormat}
 
 case class UkFhlProperty(adjustments: Option[UkFhlPropertyAdjustments], allowances: Option[UkFhlPropertyAllowances])
 

@@ -16,8 +16,8 @@
 
 package v2.models.request.amendHistoricNonFhlUkPiePeriodSummary
 
-import play.api.libs.functional.syntax.{ toFunctionalBuilderOps, unlift }
-import play.api.libs.json.{ JsPath, Json, Reads, Writes }
+import play.api.libs.functional.syntax.{toFunctionalBuilderOps, unlift}
+import play.api.libs.json.{JsPath, Json, Reads, Writes}
 import v2.models.request.common.ukPropertyRentARoom.UkPropertyExpensesRentARoom
 
 case class UkNonFhlPieExpenses(
@@ -31,7 +31,7 @@ case class UkNonFhlPieExpenses(
     travelCosts: Option[BigDecimal],
     residentialFinancialCostsCarriedForward: Option[BigDecimal],
     residentialFinancialCost: Option[BigDecimal],
-    rentARoom: Option[UkPropertyExpensesRentARoom],
+    rentARoom: Option[UkPropertyExpensesRentARoom]
 )
 
 object UkNonFhlPieExpenses {
@@ -50,4 +50,5 @@ object UkNonFhlPieExpenses {
       (JsPath \ "residentialFinancialCost").writeNullable[BigDecimal] and
       (JsPath \ "ukRentARoom").writeNullable[UkPropertyExpensesRentARoom]
   )(unlift(UkNonFhlPieExpenses.unapply))
+
 }

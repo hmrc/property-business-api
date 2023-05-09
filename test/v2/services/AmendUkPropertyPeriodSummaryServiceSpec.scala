@@ -16,13 +16,13 @@
 
 package v2.services
 
-import uk.gov.hmrc.http.HeaderCarrier
 import api.controllers.EndpointLogContext
-import v2.mocks.connectors.MockAmendUkPropertyPeriodSummaryConnector
 import api.models.domain.{Nino, TaxYear}
 import api.models.errors._
 import api.models.outcomes.ResponseWrapper
 import api.services.ServiceSpec
+import uk.gov.hmrc.http.HeaderCarrier
+import v2.mocks.connectors.MockAmendUkPropertyPeriodSummaryConnector
 import v2.models.request.amendUkPropertyPeriodSummary.{AmendUkPropertyPeriodSummaryRequest, AmendUkPropertyPeriodSummaryRequestBody}
 
 import scala.concurrent.Future

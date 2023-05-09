@@ -112,4 +112,5 @@ class AmendForeignPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec {
       await(connector.amendForeignPropertyAnnualSubmission(request)) shouldBe outcome
     }
   }
+
 }

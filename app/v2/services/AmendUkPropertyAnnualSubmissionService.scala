@@ -46,6 +46,7 @@ class AmendUkPropertyAnnualSubmissionService @Inject() (connector: AmendUkProper
       "INCOME_SOURCE_NOT_FOUND"     -> NotFoundError,
       "INCOMPATIBLE_PAYLOAD"        -> RuleTypeOfBusinessIncorrectError,
       "TAX_YEAR_NOT_SUPPORTED"      -> RuleTaxYearNotSupportedError,
+      "BUSINESS_VALIDATION_FAILURE" -> RulePropertyIncomeAllowanceError,
       "MISSING_ALLOWANCES"          -> InternalError,
       "DUPLICATE_COUNTRY_CODE"      -> InternalError,
       "SERVER_ERROR"                -> InternalError,

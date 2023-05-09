@@ -36,6 +36,7 @@ class CreateUkPropertyPeriodSummaryResponseSpec extends UnitSpec {
       }
     }
   }
+
   "writes" when {
     "passed valid model" should {
       "return valid JSON" in {
@@ -43,4 +44,5 @@ class CreateUkPropertyPeriodSummaryResponseSpec extends UnitSpec {
       }
     }
   }
+
 }

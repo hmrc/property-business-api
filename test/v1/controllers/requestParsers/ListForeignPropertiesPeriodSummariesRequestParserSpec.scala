@@ -20,7 +20,7 @@ import support.UnitSpec
 import v1.mocks.support.MockDateUtils
 import v1.mocks.validators.MockListForeignPropertiesPeriodSummariesValidator
 import v1.models.domain.Nino
-import v1.models.errors.{ BadRequestError, BusinessIdFormatError, ErrorWrapper, NinoFormatError }
+import v1.models.errors.{BadRequestError, BusinessIdFormatError, ErrorWrapper, NinoFormatError}
 import v1.models.request.listForeignPropertiesPeriodSummaries._
 
 class ListForeignPropertiesPeriodSummariesRequestParserSpec extends UnitSpec {
@@ -75,4 +75,5 @@ class ListForeignPropertiesPeriodSummariesRequestParserSpec extends UnitSpec {
       }
     }
   }
+
 }

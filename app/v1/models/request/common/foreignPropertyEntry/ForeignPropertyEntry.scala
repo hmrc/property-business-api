@@ -17,7 +17,7 @@
 package v1.models.request.common.foreignPropertyEntry
 
 import play.api.libs.functional.syntax._
-import play.api.libs.json.{ JsPath, Json, Reads, Writes }
+import play.api.libs.json.{JsPath, Json, Reads, Writes}
 
 case class ForeignPropertyEntry(countryCode: String, income: Option[ForeignPropertyIncome], expenditure: Option[ForeignPropertyExpenditure])
 
@@ -29,4 +29,5 @@ object ForeignPropertyEntry {
       (JsPath \ "income").writeNullable[ForeignPropertyIncome] and
       (JsPath \ "expenses").writeNullable[ForeignPropertyExpenditure]
   )(unlift(ForeignPropertyEntry.unapply))
+
 }

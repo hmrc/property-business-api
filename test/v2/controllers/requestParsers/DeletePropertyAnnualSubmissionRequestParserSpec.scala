@@ -16,9 +16,9 @@
 
 package v2.controllers.requestParsers
 
-import support.UnitSpec
 import api.models.domain.{Nino, TaxYear}
-import api.models.errors.{ BadRequestError, BusinessIdFormatError, ErrorWrapper, NinoFormatError }
+import api.models.errors.{BadRequestError, BusinessIdFormatError, ErrorWrapper, NinoFormatError}
+import support.UnitSpec
 import v2.mocks.validators.MockDeletePropertyAnnualSubmissionValidator
 import v2.models.request.deletePropertyAnnualSubmission._
 
@@ -63,4 +63,5 @@ class DeletePropertyAnnualSubmissionRequestParserSpec extends UnitSpec {
       }
     }
   }
+
 }

@@ -23,11 +23,13 @@ import v2.models.request.amendHistoricNonFhlUkPiePeriodSummary.{AmendHistoricNon
 
 import javax.inject.Inject
 
-class AmendHistoricNonFhlUkPiePeriodSummaryRequestParser @Inject()(val validator: AmendHistoricNonFhlUkPiePeriodSummaryValidator)
+class AmendHistoricNonFhlUkPiePeriodSummaryRequestParser @Inject() (val validator: AmendHistoricNonFhlUkPiePeriodSummaryValidator)
     extends RequestParser[AmendHistoricNonFhlUkPiePeriodSummaryRawData, AmendHistoricNonFhlUkPiePeriodSummaryRequest] {
 
   override protected def requestFor(data: AmendHistoricNonFhlUkPiePeriodSummaryRawData): AmendHistoricNonFhlUkPiePeriodSummaryRequest =
-    AmendHistoricNonFhlUkPiePeriodSummaryRequest(Nino(data.nino),
-                                                 PeriodId(data.periodId),
-                                                 data.body.as[AmendHistoricNonFhlUkPiePeriodSummaryRequestBody])
+    AmendHistoricNonFhlUkPiePeriodSummaryRequest(
+      Nino(data.nino),
+      PeriodId(data.periodId),
+      data.body.as[AmendHistoricNonFhlUkPiePeriodSummaryRequestBody])
+
 }

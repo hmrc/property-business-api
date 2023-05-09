@@ -60,4 +60,5 @@ class StringValidationSpec extends UnitSpec {
       }
     }
   }
+
 }

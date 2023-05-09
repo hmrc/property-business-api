@@ -16,7 +16,7 @@
 
 package v2.models.request.common.ukNonFhlProperty
 
-import play.api.libs.json.{ Json, OFormat }
+import play.api.libs.json.{Json, OFormat}
 
 case class UkNonFhlProperty(income: Option[UkNonFhlPropertyIncome], expenses: Option[UkNonFhlPropertyExpenses])
 

@@ -16,23 +16,12 @@
 
 package v2.models.response.retrieveForeignPropertyAnnualSubmission
 
+import api.models.hateoas.{Link, Method}
 import mocks.MockAppConfig
 import play.api.libs.json.Json
 import support.UnitSpec
-import api.models.hateoas.{Link, Method}
-import v2.models.response.retrieveForeignPropertyAnnualSubmission.foreignFhlEea.{
-  ForeignFhlEeaAdjustments,
-  ForeignFhlEeaAllowances,
-  ForeignFhlEeaEntry
-}
-import v2.models.response.retrieveForeignPropertyAnnualSubmission.foreignProperty.{
-  Building,
-  FirstYear,
-  ForeignPropertyAdjustments,
-  ForeignPropertyAllowances,
-  ForeignPropertyEntry,
-  StructuredBuildingAllowance
-}
+import v2.models.response.retrieveForeignPropertyAnnualSubmission.foreignFhlEea.{ForeignFhlEeaAdjustments, ForeignFhlEeaAllowances, ForeignFhlEeaEntry}
+import v2.models.response.retrieveForeignPropertyAnnualSubmission.foreignProperty._
 
 class RetrieveForeignPropertyAnnualSubmissionResponseSpec extends UnitSpec with MockAppConfig {
 
@@ -252,11 +241,13 @@ class RetrieveForeignPropertyAnnualSubmissionResponseSpec extends UnitSpec with 
             rel = "create-and-amend-foreign-property-annual-submission"
           ),
           Link(href = s"/my/context/foreign/${data.nino}/${data.businessId}/annual/${data.taxYear}", method = Method.GET, rel = "self"),
-          Link(href = s"/my/context/${data.nino}/${data.businessId}/annual/${data.taxYear}",
-               method = Method.DELETE,
-               rel = "delete-property-annual-submission")
+          Link(
+            href = s"/my/context/${data.nino}/${data.businessId}/annual/${data.taxYear}",
+            method = Method.DELETE,
+            rel = "delete-property-annual-submission")
         )
       }
     }
   }
+
 }

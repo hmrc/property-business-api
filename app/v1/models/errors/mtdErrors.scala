@@ -16,7 +16,7 @@
 
 package v1.models.errors
 
-import play.api.libs.json.{ Json, OWrites }
+import play.api.libs.json.{Json, OWrites}
 
 case class MtdError(code: String, message: String, paths: Option[Seq[String]] = None)
 
@@ -25,6 +25,7 @@ object MtdError {
 
   implicit def genericWrites[T <: MtdError]: OWrites[T] =
     writes.contramap[T](c => c: MtdError)
+
 }
 
 object MtdErrorWithCustomMessage {
@@ -45,6 +46,7 @@ object RuleIncorrectOrEmptyBodyError extends MtdError("RULE_INCORRECT_OR_EMPTY_B
 
 object RuleBothExpensesSuppliedError
     extends MtdError("RULE_BOTH_EXPENSES_SUPPLIED", "Both expenses and consolidatedExpenses can not be present at the same time")
+
 object RuleToDateBeforeFromDateError extends MtdError("RULE_TO_DATE_BEFORE_FROM_DATE", "The To date cannot be earlier than the From date")
 object RuleCountryCodeError          extends MtdError("RULE_COUNTRY_CODE", "The country code is not a valid ISO 3166-1 alpha-3 country code")
 object RuleOverlappingPeriodError    extends MtdError("RULE_OVERLAPPING_PERIOD", "Period summary overlaps with any of the existing period summaries")

@@ -17,13 +17,10 @@
 package v1.controllers.requestParsers.validators
 
 import v1.controllers.requestParsers.validators.validations._
-import v1.models.errors.{ MtdError, RuleIncorrectOrEmptyBodyError }
-import v1.models.request.common.foreignPropertyEntry.{ ForeignPropertyEntry, ForeignPropertyExpenditure }
-import v1.models.request.createForeignPropertyPeriodSummary.{
-  CreateForeignPropertyPeriodSummaryRawData,
-  CreateForeignPropertyPeriodSummaryRequestBody
-}
-import v1.models.request.common.foreignFhlEea.{ ForeignFhlEea, ForeignFhlEeaExpenditure }
+import v1.models.errors.{MtdError, RuleIncorrectOrEmptyBodyError}
+import v1.models.request.common.foreignFhlEea.{ForeignFhlEea, ForeignFhlEeaExpenditure}
+import v1.models.request.common.foreignPropertyEntry.{ForeignPropertyEntry, ForeignPropertyExpenditure}
+import v1.models.request.createForeignPropertyPeriodSummary.{CreateForeignPropertyPeriodSummaryRawData, CreateForeignPropertyPeriodSummaryRequestBody}
 
 class CreateForeignPropertyPeriodSummaryValidator extends Validator[CreateForeignPropertyPeriodSummaryRawData] {
 
@@ -67,16 +64,15 @@ class CreateForeignPropertyPeriodSummaryValidator extends Validator[CreateForeig
         List(
           body.foreignFhlEea.map(validateForeignFhlEea).getOrElse(NoValidationErrors),
           body.foreignProperty
-            .map(_.zipWithIndex.toList.flatMap {
-              case (entry, i) => validateForeignProperty(entry, i)
+            .map(_.zipWithIndex.toList.flatMap { case (entry, i) =>
+              validateForeignProperty(entry, i)
             })
             .getOrElse(NoValidationErrors),
           body.foreignFhlEea.flatMap(_.expenditure.map(validateForeignFhlEeaConsolidatedExpenses)).getOrElse(NoValidationErrors),
           body.foreignProperty
             .map(
-              _.toList.zipWithIndex.map {
-                case (entry, i) =>
-                  entry.expenditure.map(expenditure => validateForeignPropertyConsolidatedExpenses(expenditure, i)).getOrElse(NoValidationErrors)
+              _.toList.zipWithIndex.map { case (entry, i) =>
+                entry.expenditure.map(expenditure => validateForeignPropertyConsolidatedExpenses(expenditure, i)).getOrElse(NoValidationErrors)
               }
             )
             .getOrElse(Nil)

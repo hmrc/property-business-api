@@ -16,16 +16,18 @@
 
 package v2.models.response.retrieveForeignPropertyPeriodSummary.foreignNonFhlProperty
 
-import play.api.libs.json.{ JsPath, Json, Reads, Writes }
 import play.api.libs.functional.syntax._
+import play.api.libs.json.{JsPath, Json, Reads, Writes}
 
 case class ForeignNonFhlProperty(countryCode: String, income: Option[ForeignNonFhlPropertyIncome], expenses: Option[ForeignNonFhlPropertyExpenses])
 
 object ForeignNonFhlProperty {
   implicit val writes: Writes[ForeignNonFhlProperty] = Json.writes[ForeignNonFhlProperty]
+
   implicit val reads: Reads[ForeignNonFhlProperty] = (
     (JsPath \ "countryCode").read[String] and
       (JsPath \ "income").readNullable[ForeignNonFhlPropertyIncome] and
       (JsPath \ "expenses").readNullable[ForeignNonFhlPropertyExpenses]
   )(ForeignNonFhlProperty.apply _)
+
 }

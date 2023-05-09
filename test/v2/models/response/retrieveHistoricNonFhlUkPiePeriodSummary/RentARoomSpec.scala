@@ -16,7 +16,7 @@
 
 package v2.models.response.retrieveHistoricNonFhlUkPiePeriodSummary
 
-import play.api.libs.json.{ JsValue, Json }
+import play.api.libs.json.{JsValue, Json}
 import support.UnitSpec
 import v2.models.utils.JsonErrorValidators
 
@@ -79,4 +79,5 @@ class RentARoomSpec extends UnitSpec with JsonErrorValidators {
       }
     }
   }
+
 }

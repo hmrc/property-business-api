@@ -20,10 +20,7 @@ import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
 import v1.controllers.requestParsers.DeleteForeignPropertyAnnualSubmissionRequestParser
 import v1.models.errors.ErrorWrapper
-import v1.models.request.deleteForeignPropertyAnnualSubmission.{
-  DeleteForeignPropertyAnnualSubmissionRawData,
-  DeleteForeignPropertyAnnualSubmissionRequest
-}
+import v1.models.request.deleteForeignPropertyAnnualSubmission.{DeleteForeignPropertyAnnualSubmissionRawData, DeleteForeignPropertyAnnualSubmissionRequest}
 
 trait MockDeleteForeignPropertyAnnualSubmissionRequestParser extends MockFactory {
 
@@ -37,5 +34,7 @@ trait MockDeleteForeignPropertyAnnualSubmissionRequestParser extends MockFactory
         .parseRequest(_: DeleteForeignPropertyAnnualSubmissionRawData)(_: String))
         .expects(data, *)
     }
+
   }
+
 }

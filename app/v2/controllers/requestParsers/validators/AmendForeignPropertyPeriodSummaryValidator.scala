@@ -17,22 +17,13 @@
 package v2.controllers.requestParsers.validators
 
 import api.controllers.requestParsers.validators.Validator
-import api.controllers.requestParsers.validators.validations.{
-  BusinessIdValidation,
-  CountryCodeValidation,
-  JsonFormatValidation,
-  NinoValidation,
-  NumberValidation,
-  SubmissionIdValidation,
-  TaxYearValidation
-}
+import api.controllers.requestParsers.validators.validations._
 import api.models.errors.{MtdError, RuleDuplicateCountryCodeError}
 import config.AppConfig
 import v2.controllers.requestParsers.validators.validations._
 import v2.models.request.amendForeignPropertyPeriodSummary.{AmendForeignPropertyPeriodSummaryRawData, AmendForeignPropertyPeriodSummaryRequestBody}
 import v2.models.request.common.foreignFhlEea.{AmendForeignFhlEea, AmendForeignFhlEeaExpenses}
 import v2.models.request.common.foreignPropertyEntry.{AmendForeignNonFhlPropertyEntry, AmendForeignNonFhlPropertyExpenses}
-import api.controllers.requestParsers.validators.validations.NoValidationErrors
 
 import javax.inject.{Inject, Singleton}
 

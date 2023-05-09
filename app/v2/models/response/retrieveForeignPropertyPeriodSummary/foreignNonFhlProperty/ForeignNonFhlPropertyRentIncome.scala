@@ -16,7 +16,7 @@
 
 package v2.models.response.retrieveForeignPropertyPeriodSummary.foreignNonFhlProperty
 
-import play.api.libs.json.{ Json, Reads, Writes }
+import play.api.libs.json.{Json, Reads, Writes}
 
 case class ForeignNonFhlPropertyRentIncome(rentAmount: Option[BigDecimal])
 

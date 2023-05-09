@@ -16,13 +16,13 @@
 
 package v2.services
 
-import support.UnitSpec
-import uk.gov.hmrc.http.HeaderCarrier
 import api.controllers.EndpointLogContext
-import v2.mocks.connectors.MockAmendUkPropertyAnnualSubmissionConnector
 import api.models.domain.{Nino, TaxYear}
 import api.models.errors._
 import api.models.outcomes.ResponseWrapper
+import support.UnitSpec
+import uk.gov.hmrc.http.HeaderCarrier
+import v2.mocks.connectors.MockAmendUkPropertyAnnualSubmissionConnector
 import v2.models.request.amendUkPropertyAnnualSubmission.{AmendUkPropertyAnnualSubmissionRequest, AmendUkPropertyAnnualSubmissionRequestBody}
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -68,6 +68,7 @@ class AmendUkPropertyAnnualSubmissionServiceSpec extends UnitSpec {
           "INCOME_SOURCE_NOT_FOUND"     -> NotFoundError,
           "INCOMPATIBLE_PAYLOAD"        -> RuleTypeOfBusinessIncorrectError,
           "TAX_YEAR_NOT_SUPPORTED"      -> RuleTaxYearNotSupportedError,
+          "BUSINESS_VALIDATION_FAILURE" -> RulePropertyIncomeAllowanceError,
           "MISSING_ALLOWANCES"          -> InternalError,
           "DUPLICATE_COUNTRY_CODE"      -> InternalError,
           "SERVER_ERROR"                -> InternalError,

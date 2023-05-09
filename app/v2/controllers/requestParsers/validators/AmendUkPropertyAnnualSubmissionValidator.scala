@@ -17,8 +17,8 @@
 package v2.controllers.requestParsers.validators
 
 import api.controllers.requestParsers.validators.Validator
-import api.controllers.requestParsers.validators.validations.{BusinessIdValidation, DateValidation, JsonFormatValidation, NinoValidation, NoValidationErrors, NumberValidation, StringValidation, TaxYearValidation}
-import api.models.errors.{MtdError, RulePropertyIncomeAllowanceError}
+import api.controllers.requestParsers.validators.validations._
+import api.models.errors.MtdError
 import config.AppConfig
 import v2.controllers.requestParsers.validators.validations._
 import v2.models.request.amendUkPropertyAnnualSubmission.ukFhlProperty.{UkFhlProperty, UkFhlPropertyAllowances}
@@ -29,7 +29,7 @@ import v2.models.request.common.StructuredBuildingAllowance
 import javax.inject.{Inject, Singleton}
 
 @Singleton
-class AmendUkPropertyAnnualSubmissionValidator @Inject()(appConfig: AppConfig) extends Validator[AmendUkPropertyAnnualSubmissionRawData] {
+class AmendUkPropertyAnnualSubmissionValidator @Inject() (appConfig: AppConfig) extends Validator[AmendUkPropertyAnnualSubmissionRawData] {
 
   private lazy val minTaxYear = appConfig.minimumTaxV2Uk
   private val validationSet   = List(parameterFormatValidation, bodyFormatValidation, bodyFieldValidation)
@@ -62,14 +62,14 @@ class AmendUkPropertyAnnualSubmissionValidator @Inject()(appConfig: AppConfig) e
           body.ukNonFhlProperty.flatMap(_.allowances).map(validateNonFhlAllowances).getOrElse(NoValidationErrors),
           body.ukNonFhlProperty
             .flatMap(_.allowances.flatMap(_.structuredBuildingAllowance))
-            .map(_.zipWithIndex.toList.flatMap {
-              case (entry, i) => validateStructuredBuildingAllowance(entry, i)
+            .map(_.zipWithIndex.toList.flatMap { case (entry, i) =>
+              validateStructuredBuildingAllowance(entry, i)
             })
             .getOrElse(NoValidationErrors),
           body.ukNonFhlProperty
             .flatMap(_.allowances.flatMap(_.enhancedStructuredBuildingAllowance))
-            .map(_.zipWithIndex.toList.flatMap {
-              case (entry, i) => validateEnhancedStructuredBuildingAllowance(entry, i)
+            .map(_.zipWithIndex.toList.flatMap { case (entry, i) =>
+              validateEnhancedStructuredBuildingAllowance(entry, i)
             })
             .getOrElse(NoValidationErrors)
         )
@@ -115,8 +115,7 @@ class AmendUkPropertyAnnualSubmissionValidator @Inject()(appConfig: AppConfig) e
         field = ukFhlProperty.allowances.flatMap(_.propertyIncomeAllowance),
         path = "/ukFhlProperty/allowances/propertyIncomeAllowance",
         max = 1000
-      ),
-      validateFhlPropertyIncomeAllowance(ukFhlProperty)
+      )
     ).flatten
   }
 
@@ -166,8 +165,7 @@ class AmendUkPropertyAnnualSubmissionValidator @Inject()(appConfig: AppConfig) e
         field = ukNonFhlProperty.allowances.flatMap(_.propertyIncomeAllowance),
         path = "/ukNonFhlProperty/allowances/propertyIncomeAllowance",
         max = 1000
-      ),
-      validateNonFhlPropertyIncomeAllowance(ukNonFhlProperty)
+      )
     ).flatten
   }
 
@@ -203,6 +201,7 @@ class AmendUkPropertyAnnualSubmissionValidator @Inject()(appConfig: AppConfig) e
       )
     ).flatten
   }
+
   private def validateEnhancedStructuredBuildingAllowance(buildingAllowance: StructuredBuildingAllowance, index: Int): List[MtdError] = {
     List(
       NumberValidation.validate(
@@ -232,7 +231,7 @@ class AmendUkPropertyAnnualSubmissionValidator @Inject()(appConfig: AppConfig) e
       StringValidation.validate(
         field = buildingAllowance.building.postcode,
         path = s"/ukNonFhlProperty/allowances/enhancedStructuredBuildingAllowance/$index/building/postcode"
-      ),
+      )
     ).flatten
   }
 
@@ -250,31 +249,8 @@ class AmendUkPropertyAnnualSubmissionValidator @Inject()(appConfig: AppConfig) e
     )
   }
 
-  private def validateFhlPropertyIncomeAllowance(property: UkFhlProperty): List[MtdError] = {
-    (for {
-      allowances  <- property.allowances
-      adjustments <- property.adjustments
-    } yield {
-      (allowances.propertyIncomeAllowance, adjustments.privateUseAdjustment) match {
-        case (Some(_), Some(_)) => List(RulePropertyIncomeAllowanceError.copy(paths = Some(Seq("/ukFhlProperty"))))
-        case _                  => Nil
-      }
-    }).getOrElse(Nil)
-  }
-
-  private def validateNonFhlPropertyIncomeAllowance(property: UkNonFhlProperty): List[MtdError] = {
-    (for {
-      allowances  <- property.allowances
-      adjustments <- property.adjustments
-    } yield {
-      (allowances.propertyIncomeAllowance, adjustments.privateUseAdjustment) match {
-        case (Some(_), Some(_)) => List(RulePropertyIncomeAllowanceError.copy(paths = Some(Seq(s"/ukNonFhlProperty"))))
-        case _                  => Nil
-      }
-    }).getOrElse(Nil)
-  }
-
   override def validate(data: AmendUkPropertyAnnualSubmissionRawData): List[MtdError] = {
     run(validationSet, data).distinct
   }
+
 }

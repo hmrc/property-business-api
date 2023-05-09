@@ -28,4 +28,5 @@ object UkNonFhlProperty {
     (__ \ "ukOtherPropertyAnnualAdjustments").readNullable[UkNonFhlPropertyAdjustments] and
       (__ \ "ukOtherPropertyAnnualAllowances").readNullable[UkNonFhlPropertyAllowances]
   )(UkNonFhlProperty.apply _)
+
 }

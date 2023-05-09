@@ -16,7 +16,7 @@
 
 package mocks
 
-import config.{ AppConfig, ConfidenceLevelConfig }
+import config.{AppConfig, ConfidenceLevelConfig}
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
 import play.api.Configuration
@@ -63,4 +63,5 @@ trait MockAppConfig extends MockFactory {
     def minimumTaxHistoric: CallHandler[Int] = (mockAppConfig.minimumTaxHistoric _).expects()
     def maximumTaxHistoric: CallHandler[Int] = (mockAppConfig.maximumTaxHistoric _).expects()
   }
+
 }

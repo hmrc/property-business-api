@@ -19,11 +19,7 @@ package v2.controllers.requestParsers
 import api.controllers.requestParsers.RequestParser
 import api.models.domain.Nino
 import v2.controllers.requestParsers.validators.CreateHistoricNonFhlUkPropertyPeriodSummaryValidator
-import v2.models.request.createHistoricNonFhlUkPropertyPeriodSummary.{
-  CreateHistoricNonFhlUkPropertyPeriodSummaryRawData,
-  CreateHistoricNonFhlUkPropertyPeriodSummaryRequest,
-  CreateHistoricNonFhlUkPropertyPeriodSummaryRequestBody
-}
+import v2.models.request.createHistoricNonFhlUkPropertyPeriodSummary.{CreateHistoricNonFhlUkPropertyPeriodSummaryRawData, CreateHistoricNonFhlUkPropertyPeriodSummaryRequest, CreateHistoricNonFhlUkPropertyPeriodSummaryRequestBody}
 
 import javax.inject.Inject
 

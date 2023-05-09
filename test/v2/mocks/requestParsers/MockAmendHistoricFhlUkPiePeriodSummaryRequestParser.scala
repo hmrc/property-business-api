@@ -16,10 +16,10 @@
 
 package v2.mocks.requestParsers
 
+import api.models.errors.ErrorWrapper
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
 import v2.controllers.requestParsers.AmendHistoricFhlUkPiePeriodSummaryRequestParser
-import api.models.errors.ErrorWrapper
 import v2.models.request.amendHistoricFhlUkPiePeriodSummary.{AmendHistoricFhlUkPiePeriodSummaryRawData, AmendHistoricFhlUkPiePeriodSummaryRequest}
 
 trait MockAmendHistoricFhlUkPiePeriodSummaryRequestParser extends MockFactory {

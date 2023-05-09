@@ -37,4 +37,5 @@ class UkNonFhlPieIncomeSpec extends UnitSpec with AmendHistoricNonFhlUkPiePeriod
       }
     }
   }
+
 }

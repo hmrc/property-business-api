@@ -18,11 +18,11 @@ package v2.controllers.requestParsers.validators
 
 import api.controllers.requestParsers.validators.Validator
 import api.controllers.requestParsers.validators.validations.{NinoValidation, TaxYearValidation}
+import api.models.errors.MtdError
 import config.AppConfig
+import v2.models.request.retrieveHistoricFhlUkPropertyAnnualSubmission.RetrieveHistoricFhlUkPropertyAnnualSubmissionRawData
 
 import javax.inject.{Inject, Singleton}
-import api.models.errors.MtdError
-import v2.models.request.retrieveHistoricFhlUkPropertyAnnualSubmission.RetrieveHistoricFhlUkPropertyAnnualSubmissionRawData
 
 @Singleton
 class RetrieveHistoricFhlUkPropertyAnnualSubmissionValidator @Inject() (appConfig: AppConfig)

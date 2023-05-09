@@ -16,13 +16,15 @@
 
 package v2.models.response.amendHistoricFhlUkPiePeriodSummary
 
-import config.AppConfig
-import v2.hateoas.HateoasLinks
 import api.hateoas.HateoasLinksFactory
 import api.models.hateoas.{HateoasData, Link}
+import config.AppConfig
+import v2.hateoas.HateoasLinks
 
 object AmendHistoricFhlUkPropertyPeriodSummaryHateoasData extends HateoasLinks {
+
   implicit object LinksFactory extends HateoasLinksFactory[Unit, AmendHistoricFhlUkPropertyPeriodSummaryHateoasData] {
+
     override def links(appConfig: AppConfig, data: AmendHistoricFhlUkPropertyPeriodSummaryHateoasData): Seq[Link] = {
       import data._
       Seq(
@@ -31,7 +33,9 @@ object AmendHistoricFhlUkPropertyPeriodSummaryHateoasData extends HateoasLinks {
         listHistoricFhlUkPiePeriodSummaries(appConfig, nino, self = false)
       )
     }
+
   }
+
 }
 
 case class AmendHistoricFhlUkPropertyPeriodSummaryHateoasData(nino: String, periodId: String) extends HateoasData

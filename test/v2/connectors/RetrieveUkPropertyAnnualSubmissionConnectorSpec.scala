@@ -17,11 +17,11 @@
 package v2.connectors
 
 import api.connectors.{ConnectorSpec, DownstreamOutcome}
-import org.scalamock.handlers.CallHandler
-import v2.connectors.RetrieveUkPropertyAnnualSubmissionConnector._
 import api.models.domain.{Nino, TaxYear}
 import api.models.errors.{DownstreamErrorCode, DownstreamErrors}
 import api.models.outcomes.ResponseWrapper
+import org.scalamock.handlers.CallHandler
+import v2.connectors.RetrieveUkPropertyAnnualSubmissionConnector._
 import v2.models.request.retrieveUkPropertyAnnualSubmission.RetrieveUkPropertyAnnualSubmissionRequest
 import v2.models.response.retrieveUkPropertyAnnualSubmission.RetrieveUkPropertyAnnualSubmissionResponse
 import v2.models.response.retrieveUkPropertyAnnualSubmission.ukFhlProperty.UkFhlProperty

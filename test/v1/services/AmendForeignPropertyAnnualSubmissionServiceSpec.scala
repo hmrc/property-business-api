@@ -84,6 +84,7 @@ class AmendForeignPropertyAnnualSubmissionServiceSpec extends ServiceSpec {
     val service = new AmendForeignPropertyAnnualSubmissionService(
       connector = mockAmendForeignPropertyAnnualSubmissionConnector
     )
+
   }
 
   "service" should {
@@ -126,4 +127,5 @@ class AmendForeignPropertyAnnualSubmissionServiceSpec extends ServiceSpec {
       input.foreach(args => (serviceError _).tupled(args))
     }
   }
+
 }

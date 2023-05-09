@@ -16,7 +16,7 @@
 
 package v1.models.response.retrieveForeignPropertyAnnualSubmission.foreignProperty
 
-import play.api.libs.json.{ Json, OFormat }
+import play.api.libs.json.{Json, OFormat}
 
 case class ForeignPropertyAllowances(annualInvestmentAllowance: Option[BigDecimal],
                                      costOfReplacingDomesticItems: Option[BigDecimal],

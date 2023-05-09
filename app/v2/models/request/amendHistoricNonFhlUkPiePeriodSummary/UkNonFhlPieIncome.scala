@@ -16,8 +16,8 @@
 
 package v2.models.request.amendHistoricNonFhlUkPiePeriodSummary
 
-import play.api.libs.functional.syntax.{ toFunctionalBuilderOps, unlift }
-import play.api.libs.json.{ JsPath, Json, Reads, Writes }
+import play.api.libs.functional.syntax.{toFunctionalBuilderOps, unlift}
+import play.api.libs.json.{JsPath, Json, Reads, Writes}
 import v2.models.request.common.ukPropertyRentARoom.UkPropertyIncomeRentARoom
 
 case class UkNonFhlPieIncome(periodAmount: Option[BigDecimal],

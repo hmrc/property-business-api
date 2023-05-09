@@ -29,4 +29,5 @@ object UkNonFhlPropertyBuilding {
       (__ \ "number").readNullable[String] and
       (__ \ "postCode").read[String]
   )(UkNonFhlPropertyBuilding.apply _)
+
 }

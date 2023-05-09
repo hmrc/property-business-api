@@ -30,5 +30,7 @@ trait MockDateUtils extends MockFactory {
 
     def currentTaxYearEnd(): CallHandler0[String] =
       (mockDateUtils.currentTaxYearEnd _: () => String).expects()
+
   }
+
 }

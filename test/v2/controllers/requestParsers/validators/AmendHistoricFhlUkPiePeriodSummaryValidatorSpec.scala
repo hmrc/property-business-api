@@ -16,10 +16,10 @@
 
 package v2.controllers.requestParsers.validators
 
+import api.models.errors.{NinoFormatError, PeriodIdFormatError, RuleIncorrectOrEmptyBodyError, ValueFormatError}
 import mocks.MockAppConfig
-import play.api.libs.json.{ JsObject, JsValue, Json }
+import play.api.libs.json.{JsObject, JsValue, Json}
 import support.UnitSpec
-import api.models.errors.{ NinoFormatError, PeriodIdFormatError, RuleIncorrectOrEmptyBodyError, ValueFormatError }
 import v2.models.request.amendHistoricFhlUkPiePeriodSummary.AmendHistoricFhlUkPiePeriodSummaryRawData
 import v2.models.utils.JsonErrorValidators
 
@@ -186,4 +186,5 @@ class AmendHistoricFhlUkPiePeriodSummaryValidatorSpec extends UnitSpec with Json
       }
     }
   }
+
 }

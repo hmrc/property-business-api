@@ -16,14 +16,14 @@
 
 package v2.mocks.connectors
 
+import api.connectors.DownstreamOutcome
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
 import uk.gov.hmrc.http.HeaderCarrier
-import api.connectors.{ DownstreamOutcome }
 import v2.connectors.CreateHistoricNonFhlUkPropertyPeriodSummaryConnector
 import v2.models.request.createHistoricNonFhlUkPropertyPeriodSummary.CreateHistoricNonFhlUkPropertyPeriodSummaryRequest
 
-import scala.concurrent.{ ExecutionContext, Future }
+import scala.concurrent.{ExecutionContext, Future}
 
 trait MockCreateHistoricNonFhlUkPropertyPeriodSummaryConnector extends MockFactory {
 
@@ -44,5 +44,7 @@ trait MockCreateHistoricNonFhlUkPropertyPeriodSummaryConnector extends MockFacto
         )
         .expects(requestData, *, *, *)
     }
+
   }
+
 }

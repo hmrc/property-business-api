@@ -16,11 +16,11 @@
 
 package v2.models.request.amendUkPropertyPeriodSummary
 
-import play.api.libs.json.{ JsValue, Json }
+import play.api.libs.json.{JsValue, Json}
 import support.UnitSpec
-import v2.models.request.common.ukPropertyRentARoom._
 import v2.models.request.common.ukFhlProperty._
 import v2.models.request.common.ukNonFhlProperty._
+import v2.models.request.common.ukPropertyRentARoom._
 import v2.models.utils.JsonErrorValidators
 
 class AmendUkPropertyPeriodSummaryRequestBodySpec extends UnitSpec with JsonErrorValidators {
@@ -191,6 +191,7 @@ class AmendUkPropertyPeriodSummaryRequestBodySpec extends UnitSpec with JsonErro
       }
     }
   }
+
   "writes" when {
     "passed valid model" should {
       "return valid JSON" in {
@@ -198,4 +199,5 @@ class AmendUkPropertyPeriodSummaryRequestBodySpec extends UnitSpec with JsonErro
       }
     }
   }
+
 }

@@ -16,7 +16,7 @@
 
 package v1.models.request.amendForeignPropertyAnnualSubmission.foreignProperty
 
-import play.api.libs.json.{ JsValue, Json }
+import play.api.libs.json.{JsValue, Json}
 import support.UnitSpec
 import v1.models.utils.JsonErrorValidators
 
@@ -138,6 +138,7 @@ class ForeignPropertyEntrySpec extends UnitSpec with JsonErrorValidators {
       }
     }
   }
+
   "writes" when {
     "passed valid model" should {
       "return valid JSON" in {
@@ -151,4 +152,5 @@ class ForeignPropertyEntrySpec extends UnitSpec with JsonErrorValidators {
       }
     }
   }
+
 }

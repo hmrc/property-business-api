@@ -19,12 +19,12 @@ package v1.endpoints
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import play.api.http.HeaderNames.ACCEPT
 import play.api.http.Status._
-import play.api.libs.json.{ JsObject, JsValue, Json }
-import play.api.libs.ws.{ WSRequest, WSResponse }
+import play.api.libs.json.{JsObject, JsValue, Json}
+import play.api.libs.ws.{WSRequest, WSResponse}
 import play.api.test.Helpers.AUTHORIZATION
 import support.V1IntegrationBaseSpec
 import v1.models.errors._
-import v1.stubs.{ AuditStub, AuthStub, IfsStub, MtdIdLookupStub }
+import v1.stubs.{AuditStub, AuthStub, IfsStub, MtdIdLookupStub}
 
 class AmendForeignPropertyPeriodSummaryControllerISpec extends V1IntegrationBaseSpec {
 
@@ -127,6 +127,7 @@ class AmendForeignPropertyPeriodSummaryControllerISpec extends V1IntegrationBase
          |  "reason": "ifs message"
          |}
        """.stripMargin
+
   }
 
   "Calling the amend foreign property period summary endpoint" should {
@@ -204,7 +205,7 @@ class AmendForeignPropertyPeriodSummaryControllerISpec extends V1IntegrationBase
               List(
                 "/foreignProperty/0/countryCode"
               ))
-          ),
+          )
         )
 
         val wrappedErrors: ErrorWrapper = ErrorWrapper(
@@ -429,42 +430,48 @@ class AmendForeignPropertyPeriodSummaryControllerISpec extends V1IntegrationBase
 
           val input = Seq(
             ("AA1123A", "XAIS12345678910", "4557ecb5-fd32-48cc-81f5-e6acd1099f3c", validRequestBodyJson, BAD_REQUEST, NinoFormatError),
-            ("AA123456A",
-             "XAIS1234dfxgchjbn5678910",
-             "4557ecb5-fd32-48cc-81f5-e6acd1099f3c",
-             validRequestBodyJson,
-             BAD_REQUEST,
-             BusinessIdFormatError),
-            ("AA123456A",
-             "XAIS12345678910",
-             "4557ecb5-fd32-awefwaef48cc-81f5-e6acd1099f3c",
-             validRequestBodyJson,
-             BAD_REQUEST,
-             SubmissionIdFormatError),
-            ("AA123456A",
-             "XAIS12345678910",
-             "4557ecb5-fd32-48cc-81f5-e6acd1099f3c",
-             Json.parse(s"""{"foreignFhlEea": 2342314}""".stripMargin),
-             BAD_REQUEST,
-             RuleIncorrectOrEmptyBodyError),
-            ("AA123456A",
-             "XAIS12345678910",
-             "4557ecb5-fd32-48cc-81f5-e6acd1099f3c",
-             bothExpensesTypesProvidedJson,
-             BAD_REQUEST,
-             RuleBothExpensesSuppliedRequestError),
-            ("AA123456A",
-             "XAIS12345678910",
-             "4557ecb5-fd32-48cc-81f5-e6acd1099f3c",
-             allInvalidValueRequestBodyJson,
-             BAD_REQUEST,
-             allInvalidValueRequestError),
-            ("AA123456A",
-             "XAIS12345678910",
-             "4557ecb5-fd32-48cc-81f5-e6acd1099f3c",
-             allInvalidCountryCodeRequestBodyJson,
-             BAD_REQUEST,
-             allInvalidCountryCodeRequestError)
+            (
+              "AA123456A",
+              "XAIS1234dfxgchjbn5678910",
+              "4557ecb5-fd32-48cc-81f5-e6acd1099f3c",
+              validRequestBodyJson,
+              BAD_REQUEST,
+              BusinessIdFormatError),
+            (
+              "AA123456A",
+              "XAIS12345678910",
+              "4557ecb5-fd32-awefwaef48cc-81f5-e6acd1099f3c",
+              validRequestBodyJson,
+              BAD_REQUEST,
+              SubmissionIdFormatError),
+            (
+              "AA123456A",
+              "XAIS12345678910",
+              "4557ecb5-fd32-48cc-81f5-e6acd1099f3c",
+              Json.parse(s"""{"foreignFhlEea": 2342314}""".stripMargin),
+              BAD_REQUEST,
+              RuleIncorrectOrEmptyBodyError),
+            (
+              "AA123456A",
+              "XAIS12345678910",
+              "4557ecb5-fd32-48cc-81f5-e6acd1099f3c",
+              bothExpensesTypesProvidedJson,
+              BAD_REQUEST,
+              RuleBothExpensesSuppliedRequestError),
+            (
+              "AA123456A",
+              "XAIS12345678910",
+              "4557ecb5-fd32-48cc-81f5-e6acd1099f3c",
+              allInvalidValueRequestBodyJson,
+              BAD_REQUEST,
+              allInvalidValueRequestError),
+            (
+              "AA123456A",
+              "XAIS12345678910",
+              "4557ecb5-fd32-48cc-81f5-e6acd1099f3c",
+              allInvalidCountryCodeRequestBodyJson,
+              BAD_REQUEST,
+              allInvalidCountryCodeRequestError)
           )
           input.foreach(args => (validationErrorTest _).tupled(args))
         }
@@ -502,4 +509,5 @@ class AmendForeignPropertyPeriodSummaryControllerISpec extends V1IntegrationBase
       }
     }
   }
+
 }

@@ -69,4 +69,5 @@ class VersionRoutingMapSpec extends UnitSpec with MockAppConfig with GuiceOneApp
       }
     }
   }
+
 }

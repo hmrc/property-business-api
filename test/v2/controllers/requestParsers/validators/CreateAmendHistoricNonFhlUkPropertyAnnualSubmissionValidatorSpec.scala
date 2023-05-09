@@ -16,10 +16,10 @@
 
 package v2.controllers.requestParsers.validators
 
-import mocks.MockAppConfig
-import play.api.libs.json.{ JsNumber, JsObject, JsValue, Json }
-import support.UnitSpec
 import api.models.errors._
+import mocks.MockAppConfig
+import play.api.libs.json.{JsNumber, JsObject, JsValue, Json}
+import support.UnitSpec
 import v2.models.request.createAmendHistoricNonFhlUkPropertyAnnualSubmission.CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRawData
 import v2.models.utils.JsonErrorValidators
 
@@ -140,7 +140,8 @@ class CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionValidatorSpec extends U
 
         "for /annualAdjustments" in {
           // Because it has a mandatory property
-          validator.validate(data(validNino, validTaxYear, body.replaceWithEmptyObject("/annualAdjustments"))) should contain only RuleIncorrectOrEmptyBodyError
+          validator.validate(
+            data(validNino, validTaxYear, body.replaceWithEmptyObject("/annualAdjustments"))) should contain only RuleIncorrectOrEmptyBodyError
             .copy(paths = Some(Seq("/annualAdjustments/nonResidentLandlord")))
         }
       }

@@ -16,7 +16,7 @@
 
 package v1.models.request.amendForeignPropertyPeriodSummary
 
-import play.api.libs.json.{ Json, Reads, Writes }
+import play.api.libs.json.{Json, Reads, Writes}
 import v1.models.request.common.foreignFhlEea.ForeignFhlEea
 import v1.models.request.common.foreignPropertyEntry.ForeignPropertyEntry
 
@@ -24,10 +24,11 @@ case class AmendForeignPropertyPeriodSummaryRequestBody(foreignFhlEea: Option[Fo
 
   def isEmpty: Boolean =
     (foreignFhlEea.isEmpty && foreignProperty.isEmpty) ||
-    foreignFhlEea.flatMap(_.expenditure.map(_.isEmpty)).getOrElse(false) ||
-    foreignProperty.exists(_.isEmpty) ||
-    foreignFhlEea.exists(_.isEmpty) ||
-    foreignProperty.exists(_.exists(_.expenditure.exists(_.isEmpty)))
+      foreignFhlEea.flatMap(_.expenditure.map(_.isEmpty)).getOrElse(false) ||
+      foreignProperty.exists(_.isEmpty) ||
+      foreignFhlEea.exists(_.isEmpty) ||
+      foreignProperty.exists(_.exists(_.expenditure.exists(_.isEmpty)))
+
 }
 
 object AmendForeignPropertyPeriodSummaryRequestBody {

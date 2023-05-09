@@ -17,7 +17,7 @@
 package v2.models.response.retrieveHistoricFhlUkPropertyAnnualSubmission
 
 import mocks.MockAppConfig
-import play.api.libs.json.{ JsValue, Json }
+import play.api.libs.json.{JsValue, Json}
 import support.UnitSpec
 
 class RetrieveHistoricFhlUkPropertyAnnualSubmissionResponseSpec extends UnitSpec with MockAppConfig {
@@ -48,13 +48,14 @@ class RetrieveHistoricFhlUkPropertyAnnualSubmissionResponseSpec extends UnitSpec
 
   val model = RetrieveHistoricFhlUkPropertyAnnualSubmissionResponse(
     Some(
-      AnnualAdjustments(decimal("200.00"),
-                        decimal("300.00"),
-                        decimal("400.00"),
-                        true,
-                        decimal("500.02"),
-                        true,
-                        Option(RentARoom(jointlyLet = false)))),
+      AnnualAdjustments(
+        decimal("200.00"),
+        decimal("300.00"),
+        decimal("400.00"),
+        true,
+        decimal("500.02"),
+        true,
+        Option(RentARoom(jointlyLet = false)))),
     Some(AnnualAllowances(decimal("200.00"), decimal("300.00"), decimal("400.02"), decimal("10.02")))
   )
 

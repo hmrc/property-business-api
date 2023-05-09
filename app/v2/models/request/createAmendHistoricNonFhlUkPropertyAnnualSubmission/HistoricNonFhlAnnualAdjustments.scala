@@ -16,8 +16,8 @@
 
 package v2.models.request.createAmendHistoricNonFhlUkPropertyAnnualSubmission
 
-import play.api.libs.functional.syntax.{ toFunctionalBuilderOps, unlift }
-import play.api.libs.json.{ JsPath, Json, OWrites, Reads }
+import play.api.libs.functional.syntax.{toFunctionalBuilderOps, unlift}
+import play.api.libs.json.{JsPath, Json, OWrites, Reads}
 import v2.models.request.common.ukPropertyRentARoom.UkPropertyAdjustmentsRentARoom
 
 case class HistoricNonFhlAnnualAdjustments(

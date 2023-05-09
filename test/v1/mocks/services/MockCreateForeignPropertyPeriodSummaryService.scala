@@ -35,7 +35,7 @@ trait MockCreateForeignPropertyPeriodSummaryService extends MockFactory {
   object MockCreateForeignPropertyService {
 
     def createForeignProperty(requestData: CreateForeignPropertyPeriodSummaryRequest)
-      : CallHandler[Future[Either[ErrorWrapper, ResponseWrapper[CreateForeignPropertyPeriodSummaryResponse]]]] = {
+        : CallHandler[Future[Either[ErrorWrapper, ResponseWrapper[CreateForeignPropertyPeriodSummaryResponse]]]] = {
       (
         mockCreateForeignPropertyService
           .createForeignProperty(_: CreateForeignPropertyPeriodSummaryRequest)(
@@ -47,5 +47,7 @@ trait MockCreateForeignPropertyPeriodSummaryService extends MockFactory {
         )
         .expects(requestData, *, *, *, *)
     }
+
   }
+
 }

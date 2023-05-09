@@ -16,16 +16,16 @@
 
 package v2.endpoints
 
+import api.models.errors._
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import play.api.http.HeaderNames.ACCEPT
 import play.api.http.Status._
-import play.api.libs.json.{ JsObject, JsValue, Json }
-import play.api.libs.ws.{ WSRequest, WSResponse }
+import play.api.libs.json.{JsObject, JsValue, Json}
+import play.api.libs.ws.{WSRequest, WSResponse}
 import play.api.test.Helpers.AUTHORIZATION
 import support.V2IntegrationBaseSpec
-import api.models.errors._
 import v2.models.request.createAmendForeignPropertyAnnualSubmission.CreateAmendForeignPropertyAnnualSubmissionFixture
-import v2.stubs.{ AuditStub, AuthStub, DownstreamStub, MtdIdLookupStub }
+import v2.stubs.{AuditStub, AuthStub, DownstreamStub, MtdIdLookupStub}
 
 class CreateAmendForeignPropertyAnnualSubmissionControllerISpec extends V2IntegrationBaseSpec with CreateAmendForeignPropertyAnnualSubmissionFixture {
 
@@ -372,7 +372,7 @@ class CreateAmendForeignPropertyAnnualSubmissionControllerISpec extends V2Integr
               List(
                 "/foreignNonFhlProperty/0/allowances/structuredBuildingAllowance/0/firstYear/qualifyingDate"
               ))
-          ),
+          )
         )
 
         val wrappedErrors: ErrorWrapper = ErrorWrapper(
@@ -424,7 +424,8 @@ class CreateAmendForeignPropertyAnnualSubmissionControllerISpec extends V2Integr
         ("AA123456A", "XAIS1234dfxgchjbn5678910", "2021-22", requestBodyJson, BAD_REQUEST, BusinessIdFormatError),
         ("AA123456A", "XAIS12345678910", "2021-24", requestBodyJson, BAD_REQUEST, RuleTaxYearRangeInvalidError),
         ("AA123456A", "XAIS12345678910", "2018-19", requestBodyJson, BAD_REQUEST, RuleTaxYearNotSupportedError),
-        ("AA123456A",
+        (
+          "AA123456A",
           "XAIS12345678910",
           "2021-22",
           Json.parse(s"""{
@@ -432,25 +433,29 @@ class CreateAmendForeignPropertyAnnualSubmissionControllerISpec extends V2Integr
                         |}""".stripMargin),
           BAD_REQUEST,
           RuleIncorrectOrEmptyBodyError),
-        ("AA123456A",
+        (
+          "AA123456A",
           "XAIS12345678910",
           "2021-22",
           ruleCountryCodeErrorRequestJson,
           BAD_REQUEST,
           RuleCountryCodeError.copy(paths = Some(Seq("/foreignNonFhlProperty/0/countryCode")))),
-        ("AA123456A",
+        (
+          "AA123456A",
           "XAIS12345678910",
           "2021-22",
           formatCountryCodeErrorRequestJson,
           BAD_REQUEST,
           CountryCodeFormatError.copy(paths = Some(Seq("/foreignNonFhlProperty/0/countryCode")))),
-        ("AA123456A",
+        (
+          "AA123456A",
           "XAIS12345678910",
           "2021-22",
           bothAllowancesSuppliedErrorRequestJson,
           BAD_REQUEST,
           RuleBothAllowancesSuppliedError.copy(paths = Some(Seq("/foreignFhlEea/allowances")))),
-        ("AA123456A",
+        (
+          "AA123456A",
           "XAIS12345678910",
           "2022-23",
           ruleBuildingNameOrNumberErrorRequestJson,
@@ -555,6 +560,7 @@ class CreateAmendForeignPropertyAnnualSubmissionControllerISpec extends V2Integr
          |  "reason": "downstream error message"
          |}
        """.stripMargin
+
   }
 
   private trait TysIfsTest extends Test {
@@ -572,5 +578,7 @@ class CreateAmendForeignPropertyAnnualSubmissionControllerISpec extends V2Integr
       "incomeSourceId"  -> businessId,
       "taxYear"         -> "2022-23"
     )
+
   }
+
 }

@@ -16,10 +16,10 @@
 
 package v2.controllers.requestParsers
 
-import play.api.libs.json.Json
-import support.UnitSpec
 import api.models.domain.{Nino, TaxYear}
 import api.models.errors._
+import play.api.libs.json.Json
+import support.UnitSpec
 import v2.mocks.validators.MockAmendForeignPropertyPeriodSummaryValidator
 import v2.models.request.amendForeignPropertyPeriodSummary._
 import v2.models.request.common.foreignFhlEea._
@@ -91,4 +91,5 @@ class AmendForeignPropertyPeriodSummaryRequestParserSpec extends UnitSpec {
       }
     }
   }
+
 }

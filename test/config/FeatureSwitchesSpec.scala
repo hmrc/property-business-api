@@ -113,4 +113,5 @@ class FeatureSwitchesSpec extends UnitSpec with ScalaCheckPropertyChecks {
       }
     }
   }
+
 }

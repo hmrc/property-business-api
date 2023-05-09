@@ -16,7 +16,7 @@
 
 package v2.models.response.retrieveForeignPropertyAnnualSubmission.foreignProperty
 
-import play.api.libs.json.{ Json, OFormat }
+import play.api.libs.json.{Json, OFormat}
 
 case class ForeignPropertyEntry(countryCode: String, adjustments: Option[ForeignPropertyAdjustments], allowances: Option[ForeignPropertyAllowances])
 

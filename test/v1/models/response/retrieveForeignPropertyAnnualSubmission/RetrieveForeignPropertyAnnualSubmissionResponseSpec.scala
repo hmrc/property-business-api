@@ -19,17 +19,9 @@ package v1.models.response.retrieveForeignPropertyAnnualSubmission
 import mocks.MockAppConfig
 import play.api.libs.json.Json
 import support.UnitSpec
-import v1.models.hateoas.{ Link, Method }
-import v1.models.response.retrieveForeignPropertyAnnualSubmission.foreignFhlEea.{
-  ForeignFhlEeaAdjustments,
-  ForeignFhlEeaAllowances,
-  ForeignFhlEeaEntry
-}
-import v1.models.response.retrieveForeignPropertyAnnualSubmission.foreignProperty.{
-  ForeignPropertyAdjustments,
-  ForeignPropertyAllowances,
-  ForeignPropertyEntry
-}
+import v1.models.hateoas.{Link, Method}
+import v1.models.response.retrieveForeignPropertyAnnualSubmission.foreignFhlEea.{ForeignFhlEeaAdjustments, ForeignFhlEeaAllowances, ForeignFhlEeaEntry}
+import v1.models.response.retrieveForeignPropertyAnnualSubmission.foreignProperty.{ForeignPropertyAdjustments, ForeignPropertyAllowances, ForeignPropertyEntry}
 
 class RetrieveForeignPropertyAnnualSubmissionResponseSpec extends UnitSpec with MockAppConfig {
 
@@ -119,6 +111,7 @@ class RetrieveForeignPropertyAnnualSubmissionResponseSpec extends UnitSpec with 
       }
     }
   }
+
   "writes" when {
     "passed valid model" should {
       "return valid JSON" in {
@@ -139,15 +132,18 @@ class RetrieveForeignPropertyAnnualSubmissionResponseSpec extends UnitSpec with 
         MockAppConfig.apiGatewayContext.returns("my/context").anyNumberOfTimes()
 
         RetrieveForeignPropertyAnnualSubmissionResponse.RetrieveAnnualSubmissionLinksFactory.links(mockAppConfig, data) shouldBe Seq(
-          Link(href = s"/my/context/${data.nino}/${data.businessId}/annual/${data.taxYear}",
-               method = Method.PUT,
-               rel = "amend-property-annual-submission"),
+          Link(
+            href = s"/my/context/${data.nino}/${data.businessId}/annual/${data.taxYear}",
+            method = Method.PUT,
+            rel = "amend-property-annual-submission"),
           Link(href = s"/my/context/${data.nino}/${data.businessId}/annual/${data.taxYear}", method = Method.GET, rel = "self"),
-          Link(href = s"/my/context/${data.nino}/${data.businessId}/annual/${data.taxYear}",
-               method = Method.DELETE,
-               rel = "delete-property-annual-submission")
+          Link(
+            href = s"/my/context/${data.nino}/${data.businessId}/annual/${data.taxYear}",
+            method = Method.DELETE,
+            rel = "delete-property-annual-submission")
         )
       }
     }
   }
+
 }

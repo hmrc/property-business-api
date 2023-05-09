@@ -16,9 +16,9 @@
 
 package v2.models.request.createHistoricNonFhlUkPropertyPeriodSummary
 
-import play.api.libs.json.{ JsValue, Json }
+import play.api.libs.json.{JsValue, Json}
 import support.UnitSpec
-import v2.models.request.common.ukPropertyRentARoom.{ UkPropertyExpensesRentARoom, UkPropertyIncomeRentARoom }
+import v2.models.request.common.ukPropertyRentARoom.{UkPropertyExpensesRentARoom, UkPropertyIncomeRentARoom}
 
 class CreateHistoricNonFhlUkPropertyPeriodSummaryRequestBodySpec extends UnitSpec {
 
@@ -184,6 +184,7 @@ class CreateHistoricNonFhlUkPropertyPeriodSummaryRequestBodySpec extends UnitSpe
       }
     }
   }
+
   "writes" when {
     "passed valid model" should {
       "return valid JSON" in {
@@ -200,6 +201,7 @@ class CreateHistoricNonFhlUkPropertyPeriodSummaryRequestBodySpec extends UnitSpe
       }
     }
   }
+
   "writes" when {
     "passed valid consolidated model" should {
       "return valid consolidated JSON" in {
@@ -207,4 +209,5 @@ class CreateHistoricNonFhlUkPropertyPeriodSummaryRequestBodySpec extends UnitSpe
       }
     }
   }
+
 }

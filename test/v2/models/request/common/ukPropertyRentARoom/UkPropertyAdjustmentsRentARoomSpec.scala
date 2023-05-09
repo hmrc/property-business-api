@@ -16,7 +16,7 @@
 
 package v2.models.request.common.ukPropertyRentARoom
 
-import play.api.libs.json.{ JsValue, Json }
+import play.api.libs.json.{JsValue, Json}
 import support.UnitSpec
 
 class UkPropertyAdjustmentsRentARoomSpec extends UnitSpec {
@@ -37,6 +37,7 @@ class UkPropertyAdjustmentsRentARoomSpec extends UnitSpec {
       }
     }
   }
+
   "writes" when {
     "passed valid model" should {
       "return valid JSON" in {
@@ -44,4 +45,5 @@ class UkPropertyAdjustmentsRentARoomSpec extends UnitSpec {
       }
     }
   }
+
 }

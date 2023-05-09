@@ -16,12 +16,12 @@
 
 package v2.controllers.requestParsers.validators.validations
 
+import api.controllers.requestParsers.validators.validations.NoValidationErrors
 import api.models.errors.{MtdError, RuleBothAllowancesSuppliedError}
-import v2.models.request.createAmendForeignPropertyAnnualSubmission.foreignFhlEea.ForeignFhlEeaAllowances
-import v2.models.request.createAmendForeignPropertyAnnualSubmission.foreignNonFhl.ForeignNonFhlAllowances
 import v2.models.request.amendUkPropertyAnnualSubmission.ukFhlProperty.UkFhlPropertyAllowances
 import v2.models.request.amendUkPropertyAnnualSubmission.ukNonFhlProperty.UkNonFhlPropertyAllowances
-import api.controllers.requestParsers.validators.validations.NoValidationErrors
+import v2.models.request.createAmendForeignPropertyAnnualSubmission.foreignFhlEea.ForeignFhlEeaAllowances
+import v2.models.request.createAmendForeignPropertyAnnualSubmission.foreignNonFhl.ForeignNonFhlAllowances
 
 object AllowancesValidation {
 

@@ -16,13 +16,9 @@
 
 package fixtures.AmendHistoricNonFhlUkPiePeriodSummary
 
-import play.api.libs.json.{ JsValue, Json }
-import v2.models.request.amendHistoricNonFhlUkPiePeriodSummary.{
-  AmendHistoricNonFhlUkPiePeriodSummaryRequestBody,
-  UkNonFhlPieExpenses,
-  UkNonFhlPieIncome
-}
-import v2.models.request.common.ukPropertyRentARoom.{ UkPropertyExpensesRentARoom, UkPropertyIncomeRentARoom }
+import play.api.libs.json.{JsValue, Json}
+import v2.models.request.amendHistoricNonFhlUkPiePeriodSummary.{AmendHistoricNonFhlUkPiePeriodSummaryRequestBody, UkNonFhlPieExpenses, UkNonFhlPieIncome}
+import v2.models.request.common.ukPropertyRentARoom.{UkPropertyExpensesRentARoom, UkPropertyIncomeRentARoom}
 
 trait AmendHistoricNonFhlUkPiePeriodSummaryFixtures {
   val rentARoomExpenses: UkPropertyExpensesRentARoom = UkPropertyExpensesRentARoom(Some(1000.00))
@@ -243,4 +239,5 @@ trait AmendHistoricNonFhlUkPiePeriodSummaryFixtures {
       |}
       |""".stripMargin
   )
+
 }

@@ -16,10 +16,10 @@
 
 package v2.mocks.connectors
 
+import api.connectors.DownstreamOutcome
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
 import uk.gov.hmrc.http.HeaderCarrier
-import api.connectors.{DownstreamOutcome}
 import v2.connectors.ListPropertyPeriodSummariesConnector
 import v2.models.request.listPropertyPeriodSummaries.ListPropertyPeriodSummariesRequest
 import v2.models.response.listPropertyPeriodSummaries.ListPropertyPeriodSummariesResponse
@@ -38,5 +38,7 @@ trait MockListPropertyPeriodSummariesConnector extends MockFactory {
         .listPeriodSummaries(_: ListPropertyPeriodSummariesRequest)(_: HeaderCarrier, _: ExecutionContext, _: String))
         .expects(requestData, *, *, *)
     }
+
   }
+
 }

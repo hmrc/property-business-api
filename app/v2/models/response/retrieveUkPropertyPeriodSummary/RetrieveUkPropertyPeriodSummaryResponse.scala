@@ -20,7 +20,7 @@ import api.hateoas.HateoasLinksFactory
 import api.models.hateoas.{HateoasData, Link}
 import config.AppConfig
 import play.api.libs.functional.syntax._
-import play.api.libs.json.{__, Json, OWrites, Reads}
+import play.api.libs.json.{Json, OWrites, Reads, __}
 import v2.hateoas.HateoasLinks
 
 case class RetrieveUkPropertyPeriodSummaryResponse(submittedOn: String,

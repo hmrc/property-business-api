@@ -19,12 +19,12 @@ package v1.endpoints
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import play.api.http.HeaderNames.ACCEPT
 import play.api.http.Status
-import play.api.libs.json.{ JsValue, Json }
-import play.api.libs.ws.{ WSRequest, WSResponse }
+import play.api.libs.json.{JsValue, Json}
+import play.api.libs.ws.{WSRequest, WSResponse}
 import play.api.test.Helpers.AUTHORIZATION
 import support.V1IntegrationBaseSpec
-import v1.models.errors.{ BusinessIdFormatError, DownstreamError, MtdError, NinoFormatError, NotFoundError, SubmissionIdFormatError }
-import v1.stubs.{ AuditStub, AuthStub, IfsStub, MtdIdLookupStub }
+import v1.models.errors._
+import v1.stubs.{AuditStub, AuthStub, IfsStub, MtdIdLookupStub}
 
 class RetrieveForeignPropertyPeriodSummaryControllerISpec extends V1IntegrationBaseSpec {
 
@@ -167,6 +167,7 @@ class RetrieveForeignPropertyPeriodSummaryControllerISpec extends V1IntegrationB
          |  "reason": "ifs message"
          |}
        """.stripMargin
+
   }
 
   "calling the retrieve foreign property period summary endpoint" should {
@@ -253,4 +254,5 @@ class RetrieveForeignPropertyPeriodSummaryControllerISpec extends V1IntegrationB
       }
     }
   }
+
 }

@@ -16,7 +16,7 @@
 
 package v1.models.request.amendForeignPropertyAnnualSubmission.foreignProperty
 
-import play.api.libs.json.{ Json, OFormat }
+import play.api.libs.json.{Json, OFormat}
 
 case class ForeignPropertyAllowances(annualInvestmentAllowance: Option[BigDecimal],
                                      costOfReplacingDomesticItems: Option[BigDecimal],
@@ -28,12 +28,13 @@ case class ForeignPropertyAllowances(annualInvestmentAllowance: Option[BigDecima
 
   def isEmpty: Boolean =
     annualInvestmentAllowance.isEmpty &&
-    costOfReplacingDomesticItems.isEmpty &&
-    zeroEmissionsGoodsVehicleAllowance.isEmpty &&
-    propertyAllowance.isEmpty &&
-    otherCapitalAllowance.isEmpty &&
-    structureAndBuildingAllowance.isEmpty &&
-    electricChargePointAllowance.isEmpty
+      costOfReplacingDomesticItems.isEmpty &&
+      zeroEmissionsGoodsVehicleAllowance.isEmpty &&
+      propertyAllowance.isEmpty &&
+      otherCapitalAllowance.isEmpty &&
+      structureAndBuildingAllowance.isEmpty &&
+      electricChargePointAllowance.isEmpty
+
 }
 
 object ForeignPropertyAllowances {

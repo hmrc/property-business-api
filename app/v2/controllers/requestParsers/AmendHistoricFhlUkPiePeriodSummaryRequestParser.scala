@@ -19,11 +19,7 @@ package v2.controllers.requestParsers
 import api.controllers.requestParsers.RequestParser
 import api.models.domain.{Nino, PeriodId}
 import v2.controllers.requestParsers.validators.AmendHistoricFhlUkPiePeriodSummaryValidator
-import v2.models.request.amendHistoricFhlUkPiePeriodSummary.{
-  AmendHistoricFhlUkPiePeriodSummaryRawData,
-  AmendHistoricFhlUkPiePeriodSummaryRequest,
-  AmendHistoricFhlUkPiePeriodSummaryRequestBody
-}
+import v2.models.request.amendHistoricFhlUkPiePeriodSummary.{AmendHistoricFhlUkPiePeriodSummaryRawData, AmendHistoricFhlUkPiePeriodSummaryRequest, AmendHistoricFhlUkPiePeriodSummaryRequestBody}
 
 import javax.inject.Inject
 

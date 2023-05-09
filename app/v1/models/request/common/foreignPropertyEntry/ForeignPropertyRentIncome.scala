@@ -16,7 +16,7 @@
 
 package v1.models.request.common.foreignPropertyEntry
 
-import play.api.libs.json.{ Json, Reads, Writes }
+import play.api.libs.json.{Json, Reads, Writes}
 
 case class ForeignPropertyRentIncome(rentAmount: Option[BigDecimal])
 

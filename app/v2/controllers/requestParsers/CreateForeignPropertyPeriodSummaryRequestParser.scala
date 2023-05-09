@@ -18,17 +18,19 @@ package v2.controllers.requestParsers
 
 import api.controllers.requestParsers.RequestParser
 import api.models.domain.{Nino, TaxYear}
-
-import javax.inject.Inject
 import v2.controllers.requestParsers.validators.CreateForeignPropertyPeriodSummaryValidator
 import v2.models.request.createForeignPropertyPeriodSummary._
 
-class CreateForeignPropertyPeriodSummaryRequestParser @Inject()(val validator: CreateForeignPropertyPeriodSummaryValidator)
+import javax.inject.Inject
+
+class CreateForeignPropertyPeriodSummaryRequestParser @Inject() (val validator: CreateForeignPropertyPeriodSummaryValidator)
     extends RequestParser[CreateForeignPropertyPeriodSummaryRawData, CreateForeignPropertyPeriodSummaryRequest] {
 
   override protected def requestFor(data: CreateForeignPropertyPeriodSummaryRawData): CreateForeignPropertyPeriodSummaryRequest =
-    CreateForeignPropertyPeriodSummaryRequest(Nino(data.nino),
-                                              data.businessId,
-                                              TaxYear.fromMtd(data.taxYear),
-                                              data.body.as[CreateForeignPropertyPeriodSummaryRequestBody])
+    CreateForeignPropertyPeriodSummaryRequest(
+      Nino(data.nino),
+      data.businessId,
+      TaxYear.fromMtd(data.taxYear),
+      data.body.as[CreateForeignPropertyPeriodSummaryRequestBody])
+
 }

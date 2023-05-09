@@ -30,7 +30,7 @@ class ListForeignPropertiesPeriodSummariesValidator extends Validator[ListForeig
         NinoValidation.validate(data.nino),
         BusinessIdValidation.validate(data.businessId),
         data.fromDate.map(DateValidation.validate(_, isFromDate = true)).getOrElse(Nil),
-        data.toDate.map(DateValidation.validate(_, isFromDate = false)).getOrElse(Nil),
+        data.toDate.map(DateValidation.validate(_, isFromDate = false)).getOrElse(Nil)
       )
     }
 
@@ -54,4 +54,5 @@ class ListForeignPropertiesPeriodSummariesValidator extends Validator[ListForeig
   override def validate(data: ListForeignPropertiesPeriodSummariesRawData): List[MtdError] = {
     run(validationSet, data).distinct
   }
+
 }

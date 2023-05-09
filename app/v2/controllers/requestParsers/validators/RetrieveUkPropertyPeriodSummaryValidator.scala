@@ -18,11 +18,11 @@ package v2.controllers.requestParsers.validators
 
 import api.controllers.requestParsers.validators.Validator
 import api.controllers.requestParsers.validators.validations.{BusinessIdValidation, NinoValidation, SubmissionIdValidation, TaxYearValidation}
+import api.models.errors.MtdError
 import config.AppConfig
+import v2.models.request.retrieveUkPropertyPeriodSummary.RetrieveUkPropertyPeriodSummaryRawData
 
 import javax.inject.{Inject, Singleton}
-import api.models.errors.MtdError
-import v2.models.request.retrieveUkPropertyPeriodSummary.RetrieveUkPropertyPeriodSummaryRawData
 
 @Singleton
 class RetrieveUkPropertyPeriodSummaryValidator @Inject() (appConfig: AppConfig) extends Validator[RetrieveUkPropertyPeriodSummaryRawData] {

@@ -16,89 +16,90 @@
 
 package v2.controllers.requestParsers.validators
 
+import api.models.errors._
 import mocks.MockAppConfig
 import play.api.libs.json._
 import support.UnitSpec
-import api.models.errors._
 import v2.models.request.amendUkPropertyAnnualSubmission.AmendUkPropertyAnnualSubmissionRawData
 import v2.models.utils.JsonErrorValidators
 
 class AmendUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec with JsonErrorValidators with MockAppConfig {
 
-  private val validNino        = "AA123456A"
-  private val validBusinessId  = "XAIS12345678901"
-  private val validTaxYear     = "2021-22"
+  private val validNino       = "AA123456A"
+  private val validBusinessId = "XAIS12345678901"
+  private val validTaxYear    = "2021-22"
+
   val requestBodyJson: JsValue = Json.parse("""
-      |{
-      |  "ukFhlProperty": {
-      |    "allowances": {
-      |      "annualInvestmentAllowance": 123.45,
-      |      "businessPremisesRenovationAllowance": 345.56,
-      |      "otherCapitalAllowance": 345.34,
-      |      "electricChargePointAllowance": 453.34,
-      |      "zeroEmissionsCarAllowance": 123.12
-      |    },
-      |    "adjustments": {
-      |      "privateUseAdjustment": 454.45,
-      |      "balancingCharge": 231.45,
-      |      "periodOfGraceAdjustment": true,
-      |      "businessPremisesRenovationAllowanceBalancingCharges": 567.67,
-      |      "nonResidentLandlord": true,
-      |      "rentARoom": {
-      |        "jointlyLet": true
-      |      }
-      |    }
-      |  },
-      |  "ukNonFhlProperty": {
-      |    "allowances": {
-      |      "annualInvestmentAllowance": 678.45,
-      |      "zeroEmissionsGoodsVehicleAllowance": 456.34,
-      |      "businessPremisesRenovationAllowance": 573.45,
-      |      "otherCapitalAllowance": 452.34,
-      |      "costOfReplacingDomesticGoods": 567.34,
-      |      "electricChargePointAllowance": 454.34,
-      |      "structuredBuildingAllowance": [
-      |        {
-      |          "amount": 234.34,
-      |          "firstYear": {
-      |            "qualifyingDate": "2020-03-29",
-      |            "qualifyingAmountExpenditure": 3434.45
-      |          },
-      |          "building": {
-      |            "name": "Plaza",
-      |            "number": "1",
-      |            "postcode": "TF3 4EH"
-      |          }
-      |        }
-      |      ],
-      |      "enhancedStructuredBuildingAllowance": [
-      |        {
-      |          "amount": 234.45,
-      |          "firstYear": {
-      |            "qualifyingDate": "2020-05-29",
-      |            "qualifyingAmountExpenditure": 453.34
-      |          },
-      |          "building": {
-      |            "name": "Plaza 2",
-      |            "number": "2",
-      |            "postcode": "TF3 4ER"
-      |          }
-      |        }
-      |      ],
-      |      "zeroEmissionsCarAllowance": 454.34
-      |    },
-      |    "adjustments": {
-      |      "balancingCharge": 565.34,
-      |      "privateUseAdjustment": 533.54,
-      |      "businessPremisesRenovationAllowanceBalancingCharges": 563.34,
-      |      "nonResidentLandlord": true,
-      |      "rentARoom": {
-      |        "jointlyLet": true
-      |      }
-      |    }
-      |  }
-      |}
-      |""".stripMargin)
+                                              |{
+                                              |  "ukFhlProperty": {
+                                              |    "allowances": {
+                                              |      "annualInvestmentAllowance": 123.45,
+                                              |      "businessPremisesRenovationAllowance": 345.56,
+                                              |      "otherCapitalAllowance": 345.34,
+                                              |      "electricChargePointAllowance": 453.34,
+                                              |      "zeroEmissionsCarAllowance": 123.12
+                                              |    },
+                                              |    "adjustments": {
+                                              |      "privateUseAdjustment": 454.45,
+                                              |      "balancingCharge": 231.45,
+                                              |      "periodOfGraceAdjustment": true,
+                                              |      "businessPremisesRenovationAllowanceBalancingCharges": 567.67,
+                                              |      "nonResidentLandlord": true,
+                                              |      "rentARoom": {
+                                              |        "jointlyLet": true
+                                              |      }
+                                              |    }
+                                              |  },
+                                              |  "ukNonFhlProperty": {
+                                              |    "allowances": {
+                                              |      "annualInvestmentAllowance": 678.45,
+                                              |      "zeroEmissionsGoodsVehicleAllowance": 456.34,
+                                              |      "businessPremisesRenovationAllowance": 573.45,
+                                              |      "otherCapitalAllowance": 452.34,
+                                              |      "costOfReplacingDomesticGoods": 567.34,
+                                              |      "electricChargePointAllowance": 454.34,
+                                              |      "structuredBuildingAllowance": [
+                                              |        {
+                                              |          "amount": 234.34,
+                                              |          "firstYear": {
+                                              |            "qualifyingDate": "2020-03-29",
+                                              |            "qualifyingAmountExpenditure": 3434.45
+                                              |          },
+                                              |          "building": {
+                                              |            "name": "Plaza",
+                                              |            "number": "1",
+                                              |            "postcode": "TF3 4EH"
+                                              |          }
+                                              |        }
+                                              |      ],
+                                              |      "enhancedStructuredBuildingAllowance": [
+                                              |        {
+                                              |          "amount": 234.45,
+                                              |          "firstYear": {
+                                              |            "qualifyingDate": "2020-05-29",
+                                              |            "qualifyingAmountExpenditure": 453.34
+                                              |          },
+                                              |          "building": {
+                                              |            "name": "Plaza 2",
+                                              |            "number": "2",
+                                              |            "postcode": "TF3 4ER"
+                                              |          }
+                                              |        }
+                                              |      ],
+                                              |      "zeroEmissionsCarAllowance": 454.34
+                                              |    },
+                                              |    "adjustments": {
+                                              |      "balancingCharge": 565.34,
+                                              |      "privateUseAdjustment": 533.54,
+                                              |      "businessPremisesRenovationAllowanceBalancingCharges": 563.34,
+                                              |      "nonResidentLandlord": true,
+                                              |      "rentARoom": {
+                                              |        "jointlyLet": true
+                                              |      }
+                                              |    }
+                                              |  }
+                                              |}
+                                              |""".stripMargin)
 
   MockAppConfig.minimumTaxV2Uk returns 2021
   val validator = new AmendUkPropertyAnnualSubmissionValidator(mockAppConfig)
@@ -116,15 +117,15 @@ class AmendUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec with JsonErr
             validBusinessId,
             validTaxYear,
             Json.parse("""
-                |{
-                |  "ukFhlProperty": {
-                |    "adjustments": {
-                |      "periodOfGraceAdjustment": true,
-                |      "nonResidentLandlord": true
-                |    }
-                |  }
-                |}
-                |""".stripMargin)
+                         |{
+                         |  "ukFhlProperty": {
+                         |    "adjustments": {
+                         |      "periodOfGraceAdjustment": true,
+                         |      "nonResidentLandlord": true
+                         |    }
+                         |  }
+                         |}
+                         |""".stripMargin)
           )
         ) shouldBe Nil
       }
@@ -136,28 +137,28 @@ class AmendUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec with JsonErr
             validBusinessId,
             validTaxYear,
             Json.parse("""
-                |{
-                |  "ukFhlProperty": {
-                |    "allowances": {
-                |      "annualInvestmentAllowance": 123.45,
-                |      "businessPremisesRenovationAllowance": 345.56,
-                |      "otherCapitalAllowance": 345.34,
-                |      "electricChargePointAllowance": 453.34,
-                |      "zeroEmissionsCarAllowance": 123.12
-                |    },
-                |    "adjustments": {
-                |      "privateUseAdjustment": 454.45,
-                |      "balancingCharge": 231.45,
-                |      "periodOfGraceAdjustment": true,
-                |      "businessPremisesRenovationAllowanceBalancingCharges": 567.67,
-                |      "nonResidentLandlord": true,
-                |      "rentARoom": {
-                |        "jointlyLet": true
-                |      }
-                |    }
-                |  }
-                |}
-                |""".stripMargin)
+                         |{
+                         |  "ukFhlProperty": {
+                         |    "allowances": {
+                         |      "annualInvestmentAllowance": 123.45,
+                         |      "businessPremisesRenovationAllowance": 345.56,
+                         |      "otherCapitalAllowance": 345.34,
+                         |      "electricChargePointAllowance": 453.34,
+                         |      "zeroEmissionsCarAllowance": 123.12
+                         |    },
+                         |    "adjustments": {
+                         |      "privateUseAdjustment": 454.45,
+                         |      "balancingCharge": 231.45,
+                         |      "periodOfGraceAdjustment": true,
+                         |      "businessPremisesRenovationAllowanceBalancingCharges": 567.67,
+                         |      "nonResidentLandlord": true,
+                         |      "rentARoom": {
+                         |        "jointlyLet": true
+                         |      }
+                         |    }
+                         |  }
+                         |}
+                         |""".stripMargin)
           )
         ) shouldBe Nil
       }
@@ -169,58 +170,58 @@ class AmendUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec with JsonErr
             validBusinessId,
             validTaxYear,
             Json.parse("""
-                |{
-                |  "ukNonFhlProperty": {
-                |    "allowances": {
-                |      "annualInvestmentAllowance": 678.45,
-                |      "zeroEmissionsGoodsVehicleAllowance": 456.34,
-                |      "businessPremisesRenovationAllowance": 573.45,
-                |      "otherCapitalAllowance": 452.34,
-                |      "costOfReplacingDomesticGoods": 567.34,
-                |      "electricChargePointAllowance": 454.34,
-                |      "structuredBuildingAllowance": [
-                |        {
-                |          "amount": 234.34,
-                |          "firstYear": {
-                |            "qualifyingDate": "2020-03-29",
-                |            "qualifyingAmountExpenditure": 3434.45
-                |          },
-                |          "building": {
-                |            "name": "Plaza",
-                |            "number": "1",
-                |            "postcode": "TF3 4EH"
-                |          }
-                |        }
-                |      ],
-                |      "enhancedStructuredBuildingAllowance": [
-                |        {
-                |          "amount": 234.45,
-                |          "firstYear": {
-                |            "qualifyingDate": "2020-05-29",
-                |            "qualifyingAmountExpenditure": 453.34
-                |          },
-                |          "building": {
-                |            "name": "Plaza 2",
-                |            "number": "2",
-                |            "postcode": "TF3 4ER"
-                |          }
-                |        }
-                |      ],
-                |      "zeroEmissionsCarAllowance": 454.34
-                |    },
-                |    "adjustments": {
-                |      "balancingCharge": 565.34,
-                |      "privateUseAdjustment": 533.54,
-                |      "businessPremisesRenovationAllowanceBalancingCharges": 563.34,
-                |      "nonResidentLandlord": true,
-                |      "rentARoom": {
-                |        "jointlyLet": true
-                |      }
-                |    }
-                |  }
-                |}
-                |
-                |""".stripMargin)
+                         |{
+                         |  "ukNonFhlProperty": {
+                         |    "allowances": {
+                         |      "annualInvestmentAllowance": 678.45,
+                         |      "zeroEmissionsGoodsVehicleAllowance": 456.34,
+                         |      "businessPremisesRenovationAllowance": 573.45,
+                         |      "otherCapitalAllowance": 452.34,
+                         |      "costOfReplacingDomesticGoods": 567.34,
+                         |      "electricChargePointAllowance": 454.34,
+                         |      "structuredBuildingAllowance": [
+                         |        {
+                         |          "amount": 234.34,
+                         |          "firstYear": {
+                         |            "qualifyingDate": "2020-03-29",
+                         |            "qualifyingAmountExpenditure": 3434.45
+                         |          },
+                         |          "building": {
+                         |            "name": "Plaza",
+                         |            "number": "1",
+                         |            "postcode": "TF3 4EH"
+                         |          }
+                         |        }
+                         |      ],
+                         |      "enhancedStructuredBuildingAllowance": [
+                         |        {
+                         |          "amount": 234.45,
+                         |          "firstYear": {
+                         |            "qualifyingDate": "2020-05-29",
+                         |            "qualifyingAmountExpenditure": 453.34
+                         |          },
+                         |          "building": {
+                         |            "name": "Plaza 2",
+                         |            "number": "2",
+                         |            "postcode": "TF3 4ER"
+                         |          }
+                         |        }
+                         |      ],
+                         |      "zeroEmissionsCarAllowance": 454.34
+                         |    },
+                         |    "adjustments": {
+                         |      "balancingCharge": 565.34,
+                         |      "privateUseAdjustment": 533.54,
+                         |      "businessPremisesRenovationAllowanceBalancingCharges": 563.34,
+                         |      "nonResidentLandlord": true,
+                         |      "rentARoom": {
+                         |        "jointlyLet": true
+                         |      }
+                         |    }
+                         |  }
+                         |}
+                         |
+                         |""".stripMargin)
           )
         ) shouldBe Nil
       }
@@ -268,7 +269,7 @@ class AmendUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec with JsonErr
           "/ukNonFhlProperty",
           "/ukNonFhlProperty/allowances",
           "/ukNonFhlProperty/allowances/structuredBuildingAllowance",
-          "/ukNonFhlProperty/allowances/enhancedStructuredBuildingAllowance",
+          "/ukNonFhlProperty/allowances/enhancedStructuredBuildingAllowance"
         ).foreach(p => testEmpty(p))
 
         def testEmpty(path: String): Unit =
@@ -306,12 +307,12 @@ class AmendUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec with JsonErr
             validBusinessId,
             validTaxYear,
             Json.parse("""
-              |{
-              |  "ukFhlProperty": {
-              |      "adjustments": {}
-              |  }
-              |}
-              |""".stripMargin)
+                         |{
+                         |  "ukFhlProperty": {
+                         |      "adjustments": {}
+                         |  }
+                         |}
+                         |""".stripMargin)
           )) shouldBe List(
           RuleIncorrectOrEmptyBodyError.copy(
             paths = Some(List("/ukFhlProperty/adjustments/periodOfGraceAdjustment", "/ukFhlProperty/adjustments/nonResidentLandlord"))))
@@ -324,75 +325,75 @@ class AmendUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec with JsonErr
             validBusinessId,
             validTaxYear,
             Json.parse("""
-              |{
-              |  "ukFhlProperty": {
-              |    "allowances": {
-              |      "annualInvestmentAllowance": 123.45,
-              |      "businessPremisesRenovationAllowance": 345.56,
-              |      "otherCapitalAllowance": 345.34,
-              |      "electricChargePointAllowance": 453.34,
-              |      "zeroEmissionsCarAllowance": 123.12
-              |    },
-              |    "adjustments": {
-              |      "privateUseAdjustment": 454.45,
-              |      "balancingCharge": 231.45,
-              |      "periodOfGraceAdjustment": true,
-              |      "businessPremisesRenovationAllowanceBalancingCharges": 567.67,
-              |      "nonResidentLandlord": true,
-              |      "rentARoom": {
-              |      }
-              |    }
-              |  },
-              |  "ukNonFhlProperty": {
-              |    "allowances": {
-              |      "annualInvestmentAllowance": 678.45,
-              |      "zeroEmissionsGoodsVehicleAllowance": 456.34,
-              |      "businessPremisesRenovationAllowance": 573.45,
-              |      "otherCapitalAllowance": 452.34,
-              |      "costOfReplacingDomesticGoods": 567.34,
-              |      "electricChargePointAllowance": 454.34,
-              |      "structuredBuildingAllowance": [
-              |        {
-              |          "amount": 234.34,
-              |          "firstYear": {
-              |            "qualifyingDate": "2020-03-29",
-              |            "qualifyingAmountExpenditure": 3434.45
-              |          },
-              |          "building": {
-              |            "name": "Plaza",
-              |            "number": "1",
-              |            "postcode": "TF3 4EH"
-              |          }
-              |        }
-              |      ],
-              |      "enhancedStructuredBuildingAllowance": [
-              |        {
-              |          "amount": 234.45,
-              |          "firstYear": {
-              |            "qualifyingDate": "2020-05-29",
-              |            "qualifyingAmountExpenditure": 453.34
-              |          },
-              |          "building": {
-              |            "name": "Plaza 2",
-              |            "number": "2",
-              |            "postcode": "TF3 4ER"
-              |          }
-              |        }
-              |      ],
-              |      "zeroEmissionsCarAllowance": 454.34
-              |    },
-              |    "adjustments": {
-              |      "balancingCharge": 565.34,
-              |      "privateUseAdjustment": 533.54,
-              |      "businessPremisesRenovationAllowanceBalancingCharges": 563.34,
-              |      "nonResidentLandlord": true,
-              |      "rentARoom": {
-              |        "jointlyLet": true
-              |      }
-              |    }
-              |  }
-              |}
-              |""".stripMargin)
+                         |{
+                         |  "ukFhlProperty": {
+                         |    "allowances": {
+                         |      "annualInvestmentAllowance": 123.45,
+                         |      "businessPremisesRenovationAllowance": 345.56,
+                         |      "otherCapitalAllowance": 345.34,
+                         |      "electricChargePointAllowance": 453.34,
+                         |      "zeroEmissionsCarAllowance": 123.12
+                         |    },
+                         |    "adjustments": {
+                         |      "privateUseAdjustment": 454.45,
+                         |      "balancingCharge": 231.45,
+                         |      "periodOfGraceAdjustment": true,
+                         |      "businessPremisesRenovationAllowanceBalancingCharges": 567.67,
+                         |      "nonResidentLandlord": true,
+                         |      "rentARoom": {
+                         |      }
+                         |    }
+                         |  },
+                         |  "ukNonFhlProperty": {
+                         |    "allowances": {
+                         |      "annualInvestmentAllowance": 678.45,
+                         |      "zeroEmissionsGoodsVehicleAllowance": 456.34,
+                         |      "businessPremisesRenovationAllowance": 573.45,
+                         |      "otherCapitalAllowance": 452.34,
+                         |      "costOfReplacingDomesticGoods": 567.34,
+                         |      "electricChargePointAllowance": 454.34,
+                         |      "structuredBuildingAllowance": [
+                         |        {
+                         |          "amount": 234.34,
+                         |          "firstYear": {
+                         |            "qualifyingDate": "2020-03-29",
+                         |            "qualifyingAmountExpenditure": 3434.45
+                         |          },
+                         |          "building": {
+                         |            "name": "Plaza",
+                         |            "number": "1",
+                         |            "postcode": "TF3 4EH"
+                         |          }
+                         |        }
+                         |      ],
+                         |      "enhancedStructuredBuildingAllowance": [
+                         |        {
+                         |          "amount": 234.45,
+                         |          "firstYear": {
+                         |            "qualifyingDate": "2020-05-29",
+                         |            "qualifyingAmountExpenditure": 453.34
+                         |          },
+                         |          "building": {
+                         |            "name": "Plaza 2",
+                         |            "number": "2",
+                         |            "postcode": "TF3 4ER"
+                         |          }
+                         |        }
+                         |      ],
+                         |      "zeroEmissionsCarAllowance": 454.34
+                         |    },
+                         |    "adjustments": {
+                         |      "balancingCharge": 565.34,
+                         |      "privateUseAdjustment": 533.54,
+                         |      "businessPremisesRenovationAllowanceBalancingCharges": 563.34,
+                         |      "nonResidentLandlord": true,
+                         |      "rentARoom": {
+                         |        "jointlyLet": true
+                         |      }
+                         |    }
+                         |  }
+                         |}
+                         |""".stripMargin)
           )) shouldBe List(
           RuleIncorrectOrEmptyBodyError.copy(paths = Some(List("/ukFhlProperty/adjustments/rentARoom/jointlyLet")))
         )
@@ -405,51 +406,51 @@ class AmendUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec with JsonErr
             validBusinessId,
             validTaxYear,
             Json.parse("""
-              |{
-              |  "ukNonFhlProperty": {
-              |    "allowances": {
-              |      "annualInvestmentAllowance": 678.45,
-              |      "zeroEmissionsGoodsVehicleAllowance": 456.34,
-              |      "businessPremisesRenovationAllowance": 573.45,
-              |      "otherCapitalAllowance": 452.34,
-              |      "costOfReplacingDomesticGoods": 567.34,
-              |      "electricChargePointAllowance": 454.34,
-              |      "structuredBuildingAllowance": [
-              |        {
-              |          "amount": 234.34,
-              |          "firstYear": {
-              |            "qualifyingDate": "2020-03-29",
-              |            "qualifyingAmountExpenditure": 3434.45
-              |          },
-              |          "building": {
-              |            "name": "Plaza",
-              |            "number": "1",
-              |            "postcode": "TF3 4EH"
-              |          }
-              |        }
-              |      ],
-              |      "enhancedStructuredBuildingAllowance": [
-              |        {
-              |          "amount": 234.45,
-              |          "firstYear": {
-              |            "qualifyingDate": "2020-05-29",
-              |            "qualifyingAmountExpenditure": 453.34
-              |          },
-              |          "building": {
-              |            "name": "Plaza 2",
-              |            "number": "2",
-              |            "postcode": "TF3 4ER"
-              |          }
-              |        }
-              |      ],
-              |      "zeroEmissionsCarAllowance": 454.34
-              |    },
-              |    "adjustments": {
-              |    }
-              |  }
-              |}
-              |
-              |""".stripMargin)
+                         |{
+                         |  "ukNonFhlProperty": {
+                         |    "allowances": {
+                         |      "annualInvestmentAllowance": 678.45,
+                         |      "zeroEmissionsGoodsVehicleAllowance": 456.34,
+                         |      "businessPremisesRenovationAllowance": 573.45,
+                         |      "otherCapitalAllowance": 452.34,
+                         |      "costOfReplacingDomesticGoods": 567.34,
+                         |      "electricChargePointAllowance": 454.34,
+                         |      "structuredBuildingAllowance": [
+                         |        {
+                         |          "amount": 234.34,
+                         |          "firstYear": {
+                         |            "qualifyingDate": "2020-03-29",
+                         |            "qualifyingAmountExpenditure": 3434.45
+                         |          },
+                         |          "building": {
+                         |            "name": "Plaza",
+                         |            "number": "1",
+                         |            "postcode": "TF3 4EH"
+                         |          }
+                         |        }
+                         |      ],
+                         |      "enhancedStructuredBuildingAllowance": [
+                         |        {
+                         |          "amount": 234.45,
+                         |          "firstYear": {
+                         |            "qualifyingDate": "2020-05-29",
+                         |            "qualifyingAmountExpenditure": 453.34
+                         |          },
+                         |          "building": {
+                         |            "name": "Plaza 2",
+                         |            "number": "2",
+                         |            "postcode": "TF3 4ER"
+                         |          }
+                         |        }
+                         |      ],
+                         |      "zeroEmissionsCarAllowance": 454.34
+                         |    },
+                         |    "adjustments": {
+                         |    }
+                         |  }
+                         |}
+                         |
+                         |""".stripMargin)
           )) shouldBe List(
           RuleIncorrectOrEmptyBodyError.copy(paths = Some(List("/ukNonFhlProperty/adjustments/nonResidentLandlord")))
         )
@@ -462,75 +463,75 @@ class AmendUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec with JsonErr
             validBusinessId,
             validTaxYear,
             Json.parse("""
-              |{
-              |  "ukFhlProperty": {
-              |    "allowances": {
-              |      "annualInvestmentAllowance": 123.45,
-              |      "businessPremisesRenovationAllowance": 345.56,
-              |      "otherCapitalAllowance": 345.34,
-              |      "electricChargePointAllowance": 453.34,
-              |      "zeroEmissionsCarAllowance": 123.12
-              |    },
-              |    "adjustments": {
-              |      "privateUseAdjustment": 454.45,
-              |      "balancingCharge": 231.45,
-              |      "periodOfGraceAdjustment": true,
-              |      "businessPremisesRenovationAllowanceBalancingCharges": 567.67,
-              |      "nonResidentLandlord": true,
-              |      "rentARoom": {
-              |        "jointlyLet": true
-              |      }
-              |    }
-              |  },
-              |  "ukNonFhlProperty": {
-              |    "allowances": {
-              |      "annualInvestmentAllowance": 678.45,
-              |      "zeroEmissionsGoodsVehicleAllowance": 456.34,
-              |      "businessPremisesRenovationAllowance": 573.45,
-              |      "otherCapitalAllowance": 452.34,
-              |      "costOfReplacingDomesticGoods": 567.34,
-              |      "electricChargePointAllowance": 454.34,
-              |      "structuredBuildingAllowance": [
-              |        {
-              |          "amount": 234.34,
-              |          "firstYear": {
-              |            "qualifyingDate": "2020-03-29",
-              |            "qualifyingAmountExpenditure": 3434.45
-              |          },
-              |          "building": {
-              |            "name": "Plaza",
-              |            "number": "1",
-              |            "postcode": "TF3 4EH"
-              |          }
-              |        }
-              |      ],
-              |      "enhancedStructuredBuildingAllowance": [
-              |        {
-              |          "amount": 234.45,
-              |          "firstYear": {
-              |            "qualifyingDate": "2020-05-29",
-              |            "qualifyingAmountExpenditure": 453.34
-              |          },
-              |          "building": {
-              |            "name": "Plaza 2",
-              |            "number": "2",
-              |            "postcode": "TF3 4ER"
-              |          }
-              |        }
-              |      ],
-              |      "zeroEmissionsCarAllowance": 454.34
-              |    },
-              |    "adjustments": {
-              |      "balancingCharge": 565.34,
-              |      "privateUseAdjustment": 533.54,
-              |      "businessPremisesRenovationAllowanceBalancingCharges": 563.34,
-              |      "nonResidentLandlord": true,
-              |      "rentARoom": {
-              |      }
-              |    }
-              |  }
-              |}
-              |""".stripMargin)
+                         |{
+                         |  "ukFhlProperty": {
+                         |    "allowances": {
+                         |      "annualInvestmentAllowance": 123.45,
+                         |      "businessPremisesRenovationAllowance": 345.56,
+                         |      "otherCapitalAllowance": 345.34,
+                         |      "electricChargePointAllowance": 453.34,
+                         |      "zeroEmissionsCarAllowance": 123.12
+                         |    },
+                         |    "adjustments": {
+                         |      "privateUseAdjustment": 454.45,
+                         |      "balancingCharge": 231.45,
+                         |      "periodOfGraceAdjustment": true,
+                         |      "businessPremisesRenovationAllowanceBalancingCharges": 567.67,
+                         |      "nonResidentLandlord": true,
+                         |      "rentARoom": {
+                         |        "jointlyLet": true
+                         |      }
+                         |    }
+                         |  },
+                         |  "ukNonFhlProperty": {
+                         |    "allowances": {
+                         |      "annualInvestmentAllowance": 678.45,
+                         |      "zeroEmissionsGoodsVehicleAllowance": 456.34,
+                         |      "businessPremisesRenovationAllowance": 573.45,
+                         |      "otherCapitalAllowance": 452.34,
+                         |      "costOfReplacingDomesticGoods": 567.34,
+                         |      "electricChargePointAllowance": 454.34,
+                         |      "structuredBuildingAllowance": [
+                         |        {
+                         |          "amount": 234.34,
+                         |          "firstYear": {
+                         |            "qualifyingDate": "2020-03-29",
+                         |            "qualifyingAmountExpenditure": 3434.45
+                         |          },
+                         |          "building": {
+                         |            "name": "Plaza",
+                         |            "number": "1",
+                         |            "postcode": "TF3 4EH"
+                         |          }
+                         |        }
+                         |      ],
+                         |      "enhancedStructuredBuildingAllowance": [
+                         |        {
+                         |          "amount": 234.45,
+                         |          "firstYear": {
+                         |            "qualifyingDate": "2020-05-29",
+                         |            "qualifyingAmountExpenditure": 453.34
+                         |          },
+                         |          "building": {
+                         |            "name": "Plaza 2",
+                         |            "number": "2",
+                         |            "postcode": "TF3 4ER"
+                         |          }
+                         |        }
+                         |      ],
+                         |      "zeroEmissionsCarAllowance": 454.34
+                         |    },
+                         |    "adjustments": {
+                         |      "balancingCharge": 565.34,
+                         |      "privateUseAdjustment": 533.54,
+                         |      "businessPremisesRenovationAllowanceBalancingCharges": 563.34,
+                         |      "nonResidentLandlord": true,
+                         |      "rentARoom": {
+                         |      }
+                         |    }
+                         |  }
+                         |}
+                         |""".stripMargin)
           )) shouldBe List(
           RuleIncorrectOrEmptyBodyError.copy(paths = Some(List("/ukNonFhlProperty/adjustments/rentARoom/jointlyLet")))
         )
@@ -545,76 +546,76 @@ class AmendUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec with JsonErr
             validBusinessId,
             validTaxYear,
             Json.parse("""
-              |{
-              |  "ukFhlProperty": {
-              |    "allowances": {
-              |      "annualInvestmentAllowance": 123.45,
-              |      "businessPremisesRenovationAllowance": 345.56,
-              |      "otherCapitalAllowance": 345.34,
-              |      "electricChargePointAllowance": 453.34,
-              |      "zeroEmissionsCarAllowance": 123.12
-              |    },
-              |    "adjustments": {
-              |      "privateUseAdjustment": 454.45,
-              |      "balancingCharge": 231.45,
-              |      "periodOfGraceAdjustment": true,
-              |      "businessPremisesRenovationAllowanceBalancingCharges": 567.67,
-              |      "nonResidentLandlord": true,
-              |      "rentARoom": {
-              |        "jointlyLet": true
-              |      }
-              |    }
-              |  },
-              |  "ukNonFhlProperty": {
-              |    "allowances": {
-              |      "annualInvestmentAllowance": 678.45,
-              |      "zeroEmissionsGoodsVehicleAllowance": 456.34,
-              |      "businessPremisesRenovationAllowance": 573.45,
-              |      "otherCapitalAllowance": 452.34,
-              |      "costOfReplacingDomesticGoods": 567.34,
-              |      "electricChargePointAllowance": 454.34,
-              |      "structuredBuildingAllowance": [
-              |        {
-              |          "amount": 234.34,
-              |          "firstYear": {
-              |            "qualifyingDate": "2020.10.01",
-              |            "qualifyingAmountExpenditure": 3434.45
-              |          },
-              |          "building": {
-              |            "name": "Plaza",
-              |            "number": "1",
-              |            "postcode": "TF3 4EH"
-              |          }
-              |        }
-              |      ],
-              |      "enhancedStructuredBuildingAllowance": [
-              |        {
-              |          "amount": 234.45,
-              |          "firstYear": {
-              |            "qualifyingDate": "2020-03-29",
-              |            "qualifyingAmountExpenditure": 453.34
-              |          },
-              |          "building": {
-              |            "name": "Plaza 2",
-              |            "number": "2",
-              |            "postcode": "TF3 4ER"
-              |          }
-              |        }
-              |      ],
-              |      "zeroEmissionsCarAllowance": 454.34
-              |    },
-              |    "adjustments": {
-              |      "balancingCharge": 565.34,
-              |      "privateUseAdjustment": 533.54,
-              |      "businessPremisesRenovationAllowanceBalancingCharges": 563.34,
-              |      "nonResidentLandlord": true,
-              |      "rentARoom": {
-              |        "jointlyLet": true
-              |      }
-              |    }
-              |  }
-              |}
-              |""".stripMargin)
+                         |{
+                         |  "ukFhlProperty": {
+                         |    "allowances": {
+                         |      "annualInvestmentAllowance": 123.45,
+                         |      "businessPremisesRenovationAllowance": 345.56,
+                         |      "otherCapitalAllowance": 345.34,
+                         |      "electricChargePointAllowance": 453.34,
+                         |      "zeroEmissionsCarAllowance": 123.12
+                         |    },
+                         |    "adjustments": {
+                         |      "privateUseAdjustment": 454.45,
+                         |      "balancingCharge": 231.45,
+                         |      "periodOfGraceAdjustment": true,
+                         |      "businessPremisesRenovationAllowanceBalancingCharges": 567.67,
+                         |      "nonResidentLandlord": true,
+                         |      "rentARoom": {
+                         |        "jointlyLet": true
+                         |      }
+                         |    }
+                         |  },
+                         |  "ukNonFhlProperty": {
+                         |    "allowances": {
+                         |      "annualInvestmentAllowance": 678.45,
+                         |      "zeroEmissionsGoodsVehicleAllowance": 456.34,
+                         |      "businessPremisesRenovationAllowance": 573.45,
+                         |      "otherCapitalAllowance": 452.34,
+                         |      "costOfReplacingDomesticGoods": 567.34,
+                         |      "electricChargePointAllowance": 454.34,
+                         |      "structuredBuildingAllowance": [
+                         |        {
+                         |          "amount": 234.34,
+                         |          "firstYear": {
+                         |            "qualifyingDate": "2020.10.01",
+                         |            "qualifyingAmountExpenditure": 3434.45
+                         |          },
+                         |          "building": {
+                         |            "name": "Plaza",
+                         |            "number": "1",
+                         |            "postcode": "TF3 4EH"
+                         |          }
+                         |        }
+                         |      ],
+                         |      "enhancedStructuredBuildingAllowance": [
+                         |        {
+                         |          "amount": 234.45,
+                         |          "firstYear": {
+                         |            "qualifyingDate": "2020-03-29",
+                         |            "qualifyingAmountExpenditure": 453.34
+                         |          },
+                         |          "building": {
+                         |            "name": "Plaza 2",
+                         |            "number": "2",
+                         |            "postcode": "TF3 4ER"
+                         |          }
+                         |        }
+                         |      ],
+                         |      "zeroEmissionsCarAllowance": 454.34
+                         |    },
+                         |    "adjustments": {
+                         |      "balancingCharge": 565.34,
+                         |      "privateUseAdjustment": 533.54,
+                         |      "businessPremisesRenovationAllowanceBalancingCharges": 563.34,
+                         |      "nonResidentLandlord": true,
+                         |      "rentARoom": {
+                         |        "jointlyLet": true
+                         |      }
+                         |    }
+                         |  }
+                         |}
+                         |""".stripMargin)
           )) shouldBe List(
           DateFormatError.copy(paths = Some(Seq("/ukNonFhlProperty/allowances/structuredBuildingAllowance/0/firstYear/qualifyingDate"))))
       }
@@ -626,76 +627,76 @@ class AmendUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec with JsonErr
             validBusinessId,
             validTaxYear,
             Json.parse("""
-              |{
-              |  "ukFhlProperty": {
-              |    "allowances": {
-              |      "annualInvestmentAllowance": 123.45,
-              |      "businessPremisesRenovationAllowance": 345.56,
-              |      "otherCapitalAllowance": 345.34,
-              |      "electricChargePointAllowance": 453.34,
-              |      "zeroEmissionsCarAllowance": 123.12
-              |    },
-              |    "adjustments": {
-              |      "privateUseAdjustment": 454.45,
-              |      "balancingCharge": 231.45,
-              |      "periodOfGraceAdjustment": true,
-              |      "businessPremisesRenovationAllowanceBalancingCharges": 567.67,
-              |      "nonResidentLandlord": true,
-              |      "rentARoom": {
-              |        "jointlyLet": true
-              |      }
-              |    }
-              |  },
-              |  "ukNonFhlProperty": {
-              |    "allowances": {
-              |      "annualInvestmentAllowance": 678.45,
-              |      "zeroEmissionsGoodsVehicleAllowance": 456.34,
-              |      "businessPremisesRenovationAllowance": 573.45,
-              |      "otherCapitalAllowance": 452.34,
-              |      "costOfReplacingDomesticGoods": 567.34,
-              |      "electricChargePointAllowance": 454.34,
-              |      "structuredBuildingAllowance": [
-              |        {
-              |          "amount": 234.34,
-              |          "firstYear": {
-              |            "qualifyingDate": "2020-03-29",
-              |            "qualifyingAmountExpenditure": 3434.45
-              |          },
-              |          "building": {
-              |            "name": "Plaza",
-              |            "number": "1",
-              |            "postcode": "TF3 4EH"
-              |          }
-              |        }
-              |      ],
-              |      "enhancedStructuredBuildingAllowance": [
-              |        {
-              |          "amount": 234.45,
-              |          "firstYear": {
-              |            "qualifyingDate": "2020.10.01",
-              |            "qualifyingAmountExpenditure": 453.34
-              |          },
-              |          "building": {
-              |            "name": "Plaza 2",
-              |            "number": "2",
-              |            "postcode": "TF3 4ER"
-              |          }
-              |        }
-              |      ],
-              |      "zeroEmissionsCarAllowance": 454.34
-              |    },
-              |    "adjustments": {
-              |      "balancingCharge": 565.34,
-              |      "privateUseAdjustment": 533.54,
-              |      "businessPremisesRenovationAllowanceBalancingCharges": 563.34,
-              |      "nonResidentLandlord": true,
-              |      "rentARoom": {
-              |        "jointlyLet": true
-              |      }
-              |    }
-              |  }
-              |}
-              |""".stripMargin)
+                         |{
+                         |  "ukFhlProperty": {
+                         |    "allowances": {
+                         |      "annualInvestmentAllowance": 123.45,
+                         |      "businessPremisesRenovationAllowance": 345.56,
+                         |      "otherCapitalAllowance": 345.34,
+                         |      "electricChargePointAllowance": 453.34,
+                         |      "zeroEmissionsCarAllowance": 123.12
+                         |    },
+                         |    "adjustments": {
+                         |      "privateUseAdjustment": 454.45,
+                         |      "balancingCharge": 231.45,
+                         |      "periodOfGraceAdjustment": true,
+                         |      "businessPremisesRenovationAllowanceBalancingCharges": 567.67,
+                         |      "nonResidentLandlord": true,
+                         |      "rentARoom": {
+                         |        "jointlyLet": true
+                         |      }
+                         |    }
+                         |  },
+                         |  "ukNonFhlProperty": {
+                         |    "allowances": {
+                         |      "annualInvestmentAllowance": 678.45,
+                         |      "zeroEmissionsGoodsVehicleAllowance": 456.34,
+                         |      "businessPremisesRenovationAllowance": 573.45,
+                         |      "otherCapitalAllowance": 452.34,
+                         |      "costOfReplacingDomesticGoods": 567.34,
+                         |      "electricChargePointAllowance": 454.34,
+                         |      "structuredBuildingAllowance": [
+                         |        {
+                         |          "amount": 234.34,
+                         |          "firstYear": {
+                         |            "qualifyingDate": "2020-03-29",
+                         |            "qualifyingAmountExpenditure": 3434.45
+                         |          },
+                         |          "building": {
+                         |            "name": "Plaza",
+                         |            "number": "1",
+                         |            "postcode": "TF3 4EH"
+                         |          }
+                         |        }
+                         |      ],
+                         |      "enhancedStructuredBuildingAllowance": [
+                         |        {
+                         |          "amount": 234.45,
+                         |          "firstYear": {
+                         |            "qualifyingDate": "2020.10.01",
+                         |            "qualifyingAmountExpenditure": 453.34
+                         |          },
+                         |          "building": {
+                         |            "name": "Plaza 2",
+                         |            "number": "2",
+                         |            "postcode": "TF3 4ER"
+                         |          }
+                         |        }
+                         |      ],
+                         |      "zeroEmissionsCarAllowance": 454.34
+                         |    },
+                         |    "adjustments": {
+                         |      "balancingCharge": 565.34,
+                         |      "privateUseAdjustment": 533.54,
+                         |      "businessPremisesRenovationAllowanceBalancingCharges": 563.34,
+                         |      "nonResidentLandlord": true,
+                         |      "rentARoom": {
+                         |        "jointlyLet": true
+                         |      }
+                         |    }
+                         |  }
+                         |}
+                         |""".stripMargin)
           )) shouldBe List(
           DateFormatError.copy(paths = Some(Seq("/ukNonFhlProperty/allowances/enhancedStructuredBuildingAllowance/0/firstYear/qualifyingDate"))))
       }
@@ -709,76 +710,76 @@ class AmendUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec with JsonErr
             validBusinessId,
             validTaxYear,
             Json.parse("""
-              |{
-              |  "ukFhlProperty": {
-              |    "allowances": {
-              |      "annualInvestmentAllowance": 123.45,
-              |      "businessPremisesRenovationAllowance": 345.56,
-              |      "otherCapitalAllowance": 345.34,
-              |      "electricChargePointAllowance": 453.34,
-              |      "zeroEmissionsCarAllowance": 123.12
-              |    },
-              |    "adjustments": {
-              |      "privateUseAdjustment": 454.45,
-              |      "balancingCharge": 231.45,
-              |      "periodOfGraceAdjustment": true,
-              |      "businessPremisesRenovationAllowanceBalancingCharges": 567.67,
-              |      "nonResidentLandlord": true,
-              |      "rentARoom": {
-              |        "jointlyLet": true
-              |      }
-              |    }
-              |  },
-              |  "ukNonFhlProperty": {
-              |    "allowances": {
-              |      "annualInvestmentAllowance": 678.45,
-              |      "zeroEmissionsGoodsVehicleAllowance": 456.34,
-              |      "businessPremisesRenovationAllowance": 573.45,
-              |      "otherCapitalAllowance": 452.34,
-              |      "costOfReplacingDomesticGoods": 567.34,
-              |      "electricChargePointAllowance": 454.34,
-              |      "structuredBuildingAllowance": [
-              |        {
-              |          "amount": 234.34,
-              |          "firstYear": {
-              |            "qualifyingDate": "2020-03-29",
-              |            "qualifyingAmountExpenditure": 3434.45
-              |          },
-              |          "building": {
-              |            "name": "Plaza",
-              |            "number": "1",
-              |            "postcode": "TF3 4EH"
-              |          }
-              |        }
-              |      ],
-              |      "enhancedStructuredBuildingAllowance": [
-              |        {
-              |          "amount": 234.45,
-              |          "firstYear": {
-              |            "qualifyingDate": "2020-05-29",
-              |            "qualifyingAmountExpenditure": 453.34
-              |          },
-              |          "building": {
-              |            "name": "*",
-              |            "number": "2",
-              |            "postcode": "TF3 4ER"
-              |          }
-              |        }
-              |      ],
-              |      "zeroEmissionsCarAllowance": 454.34
-              |    },
-              |    "adjustments": {
-              |      "balancingCharge": 565.34,
-              |      "privateUseAdjustment": 533.54,
-              |      "businessPremisesRenovationAllowanceBalancingCharges": 563.34,
-              |      "nonResidentLandlord": true,
-              |      "rentARoom": {
-              |        "jointlyLet": true
-              |      }
-              |    }
-              |  }
-              |}
-              |""".stripMargin)
+                         |{
+                         |  "ukFhlProperty": {
+                         |    "allowances": {
+                         |      "annualInvestmentAllowance": 123.45,
+                         |      "businessPremisesRenovationAllowance": 345.56,
+                         |      "otherCapitalAllowance": 345.34,
+                         |      "electricChargePointAllowance": 453.34,
+                         |      "zeroEmissionsCarAllowance": 123.12
+                         |    },
+                         |    "adjustments": {
+                         |      "privateUseAdjustment": 454.45,
+                         |      "balancingCharge": 231.45,
+                         |      "periodOfGraceAdjustment": true,
+                         |      "businessPremisesRenovationAllowanceBalancingCharges": 567.67,
+                         |      "nonResidentLandlord": true,
+                         |      "rentARoom": {
+                         |        "jointlyLet": true
+                         |      }
+                         |    }
+                         |  },
+                         |  "ukNonFhlProperty": {
+                         |    "allowances": {
+                         |      "annualInvestmentAllowance": 678.45,
+                         |      "zeroEmissionsGoodsVehicleAllowance": 456.34,
+                         |      "businessPremisesRenovationAllowance": 573.45,
+                         |      "otherCapitalAllowance": 452.34,
+                         |      "costOfReplacingDomesticGoods": 567.34,
+                         |      "electricChargePointAllowance": 454.34,
+                         |      "structuredBuildingAllowance": [
+                         |        {
+                         |          "amount": 234.34,
+                         |          "firstYear": {
+                         |            "qualifyingDate": "2020-03-29",
+                         |            "qualifyingAmountExpenditure": 3434.45
+                         |          },
+                         |          "building": {
+                         |            "name": "Plaza",
+                         |            "number": "1",
+                         |            "postcode": "TF3 4EH"
+                         |          }
+                         |        }
+                         |      ],
+                         |      "enhancedStructuredBuildingAllowance": [
+                         |        {
+                         |          "amount": 234.45,
+                         |          "firstYear": {
+                         |            "qualifyingDate": "2020-05-29",
+                         |            "qualifyingAmountExpenditure": 453.34
+                         |          },
+                         |          "building": {
+                         |            "name": "*",
+                         |            "number": "2",
+                         |            "postcode": "TF3 4ER"
+                         |          }
+                         |        }
+                         |      ],
+                         |      "zeroEmissionsCarAllowance": 454.34
+                         |    },
+                         |    "adjustments": {
+                         |      "balancingCharge": 565.34,
+                         |      "privateUseAdjustment": 533.54,
+                         |      "businessPremisesRenovationAllowanceBalancingCharges": 563.34,
+                         |      "nonResidentLandlord": true,
+                         |      "rentARoom": {
+                         |        "jointlyLet": true
+                         |      }
+                         |    }
+                         |  }
+                         |}
+                         |""".stripMargin)
           )) shouldBe List(
           StringFormatError.copy(paths = Some(Seq("/ukNonFhlProperty/allowances/enhancedStructuredBuildingAllowance/0/building/name"))))
       }
@@ -790,76 +791,76 @@ class AmendUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec with JsonErr
             validBusinessId,
             validTaxYear,
             Json.parse("""
-              |{
-              |  "ukFhlProperty": {
-              |    "allowances": {
-              |      "annualInvestmentAllowance": 123.45,
-              |      "businessPremisesRenovationAllowance": 345.56,
-              |      "otherCapitalAllowance": 345.34,
-              |      "electricChargePointAllowance": 453.34,
-              |      "zeroEmissionsCarAllowance": 123.12
-              |    },
-              |    "adjustments": {
-              |      "privateUseAdjustment": 454.45,
-              |      "balancingCharge": 231.45,
-              |      "periodOfGraceAdjustment": true,
-              |      "businessPremisesRenovationAllowanceBalancingCharges": 567.67,
-              |      "nonResidentLandlord": true,
-              |      "rentARoom": {
-              |        "jointlyLet": true
-              |      }
-              |    }
-              |  },
-              |  "ukNonFhlProperty": {
-              |    "allowances": {
-              |      "annualInvestmentAllowance": 678.45,
-              |      "zeroEmissionsGoodsVehicleAllowance": 456.34,
-              |      "businessPremisesRenovationAllowance": 573.45,
-              |      "otherCapitalAllowance": 452.34,
-              |      "costOfReplacingDomesticGoods": 567.34,
-              |      "electricChargePointAllowance": 454.34,
-              |      "structuredBuildingAllowance": [
-              |        {
-              |          "amount": 234.34,
-              |          "firstYear": {
-              |            "qualifyingDate": "2020-03-29",
-              |            "qualifyingAmountExpenditure": 3434.45
-              |          },
-              |          "building": {
-              |            "name": "Plaza",
-              |            "number": "1",
-              |            "postcode": "TF3 4EH"
-              |          }
-              |        }
-              |      ],
-              |      "enhancedStructuredBuildingAllowance": [
-              |        {
-              |          "amount": 234.45,
-              |          "firstYear": {
-              |            "qualifyingDate": "2020-05-29",
-              |            "qualifyingAmountExpenditure": 453.34
-              |          },
-              |          "building": {
-              |            "name": "Plaza 2",
-              |            "number": "",
-              |            "postcode": "TF3 4ER"
-              |          }
-              |        }
-              |      ],
-              |      "zeroEmissionsCarAllowance": 454.34
-              |    },
-              |    "adjustments": {
-              |      "balancingCharge": 565.34,
-              |      "privateUseAdjustment": 533.54,
-              |      "businessPremisesRenovationAllowanceBalancingCharges": 563.34,
-              |      "nonResidentLandlord": true,
-              |      "rentARoom": {
-              |        "jointlyLet": true
-              |      }
-              |    }
-              |  }
-              |}
-              |""".stripMargin)
+                         |{
+                         |  "ukFhlProperty": {
+                         |    "allowances": {
+                         |      "annualInvestmentAllowance": 123.45,
+                         |      "businessPremisesRenovationAllowance": 345.56,
+                         |      "otherCapitalAllowance": 345.34,
+                         |      "electricChargePointAllowance": 453.34,
+                         |      "zeroEmissionsCarAllowance": 123.12
+                         |    },
+                         |    "adjustments": {
+                         |      "privateUseAdjustment": 454.45,
+                         |      "balancingCharge": 231.45,
+                         |      "periodOfGraceAdjustment": true,
+                         |      "businessPremisesRenovationAllowanceBalancingCharges": 567.67,
+                         |      "nonResidentLandlord": true,
+                         |      "rentARoom": {
+                         |        "jointlyLet": true
+                         |      }
+                         |    }
+                         |  },
+                         |  "ukNonFhlProperty": {
+                         |    "allowances": {
+                         |      "annualInvestmentAllowance": 678.45,
+                         |      "zeroEmissionsGoodsVehicleAllowance": 456.34,
+                         |      "businessPremisesRenovationAllowance": 573.45,
+                         |      "otherCapitalAllowance": 452.34,
+                         |      "costOfReplacingDomesticGoods": 567.34,
+                         |      "electricChargePointAllowance": 454.34,
+                         |      "structuredBuildingAllowance": [
+                         |        {
+                         |          "amount": 234.34,
+                         |          "firstYear": {
+                         |            "qualifyingDate": "2020-03-29",
+                         |            "qualifyingAmountExpenditure": 3434.45
+                         |          },
+                         |          "building": {
+                         |            "name": "Plaza",
+                         |            "number": "1",
+                         |            "postcode": "TF3 4EH"
+                         |          }
+                         |        }
+                         |      ],
+                         |      "enhancedStructuredBuildingAllowance": [
+                         |        {
+                         |          "amount": 234.45,
+                         |          "firstYear": {
+                         |            "qualifyingDate": "2020-05-29",
+                         |            "qualifyingAmountExpenditure": 453.34
+                         |          },
+                         |          "building": {
+                         |            "name": "Plaza 2",
+                         |            "number": "",
+                         |            "postcode": "TF3 4ER"
+                         |          }
+                         |        }
+                         |      ],
+                         |      "zeroEmissionsCarAllowance": 454.34
+                         |    },
+                         |    "adjustments": {
+                         |      "balancingCharge": 565.34,
+                         |      "privateUseAdjustment": 533.54,
+                         |      "businessPremisesRenovationAllowanceBalancingCharges": 563.34,
+                         |      "nonResidentLandlord": true,
+                         |      "rentARoom": {
+                         |        "jointlyLet": true
+                         |      }
+                         |    }
+                         |  }
+                         |}
+                         |""".stripMargin)
           )) shouldBe List(
           StringFormatError.copy(paths = Some(Seq("/ukNonFhlProperty/allowances/enhancedStructuredBuildingAllowance/0/building/number"))))
       }
@@ -871,76 +872,76 @@ class AmendUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec with JsonErr
             validBusinessId,
             validTaxYear,
             Json.parse("""
-              |{
-              |  "ukFhlProperty": {
-              |    "allowances": {
-              |      "annualInvestmentAllowance": 123.45,
-              |      "businessPremisesRenovationAllowance": 345.56,
-              |      "otherCapitalAllowance": 345.34,
-              |      "electricChargePointAllowance": 453.34,
-              |      "zeroEmissionsCarAllowance": 123.12
-              |    },
-              |    "adjustments": {
-              |      "privateUseAdjustment": 454.45,
-              |      "balancingCharge": 231.45,
-              |      "periodOfGraceAdjustment": true,
-              |      "businessPremisesRenovationAllowanceBalancingCharges": 567.67,
-              |      "nonResidentLandlord": true,
-              |      "rentARoom": {
-              |        "jointlyLet": true
-              |      }
-              |    }
-              |  },
-              |  "ukNonFhlProperty": {
-              |    "allowances": {
-              |      "annualInvestmentAllowance": 678.45,
-              |      "zeroEmissionsGoodsVehicleAllowance": 456.34,
-              |      "businessPremisesRenovationAllowance": 573.45,
-              |      "otherCapitalAllowance": 452.34,
-              |      "costOfReplacingDomesticGoods": 567.34,
-              |      "electricChargePointAllowance": 454.34,
-              |      "structuredBuildingAllowance": [
-              |        {
-              |          "amount": 234.34,
-              |          "firstYear": {
-              |            "qualifyingDate": "2020-03-29",
-              |            "qualifyingAmountExpenditure": 3434.45
-              |          },
-              |          "building": {
-              |            "name": "Plaza",
-              |            "number": "1",
-              |            "postcode": "TF3 4EH"
-              |          }
-              |        }
-              |      ],
-              |      "enhancedStructuredBuildingAllowance": [
-              |        {
-              |          "amount": 234.45,
-              |          "firstYear": {
-              |            "qualifyingDate": "2020-05-29",
-              |            "qualifyingAmountExpenditure": 453.34
-              |          },
-              |          "building": {
-              |            "name": "Plaza 2",
-              |            "number": "2",
-              |            "postcode": "*"
-              |          }
-              |        }
-              |      ],
-              |      "zeroEmissionsCarAllowance": 454.34
-              |    },
-              |    "adjustments": {
-              |      "balancingCharge": 565.34,
-              |      "privateUseAdjustment": 533.54,
-              |      "businessPremisesRenovationAllowanceBalancingCharges": 563.34,
-              |      "nonResidentLandlord": true,
-              |      "rentARoom": {
-              |        "jointlyLet": true
-              |      }
-              |    }
-              |  }
-              |}
-              |""".stripMargin)
+                         |{
+                         |  "ukFhlProperty": {
+                         |    "allowances": {
+                         |      "annualInvestmentAllowance": 123.45,
+                         |      "businessPremisesRenovationAllowance": 345.56,
+                         |      "otherCapitalAllowance": 345.34,
+                         |      "electricChargePointAllowance": 453.34,
+                         |      "zeroEmissionsCarAllowance": 123.12
+                         |    },
+                         |    "adjustments": {
+                         |      "privateUseAdjustment": 454.45,
+                         |      "balancingCharge": 231.45,
+                         |      "periodOfGraceAdjustment": true,
+                         |      "businessPremisesRenovationAllowanceBalancingCharges": 567.67,
+                         |      "nonResidentLandlord": true,
+                         |      "rentARoom": {
+                         |        "jointlyLet": true
+                         |      }
+                         |    }
+                         |  },
+                         |  "ukNonFhlProperty": {
+                         |    "allowances": {
+                         |      "annualInvestmentAllowance": 678.45,
+                         |      "zeroEmissionsGoodsVehicleAllowance": 456.34,
+                         |      "businessPremisesRenovationAllowance": 573.45,
+                         |      "otherCapitalAllowance": 452.34,
+                         |      "costOfReplacingDomesticGoods": 567.34,
+                         |      "electricChargePointAllowance": 454.34,
+                         |      "structuredBuildingAllowance": [
+                         |        {
+                         |          "amount": 234.34,
+                         |          "firstYear": {
+                         |            "qualifyingDate": "2020-03-29",
+                         |            "qualifyingAmountExpenditure": 3434.45
+                         |          },
+                         |          "building": {
+                         |            "name": "Plaza",
+                         |            "number": "1",
+                         |            "postcode": "TF3 4EH"
+                         |          }
+                         |        }
+                         |      ],
+                         |      "enhancedStructuredBuildingAllowance": [
+                         |        {
+                         |          "amount": 234.45,
+                         |          "firstYear": {
+                         |            "qualifyingDate": "2020-05-29",
+                         |            "qualifyingAmountExpenditure": 453.34
+                         |          },
+                         |          "building": {
+                         |            "name": "Plaza 2",
+                         |            "number": "2",
+                         |            "postcode": "*"
+                         |          }
+                         |        }
+                         |      ],
+                         |      "zeroEmissionsCarAllowance": 454.34
+                         |    },
+                         |    "adjustments": {
+                         |      "balancingCharge": 565.34,
+                         |      "privateUseAdjustment": 533.54,
+                         |      "businessPremisesRenovationAllowanceBalancingCharges": 563.34,
+                         |      "nonResidentLandlord": true,
+                         |      "rentARoom": {
+                         |        "jointlyLet": true
+                         |      }
+                         |    }
+                         |  }
+                         |}
+                         |""".stripMargin)
           )) shouldBe List(
           StringFormatError.copy(paths = Some(Seq("/ukNonFhlProperty/allowances/enhancedStructuredBuildingAllowance/0/building/postcode"))))
       }
@@ -967,7 +968,7 @@ class AmendUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec with JsonErr
           "/ukNonFhlProperty/allowances/zeroEmissionsCarAllowance",
           "/ukNonFhlProperty/adjustments/balancingCharge",
           "/ukNonFhlProperty/adjustments/privateUseAdjustment",
-          "/ukNonFhlProperty/adjustments/businessPremisesRenovationAllowanceBalancingCharges",
+          "/ukNonFhlProperty/adjustments/businessPremisesRenovationAllowanceBalancingCharges"
         ).foreach(p => testValueFormatError(p))
 
         def testValueFormatError(path: String): Unit = s"for $path" in {
@@ -989,76 +990,76 @@ class AmendUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec with JsonErr
             validBusinessId,
             validTaxYear,
             Json.parse("""
-                |{
-                |  "ukFhlProperty": {
-                |    "allowances": {
-                |      "annualInvestmentAllowance": 123.45,
-                |      "businessPremisesRenovationAllowance": 345.56,
-                |      "otherCapitalAllowance": 345.34,
-                |      "electricChargePointAllowance": 453.34,
-                |      "zeroEmissionsCarAllowance": 123.12
-                |    },
-                |    "adjustments": {
-                |      "privateUseAdjustment": 454.45,
-                |      "balancingCharge": 231.45,
-                |      "periodOfGraceAdjustment": true,
-                |      "businessPremisesRenovationAllowanceBalancingCharges": 567.67,
-                |      "nonResidentLandlord": true,
-                |      "rentARoom": {
-                |        "jointlyLet": true
-                |      }
-                |    }
-                |  },
-                |  "ukNonFhlProperty": {
-                |    "allowances": {
-                |      "annualInvestmentAllowance": 678.45,
-                |      "zeroEmissionsGoodsVehicleAllowance": 456.34,
-                |      "businessPremisesRenovationAllowance": 573.45,
-                |      "otherCapitalAllowance": 452.34,
-                |      "costOfReplacingDomesticGoods": 567.34,
-                |      "electricChargePointAllowance": 454.34,
-                |      "structuredBuildingAllowance": [
-                |        {
-                |          "amount": 234.345342,
-                |          "firstYear": {
-                |            "qualifyingDate": "2020-03-29",
-                |            "qualifyingAmountExpenditure": 3434.453423
-                |          },
-                |          "building": {
-                |            "name": "Plaza",
-                |            "number": "1",
-                |            "postcode": "TF3 4EH"
-                |          }
-                |        }
-                |      ],
-                |      "enhancedStructuredBuildingAllowance": [
-                |        {
-                |          "amount": 234.45,
-                |          "firstYear": {
-                |            "qualifyingDate": "2020-05-29",
-                |            "qualifyingAmountExpenditure": 453.34
-                |          },
-                |          "building": {
-                |            "name": "Plaza 2",
-                |            "number": "2",
-                |            "postcode": "TF3 4ER"
-                |          }
-                |        }
-                |      ],
-                |      "zeroEmissionsCarAllowance": 454.34
-                |    },
-                |    "adjustments": {
-                |      "balancingCharge": 565.34,
-                |      "privateUseAdjustment": 533.54,
-                |      "businessPremisesRenovationAllowanceBalancingCharges": 563.34,
-                |      "nonResidentLandlord": true,
-                |      "rentARoom": {
-                |        "jointlyLet": true
-                |      }
-                |    }
-                |  }
-                |}
-                |""".stripMargin)
+                         |{
+                         |  "ukFhlProperty": {
+                         |    "allowances": {
+                         |      "annualInvestmentAllowance": 123.45,
+                         |      "businessPremisesRenovationAllowance": 345.56,
+                         |      "otherCapitalAllowance": 345.34,
+                         |      "electricChargePointAllowance": 453.34,
+                         |      "zeroEmissionsCarAllowance": 123.12
+                         |    },
+                         |    "adjustments": {
+                         |      "privateUseAdjustment": 454.45,
+                         |      "balancingCharge": 231.45,
+                         |      "periodOfGraceAdjustment": true,
+                         |      "businessPremisesRenovationAllowanceBalancingCharges": 567.67,
+                         |      "nonResidentLandlord": true,
+                         |      "rentARoom": {
+                         |        "jointlyLet": true
+                         |      }
+                         |    }
+                         |  },
+                         |  "ukNonFhlProperty": {
+                         |    "allowances": {
+                         |      "annualInvestmentAllowance": 678.45,
+                         |      "zeroEmissionsGoodsVehicleAllowance": 456.34,
+                         |      "businessPremisesRenovationAllowance": 573.45,
+                         |      "otherCapitalAllowance": 452.34,
+                         |      "costOfReplacingDomesticGoods": 567.34,
+                         |      "electricChargePointAllowance": 454.34,
+                         |      "structuredBuildingAllowance": [
+                         |        {
+                         |          "amount": 234.345342,
+                         |          "firstYear": {
+                         |            "qualifyingDate": "2020-03-29",
+                         |            "qualifyingAmountExpenditure": 3434.453423
+                         |          },
+                         |          "building": {
+                         |            "name": "Plaza",
+                         |            "number": "1",
+                         |            "postcode": "TF3 4EH"
+                         |          }
+                         |        }
+                         |      ],
+                         |      "enhancedStructuredBuildingAllowance": [
+                         |        {
+                         |          "amount": 234.45,
+                         |          "firstYear": {
+                         |            "qualifyingDate": "2020-05-29",
+                         |            "qualifyingAmountExpenditure": 453.34
+                         |          },
+                         |          "building": {
+                         |            "name": "Plaza 2",
+                         |            "number": "2",
+                         |            "postcode": "TF3 4ER"
+                         |          }
+                         |        }
+                         |      ],
+                         |      "zeroEmissionsCarAllowance": 454.34
+                         |    },
+                         |    "adjustments": {
+                         |      "balancingCharge": 565.34,
+                         |      "privateUseAdjustment": 533.54,
+                         |      "businessPremisesRenovationAllowanceBalancingCharges": 563.34,
+                         |      "nonResidentLandlord": true,
+                         |      "rentARoom": {
+                         |        "jointlyLet": true
+                         |      }
+                         |    }
+                         |  }
+                         |}
+                         |""".stripMargin)
           )
         ) shouldBe List(
           ValueFormatError.copy(paths = Some(List(
@@ -1074,76 +1075,76 @@ class AmendUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec with JsonErr
             validBusinessId,
             validTaxYear,
             Json.parse("""
-                |{
-                |  "ukFhlProperty": {
-                |    "allowances": {
-                |      "annualInvestmentAllowance": 123.45,
-                |      "businessPremisesRenovationAllowance": 345.56,
-                |      "otherCapitalAllowance": 345.34,
-                |      "electricChargePointAllowance": 453.34,
-                |      "zeroEmissionsCarAllowance": 123.12
-                |    },
-                |    "adjustments": {
-                |      "privateUseAdjustment": 454.45,
-                |      "balancingCharge": 231.45,
-                |      "periodOfGraceAdjustment": true,
-                |      "businessPremisesRenovationAllowanceBalancingCharges": 567.67,
-                |      "nonResidentLandlord": true,
-                |      "rentARoom": {
-                |        "jointlyLet": true
-                |      }
-                |    }
-                |  },
-                |  "ukNonFhlProperty": {
-                |    "allowances": {
-                |      "annualInvestmentAllowance": 678.45,
-                |      "zeroEmissionsGoodsVehicleAllowance": 456.34,
-                |      "businessPremisesRenovationAllowance": 573.45,
-                |      "otherCapitalAllowance": 452.34,
-                |      "costOfReplacingDomesticGoods": 567.34,
-                |      "electricChargePointAllowance": 454.34,
-                |      "structuredBuildingAllowance": [
-                |        {
-                |          "amount": 234.34,
-                |          "firstYear": {
-                |            "qualifyingDate": "2020-03-29",
-                |            "qualifyingAmountExpenditure": 3434.45
-                |          },
-                |          "building": {
-                |            "name": "Plaza",
-                |            "number": "1",
-                |            "postcode": "TF3 4EH"
-                |          }
-                |        }
-                |      ],
-                |      "enhancedStructuredBuildingAllowance": [
-                |        {
-                |          "amount": 234.4576,
-                |          "firstYear": {
-                |            "qualifyingDate": "2020-05-29",
-                |            "qualifyingAmountExpenditure": 453.3424
-                |          },
-                |          "building": {
-                |            "name": "Plaza 2",
-                |            "number": "2",
-                |            "postcode": "TF3 4ER"
-                |          }
-                |        }
-                |      ],
-                |      "zeroEmissionsCarAllowance": 454.34
-                |    },
-                |    "adjustments": {
-                |      "balancingCharge": 565.34,
-                |      "privateUseAdjustment": 533.54,
-                |      "businessPremisesRenovationAllowanceBalancingCharges": 563.34,
-                |      "nonResidentLandlord": true,
-                |      "rentARoom": {
-                |        "jointlyLet": true
-                |      }
-                |    }
-                |  }
-                |}
-                |""".stripMargin)
+                         |{
+                         |  "ukFhlProperty": {
+                         |    "allowances": {
+                         |      "annualInvestmentAllowance": 123.45,
+                         |      "businessPremisesRenovationAllowance": 345.56,
+                         |      "otherCapitalAllowance": 345.34,
+                         |      "electricChargePointAllowance": 453.34,
+                         |      "zeroEmissionsCarAllowance": 123.12
+                         |    },
+                         |    "adjustments": {
+                         |      "privateUseAdjustment": 454.45,
+                         |      "balancingCharge": 231.45,
+                         |      "periodOfGraceAdjustment": true,
+                         |      "businessPremisesRenovationAllowanceBalancingCharges": 567.67,
+                         |      "nonResidentLandlord": true,
+                         |      "rentARoom": {
+                         |        "jointlyLet": true
+                         |      }
+                         |    }
+                         |  },
+                         |  "ukNonFhlProperty": {
+                         |    "allowances": {
+                         |      "annualInvestmentAllowance": 678.45,
+                         |      "zeroEmissionsGoodsVehicleAllowance": 456.34,
+                         |      "businessPremisesRenovationAllowance": 573.45,
+                         |      "otherCapitalAllowance": 452.34,
+                         |      "costOfReplacingDomesticGoods": 567.34,
+                         |      "electricChargePointAllowance": 454.34,
+                         |      "structuredBuildingAllowance": [
+                         |        {
+                         |          "amount": 234.34,
+                         |          "firstYear": {
+                         |            "qualifyingDate": "2020-03-29",
+                         |            "qualifyingAmountExpenditure": 3434.45
+                         |          },
+                         |          "building": {
+                         |            "name": "Plaza",
+                         |            "number": "1",
+                         |            "postcode": "TF3 4EH"
+                         |          }
+                         |        }
+                         |      ],
+                         |      "enhancedStructuredBuildingAllowance": [
+                         |        {
+                         |          "amount": 234.4576,
+                         |          "firstYear": {
+                         |            "qualifyingDate": "2020-05-29",
+                         |            "qualifyingAmountExpenditure": 453.3424
+                         |          },
+                         |          "building": {
+                         |            "name": "Plaza 2",
+                         |            "number": "2",
+                         |            "postcode": "TF3 4ER"
+                         |          }
+                         |        }
+                         |      ],
+                         |      "zeroEmissionsCarAllowance": 454.34
+                         |    },
+                         |    "adjustments": {
+                         |      "balancingCharge": 565.34,
+                         |      "privateUseAdjustment": 533.54,
+                         |      "businessPremisesRenovationAllowanceBalancingCharges": 563.34,
+                         |      "nonResidentLandlord": true,
+                         |      "rentARoom": {
+                         |        "jointlyLet": true
+                         |      }
+                         |    }
+                         |  }
+                         |}
+                         |""".stripMargin)
           )
         ) shouldBe List(
           ValueFormatError.copy(paths = Some(List(
@@ -1159,71 +1160,71 @@ class AmendUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec with JsonErr
             validBusinessId,
             validTaxYear,
             Json.parse("""
-              |{
-              |  "ukFhlProperty": {
-              |    "allowances": {
-              |       "propertyIncomeAllowance": 123.455
-              |          },
-              |    "adjustments": {
-              |      "balancingCharge": 231.45,
-              |      "periodOfGraceAdjustment": true,
-              |      "businessPremisesRenovationAllowanceBalancingCharges": 567.67,
-              |      "nonResidentLandlord": true,
-              |      "rentARoom": {
-              |        "jointlyLet": true
-              |      }
-              |    }
-              |  },
-              |  "ukNonFhlProperty": {
-              |    "allowances": {
-              |      "annualInvestmentAllowance": 678.45,
-              |      "zeroEmissionsGoodsVehicleAllowance": 456.34,
-              |      "businessPremisesRenovationAllowance": 573.45,
-              |      "otherCapitalAllowance": 452.34,
-              |      "costOfReplacingDomesticGoods": 567.34,
-              |      "electricChargePointAllowance": 454.34,
-              |      "structuredBuildingAllowance": [
-              |        {
-              |          "amount": 234.34,
-              |          "firstYear": {
-              |            "qualifyingDate": "2020-03-29",
-              |            "qualifyingAmountExpenditure": 3434.45
-              |          },
-              |          "building": {
-              |            "name": "Plaza",
-              |            "number": "1",
-              |            "postcode": "TF3 4EH"
-              |          }
-              |        }
-              |      ],
-              |      "enhancedStructuredBuildingAllowance": [
-              |        {
-              |          "amount": 234.45,
-              |          "firstYear": {
-              |            "qualifyingDate": "2020-05-29",
-              |            "qualifyingAmountExpenditure": 453.34
-              |          },
-              |          "building": {
-              |            "name": "Plaza 2",
-              |            "number": "2",
-              |            "postcode": "TF3 4ER"
-              |          }
-              |        }
-              |      ],
-              |      "zeroEmissionsCarAllowance": 454.34
-              |    },
-              |    "adjustments": {
-              |      "balancingCharge": 565.34,
-              |      "privateUseAdjustment": 533.54,
-              |      "businessPremisesRenovationAllowanceBalancingCharges": 563.34,
-              |      "nonResidentLandlord": true,
-              |      "rentARoom": {
-              |        "jointlyLet": true
-              |      }
-              |    }
-              |  }
-              |}
-              |""".stripMargin)
+                         |{
+                         |  "ukFhlProperty": {
+                         |    "allowances": {
+                         |       "propertyIncomeAllowance": 123.455
+                         |          },
+                         |    "adjustments": {
+                         |      "balancingCharge": 231.45,
+                         |      "periodOfGraceAdjustment": true,
+                         |      "businessPremisesRenovationAllowanceBalancingCharges": 567.67,
+                         |      "nonResidentLandlord": true,
+                         |      "rentARoom": {
+                         |        "jointlyLet": true
+                         |      }
+                         |    }
+                         |  },
+                         |  "ukNonFhlProperty": {
+                         |    "allowances": {
+                         |      "annualInvestmentAllowance": 678.45,
+                         |      "zeroEmissionsGoodsVehicleAllowance": 456.34,
+                         |      "businessPremisesRenovationAllowance": 573.45,
+                         |      "otherCapitalAllowance": 452.34,
+                         |      "costOfReplacingDomesticGoods": 567.34,
+                         |      "electricChargePointAllowance": 454.34,
+                         |      "structuredBuildingAllowance": [
+                         |        {
+                         |          "amount": 234.34,
+                         |          "firstYear": {
+                         |            "qualifyingDate": "2020-03-29",
+                         |            "qualifyingAmountExpenditure": 3434.45
+                         |          },
+                         |          "building": {
+                         |            "name": "Plaza",
+                         |            "number": "1",
+                         |            "postcode": "TF3 4EH"
+                         |          }
+                         |        }
+                         |      ],
+                         |      "enhancedStructuredBuildingAllowance": [
+                         |        {
+                         |          "amount": 234.45,
+                         |          "firstYear": {
+                         |            "qualifyingDate": "2020-05-29",
+                         |            "qualifyingAmountExpenditure": 453.34
+                         |          },
+                         |          "building": {
+                         |            "name": "Plaza 2",
+                         |            "number": "2",
+                         |            "postcode": "TF3 4ER"
+                         |          }
+                         |        }
+                         |      ],
+                         |      "zeroEmissionsCarAllowance": 454.34
+                         |    },
+                         |    "adjustments": {
+                         |      "balancingCharge": 565.34,
+                         |      "privateUseAdjustment": 533.54,
+                         |      "businessPremisesRenovationAllowanceBalancingCharges": 563.34,
+                         |      "nonResidentLandlord": true,
+                         |      "rentARoom": {
+                         |        "jointlyLet": true
+                         |      }
+                         |    }
+                         |  }
+                         |}
+                         |""".stripMargin)
           )) shouldBe List(ValueFormatError.forPathAndRange("/ukFhlProperty/allowances/propertyIncomeAllowance", "0", "1000"))
       }
 
@@ -1234,22 +1235,22 @@ class AmendUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec with JsonErr
             validBusinessId,
             validTaxYear,
             Json.parse("""
-              |{
-              |  "ukNonFhlProperty": {
-              |    "allowances": {
-              |      "propertyIncomeAllowance": 345.676
-              |    },
-              |    "adjustments": {
-              |      "balancingCharge": 565.34,
-              |      "businessPremisesRenovationAllowanceBalancingCharges": 563.34,
-              |      "nonResidentLandlord": true,
-              |      "rentARoom": {
-              |        "jointlyLet": true
-              |      }
-              |    }
-              |  }
-              |}
-              |""".stripMargin)
+                         |{
+                         |  "ukNonFhlProperty": {
+                         |    "allowances": {
+                         |      "propertyIncomeAllowance": 345.676
+                         |    },
+                         |    "adjustments": {
+                         |      "balancingCharge": 565.34,
+                         |      "businessPremisesRenovationAllowanceBalancingCharges": 563.34,
+                         |      "nonResidentLandlord": true,
+                         |      "rentARoom": {
+                         |        "jointlyLet": true
+                         |      }
+                         |    }
+                         |  }
+                         |}
+                         |""".stripMargin)
           )) shouldBe List(ValueFormatError.forPathAndRange("/ukNonFhlProperty/allowances/propertyIncomeAllowance", "0", "1000"))
       }
     }
@@ -1261,14 +1262,14 @@ class AmendUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec with JsonErr
           validBusinessId,
           validTaxYear,
           Json.parse("""
-            |{
-            |  "ukFhlProperty": {
-            |    "allowances": {
-            |       "propertyIncomeAllowance": 1000.01
-            |    }
-            |  }
-            |}
-            |""".stripMargin)
+                       |{
+                       |  "ukFhlProperty": {
+                       |    "allowances": {
+                       |       "propertyIncomeAllowance": 1000.01
+                       |    }
+                       |  }
+                       |}
+                       |""".stripMargin)
         )) shouldBe List(ValueFormatError.forPathAndRange("/ukFhlProperty/allowances/propertyIncomeAllowance", "0", "1000"))
     }
   }
@@ -1281,14 +1282,14 @@ class AmendUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec with JsonErr
           validBusinessId,
           validTaxYear,
           Json.parse("""
-                 |{
-                 |  "ukNonFhlProperty": {
-                 |    "allowances": {
-                 |      "propertyIncomeAllowance": 1000.01
-                 |    }
-                 |  }
-                 |}
-                 |""".stripMargin)
+                       |{
+                       |  "ukNonFhlProperty": {
+                       |    "allowances": {
+                       |      "propertyIncomeAllowance": 1000.01
+                       |    }
+                       |  }
+                       |}
+                       |""".stripMargin)
         )) shouldBe List(ValueFormatError.forPathAndRange("/ukNonFhlProperty/allowances/propertyIncomeAllowance", "0", "1000"))
     }
 
@@ -1326,54 +1327,54 @@ class AmendUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec with JsonErr
             validBusinessId,
             validTaxYear,
             Json.parse("""
-              |{
-              |  "ukNonFhlProperty": {
-              |    "allowances": {
-              |      "annualInvestmentAllowance": 2000.50,
-              |      "zeroEmissionsGoodsVehicleAllowance": 2000.60,
-              |      "businessPremisesRenovationAllowance": 2000.70,
-              |      "otherCapitalAllowance": 2000.80,
-              |      "costOfReplacingDomesticGoods": 2000.90,
-              |      "electricChargePointAllowance": 3000.10,
-              |      "structuredBuildingAllowance": [
-              |        {
-              |          "amount": 3000.30,
-              |          "firstYear": {
-              |            "qualifyingDate": "2020-01-01",
-              |            "qualifyingAmountExpenditure": 3000.40
-              |          },
-              |          "building": {
-              |            "postcode": "GF49JH"
-              |          }
-              |        }
-              |      ],
-              |      "enhancedStructuredBuildingAllowance": [
-              |        {
-              |          "amount": 3000.50,
-              |          "firstYear": {
-              |            "qualifyingDate": "2020-01-01",
-              |            "qualifyingAmountExpenditure": 3000.60
-              |          },
-              |          "building": {
-              |            "name": "house name",
-              |            "number": "house number",
-              |            "postcode": "GF49JH"
-              |          }
-              |        }
-              |      ],
-              |      "zeroEmissionsCarAllowance": 3000.20
-              |    },
-              |    "adjustments": {
-              |      "balancingCharge": 2000.20,
-              |      "privateUseAdjustment": 2000.30,
-              |      "businessPremisesRenovationAllowanceBalancingCharges": 2000.40,
-              |      "nonResidentLandlord": true,
-              |      "rentARoom": {
-              |        "jointlyLet": true
-              |      }
-              |    }
-              |  }
-              |}
+                         |{
+                         |  "ukNonFhlProperty": {
+                         |    "allowances": {
+                         |      "annualInvestmentAllowance": 2000.50,
+                         |      "zeroEmissionsGoodsVehicleAllowance": 2000.60,
+                         |      "businessPremisesRenovationAllowance": 2000.70,
+                         |      "otherCapitalAllowance": 2000.80,
+                         |      "costOfReplacingDomesticGoods": 2000.90,
+                         |      "electricChargePointAllowance": 3000.10,
+                         |      "structuredBuildingAllowance": [
+                         |        {
+                         |          "amount": 3000.30,
+                         |          "firstYear": {
+                         |            "qualifyingDate": "2020-01-01",
+                         |            "qualifyingAmountExpenditure": 3000.40
+                         |          },
+                         |          "building": {
+                         |            "postcode": "GF49JH"
+                         |          }
+                         |        }
+                         |      ],
+                         |      "enhancedStructuredBuildingAllowance": [
+                         |        {
+                         |          "amount": 3000.50,
+                         |          "firstYear": {
+                         |            "qualifyingDate": "2020-01-01",
+                         |            "qualifyingAmountExpenditure": 3000.60
+                         |          },
+                         |          "building": {
+                         |            "name": "house name",
+                         |            "number": "house number",
+                         |            "postcode": "GF49JH"
+                         |          }
+                         |        }
+                         |      ],
+                         |      "zeroEmissionsCarAllowance": 3000.20
+                         |    },
+                         |    "adjustments": {
+                         |      "balancingCharge": 2000.20,
+                         |      "privateUseAdjustment": 2000.30,
+                         |      "businessPremisesRenovationAllowanceBalancingCharges": 2000.40,
+                         |      "nonResidentLandlord": true,
+                         |      "rentARoom": {
+                         |        "jointlyLet": true
+                         |      }
+                         |    }
+                         |  }
+                         |}
       """.stripMargin)
           )) shouldBe
           List(RuleBuildingNameNumberError.copy(paths = Some(Seq("/ukNonFhlProperty/allowances/structuredBuildingAllowance/0/building"))))
@@ -1386,107 +1387,107 @@ class AmendUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec with JsonErr
             validBusinessId,
             validTaxYear,
             Json.parse("""
-              |{
-              |  "ukNonFhlProperty": {
-              |    "allowances": {
-              |      "annualInvestmentAllowance": 2000.50,
-              |      "zeroEmissionsGoodsVehicleAllowance": 2000.60,
-              |      "businessPremisesRenovationAllowance": 2000.70,
-              |      "otherCapitalAllowance": 2000.80,
-              |      "costOfReplacingDomesticGoods": 2000.90,
-              |      "electricChargePointAllowance": 3000.10,
-              |      "structuredBuildingAllowance": [
-              |        {
-              |          "amount": 3000.30,
-              |          "firstYear": {
-              |            "qualifyingDate": "2020-01-01",
-              |            "qualifyingAmountExpenditure": 3000.40
-              |          },
-              |          "building": {
-              |            "name": "house name",
-              |            "postcode": "GF49JH"
-              |          }
-              |        }
-              |      ],
-              |      "enhancedStructuredBuildingAllowance": [
-              |        {
-              |          "amount": 3000.50,
-              |          "firstYear": {
-              |            "qualifyingDate": "2020-01-01",
-              |            "qualifyingAmountExpenditure": 3000.60
-              |          },
-              |          "building": {
-              |            "postcode": "GF49JH"
-              |          }
-              |        }
-              |      ],
-              |      "zeroEmissionsCarAllowance": 3000.20
-              |    },
-              |    "adjustments": {
-              |      "balancingCharge": 2000.20,
-              |      "privateUseAdjustment": 2000.30,
-              |      "businessPremisesRenovationAllowanceBalancingCharges": 2000.40,
-              |      "nonResidentLandlord": true,
-              |      "rentARoom": {
-              |        "jointlyLet": true
-              |      }
-              |    }
-              |  }
-              |}
+                         |{
+                         |  "ukNonFhlProperty": {
+                         |    "allowances": {
+                         |      "annualInvestmentAllowance": 2000.50,
+                         |      "zeroEmissionsGoodsVehicleAllowance": 2000.60,
+                         |      "businessPremisesRenovationAllowance": 2000.70,
+                         |      "otherCapitalAllowance": 2000.80,
+                         |      "costOfReplacingDomesticGoods": 2000.90,
+                         |      "electricChargePointAllowance": 3000.10,
+                         |      "structuredBuildingAllowance": [
+                         |        {
+                         |          "amount": 3000.30,
+                         |          "firstYear": {
+                         |            "qualifyingDate": "2020-01-01",
+                         |            "qualifyingAmountExpenditure": 3000.40
+                         |          },
+                         |          "building": {
+                         |            "name": "house name",
+                         |            "postcode": "GF49JH"
+                         |          }
+                         |        }
+                         |      ],
+                         |      "enhancedStructuredBuildingAllowance": [
+                         |        {
+                         |          "amount": 3000.50,
+                         |          "firstYear": {
+                         |            "qualifyingDate": "2020-01-01",
+                         |            "qualifyingAmountExpenditure": 3000.60
+                         |          },
+                         |          "building": {
+                         |            "postcode": "GF49JH"
+                         |          }
+                         |        }
+                         |      ],
+                         |      "zeroEmissionsCarAllowance": 3000.20
+                         |    },
+                         |    "adjustments": {
+                         |      "balancingCharge": 2000.20,
+                         |      "privateUseAdjustment": 2000.30,
+                         |      "businessPremisesRenovationAllowanceBalancingCharges": 2000.40,
+                         |      "nonResidentLandlord": true,
+                         |      "rentARoom": {
+                         |        "jointlyLet": true
+                         |      }
+                         |    }
+                         |  }
+                         |}
               """.stripMargin)
           )) shouldBe
           List(RuleBuildingNameNumberError.copy(paths = Some(Seq("/ukNonFhlProperty/allowances/enhancedStructuredBuildingAllowance/0/building"))))
       }
     }
 
-//    "return RulePropertyIncomeAllowanceError" when {
-//      "propertyIncomeAllowance is supplied with privateUseAdjustment for fhl" in {
-//        validator.validate(
-//          AmendUkPropertyAnnualSubmissionRawData(
-//            validNino,
-//            validBusinessId,
-//            validTaxYear,
-//            Json.parse("""
-//              |{
-//              |  "ukFhlProperty": {
-//              |    "allowances": {
-//              |      "propertyIncomeAllowance": 1.25
-//              |    },
-//              |    "adjustments": {
-//              |      "privateUseAdjustment": 1.25,
-//              |      "nonResidentLandlord": true,
-//              |      "periodOfGraceAdjustment": true
-//              |    }
-//              |  }
-//              |}
-//              |""".stripMargin)
-//          )) shouldBe
-//          List(RulePropertyIncomeAllowanceError.copy(paths = Some(Seq("/ukFhlProperty"))))
-//      }
-//
-//      "propertyIncomeAllowance is supplied with privateUseAdjustment for non-fhl" in {
-//        validator.validate(
-//          AmendUkPropertyAnnualSubmissionRawData(
-//            validNino,
-//            validBusinessId,
-//            validTaxYear,
-//            Json.parse("""
-//              |{
-//              |  "ukNonFhlProperty": {
-//              |    "allowances": {
-//              |      "propertyIncomeAllowance": 1.25
-//              |    },
-//              |    "adjustments": {
-//              |      "privateUseAdjustment": 1.25,
-//              |      "nonResidentLandlord": true
-//              |    }
-//              |  }
-//              |}
-//              |""".stripMargin)
-//          )) shouldBe
-//          List(RulePropertyIncomeAllowanceError.copy(paths = Some(Seq("/ukNonFhlProperty"))))
-//      }
-//    }
+    "return RulePropertyIncomeAllowanceError" when {
+      "propertyIncomeAllowance is supplied with privateUseAdjustment for fhl" in {
+        validator.validate(
+          AmendUkPropertyAnnualSubmissionRawData(
+            validNino,
+            validBusinessId,
+            validTaxYear,
+            Json.parse("""
+                         |{
+                         |  "ukFhlProperty": {
+                         |    "allowances": {
+                         |      "propertyIncomeAllowance": 1.25
+                         |    },
+                         |    "adjustments": {
+                         |      "privateUseAdjustment": 1.25,
+                         |      "nonResidentLandlord": true,
+                         |      "periodOfGraceAdjustment": true
+                         |    }
+                         |  }
+                         |}
+                         |""".stripMargin)
+          )) shouldBe
+          List(RulePropertyIncomeAllowanceError.copy(paths = Some(Seq("/ukFhlProperty"))))
+      }
+
+      "propertyIncomeAllowance is supplied with privateUseAdjustment for non-fhl" in {
+        validator.validate(
+          AmendUkPropertyAnnualSubmissionRawData(
+            validNino,
+            validBusinessId,
+            validTaxYear,
+            Json.parse("""
+                         |{
+                         |  "ukNonFhlProperty": {
+                         |    "allowances": {
+                         |      "propertyIncomeAllowance": 1.25
+                         |    },
+                         |    "adjustments": {
+                         |      "privateUseAdjustment": 1.25,
+                         |      "nonResidentLandlord": true
+                         |    }
+                         |  }
+                         |}
+                         |""".stripMargin)
+          )) shouldBe
+          List(RulePropertyIncomeAllowanceError.copy(paths = Some(Seq("/ukNonFhlProperty"))))
+      }
+    }
 
     "return multiple errors" when {
       "request supplied has multiple errors" in {
@@ -1495,4 +1496,5 @@ class AmendUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec with JsonErr
       }
     }
   }
+
 }

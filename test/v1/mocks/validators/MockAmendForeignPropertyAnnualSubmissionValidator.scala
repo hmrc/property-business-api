@@ -33,5 +33,7 @@ class MockAmendForeignPropertyAnnualSubmissionValidator extends MockFactory {
         .validate(_: AmendForeignPropertyAnnualSubmissionRawData))
         .expects(data)
     }
+
   }
+
 }

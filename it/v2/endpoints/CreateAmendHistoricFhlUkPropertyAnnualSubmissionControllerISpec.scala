@@ -16,16 +16,16 @@
 
 package v2.endpoints
 
+import api.models.errors._
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import play.api.http.HeaderNames.ACCEPT
 import play.api.http.Status._
-import play.api.libs.json.{ JsObject, JsValue, Json }
-import play.api.libs.ws.{ WSRequest, WSResponse }
+import play.api.libs.json.{JsObject, JsValue, Json}
+import play.api.libs.ws.{WSRequest, WSResponse}
 import play.api.test.Helpers.AUTHORIZATION
 import support.V2IntegrationBaseSpec
 import v1.stubs.AuditStub
-import api.models.errors._
-import v2.stubs.{ AuthStub, DownstreamStub, MtdIdLookupStub }
+import v2.stubs.{AuthStub, DownstreamStub, MtdIdLookupStub}
 
 class CreateAmendHistoricFhlUkPropertyAnnualSubmissionControllerISpec extends V2IntegrationBaseSpec {
 
@@ -111,6 +111,7 @@ class CreateAmendHistoricFhlUkPropertyAnnualSubmissionControllerISpec extends V2
          |  "reason": "downstream message"
          |}
        """.stripMargin
+
   }
 
   "Calling the create and amend historic FHL uk property annual submission endpoint" should {
@@ -233,7 +234,7 @@ class CreateAmendHistoricFhlUkPropertyAnnualSubmissionControllerISpec extends V2
         ("AA123456A", "202362-23", requestJson, BAD_REQUEST, TaxYearFormatError),
         ("AA123456A", "2021-24", requestJson, BAD_REQUEST, RuleTaxYearRangeInvalidError),
         ("AA123456A", "2015-16", requestJson, BAD_REQUEST, RuleHistoricTaxYearNotSupportedError),
-        ("AA123456A", "2021-22", JsObject.empty, BAD_REQUEST, RuleIncorrectOrEmptyBodyError),
+        ("AA123456A", "2021-22", JsObject.empty, BAD_REQUEST, RuleIncorrectOrEmptyBodyError)
       )
       input.foreach(args => (validationErrorTest _).tupled(args))
     }
@@ -270,4 +271,5 @@ class CreateAmendHistoricFhlUkPropertyAnnualSubmissionControllerISpec extends V2
       input.foreach(args => (serviceErrorTest _).tupled(args))
     }
   }
+
 }

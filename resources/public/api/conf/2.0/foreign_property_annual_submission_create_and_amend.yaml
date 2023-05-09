@@ -27,6 +27,14 @@ description: |
               <td><p>TYPE_OF_BUSINESS_INCORRECT</p></td>
               <td><p>Simulates the scenario where a businessId for something other than a foreign property is supplied.</p></td>
           </tr>
+          <tr>
+              <td><p>DUPLICATE_COUNTRY_CODE</p></td>
+              <td><p>Simulates the scenario where the same countryCode is supplied for multiple properties</p></td>
+          </tr>
+          <tr>
+              <td><p>PROPERTY_INCOME_ALLOWANCE</p></td>
+              <td><p>Simulates the scenario where the propertyIncomeAllowance is submitted when privateUseAdjustment is supplied</p></td>
+          </tr>
       </tbody>
   </table>
 

@@ -44,6 +44,10 @@ post:
                 <td><p>TYPE_OF_BUSINESS_INCORRECT</p></td>
                 <td><p>Simulates the scenario where the supplied Business ID does not represent a foreign property business.</p></td>
             </tr>
+            <tr>
+                <td><p>STATEFUL</p></td>
+                <td><p>Simulates a stateful success response.</p></td>
+            </tr>
         </tbody>
     </table>
 

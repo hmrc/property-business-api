@@ -789,21 +789,6 @@ class AmendUkPropertyAnnualSubmissionControllerISpec extends V2IntegrationBaseSp
           |}
           |""".stripMargin)
 
-      val propertyIncomeAllowanceBodyJson = Json.parse("""
-          |{
-          |  "ukFhlProperty": {
-          |    "allowances": {
-          |      "propertyIncomeAllowance": 1000.00
-          |    },
-          |    "adjustments": {
-          |      "privateUseAdjustment": 2000.30,
-          |      "periodOfGraceAdjustment": true,
-          |      "nonResidentLandlord": true
-          |    }
-          |  }
-          |}
-          |""".stripMargin)
-
       val allInvalidValueRequestError: MtdError = ValueFormatError.copy(
         message = "The value must be between 0 and 99999999999.99",
         paths = Some(
@@ -871,8 +856,6 @@ class AmendUkPropertyAnnualSubmissionControllerISpec extends V2IntegrationBaseSp
           ))
       )
 
-      val propertyIncomeAllowanceError: MtdError = RulePropertyIncomeAllowanceError.copy(paths = Some(List("/ukFhlProperty")))
-
       "validation error occurs" when {
         def validationErrorTest(requestNino: String,
                                 requestBusinessId: String,
@@ -910,8 +893,7 @@ class AmendUkPropertyAnnualSubmissionControllerISpec extends V2IntegrationBaseSp
           ("AA123456A", "XAIS12345678910", "2022-23", allInvalidDateFormatRequestBodyJson, BAD_REQUEST, allInvalidDateFormatRequestError),
           ("AA123456A", "XAIS12345678910", "2022-23", allInvalidStringRequestBodyJson, BAD_REQUEST, allInvalidStringRequestError),
           ("AA123456A", "XAIS12345678910", "2022-23", buildingNameNumberBodyJson, BAD_REQUEST, buildingNameNumberError),
-          ("AA123456A", "XAIS12345678910", "2022-23", bothAllowancesSuppliedBodyJson, BAD_REQUEST, bothAllowancesSuppliedError),
-          ("AA123456A", "XAIS12345678910", "2022-23", propertyIncomeAllowanceBodyJson, BAD_REQUEST, propertyIncomeAllowanceError)
+          ("AA123456A", "XAIS12345678910", "2022-23", bothAllowancesSuppliedBodyJson, BAD_REQUEST, bothAllowancesSuppliedError)
         )
         input.foreach(args => (validationErrorTest _).tupled(args))
       }

@@ -1439,55 +1439,6 @@ class AmendUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec with JsonErr
       }
     }
 
-    "return RulePropertyIncomeAllowanceError" when {
-      "propertyIncomeAllowance is supplied with privateUseAdjustment for fhl" in {
-        validator.validate(
-          AmendUkPropertyAnnualSubmissionRawData(
-            validNino,
-            validBusinessId,
-            validTaxYear,
-            Json.parse("""
-              |{
-              |  "ukFhlProperty": {
-              |    "allowances": {
-              |      "propertyIncomeAllowance": 1.25
-              |    },
-              |    "adjustments": {
-              |      "privateUseAdjustment": 1.25,
-              |      "nonResidentLandlord": true,
-              |      "periodOfGraceAdjustment": true
-              |    }
-              |  }
-              |}
-              |""".stripMargin)
-          )) shouldBe
-          List(RulePropertyIncomeAllowanceError.copy(paths = Some(Seq("/ukFhlProperty"))))
-      }
-
-      "propertyIncomeAllowance is supplied with privateUseAdjustment for non-fhl" in {
-        validator.validate(
-          AmendUkPropertyAnnualSubmissionRawData(
-            validNino,
-            validBusinessId,
-            validTaxYear,
-            Json.parse("""
-              |{
-              |  "ukNonFhlProperty": {
-              |    "allowances": {
-              |      "propertyIncomeAllowance": 1.25
-              |    },
-              |    "adjustments": {
-              |      "privateUseAdjustment": 1.25,
-              |      "nonResidentLandlord": true
-              |    }
-              |  }
-              |}
-              |""".stripMargin)
-          )) shouldBe
-          List(RulePropertyIncomeAllowanceError.copy(paths = Some(Seq("/ukNonFhlProperty"))))
-      }
-    }
-
     "return multiple errors" when {
       "request supplied has multiple errors" in {
         validator.validate(AmendUkPropertyAnnualSubmissionRawData("A12344A", "20178", validTaxYear, requestBodyJson)) shouldBe

@@ -48,8 +48,10 @@ object JsonFormatValidation {
       Left(List(RuleIncorrectOrEmptyBodyError))
     } else {
       data.validate[A] match {
-        case JsSuccess(a, _)                                          => Right(a)
-        case JsError(errors: Seq[(JsPath, Seq[JsonValidationError])]) => Left(handleErrors(errors))
+        case JsSuccess(a, _) => Right(a)
+        case JsError(errors) =>
+          val immutableErrors = errors.map { case (path, errors) => (path, errors.toList) }.toList
+          Left(handleErrors(immutableErrors))
       }
     }
   }
@@ -81,7 +83,7 @@ object JsonFormatValidation {
       .drop(5)
 
     logger.warn(s"[JsonFormatValidation][validate] - Request body failed validation with errors - $logString")
-    List(RuleIncorrectOrEmptyBodyError.copy(paths = Some(failures.map(_.fromJsPath))))
+    List(RuleIncorrectOrEmptyBodyError.copy(paths = Some(failures.map(_.fromJsPath).sorted)))
   }
 
   private class JsonFormatValidationFailure(path: JsPath, failure: String) {

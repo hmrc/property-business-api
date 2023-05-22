@@ -26,9 +26,11 @@ trait MockDateUtils extends MockFactory {
   object MockDateUtils {
 
     def currentTaxYearStart(): CallHandler0[String] =
-      (mockDateUtils.currentTaxYearStart _: () => String).expects()
+      (() => mockDateUtils.currentTaxYearStart).expects()
 
     def currentTaxYearEnd(): CallHandler0[String] =
-      (mockDateUtils.currentTaxYearEnd _: () => String).expects()
+      (() => mockDateUtils.currentTaxYearEnd).expects()
+
   }
+
 }

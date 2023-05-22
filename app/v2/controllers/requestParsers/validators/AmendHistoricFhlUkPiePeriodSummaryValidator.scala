@@ -28,7 +28,7 @@ import v2.models.request.amendHistoricFhlUkPiePeriodSummary.{AmendHistoricFhlUkP
 import javax.inject.{Inject, Singleton}
 
 @Singleton
-class AmendHistoricFhlUkPiePeriodSummaryValidator @Inject()(appConfig: AppConfig) extends Validator[AmendHistoricFhlUkPiePeriodSummaryRawData] {
+class AmendHistoricFhlUkPiePeriodSummaryValidator @Inject() (appConfig: AppConfig) extends Validator[AmendHistoricFhlUkPiePeriodSummaryRawData] {
 
   lazy private val minTaxYear = appConfig.minimumTaxHistoric
   lazy private val maxTaxYear = appConfig.maximumTaxHistoric
@@ -82,4 +82,5 @@ class AmendHistoricFhlUkPiePeriodSummaryValidator @Inject()(appConfig: AppConfig
 
     errorsResult(incomeFormatErrors ++ expensesFormatErrors ++ bothExpensesErrors)
   }
+
 }

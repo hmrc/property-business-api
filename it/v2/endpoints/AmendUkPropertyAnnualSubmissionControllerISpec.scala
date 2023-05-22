@@ -308,6 +308,22 @@ class AmendUkPropertyAnnualSubmissionControllerISpec extends V2IntegrationBaseSp
             |""".stripMargin)
 
         val allInvalidFieldsRequestError: List[MtdError] = List(
+          DateFormatError.copy(
+            paths = Some(
+              List(
+                "/ukNonFhlProperty/allowances/structuredBuildingAllowance/0/firstYear/qualifyingDate",
+                "/ukNonFhlProperty/allowances/enhancedStructuredBuildingAllowance/0/firstYear/qualifyingDate"
+              ))
+          ),
+          StringFormatError.copy(
+            paths = Some(
+              List(
+                "/ukNonFhlProperty/allowances/structuredBuildingAllowance/0/building/name",
+                "/ukNonFhlProperty/allowances/structuredBuildingAllowance/0/building/postcode",
+                "/ukNonFhlProperty/allowances/enhancedStructuredBuildingAllowance/0/building/number",
+                "/ukNonFhlProperty/allowances/enhancedStructuredBuildingAllowance/0/building/postcode"
+              ))
+          ),
           ValueFormatError.copy(
             paths = Some(
               List(
@@ -333,22 +349,6 @@ class AmendUkPropertyAnnualSubmissionControllerISpec extends V2IntegrationBaseSp
                 "/ukNonFhlProperty/allowances/structuredBuildingAllowance/0/firstYear/qualifyingAmountExpenditure",
                 "/ukNonFhlProperty/allowances/enhancedStructuredBuildingAllowance/0/amount",
                 "/ukNonFhlProperty/allowances/enhancedStructuredBuildingAllowance/0/firstYear/qualifyingAmountExpenditure"
-              ))
-          ),
-          DateFormatError.copy(
-            paths = Some(
-              List(
-                "/ukNonFhlProperty/allowances/structuredBuildingAllowance/0/firstYear/qualifyingDate",
-                "/ukNonFhlProperty/allowances/enhancedStructuredBuildingAllowance/0/firstYear/qualifyingDate"
-              ))
-          ),
-          StringFormatError.copy(
-            paths = Some(
-              List(
-                "/ukNonFhlProperty/allowances/structuredBuildingAllowance/0/building/name",
-                "/ukNonFhlProperty/allowances/structuredBuildingAllowance/0/building/postcode",
-                "/ukNonFhlProperty/allowances/enhancedStructuredBuildingAllowance/0/building/number",
-                "/ukNonFhlProperty/allowances/enhancedStructuredBuildingAllowance/0/building/postcode"
               ))
           )
         )

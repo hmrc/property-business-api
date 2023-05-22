@@ -69,7 +69,7 @@ class RetrieveForeignPropertyPeriodSummaryConnector @Inject() (val http: HttpCli
 
     val response = get(downstreamUri, queryParams)
 
-    response.map(_.right.map {
+    response.map(_.map {
       case ResponseWrapper(corId, resp) if foreignResult(resp) => ResponseWrapper(corId, ForeignResult(resp))
       case ResponseWrapper(corId, _)                           => ResponseWrapper(corId, NonForeignResult)
     })

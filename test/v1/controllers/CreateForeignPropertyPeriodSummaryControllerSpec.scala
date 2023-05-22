@@ -282,8 +282,7 @@ class CreateForeignPropertyPeriodSummaryControllerSpec
         header("X-CorrelationId", result) shouldBe Some(correlationId)
 
         val auditResponse: AuditResponse = AuditResponse(OK, None, Some(hateoasResponse))
-        MockedAuditService.verifyAuditEvent(consolidatedEvent(auditResponse)).once
-      }
+        MockedAuditService.verifyAuditEvent(consolidatedEvent(auditResponse)).once()      }
     }
 
     "return a successful response from an unconsolidated request" when {
@@ -307,8 +306,7 @@ class CreateForeignPropertyPeriodSummaryControllerSpec
         header("X-CorrelationId", result) shouldBe Some(correlationId)
 
         val auditResponse: AuditResponse = AuditResponse(OK, None, Some(hateoasResponse))
-        MockedAuditService.verifyAuditEvent(unconsolidatedEvent(auditResponse)).once
-      }
+        MockedAuditService.verifyAuditEvent(unconsolidatedEvent(auditResponse)).once()      }
     }
 
     "return the error as per spec" when {
@@ -327,8 +325,7 @@ class CreateForeignPropertyPeriodSummaryControllerSpec
             header("X-CorrelationId", result) shouldBe Some(correlationId)
 
             val auditResponse: AuditResponse = AuditResponse(expectedStatus, Some(Seq(AuditError(error.code))), None)
-            MockedAuditService.verifyAuditEvent(consolidatedEvent(auditResponse)).once
-          }
+            MockedAuditService.verifyAuditEvent(consolidatedEvent(auditResponse)).once()          }
         }
 
         val input = Seq(
@@ -370,8 +367,7 @@ class CreateForeignPropertyPeriodSummaryControllerSpec
             header("X-CorrelationId", result) shouldBe Some(correlationId)
 
             val auditResponse: AuditResponse = AuditResponse(expectedStatus, Some(Seq(AuditError(mtdError.code))), None)
-            MockedAuditService.verifyAuditEvent(consolidatedEvent(auditResponse)).once
-          }
+            MockedAuditService.verifyAuditEvent(consolidatedEvent(auditResponse)).once()          }
         }
 
         val input = Seq(

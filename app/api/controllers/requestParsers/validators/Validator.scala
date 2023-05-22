@@ -31,8 +31,8 @@ trait Validator[A <: RawData] {
       case Nil => List()
       case thisLevel :: remainingLevels =>
         thisLevel(data).flatten match {
-          case x if x.isEmpty  => run(remainingLevels, data)
-          case x if x.nonEmpty => x
+          case x if x.isEmpty => run(remainingLevels, data)
+          case x              => x
         }
     }
   }
@@ -40,15 +40,14 @@ trait Validator[A <: RawData] {
   protected def flattenErrors(errors: List[List[MtdError]]): List[MtdError] = {
     errors.flatten
       .groupBy(_.message)
-      .map {
-        case (_, errors) =>
-          val baseError = errors.head.copy(paths = Some(Seq.empty[String]))
+      .map { case (_, errors) =>
+        val baseError = errors.head.copy(paths = Some(Seq.empty[String]))
 
-          errors.fold(baseError)(
-            (error1, error2) => error1.copy(paths = Some(error1.paths.getOrElse(Seq.empty[String]) ++ error2.paths.getOrElse(Seq.empty[String])))
-          )
+        errors.fold(baseError)((error1, error2) =>
+          error1.copy(paths = Some(error1.paths.getOrElse(Seq.empty[String]) ++ error2.paths.getOrElse(Seq.empty[String]))))
       }
       .toList
+      .sortBy(_.code)
   }
 
   protected def errorsResult(errors: Seq[MtdError]): Either[List[MtdError], Unit] =
@@ -57,12 +56,11 @@ trait Validator[A <: RawData] {
   private def combine(errors: Seq[MtdError]): List[MtdError] =
     errors
       .groupBy(_.message)
-      .foldLeft(List[MtdError]()) {
-        case (acc, (_, errs)) =>
-          val paths      = errs.flatMap(_.paths.getOrElse(Nil))
-          val maybePaths = if (paths.isEmpty) None else Some(paths)
+      .foldLeft(List[MtdError]()) { case (acc, (_, errs)) =>
+        val paths      = errs.flatMap(_.paths.getOrElse(Nil))
+        val maybePaths = if (paths.isEmpty) None else Some(paths)
 
-          acc ++ errs.headOption.map(_.copy(paths = maybePaths))
+        acc ++ errs.headOption.map(_.copy(paths = maybePaths))
       }
 
 }

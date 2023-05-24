@@ -29,7 +29,7 @@ class AmendHistoricFhlUkPropertyPeriodSummaryHateoasDataSpec extends UnitSpec wi
       val periodId = "somePeriodId"
       val context  = "some/context"
 
-      MockAppConfig.apiGatewayContext.returns(context).anyNumberOfTimes
+      MockAppConfig.apiGatewayContext.returns(context).anyNumberOfTimes()
 
       AmendHistoricFhlUkPropertyPeriodSummaryHateoasData.LinksFactory
         .links(mockAppConfig, AmendHistoricFhlUkPropertyPeriodSummaryHateoasData(nino, periodId)) shouldBe

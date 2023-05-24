@@ -99,7 +99,7 @@ class DeleteForeignPropertyAnnualSubmissionControllerSpec
         header("X-CorrelationId", result) shouldBe Some(correlationId)
 
         val auditResponse: AuditResponse = AuditResponse(NO_CONTENT, None, None)
-        MockedAuditService.verifyAuditEvent(event(auditResponse)).once
+        MockedAuditService.verifyAuditEvent(event(auditResponse)).once()
       }
     }
     "return the error as per spec" when {
@@ -118,7 +118,7 @@ class DeleteForeignPropertyAnnualSubmissionControllerSpec
             header("X-CorrelationId", result) shouldBe Some(correlationId)
 
             val auditResponse: AuditResponse = AuditResponse(expectedStatus, Some(Seq(AuditError(error.code))), None)
-            MockedAuditService.verifyAuditEvent(event(auditResponse)).once
+            MockedAuditService.verifyAuditEvent(event(auditResponse)).once()
           }
         }
 
@@ -152,7 +152,7 @@ class DeleteForeignPropertyAnnualSubmissionControllerSpec
             header("X-CorrelationId", result) shouldBe Some(correlationId)
 
             val auditResponse: AuditResponse = AuditResponse(expectedStatus, Some(Seq(AuditError(mtdError.code))), None)
-            MockedAuditService.verifyAuditEvent(event(auditResponse)).once
+            MockedAuditService.verifyAuditEvent(event(auditResponse)).once()
           }
         }
 
@@ -167,4 +167,5 @@ class DeleteForeignPropertyAnnualSubmissionControllerSpec
       }
     }
   }
+
 }

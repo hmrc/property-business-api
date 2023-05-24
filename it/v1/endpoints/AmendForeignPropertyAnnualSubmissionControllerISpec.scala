@@ -19,12 +19,12 @@ package v1.endpoints
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import play.api.http.HeaderNames.ACCEPT
 import play.api.http.Status._
-import play.api.libs.json.{ JsObject, JsValue, Json }
-import play.api.libs.ws.{ WSRequest, WSResponse }
+import play.api.libs.json.{JsObject, JsValue, Json}
+import play.api.libs.ws.{WSRequest, WSResponse}
 import play.api.test.Helpers.AUTHORIZATION
 import support.V1IntegrationBaseSpec
 import v1.models.errors._
-import v1.stubs.{ AuditStub, AuthStub, IfsStub, MtdIdLookupStub }
+import v1.stubs.{AuditStub, AuthStub, IfsStub, MtdIdLookupStub}
 
 class AmendForeignPropertyAnnualSubmissionControllerISpec extends V1IntegrationBaseSpec {
 
@@ -119,6 +119,7 @@ class AmendForeignPropertyAnnualSubmissionControllerISpec extends V1IntegrationB
          |  "reason": "ifs message"
          |}
        """.stripMargin
+
   }
 
   "Calling the amend foreign property annual submission endpoint" should {
@@ -182,6 +183,13 @@ class AmendForeignPropertyAnnualSubmissionControllerISpec extends V1IntegrationB
         )
 
         val allInvalidFieldsRequestError: List[MtdError] = List(
+          CountryCodeFormatError.copy(
+            message = "The provided Country code is invalid",
+            paths = Some(
+              List(
+                "/foreignProperty/0/countryCode"
+              ))
+          ),
           ValueFormatError.copy(
             message = "One or more monetary fields are invalid",
             paths = Some(
@@ -202,14 +210,7 @@ class AmendForeignPropertyAnnualSubmissionControllerISpec extends V1IntegrationB
                 "/foreignProperty/0/allowances/structureAndBuildingAllowance",
                 "/foreignProperty/0/allowances/electricChargePointAllowance"
               ))
-          ),
-          CountryCodeFormatError.copy(
-            message = "The provided Country code is invalid",
-            paths = Some(
-              List(
-                "/foreignProperty/0/countryCode"
-              ))
-          ),
+          )
         )
 
         val wrappedErrors: ErrorWrapper = ErrorWrapper(
@@ -406,12 +407,13 @@ class AmendForeignPropertyAnnualSubmissionControllerISpec extends V1IntegrationB
             ("AA123456A", "XAIS1234dfxgchjbn5678910", "2021-22", validRequestBodyJson, BAD_REQUEST, BusinessIdFormatError),
             ("AA123456A", "XAIS12345678910", "2021-24", validRequestBodyJson, BAD_REQUEST, RuleTaxYearRangeInvalidError),
             ("AA123456A", "XAIS12345678910", "2019-20", validRequestBodyJson, BAD_REQUEST, RuleTaxYearNotSupportedError),
-            ("AA123456A",
-             "XAIS12345678910",
-             "2021-22",
-             Json.parse(s"""{"foreignFhlEea": 2342314}""".stripMargin),
-             BAD_REQUEST,
-             RuleIncorrectOrEmptyBodyError),
+            (
+              "AA123456A",
+              "XAIS12345678910",
+              "2021-22",
+              Json.parse(s"""{"foreignFhlEea": 2342314}""".stripMargin),
+              BAD_REQUEST,
+              RuleIncorrectOrEmptyBodyError),
             ("AA123456A", "XAIS12345678910", "2021-22", allInvalidValueRequestBodyJson, BAD_REQUEST, allInvalidValueRequestError),
             ("AA123456A", "XAIS12345678910", "2021-22", allInvalidCountryCodeRequestBodyJson, BAD_REQUEST, allInvalidCountryCodeRequestError)
           )
@@ -452,4 +454,5 @@ class AmendForeignPropertyAnnualSubmissionControllerISpec extends V1IntegrationB
       }
     }
   }
+
 }

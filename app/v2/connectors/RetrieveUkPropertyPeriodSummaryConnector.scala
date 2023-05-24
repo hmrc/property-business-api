@@ -25,7 +25,6 @@ import config.AppConfig
 import javax.inject.{Inject, Singleton}
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
 import v2.connectors.RetrieveUkPropertyPeriodSummaryConnector._
-import v2.connectors.RetrieveUkPropertyPeriodSummaryConnector.{NonUkResult, Result, UkResult}
 import v2.models.request.retrieveUkPropertyPeriodSummary.RetrieveUkPropertyPeriodSummaryRequest
 import v2.models.response.retrieveUkPropertyPeriodSummary.RetrieveUkPropertyPeriodSummaryResponse
 

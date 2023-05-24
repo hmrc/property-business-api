@@ -20,7 +20,7 @@ import mocks.MockAppConfig
 import play.api.libs.json.Json
 import support.UnitSpec
 import v1.models.hateoas.Link
-import v1.models.hateoas.Method.{ GET, POST }
+import v1.models.hateoas.Method.{GET, POST}
 
 class ListForeignPropertiesPeriodSummariesResponseSpec extends UnitSpec with MockAppConfig {
 
@@ -136,9 +136,10 @@ class ListForeignPropertiesPeriodSummariesResponseSpec extends UnitSpec with Moc
     val submissionId = "mysubmissionid"
 
     "expose the correct top level links for list" in {
-      MockAppConfig.apiGatewayContext.returns("my/context").anyNumberOfTimes
-      ListForeignPropertiesPeriodSummariesResponse.LinksFactory.links(mockAppConfig,
-                                                                      ListForeignPropertiesPeriodSummariesHateoasData(nino, businessId)) shouldBe
+      MockAppConfig.apiGatewayContext.returns("my/context").anyNumberOfTimes()
+      ListForeignPropertiesPeriodSummariesResponse.LinksFactory.links(
+        mockAppConfig,
+        ListForeignPropertiesPeriodSummariesHateoasData(nino, businessId)) shouldBe
         Seq(
           Link(s"/my/context/$nino/$businessId/period", GET, "self"),
           Link(s"/my/context/$nino/$businessId/period", POST, "create-property-period-summary")
@@ -146,10 +147,11 @@ class ListForeignPropertiesPeriodSummariesResponseSpec extends UnitSpec with Moc
     }
 
     "expose the correct item level links for list" in {
-      MockAppConfig.apiGatewayContext.returns("my/context").anyNumberOfTimes
-      ListForeignPropertiesPeriodSummariesResponse.LinksFactory.itemLinks(mockAppConfig,
-                                                                          ListForeignPropertiesPeriodSummariesHateoasData(nino, businessId),
-                                                                          SubmissionPeriod(submissionId, "", "")) shouldBe
+      MockAppConfig.apiGatewayContext.returns("my/context").anyNumberOfTimes()
+      ListForeignPropertiesPeriodSummariesResponse.LinksFactory.itemLinks(
+        mockAppConfig,
+        ListForeignPropertiesPeriodSummariesHateoasData(nino, businessId),
+        SubmissionPeriod(submissionId, "", "")) shouldBe
         Seq(
           Link(s"/my/context/$nino/$businessId/period/$submissionId", GET, "self")
         )
@@ -158,8 +160,9 @@ class ListForeignPropertiesPeriodSummariesResponseSpec extends UnitSpec with Moc
 
   "Response Functor" should {
     "apply the map function" in {
-      ListForeignPropertiesPeriodSummariesResponse.ResponseFunctor.map(ListForeignPropertiesPeriodSummariesResponse(Seq(1)))(_.toString) shouldBe ListForeignPropertiesPeriodSummariesResponse(
-        Seq("1"))
+      ListForeignPropertiesPeriodSummariesResponse.ResponseFunctor.map(ListForeignPropertiesPeriodSummariesResponse(Seq(1)))(
+        _.toString) shouldBe ListForeignPropertiesPeriodSummariesResponse(Seq("1"))
     }
   }
+
 }

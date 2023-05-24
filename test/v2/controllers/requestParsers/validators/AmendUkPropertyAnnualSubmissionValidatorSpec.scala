@@ -25,9 +25,10 @@ import v2.models.utils.JsonErrorValidators
 
 class AmendUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec with JsonErrorValidators with MockAppConfig {
 
-  private val validNino        = "AA123456A"
-  private val validBusinessId  = "XAIS12345678901"
-  private val validTaxYear     = "2021-22"
+  private val validNino       = "AA123456A"
+  private val validBusinessId = "XAIS12345678901"
+  private val validTaxYear    = "2021-22"
+
   val requestBodyJson: JsValue = Json.parse("""
       |{
       |  "ukFhlProperty": {
@@ -268,7 +269,7 @@ class AmendUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec with JsonErr
           "/ukNonFhlProperty",
           "/ukNonFhlProperty/allowances",
           "/ukNonFhlProperty/allowances/structuredBuildingAllowance",
-          "/ukNonFhlProperty/allowances/enhancedStructuredBuildingAllowance",
+          "/ukNonFhlProperty/allowances/enhancedStructuredBuildingAllowance"
         ).foreach(p => testEmpty(p))
 
         def testEmpty(path: String): Unit =
@@ -314,7 +315,7 @@ class AmendUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec with JsonErr
               |""".stripMargin)
           )) shouldBe List(
           RuleIncorrectOrEmptyBodyError.copy(
-            paths = Some(List("/ukFhlProperty/adjustments/periodOfGraceAdjustment", "/ukFhlProperty/adjustments/nonResidentLandlord"))))
+            paths = Some(List("/ukFhlProperty/adjustments/nonResidentLandlord", "/ukFhlProperty/adjustments/periodOfGraceAdjustment"))))
       }
 
       "an empty ukFhlProperty adjustments rentARoom object is submitted" in {
@@ -967,7 +968,7 @@ class AmendUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec with JsonErr
           "/ukNonFhlProperty/allowances/zeroEmissionsCarAllowance",
           "/ukNonFhlProperty/adjustments/balancingCharge",
           "/ukNonFhlProperty/adjustments/privateUseAdjustment",
-          "/ukNonFhlProperty/adjustments/businessPremisesRenovationAllowanceBalancingCharges",
+          "/ukNonFhlProperty/adjustments/businessPremisesRenovationAllowanceBalancingCharges"
         ).foreach(p => testValueFormatError(p))
 
         def testValueFormatError(path: String): Unit = s"for $path" in {
@@ -1446,4 +1447,5 @@ class AmendUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec with JsonErr
       }
     }
   }
+
 }

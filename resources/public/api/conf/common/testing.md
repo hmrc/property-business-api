@@ -7,3 +7,18 @@ For versions 2.0 and later, Gov-Test-Scenario values that are not supported by t
 If you have a specific testing need that is not supported in the sandbox, contact <a href="/developer/support">our support team</a>.
 
 Some APIs may be marked \[test only\]. This means that they are not available for use in production and may change.
+
+<h3>Stateful</h3>
+Some endpoints support STATEFUL gov test scenarios.Stateful scenarios work with groups of endpoints that represent particular types of submissions.  For each type you can POST (or PUT) to submit or amend data.  GET to retrieve or list data and DELETE to delete data.   For example, with a STATEFUL gov test scenario a retrieval will return data based on what you submitted.
+
+The following groups are stateful in the sandbox:
+- UK Property Business Annual Submission
+- Foreign Property Annual Submission
+- UK Property Income and Expenses Period Summary 
+- Foreign Property Income and Expenses Period Summary
+- Historic FHL UK Property Business Annual Submission
+- Historic FHL UK Property Income and Expenses Period Summary
+- Historic non-FHL UK Property Business Annual Submission
+- Historic non-FHL UK Property Income and Expenses Period Summary
+
+

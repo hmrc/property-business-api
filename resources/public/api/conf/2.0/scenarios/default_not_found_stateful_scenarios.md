@@ -19,7 +19,7 @@
         </tr>
           <tr>
               <td><p>STATEFUL</p></td>
-              <td><p>Simulates a stateful success response.</p></td>
+              <td><p>Performs a stateful request.</p></td>
           </tr>
     </tbody>
 </table>

@@ -9,7 +9,7 @@ If you have a specific testing need that is not supported in the sandbox, contac
 Some APIs may be marked \[test only\]. This means that they are not available for use in production and may change.
 
 <h3>Stateful</h3>
-Some endpoints support STATEFUL gov test scenarios.Stateful scenarios work with groups of endpoints that represent particular types of submissions.  For each type you can POST (or PUT) to submit or amend data.  GET to retrieve or list data and DELETE to delete data.   For example, with a STATEFUL gov test scenario a retrieval will return data based on what you submitted.
+Some endpoints support STATEFUL gov test scenarios. Stateful scenarios work with groups of endpoints that represent particular types of submissions.  For each type you can POST (or PUT) to submit or amend data, GET to retrieve or list data and DELETE to delete data. For example, with a STATEFUL gov test scenario a retrieval will return data based on what you submitted.
 
 The following groups are stateful in the sandbox:
 - UK Property Business Annual Submission

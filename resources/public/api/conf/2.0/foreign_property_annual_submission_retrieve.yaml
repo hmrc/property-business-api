@@ -28,18 +28,22 @@ description: |
               <td><p>FOREIGN_FHL_PROPERTY_ALLOWANCE</p></td>
               <td><p>Simulates the scenario of a FHL property with property allowance.</p></td>
           </tr>
-           <tr>
+          <tr>
                <td><p>FOREIGN_NON_FHL_ALL_OTHER_ALLOWANCES</p></td>
                <td><p>Simulates the scenario of a Non-FHL property with all other allowances.</p></td>
-           </tr>
-           <tr>
+          </tr>
+          <tr>
                <td><p>FOREIGN_NON_FHL_PROPERTY_ALLOWANCE</p></td>
                <td><p>Simulates the scenario of a Non-FHL property with property allowance.</p></td>
-           </tr>
-           <tr>
+          </tr>
+          <tr>
                <td><p>UK_PROPERTY</p></td>
                <td><p>Simulates the scenario where the type of business is incorrect.</p></td>
-           </tr>
+          </tr>
+          <tr>
+               <td><p>STATEFUL</p></td>
+               <td><p>Performs a stateful retrieve.</p></td>
+          </tr>
       </tbody>
   </table>
 
@@ -92,11 +96,11 @@ responses:
           FORMAT_BUSINESS_ID:
             $ref: './common/errors.yaml#/components/examples/formatBusinessId'
           FORMAT_TAX_YEAR:
-            $ref: './common/errors.yaml#/components/examples/formatTaxYear' 
+            $ref: './common/errors.yaml#/components/examples/formatTaxYear'
           RULE_TAX_YEAR_NOT_SUPPORTED:
-            $ref: './common/errors.yaml#/components/examples/ruleTaxYearNotSupported' 
+            $ref: './common/errors.yaml#/components/examples/ruleTaxYearNotSupported'
           RULE_TAX_YEAR_RANGE_INVALID:
-            $ref: './common/errors.yaml#/components/examples/ruleTaxYearRangeInvalid' 
+            $ref: './common/errors.yaml#/components/examples/ruleTaxYearRangeInvalid'
           RULE_TYPE_OF_BUSINESS_INCORRECT:
             $ref: './common/errors.yaml#/components/examples/ruleTypeOfBusinessIncorrectForeign'
           RULE_INCORRECT_GOV_TEST_SCENARIO:

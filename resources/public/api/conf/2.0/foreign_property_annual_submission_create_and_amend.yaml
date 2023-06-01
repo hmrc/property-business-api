@@ -35,6 +35,10 @@ description: |
               <td><p>PROPERTY_INCOME_ALLOWANCE</p></td>
               <td><p>Simulates the scenario where the propertyIncomeAllowance is submitted when privateUseAdjustment is supplied</p></td>
           </tr>
+          <tr>
+              <td><p>STATEFUL</p></td>
+              <td><p>Performs a stateful create or update.</p></td>
+          </tr>
       </tbody>
   </table>
 

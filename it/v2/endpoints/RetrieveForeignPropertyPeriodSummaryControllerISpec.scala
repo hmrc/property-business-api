@@ -154,7 +154,7 @@ class RetrieveForeignPropertyPeriodSummaryControllerISpec extends V2IntegrationB
     val responseBody: JsValue = Json.parse(
       s"""
          |{
-         |  "submittedOn": "2021-06-17T10:53:38Z",
+         |  "submittedOn": "2021-06-17T10:53:38.000Z",
          |  "fromDate": "2020-01-29",
          |  "toDate": "2020-04-29",
          |  "foreignFhlEea": {
@@ -221,7 +221,7 @@ class RetrieveForeignPropertyPeriodSummaryControllerISpec extends V2IntegrationB
     val ifsResponseBody: JsValue = Json.parse(
       """
         |{
-        |  "submittedOn": "2021-06-17T10:53:38Z",
+        |  "submittedOn": "2021-06-17T10:53:38.000Z",
         |  "fromDate": "2020-01-29",
         |  "toDate": "2020-04-29",
         |  "foreignFhlEea": {

@@ -297,7 +297,7 @@ class RetrieveForeignPropertyAnnualSubmissionControllerISpec extends V2Integrati
     "the service response does not contain a foreign property" in new Test with NonTysTest {
       override val downstreamResponseBody: JsValue = Json.parse(s"""
            |{
-           |  "submittedOn": "2022-06-17T10:53:38Z",
+           |  "submittedOn": "2022-06-17T10:53:38.000Z",
            |  "ukFhlProperty": {
            |     "allowances": {
            |        "annualInvestmentAllowance": 123.45

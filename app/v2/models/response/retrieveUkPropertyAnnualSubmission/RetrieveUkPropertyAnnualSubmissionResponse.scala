@@ -21,11 +21,12 @@ import play.api.libs.functional.syntax._
 import play.api.libs.json._
 import v2.hateoas.HateoasLinks
 import api.hateoas.HateoasLinksFactory
+import api.models.domain.Timestamp
 import api.models.hateoas.{HateoasData, Link}
 import v2.models.response.retrieveUkPropertyAnnualSubmission.ukFhlProperty.UkFhlProperty
 import v2.models.response.retrieveUkPropertyAnnualSubmission.ukNonFhlProperty.UkNonFhlProperty
 
-case class RetrieveUkPropertyAnnualSubmissionResponse(submittedOn: String,
+case class RetrieveUkPropertyAnnualSubmissionResponse(submittedOn: Timestamp,
                                                       ukFhlProperty: Option[UkFhlProperty],
                                                       ukNonFhlProperty: Option[UkNonFhlProperty])
 
@@ -33,7 +34,7 @@ object RetrieveUkPropertyAnnualSubmissionResponse extends HateoasLinks {
   implicit val writes: OWrites[RetrieveUkPropertyAnnualSubmissionResponse] = Json.writes[RetrieveUkPropertyAnnualSubmissionResponse]
 
   implicit val reads: Reads[RetrieveUkPropertyAnnualSubmissionResponse] = (
-    (__ \ "submittedOn").read[String] and
+    (__ \ "submittedOn").read[Timestamp] and
       (__ \ "ukFhlProperty").readNullable[UkFhlProperty] and
       (__ \ "ukOtherProperty").readNullable[UkNonFhlProperty]
   )(RetrieveUkPropertyAnnualSubmissionResponse.apply _)

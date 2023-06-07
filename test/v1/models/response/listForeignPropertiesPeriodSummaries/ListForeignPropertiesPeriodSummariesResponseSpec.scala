@@ -30,7 +30,7 @@ class ListForeignPropertiesPeriodSummariesResponseSpec extends UnitSpec with Moc
         """
           |[
           |  {
-          |    "submittedOn": "2020-06-22T22:00:20Z",
+          |    "submittedOn": "2020-06-22T22:00:20.000Z",
           |    "foreignFhlEea": {
           |      "submissionId": "4557ecb5-fd32-48cc-81f5-e6acd1099f3c",
           |      "fromDate": "2020-06-22",
@@ -58,7 +58,7 @@ class ListForeignPropertiesPeriodSummariesResponseSpec extends UnitSpec with Moc
         """
           |[
           |  {
-          |    "submittedOn": "2020-06-22T22:00:20Z",
+          |    "submittedOn": "2020-06-22T22:00:20.000Z",
           |    "foreignProperty": {
           |      "submissionId": "4557ecb5-fd32-48cc-81f5-e6acd1099f3c",
           |      "fromDate": "2020-06-22",
@@ -71,7 +71,7 @@ class ListForeignPropertiesPeriodSummariesResponseSpec extends UnitSpec with Moc
           |    }
           |  },
           |  {
-          |    "submittedOn": "2020-08-22T22:00:20Z",
+          |    "submittedOn": "2020-08-22T22:00:20.000Z",
           |    "foreignFhlEea": {
           |      "submissionId": "4557ecb5-fd32-48cc-81f5-e6acd1099f3d",
           |      "fromDate": "2020-08-22",

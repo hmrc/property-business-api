@@ -16,6 +16,7 @@
 
 package fixtures.RetrieveUkPropertyPeriodSummary
 
+import api.models.domain.Timestamp
 import play.api.libs.json.{JsObject, JsValue, Json}
 import v2.models.response.retrieveUkPropertyPeriodSummary._
 
@@ -24,7 +25,7 @@ trait ResponseModelsFixture {
   val fullDownstreamJson: JsValue = Json.parse(
     """
       |{
-      |  "submittedOn": "2020-06-17T10:53:38Z",
+      |  "submittedOn": "2020-06-17T10:53:38.000Z",
       |  "fromDate": "2019-01-29",
       |  "toDate": "2020-03-29",
       |  "periodCreationDate": "2020-06-17T10:53:38Z",
@@ -84,7 +85,7 @@ trait ResponseModelsFixture {
   val fullMtdJson: JsValue = Json.parse(
     """
       |{
-      |  "submittedOn": "2020-06-17T10:53:38Z",
+      |  "submittedOn": "2020-06-17T10:53:38.000Z",
       |  "fromDate": "2019-01-29",
       |  "toDate": "2020-03-29",
       |  "ukFhlProperty": {
@@ -208,7 +209,7 @@ trait ResponseModelsFixture {
   )
 
   val fullResponseModel: RetrieveUkPropertyPeriodSummaryResponse = RetrieveUkPropertyPeriodSummaryResponse(
-    submittedOn = "2020-06-17T10:53:38Z",
+    submittedOn = Timestamp("2020-06-17T10:53:38.000Z"),
     fromDate = "2019-01-29",
     toDate = "2020-03-29",
 //    periodCreationDate = Some("2020-06-17T10:53:38Z"), // To be reinstated, see MTDSA-15575

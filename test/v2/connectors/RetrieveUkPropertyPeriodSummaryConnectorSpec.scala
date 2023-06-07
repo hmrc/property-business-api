@@ -20,7 +20,7 @@ import api.connectors.{ConnectorSpec, DownstreamOutcome}
 import fixtures.RetrieveUkPropertyPeriodSummary.ResponseModelsFixture
 import org.scalamock.handlers.CallHandler
 import v2.connectors.RetrieveUkPropertyPeriodSummaryConnector._
-import api.models.domain.{Nino, TaxYear}
+import api.models.domain.{Nino, TaxYear, Timestamp}
 import api.models.errors.{DownstreamErrorCode, DownstreamErrors}
 import api.models.outcomes.ResponseWrapper
 import v2.models.request.retrieveUkPropertyPeriodSummary.RetrieveUkPropertyPeriodSummaryRequest
@@ -173,7 +173,7 @@ class RetrieveUkPropertyPeriodSummaryConnectorSpec extends ConnectorSpec with Re
 
     def responseWith(ukFhlProperty: Option[UkFhlProperty], ukNonFhlProperty: Option[UkNonFhlProperty]): RetrieveUkPropertyPeriodSummaryResponse =
       RetrieveUkPropertyPeriodSummaryResponse(
-        "2020-06-17T10:53:38Z",
+        Timestamp("2020-06-17T10:53:38Z"),
         "2019-01-29",
         "2020-03-29",
         //      Some("2020-06-17T10:53:38Z"), // To be reinstated, see MTDSA-15575

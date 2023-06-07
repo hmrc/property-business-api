@@ -16,8 +16,9 @@
 
 package v2.models.response.retrieveUkPropertyAnnualSubmission
 
+import api.models.domain.Timestamp
 import mocks.MockAppConfig
-import play.api.libs.json.{ JsValue, Json }
+import play.api.libs.json.{JsValue, Json}
 import support.UnitSpec
 import api.models.hateoas.{Link, Method}
 import v2.models.response.retrieveUkPropertyAnnualSubmission.ukFhlProperty._
@@ -27,7 +28,7 @@ class RetrieveUkPropertyAnnualSubmissionResponseSpec extends UnitSpec with MockA
 
   val downstreamJson: JsValue = Json.parse("""
       |{
-      |   "submittedOn":"2020-06-17T10:53:38Z",
+      |   "submittedOn":"2020-06-17T10:53:38.000Z",
       |   "ukFhlProperty":{
       |      "allowances":{
       |         "annualInvestmentAllowance":123.45,
@@ -101,7 +102,7 @@ class RetrieveUkPropertyAnnualSubmissionResponseSpec extends UnitSpec with MockA
       |""".stripMargin)
 
   val model: RetrieveUkPropertyAnnualSubmissionResponse = RetrieveUkPropertyAnnualSubmissionResponse(
-    submittedOn = "2020-06-17T10:53:38Z",
+    submittedOn = Timestamp("2020-06-17T10:53:38.000Z"),
     ukFhlProperty = Some(
       UkFhlProperty(
         adjustments = Some(
@@ -195,7 +196,7 @@ class RetrieveUkPropertyAnnualSubmissionResponseSpec extends UnitSpec with MockA
 
   val mtdJson: JsValue = Json.parse("""
       |{
-      |   "submittedOn":"2020-06-17T10:53:38Z",
+      |   "submittedOn":"2020-06-17T10:53:38.000Z",
       |   "ukFhlProperty":{
       |      "allowances":{
       |         "annualInvestmentAllowance":123.45,

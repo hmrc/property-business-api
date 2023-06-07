@@ -17,16 +17,17 @@
 package v2.models.response.retrieveUkPropertyPeriodSummary
 
 import api.hateoas.HateoasLinksFactory
+import api.models.domain.Timestamp
 import api.models.hateoas.{HateoasData, Link}
 import config.AppConfig
 import play.api.libs.functional.syntax._
-import play.api.libs.json.{__, Json, OWrites, Reads}
+import play.api.libs.json.{Json, OWrites, Reads, __}
 import v2.hateoas.HateoasLinks
 
-case class RetrieveUkPropertyPeriodSummaryResponse(submittedOn: String,
+case class RetrieveUkPropertyPeriodSummaryResponse(submittedOn: Timestamp,
                                                    fromDate: String,
                                                    toDate: String,
-//                                                   periodCreationDate: Option[String], // To be reinstated, see MTDSA-15575
+                                                   //periodCreationDate: Option[String], // To be reinstated, see MTDSA-15575
                                                    ukFhlProperty: Option[UkFhlProperty],
                                                    ukNonFhlProperty: Option[UkNonFhlProperty])
 
@@ -34,7 +35,7 @@ object RetrieveUkPropertyPeriodSummaryResponse extends HateoasLinks {
   implicit val writes: OWrites[RetrieveUkPropertyPeriodSummaryResponse] = Json.writes[RetrieveUkPropertyPeriodSummaryResponse]
 
   implicit val reads: Reads[RetrieveUkPropertyPeriodSummaryResponse] = (
-    (__ \ "submittedOn").read[String] and
+    (__ \ "submittedOn").read[Timestamp] and
       (__ \ "fromDate").read[String] and
       (__ \ "toDate").read[String] and
 //      (__ \ "periodCreationDate").readNullable[String] and // To be reinstated, see MTDSA-15575

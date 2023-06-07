@@ -18,7 +18,7 @@ package v2.controllers
 
 import api.controllers.{ControllerBaseSpec, ControllerTestRunner}
 import api.mocks.hateoas.MockHateoasFactory
-import api.models.domain.{Nino, TaxYear}
+import api.models.domain.{Nino, TaxYear, Timestamp}
 import api.models.errors._
 import api.models.hateoas.HateoasWrapper
 import api.models.outcomes.ResponseWrapper
@@ -192,7 +192,7 @@ class RetrieveUkPropertyAnnualSubmissionControllerSpec
     )
 
     protected val responseData: RetrieveUkPropertyAnnualSubmissionResponse = RetrieveUkPropertyAnnualSubmissionResponse(
-      submittedOn = "2020-06-17T10:53:38Z",
+      submittedOn = Timestamp("2020-06-17T10:53:38.000Z"),
       ukFhlProperty = Some(ukFhlProperty),
       ukNonFhlProperty = Some(ukNonFhlProperty)
     )
@@ -203,7 +203,7 @@ class RetrieveUkPropertyAnnualSubmissionControllerSpec
     protected val responseBodyJson: JsValue = Json.parse(
       """
         |{
-        |   "submittedOn":"2020-06-17T10:53:38Z",
+        |   "submittedOn":"2020-06-17T10:53:38.000Z",
         |   "ukFhlProperty":{
         |      "adjustments":{
         |         "privateUseAdjustment":454.45,

@@ -17,7 +17,7 @@
 package v2.services
 
 import api.controllers.EndpointLogContext
-import api.models.domain.{Nino, TaxYear}
+import api.models.domain.{Nino, TaxYear, Timestamp}
 import api.models.errors._
 import api.models.outcomes.ResponseWrapper
 import support.UnitSpec
@@ -103,7 +103,7 @@ class RetrieveForeignPropertyPeriodSummaryServiceSpec extends UnitSpec {
     )
 
     protected val response: RetrieveForeignPropertyPeriodSummaryResponse =
-      RetrieveForeignPropertyPeriodSummaryResponse("2020-06-17T10:53:38Z", "2019-01-29", "2020-03-29", None, None)
+      RetrieveForeignPropertyPeriodSummaryResponse(Timestamp("2020-06-17T10:53:38Z"), "2019-01-29", "2020-03-29", None, None)
 
     protected val requestData: RetrieveForeignPropertyPeriodSummaryRequest =
       RetrieveForeignPropertyPeriodSummaryRequest(Nino(nino), businessId, taxYear, submissionId)

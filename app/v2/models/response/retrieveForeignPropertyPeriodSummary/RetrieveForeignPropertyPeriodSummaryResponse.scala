@@ -17,15 +17,16 @@
 package v2.models.response.retrieveForeignPropertyPeriodSummary
 
 import api.hateoas.HateoasLinksFactory
+import api.models.domain.Timestamp
 import api.models.hateoas.{HateoasData, Link}
 import config.AppConfig
-import play.api.libs.json.{Json, JsPath, OWrites, Reads}
+import play.api.libs.json.{JsPath, Json, OWrites, Reads}
 import play.api.libs.functional.syntax._
 import v2.hateoas.HateoasLinks
 import v2.models.response.retrieveForeignPropertyPeriodSummary.foreignFhlEea.ForeignFhlEea
 import v2.models.response.retrieveForeignPropertyPeriodSummary.foreignNonFhlProperty.ForeignNonFhlProperty
 
-case class RetrieveForeignPropertyPeriodSummaryResponse(submittedOn: String,
+case class RetrieveForeignPropertyPeriodSummaryResponse(submittedOn: Timestamp,
                                                         fromDate: String,
                                                         toDate: String,
                                                         foreignFhlEea: Option[ForeignFhlEea],
@@ -34,7 +35,7 @@ case class RetrieveForeignPropertyPeriodSummaryResponse(submittedOn: String,
 object RetrieveForeignPropertyPeriodSummaryResponse extends HateoasLinks {
   implicit val writes: OWrites[RetrieveForeignPropertyPeriodSummaryResponse] = Json.writes[RetrieveForeignPropertyPeriodSummaryResponse]
   implicit val reads: Reads[RetrieveForeignPropertyPeriodSummaryResponse] = (
-    (JsPath \ "submittedOn").read[String] and
+    (JsPath \ "submittedOn").read[Timestamp] and
       (JsPath \ "fromDate").read[String] and
       (JsPath \ "toDate").read[String] and
       (JsPath \ "foreignFhlEea").readNullable[ForeignFhlEea] and

@@ -20,7 +20,7 @@ import api.controllers.{ControllerBaseSpec, ControllerTestRunner}
 import api.mocks.hateoas.MockHateoasFactory
 import api.mocks.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService}
 import api.mocks.MockIdGenerator
-import api.models.domain.{Nino, TaxYear}
+import api.models.domain.{Nino, TaxYear, Timestamp}
 import api.models.errors._
 import api.models.hateoas.HateoasWrapper
 import api.models.outcomes.ResponseWrapper
@@ -167,7 +167,7 @@ class RetrieveForeignPropertyAnnualSubmissionControllerSpec
     )
 
     protected val responseBody: RetrieveForeignPropertyAnnualSubmissionResponse = RetrieveForeignPropertyAnnualSubmissionResponse(
-      "2020-07-07T10:59:47.544Z",
+      Timestamp("2020-07-07T10:59:47.544Z"),
       foreignFhlEea = Some(foreignFhlEeaEntry),
       foreignNonFhlProperty = Some(Seq(foreignPropertyEntry))
     )

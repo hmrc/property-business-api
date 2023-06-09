@@ -37,7 +37,7 @@ class RetrieveUkPropertyAnnualSubmissionControllerISpec extends V2IntegrationBas
     val responseBody: JsValue = Json.parse(
       s"""
         |{
-        |  "submittedOn": "2022-06-17T10:53:38Z",
+        |  "submittedOn": "2022-06-17T10:53:38.000Z",
         |  "ukFhlProperty": {
         |     "allowances": {
         |        "annualInvestmentAllowance": 123.45,
@@ -131,7 +131,7 @@ class RetrieveUkPropertyAnnualSubmissionControllerISpec extends V2IntegrationBas
     val downstreamResponseBody: JsValue = Json.parse(
       """
         |{
-        |   "submittedOn":"2022-06-17T10:53:38Z",
+        |   "submittedOn":"2022-06-17T10:53:38.000Z",
         |   "ukFhlProperty":{
         |      "allowances":{
         |         "annualInvestmentAllowance":123.45,
@@ -348,7 +348,7 @@ class RetrieveUkPropertyAnnualSubmissionControllerISpec extends V2IntegrationBas
       "downstream returns no UK properties" in new NonTysTest {
         override val downstreamResponseBody: JsValue = Json.parse("""
             |{
-            |  "submittedOn":"2022-06-17T10:53:38Z",
+            |  "submittedOn":"2022-06-17T10:53:38.000Z",
             |  "foreignProperty": [
             |    {
             |      "countryCode": "FRA",

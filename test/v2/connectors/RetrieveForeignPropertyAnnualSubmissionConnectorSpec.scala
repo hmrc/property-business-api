@@ -19,7 +19,7 @@ package v2.connectors
 import api.connectors.{ConnectorSpec, DownstreamOutcome}
 import org.scalamock.handlers.CallHandler
 import v2.connectors.RetrieveForeignPropertyAnnualSubmissionConnector.{ForeignResult, NonForeignResult}
-import api.models.domain.{Nino, TaxYear}
+import api.models.domain.{Nino, TaxYear, Timestamp}
 import api.models.errors.{DownstreamErrorCode, DownstreamErrors}
 import api.models.outcomes.ResponseWrapper
 import v2.models.request.retrieveForeignPropertyAnnualSubmission.RetrieveForeignPropertyAnnualSubmissionRequest
@@ -41,7 +41,7 @@ class RetrieveForeignPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec
 
   def responseWith(foreignFhlEea: Option[ForeignFhlEeaEntry],
                    foreignNonFhlProperty: Option[Seq[ForeignPropertyEntry]]): RetrieveForeignPropertyAnnualSubmissionResponse =
-    RetrieveForeignPropertyAnnualSubmissionResponse("2020-06-17T10:53:38Z", foreignFhlEea, foreignNonFhlProperty)
+    RetrieveForeignPropertyAnnualSubmissionResponse(Timestamp("2020-06-17T10:53:38Z"), foreignFhlEea, foreignNonFhlProperty)
 
   "connector" when {
     "response has a foreign fhl details" must {

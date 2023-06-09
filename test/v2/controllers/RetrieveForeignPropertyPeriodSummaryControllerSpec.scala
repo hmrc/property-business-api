@@ -20,11 +20,11 @@ import api.controllers.{ControllerBaseSpec, ControllerTestRunner}
 import api.mocks.hateoas.MockHateoasFactory
 import api.mocks.MockIdGenerator
 import api.mocks.services.{MockEnrolmentsAuthService, MockMtdIdLookupService}
-import api.models.domain.{Nino, TaxYear}
+import api.models.domain.{Nino, TaxYear, Timestamp}
 import api.models.hateoas._
 import api.models.hateoas.Method.GET
 import api.models.outcomes.ResponseWrapper
-import play.api.libs.json.{Json, JsValue}
+import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.Result
 import v2.mocks.requestParsers.MockRetrieveForeignPropertyPeriodSummaryRequestParser
 import v2.mocks.services.MockRetrieveForeignPropertyPeriodSummaryService
@@ -99,7 +99,7 @@ class RetrieveForeignPropertyPeriodSummaryControllerSpec
       Link(href = s"/individuals/business/property/$nino/$businessId/period/$taxYear/$submissionId", method = GET, rel = "self")
 
     protected val responseBody: RetrieveForeignPropertyPeriodSummaryResponse = RetrieveForeignPropertyPeriodSummaryResponse(
-      submittedOn = "",
+      submittedOn = Timestamp("2022-06-17T10:53:38Z"),
       fromDate = "",
       toDate = "",
       foreignFhlEea = Some(

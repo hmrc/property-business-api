@@ -16,8 +16,9 @@
 
 package v2.models.response.retrieveForeignPropertyPeriodSummary
 
+import api.models.domain.Timestamp
 import mocks.MockAppConfig
-import play.api.libs.json.{ JsValue, Json }
+import play.api.libs.json.{JsValue, Json}
 import support.UnitSpec
 import api.models.hateoas.{Link, Method}
 import v2.models.response.retrieveForeignPropertyPeriodSummary.foreignFhlEea._
@@ -27,7 +28,7 @@ import v2.models.utils.JsonErrorValidators
 class RetrieveForeignPropertyPeriodSummaryResponseSpec extends UnitSpec with JsonErrorValidators with MockAppConfig {
 
   val retrieveForeignPropertyResponseBody: RetrieveForeignPropertyPeriodSummaryResponse = RetrieveForeignPropertyPeriodSummaryResponse(
-    "2021-06-17T10:53:38Z",
+    Timestamp("2021-06-17T10:53:38Z"),
     "2020-01-01",
     "2020-01-31",
     Some(
@@ -76,7 +77,7 @@ class RetrieveForeignPropertyPeriodSummaryResponseSpec extends UnitSpec with Jso
   val writesJson: JsValue = Json.parse(
     """
       |{
-      |  "submittedOn": "2021-06-17T10:53:38Z",
+      |  "submittedOn": "2021-06-17T10:53:38.000Z",
       |  "fromDate": "2020-01-01",
       |  "toDate": "2020-01-31",
       |  "foreignFhlEea": {
@@ -128,7 +129,7 @@ class RetrieveForeignPropertyPeriodSummaryResponseSpec extends UnitSpec with Jso
   val readsJson: JsValue = Json.parse(
     """
       |{
-      |  "submittedOn": "2021-06-17T10:53:38Z",
+      |  "submittedOn": "2021-06-17T10:53:38.000Z",
       |  "fromDate": "2020-01-01",
       |  "toDate": "2020-01-31",
       |  "foreignFhlEea": {

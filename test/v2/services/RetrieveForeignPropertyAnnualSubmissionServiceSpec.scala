@@ -24,7 +24,7 @@ import v2.models.response.retrieveForeignPropertyAnnualSubmission.RetrieveForeig
 import uk.gov.hmrc.http.HeaderCarrier
 import v2.connectors.RetrieveForeignPropertyAnnualSubmissionConnector.{ForeignResult, NonForeignResult}
 import api.controllers.EndpointLogContext
-import api.models.domain.{Nino, TaxYear}
+import api.models.domain.{Nino, TaxYear, Timestamp}
 import api.models.outcomes.ResponseWrapper
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -104,7 +104,7 @@ class RetrieveForeignPropertyAnnualSubmissionServiceSpec extends UnitSpec {
       RetrieveForeignPropertyAnnualSubmissionRequest(Nino(nino), businessId, taxYear)
 
     protected val response: RetrieveForeignPropertyAnnualSubmissionResponse =
-      RetrieveForeignPropertyAnnualSubmissionResponse("2020-07-07T10:59:47.544Z", None, None)
+      RetrieveForeignPropertyAnnualSubmissionResponse(Timestamp("2020-07-07T10:59:47.544Z"), None, None)
 
   }
 

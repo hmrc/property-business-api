@@ -16,28 +16,18 @@
 
 package v2.models.response.retrieveForeignPropertyAnnualSubmission
 
+import api.models.domain.Timestamp
 import mocks.MockAppConfig
 import play.api.libs.json.Json
 import support.UnitSpec
 import api.models.hateoas.{Link, Method}
-import v2.models.response.retrieveForeignPropertyAnnualSubmission.foreignFhlEea.{
-  ForeignFhlEeaAdjustments,
-  ForeignFhlEeaAllowances,
-  ForeignFhlEeaEntry
-}
-import v2.models.response.retrieveForeignPropertyAnnualSubmission.foreignProperty.{
-  Building,
-  FirstYear,
-  ForeignPropertyAdjustments,
-  ForeignPropertyAllowances,
-  ForeignPropertyEntry,
-  StructuredBuildingAllowance
-}
+import v2.models.response.retrieveForeignPropertyAnnualSubmission.foreignFhlEea.{ForeignFhlEeaAdjustments, ForeignFhlEeaAllowances, ForeignFhlEeaEntry}
+import v2.models.response.retrieveForeignPropertyAnnualSubmission.foreignProperty.{Building, FirstYear, ForeignPropertyAdjustments, ForeignPropertyAllowances, ForeignPropertyEntry, StructuredBuildingAllowance}
 
 class RetrieveForeignPropertyAnnualSubmissionResponseSpec extends UnitSpec with MockAppConfig {
 
   private val retrieveForeignPropertyAnnualSubmissionResponseBody = RetrieveForeignPropertyAnnualSubmissionResponse(
-    "2020-07-07T10:59:47.544Z",
+    Timestamp("2020-07-07T10:59:47.544Z"),
     Some(
       ForeignFhlEeaEntry(
         Some(ForeignFhlEeaAdjustments(Some(100.25), Some(100.25), Some(true))),
@@ -74,7 +64,7 @@ class RetrieveForeignPropertyAnnualSubmissionResponseSpec extends UnitSpec with 
   )
 
   private val retrieveForeignPropertyAnnualSubmissionResponseBodyMinimum = RetrieveForeignPropertyAnnualSubmissionResponse(
-    "2020-07-07T10:59:47.544Z",
+    Timestamp("2020-07-07T10:59:47.544Z"),
     None,
     Some(
       Seq(

@@ -25,7 +25,7 @@ class SubmissionPeriodSpec extends UnitSpec {
       val ifsJson = Json.parse(
         """
           |{
-          |    "submittedOn": "2020-06-22T22:00:20Z",
+          |    "submittedOn": "2020-06-22T22:00:20.000Z",
           |    "foreignFhlEea": {
           |      "submissionId": "4557ecb5-fd32-48cc-81f5-e6acd1099f3c",
           |      "fromDate": "2020-06-22",
@@ -43,7 +43,7 @@ class SubmissionPeriodSpec extends UnitSpec {
       val ifsJson = Json.parse(
         """
           |{
-          |    "submittedOn": "2020-06-22T22:00:20Z",
+          |    "submittedOn": "2020-06-22T22:00:20.000Z",
           |    "foreignProperty": {
           |      "submissionId": "4557ecb5-fd32-48cc-81f5-e6acd1099f3c",
           |      "fromDate": "2020-06-22",
@@ -61,7 +61,7 @@ class SubmissionPeriodSpec extends UnitSpec {
       val ifsJson = Json.parse(
         """
           |{
-          |    "submittedOn": "2020-06-22T22:00:20Z",
+          |    "submittedOn": "2020-06-22T22:00:20.000Z",
           |    "foreignProperty": {
           |      "submissionId": "4557ecb5-fd32-48cc-81f5-e6acd1099f3c",
           |      "fromDate": "2020-06-22",
@@ -84,7 +84,7 @@ class SubmissionPeriodSpec extends UnitSpec {
       val ifsJson = Json.parse(
         """
           |{
-          |    "submittedOn": "2020-06-22T22:00:20Z",
+          |    "submittedOn": "2020-06-22T22:00:20.000Z",
           |    "foreignFhlEea": {
           |      "submissionId": "4557ecb5-fd32-48cc-81f5-e6acd1099f3c",
           |      "fromDate": "2020-06-22",

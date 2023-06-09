@@ -19,7 +19,7 @@ package v2.connectors
 import api.connectors.{ConnectorSpec, DownstreamOutcome}
 import org.scalamock.handlers.CallHandler
 import v2.connectors.RetrieveUkPropertyAnnualSubmissionConnector._
-import api.models.domain.{Nino, TaxYear}
+import api.models.domain.{Nino, TaxYear, Timestamp}
 import api.models.errors.{DownstreamErrorCode, DownstreamErrors}
 import api.models.outcomes.ResponseWrapper
 import v2.models.request.retrieveUkPropertyAnnualSubmission.RetrieveUkPropertyAnnualSubmissionRequest
@@ -132,7 +132,7 @@ class RetrieveUkPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec {
       RetrieveUkPropertyAnnualSubmissionRequest(Nino(nino), businessId, TaxYear.fromMtd(taxYear))
 
     def responseWith(ukFhlProperty: Option[UkFhlProperty], ukNonFhlProperty: Option[UkNonFhlProperty]): RetrieveUkPropertyAnnualSubmissionResponse =
-      RetrieveUkPropertyAnnualSubmissionResponse("2020-01-01", ukFhlProperty, ukNonFhlProperty)
+      RetrieveUkPropertyAnnualSubmissionResponse(Timestamp("2022-06-17T10:53:38Z"), ukFhlProperty, ukNonFhlProperty)
 
   }
 

@@ -39,7 +39,7 @@ class RetrieveUkPropertyPeriodSummaryControllerISpec extends V2IntegrationBaseSp
     val responseBody: JsValue = Json.parse(
       s"""
          |{
-         |  "submittedOn": "2020-06-17T10:53:38Z",
+         |  "submittedOn": "2020-06-17T10:53:38.000Z",
          |  "fromDate": "2019-01-29",
          |  "toDate": "2020-03-29",
          |  "ukFhlProperty": {
@@ -115,7 +115,7 @@ class RetrieveUkPropertyPeriodSummaryControllerISpec extends V2IntegrationBaseSp
     val downstreamResponseBody: JsValue = Json.parse(
       """
         |{
-        |  "submittedOn": "2020-06-17T10:53:38Z",
+        |  "submittedOn": "2020-06-17T10:53:38.000Z",
         |  "fromDate": "2019-01-29",
         |  "toDate": "2020-03-29",
         |  "ukFhlProperty": {

@@ -17,7 +17,7 @@
 package v2.services
 
 import api.controllers.EndpointLogContext
-import api.models.domain.{Nino, TaxYear}
+import api.models.domain.{Nino, TaxYear, Timestamp}
 import api.models.errors._
 import api.models.outcomes.ResponseWrapper
 import support.UnitSpec
@@ -100,7 +100,7 @@ class RetrieveUkPropertyAnnualSubmissionServiceSpec extends UnitSpec {
     )
 
     protected val response: RetrieveUkPropertyAnnualSubmissionResponse =
-      RetrieveUkPropertyAnnualSubmissionResponse("2020-01-01", None, None)
+      RetrieveUkPropertyAnnualSubmissionResponse(Timestamp("2022-06-17T10:53:38Z"), None, None)
 
     protected val request: RetrieveUkPropertyAnnualSubmissionRequest = RetrieveUkPropertyAnnualSubmissionRequest(Nino(nino), businessId, taxYear)
   }

@@ -18,9 +18,9 @@ package definition
 
 import config.ConfidenceLevelConfig
 import definition.APIStatus.{ALPHA, BETA}
-import definition.Versions.{VERSION_1, VERSION_2}
+import definition.Versions.{VERSION_1, VERSION_2, VERSION_3}
 import mocks.{MockAppConfig, MockHttpClient}
-import play.api.Configuration
+//import play.api.Configuration
 import support.UnitSpec
 import uk.gov.hmrc.auth.core.ConfidenceLevel
 
@@ -36,11 +36,12 @@ class ApiDefinitionFactorySpec extends UnitSpec {
   "definition" when {
     "called" should {
       "return a valid Definition case class" in new Test {
-        MockAppConfig.featureSwitches.returns(Configuration.empty).anyNumberOfTimes()
         MockAppConfig.apiStatus("1.0") returns "BETA"
-        MockAppConfig.apiStatus("2.0") returns "ALPHA"
+        MockAppConfig.apiStatus("2.0") returns "BETA"
+        MockAppConfig.apiStatus("3.0") returns "BETA"
         MockAppConfig.endpointsEnabled("1.0").returns(true).anyNumberOfTimes()
         MockAppConfig.endpointsEnabled("2.0").returns(true).anyNumberOfTimes()
+        MockAppConfig.endpointsEnabled("3.0").returns(true).anyNumberOfTimes()
         MockAppConfig.confidenceLevelCheckEnabled
           .returns(ConfidenceLevelConfig(confidenceLevel = confidenceLevel, definitionEnabled = true, authValidationEnabled = true))
           .anyNumberOfTimes()
@@ -77,7 +78,12 @@ class ApiDefinitionFactorySpec extends UnitSpec {
                 ),
                 APIVersion(
                   version = VERSION_2,
-                  status = ALPHA,
+                  status = BETA,
+                  endpointsEnabled = true
+                ),
+                APIVersion(
+                  version = VERSION_3,
+                  status = BETA,
                   endpointsEnabled = true
                 )
               ),

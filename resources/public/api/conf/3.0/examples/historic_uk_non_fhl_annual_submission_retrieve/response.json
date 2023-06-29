@@ -1,0 +1,37 @@
+{
+  "annualAdjustments": {
+    "lossBroughtForward": 200.00,
+    "balancingCharge": 200.00,
+    "privateUseAdjustment": 200.00,
+    "businessPremisesRenovationAllowanceBalancingCharges": 80.02,
+    "nonResidentLandlord": true,
+    "rentARoom": {
+      "jointlyLet": true
+    }
+  },
+  "annualAllowances": {
+    "annualInvestmentAllowance": 200.00,
+    "otherCapitalAllowance": 200.00,
+    "zeroEmissionGoodsVehicleAllowance": 200.00,
+    "businessPremisesRenovationAllowance": 200.00,
+    "costOfReplacingDomesticGoods": 200.00,
+    "propertyIncomeAllowance": 30.02
+  },
+  "links": [
+    {
+      "href": "/individuals/business/property/uk/non-furnished-holiday-lettings/AA999999A/2019-20",
+      "method": "PUT",
+      "rel": "create-and-amend-uk-property-historic-non-fhl-annual-submission"
+    },
+    {
+      "href": "/individuals/business/property/uk/non-furnished-holiday-lettings/AA999999A/2019-20",
+      "method": "GET",
+      "rel": "self"
+    },
+    {
+      "href": "/individuals/business/property/uk/non-furnished-holiday-lettings/AA999999A/2019-20",
+      "method": "DELETE",
+      "rel": "delete-uk-property-historic-non-fhl-annual-submission"
+    }
+  ]
+}

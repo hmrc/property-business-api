@@ -19,7 +19,6 @@ import sbt._
 import sbt.complete.DefaultParsers._
 import uk.gov.hmrc.DefaultBuildSettings.{addTestReportOption, defaultSettings}
 import uk.gov.hmrc.SbtAutoBuildPlugin
-import uk.gov.hmrc.sbtdistributables.SbtDistributablesPlugin.publishingSettings
 import uk.gov.hmrc.versioning.SbtGitVersioning.autoImport.majorVersion
 
 import scala.sys.process._
@@ -42,7 +41,6 @@ lazy val microservice = Project(appName, file("."))
     Compile / unmanagedResourceDirectories += baseDirectory.value / "resources"
   )
   .settings(majorVersion := 0)
-  .settings(publishingSettings: _*)
   .settings(CodeCoverageSettings.settings: _*)
   .settings(defaultSettings(): _*)
   .configs(ItTest)

@@ -17,9 +17,8 @@
 package routing
 
 import com.google.inject.ImplementedBy
-import config.{AppConfig, FeatureSwitches}
-import definition.Versions.{VERSION_1, VERSION_2}
-import play.api.Logging
+import config.AppConfig
+import definition.Versions.{VERSION_1, VERSION_2, VERSION_3}
 import play.api.routing.Router
 
 import javax.inject.Inject
@@ -40,25 +39,13 @@ case class VersionRoutingMapImpl @Inject() (appConfig: AppConfig,
                                             defaultRouter: Router,
                                             v1Router: v1.Routes,
                                             v2Router: v2.Routes,
-                                            v2r7cRouter: v2r7c.Routes)
-    extends VersionRoutingMap
-    with Logging {
-
-  val featureSwitches: FeatureSwitches = FeatureSwitches(appConfig.featureSwitches)
-
-  private val effectiveV2Router: Router = {
-    if (featureSwitches.isV2R7cRoutingEnabled) {
-      logger.info("[VersionRoutingMap][map] including R7C endpoints in V2 routes")
-      v2r7cRouter
-    } else {
-      logger.info("[VersionRoutingMap][map] not including R7C endpoints in V2 routes")
-      v2Router
-    }
-  }
+                                            v3Router: v3.Routes)
+    extends VersionRoutingMap {
 
   val map: Map[String, Router] = Map(
     VERSION_1 -> v1Router,
-    VERSION_2 -> effectiveV2Router
+    VERSION_2 -> v2Router,
+    VERSION_3 -> v3Router
   )
 
 }

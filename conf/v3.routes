@@ -35,8 +35,3 @@ GET        /uk/period/non-furnished-holiday-lettings/:nino/:periodId  v2.control
 POST       /uk/period/non-furnished-holiday-lettings/:nino            v2.controllers.CreateHistoricNonFHLUkPiePeriodSummaryController.handleRequest(nino: String)
 
 GET        /uk/period/non-furnished-holiday-lettings/:nino            v2.controllers.ListHistoricUkPropertyPeriodSummariesController.handleNonFhlRequest(nino)
-
-
-
-
-

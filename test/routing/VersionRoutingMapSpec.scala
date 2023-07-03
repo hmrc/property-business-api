@@ -16,57 +16,46 @@
 
 package routing
 
-import com.typesafe.config.ConfigFactory
 import definition.Versions
 import mocks.MockAppConfig
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
-import play.api.Configuration
 import play.api.routing.Router
 import support.UnitSpec
 
 class VersionRoutingMapSpec extends UnitSpec with MockAppConfig with GuiceOneAppPerSuite with ScalaCheckPropertyChecks {
 
-  val defaultRouter: Router     = mock[Router]
-  val v1Routes: v1.Routes       = app.injector.instanceOf[v1.Routes]
-  val v2Routes: v2.Routes       = app.injector.instanceOf[v2.Routes]
-  val v2r7cRoutes: v2r7c.Routes = app.injector.instanceOf[v2r7c.Routes]
+  val defaultRouter: Router = mock[Router]
+  val v1Routes: v1.Routes   = app.injector.instanceOf[v1.Routes]
+  val v2Routes: v2.Routes   = app.injector.instanceOf[v2.Routes]
+  val v3Routes: v3.Routes   = app.injector.instanceOf[v3.Routes]
 
-  private def newVersionRoutingMap(v2r7cEnabled: Boolean) = {
-    MockAppConfig.featureSwitches.returns(Configuration(ConfigFactory.parseString(s"v2r7c-endpoints.enabled = $v2r7cEnabled")))
-
-    VersionRoutingMapImpl(
-      appConfig = mockAppConfig,
-      defaultRouter = defaultRouter,
-      v1Router = v1Routes,
-      v2Router = v2Routes,
-      v2r7cRouter = v2r7cRoutes
-    )
-  }
+  private val versionRoutingMap = VersionRoutingMapImpl(
+    appConfig = mockAppConfig,
+    defaultRouter = defaultRouter,
+    v1Router = v1Routes,
+    v2Router = v2Routes,
+    v3Router = v3Routes
+  )
 
   "map" when {
     "routing a v1 request" should {
-      "route to v1.routes (regardless of r7c enablement)" in
-        forAll { v2r7cEnabled: Boolean =>
-          val versionRoutingMap = newVersionRoutingMap(v2r7cEnabled)
-          versionRoutingMap.map(Versions.VERSION_1) shouldBe v1Routes
-        }
+      "route to v1.routes (regardless of r7c enablement)" in {
+        versionRoutingMap.map(Versions.VERSION_1) shouldBe v1Routes
+      }
     }
 
     "routing a v2 request" when {
-      "r7c enabled" should {
-        "route to v2r7c.routes" in {
-          val versionRoutingMap = newVersionRoutingMap(v2r7cEnabled = true)
-          versionRoutingMap.map(Versions.VERSION_2) shouldBe v2r7cRoutes
-        }
+      "route to v2.routes" in {
+        versionRoutingMap.map(Versions.VERSION_2) shouldBe v2Routes
       }
+    }
 
-      "r7c disabled" should {
-        "route to v2.routes" in {
-          val versionRoutingMap = newVersionRoutingMap(v2r7cEnabled = false)
-          versionRoutingMap.map(Versions.VERSION_2) shouldBe v2Routes
-        }
+    "routing a v3 request" when {
+      "route to v3.routes" in {
+        versionRoutingMap.map(Versions.VERSION_3) shouldBe v3Routes
       }
     }
   }
+
 }

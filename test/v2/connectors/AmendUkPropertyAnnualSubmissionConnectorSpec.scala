@@ -48,10 +48,10 @@ class AmendUkPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec {
     }
 
     "amendUkPropertyAnnualSubmissionConnector called for a Tax Year Specific tax year" must {
-      "put a body and return a 204" in new IfsTest with Test {
+      "put a body and return a 204" in new TysIfsTest with Test {
         def taxYear: TaxYear = tysTaxYear
 
-        stubHttpResponse(outcome)
+        stubTysHttpResponse(outcome)
 
         val result: DownstreamOutcome[Unit] = await(connector.amendUkPropertyAnnualSubmission(request))
         result shouldBe outcome

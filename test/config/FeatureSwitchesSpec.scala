@@ -16,10 +16,11 @@
 
 package config
 
+import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import play.api.Configuration
 import support.UnitSpec
 
-class FeatureSwitchesSpec extends UnitSpec {
+class FeatureSwitchesSpec extends UnitSpec with ScalaCheckPropertyChecks {
 
   private val configuration = Configuration(
     "feature-switch.enabled" -> true

@@ -175,7 +175,7 @@ class VersionRoutingRequestHandlerSpec extends UnitSpec with Inside with MockApp
 
     "the version has a route for the resource" must {
       "return 404 Not Found" in new Test {
-
+        MockAppConfig.endpointsEnabled(Version3).anyNumberOfTimes()
         private val request = buildRequest("/v1")
         inside(requestHandler.routeRequest(request)) { case Some(a: EssentialAction) =>
           val result = a.apply(request)

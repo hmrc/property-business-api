@@ -16,44 +16,37 @@
 
 package routing
 
-import definition.Versions
-import mocks.MockAppConfig
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import play.api.routing.Router
 import support.UnitSpec
 
-class VersionRoutingMapSpec extends UnitSpec with MockAppConfig with GuiceOneAppPerSuite with ScalaCheckPropertyChecks {
+class VersionRoutingMapSpec extends UnitSpec with GuiceOneAppPerSuite with ScalaCheckPropertyChecks {
 
   val defaultRouter: Router = mock[Router]
   val v1Routes: v1.Routes   = app.injector.instanceOf[v1.Routes]
   val v2Routes: v2.Routes   = app.injector.instanceOf[v2.Routes]
   val v3Routes: v3.Routes   = app.injector.instanceOf[v3.Routes]
 
-  private val versionRoutingMap = VersionRoutingMapImpl(
-    appConfig = mockAppConfig,
-    defaultRouter = defaultRouter,
-    v1Router = v1Routes,
-    v2Router = v2Routes,
-    v3Router = v3Routes
-  )
-
   "map" when {
-    "routing a v1 request" should {
-      "route to v1.routes (regardless of r7c enablement)" in {
-        versionRoutingMap.map(Versions.VERSION_1) shouldBe v1Routes
-      }
-    }
+    "routing to v1, v2 and v3" should {
+      val versionRoutingMap: VersionRoutingMapImpl = VersionRoutingMapImpl(
+        defaultRouter = defaultRouter,
+        v1Router = v1Routes,
+        v2Router = v2Routes,
+        v3Router = v3Routes
+      )
 
-    "routing a v2 request" when {
-      "route to v2.routes" in {
-        versionRoutingMap.map(Versions.VERSION_2) shouldBe v2Routes
+      s"route to ${v1Routes.toString} (regardless of r7c enablement)" in {
+        versionRoutingMap.map(Version1) shouldBe v1Routes
       }
-    }
 
-    "routing a v3 request" when {
-      "route to v3.routes" in {
-        versionRoutingMap.map(Versions.VERSION_3) shouldBe v3Routes
+      s"route to ${v2Routes.toString}" in {
+        versionRoutingMap.map(Version2) shouldBe v2Routes
+      }
+
+      s"route to ${v3Routes.toString}" in {
+        versionRoutingMap.map(Version3) shouldBe v3Routes
       }
     }
   }

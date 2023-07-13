@@ -16,10 +16,25 @@
 
 package config
 
+import com.google.inject.ImplementedBy
 import play.api.Configuration
 
-case class FeatureSwitches(featureSwitchConfig: Configuration)
+import javax.inject.Inject
+
+
+@ImplementedBy(classOf[FeatureSwitchesImpl])
+trait FeatureSwitches {
+  def isPassDeleteIntentEnabled: Boolean
+}
+
+class FeatureSwitchesImpl(featureSwitchConfig: Configuration) extends FeatureSwitches{
+  @Inject
+  def this(appConfig:AppConfig) = this(appConfig.featureSwitches)
+
+  val isPassDeleteIntentEnabled: Boolean = featureSwitchConfig.getOptional[Boolean]("passDeleteIntentHeader.enabled").getOrElse(true)
+
+}
 
 object FeatureSwitches {
-  def apply()(implicit appConfig: AppConfig): FeatureSwitches = FeatureSwitches(appConfig.featureSwitches)
+  def apply(configuration: Configuration): FeatureSwitches = new FeatureSwitchesImpl(configuration)
 }

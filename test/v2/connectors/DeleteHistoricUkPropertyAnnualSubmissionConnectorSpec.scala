@@ -20,43 +20,65 @@ import api.connectors.{ConnectorSpec, DownstreamOutcome}
 import play.api.libs.json.JsObject
 import api.models.domain.{HistoricPropertyType, Nino, TaxYear}
 import api.models.outcomes.ResponseWrapper
+import mocks.MockFeatureSwitches
 import v2.models.request.deleteHistoricUkPropertyAnnualSubmission.DeleteHistoricUkPropertyAnnualSubmissionRequest
 
 import scala.concurrent.Future
 
-class DeleteHistoricUkPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec {
+class DeleteHistoricUkPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec with MockFeatureSwitches {
 
   private val nino: String       = "AA123456A"
   private val mtdTaxYear: String = "2021-22"
   private val taxYear: TaxYear   = TaxYear.fromMtd(mtdTaxYear)
 
   "connector" must {
-    "send a request and return no content for FHL" in new IfsTest with Test {
-      lazy val propertyType: HistoricPropertyType = HistoricPropertyType.Fhl
+    "send a request and return no content" when {
+      "using FHL data" in new IfsTest with Test {
+        lazy val propertyType: HistoricPropertyType = HistoricPropertyType.Fhl
 
-      val outcome: Right[Nothing, ResponseWrapper[Unit]] = Right(ResponseWrapper(correlationId, ()))
+        MockFeatureSwitches.isPassDeleteIntentEnabled.returns(true)
 
-      willPut(
-        url = s"$baseUrl/income-tax/nino/$nino/uk-properties/furnished-holiday-lettings/annual-summaries/2022",
-        body = JsObject.empty
-      ).returns(Future.successful(outcome))
+        willPut(
+          url = s"$baseUrl/income-tax/nino/$nino/uk-properties/furnished-holiday-lettings/annual-summaries/2022",
+          body = JsObject.empty
+        ).returns(Future.successful(expectedOutcome))
 
-      val result: DownstreamOutcome[Unit] = await(connector.deleteHistoricUkPropertyAnnualSubmission(request))
-      result shouldBe outcome
-    }
 
-    "send a request and return no content for non-FHL" in new IfsTest with Test {
-      lazy val propertyType: HistoricPropertyType = HistoricPropertyType.NonFhl
+        val result: DownstreamOutcome[Unit] = await(connector.deleteHistoricUkPropertyAnnualSubmission(request))
 
-      val outcome: Right[Nothing, ResponseWrapper[Unit]] = Right(ResponseWrapper(correlationId, ()))
+        result shouldBe expectedOutcome
+      }
 
-      willPut(
-        url = s"$baseUrl/income-tax/nino/$nino/uk-properties/other/annual-summaries/2022",
-        body = JsObject.empty
-      ).returns(Future.successful(outcome))
+      "using non-FHL data" in new IfsTest with Test {
+        lazy val propertyType: HistoricPropertyType = HistoricPropertyType.NonFhl
 
-      val result: DownstreamOutcome[Unit] = await(connector.deleteHistoricUkPropertyAnnualSubmission(request))
-      result shouldBe outcome
+        MockFeatureSwitches.isPassDeleteIntentEnabled.returns(true)
+
+        willPut(
+          url = s"$baseUrl/income-tax/nino/$nino/uk-properties/other/annual-summaries/2022",
+          body = JsObject.empty
+        ).returns(Future.successful(expectedOutcome))
+
+
+        val result: DownstreamOutcome[Unit] = await(connector.deleteHistoricUkPropertyAnnualSubmission(request))
+
+        result shouldBe expectedOutcome
+      }
+
+      "isPassDeleteIntentHeader feature switch is off" in new IfsTest with Test {
+        override lazy val excludedHeaders: scala.Seq[(String, String)] = super.excludedHeaders :+ ("intent" -> "DELETE")
+        lazy val propertyType: HistoricPropertyType = HistoricPropertyType.NonFhl
+
+        MockFeatureSwitches.isPassDeleteIntentEnabled returns false
+
+        willPut(url = s"$baseUrl/income-tax/nino/$nino/uk-properties/other/annual-summaries/2022", body = JsObject.empty)
+          .returns(Future.successful(expectedOutcome))
+
+        val result: DownstreamOutcome[Unit] = await(connector.deleteHistoricUkPropertyAnnualSubmission(request))
+
+        result shouldBe expectedOutcome
+
+      }
     }
   }
 
@@ -71,6 +93,8 @@ class DeleteHistoricUkPropertyAnnualSubmissionConnectorSpec extends ConnectorSpe
 
     protected val request: DeleteHistoricUkPropertyAnnualSubmissionRequest =
       DeleteHistoricUkPropertyAnnualSubmissionRequest(Nino(nino), taxYear, propertyType)
+
+    protected val expectedOutcome: Right[Nothing, ResponseWrapper[Unit]] = Right(ResponseWrapper(correlationId, ()))
 
   }
 

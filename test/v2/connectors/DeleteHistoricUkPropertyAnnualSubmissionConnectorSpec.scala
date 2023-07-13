@@ -35,6 +35,8 @@ class DeleteHistoricUkPropertyAnnualSubmissionConnectorSpec extends ConnectorSpe
     "send a request and return no content" when {
       "using FHL data" in new IfsTest with Test {
         lazy val propertyType: HistoricPropertyType = HistoricPropertyType.Fhl
+        override lazy val requiredHeaders: scala.Seq[(String, String)] = requiredIfsHeaders :+ ("intent" -> "DELETE")
+
 
         MockFeatureSwitches.isPassDeleteIntentEnabled.returns(true)
 
@@ -51,6 +53,7 @@ class DeleteHistoricUkPropertyAnnualSubmissionConnectorSpec extends ConnectorSpe
 
       "using non-FHL data" in new IfsTest with Test {
         lazy val propertyType: HistoricPropertyType = HistoricPropertyType.NonFhl
+        override lazy val requiredHeaders: scala.Seq[(String, String)] = requiredIfsHeaders :+ ("intent" -> "DELETE")
 
         MockFeatureSwitches.isPassDeleteIntentEnabled.returns(true)
 

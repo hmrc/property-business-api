@@ -18,6 +18,7 @@ package config
 
 import com.google.inject.ImplementedBy
 import play.api.Configuration
+import javax.inject.Singleton
 
 import javax.inject.Inject
 
@@ -27,6 +28,7 @@ trait FeatureSwitches {
   def isPassDeleteIntentEnabled: Boolean
 }
 
+@Singleton
 class FeatureSwitchesImpl(featureSwitchConfig: Configuration) extends FeatureSwitches{
   @Inject
   def this(appConfig:AppConfig) = this(appConfig.featureSwitches)

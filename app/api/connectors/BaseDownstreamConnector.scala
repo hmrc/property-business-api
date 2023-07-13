@@ -58,7 +58,7 @@ trait BaseDownstreamConnector extends Logging {
     doGet(getBackendHeaders(uri, hc, correlationId))
   }
 
-  def put[Body: Writes, Resp](body: Body, uri: DownstreamUri[Resp], intent:Option[String]=None)(implicit
+  def put[Body: Writes, Resp](body: Body, uri: DownstreamUri[Resp], intent: Option[String] = None)(implicit
       ec: ExecutionContext,
       hc: HeaderCarrier,
       httpReads: HttpReads[DownstreamOutcome[Resp]],
@@ -69,8 +69,8 @@ trait BaseDownstreamConnector extends Logging {
     }
 
     intent match {
-      case Some(x) =>doPut(getBackendHeaders(uri, hc, correlationId, jsonContentTypeHeader, ("intent", x)))
-      case _ => doPut(getBackendHeaders(uri, hc, correlationId, jsonContentTypeHeader))
+      case Some(x) => doPut(getBackendHeaders(uri, hc, correlationId, jsonContentTypeHeader, ("intent", x)))
+      case None    => doPut(getBackendHeaders(uri, hc, correlationId, jsonContentTypeHeader))
     }
 
   }

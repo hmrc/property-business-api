@@ -22,7 +22,6 @@ import support.UnitSpec
 
 class FeatureSwitchesSpec extends UnitSpec with ScalaCheckPropertyChecks {
 
-
   "FeatureSwitches" should {
     "return true" when {
       "the feature switch is set to true" in {

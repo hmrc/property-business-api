@@ -4,29 +4,13 @@ delete:
     This endpoint allows the developer to delete the adjustments and allowances for a UK or Foreign property business in a tax year. A National Insurance number, business ID and tax year must be provided.
 
     ### Test data
-    <p>Scenario simulations using <code>Gov-Test-Scenario</code> headers is only available in the sandbox environment.</p>
-    <table>
-        <thead>
-            <tr>
-                <th>Header Value (Gov-Test-Scenario)</th>
-                <th>Scenario</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td><p>N/A - DEFAULT</p></td>
-                <td><p>Simulates a success response.</p></td>
-            </tr>
-            <tr>
-                <td><p>NOT_FOUND</p></td>
-                <td><p>Simulates the scenario where no data is found.</p></td>
-            </tr>
-            <tr>
-                <td><p>STATEFUL</p></td>
-                <td><p>Performs a stateful delete.</p></td>
-          </tr>
-        </tbody>
-    </table>
+    Scenario simulation using Gov-Test-Scenario headers is only available in the sandbox environment.
+    
+    | Header Value (Gov-Test-Scenario)    | Scenario                                                                                      |
+    |-------------------------------------|-----------------------------------------------------------------------------------------------|
+    | N/A - DEFAULT                       | Simulate success response.                                                                    |
+    | NOT_FOUND                           | Simulates the scenario where no data is found.                                                |
+    | STATEFUL                            | Performs a stateful delete.                                                                   |
 
   tags:
     - UK or Foreign Property Annual Submission Deletion

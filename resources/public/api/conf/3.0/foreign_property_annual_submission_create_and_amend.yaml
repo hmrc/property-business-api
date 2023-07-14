@@ -6,41 +6,17 @@ description: |
   A National Insurance number, business ID and tax year must be provided.
 
   ### Test data
-  <p>Scenario simulations using <code>Gov-Test-Scenario</code> headers is only available in the sandbox environment.</p>
-  <table>
-      <thead>
-          <tr>
-              <th>Header Value (Gov-Test-Scenario)</th>
-              <th>Scenario</th>
-          </tr>
-      </thead>
-      <tbody>
-          <tr>
-              <td><p>N/A - DEFAULT</p></td>
-              <td><p>Simulates success response.</p></td>
-          </tr>
-          <tr>
-              <td><p>NOT_FOUND</p></td>
-              <td><p>Simulates the scenario where no data is found.</p></td>
-          </tr>
-          <tr>
-              <td><p>TYPE_OF_BUSINESS_INCORRECT</p></td>
-              <td><p>Simulates the scenario where a businessId for something other than a foreign property is supplied.</p></td>
-          </tr>
-          <tr>
-              <td><p>DUPLICATE_COUNTRY_CODE</p></td>
-              <td><p>Simulates the scenario where the same countryCode is supplied for multiple properties</p></td>
-          </tr>
-          <tr>
-              <td><p>PROPERTY_INCOME_ALLOWANCE</p></td>
-              <td><p>Simulates the scenario where the propertyIncomeAllowance is submitted when privateUseAdjustment is supplied</p></td>
-          </tr>
-          <tr>
-              <td><p>STATEFUL</p></td>
-              <td><p>Performs a stateful create or update.</p></td>
-          </tr>
-      </tbody>
-  </table>
+  Scenario simulation using Gov-Test-Scenario headers is only available in the sandbox environment.
+  
+  | Header Value (Gov-Test-Scenario)| Scenario                                                                                                    |
+  |---------------------------------|-------------------------------------------------------------------------------------------------------------|
+  | N/A - DEFAULT                   | Simulates success response.                                                                                 |
+  | NOT_FOUND                       | Simulates the scenario where no data is found.                                                              |
+  | TYPE_OF_BUSINESS_INCORRECT      | Simulates the scenario where a businessId for something other than a foreign property is supplied.          |
+  | DUPLICATE_COUNTRY_CODE          | Simulates the scenario where the same countryCode is supplied for multiple properties                       |
+  | PROPERTY_INCOME_ALLOWANCE       | Simulates the scenario where the propertyIncomeAllowance is submitted when privateUseAdjustment is supplied |
+  | STATEFUL                        | Performs a stateful create or update.                                                                       |
+
 
 tags:
   - Foreign Property Annual Submission

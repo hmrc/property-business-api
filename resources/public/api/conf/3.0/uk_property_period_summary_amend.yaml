@@ -3,33 +3,15 @@ description: |
   This endpoint allows a developer to re-submit the income and expenditure for a UK property business. This submission is for either or both of Furnished Holiday Letting (FHL) and Non FHL UK property submissions. A National Insurance number, business ID, tax year and submission ID are required.
 
   ### Test data
-  <p>Scenario simulations using <code>Gov-Test-Scenario</code> headers is only available in the sandbox environment.</p>
-  <table>
-      <thead>
-          <tr>
-              <th>Header Value (Gov-Test-Scenario)</th>
-              <th>Scenario</th>
-          </tr>
-      </thead>
-      <tbody>
-          <tr>
-              <td><p>N/A - DEFAULT</p></td>
-              <td><p>Simulate success response.</p></td>
-          </tr>
-          <tr>
-              <td><p>NOT_FOUND</p></td>
-              <td><p>Simulates the scenario where no data is found.</p></td>
-          </tr>
-          <tr>
-              <td><p>TYPE_OF_BUSINESS_INCORRECT</p></td>
-              <td><p>Simulates the scenario where an businessId for something other than a UK property is supplied.</p></td>
-          </tr>
-          <tr>
-              <td><p>STATEFUL</p></td>
-              <td><p>Performs a stateful update.</p></td>
-          </tr>
-      </tbody>
-  </table>
+  Scenario simulation using Gov-Test-Scenario headers is only available in the sandbox environment.
+  
+  | Header Value (Gov-Test-Scenario)    | Scenario                                                                                      |
+  |-------------------------------------|-----------------------------------------------------------------------------------------------|
+  | N/A - DEFAULT                       | Simulate success response.                                                                    |
+  | NOT_FOUND                           | Simulates the scenario where no data is found.                                                |
+  | TYPE_OF_BUSINESS_INCORRECT          | Simulates the scenario where a businessId for something other than a UK property is supplied. |
+  | STATEFUL                            | Performs a stateful update.                                                                   |
+
 
 tags:
   - UK Property Income & Expenses Period Summary

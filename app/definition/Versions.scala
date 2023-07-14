@@ -17,17 +17,19 @@
 package definition
 
 import play.api.http.HeaderNames.ACCEPT
-import play.api.test.FakeRequest
-import support.UnitSpec
+import play.api.mvc.RequestHeader
 
-class VersionSpec extends UnitSpec {
+object Versions {
+  val VERSION_1 = "1.0"
+  val VERSION_2 = "2.0"
+  val VERSION_3 = "3.0"
 
-  "Versions" when {
-    "retrieved from a request header" must {
-      "work" in {
-        Versions.getFromRequest(FakeRequest().withHeaders((ACCEPT, "application/vnd.hmrc.1.0+json"))) shouldBe Some("1.0")
-        Versions.getFromRequest(FakeRequest().withHeaders((ACCEPT, "application/vnd.hmrc.2.0+json"))) shouldBe Some("2.0")
-      }
-    }
-  }
+  private val versionRegex = """application\/vnd.hmrc.(\d.\d)\+json""".r
+
+  def getFromRequest(request: RequestHeader): Option[String] =
+    getFrom(request.headers.headers)
+
+  private def getFrom(headers: Seq[(String, String)]): Option[String] =
+    headers.collectFirst { case (ACCEPT, versionRegex(ver)) => ver }
+
 }

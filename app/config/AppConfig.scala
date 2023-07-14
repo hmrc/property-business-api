@@ -18,7 +18,6 @@ package config
 
 import com.typesafe.config.Config
 import play.api.{ConfigLoader, Configuration}
-import routing.Version
 import uk.gov.hmrc.auth.core.ConfidenceLevel
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 
@@ -58,9 +57,9 @@ trait AppConfig {
   // API Config
   def apiGatewayContext: String
   def confidenceLevelConfig: ConfidenceLevelConfig
-  def apiStatus(version: Version): String
+  def apiStatus(version: String): String
   def featureSwitches: Configuration
-  def endpointsEnabled(version: Version): Boolean
+  def endpointsEnabled(version: String): Boolean
 
   def minimumTaxV2Foreign: Int
   def minimumTaxV2Uk: Int
@@ -96,9 +95,9 @@ class AppConfigImpl @Inject() (config: ServicesConfig, configuration: Configurat
   // API Config
   val apiGatewayContext: String                    = config.getString("api.gateway.context")
   val confidenceLevelConfig: ConfidenceLevelConfig = configuration.get[ConfidenceLevelConfig](s"api.confidence-level-check")
-  def apiStatus(version: Version): String          = config.getString(s"api.${version.name}.status")
+  def apiStatus(version: String): String           = config.getString(s"api.$version.status")
   def featureSwitches: Configuration               = configuration.getOptional[Configuration](s"feature-switch").getOrElse(Configuration.empty)
-  def endpointsEnabled(version: Version): Boolean  = config.getBoolean(s"api.${version.name}.endpoints.enabled")
+  def endpointsEnabled(version: String): Boolean   = config.getBoolean(s"api.$version.endpoints.enabled")
 
   val minimumTaxV2Foreign: Int = config.getInt("minimum-tax-year.version-2.foreign")
   val minimumTaxV2Uk: Int      = config.getInt("minimum-tax-year.version-2.uk")

@@ -50,7 +50,7 @@ class AmendForeignPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
 
     "the vendor request has a different content-type" must {
       "send the downstream request with the correct application/json content-type" in new IfsTest with Test {
-        def taxYear: TaxYear = preTysTaxYear
+        def taxYear: TaxYear = tysTaxYear
         stubHttpResponse(outcome)
         val vendorHc: HeaderCarrier = hc.copy(otherHeaders = otherHeaders :+ ("Content-Type" -> "some-other-content-type"))
 

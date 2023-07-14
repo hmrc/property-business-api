@@ -18,8 +18,9 @@ package definition
 
 import config.ConfidenceLevelConfig
 import definition.APIStatus.{ALPHA, BETA}
+import definition.Versions.{VERSION_1, VERSION_2, VERSION_3}
 import mocks.{MockAppConfig, MockHttpClient}
-import routing.{Version1, Version2, Version3}
+//import play.api.Configuration
 import support.UnitSpec
 import uk.gov.hmrc.auth.core.ConfidenceLevel
 
@@ -35,12 +36,12 @@ class ApiDefinitionFactorySpec extends UnitSpec {
   "definition" when {
     "called" should {
       "return a valid Definition case class" in new Test {
-        MockAppConfig.apiStatus(Version1) returns "BETA"
-        MockAppConfig.apiStatus(Version2) returns "BETA"
-        MockAppConfig.apiStatus(Version3) returns "BETA"
-        MockAppConfig.endpointsEnabled(Version1).returns(true).anyNumberOfTimes()
-        MockAppConfig.endpointsEnabled(Version2).returns(true).anyNumberOfTimes()
-        MockAppConfig.endpointsEnabled(Version3).returns(true).anyNumberOfTimes()
+        MockAppConfig.apiStatus("1.0") returns "BETA"
+        MockAppConfig.apiStatus("2.0") returns "BETA"
+        MockAppConfig.apiStatus("3.0") returns "BETA"
+        MockAppConfig.endpointsEnabled("1.0").returns(true).anyNumberOfTimes()
+        MockAppConfig.endpointsEnabled("2.0").returns(true).anyNumberOfTimes()
+        MockAppConfig.endpointsEnabled("3.0").returns(true).anyNumberOfTimes()
         MockAppConfig.confidenceLevelCheckEnabled
           .returns(ConfidenceLevelConfig(confidenceLevel = confidenceLevel, definitionEnabled = true, authValidationEnabled = true))
           .anyNumberOfTimes()
@@ -71,17 +72,17 @@ class ApiDefinitionFactorySpec extends UnitSpec {
               categories = Seq("INCOME_TAX_MTD"),
               versions = Seq(
                 APIVersion(
-                  version = Version1,
+                  version = VERSION_1,
                   status = BETA,
                   endpointsEnabled = true
                 ),
                 APIVersion(
-                  version = Version2,
+                  version = VERSION_2,
                   status = BETA,
                   endpointsEnabled = true
                 ),
                 APIVersion(
-                  version = Version3,
+                  version = VERSION_3,
                   status = BETA,
                   endpointsEnabled = true
                 )
@@ -114,15 +115,15 @@ class ApiDefinitionFactorySpec extends UnitSpec {
   "buildAPIStatus" when {
     "the 'apiStatus' parameter is present and valid" should {
       "return the correct status" in new Test {
-        MockAppConfig.apiStatus(Version1) returns "BETA"
-        apiDefinitionFactory.buildAPIStatus(version = Version1) shouldBe BETA
+        MockAppConfig.apiStatus("1.0") returns "BETA"
+        apiDefinitionFactory.buildAPIStatus(version = "1.0") shouldBe BETA
       }
     }
 
     "the 'apiStatus' parameter is present and invalid" should {
       "default to alpha" in new Test {
-        MockAppConfig.apiStatus(Version1) returns "ALPHO"
-        apiDefinitionFactory.buildAPIStatus(version = Version1) shouldBe ALPHA
+        MockAppConfig.apiStatus("1.0") returns "ALPHO"
+        apiDefinitionFactory.buildAPIStatus(version = "1.0") shouldBe ALPHA
       }
     }
   }

@@ -14,20 +14,16 @@
  * limitations under the License.
  */
 
-package definition
+package mocks
 
-import play.api.http.HeaderNames.ACCEPT
-import play.api.test.FakeRequest
-import support.UnitSpec
+import config.FeatureSwitches
+import org.scalamock.handlers.CallHandler
+import org.scalamock.scalatest.MockFactory
 
-class VersionSpec extends UnitSpec {
+trait MockFeatureSwitches extends MockFactory{
+  implicit val mockFeatureSwitches: FeatureSwitches = mock[FeatureSwitches]
 
-  "Versions" when {
-    "retrieved from a request header" must {
-      "work" in {
-        Versions.getFromRequest(FakeRequest().withHeaders((ACCEPT, "application/vnd.hmrc.1.0+json"))) shouldBe Some("1.0")
-        Versions.getFromRequest(FakeRequest().withHeaders((ACCEPT, "application/vnd.hmrc.2.0+json"))) shouldBe Some("2.0")
-      }
-    }
+  object MockFeatureSwitches {
+    def isPassDeleteIntentEnabled: CallHandler[Boolean]= (()=> mockFeatureSwitches.isPassDeleteIntentEnabled).expects()
   }
 }

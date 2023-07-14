@@ -17,7 +17,7 @@
 package api.connectors
 
 import api.connectors.DownstreamUri.{DesUri, IfsUri, TaxYearSpecificIfsUri}
-import config.AppConfig
+import config.{AppConfig, FeatureSwitches}
 import play.api.http.{HeaderNames, MimeTypes}
 import play.api.libs.json.Writes
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, HttpReads}
@@ -31,6 +31,8 @@ trait BaseDownstreamConnector extends Logging {
   val appConfig: AppConfig
 
   private val jsonContentTypeHeader = HeaderNames.CONTENT_TYPE -> MimeTypes.JSON
+
+  implicit protected lazy val featureSwitches: FeatureSwitches = FeatureSwitches(appConfig.featureSwitches)
 
   def post[Body: Writes, Resp](body: Body, uri: DownstreamUri[Resp])(implicit
       ec: ExecutionContext,
@@ -58,7 +60,7 @@ trait BaseDownstreamConnector extends Logging {
     doGet(getBackendHeaders(uri, hc, correlationId))
   }
 
-  def put[Body: Writes, Resp](body: Body, uri: DownstreamUri[Resp], intent: Option[String] = None)(implicit
+  def put[Body: Writes, Resp](body: Body, uri: DownstreamUri[Resp])(implicit
       ec: ExecutionContext,
       hc: HeaderCarrier,
       httpReads: HttpReads[DownstreamOutcome[Resp]],
@@ -68,10 +70,7 @@ trait BaseDownstreamConnector extends Logging {
       http.PUT(getBackendUri(uri), body)
     }
 
-    intent match {
-      case Some(x) => doPut(getBackendHeaders(uri, hc, correlationId, jsonContentTypeHeader, ("intent", x)))
-      case None    => doPut(getBackendHeaders(uri, hc, correlationId, jsonContentTypeHeader))
-    }
+    doPut(getBackendHeaders(uri, hc, correlationId, jsonContentTypeHeader))
 
   }
 

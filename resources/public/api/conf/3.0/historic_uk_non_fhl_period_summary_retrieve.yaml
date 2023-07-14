@@ -4,33 +4,15 @@ description: |
   A National Insurance number and period ID must be provided. Use this endpoint only for the specified tax year range; for current tax year submissions, use the Retrieve a UK Property Income & Expenses Period Summary endpoint.
 
   ### Test data
-  <p>Scenario simulations using <code>Gov-Test-Scenario</code> headers is only available in the sandbox environment.</p>
-  <table>
-      <thead>
-          <tr>
-              <th>Header Value (Gov-Test-Scenario)</th>
-              <th>Scenario</th>
-          </tr>
-      </thead>
-      <tbody>
-          <tr>
-              <td><p>N/A - DEFAULT</p></td>
-              <td><p>Simulates a success response.</p></td>
-          </tr>
-          <tr>
-              <td><p>NOT_FOUND</p></td>
-              <td><p>Simulates the scenario where no data is found.</p></td>
-          </tr>
-          <tr>
-              <td><p>CONSOLIDATED</p></td>
-              <td><p>Simulates the scenario where success response containing consolidated expenses is found.</p></td>
-          </tr>
-          <tr>
-              <td><p>STATEFUL</p></td>
-              <td><p>Performs a stateful retrieve.</p></td>
-          </tr>
-      </tbody>
-  </table>
+  Scenario simulation using Gov-Test-Scenario headers is only available in the sandbox environment.
+  
+  | Header Value (Gov-Test-Scenario) | Scenario                                                                                 |
+  |----------------------------------|------------------------------------------------------------------------------------------|
+  | N/A - DEFAULT                    | Simulates a success response.                                                            |
+  | NOT_FOUND                        | Simulates the scenario where no data is found.                                           |
+  | CONSOLIDATED                     | Simulates the scenario where success response containing consolidated expenses is found. |
+  | STATEFUL                         | Performs a stateful retrieve.                                                            |
+
 
 tags:
   - Historic non-FHL UK Property Income & Expenses Period Summary

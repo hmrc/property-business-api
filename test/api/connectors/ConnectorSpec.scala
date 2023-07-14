@@ -104,8 +104,6 @@ trait ConnectorSpec extends UnitSpec with Status with MimeTypes with HeaderNames
 
     protected val requiredHeaders: Seq[(String, String)]
 
-    protected def excludedHeaders:Seq[(String, String)] = Seq("AnotherHeader" -> "HeaderValue")
-
     protected def willGet[T](url: String, parameters: Seq[(String, String)] = Nil): CallHandler[Future[T]] = {
       MockHttpClient
         .get(
@@ -113,7 +111,7 @@ trait ConnectorSpec extends UnitSpec with Status with MimeTypes with HeaderNames
           parameters = parameters,
           config = dummyHeaderCarrierConfig,
           requiredHeaders = requiredHeaders,
-          excludedHeaders = excludedHeaders
+          excludedHeaders = Seq("AnotherHeader" -> "HeaderValue")
         )
     }
 
@@ -124,7 +122,7 @@ trait ConnectorSpec extends UnitSpec with Status with MimeTypes with HeaderNames
           config = dummyHeaderCarrierConfig,
           body = body,
           requiredHeaders = requiredHeaders ++ Seq("Content-Type" -> "application/json"),
-          excludedHeaders = excludedHeaders
+          excludedHeaders = Seq("AnotherHeader" -> "HeaderValue")
         )
     }
 
@@ -135,7 +133,7 @@ trait ConnectorSpec extends UnitSpec with Status with MimeTypes with HeaderNames
           config = dummyHeaderCarrierConfig,
           body = body,
           requiredHeaders = requiredHeaders ++ Seq("Content-Type" -> "application/json"),
-          excludedHeaders = excludedHeaders
+          excludedHeaders = Seq("AnotherHeader" -> "HeaderValue")
         )
     }
 
@@ -147,7 +145,7 @@ trait ConnectorSpec extends UnitSpec with Status with MimeTypes with HeaderNames
           url = fullUrl,
           config = dummyHeaderCarrierConfig,
           requiredHeaders = requiredHeaders,
-          excludedHeaders = excludedHeaders
+          excludedHeaders = Seq("AnotherHeader" -> "HeaderValue")
         )
     }
 

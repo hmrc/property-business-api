@@ -212,7 +212,7 @@ trait ResponseModelsFixture {
     submittedOn = Timestamp("2020-06-17T10:53:38.000Z"),
     fromDate = "2019-01-29",
     toDate = "2020-03-29",
-//    periodCreationDate = Some("2020-06-17T10:53:38Z"), // To be reinstated, see MTDSA-15575
+    //    periodCreationDate = Some("2020-06-17T10:53:38Z"), // To be reinstated, see MTDSA-15575
     ukFhlProperty = Some(ukFhlPropertyModel),
     ukNonFhlProperty = Some(ukNonFhlPropertyModel)
   )

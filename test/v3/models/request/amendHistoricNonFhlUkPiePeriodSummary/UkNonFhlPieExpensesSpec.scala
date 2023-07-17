@@ -14,24 +14,24 @@
  * limitations under the License.
  */
 
-package v2.models.request.amendHistoricNonFhlUkPiePeriodSummary
+package v3.models.request.amendHistoricNonFhlUkPiePeriodSummary
 
-import v2.fixtures.AmendHistoricNonFhlUkPiePeriodSummary.AmendHistoricNonFhlUkPiePeriodSummaryFixtures
+import v3.fixtures.AmendHistoricNonFhlUkPiePeriodSummary.AmendHistoricNonFhlUkPiePeriodSummaryFixtures
 import play.api.libs.json.Json
 import support.UnitSpec
 
-class AmendHistoricNonFhlUkPiePeriodSummaryRequestBodySpec extends UnitSpec with AmendHistoricNonFhlUkPiePeriodSummaryFixtures {
+class UkNonFhlPieExpensesSpec extends UnitSpec with AmendHistoricNonFhlUkPiePeriodSummaryFixtures {
 
   "reads" when {
     "passed a valid JSON with full data" should {
       "return a valid model" in {
-        mtdJsonRequestFull.as[AmendHistoricNonFhlUkPiePeriodSummaryRequestBody] shouldBe requestBodyFull
+        mtdJsonExpensesFull.as[UkNonFhlPieExpenses] shouldBe ukNonFhlPieExpensesFull
       }
     }
 
     "passed a valid JSON with consolidated data" should {
       "return a valid model" in {
-        mtdJsonRequestConsolidated.as[AmendHistoricNonFhlUkPiePeriodSummaryRequestBody] shouldBe requestBodyConsolidated
+        mtdJsonExpensesConsolidated.as[UkNonFhlPieExpenses] shouldBe ukNonFhlPieExpensesConsolidated
       }
     }
   }
@@ -39,13 +39,13 @@ class AmendHistoricNonFhlUkPiePeriodSummaryRequestBodySpec extends UnitSpec with
   "writes" when {
     "passed valid model with full data" should {
       "return valid JSON" in {
-        Json.toJson(requestBodyFull) shouldBe downstreamJsonRequestFull
+        Json.toJson(ukNonFhlPieExpensesFull) shouldBe downstreamJsonExpensesFull
       }
     }
 
     "passed valid model with consolidated data" should {
       "return valid JSON" in {
-        Json.toJson(requestBodyConsolidated) shouldBe downstreamJsonRequestConsolidated
+        Json.toJson(ukNonFhlPieExpensesConsolidated) shouldBe downstreamJsonExpensesConsolidated
       }
     }
   }

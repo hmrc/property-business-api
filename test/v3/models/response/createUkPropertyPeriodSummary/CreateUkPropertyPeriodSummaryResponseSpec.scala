@@ -14,18 +14,25 @@
  * limitations under the License.
  */
 
-package v2.models.request.amendHistoricNonFhlUkPiePeriodSummary
+package v3.models.response.createUkPropertyPeriodSummary
 
-import v2.fixtures.AmendHistoricNonFhlUkPiePeriodSummary.AmendHistoricNonFhlUkPiePeriodSummaryFixtures
 import play.api.libs.json.Json
 import support.UnitSpec
 
-class UkNonFhlPieIncomeSpec extends UnitSpec with AmendHistoricNonFhlUkPiePeriodSummaryFixtures {
+class CreateUkPropertyPeriodSummaryResponseSpec extends UnitSpec {
+
+  val createUkPropertyResponse = CreateUkPropertyPeriodSummaryResponse(
+    "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
+  )
+
+  val json = Json.parse("""{
+                          |  "submissionId": "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
+                          |}""".stripMargin)
 
   "reads" when {
     "passed a valid JSON" should {
       "return a valid model" in {
-        mtdJsonIncome.as[UkNonFhlPieIncome] shouldBe ukNonFhlPieIncome
+        json.as[CreateUkPropertyPeriodSummaryResponse] shouldBe createUkPropertyResponse
       }
     }
   }
@@ -33,7 +40,7 @@ class UkNonFhlPieIncomeSpec extends UnitSpec with AmendHistoricNonFhlUkPiePeriod
   "writes" when {
     "passed valid model" should {
       "return valid JSON" in {
-        Json.toJson(ukNonFhlPieIncome) shouldBe downstreamJsonIncome
+        Json.toJson(createUkPropertyResponse) shouldBe json
       }
     }
   }

@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-package v2.models.request.amendHistoricNonFhlUkPiePeriodSummary
+package v3.models.request.amendHistoricNonFhlUkPiePeriodSummary
 
-import v2.fixtures.AmendHistoricNonFhlUkPiePeriodSummary.AmendHistoricNonFhlUkPiePeriodSummaryFixtures
+import v3.fixtures.AmendHistoricNonFhlUkPiePeriodSummary.AmendHistoricNonFhlUkPiePeriodSummaryFixtures
 import play.api.libs.json.Json
 import support.UnitSpec
 

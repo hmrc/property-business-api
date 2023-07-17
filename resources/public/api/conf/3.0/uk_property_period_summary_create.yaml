@@ -20,7 +20,7 @@ post:
     | STATEFUL                           | Performs a stateful create.                                                                           |
 
 
-tags:
+  tags:
     - UK Property Income & Expenses Period Summary
 
   parameters:

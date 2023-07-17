@@ -17,8 +17,7 @@
 package v3.endpoints
 
 import play.api.http.HeaderNames.ACCEPT
-import play.api.http.Status
-import play.api.http.Status.BAD_REQUEST
+import play.api.http.Status.{BAD_REQUEST, CONFLICT, CREATED, INTERNAL_SERVER_ERROR, NOT_FOUND, OK, SERVICE_UNAVAILABLE, UNPROCESSABLE_ENTITY}
 import play.api.libs.json.{JsValue, Json}
 import play.api.libs.ws.{WSRequest, WSResponse}
 import play.api.test.Helpers.AUTHORIZATION
@@ -448,33 +447,33 @@ class CreateUkPropertyPeriodSummaryControllerISpec extends V2IntegrationBaseSpec
 
       "any valid unconsolidated request is made" in new NonTysTest {
         override def setupStubs(): Unit = {
-          DownstreamStub.onSuccess(DownstreamStub.POST, downstreamUri, downstreamQueryParams, Status.OK, ifsResponse)
+          DownstreamStub.onSuccess(DownstreamStub.POST, downstreamUri, downstreamQueryParams, OK, ifsResponse)
         }
 
         val response: WSResponse = await(request().post(requestBodyJson))
-        response.status shouldBe Status.CREATED
+        response.status shouldBe CREATED
         response.json shouldBe responseBody
         response.header("Content-Type") shouldBe Some("application/json")
       }
 
       "any valid consolidated request is made" in new NonTysTest {
         override def setupStubs(): Unit = {
-          DownstreamStub.onSuccess(DownstreamStub.POST, downstreamUri, downstreamQueryParams, Status.OK, ifsResponse)
+          DownstreamStub.onSuccess(DownstreamStub.POST, downstreamUri, downstreamQueryParams, OK, ifsResponse)
         }
 
         val response: WSResponse = await(request().post(requestBodyJsonConsolidatedExpense))
-        response.status shouldBe Status.CREATED
+        response.status shouldBe CREATED
         response.json shouldBe responseBody
         response.header("Content-Type") shouldBe Some("application/json")
       }
 
       "any valid request is made for TYS" in new TysIfsTest {
         override def setupStubs(): Unit = {
-          DownstreamStub.onSuccess(DownstreamStub.POST, downstreamUri, downstreamQueryParams, Status.OK, ifsResponse)
+          DownstreamStub.onSuccess(DownstreamStub.POST, downstreamUri, downstreamQueryParams, OK, ifsResponse)
         }
 
         val response: WSResponse = await(request().post(requestBodyJsonConsolidatedExpense))
-        response.status shouldBe Status.CREATED
+        response.status shouldBe CREATED
         response.json shouldBe responseBody
         response.header("Content-Type") shouldBe Some("application/json")
       }
@@ -490,7 +489,7 @@ class CreateUkPropertyPeriodSummaryControllerISpec extends V2IntegrationBaseSpec
            """.stripMargin
 
         val response: WSResponse = await(request().addHttpHeaders(("Content-Type", "application/json")).post(json))
-        response.status shouldBe Status.BAD_REQUEST
+        response.status shouldBe BAD_REQUEST
         response.json shouldBe Json.toJson(BadRequestError)
       }
     }
@@ -515,13 +514,13 @@ class CreateUkPropertyPeriodSummaryControllerISpec extends V2IntegrationBaseSpec
         }
 
         val input = Seq(
-          ("AA1123A", "XAIS12345678910", "2022-23", requestBodyJson, Status.BAD_REQUEST, NinoFormatError),
-          ("AA123456A", "XAIS12345678910", "20223", requestBodyJson, Status.BAD_REQUEST, TaxYearFormatError),
-          ("AA123456A", "XAIS12345678910", "2021-23", requestBodyJson, Status.BAD_REQUEST, RuleTaxYearRangeInvalidError),
-          ("AA123456A", "XAIS12345678910", "2021-22", requestBodyJson, Status.BAD_REQUEST, RuleTaxYearNotSupportedError),
-          ("AA123456A", "XA***IS1", "2022-23", requestBodyJson, Status.BAD_REQUEST, BusinessIdFormatError),
-          ("AA123456A", "XAIS12345678910", "2022-23", invalidToDateRequestJson, Status.BAD_REQUEST, ToDateFormatError),
-          ("AA123456A", "XAIS12345678910", "2022-23", invalidFromDateRequestJson, Status.BAD_REQUEST, FromDateFormatError),
+          ("AA1123A", "XAIS12345678910", "2022-23", requestBodyJson, BAD_REQUEST, NinoFormatError),
+          ("AA123456A", "XAIS12345678910", "20223", requestBodyJson, BAD_REQUEST, TaxYearFormatError),
+          ("AA123456A", "XAIS12345678910", "2021-23", requestBodyJson, BAD_REQUEST, RuleTaxYearRangeInvalidError),
+          ("AA123456A", "XAIS12345678910", "2021-22", requestBodyJson, BAD_REQUEST, RuleTaxYearNotSupportedError),
+          ("AA123456A", "XA***IS1", "2022-23", requestBodyJson, BAD_REQUEST, BusinessIdFormatError),
+          ("AA123456A", "XAIS12345678910", "2022-23", invalidToDateRequestJson, BAD_REQUEST, ToDateFormatError),
+          ("AA123456A", "XAIS12345678910", "2022-23", invalidFromDateRequestJson, BAD_REQUEST, FromDateFormatError),
           (
             "AA123456A",
             "XAIS12345678910",
@@ -529,9 +528,9 @@ class CreateUkPropertyPeriodSummaryControllerISpec extends V2IntegrationBaseSpec
             Json.parse(s"""{ "fromDate": "2020-04-06", "toDate": "2019-04-06", "ukFhlProperty": {} }""".stripMargin),
             BAD_REQUEST,
             RuleIncorrectOrEmptyBodyError.copy(paths = Some(Seq("/ukFhlProperty")))),
-          ("AA123456A", "XAIS12345678910", "2022-23", invalidValueRequestJson, Status.BAD_REQUEST, allInvalidValueRequestError),
-          ("AA123456A", "XAIS12345678910", "2022-23", bothExpensesSuppliedRequestJson, Status.BAD_REQUEST, RuleBothExpensesSuppliedRequestError),
-          ("AA123456A", "XAIS12345678910", "2022-23", toDateBeforeFromDateRequestJson, Status.BAD_REQUEST, RuleToDateBeforeFromDateError)
+          ("AA123456A", "XAIS12345678910", "2022-23", invalidValueRequestJson, BAD_REQUEST, allInvalidValueRequestError),
+          ("AA123456A", "XAIS12345678910", "2022-23", bothExpensesSuppliedRequestJson, BAD_REQUEST, RuleBothExpensesSuppliedRequestError),
+          ("AA123456A", "XAIS12345678910", "2022-23", toDateBeforeFromDateRequestJson, BAD_REQUEST, RuleToDateBeforeFromDateError)
         )
         input.foreach(args => (validationErrorTest _).tupled(args))
       }
@@ -551,31 +550,31 @@ class CreateUkPropertyPeriodSummaryControllerISpec extends V2IntegrationBaseSpec
         }
 
         val errors = Seq(
-          (Status.SERVICE_UNAVAILABLE, "SERVICE_UNAVAILABLE", Status.INTERNAL_SERVER_ERROR, InternalError),
-          (Status.INTERNAL_SERVER_ERROR, "SERVER_ERROR", Status.INTERNAL_SERVER_ERROR, InternalError),
-          (Status.NOT_FOUND, "INCOME_SOURCE_NOT_FOUND", Status.NOT_FOUND, NotFoundError),
-          (Status.BAD_REQUEST, "INVALID_TAXABLE_ENTITY_ID", Status.BAD_REQUEST, NinoFormatError),
-          (Status.BAD_REQUEST, "INVALID_TAX_YEAR", Status.BAD_REQUEST, TaxYearFormatError),
-          (Status.BAD_REQUEST, "INVALID_INCOMESOURCEID", Status.BAD_REQUEST, BusinessIdFormatError),
-          (Status.BAD_REQUEST, "INVALID_PAYLOAD", Status.INTERNAL_SERVER_ERROR, InternalError),
-          (Status.BAD_REQUEST, "INVALID_CORRELATIONID", Status.INTERNAL_SERVER_ERROR, InternalError),
-          (Status.UNPROCESSABLE_ENTITY, "MISSING_EXPENSES", Status.INTERNAL_SERVER_ERROR, InternalError),
-          (Status.CONFLICT, "DUPLICATE_SUBMISSION", Status.BAD_REQUEST, RuleDuplicateSubmissionError),
-          (Status.UNPROCESSABLE_ENTITY, "OVERLAPS_IN_PERIOD", Status.BAD_REQUEST, RuleOverlappingPeriodError),
-          (Status.UNPROCESSABLE_ENTITY, "INCOMPATIBLE_PAYLOAD", Status.BAD_REQUEST, RuleTypeOfBusinessIncorrectError),
-          (Status.UNPROCESSABLE_ENTITY, "TAX_YEAR_NOT_SUPPORTED", Status.BAD_REQUEST, RuleTaxYearNotSupportedError),
-          (Status.UNPROCESSABLE_ENTITY, "NOT_ALIGN_PERIOD", Status.BAD_REQUEST, RuleMisalignedPeriodError),
-          (Status.UNPROCESSABLE_ENTITY, "GAPS_IN_PERIOD", Status.BAD_REQUEST, RuleNotContiguousPeriodError),
-          (Status.UNPROCESSABLE_ENTITY, "INVALID_DATE_RANGE", Status.BAD_REQUEST, RuleToDateBeforeFromDateError)
+          (SERVICE_UNAVAILABLE, "SERVICE_UNAVAILABLE", INTERNAL_SERVER_ERROR, InternalError),
+          (INTERNAL_SERVER_ERROR, "SERVER_ERROR", INTERNAL_SERVER_ERROR, InternalError),
+          (NOT_FOUND, "INCOME_SOURCE_NOT_FOUND", NOT_FOUND, NotFoundError),
+          (BAD_REQUEST, "INVALID_TAXABLE_ENTITY_ID", BAD_REQUEST, NinoFormatError),
+          (BAD_REQUEST, "INVALID_TAX_YEAR", BAD_REQUEST, TaxYearFormatError),
+          (BAD_REQUEST, "INVALID_INCOMESOURCEID", BAD_REQUEST, BusinessIdFormatError),
+          (BAD_REQUEST, "INVALID_PAYLOAD", INTERNAL_SERVER_ERROR, InternalError),
+          (BAD_REQUEST, "INVALID_CORRELATIONID", INTERNAL_SERVER_ERROR, InternalError),
+          (UNPROCESSABLE_ENTITY, "MISSING_EXPENSES", INTERNAL_SERVER_ERROR, InternalError),
+          (CONFLICT, "DUPLICATE_SUBMISSION", BAD_REQUEST, RuleDuplicateSubmissionError),
+          (UNPROCESSABLE_ENTITY, "OVERLAPS_IN_PERIOD", BAD_REQUEST, RuleOverlappingPeriodError),
+          (UNPROCESSABLE_ENTITY, "INCOMPATIBLE_PAYLOAD", BAD_REQUEST, RuleTypeOfBusinessIncorrectError),
+          (UNPROCESSABLE_ENTITY, "TAX_YEAR_NOT_SUPPORTED", BAD_REQUEST, RuleTaxYearNotSupportedError),
+          (UNPROCESSABLE_ENTITY, "NOT_ALIGN_PERIOD", BAD_REQUEST, RuleMisalignedPeriodError),
+          (UNPROCESSABLE_ENTITY, "GAPS_IN_PERIOD", BAD_REQUEST, RuleNotContiguousPeriodError),
+          (UNPROCESSABLE_ENTITY, "INVALID_DATE_RANGE", BAD_REQUEST, RuleToDateBeforeFromDateError)
         )
 
         val extraTysErrors = Seq(
-          (Status.BAD_REQUEST, "INVALID_INCOMESOURCE_ID", Status.BAD_REQUEST, BusinessIdFormatError),
-          (Status.BAD_REQUEST, "INVALID_CORRELATION_ID", Status.INTERNAL_SERVER_ERROR, InternalError),
-          (Status.UNPROCESSABLE_ENTITY, "PERIOD_NOT_ALIGNED", Status.BAD_REQUEST, RuleMisalignedPeriodError),
-          (Status.UNPROCESSABLE_ENTITY, "PERIOD_OVERLAPS", Status.BAD_REQUEST, RuleOverlappingPeriodError)
-//          (Status.UNPROCESSABLE_ENTITY, "INVALID_SUBMISSION_PERIOD", Status.BAD_REQUEST, RuleInvalidSubmissionPeriodError),
-//          (Status.UNPROCESSABLE_ENTITY, "INVALID_SUBMISSION_END_DATE", Status.BAD_REQUEST, RuleInvalidSubmissionEndDateError)
+          (BAD_REQUEST, "INVALID_INCOMESOURCE_ID", BAD_REQUEST, BusinessIdFormatError),
+          (BAD_REQUEST, "INVALID_CORRELATION_ID", INTERNAL_SERVER_ERROR, InternalError),
+          (UNPROCESSABLE_ENTITY, "PERIOD_NOT_ALIGNED", BAD_REQUEST, RuleMisalignedPeriodError),
+          (UNPROCESSABLE_ENTITY, "BUSINESS_INCOME_PERIOD_RESTRICTION", BAD_REQUEST, RuleBusinessIncomePeriodRestriction)
+//          (UNPROCESSABLE_ENTITY, "INVALID_SUBMISSION_PERIOD", BAD_REQUEST, RuleInvalidSubmissionPeriodError),
+//          (UNPROCESSABLE_ENTITY, "INVALID_SUBMISSION_END_DATE", BAD_REQUEST, RuleInvalidSubmissionEndDateError)
 //          To be reinstated, see MTDSA-15575
         )
 

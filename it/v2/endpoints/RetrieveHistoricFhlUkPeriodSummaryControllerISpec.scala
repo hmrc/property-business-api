@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package v3.endpoints
+package v2.endpoints
 
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import play.api.http.HeaderNames.ACCEPT
@@ -24,9 +24,9 @@ import play.api.libs.ws.{WSRequest, WSResponse}
 import play.api.test.Helpers.AUTHORIZATION
 import support.V2IntegrationBaseSpec
 import api.models.errors.{InternalError, MtdError, NinoFormatError, NotFoundError, PeriodIdFormatError}
-import v3.stubs.{AuditStub, AuthStub, DownstreamStub, MtdIdLookupStub}
+import v2.stubs.{AuditStub, AuthStub, DownstreamStub, MtdIdLookupStub}
 
-class RetrieveHistoricFhlUkPiePeriodSummaryControllerISpec extends V2IntegrationBaseSpec {
+class RetrieveHistoricFhlUkPeriodSummaryControllerISpec extends V2IntegrationBaseSpec {
 
   private trait Test {
 
@@ -126,7 +126,7 @@ class RetrieveHistoricFhlUkPiePeriodSummaryControllerISpec extends V2Integration
       setupStubs()
       buildRequest(mtdUri)
         .withHttpHeaders(
-          (ACCEPT, "application/vnd.hmrc.3.0+json"),
+          (ACCEPT, "application/vnd.hmrc.2.0+json"),
           (AUTHORIZATION, "Bearer 123") // some bearer token
         )
     }

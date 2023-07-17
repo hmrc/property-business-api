@@ -26,7 +26,7 @@ import support.V2IntegrationBaseSpec
 import api.models.errors._
 import v3.stubs.{AuditStub, AuthStub, DownstreamStub, MtdIdLookupStub}
 
-class CreateHistoricNonFhlUkPiePeriodSummaryControllerISpec extends V2IntegrationBaseSpec {
+class CreateHistoricNonFhlUkPeriodSummaryControllerISpec extends V2IntegrationBaseSpec {
 
   private val requestBodyJson = Json.parse(
     """{

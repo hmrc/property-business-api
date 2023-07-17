@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package v3.endpoints
+package v2.endpoints
 
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import play.api.http.HeaderNames.ACCEPT
@@ -25,10 +25,10 @@ import play.api.test.Helpers.AUTHORIZATION
 import support.V2IntegrationBaseSpec
 import v1.stubs.AuditStub
 import api.models.errors._
-import v3.models.utils.JsonErrorValidators
-import v3.stubs.{AuthStub, DownstreamStub, MtdIdLookupStub}
+import v2.models.utils.JsonErrorValidators
+import v2.stubs.{AuthStub, DownstreamStub, MtdIdLookupStub}
 
-class CreateHistoricFhlUkPiePeriodSummaryControllerISpec extends V2IntegrationBaseSpec with JsonErrorValidators {
+class CreateHistoricFhlUkPeriodSummaryControllerISpec extends V2IntegrationBaseSpec with JsonErrorValidators {
 
   val validRequestJson: JsValue = Json.parse(
     """
@@ -142,7 +142,7 @@ class CreateHistoricFhlUkPiePeriodSummaryControllerISpec extends V2IntegrationBa
       setupStubs()
       buildRequest(mtdUri)
         .withHttpHeaders(
-          (ACCEPT, "application/vnd.hmrc.3.0+json"),
+          (ACCEPT, "application/vnd.hmrc.2.0+json"),
           (AUTHORIZATION, "Bearer 123")
         )
     }

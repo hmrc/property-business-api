@@ -17,6 +17,7 @@ post:
     | NOT_CONTIGUOUS                     | Simulates the scenario where the period summaries are not contiguous.                                 |
     | DUPLICATE_SUBMISSION               | Simulates the scenario where a summary has already been submitted for the specified period.           |
     | TYPE_OF_BUSINESS_INCORRECT         | Simulates the scenario where the supplied Business ID does not represent a foreign property business. |
+    | BUSINESS_INCOME_PERIOD_RESTRICTION | Simulates the scenario where the customer has ITSA status 'Annual' or a latent business income source and the submission period is between 6 April to 5 April. |
     | STATEFUL                           | Performs a stateful create.                                                                           |
 
 
@@ -109,6 +110,8 @@ post:
               $ref: './common/errors.yaml#/components/examples/ruleNotContiguousPeriod'
             RULE_DUPLICATE_SUBMISSION:
               $ref: './common/errors.yaml#/components/examples/ruleDuplicateSubmission'
+            RULE_BUSINESS_INCOME_PERIOD_RESTRICTION:
+              $ref: './common/errors.yaml#/components/examples/ruleBusinessIncomePeriodRestriction'
             RULE_INCORRECT_GOV_TEST_SCENARIO:
               $ref: './common/errors.yaml#/components/examples/ruleIncorrectGovTestScenario'
 

@@ -131,6 +131,12 @@ components:
         code: RULE_NOT_CONTIGUOUS_PERIOD
         message: Period summaries are not contiguous
 
+    ruleBusinessIncomePeriodRestriction:
+      description: For customers with ITSA status 'Annual' or a latent business income source, submission period has to be 6 April to 5 April.
+      value:
+        code: RULE_BUSINESS_INCOME_PERIOD_RESTRICTION
+        message: For customers with ITSA status 'Annual' or a latent business income source, submission period has to be 6 April to 5 April
+
     ruleDuplicateSubmission:
       description: Period summaries are not contiguous.
       value:

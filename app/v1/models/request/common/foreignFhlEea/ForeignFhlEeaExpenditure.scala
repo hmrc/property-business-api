@@ -17,7 +17,7 @@
 package v1.models.request.common.foreignFhlEea
 
 import play.api.libs.functional.syntax._
-import play.api.libs.json.{ JsPath, Json, Reads, Writes }
+import play.api.libs.json.{JsPath, Json, Reads, Writes}
 
 case class ForeignFhlEeaExpenditure(
     premisesRunningCosts: Option[BigDecimal],
@@ -32,13 +32,14 @@ case class ForeignFhlEeaExpenditure(
 
   def isEmpty: Boolean =
     premisesRunningCosts.isEmpty &&
-    repairsAndMaintenance.isEmpty &&
-    financialCosts.isEmpty &&
-    professionalFees.isEmpty &&
-    costsOfServices.isEmpty &&
-    travelCosts.isEmpty &&
-    other.isEmpty &&
-    consolidatedExpenses.isEmpty
+      repairsAndMaintenance.isEmpty &&
+      financialCosts.isEmpty &&
+      professionalFees.isEmpty &&
+      costsOfServices.isEmpty &&
+      travelCosts.isEmpty &&
+      other.isEmpty &&
+      consolidatedExpenses.isEmpty
+
 }
 
 object ForeignFhlEeaExpenditure {
@@ -54,4 +55,5 @@ object ForeignFhlEeaExpenditure {
       (JsPath \ "other").writeNullable[BigDecimal] and
       (JsPath \ "consolidatedExpense").writeNullable[BigDecimal]
   )(unlift(ForeignFhlEeaExpenditure.unapply))
+
 }

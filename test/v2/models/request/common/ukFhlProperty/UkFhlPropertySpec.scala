@@ -16,9 +16,9 @@
 
 package v2.models.request.common.ukFhlProperty
 
-import play.api.libs.json.{ JsValue, Json }
+import play.api.libs.json.{JsValue, Json}
 import support.UnitSpec
-import v2.models.request.common.ukPropertyRentARoom.{ UkPropertyExpensesRentARoom, UkPropertyIncomeRentARoom }
+import v2.models.request.common.ukPropertyRentARoom.{UkPropertyExpensesRentARoom, UkPropertyIncomeRentARoom}
 
 class UkFhlPropertySpec extends UnitSpec {
 
@@ -107,6 +107,7 @@ class UkFhlPropertySpec extends UnitSpec {
       }
     }
   }
+
   "writes" when {
     "passed valid model" should {
       "return valid JSON" in {
@@ -114,4 +115,5 @@ class UkFhlPropertySpec extends UnitSpec {
       }
     }
   }
+
 }

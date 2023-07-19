@@ -28,6 +28,7 @@ class StructuredBuildingAllowanceSpec extends UnitSpec with StructuredBuildingAl
       }
     }
   }
+
   "writes" when {
     "passed valid model" should {
       "return valid JSON" in {
@@ -35,4 +36,5 @@ class StructuredBuildingAllowanceSpec extends UnitSpec with StructuredBuildingAl
       }
     }
   }
+
 }

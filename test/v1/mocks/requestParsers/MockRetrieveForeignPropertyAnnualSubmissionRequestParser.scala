@@ -35,5 +35,7 @@ trait MockRetrieveForeignPropertyAnnualSubmissionRequestParser extends MockFacto
         .parseRequest(_: RetrieveForeignPropertyAnnualSubmissionRawData)(_: String))
         .expects(data, *)
     }
+
   }
+
 }

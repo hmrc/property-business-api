@@ -144,4 +144,5 @@ class CreateAndAmendForeignPropertyAnnualAuditDetailSpec extends UnitSpec {
       }
     }
   }
+
 }

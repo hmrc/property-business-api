@@ -37,4 +37,5 @@ object UkNonFhlPropertyAdjustments {
       (__ \ "nonResidentLandlord").read[Boolean] and
       (__ \ "ukOtherRentARoom").readNullable[UkNonFhlPropertyRentARoom]
   )(UkNonFhlPropertyAdjustments.apply _)
+
 }

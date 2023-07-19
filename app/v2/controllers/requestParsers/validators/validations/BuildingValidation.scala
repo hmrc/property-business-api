@@ -16,9 +16,9 @@
 
 package v2.controllers.requestParsers.validators.validations
 
+import api.controllers.requestParsers.validators.validations.NoValidationErrors
 import api.models.errors.{MtdError, RuleBuildingNameNumberError}
 import v2.models.request.common.Building
-import api.controllers.requestParsers.validators.validations.NoValidationErrors
 
 object BuildingValidation {
 
@@ -27,4 +27,5 @@ object BuildingValidation {
       case (None, None) => List(RuleBuildingNameNumberError.copy(paths = Some(Seq(path))))
       case (_, _)       => NoValidationErrors
     }
+
 }

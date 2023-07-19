@@ -17,7 +17,7 @@
 package v2.models.request.createUkPropertyPeriodSummary
 
 import play.api.libs.functional.syntax._
-import play.api.libs.json.{ JsPath, Json, OWrites, Reads }
+import play.api.libs.json.{JsPath, Json, OWrites, Reads}
 import shapeless.HNil
 import utils.EmptinessChecker
 import v2.models.request.common.ukFhlProperty.UkFhlProperty
@@ -29,6 +29,7 @@ case class CreateUkPropertyPeriodSummaryRequestBody(fromDate: String,
                                                     ukNonFhlProperty: Option[UkNonFhlProperty])
 
 object CreateUkPropertyPeriodSummaryRequestBody {
+
   implicit val emptinessChecker: EmptinessChecker[CreateUkPropertyPeriodSummaryRequestBody] = EmptinessChecker.use { body =>
     "ukFhlProperty"      -> body.ukFhlProperty ::
       "ukNonFhlProperty" -> body.ukNonFhlProperty :: HNil

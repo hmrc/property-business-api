@@ -18,14 +18,14 @@ package v2.controllers.requestParsers.validators
 
 import api.controllers.requestParsers.validators.Validator
 import api.controllers.requestParsers.validators.validations.{BusinessIdValidation, NinoValidation, TaxYearValidation}
-import config.AppConfig
 import api.models.errors.MtdError
+import config.AppConfig
 import v2.models.request.retrieveForeignPropertyAnnualSubmission.RetrieveForeignPropertyAnnualSubmissionRawData
 
 import javax.inject.{Inject, Singleton}
 
 @Singleton
-class RetrieveForeignPropertyAnnualSubmissionValidator @Inject()(appConfig: AppConfig)
+class RetrieveForeignPropertyAnnualSubmissionValidator @Inject() (appConfig: AppConfig)
     extends Validator[RetrieveForeignPropertyAnnualSubmissionRawData] {
 
   private lazy val minTaxYear = appConfig.minimumTaxV2Foreign
@@ -43,4 +43,5 @@ class RetrieveForeignPropertyAnnualSubmissionValidator @Inject()(appConfig: AppC
   override def validate(data: RetrieveForeignPropertyAnnualSubmissionRawData): List[MtdError] = {
     run(validationSet, data).distinct
   }
+
 }

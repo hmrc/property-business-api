@@ -16,8 +16,8 @@
 
 package v2.models.request.createHistoricNonFhlUkPropertyPeriodSummary
 
-import play.api.libs.functional.syntax.{ toFunctionalBuilderOps, unlift }
-import play.api.libs.json.{ JsPath, Json, OWrites, Reads }
+import play.api.libs.functional.syntax.{toFunctionalBuilderOps, unlift}
+import play.api.libs.json.{JsPath, Json, OWrites, Reads}
 import shapeless.HNil
 import utils.EmptinessChecker
 
@@ -42,4 +42,5 @@ object CreateHistoricNonFhlUkPropertyPeriodSummaryRequestBody {
       (JsPath \ "financials" \ "incomes").writeNullable[UkNonFhlPropertyIncome] and
       (JsPath \ "financials" \ "deductions").writeNullable[UkNonFhlPropertyExpenses]
   )(unlift(CreateHistoricNonFhlUkPropertyPeriodSummaryRequestBody.unapply))
+
 }

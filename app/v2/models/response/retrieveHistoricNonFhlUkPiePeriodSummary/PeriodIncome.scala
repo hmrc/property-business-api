@@ -17,7 +17,7 @@
 package v2.models.response.retrieveHistoricNonFhlUkPiePeriodSummary
 
 import play.api.libs.functional.syntax._
-import play.api.libs.json.{ JsPath, Json, OWrites, Reads }
+import play.api.libs.json.{JsPath, Json, OWrites, Reads}
 
 case class PeriodIncome(periodAmount: Option[BigDecimal],
                         premiumsOfLeaseGrant: Option[BigDecimal],

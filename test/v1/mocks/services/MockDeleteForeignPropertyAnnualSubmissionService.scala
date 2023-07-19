@@ -47,5 +47,7 @@ trait MockDeleteForeignPropertyAnnualSubmissionService extends MockFactory {
         )
         .expects(requestData, *, *, *, *)
     }
+
   }
+
 }

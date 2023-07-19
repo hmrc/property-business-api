@@ -16,7 +16,7 @@
 
 package v2.models.request.createHistoricNonFhlUkPropertyPeriodSummary
 
-import play.api.libs.json.{ JsValue, Json }
+import play.api.libs.json.{JsValue, Json}
 import support.UnitSpec
 import v2.models.request.common.ukPropertyRentARoom.UkPropertyExpensesRentARoom
 
@@ -81,6 +81,7 @@ class UkNonFhlPropertyExpensesSpec extends UnitSpec {
       }
     }
   }
+
   "writes" when {
     "passed a valid object" should {
       "return valid JSON" in {
@@ -88,4 +89,5 @@ class UkNonFhlPropertyExpensesSpec extends UnitSpec {
       }
     }
   }
+
 }

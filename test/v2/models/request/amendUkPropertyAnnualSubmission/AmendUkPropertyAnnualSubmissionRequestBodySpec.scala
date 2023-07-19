@@ -16,12 +16,12 @@
 
 package v2.models.request.amendUkPropertyAnnualSubmission
 
-import play.api.libs.json.{ JsValue, Json }
+import play.api.libs.json.{JsValue, Json}
 import support.UnitSpec
 import v2.models.request.amendUkPropertyAnnualSubmission.ukFhlProperty._
 import v2.models.request.amendUkPropertyAnnualSubmission.ukNonFhlProperty._
-import v2.models.request.common.{ Building, FirstYear, StructuredBuildingAllowance }
 import v2.models.request.common.ukPropertyRentARoom.UkPropertyAdjustmentsRentARoom
+import v2.models.request.common.{Building, FirstYear, StructuredBuildingAllowance}
 
 class AmendUkPropertyAnnualSubmissionRequestBodySpec extends UnitSpec {
 
@@ -246,6 +246,7 @@ class AmendUkPropertyAnnualSubmissionRequestBodySpec extends UnitSpec {
       }
     }
   }
+
   "writes" when {
     "passed valid model" should {
       "return valid JSON" in {
@@ -253,4 +254,5 @@ class AmendUkPropertyAnnualSubmissionRequestBodySpec extends UnitSpec {
       }
     }
   }
+
 }

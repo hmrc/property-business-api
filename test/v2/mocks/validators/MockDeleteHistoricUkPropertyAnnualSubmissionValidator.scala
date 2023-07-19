@@ -16,10 +16,10 @@
 
 package v2.mocks.validators
 
+import api.models.errors.MtdError
 import org.scalamock.handlers.CallHandler1
 import org.scalamock.scalatest.MockFactory
 import v2.controllers.requestParsers.validators.DeleteHistoricUkPropertyAnnualSubmissionValidator
-import api.models.errors.MtdError
 import v2.models.request.deleteHistoricUkPropertyAnnualSubmission.DeleteHistoricUkPropertyAnnualSubmissionRawData
 
 class MockDeleteHistoricUkPropertyAnnualSubmissionValidator extends MockFactory {
@@ -34,6 +34,7 @@ class MockDeleteHistoricUkPropertyAnnualSubmissionValidator extends MockFactory 
         .validate(_: DeleteHistoricUkPropertyAnnualSubmissionRawData))
         .expects(data)
     }
+
   }
 
 }

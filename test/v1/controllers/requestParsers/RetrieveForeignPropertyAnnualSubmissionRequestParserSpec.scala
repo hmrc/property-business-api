@@ -19,7 +19,7 @@ package v1.controllers.requestParsers
 import support.UnitSpec
 import v1.mocks.validators.MockRetrieveForeignPropertyAnnualSubmissionValidator
 import v1.models.domain.Nino
-import v1.models.errors.{ BadRequestError, BusinessIdFormatError, ErrorWrapper, NinoFormatError }
+import v1.models.errors.{BadRequestError, BusinessIdFormatError, ErrorWrapper, NinoFormatError}
 import v1.models.request.retrieveForeignPropertyAnnualSubmission._
 
 class RetrieveForeignPropertyAnnualSubmissionRequestParserSpec extends UnitSpec {
@@ -63,4 +63,5 @@ class RetrieveForeignPropertyAnnualSubmissionRequestParserSpec extends UnitSpec 
       }
     }
   }
+
 }

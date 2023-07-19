@@ -16,8 +16,8 @@
 
 package v3.models.request.common.ukNonFhlProperty
 
-import play.api.libs.json.{JsPath, Json, Reads, Writes}
 import play.api.libs.functional.syntax._
+import play.api.libs.json.{JsPath, Json, Reads, Writes}
 import v3.models.request.common.ukPropertyRentARoom.UkPropertyExpensesRentARoom
 
 case class UkNonFhlPropertyExpenses(premisesRunningCosts: Option[BigDecimal],

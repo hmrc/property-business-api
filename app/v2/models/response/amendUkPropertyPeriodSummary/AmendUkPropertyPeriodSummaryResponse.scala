@@ -16,16 +16,17 @@
 
 package v2.models.response.amendUkPropertyPeriodSummary
 
-import config.AppConfig
 import api.hateoas.HateoasLinksFactory
-import v2.hateoas.HateoasLinks
 import api.models.hateoas.{HateoasData, Link}
+import config.AppConfig
+import v2.hateoas.HateoasLinks
 
 case class AmendUkPropertyPeriodSummaryResponse(submissionId: String)
 
 object AmendUkPropertyPeriodSummaryResponse extends HateoasLinks {
 
   implicit object AmendUkPropertyLinksFactory extends HateoasLinksFactory[Unit, AmendUkPropertyPeriodSummaryHateoasData] {
+
     override def links(appConfig: AppConfig, data: AmendUkPropertyPeriodSummaryHateoasData): Seq[Link] = {
       import data._
       Seq(
@@ -34,7 +35,9 @@ object AmendUkPropertyPeriodSummaryResponse extends HateoasLinks {
         amendUkPropertyPeriodSummary(appConfig, nino, businessId, taxYear, submissionId)
       )
     }
+
   }
+
 }
 
 case class AmendUkPropertyPeriodSummaryHateoasData(nino: String, businessId: String, taxYear: String, submissionId: String) extends HateoasData

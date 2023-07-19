@@ -17,7 +17,7 @@
 package api.services
 
 import api.mocks.connectors.MockMtdIdLookupConnector
-import api.models.errors.{InternalError, NinoFormatError, ClientNotAuthenticatedError}
+import api.models.errors.{ClientNotAuthenticatedError, InternalError, NinoFormatError}
 
 import scala.concurrent.Future
 
@@ -77,4 +77,5 @@ class MtdIdLookupServiceSpec extends ServiceSpec {
     }
 
   }
+
 }

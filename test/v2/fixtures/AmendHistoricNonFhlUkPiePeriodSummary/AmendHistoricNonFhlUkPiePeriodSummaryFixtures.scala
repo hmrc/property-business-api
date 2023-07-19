@@ -17,11 +17,7 @@
 package v2.fixtures.AmendHistoricNonFhlUkPiePeriodSummary
 
 import play.api.libs.json.{JsValue, Json}
-import v2.models.request.amendHistoricNonFhlUkPiePeriodSummary.{
-  AmendHistoricNonFhlUkPiePeriodSummaryRequestBody,
-  UkNonFhlPieExpenses,
-  UkNonFhlPieIncome
-}
+import v2.models.request.amendHistoricNonFhlUkPiePeriodSummary.{AmendHistoricNonFhlUkPiePeriodSummaryRequestBody, UkNonFhlPieExpenses, UkNonFhlPieIncome}
 import v2.models.request.common.ukPropertyRentARoom.{UkPropertyExpensesRentARoom, UkPropertyIncomeRentARoom}
 
 trait AmendHistoricNonFhlUkPiePeriodSummaryFixtures {

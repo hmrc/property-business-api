@@ -39,4 +39,5 @@ class MtdErrorSpec extends UnitSpec {
       MtdErrorWithCustomMessage.unapply(MtdError("CODE", "message")) shouldBe Some("CODE")
     }
   }
+
 }

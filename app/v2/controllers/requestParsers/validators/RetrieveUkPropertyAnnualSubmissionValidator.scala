@@ -18,15 +18,15 @@ package v2.controllers.requestParsers.validators
 
 import api.controllers.requestParsers.validators.Validator
 import api.controllers.requestParsers.validators.validations.{BusinessIdValidation, NinoValidation, TaxYearValidation}
+import api.models.errors.MtdError
 import com.google.inject.Inject
 import config.AppConfig
-import api.models.errors.MtdError
 import v2.models.request.retrieveUkPropertyAnnualSubmission.RetrieveUkPropertyAnnualSubmissionRawData
 
 import javax.inject.Singleton
 
 @Singleton
-class RetrieveUkPropertyAnnualSubmissionValidator @Inject()(appConfig: AppConfig) extends Validator[RetrieveUkPropertyAnnualSubmissionRawData] {
+class RetrieveUkPropertyAnnualSubmissionValidator @Inject() (appConfig: AppConfig) extends Validator[RetrieveUkPropertyAnnualSubmissionRawData] {
 
   private lazy val minTaxYear = appConfig.minimumTaxV2Uk
   private val validationSet   = List(parameterFormatValidation)
@@ -43,4 +43,5 @@ class RetrieveUkPropertyAnnualSubmissionValidator @Inject()(appConfig: AppConfig
   override def validate(data: RetrieveUkPropertyAnnualSubmissionRawData): List[MtdError] = {
     run(validationSet, data).distinct
   }
+
 }

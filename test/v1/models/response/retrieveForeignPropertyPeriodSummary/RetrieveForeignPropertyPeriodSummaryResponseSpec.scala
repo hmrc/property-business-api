@@ -17,9 +17,9 @@
 package v1.models.response.retrieveForeignPropertyPeriodSummary
 
 import mocks.MockAppConfig
-import play.api.libs.json.{ JsValue, Json }
+import play.api.libs.json.{JsValue, Json}
 import support.UnitSpec
-import v1.models.hateoas.{ Link, Method }
+import v1.models.hateoas.{Link, Method}
 import v1.models.response.retrieveForeignPropertyPeriodSummary.foreignFhlEea._
 import v1.models.response.retrieveForeignPropertyPeriodSummary.foreignProperty._
 import v1.models.utils.JsonErrorValidators
@@ -180,6 +180,7 @@ class RetrieveForeignPropertyPeriodSummaryResponseSpec extends UnitSpec with Jso
       }
     }
   }
+
   "writes" when {
     "passed valid model" should {
       "return valid JSON" in {
@@ -197,13 +198,15 @@ class RetrieveForeignPropertyPeriodSummaryResponseSpec extends UnitSpec with Jso
         MockAppConfig.apiGatewayContext.returns("my/context").anyNumberOfTimes()
 
         RetrieveForeignPropertyPeriodSummaryResponse.RetrieveForeignPropertyLinksFactory.links(mockAppConfig, data) shouldBe Seq(
-          Link(href = s"/my/context/${data.nino}/${data.businessId}/period/${data.submissionId}",
-               method = Method.PUT,
-               rel = "amend-property-period-summary"),
+          Link(
+            href = s"/my/context/${data.nino}/${data.businessId}/period/${data.submissionId}",
+            method = Method.PUT,
+            rel = "amend-property-period-summary"),
           Link(href = s"/my/context/${data.nino}/${data.businessId}/period/${data.submissionId}", method = Method.GET, rel = "self"),
           Link(href = s"/my/context/${data.nino}/${data.businessId}/period", method = Method.GET, rel = "list-property-period-summaries")
         )
       }
     }
   }
+
 }

@@ -17,13 +17,10 @@
 package v2.connectors
 
 import api.connectors.{ConnectorSpec, DownstreamOutcome}
-import org.scalamock.handlers.CallHandler
 import api.models.domain.{Nino, PeriodId}
 import api.models.outcomes.ResponseWrapper
-import v2.models.request.amendHistoricNonFhlUkPiePeriodSummary.{
-  AmendHistoricNonFhlUkPiePeriodSummaryRequest,
-  AmendHistoricNonFhlUkPiePeriodSummaryRequestBody
-}
+import org.scalamock.handlers.CallHandler
+import v2.models.request.amendHistoricNonFhlUkPiePeriodSummary.{AmendHistoricNonFhlUkPiePeriodSummaryRequest, AmendHistoricNonFhlUkPiePeriodSummaryRequestBody}
 import v2.models.response.amendHistoricNonFhlUkPiePeriodSummary.AmendHistoricNonFhlUkPiePeriodSummaryResponse
 
 import scala.concurrent.Future

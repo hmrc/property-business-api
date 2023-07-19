@@ -16,8 +16,8 @@
 
 package v2.models.request.amendUkPropertyAnnualSubmission.ukNonFhlProperty
 
-import play.api.libs.json.{ JsPath, Json, Reads, Writes }
 import play.api.libs.functional.syntax._
+import play.api.libs.json.{JsPath, Json, Reads, Writes}
 
 case class UkNonFhlProperty(adjustments: Option[UkNonFhlPropertyAdjustments], allowances: Option[UkNonFhlPropertyAllowances])
 
@@ -28,4 +28,5 @@ object UkNonFhlProperty {
     (JsPath \ "ukOtherPropertyAnnualAdjustments").writeNullable[UkNonFhlPropertyAdjustments] and
       (JsPath \ "ukOtherPropertyAnnualAllowances").writeNullable[UkNonFhlPropertyAllowances]
   )(unlift(UkNonFhlProperty.unapply))
+
 }

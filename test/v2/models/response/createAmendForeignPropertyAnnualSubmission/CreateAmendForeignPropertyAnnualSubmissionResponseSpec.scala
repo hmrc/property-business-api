@@ -16,10 +16,10 @@
 
 package v2.models.response.createAmendForeignPropertyAnnualSubmission
 
+import api.models.hateoas.Link
+import api.models.hateoas.Method.{DELETE, GET, PUT}
 import mocks.MockAppConfig
 import support.UnitSpec
-import api.models.hateoas.Method.{ DELETE, GET, PUT }
-import api.models.hateoas.Link
 
 class CreateAmendForeignPropertyAnnualSubmissionResponseSpec extends UnitSpec with MockAppConfig {
 
@@ -33,12 +33,14 @@ class CreateAmendForeignPropertyAnnualSubmissionResponseSpec extends UnitSpec wi
 
       CreateAmendForeignPropertyAnnualSubmissionResponse.LinksFactory.links(mockAppConfig, data) shouldBe
         Seq(
-          Link(s"/my/context/foreign/${data.nino}/${data.businessId}/annual/${data.taxYear}",
-               PUT,
-               "create-and-amend-foreign-property-annual-submission"),
+          Link(
+            s"/my/context/foreign/${data.nino}/${data.businessId}/annual/${data.taxYear}",
+            PUT,
+            "create-and-amend-foreign-property-annual-submission"),
           Link(s"/my/context/foreign/${data.nino}/${data.businessId}/annual/${data.taxYear}", GET, "self"),
           Link(s"/my/context/${data.nino}/${data.businessId}/annual/${data.taxYear}", DELETE, "delete-property-annual-submission")
         )
     }
   }
+
 }

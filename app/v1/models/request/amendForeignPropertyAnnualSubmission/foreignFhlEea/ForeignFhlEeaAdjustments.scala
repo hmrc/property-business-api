@@ -16,7 +16,7 @@
 
 package v1.models.request.amendForeignPropertyAnnualSubmission.foreignFhlEea
 
-import play.api.libs.json.{ Json, OFormat }
+import play.api.libs.json.{Json, OFormat}
 
 case class ForeignFhlEeaAdjustments(privateUseAdjustment: Option[BigDecimal],
                                     balancingCharge: Option[BigDecimal],
@@ -24,8 +24,9 @@ case class ForeignFhlEeaAdjustments(privateUseAdjustment: Option[BigDecimal],
 
   def isEmpty: Boolean =
     privateUseAdjustment.isEmpty &&
-    balancingCharge.isEmpty &&
-    periodOfGraceAdjustment.isEmpty
+      balancingCharge.isEmpty &&
+      periodOfGraceAdjustment.isEmpty
+
 }
 
 object ForeignFhlEeaAdjustments {

@@ -50,6 +50,7 @@ class ForeignFhlEeaAdjustmentsSpec extends UnitSpec with JsonErrorValidators {
       }
     }
   }
+
   "writes" when {
     "passed valid model" should {
       "return valid JSON" in {
@@ -57,6 +58,7 @@ class ForeignFhlEeaAdjustmentsSpec extends UnitSpec with JsonErrorValidators {
       }
     }
   }
+
   "isEmpty" when {
     "passed a valid model" should {
       "return false" in {

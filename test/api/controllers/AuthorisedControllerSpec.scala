@@ -17,8 +17,7 @@
 package api.controllers
 
 import api.mocks.services.{MockEnrolmentsAuthService, MockMtdIdLookupService}
-import api.models.errors._
-import api.models.errors.{InvalidBearerTokenError, ClientNotAuthenticatedError, InternalError}
+import api.models.errors.{ClientNotAuthenticatedError, InternalError, InvalidBearerTokenError, _}
 import api.services.{EnrolmentsAuthService, MtdIdLookupService}
 import play.api.libs.json.Json
 import play.api.mvc.{Action, AnyContent}

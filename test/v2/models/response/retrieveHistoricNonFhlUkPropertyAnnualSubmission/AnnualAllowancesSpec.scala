@@ -16,7 +16,7 @@
 
 package v2.models.response.retrieveHistoricNonFhlUkPropertyAnnualSubmission
 
-import play.api.libs.json.{ JsValue, Json }
+import play.api.libs.json.{JsValue, Json}
 import support.UnitSpec
 import v2.models.response.retrieveHistoricNonFhlUkPropertyAnnualSubmissionResponse.AnnualAllowances
 
@@ -34,7 +34,8 @@ class AnnualAllowancesSpec extends UnitSpec {
                                              |      "propertyIncomeAllowance": 30.02
                                              |   }
                                              |""".stripMargin)
-  val mtdJson: JsValue        = Json.parse("""
+
+  val mtdJson: JsValue = Json.parse("""
                                       |   {
                                       |     "annualInvestmentAllowance": 200.00,
                                       |      "otherCapitalAllowance": 300.00,
@@ -68,4 +69,5 @@ class AnnualAllowancesSpec extends UnitSpec {
       Json.toJson(model) shouldBe mtdJson
     }
   }
+
 }

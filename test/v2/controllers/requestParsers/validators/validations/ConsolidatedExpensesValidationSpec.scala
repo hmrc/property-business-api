@@ -16,13 +16,13 @@
 
 package v2.controllers.requestParsers.validators.validations
 
-import support.UnitSpec
 import api.models.errors.RuleBothExpensesSuppliedError
+import support.UnitSpec
 import v2.models.request.common.foreignFhlEea.AmendForeignFhlEeaExpenses
 import v2.models.request.common.foreignPropertyEntry.AmendForeignNonFhlPropertyExpenses
 import v2.models.request.common.ukFhlPieProperty.UkFhlPieExpenses
 import v2.models.request.common.ukFhlProperty.UkFhlPropertyExpenses
-import v2.models.request.common.ukNonFhlProperty.{ UkNonFhlPropertyExpenses => CommonUkNonFhlPropertyExpenses }
+import v2.models.request.common.ukNonFhlProperty.{UkNonFhlPropertyExpenses => CommonUkNonFhlPropertyExpenses}
 import v2.models.request.common.ukPropertyRentARoom.UkPropertyExpensesRentARoom
 import v2.models.request.createHistoricNonFhlUkPropertyPeriodSummary.UkNonFhlPropertyExpenses
 
@@ -41,9 +41,9 @@ class ConsolidatedExpensesValidationSpec extends UnitSpec {
           ConsolidatedExpensesValidation.validate(model, path) shouldBe Nil
         }
         "a valid consolidatedExpenses model is supplied with all consolidatedExpenses fields" in {
-          ConsolidatedExpensesValidation.validate(model.copy(residentialFinancialCost = Some(123.45),
-                                                             broughtFwdResidentialFinancialCost = Some(123.45)),
-                                                  path) shouldBe Nil
+          ConsolidatedExpensesValidation.validate(
+            model.copy(residentialFinancialCost = Some(123.45), broughtFwdResidentialFinancialCost = Some(123.45)),
+            path) shouldBe Nil
         }
       }
 
@@ -271,4 +271,5 @@ class ConsolidatedExpensesValidationSpec extends UnitSpec {
       }
     }
   }
+
 }

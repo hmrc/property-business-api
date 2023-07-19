@@ -18,13 +18,8 @@ package v1.models.request.createForeignPropertyPeriodSummary
 
 import play.api.libs.json.Json
 import support.UnitSpec
-import v1.models.request.common.foreignFhlEea.{ ForeignFhlEea, ForeignFhlEeaExpenditure, ForeignFhlEeaIncome }
-import v1.models.request.common.foreignPropertyEntry.{
-  ForeignPropertyEntry,
-  ForeignPropertyExpenditure,
-  ForeignPropertyIncome,
-  ForeignPropertyRentIncome
-}
+import v1.models.request.common.foreignFhlEea.{ForeignFhlEea, ForeignFhlEeaExpenditure, ForeignFhlEeaIncome}
+import v1.models.request.common.foreignPropertyEntry.{ForeignPropertyEntry, ForeignPropertyExpenditure, ForeignPropertyIncome, ForeignPropertyRentIncome}
 import v1.models.utils.JsonErrorValidators
 
 class CreateForeignPropertyPeriodSummaryRequestBodySpec extends UnitSpec with JsonErrorValidators {
@@ -176,6 +171,7 @@ class CreateForeignPropertyPeriodSummaryRequestBodySpec extends UnitSpec with Js
       }
     }
   }
+
   "writes" when {
     "passed valid model" should {
       "return valid JSON" in {
@@ -183,4 +179,5 @@ class CreateForeignPropertyPeriodSummaryRequestBodySpec extends UnitSpec with Js
       }
     }
   }
+
 }

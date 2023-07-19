@@ -17,9 +17,10 @@
 package v1.controllers.requestParsers.validators.validations
 
 import support.UnitSpec
-import v1.models.errors.{ CountryCodeFormatError, RuleCountryCodeError }
+import v1.models.errors.{CountryCodeFormatError, RuleCountryCodeError}
 
 class CountryCodeValidationSpec extends UnitSpec {
+
   "CountryCodeValidation" when {
     "validate" must {
       Seq(
@@ -279,4 +280,5 @@ class CountryCodeValidationSpec extends UnitSpec {
       }
     }
   }
+
 }

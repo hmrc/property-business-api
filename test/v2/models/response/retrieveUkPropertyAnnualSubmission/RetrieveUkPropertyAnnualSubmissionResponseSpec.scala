@@ -17,10 +17,10 @@
 package v2.models.response.retrieveUkPropertyAnnualSubmission
 
 import api.models.domain.Timestamp
+import api.models.hateoas.{Link, Method}
 import mocks.MockAppConfig
 import play.api.libs.json.{JsValue, Json}
 import support.UnitSpec
-import api.models.hateoas.{Link, Method}
 import v2.models.response.retrieveUkPropertyAnnualSubmission.ukFhlProperty._
 import v2.models.response.retrieveUkPropertyAnnualSubmission.ukNonFhlProperty._
 
@@ -115,7 +115,7 @@ class RetrieveUkPropertyAnnualSubmissionResponseSpec extends UnitSpec with MockA
             rentARoom = Some(
               UkFhlPropertyRentARoom(
                 jointlyLet = true
-              )),
+              ))
           )
         ),
         allowances = Some(
@@ -290,15 +290,18 @@ class RetrieveUkPropertyAnnualSubmissionResponseSpec extends UnitSpec with MockA
         MockAppConfig.apiGatewayContext.returns("my/context").anyNumberOfTimes()
 
         RetrieveUkPropertyAnnualSubmissionResponse.RetrieveAnnualSubmissionLinksFactory.links(mockAppConfig, data) shouldBe Seq(
-          Link(href = s"/my/context/uk/${data.nino}/${data.businessId}/annual/${data.taxYear}",
-               method = Method.PUT,
-               rel = "create-and-amend-uk-property-annual-submission"),
+          Link(
+            href = s"/my/context/uk/${data.nino}/${data.businessId}/annual/${data.taxYear}",
+            method = Method.PUT,
+            rel = "create-and-amend-uk-property-annual-submission"),
           Link(href = s"/my/context/uk/${data.nino}/${data.businessId}/annual/${data.taxYear}", method = Method.GET, rel = "self"),
-          Link(href = s"/my/context/${data.nino}/${data.businessId}/annual/${data.taxYear}",
-               method = Method.DELETE,
-               rel = "delete-property-annual-submission")
+          Link(
+            href = s"/my/context/${data.nino}/${data.businessId}/annual/${data.taxYear}",
+            method = Method.DELETE,
+            rel = "delete-property-annual-submission")
         )
       }
     }
   }
+
 }

@@ -16,8 +16,8 @@
 
 package v3.hateoas
 
-import api.models.hateoas.Method._
 import api.models.hateoas.Link
+import api.models.hateoas.Method._
 import config.AppConfig
 
 trait HateoasLinks {

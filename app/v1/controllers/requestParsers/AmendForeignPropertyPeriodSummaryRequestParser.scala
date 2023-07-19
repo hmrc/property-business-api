@@ -16,17 +16,20 @@
 
 package v1.controllers.requestParsers
 
-import javax.inject.Inject
 import v1.controllers.requestParsers.validators.AmendForeignPropertyPeriodSummaryValidator
 import v1.models.domain.Nino
 import v1.models.request.amendForeignPropertyPeriodSummary._
 
-class AmendForeignPropertyPeriodSummaryRequestParser @Inject()(val validator: AmendForeignPropertyPeriodSummaryValidator)
+import javax.inject.Inject
+
+class AmendForeignPropertyPeriodSummaryRequestParser @Inject() (val validator: AmendForeignPropertyPeriodSummaryValidator)
     extends RequestParser[AmendForeignPropertyPeriodSummaryRawData, AmendForeignPropertyPeriodSummaryRequest] {
 
   override protected def requestFor(data: AmendForeignPropertyPeriodSummaryRawData): AmendForeignPropertyPeriodSummaryRequest =
-    AmendForeignPropertyPeriodSummaryRequest(Nino(data.nino),
-                                             data.businessId,
-                                             data.submissionId,
-                                             data.body.as[AmendForeignPropertyPeriodSummaryRequestBody])
+    AmendForeignPropertyPeriodSummaryRequest(
+      Nino(data.nino),
+      data.businessId,
+      data.submissionId,
+      data.body.as[AmendForeignPropertyPeriodSummaryRequestBody])
+
 }

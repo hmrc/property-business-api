@@ -119,4 +119,5 @@ class AmendForeignPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
 
     }
   }
+
 }

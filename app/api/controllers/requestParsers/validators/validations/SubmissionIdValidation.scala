@@ -16,7 +16,7 @@
 
 package api.controllers.requestParsers.validators.validations
 
-import api.models.errors.{ SubmissionIdFormatError, MtdError }
+import api.models.errors.{MtdError, SubmissionIdFormatError}
 
 object SubmissionIdValidation {
 
@@ -24,4 +24,5 @@ object SubmissionIdValidation {
     val idRegex = "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
     if (id.matches(idRegex)) NoValidationErrors else List(SubmissionIdFormatError)
   }
+
 }

@@ -16,10 +16,10 @@
 
 package v2.controllers.requestParsers.validators
 
+import api.models.errors._
 import mocks.MockAppConfig
 import play.api.libs.json._
 import support.UnitSpec
-import api.models.errors._
 import v2.models.request.amendForeignPropertyPeriodSummary.AmendForeignPropertyPeriodSummaryRawData
 import v2.models.utils.JsonErrorValidators
 
@@ -119,20 +119,22 @@ class AmendForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with JsonE
     "return no errors" when {
       "a valid request is supplied" in {
         validator.validate(
-          AmendForeignPropertyPeriodSummaryRawData(nino = validNino,
-                                                   businessId = validBusinessId,
-                                                   taxYear = taxYear,
-                                                   submissionId = validSubmissionId,
-                                                   body = requestBodyJson)) shouldBe Nil
+          AmendForeignPropertyPeriodSummaryRawData(
+            nino = validNino,
+            businessId = validBusinessId,
+            taxYear = taxYear,
+            submissionId = validSubmissionId,
+            body = requestBodyJson)) shouldBe Nil
       }
 
       "a valid consolidated expenses request is supplied" in {
         validator.validate(
-          AmendForeignPropertyPeriodSummaryRawData(nino = validNino,
-                                                   businessId = validBusinessId,
-                                                   taxYear = taxYear,
-                                                   submissionId = validSubmissionId,
-                                                   body = requestBodyJsonConsolidatedExpenses)) shouldBe Nil
+          AmendForeignPropertyPeriodSummaryRawData(
+            nino = validNino,
+            businessId = validBusinessId,
+            taxYear = taxYear,
+            submissionId = validSubmissionId,
+            body = requestBodyJsonConsolidatedExpenses)) shouldBe Nil
       }
 
       "a minimal fhl request is supplied" in {
@@ -182,11 +184,12 @@ class AmendForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with JsonE
     "return NinoFormatError error" when {
       "an invalid nino is supplied" in {
         validator.validate(
-          AmendForeignPropertyPeriodSummaryRawData(nino = "A12344A",
-                                                   businessId = validBusinessId,
-                                                   taxYear = taxYear,
-                                                   submissionId = validSubmissionId,
-                                                   body = requestBodyJson)) shouldBe
+          AmendForeignPropertyPeriodSummaryRawData(
+            nino = "A12344A",
+            businessId = validBusinessId,
+            taxYear = taxYear,
+            submissionId = validSubmissionId,
+            body = requestBodyJson)) shouldBe
           List(NinoFormatError)
       }
     }
@@ -194,11 +197,12 @@ class AmendForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with JsonE
     "return TaxYearFormatError" when {
       "an invalid tax year is supplied" in {
         validator.validate(
-          AmendForeignPropertyPeriodSummaryRawData(nino = validNino,
-                                                   businessId = validBusinessId,
-                                                   taxYear = "2020",
-                                                   submissionId = validSubmissionId,
-                                                   body = requestBodyJson)) shouldBe
+          AmendForeignPropertyPeriodSummaryRawData(
+            nino = validNino,
+            businessId = validBusinessId,
+            taxYear = "2020",
+            submissionId = validSubmissionId,
+            body = requestBodyJson)) shouldBe
           List(TaxYearFormatError)
       }
     }
@@ -206,11 +210,12 @@ class AmendForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with JsonE
     "return RuleTaxYearNotSupportedError" when {
       "a tax year that is too early is supplied" in {
         validator.validate(
-          AmendForeignPropertyPeriodSummaryRawData(nino = validNino,
-                                                   businessId = validBusinessId,
-                                                   taxYear = "2020-21",
-                                                   submissionId = validSubmissionId,
-                                                   body = requestBodyJson)) shouldBe
+          AmendForeignPropertyPeriodSummaryRawData(
+            nino = validNino,
+            businessId = validBusinessId,
+            taxYear = "2020-21",
+            submissionId = validSubmissionId,
+            body = requestBodyJson)) shouldBe
           List(RuleTaxYearNotSupportedError)
       }
     }
@@ -218,11 +223,12 @@ class AmendForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with JsonE
     "return RuleTaxYearRangeInvalidError" when {
       "a tax year range is more than 1 year" in {
         validator.validate(
-          AmendForeignPropertyPeriodSummaryRawData(nino = validNino,
-                                                   businessId = validBusinessId,
-                                                   taxYear = "2019-21",
-                                                   submissionId = validSubmissionId,
-                                                   body = requestBodyJson)) shouldBe
+          AmendForeignPropertyPeriodSummaryRawData(
+            nino = validNino,
+            businessId = validBusinessId,
+            taxYear = "2019-21",
+            submissionId = validSubmissionId,
+            body = requestBodyJson)) shouldBe
           List(RuleTaxYearRangeInvalidError)
       }
     }
@@ -230,11 +236,12 @@ class AmendForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with JsonE
     "return BusinessIdFormatError error" when {
       "an invalid businessId is supplied" in {
         validator.validate(
-          AmendForeignPropertyPeriodSummaryRawData(nino = validNino,
-                                                   businessId = "20178",
-                                                   taxYear = taxYear,
-                                                   submissionId = validSubmissionId,
-                                                   body = requestBodyJson)) shouldBe
+          AmendForeignPropertyPeriodSummaryRawData(
+            nino = validNino,
+            businessId = "20178",
+            taxYear = taxYear,
+            submissionId = validSubmissionId,
+            body = requestBodyJson)) shouldBe
           List(BusinessIdFormatError)
       }
     }
@@ -242,11 +249,12 @@ class AmendForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with JsonE
     "return SubmissionIdFormatError error" when {
       "an invalid submissionId is supplied" in {
         validator.validate(
-          AmendForeignPropertyPeriodSummaryRawData(nino = validNino,
-                                                   businessId = validBusinessId,
-                                                   taxYear = taxYear,
-                                                   submissionId = "12345",
-                                                   body = requestBodyJson)) shouldBe
+          AmendForeignPropertyPeriodSummaryRawData(
+            nino = validNino,
+            businessId = validBusinessId,
+            taxYear = taxYear,
+            submissionId = "12345",
+            body = requestBodyJson)) shouldBe
           List(SubmissionIdFormatError)
       }
     }
@@ -254,11 +262,12 @@ class AmendForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with JsonE
     "return RuleIncorrectOrEmptyBodyError" when {
       "an empty body is submitted" in {
         validator.validate(
-          AmendForeignPropertyPeriodSummaryRawData(nino = validNino,
-                                                   businessId = validBusinessId,
-                                                   taxYear = taxYear,
-                                                   submissionId = validSubmissionId,
-                                                   body = Json.parse("""{}"""))) shouldBe List(RuleIncorrectOrEmptyBodyError)
+          AmendForeignPropertyPeriodSummaryRawData(
+            nino = validNino,
+            businessId = validBusinessId,
+            taxYear = taxYear,
+            submissionId = validSubmissionId,
+            body = Json.parse("""{}"""))) shouldBe List(RuleIncorrectOrEmptyBodyError)
       }
 
       "an object/array is empty or mandatory field is missing" when {
@@ -266,7 +275,7 @@ class AmendForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with JsonE
         Seq(
           "/foreignFhlEea",
           "/foreignFhlEea/income",
-          "/foreignFhlEea/expenses",
+          "/foreignFhlEea/expenses"
         ).foreach(path => testWith(bodyWith(entry).replaceWithEmptyObject(path), path))
 
         Seq(
@@ -275,7 +284,7 @@ class AmendForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with JsonE
           (bodyWith(entry.replaceWithEmptyObject("/expenses")), "/foreignNonFhlProperty/0/expenses"),
           (bodyWith(entry.removeProperty("/countryCode")), "/foreignNonFhlProperty/0/countryCode"),
           (bodyWith(entry.removeProperty("/income/foreignTaxCreditRelief")), "/foreignNonFhlProperty/0/income/foreignTaxCreditRelief"),
-          (bodyWith(entry.removeProperty("/income").removeProperty("/expenses")), "/foreignNonFhlProperty/0"),
+          (bodyWith(entry.removeProperty("/income").removeProperty("/expenses")), "/foreignNonFhlProperty/0")
         ).foreach((testWith _).tupled)
 
         def testWith(body: JsValue, expectedPath: String): Unit =
@@ -320,7 +329,7 @@ class AmendForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with JsonE
             "/foreignFhlEea/expenses/professionalFees",
             "/foreignFhlEea/expenses/costOfServices",
             "/foreignFhlEea/expenses/other",
-            "/foreignFhlEea/expenses/travelCosts",
+            "/foreignFhlEea/expenses/travelCosts"
           ).foreach(path => testWith(requestBodyJson.update(path, badValue), path))
 
           Seq(
@@ -328,8 +337,9 @@ class AmendForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with JsonE
             (bodyWith(entry.update("/income/premiumsOfLeaseGrant", badValue)), "/foreignNonFhlProperty/0/income/premiumsOfLeaseGrant"),
             (bodyWith(entry.update("/income/otherPropertyIncome", badValue)), "/foreignNonFhlProperty/0/income/otherPropertyIncome"),
             (bodyWith(entry.update("/income/foreignTaxPaidOrDeducted", badValue)), "/foreignNonFhlProperty/0/income/foreignTaxPaidOrDeducted"),
-            (bodyWith(entry.update("/income/specialWithholdingTaxOrUkTaxPaid", badValue)),
-             "/foreignNonFhlProperty/0/income/specialWithholdingTaxOrUkTaxPaid"),
+            (
+              bodyWith(entry.update("/income/specialWithholdingTaxOrUkTaxPaid", badValue)),
+              "/foreignNonFhlProperty/0/income/specialWithholdingTaxOrUkTaxPaid"),
             (bodyWith(entry.update("/expenses/premisesRunningCosts", badValue)), "/foreignNonFhlProperty/0/expenses/premisesRunningCosts"),
             (bodyWith(entry.update("/expenses/repairsAndMaintenance", badValue)), "/foreignNonFhlProperty/0/expenses/repairsAndMaintenance"),
             (bodyWith(entry.update("/expenses/financialCosts", badValue)), "/foreignNonFhlProperty/0/expenses/financialCosts"),
@@ -337,24 +347,28 @@ class AmendForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with JsonE
             (bodyWith(entry.update("/expenses/travelCosts", badValue)), "/foreignNonFhlProperty/0/expenses/travelCosts"),
             (bodyWith(entry.update("/expenses/costOfServices", badValue)), "/foreignNonFhlProperty/0/expenses/costOfServices"),
             (bodyWith(entry.update("/expenses/residentialFinancialCost", badValue)), "/foreignNonFhlProperty/0/expenses/residentialFinancialCost"),
-            (bodyWith(entry.update("/expenses/broughtFwdResidentialFinancialCost", badValue)),
-             "/foreignNonFhlProperty/0/expenses/broughtFwdResidentialFinancialCost"),
-            (bodyWith(entry.update("/expenses/other", badValue)), "/foreignNonFhlProperty/0/expenses/other"),
+            (
+              bodyWith(entry.update("/expenses/broughtFwdResidentialFinancialCost", badValue)),
+              "/foreignNonFhlProperty/0/expenses/broughtFwdResidentialFinancialCost"),
+            (bodyWith(entry.update("/expenses/other", badValue)), "/foreignNonFhlProperty/0/expenses/other")
           ).foreach((testWith _).tupled)
         }
 
         "consolidated expenses is invalid" when {
           Seq(
-            "/foreignFhlEea/expenses/consolidatedExpenses",
+            "/foreignFhlEea/expenses/consolidatedExpenses"
           ).foreach(path => testWith(requestBodyJsonConsolidatedExpenses.update(path, badValue), path))
 
           Seq(
-            (consolidatedBodyWith(entryConsolidated.update("/expenses/consolidatedExpenses", badValue)),
-             "/foreignNonFhlProperty/0/expenses/consolidatedExpenses"),
-            (consolidatedBodyWith(entryConsolidated.update("/expenses/residentialFinancialCost", badValue)),
-             "/foreignNonFhlProperty/0/expenses/residentialFinancialCost"),
-            (consolidatedBodyWith(entryConsolidated.update("/expenses/broughtFwdResidentialFinancialCost", badValue)),
-             "/foreignNonFhlProperty/0/expenses/broughtFwdResidentialFinancialCost"),
+            (
+              consolidatedBodyWith(entryConsolidated.update("/expenses/consolidatedExpenses", badValue)),
+              "/foreignNonFhlProperty/0/expenses/consolidatedExpenses"),
+            (
+              consolidatedBodyWith(entryConsolidated.update("/expenses/residentialFinancialCost", badValue)),
+              "/foreignNonFhlProperty/0/expenses/residentialFinancialCost"),
+            (
+              consolidatedBodyWith(entryConsolidated.update("/expenses/broughtFwdResidentialFinancialCost", badValue)),
+              "/foreignNonFhlProperty/0/expenses/broughtFwdResidentialFinancialCost")
           ).foreach(p => (testWith _).tupled(p))
         }
 
@@ -364,8 +378,9 @@ class AmendForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with JsonE
           val path2 = "/foreignNonFhlProperty/1/income/rentIncome/rentAmount"
 
           val json =
-            bodyWith(entryWith(countryCode = "ZWE").update("/expenses/travelCosts", badValue),
-                     entry.update("/income/rentIncome/rentAmount", badValue))
+            bodyWith(
+              entryWith(countryCode = "ZWE").update("/expenses/travelCosts", badValue),
+              entry.update("/income/rentIncome/rentAmount", badValue))
               .update(path0, badValue)
 
           validator.validate(
@@ -454,7 +469,7 @@ class AmendForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with JsonE
             RuleDuplicateCountryCodeError
               .forDuplicatedCodesAndPaths(code = code1, paths = Seq("/foreignNonFhlProperty/0/countryCode", "/foreignNonFhlProperty/2/countryCode")),
             RuleDuplicateCountryCodeError
-              .forDuplicatedCodesAndPaths(code = code2, paths = Seq("/foreignNonFhlProperty/1/countryCode", "/foreignNonFhlProperty/3/countryCode")),
+              .forDuplicatedCodesAndPaths(code = code2, paths = Seq("/foreignNonFhlProperty/1/countryCode", "/foreignNonFhlProperty/3/countryCode"))
           )
         }
       }
@@ -477,8 +492,9 @@ class AmendForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with JsonE
             businessId = validBusinessId,
             taxYear = taxYear,
             submissionId = validSubmissionId,
-            body = bodyWith(entryWith(countryCode = "ZWE").update("expenses/consolidatedExpenses", JsNumber(123.45)),
-                            entry.update("expenses/consolidatedExpenses", JsNumber(123.45)))
+            body = bodyWith(
+              entryWith(countryCode = "ZWE").update("expenses/consolidatedExpenses", JsNumber(123.45)),
+              entry.update("expenses/consolidatedExpenses", JsNumber(123.45)))
           )) shouldBe
             List(RuleBothExpensesSuppliedError.copy(paths = Some(Seq("/foreignNonFhlProperty/0/expenses", "/foreignNonFhlProperty/1/expenses"))))
         }
@@ -487,14 +503,16 @@ class AmendForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with JsonE
       "return multiple errors" when {
         "request supplied has multiple errors" in {
           validator.validate(
-            AmendForeignPropertyPeriodSummaryRawData(nino = "A12344A",
-                                                     businessId = "20178",
-                                                     taxYear = taxYear,
-                                                     submissionId = validSubmissionId,
-                                                     body = requestBodyJson)) shouldBe
+            AmendForeignPropertyPeriodSummaryRawData(
+              nino = "A12344A",
+              businessId = "20178",
+              taxYear = taxYear,
+              submissionId = validSubmissionId,
+              body = requestBodyJson)) shouldBe
             List(NinoFormatError, BusinessIdFormatError)
         }
       }
     }
   }
+
 }

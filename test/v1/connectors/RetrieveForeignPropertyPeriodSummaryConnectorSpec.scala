@@ -113,4 +113,5 @@ class RetrieveForeignPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
 
     }
   }
+
 }

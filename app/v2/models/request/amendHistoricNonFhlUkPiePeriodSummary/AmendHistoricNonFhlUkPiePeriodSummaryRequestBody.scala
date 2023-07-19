@@ -16,8 +16,8 @@
 
 package v2.models.request.amendHistoricNonFhlUkPiePeriodSummary
 
-import play.api.libs.functional.syntax.{ toFunctionalBuilderOps, unlift }
-import play.api.libs.json.{ JsPath, Json, Reads, Writes }
+import play.api.libs.functional.syntax.{toFunctionalBuilderOps, unlift}
+import play.api.libs.json.{JsPath, Json, Reads, Writes}
 
 case class AmendHistoricNonFhlUkPiePeriodSummaryRequestBody(income: Option[UkNonFhlPieIncome], expenses: Option[UkNonFhlPieExpenses])
 
@@ -28,4 +28,5 @@ object AmendHistoricNonFhlUkPiePeriodSummaryRequestBody {
     (JsPath \ "incomes").writeNullable[UkNonFhlPieIncome] and
       (JsPath \ "deductions").writeNullable[UkNonFhlPieExpenses]
   )(unlift(AmendHistoricNonFhlUkPiePeriodSummaryRequestBody.unapply))
+
 }

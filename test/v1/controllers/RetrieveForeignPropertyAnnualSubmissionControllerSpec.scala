@@ -26,12 +26,12 @@ import v1.mocks.requestParsers.MockRetrieveForeignPropertyAnnualSubmissionReques
 import v1.mocks.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService, MockRetrieveForeignPropertyAnnualSubmissionService}
 import v1.models.domain.Nino
 import v1.models.errors._
-import v1.models.hateoas.{HateoasWrapper, Link}
 import v1.models.hateoas.Method.GET
+import v1.models.hateoas.{HateoasWrapper, Link}
 import v1.models.request.retrieveForeignPropertyAnnualSubmission._
+import v1.models.response.retrieveForeignPropertyAnnualSubmission._
 import v1.models.response.retrieveForeignPropertyAnnualSubmission.foreignFhlEea._
 import v1.models.response.retrieveForeignPropertyAnnualSubmission.foreignProperty._
-import v1.models.response.retrieveForeignPropertyAnnualSubmission._
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -194,4 +194,5 @@ class RetrieveForeignPropertyAnnualSubmissionControllerSpec
       }
     }
   }
+
 }

@@ -92,6 +92,7 @@ class RetrieveForeignPropertyPeriodSummaryServiceSpec extends UnitSpec {
     val service = new RetrieveForeignPropertyPeriodSummaryService(
       connector = mockRetrieveForeignPropertyConnector
     )
+
   }
 
   "service" should {
@@ -132,4 +133,5 @@ class RetrieveForeignPropertyPeriodSummaryServiceSpec extends UnitSpec {
       input.foreach(args => (serviceError _).tupled(args))
     }
   }
+
 }

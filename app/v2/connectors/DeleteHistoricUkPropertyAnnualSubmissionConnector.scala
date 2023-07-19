@@ -20,7 +20,7 @@ import api.connectors.DownstreamUri.IfsUri
 import api.connectors.httpparsers.StandardDownstreamHttpParser.readsEmpty
 import api.connectors.{BaseDownstreamConnector, DownstreamOutcome}
 import api.models.domain.HistoricPropertyType
-import config.AppConfig
+import config.{AppConfig, FeatureSwitches}
 import play.api.libs.json.JsObject
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
 import v2.models.request.deleteHistoricUkPropertyAnnualSubmission.DeleteHistoricUkPropertyAnnualSubmissionRequest
@@ -29,7 +29,7 @@ import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class DeleteHistoricUkPropertyAnnualSubmissionConnector @Inject() (val http: HttpClient, val appConfig: AppConfig) extends BaseDownstreamConnector {
+class DeleteHistoricUkPropertyAnnualSubmissionConnector @Inject() (val http: HttpClient, val appConfig: AppConfig)(implicit featureSwitches: FeatureSwitches) extends BaseDownstreamConnector {
 
   def deleteHistoricUkPropertyAnnualSubmission(request: DeleteHistoricUkPropertyAnnualSubmissionRequest)(implicit
       hc: HeaderCarrier,
@@ -38,6 +38,8 @@ class DeleteHistoricUkPropertyAnnualSubmissionConnector @Inject() (val http: Htt
 
     import request._
 
+    val intent = if(featureSwitches.isPassDeleteIntentEnabled) Some("DELETE") else None
+
     val propertyTypeName = propertyType match {
       case HistoricPropertyType.Fhl    => "furnished-holiday-lettings"
       case HistoricPropertyType.NonFhl => "other"
@@ -45,7 +47,7 @@ class DeleteHistoricUkPropertyAnnualSubmissionConnector @Inject() (val http: Htt
 
     val downstreamUri = IfsUri[Unit](s"income-tax/nino/$nino/uk-properties/$propertyTypeName/annual-summaries/${taxYear.asDownstream}")
 
-    put(JsObject.empty, downstreamUri)
+    put(JsObject.empty, downstreamUri, intent)
   }
 
 }

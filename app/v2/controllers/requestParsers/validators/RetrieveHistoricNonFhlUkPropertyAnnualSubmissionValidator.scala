@@ -18,14 +18,14 @@ package v2.controllers.requestParsers.validators
 
 import api.controllers.requestParsers.validators.Validator
 import api.controllers.requestParsers.validators.validations.{NinoValidation, TaxYearValidation}
-import config.AppConfig
 import api.models.errors.MtdError
+import config.AppConfig
 import v2.models.request.retrieveHistoricNonFhlUkPropertyAnnualSubmission.RetrieveHistoricNonFhlUkPropertyAnnualSubmissionRawData
 
 import javax.inject.{Inject, Singleton}
 
 @Singleton
-class RetrieveHistoricNonFhlUkPropertyAnnualSubmissionValidator @Inject()(appConfig: AppConfig)
+class RetrieveHistoricNonFhlUkPropertyAnnualSubmissionValidator @Inject() (appConfig: AppConfig)
     extends Validator[RetrieveHistoricNonFhlUkPropertyAnnualSubmissionRawData] {
 
   private lazy val minTaxYear = appConfig.minimumTaxHistoric
@@ -36,11 +36,12 @@ class RetrieveHistoricNonFhlUkPropertyAnnualSubmissionValidator @Inject()(appCon
     (data: RetrieveHistoricNonFhlUkPropertyAnnualSubmissionRawData) => {
       List(
         NinoValidation.validate(data.nino),
-        TaxYearValidation.validateHistoric(minTaxYear, maxTaxYear, data.taxYear),
+        TaxYearValidation.validateHistoric(minTaxYear, maxTaxYear, data.taxYear)
       )
     }
 
   override def validate(data: RetrieveHistoricNonFhlUkPropertyAnnualSubmissionRawData): List[MtdError] = {
     run(validationSet, data).distinct
   }
+
 }

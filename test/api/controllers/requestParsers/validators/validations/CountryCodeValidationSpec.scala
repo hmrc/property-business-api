@@ -20,6 +20,7 @@ import api.models.errors.{CountryCodeFormatError, RuleCountryCodeError}
 import support.UnitSpec
 
 class CountryCodeValidationSpec extends UnitSpec {
+
   "CountryCodeValidation" when {
     "validate" must {
       Seq(
@@ -280,4 +281,5 @@ class CountryCodeValidationSpec extends UnitSpec {
       }
     }
   }
+
 }

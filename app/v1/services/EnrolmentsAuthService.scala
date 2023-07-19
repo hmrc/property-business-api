@@ -18,8 +18,6 @@ package v1.services
 
 import api.models.auth.UserDetails
 import config.AppConfig
-
-import javax.inject.{Inject, Singleton}
 import uk.gov.hmrc.auth.core.AffinityGroup.{Agent, Individual, Organisation}
 import uk.gov.hmrc.auth.core._
 import uk.gov.hmrc.auth.core.authorise.Predicate
@@ -31,6 +29,7 @@ import utils.Logging
 import v1.models.errors.{DownstreamError, UnauthorisedError}
 import v1.models.outcomes.AuthOutcome
 
+import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton

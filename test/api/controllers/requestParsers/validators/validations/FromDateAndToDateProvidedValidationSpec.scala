@@ -20,6 +20,7 @@ import api.models.errors.{MissingFromDateError, MissingToDateError}
 import support.UnitSpec
 
 class FromDateAndToDateProvidedValidationSpec extends UnitSpec {
+
   "validation" should {
     "return no errors" when {
       "no dates are provided" in {
@@ -38,4 +39,5 @@ class FromDateAndToDateProvidedValidationSpec extends UnitSpec {
       }
     }
   }
+
 }

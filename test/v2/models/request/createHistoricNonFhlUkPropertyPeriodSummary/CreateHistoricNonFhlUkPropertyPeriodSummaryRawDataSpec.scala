@@ -16,7 +16,7 @@
 
 package v2.models.request.createHistoricNonFhlUkPropertyPeriodSummary
 
-import play.api.libs.json.{ JsValue, Json }
+import play.api.libs.json.{JsValue, Json}
 import support.UnitSpec
 
 class CreateHistoricNonFhlUkPropertyPeriodSummaryRawDataSpec extends UnitSpec {
@@ -40,4 +40,5 @@ class CreateHistoricNonFhlUkPropertyPeriodSummaryRawDataSpec extends UnitSpec {
       result shouldBe expectedJson
     }
   }
+
 }

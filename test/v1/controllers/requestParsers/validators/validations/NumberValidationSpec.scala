@@ -55,4 +55,5 @@ class NumberValidationSpec extends UnitSpec {
       }
     }
   }
+
 }

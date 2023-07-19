@@ -16,10 +16,10 @@
 
 package v2.models.request.createHistoricFhlUkPiePeriodSummary
 
-import play.api.libs.json.{ JsValue, Json }
+import play.api.libs.json.{JsValue, Json}
 import support.UnitSpec
-import v2.models.request.common.ukFhlPieProperty.{ UkFhlPieExpenses, UkFhlPieIncome }
-import v2.models.request.common.ukPropertyRentARoom.{ UkPropertyExpensesRentARoom, UkPropertyIncomeRentARoom }
+import v2.models.request.common.ukFhlPieProperty.{UkFhlPieExpenses, UkFhlPieIncome}
+import v2.models.request.common.ukPropertyRentARoom.{UkPropertyExpensesRentARoom, UkPropertyIncomeRentARoom}
 
 class CreateHistoricFhlUkPiePeriodSummaryRequestBodySpec extends UnitSpec {
 
@@ -29,15 +29,16 @@ class CreateHistoricFhlUkPiePeriodSummaryRequestBodySpec extends UnitSpec {
     Some(UkPropertyIncomeRentARoom(Some(97.50)))
   )
 
-  val expenses: UkFhlPieExpenses = UkFhlPieExpenses(Some(123.12),
-                                                    Some(17.90),
-                                                    Some(38.19),
-                                                    Some(13.42),
-                                                    Some(29.42),
-                                                    Some(751.00),
-                                                    Some(1259.18),
-                                                    Some(12.00),
-                                                    Some(UkPropertyExpensesRentARoom(Some(12.12))))
+  val expenses: UkFhlPieExpenses = UkFhlPieExpenses(
+    Some(123.12),
+    Some(17.90),
+    Some(38.19),
+    Some(13.42),
+    Some(29.42),
+    Some(751.00),
+    Some(1259.18),
+    Some(12.00),
+    Some(UkPropertyExpensesRentARoom(Some(12.12))))
 
   val requestBody: CreateHistoricFhlUkPiePeriodSummaryRequestBody =
     CreateHistoricFhlUkPiePeriodSummaryRequestBody(
@@ -125,4 +126,5 @@ class CreateHistoricFhlUkPiePeriodSummaryRequestBodySpec extends UnitSpec {
       }
     }
   }
+
 }

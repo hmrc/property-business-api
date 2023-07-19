@@ -34,6 +34,7 @@ class MockRetrieveForeignPropertyAnnualSubmissionValidator extends MockFactory {
         .validate(_: RetrieveForeignPropertyAnnualSubmissionRawData))
         .expects(data)
     }
+
   }
 
 }

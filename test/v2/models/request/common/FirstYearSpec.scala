@@ -16,7 +16,7 @@
 
 package v2.models.request.common
 
-import play.api.libs.json.{ JsValue, Json }
+import play.api.libs.json.{JsValue, Json}
 import support.UnitSpec
 
 class FirstYearSpec extends UnitSpec {
@@ -41,6 +41,7 @@ class FirstYearSpec extends UnitSpec {
       }
     }
   }
+
   "writes" when {
     "passed valid model" should {
       "return valid JSON" in {
@@ -48,4 +49,5 @@ class FirstYearSpec extends UnitSpec {
       }
     }
   }
+
 }

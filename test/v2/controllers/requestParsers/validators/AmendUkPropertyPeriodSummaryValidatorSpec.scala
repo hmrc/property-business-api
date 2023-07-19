@@ -16,10 +16,10 @@
 
 package v2.controllers.requestParsers.validators
 
+import api.models.errors._
 import mocks.MockAppConfig
 import play.api.libs.json._
 import support.UnitSpec
-import api.models.errors._
 import v2.models.request.amendUkPropertyPeriodSummary._
 import v2.models.utils.JsonErrorValidators
 
@@ -127,11 +127,13 @@ class AmendUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with JsonErrorV
       }
 
       "a valid consolidated expenses request is supplied" in {
-        validator.validate(AmendUkPropertyPeriodSummaryRawData(validNino,
-                                                               taxYear,
-                                                               validBusinessId,
-                                                               validSubmissionId,
-                                                               requestBodyJsonConsolidatedExpenses)) shouldBe Nil
+        validator.validate(
+          AmendUkPropertyPeriodSummaryRawData(
+            validNino,
+            taxYear,
+            validBusinessId,
+            validSubmissionId,
+            requestBodyJsonConsolidatedExpenses)) shouldBe Nil
       }
 
       "a minimal fhl request is supplied" in {
@@ -217,7 +219,8 @@ class AmendUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with JsonErrorV
 
     "return RuleIncorrectOrEmptyBodyError" when {
       "an empty body is submitted" in {
-        validator.validate(AmendUkPropertyPeriodSummaryRawData(validNino, taxYear, validBusinessId, validSubmissionId, Json.parse("""{}"""))) shouldBe List(
+        validator.validate(
+          AmendUkPropertyPeriodSummaryRawData(validNino, taxYear, validBusinessId, validSubmissionId, Json.parse("""{}"""))) shouldBe List(
           RuleIncorrectOrEmptyBodyError)
       }
 
@@ -233,7 +236,7 @@ class AmendUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with JsonErrorV
           "/ukNonFhlProperty/income",
           "/ukNonFhlProperty/income/rentARoom",
           "/ukNonFhlProperty/expenses",
-          "/ukNonFhlProperty/expenses/rentARoom",
+          "/ukNonFhlProperty/expenses/rentARoom"
         ).foreach(p => testEmpty(p))
 
         def testEmpty(path: String): Unit =
@@ -313,7 +316,7 @@ class AmendUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with JsonErrorV
         "consolidated expenses is invalid" when {
           Seq(
             "/ukFhlProperty/expenses/consolidatedExpenses",
-            "/ukNonFhlProperty/expenses/consolidatedExpenses",
+            "/ukNonFhlProperty/expenses/consolidatedExpenses"
           ).foreach(testValueFormatError)
 
           def testValueFormatError(path: String): Unit = s"for $path" in {
@@ -352,21 +355,23 @@ class AmendUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with JsonErrorV
       "return RuleBothExpensesSuppliedError" when {
         "consolidated and separate expenses provided for fhl" in {
           validator.validate(
-            AmendUkPropertyPeriodSummaryRawData(validNino,
-                                                taxYear,
-                                                validBusinessId,
-                                                validSubmissionId,
-                                                requestBodyJson.update("ukFhlProperty/expenses/consolidatedExpenses", JsNumber(123.45)))) shouldBe
+            AmendUkPropertyPeriodSummaryRawData(
+              validNino,
+              taxYear,
+              validBusinessId,
+              validSubmissionId,
+              requestBodyJson.update("ukFhlProperty/expenses/consolidatedExpenses", JsNumber(123.45)))) shouldBe
             List(RuleBothExpensesSuppliedError.copy(paths = Some(Seq("/ukFhlProperty/expenses"))))
         }
 
         "consolidated and separate expenses provided for non-fhl" in {
           validator.validate(
-            AmendUkPropertyPeriodSummaryRawData(validNino,
-                                                taxYear,
-                                                validBusinessId,
-                                                validSubmissionId,
-                                                requestBodyJson.update("ukNonFhlProperty/expenses/consolidatedExpenses", JsNumber(123.45)))) shouldBe
+            AmendUkPropertyPeriodSummaryRawData(
+              validNino,
+              taxYear,
+              validBusinessId,
+              validSubmissionId,
+              requestBodyJson.update("ukNonFhlProperty/expenses/consolidatedExpenses", JsNumber(123.45)))) shouldBe
             List(RuleBothExpensesSuppliedError.copy(paths = Some(Seq("/ukNonFhlProperty/expenses"))))
         }
       }
@@ -379,4 +384,5 @@ class AmendUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with JsonErrorV
       }
     }
   }
+
 }

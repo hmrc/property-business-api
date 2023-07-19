@@ -82,4 +82,5 @@ class RetrieveForeignPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec
 
     }
   }
+
 }

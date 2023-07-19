@@ -17,7 +17,6 @@
 package v2.connectors
 
 import api.connectors.{ConnectorSpec, DownstreamOutcome}
-import play.api.libs.json.JsObject
 import api.models.domain.{HistoricPropertyType, Nino, TaxYear}
 import api.models.outcomes.ResponseWrapper
 import mocks.MockFeatureSwitches

@@ -17,13 +17,10 @@
 package v2.controllers.requestParsers
 
 import api.models.domain.{HistoricPropertyType, Nino, TaxYear}
-import support.UnitSpec
 import api.models.errors._
+import support.UnitSpec
 import v2.mocks.validators.MockDeleteHistoricUkPropertyAnnualSubmissionValidator
-import v2.models.request.deleteHistoricUkPropertyAnnualSubmission.{
-  DeleteHistoricUkPropertyAnnualSubmissionRawData,
-  DeleteHistoricUkPropertyAnnualSubmissionRequest
-}
+import v2.models.request.deleteHistoricUkPropertyAnnualSubmission.{DeleteHistoricUkPropertyAnnualSubmissionRawData, DeleteHistoricUkPropertyAnnualSubmissionRequest}
 
 class DeleteHistoricUkPropertyAnnualSubmissionRequestParserSpec extends UnitSpec {
 
@@ -67,4 +64,5 @@ class DeleteHistoricUkPropertyAnnualSubmissionRequestParserSpec extends UnitSpec
       }
     }
   }
+
 }

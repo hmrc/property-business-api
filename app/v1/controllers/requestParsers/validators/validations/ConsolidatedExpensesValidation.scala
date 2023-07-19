@@ -16,7 +16,7 @@
 
 package v1.controllers.requestParsers.validators.validations
 
-import v1.models.errors.{ MtdError, RuleBothExpensesSuppliedError }
+import v1.models.errors.{MtdError, RuleBothExpensesSuppliedError}
 import v1.models.request.common.foreignFhlEea._
 import v1.models.request.common.foreignPropertyEntry._
 
@@ -28,7 +28,7 @@ object ConsolidatedExpensesValidation {
       case Some(_) =>
         expenditure match {
           case ForeignPropertyExpenditure(None, None, None, None, None, None, _, _, None, Some(_)) => NoValidationErrors
-          case _                                                                                   => List(RuleBothExpensesSuppliedError.copy(paths = Some(Seq(path))))
+          case _ => List(RuleBothExpensesSuppliedError.copy(paths = Some(Seq(path))))
         }
     }
   }
@@ -39,8 +39,9 @@ object ConsolidatedExpensesValidation {
       case Some(_) =>
         expenditure match {
           case ForeignFhlEeaExpenditure(None, None, None, None, None, None, None, Some(_)) => NoValidationErrors
-          case _                                                                           => List(RuleBothExpensesSuppliedError.copy(paths = Some(Seq(path))))
+          case _ => List(RuleBothExpensesSuppliedError.copy(paths = Some(Seq(path))))
         }
     }
   }
+
 }

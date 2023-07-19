@@ -30,6 +30,7 @@ class ForeignNonFhlAdjustmentsSpec extends UnitSpec with JsonErrorValidators wit
       }
     }
   }
+
   "writes" when {
     "passed a model" should {
       "return downstream JSON" in {
@@ -37,4 +38,5 @@ class ForeignNonFhlAdjustmentsSpec extends UnitSpec with JsonErrorValidators wit
       }
     }
   }
+
 }

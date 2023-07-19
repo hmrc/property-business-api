@@ -16,14 +16,16 @@
 
 package v1.controllers.requestParsers
 
-import javax.inject.Inject
 import v1.controllers.requestParsers.validators.CreateForeignPropertyPeriodSummaryValidator
 import v1.models.domain.Nino
 import v1.models.request.createForeignPropertyPeriodSummary._
 
-class CreateForeignPropertyPeriodSummaryRequestParser @Inject()(val validator: CreateForeignPropertyPeriodSummaryValidator)
+import javax.inject.Inject
+
+class CreateForeignPropertyPeriodSummaryRequestParser @Inject() (val validator: CreateForeignPropertyPeriodSummaryValidator)
     extends RequestParser[CreateForeignPropertyPeriodSummaryRawData, CreateForeignPropertyPeriodSummaryRequest] {
 
   override protected def requestFor(data: CreateForeignPropertyPeriodSummaryRawData): CreateForeignPropertyPeriodSummaryRequest =
     CreateForeignPropertyPeriodSummaryRequest(Nino(data.nino), data.businessId, data.body.as[CreateForeignPropertyPeriodSummaryRequestBody])
+
 }

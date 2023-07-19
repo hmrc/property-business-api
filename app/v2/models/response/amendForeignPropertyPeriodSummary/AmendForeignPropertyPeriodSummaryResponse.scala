@@ -24,6 +24,7 @@ import v2.hateoas.HateoasLinks
 object AmendForeignPropertyPeriodSummaryResponse extends HateoasLinks {
 
   implicit object AmendForeignPropertyLinksFactory extends HateoasLinksFactory[Unit, AmendForeignPropertyPeriodSummaryHateoasData] {
+
     override def links(appConfig: AppConfig, data: AmendForeignPropertyPeriodSummaryHateoasData): Seq[Link] = {
       import data._
       Seq(
@@ -32,7 +33,9 @@ object AmendForeignPropertyPeriodSummaryResponse extends HateoasLinks {
         listPropertyPeriodSummaries(appConfig, nino, businessId, taxYear, self = false)
       )
     }
+
   }
+
 }
 
 case class AmendForeignPropertyPeriodSummaryHateoasData(nino: String, businessId: String, taxYear: String, submissionId: String) extends HateoasData

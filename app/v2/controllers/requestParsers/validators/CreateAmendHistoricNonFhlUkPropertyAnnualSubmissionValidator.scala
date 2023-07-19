@@ -17,16 +17,13 @@
 package v2.controllers.requestParsers.validators
 
 import api.controllers.requestParsers.validators.Validator
-import api.controllers.requestParsers.validators.validations.{NinoValidation, TaxYearValidation}
-import com.google.inject.Inject
-import config.AppConfig
 import api.controllers.requestParsers.validators.validations.JsonFormatValidation.validateAndCheckNonEmptyOrRead
 import api.controllers.requestParsers.validators.validations.NumberValidation.{validateOptional => optionalNumber}
+import api.controllers.requestParsers.validators.validations.{NinoValidation, TaxYearValidation}
 import api.models.errors.MtdError
-import v2.models.request.createAmendHistoricNonFhlUkPropertyAnnualSubmission.{
-  CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRawData,
-  CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestBody
-}
+import com.google.inject.Inject
+import config.AppConfig
+import v2.models.request.createAmendHistoricNonFhlUkPropertyAnnualSubmission.{CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRawData, CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestBody}
 
 import javax.inject.Singleton
 

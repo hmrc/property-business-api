@@ -17,7 +17,7 @@
 package v1.models.request.common.foreignPropertyEntry
 
 import play.api.libs.functional.syntax._
-import play.api.libs.json.{ JsPath, Json, Reads, Writes }
+import play.api.libs.json.{JsPath, Json, Reads, Writes}
 
 case class ForeignPropertyExpenditure(
     premisesRunningCosts: Option[BigDecimal],
@@ -34,15 +34,16 @@ case class ForeignPropertyExpenditure(
 
   def isEmpty: Boolean =
     premisesRunningCosts.isEmpty &&
-    repairsAndMaintenance.isEmpty &&
-    financialCosts.isEmpty &&
-    professionalFees.isEmpty &&
-    costsOfServices.isEmpty &&
-    travelCosts.isEmpty &&
-    residentialFinancialCost.isEmpty &&
-    broughtFwdResidentialFinancialCost.isEmpty &&
-    other.isEmpty &&
-    consolidatedExpenses.isEmpty
+      repairsAndMaintenance.isEmpty &&
+      financialCosts.isEmpty &&
+      professionalFees.isEmpty &&
+      costsOfServices.isEmpty &&
+      travelCosts.isEmpty &&
+      residentialFinancialCost.isEmpty &&
+      broughtFwdResidentialFinancialCost.isEmpty &&
+      other.isEmpty &&
+      consolidatedExpenses.isEmpty
+
 }
 
 object ForeignPropertyExpenditure {
@@ -60,4 +61,5 @@ object ForeignPropertyExpenditure {
       (JsPath \ "other").writeNullable[BigDecimal] and
       (JsPath \ "consolidatedExpense").writeNullable[BigDecimal]
   )(unlift(ForeignPropertyExpenditure.unapply))
+
 }

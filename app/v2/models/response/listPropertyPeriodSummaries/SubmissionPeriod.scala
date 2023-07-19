@@ -22,6 +22,7 @@ import play.api.libs.json._
 case class SubmissionPeriod(submissionId: String, fromDate: String, toDate: String)
 
 object SubmissionPeriod {
+
   implicit val reads: Reads[SubmissionPeriod] = (
     (JsPath \ "submissionId").read[String] and
       (JsPath \ "fromDate").read[String] and

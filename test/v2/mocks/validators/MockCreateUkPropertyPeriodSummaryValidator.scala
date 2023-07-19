@@ -16,10 +16,10 @@
 
 package v2.mocks.validators
 
+import api.models.errors.MtdError
 import org.scalamock.handlers.CallHandler1
 import org.scalamock.scalatest.MockFactory
 import v2.controllers.requestParsers.validators.CreateUkPropertyPeriodSummaryValidator
-import api.models.errors.MtdError
 import v2.models.request.createUkPropertyPeriodSummary.CreateUkPropertyPeriodSummaryRawData
 
 class MockCreateUkPropertyPeriodSummaryValidator extends MockFactory {
@@ -33,5 +33,7 @@ class MockCreateUkPropertyPeriodSummaryValidator extends MockFactory {
         .validate(_: CreateUkPropertyPeriodSummaryRawData))
         .expects(data)
     }
+
   }
+
 }

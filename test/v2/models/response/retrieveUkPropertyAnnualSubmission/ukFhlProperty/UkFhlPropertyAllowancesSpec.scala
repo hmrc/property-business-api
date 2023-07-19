@@ -16,10 +16,11 @@
 
 package v2.models.response.retrieveUkPropertyAnnualSubmission.ukFhlProperty
 
-import play.api.libs.json.{ JsValue, Json }
+import play.api.libs.json.{JsValue, Json}
 import support.UnitSpec
 
 class UkFhlPropertyAllowancesSpec extends UnitSpec {
+
   val downstreamJson: JsValue = Json.parse("""
       |{
       |   "annualInvestmentAllowance":123.45,
@@ -62,4 +63,5 @@ class UkFhlPropertyAllowancesSpec extends UnitSpec {
       Json.toJson(model) shouldBe mtdJson
     }
   }
+
 }

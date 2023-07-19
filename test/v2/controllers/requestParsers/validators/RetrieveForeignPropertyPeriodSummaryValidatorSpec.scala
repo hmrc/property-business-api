@@ -16,9 +16,9 @@
 
 package v2.controllers.requestParsers.validators
 
+import api.models.errors._
 import mocks.MockAppConfig
 import support.UnitSpec
-import api.models.errors._
 import v2.models.request.retrieveForeignPropertyPeriodSummary.RetrieveForeignPropertyPeriodSummaryRawData
 
 class RetrieveForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with MockAppConfig {
@@ -59,7 +59,8 @@ class RetrieveForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with Mo
           RuleTaxYearNotSupportedError)
       }
       "an invalid submissionId is supplied" in {
-        validator.validate(RetrieveForeignPropertyPeriodSummaryRawData(validNino, validBusinessId, validTaxYear, "ABCDEFGHIJKLMNOPQRSTUVWXYZ")) shouldBe List(
+        validator.validate(
+          RetrieveForeignPropertyPeriodSummaryRawData(validNino, validBusinessId, validTaxYear, "ABCDEFGHIJKLMNOPQRSTUVWXYZ")) shouldBe List(
           SubmissionIdFormatError)
       }
       "multiple format errors are made" in {
@@ -70,4 +71,5 @@ class RetrieveForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with Mo
       }
     }
   }
+
 }

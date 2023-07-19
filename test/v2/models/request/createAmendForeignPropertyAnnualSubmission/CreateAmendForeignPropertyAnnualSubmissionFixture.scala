@@ -16,14 +16,10 @@
 
 package v2.models.request.createAmendForeignPropertyAnnualSubmission
 
-import play.api.libs.json.{ JsValue, Json }
-import v2.models.request.createAmendForeignPropertyAnnualSubmission.foreignFhlEea.{ ForeignFhlEea, ForeignFhlEeaAdjustments, ForeignFhlEeaAllowances }
-import v2.models.request.createAmendForeignPropertyAnnualSubmission.foreignNonFhl.{
-  ForeignNonFhlAdjustments,
-  ForeignNonFhlAllowances,
-  ForeignNonFhlEntry
-}
+import play.api.libs.json.{JsValue, Json}
 import v2.models.request.common.StructuredBuildingAllowanceFixture
+import v2.models.request.createAmendForeignPropertyAnnualSubmission.foreignFhlEea.{ForeignFhlEea, ForeignFhlEeaAdjustments, ForeignFhlEeaAllowances}
+import v2.models.request.createAmendForeignPropertyAnnualSubmission.foreignNonFhl.{ForeignNonFhlAdjustments, ForeignNonFhlAllowances, ForeignNonFhlEntry}
 
 trait CreateAmendForeignPropertyAnnualSubmissionFixture extends StructuredBuildingAllowanceFixture {
 
@@ -100,12 +96,13 @@ trait CreateAmendForeignPropertyAnnualSubmissionFixture extends StructuredBuildi
       balancingCharge = Some(2.25)
     )
 
-  val foreignNonFhlAdjustmentsMtdJson: JsValue        = Json.parse("""
+  val foreignNonFhlAdjustmentsMtdJson: JsValue = Json.parse("""
       |{
       |    "privateUseAdjustment":1.25,
       |    "balancingCharge":2.25
       |}
       |""".stripMargin)
+
   val foreignNonFhlAdjustmentsDownstreamJson: JsValue = foreignNonFhlAdjustmentsMtdJson
 
   val foreignNonFhlAllowances: ForeignNonFhlAllowances =
@@ -188,4 +185,5 @@ trait CreateAmendForeignPropertyAnnualSubmissionFixture extends StructuredBuildi
       |   "foreignProperty":[ $foreignNonFhlEntryDownstreamJson ]
       |}
       |""".stripMargin)
+
 }

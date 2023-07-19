@@ -16,11 +16,11 @@
 
 package v2.models.request.createHistoricFhlUkPiePeriodSummary
 
-import play.api.libs.functional.syntax.{ toFunctionalBuilderOps, unlift }
-import play.api.libs.json.{ JsPath, OWrites, Reads, __ }
+import play.api.libs.functional.syntax.{toFunctionalBuilderOps, unlift}
+import play.api.libs.json.{JsPath, OWrites, Reads, __}
 import shapeless.HNil
 import utils.EmptinessChecker
-import v2.models.request.common.ukFhlPieProperty.{ UkFhlPieExpenses, UkFhlPieIncome }
+import v2.models.request.common.ukFhlPieProperty.{UkFhlPieExpenses, UkFhlPieIncome}
 
 case class CreateHistoricFhlUkPiePeriodSummaryRequestBody(fromDate: String,
                                                           toDate: String,
@@ -47,4 +47,5 @@ object CreateHistoricFhlUkPiePeriodSummaryRequestBody {
       (JsPath \ "financials" \ "incomes").writeNullable[UkFhlPieIncome] and
       (JsPath \ "financials" \ "deductions").writeNullable[UkFhlPieExpenses]
   )(unlift(CreateHistoricFhlUkPiePeriodSummaryRequestBody.unapply))
+
 }

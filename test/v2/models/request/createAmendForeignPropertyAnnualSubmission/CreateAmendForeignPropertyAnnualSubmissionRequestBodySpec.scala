@@ -16,7 +16,7 @@
 
 package v2.models.request.createAmendForeignPropertyAnnualSubmission
 
-import play.api.libs.json.{ JsValue, Json }
+import play.api.libs.json.{JsValue, Json}
 import support.UnitSpec
 import v2.models.utils.JsonErrorValidators
 
@@ -79,7 +79,8 @@ class CreateAmendForeignPropertyAnnualSubmissionRequestBodySpec
   "writes" when {
     "passed a model" should {
       "return downstream JSON" in {
-        Json.toJson(createAmendForeignPropertyAnnualSubmissionRequestBody) shouldBe createAmendForeignPropertyAnnualSubmissionRequestBodyDownstreamJson
+        Json.toJson(
+          createAmendForeignPropertyAnnualSubmissionRequestBody) shouldBe createAmendForeignPropertyAnnualSubmissionRequestBodyDownstreamJson
       }
     }
     "passed a model with minimal fields" should {
@@ -93,4 +94,5 @@ class CreateAmendForeignPropertyAnnualSubmissionRequestBodySpec
       }
     }
   }
+
 }

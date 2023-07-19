@@ -16,7 +16,7 @@
 
 package v2.models.response.amendHistoricNonFhlUkPiePeriodSummary
 
-import play.api.libs.json.{ JsValue, Json }
+import play.api.libs.json.{JsValue, Json}
 import support.UnitSpec
 
 class AmendHistoricNonFhlUkPiePeriodSummaryResponseSpec extends UnitSpec {
@@ -37,4 +37,5 @@ class AmendHistoricNonFhlUkPiePeriodSummaryResponseSpec extends UnitSpec {
       }
     }
   }
+
 }

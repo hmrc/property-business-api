@@ -23,13 +23,15 @@ import v2.models.request.amendUkPropertyPeriodSummary._
 
 import javax.inject.Inject
 
-class AmendUkPropertyPeriodSummaryRequestParser @Inject()(val validator: AmendUkPropertyPeriodSummaryValidator)
+class AmendUkPropertyPeriodSummaryRequestParser @Inject() (val validator: AmendUkPropertyPeriodSummaryValidator)
     extends RequestParser[AmendUkPropertyPeriodSummaryRawData, AmendUkPropertyPeriodSummaryRequest] {
 
   override protected def requestFor(data: AmendUkPropertyPeriodSummaryRawData): AmendUkPropertyPeriodSummaryRequest =
-    AmendUkPropertyPeriodSummaryRequest(Nino(data.nino),
-                                        TaxYear.fromMtd(data.taxYear),
-                                        data.businessId,
-                                        data.submissionId,
-                                        data.body.as[AmendUkPropertyPeriodSummaryRequestBody])
+    AmendUkPropertyPeriodSummaryRequest(
+      Nino(data.nino),
+      TaxYear.fromMtd(data.taxYear),
+      data.businessId,
+      data.submissionId,
+      data.body.as[AmendUkPropertyPeriodSummaryRequestBody])
+
 }

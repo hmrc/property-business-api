@@ -16,10 +16,10 @@
 
 package v2.mocks.connectors
 
+import api.connectors.DownstreamOutcome
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
 import uk.gov.hmrc.http.HeaderCarrier
-import api.connectors.DownstreamOutcome
 import v2.connectors.RetrieveHistoricFhlUkPropertyPeriodSummaryConnector
 import v2.models.request.retrieveHistoricFhlUkPiePeriodSummary.RetrieveHistoricFhlUkPiePeriodSummaryRequest
 import v2.models.response.retrieveHistoricFhlUkPiePeriodSummary.RetrieveHistoricFhlUkPiePeriodSummaryResponse
@@ -34,7 +34,7 @@ trait MockRetrieveHistoricFhlUkPropertyPeriodSummaryConnector extends MockFactor
   object MockRetrieveHistoricFhlUkPropertyPeriodSummaryConnector {
 
     def retrieve(requestData: RetrieveHistoricFhlUkPiePeriodSummaryRequest)
-      : CallHandler[Future[DownstreamOutcome[RetrieveHistoricFhlUkPiePeriodSummaryResponse]]] = {
+        : CallHandler[Future[DownstreamOutcome[RetrieveHistoricFhlUkPiePeriodSummaryResponse]]] = {
       (
         mockRetrieveHistoricFhlUkPropertyPeriodSummaryConnector
           .retrieve(_: RetrieveHistoricFhlUkPiePeriodSummaryRequest)(
@@ -45,5 +45,7 @@ trait MockRetrieveHistoricFhlUkPropertyPeriodSummaryConnector extends MockFactor
         )
         .expects(requestData, *, *, *)
     }
+
   }
+
 }

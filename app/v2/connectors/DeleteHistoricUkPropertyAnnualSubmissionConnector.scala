@@ -16,9 +16,9 @@
 
 package v2.connectors
 
-import api.connectors.{BaseDownstreamConnector, DownstreamOutcome}
 import api.connectors.DownstreamUri.IfsUri
 import api.connectors.httpparsers.StandardDownstreamHttpParser.readsEmpty
+import api.connectors.{BaseDownstreamConnector, DownstreamOutcome}
 import api.models.domain.HistoricPropertyType
 import config.{AppConfig, FeatureSwitches}
 import play.api.libs.json.JsObject

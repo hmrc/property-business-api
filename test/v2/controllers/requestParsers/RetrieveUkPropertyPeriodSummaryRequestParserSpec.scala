@@ -16,11 +16,11 @@
 
 package v2.controllers.requestParsers
 
-import support.UnitSpec
 import api.models.domain.{Nino, TaxYear}
 import api.models.errors._
+import support.UnitSpec
 import v2.mocks.validators.MockRetrieveUkPropertyPeriodSummaryValidator
-import v2.models.request.retrieveUkPropertyPeriodSummary.{ RetrieveUkPropertyPeriodSummaryRawData, RetrieveUkPropertyPeriodSummaryRequest }
+import v2.models.request.retrieveUkPropertyPeriodSummary.{RetrieveUkPropertyPeriodSummaryRawData, RetrieveUkPropertyPeriodSummaryRequest}
 
 class RetrieveUkPropertyPeriodSummaryRequestParserSpec extends UnitSpec {
 
@@ -68,10 +68,12 @@ class RetrieveUkPropertyPeriodSummaryRequestParserSpec extends UnitSpec {
 
         parser.parseRequest(inputData) shouldBe
           Left(
-            ErrorWrapper(correlationId,
-                         BadRequestError,
-                         Some(Seq(NinoFormatError, BusinessIdFormatError, TaxYearFormatError, SubmissionIdFormatError))))
+            ErrorWrapper(
+              correlationId,
+              BadRequestError,
+              Some(Seq(NinoFormatError, BusinessIdFormatError, TaxYearFormatError, SubmissionIdFormatError))))
       }
     }
   }
+
 }

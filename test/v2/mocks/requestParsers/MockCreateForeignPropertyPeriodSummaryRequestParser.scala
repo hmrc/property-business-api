@@ -16,11 +16,11 @@
 
 package v2.mocks.requestParsers
 
+import api.models.errors.ErrorWrapper
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
 import v2.controllers.requestParsers.CreateForeignPropertyPeriodSummaryRequestParser
-import api.models.errors.ErrorWrapper
-import v2.models.request.createForeignPropertyPeriodSummary.{ CreateForeignPropertyPeriodSummaryRawData, CreateForeignPropertyPeriodSummaryRequest }
+import v2.models.request.createForeignPropertyPeriodSummary.{CreateForeignPropertyPeriodSummaryRawData, CreateForeignPropertyPeriodSummaryRequest}
 
 trait MockCreateForeignPropertyPeriodSummaryRequestParser extends MockFactory {
 
@@ -31,5 +31,7 @@ trait MockCreateForeignPropertyPeriodSummaryRequestParser extends MockFactory {
     def requestFor(data: CreateForeignPropertyPeriodSummaryRawData): CallHandler[Either[ErrorWrapper, CreateForeignPropertyPeriodSummaryRequest]] = {
       (mockCreateForeignPropertyRequestParser.parseRequest(_: CreateForeignPropertyPeriodSummaryRawData)(_: String)).expects(data, *)
     }
+
   }
+
 }

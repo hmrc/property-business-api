@@ -17,7 +17,7 @@
 package v2.models.response.retrieveHistoricNonFhlUkPropertyAnnualSubmission
 
 import mocks.MockAppConfig
-import play.api.libs.json.{ JsValue, Json }
+import play.api.libs.json.{JsValue, Json}
 import support.UnitSpec
 import v2.models.response.retrieveHistoricNonFhlUkPropertyAnnualSubmissionResponse._
 
@@ -47,7 +47,7 @@ class RetrieveHistoricNonFhlUkPropertyAnnualSubmissionResponseSpec extends UnitS
       |}
       |""".stripMargin)
 
-  val mtdJson: JsValue                                   = Json.parse("""
+  val mtdJson: JsValue = Json.parse("""
        |{
        |   "annualAdjustments":
        |   {
@@ -70,6 +70,7 @@ class RetrieveHistoricNonFhlUkPropertyAnnualSubmissionResponseSpec extends UnitS
        |   }
        |}
        |""".stripMargin)
+
   private def decimal(value: String): Option[BigDecimal] = Option(BigDecimal(value))
 
   val model: RetrieveHistoricNonFhlUkPropertyAnnualSubmissionResponse = RetrieveHistoricNonFhlUkPropertyAnnualSubmissionResponse(
@@ -108,4 +109,5 @@ class RetrieveHistoricNonFhlUkPropertyAnnualSubmissionResponseSpec extends UnitS
       Json.toJson(model) shouldBe mtdJson
     }
   }
+
 }

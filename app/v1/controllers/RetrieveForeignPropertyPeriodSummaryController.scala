@@ -18,7 +18,6 @@ package v1.controllers
 
 import cats.data.EitherT
 import cats.implicits._
-import javax.inject.{Inject, Singleton}
 import play.api.libs.json.Json
 import play.api.mvc.{Action, AnyContent, ControllerComponents}
 import utils.{IdGenerator, Logging}
@@ -29,6 +28,7 @@ import v1.models.request.retrieveForeignPropertyPeriodSummary.RetrieveForeignPro
 import v1.models.response.retrieveForeignPropertyPeriodSummary.RetrieveForeignPropertyPeriodSummaryHateoasData
 import v1.services.{EnrolmentsAuthService, MtdIdLookupService, RetrieveForeignPropertyPeriodSummaryService}
 
+import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton

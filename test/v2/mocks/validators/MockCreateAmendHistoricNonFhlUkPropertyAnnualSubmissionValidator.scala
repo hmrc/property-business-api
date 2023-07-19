@@ -16,10 +16,10 @@
 
 package v2.mocks.validators
 
+import api.models.errors.MtdError
 import org.scalamock.handlers.CallHandler1
 import org.scalamock.scalatest.MockFactory
 import v2.controllers.requestParsers.validators.CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionValidator
-import api.models.errors.MtdError
 import v2.models.request.createAmendHistoricNonFhlUkPropertyAnnualSubmission.CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRawData
 
 class MockCreateAmendHistoricNonFhlUkPropertyAnnualSubmissionValidator extends MockFactory {
@@ -29,11 +29,13 @@ class MockCreateAmendHistoricNonFhlUkPropertyAnnualSubmissionValidator extends M
   object MockCreateAmendHistoricNonFhlUkPropertyAnnualSubmissionValidator {
 
     def validate(data: CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRawData)
-      : CallHandler1[CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRawData, List[MtdError]] = {
+        : CallHandler1[CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRawData, List[MtdError]] = {
 
       (mockValidator
         .validate(_: CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRawData))
         .expects(data)
     }
+
   }
+
 }

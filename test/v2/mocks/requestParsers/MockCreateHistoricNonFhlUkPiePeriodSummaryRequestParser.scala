@@ -16,10 +16,10 @@
 
 package v2.mocks.requestParsers
 
+import api.models.errors.ErrorWrapper
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
 import v2.controllers.requestParsers.CreateHistoricNonFhlUkPropertyPeriodSummaryRequestParser
-import api.models.errors.ErrorWrapper
 import v2.models.request.createHistoricNonFhlUkPropertyPeriodSummary._
 
 trait MockCreateHistoricNonFhlUkPiePeriodSummaryRequestParser extends MockFactory {

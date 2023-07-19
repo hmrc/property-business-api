@@ -16,9 +16,9 @@
 
 package api.controllers.requestParsers.validators.validations
 
-import java.time.LocalDate
+import api.models.errors.{MtdError, RuleToDateBeforeFromDateError}
 
-import api.models.errors.{ MtdError, RuleToDateBeforeFromDateError }
+import java.time.LocalDate
 
 object ToDateBeforeFromDateValidation {
 

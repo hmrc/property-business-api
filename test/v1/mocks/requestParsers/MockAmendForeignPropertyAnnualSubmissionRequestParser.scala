@@ -20,10 +20,7 @@ import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
 import v1.controllers.requestParsers.AmendForeignPropertyAnnualSubmissionRequestParser
 import v1.models.errors.ErrorWrapper
-import v1.models.request.amendForeignPropertyAnnualSubmission.{
-  AmendForeignPropertyAnnualSubmissionRawData,
-  AmendForeignPropertyAnnualSubmissionRequest
-}
+import v1.models.request.amendForeignPropertyAnnualSubmission.{AmendForeignPropertyAnnualSubmissionRawData, AmendForeignPropertyAnnualSubmissionRequest}
 
 trait MockAmendForeignPropertyAnnualSubmissionRequestParser extends MockFactory {
 
@@ -36,5 +33,7 @@ trait MockAmendForeignPropertyAnnualSubmissionRequestParser extends MockFactory 
         data: AmendForeignPropertyAnnualSubmissionRawData): CallHandler[Either[ErrorWrapper, AmendForeignPropertyAnnualSubmissionRequest]] = {
       (mockAmendForeignPropertyAnnualSubmissionRequestParser.parseRequest(_: AmendForeignPropertyAnnualSubmissionRawData)(_: String)).expects(data, *)
     }
+
   }
+
 }

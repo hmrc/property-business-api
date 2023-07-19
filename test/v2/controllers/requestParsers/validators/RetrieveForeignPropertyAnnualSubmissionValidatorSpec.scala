@@ -16,9 +16,9 @@
 
 package v2.controllers.requestParsers.validators
 
+import api.models.errors._
 import mocks.MockAppConfig
 import support.UnitSpec
-import api.models.errors._
 import v2.models.request.retrieveForeignPropertyAnnualSubmission.RetrieveForeignPropertyAnnualSubmissionRawData
 
 class RetrieveForeignPropertyAnnualSubmissionValidatorSpec extends UnitSpec with MockAppConfig {
@@ -55,10 +55,12 @@ class RetrieveForeignPropertyAnnualSubmissionValidatorSpec extends UnitSpec with
           RuleTaxYearRangeInvalidError)
       }
       "multiple format errors are made" in {
-        validator.validate(RetrieveForeignPropertyAnnualSubmissionRawData("Walrus", "Beans", "2021/22")) shouldBe List(NinoFormatError,
-                                                                                                                       BusinessIdFormatError,
-                                                                                                                       TaxYearFormatError)
+        validator.validate(RetrieveForeignPropertyAnnualSubmissionRawData("Walrus", "Beans", "2021/22")) shouldBe List(
+          NinoFormatError,
+          BusinessIdFormatError,
+          TaxYearFormatError)
       }
     }
   }
+
 }

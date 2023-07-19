@@ -16,7 +16,7 @@
 
 package v2.models.response.amendHistoricNonFhlUkPiePeriodSummary
 
-import play.api.libs.json.{ Json, Reads }
+import play.api.libs.json.{Json, Reads}
 import v2.hateoas.HateoasLinks
 
 case class AmendHistoricNonFhlUkPiePeriodSummaryResponse(transactionReference: String)

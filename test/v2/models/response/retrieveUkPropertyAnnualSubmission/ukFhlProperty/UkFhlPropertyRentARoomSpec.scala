@@ -16,10 +16,11 @@
 
 package v2.models.response.retrieveUkPropertyAnnualSubmission.ukFhlProperty
 
-import play.api.libs.json.{ JsValue, Json }
+import play.api.libs.json.{JsValue, Json}
 import support.UnitSpec
 
 class UkFhlPropertyRentARoomSpec extends UnitSpec {
+
   val downstreamJson: JsValue = Json.parse("""
       |{
       |   "jointlyLet":true
@@ -47,4 +48,5 @@ class UkFhlPropertyRentARoomSpec extends UnitSpec {
       Json.toJson(model) shouldBe mtdJson
     }
   }
+
 }

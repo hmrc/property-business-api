@@ -19,10 +19,8 @@ package v1.controllers
 import api.models.audit.AuditEvent
 import cats.data.EitherT
 import cats.implicits._
-
-import javax.inject.{Inject, Singleton}
 import play.api.http.MimeTypes
-import play.api.libs.json.{Json, JsValue}
+import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.{Action, ControllerComponents}
 import uk.gov.hmrc.http.HeaderCarrier
 import utils.{IdGenerator, Logging}
@@ -34,6 +32,7 @@ import v1.models.request.createForeignPropertyPeriodSummary.CreateForeignPropert
 import v1.models.response.createForeignPropertyPeriodSummary.CreateForeignPropertyPeriodSummaryHateoasData
 import v1.services._
 
+import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton

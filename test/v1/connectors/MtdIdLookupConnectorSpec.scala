@@ -16,7 +16,7 @@
 
 package v1.connectors
 
-import mocks.{ MockAppConfig, MockHttpClient }
+import mocks.{MockAppConfig, MockHttpClient}
 import v1.models.errors.DownstreamError
 
 import scala.concurrent.Future
@@ -29,6 +29,7 @@ class MtdIdLookupConnectorSpec extends ConnectorSpec {
       http = mockHttpClient,
       appConfig = mockAppConfig
     )
+
     MockAppConfig.mtdIdBaseUrl returns baseUrl
   }
 
@@ -64,4 +65,5 @@ class MtdIdLookupConnectorSpec extends ConnectorSpec {
       }
     }
   }
+
 }

@@ -55,4 +55,5 @@ class UrlUtilsSpec extends UnitSpec {
       }
     }
   }
+
 }

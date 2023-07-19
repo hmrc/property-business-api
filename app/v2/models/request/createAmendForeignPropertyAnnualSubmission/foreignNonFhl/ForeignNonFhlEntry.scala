@@ -16,13 +16,14 @@
 
 package v2.models.request.createAmendForeignPropertyAnnualSubmission.foreignNonFhl
 
-import play.api.libs.json.{ Json, OFormat }
+import play.api.libs.json.{Json, OFormat}
 import shapeless.HNil
 import utils.EmptinessChecker
 
 case class ForeignNonFhlEntry(countryCode: String, adjustments: Option[ForeignNonFhlAdjustments], allowances: Option[ForeignNonFhlAllowances])
 
 object ForeignNonFhlEntry {
+
   implicit val emptinessChecker: EmptinessChecker[ForeignNonFhlEntry] = EmptinessChecker.use { body =>
     "adjustments"  -> body.adjustments ::
       "allowances" -> body.allowances :: HNil

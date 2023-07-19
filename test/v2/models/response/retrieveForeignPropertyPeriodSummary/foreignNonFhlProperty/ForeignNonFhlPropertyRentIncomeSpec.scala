@@ -35,6 +35,7 @@ class ForeignNonFhlPropertyRentIncomeSpec extends UnitSpec with JsonErrorValidat
       }
     }
   }
+
   "writes" when {
     "passed valid model" should {
       "return valid JSON" in {
@@ -42,4 +43,5 @@ class ForeignNonFhlPropertyRentIncomeSpec extends UnitSpec with JsonErrorValidat
       }
     }
   }
+
 }

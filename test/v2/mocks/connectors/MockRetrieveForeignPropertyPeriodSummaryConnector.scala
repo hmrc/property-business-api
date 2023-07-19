@@ -16,12 +16,12 @@
 
 package v2.mocks.connectors
 
+import api.connectors.DownstreamOutcome
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
 import uk.gov.hmrc.http.HeaderCarrier
-import v2.connectors.RetrieveForeignPropertyPeriodSummaryConnector.Result
 import v2.connectors.RetrieveForeignPropertyPeriodSummaryConnector
-import api.connectors.DownstreamOutcome
+import v2.connectors.RetrieveForeignPropertyPeriodSummaryConnector.Result
 import v2.models.request.retrieveForeignPropertyPeriodSummary.RetrieveForeignPropertyPeriodSummaryRequest
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -43,5 +43,7 @@ trait MockRetrieveForeignPropertyPeriodSummaryConnector extends MockFactory {
         )
         .expects(requestData, *, *, *)
     }
+
   }
+
 }

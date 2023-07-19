@@ -37,4 +37,5 @@ class CreateHistoricFhlUkPiePeriodSummaryRawDataSpec extends UnitSpec {
 
     }
   }
+
 }

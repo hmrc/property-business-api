@@ -16,6 +16,7 @@
 
 package v2.controllers.requestParsers.validators.validations
 
+import api.controllers.requestParsers.validators.validations.NoValidationErrors
 import api.models.errors.{MtdError, RuleBothExpensesSuppliedError}
 import v2.models.request.amendHistoricNonFhlUkPiePeriodSummary.UkNonFhlPieExpenses
 import v2.models.request.common.foreignFhlEea._
@@ -24,7 +25,6 @@ import v2.models.request.common.ukFhlPieProperty.UkFhlPieExpenses
 import v2.models.request.common.ukFhlProperty.{UkFhlPropertyExpenses => CommonUkFhlPropertyExpenses}
 import v2.models.request.common.ukNonFhlProperty.{UkNonFhlPropertyExpenses => CommonUkNonFhlPropertyExpenses}
 import v2.models.request.createHistoricNonFhlUkPropertyPeriodSummary.UkNonFhlPropertyExpenses
-import api.controllers.requestParsers.validators.validations.NoValidationErrors
 
 object ConsolidatedExpensesValidation {
 
@@ -144,4 +144,5 @@ object ConsolidatedExpensesValidation {
         }
     }
   }
+
 }

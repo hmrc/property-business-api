@@ -26,8 +26,8 @@ import v1.mocks.requestParsers.MockRetrieveForeignPropertyPeriodSummaryRequestPa
 import v1.mocks.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService, MockRetrieveForeignPropertyPeriodSummaryService}
 import v1.models.domain.Nino
 import v1.models.errors._
-import v1.models.hateoas.{HateoasWrapper, Link}
 import v1.models.hateoas.Method.GET
+import v1.models.hateoas.{HateoasWrapper, Link}
 import v1.models.request.retrieveForeignPropertyPeriodSummary._
 import v1.models.response.retrieveForeignPropertyPeriodSummary._
 import v1.models.response.retrieveForeignPropertyPeriodSummary.foreignFhlEea._
@@ -199,4 +199,5 @@ class RetrieveForeignPropertyPeriodSummaryControllerSpec
       }
     }
   }
+
 }

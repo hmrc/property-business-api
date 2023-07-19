@@ -16,10 +16,10 @@
 
 package v2.mocks.requestParsers
 
+import api.models.errors.ErrorWrapper
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
 import v2.controllers.requestParsers.RetrieveHistoricNonFhlUkPropertyAnnualSubmissionRequestParser
-import api.models.errors.ErrorWrapper
 import v2.models.request.retrieveHistoricNonFhlUkPropertyAnnualSubmission._
 
 trait MockRetrieveHistoricNonFhlUkPropertyAnnualSubmissionRequestParser extends MockFactory {
@@ -30,10 +30,12 @@ trait MockRetrieveHistoricNonFhlUkPropertyAnnualSubmissionRequestParser extends 
   object MockRetrieveHistoricNonFhlUkPropertyAnnualSubmissionRequestParser {
 
     def parse(data: RetrieveHistoricNonFhlUkPropertyAnnualSubmissionRawData)
-      : CallHandler[Either[ErrorWrapper, RetrieveHistoricNonFhlUkPropertyAnnualSubmissionRequest]] = {
+        : CallHandler[Either[ErrorWrapper, RetrieveHistoricNonFhlUkPropertyAnnualSubmissionRequest]] = {
       (mockRetrieveHistoricNonFhlUkPropertyAnnualSubmissionRequestParser
         .parseRequest(_: RetrieveHistoricNonFhlUkPropertyAnnualSubmissionRawData)(_: String))
         .expects(data, *)
     }
+
   }
+
 }

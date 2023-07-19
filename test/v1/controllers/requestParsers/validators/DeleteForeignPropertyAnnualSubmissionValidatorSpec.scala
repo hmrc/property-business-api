@@ -17,7 +17,7 @@
 package v1.controllers.requestParsers.validators
 
 import support.UnitSpec
-import v1.models.errors.{ BusinessIdFormatError, NinoFormatError, RuleTaxYearNotSupportedError, RuleTaxYearRangeInvalidError, TaxYearFormatError }
+import v1.models.errors._
 import v1.models.request.deleteForeignPropertyAnnualSubmission.DeleteForeignPropertyAnnualSubmissionRawData
 
 class DeleteForeignPropertyAnnualSubmissionValidatorSpec extends UnitSpec {
@@ -53,10 +53,12 @@ class DeleteForeignPropertyAnnualSubmissionValidatorSpec extends UnitSpec {
           RuleTaxYearRangeInvalidError)
       }
       "multiple format errors are made" in {
-        validator.validate(DeleteForeignPropertyAnnualSubmissionRawData("Walrus", "Beans", "2021/22")) shouldBe List(NinoFormatError,
-                                                                                                                     BusinessIdFormatError,
-                                                                                                                     TaxYearFormatError)
+        validator.validate(DeleteForeignPropertyAnnualSubmissionRawData("Walrus", "Beans", "2021/22")) shouldBe List(
+          NinoFormatError,
+          BusinessIdFormatError,
+          TaxYearFormatError)
       }
     }
   }
+
 }

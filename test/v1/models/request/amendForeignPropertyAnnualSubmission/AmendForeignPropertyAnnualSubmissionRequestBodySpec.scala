@@ -16,14 +16,10 @@
 
 package v1.models.request.amendForeignPropertyAnnualSubmission
 
-import play.api.libs.json.{ JsValue, Json }
+import play.api.libs.json.{JsValue, Json}
 import support.UnitSpec
-import v1.models.request.amendForeignPropertyAnnualSubmission.foreignFhlEea.{ ForeignFhlEea, ForeignFhlEeaAdjustments, ForeignFhlEeaAllowances }
-import v1.models.request.amendForeignPropertyAnnualSubmission.foreignProperty.{
-  ForeignPropertyAdjustments,
-  ForeignPropertyAllowances,
-  ForeignPropertyEntry
-}
+import v1.models.request.amendForeignPropertyAnnualSubmission.foreignFhlEea.{ForeignFhlEea, ForeignFhlEeaAdjustments, ForeignFhlEeaAllowances}
+import v1.models.request.amendForeignPropertyAnnualSubmission.foreignProperty.{ForeignPropertyAdjustments, ForeignPropertyAllowances, ForeignPropertyEntry}
 import v1.models.utils.JsonErrorValidators
 
 class AmendForeignPropertyAnnualSubmissionRequestBodySpec extends UnitSpec with JsonErrorValidators {
@@ -130,6 +126,7 @@ class AmendForeignPropertyAnnualSubmissionRequestBodySpec extends UnitSpec with 
       }
     }
   }
+
   "writes" when {
     "passed valid model" should {
       "return valid JSON" in {
@@ -140,4 +137,5 @@ class AmendForeignPropertyAnnualSubmissionRequestBodySpec extends UnitSpec with 
       }
     }
   }
+
 }

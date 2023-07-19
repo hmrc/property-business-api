@@ -16,10 +16,10 @@
 
 package v2.mocks.validators
 
+import api.models.errors.MtdError
 import org.scalamock.handlers.CallHandler1
 import org.scalamock.scalatest.MockFactory
 import v2.controllers.requestParsers.validators.RetrieveForeignPropertyAnnualSubmissionValidator
-import api.models.errors.MtdError
 import v2.models.request.retrieveForeignPropertyAnnualSubmission.RetrieveForeignPropertyAnnualSubmissionRawData
 
 class MockRetrieveForeignPropertyAnnualSubmissionValidator extends MockFactory {
@@ -34,6 +34,7 @@ class MockRetrieveForeignPropertyAnnualSubmissionValidator extends MockFactory {
         .validate(_: RetrieveForeignPropertyAnnualSubmissionRawData))
         .expects(data)
     }
+
   }
 
 }

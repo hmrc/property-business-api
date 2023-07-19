@@ -17,12 +17,12 @@
 package v2.controllers
 
 import api.controllers.{ControllerBaseSpec, ControllerTestRunner}
-import api.mocks.hateoas.MockHateoasFactory
 import api.mocks.MockIdGenerator
+import api.mocks.hateoas.MockHateoasFactory
 import api.mocks.services.{MockEnrolmentsAuthService, MockMtdIdLookupService}
 import api.models.domain.{Nino, TaxYear, Timestamp}
-import api.models.hateoas._
 import api.models.hateoas.Method.GET
+import api.models.hateoas._
 import api.models.outcomes.ResponseWrapper
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.Result

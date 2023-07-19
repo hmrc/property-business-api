@@ -20,6 +20,7 @@ import api.models.errors.SubmissionIdFormatError
 import support.UnitSpec
 
 class SubmissionIdValidationSpec extends UnitSpec {
+
   "validate" should {
     "return no errors" when {
       "a valid businessId is passed in" in {
@@ -32,4 +33,5 @@ class SubmissionIdValidationSpec extends UnitSpec {
       }
     }
   }
+
 }

@@ -44,4 +44,5 @@ class ToDateBeforeFromDateValidationSpec extends UnitSpec {
       }
     }
   }
+
 }

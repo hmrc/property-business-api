@@ -18,7 +18,7 @@ package v1.controllers
 
 import api.models.audit.AuditEvent
 import api.models.outcomes.ResponseWrapper
-import play.api.libs.json.{Json, JsValue}
+import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.Result
 import uk.gov.hmrc.http.HeaderCarrier
 import v1.mocks.MockIdGenerator
@@ -28,8 +28,8 @@ import v1.mocks.services.{MockAmendForeignPropertyPeriodSummaryService, MockAudi
 import v1.models.audit.{AmendForeignPropertyPeriodicAuditDetail, AuditError, AuditResponse}
 import v1.models.domain.Nino
 import v1.models.errors._
-import v1.models.hateoas.{HateoasWrapper, Link}
 import v1.models.hateoas.Method.GET
+import v1.models.hateoas.{HateoasWrapper, Link}
 import v1.models.request.amendForeignPropertyPeriodSummary._
 import v1.models.request.common.foreignFhlEea._
 import v1.models.request.common.foreignPropertyEntry._
@@ -222,7 +222,8 @@ class AmendForeignPropertyPeriodSummaryControllerSpec
         header("X-CorrelationId", result) shouldBe Some(correlationId)
 
         val auditResponse: AuditResponse = AuditResponse(OK, None, Some(hateoasResponse))
-        MockedAuditService.verifyAuditEvent(event(auditResponse)).once()      }
+        MockedAuditService.verifyAuditEvent(event(auditResponse)).once()
+      }
     }
     "return the error as per spec" when {
       "parser errors occur" should {
@@ -240,7 +241,8 @@ class AmendForeignPropertyPeriodSummaryControllerSpec
             header("X-CorrelationId", result) shouldBe Some(correlationId)
 
             val auditResponse: AuditResponse = AuditResponse(expectedStatus, Some(Seq(AuditError(error.code))), None)
-            MockedAuditService.verifyAuditEvent(event(auditResponse)).once()          }
+            MockedAuditService.verifyAuditEvent(event(auditResponse)).once()
+          }
         }
 
         val input = Seq(
@@ -249,17 +251,18 @@ class AmendForeignPropertyPeriodSummaryControllerSpec
           (BusinessIdFormatError, BAD_REQUEST),
           (SubmissionIdFormatError, BAD_REQUEST),
           (CountryCodeFormatError.copy(paths = Some(Seq("foreignProperty/0/countryCode"))), BAD_REQUEST),
-          (ValueFormatError.copy(
-             paths = Some(Seq(
-               "foreignFhlEea/income/rentAmount",
-               "foreignFhlEea/expenditure/repairsAndMaintenance",
-               "foreignFhlEea/expenditure/professionalFees",
-               "foreignFhlEea/expenditure/other",
-               "foreignProperty/income/rentIncome/rentAmount",
-               "foreignProperty/expenditure/professionalFees",
-               "foreignProperty/expenditure/other"
-             ))),
-           BAD_REQUEST),
+          (
+            ValueFormatError.copy(
+              paths = Some(Seq(
+                "foreignFhlEea/income/rentAmount",
+                "foreignFhlEea/expenditure/repairsAndMaintenance",
+                "foreignFhlEea/expenditure/professionalFees",
+                "foreignFhlEea/expenditure/other",
+                "foreignProperty/income/rentIncome/rentAmount",
+                "foreignProperty/expenditure/professionalFees",
+                "foreignProperty/expenditure/other"
+              ))),
+            BAD_REQUEST),
           (RuleIncorrectOrEmptyBodyError, BAD_REQUEST),
           (RuleBothExpensesSuppliedError, BAD_REQUEST),
           (RuleCountryCodeError.copy(paths = Some(Seq("foreignProperty/0/countryCode"))), BAD_REQUEST)
@@ -287,7 +290,8 @@ class AmendForeignPropertyPeriodSummaryControllerSpec
             header("X-CorrelationId", result) shouldBe Some(correlationId)
 
             val auditResponse: AuditResponse = AuditResponse(expectedStatus, Some(Seq(AuditError(mtdError.code))), None)
-            MockedAuditService.verifyAuditEvent(event(auditResponse)).once()          }
+            MockedAuditService.verifyAuditEvent(event(auditResponse)).once()
+          }
         }
 
         val input = Seq(
@@ -302,4 +306,5 @@ class AmendForeignPropertyPeriodSummaryControllerSpec
       }
     }
   }
+
 }

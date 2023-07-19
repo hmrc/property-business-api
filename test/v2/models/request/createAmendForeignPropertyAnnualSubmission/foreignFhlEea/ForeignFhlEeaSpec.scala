@@ -16,7 +16,7 @@
 
 package v2.models.request.createAmendForeignPropertyAnnualSubmission.foreignFhlEea
 
-import play.api.libs.json.{ JsValue, Json }
+import play.api.libs.json.{JsValue, Json}
 import support.UnitSpec
 import v2.models.request.createAmendForeignPropertyAnnualSubmission.CreateAmendForeignPropertyAnnualSubmissionFixture
 import v2.models.utils.JsonErrorValidators
@@ -70,6 +70,7 @@ class ForeignFhlEeaSpec extends UnitSpec with JsonErrorValidators with CreateAme
       }
     }
   }
+
   "writes" when {
     "passed a model" should {
       "return downstream JSON" in {
@@ -87,4 +88,5 @@ class ForeignFhlEeaSpec extends UnitSpec with JsonErrorValidators with CreateAme
       }
     }
   }
+
 }

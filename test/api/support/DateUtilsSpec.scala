@@ -16,9 +16,9 @@
 
 package api.support
 
-import java.time.LocalDate
-
 import support.UnitSpec
+
+import java.time.LocalDate
 
 class DateUtilsSpec extends UnitSpec {
 
@@ -92,4 +92,5 @@ class DateUtilsSpec extends UnitSpec {
       }
     }
   }
+
 }

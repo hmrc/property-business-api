@@ -16,8 +16,8 @@
 
 package v2.models.response.retrieveForeignPropertyAnnualSubmission.foreignFhlEea
 
-import play.api.libs.json.{ JsPath, Json, OWrites, Reads }
 import play.api.libs.functional.syntax._
+import play.api.libs.json.{JsPath, Json, OWrites, Reads}
 
 case class ForeignFhlEeaAllowances(annualInvestmentAllowance: Option[BigDecimal],
                                    otherCapitalAllowance: Option[BigDecimal],
@@ -27,6 +27,7 @@ case class ForeignFhlEeaAllowances(annualInvestmentAllowance: Option[BigDecimal]
 
 object ForeignFhlEeaAllowances {
   implicit val writes: OWrites[ForeignFhlEeaAllowances] = Json.writes[ForeignFhlEeaAllowances]
+
   implicit val reads: Reads[ForeignFhlEeaAllowances] = (
     (JsPath \ "annualInvestmentAllowance").readNullable[BigDecimal] and
       (JsPath \ "otherCapitalAllowance").readNullable[BigDecimal] and
@@ -34,4 +35,5 @@ object ForeignFhlEeaAllowances {
       (JsPath \ "zeroEmissionsCarAllowance").readNullable[BigDecimal] and
       (JsPath \ "propertyAllowance").readNullable[BigDecimal]
   )(ForeignFhlEeaAllowances.apply _)
+
 }

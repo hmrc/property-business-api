@@ -24,10 +24,7 @@ import v2.controllers.requestParsers.validators.validations._
 import v2.models.request.common.StructuredBuildingAllowance
 import v2.models.request.createAmendForeignPropertyAnnualSubmission.foreignFhlEea.ForeignFhlEea
 import v2.models.request.createAmendForeignPropertyAnnualSubmission.foreignNonFhl.ForeignNonFhlEntry
-import v2.models.request.createAmendForeignPropertyAnnualSubmission.{
-  CreateAmendForeignPropertyAnnualSubmissionRawData,
-  CreateAmendForeignPropertyAnnualSubmissionRequestBody
-}
+import v2.models.request.createAmendForeignPropertyAnnualSubmission.{CreateAmendForeignPropertyAnnualSubmissionRawData, CreateAmendForeignPropertyAnnualSubmissionRequestBody}
 
 import javax.inject.{Inject, Singleton}
 

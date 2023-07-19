@@ -16,10 +16,10 @@
 
 package v2.controllers.requestParsers.validators
 
+import api.models.errors._
 import mocks.MockAppConfig
 import play.api.libs.json._
 import support.UnitSpec
-import api.models.errors._
 import v2.models.request.amendUkPropertyAnnualSubmission.AmendUkPropertyAnnualSubmissionRawData
 import v2.models.utils.JsonErrorValidators
 

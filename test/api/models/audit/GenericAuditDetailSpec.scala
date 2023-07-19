@@ -18,7 +18,7 @@ package api.models.audit
 
 import api.models.auth.UserDetails
 import play.api.http.Status.OK
-import play.api.libs.json.{Json, JsValue, OWrites}
+import play.api.libs.json.{JsValue, Json, OWrites}
 import support.UnitSpec
 
 class GenericAuditDetailSpec extends UnitSpec {

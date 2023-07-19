@@ -44,6 +44,7 @@ class DeleteForeignPropertyAnnualSubmissionServiceSpec extends UnitSpec {
     val service = new DeleteForeignPropertyAnnualSubmissionService(
       connector = mockDeleteForeignPropertyAnnualSubmissionConnector
     )
+
   }
 
   "service" should {
@@ -84,4 +85,5 @@ class DeleteForeignPropertyAnnualSubmissionServiceSpec extends UnitSpec {
       input.foreach(args => (serviceError _).tupled(args))
     }
   }
+
 }

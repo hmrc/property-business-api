@@ -23,10 +23,11 @@ import v1.models.request.amendForeignPropertyPeriodSummary.AmendForeignPropertyP
 
 class AmendForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec {
 
-  private val validNino                   = "AA123456A"
-  private val validBusinessId             = "XAIS12345678901"
-  private val validSubmissionId           = "12345678-1234-4123-9123-123456789012"
-  private val requestBodyJson             = Json.parse("""{
+  private val validNino         = "AA123456A"
+  private val validBusinessId   = "XAIS12345678901"
+  private val validSubmissionId = "12345678-1234-4123-9123-123456789012"
+
+  private val requestBodyJson = Json.parse("""{
       |  "foreignFhlEea": {
       |    "income": {
       |      "rentAmount": 567.83
@@ -67,6 +68,7 @@ class AmendForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec {
       |  ]
       |}
     """.stripMargin)
+
   private val requestBodyJsonConsolidated = Json.parse("""{
       |  "foreignFhlEea": {
       |    "income": {
@@ -107,7 +109,8 @@ class AmendForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec {
         validator.validate(AmendForeignPropertyPeriodSummaryRawData(validNino, validBusinessId, validSubmissionId, requestBodyJson)) shouldBe Nil
       }
       "a valid consolidatedExpenses request is supplied" in {
-        validator.validate(AmendForeignPropertyPeriodSummaryRawData(validNino, validBusinessId, validSubmissionId, requestBodyJsonConsolidated)) shouldBe Nil
+        validator.validate(
+          AmendForeignPropertyPeriodSummaryRawData(validNino, validBusinessId, validSubmissionId, requestBodyJsonConsolidated)) shouldBe Nil
       }
       "a minimal foreignFhlEea request is supplied" in {
         validator.validate(
@@ -174,15 +177,17 @@ class AmendForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec {
 
     "return RuleIncorrectOrEmptyBodyError" when {
       "an empty body is submitted" in {
-        validator.validate(AmendForeignPropertyPeriodSummaryRawData(validNino, validBusinessId, validSubmissionId, Json.parse("""{}"""))) shouldBe List(
+        validator.validate(
+          AmendForeignPropertyPeriodSummaryRawData(validNino, validBusinessId, validSubmissionId, Json.parse("""{}"""))) shouldBe List(
           RuleIncorrectOrEmptyBodyError)
       }
       "an empty foreignFhlEea is submitted" in {
         validator.validate(
-          AmendForeignPropertyPeriodSummaryRawData(validNino,
-                                                   validBusinessId,
-                                                   validSubmissionId,
-                                                   Json.parse("""{
+          AmendForeignPropertyPeriodSummaryRawData(
+            validNino,
+            validBusinessId,
+            validSubmissionId,
+            Json.parse("""{
             |  "foreignFhlEea": {}
             |}""".stripMargin))) shouldBe List(RuleIncorrectOrEmptyBodyError)
       }
@@ -201,10 +206,11 @@ class AmendForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec {
       }
       "an empty foreignProperty is submitted" in {
         validator.validate(
-          AmendForeignPropertyPeriodSummaryRawData(validNino,
-                                                   validBusinessId,
-                                                   validSubmissionId,
-                                                   Json.parse("""{
+          AmendForeignPropertyPeriodSummaryRawData(
+            validNino,
+            validBusinessId,
+            validSubmissionId,
+            Json.parse("""{
             |  "foreignProperty": []
             |}""".stripMargin))) shouldBe List(RuleIncorrectOrEmptyBodyError)
       }
@@ -1990,4 +1996,5 @@ class AmendForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec {
       }
     }
   }
+
 }

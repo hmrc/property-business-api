@@ -16,11 +16,11 @@
 
 package v2.models.request.createUkPropertyPeriodSummary
 
-import play.api.libs.json.{ JsValue, Json }
+import play.api.libs.json.{JsValue, Json}
 import support.UnitSpec
-import v2.models.request.common.ukPropertyRentARoom.{ UkPropertyExpensesRentARoom, UkPropertyIncomeRentARoom }
 import v2.models.request.common.ukFhlProperty._
 import v2.models.request.common.ukNonFhlProperty._
+import v2.models.request.common.ukPropertyRentARoom.{UkPropertyExpensesRentARoom, UkPropertyIncomeRentARoom}
 
 class CreateUkPropertyPeriodSummaryRequestBodySpec extends UnitSpec {
 
@@ -177,6 +177,7 @@ class CreateUkPropertyPeriodSummaryRequestBodySpec extends UnitSpec {
       }
     }
   }
+
   "writes" when {
     "passed valid model" should {
       "return valid JSON" in {
@@ -184,4 +185,5 @@ class CreateUkPropertyPeriodSummaryRequestBodySpec extends UnitSpec {
       }
     }
   }
+
 }

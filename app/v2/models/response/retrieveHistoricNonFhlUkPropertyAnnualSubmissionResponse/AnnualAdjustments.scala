@@ -17,7 +17,7 @@
 package v2.models.response.retrieveHistoricNonFhlUkPropertyAnnualSubmissionResponse
 
 import play.api.libs.functional.syntax.toFunctionalBuilderOps
-import play.api.libs.json.{ JsPath, Json, OWrites, Reads }
+import play.api.libs.json.{JsPath, Json, OWrites, Reads}
 
 case class RentARoom(jointlyLet: Boolean)
 
@@ -45,4 +45,5 @@ object AnnualAdjustments {
       (JsPath \ "nonResidentLandlord").read[Boolean] and
       (JsPath \ "ukRentARoom").readNullable[RentARoom]
   )(AnnualAdjustments.apply _)
+
 }

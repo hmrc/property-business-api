@@ -17,9 +17,9 @@
 package v2.controllers.requestParsers
 
 import api.models.domain.{Nino, PeriodId}
-import play.api.libs.json.{Json, JsValue}
-import support.UnitSpec
 import api.models.errors.{BadRequestError, ErrorWrapper, NinoFormatError, RuleBothExpensesSuppliedError}
+import play.api.libs.json.{JsValue, Json}
+import support.UnitSpec
 import v2.mocks.validators.MockAmendHistoricFhlUkPiePeriodSummaryValidator
 import v2.models.request.amendHistoricFhlUkPiePeriodSummary.{AmendHistoricFhlUkPiePeriodSummaryRawData, AmendHistoricFhlUkPiePeriodSummaryRequest, AmendHistoricFhlUkPiePeriodSummaryRequestBody}
 import v2.models.request.common.ukFhlPieProperty.{UkFhlPieExpenses, UkFhlPieIncome}
@@ -183,4 +183,5 @@ class AmendHistoricFhlUkPiePeriodSummaryRequestParserSpec extends UnitSpec {
       }
     }
   }
+
 }

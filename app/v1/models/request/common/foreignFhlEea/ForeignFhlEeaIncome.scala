@@ -16,7 +16,7 @@
 
 package v1.models.request.common.foreignFhlEea
 
-import play.api.libs.json.{ Json, Reads, Writes }
+import play.api.libs.json.{Json, Reads, Writes}
 
 case class ForeignFhlEeaIncome(rentAmount: Option[BigDecimal]) {
   def isEmpty: Boolean = rentAmount.isEmpty

@@ -16,15 +16,15 @@
 
 package v2.endpoints
 
+import api.models.errors._
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import play.api.http.HeaderNames.ACCEPT
 import play.api.http.Status._
-import play.api.libs.json.{ JsObject, JsValue, Json }
-import play.api.libs.ws.{ WSRequest, WSResponse }
+import play.api.libs.json.{JsObject, JsValue, Json}
+import play.api.libs.ws.{WSRequest, WSResponse}
 import play.api.test.Helpers.AUTHORIZATION
 import support.V2IntegrationBaseSpec
-import api.models.errors._
-import v2.stubs.{ AuditStub, AuthStub, DownstreamStub, MtdIdLookupStub }
+import v2.stubs.{AuditStub, AuthStub, DownstreamStub, MtdIdLookupStub}
 
 class AmendForeignPropertyPeriodSummaryControllerISpec extends V2IntegrationBaseSpec {
 
@@ -348,6 +348,7 @@ class AmendForeignPropertyPeriodSummaryControllerISpec extends V2IntegrationBase
          |   "reason": "Downstream message"
          |}
       """.stripMargin
+
   }
 
   private trait NonTysTest extends Test {
@@ -484,64 +485,72 @@ class AmendForeignPropertyPeriodSummaryControllerISpec extends V2IntegrationBase
     val input = Seq(
       ("AA1123A", "2022-23", "XAIS12345678910", "4557ecb5-fd32-48cc-81f5-e6acd1099f3c", requestBodyJson, BAD_REQUEST, NinoFormatError),
       ("AA123456A", "20223", "XAIS12345678910", "4557ecb5-fd32-48cc-81f5-e6acd1099f3c", requestBodyJson, BAD_REQUEST, TaxYearFormatError),
-      ("AA123456A",
-       "2022-23",
-       "XAIS1234dfxgchjbn5678910",
-       "4557ecb5-fd32-48cc-81f5-e6acd1099f3c",
-       requestBodyJson,
-       BAD_REQUEST,
-       BusinessIdFormatError),
-      ("AA123456A",
-       "2022-23",
-       "XAIS12345678910",
-       "4557ecb5-fd32-awefwaef48cc-81f5-e6acd1099f3c",
-       requestBodyJson,
-       BAD_REQUEST,
-       SubmissionIdFormatError),
+      (
+        "AA123456A",
+        "2022-23",
+        "XAIS1234dfxgchjbn5678910",
+        "4557ecb5-fd32-48cc-81f5-e6acd1099f3c",
+        requestBodyJson,
+        BAD_REQUEST,
+        BusinessIdFormatError),
+      (
+        "AA123456A",
+        "2022-23",
+        "XAIS12345678910",
+        "4557ecb5-fd32-awefwaef48cc-81f5-e6acd1099f3c",
+        requestBodyJson,
+        BAD_REQUEST,
+        SubmissionIdFormatError),
       ("AA123456A", "2021-23", "XAIS12345678910", "4557ecb5-fd32-48cc-81f5-e6acd1099f3c", requestBodyJson, BAD_REQUEST, RuleTaxYearRangeInvalidError),
       ("AA123456A", "2020-21", "XAIS12345678910", "4557ecb5-fd32-48cc-81f5-e6acd1099f3c", requestBodyJson, BAD_REQUEST, RuleTaxYearNotSupportedError),
-      ("AA123456A",
-       "2022-23",
-       "XAIS12345678910",
-       "4557ecb5-fd32-48cc-81f5-e6acd1099f3c",
-       Json.parse(s"""{"foreignFhlEea": {}}""".stripMargin),
-       BAD_REQUEST,
-       RuleIncorrectOrEmptyBodyError.copy(paths = Some(Seq("/foreignFhlEea")))),
-      ("AA123456A",
-       "2022-23",
-       "XAIS12345678910",
-       "4557ecb5-fd32-48cc-81f5-e6acd1099f3c",
-       invalidValueRequestJson,
-       BAD_REQUEST,
-       allInvalidValueRequestError),
-      ("AA123456A",
-       "2022-23",
-       "XAIS12345678910",
-       "4557ecb5-fd32-48cc-81f5-e6acd1099f3c",
-       bothExpensesSuppliedRequestJson,
-       BAD_REQUEST,
-       ruleBothExpensesSuppliedRequestError),
-      ("AA123456A",
-       "2022-23",
-       "XAIS12345678910",
-       "4557ecb5-fd32-48cc-81f5-e6acd1099f3c",
-       duplicateCountryCodeRequestJson,
-       BAD_REQUEST,
-       ruleDuplicateCountryCodeRequestError),
-      ("AA123456A",
-       "2022-23",
-       "XAIS12345678910",
-       "4557ecb5-fd32-48cc-81f5-e6acd1099f3c",
-       invalidCountryCodeRequestJson("FRANCE"),
-       BAD_REQUEST,
-       CountryCodeFormatError.copy(paths = Some(Seq("/foreignNonFhlProperty/0/countryCode")))),
-      ("AA123456A",
-       "2022-23",
-       "XAIS12345678910",
-       "4557ecb5-fd32-48cc-81f5-e6acd1099f3c",
-       invalidCountryCodeRequestJson("SBT"),
-       BAD_REQUEST,
-       RuleCountryCodeError.copy(paths = Some(Seq("/foreignNonFhlProperty/0/countryCode"))))
+      (
+        "AA123456A",
+        "2022-23",
+        "XAIS12345678910",
+        "4557ecb5-fd32-48cc-81f5-e6acd1099f3c",
+        Json.parse(s"""{"foreignFhlEea": {}}""".stripMargin),
+        BAD_REQUEST,
+        RuleIncorrectOrEmptyBodyError.copy(paths = Some(Seq("/foreignFhlEea")))),
+      (
+        "AA123456A",
+        "2022-23",
+        "XAIS12345678910",
+        "4557ecb5-fd32-48cc-81f5-e6acd1099f3c",
+        invalidValueRequestJson,
+        BAD_REQUEST,
+        allInvalidValueRequestError),
+      (
+        "AA123456A",
+        "2022-23",
+        "XAIS12345678910",
+        "4557ecb5-fd32-48cc-81f5-e6acd1099f3c",
+        bothExpensesSuppliedRequestJson,
+        BAD_REQUEST,
+        ruleBothExpensesSuppliedRequestError),
+      (
+        "AA123456A",
+        "2022-23",
+        "XAIS12345678910",
+        "4557ecb5-fd32-48cc-81f5-e6acd1099f3c",
+        duplicateCountryCodeRequestJson,
+        BAD_REQUEST,
+        ruleDuplicateCountryCodeRequestError),
+      (
+        "AA123456A",
+        "2022-23",
+        "XAIS12345678910",
+        "4557ecb5-fd32-48cc-81f5-e6acd1099f3c",
+        invalidCountryCodeRequestJson("FRANCE"),
+        BAD_REQUEST,
+        CountryCodeFormatError.copy(paths = Some(Seq("/foreignNonFhlProperty/0/countryCode")))),
+      (
+        "AA123456A",
+        "2022-23",
+        "XAIS12345678910",
+        "4557ecb5-fd32-48cc-81f5-e6acd1099f3c",
+        invalidCountryCodeRequestJson("SBT"),
+        BAD_REQUEST,
+        RuleCountryCodeError.copy(paths = Some(Seq("/foreignNonFhlProperty/0/countryCode"))))
     )
     input.foreach(args => (validationErrorTest _).tupled(args))
   }
@@ -588,4 +597,5 @@ class AmendForeignPropertyPeriodSummaryControllerISpec extends V2IntegrationBase
 
     (errors ++ extraTysErrors).foreach(args => (serviceErrorTest _).tupled(args))
   }
+
 }

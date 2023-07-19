@@ -37,6 +37,7 @@ class CreateForeignPropertyPeriodSummaryResponseSpec extends UnitSpec with JsonE
       }
     }
   }
+
   "writes" when {
     "passed valid model" should {
       "return valid JSON" in {
@@ -44,4 +45,5 @@ class CreateForeignPropertyPeriodSummaryResponseSpec extends UnitSpec with JsonE
       }
     }
   }
+
 }

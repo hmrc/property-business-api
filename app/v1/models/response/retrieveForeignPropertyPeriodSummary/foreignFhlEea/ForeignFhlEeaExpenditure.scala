@@ -16,8 +16,8 @@
 
 package v1.models.response.retrieveForeignPropertyPeriodSummary.foreignFhlEea
 
-import play.api.libs.json.{ JsPath, Json, Reads, Writes }
 import play.api.libs.functional.syntax._
+import play.api.libs.json.{JsPath, Json, Reads, Writes}
 
 case class ForeignFhlEeaExpenditure(premisesRunningCosts: Option[BigDecimal],
                                     repairsAndMaintenance: Option[BigDecimal],
@@ -30,6 +30,7 @@ case class ForeignFhlEeaExpenditure(premisesRunningCosts: Option[BigDecimal],
 
 object ForeignFhlEeaExpenditure {
   implicit val writes: Writes[ForeignFhlEeaExpenditure] = Json.writes[ForeignFhlEeaExpenditure]
+
   implicit val reads: Reads[ForeignFhlEeaExpenditure] = (
     (JsPath \ "premisesRunningCosts").readNullable[BigDecimal] and
       (JsPath \ "repairsAndMaintenance").readNullable[BigDecimal] and
@@ -40,4 +41,5 @@ object ForeignFhlEeaExpenditure {
       (JsPath \ "other").readNullable[BigDecimal] and
       (JsPath \ "consolidatedExpense").readNullable[BigDecimal]
   )(ForeignFhlEeaExpenditure.apply _)
+
 }

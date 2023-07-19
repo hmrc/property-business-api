@@ -16,7 +16,7 @@
 
 package api.models.domain
 
-import play.api.libs.json.{Json, JsString}
+import play.api.libs.json.{JsString, Json}
 import support.UnitSpec
 
 class PeriodIdSpec extends UnitSpec {
@@ -50,4 +50,5 @@ class PeriodIdSpec extends UnitSpec {
       }
     }
   }
+
 }

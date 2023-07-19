@@ -16,10 +16,10 @@
 
 package v2.mocks.validators
 
+import api.models.errors.MtdError
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
 import v2.controllers.requestParsers.validators.AmendForeignPropertyPeriodSummaryValidator
-import api.models.errors.MtdError
 import v2.models.request.amendForeignPropertyPeriodSummary.AmendForeignPropertyPeriodSummaryRawData
 
 class MockAmendForeignPropertyPeriodSummaryValidator extends MockFactory {
@@ -33,6 +33,7 @@ class MockAmendForeignPropertyPeriodSummaryValidator extends MockFactory {
         .validate(_: AmendForeignPropertyPeriodSummaryRawData))
         .expects(data)
     }
+
   }
 
 }

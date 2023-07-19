@@ -32,7 +32,8 @@ class ListForeignPropertiesPeriodSummariesValidatorSpec extends UnitSpec {
   "running a validation" should {
     "return no errors" when {
       "a valid request is supplied" in {
-        validator.validate(ListForeignPropertiesPeriodSummariesRawData(validNino, validBusinessId, Some(validFromDate), Some(validToDate))) shouldBe Nil
+        validator.validate(
+          ListForeignPropertiesPeriodSummariesRawData(validNino, validBusinessId, Some(validFromDate), Some(validToDate))) shouldBe Nil
       }
       "a valid request is supplied without dates" in {
         validator.validate(ListForeignPropertiesPeriodSummariesRawData(validNino, validBusinessId, None, None)) shouldBe Nil
@@ -40,7 +41,8 @@ class ListForeignPropertiesPeriodSummariesValidatorSpec extends UnitSpec {
     }
     "return a path parameter format error" when {
       "an invalid nino is supplied" in {
-        validator.validate(ListForeignPropertiesPeriodSummariesRawData("Walrus", validBusinessId, Some(validFromDate), Some(validToDate))) shouldBe List(
+        validator.validate(
+          ListForeignPropertiesPeriodSummariesRawData("Walrus", validBusinessId, Some(validFromDate), Some(validToDate))) shouldBe List(
           NinoFormatError)
       }
       "an invalid businessId is supplied" in {
@@ -48,15 +50,18 @@ class ListForeignPropertiesPeriodSummariesValidatorSpec extends UnitSpec {
           BusinessIdFormatError)
       }
       "an invalid fromDate is supplied" in {
-        validator.validate(ListForeignPropertiesPeriodSummariesRawData(validNino, validBusinessId, Some("20202-202-202"), Some(validToDate))) shouldBe List(
+        validator.validate(
+          ListForeignPropertiesPeriodSummariesRawData(validNino, validBusinessId, Some("20202-202-202"), Some(validToDate))) shouldBe List(
           FromDateFormatError)
       }
       "an invalid toDate is supplied" in {
-        validator.validate(ListForeignPropertiesPeriodSummariesRawData(validNino, validBusinessId, Some(validFromDate), Some("20202-202-202"))) shouldBe List(
+        validator.validate(
+          ListForeignPropertiesPeriodSummariesRawData(validNino, validBusinessId, Some(validFromDate), Some("20202-202-202"))) shouldBe List(
           ToDateFormatError)
       }
       "toDate is before fromDate" in {
-        validator.validate(ListForeignPropertiesPeriodSummariesRawData(validNino, validBusinessId, Some("2020-08-06"), Some("2020-06-06"))) shouldBe List(
+        validator.validate(
+          ListForeignPropertiesPeriodSummariesRawData(validNino, validBusinessId, Some("2020-08-06"), Some("2020-06-06"))) shouldBe List(
           RuleToDateBeforeFromDateError)
       }
       "only fromDate is provided" in {
@@ -74,4 +79,5 @@ class ListForeignPropertiesPeriodSummariesValidatorSpec extends UnitSpec {
       }
     }
   }
+
 }

@@ -18,25 +18,27 @@ package v2.controllers.requestParsers.validators
 
 import api.controllers.requestParsers.validators.Validator
 import api.controllers.requestParsers.validators.validations.NinoValidation
-import config.AppConfig
-
-import javax.inject.{Inject, Singleton}
 import api.models.errors.MtdError
+import config.AppConfig
 import v2.models.request.listHistoricUkPropertyPeriodSummaries.ListHistoricUkPropertyPeriodSummariesRawData
 
+import javax.inject.{Inject, Singleton}
+
 @Singleton
-class ListHistoricUkPropertyPeriodSummariesValidator @Inject()(appConfig: AppConfig) extends Validator[ListHistoricUkPropertyPeriodSummariesRawData] {
+class ListHistoricUkPropertyPeriodSummariesValidator @Inject() (appConfig: AppConfig)
+    extends Validator[ListHistoricUkPropertyPeriodSummariesRawData] {
 
   private val validationSet = List(parameterFormatValidation)
 
   private def parameterFormatValidation: ListHistoricUkPropertyPeriodSummariesRawData => List[List[MtdError]] =
     (data: ListHistoricUkPropertyPeriodSummariesRawData) => {
       List(
-        NinoValidation.validate(data.nino),
+        NinoValidation.validate(data.nino)
       )
     }
 
   override def validate(data: ListHistoricUkPropertyPeriodSummariesRawData): List[MtdError] = {
     run(validationSet, data).distinct
   }
+
 }

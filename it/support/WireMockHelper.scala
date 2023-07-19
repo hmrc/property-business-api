@@ -20,7 +20,7 @@ import com.github.tomakehurst.wiremock.WireMockServer
 import com.github.tomakehurst.wiremock.client.WireMock
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration._
-import org.scalatest.concurrent.{ Eventually, IntegrationPatience }
+import org.scalatest.concurrent.{Eventually, IntegrationPatience}
 import org.scalatestplus.play.guice.GuiceOneServerPerSuite
 
 object WireMockHelper extends Eventually with IntegrationPatience {
@@ -33,7 +33,7 @@ trait WireMockHelper {
 
   self: GuiceOneServerPerSuite =>
 
-  import WireMockHelper._
+  import support.WireMockHelper._
 
   lazy val wireMockConf: WireMockConfiguration = wireMockConfig.port(wireMockPort)
   lazy val wireMockServer: WireMockServer      = new WireMockServer(wireMockConf)

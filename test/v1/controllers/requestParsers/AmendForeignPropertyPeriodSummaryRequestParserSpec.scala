@@ -21,9 +21,9 @@ import support.UnitSpec
 import v1.mocks.validators.MockAmendForeignPropertyPeriodSummaryValidator
 import v1.models.domain.Nino
 import v1.models.errors._
-import v1.models.request.common.foreignPropertyEntry._
 import v1.models.request.amendForeignPropertyPeriodSummary._
 import v1.models.request.common.foreignFhlEea._
+import v1.models.request.common.foreignPropertyEntry._
 
 class AmendForeignPropertyPeriodSummaryRequestParserSpec extends UnitSpec {
 
@@ -161,4 +161,5 @@ class AmendForeignPropertyPeriodSummaryRequestParserSpec extends UnitSpec {
       }
     }
   }
+
 }

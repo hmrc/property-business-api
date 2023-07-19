@@ -16,9 +16,9 @@
 
 package v3.models.request.amendHistoricNonFhlUkPiePeriodSummary
 
-import v3.fixtures.AmendHistoricNonFhlUkPiePeriodSummary.AmendHistoricNonFhlUkPiePeriodSummaryFixtures
 import play.api.libs.json.Json
 import support.UnitSpec
+import v3.fixtures.AmendHistoricNonFhlUkPiePeriodSummary.AmendHistoricNonFhlUkPiePeriodSummaryFixtures
 
 class AmendHistoricNonFhlUkPiePeriodSummaryRequestBodySpec extends UnitSpec with AmendHistoricNonFhlUkPiePeriodSummaryFixtures {
 

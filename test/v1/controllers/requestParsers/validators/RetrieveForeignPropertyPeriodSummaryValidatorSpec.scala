@@ -17,7 +17,7 @@
 package v1.controllers.requestParsers.validators
 
 import support.UnitSpec
-import v1.models.errors.{ BusinessIdFormatError, NinoFormatError, SubmissionIdFormatError }
+import v1.models.errors.{BusinessIdFormatError, NinoFormatError, SubmissionIdFormatError}
 import v1.models.request.retrieveForeignPropertyPeriodSummary.RetrieveForeignPropertyPeriodSummaryRawData
 
 class RetrieveForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec {
@@ -53,4 +53,5 @@ class RetrieveForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec {
       }
     }
   }
+
 }

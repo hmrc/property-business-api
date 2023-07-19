@@ -27,7 +27,7 @@ import v2.hateoas.HateoasLinks
 case class RetrieveUkPropertyPeriodSummaryResponse(submittedOn: Timestamp,
                                                    fromDate: String,
                                                    toDate: String,
-                                                   //periodCreationDate: Option[String], // To be reinstated, see MTDSA-15575
+                                                   // periodCreationDate: Option[String], // To be reinstated, see MTDSA-15575
                                                    ukFhlProperty: Option[UkFhlProperty],
                                                    ukNonFhlProperty: Option[UkNonFhlProperty])
 

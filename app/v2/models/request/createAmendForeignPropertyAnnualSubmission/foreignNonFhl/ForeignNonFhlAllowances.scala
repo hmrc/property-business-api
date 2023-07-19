@@ -17,7 +17,7 @@
 package v2.models.request.createAmendForeignPropertyAnnualSubmission.foreignNonFhl
 
 import play.api.libs.functional.syntax._
-import play.api.libs.json.{ JsPath, Json, Reads, Writes }
+import play.api.libs.json.{JsPath, Json, Reads, Writes}
 import v2.models.request.common.StructuredBuildingAllowance
 
 case class ForeignNonFhlAllowances(annualInvestmentAllowance: Option[BigDecimal],
@@ -42,4 +42,5 @@ object ForeignNonFhlAllowances {
       (JsPath \ "propertyAllowance").writeNullable[BigDecimal] and
       (JsPath \ "structuredBuildingAllowance").writeNullable[Seq[StructuredBuildingAllowance]]
   )(unlift(ForeignNonFhlAllowances.unapply))
+
 }

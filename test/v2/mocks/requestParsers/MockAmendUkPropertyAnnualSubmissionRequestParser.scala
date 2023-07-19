@@ -16,11 +16,11 @@
 
 package v2.mocks.requestParsers
 
+import api.models.errors.ErrorWrapper
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
 import v2.controllers.requestParsers.AmendUkPropertyAnnualSubmissionRequestParser
-import api.models.errors.ErrorWrapper
-import v2.models.request.amendUkPropertyAnnualSubmission.{ AmendUkPropertyAnnualSubmissionRawData, AmendUkPropertyAnnualSubmissionRequest }
+import v2.models.request.amendUkPropertyAnnualSubmission.{AmendUkPropertyAnnualSubmissionRawData, AmendUkPropertyAnnualSubmissionRequest}
 
 trait MockAmendUkPropertyAnnualSubmissionRequestParser extends MockFactory {
 
@@ -32,5 +32,7 @@ trait MockAmendUkPropertyAnnualSubmissionRequestParser extends MockFactory {
     def parseRequest(data: AmendUkPropertyAnnualSubmissionRawData): CallHandler[Either[ErrorWrapper, AmendUkPropertyAnnualSubmissionRequest]] = {
       (mockAmendUkPropertyAnnualSubmissionRequestParser.parseRequest(_: AmendUkPropertyAnnualSubmissionRawData)(_: String)).expects(data, *)
     }
+
   }
+
 }

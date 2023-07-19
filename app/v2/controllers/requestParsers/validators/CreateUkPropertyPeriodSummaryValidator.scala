@@ -17,20 +17,11 @@
 package v2.controllers.requestParsers.validators
 
 import api.controllers.requestParsers.validators.Validator
-import api.controllers.requestParsers.validators.validations.{
-  BusinessIdValidation,
-  DateValidation,
-  JsonFormatValidation,
-  NinoValidation,
-  NoValidationErrors,
-  NumberValidation,
-  TaxYearValidation,
-  ToDateBeforeFromDateValidation
-}
+import api.controllers.requestParsers.validators.validations._
+import api.models.errors.MtdError
 import com.google.inject.Inject
 import config.AppConfig
 import v2.controllers.requestParsers.validators.validations._
-import api.models.errors.MtdError
 import v2.models.request.common.ukFhlProperty.UkFhlProperty
 import v2.models.request.common.ukNonFhlProperty.UkNonFhlProperty
 import v2.models.request.createUkPropertyPeriodSummary.{CreateUkPropertyPeriodSummaryRawData, CreateUkPropertyPeriodSummaryRequestBody}

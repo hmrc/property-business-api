@@ -16,10 +16,10 @@
 
 package v2.mocks.connectors
 
+import api.connectors.DownstreamOutcome
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
 import uk.gov.hmrc.http.HeaderCarrier
-import api.connectors.{DownstreamOutcome}
 import v2.connectors.DeleteHistoricUkPropertyAnnualSubmissionConnector
 import v2.models.request.deleteHistoricUkPropertyAnnualSubmission.DeleteHistoricUkPropertyAnnualSubmissionRequest
 
@@ -44,5 +44,7 @@ trait MockDeleteHistoricUkPropertyAnnualSubmissionConnector extends MockFactory 
         )
         .expects(requestData, *, *, *)
     }
+
   }
+
 }

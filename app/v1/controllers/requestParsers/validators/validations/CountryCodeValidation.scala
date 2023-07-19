@@ -17,7 +17,7 @@
 package v1.controllers.requestParsers.validators.validations
 
 import com.neovisionaries.i18n.CountryCode
-import v1.models.errors.{ CountryCodeFormatError, RuleCountryCodeError, MtdError }
+import v1.models.errors.{CountryCodeFormatError, MtdError, RuleCountryCodeError}
 
 object CountryCodeValidation {
 
@@ -26,4 +26,5 @@ object CountryCodeValidation {
     case (_, code) if code.length == 3 => List(RuleCountryCodeError.copy(paths = Some(Seq(path))))
     case _                             => List(CountryCodeFormatError.copy(paths = Some(Seq(path))))
   }
+
 }

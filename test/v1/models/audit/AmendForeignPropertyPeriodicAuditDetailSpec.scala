@@ -184,4 +184,5 @@ class AmendForeignPropertyPeriodicAuditDetailSpec extends UnitSpec {
       }
     }
   }
+
 }

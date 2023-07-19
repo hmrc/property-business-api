@@ -24,7 +24,7 @@ import uk.gov.hmrc.http.HeaderCarrier
 import v1.models.outcomes.AuthOutcome
 import v1.services.EnrolmentsAuthService
 
-import scala.concurrent.{ ExecutionContext, Future }
+import scala.concurrent.{ExecutionContext, Future}
 
 trait MockEnrolmentsAuthService extends MockFactory {
 
@@ -44,6 +44,7 @@ trait MockEnrolmentsAuthService extends MockFactory {
         .authorised(_: Predicate)(_: HeaderCarrier, _: ExecutionContext))
         .expects(predicate, *, *)
     }
+
   }
 
 }

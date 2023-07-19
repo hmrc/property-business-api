@@ -16,10 +16,10 @@
 
 package v3.mocks.connectors
 
+import api.connectors.DownstreamOutcome
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
 import uk.gov.hmrc.http.HeaderCarrier
-import api.connectors.DownstreamOutcome
 import v3.connectors.CreateUkPropertyPeriodSummaryConnector
 import v3.models.request.createUkPropertyPeriodSummary.CreateUkPropertyPeriodSummaryRequest
 import v3.models.response.createUkPropertyPeriodSummary.CreateUkPropertyPeriodSummaryResponse

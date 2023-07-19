@@ -16,10 +16,10 @@
 
 package v2.models.request.amendUkPropertyAnnualSubmission.ukNonFhlProperty
 
-import play.api.libs.json.{ JsValue, Json }
+import play.api.libs.json.{JsValue, Json}
 import support.UnitSpec
-import v2.models.request.common.{ Building, FirstYear, StructuredBuildingAllowance }
 import v2.models.request.common.ukPropertyRentARoom.UkPropertyAdjustmentsRentARoom
+import v2.models.request.common.{Building, FirstYear, StructuredBuildingAllowance}
 
 class UkNonFhlPropertySpec extends UnitSpec {
 
@@ -179,6 +179,7 @@ class UkNonFhlPropertySpec extends UnitSpec {
       }
     }
   }
+
   "writes" when {
     "passed valid model" should {
       "return valid JSON" in {
@@ -186,4 +187,5 @@ class UkNonFhlPropertySpec extends UnitSpec {
       }
     }
   }
+
 }

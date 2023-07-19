@@ -16,17 +16,10 @@
 
 package v2.controllers.requestParsers.validators
 
+import api.models.errors._
 import mocks.MockAppConfig
 import play.api.libs.json.{JsNumber, JsObject, JsValue, Json}
 import support.UnitSpec
-import api.models.errors.{
-  NinoFormatError,
-  RuleHistoricTaxYearNotSupportedError,
-  RuleIncorrectOrEmptyBodyError,
-  RuleTaxYearRangeInvalidError,
-  TaxYearFormatError,
-  ValueFormatError
-}
 import v2.models.request.createAmendHistoricFhlUkPropertyAnnualSubmission.CreateAmendHistoricFhlUkPropertyAnnualSubmissionRawData
 import v2.models.utils.JsonErrorValidators
 

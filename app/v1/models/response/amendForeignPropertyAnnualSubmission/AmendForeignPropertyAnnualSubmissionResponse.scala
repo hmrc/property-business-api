@@ -17,12 +17,13 @@
 package v1.models.response.amendForeignPropertyAnnualSubmission
 
 import config.AppConfig
-import v1.hateoas.{ HateoasLinks, HateoasLinksFactory }
-import v1.models.hateoas.{ HateoasData, Link }
+import v1.hateoas.{HateoasLinks, HateoasLinksFactory}
+import v1.models.hateoas.{HateoasData, Link}
 
 object AmendForeignPropertyAnnualSubmissionResponse extends HateoasLinks {
 
   implicit object AmendForeignPropertyLinksFactory extends HateoasLinksFactory[Unit, AmendForeignPropertyAnnualSubmissionHateoasData] {
+
     override def links(appConfig: AppConfig, data: AmendForeignPropertyAnnualSubmissionHateoasData): Seq[Link] = {
       import data._
       Seq(
@@ -31,7 +32,9 @@ object AmendForeignPropertyAnnualSubmissionResponse extends HateoasLinks {
         deleteForeignPropertyAnnualSubmission(appConfig, nino, businessId, taxYear)
       )
     }
+
   }
+
 }
 
 case class AmendForeignPropertyAnnualSubmissionHateoasData(nino: String, businessId: String, taxYear: String) extends HateoasData

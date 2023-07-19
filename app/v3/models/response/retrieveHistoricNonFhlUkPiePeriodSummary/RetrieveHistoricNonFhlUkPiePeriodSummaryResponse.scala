@@ -16,12 +16,12 @@
 
 package v3.models.response.retrieveHistoricNonFhlUkPiePeriodSummary
 
-import config.AppConfig
-import play.api.libs.json.{Json, JsPath, OWrites, Reads}
-import play.api.libs.functional.syntax._
-import v3.hateoas.HateoasLinks
 import api.hateoas.HateoasLinksFactory
 import api.models.hateoas.{HateoasData, Link}
+import config.AppConfig
+import play.api.libs.functional.syntax._
+import play.api.libs.json.{JsPath, Json, OWrites, Reads}
+import v3.hateoas.HateoasLinks
 
 case class RetrieveHistoricNonFhlUkPiePeriodSummaryResponse(fromDate: String,
                                                             toDate: String,

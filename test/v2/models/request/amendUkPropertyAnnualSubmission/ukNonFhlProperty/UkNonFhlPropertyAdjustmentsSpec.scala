@@ -16,7 +16,7 @@
 
 package v2.models.request.amendUkPropertyAnnualSubmission.ukNonFhlProperty
 
-import play.api.libs.json.{ JsValue, Json }
+import play.api.libs.json.{JsValue, Json}
 import support.UnitSpec
 import v2.models.request.common.ukPropertyRentARoom.UkPropertyAdjustmentsRentARoom
 
@@ -62,6 +62,7 @@ class UkNonFhlPropertyAdjustmentsSpec extends UnitSpec {
       }
     }
   }
+
   "writes" when {
     "passed valid model" should {
       "return valid JSON" in {
@@ -69,4 +70,5 @@ class UkNonFhlPropertyAdjustmentsSpec extends UnitSpec {
       }
     }
   }
+
 }

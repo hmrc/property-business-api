@@ -16,14 +16,11 @@
 
 package v2.mocks.requestParsers
 
+import api.models.errors.ErrorWrapper
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
 import v2.controllers.requestParsers.CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequestParser
-import api.models.errors.ErrorWrapper
-import v2.models.request.createAmendHistoricFhlUkPropertyAnnualSubmission.{
-  CreateAmendHistoricFhlUkPropertyAnnualSubmissionRawData,
-  CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequest
-}
+import v2.models.request.createAmendHistoricFhlUkPropertyAnnualSubmission.{CreateAmendHistoricFhlUkPropertyAnnualSubmissionRawData, CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequest}
 
 trait MockCreateAmendHistoricFhlUkPropertyAnnualSubmissionRequestParser extends MockFactory {
 

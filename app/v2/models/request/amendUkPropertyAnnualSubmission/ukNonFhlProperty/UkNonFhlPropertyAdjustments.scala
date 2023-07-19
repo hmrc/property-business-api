@@ -16,8 +16,8 @@
 
 package v2.models.request.amendUkPropertyAnnualSubmission.ukNonFhlProperty
 
-import play.api.libs.json.{ JsPath, Json, Reads, Writes }
 import play.api.libs.functional.syntax._
+import play.api.libs.json.{JsPath, Json, Reads, Writes}
 import v2.models.request.common.ukPropertyRentARoom.UkPropertyAdjustmentsRentARoom
 
 case class UkNonFhlPropertyAdjustments(balancingCharge: Option[BigDecimal],
@@ -36,4 +36,5 @@ object UkNonFhlPropertyAdjustments {
       (JsPath \ "nonResidentLandlord").write[Boolean] and
       (JsPath \ "ukOtherRentARoom").writeNullable[UkPropertyAdjustmentsRentARoom]
   )(unlift(UkNonFhlPropertyAdjustments.unapply))
+
 }

@@ -17,10 +17,11 @@
 package v2.models.response.retrieveUkPropertyPeriodSummary
 
 import fixtures.RetrieveUkPropertyPeriodSummary.ResponseModelsFixture
-import play.api.libs.json.{ JsValue, Json }
+import play.api.libs.json.{JsValue, Json}
 import support.UnitSpec
 
 class UkNonFhlPropertySpec extends UnitSpec with ResponseModelsFixture {
+
   "NonUkFhlProperty" when {
     val downstreamJson: JsValue = (fullDownstreamJson \ "ukOtherProperty").get
     val mtdJson: JsValue        = (fullMtdJson \ "ukNonFhlProperty").get
@@ -37,4 +38,5 @@ class UkNonFhlPropertySpec extends UnitSpec with ResponseModelsFixture {
       }
     }
   }
+
 }

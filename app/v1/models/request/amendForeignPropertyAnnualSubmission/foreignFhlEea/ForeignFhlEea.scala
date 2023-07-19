@@ -16,14 +16,15 @@
 
 package v1.models.request.amendForeignPropertyAnnualSubmission.foreignFhlEea
 
-import play.api.libs.json.{ Json, OFormat }
+import play.api.libs.json.{Json, OFormat}
 
 case class ForeignFhlEea(adjustments: Option[ForeignFhlEeaAdjustments], allowances: Option[ForeignFhlEeaAllowances]) {
 
   def isEmpty: Boolean =
     (adjustments.isEmpty && allowances.isEmpty) ||
-    adjustments.exists(_.isEmpty) ||
-    allowances.exists(_.isEmpty)
+      adjustments.exists(_.isEmpty) ||
+      allowances.exists(_.isEmpty)
+
 }
 
 object ForeignFhlEea {

@@ -16,10 +16,10 @@
 
 package v2.mocks.validators
 
+import api.models.errors.MtdError
 import org.scalamock.handlers.CallHandler1
 import org.scalamock.scalatest.MockFactory
 import v2.controllers.requestParsers.validators.ListPropertyPeriodSummariesValidator
-import api.models.errors.MtdError
 import v2.models.request.listPropertyPeriodSummaries.ListPropertyPeriodSummariesRawData
 
 class MockListPropertyPeriodSummariesValidator extends MockFactory {
@@ -33,6 +33,7 @@ class MockListPropertyPeriodSummariesValidator extends MockFactory {
         .validate(_: ListPropertyPeriodSummariesRawData))
         .expects(data)
     }
+
   }
 
 }

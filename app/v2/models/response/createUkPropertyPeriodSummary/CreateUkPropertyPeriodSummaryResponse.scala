@@ -28,6 +28,7 @@ object CreateUkPropertyPeriodSummaryResponse extends HateoasLinks {
   implicit val format: OFormat[CreateUkPropertyPeriodSummaryResponse] = Json.format[CreateUkPropertyPeriodSummaryResponse]
 
   implicit object LinksFactory extends HateoasLinksFactory[CreateUkPropertyPeriodSummaryResponse, CreateUkPropertyPeriodSummaryHateoasData] {
+
     override def links(appConfig: AppConfig, data: CreateUkPropertyPeriodSummaryHateoasData): Seq[Link] = {
       import data._
       Seq(
@@ -35,7 +36,9 @@ object CreateUkPropertyPeriodSummaryResponse extends HateoasLinks {
         retrieveUkPropertyPeriodSummary(appConfig, nino, businessId, taxYear, submissionId, self = true)
       )
     }
+
   }
+
 }
 
 case class CreateUkPropertyPeriodSummaryHateoasData(nino: String, businessId: String, taxYear: String, submissionId: String) extends HateoasData

@@ -16,13 +16,13 @@
 
 package v2.controllers.requestParsers.validators.validations
 
-import support.UnitSpec
 import api.models.errors.RuleBothAllowancesSuppliedError
-import v2.models.request.createAmendForeignPropertyAnnualSubmission.foreignFhlEea.ForeignFhlEeaAllowances
-import v2.models.request.createAmendForeignPropertyAnnualSubmission.foreignNonFhl.ForeignNonFhlAllowances
+import support.UnitSpec
 import v2.models.request.amendUkPropertyAnnualSubmission.ukFhlProperty.UkFhlPropertyAllowances
 import v2.models.request.amendUkPropertyAnnualSubmission.ukNonFhlProperty.UkNonFhlPropertyAllowances
-import v2.models.request.common.{ Building, StructuredBuildingAllowance }
+import v2.models.request.common.{Building, StructuredBuildingAllowance}
+import v2.models.request.createAmendForeignPropertyAnnualSubmission.foreignFhlEea.ForeignFhlEeaAllowances
+import v2.models.request.createAmendForeignPropertyAnnualSubmission.foreignNonFhl.ForeignNonFhlAllowances
 
 class AllowancesValidationSpec extends UnitSpec {
 
@@ -86,7 +86,7 @@ class AllowancesValidationSpec extends UnitSpec {
     }
     "return RuleBothAllowancesSuppliedError error" when {
       "propertyIncomeAllowance is provided with other fields" in {
-        val allowances       = UkNonFhlPropertyAllowances(Some(5326.11), None, Some(5326.11), None, None, Some(5326.11), None, Some(5326.11), None, None)
+        val allowances = UkNonFhlPropertyAllowances(Some(5326.11), None, Some(5326.11), None, None, Some(5326.11), None, Some(5326.11), None, None)
         val validationResult = AllowancesValidation.validateUkNonFhl(allowances, "path")
         validationResult shouldBe List(RuleBothAllowancesSuppliedError.copy(paths = Some(Seq("path"))))
       }
@@ -139,14 +139,15 @@ class AllowancesValidationSpec extends UnitSpec {
     "return no errors" when {
       "other fields are provided without propertyIncomeAllowance" in {
         val allowances =
-          ForeignNonFhlAllowances(provided,
-                                  provided,
-                                  provided,
-                                  provided,
-                                  provided,
-                                  provided,
-                                  propertyIncomeAllowance = None,
-                                  structuredBuildingAllowance)
+          ForeignNonFhlAllowances(
+            provided,
+            provided,
+            provided,
+            provided,
+            provided,
+            provided,
+            propertyIncomeAllowance = None,
+            structuredBuildingAllowance)
         AllowancesValidation.validateForeignNonFhl(allowances, "path") shouldBe Nil
       }
 
@@ -171,14 +172,15 @@ class AllowancesValidationSpec extends UnitSpec {
 
       "zeroEmissionsGoodsVehicleAllowance is provided with propertyIncomeAllowance" in {
         val allowances =
-          ForeignNonFhlAllowances(None,
-                                  None,
-                                  zeroEmissionsGoodsVehicleAllowance = provided,
-                                  None,
-                                  None,
-                                  None,
-                                  propertyIncomeAllowance = provided,
-                                  None)
+          ForeignNonFhlAllowances(
+            None,
+            None,
+            zeroEmissionsGoodsVehicleAllowance = provided,
+            None,
+            None,
+            None,
+            propertyIncomeAllowance = provided,
+            None)
         AllowancesValidation.validateForeignNonFhl(allowances, "path") shouldBe List(RuleBothAllowancesSuppliedError.copy(paths = Some(Seq("path"))))
       }
 
@@ -207,4 +209,5 @@ class AllowancesValidationSpec extends UnitSpec {
       }
     }
   }
+
 }

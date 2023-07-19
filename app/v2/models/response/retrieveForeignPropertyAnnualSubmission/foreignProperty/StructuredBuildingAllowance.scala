@@ -16,7 +16,7 @@
 
 package v2.models.response.retrieveForeignPropertyAnnualSubmission.foreignProperty
 
-import play.api.libs.json.{ Json, OFormat }
+import play.api.libs.json.{Json, OFormat}
 
 case class StructuredBuildingAllowance(amount: BigDecimal, firstYear: Option[FirstYear], building: Building)
 

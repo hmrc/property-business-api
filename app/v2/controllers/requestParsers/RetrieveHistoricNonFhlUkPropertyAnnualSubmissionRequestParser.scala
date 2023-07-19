@@ -18,13 +18,10 @@ package v2.controllers.requestParsers
 
 import api.controllers.requestParsers.RequestParser
 import api.models.domain.{Nino, TaxYear}
+import v2.controllers.requestParsers.validators.RetrieveHistoricNonFhlUkPropertyAnnualSubmissionValidator
+import v2.models.request.retrieveHistoricNonFhlUkPropertyAnnualSubmission.{RetrieveHistoricNonFhlUkPropertyAnnualSubmissionRawData, RetrieveHistoricNonFhlUkPropertyAnnualSubmissionRequest}
 
 import javax.inject.Inject
-import v2.controllers.requestParsers.validators.RetrieveHistoricNonFhlUkPropertyAnnualSubmissionValidator
-import v2.models.request.retrieveHistoricNonFhlUkPropertyAnnualSubmission.{
-  RetrieveHistoricNonFhlUkPropertyAnnualSubmissionRawData,
-  RetrieveHistoricNonFhlUkPropertyAnnualSubmissionRequest
-}
 
 class RetrieveHistoricNonFhlUkPropertyAnnualSubmissionRequestParser @Inject() (
     val validator: RetrieveHistoricNonFhlUkPropertyAnnualSubmissionValidator)

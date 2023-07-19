@@ -18,12 +18,13 @@ package v2.models.request.amendForeignPropertyPeriodSummary
 
 import api.models.request.RawData
 import play.api.libs.functional.syntax._
-import play.api.libs.json.{ JsPath, JsValue, OWrites }
+import play.api.libs.json.{JsPath, JsValue, OWrites}
 
 case class AmendForeignPropertyPeriodSummaryRawData(nino: String, businessId: String, taxYear: String, submissionId: String, body: JsValue)
     extends RawData
 
 object AmendForeignPropertyPeriodSummaryRawData {
+
   implicit val writes: OWrites[AmendForeignPropertyPeriodSummaryRawData] = (
     (JsPath \ "nino").write[String] and
       (JsPath \ "businessId").write[String] and
@@ -31,4 +32,5 @@ object AmendForeignPropertyPeriodSummaryRawData {
       (JsPath \ "submissionId").write[String] and
       (JsPath \ "request").write[JsValue]
   )(unlift(AmendForeignPropertyPeriodSummaryRawData.unapply))
+
 }

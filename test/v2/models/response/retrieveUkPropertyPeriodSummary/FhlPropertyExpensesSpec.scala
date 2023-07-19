@@ -17,10 +17,11 @@
 package v2.models.response.retrieveUkPropertyPeriodSummary
 
 import fixtures.RetrieveUkPropertyPeriodSummary.ResponseModelsFixture
-import play.api.libs.json.{ JsValue, Json }
+import play.api.libs.json.{JsValue, Json}
 import support.UnitSpec
 
 class FhlPropertyExpensesSpec extends UnitSpec with ResponseModelsFixture {
+
   "FhlPropertyExpenses" when {
     val downstreamJson: JsValue    = (fullDownstreamJson \ "ukFhlProperty" \ "expenses").get
     val mtdJson: JsValue           = (fullMtdJson \ "ukFhlProperty" \ "expenses").get
@@ -37,4 +38,5 @@ class FhlPropertyExpensesSpec extends UnitSpec with ResponseModelsFixture {
       }
     }
   }
+
 }

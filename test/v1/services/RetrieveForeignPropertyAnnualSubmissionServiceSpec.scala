@@ -18,15 +18,15 @@ package v1.services
 
 import api.models.outcomes.ResponseWrapper
 import support.UnitSpec
+import uk.gov.hmrc.http.HeaderCarrier
+import v1.controllers.EndpointLogContext
 import v1.mocks.connectors.MockRetrieveForeignPropertyAnnualSubmissionConnector
+import v1.models.domain.Nino
 import v1.models.errors._
 import v1.models.request.retrieveForeignPropertyAnnualSubmission.RetrieveForeignPropertyAnnualSubmissionRequest
 import v1.models.response.retrieveForeignPropertyAnnualSubmission.RetrieveForeignPropertyAnnualSubmissionResponse
 import v1.models.response.retrieveForeignPropertyAnnualSubmission.foreignFhlEea._
 import v1.models.response.retrieveForeignPropertyAnnualSubmission.foreignProperty._
-import uk.gov.hmrc.http.HeaderCarrier
-import v1.controllers.EndpointLogContext
-import v1.models.domain.Nino
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -61,6 +61,7 @@ class RetrieveForeignPropertyAnnualSubmissionServiceSpec extends UnitSpec {
     val service = new RetrieveForeignPropertyAnnualSubmissionService(
       connector = mockRetrieveForeignPropertyConnector
     )
+
   }
 
   "service" should {
@@ -102,4 +103,5 @@ class RetrieveForeignPropertyAnnualSubmissionServiceSpec extends UnitSpec {
       input.foreach(args => (serviceError _).tupled(args))
     }
   }
+
 }

@@ -17,7 +17,7 @@
 package v2.models.request.amendForeignPropertyPeriodSummary
 
 import play.api.libs.functional.syntax._
-import play.api.libs.json.{ JsPath, Json, OWrites, Reads }
+import play.api.libs.json.{JsPath, Json, OWrites, Reads}
 import v2.models.request.common.foreignFhlEea.AmendForeignFhlEea
 import v2.models.request.common.foreignPropertyEntry.AmendForeignNonFhlPropertyEntry
 
@@ -31,4 +31,5 @@ object AmendForeignPropertyPeriodSummaryRequestBody {
     (JsPath \ "foreignFhlEea").writeNullable[AmendForeignFhlEea] and
       (JsPath \ "foreignProperty").writeNullable[Seq[AmendForeignNonFhlPropertyEntry]]
   )(unlift(AmendForeignPropertyPeriodSummaryRequestBody.unapply))
+
 }

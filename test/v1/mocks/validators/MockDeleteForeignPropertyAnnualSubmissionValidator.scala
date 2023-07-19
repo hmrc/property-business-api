@@ -33,6 +33,7 @@ class MockDeleteForeignPropertyAnnualSubmissionValidator extends MockFactory {
         .validate(_: DeleteForeignPropertyAnnualSubmissionRawData))
         .expects(data)
     }
+
   }
 
 }

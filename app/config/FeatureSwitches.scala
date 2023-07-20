@@ -25,7 +25,8 @@ import javax.inject.Inject
 @ImplementedBy(classOf[FeatureSwitchesImpl])
 trait FeatureSwitches {
   def isPassDeleteIntentEnabled: Boolean
-  def isRemoveLossesBroughtForwardEnabled: Boolean
+  def isRemoveLossesBroughtForwardEnabledV1: Boolean
+  def isRemoveLossesBroughtForwardEnabledV2: Boolean
 }
 
 @Singleton
@@ -34,8 +35,9 @@ class FeatureSwitchesImpl(featureSwitchConfig: Configuration) extends FeatureSwi
   @Inject
   def this(appConfig: AppConfig) = this(appConfig.featureSwitches)
 
-  val isPassDeleteIntentEnabled: Boolean           = isEnabled("passDeleteIntentHeader.enabled")
-  val isRemoveLossesBroughtForwardEnabled: Boolean = isEnabled("removeLossesBroughtForward.enabled")
+  val isPassDeleteIntentEnabled: Boolean             = isEnabled("passDeleteIntentHeader.enabled")
+  val isRemoveLossesBroughtForwardEnabledV1: Boolean = isEnabled("removeLossesBroughtForwardV1.enabled")
+  val isRemoveLossesBroughtForwardEnabledV2: Boolean = isEnabled("removeLossesBroughtForwardV2.enabled")
 
   private def isEnabled(key: String): Boolean = featureSwitchConfig.getOptional[Boolean](key).getOrElse(true)
 }

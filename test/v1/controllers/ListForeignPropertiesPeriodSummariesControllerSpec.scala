@@ -27,10 +27,10 @@ import v1.mocks.services.{MockAuditService, MockEnrolmentsAuthService, MockListF
 import v1.models.domain.Nino
 import v1.models.errors._
 import v1.models.hateoas.Method.GET
+import v1.models.hateoas.RelType.SELF
 import v1.models.hateoas.{HateoasWrapper, Link}
 import v1.models.request.listForeignPropertiesPeriodSummaries._
 import v1.models.response.listForeignPropertiesPeriodSummaries._
-import v1.models.hateoas.RelType.SELF
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -88,14 +88,16 @@ class ListForeignPropertiesPeriodSummariesControllerSpec
 
   private val hateoasResponse = ListForeignPropertiesPeriodSummariesResponse(
     Seq(
-      HateoasWrapper(responseModel1,
-                     Seq(
-                       responseModel1TestHateoasLink
-                     )),
-      HateoasWrapper(responseModel2,
-                     Seq(
-                       responseModel2TestHateoasLink
-                     ))
+      HateoasWrapper(
+        responseModel1,
+        Seq(
+          responseModel1TestHateoasLink
+        )),
+      HateoasWrapper(
+        responseModel2,
+        Seq(
+          responseModel2TestHateoasLink
+        ))
     )
   )
 
@@ -191,4 +193,5 @@ class ListForeignPropertiesPeriodSummariesControllerSpec
       }
     }
   }
+
 }

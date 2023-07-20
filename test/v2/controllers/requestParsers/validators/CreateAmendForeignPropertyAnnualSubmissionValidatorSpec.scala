@@ -16,10 +16,10 @@
 
 package v2.controllers.requestParsers.validators
 
+import api.models.errors._
 import mocks.MockAppConfig
 import play.api.libs.json._
 import support.UnitSpec
-import api.models.errors._
 import v2.models.request.createAmendForeignPropertyAnnualSubmission.CreateAmendForeignPropertyAnnualSubmissionRawData
 import v2.models.utils.JsonErrorValidators
 
@@ -127,18 +127,21 @@ class CreateAmendForeignPropertyAnnualSubmissionValidatorSpec extends UnitSpec w
   "running a validation" should {
     "return no errors" when {
       "a valid request is supplied" in {
-        validator.validate(CreateAmendForeignPropertyAnnualSubmissionRawData(nino = validNino,
-                                                                             businessId = validBusinessId,
-                                                                             taxYear = taxYear,
-                                                                             body = body)) shouldBe Nil
+        validator.validate(
+          CreateAmendForeignPropertyAnnualSubmissionRawData(
+            nino = validNino,
+            businessId = validBusinessId,
+            taxYear = taxYear,
+            body = body)) shouldBe Nil
       }
 
       "a valid propertyIncomeAllowance request is supplied" in {
         validator.validate(
-          CreateAmendForeignPropertyAnnualSubmissionRawData(nino = validNino,
-                                                            businessId = validBusinessId,
-                                                            taxYear = taxYear,
-                                                            body = propertyIncomeAllowanceBody)) shouldBe Nil
+          CreateAmendForeignPropertyAnnualSubmissionRawData(
+            nino = validNino,
+            businessId = validBusinessId,
+            taxYear = taxYear,
+            body = propertyIncomeAllowanceBody)) shouldBe Nil
       }
 
       "a minimal fhl request is supplied" in {
@@ -237,27 +240,32 @@ class CreateAmendForeignPropertyAnnualSubmissionValidatorSpec extends UnitSpec w
 
     "return RuleTaxYearNotSupportedError" when {
       "a tax year that is too early is supplied" in {
-        validator.validate(CreateAmendForeignPropertyAnnualSubmissionRawData(nino = validNino,
-                                                                             businessId = validBusinessId,
-                                                                             taxYear = "2020-21",
-                                                                             body = body)) shouldBe
+        validator.validate(
+          CreateAmendForeignPropertyAnnualSubmissionRawData(
+            nino = validNino,
+            businessId = validBusinessId,
+            taxYear = "2020-21",
+            body = body)) shouldBe
           List(RuleTaxYearNotSupportedError)
       }
     }
 
     "return RuleTaxYearRangeInvalidError" when {
       "a tax year range is more than 1 year" in {
-        validator.validate(CreateAmendForeignPropertyAnnualSubmissionRawData(nino = validNino,
-                                                                             businessId = validBusinessId,
-                                                                             taxYear = "2019-21",
-                                                                             body = body)) shouldBe
+        validator.validate(
+          CreateAmendForeignPropertyAnnualSubmissionRawData(
+            nino = validNino,
+            businessId = validBusinessId,
+            taxYear = "2019-21",
+            body = body)) shouldBe
           List(RuleTaxYearRangeInvalidError)
       }
     }
 
     "return BusinessIdFormatError error" when {
       "an invalid businessId is supplied" in {
-        validator.validate(CreateAmendForeignPropertyAnnualSubmissionRawData(nino = validNino, businessId = "20178", taxYear = taxYear, body = body)) shouldBe
+        validator.validate(
+          CreateAmendForeignPropertyAnnualSubmissionRawData(nino = validNino, businessId = "20178", taxYear = taxYear, body = body)) shouldBe
           List(BusinessIdFormatError)
       }
     }
@@ -265,10 +273,11 @@ class CreateAmendForeignPropertyAnnualSubmissionValidatorSpec extends UnitSpec w
     "return RuleIncorrectOrEmptyBodyError" when {
       "an empty body is submitted" in {
         validator.validate(
-          CreateAmendForeignPropertyAnnualSubmissionRawData(nino = validNino,
-                                                            businessId = validBusinessId,
-                                                            taxYear = taxYear,
-                                                            body = Json.parse("""{}"""))) shouldBe List(RuleIncorrectOrEmptyBodyError)
+          CreateAmendForeignPropertyAnnualSubmissionRawData(
+            nino = validNino,
+            businessId = validBusinessId,
+            taxYear = taxYear,
+            body = Json.parse("""{}"""))) shouldBe List(RuleIncorrectOrEmptyBodyError)
       }
 
       "an object/array is empty or mandatory field is missing" when {
@@ -379,50 +388,59 @@ class CreateAmendForeignPropertyAnnualSubmissionValidatorSpec extends UnitSpec w
             "/foreignFhlEea/allowances/annualInvestmentAllowance",
             "/foreignFhlEea/allowances/otherCapitalAllowance",
             "/foreignFhlEea/allowances/electricChargePointAllowance",
-            "/foreignFhlEea/allowances/zeroEmissionsCarAllowance",
+            "/foreignFhlEea/allowances/zeroEmissionsCarAllowance"
           ).foreach(path => testWith(body.update(path, badValue), path))
 
           Seq(
             (bodyWith(entry.update("/adjustments/privateUseAdjustment", badValue)), "/foreignNonFhlProperty/0/adjustments/privateUseAdjustment"),
             (bodyWith(entry.update("/adjustments/balancingCharge", badValue)), "/foreignNonFhlProperty/0/adjustments/balancingCharge"),
-            (bodyWith(entry.update("/allowances/annualInvestmentAllowance", badValue)),
-             "/foreignNonFhlProperty/0/allowances/annualInvestmentAllowance"),
-            (bodyWith(entry.update("/allowances/costOfReplacingDomesticItems", badValue)),
-             "/foreignNonFhlProperty/0/allowances/costOfReplacingDomesticItems"),
-            (bodyWith(entry.update("/allowances/zeroEmissionsGoodsVehicleAllowance", badValue)),
-             "/foreignNonFhlProperty/0/allowances/zeroEmissionsGoodsVehicleAllowance"),
+            (
+              bodyWith(entry.update("/allowances/annualInvestmentAllowance", badValue)),
+              "/foreignNonFhlProperty/0/allowances/annualInvestmentAllowance"),
+            (
+              bodyWith(entry.update("/allowances/costOfReplacingDomesticItems", badValue)),
+              "/foreignNonFhlProperty/0/allowances/costOfReplacingDomesticItems"),
+            (
+              bodyWith(entry.update("/allowances/zeroEmissionsGoodsVehicleAllowance", badValue)),
+              "/foreignNonFhlProperty/0/allowances/zeroEmissionsGoodsVehicleAllowance"),
             (bodyWith(entry.update("/allowances/otherCapitalAllowance", badValue)), "/foreignNonFhlProperty/0/allowances/otherCapitalAllowance"),
-            (bodyWith(entry.update("/allowances/electricChargePointAllowance", badValue)),
-             "/foreignNonFhlProperty/0/allowances/electricChargePointAllowance"),
-            (bodyWith(entry.update("/allowances/zeroEmissionsCarAllowance", badValue)),
-             "/foreignNonFhlProperty/0/allowances/zeroEmissionsCarAllowance"),
-            (bodyWith(entryWith("AFG", structuredBuildingAllowance.update("/amount", badValue))),
-             "/foreignNonFhlProperty/0/allowances/structuredBuildingAllowance/0/amount"),
-            (bodyWith(entryWith("AFG", structuredBuildingAllowance.update("/firstYear/qualifyingAmountExpenditure", badValue))),
-             "/foreignNonFhlProperty/0/allowances/structuredBuildingAllowance/0/firstYear/qualifyingAmountExpenditure"),
+            (
+              bodyWith(entry.update("/allowances/electricChargePointAllowance", badValue)),
+              "/foreignNonFhlProperty/0/allowances/electricChargePointAllowance"),
+            (
+              bodyWith(entry.update("/allowances/zeroEmissionsCarAllowance", badValue)),
+              "/foreignNonFhlProperty/0/allowances/zeroEmissionsCarAllowance"),
+            (
+              bodyWith(entryWith("AFG", structuredBuildingAllowance.update("/amount", badValue))),
+              "/foreignNonFhlProperty/0/allowances/structuredBuildingAllowance/0/amount"),
+            (
+              bodyWith(entryWith("AFG", structuredBuildingAllowance.update("/firstYear/qualifyingAmountExpenditure", badValue))),
+              "/foreignNonFhlProperty/0/allowances/structuredBuildingAllowance/0/firstYear/qualifyingAmountExpenditure")
           ).foreach((testWith _).tupled)
         }
 
         "propertyIncomeAllowance allowances is invalid" when {
           Seq(
-            "/foreignFhlEea/allowances/propertyIncomeAllowance",
+            "/foreignFhlEea/allowances/propertyIncomeAllowance"
           ).foreach(path => testForPropertyIncomeAllowance(propertyIncomeAllowanceBody.update(path, badValue), path))
 
           Seq(
-            (propertyIncomeAllowanceBodyWith(entryPropertyIncomeAllowance.update("/allowances/propertyIncomeAllowance", badValue)),
-             "/foreignNonFhlProperty/0/allowances/propertyIncomeAllowance"),
+            (
+              propertyIncomeAllowanceBodyWith(entryPropertyIncomeAllowance.update("/allowances/propertyIncomeAllowance", badValue)),
+              "/foreignNonFhlProperty/0/allowances/propertyIncomeAllowance")
           ).foreach(p => (testForPropertyIncomeAllowance _).tupled(p))
         }
 
         "propertyIncomeAllowance allowances is too large" when {
           val bigValue = JsNumber(1000.01)
           Seq(
-            "/foreignFhlEea/allowances/propertyIncomeAllowance",
+            "/foreignFhlEea/allowances/propertyIncomeAllowance"
           ).foreach(path => testForPropertyIncomeAllowance(propertyIncomeAllowanceBody.update(path, bigValue), path))
 
           Seq(
-            (propertyIncomeAllowanceBodyWith(entryPropertyIncomeAllowance.update("/allowances/propertyIncomeAllowance", bigValue)),
-             "/foreignNonFhlProperty/0/allowances/propertyIncomeAllowance"),
+            (
+              propertyIncomeAllowanceBodyWith(entryPropertyIncomeAllowance.update("/allowances/propertyIncomeAllowance", bigValue)),
+              "/foreignNonFhlProperty/0/allowances/propertyIncomeAllowance")
           ).foreach(p => (testForPropertyIncomeAllowance _).tupled(p))
         }
 
@@ -471,12 +489,15 @@ class CreateAmendForeignPropertyAnnualSubmissionValidatorSpec extends UnitSpec w
         val badStringValue = JsString("x" * 91)
 
         Seq(
-          (bodyWith(entry, entryWith("ZWE", structuredBuildingAllowance.update("/building/postcode", badStringValue))),
-           "/foreignNonFhlProperty/1/allowances/structuredBuildingAllowance/0/building/postcode"),
-          (bodyWith(entry, entryWith("ZWE", structuredBuildingAllowance.update("/building/number", badStringValue))),
-           "/foreignNonFhlProperty/1/allowances/structuredBuildingAllowance/0/building/number"),
-          (bodyWith(entry, entryWith("ZWE", structuredBuildingAllowance.update("/building/name", badStringValue))),
-           "/foreignNonFhlProperty/1/allowances/structuredBuildingAllowance/0/building/name"),
+          (
+            bodyWith(entry, entryWith("ZWE", structuredBuildingAllowance.update("/building/postcode", badStringValue))),
+            "/foreignNonFhlProperty/1/allowances/structuredBuildingAllowance/0/building/postcode"),
+          (
+            bodyWith(entry, entryWith("ZWE", structuredBuildingAllowance.update("/building/number", badStringValue))),
+            "/foreignNonFhlProperty/1/allowances/structuredBuildingAllowance/0/building/number"),
+          (
+            bodyWith(entry, entryWith("ZWE", structuredBuildingAllowance.update("/building/name", badStringValue))),
+            "/foreignNonFhlProperty/1/allowances/structuredBuildingAllowance/0/building/name")
         ).foreach(p => (testWith _).tupled(p))
 
         def testWith(body: JsValue, expectedPath: String): Unit = s"for $expectedPath" in {
@@ -492,8 +513,9 @@ class CreateAmendForeignPropertyAnnualSubmissionValidatorSpec extends UnitSpec w
 
       "return DateFormatError" when {
         Seq(
-          (bodyWith(entry, entryWith("ZWE", structuredBuildingAllowance.update("/firstYear/qualifyingDate", JsString("9999-99-99")))),
-           "/foreignNonFhlProperty/1/allowances/structuredBuildingAllowance/0/firstYear/qualifyingDate"),
+          (
+            bodyWith(entry, entryWith("ZWE", structuredBuildingAllowance.update("/firstYear/qualifyingDate", JsString("9999-99-99")))),
+            "/foreignNonFhlProperty/1/allowances/structuredBuildingAllowance/0/firstYear/qualifyingDate")
         ).foreach(p => (testWith _).tupled(p))
 
         def testWith(body: JsValue, expectedPath: String): Unit = s"for $expectedPath" in {
@@ -605,9 +627,11 @@ class CreateAmendForeignPropertyAnnualSubmissionValidatorSpec extends UnitSpec w
             nino = validNino,
             businessId = validBusinessId,
             taxYear = taxYear,
-            body = bodyWith(entryWith("AFG",
-                                      structuredBuildingAllowance
-                                        .removeProperty("/building/number")))
+            body = bodyWith(
+              entryWith(
+                "AFG",
+                structuredBuildingAllowance
+                  .removeProperty("/building/number")))
           )) shouldBe Nil
         }
 
@@ -616,9 +640,11 @@ class CreateAmendForeignPropertyAnnualSubmissionValidatorSpec extends UnitSpec w
             nino = validNino,
             businessId = validBusinessId,
             taxYear = taxYear,
-            body = bodyWith(entryWith("AFG",
-                                      structuredBuildingAllowance
-                                        .removeProperty("/building/name")))
+            body = bodyWith(
+              entryWith(
+                "AFG",
+                structuredBuildingAllowance
+                  .removeProperty("/building/name")))
           )) shouldBe Nil
         }
       }
@@ -632,4 +658,5 @@ class CreateAmendForeignPropertyAnnualSubmissionValidatorSpec extends UnitSpec w
       }
     }
   }
+
 }

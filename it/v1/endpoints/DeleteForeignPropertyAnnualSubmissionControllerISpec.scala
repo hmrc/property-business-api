@@ -16,15 +16,15 @@
 
 package v1.endpoints
 
-import play.api.http.HeaderNames.ACCEPT
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
+import play.api.http.HeaderNames.ACCEPT
 import play.api.http.Status
-import play.api.libs.json.{ JsObject, Json }
-import play.api.libs.ws.{ WSRequest, WSResponse }
+import play.api.libs.json.{JsObject, Json}
+import play.api.libs.ws.{WSRequest, WSResponse}
 import play.api.test.Helpers.AUTHORIZATION
 import support.V1IntegrationBaseSpec
 import v1.models.errors._
-import v1.stubs.{ AuditStub, AuthStub, IfsStub, MtdIdLookupStub }
+import v1.stubs.{AuditStub, AuthStub, IfsStub, MtdIdLookupStub}
 
 class DeleteForeignPropertyAnnualSubmissionControllerISpec extends V1IntegrationBaseSpec {
 
@@ -56,6 +56,7 @@ class DeleteForeignPropertyAnnualSubmissionControllerISpec extends V1Integration
          |  "reason": "ifs message"
          |}
        """.stripMargin
+
   }
 
   "calling the delete foreign property annual submission endpoint" should {
@@ -142,4 +143,5 @@ class DeleteForeignPropertyAnnualSubmissionControllerISpec extends V1Integration
       }
     }
   }
+
 }

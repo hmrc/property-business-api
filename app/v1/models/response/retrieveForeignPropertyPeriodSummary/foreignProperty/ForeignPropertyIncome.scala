@@ -16,8 +16,8 @@
 
 package v1.models.response.retrieveForeignPropertyPeriodSummary.foreignProperty
 
-import play.api.libs.json.{ JsPath, Json, Reads, Writes }
 import play.api.libs.functional.syntax._
+import play.api.libs.json.{JsPath, Json, Reads, Writes}
 
 case class ForeignPropertyIncome(rentIncome: Option[ForeignPropertyRentIncome],
                                  foreignTaxCreditRelief: Boolean,
@@ -28,6 +28,7 @@ case class ForeignPropertyIncome(rentIncome: Option[ForeignPropertyRentIncome],
 
 object ForeignPropertyIncome {
   implicit val writes: Writes[ForeignPropertyIncome] = Json.writes[ForeignPropertyIncome]
+
   implicit val reads: Reads[ForeignPropertyIncome] = (
     (JsPath \ "rentIncome").readNullable[ForeignPropertyRentIncome] and
       (JsPath \ "foreignTaxCreditRelief").read[Boolean] and
@@ -36,4 +37,5 @@ object ForeignPropertyIncome {
       (JsPath \ "foreignTaxPaidOrDeducted").readNullable[BigDecimal] and
       (JsPath \ "specialWithholdingTaxOrUkTaxPaid").readNullable[BigDecimal]
   )(ForeignPropertyIncome.apply _)
+
 }

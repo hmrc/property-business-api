@@ -16,12 +16,13 @@
 
 package v1.models.response.listForeignPropertiesPeriodSummaries
 
-import play.api.libs.json.{ JsObject, JsPath, Json, OWrites, Reads }
 import play.api.libs.functional.syntax._
+import play.api.libs.json._
 
 case class SubmissionPeriod(submissionId: String, fromDate: String, toDate: String)
 
 object SubmissionPeriod {
+
   implicit val reads: Reads[SubmissionPeriod] = {
     val objectReads = (JsPath \ "foreignProperty").read[JsObject] or (JsPath \ "foreignFhlEea").read[JsObject]
     objectReads.andThen { obj =>

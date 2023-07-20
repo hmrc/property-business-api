@@ -16,7 +16,7 @@
 
 package v2.models.request.amendUkPropertyAnnualSubmission.ukFhlProperty
 
-import play.api.libs.json.{ JsValue, Json }
+import play.api.libs.json.{JsValue, Json}
 import support.UnitSpec
 
 class UkFhlPropertyAllowancesSpec extends UnitSpec {
@@ -58,6 +58,7 @@ class UkFhlPropertyAllowancesSpec extends UnitSpec {
       }
     }
   }
+
   "writes" when {
     "passed valid model" should {
       "return valid JSON" in {
@@ -65,4 +66,5 @@ class UkFhlPropertyAllowancesSpec extends UnitSpec {
       }
     }
   }
+
 }

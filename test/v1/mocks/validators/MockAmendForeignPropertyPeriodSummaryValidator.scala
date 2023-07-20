@@ -33,6 +33,7 @@ class MockAmendForeignPropertyPeriodSummaryValidator extends MockFactory {
         .validate(_: AmendForeignPropertyPeriodSummaryRawData))
         .expects(data)
     }
+
   }
 
 }

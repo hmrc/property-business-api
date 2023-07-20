@@ -16,13 +16,13 @@
 
 package v2.models.response.retrieveUkPropertyAnnualSubmission
 
+import api.hateoas.HateoasLinksFactory
+import api.models.domain.Timestamp
+import api.models.hateoas.{HateoasData, Link}
 import config.AppConfig
 import play.api.libs.functional.syntax._
 import play.api.libs.json._
 import v2.hateoas.HateoasLinks
-import api.hateoas.HateoasLinksFactory
-import api.models.domain.Timestamp
-import api.models.hateoas.{HateoasData, Link}
 import v2.models.response.retrieveUkPropertyAnnualSubmission.ukFhlProperty.UkFhlProperty
 import v2.models.response.retrieveUkPropertyAnnualSubmission.ukNonFhlProperty.UkNonFhlProperty
 
@@ -41,6 +41,7 @@ object RetrieveUkPropertyAnnualSubmissionResponse extends HateoasLinks {
 
   implicit object RetrieveAnnualSubmissionLinksFactory
       extends HateoasLinksFactory[RetrieveUkPropertyAnnualSubmissionResponse, RetrieveUkPropertyAnnualSubmissionHateoasData] {
+
     override def links(appConfig: AppConfig, data: RetrieveUkPropertyAnnualSubmissionHateoasData): Seq[Link] = {
       import data._
       Seq(
@@ -49,7 +50,9 @@ object RetrieveUkPropertyAnnualSubmissionResponse extends HateoasLinks {
         deletePropertyAnnualSubmission(appConfig, nino, businessId, taxYear)
       )
     }
+
   }
+
 }
 
 case class RetrieveUkPropertyAnnualSubmissionHateoasData(nino: String, businessId: String, taxYear: String) extends HateoasData

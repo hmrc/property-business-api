@@ -18,24 +18,14 @@ package v1.controllers.requestParsers.validators
 
 import play.api.libs.json.Json
 import support.UnitSpec
-import v1.models.errors.{
-  BusinessIdFormatError,
-  CountryCodeFormatError,
-  FromDateFormatError,
-  NinoFormatError,
-  RuleBothExpensesSuppliedError,
-  RuleCountryCodeError,
-  RuleIncorrectOrEmptyBodyError,
-  RuleToDateBeforeFromDateError,
-  ToDateFormatError,
-  ValueFormatError
-}
+import v1.models.errors._
 import v1.models.request.createForeignPropertyPeriodSummary.CreateForeignPropertyPeriodSummaryRawData
 
 class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec {
 
   private val validNino       = "AA123456A"
   private val validBusinessId = "XAIS12345678901"
+
   private val requestBodyJson = Json.parse(
     """
       |{
@@ -84,6 +74,7 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec {
       |}
       |""".stripMargin
   )
+
   private val requestBodyConsolidationExpenseJson = Json.parse(
     """
       |{
@@ -2236,4 +2227,5 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec {
       }
     }
   }
+
 }

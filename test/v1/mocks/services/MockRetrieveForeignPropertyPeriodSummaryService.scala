@@ -16,6 +16,7 @@
 
 package v1.mocks.services
 
+import api.models.outcomes.ResponseWrapper
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
 import uk.gov.hmrc.http.HeaderCarrier
@@ -24,7 +25,6 @@ import v1.models.errors.ErrorWrapper
 import v1.models.request.retrieveForeignPropertyPeriodSummary.RetrieveForeignPropertyPeriodSummaryRequest
 import v1.models.response.retrieveForeignPropertyPeriodSummary.RetrieveForeignPropertyPeriodSummaryResponse
 import v1.services.RetrieveForeignPropertyPeriodSummaryService
-import api.models.outcomes.ResponseWrapper
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -35,7 +35,7 @@ trait MockRetrieveForeignPropertyPeriodSummaryService extends MockFactory {
   object MockRetrieveForeignPropertyService {
 
     def retrieve(requestData: RetrieveForeignPropertyPeriodSummaryRequest)
-      : CallHandler[Future[Either[ErrorWrapper, ResponseWrapper[RetrieveForeignPropertyPeriodSummaryResponse]]]] = {
+        : CallHandler[Future[Either[ErrorWrapper, ResponseWrapper[RetrieveForeignPropertyPeriodSummaryResponse]]]] = {
       (
         mockRetrieveForeignPropertyService
           .retrieveForeignProperty(_: RetrieveForeignPropertyPeriodSummaryRequest)(
@@ -47,5 +47,7 @@ trait MockRetrieveForeignPropertyPeriodSummaryService extends MockFactory {
         )
         .expects(requestData, *, *, *, *)
     }
+
   }
+
 }

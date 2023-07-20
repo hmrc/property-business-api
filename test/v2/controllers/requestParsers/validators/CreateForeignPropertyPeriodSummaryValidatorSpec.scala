@@ -16,10 +16,10 @@
 
 package v2.controllers.requestParsers.validators
 
-import mocks.MockAppConfig
-import play.api.libs.json.{ JsArray, JsValue, Json }
-import support.UnitSpec
 import api.models.errors._
+import mocks.MockAppConfig
+import play.api.libs.json.{JsArray, JsValue, Json}
+import support.UnitSpec
 import v2.models.request.createForeignPropertyPeriodSummary.CreateForeignPropertyPeriodSummaryRawData
 
 class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with MockAppConfig {
@@ -138,7 +138,8 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with Mock
         validator.validate(CreateForeignPropertyPeriodSummaryRawData(validNino, validBusinessId, validTaxYear, requestBodyJson)) shouldBe Nil
       }
       "a valid consolidatedExpenses request is supplied" in {
-        validator.validate(CreateForeignPropertyPeriodSummaryRawData(validNino, validBusinessId, validTaxYear, requestBodyConsolidationExpenseJson)) shouldBe Nil
+        validator.validate(
+          CreateForeignPropertyPeriodSummaryRawData(validNino, validBusinessId, validTaxYear, requestBodyConsolidationExpenseJson)) shouldBe Nil
       }
       "a minimal foreignFhlEea request is supplied" in {
         validator.validate(
@@ -578,7 +579,7 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with Mock
           RuleDuplicateCountryCodeError
             .forDuplicatedCodesAndPaths(code = code1, paths = Seq("/foreignNonFhlProperty/0/countryCode", "/foreignNonFhlProperty/2/countryCode")),
           RuleDuplicateCountryCodeError
-            .forDuplicatedCodesAndPaths(code = code2, paths = Seq("/foreignNonFhlProperty/1/countryCode", "/foreignNonFhlProperty/3/countryCode")),
+            .forDuplicatedCodesAndPaths(code = code2, paths = Seq("/foreignNonFhlProperty/1/countryCode", "/foreignNonFhlProperty/3/countryCode"))
         )
       }
     }
@@ -2411,4 +2412,5 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with Mock
       }
     }
   }
+
 }

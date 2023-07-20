@@ -16,7 +16,7 @@
 
 package v1.models.request.common.foreignPropertyEntry
 
-import play.api.libs.json.{ JsValue, Json }
+import play.api.libs.json.{JsValue, Json}
 import support.UnitSpec
 
 class IncomeSpec extends UnitSpec {
@@ -75,4 +75,5 @@ class IncomeSpec extends UnitSpec {
       }
     }
   }
+
 }

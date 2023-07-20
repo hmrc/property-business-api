@@ -16,9 +16,9 @@
 
 package v2.controllers.requestParsers
 
-import support.UnitSpec
 import api.models.domain.{Nino, TaxYear}
-import api.models.errors.{ BadRequestError, ErrorWrapper, NinoFormatError, TaxYearFormatError }
+import api.models.errors.{BadRequestError, ErrorWrapper, NinoFormatError, TaxYearFormatError}
+import support.UnitSpec
 import v2.mocks.validators.MockRetrieveHistoricNonFhlUkPropertyAnnualSubmissionValidator
 import v2.models.request.retrieveHistoricNonFhlUkPropertyAnnualSubmission._
 
@@ -64,4 +64,5 @@ class RetrieveHistoricNonFhlUkPropertyAnnualSubmissionRequestParserRequestParser
       }
     }
   }
+
 }

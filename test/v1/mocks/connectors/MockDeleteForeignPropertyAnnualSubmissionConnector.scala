@@ -19,10 +19,10 @@ package v1.mocks.connectors
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
 import uk.gov.hmrc.http.HeaderCarrier
-import v1.connectors.{ DeleteForeignPropertyAnnualSubmissionConnector, IfsOutcome }
+import v1.connectors.{DeleteForeignPropertyAnnualSubmissionConnector, IfsOutcome}
 import v1.models.request.deleteForeignPropertyAnnualSubmission.DeleteForeignPropertyAnnualSubmissionRequest
 
-import scala.concurrent.{ ExecutionContext, Future }
+import scala.concurrent.{ExecutionContext, Future}
 
 trait MockDeleteForeignPropertyAnnualSubmissionConnector extends MockFactory {
 
@@ -42,5 +42,7 @@ trait MockDeleteForeignPropertyAnnualSubmissionConnector extends MockFactory {
         )
         .expects(requestData, *, *, *)
     }
+
   }
+
 }

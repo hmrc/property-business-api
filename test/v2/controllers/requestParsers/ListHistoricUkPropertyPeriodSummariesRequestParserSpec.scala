@@ -16,14 +16,11 @@
 
 package v2.controllers.requestParsers
 
-import support.UnitSpec
 import api.models.domain.Nino
-import api.models.errors.{ ErrorWrapper, NinoFormatError }
+import api.models.errors.{ErrorWrapper, NinoFormatError}
+import support.UnitSpec
 import v2.mocks.validators.MockListHistoricUkPropertyPeriodSummariesValidator
-import v2.models.request.listHistoricUkPropertyPeriodSummaries.{
-  ListHistoricUkPropertyPeriodSummariesRawData,
-  ListHistoricUkPropertyPeriodSummariesRequest
-}
+import v2.models.request.listHistoricUkPropertyPeriodSummaries.{ListHistoricUkPropertyPeriodSummariesRawData, ListHistoricUkPropertyPeriodSummariesRequest}
 
 class ListHistoricUkPropertyPeriodSummariesRequestParserSpec extends UnitSpec {
 
@@ -58,4 +55,5 @@ class ListHistoricUkPropertyPeriodSummariesRequestParserSpec extends UnitSpec {
 
     }
   }
+
 }

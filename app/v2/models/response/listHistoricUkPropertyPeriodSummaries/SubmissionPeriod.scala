@@ -25,6 +25,7 @@ case class SubmissionPeriod(fromDate: String, toDate: String) {
 }
 
 object SubmissionPeriod {
+
   implicit val reads: Reads[SubmissionPeriod] = (
     (__ \ "from").read[String] and
       (__ \ "to").read[String]

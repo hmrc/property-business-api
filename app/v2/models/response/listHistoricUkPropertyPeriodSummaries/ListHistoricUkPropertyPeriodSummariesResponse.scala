@@ -21,7 +21,7 @@ import api.models.domain.HistoricPropertyType
 import api.models.hateoas.{HateoasData, Link}
 import cats.Functor
 import config.AppConfig
-import play.api.libs.json.{__, Json, OWrites, Reads, Writes}
+import play.api.libs.json._
 import v2.hateoas.HateoasLinks
 
 case class ListHistoricUkPropertyPeriodSummariesResponse[I](submissions: Seq[I])
@@ -34,9 +34,11 @@ object ListHistoricUkPropertyPeriodSummariesResponse extends HateoasLinks {
   implicit def writes[I: Writes]: OWrites[ListHistoricUkPropertyPeriodSummariesResponse[I]] = Json.writes
 
   implicit object LinksFactory
-      extends HateoasListLinksFactory[ListHistoricUkPropertyPeriodSummariesResponse,
-                                      SubmissionPeriod,
-                                      ListHistoricUkPropertyPeriodSummariesHateoasData] {
+      extends HateoasListLinksFactory[
+        ListHistoricUkPropertyPeriodSummariesResponse,
+        SubmissionPeriod,
+        ListHistoricUkPropertyPeriodSummariesHateoasData] {
+
     override def itemLinks(appConfig: AppConfig, data: ListHistoricUkPropertyPeriodSummariesHateoasData, item: SubmissionPeriod): Seq[Link] = {
       import data._
 
@@ -70,12 +72,16 @@ object ListHistoricUkPropertyPeriodSummariesResponse extends HateoasLinks {
           )
       }
     }
+
   }
 
   implicit object ResponseFunctor extends Functor[ListHistoricUkPropertyPeriodSummariesResponse] {
+
     override def map[A, B](fa: ListHistoricUkPropertyPeriodSummariesResponse[A])(f: A => B): ListHistoricUkPropertyPeriodSummariesResponse[B] =
       ListHistoricUkPropertyPeriodSummariesResponse(fa.submissions.map(f))
+
   }
+
 }
 
 case class ListHistoricUkPropertyPeriodSummariesHateoasData(nino: String, propertyType: HistoricPropertyType) extends HateoasData

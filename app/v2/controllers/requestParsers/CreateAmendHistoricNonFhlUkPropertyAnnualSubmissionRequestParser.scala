@@ -23,15 +23,17 @@ import v2.models.request.createAmendHistoricNonFhlUkPropertyAnnualSubmission._
 
 import javax.inject.Inject
 
-class CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestParser @Inject()(
+class CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestParser @Inject() (
     val validator: CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionValidator)
     extends RequestParser[CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRawData, CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequest] {
 
   override protected def requestFor(
       data: CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRawData): CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequest = {
 
-    CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequest(Nino(data.nino),
-                                                               TaxYear.fromMtd(data.taxYear),
-                                                               data.body.as[CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestBody])
+    CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequest(
+      Nino(data.nino),
+      TaxYear.fromMtd(data.taxYear),
+      data.body.as[CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestBody])
   }
+
 }

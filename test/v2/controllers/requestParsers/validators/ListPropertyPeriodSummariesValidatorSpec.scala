@@ -16,9 +16,9 @@
 
 package v2.controllers.requestParsers.validators
 
+import api.models.errors._
 import mocks.MockAppConfig
 import support.UnitSpec
-import api.models.errors._
 import v2.models.request.listPropertyPeriodSummaries.ListPropertyPeriodSummariesRawData
 
 class ListPropertyPeriodSummariesValidatorSpec extends UnitSpec with MockAppConfig {
@@ -51,8 +51,9 @@ class ListPropertyPeriodSummariesValidatorSpec extends UnitSpec with MockAppConf
       }
 
       "raw data contains multiple errors" in {
-        validator.validate(ListPropertyPeriodSummariesRawData("AA12345", "XAIS12345678", validTaxYear)) shouldBe List(NinoFormatError,
-                                                                                                                      BusinessIdFormatError)
+        validator.validate(ListPropertyPeriodSummariesRawData("AA12345", "XAIS12345678", validTaxYear)) shouldBe List(
+          NinoFormatError,
+          BusinessIdFormatError)
       }
 
       "raw data contains rule tax year errors" in {
@@ -61,4 +62,5 @@ class ListPropertyPeriodSummariesValidatorSpec extends UnitSpec with MockAppConf
       }
     }
   }
+
 }

@@ -16,9 +16,9 @@
 
 package v2.controllers.requestParsers.validators
 
+import api.models.errors._
 import mocks.MockAppConfig
 import support.UnitSpec
-import api.models.errors._
 import v2.models.request.listHistoricUkPropertyPeriodSummaries.ListHistoricUkPropertyPeriodSummariesRawData
 
 class ListHistoricUkPropertyPeriodSummariesValidatorSpec extends UnitSpec with MockAppConfig {
@@ -41,4 +41,5 @@ class ListHistoricUkPropertyPeriodSummariesValidatorSpec extends UnitSpec with M
 
     }
   }
+
 }

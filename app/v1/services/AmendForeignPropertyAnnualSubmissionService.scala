@@ -16,9 +16,8 @@
 
 package v1.services
 
-import cats.implicits._
 import cats.data.EitherT
-import javax.inject.{Inject, Singleton}
+import cats.implicits._
 import uk.gov.hmrc.http.HeaderCarrier
 import utils.Logging
 import v1.connectors.AmendForeignPropertyAnnualSubmissionConnector
@@ -27,6 +26,7 @@ import v1.models.errors._
 import v1.models.request.amendForeignPropertyAnnualSubmission.AmendForeignPropertyAnnualSubmissionRequest
 import v1.support.IfsResponseMappingSupport
 
+import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton

@@ -17,7 +17,7 @@
 package utils.enums
 
 import cats.Show
-import org.scalacheck.{ Arbitrary, Gen }
+import org.scalacheck.{Arbitrary, Gen}
 import org.scalatest.Inspectors
 import play.api.libs.json._
 import support.UnitSpec
@@ -40,7 +40,7 @@ object Foo {
 
 class EnumsSpec extends UnitSpec with Inspectors {
 
-  import Enum._
+  import utils.enums.Enum._
 
   implicit val arbitraryEnumValue: Arbitrary[Enum] = Arbitrary[Enum](Gen.oneOf(`enum-one`, `enum-two`, `enum-three`))
 
@@ -141,4 +141,5 @@ class EnumsSpec extends UnitSpec with Inspectors {
         """.stripMargin)
     }
   }
+
 }

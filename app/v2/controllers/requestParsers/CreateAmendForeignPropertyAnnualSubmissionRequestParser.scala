@@ -18,10 +18,10 @@ package v2.controllers.requestParsers
 
 import api.controllers.requestParsers.RequestParser
 import api.models.domain.{Nino, TaxYear}
-
-import javax.inject.Inject
 import v2.controllers.requestParsers.validators.CreateAmendForeignPropertyAnnualSubmissionValidator
 import v2.models.request.createAmendForeignPropertyAnnualSubmission._
+
+import javax.inject.Inject
 
 class CreateAmendForeignPropertyAnnualSubmissionRequestParser @Inject() (val validator: CreateAmendForeignPropertyAnnualSubmissionValidator)
     extends RequestParser[CreateAmendForeignPropertyAnnualSubmissionRawData, CreateAmendForeignPropertyAnnualSubmissionRequest] {

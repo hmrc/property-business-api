@@ -19,14 +19,15 @@ package v2.controllers.requestParsers
 import api.controllers.requestParsers.RequestParser
 import api.models.domain.Nino
 import v2.controllers.requestParsers.validators.ListHistoricUkPropertyPeriodSummariesValidator
-
-import javax.inject.Inject
 import v2.models.request.listHistoricUkPropertyPeriodSummaries.{ListHistoricUkPropertyPeriodSummariesRawData, ListHistoricUkPropertyPeriodSummariesRequest}
 
-class ListHistoricUkPropertyPeriodSummariesRequestParser @Inject()(val validator: ListHistoricUkPropertyPeriodSummariesValidator)
+import javax.inject.Inject
+
+class ListHistoricUkPropertyPeriodSummariesRequestParser @Inject() (val validator: ListHistoricUkPropertyPeriodSummariesValidator)
     extends RequestParser[ListHistoricUkPropertyPeriodSummariesRawData, ListHistoricUkPropertyPeriodSummariesRequest] {
 
   override protected def requestFor(data: ListHistoricUkPropertyPeriodSummariesRawData): ListHistoricUkPropertyPeriodSummariesRequest = {
     ListHistoricUkPropertyPeriodSummariesRequest(Nino(data.nino))
   }
+
 }

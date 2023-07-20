@@ -16,13 +16,14 @@
 
 package v1.controllers.requestParsers
 
-import javax.inject.Inject
 import v1.controllers.requestParsers.validators.ListForeignPropertiesPeriodSummariesValidator
 import v1.models.domain.Nino
 import v1.models.request.listForeignPropertiesPeriodSummaries._
 import v1.support.DateUtils
 
-class ListForeignPropertiesPeriodSummariesRequestParser @Inject()(val validator: ListForeignPropertiesPeriodSummariesValidator, dateUtils: DateUtils)
+import javax.inject.Inject
+
+class ListForeignPropertiesPeriodSummariesRequestParser @Inject() (val validator: ListForeignPropertiesPeriodSummariesValidator, dateUtils: DateUtils)
     extends RequestParser[ListForeignPropertiesPeriodSummariesRawData, ListForeignPropertiesPeriodSummariesRequest] {
 
   override protected def requestFor(data: ListForeignPropertiesPeriodSummariesRawData): ListForeignPropertiesPeriodSummariesRequest = {
@@ -30,4 +31,5 @@ class ListForeignPropertiesPeriodSummariesRequestParser @Inject()(val validator:
     val toDate   = data.toDate.getOrElse(dateUtils.currentTaxYearEnd)
     ListForeignPropertiesPeriodSummariesRequest(Nino(data.nino), data.businessId, fromDate, toDate)
   }
+
 }

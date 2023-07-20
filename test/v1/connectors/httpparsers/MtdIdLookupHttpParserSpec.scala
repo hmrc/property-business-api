@@ -17,13 +17,13 @@
 package v1.connectors.httpparsers
 
 import play.api.libs.json.Writes.StringWrites
-import play.api.libs.json.{ JsObject, Json }
-import play.api.test.Helpers.{ FORBIDDEN, INTERNAL_SERVER_ERROR, OK, UNAUTHORIZED }
+import play.api.libs.json.{JsObject, Json}
+import play.api.test.Helpers.{FORBIDDEN, INTERNAL_SERVER_ERROR, OK, UNAUTHORIZED}
 import support.UnitSpec
 import uk.gov.hmrc.http.HttpResponse
 import v1.connectors.MtdIdLookupOutcome
-import MtdIdLookupHttpParser.mtdIdLookupHttpReads
-import v1.models.errors.{ DownstreamError, InvalidBearerTokenError, NinoFormatError }
+import v1.connectors.httpparsers.MtdIdLookupHttpParser.mtdIdLookupHttpReads
+import v1.models.errors.{DownstreamError, InvalidBearerTokenError, NinoFormatError}
 
 class MtdIdLookupHttpParserSpec extends UnitSpec {
 
@@ -32,7 +32,7 @@ class MtdIdLookupHttpParserSpec extends UnitSpec {
   val mtdId  = "test-mtd-id"
 
   val mtdIdJson: JsObject   = Json.obj("mtdbsa" -> mtdId)
-  val invalidJson: JsObject = Json.obj("hello"  -> "world")
+  val invalidJson: JsObject = Json.obj("hello" -> "world")
 
   "read" should {
     "return an MtdId" when {
@@ -94,4 +94,5 @@ class MtdIdLookupHttpParserSpec extends UnitSpec {
       }
     }
   }
+
 }

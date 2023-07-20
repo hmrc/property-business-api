@@ -18,15 +18,16 @@ package v2.controllers.requestParsers
 
 import api.controllers.requestParsers.RequestParser
 import api.models.domain.{Nino, TaxYear}
-
-import javax.inject.Inject
 import v2.controllers.requestParsers.validators.ListPropertyPeriodSummariesValidator
 import v2.models.request.listPropertyPeriodSummaries._
 
-class ListPropertyPeriodSummariesRequestParser @Inject()(val validator: ListPropertyPeriodSummariesValidator)
+import javax.inject.Inject
+
+class ListPropertyPeriodSummariesRequestParser @Inject() (val validator: ListPropertyPeriodSummariesValidator)
     extends RequestParser[ListPropertyPeriodSummariesRawData, ListPropertyPeriodSummariesRequest] {
 
   override protected def requestFor(data: ListPropertyPeriodSummariesRawData): ListPropertyPeriodSummariesRequest = {
     ListPropertyPeriodSummariesRequest(Nino(data.nino), data.businessId, TaxYear.fromMtd(data.taxYear))
   }
+
 }

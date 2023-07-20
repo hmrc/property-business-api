@@ -31,4 +31,5 @@ object CreateAmendForeignPropertyAnnualSubmissionRequestBody {
     (JsPath \ "foreignFhlEea").writeNullable[ForeignFhlEea] and
       (JsPath \ "foreignProperty").writeNullable[Seq[ForeignNonFhlEntry]]
   )(unlift(CreateAmendForeignPropertyAnnualSubmissionRequestBody.unapply))
+
 }

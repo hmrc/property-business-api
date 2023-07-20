@@ -17,7 +17,7 @@
 package v1.models.audit
 
 import api.models.auth.UserDetails
-import play.api.libs.json.{ JsValue, Json, Writes }
+import play.api.libs.json.{JsValue, Json, Writes}
 
 case class AmendForeignPropertyPeriodicAuditDetail(userType: String,
                                                    agentReferenceNumber: Option[String],
@@ -50,4 +50,5 @@ object AmendForeignPropertyPeriodicAuditDetail {
       auditResponse
     )
   }
+
 }

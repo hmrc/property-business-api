@@ -18,10 +18,10 @@ package v2.controllers.requestParsers
 
 import api.controllers.requestParsers.RequestParser
 import api.models.domain.{Nino, TaxYear}
-
-import javax.inject.Inject
 import v2.controllers.requestParsers.validators.RetrieveUkPropertyPeriodSummaryValidator
 import v2.models.request.retrieveUkPropertyPeriodSummary.{RetrieveUkPropertyPeriodSummaryRawData, RetrieveUkPropertyPeriodSummaryRequest}
+
+import javax.inject.Inject
 
 class RetrieveUkPropertyPeriodSummaryRequestParser @Inject() (val validator: RetrieveUkPropertyPeriodSummaryValidator)
     extends RequestParser[RetrieveUkPropertyPeriodSummaryRawData, RetrieveUkPropertyPeriodSummaryRequest] {

@@ -184,4 +184,5 @@ class CreateForeignPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
 
     }
   }
+
 }

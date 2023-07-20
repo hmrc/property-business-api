@@ -16,14 +16,11 @@
 
 package v2.mocks.requestParsers
 
+import api.models.errors.ErrorWrapper
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
 import v2.controllers.requestParsers.DeleteHistoricUkPropertyAnnualSubmissionRequestParser
-import api.models.errors.ErrorWrapper
-import v2.models.request.deleteHistoricUkPropertyAnnualSubmission.{
-  DeleteHistoricUkPropertyAnnualSubmissionRawData,
-  DeleteHistoricUkPropertyAnnualSubmissionRequest
-}
+import v2.models.request.deleteHistoricUkPropertyAnnualSubmission.{DeleteHistoricUkPropertyAnnualSubmissionRawData, DeleteHistoricUkPropertyAnnualSubmissionRequest}
 
 trait MockDeleteHistoricUkPropertyAnnualSubmissionRequestParser extends MockFactory {
 
@@ -38,5 +35,7 @@ trait MockDeleteHistoricUkPropertyAnnualSubmissionRequestParser extends MockFact
         .parseRequest(_: DeleteHistoricUkPropertyAnnualSubmissionRawData)(_: String))
         .expects(data, *)
     }
+
   }
+
 }

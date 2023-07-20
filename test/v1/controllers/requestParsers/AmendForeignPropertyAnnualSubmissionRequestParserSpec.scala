@@ -20,7 +20,7 @@ import play.api.libs.json.Json
 import support.UnitSpec
 import v1.mocks.validators.MockAmendForeignPropertyAnnualSubmissionValidator
 import v1.models.domain.Nino
-import v1.models.errors.{ BadRequestError, BusinessIdFormatError, ErrorWrapper, NinoFormatError }
+import v1.models.errors.{BadRequestError, BusinessIdFormatError, ErrorWrapper, NinoFormatError}
 import v1.models.request.amendForeignPropertyAnnualSubmission._
 import v1.models.request.amendForeignPropertyAnnualSubmission.foreignFhlEea._
 import v1.models.request.amendForeignPropertyAnnualSubmission.foreignProperty._
@@ -144,4 +144,5 @@ class AmendForeignPropertyAnnualSubmissionRequestParserSpec extends UnitSpec {
       }
     }
   }
+
 }

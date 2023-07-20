@@ -38,4 +38,5 @@ object PeriodId {
   def apply(from: String, to: String): PeriodId = {
     PeriodId(s"${from}_$to")
   }
+
 }

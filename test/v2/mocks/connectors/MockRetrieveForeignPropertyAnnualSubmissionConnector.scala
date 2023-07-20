@@ -16,15 +16,15 @@
 
 package v2.mocks.connectors
 
+import api.connectors.DownstreamOutcome
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
 import uk.gov.hmrc.http.HeaderCarrier
-import v2.connectors.RetrieveForeignPropertyAnnualSubmissionConnector.Result
-import api.connectors.DownstreamOutcome
 import v2.connectors.RetrieveForeignPropertyAnnualSubmissionConnector
+import v2.connectors.RetrieveForeignPropertyAnnualSubmissionConnector.Result
 import v2.models.request.retrieveForeignPropertyAnnualSubmission.RetrieveForeignPropertyAnnualSubmissionRequest
 
-import scala.concurrent.{ ExecutionContext, Future }
+import scala.concurrent.{ExecutionContext, Future}
 
 trait MockRetrieveForeignPropertyAnnualSubmissionConnector extends MockFactory {
 
@@ -43,5 +43,7 @@ trait MockRetrieveForeignPropertyAnnualSubmissionConnector extends MockFactory {
         )
         .expects(requestData, *, *, *)
     }
+
   }
+
 }

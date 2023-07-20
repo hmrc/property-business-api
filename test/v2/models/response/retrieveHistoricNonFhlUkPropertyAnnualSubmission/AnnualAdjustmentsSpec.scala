@@ -16,9 +16,9 @@
 
 package v2.models.response.retrieveHistoricNonFhlUkPropertyAnnualSubmission
 
-import play.api.libs.json.{ JsValue, Json }
+import play.api.libs.json.{JsValue, Json}
 import support.UnitSpec
-import v2.models.response.retrieveHistoricNonFhlUkPropertyAnnualSubmissionResponse.{ AnnualAdjustments, RentARoom }
+import v2.models.response.retrieveHistoricNonFhlUkPropertyAnnualSubmissionResponse.{AnnualAdjustments, RentARoom}
 
 class AnnualAdjustmentsSpec extends UnitSpec {
 
@@ -36,7 +36,8 @@ class AnnualAdjustmentsSpec extends UnitSpec {
                                              |      }
                                              |   }
                                              |""".stripMargin)
-  val mtdJson: JsValue        = Json.parse("""
+
+  val mtdJson: JsValue = Json.parse("""
                                              |   {
                                              |      "lossBroughtForward": 200.00,
                                              |      "balancingCharge": 300.00,
@@ -72,4 +73,5 @@ class AnnualAdjustmentsSpec extends UnitSpec {
       Json.toJson(model) shouldBe mtdJson
     }
   }
+
 }

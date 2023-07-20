@@ -3,29 +3,13 @@ description: |
   This endpoint enables you to list the income and expenses for a furnished holiday lettings (FHL) UK property business for a specific period within tax years 2017-18 to 2021-22. A National Insurance number is required. To list summaries from the current tax year, use the List Property Income & Expenses Period Summaries endpoint.
 
   ### Test data
-  <p>Scenario simulations using <code>Gov-Test-Scenario</code> headers is only available in the sandbox environment.</p>
-  <table>
-      <thead>
-          <tr>
-              <th>Header Value (Gov-Test-Scenario)</th>
-              <th>Scenario</th>
-          </tr>
-      </thead>
-      <tbody>
-          <tr>
-              <td><p>N/A - DEFAULT</p></td>
-              <td><p>Simulate success response.</p></td>
-          </tr>
-          <tr>
-              <td><p>EMPTY</p></td>
-              <td><p>Simulates the scenario where no data is found.</p></td>
-          </tr>
-          <tr>
-              <td><p>STATEFUL</p></td>
-              <td><p>Performs a stateful retrieve.</p></td>
-          </tr>
-      </tbody>
-  </table>
+  Scenario simulation using Gov-Test-Scenario headers is only available in the sandbox environment.
+  
+  | Header Value (Gov-Test-Scenario) | Scenario                                       |
+  |----------------------------------|------------------------------------------------|
+  | N/A - DEFAULT                    | Simulate success response.                     |
+  | EMPTY                            | Simulates the scenario where no data is found. |
+  | STATEFUL                         | Performs a stateful retrieve.                  |
 
 
 tags:

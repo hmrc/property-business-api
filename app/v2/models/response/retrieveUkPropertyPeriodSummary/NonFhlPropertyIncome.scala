@@ -17,7 +17,7 @@
 package v2.models.response.retrieveUkPropertyPeriodSummary
 
 import play.api.libs.functional.syntax._
-import play.api.libs.json.{ JsPath, Json, OWrites, Reads }
+import play.api.libs.json.{JsPath, Json, OWrites, Reads}
 
 case class NonFhlPropertyIncome(premiumsOfLeaseGrant: Option[BigDecimal],
                                 reversePremiums: Option[BigDecimal],
@@ -37,4 +37,5 @@ object NonFhlPropertyIncome {
       (JsPath \ "otherIncome").readNullable[BigDecimal] and
       (JsPath \ "ukOtherRentARoom").readNullable[RentARoomIncome]
   )(NonFhlPropertyIncome.apply _)
+
 }

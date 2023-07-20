@@ -20,10 +20,7 @@ import v1.controllers.requestParsers.validators.validations._
 import v1.models.errors._
 import v1.models.request.amendForeignPropertyAnnualSubmission.foreignFhlEea.ForeignFhlEea
 import v1.models.request.amendForeignPropertyAnnualSubmission.foreignProperty.ForeignPropertyEntry
-import v1.models.request.amendForeignPropertyAnnualSubmission.{
-  AmendForeignPropertyAnnualSubmissionRawData,
-  AmendForeignPropertyAnnualSubmissionRequestBody
-}
+import v1.models.request.amendForeignPropertyAnnualSubmission.{AmendForeignPropertyAnnualSubmissionRawData, AmendForeignPropertyAnnualSubmissionRequestBody}
 
 class AmendForeignPropertyAnnualSubmissionValidator extends Validator[AmendForeignPropertyAnnualSubmissionRawData] {
 
@@ -63,8 +60,8 @@ class AmendForeignPropertyAnnualSubmissionValidator extends Validator[AmendForei
         List(
           body.foreignFhlEea.map(validateForeignFhlEea).getOrElse(NoValidationErrors),
           body.foreignProperty
-            .map(_.zipWithIndex.toList.flatMap {
-              case (entry, i) => validateForeignProperty(entry, i)
+            .map(_.zipWithIndex.toList.flatMap { case (entry, i) =>
+              validateForeignProperty(entry, i)
             })
             .getOrElse(NoValidationErrors)
         )))
@@ -147,4 +144,5 @@ class AmendForeignPropertyAnnualSubmissionValidator extends Validator[AmendForei
   override def validate(data: AmendForeignPropertyAnnualSubmissionRawData): List[MtdError] = {
     run(validationSet, data).distinct
   }
+
 }

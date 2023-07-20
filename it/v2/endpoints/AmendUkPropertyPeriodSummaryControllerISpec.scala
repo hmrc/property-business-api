@@ -16,15 +16,15 @@
 
 package v2.endpoints
 
+import api.models.errors._
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import play.api.http.HeaderNames.ACCEPT
 import play.api.http.Status._
-import play.api.libs.json.{ JsObject, JsValue, Json }
-import play.api.libs.ws.{ WSRequest, WSResponse }
+import play.api.libs.json.{JsObject, JsValue, Json}
+import play.api.libs.ws.{WSRequest, WSResponse}
 import play.api.test.Helpers.AUTHORIZATION
 import support.V2IntegrationBaseSpec
-import api.models.errors._
-import v2.stubs.{ AuditStub, AuthStub, DownstreamStub, MtdIdLookupStub }
+import v2.stubs.{AuditStub, AuthStub, DownstreamStub, MtdIdLookupStub}
 
 class AmendUkPropertyPeriodSummaryControllerISpec extends V2IntegrationBaseSpec {
 
@@ -328,6 +328,7 @@ class AmendUkPropertyPeriodSummaryControllerISpec extends V2IntegrationBaseSpec 
          |   "reason": "downstream message"
          |}
       """.stripMargin
+
   }
 
   private trait NonTysTest extends Test {
@@ -459,55 +460,62 @@ class AmendUkPropertyPeriodSummaryControllerISpec extends V2IntegrationBaseSpec 
       val input = Seq(
         ("AA1123A", "2022-23", "XAIS12345678910", "4557ecb5-fd32-48cc-81f5-e6acd1099f3c", requestBodyJson, BAD_REQUEST, NinoFormatError),
         ("AA123456A", "20223", "XAIS12345678910", "4557ecb5-fd32-48cc-81f5-e6acd1099f3c", requestBodyJson, BAD_REQUEST, TaxYearFormatError),
-        ("AA123456A",
-         "2022-23",
-         "XAIS1234dfxgchjbn5678910",
-         "4557ecb5-fd32-48cc-81f5-e6acd1099f3c",
-         requestBodyJson,
-         BAD_REQUEST,
-         BusinessIdFormatError),
-        ("AA123456A",
-         "2022-23",
-         "XAIS12345678910",
-         "4557ecb5-fd32-awefwaef48cc-81f5-e6acd1099f3c",
-         requestBodyJson,
-         BAD_REQUEST,
-         SubmissionIdFormatError),
-        ("AA123456A",
-         "2021-23",
-         "XAIS12345678910",
-         "4557ecb5-fd32-48cc-81f5-e6acd1099f3c",
-         requestBodyJson,
-         BAD_REQUEST,
-         RuleTaxYearRangeInvalidError),
-        ("AA123456A",
-         "2021-22",
-         "XAIS12345678910",
-         "4557ecb5-fd32-48cc-81f5-e6acd1099f3c",
-         requestBodyJson,
-         BAD_REQUEST,
-         RuleTaxYearNotSupportedError),
-        ("AA123456A",
-         "2022-23",
-         "XAIS12345678910",
-         "4557ecb5-fd32-48cc-81f5-e6acd1099f3c",
-         Json.parse(s"""{"ukFhlProperty": {}}""".stripMargin),
-         BAD_REQUEST,
-         RuleIncorrectOrEmptyBodyError.copy(paths = Some(Seq("/ukFhlProperty")))),
-        ("AA123456A",
-         "2022-23",
-         "XAIS12345678910",
-         "4557ecb5-fd32-48cc-81f5-e6acd1099f3c",
-         invalidValueRequestJson,
-         BAD_REQUEST,
-         allInvalidValueRequestError),
-        ("AA123456A",
-         "2022-23",
-         "XAIS12345678910",
-         "4557ecb5-fd32-48cc-81f5-e6acd1099f3c",
-         bothExpensesSuppliedRequestJson,
-         BAD_REQUEST,
-         RuleBothExpensesSuppliedRequestError)
+        (
+          "AA123456A",
+          "2022-23",
+          "XAIS1234dfxgchjbn5678910",
+          "4557ecb5-fd32-48cc-81f5-e6acd1099f3c",
+          requestBodyJson,
+          BAD_REQUEST,
+          BusinessIdFormatError),
+        (
+          "AA123456A",
+          "2022-23",
+          "XAIS12345678910",
+          "4557ecb5-fd32-awefwaef48cc-81f5-e6acd1099f3c",
+          requestBodyJson,
+          BAD_REQUEST,
+          SubmissionIdFormatError),
+        (
+          "AA123456A",
+          "2021-23",
+          "XAIS12345678910",
+          "4557ecb5-fd32-48cc-81f5-e6acd1099f3c",
+          requestBodyJson,
+          BAD_REQUEST,
+          RuleTaxYearRangeInvalidError),
+        (
+          "AA123456A",
+          "2021-22",
+          "XAIS12345678910",
+          "4557ecb5-fd32-48cc-81f5-e6acd1099f3c",
+          requestBodyJson,
+          BAD_REQUEST,
+          RuleTaxYearNotSupportedError),
+        (
+          "AA123456A",
+          "2022-23",
+          "XAIS12345678910",
+          "4557ecb5-fd32-48cc-81f5-e6acd1099f3c",
+          Json.parse(s"""{"ukFhlProperty": {}}""".stripMargin),
+          BAD_REQUEST,
+          RuleIncorrectOrEmptyBodyError.copy(paths = Some(Seq("/ukFhlProperty")))),
+        (
+          "AA123456A",
+          "2022-23",
+          "XAIS12345678910",
+          "4557ecb5-fd32-48cc-81f5-e6acd1099f3c",
+          invalidValueRequestJson,
+          BAD_REQUEST,
+          allInvalidValueRequestError),
+        (
+          "AA123456A",
+          "2022-23",
+          "XAIS12345678910",
+          "4557ecb5-fd32-48cc-81f5-e6acd1099f3c",
+          bothExpensesSuppliedRequestJson,
+          BAD_REQUEST,
+          RuleBothExpensesSuppliedRequestError)
       )
       input.foreach(args => (validationErrorTest _).tupled(args))
     }
@@ -555,4 +563,5 @@ class AmendUkPropertyPeriodSummaryControllerISpec extends V2IntegrationBaseSpec 
       (errors ++ extraTysErrors).foreach(args => (serviceErrorTest _).tupled(args))
     }
   }
+
 }

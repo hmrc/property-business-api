@@ -28,10 +28,7 @@ import play.api.libs.json.JsValue
 import play.api.mvc.Result
 import v2.mocks.requestParsers.MockDeleteHistoricUkPropertyAnnualSubmissionRequestParser
 import v2.mocks.services.MockDeleteHistoricUkPropertyAnnualSubmissionService
-import v2.models.request.deleteHistoricUkPropertyAnnualSubmission.{
-  DeleteHistoricUkPropertyAnnualSubmissionRawData,
-  DeleteHistoricUkPropertyAnnualSubmissionRequest
-}
+import v2.models.request.deleteHistoricUkPropertyAnnualSubmission.{DeleteHistoricUkPropertyAnnualSubmissionRawData, DeleteHistoricUkPropertyAnnualSubmissionRequest}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future

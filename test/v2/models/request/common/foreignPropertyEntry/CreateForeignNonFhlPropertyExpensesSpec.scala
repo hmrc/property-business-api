@@ -16,7 +16,7 @@
 
 package v2.models.request.common.foreignPropertyEntry
 
-import play.api.libs.json.{ JsValue, Json }
+import play.api.libs.json.{JsValue, Json}
 import support.UnitSpec
 
 class CreateForeignNonFhlPropertyExpensesSpec extends UnitSpec {
@@ -83,4 +83,5 @@ class CreateForeignNonFhlPropertyExpensesSpec extends UnitSpec {
       }
     }
   }
+
 }

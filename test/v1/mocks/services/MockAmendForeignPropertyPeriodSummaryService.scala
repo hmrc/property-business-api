@@ -38,5 +38,7 @@ trait MockAmendForeignPropertyPeriodSummaryService extends MockFactory {
         .amendForeignProperty(_: AmendForeignPropertyPeriodSummaryRequest)(_: HeaderCarrier, _: ExecutionContext, _: EndpointLogContext, _: String))
         .expects(requestData, *, *, *, *)
     }
+
   }
+
 }

@@ -16,7 +16,7 @@
 
 package v2.models.response.retrieveHistoricNonFhlUkPiePeriodSummary
 
-import play.api.libs.json.{ JsValue, Json }
+import play.api.libs.json.{JsValue, Json}
 import support.UnitSpec
 import v2.models.utils.JsonErrorValidators
 
@@ -69,6 +69,7 @@ class PeriodIncomeSpec extends UnitSpec with JsonErrorValidators {
       }
     }
   }
+
   "writes" when {
     "passed valid model" should {
       "return valid JSON" in {
@@ -76,4 +77,5 @@ class PeriodIncomeSpec extends UnitSpec with JsonErrorValidators {
       }
     }
   }
+
 }

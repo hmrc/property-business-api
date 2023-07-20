@@ -17,8 +17,8 @@
 package v2.controllers.requestParsers
 
 import api.models.domain.{Nino, PeriodId}
-import support.UnitSpec
 import api.models.errors.{BadRequestError, ErrorWrapper, NinoFormatError, PeriodIdFormatError}
+import support.UnitSpec
 import v2.mocks.validators.MockRetrieveHistoricNonFhlUkPropertyPeriodSummaryValidator
 import v2.models.request.retrieveHistoricNonFhlUkPiePeriodSummary.{RetrieveHistoricNonFhlUkPiePeriodSummaryRawData, RetrieveHistoricNonFhlUkPiePeriodSummaryRequest}
 
@@ -64,4 +64,5 @@ class RetrieveHistoricNonFhlUkPropertyPeriodSummaryRequestParserSpec extends Uni
       }
     }
   }
+
 }

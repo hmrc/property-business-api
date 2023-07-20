@@ -16,14 +16,11 @@
 
 package v2.mocks.requestParsers
 
+import api.models.errors.ErrorWrapper
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
 import v2.controllers.requestParsers.ListHistoricUkPropertyPeriodSummariesRequestParser
-import api.models.errors.ErrorWrapper
-import v2.models.request.listHistoricUkPropertyPeriodSummaries.{
-  ListHistoricUkPropertyPeriodSummariesRawData,
-  ListHistoricUkPropertyPeriodSummariesRequest
-}
+import v2.models.request.listHistoricUkPropertyPeriodSummaries.{ListHistoricUkPropertyPeriodSummariesRawData, ListHistoricUkPropertyPeriodSummariesRequest}
 
 trait MockListHistoricUkPropertyPeriodSummariesRequestParser extends MockFactory {
 
@@ -38,5 +35,7 @@ trait MockListHistoricUkPropertyPeriodSummariesRequestParser extends MockFactory
         .parseRequest(_: ListHistoricUkPropertyPeriodSummariesRawData)(_: String))
         .expects(data, *)
     }
+
   }
+
 }

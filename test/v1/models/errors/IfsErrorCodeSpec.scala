@@ -35,4 +35,5 @@ class IfsErrorCodeSpec extends UnitSpec {
       json.as[IfsErrorCode] shouldBe IfsErrorCode("CODE")
     }
   }
+
 }

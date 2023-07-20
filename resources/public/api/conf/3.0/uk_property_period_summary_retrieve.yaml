@@ -3,53 +3,20 @@ description: |
   This endpoint allows a developer to retrieve the income and expenses for a UK property business, that occurred between tax year. A National Insurance number, business ID, tax year and submission ID are required.
   
   ### Test data
-  <p>Scenario simulations using <code>Gov-Test-Scenario</code> headers is only available in the sandbox environment.</p>
-  <table>
-      <thead>
-          <tr>
-              <th>Header Value (Gov-Test-Scenario)</th>
-              <th>Scenario</th>
-          </tr>
-      </thead>
-      <tbody>
-          <tr>
-              <td><p>N/A - DEFAULT</p></td>
-              <td><p>Simulates the scenario where no data is found.</p></td>
-          </tr>
-          <tr>
-              <td><p>UK_PROPERTY</p></td>
-              <td><p>Simulates the scenario with FHL and Non-FHL properties.</p></td>
-          </tr>
-          <tr>
-              <td><p>NOT_FOUND</p></td>
-              <td><p>Simulates the scenario where no data is found.</p></td>
-          </tr>
-          <tr>
-              <td><p>UK_FHL_FULL_EXPENSES</p></td>
-              <td><p>Simulates the scenario of a FHL property with full expenses.</p></td>
-          </tr>
-          <tr>
-              <td><p>UK_FHL_CONSOLIDATED</p></td>
-              <td><p>Simulates the scenario of a FHL property with consolidated expenses.</p></td>
-          </tr>
-          <tr>
-              <td><p>UK_NON_FHL_FULL_EXPENSES</p></td>
-              <td><p>Simulates the scenario of a Non-FHL property with full expenses.</p></td>
-          </tr>
-          <tr>
-              <td><p>UK_NON_FHL_CONSOLIDATED</p></td>
-              <td><p>Simulates the scenario of a Non-FHL property with consolidated expenses.</p></td>
-          </tr>
-          <tr>
-              <td><p>FOREIGN_PROPERTY</p></td>
-              <td><p>Simulates the scenario where the type of business is incorrect.</p></td>
-          </tr>
-          <tr>
-              <td><p>STATEFUL</p></td>
-              <td><p>Performs a stateful retrieve.</p></td>
-          </tr>
-      </tbody>
-  </table>
+  Scenario simulation using Gov-Test-Scenario headers is only available in the sandbox environment.
+  
+  | Header Value (Gov-Test-Scenario)    | Scenario                                                                 |
+  |-------------------------------------|--------------------------------------------------------------------------|
+  | N/A - DEFAULT                       | Simulates the scenario where no data is found.                           |
+  | UK_PROPERTY                         | Simulates the scenario with FHL and Non-FHL properties.                  |
+  | NOT_FOUND                           | Simulates the scenario where no data is found.                           |
+  | UK_FHL_FULL_EXPENSES                | Simulates the scenario of a FHL property with full expenses.             |
+  | UK_FHL_CONSOLIDATED                 | Simulates the scenario of a FHL property with consolidated expenses.     |
+  | UK_NON_FHL_FULL_EXPENSES            | Simulates the scenario of a Non-FHL property with full expenses.         |
+  | UK_NON_FHL_CONSOLIDATED             | Simulates the scenario of a Non-FHL property with consolidated expenses. |
+  | FOREIGN_PROPERTY                    | Simulates the scenario where the type of business is incorrect.          |
+  | STATEFUL                            | Performs a stateful retrieve.                                            |
+
 
 tags:
   - UK Property Income & Expenses Period Summary

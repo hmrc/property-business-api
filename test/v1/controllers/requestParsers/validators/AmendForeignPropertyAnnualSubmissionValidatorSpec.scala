@@ -237,16 +237,17 @@ class AmendForeignPropertyAnnualSubmissionValidatorSpec extends UnitSpec {
       }
       "an empty foreignFhlEea is submitted" in {
         validator.validate(
-          AmendForeignPropertyAnnualSubmissionRawData(validNino,
-                                                      validBusinessId,
-                                                      validTaxYear,
-                                                      Json.parse(
-                                                        """
+          AmendForeignPropertyAnnualSubmissionRawData(
+            validNino,
+            validBusinessId,
+            validTaxYear,
+            Json.parse(
+              """
             |{
             |  "foreignFhlEea": {}
             |}
           """.stripMargin
-                                                      ))) shouldBe List(RuleIncorrectOrEmptyBodyError)
+            ))) shouldBe List(RuleIncorrectOrEmptyBodyError)
       }
       "an empty foreignProperty is submitted" in {
         validator.validate(
@@ -1191,4 +1192,5 @@ class AmendForeignPropertyAnnualSubmissionValidatorSpec extends UnitSpec {
       }
     }
   }
+
 }

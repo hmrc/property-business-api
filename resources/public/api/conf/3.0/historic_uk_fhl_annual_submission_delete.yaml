@@ -9,7 +9,8 @@ description: |
   |----------------------------------|------------------------------------------------|
   | DELETE                           | Simulates a success response.                  |
   | NOT_FOUND                        | Simulates the scenario where no data is found. |
-  | STATEFUL_DELETE                  | Performs a stateful delete.                    |
+  | STATEFUL                         | Performs a stateful delete.                    |
+  | STATEFUL_DELETE                  | Performs a stateful delete. This Gov-Test-Scenario will be deprecated and no longer available on 05 September 2023. It will be replaced by the STATEFUL Gov-Test-Scenario.                    |
 
 tags:
   - Historic FHL UK Property Business Annual Submission

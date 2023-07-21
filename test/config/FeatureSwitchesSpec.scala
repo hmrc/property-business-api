@@ -25,24 +25,21 @@ class FeatureSwitchesSpec extends UnitSpec with ScalaCheckPropertyChecks {
   "FeatureSwitches" should {
     "return true" when {
       "the feature switch is set to true" in {
-        val config          = Configuration("passDeleteIntentHeader.enabled" -> true, "removeLossesBroughtForward.enabled" -> true)
+        val config = Configuration("passDeleteIntentHeader.enabled" -> true)
         val featureSwitches = FeatureSwitches(config)
         featureSwitches.isPassDeleteIntentEnabled shouldBe true
-        featureSwitches.isRemoveLossesBroughtForwardEnabled shouldBe true
       }
     }
     "return false" when {
       "the feature switch is set to false" in {
-        val config          = Configuration("passDeleteIntentHeader.enabled" -> false, "removeLossesBroughtForward.enabled" -> false)
+        val config = Configuration("passDeleteIntentHeader.enabled" -> false)
         val featureSwitches = FeatureSwitches(config)
         featureSwitches.isPassDeleteIntentEnabled shouldBe false
-        featureSwitches.isRemoveLossesBroughtForwardEnabled shouldBe false
       }
       "the feature switch is not present in the config" in {
-        val config          = Configuration.empty
+        val config = Configuration.empty
         val featureSwitches = FeatureSwitches(config)
         featureSwitches.isPassDeleteIntentEnabled shouldBe true
-        featureSwitches.isRemoveLossesBroughtForwardEnabled shouldBe true
       }
     }
   }

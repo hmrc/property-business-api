@@ -17,12 +17,12 @@
 package v2.connectors
 
 import api.connectors.{ConnectorSpec, DownstreamOutcome}
-import fixtures.RetrieveUkPropertyPeriodSummary.ResponseModelsFixture
-import org.scalamock.handlers.CallHandler
-import v2.connectors.RetrieveUkPropertyPeriodSummaryConnector._
 import api.models.domain.{Nino, TaxYear, Timestamp}
 import api.models.errors.{DownstreamErrorCode, DownstreamErrors}
 import api.models.outcomes.ResponseWrapper
+import fixtures.RetrieveUkPropertyPeriodSummary.ResponseModelsFixture
+import org.scalamock.handlers.CallHandler
+import v2.connectors.RetrieveUkPropertyPeriodSummaryConnector._
 import v2.models.request.retrieveUkPropertyPeriodSummary.RetrieveUkPropertyPeriodSummaryRequest
 import v2.models.response.retrieveUkPropertyPeriodSummary.{RetrieveUkPropertyPeriodSummaryResponse, UkFhlProperty, UkNonFhlProperty}
 

@@ -17,18 +17,18 @@
 package v2.controllers.requestParsers.validators
 
 import api.controllers.requestParsers.validators.Validator
-import api.controllers.requestParsers.validators.validations.{BusinessIdValidation, CountryCodeValidation, DateValidation, JsonFormatValidation, NinoValidation, NoValidationErrors, NumberValidation, TaxYearValidation, ToDateBeforeFromDateValidation}
+import api.controllers.requestParsers.validators.validations._
 import api.models.errors.{MtdError, RuleDuplicateCountryCodeError}
 import config.AppConfig
 import v2.controllers.requestParsers.validators.validations._
+import v2.models.request.common.foreignFhlEea.{CreateForeignFhlEea, CreateForeignFhlEeaExpenses}
+import v2.models.request.common.foreignPropertyEntry.{CreateForeignNonFhlPropertyEntry, CreateForeignNonFhlPropertyExpenses}
 import v2.models.request.createForeignPropertyPeriodSummary.{CreateForeignPropertyPeriodSummaryRawData, CreateForeignPropertyPeriodSummaryRequestBody}
 
 import javax.inject.{Inject, Singleton}
-import v2.models.request.common.foreignFhlEea.{CreateForeignFhlEea, CreateForeignFhlEeaExpenses}
-import v2.models.request.common.foreignPropertyEntry.{CreateForeignNonFhlPropertyEntry, CreateForeignNonFhlPropertyExpenses}
 
 @Singleton
-class CreateForeignPropertyPeriodSummaryValidator @Inject()(appConfig: AppConfig) extends Validator[CreateForeignPropertyPeriodSummaryRawData] {
+class CreateForeignPropertyPeriodSummaryValidator @Inject() (appConfig: AppConfig) extends Validator[CreateForeignPropertyPeriodSummaryRawData] {
 
   private lazy val minTaxYear = appConfig.minimumTaxV2Foreign
   private val validationSet   = List(parameterFormatValidation, bodyFormatValidation, bodyFieldFormatValidation, dateRangeValidation)
@@ -62,16 +62,15 @@ class CreateForeignPropertyPeriodSummaryValidator @Inject()(appConfig: AppConfig
         List(
           body.foreignFhlEea.map(validateForeignFhlEea).getOrElse(NoValidationErrors),
           body.foreignNonFhlProperty
-            .map(_.zipWithIndex.toList.flatMap {
-              case (entry, i) => validateForeignProperty(entry, i)
+            .map(_.zipWithIndex.toList.flatMap { case (entry, i) =>
+              validateForeignProperty(entry, i)
             })
             .getOrElse(NoValidationErrors),
           body.foreignFhlEea.flatMap(_.expenses.map(validateForeignFhlEeaConsolidatedExpenses)).getOrElse(NoValidationErrors),
           body.foreignNonFhlProperty
             .map(
-              _.toList.zipWithIndex.map {
-                case (entry, i) =>
-                  entry.expenses.map(expenditure => validateForeignPropertyConsolidatedExpenses(expenditure, i)).getOrElse(NoValidationErrors)
+              _.toList.zipWithIndex.map { case (entry, i) =>
+                entry.expenses.map(expenditure => validateForeignPropertyConsolidatedExpenses(expenditure, i)).getOrElse(NoValidationErrors)
               }
             )
             .getOrElse(Nil)
@@ -216,8 +215,8 @@ class CreateForeignPropertyPeriodSummaryValidator @Inject()(appConfig: AppConfig
     body.foreignNonFhlProperty
       .map { entries =>
         entries.zipWithIndex
-          .map {
-            case (entry, idx) => (entry.countryCode, s"/foreignNonFhlProperty/$idx/countryCode")
+          .map { case (entry, idx) =>
+            (entry.countryCode, s"/foreignNonFhlProperty/$idx/countryCode")
           }
           .groupBy(_._1)
           .collect {
@@ -232,4 +231,5 @@ class CreateForeignPropertyPeriodSummaryValidator @Inject()(appConfig: AppConfig
   override def validate(data: CreateForeignPropertyPeriodSummaryRawData): List[MtdError] = {
     run(validationSet, data).distinct
   }
+
 }

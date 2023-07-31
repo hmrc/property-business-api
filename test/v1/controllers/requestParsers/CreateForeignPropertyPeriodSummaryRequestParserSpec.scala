@@ -20,7 +20,7 @@ import play.api.libs.json.Json
 import support.UnitSpec
 import v1.mocks.validators.MockCreateForeignPropertyPeriodSummaryValidator
 import v1.models.domain.Nino
-import v1.models.errors.{ BadRequestError, BusinessIdFormatError, ErrorWrapper, NinoFormatError }
+import v1.models.errors.{BadRequestError, BusinessIdFormatError, ErrorWrapper, NinoFormatError}
 import v1.models.request.common.foreignFhlEea._
 import v1.models.request.common.foreignPropertyEntry._
 import v1.models.request.createForeignPropertyPeriodSummary._
@@ -164,4 +164,5 @@ class CreateForeignPropertyPeriodSummaryRequestParserSpec extends UnitSpec {
       }
     }
   }
+
 }

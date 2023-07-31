@@ -17,7 +17,7 @@
 package v2.models.response.retrieveHistoricNonFhlUkPropertyAnnualSubmissionResponse
 
 import play.api.libs.functional.syntax.toFunctionalBuilderOps
-import play.api.libs.json.{ JsPath, Json, OWrites, Reads }
+import play.api.libs.json.{JsPath, Json, OWrites, Reads}
 
 case class AnnualAllowances(annualInvestmentAllowance: Option[BigDecimal],
                             otherCapitalAllowance: Option[BigDecimal],
@@ -37,4 +37,5 @@ object AnnualAllowances {
       (JsPath \ "costOfReplacingDomGoods").readNullable[BigDecimal] and
       (JsPath \ "propertyIncomeAllowance").readNullable[BigDecimal]
   )(AnnualAllowances.apply _)
+
 }

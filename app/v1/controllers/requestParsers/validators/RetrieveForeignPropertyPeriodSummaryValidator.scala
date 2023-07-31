@@ -16,7 +16,7 @@
 
 package v1.controllers.requestParsers.validators
 
-import v1.controllers.requestParsers.validators.validations.{ BusinessIdValidation, NinoValidation, SubmissionIdValidation }
+import v1.controllers.requestParsers.validators.validations.{BusinessIdValidation, NinoValidation, SubmissionIdValidation}
 import v1.models.errors.MtdError
 import v1.models.request.retrieveForeignPropertyPeriodSummary.RetrieveForeignPropertyPeriodSummaryRawData
 
@@ -36,4 +36,5 @@ class RetrieveForeignPropertyPeriodSummaryValidator extends Validator[RetrieveFo
   override def validate(data: RetrieveForeignPropertyPeriodSummaryRawData): List[MtdError] = {
     run(validationSet, data).distinct
   }
+
 }

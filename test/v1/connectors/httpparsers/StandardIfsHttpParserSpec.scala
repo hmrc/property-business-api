@@ -18,7 +18,7 @@ package v1.connectors.httpparsers
 
 import api.models.outcomes.ResponseWrapper
 import play.api.http.Status._
-import play.api.libs.json.{Json, JsValue, Reads}
+import play.api.libs.json.{JsValue, Json, Reads}
 import support.UnitSpec
 import uk.gov.hmrc.http.{HttpReads, HttpResponse}
 import v1.connectors.IfsOutcome
@@ -150,30 +150,28 @@ class StandardIfsHttpParserSpec extends UnitSpec {
   )
 
   private def handleErrorsCorrectly[A](httpReads: HttpReads[IfsOutcome[A]]): Unit =
-    Seq(BAD_REQUEST, NOT_FOUND, FORBIDDEN, CONFLICT).foreach(
-      responseCode =>
-        s"receiving a $responseCode response" should {
-          "be able to parse a single error" in {
-            val httpResponse = HttpResponse(responseCode, singleErrorJson.toString(), Map("CorrelationId" -> Seq(correlationId)))
+    Seq(BAD_REQUEST, NOT_FOUND, FORBIDDEN, CONFLICT).foreach(responseCode =>
+      s"receiving a $responseCode response" should {
+        "be able to parse a single error" in {
+          val httpResponse = HttpResponse(responseCode, singleErrorJson.toString(), Map("CorrelationId" -> Seq(correlationId)))
 
-            httpReads.read(method, url, httpResponse) shouldBe Left(ResponseWrapper(correlationId, IfsErrors.single(IfsErrorCode("CODE"))))
+          httpReads.read(method, url, httpResponse) shouldBe Left(ResponseWrapper(correlationId, IfsErrors.single(IfsErrorCode("CODE"))))
+        }
+
+        "be able to parse multiple errors" in {
+          val httpResponse = HttpResponse(responseCode, multipleErrorsJson.toString(), Map("CorrelationId" -> Seq(correlationId)))
+
+          httpReads.read(method, url, httpResponse) shouldBe {
+            Left(ResponseWrapper(correlationId, IfsErrors(List(IfsErrorCode("CODE 1"), IfsErrorCode("CODE 2")))))
           }
+        }
 
-          "be able to parse multiple errors" in {
-            val httpResponse = HttpResponse(responseCode, multipleErrorsJson.toString(), Map("CorrelationId" -> Seq(correlationId)))
+        "return an outbound error when the error returned doesn't match the Error model" in {
+          val httpResponse = HttpResponse(responseCode, malformedErrorJson.toString(), Map("CorrelationId" -> Seq(correlationId)))
 
-            httpReads.read(method, url, httpResponse) shouldBe {
-              Left(ResponseWrapper(correlationId, IfsErrors(List(IfsErrorCode("CODE 1"), IfsErrorCode("CODE 2")))))
-            }
-          }
-
-          "return an outbound error when the error returned doesn't match the Error model" in {
-            val httpResponse = HttpResponse(responseCode, malformedErrorJson.toString(), Map("CorrelationId" -> Seq(correlationId)))
-
-            httpReads.read(method, url, httpResponse) shouldBe Left(ResponseWrapper(correlationId, OutboundError(DownstreamError)))
-          }
-      }
-    )
+          httpReads.read(method, url, httpResponse) shouldBe Left(ResponseWrapper(correlationId, OutboundError(DownstreamError)))
+        }
+      })
 
   private def handleInternalErrorsCorrectly[A](httpReads: HttpReads[IfsOutcome[A]]): Unit =
     Seq(INTERNAL_SERVER_ERROR, SERVICE_UNAVAILABLE).foreach(responseCode =>
@@ -189,7 +187,7 @@ class StandardIfsHttpParserSpec extends UnitSpec {
 
           httpReads.read(method, url, httpResponse) shouldBe Left(ResponseWrapper(correlationId, OutboundError(DownstreamError)))
         }
-    })
+      })
 
   private def handleUnexpectedResponse[A](httpReads: HttpReads[IfsOutcome[A]]): Unit =
     "receiving an unexpected response" should {
@@ -233,4 +231,5 @@ class StandardIfsHttpParserSpec extends UnitSpec {
       }
     }
   }
+
 }

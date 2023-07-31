@@ -16,13 +16,13 @@
 
 package api.connectors.httpparsers
 
+import api.connectors.DownstreamOutcome
+import api.models.errors._
+import api.models.outcomes.ResponseWrapper
 import play.api.http.Status._
 import play.api.libs.json.{JsValue, Json, Reads}
 import support.UnitSpec
 import uk.gov.hmrc.http.{HttpReads, HttpResponse}
-import api.connectors.DownstreamOutcome
-import api.models.errors._
-import api.models.outcomes.ResponseWrapper
 
 // WLOG if Reads tested elsewhere
 case class SomeModel(data: String)

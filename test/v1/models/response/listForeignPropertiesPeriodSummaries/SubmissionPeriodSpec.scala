@@ -20,6 +20,7 @@ import play.api.libs.json.Json
 import support.UnitSpec
 
 class SubmissionPeriodSpec extends UnitSpec {
+
   "reads" should {
     "read when only foreignFhlEea is provided" in {
       val ifsJson = Json.parse(
@@ -122,4 +123,5 @@ class SubmissionPeriodSpec extends UnitSpec {
       Json.toJson(model) shouldBe mtdJson
     }
   }
+
 }

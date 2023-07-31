@@ -144,6 +144,7 @@ class CreateForeignPropertyPeriodSummaryServiceSpec extends UnitSpec {
     val service = new CreateForeignPropertyPeriodSummaryService(
       connector = mockCreateForeignPropertyConnector
     )
+
   }
 
   "service" should {
@@ -196,4 +197,5 @@ class CreateForeignPropertyPeriodSummaryServiceSpec extends UnitSpec {
       input.foreach(args => (serviceError _).tupled(args))
     }
   }
+
 }

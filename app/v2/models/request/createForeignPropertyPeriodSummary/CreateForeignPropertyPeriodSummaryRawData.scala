@@ -18,15 +18,17 @@ package v2.models.request.createForeignPropertyPeriodSummary
 
 import api.models.request.RawData
 import play.api.libs.functional.syntax._
-import play.api.libs.json.{ JsPath, JsValue, OWrites }
+import play.api.libs.json.{JsPath, JsValue, OWrites}
 
 case class CreateForeignPropertyPeriodSummaryRawData(nino: String, businessId: String, taxYear: String, body: JsValue) extends RawData
 
 object CreateForeignPropertyPeriodSummaryRawData {
+
   implicit val writes: OWrites[CreateForeignPropertyPeriodSummaryRawData] = (
     (JsPath \ "nino").write[String] and
       (JsPath \ "businessId").write[String] and
       (JsPath \ "taxYear").write[String] and
       (JsPath \ "request").write[JsValue]
   )(unlift(CreateForeignPropertyPeriodSummaryRawData.unapply))
+
 }

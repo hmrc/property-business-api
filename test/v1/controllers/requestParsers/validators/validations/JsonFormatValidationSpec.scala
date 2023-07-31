@@ -16,7 +16,7 @@
 
 package v1.controllers.requestParsers.validators.validations
 
-import play.api.libs.json.{ Json, Reads }
+import play.api.libs.json.{Json, Reads}
 import support.UnitSpec
 import v1.models.errors.MtdError
 import v1.models.utils.JsonErrorValidators
@@ -53,4 +53,5 @@ class JsonFormatValidationSpec extends UnitSpec with JsonErrorValidators {
     }
 
   }
+
 }

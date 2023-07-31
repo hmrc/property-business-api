@@ -17,7 +17,7 @@
 package v2.models.request.common.foreignFhlEea
 
 import play.api.libs.functional.syntax._
-import play.api.libs.json.{ JsPath, Json, Reads, Writes }
+import play.api.libs.json.{JsPath, Json, Reads, Writes}
 
 case class CreateForeignFhlEea(income: Option[ForeignFhlEeaIncome], expenses: Option[CreateForeignFhlEeaExpenses])
 
@@ -28,4 +28,5 @@ object CreateForeignFhlEea {
     (JsPath \ "income").writeNullable[ForeignFhlEeaIncome] and
       (JsPath \ "expenses").writeNullable[CreateForeignFhlEeaExpenses]
   )(unlift(CreateForeignFhlEea.unapply))
+
 }

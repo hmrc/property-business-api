@@ -16,14 +16,11 @@
 
 package v2.mocks.requestParsers
 
+import api.models.errors.ErrorWrapper
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
 import v2.controllers.requestParsers.RetrieveHistoricNonFhlUkPropertyPeriodSummaryRequestParser
-import api.models.errors.ErrorWrapper
-import v2.models.request.retrieveHistoricNonFhlUkPiePeriodSummary.{
-  RetrieveHistoricNonFhlUkPiePeriodSummaryRawData,
-  RetrieveHistoricNonFhlUkPiePeriodSummaryRequest
-}
+import v2.models.request.retrieveHistoricNonFhlUkPiePeriodSummary.{RetrieveHistoricNonFhlUkPiePeriodSummaryRawData, RetrieveHistoricNonFhlUkPiePeriodSummaryRequest}
 
 trait MockRetrieveHistoricNonFhlUkPiePeriodSummaryRequestParser extends MockFactory {
 

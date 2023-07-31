@@ -17,7 +17,7 @@
 package v2.models.request.common.foreignPropertyEntry
 
 import play.api.libs.functional.syntax._
-import play.api.libs.json.{ JsPath, Json, Reads, Writes }
+import play.api.libs.json.{JsPath, Json, Reads, Writes}
 
 case class AmendForeignNonFhlPropertyExpenses(
     premisesRunningCosts: Option[BigDecimal],
@@ -47,4 +47,5 @@ object AmendForeignNonFhlPropertyExpenses {
       (JsPath \ "other").writeNullable[BigDecimal] and
       (JsPath \ "consolidatedExpense").writeNullable[BigDecimal]
   )(unlift(AmendForeignNonFhlPropertyExpenses.unapply))
+
 }

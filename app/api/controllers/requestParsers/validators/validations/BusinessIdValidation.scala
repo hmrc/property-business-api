@@ -16,7 +16,7 @@
 
 package api.controllers.requestParsers.validators.validations
 
-import api.models.errors.{ BusinessIdFormatError, MtdError }
+import api.models.errors.{BusinessIdFormatError, MtdError}
 
 object BusinessIdValidation {
 
@@ -24,4 +24,5 @@ object BusinessIdValidation {
     val idRegex = "^X[A-Z0-9]{1}IS[0-9]{11}$"
     if (id.matches(idRegex)) NoValidationErrors else List(BusinessIdFormatError)
   }
+
 }

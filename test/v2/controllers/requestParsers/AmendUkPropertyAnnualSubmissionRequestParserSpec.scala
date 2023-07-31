@@ -16,20 +16,16 @@
 
 package v2.controllers.requestParsers
 
-import play.api.libs.json.{ JsValue, Json }
-import support.UnitSpec
 import api.models.domain.{Nino, TaxYear}
-import api.models.errors.{ BadRequestError, BusinessIdFormatError, ErrorWrapper, NinoFormatError }
+import api.models.errors.{BadRequestError, BusinessIdFormatError, ErrorWrapper, NinoFormatError}
+import play.api.libs.json.{JsValue, Json}
+import support.UnitSpec
 import v2.mocks.validators.MockAmendUkPropertyAnnualSubmissionValidator
-import v2.models.request.amendUkPropertyAnnualSubmission.ukFhlProperty.{ UkFhlProperty, UkFhlPropertyAdjustments, UkFhlPropertyAllowances }
-import v2.models.request.amendUkPropertyAnnualSubmission.ukNonFhlProperty.{
-  UkNonFhlProperty,
-  UkNonFhlPropertyAdjustments,
-  UkNonFhlPropertyAllowances
-}
 import v2.models.request.amendUkPropertyAnnualSubmission._
+import v2.models.request.amendUkPropertyAnnualSubmission.ukFhlProperty.{UkFhlProperty, UkFhlPropertyAdjustments, UkFhlPropertyAllowances}
+import v2.models.request.amendUkPropertyAnnualSubmission.ukNonFhlProperty.{UkNonFhlProperty, UkNonFhlPropertyAdjustments, UkNonFhlPropertyAllowances}
 import v2.models.request.common.ukPropertyRentARoom.UkPropertyAdjustmentsRentARoom
-import v2.models.request.common.{ Building, FirstYear, StructuredBuildingAllowance }
+import v2.models.request.common.{Building, FirstYear, StructuredBuildingAllowance}
 
 class AmendUkPropertyAnnualSubmissionRequestParserSpec extends UnitSpec {
 
@@ -127,22 +123,24 @@ class AmendUkPropertyAnnualSubmissionRequestParserSpec extends UnitSpec {
             Some(
               UkFhlProperty(
                 Some(
-                  UkFhlPropertyAdjustments(Some(454.45),
-                                           Some(231.45),
-                                           periodOfGraceAdjustment = true,
-                                           Some(567.67),
-                                           nonResidentLandlord = true,
-                                           Some(UkPropertyAdjustmentsRentARoom(true)))),
+                  UkFhlPropertyAdjustments(
+                    Some(454.45),
+                    Some(231.45),
+                    periodOfGraceAdjustment = true,
+                    Some(567.67),
+                    nonResidentLandlord = true,
+                    Some(UkPropertyAdjustmentsRentARoom(true)))),
                 Some(UkFhlPropertyAllowances(Some(123.45), Some(345.56), Some(345.34), Some(453.34), Some(123.12), None))
               )),
             Some(
               UkNonFhlProperty(
                 Some(
-                  UkNonFhlPropertyAdjustments(Some(565.34),
-                                              Some(533.54),
-                                              Some(563.34),
-                                              nonResidentLandlord = true,
-                                              Some(UkPropertyAdjustmentsRentARoom(true)))),
+                  UkNonFhlPropertyAdjustments(
+                    Some(565.34),
+                    Some(533.54),
+                    Some(563.34),
+                    nonResidentLandlord = true,
+                    Some(UkPropertyAdjustmentsRentARoom(true)))),
                 Some(UkNonFhlPropertyAllowances(
                   Some(678.45),
                   Some(456.34),
@@ -192,4 +190,5 @@ class AmendUkPropertyAnnualSubmissionRequestParserSpec extends UnitSpec {
       }
     }
   }
+
 }

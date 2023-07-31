@@ -16,7 +16,7 @@
 
 package v2.models.response.retrieveHistoricFhlUkPropertyAnnualSubmission
 
-import play.api.libs.json.{ Json, OWrites, Reads }
+import play.api.libs.json.{Json, OWrites, Reads}
 
 case class AnnualAllowances(annualInvestmentAllowance: Option[BigDecimal],
                             businessPremisesRenovationAllowance: Option[BigDecimal],

@@ -16,7 +16,7 @@
 
 package v2.models.request.createAmendHistoricFhlUkPropertyAnnualSubmission
 
-import play.api.libs.json.{ JsValue, Json }
+import play.api.libs.json.{JsValue, Json}
 import support.UnitSpec
 
 class HistoricFhlAnnualAllowancesSpec extends UnitSpec {
@@ -54,6 +54,7 @@ class HistoricFhlAnnualAllowancesSpec extends UnitSpec {
       }
     }
   }
+
   "writes" when {
     "passed valid model" should {
       "return valid JSON" in {
@@ -61,4 +62,5 @@ class HistoricFhlAnnualAllowancesSpec extends UnitSpec {
       }
     }
   }
+
 }

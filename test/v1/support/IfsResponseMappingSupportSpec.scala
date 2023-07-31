@@ -97,4 +97,5 @@ class IfsResponseMappingSupportSpec extends UnitSpec {
       }
     }
   }
+
 }

@@ -70,7 +70,7 @@ class BaseIfsConnectorSpec extends ConnectorSpec {
           "Environment"   -> "ifs-environment",
           "Authorization" -> s"Bearer ifs-token",
           "User-Agent"    -> "property-business-api",
-          "CorrelationId" -> correlationId,
+          "CorrelationId" -> correlationId
         )
 
         testHttpMethods(dummyIfsHeaderCarrierConfig, requiredHeaders, otherHeaders, None)
@@ -123,4 +123,5 @@ class BaseIfsConnectorSpec extends ConnectorSpec {
       }
     }
   }
+
 }

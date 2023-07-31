@@ -17,7 +17,7 @@
 package v2.models.request.common.foreignPropertyEntry
 
 import play.api.libs.functional.syntax._
-import play.api.libs.json.{ JsPath, Json, Reads, Writes }
+import play.api.libs.json.{JsPath, Json, Reads, Writes}
 
 case class ForeignNonFhlPropertyIncome(
     rentIncome: Option[ForeignNonFhlPropertyRentIncome],
@@ -39,4 +39,5 @@ object ForeignNonFhlPropertyIncome {
       (JsPath \ "foreignTaxPaidOrDeducted").writeNullable[BigDecimal] and
       (JsPath \ "specialWithholdingTaxOrUkTaxPaid").writeNullable[BigDecimal]
   )(unlift(ForeignNonFhlPropertyIncome.unapply))
+
 }

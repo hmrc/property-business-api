@@ -16,7 +16,7 @@
 
 package v2.models.response.retrieveHistoricNonFhlUkPiePeriodSummary
 
-import play.api.libs.json.{ Json, OFormat }
+import play.api.libs.json.{Json, OFormat}
 
 case class RentARoomIncome(rentsReceived: Option[BigDecimal])
 

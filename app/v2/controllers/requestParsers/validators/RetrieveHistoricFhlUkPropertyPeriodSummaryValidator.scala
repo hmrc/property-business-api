@@ -18,14 +18,14 @@ package v2.controllers.requestParsers.validators
 
 import api.controllers.requestParsers.validators.Validator
 import api.controllers.requestParsers.validators.validations.{HistoricPeriodIdValidation, NinoValidation}
-import config.AppConfig
-
-import javax.inject.{Inject, Singleton}
 import api.models.errors.MtdError
+import config.AppConfig
 import v2.models.request.retrieveHistoricFhlUkPiePeriodSummary.RetrieveHistoricFhlUkPiePeriodSummaryRawData
 
+import javax.inject.{Inject, Singleton}
+
 @Singleton
-class RetrieveHistoricFhlUkPropertyPeriodSummaryValidator @Inject()(appConfig: AppConfig)
+class RetrieveHistoricFhlUkPropertyPeriodSummaryValidator @Inject() (appConfig: AppConfig)
     extends Validator[RetrieveHistoricFhlUkPiePeriodSummaryRawData] {
 
   private lazy val minTaxYear = appConfig.minimumTaxHistoric
@@ -37,11 +37,12 @@ class RetrieveHistoricFhlUkPropertyPeriodSummaryValidator @Inject()(appConfig: A
     (data: RetrieveHistoricFhlUkPiePeriodSummaryRawData) => {
       List(
         NinoValidation.validate(data.nino),
-        HistoricPeriodIdValidation.validate(minTaxYear, maxTaxYear, data.periodId),
+        HistoricPeriodIdValidation.validate(minTaxYear, maxTaxYear, data.periodId)
       )
     }
 
   override def validate(data: RetrieveHistoricFhlUkPiePeriodSummaryRawData): List[MtdError] = {
     run(validationSet, data).distinct
   }
+
 }

@@ -20,6 +20,7 @@ import support.UnitSpec
 import v1.models.errors.BusinessIdFormatError
 
 class BusinessIdValidationSpec extends UnitSpec {
+
   "validate" should {
     "return no errors" when {
       "a valid businessId is passed in" in {
@@ -32,4 +33,5 @@ class BusinessIdValidationSpec extends UnitSpec {
       }
     }
   }
+
 }

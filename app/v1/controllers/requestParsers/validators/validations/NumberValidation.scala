@@ -16,7 +16,7 @@
 
 package v1.controllers.requestParsers.validators.validations
 
-import v1.models.errors.{ ValueFormatError, MtdError }
+import v1.models.errors.{MtdError, ValueFormatError}
 
 object NumberValidation {
 
@@ -36,4 +36,5 @@ object NumberValidation {
       )
     }
   }
+
 }

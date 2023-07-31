@@ -17,15 +17,15 @@
 package v2.endpoints
 
 import api.models.domain.TaxYear
+import api.models.errors._
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import play.api.http.HeaderNames.ACCEPT
 import play.api.http.Status
-import play.api.libs.json.{ Json, JsValue }
-import play.api.libs.ws.{ WSRequest, WSResponse }
+import play.api.libs.json.{JsValue, Json}
+import play.api.libs.ws.{WSRequest, WSResponse}
 import play.api.test.Helpers.AUTHORIZATION
 import support.V2IntegrationBaseSpec
-import api.models.errors._
-import v2.stubs.{ AuditStub, AuthStub, DownstreamStub, MtdIdLookupStub }
+import v2.stubs.{AuditStub, AuthStub, DownstreamStub, MtdIdLookupStub}
 
 class RetrieveUkPropertyPeriodSummaryControllerISpec extends V2IntegrationBaseSpec {
 
@@ -198,6 +198,7 @@ class RetrieveUkPropertyPeriodSummaryControllerISpec extends V2IntegrationBaseSp
          |  "reason": "ifs message"
          |}
        """.stripMargin
+
   }
 
   private trait NonTysTest extends Test {
@@ -315,10 +316,11 @@ class RetrieveUkPropertyPeriodSummaryControllerISpec extends V2IntegrationBaseSp
 
       val tysInput = Seq(
         (Status.BAD_REQUEST, "INVALID_INCOMESOURCE_ID", Status.BAD_REQUEST, BusinessIdFormatError),
-        (Status.BAD_REQUEST, "INVALID_CORRELATION_ID", Status.INTERNAL_SERVER_ERROR, InternalError),
+        (Status.BAD_REQUEST, "INVALID_CORRELATION_ID", Status.INTERNAL_SERVER_ERROR, InternalError)
       )
 
       (input ++ tysInput).foreach(args => (serviceErrorTest _).tupled(args))
     }
   }
+
 }

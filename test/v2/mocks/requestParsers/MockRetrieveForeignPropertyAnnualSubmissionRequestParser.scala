@@ -16,10 +16,10 @@
 
 package v2.mocks.requestParsers
 
+import api.models.errors.ErrorWrapper
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
 import v2.controllers.requestParsers.RetrieveForeignPropertyAnnualSubmissionRequestParser
-import api.models.errors.ErrorWrapper
 import v2.models.request.retrieveForeignPropertyAnnualSubmission._
 
 trait MockRetrieveForeignPropertyAnnualSubmissionRequestParser extends MockFactory {
@@ -35,5 +35,7 @@ trait MockRetrieveForeignPropertyAnnualSubmissionRequestParser extends MockFacto
         .parseRequest(_: RetrieveForeignPropertyAnnualSubmissionRawData)(_: String))
         .expects(data, *)
     }
+
   }
+
 }

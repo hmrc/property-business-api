@@ -85,7 +85,8 @@ class DeleteHistoricUkPropertyAnnualSubmissionConnectorSpec extends ConnectorSpe
     }
   }
 
-  trait Test { _: ConnectorTest =>
+  trait Test {
+    _: ConnectorTest =>
 
     protected val propertyType: HistoricPropertyType
 

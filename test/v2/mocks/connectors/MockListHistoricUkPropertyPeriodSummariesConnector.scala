@@ -16,11 +16,11 @@
 
 package v2.mocks.connectors
 
+import api.connectors.DownstreamOutcome
+import api.models.domain.HistoricPropertyType
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
 import uk.gov.hmrc.http.HeaderCarrier
-import api.connectors.DownstreamOutcome
-import api.models.domain.HistoricPropertyType
 import v2.connectors.ListHistoricUkPropertyPeriodSummariesConnector
 import v2.models.request.listHistoricUkPropertyPeriodSummaries.ListHistoricUkPropertyPeriodSummariesRequest
 import v2.models.response.listHistoricUkPropertyPeriodSummaries.{ListHistoricUkPropertyPeriodSummariesResponse, SubmissionPeriod}
@@ -35,7 +35,7 @@ trait MockListHistoricUkPropertyPeriodSummariesConnector extends MockFactory {
   object MockListHistoricUkPropertyPeriodSummariesConnector {
 
     def listPeriodSummaries(requestData: ListHistoricUkPropertyPeriodSummariesRequest, propertyType: HistoricPropertyType)
-      : CallHandler[Future[DownstreamOutcome[ListHistoricUkPropertyPeriodSummariesResponse[SubmissionPeriod]]]] = {
+        : CallHandler[Future[DownstreamOutcome[ListHistoricUkPropertyPeriodSummariesResponse[SubmissionPeriod]]]] = {
       (
         mockListHistoricUkPropertyPeriodSummariesConnector
           .listPeriodSummaries(_: ListHistoricUkPropertyPeriodSummariesRequest, _: HistoricPropertyType)(
@@ -46,5 +46,7 @@ trait MockListHistoricUkPropertyPeriodSummariesConnector extends MockFactory {
         )
         .expects(requestData, propertyType, *, *, *)
     }
+
   }
+
 }

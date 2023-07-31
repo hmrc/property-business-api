@@ -53,10 +53,12 @@ class RetrieveForeignPropertyAnnualSubmissionValidatorSpec extends UnitSpec {
           RuleTaxYearRangeInvalidError)
       }
       "multiple format errors are made" in {
-        validator.validate(RetrieveForeignPropertyAnnualSubmissionRawData("Walrus", "Beans", "2021/22")) shouldBe List(NinoFormatError,
-                                                                                                                       BusinessIdFormatError,
-                                                                                                                       TaxYearFormatError)
+        validator.validate(RetrieveForeignPropertyAnnualSubmissionRawData("Walrus", "Beans", "2021/22")) shouldBe List(
+          NinoFormatError,
+          BusinessIdFormatError,
+          TaxYearFormatError)
       }
     }
   }
+
 }

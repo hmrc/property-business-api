@@ -16,10 +16,10 @@
 
 package v2.models.request.amendHistoricFhlUkPiePeriodSummary
 
-import play.api.libs.json.{ JsValue, Json }
+import play.api.libs.json.{JsValue, Json}
 import support.UnitSpec
-import v2.models.request.common.ukFhlPieProperty.{ UkFhlPieExpenses, UkFhlPieIncome }
-import v2.models.request.common.ukPropertyRentARoom.{ UkPropertyExpensesRentARoom, UkPropertyIncomeRentARoom }
+import v2.models.request.common.ukFhlPieProperty.{UkFhlPieExpenses, UkFhlPieIncome}
+import v2.models.request.common.ukPropertyRentARoom.{UkPropertyExpensesRentARoom, UkPropertyIncomeRentARoom}
 
 class AmendHistoricFhlUkPiePeriodSummaryRequestBodySpec extends UnitSpec {
 
@@ -99,6 +99,7 @@ class AmendHistoricFhlUkPiePeriodSummaryRequestBodySpec extends UnitSpec {
       |}
       |""".stripMargin
   )
+
   "reads" when {
     "passed valid JSON" should {
       "return a valid model" in {
@@ -114,4 +115,5 @@ class AmendHistoricFhlUkPiePeriodSummaryRequestBodySpec extends UnitSpec {
       }
     }
   }
+
 }

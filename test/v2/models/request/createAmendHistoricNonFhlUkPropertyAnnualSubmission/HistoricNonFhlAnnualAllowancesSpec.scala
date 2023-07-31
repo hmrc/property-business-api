@@ -16,7 +16,7 @@
 
 package v2.models.request.createAmendHistoricNonFhlUkPropertyAnnualSubmission
 
-import play.api.libs.json.{ JsValue, Json }
+import play.api.libs.json.{JsValue, Json}
 import support.UnitSpec
 
 class HistoricNonFhlAnnualAllowancesSpec extends UnitSpec {
@@ -28,7 +28,7 @@ class HistoricNonFhlAnnualAllowancesSpec extends UnitSpec {
       businessPremisesRenovationAllowance = Some(300.00),
       otherCapitalAllowance = Some(400.00),
       costOfReplacingDomesticGoods = Some(500.00),
-      propertyIncomeAllowance = Some(600.00),
+      propertyIncomeAllowance = Some(600.00)
     )
 
   val validMtdJson: JsValue = Json.parse(
@@ -72,4 +72,5 @@ class HistoricNonFhlAnnualAllowancesSpec extends UnitSpec {
       }
     }
   }
+
 }

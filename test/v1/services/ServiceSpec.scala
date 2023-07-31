@@ -16,7 +16,7 @@
 
 package v1.services
 
-import play.api.http.{ HeaderNames, MimeTypes, Status }
+import play.api.http.{HeaderNames, MimeTypes, Status}
 import support.UnitSpec
 import uk.gov.hmrc.http.HeaderCarrier
 

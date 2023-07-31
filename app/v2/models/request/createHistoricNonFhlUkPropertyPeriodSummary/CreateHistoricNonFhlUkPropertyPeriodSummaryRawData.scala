@@ -18,13 +18,15 @@ package v2.models.request.createHistoricNonFhlUkPropertyPeriodSummary
 
 import api.models.request.RawData
 import play.api.libs.functional.syntax._
-import play.api.libs.json.{ JsPath, JsValue, OWrites }
+import play.api.libs.json.{JsPath, JsValue, OWrites}
 
 case class CreateHistoricNonFhlUkPropertyPeriodSummaryRawData(nino: String, body: JsValue) extends RawData
 
 object CreateHistoricNonFhlUkPropertyPeriodSummaryRawData {
+
   implicit val writes: OWrites[CreateHistoricNonFhlUkPropertyPeriodSummaryRawData] = (
     (JsPath \ "nino").write[String] and
       (JsPath \ "request").write[JsValue]
   )(unlift(CreateHistoricNonFhlUkPropertyPeriodSummaryRawData.unapply))
+
 }

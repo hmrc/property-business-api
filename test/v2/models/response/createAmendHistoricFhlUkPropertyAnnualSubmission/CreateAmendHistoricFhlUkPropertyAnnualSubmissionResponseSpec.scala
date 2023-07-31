@@ -16,7 +16,7 @@
 
 package v2.models.response.createAmendHistoricFhlUkPropertyAnnualSubmission
 
-import play.api.libs.json.{ JsObject, JsValue, Json }
+import play.api.libs.json.{JsObject, JsValue, Json}
 import support.UnitSpec
 
 class CreateAmendHistoricFhlUkPropertyAnnualSubmissionResponseSpec extends UnitSpec {
@@ -44,4 +44,5 @@ class CreateAmendHistoricFhlUkPropertyAnnualSubmissionResponseSpec extends UnitS
       }
     }
   }
+
 }

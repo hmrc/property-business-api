@@ -16,10 +16,10 @@
 
 package v2.mocks.connectors
 
+import api.connectors.DownstreamOutcome
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
 import uk.gov.hmrc.http.HeaderCarrier
-import api.connectors.{DownstreamOutcome}
 import v2.connectors.CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionConnector
 import v2.models.request.createAmendHistoricNonFhlUkPropertyAnnualSubmission.CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequest
 import v2.models.response.createAmendHistoricNonFhlUkPropertyAnnualSubmission.CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionResponse
@@ -34,7 +34,7 @@ trait MockCreateAmendHistoricNonFhlUkPropertyAnnualSubmissionConnector extends M
   object MockCreateAmendHistoricNonFhlUkPropertyAnnualSubmissionConnector {
 
     def amend(requestData: CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequest)
-      : CallHandler[Future[DownstreamOutcome[CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionResponse]]] = {
+        : CallHandler[Future[DownstreamOutcome[CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionResponse]]] = {
       (
         mockCreateAmendHistoricNonFhlUkPropertyAnnualSubmissionConnector
           .amend(_: CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequest)(
@@ -45,5 +45,7 @@ trait MockCreateAmendHistoricNonFhlUkPropertyAnnualSubmissionConnector extends M
         )
         .expects(requestData, *, *, *)
     }
+
   }
+
 }

@@ -17,7 +17,7 @@
 package v2.models.request.common.foreignFhlEea
 
 import play.api.libs.functional.syntax._
-import play.api.libs.json.{ JsPath, Json, Reads, Writes }
+import play.api.libs.json.{JsPath, Json, Reads, Writes}
 
 case class CreateForeignFhlEeaExpenses(premisesRunningCosts: Option[BigDecimal],
                                        repairsAndMaintenance: Option[BigDecimal],
@@ -41,4 +41,5 @@ object CreateForeignFhlEeaExpenses {
       (JsPath \ "other").writeNullable[BigDecimal] and
       (JsPath \ "consolidatedExpenseAmount").writeNullable[BigDecimal]
   )(unlift(CreateForeignFhlEeaExpenses.unapply))
+
 }

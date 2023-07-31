@@ -16,13 +16,13 @@
 
 package v2.models.response.retrieveUkPropertyPeriodSummary
 
-import fixtures.RetrieveUkPropertyPeriodSummary.ResponseModelsFixture
-import mocks.MockAppConfig
-import play.api.libs.json.{ JsValue, Json }
-import support.UnitSpec
 import api.hateoas.HateoasFactory
 import api.models.hateoas.Method._
 import api.models.hateoas.{HateoasWrapper, Link}
+import fixtures.RetrieveUkPropertyPeriodSummary.ResponseModelsFixture
+import mocks.MockAppConfig
+import play.api.libs.json.{JsValue, Json}
+import support.UnitSpec
 
 class RetrieveUkPropertyPeriodSummaryResponseSpec extends UnitSpec with MockAppConfig with ResponseModelsFixture {
   val downstreamJson: JsValue                        = fullDownstreamJson
@@ -71,4 +71,5 @@ class RetrieveUkPropertyPeriodSummaryResponseSpec extends UnitSpec with MockAppC
       }
     }
   }
+
 }

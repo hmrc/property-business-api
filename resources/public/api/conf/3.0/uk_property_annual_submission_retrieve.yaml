@@ -3,49 +3,19 @@ description: |
   This endpoint allows a developer to retrieve adjustments and allowances for a UK property business. For either or both of Furnished Holiday Letting (FHL) or other UK property submissions. A National Insurance number, business ID and tax year are required.
 
   ### Test data
-  <p>Scenario simulations using <code>Gov-Test-Scenario</code> headers is only available in the sandbox environment.</p>
-  <table>
-      <thead>
-          <tr>
-              <th>Header Value (Gov-Test-Scenario)</th>
-              <th>Scenario</th>
-          </tr>
-      </thead>
-      <tbody>
-          <tr>
-              <td><p>N/A - DEFAULT</p></td>
-              <td><p>Simulates the scenario where no data is found.</p></td>
-          </tr>
-          <tr>
-              <td><p>UK_PROPERTY</p></td>
-              <td><p>Simulates the scenario with FHL and Non-FHL properties.</p></td>
-          </tr>
-          <tr>
-              <td><p>UK_FHL_ALL_OTHER_ALLOWANCES</p></td>
-              <td><p>Simulates the scenario of a FHL property with all other allowances.</p></td>
-          </tr>
-          <tr>
-              <td><p>UK_FHL_PROPERTY_ALLOWANCE</p></td>
-              <td><p>Simulates the scenario of a FHL property with property allowance.</p></td>
-          </tr>
-          <tr>
-              <td><p>UK_NON_FHL_ALL_OTHER_ALLOWANCES</p></td>
-              <td><p>Simulates the scenario of a Non-FHL property with all other allowances.</p></td>
-          </tr>
-          <tr>
-              <td><p>UK_NON_FHL_PROPERTY_ALLOWANCE</p></td>
-              <td><p>Simulates the scenario of a Non-FHL property with property allowance.</p></td>
-          </tr>
-          <tr>
-              <td><p>FOREIGN_PROPERTY</p></td>
-              <td><p>Simulates the scenario where the type of business is incorrect.</p></td>
-          </tr>
-          <tr>
-              <td><p>STATEFUL</p></td>
-              <td><p>Performs a stateful retrieve.</p></td>
-          </tr>
-      </tbody>
-  </table>
+  Scenario simulation using Gov-Test-Scenario headers is only available in the sandbox environment.
+  
+  | Header Value (Gov-Test-Scenario)      | Scenario                                                               |
+  |---------------------------------------|------------------------------------------------------------------------|
+  | N/A - DEFAULT                         | Simulates the scenario where no data is found.                         |
+  | UK_PROPERTY                           | Simulates the scenario with FHL and Non-FHL properties.                |
+  | UK_FHL_ALL_OTHER_ALLOWANCES           | Simulates the scenario of a FHL property with all other allowances.    |
+  | UK_FHL_PROPERTY_ALLOWANCE             | Simulates the scenario of a FHL property with property allowance.      |
+  | UK_NON_FHL_ALL_OTHER_ALLOWANCES       | Simulates the scenario of a Non-FHL property with all other allowances.|
+  | UK_NON_FHL_PROPERTY_ALLOWANCE         | Simulates the scenario of a Non-FHL property with property allowance.  |
+  | FOREIGN_PROPERTY                      | Simulates the scenario where the type of business is incorrect.        |
+  | STATEFUL                              | Performs a stateful retrieve.                                          |
+
 
 tags:
   - UK Property Business Annual Submission

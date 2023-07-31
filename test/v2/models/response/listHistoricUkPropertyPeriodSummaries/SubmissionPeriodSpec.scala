@@ -48,4 +48,5 @@ class SubmissionPeriodSpec extends UnitSpec {
       )
     }
   }
+
 }

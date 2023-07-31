@@ -16,7 +16,7 @@
 
 package v1.connectors
 
-import play.api.http.{ HeaderNames, MimeTypes, Status }
+import play.api.http.{HeaderNames, MimeTypes, Status}
 import support.UnitSpec
 import uk.gov.hmrc.http.HeaderCarrier
 
@@ -58,4 +58,5 @@ trait ConnectorSpec extends UnitSpec with Status with MimeTypes with HeaderNames
     "X-Request-Timestamp",
     "X-Session-Id"
   )
+
 }

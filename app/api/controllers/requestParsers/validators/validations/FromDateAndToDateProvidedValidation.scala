@@ -16,7 +16,7 @@
 
 package api.controllers.requestParsers.validators.validations
 
-import api.models.errors.{ MtdError, MissingFromDateError, MissingToDateError }
+import api.models.errors.{MissingFromDateError, MissingToDateError, MtdError}
 
 object FromDateAndToDateProvidedValidation {
 
@@ -27,4 +27,5 @@ object FromDateAndToDateProvidedValidation {
       case _               => NoValidationErrors
     }
   }
+
 }

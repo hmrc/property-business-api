@@ -20,6 +20,8 @@ import api.models.errors.{DateFormatError, FromDateFormatError, MtdError, ToDate
 
 import java.time.LocalDate
 import scala.util.{Failure, Success, Try}
+import api.models.errors.ToDateOutOfRangeError
+import api.models.errors.FromDateOutOfRangeError
 
 object DateValidation {
 
@@ -35,10 +37,14 @@ object DateValidation {
       case _ => Nil
     }
 
-  def validate(field: String, isFromDate: Boolean): List[MtdError] =
+  def validate(field: String, isFromDate: Boolean, minYear: Int = 1900, maxYear: Int = 2100): List[MtdError] =
     Try {
       LocalDate.parse(field, dateFormat)
     } match {
+      case Success(ld) if (isFromDate && ld.getYear() <= minYear) =>
+        List(FromDateOutOfRangeError)
+      case Success(ld) if (!isFromDate && ld.getYear() >= maxYear) =>
+        List(ToDateOutOfRangeError)
       case Success(_) => Nil
       case Failure(_) =>
         if (isFromDate) {

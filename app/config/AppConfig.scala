@@ -67,6 +67,9 @@ trait AppConfig {
 
   def minimumTaxHistoric: Int
   def maximumTaxHistoric: Int
+
+  def minimumFromDateV3: Int
+  def maximumToDateV3:  Int
 }
 
 @Singleton
@@ -100,6 +103,8 @@ class AppConfigImpl @Inject() (config: ServicesConfig, configuration: Configurat
   def featureSwitches: Configuration               = configuration.getOptional[Configuration](s"feature-switch").getOrElse(Configuration.empty)
   def endpointsEnabled(version: Version): Boolean  = config.getBoolean(s"api.${version.name}.endpoints.enabled")
 
+  val minimumFromDateV3: Int   = config.getInt("date-ranges.version-3.minimum-from-date")
+  val maximumToDateV3: Int     = config.getInt("date-ranges.version-3.maximum-to-date")
   val minimumTaxV2Foreign: Int = config.getInt("minimum-tax-year.version-2.foreign")
   val minimumTaxV2Uk: Int      = config.getInt("minimum-tax-year.version-2.uk")
 

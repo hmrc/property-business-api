@@ -16,7 +16,7 @@
 
 package api.controllers.requestParsers.validators.validations
 
-import api.models.errors.{FromDateFormatError, ToDateFormatError}
+import api.models.errors.{FromDateFormatError, FromDateOutOfRangeError, ToDateFormatError, ToDateOutOfRangeError}
 import support.UnitSpec
 
 class DateValidationSpec extends UnitSpec {
@@ -50,6 +50,14 @@ class DateValidationSpec extends UnitSpec {
 
       }
 
+      "when an out of range fromDate is supplied" in {
+        val invalidFromDate = "1899-01-01"
+        val validationResult  = DateValidation.validate(invalidFromDate, isFromDate = true)
+        validationResult.isEmpty shouldBe false
+        validationResult.length shouldBe 1
+        validationResult.head shouldBe FromDateOutOfRangeError
+      }
+
       "when an invalid toDate is supplied" in {
 
         val invalidBusinessId = "30-01-2020"
@@ -58,6 +66,14 @@ class DateValidationSpec extends UnitSpec {
         validationResult.length shouldBe 1
         validationResult.head shouldBe ToDateFormatError
 
+      }
+
+      "when an out of range toDate is supplied" in {
+        val invalidToDate = "2101-01-01"
+        val validationResult  = DateValidation.validate(invalidToDate, isFromDate = false)
+        validationResult.isEmpty shouldBe false
+        validationResult.length shouldBe 1
+        validationResult.head shouldBe ToDateOutOfRangeError
       }
     }
   }

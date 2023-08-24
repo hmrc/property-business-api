@@ -23,12 +23,12 @@ import play.api.http.Status._
 import play.api.libs.json.{JsObject, JsString, JsValue, Json}
 import play.api.libs.ws.{WSRequest, WSResponse}
 import play.api.test.Helpers.AUTHORIZATION
-import support.V2IntegrationBaseSpec
+import support.IntegrationBaseSpec
 import v3.stubs.AuditStub
 import v3.models.utils.JsonErrorValidators
 import v3.stubs.{AuthStub, DownstreamStub, MtdIdLookupStub}
 
-class CreateHistoricFhlUkPeriodSummaryControllerISpec extends V2IntegrationBaseSpec with JsonErrorValidators {
+class CreateHistoricFhlUkPeriodSummaryControllerISpec extends IntegrationBaseSpec with JsonErrorValidators {
 
   val validRequestJson: JsValue = Json.parse(
     """

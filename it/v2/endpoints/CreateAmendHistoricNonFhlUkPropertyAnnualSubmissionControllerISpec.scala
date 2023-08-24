@@ -23,11 +23,11 @@ import play.api.http.Status._
 import play.api.libs.json.{JsObject, JsValue, Json}
 import play.api.libs.ws.{WSRequest, WSResponse}
 import play.api.test.Helpers.AUTHORIZATION
-import support.V2IntegrationBaseSpec
+import support.IntegrationBaseSpec
 import v2.stubs.AuditStub
 import v2.stubs.{AuthStub, DownstreamStub, MtdIdLookupStub}
 
-class CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionControllerISpec extends V2IntegrationBaseSpec {
+class CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionControllerISpec extends IntegrationBaseSpec {
 
   private trait Test {
 

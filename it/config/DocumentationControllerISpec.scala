@@ -20,12 +20,12 @@ import io.swagger.v3.parser.OpenAPIV3Parser
 import play.api.http.Status
 import play.api.libs.json.{JsValue, Json}
 import play.api.libs.ws.WSResponse
-import support.V2IntegrationBaseSpec
+import support.IntegrationBaseSpec
 import uk.gov.hmrc.auth.core.ConfidenceLevel
 
 import scala.util.Try
 
-class DocumentationControllerISpec extends V2IntegrationBaseSpec {
+class DocumentationControllerISpec extends IntegrationBaseSpec {
 
   val config: AppConfig                = app.injector.instanceOf[AppConfig]
   val confidenceLevel: ConfidenceLevel = config.confidenceLevelConfig.confidenceLevel

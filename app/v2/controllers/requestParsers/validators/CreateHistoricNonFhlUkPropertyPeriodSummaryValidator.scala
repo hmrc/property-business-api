@@ -49,8 +49,8 @@ class CreateHistoricNonFhlUkPropertyPeriodSummaryValidator @Inject() (appConfig:
   private def validateBody(body: CreateHistoricNonFhlUkPropertyPeriodSummaryRequestBody): Either[List[MtdError], Unit] = {
 
     val formatDateErrors =
-      DateValidation.validate(body.fromDate, true) ++
-        DateValidation.validate(body.toDate, false)
+      DateValidation.validate(body.fromDate, isFromDate = true, appConfig.minimumFromDate, appConfig.maximumToDate) ++
+        DateValidation.validate(body.toDate, isFromDate = false, appConfig.minimumFromDate, appConfig.maximumToDate)
 
     def validateToDateIsAfterFromDate: List[MtdError] =
       if (formatDateErrors.isEmpty)

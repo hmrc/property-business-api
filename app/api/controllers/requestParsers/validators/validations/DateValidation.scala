@@ -37,21 +37,31 @@ object DateValidation {
       case _ => Nil
     }
 
-  def validate(field: String, isFromDate: Boolean, minYear: Int = 1900, maxYear: Int = 2100): List[MtdError] =
+  def validate(field: String, isFromDate: Boolean, minYear: Int, maxYear: Int): List[MtdError] = {
     Try {
       LocalDate.parse(field, dateFormat)
     } match {
-      case Success(ld) if (isFromDate && ld.getYear() <= minYear) =>
-        List(FromDateOutOfRangeError)
-      case Success(ld) if (!isFromDate && ld.getYear() >= maxYear) =>
-        List(ToDateOutOfRangeError)
-      case Success(_) => Nil
-      case Failure(_) =>
-        if (isFromDate) {
-          List(FromDateFormatError)
-        } else {
-          List(ToDateFormatError)
-        }
+      case Success(ld) => validateFromAndToDate(ld, isFromDate, minYear, maxYear)
+      case Failure(_)  => returnFormatError(isFromDate)
     }
+  }
+
+  private def returnFormatError(isFromDate: Boolean) = {
+    if (isFromDate) {
+      List(FromDateFormatError)
+    } else {
+      List(ToDateFormatError)
+    }
+  }
+
+  private def validateFromAndToDate(date: LocalDate, isFromDate: Boolean, minYear: Int, maxYear: Int): List[MtdError] = {
+    if (isFromDate && date.getYear <= minYear) {
+      List(FromDateOutOfRangeError)
+    } else if (!isFromDate && date.getYear >= maxYear) {
+      List(ToDateOutOfRangeError)
+    } else {
+      Nil
+    }
+  }
 
 }

@@ -56,11 +56,6 @@ class DocumentationControllerISpec extends IntegrationBaseSpec {
        |      ],
        |      "versions":[
        |         {
-       |            "version":"1.0",
-       |            "status":"DEPRECATED",
-       |            "endpointsEnabled":true
-       |         },
-       |         {
        |            "version":"2.0",
        |            "status":"BETA",
        |            "endpointsEnabled":true
@@ -81,23 +76,6 @@ class DocumentationControllerISpec extends IntegrationBaseSpec {
       val response: WSResponse = await(buildRequest("/api/definition").get())
       response.status shouldBe Status.OK
       Json.parse(response.body) shouldBe apiDefinitionJson
-    }
-  }
-
-  "an OAS documentation request for V1" must {
-    "return the documentation that passes OAS V3 parser" in {
-      val response: WSResponse = await(buildRequest("/api/conf/1.0/application.yaml").get())
-      response.status shouldBe Status.OK
-
-      val contents     = response.body[String]
-      val parserResult = Try(new OpenAPIV3Parser().readContents(contents))
-      parserResult.isSuccess shouldBe true
-
-      val openAPI = Option(parserResult.get.getOpenAPI)
-      openAPI.isEmpty shouldBe false
-      openAPI.get.getOpenapi shouldBe "3.0.3"
-      openAPI.get.getInfo.getTitle shouldBe "Property Business (MTD)"
-      openAPI.get.getInfo.getVersion shouldBe "1.0"
     }
   }
 

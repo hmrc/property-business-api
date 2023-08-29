@@ -35,10 +35,8 @@ class ApiDefinitionFactorySpec extends UnitSpec {
   "definition" when {
     "called" should {
       "return a valid Definition case class" in new Test {
-        MockAppConfig.apiStatus(Version1) returns "BETA"
         MockAppConfig.apiStatus(Version2) returns "BETA"
         MockAppConfig.apiStatus(Version3) returns "BETA"
-        MockAppConfig.endpointsEnabled(Version1).returns(true).anyNumberOfTimes()
         MockAppConfig.endpointsEnabled(Version2).returns(true).anyNumberOfTimes()
         MockAppConfig.endpointsEnabled(Version3).returns(true).anyNumberOfTimes()
         MockAppConfig.confidenceLevelCheckEnabled
@@ -70,11 +68,6 @@ class ApiDefinitionFactorySpec extends UnitSpec {
               context = "individuals/business/property",
               categories = Seq("INCOME_TAX_MTD"),
               versions = Seq(
-                APIVersion(
-                  version = Version1,
-                  status = BETA,
-                  endpointsEnabled = true
-                ),
                 APIVersion(
                   version = Version2,
                   status = BETA,

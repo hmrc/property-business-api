@@ -19,7 +19,7 @@ package definition
 import config.ConfidenceLevelConfig
 import definition.APIStatus.{ALPHA, BETA}
 import mocks.{MockAppConfig, MockHttpClient}
-import routing.{Version1, Version2, Version3}
+import routing.{Version2, Version3}
 import support.UnitSpec
 import uk.gov.hmrc.auth.core.ConfidenceLevel
 
@@ -107,15 +107,15 @@ class ApiDefinitionFactorySpec extends UnitSpec {
   "buildAPIStatus" when {
     "the 'apiStatus' parameter is present and valid" should {
       "return the correct status" in new Test {
-        MockAppConfig.apiStatus(Version1) returns "BETA"
-        apiDefinitionFactory.buildAPIStatus(version = Version1) shouldBe BETA
+        MockAppConfig.apiStatus(Version2) returns "BETA"
+        apiDefinitionFactory.buildAPIStatus(version = Version2) shouldBe BETA
       }
     }
 
     "the 'apiStatus' parameter is present and invalid" should {
       "default to alpha" in new Test {
-        MockAppConfig.apiStatus(Version1) returns "ALPHO"
-        apiDefinitionFactory.buildAPIStatus(version = Version1) shouldBe ALPHA
+        MockAppConfig.apiStatus(Version2) returns "ALPHO"
+        apiDefinitionFactory.buildAPIStatus(version = Version2) shouldBe ALPHA
       }
     }
   }

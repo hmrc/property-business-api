@@ -18,7 +18,7 @@ package definition
 
 import play.api.http.HeaderNames.ACCEPT
 import play.api.test.FakeRequest
-import routing.{Version1, Version2, Version3, Versions}
+import routing.{Version2, Version3, Versions}
 import support.UnitSpec
 
 class VersionSpec extends UnitSpec {
@@ -26,7 +26,6 @@ class VersionSpec extends UnitSpec {
   "Versions" when {
     "retrieved from a request header" must {
       "work" in {
-        Versions.getFromRequest(FakeRequest().withHeaders((ACCEPT, "application/vnd.hmrc.1.0+json"))) shouldBe Right(Version1)
         Versions.getFromRequest(FakeRequest().withHeaders((ACCEPT, "application/vnd.hmrc.2.0+json"))) shouldBe Right(Version2)
         Versions.getFromRequest(FakeRequest().withHeaders((ACCEPT, "application/vnd.hmrc.3.0+json"))) shouldBe Right(Version3)
       }

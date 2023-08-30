@@ -23,10 +23,10 @@ import play.api.http.Status
 import play.api.libs.json.{JsValue, Json}
 import play.api.libs.ws.{WSRequest, WSResponse}
 import play.api.test.Helpers.AUTHORIZATION
-import support.V2IntegrationBaseSpec
+import support.IntegrationBaseSpec
 import v3.stubs.{AuditStub, AuthStub, DownstreamStub, MtdIdLookupStub}
 
-class ListHistoricFhlUkPropertyPeriodSummariesControllerISpec extends V2IntegrationBaseSpec {
+class ListHistoricFhlUkPropertyPeriodSummariesControllerISpec extends IntegrationBaseSpec {
 
   private trait Test {
 

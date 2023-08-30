@@ -23,11 +23,11 @@ import play.api.http.Status
 import play.api.libs.json._
 import play.api.libs.ws.{WSRequest, WSResponse}
 import play.api.test.Helpers.AUTHORIZATION
-import support.V2IntegrationBaseSpec
+import support.IntegrationBaseSpec
 import v2.models.utils.JsonErrorValidators
 import v2.stubs.{AuditStub, AuthStub, DownstreamStub, MtdIdLookupStub}
 
-class CreateForeignPropertyPeriodSummaryControllerISpec extends V2IntegrationBaseSpec with JsonErrorValidators {
+class CreateForeignPropertyPeriodSummaryControllerISpec extends IntegrationBaseSpec with JsonErrorValidators {
 
   private def nonFhlEntryWith(countryCode: String) =
     Json.parse(s"""

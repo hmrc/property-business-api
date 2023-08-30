@@ -14,22 +14,9 @@
  * limitations under the License.
  */
 
-package definition
+package v3.models.request.amendHistoricFhlUkPiePeriodSummary
 
-import play.api.http.HeaderNames.ACCEPT
-import play.api.test.FakeRequest
-import routing.{Version2, Version3, Versions}
-import support.UnitSpec
+import api.models.request.RawData
+import play.api.libs.json.JsValue
 
-class VersionSpec extends UnitSpec {
-
-  "Versions" when {
-    "retrieved from a request header" must {
-      "work" in {
-        Versions.getFromRequest(FakeRequest().withHeaders((ACCEPT, "application/vnd.hmrc.2.0+json"))) shouldBe Right(Version2)
-        Versions.getFromRequest(FakeRequest().withHeaders((ACCEPT, "application/vnd.hmrc.3.0+json"))) shouldBe Right(Version3)
-      }
-    }
-  }
-
-}
+case class AmendHistoricFhlUkPiePeriodSummaryRawData(nino: String, periodId: String, body: JsValue) extends RawData

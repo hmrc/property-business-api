@@ -39,7 +39,6 @@ class VersionRoutingRequestHandlerSpec extends UnitSpec with Inside with MockApp
   import play.api.routing.sird._
 
   object DefaultHandler extends Handler
-  object V1Handler      extends Handler
   object V2Handler      extends Handler
   object V3Handler      extends Handler
 
@@ -135,7 +134,7 @@ class VersionRoutingRequestHandlerSpec extends UnitSpec with Inside with MockApp
 
     "return 406" in new Test {
 
-      val request: RequestHeader = buildRequest("/v1")
+      val request: RequestHeader = buildRequest("/v2")
       inside(requestHandler.routeRequest(request)) { case Some(a: EssentialAction) =>
         val result = a.apply(request)
 
@@ -149,7 +148,7 @@ class VersionRoutingRequestHandlerSpec extends UnitSpec with Inside with MockApp
     implicit val acceptHeader: Some[String] = Some("application/vnd.hmrc.5.0+json")
 
     "return 404" in new Test {
-      private val request = buildRequest("/v1")
+      private val request = buildRequest("/v2")
 
       inside(requestHandler.routeRequest(request)) { case Some(a: EssentialAction) =>
         val result = a.apply(request)
@@ -166,7 +165,7 @@ class VersionRoutingRequestHandlerSpec extends UnitSpec with Inside with MockApp
     "the version has a route for the resource" must {
       "return 404 Not Found" in new Test {
         MockAppConfig.endpointsEnabled(Version3).anyNumberOfTimes()
-        private val request = buildRequest("/v1")
+        private val request = buildRequest("/v2")
         inside(requestHandler.routeRequest(request)) { case Some(a: EssentialAction) =>
           val result = a.apply(request)
 

@@ -49,7 +49,7 @@ class DateValidationSpec extends UnitSpec {
         val validationResult1 = DateValidation.validate(invalidDate1, isFromDate = true, minInputYear, maxInputYear)
         validationResult1.isEmpty shouldBe false
         validationResult1.length shouldBe 1
-        validationResult1.head shouldBe FromDateFormatError
+        validationResult1.head shouldBe FromDateOutOfRangeError
 
         val invalidDate = "01-01-2020"
         val validationResult = DateValidation.validate(invalidDate, isFromDate = true, minInputYear, maxInputYear)

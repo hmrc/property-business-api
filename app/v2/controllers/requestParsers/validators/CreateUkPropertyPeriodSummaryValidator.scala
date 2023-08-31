@@ -54,8 +54,8 @@ class CreateUkPropertyPeriodSummaryValidator @Inject() (appConfig: AppConfig) ex
     val body = data.body.as[CreateUkPropertyPeriodSummaryRequestBody]
 
     val regularErrors = List(
-      DateValidation.validate(body.fromDate, isFromDate = true),
-      DateValidation.validate(body.toDate, isFromDate = false)
+      DateValidation.validate(body.fromDate, isFromDate = true, appConfig.minimumFromDate, appConfig.maximumToDate),
+      DateValidation.validate(body.toDate, isFromDate = false, appConfig.minimumFromDate, appConfig.maximumToDate)
     )
 
     val pathErrors = List(

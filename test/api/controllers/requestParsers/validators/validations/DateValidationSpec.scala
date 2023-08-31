@@ -44,8 +44,15 @@ class DateValidationSpec extends UnitSpec {
     }
     "return an error" when {
       "when an invalid fromDate is supplied" in {
-        val invalidBusinessId = "01-01-2020"
-        val validationResult  = DateValidation.validate(invalidBusinessId, isFromDate = true, minInputYear, maxInputYear)
+
+        val invalidDate1 = "0010-01-01"
+        val validationResult1 = DateValidation.validate(invalidDate1, isFromDate = true, minInputYear, maxInputYear)
+        validationResult1.isEmpty shouldBe false
+        validationResult1.length shouldBe 1
+        validationResult1.head shouldBe FromDateFormatError
+
+        val invalidDate = "01-01-2020"
+        val validationResult = DateValidation.validate(invalidDate, isFromDate = true, minInputYear, maxInputYear)
         validationResult.isEmpty shouldBe false
         validationResult.length shouldBe 1
         validationResult.head shouldBe FromDateFormatError

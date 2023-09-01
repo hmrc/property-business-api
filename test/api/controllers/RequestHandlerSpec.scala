@@ -26,13 +26,13 @@ import api.services.{MockAuditService, ServiceOutcome}
 import cats.data.Validated
 import cats.data.Validated.{Invalid, Valid}
 import config.AppConfig
-import mocks.{MockAppConfig, MockIdGenerator}
+import mocks.MockIdGenerator
 import org.scalamock.handlers.CallHandler
 import play.api.http.{HeaderNames, Status}
 import play.api.libs.json.{JsString, Json, OWrites}
 import play.api.mvc.AnyContent
 import play.api.test.{FakeRequest, ResultExtractors}
-import routing.{Version, Version3}
+import routing.Version3
 import support.UnitSpec
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.audit.http.connector.AuditResult
@@ -48,10 +48,7 @@ class RequestHandlerSpec
     with Status
     with HeaderNames
     with ResultExtractors
-    with ControllerSpecHateoasSupport
-    with MockAppConfig {
-
-  private implicit val version: Version = Version3
+    with ControllerSpecHateoasSupport {
 
   private val successResponseJson = Json.obj("result" -> "SUCCESS!")
   private val successCode         = ACCEPTED
@@ -116,7 +113,6 @@ class RequestHandlerSpec
           .withService(mockService.service)
           .withNoContentResult()
 
-        MockedAppConfig.isApiDeprecated(version) returns false
         service returns Future.successful(Right(ResponseWrapper(serviceCorrelationId, Output)))
 
         val result = requestHandler.handleRequest()
@@ -132,7 +128,6 @@ class RequestHandlerSpec
           .withService(mockService.service)
           .withHateoasResult(mockHateoasFactory)(HData, successCode)
 
-        MockedAppConfig.isApiDeprecated(version) returns false
         service returns Future.successful(Right(ResponseWrapper(serviceCorrelationId, Output)))
 
         MockHateoasFactory.wrap(Output, HData) returns HateoasWrapper(Output, hateoaslinks)
@@ -152,8 +147,6 @@ class RequestHandlerSpec
           .withService(mockService.service)
           .withPlainJsonResult(successCode)
 
-        MockedAppConfig.isApiDeprecated(version) returns false
-
         val result = requestHandler.handleRequest()
 
         contentAsJson(result) shouldBe NinoFormatError.asJson
@@ -169,7 +162,6 @@ class RequestHandlerSpec
           .withService(mockService.service)
           .withPlainJsonResult(successCode)
 
-        MockedAppConfig.isApiDeprecated(version) returns false
         service returns Future.successful(Left(ErrorWrapper(serviceCorrelationId, NinoFormatError)))
 
         val result = requestHandler.handleRequest()
@@ -184,8 +176,6 @@ class RequestHandlerSpec
       val params    = Map("param" -> "value")
       val auditType = "type"
       val txName    = "txName"
-
-      MockedAppConfig.isApiDeprecated(version) returns false
 
       val requestBody = Some(JsString("REQUEST BODY"))
 
@@ -228,7 +218,6 @@ class RequestHandlerSpec
           "audit without the response" in {
             val requestHandler = basicRequestHandler.withAuditing(auditHandler())
 
-            MockedAppConfig.isApiDeprecated(version) returns false
             service returns Future.successful(Right(ResponseWrapper(serviceCorrelationId, Output)))
 
             val result = requestHandler.handleRequest()
@@ -245,7 +234,6 @@ class RequestHandlerSpec
           "audit with the response" in {
             val requestHandler = basicRequestHandler.withAuditing(auditHandler(includeResponse = true))
 
-            MockedAppConfig.isApiDeprecated(version) returns false
             service returns Future.successful(Right(ResponseWrapper(serviceCorrelationId, Output)))
 
             val result = requestHandler.handleRequest()
@@ -263,8 +251,6 @@ class RequestHandlerSpec
         "audit the failure" in {
           val requestHandler = basicErrorRequestHandler.withAuditing(auditHandler())
 
-          MockedAppConfig.isApiDeprecated(version) returns false
-
           val result = requestHandler.handleRequest()
 
           contentAsJson(result) shouldBe NinoFormatError.asJson
@@ -278,8 +264,6 @@ class RequestHandlerSpec
       "a request fails with service errors" must {
         "audit the failure" in {
           val requestHandler = basicRequestHandler.withAuditing(auditHandler())
-
-          MockedAppConfig.isApiDeprecated(version) returns false
 
           service returns Future.successful(Left(ErrorWrapper(serviceCorrelationId, NinoFormatError)))
 

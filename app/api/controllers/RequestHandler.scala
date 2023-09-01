@@ -23,12 +23,10 @@ import api.models.outcomes.ResponseWrapper
 import api.services.ServiceOutcome
 import cats.data.EitherT
 import cats.implicits._
-import config.AppConfig
 import play.api.http.Status
 import play.api.libs.json.{JsValue, Writes}
 import play.api.mvc.Result
 import play.api.mvc.Results.InternalServerError
-import routing.Version
 import utils.Logging
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -38,9 +36,8 @@ trait RequestHandler {
   def handleRequest()(implicit
       ctx: RequestContext,
       request: UserRequest[_],
-      ec: ExecutionContext,
-      appConfig: AppConfig,
-      apiVersion: Version): Future[Result]
+      ec: ExecutionContext
+  ): Future[Result]
 
 }
 
@@ -64,12 +61,7 @@ object RequestHandler {
       auditHandler: Option[AuditHandler] = None
   ) extends RequestHandler {
 
-    def handleRequest()(implicit
-        ctx: RequestContext,
-        request: UserRequest[_],
-        ec: ExecutionContext,
-        appConfig: AppConfig,
-        apiVersion: Version): Future[Result] =
+    def handleRequest()(implicit ctx: RequestContext, request: UserRequest[_], ec: ExecutionContext): Future[Result] =
       Delegate.handleRequest()
 
     def withErrorHandling(errorHandling: ErrorHandling): RequestHandlerBuilder[Input, Output] =
@@ -123,20 +115,13 @@ object RequestHandler {
 
       implicit class Response(result: Result) {
 
-        def withApiHeaders(correlationId: String, responseHeaders: (String, String)*)(implicit appConfig: AppConfig, apiVersion: Version): Result = {
-          val maybeDeprecatedHeader =
-            if (appConfig.isApiDeprecated(apiVersion))
-              List(
-                "Deprecation" -> "This endpoint is deprecated. See the API documentation: https://developer.service.hmrc.gov.uk/api-documentation/docs/api/service/self-assessment-bsas-api")
-            else Nil
-
+        def withApiHeaders(correlationId: String, responseHeaders: (String, String)*): Result = {
           val headers =
             responseHeaders ++
               List(
                 "X-CorrelationId"        -> correlationId,
                 "X-Content-Type-Options" -> "nosniff"
-              ) ++
-              maybeDeprecatedHeader
+              )
 
           result.copy(header = result.header.copy(headers = result.header.headers ++ headers))
         }
@@ -146,9 +131,8 @@ object RequestHandler {
       def handleRequest()(implicit
           ctx: RequestContext,
           request: UserRequest[_],
-          ec: ExecutionContext,
-          appConfig: AppConfig,
-          apiVersion: Version): Future[Result] = {
+          ec: ExecutionContext
+      ): Future[Result] = {
 
         logger.info(
           message = s"[${ctx.endpointLogContext.controllerName}][${ctx.endpointLogContext.endpointName}] " +
@@ -174,9 +158,8 @@ object RequestHandler {
       private def handleSuccess(parsedRequest: Input, serviceResponse: ResponseWrapper[Output])(implicit
           ctx: RequestContext,
           request: UserRequest[_],
-          ec: ExecutionContext,
-          appConfig: AppConfig,
-          apiVersion: Version): Result = {
+          ec: ExecutionContext
+      ): Result = {
         logger.info(
           s"[${ctx.endpointLogContext.controllerName}][${ctx.endpointLogContext.endpointName}] - " +
             s"Success response received with CorrelationId: ${ctx.correlationId}")
@@ -192,9 +175,8 @@ object RequestHandler {
       private def handleFailure(errorWrapper: ErrorWrapper)(implicit
           ctx: RequestContext,
           request: UserRequest[_],
-          ec: ExecutionContext,
-          appConfig: AppConfig,
-          apiVersion: Version): Result = {
+          ec: ExecutionContext
+      ): Result = {
         logger.warn(
           s"[${ctx.endpointLogContext.controllerName}][${ctx.endpointLogContext.endpointName}] - " +
             s"Error response received with CorrelationId: ${ctx.correlationId}")

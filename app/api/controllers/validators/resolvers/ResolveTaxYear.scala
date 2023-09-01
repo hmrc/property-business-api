@@ -36,11 +36,10 @@ trait ResolvingTaxYear extends Resolver[String, TaxYear] {
       val start = value.substring(startTaxYearStart, startTaxYearEnd).toInt
       val end   = value.substring(endTaxYearStart, endTaxYearEnd).toInt
 
-      if (end - start == 1) {
+      if (end - start == 1)
         Valid(TaxYear.fromMtd(value))
-      } else {
+      else
         Invalid(List(withError(error, RuleTaxYearRangeInvalid, path)))
-      }
 
     } else {
       Invalid(List(withError(error, TaxYearFormatError, path)))
@@ -57,11 +56,10 @@ object ResolveTaxYear extends ResolvingTaxYear {
   def apply(minimumTaxYear: Int, value: String, error: Option[MtdError], path: Option[String]): Validated[Seq[MtdError], TaxYear] =
     resolve(value, error, path)
       .andThen { taxYear =>
-        if (taxYear.year < minimumTaxYear) {
+        if (taxYear.year < minimumTaxYear)
           Invalid(List(RuleTaxYearNotSupportedError))
-        } else {
+        else
           Valid(taxYear)
-        }
       }
 
 }
@@ -71,11 +69,10 @@ object ResolveTysTaxYear extends ResolvingTaxYear {
   def apply(value: String, error: Option[MtdError], path: Option[String]): Validated[Seq[MtdError], TaxYear] =
     resolve(value, error, path)
       .andThen { taxYear =>
-        if (taxYear.year < TaxYear.tysTaxYear) {
+        if (taxYear.year < TaxYear.tysTaxYear)
           Invalid(List(InvalidTaxYearParameterError) ++ error)
-        } else {
+        else
           Valid(taxYear)
-        }
       }
 
 }

@@ -39,11 +39,10 @@ object ResolveDateRange extends Resolver[(String, String), DateRange] {
     val startDateEpochTime = parsedStartDate.toEpochDay
     val endDateEpochTime   = parsedEndDate.toEpochDay
 
-    if ((endDateEpochTime - startDateEpochTime) <= 0) {
+    if ((endDateEpochTime - startDateEpochTime) <= 0)
       Invalid(List(RuleEndBeforeStartDateError))
-    } else {
+    else
       Valid(DateRange(parsedStartDate, parsedEndDate))
-    }
   }
 
 }

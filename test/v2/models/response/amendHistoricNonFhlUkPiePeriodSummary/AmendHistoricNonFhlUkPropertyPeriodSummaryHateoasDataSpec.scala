@@ -16,8 +16,8 @@
 
 package v2.models.response.amendHistoricNonFhlUkPiePeriodSummary
 
-import api.models.hateoas.Link
-import api.models.hateoas.Method._
+import api.hateoas.Link
+import api.hateoas.Method._
 import mocks.MockAppConfig
 import support.UnitSpec
 
@@ -29,7 +29,7 @@ class AmendHistoricNonFhlUkPropertyPeriodSummaryHateoasDataSpec extends UnitSpec
       val periodId = "somePeriodId"
       val context  = "some/context"
 
-      MockAppConfig.apiGatewayContext.returns(context).anyNumberOfTimes()
+      MockedAppConfig.apiGatewayContext.returns(context).anyNumberOfTimes()
 
       AmendHistoricNonFhlUkPropertyPeriodSummaryHateoasData.LinksFactory
         .links(mockAppConfig, AmendHistoricNonFhlUkPropertyPeriodSummaryHateoasData(nino, periodId)) shouldBe

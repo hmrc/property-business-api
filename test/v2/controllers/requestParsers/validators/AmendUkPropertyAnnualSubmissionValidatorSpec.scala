@@ -101,7 +101,7 @@ class AmendUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec with JsonErr
       |}
       |""".stripMargin)
 
-  MockAppConfig.minimumTaxV2Uk returns 2021
+  MockedAppConfig.minimumTaxV2Uk returns 2021
   val validator = new AmendUkPropertyAnnualSubmissionValidator(mockAppConfig)
 
   "running a validation" should {

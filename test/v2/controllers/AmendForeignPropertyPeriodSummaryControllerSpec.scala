@@ -17,14 +17,13 @@
 package v2.controllers
 
 import api.controllers.{ControllerBaseSpec, ControllerTestRunner}
-import api.mocks.MockIdGenerator
-import api.mocks.hateoas.MockHateoasFactory
-import api.mocks.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService}
-import api.models.audit.{AuditEvent, AuditResponse, GenericAuditDetail}
+import api.hateoas.{HateoasWrapper, MockHateoasFactory}
+import api.models.audit.{AuditEvent, AuditResponse, GenericAuditDetailOld}
 import api.models.domain.{Nino, TaxYear}
 import api.models.errors._
-import api.models.hateoas.HateoasWrapper
 import api.models.outcomes.ResponseWrapper
+import api.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService}
+import mocks.MockIdGenerator
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.Result
 import v2.mocks.requestParsers.MockAmendForeignPropertyPeriodSummaryRequestParser
@@ -113,7 +112,7 @@ class AmendForeignPropertyPeriodSummaryControllerSpec
     }
   }
 
-  trait Test extends ControllerTest with AuditEventChecking[GenericAuditDetail] {
+  trait Test extends ControllerTest with AuditEventChecking[GenericAuditDetailOld] {
 
     private val controller = new AmendForeignPropertyPeriodSummaryController(
       authService = mockEnrolmentsAuthService,
@@ -229,11 +228,11 @@ class AmendForeignPropertyPeriodSummaryControllerSpec
     protected val rawData: AmendForeignPropertyPeriodSummaryRawData =
       AmendForeignPropertyPeriodSummaryRawData(nino, businessId, taxYear, submissionId, requestBodyJson)
 
-    protected def event(auditResponse: AuditResponse, requestBody: Option[JsValue]): AuditEvent[GenericAuditDetail] =
+    protected def event(auditResponse: AuditResponse, requestBody: Option[JsValue]): AuditEvent[GenericAuditDetailOld] =
       AuditEvent(
         auditType = "AmendForeignPropertyIncomeAndExpensesPeriodSummary",
         transactionName = "amend-foreign-property-income-and-expenses-period-summary",
-        detail = GenericAuditDetail(
+        detail = GenericAuditDetailOld(
           versionNumber = "2.0",
           userType = "Individual",
           agentReferenceNumber = None,

@@ -26,8 +26,8 @@ import v2.models.utils.JsonErrorValidators
 class CreateAmendHistoricFhlUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec with MockAppConfig with JsonErrorValidators {
   private val validNino    = "AA123456A"
   private val validTaxYear = "2021-22"
-  MockAppConfig.minimumTaxHistoric.returns(2017).anyNumberOfTimes()
-  MockAppConfig.maximumTaxHistoric.returns(2022).anyNumberOfTimes()
+  MockedAppConfig.minimumTaxHistoric.returns(2017).anyNumberOfTimes()
+  MockedAppConfig.maximumTaxHistoric.returns(2022).anyNumberOfTimes()
 
   val validator = new CreateAmendHistoricFhlUkPropertyAnnualSubmissionValidator(mockAppConfig)
 

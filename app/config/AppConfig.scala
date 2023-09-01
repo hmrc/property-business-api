@@ -59,6 +59,9 @@ trait AppConfig {
   def apiGatewayContext: String
   def confidenceLevelConfig: ConfidenceLevelConfig
   def apiStatus(version: Version): String
+
+  def isApiDeprecated(version: Version): Boolean = apiStatus(version) == "DEPRECATED"
+
   def featureSwitches: Configuration
   def endpointsEnabled(version: Version): Boolean
 
@@ -69,7 +72,7 @@ trait AppConfig {
   def maximumTaxHistoric: Int
 
   def minimumFromDate: Int
-  def maximumToDate:  Int
+  def maximumToDate: Int
 }
 
 @Singleton
@@ -109,8 +112,8 @@ class AppConfigImpl @Inject() (config: ServicesConfig, configuration: Configurat
   val minimumTaxHistoric: Int = config.getInt("minimum-tax-year.version-2.historic")
   val maximumTaxHistoric: Int = config.getInt("maximum-tax-year.version-2.historic")
 
-  val minimumFromDate: Int   = config.getInt("date-ranges.minimum-from-date")
-  val maximumToDate: Int     = config.getInt("date-ranges.maximum-to-date")
+  val minimumFromDate: Int = config.getInt("date-ranges.minimum-from-date")
+  val maximumToDate: Int   = config.getInt("date-ranges.maximum-to-date")
 }
 
 case class ConfidenceLevelConfig(confidenceLevel: ConfidenceLevel, definitionEnabled: Boolean, authValidationEnabled: Boolean)

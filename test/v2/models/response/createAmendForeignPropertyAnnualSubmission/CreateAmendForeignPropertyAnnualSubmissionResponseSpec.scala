@@ -16,8 +16,8 @@
 
 package v2.models.response.createAmendForeignPropertyAnnualSubmission
 
-import api.models.hateoas.Link
-import api.models.hateoas.Method.{DELETE, GET, PUT}
+import api.hateoas.Link
+import api.hateoas.Method.{DELETE, GET, PUT}
 import mocks.MockAppConfig
 import support.UnitSpec
 
@@ -29,7 +29,7 @@ class CreateAmendForeignPropertyAnnualSubmissionResponseSpec extends UnitSpec wi
       val data: CreateAmendForeignPropertyAnnualSubmissionHateoasData =
         CreateAmendForeignPropertyAnnualSubmissionHateoasData(nino = "myNino", businessId = "myBusinessId", taxYear = "mySubmissionId")
 
-      MockAppConfig.apiGatewayContext.returns("my/context").anyNumberOfTimes()
+      MockedAppConfig.apiGatewayContext.returns("my/context").anyNumberOfTimes()
 
       CreateAmendForeignPropertyAnnualSubmissionResponse.LinksFactory.links(mockAppConfig, data) shouldBe
         Seq(

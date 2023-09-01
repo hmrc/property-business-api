@@ -14,18 +14,21 @@
  * limitations under the License.
  */
 
-package api.mocks
+package api.models.domain
 
-import org.scalamock.handlers.CallHandler
-import org.scalamock.scalatest.MockFactory
-import utils.IdGenerator
+import support.UnitSpec
 
-trait MockIdGenerator extends MockFactory {
+class CalculationIdSpec extends UnitSpec {
 
-  val mockIdGenerator: IdGenerator = mock[IdGenerator]
+  class CalculationIdSpec extends UnitSpec {
 
-  object MockIdGenerator {
-    def getCorrelationId: CallHandler[String] = (() => mockIdGenerator.getCorrelationId).expects()
+    "toString" should {
+      "return the CalculationId value" in {
+        val calculationId = CalculationId("some id")
+        calculationId.toString shouldBe "some id"
+      }
+    }
+
   }
 
 }

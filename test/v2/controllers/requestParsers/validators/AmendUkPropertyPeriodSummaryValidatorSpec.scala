@@ -30,7 +30,7 @@ class AmendUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with JsonErrorV
   private val validBusinessId   = "XAIS12345678901"
   private val validSubmissionId = "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
 
-  MockAppConfig.minimumTaxV2Uk returns 2021
+  MockedAppConfig.minimumTaxV2Uk returns 2021
 
   private val requestBodyJson = Json.parse(
     """{

@@ -17,11 +17,11 @@
 package v2.controllers
 
 import api.controllers.{ControllerBaseSpec, ControllerTestRunner}
-import api.mocks.services.MockAuditService
-import api.models.audit.{AuditEvent, AuditResponse, GenericAuditDetail}
+import api.models.audit.{AuditEvent, AuditResponse, GenericAuditDetailOld}
 import api.models.domain.{Nino, TaxYear}
 import api.models.errors._
 import api.models.outcomes.ResponseWrapper
+import api.services.MockAuditService
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.Result
 import v2.mocks.requestParsers.MockDeletePropertyAnnualSubmissionRequestParser
@@ -79,7 +79,7 @@ class DeletePropertyAnnualSubmissionControllerSpec
     }
   }
 
-  trait Test extends ControllerTest with AuditEventChecking[GenericAuditDetail] {
+  trait Test extends ControllerTest with AuditEventChecking[GenericAuditDetailOld] {
 
     private val controller = new DeletePropertyAnnualSubmissionController(
       authService = mockEnrolmentsAuthService,
@@ -93,11 +93,11 @@ class DeletePropertyAnnualSubmissionControllerSpec
 
     protected def callController(): Future[Result] = controller.handleRequest(nino, businessId, taxYear)(fakeDeleteRequest)
 
-    protected def event(auditResponse: AuditResponse, maybeRequestBody: Option[JsValue]): AuditEvent[GenericAuditDetail] =
+    protected def event(auditResponse: AuditResponse, maybeRequestBody: Option[JsValue]): AuditEvent[GenericAuditDetailOld] =
       AuditEvent(
         auditType = "DeletePropertyAnnualSubmission",
         transactionName = "delete-property-annual-submission",
-        detail = GenericAuditDetail(
+        detail = GenericAuditDetailOld(
           versionNumber = "2.0",
           userType = "Individual",
           agentReferenceNumber = None,

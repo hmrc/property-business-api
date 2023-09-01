@@ -21,14 +21,14 @@ import play.api.http.Status.OK
 import play.api.libs.json.{JsValue, Json, OWrites}
 import support.UnitSpec
 
-class GenericAuditDetailSpec extends UnitSpec {
+class GenericAuditDetailOldSpec extends UnitSpec {
 
   "writes" must {
     "work" in {
       val userDetails = UserDetails(mtdId = "ignoredMtdId", userType = "Agent", agentReferenceNumber = Some("someARN"))
 
       Json.toJson(
-        GenericAuditDetail(
+        GenericAuditDetailOld(
           userDetails = userDetails,
           params = Params(nino = "someNino", businessId = "someBusinessId", request = Json.obj("requestField" -> "value")),
           correlationId = "someCorrelationId",

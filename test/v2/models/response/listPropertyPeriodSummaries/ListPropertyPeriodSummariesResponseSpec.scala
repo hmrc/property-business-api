@@ -16,7 +16,7 @@
 
 package v2.models.response.listPropertyPeriodSummaries
 
-import api.models.hateoas.{Link, Method}
+import api.hateoas.{Link, Method}
 import mocks.MockAppConfig
 import play.api.libs.json.Json
 import support.UnitSpec
@@ -118,7 +118,7 @@ class ListPropertyPeriodSummariesResponseSpec extends UnitSpec with MockAppConfi
         val data: ListPropertyPeriodSummariesHateoasData =
           ListPropertyPeriodSummariesHateoasData("myNino", "myBusinessId", "myTaxYear")
 
-        MockAppConfig.apiGatewayContext.returns("my/context").anyNumberOfTimes()
+        MockedAppConfig.apiGatewayContext.returns("my/context").anyNumberOfTimes()
 
         ListPropertyPeriodSummariesResponse.LinksFactory.links(mockAppConfig, data) shouldBe Seq(
           Link(href = s"/my/context/${data.nino}/${data.businessId}/period/${data.taxYear}", method = Method.GET, rel = "self")

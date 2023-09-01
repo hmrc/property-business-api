@@ -30,9 +30,9 @@ class CreateUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with JsonError
   private val validBusinessId = "XAIS12345678901"
 
   def setUpValidator(): CreateUkPropertyPeriodSummaryValidator = {
-    MockAppConfig.minimumTaxV2Uk returns 2021
-    MockAppConfig.minimumFromDate returns 1900
-    MockAppConfig.maximumToDate returns 2100
+    MockedAppConfig.minimumTaxV2Uk returns 2021
+    MockedAppConfig.minimumFromDate returns 1900
+    MockedAppConfig.maximumToDate returns 2100
     new CreateUkPropertyPeriodSummaryValidator(mockAppConfig)
   }
 

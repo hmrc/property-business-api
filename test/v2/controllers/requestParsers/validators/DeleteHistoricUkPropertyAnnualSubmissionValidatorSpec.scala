@@ -28,8 +28,8 @@ class DeleteHistoricUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec wit
   private val validTaxYear = "2021-22"
   private val propertyType = HistoricPropertyType.Fhl
 
-  MockAppConfig.minimumTaxHistoric returns 2020
-  MockAppConfig.maximumTaxHistoric returns 2023
+  MockedAppConfig.minimumTaxHistoric returns 2020
+  MockedAppConfig.maximumTaxHistoric returns 2023
   private val validator = new DeleteHistoricUkPropertyAnnualSubmissionValidator(mockAppConfig)
 
   "running a validation" should {

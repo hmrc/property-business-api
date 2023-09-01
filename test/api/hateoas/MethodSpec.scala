@@ -14,21 +14,12 @@
  * limitations under the License.
  */
 
-package utils
+package api.hateoas
 
+import api.hateoas.Method.{DELETE, GET, POST}
 import support.UnitSpec
+import utils.enums.EnumJsonSpecSupport
 
-class IdGeneratorSpec extends UnitSpec {
-
-  val generator        = new IdGenerator
-  val correlationRegex = "^[A-Za-z0-9\\-]{36}$"
-
-  "IdGenerator" should {
-    "generate a correlation id" when {
-      "getCorrelationId is called" in {
-        generator.generateCorrelationId.matches(correlationRegex) shouldBe true
-      }
-    }
-  }
-
+class MethodSpec extends UnitSpec with EnumJsonSpecSupport {
+  testRoundTrip[Method](("GET", GET), ("POST", POST), ("DELETE", DELETE))
 }

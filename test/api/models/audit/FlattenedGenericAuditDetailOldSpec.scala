@@ -23,7 +23,7 @@ import play.api.http.Status.{BAD_REQUEST, OK}
 import play.api.libs.json.{JsValue, Json}
 import support.UnitSpec
 
-class FlattenedGenericAuditDetailSpec extends UnitSpec with MockAppConfig {
+class FlattenedGenericAuditDetailOldSpec extends UnitSpec with MockAppConfig {
 
   val versionNumber: String                = "99.0"
   val nino: String                         = "XX751130C"

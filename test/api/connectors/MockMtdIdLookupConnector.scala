@@ -14,21 +14,26 @@
  * limitations under the License.
  */
 
-package utils
+package api.connectors
 
-import support.UnitSpec
+import org.scalamock.handlers.CallHandler
+import org.scalamock.scalatest.MockFactory
+import uk.gov.hmrc.http.HeaderCarrier
 
-class IdGeneratorSpec extends UnitSpec {
+import scala.concurrent.{ExecutionContext, Future}
 
-  val generator        = new IdGenerator
-  val correlationRegex = "^[A-Za-z0-9\\-]{36}$"
+trait MockMtdIdLookupConnector extends MockFactory {
 
-  "IdGenerator" should {
-    "generate a correlation id" when {
-      "getCorrelationId is called" in {
-        generator.generateCorrelationId.matches(correlationRegex) shouldBe true
-      }
+  val mockMtdIdLookupConnector: MtdIdLookupConnector = mock[MtdIdLookupConnector]
+
+  object MockedMtdIdLookupConnector {
+
+    def lookup(nino: String): CallHandler[Future[MtdIdLookupOutcome]] = {
+      (mockMtdIdLookupConnector
+        .getMtdId(_: String)(_: HeaderCarrier, _: ExecutionContext))
+        .expects(nino, *, *)
     }
+
   }
 
 }

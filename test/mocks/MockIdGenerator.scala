@@ -14,21 +14,18 @@
  * limitations under the License.
  */
 
-package utils
+package mocks
 
-import support.UnitSpec
+import org.scalamock.handlers.CallHandler
+import org.scalamock.scalatest.MockFactory
+import utils.IdGenerator
 
-class IdGeneratorSpec extends UnitSpec {
+trait MockIdGenerator extends MockFactory {
 
-  val generator        = new IdGenerator
-  val correlationRegex = "^[A-Za-z0-9\\-]{36}$"
+  val mockIdGenerator: IdGenerator = mock[IdGenerator]
 
-  "IdGenerator" should {
-    "generate a correlation id" when {
-      "getCorrelationId is called" in {
-        generator.generateCorrelationId.matches(correlationRegex) shouldBe true
-      }
-    }
+  object MockIdGenerator {
+    def generateCorrelationId: CallHandler[String] = (() => mockIdGenerator.generateCorrelationId).expects()
   }
 
 }

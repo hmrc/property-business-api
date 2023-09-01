@@ -27,7 +27,7 @@ class DeletePropertyAnnualSubmissionValidatorSpec extends UnitSpec with MockAppC
   private val validBusinessId = "XAIS12345678901"
   private val validTaxYear    = "2021-22"
 
-  MockAppConfig.minimumTaxV2Foreign returns 2021
+  MockedAppConfig.minimumTaxV2Foreign returns 2021
   private val validator = new DeletePropertyAnnualSubmissionValidator(mockAppConfig)
 
   "running a validation" should {

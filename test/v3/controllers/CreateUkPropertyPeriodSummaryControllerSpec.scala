@@ -17,13 +17,12 @@
 package v3.controllers
 
 import api.controllers.{ControllerBaseSpec, ControllerTestRunner}
-import api.mocks.hateoas.MockHateoasFactory
-import api.mocks.services.MockAuditService
-import api.models.audit.{AuditEvent, AuditResponse, GenericAuditDetail}
+import api.hateoas.{HateoasWrapper, MockHateoasFactory}
+import api.models.audit.{AuditEvent, AuditResponse, GenericAuditDetailOld}
 import api.models.domain.{Nino, TaxYear}
 import api.models.errors._
-import api.models.hateoas.HateoasWrapper
 import api.models.outcomes.ResponseWrapper
+import api.services.MockAuditService
 import play.api.libs.json.{JsObject, JsValue, Json}
 import play.api.mvc.Result
 import v3.mocks.requestParsers.MockCreateUkPropertyPeriodSummaryRequestParser
@@ -122,7 +121,7 @@ class CreateUkPropertyPeriodSummaryControllerSpec
     }
   }
 
-  trait Test extends ControllerTest with AuditEventChecking[GenericAuditDetail] {
+  trait Test extends ControllerTest with AuditEventChecking[GenericAuditDetailOld] {
 
     protected val controller = new CreateUkPropertyPeriodSummaryController(
       authService = mockEnrolmentsAuthService,
@@ -137,11 +136,11 @@ class CreateUkPropertyPeriodSummaryControllerSpec
 
     protected def callController(): Future[Result] = controller.handleRequest(nino, businessId, taxYear)(fakePostRequest(requestBodyJson))
 
-    protected def event(auditResponse: AuditResponse, requestBody: Option[JsValue]): AuditEvent[GenericAuditDetail] =
+    protected def event(auditResponse: AuditResponse, requestBody: Option[JsValue]): AuditEvent[GenericAuditDetailOld] =
       AuditEvent(
         auditType = "CreateUKPropertyIncomeAndExpensesPeriodSummary",
         transactionName = "create-uk-property-income-and-expenses-period-summary",
-        detail = GenericAuditDetail(
+        detail = GenericAuditDetailOld(
           versionNumber = "2.0",
           userType = "Individual",
           agentReferenceNumber = None,

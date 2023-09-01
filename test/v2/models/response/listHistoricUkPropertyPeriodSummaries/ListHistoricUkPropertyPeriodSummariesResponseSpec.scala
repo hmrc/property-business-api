@@ -16,9 +16,9 @@
 
 package v2.models.response.listHistoricUkPropertyPeriodSummaries
 
+import api.hateoas.Link
 import api.models.domain.{HistoricPropertyType, PeriodId}
-import api.models.hateoas.Link
-import api.models.hateoas.Method._
+import api.hateoas.Method._
 import mocks.MockAppConfig
 import play.api.libs.json.Json
 import support.UnitSpec
@@ -102,7 +102,7 @@ class ListHistoricUkPropertyPeriodSummariesResponseSpec extends UnitSpec with Mo
         ListHistoricUkPropertyPeriodSummariesHateoasData(nino, HistoricPropertyType.Fhl)
 
       "produce the correct links" in {
-        MockAppConfig.apiGatewayContext.returns(context).anyNumberOfTimes()
+        MockedAppConfig.apiGatewayContext.returns(context).anyNumberOfTimes()
 
         linksFactory.links(mockAppConfig, data) shouldBe
           Seq(
@@ -112,7 +112,7 @@ class ListHistoricUkPropertyPeriodSummariesResponseSpec extends UnitSpec with Mo
       }
 
       "produce the correct item links" in {
-        MockAppConfig.apiGatewayContext.returns(context).anyNumberOfTimes()
+        MockedAppConfig.apiGatewayContext.returns(context).anyNumberOfTimes()
 
         val item = SubmissionPeriod(from, to)
 
@@ -129,7 +129,7 @@ class ListHistoricUkPropertyPeriodSummariesResponseSpec extends UnitSpec with Mo
         ListHistoricUkPropertyPeriodSummariesHateoasData(nino, HistoricPropertyType.NonFhl)
 
       "produce the correct links" in {
-        MockAppConfig.apiGatewayContext.returns(context).anyNumberOfTimes()
+        MockedAppConfig.apiGatewayContext.returns(context).anyNumberOfTimes()
 
         linksFactory.links(mockAppConfig, data) shouldBe
           Seq(
@@ -139,7 +139,7 @@ class ListHistoricUkPropertyPeriodSummariesResponseSpec extends UnitSpec with Mo
       }
 
       "produce the correct item links" in {
-        MockAppConfig.apiGatewayContext.returns(context).anyNumberOfTimes()
+        MockedAppConfig.apiGatewayContext.returns(context).anyNumberOfTimes()
 
         val item = SubmissionPeriod(from, to)
 

@@ -14,10 +14,9 @@
  * limitations under the License.
  */
 
-package api.mocks.services
+package api.services
 
 import api.models.audit.AuditEvent
-import api.services.AuditService
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
 import play.api.libs.json.Writes

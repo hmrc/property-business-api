@@ -24,9 +24,9 @@ import routing.Version
 
 trait MockAppConfig extends MockFactory {
 
-  val mockAppConfig: AppConfig = mock[AppConfig]
+  implicit val mockAppConfig: AppConfig = mock[AppConfig]
 
-  object MockAppConfig {
+  object MockedAppConfig {
     // MTD ID Lookup Config
     def mtdIdBaseUrl: CallHandler[String] = (() => mockAppConfig.mtdIdBaseUrl).expects()
 
@@ -50,16 +50,20 @@ trait MockAppConfig extends MockFactory {
     def tysIfsEnvironmentHeaders: CallHandler[Option[Seq[String]]] = (() => mockAppConfig.tysIfsEnvironmentHeaders).expects()
 
     // API Config
-    def featureSwitches: CallHandler[Configuration]              = (() => mockAppConfig.featureSwitches).expects()
-    def apiGatewayContext: CallHandler[String]                   = (() => mockAppConfig.apiGatewayContext).expects()
-    def apiStatus(status: Version): CallHandler[String]          = (mockAppConfig.apiStatus: Version => String).expects(status)
+    def featureSwitches: CallHandler[Configuration] = (() => mockAppConfig.featureSwitches).expects()
+    def apiGatewayContext: CallHandler[String]      = (() => mockAppConfig.apiGatewayContext).expects()
+
+    def apiStatus(version: Version): CallHandler[String] = (mockAppConfig.apiStatus: Version => String).expects(version)
+
+    def isApiDeprecated(version: Version): CallHandler[Boolean] = (mockAppConfig.isApiDeprecated: Version => Boolean).expects(version)
+
     def endpointsEnabled(version: Version): CallHandler[Boolean] = (mockAppConfig.endpointsEnabled: Version => Boolean).expects(version)
 
     def confidenceLevelCheckEnabled: CallHandler[ConfidenceLevelConfig] =
       (() => mockAppConfig.confidenceLevelConfig).expects()
 
     def minimumFromDate: CallHandler[Int] = (() => mockAppConfig.minimumFromDate).expects().anyNumberOfTimes()
-    def maximumToDate:  CallHandler[Int] = (() => mockAppConfig.maximumToDate).expects().anyNumberOfTimes()
+    def maximumToDate: CallHandler[Int]   = (() => mockAppConfig.maximumToDate).expects().anyNumberOfTimes()
 
     def minimumTaxV2Foreign: CallHandler[Int] = (() => mockAppConfig.minimumTaxV2Foreign).expects()
     def minimumTaxV2Uk: CallHandler[Int]      = (() => mockAppConfig.minimumTaxV2Uk).expects()

@@ -16,11 +16,14 @@
 
 package v2.hateoas
 
-import api.models.hateoas.Method._
-import api.models.hateoas.{Link, Method}
+import api.hateoas.{Link, Method}
+import api.hateoas.Method._
 import mocks.MockAppConfig
 import support.UnitSpec
-import v2.models.response.retrieveHistoricNonFhlUkPiePeriodSummary.{RetrieveHistoricNonFhlUkPiePeriodSummaryHateoasData, RetrieveHistoricNonFhlUkPiePeriodSummaryResponse}
+import v2.models.response.retrieveHistoricNonFhlUkPiePeriodSummary.{
+  RetrieveHistoricNonFhlUkPiePeriodSummaryHateoasData,
+  RetrieveHistoricNonFhlUkPiePeriodSummaryResponse
+}
 
 class HateoasLinksSpec extends UnitSpec with MockAppConfig with HateoasLinks {
 
@@ -31,7 +34,7 @@ class HateoasLinksSpec extends UnitSpec with MockAppConfig with HateoasLinks {
   val periodId     = "{periodId}"
 
   class Test {
-    MockAppConfig.apiGatewayContext.returns("individuals/business/property").anyNumberOfTimes()
+    MockedAppConfig.apiGatewayContext.returns("individuals/business/property").anyNumberOfTimes()
   }
 
   "The HateoasLinks functions" when {
@@ -238,7 +241,7 @@ class HateoasLinksSpec extends UnitSpec with MockAppConfig with HateoasLinks {
       "called" in {
         val data: RetrieveHistoricNonFhlUkPiePeriodSummaryHateoasData = RetrieveHistoricNonFhlUkPiePeriodSummaryHateoasData("myNino", "myPeriodId")
 
-        MockAppConfig.apiGatewayContext.returns("my/context").anyNumberOfTimes()
+        MockedAppConfig.apiGatewayContext.returns("my/context").anyNumberOfTimes()
 
         RetrieveHistoricNonFhlUkPiePeriodSummaryResponse.RetrieveNonFhlUkPiePeriodSummaryLinksFactory.links(mockAppConfig, data) shouldBe Seq(
           Link(

@@ -28,7 +28,7 @@ class RetrieveForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with Mo
   private val validTaxYear      = "2022-23"
   private val validSubmissionId = "12345678-1234-4123-9123-123456789012"
 
-  MockAppConfig.minimumTaxV2Foreign returns 2022
+  MockedAppConfig.minimumTaxV2Foreign returns 2022
   private val validator = new RetrieveForeignPropertyPeriodSummaryValidator(mockAppConfig)
 
   "running a validation" should {

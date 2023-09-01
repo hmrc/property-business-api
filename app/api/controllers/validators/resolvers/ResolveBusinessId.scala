@@ -14,25 +14,22 @@
  * limitations under the License.
  */
 
-package api.models.errors
+package api.controllers.validators.resolvers
 
-import play.api.http.Status.BAD_REQUEST
-import play.api.libs.json.Json
-import support.UnitSpec
+import api.models.domain.BusinessId
+import api.models.errors.{BusinessIdFormatError, MtdError}
+import cats.data.Validated
+import cats.data.Validated.{Invalid, Valid}
 
-class MtdErrorSpec extends UnitSpec {
+object ResolveBusinessId extends Resolver[String, BusinessId] {
 
-  "writes" should {
-    "generate the correct JSON" in {
-      Json.toJson(MtdError("CODE", "some message", BAD_REQUEST)) shouldBe Json.parse(
-        """
-          |{
-          |   "code": "CODE",
-          |   "message": "some message"
-          |}
-        """.stripMargin
-      )
-    }
+  private val businessIdRegex = "^X[A-Z0-9]{1}IS[0-9]{11}$".r
+
+  def apply(value: String, unusedError: Option[MtdError], path: Option[String]): Validated[Seq[MtdError], BusinessId] = {
+    if (businessIdRegex.matches(value))
+      Valid(BusinessId(value))
+    else
+      Invalid(List(BusinessIdFormatError.maybeWithExtraPath(path)))
   }
 
 }

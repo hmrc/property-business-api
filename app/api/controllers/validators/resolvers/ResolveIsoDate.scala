@@ -14,25 +14,23 @@
  * limitations under the License.
  */
 
-package api.models.errors
+package api.controllers.validators.resolvers
 
-import play.api.http.Status.BAD_REQUEST
-import play.api.libs.json.Json
-import support.UnitSpec
+import api.models.errors.MtdError
+import cats.data.Validated
+import cats.data.Validated.{Invalid, Valid}
 
-class MtdErrorSpec extends UnitSpec {
+import java.time.LocalDate
+import java.time.format.DateTimeParseException
 
-  "writes" should {
-    "generate the correct JSON" in {
-      Json.toJson(MtdError("CODE", "some message", BAD_REQUEST)) shouldBe Json.parse(
-        """
-          |{
-          |   "code": "CODE",
-          |   "message": "some message"
-          |}
-        """.stripMargin
-      )
+/** Checks that the date format is YYYY-MM-DD, and returns a new LocalDate.
+  */
+object ResolveIsoDate extends Resolver[String, LocalDate] {
+
+  def apply(value: String, error: Option[MtdError], path: Option[String]): Validated[Seq[MtdError], LocalDate] =
+    try Valid(LocalDate.parse(value))
+    catch {
+      case _: DateTimeParseException => Invalid(List(requireError(error, path)))
     }
-  }
 
 }

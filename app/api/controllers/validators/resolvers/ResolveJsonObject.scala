@@ -14,25 +14,15 @@
  * limitations under the License.
  */
 
-package api.models.errors
+package api.controllers.validators.resolvers
 
-import play.api.http.Status.BAD_REQUEST
-import play.api.libs.json.Json
-import support.UnitSpec
+import api.models.errors.MtdError
+import cats.data.Validated
+import play.api.libs.json._
 
-class MtdErrorSpec extends UnitSpec {
+class ResolveJsonObject[T](implicit val reads: Reads[T]) extends Resolver[JsValue, T] with JsonObjectResolving[T] {
 
-  "writes" should {
-    "generate the correct JSON" in {
-      Json.toJson(MtdError("CODE", "some message", BAD_REQUEST)) shouldBe Json.parse(
-        """
-          |{
-          |   "code": "CODE",
-          |   "message": "some message"
-          |}
-        """.stripMargin
-      )
-    }
-  }
+  def apply(data: JsValue, error: Option[MtdError], path: Option[String]): Validated[Seq[MtdError], T] =
+    validate(data).leftMap(errs => withErrors(error, errs, path))
 
 }

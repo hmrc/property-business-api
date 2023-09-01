@@ -32,7 +32,7 @@ class CreateAmendForeignPropertyAnnualSubmissionValidatorSpec extends UnitSpec w
   private val validNino       = "AA123456A"
   private val validBusinessId = "XAIS12345678901"
 
-  MockedAppConfig.minimumTaxV2Foreign returns 2021
+  MockAppConfig.minimumTaxV2Foreign returns 2021
 
   private val structuredBuildingAllowance =
     Json.parse("""{

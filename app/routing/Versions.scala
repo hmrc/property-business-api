@@ -47,18 +47,15 @@ object Version {
 
 sealed trait Version {
   val name: String
-  val regexMatch: Option[String] = None
-  override def toString: String  = name
+  override def toString: String = name
 }
 
 case object Version2 extends Version {
-  val name                                = "2.0"
-  override val regexMatch: Option[String] = Some("^.*collection/tax-code/?$")
+  val name = "2.0"
 }
 
 case object Version3 extends Version {
-  val name                                = "3.0"
-  override val regexMatch: Option[String] = Some("^.*collection/tax-code/?$")
+  val name = "3.0"
 }
 
 object Versions {

@@ -26,8 +26,8 @@ class RetrieveHistoricNonFhlUkPropertyAnnualSubmissionValidatorSpec extends Unit
   private val validNino    = "AA123456A"
   private val validTaxYear = "2021-22"
 
-  MockedAppConfig.minimumTaxHistoric returns 2017
-  MockedAppConfig.maximumTaxHistoric returns 2021
+  MockAppConfig.minimumTaxHistoric returns 2017
+  MockAppConfig.maximumTaxHistoric returns 2021
 
   private val validator = new RetrieveHistoricNonFhlUkPropertyAnnualSubmissionValidator(mockAppConfig)
 

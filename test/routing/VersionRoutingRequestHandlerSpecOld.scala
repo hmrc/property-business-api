@@ -115,18 +115,21 @@ class VersionRoutingRequestHandlerSpecOld extends UnitSpec with Inside with Mock
   }
 
   private def handleWithVersionRoutes(path: String, handler: Handler, version: Version)(implicit acceptHeader: Option[String]): Unit = {
-    withClue("request ends with a trailing slash...") {
-      new Test {
-        MockedAppConfig.endpointsEnabled(version).returns(true).anyNumberOfTimes()
+    "if the request ends with a trailing slash" when {
+      "handler found" should {
+        "use it" in new Test {
+          MockAppConfig.endpointsEnabled(version).returns(true).anyNumberOfTimes()
 
-        requestHandler.routeRequest(buildRequest(s"$path/")) shouldBe Some(handler)
+          requestHandler.routeRequest(buildRequest(s"$path/")) shouldBe Some(handler)
+        }
       }
-    }
-    withClue("request doesn't end with a trailing slash...") {
-      new Test {
-        MockedAppConfig.endpointsEnabled(version).returns(true).anyNumberOfTimes()
 
-        requestHandler.routeRequest(buildRequest(s"$path")) shouldBe Some(handler)
+      "handler not found" should {
+        "try without the trailing slash" in new Test {
+          MockAppConfig.endpointsEnabled(version).returns(true).anyNumberOfTimes()
+
+          requestHandler.routeRequest(buildRequest(s"$path")) shouldBe Some(handler)
+        }
       }
     }
   }
@@ -166,7 +169,7 @@ class VersionRoutingRequestHandlerSpecOld extends UnitSpec with Inside with Mock
 
     "the version has a route for the resource" must {
       "return 404 Not Found" in new Test {
-        MockedAppConfig.endpointsEnabled(Version3).anyNumberOfTimes()
+        MockAppConfig.endpointsEnabled(Version3).anyNumberOfTimes()
         private val request = buildRequest("/v2")
         inside(requestHandler.routeRequest(request)) { case Some(a: EssentialAction) =>
           val result = a.apply(request)

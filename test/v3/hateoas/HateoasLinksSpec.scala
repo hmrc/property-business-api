@@ -34,7 +34,7 @@ class HateoasLinksSpec extends UnitSpec with MockAppConfig with HateoasLinks {
   val periodId     = "{periodId}"
 
   class Test {
-    MockedAppConfig.apiGatewayContext.returns("individuals/business/property").anyNumberOfTimes()
+    MockAppConfig.apiGatewayContext.returns("individuals/business/property").anyNumberOfTimes()
   }
 
   "The HateoasLinks functions" when {
@@ -241,7 +241,7 @@ class HateoasLinksSpec extends UnitSpec with MockAppConfig with HateoasLinks {
       "called" in {
         val data: RetrieveHistoricNonFhlUkPiePeriodSummaryHateoasData = RetrieveHistoricNonFhlUkPiePeriodSummaryHateoasData("myNino", "myPeriodId")
 
-        MockedAppConfig.apiGatewayContext.returns("my/context").anyNumberOfTimes()
+        MockAppConfig.apiGatewayContext.returns("my/context").anyNumberOfTimes()
 
         RetrieveHistoricNonFhlUkPiePeriodSummaryResponse.RetrieveNonFhlUkPiePeriodSummaryLinksFactory.links(mockAppConfig, data) shouldBe Seq(
           Link(

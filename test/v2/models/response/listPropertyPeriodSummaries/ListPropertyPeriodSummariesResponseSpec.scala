@@ -118,7 +118,7 @@ class ListPropertyPeriodSummariesResponseSpec extends UnitSpec with MockAppConfi
         val data: ListPropertyPeriodSummariesHateoasData =
           ListPropertyPeriodSummariesHateoasData("myNino", "myBusinessId", "myTaxYear")
 
-        MockedAppConfig.apiGatewayContext.returns("my/context").anyNumberOfTimes()
+        MockAppConfig.apiGatewayContext.returns("my/context").anyNumberOfTimes()
 
         ListPropertyPeriodSummariesResponse.LinksFactory.links(mockAppConfig, data) shouldBe Seq(
           Link(href = s"/my/context/${data.nino}/${data.businessId}/period/${data.taxYear}", method = Method.GET, rel = "self")

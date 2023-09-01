@@ -24,9 +24,9 @@ import routing.Version
 
 trait MockAppConfig extends MockFactory {
 
-  implicit val mockAppConfig: AppConfig = mock[AppConfig]
+  val mockAppConfig: AppConfig = mock[AppConfig]
 
-  object MockedAppConfig {
+  object MockAppConfig {
     // MTD ID Lookup Config
     def mtdIdBaseUrl: CallHandler[String] = (() => mockAppConfig.mtdIdBaseUrl).expects()
 
@@ -54,8 +54,6 @@ trait MockAppConfig extends MockFactory {
     def apiGatewayContext: CallHandler[String]      = (() => mockAppConfig.apiGatewayContext).expects()
 
     def apiStatus(version: Version): CallHandler[String] = (mockAppConfig.apiStatus: Version => String).expects(version)
-
-    def isApiDeprecated(version: Version): CallHandler[Boolean] = (mockAppConfig.isApiDeprecated: Version => Boolean).expects(version)
 
     def endpointsEnabled(version: Version): CallHandler[Boolean] = (mockAppConfig.endpointsEnabled: Version => Boolean).expects(version)
 

@@ -30,7 +30,7 @@ class AmendForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with JsonE
   private val validBusinessId   = "XAIS12345678901"
   private val validSubmissionId = "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
 
-  MockedAppConfig.minimumTaxV2Foreign returns 2021
+  MockAppConfig.minimumTaxV2Foreign returns 2021
 
   private def entryWith(countryCode: String) =
     Json.parse(s"""{

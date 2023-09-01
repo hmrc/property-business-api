@@ -237,7 +237,7 @@ class RetrieveForeignPropertyAnnualSubmissionResponseSpec extends UnitSpec with 
         val data: RetrieveForeignPropertyAnnualSubmissionHateoasData =
           RetrieveForeignPropertyAnnualSubmissionHateoasData("myNino", "myBusinessId", "mySubmissionId")
 
-        MockedAppConfig.apiGatewayContext.returns("my/context").anyNumberOfTimes()
+        MockAppConfig.apiGatewayContext.returns("my/context").anyNumberOfTimes()
 
         RetrieveForeignPropertyAnnualSubmissionResponse.RetrieveAnnualSubmissionLinksFactory.links(mockAppConfig, data) shouldBe Seq(
           Link(

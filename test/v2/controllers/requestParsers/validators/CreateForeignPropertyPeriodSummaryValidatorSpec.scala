@@ -29,9 +29,9 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with Mock
   private val validTaxYear    = "2021-22"
 
   def setUpValidator(): CreateForeignPropertyPeriodSummaryValidator = {
-    MockedAppConfig.minimumTaxV2Foreign returns 2021
-    MockedAppConfig.minimumFromDate returns 1900
-    MockedAppConfig.maximumToDate returns 2100
+    MockAppConfig.minimumTaxV2Foreign returns 2021
+    MockAppConfig.minimumFromDate returns 1900
+    MockAppConfig.maximumToDate returns 2100
     new CreateForeignPropertyPeriodSummaryValidator(mockAppConfig)
   }
 

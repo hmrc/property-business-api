@@ -28,8 +28,8 @@ class CreateHistoricNonFhlUkPropertyPeriodSummaryValidatorSpec extends UnitSpec 
   private val validNino = "AA123456A"
 
   def setUpValidator(): CreateHistoricNonFhlUkPropertyPeriodSummaryValidator = {
-    MockedAppConfig.minimumFromDate returns 1900
-    MockedAppConfig.maximumToDate returns 2100
+    MockAppConfig.minimumFromDate returns 1900
+    MockAppConfig.maximumToDate returns 2100
     new CreateHistoricNonFhlUkPropertyPeriodSummaryValidator(mockAppConfig)
   }
 

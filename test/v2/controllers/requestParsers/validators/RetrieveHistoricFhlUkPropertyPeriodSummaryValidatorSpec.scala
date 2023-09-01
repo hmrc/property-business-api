@@ -26,8 +26,8 @@ class RetrieveHistoricFhlUkPropertyPeriodSummaryValidatorSpec extends UnitSpec w
   private val validNino     = "AA123456A"
   private val validPeriodId = "2017-04-06_2017-07-04"
 
-  MockedAppConfig.minimumTaxHistoric returns 2017
-  MockedAppConfig.maximumTaxHistoric returns 2021
+  MockAppConfig.minimumTaxHistoric returns 2017
+  MockAppConfig.maximumTaxHistoric returns 2021
 
   private val validator = new RetrieveHistoricFhlUkPropertyPeriodSummaryValidator(mockAppConfig)
 

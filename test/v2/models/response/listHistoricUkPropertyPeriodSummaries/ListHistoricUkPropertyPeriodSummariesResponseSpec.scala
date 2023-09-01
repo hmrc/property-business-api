@@ -102,7 +102,7 @@ class ListHistoricUkPropertyPeriodSummariesResponseSpec extends UnitSpec with Mo
         ListHistoricUkPropertyPeriodSummariesHateoasData(nino, HistoricPropertyType.Fhl)
 
       "produce the correct links" in {
-        MockedAppConfig.apiGatewayContext.returns(context).anyNumberOfTimes()
+        MockAppConfig.apiGatewayContext.returns(context).anyNumberOfTimes()
 
         linksFactory.links(mockAppConfig, data) shouldBe
           Seq(
@@ -112,7 +112,7 @@ class ListHistoricUkPropertyPeriodSummariesResponseSpec extends UnitSpec with Mo
       }
 
       "produce the correct item links" in {
-        MockedAppConfig.apiGatewayContext.returns(context).anyNumberOfTimes()
+        MockAppConfig.apiGatewayContext.returns(context).anyNumberOfTimes()
 
         val item = SubmissionPeriod(from, to)
 
@@ -129,7 +129,7 @@ class ListHistoricUkPropertyPeriodSummariesResponseSpec extends UnitSpec with Mo
         ListHistoricUkPropertyPeriodSummariesHateoasData(nino, HistoricPropertyType.NonFhl)
 
       "produce the correct links" in {
-        MockedAppConfig.apiGatewayContext.returns(context).anyNumberOfTimes()
+        MockAppConfig.apiGatewayContext.returns(context).anyNumberOfTimes()
 
         linksFactory.links(mockAppConfig, data) shouldBe
           Seq(
@@ -139,7 +139,7 @@ class ListHistoricUkPropertyPeriodSummariesResponseSpec extends UnitSpec with Mo
       }
 
       "produce the correct item links" in {
-        MockedAppConfig.apiGatewayContext.returns(context).anyNumberOfTimes()
+        MockAppConfig.apiGatewayContext.returns(context).anyNumberOfTimes()
 
         val item = SubmissionPeriod(from, to)
 

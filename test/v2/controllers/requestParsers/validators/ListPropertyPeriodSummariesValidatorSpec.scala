@@ -27,7 +27,7 @@ class ListPropertyPeriodSummariesValidatorSpec extends UnitSpec with MockAppConf
   private val validBusinessId = "XAIS12345678901"
   private val validTaxYear    = "2021-22"
 
-  MockedAppConfig.minimumTaxV2Foreign returns 2021
+  MockAppConfig.minimumTaxV2Foreign returns 2021
   private val validator = new ListPropertyPeriodSummariesValidator(mockAppConfig)
 
   "ListPropertyPeriodSummariesValidator" should {

@@ -200,7 +200,7 @@ class RetrieveForeignPropertyPeriodSummaryResponseSpec extends UnitSpec with Jso
         val data: RetrieveForeignPropertyPeriodSummaryHateoasData =
           RetrieveForeignPropertyPeriodSummaryHateoasData("myNino", "myBusinessId", "myTaxYear", "mySubmissionId")
 
-        MockedAppConfig.apiGatewayContext.returns("my/context").anyNumberOfTimes()
+        MockAppConfig.apiGatewayContext.returns("my/context").anyNumberOfTimes()
 
         RetrieveForeignPropertyPeriodSummaryResponse.RetrieveForeignPropertyLinksFactory.links(mockAppConfig, data) shouldBe Seq(
           Link(

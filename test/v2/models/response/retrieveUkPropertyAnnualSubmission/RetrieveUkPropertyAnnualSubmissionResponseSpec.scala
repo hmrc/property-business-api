@@ -16,8 +16,8 @@
 
 package v2.models.response.retrieveUkPropertyAnnualSubmission
 
+import api.hateoas.{Link, Method}
 import api.models.domain.Timestamp
-import api.models.hateoas.{Link, Method}
 import mocks.MockAppConfig
 import play.api.libs.json.{JsValue, Json}
 import support.UnitSpec
@@ -287,7 +287,7 @@ class RetrieveUkPropertyAnnualSubmissionResponseSpec extends UnitSpec with MockA
         val data: RetrieveUkPropertyAnnualSubmissionHateoasData =
           RetrieveUkPropertyAnnualSubmissionHateoasData("myNino", "myBusinessId", "mySubmissionId")
 
-        MockAppConfig.apiGatewayContext.returns("my/context").anyNumberOfTimes()
+        MockedAppConfig.apiGatewayContext.returns("my/context").anyNumberOfTimes()
 
         RetrieveUkPropertyAnnualSubmissionResponse.RetrieveAnnualSubmissionLinksFactory.links(mockAppConfig, data) shouldBe Seq(
           Link(

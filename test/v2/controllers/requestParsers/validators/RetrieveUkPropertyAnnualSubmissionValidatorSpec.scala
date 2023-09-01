@@ -27,7 +27,7 @@ class RetrieveUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec with Mock
   private val validBusinessId = "XAIS12345678901"
   private val validTaxYear    = "2021-22"
 
-  MockAppConfig.minimumTaxV2Uk returns 2021
+  MockedAppConfig.minimumTaxV2Uk returns 2021
 
   private val validator = new RetrieveUkPropertyAnnualSubmissionValidator(mockAppConfig)
 

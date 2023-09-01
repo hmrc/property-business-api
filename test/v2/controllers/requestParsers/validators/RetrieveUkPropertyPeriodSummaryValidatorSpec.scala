@@ -28,7 +28,7 @@ class RetrieveUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with MockApp
   private val validTaxYear      = "2022-23"
   private val validSubmissionId = "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
 
-  MockAppConfig.minimumTaxV2Uk returns 2022
+  MockedAppConfig.minimumTaxV2Uk returns 2022
   private val validator = new RetrieveUkPropertyPeriodSummaryValidator(mockAppConfig)
 
   "running a validation" should {

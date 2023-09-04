@@ -17,13 +17,12 @@
 package v2.controllers
 
 import api.controllers.{ControllerBaseSpec, ControllerTestRunner}
-import api.mocks.MockIdGenerator
-import api.mocks.hateoas.MockHateoasFactory
-import api.mocks.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService}
+import api.hateoas.{HateoasWrapper, MockHateoasFactory}
 import api.models.domain.{Nino, TaxYear, Timestamp}
 import api.models.errors._
-import api.models.hateoas.HateoasWrapper
 import api.models.outcomes.ResponseWrapper
+import api.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService}
+import mocks.MockIdGenerator
 import play.api.libs.json.Json
 import play.api.mvc.Result
 import v2.mocks.requestParsers.MockRetrieveForeignPropertyAnnualSubmissionRequestParser

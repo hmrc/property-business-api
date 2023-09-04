@@ -16,9 +16,8 @@
 
 package v2.models.response.retrieveUkPropertyPeriodSummary
 
-import api.hateoas.HateoasLinksFactory
+import api.hateoas.{HateoasData, HateoasLinksFactory, Link}
 import api.models.domain.Timestamp
-import api.models.hateoas.{HateoasData, Link}
 import config.AppConfig
 import play.api.libs.functional.syntax._
 import play.api.libs.json.{Json, OWrites, Reads, __}

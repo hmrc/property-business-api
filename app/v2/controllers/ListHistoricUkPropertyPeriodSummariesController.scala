@@ -62,12 +62,12 @@ class ListHistoricUkPropertyPeriodSummariesController @Inject() (val authService
 
       val rawData = ListHistoricUkPropertyPeriodSummariesRawData(nino)
 
-      val requestHandler = RequestHandler
+      val requestHandler = RequestHandlerOld
         .withParser(parser)
         .withService({ req =>
           service.listPeriodSummaries(req, propertyType)
         })
-        .withResultCreator(ResultCreator.hateoasListWrapping(hateoasFactory)((_, _) =>
+        .withResultCreator(ResultCreatorOld.hateoasListWrapping(hateoasFactory)((_, _) =>
           ListHistoricUkPropertyPeriodSummariesHateoasData(nino, propertyType)))
 
       requestHandler.handleRequest(rawData)

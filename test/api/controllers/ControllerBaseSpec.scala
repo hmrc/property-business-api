@@ -17,12 +17,12 @@
 package api.controllers
 
 import api.controllers.ControllerTestRunner.validNino
-import api.mocks.MockIdGenerator
-import api.mocks.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService}
+import api.hateoas.Link
 import api.models.audit.{AuditError, AuditEvent, AuditResponse}
 import api.models.errors.MtdError
-import api.models.hateoas.Link
-import api.models.hateoas.Method.GET
+import api.hateoas.Method.GET
+import api.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService}
+import mocks.MockIdGenerator
 import play.api.http.{HeaderNames, MimeTypes, Status}
 import play.api.libs.json.{JsObject, JsValue, Json}
 import play.api.mvc.{AnyContentAsEmpty, ControllerComponents, Result}
@@ -75,7 +75,7 @@ trait ControllerTestRunner extends MockEnrolmentsAuthService with MockMtdIdLooku
 
     MockMtdIdLookupService.lookup(nino).returns(Future.successful(Right("test-mtd-id")))
     MockedEnrolmentsAuthService.authoriseUser()
-    MockIdGenerator.getCorrelationId.returns(correlationId)
+    MockIdGenerator.generateCorrelationId.returns(correlationId)
 
     def runOkTest(expectedStatus: Int, maybeExpectedResponseBody: Option[JsValue] = None): Unit = {
       val result: Future[Result] = callController()

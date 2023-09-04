@@ -16,12 +16,16 @@
 
 package v2.models.response.retrieveForeignPropertyAnnualSubmission
 
+import api.hateoas.{Link, Method}
 import api.models.domain.Timestamp
-import api.models.hateoas.{Link, Method}
 import mocks.MockAppConfig
 import play.api.libs.json.Json
 import support.UnitSpec
-import v2.models.response.retrieveForeignPropertyAnnualSubmission.foreignFhlEea.{ForeignFhlEeaAdjustments, ForeignFhlEeaAllowances, ForeignFhlEeaEntry}
+import v2.models.response.retrieveForeignPropertyAnnualSubmission.foreignFhlEea.{
+  ForeignFhlEeaAdjustments,
+  ForeignFhlEeaAllowances,
+  ForeignFhlEeaEntry
+}
 import v2.models.response.retrieveForeignPropertyAnnualSubmission.foreignProperty._
 
 class RetrieveForeignPropertyAnnualSubmissionResponseSpec extends UnitSpec with MockAppConfig {

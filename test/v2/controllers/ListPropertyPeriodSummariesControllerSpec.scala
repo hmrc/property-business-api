@@ -17,10 +17,9 @@
 package v2.controllers
 
 import api.controllers.{ControllerBaseSpec, ControllerTestRunner}
-import api.mocks.hateoas.MockHateoasFactory
+import api.hateoas.{HateoasWrapper, MockHateoasFactory}
 import api.models.domain.{Nino, TaxYear}
 import api.models.errors._
-import api.models.hateoas.HateoasWrapper
 import api.models.outcomes.ResponseWrapper
 import play.api.libs.json.Json
 import play.api.mvc.Result

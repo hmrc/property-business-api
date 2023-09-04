@@ -16,7 +16,7 @@
 
 package v2.controllers
 
-import api.controllers.{AuthorisedController, EndpointLogContext, RequestContext, RequestHandler}
+import api.controllers.{AuthorisedController, EndpointLogContext, RequestContext, RequestHandlerOld}
 import api.hateoas.HateoasFactory
 import api.services.{EnrolmentsAuthService, MtdIdLookupService}
 import play.api.mvc.{Action, AnyContent, ControllerComponents}
@@ -49,7 +49,7 @@ class RetrieveUkPropertyAnnualSubmissionController @Inject() (val authService: E
       val rawData = RetrieveUkPropertyAnnualSubmissionRawData(nino, businessId, taxYear)
 
       val requestHandler =
-        RequestHandler
+        RequestHandlerOld
           .withParser(parser)
           .withService(service.retrieveUkProperty)
           .withHateoasResult(hateoasFactory)(RetrieveUkPropertyAnnualSubmissionHateoasData(nino, businessId, taxYear))

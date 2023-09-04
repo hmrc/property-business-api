@@ -17,11 +17,10 @@
 package v2.controllers
 
 import api.controllers.{ControllerBaseSpec, ControllerTestRunner}
-import api.mocks.hateoas.MockHateoasFactory
+import api.hateoas.{HateoasWrapper, Link, MockHateoasFactory}
 import api.models.domain.{Nino, TaxYear}
 import api.models.errors._
-import api.models.hateoas.Method.GET
-import api.models.hateoas.{HateoasWrapper, Link}
+import api.hateoas.Method.GET
 import api.models.outcomes.ResponseWrapper
 import fixtures.RetrieveUkPropertyPeriodSummary.ResponseModelsFixture
 import play.api.mvc.Result

@@ -17,15 +17,14 @@
 package v2.controllers
 
 import api.controllers.{ControllerBaseSpec, ControllerTestRunner}
-import api.mocks.MockIdGenerator
-import api.mocks.hateoas.MockHateoasFactory
-import api.mocks.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService}
-import api.models.audit.{AuditEvent, AuditResponse, GenericAuditDetail}
+import api.hateoas.{HateoasWrapper, MockHateoasFactory}
+import api.models.audit.{AuditEvent, AuditResponse, GenericAuditDetailOld}
 import api.models.domain.{Nino, TaxYear}
 import api.models.errors._
-import api.models.hateoas.HateoasWrapper
 import api.models.outcomes.ResponseWrapper
+import api.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService}
 import fixtures.CreateForeignPropertyPeriodSummaryFixtures.CreateForeignPropertyPeriodSummaryFixtures
+import mocks.MockIdGenerator
 import play.api.libs.json.{JsObject, JsValue, Json}
 import play.api.mvc.Result
 import v2.mocks.requestParsers.MockCreateForeignPropertyPeriodSummaryRequestParser
@@ -97,7 +96,7 @@ class CreateForeignPropertyPeriodSummaryControllerSpec
     }
   }
 
-  trait Test extends ControllerTest with AuditEventChecking[GenericAuditDetail] {
+  trait Test extends ControllerTest with AuditEventChecking[GenericAuditDetailOld] {
 
     private val controller = new CreateForeignPropertyPeriodSummaryController(
       authService = mockEnrolmentsAuthService,
@@ -112,11 +111,11 @@ class CreateForeignPropertyPeriodSummaryControllerSpec
 
     protected def callController(): Future[Result] = controller.handleRequest(nino, businessId, taxYear)(fakePostRequest(requestBody))
 
-    protected def event(auditResponse: AuditResponse, maybeRequestBody: Option[JsValue]): AuditEvent[GenericAuditDetail] =
+    protected def event(auditResponse: AuditResponse, maybeRequestBody: Option[JsValue]): AuditEvent[GenericAuditDetailOld] =
       AuditEvent(
         auditType = "CreateForeignPropertyIncomeAndExpensesPeriodSummary",
         transactionName = "create-foreign-property-income-and-expenses-period-summary",
-        detail = GenericAuditDetail(
+        detail = GenericAuditDetailOld(
           versionNumber = "2.0",
           userType = "Individual",
           agentReferenceNumber = None,

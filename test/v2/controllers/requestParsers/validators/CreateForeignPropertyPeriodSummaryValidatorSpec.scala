@@ -135,7 +135,6 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with Mock
 
   private val requestBodyConsolidationExpenseJson = consolidatedBodyWith(entryConsolidated)
 
-
   "running a validation" should {
     "return no errors" when {
       "a valid request is supplied" in {
@@ -580,7 +579,7 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with Mock
 
     "return RuleDuplicateCountryCodeError" when {
       "a country code is duplicated" in {
-        val code = "ZWE"
+        val code      = "ZWE"
         val validator = setUpValidator()
         validator.validate(
           CreateForeignPropertyPeriodSummaryRawData(
@@ -594,8 +593,8 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with Mock
       }
 
       "multiple country codes are duplicated" in {
-        val code1 = "AFG"
-        val code2 = "ZWE"
+        val code1     = "AFG"
+        val code2     = "ZWE"
         val validator = setUpValidator()
         validator.validate(
           CreateForeignPropertyPeriodSummaryRawData(

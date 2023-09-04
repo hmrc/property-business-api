@@ -19,16 +19,19 @@ package api.models.errors
 import play.api.http.Status._
 
 // Format Errors
-object NinoFormatError         extends MtdError("FORMAT_NINO", "The provided NINO is invalid", BAD_REQUEST)
-object BusinessIdFormatError   extends MtdError("FORMAT_BUSINESS_ID", "The provided Business ID is invalid", BAD_REQUEST)
-object SubmissionIdFormatError extends MtdError("FORMAT_SUBMISSION_ID", "The provided Submission ID is invalid", BAD_REQUEST)
-object FromDateFormatError     extends MtdError("FORMAT_FROM_DATE", "The provided From date is invalid", BAD_REQUEST)
-object FromDateOutOfRangeError extends MtdError("INVALID_RANGE_FROM_DATE", "The provided From date is below the acceptable range", BAD_REQUEST)
-object ToDateFormatError       extends MtdError("FORMAT_TO_DATE", "The provided To date is invalid", BAD_REQUEST)
-object ToDateOutOfRangeError   extends MtdError("INVALID_RANGE_TO_DATE", "The provided To date is above the acceptable range", BAD_REQUEST)
-object DateFormatError         extends MtdError("FORMAT_DATE", "The supplied date format is not valid", BAD_REQUEST)
-object StringFormatError       extends MtdError("FORMAT_STRING", "The supplied string format is not valid", BAD_REQUEST)
-object CountryCodeFormatError  extends MtdError("FORMAT_COUNTRY_CODE", "The provided Country code is invalid", BAD_REQUEST)
+object NinoFormatError          extends MtdError("FORMAT_NINO", "The provided NINO is invalid", BAD_REQUEST)
+object BusinessIdFormatError    extends MtdError("FORMAT_BUSINESS_ID", "The provided Business ID is invalid", BAD_REQUEST)
+object SubmissionIdFormatError  extends MtdError("FORMAT_SUBMISSION_ID", "The provided Submission ID is invalid", BAD_REQUEST)
+object FromDateFormatError      extends MtdError("FORMAT_FROM_DATE", "The provided From date is invalid", BAD_REQUEST)
+object FromDateOutOfRangeError  extends MtdError("INVALID_RANGE_FROM_DATE", "The provided From date is below the acceptable range", BAD_REQUEST)
+object ToDateFormatError        extends MtdError("FORMAT_TO_DATE", "The provided To date is invalid", BAD_REQUEST)
+object ToDateOutOfRangeError    extends MtdError("INVALID_RANGE_TO_DATE", "The provided To date is above the acceptable range", BAD_REQUEST)
+object DateFormatError          extends MtdError("FORMAT_DATE", "The supplied date format is not valid", BAD_REQUEST)
+object StringFormatError        extends MtdError("FORMAT_STRING", "The supplied string format is not valid", BAD_REQUEST)
+object CountryCodeFormatError   extends MtdError("FORMAT_COUNTRY_CODE", "The provided Country code is invalid", BAD_REQUEST)
+object CalculationIdFormatError extends MtdError("FORMAT_CALCULATION_ID", "The provided calculation ID is invalid", BAD_REQUEST)
+object StartDateFormatError     extends MtdError("FORMAT_START_DATE", "The provided Start date is invalid", BAD_REQUEST)
+object EndDateFormatError       extends MtdError("FORMAT_END_DATE", "The provided End date is invalid", BAD_REQUEST)
 
 object ValueFormatError extends MtdError("FORMAT_VALUE", "The value must be between 0 and 99999999999.99", BAD_REQUEST) {
 
@@ -128,3 +131,13 @@ object RuleIncorrectGovTestScenarioError
 object InvalidAcceptHeaderError extends MtdError("ACCEPT_HEADER_INVALID", "The accept header is missing or invalid", NOT_ACCEPTABLE)
 object UnsupportedVersionError  extends MtdError("NOT_FOUND", "The requested resource could not be found", NOT_FOUND)
 object InvalidBodyTypeError     extends MtdError("INVALID_BODY_TYPE", "Expecting text/json or application/json body", UNSUPPORTED_MEDIA_TYPE)
+
+// Common rule errors
+object RuleTaxYearRangeInvalid
+    extends MtdError("RULE_TAX_YEAR_RANGE_INVALID", "Tax year range invalid. A tax year range of one year is required", BAD_REQUEST)
+
+object RuleEndBeforeStartDateError
+    extends MtdError("RULE_END_DATE_BEFORE_START_DATE", "The supplied accounting period end date is before the start date", BAD_REQUEST)
+
+object InvalidTaxYearParameterError
+    extends MtdError(code = "INVALID_TAX_YEAR_PARAMETER", message = "A tax year before 2023-24 was supplied", BAD_REQUEST)

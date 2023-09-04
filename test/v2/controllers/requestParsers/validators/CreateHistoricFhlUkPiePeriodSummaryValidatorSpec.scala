@@ -131,13 +131,13 @@ class CreateHistoricFhlUkPiePeriodSummaryValidatorSpec extends UnitSpec with Jso
     "return no errors" when {
       "given a valid request" in {
         val validator = setUpValidator()
-        val result = validator.validate(CreateHistoricFhlUkPiePeriodSummaryRawData(validNino, validRequestBody))
+        val result    = validator.validate(CreateHistoricFhlUkPiePeriodSummaryRawData(validNino, validRequestBody))
         result shouldBe empty
       }
 
       "given a valid request object with consolidated expenses" in {
         val validator = setUpValidator()
-        val result = validator.validate(CreateHistoricFhlUkPiePeriodSummaryRawData(validNino, validRequestBodyConsolidated))
+        val result    = validator.validate(CreateHistoricFhlUkPiePeriodSummaryRawData(validNino, validRequestBodyConsolidated))
         result shouldBe empty
       }
     }
@@ -145,8 +145,8 @@ class CreateHistoricFhlUkPiePeriodSummaryValidatorSpec extends UnitSpec with Jso
     "return an error" when {
       "a mandatory field is missing" in {
         val validator = setUpValidator()
-        val expected = RuleIncorrectOrEmptyBodyError.copy(paths = Some(List("/fromDate")))
-        val result   = validator.validate(CreateHistoricFhlUkPiePeriodSummaryRawData(validNino, incompleteRequestBody))
+        val expected  = RuleIncorrectOrEmptyBodyError.copy(paths = Some(List("/fromDate")))
+        val result    = validator.validate(CreateHistoricFhlUkPiePeriodSummaryRawData(validNino, incompleteRequestBody))
 
         result should contain only expected
       }
@@ -174,7 +174,7 @@ class CreateHistoricFhlUkPiePeriodSummaryValidatorSpec extends UnitSpec with Jso
     "return RuleIncorrectOrEmptyBodyError" when {
       "given an empty body" in {
         val validator = setUpValidator()
-        val result = validator.validate(CreateHistoricFhlUkPiePeriodSummaryRawData(validNino, JsObject.empty))
+        val result    = validator.validate(CreateHistoricFhlUkPiePeriodSummaryRawData(validNino, JsObject.empty))
         result should contain only RuleIncorrectOrEmptyBodyError
       }
     }

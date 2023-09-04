@@ -58,7 +58,7 @@ class CreateHistoricNonFHLUkPiePeriodSummaryController @Inject() (val authServic
       val rawData = CreateHistoricNonFhlUkPropertyPeriodSummaryRawData(nino, request.body)
 
       val requestHandler =
-        RequestHandler
+        RequestHandlerOld
           .withParser(parser)
           .withService(service.createPeriodSummary)
           .withAuditing(auditHandler(nino, ctx.correlationId, request))
@@ -67,8 +67,8 @@ class CreateHistoricNonFHLUkPiePeriodSummaryController @Inject() (val authServic
       requestHandler.handleRequest(rawData)
     }
 
-  private def auditHandler(nino: String, correlationId: String, request: UserRequest[JsValue]): AuditHandler = {
-    new AuditHandler() {
+  private def auditHandler(nino: String, correlationId: String, request: UserRequest[JsValue]): AuditHandlerOld = {
+    new AuditHandlerOld() {
       override def performAudit(userDetails: UserDetails, httpStatus: Int, response: Either[ErrorWrapper, Option[JsValue]], versionNumber: String)(
           implicit
           ctx: RequestContext,

@@ -58,7 +58,7 @@ class CreateAmendHistoricFhlUkPropertyAnnualSubmissionController @Inject() (val 
       val rawData = CreateAmendHistoricFhlUkPropertyAnnualSubmissionRawData(nino, taxYear, request.body)
 
       val requestHandler =
-        RequestHandler
+        RequestHandlerOld
           .withParser(parser)
           .withService(service.amend)
           .withAuditing(auditHandler(nino, taxYear, ctx.correlationId, request))
@@ -67,8 +67,8 @@ class CreateAmendHistoricFhlUkPropertyAnnualSubmissionController @Inject() (val 
       requestHandler.handleRequest(rawData)
     }
 
-  private def auditHandler(nino: String, taxYear: String, correlationId: String, request: UserRequest[JsValue]): AuditHandler = {
-    new AuditHandler() {
+  private def auditHandler(nino: String, taxYear: String, correlationId: String, request: UserRequest[JsValue]): AuditHandlerOld = {
+    new AuditHandlerOld() {
       override def performAudit(userDetails: UserDetails, httpStatus: Int, response: Either[ErrorWrapper, Option[JsValue]], versionNumber: String)(
           implicit
           ctx: RequestContext,

@@ -16,7 +16,7 @@
 
 package v2.models.response.listPropertyPeriodSummaries
 
-import api.models.hateoas.{Link, Method}
+import api.hateoas.{Link, Method}
 import mocks.MockAppConfig
 import play.api.libs.json.Json
 import support.UnitSpec

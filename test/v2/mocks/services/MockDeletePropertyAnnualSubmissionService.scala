@@ -20,7 +20,7 @@ import api.controllers.RequestContext
 import api.services.ServiceOutcome
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
-import v2.models.request.deletePropertyAnnualSubmission.DeletePropertyAnnualSubmissionRequest
+import v2.models.request.deletePropertyAnnualSubmission.DeletePropertyAnnualSubmissionRequestData
 import v2.services.DeletePropertyAnnualSubmissionService
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -32,10 +32,10 @@ trait MockDeletePropertyAnnualSubmissionService extends MockFactory {
 
   object MockDeletePropertyAnnualSubmissionService {
 
-    def deletePropertyAnnualSubmission(requestData: DeletePropertyAnnualSubmissionRequest): CallHandler[Future[ServiceOutcome[Unit]]] = {
+    def deletePropertyAnnualSubmission(requestData: DeletePropertyAnnualSubmissionRequestData): CallHandler[Future[ServiceOutcome[Unit]]] = {
       (
         mockDeletePropertyAnnualSubmissionService
-          .deletePropertyAnnualSubmission(_: DeletePropertyAnnualSubmissionRequest)(
+          .deletePropertyAnnualSubmission(_: DeletePropertyAnnualSubmissionRequestData)(
             _: RequestContext,
             _: ExecutionContext
           )

@@ -21,7 +21,7 @@ import api.connectors.httpparsers.StandardDownstreamHttpParser.readsEmpty
 import api.connectors.{BaseDownstreamConnector, DownstreamOutcome}
 import config.AppConfig
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
-import v2.models.request.deletePropertyAnnualSubmission.DeletePropertyAnnualSubmissionRequest
+import v2.models.request.deletePropertyAnnualSubmission.DeletePropertyAnnualSubmissionRequestData
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
@@ -29,7 +29,7 @@ import scala.concurrent.{ExecutionContext, Future}
 @Singleton
 class DeletePropertyAnnualSubmissionConnector @Inject() (val http: HttpClient, val appConfig: AppConfig) extends BaseDownstreamConnector {
 
-  def deletePropertyAnnualSubmission(request: DeletePropertyAnnualSubmissionRequest)(implicit
+  def deletePropertyAnnualSubmission(request: DeletePropertyAnnualSubmissionRequestData)(implicit
       hc: HeaderCarrier,
       ec: ExecutionContext,
       correlationId: String): Future[DownstreamOutcome[Unit]] = {
@@ -47,7 +47,7 @@ class DeletePropertyAnnualSubmissionConnector @Inject() (val http: HttpClient, v
           IfsUri[Unit](s"income-tax/business/property/annual"),
           List(
             "taxableEntityId" -> nino.nino,
-            "incomeSourceId"  -> businessId,
+            "incomeSourceId"  -> businessId.businessId,
             "taxYear"         -> taxYear.asMtd // Note that MTD tax year format is used
           )
         )

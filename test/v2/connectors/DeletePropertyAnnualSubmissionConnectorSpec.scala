@@ -17,17 +17,17 @@
 package v2.connectors
 
 import api.connectors.{ConnectorSpec, DownstreamOutcome}
-import api.models.domain.{Nino, TaxYear}
+import api.models.domain.{BusinessId, Nino, TaxYear}
 import api.models.errors.{DownstreamErrorCode, DownstreamErrors}
 import api.models.outcomes.ResponseWrapper
-import v2.models.request.deletePropertyAnnualSubmission.DeletePropertyAnnualSubmissionRequest
+import v2.models.request.deletePropertyAnnualSubmission.DeletePropertyAnnualSubmissionRequestData
 
 import scala.concurrent.Future
 
 class DeletePropertyAnnualSubmissionConnectorSpec extends ConnectorSpec {
 
-  private val nino: String       = "AA123456A"
-  private val businessId: String = "XAIS12345678910"
+  private val nino       = Nino("AA123456A")
+  private val businessId = BusinessId("XAIS12345678910")
 
   private val preTysTaxYear: TaxYear = TaxYear.fromMtd("2021-22")
   private val tysTaxYear: TaxYear    = TaxYear.fromMtd("2023-24")
@@ -85,18 +85,18 @@ class DeletePropertyAnnualSubmissionConnectorSpec extends ConnectorSpec {
       appConfig = mockAppConfig
     )
 
-    protected val request: DeletePropertyAnnualSubmissionRequest =
-      DeletePropertyAnnualSubmissionRequest(nino = Nino(nino), businessId = businessId, taxYear = taxYear)
+    protected val request: DeletePropertyAnnualSubmissionRequestData =
+      DeletePropertyAnnualSubmissionRequestData(nino = nino, businessId = businessId, taxYear = taxYear)
 
     protected def stubHttpResponse(outcome: DownstreamOutcome[Unit]): Unit =
       willDelete(
         url = s"$baseUrl/income-tax/business/property/annual",
-        parameters = List("taxableEntityId" -> nino, "incomeSourceId" -> businessId, "taxYear" -> taxYear.asMtd)
+        parameters = List("taxableEntityId" -> nino.nino, "incomeSourceId" -> businessId.businessId, "taxYear" -> taxYear.asMtd)
       ).returns(Future.successful(outcome))
 
     protected def stubTysHttpResponse(outcome: DownstreamOutcome[Unit]): Unit =
       willDelete(
-        url = s"$baseUrl/income-tax/business/property/annual/${request.taxYear.asTysDownstream}/${request.nino.value}/${request.businessId}"
+        url = s"$baseUrl/income-tax/business/property/annual/${request.taxYear.asTysDownstream}/${request.nino}/${request.businessId}"
       ).returns(Future.successful(outcome))
 
   }

@@ -16,21 +16,22 @@
 
 package v2.controllers.requestParsers
 
-import api.models.domain.{Nino, TaxYear}
+import api.models.domain.{BusinessId, Nino, TaxYear}
 import api.models.errors.{BadRequestError, BusinessIdFormatError, ErrorWrapper, NinoFormatError}
 import support.UnitSpec
 import v2.mocks.validators.MockDeletePropertyAnnualSubmissionValidator
 import v2.models.request.deletePropertyAnnualSubmission._
 
-class DeletePropertyAnnualSubmissionRequestParserSpec extends UnitSpec {
+class DeletePropertyAnnualSubmissionRequestDataParserSpec extends UnitSpec {
 
-  val nino: String                   = "AA123456B"
-  val businessId: String             = "XAIS12345678901"
-  val taxYear: String                = "2021-22"
-  implicit val correlationId: String = "X-123"
+  private val nino       = Nino("AA123456B")
+  private val businessId = BusinessId("XAIS12345678901")
+  private val taxYear    = TaxYear.fromMtd("2021-22")
 
-  val inputData: DeletePropertyAnnualSubmissionRawData =
-    DeletePropertyAnnualSubmissionRawData(nino, businessId, taxYear)
+  implicit private val correlationId: String = "X-123"
+
+  private val inputData: DeletePropertyAnnualSubmissionRawData =
+    DeletePropertyAnnualSubmissionRawData(nino.nino, businessId.businessId, taxYear.asMtd)
 
   trait Test extends MockDeletePropertyAnnualSubmissionValidator {
     lazy val parser = new DeletePropertyAnnualSubmissionRequestParser(mockValidator)
@@ -41,7 +42,7 @@ class DeletePropertyAnnualSubmissionRequestParserSpec extends UnitSpec {
       "valid request data is supplied" in new Test {
         MockDeletePropertyAnnualSubmissionValidator.validate(inputData).returns(Nil)
 
-        parser.parseRequest(inputData) shouldBe Right(DeletePropertyAnnualSubmissionRequest(Nino(nino), businessId, TaxYear.fromMtd(taxYear)))
+        parser.parseRequest(inputData) shouldBe Right(DeletePropertyAnnualSubmissionRequestData(nino, businessId, taxYear))
       }
     }
     "return an ErrorWrapper" when {

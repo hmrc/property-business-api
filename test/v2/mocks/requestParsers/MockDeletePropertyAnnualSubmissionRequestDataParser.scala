@@ -20,16 +20,16 @@ import api.models.errors.ErrorWrapper
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
 import v2.controllers.requestParsers.DeletePropertyAnnualSubmissionRequestParser
-import v2.models.request.deletePropertyAnnualSubmission.{DeletePropertyAnnualSubmissionRawData, DeletePropertyAnnualSubmissionRequest}
+import v2.models.request.deletePropertyAnnualSubmission.{DeletePropertyAnnualSubmissionRawData, DeletePropertyAnnualSubmissionRequestData}
 
-trait MockDeletePropertyAnnualSubmissionRequestParser extends MockFactory {
+trait MockDeletePropertyAnnualSubmissionRequestDataParser extends MockFactory {
 
   val mockDeletePropertyAnnualSubmissionRequestParser: DeletePropertyAnnualSubmissionRequestParser =
     mock[DeletePropertyAnnualSubmissionRequestParser]
 
   object MockDeletePropertyAnnualSubmissionRequestParser {
 
-    def parse(data: DeletePropertyAnnualSubmissionRawData): CallHandler[Either[ErrorWrapper, DeletePropertyAnnualSubmissionRequest]] = {
+    def parse(data: DeletePropertyAnnualSubmissionRawData): CallHandler[Either[ErrorWrapper, DeletePropertyAnnualSubmissionRequestData]] = {
       (mockDeletePropertyAnnualSubmissionRequestParser.parseRequest(_: DeletePropertyAnnualSubmissionRawData)(_: String)).expects(data, *)
     }
 

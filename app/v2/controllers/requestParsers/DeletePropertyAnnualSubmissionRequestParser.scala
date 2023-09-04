@@ -17,16 +17,16 @@
 package v2.controllers.requestParsers
 
 import api.controllers.requestParsers.RequestParser
-import api.models.domain.{Nino, TaxYear}
+import api.models.domain.{BusinessId, Nino, TaxYear}
 import v2.controllers.requestParsers.validators.DeletePropertyAnnualSubmissionValidator
 import v2.models.request.deletePropertyAnnualSubmission._
 
 import javax.inject.Inject
 
 class DeletePropertyAnnualSubmissionRequestParser @Inject() (val validator: DeletePropertyAnnualSubmissionValidator)
-    extends RequestParser[DeletePropertyAnnualSubmissionRawData, DeletePropertyAnnualSubmissionRequest] {
+    extends RequestParser[DeletePropertyAnnualSubmissionRawData, DeletePropertyAnnualSubmissionRequestData] {
 
-  override protected def requestFor(data: DeletePropertyAnnualSubmissionRawData): DeletePropertyAnnualSubmissionRequest =
-    DeletePropertyAnnualSubmissionRequest(Nino(data.nino), data.businessId, TaxYear.fromMtd(data.taxYear))
+  override protected def requestFor(data: DeletePropertyAnnualSubmissionRawData): DeletePropertyAnnualSubmissionRequestData =
+    DeletePropertyAnnualSubmissionRequestData(Nino(data.nino), BusinessId(data.businessId), TaxYear.fromMtd(data.taxYear))
 
 }

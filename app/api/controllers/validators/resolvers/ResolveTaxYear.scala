@@ -76,3 +76,22 @@ object ResolveTysTaxYear extends ResolvingTaxYear {
       }
 
 }
+
+object ResolveHistoricTaxYear extends ResolvingTaxYear {
+
+  def apply(value: String, error: Option[MtdError], path: Option[String]): Validated[Seq[MtdError], TaxYear] = resolve(value, error, path)
+
+  def apply(minimumTaxYear: Int,
+            maximumTaxYear: Int,
+            value: String,
+            error: Option[MtdError],
+            path: Option[String]): Validated[Seq[MtdError], TaxYear] =
+    resolve(value, error, path)
+      .andThen { taxYear =>
+        if (taxYear.year >= minimumTaxYear && taxYear.year <= maximumTaxYear)
+          Valid(taxYear)
+        else
+          Invalid(List(RuleHistoricTaxYearNotSupportedError))
+      }
+
+}

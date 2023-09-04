@@ -25,24 +25,37 @@ import java.time.LocalDate
 
 case class DateRange(startDate: LocalDate, endDate: LocalDate)
 
-object ResolveDateRange extends Resolver[(String, String), DateRange] {
+trait DateRangeResolving {
 
-  def apply(value: (String, String), notUsedError: Option[MtdError], path: Option[String]): Validated[Seq[MtdError], DateRange] = {
+  protected val startDateFormatError: MtdError = StartDateFormatError
+  protected val endDateFormatError: MtdError   = EndDateFormatError
+
+  protected def resolve(value: (String, String), maybeError: Option[MtdError], path: Option[String]): Validated[Seq[MtdError], DateRange] = {
+
+    def resolveDateRange(parsedStartDate: LocalDate, parsedEndDate: LocalDate): Validated[Seq[MtdError], DateRange] = {
+      val startDateEpochTime = parsedStartDate.toEpochDay
+      val endDateEpochTime   = parsedEndDate.toEpochDay
+
+      if ((endDateEpochTime - startDateEpochTime) <= 0)
+        Invalid(List(maybeError.getOrElse(RuleEndBeforeStartDateError)))
+      else
+        Valid(DateRange(parsedStartDate, parsedEndDate))
+
+    }
+
     val (startDate, endDate) = value
     (
-      ResolveIsoDate(startDate, StartDateFormatError),
-      ResolveIsoDate(endDate, EndDateFormatError)
+      ResolveIsoDate(startDate, startDateFormatError),
+      ResolveIsoDate(endDate, endDateFormatError)
     ).mapN(resolveDateRange).andThen(identity)
   }
 
-  private def resolveDateRange(parsedStartDate: LocalDate, parsedEndDate: LocalDate): Validated[Seq[MtdError], DateRange] = {
-    val startDateEpochTime = parsedStartDate.toEpochDay
-    val endDateEpochTime   = parsedEndDate.toEpochDay
+}
 
-    if ((endDateEpochTime - startDateEpochTime) <= 0)
-      Invalid(List(RuleEndBeforeStartDateError))
-    else
-      Valid(DateRange(parsedStartDate, parsedEndDate))
+object ResolveDateRange extends Resolver[(String, String), DateRange] with DateRangeResolving {
+
+  def apply(value: (String, String), maybeError: Option[MtdError], path: Option[String]): Validated[Seq[MtdError], DateRange] = {
+    resolve(value, maybeError, path)
   }
 
 }

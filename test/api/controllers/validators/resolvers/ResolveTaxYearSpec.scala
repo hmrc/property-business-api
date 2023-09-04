@@ -17,7 +17,7 @@
 package api.controllers.validators.resolvers
 
 import api.models.domain.TaxYear
-import api.models.errors.{InvalidTaxYearParameterError, RuleTaxYearRangeInvalid, TaxYearFormatError}
+import api.models.errors.{InvalidTaxYearParameterError, RuleHistoricTaxYearNotSupportedError, RuleTaxYearRangeInvalid, TaxYearFormatError}
 import cats.data.Validated.{Invalid, Valid}
 import support.UnitSpec
 
@@ -71,6 +71,42 @@ class ResolveTaxYearSpec extends UnitSpec {
       "passed a valid tax year but below TaxYear.tysTaxYear" in {
         val result = ResolveTysTaxYear("2021-22")
         result shouldBe Invalid(List(InvalidTaxYearParameterError))
+      }
+    }
+
+    "return no errors" when {
+      "when the tax year is within the specified range" in {
+        val minimumTaxYear = 2000
+        val maximumTaxYear = 2023
+        val validTaxYear   = "2020-21"
+
+        val result = ResolveHistoricTaxYear(minimumTaxYear, maximumTaxYear, validTaxYear, None, None)
+
+        result shouldBe Valid(TaxYear.fromMtd(validTaxYear))
+      }
+    }
+
+    "return an error" when {
+      "when the tax year is before the minimum tax year" in {
+        val minimumTaxYear = 2020
+        val maximumTaxYear = 2023
+        val invalidTaxYear = "2018-19"
+
+        val result = ResolveHistoricTaxYear(minimumTaxYear, maximumTaxYear, invalidTaxYear, None, None)
+
+        result shouldBe Invalid(List(RuleHistoricTaxYearNotSupportedError))
+      }
+    }
+
+    "return an error" when {
+      "when the tax year is after the maximum tax year" in {
+        val minimumTaxYear = 2020
+        val maximumTaxYear = 2023
+        val invalidTaxYear = "2024-25"
+
+        val result = ResolveHistoricTaxYear(minimumTaxYear, maximumTaxYear, invalidTaxYear, None, None)
+
+        result shouldBe Invalid(List(RuleHistoricTaxYearNotSupportedError))
       }
     }
   }

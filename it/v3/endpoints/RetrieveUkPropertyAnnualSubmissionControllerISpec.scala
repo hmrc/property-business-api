@@ -23,10 +23,10 @@ import play.api.http.Status._
 import play.api.libs.json.{JsValue, Json}
 import play.api.libs.ws.{WSRequest, WSResponse}
 import play.api.test.Helpers.AUTHORIZATION
-import support.V2IntegrationBaseSpec
+import support.IntegrationBaseSpec
 import v3.stubs.{AuditStub, AuthStub, DownstreamStub, MtdIdLookupStub}
 
-class RetrieveUkPropertyAnnualSubmissionControllerISpec extends V2IntegrationBaseSpec {
+class RetrieveUkPropertyAnnualSubmissionControllerISpec extends IntegrationBaseSpec {
 
   private trait Test {
 

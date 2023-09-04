@@ -20,12 +20,12 @@ import io.swagger.v3.parser.OpenAPIV3Parser
 import play.api.http.Status
 import play.api.libs.json.{JsValue, Json}
 import play.api.libs.ws.WSResponse
-import support.V2IntegrationBaseSpec
+import support.IntegrationBaseSpec
 import uk.gov.hmrc.auth.core.ConfidenceLevel
 
 import scala.util.Try
 
-class DocumentationControllerISpec extends V2IntegrationBaseSpec {
+class DocumentationControllerISpec extends IntegrationBaseSpec {
 
   val config: AppConfig                = app.injector.instanceOf[AppConfig]
   val confidenceLevel: ConfidenceLevel = config.confidenceLevelConfig.confidenceLevel
@@ -56,11 +56,6 @@ class DocumentationControllerISpec extends V2IntegrationBaseSpec {
        |      ],
        |      "versions":[
        |         {
-       |            "version":"1.0",
-       |            "status":"DEPRECATED",
-       |            "endpointsEnabled":true
-       |         },
-       |         {
        |            "version":"2.0",
        |            "status":"BETA",
        |            "endpointsEnabled":true
@@ -81,23 +76,6 @@ class DocumentationControllerISpec extends V2IntegrationBaseSpec {
       val response: WSResponse = await(buildRequest("/api/definition").get())
       response.status shouldBe Status.OK
       Json.parse(response.body) shouldBe apiDefinitionJson
-    }
-  }
-
-  "an OAS documentation request for V1" must {
-    "return the documentation that passes OAS V3 parser" in {
-      val response: WSResponse = await(buildRequest("/api/conf/1.0/application.yaml").get())
-      response.status shouldBe Status.OK
-
-      val contents     = response.body[String]
-      val parserResult = Try(new OpenAPIV3Parser().readContents(contents))
-      parserResult.isSuccess shouldBe true
-
-      val openAPI = Option(parserResult.get.getOpenAPI)
-      openAPI.isEmpty shouldBe false
-      openAPI.get.getOpenapi shouldBe "3.0.3"
-      openAPI.get.getInfo.getTitle shouldBe "Property Business (MTD)"
-      openAPI.get.getInfo.getVersion shouldBe "1.0"
     }
   }
 

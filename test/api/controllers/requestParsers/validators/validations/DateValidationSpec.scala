@@ -16,17 +16,20 @@
 
 package api.controllers.requestParsers.validators.validations
 
-import api.models.errors.{FromDateFormatError, ToDateFormatError}
+import api.models.errors.{FromDateFormatError, FromDateOutOfRangeError, ToDateFormatError, ToDateOutOfRangeError}
 import support.UnitSpec
 
 class DateValidationSpec extends UnitSpec {
+
+  val minInputYear = 1900
+  val maxInputYear = 2100
 
   "validate" should {
     "return no errors" when {
       "when a valid fromDate is supplied" in {
 
         val validDate        = "2020-01-01"
-        val validationResult = DateValidation.validate(validDate, isFromDate = true)
+        val validationResult = DateValidation.validate(validDate, isFromDate = true, minInputYear, maxInputYear)
         validationResult.isEmpty shouldBe true
 
       }
@@ -34,7 +37,7 @@ class DateValidationSpec extends UnitSpec {
       "when a valid toDate is supplied" in {
 
         val validDate        = "2020-03-12"
-        val validationResult = DateValidation.validate(validDate, isFromDate = true)
+        val validationResult = DateValidation.validate(validDate, isFromDate = true, minInputYear, maxInputYear)
         validationResult.isEmpty shouldBe true
 
       }
@@ -42,22 +45,43 @@ class DateValidationSpec extends UnitSpec {
     "return an error" when {
       "when an invalid fromDate is supplied" in {
 
-        val invalidBusinessId = "01-01-2020"
-        val validationResult  = DateValidation.validate(invalidBusinessId, isFromDate = true)
+        val invalidDate1 = "0010-01-01"
+        val validationResult1 = DateValidation.validate(invalidDate1, isFromDate = true, minInputYear, maxInputYear)
+        validationResult1.isEmpty shouldBe false
+        validationResult1.length shouldBe 1
+        validationResult1.head shouldBe FromDateOutOfRangeError
+
+        val invalidDate = "01-01-2020"
+        val validationResult = DateValidation.validate(invalidDate, isFromDate = true, minInputYear, maxInputYear)
         validationResult.isEmpty shouldBe false
         validationResult.length shouldBe 1
         validationResult.head shouldBe FromDateFormatError
 
       }
 
-      "when an invalid toDate is supplied" in {
+      "when an out of range fromDate is supplied" in {
+        val invalidFromDate = "1899-01-01"
+        val validationResult  = DateValidation.validate(invalidFromDate, isFromDate = true, minInputYear, maxInputYear)
+        validationResult.isEmpty shouldBe false
+        validationResult.length shouldBe 1
+        validationResult.head shouldBe FromDateOutOfRangeError
+      }
 
+      "when an invalid toDate is supplied" in {
         val invalidBusinessId = "30-01-2020"
-        val validationResult  = DateValidation.validate(invalidBusinessId, isFromDate = false)
+        val validationResult  = DateValidation.validate(invalidBusinessId, isFromDate = false, minInputYear, maxInputYear)
         validationResult.isEmpty shouldBe false
         validationResult.length shouldBe 1
         validationResult.head shouldBe ToDateFormatError
 
+      }
+
+      "when an out of range toDate is supplied" in {
+        val invalidToDate = "2101-01-01"
+        val validationResult  = DateValidation.validate(invalidToDate, isFromDate = false, minInputYear, maxInputYear)
+        validationResult.isEmpty shouldBe false
+        validationResult.length shouldBe 1
+        validationResult.head shouldBe ToDateOutOfRangeError
       }
     }
   }

@@ -70,7 +70,7 @@ class DeleteHistoricUkPropertyAnnualSubmissionController @Inject() (val authServ
 
       val rawData = DeleteHistoricUkPropertyAnnualSubmissionRawData(nino, taxYear, propertyType)
 
-      val requestHandler = RequestHandler
+      val requestHandler = RequestHandlerOld
         .withParser(parser)
         .withService(service.deleteHistoricUkPropertyAnnualSubmission)
         .withAuditing(auditHandler(nino, taxYear, propertyType, ctx.correlationId, request))
@@ -83,8 +83,8 @@ class DeleteHistoricUkPropertyAnnualSubmissionController @Inject() (val authServ
                            taxYear: String,
                            propertyType: HistoricPropertyType,
                            correlationId: String,
-                           request: UserRequest[AnyContent]): AuditHandler = {
-    new AuditHandler() {
+                           request: UserRequest[AnyContent]): AuditHandlerOld = {
+    new AuditHandlerOld() {
       override def performAudit(userDetails: UserDetails, httpStatus: Int, response: Either[ErrorWrapper, Option[JsValue]], versionNumber: String)(
           implicit
           ctx: RequestContext,

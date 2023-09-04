@@ -24,10 +24,10 @@ import play.api.http.Status.NO_CONTENT
 import play.api.libs.json.{JsObject, Json}
 import play.api.libs.ws.{WSRequest, WSResponse}
 import play.api.test.Helpers.AUTHORIZATION
-import support.V2IntegrationBaseSpec
+import support.IntegrationBaseSpec
 import v3.stubs.{AuditStub, AuthStub, DownstreamStub, MtdIdLookupStub}
 
-class DeleteHistoricNonFhlUkPropertyAnnualSubmissionControllerISpec extends V2IntegrationBaseSpec {
+class DeleteHistoricNonFhlUkPropertyAnnualSubmissionControllerISpec extends IntegrationBaseSpec {
 
   private trait Test {
 

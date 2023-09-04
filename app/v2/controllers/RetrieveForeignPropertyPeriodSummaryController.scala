@@ -16,7 +16,7 @@
 
 package v2.controllers
 
-import api.controllers.{AuthorisedController, EndpointLogContext, RequestContext, RequestHandler}
+import api.controllers.{AuthorisedController, EndpointLogContext, RequestContext, RequestHandlerOld}
 import api.hateoas.HateoasFactory
 import api.services.{EnrolmentsAuthService, MtdIdLookupService}
 import play.api.mvc.{Action, AnyContent, ControllerComponents}
@@ -49,7 +49,7 @@ class RetrieveForeignPropertyPeriodSummaryController @Inject() (val authService:
       val rawData = RetrieveForeignPropertyPeriodSummaryRawData(nino, businessId, taxYear, submissionId)
 
       val requestHandler =
-        RequestHandler
+        RequestHandlerOld
           .withParser(parser)
           .withService(service.retrieveForeignProperty)
           .withHateoasResult(hateoasFactory)(RetrieveForeignPropertyPeriodSummaryHateoasData(nino, businessId, taxYear, submissionId))

@@ -29,7 +29,12 @@ class CreateUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with JsonError
   private val validNino       = "AA123456A"
   private val validBusinessId = "XAIS12345678901"
 
-  MockAppConfig.minimumTaxV2Uk returns 2021
+  def setUpValidator(): CreateUkPropertyPeriodSummaryValidator = {
+    MockAppConfig.minimumTaxV2Uk returns 2021
+    MockAppConfig.minimumFromDate returns 1900
+    MockAppConfig.maximumToDate returns 2100
+    new CreateUkPropertyPeriodSummaryValidator(mockAppConfig)
+  }
 
   private val requestBodyJson = Json.parse(
     """{
@@ -121,20 +126,21 @@ class CreateUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with JsonError
       |""".stripMargin
   )
 
-  val validator = new CreateUkPropertyPeriodSummaryValidator(mockAppConfig)
-
   "running a validation" should {
     "return no errors" when {
       "a valid request is supplied" in {
+        val validator = setUpValidator()
         validator.validate(CreateUkPropertyPeriodSummaryRawData(validNino, taxYear, validBusinessId, requestBodyJson)) shouldBe Nil
       }
 
       "a valid consolidated expenses request is supplied" in {
+        val validator = setUpValidator()
         validator.validate(
           CreateUkPropertyPeriodSummaryRawData(validNino, taxYear, validBusinessId, requestBodyJsonConsolidatedExpenses)) shouldBe Nil
       }
 
       "a minimal fhl request is supplied" in {
+        val validator = setUpValidator()
         validator.validate(
           CreateUkPropertyPeriodSummaryRawData(
             validNino,
@@ -155,6 +161,7 @@ class CreateUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with JsonError
       }
 
       "a minimal non-fhl request is supplied" in {
+        val validator = setUpValidator()
         validator.validate(
           CreateUkPropertyPeriodSummaryRawData(
             validNino,
@@ -177,6 +184,7 @@ class CreateUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with JsonError
 
     "return NinoFormatError error" when {
       "an invalid nino is supplied" in {
+        val validator = setUpValidator()
         validator.validate(CreateUkPropertyPeriodSummaryRawData("A12344A", taxYear, validBusinessId, requestBodyJson)) shouldBe
           List(NinoFormatError)
       }
@@ -184,6 +192,7 @@ class CreateUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with JsonError
 
     "return TaxYearFormatError" when {
       "an invalid tax year is supplied" in {
+        val validator = setUpValidator()
         validator.validate(CreateUkPropertyPeriodSummaryRawData(validNino, "2020", validBusinessId, requestBodyJson)) shouldBe
           List(TaxYearFormatError)
       }
@@ -191,6 +200,7 @@ class CreateUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with JsonError
 
     "return RuleTaxYearNotSupportedError" when {
       "a tax year that is too early is supplied" in {
+        val validator = setUpValidator()
         validator.validate(CreateUkPropertyPeriodSummaryRawData(validNino, "2019-20", validBusinessId, requestBodyJson)) shouldBe
           List(RuleTaxYearNotSupportedError)
       }
@@ -198,6 +208,7 @@ class CreateUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with JsonError
 
     "return RuleTaxYearRangeInvalidError" when {
       "a tax year range is more than 1 year" in {
+        val validator = setUpValidator()
         validator.validate(CreateUkPropertyPeriodSummaryRawData(validNino, "2019-21", validBusinessId, requestBodyJson)) shouldBe
           List(RuleTaxYearRangeInvalidError)
       }
@@ -205,6 +216,7 @@ class CreateUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with JsonError
 
     "return BusinessIdFormatError error" when {
       "an invalid businessId is supplied" in {
+        val validator = setUpValidator()
         validator.validate(CreateUkPropertyPeriodSummaryRawData(validNino, taxYear, "20178", requestBodyJson)) shouldBe
           List(BusinessIdFormatError)
       }
@@ -212,11 +224,13 @@ class CreateUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with JsonError
 
     "return RuleIncorrectOrEmptyBodyError" when {
       "an empty body is submitted" in {
+        val validator = setUpValidator()
         validator.validate(CreateUkPropertyPeriodSummaryRawData(validNino, taxYear, validBusinessId, Json.parse("""{}"""))) shouldBe List(
           RuleIncorrectOrEmptyBodyError)
       }
 
       "neither fhl nor non-fhl property data is provided" in {
+        val validator = setUpValidator()
         validator.validate(
           CreateUkPropertyPeriodSummaryRawData(
             validNino,
@@ -248,6 +262,7 @@ class CreateUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with JsonError
 
         def testEmpty(path: String): Unit =
           s"for $path" in {
+            val validator = setUpValidator()
             validator.validate(
               CreateUkPropertyPeriodSummaryRawData(
                 validNino,
@@ -267,6 +282,7 @@ class CreateUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with JsonError
                      |    }
                      |}""".stripMargin)
 
+        val validator = setUpValidator()
         validator.validate(
           CreateUkPropertyPeriodSummaryRawData(
             validNino,
@@ -277,6 +293,7 @@ class CreateUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with JsonError
       }
 
       "fromDate is missing" in {
+        val validator = setUpValidator()
         validator.validate(
           CreateUkPropertyPeriodSummaryRawData(
             validNino,
@@ -287,6 +304,7 @@ class CreateUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with JsonError
       }
 
       "toDate is missing" in {
+        val validator = setUpValidator()
         validator.validate(
           CreateUkPropertyPeriodSummaryRawData(
             validNino,
@@ -299,6 +317,7 @@ class CreateUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with JsonError
 
     "return Date Errors" when {
       "the fromDate format is invalid" in {
+        val validator = setUpValidator()
         validator.validate(
           CreateUkPropertyPeriodSummaryRawData(
             validNino,
@@ -309,6 +328,7 @@ class CreateUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with JsonError
       }
 
       "the toDate format is invalid" in {
+        val validator = setUpValidator()
         validator.validate(
           CreateUkPropertyPeriodSummaryRawData(
             validNino,
@@ -319,6 +339,7 @@ class CreateUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with JsonError
       }
 
       "toDate is before fromDate" in {
+        val validator = setUpValidator()
         validator.validate(
           CreateUkPropertyPeriodSummaryRawData(
             validNino,
@@ -362,6 +383,7 @@ class CreateUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with JsonError
         ).foreach(testValueFormatError)
 
         def testValueFormatError(path: String): Unit = s"for $path" in {
+          val validator = setUpValidator()
           validator.validate(
             CreateUkPropertyPeriodSummaryRawData(
               validNino,
@@ -379,6 +401,7 @@ class CreateUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with JsonError
         ).foreach(testValueFormatError)
 
         def testValueFormatError(path: String): Unit = s"for $path" in {
+          val validator = setUpValidator()
           validator.validate(
             CreateUkPropertyPeriodSummaryRawData(
               validNino,
@@ -399,6 +422,7 @@ class CreateUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with JsonError
           .update(path1, JsNumber(123.456))
           .update(path2, JsNumber(123.456))
 
+        val validator = setUpValidator()
         validator.validate(
           CreateUkPropertyPeriodSummaryRawData(
             validNino,
@@ -411,6 +435,7 @@ class CreateUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with JsonError
 
     "return RuleBothExpensesSuppliedError" when {
       "consolidated and separate expenses provided for fhl" in {
+        val validator = setUpValidator()
         validator.validate(
           CreateUkPropertyPeriodSummaryRawData(
             validNino,
@@ -421,6 +446,7 @@ class CreateUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with JsonError
       }
 
       "consolidated and separate expenses provided for non-fhl" in {
+        val validator = setUpValidator()
         validator.validate(
           CreateUkPropertyPeriodSummaryRawData(
             validNino,
@@ -433,6 +459,7 @@ class CreateUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with JsonError
 
     "return multiple errors" when {
       "request supplied has multiple errors" in {
+        val validator = setUpValidator()
         validator.validate(CreateUkPropertyPeriodSummaryRawData("A12344A", taxYear, "20178", requestBodyJson)) shouldBe
           List(NinoFormatError, BusinessIdFormatError)
       }

@@ -59,7 +59,7 @@ class AmendHistoricFhlUkPropertyPeriodSummaryController @Inject() (val authServi
       val rawData = AmendHistoricFhlUkPiePeriodSummaryRawData(nino, periodId, request.body)
 
       val requestHandler =
-        RequestHandler
+        RequestHandlerOld
           .withParser(parser)
           .withService(service.amend)
           .withAuditing(auditHandler(nino, periodId, ctx.correlationId, request))
@@ -68,8 +68,8 @@ class AmendHistoricFhlUkPropertyPeriodSummaryController @Inject() (val authServi
       requestHandler.handleRequest(rawData)
     }
 
-  private def auditHandler(nino: String, periodId: String, correlationId: String, request: UserRequest[JsValue]): AuditHandler = {
-    new AuditHandler() {
+  private def auditHandler(nino: String, periodId: String, correlationId: String, request: UserRequest[JsValue]): AuditHandlerOld = {
+    new AuditHandlerOld() {
       override def performAudit(userDetails: UserDetails, httpStatus: Int, response: Either[ErrorWrapper, Option[JsValue]], versionNumber: String)(
           implicit
           ctx: RequestContext,

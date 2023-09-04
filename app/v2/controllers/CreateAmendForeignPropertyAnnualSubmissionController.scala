@@ -18,7 +18,7 @@ package v2.controllers
 
 import api.controllers._
 import api.hateoas.HateoasFactory
-import api.models.audit.{AuditEvent, AuditResponse, GenericAuditDetail}
+import api.models.audit.{AuditEvent, AuditResponse, GenericAuditDetailOld}
 import api.models.auth.UserDetails
 import api.models.errors._
 import api.services.{AuditService, EnrolmentsAuthService, MtdIdLookupService}
@@ -58,7 +58,7 @@ class CreateAmendForeignPropertyAnnualSubmissionController @Inject() (val authSe
 
       val rawData = CreateAmendForeignPropertyAnnualSubmissionRawData(nino, businessId, taxYear, request.body)
 
-      val requestHandler = RequestHandler
+      val requestHandler = RequestHandlerOld
         .withParser(parser)
         .withService(service.createAmendForeignPropertyAnnualSubmission)
         .withAuditing(auditHandler(rawData, ctx.correlationId, request))
@@ -68,17 +68,17 @@ class CreateAmendForeignPropertyAnnualSubmissionController @Inject() (val authSe
     }
 
   private def auditHandler(rawData: CreateAmendForeignPropertyAnnualSubmissionRawData, correlationId: String, request: UserRequest[JsValue]) = {
-    new AuditHandler() {
+    new AuditHandlerOld() {
       override def performAudit(userDetails: UserDetails, httpStatus: Int, response: Either[ErrorWrapper, Option[JsValue]], versionNumber: String)(
           implicit
           ctx: RequestContext,
           ec: ExecutionContext): Unit = {
         response match {
           case Left(err: ErrorWrapper) =>
-            auditSubmission(GenericAuditDetail(request.userDetails, rawData, correlationId, AuditResponse(httpStatus, Left(err.auditErrors))))
+            auditSubmission(GenericAuditDetailOld(request.userDetails, rawData, correlationId, AuditResponse(httpStatus, Left(err.auditErrors))))
           case Right(_) =>
             auditSubmission(
-              GenericAuditDetail(request.userDetails, rawData, correlationId, AuditResponse(OK, Right(None)))
+              GenericAuditDetailOld(request.userDetails, rawData, correlationId, AuditResponse(OK, Right(None)))
             )
         }
       }
@@ -86,7 +86,7 @@ class CreateAmendForeignPropertyAnnualSubmissionController @Inject() (val authSe
 
   }
 
-  private def auditSubmission(details: GenericAuditDetail)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[AuditResult] = {
+  private def auditSubmission(details: GenericAuditDetailOld)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[AuditResult] = {
     val event = AuditEvent("CreateAmendForeignPropertyAnnualSubmission", "create-amend-foreign-property-annual-submission", details)
     auditService.auditEvent(event)
   }

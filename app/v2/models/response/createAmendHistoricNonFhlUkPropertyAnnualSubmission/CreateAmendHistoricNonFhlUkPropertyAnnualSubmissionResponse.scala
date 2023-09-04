@@ -16,12 +16,10 @@
 
 package v2.models.response.createAmendHistoricNonFhlUkPropertyAnnualSubmission
 
-import api.hateoas.HateoasLinksFactory
-import api.models.hateoas.{HateoasData, Link}
+import api.hateoas.{HateoasData, HateoasLinksFactory, Link}
 import config.AppConfig
 import play.api.libs.json.{Json, OWrites, Reads}
-import v1.hateoas.HateoasLinks
-import v2.models.response.listPropertyPeriodSummaries.ListPropertyPeriodSummariesResponse._
+import v2.hateoas.HateoasLinks
 
 case class CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionResponse(transactionReference: Option[String])
 

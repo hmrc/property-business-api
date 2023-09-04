@@ -51,7 +51,7 @@ class RetrieveHistoricFhlUkPropertyAnnualSubmissionController @Inject() (val aut
       val rawData = RetrieveHistoricFhlUkPropertyAnnualSubmissionRawData(nino, taxYear)
 
       val requestHandler =
-        RequestHandler
+        RequestHandlerOld
           .withParser(parser)
           .withService(service.retrieve)
           .withHateoasResult(hateoasFactory)(RetrieveHistoricFhlUkPropertyAnnualSubmissionHateoasData(nino, taxYear))

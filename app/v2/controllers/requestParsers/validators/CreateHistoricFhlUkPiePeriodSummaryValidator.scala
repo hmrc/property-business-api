@@ -22,13 +22,14 @@ import api.controllers.requestParsers.validators.validations.NumberValidation.va
 import api.controllers.requestParsers.validators.validations.{DateValidation, NinoValidation, NoValidationErrors, ToDateBeforeFromDateValidation}
 import api.models.errors.MtdError
 import com.google.inject.Inject
+import config.AppConfig
 import v2.controllers.requestParsers.validators.validations._
 import v2.models.request.createHistoricFhlUkPiePeriodSummary.{CreateHistoricFhlUkPiePeriodSummaryRawData, CreateHistoricFhlUkPiePeriodSummaryRequestBody}
 
 import javax.inject.Singleton
 
 @Singleton
-class CreateHistoricFhlUkPiePeriodSummaryValidator @Inject() extends Validator[CreateHistoricFhlUkPiePeriodSummaryRawData] {
+class CreateHistoricFhlUkPiePeriodSummaryValidator @Inject() (appConfig: AppConfig) extends Validator[CreateHistoricFhlUkPiePeriodSummaryRawData] {
 
   override def validate(data: CreateHistoricFhlUkPiePeriodSummaryRawData): List[MtdError] = {
     (for {
@@ -46,8 +47,8 @@ class CreateHistoricFhlUkPiePeriodSummaryValidator @Inject() extends Validator[C
   private def validateBody(body: CreateHistoricFhlUkPiePeriodSummaryRequestBody): Either[List[MtdError], Unit] = {
 
     val formatDateErrors =
-      DateValidation.validate(body.fromDate, isFromDate = true) ++
-        DateValidation.validate(body.toDate, isFromDate = false)
+      DateValidation.validate(body.fromDate, isFromDate = true, appConfig.minimumFromDate, appConfig.maximumToDate) ++
+        DateValidation.validate(body.toDate, isFromDate = false, appConfig.minimumFromDate, appConfig.maximumToDate)
 
     def validateToDateIsAfterFromDate: List[MtdError] =
       if (formatDateErrors.isEmpty)

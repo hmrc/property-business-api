@@ -17,14 +17,14 @@
 package v2.services
 
 import api.controllers.EndpointLogContext
-import api.models.domain.{Nino, TaxYear, Timestamp}
+import api.models.domain.{BusinessId, Nino, TaxYear, Timestamp}
 import api.models.errors._
 import api.models.outcomes.ResponseWrapper
 import support.UnitSpec
 import uk.gov.hmrc.http.HeaderCarrier
 import v2.connectors.RetrieveUkPropertyAnnualSubmissionConnector._
 import v2.mocks.connectors.MockRetrieveUkPropertyAnnualSubmissionConnector
-import v2.models.request.retrieveUkPropertyAnnualSubmission.RetrieveUkPropertyAnnualSubmissionRequest
+import v2.models.request.retrieveUkPropertyAnnualSubmission.RetrieveUkPropertyAnnualSubmissionRequestData
 import v2.models.response.retrieveUkPropertyAnnualSubmission.RetrieveUkPropertyAnnualSubmissionResponse
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -32,9 +32,9 @@ import scala.concurrent.Future
 
 class RetrieveUkPropertyAnnualSubmissionServiceSpec extends UnitSpec {
 
-  private val nino: String       = "AA123456A"
-  private val businessId: String = "XAIS12345678910"
-  private val taxYear: TaxYear   = TaxYear.fromMtd("2020-21")
+  private val nino: Nino             = Nino("AA123456A")
+  private val businessId: BusinessId = BusinessId("XAIS12345678910")
+  private val taxYear: TaxYear       = TaxYear.fromMtd("2020-21")
 
   implicit private val correlationId: String = "X-123"
 
@@ -102,7 +102,9 @@ class RetrieveUkPropertyAnnualSubmissionServiceSpec extends UnitSpec {
     protected val response: RetrieveUkPropertyAnnualSubmissionResponse =
       RetrieveUkPropertyAnnualSubmissionResponse(Timestamp("2022-06-17T10:53:38Z"), None, None)
 
-    protected val request: RetrieveUkPropertyAnnualSubmissionRequest = RetrieveUkPropertyAnnualSubmissionRequest(Nino(nino), businessId, taxYear)
+    protected val request: RetrieveUkPropertyAnnualSubmissionRequestData =
+      RetrieveUkPropertyAnnualSubmissionRequestData(nino, businessId, taxYear)
+
   }
 
 }

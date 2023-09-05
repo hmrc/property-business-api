@@ -18,12 +18,12 @@ package v2.controllers
 
 import api.controllers.{ControllerBaseSpec, ControllerTestRunner}
 import api.hateoas.{HateoasWrapper, MockHateoasFactory}
-import api.models.domain.{Nino, TaxYear, Timestamp}
+import api.models.domain.{BusinessId, Nino, TaxYear, Timestamp}
 import api.models.errors._
 import api.models.outcomes.ResponseWrapper
 import play.api.libs.json.{JsObject, JsValue, Json}
 import play.api.mvc.Result
-import v2.mocks.requestParsers.MockRetrieveUkPropertyAnnualSubmissionRequestParser
+import v2.controllers.validators.MockRetrieveUkPropertyAnnualSubmissionValidatorFactory
 import v2.mocks.services.MockRetrieveUkPropertyAnnualSubmissionService
 import v2.models.request.retrieveUkPropertyAnnualSubmission._
 import v2.models.response.retrieveUkPropertyAnnualSubmission._
@@ -37,49 +37,43 @@ class RetrieveUkPropertyAnnualSubmissionControllerSpec
     extends ControllerBaseSpec
     with ControllerTestRunner
     with MockRetrieveUkPropertyAnnualSubmissionService
-    with MockRetrieveUkPropertyAnnualSubmissionRequestParser
+    with MockRetrieveUkPropertyAnnualSubmissionValidatorFactory
     with MockHateoasFactory {
 
   private val businessId = "XAIS12345678910"
   private val taxYear    = "2020-21"
 
   "RetrieveUkPropertyAnnualSubmissionController" should {
-    "return Ok" when {
+    "return a successful response with status 200 (OK)" when {
       "the request received is valid" in new Test {
-        MockRetrieveUkPropertyRequestParser
-          .parse(rawData)
-          .returns(Right(requestData))
+        willUseValidator(returningSuccess(requestData))
 
         MockRetrieveUkPropertyService
           .retrieve(requestData)
           .returns(Future.successful(Right(ResponseWrapper(correlationId, responseData))))
 
         MockHateoasFactory
-          .wrap(responseData, hateoasData)
+          .wrap(responseData, RetrieveUkPropertyAnnualSubmissionHateoasData(nino, businessId, taxYear))
           .returns(HateoasWrapper(responseData, testHateoasLinks))
 
-        runOkTest(expectedStatus = OK, maybeExpectedResponseBody = Some(responseBodyJsonWithHateoas))
+        runOkTest(expectedStatus = OK, maybeExpectedResponseBody = Some(Json.toJson(HateoasWrapper(responseData, testHateoasLinks))))
       }
     }
+
     "return an error as per spec" when {
       "the parser validation fails" in new Test {
-        MockRetrieveUkPropertyRequestParser
-          .parse(rawData)
-          .returns(Left(ErrorWrapper(correlationId, NinoFormatError, None)))
-
-        runErrorTest(NinoFormatError)
+        willUseValidator(returning(NinoFormatError))
+        runErrorTest(expectedError = NinoFormatError)
       }
 
       "the service returns an error" in new Test {
-        MockRetrieveUkPropertyRequestParser
-          .parse(rawData)
-          .returns(Right(requestData))
+        willUseValidator(returningSuccess(requestData))
 
         MockRetrieveUkPropertyService
           .retrieve(requestData)
           .returns(Future.successful(Left(ErrorWrapper(correlationId, RuleTaxYearNotSupportedError))))
 
-        runErrorTest(RuleTaxYearNotSupportedError)
+        runErrorTest(expectedError = RuleTaxYearNotSupportedError)
       }
     }
   }
@@ -89,7 +83,7 @@ class RetrieveUkPropertyAnnualSubmissionControllerSpec
     private val controller = new RetrieveUkPropertyAnnualSubmissionController(
       authService = mockEnrolmentsAuthService,
       lookupService = mockMtdIdLookupService,
-      parser = mockRetrieveUkPropertyAnnualSubmissionRequestParser,
+      validatorFactory = mockRetrieveUkPropertyAnnualSubmissionValidatorFactory,
       service = mockRetrieveUkPropertyAnnualSubmissionService,
       hateoasFactory = mockHateoasFactory,
       cc = cc,
@@ -98,10 +92,8 @@ class RetrieveUkPropertyAnnualSubmissionControllerSpec
 
     protected def callController(): Future[Result] = controller.handleRequest(nino, businessId, taxYear)(fakeGetRequest)
 
-    protected val rawData: RetrieveUkPropertyAnnualSubmissionRawData = RetrieveUkPropertyAnnualSubmissionRawData(nino, businessId, taxYear)
-
-    protected val requestData: RetrieveUkPropertyAnnualSubmissionRequest =
-      RetrieveUkPropertyAnnualSubmissionRequest(Nino(nino), businessId, TaxYear.fromMtd(taxYear))
+    protected val requestData: RetrieveUkPropertyAnnualSubmissionRequestData =
+      RetrieveUkPropertyAnnualSubmissionRequestData(Nino(nino), BusinessId(businessId), TaxYear.fromMtd(taxYear))
 
     private val ukFhlProperty = UkFhlProperty(
       adjustments = Some(

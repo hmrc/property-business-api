@@ -17,14 +17,14 @@
 package v2.services
 
 import api.controllers.EndpointLogContext
-import api.models.domain.{Nino, TaxYear, Timestamp}
+import api.models.domain.{BusinessId, Nino, TaxYear, Timestamp}
 import api.models.errors._
 import api.models.outcomes.ResponseWrapper
 import support.UnitSpec
 import uk.gov.hmrc.http.HeaderCarrier
 import v2.connectors.RetrieveForeignPropertyAnnualSubmissionConnector.{ForeignResult, NonForeignResult}
 import v2.mocks.connectors.MockRetrieveForeignPropertyAnnualSubmissionConnector
-import v2.models.request.retrieveForeignPropertyAnnualSubmission.RetrieveForeignPropertyAnnualSubmissionRequest
+import v2.models.request.retrieveForeignPropertyAnnualSubmission.RetrieveForeignPropertyAnnualSubmissionRequestData
 import v2.models.response.retrieveForeignPropertyAnnualSubmission.RetrieveForeignPropertyAnnualSubmissionResponse
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -32,9 +32,9 @@ import scala.concurrent.Future
 
 class RetrieveForeignPropertyAnnualSubmissionServiceSpec extends UnitSpec {
 
-  private val nino: String       = "AA123456A"
-  private val businessId: String = "XAIS12345678910"
-  private val taxYear: TaxYear   = TaxYear.fromMtd("2020-21")
+  private val nino       = Nino("AA123456A")
+  private val businessId = BusinessId("XAIS12345678910")
+  private val taxYear    = TaxYear.fromMtd("2020-21")
 
   implicit private val correlationId: String = "X-123"
 
@@ -100,8 +100,8 @@ class RetrieveForeignPropertyAnnualSubmissionServiceSpec extends UnitSpec {
       connector = mockRetrieveForeignPropertyConnector
     )
 
-    protected val requestData: RetrieveForeignPropertyAnnualSubmissionRequest =
-      RetrieveForeignPropertyAnnualSubmissionRequest(Nino(nino), businessId, taxYear)
+    protected val requestData: RetrieveForeignPropertyAnnualSubmissionRequestData =
+      RetrieveForeignPropertyAnnualSubmissionRequestData(nino, businessId, taxYear)
 
     protected val response: RetrieveForeignPropertyAnnualSubmissionResponse =
       RetrieveForeignPropertyAnnualSubmissionResponse(Timestamp("2020-07-07T10:59:47.544Z"), None, None)

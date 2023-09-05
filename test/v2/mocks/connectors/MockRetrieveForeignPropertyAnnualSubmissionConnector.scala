@@ -22,7 +22,7 @@ import org.scalamock.scalatest.MockFactory
 import uk.gov.hmrc.http.HeaderCarrier
 import v2.connectors.RetrieveForeignPropertyAnnualSubmissionConnector
 import v2.connectors.RetrieveForeignPropertyAnnualSubmissionConnector.Result
-import v2.models.request.retrieveForeignPropertyAnnualSubmission.RetrieveForeignPropertyAnnualSubmissionRequest
+import v2.models.request.retrieveForeignPropertyAnnualSubmission.RetrieveForeignPropertyAnnualSubmissionRequestData
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -32,10 +32,10 @@ trait MockRetrieveForeignPropertyAnnualSubmissionConnector extends MockFactory {
 
   object MockRetrieveForeignPropertyConnector {
 
-    def retrieveForeignProperty(requestData: RetrieveForeignPropertyAnnualSubmissionRequest): CallHandler[Future[DownstreamOutcome[Result]]] = {
+    def retrieveForeignProperty(requestData: RetrieveForeignPropertyAnnualSubmissionRequestData): CallHandler[Future[DownstreamOutcome[Result]]] = {
       (
         mockRetrieveForeignPropertyConnector
-          .retrieveForeignProperty(_: RetrieveForeignPropertyAnnualSubmissionRequest)(
+          .retrieveForeignProperty(_: RetrieveForeignPropertyAnnualSubmissionRequestData)(
             _: HeaderCarrier,
             _: ExecutionContext,
             _: String

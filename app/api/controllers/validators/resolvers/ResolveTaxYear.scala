@@ -88,7 +88,7 @@ object ResolveHistoricTaxYear extends ResolvingTaxYear {
             path: Option[String]): Validated[Seq[MtdError], TaxYear] =
     resolve(value, error, path)
       .andThen { taxYear =>
-        if (taxYear.year >= minimumTaxYear && taxYear.year <= maximumTaxYear)
+        if (taxYear.year > minimumTaxYear && taxYear.year - 1 <= maximumTaxYear)
           Valid(taxYear)
         else
           Invalid(List(RuleHistoricTaxYearNotSupportedError))

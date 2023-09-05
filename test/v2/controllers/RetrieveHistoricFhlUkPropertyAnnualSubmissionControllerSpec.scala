@@ -25,7 +25,7 @@ import api.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLooku
 import mocks.MockIdGenerator
 import play.api.libs.json.{JsObject, JsValue, Json}
 import play.api.mvc.Result
-import v2.mocks.requestParsers.MockRetrieveHistoricFhlUkPropertyAnnualSubmissionRequestParser
+import v2.controllers.validators.MockRetrieveHistoricFhlUkPropertyAnnualSubmissionValidatorFactory
 import v2.mocks.services.MockRetrieveHistoricFhlUkPropertyAnnualSubmissionService
 import v2.models.request.retrieveHistoricFhlUkPropertyAnnualSubmission._
 import v2.models.response.retrieveHistoricFhlUkPropertyAnnualSubmission._
@@ -39,7 +39,7 @@ class RetrieveHistoricFhlUkPropertyAnnualSubmissionControllerSpec
     with MockEnrolmentsAuthService
     with MockMtdIdLookupService
     with MockRetrieveHistoricFhlUkPropertyAnnualSubmissionService
-    with MockRetrieveHistoricFhlUkPropertyAnnualSubmissionRequestParser
+    with MockRetrieveHistoricFhlUkPropertyAnnualSubmissionValidatorFactory
     with MockHateoasFactory
     with MockAuditService
     with MockIdGenerator {
@@ -50,9 +50,7 @@ class RetrieveHistoricFhlUkPropertyAnnualSubmissionControllerSpec
   "RetrieveHistoricFhlUkPropertyAnnualSubmissionController" should {
     "return OK" when {
       "the request is valid" in new Test {
-        MockRetrieveHistoricFhlUkPropertyAnnualSubmissionRequestParser
-          .parse(rawData)
-          .returns(Right(requestData))
+        willUseValidator(returningSuccess(requestData))
 
         MockRetrieveHistoricFhlUkPropertyAnnualSubmissionService
           .retrieve(requestData)
@@ -68,17 +66,13 @@ class RetrieveHistoricFhlUkPropertyAnnualSubmissionControllerSpec
 
     "return the error as per spec" when {
       "the parser validation fails" in new Test {
-        MockRetrieveHistoricFhlUkPropertyAnnualSubmissionRequestParser
-          .parse(rawData)
-          .returns(Left(ErrorWrapper(correlationId, NinoFormatError, None)))
+        willUseValidator(returning(NinoFormatError))
 
         runErrorTest(NinoFormatError)
       }
 
       "the service returns an error" in new Test {
-        MockRetrieveHistoricFhlUkPropertyAnnualSubmissionRequestParser
-          .parse(rawData)
-          .returns(Right(requestData))
+        willUseValidator(returningSuccess(requestData))
 
         MockRetrieveHistoricFhlUkPropertyAnnualSubmissionService
           .retrieve(requestData)
@@ -94,7 +88,7 @@ class RetrieveHistoricFhlUkPropertyAnnualSubmissionControllerSpec
     private val controller = new RetrieveHistoricFhlUkPropertyAnnualSubmissionController(
       authService = mockEnrolmentsAuthService,
       lookupService = mockMtdIdLookupService,
-      parser = mockRetrieveHistoricFhlUkPropertyAnnualSubmissionRequestParser,
+      validatorFactory = mockRetrieveHistoricFhlUkPropertyAnnualSubmissionValidatorFactory,
       service = mockRetrieveHistoricFhlUkPropertyAnnualSubmissionService,
       hateoasFactory = mockHateoasFactory,
       cc = cc,
@@ -103,11 +97,8 @@ class RetrieveHistoricFhlUkPropertyAnnualSubmissionControllerSpec
 
     protected def callController(): Future[Result] = controller.handleRequest(nino, mtdTaxYear)(fakeGetRequest)
 
-    protected val rawData: RetrieveHistoricFhlUkPropertyAnnualSubmissionRawData =
-      RetrieveHistoricFhlUkPropertyAnnualSubmissionRawData(nino, mtdTaxYear)
-
-    protected val requestData: RetrieveHistoricFhlUkPropertyAnnualSubmissionRequest =
-      RetrieveHistoricFhlUkPropertyAnnualSubmissionRequest(Nino(nino), taxYear)
+    protected val requestData: RetrieveHistoricFhlUkPropertyAnnualSubmissionRequestData =
+      RetrieveHistoricFhlUkPropertyAnnualSubmissionRequestData(Nino(nino), taxYear)
 
     private val annualAdjustments: AnnualAdjustments = AnnualAdjustments(
       Some(BigDecimal("100.11")),

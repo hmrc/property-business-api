@@ -17,27 +17,26 @@
 package v2.controllers.validators
 
 import api.controllers.validators.Validator
-import api.controllers.validators.resolvers.{ResolveBusinessId, ResolveNino, ResolveTaxYear}
+import api.controllers.validators.resolvers.{ResolveHistoricTaxYear, ResolveNino}
 import api.models.errors.MtdError
 import cats.data.Validated
 import cats.implicits._
 import config.AppConfig
-import v2.models.request.retrieveForeignPropertyAnnualSubmission.RetrieveForeignPropertyAnnualSubmissionRequestData
+import v2.models.request.retrieveHistoricFhlUkPropertyAnnualSubmission.RetrieveHistoricFhlUkPropertyAnnualSubmissionRequestData
 
 import javax.inject.{Inject, Singleton}
 
 @Singleton
-class RetrieveForeignPropertyAnnualSubmissionValidatorFactory @Inject() (appConfig: AppConfig) {
+class RetrieveHistoricFhlUkPropertyAnnualSubmissionValidatorFactory @Inject() (appConfig: AppConfig) {
 
-  def validator(nino: String, businessId: String, taxYear: String): Validator[RetrieveForeignPropertyAnnualSubmissionRequestData] =
-    new Validator[RetrieveForeignPropertyAnnualSubmissionRequestData] {
+  def validator(nino: String, taxYear: String): Validator[RetrieveHistoricFhlUkPropertyAnnualSubmissionRequestData] =
+    new Validator[RetrieveHistoricFhlUkPropertyAnnualSubmissionRequestData] {
 
-      def validate: Validated[Seq[MtdError], RetrieveForeignPropertyAnnualSubmissionRequestData] =
+      def validate: Validated[Seq[MtdError], RetrieveHistoricFhlUkPropertyAnnualSubmissionRequestData] =
         (
           ResolveNino(nino),
-          ResolveBusinessId(businessId),
-          ResolveTaxYear(appConfig.minimumTaxV2Foreign + 1, taxYear, None, None)
-        ).mapN(RetrieveForeignPropertyAnnualSubmissionRequestData)
+          ResolveHistoricTaxYear(appConfig.minimumTaxHistoric, appConfig.maximumTaxHistoric, taxYear, None, None)
+        ).mapN(RetrieveHistoricFhlUkPropertyAnnualSubmissionRequestData)
 
     }
 

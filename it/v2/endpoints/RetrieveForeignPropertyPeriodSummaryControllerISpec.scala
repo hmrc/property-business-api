@@ -95,7 +95,7 @@ class RetrieveForeignPropertyPeriodSummaryControllerISpec extends IntegrationBas
         ("AA123456A", "XAIS12345678910", "2022-23", "4557ecb5-48cc-81f5-e6acd1099f3c", BAD_REQUEST, SubmissionIdFormatError),
         ("AA123456A", "XAIS12345678910", "20223", "4557ecb5-fd32-48cc-81f5-e6acd1099f3c", BAD_REQUEST, TaxYearFormatError),
         ("AA123456A", "XAIS12345678910", "2021-23", "4557ecb5-fd32-48cc-81f5-e6acd1099f3c", BAD_REQUEST, RuleTaxYearRangeInvalidError),
-        ("AA123456A", "XAIS12345678910", "2019-20", "4557ecb5-fd32-48cc-81f5-e6acd1099f3c", BAD_REQUEST, RuleTaxYearNotSupportedError)
+        ("AA123456A", "XAIS12345678910", "2020-21", "4557ecb5-fd32-48cc-81f5-e6acd1099f3c", BAD_REQUEST, RuleTaxYearNotSupportedError)
       )
       input.foreach(args => (validationErrorTest _).tupled(args))
     }

@@ -23,7 +23,7 @@ import api.models.outcomes.ResponseWrapper
 import config.AppConfig
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
 import v2.connectors.RetrieveForeignPropertyPeriodSummaryConnector.{ForeignResult, NonForeignResult, Result}
-import v2.models.request.retrieveForeignPropertyPeriodSummary.RetrieveForeignPropertyPeriodSummaryRequest
+import v2.models.request.retrieveForeignPropertyPeriodSummary.RetrieveForeignPropertyPeriodSummaryRequestData
 import v2.models.response.retrieveForeignPropertyPeriodSummary.RetrieveForeignPropertyPeriodSummaryResponse
 
 import javax.inject.{Inject, Singleton}
@@ -41,7 +41,7 @@ object RetrieveForeignPropertyPeriodSummaryConnector {
 @Singleton
 class RetrieveForeignPropertyPeriodSummaryConnector @Inject() (val http: HttpClient, val appConfig: AppConfig) extends BaseDownstreamConnector {
 
-  def retrieveForeignProperty(request: RetrieveForeignPropertyPeriodSummaryRequest)(implicit
+  def retrieveForeignProperty(request: RetrieveForeignPropertyPeriodSummaryRequestData)(implicit
       hc: HeaderCarrier,
       ec: ExecutionContext,
       correlationId: String): Future[DownstreamOutcome[Result]] = {
@@ -61,8 +61,8 @@ class RetrieveForeignPropertyPeriodSummaryConnector @Inject() (val http: HttpCli
           List(
             "taxableEntityId" -> nino.nino,
             "taxYear"         -> taxYear.asMtd, // Note that MTD tax year format is used
-            "incomeSourceId"  -> businessId,
-            "submissionId"    -> submissionId
+            "incomeSourceId"  -> businessId.businessId,
+            "submissionId"    -> submissionId.submissionId
           )
         )
       }

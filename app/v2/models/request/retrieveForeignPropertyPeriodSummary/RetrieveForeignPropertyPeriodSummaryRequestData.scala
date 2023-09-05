@@ -16,6 +16,6 @@
 
 package v2.models.request.retrieveForeignPropertyPeriodSummary
 
-import api.models.domain.{Nino, TaxYear}
+import api.models.domain.{BusinessId, Nino, SubmissionId, TaxYear}
 
-case class RetrieveForeignPropertyPeriodSummaryRequest(nino: Nino, businessId: String, taxYear: TaxYear, submissionId: String)
+case class RetrieveForeignPropertyPeriodSummaryRequestData(nino: Nino, businessId: BusinessId, taxYear: TaxYear, submissionId: SubmissionId)

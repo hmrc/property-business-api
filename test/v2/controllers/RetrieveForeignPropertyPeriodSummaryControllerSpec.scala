@@ -19,13 +19,14 @@ package v2.controllers
 import api.controllers.{ControllerBaseSpec, ControllerTestRunner}
 import api.hateoas.Method.GET
 import api.hateoas.{HateoasWrapper, Link, MockHateoasFactory}
-import api.models.domain.{Nino, TaxYear, Timestamp}
+import api.models.domain.{BusinessId, Nino, SubmissionId, TaxYear, Timestamp}
+import api.models.errors.{ErrorWrapper, NinoFormatError, RuleTaxYearNotSupportedError}
 import api.models.outcomes.ResponseWrapper
 import api.services.{MockEnrolmentsAuthService, MockMtdIdLookupService}
 import mocks.MockIdGenerator
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.Result
-import v2.mocks.requestParsers.MockRetrieveForeignPropertyPeriodSummaryRequestParser
+import v2.controllers.validators.MockRetrieveForeignPropertyPeriodSummaryValidatorFactory
 import v2.mocks.services.MockRetrieveForeignPropertyPeriodSummaryService
 import v2.models.request.retrieveForeignPropertyPeriodSummary._
 import v2.models.response.retrieveForeignPropertyPeriodSummary._
@@ -41,7 +42,7 @@ class RetrieveForeignPropertyPeriodSummaryControllerSpec
     with MockEnrolmentsAuthService
     with MockMtdIdLookupService
     with MockRetrieveForeignPropertyPeriodSummaryService
-    with MockRetrieveForeignPropertyPeriodSummaryRequestParser
+    with MockRetrieveForeignPropertyPeriodSummaryValidatorFactory
     with MockHateoasFactory
     with MockIdGenerator {
 
@@ -52,10 +53,7 @@ class RetrieveForeignPropertyPeriodSummaryControllerSpec
   "RetrieveForeignPropertyPeriodSummaryController" should {
     "return a successful response with status 200 (OK)" when {
       "the request received is valid" in new Test {
-
-        MockRetrieveForeignPropertyRequestParser
-          .parse(rawData)
-          .returns(Right(requestData))
+        willUseValidator(returningSuccess(requestData))
 
         MockRetrieveForeignPropertyService
           .retrieve(requestData)
@@ -71,6 +69,23 @@ class RetrieveForeignPropertyPeriodSummaryControllerSpec
         runOkTest(expectedStatus = OK, maybeExpectedResponseBody = Some(expectedResponseBody))
       }
     }
+
+    "return the error as per spec" when {
+      "the parser validation fails" in new Test {
+        willUseValidator(returning(NinoFormatError))
+        runErrorTest(expectedError = NinoFormatError)
+      }
+
+      "the service returns an error" in new Test {
+        willUseValidator(returningSuccess(requestData))
+
+        MockRetrieveForeignPropertyService
+          .retrieve(requestData)
+          .returns(Future.successful(Left(ErrorWrapper(correlationId, RuleTaxYearNotSupportedError))))
+
+        runErrorTest(expectedError = RuleTaxYearNotSupportedError)
+      }
+    }
   }
 
   trait Test extends ControllerTest {
@@ -78,7 +93,7 @@ class RetrieveForeignPropertyPeriodSummaryControllerSpec
     private val controller = new RetrieveForeignPropertyPeriodSummaryController(
       authService = mockEnrolmentsAuthService,
       lookupService = mockMtdIdLookupService,
-      parser = mockRetrieveForeignPropertyRequestParser,
+      validatorFactory = mockRetrieveForeignPropertyPeriodSummaryValidatorFactory,
       service = mockRetrieveForeignPropertyService,
       hateoasFactory = mockHateoasFactory,
       cc = cc,
@@ -88,11 +103,8 @@ class RetrieveForeignPropertyPeriodSummaryControllerSpec
     protected def callController(): Future[Result] =
       controller.handleRequest(nino = nino, businessId = businessId, taxYear = taxYear, submissionId = submissionId)(fakeGetRequest)
 
-    protected val rawData: RetrieveForeignPropertyPeriodSummaryRawData =
-      RetrieveForeignPropertyPeriodSummaryRawData(nino = nino, businessId = businessId, taxYear = taxYear, submissionId = submissionId)
-
-    protected val requestData: RetrieveForeignPropertyPeriodSummaryRequest =
-      RetrieveForeignPropertyPeriodSummaryRequest(Nino(nino), businessId, TaxYear.fromMtd(taxYear), submissionId)
+    protected val requestData: RetrieveForeignPropertyPeriodSummaryRequestData =
+      RetrieveForeignPropertyPeriodSummaryRequestData(Nino(nino), BusinessId(businessId), TaxYear.fromMtd(taxYear), SubmissionId(submissionId))
 
     protected val testHateoasLink: Link =
       Link(href = s"/individuals/business/property/$nino/$businessId/period/$taxYear/$submissionId", method = GET, rel = "self")

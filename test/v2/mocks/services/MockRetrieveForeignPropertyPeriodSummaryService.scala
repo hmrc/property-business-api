@@ -20,7 +20,7 @@ import api.controllers.RequestContext
 import api.services.ServiceOutcome
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
-import v2.models.request.retrieveForeignPropertyPeriodSummary.RetrieveForeignPropertyPeriodSummaryRequest
+import v2.models.request.retrieveForeignPropertyPeriodSummary.RetrieveForeignPropertyPeriodSummaryRequestData
 import v2.models.response.retrieveForeignPropertyPeriodSummary.RetrieveForeignPropertyPeriodSummaryResponse
 import v2.services.RetrieveForeignPropertyPeriodSummaryService
 
@@ -32,11 +32,11 @@ trait MockRetrieveForeignPropertyPeriodSummaryService extends MockFactory {
 
   object MockRetrieveForeignPropertyService {
 
-    def retrieve(requestData: RetrieveForeignPropertyPeriodSummaryRequest)
+    def retrieve(requestData: RetrieveForeignPropertyPeriodSummaryRequestData)
         : CallHandler[Future[ServiceOutcome[RetrieveForeignPropertyPeriodSummaryResponse]]] = {
       (
         mockRetrieveForeignPropertyService
-          .retrieveForeignProperty(_: RetrieveForeignPropertyPeriodSummaryRequest)(
+          .retrieveForeignProperty(_: RetrieveForeignPropertyPeriodSummaryRequestData)(
             _: RequestContext,
             _: ExecutionContext
           )

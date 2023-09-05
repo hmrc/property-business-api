@@ -102,8 +102,6 @@ class DeletePropertyAnnualSubmissionControllerSpec
         )
       )
 
-    protected val rawData: DeletePropertyAnnualSubmissionRawData = DeletePropertyAnnualSubmissionRawData(nino, businessId.businessId, taxYear.asMtd)
-
     protected val requestData: DeletePropertyAnnualSubmissionRequestData =
       DeletePropertyAnnualSubmissionRequestData(Nino(nino), businessId, taxYear)
 

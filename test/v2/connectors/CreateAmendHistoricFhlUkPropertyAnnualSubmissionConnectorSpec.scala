@@ -55,8 +55,8 @@ class CreateAmendHistoricFhlUkPropertyAnnualSubmissionConnectorSpec extends Conn
     protected val requestBody: CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequestBody =
       CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequestBody(None, None)
 
-    protected val request: CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequest =
-      CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequest(Nino(nino), TaxYear.fromMtd(mtdTaxYear), requestBody)
+    protected val request: CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequestData =
+      CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequestData(Nino(nino), TaxYear.fromMtd(mtdTaxYear), requestBody)
 
   }
 

@@ -123,7 +123,7 @@ class CreateAmendHistoricFhlUkPropertyAnnualSubmissionValidatorFactorySpec exten
            | }
            |""".stripMargin)
 
-  private val requestBodyWithEmptyRentARoom: JsValue = Json.parse("""
+  private val requestBodyWithEmptyRentARoom = Json.parse("""
           | {
           |   "annualAdjustments": {
           |      "lossBroughtForward": 200.00,

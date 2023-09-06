@@ -29,8 +29,8 @@ class DeletePropertyAnnualSubmissionConnectorSpec extends ConnectorSpec {
   private val nino       = Nino("AA123456A")
   private val businessId = BusinessId("XAIS12345678910")
 
-  private val preTysTaxYear: TaxYear = TaxYear.fromMtd("2021-22")
-  private val tysTaxYear: TaxYear    = TaxYear.fromMtd("2023-24")
+  private val preTysTaxYear = TaxYear.fromMtd("2021-22")
+  private val tysTaxYear    = TaxYear.fromMtd("2023-24")
 
   "connector" when {
     "the downstream response is a success" must {

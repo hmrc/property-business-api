@@ -76,7 +76,7 @@ class RetrieveForeignPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
     "response has foreign non-FHL details" must {
 
       val downstreamResponse: RetrieveForeignPropertyPeriodSummaryResponse =
-        responseWith(foreignFhlEea = None, foreignNonFhlProperty = Some(Seq(foreignNonFhlProperty)))
+        responseWith(foreignFhlEea = None, foreignNonFhlProperty = Some(List(foreignNonFhlProperty)))
       val outcome = Right(ResponseWrapper(correlationId, downstreamResponse))
 
       "return a foreign result" in new IfsTest with Test {
@@ -103,7 +103,7 @@ class RetrieveForeignPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
     "response has foreign FHL and non-FHL details" must {
 
       val downstreamResponse: RetrieveForeignPropertyPeriodSummaryResponse =
-        responseWith(foreignFhlEea = Some(foreignFhlEea), foreignNonFhlProperty = Some(Seq(foreignNonFhlProperty)))
+        responseWith(foreignFhlEea = Some(foreignFhlEea), foreignNonFhlProperty = Some(List(foreignNonFhlProperty)))
       val outcome = Right(ResponseWrapper(correlationId, downstreamResponse))
 
       "return a foreign result" in new IfsTest with Test {

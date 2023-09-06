@@ -61,7 +61,7 @@ class RetrieveForeignPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec
     "response has foreign non-fhl details" must {
       "return a foreign result" in new StandardTest {
         val response: RetrieveForeignPropertyAnnualSubmissionResponse =
-          responseWith(foreignFhlEea = None, foreignNonFhlProperty = Some(Seq(foreignNonFhlProperty)))
+          responseWith(foreignFhlEea = None, foreignNonFhlProperty = Some(List(foreignNonFhlProperty)))
         val outcome: Right[Nothing, ResponseWrapper[RetrieveForeignPropertyAnnualSubmissionResponse]] =
           Right(ResponseWrapper(correlationId, response))
 
@@ -75,7 +75,7 @@ class RetrieveForeignPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec
     "response has foreign fhl and non-fhl details" must {
       "return a foreign result" in new StandardTest {
         val response: RetrieveForeignPropertyAnnualSubmissionResponse =
-          responseWith(foreignFhlEea = Some(foreignFhlEea), foreignNonFhlProperty = Some(Seq(foreignNonFhlProperty)))
+          responseWith(foreignFhlEea = Some(foreignFhlEea), foreignNonFhlProperty = Some(List(foreignNonFhlProperty)))
         val outcome: Right[Nothing, ResponseWrapper[RetrieveForeignPropertyAnnualSubmissionResponse]] =
           Right(ResponseWrapper(correlationId, response))
 
@@ -122,7 +122,7 @@ class RetrieveForeignPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec
 
         willGet(
           url = s"$baseUrl/income-tax/business/property/annual",
-          parameters = Seq("taxableEntityId" -> nino.nino, "incomeSourceId" -> businessId.businessId, "taxYear" -> "2019-20")
+          parameters = List("taxableEntityId" -> nino.nino, "incomeSourceId" -> businessId.businessId, "taxYear" -> "2019-20")
         ).returns(Future.successful(outcome))
 
         val result: DownstreamOutcome[RetrieveForeignPropertyAnnualSubmissionConnector.Result] = await(connector.retrieveForeignProperty(request))

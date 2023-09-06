@@ -27,7 +27,7 @@ class RetrieveUkPropertyAnnualSubmissionValidatorFactorySpec extends UnitSpec wi
   implicit private val correlationId: String = "X-123"
   private val validNino                      = "AA123456B"
   private val validBusinessId                = "XAIS12345678901"
-  private val validTaxYear                   = "2021-22"
+  private val validTaxYear                   = "2022-23"
 
   private val parsedNino       = Nino(validNino)
   private val parsedBusinessId = BusinessId(validBusinessId)
@@ -41,7 +41,7 @@ class RetrieveUkPropertyAnnualSubmissionValidatorFactorySpec extends UnitSpec wi
   class SetUp {
 
     MockAppConfig.minimumTaxV2Uk
-      .returns(2021)
+      .returns(2022)
       .anyNumberOfTimes()
 
   }

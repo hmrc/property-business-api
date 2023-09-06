@@ -26,10 +26,10 @@ import scala.concurrent.Future
 
 class ListPropertyPeriodSummariesConnectorSpec extends ConnectorSpec {
 
-  private val nino                  = Nino("AA123456A")
-  private val businessId            = BusinessId("XAIS12345678910")
-  private val preTysTaxYear: String = "2022-23"
-  private val tysTaxYear: String    = "2023-24"
+  private val nino          = Nino("AA123456A")
+  private val businessId    = BusinessId("XAIS12345678910")
+  private val preTysTaxYear = "2022-23"
+  private val tysTaxYear    = "2023-24"
 
   "connector" must {
     "send a request and return a body for a non-tys tax year" in new IfsTest with Test {

@@ -32,10 +32,10 @@ import scala.concurrent.Future
 
 class RetrieveUkPropertyPeriodSummaryServiceSpec extends UnitSpec with ResponseModelsFixture {
 
-  private val nino             = Nino("AA123456A")
-  private val businessId       = BusinessId("XAIS12345678910")
-  private val taxYear: TaxYear = TaxYear.fromMtd("2020-21")
-  private val submissionId     = SubmissionId("4557ecb5-fd32-48cc-81f5-e6acd1099f3c")
+  private val nino         = Nino("AA123456A")
+  private val businessId   = BusinessId("XAIS12345678910")
+  private val taxYear      = TaxYear.fromMtd("2020-21")
+  private val submissionId = SubmissionId("4557ecb5-fd32-48cc-81f5-e6acd1099f3c")
 
   implicit private val correlationId: String = "X-123"
 

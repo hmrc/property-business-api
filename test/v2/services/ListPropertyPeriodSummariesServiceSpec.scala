@@ -31,9 +31,9 @@ import scala.concurrent.Future
 
 class ListPropertyPeriodSummariesServiceSpec extends UnitSpec {
 
-  private val nino             = Nino("AA123456A")
-  private val businessId       = BusinessId("XAIS12345678910")
-  private val taxYear: TaxYear = TaxYear.fromMtd("2020-21")
+  private val nino       = Nino("AA123456A")
+  private val businessId = BusinessId("XAIS12345678910")
+  private val taxYear    = TaxYear.fromMtd("2020-21")
 
   implicit private val correlationId: String = "X-123"
 

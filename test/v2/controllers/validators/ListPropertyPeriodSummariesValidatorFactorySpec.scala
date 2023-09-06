@@ -80,7 +80,7 @@ class ListPropertyPeriodSummariesValidatorFactorySpec extends UnitSpec with Mock
 
       "passed an unsupported taxYear" in new SetUp {
         val result: Either[ErrorWrapper, ListPropertyPeriodSummariesRequestData] =
-          validator(validNino, validBusinessId, "2018-19").validateAndWrapResult()
+          validator(validNino, validBusinessId, "2019-20").validateAndWrapResult()
 
         result shouldBe Left(ErrorWrapper(correlationId, RuleTaxYearNotSupportedError))
       }

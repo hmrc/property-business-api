@@ -30,11 +30,11 @@ import scala.concurrent.Future
 
 class RetrieveUkPropertyPeriodSummaryConnectorSpec extends ConnectorSpec with ResponseModelsFixture {
 
-  private val nino                               = Nino("AA123456A")
-  private val businessId                         = BusinessId("XAIS12345678910")
-  private val submissionId                       = SubmissionId("4557ecb5-fd32-48cc-81f5-e6acd1099f3c")
-  private val ukFhlProperty: UkFhlProperty       = UkFhlProperty(None, None)
-  private val ukNonFhlProperty: UkNonFhlProperty = UkNonFhlProperty(None, None)
+  private val nino             = Nino("AA123456A")
+  private val businessId       = BusinessId("XAIS12345678910")
+  private val submissionId     = SubmissionId("4557ecb5-fd32-48cc-81f5-e6acd1099f3c")
+  private val ukFhlProperty    = UkFhlProperty(None, None)
+  private val ukNonFhlProperty = UkNonFhlProperty(None, None)
 
   "connector" when {
     "response has uk fhl details" must {

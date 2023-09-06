@@ -31,11 +31,11 @@ import scala.concurrent.Future
 
 class RetrieveUkPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec {
 
-  private val nino: Nino             = Nino("AA123456A")
-  private val businessId: BusinessId = BusinessId("XAIS12345678910")
+  private val nino       = Nino("AA123456A")
+  private val businessId = BusinessId("XAIS12345678910")
 
-  private val ukFhlProperty: UkFhlProperty       = UkFhlProperty(None, None)
-  private val ukNonFhlProperty: UkNonFhlProperty = UkNonFhlProperty(None, None)
+  private val ukFhlProperty    = UkFhlProperty(None, None)
+  private val ukNonFhlProperty = UkNonFhlProperty(None, None)
 
   "connector" when {
     "response has uk fhl details" must {

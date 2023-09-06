@@ -53,10 +53,10 @@ class RetrieveUkPropertyAnnualSubmissionControllerSpec
           .returns(Future.successful(Right(ResponseWrapper(correlationId, responseData))))
 
         MockHateoasFactory
-          .wrap(responseData, RetrieveUkPropertyAnnualSubmissionHateoasData(nino, businessId, taxYear))
+          .wrap(responseData, hateoasData)
           .returns(HateoasWrapper(responseData, testHateoasLinks))
 
-        runOkTest(expectedStatus = OK, maybeExpectedResponseBody = Some(Json.toJson(HateoasWrapper(responseData, testHateoasLinks))))
+        runOkTest(expectedStatus = OK, maybeExpectedResponseBody = Some(responseBodyJsonWithHateoas))
       }
     }
 

@@ -16,13 +16,12 @@
 
 package v2.controllers
 
-import api.controllers.{AuthorisedController, EndpointLogContext, RequestContext, RequestHandlerOld}
+import api.controllers.{AuthorisedController, EndpointLogContext, RequestContext, RequestHandler}
 import api.hateoas.HateoasFactory
 import api.services.{EnrolmentsAuthService, MtdIdLookupService}
 import play.api.mvc.{Action, AnyContent, ControllerComponents}
 import utils.IdGenerator
-import v2.controllers.requestParsers.RetrieveUkPropertyPeriodSummaryRequestParser
-import v2.models.request.retrieveUkPropertyPeriodSummary.RetrieveUkPropertyPeriodSummaryRawData
+import v2.controllers.validators.RetrieveUkPropertyPeriodSummaryValidatorFactory
 import v2.models.response.retrieveUkPropertyPeriodSummary.RetrieveUkPropertyPeriodSummaryHateoasData
 import v2.services.RetrieveUkPropertyPeriodSummaryService
 
@@ -32,7 +31,7 @@ import scala.concurrent.ExecutionContext
 @Singleton
 class RetrieveUkPropertyPeriodSummaryController @Inject() (val authService: EnrolmentsAuthService,
                                                            val lookupService: MtdIdLookupService,
-                                                           parser: RetrieveUkPropertyPeriodSummaryRequestParser,
+                                                           validatorFactory: RetrieveUkPropertyPeriodSummaryValidatorFactory,
                                                            service: RetrieveUkPropertyPeriodSummaryService,
                                                            hateoasFactory: HateoasFactory,
                                                            cc: ControllerComponents,
@@ -46,15 +45,15 @@ class RetrieveUkPropertyPeriodSummaryController @Inject() (val authService: Enro
     authorisedAction(nino).async { implicit request =>
       implicit val ctx: RequestContext = RequestContext.from(idGenerator, endpointLogContext)
 
-      val rawData = RetrieveUkPropertyPeriodSummaryRawData(nino, businessId, taxYear, submissionId)
+      val validator = validatorFactory.validator(nino, businessId, taxYear, submissionId)
 
       val requestHandler =
-        RequestHandlerOld
-          .withParser(parser)
+        RequestHandler
+          .withValidator(validator)
           .withService(service.retrieveUkProperty)
           .withHateoasResult(hateoasFactory)(RetrieveUkPropertyPeriodSummaryHateoasData(nino, businessId, taxYear, submissionId))
 
-      requestHandler.handleRequest(rawData)
+      requestHandler.handleRequest()
     }
 
 }

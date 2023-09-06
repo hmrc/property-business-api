@@ -17,22 +17,22 @@
 package v2.connectors
 
 import api.connectors.{ConnectorSpec, DownstreamOutcome}
-import api.models.domain.{Nino, TaxYear, Timestamp}
+import api.models.domain._
 import api.models.errors.{DownstreamErrorCode, DownstreamErrors}
 import api.models.outcomes.ResponseWrapper
 import fixtures.RetrieveUkPropertyPeriodSummary.ResponseModelsFixture
 import org.scalamock.handlers.CallHandler
 import v2.connectors.RetrieveUkPropertyPeriodSummaryConnector._
-import v2.models.request.retrieveUkPropertyPeriodSummary.RetrieveUkPropertyPeriodSummaryRequest
+import v2.models.request.retrieveUkPropertyPeriodSummary.RetrieveUkPropertyPeriodSummaryRequestData
 import v2.models.response.retrieveUkPropertyPeriodSummary.{RetrieveUkPropertyPeriodSummaryResponse, UkFhlProperty, UkNonFhlProperty}
 
 import scala.concurrent.Future
 
 class RetrieveUkPropertyPeriodSummaryConnectorSpec extends ConnectorSpec with ResponseModelsFixture {
 
-  private val nino: String                       = "AA123456A"
-  private val businessId: String                 = "XAIS12345678910"
-  private val submissionId: String               = "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
+  private val nino                               = Nino("AA123456A")
+  private val businessId                         = BusinessId("XAIS12345678910")
+  private val submissionId                       = SubmissionId("4557ecb5-fd32-48cc-81f5-e6acd1099f3c")
   private val ukFhlProperty: UkFhlProperty       = UkFhlProperty(None, None)
   private val ukNonFhlProperty: UkNonFhlProperty = UkNonFhlProperty(None, None)
 
@@ -161,8 +161,8 @@ class RetrieveUkPropertyPeriodSummaryConnectorSpec extends ConnectorSpec with Re
       appConfig = mockAppConfig
     )
 
-    protected val request: RetrieveUkPropertyPeriodSummaryRequest =
-      RetrieveUkPropertyPeriodSummaryRequest(Nino(nino), businessId, TaxYear.fromMtd(taxYear), submissionId)
+    protected val request: RetrieveUkPropertyPeriodSummaryRequestData =
+      RetrieveUkPropertyPeriodSummaryRequestData(nino, businessId, TaxYear.fromMtd(taxYear), submissionId)
 
     def stubHttpResponse(uri: String, outcome: DownstreamOutcome[RetrieveUkPropertyPeriodSummaryResponse])
         : CallHandler[Future[DownstreamOutcome[RetrieveUkPropertyPeriodSummaryResponse]]]#Derived = {

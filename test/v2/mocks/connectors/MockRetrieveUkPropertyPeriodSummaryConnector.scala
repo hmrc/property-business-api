@@ -22,7 +22,7 @@ import org.scalamock.scalatest.MockFactory
 import uk.gov.hmrc.http.HeaderCarrier
 import v2.connectors.RetrieveUkPropertyPeriodSummaryConnector
 import v2.connectors.RetrieveUkPropertyPeriodSummaryConnector.Result
-import v2.models.request.retrieveUkPropertyPeriodSummary.RetrieveUkPropertyPeriodSummaryRequest
+import v2.models.request.retrieveUkPropertyPeriodSummary.RetrieveUkPropertyPeriodSummaryRequestData
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -32,9 +32,9 @@ trait MockRetrieveUkPropertyPeriodSummaryConnector extends MockFactory {
 
   object MockRetrieveUkPropertyConnector {
 
-    def retrieveUkProperty(requestData: RetrieveUkPropertyPeriodSummaryRequest): CallHandler[Future[DownstreamOutcome[Result]]] = {
+    def retrieveUkProperty(requestData: RetrieveUkPropertyPeriodSummaryRequestData): CallHandler[Future[DownstreamOutcome[Result]]] = {
       (mockConnector
-        .retrieveUkProperty(_: RetrieveUkPropertyPeriodSummaryRequest)(_: HeaderCarrier, _: ExecutionContext, _: String))
+        .retrieveUkProperty(_: RetrieveUkPropertyPeriodSummaryRequestData)(_: HeaderCarrier, _: ExecutionContext, _: String))
         .expects(requestData, *, *, *)
     }
 

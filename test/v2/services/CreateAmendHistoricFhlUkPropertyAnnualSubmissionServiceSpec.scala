@@ -90,8 +90,8 @@ class CreateAmendHistoricFhlUkPropertyAnnualSubmissionServiceSpec extends UnitSp
     private val body: CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequestBody =
       CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequestBody(None, None)
 
-    protected val request: CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequest =
-      CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequest(Nino(nino), TaxYear.fromMtd(taxYear), body)
+    protected val request: CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequestData =
+      CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequestData(Nino(nino), TaxYear.fromMtd(taxYear), body)
 
   }
 

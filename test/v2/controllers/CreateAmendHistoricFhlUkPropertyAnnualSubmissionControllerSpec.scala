@@ -27,7 +27,7 @@ import api.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLooku
 import mocks.MockIdGenerator
 import play.api.libs.json.{JsObject, JsValue, Json}
 import play.api.mvc.Result
-import v2.mocks.requestParsers.MockCreateAmendHistoricFhlUkPropertyAnnualSubmissionRequestParser
+import v2.controllers.validators.MockCreateAmendHistoricFhlUkPropertyAnnualSubmissionValidatorFactory
 import v2.mocks.services.MockCreateAmendHistoricFhlUkPropertyAnnualSubmissionService
 import v2.models.request.createAmendHistoricFhlUkPropertyAnnualSubmission._
 import v2.models.response.createAmendHistoricFhlUkPropertyAnnualSubmission._
@@ -41,7 +41,7 @@ class CreateAmendHistoricFhlUkPropertyAnnualSubmissionControllerSpec
     with MockEnrolmentsAuthService
     with MockMtdIdLookupService
     with MockCreateAmendHistoricFhlUkPropertyAnnualSubmissionService
-    with MockCreateAmendHistoricFhlUkPropertyAnnualSubmissionRequestParser
+    with MockCreateAmendHistoricFhlUkPropertyAnnualSubmissionValidatorFactory
     with MockHateoasFactory
     with MockIdGenerator
     with MockAuditService {
@@ -53,9 +53,7 @@ class CreateAmendHistoricFhlUkPropertyAnnualSubmissionControllerSpec
   "CreateAmendHistoricFhlUkPropertyAnnualSubmissionController" should {
     "return a successful response with status 200 (OK)" when {
       "the request received is valid" in new Test {
-        MockCreateAmendHistoricFhlUkPropertyAnnualSubmissionRequestParser
-          .parse(rawData)
-          .returns(Right(requestData))
+        willUseValidator(returningSuccess(requestData))
 
         MockCreateAmendHistoricFhlUkPropertyAnnualSubmissionService
           .amend(requestData)
@@ -70,17 +68,13 @@ class CreateAmendHistoricFhlUkPropertyAnnualSubmissionControllerSpec
     }
     "return the error as per spec" when {
       "the parser validation fails" in new Test {
-        MockCreateAmendHistoricFhlUkPropertyAnnualSubmissionRequestParser
-          .parse(rawData)
-          .returns(Left(ErrorWrapper(correlationId, NinoFormatError, None)))
+        willUseValidator(returning(NinoFormatError))
 
         runErrorTest(NinoFormatError)
       }
 
       "the service returns an error" in new Test {
-        MockCreateAmendHistoricFhlUkPropertyAnnualSubmissionRequestParser
-          .parse(rawData)
-          .returns(Right(requestData))
+        willUseValidator(returningSuccess(requestData))
 
         MockCreateAmendHistoricFhlUkPropertyAnnualSubmissionService
           .amend(requestData)
@@ -96,7 +90,7 @@ class CreateAmendHistoricFhlUkPropertyAnnualSubmissionControllerSpec
     private val controller = new CreateAmendHistoricFhlUkPropertyAnnualSubmissionController(
       authService = mockEnrolmentsAuthService,
       lookupService = mockMtdIdLookupService,
-      parser = mockCreateAmendHistoricFhlUkPropertyAnnualSubmissionRequestParser,
+      validatorFactory = mockCreateAmendHistoricFhlUkPropertyAnnualSubmissionValidatorFactory,
       service = mockCreateAmendHistoricFhlUkPropertyAnnualSubmissionService,
       hateoasFactory = mockHateoasFactory,
       auditService = mockAuditService,
@@ -122,14 +116,11 @@ class CreateAmendHistoricFhlUkPropertyAnnualSubmissionControllerSpec
 
     private val requestBodyJson: JsValue = JsObject.empty
 
-    protected val rawData: CreateAmendHistoricFhlUkPropertyAnnualSubmissionRawData =
-      CreateAmendHistoricFhlUkPropertyAnnualSubmissionRawData(nino, taxYear, requestBodyJson)
-
     protected val requestBody: CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequestBody =
       CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequestBody(None, None)
 
-    protected val requestData: CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequest =
-      CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequest(Nino(nino), TaxYear.fromMtd(taxYear), requestBody)
+    protected val requestData: CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequestData =
+      CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequestData(Nino(nino), TaxYear.fromMtd(taxYear), requestBody)
 
     protected val hateoasData: CreateAmendHistoricFhlUkPropertyAnnualSubmissionHateoasData =
       CreateAmendHistoricFhlUkPropertyAnnualSubmissionHateoasData(nino, taxYear)

@@ -23,7 +23,7 @@ import api.models.outcomes.ResponseWrapper
 import config.AppConfig
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
 import v2.connectors.RetrieveForeignPropertyAnnualSubmissionConnector.{ForeignResult, NonForeignResult, Result}
-import v2.models.request.retrieveForeignPropertyAnnualSubmission.RetrieveForeignPropertyAnnualSubmissionRequest
+import v2.models.request.retrieveForeignPropertyAnnualSubmission.RetrieveForeignPropertyAnnualSubmissionRequestData
 import v2.models.response.retrieveForeignPropertyAnnualSubmission.RetrieveForeignPropertyAnnualSubmissionResponse
 
 import javax.inject.{Inject, Singleton}
@@ -41,7 +41,7 @@ object RetrieveForeignPropertyAnnualSubmissionConnector {
 @Singleton
 class RetrieveForeignPropertyAnnualSubmissionConnector @Inject() (val http: HttpClient, val appConfig: AppConfig) extends BaseDownstreamConnector {
 
-  def retrieveForeignProperty(request: RetrieveForeignPropertyAnnualSubmissionRequest)(implicit
+  def retrieveForeignProperty(request: RetrieveForeignPropertyAnnualSubmissionRequestData)(implicit
       hc: HeaderCarrier,
       ec: ExecutionContext,
       correlationId: String): Future[DownstreamOutcome[Result]] = {
@@ -58,7 +58,7 @@ class RetrieveForeignPropertyAnnualSubmissionConnector @Inject() (val http: Http
       // Note that MTD tax year format is used pre-TYS
       (
         IfsUri[RetrieveForeignPropertyAnnualSubmissionResponse]("income-tax/business/property/annual"),
-        Seq("taxableEntityId" -> nino.nino, "incomeSourceId" -> businessId, "taxYear" -> taxYear.asMtd)
+        Seq("taxableEntityId" -> nino.nino, "incomeSourceId" -> businessId.businessId, "taxYear" -> taxYear.asMtd)
       )
     }
 

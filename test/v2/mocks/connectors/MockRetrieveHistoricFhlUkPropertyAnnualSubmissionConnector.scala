@@ -21,7 +21,7 @@ import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
 import uk.gov.hmrc.http.HeaderCarrier
 import v2.connectors.RetrieveHistoricFhlUkPropertyAnnualSubmissionConnector
-import v2.models.request.retrieveHistoricFhlUkPropertyAnnualSubmission.RetrieveHistoricFhlUkPropertyAnnualSubmissionRequest
+import v2.models.request.retrieveHistoricFhlUkPropertyAnnualSubmission.RetrieveHistoricFhlUkPropertyAnnualSubmissionRequestData
 import v2.models.response.retrieveHistoricFhlUkPropertyAnnualSubmission.RetrieveHistoricFhlUkPropertyAnnualSubmissionResponse
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -33,11 +33,11 @@ trait MockRetrieveHistoricFhlUkPropertyAnnualSubmissionConnector extends MockFac
 
   object MockRetrieveHistoricFhlUkPropertyAnnualSubmissionConnector {
 
-    def retrieve(requestData: RetrieveHistoricFhlUkPropertyAnnualSubmissionRequest)
+    def retrieve(requestData: RetrieveHistoricFhlUkPropertyAnnualSubmissionRequestData)
         : CallHandler[Future[DownstreamOutcome[RetrieveHistoricFhlUkPropertyAnnualSubmissionResponse]]] = {
       (
         mockRetrieveHistoricFhlUkPropertyConnector
-          .retrieve(_: RetrieveHistoricFhlUkPropertyAnnualSubmissionRequest)(
+          .retrieve(_: RetrieveHistoricFhlUkPropertyAnnualSubmissionRequestData)(
             _: HeaderCarrier,
             _: ExecutionContext,
             _: String

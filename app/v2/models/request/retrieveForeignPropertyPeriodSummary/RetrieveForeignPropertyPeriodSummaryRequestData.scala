@@ -14,9 +14,8 @@
  * limitations under the License.
  */
 
-package v2.models.request.createAmendHistoricFhlUkPropertyAnnualSubmission
+package v2.models.request.retrieveForeignPropertyPeriodSummary
 
-import api.models.request.RawData
-import play.api.libs.json.JsValue
+import api.models.domain.{BusinessId, Nino, SubmissionId, TaxYear}
 
-case class CreateAmendHistoricFhlUkPropertyAnnualSubmissionRawData(nino: String, taxYear: String, body: JsValue) extends RawData
+case class RetrieveForeignPropertyPeriodSummaryRequestData(nino: Nino, businessId: BusinessId, taxYear: TaxYear, submissionId: SubmissionId)

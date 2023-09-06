@@ -14,13 +14,8 @@
  * limitations under the License.
  */
 
-package v2.models.request.deletePropertyAnnualSubmission
+package v2.models.request.retrieveForeignPropertyAnnualSubmission
 
-import api.models.request.RawData
-import play.api.libs.json.{Json, OWrites}
+import api.models.domain.{BusinessId, Nino, TaxYear}
 
-case class DeletePropertyAnnualSubmissionRawData(nino: String, businessId: String, taxYear: String) extends RawData
-
-object DeletePropertyAnnualSubmissionRawData {
-  implicit val writes: OWrites[DeletePropertyAnnualSubmissionRawData] = Json.writes
-}
+case class RetrieveForeignPropertyAnnualSubmissionRequestData(nino: Nino, businessId: BusinessId, taxYear: TaxYear)

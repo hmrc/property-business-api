@@ -18,14 +18,14 @@ package v2.controllers
 
 import api.controllers.{ControllerBaseSpec, ControllerTestRunner}
 import api.hateoas.{HateoasWrapper, MockHateoasFactory}
-import api.models.domain.{Nino, TaxYear, Timestamp}
+import api.models.domain.{BusinessId, Nino, TaxYear, Timestamp}
 import api.models.errors._
 import api.models.outcomes.ResponseWrapper
 import api.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService}
 import mocks.MockIdGenerator
 import play.api.libs.json.Json
 import play.api.mvc.Result
-import v2.mocks.requestParsers.MockRetrieveForeignPropertyAnnualSubmissionRequestParser
+import v2.controllers.validators.MockRetrieveForeignPropertyAnnualSubmissionValidatorFactory
 import v2.mocks.services.MockRetrieveForeignPropertyAnnualSubmissionService
 import v2.models.request.retrieveForeignPropertyAnnualSubmission._
 import v2.models.response.retrieveForeignPropertyAnnualSubmission._
@@ -41,7 +41,7 @@ class RetrieveForeignPropertyAnnualSubmissionControllerSpec
     with MockEnrolmentsAuthService
     with MockMtdIdLookupService
     with MockRetrieveForeignPropertyAnnualSubmissionService
-    with MockRetrieveForeignPropertyAnnualSubmissionRequestParser
+    with MockRetrieveForeignPropertyAnnualSubmissionValidatorFactory
     with MockHateoasFactory
     with MockAuditService
     with MockIdGenerator {
@@ -52,10 +52,7 @@ class RetrieveForeignPropertyAnnualSubmissionControllerSpec
   "RetrieveForeignPropertyAnnualSubmissionController" should {
     "return a successful response with status 200 (OK)" when {
       "the request received is valid" in new Test {
-
-        MockRetrieveForeignPropertyRequestParser
-          .parse(rawData)
-          .returns(Right(requestData))
+        willUseValidator(returningSuccess(requestData))
 
         MockRetrieveForeignPropertyService
           .retrieve(requestData)
@@ -71,20 +68,14 @@ class RetrieveForeignPropertyAnnualSubmissionControllerSpec
 
     "return an error as per spec" when {
       "the parser validation fails" in new Test {
+        willUseValidator(returning(NinoFormatError))
 
-        MockRetrieveForeignPropertyRequestParser
-          .parse(rawData)
-          .returns(Left(ErrorWrapper(correlationId, BadRequestError, None)))
-
-        runErrorTest(BadRequestError)
+        runErrorTest(NinoFormatError)
       }
 
       "service errors occur" should {
         "the service returns an error" in new Test {
-
-          MockRetrieveForeignPropertyRequestParser
-            .parse(rawData)
-            .returns(Right(requestData))
+          willUseValidator(returningSuccess(requestData))
 
           MockRetrieveForeignPropertyService
             .retrieve(requestData)
@@ -101,7 +92,7 @@ class RetrieveForeignPropertyAnnualSubmissionControllerSpec
     private val controller = new RetrieveForeignPropertyAnnualSubmissionController(
       authService = mockEnrolmentsAuthService,
       lookupService = mockMtdIdLookupService,
-      parser = mockRetrieveForeignPropertyAnnualSubmissionRequestParser,
+      validatorFactory = mockRetrieveForeignPropertyAnnualSubmissionValidatorFactory,
       service = mockRetrieveForeignPropertyAnnualSubmissionService,
       hateoasFactory = mockHateoasFactory,
       cc = cc,
@@ -110,10 +101,8 @@ class RetrieveForeignPropertyAnnualSubmissionControllerSpec
 
     protected def callController(): Future[Result] = controller.handleRequest(nino, businessId, taxYear)(fakeRequest)
 
-    protected val rawData: RetrieveForeignPropertyAnnualSubmissionRawData = RetrieveForeignPropertyAnnualSubmissionRawData(nino, businessId, taxYear)
-
-    protected val requestData: RetrieveForeignPropertyAnnualSubmissionRequest =
-      RetrieveForeignPropertyAnnualSubmissionRequest(Nino(nino), businessId, TaxYear.fromMtd(taxYear))
+    protected val requestData: RetrieveForeignPropertyAnnualSubmissionRequestData =
+      RetrieveForeignPropertyAnnualSubmissionRequestData(Nino(nino), BusinessId(businessId), TaxYear.fromMtd(taxYear))
 
     protected val foreignFhlEeaEntry: ForeignFhlEeaEntry = ForeignFhlEeaEntry(
       Some(

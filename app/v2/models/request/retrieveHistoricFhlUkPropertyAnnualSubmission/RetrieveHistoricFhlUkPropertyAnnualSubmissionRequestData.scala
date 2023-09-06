@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-package v2.models.request.retrieveForeignPropertyPeriodSummary
+package v2.models.request.retrieveHistoricFhlUkPropertyAnnualSubmission
 
 import api.models.domain.{Nino, TaxYear}
 
-case class RetrieveForeignPropertyPeriodSummaryRequest(nino: Nino, businessId: String, taxYear: TaxYear, submissionId: String)
+case class RetrieveHistoricFhlUkPropertyAnnualSubmissionRequestData(nino: Nino, taxYear: TaxYear)

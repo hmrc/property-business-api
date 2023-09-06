@@ -20,7 +20,7 @@ import api.controllers.RequestContext
 import api.services.ServiceOutcome
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
-import v2.models.request.createAmendHistoricFhlUkPropertyAnnualSubmission.CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequest
+import v2.models.request.createAmendHistoricFhlUkPropertyAnnualSubmission.CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequestData
 import v2.models.response.createAmendHistoricFhlUkPropertyAnnualSubmission.CreateAmendHistoricFhlUkPropertyAnnualSubmissionResponse
 import v2.services.CreateAmendHistoricFhlUkPropertyAnnualSubmissionService
 
@@ -33,11 +33,11 @@ trait MockCreateAmendHistoricFhlUkPropertyAnnualSubmissionService extends MockFa
 
   object MockCreateAmendHistoricFhlUkPropertyAnnualSubmissionService {
 
-    def amend(requestData: CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequest)
+    def amend(requestData: CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequestData)
         : CallHandler[Future[ServiceOutcome[CreateAmendHistoricFhlUkPropertyAnnualSubmissionResponse]]] = {
       (
         mockCreateAmendHistoricFhlUkPropertyAnnualSubmissionService
-          .amend(_: CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequest)(
+          .amend(_: CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequestData)(
             _: RequestContext,
             _: ExecutionContext
           )

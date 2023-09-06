@@ -14,8 +14,10 @@
  * limitations under the License.
  */
 
-package v2.models.request.retrieveForeignPropertyPeriodSummary
+package v2.models.request.createAmendHistoricFhlUkPropertyAnnualSubmission
 
-import api.models.request.RawData
+import api.models.domain.{Nino, TaxYear}
 
-case class RetrieveForeignPropertyPeriodSummaryRawData(nino: String, businessId: String, taxYear: String, submissionId: String) extends RawData
+case class CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequestData(nino: Nino,
+                                                                       taxYear: TaxYear,
+                                                                       body: CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequestBody)

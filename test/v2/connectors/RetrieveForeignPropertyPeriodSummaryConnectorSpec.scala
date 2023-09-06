@@ -17,11 +17,11 @@
 package v2.connectors
 
 import api.connectors.{ConnectorSpec, DownstreamOutcome}
-import api.models.domain.{Nino, TaxYear, Timestamp}
+import api.models.domain.{BusinessId, Nino, SubmissionId, TaxYear, Timestamp}
 import api.models.errors.{DownstreamErrorCode, DownstreamErrors}
 import api.models.outcomes.ResponseWrapper
 import v2.connectors.RetrieveForeignPropertyPeriodSummaryConnector.{ForeignResult, NonForeignResult}
-import v2.models.request.retrieveForeignPropertyPeriodSummary.RetrieveForeignPropertyPeriodSummaryRequest
+import v2.models.request.retrieveForeignPropertyPeriodSummary.RetrieveForeignPropertyPeriodSummaryRequestData
 import v2.models.response.retrieveForeignPropertyPeriodSummary.RetrieveForeignPropertyPeriodSummaryResponse
 import v2.models.response.retrieveForeignPropertyPeriodSummary.foreignFhlEea._
 import v2.models.response.retrieveForeignPropertyPeriodSummary.foreignNonFhlProperty._
@@ -30,13 +30,13 @@ import scala.concurrent.Future
 
 class RetrieveForeignPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
 
-  val nino: String         = "AA123456A"
-  val businessId: String   = "XAIS12345678910"
-  val submissionId: String = "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
-  val countryCode: String  = "FRA"
+  private val nino         = Nino("AA123456A")
+  private val businessId   = BusinessId("XAIS12345678910")
+  private val submissionId = SubmissionId("4557ecb5-fd32-48cc-81f5-e6acd1099f3c")
+  private val countryCode  = "FRA"
 
-  val foreignFhlEea: ForeignFhlEea                 = ForeignFhlEea(None, None)
-  val foreignNonFhlProperty: ForeignNonFhlProperty = ForeignNonFhlProperty(countryCode, None, None)
+  private val foreignFhlEea         = ForeignFhlEea(None, None)
+  private val foreignNonFhlProperty = ForeignNonFhlProperty(countryCode, None, None)
 
   private val preTysTaxYear = TaxYear.fromMtd("2022-23")
   private val tysTaxYear    = TaxYear.fromMtd("2023-24")
@@ -76,7 +76,7 @@ class RetrieveForeignPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
     "response has foreign non-FHL details" must {
 
       val downstreamResponse: RetrieveForeignPropertyPeriodSummaryResponse =
-        responseWith(foreignFhlEea = None, foreignNonFhlProperty = Some(Seq(foreignNonFhlProperty)))
+        responseWith(foreignFhlEea = None, foreignNonFhlProperty = Some(List(foreignNonFhlProperty)))
       val outcome = Right(ResponseWrapper(correlationId, downstreamResponse))
 
       "return a foreign result" in new IfsTest with Test {
@@ -103,7 +103,7 @@ class RetrieveForeignPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
     "response has foreign FHL and non-FHL details" must {
 
       val downstreamResponse: RetrieveForeignPropertyPeriodSummaryResponse =
-        responseWith(foreignFhlEea = Some(foreignFhlEea), foreignNonFhlProperty = Some(Seq(foreignNonFhlProperty)))
+        responseWith(foreignFhlEea = Some(foreignFhlEea), foreignNonFhlProperty = Some(List(foreignNonFhlProperty)))
       val outcome = Right(ResponseWrapper(correlationId, downstreamResponse))
 
       "return a foreign result" in new IfsTest with Test {
@@ -190,13 +190,17 @@ class RetrieveForeignPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
       appConfig = mockAppConfig
     )
 
-    protected val request: RetrieveForeignPropertyPeriodSummaryRequest =
-      RetrieveForeignPropertyPeriodSummaryRequest(Nino(nino), businessId, taxYear, submissionId)
+    protected val request: RetrieveForeignPropertyPeriodSummaryRequestData =
+      RetrieveForeignPropertyPeriodSummaryRequestData(nino, businessId, taxYear, submissionId)
 
     protected def stubHttpResponse(outcome: DownstreamOutcome[RetrieveForeignPropertyPeriodSummaryResponse]): Unit =
       willGet(
         url = s"$baseUrl/income-tax/business/property/periodic",
-        parameters = List("taxableEntityId" -> nino, "incomeSourceId" -> businessId, "taxYear" -> taxYear.asMtd, "submissionId" -> submissionId)
+        parameters = List(
+          "taxableEntityId" -> nino.nino,
+          "incomeSourceId"  -> businessId.businessId,
+          "taxYear"         -> taxYear.asMtd,
+          "submissionId"    -> submissionId.submissionId)
       ).returns(Future.successful(outcome))
 
     protected def stubTysHttpResponse(outcome: DownstreamOutcome[RetrieveForeignPropertyPeriodSummaryResponse]): Unit =

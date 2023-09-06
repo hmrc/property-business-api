@@ -17,14 +17,14 @@
 package v2.services
 
 import api.controllers.EndpointLogContext
-import api.models.domain.{Nino, TaxYear, Timestamp}
+import api.models.domain.{BusinessId, Nino, SubmissionId, TaxYear, Timestamp}
 import api.models.errors._
 import api.models.outcomes.ResponseWrapper
 import support.UnitSpec
 import uk.gov.hmrc.http.HeaderCarrier
 import v2.connectors.RetrieveForeignPropertyPeriodSummaryConnector.{ForeignResult, NonForeignResult}
 import v2.mocks.connectors.MockRetrieveForeignPropertyPeriodSummaryConnector
-import v2.models.request.retrieveForeignPropertyPeriodSummary.RetrieveForeignPropertyPeriodSummaryRequest
+import v2.models.request.retrieveForeignPropertyPeriodSummary.RetrieveForeignPropertyPeriodSummaryRequestData
 import v2.models.response.retrieveForeignPropertyPeriodSummary.RetrieveForeignPropertyPeriodSummaryResponse
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -32,10 +32,10 @@ import scala.concurrent.Future
 
 class RetrieveForeignPropertyPeriodSummaryServiceSpec extends UnitSpec {
 
-  private val nino: String         = "AA123456A"
-  private val businessId: String   = "XAIS12345678910"
-  private val taxYear: TaxYear     = TaxYear.fromMtd("2020-21")
-  private val submissionId: String = "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
+  private val nino         = Nino("AA123456A")
+  private val businessId   = BusinessId("XAIS12345678910")
+  private val taxYear      = TaxYear.fromMtd("2020-21")
+  private val submissionId = SubmissionId("4557ecb5-fd32-48cc-81f5-e6acd1099f3c")
 
   implicit private val correlationId: String = "X-123"
 
@@ -105,8 +105,8 @@ class RetrieveForeignPropertyPeriodSummaryServiceSpec extends UnitSpec {
     protected val response: RetrieveForeignPropertyPeriodSummaryResponse =
       RetrieveForeignPropertyPeriodSummaryResponse(Timestamp("2020-06-17T10:53:38Z"), "2019-01-29", "2020-03-29", None, None)
 
-    protected val requestData: RetrieveForeignPropertyPeriodSummaryRequest =
-      RetrieveForeignPropertyPeriodSummaryRequest(Nino(nino), businessId, taxYear, submissionId)
+    protected val requestData: RetrieveForeignPropertyPeriodSummaryRequestData =
+      RetrieveForeignPropertyPeriodSummaryRequestData(nino, businessId, taxYear, submissionId)
 
   }
 

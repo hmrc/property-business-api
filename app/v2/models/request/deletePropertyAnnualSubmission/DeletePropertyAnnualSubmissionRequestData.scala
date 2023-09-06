@@ -14,10 +14,8 @@
  * limitations under the License.
  */
 
-package v2.models.request.createAmendHistoricFhlUkPropertyAnnualSubmission
+package v2.models.request.deletePropertyAnnualSubmission
 
-import api.models.domain.{Nino, TaxYear}
+import api.models.domain.{BusinessId, Nino, TaxYear}
 
-case class CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequest(nino: Nino,
-                                                                   taxYear: TaxYear,
-                                                                   body: CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequestBody)
+case class DeletePropertyAnnualSubmissionRequestData(nino: Nino, businessId: BusinessId, taxYear: TaxYear)

@@ -21,7 +21,7 @@ import api.models.errors._
 import api.services.{BaseService, ServiceOutcome}
 import cats.implicits._
 import v2.connectors.RetrieveHistoricFhlUkPropertyAnnualSubmissionConnector
-import v2.models.request.retrieveHistoricFhlUkPropertyAnnualSubmission.RetrieveHistoricFhlUkPropertyAnnualSubmissionRequest
+import v2.models.request.retrieveHistoricFhlUkPropertyAnnualSubmission.RetrieveHistoricFhlUkPropertyAnnualSubmissionRequestData
 import v2.models.response.retrieveHistoricFhlUkPropertyAnnualSubmission.RetrieveHistoricFhlUkPropertyAnnualSubmissionResponse
 
 import javax.inject.{Inject, Singleton}
@@ -31,7 +31,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class RetrieveHistoricFhlUkPropertyAnnualSubmissionService @Inject() (connector: RetrieveHistoricFhlUkPropertyAnnualSubmissionConnector)
     extends BaseService {
 
-  def retrieve(request: RetrieveHistoricFhlUkPropertyAnnualSubmissionRequest)(implicit
+  def retrieve(request: RetrieveHistoricFhlUkPropertyAnnualSubmissionRequestData)(implicit
       ctx: RequestContext,
       ec: ExecutionContext): Future[ServiceOutcome[RetrieveHistoricFhlUkPropertyAnnualSubmissionResponse]] = {
 

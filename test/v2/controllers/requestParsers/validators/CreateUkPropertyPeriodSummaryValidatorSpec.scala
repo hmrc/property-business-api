@@ -327,6 +327,17 @@ class CreateUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with JsonError
           )) shouldBe List(FromDateFormatError)
       }
 
+      "the fromDate is out of range" in {
+        val validator = setUpValidator()
+        validator.validate(
+          CreateUkPropertyPeriodSummaryRawData(
+            validNino,
+            taxYear,
+            validBusinessId,
+            requestBodyJson.update("fromDate", JsString("1569-10-01"))
+          )) shouldBe List(FromDateOutOfRangeError)
+      }
+
       "the toDate format is invalid" in {
         val validator = setUpValidator()
         validator.validate(
@@ -336,6 +347,17 @@ class CreateUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with JsonError
             validBusinessId,
             requestBodyJson.update("toDate", JsString("2020.10.01"))
           )) shouldBe List(ToDateFormatError)
+      }
+
+      "the toDate is out of range" in {
+        val validator = setUpValidator()
+        validator.validate(
+          CreateUkPropertyPeriodSummaryRawData(
+            validNino,
+            taxYear,
+            validBusinessId,
+            requestBodyJson.update("toDate", JsString("3490-10-01"))
+          )) shouldBe List(ToDateOutOfRangeError)
       }
 
       "toDate is before fromDate" in {

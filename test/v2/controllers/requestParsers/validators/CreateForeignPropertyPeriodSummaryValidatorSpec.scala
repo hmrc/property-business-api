@@ -460,6 +460,64 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with Mock
             )
           )) shouldBe List(FromDateFormatError)
       }
+      "the fromDate is out of range" in {
+        val validator = setUpValidator()
+        validator.validate(
+          CreateForeignPropertyPeriodSummaryRawData(
+            validNino,
+            validBusinessId,
+            validTaxYear,
+            Json.parse(
+              """
+                |{
+                |   "fromDate":"1782-01-01",
+                |   "toDate":"2021-03-29",
+                |   "foreignFhlEea":{
+                |      "income":{
+                |         "rentAmount":381.21
+                |      },
+                |      "expenses":{
+                |         "premisesRunningCosts":993.31,
+                |         "repairsAndMaintenance":8842.23,
+                |         "financialCosts":994,
+                |         "professionalFees":992.12,
+                |         "costOfServices":4620.23,
+                |         "travelCosts":774,
+                |         "other":984.41
+                |      }
+                |   },
+                |   "foreignNonFhlProperty":[
+                |      {
+                |         "countryCode":"AFG",
+                |         "income":{
+                |            "rentIncome":{
+                |               "rentAmount":4882.23
+                |            },
+                |            "foreignTaxCreditRelief":true,
+                |            "premiumsOfLeaseGrant":884.72,
+                |            "otherPropertyIncome":7713.09,
+                |            "foreignTaxPaidOrDeducted":884.12,
+                |            "specialWithholdingTaxOrUkTaxPaid":847.72
+                |         },
+                |         "expenses":{
+                |            "premisesRunningCosts":129.35,
+                |            "repairsAndMaintenance":7490.32,
+                |            "financialCosts":5000.99,
+                |            "professionalFees":847.90,
+                |            "travelCosts":69.20,
+                |            "costOfServices":478.23,
+                |            "residentialFinancialCost":879.28,
+                |            "broughtFwdResidentialFinancialCost":846.13,
+                |            "other":138.92
+                |         }
+                |      }
+                |   ]
+                |}
+                |""".stripMargin
+            )
+          )) shouldBe List(FromDateOutOfRangeError)
+      }
+
       "the toDate format is invalid" in {
         val validator = setUpValidator()
         validator.validate(
@@ -518,6 +576,66 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with Mock
           )) shouldBe List(ToDateFormatError)
 
       }
+
+      "the toDate is out of range" in {
+        val validator = setUpValidator()
+        validator.validate(
+          CreateForeignPropertyPeriodSummaryRawData(
+            validNino,
+            validBusinessId,
+            validTaxYear,
+            Json.parse(
+              """
+                |{
+                |   "fromDate":"2019-01-01",
+                |   "toDate":"3054-03-29",
+                |   "foreignFhlEea":{
+                |      "income":{
+                |         "rentAmount":381.21
+                |      },
+                |      "expenses":{
+                |         "premisesRunningCosts":993.31,
+                |         "repairsAndMaintenance":8842.23,
+                |         "financialCosts":994,
+                |         "professionalFees":992.12,
+                |         "costOfServices":4620.23,
+                |         "travelCosts":774,
+                |         "other":984.41
+                |      }
+                |   },
+                |   "foreignNonFhlProperty":[
+                |      {
+                |         "countryCode":"AFG",
+                |         "income":{
+                |            "rentIncome":{
+                |               "rentAmount":4882.23
+                |            },
+                |            "foreignTaxCreditRelief":true,
+                |            "premiumsOfLeaseGrant":884.72,
+                |            "otherPropertyIncome":7713.09,
+                |            "foreignTaxPaidOrDeducted":884.12,
+                |            "specialWithholdingTaxOrUkTaxPaid":847.72
+                |         },
+                |         "expenses":{
+                |            "premisesRunningCosts":129.35,
+                |            "repairsAndMaintenance":7490.32,
+                |            "financialCosts":5000.99,
+                |            "professionalFees":847.90,
+                |            "travelCosts":69.20,
+                |            "costOfServices":478.23,
+                |            "residentialFinancialCost":879.28,
+                |            "broughtFwdResidentialFinancialCost":846.13,
+                |            "other":138.92
+                |         }
+                |      }
+                |   ]
+                |}
+                |""".stripMargin
+            )
+          )) shouldBe List(ToDateOutOfRangeError)
+
+      }
+
       "toDate is before fromDate" in {
         val validator = setUpValidator()
         validator.validate(

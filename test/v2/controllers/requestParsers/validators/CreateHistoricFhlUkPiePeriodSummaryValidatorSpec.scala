@@ -188,12 +188,30 @@ class CreateHistoricFhlUkPiePeriodSummaryValidatorSpec extends UnitSpec with Jso
       }
     }
 
+    "return FromDateOutOfRangeError error" when {
+      "given an early fromDate" in {
+        val validator = setUpValidator()
+        val result =
+          validator.validate(CreateHistoricFhlUkPiePeriodSummaryRawData(validNino, validRequestBody.update("fromDate", JsString("1800-01-01"))))
+        result should contain only FromDateOutOfRangeError
+      }
+    }
+
     "return ToDateFormatError error" when {
       "given an invalid toDate" in {
         val validator = setUpValidator()
         val result =
           validator.validate(CreateHistoricFhlUkPiePeriodSummaryRawData(validNino, validRequestBody.update("toDate", JsString("BAD_DATE"))))
         result should contain only ToDateFormatError
+      }
+    }
+
+    "return ToDateOutOfRangeError error" when {
+      "given an invalid toDate" in {
+        val validator = setUpValidator()
+        val result =
+          validator.validate(CreateHistoricFhlUkPiePeriodSummaryRawData(validNino, validRequestBody.update("toDate", JsString("2100-01-01"))))
+        result should contain only ToDateOutOfRangeError
       }
     }
 

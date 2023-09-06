@@ -82,7 +82,7 @@ class RetrieveUkPropertyPeriodSummaryValidatorFactorySpec extends UnitSpec with 
 
       "an unsupported tax year is supplied" in new SetUp {
         val result: Either[ErrorWrapper, RetrieveUkPropertyPeriodSummaryRequestData] =
-          validator(validNino, validBusinessId, "2020-21", validSubmissionId).validateAndWrapResult()
+          validator(validNino, validBusinessId, "2021-22", validSubmissionId).validateAndWrapResult()
 
         result shouldBe Left(ErrorWrapper(correlationId, RuleTaxYearNotSupportedError))
       }

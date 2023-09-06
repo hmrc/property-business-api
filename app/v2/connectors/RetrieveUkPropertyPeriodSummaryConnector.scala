@@ -23,7 +23,7 @@ import api.models.outcomes.ResponseWrapper
 import config.AppConfig
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
 import v2.connectors.RetrieveUkPropertyPeriodSummaryConnector._
-import v2.models.request.retrieveUkPropertyPeriodSummary.RetrieveUkPropertyPeriodSummaryRequest
+import v2.models.request.retrieveUkPropertyPeriodSummary.RetrieveUkPropertyPeriodSummaryRequestData
 import v2.models.response.retrieveUkPropertyPeriodSummary.RetrieveUkPropertyPeriodSummaryResponse
 
 import javax.inject.{Inject, Singleton}
@@ -41,10 +41,10 @@ object RetrieveUkPropertyPeriodSummaryConnector {
 @Singleton
 class RetrieveUkPropertyPeriodSummaryConnector @Inject() (val http: HttpClient, val appConfig: AppConfig) extends BaseDownstreamConnector {
 
-  def retrieveUkProperty(request: RetrieveUkPropertyPeriodSummaryRequest)(implicit
-      hc: HeaderCarrier,
-      ec: ExecutionContext,
-      correlationId: String): Future[DownstreamOutcome[Result]] = {
+  def retrieveUkProperty(request: RetrieveUkPropertyPeriodSummaryRequestData)(implicit
+                                                                              hc: HeaderCarrier,
+                                                                              ec: ExecutionContext,
+                                                                              correlationId: String): Future[DownstreamOutcome[Result]] = {
 
     import request._
 

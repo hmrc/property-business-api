@@ -17,19 +17,19 @@
 package v2.connectors
 
 import api.connectors.{ConnectorSpec, DownstreamOutcome}
-import api.models.domain.{Nino, TaxYear}
+import api.models.domain.{BusinessId, Nino, TaxYear}
 import api.models.outcomes.ResponseWrapper
-import v2.models.request.listPropertyPeriodSummaries.ListPropertyPeriodSummariesRequest
+import v2.models.request.listPropertyPeriodSummaries.ListPropertyPeriodSummariesRequestData
 import v2.models.response.listPropertyPeriodSummaries.{ListPropertyPeriodSummariesResponse, SubmissionPeriod}
 
 import scala.concurrent.Future
 
 class ListPropertyPeriodSummariesConnectorSpec extends ConnectorSpec {
 
-  private val nino: String          = "AA123456A"
-  private val businessId: String    = "XAIS12345678910"
-  private val preTysTaxYear: String = "2022-23"
-  private val tysTaxYear: String    = "2023-24"
+  private val nino          = Nino("AA123456A")
+  private val businessId    = BusinessId("XAIS12345678910")
+  private val preTysTaxYear = "2022-23"
+  private val tysTaxYear    = "2023-24"
 
   "connector" must {
     "send a request and return a body for a non-tys tax year" in new IfsTest with Test {
@@ -70,7 +70,7 @@ class ListPropertyPeriodSummariesConnectorSpec extends ConnectorSpec {
       appConfig = mockAppConfig
     )
 
-    protected val request: ListPropertyPeriodSummariesRequest = ListPropertyPeriodSummariesRequest(Nino(nino), businessId, taxYear)
+    protected val request: ListPropertyPeriodSummariesRequestData = ListPropertyPeriodSummariesRequestData(nino, businessId, taxYear)
 
     protected val response: ListPropertyPeriodSummariesResponse = ListPropertyPeriodSummariesResponse(
       Seq(SubmissionPeriod("4557ecb5-fd32-48cc-81f5-e6acd1099f3c", "2020-06-22", "2020-06-22")))

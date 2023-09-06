@@ -16,6 +16,6 @@
 
 package v2.models.request.listPropertyPeriodSummaries
 
-import api.models.request.RawData
+import api.models.domain.{BusinessId, Nino, TaxYear}
 
-case class ListPropertyPeriodSummariesRawData(nino: String, businessId: String, taxYear: String) extends RawData
+case class ListPropertyPeriodSummariesRequestData(nino: Nino, businessId: BusinessId, taxYear: TaxYear)

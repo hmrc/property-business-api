@@ -17,13 +17,13 @@
 package v2.services
 
 import api.controllers.EndpointLogContext
-import api.models.domain.{Nino, TaxYear}
+import api.models.domain.{BusinessId, Nino, TaxYear}
 import api.models.errors._
 import api.models.outcomes.ResponseWrapper
 import support.UnitSpec
 import uk.gov.hmrc.http.HeaderCarrier
 import v2.mocks.connectors.MockListPropertyPeriodSummariesConnector
-import v2.models.request.listPropertyPeriodSummaries.ListPropertyPeriodSummariesRequest
+import v2.models.request.listPropertyPeriodSummaries.ListPropertyPeriodSummariesRequestData
 import v2.models.response.listPropertyPeriodSummaries.{ListPropertyPeriodSummariesResponse, SubmissionPeriod}
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -31,9 +31,9 @@ import scala.concurrent.Future
 
 class ListPropertyPeriodSummariesServiceSpec extends UnitSpec {
 
-  private val nino: String       = "AA123456A"
-  private val businessId: String = "XAIS12345678910"
-  private val taxYear: TaxYear   = TaxYear.fromMtd("2020-21")
+  private val nino       = Nino("AA123456A")
+  private val businessId = BusinessId("XAIS12345678910")
+  private val taxYear    = TaxYear.fromMtd("2020-21")
 
   implicit private val correlationId: String = "X-123"
 
@@ -91,7 +91,7 @@ class ListPropertyPeriodSummariesServiceSpec extends UnitSpec {
       connector = mockListPropertyPeriodSummariesConnector
     )
 
-    protected val request: ListPropertyPeriodSummariesRequest = ListPropertyPeriodSummariesRequest(Nino(nino), businessId, taxYear)
+    protected val request: ListPropertyPeriodSummariesRequestData = ListPropertyPeriodSummariesRequestData(nino, businessId, taxYear)
 
     protected val response: ListPropertyPeriodSummariesResponse = ListPropertyPeriodSummariesResponse(
       Seq(

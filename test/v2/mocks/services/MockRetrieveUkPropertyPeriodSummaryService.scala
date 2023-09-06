@@ -20,7 +20,7 @@ import api.controllers.RequestContext
 import api.services.ServiceOutcome
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
-import v2.models.request.retrieveUkPropertyPeriodSummary.RetrieveUkPropertyPeriodSummaryRequest
+import v2.models.request.retrieveUkPropertyPeriodSummary.RetrieveUkPropertyPeriodSummaryRequestData
 import v2.models.response.retrieveUkPropertyPeriodSummary.RetrieveUkPropertyPeriodSummaryResponse
 import v2.services.RetrieveUkPropertyPeriodSummaryService
 
@@ -33,10 +33,10 @@ trait MockRetrieveUkPropertyPeriodSummaryService extends MockFactory {
   object MockRetrieveUkPropertyService {
 
     def retrieve(
-        requestData: RetrieveUkPropertyPeriodSummaryRequest): CallHandler[Future[ServiceOutcome[RetrieveUkPropertyPeriodSummaryResponse]]] = {
+        requestData: RetrieveUkPropertyPeriodSummaryRequestData): CallHandler[Future[ServiceOutcome[RetrieveUkPropertyPeriodSummaryResponse]]] = {
       (
         mockRetrieveUkPropertyService
-          .retrieveUkProperty(_: RetrieveUkPropertyPeriodSummaryRequest)(
+          .retrieveUkProperty(_: RetrieveUkPropertyPeriodSummaryRequestData)(
             _: RequestContext,
             _: ExecutionContext
           )

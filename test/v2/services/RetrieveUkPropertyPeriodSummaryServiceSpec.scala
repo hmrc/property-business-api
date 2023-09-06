@@ -17,7 +17,7 @@
 package v2.services
 
 import api.controllers.EndpointLogContext
-import api.models.domain.{Nino, TaxYear}
+import api.models.domain.{BusinessId, Nino, SubmissionId, TaxYear}
 import api.models.errors._
 import api.models.outcomes.ResponseWrapper
 import fixtures.RetrieveUkPropertyPeriodSummary.ResponseModelsFixture
@@ -25,17 +25,17 @@ import support.UnitSpec
 import uk.gov.hmrc.http.HeaderCarrier
 import v2.connectors.RetrieveUkPropertyPeriodSummaryConnector.{NonUkResult, UkResult}
 import v2.mocks.connectors.MockRetrieveUkPropertyPeriodSummaryConnector
-import v2.models.request.retrieveUkPropertyPeriodSummary.RetrieveUkPropertyPeriodSummaryRequest
+import v2.models.request.retrieveUkPropertyPeriodSummary.RetrieveUkPropertyPeriodSummaryRequestData
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class RetrieveUkPropertyPeriodSummaryServiceSpec extends UnitSpec with ResponseModelsFixture {
 
-  private val nino: String         = "AA123456A"
-  private val businessId: String   = "XAIS12345678910"
-  private val taxYear: TaxYear     = TaxYear.fromMtd("2020-21")
-  private val submissionId: String = "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
+  private val nino         = Nino("AA123456A")
+  private val businessId   = BusinessId("XAIS12345678910")
+  private val taxYear      = TaxYear.fromMtd("2020-21")
+  private val submissionId = SubmissionId("4557ecb5-fd32-48cc-81f5-e6acd1099f3c")
 
   implicit private val correlationId: String = "X-123"
 
@@ -104,8 +104,8 @@ class RetrieveUkPropertyPeriodSummaryServiceSpec extends UnitSpec with ResponseM
       connector = mockConnector
     )
 
-    protected val requestData: RetrieveUkPropertyPeriodSummaryRequest =
-      RetrieveUkPropertyPeriodSummaryRequest(Nino(nino), businessId, taxYear, submissionId)
+    protected val requestData: RetrieveUkPropertyPeriodSummaryRequestData =
+      RetrieveUkPropertyPeriodSummaryRequestData(nino, businessId, taxYear, submissionId)
 
   }
 

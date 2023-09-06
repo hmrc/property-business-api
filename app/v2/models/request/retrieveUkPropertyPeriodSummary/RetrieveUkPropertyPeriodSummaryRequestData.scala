@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-package v2.models.request.listPropertyPeriodSummaries
+package v2.models.request.retrieveUkPropertyPeriodSummary
 
-import api.models.domain.{Nino, TaxYear}
+import api.models.domain.{BusinessId, Nino, SubmissionId, TaxYear}
 
-case class ListPropertyPeriodSummariesRequest(nino: Nino, businessId: String, taxYear: TaxYear)
+case class RetrieveUkPropertyPeriodSummaryRequestData(nino: Nino, businessId: BusinessId, taxYear: TaxYear, submissionId: SubmissionId)

@@ -80,7 +80,7 @@ class DeletePropertyAnnualSubmissionValidatorFactorySpec extends UnitSpec with M
 
       "passed an unsupported taxYear" in new SetUp {
         val result: Either[ErrorWrapper, DeletePropertyAnnualSubmissionRequestData] =
-          validator(validNino, validBusinessId, "2019-20").validateAndWrapResult()
+          validator(validNino, validBusinessId, "2020-21").validateAndWrapResult()
 
         result shouldBe Left(ErrorWrapper(correlationId, RuleTaxYearNotSupportedError))
       }

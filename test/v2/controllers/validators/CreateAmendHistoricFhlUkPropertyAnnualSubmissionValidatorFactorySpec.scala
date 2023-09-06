@@ -217,7 +217,7 @@ class CreateAmendHistoricFhlUkPropertyAnnualSubmissionValidatorFactorySpec exten
 
       "passed a historic tax year that precedes the minimum" in new Setup {
         val result: Either[ErrorWrapper, CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequestData] =
-          validator(validNino, "2016-17", validRequestBody).validateAndWrapResult()
+          validator(validNino, "2017-18", validRequestBody).validateAndWrapResult()
 
         result shouldBe Left(ErrorWrapper(correlationId, RuleHistoricTaxYearNotSupportedError))
       }

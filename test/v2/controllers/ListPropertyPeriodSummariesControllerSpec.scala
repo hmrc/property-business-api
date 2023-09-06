@@ -18,14 +18,14 @@ package v2.controllers
 
 import api.controllers.{ControllerBaseSpec, ControllerTestRunner}
 import api.hateoas.{HateoasWrapper, MockHateoasFactory}
-import api.models.domain.{Nino, TaxYear}
+import api.models.domain.{BusinessId, Nino, TaxYear}
 import api.models.errors._
 import api.models.outcomes.ResponseWrapper
 import play.api.libs.json.Json
 import play.api.mvc.Result
-import v2.mocks.requestParsers.MockListPropertyPeriodSummariesRequestParser
+import v2.controllers.validators.MockListPropertyPeriodSummariesValidatorFactory
 import v2.mocks.services.MockListPropertyPeriodSummariesService
-import v2.models.request.listPropertyPeriodSummaries.{ListPropertyPeriodSummariesRawData, ListPropertyPeriodSummariesRequest}
+import v2.models.request.listPropertyPeriodSummaries.ListPropertyPeriodSummariesRequestData
 import v2.models.response.listPropertyPeriodSummaries.{ListPropertyPeriodSummariesHateoasData, ListPropertyPeriodSummariesResponse, SubmissionPeriod}
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -35,7 +35,7 @@ class ListPropertyPeriodSummariesControllerSpec
     extends ControllerBaseSpec
     with ControllerTestRunner
     with MockListPropertyPeriodSummariesService
-    with MockListPropertyPeriodSummariesRequestParser
+    with MockListPropertyPeriodSummariesValidatorFactory
     with MockHateoasFactory {
 
   private val businessId = "XAIS12345678910"
@@ -44,9 +44,7 @@ class ListPropertyPeriodSummariesControllerSpec
   "ListPropertyPeriodSummariesController" should {
     "return Ok" when {
       "the request received is valid" in new Test {
-        MockListPropertyPeriodSummariesRequestParser
-          .parseRequest(rawData)
-          .returns(Right(requestData))
+        willUseValidator(returningSuccess(requestData))
 
         MockListPropertyPeriodSummariesService
           .listPeriodSummaries(requestData)
@@ -62,17 +60,13 @@ class ListPropertyPeriodSummariesControllerSpec
 
     "return an error as per spec" when {
       "the parser validation fails" in new Test {
-        MockListPropertyPeriodSummariesRequestParser
-          .parseRequest(rawData)
-          .returns(Left(ErrorWrapper(correlationId, NinoFormatError, None)))
+        willUseValidator(returning(NinoFormatError))
 
         runErrorTest(NinoFormatError)
       }
 
       "the service returns an error" in new Test {
-        MockListPropertyPeriodSummariesRequestParser
-          .parseRequest(rawData)
-          .returns(Right(requestData))
+        willUseValidator(returningSuccess(requestData))
 
         MockListPropertyPeriodSummariesService
           .listPeriodSummaries(requestData)
@@ -89,7 +83,7 @@ class ListPropertyPeriodSummariesControllerSpec
     private val controller = new ListPropertyPeriodSummariesController(
       authService = mockEnrolmentsAuthService,
       lookupService = mockMtdIdLookupService,
-      parser = mockListPropertyPeriodSummariesRequestParser,
+      validatorFactory = mockListPropertyPeriodSummariesValidatorFactory,
       service = mockService,
       hateoasFactory = mockHateoasFactory,
       cc = cc,
@@ -98,10 +92,8 @@ class ListPropertyPeriodSummariesControllerSpec
 
     protected def callController(): Future[Result] = controller.handleRequest(nino, businessId, taxYear)(fakeGetRequest)
 
-    protected val rawData: ListPropertyPeriodSummariesRawData = ListPropertyPeriodSummariesRawData(nino, businessId, taxYear)
-
-    protected val requestData: ListPropertyPeriodSummariesRequest =
-      ListPropertyPeriodSummariesRequest(Nino(nino), businessId, TaxYear.fromMtd(taxYear))
+    protected val requestData: ListPropertyPeriodSummariesRequestData =
+      ListPropertyPeriodSummariesRequestData(Nino(nino), BusinessId(businessId), TaxYear.fromMtd(taxYear))
 
     protected val responseData: ListPropertyPeriodSummariesResponse =
       ListPropertyPeriodSummariesResponse(Seq(SubmissionPeriod("someId", "fromDate", "toDate")))

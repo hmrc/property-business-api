@@ -548,473 +548,119 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with Mock
     }
 
     "return ValueFormatError" when {
-      "foreignFhlEea/income/rentAmount is invalid" in {
-        val validator = setUpValidator()
-        val result = validator.validate(
+      "foreignFhlEea/income/rentAmount is invalid" in new TestData {
+        val validator: CreateForeignPropertyPeriodSummaryValidator = setUpValidator()
+        val result: Seq[MtdError] = validator.validate(
           CreateForeignPropertyPeriodSummaryRawData(
             validNino,
             validBusinessId,
             validTaxYear,
-            Json.parse("""
-            |{
-            |   "fromDate":"2020-03-29",
-            |   "toDate":"2021-03-29",
-            |   "foreignFhlEea":{
-            |      "income":{
-            |         "rentAmount":381.211
-            |      },
-            |      "expenses":{
-            |         "premisesRunningCosts":993.31,
-            |         "repairsAndMaintenance":8842.23,
-            |         "financialCosts":994,
-            |         "professionalFees":992.12,
-            |         "costOfServices":4620.23,
-            |         "travelCosts":774,
-            |         "other":984.41
-            |      }
-            |   },
-            |   "foreignNonFhlProperty":[
-            |      {
-            |         "countryCode":"AFG",
-            |         "income":{
-            |            "rentIncome":{
-            |               "rentAmount":4882.23
-            |            },
-            |            "foreignTaxCreditRelief":true,
-            |            "premiumsOfLeaseGrant":884.72,
-            |            "otherPropertyIncome":7713.09,
-            |            "foreignTaxPaidOrDeducted":884.12,
-            |            "specialWithholdingTaxOrUkTaxPaid":847.72
-            |         },
-            |         "expenses":{
-            |            "premisesRunningCosts":129.35,
-            |            "repairsAndMaintenance":7490.32,
-            |            "financialCosts":5000.99,
-            |            "professionalFees":847.90,
-            |            "travelCosts":69.20,
-            |            "costOfServices":478.23,
-            |            "residentialFinancialCost":879.28,
-            |            "broughtFwdResidentialFinancialCost":846.13,
-            |            "other":138.92
-            |         }
-            |      }
-            |   ]
-            |}
-            |""".stripMargin)
+            requestBody.update("foreignFhlEea/income/rentAmount", JsString("4882.233"))
           ))
         result shouldBe List(
           ValueFormatError.copy(paths = Some(Seq("/foreignFhlEea/income/rentAmount")))
         )
       }
 
-      "foreignFhlEea/expenses/premisesRunningCosts is invalid" in {
-        val validator = setUpValidator()
-        val result = validator.validate(
+      "foreignFhlEea/expenses/premisesRunningCosts is invalid" in new TestData {
+        val validator: CreateForeignPropertyPeriodSummaryValidator = setUpValidator()
+        val result: Seq[MtdError] = validator.validate(
           CreateForeignPropertyPeriodSummaryRawData(
             validNino,
             validBusinessId,
             validTaxYear,
-            Json.parse("""
-            |{
-            |   "fromDate":"2020-03-29",
-            |   "toDate":"2021-03-29",
-            |   "foreignFhlEea":{
-            |      "income":{
-            |         "rentAmount":381.21
-            |      },
-            |      "expenses":{
-            |         "premisesRunningCosts":993.311,
-            |         "repairsAndMaintenance":8842.23,
-            |         "financialCosts":994,
-            |         "professionalFees":992.12,
-            |         "costOfServices":4620.23,
-            |         "travelCosts":774,
-            |         "other":984.41
-            |      }
-            |   },
-            |   "foreignNonFhlProperty":[
-            |      {
-            |         "countryCode":"AFG",
-            |         "income":{
-            |            "rentIncome":{
-            |               "rentAmount":4882.23
-            |            },
-            |            "foreignTaxCreditRelief":true,
-            |            "premiumsOfLeaseGrant":884.72,
-            |            "otherPropertyIncome":7713.09,
-            |            "foreignTaxPaidOrDeducted":884.12,
-            |            "specialWithholdingTaxOrUkTaxPaid":847.72
-            |         },
-            |         "expenses":{
-            |            "premisesRunningCosts":129.35,
-            |            "repairsAndMaintenance":7490.32,
-            |            "financialCosts":5000.99,
-            |            "professionalFees":847.90,
-            |            "travelCosts":69.20,
-            |            "costOfServices":478.23,
-            |            "residentialFinancialCost":879.28,
-            |            "broughtFwdResidentialFinancialCost":846.13,
-            |            "other":138.92
-            |         }
-            |      }
-            |   ]
-            |}
-            |""".stripMargin)
+            requestBody.update("foreignFhlEea/expenses/premisesRunningCosts", JsString("211.237"))
           ))
+
         result shouldBe List(
           ValueFormatError.copy(paths = Some(Seq("/foreignFhlEea/expenses/premisesRunningCosts")))
         )
       }
 
-      "foreignFhlEea/expenses/repairsAndMaintenance is invalid" in {
-        val validator = setUpValidator()
-        val result = validator.validate(
+      "foreignFhlEea/expenses/repairsAndMaintenance is invalid" in new TestData {
+        val validator: CreateForeignPropertyPeriodSummaryValidator = setUpValidator()
+        val result: Seq[MtdError] = validator.validate(
           CreateForeignPropertyPeriodSummaryRawData(
             validNino,
             validBusinessId,
             validTaxYear,
-            Json.parse("""
-            |{
-            |   "fromDate":"2020-03-29",
-            |   "toDate":"2021-03-29",
-            |   "foreignFhlEea":{
-            |      "income":{
-            |         "rentAmount":381.21
-            |      },
-            |      "expenses":{
-            |         "premisesRunningCosts":993.31,
-            |         "repairsAndMaintenance":8842.231,
-            |         "financialCosts":994,
-            |         "professionalFees":992.12,
-            |         "costOfServices":4620.23,
-            |         "travelCosts":774,
-            |         "other":984.41
-            |      }
-            |   },
-            |   "foreignNonFhlProperty":[
-            |      {
-            |         "countryCode":"AFG",
-            |         "income":{
-            |            "rentIncome":{
-            |               "rentAmount":4882.23
-            |            },
-            |            "foreignTaxCreditRelief":true,
-            |            "premiumsOfLeaseGrant":884.72,
-            |            "otherPropertyIncome":7713.09,
-            |            "foreignTaxPaidOrDeducted":884.12,
-            |            "specialWithholdingTaxOrUkTaxPaid":847.72
-            |         },
-            |         "expenses":{
-            |            "premisesRunningCosts":129.35,
-            |            "repairsAndMaintenance":7490.32,
-            |            "financialCosts":5000.99,
-            |            "professionalFees":847.90,
-            |            "travelCosts":69.20,
-            |            "costOfServices":478.23,
-            |            "residentialFinancialCost":879.28,
-            |            "broughtFwdResidentialFinancialCost":846.13,
-            |            "other":138.92
-            |         }
-            |      }
-            |   ]
-            |}
-            |""".stripMargin)
+            requestBody.update("foreignFhlEea/expenses/repairsAndMaintenance", JsString("8842.231"))
           ))
         result shouldBe List(
           ValueFormatError.copy(paths = Some(Seq("/foreignFhlEea/expenses/repairsAndMaintenance")))
         )
       }
 
-      "foreignFhlEea/expenses/financialCosts is invalid" in {
-        val validator = setUpValidator()
-        val result = validator.validate(
+      "foreignFhlEea/expenses/financialCosts is invalid" in new TestData {
+        val validator: CreateForeignPropertyPeriodSummaryValidator = setUpValidator()
+        val result: Seq[MtdError] = validator.validate(
           CreateForeignPropertyPeriodSummaryRawData(
             validNino,
             validBusinessId,
             validTaxYear,
-            Json.parse("""
-            |{
-            |   "fromDate":"2020-03-29",
-            |   "toDate":"2021-03-29",
-            |   "foreignFhlEea":{
-            |      "income":{
-            |         "rentAmount":381.21
-            |      },
-            |      "expenses":{
-            |         "premisesRunningCosts":993.31,
-            |         "repairsAndMaintenance":8842.23,
-            |         "financialCosts":994.231,
-            |         "professionalFees":992.12,
-            |         "costOfServices":4620.23,
-            |         "travelCosts":774,
-            |         "other":984.41
-            |      }
-            |   },
-            |   "foreignNonFhlProperty":[
-            |      {
-            |         "countryCode":"AFG",
-            |         "income":{
-            |            "rentIncome":{
-            |               "rentAmount":4882.23
-            |            },
-            |            "foreignTaxCreditRelief":true,
-            |            "premiumsOfLeaseGrant":884.72,
-            |            "otherPropertyIncome":7713.09,
-            |            "foreignTaxPaidOrDeducted":884.12,
-            |            "specialWithholdingTaxOrUkTaxPaid":847.72
-            |         },
-            |         "expenses":{
-            |            "premisesRunningCosts":129.35,
-            |            "repairsAndMaintenance":7490.32,
-            |            "financialCosts":5000.99,
-            |            "professionalFees":847.90,
-            |            "travelCosts":69.20,
-            |            "costOfServices":478.23,
-            |            "residentialFinancialCost":879.28,
-            |            "broughtFwdResidentialFinancialCost":846.13,
-            |            "other":138.92
-            |         }
-            |      }
-            |   ]
-            |}
-            |""".stripMargin)
+            requestBody.update("foreignFhlEea/expenses/financialCosts", JsString("42.768"))
           ))
+
         result shouldBe List(
           ValueFormatError.copy(paths = Some(Seq("/foreignFhlEea/expenses/financialCosts")))
         )
       }
 
-      "foreignFhlEea/expenses/professionalFees is invalid" in {
+      "foreignFhlEea/expenses/professionalFees is invalid" in new TestData {
         val validator = setUpValidator()
         val result = validator.validate(
           CreateForeignPropertyPeriodSummaryRawData(
             validNino,
             validBusinessId,
             validTaxYear,
-            Json.parse("""
-            |{
-            |   "fromDate":"2020-03-29",
-            |   "toDate":"2021-03-29",
-            |   "foreignFhlEea":{
-            |      "income":{
-            |         "rentAmount":381.21
-            |      },
-            |      "expenses":{
-            |         "premisesRunningCosts":993.31,
-            |         "repairsAndMaintenance":8842.23,
-            |         "financialCosts":994,
-            |         "professionalFees":992.112,
-            |         "costOfServices":4620.23,
-            |         "travelCosts":774,
-            |         "other":984.41
-            |      }
-            |   },
-            |   "foreignNonFhlProperty":[
-            |      {
-            |         "countryCode":"AFG",
-            |         "income":{
-            |            "rentIncome":{
-            |               "rentAmount":4882.23
-            |            },
-            |            "foreignTaxCreditRelief":true,
-            |            "premiumsOfLeaseGrant":884.72,
-            |            "otherPropertyIncome":7713.09,
-            |            "foreignTaxPaidOrDeducted":884.12,
-            |            "specialWithholdingTaxOrUkTaxPaid":847.72
-            |         },
-            |         "expenses":{
-            |            "premisesRunningCosts":129.35,
-            |            "repairsAndMaintenance":7490.32,
-            |            "financialCosts":5000.99,
-            |            "professionalFees":847.90,
-            |            "travelCosts":69.20,
-            |            "costOfServices":478.23,
-            |            "residentialFinancialCost":879.28,
-            |            "broughtFwdResidentialFinancialCost":846.13,
-            |            "other":138.92
-            |         }
-            |      }
-            |   ]
-            |}
-            |""".stripMargin)
+            requestBody.update("foreignFhlEea/expenses/professionalFees", JsString("992.112"))
           ))
+
         result shouldBe List(
           ValueFormatError.copy(paths = Some(Seq("/foreignFhlEea/expenses/professionalFees")))
         )
       }
 
-      "foreignFhlEea/expenses/costOfServices is invalid" in {
-        val validator = setUpValidator()
-        val result = validator.validate(
+      "foreignFhlEea/expenses/costOfServices is invalid" in new TestData {
+        val validator: CreateForeignPropertyPeriodSummaryValidator = setUpValidator()
+        val result: Seq[MtdError] = validator.validate(
           CreateForeignPropertyPeriodSummaryRawData(
             validNino,
             validBusinessId,
             validTaxYear,
-            Json.parse("""
-            |{
-            |   "fromDate":"2020-03-29",
-            |   "toDate":"2021-03-29",
-            |   "foreignFhlEea":{
-            |      "income":{
-            |         "rentAmount":381.21
-            |      },
-            |      "expenses":{
-            |         "premisesRunningCosts":993.31,
-            |         "repairsAndMaintenance":8842.23,
-            |         "financialCosts":994,
-            |         "professionalFees":992.12,
-            |         "costOfServices":4620.231,
-            |         "travelCosts":774,
-            |         "other":984.41
-            |      }
-            |   },
-            |   "foreignNonFhlProperty":[
-            |      {
-            |         "countryCode":"AFG",
-            |         "income":{
-            |            "rentIncome":{
-            |               "rentAmount":4882.23
-            |            },
-            |            "foreignTaxCreditRelief":true,
-            |            "premiumsOfLeaseGrant":884.72,
-            |            "otherPropertyIncome":7713.09,
-            |            "foreignTaxPaidOrDeducted":884.12,
-            |            "specialWithholdingTaxOrUkTaxPaid":847.72
-            |         },
-            |         "expenses":{
-            |            "premisesRunningCosts":129.35,
-            |            "repairsAndMaintenance":7490.32,
-            |            "financialCosts":5000.99,
-            |            "professionalFees":847.90,
-            |            "travelCosts":69.20,
-            |            "costOfServices":478.23,
-            |            "residentialFinancialCost":879.28,
-            |            "broughtFwdResidentialFinancialCost":846.13,
-            |            "other":138.92
-            |         }
-            |      }
-            |   ]
-            |}
-            |""".stripMargin)
+            requestBody.update("foreignFhlEea/expenses/costOfServices", JsString("4620.231"))
           ))
+
         result shouldBe List(
           ValueFormatError.copy(paths = Some(Seq("/foreignFhlEea/expenses/costOfServices")))
         )
       }
 
-      "foreignFhlEea/expenses/travelCosts is invalid" in {
-        val validator = setUpValidator()
-        val result = validator.validate(
+      "foreignFhlEea/expenses/travelCosts is invalid" in new TestData {
+        val validator: CreateForeignPropertyPeriodSummaryValidator = setUpValidator()
+        val result: Seq[MtdError] = validator.validate(
           CreateForeignPropertyPeriodSummaryRawData(
             validNino,
             validBusinessId,
             validTaxYear,
-            Json.parse("""
-            |{
-            |   "fromDate":"2020-03-29",
-            |   "toDate":"2021-03-29",
-            |   "foreignFhlEea":{
-            |      "income":{
-            |         "rentAmount":381.21
-            |      },
-            |      "expenses":{
-            |         "premisesRunningCosts":993.31,
-            |         "repairsAndMaintenance":8842.23,
-            |         "financialCosts":994,
-            |         "professionalFees":992.12,
-            |         "costOfServices":4620.23,
-            |         "travelCosts":774.321,
-            |         "other":984.41
-            |      }
-            |   },
-            |   "foreignNonFhlProperty":[
-            |      {
-            |         "countryCode":"AFG",
-            |         "income":{
-            |            "rentIncome":{
-            |               "rentAmount":4882.23
-            |            },
-            |            "foreignTaxCreditRelief":true,
-            |            "premiumsOfLeaseGrant":884.72,
-            |            "otherPropertyIncome":7713.09,
-            |            "foreignTaxPaidOrDeducted":884.12,
-            |            "specialWithholdingTaxOrUkTaxPaid":847.72
-            |         },
-            |         "expenses":{
-            |            "premisesRunningCosts":129.35,
-            |            "repairsAndMaintenance":7490.32,
-            |            "financialCosts":5000.99,
-            |            "professionalFees":847.90,
-            |            "travelCosts":69.20,
-            |            "costOfServices":478.23,
-            |            "residentialFinancialCost":879.28,
-            |            "broughtFwdResidentialFinancialCost":846.13,
-            |            "other":138.92
-            |         }
-            |      }
-            |   ]
-            |}
-            |""".stripMargin)
+            requestBody.update("foreignFhlEea/expenses/travelCosts", JsString("482.678"))
           ))
+
         result shouldBe List(
           ValueFormatError.copy(paths = Some(Seq("/foreignFhlEea/expenses/travelCosts")))
         )
       }
 
-      "foreignFhlEea/expenses/other is invalid" in {
-        val validator = setUpValidator()
-        val result = validator.validate(
+      "foreignFhlEea/expenses/other is invalid" in new TestData {
+        val validator: CreateForeignPropertyPeriodSummaryValidator = setUpValidator()
+        val result: Seq[MtdError] = validator.validate(
           CreateForeignPropertyPeriodSummaryRawData(
             validNino,
             validBusinessId,
             validTaxYear,
-            Json.parse("""
-            |{
-            |   "fromDate":"2020-03-29",
-            |   "toDate":"2021-03-29",
-            |   "foreignFhlEea":{
-            |      "income":{
-            |         "rentAmount":381.21
-            |      },
-            |      "expenses":{
-            |         "premisesRunningCosts":993.31,
-            |         "repairsAndMaintenance":8842.23,
-            |         "financialCosts":994,
-            |         "professionalFees":992.12,
-            |         "costOfServices":4620.23,
-            |         "travelCosts":774,
-            |         "other":984.411
-            |      }
-            |   },
-            |   "foreignNonFhlProperty":[
-            |      {
-            |         "countryCode":"AFG",
-            |         "income":{
-            |            "rentIncome":{
-            |               "rentAmount":4882.23
-            |            },
-            |            "foreignTaxCreditRelief":true,
-            |            "premiumsOfLeaseGrant":884.72,
-            |            "otherPropertyIncome":7713.09,
-            |            "foreignTaxPaidOrDeducted":884.12,
-            |            "specialWithholdingTaxOrUkTaxPaid":847.72
-            |         },
-            |         "expenses":{
-            |            "premisesRunningCosts":129.35,
-            |            "repairsAndMaintenance":7490.32,
-            |            "financialCosts":5000.99,
-            |            "professionalFees":847.90,
-            |            "travelCosts":69.20,
-            |            "costOfServices":478.23,
-            |            "residentialFinancialCost":879.28,
-            |            "broughtFwdResidentialFinancialCost":846.13,
-            |            "other":138.92
-            |         }
-            |      }
-            |   ]
-            |}
-            |""".stripMargin)
+            requestBody.update("foreignFhlEea/expenses/other", JsString("482.231"))
           ))
+
         result shouldBe List(
           ValueFormatError.copy(paths = Some(Seq("/foreignFhlEea/expenses/other")))
         )
@@ -1066,6 +712,9 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with Mock
             |}
             |""".stripMargin)
           ))
+
+
+
         result shouldBe List(
           ValueFormatError.copy(paths = Some(Seq("/foreignFhlEea/expenses/consolidatedExpenses")))
         )
@@ -1125,6 +774,7 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with Mock
             |}
             |""".stripMargin)
           ))
+
         result shouldBe List(
           ValueFormatError.copy(paths = Some(Seq("/foreignNonFhlProperty/0/income/rentIncome/rentAmount")))
         )
@@ -1184,6 +834,7 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with Mock
             |}
             |""".stripMargin)
           ))
+
         result shouldBe List(
           ValueFormatError.copy(paths = Some(Seq("/foreignNonFhlProperty/0/income/premiumsOfLeaseGrant")))
         )
@@ -1243,6 +894,7 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with Mock
             |}
             |""".stripMargin)
           ))
+
         result shouldBe List(
           ValueFormatError.copy(paths = Some(Seq("/foreignNonFhlProperty/0/income/otherPropertyIncome")))
         )
@@ -2474,7 +2126,7 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with Mock
 
     val requestBody: JsValue = Json.parse("""
       |{
-      |   "fromDate":"2023-01-01",
+      |   "fromDate":"2021-01-01",
       |   "toDate":"2021-03-29",
       |   "foreignFhlEea":{
       |      "income":{

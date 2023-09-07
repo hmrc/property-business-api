@@ -23,7 +23,10 @@ import api.controllers.requestParsers.validators.validations.{HistoricPeriodIdVa
 import api.models.errors.MtdError
 import config.AppConfig
 import v2.controllers.requestParsers.validators.validations.ConsolidatedExpensesValidation
-import v2.models.request.amendHistoricNonFhlUkPiePeriodSummary.{AmendHistoricNonFhlUkPiePeriodSummaryRawData, AmendHistoricNonFhlUkPiePeriodSummaryRequestBody}
+import v2.models.request.amendHistoricNonFhlUkPiePeriodSummary.{
+  AmendHistoricNonFhlUkPiePeriodSummaryRawData,
+  AmendHistoricNonFhlUkPiePeriodSummaryRequestBody
+}
 
 import javax.inject.{Inject, Singleton}
 
@@ -47,7 +50,7 @@ class AmendHistoricNonFhlUkPiePeriodSummaryValidator @Inject() (appConfig: AppCo
       NinoValidation.validate(data.nino)
 
     val periodIdError =
-      HistoricPeriodIdValidation.validate(minTaxYear, maxTaxYear, data.periodId)
+      HistoricPeriodIdValidation.validatePeriodId(minTaxYear, maxTaxYear, data.periodId)
 
     errorsResult(ninoError ++ periodIdError)
   }

@@ -16,12 +16,29 @@
 
 package api.controllers.requestParsers.validators.validations
 
-import api.models.errors.{MtdError, PeriodIdFormatError}
+import api.models.errors.{MtdError, PeriodIdFormatError, RuleHistoricTaxYearNotSupportedError, TaxYearFormatError}
 
 object HistoricPeriodIdValidation {
 
-  def validate(minimumTaxYear: Int, maximumTaxYear: Int, periodId: String): List[MtdError] = {
+  val taxDateFormat                     = "20[1-9][0-9]\\-[0-9][0-9]\\-[0-9][0-9]"
+  val NoValidationErrors: List[Nothing] = List()
 
+  def validateHistoricTaxYear(minimumTaxYear: Int, maximumTaxYear: Int, taxYear: String): List[MtdError] = {
+    if (taxYear.matches(taxDateFormat)) {
+
+      val year = taxYear.substring(0, 4).toInt
+
+      if (year >= minimumTaxYear && year <= maximumTaxYear) {
+        NoValidationErrors
+      } else {
+        List(RuleHistoricTaxYearNotSupportedError)
+      }
+    } else {
+      List(TaxYearFormatError)
+    }
+  }
+
+  def validatePeriodId(minimumTaxYear: Int, maximumTaxYear: Int, periodId: String): List[MtdError] = {
     val periodIdLength = "YYYY-MM-DD_YYYY-MM-DD".length
 
     if (periodId.length.equals(periodIdLength)) {
@@ -30,15 +47,15 @@ object HistoricPeriodIdValidation {
       val toDate     = periodId.substring(11, 21)
       val underscore = periodId.substring(10, 11)
 
-      val historicDateErrors = HistoricTaxPeriodYearValidation.validate(minimumTaxYear, maximumTaxYear, fromDate) ++
-        HistoricTaxPeriodYearValidation.validate(minimumTaxYear, maximumTaxYear, toDate)
+      val historicDateErrors = validateHistoricTaxYear(minimumTaxYear, maximumTaxYear, fromDate) ++
+        validateHistoricTaxYear(minimumTaxYear, maximumTaxYear, toDate)
 
-      if (historicDateErrors.equals(NoValidationErrors)) {
+      if (historicDateErrors.isEmpty) {
         val dateOrderErrors = ToDateBeforeFromDateValidation.validate(fromDate, toDate)
 
-        if (dateOrderErrors.equals(Nil)) {
+        if (dateOrderErrors.isEmpty) {
           if (underscore.matches("_")) {
-            NoValidationErrors
+            Nil // Empty list represents no validation errors
           } else {
             List(PeriodIdFormatError)
           }

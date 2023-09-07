@@ -18,11 +18,12 @@ package v2.controllers.requestParsers.validators
 
 import api.models.errors._
 import mocks.MockAppConfig
-import play.api.libs.json.{JsArray, JsValue, Json}
+import play.api.libs.json.{JsArray, JsString, JsValue, Json}
 import support.UnitSpec
 import v2.models.request.createForeignPropertyPeriodSummary.CreateForeignPropertyPeriodSummaryRawData
+import v2.models.utils.JsonErrorValidators
 
-class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with MockAppConfig {
+class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with MockAppConfig with JsonErrorValidators {
 
   private val validNino       = "AA123456A"
   private val validBusinessId = "XAIS12345678901"
@@ -139,16 +140,20 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with Mock
     "return no errors" when {
       "a valid request is supplied" in {
         val validator = setUpValidator()
-        validator.validate(CreateForeignPropertyPeriodSummaryRawData(validNino, validBusinessId, validTaxYear, requestBodyJson)) shouldBe Nil
+        val result    = validator.validate(CreateForeignPropertyPeriodSummaryRawData(validNino, validBusinessId, validTaxYear, requestBodyJson))
+        result shouldBe Nil
       }
+
       "a valid consolidatedExpenses request is supplied" in {
         val validator = setUpValidator()
-        validator.validate(
-          CreateForeignPropertyPeriodSummaryRawData(validNino, validBusinessId, validTaxYear, requestBodyConsolidationExpenseJson)) shouldBe Nil
+        val result =
+          validator.validate(CreateForeignPropertyPeriodSummaryRawData(validNino, validBusinessId, validTaxYear, requestBodyConsolidationExpenseJson))
+        result shouldBe Nil
       }
+
       "a minimal foreignFhlEea request is supplied" in {
         val validator = setUpValidator()
-        validator.validate(
+        val result = validator.validate(
           CreateForeignPropertyPeriodSummaryRawData(
             validNino,
             validBusinessId,
@@ -164,11 +169,14 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with Mock
             |  }
             |}
             |""".stripMargin)
-          )) shouldBe Nil
+          ))
+
+        result shouldBe Nil
       }
+
       "a minimal foreignNonFhlProperty request is supplied" in {
         val validator = setUpValidator()
-        validator.validate(
+        val result = validator.validate(
           CreateForeignPropertyPeriodSummaryRawData(
             validNino,
             validBusinessId,
@@ -190,14 +198,17 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with Mock
             |  ]
             |}
             |""".stripMargin)
-          )) shouldBe Nil
+          ))
+
+        result shouldBe Nil
       }
     }
 
     "return NinoFormatError error" when {
       "an invalid nino is supplied" in {
         val validator = setUpValidator()
-        validator.validate(CreateForeignPropertyPeriodSummaryRawData("A12344A", validBusinessId, validTaxYear, requestBodyJson)) shouldBe
+        val result    = validator.validate(CreateForeignPropertyPeriodSummaryRawData("A12344A", validBusinessId, validTaxYear, requestBodyJson))
+        result shouldBe
           List(NinoFormatError)
       }
     }
@@ -205,7 +216,8 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with Mock
     "return BusinessIdFormatError error" when {
       "an invalid businessId is supplied" in {
         val validator = setUpValidator()
-        validator.validate(CreateForeignPropertyPeriodSummaryRawData(validNino, "20178", validTaxYear, requestBodyJson)) shouldBe
+        val result    = validator.validate(CreateForeignPropertyPeriodSummaryRawData(validNino, "20178", validTaxYear, requestBodyJson))
+        result shouldBe
           List(BusinessIdFormatError)
       }
     }
@@ -213,7 +225,8 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with Mock
     "return TaxYearFormatError error" when {
       "an invalid taxYear is supplied" in {
         val validator = setUpValidator()
-        validator.validate(CreateForeignPropertyPeriodSummaryRawData(validNino, validBusinessId, "20231", requestBodyJson)) shouldBe
+        val result    = validator.validate(CreateForeignPropertyPeriodSummaryRawData(validNino, validBusinessId, "20231", requestBodyJson))
+        result shouldBe
           List(TaxYearFormatError)
       }
     }
@@ -221,7 +234,8 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with Mock
     "return RuleTaxYearRangeInvalidError" when {
       "a taxYear with a range higher than 1 is supplied" in {
         val validator = setUpValidator()
-        validator.validate(CreateForeignPropertyPeriodSummaryRawData(validNino, validBusinessId, "2021-23", requestBodyJson)) shouldBe
+        val result    = validator.validate(CreateForeignPropertyPeriodSummaryRawData(validNino, validBusinessId, "2021-23", requestBodyJson))
+        result shouldBe
           List(RuleTaxYearRangeInvalidError)
       }
     }
@@ -229,7 +243,8 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with Mock
     "return RuleTaxYearNotSupportedError" when {
       "a taxYear that's before 2021 is supplied" in {
         val validator = setUpValidator()
-        validator.validate(CreateForeignPropertyPeriodSummaryRawData(validNino, validBusinessId, "2020-21", requestBodyJson)) shouldBe
+        val result    = validator.validate(CreateForeignPropertyPeriodSummaryRawData(validNino, validBusinessId, "2020-21", requestBodyJson))
+        result shouldBe
           List(RuleTaxYearNotSupportedError)
       }
     }
@@ -237,12 +252,13 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with Mock
     "return RuleIncorrectOrEmptyBodyError" when {
       "an empty body is submitted" in {
         val validator = setUpValidator()
-        validator.validate(CreateForeignPropertyPeriodSummaryRawData(validNino, validBusinessId, validTaxYear, Json.parse("""{}"""))) shouldBe List(
-          RuleIncorrectOrEmptyBodyError)
+        val result    = validator.validate(CreateForeignPropertyPeriodSummaryRawData(validNino, validBusinessId, validTaxYear, Json.parse("""{}""")))
+        result shouldBe List(RuleIncorrectOrEmptyBodyError)
       }
+
       "an empty foreignFhlEea is submitted" in {
         val validator = setUpValidator()
-        validator.validate(
+        val result = validator.validate(
           CreateForeignPropertyPeriodSummaryRawData(
             validNino,
             validBusinessId,
@@ -254,11 +270,14 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with Mock
             |  "foreignFhlEea": {}
             |}
             |""".stripMargin)
-          )) shouldBe List(RuleIncorrectOrEmptyBodyError.copy(paths = Some(List("/foreignFhlEea"))))
+          ))
+
+        result shouldBe List(RuleIncorrectOrEmptyBodyError.copy(paths = Some(List("/foreignFhlEea"))))
       }
+
       "foreignFhlEea.expenses is empty" in {
         val validator = setUpValidator()
-        validator.validate(
+        val result = validator.validate(
           CreateForeignPropertyPeriodSummaryRawData(
             validNino,
             validBusinessId,
@@ -272,11 +291,14 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with Mock
             |  }
             |}
             |""".stripMargin)
-          )) shouldBe List(RuleIncorrectOrEmptyBodyError.copy(paths = Some(List("/foreignFhlEea/expenses"))))
+          ))
+
+        result shouldBe List(RuleIncorrectOrEmptyBodyError.copy(paths = Some(List("/foreignFhlEea/expenses"))))
       }
+
       "foreignFhlEea.income is empty" in {
         val validator = setUpValidator()
-        validator.validate(
+        val result = validator.validate(
           CreateForeignPropertyPeriodSummaryRawData(
             validNino,
             validBusinessId,
@@ -290,11 +312,14 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with Mock
             |  }
             |}
             |""".stripMargin)
-          )) shouldBe List(RuleIncorrectOrEmptyBodyError.copy(paths = Some(List("/foreignFhlEea/income"))))
+          ))
+
+        result shouldBe List(RuleIncorrectOrEmptyBodyError.copy(paths = Some(List("/foreignFhlEea/income"))))
       }
+
       "an empty foreignNonFhlProperty is submitted" in {
         val validator = setUpValidator()
-        validator.validate(
+        val result = validator.validate(
           CreateForeignPropertyPeriodSummaryRawData(
             validNino,
             validBusinessId,
@@ -304,11 +329,14 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with Mock
             |  "toDate": "2020-01-31",
             |  "foreignNonFhlProperty": []
             |}""".stripMargin)
-          )) shouldBe List(RuleIncorrectOrEmptyBodyError.copy(paths = Some(List("/foreignNonFhlProperty"))))
+          ))
+
+        result shouldBe List(RuleIncorrectOrEmptyBodyError.copy(paths = Some(List("/foreignNonFhlProperty"))))
       }
+
       "a foreignNonFhlProperty array is submitted with an empty body in it" in {
         val validator = setUpValidator()
-        validator.validate(
+        val result = validator.validate(
           CreateForeignPropertyPeriodSummaryRawData(
             validNino,
             validBusinessId,
@@ -320,11 +348,14 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with Mock
             |    {}
             |  ]
             |}""".stripMargin)
-          )) shouldBe List(RuleIncorrectOrEmptyBodyError.copy(paths = Some(Seq("/foreignNonFhlProperty/0/countryCode"))))
+          ))
+
+        result shouldBe List(RuleIncorrectOrEmptyBodyError.copy(paths = Some(Seq("/foreignNonFhlProperty/0/countryCode"))))
       }
+
       "foreignNonFhlProperty[].expenses is empty" in {
         val validator = setUpValidator()
-        validator.validate(
+        val result = validator.validate(
           CreateForeignPropertyPeriodSummaryRawData(
             validNino,
             validBusinessId,
@@ -339,11 +370,14 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with Mock
             |    }
             |  ]
             |}""".stripMargin)
-          )) shouldBe List(RuleIncorrectOrEmptyBodyError.copy(paths = Some(List("/foreignNonFhlProperty/0/expenses"))))
+          ))
+
+        result shouldBe List(RuleIncorrectOrEmptyBodyError.copy(paths = Some(List("/foreignNonFhlProperty/0/expenses"))))
       }
+
       "foreignNonFhlProperty[].income is empty" in {
         val validator = setUpValidator()
-        validator.validate(
+        val result = validator.validate(
           CreateForeignPropertyPeriodSummaryRawData(
             validNino,
             validBusinessId,
@@ -358,11 +392,14 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with Mock
             |    }
             |  ]
             |}""".stripMargin)
-          )) shouldBe List(RuleIncorrectOrEmptyBodyError.copy(paths = Some(Seq("/foreignNonFhlProperty/0/income/foreignTaxCreditRelief"))))
+          ))
+
+        result shouldBe List(RuleIncorrectOrEmptyBodyError.copy(paths = Some(Seq("/foreignNonFhlProperty/0/income/foreignTaxCreditRelief"))))
       }
+
       "foreignNonFhlProperty[].income and foreignNonFhlProperty[].expenses are missing but countryCode exists" in {
         val validator = setUpValidator()
-        validator.validate(
+        val result = validator.validate(
           CreateForeignPropertyPeriodSummaryRawData(
             validNino,
             validBusinessId,
@@ -376,11 +413,14 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with Mock
             |    }
             |  ]
             |}""".stripMargin)
-          )) shouldBe List(RuleIncorrectOrEmptyBodyError.copy(paths = Some(List("/foreignNonFhlProperty/0"))))
+          ))
+
+        result shouldBe List(RuleIncorrectOrEmptyBodyError.copy(paths = Some(List("/foreignNonFhlProperty/0"))))
       }
+
       "foreignNonFhlProperty[].income.rentIncome is empty" in {
         val validator = setUpValidator()
-        validator.validate(
+        val result = validator.validate(
           CreateForeignPropertyPeriodSummaryRawData(
             validNino,
             validBusinessId,
@@ -398,300 +438,75 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with Mock
             |    }
             |  ]
             |}""".stripMargin)
-          )) shouldBe List(RuleIncorrectOrEmptyBodyError.copy(paths = Some(List("/foreignNonFhlProperty/0/income/rentIncome"))))
+          ))
+
+        result shouldBe List(RuleIncorrectOrEmptyBodyError.copy(paths = Some(List("/foreignNonFhlProperty/0/income/rentIncome"))))
       }
     }
 
     "return Date Errors" when {
-      "the fromDate format is invalid" in {
-        val validator = setUpValidator()
-        validator.validate(
+      "the fromDate format is invalid" in new TestData {
+        val validator: CreateForeignPropertyPeriodSummaryValidator = setUpValidator()
+        val result: Seq[MtdError] = validator.validate(
           CreateForeignPropertyPeriodSummaryRawData(
             validNino,
             validBusinessId,
             validTaxYear,
-            Json.parse(
-              """
-            |{
-            |   "fromDate":"01-01-2023",
-            |   "toDate":"2021-03-29",
-            |   "foreignFhlEea":{
-            |      "income":{
-            |         "rentAmount":381.21
-            |      },
-            |      "expenses":{
-            |         "premisesRunningCosts":993.31,
-            |         "repairsAndMaintenance":8842.23,
-            |         "financialCosts":994,
-            |         "professionalFees":992.12,
-            |         "costOfServices":4620.23,
-            |         "travelCosts":774,
-            |         "other":984.41
-            |      }
-            |   },
-            |   "foreignNonFhlProperty":[
-            |      {
-            |         "countryCode":"AFG",
-            |         "income":{
-            |            "rentIncome":{
-            |               "rentAmount":4882.23
-            |            },
-            |            "foreignTaxCreditRelief":true,
-            |            "premiumsOfLeaseGrant":884.72,
-            |            "otherPropertyIncome":7713.09,
-            |            "foreignTaxPaidOrDeducted":884.12,
-            |            "specialWithholdingTaxOrUkTaxPaid":847.72
-            |         },
-            |         "expenses":{
-            |            "premisesRunningCosts":129.35,
-            |            "repairsAndMaintenance":7490.32,
-            |            "financialCosts":5000.99,
-            |            "professionalFees":847.90,
-            |            "travelCosts":69.20,
-            |            "costOfServices":478.23,
-            |            "residentialFinancialCost":879.28,
-            |            "broughtFwdResidentialFinancialCost":846.13,
-            |            "other":138.92
-            |         }
-            |      }
-            |   ]
-            |}
-            |""".stripMargin
-            )
-          )) shouldBe List(FromDateFormatError)
-      }
-      "the fromDate is out of range" in {
-        val validator = setUpValidator()
-        validator.validate(
-          CreateForeignPropertyPeriodSummaryRawData(
-            validNino,
-            validBusinessId,
-            validTaxYear,
-            Json.parse(
-              """
-                |{
-                |   "fromDate":"1782-01-01",
-                |   "toDate":"2021-03-29",
-                |   "foreignFhlEea":{
-                |      "income":{
-                |         "rentAmount":381.21
-                |      },
-                |      "expenses":{
-                |         "premisesRunningCosts":993.31,
-                |         "repairsAndMaintenance":8842.23,
-                |         "financialCosts":994,
-                |         "professionalFees":992.12,
-                |         "costOfServices":4620.23,
-                |         "travelCosts":774,
-                |         "other":984.41
-                |      }
-                |   },
-                |   "foreignNonFhlProperty":[
-                |      {
-                |         "countryCode":"AFG",
-                |         "income":{
-                |            "rentIncome":{
-                |               "rentAmount":4882.23
-                |            },
-                |            "foreignTaxCreditRelief":true,
-                |            "premiumsOfLeaseGrant":884.72,
-                |            "otherPropertyIncome":7713.09,
-                |            "foreignTaxPaidOrDeducted":884.12,
-                |            "specialWithholdingTaxOrUkTaxPaid":847.72
-                |         },
-                |         "expenses":{
-                |            "premisesRunningCosts":129.35,
-                |            "repairsAndMaintenance":7490.32,
-                |            "financialCosts":5000.99,
-                |            "professionalFees":847.90,
-                |            "travelCosts":69.20,
-                |            "costOfServices":478.23,
-                |            "residentialFinancialCost":879.28,
-                |            "broughtFwdResidentialFinancialCost":846.13,
-                |            "other":138.92
-                |         }
-                |      }
-                |   ]
-                |}
-                |""".stripMargin
-            )
-          )) shouldBe List(FromDateOutOfRangeError)
+            requestBody.update("fromDate", JsString("01-01-2023"))
+          ))
+
+        result shouldBe List(FromDateFormatError)
       }
 
-      "the toDate format is invalid" in {
-        val validator = setUpValidator()
-        validator.validate(
+      "the fromDate is out of range" in new TestData {
+        val validator: CreateForeignPropertyPeriodSummaryValidator = setUpValidator()
+        val result: Seq[MtdError] = validator.validate(
           CreateForeignPropertyPeriodSummaryRawData(
             validNino,
             validBusinessId,
             validTaxYear,
-            Json.parse(
-              """
-            |{
-            |   "fromDate":"2020-01-01",
-            |   "toDate":"2020.10.01",
-            |   "foreignFhlEea":{
-            |      "income":{
-            |         "rentAmount":381.21
-            |      },
-            |      "expenses":{
-            |         "premisesRunningCosts":993.31,
-            |         "repairsAndMaintenance":8842.23,
-            |         "financialCosts":994,
-            |         "professionalFees":992.12,
-            |         "costOfServices":4620.23,
-            |         "travelCosts":774,
-            |         "other":984.41
-            |      }
-            |   },
-            |   "foreignNonFhlProperty":[
-            |      {
-            |         "countryCode":"AFG",
-            |         "income":{
-            |            "rentIncome":{
-            |               "rentAmount":4882.23
-            |            },
-            |            "foreignTaxCreditRelief":true,
-            |            "premiumsOfLeaseGrant":884.72,
-            |            "otherPropertyIncome":7713.09,
-            |            "foreignTaxPaidOrDeducted":884.12,
-            |            "specialWithholdingTaxOrUkTaxPaid":847.72
-            |         },
-            |         "expenses":{
-            |            "premisesRunningCosts":129.35,
-            |            "repairsAndMaintenance":7490.32,
-            |            "financialCosts":5000.99,
-            |            "professionalFees":847.90,
-            |            "travelCosts":69.20,
-            |            "costOfServices":478.23,
-            |            "residentialFinancialCost":879.28,
-            |            "broughtFwdResidentialFinancialCost":846.13,
-            |            "other":138.92
-            |         }
-            |      }
-            |   ]
-            |}
-            |""".stripMargin
-            )
-          )) shouldBe List(ToDateFormatError)
+            requestBody.update("fromDate", JsString("1782-09-04"))
+          )
+        )
+        result shouldBe List(FromDateOutOfRangeError)
+      }
+
+      "the toDate format is invalid" in new TestData {
+        val validator: CreateForeignPropertyPeriodSummaryValidator = setUpValidator()
+        val result: Seq[MtdError] = validator.validate(
+          CreateForeignPropertyPeriodSummaryRawData(
+            validNino,
+            validBusinessId,
+            validTaxYear,
+            requestBody.update("toDate", JsString("2020.10.01"))
+          ))
+        result shouldBe List(ToDateFormatError)
 
       }
 
-      "the toDate is out of range" in {
-        val validator = setUpValidator()
-        validator.validate(
+      "the toDate is out of range" in new TestData {
+        val validator: CreateForeignPropertyPeriodSummaryValidator = setUpValidator()
+        val result: Seq[MtdError] = validator.validate(
           CreateForeignPropertyPeriodSummaryRawData(
             validNino,
             validBusinessId,
             validTaxYear,
-            Json.parse(
-              """
-                |{
-                |   "fromDate":"2019-01-01",
-                |   "toDate":"3054-03-29",
-                |   "foreignFhlEea":{
-                |      "income":{
-                |         "rentAmount":381.21
-                |      },
-                |      "expenses":{
-                |         "premisesRunningCosts":993.31,
-                |         "repairsAndMaintenance":8842.23,
-                |         "financialCosts":994,
-                |         "professionalFees":992.12,
-                |         "costOfServices":4620.23,
-                |         "travelCosts":774,
-                |         "other":984.41
-                |      }
-                |   },
-                |   "foreignNonFhlProperty":[
-                |      {
-                |         "countryCode":"AFG",
-                |         "income":{
-                |            "rentIncome":{
-                |               "rentAmount":4882.23
-                |            },
-                |            "foreignTaxCreditRelief":true,
-                |            "premiumsOfLeaseGrant":884.72,
-                |            "otherPropertyIncome":7713.09,
-                |            "foreignTaxPaidOrDeducted":884.12,
-                |            "specialWithholdingTaxOrUkTaxPaid":847.72
-                |         },
-                |         "expenses":{
-                |            "premisesRunningCosts":129.35,
-                |            "repairsAndMaintenance":7490.32,
-                |            "financialCosts":5000.99,
-                |            "professionalFees":847.90,
-                |            "travelCosts":69.20,
-                |            "costOfServices":478.23,
-                |            "residentialFinancialCost":879.28,
-                |            "broughtFwdResidentialFinancialCost":846.13,
-                |            "other":138.92
-                |         }
-                |      }
-                |   ]
-                |}
-                |""".stripMargin
-            )
-          )) shouldBe List(ToDateOutOfRangeError)
+            requestBody.update("toDate", JsString("3054-03-29"))
+          ))
+        result shouldBe List(ToDateOutOfRangeError)
 
       }
 
-      "toDate is before fromDate" in {
-        val validator = setUpValidator()
-        validator.validate(
+      "toDate is before fromDate" in new TestData {
+        val validator: CreateForeignPropertyPeriodSummaryValidator = setUpValidator()
+        val result: Seq[MtdError] = validator.validate(
           CreateForeignPropertyPeriodSummaryRawData(
             validNino,
             validBusinessId,
             validTaxYear,
-            Json.parse(
-              """
-            |{
-            |   "fromDate":"2020-01-31",
-            |   "toDate":"2020-01-01",
-            |   "foreignFhlEea":{
-            |      "income":{
-            |         "rentAmount":381.21
-            |      },
-            |      "expenses":{
-            |         "premisesRunningCosts":993.31,
-            |         "repairsAndMaintenance":8842.23,
-            |         "financialCosts":994,
-            |         "professionalFees":992.12,
-            |         "costOfServices":4620.23,
-            |         "travelCosts":774,
-            |         "other":984.41
-            |      }
-            |   },
-            |   "foreignNonFhlProperty":[
-            |      {
-            |         "countryCode":"AFG",
-            |         "income":{
-            |            "rentIncome":{
-            |               "rentAmount":4882.23
-            |            },
-            |            "foreignTaxCreditRelief":true,
-            |            "premiumsOfLeaseGrant":884.72,
-            |            "otherPropertyIncome":7713.09,
-            |            "foreignTaxPaidOrDeducted":884.12,
-            |            "specialWithholdingTaxOrUkTaxPaid":847.72
-            |         },
-            |         "expenses":{
-            |            "premisesRunningCosts":129.35,
-            |            "repairsAndMaintenance":7490.32,
-            |            "financialCosts":5000.99,
-            |            "professionalFees":847.90,
-            |            "travelCosts":69.20,
-            |            "costOfServices":478.23,
-            |            "residentialFinancialCost":879.28,
-            |            "broughtFwdResidentialFinancialCost":846.13,
-            |            "other":138.92
-            |         }
-            |      }
-            |   ]
-            |}
-            |""".stripMargin
-            )
-          )) shouldBe List(RuleToDateBeforeFromDateError)
+            requestBody.update("fromDate", JsString("2020-01-31")).update("toDate", JsString("2020-01-01"))
+          ))
+        result shouldBe List(RuleToDateBeforeFromDateError)
       }
     }
 
@@ -699,13 +514,14 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with Mock
       "a country code is duplicated" in {
         val code      = "ZWE"
         val validator = setUpValidator()
-        validator.validate(
+        val result = validator.validate(
           CreateForeignPropertyPeriodSummaryRawData(
             nino = validNino,
             businessId = validBusinessId,
             taxYear = validTaxYear,
             body = bodyWith(entryWith(code), entryWith(code))
-          )) shouldBe List(
+          ))
+        result shouldBe List(
           RuleDuplicateCountryCodeError
             .forDuplicatedCodesAndPaths(code = code, paths = Seq("/foreignNonFhlProperty/0/countryCode", "/foreignNonFhlProperty/1/countryCode")))
       }
@@ -714,13 +530,15 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with Mock
         val code1     = "AFG"
         val code2     = "ZWE"
         val validator = setUpValidator()
-        validator.validate(
+        val result = validator.validate(
           CreateForeignPropertyPeriodSummaryRawData(
             nino = validNino,
             businessId = validBusinessId,
             taxYear = validTaxYear,
             body = bodyWith(entryWith(code1), entryWith(code2), entryWith(code1), entryWith(code2))
-          )) should contain theSameElementsAs List(
+          ))
+
+        result should contain theSameElementsAs List(
           RuleDuplicateCountryCodeError
             .forDuplicatedCodesAndPaths(code = code1, paths = Seq("/foreignNonFhlProperty/0/countryCode", "/foreignNonFhlProperty/2/countryCode")),
           RuleDuplicateCountryCodeError
@@ -732,7 +550,7 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with Mock
     "return ValueFormatError" when {
       "foreignFhlEea/income/rentAmount is invalid" in {
         val validator = setUpValidator()
-        validator.validate(
+        val result = validator.validate(
           CreateForeignPropertyPeriodSummaryRawData(
             validNino,
             validBusinessId,
@@ -783,13 +601,15 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with Mock
             |   ]
             |}
             |""".stripMargin)
-          )) shouldBe List(
+          ))
+        result shouldBe List(
           ValueFormatError.copy(paths = Some(Seq("/foreignFhlEea/income/rentAmount")))
         )
       }
+
       "foreignFhlEea/expenses/premisesRunningCosts is invalid" in {
         val validator = setUpValidator()
-        validator.validate(
+        val result = validator.validate(
           CreateForeignPropertyPeriodSummaryRawData(
             validNino,
             validBusinessId,
@@ -840,13 +660,15 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with Mock
             |   ]
             |}
             |""".stripMargin)
-          )) shouldBe List(
+          ))
+        result shouldBe List(
           ValueFormatError.copy(paths = Some(Seq("/foreignFhlEea/expenses/premisesRunningCosts")))
         )
       }
+
       "foreignFhlEea/expenses/repairsAndMaintenance is invalid" in {
         val validator = setUpValidator()
-        validator.validate(
+        val result = validator.validate(
           CreateForeignPropertyPeriodSummaryRawData(
             validNino,
             validBusinessId,
@@ -897,13 +719,15 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with Mock
             |   ]
             |}
             |""".stripMargin)
-          )) shouldBe List(
+          ))
+        result shouldBe List(
           ValueFormatError.copy(paths = Some(Seq("/foreignFhlEea/expenses/repairsAndMaintenance")))
         )
       }
+
       "foreignFhlEea/expenses/financialCosts is invalid" in {
         val validator = setUpValidator()
-        validator.validate(
+        val result = validator.validate(
           CreateForeignPropertyPeriodSummaryRawData(
             validNino,
             validBusinessId,
@@ -954,13 +778,15 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with Mock
             |   ]
             |}
             |""".stripMargin)
-          )) shouldBe List(
+          ))
+        result shouldBe List(
           ValueFormatError.copy(paths = Some(Seq("/foreignFhlEea/expenses/financialCosts")))
         )
       }
+
       "foreignFhlEea/expenses/professionalFees is invalid" in {
         val validator = setUpValidator()
-        validator.validate(
+        val result = validator.validate(
           CreateForeignPropertyPeriodSummaryRawData(
             validNino,
             validBusinessId,
@@ -1011,13 +837,15 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with Mock
             |   ]
             |}
             |""".stripMargin)
-          )) shouldBe List(
+          ))
+        result shouldBe List(
           ValueFormatError.copy(paths = Some(Seq("/foreignFhlEea/expenses/professionalFees")))
         )
       }
+
       "foreignFhlEea/expenses/costOfServices is invalid" in {
         val validator = setUpValidator()
-        validator.validate(
+        val result = validator.validate(
           CreateForeignPropertyPeriodSummaryRawData(
             validNino,
             validBusinessId,
@@ -1068,13 +896,15 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with Mock
             |   ]
             |}
             |""".stripMargin)
-          )) shouldBe List(
+          ))
+        result shouldBe List(
           ValueFormatError.copy(paths = Some(Seq("/foreignFhlEea/expenses/costOfServices")))
         )
       }
+
       "foreignFhlEea/expenses/travelCosts is invalid" in {
         val validator = setUpValidator()
-        validator.validate(
+        val result = validator.validate(
           CreateForeignPropertyPeriodSummaryRawData(
             validNino,
             validBusinessId,
@@ -1125,13 +955,15 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with Mock
             |   ]
             |}
             |""".stripMargin)
-          )) shouldBe List(
+          ))
+        result shouldBe List(
           ValueFormatError.copy(paths = Some(Seq("/foreignFhlEea/expenses/travelCosts")))
         )
       }
+
       "foreignFhlEea/expenses/other is invalid" in {
         val validator = setUpValidator()
-        validator.validate(
+        val result = validator.validate(
           CreateForeignPropertyPeriodSummaryRawData(
             validNino,
             validBusinessId,
@@ -1182,13 +1014,15 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with Mock
             |   ]
             |}
             |""".stripMargin)
-          )) shouldBe List(
+          ))
+        result shouldBe List(
           ValueFormatError.copy(paths = Some(Seq("/foreignFhlEea/expenses/other")))
         )
       }
+
       "foreignFhlEea/expenses/consolidatedExpenses is invalid" in {
         val validator = setUpValidator()
-        validator.validate(
+        val result = validator.validate(
           CreateForeignPropertyPeriodSummaryRawData(
             validNino,
             validBusinessId,
@@ -1231,13 +1065,15 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with Mock
             |  ]
             |}
             |""".stripMargin)
-          )) shouldBe List(
+          ))
+        result shouldBe List(
           ValueFormatError.copy(paths = Some(Seq("/foreignFhlEea/expenses/consolidatedExpenses")))
         )
       }
+
       "foreignNonFhlProperty/0/income/rentIncome/rentAmount is invalid" in {
         val validator = setUpValidator()
-        validator.validate(
+        val result = validator.validate(
           CreateForeignPropertyPeriodSummaryRawData(
             validNino,
             validBusinessId,
@@ -1288,13 +1124,15 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with Mock
             |   ]
             |}
             |""".stripMargin)
-          )) shouldBe List(
+          ))
+        result shouldBe List(
           ValueFormatError.copy(paths = Some(Seq("/foreignNonFhlProperty/0/income/rentIncome/rentAmount")))
         )
       }
+
       "foreignNonFhlProperty/0/income/premiumsOfLeaseGrant is invalid" in {
         val validator = setUpValidator()
-        validator.validate(
+        val result = validator.validate(
           CreateForeignPropertyPeriodSummaryRawData(
             validNino,
             validBusinessId,
@@ -1345,13 +1183,15 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with Mock
             |   ]
             |}
             |""".stripMargin)
-          )) shouldBe List(
+          ))
+        result shouldBe List(
           ValueFormatError.copy(paths = Some(Seq("/foreignNonFhlProperty/0/income/premiumsOfLeaseGrant")))
         )
       }
+
       "foreignNonFhlProperty/0/income/otherPropertyIncome is invalid" in {
         val validator = setUpValidator()
-        validator.validate(
+        val result = validator.validate(
           CreateForeignPropertyPeriodSummaryRawData(
             validNino,
             validBusinessId,
@@ -1402,13 +1242,15 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with Mock
             |   ]
             |}
             |""".stripMargin)
-          )) shouldBe List(
+          ))
+        result shouldBe List(
           ValueFormatError.copy(paths = Some(Seq("/foreignNonFhlProperty/0/income/otherPropertyIncome")))
         )
       }
+
       "foreignNonFhlProperty/0/income/foreignTaxPaidOrDeducted is invalid" in {
         val validator = setUpValidator()
-        validator.validate(
+        val result = validator.validate(
           CreateForeignPropertyPeriodSummaryRawData(
             validNino,
             validBusinessId,
@@ -1459,13 +1301,15 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with Mock
             |   ]
             |}
             |""".stripMargin)
-          )) shouldBe List(
+          ))
+        result shouldBe List(
           ValueFormatError.copy(paths = Some(Seq("/foreignNonFhlProperty/0/income/foreignTaxPaidOrDeducted")))
         )
       }
+
       "foreignNonFhlProperty/0/income/specialWithholdingTaxOrUkTaxPaid is invalid" in {
         val validator = setUpValidator()
-        validator.validate(
+        val result = validator.validate(
           CreateForeignPropertyPeriodSummaryRawData(
             validNino,
             validBusinessId,
@@ -1516,13 +1360,15 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with Mock
             |   ]
             |}
             |""".stripMargin)
-          )) shouldBe List(
+          ))
+        result shouldBe List(
           ValueFormatError.copy(paths = Some(Seq("/foreignNonFhlProperty/0/income/specialWithholdingTaxOrUkTaxPaid")))
         )
       }
+
       "foreignNonFhlProperty/0/expenses/premisesRunningCosts is invalid" in {
         val validator = setUpValidator()
-        validator.validate(
+        val result = validator.validate(
           CreateForeignPropertyPeriodSummaryRawData(
             validNino,
             validBusinessId,
@@ -1573,13 +1419,15 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with Mock
             |   ]
             |}
             |""".stripMargin)
-          )) shouldBe List(
+          ))
+        result shouldBe List(
           ValueFormatError.copy(paths = Some(Seq("/foreignNonFhlProperty/0/expenses/premisesRunningCosts")))
         )
       }
+
       "foreignNonFhlProperty/0/expenses/repairsAndMaintenance is invalid" in {
         val validator = setUpValidator()
-        validator.validate(
+        val result = validator.validate(
           CreateForeignPropertyPeriodSummaryRawData(
             validNino,
             validBusinessId,
@@ -1630,13 +1478,15 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with Mock
             |   ]
             |}
             |""".stripMargin)
-          )) shouldBe List(
+          ))
+        result shouldBe List(
           ValueFormatError.copy(paths = Some(Seq("/foreignNonFhlProperty/0/expenses/repairsAndMaintenance")))
         )
       }
+
       "foreignNonFhlProperty/0/expenses/financialCosts is invalid" in {
         val validator = setUpValidator()
-        validator.validate(
+        val result = validator.validate(
           CreateForeignPropertyPeriodSummaryRawData(
             validNino,
             validBusinessId,
@@ -1687,13 +1537,15 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with Mock
             |   ]
             |}
             |""".stripMargin)
-          )) shouldBe List(
+          ))
+        result shouldBe List(
           ValueFormatError.copy(paths = Some(Seq("/foreignNonFhlProperty/0/expenses/financialCosts")))
         )
       }
+
       "foreignNonFhlProperty/0/expenses/professionalFees is invalid" in {
         val validator = setUpValidator()
-        validator.validate(
+        val result = validator.validate(
           CreateForeignPropertyPeriodSummaryRawData(
             validNino,
             validBusinessId,
@@ -1744,13 +1596,15 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with Mock
             |   ]
             |}
             |""".stripMargin)
-          )) shouldBe List(
+          ))
+        result shouldBe List(
           ValueFormatError.copy(paths = Some(Seq("/foreignNonFhlProperty/0/expenses/professionalFees")))
         )
       }
+
       "foreignNonFhlProperty/0/expenses/costOfServices is invalid" in {
         val validator = setUpValidator()
-        validator.validate(
+        val result = validator.validate(
           CreateForeignPropertyPeriodSummaryRawData(
             validNino,
             validBusinessId,
@@ -1801,13 +1655,15 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with Mock
             |   ]
             |}
             |""".stripMargin)
-          )) shouldBe List(
+          ))
+        result shouldBe List(
           ValueFormatError.copy(paths = Some(Seq("/foreignNonFhlProperty/0/expenses/costOfServices")))
         )
       }
+
       "foreignNonFhlProperty/0/expenses/travelCosts is invalid" in {
         val validator = setUpValidator()
-        validator.validate(
+        val result = validator.validate(
           CreateForeignPropertyPeriodSummaryRawData(
             validNino,
             validBusinessId,
@@ -1858,13 +1714,15 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with Mock
             |   ]
             |}
             |""".stripMargin)
-          )) shouldBe List(
+          ))
+        result shouldBe List(
           ValueFormatError.copy(paths = Some(Seq("/foreignNonFhlProperty/0/expenses/travelCosts")))
         )
       }
+
       "foreignNonFhlProperty/0/expenses/other is invalid" in {
         val validator = setUpValidator()
-        validator.validate(
+        val result = validator.validate(
           CreateForeignPropertyPeriodSummaryRawData(
             validNino,
             validBusinessId,
@@ -1915,13 +1773,15 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with Mock
             |   ]
             |}
             |""".stripMargin)
-          )) shouldBe List(
+          ))
+        result shouldBe List(
           ValueFormatError.copy(paths = Some(Seq("/foreignNonFhlProperty/0/expenses/other")))
         )
       }
+
       "foreignNonFhlProperty/0/expenses/residentialFinancialCost is invalid" in {
         val validator = setUpValidator()
-        validator.validate(
+        val result = validator.validate(
           CreateForeignPropertyPeriodSummaryRawData(
             validNino,
             validBusinessId,
@@ -1960,13 +1820,15 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with Mock
             |  ]
             |}
             |""".stripMargin)
-          )) shouldBe List(
+          ))
+        result shouldBe List(
           ValueFormatError.copy(paths = Some(Seq("/foreignNonFhlProperty/0/expenses/residentialFinancialCost")))
         )
       }
+
       "foreignNonFhlProperty/0/expenses/broughtFwdResidentialFinancialCost is invalid" in {
         val validator = setUpValidator()
-        validator.validate(
+        val result = validator.validate(
           CreateForeignPropertyPeriodSummaryRawData(
             validNino,
             validBusinessId,
@@ -2005,13 +1867,15 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with Mock
             |  ]
             |}
             |""".stripMargin)
-          )) shouldBe List(
+          ))
+        result shouldBe List(
           ValueFormatError.copy(paths = Some(Seq("/foreignNonFhlProperty/0/expenses/broughtFwdResidentialFinancialCost")))
         )
       }
+
       "foreignNonFhlProperty/0/expenses/consolidatedExpenses is invalid" in {
         val validator = setUpValidator()
-        validator.validate(
+        val result = validator.validate(
           CreateForeignPropertyPeriodSummaryRawData(
             validNino,
             validBusinessId,
@@ -2050,13 +1914,15 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with Mock
             |  ]
             |}
             |""".stripMargin)
-          )) shouldBe List(
+          ))
+        result shouldBe List(
           ValueFormatError.copy(paths = Some(Seq("/foreignNonFhlProperty/0/expenses/consolidatedExpenses")))
         )
       }
+
       "multiple fields are invalid" in {
         val validator = setUpValidator()
-        validator.validate(
+        val result = validator.validate(
           CreateForeignPropertyPeriodSummaryRawData(
             validNino,
             validBusinessId,
@@ -2128,7 +1994,8 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with Mock
             |  ]
             |}
             |""".stripMargin)
-          )) shouldBe List(
+          ))
+        result shouldBe List(
           ValueFormatError.copy(paths = Some(Seq(
             "/foreignFhlEea/expenses/travelCosts",
             "/foreignNonFhlProperty/0/income/premiumsOfLeaseGrant",
@@ -2142,7 +2009,7 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with Mock
     "return RuleCountryCodeError" when {
       "an invalid country code is provided" in {
         val validator = setUpValidator()
-        validator.validate(
+        val result = validator.validate(
           CreateForeignPropertyPeriodSummaryRawData(
             validNino,
             validBusinessId,
@@ -2193,11 +2060,13 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with Mock
             |}
             |""".stripMargin
             )
-          )) shouldBe List(RuleCountryCodeError.copy(paths = Some(Seq("/foreignNonFhlProperty/0/countryCode"))))
+          ))
+        result shouldBe List(RuleCountryCodeError.copy(paths = Some(Seq("/foreignNonFhlProperty/0/countryCode"))))
       }
+
       "multiple invalid country codes are provided" in {
         val validator = setUpValidator()
-        validator.validate(
+        val result = validator.validate(
           CreateForeignPropertyPeriodSummaryRawData(
             validNino,
             validBusinessId,
@@ -2271,7 +2140,8 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with Mock
             |}
             |""".stripMargin
             )
-          )) shouldBe List(
+          ))
+        result shouldBe List(
           RuleCountryCodeError.copy(paths = Some(Seq("/foreignNonFhlProperty/0/countryCode", "/foreignNonFhlProperty/1/countryCode"))))
       }
     }
@@ -2279,7 +2149,7 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with Mock
     "return CountryCodeFormatError" when {
       "an invalid country code is provided" in {
         val validator = setUpValidator()
-        validator.validate(
+        val result = validator.validate(
           CreateForeignPropertyPeriodSummaryRawData(
             validNino,
             validBusinessId,
@@ -2330,11 +2200,13 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with Mock
             |}
             |""".stripMargin
             )
-          )) shouldBe List(CountryCodeFormatError.copy(paths = Some(Seq("/foreignNonFhlProperty/0/countryCode"))))
+          ))
+        result shouldBe List(CountryCodeFormatError.copy(paths = Some(Seq("/foreignNonFhlProperty/0/countryCode"))))
       }
+
       "multiple invalid country codes are provided" in {
         val validator = setUpValidator()
-        validator.validate(
+        val result = validator.validate(
           CreateForeignPropertyPeriodSummaryRawData(
             validNino,
             validBusinessId,
@@ -2408,7 +2280,8 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with Mock
             |}
             |""".stripMargin
             )
-          )) shouldBe List(
+          ))
+        result shouldBe List(
           CountryCodeFormatError.copy(paths = Some(Seq("/foreignNonFhlProperty/0/countryCode", "/foreignNonFhlProperty/1/countryCode"))))
       }
     }
@@ -2416,7 +2289,7 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with Mock
     "return RuleBothExpensesSuppliedError" when {
       "foreignFhlEea/expenses is invalid" in {
         val validator = setUpValidator()
-        validator.validate(
+        val result = validator.validate(
           CreateForeignPropertyPeriodSummaryRawData(
             validNino,
             validBusinessId,
@@ -2458,11 +2331,13 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with Mock
             |}
             |""".stripMargin
             )
-          )) shouldBe List(RuleBothExpensesSuppliedError.copy(paths = Some(Seq("/foreignFhlEea/expenses"))))
+          ))
+        result shouldBe List(RuleBothExpensesSuppliedError.copy(paths = Some(Seq("/foreignFhlEea/expenses"))))
       }
+
       "foreignNonFhlProperty/0/expenses is invalid" in {
         val validator = setUpValidator()
-        validator.validate(
+        val result = validator.validate(
           CreateForeignPropertyPeriodSummaryRawData(
             validNino,
             validBusinessId,
@@ -2504,11 +2379,13 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with Mock
             |}
             |""".stripMargin
             )
-          )) shouldBe List(RuleBothExpensesSuppliedError.copy(paths = Some(Seq("/foreignNonFhlProperty/0/expenses"))))
+          ))
+        result shouldBe List(RuleBothExpensesSuppliedError.copy(paths = Some(Seq("/foreignNonFhlProperty/0/expenses"))))
       }
+
       "multiple expenses objects are invalid" in {
         val validator = setUpValidator()
-        validator.validate(
+        val result = validator.validate(
           CreateForeignPropertyPeriodSummaryRawData(
             validNino,
             validBusinessId,
@@ -2571,7 +2448,8 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with Mock
             |}
             |""".stripMargin
             )
-          )) shouldBe List(
+          ))
+        result shouldBe List(
           RuleBothExpensesSuppliedError.copy(
             paths = Some(
               Seq(
@@ -2585,10 +2463,62 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with Mock
     "return multiple errors" when {
       "request supplied has multiple errors" in {
         val validator = setUpValidator()
-        validator.validate(CreateForeignPropertyPeriodSummaryRawData("A12344A", "20178", "232301", requestBodyJson)) shouldBe
+        val result    = validator.validate(CreateForeignPropertyPeriodSummaryRawData("A12344A", "20178", "232301", requestBodyJson))
+        result shouldBe
           List(NinoFormatError, TaxYearFormatError, BusinessIdFormatError)
       }
     }
+  }
+
+  trait TestData {
+
+    val requestBody: JsValue = Json.parse("""
+      |{
+      |   "fromDate":"2023-01-01",
+      |   "toDate":"2021-03-29",
+      |   "foreignFhlEea":{
+      |      "income":{
+      |         "rentAmount":381.21
+      |      },
+      |      "expenses":{
+      |         "premisesRunningCosts":993.31,
+      |         "repairsAndMaintenance":8842.23,
+      |         "financialCosts":994,
+      |         "professionalFees":992.12,
+      |         "costOfServices":4620.23,
+      |         "travelCosts":774,
+      |         "other":984.41
+      |      }
+      |   },
+      |   "foreignNonFhlProperty":[
+      |      {
+      |         "countryCode":"AFG",
+      |         "income":{
+      |            "rentIncome":{
+      |               "rentAmount":4882.23
+      |            },
+      |            "foreignTaxCreditRelief":true,
+      |            "premiumsOfLeaseGrant":884.72,
+      |            "otherPropertyIncome":7713.09,
+      |            "foreignTaxPaidOrDeducted":884.12,
+      |            "specialWithholdingTaxOrUkTaxPaid":847.72
+      |         },
+      |         "expenses":{
+      |            "premisesRunningCosts":129.35,
+      |            "repairsAndMaintenance":7490.32,
+      |            "financialCosts":5000.99,
+      |            "professionalFees":847.90,
+      |            "travelCosts":69.20,
+      |            "costOfServices":478.23,
+      |            "residentialFinancialCost":879.28,
+      |            "broughtFwdResidentialFinancialCost":846.13,
+      |            "other":138.92
+      |         }
+      |      }
+      |   ]
+      |}
+      |""".stripMargin)
+
   }
 
 }

@@ -17,7 +17,7 @@
 package v2.connectors
 
 import api.connectors.{ConnectorSpec, DownstreamOutcome}
-import api.models.domain.{Nino, TaxYear}
+import api.models.domain.{BusinessId, Nino, TaxYear}
 import api.models.errors.{DownstreamErrorCode, DownstreamErrors}
 import api.models.outcomes.ResponseWrapper
 import org.scalamock.handlers.CallHandler
@@ -97,9 +97,9 @@ class AmendUkPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec {
 
     private val requestBody: AmendUkPropertyAnnualSubmissionRequestBody = AmendUkPropertyAnnualSubmissionRequestBody(None, None)
 
-    protected val request: AmendUkPropertyAnnualSubmissionRequest = AmendUkPropertyAnnualSubmissionRequest(
+    protected val request: AmendUkPropertyAnnualSubmissionRequestData = AmendUkPropertyAnnualSubmissionRequestData(
       nino = Nino(nino),
-      businessId = businessId,
+      businessId = BusinessId(businessId),
       taxYear = taxYear,
       body = requestBody
     )

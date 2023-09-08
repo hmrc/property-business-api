@@ -104,7 +104,6 @@ class AmendForeignPropertyPeriodSummaryValidatorFactorySpec extends UnitSpec wit
                                                |    "consolidatedExpenses": 332.78
                                                |  }
                                                |}""".stripMargin)
-  //
 
   private def consolidatedBodyWith(nonFhlEntries: JsValue*) = Json.parse(
     s"""{
@@ -190,7 +189,6 @@ class AmendForeignPropertyPeriodSummaryValidatorFactorySpec extends UnitSpec wit
     rentAmount = Some(440.31)
   )
 
-  // HERE
   private val incomeNonFhl = ForeignNonFhlPropertyIncome(
     rentIncome = Some(foreignNonFhlPropertyRentIncome),
     foreignTaxCreditRelief = false,

@@ -37,7 +37,7 @@ class RetrieveHistoricNonFhlUkPropertyPeriodSummaryValidator @Inject() (appConfi
     (data: RetrieveHistoricNonFhlUkPiePeriodSummaryRawData) => {
       List(
         NinoValidation.validate(data.nino),
-        HistoricPeriodIdValidation.validatePeriodId(minTaxYear, maxTaxYear, data.periodId)
+        HistoricPeriodIdValidation.validate(minTaxYear, maxTaxYear, data.periodId)
       )
     }
 

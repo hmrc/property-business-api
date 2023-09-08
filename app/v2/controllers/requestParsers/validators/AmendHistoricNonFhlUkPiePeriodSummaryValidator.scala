@@ -50,7 +50,7 @@ class AmendHistoricNonFhlUkPiePeriodSummaryValidator @Inject() (appConfig: AppCo
       NinoValidation.validate(data.nino)
 
     val periodIdError =
-      HistoricPeriodIdValidation.validatePeriodId(minTaxYear, maxTaxYear, data.periodId)
+      HistoricPeriodIdValidation.validate(minTaxYear, maxTaxYear, data.periodId)
 
     errorsResult(ninoError ++ periodIdError)
   }

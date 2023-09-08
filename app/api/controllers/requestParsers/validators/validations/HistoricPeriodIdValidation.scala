@@ -20,11 +20,10 @@ import api.models.errors.{MtdError, PeriodIdFormatError, RuleHistoricTaxYearNotS
 
 object HistoricPeriodIdValidation {
 
-  val taxDateFormat                     = "20[1-9][0-9]\\-[0-9][0-9]\\-[0-9][0-9]"
-  val NoValidationErrors: List[Nothing] = List()
+  private val taxDateFormat = "20[1-9][0-9]\\-[0-9][0-9]\\-[0-9][0-9]".r
 
-  def validateHistoricTaxYear(minimumTaxYear: Int, maximumTaxYear: Int, taxYear: String): List[MtdError] = {
-    if (taxYear.matches(taxDateFormat)) {
+  private def validateHistoricTaxYear(minimumTaxYear: Int, maximumTaxYear: Int, taxYear: String): List[MtdError] = {
+    if (taxDateFormat.matches(taxYear)) {
 
       val year = taxYear.substring(0, 4).toInt
 
@@ -38,7 +37,7 @@ object HistoricPeriodIdValidation {
     }
   }
 
-  def validatePeriodId(minimumTaxYear: Int, maximumTaxYear: Int, periodId: String): List[MtdError] = {
+  def validate(minimumTaxYear: Int, maximumTaxYear: Int, periodId: String): List[MtdError] = {
     val periodIdLength = "YYYY-MM-DD_YYYY-MM-DD".length
 
     if (periodId.length.equals(periodIdLength)) {
@@ -52,15 +51,9 @@ object HistoricPeriodIdValidation {
 
       if (historicDateErrors.isEmpty) {
         val dateOrderErrors = ToDateBeforeFromDateValidation.validate(fromDate, toDate)
-
-        if (dateOrderErrors.isEmpty) {
-          if (underscore.matches("_")) {
-            Nil // Empty list represents no validation errors
-          } else {
-            List(PeriodIdFormatError)
-          }
-        } else {
-          List(PeriodIdFormatError)
+        dateOrderErrors match {
+          case NoValidationErrors if underscore.matches("_") => NoValidationErrors
+          case _                                             => List(PeriodIdFormatError)
         }
       } else {
         List(PeriodIdFormatError)

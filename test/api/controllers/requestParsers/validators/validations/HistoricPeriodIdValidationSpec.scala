@@ -23,7 +23,6 @@ class HistoricPeriodIdValidationSpec extends UnitSpec {
 
   val minTaxYear = 2017
   val maxTaxYear = 2021
-  val taxDate    = "2020-08-02"
 
   "validate" should {
     "return no errors" when {

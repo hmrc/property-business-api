@@ -20,7 +20,7 @@ import api.models.errors.{MtdError, PeriodIdFormatError, RuleHistoricTaxYearNotS
 
 object HistoricPeriodIdValidation {
 
-  private val taxDateFormat = "20[1-9][0-9]\\-[0-9][0-9]\\-[0-9][0-9]".r
+  private val taxDateFormat = "20\\d{2}-\\d{2}-\\d{2}".r
 
   private def validateHistoricTaxYear(minimumTaxYear: Int, maximumTaxYear: Int, taxYear: String): List[MtdError] = {
     if (taxDateFormat.matches(taxYear)) {

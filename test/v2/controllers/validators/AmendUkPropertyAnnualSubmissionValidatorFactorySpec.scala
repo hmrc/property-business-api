@@ -182,7 +182,7 @@ class AmendUkPropertyAnnualSubmissionValidatorFactorySpec extends UnitSpec with 
 
   trait SetUp {
 
-    MockAppConfig.minimumTaxV2Foreign
+    MockAppConfig.minimumTaxV2Uk
       .returns(2021)
 
   }

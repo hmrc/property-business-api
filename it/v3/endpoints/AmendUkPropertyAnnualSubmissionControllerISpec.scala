@@ -326,10 +326,10 @@ class AmendUkPropertyAnnualSubmissionControllerISpec extends IntegrationBaseSpec
                 "/ukNonFhlProperty/allowances/costOfReplacingDomesticGoods",
                 "/ukNonFhlProperty/allowances/electricChargePointAllowance",
                 "/ukNonFhlProperty/allowances/zeroEmissionsCarAllowance",
-                "/ukNonFhlProperty/allowances/structuredBuildingAllowance/0/amount",
                 "/ukNonFhlProperty/allowances/structuredBuildingAllowance/0/firstYear/qualifyingAmountExpenditure",
-                "/ukNonFhlProperty/allowances/enhancedStructuredBuildingAllowance/0/amount",
-                "/ukNonFhlProperty/allowances/enhancedStructuredBuildingAllowance/0/firstYear/qualifyingAmountExpenditure"
+                "/ukNonFhlProperty/allowances/structuredBuildingAllowance/0/amount",
+                "/ukNonFhlProperty/allowances/enhancedStructuredBuildingAllowance/0/firstYear/qualifyingAmountExpenditure",
+                "/ukNonFhlProperty/allowances/enhancedStructuredBuildingAllowance/0/amount"
               ))
           )
         )
@@ -770,34 +770,34 @@ class AmendUkPropertyAnnualSubmissionControllerISpec extends IntegrationBaseSpec
           |}
           |""".stripMargin)
 
-//      val allInvalidValueRequestError: MtdError = ValueFormatError.copy(
-//        message = "The value must be between 0 and 99999999999.99",
-//        paths = Some(
-//          List(
-//            "/ukFhlProperty/adjustments/balancingCharge",
-//            "/ukFhlProperty/adjustments/privateUseAdjustment",
-//            "/ukFhlProperty/adjustments/businessPremisesRenovationAllowanceBalancingCharges",
-//            "/ukFhlProperty/allowances/annualInvestmentAllowance",
-//            "/ukFhlProperty/allowances/businessPremisesRenovationAllowance",
-//            "/ukFhlProperty/allowances/otherCapitalAllowance",
-//            "/ukFhlProperty/allowances/electricChargePointAllowance",
-//            "/ukFhlProperty/allowances/zeroEmissionsCarAllowance",
-//            "/ukNonFhlProperty/adjustments/balancingCharge",
-//            "/ukNonFhlProperty/adjustments/privateUseAdjustment",
-//            "/ukNonFhlProperty/adjustments/businessPremisesRenovationAllowanceBalancingCharges",
-//            "/ukNonFhlProperty/allowances/annualInvestmentAllowance",
-//            "/ukNonFhlProperty/allowances/zeroEmissionsGoodsVehicleAllowance",
-//            "/ukNonFhlProperty/allowances/businessPremisesRenovationAllowance",
-//            "/ukNonFhlProperty/allowances/otherCapitalAllowance",
-//            "/ukNonFhlProperty/allowances/costOfReplacingDomesticGoods",
-//            "/ukNonFhlProperty/allowances/electricChargePointAllowance",
-//            "/ukNonFhlProperty/allowances/zeroEmissionsCarAllowance",
-//            "/ukNonFhlProperty/allowances/structuredBuildingAllowance/0/amount",
-//            "/ukNonFhlProperty/allowances/structuredBuildingAllowance/0/firstYear/qualifyingAmountExpenditure",
-//            "/ukNonFhlProperty/allowances/enhancedStructuredBuildingAllowance/0/amount",
-//            "/ukNonFhlProperty/allowances/enhancedStructuredBuildingAllowance/0/firstYear/qualifyingAmountExpenditure"
-//          ))
-//      )
+      val allInvalidValueRequestError: MtdError = ValueFormatError.copy(
+        message = "The value must be between 0 and 99999999999.99",
+        paths = Some(
+          List(
+            "/ukFhlProperty/adjustments/balancingCharge",
+            "/ukFhlProperty/adjustments/privateUseAdjustment",
+            "/ukFhlProperty/adjustments/businessPremisesRenovationAllowanceBalancingCharges",
+            "/ukFhlProperty/allowances/annualInvestmentAllowance",
+            "/ukFhlProperty/allowances/businessPremisesRenovationAllowance",
+            "/ukFhlProperty/allowances/otherCapitalAllowance",
+            "/ukFhlProperty/allowances/electricChargePointAllowance",
+            "/ukFhlProperty/allowances/zeroEmissionsCarAllowance",
+            "/ukNonFhlProperty/adjustments/balancingCharge",
+            "/ukNonFhlProperty/adjustments/privateUseAdjustment",
+            "/ukNonFhlProperty/adjustments/businessPremisesRenovationAllowanceBalancingCharges",
+            "/ukNonFhlProperty/allowances/annualInvestmentAllowance",
+            "/ukNonFhlProperty/allowances/zeroEmissionsGoodsVehicleAllowance",
+            "/ukNonFhlProperty/allowances/businessPremisesRenovationAllowance",
+            "/ukNonFhlProperty/allowances/otherCapitalAllowance",
+            "/ukNonFhlProperty/allowances/costOfReplacingDomesticGoods",
+            "/ukNonFhlProperty/allowances/electricChargePointAllowance",
+            "/ukNonFhlProperty/allowances/zeroEmissionsCarAllowance",
+            "/ukNonFhlProperty/allowances/structuredBuildingAllowance/0/firstYear/qualifyingAmountExpenditure",
+            "/ukNonFhlProperty/allowances/structuredBuildingAllowance/0/amount",
+            "/ukNonFhlProperty/allowances/enhancedStructuredBuildingAllowance/0/firstYear/qualifyingAmountExpenditure",
+            "/ukNonFhlProperty/allowances/enhancedStructuredBuildingAllowance/0/amount"
+          ))
+      )
 
       val allInvalidDateFormatRequestError: MtdError = DateFormatError.copy(
         message = "The supplied date format is not valid",
@@ -870,7 +870,7 @@ class AmendUkPropertyAnnualSubmissionControllerISpec extends IntegrationBaseSpec
           ("AA123456A", "XAIS12345678910", "2021-24", validRequestBodyJson, BAD_REQUEST, RuleTaxYearRangeInvalidError),
           ("AA123456A", "XAIS12345678910", "2021-22", validRequestBodyJson, BAD_REQUEST, RuleTaxYearNotSupportedError),
           ("AA123456A", "XAIS12345678910", "2022-23", Json.parse(s"""{}""".stripMargin), BAD_REQUEST, RuleIncorrectOrEmptyBodyError),
-//          ("AA123456A", "XAIS12345678910", "2022-23", allInvalidValueRequestBodyJson, BAD_REQUEST, allInvalidValueRequestError),
+          ("AA123456A", "XAIS12345678910", "2022-23", allInvalidValueRequestBodyJson, BAD_REQUEST, allInvalidValueRequestError),
           ("AA123456A", "XAIS12345678910", "2022-23", allInvalidDateFormatRequestBodyJson, BAD_REQUEST, allInvalidDateFormatRequestError),
           ("AA123456A", "XAIS12345678910", "2022-23", allInvalidStringRequestBodyJson, BAD_REQUEST, allInvalidStringRequestError),
           ("AA123456A", "XAIS12345678910", "2022-23", buildingNameNumberBodyJson, BAD_REQUEST, buildingNameNumberError),

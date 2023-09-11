@@ -53,7 +53,7 @@ class AmendUkPropertyAnnualSubmissionValidatorFactory @Inject() (appConfig: AppC
         (
           ResolveNino(nino),
           ResolveBusinessId(businessId),
-          ResolveTaxYear(appConfig.minimumTaxV2Foreign + 1, taxYear, None, None),
+          ResolveTaxYear(appConfig.minimumTaxV2Uk + 1, taxYear, None, None),
           resolveJson(body)
         ).mapN(AmendUkPropertyAnnualSubmissionRequestData) andThen validateBusinessRules
 

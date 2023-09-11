@@ -18,7 +18,7 @@ package v2.controllers.requestParsers.validators
 
 import api.models.errors._
 import mocks.MockAppConfig
-import play.api.libs.json.{JsArray, JsString, JsValue, Json}
+import play.api.libs.json.{JsArray, JsValue, Json}
 import support.UnitSpec
 import v2.models.request.createForeignPropertyPeriodSummary.CreateForeignPropertyPeriodSummaryRawData
 import v2.models.utils.JsonErrorValidators
@@ -118,20 +118,20 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with Mock
 
   private def consolidatedBodyWith(nonFhlEntries: JsValue*) = Json.parse(
     s"""
-      |{
-      |   "fromDate": "2020-01-01",
-      |   "toDate": "2020-01-31",
-      |   "foreignFhlEea":{
-      |      "income":{
-      |         "rentAmount":381.21
-      |      },
-      |      "expenses":{
-      |         "consolidatedExpenses":993.31
-      |      }
-      |   },
-      |   "foreignNonFhlProperty": ${JsArray(nonFhlEntries)}
-      |}
-      |""".stripMargin
+       |{
+       |   "fromDate": "2020-01-01",
+       |   "toDate": "2020-01-31",
+       |   "foreignFhlEea":{
+       |      "income":{
+       |         "rentAmount":381.21
+       |      },
+       |      "expenses":{
+       |         "consolidatedExpenses":993.31
+       |      }
+       |   },
+       |   "foreignNonFhlProperty": ${JsArray(nonFhlEntries)}
+       |}
+       |""".stripMargin
   )
 
   private val requestBodyConsolidationExpenseJson = consolidatedBodyWith(entryConsolidated)
@@ -159,16 +159,16 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with Mock
             validBusinessId,
             validTaxYear,
             Json.parse("""
-            |{
-            |  "fromDate": "2020-01-01",
-            |  "toDate": "2020-01-31",
-            |  "foreignFhlEea": {
-            |    "income": {
-            |    "rentAmount": 567.83
-            |    }
-            |  }
-            |}
-            |""".stripMargin)
+                         |{
+                         |  "fromDate": "2020-01-01",
+                         |  "toDate": "2020-01-31",
+                         |  "foreignFhlEea": {
+                         |    "income": {
+                         |    "rentAmount": 567.83
+                         |    }
+                         |  }
+                         |}
+                         |""".stripMargin)
           ))
 
         result shouldBe Nil
@@ -182,22 +182,22 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with Mock
             validBusinessId,
             validTaxYear,
             Json.parse("""
-            |{
-            |  "fromDate": "2020-01-01",
-            |  "toDate": "2020-01-31",
-            |  "foreignNonFhlProperty": [
-            |    {
-            |      "countryCode": "GBR",
-            |      "income": {
-            |        "rentIncome": {
-            |          "rentAmount": 34456.30
-            |        },
-            |        "foreignTaxCreditRelief": true
-            |      }
-            |    }
-            |  ]
-            |}
-            |""".stripMargin)
+                         |{
+                         |  "fromDate": "2020-01-01",
+                         |  "toDate": "2020-01-31",
+                         |  "foreignNonFhlProperty": [
+                         |    {
+                         |      "countryCode": "GBR",
+                         |      "income": {
+                         |        "rentIncome": {
+                         |          "rentAmount": 34456.30
+                         |        },
+                         |        "foreignTaxCreditRelief": true
+                         |      }
+                         |    }
+                         |  ]
+                         |}
+                         |""".stripMargin)
           ))
 
         result shouldBe Nil
@@ -264,12 +264,12 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with Mock
             validBusinessId,
             validTaxYear,
             Json.parse("""
-            |{
-            |  "fromDate": "2020-01-01",
-            |  "toDate": "2020-01-31",
-            |  "foreignFhlEea": {}
-            |}
-            |""".stripMargin)
+                         |{
+                         |  "fromDate": "2020-01-01",
+                         |  "toDate": "2020-01-31",
+                         |  "foreignFhlEea": {}
+                         |}
+                         |""".stripMargin)
           ))
 
         result shouldBe List(RuleIncorrectOrEmptyBodyError.copy(paths = Some(List("/foreignFhlEea"))))
@@ -283,14 +283,14 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with Mock
             validBusinessId,
             validTaxYear,
             Json.parse("""
-            |{
-            |  "fromDate": "2020-01-01",
-            |  "toDate": "2020-01-31",
-            |  "foreignFhlEea": {
-            |    "expenses": {}
-            |  }
-            |}
-            |""".stripMargin)
+                         |{
+                         |  "fromDate": "2020-01-01",
+                         |  "toDate": "2020-01-31",
+                         |  "foreignFhlEea": {
+                         |    "expenses": {}
+                         |  }
+                         |}
+                         |""".stripMargin)
           ))
 
         result shouldBe List(RuleIncorrectOrEmptyBodyError.copy(paths = Some(List("/foreignFhlEea/expenses"))))
@@ -304,14 +304,14 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with Mock
             validBusinessId,
             validTaxYear,
             Json.parse("""
-            |{
-            |  "fromDate": "2020-01-01",
-            |  "toDate": "2020-01-31",
-            |  "foreignFhlEea": {
-            |    "income": {}
-            |  }
-            |}
-            |""".stripMargin)
+                         |{
+                         |  "fromDate": "2020-01-01",
+                         |  "toDate": "2020-01-31",
+                         |  "foreignFhlEea": {
+                         |    "income": {}
+                         |  }
+                         |}
+                         |""".stripMargin)
           ))
 
         result shouldBe List(RuleIncorrectOrEmptyBodyError.copy(paths = Some(List("/foreignFhlEea/income"))))
@@ -325,10 +325,10 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with Mock
             validBusinessId,
             validTaxYear,
             Json.parse("""{
-            |  "fromDate": "2020-01-01",
-            |  "toDate": "2020-01-31",
-            |  "foreignNonFhlProperty": []
-            |}""".stripMargin)
+                         |  "fromDate": "2020-01-01",
+                         |  "toDate": "2020-01-31",
+                         |  "foreignNonFhlProperty": []
+                         |}""".stripMargin)
           ))
 
         result shouldBe List(RuleIncorrectOrEmptyBodyError.copy(paths = Some(List("/foreignNonFhlProperty"))))
@@ -342,15 +342,15 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with Mock
             validBusinessId,
             validTaxYear,
             Json.parse("""{
-            |  "fromDate": "2020-01-01",
-            |  "toDate": "2020-01-31",
-            |  "foreignNonFhlProperty": [
-            |    {}
-            |  ]
-            |}""".stripMargin)
+                         |  "fromDate": "2020-01-01",
+                         |  "toDate": "2020-01-31",
+                         |  "foreignNonFhlProperty": [
+                         |    {}
+                         |  ]
+                         |}""".stripMargin)
           ))
 
-        result shouldBe List(RuleIncorrectOrEmptyBodyError.copy(paths = Some(Seq("/foreignNonFhlProperty/0/countryCode"))))
+        result shouldBe List(RuleIncorrectOrEmptyBodyError.copy(paths = Some(List("/foreignNonFhlProperty/0/countryCode"))))
       }
 
       "foreignNonFhlProperty[].expenses is empty" in {
@@ -361,15 +361,15 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with Mock
             validBusinessId,
             validTaxYear,
             Json.parse("""{
-            |  "fromDate": "2020-01-01",
-            |  "toDate": "2020-01-31",
-            |  "foreignNonFhlProperty": [
-            |    {
-            |      "countryCode":"AFG",
-            |      "expenses": {}
-            |    }
-            |  ]
-            |}""".stripMargin)
+                         |  "fromDate": "2020-01-01",
+                         |  "toDate": "2020-01-31",
+                         |  "foreignNonFhlProperty": [
+                         |    {
+                         |      "countryCode":"AFG",
+                         |      "expenses": {}
+                         |    }
+                         |  ]
+                         |}""".stripMargin)
           ))
 
         result shouldBe List(RuleIncorrectOrEmptyBodyError.copy(paths = Some(List("/foreignNonFhlProperty/0/expenses"))))
@@ -383,18 +383,18 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with Mock
             validBusinessId,
             validTaxYear,
             Json.parse("""{
-            |  "fromDate": "2020-01-01",
-            |  "toDate": "2020-01-31",
-            |  "foreignNonFhlProperty": [
-            |    {
-            |      "countryCode":"AFG",
-            |      "income": {}
-            |    }
-            |  ]
-            |}""".stripMargin)
+                         |  "fromDate": "2020-01-01",
+                         |  "toDate": "2020-01-31",
+                         |  "foreignNonFhlProperty": [
+                         |    {
+                         |      "countryCode":"AFG",
+                         |      "income": {}
+                         |    }
+                         |  ]
+                         |}""".stripMargin)
           ))
 
-        result shouldBe List(RuleIncorrectOrEmptyBodyError.copy(paths = Some(Seq("/foreignNonFhlProperty/0/income/foreignTaxCreditRelief"))))
+        result shouldBe List(RuleIncorrectOrEmptyBodyError.copy(paths = Some(List("/foreignNonFhlProperty/0/income/foreignTaxCreditRelief"))))
       }
 
       "foreignNonFhlProperty[].income and foreignNonFhlProperty[].expenses are missing but countryCode exists" in {
@@ -405,14 +405,14 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with Mock
             validBusinessId,
             validTaxYear,
             Json.parse("""{
-            |  "fromDate": "2020-01-01",
-            |  "toDate": "2020-01-31",
-            |  "foreignNonFhlProperty": [
-            |    {
-            |      "countryCode":"AFG"
-            |    }
-            |  ]
-            |}""".stripMargin)
+                         |  "fromDate": "2020-01-01",
+                         |  "toDate": "2020-01-31",
+                         |  "foreignNonFhlProperty": [
+                         |    {
+                         |      "countryCode":"AFG"
+                         |    }
+                         |  ]
+                         |}""".stripMargin)
           ))
 
         result shouldBe List(RuleIncorrectOrEmptyBodyError.copy(paths = Some(List("/foreignNonFhlProperty/0"))))
@@ -426,18 +426,18 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with Mock
             validBusinessId,
             validTaxYear,
             Json.parse("""{
-            |  "fromDate": "2020-01-01",
-            |  "toDate": "2020-01-31",
-            |  "foreignNonFhlProperty": [
-            |    {
-            |      "countryCode":"AFG",
-            |      "income": {
-            |         "rentIncome": {},
-            |         "foreignTaxCreditRelief" : true
-            |      }
-            |    }
-            |  ]
-            |}""".stripMargin)
+                         |  "fromDate": "2020-01-01",
+                         |  "toDate": "2020-01-31",
+                         |  "foreignNonFhlProperty": [
+                         |    {
+                         |      "countryCode":"AFG",
+                         |      "income": {
+                         |         "rentIncome": {},
+                         |         "foreignTaxCreditRelief" : true
+                         |      }
+                         |    }
+                         |  ]
+                         |}""".stripMargin)
           ))
 
         result shouldBe List(RuleIncorrectOrEmptyBodyError.copy(paths = Some(List("/foreignNonFhlProperty/0/income/rentIncome"))))
@@ -445,66 +445,68 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with Mock
     }
 
     "return Date Errors" when {
-      "the fromDate format is invalid" in new TestData {
-        val validator: CreateForeignPropertyPeriodSummaryValidator = setUpValidator()
-        val result: Seq[MtdError] = validator.validate(
+      "the fromDate format is invalid" in {
+        val validator = setUpValidator()
+
+        val result: List[MtdError] = validator.validate(
           CreateForeignPropertyPeriodSummaryRawData(
             validNino,
             validBusinessId,
             validTaxYear,
-            requestBody.update("fromDate", JsString("01-01-2023"))
+            requestBody(fromDate = "01-01-2023")
           ))
 
         result shouldBe List(FromDateFormatError)
       }
 
-      "the fromDate is out of range" in new TestData {
+      "the fromDate is out of range" in {
         val validator: CreateForeignPropertyPeriodSummaryValidator = setUpValidator()
-        val result: Seq[MtdError] = validator.validate(
+        val result: List[MtdError] = validator.validate(
           CreateForeignPropertyPeriodSummaryRawData(
             validNino,
             validBusinessId,
             validTaxYear,
-            requestBody.update("fromDate", JsString("1782-09-04"))
+            requestBody(fromDate = "1782-09-04")
           )
         )
         result shouldBe List(FromDateOutOfRangeError)
       }
 
-      "the toDate format is invalid" in new TestData {
+      "the toDate format is invalid" in {
         val validator: CreateForeignPropertyPeriodSummaryValidator = setUpValidator()
-        val result: Seq[MtdError] = validator.validate(
+        val result: List[MtdError] = validator.validate(
           CreateForeignPropertyPeriodSummaryRawData(
             validNino,
             validBusinessId,
             validTaxYear,
-            requestBody.update("toDate", JsString("2020.10.01"))
+            requestBody(toDate = "2020.10.01")
           ))
         result shouldBe List(ToDateFormatError)
 
       }
 
-      "the toDate is out of range" in new TestData {
+      "the toDate is out of range" in {
         val validator: CreateForeignPropertyPeriodSummaryValidator = setUpValidator()
-        val result: Seq[MtdError] = validator.validate(
+        val result: List[MtdError] = validator.validate(
           CreateForeignPropertyPeriodSummaryRawData(
             validNino,
             validBusinessId,
             validTaxYear,
-            requestBody.update("toDate", JsString("3054-03-29"))
+            requestBody(toDate = "3054-03-29")
           ))
         result shouldBe List(ToDateOutOfRangeError)
 
       }
 
-      "toDate is before fromDate" in new TestData {
-        val validator: CreateForeignPropertyPeriodSummaryValidator = setUpValidator()
-        val result: Seq[MtdError] = validator.validate(
+      "toDate is before fromDate" in {
+        val validator = setUpValidator()
+
+        val result: List[MtdError] = validator.validate(
           CreateForeignPropertyPeriodSummaryRawData(
             validNino,
             validBusinessId,
             validTaxYear,
-            requestBody.update("fromDate", JsString("2020-01-31")).update("toDate", JsString("2020-01-01"))
+            requestBody(fromDate = "2020-01-31", toDate = "2020-01-01")
           ))
         result shouldBe List(RuleToDateBeforeFromDateError)
       }
@@ -523,7 +525,7 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with Mock
           ))
         result shouldBe List(
           RuleDuplicateCountryCodeError
-            .forDuplicatedCodesAndPaths(code = code, paths = Seq("/foreignNonFhlProperty/0/countryCode", "/foreignNonFhlProperty/1/countryCode")))
+            .forDuplicatedCodesAndPaths(code = code, paths = List("/foreignNonFhlProperty/0/countryCode", "/foreignNonFhlProperty/1/countryCode")))
       }
 
       "multiple country codes are duplicated" in {
@@ -540,129 +542,129 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with Mock
 
         result should contain theSameElementsAs List(
           RuleDuplicateCountryCodeError
-            .forDuplicatedCodesAndPaths(code = code1, paths = Seq("/foreignNonFhlProperty/0/countryCode", "/foreignNonFhlProperty/2/countryCode")),
+            .forDuplicatedCodesAndPaths(code = code1, paths = List("/foreignNonFhlProperty/0/countryCode", "/foreignNonFhlProperty/2/countryCode")),
           RuleDuplicateCountryCodeError
-            .forDuplicatedCodesAndPaths(code = code2, paths = Seq("/foreignNonFhlProperty/1/countryCode", "/foreignNonFhlProperty/3/countryCode"))
+            .forDuplicatedCodesAndPaths(code = code2, paths = List("/foreignNonFhlProperty/1/countryCode", "/foreignNonFhlProperty/3/countryCode"))
         )
       }
     }
 
     "return ValueFormatError" when {
-      "foreignFhlEea/income/rentAmount is invalid" in new TestData {
+      "foreignFhlEea/income/rentAmount is invalid" in {
         val validator: CreateForeignPropertyPeriodSummaryValidator = setUpValidator()
-        val result: Seq[MtdError] = validator.validate(
+        val result: List[MtdError] = validator.validate(
           CreateForeignPropertyPeriodSummaryRawData(
             validNino,
             validBusinessId,
             validTaxYear,
-            requestBody.update("foreignFhlEea/income/rentAmount", JsString("4882.233"))
+            requestBody(foreignFhlEeaRentAmount = "4882.233")
           ))
         result shouldBe List(
-          ValueFormatError.copy(paths = Some(Seq("/foreignFhlEea/income/rentAmount")))
+          ValueFormatError.copy(paths = Some(List("/foreignFhlEea/income/rentAmount")))
         )
       }
 
-      "foreignFhlEea/expenses/premisesRunningCosts is invalid" in new TestData {
+      "foreignFhlEea/expenses/premisesRunningCosts is invalid" in {
         val validator: CreateForeignPropertyPeriodSummaryValidator = setUpValidator()
-        val result: Seq[MtdError] = validator.validate(
+        val result: List[MtdError] = validator.validate(
           CreateForeignPropertyPeriodSummaryRawData(
             validNino,
             validBusinessId,
             validTaxYear,
-            requestBody.update("foreignFhlEea/expenses/premisesRunningCosts", JsString("211.237"))
+            requestBody(foreignFhlEeaPremisesRunningCosts = "211.237")
           ))
 
         result shouldBe List(
-          ValueFormatError.copy(paths = Some(Seq("/foreignFhlEea/expenses/premisesRunningCosts")))
+          ValueFormatError.copy(paths = Some(List("/foreignFhlEea/expenses/premisesRunningCosts")))
         )
       }
 
-      "foreignFhlEea/expenses/repairsAndMaintenance is invalid" in new TestData {
+      "foreignFhlEea/expenses/repairsAndMaintenance is invalid" in {
         val validator: CreateForeignPropertyPeriodSummaryValidator = setUpValidator()
-        val result: Seq[MtdError] = validator.validate(
+        val result: List[MtdError] = validator.validate(
           CreateForeignPropertyPeriodSummaryRawData(
             validNino,
             validBusinessId,
             validTaxYear,
-            requestBody.update("foreignFhlEea/expenses/repairsAndMaintenance", JsString("8842.231"))
+            requestBody(foreignFhlEeaRepairsAndMaintenance = "8842.231")
           ))
         result shouldBe List(
-          ValueFormatError.copy(paths = Some(Seq("/foreignFhlEea/expenses/repairsAndMaintenance")))
+          ValueFormatError.copy(paths = Some(List("/foreignFhlEea/expenses/repairsAndMaintenance")))
         )
       }
 
-      "foreignFhlEea/expenses/financialCosts is invalid" in new TestData {
+      "foreignFhlEea/expenses/financialCosts is invalid" in {
         val validator: CreateForeignPropertyPeriodSummaryValidator = setUpValidator()
-        val result: Seq[MtdError] = validator.validate(
+        val result: List[MtdError] = validator.validate(
           CreateForeignPropertyPeriodSummaryRawData(
             validNino,
             validBusinessId,
             validTaxYear,
-            requestBody.update("foreignFhlEea/expenses/financialCosts", JsString("42.768"))
+            requestBody(foreignFhlEeaFinancialCosts = "42.768")
           ))
 
         result shouldBe List(
-          ValueFormatError.copy(paths = Some(Seq("/foreignFhlEea/expenses/financialCosts")))
+          ValueFormatError.copy(paths = Some(List("/foreignFhlEea/expenses/financialCosts")))
         )
       }
 
-      "foreignFhlEea/expenses/professionalFees is invalid" in new TestData {
+      "foreignFhlEea/expenses/professionalFees is invalid" in {
         val validator = setUpValidator()
         val result = validator.validate(
           CreateForeignPropertyPeriodSummaryRawData(
             validNino,
             validBusinessId,
             validTaxYear,
-            requestBody.update("foreignFhlEea/expenses/professionalFees", JsString("992.112"))
+            requestBody(foreignFhlEeaProfessionalFees = "992.112")
           ))
 
         result shouldBe List(
-          ValueFormatError.copy(paths = Some(Seq("/foreignFhlEea/expenses/professionalFees")))
+          ValueFormatError.copy(paths = Some(List("/foreignFhlEea/expenses/professionalFees")))
         )
       }
 
-      "foreignFhlEea/expenses/costOfServices is invalid" in new TestData {
+      "foreignFhlEea/expenses/costOfServices is invalid" in {
         val validator: CreateForeignPropertyPeriodSummaryValidator = setUpValidator()
-        val result: Seq[MtdError] = validator.validate(
+        val result: List[MtdError] = validator.validate(
           CreateForeignPropertyPeriodSummaryRawData(
             validNino,
             validBusinessId,
             validTaxYear,
-            requestBody.update("foreignFhlEea/expenses/costOfServices", JsString("4620.231"))
+            requestBody(foreignFhlEeaCostOfServices = "4620.231")
           ))
 
         result shouldBe List(
-          ValueFormatError.copy(paths = Some(Seq("/foreignFhlEea/expenses/costOfServices")))
+          ValueFormatError.copy(paths = Some(List("/foreignFhlEea/expenses/costOfServices")))
         )
       }
 
-      "foreignFhlEea/expenses/travelCosts is invalid" in new TestData {
+      "foreignFhlEea/expenses/travelCosts is invalid" in {
         val validator: CreateForeignPropertyPeriodSummaryValidator = setUpValidator()
-        val result: Seq[MtdError] = validator.validate(
+        val result: List[MtdError] = validator.validate(
           CreateForeignPropertyPeriodSummaryRawData(
             validNino,
             validBusinessId,
             validTaxYear,
-            requestBody.update("foreignFhlEea/expenses/travelCosts", JsString("482.678"))
+            requestBody(foreignFhlEeaTravelCosts = "482.678")
           ))
 
         result shouldBe List(
-          ValueFormatError.copy(paths = Some(Seq("/foreignFhlEea/expenses/travelCosts")))
+          ValueFormatError.copy(paths = Some(List("/foreignFhlEea/expenses/travelCosts")))
         )
       }
 
-      "foreignFhlEea/expenses/other is invalid" in new TestData {
+      "foreignFhlEea/expenses/other is invalid" in {
         val validator: CreateForeignPropertyPeriodSummaryValidator = setUpValidator()
-        val result: Seq[MtdError] = validator.validate(
+        val result: List[MtdError] = validator.validate(
           CreateForeignPropertyPeriodSummaryRawData(
             validNino,
             validBusinessId,
             validTaxYear,
-            requestBody.update("foreignFhlEea/expenses/other", JsString("482.231"))
+            requestBody(foreignFhlOther = "482.231")
           ))
 
         result shouldBe List(
-          ValueFormatError.copy(paths = Some(Seq("/foreignFhlEea/expenses/other")))
+          ValueFormatError.copy(paths = Some(List("/foreignFhlEea/expenses/other")))
         )
       }
 
@@ -673,50 +675,11 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with Mock
             validNino,
             validBusinessId,
             validTaxYear,
-            Json.parse("""
-            |{
-            |  "fromDate": "2020-01-01",
-            |  "toDate": "2020-01-31",
-            |  "foreignFhlEea": {
-            |    "income": {
-            |      "rentAmount": 567.83
-            |      },
-            |    "expenses": {
-            |      "consolidatedExpenses": 567.673
-            |    }
-            |
-            |  },
-            |  "foreignProperty": [{
-            |      "countryCode": "GBR",
-            |      "income": {
-            |        "rentIncome": {
-            |          "rentAmount": 34456.30
-            |        },
-            |        "foreignTaxCreditRelief": true,
-            |        "premiumOfLeaseGrant": 2543.43,
-            |        "otherPropertyIncome": 54325.30,
-            |        "foreignTaxTakenOff": 6543.01,
-            |        "specialWithholdingTaxOrUKTaxPaid": 643245.00
-            |      },
-            |      "expenses": {
-            |        "premisesRunningCosts": 5635.43,
-            |        "repairsAndMaintenance": 3456.65,
-            |        "financialCosts": 34532.21,
-            |        "professionalFees": 32465.32,
-            |        "costsOfServices": 2567.21,
-            |        "travelCosts": 2345.76,
-            |        "other": 2425.11
-            |      }
-            |    }
-            |  ]
-            |}
-            |""".stripMargin)
+            foreignFhlInvalidConsolidatedExpenses
           ))
 
-
-
         result shouldBe List(
-          ValueFormatError.copy(paths = Some(Seq("/foreignFhlEea/expenses/consolidatedExpenses")))
+          ValueFormatError.copy(paths = Some(List("/foreignFhlEea/expenses/consolidatedExpenses")))
         )
       }
 
@@ -727,56 +690,11 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with Mock
             validNino,
             validBusinessId,
             validTaxYear,
-            Json.parse("""
-            |{
-            |   "fromDate":"2020-03-29",
-            |   "toDate":"2021-03-29",
-            |   "foreignFhlEea":{
-            |      "income":{
-            |         "rentAmount":381.21
-            |      },
-            |      "expenses":{
-            |         "premisesRunningCosts":993.31,
-            |         "repairsAndMaintenance":8842.23,
-            |         "financialCosts":994,
-            |         "professionalFees":992.12,
-            |         "costOfServices":4620.23,
-            |         "travelCosts":774,
-            |         "other":984.41
-            |      }
-            |   },
-            |   "foreignNonFhlProperty":[
-            |      {
-            |         "countryCode":"AFG",
-            |         "income":{
-            |            "rentIncome":{
-            |               "rentAmount":4882.231
-            |            },
-            |            "foreignTaxCreditRelief":true,
-            |            "premiumsOfLeaseGrant":884.72,
-            |            "otherPropertyIncome":7713.09,
-            |            "foreignTaxPaidOrDeducted":884.12,
-            |            "specialWithholdingTaxOrUkTaxPaid":847.72
-            |         },
-            |         "expenses":{
-            |            "premisesRunningCosts":129.35,
-            |            "repairsAndMaintenance":7490.32,
-            |            "financialCosts":5000.99,
-            |            "professionalFees":847.90,
-            |            "travelCosts":69.20,
-            |            "costOfServices":478.23,
-            |            "residentialFinancialCost":879.28,
-            |            "broughtFwdResidentialFinancialCost":846.13,
-            |            "other":138.92
-            |         }
-            |      }
-            |   ]
-            |}
-            |""".stripMargin)
+            requestBody(foreignNonFhlRentAmount = "482.231")
           ))
 
         result shouldBe List(
-          ValueFormatError.copy(paths = Some(Seq("/foreignNonFhlProperty/0/income/rentIncome/rentAmount")))
+          ValueFormatError.copy(paths = Some(List("/foreignNonFhlProperty/0/income/rentIncome/rentAmount")))
         )
       }
 
@@ -787,56 +705,11 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with Mock
             validNino,
             validBusinessId,
             validTaxYear,
-            Json.parse("""
-            |{
-            |   "fromDate":"2020-03-29",
-            |   "toDate":"2021-03-29",
-            |   "foreignFhlEea":{
-            |      "income":{
-            |         "rentAmount":381.21
-            |      },
-            |      "expenses":{
-            |         "premisesRunningCosts":993.31,
-            |         "repairsAndMaintenance":8842.23,
-            |         "financialCosts":994,
-            |         "professionalFees":992.12,
-            |         "costOfServices":4620.23,
-            |         "travelCosts":774,
-            |         "other":984.41
-            |      }
-            |   },
-            |   "foreignNonFhlProperty":[
-            |      {
-            |         "countryCode":"AFG",
-            |         "income":{
-            |            "rentIncome":{
-            |               "rentAmount":4882.23
-            |            },
-            |            "foreignTaxCreditRelief":true,
-            |            "premiumsOfLeaseGrant":884.721,
-            |            "otherPropertyIncome":7713.09,
-            |            "foreignTaxPaidOrDeducted":884.12,
-            |            "specialWithholdingTaxOrUkTaxPaid":847.72
-            |         },
-            |         "expenses":{
-            |            "premisesRunningCosts":129.35,
-            |            "repairsAndMaintenance":7490.32,
-            |            "financialCosts":5000.99,
-            |            "professionalFees":847.90,
-            |            "travelCosts":69.20,
-            |            "costOfServices":478.23,
-            |            "residentialFinancialCost":879.28,
-            |            "broughtFwdResidentialFinancialCost":846.13,
-            |            "other":138.92
-            |         }
-            |      }
-            |   ]
-            |}
-            |""".stripMargin)
+            requestBody(foreignNonFhlPropertyPremiumsOfLeaseGrant = "482.231")
           ))
 
         result shouldBe List(
-          ValueFormatError.copy(paths = Some(Seq("/foreignNonFhlProperty/0/income/premiumsOfLeaseGrant")))
+          ValueFormatError.copy(paths = Some(List("/foreignNonFhlProperty/0/income/premiumsOfLeaseGrant")))
         )
       }
 
@@ -847,56 +720,11 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with Mock
             validNino,
             validBusinessId,
             validTaxYear,
-            Json.parse("""
-            |{
-            |   "fromDate":"2020-03-29",
-            |   "toDate":"2021-03-29",
-            |   "foreignFhlEea":{
-            |      "income":{
-            |         "rentAmount":381.21
-            |      },
-            |      "expenses":{
-            |         "premisesRunningCosts":993.31,
-            |         "repairsAndMaintenance":8842.23,
-            |         "financialCosts":994,
-            |         "professionalFees":992.12,
-            |         "costOfServices":4620.23,
-            |         "travelCosts":774,
-            |         "other":984.41
-            |      }
-            |   },
-            |   "foreignNonFhlProperty":[
-            |      {
-            |         "countryCode":"AFG",
-            |         "income":{
-            |            "rentIncome":{
-            |               "rentAmount":4882.23
-            |            },
-            |            "foreignTaxCreditRelief":true,
-            |            "premiumsOfLeaseGrant":884.72,
-            |            "otherPropertyIncome":7713.091,
-            |            "foreignTaxPaidOrDeducted":884.12,
-            |            "specialWithholdingTaxOrUkTaxPaid":847.72
-            |         },
-            |         "expenses":{
-            |            "premisesRunningCosts":129.35,
-            |            "repairsAndMaintenance":7490.32,
-            |            "financialCosts":5000.99,
-            |            "professionalFees":847.90,
-            |            "travelCosts":69.20,
-            |            "costOfServices":478.23,
-            |            "residentialFinancialCost":879.28,
-            |            "broughtFwdResidentialFinancialCost":846.13,
-            |            "other":138.92
-            |         }
-            |      }
-            |   ]
-            |}
-            |""".stripMargin)
+            requestBody(foreignNonFhlPropertyOtherPropertyIncome = "7713.091")
           ))
 
         result shouldBe List(
-          ValueFormatError.copy(paths = Some(Seq("/foreignNonFhlProperty/0/income/otherPropertyIncome")))
+          ValueFormatError.copy(paths = Some(List("/foreignNonFhlProperty/0/income/otherPropertyIncome")))
         )
       }
 
@@ -907,55 +735,10 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with Mock
             validNino,
             validBusinessId,
             validTaxYear,
-            Json.parse("""
-            |{
-            |   "fromDate":"2020-03-29",
-            |   "toDate":"2021-03-29",
-            |   "foreignFhlEea":{
-            |      "income":{
-            |         "rentAmount":381.21
-            |      },
-            |      "expenses":{
-            |         "premisesRunningCosts":993.31,
-            |         "repairsAndMaintenance":8842.23,
-            |         "financialCosts":994,
-            |         "professionalFees":992.12,
-            |         "costOfServices":4620.23,
-            |         "travelCosts":774,
-            |         "other":984.41
-            |      }
-            |   },
-            |   "foreignNonFhlProperty":[
-            |      {
-            |         "countryCode":"AFG",
-            |         "income":{
-            |            "rentIncome":{
-            |               "rentAmount":4882.23
-            |            },
-            |            "foreignTaxCreditRelief":true,
-            |            "premiumsOfLeaseGrant":884.72,
-            |            "otherPropertyIncome":7713.09,
-            |            "foreignTaxPaidOrDeducted":884.121,
-            |            "specialWithholdingTaxOrUkTaxPaid":847.72
-            |         },
-            |         "expenses":{
-            |            "premisesRunningCosts":129.35,
-            |            "repairsAndMaintenance":7490.32,
-            |            "financialCosts":5000.99,
-            |            "professionalFees":847.90,
-            |            "travelCosts":69.20,
-            |            "costOfServices":478.23,
-            |            "residentialFinancialCost":879.28,
-            |            "broughtFwdResidentialFinancialCost":846.13,
-            |            "other":138.92
-            |         }
-            |      }
-            |   ]
-            |}
-            |""".stripMargin)
+            requestBody(foreignNonFhlPropertyForeignTaxPaidOrDeducted = "7713.091")
           ))
         result shouldBe List(
-          ValueFormatError.copy(paths = Some(Seq("/foreignNonFhlProperty/0/income/foreignTaxPaidOrDeducted")))
+          ValueFormatError.copy(paths = Some(List("/foreignNonFhlProperty/0/income/foreignTaxPaidOrDeducted")))
         )
       }
 
@@ -966,55 +749,11 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with Mock
             validNino,
             validBusinessId,
             validTaxYear,
-            Json.parse("""
-            |{
-            |   "fromDate":"2020-03-29",
-            |   "toDate":"2021-03-29",
-            |   "foreignFhlEea":{
-            |      "income":{
-            |         "rentAmount":381.21
-            |      },
-            |      "expenses":{
-            |         "premisesRunningCosts":993.31,
-            |         "repairsAndMaintenance":8842.23,
-            |         "financialCosts":994,
-            |         "professionalFees":992.12,
-            |         "costOfServices":4620.23,
-            |         "travelCosts":774,
-            |         "other":984.41
-            |      }
-            |   },
-            |   "foreignNonFhlProperty":[
-            |      {
-            |         "countryCode":"AFG",
-            |         "income":{
-            |            "rentIncome":{
-            |               "rentAmount":4882.23
-            |            },
-            |            "foreignTaxCreditRelief":true,
-            |            "premiumsOfLeaseGrant":884.72,
-            |            "otherPropertyIncome":7713.09,
-            |            "foreignTaxPaidOrDeducted":884.12,
-            |            "specialWithholdingTaxOrUkTaxPaid":847.721
-            |         },
-            |         "expenses":{
-            |            "premisesRunningCosts":129.35,
-            |            "repairsAndMaintenance":7490.32,
-            |            "financialCosts":5000.99,
-            |            "professionalFees":847.90,
-            |            "travelCosts":69.20,
-            |            "costOfServices":478.23,
-            |            "residentialFinancialCost":879.28,
-            |            "broughtFwdResidentialFinancialCost":846.13,
-            |            "other":138.92
-            |         }
-            |      }
-            |   ]
-            |}
-            |""".stripMargin)
+            requestBody(foreignNonFhlPropertySpecialWithholdingTaxOrUkTaxPaid = "847.721")
           ))
+
         result shouldBe List(
-          ValueFormatError.copy(paths = Some(Seq("/foreignNonFhlProperty/0/income/specialWithholdingTaxOrUkTaxPaid")))
+          ValueFormatError.copy(paths = Some(List("/foreignNonFhlProperty/0/income/specialWithholdingTaxOrUkTaxPaid")))
         )
       }
 
@@ -1025,55 +764,11 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with Mock
             validNino,
             validBusinessId,
             validTaxYear,
-            Json.parse("""
-            |{
-            |   "fromDate":"2020-03-29",
-            |   "toDate":"2021-03-29",
-            |   "foreignFhlEea":{
-            |      "income":{
-            |         "rentAmount":381.21
-            |      },
-            |      "expenses":{
-            |         "premisesRunningCosts":993.31,
-            |         "repairsAndMaintenance":8842.23,
-            |         "financialCosts":994,
-            |         "professionalFees":992.12,
-            |         "costOfServices":4620.23,
-            |         "travelCosts":774,
-            |         "other":984.41
-            |      }
-            |   },
-            |   "foreignNonFhlProperty":[
-            |      {
-            |         "countryCode":"AFG",
-            |         "income":{
-            |            "rentIncome":{
-            |               "rentAmount":4882.23
-            |            },
-            |            "foreignTaxCreditRelief":true,
-            |            "premiumsOfLeaseGrant":884.72,
-            |            "otherPropertyIncome":7713.09,
-            |            "foreignTaxPaidOrDeducted":884.12,
-            |            "specialWithholdingTaxOrUkTaxPaid":847.72
-            |         },
-            |         "expenses":{
-            |            "premisesRunningCosts":129.351,
-            |            "repairsAndMaintenance":7490.32,
-            |            "financialCosts":5000.99,
-            |            "professionalFees":847.90,
-            |            "travelCosts":69.20,
-            |            "costOfServices":478.23,
-            |            "residentialFinancialCost":879.28,
-            |            "broughtFwdResidentialFinancialCost":846.13,
-            |            "other":138.92
-            |         }
-            |      }
-            |   ]
-            |}
-            |""".stripMargin)
+            requestBody(foreignNonFhlPropertyPremisesRunningCosts = "847.721")
           ))
+
         result shouldBe List(
-          ValueFormatError.copy(paths = Some(Seq("/foreignNonFhlProperty/0/expenses/premisesRunningCosts")))
+          ValueFormatError.copy(paths = Some(List("/foreignNonFhlProperty/0/expenses/premisesRunningCosts")))
         )
       }
 
@@ -1084,55 +779,11 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with Mock
             validNino,
             validBusinessId,
             validTaxYear,
-            Json.parse("""
-            |{
-            |   "fromDate":"2020-03-29",
-            |   "toDate":"2021-03-29",
-            |   "foreignFhlEea":{
-            |      "income":{
-            |         "rentAmount":381.21
-            |      },
-            |      "expenses":{
-            |         "premisesRunningCosts":993.31,
-            |         "repairsAndMaintenance":8842.23,
-            |         "financialCosts":994,
-            |         "professionalFees":992.12,
-            |         "costOfServices":4620.23,
-            |         "travelCosts":774,
-            |         "other":984.41
-            |      }
-            |   },
-            |   "foreignNonFhlProperty":[
-            |      {
-            |         "countryCode":"AFG",
-            |         "income":{
-            |            "rentIncome":{
-            |               "rentAmount":4882.23
-            |            },
-            |            "foreignTaxCreditRelief":true,
-            |            "premiumsOfLeaseGrant":884.72,
-            |            "otherPropertyIncome":7713.09,
-            |            "foreignTaxPaidOrDeducted":884.12,
-            |            "specialWithholdingTaxOrUkTaxPaid":847.72
-            |         },
-            |         "expenses":{
-            |            "premisesRunningCosts":129.35,
-            |            "repairsAndMaintenance":7490.321,
-            |            "financialCosts":5000.99,
-            |            "professionalFees":847.90,
-            |            "travelCosts":69.20,
-            |            "costOfServices":478.23,
-            |            "residentialFinancialCost":879.28,
-            |            "broughtFwdResidentialFinancialCost":846.13,
-            |            "other":138.92
-            |         }
-            |      }
-            |   ]
-            |}
-            |""".stripMargin)
+            requestBody(foreignNonFhlPropertyRepairsAndMaintenance = "847.721")
           ))
+
         result shouldBe List(
-          ValueFormatError.copy(paths = Some(Seq("/foreignNonFhlProperty/0/expenses/repairsAndMaintenance")))
+          ValueFormatError.copy(paths = Some(List("/foreignNonFhlProperty/0/expenses/repairsAndMaintenance")))
         )
       }
 
@@ -1143,55 +794,11 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with Mock
             validNino,
             validBusinessId,
             validTaxYear,
-            Json.parse("""
-            |{
-            |   "fromDate":"2020-03-29",
-            |   "toDate":"2021-03-29",
-            |   "foreignFhlEea":{
-            |      "income":{
-            |         "rentAmount":381.21
-            |      },
-            |      "expenses":{
-            |         "premisesRunningCosts":993.31,
-            |         "repairsAndMaintenance":8842.23,
-            |         "financialCosts":994,
-            |         "professionalFees":992.12,
-            |         "costOfServices":4620.23,
-            |         "travelCosts":774,
-            |         "other":984.41
-            |      }
-            |   },
-            |   "foreignNonFhlProperty":[
-            |      {
-            |         "countryCode":"AFG",
-            |         "income":{
-            |            "rentIncome":{
-            |               "rentAmount":4882.23
-            |            },
-            |            "foreignTaxCreditRelief":true,
-            |            "premiumsOfLeaseGrant":884.72,
-            |            "otherPropertyIncome":7713.09,
-            |            "foreignTaxPaidOrDeducted":884.12,
-            |            "specialWithholdingTaxOrUkTaxPaid":847.72
-            |         },
-            |         "expenses":{
-            |            "premisesRunningCosts":129.35,
-            |            "repairsAndMaintenance":7490.32,
-            |            "financialCosts":5000.991,
-            |            "professionalFees":847.90,
-            |            "travelCosts":69.20,
-            |            "costOfServices":478.23,
-            |            "residentialFinancialCost":879.28,
-            |            "broughtFwdResidentialFinancialCost":846.13,
-            |            "other":138.92
-            |         }
-            |      }
-            |   ]
-            |}
-            |""".stripMargin)
+            requestBody(foreignNonFhlPropertyFinancialCosts = "5000.991")
           ))
+
         result shouldBe List(
-          ValueFormatError.copy(paths = Some(Seq("/foreignNonFhlProperty/0/expenses/financialCosts")))
+          ValueFormatError.copy(paths = Some(List("/foreignNonFhlProperty/0/expenses/financialCosts")))
         )
       }
 
@@ -1202,55 +809,11 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with Mock
             validNino,
             validBusinessId,
             validTaxYear,
-            Json.parse("""
-            |{
-            |   "fromDate":"2020-03-29",
-            |   "toDate":"2021-03-29",
-            |   "foreignFhlEea":{
-            |      "income":{
-            |         "rentAmount":381.21
-            |      },
-            |      "expenses":{
-            |         "premisesRunningCosts":993.31,
-            |         "repairsAndMaintenance":8842.23,
-            |         "financialCosts":994,
-            |         "professionalFees":992.12,
-            |         "costOfServices":4620.23,
-            |         "travelCosts":774,
-            |         "other":984.41
-            |      }
-            |   },
-            |   "foreignNonFhlProperty":[
-            |      {
-            |         "countryCode":"AFG",
-            |         "income":{
-            |            "rentIncome":{
-            |               "rentAmount":4882.23
-            |            },
-            |            "foreignTaxCreditRelief":true,
-            |            "premiumsOfLeaseGrant":884.72,
-            |            "otherPropertyIncome":7713.09,
-            |            "foreignTaxPaidOrDeducted":884.12,
-            |            "specialWithholdingTaxOrUkTaxPaid":847.72
-            |         },
-            |         "expenses":{
-            |            "premisesRunningCosts":129.35,
-            |            "repairsAndMaintenance":7490.32,
-            |            "financialCosts":5000.99,
-            |            "professionalFees":847.901,
-            |            "travelCosts":69.20,
-            |            "costOfServices":478.23,
-            |            "residentialFinancialCost":879.28,
-            |            "broughtFwdResidentialFinancialCost":846.13,
-            |            "other":138.92
-            |         }
-            |      }
-            |   ]
-            |}
-            |""".stripMargin)
+            requestBody(foreignNonFhlPropertyProfessionalFees = "847.901")
           ))
+
         result shouldBe List(
-          ValueFormatError.copy(paths = Some(Seq("/foreignNonFhlProperty/0/expenses/professionalFees")))
+          ValueFormatError.copy(paths = Some(List("/foreignNonFhlProperty/0/expenses/professionalFees")))
         )
       }
 
@@ -1261,55 +824,11 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with Mock
             validNino,
             validBusinessId,
             validTaxYear,
-            Json.parse("""
-            |{
-            |   "fromDate":"2020-03-29",
-            |   "toDate":"2021-03-29",
-            |   "foreignFhlEea":{
-            |      "income":{
-            |         "rentAmount":381.21
-            |      },
-            |      "expenses":{
-            |         "premisesRunningCosts":993.31,
-            |         "repairsAndMaintenance":8842.23,
-            |         "financialCosts":994,
-            |         "professionalFees":992.12,
-            |         "costOfServices":4620.23,
-            |         "travelCosts":774,
-            |         "other":984.41
-            |      }
-            |   },
-            |   "foreignNonFhlProperty":[
-            |      {
-            |         "countryCode":"AFG",
-            |         "income":{
-            |            "rentIncome":{
-            |               "rentAmount":4882.23
-            |            },
-            |            "foreignTaxCreditRelief":true,
-            |            "premiumsOfLeaseGrant":884.72,
-            |            "otherPropertyIncome":7713.09,
-            |            "foreignTaxPaidOrDeducted":884.12,
-            |            "specialWithholdingTaxOrUkTaxPaid":847.72
-            |         },
-            |         "expenses":{
-            |            "premisesRunningCosts":129.35,
-            |            "repairsAndMaintenance":7490.32,
-            |            "financialCosts":5000.99,
-            |            "professionalFees":847.90,
-            |            "travelCosts":69.20,
-            |            "costOfServices":478.231,
-            |            "residentialFinancialCost":879.28,
-            |            "broughtFwdResidentialFinancialCost":846.13,
-            |            "other":138.92
-            |         }
-            |      }
-            |   ]
-            |}
-            |""".stripMargin)
+            requestBody(foreignNonFhlCostOfServices = "478.231")
           ))
+
         result shouldBe List(
-          ValueFormatError.copy(paths = Some(Seq("/foreignNonFhlProperty/0/expenses/costOfServices")))
+          ValueFormatError.copy(paths = Some(List("/foreignNonFhlProperty/0/expenses/costOfServices")))
         )
       }
 
@@ -1320,55 +839,11 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with Mock
             validNino,
             validBusinessId,
             validTaxYear,
-            Json.parse("""
-            |{
-            |   "fromDate":"2020-03-29",
-            |   "toDate":"2021-03-29",
-            |   "foreignFhlEea":{
-            |      "income":{
-            |         "rentAmount":381.21
-            |      },
-            |      "expenses":{
-            |         "premisesRunningCosts":993.31,
-            |         "repairsAndMaintenance":8842.23,
-            |         "financialCosts":994,
-            |         "professionalFees":992.12,
-            |         "costOfServices":4620.23,
-            |         "travelCosts":774,
-            |         "other":984.41
-            |      }
-            |   },
-            |   "foreignNonFhlProperty":[
-            |      {
-            |         "countryCode":"AFG",
-            |         "income":{
-            |            "rentIncome":{
-            |               "rentAmount":4882.23
-            |            },
-            |            "foreignTaxCreditRelief":true,
-            |            "premiumsOfLeaseGrant":884.72,
-            |            "otherPropertyIncome":7713.09,
-            |            "foreignTaxPaidOrDeducted":884.12,
-            |            "specialWithholdingTaxOrUkTaxPaid":847.72
-            |         },
-            |         "expenses":{
-            |            "premisesRunningCosts":129.35,
-            |            "repairsAndMaintenance":7490.32,
-            |            "financialCosts":5000.99,
-            |            "professionalFees":847.90,
-            |            "travelCosts":69.201,
-            |            "costOfServices":478.23,
-            |            "residentialFinancialCost":879.28,
-            |            "broughtFwdResidentialFinancialCost":846.13,
-            |            "other":138.92
-            |         }
-            |      }
-            |   ]
-            |}
-            |""".stripMargin)
+            requestBody(foreignNonFhlPropertyTravelCosts = "69.201")
           ))
+
         result shouldBe List(
-          ValueFormatError.copy(paths = Some(Seq("/foreignNonFhlProperty/0/expenses/travelCosts")))
+          ValueFormatError.copy(paths = Some(List("/foreignNonFhlProperty/0/expenses/travelCosts")))
         )
       }
 
@@ -1379,55 +854,11 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with Mock
             validNino,
             validBusinessId,
             validTaxYear,
-            Json.parse("""
-            |{
-            |   "fromDate":"2020-03-29",
-            |   "toDate":"2021-03-29",
-            |   "foreignFhlEea":{
-            |      "income":{
-            |         "rentAmount":381.21
-            |      },
-            |      "expenses":{
-            |         "premisesRunningCosts":993.31,
-            |         "repairsAndMaintenance":8842.23,
-            |         "financialCosts":994,
-            |         "professionalFees":992.12,
-            |         "costOfServices":4620.23,
-            |         "travelCosts":774,
-            |         "other":984.41
-            |      }
-            |   },
-            |   "foreignNonFhlProperty":[
-            |      {
-            |         "countryCode":"AFG",
-            |         "income":{
-            |            "rentIncome":{
-            |               "rentAmount":4882.23
-            |            },
-            |            "foreignTaxCreditRelief":true,
-            |            "premiumsOfLeaseGrant":884.72,
-            |            "otherPropertyIncome":7713.09,
-            |            "foreignTaxPaidOrDeducted":884.12,
-            |            "specialWithholdingTaxOrUkTaxPaid":847.72
-            |         },
-            |         "expenses":{
-            |            "premisesRunningCosts":129.35,
-            |            "repairsAndMaintenance":7490.32,
-            |            "financialCosts":5000.99,
-            |            "professionalFees":847.90,
-            |            "travelCosts":69.20,
-            |            "costOfServices":478.23,
-            |            "residentialFinancialCost":879.28,
-            |            "broughtFwdResidentialFinancialCost":846.13,
-            |            "other":138.921
-            |         }
-            |      }
-            |   ]
-            |}
-            |""".stripMargin)
+            requestBody(foreignNonFhlOther = "138.921")
           ))
+
         result shouldBe List(
-          ValueFormatError.copy(paths = Some(Seq("/foreignNonFhlProperty/0/expenses/other")))
+          ValueFormatError.copy(paths = Some(List("/foreignNonFhlProperty/0/expenses/other")))
         )
       }
 
@@ -1438,43 +869,11 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with Mock
             validNino,
             validBusinessId,
             validTaxYear,
-            Json.parse("""
-            |{
-            |  "fromDate": "2020-01-01",
-            |  "toDate": "2020-01-31",
-            |  "foreignFhlEea": {
-            |    "income": {
-            |      "rentAmount": 567.83
-            |      },
-            |    "expenses": {
-            |      "consolidatedExpenses": 456.98
-            |    }
-            |
-            |  },
-            |  "foreignNonFhlProperty": [{
-            |      "countryCode": "GBR",
-            |      "income": {
-            |        "rentIncome": {
-            |          "rentAmount": 34456.30
-            |        },
-            |        "foreignTaxCreditRelief": true,
-            |        "premiumsOfLeaseGrant": 2543.43,
-            |        "otherPropertyIncome": 54325.30,
-            |        "foreignTaxTakenOff": 6543.01,
-            |        "specialWithholdingTaxOrUKTaxPaid": 643245.00
-            |      },
-            |      "expenses": {
-            |        "residentialFinancialCost": 21235.223,
-            |        "broughtFwdResidentialFinancialCost": 12556.00,
-            |        "consolidatedExpenses": 352.66
-            |      }
-            |    }
-            |  ]
-            |}
-            |""".stripMargin)
+            requestBody(foreignNonFhlResidentialFinancialCost = "21235.223")
           ))
+
         result shouldBe List(
-          ValueFormatError.copy(paths = Some(Seq("/foreignNonFhlProperty/0/expenses/residentialFinancialCost")))
+          ValueFormatError.copy(paths = Some(List("/foreignNonFhlProperty/0/expenses/residentialFinancialCost")))
         )
       }
 
@@ -1485,43 +884,11 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with Mock
             validNino,
             validBusinessId,
             validTaxYear,
-            Json.parse("""
-            |{
-            |  "fromDate": "2020-01-01",
-            |  "toDate": "2020-01-31",
-            |  "foreignFhlEea": {
-            |    "income": {
-            |      "rentAmount": 567.83
-            |      },
-            |    "expenses": {
-            |      "consolidatedExpenses": 456.98
-            |    }
-            |
-            |  },
-            |  "foreignNonFhlProperty": [{
-            |      "countryCode": "GBR",
-            |      "income": {
-            |        "rentIncome": {
-            |          "rentAmount": 34456.30
-            |        },
-            |        "foreignTaxCreditRelief": true,
-            |        "premiumsOfLeaseGrant": 2543.43,
-            |        "otherPropertyIncome": 54325.30,
-            |        "foreignTaxTakenOff": 6543.01,
-            |        "specialWithholdingTaxOrUKTaxPaid": 643245.00
-            |      },
-            |      "expenses": {
-            |        "residentialFinancialCost": 21235.22,
-            |        "broughtFwdResidentialFinancialCost": 12556.003,
-            |        "consolidatedExpenses": 352.66
-            |      }
-            |    }
-            |  ]
-            |}
-            |""".stripMargin)
+            requestBody(foreignNonFhlBroughtFwdResidentialFinancialCost = "12556.003")
           ))
+
         result shouldBe List(
-          ValueFormatError.copy(paths = Some(Seq("/foreignNonFhlProperty/0/expenses/broughtFwdResidentialFinancialCost")))
+          ValueFormatError.copy(paths = Some(List("/foreignNonFhlProperty/0/expenses/broughtFwdResidentialFinancialCost")))
         )
       }
 
@@ -1533,42 +900,42 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with Mock
             validBusinessId,
             validTaxYear,
             Json.parse("""
-            |{
-            |  "fromDate": "2020-01-01",
-            |  "toDate": "2020-01-31",
-            |  "foreignFhlEea": {
-            |    "income": {
-            |      "rentAmount": 567.83
-            |      },
-            |    "expenses": {
-            |      "consolidatedExpenses": 456.98
-            |    }
-            |
-            |  },
-            |  "foreignNonFhlProperty": [{
-            |      "countryCode": "GBR",
-            |      "income": {
-            |        "rentIncome": {
-            |          "rentAmount": 34456.30
-            |        },
-            |        "foreignTaxCreditRelief": true,
-            |        "premiumsOfLeaseGrant": 2543.43,
-            |        "otherPropertyIncome": 54325.30,
-            |        "foreignTaxTakenOff": 6543.01,
-            |        "specialWithholdingTaxOrUKTaxPaid": 643245.00
-            |      },
-            |      "expenses": {
-            |        "residentialFinancialCost": 21235.22,
-            |        "broughtFwdResidentialFinancialCost": 12556.00,
-            |        "consolidatedExpenses": 352.663
-            |      }
-            |    }
-            |  ]
-            |}
-            |""".stripMargin)
+                         |{
+                         |  "fromDate": "2020-01-01",
+                         |  "toDate": "2020-01-31",
+                         |  "foreignFhlEea": {
+                         |    "income": {
+                         |      "rentAmount": 567.83
+                         |      },
+                         |    "expenses": {
+                         |      "consolidatedExpenses": 456.98
+                         |    }
+                         |
+                         |  },
+                         |  "foreignNonFhlProperty": [{
+                         |      "countryCode": "GBR",
+                         |      "income": {
+                         |        "rentIncome": {
+                         |          "rentAmount": 34456.30
+                         |        },
+                         |        "foreignTaxCreditRelief": true,
+                         |        "premiumsOfLeaseGrant": 2543.43,
+                         |        "otherPropertyIncome": 54325.30,
+                         |        "foreignTaxTakenOff": 6543.01,
+                         |        "specialWithholdingTaxOrUKTaxPaid": 643245.00
+                         |      },
+                         |      "expenses": {
+                         |        "residentialFinancialCost": 21235.22,
+                         |        "broughtFwdResidentialFinancialCost": 12556.00,
+                         |        "consolidatedExpenses": 352.663
+                         |      }
+                         |    }
+                         |  ]
+                         |}
+                         |""".stripMargin)
           ))
         result shouldBe List(
-          ValueFormatError.copy(paths = Some(Seq("/foreignNonFhlProperty/0/expenses/consolidatedExpenses")))
+          ValueFormatError.copy(paths = Some(List("/foreignNonFhlProperty/0/expenses/consolidatedExpenses")))
         )
       }
 
@@ -1579,82 +946,21 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with Mock
             validNino,
             validBusinessId,
             validTaxYear,
-            Json.parse("""
-            |{
-            |  "fromDate": "2020-01-01",
-            |  "toDate": "2020-01-31",
-            |  "foreignFhlEea": {
-            |    "income": {
-            |      "rentAmount": 567.83
-            |      },
-            |    "expenses": {
-            |      "premisesRunningCosts": 4567.98,
-            |      "repairsAndMaintenance": 98765.67,
-            |      "financialCosts": 4566.95,
-            |      "professionalFees": 23.65,
-            |      "costsOfServices": 4567.77,
-            |      "travelCosts": 456.776,
-            |      "other": 567.67
-            |    }
-            |
-            |  },
-            |  "foreignNonFhlProperty": [
-            |    {
-            |      "countryCode": "FRA",
-            |      "income": {
-            |        "rentIncome": {
-            |          "rentAmount": 34456.30
-            |        },
-            |        "foreignTaxCreditRelief": true,
-            |        "premiumsOfLeaseGrant": 2543.463,
-            |        "otherPropertyIncome": 54325.30,
-            |        "foreignTaxTakenOff": 6543.01,
-            |        "specialWithholdingTaxOrUKTaxPaid": 643245.00
-            |      },
-            |      "expenses": {
-            |        "premisesRunningCosts": 5635.43,
-            |        "repairsAndMaintenance": 3456.65,
-            |        "financialCosts": 34532.21,
-            |        "professionalFees": 32465.32,
-            |        "costsOfServices": 2567.21,
-            |        "travelCosts": 2345.76,
-            |        "other": 2425.11
-            |      }
-            |    },
-            |    {
-            |      "countryCode": "GBR",
-            |      "income": {
-            |        "rentIncome": {
-            |          "rentAmount": 34456.3320
-            |        },
-            |        "foreignTaxCreditRelief": true,
-            |        "premiumsOfLeaseGrant": 2543.43,
-            |        "otherPropertyIncome": 54325.30,
-            |        "foreignTaxTakenOff": 6543.01,
-            |        "specialWithholdingTaxOrUKTaxPaid": 643245.00
-            |      },
-            |      "expenses": {
-            |        "premisesRunningCosts": 5635.43,
-            |        "repairsAndMaintenance": 3456.65,
-            |        "financialCosts": 34532.212,
-            |        "professionalFees": 32465.32,
-            |        "costsOfServices": 2567.21,
-            |        "travelCosts": 2345.76,
-            |        "other": 2425.11
-            |      }
-            |    }
-            |  ]
-            |}
-            |""".stripMargin)
+            requestBody(
+              foreignNonFhlPropertyPremiumsOfLeaseGrant = "2543.463",
+              foreignFhlEeaRentAmount = "98765.673",
+              foreignNonFhlPropertyTravelCosts = "4325.3243",
+              foreignNonFhlPropertyFinancialCosts = "12.901"
+            )
           ))
+
         result shouldBe List(
-          ValueFormatError.copy(paths = Some(Seq(
-            "/foreignFhlEea/expenses/travelCosts",
+          ValueFormatError.copy(paths = Some(List(
+            "/foreignFhlEea/income/rentAmount",
             "/foreignNonFhlProperty/0/income/premiumsOfLeaseGrant",
-            "/foreignNonFhlProperty/1/income/rentIncome/rentAmount",
-            "/foreignNonFhlProperty/1/expenses/financialCosts"
-          )))
-        )
+            "/foreignNonFhlProperty/0/expenses/financialCosts",
+            "/foreignNonFhlProperty/0/expenses/travelCosts"
+          ))))
       }
     }
 
@@ -1666,54 +972,10 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with Mock
             validNino,
             validBusinessId,
             validTaxYear,
-            Json.parse(
-              """
-            |{
-            |  "fromDate": "2020-01-01",
-            |  "toDate": "2020-01-31",
-            |  "foreignFhlEea": {
-            |    "income": {
-            |      "rentAmount": 567.83
-            |      },
-            |    "expenses": {
-            |      "premisesRunningCosts": 4567.98,
-            |      "repairsAndMaintenance": 98765.67,
-            |      "financialCosts": 4566.95,
-            |      "professionalFees": 23.65,
-            |      "costsOfServices": 4567.77,
-            |      "travelCosts": 456.77,
-            |      "other": 567.67
-            |    }
-            |
-            |  },
-            |  "foreignNonFhlProperty": [{
-            |      "countryCode": "ABC",
-            |      "income": {
-            |        "rentIncome": {
-            |          "rentAmount": 34456.30
-            |        },
-            |        "foreignTaxCreditRelief": true,
-            |        "premiumsOfLeaseGrant": 2543.43,
-            |        "otherPropertyIncome": 54325.30,
-            |        "foreignTaxTakenOff": 6543.01,
-            |        "specialWithholdingTaxOrUKTaxPaid": 643245.00
-            |      },
-            |      "expenses": {
-            |        "premisesRunningCosts": 5635.43,
-            |        "repairsAndMaintenance": 3456.65,
-            |        "financialCosts": 34532.21,
-            |        "professionalFees": 32465.32,
-            |        "costsOfServices": 2567.21,
-            |        "travelCosts": 2345.76,
-            |        "other": 2425.11
-            |      }
-            |    }
-            |  ]
-            |}
-            |""".stripMargin
-            )
+            requestBody(foreignNonFhlPropertyCountryCode0 = "JUY")
           ))
-        result shouldBe List(RuleCountryCodeError.copy(paths = Some(Seq("/foreignNonFhlProperty/0/countryCode"))))
+
+        result shouldBe List(RuleCountryCodeError.copy(paths = Some(List("/foreignNonFhlProperty/0/countryCode"))))
       }
 
       "multiple invalid country codes are provided" in {
@@ -1723,78 +985,10 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with Mock
             validNino,
             validBusinessId,
             validTaxYear,
-            Json.parse(
-              """
-            |{
-            |  "fromDate": "2020-01-01",
-            |  "toDate": "2020-01-31",
-            |  "foreignFhlEea": {
-            |    "income": {
-            |      "rentAmount": 567.83
-            |      },
-            |    "expenses": {
-            |      "premisesRunningCosts": 4567.98,
-            |      "repairsAndMaintenance": 98765.67,
-            |      "financialCosts": 4566.95,
-            |      "professionalFees": 23.65,
-            |      "costsOfServices": 4567.77,
-            |      "travelCosts": 456.77,
-            |      "other": 567.67
-            |    }
-            |
-            |  },
-            |  "foreignNonFhlProperty": [
-            |    {
-            |      "countryCode": "ABC",
-            |      "income": {
-            |        "rentIncome": {
-            |          "rentAmount": 34456.30
-            |        },
-            |        "foreignTaxCreditRelief": true,
-            |        "premiumsOfLeaseGrant": 2543.43,
-            |        "otherPropertyIncome": 54325.30,
-            |        "foreignTaxTakenOff": 6543.01,
-            |        "specialWithholdingTaxOrUKTaxPaid": 643245.00
-            |      },
-            |      "expenses": {
-            |        "premisesRunningCosts": 5635.43,
-            |        "repairsAndMaintenance": 3456.65,
-            |        "financialCosts": 34532.21,
-            |        "professionalFees": 32465.32,
-            |        "costsOfServices": 2567.21,
-            |        "travelCosts": 2345.76,
-            |        "other": 2425.11
-            |      }
-            |    },
-            |    {
-            |      "countryCode": "DEF",
-            |      "income": {
-            |        "rentIncome": {
-            |          "rentAmount": 34456.30
-            |        },
-            |        "foreignTaxCreditRelief": true,
-            |        "premiumsOfLeaseGrant": 2543.43,
-            |        "otherPropertyIncome": 54325.30,
-            |        "foreignTaxTakenOff": 6543.01,
-            |        "specialWithholdingTaxOrUKTaxPaid": 643245.00
-            |      },
-            |      "expenses": {
-            |        "premisesRunningCosts": 5635.43,
-            |        "repairsAndMaintenance": 3456.65,
-            |        "financialCosts": 34532.21,
-            |        "professionalFees": 32465.32,
-            |        "costsOfServices": 2567.21,
-            |        "travelCosts": 2345.76,
-            |        "other": 2425.11
-            |      }
-            |    }
-            |  ]
-            |}
-            |""".stripMargin
-            )
+            requestBody(foreignNonFhlPropertyCountryCode0 = "ABC", foreignNonFhlPropertyCountryCode1 = "DEF")
           ))
-        result shouldBe List(
-          RuleCountryCodeError.copy(paths = Some(Seq("/foreignNonFhlProperty/0/countryCode", "/foreignNonFhlProperty/1/countryCode"))))
+
+        result shouldBe List(RuleCountryCodeError.withPaths(List("/foreignNonFhlProperty/0/countryCode", "/foreignNonFhlProperty/1/countryCode")))
       }
     }
 
@@ -1806,54 +1000,10 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with Mock
             validNino,
             validBusinessId,
             validTaxYear,
-            Json.parse(
-              """
-            |{
-            |  "fromDate": "2020-01-01",
-            |  "toDate": "2020-01-31",
-            |  "foreignFhlEea": {
-            |    "income": {
-            |      "rentAmount": 567.83
-            |      },
-            |    "expenses": {
-            |      "premisesRunningCosts": 4567.98,
-            |      "repairsAndMaintenance": 98765.67,
-            |      "financialCosts": 4566.95,
-            |      "professionalFees": 23.65,
-            |      "costsOfServices": 4567.77,
-            |      "travelCosts": 456.77,
-            |      "other": 567.67
-            |    }
-            |
-            |  },
-            |  "foreignNonFhlProperty": [{
-            |      "countryCode": "12345678",
-            |      "income": {
-            |        "rentIncome": {
-            |          "rentAmount": 34456.30
-            |        },
-            |        "foreignTaxCreditRelief": true,
-            |        "premiumsOfLeaseGrant": 2543.43,
-            |        "otherPropertyIncome": 54325.30,
-            |        "foreignTaxTakenOff": 6543.01,
-            |        "specialWithholdingTaxOrUKTaxPaid": 643245.00
-            |      },
-            |      "expenses": {
-            |        "premisesRunningCosts": 5635.43,
-            |        "repairsAndMaintenance": 3456.65,
-            |        "financialCosts": 34532.21,
-            |        "professionalFees": 32465.32,
-            |        "costsOfServices": 2567.21,
-            |        "travelCosts": 2345.76,
-            |        "other": 2425.11
-            |      }
-            |    }
-            |  ]
-            |}
-            |""".stripMargin
-            )
+            requestBody(foreignNonFhlPropertyCountryCode0 = "12345678")
           ))
-        result shouldBe List(CountryCodeFormatError.copy(paths = Some(Seq("/foreignNonFhlProperty/0/countryCode"))))
+
+        result shouldBe List(CountryCodeFormatError.copy(paths = Some(List("/foreignNonFhlProperty/0/countryCode"))))
       }
 
       "multiple invalid country codes are provided" in {
@@ -1863,78 +1013,11 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with Mock
             validNino,
             validBusinessId,
             validTaxYear,
-            Json.parse(
-              """
-            |{
-            |  "fromDate": "2020-01-01",
-            |  "toDate": "2020-01-31",
-            |  "foreignFhlEea": {
-            |    "income": {
-            |      "rentAmount": 567.83
-            |      },
-            |    "expenses": {
-            |      "premisesRunningCosts": 4567.98,
-            |      "repairsAndMaintenance": 98765.67,
-            |      "financialCosts": 4566.95,
-            |      "professionalFees": 23.65,
-            |      "costsOfServices": 4567.77,
-            |      "travelCosts": 456.77,
-            |      "other": 567.67
-            |    }
-            |
-            |  },
-            |  "foreignNonFhlProperty": [
-            |    {
-            |      "countryCode": "12345678",
-            |      "income": {
-            |        "rentIncome": {
-            |          "rentAmount": 34456.30
-            |        },
-            |        "foreignTaxCreditRelief": true,
-            |        "premiumsOfLeaseGrant": 2543.43,
-            |        "otherPropertyIncome": 54325.30,
-            |        "foreignTaxTakenOff": 6543.01,
-            |        "specialWithholdingTaxOrUKTaxPaid": 643245.00
-            |      },
-            |      "expenses": {
-            |        "premisesRunningCosts": 5635.43,
-            |        "repairsAndMaintenance": 3456.65,
-            |        "financialCosts": 34532.21,
-            |        "professionalFees": 32465.32,
-            |        "costsOfServices": 2567.21,
-            |        "travelCosts": 2345.76,
-            |        "other": 2425.11
-            |      }
-            |    },
-            |    {
-            |      "countryCode": "34567890",
-            |      "income": {
-            |        "rentIncome": {
-            |          "rentAmount": 34456.30
-            |        },
-            |        "foreignTaxCreditRelief": true,
-            |        "premiumsOfLeaseGrant": 2543.43,
-            |        "otherPropertyIncome": 54325.30,
-            |        "foreignTaxTakenOff": 6543.01,
-            |        "specialWithholdingTaxOrUKTaxPaid": 643245.00
-            |      },
-            |      "expenses": {
-            |        "premisesRunningCosts": 5635.43,
-            |        "repairsAndMaintenance": 3456.65,
-            |        "financialCosts": 34532.21,
-            |        "professionalFees": 32465.32,
-            |        "costsOfServices": 2567.21,
-            |        "travelCosts": 2345.76,
-            |        "other": 2425.11
-            |      }
-            |    }
-            |  ]
-            |}
-            |""".stripMargin
-            )
+            requestBody(foreignNonFhlPropertyCountryCode0 = "12345678", foreignNonFhlPropertyCountryCode1 = "34567890")
           ))
+
         result shouldBe List(
-          CountryCodeFormatError.copy(paths = Some(Seq("/foreignNonFhlProperty/0/countryCode", "/foreignNonFhlProperty/1/countryCode"))))
+          CountryCodeFormatError.copy(paths = Some(List("/foreignNonFhlProperty/0/countryCode", "/foreignNonFhlProperty/1/countryCode"))))
       }
     }
 
@@ -1946,45 +1029,9 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with Mock
             validNino,
             validBusinessId,
             validTaxYear,
-            Json.parse(
-              """
-            |{
-            |  "fromDate": "2020-01-01",
-            |  "toDate": "2020-01-31",
-            |  "foreignFhlEea": {
-            |    "income": {
-            |      "rentAmount": 567.83
-            |      },
-            |    "expenses": {
-            |      "other": 2425.11,
-            |      "consolidatedExpenses": 456.98
-            |    }
-            |
-            |  },
-            |  "foreignNonFhlProperty": [{
-            |      "countryCode": "GBR",
-            |      "income": {
-            |        "rentIncome": {
-            |          "rentAmount": 34456.30
-            |        },
-            |        "foreignTaxCreditRelief": true,
-            |        "premiumsOfLeaseGrant": 2543.43,
-            |        "otherPropertyIncome": 54325.30,
-            |        "foreignTaxTakenOff": 6543.01,
-            |        "specialWithholdingTaxOrUKTaxPaid": 643245.00
-            |      },
-            |      "expenses": {
-            |        "residentialFinancialCost": 21235.22,
-            |        "broughtFwdResidentialFinancialCost": 12556.00,
-            |        "consolidatedExpenses": 352.66
-            |      }
-            |    }
-            |  ]
-            |}
-            |""".stripMargin
-            )
+            invalidForeignFhlEeaExpenses
           ))
-        result shouldBe List(RuleBothExpensesSuppliedError.copy(paths = Some(Seq("/foreignFhlEea/expenses"))))
+        result shouldBe List(RuleBothExpensesSuppliedError.copy(paths = Some(List("/foreignFhlEea/expenses"))))
       }
 
       "foreignNonFhlProperty/0/expenses is invalid" in {
@@ -1994,45 +1041,9 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with Mock
             validNino,
             validBusinessId,
             validTaxYear,
-            Json.parse(
-              """
-            |{
-            |  "fromDate": "2020-01-01",
-            |  "toDate": "2020-01-31",
-            |  "foreignFhlEea": {
-            |    "income": {
-            |      "rentAmount": 567.83
-            |      },
-            |    "expenses": {
-            |      "consolidatedExpenses": 456.98
-            |    }
-            |
-            |  },
-            |  "foreignNonFhlProperty": [{
-            |      "countryCode": "GBR",
-            |      "income": {
-            |        "rentIncome": {
-            |          "rentAmount": 34456.30
-            |        },
-            |        "foreignTaxCreditRelief": true,
-            |        "premiumsOfLeaseGrant": 2543.43,
-            |        "otherPropertyIncome": 54325.30,
-            |        "foreignTaxTakenOff": 6543.01,
-            |        "specialWithholdingTaxOrUKTaxPaid": 643245.00
-            |      },
-            |      "expenses": {
-            |        "residentialFinancialCost": 21235.22,
-            |        "broughtFwdResidentialFinancialCost": 12556.00,
-            |        "other": 2425.11,
-            |        "consolidatedExpenses": 352.66
-            |      }
-            |    }
-            |  ]
-            |}
-            |""".stripMargin
-            )
+            invalidForeignNonFhlPropertyExpenses0
           ))
-        result shouldBe List(RuleBothExpensesSuppliedError.copy(paths = Some(Seq("/foreignNonFhlProperty/0/expenses"))))
+        result shouldBe List(RuleBothExpensesSuppliedError.copy(paths = Some(List("/foreignNonFhlProperty/0/expenses"))))
       }
 
       "multiple expenses objects are invalid" in {
@@ -2042,69 +1053,12 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with Mock
             validNino,
             validBusinessId,
             validTaxYear,
-            Json.parse(
-              """
-            |{
-            |  "fromDate": "2020-01-01",
-            |  "toDate": "2020-01-31",
-            |  "foreignFhlEea": {
-            |    "income": {
-            |      "rentAmount": 567.83
-            |      },
-            |    "expenses": {
-            |      "other": 2425.11,
-            |      "consolidatedExpenses": 456.98
-            |    }
-            |
-            |  },
-            |  "foreignNonFhlProperty": [
-            |    {
-            |      "countryCode": "FRA",
-            |      "income": {
-            |        "rentIncome": {
-            |          "rentAmount": 34456.30
-            |        },
-            |        "foreignTaxCreditRelief": true,
-            |        "premiumsOfLeaseGrant": 2543.43,
-            |        "otherPropertyIncome": 54325.30,
-            |        "foreignTaxTakenOff": 6543.01,
-            |        "specialWithholdingTaxOrUKTaxPaid": 643245.00
-            |      },
-            |      "expenses": {
-            |        "residentialFinancialCost": 21235.22,
-            |        "broughtFwdResidentialFinancialCost": 12556.00,
-            |        "other": 2425.11,
-            |        "consolidatedExpenses": 352.66
-            |      }
-            |    },
-            |    {
-            |      "countryCode": "GBR",
-            |      "income": {
-            |        "rentIncome": {
-            |          "rentAmount": 34456.30
-            |        },
-            |        "foreignTaxCreditRelief": true,
-            |        "premiumsOfLeaseGrant": 2543.43,
-            |        "otherPropertyIncome": 54325.30,
-            |        "foreignTaxTakenOff": 6543.01,
-            |        "specialWithholdingTaxOrUKTaxPaid": 643245.00
-            |      },
-            |      "expenses": {
-            |        "residentialFinancialCost": 21235.22,
-            |        "broughtFwdResidentialFinancialCost": 12556.00,
-            |        "other": 2425.11,
-            |        "consolidatedExpenses": 352.66
-            |      }
-            |    }
-            |  ]
-            |}
-            |""".stripMargin
-            )
+            multipleInvalidExpenses
           ))
         result shouldBe List(
           RuleBothExpensesSuppliedError.copy(
             paths = Some(
-              Seq(
+              List(
                 "/foreignFhlEea/expenses",
                 "/foreignNonFhlProperty/0/expenses",
                 "/foreignNonFhlProperty/1/expenses"
@@ -2122,55 +1076,275 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with Mock
     }
   }
 
-  trait TestData {
+  private def requestBody(
+      fromDate: String = "2021-01-01",
+      toDate: String = "2021-03-29",
+      foreignNonFhlRentAmount: String = "4823.89",
+      foreignFhlEeaRentAmount: String = "381.21",
+      foreignFhlEeaPremisesRunningCosts: String = "993.31",
+      foreignFhlEeaRepairsAndMaintenance: String = "8842.23",
+      foreignFhlEeaFinancialCosts: String = "994",
+      foreignFhlEeaProfessionalFees: String = "992.12",
+      foreignFhlEeaCostOfServices: String = "4620.23",
+      foreignFhlEeaTravelCosts: String = "774",
+      foreignFhlOther: String = "984.41",
+      foreignNonFhlPropertyPremiumsOfLeaseGrant: String = "884.72",
+      foreignNonFhlPropertyOtherPropertyIncome: String = "7713.09",
+      foreignNonFhlPropertyForeignTaxPaidOrDeducted: String = "7713.09",
+      foreignNonFhlPropertySpecialWithholdingTaxOrUkTaxPaid: String = "847.72",
+      foreignNonFhlPropertyPremisesRunningCosts: String = "139.25",
+      foreignNonFhlPropertyRepairsAndMaintenance: String = "7490.32",
+      foreignNonFhlPropertyFinancialCosts: String = "5000.99",
+      foreignNonFhlPropertyProfessionalFees: String = "847.90",
+      foreignNonFhlPropertyTravelCosts: String = "69.20",
+      foreignNonFhlCostOfServices: String = "478.23",
+      foreignNonFhlResidentialFinancialCost: String = "879.28",
+      foreignNonFhlBroughtFwdResidentialFinancialCost: String = "846.13",
+      foreignNonFhlOther: String = "138.92",
+      foreignNonFhlPropertyCountryCode0: String = "AFG",
+      foreignNonFhlPropertyCountryCode1: String = "GBR"
+  ): JsValue =
+    Json.parse(s"""
+                  |{
+                  |   "fromDate":"$fromDate",
+                  |   "toDate":"$toDate",
+                  |   "foreignFhlEea":{
+                  |      "income":{
+                  |         "rentAmount": "$foreignFhlEeaRentAmount"
+                  |      },
+                  |      "expenses":{
+                  |         "premisesRunningCosts": "$foreignFhlEeaPremisesRunningCosts",
+                  |         "repairsAndMaintenance": "$foreignFhlEeaRepairsAndMaintenance",
+                  |         "financialCosts": "$foreignFhlEeaFinancialCosts",
+                  |         "professionalFees": "$foreignFhlEeaProfessionalFees",
+                  |         "costOfServices": "$foreignFhlEeaCostOfServices",
+                  |         "travelCosts": "$foreignFhlEeaTravelCosts",
+                  |         "other": "$foreignFhlOther"
+                  |      }
+                  |   },
+                  |   "foreignNonFhlProperty":[
+                  |      {
+                  |         "countryCode":"$foreignNonFhlPropertyCountryCode0",
+                  |         "income":{
+                  |            "rentIncome":{
+                  |               "rentAmount": "$foreignNonFhlRentAmount"
+                  |            },
+                  |            "foreignTaxCreditRelief":true,
+                  |            "premiumsOfLeaseGrant": "$foreignNonFhlPropertyPremiumsOfLeaseGrant",
+                  |            "otherPropertyIncome": "$foreignNonFhlPropertyOtherPropertyIncome",
+                  |            "foreignTaxPaidOrDeducted": "$foreignNonFhlPropertyForeignTaxPaidOrDeducted",
+                  |            "specialWithholdingTaxOrUkTaxPaid": "$foreignNonFhlPropertySpecialWithholdingTaxOrUkTaxPaid"
+                  |         },
+                  |         "expenses":{
+                  |            "premisesRunningCosts": "$foreignNonFhlPropertyPremisesRunningCosts",
+                  |            "repairsAndMaintenance":"$foreignNonFhlPropertyRepairsAndMaintenance",
+                  |            "financialCosts": "$foreignNonFhlPropertyFinancialCosts",
+                  |            "professionalFees": "$foreignNonFhlPropertyProfessionalFees",
+                  |            "travelCosts": "$foreignNonFhlPropertyTravelCosts",
+                  |            "costOfServices": "$foreignNonFhlCostOfServices",
+                  |            "residentialFinancialCost": "$foreignNonFhlResidentialFinancialCost",
+                  |            "broughtFwdResidentialFinancialCost": "$foreignNonFhlBroughtFwdResidentialFinancialCost",
+                  |            "other": "$foreignNonFhlOther"
+                  |         }
+                  |      },
+                  |      {
+                  |      "countryCode": "$foreignNonFhlPropertyCountryCode1",
+                  |       "income": {
+                  |         "rentIncome": {
+                  |           "rentAmount": 34456.30
+                  |         },
+                  |         "foreignTaxCreditRelief": true,
+                  |         "premiumsOfLeaseGrant": 2543.43,
+                  |         "otherPropertyIncome": 54325.30,
+                  |         "foreignTaxTakenOff": 6543.01,
+                  |         "specialWithholdingTaxOrUKTaxPaid": 643245.00
+                  |       },
+                  |       "expenses": {
+                  |         "premisesRunningCosts": 5635.43,
+                  |         "repairsAndMaintenance": 3456.65,
+                  |         "financialCosts": 34532.21,
+                  |         "professionalFees": 32465.32,
+                  |         "costsOfServices": 2567.21,
+                  |         "travelCosts": 2345.76,
+                  |         "other": 2425.11
+                  |       }
+                  |     }
+                  |   ]
+                  |}
+                  |""".stripMargin)
 
-    val requestBody: JsValue = Json.parse("""
+  def foreignFhlInvalidConsolidatedExpenses: JsValue = Json.parse("""
       |{
-      |   "fromDate":"2021-01-01",
-      |   "toDate":"2021-03-29",
-      |   "foreignFhlEea":{
-      |      "income":{
-      |         "rentAmount":381.21
+      |  "fromDate": "2020-01-01",
+      |  "toDate": "2020-01-31",
+      |  "foreignFhlEea": {
+      |    "income": {
+      |      "rentAmount": 567.83
       |      },
-      |      "expenses":{
-      |         "premisesRunningCosts":993.31,
-      |         "repairsAndMaintenance":8842.23,
-      |         "financialCosts":994,
-      |         "professionalFees":992.12,
-      |         "costOfServices":4620.23,
-      |         "travelCosts":774,
-      |         "other":984.41
+      |    "expenses": {
+      |      "consolidatedExpenses": 567.673
+      |    }
+      |
+      |  },
+      |  "foreignProperty": [{
+      |      "countryCode": "GBR",
+      |      "income": {
+      |        "rentIncome": {
+      |          "rentAmount": 34456.30
+      |        },
+      |        "foreignTaxCreditRelief": true,
+      |        "premiumOfLeaseGrant": 2543.43,
+      |        "otherPropertyIncome": 54325.30,
+      |        "foreignTaxTakenOff": 6543.01,
+      |        "specialWithholdingTaxOrUKTaxPaid": 643245.00
+      |      },
+      |      "expenses": {
+      |        "premisesRunningCosts": 5635.43,
+      |        "repairsAndMaintenance": 3456.65,
+      |        "financialCosts": 34532.21,
+      |        "professionalFees": 32465.32,
+      |        "costsOfServices": 2567.21,
+      |        "travelCosts": 2345.76,
+      |        "other": 2425.11
       |      }
-      |   },
-      |   "foreignNonFhlProperty":[
-      |      {
-      |         "countryCode":"AFG",
-      |         "income":{
-      |            "rentIncome":{
-      |               "rentAmount":4882.23
-      |            },
-      |            "foreignTaxCreditRelief":true,
-      |            "premiumsOfLeaseGrant":884.72,
-      |            "otherPropertyIncome":7713.09,
-      |            "foreignTaxPaidOrDeducted":884.12,
-      |            "specialWithholdingTaxOrUkTaxPaid":847.72
-      |         },
-      |         "expenses":{
-      |            "premisesRunningCosts":129.35,
-      |            "repairsAndMaintenance":7490.32,
-      |            "financialCosts":5000.99,
-      |            "professionalFees":847.90,
-      |            "travelCosts":69.20,
-      |            "costOfServices":478.23,
-      |            "residentialFinancialCost":879.28,
-      |            "broughtFwdResidentialFinancialCost":846.13,
-      |            "other":138.92
-      |         }
-      |      }
-      |   ]
+      |    }
+      |  ]
       |}
       |""".stripMargin)
 
-  }
+  def invalidForeignFhlEeaExpenses: JsValue = Json.parse(
+    """
+      |{
+      |  "fromDate": "2020-01-01",
+      |  "toDate": "2020-01-31",
+      |  "foreignFhlEea": {
+      |    "income": {
+      |      "rentAmount": 567.83
+      |      },
+      |    "expenses": {
+      |      "other": 2425.11,
+      |      "consolidatedExpenses": 456.98
+      |    }
+      |
+      |  },
+      |  "foreignNonFhlProperty": [{
+      |      "countryCode": "GBR",
+      |      "income": {
+      |        "rentIncome": {
+      |          "rentAmount": 34456.30
+      |        },
+      |        "foreignTaxCreditRelief": true,
+      |        "premiumsOfLeaseGrant": 2543.43,
+      |        "otherPropertyIncome": 54325.30,
+      |        "foreignTaxTakenOff": 6543.01,
+      |        "specialWithholdingTaxOrUKTaxPaid": 643245.00
+      |      },
+      |      "expenses": {
+      |        "residentialFinancialCost": 21235.22,
+      |        "broughtFwdResidentialFinancialCost": 12556.00,
+      |        "consolidatedExpenses": 352.66
+      |      }
+      |    }
+      |  ]
+      |}
+      |""".stripMargin
+  )
+
+  def invalidForeignNonFhlPropertyExpenses0: JsValue = Json.parse(
+    """
+      |{
+      |  "fromDate": "2020-01-01",
+      |  "toDate": "2020-01-31",
+      |  "foreignFhlEea": {
+      |    "income": {
+      |      "rentAmount": 567.83
+      |      },
+      |    "expenses": {
+      |      "consolidatedExpenses": 456.98
+      |    }
+      |
+      |  },
+      |  "foreignNonFhlProperty": [{
+      |      "countryCode": "GBR",
+      |      "income": {
+      |        "rentIncome": {
+      |          "rentAmount": 34456.30
+      |        },
+      |        "foreignTaxCreditRelief": true,
+      |        "premiumsOfLeaseGrant": 2543.43,
+      |        "otherPropertyIncome": 54325.30,
+      |        "foreignTaxTakenOff": 6543.01,
+      |        "specialWithholdingTaxOrUKTaxPaid": 643245.00
+      |      },
+      |      "expenses": {
+      |        "residentialFinancialCost": 21235.22,
+      |        "broughtFwdResidentialFinancialCost": 12556.00,
+      |        "other": 2425.11,
+      |        "consolidatedExpenses": 352.66
+      |      }
+      |    }
+      |  ]
+      |}
+      |""".stripMargin
+  )
+
+  def multipleInvalidExpenses: JsValue = Json.parse(
+    """
+      |{
+      |  "fromDate": "2020-01-01",
+      |  "toDate": "2020-01-31",
+      |  "foreignFhlEea": {
+      |    "income": {
+      |      "rentAmount": 567.83
+      |      },
+      |    "expenses": {
+      |      "other": 2425.11,
+      |      "consolidatedExpenses": 456.98
+      |    }
+      |
+      |  },
+      |  "foreignNonFhlProperty": [
+      |    {
+      |      "countryCode": "FRA",
+      |      "income": {
+      |        "rentIncome": {
+      |          "rentAmount": 34456.30
+      |        },
+      |        "foreignTaxCreditRelief": true,
+      |        "premiumsOfLeaseGrant": 2543.43,
+      |        "otherPropertyIncome": 54325.30,
+      |        "foreignTaxTakenOff": 6543.01,
+      |        "specialWithholdingTaxOrUKTaxPaid": 643245.00
+      |      },
+      |      "expenses": {
+      |        "residentialFinancialCost": 21235.22,
+      |        "broughtFwdResidentialFinancialCost": 12556.00,
+      |        "other": 2425.11,
+      |        "consolidatedExpenses": 352.66
+      |      }
+      |    },
+      |    {
+      |      "countryCode": "GBR",
+      |      "income": {
+      |        "rentIncome": {
+      |          "rentAmount": 34456.30
+      |        },
+      |        "foreignTaxCreditRelief": true,
+      |        "premiumsOfLeaseGrant": 2543.43,
+      |        "otherPropertyIncome": 54325.30,
+      |        "foreignTaxTakenOff": 6543.01,
+      |        "specialWithholdingTaxOrUKTaxPaid": 643245.00
+      |      },
+      |      "expenses": {
+      |        "residentialFinancialCost": 21235.22,
+      |        "broughtFwdResidentialFinancialCost": 12556.00,
+      |        "other": 2425.11,
+      |        "consolidatedExpenses": 352.66
+      |      }
+      |    }
+      |  ]
+      |}
+      |""".stripMargin
+  )
 
 }

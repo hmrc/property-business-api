@@ -896,7 +896,7 @@ class AmendUkPropertyAnnualSubmissionControllerISpec extends IntegrationBaseSpec
           }
         }
 
-        val errors = Seq(
+        val errors = List(
           (BAD_REQUEST, "INVALID_TAXABLE_ENTITY_ID", BAD_REQUEST, NinoFormatError),
           (BAD_REQUEST, "INVALID_TAX_YEAR", BAD_REQUEST, TaxYearFormatError),
           (BAD_REQUEST, "INVALID_INCOMESOURCEID", BAD_REQUEST, BusinessIdFormatError),
@@ -912,7 +912,7 @@ class AmendUkPropertyAnnualSubmissionControllerISpec extends IntegrationBaseSpec
           (SERVICE_UNAVAILABLE, "SERVICE_UNAVAILABLE", INTERNAL_SERVER_ERROR, InternalError)
         )
 
-        val extraTysErrors = Seq(
+        val extraTysErrors = List(
           (INTERNAL_SERVER_ERROR, "MISSING_EXPENSES", INTERNAL_SERVER_ERROR, InternalError),
           (UNPROCESSABLE_ENTITY, "FIELD_CONFLICT", BAD_REQUEST, RulePropertyIncomeAllowanceError)
         )

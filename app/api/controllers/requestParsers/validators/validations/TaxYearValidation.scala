@@ -23,7 +23,6 @@ object TaxYearValidation {
   val taxYearFormat = "20[1-9][0-9]\\-[1-9][0-9]"
 
   def validate(minimumTaxYear: Int, taxYear: String): List[MtdError] = {
-    // minTaxYear = 2021, startYear = 2021
     doValidate(taxYear) { startYear =>
       if (startYear >= minimumTaxYear) Nil else List(RuleTaxYearNotSupportedError)
     }

@@ -30,56 +30,63 @@ class ResolvePeriodIdSpec extends UnitSpec {
     "return no errors" when {
       "passed a valid PeriodId" in {
         val periodId = "2019-04-06_2019-07-04"
-        val result   = ResolvePeriodId(minTaxYear, maxTaxYear, periodId)
+        val result   = ResolvePeriodId(minTaxYear, maxTaxYear, periodId, None, None)
         result shouldBe Valid(PeriodId(periodId))
       }
       "passed a periodId equal to the minimum" in {
         val minPeriodId = "2017-04-06_2017-07-04"
-        val result      = ResolvePeriodId(minTaxYear, maxTaxYear, minPeriodId)
+        val result      = ResolvePeriodId(minTaxYear, maxTaxYear, minPeriodId, None, None)
         result shouldBe Valid(PeriodId(minPeriodId))
       }
 
       "passed a periodId equal to the maximum" in {
         val maxPeriodId = "2021-04-06_2021-07-04"
-        val result      = ResolvePeriodId(minTaxYear, maxTaxYear, maxPeriodId)
+        val result      = ResolvePeriodId(minTaxYear, maxTaxYear, maxPeriodId, None, None)
         result shouldBe Valid(PeriodId(maxPeriodId))
       }
+
     }
 
     "return an error" when {
       "passed a PeriodId with an invalid format" in {
         val invalidPeriodId = "2017-04-06__2017-07-04"
-        val result          = ResolvePeriodId(minTaxYear, maxTaxYear, invalidPeriodId)
+        val result          = ResolvePeriodId(minTaxYear, maxTaxYear, invalidPeriodId, None, None)
         result shouldBe Invalid(List(PeriodIdFormatError))
       }
 
-      "passed a PeriodId with an invalid date format" in {
+      "passed a PeriodId with an invalid start date format" in {
         val invalidPeriodId = "20A7-04-06_2017-07-04"
-        val result          = ResolvePeriodId(minTaxYear, maxTaxYear, invalidPeriodId)
+        val result          = ResolvePeriodId(minTaxYear, maxTaxYear, invalidPeriodId, None, None)
+        result shouldBe Invalid(List(PeriodIdFormatError))
+      }
+
+      "passed a PeriodId with an invalid end date format" in {
+        val invalidPeriodId = "2017-04-06_20A7-07-04"
+        val result          = ResolvePeriodId(minTaxYear, maxTaxYear, invalidPeriodId, None, None)
         result shouldBe Invalid(List(PeriodIdFormatError))
       }
 
       "passed a PeriodId with a invalid underscore" in {
         val invalidPeriodId = "20A7-04-06a2017-07-04"
-        val result          = ResolvePeriodId(minTaxYear, maxTaxYear, invalidPeriodId)
+        val result          = ResolvePeriodId(minTaxYear, maxTaxYear, invalidPeriodId, None, None)
         result shouldBe Invalid(List(PeriodIdFormatError))
       }
 
       "passed a PeriodId before the minimum" in {
         val earlyPeriodId = "2016-04-06_2016-07-04"
-        val result        = ResolvePeriodId(minTaxYear, maxTaxYear, earlyPeriodId)
+        val result        = ResolvePeriodId(minTaxYear, maxTaxYear, earlyPeriodId, None, None)
         result shouldBe Invalid(List(PeriodIdFormatError))
       }
 
       "passed a PeriodId after the maximum" in {
         val latePeriodId = "2022-04-06_2022-07-04"
-        val result       = ResolvePeriodId(minTaxYear, maxTaxYear, latePeriodId)
+        val result       = ResolvePeriodId(minTaxYear, maxTaxYear, latePeriodId, None, None)
         result shouldBe Invalid(List(PeriodIdFormatError))
       }
 
       "passed a PeriodId with toDate before fromDate" in {
         val latePeriodId = "2022-07-04_2022-04-06"
-        val result       = ResolvePeriodId(minTaxYear, maxTaxYear, latePeriodId)
+        val result       = ResolvePeriodId(minTaxYear, maxTaxYear, latePeriodId, None, None)
         result shouldBe Invalid(List(PeriodIdFormatError))
       }
     }

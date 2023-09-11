@@ -21,52 +21,34 @@ import api.models.errors.{MtdError, PeriodIdFormatError}
 import cats.data.Validated
 import cats.data.Validated.{Invalid, Valid}
 
-trait ResolvingPeriodId extends Resolver[String, PeriodId] {
-  private val periodIdLength = "YYYY-MM-DD_YYYY-MM-DD".length
-  private val taxDateRegex   = "20\\d{2}-\\d{2}-\\d{2}".r
+object ResolvePeriodId extends Resolver[String, PeriodId] with DateRangeFromStringResolving {
 
-  protected def resolve(value: String): Validated[Seq[MtdError], PeriodId] = {
-    if (value.length.equals(periodIdLength)) {
-      val fromDate   = value.substring(0, 10)
-      val toDate     = value.substring(11, 21)
-      val underscore = value.substring(10, 11)
+  override protected val startDateFormatError: MtdError = PeriodIdFormatError
+  override protected val endDateFormatError: MtdError   = PeriodIdFormatError
 
-      if (taxDateRegex.matches(fromDate) && taxDateRegex.matches(toDate) && underscore.matches("_")) {
-        ResolveDateRange((fromDate, toDate), None, None) match {
-          case Valid(_)   => Valid(PeriodId(value))
-          case Invalid(_) => Invalid(List(PeriodIdFormatError))
-        }
-      } else {
-        Invalid(List(PeriodIdFormatError))
-      }
-    } else {
-      Invalid(List(PeriodIdFormatError))
-    }
+  def apply(value: String, notUsedError: Option[MtdError], path: Option[String]): Validated[Seq[MtdError], PeriodId] = {
+    resolve(value, Some(PeriodIdFormatError), path)
+      .map(dateRange => PeriodId(dateRange))
   }
 
-}
+  def apply(minimumTaxYear: Int,
+            maximumTaxYear: Int,
+            value: String,
+            notUsedError: Option[MtdError],
+            path: Option[String]): Validated[Seq[MtdError], PeriodId] = {
+    resolve(value, Some(PeriodIdFormatError), path)
+      .andThen { dateRange =>
+        import dateRange.{startDateAsInt => fromYear, endDateAsInt => toYear}
 
-object ResolvePeriodId extends ResolvingPeriodId {
+        val fromYearIsValid = fromYear >= minimumTaxYear && fromYear <= maximumTaxYear
+        val toYearIsValid   = toYear >= minimumTaxYear && toYear <= maximumTaxYear
 
-  def apply(value: String, error: Option[MtdError], path: Option[String]): Validated[Seq[MtdError], PeriodId] =
-    resolve(value)
-
-  def apply(minimumTaxYear: Int, maximumTaxYear: Int, value: String): Validated[Seq[MtdError], PeriodId] = {
-    resolve(value)
-      .andThen { periodId =>
-        {
-          val fromYear = periodId.from.substring(0, 4).toInt
-          val toYear   = periodId.to.substring(0, 4).toInt
-
-          val fromYearIsValid = fromYear >= minimumTaxYear && fromYear <= maximumTaxYear
-          val toYearIsValid   = toYear >= minimumTaxYear && toYear <= maximumTaxYear
-
-          if (fromYearIsValid && toYearIsValid)
-            Valid(periodId)
-          else
-            Invalid(List(PeriodIdFormatError))
-        }
+        if (fromYearIsValid && toYearIsValid)
+          Valid(dateRange)
+        else
+          Invalid(List(PeriodIdFormatError))
       }
+      .map(dateRange => PeriodId(dateRange))
   }
 
 }

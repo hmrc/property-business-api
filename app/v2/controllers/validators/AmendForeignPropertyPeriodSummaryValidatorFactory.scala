@@ -18,15 +18,13 @@ package v2.controllers.validators
 
 import api.controllers.validators.Validator
 import api.controllers.validators.resolvers._
-import api.models.errors.{MtdError, RuleBothExpensesSuppliedError, RuleDuplicateCountryCodeError}
+import api.models.errors.MtdError
 import cats.data.Validated
-import cats.data.Validated.{Invalid, Valid}
 import cats.implicits._
 import config.AppConfig
 import play.api.libs.json.JsValue
+import v2.controllers.validators.AmendForeignPropertyPeriodSummaryValidator.validateBusinessRules
 import v2.models.request.amendForeignPropertyPeriodSummary._
-import v2.models.request.common.foreignFhlEea.{AmendForeignFhlEea, AmendForeignFhlEeaExpenses}
-import v2.models.request.common.foreignPropertyEntry.{AmendForeignNonFhlPropertyEntry, AmendForeignNonFhlPropertyExpenses}
 
 import javax.inject.{Inject, Singleton}
 
@@ -34,10 +32,6 @@ import javax.inject.{Inject, Singleton}
 class AmendForeignPropertyPeriodSummaryValidatorFactory @Inject() (appConfig: AppConfig) {
 
   private val resolveJson = new ResolveNonEmptyJsonObject[AmendForeignPropertyPeriodSummaryRequestBody]()
-
-  private val resolveParsedNumber = ResolveParsedNumber()
-
-  private val valid = Valid(())
 
   def validator(nino: String,
                 businessId: String,
@@ -55,129 +49,6 @@ class AmendForeignPropertyPeriodSummaryValidatorFactory @Inject() (appConfig: Ap
           resolveJson(body)
         ).mapN(AmendForeignPropertyPeriodSummaryRequestData) andThen validateBusinessRules
 
-      private def validateBusinessRules(
-          parsed: AmendForeignPropertyPeriodSummaryRequestData): Validated[Seq[MtdError], AmendForeignPropertyPeriodSummaryRequestData] = {
-
-        import parsed.body._
-
-        List(
-          foreignFhlEea.map(validateForeignFhlEea).getOrElse(valid),
-          foreignNonFhlProperty.map(validateForeignNonFhlProperties).getOrElse(valid)
-        ).traverse(identity).map(_ => parsed)
-      }
-
     }
-
-  private def validateForeignFhlEea(foreignFhlEea: AmendForeignFhlEea): Validated[Seq[MtdError], Unit] = {
-    import foreignFhlEea._
-
-    val fieldsWithPaths = List(
-      (income.flatMap(_.rentAmount), "/foreignFhlEea/income/rentAmount"),
-      (expenses.flatMap(_.premisesRunningCosts), "/foreignFhlEea/expenses/premisesRunningCosts"),
-      (expenses.flatMap(_.repairsAndMaintenance), "/foreignFhlEea/expenses/repairsAndMaintenance"),
-      (expenses.flatMap(_.financialCosts), "/foreignFhlEea/expenses/financialCosts"),
-      (expenses.flatMap(_.professionalFees), "/foreignFhlEea/expenses/professionalFees"),
-      (expenses.flatMap(_.costOfServices), "/foreignFhlEea/expenses/costOfServices"),
-      (expenses.flatMap(_.travelCosts), "/foreignFhlEea/expenses/travelCosts"),
-      (expenses.flatMap(_.other), "/foreignFhlEea/expenses/other"),
-      (expenses.flatMap(_.consolidatedExpenses), "/foreignFhlEea/expenses/consolidatedExpenses")
-    )
-
-    val validateNumberFields = fieldsWithPaths
-      .map {
-        case (None, _)            => valid
-        case (Some(number), path) => resolveParsedNumber(number, None, Some(path))
-      }
-
-    val validatedForeignFhlEeaConsolidatedExpenses = expenses.map { expenses =>
-      expenses.consolidatedExpenses match {
-        case None => valid
-        case Some(_) =>
-          expenses match {
-            case AmendForeignFhlEeaExpenses(None, None, None, None, None, None, None, Some(_)) => valid
-            case _ => Invalid(List(RuleBothExpensesSuppliedError.withPath("/foreignFhlEea/expenses")))
-          }
-      }
-    }
-
-    (validateNumberFields ++ validatedForeignFhlEeaConsolidatedExpenses).sequence.andThen(_ => valid)
-  }
-
-  private def validateForeignNonFhlProperties(foreignNonFhlProperties: Seq[AmendForeignNonFhlPropertyEntry]): Validated[Seq[MtdError], Unit] = {
-    val zippedForeignNonFhlProperties = foreignNonFhlProperties.zipWithIndex
-
-    val validatedFields = zippedForeignNonFhlProperties
-      .map { case (entry, index) =>
-        List(validateForeignPropertyConsolidatedExpenses(entry, index), validateForeignNonFhlProperty(entry, index)).sequence
-      }
-      .sequence
-      .andThen(_ => valid)
-
-    val validatedCountryCodes: Seq[Validated[Seq[MtdError], Unit]] = zippedForeignNonFhlProperties
-      .map { case (entry, index) =>
-        (entry.countryCode, s"/foreignNonFhlProperty/$index/countryCode")
-      }
-      .groupBy(_._1)
-      .collect {
-        case (code, codeAndPaths) if codeAndPaths.size >= 2 =>
-          Invalid(List(RuleDuplicateCountryCodeError.forDuplicatedCodesAndPaths(code, codeAndPaths.map(_._2))))
-      }
-      .toSeq
-
-    (validatedCountryCodes :+ validatedFields).sequence.andThen(_ => valid)
-  }
-
-  private def validateForeignNonFhlProperty(foreignNonFhlPropertyEntry: AmendForeignNonFhlPropertyEntry,
-                                            index: Int): Validated[Seq[MtdError], Unit] = {
-    import foreignNonFhlPropertyEntry.{countryCode, income => i, expenses => e}
-
-    val validatedCountryCode = ResolveParsedCountryCode(countryCode, s"/foreignNonFhlProperty/$index/countryCode")
-
-    val fieldsWithPaths = List(
-      (i.flatMap(_.rentIncome).flatMap(_.rentAmount), s"/foreignNonFhlProperty/$index/income/rentIncome/rentAmount"),
-      (i.flatMap(_.premiumsOfLeaseGrant), s"/foreignNonFhlProperty/$index/income/premiumsOfLeaseGrant"),
-      (i.flatMap(_.otherPropertyIncome), s"/foreignNonFhlProperty/$index/income/otherPropertyIncome"),
-      (i.flatMap(_.foreignTaxPaidOrDeducted), s"/foreignNonFhlProperty/$index/income/foreignTaxPaidOrDeducted"),
-      (i.flatMap(_.specialWithholdingTaxOrUkTaxPaid), s"/foreignNonFhlProperty/$index/income/specialWithholdingTaxOrUkTaxPaid"),
-      (e.flatMap(_.premisesRunningCosts), s"/foreignNonFhlProperty/$index/expenses/premisesRunningCosts"),
-      (e.flatMap(_.repairsAndMaintenance), s"/foreignNonFhlProperty/$index/expenses/repairsAndMaintenance"),
-      (e.flatMap(_.financialCosts), s"/foreignNonFhlProperty/$index/expenses/financialCosts"),
-      (e.flatMap(_.professionalFees), s"/foreignNonFhlProperty/$index/expenses/professionalFees"),
-      (e.flatMap(_.costOfServices), s"/foreignNonFhlProperty/$index/expenses/costOfServices"),
-      (e.flatMap(_.travelCosts), s"/foreignNonFhlProperty/$index/expenses/travelCosts"),
-      (e.flatMap(_.residentialFinancialCost), s"/foreignNonFhlProperty/$index/expenses/residentialFinancialCost"),
-      (e.flatMap(_.broughtFwdResidentialFinancialCost), s"/foreignNonFhlProperty/$index/expenses/broughtFwdResidentialFinancialCost"),
-      (e.flatMap(_.other), s"/foreignNonFhlProperty/$index/expenses/other"),
-      (e.flatMap(_.consolidatedExpenses), s"/foreignNonFhlProperty/$index/expenses/consolidatedExpenses")
-    )
-
-    val validatedNumberFields = fieldsWithPaths
-      .map {
-        case (None, _)            => valid
-        case (Some(number), path) => resolveParsedNumber(number, None, Some(path))
-      }
-
-    val result = validatedNumberFields :+ validatedCountryCode
-
-    result.sequence.andThen(_ => valid)
-  }
-
-  private def validateForeignPropertyConsolidatedExpenses(foreignNonFhlPropertyEntry: AmendForeignNonFhlPropertyEntry,
-                                                          index: Int): Validated[Seq[MtdError], Unit] = {
-
-    foreignNonFhlPropertyEntry.expenses
-      .map { expenses =>
-        expenses.consolidatedExpenses match {
-          case None => valid
-          case Some(_) =>
-            expenses match {
-              case AmendForeignNonFhlPropertyExpenses(None, None, None, None, None, None, _, _, None, Some(_)) => valid
-              case _ => Invalid(List(RuleBothExpensesSuppliedError.withPath(s"/foreignNonFhlProperty/$index/expenses")))
-            }
-        }
-      }
-      .getOrElse(valid)
-
-  }
 
 }

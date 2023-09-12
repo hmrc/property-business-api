@@ -204,7 +204,7 @@ class CreateHistoricNonFhlUkPropertyPeriodSummaryValidatorSpec extends UnitSpec 
       }
     }
 
-    "return FromDateFormatError error" when {
+    "return FromDateFormatError" when {
       "given an invalid fromDate" in {
         val validator = setUpValidator()
         val result =
@@ -213,7 +213,16 @@ class CreateHistoricNonFhlUkPropertyPeriodSummaryValidatorSpec extends UnitSpec 
       }
     }
 
-    "return ToDateFormatError error" when {
+    "return FromDateOutOfRangeError" when {
+      "given a too early fromDate" in {
+        val validator = setUpValidator()
+        val result =
+          validator.validate(CreateHistoricNonFhlUkPropertyPeriodSummaryRawData(validNino, validRequestBody.update("fromDate", JsString("1801-12-17"))))
+        result should contain only FromDateOutOfRangeError
+      }
+    }
+
+    "return ToDateFormatError" when {
       "given an invalid toDate" in {
         val validator = setUpValidator()
         val result =
@@ -222,7 +231,16 @@ class CreateHistoricNonFhlUkPropertyPeriodSummaryValidatorSpec extends UnitSpec 
       }
     }
 
-    "return toDateBeforeFromDateError error" when {
+    "return ToDateOutOfRangeError" when {
+      "given late toDate" in {
+        val validator = setUpValidator()
+        val result =
+          validator.validate(CreateHistoricNonFhlUkPropertyPeriodSummaryRawData(validNino, validRequestBody.update("toDate", JsString("2104-01-31"))))
+        result should contain only ToDateOutOfRangeError
+      }
+    }
+
+    "return toDateBeforeFromDateError" when {
       "given a toDate that is earlier than the fromDate" in {
         val validator = setUpValidator()
         val result    = validator.validate(CreateHistoricNonFhlUkPropertyPeriodSummaryRawData(validNino, requestBodyWithToDateEarlierThanFromDate))

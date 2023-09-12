@@ -27,12 +27,6 @@ class CreateHistoricFhlUkPiePeriodSummaryValidatorSpec extends UnitSpec with Jso
 
   private val validNino = "AA123456A"
 
-  def setUpValidator(): CreateHistoricFhlUkPiePeriodSummaryValidator = {
-    MockAppConfig.minimumFromDate returns 1900
-    MockAppConfig.maximumToDate returns 2100
-    new CreateHistoricFhlUkPiePeriodSummaryValidator(mockAppConfig)
-  }
-
   private val validRequestBody: JsValue = Json.parse(
     """
       |{
@@ -130,13 +124,13 @@ class CreateHistoricFhlUkPiePeriodSummaryValidatorSpec extends UnitSpec with Jso
   "The validator" should {
     "return no errors" when {
       "given a valid request" in {
-        val validator = setUpValidator()
+        val validator = new CreateHistoricFhlUkPiePeriodSummaryValidator()
         val result    = validator.validate(CreateHistoricFhlUkPiePeriodSummaryRawData(validNino, validRequestBody))
         result shouldBe empty
       }
 
       "given a valid request object with consolidated expenses" in {
-        val validator = setUpValidator()
+        val validator = new CreateHistoricFhlUkPiePeriodSummaryValidator()
         val result    = validator.validate(CreateHistoricFhlUkPiePeriodSummaryRawData(validNino, validRequestBodyConsolidated))
         result shouldBe empty
       }
@@ -144,7 +138,7 @@ class CreateHistoricFhlUkPiePeriodSummaryValidatorSpec extends UnitSpec with Jso
 
     "return an error" when {
       "a mandatory field is missing" in {
-        val validator = setUpValidator()
+        val validator = new CreateHistoricFhlUkPiePeriodSummaryValidator()
         val expected  = RuleIncorrectOrEmptyBodyError.copy(paths = Some(List("/fromDate")))
         val result    = validator.validate(CreateHistoricFhlUkPiePeriodSummaryRawData(validNino, incompleteRequestBody))
 
@@ -152,7 +146,7 @@ class CreateHistoricFhlUkPiePeriodSummaryValidatorSpec extends UnitSpec with Jso
       }
 
       "given only a fromDate and toDate" in {
-        val validator = setUpValidator()
+        val validator = new CreateHistoricFhlUkPiePeriodSummaryValidator()
         validator.validate(CreateHistoricFhlUkPiePeriodSummaryRawData(validNino, requestBodyWithNoSubObjects)) should
           contain only RuleIncorrectOrEmptyBodyError
       }
@@ -160,7 +154,7 @@ class CreateHistoricFhlUkPiePeriodSummaryValidatorSpec extends UnitSpec with Jso
 
     "return ValueFormatErrors grouped into one error object with an array of paths" when {
       "given data with multiple invalid numeric amounts" in {
-        val validator = setUpValidator()
+        val validator = new CreateHistoricFhlUkPiePeriodSummaryValidator()
         val expected =
           ValueFormatError.copy(paths = Some(List("/income/periodAmount", "/income/taxDeducted", "/expenses/consolidatedExpenses")))
 
@@ -173,7 +167,7 @@ class CreateHistoricFhlUkPiePeriodSummaryValidatorSpec extends UnitSpec with Jso
 
     "return RuleIncorrectOrEmptyBodyError" when {
       "given an empty body" in {
-        val validator = setUpValidator()
+        val validator = new CreateHistoricFhlUkPiePeriodSummaryValidator()
         val result    = validator.validate(CreateHistoricFhlUkPiePeriodSummaryRawData(validNino, JsObject.empty))
         result should contain only RuleIncorrectOrEmptyBodyError
       }
@@ -181,7 +175,7 @@ class CreateHistoricFhlUkPiePeriodSummaryValidatorSpec extends UnitSpec with Jso
 
     "return FromDateFormatError" when {
       "given an invalid fromDate" in {
-        val validator = setUpValidator()
+        val validator = new CreateHistoricFhlUkPiePeriodSummaryValidator()
         val result =
           validator.validate(CreateHistoricFhlUkPiePeriodSummaryRawData(validNino, validRequestBody.update("fromDate", JsString("BAD_DATE"))))
         result should contain only FromDateFormatError
@@ -190,16 +184,16 @@ class CreateHistoricFhlUkPiePeriodSummaryValidatorSpec extends UnitSpec with Jso
 
     "return FromDateOutOfRangeError" when {
       "given an early fromDate" in {
-        val validator = setUpValidator()
+        val validator = new CreateHistoricFhlUkPiePeriodSummaryValidator()
         val result =
           validator.validate(CreateHistoricFhlUkPiePeriodSummaryRawData(validNino, validRequestBody.update("fromDate", JsString("1800-01-01"))))
-        result should contain only FromDateOutOfRangeError
+        result should contain only FromDateFormatError
       }
     }
 
     "return ToDateFormatError" when {
       "given an invalid toDate" in {
-        val validator = setUpValidator()
+        val validator = new CreateHistoricFhlUkPiePeriodSummaryValidator()
         val result =
           validator.validate(CreateHistoricFhlUkPiePeriodSummaryRawData(validNino, validRequestBody.update("toDate", JsString("BAD_DATE"))))
         result should contain only ToDateFormatError
@@ -208,16 +202,16 @@ class CreateHistoricFhlUkPiePeriodSummaryValidatorSpec extends UnitSpec with Jso
 
     "return ToDateOutOfRangeError" when {
       "given an invalid toDate" in {
-        val validator = setUpValidator()
+        val validator = new CreateHistoricFhlUkPiePeriodSummaryValidator()
         val result =
           validator.validate(CreateHistoricFhlUkPiePeriodSummaryRawData(validNino, validRequestBody.update("toDate", JsString("2100-01-01"))))
-        result should contain only ToDateOutOfRangeError
+        result should contain only ToDateFormatError
       }
     }
 
     "return RuleToDateBeforeFromDateError" when {
       "given an toDate is before the fromDate" in {
-        val validator = setUpValidator()
+        val validator = new CreateHistoricFhlUkPiePeriodSummaryValidator()
         validator.validate(CreateHistoricFhlUkPiePeriodSummaryRawData(validNino, validRequestBody.update("fromDate", JsString("2099-01-01")))) should
           contain only RuleToDateBeforeFromDateError
       }
@@ -225,7 +219,7 @@ class CreateHistoricFhlUkPiePeriodSummaryValidatorSpec extends UnitSpec with Jso
 
     "return only the path-param errors" when {
       "given a request with both invalid path params and an invalid body" in {
-        val validator = setUpValidator()
+        val validator = new CreateHistoricFhlUkPiePeriodSummaryValidator()
         val result =
           validator.validate(CreateHistoricFhlUkPiePeriodSummaryRawData("BAD-NINO", requestBodyWithInvalidAmounts))
         result should contain only NinoFormatError

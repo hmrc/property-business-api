@@ -31,8 +31,6 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with Mock
 
   def setUpValidator(): CreateForeignPropertyPeriodSummaryValidator = {
     MockAppConfig.minimumTaxV2Foreign returns 2021
-    MockAppConfig.minimumFromDate returns 1900
-    MockAppConfig.maximumToDate returns 2100
     new CreateForeignPropertyPeriodSummaryValidator(mockAppConfig)
   }
 
@@ -469,7 +467,7 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with Mock
             requestBody(fromDate = "1782-09-04")
           )
         )
-        result shouldBe List(FromDateOutOfRangeError)
+        result shouldBe List(FromDateFormatError)
       }
 
       "the toDate format is invalid" in {
@@ -494,7 +492,7 @@ class CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with Mock
             validTaxYear,
             requestBody(toDate = "3054-03-29")
           ))
-        result shouldBe List(ToDateOutOfRangeError)
+        result shouldBe List(ToDateFormatError)
 
       }
 

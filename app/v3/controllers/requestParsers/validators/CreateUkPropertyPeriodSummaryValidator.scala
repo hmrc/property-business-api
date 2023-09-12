@@ -32,8 +32,6 @@ import javax.inject.Singleton
 class CreateUkPropertyPeriodSummaryValidator @Inject() (appConfig: AppConfig) extends Validator[CreateUkPropertyPeriodSummaryRawData] {
 
   private lazy val minTaxYear = appConfig.minimumTaxV2Uk
-  private lazy val minFromDate = appConfig.minimumFromDate
-  private lazy val maxToDate   = appConfig.maximumToDate
   private val validationSet   = List(parameterFormatValidation, bodyFormatValidation, bodyFieldFormatValidation, dateRangeValidation)
 
   private def parameterFormatValidation: CreateUkPropertyPeriodSummaryRawData => List[List[MtdError]] =
@@ -56,8 +54,8 @@ class CreateUkPropertyPeriodSummaryValidator @Inject() (appConfig: AppConfig) ex
     val body = data.body.as[CreateUkPropertyPeriodSummaryRequestBody]
 
     val regularErrors = List(
-      DateValidation.validate(body.fromDate, isFromDate = true, minYear = minFromDate, maxYear = maxToDate),
-      DateValidation.validate(body.toDate, isFromDate = false, minYear = minFromDate, maxYear = maxToDate)
+      DateValidation.validate(body.fromDate, isFromDate = true),
+      DateValidation.validate(body.toDate, isFromDate = false)
     )
 
     val pathErrors = List(

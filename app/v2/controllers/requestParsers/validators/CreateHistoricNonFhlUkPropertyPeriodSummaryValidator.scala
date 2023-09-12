@@ -21,16 +21,16 @@ import api.controllers.requestParsers.validators.validations.JsonFormatValidatio
 import api.controllers.requestParsers.validators.validations.NumberValidation.validateOptional
 import api.controllers.requestParsers.validators.validations.{DateValidation, NinoValidation, NoValidationErrors, ToDateBeforeFromDateValidation}
 import api.models.errors.MtdError
-import com.google.inject.Inject
-import config.AppConfig
 import v2.controllers.requestParsers.validators.validations._
-import v2.models.request.createHistoricNonFhlUkPropertyPeriodSummary.{CreateHistoricNonFhlUkPropertyPeriodSummaryRawData, CreateHistoricNonFhlUkPropertyPeriodSummaryRequestBody}
+import v2.models.request.createHistoricNonFhlUkPropertyPeriodSummary.{
+  CreateHistoricNonFhlUkPropertyPeriodSummaryRawData,
+  CreateHistoricNonFhlUkPropertyPeriodSummaryRequestBody
+}
 
 import javax.inject.Singleton
 
 @Singleton
-class CreateHistoricNonFhlUkPropertyPeriodSummaryValidator @Inject() (appConfig: AppConfig)
-    extends Validator[CreateHistoricNonFhlUkPropertyPeriodSummaryRawData] {
+class CreateHistoricNonFhlUkPropertyPeriodSummaryValidator extends Validator[CreateHistoricNonFhlUkPropertyPeriodSummaryRawData] {
 
   override def validate(data: CreateHistoricNonFhlUkPropertyPeriodSummaryRawData): List[MtdError] = {
     (for {
@@ -49,8 +49,8 @@ class CreateHistoricNonFhlUkPropertyPeriodSummaryValidator @Inject() (appConfig:
   private def validateBody(body: CreateHistoricNonFhlUkPropertyPeriodSummaryRequestBody): Either[List[MtdError], Unit] = {
 
     val formatDateErrors =
-      DateValidation.validate(body.fromDate, isFromDate = true, appConfig.minimumFromDate, appConfig.maximumToDate) ++
-        DateValidation.validate(body.toDate, isFromDate = false, appConfig.minimumFromDate, appConfig.maximumToDate)
+      DateValidation.validate(body.fromDate, isFromDate = true) ++
+        DateValidation.validate(body.toDate, isFromDate = false)
 
     def validateToDateIsAfterFromDate: List[MtdError] =
       if (formatDateErrors.isEmpty)

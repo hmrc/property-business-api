@@ -31,8 +31,6 @@ class CreateUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with JsonError
 
   def setUpValidator(): CreateUkPropertyPeriodSummaryValidator = {
     MockAppConfig.minimumTaxV2Uk returns 2021
-    MockAppConfig.minimumFromDate returns 1900
-    MockAppConfig.maximumToDate returns 2100
     new CreateUkPropertyPeriodSummaryValidator(mockAppConfig)
   }
 
@@ -337,7 +335,7 @@ class CreateUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with JsonError
             validBusinessId,
             requestBodyJson.update("fromDate", JsString("1569-10-01"))
           ))
-        result shouldBe List(FromDateOutOfRangeError)
+        result shouldBe List(FromDateFormatError)
       }
 
       "the toDate format is invalid" in {
@@ -361,7 +359,7 @@ class CreateUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with JsonError
             validBusinessId,
             requestBodyJson.update("toDate", JsString("3490-10-01"))
           ))
-        result shouldBe List(ToDateOutOfRangeError)
+        result shouldBe List(ToDateFormatError)
       }
 
       "toDate is before fromDate" in {

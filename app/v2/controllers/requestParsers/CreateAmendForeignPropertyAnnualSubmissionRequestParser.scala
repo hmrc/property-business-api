@@ -17,19 +17,19 @@
 package v2.controllers.requestParsers
 
 import api.controllers.requestParsers.RequestParser
-import api.models.domain.{Nino, TaxYear}
+import api.models.domain.{BusinessId, Nino, TaxYear}
 import v2.controllers.requestParsers.validators.CreateAmendForeignPropertyAnnualSubmissionValidator
 import v2.models.request.createAmendForeignPropertyAnnualSubmission._
 
 import javax.inject.Inject
 
 class CreateAmendForeignPropertyAnnualSubmissionRequestParser @Inject() (val validator: CreateAmendForeignPropertyAnnualSubmissionValidator)
-    extends RequestParser[CreateAmendForeignPropertyAnnualSubmissionRawData, CreateAmendForeignPropertyAnnualSubmissionRequest] {
+    extends RequestParser[CreateAmendForeignPropertyAnnualSubmissionRawData, CreateAmendForeignPropertyAnnualSubmissionRequestData] {
 
-  override protected def requestFor(data: CreateAmendForeignPropertyAnnualSubmissionRawData): CreateAmendForeignPropertyAnnualSubmissionRequest =
-    CreateAmendForeignPropertyAnnualSubmissionRequest(
+  override protected def requestFor(data: CreateAmendForeignPropertyAnnualSubmissionRawData): CreateAmendForeignPropertyAnnualSubmissionRequestData =
+    CreateAmendForeignPropertyAnnualSubmissionRequestData(
       Nino(data.nino),
-      data.businessId,
+      BusinessId(data.businessId),
       TaxYear.fromMtd(data.taxYear),
       data.body.as[CreateAmendForeignPropertyAnnualSubmissionRequestBody]
     )

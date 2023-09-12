@@ -19,7 +19,7 @@ package v2.controllers
 import api.controllers.{ControllerBaseSpec, ControllerTestRunner}
 import api.hateoas.{HateoasWrapper, MockHateoasFactory}
 import api.models.audit.{AuditEvent, AuditResponse, GenericAuditDetailOld}
-import api.models.domain.{Nino, TaxYear}
+import api.models.domain.{BusinessId, Nino, TaxYear}
 import api.models.errors._
 import api.models.outcomes.ResponseWrapper
 import api.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService}
@@ -129,8 +129,8 @@ class CreateAmendForeignPropertyAnnualSubmissionControllerSpec
     protected val rawData: CreateAmendForeignPropertyAnnualSubmissionRawData =
       CreateAmendForeignPropertyAnnualSubmissionRawData(nino, businessId, taxYear, requestJson)
 
-    protected val requestData: CreateAmendForeignPropertyAnnualSubmissionRequest =
-      CreateAmendForeignPropertyAnnualSubmissionRequest(Nino(nino), businessId, TaxYear.fromMtd(taxYear), requestBody)
+    protected val requestData: CreateAmendForeignPropertyAnnualSubmissionRequestData =
+      CreateAmendForeignPropertyAnnualSubmissionRequestData(Nino(nino), BusinessId(businessId), TaxYear.fromMtd(taxYear), requestBody)
 
     protected val hateoasData: CreateAmendForeignPropertyAnnualSubmissionHateoasData =
       CreateAmendForeignPropertyAnnualSubmissionHateoasData(nino, businessId, taxYear)

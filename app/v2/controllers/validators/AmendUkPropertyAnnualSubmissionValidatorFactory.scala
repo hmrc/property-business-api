@@ -44,6 +44,9 @@ class AmendUkPropertyAnnualSubmissionValidatorFactory @Inject() (appConfig: AppC
   private def resolveString(field: String, path: String): Validated[Seq[MtdError], Unit] =
     if (stringRegex.matches(field)) valid else Invalid(List(StringFormatError.withPath(path)))
 
+  private def resolveStringOptional(maybeField: Option[String], path: String) =
+    maybeField.map(field => resolveString(field, path)).getOrElse(valid)
+
   private val valid = Valid(())
 
   def validator(nino: String, businessId: String, taxYear: String, body: JsValue): Validator[AmendUkPropertyAnnualSubmissionRequestData] =
@@ -200,12 +203,8 @@ class AmendUkPropertyAnnualSubmissionValidatorFactory @Inject() (appConfig: AppC
     }
 
     val validatedStringFields = List(
-      building.name
-        .map(name => resolveString(name, s"/ukNonFhlProperty/allowances/$buildingType/$index/building/name"))
-        .getOrElse(valid),
-      building.number
-        .map(number => resolveString(number, s"/ukNonFhlProperty/allowances/$buildingType/$index/building/number"))
-        .getOrElse(valid),
+      resolveStringOptional(building.name, s"/ukNonFhlProperty/allowances/$buildingType/$index/building/name"),
+      resolveStringOptional(building.number, s"/ukNonFhlProperty/allowances/$buildingType/$index/building/number"),
       resolveString(building.postcode, s"/ukNonFhlProperty/allowances/$buildingType/$index/building/postcode")
     )
 

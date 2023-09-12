@@ -16,7 +16,7 @@
 
 package v2.controllers.requestParsers
 
-import api.models.domain.{Nino, TaxYear}
+import api.models.domain.{BusinessId, Nino, TaxYear}
 import api.models.errors.{BadRequestError, BusinessIdFormatError, ErrorWrapper, NinoFormatError}
 import support.UnitSpec
 import v2.mocks.validators.MockCreateAmendForeignPropertyAnnualSubmissionValidator
@@ -47,9 +47,9 @@ class CreateAmendForeignPropertyAnnualSubmissionRequestParserSpec extends UnitSp
 
         parser.parseRequest(inputData) shouldBe
           Right(
-            CreateAmendForeignPropertyAnnualSubmissionRequest(
+            CreateAmendForeignPropertyAnnualSubmissionRequestData(
               nino = Nino(nino),
-              businessId = businessId,
+              businessId = BusinessId(businessId),
               taxYear = TaxYear.fromMtd(taxYear),
               body = createAmendForeignPropertyAnnualSubmissionRequestBody))
       }

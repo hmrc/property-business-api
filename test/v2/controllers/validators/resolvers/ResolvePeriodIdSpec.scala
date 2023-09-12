@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package api.controllers.validators.resolvers
+package v2.controllers.validators.resolvers
 
 import api.models.domain.PeriodId
 import api.models.errors.PeriodIdFormatError

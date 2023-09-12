@@ -14,8 +14,9 @@
  * limitations under the License.
  */
 
-package api.controllers.validators.resolvers
+package v3.controllers.validators.resolvers
 
+import api.controllers.validators.resolvers.{DateRangeFromStringResolving, Resolver}
 import api.models.domain.PeriodId
 import api.models.errors.{MtdError, PeriodIdFormatError}
 import cats.data.Validated
@@ -38,7 +39,7 @@ object ResolvePeriodId extends Resolver[String, PeriodId] with DateRangeFromStri
             path: Option[String]): Validated[Seq[MtdError], PeriodId] = {
     resolve(value, Some(PeriodIdFormatError), path)
       .andThen { dateRange =>
-        import dateRange.{startDateAsInt => fromYear, endDateAsInt => toYear}
+        import dateRange.{endDateAsInt => toYear, startDateAsInt => fromYear}
 
         val fromYearIsValid = fromYear >= minimumTaxYear && fromYear <= maximumTaxYear
         val toYearIsValid   = toYear >= minimumTaxYear && toYear <= maximumTaxYear

@@ -22,21 +22,13 @@ import api.models.errors.{MtdError, PeriodIdFormatError}
 import cats.data.Validated
 import cats.data.Validated.{Invalid, Valid}
 
-object ResolvePeriodId extends Resolver[String, PeriodId] with DateRangeFromStringResolving {
+class ResolvePeriodId(minimumTaxYear: Int, maximumTaxYear: Int) extends Resolver[String, PeriodId] with DateRangeFromStringResolving {
 
-  override protected val startDateFormatError: MtdError = PeriodIdFormatError
-  override protected val endDateFormatError: MtdError   = PeriodIdFormatError
+  override protected val startDateFormatError: MtdError    = PeriodIdFormatError
+  override protected val endDateFormatError: MtdError      = PeriodIdFormatError
+  override protected val endBeforeStartDateError: MtdError = PeriodIdFormatError
 
   def apply(value: String, notUsedError: Option[MtdError], path: Option[String]): Validated[Seq[MtdError], PeriodId] = {
-    resolve(value, Some(PeriodIdFormatError), path)
-      .map(dateRange => PeriodId(dateRange))
-  }
-
-  def apply(minimumTaxYear: Int,
-            maximumTaxYear: Int,
-            value: String,
-            notUsedError: Option[MtdError],
-            path: Option[String]): Validated[Seq[MtdError], PeriodId] = {
     resolve(value, Some(PeriodIdFormatError), path)
       .andThen { dateRange =>
         import dateRange.{endDateAsInt => toYear, startDateAsInt => fromYear}

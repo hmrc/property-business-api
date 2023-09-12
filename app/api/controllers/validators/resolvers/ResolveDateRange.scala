@@ -26,8 +26,9 @@ import java.time.LocalDate
 
 trait DateRangeResolving {
 
-  protected val startDateFormatError: MtdError = StartDateFormatError
-  protected val endDateFormatError: MtdError   = EndDateFormatError
+  protected val startDateFormatError: MtdError    = StartDateFormatError
+  protected val endDateFormatError: MtdError      = EndDateFormatError
+  protected val endBeforeStartDateError: MtdError = RuleEndBeforeStartDateError
 
   protected def resolve(value: (String, String), maybeError: Option[MtdError], path: Option[String]): Validated[Seq[MtdError], DateRange] = {
 
@@ -36,7 +37,7 @@ trait DateRangeResolving {
       val endDateEpochTime   = parsedEndDate.toEpochDay
 
       if ((endDateEpochTime - startDateEpochTime) <= 0)
-        Invalid(List(maybeError.getOrElse(RuleEndBeforeStartDateError)))
+        Invalid(List(maybeError.getOrElse(endBeforeStartDateError)))
       else
         Valid(DateRange(parsedStartDate, parsedEndDate))
 
@@ -70,6 +71,8 @@ trait DateRangeFromStringResolving extends DateRangeResolving {
 
 }
 
+/** Resolves a date range from a single input string in the format "2023-01-01_2023-01-01"
+  */
 object ResolveDateRangeFromString extends Resolver[String, DateRange] with DateRangeFromStringResolving {
 
   def apply(value: String, maybeError: Option[MtdError], maybePath: Option[String]): Validated[Seq[MtdError], DateRange] = {

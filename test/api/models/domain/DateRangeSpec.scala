@@ -22,25 +22,22 @@ import java.time.LocalDate
 
 class DateRangeSpec extends UnitSpec {
 
-  val startDate: LocalDate = LocalDate
-    .of(2020, 1, 1)
-
-  val endDate: LocalDate = LocalDate
-    .of(2023, 12, 31)
+  val startDate: LocalDate = LocalDate.of(2020, 1, 1)
+  val endDate: LocalDate   = LocalDate.of(2023, 12, 31)
 
   "DateRange" should {
     "correctly format startDate and endDate as ISO strings" in {
       val dateRange = DateRange(startDate, endDate)
 
-      dateRange.startDateAsIso shouldEqual "2020-01-01"
-      dateRange.endDateAsIso shouldEqual "2023-12-31"
+      dateRange.startDateAsIso shouldBe "2020-01-01"
+      dateRange.endDateAsIso shouldBe "2023-12-31"
     }
 
     "correctly extract the year as an integer from startDate and endDate" in {
       val dateRange = DateRange(startDate, endDate)
 
-      dateRange.startDateAsInt shouldEqual 2020
-      dateRange.endDateAsInt shouldEqual 2023
+      dateRange.startDateAsInt shouldBe 2020
+      dateRange.endDateAsInt shouldBe 2023
     }
 
   }

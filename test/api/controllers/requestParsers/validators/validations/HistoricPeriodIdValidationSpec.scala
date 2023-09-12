@@ -30,19 +30,19 @@ class HistoricPeriodIdValidationSpec extends UnitSpec {
         val periodId = "2019-04-06_2019-07-04"
         val result   = HistoricPeriodIdValidation.validate(minTaxYear, maxTaxYear, periodId)
 
-        result shouldBe Nil
+        result shouldBe NoValidationErrors
       }
-      "the minimum taxDate is supplied" in {
+      "the minimum periodId is supplied" in {
         val minPeriodId = "2017-04-06_2017-07-04"
         val result      = HistoricPeriodIdValidation.validate(minTaxYear, maxTaxYear, minPeriodId)
 
-        result shouldBe Nil
+        result shouldBe NoValidationErrors
       }
-      "the maximum taxDate is supplied" in {
+      "the maximum periodId is supplied" in {
         val maxPeriodId = "2021-04-06_2021-07-04"
         val result      = HistoricPeriodIdValidation.validate(minTaxYear, maxTaxYear, maxPeriodId)
 
-        result shouldBe Nil
+        result shouldBe NoValidationErrors
       }
     }
     "return an error" when {
@@ -77,6 +77,7 @@ class HistoricPeriodIdValidationSpec extends UnitSpec {
         result shouldBe List(PeriodIdFormatError)
       }
     }
+
   }
 
 }

@@ -17,8 +17,5 @@
 package v2.models.request.listHistoricUkPropertyPeriodSummaries
 
 import api.models.domain.Nino
-import api.models.request.RawData
 
-case class ListHistoricUkPropertyPeriodSummariesRawData(nino: String) extends RawData
-
-case class ListHistoricUkPropertyPeriodSummariesRequest(nino: Nino)
+case class ListHistoricUkPropertyPeriodSummariesRequestData(nino: Nino)

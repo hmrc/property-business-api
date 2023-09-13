@@ -19,14 +19,14 @@ package v2.connectors
 import api.connectors.{ConnectorSpec, DownstreamOutcome}
 import api.models.domain.{HistoricPropertyType, Nino}
 import api.models.outcomes.ResponseWrapper
-import v2.models.request.listHistoricUkPropertyPeriodSummaries.ListHistoricUkPropertyPeriodSummariesRequest
+import v2.models.request.listHistoricUkPropertyPeriodSummaries.ListHistoricUkPropertyPeriodSummariesRequestData
 import v2.models.response.listHistoricUkPropertyPeriodSummaries.{ListHistoricUkPropertyPeriodSummariesResponse, SubmissionPeriod}
 
 import scala.concurrent.Future
 
 class ListHistoricUkPropertyPeriodSummariesConnectorSpec extends ConnectorSpec {
 
-  private val nino: String = "AA123456A"
+  private val nino = Nino("AA123456A")
 
   "connector" must {
     "send a request and return a body for FHL" in new IfsTest with Test {
@@ -57,11 +57,11 @@ class ListHistoricUkPropertyPeriodSummariesConnectorSpec extends ConnectorSpec {
       appConfig = mockAppConfig
     )
 
-    protected val request: ListHistoricUkPropertyPeriodSummariesRequest =
-      ListHistoricUkPropertyPeriodSummariesRequest(Nino(nino))
+    protected val request: ListHistoricUkPropertyPeriodSummariesRequestData =
+      ListHistoricUkPropertyPeriodSummariesRequestData(nino)
 
     private val response =
-      ListHistoricUkPropertyPeriodSummariesResponse(Seq(SubmissionPeriod("2020-06-22", "2020-06-22")))
+      ListHistoricUkPropertyPeriodSummariesResponse(List(SubmissionPeriod("2020-06-22", "2020-06-22")))
 
     protected val outcome: Right[Nothing, ResponseWrapper[ListHistoricUkPropertyPeriodSummariesResponse[SubmissionPeriod]]] = Right(
       ResponseWrapper(correlationId, response))

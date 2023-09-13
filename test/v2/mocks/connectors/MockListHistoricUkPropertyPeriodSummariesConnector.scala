@@ -22,7 +22,7 @@ import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
 import uk.gov.hmrc.http.HeaderCarrier
 import v2.connectors.ListHistoricUkPropertyPeriodSummariesConnector
-import v2.models.request.listHistoricUkPropertyPeriodSummaries.ListHistoricUkPropertyPeriodSummariesRequest
+import v2.models.request.listHistoricUkPropertyPeriodSummaries.ListHistoricUkPropertyPeriodSummariesRequestData
 import v2.models.response.listHistoricUkPropertyPeriodSummaries.{ListHistoricUkPropertyPeriodSummariesResponse, SubmissionPeriod}
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -34,11 +34,11 @@ trait MockListHistoricUkPropertyPeriodSummariesConnector extends MockFactory {
 
   object MockListHistoricUkPropertyPeriodSummariesConnector {
 
-    def listPeriodSummaries(requestData: ListHistoricUkPropertyPeriodSummariesRequest, propertyType: HistoricPropertyType)
+    def listPeriodSummaries(requestData: ListHistoricUkPropertyPeriodSummariesRequestData, propertyType: HistoricPropertyType)
         : CallHandler[Future[DownstreamOutcome[ListHistoricUkPropertyPeriodSummariesResponse[SubmissionPeriod]]]] = {
       (
         mockListHistoricUkPropertyPeriodSummariesConnector
-          .listPeriodSummaries(_: ListHistoricUkPropertyPeriodSummariesRequest, _: HistoricPropertyType)(
+          .listPeriodSummaries(_: ListHistoricUkPropertyPeriodSummariesRequestData, _: HistoricPropertyType)(
             _: HeaderCarrier,
             _: ExecutionContext,
             _: String

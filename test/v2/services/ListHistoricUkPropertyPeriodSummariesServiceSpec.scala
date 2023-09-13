@@ -23,7 +23,7 @@ import api.models.outcomes.ResponseWrapper
 import support.UnitSpec
 import uk.gov.hmrc.http.HeaderCarrier
 import v2.mocks.connectors.MockListHistoricUkPropertyPeriodSummariesConnector
-import v2.models.request.listHistoricUkPropertyPeriodSummaries.ListHistoricUkPropertyPeriodSummariesRequest
+import v2.models.request.listHistoricUkPropertyPeriodSummaries.ListHistoricUkPropertyPeriodSummariesRequestData
 import v2.models.response.listHistoricUkPropertyPeriodSummaries.{ListHistoricUkPropertyPeriodSummariesResponse, SubmissionPeriod}
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -31,28 +31,27 @@ import scala.concurrent.Future
 
 class ListHistoricUkPropertyPeriodSummariesServiceSpec extends UnitSpec {
 
-  private val nino: String = "AA123456A"
-
   implicit private val correlationId: String = "X-123"
+  private val nino                           = Nino("AA123456A")
 
   "service" when {
     "service call successful" must {
       "return success result for FHL" in new Test {
         val propertyType: HistoricPropertyType = HistoricPropertyType.Fhl
         MockListHistoricUkPropertyPeriodSummariesConnector
-          .listPeriodSummaries(request, propertyType)
+          .listPeriodSummaries(requestData, propertyType)
           .returns(Future.successful(Right(ResponseWrapper(correlationId, response))))
 
-        await(service.listPeriodSummaries(request, propertyType)) shouldBe Right(ResponseWrapper(correlationId, response))
+        await(service.listPeriodSummaries(requestData, propertyType)) shouldBe Right(ResponseWrapper(correlationId, response))
       }
 
       "return success result for non-FHL" in new Test {
         val propertyType: HistoricPropertyType = HistoricPropertyType.NonFhl
         MockListHistoricUkPropertyPeriodSummariesConnector
-          .listPeriodSummaries(request, propertyType)
+          .listPeriodSummaries(requestData, propertyType)
           .returns(Future.successful(Right(ResponseWrapper(correlationId, response))))
 
-        await(service.listPeriodSummaries(request, propertyType)) shouldBe Right(ResponseWrapper(correlationId, response))
+        await(service.listPeriodSummaries(requestData, propertyType)) shouldBe Right(ResponseWrapper(correlationId, response))
       }
     }
 
@@ -64,10 +63,10 @@ class ListHistoricUkPropertyPeriodSummariesServiceSpec extends UnitSpec {
             val propertyType: HistoricPropertyType = HistoricPropertyType.Fhl
 
             MockListHistoricUkPropertyPeriodSummariesConnector
-              .listPeriodSummaries(request, propertyType)
+              .listPeriodSummaries(requestData, propertyType)
               .returns(Future.successful(Left(ResponseWrapper(correlationId, DownstreamErrors.single(DownstreamErrorCode(downstreamErrorCode))))))
 
-            await(service.listPeriodSummaries(request, propertyType)) shouldBe Left(ErrorWrapper(correlationId, error))
+            await(service.listPeriodSummaries(requestData, propertyType)) shouldBe Left(ErrorWrapper(correlationId, error))
           }
 
         val input = List(
@@ -92,7 +91,7 @@ class ListHistoricUkPropertyPeriodSummariesServiceSpec extends UnitSpec {
       connector = mockListHistoricUkPropertyPeriodSummariesConnector
     )
 
-    protected val request: ListHistoricUkPropertyPeriodSummariesRequest = ListHistoricUkPropertyPeriodSummariesRequest(Nino(nino))
+    protected val requestData: ListHistoricUkPropertyPeriodSummariesRequestData = ListHistoricUkPropertyPeriodSummariesRequestData(nino)
 
     protected val response: ListHistoricUkPropertyPeriodSummariesResponse[SubmissionPeriod] = ListHistoricUkPropertyPeriodSummariesResponse(
       Seq(SubmissionPeriod("2020-08-22", "2020-08-22")))

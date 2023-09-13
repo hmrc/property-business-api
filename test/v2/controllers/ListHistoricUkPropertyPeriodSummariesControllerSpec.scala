@@ -25,9 +25,9 @@ import api.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLooku
 import mocks.MockIdGenerator
 import play.api.libs.json.Json
 import play.api.mvc.Result
-import v2.mocks.requestParsers.MockListHistoricUkPropertyPeriodSummariesRequestParser
+import v2.controllers.validators.MockListHistoricUkPropertyPeriodSummariesValidatorFactory
 import v2.mocks.services.MockListHistoricUkPropertyPeriodSummariesService
-import v2.models.request.listHistoricUkPropertyPeriodSummaries._
+import v2.models.request.listHistoricUkPropertyPeriodSummaries.ListHistoricUkPropertyPeriodSummariesRequestData
 import v2.models.response.listHistoricUkPropertyPeriodSummaries._
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -39,7 +39,7 @@ class ListHistoricUkPropertyPeriodSummariesControllerSpec
     with MockEnrolmentsAuthService
     with MockMtdIdLookupService
     with MockListHistoricUkPropertyPeriodSummariesService
-    with MockListHistoricUkPropertyPeriodSummariesRequestParser
+    with MockListHistoricUkPropertyPeriodSummariesValidatorFactory
     with MockHateoasFactory
     with MockAuditService
     with MockIdGenerator {
@@ -49,9 +49,7 @@ class ListHistoricUkPropertyPeriodSummariesControllerSpec
       "the valid request received is for a Fhl HistoricPropertyType" in new Test {
         lazy val propertyType: HistoricPropertyType = HistoricPropertyType.Fhl
 
-        MockListHistoricUkPropertyPeriodSummariesRequestParser
-          .parseRequest(rawData)
-          .returns(Right(requestData))
+        willUseValidator(returningSuccess(requestData))
 
         MockListHistoricUkPropertyPeriodSummariesService
           .listPeriodSummaries(requestData, propertyType)
@@ -67,9 +65,7 @@ class ListHistoricUkPropertyPeriodSummariesControllerSpec
       "the valid request received is for a non-Fhl HistoricPropertyType" in new Test {
         lazy val propertyType: HistoricPropertyType = HistoricPropertyType.NonFhl
 
-        MockListHistoricUkPropertyPeriodSummariesRequestParser
-          .parseRequest(rawData)
-          .returns(Right(requestData))
+        willUseValidator(returningSuccess(requestData))
 
         MockListHistoricUkPropertyPeriodSummariesService
           .listPeriodSummaries(requestData, propertyType)
@@ -88,9 +84,7 @@ class ListHistoricUkPropertyPeriodSummariesControllerSpec
         "the parser validation fails for a Fhl HistoricPropertyType" in new Test {
           lazy val propertyType: HistoricPropertyType = property
 
-          MockListHistoricUkPropertyPeriodSummariesRequestParser
-            .parseRequest(rawData)
-            .returns(Left(ErrorWrapper(correlationId, NinoFormatError, None)))
+          willUseValidator(returning(NinoFormatError))
 
           runErrorTest(NinoFormatError)
         }
@@ -99,9 +93,7 @@ class ListHistoricUkPropertyPeriodSummariesControllerSpec
           "the service returns an error" in new Test {
             lazy val propertyType: HistoricPropertyType = property
 
-            MockListHistoricUkPropertyPeriodSummariesRequestParser
-              .parseRequest(rawData)
-              .returns(Right(requestData))
+            willUseValidator(returning(RuleTaxYearNotSupportedError))
 
             MockListHistoricUkPropertyPeriodSummariesService
               .listPeriodSummaries(requestData, propertyType)
@@ -127,7 +119,7 @@ class ListHistoricUkPropertyPeriodSummariesControllerSpec
     private val controller = new ListHistoricUkPropertyPeriodSummariesController(
       authService = mockEnrolmentsAuthService,
       lookupService = mockMtdIdLookupService,
-      parser = mockListHistoricUkPropertyPeriodSummariesRequestParser,
+      validatorFactory = mockListHistoricUkPropertyPeriodSummariesValidatorFactory,
       service = mockService,
       hateoasFactory = mockHateoasFactory,
       cc = cc,
@@ -139,8 +131,7 @@ class ListHistoricUkPropertyPeriodSummariesControllerSpec
       case HistoricPropertyType.NonFhl => controller.handleNonFhlRequest(nino)(fakeGetRequest)
     }
 
-    protected val rawData: ListHistoricUkPropertyPeriodSummariesRawData     = ListHistoricUkPropertyPeriodSummariesRawData(nino)
-    protected val requestData: ListHistoricUkPropertyPeriodSummariesRequest = ListHistoricUkPropertyPeriodSummariesRequest(Nino(nino))
+    protected val requestData: ListHistoricUkPropertyPeriodSummariesRequestData = ListHistoricUkPropertyPeriodSummariesRequestData(Nino(nino))
 
     protected val submissionPeriod: SubmissionPeriod = SubmissionPeriod("fromDate", "toDate")
 

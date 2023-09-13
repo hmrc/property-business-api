@@ -21,7 +21,7 @@ import api.models.domain.HistoricPropertyType
 import api.services.ServiceOutcome
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
-import v2.models.request.listHistoricUkPropertyPeriodSummaries.ListHistoricUkPropertyPeriodSummariesRequest
+import v2.models.request.listHistoricUkPropertyPeriodSummaries.ListHistoricUkPropertyPeriodSummariesRequestData
 import v2.models.response.listHistoricUkPropertyPeriodSummaries.{ListHistoricUkPropertyPeriodSummariesResponse, SubmissionPeriod}
 import v2.services.ListHistoricUkPropertyPeriodSummariesService
 
@@ -34,11 +34,11 @@ trait MockListHistoricUkPropertyPeriodSummariesService extends MockFactory {
   object MockListHistoricUkPropertyPeriodSummariesService {
 
     def listPeriodSummaries(
-        requestData: ListHistoricUkPropertyPeriodSummariesRequest,
+        requestData: ListHistoricUkPropertyPeriodSummariesRequestData,
         propertyType: HistoricPropertyType): CallHandler[Future[ServiceOutcome[ListHistoricUkPropertyPeriodSummariesResponse[SubmissionPeriod]]]] = {
       (
         mockService
-          .listPeriodSummaries(_: ListHistoricUkPropertyPeriodSummariesRequest, _: HistoricPropertyType)(
+          .listPeriodSummaries(_: ListHistoricUkPropertyPeriodSummariesRequestData, _: HistoricPropertyType)(
             _: RequestContext,
             _: ExecutionContext
           )

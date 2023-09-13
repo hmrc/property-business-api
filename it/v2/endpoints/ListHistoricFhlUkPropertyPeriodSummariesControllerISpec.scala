@@ -19,7 +19,7 @@ package v2.endpoints
 import api.models.errors._
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import play.api.http.HeaderNames.ACCEPT
-import play.api.http.Status
+import play.api.http.Status.{BAD_REQUEST, INTERNAL_SERVER_ERROR, OK, SERVICE_UNAVAILABLE, UNPROCESSABLE_ENTITY}
 import play.api.libs.json.{JsValue, Json}
 import play.api.libs.ws.{WSRequest, WSResponse}
 import play.api.test.Helpers.AUTHORIZATION
@@ -117,12 +117,12 @@ class ListHistoricFhlUkPropertyPeriodSummariesControllerISpec extends Integratio
           AuditStub.audit()
           AuthStub.authorised()
           MtdIdLookupStub.ninoFound(nino)
-          DownstreamStub.onSuccess(DownstreamStub.GET, ifsUri, Status.OK, ifsResponseBody)
+          DownstreamStub.onSuccess(DownstreamStub.GET, ifsUri, OK, ifsResponseBody)
         }
 
         val response: WSResponse = await(request().get())
         response.json shouldBe responseBody
-        response.status shouldBe Status.OK
+        response.status shouldBe OK
         response.header("X-CorrelationId").nonEmpty shouldBe true
         response.header("Content-Type") shouldBe Some("application/json")
       }
@@ -147,7 +147,7 @@ class ListHistoricFhlUkPropertyPeriodSummariesControllerISpec extends Integratio
       }
 
       val input = Seq(
-        ("AA1123A", Status.BAD_REQUEST, NinoFormatError)
+        ("AA1123A", BAD_REQUEST, NinoFormatError)
       )
       input.foreach(args => (validationErrorTest _).tupled(args))
     }
@@ -170,11 +170,11 @@ class ListHistoricFhlUkPropertyPeriodSummariesControllerISpec extends Integratio
       }
 
       val input = Seq(
-        (Status.BAD_REQUEST, "INVALID_NINO", Status.BAD_REQUEST, NinoFormatError),
-        (Status.UNPROCESSABLE_ENTITY, "TAX_YEAR_NOT_SUPPORTED", Status.INTERNAL_SERVER_ERROR, InternalError),
-        (Status.BAD_REQUEST, "INVALID_CORRELATIONID", Status.INTERNAL_SERVER_ERROR, InternalError),
-        (Status.INTERNAL_SERVER_ERROR, "SERVER_ERROR", Status.INTERNAL_SERVER_ERROR, InternalError),
-        (Status.SERVICE_UNAVAILABLE, "SERVICE_UNAVAILABLE", Status.INTERNAL_SERVER_ERROR, InternalError)
+        (BAD_REQUEST, "INVALID_NINO", BAD_REQUEST, NinoFormatError),
+        (UNPROCESSABLE_ENTITY, "TAX_YEAR_NOT_SUPPORTED", INTERNAL_SERVER_ERROR, InternalError),
+        (BAD_REQUEST, "INVALID_CORRELATIONID", INTERNAL_SERVER_ERROR, InternalError),
+        (INTERNAL_SERVER_ERROR, "SERVER_ERROR", INTERNAL_SERVER_ERROR, InternalError),
+        (SERVICE_UNAVAILABLE, "SERVICE_UNAVAILABLE", INTERNAL_SERVER_ERROR, InternalError)
       )
       input.foreach(args => (serviceErrorTest _).tupled(args))
     }

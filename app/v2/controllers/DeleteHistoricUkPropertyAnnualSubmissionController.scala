@@ -17,6 +17,7 @@
 package v2.controllers
 
 import api.controllers._
+import api.models.audit.FlattenedGenericAuditDetail
 import api.models.domain.HistoricPropertyType
 import api.services.{AuditService, EnrolmentsAuthService, MtdIdLookupService}
 import play.api.mvc.{Action, AnyContent, ControllerComponents}
@@ -67,16 +68,17 @@ class DeleteHistoricUkPropertyAnnualSubmissionController @Inject() (val authServ
       val requestHandler = RequestHandler
         .withValidator(validator)
         .withService(service.deleteHistoricUkPropertyAnnualSubmission)
-        .withAuditing(
-          AuditHandler(
-            auditService,
-            auditType = s"DeleteHistoric${propertyType}PropertyBusinessAnnualSubmission",
-            transactionName = s"delete-uk-property-historic-$propertyType-annual-submission",
-            apiVersion = Version.from(request, orElse = Version2),
-            params = Map("nino" -> nino, "taxYear" -> taxYear),
-            flattened = true
-          )
-        )
+        .withAuditing(AuditHandler.custom(
+          auditService,
+          auditType = s"DeleteHistoric${propertyType}PropertyBusinessAnnualSubmission",
+          transactionName = s"delete-uk-property-historic-$propertyType-annual-submission",
+          auditDetailCreator = FlattenedGenericAuditDetail.auditDetailCreator(
+            Version.from(request, orElse = Version2),
+            Map("nino" -> nino, "taxYear" -> taxYear)
+          ),
+          requestBody = None,
+          responseBodyMap = None => None
+        ))
 
       requestHandler.handleRequest()
     }

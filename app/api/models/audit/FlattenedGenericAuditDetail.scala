@@ -16,7 +16,8 @@
 
 package api.models.audit
 
-import api.controllers.{AuditHandler, RequestContext}
+import api.controllers.AuditHandler.AuditDetailCreator
+import api.controllers.RequestContext
 import api.models.auth.UserDetails
 import play.api.libs.functional.syntax.{toFunctionalBuilderOps, unlift}
 import play.api.libs.json.{JsPath, JsValue, OWrites}
@@ -69,8 +70,8 @@ object FlattenedGenericAuditDetail {
     )
   }
 
-  def auditDetailCreator(apiVersion: Version, params: Map[String, String]): AuditHandler.AuditDetailCreator[FlattenedGenericAuditDetail] =
-    new AuditHandler.AuditDetailCreator[FlattenedGenericAuditDetail] {
+  def auditDetailCreator(apiVersion: Version, params: Map[String, String]): AuditDetailCreator[FlattenedGenericAuditDetail] =
+    new AuditDetailCreator[FlattenedGenericAuditDetail] {
 
       def createAuditDetail(userDetails: UserDetails, requestBody: Option[JsValue], auditResponse: AuditResponse)(implicit
           ctx: RequestContext): FlattenedGenericAuditDetail =

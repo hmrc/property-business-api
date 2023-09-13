@@ -31,6 +31,8 @@ import javax.inject.{Inject, Singleton}
 @Singleton
 class CreateAmendForeignPropertyAnnualSubmissionValidatorFactory @Inject() (appConfig: AppConfig) {
 
+  private lazy val minimumTaxYear = appConfig.minimumTaxV2Foreign + 1
+
   private val resolveJson = new ResolveNonEmptyJsonObject[CreateAmendForeignPropertyAnnualSubmissionRequestBody]
 
   def validator(nino: String, businessId: String, taxYear: String, body: JsValue): Validator[CreateAmendForeignPropertyAnnualSubmissionRequestData] =
@@ -40,7 +42,7 @@ class CreateAmendForeignPropertyAnnualSubmissionValidatorFactory @Inject() (appC
         (
           ResolveNino(nino),
           ResolveBusinessId(businessId),
-          ResolveTaxYear(appConfig.minimumTaxV2Foreign + 1, taxYear, None, None),
+          ResolveTaxYear(minimumTaxYear, taxYear, None, None),
           resolveJson(body)
         ).mapN(CreateAmendForeignPropertyAnnualSubmissionRequestData) andThen validateBusinessRules
 

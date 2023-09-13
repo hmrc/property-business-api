@@ -31,6 +31,8 @@ import javax.inject.{Inject, Singleton}
 @Singleton
 class AmendUkPropertyAnnualSubmissionValidatorFactory @Inject() (appConfig: AppConfig) {
 
+  private lazy val minimumTaxYear = appConfig.minimumTaxV2Uk + 1
+
   private val resolveJson = new ResolveNonEmptyJsonObject[AmendUkPropertyAnnualSubmissionRequestBody]()
 
   def validator(nino: String, businessId: String, taxYear: String, body: JsValue): Validator[AmendUkPropertyAnnualSubmissionRequestData] =
@@ -40,7 +42,7 @@ class AmendUkPropertyAnnualSubmissionValidatorFactory @Inject() (appConfig: AppC
         (
           ResolveNino(nino),
           ResolveBusinessId(businessId),
-          ResolveTaxYear(appConfig.minimumTaxV2Uk + 1, taxYear, None, None),
+          ResolveTaxYear(minimumTaxYear, taxYear, None, None),
           resolveJson(body)
         ).mapN(AmendUkPropertyAnnualSubmissionRequestData) andThen validateBusinessRules
 

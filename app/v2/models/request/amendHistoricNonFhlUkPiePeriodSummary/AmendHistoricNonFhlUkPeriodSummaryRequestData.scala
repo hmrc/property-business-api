@@ -16,7 +16,6 @@
 
 package v2.models.request.amendHistoricNonFhlUkPiePeriodSummary
 
-import api.models.request.RawData
-import play.api.libs.json.JsValue
+import api.models.domain.{Nino, PeriodId}
 
-case class AmendHistoricNonFhlUkPiePeriodSummaryRawData(nino: String, periodId: String, body: JsValue) extends RawData
+case class AmendHistoricNonFhlUkPeriodSummaryRequestData(nino: Nino, periodId: PeriodId, body: AmendHistoricNonFhlUkPeriodSummaryRequestBody)

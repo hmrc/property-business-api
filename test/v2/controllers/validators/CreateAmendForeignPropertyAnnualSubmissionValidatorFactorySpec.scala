@@ -296,17 +296,10 @@ class CreateAmendForeignPropertyAnnualSubmissionValidatorFactorySpec extends Uni
   private def validator(nino: String, businessId: String, taxYear: String, body: JsValue) =
     validatorFactory.validator(nino, businessId, taxYear, body)
 
-  // TODO make setup method instead
-  class SetUp {
-
-    MockAppConfig.minimumTaxV2Foreign
-      .returns(2021)
-      .anyNumberOfTimes()
-
-  }
+  MockAppConfig.minimumTaxV2Foreign.returns(2021)
 
   def testWith(error: MtdError)(body: JsValue, expectedPath: String): Unit =
-    s"for $expectedPath" in new SetUp {
+    s"for $expectedPath" in {
 
       val result: Either[ErrorWrapper, CreateAmendForeignPropertyAnnualSubmissionRequestData] =
         validator(validNino, validBusinessId, validTaxYear, body).validateAndWrapResult()
@@ -327,14 +320,14 @@ class CreateAmendForeignPropertyAnnualSubmissionValidatorFactorySpec extends Uni
 
   "validator" should {
     "return the parsed domain object" when {
-      "passed a valid request" in new SetUp {
+      "passed a valid request" in {
         val result: Either[ErrorWrapper, CreateAmendForeignPropertyAnnualSubmissionRequestData] =
           validator(validNino, validBusinessId, validTaxYear, validBody).validateAndWrapResult()
 
         result shouldBe Right(CreateAmendForeignPropertyAnnualSubmissionRequestData(parsedNino, parsedBusinessId, parsedTaxYear, parsedBody))
       }
 
-      "passed a valid request with propertyIncomeAllowance" in new SetUp {
+      "passed a valid request with propertyIncomeAllowance" in {
         val result: Either[ErrorWrapper, CreateAmendForeignPropertyAnnualSubmissionRequestData] =
           validator(validNino, validBusinessId, validTaxYear, validBodyWithPropertyIncomeAllowance).validateAndWrapResult()
 
@@ -342,7 +335,7 @@ class CreateAmendForeignPropertyAnnualSubmissionValidatorFactorySpec extends Uni
           CreateAmendForeignPropertyAnnualSubmissionRequestData(parsedNino, parsedBusinessId, parsedTaxYear, parsedBodyWithPropertyIncomeAllowance))
       }
 
-      "passed a valid request with minimal fhl" in new SetUp {
+      "passed a valid request with minimal fhl" in {
         val result: Either[ErrorWrapper, CreateAmendForeignPropertyAnnualSubmissionRequestData] =
           validator(
             validNino,
@@ -363,7 +356,7 @@ class CreateAmendForeignPropertyAnnualSubmissionValidatorFactorySpec extends Uni
           CreateAmendForeignPropertyAnnualSubmissionRequestData(parsedNino, parsedBusinessId, parsedTaxYear, parsedBodyWithMinimalFhl))
       }
 
-      "passed a valid request with minimal fhl including only allowances" in new SetUp {
+      "passed a valid request with minimal fhl including only allowances" in {
         val result: Either[ErrorWrapper, CreateAmendForeignPropertyAnnualSubmissionRequestData] =
           validator(
             validNino,
@@ -384,7 +377,7 @@ class CreateAmendForeignPropertyAnnualSubmissionValidatorFactorySpec extends Uni
           CreateAmendForeignPropertyAnnualSubmissionRequestData(parsedNino, parsedBusinessId, parsedTaxYear, parsedBodyWithMinimalFhlOnlyAllowances))
       }
 
-      "passed a valid request with minimal non-fhl" in new SetUp {
+      "passed a valid request with minimal non-fhl" in {
         val result: Either[ErrorWrapper, CreateAmendForeignPropertyAnnualSubmissionRequestData] =
           validator(
             validNino,
@@ -407,7 +400,7 @@ class CreateAmendForeignPropertyAnnualSubmissionValidatorFactorySpec extends Uni
           CreateAmendForeignPropertyAnnualSubmissionRequestData(parsedNino, parsedBusinessId, parsedTaxYear, parsedBodyWithMinimalNonFhl))
       }
 
-      "passed a valid request with minimal non-fhl including only allowances" in new SetUp {
+      "passed a valid request with minimal non-fhl including only allowances" in {
         val result: Either[ErrorWrapper, CreateAmendForeignPropertyAnnualSubmissionRequestData] =
           validator(
             validNino,
@@ -434,7 +427,7 @@ class CreateAmendForeignPropertyAnnualSubmissionValidatorFactorySpec extends Uni
             parsedBodyWithMinimalNonFhlOnlyAllowances))
       }
 
-      "passed a valid request where a postcode is with a name but not a number" in new SetUp {
+      "passed a valid request where a postcode is with a name but not a number" in {
         val result: Either[ErrorWrapper, CreateAmendForeignPropertyAnnualSubmissionRequestData] =
           validator(
             validNino,
@@ -450,7 +443,7 @@ class CreateAmendForeignPropertyAnnualSubmissionValidatorFactorySpec extends Uni
           CreateAmendForeignPropertyAnnualSubmissionRequestData(parsedNino, parsedBusinessId, parsedTaxYear, parsedBodyWithoutBuildingNumber))
       }
 
-      "passed a valid request where a postcode is with a number but not a name" in new SetUp {
+      "passed a valid request where a postcode is with a number but not a name" in {
         val result: Either[ErrorWrapper, CreateAmendForeignPropertyAnnualSubmissionRequestData] =
           validator(
             validNino,
@@ -469,14 +462,14 @@ class CreateAmendForeignPropertyAnnualSubmissionValidatorFactorySpec extends Uni
     }
 
     "return a single error" when {
-      "passed an invalid nino" in new SetUp {
+      "passed an invalid nino" in {
         val result: Either[ErrorWrapper, CreateAmendForeignPropertyAnnualSubmissionRequestData] =
           validator("invalid nino", validBusinessId, validTaxYear, validBody).validateAndWrapResult()
 
         result shouldBe Left(ErrorWrapper(correlationId, NinoFormatError))
       }
 
-      "passed an incorrectly formatted taxYear" in new SetUp {
+      "passed an incorrectly formatted taxYear" in {
         val result: Either[ErrorWrapper, CreateAmendForeignPropertyAnnualSubmissionRequestData] =
           validator(validNino, validBusinessId, "202324", validBody).validateAndWrapResult()
 
@@ -484,28 +477,28 @@ class CreateAmendForeignPropertyAnnualSubmissionValidatorFactorySpec extends Uni
 
       }
 
-      "passed an unsupported taxYear" in new SetUp {
+      "passed an unsupported taxYear" in {
         val result: Either[ErrorWrapper, CreateAmendForeignPropertyAnnualSubmissionRequestData] =
           validator(validNino, validBusinessId, "2020-21", validBody).validateAndWrapResult()
 
         result shouldBe Left(ErrorWrapper(correlationId, RuleTaxYearNotSupportedError))
       }
 
-      "passed a taxYear spanning an invalid tax year range" in new SetUp {
+      "passed a taxYear spanning an invalid tax year range" in {
         val result: Either[ErrorWrapper, CreateAmendForeignPropertyAnnualSubmissionRequestData] =
           validator(validNino, validBusinessId, "2020-22", validBody).validateAndWrapResult()
 
         result shouldBe Left(ErrorWrapper(correlationId, RuleTaxYearRangeInvalidError))
       }
 
-      "passed an incorrectly formatted businessId" in new SetUp {
+      "passed an incorrectly formatted businessId" in {
         val result: Either[ErrorWrapper, CreateAmendForeignPropertyAnnualSubmissionRequestData] =
           validator(validNino, "invalid business id", validTaxYear, validBody).validateAndWrapResult()
 
         result shouldBe Left(ErrorWrapper(correlationId, BusinessIdFormatError))
       }
 
-      "passed an empty request body" in new SetUp {
+      "passed an empty request body" in {
         val emptyBody: JsValue = Json.parse("""{}""")
         val result: Either[ErrorWrapper, CreateAmendForeignPropertyAnnualSubmissionRequestData] =
           validator(validNino, validBusinessId, validTaxYear, emptyBody).validateAndWrapResult()
@@ -553,8 +546,8 @@ class CreateAmendForeignPropertyAnnualSubmissionValidatorFactorySpec extends Uni
         ).foreach((testRuleIncorrectOrEmptyBodyWith _).tupled)
       }
 
-      "passed a request body with empty fields except for additional (non-schema) properties" in new SetUp {
-        private val invalidBody = Json.parse("""{
+      "passed a request body with empty fields except for additional (non-schema) properties" in {
+        val invalidBody = Json.parse("""{
                                        |    "foreignFhlEea":{
                                        |       "unknownField": 999.99
                                        |    }
@@ -631,12 +624,12 @@ class CreateAmendForeignPropertyAnnualSubmissionValidatorFactorySpec extends Uni
           ).foreach(p => (testForPropertyIncomeAllowance _).tupled(p))
         }
 
-        "passed a request body with empty fields except for additional (non-schema) properties" in new SetUp {
-          private val path0 = "/foreignFhlEea/adjustments/privateUseAdjustment"
-          private val path1 = "/foreignNonFhlProperty/0/adjustments/privateUseAdjustment"
-          private val path2 = "/foreignNonFhlProperty/1/allowances/costOfReplacingDomesticItems"
+        "passed a request body with empty fields except for additional (non-schema) properties" in {
+          val path0 = "/foreignFhlEea/adjustments/privateUseAdjustment"
+          val path1 = "/foreignNonFhlProperty/0/adjustments/privateUseAdjustment"
+          val path2 = "/foreignNonFhlProperty/1/allowances/costOfReplacingDomesticItems"
 
-          private val invalidBody = bodyWith(
+          val invalidBody = bodyWith(
             entryWith(countryCode = "ZWE", validStructuredBuildingAllowance).update("/adjustments/privateUseAdjustment", badValue),
             entry.update("/allowances/costOfReplacingDomesticItems", badValue)
           ).update(path0, badValue)
@@ -675,16 +668,16 @@ class CreateAmendForeignPropertyAnnualSubmissionValidatorFactorySpec extends Uni
       )
     }
 
-    "passed a request body with an invalid country code" in new SetUp {
-      private val invalidBody = bodyWith(entryWithCountryCode("QQQ"))
+    "passed a request body with an invalid country code" in {
+      val invalidBody = bodyWith(entryWithCountryCode("QQQ"))
       val result: Either[ErrorWrapper, CreateAmendForeignPropertyAnnualSubmissionRequestData] =
         validator(validNino, validBusinessId, validTaxYear, invalidBody).validateAndWrapResult()
 
       result shouldBe Left(ErrorWrapper(correlationId, RuleCountryCodeError.withPath("/foreignNonFhlProperty/0/countryCode")))
     }
 
-    "passed a request body with multiple invalid country codes" in new SetUp {
-      private val invalidBody = bodyWith(entryWithCountryCode("QQQ"), entryWithCountryCode("AAA"))
+    "passed a request body with multiple invalid country codes" in {
+      val invalidBody = bodyWith(entryWithCountryCode("QQQ"), entryWithCountryCode("AAA"))
       val result: Either[ErrorWrapper, CreateAmendForeignPropertyAnnualSubmissionRequestData] =
         validator(validNino, validBusinessId, validTaxYear, invalidBody).validateAndWrapResult()
 
@@ -694,16 +687,16 @@ class CreateAmendForeignPropertyAnnualSubmissionValidatorFactorySpec extends Uni
           RuleCountryCodeError.withPaths(List("/foreignNonFhlProperty/0/countryCode", "/foreignNonFhlProperty/1/countryCode"))))
     }
 
-    "passed a request body with an invalid country code format" in new SetUp {
-      private val invalidBody = bodyWith(entryWithCountryCode("XXXX"))
+    "passed a request body with an invalid country code format" in {
+      val invalidBody = bodyWith(entryWithCountryCode("XXXX"))
       val result: Either[ErrorWrapper, CreateAmendForeignPropertyAnnualSubmissionRequestData] =
         validator(validNino, validBusinessId, validTaxYear, invalidBody).validateAndWrapResult()
 
       result shouldBe Left(ErrorWrapper(correlationId, CountryCodeFormatError.withPath("/foreignNonFhlProperty/0/countryCode")))
     }
 
-    "passed a request body with propertyIncomeAllowance and separate allowances for fhl" in new SetUp {
-      private val invalidBody = validBody
+    "passed a request body with propertyIncomeAllowance and separate allowances for fhl" in {
+      val invalidBody = validBody
         .update("/foreignFhlEea/allowances/propertyIncomeAllowance", JsNumber(123.45))
         .removeProperty("/foreignFhlEea/adjustments/privateUseAdjustment")
 
@@ -713,8 +706,8 @@ class CreateAmendForeignPropertyAnnualSubmissionValidatorFactorySpec extends Uni
       result shouldBe Left(ErrorWrapper(correlationId, RuleBothAllowancesSuppliedError.withPath("/foreignFhlEea/allowances")))
     }
 
-    "passed a request body with propertyIncomeAllowance and separate allowances for non-fhl" in new SetUp {
-      private val invalidBody = bodyWith(
+    "passed a request body with propertyIncomeAllowance and separate allowances for non-fhl" in {
+      val invalidBody = bodyWith(
         entry
           .update("/allowances/propertyIncomeAllowance", JsNumber(123.45))
           .removeProperty("/adjustments/privateUseAdjustment"))
@@ -734,7 +727,7 @@ class CreateAmendForeignPropertyAnnualSubmissionValidatorFactorySpec extends Uni
     val invalidBodyWithoutNameOrNumberMultiple =
       bodyWith(entryWith("AFG", buildingAllowanceWithoutNameOrNumber, buildingAllowanceWithoutNameOrNumber))
 
-    "passed a request body where only the postcode is supplied in structuredBuildingAllowance" in new SetUp {
+    "passed a request body where only the postcode is supplied in structuredBuildingAllowance" in {
       val result: Either[ErrorWrapper, CreateAmendForeignPropertyAnnualSubmissionRequestData] =
         validator(validNino, validBusinessId, validTaxYear, invalidBodyWithoutNameOrNumber).validateAndWrapResult()
 
@@ -744,7 +737,7 @@ class CreateAmendForeignPropertyAnnualSubmissionValidatorFactorySpec extends Uni
           RuleBuildingNameNumberError.withPath("/foreignNonFhlProperty/0/allowances/structuredBuildingAllowance/0/building")))
     }
 
-    "passed a request body where only the postcode is supplied for multiple buildings" in new SetUp {
+    "passed a request body where only the postcode is supplied for multiple buildings" in {
       val result: Either[ErrorWrapper, CreateAmendForeignPropertyAnnualSubmissionRequestData] =
         validator(validNino, validBusinessId, validTaxYear, invalidBodyWithoutNameOrNumberMultiple).validateAndWrapResult()
 
@@ -759,7 +752,7 @@ class CreateAmendForeignPropertyAnnualSubmissionValidatorFactorySpec extends Uni
     }
 
     "return multiple errors" when {
-      "the request has multiple issues (path parameters)" in new SetUp {
+      "the request has multiple issues (path parameters)" in {
         val result: Either[ErrorWrapper, CreateAmendForeignPropertyAnnualSubmissionRequestData] =
           validator("invalid", "invalid", "invalid", validBody).validateAndWrapResult()
 

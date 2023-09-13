@@ -38,17 +38,11 @@ class RetrieveUkPropertyAnnualSubmissionValidatorFactorySpec extends UnitSpec wi
   private def validator(nino: String, businessId: String, taxYear: String) =
     validatorFactory.validator(nino, businessId, taxYear)
 
-  class SetUp {
-
-    MockAppConfig.minimumTaxV2Uk
-      .returns(2022)
-      .anyNumberOfTimes()
-
-  }
+  MockAppConfig.minimumTaxV2Uk.returns(2022)
 
   "validator" should {
     "return the parsed domain object" when {
-      "valid request data is supplied" in new SetUp {
+      "valid request data is supplied" in {
         val result: Either[ErrorWrapper, RetrieveUkPropertyAnnualSubmissionRequestData] =
           validator(validNino, validBusinessId, validTaxYear).validateAndWrapResult()
 
@@ -57,14 +51,14 @@ class RetrieveUkPropertyAnnualSubmissionValidatorFactorySpec extends UnitSpec wi
     }
 
     "return a single validation error" when {
-      "an invalid nino is supplied" in new SetUp {
+      "an invalid nino is supplied" in {
         val result: Either[ErrorWrapper, RetrieveUkPropertyAnnualSubmissionRequestData] =
           validator("invalid nino", validBusinessId, validTaxYear).validateAndWrapResult()
 
         result shouldBe Left(ErrorWrapper(correlationId, NinoFormatError, None))
       }
 
-      "passed an incorrectly formatted taxYear" in new SetUp {
+      "passed an incorrectly formatted taxYear" in {
         val result: Either[ErrorWrapper, RetrieveUkPropertyAnnualSubmissionRequestData] =
           validator(validNino, validBusinessId, "202324").validateAndWrapResult()
 
@@ -72,21 +66,21 @@ class RetrieveUkPropertyAnnualSubmissionValidatorFactorySpec extends UnitSpec wi
 
       }
 
-      "passed an incorrectly formatted businessId" in new SetUp {
+      "passed an incorrectly formatted businessId" in {
         val result: Either[ErrorWrapper, RetrieveUkPropertyAnnualSubmissionRequestData] =
           validator(validNino, "invalid business id", validTaxYear).validateAndWrapResult()
 
         result shouldBe Left(ErrorWrapper(correlationId, BusinessIdFormatError))
       }
 
-      "passed an unsupported taxYear" in new SetUp {
+      "passed an unsupported taxYear" in {
         val result: Either[ErrorWrapper, RetrieveUkPropertyAnnualSubmissionRequestData] =
           validator(validNino, validBusinessId, "2019-20").validateAndWrapResult()
 
         result shouldBe Left(ErrorWrapper(correlationId, RuleTaxYearNotSupportedError))
       }
 
-      "passed a taxYear spanning an invalid tax year range" in new SetUp {
+      "passed a taxYear spanning an invalid tax year range" in {
         val result: Either[ErrorWrapper, RetrieveUkPropertyAnnualSubmissionRequestData] =
           validator(validNino, validBusinessId, "2021-23").validateAndWrapResult()
 
@@ -96,7 +90,7 @@ class RetrieveUkPropertyAnnualSubmissionValidatorFactorySpec extends UnitSpec wi
     }
 
     "return multiple validation errors" when {
-      "the request has multiple issues (path parameters)" in new SetUp {
+      "the request has multiple issues (path parameters)" in {
         val result: Either[ErrorWrapper, RetrieveUkPropertyAnnualSubmissionRequestData] =
           validator("invalid", "invalid", "invalid").validateAndWrapResult()
 

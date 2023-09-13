@@ -29,6 +29,8 @@ import javax.inject.{Inject, Singleton}
 @Singleton
 class RetrieveUkPropertyPeriodSummaryValidatorFactory @Inject() (appConfig: AppConfig) {
 
+  private lazy val minimumTaxYear = appConfig.minimumTaxV2Uk + 1
+
   def validator(nino: String, businessId: String, taxYear: String, submissionId: String): Validator[RetrieveUkPropertyPeriodSummaryRequestData] =
     new Validator[RetrieveUkPropertyPeriodSummaryRequestData] {
 
@@ -36,7 +38,7 @@ class RetrieveUkPropertyPeriodSummaryValidatorFactory @Inject() (appConfig: AppC
         (
           ResolveNino(nino),
           ResolveBusinessId(businessId),
-          ResolveTaxYear(appConfig.minimumTaxV2Uk + 1, taxYear, None, None),
+          ResolveTaxYear(minimumTaxYear, taxYear, None, None),
           ResolveSubmissionId(submissionId)
         ).mapN(RetrieveUkPropertyPeriodSummaryRequestData)
 

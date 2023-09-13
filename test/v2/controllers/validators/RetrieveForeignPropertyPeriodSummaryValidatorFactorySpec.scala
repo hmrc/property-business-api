@@ -40,17 +40,11 @@ class RetrieveForeignPropertyPeriodSummaryValidatorFactorySpec extends UnitSpec 
   private def validator(nino: String, businessId: String, taxYear: String, submissionId: String) =
     validatorFactory.validator(nino, businessId, taxYear, submissionId)
 
-  class SetUp {
-
-    MockAppConfig.minimumTaxV2Foreign
-      .returns(2021)
-      .anyNumberOfTimes()
-
-  }
+  MockAppConfig.minimumTaxV2Foreign.returns(2021)
 
   "validator" should {
     "return the parsed domain object" when {
-      "passed a valid request" in new SetUp {
+      "passed a valid request" in {
         val result: Either[ErrorWrapper, RetrieveForeignPropertyPeriodSummaryRequestData] =
           validator(validNino, validBusinessId, validTaxYear, validSubmissionId).validateAndWrapResult()
 
@@ -59,14 +53,14 @@ class RetrieveForeignPropertyPeriodSummaryValidatorFactorySpec extends UnitSpec 
     }
 
     "return a single error" when {
-      "passed an invalid nino" in new SetUp {
+      "passed an invalid nino" in {
         val result: Either[ErrorWrapper, RetrieveForeignPropertyPeriodSummaryRequestData] =
           validator("invalid nino", validBusinessId, validTaxYear, validSubmissionId).validateAndWrapResult()
 
         result shouldBe Left(ErrorWrapper(correlationId, NinoFormatError))
       }
 
-      "passed an incorrectly formatted taxYear" in new SetUp {
+      "passed an incorrectly formatted taxYear" in {
         val result: Either[ErrorWrapper, RetrieveForeignPropertyPeriodSummaryRequestData] =
           validator(validNino, validBusinessId, "202324", validSubmissionId).validateAndWrapResult()
 
@@ -74,28 +68,28 @@ class RetrieveForeignPropertyPeriodSummaryValidatorFactorySpec extends UnitSpec 
 
       }
 
-      "passed an incorrectly formatted businessId" in new SetUp {
+      "passed an incorrectly formatted businessId" in {
         val result: Either[ErrorWrapper, RetrieveForeignPropertyPeriodSummaryRequestData] =
           validator(validNino, "invalid business id", validTaxYear, validSubmissionId).validateAndWrapResult()
 
         result shouldBe Left(ErrorWrapper(correlationId, BusinessIdFormatError))
       }
 
-      "passed an unsupported taxYear" in new SetUp {
+      "passed an unsupported taxYear" in {
         val result: Either[ErrorWrapper, RetrieveForeignPropertyPeriodSummaryRequestData] =
           validator(validNino, validBusinessId, "2020-21", validSubmissionId).validateAndWrapResult()
 
         result shouldBe Left(ErrorWrapper(correlationId, RuleTaxYearNotSupportedError))
       }
 
-      "passed a taxYear spanning an invalid tax year range" in new SetUp {
+      "passed a taxYear spanning an invalid tax year range" in {
         val result: Either[ErrorWrapper, RetrieveForeignPropertyPeriodSummaryRequestData] =
           validator(validNino, validBusinessId, "2020-22", validSubmissionId).validateAndWrapResult()
 
         result shouldBe Left(ErrorWrapper(correlationId, RuleTaxYearRangeInvalidError))
       }
 
-      "passed an incorrectly formatted submissionId" in new SetUp {
+      "passed an incorrectly formatted submissionId" in {
         val result: Either[ErrorWrapper, RetrieveForeignPropertyPeriodSummaryRequestData] =
           validator(validNino, validBusinessId, validTaxYear, "invalid submission id").validateAndWrapResult()
 
@@ -104,7 +98,7 @@ class RetrieveForeignPropertyPeriodSummaryValidatorFactorySpec extends UnitSpec 
     }
 
     "return multiple errors" when {
-      "the request has multiple issues (path parameters)" in new SetUp {
+      "the request has multiple issues (path parameters)" in {
         val result: Either[ErrorWrapper, RetrieveForeignPropertyPeriodSummaryRequestData] =
           validator("invalid", "invalid", "invalid", "invalid").validateAndWrapResult()
 

@@ -21,7 +21,7 @@ import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
 import uk.gov.hmrc.http.HeaderCarrier
 import v2.connectors.AmendHistoricNonFhlUkPiePeriodSummaryConnector
-import v2.models.request.amendHistoricNonFhlUkPiePeriodSummary.AmendHistoricNonFhlUkPiePeriodSummaryRequest
+import v2.models.request.amendHistoricNonFhlUkPiePeriodSummary.AmendHistoricNonFhlUkPeriodSummaryRequestData
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -31,9 +31,9 @@ trait MockAmendHistoricNonFhlUkPiePeriodSummaryConnector extends MockFactory {
 
   object MockAmendHistoricNonFhlUkPiePeriodSummaryConnector {
 
-    def amend(requestData: AmendHistoricNonFhlUkPiePeriodSummaryRequest): CallHandler[Future[DownstreamOutcome[Unit]]] = {
+    def amend(requestData: AmendHistoricNonFhlUkPeriodSummaryRequestData): CallHandler[Future[DownstreamOutcome[Unit]]] = {
       (mockConnector
-        .amend(_: AmendHistoricNonFhlUkPiePeriodSummaryRequest)(_: HeaderCarrier, _: ExecutionContext, _: String))
+        .amend(_: AmendHistoricNonFhlUkPeriodSummaryRequestData)(_: HeaderCarrier, _: ExecutionContext, _: String))
         .expects(requestData, *, *, *)
     }
 

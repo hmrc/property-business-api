@@ -16,9 +16,12 @@
 
 package api.models.audit
 
+import api.controllers.AuditHandler.AuditDetailCreator
+import api.controllers.RequestContext
 import api.models.auth.UserDetails
 import play.api.libs.functional.syntax.{toFunctionalBuilderOps, unlift}
 import play.api.libs.json.{JsPath, JsValue, OWrites}
+import routing.Version
 
 case class FlattenedGenericAuditDetail(versionNumber: Option[String],
                                        userType: String,
@@ -66,5 +69,21 @@ object FlattenedGenericAuditDetail {
       responseBody = auditResponse.body
     )
   }
+
+  def auditDetailCreator(apiVersion: Version, params: Map[String, String]): AuditDetailCreator[FlattenedGenericAuditDetail] =
+    new AuditDetailCreator[FlattenedGenericAuditDetail] {
+
+      def createAuditDetail(userDetails: UserDetails, requestBody: Option[JsValue], auditResponse: AuditResponse)(implicit
+          ctx: RequestContext): FlattenedGenericAuditDetail =
+        FlattenedGenericAuditDetail(
+          versionNumber = Some(apiVersion.name),
+          userDetails = userDetails,
+          params = params,
+          request = requestBody,
+          `X-CorrelationId` = ctx.correlationId,
+          auditResponse = auditResponse
+        )
+
+    }
 
 }

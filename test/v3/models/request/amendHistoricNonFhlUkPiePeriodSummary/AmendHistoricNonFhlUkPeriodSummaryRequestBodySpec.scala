@@ -20,7 +20,7 @@ import play.api.libs.json.Json
 import support.UnitSpec
 import v3.fixtures.AmendHistoricNonFhlUkPiePeriodSummary.AmendHistoricNonFhlUkPiePeriodSummaryFixtures
 
-class AmendHistoricNonFhlUkPiePeriodSummaryRequestBodySpec extends UnitSpec with AmendHistoricNonFhlUkPiePeriodSummaryFixtures {
+class AmendHistoricNonFhlUkPeriodSummaryRequestBodySpec extends UnitSpec with AmendHistoricNonFhlUkPiePeriodSummaryFixtures {
 
   "reads" when {
     "passed a valid JSON with full data" should {

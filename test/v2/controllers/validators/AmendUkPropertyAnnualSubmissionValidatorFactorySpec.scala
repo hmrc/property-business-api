@@ -180,30 +180,25 @@ class AmendUkPropertyAnnualSubmissionValidatorFactorySpec extends UnitSpec with 
   private def validator(nino: String, businessId: String, taxYear: String, body: JsValue) =
     validatorFactory.validator(nino, businessId, taxYear, body)
 
-  trait SetUp {
-
-    MockAppConfig.minimumTaxV2Uk
-      .returns(2021)
-
-  }
+  MockAppConfig.minimumTaxV2Uk.returns(2021)
 
   "validator" should {
     "return the parsed domain object" when {
-      "passed a valid request" in new SetUp {
+      "passed a valid request" in {
         val result: Either[ErrorWrapper, AmendUkPropertyAnnualSubmissionRequestData] =
           validator(validNino, validBusinessId, validTaxYear, validBody).validateAndWrapResult()
 
         result shouldBe Right(AmendUkPropertyAnnualSubmissionRequestData(parsedNino, parsedBusinessId, parsedTaxYear, parsedBody))
       }
 
-      "passed a valid request with a minimal request body" in new SetUp {
+      "passed a valid request with a minimal request body" in {
         val result: Either[ErrorWrapper, AmendUkPropertyAnnualSubmissionRequestData] =
           validator(validNino, validBusinessId, validTaxYear, validBodyMinimal).validateAndWrapResult()
 
         result shouldBe Right(AmendUkPropertyAnnualSubmissionRequestData(parsedNino, parsedBusinessId, parsedTaxYear, parsedBodyMinimal))
       }
 
-      "passed a valid request where only a ukFhlProperty is supplied" in new SetUp {
+      "passed a valid request where only a ukFhlProperty is supplied" in {
         val result: Either[ErrorWrapper, AmendUkPropertyAnnualSubmissionRequestData] =
           validator(validNino, validBusinessId, validTaxYear, validBodyFhlOnly).validateAndWrapResult()
 
@@ -211,7 +206,7 @@ class AmendUkPropertyAnnualSubmissionValidatorFactorySpec extends UnitSpec with 
           AmendUkPropertyAnnualSubmissionRequestData(parsedNino, parsedBusinessId, parsedTaxYear, parsedBody.copy(ukNonFhlProperty = None)))
       }
 
-      "passed a valid request where only a ukNonFhlProperty is supplied" in new SetUp {
+      "passed a valid request where only a ukNonFhlProperty is supplied" in {
         val result: Either[ErrorWrapper, AmendUkPropertyAnnualSubmissionRequestData] =
           validator(validNino, validBusinessId, validTaxYear, validBodyNonFhlOnly).validateAndWrapResult()
 
@@ -221,42 +216,42 @@ class AmendUkPropertyAnnualSubmissionValidatorFactorySpec extends UnitSpec with 
     }
 
     "return a single error" when {
-      "passed an invalid nino" in new SetUp {
+      "passed an invalid nino" in {
         val result: Either[ErrorWrapper, AmendUkPropertyAnnualSubmissionRequestData] =
           validator("invalid nino", validBusinessId, validTaxYear, validBody).validateAndWrapResult()
 
         result shouldBe Left(ErrorWrapper(correlationId, NinoFormatError))
       }
 
-      "passed an incorrectly formatted taxYear" in new SetUp {
+      "passed an incorrectly formatted taxYear" in {
         val result: Either[ErrorWrapper, AmendUkPropertyAnnualSubmissionRequestData] =
           validator(validNino, validBusinessId, "202324", validBody).validateAndWrapResult()
 
         result shouldBe Left(ErrorWrapper(correlationId, TaxYearFormatError))
       }
 
-      "passed a taxYear spanning an invalid tax year range" in new SetUp {
+      "passed a taxYear spanning an invalid tax year range" in {
         val result: Either[ErrorWrapper, AmendUkPropertyAnnualSubmissionRequestData] =
           validator(validNino, validBusinessId, "2020-22", validBody).validateAndWrapResult()
 
         result shouldBe Left(ErrorWrapper(correlationId, RuleTaxYearRangeInvalidError))
       }
 
-      "passed an taxYear preceding the minimum" in new SetUp {
+      "passed an taxYear preceding the minimum" in {
         val result: Either[ErrorWrapper, AmendUkPropertyAnnualSubmissionRequestData] =
           validator(validNino, validBusinessId, "2020-21", validBody).validateAndWrapResult()
 
         result shouldBe Left(ErrorWrapper(correlationId, RuleTaxYearNotSupportedError))
       }
 
-      "passed an incorrectly formatted businessId" in new SetUp {
+      "passed an incorrectly formatted businessId" in {
         val result: Either[ErrorWrapper, AmendUkPropertyAnnualSubmissionRequestData] =
           validator(validNino, "invalid business id", validTaxYear, validBody).validateAndWrapResult()
 
         result shouldBe Left(ErrorWrapper(correlationId, BusinessIdFormatError))
       }
 
-      "passed an empty body" in new SetUp {
+      "passed an empty body" in {
         val result: Either[ErrorWrapper, AmendUkPropertyAnnualSubmissionRequestData] =
           validator(validNino, validBusinessId, validTaxYear, Json.parse("""{}""")).validateAndWrapResult()
 
@@ -265,7 +260,7 @@ class AmendUkPropertyAnnualSubmissionValidatorFactorySpec extends UnitSpec with 
 
       "passed a body with an empty object" should {
         def testEmpty(path: String): Unit =
-          s"for $path" in new SetUp {
+          s"for $path" in {
             val invalidBody: JsValue = validBody.removeProperty(path).replaceWithEmptyObject(path)
 
             val result: Either[ErrorWrapper, AmendUkPropertyAnnualSubmissionRequestData] =
@@ -284,7 +279,7 @@ class AmendUkPropertyAnnualSubmissionValidatorFactorySpec extends UnitSpec with 
         ).foreach(p => testEmpty(p))
       }
 
-      "passed a body with an empty object except for an additional (non-schema) property" in new SetUp {
+      "passed a body with an empty object except for an additional (non-schema) property" in {
         val invalidBody: JsValue = Json.parse("""
             |{
             |    "ukFhlProperty":{
@@ -298,7 +293,7 @@ class AmendUkPropertyAnnualSubmissionValidatorFactorySpec extends UnitSpec with 
         result shouldBe Left(ErrorWrapper(correlationId, RuleIncorrectOrEmptyBodyError.withPath("/ukFhlProperty")))
       }
 
-      "passed a body with an empty ukFhlPropertyAdjustments object" in new SetUp {
+      "passed a body with an empty ukFhlPropertyAdjustments object" in {
         val invalidBody: JsValue = Json.parse("""
                                                 |{
                                                 |  "ukFhlProperty": {
@@ -318,7 +313,7 @@ class AmendUkPropertyAnnualSubmissionValidatorFactorySpec extends UnitSpec with 
           ))
       }
 
-      "passed a body with a ukFhlPropertyAdjustments containing an empty rentARoom object" in new SetUp {
+      "passed a body with a ukFhlPropertyAdjustments containing an empty rentARoom object" in {
         val invalidBody: JsValue = validBody.removeProperty("/ukFhlProperty/adjustments/rentARoom/jointlyLet")
 
         val result: Either[ErrorWrapper, AmendUkPropertyAnnualSubmissionRequestData] =
@@ -327,7 +322,7 @@ class AmendUkPropertyAnnualSubmissionValidatorFactorySpec extends UnitSpec with 
         result shouldBe Left(ErrorWrapper(correlationId, RuleIncorrectOrEmptyBodyError.withPath("/ukFhlProperty/adjustments/rentARoom/jointlyLet")))
       }
 
-      "passed a body with ukNonFhlProperty adjustments missing a required field object" in new SetUp {
+      "passed a body with ukNonFhlProperty adjustments missing a required field object" in {
         val invalidBody: JsValue = validBody.removeProperty("/ukNonFhlProperty/adjustments/nonResidentLandlord")
 
         val result: Either[ErrorWrapper, AmendUkPropertyAnnualSubmissionRequestData] =
@@ -336,7 +331,7 @@ class AmendUkPropertyAnnualSubmissionValidatorFactorySpec extends UnitSpec with 
         result shouldBe Left(ErrorWrapper(correlationId, RuleIncorrectOrEmptyBodyError.withPath("/ukNonFhlProperty/adjustments/nonResidentLandlord")))
       }
 
-      "passed a body with ukNonFhlProperty adjustments with an empty rentARoom object" in new SetUp {
+      "passed a body with ukNonFhlProperty adjustments with an empty rentARoom object" in {
         val invalidBody: JsValue = validBody.replaceWithEmptyObject("/ukNonFhlProperty/adjustments/rentARoom/jointlyLet")
 
         val result: Either[ErrorWrapper, AmendUkPropertyAnnualSubmissionRequestData] =
@@ -346,7 +341,7 @@ class AmendUkPropertyAnnualSubmissionValidatorFactorySpec extends UnitSpec with 
           ErrorWrapper(correlationId, RuleIncorrectOrEmptyBodyError.withPath("/ukNonFhlProperty/adjustments/rentARoom/jointlyLet")))
       }
 
-      "passed a body with an invalid structuredBuildingAllowance/qualifyingDate" in new SetUp {
+      "passed a body with an invalid structuredBuildingAllowance/qualifyingDate" in {
         val invalidBody: JsValue =
           validBody.update(
             "/ukNonFhlProperty",
@@ -364,7 +359,7 @@ class AmendUkPropertyAnnualSubmissionValidatorFactorySpec extends UnitSpec with 
             DateFormatError.withPath("/ukNonFhlProperty/allowances/structuredBuildingAllowance/0/firstYear/qualifyingDate")))
       }
 
-      "passed a body with an invalid enhancedStructuredBuildingAllowance/qualifyingDate" in new SetUp {
+      "passed a body with an invalid enhancedStructuredBuildingAllowance/qualifyingDate" in {
         val invalidBody: JsValue =
           validBody.update(
             "/ukNonFhlProperty",
@@ -381,7 +376,7 @@ class AmendUkPropertyAnnualSubmissionValidatorFactorySpec extends UnitSpec with 
             DateFormatError.withPath("/ukNonFhlProperty/allowances/enhancedStructuredBuildingAllowance/0/firstYear/qualifyingDate")))
       }
 
-      "passed a body with an invalid structuredBuildingAllowance/building/name" in new SetUp {
+      "passed a body with an invalid structuredBuildingAllowance/building/name" in {
         val invalidBody: JsValue =
           validBody.update(
             "/ukNonFhlProperty",
@@ -395,7 +390,7 @@ class AmendUkPropertyAnnualSubmissionValidatorFactorySpec extends UnitSpec with 
           ErrorWrapper(correlationId, StringFormatError.withPath("/ukNonFhlProperty/allowances/enhancedStructuredBuildingAllowance/0/building/name")))
       }
 
-      "passed a body with an invalid structuredBuildingAllowance/building/number" in new SetUp {
+      "passed a body with an invalid structuredBuildingAllowance/building/number" in {
         val invalidBody: JsValue =
           validBody.update(
             "/ukNonFhlProperty",
@@ -411,7 +406,7 @@ class AmendUkPropertyAnnualSubmissionValidatorFactorySpec extends UnitSpec with 
             StringFormatError.withPath("/ukNonFhlProperty/allowances/enhancedStructuredBuildingAllowance/0/building/number")))
       }
 
-      "passed a body with an invalid structuredBuildingAllowance/building/postcode" in new SetUp {
+      "passed a body with an invalid structuredBuildingAllowance/building/postcode" in {
         val invalidBody: JsValue =
           validBody.update(
             "/ukNonFhlProperty",
@@ -429,7 +424,7 @@ class AmendUkPropertyAnnualSubmissionValidatorFactorySpec extends UnitSpec with 
       }
 
       "passed a body with invalid numeric fields" should {
-        def testValueFormatError(path: String): Unit = s"for $path" in new SetUp {
+        def testValueFormatError(path: String): Unit = s"for $path" in {
           val result: Either[ErrorWrapper, AmendUkPropertyAnnualSubmissionRequestData] =
             validator(validNino, validBusinessId, validTaxYear, validBody.update(path, JsNumber(123.456))).validateAndWrapResult()
 
@@ -458,7 +453,7 @@ class AmendUkPropertyAnnualSubmissionValidatorFactorySpec extends UnitSpec with 
         ).foreach(p => testValueFormatError(p))
       }
 
-      "passed a body with invalid structuredBuildingAllowance fields" in new SetUp {
+      "passed a body with invalid structuredBuildingAllowance fields" in {
         val invalidBody: JsValue =
           validBody.update(
             "/ukNonFhlProperty",
@@ -482,7 +477,7 @@ class AmendUkPropertyAnnualSubmissionValidatorFactorySpec extends UnitSpec with 
           ))
       }
 
-      "passed a body with invalid enhancedStructuredBuildingAllowance fields" in new SetUp {
+      "passed a body with invalid enhancedStructuredBuildingAllowance fields" in {
         val invalidBody: JsValue =
           validBody.update(
             "/ukNonFhlProperty",
@@ -505,7 +500,7 @@ class AmendUkPropertyAnnualSubmissionValidatorFactorySpec extends UnitSpec with 
           ))
       }
 
-      "passed a body with an invalid ukFhlProperty propertyIncomeAllowance" in new SetUp {
+      "passed a body with an invalid ukFhlProperty propertyIncomeAllowance" in {
         val invalidBody: JsValue =
           validBody
             .removeProperty("/ukFhlProperty/allowances")
@@ -521,7 +516,7 @@ class AmendUkPropertyAnnualSubmissionValidatorFactorySpec extends UnitSpec with 
           ))
       }
 
-      "passed a body with an invalid ukNonFhlProperty propertyIncomeAllowance" in new SetUp {
+      "passed a body with an invalid ukNonFhlProperty propertyIncomeAllowance" in {
         val invalidBody: JsValue =
           validBody
             .removeProperty("/ukNonFhlProperty/allowances")
@@ -537,7 +532,7 @@ class AmendUkPropertyAnnualSubmissionValidatorFactorySpec extends UnitSpec with 
           ))
       }
 
-      "passed a body with ukFhlProperty propertyIncomeAllowance that is too big" in new SetUp {
+      "passed a body with ukFhlProperty propertyIncomeAllowance that is too big" in {
         val invalidBody: JsValue =
           validBody
             .removeProperty("/ukFhlProperty/allowances")
@@ -553,7 +548,7 @@ class AmendUkPropertyAnnualSubmissionValidatorFactorySpec extends UnitSpec with 
           ))
       }
 
-      "passed a body with ukNonFhlProperty propertyIncomeAllowance that is too big" in new SetUp {
+      "passed a body with ukNonFhlProperty propertyIncomeAllowance that is too big" in {
         val invalidBody: JsValue =
           validBody
             .removeProperty("/ukNonFhlProperty/allowances")
@@ -569,7 +564,7 @@ class AmendUkPropertyAnnualSubmissionValidatorFactorySpec extends UnitSpec with 
           ))
       }
 
-      "passed a body with both allowances and propertyIncomeAllowance supplied for fhl" in new SetUp {
+      "passed a body with both allowances and propertyIncomeAllowance supplied for fhl" in {
         val invalidBody: JsValue =
           validBody
             .update("/ukFhlProperty/allowances/propertyIncomeAllowance", JsNumber(123.45))
@@ -581,7 +576,7 @@ class AmendUkPropertyAnnualSubmissionValidatorFactorySpec extends UnitSpec with 
         result shouldBe Left(ErrorWrapper(correlationId, RuleBothAllowancesSuppliedError.withPath("/ukFhlProperty/allowances")))
       }
 
-      "passed a body with both allowances and propertyIncomeAllowance supplied for non-fhl" in new SetUp {
+      "passed a body with both allowances and propertyIncomeAllowance supplied for non-fhl" in {
         val invalidBody: JsValue =
           validBody
             .update("/ukNonFhlProperty/allowances/propertyIncomeAllowance", JsNumber(123.45))
@@ -593,7 +588,7 @@ class AmendUkPropertyAnnualSubmissionValidatorFactorySpec extends UnitSpec with 
         result shouldBe Left(ErrorWrapper(correlationId, RuleBothAllowancesSuppliedError.withPath("/ukNonFhlProperty/allowances")))
       }
 
-      "passed a both with structuredBuildingAllowance/building with no name or number" in new SetUp {
+      "passed a both with structuredBuildingAllowance/building with no name or number" in {
         val invalidBody: JsValue =
           validBody.update(
             "/ukNonFhlProperty",
@@ -611,7 +606,7 @@ class AmendUkPropertyAnnualSubmissionValidatorFactorySpec extends UnitSpec with 
           ErrorWrapper(correlationId, RuleBuildingNameNumberError.withPath("/ukNonFhlProperty/allowances/structuredBuildingAllowance/0/building")))
       }
 
-      "passed a both with enhancedStructuredBuildingAllowance/building with no name or number" in new SetUp {
+      "passed a both with enhancedStructuredBuildingAllowance/building with no name or number" in {
         val invalidBody: JsValue =
           validBody.update(
             "/ukNonFhlProperty",
@@ -633,7 +628,7 @@ class AmendUkPropertyAnnualSubmissionValidatorFactorySpec extends UnitSpec with 
     }
 
     "return multiple errors" when {
-      "the request has multiple issues (path parameters)" in new SetUp {
+      "the request has multiple issues (path parameters)" in {
         val result: Either[ErrorWrapper, AmendUkPropertyAnnualSubmissionRequestData] =
           validator("invalid", "invalid", "invalid", validBody).validateAndWrapResult()
 

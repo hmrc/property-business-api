@@ -17,16 +17,17 @@
 package v2.models.request.amendHistoricNonFhlUkPiePeriodSummary
 
 import play.api.libs.functional.syntax.{toFunctionalBuilderOps, unlift}
-import play.api.libs.json.{JsPath, Json, Reads, Writes}
+import play.api.libs.json._
 
-case class AmendHistoricNonFhlUkPiePeriodSummaryRequestBody(income: Option[UkNonFhlPieIncome], expenses: Option[UkNonFhlPieExpenses])
+case class AmendHistoricNonFhlUkPeriodSummaryRequestBody(income: Option[UkNonFhlPieIncome], expenses: Option[UkNonFhlPieExpenses])
 
-object AmendHistoricNonFhlUkPiePeriodSummaryRequestBody {
-  implicit val reads: Reads[AmendHistoricNonFhlUkPiePeriodSummaryRequestBody] = Json.reads
+object AmendHistoricNonFhlUkPeriodSummaryRequestBody {
+  implicit val reads: Reads[AmendHistoricNonFhlUkPeriodSummaryRequestBody] = Json.reads[AmendHistoricNonFhlUkPeriodSummaryRequestBody]
 
-  implicit val writes: Writes[AmendHistoricNonFhlUkPiePeriodSummaryRequestBody] = (
+  implicit val writes: OWrites[AmendHistoricNonFhlUkPeriodSummaryRequestBody] = (
     (JsPath \ "incomes").writeNullable[UkNonFhlPieIncome] and
       (JsPath \ "deductions").writeNullable[UkNonFhlPieExpenses]
-  )(unlift(AmendHistoricNonFhlUkPiePeriodSummaryRequestBody.unapply))
+  )(unlift(AmendHistoricNonFhlUkPeriodSummaryRequestBody.unapply))
 
+  implicit val format: OFormat[AmendHistoricNonFhlUkPeriodSummaryRequestBody] = OFormat(reads, writes)
 }

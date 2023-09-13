@@ -32,6 +32,9 @@ import scala.annotation.nowarn
 @Singleton
 class CreateAmendHistoricFhlUkPropertyAnnualSubmissionValidatorFactory @Inject() (appConfig: AppConfig) {
 
+  private lazy val minimumTaxYear = appConfig.minimumTaxHistoric + 1
+  private lazy val maximumTaxYear = appConfig.maximumTaxHistoric
+
   @nowarn("cat=lint-byname-implicit")
   private val resolveJson = new ResolveNonEmptyJsonObject[CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequestBody]()
 
@@ -45,7 +48,7 @@ class CreateAmendHistoricFhlUkPropertyAnnualSubmissionValidatorFactory @Inject()
       def validate: Validated[Seq[MtdError], CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequestData] =
         (
           ResolveNino(nino),
-          ResolveHistoricTaxYear(appConfig.minimumTaxHistoric + 1, appConfig.maximumTaxHistoric, taxYear, None, None),
+          ResolveHistoricTaxYear(minimumTaxYear, maximumTaxYear, taxYear, None, None),
           resolveJson(body)
         ).mapN(CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequestData) andThen validateBusinessRules
 

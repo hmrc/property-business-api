@@ -20,18 +20,18 @@ import play.api.libs.json.Json
 import support.UnitSpec
 import v2.fixtures.AmendHistoricNonFhlUkPiePeriodSummary.AmendHistoricNonFhlUkPiePeriodSummaryFixtures
 
-class AmendHistoricNonFhlUkPiePeriodSummaryRequestBodySpec extends UnitSpec with AmendHistoricNonFhlUkPiePeriodSummaryFixtures {
+class AmendHistoricNonFhlUkPeriodSummaryRequestBodySpec extends UnitSpec with AmendHistoricNonFhlUkPiePeriodSummaryFixtures {
 
   "reads" when {
     "passed a valid JSON with full data" should {
       "return a valid model" in {
-        mtdJsonRequestFull.as[AmendHistoricNonFhlUkPiePeriodSummaryRequestBody] shouldBe requestBodyFull
+        mtdJsonRequestFull.as[AmendHistoricNonFhlUkPeriodSummaryRequestBody] shouldBe requestBodyFull
       }
     }
 
     "passed a valid JSON with consolidated data" should {
       "return a valid model" in {
-        mtdJsonRequestConsolidated.as[AmendHistoricNonFhlUkPiePeriodSummaryRequestBody] shouldBe requestBodyConsolidated
+        mtdJsonRequestConsolidated.as[AmendHistoricNonFhlUkPeriodSummaryRequestBody] shouldBe requestBodyConsolidated
       }
     }
   }

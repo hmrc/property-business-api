@@ -16,7 +16,7 @@
 
 package api.controllers
 
-import api.models.audit.{AuditEvent, AuditResponse, GenericAuditDetail}
+import api.models.audit.{AuditEvent, AuditResponse, FlattenedGenericAuditDetail, GenericAuditDetail}
 import api.models.auth.UserDetails
 import api.models.errors.ErrorWrapper
 import api.services.AuditService
@@ -43,15 +43,28 @@ object AuditHandler {
             apiVersion: Version,
             params: Map[String, String],
             requestBody: Option[JsValue] = None,
-            includeResponse: Boolean = false): AuditHandler =
-    new AuditHandlerImpl[GenericAuditDetail](
-      auditService = auditService,
-      auditType = auditType,
-      transactionName = transactionName,
-      auditDetailCreator = GenericAuditDetail.auditDetailCreator(apiVersion, params),
-      requestBody = requestBody,
-      responseBodyMap = if (includeResponse) identity else const(None)
-    )
+            includeResponse: Boolean = false,
+            flattened: Boolean = false): AuditHandler = {
+    if (flattened) {
+      new AuditHandlerImpl[FlattenedGenericAuditDetail](
+        auditService = auditService,
+        auditType = auditType,
+        transactionName = transactionName,
+        auditDetailCreator = FlattenedGenericAuditDetail.auditDetailCreator(apiVersion, params),
+        requestBody = requestBody,
+        responseBodyMap = if (includeResponse) identity else const(None)
+      )
+    } else {
+      new AuditHandlerImpl[GenericAuditDetail](
+        auditService = auditService,
+        auditType = auditType,
+        transactionName = transactionName,
+        auditDetailCreator = GenericAuditDetail.auditDetailCreator(apiVersion, params),
+        requestBody = requestBody,
+        responseBodyMap = if (includeResponse) identity else const(None)
+      )
+    }
+  }
 
   def custom[A: Writes](auditService: AuditService,
                         auditType: String,

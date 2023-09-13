@@ -27,7 +27,7 @@ import api.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLooku
 import mocks.MockIdGenerator
 import play.api.libs.json.{JsObject, JsValue}
 import play.api.mvc.Result
-import v2.mocks.requestParsers.MockAmendHistoricFhlUkPiePeriodSummaryRequestParser
+import v2.controllers.validators.MockAmendHistoricFhlUkPropertyPeriodSummaryValidatorFactory
 import v2.mocks.services.MockAmendHistoricFhlUkPropertyPeriodSummaryService
 import v2.models.request.amendHistoricFhlUkPiePeriodSummary._
 import v2.models.response.amendHistoricFhlUkPiePeriodSummary.AmendHistoricFhlUkPropertyPeriodSummaryHateoasData
@@ -41,7 +41,7 @@ class AmendHistoricFhlUkPropertyPeriodSummaryControllerSpec
     with MockEnrolmentsAuthService
     with MockMtdIdLookupService
     with MockAmendHistoricFhlUkPropertyPeriodSummaryService
-    with MockAmendHistoricFhlUkPiePeriodSummaryRequestParser
+    with MockAmendHistoricFhlUkPropertyPeriodSummaryValidatorFactory
     with MockHateoasFactory
     with MockIdGenerator
     with MockAuditService {
@@ -52,9 +52,7 @@ class AmendHistoricFhlUkPropertyPeriodSummaryControllerSpec
   "AmendHistoricFhlUkPropertyPeriodSummaryController" should {
     "return a successful response with status 200 (OK)" when {
       "the request received is valid" in new Test {
-        MockAmendHistoricFhlUkPiePeriodSummaryRequestParser
-          .parse(rawData)
-          .returns(Right(requestData))
+        willUseValidator(returningSuccess(requestData))
 
         MockAmendHistoricFhlUkPropertyPeriodSummaryService
           .amend(requestData)
@@ -64,28 +62,27 @@ class AmendHistoricFhlUkPropertyPeriodSummaryControllerSpec
           .wrap((), hateoasData)
           .returns(HateoasWrapper((), testHateoasLinks))
 
-        runOkTest(expectedStatus = OK, maybeExpectedResponseBody = Some(testHateoasLinksJson))
+        runOkTestWithAudit(
+          expectedStatus = OK,
+          maybeExpectedResponseBody = Some(testHateoasLinksJson),
+          maybeAuditResponseBody = Some(testHateoasLinksJson))
       }
     }
     "return the error as per spec" when {
       "the parser validation fails" in new Test {
-        MockAmendHistoricFhlUkPiePeriodSummaryRequestParser
-          .parse(rawData)
-          .returns(Left(ErrorWrapper(correlationId, NinoFormatError, None)))
+        willUseValidator(returning(NinoFormatError))
 
-        runErrorTest(NinoFormatError)
+        runErrorTestWithAudit(NinoFormatError)
       }
 
       "the service returns an error" in new Test {
-        MockAmendHistoricFhlUkPiePeriodSummaryRequestParser
-          .parse(rawData)
-          .returns(Right(requestData))
+        willUseValidator(returningSuccess(requestData))
 
         MockAmendHistoricFhlUkPropertyPeriodSummaryService
           .amend(requestData)
           .returns(Future.successful(Left(ErrorWrapper(correlationId, RuleMisalignedPeriodError))))
 
-        runErrorTest(RuleMisalignedPeriodError)
+        runErrorTestWithAudit(RuleMisalignedPeriodError)
       }
     }
   }
@@ -95,7 +92,7 @@ class AmendHistoricFhlUkPropertyPeriodSummaryControllerSpec
     private val controller = new AmendHistoricFhlUkPropertyPeriodSummaryController(
       authService = mockEnrolmentsAuthService,
       lookupService = mockMtdIdLookupService,
-      parser = mockAmendHistoricFhlUkPropertyPeriodSummaryRequestParser,
+      validatorFactory = mockAmendHistoricFhlUkPropertyPeriodSummaryValidatorFactory,
       service = mockAmendHistoricFhlUkPropertyPeriodSummaryService,
       hateoasFactory = mockHateoasFactory,
       auditService = mockAuditService,
@@ -108,7 +105,7 @@ class AmendHistoricFhlUkPropertyPeriodSummaryControllerSpec
     protected def event(auditResponse: AuditResponse, maybeRequestBody: Option[JsValue]): AuditEvent[FlattenedGenericAuditDetail] =
       AuditEvent(
         auditType = "AmendHistoricFhlPropertyIncomeExpensesPeriodSummary",
-        transactionName = "AmendHistoricFhlPropertyIncomeExpensesPeriodSummary",
+        transactionName = "amend-historic-fhl-property-income-expenses-period-summary",
         detail = FlattenedGenericAuditDetail(
           versionNumber = Some("2.0"),
           userDetails = UserDetails(mtdId, "Individual", None),
@@ -121,11 +118,10 @@ class AmendHistoricFhlUkPropertyPeriodSummaryControllerSpec
 
     private val requestBodyJson: JsValue = JsObject.empty
 
-    protected val rawData: AmendHistoricFhlUkPiePeriodSummaryRawData = AmendHistoricFhlUkPiePeriodSummaryRawData(nino, periodId, requestBodyJson)
     protected val requestBody: AmendHistoricFhlUkPiePeriodSummaryRequestBody = AmendHistoricFhlUkPiePeriodSummaryRequestBody(None, None)
 
-    protected val requestData: AmendHistoricFhlUkPiePeriodSummaryRequest =
-      AmendHistoricFhlUkPiePeriodSummaryRequest(Nino(nino), PeriodId(periodId), requestBody)
+    protected val requestData: AmendHistoricFhlUkPiePeriodSummaryRequestData =
+      AmendHistoricFhlUkPiePeriodSummaryRequestData(Nino(nino), PeriodId(periodId), requestBody)
 
     protected val hateoasData: AmendHistoricFhlUkPropertyPeriodSummaryHateoasData = AmendHistoricFhlUkPropertyPeriodSummaryHateoasData(nino, periodId)
 

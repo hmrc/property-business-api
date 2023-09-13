@@ -58,7 +58,7 @@ class AmendHistoricNonFhlUkPropertyPeriodSummaryController @Inject() (val authSe
           .withAuditing(AuditHandler.custom(
             auditService,
             auditType = "AmendHistoricNonFhlPropertyIncomeExpensesPeriodSummary",
-            transactionName = "AmendHistoricNonFhlPropertyIncomeExpensesPeriodSummary",
+            transactionName = "amend-historic-non-fhl-property-income-expenses-period-summary",
             auditDetailCreator = FlattenedGenericAuditDetail.auditDetailCreator(
               Version.from(request, orElse = Version2),
               Map("nino" -> nino, "periodId" -> periodId)

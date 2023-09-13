@@ -17,21 +17,22 @@
 package v2.controllers.requestParsers
 
 import api.controllers.requestParsers.RequestParser
-import api.models.domain.{Nino, TaxYear}
+import api.models.domain.{BusinessId, Nino, SubmissionId, TaxYear}
 import v2.controllers.requestParsers.validators.AmendUkPropertyPeriodSummaryValidator
 import v2.models.request.amendUkPropertyPeriodSummary._
 
 import javax.inject.Inject
 
 class AmendUkPropertyPeriodSummaryRequestParser @Inject() (val validator: AmendUkPropertyPeriodSummaryValidator)
-    extends RequestParser[AmendUkPropertyPeriodSummaryRawData, AmendUkPropertyPeriodSummaryRequest] {
+    extends RequestParser[AmendUkPropertyPeriodSummaryRawData, AmendUkPropertyPeriodSummaryRequestData] {
 
-  override protected def requestFor(data: AmendUkPropertyPeriodSummaryRawData): AmendUkPropertyPeriodSummaryRequest =
-    AmendUkPropertyPeriodSummaryRequest(
+  override protected def requestFor(data: AmendUkPropertyPeriodSummaryRawData): AmendUkPropertyPeriodSummaryRequestData =
+    AmendUkPropertyPeriodSummaryRequestData(
       Nino(data.nino),
       TaxYear.fromMtd(data.taxYear),
-      data.businessId,
-      data.submissionId,
-      data.body.as[AmendUkPropertyPeriodSummaryRequestBody])
+      BusinessId(data.businessId),
+      SubmissionId(data.submissionId),
+      data.body.as[AmendUkPropertyPeriodSummaryRequestBody]
+    )
 
 }

@@ -17,13 +17,13 @@
 package v2.services
 
 import api.controllers.EndpointLogContext
-import api.models.domain.{Nino, TaxYear}
+import api.models.domain.{BusinessId, Nino, SubmissionId, TaxYear}
 import api.models.errors._
 import api.models.outcomes.ResponseWrapper
 import api.services.ServiceSpec
 import uk.gov.hmrc.http.HeaderCarrier
 import v2.mocks.connectors.MockAmendUkPropertyPeriodSummaryConnector
-import v2.models.request.amendUkPropertyPeriodSummary.{AmendUkPropertyPeriodSummaryRequest, AmendUkPropertyPeriodSummaryRequestBody}
+import v2.models.request.amendUkPropertyPeriodSummary.{AmendUkPropertyPeriodSummaryRequestBody, AmendUkPropertyPeriodSummaryRequestData}
 
 import scala.concurrent.Future
 
@@ -98,8 +98,8 @@ class AmendUkPropertyPeriodSummaryServiceSpec extends ServiceSpec {
 
     private val requestBody: AmendUkPropertyPeriodSummaryRequestBody = AmendUkPropertyPeriodSummaryRequestBody(None, None)
 
-    protected val request: AmendUkPropertyPeriodSummaryRequest =
-      AmendUkPropertyPeriodSummaryRequest(Nino(nino), taxYear, businessId, submissionId, requestBody)
+    protected val request: AmendUkPropertyPeriodSummaryRequestData =
+      AmendUkPropertyPeriodSummaryRequestData(Nino(nino), taxYear, BusinessId(businessId), SubmissionId(submissionId), requestBody)
 
   }
 

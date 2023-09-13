@@ -16,10 +16,10 @@
 
 package v2.models.request.amendUkPropertyPeriodSummary
 
-import api.models.domain.{Nino, TaxYear}
+import api.models.domain.{BusinessId, Nino, SubmissionId, TaxYear}
 
-case class AmendUkPropertyPeriodSummaryRequest(nino: Nino,
-                                               taxYear: TaxYear,
-                                               businessId: String,
-                                               submissionId: String,
-                                               body: AmendUkPropertyPeriodSummaryRequestBody)
+case class AmendUkPropertyPeriodSummaryRequestData(nino: Nino,
+                                                   taxYear: TaxYear,
+                                                   businessId: BusinessId,
+                                                   submissionId: SubmissionId,
+                                                   body: AmendUkPropertyPeriodSummaryRequestBody)

@@ -77,13 +77,13 @@ class AmendHistoricNonFhlUkPeriodSummaryValidatorFactory @Inject() (appConfig: A
       (rentARoom.flatMap(_.rentsReceived), "/income/rentARoom/rentsReceived")
     )
 
-    val validateNumberFields = valuesWithPaths
+    val validatedNumberFields = valuesWithPaths
       .map {
         case (None, _)            => valid
         case (Some(number), path) => resolveParsedNumber(number, path)
       }
 
-    validateNumberFields.sequence.andThen(_ => valid)
+    validatedNumberFields.sequence.andThen(_ => valid)
   }
 
   private def validateExpenses(expenses: UkNonFhlPieExpenses): Validated[Seq[MtdError], Unit] = {

@@ -19,7 +19,7 @@ package v2.controllers
 import api.controllers.{ControllerBaseSpec, ControllerTestRunner}
 import api.hateoas.{HateoasWrapper, MockHateoasFactory}
 import api.models.audit.{AuditEvent, AuditResponse, GenericAuditDetailOld}
-import api.models.domain.{Nino, TaxYear}
+import api.models.domain.{BusinessId, Nino, SubmissionId, TaxYear}
 import api.models.errors._
 import api.models.outcomes.ResponseWrapper
 import api.services.MockAuditService
@@ -352,14 +352,19 @@ class AmendUkPropertyPeriodSummaryControllerSpec
     protected val rawData: AmendUkPropertyPeriodSummaryRawData =
       AmendUkPropertyPeriodSummaryRawData(nino, taxYear, businessId, submissionId, requestBodyJson)
 
-    protected val requestData: AmendUkPropertyPeriodSummaryRequest =
-      AmendUkPropertyPeriodSummaryRequest(Nino(nino), TaxYear.fromMtd(taxYear), businessId, submissionId, requestBody)
+    protected val requestData: AmendUkPropertyPeriodSummaryRequestData =
+      AmendUkPropertyPeriodSummaryRequestData(Nino(nino), TaxYear.fromMtd(taxYear), BusinessId(businessId), SubmissionId(submissionId), requestBody)
 
     protected val rawDataConsolidatedExpense: AmendUkPropertyPeriodSummaryRawData =
       AmendUkPropertyPeriodSummaryRawData(nino, taxYear, businessId, submissionId, requestBodyJsonConsolidatedExpense)
 
-    protected val requestDataConsolidatedExpense: AmendUkPropertyPeriodSummaryRequest =
-      AmendUkPropertyPeriodSummaryRequest(Nino(nino), TaxYear.fromMtd(taxYear), businessId, submissionId, requestBodyWithConsolidatedExpense)
+    protected val requestDataConsolidatedExpense: AmendUkPropertyPeriodSummaryRequestData =
+      AmendUkPropertyPeriodSummaryRequestData(
+        Nino(nino),
+        TaxYear.fromMtd(taxYear),
+        BusinessId(businessId),
+        SubmissionId(submissionId),
+        requestBodyWithConsolidatedExpense)
 
     protected val hateoasData: AmendUkPropertyPeriodSummaryHateoasData =
       AmendUkPropertyPeriodSummaryHateoasData(nino, businessId, taxYear, submissionId)

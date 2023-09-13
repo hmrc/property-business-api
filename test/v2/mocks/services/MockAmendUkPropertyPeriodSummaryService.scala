@@ -20,7 +20,7 @@ import api.controllers.RequestContext
 import api.services.ServiceOutcome
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
-import v2.models.request.amendUkPropertyPeriodSummary.AmendUkPropertyPeriodSummaryRequest
+import v2.models.request.amendUkPropertyPeriodSummary.AmendUkPropertyPeriodSummaryRequestData
 import v2.services.AmendUkPropertyPeriodSummaryService
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -31,9 +31,9 @@ trait MockAmendUkPropertyPeriodSummaryService extends MockFactory {
 
   object MockAmendUkPropertyService {
 
-    def amend(requestData: AmendUkPropertyPeriodSummaryRequest): CallHandler[Future[ServiceOutcome[Unit]]] = {
+    def amend(requestData: AmendUkPropertyPeriodSummaryRequestData): CallHandler[Future[ServiceOutcome[Unit]]] = {
       (mockService
-        .amendUkPropertyPeriodSummary(_: AmendUkPropertyPeriodSummaryRequest)(_: RequestContext, _: ExecutionContext))
+        .amendUkPropertyPeriodSummary(_: AmendUkPropertyPeriodSummaryRequestData)(_: RequestContext, _: ExecutionContext))
         .expects(requestData, *, *)
     }
 

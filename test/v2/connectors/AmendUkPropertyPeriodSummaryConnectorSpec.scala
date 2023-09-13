@@ -17,11 +17,11 @@
 package v2.connectors
 
 import api.connectors.{ConnectorSpec, DownstreamOutcome}
-import api.models.domain.{Nino, TaxYear}
+import api.models.domain.{BusinessId, Nino, SubmissionId, TaxYear}
 import api.models.errors.{DownstreamErrorCode, DownstreamErrors}
 import api.models.outcomes.ResponseWrapper
 import org.scalamock.handlers.CallHandler
-import v2.models.request.amendUkPropertyPeriodSummary.{AmendUkPropertyPeriodSummaryRequest, AmendUkPropertyPeriodSummaryRequestBody}
+import v2.models.request.amendUkPropertyPeriodSummary.{AmendUkPropertyPeriodSummaryRequestBody, AmendUkPropertyPeriodSummaryRequestData}
 
 import scala.concurrent.Future
 
@@ -95,8 +95,8 @@ class AmendUkPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
 
     private val requestBody: AmendUkPropertyPeriodSummaryRequestBody = AmendUkPropertyPeriodSummaryRequestBody(None, None)
 
-    protected val request: AmendUkPropertyPeriodSummaryRequest =
-      AmendUkPropertyPeriodSummaryRequest(Nino(nino), taxYear, businessId, submissionId, requestBody)
+    protected val request: AmendUkPropertyPeriodSummaryRequestData =
+      AmendUkPropertyPeriodSummaryRequestData(Nino(nino), taxYear, BusinessId(businessId), SubmissionId(submissionId), requestBody)
 
     protected def stubHttpResponse(outcome: DownstreamOutcome[Unit]): CallHandler[Future[DownstreamOutcome[Unit]]]#Derived = {
       willPut(

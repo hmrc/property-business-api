@@ -21,7 +21,7 @@ import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
 import uk.gov.hmrc.http.HeaderCarrier
 import v2.connectors.AmendUkPropertyPeriodSummaryConnector
-import v2.models.request.amendUkPropertyPeriodSummary.AmendUkPropertyPeriodSummaryRequest
+import v2.models.request.amendUkPropertyPeriodSummary.AmendUkPropertyPeriodSummaryRequestData
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -31,10 +31,10 @@ trait MockAmendUkPropertyPeriodSummaryConnector extends MockFactory {
 
   object MockAmendUkPropertyPeriodSummaryConnector {
 
-    def amendUkPropertyPeriodSummary(requestData: AmendUkPropertyPeriodSummaryRequest): CallHandler[Future[DownstreamOutcome[Unit]]] = {
+    def amendUkPropertyPeriodSummary(requestData: AmendUkPropertyPeriodSummaryRequestData): CallHandler[Future[DownstreamOutcome[Unit]]] = {
       (
         mockAmendUkPropertyPeriodSummaryConnector
-          .amendUkPropertyPeriodSummary(_: AmendUkPropertyPeriodSummaryRequest)(
+          .amendUkPropertyPeriodSummary(_: AmendUkPropertyPeriodSummaryRequestData)(
             _: HeaderCarrier,
             _: ExecutionContext,
             _: String

@@ -46,7 +46,7 @@ class AmendHistoricNonFhlUkPropertyPeriodSummaryControllerSpec
     with MockIdGenerator
     with MockAuditService {
 
-  private val periodId      = "somePeriodId"
+  private val periodId      = "2017-04-06_2017-07-04"
   private val mtdId: String = "test-mtd-id"
 
   "AmendHistoricNonFhlUkPropertyPeriodSummaryController" should {
@@ -105,7 +105,7 @@ class AmendHistoricNonFhlUkPropertyPeriodSummaryControllerSpec
     protected def event(auditResponse: AuditResponse, maybeRequestBody: Option[JsValue]): AuditEvent[FlattenedGenericAuditDetail] =
       AuditEvent(
         auditType = "AmendHistoricNonFhlPropertyIncomeExpensesPeriodSummary",
-        transactionName = "AmendHistoricNonFhlPropertyIncomeExpensesPeriodSummary",
+        transactionName = "amend-historic-non-fhl-property-income-expenses-period-summary",
         detail = FlattenedGenericAuditDetail(
           versionNumber = Some("2.0"),
           userDetails = UserDetails(mtdId, "Individual", None),

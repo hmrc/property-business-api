@@ -318,35 +318,62 @@ class CreateUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with JsonError
     "return Date Errors" when {
       "the fromDate format is invalid" in {
         val validator = setUpValidator()
-        validator.validate(
+        val result = validator.validate(
           CreateUkPropertyPeriodSummaryRawData(
             validNino,
             taxYear,
             validBusinessId,
             requestBodyJson.update("fromDate", JsString("2020.10.01"))
-          )) shouldBe List(FromDateFormatError)
+          ))
+        result shouldBe List(FromDateFormatError)
+      }
+
+      "the fromDate is out of range" in {
+        val validator = setUpValidator()
+        val result = validator.validate(
+          CreateUkPropertyPeriodSummaryRawData(
+            validNino,
+            taxYear,
+            validBusinessId,
+            requestBodyJson.update("fromDate", JsString("1569-10-01"))
+          ))
+        result shouldBe List(FromDateOutOfRangeError)
       }
 
       "the toDate format is invalid" in {
         val validator = setUpValidator()
-        validator.validate(
+        val result = validator.validate(
           CreateUkPropertyPeriodSummaryRawData(
             validNino,
             taxYear,
             validBusinessId,
             requestBodyJson.update("toDate", JsString("2020.10.01"))
-          )) shouldBe List(ToDateFormatError)
+          ))
+        result shouldBe List(ToDateFormatError)
+      }
+
+      "the toDate is out of range" in {
+        val validator = setUpValidator()
+        val result = validator.validate(
+          CreateUkPropertyPeriodSummaryRawData(
+            validNino,
+            taxYear,
+            validBusinessId,
+            requestBodyJson.update("toDate", JsString("3490-10-01"))
+          ))
+        result shouldBe List(ToDateOutOfRangeError)
       }
 
       "toDate is before fromDate" in {
         val validator = setUpValidator()
-        validator.validate(
+        val result = validator.validate(
           CreateUkPropertyPeriodSummaryRawData(
             validNino,
             taxYear,
             validBusinessId,
             requestBodyJson.update("fromDate", JsString("2090-01-01"))
-          )) shouldBe List(RuleToDateBeforeFromDateError)
+          ))
+        result shouldBe List(RuleToDateBeforeFromDateError)
       }
     }
 

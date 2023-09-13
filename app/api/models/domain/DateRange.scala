@@ -16,34 +16,14 @@
 
 package api.models.domain
 
-import play.api.libs.json.{JsString, Writes}
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
-case class PeriodId(value: String) {
+case class DateRange(startDate: LocalDate, endDate: LocalDate) {
+  val startDateAsIso: String = startDate.format(DateTimeFormatter.ISO_DATE)
+  val endDateAsIso: String   = endDate.format(DateTimeFormatter.ISO_DATE)
 
-  val (from, to): (String, String) = {
-    if (value.length == 21) {
-      val f = value.substring(0, 10)
-      val t = value.substring(11, 21)
-      (f, t)
-    } else {
-      ("", "")
-    }
-  }
-
-}
-
-object PeriodId {
-  implicit val writes: Writes[PeriodId] = Writes(x => JsString(x.value))
-
-  def apply(dateRange: DateRange): PeriodId = {
-    PeriodId(
-      dateRange.startDateAsIso,
-      dateRange.endDateAsIso
-    )
-  }
-
-  def apply(from: String, to: String): PeriodId = {
-    PeriodId(s"${from}_$to")
-  }
+  val startDateAsInt: Int = startDateAsIso.substring(0, 4).toInt
+  val endDateAsInt: Int   = endDateAsIso.substring(0, 4).toInt
 
 }

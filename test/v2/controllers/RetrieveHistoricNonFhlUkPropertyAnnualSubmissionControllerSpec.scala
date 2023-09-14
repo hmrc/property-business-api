@@ -19,15 +19,15 @@ package v2.controllers
 import api.controllers.{ControllerBaseSpec, ControllerTestRunner}
 import api.hateoas.{HateoasWrapper, MockHateoasFactory}
 import api.models.domain.{Nino, TaxYear}
-import api.models.errors._
+import api.models.errors.{ErrorWrapper, NinoFormatError, RuleTaxYearNotSupportedError}
 import api.models.outcomes.ResponseWrapper
 import api.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService}
 import mocks.MockIdGenerator
 import play.api.libs.json.{JsObject, JsValue, Json}
 import play.api.mvc.Result
-import v2.mocks.requestParsers.MockRetrieveHistoricNonFhlUkPropertyAnnualSubmissionRequestParser
+import v2.controllers.validators.MockRetrieveHistoricNonFhlUkPropertyAnnualSubmissionValidatorFactory
 import v2.mocks.services.MockRetrieveHistoricNonFhlUkPropertyAnnualSubmissionService
-import v2.models.request.retrieveHistoricNonFhlUkPropertyAnnualSubmission._
+import v2.models.request.retrieveHistoricNonFhlUkPropertyAnnualSubmission.RetrieveHistoricNonFhlUkPropertyAnnualSubmissionRequestData
 import v2.models.response.retrieveHistoricNonFhlUkPropertyAnnualSubmissionResponse._
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -39,19 +39,17 @@ class RetrieveHistoricNonFhlUkPropertyAnnualSubmissionControllerSpec
     with MockEnrolmentsAuthService
     with MockMtdIdLookupService
     with MockRetrieveHistoricNonFhlUkPropertyAnnualSubmissionService
-    with MockRetrieveHistoricNonFhlUkPropertyAnnualSubmissionRequestParser
+    with MockRetrieveHistoricNonFhlUkPropertyAnnualSubmissionValidatorFactory
     with MockHateoasFactory
     with MockAuditService
     with MockIdGenerator {
 
-  private val taxYear = "2020-21"
+  private val taxYear = TaxYear.fromMtd("2020-21")
 
   "RetrieveHistoricNonFhlUkPropertyAnnualSubmissionController" should {
     "return OK" when {
       "the request is valid" in new Test {
-        MockRetrieveHistoricNonFhlUkPropertyAnnualSubmissionRequestParser
-          .parse(rawData)
-          .returns(Right(requestData))
+        willUseValidator(returningSuccess(requestData))
 
         MockRetrieveHistoricNonFhlUkPropertyAnnualSubmissionService
           .retrieve(requestData)
@@ -67,17 +65,13 @@ class RetrieveHistoricNonFhlUkPropertyAnnualSubmissionControllerSpec
 
     "return the error as per spec" when {
       "the parser validation fails" in new Test {
-        MockRetrieveHistoricNonFhlUkPropertyAnnualSubmissionRequestParser
-          .parse(rawData)
-          .returns(Left(ErrorWrapper(correlationId, NinoFormatError, None)))
+        willUseValidator(returning(NinoFormatError))
 
         runErrorTest(NinoFormatError)
       }
 
       "the service returns an error" in new Test {
-        MockRetrieveHistoricNonFhlUkPropertyAnnualSubmissionRequestParser
-          .parse(rawData)
-          .returns(Right(requestData))
+        willUseValidator(returningSuccess(requestData))
 
         MockRetrieveHistoricNonFhlUkPropertyAnnualSubmissionService
           .retrieve(requestData)
@@ -88,25 +82,23 @@ class RetrieveHistoricNonFhlUkPropertyAnnualSubmissionControllerSpec
     }
   }
 
+// RetrieveHistoricNonFhlUkPropertyAnnualSubmissionValidatorFactory
   trait Test extends ControllerTest {
 
     private val controller = new RetrieveHistoricNonFhlUkPropertyAnnualSubmissionController(
       authService = mockEnrolmentsAuthService,
       lookupService = mockMtdIdLookupService,
-      parser = mockRetrieveHistoricNonFhlUkPropertyAnnualSubmissionRequestParser,
+      validatorFactory = mockRetrieveHistoricNonFhlUkPropertyAnnualSubmissionValidatorFactory,
       service = mockRetrieveHistoricNonFhlUkPropertyAnnualSubmissionService,
       hateoasFactory = mockHateoasFactory,
       cc = cc,
       idGenerator = mockIdGenerator
     )
 
-    protected def callController(): Future[Result] = controller.handleRequest(nino, taxYear)(fakeGetRequest)
+    protected def callController(): Future[Result] = controller.handleRequest(nino, taxYear.asMtd)(fakeGetRequest)
 
-    protected val rawData: RetrieveHistoricNonFhlUkPropertyAnnualSubmissionRawData =
-      RetrieveHistoricNonFhlUkPropertyAnnualSubmissionRawData(nino, taxYear)
-
-    protected val requestData: RetrieveHistoricNonFhlUkPropertyAnnualSubmissionRequest =
-      RetrieveHistoricNonFhlUkPropertyAnnualSubmissionRequest(Nino(nino), TaxYear.fromMtd(taxYear))
+    protected val requestData: RetrieveHistoricNonFhlUkPropertyAnnualSubmissionRequestData =
+      RetrieveHistoricNonFhlUkPropertyAnnualSubmissionRequestData(Nino(nino), taxYear)
 
     private val annualAdjustments = AnnualAdjustments(
       lossBroughtForward = Some(BigDecimal("200.00")),
@@ -130,7 +122,7 @@ class RetrieveHistoricNonFhlUkPropertyAnnualSubmissionControllerSpec
       RetrieveHistoricNonFhlUkPropertyAnnualSubmissionResponse(Some(annualAdjustments), Some(annualAllowances))
 
     protected val hateoasData: RetrieveHistoricNonFhlUkPropertyAnnualSubmissionHateoasData =
-      RetrieveHistoricNonFhlUkPropertyAnnualSubmissionHateoasData(nino, taxYear)
+      RetrieveHistoricNonFhlUkPropertyAnnualSubmissionHateoasData(nino, taxYear.asMtd)
 
     private val responseBodyJson: JsValue = Json.parse("""
                                                          |{

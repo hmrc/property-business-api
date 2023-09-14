@@ -23,7 +23,7 @@ import api.models.outcomes.ResponseWrapper
 import support.UnitSpec
 import uk.gov.hmrc.http.HeaderCarrier
 import v2.mocks.connectors.MockRetrieveHistoricFhlUkPropertyPeriodSummaryConnector
-import v2.models.request.retrieveHistoricFhlUkPiePeriodSummary.RetrieveHistoricFhlUkPiePeriodSummaryRequest
+import v2.models.request.retrieveHistoricFhlUkPiePeriodSummary.RetrieveHistoricFhlUkPiePeriodSummaryRequestData
 import v2.models.response.retrieveHistoricFhlUkPiePeriodSummary.RetrieveHistoricFhlUkPiePeriodSummaryResponse
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -31,8 +31,8 @@ import scala.concurrent.Future
 
 class RetrieveHistoricFhlUkPropertyPeriodSummaryServiceSpec extends UnitSpec {
 
-  private val nino: String = "AA123456A"
-  private val periodId     = "2017-04-06_2017-07-04"
+  private val nino     = Nino("AA123456A")
+  private val periodId = PeriodId("2017-04-06_2017-07-04")
 
   implicit private val correlationId: String = "X-123"
 
@@ -82,7 +82,8 @@ class RetrieveHistoricFhlUkPropertyPeriodSummaryServiceSpec extends UnitSpec {
       connector = mockRetrieveHistoricFhlUkPropertyPeriodSummaryConnector
     )
 
-    protected val request: RetrieveHistoricFhlUkPiePeriodSummaryRequest = RetrieveHistoricFhlUkPiePeriodSummaryRequest(Nino(nino), PeriodId(periodId))
+    protected val request: RetrieveHistoricFhlUkPiePeriodSummaryRequestData =
+      RetrieveHistoricFhlUkPiePeriodSummaryRequestData(nino, periodId)
 
     protected val response: RetrieveHistoricFhlUkPiePeriodSummaryResponse =
       RetrieveHistoricFhlUkPiePeriodSummaryResponse("2017-04-06", "2017-07-04", None, None)

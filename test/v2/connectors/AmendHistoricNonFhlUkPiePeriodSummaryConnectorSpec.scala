@@ -20,7 +20,10 @@ import api.connectors.{ConnectorSpec, DownstreamOutcome}
 import api.models.domain.{Nino, PeriodId}
 import api.models.outcomes.ResponseWrapper
 import org.scalamock.handlers.CallHandler
-import v2.models.request.amendHistoricNonFhlUkPiePeriodSummary.{AmendHistoricNonFhlUkPiePeriodSummaryRequest, AmendHistoricNonFhlUkPiePeriodSummaryRequestBody}
+import v2.models.request.amendHistoricNonFhlUkPiePeriodSummary.{
+  AmendHistoricNonFhlUkPeriodSummaryRequestData,
+  AmendHistoricNonFhlUkPeriodSummaryRequestBody
+}
 import v2.models.response.amendHistoricNonFhlUkPiePeriodSummary.AmendHistoricNonFhlUkPiePeriodSummaryResponse
 
 import scala.concurrent.Future
@@ -54,10 +57,12 @@ class AmendHistoricNonFhlUkPiePeriodSummaryConnectorSpec extends ConnectorSpec {
       appConfig = mockAppConfig
     )
 
-    private val requestBody: AmendHistoricNonFhlUkPiePeriodSummaryRequestBody = AmendHistoricNonFhlUkPiePeriodSummaryRequestBody(None, None)
-    protected val request: AmendHistoricNonFhlUkPiePeriodSummaryRequest = AmendHistoricNonFhlUkPiePeriodSummaryRequest(nino, periodId, requestBody)
+    private val requestBody: AmendHistoricNonFhlUkPeriodSummaryRequestBody = AmendHistoricNonFhlUkPeriodSummaryRequestBody(None, None)
 
-    def pathFrom(request: AmendHistoricNonFhlUkPiePeriodSummaryRequest): String =
+    protected val request: AmendHistoricNonFhlUkPeriodSummaryRequestData =
+      AmendHistoricNonFhlUkPeriodSummaryRequestData(nino, periodId, requestBody)
+
+    def pathFrom(request: AmendHistoricNonFhlUkPeriodSummaryRequestData): String =
       s"income-tax/nino/${request.nino.value}/uk-properties/other/periodic-summaries" +
         s"?from=${request.periodId.from}" +
         s"&to=${request.periodId.to}"

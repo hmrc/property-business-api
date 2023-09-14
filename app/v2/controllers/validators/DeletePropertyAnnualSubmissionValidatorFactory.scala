@@ -29,6 +29,8 @@ import javax.inject.{Inject, Singleton}
 @Singleton
 class DeletePropertyAnnualSubmissionValidatorFactory @Inject() (appConfig: AppConfig) {
 
+  private lazy val minimumTaxYear = appConfig.minimumTaxV2Foreign + 1
+
   def validator(nino: String, businessId: String, taxYear: String): Validator[DeletePropertyAnnualSubmissionRequestData] =
     new Validator[DeletePropertyAnnualSubmissionRequestData] {
 
@@ -36,7 +38,7 @@ class DeletePropertyAnnualSubmissionValidatorFactory @Inject() (appConfig: AppCo
         (
           ResolveNino(nino),
           ResolveBusinessId(businessId),
-          ResolveTaxYear(appConfig.minimumTaxV2Foreign + 1, taxYear, None, None)
+          ResolveTaxYear(minimumTaxYear, taxYear, None, None)
         ).mapN(DeletePropertyAnnualSubmissionRequestData)
 
     }

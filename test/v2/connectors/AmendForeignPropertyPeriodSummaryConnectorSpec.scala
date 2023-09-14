@@ -17,7 +17,7 @@
 package v2.connectors
 
 import api.connectors.{ConnectorSpec, DownstreamOutcome}
-import api.models.domain.{Nino, TaxYear}
+import api.models.domain.{BusinessId, Nino, SubmissionId, TaxYear}
 import api.models.errors.{DownstreamErrorCode, DownstreamErrors}
 import api.models.outcomes.ResponseWrapper
 import org.scalamock.handlers.CallHandler
@@ -110,8 +110,8 @@ class AmendForeignPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
 
     private val requestBody: AmendForeignPropertyPeriodSummaryRequestBody = AmendForeignPropertyPeriodSummaryRequestBody(None, None)
 
-    protected val request: AmendForeignPropertyPeriodSummaryRequest =
-      AmendForeignPropertyPeriodSummaryRequest(Nino(nino), businessId, taxYear, submissionId, requestBody)
+    protected val request: AmendForeignPropertyPeriodSummaryRequestData =
+      AmendForeignPropertyPeriodSummaryRequestData(Nino(nino), BusinessId(businessId), taxYear, SubmissionId(submissionId), requestBody)
 
     protected def stubHttpResponse(outcome: DownstreamOutcome[Unit]): CallHandler[Future[DownstreamOutcome[Unit]]]#Derived = {
       willPut(

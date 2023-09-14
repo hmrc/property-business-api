@@ -17,7 +17,7 @@
 package v2.services
 
 import api.controllers.EndpointLogContext
-import api.models.domain.{Nino, TaxYear}
+import api.models.domain.{BusinessId, Nino, SubmissionId, TaxYear}
 import api.models.errors._
 import api.models.outcomes.ResponseWrapper
 import api.services.ServiceSpec
@@ -29,10 +29,10 @@ import scala.concurrent.Future
 
 class AmendForeignPropertyPeriodSummaryServiceSpec extends ServiceSpec {
 
-  private val nino: String         = "AA123456A"
-  private val businessId: String   = "XAIS12345678910"
-  private val taxYear: TaxYear     = TaxYear.fromMtd("2020-21")
-  private val submissionId: String = "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
+  private val nino         = Nino("AA123456A")
+  private val businessId   = BusinessId("XAIS12345678910")
+  private val taxYear      = TaxYear.fromMtd("2020-21")
+  private val submissionId = SubmissionId("4557ecb5-fd32-48cc-81f5-e6acd1099f3c")
 
   implicit private val correlationId: String = "X-123"
 
@@ -98,8 +98,8 @@ class AmendForeignPropertyPeriodSummaryServiceSpec extends ServiceSpec {
 
     protected val requestBody: AmendForeignPropertyPeriodSummaryRequestBody = AmendForeignPropertyPeriodSummaryRequestBody(None, None)
 
-    protected val request: AmendForeignPropertyPeriodSummaryRequest =
-      AmendForeignPropertyPeriodSummaryRequest(Nino(nino), businessId, taxYear, submissionId, requestBody)
+    protected val request: AmendForeignPropertyPeriodSummaryRequestData =
+      AmendForeignPropertyPeriodSummaryRequestData(nino, businessId, taxYear, submissionId, requestBody)
 
   }
 

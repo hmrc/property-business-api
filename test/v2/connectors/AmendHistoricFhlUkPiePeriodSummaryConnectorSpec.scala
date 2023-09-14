@@ -20,7 +20,10 @@ import api.connectors.{ConnectorSpec, DownstreamOutcome}
 import api.models.domain.{Nino, PeriodId}
 import api.models.outcomes.ResponseWrapper
 import org.scalamock.handlers.CallHandler
-import v2.models.request.amendHistoricFhlUkPiePeriodSummary.{AmendHistoricFhlUkPiePeriodSummaryRequest, AmendHistoricFhlUkPiePeriodSummaryRequestBody}
+import v2.models.request.amendHistoricFhlUkPiePeriodSummary.{
+  AmendHistoricFhlUkPiePeriodSummaryRequestData,
+  AmendHistoricFhlUkPiePeriodSummaryRequestBody
+}
 import v2.models.response.amendHistoricFhlUkPiePeriodSummary.AmendHistoricFhlUkPiePeriodSummaryResponse
 
 import scala.concurrent.Future
@@ -55,9 +58,9 @@ class AmendHistoricFhlUkPiePeriodSummaryConnectorSpec extends ConnectorSpec {
     )
 
     private val requestBody: AmendHistoricFhlUkPiePeriodSummaryRequestBody = AmendHistoricFhlUkPiePeriodSummaryRequestBody(None, None)
-    protected val request: AmendHistoricFhlUkPiePeriodSummaryRequest       = AmendHistoricFhlUkPiePeriodSummaryRequest(nino, periodId, requestBody)
+    protected val request: AmendHistoricFhlUkPiePeriodSummaryRequestData = AmendHistoricFhlUkPiePeriodSummaryRequestData(nino, periodId, requestBody)
 
-    def pathFrom(request: AmendHistoricFhlUkPiePeriodSummaryRequest): String =
+    def pathFrom(request: AmendHistoricFhlUkPiePeriodSummaryRequestData): String =
       s"income-tax/nino/${request.nino.value}/uk-properties/furnished-holiday-lettings/periodic-summaries" +
         s"?from=${request.periodId.from}" +
         s"&to=${request.periodId.to}"

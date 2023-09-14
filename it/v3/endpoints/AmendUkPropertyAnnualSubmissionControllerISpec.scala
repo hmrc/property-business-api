@@ -16,7 +16,7 @@
 
 package v3.endpoints
 
-import api.models.errors.{BadRequestError, BusinessIdFormatError, DateFormatError, ErrorWrapper, InternalError, MtdError, NinoFormatError, NotFoundError, RuleBothAllowancesSuppliedError, RuleBuildingNameNumberError, RuleIncorrectOrEmptyBodyError, RulePropertyIncomeAllowanceError, RuleTaxYearNotSupportedError, RuleTaxYearRangeInvalidError, RuleTypeOfBusinessIncorrectError, StringFormatError, TaxYearFormatError, ValueFormatError}
+import api.models.errors._
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import play.api.http.HeaderNames.ACCEPT
 import play.api.http.Status._
@@ -326,10 +326,10 @@ class AmendUkPropertyAnnualSubmissionControllerISpec extends IntegrationBaseSpec
                 "/ukNonFhlProperty/allowances/costOfReplacingDomesticGoods",
                 "/ukNonFhlProperty/allowances/electricChargePointAllowance",
                 "/ukNonFhlProperty/allowances/zeroEmissionsCarAllowance",
-                "/ukNonFhlProperty/allowances/structuredBuildingAllowance/0/amount",
                 "/ukNonFhlProperty/allowances/structuredBuildingAllowance/0/firstYear/qualifyingAmountExpenditure",
-                "/ukNonFhlProperty/allowances/enhancedStructuredBuildingAllowance/0/amount",
-                "/ukNonFhlProperty/allowances/enhancedStructuredBuildingAllowance/0/firstYear/qualifyingAmountExpenditure"
+                "/ukNonFhlProperty/allowances/structuredBuildingAllowance/0/amount",
+                "/ukNonFhlProperty/allowances/enhancedStructuredBuildingAllowance/0/firstYear/qualifyingAmountExpenditure",
+                "/ukNonFhlProperty/allowances/enhancedStructuredBuildingAllowance/0/amount"
               ))
           )
         )
@@ -792,10 +792,10 @@ class AmendUkPropertyAnnualSubmissionControllerISpec extends IntegrationBaseSpec
             "/ukNonFhlProperty/allowances/costOfReplacingDomesticGoods",
             "/ukNonFhlProperty/allowances/electricChargePointAllowance",
             "/ukNonFhlProperty/allowances/zeroEmissionsCarAllowance",
-            "/ukNonFhlProperty/allowances/structuredBuildingAllowance/0/amount",
             "/ukNonFhlProperty/allowances/structuredBuildingAllowance/0/firstYear/qualifyingAmountExpenditure",
-            "/ukNonFhlProperty/allowances/enhancedStructuredBuildingAllowance/0/amount",
-            "/ukNonFhlProperty/allowances/enhancedStructuredBuildingAllowance/0/firstYear/qualifyingAmountExpenditure"
+            "/ukNonFhlProperty/allowances/structuredBuildingAllowance/0/amount",
+            "/ukNonFhlProperty/allowances/enhancedStructuredBuildingAllowance/0/firstYear/qualifyingAmountExpenditure",
+            "/ukNonFhlProperty/allowances/enhancedStructuredBuildingAllowance/0/amount"
           ))
       )
 
@@ -863,7 +863,7 @@ class AmendUkPropertyAnnualSubmissionControllerISpec extends IntegrationBaseSpec
           }
         }
 
-        val input = Seq(
+        val input = List(
           ("AA1123A", "XAIS12345678910", "2022-23", validRequestBodyJson, BAD_REQUEST, NinoFormatError),
           ("AA123456A", "XAIS12345678910", "202362-23", validRequestBodyJson, BAD_REQUEST, TaxYearFormatError),
           ("AA123456A", "XAIS1234dfxgchjbn5678910", "2022-23", validRequestBodyJson, BAD_REQUEST, BusinessIdFormatError),
@@ -896,7 +896,7 @@ class AmendUkPropertyAnnualSubmissionControllerISpec extends IntegrationBaseSpec
           }
         }
 
-        val errors = Seq(
+        val errors = List(
           (BAD_REQUEST, "INVALID_TAXABLE_ENTITY_ID", BAD_REQUEST, NinoFormatError),
           (BAD_REQUEST, "INVALID_TAX_YEAR", BAD_REQUEST, TaxYearFormatError),
           (BAD_REQUEST, "INVALID_INCOMESOURCEID", BAD_REQUEST, BusinessIdFormatError),
@@ -912,7 +912,7 @@ class AmendUkPropertyAnnualSubmissionControllerISpec extends IntegrationBaseSpec
           (SERVICE_UNAVAILABLE, "SERVICE_UNAVAILABLE", INTERNAL_SERVER_ERROR, InternalError)
         )
 
-        val extraTysErrors = Seq(
+        val extraTysErrors = List(
           (INTERNAL_SERVER_ERROR, "MISSING_EXPENSES", INTERNAL_SERVER_ERROR, InternalError),
           (UNPROCESSABLE_ENTITY, "FIELD_CONFLICT", BAD_REQUEST, RulePropertyIncomeAllowanceError)
         )

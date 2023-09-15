@@ -18,4 +18,4 @@ package v2.models.request.createHistoricNonFhlUkPropertyPeriodSummary
 
 import api.models.domain.Nino
 
-case class CreateHistoricNonFhlUkPropertyPeriodSummaryRequest(nino: Nino, body: CreateHistoricNonFhlUkPropertyPeriodSummaryRequestBody)
+case class CreateHistoricNonFhlUkPropertyPeriodSummaryRequestData(nino: Nino, body: CreateHistoricNonFhlUkPropertyPeriodSummaryRequestBody)

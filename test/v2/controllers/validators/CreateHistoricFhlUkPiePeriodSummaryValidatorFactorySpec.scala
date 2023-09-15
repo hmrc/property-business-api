@@ -153,7 +153,7 @@ class CreateHistoricFhlUkPiePeriodSummaryValidatorFactorySpec extends UnitSpec w
             ValueFormatError.withPaths(List("/income/periodAmount", "/income/taxDeducted", "/expenses/consolidatedExpenses"))))
       }
 
-      "passed an empty" in {
+      "passed an empty body" in {
         val invalidBody = JsObject.empty
 
         val result: Either[ErrorWrapper, CreateHistoricFhlUkPiePeriodSummaryRequestData] =

@@ -16,26 +16,6 @@
 
 package v2.models.request.createHistoricFhlUkPiePeriodSummary
 
-import play.api.libs.json.Json
-import support.UnitSpec
+import api.models.domain.Nino
 
-class CreateHistoricFhlUkPiePeriodSummaryRawDataSpec extends UnitSpec {
-
-  "writes" must {
-    "work" in {
-      Json.toJson(CreateHistoricFhlUkPiePeriodSummaryRawData(nino = "some-nino", body = Json.obj("bodyField" -> "value"))) shouldBe
-        Json.parse(
-          """
-            |{
-            | "nino": "some-nino",
-            | "request": {
-            |   "bodyField": "value"
-            |   }
-            | }
-            |""".stripMargin
-        )
-
-    }
-  }
-
-}
+case class CreateHistoricFhlUkPiePeriodSummaryRequestData(nino: Nino, body: CreateHistoricFhlUkPiePeriodSummaryRequestBody)

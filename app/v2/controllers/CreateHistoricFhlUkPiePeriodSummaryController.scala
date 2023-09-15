@@ -18,27 +18,22 @@ package v2.controllers
 
 import api.controllers._
 import api.hateoas.HateoasFactory
-import api.models.audit.{AuditEvent, AuditResponse, FlattenedGenericAuditDetail}
-import api.models.auth.UserDetails
-import api.models.errors._
 import api.services.{AuditService, EnrolmentsAuthService, MtdIdLookupService}
 import play.api.libs.json.JsValue
 import play.api.mvc.{Action, ControllerComponents}
-import uk.gov.hmrc.http.HeaderCarrier
-import uk.gov.hmrc.play.audit.http.connector.AuditResult
+import routing.{Version, Version2}
 import utils.IdGenerator
-import v2.controllers.requestParsers.CreateHistoricFhlUkPiePeriodSummaryRequestParser
-import v2.models.request.createHistoricFhlUkPiePeriodSummary.CreateHistoricFhlUkPiePeriodSummaryRawData
+import v2.controllers.validators.CreateHistoricFhlUkPiePeriodSummaryValidatorFactory
 import v2.models.response.createHistoricFhlUkPiePeriodSummary.CreateHistoricFhlUkPiePeriodSummaryHateoasData
 import v2.services.CreateHistoricFhlUkPiePeriodSummaryService
 
 import javax.inject.{Inject, Singleton}
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.ExecutionContext
 
 @Singleton
 class CreateHistoricFhlUkPiePeriodSummaryController @Inject() (val authService: EnrolmentsAuthService,
                                                                val lookupService: MtdIdLookupService,
-                                                               parser: CreateHistoricFhlUkPiePeriodSummaryRequestParser,
+                                                               validatorFactory: CreateHistoricFhlUkPiePeriodSummaryValidatorFactory,
                                                                service: CreateHistoricFhlUkPiePeriodSummaryService,
                                                                auditService: AuditService,
                                                                hateoasFactory: HateoasFactory,
@@ -49,63 +44,32 @@ class CreateHistoricFhlUkPiePeriodSummaryController @Inject() (val authService: 
   implicit val endpointLogContext: EndpointLogContext =
     EndpointLogContext(
       controllerName = "CreateHistoricFhlUkPiePeriodSummaryController",
-      endpointName = "Create a Historic UK Furnished Holiday Letting Property Income & Expenses Period Summary"
+      endpointName = "createHistoricFhlUkPropertyIncomeAndExpensesPeriodSummary"
     )
 
   def handleRequest(nino: String): Action[JsValue] =
     authorisedAction(nino).async(parse.json) { implicit request =>
       implicit val ctx: RequestContext = RequestContext.from(idGenerator, endpointLogContext)
 
-      val rawData = CreateHistoricFhlUkPiePeriodSummaryRawData(nino, request.body)
+      val validator = validatorFactory.validator(nino, request.body)
 
       val requestHandler =
-        RequestHandlerOld
-          .withParser(parser)
+        RequestHandler
+          .withValidator(validator)
           .withService(service.createPeriodSummary)
-          .withAuditing(auditHandler(nino, ctx.correlationId, request))
+          .withAuditing(
+            AuditHandler(
+              auditService,
+              "CreateHistoricFhlPropertyIncomeExpensesPeriodSummary",
+              "create-historic-fhl-property-income-expenses-period-summary",
+              Version.from(request, orElse = Version2),
+              Map("nino" -> nino),
+              Some(request.body)
+            )
+          )
           .withHateoasResultFrom(hateoasFactory)((_, response) => CreateHistoricFhlUkPiePeriodSummaryHateoasData(nino, response.periodId), CREATED)
 
-      requestHandler.handleRequest(rawData)
+      requestHandler.handleRequest()
     }
-
-  private def auditHandler(nino: String, correlationId: String, request: UserRequest[JsValue]): AuditHandlerOld = {
-    new AuditHandlerOld() {
-      override def performAudit(userDetails: UserDetails, httpStatus: Int, response: Either[ErrorWrapper, Option[JsValue]], versionNumber: String)(
-          implicit
-          ctx: RequestContext,
-          ec: ExecutionContext): Unit = {
-        response match {
-          case Left(err: ErrorWrapper) =>
-            auditSubmission(
-              FlattenedGenericAuditDetail(
-                Some("2.0"),
-                request.userDetails,
-                Map("nino" -> nino),
-                Some(request.body),
-                correlationId,
-                AuditResponse(httpStatus, Left(err.auditErrors))
-              )
-            )
-          case Right(_) =>
-            auditSubmission(
-              FlattenedGenericAuditDetail(
-                Some("2.0"),
-                request.userDetails,
-                Map("nino" -> nino),
-                Some(request.body),
-                correlationId,
-                AuditResponse(CREATED, Right(None))
-              )
-            )
-        }
-      }
-    }
-  }
-
-  private def auditSubmission(details: FlattenedGenericAuditDetail)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[AuditResult] = {
-    val event =
-      AuditEvent("CreateHistoricFhlPropertyIncomeExpensesPeriodSummary", "CreateHistoricFhlPropertyIncomeExpensesPeriodSummary", details)
-    auditService.auditEvent(event)
-  }
 
 }

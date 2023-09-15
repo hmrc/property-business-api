@@ -53,7 +53,9 @@ class CreateHistoricFhlUkPiePeriodSummaryConnectorSpec extends ConnectorSpec {
     protected val requestBody: CreateHistoricFhlUkPiePeriodSummaryRequestBody =
       CreateHistoricFhlUkPiePeriodSummaryRequestBody(fromDate, toDate, None, None)
 
-    protected val requestData: CreateHistoricFhlUkPiePeriodSummaryRequest = CreateHistoricFhlUkPiePeriodSummaryRequest(Nino(nino), requestBody)
+    protected val requestData: CreateHistoricFhlUkPiePeriodSummaryRequestData =
+      CreateHistoricFhlUkPiePeriodSummaryRequestData(Nino(nino), requestBody)
+
   }
 
 }

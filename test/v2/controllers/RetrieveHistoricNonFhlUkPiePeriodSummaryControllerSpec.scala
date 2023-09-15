@@ -25,7 +25,7 @@ import api.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLooku
 import mocks.MockIdGenerator
 import play.api.libs.json.{JsObject, JsValue, Json}
 import play.api.mvc.Result
-import v2.mocks.requestParsers.MockRetrieveHistoricNonFhlUkPiePeriodSummaryRequestParser
+import v2.controllers.validators.MockRetrieveHistoricNonFhlUkPiePeriodSummaryValidatorFactory
 import v2.mocks.services.MockRetrieveHistoricNonFhlUkPiePeriodSummaryService
 import v2.models.request.retrieveHistoricNonFhlUkPiePeriodSummary._
 import v2.models.response.retrieveHistoricNonFhlUkPiePeriodSummary._
@@ -39,7 +39,7 @@ class RetrieveHistoricNonFhlUkPiePeriodSummaryControllerSpec
     with MockEnrolmentsAuthService
     with MockMtdIdLookupService
     with MockRetrieveHistoricNonFhlUkPiePeriodSummaryService
-    with MockRetrieveHistoricNonFhlUkPiePeriodSummaryRequestParser
+    with MockRetrieveHistoricNonFhlUkPiePeriodSummaryValidatorFactory
     with MockHateoasFactory
     with MockAuditService
     with MockIdGenerator {
@@ -51,9 +51,7 @@ class RetrieveHistoricNonFhlUkPiePeriodSummaryControllerSpec
   "RetrieveHistoricNonFhlUkPiePeriodSummaryController" should {
     "return OK" when {
       "the request is valid" in new Test {
-        MockRetrieveHistoricNonFhlUkPiePeriodSummaryRequestParser
-          .parse(rawData)
-          .returns(Right(requestData))
+        willUseValidator(returningSuccess(requestData))
 
         MockRetrieveHistoricNonFhlUkPiePeriodSummaryService
           .retrieve(requestData)
@@ -69,23 +67,19 @@ class RetrieveHistoricNonFhlUkPiePeriodSummaryControllerSpec
 
     "return the error as per spec" when {
       "the parser validation fails" in new Test {
-        MockRetrieveHistoricNonFhlUkPiePeriodSummaryRequestParser
-          .parse(rawData)
-          .returns(Left(ErrorWrapper(correlationId, NinoFormatError, None)))
+        willUseValidator(returning(NinoFormatError))
 
-        runErrorTest(NinoFormatError)
+        runErrorTest(expectedError = NinoFormatError)
       }
 
       "the service returns an error" in new Test {
-        MockRetrieveHistoricNonFhlUkPiePeriodSummaryRequestParser
-          .parse(rawData)
-          .returns(Right(requestData))
+        willUseValidator(returningSuccess(requestData))
 
         MockRetrieveHistoricNonFhlUkPiePeriodSummaryService
           .retrieve(requestData)
           .returns(Future.successful(Left(ErrorWrapper(correlationId, RuleTaxYearNotSupportedError))))
 
-        runErrorTest(RuleTaxYearNotSupportedError)
+        runErrorTest(expectedError = RuleTaxYearNotSupportedError)
       }
     }
   }
@@ -95,7 +89,7 @@ class RetrieveHistoricNonFhlUkPiePeriodSummaryControllerSpec
     private val controller = new RetrieveHistoricNonFhlUkPiePeriodSummaryController(
       authService = mockEnrolmentsAuthService,
       lookupService = mockMtdIdLookupService,
-      parser = mockRetrieveHistoricNonFhlUkPiePeriodSummaryRequestParser,
+      validatorFactory = mockRetrieveHistoricNonFhlUkPiePeriodSummaryValidatorFactory,
       service = mockRetrieveHistoricNonFhlUkPiePeriodSummaryService,
       hateoasFactory = mockHateoasFactory,
       cc = cc,
@@ -104,10 +98,8 @@ class RetrieveHistoricNonFhlUkPiePeriodSummaryControllerSpec
 
     protected def callController(): Future[Result] = controller.handleRequest(nino, periodId)(fakeGetRequest)
 
-    protected val rawData: RetrieveHistoricNonFhlUkPiePeriodSummaryRawData = RetrieveHistoricNonFhlUkPiePeriodSummaryRawData(nino, periodId)
-
-    protected val requestData: RetrieveHistoricNonFhlUkPiePeriodSummaryRequest =
-      RetrieveHistoricNonFhlUkPiePeriodSummaryRequest(Nino(nino), PeriodId(periodId))
+    protected val requestData: RetrieveHistoricNonFhlUkPiePeriodSummaryRequestData =
+      RetrieveHistoricNonFhlUkPiePeriodSummaryRequestData(Nino(nino), PeriodId(periodId))
 
     private val periodIncome: PeriodIncome =
       PeriodIncome(Some(5000.99), Some(5000.99), Some(5000.99), Some(5000.99), Some(5000.99), Some(RentARoomIncome(Some(5000.99))))

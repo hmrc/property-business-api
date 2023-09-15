@@ -21,7 +21,7 @@ import api.models.domain.{Nino, PeriodId}
 import api.models.errors.{DownstreamErrorCode, DownstreamErrors}
 import api.models.outcomes.ResponseWrapper
 import org.scalamock.handlers.CallHandler
-import v2.models.request.retrieveHistoricNonFhlUkPiePeriodSummary.RetrieveHistoricNonFhlUkPiePeriodSummaryRequest
+import v2.models.request.retrieveHistoricNonFhlUkPiePeriodSummary.RetrieveHistoricNonFhlUkPiePeriodSummaryRequestData
 import v2.models.response.retrieveHistoricNonFhlUkPiePeriodSummary.RetrieveHistoricNonFhlUkPiePeriodSummaryResponse
 
 import scala.concurrent.Future
@@ -74,8 +74,8 @@ class RetrieveHistoricNonFhlUkPropertyPeriodSummaryConnectorSpec extends Connect
       ).returns(Future.successful(outcome))
     }
 
-    protected val request: RetrieveHistoricNonFhlUkPiePeriodSummaryRequest =
-      RetrieveHistoricNonFhlUkPiePeriodSummaryRequest(Nino(nino), PeriodId(periodId))
+    protected val request: RetrieveHistoricNonFhlUkPiePeriodSummaryRequestData =
+      RetrieveHistoricNonFhlUkPiePeriodSummaryRequestData(Nino(nino), PeriodId(periodId))
 
     protected val response: RetrieveHistoricNonFhlUkPiePeriodSummaryResponse =
       RetrieveHistoricNonFhlUkPiePeriodSummaryResponse(periodIdFrom, periodIdTo, None, None)

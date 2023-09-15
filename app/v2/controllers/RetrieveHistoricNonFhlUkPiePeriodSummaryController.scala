@@ -16,13 +16,12 @@
 
 package v2.controllers
 
-import api.controllers.{AuthorisedController, EndpointLogContext, RequestContext, RequestHandlerOld}
+import api.controllers.{AuthorisedController, EndpointLogContext, RequestContext, RequestHandler}
 import api.hateoas.HateoasFactory
 import api.services.{EnrolmentsAuthService, MtdIdLookupService}
 import play.api.mvc.{Action, AnyContent, ControllerComponents}
 import utils.IdGenerator
-import v2.controllers.requestParsers.RetrieveHistoricNonFhlUkPropertyPeriodSummaryRequestParser
-import v2.models.request.retrieveHistoricNonFhlUkPiePeriodSummary.RetrieveHistoricNonFhlUkPiePeriodSummaryRawData
+import v2.controllers.validators.RetrieveHistoricNonFhlUkPropertyPeriodSummaryValidatorFactory
 import v2.models.response.retrieveHistoricNonFhlUkPiePeriodSummary.RetrieveHistoricNonFhlUkPiePeriodSummaryHateoasData
 import v2.services.RetrieveHistoricNonFhlUkPropertyPeriodSummaryService
 
@@ -32,7 +31,7 @@ import scala.concurrent.ExecutionContext
 @Singleton
 class RetrieveHistoricNonFhlUkPiePeriodSummaryController @Inject() (val authService: EnrolmentsAuthService,
                                                                     val lookupService: MtdIdLookupService,
-                                                                    parser: RetrieveHistoricNonFhlUkPropertyPeriodSummaryRequestParser,
+                                                                    validatorFactory: RetrieveHistoricNonFhlUkPropertyPeriodSummaryValidatorFactory,
                                                                     service: RetrieveHistoricNonFhlUkPropertyPeriodSummaryService,
                                                                     hateoasFactory: HateoasFactory,
                                                                     cc: ControllerComponents,
@@ -48,15 +47,15 @@ class RetrieveHistoricNonFhlUkPiePeriodSummaryController @Inject() (val authServ
     authorisedAction(nino).async { implicit request =>
       implicit val ctx: RequestContext = RequestContext.from(idGenerator, endpointLogContext)
 
-      val rawData = RetrieveHistoricNonFhlUkPiePeriodSummaryRawData(nino, periodId)
+      val validator = validatorFactory.validator(nino, periodId)
 
       val requestHandler =
-        RequestHandlerOld
-          .withParser(parser)
+        RequestHandler
+          .withValidator(validator)
           .withService(service.retrieve)
           .withHateoasResult(hateoasFactory)(RetrieveHistoricNonFhlUkPiePeriodSummaryHateoasData(nino, periodId))
 
-      requestHandler.handleRequest(rawData)
+      requestHandler.handleRequest()
     }
 
 }

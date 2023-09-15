@@ -69,7 +69,7 @@ class RetrieveHistoricNonFhlUkPiePeriodSummaryControllerSpec
       "the parser validation fails" in new Test {
         willUseValidator(returning(NinoFormatError))
 
-        runErrorTest(expectedError = NinoFormatError)
+        runErrorTest(NinoFormatError)
       }
 
       "the service returns an error" in new Test {
@@ -79,7 +79,7 @@ class RetrieveHistoricNonFhlUkPiePeriodSummaryControllerSpec
           .retrieve(requestData)
           .returns(Future.successful(Left(ErrorWrapper(correlationId, RuleTaxYearNotSupportedError))))
 
-        runErrorTest(expectedError = RuleTaxYearNotSupportedError)
+        runErrorTest(RuleTaxYearNotSupportedError)
       }
     }
   }

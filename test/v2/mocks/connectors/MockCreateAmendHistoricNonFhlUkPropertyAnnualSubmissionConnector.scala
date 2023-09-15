@@ -21,7 +21,7 @@ import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
 import uk.gov.hmrc.http.HeaderCarrier
 import v2.connectors.CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionConnector
-import v2.models.request.createAmendHistoricNonFhlUkPropertyAnnualSubmission.CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequest
+import v2.models.request.createAmendHistoricNonFhlUkPropertyAnnualSubmission.CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestData
 import v2.models.response.createAmendHistoricNonFhlUkPropertyAnnualSubmission.CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionResponse
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -33,11 +33,11 @@ trait MockCreateAmendHistoricNonFhlUkPropertyAnnualSubmissionConnector extends M
 
   object MockCreateAmendHistoricNonFhlUkPropertyAnnualSubmissionConnector {
 
-    def amend(requestData: CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequest)
+    def amend(requestData: CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestData)
         : CallHandler[Future[DownstreamOutcome[CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionResponse]]] = {
       (
         mockCreateAmendHistoricNonFhlUkPropertyAnnualSubmissionConnector
-          .amend(_: CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequest)(
+          .amend(_: CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestData)(
             _: HeaderCarrier,
             _: ExecutionContext,
             _: String

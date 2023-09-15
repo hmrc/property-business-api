@@ -18,6 +18,6 @@ package v2.models.request.createAmendHistoricNonFhlUkPropertyAnnualSubmission
 
 import api.models.domain.{Nino, TaxYear}
 
-case class CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequest(nino: Nino,
-                                                                      taxYear: TaxYear,
-                                                                      body: CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestBody)
+case class CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestData(nino: Nino,
+                                                                          taxYear: TaxYear,
+                                                                          body: CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestBody)

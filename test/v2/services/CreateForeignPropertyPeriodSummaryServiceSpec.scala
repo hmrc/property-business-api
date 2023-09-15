@@ -17,7 +17,7 @@
 package v2.services
 
 import api.controllers.EndpointLogContext
-import api.models.domain.{Nino, TaxYear}
+import api.models.domain.{BusinessId, Nino, TaxYear}
 import api.models.errors._
 import api.models.outcomes.ResponseWrapper
 import fixtures.CreateForeignPropertyPeriodSummaryFixtures.CreateForeignPropertyPeriodSummaryFixtures
@@ -32,9 +32,9 @@ import scala.concurrent.Future
 
 class CreateForeignPropertyPeriodSummaryServiceSpec extends UnitSpec with CreateForeignPropertyPeriodSummaryFixtures {
 
-  private val businessId: String = "XAIS12345678910"
-  private val nino: String       = "AA123456A"
-  private val taxYear: TaxYear   = TaxYear.fromMtd("2020-21")
+  private val nino       = Nino("AA123456A")
+  private val businessId = BusinessId("XAIS12345678910")
+  private val taxYear    = TaxYear.fromMtd("2020-21")
 
   implicit private val correlationId: String = "X-123"
 
@@ -105,8 +105,8 @@ class CreateForeignPropertyPeriodSummaryServiceSpec extends UnitSpec with Create
     protected val response: CreateForeignPropertyPeriodSummaryResponse =
       CreateForeignPropertyPeriodSummaryResponse("4557ecb5-fd32-48cc-81f5-e6acd1099f3c")
 
-    protected val expensesRequestData: CreateForeignPropertyPeriodSummaryRequest =
-      CreateForeignPropertyPeriodSummaryRequest(Nino(nino), businessId, taxYear, regularExpensesRequestBody)
+    protected val expensesRequestData: CreateForeignPropertyPeriodSummaryRequestData =
+      CreateForeignPropertyPeriodSummaryRequestData(nino, businessId, taxYear, regularExpensesRequestBody)
 
   }
 

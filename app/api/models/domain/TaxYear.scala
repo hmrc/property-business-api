@@ -78,6 +78,9 @@ object TaxYear {
 
   val minimumTaxYear = new TaxYear("2018")
 
+  val minimumFromDate = new TaxYear("1900")
+  val maximumToDate   = new TaxYear("2100")
+
   /** UK tax year starts on 6 April.
     */
   private val taxYearMonthStart = 4

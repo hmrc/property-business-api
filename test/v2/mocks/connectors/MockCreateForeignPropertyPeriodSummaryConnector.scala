@@ -21,7 +21,7 @@ import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
 import uk.gov.hmrc.http.HeaderCarrier
 import v2.connectors.CreateForeignPropertyPeriodSummaryConnector
-import v2.models.request.createForeignPropertyPeriodSummary.CreateForeignPropertyPeriodSummaryRequest
+import v2.models.request.createForeignPropertyPeriodSummary.CreateForeignPropertyPeriodSummaryRequestData
 import v2.models.response.createForeignPropertyPeriodSummary.CreateForeignPropertyPeriodSummaryResponse
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -32,10 +32,16 @@ trait MockCreateForeignPropertyPeriodSummaryConnector extends MockFactory {
 
   object MockCreateForeignPropertyConnector {
 
-    def createForeignProperty(requestData: CreateForeignPropertyPeriodSummaryRequest)
+    def createForeignProperty(requestData: CreateForeignPropertyPeriodSummaryRequestData)
         : CallHandler[Future[DownstreamOutcome[CreateForeignPropertyPeriodSummaryResponse]]] = {
-      (mockCreateForeignPropertyConnector
-        .createForeignProperty(_: CreateForeignPropertyPeriodSummaryRequest)(_: HeaderCarrier, _: ExecutionContext, _: String))
+      (
+        mockCreateForeignPropertyConnector
+          .createForeignProperty(_: CreateForeignPropertyPeriodSummaryRequestData)(
+            _: HeaderCarrier,
+            _: ExecutionContext,
+            _: String
+          )
+        )
         .expects(requestData, *, *, *)
     }
 

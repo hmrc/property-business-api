@@ -18,14 +18,14 @@ package v3.controllers
 
 import api.controllers.{ControllerBaseSpec, ControllerTestRunner}
 import api.hateoas.{HateoasWrapper, MockHateoasFactory}
-import api.models.audit.{AuditEvent, AuditResponse, GenericAuditDetailOld}
-import api.models.domain.{Nino, TaxYear}
+import api.models.audit.{AuditEvent, AuditResponse, GenericAuditDetail}
+import api.models.domain.{BusinessId, Nino, TaxYear}
 import api.models.errors._
 import api.models.outcomes.ResponseWrapper
 import api.services.MockAuditService
 import play.api.libs.json.{JsObject, JsValue, Json}
 import play.api.mvc.Result
-import v3.mocks.requestParsers.MockCreateUkPropertyPeriodSummaryRequestParser
+import v3.controllers.validators.MockCreateUkPropertyPeriodSummaryValidatorFactory
 import v3.mocks.services.MockCreateUkPropertyPeriodSummaryService
 import v3.models.request.common.ukFhlProperty.{UkFhlProperty, UkFhlPropertyExpenses, UkFhlPropertyIncome}
 import v3.models.request.common.ukNonFhlProperty.{UkNonFhlProperty, UkNonFhlPropertyExpenses, UkNonFhlPropertyIncome}
@@ -40,7 +40,7 @@ class CreateUkPropertyPeriodSummaryControllerSpec
     extends ControllerBaseSpec
     with ControllerTestRunner
     with MockCreateUkPropertyPeriodSummaryService
-    with MockCreateUkPropertyPeriodSummaryRequestParser
+    with MockCreateUkPropertyPeriodSummaryValidatorFactory
     with MockHateoasFactory
     with MockAuditService {
 
@@ -51,9 +51,7 @@ class CreateUkPropertyPeriodSummaryControllerSpec
   "CreateUkPropertyPeriodSummaryController" should {
     "return a successful response from a consolidated request" when {
       "the request received is valid" in new Test {
-        MockCreateUkPropertyRequestParser
-          .requestFor(rawDataConsolidatedExpense)
-          .returns(Right(requestDataConsolidatedExpense))
+        willUseValidator(returningSuccess(requestDataConsolidatedExpense))
 
         MockCreateUkPropertyService
           .createUkProperty(requestDataConsolidatedExpense)
@@ -77,9 +75,7 @@ class CreateUkPropertyPeriodSummaryControllerSpec
 
     "return a successful response from an unconsolidated request" when {
       "the request received is valid" in new Test {
-        MockCreateUkPropertyRequestParser
-          .requestFor(rawData)
-          .returns(Right(requestData))
+        willUseValidator(returningSuccess(requestData))
 
         MockCreateUkPropertyService
           .createUkProperty(requestData)
@@ -100,17 +96,13 @@ class CreateUkPropertyPeriodSummaryControllerSpec
 
     "return the error as per spec" when {
       "the parser validation fails" in new Test {
-        MockCreateUkPropertyRequestParser
-          .requestFor(rawData)
-          .returns(Left(ErrorWrapper(correlationId, NinoFormatError, None)))
+        willUseValidator(returning(NinoFormatError))
 
         runErrorTestWithAudit(NinoFormatError, Some(requestBodyJson))
       }
 
       "the service returns an error" in new Test {
-        MockCreateUkPropertyRequestParser
-          .requestFor(rawData)
-          .returns(Right(requestData))
+        willUseValidator(returningSuccess(requestData))
 
         MockCreateUkPropertyService
           .createUkProperty(requestData)
@@ -121,14 +113,14 @@ class CreateUkPropertyPeriodSummaryControllerSpec
     }
   }
 
-  trait Test extends ControllerTest with AuditEventChecking[GenericAuditDetailOld] {
+  trait Test extends ControllerTest with AuditEventChecking[GenericAuditDetail] {
 
     protected val controller = new CreateUkPropertyPeriodSummaryController(
       authService = mockEnrolmentsAuthService,
       lookupService = mockMtdIdLookupService,
       service = mockCreateUkPropertyService,
       auditService = mockAuditService,
-      parser = mockCreateUkPropertyRequestParser,
+      validatorFactory = mockCreateUkPropertyPeriodSummaryValidatorFactory,
       hateoasFactory = mockHateoasFactory,
       cc = cc,
       idGenerator = mockIdGenerator
@@ -136,17 +128,18 @@ class CreateUkPropertyPeriodSummaryControllerSpec
 
     protected def callController(): Future[Result] = controller.handleRequest(nino, businessId, taxYear)(fakePostRequest(requestBodyJson))
 
-    protected def event(auditResponse: AuditResponse, requestBody: Option[JsValue]): AuditEvent[GenericAuditDetailOld] =
+    protected def event(auditResponse: AuditResponse, requestBody: Option[JsValue]): AuditEvent[GenericAuditDetail] =
       AuditEvent(
         auditType = "CreateUKPropertyIncomeAndExpensesPeriodSummary",
         transactionName = "create-uk-property-income-and-expenses-period-summary",
-        detail = GenericAuditDetailOld(
-          versionNumber = "2.0",
+        detail = GenericAuditDetail(
+          versionNumber = "3.0",
           userType = "Individual",
           agentReferenceNumber = None,
-          params = Json.obj("nino" -> nino, "taxYear" -> taxYear, "businessId" -> businessId, "request" -> requestBody),
-          correlationId = correlationId,
-          response = auditResponse
+          params = Map("nino" -> nino, "businessId" -> businessId, "taxYear" -> taxYear),
+          requestBody = requestBody,
+          `X-CorrelationId` = correlationId,
+          auditResponse = auditResponse
         )
       )
 
@@ -355,16 +348,11 @@ class CreateUkPropertyPeriodSummaryControllerSpec
         |""".stripMargin
     )
 
-    protected val rawData: CreateUkPropertyPeriodSummaryRawData = CreateUkPropertyPeriodSummaryRawData(nino, taxYear, businessId, requestBodyJson)
+    protected val requestData: CreateUkPropertyPeriodSummaryRequestData =
+      CreateUkPropertyPeriodSummaryRequestData(Nino(nino), TaxYear.fromMtd(taxYear), BusinessId(businessId), requestBody)
 
-    protected val requestData: CreateUkPropertyPeriodSummaryRequest =
-      CreateUkPropertyPeriodSummaryRequest(Nino(nino), TaxYear.fromMtd(taxYear), businessId, requestBody)
-
-    protected val rawDataConsolidatedExpense: CreateUkPropertyPeriodSummaryRawData =
-      CreateUkPropertyPeriodSummaryRawData(nino, taxYear, businessId, requestBodyJsonConsolidatedExpense)
-
-    protected val requestDataConsolidatedExpense: CreateUkPropertyPeriodSummaryRequest =
-      CreateUkPropertyPeriodSummaryRequest(Nino(nino), TaxYear.fromMtd(taxYear), businessId, requestBodyWithConsolidatedExpense)
+    protected val requestDataConsolidatedExpense: CreateUkPropertyPeriodSummaryRequestData =
+      CreateUkPropertyPeriodSummaryRequestData(Nino(nino), TaxYear.fromMtd(taxYear), BusinessId(businessId), requestBodyWithConsolidatedExpense)
 
     protected val responseBodyJson: JsValue = Json.parse(
       s"""

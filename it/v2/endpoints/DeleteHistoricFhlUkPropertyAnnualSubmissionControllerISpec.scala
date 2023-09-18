@@ -99,7 +99,7 @@ class DeleteHistoricFhlUkPropertyAnnualSubmissionControllerISpec extends Integra
           }
         }
 
-        val input = Seq(
+        val input = List(
           ("hello", "2021-22", BAD_REQUEST, NinoFormatError),
           ("AA123456A", "Beans", BAD_REQUEST, TaxYearFormatError),
           ("AA123456A", "2021-23", BAD_REQUEST, RuleTaxYearRangeInvalidError),

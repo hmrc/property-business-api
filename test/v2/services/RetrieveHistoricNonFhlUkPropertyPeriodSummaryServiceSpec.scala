@@ -31,10 +31,10 @@ import scala.concurrent.Future
 
 class RetrieveHistoricNonFhlUkPropertyPeriodSummaryServiceSpec extends UnitSpec {
 
-  private val nino         = Nino("AA123456A")
-  private val from: String = "2017-04-06"
-  private val to: String   = "2017-07-04"
-  private val periodId     = PeriodId(s"${from}_$to")
+  private val nino     = Nino("AA123456A")
+  private val from     = "2017-04-06"
+  private val to       = "2017-07-04"
+  private val periodId = PeriodId(s"${from}_$to")
 
   implicit private val correlationId: String = "X-123"
 

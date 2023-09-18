@@ -41,11 +41,18 @@ class DeleteHistoricUkPropertyAnnualSubmissionValidatorFactorySpec extends UnitS
 
   "validator" should {
     "return no errors" when {
-      "a valid request is supplied" in {
+      "a valid Fhl request is supplied" in {
         val result: Either[ErrorWrapper, DeleteHistoricUkPropertyAnnualSubmissionRequestData] =
-          validator(validNino, validTaxYear, propertyType).validateAndWrapResult()
+          validator(validNino, validTaxYear, HistoricPropertyType.Fhl).validateAndWrapResult()
 
-        result shouldBe Right(DeleteHistoricUkPropertyAnnualSubmissionRequestData(parsedNino, parsedTaxYear, propertyType))
+        result shouldBe Right(DeleteHistoricUkPropertyAnnualSubmissionRequestData(parsedNino, parsedTaxYear, HistoricPropertyType.Fhl))
+
+      }
+      "a valid non-Fhl request is supplied" in {
+        val result: Either[ErrorWrapper, DeleteHistoricUkPropertyAnnualSubmissionRequestData] =
+          validator(validNino, validTaxYear, HistoricPropertyType.NonFhl).validateAndWrapResult()
+
+        result shouldBe Right(DeleteHistoricUkPropertyAnnualSubmissionRequestData(parsedNino, parsedTaxYear, HistoricPropertyType.NonFhl))
 
       }
     }

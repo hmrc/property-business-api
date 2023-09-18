@@ -82,7 +82,6 @@ class RetrieveHistoricNonFhlUkPropertyAnnualSubmissionControllerSpec
     }
   }
 
-// RetrieveHistoricNonFhlUkPropertyAnnualSubmissionValidatorFactory
   trait Test extends ControllerTest {
 
     private val controller = new RetrieveHistoricNonFhlUkPropertyAnnualSubmissionController(

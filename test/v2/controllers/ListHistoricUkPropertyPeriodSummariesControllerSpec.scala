@@ -102,7 +102,7 @@ class ListHistoricUkPropertyPeriodSummariesControllerSpec
             runErrorTest(RuleTaxYearNotSupportedError)
           }
 
-          Seq(HistoricPropertyType.Fhl, HistoricPropertyType.NonFhl)
+          List(HistoricPropertyType.Fhl, HistoricPropertyType.NonFhl)
             .foreach(propertyType => {
               parserErrorTest(propertyType)
               serviceErrorTest(propertyType)
@@ -136,12 +136,12 @@ class ListHistoricUkPropertyPeriodSummariesControllerSpec
     protected val submissionPeriod: SubmissionPeriod = SubmissionPeriod("fromDate", "toDate")
 
     protected val responseData: ListHistoricUkPropertyPeriodSummariesResponse[SubmissionPeriod] =
-      ListHistoricUkPropertyPeriodSummariesResponse(Seq(submissionPeriod))
+      ListHistoricUkPropertyPeriodSummariesResponse(List(submissionPeriod))
 
     protected val hateoasData: ListHistoricUkPropertyPeriodSummariesHateoasData = ListHistoricUkPropertyPeriodSummariesHateoasData(nino, propertyType)
 
     protected val responseDataWithHateoas: HateoasWrapper[ListHistoricUkPropertyPeriodSummariesResponse[HateoasWrapper[SubmissionPeriod]]] =
-      HateoasWrapper(ListHistoricUkPropertyPeriodSummariesResponse(Seq(HateoasWrapper(submissionPeriod, testHateoasLinks))), testHateoasLinks)
+      HateoasWrapper(ListHistoricUkPropertyPeriodSummariesResponse(List(HateoasWrapper(submissionPeriod, testHateoasLinks))), testHateoasLinks)
 
   }
 

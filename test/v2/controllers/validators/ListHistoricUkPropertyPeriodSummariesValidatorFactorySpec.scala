@@ -16,6 +16,7 @@
 
 package v2.controllers.validators
 
+import api.controllers.validators.Validator
 import api.models.domain.Nino
 import api.models.errors._
 import mocks.MockAppConfig
@@ -29,12 +30,12 @@ class ListHistoricUkPropertyPeriodSummariesValidatorFactorySpec extends UnitSpec
 
   private val parsedNino = Nino(validNino)
 
-  private val validatorFactory = new ListHistoricUkPropertyPeriodSummariesValidatorFactory(mockAppConfig)
+  private val validatorFactory = new ListHistoricUkPropertyPeriodSummariesValidatorFactory()
 
-  private def validator(nino: String) = validatorFactory.validator(nino)
+  private def validator(nino: String): Validator[ListHistoricUkPropertyPeriodSummariesRequestData] = validatorFactory.validator(nino)
 
   "validator" should {
-    "return empty List (Nil)" when {
+    "return the parsed domain object" when {
       "passed a valid nino is supplied" in {
         val result: Either[ErrorWrapper, ListHistoricUkPropertyPeriodSummariesRequestData] =
           validator(validNino).validateAndWrapResult()

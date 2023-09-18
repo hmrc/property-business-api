@@ -20,13 +20,12 @@ import api.controllers.validators.Validator
 import api.controllers.validators.resolvers.ResolveNino
 import api.models.errors.MtdError
 import cats.data.Validated
-import config.AppConfig
 import v2.models.request.listHistoricUkPropertyPeriodSummaries.ListHistoricUkPropertyPeriodSummariesRequestData
 
-import javax.inject.{Inject, Singleton}
+import javax.inject.Singleton
 
 @Singleton
-class ListHistoricUkPropertyPeriodSummariesValidatorFactory @Inject() (appConfig: AppConfig) {
+class ListHistoricUkPropertyPeriodSummariesValidatorFactory {
 
   def validator(nino: String): Validator[ListHistoricUkPropertyPeriodSummariesRequestData] =
     new Validator[ListHistoricUkPropertyPeriodSummariesRequestData] {

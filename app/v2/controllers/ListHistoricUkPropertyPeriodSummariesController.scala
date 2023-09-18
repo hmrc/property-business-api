@@ -16,6 +16,7 @@
 
 package v2.controllers
 
+import api.controllers.ResultCreator.hateoasListWrapping
 import api.controllers._
 import api.hateoas.HateoasFactory
 import api.models.domain.HistoricPropertyType
@@ -66,8 +67,7 @@ class ListHistoricUkPropertyPeriodSummariesController @Inject() (val authService
         .withService({ req =>
           service.listPeriodSummaries(req, propertyType)
         })
-        .withResultCreator(ResultCreator.hateoasListWrapping(hateoasFactory)((_, _) =>
-          ListHistoricUkPropertyPeriodSummariesHateoasData(nino, propertyType)))
+        .withResultCreator(hateoasListWrapping(hateoasFactory)((_, _) => ListHistoricUkPropertyPeriodSummariesHateoasData(nino, propertyType)))
 
       requestHandler.handleRequest()
 

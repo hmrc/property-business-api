@@ -14,11 +14,8 @@
  * limitations under the License.
  */
 
-package v2.models.request.listHistoricUkPropertyPeriodSummaries
+package v2.models.request.retrieveHistoricNonFhlUkPropertyAnnualSubmission
 
-import api.models.domain.Nino
-import api.models.request.RawData
+import api.models.domain.{Nino, TaxYear}
 
-case class ListHistoricUkPropertyPeriodSummariesRawData(nino: String) extends RawData
-
-case class ListHistoricUkPropertyPeriodSummariesRequest(nino: Nino)
+case class RetrieveHistoricNonFhlUkPropertyAnnualSubmissionRequestData(nino: Nino, taxYear: TaxYear)

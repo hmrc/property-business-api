@@ -14,9 +14,8 @@
  * limitations under the License.
  */
 
-package v2.models.request.deleteHistoricUkPropertyAnnualSubmission
+package v2.models.request.listHistoricUkPropertyPeriodSummaries
 
-import api.models.domain.HistoricPropertyType
-import api.models.request.RawData
+import api.models.domain.Nino
 
-case class DeleteHistoricUkPropertyAnnualSubmissionRawData(nino: String, taxYear: String, propertyType: HistoricPropertyType) extends RawData
+case class ListHistoricUkPropertyPeriodSummariesRequestData(nino: Nino)

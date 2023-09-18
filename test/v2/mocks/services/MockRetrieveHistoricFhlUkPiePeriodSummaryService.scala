@@ -20,7 +20,7 @@ import api.controllers.RequestContext
 import api.services.ServiceOutcome
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
-import v2.models.request.retrieveHistoricFhlUkPiePeriodSummary.RetrieveHistoricFhlUkPiePeriodSummaryRequest
+import v2.models.request.retrieveHistoricFhlUkPiePeriodSummary.RetrieveHistoricFhlUkPiePeriodSummaryRequestData
 import v2.models.response.retrieveHistoricFhlUkPiePeriodSummary.RetrieveHistoricFhlUkPiePeriodSummaryResponse
 import v2.services.RetrieveHistoricFhlUkPropertyPeriodSummaryService
 
@@ -33,11 +33,11 @@ trait MockRetrieveHistoricFhlUkPiePeriodSummaryService extends MockFactory {
 
   object MockRetrieveHistoricFhlUkPiePeriodSummaryService {
 
-    def retrieve(requestData: RetrieveHistoricFhlUkPiePeriodSummaryRequest)
+    def retrieve(requestData: RetrieveHistoricFhlUkPiePeriodSummaryRequestData)
         : CallHandler[Future[ServiceOutcome[RetrieveHistoricFhlUkPiePeriodSummaryResponse]]] = {
       (
         mockRetrieveHistoricFhlUkPiePeriodSummaryService
-          .retrieve(_: RetrieveHistoricFhlUkPiePeriodSummaryRequest)(
+          .retrieve(_: RetrieveHistoricFhlUkPiePeriodSummaryRequestData)(
             _: RequestContext,
             _: ExecutionContext
           )

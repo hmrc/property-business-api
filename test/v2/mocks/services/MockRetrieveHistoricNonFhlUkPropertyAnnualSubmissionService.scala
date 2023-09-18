@@ -20,7 +20,7 @@ import api.controllers.RequestContext
 import api.services.ServiceOutcome
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
-import v2.models.request.retrieveHistoricNonFhlUkPropertyAnnualSubmission.RetrieveHistoricNonFhlUkPropertyAnnualSubmissionRequest
+import v2.models.request.retrieveHistoricNonFhlUkPropertyAnnualSubmission.RetrieveHistoricNonFhlUkPropertyAnnualSubmissionRequestData
 import v2.models.response.retrieveHistoricNonFhlUkPropertyAnnualSubmissionResponse.RetrieveHistoricNonFhlUkPropertyAnnualSubmissionResponse
 import v2.services.RetrieveHistoricNonFhlUkPropertyAnnualSubmissionService
 
@@ -33,11 +33,11 @@ trait MockRetrieveHistoricNonFhlUkPropertyAnnualSubmissionService extends MockFa
 
   object MockRetrieveHistoricNonFhlUkPropertyAnnualSubmissionService {
 
-    def retrieve(requestData: RetrieveHistoricNonFhlUkPropertyAnnualSubmissionRequest)
+    def retrieve(requestData: RetrieveHistoricNonFhlUkPropertyAnnualSubmissionRequestData)
         : CallHandler[Future[ServiceOutcome[RetrieveHistoricNonFhlUkPropertyAnnualSubmissionResponse]]] = {
       (
         mockRetrieveHistoricNonFhlUkPropertyAnnualSubmissionService
-          .retrieve(_: RetrieveHistoricNonFhlUkPropertyAnnualSubmissionRequest)(
+          .retrieve(_: RetrieveHistoricNonFhlUkPropertyAnnualSubmissionRequestData)(
             _: RequestContext,
             _: ExecutionContext
           )

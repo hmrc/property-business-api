@@ -14,11 +14,8 @@
  * limitations under the License.
  */
 
-package v2.models.request.retrieveHistoricNonFhlUkPropertyAnnualSubmission
+package v2.models.request.deleteHistoricUkPropertyAnnualSubmission
 
-import api.models.domain.{Nino, TaxYear}
-import api.models.request.RawData
+import api.models.domain.{HistoricPropertyType, Nino, TaxYear}
 
-case class RetrieveHistoricNonFhlUkPropertyAnnualSubmissionRawData(nino: String, taxYear: String) extends RawData
-
-case class RetrieveHistoricNonFhlUkPropertyAnnualSubmissionRequest(nino: Nino, taxYear: TaxYear)
+case class DeleteHistoricUkPropertyAnnualSubmissionRequestData(nino: Nino, taxYear: TaxYear, propertyType: HistoricPropertyType)

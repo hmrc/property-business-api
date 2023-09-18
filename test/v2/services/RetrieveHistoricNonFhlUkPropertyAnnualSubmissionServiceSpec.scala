@@ -23,7 +23,7 @@ import api.models.outcomes.ResponseWrapper
 import support.UnitSpec
 import uk.gov.hmrc.http.HeaderCarrier
 import v2.mocks.connectors.MockRetrieveHistoricNonFhlUkPropertyAnnualSubmissionConnector
-import v2.models.request.retrieveHistoricNonFhlUkPropertyAnnualSubmission.RetrieveHistoricNonFhlUkPropertyAnnualSubmissionRequest
+import v2.models.request.retrieveHistoricNonFhlUkPropertyAnnualSubmission.RetrieveHistoricNonFhlUkPropertyAnnualSubmissionRequestData
 import v2.models.response.retrieveHistoricNonFhlUkPropertyAnnualSubmissionResponse.RetrieveHistoricNonFhlUkPropertyAnnualSubmissionResponse
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -31,10 +31,9 @@ import scala.concurrent.Future
 
 class RetrieveHistoricNonFhlUkPropertyAnnualSubmissionServiceSpec extends UnitSpec {
 
-  private val nino: String    = "AA123456A"
-  private val taxYear: String = "2019-20"
-
   implicit private val correlationId: String = "X-123"
+  private val nino                           = Nino("AA123456A")
+  private val taxYear                        = TaxYear.fromMtd("2019-20")
 
   "retrieve" should {
     "return a success result" when {
@@ -86,8 +85,8 @@ class RetrieveHistoricNonFhlUkPropertyAnnualSubmissionServiceSpec extends UnitSp
     protected val response: RetrieveHistoricNonFhlUkPropertyAnnualSubmissionResponse =
       RetrieveHistoricNonFhlUkPropertyAnnualSubmissionResponse(None, None)
 
-    protected val request: RetrieveHistoricNonFhlUkPropertyAnnualSubmissionRequest =
-      RetrieveHistoricNonFhlUkPropertyAnnualSubmissionRequest(Nino(nino), TaxYear.fromMtd(taxYear))
+    protected val request: RetrieveHistoricNonFhlUkPropertyAnnualSubmissionRequestData =
+      RetrieveHistoricNonFhlUkPropertyAnnualSubmissionRequestData(nino, taxYear)
 
   }
 

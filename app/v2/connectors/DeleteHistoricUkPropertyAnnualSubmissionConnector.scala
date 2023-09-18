@@ -23,22 +23,24 @@ import api.models.domain.HistoricPropertyType
 import config.{AppConfig, FeatureSwitches}
 import play.api.libs.json.JsObject
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
-import v2.models.request.deleteHistoricUkPropertyAnnualSubmission.DeleteHistoricUkPropertyAnnualSubmissionRequest
+import v2.models.request.deleteHistoricUkPropertyAnnualSubmission.DeleteHistoricUkPropertyAnnualSubmissionRequestData
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class DeleteHistoricUkPropertyAnnualSubmissionConnector @Inject() (val http: HttpClient, val appConfig: AppConfig)(implicit featureSwitches: FeatureSwitches) extends BaseDownstreamConnector {
+class DeleteHistoricUkPropertyAnnualSubmissionConnector @Inject() (val http: HttpClient, val appConfig: AppConfig)(implicit
+    featureSwitches: FeatureSwitches)
+    extends BaseDownstreamConnector {
 
-  def deleteHistoricUkPropertyAnnualSubmission(request: DeleteHistoricUkPropertyAnnualSubmissionRequest)(implicit
+  def deleteHistoricUkPropertyAnnualSubmission(request: DeleteHistoricUkPropertyAnnualSubmissionRequestData)(implicit
       hc: HeaderCarrier,
       ec: ExecutionContext,
       correlationId: String): Future[DownstreamOutcome[Unit]] = {
 
     import request._
 
-    val intent = if(featureSwitches.isPassDeleteIntentEnabled) Some("DELETE") else None
+    val intent = if (featureSwitches.isPassDeleteIntentEnabled) Some("DELETE") else None
 
     val propertyTypeName = propertyType match {
       case HistoricPropertyType.Fhl    => "furnished-holiday-lettings"

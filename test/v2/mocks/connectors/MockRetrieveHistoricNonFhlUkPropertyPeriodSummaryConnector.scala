@@ -21,7 +21,7 @@ import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
 import uk.gov.hmrc.http.HeaderCarrier
 import v2.connectors.RetrieveHistoricNonFhlUkPropertyPeriodSummaryConnector
-import v2.models.request.retrieveHistoricNonFhlUkPiePeriodSummary.RetrieveHistoricNonFhlUkPiePeriodSummaryRequest
+import v2.models.request.retrieveHistoricNonFhlUkPiePeriodSummary.RetrieveHistoricNonFhlUkPiePeriodSummaryRequestData
 import v2.models.response.retrieveHistoricNonFhlUkPiePeriodSummary.RetrieveHistoricNonFhlUkPiePeriodSummaryResponse
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -33,11 +33,11 @@ trait MockRetrieveHistoricNonFhlUkPropertyPeriodSummaryConnector extends MockFac
 
   object MockRetrieveHistoricNonFhlUkPropertyPeriodSummaryConnector {
 
-    def retrieve(requestData: RetrieveHistoricNonFhlUkPiePeriodSummaryRequest)
+    def retrieve(requestData: RetrieveHistoricNonFhlUkPiePeriodSummaryRequestData)
         : CallHandler[Future[DownstreamOutcome[RetrieveHistoricNonFhlUkPiePeriodSummaryResponse]]] = {
       (
         mockRetrieveHistoricNonFhlUkPropertyPeriodSummaryConnector
-          .retrieve(_: RetrieveHistoricNonFhlUkPiePeriodSummaryRequest)(
+          .retrieve(_: RetrieveHistoricNonFhlUkPiePeriodSummaryRequestData)(
             _: HeaderCarrier,
             _: ExecutionContext,
             _: String

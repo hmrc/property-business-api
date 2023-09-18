@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-package v2.models.request.deleteHistoricUkPropertyAnnualSubmission
+package v2.models.request.retrieveHistoricFhlUkPiePeriodSummary
 
-import api.models.domain.{HistoricPropertyType, Nino, TaxYear}
+import api.models.domain.{Nino, PeriodId}
 
-case class DeleteHistoricUkPropertyAnnualSubmissionRequest(nino: Nino, taxYear: TaxYear, propertyType: HistoricPropertyType)
+case class RetrieveHistoricFhlUkPiePeriodSummaryRequestData(nino: Nino, periodId: PeriodId)

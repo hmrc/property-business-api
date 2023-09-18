@@ -19,8 +19,7 @@ package v2.endpoints
 import api.models.errors._
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import play.api.http.HeaderNames.ACCEPT
-import play.api.http.Status
-import play.api.http.Status.NO_CONTENT
+import play.api.http.Status.{BAD_REQUEST, GONE, INTERNAL_SERVER_ERROR, NOT_FOUND, NO_CONTENT, SERVICE_UNAVAILABLE, UNPROCESSABLE_ENTITY}
 import play.api.libs.json.{JsObject, Json}
 import play.api.libs.ws.{WSRequest, WSResponse}
 import play.api.test.Helpers.AUTHORIZATION
@@ -74,7 +73,7 @@ class DeleteHistoricFhlUkPropertyAnnualSubmissionControllerISpec extends Integra
         }
 
         val response: WSResponse = await(request().delete())
-        response.status shouldBe Status.NO_CONTENT
+        response.status shouldBe NO_CONTENT
         response.header("X-CorrelationId").nonEmpty shouldBe true
       }
     }
@@ -100,11 +99,11 @@ class DeleteHistoricFhlUkPropertyAnnualSubmissionControllerISpec extends Integra
           }
         }
 
-        val input = Seq(
-          ("hello", "2021-22", Status.BAD_REQUEST, NinoFormatError),
-          ("AA123456A", "Beans", Status.BAD_REQUEST, TaxYearFormatError),
-          ("AA123456A", "2021-23", Status.BAD_REQUEST, RuleTaxYearRangeInvalidError),
-          ("AA123456A", "2016-17", Status.BAD_REQUEST, RuleHistoricTaxYearNotSupportedError)
+        val input = List(
+          ("hello", "2021-22", BAD_REQUEST, NinoFormatError),
+          ("AA123456A", "Beans", BAD_REQUEST, TaxYearFormatError),
+          ("AA123456A", "2021-23", BAD_REQUEST, RuleTaxYearRangeInvalidError),
+          ("AA123456A", "2016-17", BAD_REQUEST, RuleHistoricTaxYearNotSupportedError)
         )
         input.foreach(args => (validationErrorTest _).tupled(args))
       }
@@ -126,18 +125,18 @@ class DeleteHistoricFhlUkPropertyAnnualSubmissionControllerISpec extends Integra
           }
         }
 
-        val input = Seq(
-          (Status.BAD_REQUEST, "INVALID_NINO", Status.BAD_REQUEST, NinoFormatError),
-          (Status.BAD_REQUEST, "INVALID_TAX_YEAR", Status.BAD_REQUEST, TaxYearFormatError),
-          (Status.BAD_REQUEST, "INVALID_TYPE", Status.INTERNAL_SERVER_ERROR, InternalError),
-          (Status.BAD_REQUEST, "INVALID_PAYLOAD", Status.INTERNAL_SERVER_ERROR, InternalError),
-          (Status.BAD_REQUEST, "INVALID_CORRELATIONID", Status.INTERNAL_SERVER_ERROR, InternalError),
-          (Status.NOT_FOUND, "NOT_FOUND", Status.NOT_FOUND, NotFoundError),
-          (Status.NOT_FOUND, "NOT_FOUND_PROPERTY", Status.NOT_FOUND, NotFoundError),
-          (Status.GONE, "GONE", Status.NOT_FOUND, NotFoundError),
-          (Status.UNPROCESSABLE_ENTITY, "TAX_YEAR_NOT_SUPPORTED", Status.BAD_REQUEST, RuleHistoricTaxYearNotSupportedError),
-          (Status.INTERNAL_SERVER_ERROR, "SERVER_ERROR", Status.INTERNAL_SERVER_ERROR, InternalError),
-          (Status.SERVICE_UNAVAILABLE, "SERVICE_UNAVAILABLE", Status.INTERNAL_SERVER_ERROR, InternalError)
+        val input = List(
+          (BAD_REQUEST, "INVALID_NINO", BAD_REQUEST, NinoFormatError),
+          (BAD_REQUEST, "INVALID_TAX_YEAR", BAD_REQUEST, TaxYearFormatError),
+          (BAD_REQUEST, "INVALID_TYPE", INTERNAL_SERVER_ERROR, InternalError),
+          (BAD_REQUEST, "INVALID_PAYLOAD", INTERNAL_SERVER_ERROR, InternalError),
+          (BAD_REQUEST, "INVALID_CORRELATIONID", INTERNAL_SERVER_ERROR, InternalError),
+          (NOT_FOUND, "NOT_FOUND", NOT_FOUND, NotFoundError),
+          (NOT_FOUND, "NOT_FOUND_PROPERTY", NOT_FOUND, NotFoundError),
+          (GONE, "GONE", NOT_FOUND, NotFoundError),
+          (UNPROCESSABLE_ENTITY, "TAX_YEAR_NOT_SUPPORTED", BAD_REQUEST, RuleHistoricTaxYearNotSupportedError),
+          (INTERNAL_SERVER_ERROR, "SERVER_ERROR", INTERNAL_SERVER_ERROR, InternalError),
+          (SERVICE_UNAVAILABLE, "SERVICE_UNAVAILABLE", INTERNAL_SERVER_ERROR, InternalError)
         )
         input.foreach(args => (serviceErrorTest _).tupled(args))
       }

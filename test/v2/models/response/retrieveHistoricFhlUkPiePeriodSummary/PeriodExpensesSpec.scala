@@ -16,15 +16,14 @@
 
 package v2.models.response.retrieveHistoricFhlUkPiePeriodSummary
 
-import play.api.libs.json.{JsValue, Json}
+import play.api.libs.json.Json
 import support.UnitSpec
-import v2.models.utils.JsonErrorValidators
 
-class PeriodExpensesSpec extends UnitSpec with JsonErrorValidators {
+class PeriodExpensesSpec extends UnitSpec {
 
-  private def decimal(value: String): Option[BigDecimal] = Option(BigDecimal(value))
+  private def decimal(value: String): Option[BigDecimal] = Some(BigDecimal(value))
 
-  val periodExpenses =
+  private val periodExpenses =
     PeriodExpenses(
       decimal("5000.99"),
       decimal("5000.99"),
@@ -34,11 +33,11 @@ class PeriodExpensesSpec extends UnitSpec with JsonErrorValidators {
       decimal("5000.99"),
       decimal("5000.99"),
       decimal("5000.99"),
-      Option(RentARoomExpenses(Some(5000.99)))
+      Some(RentARoomExpenses(Some(5000.99)))
     )
 
-  val writesJson: JsValue = Json.parse(
-    """{
+  private val writesJson = Json.parse("""
+      |{
       |"premisesRunningCosts": 5000.99,
       |    "repairsAndMaintenance": 5000.99,
       |    "financialCosts": 5000.99,
@@ -51,25 +50,25 @@ class PeriodExpensesSpec extends UnitSpec with JsonErrorValidators {
       |      "amountClaimed":5000.99
       |    }
       |  }
-      |""".stripMargin
-  )
+      |""".stripMargin)
 
-  val readsJson: JsValue = Json.parse("""{
-                                        |         "premisesRunningCosts": 5000.99,
-                                        |         "repairsAndMaintenance": 5000.99,
-                                        |         "financialCosts": 5000.99,
-                                        |         "professionalFees": 5000.99,
-                                        |         "costOfServices": 5000.99,
-                                        |         "other": 5000.99,
-                                        |         "consolidatedExpenses": 5000.99,
-                                        |         "residentialFinancialCost": 5000.99,
-                                        |         "travelCosts": 5000.99,
-                                        |         "residentialFinancialCostsCarriedForward": 5000.99,
-                                        |         "ukRentARoom": {
-                                        |            "amountClaimed": 5000.99
-                                        |         }
-                                        |      }
-                                        |""".stripMargin)
+  private val readsJson = Json.parse("""
+      |{
+      |         "premisesRunningCosts": 5000.99,
+      |         "repairsAndMaintenance": 5000.99,
+      |         "financialCosts": 5000.99,
+      |         "professionalFees": 5000.99,
+      |         "costOfServices": 5000.99,
+      |         "other": 5000.99,
+      |         "consolidatedExpenses": 5000.99,
+      |         "residentialFinancialCost": 5000.99,
+      |         "travelCosts": 5000.99,
+      |         "residentialFinancialCostsCarriedForward": 5000.99,
+      |         "ukRentARoom": {
+      |            "amountClaimed": 5000.99
+      |         }
+      |      }
+      |""".stripMargin)
 
   "reads" when {
     "passed a valid JSON" should {

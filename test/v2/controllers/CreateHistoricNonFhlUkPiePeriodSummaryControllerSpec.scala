@@ -28,9 +28,9 @@ import mocks.MockIdGenerator
 import play.api.libs.json.{JsObject, JsValue, Json}
 import play.api.mvc.Result
 import v2.controllers.validators.MockCreateHistoricNonFhlUkPiePeriodSummaryValidatorFactory
-import v2.mocks.services.MockCreateHistoricNonFhlUkPiePeriodSummaryService
 import v2.models.request.createHistoricNonFhlUkPropertyPeriodSummary._
 import v2.models.response.createHistoricNonFhlUkPiePeriodSummary._
+import v2.services.MockCreateHistoricNonFhlUkPiePeriodSummaryService
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future

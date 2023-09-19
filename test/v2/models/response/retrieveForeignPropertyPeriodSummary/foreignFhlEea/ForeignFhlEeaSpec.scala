@@ -18,11 +18,10 @@ package v2.models.response.retrieveForeignPropertyPeriodSummary.foreignFhlEea
 
 import play.api.libs.json.Json
 import support.UnitSpec
-import v2.models.utils.JsonErrorValidators
 
-class ForeignFhlEeaSpec extends UnitSpec with JsonErrorValidators {
+class ForeignFhlEeaSpec extends UnitSpec {
 
-  val foreignFhlEea = ForeignFhlEea(
+  private val foreignFhlEea = ForeignFhlEea(
     Some(ForeignFhlEeaIncome(Some(5000.99))),
     Some(
       ForeignFhlEeaExpenses(
@@ -37,7 +36,8 @@ class ForeignFhlEeaSpec extends UnitSpec with JsonErrorValidators {
       ))
   )
 
-  val writesJson = Json.parse("""{
+  private val writesJson = Json.parse("""
+      |{
       |    "income": {
       |      "rentAmount": 5000.99
       |    },
@@ -53,7 +53,8 @@ class ForeignFhlEeaSpec extends UnitSpec with JsonErrorValidators {
       |    }
       |  }""".stripMargin)
 
-  val readsJson = Json.parse("""{
+  private val readsJson = Json.parse("""
+      |{
       |    "income": {
       |      "rentAmount": 5000.99
       |    },

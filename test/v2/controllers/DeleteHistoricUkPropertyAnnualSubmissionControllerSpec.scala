@@ -27,8 +27,8 @@ import api.services.MockAuditService
 import play.api.libs.json.JsValue
 import play.api.mvc.Result
 import v2.controllers.validators.MockDeleteHistoricUkPropertyAnnualSubmissionValidatorFactory
-import v2.mocks.services.MockDeleteHistoricUkPropertyAnnualSubmissionService
 import v2.models.request.deleteHistoricUkPropertyAnnualSubmission.DeleteHistoricUkPropertyAnnualSubmissionRequestData
+import v2.services.MockDeleteHistoricUkPropertyAnnualSubmissionService
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future

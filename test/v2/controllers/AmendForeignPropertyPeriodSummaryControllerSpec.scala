@@ -27,11 +27,11 @@ import mocks.MockIdGenerator
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.Result
 import v2.controllers.validators.MockAmendForeignPropertyPeriodSummaryValidatorFactory
-import v2.mocks.services.MockAmendForeignPropertyPeriodSummaryService
 import v2.models.request.amendForeignPropertyPeriodSummary._
 import v2.models.request.common.foreignFhlEea.{AmendForeignFhlEea, AmendForeignFhlEeaExpenses, ForeignFhlEeaIncome}
 import v2.models.request.common.foreignPropertyEntry._
 import v2.models.response.amendForeignPropertyPeriodSummary.AmendForeignPropertyPeriodSummaryHateoasData
+import v2.services.MockAmendForeignPropertyPeriodSummaryService
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future

@@ -22,7 +22,7 @@ import api.models.errors._
 import api.models.outcomes.ResponseWrapper
 import api.services.ServiceSpec
 import uk.gov.hmrc.http.HeaderCarrier
-import v3.mocks.connectors.MockCreateUkPropertyPeriodSummaryConnector
+import v3.connectors.MockCreateUkPropertyPeriodSummaryConnector
 import v3.models.request.createUkPropertyPeriodSummary._
 import v3.models.response.createUkPropertyPeriodSummary.CreateUkPropertyPeriodSummaryResponse
 

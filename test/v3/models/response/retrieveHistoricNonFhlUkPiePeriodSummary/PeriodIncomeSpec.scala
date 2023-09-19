@@ -18,9 +18,8 @@ package v3.models.response.retrieveHistoricNonFhlUkPiePeriodSummary
 
 import play.api.libs.json.{JsValue, Json}
 import support.UnitSpec
-import v3.models.utils.JsonErrorValidators
 
-class PeriodIncomeSpec extends UnitSpec with JsonErrorValidators {
+class PeriodIncomeSpec extends UnitSpec {
 
   private def decimal(value: String): Option[BigDecimal] = Option(BigDecimal(value))
 

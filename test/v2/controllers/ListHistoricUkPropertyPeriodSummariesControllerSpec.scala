@@ -26,9 +26,9 @@ import mocks.MockIdGenerator
 import play.api.libs.json.Json
 import play.api.mvc.Result
 import v2.controllers.validators.MockListHistoricUkPropertyPeriodSummariesValidatorFactory
-import v2.mocks.services.MockListHistoricUkPropertyPeriodSummariesService
 import v2.models.request.listHistoricUkPropertyPeriodSummaries.ListHistoricUkPropertyPeriodSummariesRequestData
 import v2.models.response.listHistoricUkPropertyPeriodSummaries._
+import v2.services.MockListHistoricUkPropertyPeriodSummariesService
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future

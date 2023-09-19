@@ -22,7 +22,7 @@ import api.models.errors._
 import api.models.outcomes.ResponseWrapper
 import support.UnitSpec
 import uk.gov.hmrc.http.HeaderCarrier
-import v2.mocks.connectors.MockAmendUkPropertyAnnualSubmissionConnector
+import v2.connectors.MockAmendUkPropertyAnnualSubmissionConnector
 import v2.models.request.amendUkPropertyAnnualSubmission.{AmendUkPropertyAnnualSubmissionRequestBody, AmendUkPropertyAnnualSubmissionRequestData}
 
 import scala.concurrent.ExecutionContext.Implicits.global

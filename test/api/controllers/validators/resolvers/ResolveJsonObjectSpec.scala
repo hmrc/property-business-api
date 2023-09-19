@@ -17,13 +17,12 @@
 package api.controllers.validators.resolvers
 
 import api.models.errors.MtdError
-import api.models.utils.JsonErrorValidators
 import cats.data.Validated.{Invalid, Valid}
 import play.api.http.Status.BAD_REQUEST
 import play.api.libs.json.{Json, Reads}
 import support.UnitSpec
 
-class ResolveJsonObjectSpec extends UnitSpec with JsonErrorValidators {
+class ResolveJsonObjectSpec extends UnitSpec {
 
   case class TestDataObject(fieldOne: String, fieldTwo: String)
 

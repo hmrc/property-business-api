@@ -16,18 +16,17 @@
 
 package v2.models.response.retrieveHistoricFhlUkPropertyAnnualSubmission
 
-import play.api.libs.json.{JsValue, Json}
+import play.api.libs.json.Json
 import support.UnitSpec
-import v2.models.utils.JsonErrorValidators
 
-class AnnualAllowancesSpec extends UnitSpec with JsonErrorValidators {
+class AnnualAllowancesSpec extends UnitSpec {
 
   private def decimal(value: String): Option[BigDecimal] = Option(BigDecimal(value))
 
-  val annualAllowances =
+  private val annualAllowances =
     AnnualAllowances(decimal("200.00"), decimal("300.00"), decimal("400.02"), decimal("10.02"))
 
-  val writesJson: JsValue = Json.parse(
+  private val writesJson = Json.parse(
     """
       |{
       |   "annualInvestmentAllowance": 200.00,
@@ -38,7 +37,7 @@ class AnnualAllowancesSpec extends UnitSpec with JsonErrorValidators {
       |""".stripMargin
   )
 
-  val readsJson: JsValue = Json.parse("""
+  private val readsJson = Json.parse("""
      |{
      |    "annualInvestmentAllowance": 200.00,
      |    "businessPremisesRenovationAllowance": 300.00,

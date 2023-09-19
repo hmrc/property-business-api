@@ -23,8 +23,8 @@ import api.models.outcomes.ResponseWrapper
 import fixtures.RetrieveUkPropertyPeriodSummary.ResponseModelsFixture
 import support.UnitSpec
 import uk.gov.hmrc.http.HeaderCarrier
+import v2.connectors.MockRetrieveUkPropertyPeriodSummaryConnector
 import v2.connectors.RetrieveUkPropertyPeriodSummaryConnector.{NonUkResult, UkResult}
-import v2.mocks.connectors.MockRetrieveUkPropertyPeriodSummaryConnector
 import v2.models.request.retrieveUkPropertyPeriodSummary.RetrieveUkPropertyPeriodSummaryRequestData
 
 import scala.concurrent.ExecutionContext.Implicits.global

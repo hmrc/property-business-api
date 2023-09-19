@@ -26,6 +26,7 @@ import api.models.errors.{
   RuleIncorrectOrEmptyBodyError,
   ValueFormatError
 }
+import api.models.utils.JsonErrorValidators
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import play.api.http.HeaderNames.ACCEPT
 import play.api.http.Status._
@@ -34,7 +35,6 @@ import play.api.libs.ws.{WSRequest, WSResponse}
 import play.api.test.Helpers.AUTHORIZATION
 import support.IntegrationBaseSpec
 import v2.models.request.amendHistoricNonFhlUkPiePeriodSummary.AmendHistoricNonFhlUkPeriodSummaryRequestBody
-import v2.models.utils.JsonErrorValidators
 import v2.stubs.{AuthStub, DownstreamStub, MtdIdLookupStub}
 
 class AmendHistoricNonFhlUkPropertyPeriodSummaryControllerISpec extends IntegrationBaseSpec with JsonErrorValidators {

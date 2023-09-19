@@ -19,15 +19,14 @@ package v2.models.response.retrieveForeignPropertyPeriodSummary
 import api.hateoas.{Link, Method}
 import api.models.domain.Timestamp
 import mocks.MockAppConfig
-import play.api.libs.json.{JsValue, Json}
+import play.api.libs.json.Json
 import support.UnitSpec
 import v2.models.response.retrieveForeignPropertyPeriodSummary.foreignFhlEea._
 import v2.models.response.retrieveForeignPropertyPeriodSummary.foreignNonFhlProperty._
-import v2.models.utils.JsonErrorValidators
 
-class RetrieveForeignPropertyPeriodSummaryResponseSpec extends UnitSpec with JsonErrorValidators with MockAppConfig {
+class RetrieveForeignPropertyPeriodSummaryResponseSpec extends UnitSpec with MockAppConfig {
 
-  val retrieveForeignPropertyResponseBody: RetrieveForeignPropertyPeriodSummaryResponse = RetrieveForeignPropertyPeriodSummaryResponse(
+  private val retrieveForeignPropertyResponseBody = RetrieveForeignPropertyPeriodSummaryResponse(
     Timestamp("2021-06-17T10:53:38Z"),
     "2020-01-01",
     "2020-01-31",
@@ -52,7 +51,7 @@ class RetrieveForeignPropertyPeriodSummaryResponseSpec extends UnitSpec with Jso
         Some(
           ForeignNonFhlPropertyIncome(
             Some(ForeignNonFhlPropertyRentIncome(Some(5000.99))),
-            false,
+            foreignTaxCreditRelief = false,
             Some(5000.99),
             Some(5000.99),
             Some(5000.99),
@@ -74,8 +73,7 @@ class RetrieveForeignPropertyPeriodSummaryResponseSpec extends UnitSpec with Jso
       )))
   )
 
-  val writesJson: JsValue = Json.parse(
-    """
+  private val writesJson = Json.parse("""
       |{
       |  "submittedOn": "2021-06-17T10:53:38.000Z",
       |  "fromDate": "2020-01-01",
@@ -123,10 +121,9 @@ class RetrieveForeignPropertyPeriodSummaryResponseSpec extends UnitSpec with Jso
       |    }
       |  ]
       |}
-    """.stripMargin
-  )
+    """.stripMargin)
 
-  val readsJson: JsValue = Json.parse(
+  private val readsJson = Json.parse(
     """
       |{
       |  "submittedOn": "2021-06-17T10:53:38.000Z",

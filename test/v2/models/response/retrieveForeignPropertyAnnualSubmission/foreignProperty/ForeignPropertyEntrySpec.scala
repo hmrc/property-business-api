@@ -18,9 +18,8 @@ package v2.models.response.retrieveForeignPropertyAnnualSubmission.foreignProper
 
 import play.api.libs.json.Json
 import support.UnitSpec
-import v2.models.utils.JsonErrorValidators
 
-class ForeignPropertyEntrySpec extends UnitSpec with JsonErrorValidators {
+class ForeignPropertyEntrySpec extends UnitSpec {
 
   private val foreignProperty = ForeignPropertyEntry(
     "GER",

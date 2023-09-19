@@ -22,8 +22,8 @@ import api.models.errors._
 import api.models.outcomes.ResponseWrapper
 import support.UnitSpec
 import uk.gov.hmrc.http.HeaderCarrier
+import v2.connectors.MockRetrieveUkPropertyAnnualSubmissionConnector
 import v2.connectors.RetrieveUkPropertyAnnualSubmissionConnector._
-import v2.mocks.connectors.MockRetrieveUkPropertyAnnualSubmissionConnector
 import v2.models.request.retrieveUkPropertyAnnualSubmission.RetrieveUkPropertyAnnualSubmissionRequestData
 import v2.models.response.retrieveUkPropertyAnnualSubmission.RetrieveUkPropertyAnnualSubmissionResponse
 

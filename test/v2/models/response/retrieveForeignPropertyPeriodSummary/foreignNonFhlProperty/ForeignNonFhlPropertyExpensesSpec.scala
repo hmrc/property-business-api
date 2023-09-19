@@ -18,11 +18,10 @@ package v2.models.response.retrieveForeignPropertyPeriodSummary.foreignNonFhlPro
 
 import play.api.libs.json.Json
 import support.UnitSpec
-import v2.models.utils.JsonErrorValidators
 
-class ForeignNonFhlPropertyExpensesSpec extends UnitSpec with JsonErrorValidators {
+class ForeignNonFhlPropertyExpensesSpec extends UnitSpec {
 
-  val foreignNonFhlPropertyExpenses = ForeignNonFhlPropertyExpenses(
+  private val foreignNonFhlPropertyExpenses = ForeignNonFhlPropertyExpenses(
     Some(5000.99),
     Some(5000.99),
     Some(5000.99),
@@ -35,7 +34,8 @@ class ForeignNonFhlPropertyExpensesSpec extends UnitSpec with JsonErrorValidator
     Some(5000.99)
   )
 
-  val writesJson = Json.parse("""{
+  private val writesJson = Json.parse("""
+      |{
       |  "premisesRunningCosts": 5000.99,
       |  "repairsAndMaintenance": 5000.99,
       |  "financialCosts": 5000.99,
@@ -48,7 +48,8 @@ class ForeignNonFhlPropertyExpensesSpec extends UnitSpec with JsonErrorValidator
       |  "consolidatedExpenses": 5000.99
       |}""".stripMargin)
 
-  val readsJson = Json.parse("""{
+  private val readsJson = Json.parse("""
+      |{
       |  "premisesRunningCosts": 5000.99,
       |  "repairsAndMaintenance": 5000.99,
       |  "financialCosts": 5000.99,

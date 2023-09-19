@@ -26,11 +26,11 @@ import mocks.MockIdGenerator
 import play.api.libs.json.Json
 import play.api.mvc.Result
 import v2.controllers.validators.MockRetrieveForeignPropertyAnnualSubmissionValidatorFactory
-import v2.mocks.services.MockRetrieveForeignPropertyAnnualSubmissionService
 import v2.models.request.retrieveForeignPropertyAnnualSubmission._
 import v2.models.response.retrieveForeignPropertyAnnualSubmission._
 import v2.models.response.retrieveForeignPropertyAnnualSubmission.foreignFhlEea._
 import v2.models.response.retrieveForeignPropertyAnnualSubmission.foreignProperty._
+import v2.services.MockRetrieveForeignPropertyAnnualSubmissionService
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future

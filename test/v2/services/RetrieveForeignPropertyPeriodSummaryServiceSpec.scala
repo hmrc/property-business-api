@@ -22,8 +22,8 @@ import api.models.errors._
 import api.models.outcomes.ResponseWrapper
 import support.UnitSpec
 import uk.gov.hmrc.http.HeaderCarrier
+import v2.connectors.MockRetrieveForeignPropertyPeriodSummaryConnector
 import v2.connectors.RetrieveForeignPropertyPeriodSummaryConnector.{ForeignResult, NonForeignResult}
-import v2.mocks.connectors.MockRetrieveForeignPropertyPeriodSummaryConnector
 import v2.models.request.retrieveForeignPropertyPeriodSummary.RetrieveForeignPropertyPeriodSummaryRequestData
 import v2.models.response.retrieveForeignPropertyPeriodSummary.RetrieveForeignPropertyPeriodSummaryResponse
 

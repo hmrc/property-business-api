@@ -24,11 +24,11 @@ import api.models.outcomes.ResponseWrapper
 import play.api.libs.json.{JsObject, JsValue, Json}
 import play.api.mvc.Result
 import v2.controllers.validators.MockRetrieveUkPropertyAnnualSubmissionValidatorFactory
-import v2.mocks.services.MockRetrieveUkPropertyAnnualSubmissionService
 import v2.models.request.retrieveUkPropertyAnnualSubmission._
 import v2.models.response.retrieveUkPropertyAnnualSubmission._
 import v2.models.response.retrieveUkPropertyAnnualSubmission.ukFhlProperty._
 import v2.models.response.retrieveUkPropertyAnnualSubmission.ukNonFhlProperty._
+import v2.services.MockRetrieveUkPropertyAnnualSubmissionService
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future

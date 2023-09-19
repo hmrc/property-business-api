@@ -18,6 +18,7 @@ package v2.controllers
 
 import api.controllers._
 import api.hateoas.HateoasFactory
+import api.models.audit.FlattenedGenericAuditDetail
 import api.services.{AuditService, EnrolmentsAuthService, MtdIdLookupService}
 import play.api.libs.json.JsValue
 import play.api.mvc.{Action, ControllerComponents}
@@ -57,13 +58,16 @@ class CreateHistoricNonFHLUkPiePeriodSummaryController @Inject() (val authServic
           .withValidator(validator)
           .withService(service.createPeriodSummary)
           .withAuditing(
-            AuditHandler(
+            AuditHandler.custom(
               auditService,
               "CreateHistoricNonFhlPropertyIncomeExpensesPeriodSummary",
               "create-historic-non-fhl-property-income-expenses-period-summary",
-              Version.from(request, orElse = Version2),
-              Map("nino" -> nino),
-              Some(request.body)
+              auditDetailCreator = FlattenedGenericAuditDetail.auditDetailCreator(
+                Version.from(request, orElse = Version2),
+                Map("nino" -> nino)
+              ),
+              requestBody = Some(request.body),
+              responseBodyMap = None => None
             )
           )
           .withHateoasResultFrom(hateoasFactory)((_, response) => CreateHistoricNonFhlUkPiePeriodSummaryHateoasData(nino, response.periodId), CREATED)

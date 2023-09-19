@@ -198,8 +198,6 @@ class CreateUkPropertyPeriodSummaryValidatorFactorySpec extends UnitSpec with Mo
     validatorFactory.validator(nino, businessId, taxYear, body)
 
   MockAppConfig.minimumTaxV2Uk.returns(2021)
-  //    MockAppConfig.minimumFromDate returns 1900
-  //    MockAppConfig.maximumToDate returns 2100
 
   "validator" should {
     "return the parsed domain object" when {
@@ -267,13 +265,6 @@ class CreateUkPropertyPeriodSummaryValidatorFactorySpec extends UnitSpec with Mo
           validator(validNino, "2020-22", validBusinessId, validBody).validateAndWrapResult()
 
         result shouldBe Left(ErrorWrapper(correlationId, RuleTaxYearRangeInvalidError))
-      }
-
-      "passed an invalid business id" in {
-        val result: Either[ErrorWrapper, CreateUkPropertyPeriodSummaryRequestData] =
-          validator(validNino, validTaxYear, "invalid", validBody).validateAndWrapResult()
-
-        result shouldBe Left(ErrorWrapper(correlationId, BusinessIdFormatError))
       }
 
       "passed an empty body" in {

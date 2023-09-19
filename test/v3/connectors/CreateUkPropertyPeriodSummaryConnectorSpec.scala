@@ -17,7 +17,7 @@
 package v3.connectors
 
 import api.connectors.{ConnectorSpec, DownstreamOutcome}
-import api.models.domain.{Nino, TaxYear}
+import api.models.domain.{BusinessId, Nino, TaxYear}
 import api.models.outcomes.ResponseWrapper
 import v3.models.request.createUkPropertyPeriodSummary._
 import v3.models.response.createUkPropertyPeriodSummary.CreateUkPropertyPeriodSummaryResponse
@@ -26,8 +26,8 @@ import scala.concurrent.Future
 
 class CreateUkPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
 
-  private val businessId: String = "XAIS12345678910"
-  private val nino: String       = "AA123456A"
+  private val nino       = Nino("AA123456A")
+  private val businessId = BusinessId("XAIS12345678910")
 
   "connector" must {
     "post a body and return 200 with submissionId" in new IfsTest with Test {
@@ -62,8 +62,8 @@ class CreateUkPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
     protected val requestBody: CreateUkPropertyPeriodSummaryRequestBody =
       CreateUkPropertyPeriodSummaryRequestBody("2020-01-01", "2020-01-31", None, None)
 
-    protected val requestData: CreateUkPropertyPeriodSummaryRequest =
-      CreateUkPropertyPeriodSummaryRequest(Nino(nino), taxYear, businessId, requestBody)
+    protected val requestData: CreateUkPropertyPeriodSummaryRequestData =
+      CreateUkPropertyPeriodSummaryRequestData(nino, taxYear, businessId, requestBody)
 
     protected val response: CreateUkPropertyPeriodSummaryResponse = CreateUkPropertyPeriodSummaryResponse("4557ecb5-fd32-48cc-81f5-e6acd1099f3c")
     protected val outcome: Right[Nothing, ResponseWrapper[CreateUkPropertyPeriodSummaryResponse]] = Right(ResponseWrapper(correlationId, response))

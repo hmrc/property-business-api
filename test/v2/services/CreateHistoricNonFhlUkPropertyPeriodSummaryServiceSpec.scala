@@ -135,11 +135,11 @@ class CreateHistoricNonFhlUkPropertyPeriodSummaryServiceSpec extends ServiceSpec
         Some(consolidatedExpenses)
       )
 
-    protected val requestData: CreateHistoricNonFhlUkPropertyPeriodSummaryRequest =
-      CreateHistoricNonFhlUkPropertyPeriodSummaryRequest(Nino(nino), requestBody)
+    protected val requestData: CreateHistoricNonFhlUkPropertyPeriodSummaryRequestData =
+      CreateHistoricNonFhlUkPropertyPeriodSummaryRequestData(Nino(nino), requestBody)
 
-    protected val consolidatedRequestData: CreateHistoricNonFhlUkPropertyPeriodSummaryRequest =
-      CreateHistoricNonFhlUkPropertyPeriodSummaryRequest(Nino(nino), consolidatedRequestBody)
+    protected val consolidatedRequestData: CreateHistoricNonFhlUkPropertyPeriodSummaryRequestData =
+      CreateHistoricNonFhlUkPropertyPeriodSummaryRequestData(Nino(nino), consolidatedRequestBody)
 
     protected val responseData: CreateHistoricNonFhlUkPiePeriodSummaryResponse = CreateHistoricNonFhlUkPiePeriodSummaryResponse(PeriodId(periodId))
 

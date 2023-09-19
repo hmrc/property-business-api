@@ -17,7 +17,7 @@
 package v2.services
 
 import api.controllers.EndpointLogContext
-import api.models.domain.{Nino, TaxYear}
+import api.models.domain.{BusinessId, Nino, TaxYear}
 import api.models.errors._
 import api.models.outcomes.ResponseWrapper
 import api.services.ServiceSpec
@@ -30,9 +30,9 @@ import scala.concurrent.Future
 
 class CreateUkPropertyPeriodSummaryServiceSpec extends ServiceSpec {
 
-  private val businessId: String = "XAIS12345678910"
-  private val nino: String       = "AA123456A"
-  private val taxYear: TaxYear   = TaxYear.fromMtd("2020-21")
+  private val nino       = Nino("AA123456A")
+  private val businessId = BusinessId("XAIS12345678910")
+  private val taxYear    = TaxYear.fromMtd("2020-21")
 
   implicit private val correlationId: String = "X-123"
 
@@ -102,8 +102,8 @@ class CreateUkPropertyPeriodSummaryServiceSpec extends ServiceSpec {
     private val requestBody =
       CreateUkPropertyPeriodSummaryRequestBody("2020-01-01", "2020-01-31", None, None)
 
-    protected val request: CreateUkPropertyPeriodSummaryRequest =
-      CreateUkPropertyPeriodSummaryRequest(Nino(nino), taxYear, businessId, requestBody)
+    protected val request: CreateUkPropertyPeriodSummaryRequestData =
+      CreateUkPropertyPeriodSummaryRequestData(nino, taxYear, businessId, requestBody)
 
     protected val response: CreateUkPropertyPeriodSummaryResponse = CreateUkPropertyPeriodSummaryResponse(
       submissionId = "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"

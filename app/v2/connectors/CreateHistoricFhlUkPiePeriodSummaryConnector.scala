@@ -22,7 +22,7 @@ import api.connectors.{BaseDownstreamConnector, DownstreamOutcome}
 import config.AppConfig
 import play.api.http.Status
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
-import v2.models.request.createHistoricFhlUkPiePeriodSummary.CreateHistoricFhlUkPiePeriodSummaryRequest
+import v2.models.request.createHistoricFhlUkPiePeriodSummary.CreateHistoricFhlUkPiePeriodSummaryRequestData
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
@@ -32,7 +32,7 @@ class CreateHistoricFhlUkPiePeriodSummaryConnector @Inject() (val http: HttpClie
 
   implicit val successCode: SuccessCode = SuccessCode(Status.OK)
 
-  def createPeriodSummary(request: CreateHistoricFhlUkPiePeriodSummaryRequest)(implicit
+  def createPeriodSummary(request: CreateHistoricFhlUkPiePeriodSummaryRequestData)(implicit
       hc: HeaderCarrier,
       ex: ExecutionContext,
       correlationId: String): Future[DownstreamOutcome[Unit]] = {

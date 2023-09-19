@@ -68,9 +68,6 @@ trait AppConfig {
 
   def minimumTaxHistoric: Int
   def maximumTaxHistoric: Int
-
-  def minimumFromDate: Int
-  def maximumToDate: Int
 }
 
 @Singleton
@@ -109,9 +106,6 @@ class AppConfigImpl @Inject() (config: ServicesConfig, configuration: Configurat
 
   val minimumTaxHistoric: Int = config.getInt("minimum-tax-year.version-2.historic")
   val maximumTaxHistoric: Int = config.getInt("maximum-tax-year.version-2.historic")
-
-  val minimumFromDate: Int = config.getInt("date-ranges.minimum-from-date")
-  val maximumToDate: Int   = config.getInt("date-ranges.maximum-to-date")
 }
 
 case class ConfidenceLevelConfig(confidenceLevel: ConfidenceLevel, definitionEnabled: Boolean, authValidationEnabled: Boolean)

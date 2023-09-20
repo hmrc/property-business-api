@@ -16,39 +16,38 @@
 
 package v2.models.request.createAmendForeignPropertyAnnualSubmission.foreignFhlEea
 
-import play.api.libs.json.{JsValue, Json}
+import play.api.libs.json.Json
 import support.UnitSpec
 import v2.models.request.createAmendForeignPropertyAnnualSubmission.CreateAmendForeignPropertyAnnualSubmissionFixture
-import v2.models.utils.JsonErrorValidators
 
-class ForeignFhlEeaSpec extends UnitSpec with JsonErrorValidators with CreateAmendForeignPropertyAnnualSubmissionFixture {
+class ForeignFhlEeaSpec extends UnitSpec with CreateAmendForeignPropertyAnnualSubmissionFixture {
 
-  private val allowancesOnly: ForeignFhlEea = ForeignFhlEea(
+  private val allowancesOnly = ForeignFhlEea(
     allowances = Some(foreignFhlEeaAllowances),
     adjustments = None
   )
 
-  private val allowancesOnlyMtdJson: JsValue = Json.parse(s"""
+  private val allowancesOnlyMtdJson = Json.parse(s"""
       |{
       |   "allowances": $foreignFhlEeaAllowancesMtdJson
       |}""".stripMargin)
 
-  private val allowancesOnlyDownstreamJson: JsValue = Json.parse(s"""
+  private val allowancesOnlyDownstreamJson = Json.parse(s"""
        |{
        |   "allowances": $foreignFhlEeaAllowancesDownstreamJson
        |}""".stripMargin)
 
-  private val adjustmentsOnly: ForeignFhlEea = ForeignFhlEea(
+  private val adjustmentsOnly = ForeignFhlEea(
     allowances = None,
     adjustments = Some(foreignFhlEeaAdjustments)
   )
 
-  private val adjustmentsOnlyMtdJson: JsValue = Json.parse(s"""
+  private val adjustmentsOnlyMtdJson = Json.parse(s"""
        |{
        |   "adjustments": $foreignFhlEeaAdjustmentsMtdJson
        |}""".stripMargin)
 
-  private val adjustmentsOnlyDownstreamJson: JsValue = Json.parse(s"""
+  private val adjustmentsOnlyDownstreamJson = Json.parse(s"""
        |{
        |   "adjustments": $foreignFhlEeaAdjustmentsDownstreamJson
        |}""".stripMargin)

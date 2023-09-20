@@ -26,12 +26,12 @@ import api.services.MockAuditService
 import play.api.libs.json.{JsObject, JsValue, Json}
 import play.api.mvc.Result
 import v3.controllers.validators.MockCreateUkPropertyPeriodSummaryValidatorFactory
-import v3.mocks.services.MockCreateUkPropertyPeriodSummaryService
 import v3.models.request.common.ukFhlProperty.{UkFhlProperty, UkFhlPropertyExpenses, UkFhlPropertyIncome}
 import v3.models.request.common.ukNonFhlProperty.{UkNonFhlProperty, UkNonFhlPropertyExpenses, UkNonFhlPropertyIncome}
 import v3.models.request.common.ukPropertyRentARoom.{UkPropertyExpensesRentARoom, UkPropertyIncomeRentARoom}
 import v3.models.request.createUkPropertyPeriodSummary._
 import v3.models.response.createUkPropertyPeriodSummary._
+import v3.services.MockCreateUkPropertyPeriodSummaryService
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future

@@ -24,9 +24,9 @@ import api.models.outcomes.ResponseWrapper
 import play.api.libs.json.Json
 import play.api.mvc.Result
 import v2.controllers.validators.MockListPropertyPeriodSummariesValidatorFactory
-import v2.mocks.services.MockListPropertyPeriodSummariesService
 import v2.models.request.listPropertyPeriodSummaries.ListPropertyPeriodSummariesRequestData
 import v2.models.response.listPropertyPeriodSummaries.{ListPropertyPeriodSummariesHateoasData, ListPropertyPeriodSummariesResponse, SubmissionPeriod}
+import v2.services.MockListPropertyPeriodSummariesService
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future

@@ -25,9 +25,9 @@ import api.models.outcomes.ResponseWrapper
 import fixtures.RetrieveUkPropertyPeriodSummary.ResponseModelsFixture
 import play.api.mvc.Result
 import v2.controllers.validators.MockRetrieveUkPropertyPeriodSummaryValidatorFactory
-import v2.mocks.services.MockRetrieveUkPropertyPeriodSummaryService
 import v2.models.request.retrieveUkPropertyPeriodSummary.RetrieveUkPropertyPeriodSummaryRequestData
 import v2.models.response.retrieveUkPropertyPeriodSummary.{RetrieveUkPropertyPeriodSummaryHateoasData, RetrieveUkPropertyPeriodSummaryResponse}
+import v2.services.MockRetrieveUkPropertyPeriodSummaryService
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future

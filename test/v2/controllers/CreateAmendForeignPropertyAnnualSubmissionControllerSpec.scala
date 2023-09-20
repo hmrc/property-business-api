@@ -27,9 +27,9 @@ import mocks.MockIdGenerator
 import play.api.libs.json.JsValue
 import play.api.mvc.Result
 import v2.controllers.validators.MockCreateAmendForeignPropertyAnnualSubmissionValidatorFactory
-import v2.mocks.services.MockCreateAmendForeignPropertyAnnualSubmissionService
 import v2.models.request.createAmendForeignPropertyAnnualSubmission._
 import v2.models.response.createAmendForeignPropertyAnnualSubmission.CreateAmendForeignPropertyAnnualSubmissionHateoasData
+import v2.services.MockCreateAmendForeignPropertyAnnualSubmissionService
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future

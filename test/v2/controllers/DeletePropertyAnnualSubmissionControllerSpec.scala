@@ -25,8 +25,8 @@ import api.services.MockAuditService
 import play.api.libs.json.JsValue
 import play.api.mvc.Result
 import v2.controllers.validators.MockDeletePropertyAnnualSubmissionValidatorFactory
-import v2.mocks.services.MockDeletePropertyAnnualSubmissionService
 import v2.models.request.deletePropertyAnnualSubmission._
+import v2.services.MockDeletePropertyAnnualSubmissionService
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future

@@ -26,9 +26,9 @@ import mocks.MockIdGenerator
 import play.api.libs.json.{JsObject, JsValue, Json}
 import play.api.mvc.Result
 import v2.controllers.validators.MockRetrieveHistoricNonFhlUkPropertyAnnualSubmissionValidatorFactory
-import v2.mocks.services.MockRetrieveHistoricNonFhlUkPropertyAnnualSubmissionService
 import v2.models.request.retrieveHistoricNonFhlUkPropertyAnnualSubmission.RetrieveHistoricNonFhlUkPropertyAnnualSubmissionRequestData
 import v2.models.response.retrieveHistoricNonFhlUkPropertyAnnualSubmissionResponse._
+import v2.services.MockRetrieveHistoricNonFhlUkPropertyAnnualSubmissionService
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future

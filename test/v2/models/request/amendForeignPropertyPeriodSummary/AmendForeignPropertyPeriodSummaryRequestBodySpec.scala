@@ -20,11 +20,10 @@ import play.api.libs.json.Json
 import support.UnitSpec
 import v2.models.request.common.foreignFhlEea._
 import v2.models.request.common.foreignPropertyEntry._
-import v2.models.utils.JsonErrorValidators
 
-class AmendForeignPropertyPeriodSummaryRequestBodySpec extends UnitSpec with JsonErrorValidators {
+class AmendForeignPropertyPeriodSummaryRequestBodySpec extends UnitSpec {
 
-  val amendForeignPropertyRequestBody: AmendForeignPropertyPeriodSummaryRequestBody = AmendForeignPropertyPeriodSummaryRequestBody(
+  private val amendForeignPropertyRequestBody = AmendForeignPropertyPeriodSummaryRequestBody(
     Some(
       AmendForeignFhlEea(
         Some(ForeignFhlEeaIncome(Some(5000.99))),
@@ -46,7 +45,7 @@ class AmendForeignPropertyPeriodSummaryRequestBodySpec extends UnitSpec with Jso
         Some(
           ForeignNonFhlPropertyIncome(
             Some(ForeignNonFhlPropertyRentIncome(Some(5000.99))),
-            false,
+            foreignTaxCreditRelief = false,
             Some(5000.99),
             Some(5000.99),
             Some(5000.99),
@@ -68,7 +67,8 @@ class AmendForeignPropertyPeriodSummaryRequestBodySpec extends UnitSpec with Jso
       )))
   )
 
-  val readsJson = Json.parse("""{
+  private val readsJson = Json.parse("""
+      |{
       |  "foreignFhlEea": {
       |    "income": {
       |      "rentAmount": 5000.99
@@ -113,7 +113,8 @@ class AmendForeignPropertyPeriodSummaryRequestBodySpec extends UnitSpec with Jso
       |  ]
       |}""".stripMargin)
 
-  val writesJson = Json.parse("""{
+  private val writesJson = Json.parse("""
+      |{
       |  "foreignFhlEea": {
       |    "income": {
       |      "rentAmount": 5000.99

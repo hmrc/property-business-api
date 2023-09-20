@@ -22,7 +22,7 @@ import api.models.errors.{ErrorWrapper, _}
 import api.models.outcomes.ResponseWrapper
 import api.services.{ServiceOutcome, ServiceSpec}
 import uk.gov.hmrc.http.HeaderCarrier
-import v2.mocks.connectors.MockCreateHistoricFhlUkPiePeriodSummaryConnector
+import v2.connectors.MockCreateHistoricFhlUkPiePeriodSummaryConnector
 import v2.models.request.common.ukFhlPieProperty.{UkFhlPieExpenses, UkFhlPieIncome}
 import v2.models.request.common.ukPropertyRentARoom.{UkPropertyExpensesRentARoom, UkPropertyIncomeRentARoom}
 import v2.models.request.createHistoricFhlUkPiePeriodSummary.{

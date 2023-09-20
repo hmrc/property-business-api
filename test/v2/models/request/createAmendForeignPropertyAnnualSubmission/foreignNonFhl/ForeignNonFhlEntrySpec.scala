@@ -16,48 +16,50 @@
 
 package v2.models.request.createAmendForeignPropertyAnnualSubmission.foreignNonFhl
 
-import play.api.libs.json.{JsValue, Json}
+import play.api.libs.json.Json
 import support.UnitSpec
 import v2.models.request.createAmendForeignPropertyAnnualSubmission.CreateAmendForeignPropertyAnnualSubmissionFixture
-import v2.models.utils.JsonErrorValidators
 
-class ForeignNonFhlEntrySpec extends UnitSpec with JsonErrorValidators with CreateAmendForeignPropertyAnnualSubmissionFixture {
+class ForeignNonFhlEntrySpec extends UnitSpec with CreateAmendForeignPropertyAnnualSubmissionFixture {
 
-  private val allowancesOnly: ForeignNonFhlEntry = ForeignNonFhlEntry(
+  private val allowancesOnly = ForeignNonFhlEntry(
     countryCode = "GER",
     allowances = Some(foreignNonFhlAllowances),
     adjustments = None
   )
 
-  private val allowancesOnlyMtdJson: JsValue = Json.parse(s"""
+  private val allowancesOnlyMtdJson = Json.parse(s"""
      |{
      |   "countryCode": "GER",
      |   "allowances": $foreignNonFhlAllowancesMtdJson
-     |}""".stripMargin)
+     |}
+     |""".stripMargin)
 
-  private val allowancesOnlyDownstreamJson: JsValue = Json.parse(s"""
+  private val allowancesOnlyDownstreamJson = Json.parse(s"""
     |{
     |   "countryCode": "GER",
     |   "allowances": $foreignNonFhlAllowancesDownstreamJson
-    |}""".stripMargin)
+    |}
+    |""".stripMargin)
 
-  private val adjustmentsOnly: ForeignNonFhlEntry = ForeignNonFhlEntry(
+  private val adjustmentsOnly = ForeignNonFhlEntry(
     countryCode = "GER",
     allowances = None,
     adjustments = Some(foreignNonFhlAdjustments)
   )
 
-  private val adjustmentsOnlyMtdJson: JsValue = Json.parse(s"""
+  private val adjustmentsOnlyMtdJson = Json.parse(s"""
     |{
     |   "countryCode": "GER",
     |   "adjustments": $foreignNonFhlAdjustmentsMtdJson
     |}""".stripMargin)
 
-  private val adjustmentsOnlyDownstreamJson: JsValue = Json.parse(s"""
+  private val adjustmentsOnlyDownstreamJson = Json.parse(s"""
    |{
    |   "countryCode": "GER",
    |   "adjustments": $foreignNonFhlAdjustmentsDownstreamJson
-   |}""".stripMargin)
+   |}
+   |""".stripMargin)
 
   "reads" when {
     "passed valid mtd JSON" should {

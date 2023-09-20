@@ -19,9 +19,8 @@ package v2.models.request.createAmendForeignPropertyAnnualSubmission.foreignFhlE
 import play.api.libs.json.Json
 import support.UnitSpec
 import v2.models.request.createAmendForeignPropertyAnnualSubmission.CreateAmendForeignPropertyAnnualSubmissionFixture
-import v2.models.utils.JsonErrorValidators
 
-class ForeignFhlEeaAllowancesSpec extends UnitSpec with JsonErrorValidators with CreateAmendForeignPropertyAnnualSubmissionFixture {
+class ForeignFhlEeaAllowancesSpec extends UnitSpec with CreateAmendForeignPropertyAnnualSubmissionFixture {
 
   "reads" when {
     "passed valid mtd JSON" should {

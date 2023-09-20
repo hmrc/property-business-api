@@ -16,40 +16,36 @@
 
 package v2.models.request.createAmendForeignPropertyAnnualSubmission
 
-import play.api.libs.json.{JsValue, Json}
+import play.api.libs.json.Json
 import support.UnitSpec
-import v2.models.utils.JsonErrorValidators
 
-class CreateAmendForeignPropertyAnnualSubmissionRequestBodySpec
-    extends UnitSpec
-    with JsonErrorValidators
-    with CreateAmendForeignPropertyAnnualSubmissionFixture {
+class CreateAmendForeignPropertyAnnualSubmissionRequestBodySpec extends UnitSpec with CreateAmendForeignPropertyAnnualSubmissionFixture {
 
-  private val fhlModel: CreateAmendForeignPropertyAnnualSubmissionRequestBody =
+  private val fhlModel =
     CreateAmendForeignPropertyAnnualSubmissionRequestBody(foreignFhlEea = Some(foreignFhlEea), foreignNonFhlProperty = None)
 
-  private val fhlMtdJson: JsValue = Json.parse(s"""
+  private val fhlMtdJson = Json.parse(s"""
        |{
        |   "foreignFhlEea": $foreignFhlEeaMtdJson
        |}
        |""".stripMargin)
 
-  private val fhlDownstreamJson: JsValue = Json.parse(s"""
+  private val fhlDownstreamJson = Json.parse(s"""
       |{
       |   "foreignFhlEea": $foreignFhlEeaDownstreamJson
       |}
       |""".stripMargin)
 
-  private val nonFhlModel: CreateAmendForeignPropertyAnnualSubmissionRequestBody =
+  private val nonFhlModel =
     CreateAmendForeignPropertyAnnualSubmissionRequestBody(foreignFhlEea = None, foreignNonFhlProperty = Some(Seq(foreignNonFhlEntry)))
 
-  private val nonFhlMtdJson: JsValue = Json.parse(s"""
+  private val nonFhlMtdJson = Json.parse(s"""
       |{
       |   "foreignNonFhlProperty":[ $foreignNonFhlEntryMtdJson ]
       |}
       |""".stripMargin)
 
-  private val nonFhlDownstreamJson: JsValue = Json.parse(s"""
+  private val nonFhlDownstreamJson = Json.parse(s"""
       |{
       |   "foreignProperty":[ $foreignNonFhlEntryDownstreamJson ]
       |}

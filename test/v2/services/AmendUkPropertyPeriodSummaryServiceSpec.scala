@@ -22,7 +22,7 @@ import api.models.errors._
 import api.models.outcomes.ResponseWrapper
 import api.services.ServiceSpec
 import uk.gov.hmrc.http.HeaderCarrier
-import v2.mocks.connectors.MockAmendUkPropertyPeriodSummaryConnector
+import v2.connectors.MockAmendUkPropertyPeriodSummaryConnector
 import v2.models.request.amendUkPropertyPeriodSummary.{AmendUkPropertyPeriodSummaryRequestBody, AmendUkPropertyPeriodSummaryRequestData}
 
 import scala.concurrent.Future

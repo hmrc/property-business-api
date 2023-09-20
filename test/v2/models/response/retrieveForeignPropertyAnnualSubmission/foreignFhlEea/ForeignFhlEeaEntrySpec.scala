@@ -16,9 +16,9 @@
 
 package v2.models.response.retrieveForeignPropertyAnnualSubmission.foreignFhlEea
 
+import api.models.utils.JsonErrorValidators
 import play.api.libs.json.Json
 import support.UnitSpec
-import v2.models.utils.JsonErrorValidators
 
 class ForeignFhlEeaEntrySpec extends UnitSpec with JsonErrorValidators {
 
@@ -106,7 +106,7 @@ class ForeignFhlEeaEntrySpec extends UnitSpec with JsonErrorValidators {
   """.stripMargin
   )
 
-  val jsonBodyNoAdjustments = Json.parse(
+  private val jsonBodyNoAdjustments = Json.parse(
     """
       |{
       |   "allowances":{

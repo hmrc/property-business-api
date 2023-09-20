@@ -16,15 +16,14 @@
 
 package v2.models.response.retrieveHistoricNonFhlUkPiePeriodSummary
 
-import play.api.libs.json.{JsValue, Json}
+import play.api.libs.json.Json
 import support.UnitSpec
-import v2.models.utils.JsonErrorValidators
 
-class PeriodExpensesSpec extends UnitSpec with JsonErrorValidators {
+class PeriodExpensesSpec extends UnitSpec {
 
-  private def decimal(value: String): Option[BigDecimal] = Option(BigDecimal(value))
+  private def decimal(value: String): Option[BigDecimal] = Some(BigDecimal(value))
 
-  val periodExpenses: PeriodExpenses =
+  private val periodExpenses =
     PeriodExpenses(
       decimal("5000.99"),
       decimal("4999.99"),
@@ -36,10 +35,10 @@ class PeriodExpensesSpec extends UnitSpec with JsonErrorValidators {
       decimal("4993.99"),
       decimal("4992.99"),
       decimal("4991.99"),
-      Option(RentARoomExpenses(Some(4990.99)))
+      Some(RentARoomExpenses(Some(4990.99)))
     )
 
-  val writesJson: JsValue = Json.parse(
+  private val writesJson = Json.parse(
     """{
       |    "premisesRunningCosts": 5000.99,
       |    "repairsAndMaintenance": 4999.99,
@@ -58,7 +57,7 @@ class PeriodExpensesSpec extends UnitSpec with JsonErrorValidators {
       |""".stripMargin
   )
 
-  val readsJson: JsValue = Json.parse("""{
+  private val readsJson = Json.parse("""{
             |         "premisesRunningCosts": 5000.99,
             |         "repairsAndMaintenance": 4999.99,
             |         "financialCosts": 4998.99,

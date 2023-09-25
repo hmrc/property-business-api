@@ -62,7 +62,7 @@ class CreateUkPropertyPeriodSummaryValidatorFactory @Inject() (appConfig: AppCon
       parsed: CreateUkPropertyPeriodSummaryRequestData): Validated[Seq[MtdError], CreateUkPropertyPeriodSummaryRequestData] = {
     import parsed.body._
 
-    val validatedFromAndToDates = resolveFromAndToDates((fromDate, toDate), None, None)
+    val validatedFromAndToDates = resolveFromAndToDates((fromDate, toDate))
 
     val validatedUkFhlProperty    = ukFhlProperty.map(validateUkFhlProperty).getOrElse(valid)
     val validatedUkNonFhlProperty = ukNonFhlProperty.map(validateUkNonFhlProperty).getOrElse(valid)

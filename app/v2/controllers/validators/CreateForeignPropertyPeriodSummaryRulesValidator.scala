@@ -39,7 +39,7 @@ object CreateForeignPropertyPeriodSummaryRulesValidator extends RulesValidator[C
     import parsed.body._
 
     combine(
-      resolveFromAndToDates((fromDate, toDate), None, None).map(_ => ()),
+      resolveFromAndToDates((fromDate, toDate)).map(_ => ()),
       foreignFhlEea.map(validateForeignFhlEea).getOrElse(valid),
       foreignNonFhlProperty.map(validateForeignNonFhlProperty).getOrElse(valid)
     ).onSuccess(parsed)

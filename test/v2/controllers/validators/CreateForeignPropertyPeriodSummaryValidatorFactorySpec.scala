@@ -402,7 +402,7 @@ class CreateForeignPropertyPeriodSummaryValidatorFactorySpec extends UnitSpec wi
         val result: Either[ErrorWrapper, CreateForeignPropertyPeriodSummaryRequestData] =
           validator(validNino, validBusinessId, validTaxYear, invalidBody).validateAndWrapResult()
 
-        result shouldBe Left(ErrorWrapper(correlationId, FromDateOutOfRangeError))
+        result shouldBe Left(ErrorWrapper(correlationId, FromDateFormatError))
       }
 
       "passed a body with an invalidly formatted toDate" in {
@@ -421,7 +421,7 @@ class CreateForeignPropertyPeriodSummaryValidatorFactorySpec extends UnitSpec wi
         val result: Either[ErrorWrapper, CreateForeignPropertyPeriodSummaryRequestData] =
           validator(validNino, validBusinessId, validTaxYear, invalidBody).validateAndWrapResult()
 
-        result shouldBe Left(ErrorWrapper(correlationId, ToDateOutOfRangeError))
+        result shouldBe Left(ErrorWrapper(correlationId, ToDateFormatError))
       }
 
       "passed a body where the toDate precedes fromDate" in {

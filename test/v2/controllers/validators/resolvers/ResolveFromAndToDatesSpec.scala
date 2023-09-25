@@ -17,7 +17,7 @@
 package v2.controllers.validators.resolvers
 
 import api.models.domain.DateRange
-import api.models.errors.{FromDateOutOfRangeError, ToDateOutOfRangeError}
+import api.models.errors.{FromDateFormatError, ToDateFormatError}
 import cats.data.Validated.{Invalid, Valid}
 import support.UnitSpec
 
@@ -25,8 +25,8 @@ import java.time.LocalDate
 
 class ResolveFromAndToDatesSpec extends UnitSpec {
 
-  private val minTaxYear = 2017
-  private val maxTaxYear = 2021
+  private val minTaxYear = 1900
+  private val maxTaxYear = 2100
 
   val resolveFromAndToDates = new ResolveFromAndToDates(minTaxYear, maxTaxYear)
 
@@ -42,8 +42,8 @@ class ResolveFromAndToDatesSpec extends UnitSpec {
       }
 
       "passed valid from and to dates equal to the minimum and maximum" in {
-        val fromDate = "2018-04-06"
-        val toDate   = "2020-04-06"
+        val fromDate = "1900-04-06"
+        val toDate   = "2099-04-06"
 
         val result = resolveFromAndToDates((fromDate, toDate), None, None)
 
@@ -52,19 +52,19 @@ class ResolveFromAndToDatesSpec extends UnitSpec {
     }
 
     "return an error" when {
-      "passed a fromYear less than or equal to minimumTaxYear" in {
-        val result = resolveFromAndToDates(("2017-04-06", "2019-04-05"), None, None)
-        result shouldBe Invalid(List(FromDateOutOfRangeError))
+      "passed a fromYear less than minimumTaxYear" in {
+        val result = resolveFromAndToDates(("1819-04-06", "2019-04-05"), None, None)
+        result shouldBe Invalid(List(FromDateFormatError))
       }
 
-      "passed a toYear greater than or equal to maximumTaxYear" in {
-        val result = resolveFromAndToDates(("2020-04-06", "2021-04-05"), None, None)
-        result shouldBe Invalid(List(ToDateOutOfRangeError))
+      "passed a toYear greater than maximumTaxYear" in {
+        val result = resolveFromAndToDates(("2020-04-06", "2101-04-05"), None, None)
+        result shouldBe Invalid(List(ToDateFormatError))
       }
 
       "passed both dates that are out of range" in {
-        val result = resolveFromAndToDates(("2017-04-06", "2021-04-05"), None, None)
-        result shouldBe Invalid(List(FromDateOutOfRangeError, ToDateOutOfRangeError))
+        val result = resolveFromAndToDates(("1899-04-06", "2105-04-05"), None, None)
+        result shouldBe Invalid(List(FromDateFormatError, ToDateFormatError))
       }
 
     }

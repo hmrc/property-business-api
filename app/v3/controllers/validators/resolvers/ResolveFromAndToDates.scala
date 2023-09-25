@@ -28,12 +28,12 @@ class ResolveFromAndToDates(minimumTaxYear: Int, maximumTaxYear: Int) extends Da
   override protected val endDateFormatError: MtdError      = ToDateFormatError
   override protected val endBeforeStartDateError: MtdError = RuleToDateBeforeFromDateError
 
-  def apply(value: (String, String), maybeError: Option[MtdError], path: Option[String]): Validated[Seq[MtdError], DateRange] = {
+  def apply(value: (String, String), maybeError: Option[MtdError] = None, path: Option[String] = None): Validated[Seq[MtdError], DateRange] = {
     resolve(value, maybeError, path) andThen { dateRange =>
       import dateRange.{endDateAsInt => toYear, startDateAsInt => fromYear}
 
-      val validatedFromDate = if (fromYear <= minimumTaxYear) Invalid(List(FromDateOutOfRangeError)) else Valid(())
-      val validatedToDate   = if (toYear >= maximumTaxYear) Invalid(List(ToDateOutOfRangeError)) else Valid(())
+      val validatedFromDate = if (fromYear <= minimumTaxYear) Invalid(List(FromDateFormatError)) else Valid(())
+      val validatedToDate   = if (toYear >= maximumTaxYear) Invalid(List(ToDateFormatError)) else Valid(())
 
       List(
         validatedFromDate,

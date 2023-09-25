@@ -182,7 +182,7 @@ class CreateHistoricNonFhlUkPiePeriodSummaryValidatorFactorySpec extends UnitSpe
         val result: Either[ErrorWrapper, CreateHistoricNonFhlUkPropertyPeriodSummaryRequestData] =
           validator(validNino, invalidBody).validateAndWrapResult()
 
-        result shouldBe Left(ErrorWrapper(correlationId, FromDateOutOfRangeError))
+        result shouldBe Left(ErrorWrapper(correlationId, FromDateFormatError))
       }
 
       "passed a body with an invalidly formatted toDate" in {
@@ -198,7 +198,7 @@ class CreateHistoricNonFhlUkPiePeriodSummaryValidatorFactorySpec extends UnitSpe
         val result: Either[ErrorWrapper, CreateHistoricNonFhlUkPropertyPeriodSummaryRequestData] =
           validator(validNino, invalidBody).validateAndWrapResult()
 
-        result shouldBe Left(ErrorWrapper(correlationId, ToDateOutOfRangeError))
+        result shouldBe Left(ErrorWrapper(correlationId, ToDateFormatError))
       }
 
       "passed a body where the toDate precedes the fromDate" in {

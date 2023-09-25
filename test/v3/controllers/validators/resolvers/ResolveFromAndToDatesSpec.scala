@@ -17,7 +17,7 @@
 package v3.controllers.validators.resolvers
 
 import api.models.domain.DateRange
-import api.models.errors.{FromDateOutOfRangeError, ToDateOutOfRangeError}
+import api.models.errors.{FromDateFormatError, ToDateFormatError}
 import cats.data.Validated.{Invalid, Valid}
 import support.UnitSpec
 
@@ -54,17 +54,17 @@ class ResolveFromAndToDatesSpec extends UnitSpec {
     "return an error" when {
       "passed a fromYear less than or equal to minimumTaxYear" in {
         val result = resolveFromAndToDates(("2017-04-06", "2019-04-05"), None, None)
-        result shouldBe Invalid(List(FromDateOutOfRangeError))
+        result shouldBe Invalid(List(FromDateFormatError))
       }
 
       "passed a toYear greater than or equal to maximumTaxYear" in {
         val result = resolveFromAndToDates(("2020-04-06", "2021-04-05"), None, None)
-        result shouldBe Invalid(List(ToDateOutOfRangeError))
+        result shouldBe Invalid(List(ToDateFormatError))
       }
 
       "passed both dates that are out of range" in {
         val result = resolveFromAndToDates(("2017-04-06", "2021-04-05"), None, None)
-        result shouldBe Invalid(List(FromDateOutOfRangeError, ToDateOutOfRangeError))
+        result shouldBe Invalid(List(FromDateFormatError, ToDateFormatError))
       }
 
     }

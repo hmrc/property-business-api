@@ -177,7 +177,7 @@ class CreateHistoricFhlUkPiePeriodSummaryValidatorFactorySpec extends UnitSpec w
         val result: Either[ErrorWrapper, CreateHistoricFhlUkPiePeriodSummaryRequestData] =
           validator(validNino, invalidBody).validateAndWrapResult()
 
-        result shouldBe Left(ErrorWrapper(correlationId, FromDateOutOfRangeError))
+        result shouldBe Left(ErrorWrapper(correlationId, FromDateFormatError))
       }
 
       "passed an invalid toDate" in {
@@ -190,12 +190,12 @@ class CreateHistoricFhlUkPiePeriodSummaryValidatorFactorySpec extends UnitSpec w
       }
 
       "passed a toDate that proceeds the maximum" in {
-        val invalidBody = validBody.update("toDate", JsString("2100-01-01"))
+        val invalidBody = validBody.update("toDate", JsString("2101-01-01"))
 
         val result: Either[ErrorWrapper, CreateHistoricFhlUkPiePeriodSummaryRequestData] =
           validator(validNino, invalidBody).validateAndWrapResult()
 
-        result shouldBe Left(ErrorWrapper(correlationId, ToDateOutOfRangeError))
+        result shouldBe Left(ErrorWrapper(correlationId, ToDateFormatError))
       }
 
       "passed a toDate that precedes the fromDate" in {

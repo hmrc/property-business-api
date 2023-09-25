@@ -57,7 +57,7 @@ class CreateHistoricFhlUkPiePeriodSummaryValidatorFactory {
           parsed: CreateHistoricFhlUkPiePeriodSummaryRequestData): Validated[Seq[MtdError], CreateHistoricFhlUkPiePeriodSummaryRequestData] = {
         import parsed.body._
 
-        val validatedDates = resolveFromAndToDates((fromDate, toDate), None, None).map(_ => ())
+        val validatedDates = resolveFromAndToDates((fromDate, toDate)).map(_ => ())
 
         val validatedIncome   = income.map(validateIncome).getOrElse(valid)
         val validatedExpenses = expenses.map(validateExpenses).getOrElse(valid)

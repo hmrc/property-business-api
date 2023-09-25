@@ -358,7 +358,7 @@ class CreateUkPropertyPeriodSummaryValidatorFactorySpec extends UnitSpec with Mo
         val result: Either[ErrorWrapper, CreateUkPropertyPeriodSummaryRequestData] =
           validator(validNino, validTaxYear, validBusinessId, invalidBody).validateAndWrapResult()
 
-        result shouldBe Left(ErrorWrapper(correlationId, FromDateOutOfRangeError))
+        result shouldBe Left(ErrorWrapper(correlationId, FromDateFormatError))
       }
 
       "passed a body with a toDate that proceeds the minimum" in {
@@ -366,7 +366,7 @@ class CreateUkPropertyPeriodSummaryValidatorFactorySpec extends UnitSpec with Mo
         val result: Either[ErrorWrapper, CreateUkPropertyPeriodSummaryRequestData] =
           validator(validNino, validTaxYear, validBusinessId, invalidBody).validateAndWrapResult()
 
-        result shouldBe Left(ErrorWrapper(correlationId, ToDateOutOfRangeError))
+        result shouldBe Left(ErrorWrapper(correlationId, ToDateFormatError))
       }
 
       "passed a body with a toDate that precedes the fromDate" in {

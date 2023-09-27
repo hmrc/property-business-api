@@ -19,7 +19,7 @@ package v3.endpoints
 import api.models.errors.{InternalError, MtdError, NinoFormatError, NotFoundError, PeriodIdFormatError}
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import play.api.http.HeaderNames.ACCEPT
-import play.api.http.Status
+import play.api.http.Status._
 import play.api.libs.json.{JsValue, Json}
 import play.api.libs.ws.{WSRequest, WSResponse}
 import play.api.test.Helpers.AUTHORIZATION
@@ -151,11 +151,11 @@ class RetrieveHistoricFhlUkPeriodSummaryControllerISpec extends IntegrationBaseS
           AuditStub.audit()
           AuthStub.authorised()
           MtdIdLookupStub.ninoFound(nino)
-          DownstreamStub.onSuccess(DownstreamStub.GET, downstreamUri, Map("from" -> from, "to" -> to), Status.OK, downstreamResponseBody)
+          DownstreamStub.onSuccess(DownstreamStub.GET, downstreamUri, Map("from" -> from, "to" -> to), OK, downstreamResponseBody)
         }
 
         val response: WSResponse = await(request().get())
-        response.status shouldBe Status.OK
+        response.status shouldBe OK
         response.json shouldBe responseBody
         response.header("X-CorrelationId").nonEmpty shouldBe true
         response.header("Content-Type") shouldBe Some("application/json")
@@ -183,8 +183,8 @@ class RetrieveHistoricFhlUkPeriodSummaryControllerISpec extends IntegrationBaseS
         }
 
         val input = Seq(
-          ("AA123", "2017-04-06_2017-07-04", Status.BAD_REQUEST, NinoFormatError),
-          ("AA123456A", "2017-07-04_2017-04-06", Status.BAD_REQUEST, PeriodIdFormatError)
+          ("AA123", "2017-04-06_2017-07-04", BAD_REQUEST, NinoFormatError),
+          ("AA123456A", "2017-07-04_2017-04-06", BAD_REQUEST, PeriodIdFormatError)
         )
         input.foreach(args => (validationErrorTest _).tupled(args))
       }
@@ -207,14 +207,14 @@ class RetrieveHistoricFhlUkPeriodSummaryControllerISpec extends IntegrationBaseS
         }
 
         val input = Seq(
-          (Status.BAD_REQUEST, "INVALID_NINO", Status.BAD_REQUEST, NinoFormatError),
-          (Status.BAD_REQUEST, "INVALID_DATE_FROM", Status.BAD_REQUEST, PeriodIdFormatError),
-          (Status.BAD_REQUEST, "INVALID_DATE_TO", Status.BAD_REQUEST, PeriodIdFormatError),
-          (Status.BAD_REQUEST, "INVALID_TYPE", Status.INTERNAL_SERVER_ERROR, InternalError),
-          (Status.NOT_FOUND, "NOT_FOUND_PROPERTY", Status.NOT_FOUND, NotFoundError),
-          (Status.NOT_FOUND, "NOT_FOUND_PERIOD", Status.NOT_FOUND, NotFoundError),
-          (Status.INTERNAL_SERVER_ERROR, "SERVER_ERROR", Status.INTERNAL_SERVER_ERROR, InternalError),
-          (Status.SERVICE_UNAVAILABLE, "SERVICE_UNAVAILABLE", Status.INTERNAL_SERVER_ERROR, InternalError)
+          (BAD_REQUEST, "INVALID_NINO", BAD_REQUEST, NinoFormatError),
+          (BAD_REQUEST, "INVALID_DATE_FROM", BAD_REQUEST, PeriodIdFormatError),
+          (BAD_REQUEST, "INVALID_DATE_TO", BAD_REQUEST, PeriodIdFormatError),
+          (BAD_REQUEST, "INVALID_TYPE", INTERNAL_SERVER_ERROR, InternalError),
+          (NOT_FOUND, "NOT_FOUND_PROPERTY", NOT_FOUND, NotFoundError),
+          (NOT_FOUND, "NOT_FOUND_PERIOD", NOT_FOUND, NotFoundError),
+          (INTERNAL_SERVER_ERROR, "SERVER_ERROR", INTERNAL_SERVER_ERROR, InternalError),
+          (SERVICE_UNAVAILABLE, "SERVICE_UNAVAILABLE", INTERNAL_SERVER_ERROR, InternalError)
         )
         input.foreach(args => (serviceErrorTest _).tupled(args))
       }

@@ -17,12 +17,12 @@
 package v2.services
 
 import api.controllers.EndpointLogContext
-import api.models.domain.{Nino, TaxYear}
+import api.models.domain.{BusinessId, Nino, TaxYear}
 import api.models.errors._
 import api.models.outcomes.ResponseWrapper
 import support.UnitSpec
 import uk.gov.hmrc.http.HeaderCarrier
-import v2.mocks.connectors.MockCreateAmendForeignPropertyAnnualSubmissionConnector
+import v2.connectors.MockCreateAmendForeignPropertyAnnualSubmissionConnector
 import v2.models.request.createAmendForeignPropertyAnnualSubmission._
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -30,9 +30,9 @@ import scala.concurrent.Future
 
 class CreateAmendForeignPropertyAnnualSubmissionServiceSpec extends UnitSpec {
 
-  private val nino: String       = "AA123456A"
-  private val businessId: String = "XAIS12345678910"
-  private val taxYear: TaxYear   = TaxYear.fromMtd("2020-21")
+  private val nino             = Nino("AA123456A")
+  private val businessId       = BusinessId("XAIS12345678910")
+  private val taxYear: TaxYear = TaxYear.fromMtd("2020-21")
 
   implicit private val correlationId: String = "X-123"
 
@@ -95,8 +95,8 @@ class CreateAmendForeignPropertyAnnualSubmissionServiceSpec extends UnitSpec {
 
     private val body: CreateAmendForeignPropertyAnnualSubmissionRequestBody = CreateAmendForeignPropertyAnnualSubmissionRequestBody(None, None)
 
-    protected val request: CreateAmendForeignPropertyAnnualSubmissionRequest =
-      CreateAmendForeignPropertyAnnualSubmissionRequest(Nino(nino), businessId, taxYear, body)
+    protected val request: CreateAmendForeignPropertyAnnualSubmissionRequestData =
+      CreateAmendForeignPropertyAnnualSubmissionRequestData(nino, businessId, taxYear, body)
 
   }
 

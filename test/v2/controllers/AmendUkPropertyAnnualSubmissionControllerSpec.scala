@@ -18,21 +18,21 @@ package v2.controllers
 
 import api.controllers.{ControllerBaseSpec, ControllerTestRunner}
 import api.hateoas.{HateoasWrapper, MockHateoasFactory}
-import api.models.audit.{AuditEvent, AuditResponse, GenericAuditDetailOld}
-import api.models.domain.{Nino, TaxYear}
+import api.models.audit.{AuditEvent, AuditResponse, GenericAuditDetail}
+import api.models.domain.{BusinessId, Nino, TaxYear}
 import api.models.errors._
 import api.models.outcomes.ResponseWrapper
 import api.services.MockAuditService
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.Result
-import v2.mocks.requestParsers.MockAmendUkPropertyAnnualSubmissionRequestParser
-import v2.mocks.services.MockAmendUkPropertyAnnualSubmissionService
+import v2.controllers.validators.MockAmendUkPropertyAnnualSubmissionValidatorFactory
 import v2.models.request.amendUkPropertyAnnualSubmission._
 import v2.models.request.amendUkPropertyAnnualSubmission.ukFhlProperty._
 import v2.models.request.amendUkPropertyAnnualSubmission.ukNonFhlProperty._
 import v2.models.request.common.ukPropertyRentARoom.UkPropertyAdjustmentsRentARoom
 import v2.models.request.common.{Building, FirstYear, StructuredBuildingAllowance}
 import v2.models.response.amendUkPropertyAnnualSubmission.AmendUkPropertyAnnualSubmissionHateoasData
+import v2.services.MockAmendUkPropertyAnnualSubmissionService
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -41,7 +41,7 @@ class AmendUkPropertyAnnualSubmissionControllerSpec
     extends ControllerBaseSpec
     with ControllerTestRunner
     with MockAmendUkPropertyAnnualSubmissionService
-    with MockAmendUkPropertyAnnualSubmissionRequestParser
+    with MockAmendUkPropertyAnnualSubmissionValidatorFactory
     with MockAuditService
     with MockHateoasFactory {
 
@@ -51,9 +51,7 @@ class AmendUkPropertyAnnualSubmissionControllerSpec
   "AmendUkPropertyAnnualSubmissionController" should {
     "return a successful response with status 200 (OK)" when {
       "the request received is valid" in new Test {
-        MockAmendUkPropertyAnnualSubmissionRequestParser
-          .parseRequest(rawData)
-          .returns(Right(requestData))
+        willUseValidator(returningSuccess(requestData))
 
         MockAmendUkPropertyAnnualSubmissionService
           .amend(requestData)
@@ -65,42 +63,38 @@ class AmendUkPropertyAnnualSubmissionControllerSpec
 
         runOkTestWithAudit(
           expectedStatus = OK,
-          maybeAuditRequestBody = None,
+          maybeAuditRequestBody = Some(requestBodyJson),
           maybeExpectedResponseBody = Some(testHateoasLinksJson),
-          maybeAuditResponseBody = Some(testHateoasLinksJson)
+          maybeAuditResponseBody = None
         )
       }
     }
 
     "return the error as per spec" when {
       "the parser validation fails" in new Test {
-        MockAmendUkPropertyAnnualSubmissionRequestParser
-          .parseRequest(rawData)
-          .returns(Left(ErrorWrapper(correlationId, NinoFormatError, None)))
+        willUseValidator(returning(NinoFormatError))
 
-        runErrorTestWithAudit(NinoFormatError, None)
+        runErrorTestWithAudit(NinoFormatError, Some(requestBodyJson))
       }
 
       "the service returns an error" in new Test {
-        MockAmendUkPropertyAnnualSubmissionRequestParser
-          .parseRequest(rawData)
-          .returns(Right(requestData))
+        willUseValidator(returningSuccess(requestData))
 
         MockAmendUkPropertyAnnualSubmissionService
           .amend(requestData)
           .returns(Future.successful(Left(ErrorWrapper(correlationId, RuleTaxYearNotSupportedError))))
 
-        runErrorTestWithAudit(RuleTaxYearNotSupportedError, None)
+        runErrorTestWithAudit(RuleTaxYearNotSupportedError, Some(requestBodyJson))
       }
     }
   }
 
-  trait Test extends ControllerTest with AuditEventChecking[GenericAuditDetailOld] {
+  trait Test extends ControllerTest with AuditEventChecking[GenericAuditDetail] {
 
     private val controller = new AmendUkPropertyAnnualSubmissionController(
       authService = mockEnrolmentsAuthService,
       lookupService = mockMtdIdLookupService,
-      parser = mockAmendUkPropertyAnnualSubmissionRequestParser,
+      validatorFactory = mockAmendUkPropertyAnnualSubmissionValidatorFactory,
       service = mockService,
       auditService = mockAuditService,
       hateoasFactory = mockHateoasFactory,
@@ -110,17 +104,18 @@ class AmendUkPropertyAnnualSubmissionControllerSpec
 
     protected def callController(): Future[Result] = controller.handleRequest(nino, businessId, taxYear)(fakePutRequest(requestBodyJson))
 
-    protected def event(auditResponse: AuditResponse, requestBody: Option[JsValue]): AuditEvent[GenericAuditDetailOld] =
+    protected def event(auditResponse: AuditResponse, requestBody: Option[JsValue]): AuditEvent[GenericAuditDetail] =
       AuditEvent(
         auditType = "CreateAmendUKPropertyAnnualSubmission",
         transactionName = "create-amend-uk-property-annual-submission",
-        detail = GenericAuditDetailOld(
+        detail = GenericAuditDetail(
           versionNumber = "2.0",
           userType = "Individual",
           agentReferenceNumber = None,
-          params = Json.obj("nino" -> nino, "businessId" -> businessId, "taxYear" -> taxYear, "request" -> requestBodyJson),
-          correlationId = correlationId,
-          response = auditResponse
+          params = Map("nino" -> nino, "businessId" -> businessId, "taxYear" -> taxYear),
+          requestBody = requestBody,
+          `X-CorrelationId` = correlationId,
+          auditResponse = auditResponse
         )
       )
 
@@ -195,7 +190,7 @@ class AmendUkPropertyAnnualSubmissionControllerSpec
         ))
     )
 
-    private val requestBodyJson = Json.parse(
+    protected val requestBodyJson: JsValue = Json.parse(
       """
         |{
         |  "ukFhlProperty": {
@@ -272,10 +267,8 @@ class AmendUkPropertyAnnualSubmissionControllerSpec
       Some(ukNonFhlProperty)
     )
 
-    protected val rawData: AmendUkPropertyAnnualSubmissionRawData = AmendUkPropertyAnnualSubmissionRawData(nino, businessId, taxYear, requestBodyJson)
-
-    protected val requestData: AmendUkPropertyAnnualSubmissionRequest =
-      AmendUkPropertyAnnualSubmissionRequest(Nino(nino), businessId, TaxYear.fromMtd(taxYear), body)
+    protected val requestData: AmendUkPropertyAnnualSubmissionRequestData =
+      AmendUkPropertyAnnualSubmissionRequestData(Nino(nino), BusinessId(businessId), TaxYear.fromMtd(taxYear), body)
 
     protected val hateoasData: AmendUkPropertyAnnualSubmissionHateoasData = AmendUkPropertyAnnualSubmissionHateoasData(nino, businessId, taxYear)
 

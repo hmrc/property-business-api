@@ -16,18 +16,17 @@
 
 package v2.models.response.retrieveHistoricFhlUkPropertyAnnualSubmission
 
-import play.api.libs.json.{JsValue, Json}
+import play.api.libs.json.Json
 import support.UnitSpec
-import v2.models.utils.JsonErrorValidators
 
-class AnnualAdjustmentsSpec extends UnitSpec with JsonErrorValidators {
+class AnnualAdjustmentsSpec extends UnitSpec {
 
   private def decimal(value: String): Option[BigDecimal] = Option(BigDecimal(value))
 
-  val annualAdjustments =
+  private val annualAdjustments =
     AnnualAdjustments(decimal("200.00"), decimal("300.00"), decimal("400.00"), true, decimal("500.02"), true, Option(RentARoom(jointlyLet = false)))
 
-  val writesJson: JsValue = Json.parse(
+  private val writesJson = Json.parse(
     """
       |{
       |    "lossBroughtForward": 200.00,
@@ -43,7 +42,7 @@ class AnnualAdjustmentsSpec extends UnitSpec with JsonErrorValidators {
       |""".stripMargin
   )
 
-  val readsJson: JsValue = Json.parse("""
+  private val readsJson = Json.parse("""
      |{
      |    "lossBroughtForward": 200.00,
      |    "privateUseAdjustment": 300.00,

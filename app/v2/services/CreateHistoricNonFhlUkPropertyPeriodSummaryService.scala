@@ -23,7 +23,7 @@ import api.models.outcomes.ResponseWrapper
 import api.services.{BaseService, ServiceOutcome}
 import cats.implicits.toBifunctorOps
 import v2.connectors.CreateHistoricNonFhlUkPropertyPeriodSummaryConnector
-import v2.models.request.createHistoricNonFhlUkPropertyPeriodSummary.CreateHistoricNonFhlUkPropertyPeriodSummaryRequest
+import v2.models.request.createHistoricNonFhlUkPropertyPeriodSummary.CreateHistoricNonFhlUkPropertyPeriodSummaryRequestData
 import v2.models.response.createHistoricNonFhlUkPiePeriodSummary.CreateHistoricNonFhlUkPiePeriodSummaryResponse
 
 import javax.inject.{Inject, Singleton}
@@ -33,7 +33,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class CreateHistoricNonFhlUkPropertyPeriodSummaryService @Inject() (connector: CreateHistoricNonFhlUkPropertyPeriodSummaryConnector)
     extends BaseService {
 
-  def createPeriodSummary(request: CreateHistoricNonFhlUkPropertyPeriodSummaryRequest)(implicit
+  def createPeriodSummary(request: CreateHistoricNonFhlUkPropertyPeriodSummaryRequestData)(implicit
       ctx: RequestContext,
       ec: ExecutionContext): Future[ServiceOutcome[CreateHistoricNonFhlUkPiePeriodSummaryResponse]] = {
 

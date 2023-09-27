@@ -16,25 +16,24 @@
 
 package v2.models.response.retrieveHistoricNonFhlUkPiePeriodSummary
 
-import play.api.libs.json.{JsValue, Json}
+import play.api.libs.json.Json
 import support.UnitSpec
-import v2.models.utils.JsonErrorValidators
 
-class PeriodIncomeSpec extends UnitSpec with JsonErrorValidators {
+class PeriodIncomeSpec extends UnitSpec {
 
-  private def decimal(value: String): Option[BigDecimal] = Option(BigDecimal(value))
+  private def decimal(value: String): Option[BigDecimal] = Some(BigDecimal(value))
 
-  val periodIncome: PeriodIncome =
+  private val periodIncome =
     PeriodIncome(
-      periodAmount = decimal("5000.99"),
-      premiumsOfLeaseGrant = decimal("4999.99"),
-      reversePremiums = decimal("4998.99"),
-      otherIncome = decimal("4997.99"),
-      taxDeducted = decimal("4996.99"),
-      rentARoom = Option(RentARoomIncome(Some(4995.99)))
+      decimal("5000.99"),
+      decimal("4999.99"),
+      decimal("4998.99"),
+      decimal("4997.99"),
+      decimal("4996.99"),
+      Some(RentARoomIncome(Some(4995.99)))
     )
 
-  val writesJson: JsValue = Json.parse(
+  private val writesJson = Json.parse(
     """{
       |    "periodAmount": 5000.99,
       |    "premiumsOfLeaseGrant": 4999.99,
@@ -48,7 +47,7 @@ class PeriodIncomeSpec extends UnitSpec with JsonErrorValidators {
       |""".stripMargin
   )
 
-  val readsJson: JsValue = Json.parse(""" {
+  private val readsJson = Json.parse(""" {
                                         |        "rentIncome": {
                                         |            "amount": 5000.99,
                                         |            "taxDeducted": 4996.99

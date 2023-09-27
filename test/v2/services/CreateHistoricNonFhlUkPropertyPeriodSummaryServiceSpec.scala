@@ -22,7 +22,7 @@ import api.models.errors._
 import api.models.outcomes.ResponseWrapper
 import api.services.{ServiceOutcome, ServiceSpec}
 import uk.gov.hmrc.http.HeaderCarrier
-import v2.mocks.connectors.MockCreateHistoricNonFhlUkPropertyPeriodSummaryConnector
+import v2.connectors.MockCreateHistoricNonFhlUkPropertyPeriodSummaryConnector
 import v2.models.request.common.ukPropertyRentARoom.{UkPropertyExpensesRentARoom, UkPropertyIncomeRentARoom}
 import v2.models.request.createHistoricNonFhlUkPropertyPeriodSummary._
 import v2.models.response.createHistoricNonFhlUkPiePeriodSummary.CreateHistoricNonFhlUkPiePeriodSummaryResponse
@@ -135,11 +135,11 @@ class CreateHistoricNonFhlUkPropertyPeriodSummaryServiceSpec extends ServiceSpec
         Some(consolidatedExpenses)
       )
 
-    protected val requestData: CreateHistoricNonFhlUkPropertyPeriodSummaryRequest =
-      CreateHistoricNonFhlUkPropertyPeriodSummaryRequest(Nino(nino), requestBody)
+    protected val requestData: CreateHistoricNonFhlUkPropertyPeriodSummaryRequestData =
+      CreateHistoricNonFhlUkPropertyPeriodSummaryRequestData(Nino(nino), requestBody)
 
-    protected val consolidatedRequestData: CreateHistoricNonFhlUkPropertyPeriodSummaryRequest =
-      CreateHistoricNonFhlUkPropertyPeriodSummaryRequest(Nino(nino), consolidatedRequestBody)
+    protected val consolidatedRequestData: CreateHistoricNonFhlUkPropertyPeriodSummaryRequestData =
+      CreateHistoricNonFhlUkPropertyPeriodSummaryRequestData(Nino(nino), consolidatedRequestBody)
 
     protected val responseData: CreateHistoricNonFhlUkPiePeriodSummaryResponse = CreateHistoricNonFhlUkPiePeriodSummaryResponse(PeriodId(periodId))
 

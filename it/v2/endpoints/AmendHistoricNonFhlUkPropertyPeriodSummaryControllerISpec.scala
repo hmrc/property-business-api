@@ -16,7 +16,17 @@
 
 package v2.endpoints
 
-import api.models.errors.{InternalError, MtdError, NinoFormatError, NotFoundError, PeriodIdFormatError, RuleBothExpensesSuppliedError, RuleIncorrectOrEmptyBodyError, ValueFormatError}
+import api.models.errors.{
+  InternalError,
+  MtdError,
+  NinoFormatError,
+  NotFoundError,
+  PeriodIdFormatError,
+  RuleBothExpensesSuppliedError,
+  RuleIncorrectOrEmptyBodyError,
+  ValueFormatError
+}
+import api.models.utils.JsonErrorValidators
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import play.api.http.HeaderNames.ACCEPT
 import play.api.http.Status._
@@ -24,8 +34,7 @@ import play.api.libs.json.{JsNumber, JsObject, JsValue, Json}
 import play.api.libs.ws.{WSRequest, WSResponse}
 import play.api.test.Helpers.AUTHORIZATION
 import support.IntegrationBaseSpec
-import v2.models.request.amendHistoricNonFhlUkPiePeriodSummary.AmendHistoricNonFhlUkPiePeriodSummaryRequestBody
-import v2.models.utils.JsonErrorValidators
+import v2.models.request.amendHistoricNonFhlUkPiePeriodSummary.AmendHistoricNonFhlUkPeriodSummaryRequestBody
 import v2.stubs.{AuthStub, DownstreamStub, MtdIdLookupStub}
 
 class AmendHistoricNonFhlUkPropertyPeriodSummaryControllerISpec extends IntegrationBaseSpec with JsonErrorValidators {
@@ -149,7 +158,7 @@ class AmendHistoricNonFhlUkPropertyPeriodSummaryControllerISpec extends Integrat
           MtdIdLookupStub.ninoFound(nino)
           DownstreamStub
             .when(DownstreamStub.PUT, ifsUri, queryParams = ifsQueryParams)
-            .withRequestBody(downstreamBody[AmendHistoricNonFhlUkPiePeriodSummaryRequestBody](requestBodyJson))
+            .withRequestBody(downstreamBody[AmendHistoricNonFhlUkPeriodSummaryRequestBody](requestBodyJson))
             .thenReturn(OK, successDownstreamBody)
         }
 
@@ -165,7 +174,7 @@ class AmendHistoricNonFhlUkPropertyPeriodSummaryControllerISpec extends Integrat
           MtdIdLookupStub.ninoFound(nino)
           DownstreamStub
             .when(DownstreamStub.PUT, ifsUri, queryParams = ifsQueryParams)
-            .withRequestBody(downstreamBody[AmendHistoricNonFhlUkPiePeriodSummaryRequestBody](requestBodyJsonConsolidatedExpenses))
+            .withRequestBody(downstreamBody[AmendHistoricNonFhlUkPeriodSummaryRequestBody](requestBodyJsonConsolidatedExpenses))
             .thenReturn(OK, successDownstreamBody)
         }
 

@@ -18,36 +18,34 @@ package v3.models.response.retrieveHistoricNonFhlUkPiePeriodSummary
 
 import play.api.libs.json.{JsValue, Json}
 import support.UnitSpec
-import v3.models.utils.JsonErrorValidators
 
-class RentARoomSpec extends UnitSpec with JsonErrorValidators {
+class RentARoomSpec extends UnitSpec {
 
-  val rentARoomIncome = RentARoomIncome(Some(5000.99))
+  private val rentARoomIncome   = RentARoomIncome(Some(5000.99))
+  private val rentARoomExpenses = RentARoomExpenses(Some(5000.99))
 
-  val rentARoomExpenses = RentARoomExpenses(Some(5000.99))
-
-  val writesIncomeJson: JsValue = Json.parse(
+  private val writesIncomeJson: JsValue = Json.parse(
     """{
       |      "rentsReceived":5000.99
       |    }
       |""".stripMargin
   )
 
-  val readsIncomeJson: JsValue = Json.parse(
+  private val readsIncomeJson: JsValue = Json.parse(
     """{
       |      "rentsReceived":5000.99
       |    }
       |""".stripMargin
   )
 
-  val writesExpensesJson: JsValue = Json.parse(
+  private val writesExpensesJson: JsValue = Json.parse(
     """{
       |      "amountClaimed":5000.99
       |    }
       |""".stripMargin
   )
 
-  val readsExpensesJson: JsValue = Json.parse(
+  private val readsExpensesJson: JsValue = Json.parse(
     """{
       |      "amountClaimed":5000.99
       |    }

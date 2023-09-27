@@ -17,7 +17,7 @@
 package v2.connectors
 
 import api.connectors.{ConnectorSpec, DownstreamOutcome}
-import api.models.domain.{Nino, TaxYear}
+import api.models.domain.{BusinessId, Nino, TaxYear}
 import api.models.outcomes.ResponseWrapper
 import fixtures.CreateForeignPropertyPeriodSummaryFixtures.CreateForeignPropertyPeriodSummaryFixtures
 import v2.models.request.createForeignPropertyPeriodSummary._
@@ -27,8 +27,8 @@ import scala.concurrent.Future
 
 class CreateForeignPropertyPeriodSummaryConnectorSpec extends ConnectorSpec with CreateForeignPropertyPeriodSummaryFixtures {
 
-  private val businessId: String = "XAIS12345678910"
-  private val nino: String       = "AA123456A"
+  private val nino       = Nino("AA123456A")
+  private val businessId = BusinessId("XAIS12345678910")
 
   private val preTysTaxYear = "2019-20"
   private val tysTaxYear    = "2023-24"
@@ -75,8 +75,8 @@ class CreateForeignPropertyPeriodSummaryConnectorSpec extends ConnectorSpec with
 
     protected val requestBody: CreateForeignPropertyPeriodSummaryRequestBody = regularExpensesRequestBody
 
-    protected val request: CreateForeignPropertyPeriodSummaryRequest =
-      CreateForeignPropertyPeriodSummaryRequest(Nino(nino), businessId, taxYear, requestBody)
+    protected val request: CreateForeignPropertyPeriodSummaryRequestData =
+      CreateForeignPropertyPeriodSummaryRequestData(nino, businessId, taxYear, requestBody)
 
     protected val response: CreateForeignPropertyPeriodSummaryResponse =
       CreateForeignPropertyPeriodSummaryResponse("4557ecb5-fd32-48cc-81f5-e6acd1099f3c")

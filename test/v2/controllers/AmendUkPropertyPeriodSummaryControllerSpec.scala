@@ -18,20 +18,20 @@ package v2.controllers
 
 import api.controllers.{ControllerBaseSpec, ControllerTestRunner}
 import api.hateoas.{HateoasWrapper, MockHateoasFactory}
-import api.models.audit.{AuditEvent, AuditResponse, GenericAuditDetailOld}
-import api.models.domain.{Nino, TaxYear}
+import api.models.audit.{AuditEvent, AuditResponse, GenericAuditDetail}
+import api.models.domain.{BusinessId, Nino, SubmissionId, TaxYear}
 import api.models.errors._
 import api.models.outcomes.ResponseWrapper
 import api.services.MockAuditService
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.Result
-import v2.mocks.requestParsers.MockAmendUkPropertyPeriodSummaryRequestParser
-import v2.mocks.services._
+import v2.controllers.validators.MockAmendUkPropertyPeriodSummaryValidatorFactory
 import v2.models.request.amendUkPropertyPeriodSummary._
 import v2.models.request.common.ukFhlProperty._
 import v2.models.request.common.ukNonFhlProperty._
 import v2.models.request.common.ukPropertyRentARoom.{UkPropertyExpensesRentARoom, UkPropertyIncomeRentARoom}
 import v2.models.response.amendUkPropertyPeriodSummary._
+import v2.services.MockAmendUkPropertyPeriodSummaryService
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -40,7 +40,7 @@ class AmendUkPropertyPeriodSummaryControllerSpec
     extends ControllerBaseSpec
     with ControllerTestRunner
     with MockAmendUkPropertyPeriodSummaryService
-    with MockAmendUkPropertyPeriodSummaryRequestParser
+    with MockAmendUkPropertyPeriodSummaryValidatorFactory
     with MockAuditService
     with MockHateoasFactory {
 
@@ -51,12 +51,10 @@ class AmendUkPropertyPeriodSummaryControllerSpec
   "AmendUkPropertyPeriodSummaryController" should {
     "return a successful response from a consolidated request" when {
       "the request received is valid" in new Test {
-        MockAmendUkPropertyRequestParser
-          .requestFor(rawDataConsolidatedExpense)
-          .returns(Right(requestDataConsolidatedExpense))
+        willUseValidator(returningSuccess(requestDataConsolidatedExpenses))
 
         MockAmendUkPropertyService
-          .amend(requestDataConsolidatedExpense)
+          .amend(requestDataConsolidatedExpenses)
           .returns(Future.successful(Right(ResponseWrapper(correlationId, ()))))
 
         MockHateoasFactory
@@ -69,17 +67,14 @@ class AmendUkPropertyPeriodSummaryControllerSpec
         runOkTestWithAudit(
           expectedStatus = OK,
           maybeAuditRequestBody = Some(requestBodyJsonConsolidatedExpense),
-          maybeExpectedResponseBody = Some(testHateoasLinksJson),
-          maybeAuditResponseBody = Some(testHateoasLinksJson)
+          maybeExpectedResponseBody = Some(testHateoasLinksJson)
         )
       }
     }
 
     "return a successful response from an unconsolidated request" when {
       "the request received is valid" in new Test {
-        MockAmendUkPropertyRequestParser
-          .requestFor(rawData)
-          .returns(Right(requestData))
+        willUseValidator(returningSuccess(requestData))
 
         MockAmendUkPropertyService
           .amend(requestData)
@@ -92,25 +87,20 @@ class AmendUkPropertyPeriodSummaryControllerSpec
         runOkTestWithAudit(
           expectedStatus = OK,
           maybeAuditRequestBody = Some(requestBodyJson),
-          maybeExpectedResponseBody = Some(testHateoasLinksJson),
-          maybeAuditResponseBody = Some(testHateoasLinksJson)
+          maybeExpectedResponseBody = Some(testHateoasLinksJson)
         )
       }
     }
 
     "return the error as per spec" when {
       "the parser validation fails" in new Test {
-        MockAmendUkPropertyRequestParser
-          .requestFor(rawData)
-          .returns(Left(ErrorWrapper(correlationId, NinoFormatError, None)))
+        willUseValidator(returning(NinoFormatError))
 
         runErrorTestWithAudit(NinoFormatError, Some(requestBodyJson))
       }
 
       "the service returns an error" in new Test {
-        MockAmendUkPropertyRequestParser
-          .requestFor(rawData)
-          .returns(Right(requestData))
+        willUseValidator(returningSuccess(requestData))
 
         MockAmendUkPropertyService
           .amend(requestData)
@@ -121,12 +111,12 @@ class AmendUkPropertyPeriodSummaryControllerSpec
     }
   }
 
-  trait Test extends ControllerTest with AuditEventChecking[GenericAuditDetailOld] {
+  trait Test extends ControllerTest with AuditEventChecking[GenericAuditDetail] {
 
     protected val controller = new AmendUkPropertyPeriodSummaryController(
       authService = mockEnrolmentsAuthService,
       lookupService = mockMtdIdLookupService,
-      parser = mockAmendUkPropertyRequestParser,
+      validatorFactory = mockAmendUkPropertyPeriodSummaryValidatorFactory,
       service = mockService,
       auditService = mockAuditService,
       hateoasFactory = mockHateoasFactory,
@@ -137,18 +127,18 @@ class AmendUkPropertyPeriodSummaryControllerSpec
     protected def callController(): Future[Result] =
       controller.handleRequest(nino, businessId, taxYear, submissionId)(fakePutRequest(requestBodyJson))
 
-    protected def event(auditResponse: AuditResponse, requestBody: Option[JsValue]): AuditEvent[GenericAuditDetailOld] =
+    protected def event(auditResponse: AuditResponse, maybeRequestBody: Option[JsValue]): AuditEvent[GenericAuditDetail] =
       AuditEvent(
         auditType = "AmendUKPropertyIncomeAndExpensesPeriodSummary",
         transactionName = "amend-uk-property-income-and-expenses-period-summary",
-        detail = GenericAuditDetailOld(
+        detail = GenericAuditDetail(
           versionNumber = "2.0",
           userType = "Individual",
           agentReferenceNumber = None,
-          params =
-            Json.obj("nino" -> nino, "businessId" -> businessId, "taxYear" -> taxYear, "submissionId" -> submissionId, "request" -> requestBody),
-          correlationId = correlationId,
-          response = auditResponse
+          params = Map("nino" -> nino, "businessId" -> businessId, "taxYear" -> taxYear, "submissionId" -> submissionId),
+          requestBody = maybeRequestBody,
+          `X-CorrelationId` = correlationId,
+          auditResponse = auditResponse
         )
       )
 
@@ -208,7 +198,7 @@ class AmendUkPropertyPeriodSummaryControllerSpec
           ))
       )
 
-    private val requestBodyWithConsolidatedExpense: AmendUkPropertyPeriodSummaryRequestBody =
+    private val requestBodyWithConsolidatedExpenses: AmendUkPropertyPeriodSummaryRequestBody =
       AmendUkPropertyPeriodSummaryRequestBody(
         Some(
           UkFhlProperty(
@@ -349,17 +339,16 @@ class AmendUkPropertyPeriodSummaryControllerSpec
         |""".stripMargin
     )
 
-    protected val rawData: AmendUkPropertyPeriodSummaryRawData =
-      AmendUkPropertyPeriodSummaryRawData(nino, taxYear, businessId, submissionId, requestBodyJson)
+    protected val requestData: AmendUkPropertyPeriodSummaryRequestData =
+      AmendUkPropertyPeriodSummaryRequestData(Nino(nino), TaxYear.fromMtd(taxYear), BusinessId(businessId), SubmissionId(submissionId), requestBody)
 
-    protected val requestData: AmendUkPropertyPeriodSummaryRequest =
-      AmendUkPropertyPeriodSummaryRequest(Nino(nino), TaxYear.fromMtd(taxYear), businessId, submissionId, requestBody)
-
-    protected val rawDataConsolidatedExpense: AmendUkPropertyPeriodSummaryRawData =
-      AmendUkPropertyPeriodSummaryRawData(nino, taxYear, businessId, submissionId, requestBodyJsonConsolidatedExpense)
-
-    protected val requestDataConsolidatedExpense: AmendUkPropertyPeriodSummaryRequest =
-      AmendUkPropertyPeriodSummaryRequest(Nino(nino), TaxYear.fromMtd(taxYear), businessId, submissionId, requestBodyWithConsolidatedExpense)
+    protected val requestDataConsolidatedExpenses: AmendUkPropertyPeriodSummaryRequestData =
+      AmendUkPropertyPeriodSummaryRequestData(
+        Nino(nino),
+        TaxYear.fromMtd(taxYear),
+        BusinessId(businessId),
+        SubmissionId(submissionId),
+        requestBodyWithConsolidatedExpenses)
 
     protected val hateoasData: AmendUkPropertyPeriodSummaryHateoasData =
       AmendUkPropertyPeriodSummaryHateoasData(nino, businessId, taxYear, submissionId)

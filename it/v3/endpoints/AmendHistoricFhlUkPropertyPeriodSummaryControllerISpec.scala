@@ -17,6 +17,7 @@
 package v3.endpoints
 
 import api.models.errors._
+import api.models.utils.JsonErrorValidators
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import play.api.http.HeaderNames.ACCEPT
 import play.api.http.Status._
@@ -25,7 +26,6 @@ import play.api.libs.ws.{WSRequest, WSResponse}
 import play.api.test.Helpers.AUTHORIZATION
 import support.IntegrationBaseSpec
 import v3.models.request.amendHistoricFhlUkPiePeriodSummary.AmendHistoricFhlUkPiePeriodSummaryRequestBody
-import v3.models.utils.JsonErrorValidators
 import v3.stubs.{AuthStub, DownstreamStub, MtdIdLookupStub}
 
 class AmendHistoricFhlUkPropertyPeriodSummaryControllerISpec extends IntegrationBaseSpec with JsonErrorValidators {

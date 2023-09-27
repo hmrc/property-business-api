@@ -22,8 +22,11 @@ import api.models.errors._
 import api.models.outcomes.ResponseWrapper
 import api.services.{ServiceOutcome, ServiceSpec}
 import uk.gov.hmrc.http.HeaderCarrier
-import v2.mocks.connectors.MockAmendHistoricFhlUkPiePeriodSummaryConnector
-import v2.models.request.amendHistoricFhlUkPiePeriodSummary.{AmendHistoricFhlUkPiePeriodSummaryRequest, AmendHistoricFhlUkPiePeriodSummaryRequestBody}
+import v2.connectors.MockAmendHistoricFhlUkPiePeriodSummaryConnector
+import v2.models.request.amendHistoricFhlUkPiePeriodSummary.{
+  AmendHistoricFhlUkPiePeriodSummaryRequestData,
+  AmendHistoricFhlUkPiePeriodSummaryRequestBody
+}
 
 import scala.concurrent.Future
 
@@ -88,7 +91,7 @@ class AmendHistoricFhlUkPiePeriodSummaryServiceSpec extends ServiceSpec {
     )
 
     protected val requestBody: AmendHistoricFhlUkPiePeriodSummaryRequestBody = AmendHistoricFhlUkPiePeriodSummaryRequestBody(None, None)
-    protected val request: AmendHistoricFhlUkPiePeriodSummaryRequest         = AmendHistoricFhlUkPiePeriodSummaryRequest(nino, periodId, requestBody)
+    protected val request: AmendHistoricFhlUkPiePeriodSummaryRequestData = AmendHistoricFhlUkPiePeriodSummaryRequestData(nino, periodId, requestBody)
 
   }
 

@@ -21,7 +21,7 @@ import api.models.errors._
 import api.services.{BaseService, ServiceOutcome}
 import cats.implicits._
 import v2.connectors.CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionConnector
-import v2.models.request.createAmendHistoricNonFhlUkPropertyAnnualSubmission.CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequest
+import v2.models.request.createAmendHistoricNonFhlUkPropertyAnnualSubmission.CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestData
 import v2.models.response.createAmendHistoricNonFhlUkPropertyAnnualSubmission.CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionResponse
 
 import javax.inject.{Inject, Singleton}
@@ -31,7 +31,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionService @Inject() (connector: CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionConnector)
     extends BaseService {
 
-  def amend(request: CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequest)(implicit
+  def amend(request: CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestData)(implicit
       ctx: RequestContext,
       ec: ExecutionContext): Future[ServiceOutcome[CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionResponse]] = {
 

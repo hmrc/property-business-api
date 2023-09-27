@@ -53,8 +53,8 @@ class CreateHistoricNonFhlUkPropertyPeriodSummaryConnectorSpec extends Connector
     protected val requestBody: CreateHistoricNonFhlUkPropertyPeriodSummaryRequestBody =
       CreateHistoricNonFhlUkPropertyPeriodSummaryRequestBody(fromDate, toDate, None, None)
 
-    protected val requestData: CreateHistoricNonFhlUkPropertyPeriodSummaryRequest =
-      CreateHistoricNonFhlUkPropertyPeriodSummaryRequest(Nino(nino), requestBody)
+    protected val requestData: CreateHistoricNonFhlUkPropertyPeriodSummaryRequestData =
+      CreateHistoricNonFhlUkPropertyPeriodSummaryRequestData(Nino(nino), requestBody)
 
   }
 

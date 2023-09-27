@@ -22,19 +22,17 @@ import api.models.errors._
 import api.models.outcomes.ResponseWrapper
 import api.services.ServiceSpec
 import uk.gov.hmrc.http.HeaderCarrier
-import v2.mocks.connectors.MockDeleteHistoricUkPropertyAnnualSubmissionConnector
-import v2.models.request.deleteHistoricUkPropertyAnnualSubmission.DeleteHistoricUkPropertyAnnualSubmissionRequest
+import v2.connectors.MockDeleteHistoricUkPropertyAnnualSubmissionConnector
+import v2.models.request.deleteHistoricUkPropertyAnnualSubmission.DeleteHistoricUkPropertyAnnualSubmissionRequestData
 
 import scala.concurrent.Future
 
 class DeleteHistoricUkPropertyAnnualSubmissionServiceSpec extends ServiceSpec {
 
-  private val nino: String                       = "AA123456A"
-  private val mtdTaxYear: String                 = "2021-22"
-  private val taxYear: TaxYear                   = TaxYear.fromMtd(mtdTaxYear)
-  private val propertyType: HistoricPropertyType = HistoricPropertyType.Fhl
-
   implicit private val correlationId: String = "X-123"
+  private val nino                           = Nino("AA123456A")
+  private val taxYear                        = TaxYear.fromMtd("2021-22")
+  private val propertyType                   = HistoricPropertyType.Fhl
 
   "service" when {
     "service call successful" should {
@@ -86,8 +84,8 @@ class DeleteHistoricUkPropertyAnnualSubmissionServiceSpec extends ServiceSpec {
       connector = mockDeleteHistoricUkPropertyAnnualSubmissionConnector
     )
 
-    protected val requestData: DeleteHistoricUkPropertyAnnualSubmissionRequest =
-      DeleteHistoricUkPropertyAnnualSubmissionRequest(Nino(nino), taxYear, propertyType)
+    protected val requestData: DeleteHistoricUkPropertyAnnualSubmissionRequestData =
+      DeleteHistoricUkPropertyAnnualSubmissionRequestData(nino, taxYear, propertyType)
 
   }
 

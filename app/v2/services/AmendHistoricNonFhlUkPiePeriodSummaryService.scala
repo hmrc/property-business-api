@@ -21,7 +21,7 @@ import api.models.errors._
 import api.services.{BaseService, ServiceOutcome}
 import cats.implicits._
 import v2.connectors.AmendHistoricNonFhlUkPiePeriodSummaryConnector
-import v2.models.request.amendHistoricNonFhlUkPiePeriodSummary.AmendHistoricNonFhlUkPiePeriodSummaryRequest
+import v2.models.request.amendHistoricNonFhlUkPiePeriodSummary.AmendHistoricNonFhlUkPeriodSummaryRequestData
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
@@ -30,7 +30,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class AmendHistoricNonFhlUkPiePeriodSummaryService @Inject() (connector: AmendHistoricNonFhlUkPiePeriodSummaryConnector) extends BaseService {
 
   def amend(
-      request: AmendHistoricNonFhlUkPiePeriodSummaryRequest)(implicit ctx: RequestContext, ec: ExecutionContext): Future[ServiceOutcome[Unit]] = {
+      request: AmendHistoricNonFhlUkPeriodSummaryRequestData)(implicit ctx: RequestContext, ec: ExecutionContext): Future[ServiceOutcome[Unit]] = {
 
     connector.amend(request).map(_.leftMap(mapDownstreamErrors(downstreamErrorMap)))
   }

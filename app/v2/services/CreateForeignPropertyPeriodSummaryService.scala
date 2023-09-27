@@ -21,7 +21,7 @@ import api.models.errors._
 import api.services.{BaseService, ServiceOutcome}
 import cats.implicits._
 import v2.connectors.CreateForeignPropertyPeriodSummaryConnector
-import v2.models.request.createForeignPropertyPeriodSummary.CreateForeignPropertyPeriodSummaryRequest
+import v2.models.request.createForeignPropertyPeriodSummary.CreateForeignPropertyPeriodSummaryRequestData
 import v2.models.response.createForeignPropertyPeriodSummary.CreateForeignPropertyPeriodSummaryResponse
 
 import javax.inject.{Inject, Singleton}
@@ -30,7 +30,7 @@ import scala.concurrent.{ExecutionContext, Future}
 @Singleton
 class CreateForeignPropertyPeriodSummaryService @Inject() (connector: CreateForeignPropertyPeriodSummaryConnector) extends BaseService {
 
-  def createForeignProperty(request: CreateForeignPropertyPeriodSummaryRequest)(implicit
+  def createForeignProperty(request: CreateForeignPropertyPeriodSummaryRequestData)(implicit
       ctx: RequestContext,
       ec: ExecutionContext): Future[ServiceOutcome[CreateForeignPropertyPeriodSummaryResponse]] = {
 

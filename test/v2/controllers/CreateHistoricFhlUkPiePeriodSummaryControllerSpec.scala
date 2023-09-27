@@ -27,10 +27,10 @@ import api.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLooku
 import mocks.MockIdGenerator
 import play.api.libs.json.{JsObject, JsValue, Json}
 import play.api.mvc.Result
-import v2.mocks.requestParsers.MockCreateHistoricFhlUkPiePeriodSummaryRequestParser
-import v2.mocks.services.MockCreateHistoricFhlUkPiePeriodSummaryService
+import v2.controllers.validators.MockCreateHistoricFhlUkPiePeriodSummaryValidatorFactory
 import v2.models.request.createHistoricFhlUkPiePeriodSummary._
 import v2.models.response.createHistoricFhlUkPiePeriodSummary._
+import v2.services.MockCreateHistoricFhlUkPiePeriodSummaryService
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -41,7 +41,7 @@ class CreateHistoricFhlUkPiePeriodSummaryControllerSpec
     with MockEnrolmentsAuthService
     with MockMtdIdLookupService
     with MockCreateHistoricFhlUkPiePeriodSummaryService
-    with MockCreateHistoricFhlUkPiePeriodSummaryRequestParser
+    with MockCreateHistoricFhlUkPiePeriodSummaryValidatorFactory
     with MockHateoasFactory
     with MockIdGenerator
     with MockAuditService {
@@ -52,9 +52,7 @@ class CreateHistoricFhlUkPiePeriodSummaryControllerSpec
   "CreateHistoricFhlUkPiePeriodSummaryController" should {
     "return a successful response with status 201 (CREATED)" when {
       "the request received is valid" in new Test {
-        MockCreateHistoricFhlUkPiePeriodSummaryRequestParser
-          .parse(rawData)
-          .returns(Right(requestData))
+        willUseValidator(returningSuccess(requestData))
 
         MockCreateHistoricFhlUkPiePeriodSummaryService
           .createPeriodSummary(requestData)
@@ -70,17 +68,13 @@ class CreateHistoricFhlUkPiePeriodSummaryControllerSpec
 
     "return the error as per spec" when {
       "the parser validation fails" in new Test {
-        MockCreateHistoricFhlUkPiePeriodSummaryRequestParser
-          .parse(rawData)
-          .returns(Left(ErrorWrapper(correlationId, NinoFormatError, None)))
+        willUseValidator(returning(NinoFormatError))
 
         runErrorTest(NinoFormatError)
       }
 
       "the service returns an error" in new Test {
-        MockCreateHistoricFhlUkPiePeriodSummaryRequestParser
-          .parse(rawData)
-          .returns(Right(requestData))
+        willUseValidator(returningSuccess(requestData))
 
         MockCreateHistoricFhlUkPiePeriodSummaryService
           .createPeriodSummary(requestData)
@@ -96,7 +90,7 @@ class CreateHistoricFhlUkPiePeriodSummaryControllerSpec
     private val controller: CreateHistoricFhlUkPiePeriodSummaryController = new CreateHistoricFhlUkPiePeriodSummaryController(
       authService = mockEnrolmentsAuthService,
       lookupService = mockMtdIdLookupService,
-      parser = mockCreateHistoricFhlUkPiePeriodSummaryRequestParser,
+      validatorFactory = mockCreateHistoricFhlUkPiePeriodSummaryValidatorFactory,
       service = mockCreateHistoricFhlUkPiePeriodSummaryService,
       auditService = mockAuditService,
       hateoasFactory = mockHateoasFactory,
@@ -135,12 +129,11 @@ class CreateHistoricFhlUkPiePeriodSummaryControllerSpec
 
     protected val responseBodyJsonWithHateoas: JsObject = responseBodyJson.as[JsObject] ++ testHateoasLinksJson
 
-    protected val rawData: CreateHistoricFhlUkPiePeriodSummaryRawData = CreateHistoricFhlUkPiePeriodSummaryRawData(nino, requestBodyJson)
-
     protected val requestBody: CreateHistoricFhlUkPiePeriodSummaryRequestBody =
       CreateHistoricFhlUkPiePeriodSummaryRequestBody("2021-01-01", "2021-01-02", None, None)
 
-    protected val requestData: CreateHistoricFhlUkPiePeriodSummaryRequest = CreateHistoricFhlUkPiePeriodSummaryRequest(Nino(nino), requestBody)
+    protected val requestData: CreateHistoricFhlUkPiePeriodSummaryRequestData =
+      CreateHistoricFhlUkPiePeriodSummaryRequestData(Nino(nino), requestBody)
 
     protected val hateoasData: CreateHistoricFhlUkPiePeriodSummaryHateoasData =
       CreateHistoricFhlUkPiePeriodSummaryHateoasData(nino, PeriodId(periodId))

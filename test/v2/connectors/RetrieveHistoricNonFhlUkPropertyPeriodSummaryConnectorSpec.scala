@@ -21,17 +21,17 @@ import api.models.domain.{Nino, PeriodId}
 import api.models.errors.{DownstreamErrorCode, DownstreamErrors}
 import api.models.outcomes.ResponseWrapper
 import org.scalamock.handlers.CallHandler
-import v2.models.request.retrieveHistoricNonFhlUkPiePeriodSummary.RetrieveHistoricNonFhlUkPiePeriodSummaryRequest
+import v2.models.request.retrieveHistoricNonFhlUkPiePeriodSummary.RetrieveHistoricNonFhlUkPiePeriodSummaryRequestData
 import v2.models.response.retrieveHistoricNonFhlUkPiePeriodSummary.RetrieveHistoricNonFhlUkPiePeriodSummaryResponse
 
 import scala.concurrent.Future
 
 class RetrieveHistoricNonFhlUkPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
 
-  private val nino: String         = "AA123456A"
-  private val periodIdFrom: String = "2017-04-06"
-  private val periodIdTo: String   = "2017-07-04"
-  private val periodId: String     = s"${periodIdFrom}_$periodIdTo"
+  private val nino         = Nino("AA123456A")
+  private val periodIdFrom = "2017-04-06"
+  private val periodIdTo   = "2017-07-04"
+  private val periodId     = PeriodId(s"${periodIdFrom}_$periodIdTo")
 
   "connector" when {
     "request for a historic Non-FHL UK Property Income and Expenses Period summary" must {
@@ -74,8 +74,8 @@ class RetrieveHistoricNonFhlUkPropertyPeriodSummaryConnectorSpec extends Connect
       ).returns(Future.successful(outcome))
     }
 
-    protected val request: RetrieveHistoricNonFhlUkPiePeriodSummaryRequest =
-      RetrieveHistoricNonFhlUkPiePeriodSummaryRequest(Nino(nino), PeriodId(periodId))
+    protected val request: RetrieveHistoricNonFhlUkPiePeriodSummaryRequestData =
+      RetrieveHistoricNonFhlUkPiePeriodSummaryRequestData(nino, periodId)
 
     protected val response: RetrieveHistoricNonFhlUkPiePeriodSummaryResponse =
       RetrieveHistoricNonFhlUkPiePeriodSummaryResponse(periodIdFrom, periodIdTo, None, None)

@@ -17,7 +17,7 @@
 package v2.connectors
 
 import api.connectors.{ConnectorSpec, DownstreamOutcome}
-import api.models.domain.{Nino, TaxYear}
+import api.models.domain.{BusinessId, Nino, TaxYear}
 import api.models.outcomes.ResponseWrapper
 import org.scalamock.handlers.CallHandler
 import v2.models.request.createAmendForeignPropertyAnnualSubmission._
@@ -66,8 +66,8 @@ class CreateAmendForeignPropertyAnnualSubmissionConnectorSpec extends ConnectorS
 
     private val requestBody: CreateAmendForeignPropertyAnnualSubmissionRequestBody = CreateAmendForeignPropertyAnnualSubmissionRequestBody(None, None)
 
-    protected val request: CreateAmendForeignPropertyAnnualSubmissionRequest =
-      CreateAmendForeignPropertyAnnualSubmissionRequest(Nino(nino), businessId, taxYear, requestBody)
+    protected val request: CreateAmendForeignPropertyAnnualSubmissionRequestData =
+      CreateAmendForeignPropertyAnnualSubmissionRequestData(Nino(nino), BusinessId(businessId), taxYear, requestBody)
 
     protected def stubHttpResponse(outcome: DownstreamOutcome[Unit]): CallHandler[Future[DownstreamOutcome[Unit]]]#Derived = {
       willPut(

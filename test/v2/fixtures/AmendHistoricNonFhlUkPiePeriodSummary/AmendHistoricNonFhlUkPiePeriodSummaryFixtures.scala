@@ -17,7 +17,7 @@
 package v2.fixtures.AmendHistoricNonFhlUkPiePeriodSummary
 
 import play.api.libs.json.{JsValue, Json}
-import v2.models.request.amendHistoricNonFhlUkPiePeriodSummary.{AmendHistoricNonFhlUkPiePeriodSummaryRequestBody, UkNonFhlPieExpenses, UkNonFhlPieIncome}
+import v2.models.request.amendHistoricNonFhlUkPiePeriodSummary.{AmendHistoricNonFhlUkPeriodSummaryRequestBody, UkNonFhlPieExpenses, UkNonFhlPieIncome}
 import v2.models.request.common.ukPropertyRentARoom.{UkPropertyExpensesRentARoom, UkPropertyIncomeRentARoom}
 
 trait AmendHistoricNonFhlUkPiePeriodSummaryFixtures {
@@ -64,11 +64,11 @@ trait AmendHistoricNonFhlUkPiePeriodSummaryFixtures {
       rentARoom = Some(rentARoomIncome)
     )
 
-  val requestBodyFull: AmendHistoricNonFhlUkPiePeriodSummaryRequestBody =
-    AmendHistoricNonFhlUkPiePeriodSummaryRequestBody(income = Some(ukNonFhlPieIncome), expenses = Some(ukNonFhlPieExpensesFull))
+  val requestBodyFull: AmendHistoricNonFhlUkPeriodSummaryRequestBody =
+    AmendHistoricNonFhlUkPeriodSummaryRequestBody(income = Some(ukNonFhlPieIncome), expenses = Some(ukNonFhlPieExpensesFull))
 
-  val requestBodyConsolidated: AmendHistoricNonFhlUkPiePeriodSummaryRequestBody =
-    AmendHistoricNonFhlUkPiePeriodSummaryRequestBody(income = Some(ukNonFhlPieIncome), expenses = Some(ukNonFhlPieExpensesConsolidated))
+  val requestBodyConsolidated: AmendHistoricNonFhlUkPeriodSummaryRequestBody =
+    AmendHistoricNonFhlUkPeriodSummaryRequestBody(income = Some(ukNonFhlPieIncome), expenses = Some(ukNonFhlPieExpensesConsolidated))
 
   val mtdJsonExpensesFull: JsValue = Json.parse("""
                                                   |{
@@ -171,26 +171,6 @@ trait AmendHistoricNonFhlUkPiePeriodSummaryFixtures {
                                                                  |    "deductions": $downstreamJsonExpensesConsolidated
                                                                  |}
                                                                  |""".stripMargin)
-
-  val mtdJsonRequestWithInvalidAmounts: JsValue = Json.parse(
-    """
-      |{
-      |   "income":{
-      |      "periodAmount": 5000.99,
-      |      "premiumsOfLeaseGrant": 4999.99,
-      |      "reversePremiums": 4998.99,
-      |      "otherIncome": 4997.99,
-      |      "taxDeducted": -4996.99,
-      |      "rentARoom":{
-      |         "rentsReceived": 999999999999.99
-      |       }
-      |   },
-      |   "expenses":{
-      |      "consolidatedExpenses": 5000.99
-      |    }
-      |}
-      |""".stripMargin
-  )
 
   val mtdJsonRequestWithEmptySubObjects: JsValue = Json.parse(
     """

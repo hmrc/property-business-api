@@ -22,7 +22,7 @@ import api.connectors.{BaseDownstreamConnector, DownstreamOutcome}
 import config.AppConfig
 import play.api.libs.json.Format.GenericFormat
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
-import v2.models.request.createAmendHistoricNonFhlUkPropertyAnnualSubmission.CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequest
+import v2.models.request.createAmendHistoricNonFhlUkPropertyAnnualSubmission.CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestData
 import v2.models.response.createAmendHistoricNonFhlUkPropertyAnnualSubmission.CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionResponse
 
 import javax.inject.{Inject, Singleton}
@@ -32,7 +32,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionConnector @Inject() (val http: HttpClient, val appConfig: AppConfig)
     extends BaseDownstreamConnector {
 
-  def amend(request: CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequest)(implicit
+  def amend(request: CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestData)(implicit
       hc: HeaderCarrier,
       ec: ExecutionContext,
       correlationId: String): Future[DownstreamOutcome[CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionResponse]] = {

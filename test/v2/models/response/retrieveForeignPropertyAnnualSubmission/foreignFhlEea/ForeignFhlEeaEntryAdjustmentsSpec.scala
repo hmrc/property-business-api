@@ -18,9 +18,8 @@ package v2.models.response.retrieveForeignPropertyAnnualSubmission.foreignFhlEea
 
 import play.api.libs.json.Json
 import support.UnitSpec
-import v2.models.utils.JsonErrorValidators
 
-class ForeignFhlEeaEntryAdjustmentsSpec extends UnitSpec with JsonErrorValidators {
+class ForeignFhlEeaEntryAdjustmentsSpec extends UnitSpec {
 
   private val foreignFhlEeaAdjustments = ForeignFhlEeaAdjustments(
     Some(100.25),

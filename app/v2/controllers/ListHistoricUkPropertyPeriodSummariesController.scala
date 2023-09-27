@@ -16,14 +16,14 @@
 
 package v2.controllers
 
+import api.controllers.ResultCreator.hateoasListWrapping
 import api.controllers._
 import api.hateoas.HateoasFactory
 import api.models.domain.HistoricPropertyType
 import api.services.{EnrolmentsAuthService, MtdIdLookupService}
 import play.api.mvc.{Action, AnyContent, ControllerComponents}
 import utils.IdGenerator
-import v2.controllers.requestParsers.ListHistoricUkPropertyPeriodSummariesRequestParser
-import v2.models.request.listHistoricUkPropertyPeriodSummaries.ListHistoricUkPropertyPeriodSummariesRawData
+import v2.controllers.validators.ListHistoricUkPropertyPeriodSummariesValidatorFactory
 import v2.models.response.listHistoricUkPropertyPeriodSummaries.ListHistoricUkPropertyPeriodSummariesHateoasData
 import v2.services.ListHistoricUkPropertyPeriodSummariesService
 
@@ -34,7 +34,7 @@ import scala.concurrent.ExecutionContext
 class ListHistoricUkPropertyPeriodSummariesController @Inject() (val authService: EnrolmentsAuthService,
                                                                  val lookupService: MtdIdLookupService,
                                                                  service: ListHistoricUkPropertyPeriodSummariesService,
-                                                                 parser: ListHistoricUkPropertyPeriodSummariesRequestParser,
+                                                                 validatorFactory: ListHistoricUkPropertyPeriodSummariesValidatorFactory,
                                                                  hateoasFactory: HateoasFactory,
                                                                  cc: ControllerComponents,
                                                                  idGenerator: IdGenerator)(implicit ec: ExecutionContext)
@@ -60,17 +60,16 @@ class ListHistoricUkPropertyPeriodSummariesController @Inject() (val authService
     authorisedAction(nino).async { implicit request =>
       implicit val ctx: RequestContext = RequestContext.from(idGenerator, endpointLogContext)
 
-      val rawData = ListHistoricUkPropertyPeriodSummariesRawData(nino)
+      val validator = validatorFactory.validator(nino)
 
-      val requestHandler = RequestHandlerOld
-        .withParser(parser)
+      val requestHandler = RequestHandler
+        .withValidator(validator)
         .withService({ req =>
           service.listPeriodSummaries(req, propertyType)
         })
-        .withResultCreator(ResultCreatorOld.hateoasListWrapping(hateoasFactory)((_, _) =>
-          ListHistoricUkPropertyPeriodSummariesHateoasData(nino, propertyType)))
+        .withResultCreator(hateoasListWrapping(hateoasFactory)((_, _) => ListHistoricUkPropertyPeriodSummariesHateoasData(nino, propertyType)))
 
-      requestHandler.handleRequest(rawData)
+      requestHandler.handleRequest()
 
     }
 

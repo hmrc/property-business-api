@@ -17,12 +17,12 @@
 package v2.connectors
 
 import api.connectors.{ConnectorSpec, DownstreamOutcome}
-import api.models.domain.{Nino, TaxYear, Timestamp}
+import api.models.domain.{BusinessId, Nino, TaxYear, Timestamp}
 import api.models.errors.{DownstreamErrorCode, DownstreamErrors}
 import api.models.outcomes.ResponseWrapper
 import org.scalamock.handlers.CallHandler
 import v2.connectors.RetrieveUkPropertyAnnualSubmissionConnector._
-import v2.models.request.retrieveUkPropertyAnnualSubmission.RetrieveUkPropertyAnnualSubmissionRequest
+import v2.models.request.retrieveUkPropertyAnnualSubmission.RetrieveUkPropertyAnnualSubmissionRequestData
 import v2.models.response.retrieveUkPropertyAnnualSubmission.RetrieveUkPropertyAnnualSubmissionResponse
 import v2.models.response.retrieveUkPropertyAnnualSubmission.ukFhlProperty.UkFhlProperty
 import v2.models.response.retrieveUkPropertyAnnualSubmission.ukNonFhlProperty.UkNonFhlProperty
@@ -31,11 +31,11 @@ import scala.concurrent.Future
 
 class RetrieveUkPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec {
 
-  private val nino: String       = "AA123456A"
-  private val businessId: String = "XAIS12345678910"
+  private val nino       = Nino("AA123456A")
+  private val businessId = BusinessId("XAIS12345678910")
 
-  private val ukFhlProperty: UkFhlProperty       = UkFhlProperty(None, None)
-  private val ukNonFhlProperty: UkNonFhlProperty = UkNonFhlProperty(None, None)
+  private val ukFhlProperty    = UkFhlProperty(None, None)
+  private val ukNonFhlProperty = UkNonFhlProperty(None, None)
 
   "connector" when {
     "response has uk fhl details" must {
@@ -109,7 +109,7 @@ class RetrieveUkPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec {
 
         willGet(
           url = s"$baseUrl/income-tax/business/property/annual",
-          parameters = Seq("taxableEntityId" -> nino, "incomeSourceId" -> businessId, "taxYear" -> "2019-20")
+          parameters = Seq("taxableEntityId" -> nino.nino, "incomeSourceId" -> businessId.businessId, "taxYear" -> taxYear)
         ).returns(Future.successful(outcome))
 
         val result: DownstreamOutcome[Result] = await(connector.retrieveUkProperty(request))
@@ -128,8 +128,8 @@ class RetrieveUkPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec {
 
     protected val taxYear: String
 
-    protected val request: RetrieveUkPropertyAnnualSubmissionRequest =
-      RetrieveUkPropertyAnnualSubmissionRequest(Nino(nino), businessId, TaxYear.fromMtd(taxYear))
+    protected val request: RetrieveUkPropertyAnnualSubmissionRequestData =
+      RetrieveUkPropertyAnnualSubmissionRequestData(nino, businessId, TaxYear.fromMtd(taxYear))
 
     def responseWith(ukFhlProperty: Option[UkFhlProperty], ukNonFhlProperty: Option[UkNonFhlProperty]): RetrieveUkPropertyAnnualSubmissionResponse =
       RetrieveUkPropertyAnnualSubmissionResponse(Timestamp("2022-06-17T10:53:38Z"), ukFhlProperty, ukNonFhlProperty)
@@ -138,6 +138,8 @@ class RetrieveUkPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec {
 
   trait StandardTest extends TysIfsTest with Test {
 
+    protected lazy val taxYear = "2023-24"
+
     def stubHttpResponse(outcome: DownstreamOutcome[RetrieveUkPropertyAnnualSubmissionResponse])
         : CallHandler[Future[DownstreamOutcome[RetrieveUkPropertyAnnualSubmissionResponse]]]#Derived = {
       willGet(
@@ -145,7 +147,6 @@ class RetrieveUkPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec {
       ).returns(Future.successful(outcome))
     }
 
-    protected lazy val taxYear: String = "2023-24"
   }
 
 }

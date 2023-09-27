@@ -17,7 +17,6 @@
 package api.controllers.validators.resolvers
 
 import api.models.errors.RuleIncorrectOrEmptyBodyError
-import api.models.utils.JsonErrorValidators
 import cats.data.Validated.{Invalid, Valid}
 import play.api.libs.json.{Json, OFormat}
 import shapeless.HNil
@@ -26,7 +25,7 @@ import utils.EmptinessChecker
 
 import scala.annotation.nowarn
 
-class ResolveNonEmptyJsonObjectSpec extends UnitSpec with JsonErrorValidators {
+class ResolveNonEmptyJsonObjectSpec extends UnitSpec {
 
   case class TestDataObject(field1: String, field2: String, oneOf1: Option[String] = None, oneOf2: Option[String] = None)
   case class TestDataWrapper(arrayField: Seq[TestDataObject])

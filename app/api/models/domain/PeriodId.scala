@@ -35,6 +35,13 @@ case class PeriodId(value: String) {
 object PeriodId {
   implicit val writes: Writes[PeriodId] = Writes(x => JsString(x.value))
 
+  def apply(dateRange: DateRange): PeriodId = {
+    PeriodId(
+      dateRange.startDateAsIso,
+      dateRange.endDateAsIso
+    )
+  }
+
   def apply(from: String, to: String): PeriodId = {
     PeriodId(s"${from}_$to")
   }

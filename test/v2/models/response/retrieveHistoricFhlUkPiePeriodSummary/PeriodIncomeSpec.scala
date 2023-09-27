@@ -16,22 +16,21 @@
 
 package v2.models.response.retrieveHistoricFhlUkPiePeriodSummary
 
-import play.api.libs.json.{JsValue, Json}
+import play.api.libs.json.Json
 import support.UnitSpec
-import v2.models.utils.JsonErrorValidators
 
-class PeriodIncomeSpec extends UnitSpec with JsonErrorValidators {
+class PeriodIncomeSpec extends UnitSpec {
 
-  private def decimal(value: String): Option[BigDecimal] = Option(BigDecimal(value))
+  private def decimal(value: String): Option[BigDecimal] = Some(BigDecimal(value))
 
-  val periodIncome =
+  private val periodIncome =
     PeriodIncome(
       decimal("5000.99"),
       decimal("5000.99"),
-      Option(RentARoomIncome(Some(5000.99)))
+      Some(RentARoomIncome(Some(5000.99)))
     )
 
-  val writesJson: JsValue = Json.parse(
+  private val writesJson = Json.parse(
     """{
       |"periodAmount":5000.99,
       |    "taxDeducted":5000.99,
@@ -42,19 +41,20 @@ class PeriodIncomeSpec extends UnitSpec with JsonErrorValidators {
       |""".stripMargin
   )
 
-  val readsJson: JsValue = Json.parse(""" {
-                                        |         "rentIncome": {
-                                        |            "amount": 5000.99,
-                                        |            "taxDeducted": 5000.99
-                                        |         },
-                                        |         "premiumsOfLeaseGrant": 5000.99,
-                                        |         "reversePremiums": 5000.99,
-                                        |         "otherIncome": 5000.99,
-                                        |        "ukRentARoom": {
-                                        |            "rentsReceived": 5000.99
-                                        |         }
-                                        |      }
-                                         |""".stripMargin)
+  private val readsJson = Json.parse(""" 
+      |{
+      |         "rentIncome": {
+      |            "amount": 5000.99,
+      |            "taxDeducted": 5000.99
+      |         },
+      |         "premiumsOfLeaseGrant": 5000.99,
+      |         "reversePremiums": 5000.99,
+      |         "otherIncome": 5000.99,
+      |        "ukRentARoom": {
+      |            "rentsReceived": 5000.99
+      |         }
+      |      }
+       |""".stripMargin)
 
   "reads" when {
     "passed a valid JSON" should {

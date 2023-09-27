@@ -22,7 +22,7 @@ import api.models.errors._
 import api.models.outcomes.ResponseWrapper
 import support.UnitSpec
 import uk.gov.hmrc.http.HeaderCarrier
-import v2.mocks.connectors.MockCreateAmendHistoricFhlUkPropertyAnnualSubmissionConnector
+import v2.connectors.MockCreateAmendHistoricFhlUkPropertyAnnualSubmissionConnector
 import v2.models.request.createAmendHistoricFhlUkPropertyAnnualSubmission._
 import v2.models.response.createAmendHistoricFhlUkPropertyAnnualSubmission.CreateAmendHistoricFhlUkPropertyAnnualSubmissionResponse
 
@@ -90,8 +90,8 @@ class CreateAmendHistoricFhlUkPropertyAnnualSubmissionServiceSpec extends UnitSp
     private val body: CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequestBody =
       CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequestBody(None, None)
 
-    protected val request: CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequest =
-      CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequest(Nino(nino), TaxYear.fromMtd(taxYear), body)
+    protected val request: CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequestData =
+      CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequestData(Nino(nino), TaxYear.fromMtd(taxYear), body)
 
   }
 

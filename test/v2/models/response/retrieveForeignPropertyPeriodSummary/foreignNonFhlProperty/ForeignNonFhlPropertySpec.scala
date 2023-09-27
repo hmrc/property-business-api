@@ -18,16 +18,15 @@ package v2.models.response.retrieveForeignPropertyPeriodSummary.foreignNonFhlPro
 
 import play.api.libs.json.Json
 import support.UnitSpec
-import v2.models.utils.JsonErrorValidators
 
-class ForeignNonFhlPropertySpec extends UnitSpec with JsonErrorValidators {
+class ForeignNonFhlPropertySpec extends UnitSpec {
 
-  val foreignNonFhlProperty = ForeignNonFhlProperty(
+  private val foreignNonFhlProperty = ForeignNonFhlProperty(
     "FRA",
     Some(
       ForeignNonFhlPropertyIncome(
         Some(ForeignNonFhlPropertyRentIncome(Some(5000.99))),
-        false,
+        foreignTaxCreditRelief = false,
         Some(5000.99),
         Some(5000.99),
         Some(5000.99),
@@ -48,7 +47,7 @@ class ForeignNonFhlPropertySpec extends UnitSpec with JsonErrorValidators {
       ))
   )
 
-  val writesJson = Json.parse("""{
+  private val writesJson = Json.parse("""{
       |  "countryCode": "FRA",
       |  "income": {
       |    "rentIncome": {
@@ -74,7 +73,7 @@ class ForeignNonFhlPropertySpec extends UnitSpec with JsonErrorValidators {
       |  }
       |}""".stripMargin)
 
-  val readsJson = Json.parse("""{
+  private val readsJson = Json.parse("""{
       |  "countryCode": "FRA",
       |  "income": {
       |    "rentIncome": {

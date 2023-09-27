@@ -21,8 +21,7 @@ import api.hateoas.HateoasFactory
 import api.services.{EnrolmentsAuthService, MtdIdLookupService}
 import play.api.mvc.{Action, AnyContent, ControllerComponents}
 import utils.IdGenerator
-import v2.controllers.requestParsers.RetrieveHistoricFhlUkPropertyAnnualSubmissionRequestParser
-import v2.models.request.retrieveHistoricFhlUkPropertyAnnualSubmission.RetrieveHistoricFhlUkPropertyAnnualSubmissionRawData
+import v2.controllers.validators.RetrieveHistoricFhlUkPropertyAnnualSubmissionValidatorFactory
 import v2.models.response.retrieveHistoricFhlUkPropertyAnnualSubmission.RetrieveHistoricFhlUkPropertyAnnualSubmissionHateoasData
 import v2.services.RetrieveHistoricFhlUkPropertyAnnualSubmissionService
 
@@ -30,13 +29,14 @@ import javax.inject.{Inject, Singleton}
 import scala.concurrent.ExecutionContext
 
 @Singleton
-class RetrieveHistoricFhlUkPropertyAnnualSubmissionController @Inject() (val authService: EnrolmentsAuthService,
-                                                                         val lookupService: MtdIdLookupService,
-                                                                         parser: RetrieveHistoricFhlUkPropertyAnnualSubmissionRequestParser,
-                                                                         service: RetrieveHistoricFhlUkPropertyAnnualSubmissionService,
-                                                                         hateoasFactory: HateoasFactory,
-                                                                         cc: ControllerComponents,
-                                                                         idGenerator: IdGenerator)(implicit ec: ExecutionContext)
+class RetrieveHistoricFhlUkPropertyAnnualSubmissionController @Inject() (
+    val authService: EnrolmentsAuthService,
+    val lookupService: MtdIdLookupService,
+    validatorFactory: RetrieveHistoricFhlUkPropertyAnnualSubmissionValidatorFactory,
+    service: RetrieveHistoricFhlUkPropertyAnnualSubmissionService,
+    hateoasFactory: HateoasFactory,
+    cc: ControllerComponents,
+    idGenerator: IdGenerator)(implicit ec: ExecutionContext)
     extends AuthorisedController(cc) {
 
   implicit val endpointLogContext: EndpointLogContext =
@@ -48,15 +48,15 @@ class RetrieveHistoricFhlUkPropertyAnnualSubmissionController @Inject() (val aut
     authorisedAction(nino).async { implicit request =>
       implicit val ctx: RequestContext = RequestContext.from(idGenerator, endpointLogContext)
 
-      val rawData = RetrieveHistoricFhlUkPropertyAnnualSubmissionRawData(nino, taxYear)
+      val validator = validatorFactory.validator(nino, taxYear)
 
       val requestHandler =
-        RequestHandlerOld
-          .withParser(parser)
+        RequestHandler
+          .withValidator(validator)
           .withService(service.retrieve)
           .withHateoasResult(hateoasFactory)(RetrieveHistoricFhlUkPropertyAnnualSubmissionHateoasData(nino, taxYear))
 
-      requestHandler.handleRequest(rawData)
+      requestHandler.handleRequest()
     }
 
 }

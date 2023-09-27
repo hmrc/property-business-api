@@ -16,14 +16,14 @@
 
 package v2.models.request.createAmendHistoricNonFhlUkPropertyAnnualSubmission
 
-import play.api.libs.json.{Format, Json}
+import play.api.libs.json.{Json, OFormat}
 
 case class CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestBody(annualAdjustments: Option[HistoricNonFhlAnnualAdjustments],
                                                                           annualAllowances: Option[HistoricNonFhlAnnualAllowances])
 
 object CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestBody {
 
-  implicit val format: Format[CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestBody] =
+  implicit val format: OFormat[CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestBody] =
     Json.format[CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestBody]
 
 }

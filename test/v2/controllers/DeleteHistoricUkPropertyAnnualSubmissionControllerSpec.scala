@@ -26,12 +26,9 @@ import api.models.outcomes.ResponseWrapper
 import api.services.MockAuditService
 import play.api.libs.json.JsValue
 import play.api.mvc.Result
-import v2.mocks.requestParsers.MockDeleteHistoricUkPropertyAnnualSubmissionRequestParser
-import v2.mocks.services.MockDeleteHistoricUkPropertyAnnualSubmissionService
-import v2.models.request.deleteHistoricUkPropertyAnnualSubmission.{
-  DeleteHistoricUkPropertyAnnualSubmissionRawData,
-  DeleteHistoricUkPropertyAnnualSubmissionRequest
-}
+import v2.controllers.validators.MockDeleteHistoricUkPropertyAnnualSubmissionValidatorFactory
+import v2.models.request.deleteHistoricUkPropertyAnnualSubmission.DeleteHistoricUkPropertyAnnualSubmissionRequestData
+import v2.services.MockDeleteHistoricUkPropertyAnnualSubmissionService
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -40,21 +37,19 @@ class DeleteHistoricUkPropertyAnnualSubmissionControllerSpec
     extends ControllerBaseSpec
     with ControllerTestRunner
     with MockDeleteHistoricUkPropertyAnnualSubmissionService
-    with MockDeleteHistoricUkPropertyAnnualSubmissionRequestParser
+    with MockDeleteHistoricUkPropertyAnnualSubmissionValidatorFactory
     with MockAuditService {
 
-  private val taxYear = "2021-22"
+  private val taxYear = TaxYear.fromMtd("2021-22")
 
   "DeleteHistoricUkPropertyAnnualSubmissionController" should {
-    "return No Content" when {
+    "return a successful response with status 204 (NO_CONTENT)" when {
       def success(propertyType: HistoricPropertyType): Unit = {
         s"${propertyType.toString} " should {
           "the request is valid and processed successfully" in new Test {
             val propertyTypeValue: HistoricPropertyType = propertyType
 
-            MockDeleteHistoricUkPropertyAnnualSubmissionRequestParser
-              .parse(rawData(propertyType))
-              .returns(Right(requestData(propertyType)))
+            willUseValidator(returningSuccess(requestData(propertyType)))
 
             MockDeleteHistoricUkPropertyAnnualSubmissionService
               .deleteHistoricUkPropertyAnnualSubmission(requestData(propertyType))
@@ -64,7 +59,7 @@ class DeleteHistoricUkPropertyAnnualSubmissionControllerSpec
           }
         }
       }
-      Seq(Fhl, NonFhl).foreach(c => success(c))
+      List(Fhl, NonFhl).foreach(c => success(c))
     }
 
     "return the error as per spec" when {
@@ -73,9 +68,7 @@ class DeleteHistoricUkPropertyAnnualSubmissionControllerSpec
         s"the parser validation fails for ${propertyType.toString}" in new Test {
           val propertyTypeValue: HistoricPropertyType = propertyType
 
-          MockDeleteHistoricUkPropertyAnnualSubmissionRequestParser
-            .parse(rawData(propertyType))
-            .returns(Left(ErrorWrapper(correlationId, NinoFormatError, None)))
+          willUseValidator(returning(NinoFormatError))
 
           runErrorTestWithAudit(NinoFormatError)
         }
@@ -85,9 +78,7 @@ class DeleteHistoricUkPropertyAnnualSubmissionControllerSpec
         s"service returns an error ${propertyType.toString}" in new Test {
           val propertyTypeValue: HistoricPropertyType = propertyType
 
-          MockDeleteHistoricUkPropertyAnnualSubmissionRequestParser
-            .parse(rawData(propertyType))
-            .returns(Right(requestData(propertyType)))
+          willUseValidator(returningSuccess(requestData(propertyType)))
 
           MockDeleteHistoricUkPropertyAnnualSubmissionService
             .deleteHistoricUkPropertyAnnualSubmission(requestData(propertyType))
@@ -106,7 +97,7 @@ class DeleteHistoricUkPropertyAnnualSubmissionControllerSpec
     private val controller = new DeleteHistoricUkPropertyAnnualSubmissionController(
       authService = mockEnrolmentsAuthService,
       lookupService = mockMtdIdLookupService,
-      parser = mockDeleteHistoricUkPropertyAnnualSubmissionRequestParser,
+      validatorFactory = mockDeleteHistoricUkPropertyAnnualSubmissionValidatorFactory,
       service = mockDeleteHistoricUkPropertyAnnualSubmissionService,
       auditService = mockAuditService,
       cc = cc,
@@ -115,8 +106,8 @@ class DeleteHistoricUkPropertyAnnualSubmissionControllerSpec
 
     protected def callController(): Future[Result] = {
       val handler = propertyTypeValue match {
-        case Fhl => controller.handleFhlRequest(nino, taxYear)
-        case _   => controller.handleNonFhlRequest(nino, taxYear)
+        case Fhl => controller.handleFhlRequest(nino, taxYear.asMtd)
+        case _   => controller.handleNonFhlRequest(nino, taxYear.asMtd)
       }
       handler(fakeDeleteRequest)
     }
@@ -129,11 +120,11 @@ class DeleteHistoricUkPropertyAnnualSubmissionControllerSpec
 
       AuditEvent(
         auditType = s"DeleteHistoric${fhlType}PropertyBusinessAnnualSubmission",
-        transactionName = s"DeleteHistoric${fhlType}PropertyBusinessAnnualSubmission",
+        transactionName = s"delete-uk-property-historic-$fhlType-annual-submission",
         detail = FlattenedGenericAuditDetail(
           versionNumber = Some("2.0"),
           userDetails = UserDetails("some-mtdId", "Individual", None),
-          params = Map("nino" -> nino, "taxYear" -> taxYear),
+          params = Map("nino" -> nino, "taxYear" -> taxYear.asMtd),
           request = requestBody,
           `X-CorrelationId` = correlationId,
           auditResponse = auditResponse
@@ -141,11 +132,8 @@ class DeleteHistoricUkPropertyAnnualSubmissionControllerSpec
       )
     }
 
-    protected def rawData(propertyType: HistoricPropertyType): DeleteHistoricUkPropertyAnnualSubmissionRawData =
-      DeleteHistoricUkPropertyAnnualSubmissionRawData(nino, taxYear, propertyType)
-
-    protected def requestData(propertyType: HistoricPropertyType): DeleteHistoricUkPropertyAnnualSubmissionRequest =
-      DeleteHistoricUkPropertyAnnualSubmissionRequest(Nino(nino), TaxYear.fromMtd(taxYear), propertyType)
+    protected def requestData(propertyType: HistoricPropertyType): DeleteHistoricUkPropertyAnnualSubmissionRequestData =
+      DeleteHistoricUkPropertyAnnualSubmissionRequestData(Nino(nino), taxYear, propertyType)
 
   }
 

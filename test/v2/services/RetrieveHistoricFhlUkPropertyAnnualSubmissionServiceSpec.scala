@@ -23,8 +23,8 @@ import api.models.outcomes.ResponseWrapper
 import api.services.ServiceOutcome
 import support.UnitSpec
 import uk.gov.hmrc.http.HeaderCarrier
-import v2.mocks.connectors.MockRetrieveHistoricFhlUkPropertyAnnualSubmissionConnector
-import v2.models.request.retrieveHistoricFhlUkPropertyAnnualSubmission.RetrieveHistoricFhlUkPropertyAnnualSubmissionRequest
+import v2.connectors.MockRetrieveHistoricFhlUkPropertyAnnualSubmissionConnector
+import v2.models.request.retrieveHistoricFhlUkPropertyAnnualSubmission.RetrieveHistoricFhlUkPropertyAnnualSubmissionRequestData
 import v2.models.response.retrieveHistoricFhlUkPropertyAnnualSubmission.RetrieveHistoricFhlUkPropertyAnnualSubmissionResponse
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -90,8 +90,8 @@ class RetrieveHistoricFhlUkPropertyAnnualSubmissionServiceSpec extends UnitSpec 
     protected val response: RetrieveHistoricFhlUkPropertyAnnualSubmissionResponse =
       RetrieveHistoricFhlUkPropertyAnnualSubmissionResponse(None, None)
 
-    protected val request: RetrieveHistoricFhlUkPropertyAnnualSubmissionRequest =
-      RetrieveHistoricFhlUkPropertyAnnualSubmissionRequest(Nino(nino), TaxYear.fromMtd(taxYear))
+    protected val request: RetrieveHistoricFhlUkPropertyAnnualSubmissionRequestData =
+      RetrieveHistoricFhlUkPropertyAnnualSubmissionRequestData(Nino(nino), TaxYear.fromMtd(taxYear))
 
   }
 

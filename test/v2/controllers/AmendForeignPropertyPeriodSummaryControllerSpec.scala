@@ -18,20 +18,20 @@ package v2.controllers
 
 import api.controllers.{ControllerBaseSpec, ControllerTestRunner}
 import api.hateoas.{HateoasWrapper, MockHateoasFactory}
-import api.models.audit.{AuditEvent, AuditResponse, GenericAuditDetailOld}
-import api.models.domain.{Nino, TaxYear}
+import api.models.audit.{AuditEvent, AuditResponse, GenericAuditDetail}
+import api.models.domain.{BusinessId, Nino, SubmissionId, TaxYear}
 import api.models.errors._
 import api.models.outcomes.ResponseWrapper
 import api.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService}
 import mocks.MockIdGenerator
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.Result
-import v2.mocks.requestParsers.MockAmendForeignPropertyPeriodSummaryRequestParser
-import v2.mocks.services.MockAmendForeignPropertyPeriodSummaryService
+import v2.controllers.validators.MockAmendForeignPropertyPeriodSummaryValidatorFactory
 import v2.models.request.amendForeignPropertyPeriodSummary._
 import v2.models.request.common.foreignFhlEea.{AmendForeignFhlEea, AmendForeignFhlEeaExpenses, ForeignFhlEeaIncome}
 import v2.models.request.common.foreignPropertyEntry._
 import v2.models.response.amendForeignPropertyPeriodSummary.AmendForeignPropertyPeriodSummaryHateoasData
+import v2.services.MockAmendForeignPropertyPeriodSummaryService
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -42,7 +42,7 @@ class AmendForeignPropertyPeriodSummaryControllerSpec
     with MockEnrolmentsAuthService
     with MockMtdIdLookupService
     with MockAmendForeignPropertyPeriodSummaryService
-    with MockAmendForeignPropertyPeriodSummaryRequestParser
+    with MockAmendForeignPropertyPeriodSummaryValidatorFactory
     with MockAuditService
     with MockHateoasFactory
     with MockIdGenerator {
@@ -54,9 +54,7 @@ class AmendForeignPropertyPeriodSummaryControllerSpec
   "AmendForeignPropertyPeriodSummaryController" should {
     "return a successful response with status 200 (OK)" when {
       "the request received is valid" in new Test {
-        MockAmendForeignPropertyRequestParser
-          .parseRequest(AmendForeignPropertyPeriodSummaryRawData(nino, businessId, taxYear, submissionId, requestBodyJson))
-          .returns(Right(requestData))
+        willUseValidator(returningSuccess(requestData))
 
         MockAmendForeignPropertyService
           .amend(requestData)
@@ -72,9 +70,7 @@ class AmendForeignPropertyPeriodSummaryControllerSpec
 
     "return a successful response from an unconsolidated request" when {
       "the request received is valid" in new Test {
-        MockAmendForeignPropertyRequestParser
-          .parseRequest(AmendForeignPropertyPeriodSummaryRawData(nino, businessId, taxYear, submissionId, requestBodyJson))
-          .returns(Right(requestData))
+        willUseValidator(returningSuccess(requestData))
 
         MockAmendForeignPropertyService
           .amend(requestData)
@@ -90,18 +86,14 @@ class AmendForeignPropertyPeriodSummaryControllerSpec
 
     "return the error as per spec" when {
       "the parser validation fails" in new Test {
-        MockAmendForeignPropertyRequestParser
-          .parseRequest(rawData)
-          .returns(Left(ErrorWrapper(correlationId, NinoFormatError, None)))
+        willUseValidator(returning(NinoFormatError))
 
         runErrorTest(NinoFormatError)
 
       }
 
       "the service returns an error" in new Test {
-        MockAmendForeignPropertyRequestParser
-          .parseRequest(rawData)
-          .returns(Right(requestData))
+        willUseValidator(returningSuccess(requestData))
 
         MockAmendForeignPropertyService
           .amend(requestData)
@@ -112,12 +104,12 @@ class AmendForeignPropertyPeriodSummaryControllerSpec
     }
   }
 
-  trait Test extends ControllerTest with AuditEventChecking[GenericAuditDetailOld] {
+  trait Test extends ControllerTest with AuditEventChecking[GenericAuditDetail] {
 
     private val controller = new AmendForeignPropertyPeriodSummaryController(
       authService = mockEnrolmentsAuthService,
       lookupService = mockMtdIdLookupService,
-      parser = mockAmendForeignPropertyPeriodSummaryRequestParser,
+      validatorFactory = mockAmendForeignPropertyPeriodSummaryValidatorFactory,
       service = mockService,
       auditService = mockAuditService,
       hateoasFactory = mockHateoasFactory,
@@ -222,23 +214,26 @@ class AmendForeignPropertyPeriodSummaryControllerSpec
     """.stripMargin
     )
 
-    protected val requestData: AmendForeignPropertyPeriodSummaryRequest =
-      AmendForeignPropertyPeriodSummaryRequest(Nino(nino), businessId, TaxYear.fromMtd(taxYear), submissionId, requestBody)
+    protected val requestData: AmendForeignPropertyPeriodSummaryRequestData =
+      AmendForeignPropertyPeriodSummaryRequestData(
+        Nino(nino),
+        BusinessId(businessId),
+        TaxYear.fromMtd(taxYear),
+        SubmissionId(submissionId),
+        requestBody)
 
-    protected val rawData: AmendForeignPropertyPeriodSummaryRawData =
-      AmendForeignPropertyPeriodSummaryRawData(nino, businessId, taxYear, submissionId, requestBodyJson)
-
-    protected def event(auditResponse: AuditResponse, requestBody: Option[JsValue]): AuditEvent[GenericAuditDetailOld] =
+    protected def event(auditResponse: AuditResponse, maybeRequestBody: Option[JsValue]): AuditEvent[GenericAuditDetail] =
       AuditEvent(
         auditType = "AmendForeignPropertyIncomeAndExpensesPeriodSummary",
         transactionName = "amend-foreign-property-income-and-expenses-period-summary",
-        detail = GenericAuditDetailOld(
+        detail = GenericAuditDetail(
           versionNumber = "2.0",
           userType = "Individual",
           agentReferenceNumber = None,
-          params = Json.toJsObject(rawData),
-          correlationId = correlationId,
-          response = auditResponse
+          params = Map("nino" -> nino, "businessId" -> businessId, "taxYear" -> taxYear, "submissionId" -> submissionId),
+          requestBody = maybeRequestBody,
+          `X-CorrelationId` = correlationId,
+          auditResponse = auditResponse
         )
       )
 

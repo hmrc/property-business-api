@@ -21,7 +21,7 @@ import api.connectors.httpparsers.StandardDownstreamHttpParser.reads
 import api.connectors.{BaseDownstreamConnector, DownstreamOutcome, DownstreamUri}
 import config.AppConfig
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
-import v3.models.request.createUkPropertyPeriodSummary.CreateUkPropertyPeriodSummaryRequest
+import v3.models.request.createUkPropertyPeriodSummary.CreateUkPropertyPeriodSummaryRequestData
 import v3.models.response.createUkPropertyPeriodSummary.CreateUkPropertyPeriodSummaryResponse
 
 import javax.inject.{Inject, Singleton}
@@ -30,7 +30,7 @@ import scala.concurrent.{ExecutionContext, Future}
 @Singleton
 class CreateUkPropertyPeriodSummaryConnector @Inject() (val http: HttpClient, val appConfig: AppConfig) extends BaseDownstreamConnector {
 
-  def createUkProperty(request: CreateUkPropertyPeriodSummaryRequest)(implicit
+  def createUkProperty(request: CreateUkPropertyPeriodSummaryRequestData)(implicit
       hc: HeaderCarrier,
       ec: ExecutionContext,
       correlationId: String): Future[DownstreamOutcome[CreateUkPropertyPeriodSummaryResponse]] = {

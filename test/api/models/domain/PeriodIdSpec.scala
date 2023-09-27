@@ -19,6 +19,9 @@ package api.models.domain
 import play.api.libs.json.{JsString, Json}
 import support.UnitSpec
 
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+
 class PeriodIdSpec extends UnitSpec {
 
   "PeriodId" when {
@@ -33,6 +36,21 @@ class PeriodIdSpec extends UnitSpec {
         val result = PeriodId("2017-04-06_2017-07-04")
         result.from shouldBe "2017-04-06"
         result.to shouldBe "2017-07-04"
+      }
+    }
+
+    "being created from a date range" should {
+      "passed a periodId as a DateRange" in {
+        val startDate = LocalDate
+          .of(2020, 1, 1)
+
+        val endDate = LocalDate
+          .of(2023, 12, 31)
+
+        val result = PeriodId(DateRange(startDate, endDate))
+
+        result.from shouldBe startDate.format(DateTimeFormatter.ISO_DATE)
+        result.to shouldBe endDate.format(DateTimeFormatter.ISO_DATE)
       }
     }
 

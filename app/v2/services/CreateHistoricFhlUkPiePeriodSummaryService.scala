@@ -23,7 +23,7 @@ import api.models.outcomes.ResponseWrapper
 import api.services.{BaseService, ServiceOutcome}
 import cats.implicits._
 import v2.connectors.CreateHistoricFhlUkPiePeriodSummaryConnector
-import v2.models.request.createHistoricFhlUkPiePeriodSummary.CreateHistoricFhlUkPiePeriodSummaryRequest
+import v2.models.request.createHistoricFhlUkPiePeriodSummary.CreateHistoricFhlUkPiePeriodSummaryRequestData
 import v2.models.response.createHistoricFhlUkPiePeriodSummary.CreateHistoricFhlUkPiePeriodSummaryResponse
 
 import javax.inject.{Inject, Singleton}
@@ -32,7 +32,7 @@ import scala.concurrent.{ExecutionContext, Future}
 @Singleton
 class CreateHistoricFhlUkPiePeriodSummaryService @Inject() (connector: CreateHistoricFhlUkPiePeriodSummaryConnector) extends BaseService {
 
-  def createPeriodSummary(request: CreateHistoricFhlUkPiePeriodSummaryRequest)(implicit
+  def createPeriodSummary(request: CreateHistoricFhlUkPiePeriodSummaryRequestData)(implicit
       ctx: RequestContext,
       ec: ExecutionContext): Future[ServiceOutcome[CreateHistoricFhlUkPiePeriodSummaryResponse]] = {
 

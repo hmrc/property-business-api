@@ -22,7 +22,7 @@ import api.models.errors._
 import api.services.{BaseService, ServiceOutcome}
 import cats.implicits.toBifunctorOps
 import v2.connectors.ListHistoricUkPropertyPeriodSummariesConnector
-import v2.models.request.listHistoricUkPropertyPeriodSummaries.ListHistoricUkPropertyPeriodSummariesRequest
+import v2.models.request.listHistoricUkPropertyPeriodSummaries.ListHistoricUkPropertyPeriodSummariesRequestData
 import v2.models.response.listHistoricUkPropertyPeriodSummaries.{ListHistoricUkPropertyPeriodSummariesResponse, SubmissionPeriod}
 
 import javax.inject.{Inject, Singleton}
@@ -31,7 +31,7 @@ import scala.concurrent.{ExecutionContext, Future}
 @Singleton
 class ListHistoricUkPropertyPeriodSummariesService @Inject() (connector: ListHistoricUkPropertyPeriodSummariesConnector) extends BaseService {
 
-  def listPeriodSummaries(request: ListHistoricUkPropertyPeriodSummariesRequest, propertyType: HistoricPropertyType)(implicit
+  def listPeriodSummaries(request: ListHistoricUkPropertyPeriodSummariesRequestData, propertyType: HistoricPropertyType)(implicit
       ctx: RequestContext,
       ec: ExecutionContext): Future[ServiceOutcome[ListHistoricUkPropertyPeriodSummariesResponse[SubmissionPeriod]]] = {
 

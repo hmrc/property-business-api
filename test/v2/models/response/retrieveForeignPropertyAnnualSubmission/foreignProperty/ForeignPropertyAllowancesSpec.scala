@@ -18,9 +18,8 @@ package v2.models.response.retrieveForeignPropertyAnnualSubmission.foreignProper
 
 import play.api.libs.json.Json
 import support.UnitSpec
-import v2.models.utils.JsonErrorValidators
 
-class ForeignPropertyAllowancesSpec extends UnitSpec with JsonErrorValidators {
+class ForeignPropertyAllowancesSpec extends UnitSpec {
 
   private val foreignPropertyAllowances = ForeignPropertyAllowances(
     Some(100.25),

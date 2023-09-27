@@ -17,26 +17,20 @@
 package v2.controllers
 
 import api.controllers._
-import api.models.audit.{AuditEvent, AuditResponse, GenericAuditDetailOld}
-import api.models.auth.UserDetails
-import api.models.errors._
 import api.services.{AuditService, EnrolmentsAuthService, MtdIdLookupService}
-import play.api.libs.json.JsValue
 import play.api.mvc.{Action, AnyContent, ControllerComponents}
-import uk.gov.hmrc.http.HeaderCarrier
-import uk.gov.hmrc.play.audit.http.connector.AuditResult
+import routing.{Version, Version2}
 import utils.IdGenerator
-import v2.controllers.requestParsers.DeletePropertyAnnualSubmissionRequestParser
-import v2.models.request.deletePropertyAnnualSubmission.DeletePropertyAnnualSubmissionRawData
+import v2.controllers.validators.DeletePropertyAnnualSubmissionValidatorFactory
 import v2.services.DeletePropertyAnnualSubmissionService
 
 import javax.inject.{Inject, Singleton}
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.ExecutionContext
 
 @Singleton
 class DeletePropertyAnnualSubmissionController @Inject() (val authService: EnrolmentsAuthService,
                                                           val lookupService: MtdIdLookupService,
-                                                          parser: DeletePropertyAnnualSubmissionRequestParser,
+                                                          validatorFactory: DeletePropertyAnnualSubmissionValidatorFactory,
                                                           service: DeletePropertyAnnualSubmissionService,
                                                           auditService: AuditService,
                                                           cc: ControllerComponents,
@@ -50,41 +44,22 @@ class DeletePropertyAnnualSubmissionController @Inject() (val authService: Enrol
     authorisedAction(nino).async { implicit request =>
       implicit val ctx: RequestContext = RequestContext.from(idGenerator, endpointLogContext)
 
-      val rawData = DeletePropertyAnnualSubmissionRawData(nino, businessId, taxYear)
+      val validator = validatorFactory.validator(nino, businessId, taxYear)
 
-      val requestHandler = RequestHandlerOld
-        .withParser(parser)
+      val requestHandler = RequestHandler
+        .withValidator(validator)
         .withService(service.deletePropertyAnnualSubmission)
         .withAuditing(
-          auditHandler(rawData, ctx.correlationId, request)
+          AuditHandler(
+            auditService,
+            auditType = "DeletePropertyAnnualSubmission",
+            transactionName = "delete-property-annual-submission",
+            apiVersion = Version.from(request, orElse = Version2),
+            params = Map("nino" -> nino, "businessId" -> businessId, "taxYear" -> taxYear)
+          )
         )
 
-      requestHandler.handleRequest(rawData)
+      requestHandler.handleRequest()
     }
-
-  private def auditHandler(rawData: DeletePropertyAnnualSubmissionRawData, correlationId: String, request: UserRequest[AnyContent]) = {
-    new AuditHandlerOld() {
-      override def performAudit(userDetails: UserDetails, httpStatus: Int, response: Either[ErrorWrapper, Option[JsValue]], versionNumber: String)(
-          implicit
-          ctx: RequestContext,
-          ec: ExecutionContext): Unit = {
-        response match {
-          case Left(err: ErrorWrapper) =>
-            auditSubmission(
-              GenericAuditDetailOld(request.userDetails, rawData, correlationId, AuditResponse(httpStatus, Left(err.auditErrors)))
-            )
-          case Right(_) =>
-            auditSubmission(
-              GenericAuditDetailOld(request.userDetails, rawData, correlationId, AuditResponse(OK, Right(None)))
-            )
-        }
-      }
-    }
-  }
-
-  private def auditSubmission(details: GenericAuditDetailOld)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[AuditResult] = {
-    val event = AuditEvent("DeletePropertyAnnualSubmission", "delete-property-annual-submission", details)
-    auditService.auditEvent(event)
-  }
 
 }

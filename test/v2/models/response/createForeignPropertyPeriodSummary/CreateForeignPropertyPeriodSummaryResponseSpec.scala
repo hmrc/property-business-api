@@ -18,15 +18,14 @@ package v2.models.response.createForeignPropertyPeriodSummary
 
 import play.api.libs.json.Json
 import support.UnitSpec
-import v2.models.utils.JsonErrorValidators
 
-class CreateForeignPropertyPeriodSummaryResponseSpec extends UnitSpec with JsonErrorValidators {
+class CreateForeignPropertyPeriodSummaryResponseSpec extends UnitSpec {
 
-  val createForeignPropertyResponse = CreateForeignPropertyPeriodSummaryResponse(
+  private val createForeignPropertyResponse = CreateForeignPropertyPeriodSummaryResponse(
     "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
   )
 
-  val json = Json.parse("""{
+  private val json = Json.parse("""{
       |  "submissionId": "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
       |}""".stripMargin)
 

@@ -17,17 +17,17 @@
 package v2.controllers
 
 import api.controllers.{ControllerBaseSpec, ControllerTestRunner}
-import api.hateoas.{HateoasWrapper, Link, MockHateoasFactory}
-import api.models.domain.{Nino, TaxYear}
-import api.models.errors._
 import api.hateoas.Method.GET
+import api.hateoas.{HateoasWrapper, Link, MockHateoasFactory}
+import api.models.domain.{BusinessId, Nino, SubmissionId, TaxYear}
+import api.models.errors._
 import api.models.outcomes.ResponseWrapper
 import fixtures.RetrieveUkPropertyPeriodSummary.ResponseModelsFixture
 import play.api.mvc.Result
-import v2.mocks.requestParsers.MockRetrieveUkPropertyPeriodSummaryRequestParser
-import v2.mocks.services.MockRetrieveUkPropertyPeriodSummaryService
-import v2.models.request.retrieveUkPropertyPeriodSummary.{RetrieveUkPropertyPeriodSummaryRawData, RetrieveUkPropertyPeriodSummaryRequest}
+import v2.controllers.validators.MockRetrieveUkPropertyPeriodSummaryValidatorFactory
+import v2.models.request.retrieveUkPropertyPeriodSummary.RetrieveUkPropertyPeriodSummaryRequestData
 import v2.models.response.retrieveUkPropertyPeriodSummary.{RetrieveUkPropertyPeriodSummaryHateoasData, RetrieveUkPropertyPeriodSummaryResponse}
+import v2.services.MockRetrieveUkPropertyPeriodSummaryService
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -36,7 +36,7 @@ class RetrieveUkPropertyPeriodSummaryControllerSpec
     extends ControllerBaseSpec
     with ControllerTestRunner
     with MockRetrieveUkPropertyPeriodSummaryService
-    with MockRetrieveUkPropertyPeriodSummaryRequestParser
+    with MockRetrieveUkPropertyPeriodSummaryValidatorFactory
     with MockHateoasFactory
     with ResponseModelsFixture {
 
@@ -47,9 +47,7 @@ class RetrieveUkPropertyPeriodSummaryControllerSpec
   "RetrieveUkPropertyPeriodSummaryController" should {
     "return (OK) 200 status" when {
       "the request received is valid" in new Test {
-        MockRetrieveUkPropertyRequestParser
-          .parse(rawData)
-          .returns(Right(requestData))
+        willUseValidator(returningSuccess(requestData))
 
         MockRetrieveUkPropertyService
           .retrieve(requestData)
@@ -65,17 +63,13 @@ class RetrieveUkPropertyPeriodSummaryControllerSpec
 
     "return validation error as per spec" when {
       "the parser validation fails" in new Test {
-        MockRetrieveUkPropertyRequestParser
-          .parse(rawData)
-          .returns(Left(ErrorWrapper(correlationId, NinoFormatError, None)))
+        willUseValidator(returning(NinoFormatError))
 
         runErrorTest(NinoFormatError)
       }
 
       "the service returns an error" in new Test {
-        MockRetrieveUkPropertyRequestParser
-          .parse(rawData)
-          .returns(Right(requestData))
+        willUseValidator(returningSuccess(requestData))
 
         MockRetrieveUkPropertyService
           .retrieve(requestData)
@@ -91,7 +85,7 @@ class RetrieveUkPropertyPeriodSummaryControllerSpec
     private val controller = new RetrieveUkPropertyPeriodSummaryController(
       authService = mockEnrolmentsAuthService,
       lookupService = mockMtdIdLookupService,
-      parser = mockRetrieveUkPropertyRequestParser,
+      validatorFactory = mockRetrieveUkPropertyPeriodSummaryValidatorFactory,
       service = mockRetrieveUkPropertyService,
       hateoasFactory = mockHateoasFactory,
       cc = cc,
@@ -100,10 +94,8 @@ class RetrieveUkPropertyPeriodSummaryControllerSpec
 
     protected def callController(): Future[Result] = controller.handleRequest(nino, businessId, taxYear, submissionId)(fakeGetRequest)
 
-    protected val rawData: RetrieveUkPropertyPeriodSummaryRawData = RetrieveUkPropertyPeriodSummaryRawData(nino, businessId, taxYear, submissionId)
-
-    protected val requestData: RetrieveUkPropertyPeriodSummaryRequest =
-      RetrieveUkPropertyPeriodSummaryRequest(Nino(nino), businessId, TaxYear.fromMtd(taxYear), submissionId)
+    protected val requestData: RetrieveUkPropertyPeriodSummaryRequestData =
+      RetrieveUkPropertyPeriodSummaryRequestData(Nino(nino), BusinessId(businessId), TaxYear.fromMtd(taxYear), SubmissionId(submissionId))
 
     protected val testHateoasLink: Link =
       Link(href = s"/individuals/business/property/$nino/$businessId/period/$taxYear/$submissionId", method = GET, rel = "self")

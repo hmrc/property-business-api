@@ -27,10 +27,10 @@ import api.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLooku
 import mocks.MockIdGenerator
 import play.api.libs.json.{JsObject, JsValue, Json}
 import play.api.mvc.Result
-import v2.mocks.requestParsers.MockCreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestParser
-import v2.mocks.services.MockCreateAmendHistoricNonFhlUkPropertyAnnualSubmissionService
+import v2.controllers.validators.MockCreateAmendHistoricNonFhlUkPropertyAnnualSubmissionValidatorFactory
 import v2.models.request.createAmendHistoricNonFhlUkPropertyAnnualSubmission._
 import v2.models.response.createAmendHistoricNonFhlUkPropertyAnnualSubmission._
+import v2.services.MockCreateAmendHistoricNonFhlUkPropertyAnnualSubmissionService
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -42,7 +42,7 @@ class CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionControllerSpec
     with MockEnrolmentsAuthService
     with MockMtdIdLookupService
     with MockCreateAmendHistoricNonFhlUkPropertyAnnualSubmissionService
-    with MockCreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestParser
+    with MockCreateAmendHistoricNonFhlUkPropertyAnnualSubmissionValidatorFactory
     with MockHateoasFactory
     with MockIdGenerator {
 
@@ -53,9 +53,7 @@ class CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionControllerSpec
   "CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionController" should {
     "return a successful response with status 200 (OK)" when {
       "the request received is valid" in new Test {
-        MockCreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestParser
-          .parse(rawData)
-          .returns(Right(requestData))
+        willUseValidator(returningSuccess(requestData))
 
         MockCreateAmendHistoricNonFhlUkPropertyAnnualSubmissionService
           .amend(requestData)
@@ -70,17 +68,13 @@ class CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionControllerSpec
     }
     "return the error as per spec" when {
       "the parser validation fails" in new Test {
-        MockCreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestParser
-          .parse(rawData)
-          .returns(Left(ErrorWrapper(correlationId, NinoFormatError, None)))
+        willUseValidator(returning(NinoFormatError))
 
         runErrorTest(NinoFormatError)
       }
 
       "the service returns an error" in new Test {
-        MockCreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestParser
-          .parse(rawData)
-          .returns(Right(requestData))
+        willUseValidator(returningSuccess(requestData))
 
         MockCreateAmendHistoricNonFhlUkPropertyAnnualSubmissionService
           .amend(requestData)
@@ -96,7 +90,7 @@ class CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionControllerSpec
     private val controller = new CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionController(
       authService = mockEnrolmentsAuthService,
       lookupService = mockMtdIdLookupService,
-      parser = mockCreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestParser,
+      validatorFactory = mockCreateAmendHistoricNonFhlUkPropertyAnnualSubmissionValidatorFactory,
       service = mockCreateAmendHistoricNonFhlUkPropertyAnnualSubmissionService,
       hateoasFactory = mockHateoasFactory,
       auditService = mockAuditService,
@@ -109,7 +103,7 @@ class CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionControllerSpec
     protected def event(auditResponse: AuditResponse, maybeRequestBody: Option[JsValue]): AuditEvent[FlattenedGenericAuditDetail] =
       AuditEvent(
         auditType = "CreateAndAmendHistoricNonFhlPropertyBusinessAnnualSubmission",
-        transactionName = "CreateAndAmendHistoricNonFhlPropertyBusinessAnnualSubmission",
+        transactionName = "create-and-amend-historic-non-fhl-property-business-annual-submission",
         detail = FlattenedGenericAuditDetail(
           versionNumber = Some("2.0"),
           userDetails = UserDetails(mtdId, "Individual", None),
@@ -122,14 +116,11 @@ class CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionControllerSpec
 
     private val requestBodyJson: JsValue = JsObject.empty
 
-    protected val rawData: CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRawData =
-      CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRawData(nino, taxYear, requestBodyJson)
-
     protected val requestBody: CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestBody =
       CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestBody(None, None)
 
-    protected val requestData: CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequest =
-      CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequest(Nino(nino), TaxYear.fromMtd(taxYear), requestBody)
+    protected val requestData: CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestData =
+      CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestData(Nino(nino), TaxYear.fromMtd(taxYear), requestBody)
 
     protected val hateoasData: CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionHateoasData =
       CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionHateoasData(nino, taxYear)

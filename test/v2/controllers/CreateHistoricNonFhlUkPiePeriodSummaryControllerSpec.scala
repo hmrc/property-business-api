@@ -27,10 +27,10 @@ import api.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLooku
 import mocks.MockIdGenerator
 import play.api.libs.json.{JsObject, JsValue, Json}
 import play.api.mvc.Result
-import v2.mocks.requestParsers.MockCreateHistoricNonFhlUkPiePeriodSummaryRequestParser
-import v2.mocks.services.MockCreateHistoricNonFhlUkPiePeriodSummaryService
+import v2.controllers.validators.MockCreateHistoricNonFhlUkPiePeriodSummaryValidatorFactory
 import v2.models.request.createHistoricNonFhlUkPropertyPeriodSummary._
 import v2.models.response.createHistoricNonFhlUkPiePeriodSummary._
+import v2.services.MockCreateHistoricNonFhlUkPiePeriodSummaryService
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -41,7 +41,7 @@ class CreateHistoricNonFhlUkPiePeriodSummaryControllerSpec
     with MockEnrolmentsAuthService
     with MockMtdIdLookupService
     with MockCreateHistoricNonFhlUkPiePeriodSummaryService
-    with MockCreateHistoricNonFhlUkPiePeriodSummaryRequestParser
+    with MockCreateHistoricNonFhlUkPiePeriodSummaryValidatorFactory
     with MockHateoasFactory
     with MockIdGenerator
     with MockAuditService {
@@ -52,9 +52,7 @@ class CreateHistoricNonFhlUkPiePeriodSummaryControllerSpec
   "CreateHistoricNonFhlUkPiePeriodSummaryController" should {
     "return a successful response with status 201 (CREATED)" when {
       "the request received is valid" in new Test {
-        MockCreateHistoricNonFhlUkPiePeriodSummaryRequestParser
-          .parse(rawData)
-          .returns(Right(requestData))
+        willUseValidator(returningSuccess(requestData))
 
         MockCreateHistoricNonFhlUkPiePeriodSummaryService
           .createPeriodSummary(requestData)
@@ -70,17 +68,13 @@ class CreateHistoricNonFhlUkPiePeriodSummaryControllerSpec
 
     "return the error as per spec" when {
       "the parser validation fails" in new Test {
-        MockCreateHistoricNonFhlUkPiePeriodSummaryRequestParser
-          .parse(rawData)
-          .returns(Left(ErrorWrapper(correlationId, NinoFormatError, None)))
+        willUseValidator(returning(NinoFormatError))
 
         runErrorTest(NinoFormatError)
       }
 
       "the service returns an error" in new Test {
-        MockCreateHistoricNonFhlUkPiePeriodSummaryRequestParser
-          .parse(rawData)
-          .returns(Right(requestData))
+        willUseValidator(returningSuccess(requestData))
 
         MockCreateHistoricNonFhlUkPiePeriodSummaryService
           .createPeriodSummary(requestData)
@@ -96,7 +90,7 @@ class CreateHistoricNonFhlUkPiePeriodSummaryControllerSpec
     private val controller: CreateHistoricNonFHLUkPiePeriodSummaryController = new CreateHistoricNonFHLUkPiePeriodSummaryController(
       authService = mockEnrolmentsAuthService,
       lookupService = mockMtdIdLookupService,
-      parser = mockCreateHistoricNonFhlUkPiePeriodSummaryRequestParser,
+      validatorFactory = mockCreateHistoricNonFhlUkPiePeriodSummaryValidatorFactory,
       service = mockCreateHistoricNonFhlUkPiePeriodSummaryService,
       auditService = mockAuditService,
       hateoasFactory = mockHateoasFactory,
@@ -109,7 +103,7 @@ class CreateHistoricNonFhlUkPiePeriodSummaryControllerSpec
     protected def event(auditResponse: AuditResponse, maybeRequestBody: Option[JsValue]): AuditEvent[FlattenedGenericAuditDetail] =
       AuditEvent(
         auditType = "CreateHistoricNonFhlPropertyIncomeExpensesPeriodSummary",
-        transactionName = "CreateHistoricNonFhlPropertyIncomeExpensesPeriodSummary",
+        transactionName = "create-historic-non-fhl-property-income-expenses-period-summary",
         detail = FlattenedGenericAuditDetail(
           versionNumber = Some("2.0"),
           userDetails = UserDetails(mtdId, "Individual", None),
@@ -135,14 +129,11 @@ class CreateHistoricNonFhlUkPiePeriodSummaryControllerSpec
 
     protected val responseBodyJsonWithHateoas: JsObject = responseBodyJson.as[JsObject] ++ testHateoasLinksJson
 
-    protected val rawData: CreateHistoricNonFhlUkPropertyPeriodSummaryRawData =
-      CreateHistoricNonFhlUkPropertyPeriodSummaryRawData(nino, requestBodyJson)
-
     protected val requestBody: CreateHistoricNonFhlUkPropertyPeriodSummaryRequestBody =
       CreateHistoricNonFhlUkPropertyPeriodSummaryRequestBody("2021-01-01", "2021-01-02", None, None)
 
-    protected val requestData: CreateHistoricNonFhlUkPropertyPeriodSummaryRequest =
-      CreateHistoricNonFhlUkPropertyPeriodSummaryRequest(Nino(nino), requestBody)
+    protected val requestData: CreateHistoricNonFhlUkPropertyPeriodSummaryRequestData =
+      CreateHistoricNonFhlUkPropertyPeriodSummaryRequestData(Nino(nino), requestBody)
 
     protected val hateoasData: CreateHistoricNonFhlUkPiePeriodSummaryHateoasData =
       CreateHistoricNonFhlUkPiePeriodSummaryHateoasData(nino, PeriodId(periodId))

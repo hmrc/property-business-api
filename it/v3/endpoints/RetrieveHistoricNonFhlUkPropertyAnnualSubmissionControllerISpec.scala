@@ -19,7 +19,7 @@ package v3.endpoints
 import api.models.errors._
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import play.api.http.HeaderNames.ACCEPT
-import play.api.http.Status
+import play.api.http.Status._
 import play.api.libs.json.{JsValue, Json}
 import play.api.libs.ws.{WSRequest, WSResponse}
 import play.api.test.Helpers.AUTHORIZATION
@@ -160,11 +160,11 @@ class RetrieveHistoricNonFhlUkPropertyAnnualSubmissionControllerISpec extends In
           AuditStub.audit()
           AuthStub.authorised()
           MtdIdLookupStub.ninoFound(nino)
-          DownstreamStub.onSuccess(DownstreamStub.GET, downstreamUri, Status.OK, downstreamResponseBody)
+          DownstreamStub.onSuccess(DownstreamStub.GET, downstreamUri, OK, downstreamResponseBody)
         }
 
         val response: WSResponse = await(request().get())
-        response.status shouldBe Status.OK
+        response.status shouldBe OK
         response.json shouldBe responseBody
         response.header("X-CorrelationId").nonEmpty shouldBe true
         response.header("Content-Type") shouldBe Some("application/json")
@@ -176,11 +176,11 @@ class RetrieveHistoricNonFhlUkPropertyAnnualSubmissionControllerISpec extends In
           AuditStub.audit()
           AuthStub.authorised()
           MtdIdLookupStub.ninoFound(nino)
-          DownstreamStub.onSuccess(DownstreamStub.GET, downstreamUri, Status.OK, Json.obj())
+          DownstreamStub.onSuccess(DownstreamStub.GET, downstreamUri, OK, Json.obj())
         }
 
         val response: WSResponse = await(request().get())
-        response.status shouldBe Status.OK
+        response.status shouldBe OK
         response.json shouldBe emptyResponseWithHateoasBody
         response.header("X-CorrelationId").nonEmpty shouldBe true
         response.header("Content-Type") shouldBe Some("application/json")
@@ -208,10 +208,10 @@ class RetrieveHistoricNonFhlUkPropertyAnnualSubmissionControllerISpec extends In
         }
 
         val input = Seq(
-          ("AA123", "2022-23", Status.BAD_REQUEST, NinoFormatError),
-          ("AA123456A", "2020", Status.BAD_REQUEST, TaxYearFormatError),
-          ("AA123456A", "2020-23", Status.BAD_REQUEST, RuleTaxYearRangeInvalidError),
-          ("AA123456A", "2015-16", Status.BAD_REQUEST, RuleHistoricTaxYearNotSupportedError)
+          ("AA123", "2022-23", BAD_REQUEST, NinoFormatError),
+          ("AA123456A", "2020", BAD_REQUEST, TaxYearFormatError),
+          ("AA123456A", "2020-23", BAD_REQUEST, RuleTaxYearRangeInvalidError),
+          ("AA123456A", "2015-16", BAD_REQUEST, RuleHistoricTaxYearNotSupportedError)
         )
         input.foreach(args => (validationErrorTest _).tupled(args))
       }
@@ -234,15 +234,15 @@ class RetrieveHistoricNonFhlUkPropertyAnnualSubmissionControllerISpec extends In
         }
 
         val input = Seq(
-          (Status.BAD_REQUEST, "INVALID_NINO", Status.BAD_REQUEST, NinoFormatError),
-          (Status.BAD_REQUEST, "INVALID_TYPE", Status.INTERNAL_SERVER_ERROR, InternalError),
-          (Status.BAD_REQUEST, "INVALID_TAX_YEAR", Status.BAD_REQUEST, TaxYearFormatError),
-          (Status.BAD_REQUEST, "INVALID_CORRELATIONID", Status.INTERNAL_SERVER_ERROR, InternalError),
-          (Status.NOT_FOUND, "INCOME_SOURCE_NOT_FOUND", Status.NOT_FOUND, NotFoundError),
-          (Status.NOT_FOUND, "NOT_FOUND_PERIOD", Status.NOT_FOUND, NotFoundError),
-          (Status.UNPROCESSABLE_ENTITY, "TAX_YEAR_NOT_SUPPORTED", Status.BAD_REQUEST, RuleHistoricTaxYearNotSupportedError),
-          (Status.INTERNAL_SERVER_ERROR, "SERVER_ERROR", Status.INTERNAL_SERVER_ERROR, InternalError),
-          (Status.SERVICE_UNAVAILABLE, "SERVICE_UNAVAILABLE", Status.INTERNAL_SERVER_ERROR, InternalError)
+          (BAD_REQUEST, "INVALID_NINO", BAD_REQUEST, NinoFormatError),
+          (BAD_REQUEST, "INVALID_TYPE", INTERNAL_SERVER_ERROR, InternalError),
+          (BAD_REQUEST, "INVALID_TAX_YEAR", BAD_REQUEST, TaxYearFormatError),
+          (BAD_REQUEST, "INVALID_CORRELATIONID", INTERNAL_SERVER_ERROR, InternalError),
+          (NOT_FOUND, "INCOME_SOURCE_NOT_FOUND", NOT_FOUND, NotFoundError),
+          (NOT_FOUND, "NOT_FOUND_PERIOD", NOT_FOUND, NotFoundError),
+          (UNPROCESSABLE_ENTITY, "TAX_YEAR_NOT_SUPPORTED", BAD_REQUEST, RuleHistoricTaxYearNotSupportedError),
+          (INTERNAL_SERVER_ERROR, "SERVER_ERROR", INTERNAL_SERVER_ERROR, InternalError),
+          (SERVICE_UNAVAILABLE, "SERVICE_UNAVAILABLE", INTERNAL_SERVER_ERROR, InternalError)
         )
         input.foreach(args => (serviceErrorTest _).tupled(args))
       }

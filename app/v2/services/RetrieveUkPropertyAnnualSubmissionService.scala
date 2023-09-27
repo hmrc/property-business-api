@@ -24,7 +24,7 @@ import cats.data.EitherT
 import cats.implicits._
 import v2.connectors.RetrieveUkPropertyAnnualSubmissionConnector
 import v2.connectors.RetrieveUkPropertyAnnualSubmissionConnector.{NonUkResult, UkResult}
-import v2.models.request.retrieveUkPropertyAnnualSubmission.RetrieveUkPropertyAnnualSubmissionRequest
+import v2.models.request.retrieveUkPropertyAnnualSubmission.RetrieveUkPropertyAnnualSubmissionRequestData
 import v2.models.response.retrieveUkPropertyAnnualSubmission.RetrieveUkPropertyAnnualSubmissionResponse
 
 import javax.inject.{Inject, Singleton}
@@ -33,7 +33,7 @@ import scala.concurrent.{ExecutionContext, Future}
 @Singleton
 class RetrieveUkPropertyAnnualSubmissionService @Inject() (connector: RetrieveUkPropertyAnnualSubmissionConnector) extends BaseService {
 
-  def retrieveUkProperty(request: RetrieveUkPropertyAnnualSubmissionRequest)(implicit
+  def retrieveUkProperty(request: RetrieveUkPropertyAnnualSubmissionRequestData)(implicit
       ctx: RequestContext,
       ec: ExecutionContext): Future[ServiceOutcome[RetrieveUkPropertyAnnualSubmissionResponse]] = {
 

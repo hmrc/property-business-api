@@ -22,10 +22,13 @@ import api.models.errors.{ErrorWrapper, _}
 import api.models.outcomes.ResponseWrapper
 import api.services.{ServiceOutcome, ServiceSpec}
 import uk.gov.hmrc.http.HeaderCarrier
-import v2.mocks.connectors.MockCreateHistoricFhlUkPiePeriodSummaryConnector
+import v2.connectors.MockCreateHistoricFhlUkPiePeriodSummaryConnector
 import v2.models.request.common.ukFhlPieProperty.{UkFhlPieExpenses, UkFhlPieIncome}
 import v2.models.request.common.ukPropertyRentARoom.{UkPropertyExpensesRentARoom, UkPropertyIncomeRentARoom}
-import v2.models.request.createHistoricFhlUkPiePeriodSummary.{CreateHistoricFhlUkPiePeriodSummaryRequest, CreateHistoricFhlUkPiePeriodSummaryRequestBody}
+import v2.models.request.createHistoricFhlUkPiePeriodSummary.{
+  CreateHistoricFhlUkPiePeriodSummaryRequestData,
+  CreateHistoricFhlUkPiePeriodSummaryRequestBody
+}
 import v2.models.response.createHistoricFhlUkPiePeriodSummary.CreateHistoricFhlUkPiePeriodSummaryResponse
 
 import scala.concurrent.Future
@@ -122,10 +125,11 @@ class CreateHistoricFhlUkPiePeriodSummaryServiceSpec extends ServiceSpec {
     protected val consolidatedBody: CreateHistoricFhlUkPiePeriodSummaryRequestBody =
       CreateHistoricFhlUkPiePeriodSummaryRequestBody(fromDate, toDate, Some(income), Some(consolidatedExpenses))
 
-    protected val requestData: CreateHistoricFhlUkPiePeriodSummaryRequest = CreateHistoricFhlUkPiePeriodSummaryRequest(Nino(nino), requestBody)
+    protected val requestData: CreateHistoricFhlUkPiePeriodSummaryRequestData =
+      CreateHistoricFhlUkPiePeriodSummaryRequestData(Nino(nino), requestBody)
 
-    protected val consolidatedRequestData: CreateHistoricFhlUkPiePeriodSummaryRequest =
-      CreateHistoricFhlUkPiePeriodSummaryRequest(Nino(nino), consolidatedBody)
+    protected val consolidatedRequestData: CreateHistoricFhlUkPiePeriodSummaryRequestData =
+      CreateHistoricFhlUkPiePeriodSummaryRequestData(Nino(nino), consolidatedBody)
 
     protected val responseData: CreateHistoricFhlUkPiePeriodSummaryResponse =
       CreateHistoricFhlUkPiePeriodSummaryResponse(PeriodId(periodId))

@@ -16,19 +16,19 @@
 
 package api.controllers.validators.resolvers
 
-import api.models.errors.{EndDateFormatError, MtdError, RuleEndBeforeStartDateError, StartDateFormatError}
+import api.models.domain.DateRange
+import api.models.errors._
 import cats.data.Validated
 import cats.data.Validated.{Invalid, Valid}
 import cats.implicits._
 
 import java.time.LocalDate
 
-case class DateRange(startDate: LocalDate, endDate: LocalDate)
-
 trait DateRangeResolving {
 
-  protected val startDateFormatError: MtdError = StartDateFormatError
-  protected val endDateFormatError: MtdError   = EndDateFormatError
+  protected val startDateFormatError: MtdError    = StartDateFormatError
+  protected val endDateFormatError: MtdError      = EndDateFormatError
+  protected val endBeforeStartDateError: MtdError = RuleEndBeforeStartDateError
 
   protected def resolve(value: (String, String), maybeError: Option[MtdError], path: Option[String]): Validated[Seq[MtdError], DateRange] = {
 
@@ -37,7 +37,7 @@ trait DateRangeResolving {
       val endDateEpochTime   = parsedEndDate.toEpochDay
 
       if ((endDateEpochTime - startDateEpochTime) <= 0)
-        Invalid(List(maybeError.getOrElse(RuleEndBeforeStartDateError)))
+        Invalid(List(maybeError.getOrElse(endBeforeStartDateError)))
       else
         Valid(DateRange(parsedStartDate, parsedEndDate))
 
@@ -56,6 +56,27 @@ object ResolveDateRange extends Resolver[(String, String), DateRange] with DateR
 
   def apply(value: (String, String), maybeError: Option[MtdError], path: Option[String]): Validated[Seq[MtdError], DateRange] = {
     resolve(value, maybeError, path)
+  }
+
+}
+
+trait DateRangeFromStringResolving extends DateRangeResolving {
+
+  protected def resolve(value: String, maybeError: Option[MtdError], maybePath: Option[String]): Validated[Seq[MtdError], DateRange] = {
+    value.split('_') match {
+      case Array(from, to) => resolve(from -> to, maybeError, maybePath)
+      case _               => Invalid(List(maybeError.getOrElse(RuleTaxYearRangeInvalid)))
+    }
+  }
+
+}
+
+/** Resolves a date range from a single input string in the format "2023-01-01_2023-01-01"
+  */
+object ResolveDateRangeFromString extends Resolver[String, DateRange] with DateRangeFromStringResolving {
+
+  def apply(value: String, maybeError: Option[MtdError], maybePath: Option[String]): Validated[Seq[MtdError], DateRange] = {
+    resolve(value, maybeError, maybePath)
   }
 
 }

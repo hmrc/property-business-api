@@ -17,12 +17,12 @@
 package v2.connectors
 
 import api.connectors.{ConnectorSpec, DownstreamOutcome}
-import api.models.domain.{Nino, TaxYear, Timestamp}
+import api.models.domain.{BusinessId, Nino, TaxYear, Timestamp}
 import api.models.errors.{DownstreamErrorCode, DownstreamErrors}
 import api.models.outcomes.ResponseWrapper
 import org.scalamock.handlers.CallHandler
 import v2.connectors.RetrieveForeignPropertyAnnualSubmissionConnector.{ForeignResult, NonForeignResult}
-import v2.models.request.retrieveForeignPropertyAnnualSubmission.RetrieveForeignPropertyAnnualSubmissionRequest
+import v2.models.request.retrieveForeignPropertyAnnualSubmission.RetrieveForeignPropertyAnnualSubmissionRequestData
 import v2.models.response.retrieveForeignPropertyAnnualSubmission.RetrieveForeignPropertyAnnualSubmissionResponse
 import v2.models.response.retrieveForeignPropertyAnnualSubmission.foreignFhlEea._
 import v2.models.response.retrieveForeignPropertyAnnualSubmission.foreignProperty._
@@ -31,13 +31,13 @@ import scala.concurrent.Future
 
 class RetrieveForeignPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec {
 
-  private val nino: String       = "AA123456A"
-  private val businessId: String = "XAIS12345678910"
+  private val nino       = Nino("AA123456A")
+  private val businessId = BusinessId("XAIS12345678910")
 
-  private val countryCode: String = "FRA"
+  private val countryCode = "FRA"
 
-  private val foreignFhlEea: ForeignFhlEeaEntry           = ForeignFhlEeaEntry(None, None)
-  private val foreignNonFhlProperty: ForeignPropertyEntry = ForeignPropertyEntry(countryCode, None, None)
+  private val foreignFhlEea         = ForeignFhlEeaEntry(None, None)
+  private val foreignNonFhlProperty = ForeignPropertyEntry(countryCode, None, None)
 
   def responseWith(foreignFhlEea: Option[ForeignFhlEeaEntry],
                    foreignNonFhlProperty: Option[Seq[ForeignPropertyEntry]]): RetrieveForeignPropertyAnnualSubmissionResponse =
@@ -61,7 +61,7 @@ class RetrieveForeignPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec
     "response has foreign non-fhl details" must {
       "return a foreign result" in new StandardTest {
         val response: RetrieveForeignPropertyAnnualSubmissionResponse =
-          responseWith(foreignFhlEea = None, foreignNonFhlProperty = Some(Seq(foreignNonFhlProperty)))
+          responseWith(foreignFhlEea = None, foreignNonFhlProperty = Some(List(foreignNonFhlProperty)))
         val outcome: Right[Nothing, ResponseWrapper[RetrieveForeignPropertyAnnualSubmissionResponse]] =
           Right(ResponseWrapper(correlationId, response))
 
@@ -75,7 +75,7 @@ class RetrieveForeignPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec
     "response has foreign fhl and non-fhl details" must {
       "return a foreign result" in new StandardTest {
         val response: RetrieveForeignPropertyAnnualSubmissionResponse =
-          responseWith(foreignFhlEea = Some(foreignFhlEea), foreignNonFhlProperty = Some(Seq(foreignNonFhlProperty)))
+          responseWith(foreignFhlEea = Some(foreignFhlEea), foreignNonFhlProperty = Some(List(foreignNonFhlProperty)))
         val outcome: Right[Nothing, ResponseWrapper[RetrieveForeignPropertyAnnualSubmissionResponse]] =
           Right(ResponseWrapper(correlationId, response))
 
@@ -122,7 +122,7 @@ class RetrieveForeignPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec
 
         willGet(
           url = s"$baseUrl/income-tax/business/property/annual",
-          parameters = Seq("taxableEntityId" -> nino, "incomeSourceId" -> businessId, "taxYear" -> "2019-20")
+          parameters = List("taxableEntityId" -> nino.nino, "incomeSourceId" -> businessId.businessId, "taxYear" -> "2019-20")
         ).returns(Future.successful(outcome))
 
         val result: DownstreamOutcome[RetrieveForeignPropertyAnnualSubmissionConnector.Result] = await(connector.retrieveForeignProperty(request))
@@ -141,8 +141,8 @@ class RetrieveForeignPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec
 
     protected val taxYear: String
 
-    protected val request: RetrieveForeignPropertyAnnualSubmissionRequest =
-      RetrieveForeignPropertyAnnualSubmissionRequest(Nino(nino), businessId, TaxYear.fromMtd(taxYear))
+    protected val request: RetrieveForeignPropertyAnnualSubmissionRequestData =
+      RetrieveForeignPropertyAnnualSubmissionRequestData(nino, businessId, TaxYear.fromMtd(taxYear))
 
   }
 

@@ -21,6 +21,10 @@ description: |
               <td><p>Simulates the scenario where no data is found.</p></td>
           </tr>
           <tr>
+              <td><p>STATEFUL_DELETE</p></td>
+              <td><p>Performs a stateful delete. <br></br>This Gov-Test-Scenario is deprecated and no longer available in later versions. It has been replaced by the STATEFUL Gov-Test-Scenario.</p></td>
+          </tr>
+          <tr>
               <td><p>STATEFUL</p></td>
               <td><p>Performs a stateful delete.</p></td>
           </tr>

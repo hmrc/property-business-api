@@ -26,7 +26,7 @@ description: |
           </tr>
           <tr>
               <td><p>STATEFUL_DELETE</p></td>
-              <td><p>Performs a stateful delete. <br></br>This Gov-Test-Scenario is no longer available in this version. It has been replaced by the STATEFUL Gov-Test-Scenario.</p></td>
+              <td><p>Performs a stateful delete. <br></br>This Gov-Test-Scenario is deprecated and no longer available in later versions. It has been replaced by the STATEFUL Gov-Test-Scenario.</p></td>
           </tr>
           <tr>
               <td><p>STATEFUL</p></td>

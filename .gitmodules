@@ -1,0 +1,6 @@
+[submodule "app/api1"]
+	path = app/api1
+	url = https://github.com/P0C-demo/mid-common.git
+[submodule "test/api1"]
+	path = test/api1
+	url = https://github.com/P0C-demo/mtd-common-test.git

@@ -20,14 +20,19 @@ import api.controllers.validators.RulesValidator
 import api.controllers.validators.resolvers.{ResolveIsoDate, ResolveParsedCountryCode, ResolveParsedNumber}
 import api.models.errors.{DateFormatError, MtdError, RuleBothAllowancesSuppliedError, RuleBuildingNameNumberError, StringFormatError}
 import cats.data.Validated
-import cats.data.Validated.Invalid
+import cats.data.Validated.{Invalid, Valid}
 import cats.implicits.toTraverseOps
 import v2.models.request.common.StructuredBuildingAllowance
 import v2.models.request.createAmendForeignPropertyAnnualSubmission.CreateAmendForeignPropertyAnnualSubmissionRequestData
 import v2.models.request.createAmendForeignPropertyAnnualSubmission.foreignFhlEea.{ForeignFhlEea, ForeignFhlEeaAllowances}
 import v2.models.request.createAmendForeignPropertyAnnualSubmission.foreignNonFhl.{ForeignNonFhlAllowances, ForeignNonFhlEntry}
 
+import java.time.LocalDate
+
 object CreateAmendForeignPropertyAnnualSubmissionValidator extends RulesValidator[CreateAmendForeignPropertyAnnualSubmissionRequestData] {
+
+  private val minYear = 1900
+  private val maxYear = 2100
 
   private val stringRegex = "^[0-9a-zA-Z{À-˿’}\\- _&`():.'^]{1,90}$".r
 
@@ -158,6 +163,13 @@ object CreateAmendForeignPropertyAnnualSubmissionValidator extends RulesValidato
     }
   }
 
+  private def isDateWithinRange(date: Option[LocalDate], error: MtdError, path: String): Validated[Seq[MtdError], Unit] = {
+    date match {
+      case Some(date) => if (date.getYear >= minYear && date.getYear < maxYear) Valid(()) else Invalid(List(error.withPath(path)))
+      case _          => Valid(())
+    }
+  }
+
   private def validateStructuredBuildingAllowance(structuredBuildingAllowance: StructuredBuildingAllowance,
                                                   index: Int,
                                                   buildingIndex: Int): Validated[Seq[MtdError], Unit] = {
@@ -181,11 +193,15 @@ object CreateAmendForeignPropertyAnnualSubmissionValidator extends RulesValidato
       resolveStringOptional(building.number, s"/foreignNonFhlProperty/$index/allowances/structuredBuildingAllowance/$buildingIndex/building/number")
     )
 
-    val validatedDate = ResolveIsoDate(
-      structuredBuildingAllowance.firstYear.map(_.qualifyingDate),
-      Some(DateFormatError),
-      Some(s"/foreignNonFhlProperty/$index/allowances/structuredBuildingAllowance/$buildingIndex/firstYear/qualifyingDate")
-    )
+    val validatedDate = {
+      val qualifyingDatePath = s"/foreignNonFhlProperty/$index/allowances/structuredBuildingAllowance/$buildingIndex/firstYear/qualifyingDate"
+
+      ResolveIsoDate(
+        structuredBuildingAllowance.firstYear.map(_.qualifyingDate),
+        Some(DateFormatError),
+        Some(qualifyingDatePath)
+      ).andThen(isDateWithinRange(_, DateFormatError, qualifyingDatePath))
+    }
 
     val validatedBuilding = (building.name, building.number) match {
       case (None, None) =>

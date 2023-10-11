@@ -668,6 +668,26 @@ class CreateAmendForeignPropertyAnnualSubmissionValidatorFactorySpec extends Uni
       )
     }
 
+    "passed a request body with a qualifyingDate before 1900" when {
+      val invalidBody =
+        bodyWith(entry, entryWith("ZWE", validStructuredBuildingAllowance.update("/firstYear/qualifyingDate", JsString("1899-01-01"))))
+
+      testDateFormatErrorWith(
+        invalidBody,
+        "/foreignNonFhlProperty/1/allowances/structuredBuildingAllowance/0/firstYear/qualifyingDate"
+      )
+    }
+
+    "passed a request body with a qualifyingDate after 2100" when {
+      val invalidBody =
+        bodyWith(entry, entryWith("ZWE", validStructuredBuildingAllowance.update("/firstYear/qualifyingDate", JsString("2100-01-01"))))
+
+      testDateFormatErrorWith(
+        invalidBody,
+        "/foreignNonFhlProperty/1/allowances/structuredBuildingAllowance/0/firstYear/qualifyingDate"
+      )
+    }
+
     "passed a request body with an invalid country code" in {
       val invalidBody = bodyWith(entryWithCountryCode("QQQ"))
       val result: Either[ErrorWrapper, CreateAmendForeignPropertyAnnualSubmissionRequestData] =

@@ -16,9 +16,9 @@
 
 package definition
 
+import api.routing.Version2
 import definition.APIStatus.ALPHA
-import routing.Version2
-import support.UnitSpec
+import api.support.UnitSpec
 
 class ApiDefinitionSpec extends UnitSpec {
 

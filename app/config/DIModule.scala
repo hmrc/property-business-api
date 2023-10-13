@@ -16,6 +16,7 @@
 
 package config
 
+import api.config.{AppConfig, AppConfigImpl}
 import com.google.inject.AbstractModule
 
 class DIModule extends AbstractModule {

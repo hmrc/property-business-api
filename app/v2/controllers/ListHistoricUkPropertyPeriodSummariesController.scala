@@ -22,7 +22,7 @@ import api.hateoas.HateoasFactory
 import api.models.domain.HistoricPropertyType
 import api.services.{EnrolmentsAuthService, MtdIdLookupService}
 import play.api.mvc.{Action, AnyContent, ControllerComponents}
-import utils.IdGenerator
+import api.utils.IdGenerator
 import v2.controllers.validators.ListHistoricUkPropertyPeriodSummariesValidatorFactory
 import v2.models.response.listHistoricUkPropertyPeriodSummaries.ListHistoricUkPropertyPeriodSummariesHateoasData
 import v2.services.ListHistoricUkPropertyPeriodSummariesService

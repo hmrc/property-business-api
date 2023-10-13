@@ -21,7 +21,7 @@ import api.models.domain.{BusinessId, Nino, TaxYear}
 import api.models.errors._
 import api.models.outcomes.ResponseWrapper
 import fixtures.CreateForeignPropertyPeriodSummaryFixtures.CreateForeignPropertyPeriodSummaryFixtures
-import support.UnitSpec
+import api.support.UnitSpec
 import uk.gov.hmrc.http.HeaderCarrier
 import v2.connectors.MockCreateForeignPropertyPeriodSummaryConnector
 import v2.models.request.createForeignPropertyPeriodSummary._

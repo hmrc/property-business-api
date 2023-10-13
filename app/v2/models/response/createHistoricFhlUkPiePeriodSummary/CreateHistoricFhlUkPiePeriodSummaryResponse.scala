@@ -18,7 +18,7 @@ package v2.models.response.createHistoricFhlUkPiePeriodSummary
 
 import api.hateoas.{HateoasData, HateoasLinksFactory, Link}
 import api.models.domain.PeriodId
-import config.AppConfig
+import api.config.AppConfig
 import play.api.libs.json._
 import v2.hateoas.HateoasLinks
 

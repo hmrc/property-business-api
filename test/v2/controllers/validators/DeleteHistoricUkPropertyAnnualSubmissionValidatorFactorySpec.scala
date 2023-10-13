@@ -19,7 +19,7 @@ package v2.controllers.validators
 import api.models.domain.{HistoricPropertyType, Nino, TaxYear}
 import api.models.errors._
 import mocks.MockAppConfig
-import support.UnitSpec
+import api.support.UnitSpec
 import v2.models.request.deleteHistoricUkPropertyAnnualSubmission.DeleteHistoricUkPropertyAnnualSubmissionRequestData
 
 class DeleteHistoricUkPropertyAnnualSubmissionValidatorFactorySpec extends UnitSpec with MockAppConfig {

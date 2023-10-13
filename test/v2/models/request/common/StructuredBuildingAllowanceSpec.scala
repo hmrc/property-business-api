@@ -17,7 +17,7 @@
 package v2.models.request.common
 
 import play.api.libs.json.Json
-import support.UnitSpec
+import api.support.UnitSpec
 
 class StructuredBuildingAllowanceSpec extends UnitSpec with StructuredBuildingAllowanceFixture {
 

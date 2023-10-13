@@ -22,7 +22,7 @@ import api.models.errors.MtdError
 import cats.data.Validated
 import cats.data.Validated.Valid
 import cats.implicits._
-import config.AppConfig
+import api.config.AppConfig
 import play.api.libs.json.JsValue
 import v2.models.request.createAmendHistoricFhlUkPropertyAnnualSubmission._
 

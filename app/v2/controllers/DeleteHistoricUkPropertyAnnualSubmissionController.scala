@@ -21,8 +21,8 @@ import api.models.audit.FlattenedGenericAuditDetail
 import api.models.domain.HistoricPropertyType
 import api.services.{AuditService, EnrolmentsAuthService, MtdIdLookupService}
 import play.api.mvc.{Action, AnyContent, ControllerComponents}
-import routing.{Version, Version2}
-import utils.IdGenerator
+import api.routing.{Version, Version2}
+import api.utils.IdGenerator
 import v2.controllers.validators.DeleteHistoricUkPropertyAnnualSubmissionValidatorFactory
 import v2.services.DeleteHistoricUkPropertyAnnualSubmissionService
 

@@ -17,7 +17,7 @@
 package v2.models.request.createAmendForeignPropertyAnnualSubmission.foreignNonFhl
 
 import play.api.libs.json.Json
-import support.UnitSpec
+import api.support.UnitSpec
 import v2.models.request.createAmendForeignPropertyAnnualSubmission.CreateAmendForeignPropertyAnnualSubmissionFixture
 
 class ForeignNonFhlAdjustmentsSpec extends UnitSpec with CreateAmendForeignPropertyAnnualSubmissionFixture {

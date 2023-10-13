@@ -17,7 +17,7 @@
 package v2.models.request.common.foreignFhlEea
 
 import play.api.libs.json.{JsValue, Json}
-import support.UnitSpec
+import api.support.UnitSpec
 
 class CreateForeignFhlEeaSpec extends UnitSpec {
 

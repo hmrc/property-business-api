@@ -21,7 +21,7 @@ import api.hateoas.Method._
 import fixtures.RetrieveUkPropertyPeriodSummary.ResponseModelsFixture
 import mocks.MockAppConfig
 import play.api.libs.json.{JsValue, Json}
-import support.UnitSpec
+import api.support.UnitSpec
 
 class RetrieveUkPropertyPeriodSummaryResponseSpec extends UnitSpec with MockAppConfig with ResponseModelsFixture {
   val downstreamJson: JsValue                        = fullDownstreamJson

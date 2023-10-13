@@ -16,7 +16,8 @@
 
 package utils
 
-import support.UnitSpec
+import api.utils.IdGenerator
+import api.support.UnitSpec
 
 class IdGeneratorSpec extends UnitSpec {
 

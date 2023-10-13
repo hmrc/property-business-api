@@ -17,6 +17,7 @@
 package utils
 
 import api.models.errors._
+import api.utils.ErrorHandler
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.Configuration
 import play.api.http.Status
@@ -25,7 +26,7 @@ import play.api.libs.json.Json
 import play.api.mvc.{AnyContentAsEmpty, RequestHeader}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import support.UnitSpec
+import api.support.UnitSpec
 import uk.gov.hmrc.auth.core.InsufficientEnrolments
 import uk.gov.hmrc.http.{HeaderCarrier, JsValidationException, NotFoundException}
 import uk.gov.hmrc.play.audit.http.connector.AuditConnector

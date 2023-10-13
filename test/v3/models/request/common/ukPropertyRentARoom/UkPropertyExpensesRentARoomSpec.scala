@@ -17,7 +17,7 @@
 package v3.models.request.common.ukPropertyRentARoom
 
 import play.api.libs.json.{JsValue, Json}
-import support.UnitSpec
+import api.support.UnitSpec
 
 class UkPropertyExpensesRentARoomSpec extends UnitSpec {
 

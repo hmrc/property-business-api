@@ -16,8 +16,8 @@
 
 package utils
 
-import support.UnitSpec
-import utils.UrlUtils.appendQueryParams
+import api.support.UnitSpec
+import api.utils.UrlUtils.appendQueryParams
 
 class UrlUtilsSpec extends UnitSpec {
 

@@ -18,7 +18,7 @@ package v2.models.response.retrieveUkPropertyAnnualSubmission
 
 import api.hateoas.{HateoasData, HateoasLinksFactory, Link}
 import api.models.domain.Timestamp
-import config.AppConfig
+import api.config.AppConfig
 import play.api.libs.functional.syntax._
 import play.api.libs.json._
 import v2.hateoas.HateoasLinks

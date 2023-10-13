@@ -21,8 +21,8 @@ import api.hateoas.HateoasFactory
 import api.services.{AuditService, EnrolmentsAuthService, MtdIdLookupService}
 import play.api.libs.json.JsValue
 import play.api.mvc.{Action, ControllerComponents}
-import routing.{Version, Version3}
-import utils.IdGenerator
+import api.routing.{Version, Version3}
+import api.utils.IdGenerator
 import v3.controllers.validators.CreateUkPropertyPeriodSummaryValidatorFactory
 import v3.models.response.createUkPropertyPeriodSummary.CreateUkPropertyPeriodSummaryHateoasData
 import v3.services._

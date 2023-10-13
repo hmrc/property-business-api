@@ -21,7 +21,7 @@ import api.models.errors._
 import api.models.utils.JsonErrorValidators
 import mocks.MockAppConfig
 import play.api.libs.json.{JsArray, JsNumber, JsValue, Json}
-import support.UnitSpec
+import api.support.UnitSpec
 import v2.models.request.amendForeignPropertyPeriodSummary._
 import v2.models.request.common.foreignFhlEea._
 import v2.models.request.common.foreignPropertyEntry._

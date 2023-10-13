@@ -22,7 +22,7 @@ import api.models.errors._
 import api.models.utils.JsonErrorValidators
 import mocks.MockAppConfig
 import play.api.libs.json._
-import support.UnitSpec
+import api.support.UnitSpec
 import v2.models.request.common.ukPropertyRentARoom.UkPropertyAdjustmentsRentARoom
 import v2.models.request.createAmendHistoricNonFhlUkPropertyAnnualSubmission.{
   CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestBody,

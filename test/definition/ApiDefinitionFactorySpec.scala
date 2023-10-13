@@ -16,11 +16,12 @@
 
 package definition
 
-import config.ConfidenceLevelConfig
+import api.routing.Version2
+import api.config.ConfidenceLevelConfig
 import definition.APIStatus.{ALPHA, BETA}
 import mocks.{MockAppConfig, MockHttpClient}
-import routing.{Version2, Version3}
-import support.UnitSpec
+import api.routing.{Version3}
+import api.support.UnitSpec
 import uk.gov.hmrc.auth.core.ConfidenceLevel
 
 class ApiDefinitionFactorySpec extends UnitSpec {

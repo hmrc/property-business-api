@@ -19,7 +19,7 @@ package v2.controllers.validators
 import api.models.domain.{Nino, PeriodId}
 import api.models.errors._
 import mocks.MockAppConfig
-import support.UnitSpec
+import api.support.UnitSpec
 import v2.models.request.retrieveHistoricNonFhlUkPiePeriodSummary.RetrieveHistoricNonFhlUkPiePeriodSummaryRequestData
 
 class RetrieveHistoricNonFhlUkPropertyPeriodSummaryValidatorFactorySpec extends UnitSpec with MockAppConfig {

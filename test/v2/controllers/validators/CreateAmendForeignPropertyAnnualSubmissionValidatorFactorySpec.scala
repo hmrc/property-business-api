@@ -21,7 +21,7 @@ import api.models.errors._
 import api.models.utils.JsonErrorValidators
 import mocks.MockAppConfig
 import play.api.libs.json.{JsArray, JsNumber, JsString, JsValue, Json}
-import support.UnitSpec
+import api.support.UnitSpec
 import v2.models.request.common.{Building, FirstYear, StructuredBuildingAllowance}
 import v2.models.request.createAmendForeignPropertyAnnualSubmission._
 import v2.models.request.createAmendForeignPropertyAnnualSubmission.foreignFhlEea.{ForeignFhlEea, ForeignFhlEeaAdjustments, ForeignFhlEeaAllowances}

@@ -23,7 +23,7 @@ import api.models.errors.MtdError
 import cats.data.Validated
 import cats.data.Validated.Valid
 import cats.implicits.catsSyntaxTuple3Semigroupal
-import config.AppConfig
+import api.config.AppConfig
 import v2.models.request.deleteHistoricUkPropertyAnnualSubmission.DeleteHistoricUkPropertyAnnualSubmissionRequestData
 
 import javax.inject.{Inject, Singleton}

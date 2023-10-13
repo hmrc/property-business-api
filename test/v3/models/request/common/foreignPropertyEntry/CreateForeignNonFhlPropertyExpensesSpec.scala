@@ -17,7 +17,7 @@
 package v3.models.request.common.foreignPropertyEntry
 
 import play.api.libs.json.{JsValue, Json}
-import support.UnitSpec
+import api.support.UnitSpec
 
 class CreateForeignNonFhlPropertyExpensesSpec extends UnitSpec {
 

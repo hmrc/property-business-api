@@ -16,9 +16,10 @@
 
 package config
 
+import api.config.FeatureSwitches
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import play.api.Configuration
-import support.UnitSpec
+import api.support.UnitSpec
 
 class FeatureSwitchesSpec extends UnitSpec with ScalaCheckPropertyChecks {
 

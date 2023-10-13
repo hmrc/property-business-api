@@ -17,7 +17,7 @@
 package v2.models.response.amendForeignPropertyPeriodSummary
 
 import api.hateoas.{HateoasData, HateoasLinksFactory, Link}
-import config.AppConfig
+import api.config.AppConfig
 import v2.hateoas.HateoasLinks
 
 object AmendForeignPropertyPeriodSummaryResponse extends HateoasLinks {

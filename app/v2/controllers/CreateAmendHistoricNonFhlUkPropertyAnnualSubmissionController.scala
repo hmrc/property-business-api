@@ -22,8 +22,8 @@ import api.models.audit.FlattenedGenericAuditDetail
 import api.services.{AuditService, EnrolmentsAuthService, MtdIdLookupService}
 import play.api.libs.json.JsValue
 import play.api.mvc.{Action, ControllerComponents}
-import routing.{Version, Version2}
-import utils.IdGenerator
+import api.routing.{Version, Version2}
+import api.utils.IdGenerator
 import v2.controllers.validators.CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionValidatorFactory
 import v2.models.response.createAmendHistoricNonFhlUkPropertyAnnualSubmission.CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionHateoasData
 import v2.services.CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionService

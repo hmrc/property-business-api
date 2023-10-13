@@ -19,7 +19,7 @@ package v2.models.request.common.foreignPropertyEntry
 import play.api.libs.functional.syntax._
 import play.api.libs.json.{JsPath, Json, Reads, Writes}
 import shapeless.HNil
-import utils.EmptinessChecker
+import api.utils.EmptinessChecker
 
 case class CreateForeignNonFhlPropertyEntry(
     countryCode: String,

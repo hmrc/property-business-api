@@ -18,7 +18,7 @@ package v2.models.response.retrieveHistoricFhlUkPiePeriodSummary
 
 import mocks.MockAppConfig
 import play.api.libs.json.{JsValue, Json}
-import support.UnitSpec
+import api.support.UnitSpec
 
 class RetrieveHistoricFhlUkPiePeriodSummaryResponseSpec extends UnitSpec with MockAppConfig {
 

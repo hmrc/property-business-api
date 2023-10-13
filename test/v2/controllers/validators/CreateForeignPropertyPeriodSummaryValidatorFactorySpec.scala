@@ -21,7 +21,7 @@ import api.models.errors._
 import api.models.utils.JsonErrorValidators
 import mocks.MockAppConfig
 import play.api.libs.json.{JsArray, JsNumber, JsObject, JsString, JsValue, Json}
-import support.UnitSpec
+import api.support.UnitSpec
 import v2.models.request.common.foreignFhlEea.{CreateForeignFhlEea, CreateForeignFhlEeaExpenses, ForeignFhlEeaIncome}
 import v2.models.request.common.foreignPropertyEntry.{
   CreateForeignNonFhlPropertyEntry,

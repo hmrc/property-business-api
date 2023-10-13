@@ -20,7 +20,8 @@ import cats.Show
 import org.scalacheck.{Arbitrary, Gen}
 import org.scalatest.Inspectors
 import play.api.libs.json._
-import support.UnitSpec
+import api.support.UnitSpec
+import api.utils.enums.Enums
 
 sealed trait Enum
 

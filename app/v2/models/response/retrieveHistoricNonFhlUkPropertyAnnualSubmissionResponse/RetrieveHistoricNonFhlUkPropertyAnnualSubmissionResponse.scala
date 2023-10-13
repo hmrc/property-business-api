@@ -17,7 +17,7 @@
 package v2.models.response.retrieveHistoricNonFhlUkPropertyAnnualSubmissionResponse
 
 import api.hateoas.{HateoasData, HateoasLinksFactory, Link}
-import config.AppConfig
+import api.config.AppConfig
 import play.api.libs.json.{Json, OWrites, Reads}
 import v2.hateoas.HateoasLinks
 

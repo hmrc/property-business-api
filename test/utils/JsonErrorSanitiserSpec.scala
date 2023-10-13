@@ -16,7 +16,8 @@
 
 package utils
 
-import support.UnitSpec
+import api.utils.JsonErrorSanitiser
+import api.support.UnitSpec
 
 class JsonErrorSanitiserSpec extends UnitSpec {
 

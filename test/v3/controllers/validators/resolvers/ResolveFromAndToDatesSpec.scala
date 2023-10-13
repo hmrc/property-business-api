@@ -19,7 +19,7 @@ package v3.controllers.validators.resolvers
 import api.models.domain.DateRange
 import api.models.errors.{FromDateFormatError, ToDateFormatError}
 import cats.data.Validated.{Invalid, Valid}
-import support.UnitSpec
+import api.support.UnitSpec
 
 import java.time.LocalDate
 

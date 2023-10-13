@@ -20,7 +20,7 @@ import api.controllers.validators.Validator
 import api.models.domain.Nino
 import api.models.errors._
 import mocks.MockAppConfig
-import support.UnitSpec
+import api.support.UnitSpec
 import v2.models.request.listHistoricUkPropertyPeriodSummaries.ListHistoricUkPropertyPeriodSummariesRequestData
 
 class ListHistoricUkPropertyPeriodSummariesValidatorFactorySpec extends UnitSpec with MockAppConfig {

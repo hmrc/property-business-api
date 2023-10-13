@@ -19,7 +19,7 @@ package v2.models.request.createUkPropertyPeriodSummary
 import play.api.libs.functional.syntax._
 import play.api.libs.json.{JsPath, Json, OWrites, Reads}
 import shapeless.HNil
-import utils.EmptinessChecker
+import api.utils.EmptinessChecker
 import v2.models.request.common.ukFhlProperty.UkFhlProperty
 import v2.models.request.common.ukNonFhlProperty.UkNonFhlProperty
 

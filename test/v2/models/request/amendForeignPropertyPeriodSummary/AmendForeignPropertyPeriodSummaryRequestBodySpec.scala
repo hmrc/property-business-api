@@ -17,7 +17,7 @@
 package v2.models.request.amendForeignPropertyPeriodSummary
 
 import play.api.libs.json.Json
-import support.UnitSpec
+import api.support.UnitSpec
 import v2.models.request.common.foreignFhlEea._
 import v2.models.request.common.foreignPropertyEntry._
 

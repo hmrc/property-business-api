@@ -21,7 +21,7 @@ import api.controllers.validators.resolvers.{ResolveBusinessId, ResolveNino, Res
 import api.models.errors.MtdError
 import cats.data.Validated
 import cats.implicits._
-import config.AppConfig
+import api.config.AppConfig
 import v2.models.request.retrieveUkPropertyPeriodSummary.RetrieveUkPropertyPeriodSummaryRequestData
 
 import javax.inject.{Inject, Singleton}

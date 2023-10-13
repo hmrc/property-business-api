@@ -20,7 +20,7 @@ import api.controllers.{AuthorisedController, EndpointLogContext, RequestContext
 import api.hateoas.HateoasFactory
 import api.services.{EnrolmentsAuthService, MtdIdLookupService}
 import play.api.mvc.{Action, AnyContent, ControllerComponents}
-import utils.IdGenerator
+import api.utils.IdGenerator
 import v2.controllers.validators.RetrieveHistoricNonFhlUkPropertyAnnualSubmissionValidatorFactory
 import v2.models.response.retrieveHistoricNonFhlUkPropertyAnnualSubmissionResponse.RetrieveHistoricNonFhlUkPropertyAnnualSubmissionHateoasData
 import v2.services.RetrieveHistoricNonFhlUkPropertyAnnualSubmissionService

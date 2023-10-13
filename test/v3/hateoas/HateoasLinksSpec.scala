@@ -19,7 +19,7 @@ package v3.hateoas
 import api.hateoas.{Link, Method}
 import api.hateoas.Method._
 import mocks.MockAppConfig
-import support.UnitSpec
+import api.support.UnitSpec
 import v3.models.response.retrieveHistoricNonFhlUkPiePeriodSummary.{
   RetrieveHistoricNonFhlUkPiePeriodSummaryHateoasData,
   RetrieveHistoricNonFhlUkPiePeriodSummaryResponse

@@ -20,7 +20,7 @@ import api.hateoas.{Link, Method}
 import api.models.domain.Timestamp
 import mocks.MockAppConfig
 import play.api.libs.json.{JsValue, Json}
-import support.UnitSpec
+import api.support.UnitSpec
 import v2.models.response.retrieveUkPropertyAnnualSubmission.ukFhlProperty._
 import v2.models.response.retrieveUkPropertyAnnualSubmission.ukNonFhlProperty._
 

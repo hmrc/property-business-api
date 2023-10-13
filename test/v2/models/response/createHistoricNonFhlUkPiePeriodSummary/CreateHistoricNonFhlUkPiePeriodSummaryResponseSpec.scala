@@ -18,7 +18,7 @@ package v2.models.response.createHistoricNonFhlUkPiePeriodSummary
 
 import api.models.domain.PeriodId
 import play.api.libs.json.{JsValue, Json}
-import support.UnitSpec
+import api.support.UnitSpec
 
 class CreateHistoricNonFhlUkPiePeriodSummaryResponseSpec extends UnitSpec {
 

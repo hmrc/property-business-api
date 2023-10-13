@@ -21,7 +21,7 @@ import api.controllers.validators.resolvers._
 import api.models.errors.MtdError
 import cats.data.Validated
 import cats.implicits._
-import config.AppConfig
+import api.config.AppConfig
 import play.api.libs.json.JsValue
 import v2.controllers.validators.AmendForeignPropertyPeriodSummaryValidator.validateBusinessRules
 import v2.models.request.amendForeignPropertyPeriodSummary._

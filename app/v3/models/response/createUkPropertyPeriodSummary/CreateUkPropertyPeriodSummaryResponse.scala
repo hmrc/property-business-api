@@ -17,7 +17,7 @@
 package v3.models.response.createUkPropertyPeriodSummary
 
 import api.hateoas.{HateoasData, HateoasLinksFactory, Link}
-import config.AppConfig
+import api.config.AppConfig
 import play.api.libs.json.{Json, OFormat}
 import v3.hateoas.HateoasLinks
 

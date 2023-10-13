@@ -18,7 +18,7 @@ package mocks
 
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
-import utils.IdGenerator
+import api.utils.IdGenerator
 
 trait MockIdGenerator extends MockFactory {
 

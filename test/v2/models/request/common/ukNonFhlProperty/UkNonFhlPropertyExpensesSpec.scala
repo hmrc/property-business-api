@@ -17,7 +17,7 @@
 package v2.models.request.common.ukNonFhlProperty
 
 import play.api.libs.json.{JsValue, Json}
-import support.UnitSpec
+import api.support.UnitSpec
 import v2.models.request.common.ukPropertyRentARoom.UkPropertyExpensesRentARoom
 
 class UkNonFhlPropertyExpensesSpec extends UnitSpec {

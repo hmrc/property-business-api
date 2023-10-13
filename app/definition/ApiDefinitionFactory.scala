@@ -16,10 +16,10 @@
 
 package definition
 
-import config.AppConfig
-import routing.{Version, Version2, Version3}
+import api.config.AppConfig
+import api.routing.{Version, Version2, Version3}
 import uk.gov.hmrc.auth.core.ConfidenceLevel
-import utils.Logging
+import api.utils.Logging
 
 import javax.inject.{Inject, Singleton}
 

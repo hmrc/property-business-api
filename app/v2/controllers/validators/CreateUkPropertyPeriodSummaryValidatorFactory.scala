@@ -23,7 +23,7 @@ import api.models.errors.{MtdError, RuleBothExpensesSuppliedError}
 import cats.data.Validated
 import cats.data.Validated.{Invalid, Valid}
 import cats.implicits._
-import config.AppConfig
+import api.config.AppConfig
 import play.api.libs.json.JsValue
 import v2.controllers.validators.resolvers.ResolveFromAndToDates
 import v2.models.request.common.ukFhlProperty.{UkFhlProperty, UkFhlPropertyExpenses}

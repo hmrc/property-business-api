@@ -21,7 +21,7 @@ import api.models.domain.{HistoricPropertyType, PeriodId}
 import api.hateoas.Method._
 import mocks.MockAppConfig
 import play.api.libs.json.Json
-import support.UnitSpec
+import api.support.UnitSpec
 
 class ListHistoricUkPropertyPeriodSummariesResponseSpec extends UnitSpec with MockAppConfig {
 

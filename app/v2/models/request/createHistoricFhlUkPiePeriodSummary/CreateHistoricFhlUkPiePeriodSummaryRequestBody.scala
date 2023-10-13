@@ -19,7 +19,7 @@ package v2.models.request.createHistoricFhlUkPiePeriodSummary
 import play.api.libs.functional.syntax.{toFunctionalBuilderOps, unlift}
 import play.api.libs.json.{JsPath, OWrites, Reads, __}
 import shapeless.HNil
-import utils.EmptinessChecker
+import api.utils.EmptinessChecker
 import v2.models.request.common.ukFhlPieProperty.{UkFhlPieExpenses, UkFhlPieIncome}
 
 case class CreateHistoricFhlUkPiePeriodSummaryRequestBody(fromDate: String,

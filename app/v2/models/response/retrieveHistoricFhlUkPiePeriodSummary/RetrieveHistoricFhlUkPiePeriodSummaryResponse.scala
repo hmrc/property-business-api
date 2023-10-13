@@ -17,7 +17,7 @@
 package v2.models.response.retrieveHistoricFhlUkPiePeriodSummary
 
 import api.hateoas.{HateoasData, HateoasLinksFactory, Link}
-import config.AppConfig
+import api.config.AppConfig
 import play.api.libs.functional.syntax._
 import play.api.libs.json._
 import v2.hateoas.HateoasLinks

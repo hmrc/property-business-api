@@ -17,7 +17,7 @@
 package v2.models.response.retrieveForeignPropertyPeriodSummary.foreignFhlEea
 
 import play.api.libs.json.Json
-import support.UnitSpec
+import api.support.UnitSpec
 
 class ForeignFhlEeaExpensesSpec extends UnitSpec {
 

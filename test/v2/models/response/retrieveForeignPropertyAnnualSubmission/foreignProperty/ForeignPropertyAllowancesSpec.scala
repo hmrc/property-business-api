@@ -17,7 +17,7 @@
 package v2.models.response.retrieveForeignPropertyAnnualSubmission.foreignProperty
 
 import play.api.libs.json.Json
-import support.UnitSpec
+import api.support.UnitSpec
 
 class ForeignPropertyAllowancesSpec extends UnitSpec {
 

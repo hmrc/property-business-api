@@ -20,7 +20,7 @@ import api.controllers.EndpointLogContext
 import api.models.domain.{HistoricPropertyType, Nino}
 import api.models.errors._
 import api.models.outcomes.ResponseWrapper
-import support.UnitSpec
+import api.support.UnitSpec
 import uk.gov.hmrc.http.HeaderCarrier
 import v2.connectors.MockListHistoricUkPropertyPeriodSummariesConnector
 import v2.models.request.listHistoricUkPropertyPeriodSummaries.ListHistoricUkPropertyPeriodSummariesRequestData

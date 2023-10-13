@@ -19,7 +19,7 @@ package v2.models.response.listHistoricUkPropertyPeriodSummaries
 import api.hateoas.{HateoasData, HateoasListLinksFactory, Link}
 import api.models.domain.HistoricPropertyType
 import cats.Functor
-import config.AppConfig
+import api.config.AppConfig
 import play.api.libs.json._
 import v2.hateoas.HateoasLinks
 

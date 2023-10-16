@@ -42,7 +42,7 @@ class ResolvePeriodIdSpec extends UnitSpec {
       }
 
       "passed a periodId equal to the maximum" in {
-        val maxPeriodId = "2021-04-06_2021-07-04"
+        val maxPeriodId = "2022-01-06_2022-04-05"
         val result      = resolvePeriodId(maxPeriodId, None, None)
         result shouldBe Valid(PeriodId(maxPeriodId))
       }
@@ -75,7 +75,7 @@ class ResolvePeriodIdSpec extends UnitSpec {
       }
 
       "passed a PeriodId before the minimum" in {
-        val earlyPeriodId = "2016-04-06_2016-07-04"
+        val earlyPeriodId = "2017-01-06_2017-04-05"
         val result        = resolvePeriodId(earlyPeriodId, None, None)
         result shouldBe Invalid(List(PeriodIdFormatError))
       }

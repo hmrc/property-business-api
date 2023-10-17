@@ -41,28 +41,44 @@ class TaxYearSpec extends UnitSpec {
       }
     }
 
-    "constructed from an ISO date" should {
-      "be the expected year, taking into account the UK tax year start date" in {
+    "constructed from a date" when {
+      val input = List(
+        "2025-01-01" -> 2025,
+        "2025-04-01" -> 2025,
+        "2025-04-06" -> 2026,
+        "2023-06-01" -> 2024,
+        "2026-01-01" -> 2026,
+        "2021-12-31" -> 2022
+      )
 
-        def test(datesAndExpectedYears: Seq[(String, Int)]): Unit = {
-          datesAndExpectedYears.foreach { case (date, expectedYear) =>
-            withClue(s"Given $date:") {
-              val result = TaxYear.fromIso(date)
-              result.year shouldBe expectedYear
+      "the date is an ISO string" must {
+        "be the expected year, taking into account the UK tax year start date" in {
+          def test(datesAndExpectedYears: Seq[(String, Int)]): Unit = {
+            datesAndExpectedYears.foreach { case (date, expectedYear) =>
+              withClue(s"Given $date:") {
+                val result = TaxYear.fromIso(date)
+                result.year shouldBe expectedYear
+              }
             }
           }
+
+          test(input)
         }
+      }
 
-        val input = List(
-          "2025-01-01" -> 2025,
-          "2025-04-01" -> 2025,
-          "2025-04-06" -> 2026,
-          "2023-06-01" -> 2024,
-          "2026-01-01" -> 2026,
-          "2021-12-31" -> 2022
-        )
+      "the date is a LocalDate" must {
+        "be the expected year, taking into account the UK tax year start date" in {
+          def test(datesAndExpectedYears: Seq[(String, Int)]): Unit = {
+            datesAndExpectedYears.foreach { case (date, expectedYear) =>
+              withClue(s"Given $date:") {
+                val result = TaxYear.containing(LocalDate.parse(date))
+                result.year shouldBe expectedYear
+              }
+            }
+          }
 
-        test(input)
+          test(input)
+        }
       }
     }
 
@@ -130,6 +146,22 @@ class TaxYearSpec extends UnitSpec {
 
       val result = TaxYear.currentTaxYear()
       result.year shouldBe expectedYear
+    }
+  }
+
+  "getting the start and end" must {
+    "get April 5th and April 6th when ending on non-leap years" in {
+      val taxYear = TaxYear.ending(2023)
+
+      taxYear.startDate shouldBe LocalDate.parse("2022-04-06")
+      taxYear.endDate shouldBe LocalDate.parse("2023-04-05")
+    }
+
+    "get April 5th and April 6th when ending on leap years" in {
+      val taxYear = TaxYear.ending(2020)
+
+      taxYear.startDate shouldBe LocalDate.parse("2019-04-06")
+      taxYear.endDate shouldBe LocalDate.parse("2020-04-05")
     }
   }
 

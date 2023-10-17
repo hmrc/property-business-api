@@ -14,22 +14,21 @@
  * limitations under the License.
  */
 
-package v2.controllers.validators.resolvers
+package api.controllers.validators.resolvers
 
-import api.controllers.validators.resolvers.{DateRangeFromStringResolving, Resolver}
-import api.models.domain.PeriodId
-import api.models.errors.{MtdError, PeriodIdFormatError}
+import api.models.domain.{DateRange, PeriodId}
+import api.models.errors.{MtdError, PeriodIdFormatError, RuleTaxYearRangeInvalid}
 import cats.data.Validated
 import cats.data.Validated.{Invalid, Valid}
 
-class ResolvePeriodId(minimumTaxYear: Int, maximumTaxYear: Int) extends Resolver[String, PeriodId] with DateRangeFromStringResolving {
+class ResolvePeriodId(minimumTaxYear: Int, maximumTaxYear: Int) extends Resolver[String, PeriodId] with DateRangeResolving {
 
   override protected val startDateFormatError: MtdError    = PeriodIdFormatError
   override protected val endDateFormatError: MtdError      = PeriodIdFormatError
   override protected val endBeforeStartDateError: MtdError = PeriodIdFormatError
 
   def apply(value: String, notUsedError: Option[MtdError], path: Option[String]): Validated[Seq[MtdError], PeriodId] = {
-    resolve(value, Some(PeriodIdFormatError), path)
+    splitAndResolve(value, Some(PeriodIdFormatError), path)
       .andThen { dateRange =>
         import dateRange.{endDateAsInt => toYear, startDateAsInt => fromYear}
 
@@ -42,6 +41,13 @@ class ResolvePeriodId(minimumTaxYear: Int, maximumTaxYear: Int) extends Resolver
           Invalid(List(PeriodIdFormatError))
       }
       .map(dateRange => PeriodId(dateRange))
+  }
+
+  private def splitAndResolve(value: String, maybeError: Option[MtdError], maybePath: Option[String]): Validated[Seq[MtdError], DateRange] = {
+    value.split('_') match {
+      case Array(from, to) => resolve(from -> to, maybeError, maybePath)
+      case _ => Invalid(List(maybeError.getOrElse(RuleTaxYearRangeInvalid)))
+    }
   }
 
 }

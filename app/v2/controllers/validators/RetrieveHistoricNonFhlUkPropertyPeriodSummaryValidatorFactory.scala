@@ -22,7 +22,6 @@ import api.models.errors.MtdError
 import cats.data.Validated
 import cats.implicits.catsSyntaxTuple2Semigroupal
 import config.AppConfig
-import v2.controllers.validators.resolvers.ResolvePeriodId
 import v2.models.request.retrieveHistoricNonFhlUkPiePeriodSummary.RetrieveHistoricNonFhlUkPiePeriodSummaryRequestData
 
 import javax.inject.{Inject, Singleton}

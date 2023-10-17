@@ -35,8 +35,8 @@ class RetrieveHistoricFhlUkPropertyAnnualSubmissionValidatorFactorySpec extends 
 
   private def validator(nino: String, taxYear: String) = validatorFactory.validator(nino, taxYear)
 
-  MockAppConfig.minimumTaxHistoric.returns(2017)
-  MockAppConfig.maximumTaxHistoric.returns(2021)
+  MockAppConfig.minimumTaxYearHistoric.returns(TaxYear.starting(2017))
+  MockAppConfig.maximumTaxYearHistoric.returns(TaxYear.starting(2021))
 
   "validator" should {
     "return the parsed domain object" when {

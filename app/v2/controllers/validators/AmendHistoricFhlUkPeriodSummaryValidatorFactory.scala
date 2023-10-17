@@ -37,7 +37,7 @@ class AmendHistoricFhlUkPeriodSummaryValidatorFactory @Inject() (appConfig: AppC
 
   private val resolveParsedNumber = ResolveParsedNumber()
 
-  private lazy val resolvePeriodId = new ResolvePeriodId(appConfig.minimumTaxHistoric, appConfig.maximumTaxHistoric)
+  private lazy val resolvePeriodId = new ResolvePeriodId(appConfig.minimumTaxYearHistoric, appConfig.maximumTaxYearHistoric)
 
   private val resolveJson = new ResolveNonEmptyJsonObject[AmendHistoricFhlUkPiePeriodSummaryRequestBody]()
 

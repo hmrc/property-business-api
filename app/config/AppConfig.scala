@@ -16,6 +16,7 @@
 
 package config
 
+import api.models.domain.TaxYear
 import com.typesafe.config.Config
 import play.api.{ConfigLoader, Configuration}
 import routing.Version
@@ -66,8 +67,8 @@ trait AppConfig {
   def minimumTaxV2Foreign: Int
   def minimumTaxV2Uk: Int
 
-  def minimumTaxHistoric: Int
-  def maximumTaxHistoric: Int
+  def minimumTaxYearHistoric: TaxYear
+  def maximumTaxYearHistoric: TaxYear
 }
 
 @Singleton
@@ -104,8 +105,8 @@ class AppConfigImpl @Inject() (config: ServicesConfig, configuration: Configurat
   val minimumTaxV2Foreign: Int = config.getInt("minimum-tax-year.version-2.foreign")
   val minimumTaxV2Uk: Int      = config.getInt("minimum-tax-year.version-2.uk")
 
-  val minimumTaxHistoric: Int = config.getInt("minimum-tax-year.version-2.historic")
-  val maximumTaxHistoric: Int = config.getInt("maximum-tax-year.version-2.historic")
+  val minimumTaxYearHistoric: TaxYear = TaxYear.starting(config.getInt("minimum-tax-year.version-2.historic"))
+  val maximumTaxYearHistoric: TaxYear = TaxYear.starting(config.getInt("maximum-tax-year.version-2.historic"))
 }
 
 case class ConfidenceLevelConfig(confidenceLevel: ConfidenceLevel, definitionEnabled: Boolean, authValidationEnabled: Boolean)

@@ -16,16 +16,8 @@
 
 package v2.controllers.validators
 
-import api.models.domain.{Nino, PeriodId}
-import api.models.errors.{
-  BadRequestError,
-  ErrorWrapper,
-  NinoFormatError,
-  PeriodIdFormatError,
-  RuleBothExpensesSuppliedError,
-  RuleIncorrectOrEmptyBodyError,
-  ValueFormatError
-}
+import api.models.domain.{Nino, PeriodId, TaxYear}
+import api.models.errors.{BadRequestError, ErrorWrapper, NinoFormatError, PeriodIdFormatError, RuleBothExpensesSuppliedError, RuleIncorrectOrEmptyBodyError, ValueFormatError}
 import api.models.utils.JsonErrorValidators
 import mocks.MockAppConfig
 import play.api.libs.json.{JsNumber, JsObject, JsValue}
@@ -48,8 +40,8 @@ class AmendHistoricNonFhlUkPiePeriodSummaryValidatorFactorySpec
 
   private val validatorFactory = new AmendHistoricNonFhlUkPeriodSummaryValidatorFactory(mockAppConfig)
 
-  MockAppConfig.minimumTaxHistoric.returns(2017)
-  MockAppConfig.maximumTaxHistoric.returns(2021)
+  MockAppConfig.minimumTaxYearHistoric.returns(TaxYear.starting(2017))
+  MockAppConfig.maximumTaxYearHistoric.returns(TaxYear.starting(2021))
 
   private def validator(nino: String, periodId: String, body: JsValue) =
     validatorFactory.validator(nino, periodId, body)

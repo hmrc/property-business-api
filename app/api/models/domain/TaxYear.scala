@@ -81,7 +81,8 @@ object TaxYear {
   private val taxYearMonthStart = 4
   private val taxYearDayStart   = 6
 
-  def ending(year: Int): TaxYear = new TaxYear(year.toString)
+  def starting(year: Int): TaxYear = TaxYear.ending(year + 1)
+  def ending(year: Int): TaxYear   = new TaxYear(year.toString)
 
   /** @param taxYear
     *   tax year in MTD format (e.g. 2017-18)

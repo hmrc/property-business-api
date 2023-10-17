@@ -16,15 +16,15 @@
 
 package api.controllers.validators.resolvers
 
-import api.models.domain.PeriodId
+import api.models.domain.{PeriodId, TaxYear}
 import api.models.errors.PeriodIdFormatError
 import cats.data.Validated.{Invalid, Valid}
 import support.UnitSpec
 
 class ResolvePeriodIdSpec extends UnitSpec {
 
-  private val minTaxYear = 2017
-  private val maxTaxYear = 2021
+  private val minTaxYear = TaxYear.starting(2017)
+  private val maxTaxYear = TaxYear.starting(2021)
 
   val resolvePeriodId = new ResolvePeriodId(minTaxYear, maxTaxYear)
 
@@ -51,8 +51,8 @@ class ResolvePeriodIdSpec extends UnitSpec {
 
     "return an error" when {
       "passed a PeriodId with an invalid format" in {
-        val invalidPeriodId = "2017-04-06__2017-07-04"
-        val result          = resolvePeriodId(invalidPeriodId, None, None)
+        val invalidPeriodId = "XXXXXX"
+        val result = resolvePeriodId(invalidPeriodId, None, None)
         result shouldBe Invalid(List(PeriodIdFormatError))
       }
 
@@ -68,9 +68,15 @@ class ResolvePeriodIdSpec extends UnitSpec {
         result shouldBe Invalid(List(PeriodIdFormatError))
       }
 
-      "passed a PeriodId with a invalid underscore" in {
-        val invalidPeriodId = "20A7-04-06a2017-07-04"
+      "passed a PeriodId with a no underscore" in {
+        val invalidPeriodId = "2019-04-06X2019-07-04"
         val result          = resolvePeriodId(invalidPeriodId, None, None)
+        result shouldBe Invalid(List(PeriodIdFormatError))
+      }
+
+      "passed a PeriodId with a multiple underscores" in {
+        val invalidPeriodId = "2019-04-06_2019-07-04_2019-04-06"
+        val result = resolvePeriodId(invalidPeriodId, None, None)
         result shouldBe Invalid(List(PeriodIdFormatError))
       }
 

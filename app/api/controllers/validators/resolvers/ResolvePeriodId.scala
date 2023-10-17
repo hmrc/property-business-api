@@ -16,26 +16,27 @@
 
 package api.controllers.validators.resolvers
 
-import api.models.domain.{DateRange, PeriodId}
-import api.models.errors.{MtdError, PeriodIdFormatError, RuleTaxYearRangeInvalid}
+import api.models.domain.{DateRange, PeriodId, TaxYear}
+import api.models.errors.{MtdError, PeriodIdFormatError}
 import cats.data.Validated
 import cats.data.Validated.{Invalid, Valid}
 
-class ResolvePeriodId(minimumTaxYear: Int, maximumTaxYear: Int) extends Resolver[String, PeriodId] with DateRangeResolving {
+import java.time.LocalDate
+import scala.math.Ordering.Implicits.infixOrderingOps
+
+class ResolvePeriodId(minimumTaxYear: TaxYear, maximumTaxYear: TaxYear) extends Resolver[String, PeriodId] with DateRangeResolving {
 
   override protected val startDateFormatError: MtdError    = PeriodIdFormatError
   override protected val endDateFormatError: MtdError      = PeriodIdFormatError
   override protected val endBeforeStartDateError: MtdError = PeriodIdFormatError
 
+  private val minDate = minimumTaxYear.startDate
+  private val maxDate = maximumTaxYear.endDate
+
   def apply(value: String, notUsedError: Option[MtdError], path: Option[String]): Validated[Seq[MtdError], PeriodId] = {
-    splitAndResolve(value, Some(PeriodIdFormatError), path)
+    splitAndResolveDateRange(value)
       .andThen { dateRange =>
-        import dateRange.{endDateAsInt => toYear, startDateAsInt => fromYear}
-
-        val fromYearIsValid = fromYear >= minimumTaxYear && fromYear <= maximumTaxYear
-        val toYearIsValid   = toYear >= minimumTaxYear && toYear <= maximumTaxYear
-
-        if (fromYearIsValid && toYearIsValid)
+        if (inRange(dateRange.startDate) && inRange(dateRange.endDate))
           Valid(dateRange)
         else
           Invalid(List(PeriodIdFormatError))
@@ -43,10 +44,12 @@ class ResolvePeriodId(minimumTaxYear: Int, maximumTaxYear: Int) extends Resolver
       .map(dateRange => PeriodId(dateRange))
   }
 
-  private def splitAndResolve(value: String, maybeError: Option[MtdError], maybePath: Option[String]): Validated[Seq[MtdError], DateRange] = {
+  private def inRange(date: LocalDate) = minDate <= date && date <= maxDate
+
+  private def splitAndResolveDateRange(value: String): Validated[Seq[MtdError], DateRange] = {
     value.split('_') match {
-      case Array(from, to) => resolve(from -> to, maybeError, maybePath)
-      case _ => Invalid(List(maybeError.getOrElse(RuleTaxYearRangeInvalid)))
+      case Array(from, to) => resolve(from -> to, Some(PeriodIdFormatError), None)
+      case _               => Invalid(List(PeriodIdFormatError))
     }
   }
 

@@ -29,7 +29,7 @@ import javax.inject.{Inject, Singleton}
 @Singleton
 class RetrieveHistoricNonFhlUkPropertyPeriodSummaryValidatorFactory @Inject() (appConfig: AppConfig) {
 
-  private lazy val resolvePeriodId = new ResolvePeriodId(appConfig.minimumTaxHistoric, appConfig.maximumTaxHistoric)
+  private lazy val resolvePeriodId = new ResolvePeriodId(appConfig.minimumTaxYearHistoric, appConfig.maximumTaxYearHistoric)
 
   def validator(nino: String, periodId: String): Validator[RetrieveHistoricNonFhlUkPiePeriodSummaryRequestData] =
     new Validator[RetrieveHistoricNonFhlUkPiePeriodSummaryRequestData] {

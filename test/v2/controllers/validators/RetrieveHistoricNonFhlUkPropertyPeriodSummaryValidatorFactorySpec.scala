@@ -16,7 +16,7 @@
 
 package v2.controllers.validators
 
-import api.models.domain.{Nino, PeriodId}
+import api.models.domain.{Nino, PeriodId, TaxYear}
 import api.models.errors._
 import mocks.MockAppConfig
 import support.UnitSpec
@@ -31,8 +31,8 @@ class RetrieveHistoricNonFhlUkPropertyPeriodSummaryValidatorFactorySpec extends 
   private val parsedNino     = Nino("AA123456A")
   private val parsedPeriodId = PeriodId("2017-04-06_2017-07-04")
 
-  MockAppConfig.minimumTaxHistoric returns 2017
-  MockAppConfig.maximumTaxHistoric returns 2021
+  MockAppConfig.minimumTaxYearHistoric returns TaxYear.starting(2017)
+  MockAppConfig.maximumTaxYearHistoric returns TaxYear.starting(2021)
 
   private val validatorFactory = new RetrieveHistoricNonFhlUkPropertyPeriodSummaryValidatorFactory(mockAppConfig)
 

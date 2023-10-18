@@ -24,13 +24,13 @@ import cats.implicits._
 
 import java.time.LocalDate
 
-trait DateRangeResolving {
+trait DateRangeResolving extends Resolver[(String, String), DateRange] {
 
   protected val startDateFormatError: MtdError    = StartDateFormatError
   protected val endDateFormatError: MtdError      = EndDateFormatError
   protected val endBeforeStartDateError: MtdError = RuleEndBeforeStartDateError
 
-  protected def resolve(value: (String, String), maybeError: Option[MtdError], path: Option[String]): Validated[Seq[MtdError], DateRange] = {
+  def apply(value: (String, String), maybeError: Option[MtdError], path: Option[String]): Validated[Seq[MtdError], DateRange] = {
 
     def resolveDateRange(parsedStartDate: LocalDate, parsedEndDate: LocalDate): Validated[Seq[MtdError], DateRange] = {
       val startDateEpochTime = parsedStartDate.toEpochDay
@@ -52,10 +52,4 @@ trait DateRangeResolving {
 
 }
 
-object ResolveDateRange extends Resolver[(String, String), DateRange] with DateRangeResolving {
-
-  def apply(value: (String, String), maybeError: Option[MtdError], path: Option[String]): Validated[Seq[MtdError], DateRange] = {
-    resolve(value, maybeError, path)
-  }
-
-}
+object ResolveDateRange extends DateRangeResolving

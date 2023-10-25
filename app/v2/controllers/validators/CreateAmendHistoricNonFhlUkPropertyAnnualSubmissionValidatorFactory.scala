@@ -24,20 +24,15 @@ import cats.data.Validated.Valid
 import cats.implicits.{catsSyntaxTuple3Semigroupal, toTraverseOps}
 import config.AppConfig
 import play.api.libs.json.JsValue
-import v2.models.request.createAmendHistoricNonFhlUkPropertyAnnualSubmission.{
-  CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestBody,
-  CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestData,
-  HistoricNonFhlAnnualAdjustments,
-  HistoricNonFhlAnnualAllowances
-}
+import v2.models.request.createAmendHistoricNonFhlUkPropertyAnnualSubmission.{CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestBody, CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestData, HistoricNonFhlAnnualAdjustments, HistoricNonFhlAnnualAllowances}
 
 import javax.inject.{Inject, Singleton}
 
 @Singleton
 class CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionValidatorFactory @Inject() (appConfig: AppConfig) {
 
-  private lazy val minimumTaxYear = appConfig.minimumTaxYearHistoric.startYear + 1
-  private lazy val maximumTaxYear = appConfig.maximumTaxYearHistoric.startYear
+  private lazy val minimumTaxYear = appConfig.minimumTaxYearHistoric
+  private lazy val maximumTaxYear = appConfig.maximumTaxYearHistoric
 
   private val resolveJson = new ResolveNonEmptyJsonObject[CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestBody]()
 

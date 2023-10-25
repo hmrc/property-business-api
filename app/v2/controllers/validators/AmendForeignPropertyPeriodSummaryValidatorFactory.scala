@@ -31,7 +31,7 @@ import javax.inject.{Inject, Singleton}
 @Singleton
 class AmendForeignPropertyPeriodSummaryValidatorFactory @Inject() (appConfig: AppConfig) {
 
-  private lazy val minTaxYear = appConfig.minimumTaxV2Foreign + 1
+  private lazy val minTaxYear = appConfig.minimumTaxV2Foreign
 
   private val resolveJson = new ResolveNonEmptyJsonObject[AmendForeignPropertyPeriodSummaryRequestBody]()
 

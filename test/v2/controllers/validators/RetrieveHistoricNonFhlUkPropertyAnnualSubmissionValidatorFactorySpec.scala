@@ -26,10 +26,10 @@ class RetrieveHistoricNonFhlUkPropertyAnnualSubmissionValidatorFactorySpec exten
 
   implicit val correlationId: String = "X-12345"
   private val validNino              = "AA123456A"
-  private val validTaxYear           = "2021-22"
+  private val validTaxYear           = "2019-20"
 
   private val parsedNino    = Nino("AA123456A")
-  private val parsedTaxYear = TaxYear.fromMtd("2021-22")
+  private val parsedTaxYear = TaxYear.fromMtd(validTaxYear)
 
   MockAppConfig.minimumTaxYearHistoric returns TaxYear.starting(2017)
   MockAppConfig.maximumTaxYearHistoric returns TaxYear.starting(2021)
@@ -46,6 +46,13 @@ class RetrieveHistoricNonFhlUkPropertyAnnualSubmissionValidatorFactorySpec exten
 
         result shouldBe Right(RetrieveHistoricNonFhlUkPropertyAnnualSubmissionRequestData(parsedNino, parsedTaxYear))
       }
+
+      "passed the minimum supported taxYear" in allowsTaxYear("2017-18")
+      "passed the maximum supported taxYear" in allowsTaxYear("2021-22")
+
+      def allowsTaxYear(taxYearString: String): Unit =
+        validator(validNino, taxYearString).validateAndWrapResult() shouldBe
+          Right(RetrieveHistoricNonFhlUkPropertyAnnualSubmissionRequestData(parsedNino, TaxYear.fromMtd(taxYearString)))
     }
 
     "return a single error" when {
@@ -55,24 +62,22 @@ class RetrieveHistoricNonFhlUkPropertyAnnualSubmissionValidatorFactorySpec exten
 
         result shouldBe Left(ErrorWrapper(correlationId, NinoFormatError))
       }
+
       "an invalid tax year format is supplied" in {
         val result: Either[ErrorWrapper, RetrieveHistoricNonFhlUkPropertyAnnualSubmissionRequestData] =
           validator(validNino, "2021/22").validateAndWrapResult()
 
         result shouldBe Left(ErrorWrapper(correlationId, TaxYearFormatError))
       }
-      "an unsupported min taxYear is supplied" in {
-        val result: Either[ErrorWrapper, RetrieveHistoricNonFhlUkPropertyAnnualSubmissionRequestData] =
-          validator(validNino, "2016-17").validateAndWrapResult()
 
-        result shouldBe Left(ErrorWrapper(correlationId, RuleHistoricTaxYearNotSupportedError))
-      }
-      "an unsupported max taxYear is supplied" in {
-        val result: Either[ErrorWrapper, RetrieveHistoricNonFhlUkPropertyAnnualSubmissionRequestData] =
-          validator(validNino, "2022-23").validateAndWrapResult()
 
-        result shouldBe Left(ErrorWrapper(correlationId, RuleHistoricTaxYearNotSupportedError))
-      }
+      "passed a taxYear immediately before the minimum supported" in disallowsTaxYear("2016-17")
+      "passed a taxYear immediately after the maximum supported" in disallowsTaxYear("2022-23")
+
+      def disallowsTaxYear(taxYearString: String): Unit =
+        validator(validNino, taxYearString).validateAndWrapResult() shouldBe
+          Left(ErrorWrapper(correlationId, RuleHistoricTaxYearNotSupportedError))
+
       "an invalid taxYear range is supplied" in {
         val result: Either[ErrorWrapper, RetrieveHistoricNonFhlUkPropertyAnnualSubmissionRequestData] =
           validator(validNino, "2021-23").validateAndWrapResult()
@@ -80,6 +85,7 @@ class RetrieveHistoricNonFhlUkPropertyAnnualSubmissionValidatorFactorySpec exten
         result shouldBe Left(ErrorWrapper(correlationId, RuleTaxYearRangeInvalidError))
       }
     }
+
     "return multiple errors" when {
       "the request has multiple issues (path parameters)" in {
         val result: Either[ErrorWrapper, RetrieveHistoricNonFhlUkPropertyAnnualSubmissionRequestData] =

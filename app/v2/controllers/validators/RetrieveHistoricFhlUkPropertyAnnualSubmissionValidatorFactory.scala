@@ -29,8 +29,8 @@ import javax.inject.{Inject, Singleton}
 @Singleton
 class RetrieveHistoricFhlUkPropertyAnnualSubmissionValidatorFactory @Inject() (appConfig: AppConfig) {
 
-  private lazy val minimumTaxYear = appConfig.minimumTaxYearHistoric.startYear + 1
-  private lazy val maximumTaxYear = appConfig.maximumTaxYearHistoric.startYear
+  private lazy val minimumTaxYear = appConfig.minimumTaxYearHistoric
+  private lazy val maximumTaxYear = appConfig.maximumTaxYearHistoric
 
   def validator(nino: String, taxYear: String): Validator[RetrieveHistoricFhlUkPropertyAnnualSubmissionRequestData] =
     new Validator[RetrieveHistoricFhlUkPropertyAnnualSubmissionRequestData] {

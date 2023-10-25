@@ -69,7 +69,7 @@ final case class TaxYear private (private val value: String) {
 
 object TaxYear {
 
-  val tysTaxYear: Int = 2024
+  val tysTaxYear: TaxYear = TaxYear.ending(2024)
 
   val minimumTaxYear = new TaxYear("2018")
 
@@ -134,6 +134,8 @@ object TaxYear {
   }
 
   def today(): LocalDate = LocalDate.now(ZoneOffset.UTC)
+
+  implicit val ordering: Ordering[TaxYear] = Ordering.by(_.year)
 
   implicit val writes: Writes[TaxYear] = implicitly[Writes[String]].contramap(_.asMtd)
 }

@@ -197,7 +197,7 @@ class CreateUkPropertyPeriodSummaryValidatorFactorySpec extends UnitSpec with Mo
   private def validator(nino: String, taxYear: String, businessId: String, body: JsValue) =
     validatorFactory.validator(nino, businessId, taxYear, body)
 
-  MockAppConfig.minimumTaxV2Uk.returns(2021)
+  MockAppConfig.minimumTaxV2Uk.returns(TaxYear.starting(2022))
 
   "validator" should {
     "return the parsed domain object" when {
@@ -228,6 +228,12 @@ class CreateUkPropertyPeriodSummaryValidatorFactorySpec extends UnitSpec with Mo
 
         result shouldBe Right(CreateUkPropertyPeriodSummaryRequestData(parsedNino, parsedTaxYear, parsedBusinessId, parsedBodyMinimalNonFhl))
       }
+
+      "passed the minimum supported taxYear" in {
+        val taxYearString = "2022-23"
+        validator(validNino, taxYearString, validBusinessId, validBody).validateAndWrapResult() shouldBe
+          Right(CreateUkPropertyPeriodSummaryRequestData(parsedNino, TaxYear.fromMtd(taxYearString), parsedBusinessId, parsedBody))
+      }
     }
 
     "return a single error" when {
@@ -253,11 +259,9 @@ class CreateUkPropertyPeriodSummaryValidatorFactorySpec extends UnitSpec with Mo
         result shouldBe Left(ErrorWrapper(correlationId, BusinessIdFormatError))
       }
 
-      "passed an unsupported taxYear" in {
-        val result: Either[ErrorWrapper, CreateUkPropertyPeriodSummaryRequestData] =
-          validator(validNino, "2020-21", validBusinessId, validBody).validateAndWrapResult()
-
-        result shouldBe Left(ErrorWrapper(correlationId, RuleTaxYearNotSupportedError))
+      "passed a taxYear immediately before the minimum supported" in {
+        validator(validNino, "2021-22", validBusinessId, validBody).validateAndWrapResult() shouldBe
+          Left(ErrorWrapper(correlationId, RuleTaxYearNotSupportedError))
       }
 
       "passed a taxYear spanning an invalid tax year range" in {

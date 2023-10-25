@@ -17,14 +17,11 @@
 package api.controllers.validators.resolvers
 
 import api.models.domain.TaxYear
-import api.models.errors.{InvalidTaxYearParameterError, RuleHistoricTaxYearNotSupportedError, RuleTaxYearRangeInvalid, TaxYearFormatError}
+import api.models.errors.{InvalidTaxYearParameterError, RuleHistoricTaxYearNotSupportedError, RuleTaxYearNotSupportedError, RuleTaxYearRangeInvalid, TaxYearFormatError}
 import cats.data.Validated.{Invalid, Valid}
 import support.UnitSpec
 
 class ResolveTaxYearSpec extends UnitSpec {
-
-  private val minimumHistoricTaxYear = 2021
-  private val maximumHistoricTaxYear = 2025
 
   "ResolveTaxYear" should {
     "return no errors" when {
@@ -61,7 +58,27 @@ class ResolveTaxYearSpec extends UnitSpec {
         result shouldBe Invalid(List(TaxYearFormatError))
       }
     }
+  }
 
+  "ResolveTaxYear with a minimum taxYear" should {
+    val minimumTaxYear = TaxYear.fromMtd("2021-22")
+
+    "return no errors" when {
+      "the historic tax year supplied is the minimum allowed" in {
+        ResolveTaxYear(minimumTaxYear, "2021-22", None, None) shouldBe
+          Valid(TaxYear.fromMtd("2021-22"))
+      }
+    }
+
+    "return RuleHistoricTaxYearNotSupportedError" when {
+      "when the tax year is before the minimum tax year" in {
+        ResolveTaxYear(minimumTaxYear, "2020-21", None, None) shouldBe
+          Invalid(List(RuleTaxYearNotSupportedError))
+      }
+    }
+  }
+
+  "ResolveTysTaxYear" should {
     "return no errors" when {
       "passed a valid tax year that's above or equal to TaxYear.tysTaxYear" in {
         val validTaxYear = "2023-24"
@@ -76,39 +93,28 @@ class ResolveTaxYearSpec extends UnitSpec {
         result shouldBe Invalid(List(InvalidTaxYearParameterError))
       }
     }
+  }
+
+  "ResolveHistoricTaxYear" should {
+    val minimumHistoricTaxYear = TaxYear.fromMtd("2021-22")
+    val maximumHistoricTaxYear = TaxYear.fromMtd("2025-26")
 
     "return no errors" when {
-      "the historic tax year supplied is the minimum allowed" in {
-        val validTaxYear = "2021-22"
-        val result       = ResolveHistoricTaxYear(minimumHistoricTaxYear, maximumHistoricTaxYear, validTaxYear, None, None)
+      "the historic tax year supplied is the minimum allowed" in allow("2021-22")
+      "the historic tax year supplied is the maximum allowed" in allow("2025-26")
 
-        result shouldBe Valid(TaxYear.fromMtd(validTaxYear))
-      }
-
-      "the historic tax year supplied is the maximum allowed" in {
-        val validTaxYear = "2025-26"
-        val result       = ResolveHistoricTaxYear(minimumHistoricTaxYear, maximumHistoricTaxYear, validTaxYear, None, None)
-
-        result shouldBe Valid(TaxYear.fromMtd(validTaxYear))
-      }
+      def allow(taxYearString: String): Unit =
+        ResolveHistoricTaxYear(minimumHistoricTaxYear, maximumHistoricTaxYear, taxYearString, None, None) shouldBe
+          Valid(TaxYear.fromMtd(taxYearString))
     }
 
     "return RuleHistoricTaxYearNotSupportedError" when {
-      "when the tax year is before the minimum tax year" in {
-        val invalidTaxYear = "2020-21"
+      "when the tax year is before the minimum tax year" in disallow("2020-21")
+      "when the tax year is after the maximum tax year" in disallow("2026-27")
 
-        val result = ResolveHistoricTaxYear(minimumHistoricTaxYear, maximumHistoricTaxYear, invalidTaxYear, None, None)
-
-        result shouldBe Invalid(List(RuleHistoricTaxYearNotSupportedError))
-      }
-
-      "when the tax year is before the minim the maximum tax year" in {
-        val invalidTaxYear = "2026-27"
-
-        val result = ResolveHistoricTaxYear(minimumHistoricTaxYear, maximumHistoricTaxYear, invalidTaxYear, None, None)
-
-        result shouldBe Invalid(List(RuleHistoricTaxYearNotSupportedError))
-      }
+      def disallow(taxYearString: String): Unit =
+        ResolveHistoricTaxYear(minimumHistoricTaxYear, maximumHistoricTaxYear, taxYearString, None, None) shouldBe
+          Invalid(List(RuleHistoricTaxYearNotSupportedError))
     }
   }
 

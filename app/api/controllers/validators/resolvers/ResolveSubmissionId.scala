@@ -19,17 +19,14 @@ package api.controllers.validators.resolvers
 import api.models.domain.SubmissionId
 import api.models.errors.{MtdError, SubmissionIdFormatError}
 import cats.data.Validated
-import cats.data.Validated.{Invalid, Valid}
 
-object ResolveSubmissionId extends Resolver[String, SubmissionId] {
+object ResolveSubmissionId extends Resolvers {
 
   private val submissionIdRegex = "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$".r
 
-  def apply(value: String, unusedError: Option[MtdError], path: Option[String]): Validated[Seq[MtdError], SubmissionId] = {
-    if (submissionIdRegex.matches(value))
-      Valid(SubmissionId(value))
-    else
-      Invalid(List(SubmissionIdFormatError.maybeWithExtraPath(path)))
-  }
+  val resolver: SimpleResolver[String, SubmissionId] =
+    ResolveStringPattern(submissionIdRegex, SubmissionIdFormatError).resolver.map(SubmissionId)
+
+  def apply(value: String): Validated[Seq[MtdError], SubmissionId] = resolver(value)
 
 }

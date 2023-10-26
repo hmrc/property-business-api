@@ -51,7 +51,7 @@ class AmendUkPropertyPeriodSummaryValidatorFactory @Inject() (appConfig: AppConf
       def validate: Validated[Seq[MtdError], AmendUkPropertyPeriodSummaryRequestData] =
         (
           ResolveNino(nino),
-          ResolveTaxYear(minTaxYear, taxYear, None, None),
+          ResolveTaxYear(minTaxYear, taxYear),
           ResolveBusinessId(businessId),
           ResolveSubmissionId(submissionId),
           resolveJson(body)

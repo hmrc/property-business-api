@@ -32,14 +32,6 @@ class DateRangeSpec extends UnitSpec {
       dateRange.startDateAsIso shouldBe "2020-01-01"
       dateRange.endDateAsIso shouldBe "2023-12-31"
     }
-
-    "correctly extract the year as an integer from startDate and endDate" in {
-      val dateRange = DateRange(startDate, endDate)
-
-      dateRange.startDateAsInt shouldBe 2020
-      dateRange.endDateAsInt shouldBe 2023
-    }
-
   }
 
 }

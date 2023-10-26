@@ -58,7 +58,7 @@ object AmendForeignPropertyPeriodSummaryValidator extends RulesValidator[AmendFo
     val validateNumberFields = fieldsWithPaths
       .map {
         case (None, _)            => valid
-        case (Some(number), path) => resolveParsedNumber(number, None, Some(path))
+        case (Some(number), path) => resolveParsedNumber(number, path)
       }
 
     val validatedForeignFhlEeaConsolidatedExpenses = expenses.map { expenses =>
@@ -126,7 +126,7 @@ object AmendForeignPropertyPeriodSummaryValidator extends RulesValidator[AmendFo
     val validatedNumberFields = fieldsWithPaths
       .map {
         case (None, _)            => valid
-        case (Some(number), path) => resolveParsedNumber(number, None, Some(path))
+        case (Some(number), path) => resolveParsedNumber(number, path)
       }
 
     val result = validatedNumberFields :+ validatedCountryCode

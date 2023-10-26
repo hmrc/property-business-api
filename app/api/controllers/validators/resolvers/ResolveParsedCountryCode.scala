@@ -16,26 +16,36 @@
 
 package api.controllers.validators.resolvers
 
+import ResolveParsedCountryCode.permittedCustomCodes
 import api.models.errors.{CountryCodeFormatError, MtdError, RuleCountryCodeError}
 import cats.data.Validated
 import cats.data.Validated.{Invalid, Valid}
 import com.neovisionaries.i18n.CountryCode
 
-object ResolveParsedCountryCode extends Resolver[String, String] {
+
+case class ResolveParsedCountryCode(path: String){
+def apply(value: String): Validated[List[MtdError], String] = {
+  if (value.length != 3) {
+    Invalid(List(CountryCodeFormatError.withPath(path)))
+  } else if (permittedCustomCodes.contains(value)) {
+    Valid(value)
+  } else {
+    Option(CountryCode.getByAlpha3Code(value)) match {
+      case Some(_) => Valid(value)
+      case None    => Invalid(List(RuleCountryCodeError.withPath(path)))
+    }
+  }
+}
+}
+
+object ResolveParsedCountryCode {
 
   private val permittedCustomCodes = Set("ZZZ")
 
-  def apply(value: String, notUsedError: Option[MtdError], path: Option[String]): Validated[Seq[MtdError], String] = {
-    if (value.length != 3) {
-      Invalid(List(CountryCodeFormatError.maybeWithPath(path)))
-    } else if (permittedCustomCodes.contains(value)) {
-      Valid(value)
-    } else {
-      Option(CountryCode.getByAlpha3Code(value)) match {
-        case Some(_) => Valid(value)
-        case None    => Invalid(List(RuleCountryCodeError.maybeWithPath(path)))
-      }
-    }
+  def apply(value: String, path: String): Validated[Seq[MtdError], String] = {
+    val resolver = ResolveParsedCountryCode(path)
+
+    resolver(value)
   }
 
 }

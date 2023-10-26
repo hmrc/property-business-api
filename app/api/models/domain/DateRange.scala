@@ -22,8 +22,4 @@ import java.time.format.DateTimeFormatter
 case class DateRange(startDate: LocalDate, endDate: LocalDate) {
   val startDateAsIso: String = startDate.format(DateTimeFormatter.ISO_DATE)
   val endDateAsIso: String   = endDate.format(DateTimeFormatter.ISO_DATE)
-
-  val startDateAsInt: Int = startDateAsIso.substring(0, 4).toInt
-  val endDateAsInt: Int   = endDateAsIso.substring(0, 4).toInt
-
 }

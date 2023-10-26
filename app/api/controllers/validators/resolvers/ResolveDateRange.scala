@@ -23,33 +23,26 @@ import cats.data.Validated.{Invalid, Valid}
 import cats.implicits._
 
 import java.time.LocalDate
+import scala.math.Ordering.Implicits.infixOrderingOps
 
-trait DateRangeResolving extends Resolver[(String, String), DateRange] {
+case class ResolveDateRange(startDateFormatError: MtdError = StartDateFormatError,
+                            endDateFormatError: MtdError = EndDateFormatError,
+                            endBeforeStartDateError: MtdError = RuleEndBeforeStartDateError)
+    extends Resolvers {
 
-  protected val startDateFormatError: MtdError    = StartDateFormatError
-  protected val endDateFormatError: MtdError      = EndDateFormatError
-  protected val endBeforeStartDateError: MtdError = RuleEndBeforeStartDateError
+  private def resolveDateRange(parsedStartDate: LocalDate, parsedEndDate: LocalDate): Validated[Seq[MtdError], DateRange] =
+    if (parsedEndDate <= parsedStartDate)
+      Invalid(List(endBeforeStartDateError))
+    else
+      Valid(DateRange(parsedStartDate, parsedEndDate))
 
-  def apply(value: (String, String), maybeError: Option[MtdError], path: Option[String]): Validated[Seq[MtdError], DateRange] = {
-
-    def resolveDateRange(parsedStartDate: LocalDate, parsedEndDate: LocalDate): Validated[Seq[MtdError], DateRange] = {
-      val startDateEpochTime = parsedStartDate.toEpochDay
-      val endDateEpochTime   = parsedEndDate.toEpochDay
-
-      if ((endDateEpochTime - startDateEpochTime) <= 0)
-        Invalid(List(maybeError.getOrElse(endBeforeStartDateError)))
-      else
-        Valid(DateRange(parsedStartDate, parsedEndDate))
-
-    }
-
-    val (startDate, endDate) = value
+  val resolver: SimpleResolver[(String, String), DateRange] = { case (startDate, endDate) =>
     (
       ResolveIsoDate(startDate, startDateFormatError),
       ResolveIsoDate(endDate, endDateFormatError)
     ).mapN(resolveDateRange).andThen(identity)
   }
 
-}
+  def apply(value: (String, String)): Validated[Seq[MtdError], DateRange] = resolver(value)
 
-object ResolveDateRange extends DateRangeResolving
+}

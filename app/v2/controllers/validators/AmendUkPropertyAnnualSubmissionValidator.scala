@@ -66,12 +66,12 @@ object AmendUkPropertyAnnualSubmissionValidator extends RulesValidator[AmendUkPr
     )
 
     val validatedPropertyIncomeAllowance =
-      resolvePropertyIncomeAllowance(allowances.flatMap(_.propertyIncomeAllowance), None, Some("/ukFhlProperty/allowances/propertyIncomeAllowance"))
+      resolvePropertyIncomeAllowance(allowances.flatMap(_.propertyIncomeAllowance), "/ukFhlProperty/allowances/propertyIncomeAllowance")
 
     val validatedNumberFields = fieldsWithPaths
       .map {
         case (None, _)            => valid
-        case (Some(number), path) => resolveParsedNumber(number, None, Some(path))
+        case (Some(number), path) => resolveParsedNumber(number, path)
       } :+ validatedPropertyIncomeAllowance
 
     val validatedAllowances = allowances.map(validateUkFhlAllowances).getOrElse(valid)
@@ -109,15 +109,12 @@ object AmendUkPropertyAnnualSubmissionValidator extends RulesValidator[AmendUkPr
     )
 
     val validatedPropertyIncomeAllowance =
-      resolvePropertyIncomeAllowance(
-        allowances.flatMap(_.propertyIncomeAllowance),
-        None,
-        Some("/ukNonFhlProperty/allowances/propertyIncomeAllowance"))
+      resolvePropertyIncomeAllowance(allowances.flatMap(_.propertyIncomeAllowance), "/ukNonFhlProperty/allowances/propertyIncomeAllowance")
 
     val validatedNumberFields = fieldsWithPaths
       .map {
         case (None, _)            => valid
-        case (Some(number), path) => resolveParsedNumber(number, None, Some(path))
+        case (Some(number), path) => resolveParsedNumber(number, path)
       } :+ validatedPropertyIncomeAllowance
 
     val validatedAllowances = allowances.map(validateUkNonFhlAllowances).getOrElse(valid)
@@ -164,14 +161,12 @@ object AmendUkPropertyAnnualSubmissionValidator extends RulesValidator[AmendUkPr
       (firstYear.map(_.qualifyingAmountExpenditure), s"/ukNonFhlProperty/allowances/$buildingType/$index/firstYear/qualifyingAmountExpenditure")
     ).map {
       case (None, _)            => valid
-      case (Some(number), path) => resolveParsedNumber(number, None, Some(path))
-    } :+ resolveParsedNumber(amount, None, Some(s"/ukNonFhlProperty/allowances/$buildingType/$index/amount"))
+      case (Some(number), path) => resolveParsedNumber(number, path)
+    } :+ resolveParsedNumber(amount, s"/ukNonFhlProperty/allowances/$buildingType/$index/amount")
 
     val validatedDateField = ResolveIsoDate(
       firstYear.map(_.qualifyingDate),
-      Some(DateFormatError),
-      Some(s"/ukNonFhlProperty/allowances/$buildingType/$index/firstYear/qualifyingDate")
-    )
+      DateFormatError.withPath(s"/ukNonFhlProperty/allowances/$buildingType/$index/firstYear/qualifyingDate"))
 
     val validatedBuildingField = (building.name, building.number) match {
       case (None, None) =>

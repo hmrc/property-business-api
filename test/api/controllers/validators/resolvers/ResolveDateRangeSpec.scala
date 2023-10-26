@@ -28,28 +28,38 @@ class ResolveDateRangeSpec extends UnitSpec {
   private val validStart = "2023-06-21"
   private val validEnd   = "2024-06-21"
 
+  // To be sure it's using the construction params...
+  private val startDateFormatError    = StartDateFormatError.withPath("somePath")
+  private val endDateFormatError      = EndDateFormatError.withPath("somePath")
+  private val endBeforeStartDateError = RuleEndBeforeStartDateError.withPath("somePath")
+
+  private val resolveDateRange = ResolveDateRange(
+    startDateFormatError = startDateFormatError,
+    endDateFormatError = endDateFormatError,
+    endBeforeStartDateError = endBeforeStartDateError)
+
   "ResolveDateRange" should {
     "return no errors" when {
       "passed a valid start and end date" in {
-        val result = ResolveDateRange(validStart -> validEnd)
+        val result = resolveDateRange(validStart -> validEnd)
         result shouldBe Valid(DateRange(LocalDate.parse(validStart), LocalDate.parse(validEnd)))
       }
     }
 
     "return an error" when {
       "passed an invalid start date" in {
-        val result = ResolveDateRange("not-a-date" -> validEnd)
-        result shouldBe Invalid(List(StartDateFormatError))
+        val result = resolveDateRange("not-a-date" -> validEnd)
+        result shouldBe Invalid(List(startDateFormatError))
       }
 
       "passed an invalid end date" in {
-        val result = ResolveDateRange(validStart -> "not-a-date")
-        result shouldBe Invalid(List(EndDateFormatError))
+        val result = resolveDateRange(validStart -> "not-a-date")
+        result shouldBe Invalid(List(endDateFormatError))
       }
 
       "passed an end date before start date" in {
-        val result = ResolveDateRange(validEnd -> validStart)
-        result shouldBe Invalid(List(RuleEndBeforeStartDateError))
+        val result = resolveDateRange(validEnd -> validStart)
+        result shouldBe Invalid(List(endBeforeStartDateError))
       }
     }
   }

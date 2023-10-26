@@ -67,7 +67,7 @@ class AmendHistoricFhlUkPeriodSummaryValidatorFactory @Inject() (appConfig: AppC
               (rentARoom.flatMap(_.rentsReceived), "/income/rentARoom/rentsReceived")
             ).map {
               case (None, _)            => valid
-              case (Some(number), path) => resolveParsedNumber(number, None, Some(path))
+              case (Some(number), path) => resolveParsedNumber(number, path)
             }
           }
           .getOrElse(Nil)
@@ -88,7 +88,7 @@ class AmendHistoricFhlUkPeriodSummaryValidatorFactory @Inject() (appConfig: AppC
               (rentARoom.flatMap(_.amountClaimed), "/income/rentARoom/amountClaimed")
             ).map {
               case (None, _)            => valid
-              case (Some(number), path) => resolveParsedNumber(number, None, Some(path))
+              case (Some(number), path) => resolveParsedNumber(number, path)
             }
           }
           .getOrElse(Nil)

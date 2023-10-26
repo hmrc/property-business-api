@@ -38,7 +38,7 @@ class RetrieveUkPropertyPeriodSummaryValidatorFactory @Inject() (appConfig: AppC
         (
           ResolveNino(nino),
           ResolveBusinessId(businessId),
-          ResolveTaxYear(minimumTaxYear, taxYear, None, None),
+          ResolveTaxYear(minimumTaxYear, taxYear),
           ResolveSubmissionId(submissionId)
         ).mapN(RetrieveUkPropertyPeriodSummaryRequestData)
 

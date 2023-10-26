@@ -38,7 +38,7 @@ class RetrieveForeignPropertyPeriodSummaryValidatorFactory @Inject() (appConfig:
         (
           ResolveNino(nino),
           ResolveBusinessId(businessId),
-          ResolveTaxYear(minimumTaxYear, taxYear, None, None),
+          ResolveTaxYear(minimumTaxYear, taxYear),
           ResolveSubmissionId(submissionId)
         ).mapN(RetrieveForeignPropertyPeriodSummaryRequestData)
 

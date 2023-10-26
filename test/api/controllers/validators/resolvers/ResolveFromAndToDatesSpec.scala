@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-package v3.controllers.validators.resolvers
+package api.controllers.validators.resolvers
 
 import api.models.domain.DateRange
-import api.models.errors.{FromDateFormatError, ToDateFormatError}
+import api.models.errors.{FromDateFormatError, RuleToDateBeforeFromDateError, ToDateFormatError}
 import cats.data.Validated.{Invalid, Valid}
 import support.UnitSpec
 
@@ -25,45 +25,45 @@ import java.time.LocalDate
 
 class ResolveFromAndToDatesSpec extends UnitSpec {
 
-  private val minTaxYear = 2017
-  private val maxTaxYear = 2021
-
-  val resolveFromAndToDates = new ResolveFromAndToDates(minTaxYear, maxTaxYear)
-
   "ResolvePeriodIdSpec" should {
     "return no errors" when {
       "passed valid from and to dates" in {
         val fromDate = "2019-04-06"
         val toDate   = "2019-08-06"
 
-        val result = resolveFromAndToDates((fromDate, toDate), None, None)
+        val result = ResolveFromAndToDates((fromDate, toDate))
 
         result shouldBe Valid(DateRange(LocalDate.parse(fromDate), LocalDate.parse(toDate)))
       }
 
       "passed valid from and to dates equal to the minimum and maximum" in {
-        val fromDate = "2018-04-06"
-        val toDate   = "2020-04-06"
+        val fromDate = "1900-04-06"
+        val toDate   = "2099-04-06"
 
-        val result = resolveFromAndToDates((fromDate, toDate), None, None)
+        val result = ResolveFromAndToDates((fromDate, toDate))
 
         result shouldBe Valid(DateRange(LocalDate.parse(fromDate), LocalDate.parse(toDate)))
       }
     }
 
     "return an error" when {
-      "passed a fromYear less than or equal to minimumTaxYear" in {
-        val result = resolveFromAndToDates(("2017-04-06", "2019-04-05"), None, None)
+      "passed a from date earlier than to date" in {
+        val result = ResolveFromAndToDates(("2000-01-02", "2000-01-01"))
+        result shouldBe Invalid(List(RuleToDateBeforeFromDateError))
+      }
+
+      "passed a from year less than minimum" in {
+        val result = ResolveFromAndToDates(("1899-04-06", "2019-04-05"))
         result shouldBe Invalid(List(FromDateFormatError))
       }
 
-      "passed a toYear greater than or equal to maximumTaxYear" in {
-        val result = resolveFromAndToDates(("2020-04-06", "2021-04-05"), None, None)
+      "passed a to year greater than maximum" in {
+        val result = ResolveFromAndToDates(("2020-04-06", "2100-04-05"))
         result shouldBe Invalid(List(ToDateFormatError))
       }
 
       "passed both dates that are out of range" in {
-        val result = resolveFromAndToDates(("2017-04-06", "2021-04-05"), None, None)
+        val result = ResolveFromAndToDates(("1899-04-06", "2100-04-05"))
         result shouldBe Invalid(List(FromDateFormatError, ToDateFormatError))
       }
 

@@ -42,7 +42,7 @@ class CreateAmendForeignPropertyAnnualSubmissionValidatorFactory @Inject() (appC
         (
           ResolveNino(nino),
           ResolveBusinessId(businessId),
-          ResolveTaxYear(minimumTaxYear, taxYear, None, None),
+          ResolveTaxYear(minimumTaxYear, taxYear),
           resolveJson(body)
         ).mapN(CreateAmendForeignPropertyAnnualSubmissionRequestData) andThen validateBusinessRules
 

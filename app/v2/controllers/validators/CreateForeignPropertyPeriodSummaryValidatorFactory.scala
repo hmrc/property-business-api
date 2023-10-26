@@ -42,7 +42,7 @@ class CreateForeignPropertyPeriodSummaryValidatorFactory @Inject() (appConfig: A
         (
           ResolveNino(nino),
           ResolveBusinessId(businessId),
-          ResolveTaxYear(minimumTaxYear, taxYear, None, None),
+          ResolveTaxYear(minimumTaxYear, taxYear),
           resolveJson(body)
         ).mapN(CreateForeignPropertyPeriodSummaryRequestData) andThen validateBusinessRules
 

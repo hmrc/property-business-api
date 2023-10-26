@@ -104,7 +104,7 @@ class ResolveTaxYearSpec extends UnitSpec {
       "the historic tax year supplied is the maximum allowed" in allow("2025-26")
 
       def allow(taxYearString: String): Unit =
-        ResolveHistoricTaxYear(minimumHistoricTaxYear, maximumHistoricTaxYear, taxYearString, None, None) shouldBe
+        ResolveHistoricTaxYear(minimumHistoricTaxYear, maximumHistoricTaxYear, taxYearString) shouldBe
           Valid(TaxYear.fromMtd(taxYearString))
     }
 
@@ -113,7 +113,7 @@ class ResolveTaxYearSpec extends UnitSpec {
       "when the tax year is after the maximum tax year" in disallow("2026-27")
 
       def disallow(taxYearString: String): Unit =
-        ResolveHistoricTaxYear(minimumHistoricTaxYear, maximumHistoricTaxYear, taxYearString, None, None) shouldBe
+        ResolveHistoricTaxYear(minimumHistoricTaxYear, maximumHistoricTaxYear, taxYearString) shouldBe
           Invalid(List(RuleHistoricTaxYearNotSupportedError))
     }
   }

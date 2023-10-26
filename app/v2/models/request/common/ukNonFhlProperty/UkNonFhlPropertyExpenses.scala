@@ -46,7 +46,7 @@ object UkNonFhlPropertyExpenses {
       (JsPath \ "travelCosts").writeNullable[BigDecimal] and
       (JsPath \ "residentialFinancialCostsCarriedForward").writeNullable[BigDecimal] and
       (JsPath \ "ukOtherRentARoom").writeNullable[UkPropertyExpensesRentARoom] and
-      (JsPath \ "consolidatedExpenses").writeNullable[BigDecimal]
+      (JsPath \ "consolidatedExpense").writeNullable[BigDecimal]
   )(unlift(UkNonFhlPropertyExpenses.unapply))
 
 }

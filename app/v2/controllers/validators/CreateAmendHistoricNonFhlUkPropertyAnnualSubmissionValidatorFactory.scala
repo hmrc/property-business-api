@@ -47,7 +47,7 @@ class CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionValidatorFactory @Injec
       def validate: Validated[Seq[MtdError], CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestData] =
         (
           ResolveNino(nino),
-          ResolveHistoricTaxYear(minimumTaxYear, maximumTaxYear, taxYear, None, None),
+          ResolveHistoricTaxYear(minimumTaxYear, maximumTaxYear, taxYear),
           resolveJson(body)
         ).mapN(CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestData) andThen validateBusinessRules
 

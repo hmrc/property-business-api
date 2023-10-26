@@ -40,7 +40,7 @@ class DeleteHistoricUkPropertyAnnualSubmissionValidatorFactory @Inject() (appCon
       def validate: Validated[Seq[MtdError], DeleteHistoricUkPropertyAnnualSubmissionRequestData] =
         (
           ResolveNino(nino),
-          ResolveHistoricTaxYear(minimumTaxHistoric, maximumTaxHistoric, taxYear, None, None),
+          ResolveHistoricTaxYear(minimumTaxHistoric, maximumTaxHistoric, taxYear),
           Valid(propertyType)
         ).mapN(DeleteHistoricUkPropertyAnnualSubmissionRequestData)
 

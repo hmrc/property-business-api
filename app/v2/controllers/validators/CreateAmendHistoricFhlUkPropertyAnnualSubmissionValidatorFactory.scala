@@ -32,8 +32,8 @@ import scala.annotation.nowarn
 @Singleton
 class CreateAmendHistoricFhlUkPropertyAnnualSubmissionValidatorFactory @Inject() (appConfig: AppConfig) {
 
-  private lazy val minimumTaxYear = appConfig.minimumTaxHistoric + 1
-  private lazy val maximumTaxYear = appConfig.maximumTaxHistoric
+  private lazy val minimumTaxYear =  appConfig.minimumTaxYearHistoric.startYear + 1
+  private lazy val maximumTaxYear = appConfig.maximumTaxYearHistoric.startYear
 
   @nowarn("cat=lint-byname-implicit")
   private val resolveJson = new ResolveNonEmptyJsonObject[CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequestBody]()

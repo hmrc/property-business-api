@@ -16,6 +16,7 @@
 
 package mocks
 
+import api.models.domain.TaxYear
 import config.{AppConfig, ConfidenceLevelConfig}
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
@@ -63,8 +64,8 @@ trait MockAppConfig extends MockFactory {
     def minimumTaxV2Foreign: CallHandler[Int] = (() => mockAppConfig.minimumTaxV2Foreign).expects()
     def minimumTaxV2Uk: CallHandler[Int]      = (() => mockAppConfig.minimumTaxV2Uk).expects()
 
-    def minimumTaxHistoric: CallHandler[Int] = (() => mockAppConfig.minimumTaxHistoric).expects()
-    def maximumTaxHistoric: CallHandler[Int] = (() => mockAppConfig.maximumTaxHistoric).expects()
+    def minimumTaxYearHistoric: CallHandler[TaxYear] = (() => mockAppConfig.minimumTaxYearHistoric).expects()
+    def maximumTaxYearHistoric: CallHandler[TaxYear] = (() => mockAppConfig.maximumTaxYearHistoric).expects()
   }
 
 }

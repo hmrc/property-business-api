@@ -16,20 +16,23 @@
 
 package v2.controllers.validators.resolvers
 
-import api.controllers.validators.resolvers.DateRangeResolving
+import api.controllers.validators.resolvers.{DateRangeResolving, Resolver}
 import api.models.domain.DateRange
 import api.models.errors.{FromDateFormatError, MtdError, RuleToDateBeforeFromDateError, ToDateFormatError}
 import cats.data.Validated
 import cats.data.Validated.{Invalid, Valid}
 import cats.implicits.toFoldableOps
 
-class ResolveFromAndToDates(minimumTaxYear: Int, maximumTaxYear: Int) extends DateRangeResolving {
-  override protected val startDateFormatError: MtdError    = FromDateFormatError
-  override protected val endDateFormatError: MtdError      = ToDateFormatError
-  override protected val endBeforeStartDateError: MtdError = RuleToDateBeforeFromDateError
+class ResolveFromAndToDates(minimumTaxYear: Int, maximumTaxYear: Int) extends Resolver[(String, String), DateRange] {
 
-  def apply(value: (String, String), maybeError: Option[MtdError] = None, path: Option[String] = None): Validated[Seq[MtdError], DateRange] = {
-    resolve(value, maybeError, path) andThen { dateRange =>
+  private val resolveDateRange = new DateRangeResolving {
+    override protected val startDateFormatError: MtdError    = FromDateFormatError
+    override protected val endDateFormatError: MtdError      = ToDateFormatError
+    override protected val endBeforeStartDateError: MtdError = RuleToDateBeforeFromDateError
+  }
+
+  override def apply(value: (String, String), error: Option[MtdError], path: Option[String]): Validated[Seq[MtdError], DateRange] = {
+    resolveDateRange(value, error, path) andThen { dateRange =>
       import dateRange.{endDateAsInt => toYear, startDateAsInt => fromYear}
 
       val validatedFromDate = if (fromYear < minimumTaxYear) Invalid(List(FromDateFormatError)) else Valid(())

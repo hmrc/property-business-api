@@ -24,7 +24,6 @@ import cats.data.Validated.{Invalid, Valid}
 import cats.implicits._
 import config.AppConfig
 import play.api.libs.json.JsValue
-import v2.controllers.validators.resolvers.ResolvePeriodId
 import v2.models.request.amendHistoricFhlUkPiePeriodSummary.{
   AmendHistoricFhlUkPiePeriodSummaryRequestBody,
   AmendHistoricFhlUkPiePeriodSummaryRequestData
@@ -38,7 +37,7 @@ class AmendHistoricFhlUkPeriodSummaryValidatorFactory @Inject() (appConfig: AppC
 
   private val resolveParsedNumber = ResolveParsedNumber()
 
-  private lazy val resolvePeriodId = new ResolvePeriodId(appConfig.minimumTaxHistoric, appConfig.maximumTaxHistoric)
+  private lazy val resolvePeriodId = new ResolvePeriodId(appConfig.minimumTaxYearHistoric, appConfig.maximumTaxYearHistoric)
 
   private val resolveJson = new ResolveNonEmptyJsonObject[AmendHistoricFhlUkPiePeriodSummaryRequestBody]()
 

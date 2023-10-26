@@ -162,8 +162,8 @@ class CreateAmendHistoricFhlUkPropertyAnnualSubmissionValidatorFactorySpec exten
 
   private def validator(nino: String, taxYear: String, body: JsValue) = validatorFactory.validator(nino, taxYear, body)
 
-  MockAppConfig.minimumTaxHistoric.returns(2017)
-  MockAppConfig.maximumTaxHistoric.returns(2022)
+  MockAppConfig.minimumTaxYearHistoric.returns(TaxYear.starting(2017))
+  MockAppConfig.maximumTaxYearHistoric.returns(TaxYear.starting(2022))
 
   "validator" should {
     "return the parsed domain object" when {

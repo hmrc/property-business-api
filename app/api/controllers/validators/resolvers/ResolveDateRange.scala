@@ -24,13 +24,13 @@ import cats.implicits._
 
 import java.time.LocalDate
 
-trait DateRangeResolving {
+trait DateRangeResolving extends Resolver[(String, String), DateRange] {
 
   protected val startDateFormatError: MtdError    = StartDateFormatError
   protected val endDateFormatError: MtdError      = EndDateFormatError
   protected val endBeforeStartDateError: MtdError = RuleEndBeforeStartDateError
 
-  protected def resolve(value: (String, String), maybeError: Option[MtdError], path: Option[String]): Validated[Seq[MtdError], DateRange] = {
+  def apply(value: (String, String), maybeError: Option[MtdError], path: Option[String]): Validated[Seq[MtdError], DateRange] = {
 
     def resolveDateRange(parsedStartDate: LocalDate, parsedEndDate: LocalDate): Validated[Seq[MtdError], DateRange] = {
       val startDateEpochTime = parsedStartDate.toEpochDay
@@ -52,31 +52,4 @@ trait DateRangeResolving {
 
 }
 
-object ResolveDateRange extends Resolver[(String, String), DateRange] with DateRangeResolving {
-
-  def apply(value: (String, String), maybeError: Option[MtdError], path: Option[String]): Validated[Seq[MtdError], DateRange] = {
-    resolve(value, maybeError, path)
-  }
-
-}
-
-trait DateRangeFromStringResolving extends DateRangeResolving {
-
-  protected def resolve(value: String, maybeError: Option[MtdError], maybePath: Option[String]): Validated[Seq[MtdError], DateRange] = {
-    value.split('_') match {
-      case Array(from, to) => resolve(from -> to, maybeError, maybePath)
-      case _               => Invalid(List(maybeError.getOrElse(RuleTaxYearRangeInvalid)))
-    }
-  }
-
-}
-
-/** Resolves a date range from a single input string in the format "2023-01-01_2023-01-01"
-  */
-object ResolveDateRangeFromString extends Resolver[String, DateRange] with DateRangeFromStringResolving {
-
-  def apply(value: String, maybeError: Option[MtdError], maybePath: Option[String]): Validated[Seq[MtdError], DateRange] = {
-    resolve(value, maybeError, maybePath)
-  }
-
-}
+object ResolveDateRange extends DateRangeResolving

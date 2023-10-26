@@ -16,16 +16,13 @@
 
 package v2.controllers.validators
 
-import api.models.domain.{Nino, PeriodId}
+import api.models.domain.{Nino, PeriodId, TaxYear}
 import api.models.errors._
 import api.models.utils.JsonErrorValidators
 import mocks.MockAppConfig
 import play.api.libs.json.{JsNumber, JsObject, JsValue, Json}
 import support.UnitSpec
-import v2.models.request.amendHistoricFhlUkPiePeriodSummary.{
-  AmendHistoricFhlUkPiePeriodSummaryRequestBody,
-  AmendHistoricFhlUkPiePeriodSummaryRequestData
-}
+import v2.models.request.amendHistoricFhlUkPiePeriodSummary.{AmendHistoricFhlUkPiePeriodSummaryRequestBody, AmendHistoricFhlUkPiePeriodSummaryRequestData}
 import v2.models.request.common.ukFhlPieProperty.{UkFhlPieExpenses, UkFhlPieIncome}
 import v2.models.request.common.ukPropertyRentARoom.{UkPropertyExpensesRentARoom, UkPropertyIncomeRentARoom}
 
@@ -106,8 +103,8 @@ class AmendHistoricFhlUkPeriodSummaryValidatorFactorySpec extends UnitSpec with 
 
   private def validator(nino: String, periodId: String, body: JsValue) = validatorFactory.validator(nino, periodId, body)
 
-  MockAppConfig.minimumTaxHistoric.returns(2017)
-  MockAppConfig.maximumTaxHistoric.returns(2021)
+  MockAppConfig.minimumTaxYearHistoric.returns(TaxYear.starting(2017))
+  MockAppConfig.maximumTaxYearHistoric.returns(TaxYear.starting(2021))
 
   "validator" should {
     "return the parsed domain object" when {

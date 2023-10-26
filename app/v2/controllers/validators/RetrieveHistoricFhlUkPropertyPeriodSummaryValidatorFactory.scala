@@ -22,7 +22,6 @@ import api.models.errors.MtdError
 import cats.data.Validated
 import cats.implicits._
 import config.AppConfig
-import v2.controllers.validators.resolvers.ResolvePeriodId
 import v2.models.request.retrieveHistoricFhlUkPiePeriodSummary.RetrieveHistoricFhlUkPiePeriodSummaryRequestData
 
 import javax.inject.{Inject, Singleton}
@@ -30,7 +29,7 @@ import javax.inject.{Inject, Singleton}
 @Singleton
 class RetrieveHistoricFhlUkPropertyPeriodSummaryValidatorFactory @Inject() (appConfig: AppConfig) {
 
-  private lazy val resolvePeriodId = new ResolvePeriodId(appConfig.minimumTaxHistoric, appConfig.maximumTaxHistoric)
+  private lazy val resolvePeriodId = new ResolvePeriodId(appConfig.minimumTaxYearHistoric, appConfig.maximumTaxYearHistoric)
 
   def validator(nino: String, periodId: String): Validator[RetrieveHistoricFhlUkPiePeriodSummaryRequestData] =
     new Validator[RetrieveHistoricFhlUkPiePeriodSummaryRequestData] {

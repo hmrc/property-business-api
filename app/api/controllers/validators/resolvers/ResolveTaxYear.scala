@@ -52,7 +52,7 @@ object ResolveTaxYear extends Resolver[String, TaxYear] with Resolvers {
     resolver(error, path)(value)
 
   def apply(minimumTaxYear: TaxYear, value: String, error: Option[MtdError], path: Option[String]): Validated[Seq[MtdError], TaxYear] = {
-    val resolver = this.resolver(error, path) must satisfyMin(minimumTaxYear, RuleTaxYearNotSupportedError)
+    val resolver = this.resolver(error, path) thenValidate satisfiesMin(minimumTaxYear, RuleTaxYearNotSupportedError)
 
     resolver(value)
   }
@@ -62,7 +62,7 @@ object ResolveTaxYear extends Resolver[String, TaxYear] with Resolvers {
 object ResolveTysTaxYear extends Resolver[String, TaxYear] with Resolvers {
 
   def resolver(error: Option[MtdError], path: Option[String]): SimpleResolver[String, TaxYear] =
-    ResolveTaxYear.resolver(error, path) must satisfy(List(InvalidTaxYearParameterError) ++ error)(_ >= TaxYear.tysTaxYear)
+    ResolveTaxYear.resolver(error, path) thenValidate satisfies(List(InvalidTaxYearParameterError) ++ error)(_ >= TaxYear.tysTaxYear)
 
   def apply(value: String, error: Option[MtdError], path: Option[String]): Validated[Seq[MtdError], TaxYear] =
     resolver(error, path)(value)
@@ -72,7 +72,7 @@ object ResolveTysTaxYear extends Resolver[String, TaxYear] with Resolvers {
 object ResolveHistoricTaxYear extends Resolvers {
 
   def resolver(minimumTaxYear: TaxYear, maximumTaxYear: TaxYear): SimpleResolver[String, TaxYear] =
-    ResolveTaxYear.resolver(None, None) must beInRange(minimumTaxYear, maximumTaxYear, RuleHistoricTaxYearNotSupportedError)
+    ResolveTaxYear.resolver(None, None) thenValidate inRange(minimumTaxYear, maximumTaxYear, RuleHistoricTaxYearNotSupportedError)
 
   def apply(minimumTaxYear: TaxYear, maximumTaxYear: TaxYear, value: String): Validated[Seq[MtdError], TaxYear] =
     resolver(minimumTaxYear, maximumTaxYear)(value)

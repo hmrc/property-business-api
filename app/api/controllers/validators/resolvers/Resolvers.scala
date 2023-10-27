@@ -31,20 +31,20 @@ trait Resolvers {
     def andThenF[Out2](other: SimpleResolver[Out1, Out2]): SimpleResolver[In, Out2] = i => resolver(i).andThen(other)
 
     // To apply further re-usable validation
-    def must(other: Validator[Out1]): SimpleResolver[In, Out1] = resolver.andThenF(other)
+    def thenValidate(other: Validator[Out1]): SimpleResolver[In, Out1] = resolver.andThenF(other)
   }
 
-  def satisfy[A](errors: Seq[MtdError])(predicate: A => Boolean): SimpleResolver[A, A] =
+  def satisfies[A](errors: Seq[MtdError])(predicate: A => Boolean): SimpleResolver[A, A] =
     a => if (predicate(a)) Valid(a) else Invalid(errors)
 
-  def satisfy[A](error: MtdError)(predicate: A => Boolean): SimpleResolver[A, A] =
-    satisfy(List(error))(predicate)
+  def satisfies[A](error: MtdError)(predicate: A => Boolean): SimpleResolver[A, A] =
+    satisfies(List(error))(predicate)
 
-  def beInRange[A: Ordering](minAllowed: A, maxAllowed: A, error: MtdError): SimpleResolver[A, A] =
-    satisfyMin[A](minAllowed, error) must satisfyMax[A](maxAllowed, error)
+  def inRange[A: Ordering](minAllowed: A, maxAllowed: A, error: MtdError): SimpleResolver[A, A] =
+    satisfiesMin[A](minAllowed, error) thenValidate satisfiesMax[A](maxAllowed, error)
 
-  def satisfyMin[A: Ordering](minAllowed: A, error: MtdError): SimpleResolver[A, A] = satisfy(error)(minAllowed <= _)
-  def satisfyMax[A: Ordering](maxAllowed: A, error: MtdError): SimpleResolver[A, A] = satisfy(error)(_ <= maxAllowed)
+  def satisfiesMin[A: Ordering](minAllowed: A, error: MtdError): SimpleResolver[A, A] = satisfies(error)(minAllowed <= _)
+  def satisfiesMax[A: Ordering](maxAllowed: A, error: MtdError): SimpleResolver[A, A] = satisfies(error)(_ <= maxAllowed)
 
 }
 

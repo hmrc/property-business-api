@@ -90,7 +90,7 @@ class UkFhlPropertySpec extends UnitSpec {
       |        "financialCosts": 842.99,
       |        "professionalFees": 8831.12,
       |        "costOfServices": 484.12,
-      |        "consolidatedExpenses": 999.99,
+      |        "consolidatedExpense": 999.99,
       |        "other": 99282,
       |        "travelCosts": 974.47,
       |        "ukFhlRentARoom": {

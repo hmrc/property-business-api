@@ -24,14 +24,13 @@ import scala.math.Ordered.orderingToOrdered
 
 trait Resolvers {
   type SimpleResolver[In, Out] = In => Validated[Seq[MtdError], Out]
-  type Validator[Out]          = SimpleResolver[Out, Out]
 
   implicit class SimpleResolverOps[In, Out1](resolver: In => Validated[Seq[MtdError], Out1]) {
     // To apply/compose resolvers in order
     def andThenF[Out2](other: SimpleResolver[Out1, Out2]): SimpleResolver[In, Out2] = i => resolver(i).andThen(other)
 
     // To apply further re-usable validation
-    def thenValidate(other: Validator[Out1]): SimpleResolver[In, Out1] = resolver.andThenF(other)
+    def thenValidate(other: SimpleResolver[Out1, Out1]): SimpleResolver[In, Out1] = resolver.andThenF(other)
   }
 
   def satisfies[A](errors: Seq[MtdError])(predicate: A => Boolean): SimpleResolver[A, A] =

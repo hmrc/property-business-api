@@ -48,7 +48,7 @@ class AmendHistoricNonFhlUkPeriodSummaryValidatorFactory @Inject() (appConfig: A
       def validate: Validated[Seq[MtdError], AmendHistoricNonFhlUkPeriodSummaryRequestData] =
         (
           ResolveNino(nino),
-          resolvePeriodId(periodId, None, None),
+          resolvePeriodId(periodId),
           resolveJson(body)
         ).mapN(AmendHistoricNonFhlUkPeriodSummaryRequestData) andThen validateBusinessRules
 

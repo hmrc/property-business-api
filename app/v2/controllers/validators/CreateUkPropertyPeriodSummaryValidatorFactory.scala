@@ -51,7 +51,7 @@ class CreateUkPropertyPeriodSummaryValidatorFactory @Inject() (appConfig: AppCon
       def validate: Validated[Seq[MtdError], CreateUkPropertyPeriodSummaryRequestData] =
         (
           ResolveNino(nino),
-          ResolveTaxYear(minimumTaxYear, taxYear, None, None),
+          ResolveTaxYear(minimumTaxYear, taxYear),
           ResolveBusinessId(businessId),
           resolveJson(body)
         ).mapN(CreateUkPropertyPeriodSummaryRequestData) andThen validateBusinessRules

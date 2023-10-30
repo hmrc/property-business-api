@@ -65,14 +65,14 @@ class ResolveTaxYearSpec extends UnitSpec {
 
     "return no errors" when {
       "the historic tax year supplied is the minimum allowed" in {
-        ResolveTaxYear(minimumTaxYear, "2021-22", None, None) shouldBe
+        ResolveTaxYear(minimumTaxYear, "2021-22") shouldBe
           Valid(TaxYear.fromMtd("2021-22"))
       }
     }
 
     "return RuleHistoricTaxYearNotSupportedError" when {
       "when the tax year is before the minimum tax year" in {
-        ResolveTaxYear(minimumTaxYear, "2020-21", None, None) shouldBe
+        ResolveTaxYear(minimumTaxYear, "2020-21") shouldBe
           Invalid(List(RuleTaxYearNotSupportedError))
       }
     }

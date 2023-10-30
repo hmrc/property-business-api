@@ -38,7 +38,7 @@ class DeletePropertyAnnualSubmissionValidatorFactory @Inject() (appConfig: AppCo
         (
           ResolveNino(nino),
           ResolveBusinessId(businessId),
-          ResolveTaxYear(minimumTaxYear, taxYear, None, None)
+          ResolveTaxYear(minimumTaxYear, taxYear)
         ).mapN(DeletePropertyAnnualSubmissionRequestData)
 
     }

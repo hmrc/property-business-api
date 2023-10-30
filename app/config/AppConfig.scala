@@ -64,8 +64,8 @@ trait AppConfig {
   def featureSwitches: Configuration
   def endpointsEnabled(version: Version): Boolean
 
-  def minimumTaxV2Foreign: Int
-  def minimumTaxV2Uk: Int
+  def minimumTaxV2Foreign: TaxYear
+  def minimumTaxV2Uk: TaxYear
 
   def minimumTaxYearHistoric: TaxYear
   def maximumTaxYearHistoric: TaxYear
@@ -102,8 +102,8 @@ class AppConfigImpl @Inject() (config: ServicesConfig, configuration: Configurat
   def featureSwitches: Configuration               = configuration.getOptional[Configuration](s"feature-switch").getOrElse(Configuration.empty)
   def endpointsEnabled(version: Version): Boolean  = config.getBoolean(s"api.${version.name}.endpoints.enabled")
 
-  val minimumTaxV2Foreign: Int = config.getInt("minimum-tax-year.version-2.foreign")
-  val minimumTaxV2Uk: Int      = config.getInt("minimum-tax-year.version-2.uk")
+  val minimumTaxV2Foreign: TaxYear = TaxYear.starting(config.getInt("minimum-tax-year.version-2.foreign"))
+  val minimumTaxV2Uk: TaxYear      = TaxYear.starting(config.getInt("minimum-tax-year.version-2.uk"))
 
   val minimumTaxYearHistoric: TaxYear = TaxYear.starting(config.getInt("minimum-tax-year.version-2.historic"))
   val maximumTaxYearHistoric: TaxYear = TaxYear.starting(config.getInt("maximum-tax-year.version-2.historic"))

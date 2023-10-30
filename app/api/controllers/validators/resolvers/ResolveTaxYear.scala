@@ -21,6 +21,8 @@ import api.models.errors._
 import cats.data.Validated
 import cats.data.Validated.{Invalid, Valid}
 
+import scala.math.Ordered.orderingToOrdered
+
 trait ResolvingTaxYear extends Resolver[String, TaxYear] {
 
   private val taxYearFormat = "20[1-9][0-9]-[1-9][0-9]".r
@@ -53,13 +55,13 @@ object ResolveTaxYear extends ResolvingTaxYear {
   def apply(value: String, error: Option[MtdError], path: Option[String]): Validated[Seq[MtdError], TaxYear] =
     resolve(value, error, path)
 
-  def apply(minimumTaxYear: Int, value: String, error: Option[MtdError], path: Option[String]): Validated[Seq[MtdError], TaxYear] =
+  def apply(minimumTaxYear: TaxYear, value: String, error: Option[MtdError], path: Option[String]): Validated[Seq[MtdError], TaxYear] =
     resolve(value, error, path)
       .andThen { taxYear =>
-        if (taxYear.year < minimumTaxYear)
-          Invalid(List(RuleTaxYearNotSupportedError))
-        else
+        if (minimumTaxYear <= taxYear)
           Valid(taxYear)
+        else
+          Invalid(List(RuleTaxYearNotSupportedError))
       }
 
 }
@@ -69,7 +71,7 @@ object ResolveTysTaxYear extends ResolvingTaxYear {
   def apply(value: String, error: Option[MtdError], path: Option[String]): Validated[Seq[MtdError], TaxYear] =
     resolve(value, error, path)
       .andThen { taxYear =>
-        if (taxYear.year < TaxYear.tysTaxYear)
+        if (taxYear < TaxYear.tysTaxYear)
           Invalid(List(InvalidTaxYearParameterError) ++ error)
         else
           Valid(taxYear)
@@ -81,14 +83,14 @@ object ResolveHistoricTaxYear extends ResolvingTaxYear {
 
   def apply(value: String, error: Option[MtdError], path: Option[String]): Validated[Seq[MtdError], TaxYear] = resolve(value, error, path)
 
-  def apply(minimumTaxYear: Int,
-            maximumTaxYear: Int,
+  def apply(minimumTaxYear: TaxYear,
+            maximumTaxYear: TaxYear,
             value: String,
             error: Option[MtdError],
             path: Option[String]): Validated[Seq[MtdError], TaxYear] =
     resolve(value, error, path)
       .andThen { taxYear =>
-        if (taxYear.year > minimumTaxYear && taxYear.year - 1 <= maximumTaxYear)
+        if (minimumTaxYear <= taxYear && taxYear <= maximumTaxYear)
           Valid(taxYear)
         else
           Invalid(List(RuleHistoricTaxYearNotSupportedError))

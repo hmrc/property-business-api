@@ -35,7 +35,7 @@ import javax.inject.{Inject, Singleton}
 @Singleton
 class CreateUkPropertyPeriodSummaryValidatorFactory @Inject() (appConfig: AppConfig) {
 
-  private lazy val minimumTaxYear = appConfig.minimumTaxV2Uk + 1
+  private lazy val minimumTaxYear = appConfig.minimumTaxV2Uk
 
   private val resolveFromAndToDates = new ResolveFromAndToDates(TaxYear.minimumFromDate.year, TaxYear.maximumToDate.year)
 

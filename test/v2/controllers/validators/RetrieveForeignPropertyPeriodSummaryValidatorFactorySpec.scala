@@ -40,7 +40,7 @@ class RetrieveForeignPropertyPeriodSummaryValidatorFactorySpec extends UnitSpec 
   private def validator(nino: String, businessId: String, taxYear: String, submissionId: String) =
     validatorFactory.validator(nino, businessId, taxYear, submissionId)
 
-  MockAppConfig.minimumTaxV2Foreign.returns(2021)
+  MockAppConfig.minimumTaxV2Foreign.returns(TaxYear.starting(2021))
 
   "validator" should {
     "return the parsed domain object" when {
@@ -49,6 +49,12 @@ class RetrieveForeignPropertyPeriodSummaryValidatorFactorySpec extends UnitSpec 
           validator(validNino, validBusinessId, validTaxYear, validSubmissionId).validateAndWrapResult()
 
         result shouldBe Right(RetrieveForeignPropertyPeriodSummaryRequestData(parsedNino, parsedBusinessId, parsedTaxYear, parsedSubmissionId))
+      }
+
+      "passed the minimum supported taxYear" in {
+        val taxYearString = "2021-22"
+        validator(validNino, validBusinessId, taxYearString, validSubmissionId).validateAndWrapResult() shouldBe
+          Right(RetrieveForeignPropertyPeriodSummaryRequestData(parsedNino, parsedBusinessId, TaxYear.fromMtd(taxYearString), parsedSubmissionId))
       }
     }
 
@@ -75,11 +81,9 @@ class RetrieveForeignPropertyPeriodSummaryValidatorFactorySpec extends UnitSpec 
         result shouldBe Left(ErrorWrapper(correlationId, BusinessIdFormatError))
       }
 
-      "passed an unsupported taxYear" in {
-        val result: Either[ErrorWrapper, RetrieveForeignPropertyPeriodSummaryRequestData] =
-          validator(validNino, validBusinessId, "2020-21", validSubmissionId).validateAndWrapResult()
-
-        result shouldBe Left(ErrorWrapper(correlationId, RuleTaxYearNotSupportedError))
+      "passed a taxYear immediately before the minimum supported" in {
+        validator(validNino, validBusinessId, "2020-21", validSubmissionId).validateAndWrapResult() shouldBe
+          Left(ErrorWrapper(correlationId, RuleTaxYearNotSupportedError))
       }
 
       "passed a taxYear spanning an invalid tax year range" in {

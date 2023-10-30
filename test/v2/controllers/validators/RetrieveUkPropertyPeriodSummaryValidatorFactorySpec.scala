@@ -27,7 +27,7 @@ class RetrieveUkPropertyPeriodSummaryValidatorFactorySpec extends UnitSpec with 
 
   private val validNino         = "AA123456A"
   private val validBusinessId   = "XAIS12345678901"
-  private val validTaxYear      = "2022-23"
+  private val validTaxYear      = "2023-24"
   private val validSubmissionId = "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
 
   private val parsedNino         = Nino(validNino)
@@ -40,7 +40,7 @@ class RetrieveUkPropertyPeriodSummaryValidatorFactorySpec extends UnitSpec with 
   private def validator(nino: String, businessId: String, taxYear: String, submissionId: String) =
     validatorFactory.validator(nino, businessId, taxYear, submissionId)
 
-  MockAppConfig.minimumTaxV2Uk.returns(2022)
+  MockAppConfig.minimumTaxV2Uk.returns(TaxYear.starting(2022))
 
   "validator" should {
     "return the parsed domain object" when {
@@ -49,6 +49,12 @@ class RetrieveUkPropertyPeriodSummaryValidatorFactorySpec extends UnitSpec with 
           validator(validNino, validBusinessId, validTaxYear, validSubmissionId).validateAndWrapResult()
 
         result shouldBe Right(RetrieveUkPropertyPeriodSummaryRequestData(parsedNino, parsedBusinessId, parsedTaxYear, parsedSubmissionId))
+      }
+
+      "passed the minimum supported taxYear" in {
+        val taxYearString = "2022-23"
+        validator(validNino, validBusinessId, taxYearString, validSubmissionId).validateAndWrapResult() shouldBe
+          Right(RetrieveUkPropertyPeriodSummaryRequestData(parsedNino, parsedBusinessId, TaxYear.fromMtd(taxYearString), parsedSubmissionId))
       }
     }
 
@@ -74,11 +80,9 @@ class RetrieveUkPropertyPeriodSummaryValidatorFactorySpec extends UnitSpec with 
         result shouldBe Left(ErrorWrapper(correlationId, TaxYearFormatError))
       }
 
-      "an unsupported tax year is supplied" in {
-        val result: Either[ErrorWrapper, RetrieveUkPropertyPeriodSummaryRequestData] =
-          validator(validNino, validBusinessId, "2021-22", validSubmissionId).validateAndWrapResult()
-
-        result shouldBe Left(ErrorWrapper(correlationId, RuleTaxYearNotSupportedError))
+      "passed a taxYear immediately before the minimum supported" in {
+        validator(validNino, validBusinessId, "2021-22", validSubmissionId).validateAndWrapResult() shouldBe
+          Left(ErrorWrapper(correlationId, RuleTaxYearNotSupportedError))
       }
 
       "an invalid tax year range is supplied" in {

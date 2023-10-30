@@ -24,17 +24,14 @@ import cats.implicits._
 import config.AppConfig
 import play.api.libs.json.JsValue
 import v2.controllers.validators.CreateForeignPropertyPeriodSummaryRulesValidator.validateBusinessRules
-import v2.models.request.createForeignPropertyPeriodSummary.{
-  CreateForeignPropertyPeriodSummaryRequestBody,
-  CreateForeignPropertyPeriodSummaryRequestData
-}
+import v2.models.request.createForeignPropertyPeriodSummary.{CreateForeignPropertyPeriodSummaryRequestBody, CreateForeignPropertyPeriodSummaryRequestData}
 
 import javax.inject.{Inject, Singleton}
 
 @Singleton
 class CreateForeignPropertyPeriodSummaryValidatorFactory @Inject() (appConfig: AppConfig) {
 
-  private lazy val minimumTaxYear = appConfig.minimumTaxV2Foreign + 1
+  private lazy val minimumTaxYear = appConfig.minimumTaxV2Foreign
 
   private val resolveJson = new ResolveNonEmptyJsonObject[CreateForeignPropertyPeriodSummaryRequestBody]()
 

@@ -29,7 +29,7 @@ import javax.inject.{Inject, Singleton}
 @Singleton
 class RetrieveForeignPropertyAnnualSubmissionValidatorFactory @Inject() (appConfig: AppConfig) {
 
-  private lazy val minimumTaxYear = appConfig.minimumTaxV2Foreign + 1
+  private lazy val minimumTaxYear = appConfig.minimumTaxV2Foreign
 
   def validator(nino: String, businessId: String, taxYear: String): Validator[RetrieveForeignPropertyAnnualSubmissionRequestData] =
     new Validator[RetrieveForeignPropertyAnnualSubmissionRequestData] {

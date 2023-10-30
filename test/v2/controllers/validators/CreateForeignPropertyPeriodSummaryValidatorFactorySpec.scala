@@ -39,7 +39,7 @@ class CreateForeignPropertyPeriodSummaryValidatorFactorySpec extends UnitSpec wi
 
   private val validNino       = "AA123456A"
   private val validBusinessId = "XAIS12345678901"
-  private val validTaxYear    = "2021-22"
+  private val validTaxYear    = "2023-24"
 
   private val validFromDate    = "2020-03-29"
   private val validToDate      = "2021-03-29"
@@ -250,7 +250,7 @@ class CreateForeignPropertyPeriodSummaryValidatorFactorySpec extends UnitSpec wi
   private def validator(nino: String, businessId: String, taxYear: String, body: JsValue) =
     validatorFactory.validator(nino, businessId, taxYear, body)
 
-  MockAppConfig.minimumTaxV2Foreign.returns(2021)
+  MockAppConfig.minimumTaxV2Foreign.returns(TaxYear.starting(2021))
 
   "validator" should {
     "return the parsed domain object" when {
@@ -282,6 +282,12 @@ class CreateForeignPropertyPeriodSummaryValidatorFactorySpec extends UnitSpec wi
         result shouldBe Right(
           CreateForeignPropertyPeriodSummaryRequestData(parsedNino, parsedBusinessId, parsedTaxYear, parsedBodyMinimalForeignNonFhl))
       }
+
+      "passed the minimum supported taxYear" in {
+        val taxYearString = "2021-22"
+        validator(validNino, validBusinessId, taxYearString, validBody).validateAndWrapResult() shouldBe
+          Right(CreateForeignPropertyPeriodSummaryRequestData(parsedNino, parsedBusinessId, TaxYear.fromMtd(taxYearString), parsedBody))
+      }
     }
 
     "return a single error" when {
@@ -304,6 +310,11 @@ class CreateForeignPropertyPeriodSummaryValidatorFactorySpec extends UnitSpec wi
           validator(validNino, validBusinessId, "invalid", validBody).validateAndWrapResult()
 
         result shouldBe Left(ErrorWrapper(correlationId, TaxYearFormatError))
+      }
+
+      "passed a taxYear immediately before the minimum supported" in {
+        validator(validNino, validBusinessId, "2020-21", validBody).validateAndWrapResult() shouldBe
+          Left(ErrorWrapper(correlationId, RuleTaxYearNotSupportedError))
       }
 
       "passed a tax year with an invalid range" in {
@@ -454,7 +465,7 @@ class CreateForeignPropertyPeriodSummaryValidatorFactorySpec extends UnitSpec wi
       "passed a body with multiple duplicate country codes" in {
         val countryCode1 = "AFG"
         val countryCode2 = "ZWE"
-        val invalidBody  = bodyWith(entryWith(countryCode1), entryWith(countryCode2), entryWith(countryCode1), entryWith(countryCode2))
+        val invalidBody = bodyWith(entryWith(countryCode1), entryWith(countryCode2), entryWith(countryCode1), entryWith(countryCode2))
 
         val result: Either[ErrorWrapper, CreateForeignPropertyPeriodSummaryRequestData] =
           validator(validNino, validBusinessId, validTaxYear, invalidBody).validateAndWrapResult()

@@ -38,7 +38,7 @@ class RetrieveForeignPropertyAnnualSubmissionValidatorFactorySpec extends UnitSp
   private def validator(nino: String, businessId: String, taxYear: String) =
     validatorFactory.validator(nino, businessId, taxYear)
 
-  MockAppConfig.minimumTaxV2Foreign.returns(2021)
+  MockAppConfig.minimumTaxV2Foreign.returns(TaxYear.starting(2021))
 
   "validator" should {
     "return the parsed domain object" when {
@@ -47,6 +47,12 @@ class RetrieveForeignPropertyAnnualSubmissionValidatorFactorySpec extends UnitSp
           validator(validNino, validBusinessId, validTaxYear).validateAndWrapResult()
 
         result shouldBe Right(RetrieveForeignPropertyAnnualSubmissionRequestData(parsedNino, parsedBusinessId, parsedTaxYear))
+      }
+
+      "passed the minimum supported taxYear" in {
+        val taxYearString = "2021-22"
+        validator(validNino, validBusinessId, taxYearString).validateAndWrapResult() shouldBe
+          Right(RetrieveForeignPropertyAnnualSubmissionRequestData(parsedNino, parsedBusinessId, TaxYear.fromMtd(taxYearString)))
       }
     }
 
@@ -73,11 +79,9 @@ class RetrieveForeignPropertyAnnualSubmissionValidatorFactorySpec extends UnitSp
         result shouldBe Left(ErrorWrapper(correlationId, BusinessIdFormatError))
       }
 
-      "passed an unsupported taxYear" in {
-        val result: Either[ErrorWrapper, RetrieveForeignPropertyAnnualSubmissionRequestData] =
-          validator(validNino, validBusinessId, "2020-21").validateAndWrapResult()
-
-        result shouldBe Left(ErrorWrapper(correlationId, RuleTaxYearNotSupportedError))
+      "passed a taxYear immediately before the minimum supported" in {
+        validator(validNino, validBusinessId, "2020-21").validateAndWrapResult() shouldBe
+          Left(ErrorWrapper(correlationId, RuleTaxYearNotSupportedError))
       }
 
       "passed a taxYear spanning an invalid tax year range" in {

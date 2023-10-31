@@ -80,7 +80,7 @@ class DocumentationControllerISpec extends IntegrationBaseSpec {
     }
   }
 
-  "an OAS documentation request for V2" must {
+  "an OAS documentation request" must {
     List(Version2, Version3).foreach { version =>
       s"return the documentation for $version" in {
         val response = get(s"/api/conf/${version.name}/application.yaml")

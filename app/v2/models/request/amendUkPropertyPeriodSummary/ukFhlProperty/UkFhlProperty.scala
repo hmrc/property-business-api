@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package v3.models.request.common.ukFhlProperty
+package v2.models.request.amendUkPropertyPeriodSummary.ukFhlProperty
 
 import play.api.libs.json.{Json, OFormat}
 

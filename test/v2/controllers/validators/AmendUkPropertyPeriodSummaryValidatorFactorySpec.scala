@@ -23,8 +23,8 @@ import mocks.MockAppConfig
 import play.api.libs.json.{JsNumber, JsObject, JsValue, Json}
 import support.UnitSpec
 import v2.models.request.amendUkPropertyPeriodSummary.{AmendUkPropertyPeriodSummaryRequestBody, AmendUkPropertyPeriodSummaryRequestData}
-import v2.models.request.common.ukFhlProperty.{UkFhlProperty, UkFhlPropertyExpenses, UkFhlPropertyIncome}
-import v2.models.request.common.ukNonFhlProperty.{UkNonFhlProperty, UkNonFhlPropertyExpenses, UkNonFhlPropertyIncome}
+import v2.models.request.amendUkPropertyPeriodSummary.ukFhlProperty.{UkFhlProperty, UkFhlPropertyExpenses, UkFhlPropertyIncome}
+import v2.models.request.amendUkPropertyPeriodSummary.ukNonFhlProperty.{UkNonFhlProperty, UkNonFhlPropertyExpenses, UkNonFhlPropertyIncome}
 import v2.models.request.common.ukPropertyRentARoom.{UkPropertyExpensesRentARoom, UkPropertyIncomeRentARoom}
 
 class AmendUkPropertyPeriodSummaryValidatorFactorySpec extends UnitSpec with MockAppConfig with JsonErrorValidators {
@@ -263,7 +263,7 @@ class AmendUkPropertyPeriodSummaryValidatorFactorySpec extends UnitSpec with Moc
       "passed the minimum supported taxYear" in {
         val taxYearString = "2022-23"
         validator(validNino, validBusinessId, taxYearString, validSubmissionId, validBody).validateAndWrapResult() shouldBe
-          Right(AmendUkPropertyPeriodSummaryRequestData(parsedNino, TaxYear.fromMtd(taxYearString), parsedBusinessId,  parsedSubmissionId, parsedBody))
+          Right(AmendUkPropertyPeriodSummaryRequestData(parsedNino, TaxYear.fromMtd(taxYearString), parsedBusinessId, parsedSubmissionId, parsedBody))
       }
     }
 

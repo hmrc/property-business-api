@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 
-package v3.models.request.common.ukFhlProperty
+package v2.models.request.amendUkPropertyPeriodSummary.ukFhlProperty
 
 import play.api.libs.functional.syntax._
 import play.api.libs.json.{JsPath, Json, Reads, Writes}
-import v3.models.request.common.ukPropertyRentARoom.UkPropertyIncomeRentARoom
+import v2.models.request.common.ukPropertyRentARoom.UkPropertyIncomeRentARoom
 
 case class UkFhlPropertyIncome(periodAmount: Option[BigDecimal], taxDeducted: Option[BigDecimal], rentARoom: Option[UkPropertyIncomeRentARoom])
 

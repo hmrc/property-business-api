@@ -27,8 +27,8 @@ import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.Result
 import v2.controllers.validators.MockAmendUkPropertyPeriodSummaryValidatorFactory
 import v2.models.request.amendUkPropertyPeriodSummary._
-import v2.models.request.common.ukFhlProperty._
-import v2.models.request.common.ukNonFhlProperty._
+import v2.models.request.amendUkPropertyPeriodSummary.ukFhlProperty._
+import v2.models.request.amendUkPropertyPeriodSummary.ukNonFhlProperty._
 import v2.models.request.common.ukPropertyRentARoom.{UkPropertyExpensesRentARoom, UkPropertyIncomeRentARoom}
 import v2.models.response.amendUkPropertyPeriodSummary._
 import v2.services.MockAmendUkPropertyPeriodSummaryService

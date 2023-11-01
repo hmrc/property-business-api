@@ -14,9 +14,12 @@
  * limitations under the License.
  */
 
-package v3.models.request.amendHistoricFhlUkPiePeriodSummary
+package v2.models.request.amendUkPropertyPeriodSummary.ukNonFhlProperty
 
-import api.models.request.RawData
-import play.api.libs.json.JsValue
+import play.api.libs.json.{Json, OFormat}
 
-case class AmendHistoricFhlUkPiePeriodSummaryRawData(nino: String, periodId: String, body: JsValue) extends RawData
+case class UkNonFhlProperty(income: Option[UkNonFhlPropertyIncome], expenses: Option[UkNonFhlPropertyExpenses])
+
+object UkNonFhlProperty {
+  implicit val format: OFormat[UkNonFhlProperty] = Json.format[UkNonFhlProperty]
+}

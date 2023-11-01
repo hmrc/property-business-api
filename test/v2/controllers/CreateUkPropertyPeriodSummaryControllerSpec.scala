@@ -25,12 +25,12 @@ import api.models.outcomes.ResponseWrapper
 import api.services.MockAuditService
 import play.api.libs.json.{JsObject, JsValue, Json}
 import play.api.mvc.Result
-import v2.models.request.common.ukFhlProperty.{UkFhlProperty, UkFhlPropertyExpenses, UkFhlPropertyIncome}
-import v2.models.request.common.ukNonFhlProperty.{UkNonFhlProperty, UkNonFhlPropertyExpenses, UkNonFhlPropertyIncome}
 import v2.models.request.common.ukPropertyRentARoom.{UkPropertyExpensesRentARoom, UkPropertyIncomeRentARoom}
 import v2.models.request.createUkPropertyPeriodSummary._
 import v2.models.response.createUkPropertyPeriodSummary._
 import v2.controllers.validators.MockCreateUkPropertyPeriodSummaryValidatorFactory
+import v2.models.request.createUkPropertyPeriodSummary.ukFhlProperty.{UkFhlProperty, UkFhlPropertyExpenses, UkFhlPropertyIncome}
+import v2.models.request.createUkPropertyPeriodSummary.ukNonFhlProperty.{UkNonFhlProperty, UkNonFhlPropertyExpenses, UkNonFhlPropertyIncome}
 import v2.services.MockCreateUkPropertyPeriodSummaryService
 
 import scala.concurrent.ExecutionContext.Implicits.global

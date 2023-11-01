@@ -22,9 +22,9 @@ import api.models.utils.JsonErrorValidators
 import mocks.MockAppConfig
 import play.api.libs.json._
 import support.UnitSpec
-import v2.models.request.common.ukFhlProperty.{UkFhlProperty, UkFhlPropertyExpenses, UkFhlPropertyIncome}
-import v2.models.request.common.ukNonFhlProperty.{UkNonFhlProperty, UkNonFhlPropertyExpenses, UkNonFhlPropertyIncome}
 import v2.models.request.common.ukPropertyRentARoom.{UkPropertyExpensesRentARoom, UkPropertyIncomeRentARoom}
+import v2.models.request.createUkPropertyPeriodSummary.ukFhlProperty.{UkFhlProperty, UkFhlPropertyExpenses, UkFhlPropertyIncome}
+import v2.models.request.createUkPropertyPeriodSummary.ukNonFhlProperty.{UkNonFhlProperty, UkNonFhlPropertyExpenses, UkNonFhlPropertyIncome}
 import v2.models.request.createUkPropertyPeriodSummary.{CreateUkPropertyPeriodSummaryRequestBody, CreateUkPropertyPeriodSummaryRequestData}
 
 class CreateUkPropertyPeriodSummaryValidatorFactorySpec extends UnitSpec with MockAppConfig with JsonErrorValidators {
@@ -166,7 +166,7 @@ class CreateUkPropertyPeriodSummaryValidatorFactorySpec extends UnitSpec with Mo
   //@formatter:off
   private val parsedNonFhlExpenses = UkNonFhlPropertyExpenses(
     Some(3123.21), Some(928.42), Some(842.99), Some(8831.12),
-    Some(484.12), Some(99282), Some(12.34), Some(974.47), 
+    Some(484.12), Some(99282), Some(12.34), Some(974.47),
     Some(12.34), Some(parsedNonFhlExpensesRentARoom), None
   )
 

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package v3.models.request.common.ukNonFhlProperty
+package v3.models.request.createUkPropertyPeriodSummary.ukNonFhlProperty
 
 import play.api.libs.functional.syntax._
 import play.api.libs.json.{JsPath, Json, Reads, Writes}
@@ -46,7 +46,7 @@ object UkNonFhlPropertyExpenses {
       (JsPath \ "travelCosts").writeNullable[BigDecimal] and
       (JsPath \ "residentialFinancialCostsCarriedForward").writeNullable[BigDecimal] and
       (JsPath \ "ukOtherRentARoom").writeNullable[UkPropertyExpensesRentARoom] and
-      (JsPath \ "consolidatedExpense").writeNullable[BigDecimal]
+      (JsPath \ "consolidatedExpenses").writeNullable[BigDecimal]
   )(unlift(UkNonFhlPropertyExpenses.unapply))
 
 }

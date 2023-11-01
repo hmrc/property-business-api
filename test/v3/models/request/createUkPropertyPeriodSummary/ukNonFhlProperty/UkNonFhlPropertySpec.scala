@@ -14,63 +14,49 @@
  * limitations under the License.
  */
 
-package v3.models.request.common.ukNonFhlProperty
+package v3.models.request.createUkPropertyPeriodSummary.ukNonFhlProperty
 
-import play.api.libs.json.{JsValue, Json}
+import play.api.libs.json.Json
 import support.UnitSpec
 import v3.models.request.common.ukPropertyRentARoom.UkPropertyIncomeRentARoom
 
 class UkNonFhlPropertySpec extends UnitSpec {
 
-  val requestBody: UkNonFhlProperty =
+  // @formatter:off
+  private val requestBody ={
     UkNonFhlProperty(
-      Some(
-        UkNonFhlPropertyIncome(
-          Some(41.12),
-          Some(84.31),
-          Some(9884.93),
-          Some(842.99),
-          Some(31.44),
-          Some(
-            UkPropertyIncomeRentARoom(
-              Some(947.66)
-            ))
-        )),
+      Some(UkNonFhlPropertyIncome(
+        Some(41.12), Some(84.31), Some(9884.93), Some(842.99),
+        Some(31.44), Some(UkPropertyIncomeRentARoom(Some(947.66))))),
       Some(
         UkNonFhlPropertyExpenses(
-          None,
-          None,
-          None,
-          None,
-          None,
-          None,
-          None,
-          None,
-          None,
-          None,
+          None, None, None, None, None,
+          None, None, None, None, None,
           Some(988.18)
         ))
     )
+    // @formatter:on
+  }
 
-  val mtdJson: JsValue = Json.parse("""
-                                      |{
-                                      |    "income": {
-                                      |        "premiumsOfLeaseGrant": 41.12,
-                                      |        "reversePremiums": 84.31,
-                                      |        "periodAmount": 9884.93,
-                                      |        "taxDeducted": 842.99,
-                                      |        "otherIncome": 31.44,
-                                      |        "rentARoom": {
-                                      |            "rentsReceived": 947.66
-                                      |        }
-                                      |    },
-                                      |    "expenses": {
-                                      |        "consolidatedExpenses": 988.18
-                                      |    }
-                                      |}
-                                      |""".stripMargin)
+  private val mtdJson = Json.parse("""
+      |{
+      |    "income": {
+      |        "premiumsOfLeaseGrant": 41.12,
+      |        "reversePremiums": 84.31,
+      |        "periodAmount": 9884.93,
+      |        "taxDeducted": 842.99,
+      |        "otherIncome": 31.44,
+      |        "rentARoom": {
+      |            "rentsReceived": 947.66
+      |        }
+      |    },
+      |    "expenses": {
+      |        "consolidatedExpenses": 988.18
+      |    }
+      |}
+      |""".stripMargin)
 
-  val desJson: JsValue = Json.parse("""
+  private val downstreamJson = Json.parse("""
                                       |{
                                       |    "income": {
                                       |        "premiumsOfLeaseGrant": 41.12,
@@ -83,7 +69,7 @@ class UkNonFhlPropertySpec extends UnitSpec {
                                       |        }
                                       |    },
                                       |    "expenses": {
-                                      |        "consolidatedExpense": 988.18
+                                      |        "consolidatedExpenses": 988.18
                                       |    }
                                       |}
                                       |""".stripMargin)
@@ -99,7 +85,8 @@ class UkNonFhlPropertySpec extends UnitSpec {
   "writes" when {
     "passed valid model" should {
       "return valid JSON" in {
-        Json.toJson(requestBody) shouldBe desJson
+        Json.toJson(requestBody) shouldBe downstreamJson
+
       }
     }
   }

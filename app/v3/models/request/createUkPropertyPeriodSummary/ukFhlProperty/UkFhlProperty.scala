@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-package v3.models.request.common.ukNonFhlProperty
+package v3.models.request.createUkPropertyPeriodSummary.ukFhlProperty
 
 import play.api.libs.json.{Json, OFormat}
 
-case class UkNonFhlProperty(income: Option[UkNonFhlPropertyIncome], expenses: Option[UkNonFhlPropertyExpenses])
+case class UkFhlProperty(income: Option[UkFhlPropertyIncome], expenses: Option[UkFhlPropertyExpenses])
 
-object UkNonFhlProperty {
-  implicit val format: OFormat[UkNonFhlProperty] = Json.format[UkNonFhlProperty]
+object UkFhlProperty {
+  implicit val format: OFormat[UkFhlProperty] = Json.format[UkFhlProperty]
 }

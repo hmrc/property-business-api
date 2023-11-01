@@ -26,10 +26,10 @@ import api.services.MockAuditService
 import play.api.libs.json.{JsObject, JsValue, Json}
 import play.api.mvc.Result
 import v3.controllers.validators.MockCreateUkPropertyPeriodSummaryValidatorFactory
-import v3.models.request.common.ukFhlProperty.{UkFhlProperty, UkFhlPropertyExpenses, UkFhlPropertyIncome}
-import v3.models.request.common.ukNonFhlProperty.{UkNonFhlProperty, UkNonFhlPropertyExpenses, UkNonFhlPropertyIncome}
 import v3.models.request.common.ukPropertyRentARoom.{UkPropertyExpensesRentARoom, UkPropertyIncomeRentARoom}
 import v3.models.request.createUkPropertyPeriodSummary._
+import v3.models.request.createUkPropertyPeriodSummary.ukFhlProperty.{UkFhlProperty, UkFhlPropertyExpenses, UkFhlPropertyIncome}
+import v3.models.request.createUkPropertyPeriodSummary.ukNonFhlProperty.{UkNonFhlProperty, UkNonFhlPropertyExpenses, UkNonFhlPropertyIncome}
 import v3.models.response.createUkPropertyPeriodSummary._
 import v3.services.MockCreateUkPropertyPeriodSummaryService
 

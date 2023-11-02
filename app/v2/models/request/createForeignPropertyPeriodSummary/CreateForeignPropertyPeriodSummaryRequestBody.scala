@@ -20,8 +20,8 @@ import play.api.libs.functional.syntax._
 import play.api.libs.json.{JsPath, Json, OWrites, Reads}
 import shapeless.HNil
 import utils.EmptinessChecker
-import v2.models.request.common.foreignFhlEea.CreateForeignFhlEea
-import v2.models.request.common.foreignPropertyEntry.CreateForeignNonFhlPropertyEntry
+import v2.models.request.createForeignPropertyPeriodSummary.foreignFhlEea.CreateForeignFhlEea
+import v2.models.request.createForeignPropertyPeriodSummary.foreignPropertyEntry.CreateForeignNonFhlPropertyEntry
 
 case class CreateForeignPropertyPeriodSummaryRequestBody(fromDate: String,
                                                          toDate: String,

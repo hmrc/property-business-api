@@ -20,8 +20,8 @@ import play.api.libs.functional.syntax._
 import play.api.libs.json.{JsPath, Json, OWrites, Reads}
 import shapeless.HNil
 import utils.EmptinessChecker
-import v2.models.request.common.ukFhlProperty.UkFhlProperty
-import v2.models.request.common.ukNonFhlProperty.UkNonFhlProperty
+import v2.models.request.createUkPropertyPeriodSummary.ukFhlProperty.UkFhlProperty
+import v2.models.request.createUkPropertyPeriodSummary.ukNonFhlProperty.UkNonFhlProperty
 
 case class CreateUkPropertyPeriodSummaryRequestBody(fromDate: String,
                                                     toDate: String,

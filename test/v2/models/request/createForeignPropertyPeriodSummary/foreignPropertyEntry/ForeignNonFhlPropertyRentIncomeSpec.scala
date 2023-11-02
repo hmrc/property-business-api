@@ -16,12 +16,12 @@
 
 package v2.models.request.createForeignPropertyPeriodSummary.foreignPropertyEntry
 
-import play.api.libs.json.{JsValue, Json}
+import play.api.libs.json.Json
 import support.UnitSpec
 
 class ForeignNonFhlPropertyRentIncomeSpec extends UnitSpec {
 
-  val mtdJson: JsValue = Json.parse(
+  private val mtdJson = Json.parse(
     """
       |{
       |  "rentAmount": 34456.30
@@ -29,9 +29,9 @@ class ForeignNonFhlPropertyRentIncomeSpec extends UnitSpec {
     """.stripMargin
   )
 
-  val model: ForeignNonFhlPropertyRentIncome = ForeignNonFhlPropertyRentIncome(rentAmount = Some(34456.30))
+  private val model = ForeignNonFhlPropertyRentIncome(rentAmount = Some(34456.30))
 
-  val ifsJson: JsValue = Json.parse(
+  private val downstreamJson = Json.parse(
     """
       |{
       |  "rentAmount": 34456.30
@@ -50,7 +50,7 @@ class ForeignNonFhlPropertyRentIncomeSpec extends UnitSpec {
   "writes" should {
     "write to JSON" when {
       "valid model is provided" in {
-        Json.toJson(model) shouldBe ifsJson
+        Json.toJson(model) shouldBe downstreamJson
       }
     }
   }

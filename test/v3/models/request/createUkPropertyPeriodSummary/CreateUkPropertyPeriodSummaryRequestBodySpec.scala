@@ -126,7 +126,7 @@ class CreateUkPropertyPeriodSummaryRequestBodySpec extends UnitSpec {
     |}
     |""".stripMargin)
 
-  private val desJson = Json.parse("""
+  private val downstreamJson = Json.parse("""
     |{
     |    "fromDate": "2020-01-01",
     |    "toDate": "2020-01-31",
@@ -181,7 +181,7 @@ class CreateUkPropertyPeriodSummaryRequestBodySpec extends UnitSpec {
   "writes" when {
     "passed valid model" should {
       "return valid JSON" in {
-        Json.toJson(requestBody) shouldBe desJson
+        Json.toJson(requestBody) shouldBe downstreamJson
       }
     }
   }

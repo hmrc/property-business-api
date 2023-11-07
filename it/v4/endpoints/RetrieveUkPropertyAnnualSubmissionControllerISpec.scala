@@ -215,7 +215,7 @@ class RetrieveUkPropertyAnnualSubmissionControllerISpec extends IntegrationBaseS
       setupStubs()
       buildRequest(s"/uk/$nino/$businessId/annual/$taxYear")
         .withHttpHeaders(
-          (ACCEPT, "application/vnd.hmrc.3.0+json"),
+          (ACCEPT, "application/vnd.hmrc.4.0+json"),
           (AUTHORIZATION, "Bearer 123") // some bearer token
         )
     }

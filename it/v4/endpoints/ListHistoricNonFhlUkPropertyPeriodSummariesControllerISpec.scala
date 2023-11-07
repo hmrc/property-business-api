@@ -94,7 +94,7 @@ class ListHistoricNonFhlUkPropertyPeriodSummariesControllerISpec extends Integra
       setupStubs()
       buildRequest(s"/uk/period/non-furnished-holiday-lettings/$nino")
         .withHttpHeaders(
-          (ACCEPT, "application/vnd.hmrc.3.0+json"),
+          (ACCEPT, "application/vnd.hmrc.4.0+json"),
           (AUTHORIZATION, "Bearer 123")
         )
     }

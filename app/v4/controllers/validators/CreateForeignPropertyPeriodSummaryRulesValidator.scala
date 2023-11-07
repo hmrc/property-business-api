@@ -17,20 +17,16 @@
 package v4.controllers.validators
 
 import api.controllers.validators.RulesValidator
-import api.controllers.validators.resolvers.{ResolveParsedCountryCode, ResolveParsedNumber}
-import api.models.domain.TaxYear
+import api.controllers.validators.resolvers.{ResolveFromAndToDates, ResolveParsedCountryCode, ResolveParsedNumber}
 import api.models.errors._
 import cats.data.Validated
 import cats.data.Validated.Invalid
 import cats.implicits.toTraverseOps
-import v4.controllers.validators.resolvers.ResolveFromAndToDates
 import v4.models.request.createForeignPropertyPeriodSummary.CreateForeignPropertyPeriodSummaryRequestData
 import v4.models.request.createForeignPropertyPeriodSummary.foreignFhlEea.{CreateForeignFhlEea, CreateForeignFhlEeaExpenses}
 import v4.models.request.createForeignPropertyPeriodSummary.foreignPropertyEntry.{CreateForeignNonFhlPropertyEntry, CreateForeignNonFhlPropertyExpenses}
 
 object CreateForeignPropertyPeriodSummaryRulesValidator extends RulesValidator[CreateForeignPropertyPeriodSummaryRequestData] {
-
-  private val resolveFromAndToDates = new ResolveFromAndToDates(TaxYear.minimumFromDate.year, TaxYear.maximumToDate.year)
 
   private val resolveParsedNumber = ResolveParsedNumber()
 
@@ -39,7 +35,7 @@ object CreateForeignPropertyPeriodSummaryRulesValidator extends RulesValidator[C
     import parsed.body._
 
     combine(
-      resolveFromAndToDates((fromDate, toDate)).map(_ => ()),
+      ResolveFromAndToDates((fromDate, toDate)).map(_ => ()),
       foreignFhlEea.map(validateForeignFhlEea).getOrElse(valid),
       foreignNonFhlProperty.map(validateForeignNonFhlProperty).getOrElse(valid)
     ).onSuccess(parsed)
@@ -71,7 +67,7 @@ object CreateForeignPropertyPeriodSummaryRulesValidator extends RulesValidator[C
 
     val validatedNumberFields = valuesWithPaths.map {
       case (None, _)            => valid
-      case (Some(number), path) => resolveParsedNumber(number, None, Some(path))
+      case (Some(number), path) => resolveParsedNumber(number, path)
     }
 
     (validatedNumberFields :+ validatedConsolidatedExpenses).sequence.andThen(_ => valid)
@@ -122,7 +118,7 @@ object CreateForeignPropertyPeriodSummaryRulesValidator extends RulesValidator[C
 
     val validatedNumberFields = valuesWithPaths.map {
       case (None, _)            => valid
-      case (Some(number), path) => resolveParsedNumber(number, None, Some(path))
+      case (Some(number), path) => resolveParsedNumber(number, path)
     }
 
     val validatedCountryCode = ResolveParsedCountryCode(countryCode, s"/foreignNonFhlProperty/$index/countryCode")

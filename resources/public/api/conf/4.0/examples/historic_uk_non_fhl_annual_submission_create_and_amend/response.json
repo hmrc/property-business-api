@@ -1,0 +1,19 @@
+{
+  "links": [
+    {
+      "href": "/individuals/business/property/uk/non-furnished-holiday-lettings/AA999999A/2019-20",
+      "method": "PUT",
+      "rel": "create-and-amend-uk-property-historic-non-fhl-annual-submission"
+    },
+    {
+      "href": "/individuals/business/property/uk/non-furnished-holiday-lettings/AA999999A/2019-20",
+      "method": "GET",
+      "rel": "self"
+    },
+    {
+      "href": "/individuals/business/property/uk/non-furnished-holiday-lettings/AA999999A/2019-20",
+      "method": "DELETE",
+      "rel": "delete-uk-property-historic-non-fhl-annual-submission"
+    }
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "fromDate":"2017-04-06",
+  "toDate":" 2017-07-04",
+  "income":{
+    "periodAmount":5000.99,
+    "taxDeducted":5000.99,
+    "rentARoom":{
+      "rentsReceived":5000.99
+    }
+  },
+  "expenses":{
+    "premisesRunningCosts": 5000.99,
+    "repairsAndMaintenance": 5000.99,
+    "financialCosts": 5000.99,
+    "professionalFees": 5000.99,
+    "costOfServices": 5000.99,
+    "other": 5000.99,
+    "travelCosts": 5000.99,
+    "rentARoom":{
+      "amountClaimed":5000.99
+    }
+  },
+  "links": [
+    {
+      "href":"/individuals/business/property/uk/period/furnished-holiday-lettings/TC663795B/2017-04-06_2017-07-04",
+      "method": "PUT",
+      "rel": "amend-uk-property-historic-fhl-period-summary"
+    },
+    {
+      "href":"/individuals/business/property/uk/period/furnished-holiday-lettings/TC663795B/2017-04-06_2017-07-04",
+      "method": "GET",
+      "rel": "self"
+    },
+    {
+      "href": "/individuals/business/property/uk/period/furnished-holiday-lettings/TC663795B",
+      "method": "GET",
+      "rel": "list-uk-property-historic-fhl-period-summaries"
+    }
+  ]
+}

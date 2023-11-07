@@ -452,7 +452,6 @@ class CreateUkPropertyPeriodSummaryControllerISpec extends IntegrationBaseSpec {
         }
 
         val response: WSResponse = await(request().post(requestBodyJson))
-        println(response.json)
         response.status shouldBe Status.CREATED
         response.json shouldBe responseBody
         response.header("Content-Type") shouldBe Some("application/json")

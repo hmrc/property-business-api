@@ -1,0 +1,33 @@
+{
+  "submissions": [
+    {
+      "periodId": "2019-03-24_2020-05-28",
+      "fromDate": "2019-03-24",
+      "toDate": "2020-05-28",
+      "links": [
+        {
+          "href": "/individuals/business/property/uk/period/furnished-holiday-lettings/TC663795B/2019-03-24_2020-05-28",
+          "method": "PUT",
+          "rel": "amend-uk-property-historic-fhl-period-summary"
+        },
+        {
+          "href": "/individuals/business/property/uk/period/furnished-holiday-lettings/TC663795B/2019-03-24_2020-05-28",
+          "method": "GET",
+          "rel": "self"
+        }
+      ]
+    }
+  ],
+  "links": [
+    {
+      "href": "/individuals/business/property/uk/period/furnished-holiday-lettings/TC663795B",
+      "method": "GET",
+      "rel": "self"
+    },
+    {
+      "href": "/individuals/business/property/uk/period/furnished-holiday-lettings/TC663795B",
+      "method": "POST",
+      "rel": "create-uk-property-historic-fhl-period-summary"
+    }
+  ]
+}

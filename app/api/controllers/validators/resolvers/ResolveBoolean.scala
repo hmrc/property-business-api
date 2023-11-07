@@ -20,7 +20,7 @@ import api.models.errors.MtdError
 import cats.data.Validated
 import cats.implicits.catsSyntaxOption
 
-case class ResolveBoolean(error: MtdError) extends Resolvers {
+case class ResolveBoolean(error: MtdError) extends ResolverSupport {
 
   def apply(value: String): Validated[Seq[MtdError], Boolean] =
     value.toBooleanOption.toValid(List(error))

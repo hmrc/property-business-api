@@ -25,9 +25,9 @@ import java.time.format.DateTimeParseException
 
 /** Checks that the date format is YYYY-MM-DD, and returns a new LocalDate.
   */
-case class ResolveIsoDate(error: MtdError) extends Resolvers {
+case class ResolveIsoDate(error: MtdError) extends ResolverSupport {
 
- val resolver: SimpleResolver[String, LocalDate] = value =>
+ val resolver: Resolver[String, LocalDate] = value =>
     try Valid(LocalDate.parse(value))
     catch {
       case _: DateTimeParseException => Invalid(List(error))
@@ -38,7 +38,7 @@ case class ResolveIsoDate(error: MtdError) extends Resolvers {
 
 }
 
-object ResolveIsoDate extends Resolvers {
+object ResolveIsoDate extends ResolverSupport {
 
   def apply(value: String, error: MtdError): Validated[Seq[MtdError], LocalDate] =
     ResolveIsoDate(error).resolver(value)

@@ -21,14 +21,14 @@ import cats.data.Validated.{Invalid, Valid}
 import cats.implicits.catsSyntaxOption
 import support.UnitSpec
 
-class ResolversSpec extends UnitSpec with Resolvers {
+class ResolverSupportSpec extends UnitSpec with ResolverSupport {
   private val notIntegerError = MtdError("NOT_INT", "Not integer", 400)
   private val outOfRangeError = MtdError("OUT_OF_RANGE", "Out of range", 400)
-  private val notEvenError    = MtdError("NOT_EVEN", "Odd", 400)
+  private val oddNumberError  = MtdError("ODD", "Odd", 400)
 
-  private val resolveInt: SimpleResolver[String, Int] = _.toIntOption.toValid(List(notIntegerError))
+  private val resolveInt: Resolver[String, Int] = _.toIntOption.toValid(List(notIntegerError))
 
-  "Resovlers" must {
+  "ResolverSupport" must {
     "provide the ability to easily create predicate based validators" in {
       val validator = satisfies[Int](outOfRangeError)(_ < 10)
 
@@ -70,14 +70,14 @@ class ResolversSpec extends UnitSpec with Resolvers {
     }
 
     "provide the ability to compose a resolver with multiple subsequent validators (and keep all errors)" in {
-      val isEven = satisfies[Int](notEvenError)(_ % 2 == 0)
+      val isEven = satisfies[Int](oddNumberError)(_ % 2 == 0)
 
       val resolver = resolveInt thenValidate combinedValidator(satisfiesMax(10, outOfRangeError), isEven)
 
       resolver("2") shouldBe Valid(2)
-      resolver("3") shouldBe Invalid(List(notEvenError))
+      resolver("3") shouldBe Invalid(List(oddNumberError))
       resolver("10") shouldBe Valid(10)
-      resolver("11") shouldBe Invalid(List(outOfRangeError, notEvenError))
+      resolver("11") shouldBe Invalid(List(outOfRangeError, oddNumberError))
       resolver("12") shouldBe Invalid(List(outOfRangeError))
       resolver("xx") shouldBe Invalid(List(notIntegerError))
     }

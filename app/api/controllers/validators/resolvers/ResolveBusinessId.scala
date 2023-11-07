@@ -20,11 +20,11 @@ import api.models.domain.BusinessId
 import api.models.errors.{BusinessIdFormatError, MtdError}
 import cats.data.Validated
 
-object ResolveBusinessId extends Resolvers {
+object ResolveBusinessId extends ResolverSupport {
 
   private val businessIdRegex = "^X[A-Z0-9]{1}IS[0-9]{11}$".r
 
-  val resolver: SimpleResolver[String, BusinessId] =
+  val resolver: Resolver[String, BusinessId] =
     ResolveStringPattern(businessIdRegex, BusinessIdFormatError).resolver.map(BusinessId)
 
   def apply(value: String): Validated[Seq[MtdError], BusinessId] = resolver(value)

@@ -22,9 +22,9 @@ import cats.data.Validated.{Invalid, Valid}
 import play.api.libs.json._
 import utils.Logging
 
-class ResolveJsonObject[T](implicit val reads: Reads[T]) extends Resolvers with Logging {
+class ResolveJsonObject[T](implicit val reads: Reads[T]) extends ResolverSupport with Logging {
 
-  val resolver: SimpleResolver[JsValue, T] = {
+  val resolver: Resolver[JsValue, T] = {
     case jsObj: JsObject if jsObj.fields.isEmpty =>
       Invalid(List(RuleIncorrectOrEmptyBodyError))
 

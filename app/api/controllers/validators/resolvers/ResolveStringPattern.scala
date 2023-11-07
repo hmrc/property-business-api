@@ -22,9 +22,9 @@ import cats.data.Validated.{Invalid, Valid}
 
 import scala.util.matching.Regex
 
-case class ResolveStringPattern(regexFormat: Regex, error: MtdError) extends Resolvers {
+case class ResolveStringPattern(regexFormat: Regex, error: MtdError) extends ResolverSupport {
 
-  val resolver: SimpleResolver[String, String] = value =>
+  val resolver: Resolver[String, String] = value =>
     if (regexFormat.matches(value))
       Valid(value)
     else

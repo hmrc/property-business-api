@@ -20,7 +20,7 @@ import api.models.domain.DateRange
 import api.models.errors.{FromDateFormatError, MtdError, RuleToDateBeforeFromDateError, ToDateFormatError}
 import cats.data.Validated
 
-object ResolveFromAndToDates extends Resolvers {
+object ResolveFromAndToDates extends ResolverSupport {
 
   private val minimumYear = 1900
   private val maximumYear = 2099
@@ -36,7 +36,7 @@ object ResolveFromAndToDates extends Resolvers {
     satisfies(ToDateFormatError)(_.endDate.getYear <= maximumYear)
   )
 
-  val resolver: SimpleResolver[(String, String), DateRange] = resolveDateRange.resolver thenValidate withinLimits
+  val resolver: Resolver[(String, String), DateRange] = resolveDateRange.resolver thenValidate withinLimits
 
   def apply(value: (String, String)): Validated[Seq[MtdError], DateRange] = resolver(value)
 }

@@ -23,18 +23,18 @@ import cats.implicits._
 
 import scala.math.Ordered.orderingToOrdered
 
-trait Resolvers {
-  type SimpleResolver[In, Out] = In => Validated[Seq[MtdError], Out]
-  type Validator[A]            = A => Option[Seq[MtdError]]
+trait ResolverSupport {
+  type Resolver[In, Out] = In => Validated[Seq[MtdError], Out]
+  type Validator[A]      = A => Option[Seq[MtdError]]
 
   implicit class SimpleResolverOps[In, Out](resolver: In => Validated[Seq[MtdError], Out]) {
-    def map[Out2](f: Out => Out2): SimpleResolver[In, Out2] = i => resolver(i).map(f)
+    def map[Out2](f: Out => Out2): Resolver[In, Out2] = i => resolver(i).map(f)
 
-    def thenValidate(validator: Validator[Out]): SimpleResolver[In, Out] = i => resolver(i).andThen(o => validator(o).toInvalid(o))
+    def thenValidate(validator: Validator[Out]): Resolver[In, Out] = i => resolver(i).andThen(o => validator(o).toInvalid(o))
 
-    def resolveOptionally: SimpleResolver[Option[In], Option[Out]] = _.map(in => resolver(in).map(Some(_))).getOrElse(Valid(None))
+    def resolveOptionally: Resolver[Option[In], Option[Out]] = _.map(in => resolver(in).map(Some(_))).getOrElse(Valid(None))
 
-    def resolveOptionallyWithDefault(default: => Out): SimpleResolver[Option[In], Out] = _.map(in => resolver(in)).getOrElse(Valid(default))
+    def resolveOptionallyWithDefault(default: => Out): Resolver[Option[In], Out] = _.map(in => resolver(in)).getOrElse(Valid(default))
   }
 
   implicit class ValidatorOps[A](validator: A => Option[Seq[MtdError]]) {
@@ -60,4 +60,4 @@ trait Resolvers {
 
 }
 
-object Resolvers extends Resolvers
+object ResolverSupport extends ResolverSupport

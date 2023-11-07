@@ -20,11 +20,11 @@ import api.models.domain.SubmissionId
 import api.models.errors.{MtdError, SubmissionIdFormatError}
 import cats.data.Validated
 
-object ResolveSubmissionId extends Resolvers {
+object ResolveSubmissionId extends ResolverSupport {
 
   private val submissionIdRegex = "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$".r
 
-  val resolver: SimpleResolver[String, SubmissionId] =
+  val resolver: Resolver[String, SubmissionId] =
     ResolveStringPattern(submissionIdRegex, SubmissionIdFormatError).resolver.map(SubmissionId)
 
   def apply(value: String): Validated[Seq[MtdError], SubmissionId] = resolver(value)

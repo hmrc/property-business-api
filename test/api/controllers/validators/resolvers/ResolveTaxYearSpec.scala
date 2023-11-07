@@ -21,7 +21,7 @@ import api.models.errors._
 import cats.data.Validated.{Invalid, Valid}
 import support.UnitSpec
 
-class ResolveTaxYearSpec extends UnitSpec with Resolvers {
+class ResolveTaxYearSpec extends UnitSpec with ResolverSupport {
 
   "ResolveTaxYear" should {
     "return no errors" when {
@@ -111,7 +111,7 @@ class ResolveTaxYearSpec extends UnitSpec with Resolvers {
 
   "validateIncompleteTaxYear" should {
     val error = MtdError("SOME_ERROR", "Message", 400)
-    def resolver(implicit todaySupplier: TodaySupplier): SimpleResolver[String, TaxYear] = ResolveIncompleteTaxYear(error).resolver
+    def resolver(implicit todaySupplier: TodaySupplier): Resolver[String, TaxYear] = ResolveIncompleteTaxYear(error).resolver
 
     val taxYearString = "2020-21"
     val taxYear       = TaxYear.fromMtd(taxYearString)

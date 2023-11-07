@@ -24,7 +24,7 @@ import cats.data.Validated.Invalid
 import java.time.LocalDate
 import scala.math.Ordering.Implicits.infixOrderingOps
 
-class ResolvePeriodId(minimumTaxYear: TaxYear, maximumTaxYear: TaxYear) extends Resolvers {
+class ResolvePeriodId(minimumTaxYear: TaxYear, maximumTaxYear: TaxYear) extends ResolverSupport {
 
   private val resolveDateRange = ResolveDateRange(
     startDateFormatError = PeriodIdFormatError,
@@ -35,7 +35,7 @@ class ResolvePeriodId(minimumTaxYear: TaxYear, maximumTaxYear: TaxYear) extends 
   private val minDate = minimumTaxYear.startDate
   private val maxDate = maximumTaxYear.endDate
 
-  private val splitAndResolveDateRange: SimpleResolver[String, DateRange] = { value =>
+  private val splitAndResolveDateRange: Resolver[String, DateRange] = { value =>
     value.split('_') match {
       case Array(from, to) => resolveDateRange.resolver(from -> to)
       case _               => Invalid(List(PeriodIdFormatError))
@@ -48,7 +48,7 @@ class ResolvePeriodId(minimumTaxYear: TaxYear, maximumTaxYear: TaxYear) extends 
     satisfies(PeriodIdFormatError)(dateRange => inRange(dateRange.startDate) && inRange(dateRange.endDate))
   }
 
-  val resolver: SimpleResolver[String, PeriodId] =
+  val resolver: Resolver[String, PeriodId] =
     (splitAndResolveDateRange thenValidate withinLimits).map(dateRange => PeriodId(dateRange))
 
   def apply(value: String): Validated[Seq[MtdError], PeriodId] = resolver(value)

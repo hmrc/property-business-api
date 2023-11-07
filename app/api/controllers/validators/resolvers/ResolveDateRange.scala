@@ -28,7 +28,7 @@ import scala.math.Ordering.Implicits.infixOrderingOps
 case class ResolveDateRange(startDateFormatError: MtdError = StartDateFormatError,
                             endDateFormatError: MtdError = EndDateFormatError,
                             endBeforeStartDateError: MtdError = RuleEndBeforeStartDateError)
-    extends Resolvers {
+    extends ResolverSupport {
 
   private def resolveDateRange(parsedStartDate: LocalDate, parsedEndDate: LocalDate): Validated[Seq[MtdError], DateRange] =
     if (parsedEndDate <= parsedStartDate)
@@ -36,7 +36,7 @@ case class ResolveDateRange(startDateFormatError: MtdError = StartDateFormatErro
     else
       Valid(DateRange(parsedStartDate, parsedEndDate))
 
-  val resolver: SimpleResolver[(String, String), DateRange] = { case (startDate, endDate) =>
+  val resolver: Resolver[(String, String), DateRange] = { case (startDate, endDate) =>
     (
       ResolveIsoDate(startDate, startDateFormatError),
       ResolveIsoDate(endDate, endDateFormatError)

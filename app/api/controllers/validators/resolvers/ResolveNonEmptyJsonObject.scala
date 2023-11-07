@@ -22,7 +22,7 @@ import play.api.libs.json.{JsValue, OFormat, Reads}
 import utils.EmptinessChecker
 import utils.EmptyPathsResult.{CompletelyEmpty, EmptyPaths, NoEmptyPaths}
 
-class ResolveNonEmptyJsonObject[T: OFormat: EmptinessChecker]()(implicit val reads: Reads[T]) extends Resolvers {
+class ResolveNonEmptyJsonObject[T: OFormat: EmptinessChecker]()(implicit val reads: Reads[T]) extends ResolverSupport {
 
   private val jsonResolver = new ResolveJsonObject[T].resolver
 
@@ -34,7 +34,7 @@ class ResolveNonEmptyJsonObject[T: OFormat: EmptinessChecker]()(implicit val rea
     }
   }
 
-  val resolver: SimpleResolver[JsValue, T] = jsonResolver thenValidate checkNonEmpty
+  val resolver: Resolver[JsValue, T] = jsonResolver thenValidate checkNonEmpty
 
   def apply(data: JsValue): Validated[Seq[MtdError], T] = resolver(data)
 

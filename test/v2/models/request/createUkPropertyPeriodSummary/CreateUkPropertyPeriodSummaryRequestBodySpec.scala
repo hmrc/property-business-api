@@ -16,15 +16,15 @@
 
 package v2.models.request.createUkPropertyPeriodSummary
 
-import play.api.libs.json.{JsValue, Json}
+import play.api.libs.json.Json
 import support.UnitSpec
-import v2.models.request.common.ukFhlProperty._
-import v2.models.request.common.ukNonFhlProperty._
 import v2.models.request.common.ukPropertyRentARoom.{UkPropertyExpensesRentARoom, UkPropertyIncomeRentARoom}
+import v2.models.request.createUkPropertyPeriodSummary.ukFhlProperty.{UkFhlProperty, UkFhlPropertyExpenses, UkFhlPropertyIncome}
+import v2.models.request.createUkPropertyPeriodSummary.ukNonFhlProperty.{UkNonFhlProperty, UkNonFhlPropertyExpenses, UkNonFhlPropertyIncome}
 
 class CreateUkPropertyPeriodSummaryRequestBodySpec extends UnitSpec {
 
-  val requestBody: CreateUkPropertyPeriodSummaryRequestBody =
+  private val requestBody =
     CreateUkPropertyPeriodSummaryRequestBody(
       "2020-01-01",
       "2020-01-31",
@@ -82,7 +82,7 @@ class CreateUkPropertyPeriodSummaryRequestBodySpec extends UnitSpec {
         ))
     )
 
-  val mtdJson: JsValue = Json.parse("""
+  private val mtdJson = Json.parse("""
       |{
       |    "fromDate": "2020-01-01",
       |    "toDate": "2020-01-31",
@@ -126,7 +126,7 @@ class CreateUkPropertyPeriodSummaryRequestBodySpec extends UnitSpec {
       |}
       |""".stripMargin)
 
-  val desJson: JsValue = Json.parse("""
+  private val downstreamJson = Json.parse("""
       |{
       |    "fromDate": "2020-01-01",
       |    "toDate": "2020-01-31",
@@ -145,7 +145,7 @@ class CreateUkPropertyPeriodSummaryRequestBodySpec extends UnitSpec {
       |            "professionalFees": 8831.12,
       |            "costOfServices": 484.12,
       |            "other": 99282,
-      |            "consolidatedExpense": 999.99,
+      |            "consolidatedExpenses": 999.99,
       |            "travelCosts": 974.47,
       |            "ukFhlRentARoom": {
       |                "amountClaimed": 8842.43
@@ -164,7 +164,7 @@ class CreateUkPropertyPeriodSummaryRequestBodySpec extends UnitSpec {
       |            }
       |        },
       |        "expenses": {
-      |            "consolidatedExpense": 988.18
+      |            "consolidatedExpenses": 988.18
       |        }
       |    }
       |}
@@ -181,7 +181,7 @@ class CreateUkPropertyPeriodSummaryRequestBodySpec extends UnitSpec {
   "writes" when {
     "passed valid model" should {
       "return valid JSON" in {
-        Json.toJson(requestBody) shouldBe desJson
+        Json.toJson(requestBody) shouldBe downstreamJson
       }
     }
   }

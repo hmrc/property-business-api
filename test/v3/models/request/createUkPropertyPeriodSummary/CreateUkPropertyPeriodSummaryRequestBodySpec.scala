@@ -16,15 +16,15 @@
 
 package v3.models.request.createUkPropertyPeriodSummary
 
-import play.api.libs.json.{JsValue, Json}
+import play.api.libs.json.Json
 import support.UnitSpec
-import v3.models.request.common.ukFhlProperty._
-import v3.models.request.common.ukNonFhlProperty._
 import v3.models.request.common.ukPropertyRentARoom.{UkPropertyExpensesRentARoom, UkPropertyIncomeRentARoom}
+import v3.models.request.createUkPropertyPeriodSummary.ukFhlProperty.{UkFhlProperty, UkFhlPropertyExpenses, UkFhlPropertyIncome}
+import v3.models.request.createUkPropertyPeriodSummary.ukNonFhlProperty.{UkNonFhlProperty, UkNonFhlPropertyExpenses, UkNonFhlPropertyIncome}
 
 class CreateUkPropertyPeriodSummaryRequestBodySpec extends UnitSpec {
 
-  val requestBody: CreateUkPropertyPeriodSummaryRequestBody =
+  private val requestBody =
     CreateUkPropertyPeriodSummaryRequestBody(
       "2020-01-01",
       "2020-01-31",
@@ -82,93 +82,93 @@ class CreateUkPropertyPeriodSummaryRequestBodySpec extends UnitSpec {
         ))
     )
 
-  val mtdJson: JsValue = Json.parse("""
-                                      |{
-                                      |    "fromDate": "2020-01-01",
-                                      |    "toDate": "2020-01-31",
-                                      |    "ukFhlProperty":{
-                                      |        "income": {
-                                      |            "periodAmount": 5000.99,
-                                      |            "taxDeducted": 3123.21,
-                                      |            "rentARoom": {
-                                      |                "rentsReceived": 532.12
-                                      |            }
-                                      |        },
-                                      |        "expenses": {
-                                      |            "premisesRunningCosts": 3123.21,
-                                      |            "repairsAndMaintenance": 928.42,
-                                      |            "financialCosts": 842.99,
-                                      |            "professionalFees": 8831.12,
-                                      |            "costOfServices": 484.12,
-                                      |            "other": 99282,
-                                      |            "consolidatedExpenses": 999.99,
-                                      |            "travelCosts": 974.47,
-                                      |            "rentARoom": {
-                                      |                "amountClaimed": 8842.43
-                                      |            }
-                                      |        }
-                                      |    },
-                                      |    "ukNonFhlProperty": {
-                                      |        "income": {
-                                      |            "premiumsOfLeaseGrant": 41.12,
-                                      |            "reversePremiums": 84.31,
-                                      |            "periodAmount": 9884.93,
-                                      |            "taxDeducted": 842.99,
-                                      |            "otherIncome": 31.44,
-                                      |            "rentARoom": {
-                                      |                "rentsReceived": 947.66
-                                      |            }
-                                      |        },
-                                      |        "expenses": {
-                                      |            "consolidatedExpenses": 988.18
-                                      |        }
-                                      |    }
-                                      |}
-                                      |""".stripMargin)
+  private val mtdJson = Json.parse("""
+    |{
+    |    "fromDate": "2020-01-01",
+    |    "toDate": "2020-01-31",
+    |    "ukFhlProperty":{
+    |        "income": {
+    |            "periodAmount": 5000.99,
+    |            "taxDeducted": 3123.21,
+    |            "rentARoom": {
+    |                "rentsReceived": 532.12
+    |            }
+    |        },
+    |        "expenses": {
+    |            "premisesRunningCosts": 3123.21,
+    |            "repairsAndMaintenance": 928.42,
+    |            "financialCosts": 842.99,
+    |            "professionalFees": 8831.12,
+    |            "costOfServices": 484.12,
+    |            "other": 99282,
+    |            "consolidatedExpenses": 999.99,
+    |            "travelCosts": 974.47,
+    |            "rentARoom": {
+    |                "amountClaimed": 8842.43
+    |            }
+    |        }
+    |    },
+    |    "ukNonFhlProperty": {
+    |        "income": {
+    |            "premiumsOfLeaseGrant": 41.12,
+    |            "reversePremiums": 84.31,
+    |            "periodAmount": 9884.93,
+    |            "taxDeducted": 842.99,
+    |            "otherIncome": 31.44,
+    |            "rentARoom": {
+    |                "rentsReceived": 947.66
+    |            }
+    |        },
+    |        "expenses": {
+    |            "consolidatedExpenses": 988.18
+    |        }
+    |    }
+    |}
+    |""".stripMargin)
 
-  val desJson: JsValue = Json.parse("""
-                                      |{
-                                      |    "fromDate": "2020-01-01",
-                                      |    "toDate": "2020-01-31",
-                                      |    "ukFhlProperty":{
-                                      |        "income": {
-                                      |            "periodAmount": 5000.99,
-                                      |            "taxDeducted": 3123.21,
-                                      |            "ukFhlRentARoom": {
-                                      |                "rentsReceived": 532.12
-                                      |            }
-                                      |        },
-                                      |        "expenses": {
-                                      |            "premisesRunningCosts": 3123.21,
-                                      |            "repairsAndMaintenance": 928.42,
-                                      |            "financialCosts": 842.99,
-                                      |            "professionalFees": 8831.12,
-                                      |            "costOfServices": 484.12,
-                                      |            "other": 99282,
-                                      |            "consolidatedExpense": 999.99,
-                                      |            "travelCosts": 974.47,
-                                      |            "ukFhlRentARoom": {
-                                      |                "amountClaimed": 8842.43
-                                      |            }
-                                      |        }
-                                      |    },
-                                      |    "ukOtherProperty": {
-                                      |        "income": {
-                                      |            "premiumsOfLeaseGrant": 41.12,
-                                      |            "reversePremiums": 84.31,
-                                      |            "periodAmount": 9884.93,
-                                      |            "taxDeducted": 842.99,
-                                      |            "otherIncome": 31.44,
-                                      |            "ukOtherRentARoom": {
-                                      |                "rentsReceived": 947.66
-                                      |            }
-                                      |        },
-                                      |        "expenses": {
-                                      |            "consolidatedExpense": 988.18
-                                      |        }
-                                      |    }
-                                      |}
-                                      |""".stripMargin)
+  private val downstreamJson = Json.parse("""
+    |{
+    |    "fromDate": "2020-01-01",
+    |    "toDate": "2020-01-31",
+    |    "ukFhlProperty":{
+    |        "income": {
+    |            "periodAmount": 5000.99,
+    |            "taxDeducted": 3123.21,
+    |            "ukFhlRentARoom": {
+    |                "rentsReceived": 532.12
+    |            }
+    |        },
+    |        "expenses": {
+    |            "premisesRunningCosts": 3123.21,
+    |            "repairsAndMaintenance": 928.42,
+    |            "financialCosts": 842.99,
+    |            "professionalFees": 8831.12,
+    |            "costOfServices": 484.12,
+    |            "other": 99282,
+    |            "consolidatedExpenses": 999.99,
+    |            "travelCosts": 974.47,
+    |            "ukFhlRentARoom": {
+    |                "amountClaimed": 8842.43
+    |            }
+    |        }
+    |    },
+    |    "ukOtherProperty": {
+    |        "income": {
+    |            "premiumsOfLeaseGrant": 41.12,
+    |            "reversePremiums": 84.31,
+    |            "periodAmount": 9884.93,
+    |            "taxDeducted": 842.99,
+    |            "otherIncome": 31.44,
+    |            "ukOtherRentARoom": {
+    |                "rentsReceived": 947.66
+    |            }
+    |        },
+    |        "expenses": {
+    |            "consolidatedExpenses": 988.18
+    |        }
+    |    }
+    |}
+    |""".stripMargin)
 
   "reads" when {
     "passed a valid JSON" should {
@@ -181,7 +181,7 @@ class CreateUkPropertyPeriodSummaryRequestBodySpec extends UnitSpec {
   "writes" when {
     "passed valid model" should {
       "return valid JSON" in {
-        Json.toJson(requestBody) shouldBe desJson
+        Json.toJson(requestBody) shouldBe downstreamJson
       }
     }
   }

@@ -18,8 +18,8 @@ package v2.models.request.amendUkPropertyPeriodSummary
 
 import play.api.libs.functional.syntax._
 import play.api.libs.json.{JsPath, Json, OWrites, Reads}
-import v2.models.request.common.ukFhlProperty.UkFhlProperty
-import v2.models.request.common.ukNonFhlProperty.UkNonFhlProperty
+import v2.models.request.amendUkPropertyPeriodSummary.ukFhlProperty.UkFhlProperty
+import v2.models.request.amendUkPropertyPeriodSummary.ukNonFhlProperty.UkNonFhlProperty
 
 case class AmendUkPropertyPeriodSummaryRequestBody(ukFhlProperty: Option[UkFhlProperty], ukNonFhlProperty: Option[UkNonFhlProperty])
 

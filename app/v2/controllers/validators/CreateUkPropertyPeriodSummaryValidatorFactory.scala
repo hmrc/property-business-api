@@ -24,8 +24,8 @@ import cats.data.Validated.{Invalid, Valid}
 import cats.implicits._
 import config.AppConfig
 import play.api.libs.json.JsValue
-import v2.models.request.common.ukFhlProperty.{UkFhlProperty, UkFhlPropertyExpenses}
-import v2.models.request.common.ukNonFhlProperty.{UkNonFhlProperty, UkNonFhlPropertyExpenses}
+import v2.models.request.createUkPropertyPeriodSummary.ukFhlProperty.{UkFhlProperty, UkFhlPropertyExpenses}
+import v2.models.request.createUkPropertyPeriodSummary.ukNonFhlProperty.{UkNonFhlProperty, UkNonFhlPropertyExpenses}
 import v2.models.request.createUkPropertyPeriodSummary.{CreateUkPropertyPeriodSummaryRequestBody, CreateUkPropertyPeriodSummaryRequestData}
 
 import javax.inject.{Inject, Singleton}

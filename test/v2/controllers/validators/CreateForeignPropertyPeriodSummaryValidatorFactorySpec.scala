@@ -22,13 +22,8 @@ import api.models.utils.JsonErrorValidators
 import mocks.MockAppConfig
 import play.api.libs.json.{JsArray, JsNumber, JsObject, JsString, JsValue, Json}
 import support.UnitSpec
-import v2.models.request.common.foreignFhlEea.{CreateForeignFhlEea, CreateForeignFhlEeaExpenses, ForeignFhlEeaIncome}
-import v2.models.request.common.foreignPropertyEntry.{
-  CreateForeignNonFhlPropertyEntry,
-  CreateForeignNonFhlPropertyExpenses,
-  ForeignNonFhlPropertyIncome,
-  ForeignNonFhlPropertyRentIncome
-}
+import v2.models.request.createForeignPropertyPeriodSummary.foreignFhlEea._
+import v2.models.request.createForeignPropertyPeriodSummary.foreignPropertyEntry._
 import v2.models.request.createForeignPropertyPeriodSummary.{
   CreateForeignPropertyPeriodSummaryRequestBody,
   CreateForeignPropertyPeriodSummaryRequestData
@@ -465,7 +460,7 @@ class CreateForeignPropertyPeriodSummaryValidatorFactorySpec extends UnitSpec wi
       "passed a body with multiple duplicate country codes" in {
         val countryCode1 = "AFG"
         val countryCode2 = "ZWE"
-        val invalidBody = bodyWith(entryWith(countryCode1), entryWith(countryCode2), entryWith(countryCode1), entryWith(countryCode2))
+        val invalidBody  = bodyWith(entryWith(countryCode1), entryWith(countryCode2), entryWith(countryCode1), entryWith(countryCode2))
 
         val result: Either[ErrorWrapper, CreateForeignPropertyPeriodSummaryRequestData] =
           validator(validNino, validBusinessId, validTaxYear, invalidBody).validateAndWrapResult()

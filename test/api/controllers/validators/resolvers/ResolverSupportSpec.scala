@@ -21,6 +21,8 @@ import cats.data.Validated.{Invalid, Valid}
 import cats.implicits.catsSyntaxOption
 import support.UnitSpec
 
+import java.util.concurrent.atomic.AtomicInteger
+
 class ResolverSupportSpec extends UnitSpec with ResolverSupport {
   private val notIntegerError = MtdError("NOT_INT", "Not integer", 400)
   private val outOfRangeError = MtdError("OUT_OF_RANGE", "Out of range", 400)
@@ -103,6 +105,19 @@ class ResolverSupportSpec extends UnitSpec with ResolverSupport {
       resolver(Some("1")) shouldBe Valid(1)
       resolver(Some("xx")) shouldBe Invalid(List(notIntegerError))
       resolver(None) shouldBe Valid(0)
+    }
+
+    "provide the ability to validate against an optional value with a default that is determined each time it is used" in {
+      val next              = new AtomicInteger(0)
+      def defaultValue: Int = next.getAndIncrement()
+
+      val resolver          = resolveInt.resolveOptionallyWithDefault(defaultValue)
+
+      resolver(Some("1")) shouldBe Valid(1)
+      resolver(Some("xx")) shouldBe Invalid(List(notIntegerError))
+      resolver(None) shouldBe Valid(0)
+      resolver(None) shouldBe Valid(1)
+      resolver(None) shouldBe Valid(2)
     }
   }
 

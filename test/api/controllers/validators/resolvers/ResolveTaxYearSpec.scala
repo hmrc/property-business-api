@@ -16,10 +16,12 @@
 
 package api.controllers.validators.resolvers
 
-import api.models.domain.{TaxYear, TodaySupplier}
+import api.models.domain.TaxYear
 import api.models.errors._
 import cats.data.Validated.{Invalid, Valid}
 import support.UnitSpec
+
+import java.time.{Clock, LocalDate, ZoneOffset}
 
 class ResolveTaxYearSpec extends UnitSpec with ResolverSupport {
 
@@ -111,24 +113,27 @@ class ResolveTaxYearSpec extends UnitSpec with ResolverSupport {
 
   "validateIncompleteTaxYear" should {
     val error = MtdError("SOME_ERROR", "Message", 400)
-    def resolver(implicit todaySupplier: TodaySupplier): Resolver[String, TaxYear] = ResolveIncompleteTaxYear(error).resolver
+    def resolver(localDate: LocalDate): Resolver[String, TaxYear] = {
+      implicit val clock: Clock = Clock.fixed(localDate.atStartOfDay(ZoneOffset.UTC).toInstant, ZoneOffset.UTC)
+      ResolveIncompleteTaxYear(error).resolver
+    }
 
     val taxYearString = "2020-21"
     val taxYear       = TaxYear.fromMtd(taxYearString)
 
     "accept when now is after the tax year ends" in {
-      val todaySupplier = TodaySupplier.fixed(taxYear.endDate.plusDays(1))
-      resolver(todaySupplier)(taxYearString) shouldBe Valid(taxYear)
+      val date = taxYear.endDate.plusDays(1)
+      resolver(date)(taxYearString) shouldBe Valid(taxYear)
     }
 
     "reject when now is on the day the tax year ends" in {
-      val todaySupplier = TodaySupplier.fixed(taxYear.endDate)
-      resolver(todaySupplier)(taxYearString) shouldBe Invalid(List(error))
+      val date = taxYear.endDate
+      resolver(date)(taxYearString) shouldBe Invalid(List(error))
     }
 
     "reject when now is before the tax year starts" in {
-      val todaySupplier = TodaySupplier.fixed(taxYear.startDate.minusDays(1))
-      resolver(todaySupplier)(taxYearString) shouldBe Invalid(List(error))
+      val date = taxYear.startDate.minusDays(1)
+      resolver(date)(taxYearString) shouldBe Invalid(List(error))
     }
 
   }

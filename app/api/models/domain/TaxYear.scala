@@ -16,11 +16,9 @@
 
 package api.models.domain
 
-import com.google.inject.ProvidedBy
 import play.api.libs.json.Writes
 
-import java.time.{Clock, LocalDate, ZoneOffset}
-import javax.inject.Provider
+import java.time.{Clock, LocalDate}
 
 /** Opaque representation of a tax year.
   *
@@ -87,8 +85,8 @@ object TaxYear {
   def fromMtd(taxYear: String): TaxYear =
     TaxYear(taxYear.take(2) + taxYear.drop(5))
 
-  def now(implicit todaySupplier: TodaySupplier = TodaySupplier.system): TaxYear = TaxYear.containing(todaySupplier.today)
-  def currentTaxYear()(implicit todaySupplier: TodaySupplier = TodaySupplier.system): TaxYear = TaxYear.now(todaySupplier)
+  def now(implicit clock: Clock = Clock.systemUTC): TaxYear = TaxYear.containing(LocalDate.now(clock))
+  def currentTaxYear(implicit clock: Clock = Clock.systemUTC): TaxYear = TaxYear.now
 
   /** @param date
     *   the date in extended ISO-8601 format (e.g. 2020-04-05)
@@ -123,21 +121,3 @@ object TaxYear {
   implicit val writes: Writes[TaxYear] = implicitly[Writes[String]].contramap(_.asMtd)
 }
 
-@ProvidedBy(classOf[TodaySupplier.type])
-trait TodaySupplier {
-  def today: LocalDate
-}
-
-object TodaySupplier extends Provider[TodaySupplier] {
-  val system: TodaySupplier         = fromClock(Clock.system(ZoneOffset.UTC))
-  override def get(): TodaySupplier = system
-
-  def fromClock(clock: Clock): TodaySupplier = new TodaySupplier {
-    override def today: LocalDate = LocalDate.now(clock)
-  }
-
-  def fixed(localDate: LocalDate): TodaySupplier = new TodaySupplier {
-    override def today: LocalDate = localDate
-  }
-
-}

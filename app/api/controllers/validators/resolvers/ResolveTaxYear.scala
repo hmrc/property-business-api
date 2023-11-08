@@ -16,11 +16,12 @@
 
 package api.controllers.validators.resolvers
 
-import api.models.domain.{TaxYear, TodaySupplier}
+import api.models.domain.TaxYear
 import api.models.errors._
 import cats.data.Validated
 import cats.data.Validated.{Invalid, Valid}
 
+import java.time.Clock
 import scala.math.Ordered.orderingToOrdered
 
 object ResolveTaxYear extends ResolverSupport {
@@ -56,11 +57,11 @@ case class ResolveTaxYearMinimum(minimumTaxYear: TaxYear) extends ResolverSuppor
   def apply(value: String): Validated[Seq[MtdError], TaxYear] = resolver(value)
 }
 
-case class ResolveIncompleteTaxYear(incompleteTaxYearError: MtdError = RuleTaxYearNotEndedError)(implicit todaySupplier: TodaySupplier)
+case class ResolveIncompleteTaxYear(incompleteTaxYearError: MtdError = RuleTaxYearNotEndedError)(implicit clock: Clock)
     extends ResolverSupport {
 
   val resolver: Resolver[String, TaxYear] =
-    ResolveTaxYear.resolver thenValidate satisfies(incompleteTaxYearError)(_ < TaxYear.currentTaxYear())
+    ResolveTaxYear.resolver thenValidate satisfies(incompleteTaxYearError)(_ < TaxYear.currentTaxYear)
 
   def apply(value: String): Validated[Seq[MtdError], TaxYear] = resolver(value)
 }

@@ -60,4 +60,5 @@ trait ResolverSupport {
 
 }
 
+// To allow an import-based alternative to extension
 object ResolverSupport extends ResolverSupport

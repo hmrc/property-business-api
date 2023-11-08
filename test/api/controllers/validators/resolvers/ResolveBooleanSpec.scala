@@ -39,31 +39,11 @@ class ResolveBooleanSpec extends UnitSpec {
         val result = ResolveBoolean("false", BadRequestError)
         result shouldBe Valid(false)
       }
-
-      "given the optional string 'true'" in {
-        val result = ResolveBoolean(Some("true"), BadRequestError)
-        result shouldBe Valid(Some(true))
-      }
-
-      "given None with a default value" in {
-        val result = ResolveBoolean(None, defaultValue = true, BadRequestError)
-        result shouldBe Valid(true)
-      }
     }
 
     "return an error" when {
       "given an invalid string" in {
         val result = ResolveBoolean("invalid", BadRequestError)
-        result shouldBe Invalid(List(BadRequestError))
-      }
-
-      "given an invalid optional string" in {
-        val result = ResolveBoolean(Some("invalid"), BadRequestError)
-        result shouldBe Invalid(List(BadRequestError))
-      }
-
-      "given an invalid optional string with a default value" in {
-        val result = ResolveBoolean(Some("invalid"), defaultValue = true, BadRequestError)
         result shouldBe Invalid(List(BadRequestError))
       }
     }

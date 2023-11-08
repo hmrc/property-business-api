@@ -88,6 +88,8 @@ object RuleHistoricTaxYearNotSupportedError
 object RuleTaxYearRangeInvalidError
     extends MtdError("RULE_TAX_YEAR_RANGE_INVALID", "Tax year range invalid. A tax year range of one year is required", BAD_REQUEST)
 
+object RuleTaxYearNotEndedError extends MtdError("RULE_TAX_YEAR_NOT_ENDED", "The specified tax year has not yet ended", BAD_REQUEST)
+
 object RulePropertyIncomeAllowanceError
     extends MtdError(
       "RULE_PROPERTY_INCOME_ALLOWANCE",

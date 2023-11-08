@@ -18,7 +18,7 @@ package api.models.domain
 
 import play.api.libs.json.Writes
 
-import java.time.{LocalDate, ZoneOffset}
+import java.time.{Clock, LocalDate}
 
 /** Opaque representation of a tax year.
   *
@@ -71,11 +71,6 @@ object TaxYear {
 
   val tysTaxYear: TaxYear = TaxYear.ending(2024)
 
-  val minimumTaxYear = new TaxYear("2018")
-
-  val minimumFromDate = new TaxYear("1900")
-  val maximumToDate   = new TaxYear("2100")
-
   /** UK tax year starts on 6 April.
     */
   private val taxYearMonthStart = 4
@@ -90,7 +85,8 @@ object TaxYear {
   def fromMtd(taxYear: String): TaxYear =
     TaxYear(taxYear.take(2) + taxYear.drop(5))
 
-  def now(): TaxYear = TaxYear.containing(LocalDate.now())
+  def now(implicit clock: Clock = Clock.systemUTC): TaxYear = TaxYear.containing(LocalDate.now(clock))
+  def currentTaxYear(implicit clock: Clock = Clock.systemUTC): TaxYear = TaxYear.now
 
   /** @param date
     *   the date in extended ISO-8601 format (e.g. 2020-04-05)
@@ -119,23 +115,9 @@ object TaxYear {
   def fromDownstreamInt(taxYear: Int): TaxYear =
     new TaxYear(taxYear.toString)
 
-  type TodaySupplier = () => LocalDate
-
-  def currentTaxYear()(implicit todaySupplier: TodaySupplier = today _): TaxYear = {
-    val today            = todaySupplier()
-    val year             = today.getYear
-    val taxYearStartDate = LocalDate.parse(s"$year-04-06")
-
-    val taxYear =
-      if (today.isBefore(taxYearStartDate)) year
-      else year + 1
-
-    new TaxYear(taxYear.toString)
-  }
-
-  def today(): LocalDate = LocalDate.now(ZoneOffset.UTC)
 
   implicit val ordering: Ordering[TaxYear] = Ordering.by(_.year)
 
   implicit val writes: Writes[TaxYear] = implicitly[Writes[String]].contramap(_.asMtd)
 }
+

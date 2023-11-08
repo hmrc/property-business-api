@@ -38,7 +38,7 @@ class ListPropertyPeriodSummariesValidatorFactory @Inject() (appConfig: AppConfi
         (
           ResolveNino(nino),
           ResolveBusinessId(businessId),
-          ResolveTaxYear(minimumTaxYear, taxYear, None, None)
+          ResolveTaxYear(minimumTaxYear, taxYear)
         ).mapN(ListPropertyPeriodSummariesRequestData)
 
     }

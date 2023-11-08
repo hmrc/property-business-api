@@ -17,27 +17,18 @@
 package v2.controllers.validators
 
 import api.controllers.validators.Validator
-import api.controllers.validators.resolvers.{ResolveNino, ResolveNonEmptyJsonObject, ResolveParsedNumber}
-import api.models.domain.TaxYear
+import api.controllers.validators.resolvers.{ResolveFromAndToDates, ResolveNino, ResolveNonEmptyJsonObject, ResolveParsedNumber}
 import api.models.errors.{MtdError, RuleBothExpensesSuppliedError}
 import cats.data.Validated
 import cats.data.Validated.{Invalid, Valid}
 import cats.implicits._
 import play.api.libs.json.JsValue
-import v2.controllers.validators.resolvers.ResolveFromAndToDates
-import v2.models.request.createHistoricNonFhlUkPropertyPeriodSummary.{
-  CreateHistoricNonFhlUkPropertyPeriodSummaryRequestBody,
-  CreateHistoricNonFhlUkPropertyPeriodSummaryRequestData,
-  UkNonFhlPropertyExpenses,
-  UkNonFhlPropertyIncome
-}
+import v2.models.request.createHistoricNonFhlUkPropertyPeriodSummary.{CreateHistoricNonFhlUkPropertyPeriodSummaryRequestBody, CreateHistoricNonFhlUkPropertyPeriodSummaryRequestData, UkNonFhlPropertyExpenses, UkNonFhlPropertyIncome}
 
 import javax.inject.Singleton
 
 @Singleton
 class CreateHistoricNonFhlUkPropertyPeriodSummaryValidatorFactory {
-
-  private val resolveFromAndToDates = new ResolveFromAndToDates(TaxYear.minimumFromDate.year, TaxYear.maximumToDate.year)
 
   private val resolveJson = new ResolveNonEmptyJsonObject[CreateHistoricNonFhlUkPropertyPeriodSummaryRequestBody]()
 
@@ -58,7 +49,7 @@ class CreateHistoricNonFhlUkPropertyPeriodSummaryValidatorFactory {
           : Validated[Seq[MtdError], CreateHistoricNonFhlUkPropertyPeriodSummaryRequestData] = {
         import parsed.body._
 
-        val validatedDates = resolveFromAndToDates((fromDate, toDate)).map(_ => ())
+        val validatedDates = ResolveFromAndToDates((fromDate, toDate)).map(_ => ())
 
         val validatedIncome   = income.map(validateIncome).getOrElse(valid)
         val validatedExpenses = expenses.map(validateExpenses).getOrElse(valid)
@@ -89,7 +80,7 @@ class CreateHistoricNonFhlUkPropertyPeriodSummaryValidatorFactory {
     val validatedNumberFields = valuesWithPaths
       .map {
         case (None, _)            => valid
-        case (Some(number), path) => resolveParsedNumber(number, None, Some(path))
+        case (Some(number), path) => resolveParsedNumber(number, path)
       }
 
     validatedNumberFields.sequence.andThen(_ => valid)
@@ -115,7 +106,7 @@ class CreateHistoricNonFhlUkPropertyPeriodSummaryValidatorFactory {
     val validatedNumberFields = valuesWithPaths
       .map {
         case (None, _)            => valid
-        case (Some(number), path) => resolveParsedNumber(number, None, Some(path))
+        case (Some(number), path) => resolveParsedNumber(number, path)
       }
 
     val validatedConsolidatedExpenses = expenses match {

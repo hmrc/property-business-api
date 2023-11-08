@@ -38,7 +38,7 @@ class RetrieveHistoricNonFhlUkPropertyAnnualSubmissionValidatorFactory @Inject()
       def validate: Validated[Seq[MtdError], RetrieveHistoricNonFhlUkPropertyAnnualSubmissionRequestData] =
         (
           ResolveNino(nino),
-          ResolveHistoricTaxYear(minimumTaxHistoric, maximumTaxHistoric, taxYear, None, None)
+          ResolveHistoricTaxYear(minimumTaxHistoric, maximumTaxHistoric, taxYear)
         ).mapN(RetrieveHistoricNonFhlUkPropertyAnnualSubmissionRequestData)
 
     }

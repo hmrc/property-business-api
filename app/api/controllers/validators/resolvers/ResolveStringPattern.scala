@@ -16,17 +16,29 @@
 
 package api.controllers.validators.resolvers
 
-import api.models.domain.SubmissionId
-import api.models.errors.{MtdError, SubmissionIdFormatError}
+import api.models.errors.MtdError
 import cats.data.Validated
+import cats.data.Validated.{Invalid, Valid}
 
-object ResolveSubmissionId extends ResolverSupport {
+import scala.util.matching.Regex
 
-  private val submissionIdRegex = "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$".r
+case class ResolveStringPattern(regexFormat: Regex, error: MtdError) extends ResolverSupport {
 
-  val resolver: Resolver[String, SubmissionId] =
-    ResolveStringPattern(submissionIdRegex, SubmissionIdFormatError).resolver.map(SubmissionId)
+  val resolver: Resolver[String, String] = value =>
+    if (regexFormat.matches(value))
+      Valid(value)
+    else
+      Invalid(List(error))
 
-  def apply(value: String): Validated[Seq[MtdError], SubmissionId] = resolver(value)
+  def apply(value: String): Validated[Seq[MtdError], String] = resolver(value)
+}
+
+object ResolveStringPattern {
+
+  def apply(value: String, regexFormat: Regex, error: MtdError): Validated[Seq[MtdError], String] = {
+    val resolver = ResolveStringPattern(regexFormat, error)
+
+    resolver(value)
+  }
 
 }

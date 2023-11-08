@@ -17,15 +17,13 @@
 package v3.controllers.validators
 
 import api.controllers.validators.Validator
-import api.controllers.validators.resolvers.{ResolveBusinessId, ResolveNino, ResolveNonEmptyJsonObject, ResolveParsedNumber, ResolveTaxYear}
-import api.models.domain.TaxYear
+import api.controllers.validators.resolvers._
 import api.models.errors.{MtdError, RuleBothExpensesSuppliedError}
 import cats.data.Validated
 import cats.data.Validated.{Invalid, Valid}
 import cats.implicits._
 import config.AppConfig
 import play.api.libs.json.JsValue
-import v3.controllers.validators.resolvers.ResolveFromAndToDates
 import v3.models.request.createUkPropertyPeriodSummary.ukFhlProperty.{UkFhlProperty, UkFhlPropertyExpenses}
 import v3.models.request.createUkPropertyPeriodSummary.ukNonFhlProperty.{UkNonFhlProperty, UkNonFhlPropertyExpenses}
 import v3.models.request.createUkPropertyPeriodSummary.{CreateUkPropertyPeriodSummaryRequestBody, CreateUkPropertyPeriodSummaryRequestData}
@@ -36,8 +34,6 @@ import javax.inject.{Inject, Singleton}
 class CreateUkPropertyPeriodSummaryValidatorFactory @Inject() (appConfig: AppConfig) {
 
   private lazy val minimumTaxYear = appConfig.minimumTaxV2Uk
-
-  private val resolveFromAndToDates = new ResolveFromAndToDates(TaxYear.minimumFromDate.year, TaxYear.maximumToDate.year)
 
   private val resolveJson = new ResolveNonEmptyJsonObject[CreateUkPropertyPeriodSummaryRequestBody]()
 
@@ -51,7 +47,7 @@ class CreateUkPropertyPeriodSummaryValidatorFactory @Inject() (appConfig: AppCon
       def validate: Validated[Seq[MtdError], CreateUkPropertyPeriodSummaryRequestData] =
         (
           ResolveNino(nino),
-          ResolveTaxYear(minimumTaxYear, taxYear, None, None),
+          ResolveTaxYear(minimumTaxYear, taxYear),
           ResolveBusinessId(businessId),
           resolveJson(body)
         ).mapN(CreateUkPropertyPeriodSummaryRequestData) andThen validateBusinessRules
@@ -62,7 +58,7 @@ class CreateUkPropertyPeriodSummaryValidatorFactory @Inject() (appConfig: AppCon
       parsed: CreateUkPropertyPeriodSummaryRequestData): Validated[Seq[MtdError], CreateUkPropertyPeriodSummaryRequestData] = {
     import parsed.body._
 
-    val validatedFromAndToDates = resolveFromAndToDates((fromDate, toDate))
+    val validatedFromAndToDates = ResolveFromAndToDates((fromDate, toDate))
 
     val validatedUkFhlProperty    = ukFhlProperty.map(validateUkFhlProperty).getOrElse(valid)
     val validatedUkNonFhlProperty = ukNonFhlProperty.map(validateUkNonFhlProperty).getOrElse(valid)
@@ -90,7 +86,7 @@ class CreateUkPropertyPeriodSummaryValidatorFactory @Inject() (appConfig: AppCon
 
     val validatedNumberFields = valuesWithPaths.map {
       case (None, _)            => valid
-      case (Some(number), path) => resolveParsedNumber(number, None, Some(path))
+      case (Some(number), path) => resolveParsedNumber(number, path)
     }
 
     val validatedConsolidatedExpenses = expenses match {
@@ -130,7 +126,7 @@ class CreateUkPropertyPeriodSummaryValidatorFactory @Inject() (appConfig: AppCon
 
     val validatedNumberFields = valuesWithPaths.map {
       case (None, _)            => valid
-      case (Some(number), path) => resolveParsedNumber(number, None, Some(path))
+      case (Some(number), path) => resolveParsedNumber(number, path)
     }
 
     val validatedConsolidatedExpenses = expenses match {

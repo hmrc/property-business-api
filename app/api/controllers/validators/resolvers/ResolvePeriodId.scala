@@ -19,40 +19,37 @@ package api.controllers.validators.resolvers
 import api.models.domain.{DateRange, PeriodId, TaxYear}
 import api.models.errors.{MtdError, PeriodIdFormatError}
 import cats.data.Validated
-import cats.data.Validated.{Invalid, Valid}
+import cats.data.Validated.Invalid
 
 import java.time.LocalDate
 import scala.math.Ordering.Implicits.infixOrderingOps
 
-class ResolvePeriodId(minimumTaxYear: TaxYear, maximumTaxYear: TaxYear) extends Resolver[String, PeriodId] {
+class ResolvePeriodId(minimumTaxYear: TaxYear, maximumTaxYear: TaxYear) extends ResolverSupport {
 
-  private val resolveDateRange = new DateRangeResolving {
-    override protected val startDateFormatError: MtdError    = PeriodIdFormatError
-    override protected val endDateFormatError: MtdError      = PeriodIdFormatError
-    override protected val endBeforeStartDateError: MtdError = PeriodIdFormatError
-  }
+  private val resolveDateRange = ResolveDateRange(
+    startDateFormatError = PeriodIdFormatError,
+    endDateFormatError = PeriodIdFormatError,
+    endBeforeStartDateError = PeriodIdFormatError
+  )
 
   private val minDate = minimumTaxYear.startDate
   private val maxDate = maximumTaxYear.endDate
 
-  def apply(value: String, notUsedError: Option[MtdError], path: Option[String]): Validated[Seq[MtdError], PeriodId] = {
-    splitAndResolveDateRange(value)
-      .andThen { dateRange =>
-        if (inRange(dateRange.startDate) && inRange(dateRange.endDate))
-          Valid(dateRange)
-        else
-          Invalid(List(PeriodIdFormatError))
-      }
-      .map(dateRange => PeriodId(dateRange))
-  }
-
-  private def inRange(date: LocalDate) = minDate <= date && date <= maxDate
-
-  private def splitAndResolveDateRange(value: String): Validated[Seq[MtdError], DateRange] = {
+  private val splitAndResolveDateRange: Resolver[String, DateRange] = { value =>
     value.split('_') match {
-      case Array(from, to) => resolveDateRange(from -> to, Some(PeriodIdFormatError), None)
+      case Array(from, to) => resolveDateRange.resolver(from -> to)
       case _               => Invalid(List(PeriodIdFormatError))
     }
   }
 
+  private val withinLimits: Validator[DateRange] = {
+    def inRange(date: LocalDate) = minDate <= date && date <= maxDate
+
+    satisfies(PeriodIdFormatError)(dateRange => inRange(dateRange.startDate) && inRange(dateRange.endDate))
+  }
+
+  val resolver: Resolver[String, PeriodId] =
+    (splitAndResolveDateRange thenValidate withinLimits).map(dateRange => PeriodId(dateRange))
+
+  def apply(value: String): Validated[Seq[MtdError], PeriodId] = resolver(value)
 }

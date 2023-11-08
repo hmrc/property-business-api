@@ -71,14 +71,13 @@ object CreateAmendForeignPropertyAnnualSubmissionValidator extends RulesValidato
     val validatedNumberFields = valuesWithPaths
       .map {
         case (None, _)            => valid
-        case (Some(number), path) => resolveParsedNumber(number, None, Some(path))
+        case (Some(number), path) => resolveParsedNumber(number, path)
       }
 
     val validatedPropertyIncomeAllowance =
       resolvePropertyIncomeAllowanceNumber(
         allowances.flatMap(_.propertyIncomeAllowance),
-        None,
-        Some("/foreignFhlEea/allowances/propertyIncomeAllowance"))
+        "/foreignFhlEea/allowances/propertyIncomeAllowance")
 
     val validatedAllowances = allowances.map(validateForeignFhlAllowances).getOrElse(valid)
 
@@ -129,14 +128,13 @@ object CreateAmendForeignPropertyAnnualSubmissionValidator extends RulesValidato
     val validatedNumberFields = valuesWithPaths
       .map {
         case (None, _)            => valid
-        case (Some(number), path) => resolveParsedNumber(number, None, Some(path))
+        case (Some(number), path) => resolveParsedNumber(number, path)
       }
 
     val validatedPropertyIncomeAllowance =
       resolvePropertyIncomeAllowanceNumber(
         allowances.flatMap(_.propertyIncomeAllowance),
-        None,
-        Some(s"/foreignNonFhlProperty/$index/allowances/propertyIncomeAllowance"))
+        s"/foreignNonFhlProperty/$index/allowances/propertyIncomeAllowance")
 
     val validatedBuildings = allowances
       .flatMap(_.structuredBuildingAllowance)
@@ -198,8 +196,7 @@ object CreateAmendForeignPropertyAnnualSubmissionValidator extends RulesValidato
 
       ResolveIsoDate(
         structuredBuildingAllowance.firstYear.map(_.qualifyingDate),
-        Some(DateFormatError),
-        Some(qualifyingDatePath)
+        DateFormatError.withPath(qualifyingDatePath)
       ).andThen(isDateWithinRange(_, DateFormatError, qualifyingDatePath))
     }
 

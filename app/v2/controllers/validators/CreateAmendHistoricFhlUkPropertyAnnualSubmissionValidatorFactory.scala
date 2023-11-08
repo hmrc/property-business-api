@@ -27,7 +27,6 @@ import play.api.libs.json.JsValue
 import v2.models.request.createAmendHistoricFhlUkPropertyAnnualSubmission._
 
 import javax.inject.{Inject, Singleton}
-import scala.annotation.nowarn
 
 @Singleton
 class CreateAmendHistoricFhlUkPropertyAnnualSubmissionValidatorFactory @Inject() (appConfig: AppConfig) {
@@ -35,7 +34,6 @@ class CreateAmendHistoricFhlUkPropertyAnnualSubmissionValidatorFactory @Inject()
   private lazy val minimumTaxYear = appConfig.minimumTaxYearHistoric
   private lazy val maximumTaxYear = appConfig.maximumTaxYearHistoric
 
-  @nowarn("cat=lint-byname-implicit")
   private val resolveJson = new ResolveNonEmptyJsonObject[CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequestBody]()
 
   private val resolveParsedNumber = ResolveParsedNumber()
@@ -48,7 +46,7 @@ class CreateAmendHistoricFhlUkPropertyAnnualSubmissionValidatorFactory @Inject()
       def validate: Validated[Seq[MtdError], CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequestData] =
         (
           ResolveNino(nino),
-          ResolveHistoricTaxYear(minimumTaxYear, maximumTaxYear, taxYear, None, None),
+          ResolveHistoricTaxYear(minimumTaxYear, maximumTaxYear, taxYear),
           resolveJson(body)
         ).mapN(CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequestData) andThen validateBusinessRules
 
@@ -78,7 +76,7 @@ class CreateAmendHistoricFhlUkPropertyAnnualSubmissionValidatorFactory @Inject()
     val result = annualAdjustmentsWithPaths
       .map {
         case (None, _)            => valid
-        case (Some(number), path) => resolveParsedNumber(number, None, Some(path))
+        case (Some(number), path) => resolveParsedNumber(number, path)
       }
 
     result.sequence.andThen(_ => valid)
@@ -96,11 +94,11 @@ class CreateAmendHistoricFhlUkPropertyAnnualSubmissionValidatorFactory @Inject()
     )
 
     val propertyIncomeAllowanceResult =
-      resolvePropertyIncomeAllowanceNumber(propertyIncomeAllowance, None, Some("/annualAllowances/propertyIncomeAllowance"))
+      resolvePropertyIncomeAllowanceNumber(propertyIncomeAllowance, "/annualAllowances/propertyIncomeAllowance")
 
     val result = annualAllowancesWithPaths.map {
       case (None, _)            => valid
-      case (Some(number), path) => resolveParsedNumber(number, None, Some(path))
+      case (Some(number), path) => resolveParsedNumber(number, path)
     } :+ propertyIncomeAllowanceResult
 
     result.sequence.andThen(_ => valid)

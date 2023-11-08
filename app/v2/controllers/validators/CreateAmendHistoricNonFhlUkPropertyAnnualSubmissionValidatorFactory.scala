@@ -47,7 +47,7 @@ class CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionValidatorFactory @Injec
       def validate: Validated[Seq[MtdError], CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestData] =
         (
           ResolveNino(nino),
-          ResolveHistoricTaxYear(minimumTaxYear, maximumTaxYear, taxYear, None, None),
+          ResolveHistoricTaxYear(minimumTaxYear, maximumTaxYear, taxYear),
           resolveJson(body)
         ).mapN(CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestData) andThen validateBusinessRules
 
@@ -80,7 +80,7 @@ class CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionValidatorFactory @Injec
 
     val validatedNumberFields = valuesWithPaths.map {
       case (None, _)            => valid
-      case (Some(number), path) => resolveParsedNumber(number, None, Some(path))
+      case (Some(number), path) => resolveParsedNumber(number, path)
     }
 
     validatedNumberFields.sequence.andThen(_ => valid)
@@ -98,12 +98,12 @@ class CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionValidatorFactory @Injec
     )
 
     val validatedPropertyIncomeAllowance = propertyIncomeAllowance
-      .map(number => resolveParsedNumberPropertyIncomeAllowance(number, None, Some("/annualAllowances/propertyIncomeAllowance")))
+      .map(number => resolveParsedNumberPropertyIncomeAllowance(number, path = "/annualAllowances/propertyIncomeAllowance"))
       .getOrElse(valid)
 
     val validatedNumberFields = valuesWithPaths.map {
       case (None, _)            => valid
-      case (Some(number), path) => resolveParsedNumber(number, None, Some(path))
+      case (Some(number), path) => resolveParsedNumber(number, path)
     }
 
     (validatedNumberFields :+ validatedPropertyIncomeAllowance).sequence.andThen(_ => valid)

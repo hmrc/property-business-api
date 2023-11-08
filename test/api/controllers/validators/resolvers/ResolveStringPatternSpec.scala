@@ -16,29 +16,29 @@
 
 package api.controllers.validators.resolvers
 
-import api.models.domain.Nino
-import api.models.errors.NinoFormatError
+import api.models.errors.TaxYearFormatError
 import cats.data.Validated.{Invalid, Valid}
 import support.UnitSpec
 
-class ResolveNinoSpec extends UnitSpec {
+class ResolveStringPatternSpec extends UnitSpec {
 
-  "ResolveNino" should {
-    "return the parsed Nino" when {
-      "given a valid nino string" in {
-        val validNino = "AA123456A"
-        val result    = ResolveNino(validNino)
-        result shouldBe Valid(Nino(validNino))
+  private val resolveTaxYearPattern = ResolveStringPattern("20[1-9][0-9]-[1-9][0-9]".r, TaxYearFormatError)
+
+  "ResolveStringPattern" should {
+    "return the input value" when {
+      "given a matching string" in {
+        val result = resolveTaxYearPattern("2024-25")
+        result shouldBe Valid("2024-25")
       }
     }
 
-    "return an error" when {
-      "given an invalid NINO" in {
-        val invalidNino = "AA123456ABCBBCBCBC"
-        val result      = ResolveNino(invalidNino)
-        result shouldBe Invalid(List(NinoFormatError))
+    "return the correct error" when {
+      "given a non-matching string and no override error" in {
+        val result = resolveTaxYearPattern("does-not-match-regex")
+        result shouldBe Invalid(List(TaxYearFormatError))
       }
     }
+
   }
 
 }

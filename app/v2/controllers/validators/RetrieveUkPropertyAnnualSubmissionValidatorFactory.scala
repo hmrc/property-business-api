@@ -38,7 +38,7 @@ class RetrieveUkPropertyAnnualSubmissionValidatorFactory @Inject() (appConfig: A
         (
           ResolveNino(nino),
           ResolveBusinessId(businessId),
-          ResolveTaxYear(minimumTaxYear, taxYear, None, None)
+          ResolveTaxYear(minimumTaxYear, taxYear)
         ).mapN(RetrieveUkPropertyAnnualSubmissionRequestData)
 
     }

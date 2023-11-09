@@ -64,4 +64,33 @@ class ResolveDateRangeSpec extends UnitSpec {
     }
   }
 
+  "ResolveDateRange dateLimits validator" must {
+    val minDate   = LocalDate.parse("2000-02-01")
+    val maxDate   = LocalDate.parse("2000-02-10")
+    val validator = ResolveDateRange.dateLimits(minDate, startDateFormatError, maxDate, endDateFormatError)
+
+    "allow min and max dates" in {
+      validator(DateRange(minDate, maxDate)) shouldBe None
+    }
+
+    "disallow dates earlier than min or later than max" in {
+      validator(DateRange(minDate.minusDays(1), maxDate.plusDays(1))) shouldBe Some(List(startDateFormatError, endDateFormatError))
+    }
+  }
+
+  "ResolveDateRange yearLimits validator" must {
+    val minYear = 2000
+    val maxYear = 2010
+
+    val validator = ResolveDateRange.yearLimits(minYear, startDateFormatError, maxYear, endDateFormatError)
+
+    "allow dates in min and max years" in {
+      validator(DateRange(LocalDate.parse("2000-01-01"), LocalDate.parse("2010-12-31"))) shouldBe None
+    }
+
+    "disallow dates earlier than min year or later than max year" in {
+      validator(DateRange(LocalDate.parse("1999-12-31"), LocalDate.parse("2011-01-01"))) shouldBe Some(List(startDateFormatError, endDateFormatError))
+    }
+  }
+
 }

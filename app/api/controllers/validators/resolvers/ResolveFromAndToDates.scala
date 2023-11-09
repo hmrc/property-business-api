@@ -31,12 +31,7 @@ object ResolveFromAndToDates extends ResolverSupport {
     endBeforeStartDateError = RuleToDateBeforeFromDateError
   )
 
-  private val withinLimits = combinedValidator[DateRange](
-    satisfies(FromDateFormatError)(_.startDate.getYear >= minimumYear),
-    satisfies(ToDateFormatError)(_.endDate.getYear <= maximumYear)
-  )
-
-  val resolver: Resolver[(String, String), DateRange] = resolveDateRange.resolver thenValidate withinLimits
+  val resolver: Resolver[(String, String), DateRange] = resolveDateRange.yearLimited(minimumYear, maximumYear)
 
   def apply(value: (String, String)): Validated[Seq[MtdError], DateRange] = resolver(value)
 }

@@ -26,7 +26,7 @@ import play.api.libs.ws.{WSRequest, WSResponse}
 import play.api.test.Helpers.AUTHORIZATION
 import support.IntegrationBaseSpec
 import v3.models.request.amendHistoricFhlUkPiePeriodSummary.AmendHistoricFhlUkPiePeriodSummaryRequestBody
-import v4.stubs.{AuthStub, DownstreamStub, MtdIdLookupStub}
+import v3.stubs.{AuthStub, DownstreamStub, MtdIdLookupStub}
 
 class AmendHistoricFhlUkPropertyPeriodSummaryControllerISpec extends IntegrationBaseSpec with JsonErrorValidators {
 

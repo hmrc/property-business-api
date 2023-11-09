@@ -23,7 +23,7 @@ import play.api.libs.json.JsObject
 import play.api.libs.ws.{WSRequest, WSResponse}
 import play.api.test.Helpers.AUTHORIZATION
 import support.IntegrationBaseSpec
-import v4.stubs.{AuditStub, AuthStub, DownstreamStub, MtdIdLookupStub}
+import v3.stubs.{AuditStub, AuthStub, DownstreamStub, MtdIdLookupStub}
 
 class AuthISpec extends IntegrationBaseSpec {
 

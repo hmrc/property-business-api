@@ -19,12 +19,12 @@ package v4.endpoints
 import api.models.errors._
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import play.api.http.HeaderNames.ACCEPT
-import play.api.http.Status.{BAD_REQUEST, GONE, INTERNAL_SERVER_ERROR, NOT_FOUND, NO_CONTENT, SERVICE_UNAVAILABLE, UNPROCESSABLE_ENTITY}
+import play.api.http.Status._
 import play.api.libs.json.{JsObject, Json}
 import play.api.libs.ws.{WSRequest, WSResponse}
 import play.api.test.Helpers.AUTHORIZATION
 import support.IntegrationBaseSpec
-import v4.stubs.{AuditStub, AuthStub, DownstreamStub, MtdIdLookupStub}
+import v3.stubs.{AuditStub, AuthStub, DownstreamStub, MtdIdLookupStub}
 
 class DeleteHistoricNonFhlUkPropertyAnnualSubmissionControllerISpec extends IntegrationBaseSpec {
 

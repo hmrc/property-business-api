@@ -18,7 +18,6 @@ package api.controllers.validators.resolvers
 
 import api.models.errors.{MtdError, ValueFormatError}
 import cats.data.Validated
-import cats.data.Validated.{Invalid, Valid}
 
 case class ResolveParsedNumber(min: BigDecimal = 0, max: BigDecimal = 99999999999.99, disallowZero: Boolean = false) extends ResolverSupport {
 

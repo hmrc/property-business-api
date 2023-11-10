@@ -28,13 +28,8 @@ import scala.math.Ordering.Implicits.infixOrderingOps
 case class ResolveDateRange(startDateFormatError: MtdError = StartDateFormatError,
                             endDateFormatError: MtdError = EndDateFormatError,
                             endBeforeStartDateError: MtdError = RuleEndBeforeStartDateError)
-    extends ResolverSupport {
-
-  private def resolveDateRange(parsedStartDate: LocalDate, parsedEndDate: LocalDate): Validated[Seq[MtdError], DateRange] =
-    if (parsedEndDate <= parsedStartDate)
-      Invalid(List(endBeforeStartDateError))
-    else
-      Valid(DateRange(parsedStartDate, parsedEndDate))
+  extends ResolverSupport {
+  import ResolveDateRange._
 
   val resolver: Resolver[(String, String), DateRange] = { case (startDate, endDate) =>
     (
@@ -45,27 +40,33 @@ case class ResolveDateRange(startDateFormatError: MtdError = StartDateFormatErro
 
   def apply(value: (String, String)): Validated[Seq[MtdError], DateRange] = resolver(value)
 
-  def dateLimited(minDate: LocalDate, maxDate: LocalDate): Resolver[(String, String), DateRange] =
-    resolver thenValidate ResolveDateRange.dateLimits(minDate, startDateFormatError, maxDate, endDateFormatError)
+  def withDatesLimitedTo(minDate: LocalDate, maxDate: LocalDate): Resolver[(String, String), DateRange] =
+    resolver thenValidate datesLimitedTo(minDate, startDateFormatError, maxDate, endDateFormatError)
 
-  def yearLimited(minYear: Int, maxYear: Int): Resolver[(String, String), DateRange] =
-    resolver thenValidate ResolveDateRange.yearLimits(minYear, startDateFormatError, maxYear, endDateFormatError)
+  def withYearsLimitedTo(minYear: Int, maxYear: Int): Resolver[(String, String), DateRange] =
+    resolver thenValidate yearsLimitedTo(minYear, startDateFormatError, maxYear, endDateFormatError)
+
+  private def resolveDateRange(parsedStartDate: LocalDate, parsedEndDate: LocalDate): Validated[Seq[MtdError], DateRange] =
+    if (parsedEndDate <= parsedStartDate)
+      Invalid(List(endBeforeStartDateError))
+    else
+      Valid(DateRange(parsedStartDate, parsedEndDate))
 
 }
 
 object ResolveDateRange extends ResolverSupport {
 
-  def dateLimits(minDate: LocalDate, minError: => MtdError, maxDate: LocalDate, maxError: => MtdError): Validator[DateRange] =
+  def datesLimitedTo(minDate: LocalDate, minError: => MtdError, maxDate: LocalDate, maxError: => MtdError): Validator[DateRange] =
     combinedValidator[DateRange](
       satisfies(minError)(_.startDate >= minDate),
       satisfies(maxError)(_.endDate <= maxDate)
     )
 
-  def yearLimits(minYear: Int, minError: => MtdError, maxYear: Int, maxError: => MtdError): Validator[DateRange] = {
+  def yearsLimitedTo(minYear: Int, minError: => MtdError, maxYear: Int, maxError: => MtdError): Validator[DateRange] = {
     def yearStartDate(year: Int) = LocalDate.ofYearDay(year, 1)
+    def yearEndDate(year: Int)   = yearStartDate(year + 1).minusDays(1)
 
-    def yearEndDate(year: Int) = yearStartDate(year + 1).minusDays(1)
-
-    dateLimits(yearStartDate(minYear), minError, yearEndDate(maxYear), maxError)
+    datesLimitedTo(yearStartDate(minYear), minError, yearEndDate(maxYear), maxError)
   }
+
 }

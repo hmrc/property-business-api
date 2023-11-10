@@ -24,7 +24,10 @@ import cats.data.Validated.Invalid
 import cats.implicits.toTraverseOps
 import v4.models.request.createForeignPropertyPeriodSummary.CreateForeignPropertyPeriodSummaryRequestData
 import v4.models.request.createForeignPropertyPeriodSummary.foreignFhlEea.{CreateForeignFhlEea, CreateForeignFhlEeaExpenses}
-import v4.models.request.createForeignPropertyPeriodSummary.foreignPropertyEntry.{CreateForeignNonFhlPropertyEntry, CreateForeignNonFhlPropertyExpenses}
+import v4.models.request.createForeignPropertyPeriodSummary.foreignPropertyEntry.{
+  CreateForeignNonFhlPropertyEntry,
+  CreateForeignNonFhlPropertyExpenses
+}
 
 object CreateForeignPropertyPeriodSummaryRulesValidator extends RulesValidator[CreateForeignPropertyPeriodSummaryRequestData] {
 
@@ -35,7 +38,7 @@ object CreateForeignPropertyPeriodSummaryRulesValidator extends RulesValidator[C
     import parsed.body._
 
     combine(
-      ResolveFromAndToDates((fromDate, toDate)).map(_ => ()),
+      ResolveFromAndToDates((fromDate, toDate)),
       foreignFhlEea.map(validateForeignFhlEea).getOrElse(valid),
       foreignNonFhlProperty.map(validateForeignNonFhlProperty).getOrElse(valid)
     ).onSuccess(parsed)
@@ -90,7 +93,6 @@ object CreateForeignPropertyPeriodSummaryRulesValidator extends RulesValidator[C
     val validatedEntries = zippedForeignNonFhlProperties
       .map { case (entry, index) => validateForeignNonFhlPropertyEntry(entry, index) }
       .traverse(identity)
-      .map(_ => ())
 
     (validatedCountryCodes :+ validatedEntries).sequence.andThen(_ => valid)
   }

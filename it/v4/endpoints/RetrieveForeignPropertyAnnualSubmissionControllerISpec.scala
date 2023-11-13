@@ -23,7 +23,7 @@ import play.api.libs.json.{JsValue, Json}
 import play.api.libs.ws.{WSRequest, WSResponse}
 import play.api.test.Helpers.AUTHORIZATION
 import support.IntegrationBaseSpec
-import v4.stubs.{AuthStub, DownstreamStub, MtdIdLookupStub}
+import v3.stubs.{AuthStub, DownstreamStub, MtdIdLookupStub}
 
 class RetrieveForeignPropertyAnnualSubmissionControllerISpec extends IntegrationBaseSpec {
 

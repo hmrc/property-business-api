@@ -18,7 +18,7 @@ package v3.models.request.amendHistoricFhlUkPiePeriodSummary
 
 import play.api.libs.functional.syntax.{toFunctionalBuilderOps, unlift}
 import play.api.libs.json.{JsPath, Json, OWrites, Reads}
-import v2.models.request.common.ukFhlPieProperty.{UkFhlPieExpenses, UkFhlPieIncome}
+import v3.models.request.common.ukFhlPieProperty.{UkFhlPieExpenses, UkFhlPieIncome}
 
 case class AmendHistoricFhlUkPiePeriodSummaryRequestBody(income: Option[UkFhlPieIncome], expenses: Option[UkFhlPieExpenses])
 

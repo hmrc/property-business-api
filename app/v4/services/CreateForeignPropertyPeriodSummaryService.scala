@@ -20,6 +20,7 @@ import api.controllers.RequestContext
 import api.models.errors._
 import api.services.{BaseService, ServiceOutcome}
 import cats.implicits._
+import config.FeatureSwitches
 import v4.connectors.CreateForeignPropertyPeriodSummaryConnector
 import v4.models.request.createForeignPropertyPeriodSummary.CreateForeignPropertyPeriodSummaryRequestData
 import v4.models.response.createForeignPropertyPeriodSummary.CreateForeignPropertyPeriodSummaryResponse
@@ -28,16 +29,18 @@ import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class CreateForeignPropertyPeriodSummaryService @Inject()(connector: CreateForeignPropertyPeriodSummaryConnector) extends BaseService {
+class CreateForeignPropertyPeriodSummaryService @Inject() (connector: CreateForeignPropertyPeriodSummaryConnector)(implicit
+    featureSwitches: FeatureSwitches)
+    extends BaseService {
 
   def createForeignProperty(request: CreateForeignPropertyPeriodSummaryRequestData)(implicit
       ctx: RequestContext,
       ec: ExecutionContext): Future[ServiceOutcome[CreateForeignPropertyPeriodSummaryResponse]] = {
 
-    connector.createForeignProperty(request).map(_.leftMap(mapDownstreamErrors(downstreamErrorMap)))
+    connector.createForeignProperty(request).map(_.leftMap(mapDownstreamErrors(downstreamErrorMap(featureSwitches.isRuleSubmissionDateErrorEnabled))))
   }
 
-  private val downstreamErrorMap: Map[String, MtdError] = {
+  private def downstreamErrorMap(isRuleSubmissionDateErrorEnabled: Boolean): Map[String, MtdError] = {
     val errors = Map(
       "INVALID_TAXABLE_ENTITY_ID" -> NinoFormatError,
       "INVALID_INCOMESOURCEID"    -> BusinessIdFormatError,
@@ -65,7 +68,11 @@ class CreateForeignPropertyPeriodSummaryService @Inject()(connector: CreateForei
       "PERIOD_OVERLAPS"         -> RuleOverlappingPeriodError
     )
 
-    errors ++ extraTysErrors
+    val ruleSubmissionDateIssueError = Map(
+      "SUBMISSION_DATE_ISSUE" -> RuleSubmissionDateIssueError
+    )
+
+    errors ++ extraTysErrors ++ (if (isRuleSubmissionDateErrorEnabled) ruleSubmissionDateIssueError else Nil)
   }
 
 }

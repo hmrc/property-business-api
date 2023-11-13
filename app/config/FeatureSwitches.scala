@@ -25,6 +25,7 @@ import javax.inject.Inject
 @ImplementedBy(classOf[FeatureSwitchesImpl])
 trait FeatureSwitches {
   def isPassDeleteIntentEnabled: Boolean
+  def isRuleSubmissionDateErrorEnabled: Boolean
 }
 
 @Singleton
@@ -33,9 +34,10 @@ class FeatureSwitchesImpl(featureSwitchConfig: Configuration) extends FeatureSwi
   @Inject
   def this(appConfig: AppConfig) = this(appConfig.featureSwitches)
 
-  val isPassDeleteIntentEnabled: Boolean = isEnabled("passDeleteIntentHeader.enabled")
+  val isPassDeleteIntentEnabled: Boolean        = isEnabled("passDeleteIntentHeader")
+  val isRuleSubmissionDateErrorEnabled: Boolean = isEnabled("ruleSubmissionDateIssue")
 
-  private def isEnabled(key: String): Boolean = featureSwitchConfig.getOptional[Boolean](key).getOrElse(true)
+  private def isEnabled(key: String): Boolean = featureSwitchConfig.getOptional[Boolean](s"$key.enabled").getOrElse(true)
 }
 
 object FeatureSwitches {

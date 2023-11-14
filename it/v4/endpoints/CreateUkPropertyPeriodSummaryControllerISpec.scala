@@ -117,7 +117,7 @@ class CreateUkPropertyPeriodSummaryControllerISpec extends IntegrationBaseSpec {
       |""".stripMargin
   )
 
-  val invalidToDateRequestJson: JsValue = Json.parse(
+  private val invalidToDateRequestJson = Json.parse(
     """
       |{
       |  "fromDate": "2018-04-06",
@@ -131,7 +131,7 @@ class CreateUkPropertyPeriodSummaryControllerISpec extends IntegrationBaseSpec {
     """.stripMargin
   )
 
-  val invalidFromDateRequestJson: JsValue = Json.parse(
+  private val invalidFromDateRequestJson = Json.parse(
     """
       |{
       |  "fromDate": "20180406",
@@ -145,7 +145,7 @@ class CreateUkPropertyPeriodSummaryControllerISpec extends IntegrationBaseSpec {
     """.stripMargin
   )
 
-  val invalidValueRequestJson: JsValue = Json.parse(
+  private val invalidValueRequestJson = Json.parse(
     """
       |{
       |  "fromDate": "2018-04-06",
@@ -201,7 +201,7 @@ class CreateUkPropertyPeriodSummaryControllerISpec extends IntegrationBaseSpec {
     """.stripMargin
   )
 
-  val bothExpensesSuppliedRequestJson: JsValue = Json.parse(
+  private val bothExpensesSuppliedRequestJson = Json.parse(
     """
       |{
       |  "fromDate": "2020-01-01",
@@ -259,7 +259,7 @@ class CreateUkPropertyPeriodSummaryControllerISpec extends IntegrationBaseSpec {
     """.stripMargin
   )
 
-  val toDateBeforeFromDateRequestJson: JsValue = Json.parse(
+  private val toDateBeforeFromDateRequestJson = Json.parse(
     """
       |{
       |  "fromDate": "2020-04-06",
@@ -315,45 +315,43 @@ class CreateUkPropertyPeriodSummaryControllerISpec extends IntegrationBaseSpec {
     """.stripMargin
   )
 
-  val allInvalidValueRequestError: MtdError = ValueFormatError.copy(
-    paths = Some(
-      List(
-        "/ukFhlProperty/income/periodAmount",
-        "/ukFhlProperty/income/taxDeducted",
-        "/ukFhlProperty/income/rentARoom/rentsReceived",
-        "/ukFhlProperty/expenses/premisesRunningCosts",
-        "/ukFhlProperty/expenses/repairsAndMaintenance",
-        "/ukFhlProperty/expenses/financialCosts",
-        "/ukFhlProperty/expenses/professionalFees",
-        "/ukFhlProperty/expenses/costOfServices",
-        "/ukFhlProperty/expenses/other",
-        "/ukFhlProperty/expenses/travelCosts",
-        "/ukFhlProperty/expenses/rentARoom/amountClaimed",
-        "/ukNonFhlProperty/income/premiumsOfLeaseGrant",
-        "/ukNonFhlProperty/income/reversePremiums",
-        "/ukNonFhlProperty/income/periodAmount",
-        "/ukNonFhlProperty/income/taxDeducted",
-        "/ukNonFhlProperty/income/otherIncome",
-        "/ukNonFhlProperty/income/rentARoom/rentsReceived",
-        "/ukNonFhlProperty/expenses/premisesRunningCosts",
-        "/ukNonFhlProperty/expenses/repairsAndMaintenance",
-        "/ukNonFhlProperty/expenses/financialCosts",
-        "/ukNonFhlProperty/expenses/professionalFees",
-        "/ukNonFhlProperty/expenses/costOfServices",
-        "/ukNonFhlProperty/expenses/other",
-        "/ukNonFhlProperty/expenses/residentialFinancialCost",
-        "/ukNonFhlProperty/expenses/travelCosts",
-        "/ukNonFhlProperty/expenses/residentialFinancialCostsCarriedForward",
-        "/ukNonFhlProperty/expenses/rentARoom/amountClaimed"
-      ))
+  private val allInvalidValueRequestError = ValueFormatError.withPaths(
+    List(
+      "/ukFhlProperty/income/periodAmount",
+      "/ukFhlProperty/income/taxDeducted",
+      "/ukFhlProperty/income/rentARoom/rentsReceived",
+      "/ukFhlProperty/expenses/premisesRunningCosts",
+      "/ukFhlProperty/expenses/repairsAndMaintenance",
+      "/ukFhlProperty/expenses/financialCosts",
+      "/ukFhlProperty/expenses/professionalFees",
+      "/ukFhlProperty/expenses/costOfServices",
+      "/ukFhlProperty/expenses/other",
+      "/ukFhlProperty/expenses/travelCosts",
+      "/ukFhlProperty/expenses/rentARoom/amountClaimed",
+      "/ukNonFhlProperty/income/premiumsOfLeaseGrant",
+      "/ukNonFhlProperty/income/reversePremiums",
+      "/ukNonFhlProperty/income/periodAmount",
+      "/ukNonFhlProperty/income/taxDeducted",
+      "/ukNonFhlProperty/income/otherIncome",
+      "/ukNonFhlProperty/income/rentARoom/rentsReceived",
+      "/ukNonFhlProperty/expenses/premisesRunningCosts",
+      "/ukNonFhlProperty/expenses/repairsAndMaintenance",
+      "/ukNonFhlProperty/expenses/financialCosts",
+      "/ukNonFhlProperty/expenses/professionalFees",
+      "/ukNonFhlProperty/expenses/costOfServices",
+      "/ukNonFhlProperty/expenses/other",
+      "/ukNonFhlProperty/expenses/residentialFinancialCost",
+      "/ukNonFhlProperty/expenses/travelCosts",
+      "/ukNonFhlProperty/expenses/residentialFinancialCostsCarriedForward",
+      "/ukNonFhlProperty/expenses/rentARoom/amountClaimed"
+    )
   )
 
-  val RuleBothExpensesSuppliedRequestError: MtdError = RuleBothExpensesSuppliedError.copy(
-    paths = Some(
-      List(
-        "/ukFhlProperty/expenses",
-        "/ukNonFhlProperty/expenses"
-      ))
+  private val RuleBothExpensesSuppliedRequestError = RuleBothExpensesSuppliedError.withPaths(
+    List(
+      "/ukFhlProperty/expenses",
+      "/ukNonFhlProperty/expenses"
+    )
   )
 
   private trait Test {
@@ -412,7 +410,7 @@ class CreateUkPropertyPeriodSummaryControllerISpec extends IntegrationBaseSpec {
       s"""
          |{
          |   "code": "$code",
-         |   "reason": "ifs message"
+         |   "reason": "downstream message"
          |}
        """.stripMargin
 
@@ -513,7 +511,7 @@ class CreateUkPropertyPeriodSummaryControllerISpec extends IntegrationBaseSpec {
           }
         }
 
-        val input = Seq(
+        val input = List(
           ("AA1123A", "XAIS12345678910", "2022-23", requestBodyJson, BAD_REQUEST, NinoFormatError),
           ("AA123456A", "XAIS12345678910", "20223", requestBodyJson, BAD_REQUEST, TaxYearFormatError),
           ("AA123456A", "XAIS12345678910", "2021-23", requestBodyJson, BAD_REQUEST, RuleTaxYearRangeInvalidError),
@@ -527,12 +525,13 @@ class CreateUkPropertyPeriodSummaryControllerISpec extends IntegrationBaseSpec {
             "2022-23",
             Json.parse(s"""{ "fromDate": "2020-04-06", "toDate": "2019-04-06", "ukFhlProperty": {} }""".stripMargin),
             BAD_REQUEST,
-            RuleIncorrectOrEmptyBodyError.copy(paths = Some(Seq("/ukFhlProperty")))),
+            RuleIncorrectOrEmptyBodyError.withPath("/ukFhlProperty")),
           ("AA123456A", "XAIS12345678910", "2022-23", invalidValueRequestJson, BAD_REQUEST, allInvalidValueRequestError),
           ("AA123456A", "XAIS12345678910", "2022-23", bothExpensesSuppliedRequestJson, BAD_REQUEST, RuleBothExpensesSuppliedRequestError),
           ("AA123456A", "XAIS12345678910", "2022-23", toDateBeforeFromDateRequestJson, BAD_REQUEST, RuleToDateBeforeFromDateError)
         )
-        input.foreach(args => (validationErrorTest _).tupled(args))
+
+        input.foreach((validationErrorTest _).tupled)
       }
 
       "ifs service error" when {
@@ -549,7 +548,7 @@ class CreateUkPropertyPeriodSummaryControllerISpec extends IntegrationBaseSpec {
           }
         }
 
-        val errors = Seq(
+        val errors = List(
           (SERVICE_UNAVAILABLE, "SERVICE_UNAVAILABLE", INTERNAL_SERVER_ERROR, InternalError),
           (INTERNAL_SERVER_ERROR, "SERVER_ERROR", INTERNAL_SERVER_ERROR, InternalError),
           (NOT_FOUND, "INCOME_SOURCE_NOT_FOUND", NOT_FOUND, NotFoundError),
@@ -568,7 +567,7 @@ class CreateUkPropertyPeriodSummaryControllerISpec extends IntegrationBaseSpec {
           (UNPROCESSABLE_ENTITY, "INVALID_DATE_RANGE", BAD_REQUEST, RuleToDateBeforeFromDateError)
         )
 
-        val extraTysErrors = Seq(
+        val extraTysErrors = List(
           (BAD_REQUEST, "INVALID_INCOMESOURCE_ID", BAD_REQUEST, BusinessIdFormatError),
           (BAD_REQUEST, "INVALID_CORRELATION_ID", INTERNAL_SERVER_ERROR, InternalError),
           (UNPROCESSABLE_ENTITY, "PERIOD_NOT_ALIGNED", BAD_REQUEST, RuleMisalignedPeriodError),
@@ -578,7 +577,12 @@ class CreateUkPropertyPeriodSummaryControllerISpec extends IntegrationBaseSpec {
 //          To be reinstated, see MTDSA-15575
         )
 
-        (errors ++ extraTysErrors).foreach(args => (serviceErrorTest _).tupled(args))
+        val ruleSubmissionDateIssueError = List(
+          (UNPROCESSABLE_ENTITY, "SUBMISSION_DATE_ISSUE", BAD_REQUEST, RuleSubmissionDateIssueError)
+        )
+
+        (errors ++ extraTysErrors ++ ruleSubmissionDateIssueError).foreach((serviceErrorTest _).tupled)
+
       }
     }
   }

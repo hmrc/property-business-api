@@ -62,7 +62,17 @@ trait AppConfig {
   def apiStatus(version: Version): String
 
   def featureSwitches: Configuration
+  def endpointsEnabled(version: String): Boolean
+
   def endpointsEnabled(version: Version): Boolean
+
+  /** Currently only for OAS documentation.
+    */
+  def apiVersionReleasedInProduction(version: String): Boolean
+
+  /** Currently only for OAS documentation.
+    */
+  def endpointReleasedInProduction(version: String, name: String): Boolean
 
   def minimumTaxV2Foreign: TaxYear
   def minimumTaxV2Uk: TaxYear
@@ -100,7 +110,19 @@ class AppConfigImpl @Inject() (config: ServicesConfig, configuration: Configurat
   val confidenceLevelConfig: ConfidenceLevelConfig = configuration.get[ConfidenceLevelConfig](s"api.confidence-level-check")
   def apiStatus(version: Version): String          = config.getString(s"api.${version.name}.status")
   def featureSwitches: Configuration               = configuration.getOptional[Configuration](s"feature-switch").getOrElse(Configuration.empty)
-  def endpointsEnabled(version: Version): Boolean  = config.getBoolean(s"api.${version.name}.endpoints.enabled")
+  def endpointsEnabled(version: String): Boolean   = config.getBoolean(s"api.$version.endpoints.enabled")
+
+  def endpointsEnabled(version: Version): Boolean = config.getBoolean(s"api.${version.name}.endpoints.enabled")
+
+  def apiVersionReleasedInProduction(version: String): Boolean = config.getBoolean(s"api.$version.endpoints.api-released-in-production")
+
+  def endpointReleasedInProduction(version: String, name: String): Boolean = {
+    val versionReleasedInProd = apiVersionReleasedInProduction(version)
+    val path                  = s"api.$version.endpoints.released-in-production.$name"
+
+    val conf = configuration.underlying
+    if (versionReleasedInProd && conf.hasPath(path)) config.getBoolean(path) else versionReleasedInProd
+  }
 
   val minimumTaxV2Foreign: TaxYear = TaxYear.starting(config.getInt("minimum-tax-year.version-2.foreign"))
   val minimumTaxV2Uk: TaxYear      = TaxYear.starting(config.getInt("minimum-tax-year.version-2.uk"))

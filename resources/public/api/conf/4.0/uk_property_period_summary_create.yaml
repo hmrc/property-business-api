@@ -114,6 +114,10 @@ post:
               $ref: './common/errors.yaml#/components/examples/ruleBusinessIncomePeriodRestriction'
             RULE_INCORRECT_GOV_TEST_SCENARIO:
               $ref: './common/errors.yaml#/components/examples/ruleIncorrectGovTestScenario'
+#           {{#if (enabled 'ruleSubmissionDateIssue')}}
+            "RULE_SUBMISSION_DATE_ISSUE{{#unless (releasedInProduction 'ruleSubmissionDateIssue')}} [Test only]{{/unless}}":
+              $ref: './common/errors.yaml#/components/examples/ruleSubmissionDateIssue'
+#           {{/if}}
 
     "403":
       description: Forbidden

@@ -36,8 +36,8 @@ class DeleteHistoricUkPropertyAnnualSubmissionValidatorFactorySpec extends UnitS
 
   private def validator(nino: String, taxYear: String, propertyType: HistoricPropertyType) = validatorFactory.validator(nino, taxYear, propertyType)
 
-  MockAppConfig.minimumTaxYearHistoric.returns(TaxYear.starting(2017))
-  MockAppConfig.maximumTaxYearHistoric.returns(TaxYear.starting(2021))
+  MockedAppConfig.minimumTaxYearHistoric.returns(TaxYear.starting(2017))
+  MockedAppConfig.maximumTaxYearHistoric.returns(TaxYear.starting(2021))
 
   "validator" should {
     "return no errors" when {

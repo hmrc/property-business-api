@@ -30,7 +30,7 @@ class HateoasLinksSpec extends UnitSpec with MockAppConfig with HateoasLinks {
   val periodId     = "{periodId}"
 
   class Test {
-    MockAppConfig.apiGatewayContext.returns("individuals/business/property").anyNumberOfTimes()
+    MockedAppConfig.apiGatewayContext.returns("individuals/business/property").anyNumberOfTimes()
   }
 
   "The HateoasLinks functions" when {

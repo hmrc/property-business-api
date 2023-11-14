@@ -31,8 +31,8 @@ class RetrieveHistoricNonFhlUkPropertyAnnualSubmissionValidatorFactorySpec exten
   private val parsedNino    = Nino("AA123456A")
   private val parsedTaxYear = TaxYear.fromMtd(validTaxYear)
 
-  MockAppConfig.minimumTaxYearHistoric returns TaxYear.starting(2017)
-  MockAppConfig.maximumTaxYearHistoric returns TaxYear.starting(2021)
+  MockedAppConfig.minimumTaxYearHistoric returns TaxYear.starting(2017)
+  MockedAppConfig.maximumTaxYearHistoric returns TaxYear.starting(2021)
 
   private val validatorFactory = new RetrieveHistoricNonFhlUkPropertyAnnualSubmissionValidatorFactory(mockAppConfig)
 

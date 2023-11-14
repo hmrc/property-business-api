@@ -31,8 +31,8 @@ class RetrieveHistoricNonFhlUkPropertyPeriodSummaryValidatorFactorySpec extends 
   private val parsedNino     = Nino("AA123456A")
   private val parsedPeriodId = PeriodId("2017-04-06_2017-07-04")
 
-  MockAppConfig.minimumTaxYearHistoric returns TaxYear.starting(2017)
-  MockAppConfig.maximumTaxYearHistoric returns TaxYear.starting(2021)
+  MockedAppConfig.minimumTaxYearHistoric returns TaxYear.starting(2017)
+  MockedAppConfig.maximumTaxYearHistoric returns TaxYear.starting(2021)
 
   private val validatorFactory = new RetrieveHistoricNonFhlUkPropertyPeriodSummaryValidatorFactory(mockAppConfig)
 

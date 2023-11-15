@@ -197,7 +197,7 @@ class AmendUkPropertyPeriodSummaryValidatorFactorySpec extends UnitSpec with Moc
   private def validator(nino: String, businessId: String, taxYear: String, submissionId: String, body: JsValue) =
     validatorFactory.validator(nino, businessId, taxYear, submissionId, body)
 
-  MockAppConfig.minimumTaxV2Uk.returns(TaxYear.starting(2022))
+  MockedAppConfig.minimumTaxV2Uk.returns(TaxYear.starting(2022))
 
   "validator" should {
     "return the parsed domain object" when {

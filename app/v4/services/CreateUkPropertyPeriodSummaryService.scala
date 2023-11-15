@@ -20,6 +20,7 @@ import api.controllers.RequestContext
 import api.models.errors._
 import api.services.{BaseService, ServiceOutcome}
 import cats.implicits._
+import config.FeatureSwitches
 import v4.connectors.CreateUkPropertyPeriodSummaryConnector
 import v4.models.request.createUkPropertyPeriodSummary.CreateUkPropertyPeriodSummaryRequestData
 import v4.models.response.createUkPropertyPeriodSummary.CreateUkPropertyPeriodSummaryResponse
@@ -28,16 +29,17 @@ import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class CreateUkPropertyPeriodSummaryService @Inject() (connector: CreateUkPropertyPeriodSummaryConnector) extends BaseService {
+class CreateUkPropertyPeriodSummaryService @Inject() (connector: CreateUkPropertyPeriodSummaryConnector)(implicit featureSwitches: FeatureSwitches)
+    extends BaseService {
 
   def createUkProperty(request: CreateUkPropertyPeriodSummaryRequestData)(implicit
       ctx: RequestContext,
       ec: ExecutionContext): Future[ServiceOutcome[CreateUkPropertyPeriodSummaryResponse]] = {
 
-    connector.createUkProperty(request).map(_.leftMap(mapDownstreamErrors(downstreamErrorMap)))
+    connector.createUkProperty(request).map(_.leftMap(mapDownstreamErrors(downstreamErrorMap(featureSwitches.isRuleSubmissionDateErrorEnabled))))
   }
 
-  private val downstreamErrorMap = {
+  private def downstreamErrorMap(isRuleSubmissionDateErrorEnabled: Boolean): Map[String, MtdError] = {
     val errors = Map(
       "INVALID_TAXABLE_ENTITY_ID" -> NinoFormatError,
       "INVALID_INCOMESOURCEID"    -> BusinessIdFormatError,
@@ -68,7 +70,11 @@ class CreateUkPropertyPeriodSummaryService @Inject() (connector: CreateUkPropert
       //      To be reinstated, see MTDSA-15575
     )
 
-    errors ++ extraTysErrors
+    val ruleSubmissionDateIssueError = Map(
+      "SUBMISSION_DATE_ISSUE" -> RuleSubmissionDateIssueError
+    )
+
+    errors ++ extraTysErrors ++ (if (isRuleSubmissionDateErrorEnabled) ruleSubmissionDateIssueError else Nil)
   }
 
 }

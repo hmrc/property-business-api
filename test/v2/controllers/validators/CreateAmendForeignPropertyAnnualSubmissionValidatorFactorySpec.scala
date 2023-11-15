@@ -296,7 +296,7 @@ class CreateAmendForeignPropertyAnnualSubmissionValidatorFactorySpec extends Uni
   private def validator(nino: String, businessId: String, taxYear: String, body: JsValue) =
     validatorFactory.validator(nino, businessId, taxYear, body)
 
-  MockAppConfig.minimumTaxV2Foreign.returns(TaxYear.starting(2021))
+  MockedAppConfig.minimumTaxV2Foreign.returns(TaxYear.starting(2021))
 
   def testWith(error: MtdError)(body: JsValue, expectedPath: String): Unit =
     s"for $expectedPath" in {

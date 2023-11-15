@@ -16,9 +16,9 @@
 
 package v2.models.request.createForeignPropertyPeriodSummary
 
-import fixtures.CreateForeignPropertyPeriodSummaryFixtures.CreateForeignPropertyPeriodSummaryFixtures
 import play.api.libs.json.Json
 import support.UnitSpec
+import v2.fixtures.CreateForeignPropertyPeriodSummaryFixtures.CreateForeignPropertyPeriodSummaryFixtures
 
 class CreateForeignPropertyPeriodSummaryRequestBodySpec extends UnitSpec with CreateForeignPropertyPeriodSummaryFixtures {
 

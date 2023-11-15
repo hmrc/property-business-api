@@ -197,7 +197,7 @@ class CreateUkPropertyPeriodSummaryValidatorFactorySpec extends UnitSpec with Mo
   private def validator(nino: String, taxYear: String, businessId: String, body: JsValue) =
     validatorFactory.validator(nino, businessId, taxYear, body)
 
-  MockAppConfig.minimumTaxV2Uk.returns(TaxYear.starting(2022))
+  MockedAppConfig.minimumTaxV2Uk.returns(TaxYear.starting(2022))
 
   "validator" should {
     "return the parsed domain object" when {

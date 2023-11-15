@@ -224,6 +224,13 @@ components:
         code: RULE_DUPLICATE_COUNTRY_CODE
         message: You cannot supply the same country code for multiple properties
 
+    ruleSubmissionDateIssue:
+      description: |
+        The remote endpoint indicated that Submission dates should be on or within [accounting period start date / start date] to [end date] (Periodic only)
+      value:
+        code: RULE_SUBMISSION_DATE_ISSUE
+        message: The remote endpoint indicated that Submission dates should be on or within [accounting period start date / start date] to [end date] (Periodic only)
+
     # 403
 
     clientOrAgentNotAuthorised:

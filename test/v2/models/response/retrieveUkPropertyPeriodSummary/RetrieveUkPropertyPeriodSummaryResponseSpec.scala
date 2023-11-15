@@ -52,7 +52,7 @@ class RetrieveUkPropertyPeriodSummaryResponseSpec extends UnitSpec with MockAppC
   "hateoasLinksFactory" when {
     "wrap" should {
       "return the expected wrapped response with correct links" in {
-        MockAppConfig.apiGatewayContext.returns("individuals/business/property").anyNumberOfTimes()
+        MockedAppConfig.apiGatewayContext.returns("individuals/business/property").anyNumberOfTimes()
         val wrappedResponse: HateoasWrapper[RetrieveUkPropertyPeriodSummaryResponse] = new HateoasFactory(mockAppConfig).wrap(model, hateoasData)
 
         val baseUrl = "/individuals/business/property/uk/AA999999A/XAIS12345678910/period/2022-23"

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package fixtures.CreateForeignPropertyPeriodSummaryFixtures
+package v2.fixtures.CreateForeignPropertyPeriodSummaryFixtures
 
 import play.api.libs.json.{JsValue, Json}
 import v2.models.request.createForeignPropertyPeriodSummary.CreateForeignPropertyPeriodSummaryRequestBody

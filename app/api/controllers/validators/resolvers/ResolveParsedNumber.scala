@@ -18,15 +18,15 @@ package api.controllers.validators.resolvers
 
 import api.models.errors.{MtdError, ValueFormatError}
 import cats.data.Validated
-import cats.data.Validated.{Invalid, Valid}
 
 case class ResolveParsedNumber(min: BigDecimal = 0, max: BigDecimal = 99999999999.99, disallowZero: Boolean = false) extends ResolverSupport {
 
-  def resolver(error: => MtdError): Resolver[BigDecimal, BigDecimal] = { value =>
-    val valid = min <= value && value <= max && value.scale <= 2 && (!disallowZero || value != 0)
+  def resolver(error: => MtdError): Resolver[BigDecimal, BigDecimal] =
+    resolveValid[BigDecimal] thenValidate { value =>
+      val valid = min <= value && value <= max && value.scale <= 2 && (!disallowZero || value != 0)
 
-    if (valid) Valid(value) else Invalid(List(error))
-  }
+      Option.when(!valid)(List(error))
+    }
 
   private def errorFor(path: String) = ValueFormatError.forPathAndRange(path, min.toString, max.toString)
 

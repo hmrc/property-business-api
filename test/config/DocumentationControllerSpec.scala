@@ -38,8 +38,8 @@ class DocumentationControllerSpec extends ControllerBaseSpec with MockAppConfig 
 
   "/file endpoint" should {
     "return a file" in new Test {
-      MockedAppConfig.apiVersionReleasedInProduction("4.0").anyNumberOfTimes() returns true
-      MockedAppConfig.endpointsEnabled("4.0").anyNumberOfTimes() returns true
+      MockedAppConfig.apiVersionReleasedInProduction("3.0").anyNumberOfTimes() returns true
+      MockedAppConfig.endpointsEnabled("3.0").anyNumberOfTimes() returns true
       val response: Future[Result] = requestAsset("application.yaml")
       status(response) shouldBe OK
       await(response).body.contentLength.getOrElse(-99L) should be > 0L
@@ -49,8 +49,8 @@ class DocumentationControllerSpec extends ControllerBaseSpec with MockAppConfig 
   "rewrite()" when {
     "the API version is disabled" should {
       "return the yaml with [test only] in the API title" in new Test {
-        MockedAppConfig.apiVersionReleasedInProduction("4.0").anyNumberOfTimes() returns false
-        MockedAppConfig.endpointsEnabled("4.0").anyNumberOfTimes() returns true
+        MockedAppConfig.apiVersionReleasedInProduction("3.0").anyNumberOfTimes() returns false
+        MockedAppConfig.endpointsEnabled("3.0").anyNumberOfTimes() returns true
 
         val response: Future[Result] = requestAsset("application.yaml")
         status(response) shouldBe OK
@@ -65,13 +65,13 @@ class DocumentationControllerSpec extends ControllerBaseSpec with MockAppConfig 
         result should startWith("""openapi: "3.0.3"
                                   |
                                   |info:
-                                  |  version: "4.0"""".stripMargin)
+                                  |  version: "3.0"""".stripMargin)
       }
     }
     "the API version is enabled" should {
       "return the yaml with the API title unchanged" in new Test {
-        MockedAppConfig.apiVersionReleasedInProduction("4.0").anyNumberOfTimes() returns true
-        MockedAppConfig.endpointsEnabled("4.0").anyNumberOfTimes() returns true
+        MockedAppConfig.apiVersionReleasedInProduction("3.0").anyNumberOfTimes() returns true
+        MockedAppConfig.endpointsEnabled("3.0").anyNumberOfTimes() returns true
 
         val response: Future[Result] = requestAsset("application.yaml", accept = "text/plain")
         status(response) shouldBe OK
@@ -87,7 +87,7 @@ class DocumentationControllerSpec extends ControllerBaseSpec with MockAppConfig 
         result should startWith("""openapi: "3.0.3"
                                   |
                                   |info:
-                                  |  version: "4.0"""".stripMargin)
+                                  |  version: "3.0"""".stripMargin)
       }
     }
   }
@@ -98,7 +98,7 @@ class DocumentationControllerSpec extends ControllerBaseSpec with MockAppConfig 
     protected def featureEnabled: Boolean = true
 
     protected def requestAsset(filename: String, accept: String = "text/yaml"): Future[Result] =
-      controller.asset("4.0", filename)(fakeGetRequest.withHeaders(ACCEPT -> accept))
+      controller.asset("3.0", filename)(fakeGetRequest.withHeaders(ACCEPT -> accept))
 
     protected def numberOfTestOnlyOccurrences(str: String): Int = "\\[test only]".r.findAllIn(str).size
 

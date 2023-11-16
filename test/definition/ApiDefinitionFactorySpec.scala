@@ -40,7 +40,7 @@ class ApiDefinitionFactorySpec extends UnitSpec {
         MockedAppConfig.apiStatus(Version4) returns "BETA"
         MockedAppConfig.endpointsEnabled(Version2).returns(true).anyNumberOfTimes()
         MockedAppConfig.endpointsEnabled(Version3).returns(true).anyNumberOfTimes()
-        MockedAppConfig.endpointsEnabled(Version4).returns(true).anyNumberOfTimes()
+//        MockedAppConfig.endpointsEnabled(Version4).returns(true).anyNumberOfTimes()
         MockedAppConfig.confidenceLevelCheckEnabled
           .returns(ConfidenceLevelConfig(confidenceLevel = confidenceLevel, definitionEnabled = true, authValidationEnabled = true))
           .anyNumberOfTimes()
@@ -79,12 +79,12 @@ class ApiDefinitionFactorySpec extends UnitSpec {
                   version = Version3,
                   status = BETA,
                   endpointsEnabled = true
-                ),
-                APIVersion(
-                  version = Version4,
-                  status = BETA,
-                  endpointsEnabled = true
                 )
+//                APIVersion(
+//                  version = Version4,
+//                  status = BETA,
+//                  endpointsEnabled = true
+//                )
               ),
               requiresTrust = None
             )

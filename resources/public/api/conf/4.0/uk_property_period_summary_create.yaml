@@ -18,6 +18,7 @@ post:
     | DUPLICATE_SUBMISSION               | Simulates the scenario where a summary has already been submitted for the specified period.           |
     | TYPE_OF_BUSINESS_INCORRECT         | Simulates the scenario where the supplied Business ID does not represent a foreign property business. |
     | BUSINESS_INCOME_PERIOD_RESTRICTION | Simulates the scenario where the customer has ITSA status 'Annual' or a latent business income source and the submission period is between 6 April to 5 April. |
+    {{#if (enabled 'ruleSubmissionDateIssue')}}| SUBMISSION_DATE_ISSUE {{#unless (releasedInProduction 'ruleSubmissionDateIssue')}} [Test only]{{/unless}} | Simulates the scenario in which the submission dates are not on or within [accounting period start date / start date] to [end date] (Periodic only) |{{/if}}
     | STATEFUL                           | Performs a stateful create.                                                                           |
 
 

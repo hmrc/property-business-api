@@ -37,8 +37,7 @@ class FeatureSwitchesImpl(featureSwitchConfig: Configuration) extends FeatureSwi
   @Inject
   def this(appConfig: AppConfig) = this(appConfig.featureSwitches)
 
-  val isWIS008Enabled: Boolean = isConfigTrue("wis008.enabled")
-
+  val isWIS008Enabled: Boolean                  = isEnabled("wis008")
   val isPassDeleteIntentEnabled: Boolean        = isEnabled("passDeleteIntentHeader")
   val isRuleSubmissionDateErrorEnabled: Boolean = isEnabled("ruleSubmissionDateIssue")
 

@@ -67,12 +67,6 @@ class ApiDefinitionFactory @Inject() (appConfig: AppConfig) extends Logging {
             status = buildAPIStatus(Version3),
             endpointsEnabled = appConfig.endpointsEnabled(Version3)
           )
-          // To be reinstated, see MTDSA-20412
-//          APIVersion(
-//            version = Version4,
-//            status = buildAPIStatus(Version4),
-//            endpointsEnabled = appConfig.endpointsEnabled(Version4)
-//          )
         ),
         requiresTrust = None
       )

@@ -26,9 +26,8 @@ import javax.inject.Inject
 trait FeatureSwitches {
   def isPassDeleteIntentEnabled: Boolean
   def isRuleSubmissionDateErrorEnabled: Boolean
-
+  def isWIS008Enabled: Boolean
   def isReleasedInProduction(feature: String): Boolean
-
   def isEnabled(key: String): Boolean
 }
 
@@ -37,6 +36,8 @@ class FeatureSwitchesImpl(featureSwitchConfig: Configuration) extends FeatureSwi
 
   @Inject
   def this(appConfig: AppConfig) = this(appConfig.featureSwitches)
+
+  val isWIS008Enabled: Boolean = isConfigTrue("wis008.enabled")
 
   val isPassDeleteIntentEnabled: Boolean        = isEnabled("passDeleteIntentHeader")
   val isRuleSubmissionDateErrorEnabled: Boolean = isEnabled("ruleSubmissionDateIssue")

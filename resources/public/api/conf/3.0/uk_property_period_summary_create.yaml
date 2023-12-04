@@ -17,7 +17,9 @@ post:
     | NOT_CONTIGUOUS                     | Simulates the scenario where the period summaries are not contiguous.                                 |
     | DUPLICATE_SUBMISSION               | Simulates the scenario where a summary has already been submitted for the specified period.           |
     | TYPE_OF_BUSINESS_INCORRECT         | Simulates the scenario where the supplied Business ID does not represent a foreign property business. |
-    | STATEFUL                           | Performs a stateful create.                                                                           |
+    {{#if (enabled 'wis008')}}| INVALID_SUBMISSION_PERIOD | {{#unless (releasedInProduction 'wis008')}}[Test only] {{/unless}}Simulates the scenario where the property income and expenses submissions cannot be more than 10 days before the end of the Period.|
+    | INVALID_SUBMISSION_END_DATE        | {{#unless (releasedInProduction 'wis008')}}[Test only] {{/unless}}Simulates the scenario where the submitted end date must be the end of the quarter.
+    {{/if}}| STATEFUL                    | Performs a stateful create.                                                                           |
 
 
   tags:
@@ -85,10 +87,12 @@ post:
               $ref: './common/errors.yaml#/components/examples/formatToDate'
             FORMAT_VALUE:
               $ref: './common/errors.yaml#/components/examples/formatValue'
-            #            RULE_INVALID_SUBMISSION_END_DATE:
-            #              $ref: './common/errors.yaml#/components/examples/invalidSubmissionEndDate'
-            #            RULE_INVALID_SUBMISSION_PERIOD:
-            #              $ref: './common/errors.yaml#/components/examples/invalidSubmissionPeriod'
+            {{#if (enabled 'wis008')}}
+            "RULE_INVALID_SUBMISSION_END_DATE{{#unless (releasedInProduction 'wis008')}} [Test only]{{/unless}}":
+              $ref: './common/errors.yaml#/components/examples/invalidSubmissionEndDate'
+            "RULE_INVALID_SUBMISSION_PERIOD{{#unless (releasedInProduction 'wis008')}} [Test only]{{/unless}}":
+              $ref: './common/errors.yaml#/components/examples/invalidSubmissionPeriod'
+            {{/if}}
             RULE_TAX_YEAR_RANGE_INVALID:
               $ref: './common/errors.yaml#/components/examples/ruleTaxYearRangeInvalid'
             RULE_TAX_YEAR_NOT_SUPPORTED:

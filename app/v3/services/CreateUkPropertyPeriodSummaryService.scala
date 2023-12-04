@@ -20,6 +20,7 @@ import api.controllers.RequestContext
 import api.models.errors._
 import api.services.{BaseService, ServiceOutcome}
 import cats.implicits._
+import config.FeatureSwitches
 import v3.connectors.CreateUkPropertyPeriodSummaryConnector
 import v3.models.request.createUkPropertyPeriodSummary.CreateUkPropertyPeriodSummaryRequestData
 import v3.models.response.createUkPropertyPeriodSummary.CreateUkPropertyPeriodSummaryResponse
@@ -28,16 +29,17 @@ import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class CreateUkPropertyPeriodSummaryService @Inject() (connector: CreateUkPropertyPeriodSummaryConnector) extends BaseService {
+class CreateUkPropertyPeriodSummaryService @Inject() (connector: CreateUkPropertyPeriodSummaryConnector)(implicit featureSwitches: FeatureSwitches)
+    extends BaseService {
 
   def createUkProperty(request: CreateUkPropertyPeriodSummaryRequestData)(implicit
       ctx: RequestContext,
       ec: ExecutionContext): Future[ServiceOutcome[CreateUkPropertyPeriodSummaryResponse]] = {
 
-    connector.createUkProperty(request).map(_.leftMap(mapDownstreamErrors(downstreamErrorMap)))
+    connector.createUkProperty(request).map(_.leftMap(mapDownstreamErrors(downstreamErrorMap(featureSwitches.isWIS008Enabled))))
   }
 
-  private val downstreamErrorMap = {
+  private val downstreamErrorMap = { wis008Enabled: Boolean =>
     val errors = Map(
       "INVALID_TAXABLE_ENTITY_ID" -> NinoFormatError,
       "INVALID_INCOMESOURCEID"    -> BusinessIdFormatError,
@@ -63,12 +65,14 @@ class CreateUkPropertyPeriodSummaryService @Inject() (connector: CreateUkPropert
       "PERIOD_NOT_ALIGNED"                 -> RuleMisalignedPeriodError,
       "PERIOD_OVERLAPS"                    -> RuleOverlappingPeriodError,
       "BUSINESS_INCOME_PERIOD_RESTRICTION" -> InternalError
-      //      "INVALID_SUBMISSION_PERIOD"   -> RuleInvalidSubmissionPeriodError,
-      //      "INVALID_SUBMISSION_END_DATE" -> RuleInvalidSubmissionEndDateError
-      //      To be reinstated, see MTDSA-15575
     )
 
-    errors ++ extraTysErrors
+    val wis008Errors = Map(
+      "INVALID_SUBMISSION_PERIOD"   -> RuleInvalidSubmissionPeriodError,
+      "INVALID_SUBMISSION_END_DATE" -> RuleInvalidSubmissionEndDateError
+    )
+
+    errors ++ extraTysErrors ++ (if (wis008Enabled) wis008Errors else Nil)
   }
 
 }

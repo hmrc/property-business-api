@@ -357,9 +357,9 @@ class CreateUkPropertyPeriodSummaryControllerISpec extends IntegrationBaseSpec {
   )
 
   private trait Test {
-    val nino: String       = "TC663795B"
-    val businessId: String = "XAIS12345678910"
-    val submissionId       = "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
+    val nino: String         = "TC663795B"
+    val businessId: String   = "XAIS12345678910"
+    private val submissionId = "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
     def taxYear: String
 
     def setupStubs(): Unit = ()
@@ -513,7 +513,7 @@ class CreateUkPropertyPeriodSummaryControllerISpec extends IntegrationBaseSpec {
           }
         }
 
-        val input = Seq(
+        val input = List(
           ("AA1123A", "XAIS12345678910", "2022-23", requestBodyJson, BAD_REQUEST, NinoFormatError),
           ("AA123456A", "XAIS12345678910", "20223", requestBodyJson, BAD_REQUEST, TaxYearFormatError),
           ("AA123456A", "XAIS12345678910", "2021-23", requestBodyJson, BAD_REQUEST, RuleTaxYearRangeInvalidError),
@@ -527,7 +527,7 @@ class CreateUkPropertyPeriodSummaryControllerISpec extends IntegrationBaseSpec {
             "2022-23",
             Json.parse(s"""{ "fromDate": "2020-04-06", "toDate": "2019-04-06", "ukFhlProperty": {} }""".stripMargin),
             BAD_REQUEST,
-            RuleIncorrectOrEmptyBodyError.copy(paths = Some(Seq("/ukFhlProperty")))),
+            RuleIncorrectOrEmptyBodyError.copy(paths = Some(List("/ukFhlProperty")))),
           ("AA123456A", "XAIS12345678910", "2022-23", invalidValueRequestJson, BAD_REQUEST, allInvalidValueRequestError),
           ("AA123456A", "XAIS12345678910", "2022-23", bothExpensesSuppliedRequestJson, BAD_REQUEST, RuleBothExpensesSuppliedRequestError),
           ("AA123456A", "XAIS12345678910", "2022-23", toDateBeforeFromDateRequestJson, BAD_REQUEST, RuleToDateBeforeFromDateError)
@@ -549,7 +549,7 @@ class CreateUkPropertyPeriodSummaryControllerISpec extends IntegrationBaseSpec {
           }
         }
 
-        val errors = Seq(
+        val errors = List(
           (SERVICE_UNAVAILABLE, "SERVICE_UNAVAILABLE", INTERNAL_SERVER_ERROR, InternalError),
           (INTERNAL_SERVER_ERROR, "SERVER_ERROR", INTERNAL_SERVER_ERROR, InternalError),
           (NOT_FOUND, "INCOME_SOURCE_NOT_FOUND", NOT_FOUND, NotFoundError),
@@ -568,17 +568,19 @@ class CreateUkPropertyPeriodSummaryControllerISpec extends IntegrationBaseSpec {
           (UNPROCESSABLE_ENTITY, "INVALID_DATE_RANGE", BAD_REQUEST, RuleToDateBeforeFromDateError)
         )
 
-        val extraTysErrors = Seq(
+        val extraTysErrors = List(
           (BAD_REQUEST, "INVALID_INCOMESOURCE_ID", BAD_REQUEST, BusinessIdFormatError),
           (BAD_REQUEST, "INVALID_CORRELATION_ID", INTERNAL_SERVER_ERROR, InternalError),
           (UNPROCESSABLE_ENTITY, "PERIOD_NOT_ALIGNED", BAD_REQUEST, RuleMisalignedPeriodError),
           (UNPROCESSABLE_ENTITY, "BUSINESS_INCOME_PERIOD_RESTRICTION", INTERNAL_SERVER_ERROR, InternalError)
-//          (UNPROCESSABLE_ENTITY, "INVALID_SUBMISSION_PERIOD", BAD_REQUEST, RuleInvalidSubmissionPeriodError),
-//          (UNPROCESSABLE_ENTITY, "INVALID_SUBMISSION_END_DATE", BAD_REQUEST, RuleInvalidSubmissionEndDateError)
-//          To be reinstated, see MTDSA-15575
         )
 
-        (errors ++ extraTysErrors).foreach(args => (serviceErrorTest _).tupled(args))
+        val wis008Errors = List(
+          (UNPROCESSABLE_ENTITY, "INVALID_SUBMISSION_PERIOD", BAD_REQUEST, RuleInvalidSubmissionPeriodError),
+          (UNPROCESSABLE_ENTITY, "INVALID_SUBMISSION_END_DATE", BAD_REQUEST, RuleInvalidSubmissionEndDateError)
+        )
+
+        (errors ++ extraTysErrors ++ wis008Errors).foreach((serviceErrorTest _).tupled)
       }
     }
   }

@@ -20,7 +20,8 @@ import api.controllers.EndpointLogContext
 import api.models.domain.{BusinessId, Nino, TaxYear}
 import api.models.errors._
 import api.models.outcomes.ResponseWrapper
-import api.services.ServiceSpec
+import api.services.{ServiceOutcome, ServiceSpec}
+import mocks.MockFeatureSwitches
 import uk.gov.hmrc.http.HeaderCarrier
 import v3.connectors.MockCreateUkPropertyPeriodSummaryConnector
 import v3.models.request.createUkPropertyPeriodSummary._
@@ -28,36 +29,50 @@ import v3.models.response.createUkPropertyPeriodSummary.CreateUkPropertyPeriodSu
 
 import scala.concurrent.Future
 
-class CreateUkPropertyPeriodSummaryServiceSpec extends ServiceSpec {
+class CreateUkPropertyPeriodSummaryServiceSpec extends ServiceSpec with MockFeatureSwitches {
+
+  implicit private val correlationId: String = "X-123"
 
   private val nino       = Nino("AA123456A")
   private val taxYear    = TaxYear.fromMtd("2020-21")
   private val businessId = BusinessId("XAIS12345678910")
 
-  implicit private val correlationId: String = "X-123"
+  private val requestBody =
+    CreateUkPropertyPeriodSummaryRequestBody("2020-01-01", "2020-01-31", None, None)
+
+  protected val request: CreateUkPropertyPeriodSummaryRequestData =
+    CreateUkPropertyPeriodSummaryRequestData(nino, taxYear, businessId, requestBody)
+
+  protected val response: CreateUkPropertyPeriodSummaryResponse = CreateUkPropertyPeriodSummaryResponse(
+    submissionId = "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
+  )
 
   "service" when {
     "service call successful" should {
-      "return mapped result" in new Test {
+      "return mapped result" in new Test with WIS008Enabled {
         MockCreateUkPropertyConnector
           .createUkProperty(request)
           .returns(Future.successful(Right(ResponseWrapper(correlationId, response))))
 
-        await(service.createUkProperty(request)) shouldBe Right(ResponseWrapper(correlationId, response))
+        val result: ServiceOutcome[CreateUkPropertyPeriodSummaryResponse] = await(service.createUkProperty(request))
+        result shouldBe Right(ResponseWrapper(correlationId, response))
       }
     }
 
     "unsuccessful" should {
       "map errors according to spec" when {
 
-        def serviceError(downstreamErrorCode: String, error: MtdError): Unit =
-          s"a $downstreamErrorCode error is returned from the service" in new Test {
+        def serviceError(wis008Enabled: Boolean)(downstreamErrorCode: String, error: MtdError): Unit =
+          s"a $downstreamErrorCode error is returned from the servic eand WIS008 is $wis008Enabled" in new Test {
+
+            withWIS008Enabled(wis008Enabled)
 
             MockCreateUkPropertyConnector
               .createUkProperty(request)
               .returns(Future.successful(Left(ResponseWrapper(correlationId, DownstreamErrors.single(DownstreamErrorCode(downstreamErrorCode))))))
 
-            await(service.createUkProperty(request)) shouldBe Left(ErrorWrapper(correlationId, error))
+            val result: ServiceOutcome[CreateUkPropertyPeriodSummaryResponse] = await(service.createUkProperty(request))
+            result shouldBe Left(ErrorWrapper(correlationId, error))
           }
 
         val errors = List(
@@ -87,29 +102,32 @@ class CreateUkPropertyPeriodSummaryServiceSpec extends ServiceSpec {
           "BUSINESS_INCOME_PERIOD_RESTRICTION" -> InternalError
         )
 
-        (errors ++ extraTysErrors).foreach(args => (serviceError _).tupled(args))
+        val wis008Errors = List(
+          ("INVALID_SUBMISSION_PERIOD", RuleInvalidSubmissionPeriodError),
+          ("INVALID_SUBMISSION_END_DATE", RuleInvalidSubmissionEndDateError)
+        )
+
+        (errors ++ extraTysErrors ++ wis008Errors).foreach((serviceError(wis008Enabled = true) _).tupled)
+
+        List(
+          "INVALID_SUBMISSION_PERIOD",
+          "INVALID_SUBMISSION_END_DATE"
+        ).foreach(serviceError(wis008Enabled = false)(_, InternalError))
       }
     }
   }
 
-  trait Test extends MockCreateUkPropertyPeriodSummaryConnector {
-    implicit protected val hc: HeaderCarrier              = HeaderCarrier()
-    implicit protected val logContext: EndpointLogContext = EndpointLogContext("c", "ep")
+  private trait Test extends MockCreateUkPropertyPeriodSummaryConnector {
+    implicit protected val hc: HeaderCarrier    = HeaderCarrier()
+    implicit val logContext: EndpointLogContext = EndpointLogContext("c", "ep")
 
-    protected val service = new CreateUkPropertyPeriodSummaryService(
-      connector = mockCreateUkPropertyConnector
-    )
+    protected val service = new CreateUkPropertyPeriodSummaryService(mockCreateUkPropertyConnector)
+  }
 
-    private val requestBody =
-      CreateUkPropertyPeriodSummaryRequestBody("2020-01-01", "2020-01-31", None, None)
+  private def withWIS008Enabled(enabled: Boolean): Unit = MockFeatureSwitches.isWIS008Enabled.returns(enabled)
 
-    protected val request: CreateUkPropertyPeriodSummaryRequestData =
-      CreateUkPropertyPeriodSummaryRequestData(nino, taxYear, businessId, requestBody)
-
-    protected val response: CreateUkPropertyPeriodSummaryResponse = CreateUkPropertyPeriodSummaryResponse(
-      submissionId = "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
-    )
-
+  private trait WIS008Enabled {
+    withWIS008Enabled(true)
   }
 
 }

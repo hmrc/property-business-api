@@ -28,7 +28,8 @@ import v2.models.response.retrieveUkPropertyPeriodSummary.{RetrieveUkPropertyPer
 
 import scala.concurrent.Future
 
-class RetrieveUkPropertyPeriodSummaryConnectorSpec extends ConnectorSpec with ResponseModelsFixture {
+class
+RetrieveUkPropertyPeriodSummaryConnectorSpec extends ConnectorSpec with ResponseModelsFixture {
 
   private val nino             = Nino("AA123456A")
   private val businessId       = BusinessId("XAIS12345678910")

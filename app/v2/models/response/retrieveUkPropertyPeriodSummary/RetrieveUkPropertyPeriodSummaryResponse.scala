@@ -26,7 +26,6 @@ import v2.hateoas.HateoasLinks
 case class RetrieveUkPropertyPeriodSummaryResponse(submittedOn: Timestamp,
                                                    fromDate: String,
                                                    toDate: String,
-                                                   // periodCreationDate: Option[String], // To be reinstated, see MTDSA-15575
                                                    ukFhlProperty: Option[UkFhlProperty],
                                                    ukNonFhlProperty: Option[UkNonFhlProperty])
 
@@ -37,7 +36,6 @@ object RetrieveUkPropertyPeriodSummaryResponse extends HateoasLinks {
     (__ \ "submittedOn").read[Timestamp] and
       (__ \ "fromDate").read[String] and
       (__ \ "toDate").read[String] and
-//      (__ \ "periodCreationDate").readNullable[String] and // To be reinstated, see MTDSA-15575
       (__ \ "ukFhlProperty").readNullable[UkFhlProperty] and
       (__ \ "ukOtherProperty").readNullable[UkNonFhlProperty]
   )(RetrieveUkPropertyPeriodSummaryResponse.apply _)

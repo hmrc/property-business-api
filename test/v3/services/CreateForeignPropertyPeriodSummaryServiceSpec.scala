@@ -20,47 +20,56 @@ import api.controllers.EndpointLogContext
 import api.models.domain.{BusinessId, Nino, TaxYear}
 import api.models.errors._
 import api.models.outcomes.ResponseWrapper
-import support.UnitSpec
-import uk.gov.hmrc.http.HeaderCarrier
+import api.services.ServiceSpec
 import v3.connectors.MockCreateForeignPropertyPeriodSummaryConnector
 import v3.fixtures.createForeignPropertyPeriodSummary.CreateForeignPropertyPeriodSummaryFixtures
 import v3.models.request.createForeignPropertyPeriodSummary._
 import v3.models.response.createForeignPropertyPeriodSummary.CreateForeignPropertyPeriodSummaryResponse
 
-import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-class CreateForeignPropertyPeriodSummaryServiceSpec extends UnitSpec with CreateForeignPropertyPeriodSummaryFixtures {
+class CreateForeignPropertyPeriodSummaryServiceSpec
+    extends ServiceSpec
+    with MockCreateForeignPropertyPeriodSummaryConnector
+    with CreateForeignPropertyPeriodSummaryFixtures {
+
+  implicit private val correlationId: String          = "X-123"
+  implicit private val logContext: EndpointLogContext = EndpointLogContext("c", "ep")
 
   private val nino       = Nino("AA123456A")
   private val businessId = BusinessId("XAIS12345678910")
   private val taxYear    = TaxYear.fromMtd("2020-21")
 
-  implicit private val correlationId: String = "X-123"
+  private val requestData = CreateForeignPropertyPeriodSummaryRequestData(nino, businessId, taxYear, regularExpensesRequestBody)
+
+  private val responseData = CreateForeignPropertyPeriodSummaryResponse("4557ecb5-fd32-48cc-81f5-e6acd1099f3c")
+
+  private val service = new CreateForeignPropertyPeriodSummaryService(mockCreateForeignPropertyConnector)
 
   "service" should {
     "service call successful" when {
-      "return mapped result" in new Test {
+      "return mapped result" in {
         MockCreateForeignPropertyConnector
-          .createForeignProperty(expensesRequestData)
-          .returns(Future.successful(Right(ResponseWrapper(correlationId, response))))
+          .createForeignProperty(requestData)
+          .returns(Future.successful(Right(ResponseWrapper(correlationId, responseData))))
 
-        await(service.createForeignProperty(expensesRequestData)) shouldBe Right(ResponseWrapper(correlationId, response))
+        val result = await(service.createForeignProperty(requestData))
+        result shouldBe Right(ResponseWrapper(correlationId, responseData))
       }
     }
   }
 
   "unsuccessful" should {
     "map errors according to spec" when {
-
       def serviceError(downstreamErrorCode: String, error: MtdError): Unit =
-        s"a $downstreamErrorCode error is returned from the service" in new Test {
+        s"a $downstreamErrorCode error is returned from the service" in {
 
           MockCreateForeignPropertyConnector
-            .createForeignProperty(expensesRequestData)
+            .createForeignProperty(requestData)
             .returns(Future.successful(Left(ResponseWrapper(correlationId, DownstreamErrors.single(DownstreamErrorCode(downstreamErrorCode))))))
 
-          await(service.createForeignProperty(expensesRequestData)) shouldBe Left(ErrorWrapper(correlationId, error))
+          val result = await(service.createForeignProperty(requestData))
+          result shouldBe Left(ErrorWrapper(correlationId, error))
         }
 
       val errors = List(
@@ -91,24 +100,8 @@ class CreateForeignPropertyPeriodSummaryServiceSpec extends UnitSpec with Create
         "SUBMISSION_DATE_ISSUE"   -> RuleMisalignedPeriodError
       )
 
-      (errors ++ extraTysErrors).foreach(args => (serviceError _).tupled(args))
+      (errors ++ extraTysErrors).foreach((serviceError _).tupled)
     }
-  }
-
-  trait Test extends MockCreateForeignPropertyPeriodSummaryConnector {
-    implicit protected val hc: HeaderCarrier              = HeaderCarrier()
-    implicit protected val logContext: EndpointLogContext = EndpointLogContext("c", "ep")
-
-    protected val service = new CreateForeignPropertyPeriodSummaryService(
-      connector = mockCreateForeignPropertyConnector
-    )
-
-    protected val response: CreateForeignPropertyPeriodSummaryResponse =
-      CreateForeignPropertyPeriodSummaryResponse("4557ecb5-fd32-48cc-81f5-e6acd1099f3c")
-
-    protected val expensesRequestData: CreateForeignPropertyPeriodSummaryRequestData =
-      CreateForeignPropertyPeriodSummaryRequestData(nino, businessId, taxYear, regularExpensesRequestBody)
-
   }
 
 }

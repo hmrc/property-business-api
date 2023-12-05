@@ -84,7 +84,8 @@ class CreateUkPropertyPeriodSummaryServiceSpec extends ServiceSpec {
           "INVALID_CORRELATION_ID"             -> InternalError,
           "PERIOD_NOT_ALIGNED"                 -> RuleMisalignedPeriodError,
           "PERIOD_OVERLAPS"                    -> RuleOverlappingPeriodError,
-          "BUSINESS_INCOME_PERIOD_RESTRICTION" -> RuleBusinessIncomePeriodRestriction
+          "BUSINESS_INCOME_PERIOD_RESTRICTION" -> RuleBusinessIncomePeriodRestriction,
+          "SUBMISSION_DATE_ISSUE"              -> RuleMisalignedPeriodError
         )
 
         (errors ++ extraTysErrors).foreach(args => (serviceError _).tupled(args))

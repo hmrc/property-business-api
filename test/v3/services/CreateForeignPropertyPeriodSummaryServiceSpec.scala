@@ -87,7 +87,8 @@ class CreateForeignPropertyPeriodSummaryServiceSpec extends UnitSpec with Create
         "INVALID_INCOMESOURCE_ID" -> BusinessIdFormatError,
         "INVALID_CORRELATION_ID"  -> InternalError,
         "PERIOD_NOT_ALIGNED"      -> RuleMisalignedPeriodError,
-        "PERIOD_OVERLAPS"         -> RuleOverlappingPeriodError
+        "PERIOD_OVERLAPS"         -> RuleOverlappingPeriodError,
+        "SUBMISSION_DATE_ISSUE"   -> RuleMisalignedPeriodError
       )
 
       (errors ++ extraTysErrors).foreach(args => (serviceError _).tupled(args))

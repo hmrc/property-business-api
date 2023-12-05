@@ -44,12 +44,12 @@ class CreateForeignPropertyPeriodSummaryServiceSpec
 
   private val responseData = CreateForeignPropertyPeriodSummaryResponse("4557ecb5-fd32-48cc-81f5-e6acd1099f3c")
 
-  private val service = new CreateForeignPropertyPeriodSummaryService(mockCreateForeignPropertyConnector)
+  private val service = new CreateForeignPropertyPeriodSummaryService(mockCreateForeignPropertyPeriodSummaryConnector)
 
   "service" should {
     "service call successful" when {
       "return mapped result" in {
-        MockCreateForeignPropertyConnector
+        MockedCreateForeignPropertyPeriodSummaryConnector
           .createForeignProperty(requestData)
           .returns(Future.successful(Right(ResponseWrapper(correlationId, responseData))))
 
@@ -64,7 +64,7 @@ class CreateForeignPropertyPeriodSummaryServiceSpec
       def serviceError(downstreamErrorCode: String, error: MtdError): Unit =
         s"a $downstreamErrorCode error is returned from the service" in {
 
-          MockCreateForeignPropertyConnector
+          MockedCreateForeignPropertyPeriodSummaryConnector
             .createForeignProperty(requestData)
             .returns(Future.successful(Left(ResponseWrapper(correlationId, DownstreamErrors.single(DownstreamErrorCode(downstreamErrorCode))))))
 

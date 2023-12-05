@@ -21,12 +21,12 @@ import support.UnitSpec
 
 class CreateForeignPropertyPeriodSummaryResponseSpec extends UnitSpec {
 
-  private val createForeignPropertyResponse = CreateForeignPropertyPeriodSummaryResponse(
-    "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
-  )
+  private val submissionId = "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
 
-  private val json = Json.parse("""{
-                                  |  "submissionId": "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
+  private val createForeignPropertyResponse = CreateForeignPropertyPeriodSummaryResponse(submissionId)
+
+  private val json = Json.parse(s"""{
+                                  |  "submissionId": "$submissionId"
                                   |}""".stripMargin)
 
   "reads" when {

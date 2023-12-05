@@ -47,13 +47,13 @@ class CreateUkPropertyPeriodSummaryServiceSpec extends ServiceSpec with MockCrea
   )
 
   private val service = new CreateUkPropertyPeriodSummaryService(
-    connector = mockCreateUkPropertyConnector
+    connector = mockCreateUkPropertyPeriodSummaryConnector
   )
 
   "service" when {
     "service call successful" should {
       "return mapped result" in {
-        MockCreateUkPropertyConnector
+        MockedCreateUkPropertyPeriodSummaryConnector
           .createUkProperty(requestData)
           .returns(Future.successful(Right(ResponseWrapper(correlationId, responseData))))
 
@@ -67,7 +67,7 @@ class CreateUkPropertyPeriodSummaryServiceSpec extends ServiceSpec with MockCrea
         def serviceError(downstreamErrorCode: String, error: MtdError): Unit =
           s"a $downstreamErrorCode error is returned from the service" in {
 
-            MockCreateUkPropertyConnector
+            MockedCreateUkPropertyPeriodSummaryConnector
               .createUkProperty(requestData)
               .returns(Future.successful(Left(ResponseWrapper(correlationId, DownstreamErrors.single(DownstreamErrorCode(downstreamErrorCode))))))
 

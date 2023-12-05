@@ -27,14 +27,14 @@ import scala.concurrent.{ExecutionContext, Future}
 
 trait MockCreateForeignPropertyPeriodSummaryConnector extends MockFactory {
 
-  val mockCreateForeignPropertyConnector: CreateForeignPropertyPeriodSummaryConnector = mock[CreateForeignPropertyPeriodSummaryConnector]
+  val mockCreateForeignPropertyPeriodSummaryConnector: CreateForeignPropertyPeriodSummaryConnector = mock[CreateForeignPropertyPeriodSummaryConnector]
 
-  object MockCreateForeignPropertyConnector {
+  object MockedCreateForeignPropertyPeriodSummaryConnector {
 
     def createForeignProperty(requestData: CreateForeignPropertyPeriodSummaryRequestData)
-    : CallHandler[Future[DownstreamOutcome[CreateForeignPropertyPeriodSummaryResponse]]] = {
+        : CallHandler[Future[DownstreamOutcome[CreateForeignPropertyPeriodSummaryResponse]]] = {
       (
-        mockCreateForeignPropertyConnector
+        mockCreateForeignPropertyPeriodSummaryConnector
           .createForeignProperty(_: CreateForeignPropertyPeriodSummaryRequestData)(
             _: HeaderCarrier,
             _: ExecutionContext,
@@ -47,4 +47,3 @@ trait MockCreateForeignPropertyPeriodSummaryConnector extends MockFactory {
   }
 
 }
-

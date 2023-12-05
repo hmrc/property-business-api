@@ -20,7 +20,7 @@ import api.connectors.DownstreamUri.{IfsUri, TaxYearSpecificIfsUri}
 import api.connectors.httpparsers.StandardDownstreamHttpParser.{SuccessCode, reads}
 import api.connectors.{BaseDownstreamConnector, DownstreamOutcome}
 import config.AppConfig
-import play.api.http.Status
+import play.api.http.Status.OK
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
 import v3.models.request.createForeignPropertyPeriodSummary.CreateForeignPropertyPeriodSummaryRequestData
 import v3.models.response.createForeignPropertyPeriodSummary.CreateForeignPropertyPeriodSummaryResponse
@@ -38,7 +38,7 @@ class CreateForeignPropertyPeriodSummaryConnector @Inject() (val http: HttpClien
 
     import request._
 
-    implicit val successCode: SuccessCode = SuccessCode(Status.OK)
+    implicit val successCode: SuccessCode = SuccessCode(OK)
 
     val downstreamUri = if (taxYear.useTaxYearSpecificApi) {
       TaxYearSpecificIfsUri[CreateForeignPropertyPeriodSummaryResponse](
@@ -46,7 +46,6 @@ class CreateForeignPropertyPeriodSummaryConnector @Inject() (val http: HttpClien
       )
     } else {
       IfsUri[CreateForeignPropertyPeriodSummaryResponse](
-        // Note that MTD tax year format is used
         s"income-tax/business/property/periodic?taxableEntityId=$nino&taxYear=${taxYear.asMtd}&incomeSourceId=$businessId"
       )
     }

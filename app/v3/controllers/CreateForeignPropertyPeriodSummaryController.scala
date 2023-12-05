@@ -21,7 +21,7 @@ import api.hateoas.HateoasFactory
 import api.services.{AuditService, EnrolmentsAuthService, MtdIdLookupService}
 import play.api.libs.json.JsValue
 import play.api.mvc.{Action, ControllerComponents}
-import routing.{Version, Version2}
+import routing.{Version, Version3}
 import utils.IdGenerator
 import v3.controllers.validators.CreateForeignPropertyPeriodSummaryValidatorFactory
 import v3.models.response.createForeignPropertyPeriodSummary.CreateForeignPropertyPeriodSummaryHateoasData
@@ -61,7 +61,7 @@ class CreateForeignPropertyPeriodSummaryController @Inject() (val authService: E
               auditService,
               "CreateForeignPropertyIncomeAndExpensesPeriodSummary",
               "create-foreign-property-income-and-expenses-period-summary",
-              Version.from(request, orElse = Version2),
+              Version.from(request, orElse = Version3),
               Map("nino" -> nino, "businessId" -> businessId, "taxYear" -> taxYear),
               Some(request.body)
             )

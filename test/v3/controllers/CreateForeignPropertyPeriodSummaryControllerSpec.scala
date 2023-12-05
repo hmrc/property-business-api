@@ -56,7 +56,7 @@ class CreateForeignPropertyPeriodSummaryControllerSpec
       "the request received is valid" in new Test {
         willUseValidator(returningSuccess(requestData))
 
-        MockCreateForeignPropertyService
+        MockedCreateForeignPropertyPeriodSummaryService
           .createForeignProperty(requestData)
           .returns(Future.successful(Right(ResponseWrapper(correlationId, response))))
 
@@ -80,7 +80,7 @@ class CreateForeignPropertyPeriodSummaryControllerSpec
         "the service returns an error" in new Test {
           willUseValidator(returningSuccess(requestData))
 
-          MockCreateForeignPropertyService
+          MockedCreateForeignPropertyPeriodSummaryService
             .createForeignProperty(requestData)
             .returns(Future.successful(Left(ErrorWrapper(correlationId, RuleMisalignedPeriodError))))
 
@@ -95,7 +95,7 @@ class CreateForeignPropertyPeriodSummaryControllerSpec
     val controller = new CreateForeignPropertyPeriodSummaryController(
       authService = mockEnrolmentsAuthService,
       lookupService = mockMtdIdLookupService,
-      service = mockCreateForeignPropertyService,
+      service = mockCreateForeignPropertyPeriodSummaryService,
       validatorFactory = mockCreateForeignPropertyPeriodSummaryValidatorFactory,
       auditService = mockAuditService,
       hateoasFactory = mockHateoasFactory,

@@ -20,22 +20,22 @@ import api.controllers.RequestContext
 import api.services.ServiceOutcome
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
-import v3.models.request.createUkPropertyPeriodSummary.CreateUkPropertyPeriodSummaryRequestData
-import v3.models.response.createUkPropertyPeriodSummary.CreateUkPropertyPeriodSummaryResponse
+import v3.models.request.createForeignPropertyPeriodSummary.CreateForeignPropertyPeriodSummaryRequestData
+import v3.models.response.createForeignPropertyPeriodSummary.CreateForeignPropertyPeriodSummaryResponse
 
 import scala.concurrent.{ExecutionContext, Future}
 
-trait MockCreateUkPropertyPeriodSummaryService extends MockFactory {
+trait MockCreateForeignPropertyPeriodSummaryService extends MockFactory {
 
-  val mockCreateUkPropertyPeriodSummaryService: CreateUkPropertyPeriodSummaryService = mock[CreateUkPropertyPeriodSummaryService]
+  val mockCreateForeignPropertyPeriodSummaryService: CreateForeignPropertyPeriodSummaryService = mock[CreateForeignPropertyPeriodSummaryService]
 
-  object MockedCreateUkPropertyPeriodSummaryService {
+  object MockedCreateForeignPropertyPeriodSummaryService {
 
-    def createUkProperty(
-        requestData: CreateUkPropertyPeriodSummaryRequestData): CallHandler[Future[ServiceOutcome[CreateUkPropertyPeriodSummaryResponse]]] = {
+    def createForeignProperty(requestData: CreateForeignPropertyPeriodSummaryRequestData)
+        : CallHandler[Future[ServiceOutcome[CreateForeignPropertyPeriodSummaryResponse]]] = {
       (
-        mockCreateUkPropertyPeriodSummaryService
-          .createUkProperty(_: CreateUkPropertyPeriodSummaryRequestData)(
+        mockCreateForeignPropertyPeriodSummaryService
+          .createForeignProperty(_: CreateForeignPropertyPeriodSummaryRequestData)(
             _: RequestContext,
             _: ExecutionContext
           )

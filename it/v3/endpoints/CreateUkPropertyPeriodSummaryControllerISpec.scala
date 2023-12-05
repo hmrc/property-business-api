@@ -572,6 +572,7 @@ class CreateUkPropertyPeriodSummaryControllerISpec extends IntegrationBaseSpec {
           (BAD_REQUEST, "INVALID_INCOMESOURCE_ID", BAD_REQUEST, BusinessIdFormatError),
           (BAD_REQUEST, "INVALID_CORRELATION_ID", INTERNAL_SERVER_ERROR, InternalError),
           (UNPROCESSABLE_ENTITY, "PERIOD_NOT_ALIGNED", BAD_REQUEST, RuleMisalignedPeriodError),
+          (UNPROCESSABLE_ENTITY, "SUBMISSION_DATE_ISSUE", BAD_REQUEST, RuleMisalignedPeriodError),
           (UNPROCESSABLE_ENTITY, "BUSINESS_INCOME_PERIOD_RESTRICTION", INTERNAL_SERVER_ERROR, InternalError)
 //          (UNPROCESSABLE_ENTITY, "INVALID_SUBMISSION_PERIOD", BAD_REQUEST, RuleInvalidSubmissionPeriodError),
 //          (UNPROCESSABLE_ENTITY, "INVALID_SUBMISSION_END_DATE", BAD_REQUEST, RuleInvalidSubmissionEndDateError)

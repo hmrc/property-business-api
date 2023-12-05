@@ -20,7 +20,7 @@ import api.models.errors._
 import api.models.utils.JsonErrorValidators
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import play.api.http.HeaderNames.ACCEPT
-import play.api.http.Status
+import play.api.http.Status._
 import play.api.libs.json._
 import play.api.libs.ws.{WSRequest, WSResponse}
 import play.api.test.Helpers.AUTHORIZATION
@@ -65,12 +65,12 @@ class CreateForeignPropertyPeriodSummaryControllerISpec extends IntegrationBaseS
           AuditStub.audit()
           AuthStub.authorised()
           MtdIdLookupStub.ninoFound(nino)
-          DownstreamStub.onSuccess(DownstreamStub.POST, downstreamUri, downstreamQueryParams, Status.OK, downstreamResponseBody)
+          DownstreamStub.onSuccess(DownstreamStub.POST, downstreamUri, downstreamQueryParams, OK, downstreamResponseBody)
         }
 
         val response: WSResponse = await(request().post(requestBody))
         response.json shouldBe mtdResponseBody
-        response.status shouldBe Status.CREATED
+        response.status shouldBe CREATED
         response.header("Content-Type") shouldBe Some("application/json")
       }
 
@@ -79,12 +79,12 @@ class CreateForeignPropertyPeriodSummaryControllerISpec extends IntegrationBaseS
           AuditStub.audit()
           AuthStub.authorised()
           MtdIdLookupStub.ninoFound(nino)
-          DownstreamStub.onSuccess(DownstreamStub.POST, downstreamUri, downstreamQueryParams, Status.OK, downstreamResponseBody)
+          DownstreamStub.onSuccess(DownstreamStub.POST, downstreamUri, downstreamQueryParams, OK, downstreamResponseBody)
         }
 
         val response: WSResponse = await(request().post(requestBody))
         response.json shouldBe mtdResponseBody
-        response.status shouldBe Status.CREATED
+        response.status shouldBe CREATED
         response.header("Content-Type") shouldBe Some("application/json")
       }
     }
@@ -98,7 +98,7 @@ class CreateForeignPropertyPeriodSummaryControllerISpec extends IntegrationBaseS
         }
         val response: WSResponse = await(request().addHttpHeaders(("Content-Type", "application/json")).post("{ badJson }"))
         response.json shouldBe Json.toJson(BadRequestError)
-        response.status shouldBe Status.BAD_REQUEST
+        response.status shouldBe BAD_REQUEST
       }
     }
 
@@ -129,55 +129,55 @@ class CreateForeignPropertyPeriodSummaryControllerISpec extends IntegrationBaseS
         }
 
         val input = Seq(
-          ("AA1123A", "XAIS12345678910", "2022-23", requestBody, Status.BAD_REQUEST, NinoFormatError),
-          ("AA123456A", "XAIS12345678910", "20223", requestBody, Status.BAD_REQUEST, TaxYearFormatError),
-          ("AA123456A", "XA***IS1", "2022-23", requestBody, Status.BAD_REQUEST, BusinessIdFormatError),
-          ("AA123456A", "XAIS12345678910", "2021-23", requestBody, Status.BAD_REQUEST, RuleTaxYearRangeInvalidError),
-          ("AA123456A", "XAIS12345678910", "2020-21", requestBody, Status.BAD_REQUEST, RuleTaxYearNotSupportedError),
+          ("AA1123A", "XAIS12345678910", "2022-23", requestBody, BAD_REQUEST, NinoFormatError),
+          ("AA123456A", "XAIS12345678910", "20223", requestBody, BAD_REQUEST, TaxYearFormatError),
+          ("AA123456A", "XA***IS1", "2022-23", requestBody, BAD_REQUEST, BusinessIdFormatError),
+          ("AA123456A", "XAIS12345678910", "2021-23", requestBody, BAD_REQUEST, RuleTaxYearRangeInvalidError),
+          ("AA123456A", "XAIS12345678910", "2020-21", requestBody, BAD_REQUEST, RuleTaxYearNotSupportedError),
           (
             "AA123456A",
             "XAIS12345678910",
             "2021-22",
             requestBody.update("/foreignFhlEea/expenses/premisesRunningCosts", JsNumber(1.234)),
-            Status.BAD_REQUEST,
+            BAD_REQUEST,
             ValueFormatError.copy(paths = Some(Seq("/foreignFhlEea/expenses/premisesRunningCosts")))),
           (
             "AA123456A",
             "XAIS12345678910",
             "2022-23",
             requestBody.update("/foreignFhlEea/expenses/consolidatedExpenses", JsNumber(1.23)),
-            Status.BAD_REQUEST,
+            BAD_REQUEST,
             RuleBothExpensesSuppliedError.copy(paths = Some(Seq("/foreignFhlEea/expenses")))),
-          ("AA123456A", "XAIS12345678910", "2021-22", JsObject.empty, Status.BAD_REQUEST, RuleIncorrectOrEmptyBodyError),
-          ("AA123456A", "XAIS12345678910", "2022-23", requestBody.update("/fromDate", JsString("XX")), Status.BAD_REQUEST, FromDateFormatError),
-          ("AA123456A", "XAIS12345678910", "2022-23", requestBody.update("/toDate", JsString("XX")), Status.BAD_REQUEST, ToDateFormatError),
+          ("AA123456A", "XAIS12345678910", "2021-22", JsObject.empty, BAD_REQUEST, RuleIncorrectOrEmptyBodyError),
+          ("AA123456A", "XAIS12345678910", "2022-23", requestBody.update("/fromDate", JsString("XX")), BAD_REQUEST, FromDateFormatError),
+          ("AA123456A", "XAIS12345678910", "2022-23", requestBody.update("/toDate", JsString("XX")), BAD_REQUEST, ToDateFormatError),
           (
             "AA123456A",
             "XAIS12345678910",
             "2022-23",
             requestBody.update("/toDate", JsString("1999-01-01")),
-            Status.BAD_REQUEST,
+            BAD_REQUEST,
             RuleToDateBeforeFromDateError),
           (
             "AA123456A",
             "XAIS12345678910",
             "2022-23",
             requestBodyWith(nonFhlEntryWith("France")),
-            Status.BAD_REQUEST,
+            BAD_REQUEST,
             CountryCodeFormatError.copy(paths = Some(Seq("/foreignNonFhlProperty/0/countryCode")))),
           (
             "AA123456A",
             "XAIS12345678910",
             "2022-23",
             requestBodyWith(nonFhlEntryWith("QQQ")),
-            Status.BAD_REQUEST,
+            BAD_REQUEST,
             RuleCountryCodeError.copy(paths = Some(Seq("/foreignNonFhlProperty/0/countryCode")))),
           (
             "AA123456A",
             "XAIS12345678910",
             "2022-23",
             requestBodyWith(nonFhlEntry, nonFhlEntry),
-            Status.BAD_REQUEST,
+            BAD_REQUEST,
             RuleDuplicateCountryCodeError.forDuplicatedCodesAndPaths(
               "AFG",
               Seq("/foreignNonFhlProperty/0/countryCode", "/foreignNonFhlProperty/1/countryCode")))
@@ -203,31 +203,32 @@ class CreateForeignPropertyPeriodSummaryControllerISpec extends IntegrationBaseS
         }
 
         val errors = List(
-          (Status.BAD_REQUEST, "INVALID_TAXABLE_ENTITY_ID", Status.BAD_REQUEST, NinoFormatError),
-          (Status.BAD_REQUEST, "INVALID_INCOMESOURCEID", Status.BAD_REQUEST, BusinessIdFormatError),
-          (Status.BAD_REQUEST, "INVALID_PAYLOAD", Status.INTERNAL_SERVER_ERROR, InternalError),
-          (Status.BAD_REQUEST, "INVALID_CORRELATIONID", Status.INTERNAL_SERVER_ERROR, InternalError),
-          (Status.BAD_REQUEST, "INVALID_TAX_YEAR", Status.BAD_REQUEST, TaxYearFormatError),
-          (Status.NOT_FOUND, "INCOME_SOURCE_NOT_FOUND", Status.NOT_FOUND, NotFoundError),
-          (Status.CONFLICT, "DUPLICATE_SUBMISSION", Status.BAD_REQUEST, RuleDuplicateSubmissionError),
-          (Status.UNPROCESSABLE_ENTITY, "NOT_ALIGN_PERIOD", Status.BAD_REQUEST, RuleMisalignedPeriodError),
-          (Status.UNPROCESSABLE_ENTITY, "OVERLAPS_IN_PERIOD", Status.BAD_REQUEST, RuleOverlappingPeriodError),
-          (Status.UNPROCESSABLE_ENTITY, "GAPS_IN_PERIOD", Status.BAD_REQUEST, RuleNotContiguousPeriodError),
-          (Status.UNPROCESSABLE_ENTITY, "INVALID_DATE_RANGE", Status.BAD_REQUEST, RuleToDateBeforeFromDateError),
-          (Status.UNPROCESSABLE_ENTITY, "DUPLICATE_COUNTRY_CODE", Status.BAD_REQUEST, RuleDuplicateCountryCodeError),
-          (Status.UNPROCESSABLE_ENTITY, "INCOMPATIBLE_PAYLOAD", Status.BAD_REQUEST, RuleTypeOfBusinessIncorrectError),
-          (Status.UNPROCESSABLE_ENTITY, "TAX_YEAR_NOT_SUPPORTED", Status.BAD_REQUEST, RuleTaxYearNotSupportedError),
-          (Status.UNPROCESSABLE_ENTITY, "MISSING_EXPENSES", Status.INTERNAL_SERVER_ERROR, InternalError),
-          (Status.INTERNAL_SERVER_ERROR, "SERVER_ERROR", Status.INTERNAL_SERVER_ERROR, InternalError),
-          (Status.SERVICE_UNAVAILABLE, "SERVICE_UNAVAILABLE", Status.INTERNAL_SERVER_ERROR, InternalError)
+          (BAD_REQUEST, "INVALID_TAXABLE_ENTITY_ID", BAD_REQUEST, NinoFormatError),
+          (BAD_REQUEST, "INVALID_INCOMESOURCEID", BAD_REQUEST, BusinessIdFormatError),
+          (BAD_REQUEST, "INVALID_PAYLOAD", INTERNAL_SERVER_ERROR, InternalError),
+          (BAD_REQUEST, "INVALID_CORRELATIONID", INTERNAL_SERVER_ERROR, InternalError),
+          (BAD_REQUEST, "INVALID_TAX_YEAR", BAD_REQUEST, TaxYearFormatError),
+          (NOT_FOUND, "INCOME_SOURCE_NOT_FOUND", NOT_FOUND, NotFoundError),
+          (CONFLICT, "DUPLICATE_SUBMISSION", BAD_REQUEST, RuleDuplicateSubmissionError),
+          (UNPROCESSABLE_ENTITY, "NOT_ALIGN_PERIOD", BAD_REQUEST, RuleMisalignedPeriodError),
+          (UNPROCESSABLE_ENTITY, "OVERLAPS_IN_PERIOD", BAD_REQUEST, RuleOverlappingPeriodError),
+          (UNPROCESSABLE_ENTITY, "GAPS_IN_PERIOD", BAD_REQUEST, RuleNotContiguousPeriodError),
+          (UNPROCESSABLE_ENTITY, "INVALID_DATE_RANGE", BAD_REQUEST, RuleToDateBeforeFromDateError),
+          (UNPROCESSABLE_ENTITY, "DUPLICATE_COUNTRY_CODE", BAD_REQUEST, RuleDuplicateCountryCodeError),
+          (UNPROCESSABLE_ENTITY, "INCOMPATIBLE_PAYLOAD", BAD_REQUEST, RuleTypeOfBusinessIncorrectError),
+          (UNPROCESSABLE_ENTITY, "TAX_YEAR_NOT_SUPPORTED", BAD_REQUEST, RuleTaxYearNotSupportedError),
+          (UNPROCESSABLE_ENTITY, "MISSING_EXPENSES", INTERNAL_SERVER_ERROR, InternalError),
+          (INTERNAL_SERVER_ERROR, "SERVER_ERROR", INTERNAL_SERVER_ERROR, InternalError),
+          (SERVICE_UNAVAILABLE, "SERVICE_UNAVAILABLE", INTERNAL_SERVER_ERROR, InternalError)
         )
 
         val extraTysErrors = List(
-          (Status.BAD_REQUEST, "INVALID_INCOMESOURCE_ID", Status.BAD_REQUEST, BusinessIdFormatError),
-          (Status.BAD_REQUEST, "INVALID_CORRELATION_ID", Status.INTERNAL_SERVER_ERROR, InternalError),
-          (Status.UNPROCESSABLE_ENTITY, "PERIOD_NOT_ALIGNED", Status.BAD_REQUEST, RuleMisalignedPeriodError),
-          (Status.UNPROCESSABLE_ENTITY, "PERIOD_OVERLAPS", Status.BAD_REQUEST, RuleOverlappingPeriodError),
-          (Status.UNPROCESSABLE_ENTITY, "BUSINESS_INCOME_PERIOD_RESTRICTION", Status.INTERNAL_SERVER_ERROR, InternalError)
+          (BAD_REQUEST, "INVALID_INCOMESOURCE_ID", BAD_REQUEST, BusinessIdFormatError),
+          (BAD_REQUEST, "INVALID_CORRELATION_ID", INTERNAL_SERVER_ERROR, InternalError),
+          (UNPROCESSABLE_ENTITY, "PERIOD_NOT_ALIGNED", BAD_REQUEST, RuleMisalignedPeriodError),
+          (UNPROCESSABLE_ENTITY, "PERIOD_OVERLAPS", BAD_REQUEST, RuleOverlappingPeriodError),
+          (UNPROCESSABLE_ENTITY, "SUBMISSION_DATE_ISSUE", BAD_REQUEST, RuleMisalignedPeriodError),
+          (UNPROCESSABLE_ENTITY, "BUSINESS_INCOME_PERIOD_RESTRICTION", INTERNAL_SERVER_ERROR, InternalError)
         )
 
         (errors ++ extraTysErrors).foreach(args => (serviceErrorTest _).tupled(args))

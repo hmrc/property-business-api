@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-package v2.models.request.common.foreignFhlEea
+package v3.models.request.createForeignPropertyPeriodSummary.foreignFhlEea
 
-import play.api.libs.json.{JsValue, Json}
+import play.api.libs.json.Json
 import support.UnitSpec
 
 class CreateForeignFhlEeaExpensesSpec extends UnitSpec {
 
-  val mtdJson: JsValue = Json.parse(
+  private val mtdJson = Json.parse(
     """
       |{
       |  "premisesRunningCosts": 4567.98,
@@ -36,7 +36,7 @@ class CreateForeignFhlEeaExpensesSpec extends UnitSpec {
     """.stripMargin
   )
 
-  val model: CreateForeignFhlEeaExpenses = CreateForeignFhlEeaExpenses(
+  private val model = CreateForeignFhlEeaExpenses(
     premisesRunningCosts = Some(4567.98),
     repairsAndMaintenance = Some(98765.67),
     financialCosts = Some(4566.95),
@@ -47,7 +47,7 @@ class CreateForeignFhlEeaExpensesSpec extends UnitSpec {
     consolidatedExpenses = Some(456.98)
   )
 
-  val ifsJson: JsValue = Json.parse(
+  private val downstreamJson = Json.parse(
     """
       |{
       |  "premisesRunningCosts": 4567.98,
@@ -73,7 +73,7 @@ class CreateForeignFhlEeaExpensesSpec extends UnitSpec {
   "writes" should {
     "write to JSON" when {
       "valid model is provided" in {
-        Json.toJson(model) shouldBe ifsJson
+        Json.toJson(model) shouldBe downstreamJson
       }
     }
   }

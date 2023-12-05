@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package v2.models.request.common.foreignPropertyEntry
+package v3.models.request.createForeignPropertyPeriodSummary.foreignPropertyEntry
 
 import play.api.libs.functional.syntax._
 import play.api.libs.json.{JsPath, Json, Reads, Writes}

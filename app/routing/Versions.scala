@@ -27,9 +27,6 @@ object Version {
 
   implicit object VersionWrites extends Writes[Version] {
 
-    def from(request: RequestHeader, orElse: Version): Version =
-      Versions.getFromRequest(request).getOrElse(orElse)
-
     def writes(version: Version): JsValue = version match {
       case Version2 => Json.toJson(Version2.name)
       case Version3 => Json.toJson(Version3.name)
@@ -63,7 +60,6 @@ case object Version2 extends Version {
 case object Version3 extends Version {
   val name = "3.0"
 }
-
 
 object Versions {
 

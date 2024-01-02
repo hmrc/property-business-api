@@ -20,10 +20,10 @@ import api.controllers.EndpointLogContext
 import api.models.domain.{BusinessId, Nino, TaxYear}
 import api.models.errors._
 import api.models.outcomes.ResponseWrapper
-import fixtures.CreateForeignPropertyPeriodSummaryFixtures.CreateForeignPropertyPeriodSummaryFixtures
 import support.UnitSpec
 import uk.gov.hmrc.http.HeaderCarrier
 import v2.connectors.MockCreateForeignPropertyPeriodSummaryConnector
+import v2.fixtures.CreateForeignPropertyPeriodSummaryFixtures.CreateForeignPropertyPeriodSummaryFixtures
 import v2.models.request.createForeignPropertyPeriodSummary._
 import v2.models.response.createForeignPropertyPeriodSummary.CreateForeignPropertyPeriodSummaryResponse
 
@@ -87,7 +87,8 @@ class CreateForeignPropertyPeriodSummaryServiceSpec extends UnitSpec with Create
         "INVALID_INCOMESOURCE_ID" -> BusinessIdFormatError,
         "INVALID_CORRELATION_ID"  -> InternalError,
         "PERIOD_NOT_ALIGNED"      -> RuleMisalignedPeriodError,
-        "PERIOD_OVERLAPS"         -> RuleOverlappingPeriodError
+        "PERIOD_OVERLAPS"         -> RuleOverlappingPeriodError,
+        "BUSINESS_INCOME_PERIOD_RESTRICTION" -> InternalError
       )
 
       (errors ++ extraTysErrors).foreach(args => (serviceError _).tupled(args))

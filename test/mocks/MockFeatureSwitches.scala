@@ -20,10 +20,12 @@ import config.FeatureSwitches
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
 
-trait MockFeatureSwitches extends MockFactory{
+trait MockFeatureSwitches extends MockFactory {
   implicit val mockFeatureSwitches: FeatureSwitches = mock[FeatureSwitches]
 
   object MockFeatureSwitches {
-    def isPassDeleteIntentEnabled: CallHandler[Boolean]= (()=> mockFeatureSwitches.isPassDeleteIntentEnabled).expects()
+    def isPassDeleteIntentEnabled: CallHandler[Boolean]        = (() => mockFeatureSwitches.isPassDeleteIntentEnabled).expects()
+    def isRuleSubmissionDateErrorEnabled: CallHandler[Boolean] = (() => mockFeatureSwitches.isRuleSubmissionDateErrorEnabled).expects()
   }
+
 }

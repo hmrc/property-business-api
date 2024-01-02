@@ -62,7 +62,8 @@ class CreateUkPropertyPeriodSummaryService @Inject() (connector: CreateUkPropert
       "INVALID_CORRELATION_ID"             -> InternalError,
       "PERIOD_NOT_ALIGNED"                 -> RuleMisalignedPeriodError,
       "PERIOD_OVERLAPS"                    -> RuleOverlappingPeriodError,
-      "BUSINESS_INCOME_PERIOD_RESTRICTION" -> RuleBusinessIncomePeriodRestriction
+      "SUBMISSION_DATE_ISSUE"              -> RuleMisalignedPeriodError,
+      "BUSINESS_INCOME_PERIOD_RESTRICTION" -> InternalError
       //      "INVALID_SUBMISSION_PERIOD"   -> RuleInvalidSubmissionPeriodError,
       //      "INVALID_SUBMISSION_END_DATE" -> RuleInvalidSubmissionEndDateError
       //      To be reinstated, see MTDSA-15575

@@ -27,14 +27,14 @@ import scala.concurrent.{ExecutionContext, Future}
 
 trait MockCreateUkPropertyPeriodSummaryService extends MockFactory {
 
-  val mockCreateUkPropertyService: CreateUkPropertyPeriodSummaryService = mock[CreateUkPropertyPeriodSummaryService]
+  val mockCreateUkPropertyPeriodSummaryService: CreateUkPropertyPeriodSummaryService = mock[CreateUkPropertyPeriodSummaryService]
 
-  object MockCreateUkPropertyService {
+  object MockedCreateUkPropertyPeriodSummaryService {
 
     def createUkProperty(
         requestData: CreateUkPropertyPeriodSummaryRequestData): CallHandler[Future[ServiceOutcome[CreateUkPropertyPeriodSummaryResponse]]] = {
       (
-        mockCreateUkPropertyService
+        mockCreateUkPropertyPeriodSummaryService
           .createUkProperty(_: CreateUkPropertyPeriodSummaryRequestData)(
             _: RequestContext,
             _: ExecutionContext

@@ -256,7 +256,7 @@ class AmendForeignPropertyPeriodSummaryValidatorFactorySpec extends UnitSpec wit
   private def validator(nino: String, businessId: String, taxYear: String, submissionId: String, body: JsValue) =
     validatorFactory.validator(nino, businessId, taxYear, submissionId, body)
 
-  MockAppConfig.minimumTaxV2Foreign.returns(TaxYear.starting(2021))
+  MockedAppConfig.minimumTaxV2Foreign.returns(TaxYear.starting(2021))
 
   "validator" should {
     "return the parsed domain object" when {

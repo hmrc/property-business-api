@@ -23,11 +23,13 @@ import cats.implicits._
 
 import scala.math.Ordered.orderingToOrdered
 
+/** Provides utilities and extension methods for resolvers and validators.
+  */
 trait ResolverSupport {
   type Resolver[In, Out] = In => Validated[Seq[MtdError], Out]
   type Validator[A]      = A => Option[Seq[MtdError]]
 
-  implicit class SimpleResolverOps[In, Out](resolver: In => Validated[Seq[MtdError], Out]) {
+  implicit class ResolverOps[In, Out](resolver: In => Validated[Seq[MtdError], Out]) {
     def map[Out2](f: Out => Out2): Resolver[In, Out2] = i => resolver(i).map(f)
 
     def thenValidate(validator: Validator[Out]): Resolver[In, Out] = i => resolver(i).andThen(o => validator(o).toInvalid(o))
@@ -40,6 +42,13 @@ trait ResolverSupport {
   implicit class ValidatorOps[A](validator: A => Option[Seq[MtdError]]) {
     def thenValidate(other: Validator[A]): Validator[A] = a => validator(a).orElse(other(a))
   }
+
+  /** Use to lift a a Validator to a Resolver that validates. E.g.
+    * {{{
+    * resolveValid[Int] thenValidate satisfiesMax(1000, someError)
+    * }}}
+    */
+  def resolveValid[A]: Resolver[A, A] = a => Valid(a)
 
   def satisfies[A](error: => MtdError)(predicate: A => Boolean): Validator[A] =
     a => Option.when(!predicate(a))(List(error))
@@ -60,5 +69,5 @@ trait ResolverSupport {
 
 }
 
-// To allow an import-based alternative to extension
+/** To allow an import-based alternative to extension */
 object ResolverSupport extends ResolverSupport

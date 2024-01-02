@@ -53,7 +53,7 @@ class CreateUkPropertyPeriodSummaryControllerSpec
       "the request received is valid" in new Test {
         willUseValidator(returningSuccess(requestDataConsolidatedExpense))
 
-        MockCreateUkPropertyService
+        MockedCreateUkPropertyPeriodSummaryService
           .createUkProperty(requestDataConsolidatedExpense)
           .returns(Future.successful(Right(ResponseWrapper(correlationId, responseData))))
 
@@ -77,7 +77,7 @@ class CreateUkPropertyPeriodSummaryControllerSpec
       "the request received is valid" in new Test {
         willUseValidator(returningSuccess(requestData))
 
-        MockCreateUkPropertyService
+        MockedCreateUkPropertyPeriodSummaryService
           .createUkProperty(requestData)
           .returns(Future.successful(Right(ResponseWrapper(correlationId, responseData))))
 
@@ -104,7 +104,7 @@ class CreateUkPropertyPeriodSummaryControllerSpec
       "the service returns an error" in new Test {
         willUseValidator(returningSuccess(requestData))
 
-        MockCreateUkPropertyService
+        MockedCreateUkPropertyPeriodSummaryService
           .createUkProperty(requestData)
           .returns(Future.successful(Left(ErrorWrapper(correlationId, RuleTaxYearNotSupportedError))))
 
@@ -118,7 +118,7 @@ class CreateUkPropertyPeriodSummaryControllerSpec
     protected val controller = new CreateUkPropertyPeriodSummaryController(
       authService = mockEnrolmentsAuthService,
       lookupService = mockMtdIdLookupService,
-      service = mockCreateUkPropertyService,
+      service = mockCreateUkPropertyPeriodSummaryService,
       auditService = mockAuditService,
       validatorFactory = mockCreateUkPropertyPeriodSummaryValidatorFactory,
       hateoasFactory = mockHateoasFactory,

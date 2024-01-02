@@ -29,7 +29,7 @@ class CreateAmendForeignPropertyAnnualSubmissionResponseSpec extends UnitSpec wi
       val data: CreateAmendForeignPropertyAnnualSubmissionHateoasData =
         CreateAmendForeignPropertyAnnualSubmissionHateoasData(nino = "myNino", businessId = "myBusinessId", taxYear = "mySubmissionId")
 
-      MockAppConfig.apiGatewayContext.returns("my/context").anyNumberOfTimes()
+      MockedAppConfig.apiGatewayContext.returns("my/context").anyNumberOfTimes()
 
       CreateAmendForeignPropertyAnnualSubmissionResponse.LinksFactory.links(mockAppConfig, data) shouldBe
         Seq(

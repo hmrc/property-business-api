@@ -103,8 +103,8 @@ class AmendHistoricFhlUkPeriodSummaryValidatorFactorySpec extends UnitSpec with 
 
   private def validator(nino: String, periodId: String, body: JsValue) = validatorFactory.validator(nino, periodId, body)
 
-  MockAppConfig.minimumTaxYearHistoric.returns(TaxYear.starting(2017))
-  MockAppConfig.maximumTaxYearHistoric.returns(TaxYear.starting(2021))
+  MockedAppConfig.minimumTaxYearHistoric.returns(TaxYear.starting(2017))
+  MockedAppConfig.maximumTaxYearHistoric.returns(TaxYear.starting(2021))
 
   "validator" should {
     "return the parsed domain object" when {

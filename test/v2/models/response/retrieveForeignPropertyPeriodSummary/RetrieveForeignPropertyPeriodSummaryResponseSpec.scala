@@ -197,7 +197,7 @@ class RetrieveForeignPropertyPeriodSummaryResponseSpec extends UnitSpec with Moc
         val data: RetrieveForeignPropertyPeriodSummaryHateoasData =
           RetrieveForeignPropertyPeriodSummaryHateoasData("myNino", "myBusinessId", "myTaxYear", "mySubmissionId")
 
-        MockAppConfig.apiGatewayContext.returns("my/context").anyNumberOfTimes()
+        MockedAppConfig.apiGatewayContext.returns("my/context").anyNumberOfTimes()
 
         RetrieveForeignPropertyPeriodSummaryResponse.RetrieveForeignPropertyLinksFactory.links(mockAppConfig, data) shouldBe Seq(
           Link(

@@ -21,43 +21,58 @@ import api.models.domain.{BusinessId, Nino, TaxYear}
 import api.models.errors._
 import api.models.outcomes.ResponseWrapper
 import api.services.ServiceSpec
-import uk.gov.hmrc.http.HeaderCarrier
 import v3.connectors.MockCreateUkPropertyPeriodSummaryConnector
 import v3.models.request.createUkPropertyPeriodSummary._
 import v3.models.response.createUkPropertyPeriodSummary.CreateUkPropertyPeriodSummaryResponse
 
 import scala.concurrent.Future
 
-class CreateUkPropertyPeriodSummaryServiceSpec extends ServiceSpec {
+class CreateUkPropertyPeriodSummaryServiceSpec extends ServiceSpec with MockCreateUkPropertyPeriodSummaryConnector {
+
+  implicit private val correlationId: String            = "X-123"
+  implicit protected val logContext: EndpointLogContext = EndpointLogContext("c", "ep")
 
   private val nino       = Nino("AA123456A")
   private val taxYear    = TaxYear.fromMtd("2020-21")
   private val businessId = BusinessId("XAIS12345678910")
 
-  implicit private val correlationId: String = "X-123"
+  private val requestBody =
+    CreateUkPropertyPeriodSummaryRequestBody("2020-01-01", "2020-01-31", None, None)
+
+  private val requestData: CreateUkPropertyPeriodSummaryRequestData =
+    CreateUkPropertyPeriodSummaryRequestData(nino, taxYear, businessId, requestBody)
+
+  private val responseData: CreateUkPropertyPeriodSummaryResponse = CreateUkPropertyPeriodSummaryResponse(
+    submissionId = "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
+  )
+
+  private val service = new CreateUkPropertyPeriodSummaryService(
+    connector = mockCreateUkPropertyPeriodSummaryConnector
+  )
 
   "service" when {
     "service call successful" should {
-      "return mapped result" in new Test {
-        MockCreateUkPropertyConnector
-          .createUkProperty(request)
-          .returns(Future.successful(Right(ResponseWrapper(correlationId, response))))
+      "return mapped result" in {
+        MockedCreateUkPropertyPeriodSummaryConnector
+          .createUkProperty(requestData)
+          .returns(Future.successful(Right(ResponseWrapper(correlationId, responseData))))
 
-        await(service.createUkProperty(request)) shouldBe Right(ResponseWrapper(correlationId, response))
+        val result = await(service.createUkProperty(requestData))
+        result shouldBe Right(ResponseWrapper(correlationId, responseData))
       }
     }
 
     "unsuccessful" should {
       "map errors according to spec" when {
-
         def serviceError(downstreamErrorCode: String, error: MtdError): Unit =
-          s"a $downstreamErrorCode error is returned from the service" in new Test {
+          s"a $downstreamErrorCode error is returned from the service" in {
 
-            MockCreateUkPropertyConnector
-              .createUkProperty(request)
+            MockedCreateUkPropertyPeriodSummaryConnector
+              .createUkProperty(requestData)
               .returns(Future.successful(Left(ResponseWrapper(correlationId, DownstreamErrors.single(DownstreamErrorCode(downstreamErrorCode))))))
 
-            await(service.createUkProperty(request)) shouldBe Left(ErrorWrapper(correlationId, error))
+            val result = await(service.createUkProperty(requestData))
+            result shouldBe Left(ErrorWrapper(correlationId, error))
           }
 
         val errors = List(
@@ -84,32 +99,13 @@ class CreateUkPropertyPeriodSummaryServiceSpec extends ServiceSpec {
           "INVALID_CORRELATION_ID"             -> InternalError,
           "PERIOD_NOT_ALIGNED"                 -> RuleMisalignedPeriodError,
           "PERIOD_OVERLAPS"                    -> RuleOverlappingPeriodError,
-          "BUSINESS_INCOME_PERIOD_RESTRICTION" -> RuleBusinessIncomePeriodRestriction
+          "SUBMISSION_DATE_ISSUE"              -> RuleMisalignedPeriodError,
+          "BUSINESS_INCOME_PERIOD_RESTRICTION" -> InternalError
         )
 
-        (errors ++ extraTysErrors).foreach(args => (serviceError _).tupled(args))
+        (errors ++ extraTysErrors).foreach((serviceError _).tupled)
       }
     }
-  }
-
-  trait Test extends MockCreateUkPropertyPeriodSummaryConnector {
-    implicit protected val hc: HeaderCarrier              = HeaderCarrier()
-    implicit protected val logContext: EndpointLogContext = EndpointLogContext("c", "ep")
-
-    protected val service = new CreateUkPropertyPeriodSummaryService(
-      connector = mockCreateUkPropertyConnector
-    )
-
-    private val requestBody =
-      CreateUkPropertyPeriodSummaryRequestBody("2020-01-01", "2020-01-31", None, None)
-
-    protected val request: CreateUkPropertyPeriodSummaryRequestData =
-      CreateUkPropertyPeriodSummaryRequestData(nino, taxYear, businessId, requestBody)
-
-    protected val response: CreateUkPropertyPeriodSummaryResponse = CreateUkPropertyPeriodSummaryResponse(
-      submissionId = "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
-    )
-
   }
 
 }

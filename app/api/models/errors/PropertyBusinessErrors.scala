@@ -18,8 +18,9 @@ package api.models.errors
 
 import play.api.http.Status._
 
-object RuleBusinessIncomePeriodRestriction
+object RuleSubmissionDateIssueError
     extends MtdError(
-      "RULE_BUSINESS_INCOME_PERIOD_RESTRICTION",
-      "For customers with ITSA status 'Annual' or a latent business income source, submission period has to be 6 April to 5 April",
-      BAD_REQUEST)
+      "RULE_SUBMISSION_DATE_ISSUE",
+      "Submission dates should be on or within [accounting period start date / start date] to [end date] (Periodic only)",
+      BAD_REQUEST
+    )

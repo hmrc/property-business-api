@@ -82,6 +82,61 @@ class CreateUkPropertyPeriodSummaryControllerISpec extends IntegrationBaseSpec {
       |""".stripMargin
   )
 
+  private val requestBodyWithSameDateJson = Json.parse(
+    """{
+      |    "fromDate": "2020-01-01",
+      |    "toDate": "2020-01-01",
+      |    "ukFhlProperty":{
+      |        "income": {
+      |            "periodAmount": 5000.99,
+      |            "taxDeducted": 3123.21,
+      |            "rentARoom": {
+      |                "rentsReceived": 532.12
+      |            }
+      |        },
+      |        "expenses": {
+      |            "premisesRunningCosts": 3123.21,
+      |            "repairsAndMaintenance": 928.42,
+      |            "financialCosts": 842.99,
+      |            "professionalFees": 8831.12,
+      |            "costOfServices": 484.12,
+      |            "other": 99282,
+      |            "travelCosts": 974.47,
+      |            "rentARoom": {
+      |                "amountClaimed": 8842.43
+      |            }
+      |        }
+      |    },
+      |    "ukNonFhlProperty": {
+      |        "income": {
+      |            "premiumsOfLeaseGrant": 42.12,
+      |            "reversePremiums": 84.31,
+      |            "periodAmount": 9884.93,
+      |            "taxDeducted": 842.99,
+      |            "otherIncome": 31.44,
+      |            "rentARoom": {
+      |                "rentsReceived": 947.66
+      |            }
+      |        },
+      |        "expenses": {
+      |            "premisesRunningCosts": 3123.21,
+      |            "repairsAndMaintenance": 928.42,
+      |            "financialCosts": 842.99,
+      |            "professionalFees": 8831.12,
+      |            "costOfServices": 484.12,
+      |            "other": 99282,
+      |            "residentialFinancialCost": 12.34,
+      |            "travelCosts": 974.47,
+      |            "residentialFinancialCostsCarriedForward": 12.34,
+      |            "rentARoom": {
+      |                "amountClaimed": 8842.43
+      |            }
+      |        }
+      |    }
+      |}
+      |""".stripMargin
+  )
+
   private val requestBodyJsonConsolidatedExpense = Json.parse(
     """{
       |    "fromDate": "2020-01-01",
@@ -477,6 +532,18 @@ class CreateUkPropertyPeriodSummaryControllerISpec extends IntegrationBaseSpec {
         response.json shouldBe responseBody
         response.header("Content-Type") shouldBe Some("application/json")
       }
+
+      "any valid request with same date" in new TysIfsTest {
+        override def setupStubs(): Unit = {
+          DownstreamStub.onSuccess(DownstreamStub.POST, downstreamUri, downstreamQueryParams, OK, ifsResponse)
+        }
+
+        val response: WSResponse = await(request().post(requestBodyWithSameDateJson))
+        response.status shouldBe CREATED
+        response.json shouldBe responseBody
+        response.header("Content-Type") shouldBe Some("application/json")
+      }
+
     }
 
     "return bad request error" when {

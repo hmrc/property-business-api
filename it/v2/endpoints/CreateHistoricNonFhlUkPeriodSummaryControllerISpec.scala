@@ -60,6 +60,38 @@ class CreateHistoricNonFhlUkPeriodSummaryControllerISpec extends IntegrationBase
       |""".stripMargin
   )
 
+  private val requestBodyWithSameDateJson = Json.parse(
+    """{
+      | "fromDate": "2019-03-11",
+      | "toDate": "2019-03-11",
+      |   "income": {
+      |   "periodAmount": 123.45,
+      |   "premiumsOfLeaseGrant": 2355.45,
+      |   "reversePremiums": 454.56,
+      |   "otherIncome": 567.89,
+      |   "taxDeducted": 234.53,
+      |   "rentARoom": {
+      |      "rentsReceived": 567.56
+      |    }
+      |   },
+      |  "expenses":{
+      |    "premisesRunningCosts": 567.53,
+      |    "repairsAndMaintenance": 324.65,
+      |    "financialCosts": 453.56,
+      |    "professionalFees": 535.78,
+      |    "costOfServices": 678.34,
+      |    "other": 682.34,
+      |    "travelCosts": 645.56,
+      |    "residentialFinancialCostsCarriedForward": 672.34,
+      |    "residentialFinancialCost": 1000.45,
+      |    "rentARoom": {
+      |      "amountClaimed": 545.9
+      |    }
+      |  }
+      |}
+      |""".stripMargin
+  )
+
   private val requestBodyJsonConsolidatedExpense = Json.parse(
     """{
       |    "fromDate": "2019-03-11",
@@ -277,6 +309,24 @@ class CreateHistoricNonFhlUkPeriodSummaryControllerISpec extends IntegrationBase
          |}""".stripMargin
     )
 
+    val responseBodyWithSameDate: JsValue = Json.parse(
+      s"""{
+         |  "periodId": "2019-03-11_2019-03-11",
+         |  "links": [
+         |    {
+         |      "href": "/individuals/business/property/uk/period/non-furnished-holiday-lettings/$nino/2019-03-11_2019-03-11",
+         |      "method": "GET",
+         |      "rel": "self"
+         |    },
+         |    {
+         |      "href": "/individuals/business/property/uk/period/non-furnished-holiday-lettings/$nino/2019-03-11_2019-03-11",
+         |      "method": "PUT",
+         |      "rel": "amend-uk-property-historic-non-fhl-period-summary"
+         |    }
+         |  ]
+         |}""".stripMargin
+    )
+
     val ifsResponse: JsValue = Json.parse(
       """{
         |  "transactionReference": "0000000000000001"
@@ -323,6 +373,20 @@ class CreateHistoricNonFhlUkPeriodSummaryControllerISpec extends IntegrationBase
         val response: WSResponse = await(request().post(requestBodyJsonConsolidatedExpense))
         response.status shouldBe Status.CREATED
         response.json shouldBe responseBody
+        response.header("Content-Type") shouldBe Some("application/json")
+      }
+
+      "any valid request is made with same date" in new Test {
+        override def setupStubs(): StubMapping = {
+          AuditStub.audit()
+          AuthStub.authorised()
+          MtdIdLookupStub.ninoFound(nino)
+          DownstreamStub.onSuccess(DownstreamStub.POST, ifsUri, Status.OK, ifsResponse)
+        }
+
+        val response: WSResponse = await(request().post(requestBodyWithSameDateJson))
+        response.status shouldBe Status.CREATED
+        response.json shouldBe responseBodyWithSameDate
         response.header("Content-Type") shouldBe Some("application/json")
       }
     }

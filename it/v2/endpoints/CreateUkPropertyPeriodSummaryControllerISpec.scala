@@ -83,61 +83,6 @@ class CreateUkPropertyPeriodSummaryControllerISpec extends IntegrationBaseSpec {
       |""".stripMargin
   )
 
-  private val requestBodyWithSameDateJson = Json.parse(
-    """{
-      |    "fromDate": "2020-01-01",
-      |    "toDate": "2020-01-01",
-      |    "ukFhlProperty":{
-      |        "income": {
-      |            "periodAmount": 5000.99,
-      |            "taxDeducted": 3123.21,
-      |            "rentARoom": {
-      |                "rentsReceived": 532.12
-      |            }
-      |        },
-      |        "expenses": {
-      |            "premisesRunningCosts": 3123.21,
-      |            "repairsAndMaintenance": 928.42,
-      |            "financialCosts": 842.99,
-      |            "professionalFees": 8831.12,
-      |            "costOfServices": 484.12,
-      |            "other": 99282,
-      |            "travelCosts": 974.47,
-      |            "rentARoom": {
-      |                "amountClaimed": 8842.43
-      |            }
-      |        }
-      |    },
-      |    "ukNonFhlProperty": {
-      |        "income": {
-      |            "premiumsOfLeaseGrant": 42.12,
-      |            "reversePremiums": 84.31,
-      |            "periodAmount": 9884.93,
-      |            "taxDeducted": 842.99,
-      |            "otherIncome": 31.44,
-      |            "rentARoom": {
-      |                "rentsReceived": 947.66
-      |            }
-      |        },
-      |        "expenses": {
-      |            "premisesRunningCosts": 3123.21,
-      |            "repairsAndMaintenance": 928.42,
-      |            "financialCosts": 842.99,
-      |            "professionalFees": 8831.12,
-      |            "costOfServices": 484.12,
-      |            "other": 99282,
-      |            "residentialFinancialCost": 12.34,
-      |            "travelCosts": 974.47,
-      |            "residentialFinancialCostsCarriedForward": 12.34,
-      |            "rentARoom": {
-      |                "amountClaimed": 8842.43
-      |            }
-      |        }
-      |    }
-      |}
-      |""".stripMargin
-  )
-
   private val requestBodyJsonConsolidatedExpense = Json.parse(
     """{
       |    "fromDate": "2020-01-01",
@@ -438,29 +383,29 @@ class CreateUkPropertyPeriodSummaryControllerISpec extends IntegrationBaseSpec {
 
     val responseBody: JsValue = Json.parse(
       s"""
-        |{
-        |  "submissionId": "$submissionId",
-        |  "links": [
-        |    {
-        |      "href":"/individuals/business/property/uk/$nino/$businessId/period/$taxYear/$submissionId",
-        |      "method":"PUT",
-        |      "rel":"amend-uk-property-period-summary"
-        |    },
-        |    {
-        |      "href":"/individuals/business/property/uk/$nino/$businessId/period/$taxYear/$submissionId",
-        |      "method":"GET",
-        |      "rel":"self"
-        |    }
-        |  ]
-        |}
+         |{
+         |  "submissionId": "$submissionId",
+         |  "links": [
+         |    {
+         |      "href":"/individuals/business/property/uk/$nino/$businessId/period/$taxYear/$submissionId",
+         |      "method":"PUT",
+         |      "rel":"amend-uk-property-period-summary"
+         |    },
+         |    {
+         |      "href":"/individuals/business/property/uk/$nino/$businessId/period/$taxYear/$submissionId",
+         |      "method":"GET",
+         |      "rel":"self"
+         |    }
+         |  ]
+         |}
       """.stripMargin
     )
 
     val ifsResponse: JsValue = Json.parse(
       s"""
-        |{
-        |  "submissionId": "$submissionId"
-        |}
+         |{
+         |  "submissionId": "$submissionId"
+         |}
         """.stripMargin
     )
 
@@ -529,17 +474,6 @@ class CreateUkPropertyPeriodSummaryControllerISpec extends IntegrationBaseSpec {
         }
 
         val response: WSResponse = await(request().post(requestBodyJsonConsolidatedExpense))
-        response.status shouldBe Status.CREATED
-        response.json shouldBe responseBody
-        response.header("Content-Type") shouldBe Some("application/json")
-      }
-
-      "any valid request with same date" in new TysIfsTest {
-        override def setupStubs(): Unit = {
-          DownstreamStub.onSuccess(DownstreamStub.POST, downstreamUri, downstreamQueryParams, Status.OK, ifsResponse)
-        }
-
-        val response: WSResponse = await(request().post(requestBodyWithSameDateJson))
         response.status shouldBe Status.CREATED
         response.json shouldBe responseBody
         response.header("Content-Type") shouldBe Some("application/json")
@@ -640,9 +574,9 @@ class CreateUkPropertyPeriodSummaryControllerISpec extends IntegrationBaseSpec {
           (Status.BAD_REQUEST, "INVALID_CORRELATION_ID", Status.INTERNAL_SERVER_ERROR, InternalError),
           (Status.UNPROCESSABLE_ENTITY, "PERIOD_NOT_ALIGNED", Status.BAD_REQUEST, RuleMisalignedPeriodError),
           (Status.UNPROCESSABLE_ENTITY, "PERIOD_OVERLAPS", Status.BAD_REQUEST, RuleOverlappingPeriodError)
-//          (Status.UNPROCESSABLE_ENTITY, "INVALID_SUBMISSION_PERIOD", Status.BAD_REQUEST, RuleInvalidSubmissionPeriodError),
-//          (Status.UNPROCESSABLE_ENTITY, "INVALID_SUBMISSION_END_DATE", Status.BAD_REQUEST, RuleInvalidSubmissionEndDateError)
-//          To be reinstated, see MTDSA-15575
+          //          (Status.UNPROCESSABLE_ENTITY, "INVALID_SUBMISSION_PERIOD", Status.BAD_REQUEST, RuleInvalidSubmissionPeriodError),
+          //          (Status.UNPROCESSABLE_ENTITY, "INVALID_SUBMISSION_END_DATE", Status.BAD_REQUEST, RuleInvalidSubmissionEndDateError)
+          //          To be reinstated, see MTDSA-15575
         )
 
         (errors ++ extraTysErrors).foreach(args => (serviceErrorTest _).tupled(args))

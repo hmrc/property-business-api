@@ -28,7 +28,7 @@ import scala.math.Ordering.Implicits.infixOrderingOps
 case class ResolveDateRange(startDateFormatError: MtdError = StartDateFormatError,
                             endDateFormatError: MtdError = EndDateFormatError,
                             endBeforeStartDateError: MtdError = RuleEndBeforeStartDateError)
-  extends ResolverSupport {
+    extends ResolverSupport {
   import ResolveDateRange._
 
   val resolver: Resolver[(String, String), DateRange] = { case (startDate, endDate) =>

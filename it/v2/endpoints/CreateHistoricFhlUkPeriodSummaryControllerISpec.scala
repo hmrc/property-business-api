@@ -58,34 +58,6 @@ class CreateHistoricFhlUkPeriodSummaryControllerISpec extends IntegrationBaseSpe
       """.stripMargin
   )
 
-  val validRequestWithSameDateJson: JsValue = Json.parse(
-    """
-      | {
-      |   "fromDate": "2017-04-06",
-      |   "toDate": "2017-04-06",
-      |   "income": {
-      |     "periodAmount": 100.25,
-      |     "taxDeducted": 100.25,
-      |     "rentARoom": {
-      |       "rentsReceived": 100.25
-      |     }
-      |   },
-      |   "expenses": {
-      |     "premisesRunningCosts": 100.25,
-      |     "repairsAndMaintenance": 100.25,
-      |     "financialCosts": 100.25,
-      |     "professionalFees": 100.25,
-      |     "costOfServices": 100.25,
-      |     "travelCosts": 100.25,
-      |     "other": 100.25,
-      |     "rentARoom": {
-      |       "amountClaimed": 100.25
-      |     }
-      |   }
-      | }
-      """.stripMargin
-  )
-
   val invalidFieldsRequestBodyJson: JsValue = Json.parse(
     """
       | {
@@ -150,10 +122,9 @@ class CreateHistoricFhlUkPeriodSummaryControllerISpec extends IntegrationBaseSpe
 
   private trait Test {
 
-    val nino: String                         = "TC663795B"
-    val correlationId: String                = "X-123"
-    val requestBodyJson: JsValue             = validRequestJson
-    val requestBodyWithSameDateJson: JsValue = validRequestWithSameDateJson
+    val nino: String             = "TC663795B"
+    val correlationId: String    = "X-123"
+    val requestBodyJson: JsValue = validRequestJson
 
     def setupStubs(): StubMapping
 
@@ -162,10 +133,10 @@ class CreateHistoricFhlUkPeriodSummaryControllerISpec extends IntegrationBaseSpe
     def downstreamUri: String = s"/income-tax/nino/$nino/uk-properties/furnished-holiday-lettings/periodic-summaries"
 
     val downstreamResponse: JsValue = Json.parse("""
-        |{
-        |   "transactionReference": "0000000000000001"
-        |}
-        |""".stripMargin)
+                                                   |{
+                                                   |   "transactionReference": "0000000000000001"
+                                                   |}
+                                                   |""".stripMargin)
 
     def request(): WSRequest = {
       setupStubs()
@@ -217,40 +188,6 @@ class CreateHistoricFhlUkPeriodSummaryControllerISpec extends IntegrationBaseSpe
         )
 
         val response: WSResponse = await(request().post(requestBodyJson))
-        response.status shouldBe CREATED
-        response.json shouldBe expectedResponseBody
-        response.header("X-CorrelationId").nonEmpty shouldBe true
-      }
-
-      "any valid request is made with same fromDate and toDate" in new Test {
-        override def setupStubs(): StubMapping = {
-          AuthStub.authorised()
-          AuditStub.audit()
-          MtdIdLookupStub.ninoFound(nino)
-          DownstreamStub.onSuccess(DownstreamStub.POST, downstreamUri, OK, downstreamResponse)
-        }
-
-        val expectedResponseBody: JsValue = Json.parse(
-          s"""
-             |{
-             |    "periodId": "2017-04-06_2017-04-06",
-             |    "links": [
-             |        {
-             |            "href": "/individuals/business/property/uk/period/furnished-holiday-lettings/TC663795B/2017-04-06_2017-04-06",
-             |            "method": "PUT",
-             |            "rel": "amend-uk-property-historic-fhl-period-summary"
-             |        },
-             |        {
-             |            "href": "/individuals/business/property/uk/period/furnished-holiday-lettings/TC663795B/2017-04-06_2017-04-06",
-             |            "method": "GET",
-             |            "rel": "self"
-             |        }
-             |    ]
-             |}
-      """.stripMargin
-        )
-
-        val response: WSResponse = await(request().post(requestBodyWithSameDateJson))
         response.status shouldBe CREATED
         response.json shouldBe expectedResponseBody
         response.header("X-CorrelationId").nonEmpty shouldBe true

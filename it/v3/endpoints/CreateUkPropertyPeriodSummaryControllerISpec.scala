@@ -382,29 +382,29 @@ class CreateUkPropertyPeriodSummaryControllerISpec extends IntegrationBaseSpec {
 
     val responseBody: JsValue = Json.parse(
       s"""
-         |{
-         |  "submissionId": "$submissionId",
-         |  "links": [
-         |    {
-         |      "href":"/individuals/business/property/uk/$nino/$businessId/period/$taxYear/$submissionId",
-         |      "method":"PUT",
-         |      "rel":"amend-uk-property-period-summary"
-         |    },
-         |    {
-         |      "href":"/individuals/business/property/uk/$nino/$businessId/period/$taxYear/$submissionId",
-         |      "method":"GET",
-         |      "rel":"self"
-         |    }
-         |  ]
-         |}
+        |{
+        |  "submissionId": "$submissionId",
+        |  "links": [
+        |    {
+        |      "href":"/individuals/business/property/uk/$nino/$businessId/period/$taxYear/$submissionId",
+        |      "method":"PUT",
+        |      "rel":"amend-uk-property-period-summary"
+        |    },
+        |    {
+        |      "href":"/individuals/business/property/uk/$nino/$businessId/period/$taxYear/$submissionId",
+        |      "method":"GET",
+        |      "rel":"self"
+        |    }
+        |  ]
+        |}
       """.stripMargin
     )
 
     val ifsResponse: JsValue = Json.parse(
       s"""
-         |{
-         |  "submissionId": "$submissionId"
-         |}
+        |{
+        |  "submissionId": "$submissionId"
+        |}
         """.stripMargin
     )
 

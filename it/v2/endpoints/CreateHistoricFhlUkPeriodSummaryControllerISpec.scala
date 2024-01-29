@@ -133,10 +133,10 @@ class CreateHistoricFhlUkPeriodSummaryControllerISpec extends IntegrationBaseSpe
     def downstreamUri: String = s"/income-tax/nino/$nino/uk-properties/furnished-holiday-lettings/periodic-summaries"
 
     val downstreamResponse: JsValue = Json.parse("""
-                                                   |{
-                                                   |   "transactionReference": "0000000000000001"
-                                                   |}
-                                                   |""".stripMargin)
+        |{
+        |   "transactionReference": "0000000000000001"
+        |}
+        |""".stripMargin)
 
     def request(): WSRequest = {
       setupStubs()

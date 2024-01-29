@@ -383,29 +383,29 @@ class CreateUkPropertyPeriodSummaryControllerISpec extends IntegrationBaseSpec {
 
     val responseBody: JsValue = Json.parse(
       s"""
-         |{
-         |  "submissionId": "$submissionId",
-         |  "links": [
-         |    {
-         |      "href":"/individuals/business/property/uk/$nino/$businessId/period/$taxYear/$submissionId",
-         |      "method":"PUT",
-         |      "rel":"amend-uk-property-period-summary"
-         |    },
-         |    {
-         |      "href":"/individuals/business/property/uk/$nino/$businessId/period/$taxYear/$submissionId",
-         |      "method":"GET",
-         |      "rel":"self"
-         |    }
-         |  ]
-         |}
+        |{
+        |  "submissionId": "$submissionId",
+        |  "links": [
+        |    {
+        |      "href":"/individuals/business/property/uk/$nino/$businessId/period/$taxYear/$submissionId",
+        |      "method":"PUT",
+        |      "rel":"amend-uk-property-period-summary"
+        |    },
+        |    {
+        |      "href":"/individuals/business/property/uk/$nino/$businessId/period/$taxYear/$submissionId",
+        |      "method":"GET",
+        |      "rel":"self"
+        |    }
+        |  ]
+        |}
       """.stripMargin
     )
 
     val ifsResponse: JsValue = Json.parse(
       s"""
-         |{
-         |  "submissionId": "$submissionId"
-         |}
+        |{
+        |  "submissionId": "$submissionId"
+        |}
         """.stripMargin
     )
 
@@ -574,9 +574,9 @@ class CreateUkPropertyPeriodSummaryControllerISpec extends IntegrationBaseSpec {
           (Status.BAD_REQUEST, "INVALID_CORRELATION_ID", Status.INTERNAL_SERVER_ERROR, InternalError),
           (Status.UNPROCESSABLE_ENTITY, "PERIOD_NOT_ALIGNED", Status.BAD_REQUEST, RuleMisalignedPeriodError),
           (Status.UNPROCESSABLE_ENTITY, "PERIOD_OVERLAPS", Status.BAD_REQUEST, RuleOverlappingPeriodError)
-          //          (Status.UNPROCESSABLE_ENTITY, "INVALID_SUBMISSION_PERIOD", Status.BAD_REQUEST, RuleInvalidSubmissionPeriodError),
-          //          (Status.UNPROCESSABLE_ENTITY, "INVALID_SUBMISSION_END_DATE", Status.BAD_REQUEST, RuleInvalidSubmissionEndDateError)
-          //          To be reinstated, see MTDSA-15575
+//          (Status.UNPROCESSABLE_ENTITY, "INVALID_SUBMISSION_PERIOD", Status.BAD_REQUEST, RuleInvalidSubmissionPeriodError),
+//          (Status.UNPROCESSABLE_ENTITY, "INVALID_SUBMISSION_END_DATE", Status.BAD_REQUEST, RuleInvalidSubmissionEndDateError)
+//          To be reinstated, see MTDSA-15575
         )
 
         (errors ++ extraTysErrors).foreach(args => (serviceErrorTest _).tupled(args))

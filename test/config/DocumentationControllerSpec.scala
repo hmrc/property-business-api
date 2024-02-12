@@ -16,8 +16,8 @@
 
 package config
 
-import akka.actor.ActorSystem
-import akka.stream.Materializer
+import org.apache.pekko.actor.ActorSystem
+import org.apache.pekko.stream.Materializer
 import api.controllers.ControllerBaseSpec
 import com.typesafe.config.ConfigFactory
 import config.rewriters._
@@ -127,7 +127,7 @@ class DocumentationControllerSpec extends ControllerBaseSpec with MockAppConfig 
       new OasFeatureRewriter()(mockAppConfig)
     )
 
-    private val assets       = new RewriteableAssets(errorHandler, assetsMetadata, mockAppConfig)
+    private val assets       = new RewriteableAssets(errorHandler, assetsMetadata)
     protected val controller = new DocumentationController(apiFactory, docRewriters, assets, cc)
   }
 

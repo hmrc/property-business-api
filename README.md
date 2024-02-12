@@ -10,14 +10,14 @@ The Property Business API allows software packages to create, retrieve, amend an
 
 - Scala 2.13.x
 - Java 8
-- sbt 1.7.x
+- sbt 1.9.7
 - [Service Manager](https://github.com/hmrc/service-manager)
 
 ## Running the microservice
 
 Run from the console using: `sbt run` (starts on port 7798 by default)
 
-Start the service manager profile: `sm --start MTDFB_PROPERTY_BUSINESS`
+Start the service manager profile: `sm2 --start MTDFB_PROPERTY_BUSINESS`
 
 ## Run Tests
 

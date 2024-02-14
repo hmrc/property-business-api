@@ -15,7 +15,7 @@
  */
 
 import play.sbt.PlayImport.PlayKeys._
-import sbt._
+import sbt.*
 import sbt.complete.DefaultParsers._
 import uk.gov.hmrc.DefaultBuildSettings.{addTestReportOption, defaultSettings}
 import uk.gov.hmrc.SbtAutoBuildPlugin
@@ -34,15 +34,15 @@ lazy val microservice = Project(appName, file("."))
     libraryDependencies ++= AppDependencies.compile ++ AppDependencies.test(),
     retrieveManaged                 := true,
     update / evictionWarningOptions := EvictionWarningOptions.default.withWarnScalaVersionEviction(warnScalaVersionEviction = false),
-    scalaVersion                    := "2.13.8",
+    scalaVersion                    := "2.13.12",
     scalacOptions ++= Seq("-language:higherKinds", "-Xfatal-warnings", "-Wconf:src=routes/.*:silent", "-feature", "-Wconf:cat=lint-byname-implicit:s")
   )
   .settings(
     Compile / unmanagedResourceDirectories += baseDirectory.value / "resources"
   )
   .settings(majorVersion := 0)
-  .settings(CodeCoverageSettings.settings: _*)
-  .settings(defaultSettings(): _*)
+  .settings(CodeCoverageSettings.settings *)
+  .settings(defaultSettings() *)
   .configs(ItTest)
   .settings(
     inConfig(ItTest)(Defaults.itSettings ++ headerSettings(ItTest) ++ automateHeaderSettings(ItTest)),

@@ -17,18 +17,35 @@
 package routing
 
 import play.api.http.HeaderNames.ACCEPT
+import play.api.libs.json._
 import play.api.test.FakeRequest
 import support.UnitSpec
 
 class VersionSpec extends UnitSpec {
 
-  "Versions" when {
-    "retrieved from a request header" must {
-      "work" in {
-        Versions.getFromRequest(FakeRequest().withHeaders((ACCEPT, "application/vnd.hmrc.2.0+json"))) shouldBe Right(Version2)
-        Versions.getFromRequest(FakeRequest().withHeaders((ACCEPT, "application/vnd.hmrc.3.0+json"))) shouldBe Right(Version3)
-      }
+  "serialized to Json" must {
+    "return the expected Json output" in {
+      val version: Version = Version2
+      val expected = Json.parse(""" "2.0" """)
+      val result = Json.toJson(version)
+      result shouldBe expected
     }
   }
 
+  "Versions" when {
+    "retrieved from a request header" should {
+      "return Version for valid header" in {
+        Versions.getFromRequest(FakeRequest().withHeaders((ACCEPT, "application/vnd.hmrc.2.0+json"))) shouldBe Right(Version2)
+      }
+
+      "return InvalidHeader when the version header is missing" in {
+        Versions.getFromRequest(FakeRequest().withHeaders()) shouldBe Left(InvalidHeader)
+      }
+
+      "return VersionNotFound for unrecognised version" in {
+        Versions.getFromRequest(FakeRequest().withHeaders((ACCEPT, "application/vnd.hmrc.0.0+json"))) shouldBe Left(VersionNotFound)
+
+      }
+    }
+  }
 }

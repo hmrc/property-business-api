@@ -1,0 +1,119 @@
+summary: Amend a Historic Non-FHL UK Property Income & Expenses Period Summary
+description: |
+  This endpoint allows you to amend income and expenses for
+    a non-FHL UK property business
+    and make periodic submission for tax years from 2017-18 to 2021-22.
+    A National Insurance number and a period ID must be provided.
+
+    To amend submissions for the current tax year,
+    use the Amend a UK Property Income & Expenses Period Summary endpoint.
+
+  ### Test data
+  Scenario simulation using Gov-Test-Scenario headers is only available in the sandbox environment.
+  
+  | Header Value (Gov-Test-Scenario) | Scenario                                                            |
+  |----------------------------------|---------------------------------------------------------------------|
+  | N/A - DEFAULT                    | Simulate success response.                                          |
+  | NOT_FOUND                        | Simulates the scenario where the given resource could not be found. |
+  | STATEFUL                         | Performs a stateful update.                                         |
+
+
+tags:
+  - Historic non-FHL UK Property Income & Expenses Period Summary
+
+parameters:
+  - $ref: './common/pathParameters.yaml#/components/parameters/nino'
+  - $ref: './common/pathParameters.yaml#/components/parameters/periodId'
+  - $ref: './common/headers.yaml#/components/parameters/acceptHeader'
+  - $ref: './common/headers.yaml#/components/parameters/contentTypeJson'
+  - $ref: './common/headers.yaml#/components/parameters/authorizationWriteScopeHeader'
+  - $ref: './common/headers.yaml#/components/parameters/testScenarioHeader'
+
+security:
+  - User-Restricted:
+      - write:self-assessment
+
+requestBody:
+  content:
+    application/json:
+      schema:
+        $ref: './schemas/historic_uk_non_fhl_period_summary_create/request.json'
+      examples:
+        full-income-expenses-request:
+          description: Full income and expenses request
+          value:
+            $ref: './examples/historic_uk_non_fhl_period_summary_create/request.json'
+        consolidated-income-expenses-request:
+          description: Consolidated income and expenses request
+          value:
+            $ref: './examples/historic_uk_non_fhl_period_summary_create/consolidated_request.json'
+
+responses:
+  "200":
+    description: Success
+    headers:
+      X-CorrelationId:
+        $ref: './common/headers.yaml#/components/parameters/correlationId'
+    content:
+      application/json:
+        schema:
+          $ref: './schemas/historic_uk_non_fhl_period_summary_create/response.json'
+        examples:
+          example-response:
+            description: Example Response
+            value:
+              $ref: './examples/historic_uk_non_fhl_period_summary_create/response.json'
+  "400":
+    description: Bad request
+    content:
+      application/json:
+        schema:
+          $ref: './schemas/error-response.yaml'
+        examples:
+          FORMAT_NINO:
+            $ref: './common/errors.yaml#/components/examples/formatNino'
+          FORMAT_FROM_DATE:
+            $ref: './common/errors.yaml#/components/examples/formatFromDate'
+          FORMAT_TO_DATE:
+            $ref: './common/errors.yaml#/components/examples/formatToDate'
+          FORMAT_VALUE:
+            $ref: './common/errors.yaml#/components/examples/formatValue'
+          RULE_BOTH_EXPENSES_SUPPLIED:
+            $ref: './common/errors.yaml#/components/examples/ruleBothExpensesSupplied'
+          RULE_INCORRECT_OR_EMPTY_BODY_SUBMITTED:
+            $ref: './common/errors.yaml#/components/examples/ruleIncorrectOrEmptyBody'
+          RULE_TO_DATE_BEFORE_FROM_DATE:
+            $ref: './common/errors.yaml#/components/examples/ruleToDateBeforeFromDate'
+          RULE_OVERLAPPING_PERIOD:
+            $ref: './common/errors.yaml#/components/examples/ruleOverlappingPeriod'
+          RULE_MISALIGNED_PERIOD:
+            $ref: './common/errors.yaml#/components/examples/ruleMisalignedPeriod'
+          RULE_NOT_CONTIGUOUS_PERIOD:
+            $ref: './common/errors.yaml#/components/examples/ruleNotContiguousPeriod'
+          RULE_DUPLICATE_SUBMISSION:
+            $ref: './common/errors.yaml#/components/examples/ruleDuplicateSubmission'
+          RULE_TAX_YEAR_NOT_SUPPORTED:
+            $ref: './common/errors.yaml#/components/examples/rulePeriodTaxYearNotSupported'
+          RULE_INCORRECT_GOV_TEST_SCENARIO:
+            $ref: './common/errors.yaml#/components/examples/ruleIncorrectGovTestScenario'
+
+  "403":
+    description: Forbidden
+    content:
+      application/json:
+        schema:
+          $ref: './schemas/error-response.yaml'
+        examples:
+          CLIENT_OR_AGENT_NOT_AUTHORISED:
+            $ref: './common/errors.yaml#/components/examples/clientOrAgentNotAuthorised'
+
+  "404":
+    description: Not Found
+    content:
+      application/json:
+        schema:
+          $ref: './schemas/error-response.yaml'
+        examples:
+          MATCHING_RESOURCE_NOT_FOUND:
+            $ref: './common/errors.yaml#/components/examples/notFound'
+

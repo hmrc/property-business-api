@@ -19,7 +19,7 @@ package definition
 import config.ConfidenceLevelConfig
 import definition.APIStatus.{ALPHA, BETA}
 import mocks.{MockAppConfig, MockHttpClient}
-import routing.{Version2, Version3}
+import routing.{Version2, Version3, Version4}
 import support.UnitSpec
 import uk.gov.hmrc.auth.core.ConfidenceLevel
 
@@ -37,8 +37,10 @@ class ApiDefinitionFactorySpec extends UnitSpec {
       "return a valid Definition case class" in new Test {
         MockedAppConfig.apiStatus(Version2) returns "BETA"
         MockedAppConfig.apiStatus(Version3) returns "BETA"
+        MockedAppConfig.apiStatus(Version4) returns "BETA"
         MockedAppConfig.endpointsEnabled(Version2).returns(true).anyNumberOfTimes()
         MockedAppConfig.endpointsEnabled(Version3).returns(true).anyNumberOfTimes()
+        MockedAppConfig.endpointsEnabled(Version4).returns(true).anyNumberOfTimes()
         MockedAppConfig.confidenceLevelCheckEnabled
           .returns(ConfidenceLevelConfig(confidenceLevel = confidenceLevel, definitionEnabled = true, authValidationEnabled = true))
           .anyNumberOfTimes()
@@ -77,6 +79,11 @@ class ApiDefinitionFactorySpec extends UnitSpec {
                   version = Version3,
                   status = BETA,
                   endpointsEnabled = true
+                ),
+                APIVersion(
+                  version = Version4,
+                  status = BETA,
+                  endpointsEnabled = true
                 )
               ),
               requiresTrust = None
@@ -108,7 +115,8 @@ class ApiDefinitionFactorySpec extends UnitSpec {
     "the 'apiStatus' parameter is present and valid" should {
       Seq(
         (Version2, BETA),
-        (Version3, BETA)
+        (Version3, BETA),
+        (Version4, BETA)
       ).foreach { case (version, status) =>
         s"return the correct $status for $version" in new Test {
           MockedAppConfig.apiStatus(version) returns status.toString

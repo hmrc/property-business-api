@@ -63,11 +63,16 @@ case object Version3 extends Version {
   val name = "3.0"
 }
 
+case object Version4 extends Version {
+  val name = "4.0"
+}
+
 object Versions {
 
   private val versionsByName: Map[String, Version] = Map(
     Version2.name -> Version2,
-    Version3.name -> Version3
+    Version3.name -> Version3,
+    Version4.name -> Version4
   )
 
   private val versionRegex = """application/vnd.hmrc.(\d.\d)\+json""".r

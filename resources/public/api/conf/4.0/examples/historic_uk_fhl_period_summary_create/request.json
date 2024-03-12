@@ -1,0 +1,23 @@
+{
+  "fromDate": "2017-04-06",
+  "toDate": "2017-07-05",
+  "income": {
+    "periodAmount": 100.25,
+    "taxDeducted": 100.25,
+    "rentARoom": {
+      "rentsReceived": 100.25
+    }
+  },
+  "expenses": {
+    "premisesRunningCosts": 100.25,
+    "repairsAndMaintenance": 100.25,
+    "financialCosts": 100.25,
+    "professionalFees": 100.25,
+    "costOfServices": 100.25,
+    "other": 100.25,
+    "travelCosts": 100.25,
+    "rentARoom": {
+      "amountClaimed": 100.25
+    }
+  }
+}

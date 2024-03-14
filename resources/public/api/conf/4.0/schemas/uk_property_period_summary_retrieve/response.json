@@ -228,14 +228,6 @@
               "maximum": 99999999999.99,
               "example": "5000.99"
             },
-            "zeroEmissionGoodsVehicleAllowance": {
-              "description": "The amount of zero emission goods vehicle allowance for goods vehicles purchased for business use. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
-              "type": "number",
-              "multipleOf": 0.01,
-              "minimum": 0.00,
-              "maximum": 99999999999.99,
-              "example": "5000.99"
-            },
             "repairsAndMaintenance": {
               "description": "Property repairs and maintenance. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
               "type": "number",

@@ -49,7 +49,7 @@ class RetrieveForeignPropertyPeriodSummaryConnector @Inject() (val http: HttpCli
     import request._
 
     val (downstreamUri, queryParams) =
-      if (taxYear.useTaxYearSpecificApi) {
+      if (taxYear.isTys) {
         (
           TaxYearSpecificIfsUri[RetrieveForeignPropertyPeriodSummaryResponse](
             s"income-tax/business/property/${taxYear.asTysDownstream}/$nino/$businessId/periodic/$submissionId"),

@@ -14,14 +14,18 @@
  * limitations under the License.
  */
 
-package v2.connectors
+package v4.controllers.amendUkPropertyPeriodSummary
 
 import api.connectors.DownstreamUri.{IfsUri, TaxYearSpecificIfsUri}
-import api.connectors.httpparsers.StandardDownstreamHttpParser.readsEmpty
+import api.connectors.httpparsers.StandardDownstreamHttpParser.{SuccessCode, readsEmpty}
 import api.connectors.{BaseDownstreamConnector, DownstreamOutcome}
 import config.AppConfig
+import play.api.http.Status.NO_CONTENT
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
-import v2.models.request.amendUkPropertyPeriodSummary.AmendUkPropertyPeriodSummaryRequestData
+import v4.controllers.amendUkPropertyPeriodSummary.model.request.{
+  AmendUkPropertyPeriodSummaryRequestData,
+  Def1_AmendUkPropertyPeriodSummaryRequestData
+}
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
@@ -34,21 +38,20 @@ class AmendUkPropertyPeriodSummaryConnector @Inject() (val http: HttpClient, val
       ec: ExecutionContext,
       correlationId: String): Future[DownstreamOutcome[Unit]] = {
 
-    import request._
+    implicit val successCode: SuccessCode = SuccessCode(NO_CONTENT)
 
-    val downstreamUri =
-      if (taxYear.isTys) {
-        TaxYearSpecificIfsUri[Unit](
-          s"income-tax/business/property/periodic/${taxYear.asTysDownstream}?" +
-            s"taxableEntityId=$nino&incomeSourceId=$businessId&submissionId=$submissionId")
-      } else {
-        // Note that MTD tax year format is used
-        IfsUri[Unit](
-          s"income-tax/business/property/periodic?" +
-            s"taxableEntityId=$nino&taxYear=${taxYear.asMtd}&incomeSourceId=$businessId&submissionId=$submissionId")
-      }
+    request match {
+      case def1: Def1_AmendUkPropertyPeriodSummaryRequestData =>
+        import def1._
+        val downstreamUri = if (taxYear.isTys) {
+          TaxYearSpecificIfsUri[Unit](
+            s"income-tax/business/property/periodic/${taxYear.asTysDownstream}?" + s"taxableEntityId=$nino&incomeSourceId=$businessId&submissionId=$submissionId")
+        } else
+          IfsUri[Unit](
+            s"income-tax/business/property/periodic?" + s"taxableEntityId=$nino&taxYear=${taxYear.asMtd}&incomeSourceId=$businessId&submissionId=$submissionId")
+        put(def1.body, downstreamUri)
 
-    put(body, downstreamUri)
+    }
   }
 
 }

@@ -37,7 +37,7 @@ class CreateUkPropertyPeriodSummaryConnector @Inject() (val http: HttpClient, va
 
     import request._
 
-    val downstreamUri: DownstreamUri[CreateUkPropertyPeriodSummaryResponse] = if (taxYear.useTaxYearSpecificApi) {
+    val downstreamUri: DownstreamUri[CreateUkPropertyPeriodSummaryResponse] = if (taxYear.isTys) {
       TaxYearSpecificIfsUri(s"income-tax/business/property/periodic/${taxYear.asTysDownstream}?taxableEntityId=$nino&incomeSourceId=${businessId}")
     } else {
       // Note that MTD tax year format is used pre-TYS

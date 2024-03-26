@@ -19,8 +19,10 @@ package v4.connectors
 import api.connectors.{ConnectorSpec, DownstreamOutcome}
 import api.models.domain.{BusinessId, Nino, TaxYear}
 import api.models.outcomes.ResponseWrapper
+import v4.controllers.createUkPropertyPeriodSummary.CreateUkPropertyPeriodSummaryConnector
+import v4.controllers.createUkPropertyPeriodSummary.model.request.{CreateUkPropertyPeriodSummaryRequestBody, CreateUkPropertyPeriodSummaryRequestData}
+import v4.controllers.createUkPropertyPeriodSummary.model.response.CreateUkPropertyPeriodSummaryResponse
 import v4.models.request.createUkPropertyPeriodSummary._
-import v4.models.response.createUkPropertyPeriodSummary.CreateUkPropertyPeriodSummaryResponse
 
 import scala.concurrent.Future
 

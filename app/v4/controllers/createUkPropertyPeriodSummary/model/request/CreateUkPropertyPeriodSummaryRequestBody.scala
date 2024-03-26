@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-package v4.models.request.createUkPropertyPeriodSummary
+package v4.controllers.createUkPropertyPeriodSummary.model.request
 
 import play.api.libs.functional.syntax._
 import play.api.libs.json.{JsPath, Json, OWrites, Reads}
 import shapeless.HNil
 import utils.EmptinessChecker
-import v4.models.request.createUkPropertyPeriodSummary.ukFhlProperty.UkFhlProperty
-import v4.models.request.createUkPropertyPeriodSummary.ukNonFhlProperty.UkNonFhlProperty
+import v4.controllers.createUkPropertyPeriodSummary.def1.model.request.ukFhlProperty.UkFhlProperty
+import v4.controllers.createUkPropertyPeriodSummary.def1.model.request.ukNonFhlProperty.UkNonFhlProperty
 
 case class CreateUkPropertyPeriodSummaryRequestBody(fromDate: String,
                                                     toDate: String,

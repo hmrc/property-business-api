@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package v4.models.response.createUkPropertyPeriodSummary
+package v4.controllers.createUkPropertyPeriodSummary.model.response
 
 import api.hateoas.{HateoasData, HateoasLinksFactory, Link}
 import config.AppConfig

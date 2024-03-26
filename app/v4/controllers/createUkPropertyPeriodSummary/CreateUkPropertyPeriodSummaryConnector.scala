@@ -14,15 +14,15 @@
  * limitations under the License.
  */
 
-package v4.connectors
+package v4.controllers.createUkPropertyPeriodSummary
 
 import api.connectors.DownstreamUri.{IfsUri, TaxYearSpecificIfsUri}
 import api.connectors.httpparsers.StandardDownstreamHttpParser.reads
 import api.connectors.{BaseDownstreamConnector, DownstreamOutcome, DownstreamUri}
 import config.AppConfig
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
-import v4.models.request.createUkPropertyPeriodSummary.CreateUkPropertyPeriodSummaryRequestData
-import v4.models.response.createUkPropertyPeriodSummary.CreateUkPropertyPeriodSummaryResponse
+import v4.controllers.createUkPropertyPeriodSummary.model.request.CreateUkPropertyPeriodSummaryRequestData
+import v4.controllers.createUkPropertyPeriodSummary.model.response.CreateUkPropertyPeriodSummaryResponse
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}

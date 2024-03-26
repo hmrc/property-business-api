@@ -22,8 +22,10 @@ import api.models.errors._
 import api.models.outcomes.ResponseWrapper
 import api.services.ServiceSpec
 import v4.connectors.MockCreateUkPropertyPeriodSummaryConnector
+import v4.controllers.createUkPropertyPeriodSummary.CreateUkPropertyPeriodSummaryService
+import v4.controllers.createUkPropertyPeriodSummary.model.request.{CreateUkPropertyPeriodSummaryRequestBody, CreateUkPropertyPeriodSummaryRequestData}
+import v4.controllers.createUkPropertyPeriodSummary.model.response.CreateUkPropertyPeriodSummaryResponse
 import v4.models.request.createUkPropertyPeriodSummary._
-import v4.models.response.createUkPropertyPeriodSummary.CreateUkPropertyPeriodSummaryResponse
 
 import scala.concurrent.Future
 

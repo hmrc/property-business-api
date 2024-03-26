@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package v4.models.request.createUkPropertyPeriodSummary.ukFhlProperty
+package v4.controllers.createUkPropertyPeriodSummary.def1.model.request.ukFhlProperty
 
 import play.api.libs.json.{Json, OFormat}
 

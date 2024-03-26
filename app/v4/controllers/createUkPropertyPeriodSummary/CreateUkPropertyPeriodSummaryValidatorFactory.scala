@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package v4.controllers.validators
+package v4.controllers.createUkPropertyPeriodSummary
 
 import api.controllers.validators.Validator
 import api.controllers.validators.resolvers._
@@ -24,9 +24,9 @@ import cats.data.Validated.{Invalid, Valid}
 import cats.implicits._
 import config.AppConfig
 import play.api.libs.json.JsValue
-import v4.models.request.createUkPropertyPeriodSummary.ukFhlProperty.{UkFhlProperty, UkFhlPropertyExpenses}
-import v4.models.request.createUkPropertyPeriodSummary.ukNonFhlProperty.{UkNonFhlProperty, UkNonFhlPropertyExpenses}
-import v4.models.request.createUkPropertyPeriodSummary.{CreateUkPropertyPeriodSummaryRequestBody, CreateUkPropertyPeriodSummaryRequestData}
+import v4.controllers.createUkPropertyPeriodSummary.def1.model.request.ukFhlProperty.{UkFhlProperty, UkFhlPropertyExpenses}
+import v4.controllers.createUkPropertyPeriodSummary.def1.model.request.ukNonFhlProperty.{UkNonFhlProperty, UkNonFhlPropertyExpenses}
+import v4.controllers.createUkPropertyPeriodSummary.model.request.{CreateUkPropertyPeriodSummaryRequestBody, CreateUkPropertyPeriodSummaryRequestData}
 
 import javax.inject.{Inject, Singleton}
 

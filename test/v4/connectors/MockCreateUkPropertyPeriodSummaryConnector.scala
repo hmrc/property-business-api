@@ -20,8 +20,9 @@ import api.connectors.DownstreamOutcome
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
 import uk.gov.hmrc.http.HeaderCarrier
-import v4.models.request.createUkPropertyPeriodSummary.CreateUkPropertyPeriodSummaryRequestData
-import v4.models.response.createUkPropertyPeriodSummary.CreateUkPropertyPeriodSummaryResponse
+import v4.controllers.createUkPropertyPeriodSummary.CreateUkPropertyPeriodSummaryConnector
+import v4.controllers.createUkPropertyPeriodSummary.model.request.CreateUkPropertyPeriodSummaryRequestData
+import v4.controllers.createUkPropertyPeriodSummary.model.response.CreateUkPropertyPeriodSummaryResponse
 
 import scala.concurrent.{ExecutionContext, Future}
 

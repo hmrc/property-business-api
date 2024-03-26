@@ -20,8 +20,9 @@ import api.controllers.RequestContext
 import api.services.ServiceOutcome
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
-import v4.models.request.createUkPropertyPeriodSummary.CreateUkPropertyPeriodSummaryRequestData
-import v4.models.response.createUkPropertyPeriodSummary.CreateUkPropertyPeriodSummaryResponse
+import v4.controllers.createUkPropertyPeriodSummary.CreateUkPropertyPeriodSummaryService
+import v4.controllers.createUkPropertyPeriodSummary.model.request.CreateUkPropertyPeriodSummaryRequestData
+import v4.controllers.createUkPropertyPeriodSummary.model.response.CreateUkPropertyPeriodSummaryResponse
 
 import scala.concurrent.{ExecutionContext, Future}
 

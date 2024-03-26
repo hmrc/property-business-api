@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package v4.controllers
+package v4.controllers.createUkPropertyPeriodSummary
 
 import api.controllers._
 import api.hateoas.HateoasFactory
@@ -23,9 +23,7 @@ import play.api.libs.json.JsValue
 import play.api.mvc.{Action, ControllerComponents}
 import routing.{Version, Version3}
 import utils.IdGenerator
-import v4.controllers.validators.CreateUkPropertyPeriodSummaryValidatorFactory
-import v4.models.response.createUkPropertyPeriodSummary.CreateUkPropertyPeriodSummaryHateoasData
-import v4.services._
+import v4.controllers.createUkPropertyPeriodSummary.model.response.CreateUkPropertyPeriodSummaryHateoasData
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.ExecutionContext

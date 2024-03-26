@@ -14,15 +14,14 @@
  * limitations under the License.
  */
 
-package v4.services
+package v4.controllers.createUkPropertyPeriodSummary
 
 import api.controllers.RequestContext
 import api.models.errors._
 import api.services.{BaseService, ServiceOutcome}
 import cats.implicits._
-import v4.connectors.CreateUkPropertyPeriodSummaryConnector
-import v4.models.request.createUkPropertyPeriodSummary.CreateUkPropertyPeriodSummaryRequestData
-import v4.models.response.createUkPropertyPeriodSummary.CreateUkPropertyPeriodSummaryResponse
+import v4.controllers.createUkPropertyPeriodSummary.model.request.CreateUkPropertyPeriodSummaryRequestData
+import v4.controllers.createUkPropertyPeriodSummary.model.response.CreateUkPropertyPeriodSummaryResponse
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}

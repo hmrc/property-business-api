@@ -25,11 +25,14 @@ import api.models.outcomes.ResponseWrapper
 import api.services.MockAuditService
 import play.api.libs.json.{JsObject, JsValue, Json}
 import play.api.mvc.Result
+import v4.controllers.createUkPropertyPeriodSummary.CreateUkPropertyPeriodSummaryController
+import v4.controllers.createUkPropertyPeriodSummary.def1.model.request.ukFhlProperty.{UkFhlProperty, UkFhlPropertyExpenses, UkFhlPropertyIncome}
+import v4.controllers.createUkPropertyPeriodSummary.def1.model.request.ukNonFhlProperty.{UkNonFhlProperty, UkNonFhlPropertyExpenses, UkNonFhlPropertyIncome}
+import v4.controllers.createUkPropertyPeriodSummary.model.request.{CreateUkPropertyPeriodSummaryRequestBody, CreateUkPropertyPeriodSummaryRequestData}
+import v4.controllers.createUkPropertyPeriodSummary.model.response.{CreateUkPropertyPeriodSummaryHateoasData, CreateUkPropertyPeriodSummaryResponse}
 import v4.controllers.validators.MockCreateUkPropertyPeriodSummaryValidatorFactory
 import v4.models.request.common.ukPropertyRentARoom.{UkPropertyExpensesRentARoom, UkPropertyIncomeRentARoom}
 import v4.models.request.createUkPropertyPeriodSummary._
-import v4.models.request.createUkPropertyPeriodSummary.ukFhlProperty.{UkFhlProperty, UkFhlPropertyExpenses, UkFhlPropertyIncome}
-import v4.models.request.createUkPropertyPeriodSummary.ukNonFhlProperty.{UkNonFhlProperty, UkNonFhlPropertyExpenses, UkNonFhlPropertyIncome}
 import v4.models.response.createUkPropertyPeriodSummary._
 import v4.services.MockCreateUkPropertyPeriodSummaryService
 

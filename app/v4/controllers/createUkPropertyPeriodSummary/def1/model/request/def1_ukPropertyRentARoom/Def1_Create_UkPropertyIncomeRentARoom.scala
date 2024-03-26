@@ -14,11 +14,12 @@
  * limitations under the License.
  */
 
-package v4.models.request.createUkPropertyPeriodSummary
+package v4.controllers.createUkPropertyPeriodSummary.def1.model.request.def1_ukPropertyRentARoom
 
-import api.models.domain.{BusinessId, Nino, TaxYear}
+import play.api.libs.json.{Json, OFormat}
 
-case class CreateUkPropertyPeriodSummaryRequestData(nino: Nino,
-                                                    taxYear: TaxYear,
-                                                    businessId: BusinessId,
-                                                    body: CreateUkPropertyPeriodSummaryRequestBody)
+case class Def1_Amend_UkPropertyIncomeRentARoom(rentsReceived: Option[BigDecimal])
+
+object Def1_Amend_UkPropertyIncomeRentARoom {
+  implicit val format: OFormat[Def1_Amend_UkPropertyIncomeRentARoom] = Json.format[Def1_Amend_UkPropertyIncomeRentARoom]
+}

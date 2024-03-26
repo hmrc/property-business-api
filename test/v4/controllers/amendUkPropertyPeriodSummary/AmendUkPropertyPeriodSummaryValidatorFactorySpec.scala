@@ -88,7 +88,7 @@ class AmendUkPropertyPeriodSummaryValidatorFactorySpec extends UnitSpec with Moc
   private def setupMocks(): Unit = MockedAppConfig.minimumTaxV2Uk.returns(TaxYear.starting(2022))
 
   "validator" when {
-    "given tax year within range" should {
+    "given a valid taxYear" should {
       "return the Validator for schema definition 1" in {
         setupMocks()
         val result: Validator[AmendUkPropertyPeriodSummaryRequestData] =

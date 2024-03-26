@@ -3,7 +3,7 @@ PUT        /uk/:nino/:businessId/annual/:taxYear                       v2.contro
 
 POST       /uk/:nino/:businessId/period/:taxYear                       v4.controllers.CreateUkPropertyPeriodSummaryController.handleRequest(nino: String, businessId: String, taxYear: String)
 PUT        /uk/:nino/:businessId/period/:taxYear/:submissionId         v4.controllers.amendUkPropertyPeriodSummary.AmendUkPropertyPeriodSummaryController.handleRequest(nino: String, businessId: String, taxYear: String, submissionId: String)
-GET        /uk/:nino/:businessId/period/:taxYear/:submissionId         v2.controllers.RetrieveUkPropertyPeriodSummaryController.handleRequest(nino: String, businessId: String, taxYear: String, submissionId: String)
+GET        /uk/:nino/:businessId/period/:taxYear/:submissionId         v4.controllers.retrieveUkPropertyPeriodSummary.RetrieveUkPropertyPeriodSummaryController.handleRequest(nino: String, businessId: String, taxYear: String, submissionId: String)
 
 POST       /foreign/:nino/:businessId/period/:taxYear                  v4.controllers.CreateForeignPropertyPeriodSummaryController.handleRequest(nino: String, businessId: String, taxYear: String)
 PUT        /foreign/:nino/:businessId/period/:taxYear/:submissionId    v2.controllers.AmendForeignPropertyPeriodSummaryController.handleRequest(nino: String, businessId: String, taxYear: String, submissionId: String)

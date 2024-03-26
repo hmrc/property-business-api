@@ -37,7 +37,7 @@ class DeletePropertyAnnualSubmissionConnector @Inject() (val http: HttpClient, v
     import request._
 
     val (downstreamUri, queryParams) =
-      if (taxYear.useTaxYearSpecificApi) {
+      if (taxYear.isTys) {
         (
           TaxYearSpecificIfsUri[Unit](s"income-tax/business/property/annual/${taxYear.asTysDownstream}/$nino/$businessId"),
           Nil

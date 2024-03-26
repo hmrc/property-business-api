@@ -49,7 +49,7 @@ class RetrieveUkPropertyAnnualSubmissionConnector @Inject() (val http: HttpClien
 
     import request._
 
-    val (downstreamUri, queryParams) = if (taxYear.useTaxYearSpecificApi) {
+    val (downstreamUri, queryParams) = if (taxYear.isTys) {
       (
         TaxYearSpecificIfsUri[RetrieveUkPropertyAnnualSubmissionResponse](
           s"income-tax/business/property/annual/${taxYear.asTysDownstream}/$nino/$businessId"),

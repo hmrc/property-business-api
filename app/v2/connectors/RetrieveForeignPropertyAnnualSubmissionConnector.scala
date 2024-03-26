@@ -48,7 +48,7 @@ class RetrieveForeignPropertyAnnualSubmissionConnector @Inject() (val http: Http
 
     import request._
 
-    val (downstreamUri, queryParams) = if (taxYear.useTaxYearSpecificApi) {
+    val (downstreamUri, queryParams) = if (taxYear.isTys) {
       (
         TaxYearSpecificIfsUri[RetrieveForeignPropertyAnnualSubmissionResponse](
           s"income-tax/business/property/annual/${taxYear.asTysDownstream}/$nino/$businessId"),

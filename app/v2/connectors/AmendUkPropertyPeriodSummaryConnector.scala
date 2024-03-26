@@ -37,7 +37,7 @@ class AmendUkPropertyPeriodSummaryConnector @Inject() (val http: HttpClient, val
     import request._
 
     val downstreamUri =
-      if (taxYear.useTaxYearSpecificApi) {
+      if (taxYear.isTys) {
         TaxYearSpecificIfsUri[Unit](
           s"income-tax/business/property/periodic/${taxYear.asTysDownstream}?" +
             s"taxableEntityId=$nino&incomeSourceId=$businessId&submissionId=$submissionId")

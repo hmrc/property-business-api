@@ -48,7 +48,7 @@ class RetrieveUkPropertyPeriodSummaryConnector @Inject() (val http: HttpClient, 
 
     import request._
 
-    val downstreamUri = if (taxYear.useTaxYearSpecificApi) {
+    val downstreamUri = if (taxYear.isTys) {
       TaxYearSpecificIfsUri[RetrieveUkPropertyPeriodSummaryResponse](
         s"income-tax/business/property/${taxYear.asTysDownstream}/$nino/${businessId}/periodic/$submissionId")
     } else {

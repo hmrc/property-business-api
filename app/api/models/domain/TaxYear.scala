@@ -62,9 +62,10 @@ final case class TaxYear private (private val value: String) {
 
   /** Use this for downstream API endpoints that are known to be TYS.
     */
-  def useTaxYearSpecificApi: Boolean = year >= 2024
+  def isTys: Boolean = year >= 2024
 
   override def toString: String = s"TaxYear($value)"
+
 }
 
 object TaxYear {
@@ -115,6 +116,7 @@ object TaxYear {
   def fromDownstreamInt(taxYear: Int): TaxYear =
     new TaxYear(taxYear.toString)
 
+  def isTys(taxYear: Option[TaxYear]): Boolean = taxYear.exists(_.isTys)
 
   implicit val ordering: Ordering[TaxYear] = Ordering.by(_.year)
 

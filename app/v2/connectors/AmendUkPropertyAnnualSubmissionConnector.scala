@@ -37,7 +37,7 @@ class AmendUkPropertyAnnualSubmissionConnector @Inject() (val http: HttpClient, 
     import request._
 
     val downstreamUri =
-      if (taxYear.useTaxYearSpecificApi) {
+      if (taxYear.isTys) {
         TaxYearSpecificIfsUri[Unit](s"income-tax/business/property/annual/${taxYear.asTysDownstream}/$nino/$businessId")
       } else {
         // Note that MTD tax year format is used

@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,28 +20,31 @@ import play.api.libs.functional.syntax._
 import play.api.libs.json.{JsPath, Json, OWrites, Reads}
 import shapeless.HNil
 import utils.EmptinessChecker
-import v4.controllers.createUkPropertyPeriodSummary.def1.model.request.ukFhlProperty.UkFhlProperty
-import v4.controllers.createUkPropertyPeriodSummary.def1.model.request.ukNonFhlProperty.UkNonFhlProperty
+import v4.controllers.createUkPropertyPeriodSummary.def1.model.request.def1_ukFhlProperty.Def1_Create_UkFhlProperty
+import v4.controllers.createUkPropertyPeriodSummary.def1.model.request.def1_ukNonFhlProperty.Def1_Create_UkNonFhlProperty
 
-case class CreateUkPropertyPeriodSummaryRequestBody(fromDate: String,
-                                                    toDate: String,
-                                                    ukFhlProperty: Option[UkFhlProperty],
-                                                    ukNonFhlProperty: Option[UkNonFhlProperty])
+sealed trait CreateUkPropertyPeriodSummaryRequestBody
 
-object CreateUkPropertyPeriodSummaryRequestBody {
+case class Def1_CreateUkPropertyPeriodSummaryRequestBody(fromDate: String,
+                                                         toDate: String,
+                                                         ukFhlProperty: Option[Def1_Create_UkFhlProperty],
+                                                         ukNonFhlProperty: Option[Def1_Create_UkNonFhlProperty])
+    extends CreateUkPropertyPeriodSummaryRequestBody
 
-  implicit val emptinessChecker: EmptinessChecker[CreateUkPropertyPeriodSummaryRequestBody] = EmptinessChecker.use { body =>
+object Def1_CreateUkPropertyPeriodSummaryRequestBody {
+
+  implicit val emptinessChecker: EmptinessChecker[Def1_CreateUkPropertyPeriodSummaryRequestBody] = EmptinessChecker.use { body =>
     "ukFhlProperty"      -> body.ukFhlProperty ::
       "ukNonFhlProperty" -> body.ukNonFhlProperty :: HNil
   }
 
-  implicit val reads: Reads[CreateUkPropertyPeriodSummaryRequestBody] = Json.reads[CreateUkPropertyPeriodSummaryRequestBody]
+  implicit val reads: Reads[Def1_CreateUkPropertyPeriodSummaryRequestBody] = Json.reads[Def1_CreateUkPropertyPeriodSummaryRequestBody]
 
-  implicit val writes: OWrites[CreateUkPropertyPeriodSummaryRequestBody] = (
+  implicit val writes: OWrites[Def1_CreateUkPropertyPeriodSummaryRequestBody] = (
     (JsPath \ "fromDate").write[String] and
       (JsPath \ "toDate").write[String] and
-      (JsPath \ "ukFhlProperty").writeNullable[UkFhlProperty] and
-      (JsPath \ "ukOtherProperty").writeNullable[UkNonFhlProperty]
-  )(unlift(CreateUkPropertyPeriodSummaryRequestBody.unapply))
+      (JsPath \ "ukFhlProperty").writeNullable[Def1_Create_UkFhlProperty] and
+      (JsPath \ "ukOtherProperty").writeNullable[Def1_Create_UkNonFhlProperty]
+  )(unlift(Def1_CreateUkPropertyPeriodSummaryRequestBody.unapply))
 
 }

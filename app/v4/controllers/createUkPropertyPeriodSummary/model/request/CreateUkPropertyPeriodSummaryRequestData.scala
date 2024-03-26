@@ -18,7 +18,15 @@ package v4.controllers.createUkPropertyPeriodSummary.model.request
 
 import api.models.domain.{BusinessId, Nino, TaxYear}
 
-case class CreateUkPropertyPeriodSummaryRequestData(nino: Nino,
-                                                    taxYear: TaxYear,
-                                                    businessId: BusinessId,
-                                                    body: CreateUkPropertyPeriodSummaryRequestBody)
+sealed trait CreateUkPropertyPeriodSummaryRequestData {
+  val nino: Nino
+  val taxYear: TaxYear
+  val businessId: BusinessId
+  def body: CreateUkPropertyPeriodSummaryRequestBody
+}
+
+case class Def1_CreateUkPropertyPeriodSummaryRequestData(nino: Nino,
+                                                         taxYear: TaxYear,
+                                                         businessId: BusinessId,
+                                                         body: Def1_CreateUkPropertyPeriodSummaryRequestBody)
+    extends CreateUkPropertyPeriodSummaryRequestData

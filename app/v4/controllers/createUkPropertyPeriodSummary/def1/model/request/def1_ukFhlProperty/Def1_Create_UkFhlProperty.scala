@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-package v4.controllers.createUkPropertyPeriodSummary.def1.model.request.def1_ukPropertyRentARoom
+package v4.controllers.createUkPropertyPeriodSummary.def1.model.request.def1_ukFhlProperty
 
 import play.api.libs.json.{Json, OFormat}
 
-case class Def1_Create_UkPropertyIncomeRentARoom(rentsReceived: Option[BigDecimal])
+case class Def1_Create_UkFhlProperty(income: Option[Def1_Create_UkFhlPropertyIncome], expenses: Option[Def1_Create_UkFhlPropertyExpenses])
 
-object Def1_Create_UkPropertyIncomeRentARoom {
-  implicit val format: OFormat[Def1_Create_UkPropertyIncomeRentARoom] = Json.format[Def1_Create_UkPropertyIncomeRentARoom]
+object Def1_Create_UkFhlProperty {
+  implicit val format: OFormat[Def1_Create_UkFhlProperty] = Json.format[Def1_Create_UkFhlProperty]
 }

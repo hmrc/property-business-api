@@ -14,36 +14,36 @@
  * limitations under the License.
  */
 
-package v4.controllers.amendUkPropertyPeriodSummary.def1
+package v4.controllers.createUkPropertyPeriodSummary.def1
 
 import api.controllers.validators.RulesValidator
-import api.controllers.validators.resolvers._
+import api.controllers.validators.resolvers.{ResolveFromAndToDates, ResolveParsedNumber}
 import api.models.errors.{MtdError, RuleBothExpensesSuppliedError}
 import cats.data.Validated
 import cats.data.Validated.Invalid
-import cats.implicits._
-import v4.controllers.amendUkPropertyPeriodSummary.def1.model.request.def1_ukFhlProperty.{Def1_Amend_UkFhlProperty, Def1_Amend_UkFhlPropertyExpenses}
-import v4.controllers.amendUkPropertyPeriodSummary.def1.model.request.def1_ukNonFhlProperty.{
-  Def1_Amend_UkNonFhlProperty,
-  Def1_Amend_UkNonFhlPropertyExpenses
-}
-import v4.controllers.amendUkPropertyPeriodSummary.model.request.Def1_AmendUkPropertyPeriodSummaryRequestData
+import cats.implicits.toTraverseOps
+import v4.controllers.createUkPropertyPeriodSummary.def1.model.request.def1_ukFhlProperty._
+import v4.controllers.createUkPropertyPeriodSummary.def1.model.request.def1_ukNonFhlProperty._
+import v4.controllers.createUkPropertyPeriodSummary.model.request.Def1_CreateUkPropertyPeriodSummaryRequestData
 
-class Def1_AmendUkPropertyPeriodSummaryRulesValidator extends RulesValidator[Def1_AmendUkPropertyPeriodSummaryRequestData] {
+class Def1_CreateUkPropertyPeriodSummaryRulesValidator extends RulesValidator[Def1_CreateUkPropertyPeriodSummaryRequestData] {
 
   private val resolveParsedNumber = ResolveParsedNumber()
 
   def validateBusinessRules(
-      parsed: Def1_AmendUkPropertyPeriodSummaryRequestData): Validated[Seq[MtdError], Def1_AmendUkPropertyPeriodSummaryRequestData] = {
+      parsed: Def1_CreateUkPropertyPeriodSummaryRequestData): Validated[Seq[MtdError], Def1_CreateUkPropertyPeriodSummaryRequestData] = {
     import parsed.body._
+
     combine(
+      ResolveFromAndToDates((fromDate, toDate)),
       ukFhlProperty.map(validateUkFhlProperty).getOrElse(valid),
       ukNonFhlProperty.map(validateUkNonFhlProperty).getOrElse(valid)
     ).onSuccess(parsed)
   }
 
-  private def validateUkFhlProperty(ukFhlProperty: Def1_Amend_UkFhlProperty): Validated[Seq[MtdError], Unit] = {
+  private def validateUkFhlProperty(ukFhlProperty: Def1_Create_UkFhlProperty): Validated[Seq[MtdError], Unit] = {
     import ukFhlProperty._
+
     val valuesWithPaths = List(
       (income.flatMap(_.periodAmount), "/ukFhlProperty/income/periodAmount"),
       (income.flatMap(_.taxDeducted), "/ukFhlProperty/income/taxDeducted"),
@@ -59,28 +59,26 @@ class Def1_AmendUkPropertyPeriodSummaryRulesValidator extends RulesValidator[Def
       (expenses.flatMap(_.rentARoom.flatMap(_.amountClaimed)), "/ukFhlProperty/expenses/rentARoom/amountClaimed")
     )
 
-    val validatedNumberFields = valuesWithPaths
-      .map {
-        case (None, _)            => valid
-        case (Some(number), path) => resolveParsedNumber(number, path)
-      }
+    val validatedNumberFields = valuesWithPaths.map {
+      case (None, _)            => valid
+      case (Some(number), path) => resolveParsedNumber(number, path)
+    }
 
-    val validatedConsolidatedExpenses = expenses
-      .map(_.consolidatedExpenses match {
-        case None => valid
-        case Some(_) =>
-          ukFhlProperty.expenses match {
-            case Some(Def1_Amend_UkFhlPropertyExpenses(None, None, None, None, None, None, Some(_), None, None)) => valid
-            case _ => Invalid(List(RuleBothExpensesSuppliedError.withPath("/ukFhlProperty/expenses")))
-          }
-      })
-      .getOrElse(valid)
+    val validatedConsolidatedExpenses = expenses match {
+      case Some(Def1_Create_UkFhlPropertyExpenses(None, None, None, None, None, None, Some(_), None, None)) => valid
+      case _ =>
+        expenses
+          .flatMap(_.consolidatedExpenses)
+          .map(_ => Invalid(List(RuleBothExpensesSuppliedError.withPath("/ukFhlProperty/expenses"))))
+          .getOrElse(valid)
+    }
 
     (validatedNumberFields :+ validatedConsolidatedExpenses).sequence.andThen(_ => valid)
   }
 
-  private def validateUkNonFhlProperty(ukNonFhlProperty: Def1_Amend_UkNonFhlProperty): Validated[Seq[MtdError], Unit] = {
+  private def validateUkNonFhlProperty(ukNonFhlProperty: Def1_Create_UkNonFhlProperty): Validated[Seq[MtdError], Unit] = {
     import ukNonFhlProperty._
+
     val valuesWithPaths = List(
       (income.flatMap(_.premiumsOfLeaseGrant), "/ukNonFhlProperty/income/premiumsOfLeaseGrant"),
       (income.flatMap(_.reversePremiums), "/ukNonFhlProperty/income/reversePremiums"),
@@ -97,31 +95,25 @@ class Def1_AmendUkPropertyPeriodSummaryRulesValidator extends RulesValidator[Def
       (expenses.flatMap(_.residentialFinancialCost), "/ukNonFhlProperty/expenses/residentialFinancialCost"),
       (expenses.flatMap(_.consolidatedExpenses), "/ukNonFhlProperty/expenses/consolidatedExpenses"),
       (expenses.flatMap(_.travelCosts), "/ukNonFhlProperty/expenses/travelCosts"),
-      (
-        expenses.flatMap(_.residentialFinancialCostsCarriedForward),
-        "/ukNonFhlProperty/expenses/residentialFinancialCostsCarriedForward"),
+      (expenses.flatMap(_.residentialFinancialCostsCarriedForward), "/ukNonFhlProperty/expenses/residentialFinancialCostsCarriedForward"),
       (expenses.flatMap(_.rentARoom.flatMap(_.amountClaimed)), "/ukNonFhlProperty/expenses/rentARoom/amountClaimed")
     )
 
-    val validatedNumberFields = valuesWithPaths
-      .map {
-        case (None, _)            => valid
-        case (Some(number), path) => resolveParsedNumber(number, path)
-      }
+    val validatedNumberFields = valuesWithPaths.map {
+      case (None, _)            => valid
+      case (Some(number), path) => resolveParsedNumber(number, path)
+    }
 
-    val validatedConsolidatedExpenses = expenses
-      .map(_.consolidatedExpenses match {
-        case None => valid
-        case Some(_) =>
-          expenses match {
-            case Some(Def1_Amend_UkNonFhlPropertyExpenses(None, None, None, None, None, None, None, None, None, None, Some(_))) => valid
-            case _ => Invalid(List(RuleBothExpensesSuppliedError.withPath("/ukNonFhlProperty/expenses")))
-          }
-      })
-      .getOrElse(valid)
+    val validatedConsolidatedExpenses = expenses match {
+      case Some(Def1_Create_UkNonFhlPropertyExpenses(None, None, None, None, None, None, None, None, None, None, Some(_))) => valid
+      case _ =>
+        expenses
+          .flatMap(_.consolidatedExpenses)
+          .map(_ => Invalid(List(RuleBothExpensesSuppliedError.withPath("/ukNonFhlProperty/expenses"))))
+          .getOrElse(valid)
+    }
 
     (validatedNumberFields :+ validatedConsolidatedExpenses).sequence.andThen(_ => valid)
-
   }
 
 }

@@ -17,11 +17,15 @@
 package v4.controllers.createUkPropertyPeriodSummary
 
 import api.connectors.DownstreamUri.{IfsUri, TaxYearSpecificIfsUri}
-import api.connectors.httpparsers.StandardDownstreamHttpParser.reads
+import api.connectors.httpparsers.StandardDownstreamHttpParser.{SuccessCode, reads}
 import api.connectors.{BaseDownstreamConnector, DownstreamOutcome, DownstreamUri}
 import config.AppConfig
+import play.api.http.Status.OK
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
-import v4.controllers.createUkPropertyPeriodSummary.model.request.CreateUkPropertyPeriodSummaryRequestData
+import v4.controllers.createUkPropertyPeriodSummary.model.request.{
+  CreateUkPropertyPeriodSummaryRequestData,
+  Def1_CreateUkPropertyPeriodSummaryRequestData
+}
 import v4.controllers.createUkPropertyPeriodSummary.model.response.CreateUkPropertyPeriodSummaryResponse
 
 import javax.inject.{Inject, Singleton}
@@ -35,16 +39,19 @@ class CreateUkPropertyPeriodSummaryConnector @Inject() (val http: HttpClient, va
       ec: ExecutionContext,
       correlationId: String): Future[DownstreamOutcome[CreateUkPropertyPeriodSummaryResponse]] = {
 
-    import request._
+    implicit val successCode: SuccessCode = SuccessCode(OK)
+    request match {
+      case def1: Def1_CreateUkPropertyPeriodSummaryRequestData =>
+        import def1._
+        val downstreamUri: DownstreamUri[CreateUkPropertyPeriodSummaryResponse] = if (taxYear.isTys) {
+          TaxYearSpecificIfsUri(s"income-tax/business/property/periodic/${taxYear.asTysDownstream}?taxableEntityId=$nino&incomeSourceId=$businessId")
+        } else {
+          // Note that MTD tax year format is used pre-TYS
+          IfsUri(s"income-tax/business/property/periodic?taxableEntityId=$nino&taxYear=${taxYear.asMtd}&incomeSourceId=$businessId")
+        }
 
-    val downstreamUri: DownstreamUri[CreateUkPropertyPeriodSummaryResponse] = if (taxYear.isTys) {
-      TaxYearSpecificIfsUri(s"income-tax/business/property/periodic/${taxYear.asTysDownstream}?taxableEntityId=$nino&incomeSourceId=${businessId}")
-    } else {
-      // Note that MTD tax year format is used pre-TYS
-      IfsUri(s"income-tax/business/property/periodic?taxableEntityId=$nino&taxYear=${taxYear.asMtd}&incomeSourceId=$businessId")
+        post(body, downstreamUri)
     }
-
-    post(body, downstreamUri)
   }
 
 }

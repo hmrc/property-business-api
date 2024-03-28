@@ -1,0 +1,50 @@
+/*
+ * Copyright 2023 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package v4.controllers.createAmendUkPropertyAnnualSubmission.def1.model.request.def1_ukNonFhlProperty
+
+import play.api.libs.functional.syntax._
+import play.api.libs.json.{JsPath, Json, Reads, Writes}
+
+case class Def1_Create_Amend_UkNonFhlPropertyAllowances(
+    annualInvestmentAllowance: Option[BigDecimal],
+    zeroEmissionsGoodsVehicleAllowance: Option[BigDecimal],
+    businessPremisesRenovationAllowance: Option[BigDecimal],
+    otherCapitalAllowance: Option[BigDecimal],
+    costOfReplacingDomesticGoods: Option[BigDecimal],
+    electricChargePointAllowance: Option[BigDecimal],
+    zeroEmissionsCarAllowance: Option[BigDecimal],
+    propertyIncomeAllowance: Option[BigDecimal],
+    structuredBuildingAllowance: Option[Seq[Def1_Create_Amend_StructuredBuildingAllowance]],
+    enhancedStructuredBuildingAllowance: Option[Seq[Def1_Create_Amend_StructuredBuildingAllowance]])
+
+object Def1_Create_Amend_UkNonFhlPropertyAllowances {
+  implicit val reads: Reads[Def1_Create_Amend_UkNonFhlPropertyAllowances] = Json.reads[Def1_Create_Amend_UkNonFhlPropertyAllowances]
+
+  implicit val writes: Writes[Def1_Create_Amend_UkNonFhlPropertyAllowances] = (
+    (JsPath \ "annualInvestmentAllowance").writeNullable[BigDecimal] and
+      (JsPath \ "zeroEmissionGoodsVehicleAllowance").writeNullable[BigDecimal] and
+      (JsPath \ "businessPremisesRenovationAllowance").writeNullable[BigDecimal] and
+      (JsPath \ "otherCapitalAllowance").writeNullable[BigDecimal] and
+      (JsPath \ "costOfReplacingDomesticGoods").writeNullable[BigDecimal] and
+      (JsPath \ "electricChargePointAllowance").writeNullable[BigDecimal] and
+      (JsPath \ "zeroEmissionsCarAllowance").writeNullable[BigDecimal] and
+      (JsPath \ "propertyIncomeAllowance").writeNullable[BigDecimal] and
+      (JsPath \ "structuredBuildingAllowance").writeNullable[Seq[Def1_Create_Amend_StructuredBuildingAllowance]] and
+      (JsPath \ "enhancedStructuredBuildingAllowance").writeNullable[Seq[Def1_Create_Amend_StructuredBuildingAllowance]]
+  )(unlift(Def1_Create_Amend_UkNonFhlPropertyAllowances.unapply))
+
+}

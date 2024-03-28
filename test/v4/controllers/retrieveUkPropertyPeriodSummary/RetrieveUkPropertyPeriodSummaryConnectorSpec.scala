@@ -24,10 +24,8 @@ import fixtures.RetrieveUkPropertyPeriodSummary.ResponseModelsFixture
 import org.scalamock.handlers.CallHandler
 import v4.controllers.retrieveUkPropertyPeriodSummary.RetrieveUkPropertyPeriodSummaryConnector._
 import v4.controllers.retrieveUkPropertyPeriodSummary.def1.model.response.{Def1_Retrieve_UkFhlProperty, Def1_Retrieve_UkNonFhlProperty}
-import v4.controllers.retrieveUkPropertyPeriodSummary.model.request.{
-  Def1_RetrieveUkPropertyPeriodSummaryRequestData,
-  RetrieveUkPropertyPeriodSummaryRequestData
-}
+import v4.controllers.retrieveUkPropertyPeriodSummary.model.request.Def1_RetrieveUkPropertyPeriodSummaryRequestData
+
 import v4.controllers.retrieveUkPropertyPeriodSummary.model.response.{
   Def1_RetrieveUkPropertyPeriodSummaryResponse,
   RetrieveUkPropertyPeriodSummaryResponse
@@ -168,7 +166,7 @@ class RetrieveUkPropertyPeriodSummaryConnectorSpec extends ConnectorSpec with Re
       appConfig = mockAppConfig
     )
 
-    protected val request: RetrieveUkPropertyPeriodSummaryRequestData =
+    protected val request: Def1_RetrieveUkPropertyPeriodSummaryRequestData =
       Def1_RetrieveUkPropertyPeriodSummaryRequestData(nino, businessId, TaxYear.fromMtd(taxYear), submissionId)
 
     def stubHttpResponse(uri: String, outcome: DownstreamOutcome[RetrieveUkPropertyPeriodSummaryResponse])

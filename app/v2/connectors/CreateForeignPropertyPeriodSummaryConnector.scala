@@ -40,7 +40,7 @@ class CreateForeignPropertyPeriodSummaryConnector @Inject() (val http: HttpClien
 
     implicit val successCode: SuccessCode = SuccessCode(Status.OK)
 
-    val downstreamUri = if (taxYear.useTaxYearSpecificApi) {
+    val downstreamUri = if (taxYear.isTys) {
       TaxYearSpecificIfsUri[CreateForeignPropertyPeriodSummaryResponse](
         s"income-tax/business/property/periodic/${taxYear.asTysDownstream}?taxableEntityId=$nino&incomeSourceId=$businessId"
       )

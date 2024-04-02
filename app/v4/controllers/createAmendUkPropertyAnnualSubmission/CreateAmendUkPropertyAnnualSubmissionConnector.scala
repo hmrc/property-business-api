@@ -20,7 +20,7 @@ import api.connectors.DownstreamUri.{IfsUri, TaxYearSpecificIfsUri}
 import api.connectors.httpparsers.StandardDownstreamHttpParser.{SuccessCode, readsEmpty}
 import api.connectors.{BaseDownstreamConnector, DownstreamOutcome}
 import config.AppConfig
-import play.api.http.Status.OK
+import play.api.http.Status.NO_CONTENT
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
 import v4.controllers.createAmendUkPropertyAnnualSubmission.model.request.{
   CreateAmendUkPropertyAnnualSubmissionRequestData,
@@ -38,7 +38,7 @@ class CreateAmendUkPropertyAnnualSubmissionConnector @Inject() (val http: HttpCl
       ec: ExecutionContext,
       correlationId: String): Future[DownstreamOutcome[Unit]] = {
 
-    implicit val successCode: SuccessCode = SuccessCode(OK)
+    implicit val successCode: SuccessCode = SuccessCode(NO_CONTENT)
 
     request match {
       case def1: Def1_CreateAmendUkPropertyAnnualSubmissionRequestData =>
@@ -50,7 +50,7 @@ class CreateAmendUkPropertyAnnualSubmissionConnector @Inject() (val http: HttpCl
             IfsUri[Unit](s"income-tax/business/property/annual?taxableEntityId=$nino&incomeSourceId=$businessId&taxYear=${taxYear.asMtd}")
           }
 
-        put(body, downstreamUri)
+        put(def1.body, downstreamUri)
 
     }
   }

@@ -10,9 +10,9 @@ PUT        /foreign/:nino/:businessId/period/:taxYear/:submissionId    v2.contro
 GET        /foreign/:nino/:businessId/period/:taxYear/:submissionId    v2.controllers.RetrieveForeignPropertyPeriodSummaryController.handleRequest(nino: String, businessId: String, taxYear: String,submissionId: String)
 GET        /:nino/:businessId/period/:taxYear                          v2.controllers.ListPropertyPeriodSummariesController.handleRequest(nino: String, businessId: String, taxYear: String)
 
-PUT        /foreign/:nino/:businessId/annual/:taxYear                  v2.controllers.CreateAmendForeignPropertyAnnualSubmissionController.handleRequest(nino: String, businessId: String, taxYear: String)
-GET        /foreign/:nino/:businessId/annual/:taxYear                  v2.controllers.RetrieveForeignPropertyAnnualSubmissionController.handleRequest(nino: String, businessId: String, taxYear: String)
-DELETE     /:nino/:businessId/annual/:taxYear                          v2.controllers.DeletePropertyAnnualSubmissionController.handleRequest(nino: String, businessId: String, taxYear: String)
+PUT        /foreign/:nino/:businessId/annual/:taxYear                  v4.controllers.CreateAmendForeignPropertyAnnualSubmissionController.handleRequest(nino: String, businessId: String, taxYear: String)
+GET        /foreign/:nino/:businessId/annual/:taxYear                  v4.controllers.RetrieveForeignPropertyAnnualSubmissionController.handleRequest(nino: String, businessId: String, taxYear: String)
+DELETE     /:nino/:businessId/annual/:taxYear                          v4.controllers.DeletePropertyAnnualSubmissionController.handleRequest(nino: String, businessId: String, taxYear: String)
 
 # Historical endpoints
 PUT        /uk/annual/furnished-holiday-lettings/:nino/:taxYear       v2.controllers.CreateAmendHistoricFhlUkPropertyAnnualSubmissionController.handleRequest(nino: String, taxYear: String)

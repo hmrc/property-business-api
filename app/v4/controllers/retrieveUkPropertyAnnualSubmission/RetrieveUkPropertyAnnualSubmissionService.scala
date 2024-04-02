@@ -14,27 +14,29 @@
  * limitations under the License.
  */
 
-package v4.controllers.retrieveUkPropertyPeriodSummary
+package v4.controllers.retrieveUkPropertyAnnualSubmission
 
 import api.controllers.RequestContext
 import api.models.errors._
 import api.models.outcomes.ResponseWrapper
 import api.services.{BaseService, ServiceOutcome}
 import cats.data.EitherT
-import RetrieveUkPropertyPeriodSummaryConnector.{NonUkResult, UkResult}
-import v4.controllers.retrieveUkPropertyPeriodSummary.model.request.RetrieveUkPropertyPeriodSummaryRequestData
-import v4.controllers.retrieveUkPropertyPeriodSummary.model.response.RetrieveUkPropertyPeriodSummaryResponse
+import cats.implicits._
+import v4.controllers.retrieveUkPropertyAnnualSubmission.RetrieveUkPropertyAnnualSubmissionConnector.{NonUkResult, UkResult}
+import v4.controllers.retrieveUkPropertyAnnualSubmission.model.request.RetrieveUkPropertyAnnualSubmissionRequestData
+import v4.controllers.retrieveUkPropertyAnnualSubmission.model.response.RetrieveUkPropertyAnnualSubmissionResponse
 
-import javax.inject.Inject
+import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
-class RetrieveUkPropertyPeriodSummaryService @Inject() (connector: RetrieveUkPropertyPeriodSummaryConnector) extends BaseService {
+@Singleton
+class RetrieveUkPropertyAnnualSubmissionService @Inject() (connector: RetrieveUkPropertyAnnualSubmissionConnector) extends BaseService {
 
-  def retrieveUkProperty(request: RetrieveUkPropertyPeriodSummaryRequestData)(implicit
+  def retrieveUkProperty(request: RetrieveUkPropertyAnnualSubmissionRequestData)(implicit
       ctx: RequestContext,
-      ec: ExecutionContext): Future[ServiceOutcome[RetrieveUkPropertyPeriodSummaryResponse]] = {
+      ec: ExecutionContext): Future[ServiceOutcome[RetrieveUkPropertyAnnualSubmissionResponse]] = {
 
-    val result = EitherT(connector.retrieveUkPropertyPeriodSummary(request))
+    val result = EitherT(connector.retrieveUkProperty(request))
       .leftMap(mapDownstreamErrors(downstreamErrorMap))
       .flatMap(connectorResultWrapper => EitherT.fromEither(validateBusinessType(connectorResultWrapper)))
 
@@ -42,28 +44,27 @@ class RetrieveUkPropertyPeriodSummaryService @Inject() (connector: RetrieveUkPro
   }
 
   private val downstreamErrorMap: Map[String, MtdError] = {
-    val errorMap = Map(
+    val errors = Map(
       "INVALID_TAXABLE_ENTITY_ID" -> NinoFormatError,
-      "INVALID_TAX_YEAR"          -> TaxYearFormatError,
       "INVALID_INCOMESOURCEID"    -> BusinessIdFormatError,
-      "INVALID_SUBMISSION_ID"     -> SubmissionIdFormatError,
-      "TAX_YEAR_NOT_SUPPORTED"    -> RuleTaxYearNotSupportedError,
+      "INVALID_TAX_YEAR"          -> TaxYearFormatError,
+      "INVALID_CORRELATIONID"     -> InternalError,
       "NO_DATA_FOUND"             -> NotFoundError,
+      "TAX_YEAR_NOT_SUPPORTED"    -> RuleTaxYearNotSupportedError,
       "SERVER_ERROR"              -> InternalError,
-      "SERVICE_UNAVAILABLE"       -> InternalError,
-      "INVALID_CORRELATIONID"     -> InternalError
+      "SERVICE_UNAVAILABLE"       -> InternalError
     )
 
-    val tysErrorMap =
+    val extraTysErrors =
       Map(
         "INVALID_INCOMESOURCE_ID" -> BusinessIdFormatError,
         "INVALID_CORRELATION_ID"  -> InternalError
       )
 
-    errorMap ++ tysErrorMap
+    errors ++ extraTysErrors
   }
 
-  private def validateBusinessType(resultWrapper: ResponseWrapper[RetrieveUkPropertyPeriodSummaryConnector.Result]) =
+  private def validateBusinessType(resultWrapper: ResponseWrapper[RetrieveUkPropertyAnnualSubmissionConnector.Result]) =
     resultWrapper.responseData match {
       case UkResult(response) => Right(ResponseWrapper(resultWrapper.correlationId, response))
       case NonUkResult        => Left(ErrorWrapper(resultWrapper.correlationId, RuleTypeOfBusinessIncorrectError))

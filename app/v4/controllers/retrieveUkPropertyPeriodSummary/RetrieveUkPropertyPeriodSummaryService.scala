@@ -31,8 +31,8 @@ import scala.concurrent.{ExecutionContext, Future}
 class RetrieveUkPropertyPeriodSummaryService @Inject() (connector: RetrieveUkPropertyPeriodSummaryConnector) extends BaseService {
 
   def retrieveUkProperty(request: RetrieveUkPropertyPeriodSummaryRequestData)(implicit
-                                                                              ctx: RequestContext,
-                                                                              ec: ExecutionContext): Future[ServiceOutcome[RetrieveUkPropertyPeriodSummaryResponse]] = {
+      ctx: RequestContext,
+      ec: ExecutionContext): Future[ServiceOutcome[RetrieveUkPropertyPeriodSummaryResponse]] = {
 
     val result = EitherT(connector.retrieveUkPropertyPeriodSummary(request))
       .leftMap(mapDownstreamErrors(downstreamErrorMap))

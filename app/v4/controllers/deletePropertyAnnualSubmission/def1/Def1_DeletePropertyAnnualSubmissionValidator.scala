@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package v4.controllers.validators
+package v4.controllers.deletePropertyAnnualSubmission.def1
 
 import api.controllers.validators.Validator
 import api.controllers.validators.resolvers.{ResolveBusinessId, ResolveNino, ResolveTaxYear}
@@ -22,25 +22,23 @@ import api.models.errors.MtdError
 import cats.data.Validated
 import cats.implicits._
 import config.AppConfig
-import v4.models.request.deletePropertyAnnualSubmission.DeletePropertyAnnualSubmissionRequestData
+import v4.controllers.deletePropertyAnnualSubmission.model.request.{
+  Def1_DeletePropertyAnnualSubmissionRequestData,
+  DeletePropertyAnnualSubmissionRequestData
+}
 
-import javax.inject.{Inject, Singleton}
+import javax.inject.Inject
 
-@Singleton
-class DeletePropertyAnnualSubmissionValidatorFactory @Inject()(appConfig: AppConfig) {
+class Def1_DeletePropertyAnnualSubmissionValidator @Inject() (nino: String, businessId: String, taxYear: String)(appConfig: AppConfig)
+    extends Validator[DeletePropertyAnnualSubmissionRequestData] {
 
   private lazy val minimumTaxYear = appConfig.minimumTaxV2Foreign
 
-  def validator(nino: String, businessId: String, taxYear: String): Validator[DeletePropertyAnnualSubmissionRequestData] =
-    new Validator[DeletePropertyAnnualSubmissionRequestData] {
-
-      def validate: Validated[Seq[MtdError], DeletePropertyAnnualSubmissionRequestData] =
-        (
-          ResolveNino(nino),
-          ResolveBusinessId(businessId),
-          ResolveTaxYear(minimumTaxYear, taxYear)
-        ).mapN(DeletePropertyAnnualSubmissionRequestData)
-
-    }
+  def validate: Validated[Seq[MtdError], DeletePropertyAnnualSubmissionRequestData] =
+    (
+      ResolveNino(nino),
+      ResolveBusinessId(businessId),
+      ResolveTaxYear(minimumTaxYear, taxYear)
+    ).mapN(Def1_DeletePropertyAnnualSubmissionRequestData)
 
 }

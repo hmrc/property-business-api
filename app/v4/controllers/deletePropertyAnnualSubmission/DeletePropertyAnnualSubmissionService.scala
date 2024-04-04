@@ -14,14 +14,13 @@
  * limitations under the License.
  */
 
-package v4.services
+package v4.controllers.deletePropertyAnnualSubmission
 
 import api.controllers.RequestContext
 import api.models.errors._
 import api.services.{BaseService, ServiceOutcome}
 import cats.implicits._
-import v4.connectors.DeletePropertyAnnualSubmissionConnector
-import v4.models.request.deletePropertyAnnualSubmission.DeletePropertyAnnualSubmissionRequestData
+import v4.controllers.deletePropertyAnnualSubmission.model.request.DeletePropertyAnnualSubmissionRequestData
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}

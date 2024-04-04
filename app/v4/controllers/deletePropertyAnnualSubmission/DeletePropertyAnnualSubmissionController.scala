@@ -14,15 +14,13 @@
  * limitations under the License.
  */
 
-package v4.controllers
+package v4.controllers.deletePropertyAnnualSubmission
 
 import api.controllers._
 import api.services.{AuditService, EnrolmentsAuthService, MtdIdLookupService}
 import play.api.mvc.{Action, AnyContent, ControllerComponents}
 import routing.{Version, Version2}
 import utils.IdGenerator
-import v4.controllers.validators.DeletePropertyAnnualSubmissionValidatorFactory
-import v4.services.DeletePropertyAnnualSubmissionService
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.ExecutionContext

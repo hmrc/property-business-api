@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-package v4.services
+package v4.controllers.deletePropertyAnnualSubmission
 
 import api.controllers.RequestContext
 import api.services.ServiceOutcome
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
-import v4.models.request.deletePropertyAnnualSubmission.DeletePropertyAnnualSubmissionRequestData
+import v4.controllers.deletePropertyAnnualSubmission.model.request.DeletePropertyAnnualSubmissionRequestData
 
 import scala.concurrent.{ExecutionContext, Future}
 

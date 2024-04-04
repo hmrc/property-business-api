@@ -14,8 +14,15 @@
  * limitations under the License.
  */
 
-package v4.models.request.deletePropertyAnnualSubmission
+package v4.controllers.deletePropertyAnnualSubmission.model.request
 
 import api.models.domain.{BusinessId, Nino, TaxYear}
 
-case class DeletePropertyAnnualSubmissionRequestData(nino: Nino, businessId: BusinessId, taxYear: TaxYear)
+sealed trait DeletePropertyAnnualSubmissionRequestData {
+  val nino: Nino
+  val businessId: BusinessId
+  val taxYear: TaxYear
+}
+
+case class Def1_DeletePropertyAnnualSubmissionRequestData(nino: Nino, businessId: BusinessId, taxYear: TaxYear)
+    extends DeletePropertyAnnualSubmissionRequestData

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package v4.controllers
+package v4.controllers.deletePropertyAnnualSubmission
 
 import api.controllers.{ControllerBaseSpec, ControllerTestRunner}
 import api.models.audit.{AuditEvent, AuditResponse, GenericAuditDetail}
@@ -24,9 +24,7 @@ import api.models.outcomes.ResponseWrapper
 import api.services.MockAuditService
 import play.api.libs.json.JsValue
 import play.api.mvc.Result
-import v4.controllers.validators.MockDeletePropertyAnnualSubmissionValidatorFactory
-import v4.models.request.deletePropertyAnnualSubmission._
-import v4.services.MockDeletePropertyAnnualSubmissionService
+import v4.controllers.deletePropertyAnnualSubmission.model.request.{Def1_DeletePropertyAnnualSubmissionRequestData, DeletePropertyAnnualSubmissionRequestData}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -103,7 +101,7 @@ class DeletePropertyAnnualSubmissionControllerSpec
       )
 
     protected val requestData: DeletePropertyAnnualSubmissionRequestData =
-      DeletePropertyAnnualSubmissionRequestData(Nino(nino), businessId, taxYear)
+      Def1_DeletePropertyAnnualSubmissionRequestData(Nino(nino), businessId, taxYear)
 
   }
 

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package v4.services
+package v4.controllers.deletePropertyAnnualSubmission
 
 import api.controllers.EndpointLogContext
 import api.models.domain.{BusinessId, Nino, TaxYear}
@@ -22,8 +22,7 @@ import api.models.errors._
 import api.models.outcomes.ResponseWrapper
 import api.services.ServiceSpec
 import uk.gov.hmrc.http.HeaderCarrier
-import v4.connectors.MockDeletePropertyAnnualSubmissionConnector
-import v4.models.request.deletePropertyAnnualSubmission.DeletePropertyAnnualSubmissionRequestData
+import v4.controllers.deletePropertyAnnualSubmission.model.request.{Def1_DeletePropertyAnnualSubmissionRequestData, DeletePropertyAnnualSubmissionRequestData}
 
 import scala.concurrent.Future
 
@@ -90,7 +89,7 @@ class DeletePropertyAnnualSubmissionServiceSpec extends ServiceSpec {
     )
 
     protected val requestData: DeletePropertyAnnualSubmissionRequestData =
-      DeletePropertyAnnualSubmissionRequestData(nino, businessId, taxYear)
+      Def1_DeletePropertyAnnualSubmissionRequestData(nino, businessId, taxYear)
 
   }
 

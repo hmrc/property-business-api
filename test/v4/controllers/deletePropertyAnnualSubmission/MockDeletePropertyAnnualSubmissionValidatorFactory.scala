@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package v4.controllers.validators
+package v4.controllers.deletePropertyAnnualSubmission
 
 import api.controllers.validators.Validator
 import api.models.errors.MtdError
@@ -22,7 +22,7 @@ import cats.data.Validated
 import cats.data.Validated.{Invalid, Valid}
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
-import v4.models.request.deletePropertyAnnualSubmission.DeletePropertyAnnualSubmissionRequestData
+import v4.controllers.deletePropertyAnnualSubmission.model.request.DeletePropertyAnnualSubmissionRequestData
 
 trait MockDeletePropertyAnnualSubmissionValidatorFactory extends MockFactory {
 

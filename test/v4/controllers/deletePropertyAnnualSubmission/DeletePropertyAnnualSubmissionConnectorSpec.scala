@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-package v4.connectors
+package v4.controllers.deletePropertyAnnualSubmission
 
 import api.connectors.{ConnectorSpec, DownstreamOutcome}
 import api.models.domain.{BusinessId, Nino, TaxYear}
 import api.models.errors.{DownstreamErrorCode, DownstreamErrors}
 import api.models.outcomes.ResponseWrapper
-import v4.models.request.deletePropertyAnnualSubmission.DeletePropertyAnnualSubmissionRequestData
+import v4.controllers.deletePropertyAnnualSubmission.model.request.{Def1_DeletePropertyAnnualSubmissionRequestData, DeletePropertyAnnualSubmissionRequestData}
 
 import scala.concurrent.Future
 
@@ -86,7 +86,7 @@ class DeletePropertyAnnualSubmissionConnectorSpec extends ConnectorSpec {
     )
 
     protected val request: DeletePropertyAnnualSubmissionRequestData =
-      DeletePropertyAnnualSubmissionRequestData(nino = nino, businessId = businessId, taxYear = taxYear)
+      Def1_DeletePropertyAnnualSubmissionRequestData(nino = nino, businessId = businessId, taxYear = taxYear)
 
     protected def stubHttpResponse(outcome: DownstreamOutcome[Unit]): Unit =
       willDelete(

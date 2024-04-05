@@ -24,7 +24,7 @@ import support.UnitSpec
 import v4.controllers.retrieveUkPropertyPeriodSummary.def1.model.Def1_RetrieveUkPropertyPeriodSummaryFixture
 import v4.controllers.retrieveUkPropertyPeriodSummary.model.response._
 
-class Def1_Retrieve_RetrieveUkPropertyPeriodSummaryResponseSpec extends UnitSpec with MockAppConfig with Def1_RetrieveUkPropertyPeriodSummaryFixture {
+class Def1_RetrieveUkPropertyPeriodSummaryResponseSpec extends UnitSpec with MockAppConfig with Def1_RetrieveUkPropertyPeriodSummaryFixture {
   val downstreamJson: JsValue                        = fullDownstreamJson
   val mtdJson: JsValue                               = fullMtdJson
   val model: RetrieveUkPropertyPeriodSummaryResponse = fullResponseModel

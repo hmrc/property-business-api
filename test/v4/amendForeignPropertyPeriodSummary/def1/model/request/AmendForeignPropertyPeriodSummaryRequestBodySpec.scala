@@ -20,11 +20,10 @@ import play.api.libs.json.Json
 import support.UnitSpec
 import v4.amendForeignPropertyPeriodSummary.def1.model.request.foreignFhlEea._
 import v4.amendForeignPropertyPeriodSummary.def1.model.request.foreignPropertyEntry._
-import v4.amendForeignPropertyPeriodSummary.model.request.AmendForeignPropertyPeriodSummaryRequestBody
 
 class AmendForeignPropertyPeriodSummaryRequestBodySpec extends UnitSpec {
 
-  private val amendForeignPropertyRequestBody = AmendForeignPropertyPeriodSummaryRequestBody(
+  private val amendForeignPropertyRequestBody = Def1_AmendForeignPropertyPeriodSummaryRequestBody(
     Some(
       AmendForeignFhlEea(
         Some(ForeignFhlEeaIncome(Some(5000.99))),
@@ -163,7 +162,7 @@ class AmendForeignPropertyPeriodSummaryRequestBodySpec extends UnitSpec {
   "reads" when {
     "passed a valid JSON" should {
       "return a valid model" in {
-        readsJson.as[AmendForeignPropertyPeriodSummaryRequestBody] shouldBe amendForeignPropertyRequestBody
+        readsJson.as[Def1_AmendForeignPropertyPeriodSummaryRequestBody] shouldBe amendForeignPropertyRequestBody
       }
     }
   }

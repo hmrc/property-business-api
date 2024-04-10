@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package v4.retrieveForeignPropertyPeriodSummary.model.response
+package v4.retrieveForeignPropertyPeriodSummary.def1.model.response
 
 import api.hateoas.{Link, Method}
 import api.models.domain.Timestamp
@@ -23,6 +23,7 @@ import play.api.libs.json.Json
 import support.UnitSpec
 import v4.retrieveForeignPropertyPeriodSummary.def1.model.response.foreignFhlEea._
 import v4.retrieveForeignPropertyPeriodSummary.def1.model.response.foreignNonFhlProperty._
+import v4.retrieveForeignPropertyPeriodSummary.model.response._
 
 class RetrieveForeignPropertyPeriodSummaryResponseSpec extends UnitSpec with MockAppConfig {
 

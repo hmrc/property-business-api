@@ -14,17 +14,15 @@
  * limitations under the License.
  */
 
-package v4.retrieveForeignPropertyPeriodSummary.model.response.foreignNonFhlProperty
+package v4.retrieveForeignPropertyPeriodSummary.def1.model.response.foreignFhlEea
 
 import play.api.libs.json.Json
 import support.UnitSpec
-import v4.retrieveForeignPropertyPeriodSummary.def1.model.response.foreignNonFhlProperty.ForeignNonFhlPropertyExpenses
+import v4.retrieveForeignPropertyPeriodSummary.def1.model.response.foreignFhlEea.ForeignFhlEeaExpenses
 
-class ForeignNonFhlPropertyExpensesSpec extends UnitSpec {
+class ForeignFhlEeaExpensesSpec extends UnitSpec {
 
-  private val foreignNonFhlPropertyExpenses = ForeignNonFhlPropertyExpenses(
-    Some(5000.99),
-    Some(5000.99),
+  private val foreignFhlEeaExpenses = ForeignFhlEeaExpenses(
     Some(5000.99),
     Some(5000.99),
     Some(5000.99),
@@ -43,8 +41,6 @@ class ForeignNonFhlPropertyExpensesSpec extends UnitSpec {
       |  "professionalFees": 5000.99,
       |  "costOfServices": 5000.99,
       |  "travelCosts": 5000.99,
-      |  "residentialFinancialCost": 5000.99,
-      |  "broughtFwdResidentialFinancialCost": 5000.99,
       |  "other": 5000.99,
       |  "consolidatedExpenses": 5000.99
       |}""".stripMargin)
@@ -57,8 +53,6 @@ class ForeignNonFhlPropertyExpensesSpec extends UnitSpec {
       |  "professionalFees": 5000.99,
       |  "costOfServices": 5000.99,
       |  "travelCosts": 5000.99,
-      |  "residentialFinancialCost": 5000.99,
-      |  "broughtFwdResidentialFinancialCost": 5000.99,
       |  "other": 5000.99,
       |  "consolidatedExpense": 5000.99
       |}""".stripMargin)
@@ -66,7 +60,7 @@ class ForeignNonFhlPropertyExpensesSpec extends UnitSpec {
   "reads" when {
     "passed a valid JSON" should {
       "return a valid model" in {
-        readsJson.as[ForeignNonFhlPropertyExpenses] shouldBe foreignNonFhlPropertyExpenses
+        readsJson.as[ForeignFhlEeaExpenses] shouldBe foreignFhlEeaExpenses
       }
     }
   }
@@ -74,7 +68,7 @@ class ForeignNonFhlPropertyExpensesSpec extends UnitSpec {
   "writes" when {
     "passed valid model" should {
       "return valid JSON" in {
-        Json.toJson(foreignNonFhlPropertyExpenses) shouldBe writesJson
+        Json.toJson(foreignFhlEeaExpenses) shouldBe writesJson
       }
     }
   }

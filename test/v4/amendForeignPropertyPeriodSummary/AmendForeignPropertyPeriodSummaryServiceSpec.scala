@@ -22,7 +22,8 @@ import api.models.errors._
 import api.models.outcomes.ResponseWrapper
 import api.services.ServiceSpec
 import uk.gov.hmrc.http.HeaderCarrier
-import v4.amendForeignPropertyPeriodSummary.model.request.{AmendForeignPropertyPeriodSummaryRequestBody, AmendForeignPropertyPeriodSummaryRequestData}
+import v4.amendForeignPropertyPeriodSummary.def1.model.request.Def1_AmendForeignPropertyPeriodSummaryRequestBody
+import v4.amendForeignPropertyPeriodSummary.model.request.{AmendForeignPropertyPeriodSummaryRequestData, Def1_AmendForeignPropertyPeriodSummaryRequestData}
 
 import scala.concurrent.Future
 
@@ -95,10 +96,10 @@ class AmendForeignPropertyPeriodSummaryServiceSpec extends ServiceSpec {
       connector = mockAmendForeignPropertyPeriodSummaryConnector
     )
 
-    protected val requestBody: AmendForeignPropertyPeriodSummaryRequestBody = AmendForeignPropertyPeriodSummaryRequestBody(None, None)
+    protected val requestBody: Def1_AmendForeignPropertyPeriodSummaryRequestBody = Def1_AmendForeignPropertyPeriodSummaryRequestBody(None, None)
 
     protected val request: AmendForeignPropertyPeriodSummaryRequestData =
-      AmendForeignPropertyPeriodSummaryRequestData(nino, businessId, taxYear, submissionId, requestBody)
+      Def1_AmendForeignPropertyPeriodSummaryRequestData(nino, businessId, taxYear, submissionId, requestBody)
 
   }
 

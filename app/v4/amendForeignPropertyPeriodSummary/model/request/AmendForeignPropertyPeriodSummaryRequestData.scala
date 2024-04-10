@@ -17,9 +17,19 @@
 package v4.amendForeignPropertyPeriodSummary.model.request
 
 import api.models.domain.{BusinessId, Nino, SubmissionId, TaxYear}
+import v4.amendForeignPropertyPeriodSummary.def1.model.request.Def1_AmendForeignPropertyPeriodSummaryRequestBody
 
-case class AmendForeignPropertyPeriodSummaryRequestData(nino: Nino,
-                                                        businessId: BusinessId,
-                                                        taxYear: TaxYear,
-                                                        submissionId: SubmissionId,
-                                                        body: AmendForeignPropertyPeriodSummaryRequestBody)
+sealed trait AmendForeignPropertyPeriodSummaryRequestData {
+  val nino: Nino
+  val businessId: BusinessId
+  val taxYear: TaxYear
+  val submissionId: SubmissionId
+  def body: Def1_AmendForeignPropertyPeriodSummaryRequestBody
+}
+
+case class Def1_AmendForeignPropertyPeriodSummaryRequestData(nino: Nino,
+                                                             businessId: BusinessId,
+                                                             taxYear: TaxYear,
+                                                             submissionId: SubmissionId,
+                                                             body: Def1_AmendForeignPropertyPeriodSummaryRequestBody)
+    extends AmendForeignPropertyPeriodSummaryRequestData

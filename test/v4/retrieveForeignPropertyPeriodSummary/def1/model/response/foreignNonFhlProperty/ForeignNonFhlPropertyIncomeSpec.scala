@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package v4.retrieveForeignPropertyPeriodSummary.model.response.foreignNonFhlProperty
+package v4.retrieveForeignPropertyPeriodSummary.def1.model.response.foreignNonFhlProperty
 
 import play.api.libs.json.Json
 import support.UnitSpec

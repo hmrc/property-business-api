@@ -26,9 +26,10 @@ import api.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLooku
 import mocks.MockIdGenerator
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.Result
+import v4.amendForeignPropertyPeriodSummary.def1.model.request.Def1_AmendForeignPropertyPeriodSummaryRequestBody
 import v4.amendForeignPropertyPeriodSummary.def1.model.request.foreignFhlEea._
 import v4.amendForeignPropertyPeriodSummary.def1.model.request.foreignPropertyEntry._
-import v4.amendForeignPropertyPeriodSummary.model.request.{AmendForeignPropertyPeriodSummaryRequestBody, AmendForeignPropertyPeriodSummaryRequestData}
+import v4.amendForeignPropertyPeriodSummary.model.request.{AmendForeignPropertyPeriodSummaryRequestData, Def1_AmendForeignPropertyPeriodSummaryRequestData}
 import v4.amendForeignPropertyPeriodSummary.model.response.AmendForeignPropertyPeriodSummaryHateoasData
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -118,8 +119,8 @@ class AmendForeignPropertyPeriodSummaryControllerSpec
     protected def callController(): Future[Result] =
       controller.handleRequest(nino = nino, businessId = businessId, taxYear = taxYear, submissionId = submissionId)(fakePutRequest(requestBodyJson))
 
-    protected val requestBody: AmendForeignPropertyPeriodSummaryRequestBody =
-      AmendForeignPropertyPeriodSummaryRequestBody(
+    protected val requestBody: Def1_AmendForeignPropertyPeriodSummaryRequestBody =
+      Def1_AmendForeignPropertyPeriodSummaryRequestBody(
         Some(
           AmendForeignFhlEea(
             Some(ForeignFhlEeaIncome(Some(5000.99))),
@@ -213,7 +214,7 @@ class AmendForeignPropertyPeriodSummaryControllerSpec
     )
 
     protected val requestData: AmendForeignPropertyPeriodSummaryRequestData =
-      AmendForeignPropertyPeriodSummaryRequestData(
+      Def1_AmendForeignPropertyPeriodSummaryRequestData(
         Nino(nino),
         BusinessId(businessId),
         TaxYear.fromMtd(taxYear),

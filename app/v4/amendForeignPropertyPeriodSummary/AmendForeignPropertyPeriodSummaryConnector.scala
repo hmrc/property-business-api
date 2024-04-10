@@ -21,7 +21,7 @@ import api.connectors.httpparsers.StandardDownstreamHttpParser.readsEmpty
 import api.connectors.{BaseDownstreamConnector, DownstreamOutcome}
 import config.AppConfig
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
-import v4.amendForeignPropertyPeriodSummary.model.request.AmendForeignPropertyPeriodSummaryRequestData
+import v4.amendForeignPropertyPeriodSummary.model.request.{AmendForeignPropertyPeriodSummaryRequestData, Def1_AmendForeignPropertyPeriodSummaryRequestData}
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
@@ -34,21 +34,24 @@ class AmendForeignPropertyPeriodSummaryConnector @Inject() (val http: HttpClient
       ec: ExecutionContext,
       correlationId: String): Future[DownstreamOutcome[Unit]] = {
 
-    import request._
+    request match {
+      case def1: Def1_AmendForeignPropertyPeriodSummaryRequestData =>
+        import def1._
+        val downstreamUri =
+          if (taxYear.isTys) {
+            TaxYearSpecificIfsUri[Unit](
+              s"income-tax/business/property/periodic/${taxYear.asTysDownstream}?" +
+                s"taxableEntityId=$nino&incomeSourceId=$businessId&submissionId=$submissionId")
+          } else {
+            // Note that MTD tax year format is used
+            IfsUri[Unit](
+              s"income-tax/business/property/periodic?" +
+                s"taxableEntityId=$nino&taxYear=${taxYear.asMtd}&incomeSourceId=$businessId&submissionId=$submissionId")
+          }
 
-    val downstreamUri =
-      if (taxYear.isTys) {
-        TaxYearSpecificIfsUri[Unit](
-          s"income-tax/business/property/periodic/${taxYear.asTysDownstream}?" +
-            s"taxableEntityId=$nino&incomeSourceId=$businessId&submissionId=$submissionId")
-      } else {
-        // Note that MTD tax year format is used
-        IfsUri[Unit](
-          s"income-tax/business/property/periodic?" +
-            s"taxableEntityId=$nino&taxYear=${taxYear.asMtd}&incomeSourceId=$businessId&submissionId=$submissionId")
-      }
+        put(body, downstreamUri)
+    }
 
-    put(body, downstreamUri)
   }
 
 }

@@ -17,40 +17,21 @@
 package v4.amendForeignPropertyPeriodSummary
 
 import api.controllers.validators.Validator
-import api.controllers.validators.resolvers._
-import api.models.errors.MtdError
-import cats.data.Validated
-import cats.implicits._
 import config.AppConfig
 import play.api.libs.json.JsValue
-import v4.amendForeignPropertyPeriodSummary.def1.AmendForeignPropertyPeriodSummaryRulesValidator.validateBusinessRules
-import v4.amendForeignPropertyPeriodSummary.model.request.{AmendForeignPropertyPeriodSummaryRequestBody, AmendForeignPropertyPeriodSummaryRequestData}
+import v4.amendForeignPropertyPeriodSummary.def1.Def1_AmendForeignPropertyPeriodSummaryValidator
+import v4.amendForeignPropertyPeriodSummary.model.request._
 
 import javax.inject.{Inject, Singleton}
 
 @Singleton
 class AmendForeignPropertyPeriodSummaryValidatorFactory @Inject() (appConfig: AppConfig) {
 
-  private lazy val minTaxYear = appConfig.minimumTaxV2Foreign
-
-  private val resolveJson = new ResolveNonEmptyJsonObject[AmendForeignPropertyPeriodSummaryRequestBody]()
-
   def validator(nino: String,
                 businessId: String,
                 taxYear: String,
                 submissionId: String,
                 body: JsValue): Validator[AmendForeignPropertyPeriodSummaryRequestData] =
-    new Validator[AmendForeignPropertyPeriodSummaryRequestData] {
-
-      def validate: Validated[Seq[MtdError], AmendForeignPropertyPeriodSummaryRequestData] =
-        (
-          ResolveNino(nino),
-          ResolveBusinessId(businessId),
-          ResolveTaxYear(minTaxYear, taxYear),
-          ResolveSubmissionId(submissionId),
-          resolveJson(body)
-        ).mapN(AmendForeignPropertyPeriodSummaryRequestData) andThen validateBusinessRules
-
-    }
+    new Def1_AmendForeignPropertyPeriodSummaryValidator(nino, businessId, taxYear, submissionId, body, appConfig)
 
 }

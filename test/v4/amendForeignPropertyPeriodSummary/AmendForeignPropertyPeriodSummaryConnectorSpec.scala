@@ -22,7 +22,8 @@ import api.models.errors.{DownstreamErrorCode, DownstreamErrors}
 import api.models.outcomes.ResponseWrapper
 import org.scalamock.handlers.CallHandler
 import uk.gov.hmrc.http.HeaderCarrier
-import v4.amendForeignPropertyPeriodSummary.model.request.{AmendForeignPropertyPeriodSummaryRequestBody, AmendForeignPropertyPeriodSummaryRequestData}
+import v4.amendForeignPropertyPeriodSummary.def1.model.request.Def1_AmendForeignPropertyPeriodSummaryRequestBody
+import v4.amendForeignPropertyPeriodSummary.model.request.{AmendForeignPropertyPeriodSummaryRequestData, Def1_AmendForeignPropertyPeriodSummaryRequestData}
 
 import scala.concurrent.Future
 
@@ -108,10 +109,10 @@ class AmendForeignPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
       appConfig = mockAppConfig
     )
 
-    private val requestBody: AmendForeignPropertyPeriodSummaryRequestBody = AmendForeignPropertyPeriodSummaryRequestBody(None, None)
+    private val requestBody: Def1_AmendForeignPropertyPeriodSummaryRequestBody = Def1_AmendForeignPropertyPeriodSummaryRequestBody(None, None)
 
     protected val request: AmendForeignPropertyPeriodSummaryRequestData =
-      AmendForeignPropertyPeriodSummaryRequestData(Nino(nino), BusinessId(businessId), taxYear, SubmissionId(submissionId), requestBody)
+      Def1_AmendForeignPropertyPeriodSummaryRequestData(Nino(nino), BusinessId(businessId), taxYear, SubmissionId(submissionId), requestBody)
 
     protected def stubHttpResponse(outcome: DownstreamOutcome[Unit]): CallHandler[Future[DownstreamOutcome[Unit]]]#Derived = {
       willPut(

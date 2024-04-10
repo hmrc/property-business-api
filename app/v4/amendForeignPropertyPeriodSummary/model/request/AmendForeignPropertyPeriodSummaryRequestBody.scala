@@ -16,20 +16,4 @@
 
 package v4.amendForeignPropertyPeriodSummary.model.request
 
-import play.api.libs.functional.syntax._
-import play.api.libs.json.{JsPath, Json, OWrites, Reads}
-import v4.amendForeignPropertyPeriodSummary.def1.model.request.foreignFhlEea.AmendForeignFhlEea
-import v4.amendForeignPropertyPeriodSummary.def1.model.request.foreignPropertyEntry.AmendForeignNonFhlPropertyEntry
-
-case class AmendForeignPropertyPeriodSummaryRequestBody(foreignFhlEea: Option[AmendForeignFhlEea],
-                                                        foreignNonFhlProperty: Option[Seq[AmendForeignNonFhlPropertyEntry]])
-
-object AmendForeignPropertyPeriodSummaryRequestBody {
-  implicit val reads: Reads[AmendForeignPropertyPeriodSummaryRequestBody] = Json.reads[AmendForeignPropertyPeriodSummaryRequestBody]
-
-  implicit val writes: OWrites[AmendForeignPropertyPeriodSummaryRequestBody] = (
-    (JsPath \ "foreignFhlEea").writeNullable[AmendForeignFhlEea] and
-      (JsPath \ "foreignProperty").writeNullable[Seq[AmendForeignNonFhlPropertyEntry]]
-  )(unlift(AmendForeignPropertyPeriodSummaryRequestBody.unapply))
-
-}
+trait AmendForeignPropertyPeriodSummaryRequestBody

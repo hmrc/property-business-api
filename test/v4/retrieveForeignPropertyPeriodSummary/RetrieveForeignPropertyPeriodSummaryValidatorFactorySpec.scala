@@ -31,12 +31,13 @@ class RetrieveForeignPropertyPeriodSummaryValidatorFactorySpec extends UnitSpec 
 
   private val validatorFactory = new RetrieveForeignPropertyPeriodSummaryValidatorFactory(mockAppConfig)
 
-  MockedAppConfig.minimumTaxV2Foreign.returns(TaxYear.starting(2021))
-
   "validator()" when {
 
     "given any request with a valid tax year" should {
       "return the Validator for schema definition 1" in {
+
+        MockedAppConfig.minimumTaxV2Foreign.returns(TaxYear.starting(2021)).anyNumberOfTimes()
+
         val result: Validator[RetrieveForeignPropertyPeriodSummaryRequestData] =
           validatorFactory.validator(validNino, validBusinessId, validTaxYear, validSubmissionId)
 

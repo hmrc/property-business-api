@@ -23,8 +23,8 @@ import api.models.outcomes.ResponseWrapper
 import v4.retrieveForeignPropertyPeriodSummary.RetrieveForeignPropertyPeriodSummaryConnector.{ForeignResult, NonForeignResult}
 import v4.retrieveForeignPropertyPeriodSummary.def1.model.response.foreignFhlEea.ForeignFhlEea
 import v4.retrieveForeignPropertyPeriodSummary.def1.model.response.foreignNonFhlProperty.ForeignNonFhlProperty
-import v4.retrieveForeignPropertyPeriodSummary.model.request.RetrieveForeignPropertyPeriodSummaryRequestData
-import v4.retrieveForeignPropertyPeriodSummary.model.response.RetrieveForeignPropertyPeriodSummaryResponse
+import v4.retrieveForeignPropertyPeriodSummary.model.request.{Def1_RetrieveForeignPropertyPeriodSummaryRequestData, RetrieveForeignPropertyPeriodSummaryRequestData}
+import v4.retrieveForeignPropertyPeriodSummary.model.response.{Def1_RetrieveForeignPropertyPeriodSummaryResponse, RetrieveForeignPropertyPeriodSummaryResponse}
 
 import scala.concurrent.Future
 
@@ -43,7 +43,12 @@ class RetrieveForeignPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
 
   def responseWith(foreignFhlEea: Option[ForeignFhlEea],
                    foreignNonFhlProperty: Option[Seq[ForeignNonFhlProperty]]): RetrieveForeignPropertyPeriodSummaryResponse =
-    RetrieveForeignPropertyPeriodSummaryResponse(Timestamp("2020-06-17T10:53:38Z"), "2019-01-29", "2020-03-29", foreignFhlEea, foreignNonFhlProperty)
+    Def1_RetrieveForeignPropertyPeriodSummaryResponse(
+      Timestamp("2020-06-17T10:53:38Z"),
+      "2019-01-29",
+      "2020-03-29",
+      foreignFhlEea,
+      foreignNonFhlProperty)
 
   "connector" when {
     "response has foreign FHL details" must {
@@ -191,7 +196,7 @@ class RetrieveForeignPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
     )
 
     protected val request: RetrieveForeignPropertyPeriodSummaryRequestData =
-      RetrieveForeignPropertyPeriodSummaryRequestData(nino, businessId, taxYear, submissionId)
+      Def1_RetrieveForeignPropertyPeriodSummaryRequestData(nino, businessId, taxYear, submissionId)
 
     protected def stubHttpResponse(outcome: DownstreamOutcome[RetrieveForeignPropertyPeriodSummaryResponse]): Unit =
       willGet(

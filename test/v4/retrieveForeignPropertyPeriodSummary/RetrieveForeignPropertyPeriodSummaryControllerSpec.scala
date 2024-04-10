@@ -27,9 +27,9 @@ import mocks.MockIdGenerator
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.Result
 import v4.retrieveForeignPropertyPeriodSummary.def1.model.response.foreignFhlEea.{ForeignFhlEea, ForeignFhlEeaExpenses, ForeignFhlEeaIncome}
-import v4.retrieveForeignPropertyPeriodSummary.def1.model.response.foreignNonFhlProperty.{ForeignNonFhlProperty, ForeignNonFhlPropertyExpenses, ForeignNonFhlPropertyIncome, ForeignNonFhlPropertyRentIncome}
-import v4.retrieveForeignPropertyPeriodSummary.model.request.RetrieveForeignPropertyPeriodSummaryRequestData
-import v4.retrieveForeignPropertyPeriodSummary.model.response.{RetrieveForeignPropertyPeriodSummaryHateoasData, RetrieveForeignPropertyPeriodSummaryResponse}
+import v4.retrieveForeignPropertyPeriodSummary.def1.model.response.foreignNonFhlProperty._
+import v4.retrieveForeignPropertyPeriodSummary.model.request.{Def1_RetrieveForeignPropertyPeriodSummaryRequestData, RetrieveForeignPropertyPeriodSummaryRequestData}
+import v4.retrieveForeignPropertyPeriodSummary.model.response.{Def1_RetrieveForeignPropertyPeriodSummaryResponse, RetrieveForeignPropertyPeriodSummaryHateoasData, RetrieveForeignPropertyPeriodSummaryResponse}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -102,12 +102,12 @@ class RetrieveForeignPropertyPeriodSummaryControllerSpec
       controller.handleRequest(nino = nino, businessId = businessId, taxYear = taxYear, submissionId = submissionId)(fakeGetRequest)
 
     protected val requestData: RetrieveForeignPropertyPeriodSummaryRequestData =
-      RetrieveForeignPropertyPeriodSummaryRequestData(Nino(nino), BusinessId(businessId), TaxYear.fromMtd(taxYear), SubmissionId(submissionId))
+      Def1_RetrieveForeignPropertyPeriodSummaryRequestData(Nino(nino), BusinessId(businessId), TaxYear.fromMtd(taxYear), SubmissionId(submissionId))
 
     protected val testHateoasLink: Link =
       Link(href = s"/individuals/business/property/$nino/$businessId/period/$taxYear/$submissionId", method = GET, rel = "self")
 
-    protected val responseBody: RetrieveForeignPropertyPeriodSummaryResponse = RetrieveForeignPropertyPeriodSummaryResponse(
+    protected val responseBody: RetrieveForeignPropertyPeriodSummaryResponse = Def1_RetrieveForeignPropertyPeriodSummaryResponse(
       submittedOn = Timestamp("2022-06-17T10:53:38Z"),
       fromDate = "",
       toDate = "",

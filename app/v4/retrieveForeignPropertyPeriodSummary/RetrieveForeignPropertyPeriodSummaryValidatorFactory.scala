@@ -17,31 +17,16 @@
 package v4.retrieveForeignPropertyPeriodSummary
 
 import api.controllers.validators.Validator
-import api.controllers.validators.resolvers.{ResolveBusinessId, ResolveNino, ResolveSubmissionId, ResolveTaxYear}
-import api.models.errors.MtdError
-import cats.data.Validated
-import cats.implicits._
 import config.AppConfig
-import v4.retrieveForeignPropertyPeriodSummary.model.request.RetrieveForeignPropertyPeriodSummaryRequestData
+import v4.retrieveForeignPropertyPeriodSummary.def1.Def1_RetrieveForeignPropertyPeriodSummaryValidator
+import v4.retrieveForeignPropertyPeriodSummary.model.request._
 
 import javax.inject.{Inject, Singleton}
 
 @Singleton
 class RetrieveForeignPropertyPeriodSummaryValidatorFactory @Inject() (appConfig: AppConfig) {
 
-  private lazy val minimumTaxYear = appConfig.minimumTaxV2Foreign
-
   def validator(nino: String, businessId: String, taxYear: String, submissionId: String): Validator[RetrieveForeignPropertyPeriodSummaryRequestData] =
-    new Validator[RetrieveForeignPropertyPeriodSummaryRequestData] {
-
-      def validate: Validated[Seq[MtdError], RetrieveForeignPropertyPeriodSummaryRequestData] =
-        (
-          ResolveNino(nino),
-          ResolveBusinessId(businessId),
-          ResolveTaxYear(minimumTaxYear, taxYear),
-          ResolveSubmissionId(submissionId)
-        ).mapN(RetrieveForeignPropertyPeriodSummaryRequestData)
-
-    }
+    new Def1_RetrieveForeignPropertyPeriodSummaryValidator(nino, businessId, taxYear, submissionId, appConfig)
 
 }

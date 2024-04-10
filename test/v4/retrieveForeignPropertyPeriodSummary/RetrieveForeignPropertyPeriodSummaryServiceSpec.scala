@@ -23,8 +23,8 @@ import api.models.outcomes.ResponseWrapper
 import support.UnitSpec
 import uk.gov.hmrc.http.HeaderCarrier
 import v4.retrieveForeignPropertyPeriodSummary.RetrieveForeignPropertyPeriodSummaryConnector.{ForeignResult, NonForeignResult}
-import v4.retrieveForeignPropertyPeriodSummary.model.request.RetrieveForeignPropertyPeriodSummaryRequestData
-import v4.retrieveForeignPropertyPeriodSummary.model.response.RetrieveForeignPropertyPeriodSummaryResponse
+import v4.retrieveForeignPropertyPeriodSummary.model.request.{Def1_RetrieveForeignPropertyPeriodSummaryRequestData, RetrieveForeignPropertyPeriodSummaryRequestData}
+import v4.retrieveForeignPropertyPeriodSummary.model.response.{Def1_RetrieveForeignPropertyPeriodSummaryResponse, RetrieveForeignPropertyPeriodSummaryResponse}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -102,10 +102,10 @@ class RetrieveForeignPropertyPeriodSummaryServiceSpec extends UnitSpec {
     )
 
     protected val response: RetrieveForeignPropertyPeriodSummaryResponse =
-      RetrieveForeignPropertyPeriodSummaryResponse(Timestamp("2020-06-17T10:53:38Z"), "2019-01-29", "2020-03-29", None, None)
+      Def1_RetrieveForeignPropertyPeriodSummaryResponse(Timestamp("2020-06-17T10:53:38Z"), "2019-01-29", "2020-03-29", None, None)
 
     protected val requestData: RetrieveForeignPropertyPeriodSummaryRequestData =
-      RetrieveForeignPropertyPeriodSummaryRequestData(nino, businessId, taxYear, submissionId)
+      Def1_RetrieveForeignPropertyPeriodSummaryRequestData(nino, businessId, taxYear, submissionId)
 
   }
 

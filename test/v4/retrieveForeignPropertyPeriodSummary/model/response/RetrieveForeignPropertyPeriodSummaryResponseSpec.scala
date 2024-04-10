@@ -26,7 +26,7 @@ import v4.retrieveForeignPropertyPeriodSummary.def1.model.response.foreignNonFhl
 
 class RetrieveForeignPropertyPeriodSummaryResponseSpec extends UnitSpec with MockAppConfig {
 
-  private val retrieveForeignPropertyResponseBody = RetrieveForeignPropertyPeriodSummaryResponse(
+  private val retrieveForeignPropertyResponseBody = Def1_RetrieveForeignPropertyPeriodSummaryResponse(
     Timestamp("2021-06-17T10:53:38Z"),
     "2020-01-01",
     "2020-01-31",
@@ -178,7 +178,7 @@ class RetrieveForeignPropertyPeriodSummaryResponseSpec extends UnitSpec with Moc
   "reads" when {
     "passed a valid JSON" should {
       "return a valid model" in {
-        readsJson.as[RetrieveForeignPropertyPeriodSummaryResponse] shouldBe retrieveForeignPropertyResponseBody
+        readsJson.as[Def1_RetrieveForeignPropertyPeriodSummaryResponse] shouldBe retrieveForeignPropertyResponseBody
       }
     }
   }

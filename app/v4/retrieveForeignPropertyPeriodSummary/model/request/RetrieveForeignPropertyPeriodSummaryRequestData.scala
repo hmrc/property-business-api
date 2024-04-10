@@ -18,4 +18,12 @@ package v4.retrieveForeignPropertyPeriodSummary.model.request
 
 import api.models.domain.{BusinessId, Nino, SubmissionId, TaxYear}
 
-case class RetrieveForeignPropertyPeriodSummaryRequestData(nino: Nino, businessId: BusinessId, taxYear: TaxYear, submissionId: SubmissionId)
+sealed trait RetrieveForeignPropertyPeriodSummaryRequestData {
+  val nino: Nino
+  val businessId: BusinessId
+  val taxYear: TaxYear
+  val submissionId: SubmissionId
+}
+
+case class Def1_RetrieveForeignPropertyPeriodSummaryRequestData(nino: Nino, businessId: BusinessId, taxYear: TaxYear, submissionId: SubmissionId)
+    extends RetrieveForeignPropertyPeriodSummaryRequestData

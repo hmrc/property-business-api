@@ -27,13 +27,13 @@ import javax.inject.{Inject, Singleton}
 import scala.concurrent.ExecutionContext
 
 @Singleton
-class RetrieveForeignPropertyPeriodSummaryController @Inject()(val authService: EnrolmentsAuthService,
-                                                               val lookupService: MtdIdLookupService,
-                                                               validatorFactory: RetrieveForeignPropertyPeriodSummaryValidatorFactory,
-                                                               service: RetrieveForeignPropertyPeriodSummaryService,
-                                                               hateoasFactory: HateoasFactory,
-                                                               cc: ControllerComponents,
-                                                               idGenerator: IdGenerator)(implicit ec: ExecutionContext)
+class RetrieveForeignPropertyPeriodSummaryController @Inject() (val authService: EnrolmentsAuthService,
+                                                                val lookupService: MtdIdLookupService,
+                                                                validatorFactory: RetrieveForeignPropertyPeriodSummaryValidatorFactory,
+                                                                service: RetrieveForeignPropertyPeriodSummaryService,
+                                                                hateoasFactory: HateoasFactory,
+                                                                cc: ControllerComponents,
+                                                                idGenerator: IdGenerator)(implicit ec: ExecutionContext)
     extends AuthorisedController(cc) {
 
   implicit val endpointLogContext: EndpointLogContext =

@@ -14,21 +14,21 @@
  * limitations under the License.
  */
 
-package v4.controllers.retrieveUkPropertyPeriodSummary.def1.model.response
+package v4.controllers.retrieveUkPropertyPeriodSummary.def2.model.response
 
 import play.api.libs.json.{JsValue, Json}
 import support.UnitSpec
-import v4.controllers.retrieveUkPropertyPeriodSummary.def1.model.Def1_RetrieveUkPropertyPeriodSummaryFixture
+import v4.controllers.retrieveUkPropertyPeriodSummary.def2.model.Def2_RetrieveUkPropertyPeriodSummaryFixture
 
-class Def1_Retrieve_RentARoomExpensesSpec extends UnitSpec with Def1_RetrieveUkPropertyPeriodSummaryFixture {
+class Def2_Retrieve_NonFhlPropertyIncomeSpec extends UnitSpec with Def2_RetrieveUkPropertyPeriodSummaryFixture {
 
-  "RentARoomExpenses" when {
-    val downstreamJson: JsValue  = (fullDownstreamJson \ "ukOtherProperty" \ "expenses" \ "ukOtherRentARoom").get
-    val mtdJson: JsValue         = (fullMtdJson \ "ukNonFhlProperty" \ "expenses" \ "rentARoom").get
-    val model: Def1_Retrieve_RentARoomExpenses = ukNonFhlRentARoomExpensesModel
+  "NonFhlPropertyIncome" when {
+    val downstreamJson: JsValue     = (fullDownstreamJson \ "ukOtherProperty" \ "income").get
+    val mtdJson: JsValue            = (fullMtdJson \ "ukNonFhlProperty" \ "income").get
+    val model: Def2_Retrieve_NonFhlPropertyIncome = ukNonFhlIncomeModel
     "read from valid JSON" should {
       "return the expected model" in {
-        downstreamJson.as[Def1_Retrieve_RentARoomExpenses] shouldBe model
+        downstreamJson.as[Def2_Retrieve_NonFhlPropertyIncome] shouldBe model
       }
     }
 

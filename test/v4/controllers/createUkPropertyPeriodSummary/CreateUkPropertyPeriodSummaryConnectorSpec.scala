@@ -53,6 +53,18 @@ class CreateUkPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
       val result: DownstreamOutcome[CreateUkPropertyPeriodSummaryResponse] = await(connector.createUkProperty(requestData))
       result shouldBe outcome
     }
+
+    "post a body and return 200 with submissionId for TY24-25" in new TysIfsTest with Test {
+      lazy val taxYear: TaxYear = TaxYear.fromMtd("2024-25")
+
+      willPost(
+        url = s"$baseUrl/income-tax/business/property/periodic/24-25?taxableEntityId=$nino&incomeSourceId=$businessId",
+        body = requestBodyDef2
+      ) returns Future.successful(outcome)
+
+      val result: DownstreamOutcome[CreateUkPropertyPeriodSummaryResponse] = await(connector.createUkProperty(requestDataDef2))
+      result shouldBe outcome
+    }
   }
 
   trait Test { _: ConnectorTest =>
@@ -62,8 +74,14 @@ class CreateUkPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
     protected val requestBody: Def1_CreateUkPropertyPeriodSummaryRequestBody =
       Def1_CreateUkPropertyPeriodSummaryRequestBody("2020-01-01", "2020-01-31", None, None)
 
+    protected val requestBodyDef2: Def2_CreateUkPropertyPeriodSummaryRequestBody =
+      Def2_CreateUkPropertyPeriodSummaryRequestBody("2024-04-06", "2024-07-05", None, None)
+
     protected val requestData: CreateUkPropertyPeriodSummaryRequestData =
-      Def1_CreateUkPropertyPeriodSummaryRequestData(nino, taxYear, businessId, requestBody)
+      Def1_CreateUkPropertyPeriodSummaryRequestData(nino, businessId, taxYear, requestBody)
+
+    protected val requestDataDef2: CreateUkPropertyPeriodSummaryRequestData =
+      Def2_CreateUkPropertyPeriodSummaryRequestData(nino, businessId, taxYear, requestBodyDef2)
 
     protected val response: CreateUkPropertyPeriodSummaryResponse = CreateUkPropertyPeriodSummaryResponse("4557ecb5-fd32-48cc-81f5-e6acd1099f3c")
     protected val outcome: Right[Nothing, ResponseWrapper[CreateUkPropertyPeriodSummaryResponse]] = Right(ResponseWrapper(correlationId, response))

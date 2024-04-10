@@ -14,31 +14,36 @@
  * limitations under the License.
  */
 
-package v4.controllers.createUkPropertyPeriodSummary.def1
+package v4.controllers.createUkPropertyPeriodSummary.def2
 
 import api.models.domain.{BusinessId, Nino, TaxYear}
 import api.models.errors._
 import api.models.utils.JsonErrorValidators
 import mocks.MockAppConfig
-import play.api.libs.json.{JsNumber, JsObject, JsString, JsValue, Json}
+import play.api.libs.json._
 import support.UnitSpec
 import v4.controllers.createUkPropertyPeriodSummary.CreateUkPropertyPeriodSummaryValidatorFactory
-import v4.controllers.createUkPropertyPeriodSummary.def1.model.request.def1_ukFhlProperty._
-import v4.controllers.createUkPropertyPeriodSummary.def1.model.request.def1_ukNonFhlProperty._
-import v4.controllers.createUkPropertyPeriodSummary.def1.model.request.def1_ukPropertyRentARoom._
+import v4.controllers.createUkPropertyPeriodSummary.def1.model.request.def1_ukNonFhlProperty.{
+  Def1_Create_UkNonFhlProperty,
+  Def1_Create_UkNonFhlPropertyIncome
+}
+import v4.controllers.createUkPropertyPeriodSummary.def2.model.request.def2_ukFhlProperty._
+import v4.controllers.createUkPropertyPeriodSummary.def2.model.request.def2_ukNonFhlProperty._
+import v4.controllers.createUkPropertyPeriodSummary.def2.model.request.def2_ukPropertyRentARoom._
 import v4.controllers.createUkPropertyPeriodSummary.model.request._
 
-class Def1_CreateUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with MockAppConfig with JsonErrorValidators {
+class Def2_CreateUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with MockAppConfig with JsonErrorValidators {
+
   private implicit val correlationId: String = "1234"
 
   private val validNino       = "AA123456A"
-  private val validTaxYear    = "2023-24"
+  private val validTaxYear    = "2024-25"
   private val validBusinessId = "XAIS12345678901"
 
   private val validBody = Json.parse("""
                                        |{
-                                       |    "fromDate": "2020-01-01",
-                                       |    "toDate": "2020-01-31",
+                                       |    "fromDate": "2024-04-06",
+                                       |    "toDate": "2024-07-05",
                                        |    "ukFhlProperty":{
                                        |        "income": {
                                        |            "periodAmount": 5000.99,
@@ -89,94 +94,103 @@ class Def1_CreateUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with Mock
                                        |}
                                        |""".stripMargin)
 
-  private val validBodyConsolidated = validBody
-    .removeProperty("/ukFhlProperty/expenses")
-    .removeProperty("/ukNonFhlProperty/expenses")
-    .update("/ukFhlProperty/expenses/consolidatedExpenses", JsNumber(988.18))
-    .update("/ukNonFhlProperty/expenses/consolidatedExpenses", JsNumber(988.18))
 
   private val validMinimalFhlBody = validBody
     .removeProperty("/ukNonFhlProperty")
     .replaceWithEmptyObject("/ukFhlProperty")
     .update(
-      "/ukFhlProperty",
-      Json.parse("""
-                   | {
-                   |   "income": {
-                   |     "periodAmount": 5000.99
-                   |   }
-                   | }
-                   |""".stripMargin)
-    )
+  "/ukFhlProperty",
+  Json.parse("""
+               | {
+               |   "income": {
+               |     "periodAmount": 5000.99
+               |   }
+               | }
+               |""".stripMargin)
+  )
 
   private val validMinimalNonFhlBody = validBody
     .removeProperty("/ukFhlProperty")
     .replaceWithEmptyObject("/ukNonFhlProperty")
     .update(
-      "/ukNonFhlProperty",
-      Json.parse("""
-                   | {
-                   |   "income": {
-                   |     "periodAmount": 9884.93
-                   |   }
-                   | }
-                   |""".stripMargin)
-    )
+  "/ukNonFhlProperty",
+  Json.parse("""
+               | {
+               |   "income": {
+               |     "periodAmount": 9884.93
+               |   }
+               | }
+               |""".stripMargin)
+  )
+
+  private val validBodyConsolidatedWithExtraFields = validBody
+    .removeProperty("/ukFhlProperty/expenses")
+    .removeProperty("/ukNonFhlProperty/expenses")
+    .update("/ukFhlProperty/expenses/consolidatedExpenses", JsNumber(988.18))
+    .update("/ukFhlProperty/expenses/rentARoom/amountClaimed", JsNumber(900.01))
+    .update("/ukNonFhlProperty/expenses/consolidatedExpenses", JsNumber(988.18))
+    .update("/ukNonFhlProperty/expenses/rentARoom/amountClaimed", JsNumber(935.01))
 
   private val parsedNino       = Nino(validNino)
   private val parsedTaxYear    = TaxYear.fromMtd(validTaxYear)
   private val parsedBusinessId = BusinessId(validBusinessId)
 
-  private val parsedFhlIncomeRentARoom   = Def1_Create_UkPropertyIncomeRentARoom(Some(532.12))
-  private val parsedFhlIncome            = Def1_Create_UkFhlPropertyIncome(Some(5000.99), Some(3123.21), Some(parsedFhlIncomeRentARoom))
-  private val parsedFhlIncomeMinimal     = Def1_Create_UkFhlPropertyIncome(Some(5000.99), None, None)
-  private val parsedFhlExpensesRentARoom = Def1_Create_UkPropertyExpensesRentARoom(Some(8842.43))
+  private val parsedFhlIncomeRentARoom   = Def2_Create_UkPropertyIncomeRentARoom(Some(532.12))
+  private val parsedFhlIncome            = Def2_Create_UkFhlPropertyIncome(Some(5000.99), Some(3123.21), Some(parsedFhlIncomeRentARoom))
+  private val parsedFhlIncomeMinimal     = Def2_Create_UkFhlPropertyIncome(Some(5000.99), None, None)
+  private val parsedFhlExpensesRentARoom = Def2_Create_UkPropertyExpensesRentARoom(Some(8842.43))
 
   //@formatter:off
-  private val parsedFhlExpenses = Def1_Create_UkFhlPropertyExpenses(
+  private val parsedFhlExpenses = Def2_Create_UkFhlPropertyExpenses(
     Some(3123.21), Some(928.42), Some(842.99), Some(8831.12),
     Some(484.12), Some(99282), None, Some(974.47),
     Some(parsedFhlExpensesRentARoom)
   )
 
-  private val parsedFhlExpensesConsolidated = Def1_Create_UkFhlPropertyExpenses(
-    None, None, None, None, None, None, Some(988.18), None,None
+  private val parsedFhlExpensesConsolidated = Def2_Create_UkFhlPropertyExpenses(
+    None, None, None, None, None, None, Some(988.18), None, Some(Def2_Create_UkPropertyExpensesRentARoom(Some(900.01)))
   )
   //@formatter:on
 
-  private val parsedUkFhlProperty             = Def1_Create_UkFhlProperty(Some(parsedFhlIncome), Some(parsedFhlExpenses))
+  private val parsedUkFhlProperty             = Def2_Create_UkFhlProperty(Some(parsedFhlIncome), Some(parsedFhlExpenses))
   private val parsedUkFhlPropertyConsolidated = parsedUkFhlProperty.copy(expenses = Some(parsedFhlExpensesConsolidated))
   private val parsedUkFhlPropertyMinimal      = parsedUkFhlProperty.copy(income = Some(parsedFhlIncomeMinimal), expenses = None)
 
-  private val parsedNonFhlIncomeRentARoom = Def1_Create_UkPropertyIncomeRentARoom(Some(947.66))
+  private val parsedNonFhlIncomeRentARoom = Def2_Create_UkPropertyIncomeRentARoom(Some(947.66))
 
   //@formatter:off
-  private val parsedNonFhlIncome = Def1_Create_UkNonFhlPropertyIncome(
+  private val parsedNonFhlIncome = Def2_Create_UkNonFhlPropertyIncome(
     Some(42.12), Some(84.31), Some(9884.93),
     Some(842.99), Some(31.44), Some(parsedNonFhlIncomeRentARoom)
   )
 
-  private val parsedNonFhlIncomeMinimal = Def1_Create_UkNonFhlPropertyIncome(
+  private val parsedNonFhlIncomeMinimalDef1 = Def1_Create_UkNonFhlPropertyIncome(
+    None, None, Some(9884.93),
+    None, None, None
+  )
+
+  private val parsedNonFhlIncomeMinimal = Def2_Create_UkNonFhlPropertyIncome(
     None, None, Some(9884.93),
     None, None, None
   )
   //@formatter:on
 
-  private val parsedNonFhlExpensesRentARoom = Def1_Create_UkPropertyExpensesRentARoom(Some(8842.43))
+  private val parsedNonFhlExpensesRentARoom = Def2_Create_UkPropertyExpensesRentARoom(Some(8842.43))
 
   //@formatter:off
-  private val parsedNonFhlExpenses = Def1_Create_UkNonFhlPropertyExpenses(
+  private val parsedNonFhlExpenses = Def2_Create_UkNonFhlPropertyExpenses(
     Some(3123.21), Some(928.42), Some(842.99), Some(8831.12),
     Some(484.12), Some(99282), Some(12.34), Some(974.47),
     Some(12.34), Some(parsedNonFhlExpensesRentARoom), None
   )
 
-  private val parsedNonFhlExpensesConsolidated = Def1_Create_UkNonFhlPropertyExpenses(
-    None, None, None, None, None, None, None, None, None, None, Some(988.18)
+  private val parsedNonFhlExpensesConsolidated = Def2_Create_UkNonFhlPropertyExpenses(
+    None, None, None, None, None, None, None, None, None, Some(Def2_Create_UkPropertyExpensesRentARoom(Some(935.01))), Some(988.18)
   )
+
   //@formatter:on
 
-  private val parsedUkNonFhlProperty = Def1_Create_UkNonFhlProperty(
+  private val parsedUkNonFhlProperty = Def2_Create_UkNonFhlProperty(
     Some(parsedNonFhlIncome),
     Some(parsedNonFhlExpenses)
   )
@@ -184,8 +198,13 @@ class Def1_CreateUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with Mock
   private val parsedUkNonFhlPropertyConsolidated = parsedUkNonFhlProperty.copy(expenses = Some(parsedNonFhlExpensesConsolidated))
   private val parsedUkNonFhlPropertyMinimal      = parsedUkNonFhlProperty.copy(income = Some(parsedNonFhlIncomeMinimal), expenses = None)
 
+  private val parsedUkNonFhlPropertyMinimalDef1 = Def1_Create_UkNonFhlProperty(income = Some(parsedNonFhlIncomeMinimalDef1), expenses = None)
+
+  private val parsedBodyDef1 =
+    Def1_CreateUkPropertyPeriodSummaryRequestBody("2024-04-06", "2024-07-05", None, Some(parsedUkNonFhlPropertyMinimalDef1))
+
   private val parsedBody =
-    Def1_CreateUkPropertyPeriodSummaryRequestBody("2020-01-01", "2020-01-31", Some(parsedUkFhlProperty), Some(parsedUkNonFhlProperty))
+    Def2_CreateUkPropertyPeriodSummaryRequestBody("2024-04-06", "2024-07-05", Some(parsedUkFhlProperty), Some(parsedUkNonFhlProperty))
 
   private val parsedBodyConsolidated =
     parsedBody.copy(ukFhlProperty = Some(parsedUkFhlPropertyConsolidated), ukNonFhlProperty = Some(parsedUkNonFhlPropertyConsolidated))
@@ -195,7 +214,7 @@ class Def1_CreateUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with Mock
 
   private val validatorFactory = new CreateUkPropertyPeriodSummaryValidatorFactory(mockAppConfig)
 
-  private def validator(nino: String, businessId: String, taxYear: String, body: JsValue) =
+  private def validator(nino: String, taxYear: String, businessId: String, body: JsValue) =
     validatorFactory.validator(nino, businessId, taxYear, body)
 
   private def setupMocks(): Unit = MockedAppConfig.minimumTaxV2Uk.returns(TaxYear.starting(2022)).anyNumberOfTimes()
@@ -205,40 +224,42 @@ class Def1_CreateUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with Mock
       "passed a valid request" in {
         setupMocks()
         val result: Either[ErrorWrapper, CreateUkPropertyPeriodSummaryRequestData] =
-          validator(validNino, validBusinessId, validTaxYear, validBody).validateAndWrapResult()
+          validator(validNino, validTaxYear, validBusinessId, validBody).validateAndWrapResult()
 
-        result shouldBe Right(Def1_CreateUkPropertyPeriodSummaryRequestData(parsedNino, parsedBusinessId, parsedTaxYear, parsedBody))
+        result shouldBe Right(Def2_CreateUkPropertyPeriodSummaryRequestData(parsedNino, parsedBusinessId, parsedTaxYear, parsedBody))
       }
 
-      "passed a valid request with a consolidated body" in {
+      "passed a valid request with a consolidated body for 2024-25" in {
         setupMocks()
         val result: Either[ErrorWrapper, CreateUkPropertyPeriodSummaryRequestData] =
-          validator(validNino, validBusinessId, validTaxYear, validBodyConsolidated).validateAndWrapResult()
+          validator(validNino, validTaxYear, validBusinessId, validBodyConsolidatedWithExtraFields).validateAndWrapResult()
 
-        result shouldBe Right(Def1_CreateUkPropertyPeriodSummaryRequestData(parsedNino, parsedBusinessId, parsedTaxYear, parsedBodyConsolidated))
+        result shouldBe Right(Def2_CreateUkPropertyPeriodSummaryRequestData(parsedNino, parsedBusinessId, parsedTaxYear, parsedBodyConsolidated))
       }
 
       "passed a valid request with a minimal fhl body" in {
         setupMocks()
         val result: Either[ErrorWrapper, CreateUkPropertyPeriodSummaryRequestData] =
-          validator(validNino, validBusinessId, validTaxYear, validMinimalFhlBody).validateAndWrapResult()
+          validator(validNino, validTaxYear, validBusinessId, validMinimalFhlBody).validateAndWrapResult()
 
-        result shouldBe Right(Def1_CreateUkPropertyPeriodSummaryRequestData(parsedNino, parsedBusinessId, parsedTaxYear, parsedBodyMinimalFhl))
+        result shouldBe Right(Def2_CreateUkPropertyPeriodSummaryRequestData(parsedNino, parsedBusinessId, parsedTaxYear, parsedBodyMinimalFhl))
       }
 
       "passed a valid request with a minimal non-fhl body" in {
         setupMocks()
         val result: Either[ErrorWrapper, CreateUkPropertyPeriodSummaryRequestData] =
-          validator(validNino, validBusinessId, validTaxYear, validMinimalNonFhlBody).validateAndWrapResult()
+          validator(validNino, validTaxYear, validBusinessId, validMinimalNonFhlBody).validateAndWrapResult()
 
-        result shouldBe Right(Def1_CreateUkPropertyPeriodSummaryRequestData(parsedNino, parsedBusinessId, parsedTaxYear, parsedBodyMinimalNonFhl))
+        result shouldBe Right(Def2_CreateUkPropertyPeriodSummaryRequestData(parsedNino, parsedBusinessId, parsedTaxYear, parsedBodyMinimalNonFhl))
       }
 
       "passed the minimum supported taxYear" in {
         setupMocks()
         val taxYearString = "2022-23"
-        validator(validNino, validBusinessId, taxYearString, validBody).validateAndWrapResult() shouldBe
-          Right(Def1_CreateUkPropertyPeriodSummaryRequestData(parsedNino, parsedBusinessId, TaxYear.fromMtd(taxYearString), parsedBody))
+        val result: Either[ErrorWrapper, CreateUkPropertyPeriodSummaryRequestData] =
+          validator(validNino, taxYearString, validBusinessId, validMinimalNonFhlBody).validateAndWrapResult()
+        result shouldBe Right(
+          Def1_CreateUkPropertyPeriodSummaryRequestData(parsedNino, parsedBusinessId, TaxYear.fromMtd(taxYearString), parsedBodyDef1))
       }
     }
 
@@ -246,7 +267,7 @@ class Def1_CreateUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with Mock
       "passed an invalid nino" in {
         setupMocks()
         val result: Either[ErrorWrapper, CreateUkPropertyPeriodSummaryRequestData] =
-          validator("invalid", validBusinessId, validTaxYear, validBody).validateAndWrapResult()
+          validator("invalid", validTaxYear, validBusinessId, validBody).validateAndWrapResult()
 
         result shouldBe Left(ErrorWrapper(correlationId, NinoFormatError))
       }
@@ -254,7 +275,7 @@ class Def1_CreateUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with Mock
       "passed an incorrectly formatted taxYear" in {
         setupMocks()
         val result: Either[ErrorWrapper, CreateUkPropertyPeriodSummaryRequestData] =
-          validator(validNino, validBusinessId, "202324", validBody).validateAndWrapResult()
+          validator(validNino, "202324", validBusinessId, validBody).validateAndWrapResult()
 
         result shouldBe Left(ErrorWrapper(correlationId, TaxYearFormatError))
 
@@ -263,21 +284,21 @@ class Def1_CreateUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with Mock
       "passed an incorrectly formatted businessId" in {
         setupMocks()
         val result: Either[ErrorWrapper, CreateUkPropertyPeriodSummaryRequestData] =
-          validator(validNino, "invalid", validTaxYear, validBody).validateAndWrapResult()
+          validator(validNino, validTaxYear, "invalid", validBody).validateAndWrapResult()
 
         result shouldBe Left(ErrorWrapper(correlationId, BusinessIdFormatError))
       }
 
       "passed a taxYear immediately before the minimum supported" in {
         setupMocks()
-        validator(validNino, validBusinessId, "2021-22", validBody).validateAndWrapResult() shouldBe
+        validator(validNino, "2021-22", validBusinessId, validBody).validateAndWrapResult() shouldBe
           Left(ErrorWrapper(correlationId, RuleTaxYearNotSupportedError))
       }
 
       "passed a taxYear spanning an invalid tax year range" in {
         setupMocks()
         val result: Either[ErrorWrapper, CreateUkPropertyPeriodSummaryRequestData] =
-          validator(validNino, validBusinessId, "2020-22", validBody).validateAndWrapResult()
+          validator(validNino, "2020-22", validBusinessId, validBody).validateAndWrapResult()
 
         result shouldBe Left(ErrorWrapper(correlationId, RuleTaxYearRangeInvalidError))
       }
@@ -285,7 +306,7 @@ class Def1_CreateUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with Mock
       "passed an invalid business id" in {
         setupMocks()
         val result: Either[ErrorWrapper, CreateUkPropertyPeriodSummaryRequestData] =
-          validator(validNino, "invalid", validTaxYear, validBody).validateAndWrapResult()
+          validator(validNino, validTaxYear, "invalid", validBody).validateAndWrapResult()
 
         result shouldBe Left(ErrorWrapper(correlationId, BusinessIdFormatError))
       }
@@ -294,7 +315,7 @@ class Def1_CreateUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with Mock
         setupMocks()
         val invalidBody = JsObject.empty
         val result: Either[ErrorWrapper, CreateUkPropertyPeriodSummaryRequestData] =
-          validator(validNino, validBusinessId, validTaxYear, invalidBody).validateAndWrapResult()
+          validator(validNino, validTaxYear, validBusinessId, invalidBody).validateAndWrapResult()
 
         result shouldBe Left(ErrorWrapper(correlationId, RuleIncorrectOrEmptyBodyError))
       }
@@ -306,7 +327,7 @@ class Def1_CreateUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with Mock
           .removeProperty("ukNonFhlProperty")
 
         val result: Either[ErrorWrapper, CreateUkPropertyPeriodSummaryRequestData] =
-          validator(validNino, validBusinessId, validTaxYear, invalidBody).validateAndWrapResult()
+          validator(validNino, validTaxYear, validBusinessId, invalidBody).validateAndWrapResult()
 
         result shouldBe Left(ErrorWrapper(correlationId, RuleIncorrectOrEmptyBodyError))
       }
@@ -315,7 +336,7 @@ class Def1_CreateUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with Mock
         s"for $path" in {
           setupMocks()
           val result: Either[ErrorWrapper, CreateUkPropertyPeriodSummaryRequestData] =
-            validator(validNino, validBusinessId, validTaxYear, body).validateAndWrapResult()
+            validator(validNino, validTaxYear, validBusinessId, body).validateAndWrapResult()
 
           result shouldBe Left(ErrorWrapper(correlationId, error.withPath(path)))
         }
@@ -344,7 +365,7 @@ class Def1_CreateUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with Mock
         setupMocks()
         val invalidBody = validBody.replaceWithEmptyObject("/ukFhlProperty").update("/ukFhlProperty/badField", JsNumber(100))
         val result: Either[ErrorWrapper, CreateUkPropertyPeriodSummaryRequestData] =
-          validator(validNino, validBusinessId, validTaxYear, invalidBody).validateAndWrapResult()
+          validator(validNino, validTaxYear, validBusinessId, invalidBody).validateAndWrapResult()
 
         result shouldBe Left(ErrorWrapper(correlationId, RuleIncorrectOrEmptyBodyError.withPath("/ukFhlProperty")))
       }
@@ -353,7 +374,7 @@ class Def1_CreateUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with Mock
         setupMocks()
         val invalidBody = validBody.removeProperty("/fromDate")
         val result: Either[ErrorWrapper, CreateUkPropertyPeriodSummaryRequestData] =
-          validator(validNino, validBusinessId, validTaxYear, invalidBody).validateAndWrapResult()
+          validator(validNino, validTaxYear, validBusinessId, invalidBody).validateAndWrapResult()
 
         result shouldBe Left(ErrorWrapper(correlationId, RuleIncorrectOrEmptyBodyError.withPath("/fromDate")))
       }
@@ -362,7 +383,7 @@ class Def1_CreateUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with Mock
         setupMocks()
         val invalidBody = validBody.removeProperty("/toDate")
         val result: Either[ErrorWrapper, CreateUkPropertyPeriodSummaryRequestData] =
-          validator(validNino, validBusinessId, validTaxYear, invalidBody).validateAndWrapResult()
+          validator(validNino, validTaxYear, validBusinessId, invalidBody).validateAndWrapResult()
 
         result shouldBe Left(ErrorWrapper(correlationId, RuleIncorrectOrEmptyBodyError.withPath("/toDate")))
       }
@@ -371,7 +392,7 @@ class Def1_CreateUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with Mock
         setupMocks()
         val invalidBody = validBody.update("/fromDate", JsString("invalid"))
         val result: Either[ErrorWrapper, CreateUkPropertyPeriodSummaryRequestData] =
-          validator(validNino, validBusinessId, validTaxYear, invalidBody).validateAndWrapResult()
+          validator(validNino, validTaxYear, validBusinessId, invalidBody).validateAndWrapResult()
 
         result shouldBe Left(ErrorWrapper(correlationId, FromDateFormatError))
       }
@@ -380,7 +401,7 @@ class Def1_CreateUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with Mock
         setupMocks()
         val invalidBody = validBody.update("/toDate", JsString("invalid"))
         val result: Either[ErrorWrapper, CreateUkPropertyPeriodSummaryRequestData] =
-          validator(validNino, validBusinessId, validTaxYear, invalidBody).validateAndWrapResult()
+          validator(validNino, validTaxYear, validBusinessId, invalidBody).validateAndWrapResult()
 
         result shouldBe Left(ErrorWrapper(correlationId, ToDateFormatError))
       }
@@ -389,7 +410,7 @@ class Def1_CreateUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with Mock
         setupMocks()
         val invalidBody = validBody.update("/fromDate", JsString("1569-10-01"))
         val result: Either[ErrorWrapper, CreateUkPropertyPeriodSummaryRequestData] =
-          validator(validNino, validBusinessId, validTaxYear, invalidBody).validateAndWrapResult()
+          validator(validNino, validTaxYear, validBusinessId, invalidBody).validateAndWrapResult()
 
         result shouldBe Left(ErrorWrapper(correlationId, FromDateFormatError))
       }
@@ -398,7 +419,7 @@ class Def1_CreateUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with Mock
         setupMocks()
         val invalidBody = validBody.update("/toDate", JsString("3490-10-01"))
         val result: Either[ErrorWrapper, CreateUkPropertyPeriodSummaryRequestData] =
-          validator(validNino, validBusinessId, validTaxYear, invalidBody).validateAndWrapResult()
+          validator(validNino, validTaxYear, validBusinessId, invalidBody).validateAndWrapResult()
 
         result shouldBe Left(ErrorWrapper(correlationId, ToDateFormatError))
       }
@@ -407,7 +428,7 @@ class Def1_CreateUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with Mock
         setupMocks()
         val invalidBody = validBody.update("/fromDate", JsString("2090-10-01"))
         val result: Either[ErrorWrapper, CreateUkPropertyPeriodSummaryRequestData] =
-          validator(validNino, validBusinessId, validTaxYear, invalidBody).validateAndWrapResult()
+          validator(validNino, validTaxYear, validBusinessId, invalidBody).validateAndWrapResult()
 
         result shouldBe Left(ErrorWrapper(correlationId, RuleToDateBeforeFromDateError))
       }
@@ -450,7 +471,7 @@ class Def1_CreateUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with Mock
         List(
           "/ukFhlProperty/expenses/consolidatedExpenses",
           "/ukNonFhlProperty/expenses/consolidatedExpenses"
-        ).foreach(path => testValueFormatErrorWith(path, validBodyConsolidated.update(path, JsNumber(123.456))))
+        ).foreach(path => testValueFormatErrorWith(path, validBodyConsolidatedWithExtraFields.update(path, JsNumber(123.456))))
       }
 
       "passed a body with multiple invalid fields" in {
@@ -465,7 +486,7 @@ class Def1_CreateUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with Mock
           .update(path2, JsNumber(123.456))
 
         val result: Either[ErrorWrapper, CreateUkPropertyPeriodSummaryRequestData] =
-          validator(validNino, validBusinessId, validTaxYear, invalidBody).validateAndWrapResult()
+          validator(validNino, validTaxYear, validBusinessId, invalidBody).validateAndWrapResult()
 
         result shouldBe Left(ErrorWrapper(correlationId, ValueFormatError.withPaths(List(path0, path1, path2))))
       }
@@ -474,7 +495,7 @@ class Def1_CreateUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with Mock
         setupMocks()
         val invalidBody = validBody.update("ukFhlProperty/expenses/consolidatedExpenses", JsNumber(123.45))
         val result: Either[ErrorWrapper, CreateUkPropertyPeriodSummaryRequestData] =
-          validator(validNino, validBusinessId, validTaxYear, invalidBody).validateAndWrapResult()
+          validator(validNino, validTaxYear, validBusinessId, invalidBody).validateAndWrapResult()
 
         result shouldBe Left(ErrorWrapper(correlationId, RuleBothExpensesSuppliedError.withPath("/ukFhlProperty/expenses")))
       }
@@ -483,7 +504,7 @@ class Def1_CreateUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with Mock
         setupMocks()
         val invalidBody = validBody.update("ukNonFhlProperty/expenses/consolidatedExpenses", JsNumber(123.45))
         val result: Either[ErrorWrapper, CreateUkPropertyPeriodSummaryRequestData] =
-          validator(validNino, validBusinessId, validTaxYear, invalidBody).validateAndWrapResult()
+          validator(validNino, validTaxYear, validBusinessId, invalidBody).validateAndWrapResult()
 
         result shouldBe Left(ErrorWrapper(correlationId, RuleBothExpensesSuppliedError.withPath("/ukNonFhlProperty/expenses")))
       }

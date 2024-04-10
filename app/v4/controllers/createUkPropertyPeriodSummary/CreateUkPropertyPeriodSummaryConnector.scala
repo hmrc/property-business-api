@@ -24,7 +24,8 @@ import play.api.http.Status.OK
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
 import v4.controllers.createUkPropertyPeriodSummary.model.request.{
   CreateUkPropertyPeriodSummaryRequestData,
-  Def1_CreateUkPropertyPeriodSummaryRequestData
+  Def1_CreateUkPropertyPeriodSummaryRequestData,
+  Def2_CreateUkPropertyPeriodSummaryRequestData
 }
 import v4.controllers.createUkPropertyPeriodSummary.model.response.CreateUkPropertyPeriodSummaryResponse
 
@@ -43,13 +44,18 @@ class CreateUkPropertyPeriodSummaryConnector @Inject() (val http: HttpClient, va
     request match {
       case def1: Def1_CreateUkPropertyPeriodSummaryRequestData =>
         import def1._
-        val downstreamUri: DownstreamUri[CreateUkPropertyPeriodSummaryResponse] = if (taxYear.isTys) {
+        val downstreamUri: DownstreamUri[CreateUkPropertyPeriodSummaryResponse] = if (taxYear.isTysButNot24) {
           TaxYearSpecificIfsUri(s"income-tax/business/property/periodic/${taxYear.asTysDownstream}?taxableEntityId=$nino&incomeSourceId=$businessId")
         } else {
           // Note that MTD tax year format is used pre-TYS
           IfsUri(s"income-tax/business/property/periodic?taxableEntityId=$nino&taxYear=${taxYear.asMtd}&incomeSourceId=$businessId")
         }
+        post(body, downstreamUri)
 
+      case def2: Def2_CreateUkPropertyPeriodSummaryRequestData =>
+        import def2._
+        val downstreamUri: DownstreamUri[CreateUkPropertyPeriodSummaryResponse] = TaxYearSpecificIfsUri(
+          s"income-tax/business/property/periodic/24-25?taxableEntityId=$nino&incomeSourceId=$businessId")
         post(body, downstreamUri)
     }
   }

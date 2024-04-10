@@ -348,10 +348,10 @@ class CreateUkPropertyPeriodSummaryControllerSpec
     )
 
     protected val requestData: CreateUkPropertyPeriodSummaryRequestData =
-      Def1_CreateUkPropertyPeriodSummaryRequestData(Nino(nino), TaxYear.fromMtd(taxYear), BusinessId(businessId), requestBody)
+      Def1_CreateUkPropertyPeriodSummaryRequestData(Nino(nino), BusinessId(businessId), TaxYear.fromMtd(taxYear), requestBody)
 
     protected val requestDataConsolidatedExpense: Def1_CreateUkPropertyPeriodSummaryRequestData =
-      Def1_CreateUkPropertyPeriodSummaryRequestData(Nino(nino), TaxYear.fromMtd(taxYear), BusinessId(businessId), requestBodyWithConsolidatedExpense)
+      Def1_CreateUkPropertyPeriodSummaryRequestData(Nino(nino), BusinessId(businessId), TaxYear.fromMtd(taxYear), requestBodyWithConsolidatedExpense)
 
     protected val responseBodyJson: JsValue = Json.parse(
       s"""

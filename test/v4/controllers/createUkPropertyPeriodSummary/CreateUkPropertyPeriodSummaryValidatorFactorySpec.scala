@@ -23,14 +23,16 @@ import mocks.MockAppConfig
 import play.api.libs.json._
 import support.UnitSpec
 import v4.controllers.createUkPropertyPeriodSummary.def1.Def1_CreateUkPropertyPeriodSummaryValidator
+import v4.controllers.createUkPropertyPeriodSummary.def2.Def2_CreateUkPropertyPeriodSummaryValidator
 import v4.controllers.createUkPropertyPeriodSummary.model.request.CreateUkPropertyPeriodSummaryRequestData
 
 class CreateUkPropertyPeriodSummaryValidatorFactorySpec extends UnitSpec with MockAppConfig with JsonErrorValidators {
 
-  private val validNino       = "AA123456A"
-  private val validTaxYear    = "2023-24"
-  private val validTysTaxYear = "2023-24"
-  private val validBusinessId = "XAIS12345678901"
+  private val validNino            = "AA123456A"
+  private val validTaxYear         = "2022-23"
+  private val validTysTaxYear      = "2023-24"
+  private val validSpecificTaxYear = "2024-25"
+  private val validBusinessId      = "XAIS12345678901"
 
   private val validBody = Json.parse("""
       |{
@@ -94,15 +96,23 @@ class CreateUkPropertyPeriodSummaryValidatorFactorySpec extends UnitSpec with Mo
       "return the Validator for schema definition 1" in {
         setupMocks()
         val result: Validator[CreateUkPropertyPeriodSummaryRequestData] =
-          validatorFactory.validator(validNino, validTysTaxYear, validBusinessId, validBody)
+          validatorFactory.validator(validNino, validBusinessId, validTysTaxYear, validBody)
 
         result shouldBe a[Def1_CreateUkPropertyPeriodSummaryValidator]
+      }
+
+      "return the Validator for schema definition 2" in {
+        setupMocks()
+        val result: Validator[CreateUkPropertyPeriodSummaryRequestData] =
+          validatorFactory.validator(validNino, validBusinessId, validSpecificTaxYear, validBody)
+
+        result shouldBe a[Def2_CreateUkPropertyPeriodSummaryValidator]
       }
 
       "passed the minimum supported taxYear" in {
         setupMocks()
         val result: Validator[CreateUkPropertyPeriodSummaryRequestData] =
-          validatorFactory.validator(validNino, validTaxYear, validBusinessId, validBody)
+          validatorFactory.validator(validNino, validBusinessId, validTaxYear, validBody)
         result shouldBe a[Def1_CreateUkPropertyPeriodSummaryValidator]
       }
     }

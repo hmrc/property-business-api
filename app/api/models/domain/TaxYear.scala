@@ -64,6 +64,8 @@ final case class TaxYear private (private val value: String) {
     */
   def isTys: Boolean = year >= 2024
 
+  def isTysButNot24: Boolean = year == 2024 || year >= 2026
+
   override def toString: String = s"TaxYear($value)"
 
 }
@@ -86,7 +88,7 @@ object TaxYear {
   def fromMtd(taxYear: String): TaxYear =
     TaxYear(taxYear.take(2) + taxYear.drop(5))
 
-  def now(implicit clock: Clock = Clock.systemUTC): TaxYear = TaxYear.containing(LocalDate.now(clock))
+  def now(implicit clock: Clock = Clock.systemUTC): TaxYear            = TaxYear.containing(LocalDate.now(clock))
   def currentTaxYear(implicit clock: Clock = Clock.systemUTC): TaxYear = TaxYear.now
 
   /** @param date
@@ -122,4 +124,3 @@ object TaxYear {
 
   implicit val writes: Writes[TaxYear] = implicitly[Writes[String]].contramap(_.asMtd)
 }
-

@@ -26,6 +26,7 @@ import javax.inject.Inject
 trait FeatureSwitches {
   def isPassDeleteIntentEnabled: Boolean
   def isRuleSubmissionDateErrorEnabled: Boolean
+  def isAllowNegativeExpensesEnabled: Boolean
   def isReleasedInProduction(feature: String): Boolean
   def isEnabled(key: String): Boolean
 }
@@ -38,6 +39,7 @@ class FeatureSwitchesImpl(featureSwitchConfig: Configuration) extends FeatureSwi
 
   val isPassDeleteIntentEnabled: Boolean        = isEnabled("passDeleteIntentHeader")
   val isRuleSubmissionDateErrorEnabled: Boolean = isEnabled("ruleSubmissionDateIssue")
+  val isAllowNegativeExpensesEnabled: Boolean = isConfigTrue("allowNegativeExpenses.enabled")
 
   def isReleasedInProduction(feature: String): Boolean = isConfigTrue(feature + ".released-in-production")
 

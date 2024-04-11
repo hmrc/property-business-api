@@ -24,10 +24,7 @@ import support.UnitSpec
 import uk.gov.hmrc.http.HeaderCarrier
 import v4.controllers.retrieveUkPropertyPeriodSummary.RetrieveUkPropertyPeriodSummaryConnector.{NonUkResult, UkResult}
 import v4.controllers.retrieveUkPropertyPeriodSummary.def1.model.Def1_RetrieveUkPropertyPeriodSummaryFixture
-import v4.controllers.retrieveUkPropertyPeriodSummary.model.request.{
-  Def1_RetrieveUkPropertyPeriodSummaryRequestData,
-  RetrieveUkPropertyPeriodSummaryRequestData
-}
+import v4.controllers.retrieveUkPropertyPeriodSummary.model.request.{Def1_RetrieveUkPropertyPeriodSummaryRequestData, RetrieveUkPropertyPeriodSummaryRequestData}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future

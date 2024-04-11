@@ -32,7 +32,6 @@ object RetrieveUkPropertyPeriodSummaryResponse extends HateoasLinks {
 
   implicit val writes: OWrites[RetrieveUkPropertyPeriodSummaryResponse] = {
     case def1: Def1_RetrieveUkPropertyPeriodSummaryResponse => Json.toJsObject(def1)
-    case def2: Def2_RetrieveUkPropertyPeriodSummaryResponse => Json.toJsObject(def2)
   }
 
   implicit object RetrieveUkPropertyPeriodSummaryResponseLinksFactory
@@ -79,7 +78,6 @@ object Def1_RetrieveUkPropertyPeriodSummaryResponse extends HateoasLinks {
     }
 
   }
-
 }
 
 case class Def2_RetrieveUkPropertyPeriodSummaryResponse(submittedOn: Timestamp,
@@ -88,7 +86,7 @@ case class Def2_RetrieveUkPropertyPeriodSummaryResponse(submittedOn: Timestamp,
                                                         // periodCreationDate: Option[String], // To be reinstated, see MTDSA-15575
                                                         ukFhlProperty: Option[Def2_Retrieve_UkFhlProperty],
                                                         ukNonFhlProperty: Option[Def2_Retrieve_UkNonFhlProperty])
-    extends RetrieveUkPropertyPeriodSummaryResponse
+  extends RetrieveUkPropertyPeriodSummaryResponse
 
 object Def2_RetrieveUkPropertyPeriodSummaryResponse extends HateoasLinks {
 
@@ -101,10 +99,10 @@ object Def2_RetrieveUkPropertyPeriodSummaryResponse extends HateoasLinks {
       //      (__ \ "periodCreationDate").readNullable[String] and // To be reinstated, see MTDSA-15575
       (__ \ "ukFhlProperty").readNullable[Def2_Retrieve_UkFhlProperty] and
       (__ \ "ukOtherProperty").readNullable[Def2_Retrieve_UkNonFhlProperty]
-  )(Def2_RetrieveUkPropertyPeriodSummaryResponse.apply _)
+    )(Def2_RetrieveUkPropertyPeriodSummaryResponse.apply _)
 
   implicit object Def2_RetrieveUkPropertyPeriodSummaryResponseLinksFactory
-      extends HateoasLinksFactory[Def1_RetrieveUkPropertyPeriodSummaryResponse, RetrieveUkPropertyPeriodSummaryHateoasData] {
+    extends HateoasLinksFactory[Def2_RetrieveUkPropertyPeriodSummaryResponse, RetrieveUkPropertyPeriodSummaryHateoasData] {
 
     override def links(appConfig: AppConfig, data: RetrieveUkPropertyPeriodSummaryHateoasData): Seq[Link] = {
       import data._
@@ -116,7 +114,6 @@ object Def2_RetrieveUkPropertyPeriodSummaryResponse extends HateoasLinks {
     }
 
   }
-
 }
 
 case class RetrieveUkPropertyPeriodSummaryHateoasData(nino: String, businessId: String, taxYear: String, submissionId: String) extends HateoasData

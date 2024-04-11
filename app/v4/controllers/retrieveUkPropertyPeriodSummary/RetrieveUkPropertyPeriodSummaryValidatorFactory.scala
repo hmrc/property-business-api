@@ -19,6 +19,7 @@ package v4.controllers.retrieveUkPropertyPeriodSummary
 import api.controllers.validators.Validator
 import config.AppConfig
 import v4.controllers.retrieveUkPropertyPeriodSummary.def1.Def1_RetrieveUkPropertyPeriodSummaryValidator
+import v4.controllers.retrieveUkPropertyPeriodSummary.def2.Def2_RetrieveUkPropertyPeriodSummaryValidator
 import v4.controllers.retrieveUkPropertyPeriodSummary.model.request.RetrieveUkPropertyPeriodSummaryRequestData
 
 import javax.inject.{Inject, Singleton}
@@ -27,7 +28,10 @@ import javax.inject.{Inject, Singleton}
 class RetrieveUkPropertyPeriodSummaryValidatorFactory @Inject() (appConfig: AppConfig) {
 
   def validator(nino: String, businessId: String, taxYear: String, submissionId: String): Validator[RetrieveUkPropertyPeriodSummaryRequestData] = {
-    new Def1_RetrieveUkPropertyPeriodSummaryValidator(nino, businessId, taxYear, submissionId)(appConfig)
+    taxYear match {
+      case "2024-25" => new Def2_RetrieveUkPropertyPeriodSummaryValidator (nino, businessId, taxYear, submissionId) (appConfig)
+      case _ => new Def1_RetrieveUkPropertyPeriodSummaryValidator (nino, businessId, taxYear, submissionId) (appConfig)
+    }
   }
 
 }

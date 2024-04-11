@@ -24,14 +24,8 @@ import fixtures.RetrieveUkPropertyPeriodSummary.ResponseModelsFixture
 import org.scalamock.handlers.CallHandler
 import v4.controllers.retrieveUkPropertyPeriodSummary.RetrieveUkPropertyPeriodSummaryConnector._
 import v4.controllers.retrieveUkPropertyPeriodSummary.def1.model.response.{Def1_Retrieve_UkFhlProperty, Def1_Retrieve_UkNonFhlProperty}
-import v4.controllers.retrieveUkPropertyPeriodSummary.model.request.{
-  Def1_RetrieveUkPropertyPeriodSummaryRequestData,
-  RetrieveUkPropertyPeriodSummaryRequestData
-}
-import v4.controllers.retrieveUkPropertyPeriodSummary.model.response.{
-  Def1_RetrieveUkPropertyPeriodSummaryResponse,
-  RetrieveUkPropertyPeriodSummaryResponse
-}
+import v4.controllers.retrieveUkPropertyPeriodSummary.model.request.{Def1_RetrieveUkPropertyPeriodSummaryRequestData, RetrieveUkPropertyPeriodSummaryRequestData}
+import v4.controllers.retrieveUkPropertyPeriodSummary.model.response.{Def1_RetrieveUkPropertyPeriodSummaryResponse, RetrieveUkPropertyPeriodSummaryResponse}
 
 import scala.concurrent.Future
 

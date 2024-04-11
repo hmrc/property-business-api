@@ -27,3 +27,6 @@ sealed trait RetrieveUkPropertyPeriodSummaryRequestData {
 
 case class Def1_RetrieveUkPropertyPeriodSummaryRequestData(nino: Nino, businessId: BusinessId, taxYear: TaxYear, submissionId: SubmissionId)
     extends RetrieveUkPropertyPeriodSummaryRequestData
+
+case class Def2_RetrieveUkPropertyPeriodSummaryRequestData(nino: Nino, businessId: BusinessId, taxYear: TaxYear, submissionId: SubmissionId)
+  extends RetrieveUkPropertyPeriodSummaryRequestData

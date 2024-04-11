@@ -25,7 +25,7 @@ import api.models.outcomes.ResponseWrapper
 import play.api.mvc.Result
 import v4.controllers.retrieveUkPropertyPeriodSummary.def1.model.Def1_RetrieveUkPropertyPeriodSummaryFixture
 import v4.controllers.retrieveUkPropertyPeriodSummary.model.request._
-import v4.controllers.retrieveUkPropertyPeriodSummary.model.response._
+import v4.controllers.retrieveUkPropertyPeriodSummary.model.response.{RetrieveUkPropertyPeriodSummaryHateoasData, RetrieveUkPropertyPeriodSummaryResponse, _}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future

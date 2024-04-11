@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package v4.createForeignPropertyPeriodSummary.def1.model.request
+package v4.createForeignPropertyPeriodSummary.model.request
 
 import play.api.libs.json.Json
 import support.UnitSpec

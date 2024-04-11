@@ -24,8 +24,7 @@ import cats.implicits._
 import config.AppConfig
 import play.api.libs.json.JsValue
 import v4.amendForeignPropertyPeriodSummary.def1.Def1_AmendForeignPropertyPeriodSummaryRulesValidator.validateBusinessRules
-import v4.amendForeignPropertyPeriodSummary.def1.model.request.Def1_AmendForeignPropertyPeriodSummaryRequestBody
-import v4.amendForeignPropertyPeriodSummary.model.request.{AmendForeignPropertyPeriodSummaryRequestData, Def1_AmendForeignPropertyPeriodSummaryRequestData}
+import v4.amendForeignPropertyPeriodSummary.model.request._
 
 class Def1_AmendForeignPropertyPeriodSummaryValidator(nino: String,
                                                       businessId: String,

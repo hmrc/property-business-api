@@ -26,10 +26,9 @@ import api.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLooku
 import mocks.MockIdGenerator
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.Result
-import v4.amendForeignPropertyPeriodSummary.def1.model.request.Def1_AmendForeignPropertyPeriodSummaryRequestBody
 import v4.amendForeignPropertyPeriodSummary.def1.model.request.foreignFhlEea._
 import v4.amendForeignPropertyPeriodSummary.def1.model.request.foreignPropertyEntry._
-import v4.amendForeignPropertyPeriodSummary.model.request.{AmendForeignPropertyPeriodSummaryRequestData, Def1_AmendForeignPropertyPeriodSummaryRequestData}
+import v4.amendForeignPropertyPeriodSummary.model.request.{AmendForeignPropertyPeriodSummaryRequestData, Def1_AmendForeignPropertyPeriodSummaryRequestBody, Def1_AmendForeignPropertyPeriodSummaryRequestData}
 import v4.amendForeignPropertyPeriodSummary.model.response.AmendForeignPropertyPeriodSummaryHateoasData
 
 import scala.concurrent.ExecutionContext.Implicits.global

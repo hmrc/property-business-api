@@ -16,4 +16,35 @@
 
 package v4.createForeignPropertyPeriodSummary.model.request
 
-trait CreateForeignPropertyPeriodSummaryRequestBody
+import play.api.libs.functional.syntax._
+import play.api.libs.json.{JsPath, Json, OWrites, Reads}
+import shapeless.HNil
+import utils.EmptinessChecker
+import v4.createForeignPropertyPeriodSummary.def1.model.request.foreignFhlEea.CreateForeignFhlEea
+import v4.createForeignPropertyPeriodSummary.def1.model.request.foreignPropertyEntry.CreateForeignNonFhlPropertyEntry
+
+sealed trait CreateForeignPropertyPeriodSummaryRequestBody
+
+case class Def1_CreateForeignPropertyPeriodSummaryRequestBody(fromDate: String,
+                                                              toDate: String,
+                                                              foreignFhlEea: Option[CreateForeignFhlEea],
+                                                              foreignNonFhlProperty: Option[Seq[CreateForeignNonFhlPropertyEntry]])
+    extends CreateForeignPropertyPeriodSummaryRequestBody
+
+object Def1_CreateForeignPropertyPeriodSummaryRequestBody {
+
+  implicit val emptinessChecker: EmptinessChecker[Def1_CreateForeignPropertyPeriodSummaryRequestBody] = EmptinessChecker.use { body =>
+    "foreignFhlEea"           -> body.foreignFhlEea ::
+      "foreignNonFhlProperty" -> body.foreignNonFhlProperty :: HNil
+  }
+
+  implicit val reads: Reads[Def1_CreateForeignPropertyPeriodSummaryRequestBody] = Json.reads[Def1_CreateForeignPropertyPeriodSummaryRequestBody]
+
+  implicit val writes: OWrites[Def1_CreateForeignPropertyPeriodSummaryRequestBody] = (
+    (JsPath \ "fromDate").write[String] and
+      (JsPath \ "toDate").write[String] and
+      (JsPath \ "foreignFhlEea").writeNullable[CreateForeignFhlEea] and
+      (JsPath \ "foreignProperty").writeNullable[Seq[CreateForeignNonFhlPropertyEntry]]
+  )(unlift(Def1_CreateForeignPropertyPeriodSummaryRequestBody.unapply))
+
+}

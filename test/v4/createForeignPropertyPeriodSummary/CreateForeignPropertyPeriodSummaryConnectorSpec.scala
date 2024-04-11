@@ -20,8 +20,7 @@ import api.connectors.{ConnectorSpec, DownstreamOutcome}
 import api.models.domain.{BusinessId, Nino, TaxYear}
 import api.models.outcomes.ResponseWrapper
 import v4.createForeignPropertyPeriodSummary.def1.model.Def1_CreateForeignPropertyPeriodSummaryFixtures
-import v4.createForeignPropertyPeriodSummary.def1.model.request.Def1_CreateForeignPropertyPeriodSummaryRequestBody
-import v4.createForeignPropertyPeriodSummary.model.request.{CreateForeignPropertyPeriodSummaryRequestData, Def1_CreateForeignPropertyPeriodSummaryRequestData}
+import v4.createForeignPropertyPeriodSummary.model.request._
 import v4.createForeignPropertyPeriodSummary.model.response.CreateForeignPropertyPeriodSummaryResponse
 
 import scala.concurrent.Future

@@ -22,10 +22,9 @@ import api.models.utils.JsonErrorValidators
 import mocks.MockAppConfig
 import play.api.libs.json.{JsArray, JsNumber, JsValue, Json}
 import support.UnitSpec
-import v4.amendForeignPropertyPeriodSummary.def1.model.request.Def1_AmendForeignPropertyPeriodSummaryRequestBody
 import v4.amendForeignPropertyPeriodSummary.def1.model.request.foreignFhlEea._
 import v4.amendForeignPropertyPeriodSummary.def1.model.request.foreignPropertyEntry._
-import v4.amendForeignPropertyPeriodSummary.model.request.{AmendForeignPropertyPeriodSummaryRequestData, Def1_AmendForeignPropertyPeriodSummaryRequestData}
+import v4.amendForeignPropertyPeriodSummary.model.request.{AmendForeignPropertyPeriodSummaryRequestData, Def1_AmendForeignPropertyPeriodSummaryRequestBody, Def1_AmendForeignPropertyPeriodSummaryRequestData}
 
 class Def1_AmendForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with MockAppConfig with JsonErrorValidators {
   private implicit val correlationId: String = "1234"

@@ -17,7 +17,6 @@
 package v4.amendForeignPropertyPeriodSummary.model.request
 
 import api.models.domain.{BusinessId, Nino, SubmissionId, TaxYear}
-import v4.amendForeignPropertyPeriodSummary.def1.model.request.Def1_AmendForeignPropertyPeriodSummaryRequestBody
 
 sealed trait AmendForeignPropertyPeriodSummaryRequestData {
   val nino: Nino

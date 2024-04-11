@@ -22,8 +22,7 @@ import api.models.errors.{DownstreamErrorCode, DownstreamErrors}
 import api.models.outcomes.ResponseWrapper
 import org.scalamock.handlers.CallHandler
 import uk.gov.hmrc.http.HeaderCarrier
-import v4.amendForeignPropertyPeriodSummary.def1.model.request.Def1_AmendForeignPropertyPeriodSummaryRequestBody
-import v4.amendForeignPropertyPeriodSummary.model.request.{AmendForeignPropertyPeriodSummaryRequestData, Def1_AmendForeignPropertyPeriodSummaryRequestData}
+import v4.amendForeignPropertyPeriodSummary.model.request._
 
 import scala.concurrent.Future
 

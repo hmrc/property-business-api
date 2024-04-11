@@ -43,16 +43,22 @@ responses:
     content:
       application/json:
         schema:
-          $ref: './schemas/uk_property_period_summary_retrieve/response.json'
+          oneof:
+            $ref: './schemas/uk_property_period_summary_retrieve/def1/response.json'
+            $ref: './schemas/uk_property_period_summary_retrieve/def2/response.json'
         examples:
           all-other-response:
             description: Full Expenditure response
             value:
-              $ref: './examples/uk_property_period_summary_retrieve/response.json'
+              $ref: './examples/uk_property_period_summary_retrieve/def1/response.json'
           property-allowance-response:
             description: Consolidated Expenditure response
             value:
-              $ref: './examples/uk_property_period_summary_retrieve/consolidated_response.json'
+              $ref: './examples/uk_property_period_summary_retrieve/def1/consolidated_response.json'
+          consolidated-expense-request-for-TY-2024-25:
+            description: Consolidated Expenses request for TY 2024-25
+            value:
+              $ref: './examples/uk_property_period_summary_create/def2/consolidated_request.json'
   "400":
     description: Bad request
     content:

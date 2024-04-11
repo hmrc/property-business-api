@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-04/schema#",
-  "title": "Retrieve a Foreign Property Income & Expenditure Period Summary",
+  "title": "Before and After TY 2023-24 except for TY 2024-25",
   "description": "Retrieve a Foreign Property Income & Expenditure Period Summary",
   "type": "object",
   "properties": {

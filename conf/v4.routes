@@ -14,7 +14,6 @@ PUT        /foreign/:nino/:businessId/annual/:taxYear                  v4.contro
 GET        /foreign/:nino/:businessId/annual/:taxYear                  v4.controllers.retrieveForeignPropertyAnnualSubmission.RetrieveForeignPropertyAnnualSubmissionController.handleRequest(nino: String, businessId: String, taxYear: String)
 DELETE     /:nino/:businessId/annual/:taxYear                          v4.controllers.deletePropertyAnnualSubmission.DeletePropertyAnnualSubmissionController.handleRequest(nino: String, businessId: String, taxYear: String)
 
-# Historical endpoints
 PUT        /uk/annual/furnished-holiday-lettings/:nino/:taxYear       v2.controllers.CreateAmendHistoricFhlUkPropertyAnnualSubmissionController.handleRequest(nino: String, taxYear: String)
 GET        /uk/annual/furnished-holiday-lettings/:nino/:taxYear       v2.controllers.RetrieveHistoricFhlUkPropertyAnnualSubmissionController.handleRequest(nino: String, taxYear: String)
 DELETE     /uk/annual/furnished-holiday-lettings/:nino/:taxYear       v2.controllers.DeleteHistoricUkPropertyAnnualSubmissionController.handleFhlRequest(nino: String, taxYear: String)

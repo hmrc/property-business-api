@@ -20,7 +20,6 @@ import api.models.domain.Timestamp
 import play.api.libs.json.{JsObject, JsValue, Json}
 import v4.controllers.retrieveUkPropertyPeriodSummary.def2.model.response._
 import v4.controllers.retrieveUkPropertyPeriodSummary.model.response._
-import v4.controllers.retrieveUkPropertyPeriodSummary.model.response.def1.Def2_RetrieveUkPropertyPeriodSummaryResponse
 
 trait Def2_RetrieveUkPropertyPeriodSummaryFixture {
 

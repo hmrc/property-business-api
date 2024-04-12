@@ -30,7 +30,6 @@ import v4.controllers.createUkPropertyPeriodSummary.def1.model.request.def1_ukNo
 import v4.controllers.createUkPropertyPeriodSummary.def1.model.request.def1_ukPropertyRentARoom._
 import v4.controllers.createUkPropertyPeriodSummary.model.request._
 import v4.controllers.createUkPropertyPeriodSummary.model.response.{CreateUkPropertyPeriodSummaryHateoasData, CreateUkPropertyPeriodSummaryResponse}
-import v4.services.MockCreateUkPropertyPeriodSummaryService
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future

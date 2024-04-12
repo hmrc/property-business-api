@@ -59,7 +59,6 @@ trait Def2_RetrieveUkPropertyPeriodSummaryConsolidatedFixture {
       |    "expenses": {
       |      "consolidatedExpense": 4.17,
       |      "residentialFinancialCost": 4.18,
-      |      "travelCosts": 4.19,
       |      "residentialFinancialCostsCarriedForward": 4.20,
       |      "ukOtherRentARoom": {
       |        "amountClaimed": 4.21
@@ -85,13 +84,6 @@ trait Def2_RetrieveUkPropertyPeriodSummaryConsolidatedFixture {
       |      }
       |    },
       |    "expenses": {
-      |      "premisesRunningCosts": 2.11,
-      |      "repairsAndMaintenance": 2.12,
-      |      "financialCosts": 2.13 ,
-      |      "professionalFees": 2.14,
-      |      "costOfServices": 2.15,
-      |      "other": 2.16,
-      |      "travelCosts": 2.18,
       |      "rentARoom": {
       |        "amountClaimed": 2.19
       |      },
@@ -111,7 +103,6 @@ trait Def2_RetrieveUkPropertyPeriodSummaryConsolidatedFixture {
       |    },
       |    "expenses": {
       |      "residentialFinancialCost": 4.18,
-      |      "travelCosts": 4.19,
       |      "residentialFinancialCostsCarriedForward": 4.20,
       |      "rentARoom": {
       |        "amountClaimed": 4.21

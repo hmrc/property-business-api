@@ -26,3 +26,7 @@ case class Def2_Retrieve_ConsolidatedUkFhlProperty(income: Option[Def2_Retrieve_
 object Def2_Retrieve_UkFhlProperty {
   implicit val format: OFormat[Def2_Retrieve_UkFhlProperty] = Json.format[Def2_Retrieve_UkFhlProperty]
 }
+
+object Def2_Retrieve_ConsolidatedUkFhlProperty {
+  implicit val format: OFormat[Def2_Retrieve_ConsolidatedUkFhlProperty] = Json.format[Def2_Retrieve_ConsolidatedUkFhlProperty]
+}

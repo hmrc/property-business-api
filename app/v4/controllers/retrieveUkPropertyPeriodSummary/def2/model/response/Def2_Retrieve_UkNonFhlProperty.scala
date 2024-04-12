@@ -28,5 +28,5 @@ object Def2_Retrieve_UkNonFhlProperty {
 }
 
 object Def2_Retrieve_ConsolidatedUkNonFhlProperty {
-  implicit val format: OFormat[Def2_Retrieve_ConsolidatedUkFhlProperty] = Json.format[Def2_Retrieve_ConsolidatedUkFhlProperty]
+  implicit val format: OFormat[Def2_Retrieve_ConsolidatedUkNonFhlProperty] = Json.format[Def2_Retrieve_ConsolidatedUkNonFhlProperty]
 }

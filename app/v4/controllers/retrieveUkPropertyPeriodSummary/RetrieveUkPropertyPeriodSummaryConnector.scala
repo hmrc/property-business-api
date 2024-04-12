@@ -65,10 +65,57 @@ class RetrieveUkPropertyPeriodSummaryConnector @Inject() (val http: HttpClient, 
           case Right(ResponseWrapper(corId, _))                      => Right(ResponseWrapper(corId, NonUkResult))
           case Left(e)                                               => Left(e)
         }
+
+      case def2: Def2_RetrieveUkPropertyPeriodSummaryRequestData =>
+        import def2._
+
+        val downstreamUri = if (taxYear.isTys) {
+          TaxYearSpecificIfsUri[Def2_RetrieveUkPropertyPeriodSummaryResponse](
+            s"income-tax/business/property/${taxYear.asTysDownstream}/$nino/$businessId/periodic/$submissionId")
+        } else {
+          IfsUri[Def2_RetrieveUkPropertyPeriodSummaryResponse](
+            s"income-tax/business/property/periodic?" +
+              s"taxableEntityId=$nino&taxYear=${taxYear.asMtd}&incomeSourceId=$businessId&submissionId=$submissionId")
+        }
+        val response = get(downstreamUri)
+
+        response.map {
+          case Right(ResponseWrapper(corId, resp)) if def2UkResult(resp) => Right(ResponseWrapper(corId, UkResult(resp)))
+          case Right(ResponseWrapper(corId, _))                      => Right(ResponseWrapper(corId, NonUkResult))
+          case Left(e)                                               => Left(e)
+        }
+
+      case def2: Def2_RetrieveUkPropertyPeriodSummaryConsolidatedRequestData =>
+        import def2._
+
+        val downstreamUri = if (taxYear.isTys) {
+          TaxYearSpecificIfsUri[Def2_RetrieveUkPropertyPeriodSummaryConsolidatedResponse](
+            s"income-tax/business/property/${taxYear.asTysDownstream}/$nino/$businessId/periodic/$submissionId")
+        } else {
+          IfsUri[Def2_RetrieveUkPropertyPeriodSummaryConsolidatedResponse](
+            s"income-tax/business/property/periodic?" +
+              s"taxableEntityId=$nino&taxYear=${taxYear.asMtd}&incomeSourceId=$businessId&submissionId=$submissionId")
+        }
+        val response = get(downstreamUri)
+
+        response.map {
+          case Right(ResponseWrapper(corId, resp)) if def2ConsolidatedUkResult(resp) => Right(ResponseWrapper(corId, UkResult(resp)))
+          case Right(ResponseWrapper(corId, _))                      => Right(ResponseWrapper(corId, NonUkResult))
+          case Left(e)                                               => Left(e)
+        }
     }
   }
 
-  def ukResult(response: Def1_RetrieveUkPropertyPeriodSummaryResponse): Boolean =
+  private def ukResult(response: Def1_RetrieveUkPropertyPeriodSummaryResponse): Boolean = {
     response.ukFhlProperty.nonEmpty || response.ukNonFhlProperty.nonEmpty
+  }
+
+  private def def2UkResult(response: Def2_RetrieveUkPropertyPeriodSummaryResponse): Boolean = {
+    response.ukFhlProperty.nonEmpty || response.ukNonFhlProperty.nonEmpty
+  }
+
+  private def def2ConsolidatedUkResult(response: Def2_RetrieveUkPropertyPeriodSummaryConsolidatedResponse): Boolean = {
+    response.ukFhlProperty.nonEmpty || response.ukNonFhlProperty.nonEmpty
+  }
 
 }

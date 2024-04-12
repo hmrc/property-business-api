@@ -20,6 +20,13 @@ import play.api.libs.json.{Json, OFormat}
 
 case class Def2_Retrieve_UkNonFhlProperty(income: Option[Def2_Retrieve_NonFhlPropertyIncome], expenses: Option[Def2_Retrieve_NonFhlPropertyExpenses])
 
+case class Def2_Retrieve_ConsolidatedUkNonFhlProperty(income: Option[Def2_Retrieve_NonFhlPropertyIncome],
+                                                      expenses: Option[Def2_Retrieve_NonFhlPropertyConsolidatedExpenses])
+
 object Def2_Retrieve_UkNonFhlProperty {
   implicit val format: OFormat[Def2_Retrieve_UkNonFhlProperty] = Json.format[Def2_Retrieve_UkNonFhlProperty]
+}
+
+object Def2_Retrieve_ConsolidatedUkNonFhlProperty {
+  implicit val format: OFormat[Def2_Retrieve_ConsolidatedUkFhlProperty] = Json.format[Def2_Retrieve_ConsolidatedUkFhlProperty]
 }

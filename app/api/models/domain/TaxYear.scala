@@ -64,7 +64,6 @@ final case class TaxYear private (private val value: String) {
     */
   def isTys: Boolean = year >= 2024
 
-  def isNotTY25: Boolean = year == 2024 || year >= 2026
 
   override def toString: String = s"TaxYear($value)"
 

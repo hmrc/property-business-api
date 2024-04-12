@@ -17,6 +17,7 @@
 package v4.controllers.createUkPropertyPeriodSummary
 
 import api.controllers.validators.Validator
+//import api.models.domain.TaxYear
 import config.AppConfig
 import play.api.libs.json.JsValue
 import v4.controllers.createUkPropertyPeriodSummary.def1.Def1_CreateUkPropertyPeriodSummaryValidator
@@ -28,9 +29,11 @@ import javax.inject.Inject
 class CreateUkPropertyPeriodSummaryValidatorFactory @Inject() (appConfig: AppConfig) {
 
   def validator(nino: String, businessId: String, taxYear: String, body: JsValue): Validator[CreateUkPropertyPeriodSummaryRequestData] = {
-    taxYear match {
-      case "2024-25" => new Def2_CreateUkPropertyPeriodSummaryValidator(nino, businessId, taxYear, body)(appConfig)
-      case _                    => new Def1_CreateUkPropertyPeriodSummaryValidator(nino, businessId, taxYear, body)(appConfig)
+
+    if (taxYear > "2023-24") {
+      new Def2_CreateUkPropertyPeriodSummaryValidator(nino, businessId, taxYear, body)(appConfig)
+    } else {
+      new Def1_CreateUkPropertyPeriodSummaryValidator(nino, businessId, taxYear, body)(appConfig)
     }
   }
 

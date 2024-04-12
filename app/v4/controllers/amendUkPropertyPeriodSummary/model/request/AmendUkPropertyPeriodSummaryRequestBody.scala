@@ -20,6 +20,8 @@ import play.api.libs.functional.syntax._
 import play.api.libs.json.{JsPath, Json, OWrites, Reads}
 import v4.controllers.amendUkPropertyPeriodSummary.def1.model.request.def1_ukFhlProperty.Def1_Amend_UkFhlProperty
 import v4.controllers.amendUkPropertyPeriodSummary.def1.model.request.def1_ukNonFhlProperty.Def1_Amend_UkNonFhlProperty
+import v4.controllers.amendUkPropertyPeriodSummary.def2.model.request.def2_ukFhlProperty.Def2_Amend_UkFhlProperty
+import v4.controllers.amendUkPropertyPeriodSummary.def2.model.request.def2_ukNonFhlProperty.Def2_Amend_UkNonFhlProperty
 
 sealed trait AmendUkPropertyPeriodSummaryRequestBody
 
@@ -34,5 +36,19 @@ object Def1_AmendUkPropertyPeriodSummaryRequestBody {
     (JsPath \ "ukFhlProperty").writeNullable[Def1_Amend_UkFhlProperty] and
       (JsPath \ "ukOtherProperty").writeNullable[Def1_Amend_UkNonFhlProperty]
   )(unlift(Def1_AmendUkPropertyPeriodSummaryRequestBody.unapply))
+
+}
+
+case class Def2_AmendUkPropertyPeriodSummaryRequestBody(ukFhlProperty: Option[Def2_Amend_UkFhlProperty],
+                                                        ukNonFhlProperty: Option[Def2_Amend_UkNonFhlProperty])
+    extends AmendUkPropertyPeriodSummaryRequestBody
+
+object Def2_AmendUkPropertyPeriodSummaryRequestBody {
+  implicit val reads: Reads[Def2_AmendUkPropertyPeriodSummaryRequestBody] = Json.reads[Def2_AmendUkPropertyPeriodSummaryRequestBody]
+
+  implicit val writes: OWrites[Def2_AmendUkPropertyPeriodSummaryRequestBody] = (
+    (JsPath \ "ukFhlProperty").writeNullable[Def2_Amend_UkFhlProperty] and
+      (JsPath \ "ukOtherProperty").writeNullable[Def2_Amend_UkNonFhlProperty]
+  )(unlift(Def2_AmendUkPropertyPeriodSummaryRequestBody.unapply))
 
 }

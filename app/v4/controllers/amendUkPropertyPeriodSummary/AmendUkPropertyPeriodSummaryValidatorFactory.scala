@@ -20,6 +20,7 @@ import api.controllers.validators.Validator
 import config.AppConfig
 import play.api.libs.json.JsValue
 import v4.controllers.amendUkPropertyPeriodSummary.def1.Def1_AmendUkPropertyPeriodSummaryValidator
+import v4.controllers.amendUkPropertyPeriodSummary.def2.Def2_AmendUkPropertyPeriodSummaryValidator
 import v4.controllers.amendUkPropertyPeriodSummary.model.request.AmendUkPropertyPeriodSummaryRequestData
 
 import javax.inject.Inject
@@ -30,7 +31,13 @@ class AmendUkPropertyPeriodSummaryValidatorFactory @Inject() (appConfig: AppConf
                 businessId: String,
                 taxYear: String,
                 submissionId: String,
-                body: JsValue): Validator[AmendUkPropertyPeriodSummaryRequestData] =
-    new Def1_AmendUkPropertyPeriodSummaryValidator(nino, businessId, taxYear, submissionId, body)(appConfig)
+                body: JsValue): Validator[AmendUkPropertyPeriodSummaryRequestData] = {
+    if (taxYear > "2023-24") {
+      new Def2_AmendUkPropertyPeriodSummaryValidator(nino, businessId, taxYear, submissionId, body)(appConfig)
+    } else {
+      new Def1_AmendUkPropertyPeriodSummaryValidator(nino, businessId, taxYear, submissionId, body)(appConfig)
+    }
+
+  }
 
 }

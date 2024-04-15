@@ -22,7 +22,6 @@ import api.models.utils.JsonErrorValidators
 import mocks.MockAppConfig
 import play.api.libs.json.{JsNumber, JsObject, JsString, JsValue, Json}
 import support.UnitSpec
-import v4.controllers.createUkPropertyPeriodSummary.CreateUkPropertyPeriodSummaryValidatorFactory
 import v4.controllers.createUkPropertyPeriodSummary.def1.model.request.def1_ukFhlProperty._
 import v4.controllers.createUkPropertyPeriodSummary.def1.model.request.def1_ukNonFhlProperty._
 import v4.controllers.createUkPropertyPeriodSummary.def1.model.request.def1_ukPropertyRentARoom._
@@ -193,10 +192,8 @@ class Def1_CreateUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with Mock
   private val parsedBodyMinimalFhl    = parsedBody.copy(ukFhlProperty = Some(parsedUkFhlPropertyMinimal), ukNonFhlProperty = None)
   private val parsedBodyMinimalNonFhl = parsedBody.copy(ukFhlProperty = None, ukNonFhlProperty = Some(parsedUkNonFhlPropertyMinimal))
 
-  private val validatorFactory = new CreateUkPropertyPeriodSummaryValidatorFactory(mockAppConfig)
-
   private def validator(nino: String, businessId: String, taxYear: String, body: JsValue) =
-    validatorFactory.validator(nino, businessId, taxYear, body)
+    new Def1_CreateUkPropertyPeriodSummaryValidator(nino, businessId, taxYear, body)(mockAppConfig)
 
   private def setupMocks(): Unit = MockedAppConfig.minimumTaxV2Uk.returns(TaxYear.starting(2022)).anyNumberOfTimes()
 

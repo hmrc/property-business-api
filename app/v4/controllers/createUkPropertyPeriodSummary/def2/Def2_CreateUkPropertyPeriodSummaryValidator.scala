@@ -21,16 +21,13 @@ import api.controllers.validators.resolvers.{ResolveBusinessId, ResolveNino, Res
 import api.models.errors.MtdError
 import cats.data.Validated
 import cats.implicits.catsSyntaxTuple4Semigroupal
-import config.AppConfig
 import play.api.libs.json.JsValue
 import v4.controllers.createUkPropertyPeriodSummary.model.request._
 
 import javax.inject.Inject
 
-class Def2_CreateUkPropertyPeriodSummaryValidator @Inject()(nino: String, businessId: String, taxYear: String, body: JsValue)(appConfig: AppConfig)
+class Def2_CreateUkPropertyPeriodSummaryValidator @Inject()(nino: String, businessId: String, taxYear: String, body: JsValue)
     extends Validator[CreateUkPropertyPeriodSummaryRequestData] {
-
-  private lazy val minimumTaxYear = appConfig.minimumTaxV2Uk
 
   private val resolveJson    = new ResolveNonEmptyJsonObject[Def2_CreateUkPropertyPeriodSummaryRequestBody]()
   private val rulesValidator = new Def2_CreateUkPropertyPeriodSummaryRulesValidator()
@@ -39,7 +36,7 @@ class Def2_CreateUkPropertyPeriodSummaryValidator @Inject()(nino: String, busine
     (
       ResolveNino(nino),
       ResolveBusinessId(businessId),
-      ResolveTaxYear(minimumTaxYear, taxYear),
+      ResolveTaxYear(taxYear),
       resolveJson(body)
     ).mapN(Def2_CreateUkPropertyPeriodSummaryRequestData) andThen rulesValidator.validateBusinessRules
 

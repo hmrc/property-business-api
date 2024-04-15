@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package v4.controllers.createUkPropertyPeriodSummary.def2.model
+package v4.controllers.createUkPropertyPeriodSummary.def2.model.request
 
 import play.api.libs.json.Json
 import support.UnitSpec

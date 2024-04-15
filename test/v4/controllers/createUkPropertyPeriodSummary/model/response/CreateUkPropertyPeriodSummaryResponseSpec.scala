@@ -14,11 +14,10 @@
  * limitations under the License.
  */
 
-package v4.controllers.createUkPropertyPeriodSummary.def1.model.response
+package v4.controllers.createUkPropertyPeriodSummary.model.response
 
 import play.api.libs.json.Json
 import support.UnitSpec
-import v4.controllers.createUkPropertyPeriodSummary.model.response.CreateUkPropertyPeriodSummaryResponse
 
 class CreateUkPropertyPeriodSummaryResponseSpec extends UnitSpec {
 

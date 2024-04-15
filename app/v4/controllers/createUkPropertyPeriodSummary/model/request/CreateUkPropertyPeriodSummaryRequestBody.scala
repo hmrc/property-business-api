@@ -22,6 +22,8 @@ import shapeless.HNil
 import utils.EmptinessChecker
 import v4.controllers.createUkPropertyPeriodSummary.def1.model.request.def1_ukFhlProperty.Def1_Create_UkFhlProperty
 import v4.controllers.createUkPropertyPeriodSummary.def1.model.request.def1_ukNonFhlProperty.Def1_Create_UkNonFhlProperty
+import v4.controllers.createUkPropertyPeriodSummary.def2.model.request.def2_ukFhlProperty.Def2_Create_UkFhlProperty
+import v4.controllers.createUkPropertyPeriodSummary.def2.model.request.def2_ukNonFhlProperty.Def2_Create_UkNonFhlProperty
 
 sealed trait CreateUkPropertyPeriodSummaryRequestBody
 
@@ -46,5 +48,29 @@ object Def1_CreateUkPropertyPeriodSummaryRequestBody {
       (JsPath \ "ukFhlProperty").writeNullable[Def1_Create_UkFhlProperty] and
       (JsPath \ "ukOtherProperty").writeNullable[Def1_Create_UkNonFhlProperty]
   )(unlift(Def1_CreateUkPropertyPeriodSummaryRequestBody.unapply))
+
+}
+
+case class Def2_CreateUkPropertyPeriodSummaryRequestBody(fromDate: String,
+                                                         toDate: String,
+                                                         ukFhlProperty: Option[Def2_Create_UkFhlProperty],
+                                                         ukNonFhlProperty: Option[Def2_Create_UkNonFhlProperty])
+    extends CreateUkPropertyPeriodSummaryRequestBody
+
+object Def2_CreateUkPropertyPeriodSummaryRequestBody {
+
+  implicit val emptinessChecker: EmptinessChecker[Def2_CreateUkPropertyPeriodSummaryRequestBody] = EmptinessChecker.use { body =>
+    "ukFhlProperty"      -> body.ukFhlProperty ::
+      "ukNonFhlProperty" -> body.ukNonFhlProperty :: HNil
+  }
+
+  implicit val reads: Reads[Def2_CreateUkPropertyPeriodSummaryRequestBody] = Json.reads[Def2_CreateUkPropertyPeriodSummaryRequestBody]
+
+  implicit val writes: OWrites[Def2_CreateUkPropertyPeriodSummaryRequestBody] = (
+    (JsPath \ "fromDate").write[String] and
+      (JsPath \ "toDate").write[String] and
+      (JsPath \ "ukFhlProperty").writeNullable[Def2_Create_UkFhlProperty] and
+      (JsPath \ "ukOtherProperty").writeNullable[Def2_Create_UkNonFhlProperty]
+  )(unlift(Def2_CreateUkPropertyPeriodSummaryRequestBody.unapply))
 
 }

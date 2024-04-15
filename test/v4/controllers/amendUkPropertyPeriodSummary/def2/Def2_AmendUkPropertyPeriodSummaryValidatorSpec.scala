@@ -24,20 +24,6 @@ import mocks.MockAppConfig
 import play.api.libs.json.{JsNumber, JsObject, JsValue, Json}
 import support.UnitSpec
 import v4.controllers.amendUkPropertyPeriodSummary.AmendUkPropertyPeriodSummaryValidatorFactory
-import v4.controllers.amendUkPropertyPeriodSummary.def1.model.request.def1_ukFhlProperty.{
-  Def1_Amend_UkFhlProperty,
-  Def1_Amend_UkFhlPropertyExpenses,
-  Def1_Amend_UkFhlPropertyIncome
-}
-import v4.controllers.amendUkPropertyPeriodSummary.def1.model.request.def1_ukNonFhlProperty.{
-  Def1_Amend_UkNonFhlProperty,
-  Def1_Amend_UkNonFhlPropertyExpenses,
-  Def1_Amend_UkNonFhlPropertyIncome
-}
-import v4.controllers.amendUkPropertyPeriodSummary.def1.model.request.def1_ukPropertyRentARoom.{
-  Def1_Amend_UkPropertyExpensesRentARoom,
-  Def1_Amend_UkPropertyIncomeRentARoom
-}
 import v4.controllers.amendUkPropertyPeriodSummary.def2.model.request.def2_ukFhlProperty._
 import v4.controllers.amendUkPropertyPeriodSummary.def2.model.request.def2_ukNonFhlProperty._
 import v4.controllers.amendUkPropertyPeriodSummary.def2.model.request.def2_ukPropertyRentARoom._
@@ -149,10 +135,6 @@ class Def2_AmendUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with JsonE
   private val parsedFhlIncome        = Def2_Amend_UkFhlPropertyIncome(Some(5000.99), Some(3123.21), Some(parsedIncomeRentARoom))
   private val parsedFhlIncomeMinimal = Def2_Amend_UkFhlPropertyIncome(Some(567.83), None, None)
 
-  private val def1ParsedIncomeRentARoom   = Def1_Amend_UkPropertyIncomeRentARoom(Some(532.12))
-  private val def1ParsedFhlIncome         = Def1_Amend_UkFhlPropertyIncome(Some(5000.99), Some(3123.21), Some(def1ParsedIncomeRentARoom))
-  private val def1ParsedExpensesRentARoom = Def1_Amend_UkPropertyExpensesRentARoom(Some(8842.43))
-
 
 
   // @formatter:off
@@ -161,20 +143,12 @@ class Def2_AmendUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with JsonE
     Some(484.12), Some(99282), None, Some(974.47), Some(parsedExpensesRentARoom)
   )
 
-  private val def1ParsedFhlExpenses = Def1_Amend_UkFhlPropertyExpenses(
-    Some(3123.21), Some(928.42), Some(842.99), Some(8831.12),
-    Some(484.12), Some(99282), None, Some(974.47), Some(def1ParsedExpensesRentARoom)
-  )
 
   private val parsedNonFhlIncome = Def2_Amend_UkNonFhlPropertyIncome(
     Some(42.12), Some(84.31), Some(9884.93),
     Some(842.99), Some(31.44), Some(parsedIncomeRentARoom)
   )
 
-  private val def1ParsedNonFhlIncome = Def1_Amend_UkNonFhlPropertyIncome(
-    Some(42.12), Some(84.31), Some(9884.93),
-    Some(842.99), Some(31.44), Some(def1ParsedIncomeRentARoom)
-  )
 
   private val parsedNonFhlIncomeMinimal = Def2_Amend_UkNonFhlPropertyIncome(
     None, None, Some(567.83), None, None, None
@@ -186,11 +160,6 @@ class Def2_AmendUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with JsonE
     Some(12.34), Some(parsedExpensesRentARoom), None
   )
 
-  private val def1ParsedNonFhlExpenses = Def1_Amend_UkNonFhlPropertyExpenses(
-    Some(3123.21), Some(928.42), Some(842.99), Some(8831.12),
-    Some(484.12), Some(99282), Some(12.34), Some(974.47),
-    Some(12.34), Some(def1ParsedExpensesRentARoom), None
-  )
 
   private val parsedFhlExpensesConsolidated = Def2_Amend_UkFhlPropertyExpenses(
     None, None, None, None, None, None, Some(988.18), None, None
@@ -206,29 +175,14 @@ class Def2_AmendUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with JsonE
     Some(parsedFhlExpenses)
   )
 
-  private val def1ParsedUkFhlProperty = Def1_Amend_UkFhlProperty(
-    Some(def1ParsedFhlIncome),
-    Some(def1ParsedFhlExpenses)
-  )
-
   private val parsedUkNonFhlProperty = Def2_Amend_UkNonFhlProperty(
     Some(parsedNonFhlIncome),
     Some(parsedNonFhlExpenses)
   )
 
-  private val def1ParsedUkNonFhlProperty = Def1_Amend_UkNonFhlProperty(
-    Some(def1ParsedNonFhlIncome),
-    Some(def1ParsedNonFhlExpenses)
-  )
-
   private val parsedBody = Def2_AmendUkPropertyPeriodSummaryRequestBody(
     Some(parsedUkFhlProperty),
     Some(parsedUkNonFhlProperty)
-  )
-
-  private val def1ParsedBody = Def1_AmendUkPropertyPeriodSummaryRequestBody(
-    Some(def1ParsedUkFhlProperty),
-    Some(def1ParsedUkNonFhlProperty)
   )
 
   private val parsedBodyConsolidated = parsedBody.copy(
@@ -321,21 +275,6 @@ class Def2_AmendUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with JsonE
 
         result shouldBe Right(
           Def2_AmendUkPropertyPeriodSummaryRequestData(parsedNino, parsedTaxYear, parsedBusinessId, parsedSubmissionId, parsedBodyMinimalNonFhl))
-      }
-
-      "passed the minimum supported taxYear" in {
-        setupMocks()
-        val taxYearString = "2022-23"
-        val result: Either[ErrorWrapper, AmendUkPropertyPeriodSummaryRequestData] =
-          validator(validNino, validBusinessId, taxYearString, validSubmissionId, validBody).validateAndWrapResult()
-
-        result shouldBe Right(
-          Def1_AmendUkPropertyPeriodSummaryRequestData(
-            parsedNino,
-            TaxYear.fromMtd(taxYearString),
-            parsedBusinessId,
-            parsedSubmissionId,
-            def1ParsedBody))
       }
     }
 

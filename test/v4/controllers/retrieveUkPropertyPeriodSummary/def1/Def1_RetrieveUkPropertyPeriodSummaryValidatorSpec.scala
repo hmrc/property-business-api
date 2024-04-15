@@ -21,10 +21,7 @@ import api.models.errors._
 import mocks.MockAppConfig
 import support.UnitSpec
 import v4.controllers.retrieveUkPropertyPeriodSummary.RetrieveUkPropertyPeriodSummaryValidatorFactory
-import v4.controllers.retrieveUkPropertyPeriodSummary.model.request.{
-  Def1_RetrieveUkPropertyPeriodSummaryRequestData,
-  RetrieveUkPropertyPeriodSummaryRequestData
-}
+import v4.controllers.retrieveUkPropertyPeriodSummary.model.request.{Def1_RetrieveUkPropertyPeriodSummaryRequestData, RetrieveUkPropertyPeriodSummaryRequestData}
 
 class Def1_RetrieveUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with MockAppConfig {
 

@@ -22,7 +22,7 @@ import config.AppConfig
 import play.api.libs.functional.syntax._
 import play.api.libs.json.{Json, OWrites, Reads, __}
 import v4.controllers.retrieveUkPropertyPeriodSummary.def1.model.response.{Def1_Retrieve_UkFhlProperty, Def1_Retrieve_UkNonFhlProperty}
-import v4.controllers.retrieveUkPropertyPeriodSummary.def2.model.response.{Def2_Retrieve_UkFhlProperty, Def2_Retrieve_UkNonFhlProperty}
+import v4.controllers.retrieveUkPropertyPeriodSummary.def2.model.response.{Def2_Retrieve_ConsolidatedUkFhlProperty, Def2_Retrieve_ConsolidatedUkNonFhlProperty, Def2_Retrieve_UkFhlProperty, Def2_Retrieve_UkNonFhlProperty}
 import v4.controllers.retrieveUkPropertyPeriodSummary.model.response.Def1_RetrieveUkPropertyPeriodSummaryResponse.Def1_RetrieveUkPropertyPeriodSummaryResponseLinksFactory
 import v4.hateoas.HateoasLinks
 
@@ -31,15 +31,17 @@ sealed trait RetrieveUkPropertyPeriodSummaryResponse
 object RetrieveUkPropertyPeriodSummaryResponse extends HateoasLinks {
 
   implicit val writes: OWrites[RetrieveUkPropertyPeriodSummaryResponse] = {
-    case def1: Def1_RetrieveUkPropertyPeriodSummaryResponse => Json.toJsObject(def1)
-    case def2: Def2_RetrieveUkPropertyPeriodSummaryResponse => Json.toJsObject(def2)
+    case def1: Def1_RetrieveUkPropertyPeriodSummaryResponse                         => Json.toJsObject(def1)
+    case def2: Def2_RetrieveUkPropertyPeriodSummaryResponse                         => Json.toJsObject(def2)
+    case def2Consolidated: Def2_RetrieveUkPropertyPeriodSummaryConsolidatedResponse => Json.toJsObject(def2Consolidated)
   }
 
   implicit object RetrieveUkPropertyPeriodSummaryResponseLinksFactory
       extends HateoasLinksFactory[RetrieveUkPropertyPeriodSummaryResponse, RetrieveUkPropertyPeriodSummaryHateoasData] {
 
-    override def links(appConfig: AppConfig, data: RetrieveUkPropertyPeriodSummaryHateoasData): Seq[Link] =
+    override def links(appConfig: AppConfig, data: RetrieveUkPropertyPeriodSummaryHateoasData): Seq[Link] = {
       Def1_RetrieveUkPropertyPeriodSummaryResponseLinksFactory.links(appConfig, data)
+    }
 
   }
 
@@ -104,7 +106,45 @@ object Def2_RetrieveUkPropertyPeriodSummaryResponse extends HateoasLinks {
   )(Def2_RetrieveUkPropertyPeriodSummaryResponse.apply _)
 
   implicit object Def2_RetrieveUkPropertyPeriodSummaryResponseLinksFactory
-      extends HateoasLinksFactory[Def1_RetrieveUkPropertyPeriodSummaryResponse, RetrieveUkPropertyPeriodSummaryHateoasData] {
+      extends HateoasLinksFactory[Def2_RetrieveUkPropertyPeriodSummaryResponse, RetrieveUkPropertyPeriodSummaryHateoasData] {
+
+    override def links(appConfig: AppConfig, data: RetrieveUkPropertyPeriodSummaryHateoasData): Seq[Link] = {
+      import data._
+      Seq(
+        amendUkPropertyPeriodSummary(appConfig, nino, businessId, taxYear, submissionId),
+        retrieveUkPropertyPeriodSummary(appConfig, nino, businessId, taxYear, submissionId, self = true),
+        listPropertyPeriodSummaries(appConfig, nino, businessId, taxYear, self = false)
+      )
+    }
+
+  }
+
+}
+
+case class Def2_RetrieveUkPropertyPeriodSummaryConsolidatedResponse(submittedOn: Timestamp,
+                                                                    fromDate: String,
+                                                                    toDate: String,
+                                                                    // periodCreationDate: Option[String], // To be reinstated, see MTDSA-15575
+                                                                    ukFhlProperty: Option[Def2_Retrieve_ConsolidatedUkFhlProperty],
+                                                                    ukNonFhlProperty: Option[Def2_Retrieve_ConsolidatedUkNonFhlProperty])
+    extends RetrieveUkPropertyPeriodSummaryResponse
+
+object Def2_RetrieveUkPropertyPeriodSummaryConsolidatedResponse extends HateoasLinks {
+
+  implicit val writes: OWrites[Def2_RetrieveUkPropertyPeriodSummaryConsolidatedResponse] =
+    Json.writes[Def2_RetrieveUkPropertyPeriodSummaryConsolidatedResponse]
+
+  implicit val reads: Reads[Def2_RetrieveUkPropertyPeriodSummaryConsolidatedResponse] = (
+    (__ \ "submittedOn").read[Timestamp] and
+      (__ \ "fromDate").read[String] and
+      (__ \ "toDate").read[String] and
+      //      (__ \ "periodCreationDate").readNullable[String] and // To be reinstated, see MTDSA-15575
+      (__ \ "ukFhlProperty").readNullable[Def2_Retrieve_ConsolidatedUkFhlProperty] and
+      (__ \ "ukOtherProperty").readNullable[Def2_Retrieve_ConsolidatedUkNonFhlProperty]
+  )(Def2_RetrieveUkPropertyPeriodSummaryConsolidatedResponse.apply _)
+
+  implicit object Def2_RetrieveUkPropertyPeriodSummaryResponseLinksFactory
+      extends HateoasLinksFactory[Def2_RetrieveUkPropertyPeriodSummaryResponse, RetrieveUkPropertyPeriodSummaryHateoasData] {
 
     override def links(appConfig: AppConfig, data: RetrieveUkPropertyPeriodSummaryHateoasData): Seq[Link] = {
       import data._

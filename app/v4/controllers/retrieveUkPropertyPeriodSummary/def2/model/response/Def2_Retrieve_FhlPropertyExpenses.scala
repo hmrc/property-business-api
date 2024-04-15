@@ -29,6 +29,18 @@ case class Def2_Retrieve_FhlPropertyExpenses(premisesRunningCosts: Option[BigDec
                                              rentARoom: Option[Def2_Retrieve_RentARoomExpenses],
                                              consolidatedExpenses: Option[BigDecimal])
 
+case class Def2_Retrieve_FhlPropertyConsolidatedExpenses(rentARoom: Option[Def2_Retrieve_RentARoomExpenses],
+                                                         consolidatedExpenses: Option[BigDecimal])
+
+object Def2_Retrieve_FhlPropertyConsolidatedExpenses {
+  implicit val writes: OWrites[Def2_Retrieve_FhlPropertyConsolidatedExpenses] = Json.writes[Def2_Retrieve_FhlPropertyConsolidatedExpenses]
+
+  implicit val reads: Reads[Def2_Retrieve_FhlPropertyConsolidatedExpenses] = (
+      (JsPath \ "ukFhlRentARoom").readNullable[Def2_Retrieve_RentARoomExpenses] and
+        (JsPath \ "consolidatedExpense").readNullable[BigDecimal]
+    )(Def2_Retrieve_FhlPropertyConsolidatedExpenses.apply _)
+
+}
 object Def2_Retrieve_FhlPropertyExpenses {
   implicit val writes: OWrites[Def2_Retrieve_FhlPropertyExpenses] = Json.writes[Def2_Retrieve_FhlPropertyExpenses]
 

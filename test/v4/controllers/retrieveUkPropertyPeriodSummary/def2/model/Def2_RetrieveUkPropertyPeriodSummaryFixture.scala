@@ -26,10 +26,10 @@ trait Def2_RetrieveUkPropertyPeriodSummaryFixture {
   val fullDownstreamJson: JsValue = Json.parse(
     """
       |{
-      |  "submittedOn": "2020-06-17T10:53:38.000Z",
-      |  "fromDate": "2019-01-29",
-      |  "toDate": "2020-03-29",
-      |  "periodCreationDate": "2020-06-17T10:53:38Z",
+      |  "submittedOn": "2025-06-17T10:53:38.000Z",
+      |  "fromDate": "2024-01-29",
+      |  "toDate": "2025-03-29",
+      |  "periodCreationDate": "2025-06-17T10:53:38Z",
       |  "ukFhlProperty": {
       |    "income": {
       |      "periodAmount": 1.11,
@@ -86,9 +86,9 @@ trait Def2_RetrieveUkPropertyPeriodSummaryFixture {
   val fullMtdJson: JsValue = Json.parse(
     """
       |{
-      |  "submittedOn": "2020-06-17T10:53:38.000Z",
-      |  "fromDate": "2019-01-29",
-      |  "toDate": "2020-03-29",
+      |  "submittedOn": "2025-06-17T10:53:38.000Z",
+      |  "fromDate": "2024-01-29",
+      |  "toDate": "2025-03-29",
       |  "ukFhlProperty": {
       |    "income": {
       |      "periodAmount": 1.11,
@@ -104,11 +104,11 @@ trait Def2_RetrieveUkPropertyPeriodSummaryFixture {
       |      "professionalFees": 2.14,
       |      "costOfServices": 2.15,
       |      "other": 2.16,
-      |      "consolidatedExpenses": 2.17,
       |      "travelCosts": 2.18,
       |      "rentARoom": {
       |        "amountClaimed": 2.19
-      |      }
+      |      },
+      |      "consolidatedExpenses": 2.17
       |    }
       |  },
       |  "ukNonFhlProperty": {
@@ -128,14 +128,14 @@ trait Def2_RetrieveUkPropertyPeriodSummaryFixture {
       |      "financialCosts": 4.13,
       |      "professionalFees": 4.14,
       |      "costOfServices": 4.15,
-      |      "other": -4.16,
-      |      "consolidatedExpenses": 4.17,
+      |      "other": 4.16,
       |      "residentialFinancialCost": 4.18,
       |      "travelCosts": 4.19,
       |      "residentialFinancialCostsCarriedForward": 4.20,
       |      "rentARoom": {
       |        "amountClaimed": 4.21
-      |      }
+      |      },
+      |      "consolidatedExpenses": 4.17
       |    }
       |  }
       |}
@@ -210,9 +210,9 @@ trait Def2_RetrieveUkPropertyPeriodSummaryFixture {
   )
 
   val fullResponseModel: Def2_RetrieveUkPropertyPeriodSummaryResponse = Def2_RetrieveUkPropertyPeriodSummaryResponse(
-    submittedOn = Timestamp("2020-06-17T10:53:38.000Z"),
-    fromDate = "2019-01-29",
-    toDate = "2020-03-29",
+    submittedOn = Timestamp("2025-06-17T10:53:38.000Z"),
+    fromDate = "2024-01-29",
+    toDate = "2025-03-29",
     //    periodCreationDate = Some("2020-06-17T10:53:38Z"), // To be reinstated, see MTDSA-15575
     ukFhlProperty = Some(ukFhlPropertyModel),
     ukNonFhlProperty = Some(ukNonFhlPropertyModel)
@@ -224,7 +224,7 @@ trait Def2_RetrieveUkPropertyPeriodSummaryFixture {
          |{
          |   "links":[
          |      {
-         |         "href":"/individuals/business/property/AA123456A/XAIS12345678910/period/2022-23/4557ecb5-fd32-48cc-81f5-e6acd1099f3c",
+         |         "href":"/individuals/business/property/AA123456A/XAIS12345678910/period/2024-25/4557ecb5-fd32-48cc-81f5-e6acd1099f3c",
          |         "method":"GET",
          |         "rel":"self"
          |      }

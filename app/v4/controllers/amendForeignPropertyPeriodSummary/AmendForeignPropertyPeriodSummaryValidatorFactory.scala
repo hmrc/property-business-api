@@ -20,6 +20,7 @@ import api.controllers.validators.Validator
 import config.AppConfig
 import play.api.libs.json.JsValue
 import v4.controllers.amendForeignPropertyPeriodSummary.def1.Def1_AmendForeignPropertyPeriodSummaryValidator
+import v4.controllers.amendForeignPropertyPeriodSummary.def2.Def2_AmendForeignPropertyPeriodSummaryValidator
 import v4.controllers.amendForeignPropertyPeriodSummary.model.request.AmendForeignPropertyPeriodSummaryRequestData
 
 import javax.inject.{Inject, Singleton}
@@ -31,7 +32,12 @@ class AmendForeignPropertyPeriodSummaryValidatorFactory @Inject() (appConfig: Ap
                 businessId: String,
                 taxYear: String,
                 submissionId: String,
-                body: JsValue): Validator[AmendForeignPropertyPeriodSummaryRequestData] =
-    new Def1_AmendForeignPropertyPeriodSummaryValidator(nino, businessId, taxYear, submissionId, body, appConfig)
+                body: JsValue): Validator[AmendForeignPropertyPeriodSummaryRequestData] = {
+    if (taxYear > "2023-24") {
+      new Def2_AmendForeignPropertyPeriodSummaryValidator(nino, businessId, taxYear, submissionId, body, appConfig)
+    } else {
+      new Def1_AmendForeignPropertyPeriodSummaryValidator(nino, businessId, taxYear, submissionId, body, appConfig)
+    }
+  }
 
 }

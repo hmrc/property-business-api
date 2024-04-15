@@ -23,7 +23,7 @@ sealed trait AmendForeignPropertyPeriodSummaryRequestData {
   val businessId: BusinessId
   val taxYear: TaxYear
   val submissionId: SubmissionId
-  def body: Def1_AmendForeignPropertyPeriodSummaryRequestBody
+  def body: AmendForeignPropertyPeriodSummaryRequestBody
 }
 
 case class Def1_AmendForeignPropertyPeriodSummaryRequestData(nino: Nino,
@@ -31,4 +31,11 @@ case class Def1_AmendForeignPropertyPeriodSummaryRequestData(nino: Nino,
                                                              taxYear: TaxYear,
                                                              submissionId: SubmissionId,
                                                              body: Def1_AmendForeignPropertyPeriodSummaryRequestBody)
+    extends AmendForeignPropertyPeriodSummaryRequestData
+
+case class Def2_AmendForeignPropertyPeriodSummaryRequestData(nino: Nino,
+                                                             businessId: BusinessId,
+                                                             taxYear: TaxYear,
+                                                             submissionId: SubmissionId,
+                                                             body: Def2_AmendForeignPropertyPeriodSummaryRequestBody)
     extends AmendForeignPropertyPeriodSummaryRequestData

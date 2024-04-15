@@ -128,7 +128,7 @@ trait Def2_RetrieveUkPropertyPeriodSummaryFixture {
       |      "financialCosts": 4.13,
       |      "professionalFees": 4.14,
       |      "costOfServices": 4.15,
-      |      "other": 4.16,
+      |      "other": -4.16,
       |      "residentialFinancialCost": 4.18,
       |      "travelCosts": 4.19,
       |      "residentialFinancialCostsCarriedForward": 4.20,

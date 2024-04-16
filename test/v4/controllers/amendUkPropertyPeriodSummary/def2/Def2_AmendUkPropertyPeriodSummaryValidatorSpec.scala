@@ -118,7 +118,6 @@ class Def2_AmendUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with JsonE
     Some(484.12), Some(99282), None, Some(974.47), Some(parsedExpensesRentARoom)
   )
 
-
   private val parsedNonFhlIncome = Def2_Amend_UkNonFhlPropertyIncome(
     Some(42.12), Some(84.31), Some(9884.93),
     Some(842.99), Some(31.44), Some(parsedIncomeRentARoom)

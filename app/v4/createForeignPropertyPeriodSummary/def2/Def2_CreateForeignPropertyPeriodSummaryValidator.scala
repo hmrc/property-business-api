@@ -25,7 +25,7 @@ import play.api.libs.json.JsValue
 import v4.createForeignPropertyPeriodSummary.def2.Def2_CreateForeignPropertyPeriodSummaryRulesValidator.validateBusinessRules
 import v4.createForeignPropertyPeriodSummary.model.request._
 
-class Def2_CreateValidator(nino: String, businessId: String, taxYear: String, body: JsValue)
+class Def2_CreateForeignPropertyPeriodSummaryValidator(nino: String, businessId: String, taxYear: String, body: JsValue)
     extends Validator[CreateForeignPropertyPeriodSummaryRequestData] {
 
   private val resolveJson = new ResolveNonEmptyJsonObject[Def2_CreateForeignPropertyPeriodSummaryRequestBody]()

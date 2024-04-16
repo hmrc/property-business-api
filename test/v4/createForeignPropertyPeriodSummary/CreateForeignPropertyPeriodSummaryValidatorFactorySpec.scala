@@ -23,7 +23,7 @@ import mocks.MockAppConfig
 import play.api.libs.json._
 import support.UnitSpec
 import v4.createForeignPropertyPeriodSummary.def1.Def1_CreateForeignPropertyPeriodSummaryValidator
-import v4.createForeignPropertyPeriodSummary.def2.Def2_CreateValidator
+import v4.createForeignPropertyPeriodSummary.def2.Def2_CreateForeignPropertyPeriodSummaryValidator
 import v4.createForeignPropertyPeriodSummary.model.request.CreateForeignPropertyPeriodSummaryRequestData
 
 class CreateForeignPropertyPeriodSummaryValidatorFactorySpec extends UnitSpec with MockAppConfig with JsonErrorValidators {
@@ -67,7 +67,7 @@ class CreateForeignPropertyPeriodSummaryValidatorFactorySpec extends UnitSpec wi
         val result: Validator[CreateForeignPropertyPeriodSummaryRequestData] =
           validatorFactory.validator(validNino, validBusinessId, validTyTaxYear, requestBody)
 
-        result shouldBe a[Def2_CreateValidator]
+        result shouldBe a[Def2_CreateForeignPropertyPeriodSummaryValidator]
       }
     }
   }

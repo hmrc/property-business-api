@@ -26,7 +26,7 @@ import v4.createForeignPropertyPeriodSummary.def2.model.request.Def2_foreignFhlE
 import v4.createForeignPropertyPeriodSummary.def2.model.request.Def2_foreignPropertyEntry._
 import v4.createForeignPropertyPeriodSummary.model.request._
 
-class Def2_CreateValidatorSpec extends UnitSpec with MockAppConfig with JsonErrorValidators {
+class Def2_CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with MockAppConfig with JsonErrorValidators {
   private implicit val correlationId: String = "1234"
 
   private val validNino       = "AA123456A"
@@ -238,7 +238,7 @@ class Def2_CreateValidatorSpec extends UnitSpec with MockAppConfig with JsonErro
     )
 
   private def validator(nino: String, businessId: String, taxYear: String, body: JsValue) =
-    new Def2_CreateValidator(nino, businessId, taxYear, body)
+    new Def2_CreateForeignPropertyPeriodSummaryValidator(nino, businessId, taxYear, body)
 
   "validator" should {
     "return the parsed domain object" when {

@@ -14,33 +14,30 @@
  * limitations under the License.
  */
 
-package v4.controllers.createUkPropertyPeriodSummary.def1
+package v4.controllers.createUkPropertyPeriodSummary.def2
 
 import api.controllers.validators.Validator
 import api.controllers.validators.resolvers.{ResolveBusinessId, ResolveNino, ResolveNonEmptyJsonObject, ResolveTaxYear}
 import api.models.errors.MtdError
 import cats.data.Validated
 import cats.implicits.catsSyntaxTuple4Semigroupal
-import config.AppConfig
 import play.api.libs.json.JsValue
 import v4.controllers.createUkPropertyPeriodSummary.model.request._
 
 import javax.inject.Inject
 
-class Def1_CreateUkPropertyPeriodSummaryValidator @Inject() (nino: String, businessId: String, taxYear: String, body: JsValue)(appConfig: AppConfig)
+class Def2_CreateUkPropertyPeriodSummaryValidator @Inject()(nino: String, businessId: String, taxYear: String, body: JsValue)
     extends Validator[CreateUkPropertyPeriodSummaryRequestData] {
 
-  private lazy val minimumTaxYear = appConfig.minimumTaxV2Uk
-
-  private val resolveJson    = new ResolveNonEmptyJsonObject[Def1_CreateUkPropertyPeriodSummaryRequestBody]()
-  private val rulesValidator = new Def1_CreateUkPropertyPeriodSummaryRulesValidator()
+  private val resolveJson    = new ResolveNonEmptyJsonObject[Def2_CreateUkPropertyPeriodSummaryRequestBody]()
+  private val rulesValidator = new Def2_CreateUkPropertyPeriodSummaryRulesValidator()
 
   def validate: Validated[Seq[MtdError], CreateUkPropertyPeriodSummaryRequestData] =
     (
       ResolveNino(nino),
       ResolveBusinessId(businessId),
-      ResolveTaxYear(minimumTaxYear, taxYear),
+      ResolveTaxYear(taxYear),
       resolveJson(body)
-    ).mapN(Def1_CreateUkPropertyPeriodSummaryRequestData) andThen rulesValidator.validateBusinessRules
+    ).mapN(Def2_CreateUkPropertyPeriodSummaryRequestData) andThen rulesValidator.validateBusinessRules
 
 }

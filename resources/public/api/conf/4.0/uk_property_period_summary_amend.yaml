@@ -46,7 +46,11 @@ requestBody:
           description: Consolidated Expenses request
           value:
             $ref: './examples/uk_property_period_summary_amend/def1/consolidated_request.json'
-        consolidated-expense-request-for-TY-2024-25:
+        full-expenses-request-for-TY-2024-25:
+          description: Full Expenses request for TY 2024-25
+          value:
+            $ref: './examples/uk_property_period_summary_amend/def2/consolidated_request.json'
+        consolidated-expenses-request-for-TY-2024-25:
           description: Consolidated Expenses request for TY 2024-25
           value:
             $ref: './examples/uk_property_period_summary_amend/def2/consolidated_request.json'

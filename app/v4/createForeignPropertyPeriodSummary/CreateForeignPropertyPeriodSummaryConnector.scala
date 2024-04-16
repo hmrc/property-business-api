@@ -22,7 +22,11 @@ import api.connectors.{BaseDownstreamConnector, DownstreamOutcome}
 import config.AppConfig
 import play.api.http.Status.OK
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
-import v4.createForeignPropertyPeriodSummary.model.request.{CreateForeignPropertyPeriodSummaryRequestData, Def1_CreateForeignPropertyPeriodSummaryRequestData}
+import v4.createForeignPropertyPeriodSummary.model.request.{
+  CreateForeignPropertyPeriodSummaryRequestData,
+  Def1_CreateForeignPropertyPeriodSummaryRequestData,
+  Def2_CreateForeignPropertyPeriodSummaryRequestData
+}
 import v4.createForeignPropertyPeriodSummary.model.response.CreateForeignPropertyPeriodSummaryResponse
 
 import javax.inject.{Inject, Singleton}
@@ -50,6 +54,12 @@ class CreateForeignPropertyPeriodSummaryConnector @Inject() (val http: HttpClien
               s"income-tax/business/property/periodic?taxableEntityId=$nino&taxYear=${taxYear.asMtd}&incomeSourceId=$businessId")
           }
 
+        post(body, downstreamUri)
+
+      case def2: Def2_CreateForeignPropertyPeriodSummaryRequestData =>
+        import def2._
+        val downstreamUri = TaxYearSpecificIfsUri[CreateForeignPropertyPeriodSummaryResponse](
+          s"income-tax/business/property/periodic/${taxYear.asTysDownstream}?taxableEntityId=$nino&incomeSourceId=$businessId")
         post(body, downstreamUri)
     }
   }

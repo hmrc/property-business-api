@@ -14,35 +14,28 @@
  * limitations under the License.
  */
 
-package v4.controllers.createUkPropertyPeriodSummary.def2
+package v4.createForeignPropertyPeriodSummary.def2
 
 import api.controllers.validators.Validator
 import api.controllers.validators.resolvers.{ResolveBusinessId, ResolveNino, ResolveNonEmptyJsonObject, ResolveTaxYear}
 import api.models.errors.MtdError
 import cats.data.Validated
-import cats.implicits.catsSyntaxTuple4Semigroupal
+import cats.implicits._
 import play.api.libs.json.JsValue
-import v4.controllers.createUkPropertyPeriodSummary.model.request._
+import v4.createForeignPropertyPeriodSummary.def2.Def2_CreateForeignPropertyPeriodSummaryRulesValidator.validateBusinessRules
+import v4.createForeignPropertyPeriodSummary.model.request._
 
-import javax.inject.Inject
+class Def2_CreateValidator(nino: String, businessId: String, taxYear: String, body: JsValue)
+    extends Validator[CreateForeignPropertyPeriodSummaryRequestData] {
 
+  private val resolveJson = new ResolveNonEmptyJsonObject[Def2_CreateForeignPropertyPeriodSummaryRequestBody]()
 
-class Def2_CreateUkPropertyPeriodSummaryValidator @Inject() (nino: String,
-                                                             businessId: String,
-                                                             taxYear: String,
-                                                             body: JsValue)
-
-    extends Validator[CreateUkPropertyPeriodSummaryRequestData] {
-
-  private val resolveJson    = new ResolveNonEmptyJsonObject[Def2_CreateUkPropertyPeriodSummaryRequestBody]()
-  private val rulesValidator = new Def2_CreateUkPropertyPeriodSummaryRulesValidator()
-
-  def validate: Validated[Seq[MtdError], CreateUkPropertyPeriodSummaryRequestData] =
+  def validate: Validated[Seq[MtdError], CreateForeignPropertyPeriodSummaryRequestData] =
     (
       ResolveNino(nino),
       ResolveBusinessId(businessId),
       ResolveTaxYear(taxYear),
       resolveJson(body)
-    ).mapN(Def2_CreateUkPropertyPeriodSummaryRequestData) andThen rulesValidator.validateBusinessRules
+    ).mapN(Def2_CreateForeignPropertyPeriodSummaryRequestData) andThen validateBusinessRules
 
 }

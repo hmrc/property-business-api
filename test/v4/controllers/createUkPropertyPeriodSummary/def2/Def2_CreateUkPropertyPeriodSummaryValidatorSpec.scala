@@ -298,7 +298,10 @@ class Def2_CreateUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with Mock
       }
 
       def testRuleIncorrectOrEmptyBodyErrorWith(path: String, body: JsValue): Unit = testWith(RuleIncorrectOrEmptyBodyError)(path, body)
-      def testValueFormatErrorWith(path: String, body: JsValue): Unit              = testWith(ValueFormatError)(path, body)
+      def testValueFormatErrorWith(path: String, body: JsValue): Unit =
+        testWith(ValueFormatError)(path, body)
+      def testNegativeValueFormatErrorWith(path: String, body: JsValue): Unit =
+        testWith(ValueFormatError.forPathAndRange(path, min = "-99999999999.99", max = "99999999999.99"))(path, body)
 
       "passed a body with an empty object" when {
         List(
@@ -384,13 +387,6 @@ class Def2_CreateUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with Mock
           "/ukFhlProperty/income/periodAmount",
           "/ukFhlProperty/income/taxDeducted",
           "/ukFhlProperty/income/rentARoom/rentsReceived",
-          "/ukFhlProperty/expenses/premisesRunningCosts",
-          "/ukFhlProperty/expenses/repairsAndMaintenance",
-          "/ukFhlProperty/expenses/financialCosts",
-          "/ukFhlProperty/expenses/professionalFees",
-          "/ukFhlProperty/expenses/costOfServices",
-          "/ukFhlProperty/expenses/other",
-          "/ukFhlProperty/expenses/travelCosts",
           "/ukFhlProperty/expenses/rentARoom/amountClaimed",
           "/ukNonFhlProperty/income/premiumsOfLeaseGrant",
           "/ukNonFhlProperty/income/reversePremiums",
@@ -398,30 +394,41 @@ class Def2_CreateUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with Mock
           "/ukNonFhlProperty/income/taxDeducted",
           "/ukNonFhlProperty/income/otherIncome",
           "/ukNonFhlProperty/income/rentARoom/rentsReceived",
+          "/ukNonFhlProperty/expenses/residentialFinancialCost",
+          "/ukNonFhlProperty/expenses/residentialFinancialCostsCarriedForward",
+          "/ukNonFhlProperty/expenses/rentARoom/amountClaimed"
+        ).foreach(path => testValueFormatErrorWith(path, validBody.update(path, JsNumber(123.456))))
+      }
+      "passed a body with a (non-consolidated expenses that allow negative) field containing an invalid value" when {
+        List(
+          "/ukFhlProperty/expenses/premisesRunningCosts",
+          "/ukFhlProperty/expenses/repairsAndMaintenance",
+          "/ukFhlProperty/expenses/financialCosts",
+          "/ukFhlProperty/expenses/professionalFees",
+          "/ukFhlProperty/expenses/costOfServices",
+          "/ukFhlProperty/expenses/other",
+          "/ukFhlProperty/expenses/travelCosts",
           "/ukNonFhlProperty/expenses/premisesRunningCosts",
           "/ukNonFhlProperty/expenses/repairsAndMaintenance",
           "/ukNonFhlProperty/expenses/financialCosts",
           "/ukNonFhlProperty/expenses/professionalFees",
           "/ukNonFhlProperty/expenses/costOfServices",
           "/ukNonFhlProperty/expenses/other",
-          "/ukNonFhlProperty/expenses/residentialFinancialCost",
-          "/ukNonFhlProperty/expenses/travelCosts",
-          "/ukNonFhlProperty/expenses/residentialFinancialCostsCarriedForward",
-          "/ukNonFhlProperty/expenses/rentARoom/amountClaimed"
-        ).foreach(path => testValueFormatErrorWith(path, validBody.update(path, JsNumber(123.456))))
+          "/ukNonFhlProperty/expenses/travelCosts"
+        ).foreach(path => testNegativeValueFormatErrorWith(path, validBody.update(path, JsNumber(123.456))))
       }
 
       "passed a body with a (consolidated expenses) field containing an invalid value" when {
         List(
           "/ukFhlProperty/expenses/consolidatedExpenses",
           "/ukNonFhlProperty/expenses/consolidatedExpenses"
-        ).foreach(path => testValueFormatErrorWith(path, validBodyConsolidatedWithExtraFields.update(path, JsNumber(123.456))))
+        ).foreach(path => testNegativeValueFormatErrorWith(path, validBodyConsolidatedWithExtraFields.update(path, JsNumber(123.456))))
       }
 
       "passed a body with multiple invalid fields" in {
         val path0 = "/ukFhlProperty/expenses/travelCosts"
-        val path1 = "/ukNonFhlProperty/expenses/travelCosts"
-        val path2 = "/ukNonFhlProperty/expenses/rentARoom/amountClaimed"
+        val path1 = "/ukNonFhlProperty/expenses/other"
+        val path2 = "/ukNonFhlProperty/expenses/travelCosts"
 
         val invalidBody = validBody
           .update(path0, JsNumber(123.456))
@@ -431,7 +438,10 @@ class Def2_CreateUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with Mock
         val result: Either[ErrorWrapper, CreateUkPropertyPeriodSummaryRequestData] =
           validator(validNino, validTaxYear, validBusinessId, invalidBody).validateAndWrapResult()
 
-        result shouldBe Left(ErrorWrapper(correlationId, ValueFormatError.withPaths(List(path0, path1, path2))))
+        result shouldBe Left(
+          ErrorWrapper(
+            correlationId,
+            ValueFormatError.forPathAndRange(path0, min = "-99999999999.99", max = "99999999999.99").withPaths(List(path0, path1, path2))))
       }
 
       "passed a body with both consolidated and separate expenses provided for fhl" in {

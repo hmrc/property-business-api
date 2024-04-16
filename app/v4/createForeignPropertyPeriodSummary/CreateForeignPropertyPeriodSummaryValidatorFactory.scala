@@ -20,6 +20,7 @@ import api.controllers.validators.Validator
 import config.AppConfig
 import play.api.libs.json.JsValue
 import v4.createForeignPropertyPeriodSummary.def1.Def1_CreateForeignPropertyPeriodSummaryValidator
+import v4.createForeignPropertyPeriodSummary.def2.Def2_CreateValidator
 import v4.createForeignPropertyPeriodSummary.model.request.CreateForeignPropertyPeriodSummaryRequestData
 
 import javax.inject.{Inject, Singleton}
@@ -28,6 +29,11 @@ import javax.inject.{Inject, Singleton}
 class CreateForeignPropertyPeriodSummaryValidatorFactory @Inject() (appConfig: AppConfig) {
 
   def validator(nino: String, businessId: String, taxYear: String, body: JsValue): Validator[CreateForeignPropertyPeriodSummaryRequestData] =
-    new Def1_CreateForeignPropertyPeriodSummaryValidator(nino, businessId, taxYear, body, appConfig)
+    if (taxYear >= "2024-25") {
+      new Def2_CreateValidator(nino, businessId, taxYear, body)
+    } else {
+      new Def1_CreateForeignPropertyPeriodSummaryValidator(nino, businessId, taxYear, body, appConfig)
+
+    }
 
 }

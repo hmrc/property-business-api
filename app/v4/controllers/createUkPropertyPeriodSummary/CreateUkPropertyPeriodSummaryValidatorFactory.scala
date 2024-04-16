@@ -27,10 +27,7 @@ import javax.inject.Inject
 
 class CreateUkPropertyPeriodSummaryValidatorFactory @Inject() (appConfig: AppConfig) {
 
-  def validator(nino: String,
-                businessId: String,
-                taxYear: String,
-                body: JsValue): Validator[CreateUkPropertyPeriodSummaryRequestData] = {
+  def validator(nino: String, businessId: String, taxYear: String, body: JsValue): Validator[CreateUkPropertyPeriodSummaryRequestData] = {
 
     if (taxYear >= "2024-25") {
       new Def2_CreateUkPropertyPeriodSummaryValidator(nino, businessId, taxYear, body)

@@ -26,12 +26,7 @@ import v4.controllers.createUkPropertyPeriodSummary.model.request._
 
 import javax.inject.Inject
 
-
-class Def2_CreateUkPropertyPeriodSummaryValidator @Inject() (nino: String,
-                                                             businessId: String,
-                                                             taxYear: String,
-                                                             body: JsValue)
-
+class Def2_CreateUkPropertyPeriodSummaryValidator @Inject() (nino: String, businessId: String, taxYear: String, body: JsValue)
     extends Validator[CreateUkPropertyPeriodSummaryRequestData] {
 
   private val resolveJson    = new ResolveNonEmptyJsonObject[Def2_CreateUkPropertyPeriodSummaryRequestBody]()

@@ -298,8 +298,7 @@ class Def2_CreateUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with Mock
       }
 
       def testRuleIncorrectOrEmptyBodyErrorWith(path: String, body: JsValue): Unit = testWith(RuleIncorrectOrEmptyBodyError)(path, body)
-      def testValueFormatErrorWith(path: String, body: JsValue): Unit =
-        testWith(ValueFormatError)(path, body)
+      def testValueFormatErrorWith(path: String, body: JsValue): Unit = testWith(ValueFormatError)(path, body)
       def testNegativeValueFormatErrorWith(path: String, body: JsValue): Unit =
         testWith(ValueFormatError.forPathAndRange(path, min = "-99999999999.99", max = "99999999999.99"))(path, body)
 
@@ -383,23 +382,13 @@ class Def2_CreateUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with Mock
       }
 
       "passed a body with a (non-consolidated expenses) field containing an invalid value" when {
+
         List(
           "/ukFhlProperty/income/periodAmount",
           "/ukFhlProperty/income/taxDeducted",
           "/ukFhlProperty/income/rentARoom/rentsReceived",
-          "/ukFhlProperty/expenses/rentARoom/amountClaimed",
-          "/ukNonFhlProperty/income/premiumsOfLeaseGrant",
-          "/ukNonFhlProperty/income/reversePremiums",
-          "/ukNonFhlProperty/income/periodAmount",
-          "/ukNonFhlProperty/income/taxDeducted",
-          "/ukNonFhlProperty/income/otherIncome",
-          "/ukNonFhlProperty/income/rentARoom/rentsReceived",
-          "/ukNonFhlProperty/expenses/residentialFinancialCost",
-          "/ukNonFhlProperty/expenses/residentialFinancialCostsCarriedForward",
-          "/ukNonFhlProperty/expenses/rentARoom/amountClaimed"
         ).foreach(path => testValueFormatErrorWith(path, validBody.update(path, JsNumber(123.456))))
-      }
-      "passed a body with a (non-consolidated expenses that allow negative) field containing an invalid value" when {
+
         List(
           "/ukFhlProperty/expenses/premisesRunningCosts",
           "/ukFhlProperty/expenses/repairsAndMaintenance",

@@ -33,7 +33,7 @@ class AmendForeignPropertyPeriodSummaryValidatorFactory @Inject() (appConfig: Ap
                 taxYear: String,
                 submissionId: String,
                 body: JsValue): Validator[AmendForeignPropertyPeriodSummaryRequestData] = {
-    if (taxYear > "2023-24") {
+    if (taxYear >= "2024-25") {
       new Def2_AmendForeignPropertyPeriodSummaryValidator(nino, businessId, taxYear, submissionId, body, appConfig)
     } else {
       new Def1_AmendForeignPropertyPeriodSummaryValidator(nino, businessId, taxYear, submissionId, body, appConfig)

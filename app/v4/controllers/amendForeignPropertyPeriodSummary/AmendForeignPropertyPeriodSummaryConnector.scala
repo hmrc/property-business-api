@@ -14,47 +14,50 @@
  * limitations under the License.
  */
 
-package v4.controllers.amendUkPropertyPeriodSummary
+package v4.controllers.amendForeignPropertyPeriodSummary
 
 import api.connectors.DownstreamUri.{IfsUri, TaxYearSpecificIfsUri}
-import api.connectors.httpparsers.StandardDownstreamHttpParser.{SuccessCode, readsEmpty}
+import api.connectors.httpparsers.StandardDownstreamHttpParser.readsEmpty
 import api.connectors.{BaseDownstreamConnector, DownstreamOutcome}
 import config.AppConfig
-import play.api.http.Status.NO_CONTENT
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
-import v4.controllers.amendUkPropertyPeriodSummary.model.request.{AmendUkPropertyPeriodSummaryRequestData, Def1_AmendUkPropertyPeriodSummaryRequestData, Def2_AmendUkPropertyPeriodSummaryRequestData}
+import v4.controllers.amendForeignPropertyPeriodSummary.model.request.{
+  AmendForeignPropertyPeriodSummaryRequestData,
+  Def1_AmendForeignPropertyPeriodSummaryRequestData,
+  Def2_AmendForeignPropertyPeriodSummaryRequestData
+}
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class AmendUkPropertyPeriodSummaryConnector @Inject() (val http: HttpClient, val appConfig: AppConfig) extends BaseDownstreamConnector {
+class AmendForeignPropertyPeriodSummaryConnector @Inject() (val http: HttpClient, val appConfig: AppConfig) extends BaseDownstreamConnector {
 
-  def amendUkPropertyPeriodSummary(request: AmendUkPropertyPeriodSummaryRequestData)(implicit
+  def amendForeignPropertyPeriodSummary(request: AmendForeignPropertyPeriodSummaryRequestData)(implicit
       hc: HeaderCarrier,
       ec: ExecutionContext,
       correlationId: String): Future[DownstreamOutcome[Unit]] = {
 
-    implicit val successCode: SuccessCode = SuccessCode(NO_CONTENT)
-
     request match {
-      case def1: Def1_AmendUkPropertyPeriodSummaryRequestData =>
+      case def1: Def1_AmendForeignPropertyPeriodSummaryRequestData =>
         import def1._
-        val downstreamUri = if (taxYear.isTys) {
-          TaxYearSpecificIfsUri[Unit](
-            s"income-tax/business/property/periodic/${taxYear.asTysDownstream}?taxableEntityId=$nino&incomeSourceId=$businessId&submissionId=$submissionId")
-        } else
-          IfsUri[Unit](
-            s"income-tax/business/property/periodic?" + s"taxableEntityId=$nino&taxYear=${taxYear.asMtd}&incomeSourceId=$businessId&submissionId=$submissionId")
+        val downstreamUri =
+          if (taxYear.isTys) {
+            TaxYearSpecificIfsUri[Unit](
+              s"income-tax/business/property/periodic/${taxYear.asTysDownstream}?taxableEntityId=$nino&incomeSourceId=$businessId&submissionId=$submissionId")
+          } else
+            // Note that MTD tax year format is used
+            IfsUri[Unit](
+              s"income-tax/business/property/periodic?taxableEntityId=$nino&taxYear=${taxYear.asMtd}&incomeSourceId=$businessId&submissionId=$submissionId")
         put(def1.body, downstreamUri)
-
-      case def2: Def2_AmendUkPropertyPeriodSummaryRequestData =>
+      case def2: Def2_AmendForeignPropertyPeriodSummaryRequestData =>
         import def2._
         val downstreamUri = TaxYearSpecificIfsUri[Unit](
           s"income-tax/business/property/periodic/24-25?taxableEntityId=$nino&incomeSourceId=$businessId&submissionId=$submissionId")
         put(def2.body, downstreamUri)
 
     }
+
   }
 
 }

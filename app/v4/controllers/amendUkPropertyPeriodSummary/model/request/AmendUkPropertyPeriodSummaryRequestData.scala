@@ -32,3 +32,10 @@ case class Def1_AmendUkPropertyPeriodSummaryRequestData(nino: Nino,
                                                         submissionId: SubmissionId,
                                                         body: Def1_AmendUkPropertyPeriodSummaryRequestBody)
     extends AmendUkPropertyPeriodSummaryRequestData
+
+case class Def2_AmendUkPropertyPeriodSummaryRequestData(nino: Nino,
+                                                        taxYear: TaxYear,
+                                                        businessId: BusinessId,
+                                                        submissionId: SubmissionId,
+                                                        body: Def2_AmendUkPropertyPeriodSummaryRequestBody)
+  extends AmendUkPropertyPeriodSummaryRequestData

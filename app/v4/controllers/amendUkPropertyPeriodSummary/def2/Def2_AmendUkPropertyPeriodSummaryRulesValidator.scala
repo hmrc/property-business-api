@@ -81,17 +81,6 @@ class Def2_AmendUkPropertyPeriodSummaryRulesValidator extends RulesValidator[Def
       case None => valid
     }
 
-//    val validatedConsolidatedExpenses = expenses
-//      .map(_.consolidatedExpenses match {
-//        case None => valid
-//        case Some(_) =>
-//          ukFhlProperty.expenses match {
-//            case Some(Def2_Amend_UkFhlPropertyExpenses(None, None, None, None, None, None, Some(_), None, None)) => valid
-//            case _ => Invalid(List(RuleBothExpensesSuppliedError.withPath("/ukFhlProperty/expenses")))
-//          }
-//      })
-//      .getOrElse(valid)
-
     (validatedNonNegativeNumberFields ++ validatedMaybeNegativeNumberFields :+ validatedConsolidatedExpenses).sequence.andThen(_ => valid)
   }
 
@@ -156,18 +145,6 @@ class Def2_AmendUkPropertyPeriodSummaryRulesValidator extends RulesValidator[Def
       case Some(expenses) => validateNonFhlConsolidatedExpenses(expenses)
       case None => valid
     }
-
-//    val validatedConsolidatedExpenses = expenses
-//      .map(_.consolidatedExpenses match {
-//        case Some(expense) =>
-//          validateNonFhlConsolidatedExpenses(expense)
-//          expenses match {
-//            case Some(Def2_Amend_UkNonFhlPropertyExpenses(None, None, None, None, None, None, None, None, None, None, Some(_))) => valid
-//            case _ => Invalid(List(RuleBothExpensesSuppliedError.withPath("/ukNonFhlProperty/expenses")))
-//          }
-//        case None => valid
-//      })
-//      .getOrElse(valid)
 
     (validatedNonNegativeNumberFields ++ validatedMaybeNegativeNumberFields :+ validatedConsolidatedExpenses).sequence.andThen(_ => valid)
 

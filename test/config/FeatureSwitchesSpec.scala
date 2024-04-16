@@ -48,7 +48,8 @@ class FeatureSwitchesSpec extends UnitSpec with ScalaCheckPropertyChecks {
       "the feature switch is set to false" in {
         val config = Configuration(
           "passDeleteIntentHeader.enabled"  -> false,
-          "ruleSubmissionDateIssue.enabled" -> false
+          "ruleSubmissionDateIssue.enabled" -> false,
+          "allowNegativeExpenses.enabled"   -> false
         )
 
         val featureSwitches = FeatureSwitches(config)

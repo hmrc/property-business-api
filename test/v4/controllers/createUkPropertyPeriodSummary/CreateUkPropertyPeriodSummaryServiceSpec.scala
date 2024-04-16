@@ -42,7 +42,7 @@ class CreateUkPropertyPeriodSummaryServiceSpec extends ServiceSpec with MockCrea
     Def1_CreateUkPropertyPeriodSummaryRequestBody("2020-01-01", "2020-01-31", None, None)
 
   private val requestData: Def1_CreateUkPropertyPeriodSummaryRequestData =
-    Def1_CreateUkPropertyPeriodSummaryRequestData(nino, taxYear, businessId, requestBody)
+    Def1_CreateUkPropertyPeriodSummaryRequestData(nino, businessId, taxYear, requestBody)
 
   private val responseData: CreateUkPropertyPeriodSummaryResponse = CreateUkPropertyPeriodSummaryResponse(
     submissionId = "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"

@@ -17,20 +17,20 @@
 package v4.controllers.createUkPropertyPeriodSummary
 
 import api.controllers.validators.Validator
-import api.models.domain.TaxYear
 import api.models.utils.JsonErrorValidators
 import mocks.MockAppConfig
 import play.api.libs.json._
 import support.UnitSpec
 import v4.controllers.createUkPropertyPeriodSummary.def1.Def1_CreateUkPropertyPeriodSummaryValidator
+import v4.controllers.createUkPropertyPeriodSummary.def2.Def2_CreateUkPropertyPeriodSummaryValidator
 import v4.controllers.createUkPropertyPeriodSummary.model.request.CreateUkPropertyPeriodSummaryRequestData
 
 class CreateUkPropertyPeriodSummaryValidatorFactorySpec extends UnitSpec with MockAppConfig with JsonErrorValidators {
 
-  private val validNino       = "AA123456A"
-  private val validTaxYear    = "2023-24"
-  private val validTysTaxYear = "2023-24"
-  private val validBusinessId = "XAIS12345678901"
+  private val validNino            = "AA123456A"
+  private val validTysTaxYear      = "2023-24"
+  private val validSpecificTaxYear = "2024-25"
+  private val validBusinessId      = "XAIS12345678901"
 
   private val validBody = Json.parse("""
       |{
@@ -86,24 +86,22 @@ class CreateUkPropertyPeriodSummaryValidatorFactorySpec extends UnitSpec with Mo
       |}
       |""".stripMargin)
 
-  private val validatorFactory   = new CreateUkPropertyPeriodSummaryValidatorFactory(mockAppConfig)
-  private def setupMocks(): Unit = MockedAppConfig.minimumTaxV2Uk.returns(TaxYear.starting(2022)).anyNumberOfTimes()
+  private val validatorFactory = new CreateUkPropertyPeriodSummaryValidatorFactory(mockAppConfig)
 
   "validator" when {
     "given a valid request" should {
       "return the Validator for schema definition 1" in {
-        setupMocks()
         val result: Validator[CreateUkPropertyPeriodSummaryRequestData] =
-          validatorFactory.validator(validNino, validTysTaxYear, validBusinessId, validBody)
+          validatorFactory.validator(validNino, validBusinessId, validTysTaxYear, validBody)
 
         result shouldBe a[Def1_CreateUkPropertyPeriodSummaryValidator]
       }
 
-      "passed the minimum supported taxYear" in {
-        setupMocks()
+      "return the Validator for schema definition 2" in {
         val result: Validator[CreateUkPropertyPeriodSummaryRequestData] =
-          validatorFactory.validator(validNino, validTaxYear, validBusinessId, validBody)
-        result shouldBe a[Def1_CreateUkPropertyPeriodSummaryValidator]
+          validatorFactory.validator(validNino, validBusinessId, validSpecificTaxYear, validBody)
+
+        result shouldBe a[Def2_CreateUkPropertyPeriodSummaryValidator]
       }
     }
 

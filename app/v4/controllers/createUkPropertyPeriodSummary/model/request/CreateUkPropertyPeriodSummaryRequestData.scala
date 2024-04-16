@@ -20,13 +20,19 @@ import api.models.domain.{BusinessId, Nino, TaxYear}
 
 sealed trait CreateUkPropertyPeriodSummaryRequestData {
   val nino: Nino
-  val taxYear: TaxYear
   val businessId: BusinessId
+  val taxYear: TaxYear
   def body: CreateUkPropertyPeriodSummaryRequestBody
 }
 
 case class Def1_CreateUkPropertyPeriodSummaryRequestData(nino: Nino,
-                                                         taxYear: TaxYear,
                                                          businessId: BusinessId,
+                                                         taxYear: TaxYear,
                                                          body: Def1_CreateUkPropertyPeriodSummaryRequestBody)
     extends CreateUkPropertyPeriodSummaryRequestData
+
+case class Def2_CreateUkPropertyPeriodSummaryRequestData(nino: Nino,
+                                                         businessId: BusinessId,
+                                                         taxYear: TaxYear,
+                                                         body: Def2_CreateUkPropertyPeriodSummaryRequestBody)
+  extends CreateUkPropertyPeriodSummaryRequestData

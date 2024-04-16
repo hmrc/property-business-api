@@ -40,16 +40,22 @@ post:
     content:
       application/json:
         schema:
-          $ref: './schemas/uk_property_period_summary_create/request.json'
+          oneOf:
+            - $ref: './schemas/uk_property_period_summary_create/def1/request.json'
+            - $ref: './schemas/uk_property_period_summary_create/def2/request.json'
         examples:
           full-expense-request:
             description: Full Expenses request
             value:
-              $ref: './examples/uk_property_period_summary_create/request.json'
+              $ref: './examples/uk_property_period_summary_create/def1/request.json'
           consolidated-expense-request:
             description: Consolidated Expenses request
             value:
-              $ref: './examples/uk_property_period_summary_create/consolidated_request.json'
+              $ref: './examples/uk_property_period_summary_create/def1/consolidated_request.json'
+          consolidated-expense-request-for-TY-2024-25:
+            description: Consolidated Expenses request for TY 2024-25
+            value:
+              $ref: './examples/uk_property_period_summary_create/def2/consolidated_request.json'
 
   responses:
     "201":

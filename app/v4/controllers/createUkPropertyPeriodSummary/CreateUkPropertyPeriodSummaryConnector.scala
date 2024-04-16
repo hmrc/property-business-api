@@ -24,7 +24,8 @@ import play.api.http.Status.OK
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
 import v4.controllers.createUkPropertyPeriodSummary.model.request.{
   CreateUkPropertyPeriodSummaryRequestData,
-  Def1_CreateUkPropertyPeriodSummaryRequestData
+  Def1_CreateUkPropertyPeriodSummaryRequestData,
+  Def2_CreateUkPropertyPeriodSummaryRequestData
 }
 import v4.controllers.createUkPropertyPeriodSummary.model.response.CreateUkPropertyPeriodSummaryResponse
 
@@ -49,7 +50,12 @@ class CreateUkPropertyPeriodSummaryConnector @Inject() (val http: HttpClient, va
           // Note that MTD tax year format is used pre-TYS
           IfsUri(s"income-tax/business/property/periodic?taxableEntityId=$nino&taxYear=${taxYear.asMtd}&incomeSourceId=$businessId")
         }
+        post(body, downstreamUri)
 
+      case def2: Def2_CreateUkPropertyPeriodSummaryRequestData =>
+        import def2._
+        val downstreamUri: DownstreamUri[CreateUkPropertyPeriodSummaryResponse] = TaxYearSpecificIfsUri(
+          s"income-tax/business/property/periodic/${taxYear.asTysDownstream}?taxableEntityId=$nino&incomeSourceId=$businessId")
         post(body, downstreamUri)
     }
   }

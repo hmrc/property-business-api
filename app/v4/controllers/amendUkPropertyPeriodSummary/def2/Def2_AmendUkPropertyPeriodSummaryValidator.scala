@@ -21,17 +21,13 @@ import api.controllers.validators.resolvers._
 import api.models.errors.MtdError
 import cats.data.Validated
 import cats.implicits.catsSyntaxTuple5Semigroupal
-import config.AppConfig
 import play.api.libs.json.JsValue
 import v4.controllers.amendUkPropertyPeriodSummary.model.request._
 
 import javax.inject.Inject
 
-class Def2_AmendUkPropertyPeriodSummaryValidator @Inject()(nino: String, businessId: String, taxYear: String, submissionId: String, body: JsValue)(
-  appConfig: AppConfig)
+class Def2_AmendUkPropertyPeriodSummaryValidator @Inject() (nino: String, businessId: String, taxYear: String, submissionId: String, body: JsValue)
     extends Validator[AmendUkPropertyPeriodSummaryRequestData] {
-
-  private val minTaxYear = appConfig.minimumTaxV2Uk
 
   private val resolveJson    = new ResolveNonEmptyJsonObject[Def2_AmendUkPropertyPeriodSummaryRequestBody]()
   private val rulesValidator = new Def2_AmendUkPropertyPeriodSummaryRulesValidator()
@@ -39,7 +35,7 @@ class Def2_AmendUkPropertyPeriodSummaryValidator @Inject()(nino: String, busines
   def validate: Validated[Seq[MtdError], AmendUkPropertyPeriodSummaryRequestData] =
     (
       ResolveNino(nino),
-      ResolveTaxYear(minTaxYear, taxYear),
+      ResolveTaxYear(taxYear),
       ResolveBusinessId(businessId),
       ResolveSubmissionId(submissionId),
       resolveJson(body)

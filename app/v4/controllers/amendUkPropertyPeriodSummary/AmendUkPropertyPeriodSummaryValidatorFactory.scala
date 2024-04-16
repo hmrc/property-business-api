@@ -32,8 +32,8 @@ class AmendUkPropertyPeriodSummaryValidatorFactory @Inject() (appConfig: AppConf
                 taxYear: String,
                 submissionId: String,
                 body: JsValue): Validator[AmendUkPropertyPeriodSummaryRequestData] = {
-    if (taxYear > "2023-24") {
-      new Def2_AmendUkPropertyPeriodSummaryValidator(nino, businessId, taxYear, submissionId, body)(appConfig)
+    if (taxYear >= "2024-25") {
+      new Def2_AmendUkPropertyPeriodSummaryValidator(nino, businessId, taxYear, submissionId, body)
     } else {
       new Def1_AmendUkPropertyPeriodSummaryValidator(nino, businessId, taxYear, submissionId, body)(appConfig)
     }

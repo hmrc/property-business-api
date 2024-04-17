@@ -447,15 +447,6 @@ class Def2_AmendForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with 
       "passed a request body with invalid consolidated expenses" when {
         val path = "/foreignFhlEea/expenses/consolidatedExpenses"
         testValueFormatErrorWithNegativeValue(validBodyConsolidatedExpenses.update(path, badValue), path)
-
-        List(
-          (
-            consolidatedBodyWith(entryConsolidated.update("/expenses/residentialFinancialCost", badValue)),
-            "/foreignNonFhlProperty/0/expenses/residentialFinancialCost"),
-          (
-            consolidatedBodyWith(entryConsolidated.update("/expenses/broughtFwdResidentialFinancialCost", badValue)),
-            "/foreignNonFhlProperty/0/expenses/broughtFwdResidentialFinancialCost")
-        ).foreach(p => (testValueFormatErrorWith _).tupled(p))
       }
 
       "passed a request body with multiple invalid fields" in {

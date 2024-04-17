@@ -23,6 +23,7 @@ import mocks.MockAppConfig
 import play.api.libs.json._
 import support.UnitSpec
 import v4.createForeignPropertyPeriodSummary.def1.Def1_CreateForeignPropertyPeriodSummaryValidator
+import v4.createForeignPropertyPeriodSummary.def2.Def2_CreateForeignPropertyPeriodSummaryValidator
 import v4.createForeignPropertyPeriodSummary.model.request.CreateForeignPropertyPeriodSummaryRequestData
 
 class CreateForeignPropertyPeriodSummaryValidatorFactorySpec extends UnitSpec with MockAppConfig with JsonErrorValidators {
@@ -30,9 +31,13 @@ class CreateForeignPropertyPeriodSummaryValidatorFactorySpec extends UnitSpec wi
   private val validNino       = "AA123456A"
   private val validBusinessId = "XAIS12345678901"
   private val validTaxYear    = "2023-24"
+  private val validTyTaxYear  = "2024-25"
 
   private val validFromDate = "2020-03-29"
   private val validToDate   = "2021-03-29"
+
+  private val validFromDateTy = "2024-04-06"
+  private val validToDateTy   = "2024-07-05"
 
   private def validBody(startDate: String, endDate: String) = Json.parse(s"""
        |{
@@ -48,11 +53,21 @@ class CreateForeignPropertyPeriodSummaryValidatorFactorySpec extends UnitSpec wi
   "validator()" when {
     "given a valid tax year" should {
       "return the Validator for schema definition 1" in {
+
         MockedAppConfig.minimumTaxV2Foreign.returns(TaxYear.starting(2021)).anyNumberOfTimes()
         val requestBody = validBody(validFromDate, validToDate)
         val result: Validator[CreateForeignPropertyPeriodSummaryRequestData] =
           validatorFactory.validator(validNino, validBusinessId, validTaxYear, requestBody)
+
         result shouldBe a[Def1_CreateForeignPropertyPeriodSummaryValidator]
+      }
+      "return the Validator for schema definition 2" in {
+
+        val requestBody = validBody(validFromDateTy, validToDateTy)
+        val result: Validator[CreateForeignPropertyPeriodSummaryRequestData] =
+          validatorFactory.validator(validNino, validBusinessId, validTyTaxYear, requestBody)
+
+        result shouldBe a[Def2_CreateForeignPropertyPeriodSummaryValidator]
       }
     }
   }

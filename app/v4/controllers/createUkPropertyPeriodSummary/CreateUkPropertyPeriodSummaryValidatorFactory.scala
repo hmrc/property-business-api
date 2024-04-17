@@ -33,6 +33,7 @@ class CreateUkPropertyPeriodSummaryValidatorFactory @Inject() (appConfig: AppCon
       new Def2_CreateUkPropertyPeriodSummaryValidator(nino, businessId, taxYear, body)
     } else {
       new Def1_CreateUkPropertyPeriodSummaryValidator(nino, businessId, taxYear, body)(appConfig)
+
     }
   }
 

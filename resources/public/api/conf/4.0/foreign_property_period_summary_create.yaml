@@ -42,16 +42,26 @@ post:
     content:
       application/json:
         schema:
-          $ref: './schemas/foreign_property_period_summary_create/request.json'
+          oneOf:
+            - $ref: './schemas/foreign_property_period_summary_create/def1/request.json'
+            - $ref: './schemas/foreign_property_period_summary_create/def2/request.json'
         examples:
-          full-expenditure-request:
-            description: Full Expenditure request
+          full-expenditure-request-for-TY-2023-24:
+            description: Full Expenditure request for TY 2023-24 and before
             value:
-              $ref: './examples/foreign_property_period_summary_create/request.json'
-          consolidated-expenditure-request:
-            description: Consolidated Expenditure request
+              $ref: './examples/foreign_property_period_summary_create/def1/request.json'
+          consolidated-expenditure-request-for-TY-2023-24:
+            description: Consolidated Expenditure request for TY 2023-24 and before
             value:
-              $ref: './examples/foreign_property_period_summary_create/consolidated_request.json'
+              $ref: './examples/foreign_property_period_summary_create/def1/consolidated_request.json'
+          full-expenditure-request-for-TY-2024-25:
+            description: Full Expenditure request for TY 2024-25 and after
+            value:
+              $ref: './examples/foreign_property_period_summary_create/def2/request.json'
+          consolidated-expenditure-request-for-TY-2024-25:
+            description: Consolidated Expenditure request for TY 2024-25 and after
+            value:
+              $ref: './examples/foreign_property_period_summary_create/def2/consolidated_request.json'
 
   responses:
     "201":

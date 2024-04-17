@@ -44,7 +44,7 @@ class Def2_AmendForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with 
 
   private val validNino         = "AA123456A"
   private val validBusinessId   = "XAIS12345678901"
-  private val validTaxYear      = "2023-24"
+  private val validTaxYear      = "2024-25"
   private val validSubmissionId = "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
 
   private val countryCode = "AFG"

@@ -39,16 +39,26 @@ requestBody:
   content:
     application/json:
       schema:
-        $ref: './schemas/foreign_property_period_summary_amend/request.json'
+        oneOf:
+          - $ref: './schemas/foreign_property_period_summary_amend/def1/request.json'
+          - $ref: './schemas/foreign_property_period_summary_amend/def2/request.json'
       examples:
         full-expenses-request:
           description: Full Expenses request
           value:
-            $ref: './examples/foreign_property_period_summary_amend/request.json'
+            $ref: './examples/foreign_property_period_summary_amend/def1/request.json'
         consolidated-expenses-request:
           description: Consolidated Expenses request
           value:
-            $ref: './examples/foreign_property_period_summary_amend/consolidated_request.json'
+            $ref: './examples/foreign_property_period_summary_amend/def1/consolidated_request.json'
+        full-expenses-request-for-TY-2024-25:
+          description: Full Expenses request for TY 2024-25
+          value:
+            $ref: './examples/foreign_property_period_summary_amend/def2/request.json'
+        consolidated-expenses-request-for-TY-2024-25:
+          description: Consolidated Expenses request for TY 2024-25
+          value:
+            $ref: './examples/foreign_property_period_summary_amend/def2/consolidated_request.json'
 
 responses:
   "200":

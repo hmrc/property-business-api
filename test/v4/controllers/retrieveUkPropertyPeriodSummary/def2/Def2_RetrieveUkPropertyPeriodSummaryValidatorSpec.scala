@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package v4.controllers.retrieveUkPropertyPeriodSummary.def1
+package v4.controllers.retrieveUkPropertyPeriodSummary.def2
 
 import api.models.domain.{BusinessId, Nino, SubmissionId, TaxYear}
 import api.models.errors._
@@ -23,7 +23,7 @@ import support.UnitSpec
 import v4.controllers.retrieveUkPropertyPeriodSummary.RetrieveUkPropertyPeriodSummaryValidatorFactory
 import v4.controllers.retrieveUkPropertyPeriodSummary.model.request.{Def1_RetrieveUkPropertyPeriodSummaryRequestData, RetrieveUkPropertyPeriodSummaryRequestData}
 
-class Def1_RetrieveUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with MockAppConfig {
+class Def2_RetrieveUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with MockAppConfig {
 
   private implicit val correlationId: String = "1234"
 

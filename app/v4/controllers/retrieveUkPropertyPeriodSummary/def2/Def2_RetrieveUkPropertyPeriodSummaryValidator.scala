@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package v4.controllers.retrieveUkPropertyPeriodSummary.def1
+package v4.controllers.retrieveUkPropertyPeriodSummary.def2
 
 import api.controllers.validators.Validator
 import api.controllers.validators.resolvers.{ResolveBusinessId, ResolveNino, ResolveSubmissionId, ResolveTaxYear}
@@ -22,11 +22,11 @@ import api.models.errors.MtdError
 import cats.data.Validated
 import cats.implicits.catsSyntaxTuple4Semigroupal
 import config.AppConfig
-import v4.controllers.retrieveUkPropertyPeriodSummary.model.request.{Def1_RetrieveUkPropertyPeriodSummaryRequestData, RetrieveUkPropertyPeriodSummaryRequestData}
+import v4.controllers.retrieveUkPropertyPeriodSummary.model.request.{Def2_RetrieveUkPropertyPeriodSummaryRequestData, RetrieveUkPropertyPeriodSummaryRequestData}
 
 import javax.inject.Inject
 
-class Def1_RetrieveUkPropertyPeriodSummaryValidator @Inject() (nino: String, businessId: String, taxYear: String, submissionId: String)(
+class Def2_RetrieveUkPropertyPeriodSummaryValidator @Inject() (nino: String, businessId: String, taxYear: String, submissionId: String)(
     appConfig: AppConfig)
     extends Validator[RetrieveUkPropertyPeriodSummaryRequestData] {
 
@@ -38,6 +38,6 @@ class Def1_RetrieveUkPropertyPeriodSummaryValidator @Inject() (nino: String, bus
       ResolveBusinessId(businessId),
       ResolveTaxYear(minimumTaxYear, taxYear),
       ResolveSubmissionId(submissionId)
-    ).mapN(Def1_RetrieveUkPropertyPeriodSummaryRequestData)
+    ).mapN(Def2_RetrieveUkPropertyPeriodSummaryRequestData)
 
 }

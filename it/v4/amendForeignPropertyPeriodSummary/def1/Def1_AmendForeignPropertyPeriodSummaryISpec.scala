@@ -26,7 +26,7 @@ import play.api.test.Helpers.AUTHORIZATION
 import support.IntegrationBaseSpec
 import v4.stubs._
 
-class AmendForeignPropertyPeriodSummaryControllerISpec extends IntegrationBaseSpec {
+class Def1_AmendForeignPropertyPeriodSummaryISpec extends IntegrationBaseSpec {
 
   private val requestBodyJson = Json.parse(
     """

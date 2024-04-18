@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package v4.endpoints
+package v4.amendUkPropertyPeriodSummary.def1
 
 import api.models.errors._
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
@@ -26,7 +26,7 @@ import play.api.test.Helpers.AUTHORIZATION
 import support.IntegrationBaseSpec
 import v4.stubs._
 
-class AmendUkPropertyPeriodSummaryControllerISpec extends IntegrationBaseSpec {
+class Def1_AmendUkPropertyPeriodSummaryISpec extends IntegrationBaseSpec {
 
   val requestBodyJson: JsValue = Json.parse(
     """{

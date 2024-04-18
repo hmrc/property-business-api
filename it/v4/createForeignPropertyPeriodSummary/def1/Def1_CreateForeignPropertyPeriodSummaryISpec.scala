@@ -27,7 +27,7 @@ import play.api.test.Helpers.AUTHORIZATION
 import support.IntegrationBaseSpec
 import v4.stubs._
 
-class CreateForeignPropertyPeriodSummaryControllerISpec extends IntegrationBaseSpec with JsonErrorValidators {
+class Def1_CreateForeignPropertyPeriodSummaryISpec extends IntegrationBaseSpec with JsonErrorValidators {
 
   private def nonFhlEntryWith(countryCode: String) =
     Json.parse(s"""

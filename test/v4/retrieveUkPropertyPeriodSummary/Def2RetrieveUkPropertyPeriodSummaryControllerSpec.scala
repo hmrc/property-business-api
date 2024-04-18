@@ -23,7 +23,10 @@ import api.models.domain.{BusinessId, Nino, SubmissionId, TaxYear}
 import api.models.errors._
 import api.models.outcomes.ResponseWrapper
 import play.api.mvc.Result
-import v4.retrieveUkPropertyPeriodSummary.def2.model.{Def2_RetrieveUkPropertyPeriodSummaryConsolidatedFixture, Def2_RetrieveUkPropertyPeriodSummaryFixture}
+import v4.retrieveUkPropertyPeriodSummary.def2.model.{
+  Def2_RetrieveUkPropertyPeriodSummaryConsolidatedFixture,
+  Def2_RetrieveUkPropertyPeriodSummaryFixture
+}
 import v4.retrieveUkPropertyPeriodSummary.model.request._
 import v4.retrieveUkPropertyPeriodSummary.model.response.{RetrieveUkPropertyPeriodSummaryHateoasData, RetrieveUkPropertyPeriodSummaryResponse}
 
@@ -31,7 +34,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class Def2RetrieveUkPropertyPeriodSummaryControllerSpec
-  extends ControllerBaseSpec
+    extends ControllerBaseSpec
     with ControllerTestRunner
     with MockRetrieveUkPropertyPeriodSummaryService
     with MockRetrieveUkPropertyPeriodSummaryValidatorFactory
@@ -107,7 +110,7 @@ class Def2RetrieveUkPropertyPeriodSummaryControllerSpec
 }
 
 class Def2RetrieveUkPropertyPeriodSummaryConsolidatedControllerSpec
-  extends ControllerBaseSpec
+    extends ControllerBaseSpec
     with ControllerTestRunner
     with MockRetrieveUkPropertyPeriodSummaryService
     with MockRetrieveUkPropertyPeriodSummaryValidatorFactory
@@ -169,7 +172,11 @@ class Def2RetrieveUkPropertyPeriodSummaryConsolidatedControllerSpec
     protected def callController(): Future[Result] = controller.handleRequest(nino, businessId, taxYear, submissionId)(fakeGetRequest)
 
     protected val requestData: RetrieveUkPropertyPeriodSummaryRequestData =
-      Def2_RetrieveUkPropertyPeriodSummaryConsolidatedRequestData(Nino(nino), BusinessId(businessId), TaxYear.fromMtd(taxYear), SubmissionId(submissionId))
+      Def2_RetrieveUkPropertyPeriodSummaryConsolidatedRequestData(
+        Nino(nino),
+        BusinessId(businessId),
+        TaxYear.fromMtd(taxYear),
+        SubmissionId(submissionId))
 
     protected val testHateoasLink: Link =
       Link(href = s"/individuals/business/property/$nino/$businessId/period/$taxYear/$submissionId", method = GET, rel = "self")
@@ -179,4 +186,5 @@ class Def2RetrieveUkPropertyPeriodSummaryConsolidatedControllerSpec
 
     protected val responseData: RetrieveUkPropertyPeriodSummaryResponse = fullResponseModel
   }
+
 }

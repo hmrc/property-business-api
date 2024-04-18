@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package v4.endpoints
+package v4.retrieveUkPropertyPeriodSummary.def1
 
 import api.models.domain.TaxYear
 import api.models.errors._
@@ -27,7 +27,7 @@ import play.api.test.Helpers.AUTHORIZATION
 import support.IntegrationBaseSpec
 import v4.stubs._
 
-class RetrieveUkPropertyPeriodSummaryControllerISpec extends IntegrationBaseSpec {
+class Def1_RetrieveUkPropertyPeriodSummaryISpec extends IntegrationBaseSpec {
 
   private trait Test {
 

@@ -37,7 +37,7 @@ class ApiDefinitionFactory @Inject() (appConfig: AppConfig) extends Logging {
 
   lazy val definition: Definition =
     Definition(
-      scopes = Seq(
+      scopes = List(
         Scope(
           key = readScope,
           name = "View your Self Assessment information",
@@ -55,8 +55,8 @@ class ApiDefinitionFactory @Inject() (appConfig: AppConfig) extends Logging {
         name = "Property Business (MTD)",
         description = "An API for providing property business data",
         context = appConfig.apiGatewayContext,
-        categories = Seq("INCOME_TAX_MTD"),
-        versions = Seq(
+        categories = List("INCOME_TAX_MTD"),
+        versions = List(
           APIVersion(
             version = Version2,
             status = buildAPIStatus(Version2),

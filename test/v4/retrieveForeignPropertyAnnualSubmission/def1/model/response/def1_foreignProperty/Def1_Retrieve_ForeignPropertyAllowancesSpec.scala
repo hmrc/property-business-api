@@ -30,7 +30,7 @@ class Def1_Retrieve_ForeignPropertyAllowancesSpec extends UnitSpec {
     Some(100.25),
     Some(100.25),
     Some(
-      Seq(
+      List(
         Def1_Retrieve_StructuredBuildingAllowance(
           100.25,
           Some(

@@ -144,7 +144,7 @@ class RetrieveUkPropertyAnnualSubmissionControllerSpec
           propertyIncomeAllowance = None,
           electricChargePointAllowance = Some(454.34),
           structuredBuildingAllowance = Some(
-            Seq(
+            List(
               UkNonFhlPropertyStructuredBuildingAllowance(
                 amount = 234.34,
                 firstYear = Some(
@@ -161,7 +161,7 @@ class RetrieveUkPropertyAnnualSubmissionControllerSpec
               )
             )),
           enhancedStructuredBuildingAllowance = Some(
-            Seq(
+            List(
               UkNonFhlPropertyStructuredBuildingAllowance(
                 amount = 234.45,
                 firstYear = Some(

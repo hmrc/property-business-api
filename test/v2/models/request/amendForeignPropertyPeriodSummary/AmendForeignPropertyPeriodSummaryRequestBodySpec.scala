@@ -40,7 +40,7 @@ class AmendForeignPropertyPeriodSummaryRequestBodySpec extends UnitSpec {
           ))
       )),
     Some(
-      Seq(AmendForeignNonFhlPropertyEntry(
+      List(AmendForeignNonFhlPropertyEntry(
         "FRA",
         Some(
           ForeignNonFhlPropertyIncome(

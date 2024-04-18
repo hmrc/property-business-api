@@ -53,7 +53,7 @@ class Def2RetrieveUkPropertyPeriodSummaryControllerSpec
 
         MockHateoasFactory
           .wrap(responseData, hateoasData)
-          .returns(HateoasWrapper(responseData, Seq(testHateoasLink)))
+          .returns(HateoasWrapper(responseData, List(testHateoasLink)))
 
         runOkTest(expectedStatus = OK, maybeExpectedResponseBody = Some(mtdResponseWithHateoas))
       }
@@ -129,7 +129,7 @@ class Def2RetrieveUkPropertyPeriodSummaryConsolidatedControllerSpec
 
         MockHateoasFactory
           .wrap(responseData, hateoasData)
-          .returns(HateoasWrapper(responseData, Seq(testHateoasLink)))
+          .returns(HateoasWrapper(responseData, List(testHateoasLink)))
 
         runOkTest(expectedStatus = OK, maybeExpectedResponseBody = Some(mtdResponseWithHateoas))
       }

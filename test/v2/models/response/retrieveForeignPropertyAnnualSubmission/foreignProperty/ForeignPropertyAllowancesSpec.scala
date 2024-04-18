@@ -30,7 +30,7 @@ class ForeignPropertyAllowancesSpec extends UnitSpec {
     Some(100.25),
     Some(100.25),
     Some(
-      Seq(
+      List(
         StructuredBuildingAllowance(
           100.25,
           Some(

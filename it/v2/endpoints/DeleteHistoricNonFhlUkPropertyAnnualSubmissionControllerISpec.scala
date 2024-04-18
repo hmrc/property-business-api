@@ -44,7 +44,7 @@ class DeleteHistoricNonFhlUkPropertyAnnualSubmissionControllerISpec extends Inte
       buildRequest(uri)
         .withHttpHeaders(
           (ACCEPT, "application/vnd.hmrc.2.0+json"),
-          (AUTHORIZATION, "Bearer 123") // some bearer token
+          (AUTHORIZATION, "Bearer 123")
         )
     }
 
@@ -99,7 +99,7 @@ class DeleteHistoricNonFhlUkPropertyAnnualSubmissionControllerISpec extends Inte
           }
         }
 
-        val input = Seq(
+        val input = List(
           ("hello", "2021-22", BAD_REQUEST, NinoFormatError),
           ("AA123456A", "Beans", BAD_REQUEST, TaxYearFormatError),
           ("AA123456A", "2021-23", BAD_REQUEST, RuleTaxYearRangeInvalidError),
@@ -125,7 +125,7 @@ class DeleteHistoricNonFhlUkPropertyAnnualSubmissionControllerISpec extends Inte
           }
         }
 
-        val input = Seq(
+        val input = List(
           (BAD_REQUEST, "INVALID_NINO", BAD_REQUEST, NinoFormatError),
           (BAD_REQUEST, "INVALID_TAX_YEAR", BAD_REQUEST, TaxYearFormatError),
           (BAD_REQUEST, "INVALID_TYPE", INTERNAL_SERVER_ERROR, InternalError),

@@ -277,7 +277,7 @@ class RetrieveForeignPropertyPeriodSummaryControllerISpec extends IntegrationBas
       buildRequest(mtdUri)
         .withHttpHeaders(
           (ACCEPT, "application/vnd.hmrc.2.0+json"),
-          (AUTHORIZATION, "Bearer 123") // some bearer token
+          (AUTHORIZATION, "Bearer 123")
         )
     }
 

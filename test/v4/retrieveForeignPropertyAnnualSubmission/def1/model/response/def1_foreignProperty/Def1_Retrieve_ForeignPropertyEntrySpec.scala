@@ -38,7 +38,7 @@ class Def1_Retrieve_ForeignPropertyEntrySpec extends UnitSpec {
         Some(100.25),
         Some(100.25),
         Some(
-          Seq(
+          List(
             Def1_Retrieve_StructuredBuildingAllowance(
               100.25,
               Some(Def1_Retrieve_FirstYear(
@@ -67,7 +67,7 @@ class Def1_Retrieve_ForeignPropertyEntrySpec extends UnitSpec {
         Some(100.25),
         Some(100.25),
         Some(
-          Seq(
+          List(
             Def1_Retrieve_StructuredBuildingAllowance(
               100.25,
               Some(Def1_Retrieve_FirstYear(

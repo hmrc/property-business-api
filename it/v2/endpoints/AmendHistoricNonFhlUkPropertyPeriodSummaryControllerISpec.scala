@@ -207,14 +207,14 @@ class AmendHistoricNonFhlUkPropertyPeriodSummaryControllerISpec extends Integrat
         }
       }
 
-      val input = Seq(
+      val input = List(
         ("AA1123A", "2017-04-06_2017-07-04", requestBodyJson, BAD_REQUEST, NinoFormatError),
         (
           "AA123456A",
           "2017-04-06_2017-07-04",
           requestBodyJsonConsolidatedExpenses.update("/expenses/premisesRunningCosts", JsNumber(1)),
           BAD_REQUEST,
-          RuleBothExpensesSuppliedError.copy(paths = Some(Seq("/expenses/consolidatedExpenses")))),
+          RuleBothExpensesSuppliedError.copy(paths = Some(List("/expenses/consolidatedExpenses")))),
         (
           "AA123456A",
           "2017-04-06_2017-07-04",
@@ -243,7 +243,7 @@ class AmendHistoricNonFhlUkPropertyPeriodSummaryControllerISpec extends Integrat
         }
       }
 
-      val input = Seq(
+      val input = List(
         (BAD_REQUEST, "INVALID_NINO", BAD_REQUEST, NinoFormatError),
         (BAD_REQUEST, "INVALID_TYPE", INTERNAL_SERVER_ERROR, InternalError),
         (BAD_REQUEST, "INVALID_PAYLOAD", INTERNAL_SERVER_ERROR, InternalError),

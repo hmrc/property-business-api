@@ -53,7 +53,7 @@ class RetrieveUkPropertyPeriodSummaryControllerSpec
 
         MockHateoasFactory
           .wrap(responseData, hateoasData)
-          .returns(HateoasWrapper(responseData, Seq(testHateoasLink)))
+          .returns(HateoasWrapper(responseData, List(testHateoasLink)))
 
         runOkTest(expectedStatus = OK, maybeExpectedResponseBody = Some(mtdResponseWithHateoas))
       }

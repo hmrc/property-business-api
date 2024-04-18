@@ -73,7 +73,7 @@ object Def1_RetrieveUkPropertyPeriodSummaryResponse extends HateoasLinks {
 
     override def links(appConfig: AppConfig, data: RetrieveUkPropertyPeriodSummaryHateoasData): Seq[Link] = {
       import data._
-      Seq(
+      List(
         amendUkPropertyPeriodSummary(appConfig, nino, businessId, taxYear, submissionId),
         retrieveUkPropertyPeriodSummary(appConfig, nino, businessId, taxYear, submissionId, self = true),
         listPropertyPeriodSummaries(appConfig, nino, businessId, taxYear, self = false)
@@ -110,7 +110,7 @@ object Def2_RetrieveUkPropertyPeriodSummaryResponse extends HateoasLinks {
 
     override def links(appConfig: AppConfig, data: RetrieveUkPropertyPeriodSummaryHateoasData): Seq[Link] = {
       import data._
-      Seq(
+      List(
         amendUkPropertyPeriodSummary(appConfig, nino, businessId, taxYear, submissionId),
         retrieveUkPropertyPeriodSummary(appConfig, nino, businessId, taxYear, submissionId, self = true),
         listPropertyPeriodSummaries(appConfig, nino, businessId, taxYear, self = false)
@@ -148,7 +148,7 @@ object Def2_RetrieveUkPropertyPeriodSummaryConsolidatedResponse extends HateoasL
 
     override def links(appConfig: AppConfig, data: RetrieveUkPropertyPeriodSummaryHateoasData): Seq[Link] = {
       import data._
-      Seq(
+      List(
         amendUkPropertyPeriodSummary(appConfig, nino, businessId, taxYear, submissionId),
         retrieveUkPropertyPeriodSummary(appConfig, nino, businessId, taxYear, submissionId, self = true),
         listPropertyPeriodSummaries(appConfig, nino, businessId, taxYear, self = false)

@@ -92,10 +92,10 @@ trait CreateForeignPropertyPeriodSummaryFixtures {
     ))
 
   private val regularForeignNonFhlProperty = Some(
-    Seq(CreateForeignNonFhlPropertyEntry(countryCode = "FRA", income = foreignNonFhlPropertyIncome, expenses = regularForeignNonFhlPropertyExpenses)))
+    List(CreateForeignNonFhlPropertyEntry(countryCode = "FRA", income = foreignNonFhlPropertyIncome, expenses = regularForeignNonFhlPropertyExpenses)))
 
   private val consolidatedForeignNonFhlProperty = Some(
-    Seq(
+    List(
       CreateForeignNonFhlPropertyEntry(
         countryCode = "FRA",
         income = foreignNonFhlPropertyIncome,

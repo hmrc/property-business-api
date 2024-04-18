@@ -43,12 +43,12 @@ object ListHistoricUkPropertyPeriodSummariesResponse extends HateoasLinks {
 
       data.propertyType match {
         case HistoricPropertyType.Fhl =>
-          Seq(
+          List(
             amendHistoricFhlUkPiePeriodSummary(appConfig, nino, item.periodId.value),
             retrieveHistoricFhlUkPiePeriodSummary(appConfig, nino, item.periodId.value)
           )
         case HistoricPropertyType.NonFhl =>
-          Seq(
+          List(
             amendHistoricNonFhlUkPiePeriodSummary(appConfig, nino, item.periodId.value),
             retrieveHistoricNonFhlUkPiePeriodSummary(appConfig, nino, item.periodId.value)
           )
@@ -60,12 +60,12 @@ object ListHistoricUkPropertyPeriodSummariesResponse extends HateoasLinks {
 
       data.propertyType match {
         case HistoricPropertyType.Fhl =>
-          Seq(
+          List(
             listHistoricFhlUkPiePeriodSummaries(appConfig, nino, self = true),
             createHistoricFhlUkPiePeriodSummary(appConfig, nino)
           )
         case HistoricPropertyType.NonFhl =>
-          Seq(
+          List(
             listHistoricNonFhlUkPiePeriodSummaries(appConfig, nino, self = true),
             createHistoricNonFhlUkPiePeriodSummary(appConfig, nino)
           )

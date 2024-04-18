@@ -146,7 +146,7 @@ class ListHistoricNonFhlUkPropertyPeriodSummariesControllerISpec extends Integra
         }
       }
 
-      val input = Seq(
+      val input = List(
         ("AA1123A", BAD_REQUEST, NinoFormatError)
       )
       input.foreach(args => (validationErrorTest _).tupled(args))
@@ -169,7 +169,7 @@ class ListHistoricNonFhlUkPropertyPeriodSummariesControllerISpec extends Integra
         }
       }
 
-      val input = Seq(
+      val input = List(
         (BAD_REQUEST, "INVALID_NINO", BAD_REQUEST, NinoFormatError),
         (UNPROCESSABLE_ENTITY, "TAX_YEAR_NOT_SUPPORTED", INTERNAL_SERVER_ERROR, InternalError),
         (BAD_REQUEST, "INVALID_CORRELATIONID", INTERNAL_SERVER_ERROR, InternalError),

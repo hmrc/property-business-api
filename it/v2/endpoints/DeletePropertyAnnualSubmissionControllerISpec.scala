@@ -85,7 +85,7 @@ class DeletePropertyAnnualSubmissionControllerISpec extends IntegrationBaseSpec 
           }
         }
 
-        val input = Seq(
+        val input = List(
           ("Walrus", "XAIS12345678910", "2021-22", Status.BAD_REQUEST, NinoFormatError),
           ("AA123456A", "203100", "2021-22", Status.BAD_REQUEST, BusinessIdFormatError),
           ("AA123456A", "XAIS12345678910", "Beans", Status.BAD_REQUEST, TaxYearFormatError),
@@ -154,7 +154,7 @@ class DeletePropertyAnnualSubmissionControllerISpec extends IntegrationBaseSpec 
       buildRequest(mtdUri)
         .withHttpHeaders(
           (ACCEPT, "application/vnd.hmrc.2.0+json"),
-          (AUTHORIZATION, "Bearer 123") // some bearer token
+          (AUTHORIZATION, "Bearer 123")
         )
     }
 

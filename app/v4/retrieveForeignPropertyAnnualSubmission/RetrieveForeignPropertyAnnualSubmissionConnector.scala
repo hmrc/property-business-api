@@ -70,7 +70,7 @@ class RetrieveForeignPropertyAnnualSubmissionConnector @Inject() (val http: Http
           // Note that MTD tax year format is used pre-TYS
           (
             IfsUri[Def1_RetrieveForeignPropertyAnnualSubmissionResponse]("income-tax/business/property/annual"),
-            Seq("taxableEntityId" -> nino.nino, "incomeSourceId" -> businessId.businessId, "taxYear" -> taxYear.asMtd)
+            List("taxableEntityId" -> nino.nino, "incomeSourceId" -> businessId.businessId, "taxYear" -> taxYear.asMtd)
           )
         }
 

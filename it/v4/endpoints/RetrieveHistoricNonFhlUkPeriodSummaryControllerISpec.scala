@@ -130,7 +130,7 @@ class RetrieveHistoricNonFhlUkPeriodSummaryControllerISpec extends IntegrationBa
       buildRequest(mtdUri)
         .withHttpHeaders(
           (ACCEPT, "application/vnd.hmrc.3.0+json"),
-          (AUTHORIZATION, "Bearer 123") // some bearer token
+          (AUTHORIZATION, "Bearer 123")
         )
     }
 
@@ -185,7 +185,7 @@ class RetrieveHistoricNonFhlUkPeriodSummaryControllerISpec extends IntegrationBa
           }
         }
 
-        val input = Seq(
+        val input = List(
           ("AA123", "2020-01-01_2020-01-31", BAD_REQUEST, NinoFormatError),
           ("AA123456A", "2020-01-31_2020-01-01", BAD_REQUEST, PeriodIdFormatError)
         )
@@ -209,7 +209,7 @@ class RetrieveHistoricNonFhlUkPeriodSummaryControllerISpec extends IntegrationBa
           }
         }
 
-        val input = Seq(
+        val input = List(
           (BAD_REQUEST, "INVALID_NINO", BAD_REQUEST, NinoFormatError),
           (BAD_REQUEST, "INVALID_DATE_FROM", BAD_REQUEST, PeriodIdFormatError),
           (BAD_REQUEST, "INVALID_DATE_TO", BAD_REQUEST, PeriodIdFormatError),

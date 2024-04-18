@@ -281,7 +281,7 @@ class AmendForeignPropertyPeriodSummaryControllerISpec extends IntegrationBaseSp
 
   val ruleDuplicateCountryCodeRequestError: MtdError = RuleDuplicateCountryCodeError.forDuplicatedCodesAndPaths(
     code = "FRA",
-    paths = Seq(
+    paths = List(
       "/foreignNonFhlProperty/0/countryCode",
       "/foreignNonFhlProperty/1/countryCode"
     )
@@ -313,7 +313,7 @@ class AmendForeignPropertyPeriodSummaryControllerISpec extends IntegrationBaseSp
       buildRequest(uri)
         .withHttpHeaders(
           (ACCEPT, "application/vnd.hmrc.2.0+json"),
-          (AUTHORIZATION, "Bearer 123") // some bearer token
+          (AUTHORIZATION, "Bearer 123")
         )
     }
 
@@ -482,7 +482,7 @@ class AmendForeignPropertyPeriodSummaryControllerISpec extends IntegrationBaseSp
       }
     }
 
-    val input = Seq(
+    val input = List(
       ("AA1123A", "2022-23", "XAIS12345678910", "4557ecb5-fd32-48cc-81f5-e6acd1099f3c", requestBodyJson, BAD_REQUEST, NinoFormatError),
       ("AA123456A", "20223", "XAIS12345678910", "4557ecb5-fd32-48cc-81f5-e6acd1099f3c", requestBodyJson, BAD_REQUEST, TaxYearFormatError),
       (
@@ -510,7 +510,7 @@ class AmendForeignPropertyPeriodSummaryControllerISpec extends IntegrationBaseSp
         "4557ecb5-fd32-48cc-81f5-e6acd1099f3c",
         Json.parse(s"""{"foreignFhlEea": {}}""".stripMargin),
         BAD_REQUEST,
-        RuleIncorrectOrEmptyBodyError.copy(paths = Some(Seq("/foreignFhlEea")))),
+        RuleIncorrectOrEmptyBodyError.copy(paths = Some(List("/foreignFhlEea")))),
       (
         "AA123456A",
         "2022-23",
@@ -542,7 +542,7 @@ class AmendForeignPropertyPeriodSummaryControllerISpec extends IntegrationBaseSp
         "4557ecb5-fd32-48cc-81f5-e6acd1099f3c",
         invalidCountryCodeRequestJson("FRANCE"),
         BAD_REQUEST,
-        CountryCodeFormatError.copy(paths = Some(Seq("/foreignNonFhlProperty/0/countryCode")))),
+        CountryCodeFormatError.copy(paths = Some(List("/foreignNonFhlProperty/0/countryCode")))),
       (
         "AA123456A",
         "2022-23",
@@ -550,7 +550,7 @@ class AmendForeignPropertyPeriodSummaryControllerISpec extends IntegrationBaseSp
         "4557ecb5-fd32-48cc-81f5-e6acd1099f3c",
         invalidCountryCodeRequestJson("SBT"),
         BAD_REQUEST,
-        RuleCountryCodeError.copy(paths = Some(Seq("/foreignNonFhlProperty/0/countryCode"))))
+        RuleCountryCodeError.copy(paths = Some(List("/foreignNonFhlProperty/0/countryCode"))))
     )
     input.foreach(args => (validationErrorTest _).tupled(args))
   }
@@ -572,7 +572,7 @@ class AmendForeignPropertyPeriodSummaryControllerISpec extends IntegrationBaseSp
       }
     }
 
-    val errors = Seq(
+    val errors = List(
       (BAD_REQUEST, "INVALID_TAXABLE_ENTITY_ID", BAD_REQUEST, NinoFormatError),
       (BAD_REQUEST, "INVALID_TAX_YEAR", BAD_REQUEST, TaxYearFormatError),
       (BAD_REQUEST, "INVALID_INCOMESOURCEID", BAD_REQUEST, BusinessIdFormatError),
@@ -589,7 +589,7 @@ class AmendForeignPropertyPeriodSummaryControllerISpec extends IntegrationBaseSp
       (SERVICE_UNAVAILABLE, "SERVICE_UNAVAILABLE", INTERNAL_SERVER_ERROR, InternalError)
     )
 
-    val extraTysErrors = Seq(
+    val extraTysErrors = List(
       (BAD_REQUEST, "INVALID_INCOMESOURCE_ID", BAD_REQUEST, BusinessIdFormatError),
       (BAD_REQUEST, "INVALID_CORRELATION_ID", INTERNAL_SERVER_ERROR, InternalError),
       (BAD_REQUEST, "INCOME_SOURCE_NOT_COMPATIBLE", BAD_REQUEST, RuleTypeOfBusinessIncorrectError)

@@ -72,7 +72,7 @@ class DeleteHistoricUkPropertyAnnualSubmissionControllerSpec
 
           runErrorTestWithAudit(NinoFormatError)
         }
-      Seq(Fhl, NonFhl).foreach(c => parseErrors(c))
+      List(Fhl, NonFhl).foreach(c => parseErrors(c))
 
       def serviceErrors(propertyType: HistoricPropertyType): Unit =
         s"service returns an error ${propertyType.toString}" in new Test {
@@ -86,7 +86,7 @@ class DeleteHistoricUkPropertyAnnualSubmissionControllerSpec
 
           runErrorTestWithAudit(RuleTaxYearNotSupportedError)
         }
-      Seq(Fhl, NonFhl).foreach(c => serviceErrors(c))
+      List(Fhl, NonFhl).foreach(c => serviceErrors(c))
     }
   }
 

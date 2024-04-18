@@ -26,7 +26,7 @@ object AmendHistoricNonFhlUkPropertyPeriodSummaryHateoasData extends HateoasLink
 
     override def links(appConfig: AppConfig, data: AmendHistoricNonFhlUkPropertyPeriodSummaryHateoasData): Seq[Link] = {
       import data._
-      Seq(
+      List(
         amendHistoricNonFhlUkPiePeriodSummary(appConfig, nino, periodId),
         retrieveHistoricNonFhlUkPiePeriodSummary(appConfig, nino, periodId),
         listHistoricNonFhlUkPiePeriodSummaries(appConfig, nino, self = false)

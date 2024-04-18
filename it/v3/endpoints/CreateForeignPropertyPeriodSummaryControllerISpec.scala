@@ -128,7 +128,7 @@ class CreateForeignPropertyPeriodSummaryControllerISpec extends IntegrationBaseS
           }
         }
 
-        val input = Seq(
+        val input = List(
           ("AA1123A", "XAIS12345678910", "2022-23", requestBody, BAD_REQUEST, NinoFormatError),
           ("AA123456A", "XAIS12345678910", "20223", requestBody, BAD_REQUEST, TaxYearFormatError),
           ("AA123456A", "XA***IS1", "2022-23", requestBody, BAD_REQUEST, BusinessIdFormatError),
@@ -140,14 +140,14 @@ class CreateForeignPropertyPeriodSummaryControllerISpec extends IntegrationBaseS
             "2021-22",
             requestBody.update("/foreignFhlEea/expenses/premisesRunningCosts", JsNumber(1.234)),
             BAD_REQUEST,
-            ValueFormatError.copy(paths = Some(Seq("/foreignFhlEea/expenses/premisesRunningCosts")))),
+            ValueFormatError.copy(paths = Some(List("/foreignFhlEea/expenses/premisesRunningCosts")))),
           (
             "AA123456A",
             "XAIS12345678910",
             "2022-23",
             requestBody.update("/foreignFhlEea/expenses/consolidatedExpenses", JsNumber(1.23)),
             BAD_REQUEST,
-            RuleBothExpensesSuppliedError.copy(paths = Some(Seq("/foreignFhlEea/expenses")))),
+            RuleBothExpensesSuppliedError.copy(paths = Some(List("/foreignFhlEea/expenses")))),
           ("AA123456A", "XAIS12345678910", "2021-22", JsObject.empty, BAD_REQUEST, RuleIncorrectOrEmptyBodyError),
           ("AA123456A", "XAIS12345678910", "2022-23", requestBody.update("/fromDate", JsString("XX")), BAD_REQUEST, FromDateFormatError),
           ("AA123456A", "XAIS12345678910", "2022-23", requestBody.update("/toDate", JsString("XX")), BAD_REQUEST, ToDateFormatError),
@@ -164,14 +164,14 @@ class CreateForeignPropertyPeriodSummaryControllerISpec extends IntegrationBaseS
             "2022-23",
             requestBodyWith(nonFhlEntryWith("France")),
             BAD_REQUEST,
-            CountryCodeFormatError.copy(paths = Some(Seq("/foreignNonFhlProperty/0/countryCode")))),
+            CountryCodeFormatError.copy(paths = Some(List("/foreignNonFhlProperty/0/countryCode")))),
           (
             "AA123456A",
             "XAIS12345678910",
             "2022-23",
             requestBodyWith(nonFhlEntryWith("QQQ")),
             BAD_REQUEST,
-            RuleCountryCodeError.copy(paths = Some(Seq("/foreignNonFhlProperty/0/countryCode")))),
+            RuleCountryCodeError.copy(paths = Some(List("/foreignNonFhlProperty/0/countryCode")))),
           (
             "AA123456A",
             "XAIS12345678910",
@@ -180,7 +180,7 @@ class CreateForeignPropertyPeriodSummaryControllerISpec extends IntegrationBaseS
             BAD_REQUEST,
             RuleDuplicateCountryCodeError.forDuplicatedCodesAndPaths(
               "AFG",
-              Seq("/foreignNonFhlProperty/0/countryCode", "/foreignNonFhlProperty/1/countryCode")))
+              List("/foreignNonFhlProperty/0/countryCode", "/foreignNonFhlProperty/1/countryCode")))
         )
         input.foreach(args => (validationErrorTest _).tupled(args))
       }
@@ -251,7 +251,7 @@ class CreateForeignPropertyPeriodSummaryControllerISpec extends IntegrationBaseS
       buildRequest(s"/foreign/$nino/$businessId/period/$mtdTaxYear")
         .withHttpHeaders(
           (ACCEPT, "application/vnd.hmrc.3.0+json"),
-          (AUTHORIZATION, "Bearer 123") // some bearer token
+          (AUTHORIZATION, "Bearer 123")
         )
     }
 

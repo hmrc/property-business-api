@@ -39,7 +39,7 @@ class CreateAmendForeignPropertyAnnualSubmissionRequestBodySpec extends UnitSpec
       |""".stripMargin)
 
   private val nonFhlModel =
-    Def1_CreateAmendForeignPropertyAnnualSubmissionRequestBody(foreignFhlEea = None, foreignNonFhlProperty = Some(Seq(foreignNonFhlEntry)))
+    Def1_CreateAmendForeignPropertyAnnualSubmissionRequestBody(foreignFhlEea = None, foreignNonFhlProperty = Some(List(foreignNonFhlEntry)))
 
   private val nonFhlMtdJson = Json.parse(s"""
       |{

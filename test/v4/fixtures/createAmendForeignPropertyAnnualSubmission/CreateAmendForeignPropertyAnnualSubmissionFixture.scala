@@ -114,7 +114,7 @@ trait CreateAmendForeignPropertyAnnualSubmissionFixture extends StructuredBuildi
       electricChargePointAllowance = Some(5.25),
       zeroEmissionsCarAllowance = Some(6.25),
       propertyIncomeAllowance = Some(7.25),
-      structuredBuildingAllowance = Some(Seq(structuredBuildingAllowance))
+      structuredBuildingAllowance = Some(List(structuredBuildingAllowance))
     )
 
   val foreignNonFhlAllowancesMtdJson: JsValue = Json.parse(s"""
@@ -169,7 +169,7 @@ trait CreateAmendForeignPropertyAnnualSubmissionFixture extends StructuredBuildi
   val createAmendForeignPropertyAnnualSubmissionRequestBody: Def1_CreateAmendForeignPropertyAnnualSubmissionRequestBody =
     Def1_CreateAmendForeignPropertyAnnualSubmissionRequestBody(
       foreignFhlEea = Some(foreignFhlEea),
-      foreignNonFhlProperty = Some(Seq(foreignNonFhlEntry))
+      foreignNonFhlProperty = Some(List(foreignNonFhlEntry))
     )
 
   val createAmendForeignPropertyAnnualSubmissionRequestBodyMtdJson: JsValue = Json.parse(s"""

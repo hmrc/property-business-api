@@ -109,7 +109,7 @@ class RetrieveUkPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec {
 
         willGet(
           url = s"$baseUrl/income-tax/business/property/annual",
-          parameters = Seq("taxableEntityId" -> nino.nino, "incomeSourceId" -> businessId.businessId, "taxYear" -> taxYear)
+          parameters = List("taxableEntityId" -> nino.nino, "incomeSourceId" -> businessId.businessId, "taxYear" -> taxYear)
         ).returns(Future.successful(outcome))
 
         val result: DownstreamOutcome[Result] = await(connector.retrieveUkProperty(request))

@@ -109,7 +109,7 @@ class RetrieveHistoricFhlUkPropertyAnnualSubmissionControllerISpec extends Integ
       buildRequest(mtdUri)
         .withHttpHeaders(
           (ACCEPT, "application/vnd.hmrc.3.0+json"),
-          (AUTHORIZATION, "Bearer 123") // some bearer token
+          (AUTHORIZATION, "Bearer 123")
         )
     }
 
@@ -164,7 +164,7 @@ class RetrieveHistoricFhlUkPropertyAnnualSubmissionControllerISpec extends Integ
           }
         }
 
-        val input = Seq(
+        val input = List(
           ("AA123", "2022-23", Status.BAD_REQUEST, NinoFormatError),
           ("AA123456A", "2020", Status.BAD_REQUEST, TaxYearFormatError),
           ("AA123456A", "2020-23", Status.BAD_REQUEST, RuleTaxYearRangeInvalidError),
@@ -190,7 +190,7 @@ class RetrieveHistoricFhlUkPropertyAnnualSubmissionControllerISpec extends Integ
           }
         }
 
-        val input = Seq(
+        val input = List(
           (Status.BAD_REQUEST, "INVALID_NINO", Status.BAD_REQUEST, NinoFormatError),
           (Status.BAD_REQUEST, "INVALID_TYPE", Status.INTERNAL_SERVER_ERROR, InternalError),
           (Status.BAD_REQUEST, "INVALID_TAX_YEAR", Status.BAD_REQUEST, TaxYearFormatError),

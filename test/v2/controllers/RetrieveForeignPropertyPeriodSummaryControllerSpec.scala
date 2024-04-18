@@ -131,7 +131,7 @@ class RetrieveForeignPropertyPeriodSummaryControllerSpec
           ))
         )),
       foreignNonFhlProperty = Some(
-        Seq(
+        List(
           ForeignNonFhlProperty(
             countryCode = "ZZZ",
             income = Some(

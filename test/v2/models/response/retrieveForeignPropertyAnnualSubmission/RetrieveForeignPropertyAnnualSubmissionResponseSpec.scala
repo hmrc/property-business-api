@@ -38,7 +38,7 @@ class RetrieveForeignPropertyAnnualSubmissionResponseSpec extends UnitSpec with 
         Some(ForeignFhlEeaAllowances(Some(100.25), Some(100.25), Some(100.25), Some(100.25), Some(100.25)))
       )),
     Some(
-      Seq(ForeignPropertyEntry(
+      List(ForeignPropertyEntry(
         "GER",
         Some(ForeignPropertyAdjustments(Some(100.25), Some(100.25))),
         Some(ForeignPropertyAllowances(
@@ -50,7 +50,7 @@ class RetrieveForeignPropertyAnnualSubmissionResponseSpec extends UnitSpec with 
           Some(100.25),
           Some(100.25),
           Some(
-            Seq(
+            List(
               StructuredBuildingAllowance(
                 100.25,
                 Some(FirstYear(
@@ -71,7 +71,7 @@ class RetrieveForeignPropertyAnnualSubmissionResponseSpec extends UnitSpec with 
     Timestamp("2020-07-07T10:59:47.544Z"),
     None,
     Some(
-      Seq(
+      List(
         ForeignPropertyEntry(
           "GER",
           None,
@@ -239,7 +239,7 @@ class RetrieveForeignPropertyAnnualSubmissionResponseSpec extends UnitSpec with 
 
         MockedAppConfig.apiGatewayContext.returns("my/context").anyNumberOfTimes()
 
-        RetrieveForeignPropertyAnnualSubmissionResponse.RetrieveAnnualSubmissionLinksFactory.links(mockAppConfig, data) shouldBe Seq(
+        RetrieveForeignPropertyAnnualSubmissionResponse.RetrieveAnnualSubmissionLinksFactory.links(mockAppConfig, data) shouldBe List(
           Link(
             href = s"/my/context/foreign/${data.nino}/${data.businessId}/annual/${data.taxYear}",
             method = Method.PUT,

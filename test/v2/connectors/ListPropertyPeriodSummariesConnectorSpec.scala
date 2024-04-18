@@ -39,7 +39,7 @@ class ListPropertyPeriodSummariesConnectorSpec extends ConnectorSpec {
 
       willGet(
         url = s"$baseUrl/income-tax/business/property/$nino/$businessId/period",
-        parameters = Seq("taxYear" -> "2022-23")
+        parameters = List("taxYear" -> "2022-23")
       ).returns(Future.successful(outcome))
 
       val result: DownstreamOutcome[ListPropertyPeriodSummariesResponse] = await(connector.listPeriodSummaries(request))
@@ -73,7 +73,7 @@ class ListPropertyPeriodSummariesConnectorSpec extends ConnectorSpec {
     protected val request: ListPropertyPeriodSummariesRequestData = ListPropertyPeriodSummariesRequestData(nino, businessId, taxYear)
 
     protected val response: ListPropertyPeriodSummariesResponse = ListPropertyPeriodSummariesResponse(
-      Seq(SubmissionPeriod("4557ecb5-fd32-48cc-81f5-e6acd1099f3c", "2020-06-22", "2020-06-22")))
+      List(SubmissionPeriod("4557ecb5-fd32-48cc-81f5-e6acd1099f3c", "2020-06-22", "2020-06-22")))
 
   }
 

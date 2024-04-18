@@ -6,7 +6,7 @@ PUT        /uk/:nino/:businessId/period/:taxYear/:submissionId         v4.amendU
 GET        /uk/:nino/:businessId/period/:taxYear/:submissionId         v4.retrieveUkPropertyPeriodSummary.RetrieveUkPropertyPeriodSummaryController.handleRequest(nino: String, businessId: String, taxYear: String, submissionId: String)
 
 POST       /foreign/:nino/:businessId/period/:taxYear                  v4.createForeignPropertyPeriodSummary.CreateForeignPropertyPeriodSummaryController.handleRequest(nino: String, businessId: String, taxYear: String)
-PUT        /foreign/:nino/:businessId/period/:taxYear/:submissionId    v4.controllers.amendForeignPropertyPeriodSummary.AmendForeignPropertyPeriodSummaryController.handleRequest(nino: String, businessId: String, taxYear: String, submissionId: String)
+PUT        /foreign/:nino/:businessId/period/:taxYear/:submissionId    v4.amendForeignPropertyPeriodSummary.AmendForeignPropertyPeriodSummaryController.handleRequest(nino: String, businessId: String, taxYear: String, submissionId: String)
 GET        /foreign/:nino/:businessId/period/:taxYear/:submissionId    v4.retrieveForeignPropertyPeriodSummary.RetrieveForeignPropertyPeriodSummaryController.handleRequest(nino: String, businessId: String, taxYear: String,submissionId: String)
 GET        /:nino/:businessId/period/:taxYear                          v2.controllers.ListPropertyPeriodSummariesController.handleRequest(nino: String, businessId: String, taxYear: String)
 

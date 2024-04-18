@@ -160,7 +160,7 @@ class AmendUkPropertyAnnualSubmissionControllerSpec
           Some(3000.20),
           None,
           Some(
-            Seq(
+            List(
               StructuredBuildingAllowance(
                 3000.30,
                 Some(FirstYear(
@@ -174,7 +174,7 @@ class AmendUkPropertyAnnualSubmissionControllerSpec
                 )
               ))),
           Some(
-            Seq(
+            List(
               StructuredBuildingAllowance(
                 3000.50,
                 Some(FirstYear(

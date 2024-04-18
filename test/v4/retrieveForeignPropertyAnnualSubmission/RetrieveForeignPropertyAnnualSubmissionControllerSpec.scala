@@ -136,7 +136,7 @@ class RetrieveForeignPropertyAnnualSubmissionControllerSpec
           Some(100.25),
           Some(100.25),
           Some(
-            Seq(
+            List(
               Def1_Retrieve_StructuredBuildingAllowance(
                 3545.12,
                 Some(Def1_Retrieve_FirstYear(
@@ -155,7 +155,7 @@ class RetrieveForeignPropertyAnnualSubmissionControllerSpec
     protected val responseBody: RetrieveForeignPropertyAnnualSubmissionResponse = Def1_RetrieveForeignPropertyAnnualSubmissionResponse(
       Timestamp("2020-07-07T10:59:47.544Z"),
       foreignFhlEea = Some(foreignFhlEeaEntry),
-      foreignNonFhlProperty = Some(Seq(foreignPropertyEntry))
+      foreignNonFhlProperty = Some(List(foreignPropertyEntry))
     )
 
   }

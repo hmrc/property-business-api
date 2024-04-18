@@ -33,7 +33,7 @@ class CreateAmendForeignPropertyAnnualSubmissionResponseSpec extends UnitSpec wi
       MockedAppConfig.apiGatewayContext.returns("my/context").anyNumberOfTimes()
 
       CreateAmendForeignPropertyAnnualSubmissionResponse.LinksFactory.links(mockAppConfig, data) shouldBe
-        Seq(
+        List(
           Link(
             s"/my/context/foreign/${data.nino}/${data.businessId}/annual/${data.taxYear}",
             PUT,

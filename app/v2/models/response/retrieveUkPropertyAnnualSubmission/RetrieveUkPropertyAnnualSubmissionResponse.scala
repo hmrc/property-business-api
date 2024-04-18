@@ -43,7 +43,7 @@ object RetrieveUkPropertyAnnualSubmissionResponse extends HateoasLinks {
 
     override def links(appConfig: AppConfig, data: RetrieveUkPropertyAnnualSubmissionHateoasData): Seq[Link] = {
       import data._
-      Seq(
+      List(
         createAmendUkPropertyAnnualSubmission(appConfig, nino, businessId, taxYear),
         retrieveUkPropertyAnnualSubmission(appConfig, nino, businessId, taxYear, self = true),
         deletePropertyAnnualSubmission(appConfig, nino, businessId, taxYear)

@@ -255,7 +255,7 @@ class CreateHistoricNonFhlUkPeriodSummaryControllerISpec extends IntegrationBase
       buildRequest(uri)
         .withHttpHeaders(
           (ACCEPT, "application/vnd.hmrc.3.0+json"),
-          (AUTHORIZATION, "Bearer 123") // some bearer token
+          (AUTHORIZATION, "Bearer 123")
         )
     }
 
@@ -366,7 +366,7 @@ class CreateHistoricNonFhlUkPeriodSummaryControllerISpec extends IntegrationBase
           }
         }
 
-        val input = Seq(
+        val input = List(
           ("AA1123A", requestBodyJson, Status.BAD_REQUEST, NinoFormatError),
           ("AA123456A", invalidToDateRequestJson, Status.BAD_REQUEST, ToDateFormatError),
           ("AA123456A", invalidFromDateRequestJson, Status.BAD_REQUEST, FromDateFormatError),
@@ -374,12 +374,12 @@ class CreateHistoricNonFhlUkPeriodSummaryControllerISpec extends IntegrationBase
             "AA123456A",
             bothExpensesSuppliedRequestJson,
             Status.BAD_REQUEST,
-            RuleBothExpensesSuppliedError.copy(paths = Some(Seq("/expenses/consolidatedExpenses")))),
+            RuleBothExpensesSuppliedError.copy(paths = Some(List("/expenses/consolidatedExpenses")))),
           (
             "AA123456A",
             missingFromAndToDateRequestJson,
             Status.BAD_REQUEST,
-            RuleIncorrectOrEmptyBodyError.copy(paths = Some(Seq("/fromDate", "/toDate")))),
+            RuleIncorrectOrEmptyBodyError.copy(paths = Some(List("/fromDate", "/toDate")))),
           ("AA123456A", toDateBeforeFromDateRequestJson, Status.BAD_REQUEST, RuleToDateBeforeFromDateError),
           ("AA123456A", invalidValueRequestJson, Status.BAD_REQUEST, allInvalidValueRequestError)
         )
@@ -402,7 +402,7 @@ class CreateHistoricNonFhlUkPeriodSummaryControllerISpec extends IntegrationBase
           }
         }
 
-        val input = Seq(
+        val input = List(
           (Status.BAD_REQUEST, "INVALID_NINO", Status.BAD_REQUEST, NinoFormatError),
           (Status.BAD_REQUEST, "INVALID_TYPE", Status.INTERNAL_SERVER_ERROR, InternalError),
           (Status.BAD_REQUEST, "INVALID_PAYLOAD", Status.INTERNAL_SERVER_ERROR, InternalError),

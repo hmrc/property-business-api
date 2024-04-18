@@ -60,7 +60,7 @@ class Def1_RetrieveUkPropertyPeriodSummaryResponseSpec extends UnitSpec with Moc
 
         val expectedWrappedResponse: HateoasWrapper[RetrieveUkPropertyPeriodSummaryResponse] = HateoasWrapper(
           model,
-          Seq(
+          List(
             Link(s"$baseUrl/4557ecb5-fd32-48cc-81f5-e6acd1099f3c", PUT, "amend-uk-property-period-summary"),
             Link(s"$baseUrl/4557ecb5-fd32-48cc-81f5-e6acd1099f3c", GET, "self"),
             Link("/individuals/business/property/AA999999A/XAIS12345678910/period/2022-23", GET, "list-property-period-summaries")

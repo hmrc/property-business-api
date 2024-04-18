@@ -35,7 +35,7 @@ class Def1_RetrieveForeignPropertyAnnualSubmissionResponseSpec extends UnitSpec 
         Some(Def1_Retrieve_ForeignFhlEeaAllowances(Some(100.25), Some(100.25), Some(100.25), Some(100.25), Some(100.25)))
       )),
     Some(
-      Seq(Def1_Retrieve_ForeignPropertyEntry(
+      List(Def1_Retrieve_ForeignPropertyEntry(
         "GER",
         Some(Def1_Retrieve_ForeignPropertyAdjustments(Some(100.25), Some(100.25))),
         Some(Def1_Retrieve_ForeignPropertyAllowances(
@@ -47,7 +47,7 @@ class Def1_RetrieveForeignPropertyAnnualSubmissionResponseSpec extends UnitSpec 
           Some(100.25),
           Some(100.25),
           Some(
-            Seq(
+            List(
               Def1_Retrieve_StructuredBuildingAllowance(
                 100.25,
                 Some(Def1_Retrieve_FirstYear(
@@ -68,7 +68,7 @@ class Def1_RetrieveForeignPropertyAnnualSubmissionResponseSpec extends UnitSpec 
     Timestamp("2020-07-07T10:59:47.544Z"),
     None,
     Some(
-      Seq(
+      List(
         Def1_Retrieve_ForeignPropertyEntry(
           "GER",
           None,
@@ -236,7 +236,7 @@ class Def1_RetrieveForeignPropertyAnnualSubmissionResponseSpec extends UnitSpec 
 
         MockedAppConfig.apiGatewayContext.returns("my/context").anyNumberOfTimes()
 
-        RetrieveForeignPropertyAnnualSubmissionResponse.RetrieveAnnualSubmissionLinksFactory.links(mockAppConfig, data) shouldBe Seq(
+        RetrieveForeignPropertyAnnualSubmissionResponse.RetrieveAnnualSubmissionLinksFactory.links(mockAppConfig, data) shouldBe List(
           Link(
             href = s"/my/context/foreign/${data.nino}/${data.businessId}/annual/${data.taxYear}",
             method = Method.PUT,

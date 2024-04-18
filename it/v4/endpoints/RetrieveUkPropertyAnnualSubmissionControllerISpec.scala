@@ -216,7 +216,7 @@ class RetrieveUkPropertyAnnualSubmissionControllerISpec extends IntegrationBaseS
       buildRequest(s"/uk/$nino/$businessId/annual/$taxYear")
         .withHttpHeaders(
           (ACCEPT, "application/vnd.hmrc.3.0+json"),
-          (AUTHORIZATION, "Bearer 123") // some bearer token
+          (AUTHORIZATION, "Bearer 123")
         )
     }
 
@@ -304,7 +304,7 @@ class RetrieveUkPropertyAnnualSubmissionControllerISpec extends IntegrationBaseS
           }
         }
 
-        val input = Seq(
+        val input = List(
           ("AA123", "XAIS12345678910", "2022-23", BAD_REQUEST, NinoFormatError),
           ("AA123456A", "XAIS12345678910", "2020", BAD_REQUEST, TaxYearFormatError),
           ("AA123456A", "203100", "2022-23", BAD_REQUEST, BusinessIdFormatError),
@@ -327,7 +327,7 @@ class RetrieveUkPropertyAnnualSubmissionControllerISpec extends IntegrationBaseS
           }
         }
 
-        val errors = Seq(
+        val errors = List(
           (BAD_REQUEST, "INVALID_TAXABLE_ENTITY_ID", BAD_REQUEST, NinoFormatError),
           (BAD_REQUEST, "INVALID_INCOMESOURCEID", BAD_REQUEST, BusinessIdFormatError),
           (BAD_REQUEST, "INVALID_TAX_YEAR", BAD_REQUEST, TaxYearFormatError),
@@ -338,7 +338,7 @@ class RetrieveUkPropertyAnnualSubmissionControllerISpec extends IntegrationBaseS
           (SERVICE_UNAVAILABLE, "SERVICE_UNAVAILABLE", INTERNAL_SERVER_ERROR, InternalError)
         )
 
-        val extraTysErrors = Seq(
+        val extraTysErrors = List(
           (BAD_REQUEST, "INVALID_INCOMESOURCE_ID", BAD_REQUEST, BusinessIdFormatError),
           (BAD_REQUEST, "INVALID_CORRELATION_ID", INTERNAL_SERVER_ERROR, InternalError)
         )

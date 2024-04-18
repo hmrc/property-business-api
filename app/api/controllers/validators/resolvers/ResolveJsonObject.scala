@@ -45,10 +45,10 @@ class ResolveJsonObject[T](implicit val reads: Reads[T]) extends ResolverSupport
   private def handleErrors(errors: Seq[(JsPath, Seq[JsonValidationError])]): Seq[MtdError] = {
     val failures = errors.map {
 
-      case (path: JsPath, Seq(JsonValidationError(Seq("error.path.missing")))) =>
+      case (path: JsPath, List(JsonValidationError(List("error.path.missing")))) =>
         MissingMandatoryField(path)
 
-      case (path: JsPath, Seq(JsonValidationError(Seq(error: String)))) if error.contains("error.expected") =>
+      case (path: JsPath, List(JsonValidationError(List(error: String)))) if error.contains("error.expected") =>
         WrongFieldType(path)
 
       case (path: JsPath, _) =>

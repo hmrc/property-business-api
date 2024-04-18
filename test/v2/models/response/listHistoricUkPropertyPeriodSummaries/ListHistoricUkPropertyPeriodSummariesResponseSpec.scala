@@ -26,7 +26,7 @@ import support.UnitSpec
 class ListHistoricUkPropertyPeriodSummariesResponseSpec extends UnitSpec with MockAppConfig {
 
   private val model = ListHistoricUkPropertyPeriodSummariesResponse(
-    Seq(
+    List(
       SubmissionPeriod(fromDate = "2020-01-02", toDate = "2020-03-04"),
       SubmissionPeriod(fromDate = "2021-01-02", toDate = "2021-03-04")
     ))
@@ -105,7 +105,7 @@ class ListHistoricUkPropertyPeriodSummariesResponseSpec extends UnitSpec with Mo
         MockedAppConfig.apiGatewayContext.returns(context).anyNumberOfTimes()
 
         linksFactory.links(mockAppConfig, data) shouldBe
-          Seq(
+          List(
             Link(s"/$context/uk/period/furnished-holiday-lettings/$nino", GET, "self"),
             Link(s"/$context/uk/period/furnished-holiday-lettings/$nino", POST, "create-uk-property-historic-fhl-period-summary")
           )
@@ -117,7 +117,7 @@ class ListHistoricUkPropertyPeriodSummariesResponseSpec extends UnitSpec with Mo
         val item = SubmissionPeriod(from, to)
 
         linksFactory.itemLinks(mockAppConfig, data, item) shouldBe
-          Seq(
+          List(
             Link(s"/$context/uk/period/furnished-holiday-lettings/$nino/${periodId.value}", PUT, "amend-uk-property-historic-fhl-period-summary"),
             Link(s"/$context/uk/period/furnished-holiday-lettings/$nino/${periodId.value}", GET, "self")
           )
@@ -132,7 +132,7 @@ class ListHistoricUkPropertyPeriodSummariesResponseSpec extends UnitSpec with Mo
         MockedAppConfig.apiGatewayContext.returns(context).anyNumberOfTimes()
 
         linksFactory.links(mockAppConfig, data) shouldBe
-          Seq(
+          List(
             Link(s"/$context/uk/period/non-furnished-holiday-lettings/$nino", GET, "self"),
             Link(s"/$context/uk/period/non-furnished-holiday-lettings/$nino", POST, "create-uk-property-historic-non-fhl-period-summary")
           )
@@ -144,7 +144,7 @@ class ListHistoricUkPropertyPeriodSummariesResponseSpec extends UnitSpec with Mo
         val item = SubmissionPeriod(from, to)
 
         linksFactory.itemLinks(mockAppConfig, data, item) shouldBe
-          Seq(
+          List(
             Link(
               s"/$context/uk/period/non-furnished-holiday-lettings/$nino/${periodId.value}",
               PUT,

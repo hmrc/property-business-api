@@ -155,7 +155,7 @@ class Def1_RetrieveUkPropertyAnnualSubmissionResponseSpec extends UnitSpec with 
             propertyIncomeAllowance = Some(342.34),
             electricChargePointAllowance = Some(454.34),
             structuredBuildingAllowance = Some(
-              Seq(
+              List(
                 Def1_Retrieve_UkNonFhlPropertyStructuredBuildingAllowance(
                   amount = 234.34,
                   firstYear = Some(
@@ -172,7 +172,7 @@ class Def1_RetrieveUkPropertyAnnualSubmissionResponseSpec extends UnitSpec with 
                 )
               )),
             enhancedStructuredBuildingAllowance = Some(
-              Seq(
+              List(
                 Def1_Retrieve_UkNonFhlPropertyStructuredBuildingAllowance(
                   amount = 234.45,
                   firstYear = Some(
@@ -290,7 +290,7 @@ class Def1_RetrieveUkPropertyAnnualSubmissionResponseSpec extends UnitSpec with 
 
         MockedAppConfig.apiGatewayContext.returns("my/context").anyNumberOfTimes()
 
-        RetrieveUkPropertyAnnualSubmissionResponse.RetrieveUkPropertyAnnualSubmissionLinksFactory.links(mockAppConfig, data) shouldBe Seq(
+        RetrieveUkPropertyAnnualSubmissionResponse.RetrieveUkPropertyAnnualSubmissionLinksFactory.links(mockAppConfig, data) shouldBe List(
           Link(
             href = s"/my/context/uk/${data.nino}/${data.businessId}/annual/${data.taxYear}",
             method = Method.PUT,

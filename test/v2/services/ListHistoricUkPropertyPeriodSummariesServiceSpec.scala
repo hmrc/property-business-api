@@ -94,7 +94,7 @@ class ListHistoricUkPropertyPeriodSummariesServiceSpec extends UnitSpec {
     protected val requestData: ListHistoricUkPropertyPeriodSummariesRequestData = ListHistoricUkPropertyPeriodSummariesRequestData(nino)
 
     protected val response: ListHistoricUkPropertyPeriodSummariesResponse[SubmissionPeriod] = ListHistoricUkPropertyPeriodSummariesResponse(
-      Seq(SubmissionPeriod("2020-08-22", "2020-08-22")))
+      List(SubmissionPeriod("2020-08-22", "2020-08-22")))
 
   }
 

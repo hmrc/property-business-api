@@ -32,7 +32,7 @@ class Def1_Create_Amend_UkNonFhlPropertyAllowancesSpec extends UnitSpec {
       Some(3000.20),
       None,
       Some(
-        Seq(
+        List(
           Def1_Create_Amend_StructuredBuildingAllowance(
             3000.30,
             Some(
@@ -47,7 +47,7 @@ class Def1_Create_Amend_UkNonFhlPropertyAllowancesSpec extends UnitSpec {
             )
           ))),
       Some(
-        Seq(
+        List(
           Def1_Create_Amend_StructuredBuildingAllowance(
             3000.50,
             Some(

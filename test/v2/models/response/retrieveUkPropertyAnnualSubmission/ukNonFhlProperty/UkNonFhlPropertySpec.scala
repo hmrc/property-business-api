@@ -96,7 +96,7 @@ class UkNonFhlPropertySpec extends UnitSpec {
         propertyIncomeAllowance = Some(342.34),
         electricChargePointAllowance = Some(454.34),
         structuredBuildingAllowance = Some(
-          Seq(
+          List(
             UkNonFhlPropertyStructuredBuildingAllowance(
               amount = 234.34,
               firstYear = Some(
@@ -113,7 +113,7 @@ class UkNonFhlPropertySpec extends UnitSpec {
             )
           )),
         enhancedStructuredBuildingAllowance = Some(
-          Seq(
+          List(
             UkNonFhlPropertyStructuredBuildingAllowance(
               amount = 234.45,
               firstYear = Some(

@@ -96,7 +96,7 @@ class Def1_Retrieve_UkNonFhlPropertySpec extends UnitSpec {
         propertyIncomeAllowance = Some(342.34),
         electricChargePointAllowance = Some(454.34),
         structuredBuildingAllowance = Some(
-          Seq(
+          List(
             Def1_Retrieve_UkNonFhlPropertyStructuredBuildingAllowance(
               amount = 234.34,
               firstYear = Some(
@@ -113,7 +113,7 @@ class Def1_Retrieve_UkNonFhlPropertySpec extends UnitSpec {
             )
           )),
         enhancedStructuredBuildingAllowance = Some(
-          Seq(
+          List(
             Def1_Retrieve_UkNonFhlPropertyStructuredBuildingAllowance(
               amount = 234.45,
               firstYear = Some(

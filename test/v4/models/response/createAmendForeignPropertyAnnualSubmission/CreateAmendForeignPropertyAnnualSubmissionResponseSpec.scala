@@ -20,7 +20,7 @@ import api.hateoas.Link
 import api.hateoas.Method.{DELETE, GET, PUT}
 import mocks.MockAppConfig
 import support.UnitSpec
-import v4.controllers.createAmendForeignPropertyAnnualSubmission.model.response.{CreateAmendForeignPropertyAnnualSubmissionHateoasData, CreateAmendForeignPropertyAnnualSubmissionResponse}
+import v4.createAmendForeignPropertyAnnualSubmission.model.response.{CreateAmendForeignPropertyAnnualSubmissionHateoasData, CreateAmendForeignPropertyAnnualSubmissionResponse}
 
 class CreateAmendForeignPropertyAnnualSubmissionResponseSpec extends UnitSpec with MockAppConfig {
 

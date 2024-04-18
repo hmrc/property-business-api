@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package v4.endpoints
+package v4.deletePropertyAnnualSubmission.def1
 
 import api.models.errors._
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
@@ -26,7 +26,7 @@ import play.api.test.Helpers.AUTHORIZATION
 import support.IntegrationBaseSpec
 import v4.stubs._
 
-class DeletePropertyAnnualSubmissionControllerISpec extends IntegrationBaseSpec {
+class Def1_DeletePropertyAnnualSubmissionISpec extends IntegrationBaseSpec {
 
   "The delete property annual submission endpoint" should {
     "return a 204 status code" when {

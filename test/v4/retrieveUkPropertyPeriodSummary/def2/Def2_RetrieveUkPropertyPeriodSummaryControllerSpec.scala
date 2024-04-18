@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package v4.retrieveUkPropertyPeriodSummary
+package v4.retrieveUkPropertyPeriodSummary.def2
 
 import api.controllers.{ControllerBaseSpec, ControllerTestRunner}
 import api.hateoas.Method.GET
@@ -26,6 +26,7 @@ import play.api.mvc.Result
 import v4.retrieveUkPropertyPeriodSummary.def2.model.{Def2_RetrieveUkPropertyPeriodSummaryConsolidatedFixture, Def2_RetrieveUkPropertyPeriodSummaryFixture}
 import v4.retrieveUkPropertyPeriodSummary.model.request._
 import v4.retrieveUkPropertyPeriodSummary.model.response.{RetrieveUkPropertyPeriodSummaryHateoasData, RetrieveUkPropertyPeriodSummaryResponse}
+import v4.retrieveUkPropertyPeriodSummary.{MockRetrieveUkPropertyPeriodSummaryService, MockRetrieveUkPropertyPeriodSummaryValidatorFactory, RetrieveUkPropertyPeriodSummaryController}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future

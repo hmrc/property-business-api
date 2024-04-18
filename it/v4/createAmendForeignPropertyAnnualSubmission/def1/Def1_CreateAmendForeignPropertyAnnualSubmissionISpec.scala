@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package v4.endpoints
+package v4.createAmendForeignPropertyAnnualSubmission.def1
 
 import api.models.errors._
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
@@ -27,7 +27,7 @@ import support.IntegrationBaseSpec
 import v2.models.request.createAmendForeignPropertyAnnualSubmission.CreateAmendForeignPropertyAnnualSubmissionFixture
 import v4.stubs._
 
-class CreateAmendForeignPropertyAnnualSubmissionControllerISpec extends IntegrationBaseSpec with CreateAmendForeignPropertyAnnualSubmissionFixture {
+class Def1_CreateAmendForeignPropertyAnnualSubmissionISpec extends IntegrationBaseSpec with CreateAmendForeignPropertyAnnualSubmissionFixture {
 
   val requestBodyJson: JsValue = Json.parse("""
       |{

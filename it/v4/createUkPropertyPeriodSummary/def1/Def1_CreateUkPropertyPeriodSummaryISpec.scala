@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package v4.endpoints
+package v4.createUkPropertyPeriodSummary.def1
 
 import api.models.errors._
 import play.api.http.HeaderNames.ACCEPT
@@ -25,7 +25,7 @@ import play.api.test.Helpers.AUTHORIZATION
 import support.IntegrationBaseSpec
 import v4.stubs._
 
-class CreateUkPropertyPeriodSummaryControllerISpec extends IntegrationBaseSpec {
+class Def1_CreateUkPropertyPeriodSummaryISpec extends IntegrationBaseSpec {
 
   private val requestBodyJson = Json.parse(
     """{

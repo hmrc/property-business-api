@@ -38,7 +38,7 @@ object CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionResponse extends Hateo
 
     override def links(appConfig: AppConfig, data: CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionHateoasData): Seq[Link] = {
       import data._
-      Seq(
+      List(
         retrieveHistoricNonFhlUkPropertyAnnualSubmission(appConfig, nino, taxYear, self = true),
         createAmendHistoricNonFhlUkPropertyAnnualSubmission(appConfig, nino, taxYear),
         deleteHistoricNonFhlUkPropertyAnnualSubmission(appConfig, nino, taxYear)

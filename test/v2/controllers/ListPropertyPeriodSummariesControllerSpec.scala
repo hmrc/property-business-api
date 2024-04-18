@@ -96,7 +96,7 @@ class ListPropertyPeriodSummariesControllerSpec
       ListPropertyPeriodSummariesRequestData(Nino(nino), BusinessId(businessId), TaxYear.fromMtd(taxYear))
 
     protected val responseData: ListPropertyPeriodSummariesResponse =
-      ListPropertyPeriodSummariesResponse(Seq(SubmissionPeriod("someId", "fromDate", "toDate")))
+      ListPropertyPeriodSummariesResponse(List(SubmissionPeriod("someId", "fromDate", "toDate")))
 
     protected val hateoasData: ListPropertyPeriodSummariesHateoasData = ListPropertyPeriodSummariesHateoasData(nino, businessId, taxYear)
 

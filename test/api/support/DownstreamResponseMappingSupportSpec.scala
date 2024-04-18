@@ -74,7 +74,7 @@ class DownstreamResponseMappingSupportSpec extends UnitSpec {
         "use the mapping and wrap with main error type of BadRequest" in {
           mapping.mapDownstreamErrors(errorCodeMap)(
             ResponseWrapper(correlationId, DownstreamErrors(List(DownstreamErrorCode("ERR1"), DownstreamErrorCode("ERR2"))))) shouldBe
-            ErrorWrapper(correlationId, BadRequestError, Some(Seq(Error1, Error2)))
+            ErrorWrapper(correlationId, BadRequestError, Some(List(Error1, Error2)))
         }
       }
 
@@ -104,8 +104,8 @@ class DownstreamResponseMappingSupportSpec extends UnitSpec {
 
     "the error code is an OutboundError with multiple errors" must {
       "return the error as is (in an ErrorWrapper)" in {
-        mapping.mapDownstreamErrors(errorCodeMap)(ResponseWrapper(correlationId, OutboundError(ErrorBvrMain, Some(Seq(ErrorBvr))))) shouldBe
-          ErrorWrapper(correlationId, ErrorBvrMain, Some(Seq(ErrorBvr)))
+        mapping.mapDownstreamErrors(errorCodeMap)(ResponseWrapper(correlationId, OutboundError(ErrorBvrMain, Some(List(ErrorBvr))))) shouldBe
+          ErrorWrapper(correlationId, ErrorBvrMain, Some(List(ErrorBvr)))
       }
     }
   }

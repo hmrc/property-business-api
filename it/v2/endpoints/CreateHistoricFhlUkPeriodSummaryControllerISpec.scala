@@ -231,7 +231,7 @@ class CreateHistoricFhlUkPeriodSummaryControllerISpec extends IntegrationBaseSpe
           response.json shouldBe Json.toJson(expectedError)
         }
       }
-      val input = Seq(
+      val input = List(
         ("AA1123A", validRequestJson, BAD_REQUEST, NinoFormatError),
         ("AA123456A", invalidFieldsRequestBodyJson, BAD_REQUEST, valueFormatErrorForInvalidFieldsJson),
         ("AA123456A", JsObject.empty, BAD_REQUEST, RuleIncorrectOrEmptyBodyError),
@@ -258,7 +258,7 @@ class CreateHistoricFhlUkPeriodSummaryControllerISpec extends IntegrationBaseSpe
         }
       }
 
-      val input = Seq(
+      val input = List(
         (NO_CONTENT, "NO_CONTENT", INTERNAL_SERVER_ERROR, InternalError),
         (BAD_REQUEST, "INVALID_NINO", BAD_REQUEST, NinoFormatError),
         (BAD_REQUEST, "INVALID_TYPE", INTERNAL_SERVER_ERROR, InternalError),

@@ -376,7 +376,7 @@ class CreateUkPropertyPeriodSummaryControllerISpec extends IntegrationBaseSpec {
       buildRequest(s"/uk/$nino/$businessId/period/$taxYear")
         .withHttpHeaders(
           (ACCEPT, "application/vnd.hmrc.3.0+json"),
-          (AUTHORIZATION, "Bearer 123") // some bearer token
+          (AUTHORIZATION, "Bearer 123")
         )
     }
 
@@ -513,7 +513,7 @@ class CreateUkPropertyPeriodSummaryControllerISpec extends IntegrationBaseSpec {
           }
         }
 
-        val input = Seq(
+        val input = List(
           ("AA1123A", "XAIS12345678910", "2022-23", requestBodyJson, BAD_REQUEST, NinoFormatError),
           ("AA123456A", "XAIS12345678910", "20223", requestBodyJson, BAD_REQUEST, TaxYearFormatError),
           ("AA123456A", "XAIS12345678910", "2021-23", requestBodyJson, BAD_REQUEST, RuleTaxYearRangeInvalidError),
@@ -527,7 +527,7 @@ class CreateUkPropertyPeriodSummaryControllerISpec extends IntegrationBaseSpec {
             "2022-23",
             Json.parse(s"""{ "fromDate": "2020-04-06", "toDate": "2019-04-06", "ukFhlProperty": {} }""".stripMargin),
             BAD_REQUEST,
-            RuleIncorrectOrEmptyBodyError.copy(paths = Some(Seq("/ukFhlProperty")))),
+            RuleIncorrectOrEmptyBodyError.copy(paths = Some(List("/ukFhlProperty")))),
           ("AA123456A", "XAIS12345678910", "2022-23", invalidValueRequestJson, BAD_REQUEST, allInvalidValueRequestError),
           ("AA123456A", "XAIS12345678910", "2022-23", bothExpensesSuppliedRequestJson, BAD_REQUEST, RuleBothExpensesSuppliedRequestError),
           ("AA123456A", "XAIS12345678910", "2022-23", toDateBeforeFromDateRequestJson, BAD_REQUEST, RuleToDateBeforeFromDateError)
@@ -549,7 +549,7 @@ class CreateUkPropertyPeriodSummaryControllerISpec extends IntegrationBaseSpec {
           }
         }
 
-        val errors = Seq(
+        val errors = List(
           (SERVICE_UNAVAILABLE, "SERVICE_UNAVAILABLE", INTERNAL_SERVER_ERROR, InternalError),
           (INTERNAL_SERVER_ERROR, "SERVER_ERROR", INTERNAL_SERVER_ERROR, InternalError),
           (NOT_FOUND, "INCOME_SOURCE_NOT_FOUND", NOT_FOUND, NotFoundError),
@@ -568,7 +568,7 @@ class CreateUkPropertyPeriodSummaryControllerISpec extends IntegrationBaseSpec {
           (UNPROCESSABLE_ENTITY, "INVALID_DATE_RANGE", BAD_REQUEST, RuleToDateBeforeFromDateError)
         )
 
-        val extraTysErrors = Seq(
+        val extraTysErrors = List(
           (BAD_REQUEST, "INVALID_INCOMESOURCE_ID", BAD_REQUEST, BusinessIdFormatError),
           (BAD_REQUEST, "INVALID_CORRELATION_ID", INTERNAL_SERVER_ERROR, InternalError),
           (UNPROCESSABLE_ENTITY, "PERIOD_NOT_ALIGNED", BAD_REQUEST, RuleMisalignedPeriodError),

@@ -23,7 +23,7 @@ import support.UnitSpec
 class ApiDefinitionSpec extends UnitSpec {
 
   val apiVersion: APIVersion       = APIVersion(Version2, ALPHA, endpointsEnabled = false)
-  val apiDefinition: APIDefinition = APIDefinition("b", "c", "d", Seq("e"), Seq(apiVersion), Some(false))
+  val apiDefinition: APIDefinition = APIDefinition("b", "c", "d", List("e"), List(apiVersion), Some(false))
 
   "APIDefinition" when {
     "the 'name' parameter is empty" should {
@@ -54,7 +54,7 @@ class ApiDefinitionSpec extends UnitSpec {
   "the 'categories' parameter is empty" should {
     "throw an 'IllegalArgumentException'" in {
       assertThrows[IllegalArgumentException](
-        apiDefinition.copy(categories = Seq())
+        apiDefinition.copy(categories = List())
       )
     }
   }
@@ -62,7 +62,7 @@ class ApiDefinitionSpec extends UnitSpec {
   "the 'versions' parameter is empty" should {
     "throw an 'IllegalArgumentException'" in {
       assertThrows[IllegalArgumentException](
-        apiDefinition.copy(versions = Seq(apiVersion, apiVersion))
+        apiDefinition.copy(versions = List(apiVersion, apiVersion))
       )
     }
   }
@@ -70,7 +70,7 @@ class ApiDefinitionSpec extends UnitSpec {
   "the 'versions' parameter is not unique" should {
     "throw an 'IllegalArgumentException'" in {
       assertThrows[IllegalArgumentException](
-        apiDefinition.copy(versions = Seq())
+        apiDefinition.copy(versions = List())
       )
     }
   }

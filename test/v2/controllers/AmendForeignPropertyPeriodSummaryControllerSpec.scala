@@ -138,7 +138,7 @@ class AmendForeignPropertyPeriodSummaryControllerSpec
               ))
           )),
         Some(
-          Seq(AmendForeignNonFhlPropertyEntry(
+          List(AmendForeignNonFhlPropertyEntry(
             "FRA",
             Some(
               ForeignNonFhlPropertyIncome(

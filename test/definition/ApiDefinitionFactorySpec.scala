@@ -50,7 +50,7 @@ class ApiDefinitionFactorySpec extends UnitSpec {
 
         apiDefinitionFactory.definition shouldBe
           Definition(
-            scopes = Seq(
+            scopes = List(
               Scope(
                 key = readScope,
                 name = "View your Self Assessment information",
@@ -68,8 +68,8 @@ class ApiDefinitionFactorySpec extends UnitSpec {
               name = "Property Business (MTD)",
               description = "An API for providing property business data",
               context = "individuals/business/property",
-              categories = Seq("INCOME_TAX_MTD"),
-              versions = Seq(
+              categories = List("INCOME_TAX_MTD"),
+              versions = List(
                 APIVersion(
                   version = Version2,
                   status = BETA,
@@ -94,7 +94,7 @@ class ApiDefinitionFactorySpec extends UnitSpec {
   }
 
   "confidenceLevel" when {
-    Seq(
+    List(
       (true, ConfidenceLevel.L250, ConfidenceLevel.L250),
       (true, ConfidenceLevel.L200, ConfidenceLevel.L200),
       (false, ConfidenceLevel.L200, ConfidenceLevel.L50)
@@ -113,7 +113,7 @@ class ApiDefinitionFactorySpec extends UnitSpec {
 
   "buildAPIStatus" when {
     "the 'apiStatus' parameter is present and valid" should {
-      Seq(
+      List(
         (Version2, BETA),
         (Version3, BETA),
         (Version4, BETA)

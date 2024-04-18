@@ -22,7 +22,7 @@ object AppDependencies {
 
   val bootstrapPlayVersion = "8.1.0"
 
-  val compile: Seq[ModuleID] = Seq(
+  val compile: Seq[ModuleID] = List(
     ws,
     "uk.gov.hmrc"                  %% "bootstrap-backend-play-30" % bootstrapPlayVersion,
     "org.typelevel"                %% "cats-core"                 % "2.9.0",
@@ -32,7 +32,7 @@ object AppDependencies {
     "com.github.jknack"             % "handlebars"                % "4.3.1"
   )
 
-  def test(scope: String = "test, it"): Seq[sbt.ModuleID] = Seq(
+  def test(scope: String = "test, it"): Seq[sbt.ModuleID] = List(
     "org.scalatest"         %% "scalatest"              % "3.2.15"             % scope,
     "com.vladsch.flexmark"   % "flexmark-all"           % "0.64.6"             % scope,
     "org.scalatestplus"     %% "scalacheck-1-15"        % "3.2.11.0"           % scope,

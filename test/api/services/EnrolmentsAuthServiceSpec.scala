@@ -84,7 +84,7 @@ class EnrolmentsAuthServiceSpec extends ServiceSpec with MockAppConfig {
           Set(
             Enrolment(
               "HMRC-AS-AGENT",
-              Seq(EnrolmentIdentifier("SomeOtherIdentifier", "123567890")),
+              List(EnrolmentIdentifier("SomeOtherIdentifier", "123567890")),
               "Active"
             )
           )
@@ -111,7 +111,7 @@ class EnrolmentsAuthServiceSpec extends ServiceSpec with MockAppConfig {
           Set(
             Enrolment(
               "HMRC-AS-AGENT",
-              Seq(EnrolmentIdentifier("AgentReferenceNumber", arn)),
+              List(EnrolmentIdentifier("AgentReferenceNumber", arn)),
               "Active"
             )
           )

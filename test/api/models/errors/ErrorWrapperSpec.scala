@@ -63,7 +63,7 @@ class ErrorWrapperSpec extends UnitSpec {
       correlationId,
       BadRequestError,
       Some(
-        Seq(
+        List(
           NinoFormatError,
           BusinessIdFormatError
         )
@@ -117,11 +117,11 @@ class ErrorWrapperSpec extends UnitSpec {
   "auditErrors" should {
     "handle errors = None" in {
       val errorWrapper = ErrorWrapper(correlationId, BadRequestError, None)
-      errorWrapper.auditErrors shouldBe Seq(AuditError(BadRequestError.code))
+      errorWrapper.auditErrors shouldBe List(AuditError(BadRequestError.code))
     }
     "handle errors = Some(_)" in {
-      val errorWrapper = ErrorWrapper(correlationId, BadRequestError, Some(Seq(NinoFormatError, BusinessIdFormatError)))
-      errorWrapper.auditErrors shouldBe Seq(AuditError(NinoFormatError.code), AuditError(BusinessIdFormatError.code))
+      val errorWrapper = ErrorWrapper(correlationId, BadRequestError, Some(List(NinoFormatError, BusinessIdFormatError)))
+      errorWrapper.auditErrors shouldBe List(AuditError(NinoFormatError.code), AuditError(BusinessIdFormatError.code))
     }
   }
 

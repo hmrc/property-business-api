@@ -35,7 +35,7 @@ object ListPropertyPeriodSummariesResponse extends HateoasLinks {
 
     override def links(appConfig: AppConfig, data: ListPropertyPeriodSummariesHateoasData): Seq[Link] = {
       import data._
-      Seq(
+      List(
         listPropertyPeriodSummaries(appConfig, nino = nino, businessId = businessId, taxYear = taxYear, self = true)
       )
     }

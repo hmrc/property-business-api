@@ -43,7 +43,7 @@ class AuthISpec extends IntegrationBaseSpec {
       buildRequest(uri)
         .withHttpHeaders(
           (ACCEPT, "application/vnd.hmrc.3.0+json"),
-          (AUTHORIZATION, "Bearer 123") // some bearer token
+          (AUTHORIZATION, "Bearer 123")
         )
     }
 

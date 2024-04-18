@@ -47,7 +47,7 @@ class RetrieveForeignPropertyPeriodSummaryResponseSpec extends UnitSpec with Moc
           ))
       )),
     Some(
-      Seq(ForeignNonFhlProperty(
+      List(ForeignNonFhlProperty(
         "FRA",
         Some(
           ForeignNonFhlPropertyIncome(
@@ -200,7 +200,7 @@ class RetrieveForeignPropertyPeriodSummaryResponseSpec extends UnitSpec with Moc
 
         MockedAppConfig.apiGatewayContext.returns("my/context").anyNumberOfTimes()
 
-        RetrieveForeignPropertyPeriodSummaryResponse.RetrieveForeignPropertyLinksFactory.links(mockAppConfig, data) shouldBe Seq(
+        RetrieveForeignPropertyPeriodSummaryResponse.RetrieveForeignPropertyLinksFactory.links(mockAppConfig, data) shouldBe List(
           Link(
             href = s"/my/context/foreign/${data.nino}/${data.businessId}/period/${data.taxYear}/${data.submissionId}",
             method = Method.PUT,

@@ -243,7 +243,7 @@ class HateoasLinksSpec extends UnitSpec with MockAppConfig with HateoasLinks {
 
         MockedAppConfig.apiGatewayContext.returns("my/context").anyNumberOfTimes()
 
-        RetrieveHistoricNonFhlUkPiePeriodSummaryResponse.RetrieveNonFhlUkPiePeriodSummaryLinksFactory.links(mockAppConfig, data) shouldBe Seq(
+        RetrieveHistoricNonFhlUkPiePeriodSummaryResponse.RetrieveNonFhlUkPiePeriodSummaryLinksFactory.links(mockAppConfig, data) shouldBe List(
           Link(
             href = s"/my/context/uk/period/non-furnished-holiday-lettings/${data.nino}/${data.periodId}",
             method = Method.PUT,

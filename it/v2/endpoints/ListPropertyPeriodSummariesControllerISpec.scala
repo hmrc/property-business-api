@@ -87,7 +87,7 @@ class ListPropertyPeriodSummariesControllerISpec extends IntegrationBaseSpec {
         }
       }
 
-      val input = Seq(
+      val input = List(
         ("AA1123A", "XAIS12345678910", "2022-23", Status.BAD_REQUEST, NinoFormatError),
         ("AA123456A", "XAIS12345678910", "20223", Status.BAD_REQUEST, TaxYearFormatError),
         ("AA123456A", "XAIS12345678910", "2021-23", Status.BAD_REQUEST, RuleTaxYearRangeInvalidError),
@@ -114,7 +114,7 @@ class ListPropertyPeriodSummariesControllerISpec extends IntegrationBaseSpec {
         }
       }
 
-      val input = Seq(
+      val input = List(
         (Status.BAD_REQUEST, "INVALID_TAXABLE_ENTITY_ID", Status.BAD_REQUEST, NinoFormatError),
         (Status.BAD_REQUEST, "INVALID_INCOMESOURCEID", Status.BAD_REQUEST, BusinessIdFormatError),
         (Status.BAD_REQUEST, "INVALID_TAX_YEAR", Status.BAD_REQUEST, TaxYearFormatError),
@@ -179,7 +179,7 @@ class ListPropertyPeriodSummariesControllerISpec extends IntegrationBaseSpec {
       buildRequest(s"/$nino/$businessId/period/$taxYear")
         .withHttpHeaders(
           (ACCEPT, "application/vnd.hmrc.2.0+json"),
-          (AUTHORIZATION, "Bearer 123") // some bearer token
+          (AUTHORIZATION, "Bearer 123")
         )
     }
 

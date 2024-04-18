@@ -53,7 +53,7 @@ class ControllerBaseSpec extends UnitSpec with Status with MimeTypes with Header
 
   def fakeRequestWithBody[T](body: T): FakeRequest[T] = fakeRequest.withBody(body)
 
-  val testHateoasLinks: Seq[Link] = Seq(Link(href = "/some/link", method = GET, rel = "someRel"))
+  val testHateoasLinks: Seq[Link] = List(Link(href = "/some/link", method = GET, rel = "someRel"))
 
   val testHateoasLinksJson: JsObject = Json
     .parse("""{
@@ -62,7 +62,7 @@ class ControllerBaseSpec extends UnitSpec with Status with MimeTypes with Header
         |""".stripMargin)
     .as[JsObject]
 
-  def withPath(error: MtdError): MtdError = error.copy(paths = Some(Seq("/somePath")))
+  def withPath(error: MtdError): MtdError = error.copy(paths = Some(List("/somePath")))
 
 }
 
@@ -125,7 +125,7 @@ trait ControllerTestRunner extends MockEnrolmentsAuthService with MockMtdIdLooku
     }
 
     protected def checkAuditErrorEvent(expectedError: MtdError, maybeRequestBody: Option[JsValue]): Unit = {
-      val auditResponse: AuditResponse = AuditResponse(expectedError.httpStatus, Some(Seq(AuditError(expectedError.code))), None)
+      val auditResponse: AuditResponse = AuditResponse(expectedError.httpStatus, Some(List(AuditError(expectedError.code))), None)
       MockedAuditService.verifyAuditEvent(event(auditResponse, maybeRequestBody)).once()
     }
 

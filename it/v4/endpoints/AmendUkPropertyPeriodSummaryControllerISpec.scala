@@ -293,7 +293,7 @@ class AmendUkPropertyPeriodSummaryControllerISpec extends IntegrationBaseSpec {
       buildRequest(uri)
         .withHttpHeaders(
           (ACCEPT, "application/vnd.hmrc.3.0+json"),
-          (AUTHORIZATION, "Bearer 123") // some bearer token
+          (AUTHORIZATION, "Bearer 123")
         )
     }
 
@@ -457,7 +457,7 @@ class AmendUkPropertyPeriodSummaryControllerISpec extends IntegrationBaseSpec {
         }
       }
 
-      val input = Seq(
+      val input = List(
         ("AA1123A", "2022-23", "XAIS12345678910", "4557ecb5-fd32-48cc-81f5-e6acd1099f3c", requestBodyJson, BAD_REQUEST, NinoFormatError),
         ("AA123456A", "20223", "XAIS12345678910", "4557ecb5-fd32-48cc-81f5-e6acd1099f3c", requestBodyJson, BAD_REQUEST, TaxYearFormatError),
         (
@@ -499,7 +499,7 @@ class AmendUkPropertyPeriodSummaryControllerISpec extends IntegrationBaseSpec {
           "4557ecb5-fd32-48cc-81f5-e6acd1099f3c",
           Json.parse(s"""{"ukFhlProperty": {}}""".stripMargin),
           BAD_REQUEST,
-          RuleIncorrectOrEmptyBodyError.copy(paths = Some(Seq("/ukFhlProperty")))),
+          RuleIncorrectOrEmptyBodyError.copy(paths = Some(List("/ukFhlProperty")))),
         (
           "AA123456A",
           "2022-23",
@@ -537,7 +537,7 @@ class AmendUkPropertyPeriodSummaryControllerISpec extends IntegrationBaseSpec {
         }
       }
 
-      val errors = Seq(
+      val errors = List(
         (BAD_REQUEST, "INVALID_TAXABLE_ENTITY_ID", BAD_REQUEST, NinoFormatError),
         (BAD_REQUEST, "INVALID_TAX_YEAR", BAD_REQUEST, TaxYearFormatError),
         (BAD_REQUEST, "INVALID_INCOMESOURCEID", BAD_REQUEST, BusinessIdFormatError),
@@ -554,7 +554,7 @@ class AmendUkPropertyPeriodSummaryControllerISpec extends IntegrationBaseSpec {
         (SERVICE_UNAVAILABLE, "SERVICE_UNAVAILABLE", INTERNAL_SERVER_ERROR, InternalError)
       )
 
-      val extraTysErrors = Seq(
+      val extraTysErrors = List(
         (BAD_REQUEST, "INVALID_INCOMESOURCE_ID", BAD_REQUEST, BusinessIdFormatError),
         (BAD_REQUEST, "INVALID_CORRELATION_ID", INTERNAL_SERVER_ERROR, InternalError),
         (BAD_REQUEST, "INCOME_SOURCE_NOT_COMPATIBLE", BAD_REQUEST, RuleTypeOfBusinessIncorrectError)

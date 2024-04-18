@@ -94,7 +94,7 @@ class ListPropertyPeriodSummariesServiceSpec extends UnitSpec {
     protected val request: ListPropertyPeriodSummariesRequestData = ListPropertyPeriodSummariesRequestData(nino, businessId, taxYear)
 
     protected val response: ListPropertyPeriodSummariesResponse = ListPropertyPeriodSummariesResponse(
-      Seq(
+      List(
         SubmissionPeriod("4557ecb5-fd32-48cc-81f5-e6acd1099f3c", "2020-06-22", "2020-06-22"),
         SubmissionPeriod("4557ecb5-fd32-48cc-81f5-e6acd1099f3d", "2020-08-22", "2020-08-22")
       ))

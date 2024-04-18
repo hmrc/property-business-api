@@ -38,7 +38,7 @@ class ListPropertyPeriodSummariesResponseSpec extends UnitSpec with MockAppConfi
       )
 
       val model = ListPropertyPeriodSummariesResponse(
-        Seq(
+        List(
           SubmissionPeriod("4557ecb5-fd32-48cc-81f5-e6acd1099f3c", "2022-06-22", "2023-06-22")
         ))
 
@@ -64,7 +64,7 @@ class ListPropertyPeriodSummariesResponseSpec extends UnitSpec with MockAppConfi
       )
 
       val model = ListPropertyPeriodSummariesResponse(
-        Seq(
+        List(
           SubmissionPeriod("4557ecb5-fd32-48cc-81f5-e6acd1099f3c", "2022-06-22", "2022-06-22"),
           SubmissionPeriod("4557ecb5-fd32-48cc-81f5-e6acd1099f3d", "2022-08-22", "2022-08-22")
         ))
@@ -81,7 +81,7 @@ class ListPropertyPeriodSummariesResponseSpec extends UnitSpec with MockAppConfi
         """.stripMargin
       )
 
-      val model = ListPropertyPeriodSummariesResponse(Seq())
+      val model = ListPropertyPeriodSummariesResponse(List())
 
       ifsJson.as[ListPropertyPeriodSummariesResponse] shouldBe model
     }
@@ -90,7 +90,7 @@ class ListPropertyPeriodSummariesResponseSpec extends UnitSpec with MockAppConfi
   "writes" should {
     "write to JSON" in {
       val model = ListPropertyPeriodSummariesResponse(
-        Seq(
+        List(
           SubmissionPeriod("4557ecb5-fd32-48cc-81f5-e6acd1099f3c", "2022-06-22", "2022-06-22")
         ))
 
@@ -120,7 +120,7 @@ class ListPropertyPeriodSummariesResponseSpec extends UnitSpec with MockAppConfi
 
         MockedAppConfig.apiGatewayContext.returns("my/context").anyNumberOfTimes()
 
-        ListPropertyPeriodSummariesResponse.LinksFactory.links(mockAppConfig, data) shouldBe Seq(
+        ListPropertyPeriodSummariesResponse.LinksFactory.links(mockAppConfig, data) shouldBe List(
           Link(href = s"/my/context/${data.nino}/${data.businessId}/period/${data.taxYear}", method = Method.GET, rel = "self")
         )
       }

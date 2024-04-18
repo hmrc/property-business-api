@@ -418,7 +418,7 @@ class CreateAmendForeignPropertyAnnualSubmissionControllerISpec extends Integrat
         }
       }
 
-      val input = Seq(
+      val input = List(
         ("AA1123A", "XAIS12345678910", "2021-22", requestBodyJson, BAD_REQUEST, NinoFormatError),
         ("AA123456A", "XAIS12345678910", "202362-23", requestBodyJson, BAD_REQUEST, TaxYearFormatError),
         ("AA123456A", "XAIS1234dfxgchjbn5678910", "2021-22", requestBodyJson, BAD_REQUEST, BusinessIdFormatError),
@@ -439,28 +439,28 @@ class CreateAmendForeignPropertyAnnualSubmissionControllerISpec extends Integrat
           "2021-22",
           ruleCountryCodeErrorRequestJson,
           BAD_REQUEST,
-          RuleCountryCodeError.copy(paths = Some(Seq("/foreignNonFhlProperty/0/countryCode")))),
+          RuleCountryCodeError.copy(paths = Some(List("/foreignNonFhlProperty/0/countryCode")))),
         (
           "AA123456A",
           "XAIS12345678910",
           "2021-22",
           formatCountryCodeErrorRequestJson,
           BAD_REQUEST,
-          CountryCodeFormatError.copy(paths = Some(Seq("/foreignNonFhlProperty/0/countryCode")))),
+          CountryCodeFormatError.copy(paths = Some(List("/foreignNonFhlProperty/0/countryCode")))),
         (
           "AA123456A",
           "XAIS12345678910",
           "2021-22",
           bothAllowancesSuppliedErrorRequestJson,
           BAD_REQUEST,
-          RuleBothAllowancesSuppliedError.copy(paths = Some(Seq("/foreignFhlEea/allowances")))),
+          RuleBothAllowancesSuppliedError.copy(paths = Some(List("/foreignFhlEea/allowances")))),
         (
           "AA123456A",
           "XAIS12345678910",
           "2022-23",
           ruleBuildingNameOrNumberErrorRequestJson,
           BAD_REQUEST,
-          RuleBuildingNameNumberError.copy(paths = Some(Seq("/foreignNonFhlProperty/0/allowances/structuredBuildingAllowance/0/building"))))
+          RuleBuildingNameNumberError.copy(paths = Some(List("/foreignNonFhlProperty/0/allowances/structuredBuildingAllowance/0/building"))))
       )
       input.foreach(args => (validationErrorTest _).tupled(args))
     }
@@ -526,7 +526,7 @@ class CreateAmendForeignPropertyAnnualSubmissionControllerISpec extends Integrat
       buildRequest(mtdUri)
         .withHttpHeaders(
           (ACCEPT, "application/vnd.hmrc.3.0+json"),
-          (AUTHORIZATION, "Bearer 123") // some bearer token
+          (AUTHORIZATION, "Bearer 123")
         )
     }
 

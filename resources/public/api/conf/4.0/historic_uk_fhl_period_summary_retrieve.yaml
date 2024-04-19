@@ -35,16 +35,16 @@ responses:
     content:
       application/json:
         schema:
-          $ref: './schemas/uk_property_period_summary_retrieve/response.json'
+          $ref: './schemas/historic_uk_fhl_period_summary_retrieve/response.json'
         examples:
           all-other-response:
             description: Full Expenditure response
             value:
-              $ref: './examples/uk_property_period_summary_retrieve/response.json'
+              $ref: './examples/historic_uk_fhl_period_summary_retrieve/response.json'
           property-allowance-response:
             description: Consolidated Expenditure response
             value:
-              $ref: './examples/uk_property_period_summary_retrieve/consolidated_response.json'
+              $ref: './examples/historic_uk_fhl_period_summary_retrieve/consolidated_response.json'
   "400":
     description: Bad request
     content:

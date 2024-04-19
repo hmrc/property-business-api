@@ -29,7 +29,7 @@ import v4.createUkPropertyPeriodSummary.model.request.Def2_CreateUkPropertyPerio
 
 class Def2_CreateUkPropertyPeriodSummaryRulesValidator extends RulesValidator[Def2_CreateUkPropertyPeriodSummaryRequestData] {
 
-  private val resolveParsedNumber = ResolveParsedNumber()
+  private val resolveParsedNumber              = ResolveParsedNumber()
   private val resolveMaybeNegativeParsedNumber = ResolveParsedNumber(min = -99999999999.99)
 
   def validateBusinessRules(
@@ -45,7 +45,6 @@ class Def2_CreateUkPropertyPeriodSummaryRulesValidator extends RulesValidator[De
 
   private def validateUkFhlProperty(ukFhlProperty: Def2_Create_UkFhlProperty): Validated[Seq[MtdError], Unit] = {
     import ukFhlProperty.{expenses => maybeExpenses, income => maybeIncome}
-
 
     val maybeNegativeValues = List(
       (maybeExpenses.flatMap(_.premisesRunningCosts), "/ukFhlProperty/expenses/premisesRunningCosts"),
@@ -66,7 +65,7 @@ class Def2_CreateUkPropertyPeriodSummaryRulesValidator extends RulesValidator[De
     )
 
     val validatedNegativeNumberFields = maybeNegativeValues.traverse {
-      case (None, _) => valid
+      case (None, _)            => valid
       case (Some(number), path) => resolveMaybeNegativeParsedNumber(number, path)
     }
 
@@ -109,7 +108,6 @@ class Def2_CreateUkPropertyPeriodSummaryRulesValidator extends RulesValidator[De
   private def validateUkNonFhlProperty(ukNonFhlProperty: Def2_Create_UkNonFhlProperty): Validated[Seq[MtdError], Unit] = {
     import ukNonFhlProperty.{expenses => maybeExpenses, income => maybeIncome}
 
-
     val maybeNegativeExpensesValues = List(
       (maybeExpenses.flatMap(_.premisesRunningCosts), "/ukNonFhlProperty/expenses/premisesRunningCosts"),
       (maybeExpenses.flatMap(_.repairsAndMaintenance), "/ukNonFhlProperty/expenses/repairsAndMaintenance"),
@@ -133,14 +131,13 @@ class Def2_CreateUkPropertyPeriodSummaryRulesValidator extends RulesValidator[De
       (maybeExpenses.flatMap(_.rentARoom.flatMap(_.amountClaimed)), "/ukNonFhlProperty/expenses/rentARoom/amountClaimed")
     )
 
-
     val validatedNonNegativeNumberFields = maybeValues.traverse {
-      case (None,_)         => valid
+      case (None, _)            => valid
       case (Some(number), path) => resolveParsedNumber(number, path)
     }
 
     val validatedMaybeNegativeNumberFields = maybeNegativeExpensesValues.traverse {
-      case (None,_)         => valid
+      case (None, _)            => valid
       case (Some(number), path) => resolveMaybeNegativeParsedNumber(number, path)
     }
 
@@ -155,14 +152,7 @@ class Def2_CreateUkPropertyPeriodSummaryRulesValidator extends RulesValidator[De
 
   private def validateNonFhlConsolidatedExpenses(expenses: Def2_Create_UkNonFhlPropertyExpenses): Validated[Seq[MtdError], Unit] = {
     expenses match {
-      case Def2_Create_UkNonFhlPropertyExpenses(None, None, None, None, None, None, None, None, None, None, Some(_))          => valid
-      case Def2_Create_UkNonFhlPropertyExpenses(None, None, None, None, None, None, None, None, None, Some(_), Some(_))       => valid
-      case Def2_Create_UkNonFhlPropertyExpenses(None, None, None, None, None, None, None, None, Some(_), None, Some(_))       => valid
-      case Def2_Create_UkNonFhlPropertyExpenses(None, None, None, None, None, None, Some(_), None, None, None, Some(_))       => valid
-      case Def2_Create_UkNonFhlPropertyExpenses(None, None, None, None, None, None, None, None, Some(_), Some(_), Some(_))    => valid
-      case Def2_Create_UkNonFhlPropertyExpenses(None, None, None, None, None, None, Some(_), None, None, Some(_), Some(_))    => valid
-      case Def2_Create_UkNonFhlPropertyExpenses(None, None, None, None, None, None, Some(_), None, Some(_), None, Some(_))    => valid
-      case Def2_Create_UkNonFhlPropertyExpenses(None, None, None, None, None, None, Some(_), None, Some(_), Some(_), Some(_)) => valid
+      case Def2_Create_UkNonFhlPropertyExpenses(None, None, None, None, None, None, _, None, _, _, Some(_)) => valid
       case _ =>
         expenses.consolidatedExpenses
           .map(_ => Invalid(List(RuleBothExpensesSuppliedError.withPath("/ukNonFhlProperty/expenses"))))

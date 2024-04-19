@@ -23,10 +23,7 @@ import cats.data.Validated
 import cats.data.Validated.Invalid
 import cats.implicits._
 import v4.amendUkPropertyPeriodSummary.def2.model.request.def2_ukFhlProperty.{Def2_Amend_UkFhlProperty, Def2_Amend_UkFhlPropertyExpenses}
-import v4.amendUkPropertyPeriodSummary.def2.model.request.def2_ukNonFhlProperty.{
-  Def2_Amend_UkNonFhlProperty,
-  Def2_Amend_UkNonFhlPropertyExpenses
-}
+import v4.amendUkPropertyPeriodSummary.def2.model.request.def2_ukNonFhlProperty.{Def2_Amend_UkNonFhlProperty, Def2_Amend_UkNonFhlPropertyExpenses}
 import v4.amendUkPropertyPeriodSummary.def2.model.request.def2_ukPropertyRentARoom.Def2_Amend_UkPropertyExpensesRentARoom
 import v4.amendUkPropertyPeriodSummary.model.request.Def2_AmendUkPropertyPeriodSummaryRequestData
 
@@ -78,7 +75,7 @@ class Def2_AmendUkPropertyPeriodSummaryRulesValidator extends RulesValidator[Def
 
     val validatedConsolidatedExpenses = expenses match {
       case Some(expenses) => validateFhlConsolidatedExpenses(expenses)
-      case None => valid
+      case None           => valid
     }
 
     (validatedNonNegativeNumberFields ++ validatedMaybeNegativeNumberFields :+ validatedConsolidatedExpenses).sequence.andThen(_ => valid)
@@ -143,7 +140,7 @@ class Def2_AmendUkPropertyPeriodSummaryRulesValidator extends RulesValidator[Def
 
     val validatedConsolidatedExpenses = expenses match {
       case Some(expenses) => validateNonFhlConsolidatedExpenses(expenses)
-      case None => valid
+      case None           => valid
     }
 
     (validatedNonNegativeNumberFields ++ validatedMaybeNegativeNumberFields :+ validatedConsolidatedExpenses).sequence.andThen(_ => valid)
@@ -152,14 +149,7 @@ class Def2_AmendUkPropertyPeriodSummaryRulesValidator extends RulesValidator[Def
 
   private def validateNonFhlConsolidatedExpenses(expenses: Def2_Amend_UkNonFhlPropertyExpenses): Validated[Seq[MtdError], Unit] = {
     expenses match {
-      case Def2_Amend_UkNonFhlPropertyExpenses(None, None, None, None, None, None, None, None, None, None, Some(_))          => valid
-      case Def2_Amend_UkNonFhlPropertyExpenses(None, None, None, None, None, None, None, None, None, Some(_), Some(_))       => valid
-      case Def2_Amend_UkNonFhlPropertyExpenses(None, None, None, None, None, None, None, None, Some(_), None, Some(_))       => valid
-      case Def2_Amend_UkNonFhlPropertyExpenses(None, None, None, None, None, None, Some(_), None, None, None, Some(_))       => valid
-      case Def2_Amend_UkNonFhlPropertyExpenses(None, None, None, None, None, None, None, None, Some(_), Some(_), Some(_))    => valid
-      case Def2_Amend_UkNonFhlPropertyExpenses(None, None, None, None, None, None, Some(_), None, None, Some(_), Some(_))    => valid
-      case Def2_Amend_UkNonFhlPropertyExpenses(None, None, None, None, None, None, Some(_), None, Some(_), None, Some(_))    => valid
-      case Def2_Amend_UkNonFhlPropertyExpenses(None, None, None, None, None, None, Some(_), None, Some(_), Some(_), Some(_)) => valid
+      case Def2_Amend_UkNonFhlPropertyExpenses(None, None, None, None, None, None, _, None, _, _, Some(_)) => valid
       case _ =>
         expenses.consolidatedExpenses
           .map(_ => Invalid(List(RuleBothExpensesSuppliedError.withPath("/ukNonFhlProperty/expenses"))))

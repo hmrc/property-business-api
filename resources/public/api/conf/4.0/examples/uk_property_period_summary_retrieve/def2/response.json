@@ -1,7 +1,8 @@
 {
-  "fromDate": "2024-04-06",
-  "toDate": "2024-07-04",
-  "ukFhlProperty":{
+  "submittedOn": "2024-10-21T10:59:47.544Z",
+  "fromDate": "2024-07-06",
+  "toDate": "2024-10-05",
+  "ukFhlProperty": {
     "income": {
       "periodAmount": 5000.99,
       "taxDeducted": 3123.21,
@@ -10,59 +11,59 @@
       }
     },
     "expenses": {
-      "premisesRunningCosts": 3123.21,
-      "repairsAndMaintenance": 928.42,
-      "financialCosts": 842.99,
-      "professionalFees": 8831.12,
-      "costOfServices": 484.12,
-      "other": 99282,
-      "travelCosts": 974.47,
+      "premisesRunningCosts": -993.1,
+      "repairsAndMaintenance": -939.75,
+      "financialCosts": 399.29,
+      "professionalFees": -3991.49,
+      "costOfServices": -849.2,
+      "other": 8849.95,
+      "travelCosts": 3910.5,
       "rentARoom": {
-        "amountClaimed": 8842.43
+        "amountClaimed": 9482.75
       }
     }
   },
   "ukNonFhlProperty": {
     "income": {
-      "premiumsOfLeaseGrant": 42.12,
-      "reversePremiums": 84.31,
-      "periodAmount": 9884.93,
-      "taxDeducted": 842.99,
-      "otherIncome": 31.44,
+      "premiumsOfLeaseGrant": 4889.23,
+      "reversePremiums": 847.35,
+      "periodAmount": 747.45,
+      "taxDeducted": 984.29,
+      "otherIncome": 954.32,
       "rentARoom": {
-        "rentsReceived": 947.66
+        "rentsReceived": 488.39
       }
     },
     "expenses": {
-      "premisesRunningCosts": 4141.21,
-      "repairsAndMaintenance": 582.21,
+      "premisesRunningCosts": -4141.21,
+      "repairsAndMaintenance": -582.25,
       "financialCosts": 829.39,
-      "professionalFees": 4992.31,
-      "costOfServices": 98.21,
-      "other": 29.48,
+      "professionalFees": -4992.31,
+      "costOfServices": -98.5,
+      "other": 488.95,
       "residentialFinancialCost": 2884.99,
       "travelCosts": 48.93,
       "residentialFinancialCostsCarriedForward": 483.91,
       "rentARoom": {
-        "amountClaimed": 88.21
+        "amountClaimed": 88.55
       }
     }
   },
   "links": [
     {
-      "href": "/individuals/business/property/uk/period/furnished-holiday-lettings/TC663795B/2022-04-06_2022-07-04",
+      "href": "/individuals/business/property/uk/KZ816096B/XAIS12345678910/period/2023-24/4557ecb5-fd32-48cc-81f5-e6acd1099f3c",
       "method": "PUT",
-      "rel": "amend-uk-property-historic-fhl-period-summary"
+      "rel": "amend-uk-property-period-summary"
     },
     {
-      "href": "/individuals/business/property/uk/period/furnished-holiday-lettings/TC663795B/2022-04-06_2022-07-04",
+      "href": "/individuals/business/property/uk/KZ816096B/XAIS12345678910/period/2023-24/4557ecb5-fd32-48cc-81f5-e6acd1099f3c",
       "method": "GET",
       "rel": "self"
     },
     {
-      "href": "/individuals/business/property/uk/period/furnished-holiday-lettings/TC663795B",
+      "href": "/individuals/business/property/KZ816096B/XAIS12345678910/period/2023-24",
       "method": "GET",
-      "rel": "list-uk-property-historic-fhl-period-summaries"
+      "rel": "list-property-period-summaries"
     }
   ]
 }

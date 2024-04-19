@@ -17,7 +17,6 @@ description: |
   | STATEFUL                         | Performs a stateful retrieve.                                            |
 
 
-
 tags:
   - Foreign Property Income & Expenses Period Summary
 
@@ -43,16 +42,26 @@ responses:
     content:
       application/json:
         schema:
-          $ref: './schemas/foreign_property_period_summary_retrieve/response.json'
+          oneOf:
+            - $ref: './schemas/foreign_property_period_summary_retrieve/def1/response.json'
+            - $ref: './schemas/foreign_property_period_summary_retrieve/def2/response.json'
         examples:
-          full-expenses-response:
-            description: Full Expenses response
+          full-expenses-response-for-TY-2023-24:
+            description: Full Expenses Response for TY 2023-24 and before
             value:
-              $ref: './examples/foreign_property_period_summary_retrieve/response.json'
-          consolidated-expenses-response:
-            description: Consolidated Expenses response
+              $ref: './examples/foreign_property_period_summary_retrieve/def1/response.json'
+          consolidated-expenses-response-for-TY-2023-24:
+            description: Full Consolidated Expenses Response for TY 2023-24 and before
             value:
-              $ref: './examples/foreign_property_period_summary_retrieve/consolidated_response.json'
+              $ref: './examples/foreign_property_period_summary_retrieve/def1/consolidated_response.json'
+          full-expenses-response-for-TY-2024-25:
+            description: Full Expenses Response for TY 2024-25 and after
+            value:
+              $ref: './examples/foreign_property_period_summary_retrieve/def2/response.json'
+          consolidated-expenses-response-for-TY-2024-25:
+            description: Full Consolidated Expenses Response for TY 2024-25 and after
+            value:
+              $ref: './examples/foreign_property_period_summary_retrieve/def2/consolidated_response.json'
 
   "400":
     description: Bad request
@@ -66,7 +75,7 @@ responses:
           FORMAT_BUSINESS_ID:
             $ref: './common/errors.yaml#/components/examples/formatBusinessId'
           FORMAT_SUBMISSION_ID:
-            $ref: './common/errors.yaml#/components/examples/formatSubmissionId' 
+            $ref: './common/errors.yaml#/components/examples/formatSubmissionId'
           RULE_TYPE_OF_BUSINESS_INCORRECT:
             $ref: './common/errors.yaml#/components/examples/ruleTypeOfBusinessIncorrectForeign'
           RULE_INCORRECT_GOV_TEST_SCENARIO:
@@ -91,4 +100,3 @@ responses:
         examples:
           MATCHING_RESOURCE_NOT_FOUND:
             $ref: './common/errors.yaml#/components/examples/notFound'
-

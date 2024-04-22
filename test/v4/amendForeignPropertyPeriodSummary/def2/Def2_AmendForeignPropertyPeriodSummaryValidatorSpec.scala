@@ -114,7 +114,9 @@ class Def2_AmendForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with 
       |      "specialWithholdingTaxOrUkTaxPaid": 85.47
       |  },
       |  "expenses": {
-      |    "consolidatedExpenses": 332.78
+      |    "consolidatedExpenses": 332.78,
+      |    "residentialFinancialCost":879.28,
+      |    "broughtFwdResidentialFinancialCost":846.13
       |  }
       |}""".stripMargin)
 
@@ -235,7 +237,7 @@ class Def2_AmendForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with 
 
   //@formatter:off
   private val expensesNonFhlConsolidated = Def2_AmendForeignNonFhlPropertyExpenses(
-    None, None, None, None, None, None, None, None, None,
+    None, None, None, None, None, None, residentialFinancialCost = Some(879.28), broughtFwdResidentialFinancialCost = Some(846.13), None,
     consolidatedExpenses = Some(332.78)
   )
   //@formatter:on

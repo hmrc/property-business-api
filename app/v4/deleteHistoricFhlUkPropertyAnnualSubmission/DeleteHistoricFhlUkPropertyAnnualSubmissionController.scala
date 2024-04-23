@@ -21,7 +21,7 @@ import api.models.audit.FlattenedGenericAuditDetail
 import api.models.domain.HistoricPropertyType
 import api.services.{AuditService, EnrolmentsAuthService, MtdIdLookupService}
 import play.api.mvc.{Action, AnyContent, ControllerComponents}
-import routing.{Version, Version2}
+import routing.{Version, Version4}
 import utils.IdGenerator
 
 import javax.inject.{Inject, Singleton}
@@ -71,7 +71,7 @@ class DeleteHistoricFhlUkPropertyAnnualSubmissionController @Inject() (val authS
           auditType = s"DeleteHistoric${propertyType}PropertyBusinessAnnualSubmission",
           transactionName = s"delete-uk-property-historic-$propertyType-annual-submission",
           auditDetailCreator = FlattenedGenericAuditDetail.auditDetailCreator(
-            Version.from(request, orElse = Version2),
+            Version.from(request, orElse = Version4),
             Map("nino" -> nino, "taxYear" -> taxYear)
           ),
           requestBody = None,

@@ -23,7 +23,7 @@ import api.models.domain.HistoricPropertyType
 import config.{AppConfig, FeatureSwitches}
 import play.api.libs.json.JsObject
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
-import v4.deleteHistoricFhlUkPropertyAnnualSubmission.model.request.DeleteHistoricFhlUkPropertyAnnualSubmissionRequestData
+import v4.deleteHistoricFhlUkPropertyAnnualSubmission.model.request.{Def1_DeleteHistoricFhlUkPropertyAnnualSubmissionRequestData, DeleteHistoricFhlUkPropertyAnnualSubmissionRequestData}
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
@@ -47,9 +47,15 @@ class DeleteHistoricFhlUkPropertyAnnualSubmissionConnector @Inject() (val http: 
       case HistoricPropertyType.NonFhl => "other"
     }
 
-    val downstreamUri = IfsUri[Unit](s"income-tax/nino/$nino/uk-properties/$propertyTypeName/annual-summaries/${taxYear.asDownstream}")
+    request match {
+      case def1: Def1_DeleteHistoricFhlUkPropertyAnnualSubmissionRequestData =>
+        import def1._
+        val downstreamUri = IfsUri[Unit](s"income-tax/nino/$nino/uk-properties/$propertyTypeName/annual-summaries/${taxYear.asDownstream}")
 
-    put(JsObject.empty, downstreamUri, intent)
+        put(JsObject.empty, downstreamUri, intent)
+
+    }
+
   }
 
 }

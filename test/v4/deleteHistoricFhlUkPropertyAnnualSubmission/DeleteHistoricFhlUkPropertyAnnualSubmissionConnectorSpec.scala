@@ -21,7 +21,7 @@ import api.models.domain.{HistoricPropertyType, Nino, TaxYear}
 import api.models.outcomes.ResponseWrapper
 import mocks.MockFeatureSwitches
 import play.api.libs.json.JsObject
-import v4.deleteHistoricFhlUkPropertyAnnualSubmission.model.request.DeleteHistoricFhlUkPropertyAnnualSubmissionRequestData
+import v4.deleteHistoricFhlUkPropertyAnnualSubmission.model.request.Def1_DeleteHistoricFhlUkPropertyAnnualSubmissionRequestData
 
 import scala.concurrent.Future
 
@@ -91,8 +91,8 @@ class DeleteHistoricFhlUkPropertyAnnualSubmissionConnectorSpec extends Connector
       appConfig = mockAppConfig
     )
 
-    protected val request: DeleteHistoricFhlUkPropertyAnnualSubmissionRequestData =
-      DeleteHistoricFhlUkPropertyAnnualSubmissionRequestData(nino = nino, taxYear = taxYear, propertyType = propertyType)
+    protected val request: Def1_DeleteHistoricFhlUkPropertyAnnualSubmissionRequestData =
+      Def1_DeleteHistoricFhlUkPropertyAnnualSubmissionRequestData(nino = nino, taxYear = taxYear, propertyType = propertyType)
 
     protected val expectedOutcome: Right[Nothing, ResponseWrapper[Unit]] = Right(ResponseWrapper(correlationId, ()))
 

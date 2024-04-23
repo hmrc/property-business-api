@@ -22,7 +22,7 @@ import api.models.errors._
 import api.models.outcomes.ResponseWrapper
 import api.services.ServiceSpec
 import uk.gov.hmrc.http.HeaderCarrier
-import v4.deleteHistoricFhlUkPropertyAnnualSubmission.model.request.DeleteHistoricFhlUkPropertyAnnualSubmissionRequestData
+import v4.deleteHistoricFhlUkPropertyAnnualSubmission.model.request.Def1_DeleteHistoricFhlUkPropertyAnnualSubmissionRequestData
 
 import scala.concurrent.Future
 
@@ -83,8 +83,8 @@ class DeleteHistoricFhlUkPropertyAnnualSubmissionServiceSpec extends ServiceSpec
       connector = mockDeleteHistoricUkPropertyAnnualSubmissionConnector
     )
 
-    protected val requestData: DeleteHistoricFhlUkPropertyAnnualSubmissionRequestData =
-      DeleteHistoricFhlUkPropertyAnnualSubmissionRequestData(nino, taxYear, propertyType)
+    protected val requestData: Def1_DeleteHistoricFhlUkPropertyAnnualSubmissionRequestData =
+      Def1_DeleteHistoricFhlUkPropertyAnnualSubmissionRequestData(nino, taxYear, propertyType)
 
   }
 

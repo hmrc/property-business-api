@@ -26,11 +26,12 @@ import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class DeleteHistoricFhlUkPropertyAnnualSubmissionService @Inject()(connector: DeleteHistoricFhlUkPropertyAnnualSubmissionConnector) extends BaseService {
+class DeleteHistoricFhlUkPropertyAnnualSubmissionService @Inject() (connector: DeleteHistoricFhlUkPropertyAnnualSubmissionConnector)
+    extends BaseService {
 
   def deleteHistoricUkPropertyAnnualSubmission(request: DeleteHistoricFhlUkPropertyAnnualSubmissionRequestData)(implicit
-                                                                                                                ctx: RequestContext,
-                                                                                                                ec: ExecutionContext): Future[ServiceOutcome[Unit]] = {
+      ctx: RequestContext,
+      ec: ExecutionContext): Future[ServiceOutcome[Unit]] = {
 
     connector.deleteHistoricUkPropertyAnnualSubmission(request).map(_.leftMap(mapDownstreamErrors(downstreamErrorMap)))
   }

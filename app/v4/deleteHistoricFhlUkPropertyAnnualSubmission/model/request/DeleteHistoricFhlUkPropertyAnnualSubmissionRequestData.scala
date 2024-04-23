@@ -18,4 +18,11 @@ package v4.deleteHistoricFhlUkPropertyAnnualSubmission.model.request
 
 import api.models.domain.{HistoricPropertyType, Nino, TaxYear}
 
-case class DeleteHistoricFhlUkPropertyAnnualSubmissionRequestData(nino: Nino, taxYear: TaxYear, propertyType: HistoricPropertyType)
+sealed trait DeleteHistoricFhlUkPropertyAnnualSubmissionRequestData {
+  val nino: Nino
+  val taxYear: TaxYear
+  val propertyType: HistoricPropertyType
+}
+
+case class Def1_DeleteHistoricFhlUkPropertyAnnualSubmissionRequestData(nino: Nino, taxYear: TaxYear, propertyType: HistoricPropertyType)
+    extends DeleteHistoricFhlUkPropertyAnnualSubmissionRequestData

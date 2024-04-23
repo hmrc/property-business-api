@@ -17,33 +17,19 @@
 package v4.deleteHistoricFhlUkPropertyAnnualSubmission
 
 import api.controllers.validators.Validator
-import api.controllers.validators.resolvers.{ResolveHistoricTaxYear, ResolveNino}
 import api.models.domain.HistoricPropertyType
-import api.models.errors.MtdError
-import cats.data.Validated
-import cats.data.Validated.Valid
-import cats.implicits.catsSyntaxTuple3Semigroupal
 import config.AppConfig
+import v4.deleteHistoricFhlUkPropertyAnnualSubmission.def1.Def1_DeleteHistoricFhlUkPropertyAnnualSubmissionValidator
 import v4.deleteHistoricFhlUkPropertyAnnualSubmission.model.request.DeleteHistoricFhlUkPropertyAnnualSubmissionRequestData
 
 import javax.inject.{Inject, Singleton}
 
 @Singleton
-class DeleteHistoricFhlUkPropertyAnnualSubmissionValidatorFactory @Inject()(appConfig: AppConfig) {
+class DeleteHistoricFhlUkPropertyAnnualSubmissionValidatorFactory @Inject() (appConfig: AppConfig) {
 
-  private lazy val minimumTaxHistoric = appConfig.minimumTaxYearHistoric
-  private lazy val maximumTaxHistoric = appConfig.maximumTaxYearHistoric
-
-  def validator(nino: String, taxYear: String, propertyType: HistoricPropertyType): Validator[DeleteHistoricFhlUkPropertyAnnualSubmissionRequestData] =
-    new Validator[DeleteHistoricFhlUkPropertyAnnualSubmissionRequestData] {
-
-      def validate: Validated[Seq[MtdError], DeleteHistoricFhlUkPropertyAnnualSubmissionRequestData] =
-        (
-          ResolveNino(nino),
-          ResolveHistoricTaxYear(minimumTaxHistoric, maximumTaxHistoric, taxYear),
-          Valid(propertyType)
-        ).mapN(DeleteHistoricFhlUkPropertyAnnualSubmissionRequestData)
-
-    }
+  def validator(nino: String,
+                taxYear: String,
+                propertyType: HistoricPropertyType): Validator[DeleteHistoricFhlUkPropertyAnnualSubmissionRequestData] =
+    new Def1_DeleteHistoricFhlUkPropertyAnnualSubmissionValidator(nino, taxYear, propertyType, appConfig)
 
 }

@@ -26,7 +26,7 @@ import api.models.outcomes.ResponseWrapper
 import api.services.MockAuditService
 import play.api.libs.json.JsValue
 import play.api.mvc.Result
-import v4.deleteHistoricFhlUkPropertyAnnualSubmission.model.request.DeleteHistoricFhlUkPropertyAnnualSubmissionRequestData
+import v4.deleteHistoricFhlUkPropertyAnnualSubmission.model.request.Def1_DeleteHistoricFhlUkPropertyAnnualSubmissionRequestData
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -120,7 +120,7 @@ class DeleteHistoricFhlUkPropertyAnnualSubmissionControllerSpec
         auditType = s"DeleteHistoric${fhlType}PropertyBusinessAnnualSubmission",
         transactionName = s"delete-uk-property-historic-$fhlType-annual-submission",
         detail = FlattenedGenericAuditDetail(
-          versionNumber = Some("2.0"),
+          versionNumber = Some("4.0"),
           userDetails = UserDetails("some-mtdId", "Individual", None),
           params = Map("nino" -> nino, "taxYear" -> taxYear.asMtd),
           request = requestBody,
@@ -130,8 +130,8 @@ class DeleteHistoricFhlUkPropertyAnnualSubmissionControllerSpec
       )
     }
 
-    protected def requestData(propertyType: HistoricPropertyType): DeleteHistoricFhlUkPropertyAnnualSubmissionRequestData =
-      DeleteHistoricFhlUkPropertyAnnualSubmissionRequestData(Nino(nino), taxYear, propertyType)
+    protected def requestData(propertyType: HistoricPropertyType): Def1_DeleteHistoricFhlUkPropertyAnnualSubmissionRequestData =
+      Def1_DeleteHistoricFhlUkPropertyAnnualSubmissionRequestData(Nino(nino), taxYear, propertyType)
 
   }
 

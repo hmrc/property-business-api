@@ -17,13 +17,13 @@
 package v4.retrieveHistoricFhlUkPropertyAnnualSubmission
 
 import api.controllers.{ControllerBaseSpec, ControllerTestRunner}
-import api.hateoas.{HateoasWrapper, MockHateoasFactory}
+import api.hateoas.MockHateoasFactory
 import api.models.domain.{Nino, TaxYear}
 import api.models.errors._
 import api.models.outcomes.ResponseWrapper
 import api.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService}
 import mocks.MockIdGenerator
-import play.api.libs.json.{JsObject, JsValue, Json}
+import play.api.libs.json.{JsObject, Json}
 import play.api.mvc.Result
 import v4.retrieveHistoricFhlUkPropertyAnnualSubmission.def1.model.response._
 import v4.retrieveHistoricFhlUkPropertyAnnualSubmission.model.request._
@@ -55,11 +55,7 @@ class RetrieveHistoricFhlUkPropertyAnnualSubmissionControllerSpec
           .retrieve(requestData)
           .returns(Future.successful(Right(ResponseWrapper(correlationId, responseData))))
 
-        MockHateoasFactory
-          .wrap(responseData, hateoasData)
-          .returns(HateoasWrapper(responseData, testHateoasLinks))
-
-        runOkTest(expectedStatus = OK, maybeExpectedResponseBody = Some(responseBodyJsonWithHateoas))
+        runOkTest(expectedStatus = OK, maybeExpectedResponseBody = Some(responseBodyJson))
       }
     }
 
@@ -89,15 +85,14 @@ class RetrieveHistoricFhlUkPropertyAnnualSubmissionControllerSpec
       lookupService = mockMtdIdLookupService,
       validatorFactory = mockRetrieveHistoricFhlUkPropertyAnnualSubmissionValidatorFactory,
       service = mockRetrieveHistoricFhlUkPropertyAnnualSubmissionService,
-      hateoasFactory = mockHateoasFactory,
       cc = cc,
       idGenerator = mockIdGenerator
     )
 
     protected def callController(): Future[Result] = controller.handleRequest(nino, mtdTaxYear)(fakeGetRequest)
 
-    protected val requestData: RetrieveHistoricFhlUkPropertyAnnualSubmissionRequestData =
-      RetrieveHistoricFhlUkPropertyAnnualSubmissionRequestData(Nino(nino), taxYear)
+    protected val requestData: Def1_RetrieveHistoricFhlUkPropertyAnnualSubmissionRequestData =
+      Def1_RetrieveHistoricFhlUkPropertyAnnualSubmissionRequestData(Nino(nino), taxYear)
 
     private val annualAdjustments: AnnualAdjustments = AnnualAdjustments(
       Some(BigDecimal("100.11")),
@@ -117,12 +112,10 @@ class RetrieveHistoricFhlUkPropertyAnnualSubmissionControllerSpec
     )
 
     protected val responseData: RetrieveHistoricFhlUkPropertyAnnualSubmissionResponse =
-      RetrieveHistoricFhlUkPropertyAnnualSubmissionResponse(Some(annualAdjustments), Some(annualAllowances))
+      Def1_RetrieveHistoricFhlUkPropertyAnnualSubmissionResponse(Some(annualAdjustments), Some(annualAllowances))
 
-    protected val hateoasData: RetrieveHistoricFhlUkPropertyAnnualSubmissionHateoasData =
-      RetrieveHistoricFhlUkPropertyAnnualSubmissionHateoasData(nino, mtdTaxYear)
-
-    private val responseBodyJson: JsValue = Json.parse("""
+    val responseBodyJson: JsObject = Json
+      .parse("""
         |{
         | "annualAdjustments": {
         |     "lossBroughtForward":100.11,
@@ -143,8 +136,7 @@ class RetrieveHistoricFhlUkPropertyAnnualSubmissionControllerSpec
         |  }
         |}
         |""".stripMargin)
-
-    protected val responseBodyJsonWithHateoas: JsObject = responseBodyJson.as[JsObject] ++ testHateoasLinksJson
+      .as[JsObject]
 
   }
 

@@ -21,8 +21,8 @@ import api.models.domain.{Nino, TaxYear}
 import api.models.errors.{DownstreamErrorCode, DownstreamErrors}
 import api.models.outcomes.ResponseWrapper
 import org.scalamock.handlers.CallHandler
-import v4.retrieveHistoricFhlUkPropertyAnnualSubmission.model.request.RetrieveHistoricFhlUkPropertyAnnualSubmissionRequestData
-import v4.retrieveHistoricFhlUkPropertyAnnualSubmission.model.response.RetrieveHistoricFhlUkPropertyAnnualSubmissionResponse
+import v4.retrieveHistoricFhlUkPropertyAnnualSubmission.model.request.Def1_RetrieveHistoricFhlUkPropertyAnnualSubmissionRequestData
+import v4.retrieveHistoricFhlUkPropertyAnnualSubmission.model.response._
 
 import scala.concurrent.Future
 
@@ -76,13 +76,14 @@ class RetrieveHistoricFhlUkPropertyAnnualSubmissionConnectorSpec extends Connect
         .returns(Future.successful(outcome))
     }
 
-    protected val request: RetrieveHistoricFhlUkPropertyAnnualSubmissionRequestData = RetrieveHistoricFhlUkPropertyAnnualSubmissionRequestData(
-      nino = Nino(nino),
-      taxYear = TaxYear.fromMtd(mtdTaxYear)
-    )
+    protected val request: Def1_RetrieveHistoricFhlUkPropertyAnnualSubmissionRequestData =
+      Def1_RetrieveHistoricFhlUkPropertyAnnualSubmissionRequestData(
+        nino = Nino(nino),
+        taxYear = TaxYear.fromMtd(mtdTaxYear)
+      )
 
     protected val response: RetrieveHistoricFhlUkPropertyAnnualSubmissionResponse =
-      RetrieveHistoricFhlUkPropertyAnnualSubmissionResponse(None, None)
+      Def1_RetrieveHistoricFhlUkPropertyAnnualSubmissionResponse(None, None)
 
   }
 

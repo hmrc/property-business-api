@@ -19,7 +19,7 @@ package v4.retrieveHistoricFhlUkPropertyAnnualSubmission.def1.model.response
 import mocks.MockAppConfig
 import play.api.libs.json.{JsValue, Json}
 import support.UnitSpec
-import v4.retrieveHistoricFhlUkPropertyAnnualSubmission.model.response.RetrieveHistoricFhlUkPropertyAnnualSubmissionResponse
+import v4.retrieveHistoricFhlUkPropertyAnnualSubmission.model.response.Def1_RetrieveHistoricFhlUkPropertyAnnualSubmissionResponse
 
 class RetrieveHistoricFhlUkPropertyAnnualSubmissionResponseSpec extends UnitSpec with MockAppConfig {
 
@@ -47,7 +47,7 @@ class RetrieveHistoricFhlUkPropertyAnnualSubmissionResponseSpec extends UnitSpec
 
   private def decimal(value: String): Option[BigDecimal] = Option(BigDecimal(value))
 
-  val model = RetrieveHistoricFhlUkPropertyAnnualSubmissionResponse(
+  val model = Def1_RetrieveHistoricFhlUkPropertyAnnualSubmissionResponse(
     Some(
       AnnualAdjustments(
         decimal("200.00"),
@@ -62,7 +62,7 @@ class RetrieveHistoricFhlUkPropertyAnnualSubmissionResponseSpec extends UnitSpec
 
   "reads" should {
     "read the JSON object from downstream into a case class" in {
-      val result = downstreamJson.as[RetrieveHistoricFhlUkPropertyAnnualSubmissionResponse]
+      val result = downstreamJson.as[Def1_RetrieveHistoricFhlUkPropertyAnnualSubmissionResponse]
       result shouldBe model
     }
   }

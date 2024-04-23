@@ -17,11 +17,8 @@
 package v4.retrieveHistoricFhlUkPropertyAnnualSubmission
 
 import api.controllers.validators.Validator
-import api.controllers.validators.resolvers.{ResolveHistoricTaxYear, ResolveNino}
-import api.models.errors.MtdError
-import cats.data.Validated
-import cats.implicits._
 import config.AppConfig
+import v4.retrieveHistoricFhlUkPropertyAnnualSubmission.def1.Def1_RetrieveHistoricFhlUkPropertyAnnualSubmissionValidator
 import v4.retrieveHistoricFhlUkPropertyAnnualSubmission.model.request.RetrieveHistoricFhlUkPropertyAnnualSubmissionRequestData
 
 import javax.inject.{Inject, Singleton}
@@ -29,18 +26,7 @@ import javax.inject.{Inject, Singleton}
 @Singleton
 class RetrieveHistoricFhlUkPropertyAnnualSubmissionValidatorFactory @Inject() (appConfig: AppConfig) {
 
-  private lazy val minimumTaxYear = appConfig.minimumTaxYearHistoric
-  private lazy val maximumTaxYear = appConfig.maximumTaxYearHistoric
-
   def validator(nino: String, taxYear: String): Validator[RetrieveHistoricFhlUkPropertyAnnualSubmissionRequestData] =
-    new Validator[RetrieveHistoricFhlUkPropertyAnnualSubmissionRequestData] {
-
-      def validate: Validated[Seq[MtdError], RetrieveHistoricFhlUkPropertyAnnualSubmissionRequestData] =
-        (
-          ResolveNino(nino),
-          ResolveHistoricTaxYear(minimumTaxYear, maximumTaxYear, taxYear)
-        ).mapN(RetrieveHistoricFhlUkPropertyAnnualSubmissionRequestData)
-
-    }
+    new Def1_RetrieveHistoricFhlUkPropertyAnnualSubmissionValidator(nino, taxYear, appConfig)
 
 }

@@ -17,11 +17,9 @@
 package v4.retrieveHistoricFhlUkPropertyAnnualSubmission
 
 import api.controllers._
-import api.hateoas.HateoasFactory
 import api.services.{EnrolmentsAuthService, MtdIdLookupService}
 import play.api.mvc.{Action, AnyContent, ControllerComponents}
 import utils.IdGenerator
-import v4.retrieveHistoricFhlUkPropertyAnnualSubmission.model.response.RetrieveHistoricFhlUkPropertyAnnualSubmissionHateoasData
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.ExecutionContext
@@ -32,7 +30,6 @@ class RetrieveHistoricFhlUkPropertyAnnualSubmissionController @Inject() (
     val lookupService: MtdIdLookupService,
     validatorFactory: RetrieveHistoricFhlUkPropertyAnnualSubmissionValidatorFactory,
     service: RetrieveHistoricFhlUkPropertyAnnualSubmissionService,
-    hateoasFactory: HateoasFactory,
     cc: ControllerComponents,
     idGenerator: IdGenerator)(implicit ec: ExecutionContext)
     extends AuthorisedController(cc) {
@@ -52,7 +49,7 @@ class RetrieveHistoricFhlUkPropertyAnnualSubmissionController @Inject() (
         RequestHandler
           .withValidator(validator)
           .withService(service.retrieve)
-          .withHateoasResult(hateoasFactory)(RetrieveHistoricFhlUkPropertyAnnualSubmissionHateoasData(nino, taxYear))
+          .withPlainJsonResult()
 
       requestHandler.handleRequest()
     }

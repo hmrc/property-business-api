@@ -18,4 +18,10 @@ package v4.retrieveHistoricFhlUkPropertyAnnualSubmission.model.request
 
 import api.models.domain.{Nino, TaxYear}
 
-case class RetrieveHistoricFhlUkPropertyAnnualSubmissionRequestData(nino: Nino, taxYear: TaxYear)
+sealed trait RetrieveHistoricFhlUkPropertyAnnualSubmissionRequestData {
+  val nino: Nino
+  val taxYear: TaxYear
+}
+
+case class Def1_RetrieveHistoricFhlUkPropertyAnnualSubmissionRequestData(nino: Nino, taxYear: TaxYear)
+    extends RetrieveHistoricFhlUkPropertyAnnualSubmissionRequestData

@@ -16,37 +16,31 @@
 
 package v4.retrieveHistoricFhlUkPropertyAnnualSubmission.model.response
 
-import api.hateoas.{HateoasData, HateoasLinksFactory, Link}
-import config.AppConfig
-import play.api.libs.json.{Json, OWrites, Reads}
-import v4.hateoas.HateoasLinks
+import play.api.libs.functional.syntax._
+import play.api.libs.json.{JsPath, Json, OWrites, Reads}
 import v4.retrieveHistoricFhlUkPropertyAnnualSubmission.def1.model.response._
 
-case class RetrieveHistoricFhlUkPropertyAnnualSubmissionResponse(annualAdjustments: Option[AnnualAdjustments],
-                                                                 annualAllowances: Option[AnnualAllowances])
+sealed trait RetrieveHistoricFhlUkPropertyAnnualSubmissionResponse
 
-object RetrieveHistoricFhlUkPropertyAnnualSubmissionResponse extends HateoasLinks {
+object RetrieveHistoricFhlUkPropertyAnnualSubmissionResponse {
 
-  implicit val writes: OWrites[RetrieveHistoricFhlUkPropertyAnnualSubmissionResponse] =
-    Json.writes[RetrieveHistoricFhlUkPropertyAnnualSubmissionResponse]
-
-  implicit val reads: Reads[RetrieveHistoricFhlUkPropertyAnnualSubmissionResponse] =
-    Json.reads[RetrieveHistoricFhlUkPropertyAnnualSubmissionResponse]
-
-  implicit object RetrieveHistoricFhlUkPropertyAnnualSubmissionLinksFactory
-      extends HateoasLinksFactory[RetrieveHistoricFhlUkPropertyAnnualSubmissionResponse, RetrieveHistoricFhlUkPropertyAnnualSubmissionHateoasData] {
-
-    override def links(appConfig: AppConfig, data: RetrieveHistoricFhlUkPropertyAnnualSubmissionHateoasData): Seq[Link] = {
-      import data._
-      List(
-        retrieveHistoricFhlUkPropertyAnnualSubmission(appConfig, nino, taxYear, self = true),
-        createAmendHistoricFhlUkPropertyAnnualSubmission(appConfig, nino, taxYear),
-        deleteHistoricFhlUkPropertyAnnualSubmission(appConfig, nino, taxYear)
-      )
-    }
-
+  implicit val writes: OWrites[RetrieveHistoricFhlUkPropertyAnnualSubmissionResponse] = {
+    case def1: Def1_RetrieveHistoricFhlUkPropertyAnnualSubmissionResponse => Json.toJsObject(def1)
   }
 
 }
 
-case class RetrieveHistoricFhlUkPropertyAnnualSubmissionHateoasData(nino: String, taxYear: String) extends HateoasData
+case class Def1_RetrieveHistoricFhlUkPropertyAnnualSubmissionResponse(annualAdjustments: Option[AnnualAdjustments],
+                                                                      annualAllowances: Option[AnnualAllowances])
+    extends RetrieveHistoricFhlUkPropertyAnnualSubmissionResponse
+
+object Def1_RetrieveHistoricFhlUkPropertyAnnualSubmissionResponse {
+
+  implicit val writes: OWrites[Def1_RetrieveHistoricFhlUkPropertyAnnualSubmissionResponse] =
+    Json.writes[Def1_RetrieveHistoricFhlUkPropertyAnnualSubmissionResponse]
+
+  implicit val reads: Reads[Def1_RetrieveHistoricFhlUkPropertyAnnualSubmissionResponse] =
+    ((JsPath \ "annualAdjustments").readNullable[AnnualAdjustments] and
+      (JsPath \ "annualAllowances").readNullable[AnnualAllowances])(Def1_RetrieveHistoricFhlUkPropertyAnnualSubmissionResponse.apply _)
+
+}

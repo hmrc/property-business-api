@@ -17,12 +17,12 @@
 package v4.retrieveHistoricFhlUkPropertyAnnualSubmission
 
 import api.connectors.DownstreamUri.IfsUri
-import api.connectors.httpparsers.StandardDownstreamHttpParser.reads
+import api.connectors.httpparsers.StandardDownstreamHttpParser._
 import api.connectors.{BaseDownstreamConnector, DownstreamOutcome}
 import config.AppConfig
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
-import v4.retrieveHistoricFhlUkPropertyAnnualSubmission.model.request.RetrieveHistoricFhlUkPropertyAnnualSubmissionRequestData
-import v4.retrieveHistoricFhlUkPropertyAnnualSubmission.model.response.RetrieveHistoricFhlUkPropertyAnnualSubmissionResponse
+import v4.retrieveHistoricFhlUkPropertyAnnualSubmission.model.request._
+import v4.retrieveHistoricFhlUkPropertyAnnualSubmission.model.response._
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
@@ -36,12 +36,16 @@ class RetrieveHistoricFhlUkPropertyAnnualSubmissionConnector @Inject() (val http
       ec: ExecutionContext,
       correlationId: String): Future[DownstreamOutcome[RetrieveHistoricFhlUkPropertyAnnualSubmissionResponse]] = {
 
-    import request._
+    request match {
+      case def1: Def1_RetrieveHistoricFhlUkPropertyAnnualSubmissionRequestData =>
+        import def1._
+        val downstreamUri =
+          IfsUri[Def1_RetrieveHistoricFhlUkPropertyAnnualSubmissionResponse](
+            s"income-tax/nino/$nino/uk-properties/furnished-holiday-lettings/annual-summaries/${taxYear.asDownstream}")
 
-    val downstreamUri = IfsUri[RetrieveHistoricFhlUkPropertyAnnualSubmissionResponse](
-      s"income-tax/nino/$nino/uk-properties/furnished-holiday-lettings/annual-summaries/${taxYear.asDownstream}")
-
-    get(downstreamUri)
+        val result = get(downstreamUri)
+        result
+    }
 
   }
 

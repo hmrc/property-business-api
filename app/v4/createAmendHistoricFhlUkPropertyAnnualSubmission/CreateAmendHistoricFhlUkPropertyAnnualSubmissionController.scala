@@ -17,13 +17,11 @@
 package v4.createAmendHistoricFhlUkPropertyAnnualSubmission
 
 import api.controllers._
-import api.hateoas.HateoasFactory
 import api.services.{AuditService, EnrolmentsAuthService, MtdIdLookupService}
 import play.api.libs.json.JsValue
 import play.api.mvc.{Action, ControllerComponents}
-import routing.{Version, Version2}
+import routing.{Version, Version4}
 import utils.IdGenerator
-import v4.createAmendHistoricFhlUkPropertyAnnualSubmission.model.response.CreateAmendHistoricFhlUkPropertyAnnualSubmissionHateoasData
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.ExecutionContext
@@ -35,7 +33,6 @@ class CreateAmendHistoricFhlUkPropertyAnnualSubmissionController @Inject() (
     validatorFactory: CreateAmendHistoricFhlUkPropertyAnnualSubmissionValidatorFactory,
     service: CreateAmendHistoricFhlUkPropertyAnnualSubmissionService,
     auditService: AuditService,
-    hateoasFactory: HateoasFactory,
     cc: ControllerComponents,
     idGenerator: IdGenerator)(implicit ec: ExecutionContext)
     extends AuthorisedController(cc) {
@@ -60,12 +57,12 @@ class CreateAmendHistoricFhlUkPropertyAnnualSubmissionController @Inject() (
               auditService,
               auditType = "CreateAndAmendHistoricFhlPropertyBusinessAnnualSubmission",
               transactionName = "CreateAndAmendHistoricFhlPropertyBusinessAnnualSubmission",
-              apiVersion = Version.from(request, orElse = Version2),
+              apiVersion = Version.from(request, orElse = Version4),
               params = Map("nino" -> nino, "taxYear" -> taxYear),
               requestBody = Some(request.body)
             )
           )
-          .withHateoasResult(hateoasFactory)(CreateAmendHistoricFhlUkPropertyAnnualSubmissionHateoasData(nino, taxYear))
+          .withNoContentResult(successStatus = OK)
 
       requestHandler.handleRequest()
     }

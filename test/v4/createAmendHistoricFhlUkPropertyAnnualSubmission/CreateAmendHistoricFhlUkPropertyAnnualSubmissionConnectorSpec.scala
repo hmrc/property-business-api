@@ -52,11 +52,11 @@ class CreateAmendHistoricFhlUkPropertyAnnualSubmissionConnectorSpec extends Conn
       appConfig = mockAppConfig
     )
 
-    protected val requestBody: CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequestBody =
-      CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequestBody(None, None)
+    protected val requestBody: Def1_CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequestBody =
+      Def1_CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequestBody(None, None)
 
-    protected val request: CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequestData =
-      CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequestData(Nino(nino), TaxYear.fromMtd(mtdTaxYear), requestBody)
+    protected val request: Def1_CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequestData =
+      Def1_CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequestData(Nino(nino), TaxYear.fromMtd(mtdTaxYear), requestBody)
 
   }
 

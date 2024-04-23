@@ -86,11 +86,11 @@ class CreateAmendHistoricFhlUkPropertyAnnualSubmissionServiceSpec extends UnitSp
       connector = mockCreateAmendHistoricFhlUkPropertyAnnualSubmissionConnector
     )
 
-    private val body: CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequestBody =
-      CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequestBody(None, None)
+    private val body: Def1_CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequestBody =
+      Def1_CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequestBody(None, None)
 
-    protected val request: CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequestData =
-      CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequestData(Nino(nino), TaxYear.fromMtd(taxYear), body)
+    protected val request: Def1_CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequestData =
+      Def1_CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequestData(Nino(nino), TaxYear.fromMtd(taxYear), body)
 
   }
 

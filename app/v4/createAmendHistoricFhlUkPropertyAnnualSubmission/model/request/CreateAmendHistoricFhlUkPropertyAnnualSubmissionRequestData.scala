@@ -18,6 +18,13 @@ package v4.createAmendHistoricFhlUkPropertyAnnualSubmission.model.request
 
 import api.models.domain.{Nino, TaxYear}
 
-case class CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequestData(nino: Nino,
-                                                                       taxYear: TaxYear,
-                                                                       body: CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequestBody)
+sealed trait CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequestData {
+  val nino: Nino
+  val taxYear: TaxYear
+  def body: Def1_CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequestBody
+}
+
+case class Def1_CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequestData(nino: Nino,
+                                                                            taxYear: TaxYear,
+                                                                            body: Def1_CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequestBody)
+    extends CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequestData

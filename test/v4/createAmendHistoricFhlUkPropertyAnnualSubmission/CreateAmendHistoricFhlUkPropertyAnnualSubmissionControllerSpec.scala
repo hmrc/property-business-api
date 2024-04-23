@@ -17,7 +17,7 @@
 package v4.createAmendHistoricFhlUkPropertyAnnualSubmission
 
 import api.controllers.{ControllerBaseSpec, ControllerTestRunner}
-import api.hateoas.{HateoasWrapper, MockHateoasFactory}
+import api.hateoas.MockHateoasFactory
 import api.models.audit.{AuditEvent, AuditResponse, FlattenedGenericAuditDetail}
 import api.models.auth.UserDetails
 import api.models.domain.{Nino, TaxYear}
@@ -57,11 +57,7 @@ class CreateAmendHistoricFhlUkPropertyAnnualSubmissionControllerSpec
           .amend(requestData)
           .returns(Future.successful(Right(ResponseWrapper(correlationId, responseData))))
 
-        MockHateoasFactory
-          .wrap(responseData, hateoasData)
-          .returns(HateoasWrapper(responseData, testHateoasLinks))
-
-        runOkTest(expectedStatus = OK, maybeExpectedResponseBody = Some(testHateoasLinksJson))
+        runOkTest(expectedStatus = OK)
       }
     }
     "return the error as per spec" when {
@@ -90,7 +86,6 @@ class CreateAmendHistoricFhlUkPropertyAnnualSubmissionControllerSpec
       lookupService = mockMtdIdLookupService,
       validatorFactory = mockCreateAmendHistoricFhlUkPropertyAnnualSubmissionValidatorFactory,
       service = mockCreateAmendHistoricFhlUkPropertyAnnualSubmissionService,
-      hateoasFactory = mockHateoasFactory,
       auditService = mockAuditService,
       cc = cc,
       idGenerator = mockIdGenerator
@@ -114,14 +109,11 @@ class CreateAmendHistoricFhlUkPropertyAnnualSubmissionControllerSpec
 
     private val requestBodyJson: JsValue = JsObject.empty
 
-    protected val requestBody: CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequestBody =
-      CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequestBody(None, None)
+    protected val requestBody: Def1_CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequestBody =
+      Def1_CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequestBody(None, None)
 
     protected val requestData: CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequestData =
-      CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequestData(Nino(nino), TaxYear.fromMtd(taxYear), requestBody)
-
-    protected val hateoasData: CreateAmendHistoricFhlUkPropertyAnnualSubmissionHateoasData =
-      CreateAmendHistoricFhlUkPropertyAnnualSubmissionHateoasData(nino, taxYear)
+      Def1_CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequestData(Nino(nino), TaxYear.fromMtd(taxYear), requestBody)
 
     protected val responseData: CreateAmendHistoricFhlUkPropertyAnnualSubmissionResponse =
       CreateAmendHistoricFhlUkPropertyAnnualSubmissionResponse(transactionReference)

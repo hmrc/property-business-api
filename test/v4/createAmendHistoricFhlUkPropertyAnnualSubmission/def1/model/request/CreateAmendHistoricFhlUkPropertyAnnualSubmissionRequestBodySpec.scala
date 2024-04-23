@@ -18,12 +18,12 @@ package v4.createAmendHistoricFhlUkPropertyAnnualSubmission.def1.model.request
 
 import play.api.libs.json.{JsValue, Json}
 import support.UnitSpec
-import v4.createAmendHistoricFhlUkPropertyAnnualSubmission.model.request.CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequestBody
+import v4.createAmendHistoricFhlUkPropertyAnnualSubmission.model.request.Def1_CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequestBody
 
 class CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequestBodySpec extends UnitSpec {
 
-  val requestBody: CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequestBody =
-    CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequestBody(
+  val requestBody: Def1_CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequestBody =
+    Def1_CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequestBody(
       Some(
         HistoricFhlAnnualAdjustments(
           Some(200.00),
@@ -85,7 +85,7 @@ class CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequestBodySpec extends Un
   "reads" when {
     "passed a valid JSON" should {
       "return a valid model" in {
-        validMtdJson.as[CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequestBody] shouldBe requestBody
+        validMtdJson.as[Def1_CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequestBody] shouldBe requestBody
       }
     }
   }

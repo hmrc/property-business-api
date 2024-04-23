@@ -20,17 +20,20 @@ import play.api.libs.functional.syntax._
 import play.api.libs.json.{JsPath, Json, OWrites, Reads}
 import v4.createAmendHistoricFhlUkPropertyAnnualSubmission.def1.model.request.{HistoricFhlAnnualAdjustments, HistoricFhlAnnualAllowances}
 
-case class CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequestBody(annualAdjustments: Option[HistoricFhlAnnualAdjustments],
-                                                                       annualAllowances: Option[HistoricFhlAnnualAllowances])
+sealed trait CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequestBody
 
-object CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequestBody {
+case class Def1_CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequestBody(annualAdjustments: Option[HistoricFhlAnnualAdjustments],
+                                                                            annualAllowances: Option[HistoricFhlAnnualAllowances])
+    extends CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequestBody
 
-  implicit val reads: Reads[CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequestBody] =
-    Json.reads[CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequestBody]
+object Def1_CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequestBody {
 
-  implicit val writes: OWrites[CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequestBody] = (
+  implicit val reads: Reads[Def1_CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequestBody] =
+    Json.reads[Def1_CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequestBody]
+
+  implicit val writes: OWrites[Def1_CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequestBody] = (
     (JsPath \ "annualAdjustments").writeNullable[HistoricFhlAnnualAdjustments] and
       (JsPath \ "annualAllowances").writeNullable[HistoricFhlAnnualAllowances]
-  )(unlift(CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequestBody.unapply))
+  )(unlift(Def1_CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequestBody.unapply))
 
 }

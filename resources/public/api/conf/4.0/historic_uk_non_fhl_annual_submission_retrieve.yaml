@@ -34,12 +34,13 @@ responses:
     content:
       application/json:
         schema:
-          $ref: './schemas/historic_uk_non_fhl_annual_submission_retrieve/response.json'
+          oneOf:
+            - $ref: './schemas/historic_uk_non_fhl_annual_submission_retrieve/def1/response.json'
         examples:
           example:
-            description: Example Response
+            description: Example response given any tax year
             value:
-              $ref: './examples/historic_uk_non_fhl_annual_submission_retrieve/response.json'
+              $ref: './examples/historic_uk_non_fhl_annual_submission_retrieve/def1/response.json'
 
   "400":
     description: Bad request

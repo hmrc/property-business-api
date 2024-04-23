@@ -30,12 +30,13 @@ requestBody:
   content:
     application/json:
       schema:
-        $ref: './schemas/historic_uk_non_fhl_annual_submission_create_and_amend/request.json'
+        oneOf:
+          - $ref: './schemas/historic_uk_non_fhl_annual_submission_create_and_amend/def1/request.json'
       examples:
         property-allowance-request:
-          description: Property Allowance request
+          description: Property Allowance request given any tax year
           value:
-            $ref: './examples/historic_uk_non_fhl_annual_submission_create_and_amend/request.json'
+            $ref: './examples/historic_uk_non_fhl_annual_submission_create_and_amend/def1/request.json'
 
 responses:
   "200":
@@ -43,15 +44,6 @@ responses:
     headers:
       X-CorrelationId:
         $ref: './common/headers.yaml#/components/parameters/correlationId'
-    content:
-      application/json:
-        schema:
-          $ref: './schemas/historic_uk_non_fhl_annual_submission_create_and_amend/response.json'
-        examples:
-          example-response:
-            description: Example Response
-            value:
-              $ref: './examples/historic_uk_non_fhl_annual_submission_create_and_amend/response.json'
   "400":
     description: Bad request
     content:

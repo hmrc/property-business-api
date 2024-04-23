@@ -118,6 +118,26 @@ class Def2_AmendForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with 
       |  }
       |}""".stripMargin)
 
+  private val entryConsolidatedWithExtraFields = Json.parse("""
+      |{
+      |  "countryCode": "AFG",
+      |  "income": {
+      |    "rentIncome": {
+      |      "rentAmount": 440.31
+      |     },
+      |     "foreignTaxCreditRelief": false,
+      |     "premiumsOfLeaseGrant": 950.48,
+      |      "otherPropertyIncome": 802.49,
+      |      "foreignTaxPaidOrDeducted": 734.18,
+      |      "specialWithholdingTaxOrUkTaxPaid": 85.47
+      |  },
+      |  "expenses": {
+      |    "consolidatedExpenses": 332.78,
+      |    "residentialFinancialCost":879.28,
+      |    "broughtFwdResidentialFinancialCost":846.13
+      |  }
+      |}""".stripMargin)
+
   private def consolidatedBodyWith(nonFhlEntries: JsValue*) = Json.parse(
     s"""{
        |  "foreignFhlEea": {
@@ -134,6 +154,7 @@ class Def2_AmendForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with 
   )
 
   private val validBodyConsolidatedExpenses = consolidatedBodyWith(entryConsolidated)
+  private val validBodyExtraFieldsConsolidatedExpenses = consolidatedBodyWith(entryConsolidatedWithExtraFields)
 
   private val validBodyMinimalFhl = Json.parse("""
       |{
@@ -238,6 +259,11 @@ class Def2_AmendForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with 
     None, None, None, None, None, None, None, None, None,
     consolidatedExpenses = Some(332.78)
   )
+
+  private val expensesNonFhlConsolidatedWithExtraFields = Def2_AmendForeignNonFhlPropertyExpenses(
+    None, None, None, None, None, None, residentialFinancialCost = Some(879.28), broughtFwdResidentialFinancialCost = Some(846.13), None,
+    consolidatedExpenses = Some(332.78)
+  )
   //@formatter:on
 
   private def foreignNonFhlProperty = Def2_AmendForeignNonFhlPropertyEntry(
@@ -252,6 +278,10 @@ class Def2_AmendForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with 
   private val parsedBodyConsolidatedExpenses = Def2_AmendForeignPropertyPeriodSummaryRequestBody(
     Some(foreignFhlEeaConsolidated),
     Some(List(foreignNonFhlProperty.copy(expenses = Some(expensesNonFhlConsolidated))))
+  )
+  private val parsedBodyExtraFieldsConsolidatedExpenses = Def2_AmendForeignPropertyPeriodSummaryRequestBody(
+    Some(foreignFhlEeaConsolidated),
+    Some(List(foreignNonFhlProperty.copy(expenses = Some(expensesNonFhlConsolidatedWithExtraFields))))
   )
 
   private val parsedBodyMinimalFhl = Def2_AmendForeignPropertyPeriodSummaryRequestBody(
@@ -292,6 +322,20 @@ class Def2_AmendForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with 
             parsedTaxYear,
             parsedSubmissionId,
             parsedBodyConsolidatedExpenses))
+      }
+
+      "passed a valid request with consolidated expenses with extra field" in {
+        setupMocks()
+        val result: Either[ErrorWrapper, AmendForeignPropertyPeriodSummaryRequestData] =
+          validator(validNino, validBusinessId, validTaxYear, validSubmissionId, validBodyExtraFieldsConsolidatedExpenses).validateAndWrapResult()
+
+        result shouldBe Right(
+          Def2_AmendForeignPropertyPeriodSummaryRequestData(
+            parsedNino,
+            parsedBusinessId,
+            parsedTaxYear,
+            parsedSubmissionId,
+            parsedBodyExtraFieldsConsolidatedExpenses))
       }
 
       "passed a valid request with minimal fhl" in {

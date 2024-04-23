@@ -142,7 +142,7 @@ object Def1_AmendForeignPropertyPeriodSummaryRulesValidator extends RulesValidat
           case None => valid
           case Some(_) =>
             expenses match {
-              case AmendForeignNonFhlPropertyExpenses(None, None, None, None, None, None, None, None, None, Some(_)) => valid
+              case AmendForeignNonFhlPropertyExpenses(None, None, None, None, None, None, _, _, None, Some(_)) => valid
               case _ => Invalid(List(RuleBothExpensesSuppliedError.withPath(s"/foreignNonFhlProperty/$index/expenses")))
             }
         }

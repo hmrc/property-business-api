@@ -23,21 +23,29 @@ import mocks.MockAppConfig
 import play.api.libs.json.{JsArray, JsNumber, JsValue, Json}
 import support.UnitSpec
 import v4.amendForeignPropertyPeriodSummary.def1.model.request.foreignFhlEea.{AmendForeignFhlEea, AmendForeignFhlEeaExpenses, ForeignFhlEeaIncome}
-import v4.amendForeignPropertyPeriodSummary.def1.model.request.foreignPropertyEntry.{AmendForeignNonFhlPropertyEntry, AmendForeignNonFhlPropertyExpenses, ForeignNonFhlPropertyIncome, ForeignNonFhlPropertyRentIncome}
-import v4.amendForeignPropertyPeriodSummary.model.request.{AmendForeignPropertyPeriodSummaryRequestData, Def1_AmendForeignPropertyPeriodSummaryRequestBody, Def1_AmendForeignPropertyPeriodSummaryRequestData}
+import v4.amendForeignPropertyPeriodSummary.def1.model.request.foreignPropertyEntry.{
+  AmendForeignNonFhlPropertyEntry,
+  AmendForeignNonFhlPropertyExpenses,
+  ForeignNonFhlPropertyIncome,
+  ForeignNonFhlPropertyRentIncome
+}
+import v4.amendForeignPropertyPeriodSummary.model.request.{
+  AmendForeignPropertyPeriodSummaryRequestData,
+  Def1_AmendForeignPropertyPeriodSummaryRequestBody,
+  Def1_AmendForeignPropertyPeriodSummaryRequestData
+}
 
 class Def1_AmendForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with MockAppConfig with JsonErrorValidators {
   private implicit val correlationId: String = "1234"
 
-  private val validNino = "AA123456A"
-  private val validBusinessId = "XAIS12345678901"
-  private val validTaxYear = "2023-24"
+  private val validNino         = "AA123456A"
+  private val validBusinessId   = "XAIS12345678901"
+  private val validTaxYear      = "2023-24"
   private val validSubmissionId = "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
 
   private val countryCode = "AFG"
 
-  private def nonFhlEntryWith(countryCode: String) = Json.parse(
-    s"""
+  private def nonFhlEntryWith(countryCode: String) = Json.parse(s"""
        |{
        |  "countryCode": "$countryCode",
        |  "income": {
@@ -86,10 +94,30 @@ class Def1_AmendForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with 
        |""".stripMargin
   )
 
+  private val entryConsolidatedWithExtraFields = Json.parse(
+    """
+      |{
+      |  "countryCode": "AFG",
+      |  "income": {
+      |    "rentIncome": {
+      |      "rentAmount": 440.31
+      |     },
+      |     "foreignTaxCreditRelief": false,
+      |     "premiumsOfLeaseGrant": 950.48,
+      |      "otherPropertyIncome": 802.49,
+      |      "foreignTaxPaidOrDeducted": 734.18,
+      |      "specialWithholdingTaxOrUkTaxPaid": 85.47
+      |  },
+      |  "expenses": {
+      |    "consolidatedExpenses": 332.78,
+      |    "residentialFinancialCost":879.28,
+      |    "broughtFwdResidentialFinancialCost":846.13
+      |  }
+      |}""".stripMargin)
+
   private val validBody = bodyWith(entry)
 
-  private val entryConsolidated = Json.parse(
-    """
+  private val entryConsolidated = Json.parse("""
       |{
       |  "countryCode": "AFG",
       |  "income": {
@@ -123,9 +151,9 @@ class Def1_AmendForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with 
   )
 
   private val validBodyConsolidatedExpenses = consolidatedBodyWith(entryConsolidated)
+  private val validBodyExtraFieldsConsolidatedExpenses = consolidatedBodyWith(entryConsolidatedWithExtraFields)
 
-  private val validBodyMinimalFhl = Json.parse(
-    """
+  private val validBodyMinimalFhl = Json.parse("""
       |{
       |  "foreignFhlEea": {
       |    "income": {
@@ -135,8 +163,7 @@ class Def1_AmendForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with 
       |}
       |""".stripMargin)
 
-  private val validBodyMinimalNonFhl = Json.parse(
-    """
+  private val validBodyMinimalNonFhl = Json.parse("""
       |{
       |  "foreignNonFhlProperty": [
       |    {
@@ -152,9 +179,9 @@ class Def1_AmendForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with 
       |}
       |""".stripMargin)
 
-  private val parsedNino = Nino(validNino)
-  private val parsedBusinessId = BusinessId(validBusinessId)
-  private val parsedTaxYear = TaxYear.fromMtd(validTaxYear)
+  private val parsedNino         = Nino(validNino)
+  private val parsedBusinessId   = BusinessId(validBusinessId)
+  private val parsedTaxYear      = TaxYear.fromMtd(validTaxYear)
   private val parsedSubmissionId = SubmissionId(validSubmissionId)
 
   private val incomeFhl = ForeignFhlEeaIncome(
@@ -177,6 +204,7 @@ class Def1_AmendForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with 
     None, None, None, None, None, None, None,
     consolidatedExpenses = Some(332.78)
   )
+
   //@formatter:on
 
   private val foreignFhlEea = AmendForeignFhlEea(
@@ -229,6 +257,11 @@ class Def1_AmendForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with 
     None, None, None, None, None, None, None, None, None,
     consolidatedExpenses = Some(332.78)
   )
+
+  private val expensesNonFhlConsolidatedWithExtraFields = AmendForeignNonFhlPropertyExpenses(
+    None, None, None, None, None, None, residentialFinancialCost = Some(879.28), broughtFwdResidentialFinancialCost = Some(846.13), None,
+    consolidatedExpenses = Some(332.78)
+  )
   //@formatter:on
 
   private def foreignNonFhlProperty = AmendForeignNonFhlPropertyEntry(
@@ -244,6 +277,12 @@ class Def1_AmendForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with 
     Some(foreignFhlEeaConsolidated),
     Some(List(foreignNonFhlProperty.copy(expenses = Some(expensesNonFhlConsolidated))))
   )
+
+  private val parsedBodyExtraFieldsConsolidatedExpenses = Def1_AmendForeignPropertyPeriodSummaryRequestBody(
+    Some(foreignFhlEeaConsolidated),
+    Some(List(foreignNonFhlProperty.copy(expenses = Some(expensesNonFhlConsolidatedWithExtraFields))))
+  )
+
 
   private val parsedBodyMinimalFhl = Def1_AmendForeignPropertyPeriodSummaryRequestBody(
     Some(foreignFhlEea.copy(expenses = None)),
@@ -285,6 +324,20 @@ class Def1_AmendForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with 
             parsedBodyConsolidatedExpenses))
       }
 
+      "passed a valid request with consolidated expenses with extra field" in {
+        setupMocks()
+        val result: Either[ErrorWrapper, AmendForeignPropertyPeriodSummaryRequestData] =
+          validator(validNino, validBusinessId, validTaxYear, validSubmissionId, validBodyExtraFieldsConsolidatedExpenses).validateAndWrapResult()
+
+        result shouldBe Right(
+          Def1_AmendForeignPropertyPeriodSummaryRequestData(
+            parsedNino,
+            parsedBusinessId,
+            parsedTaxYear,
+            parsedSubmissionId,
+            parsedBodyExtraFieldsConsolidatedExpenses))
+      }
+
       "passed a valid request with minimal fhl" in {
         setupMocks()
         val result: Either[ErrorWrapper, AmendForeignPropertyPeriodSummaryRequestData] =
@@ -307,7 +360,13 @@ class Def1_AmendForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with 
         setupMocks()
         val taxYearString = "2021-22"
         validator(validNino, validBusinessId, taxYearString, validSubmissionId, validBody).validateAndWrapResult() shouldBe
-          Right(Def1_AmendForeignPropertyPeriodSummaryRequestData(parsedNino, parsedBusinessId, TaxYear.fromMtd(taxYearString), parsedSubmissionId, parsedBody))
+          Right(
+            Def1_AmendForeignPropertyPeriodSummaryRequestData(
+              parsedNino,
+              parsedBusinessId,
+              TaxYear.fromMtd(taxYearString),
+              parsedSubmissionId,
+              parsedBody))
       }
     }
 

@@ -21,6 +21,8 @@
         "specialWithholdingTaxOrUkTaxPaid": 85.47
       },
       "expenses": {
+        "residentialFinancialCost": 200.25,
+        "broughtFwdResidentialFinancialCost": 100.25,
         "consolidatedExpenses": -3992.93
       }
     }

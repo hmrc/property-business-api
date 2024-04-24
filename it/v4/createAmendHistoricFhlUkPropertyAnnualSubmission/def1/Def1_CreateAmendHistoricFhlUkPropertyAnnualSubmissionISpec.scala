@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package v4.endpoints
+package v4.createAmendHistoricFhlUkPropertyAnnualSubmission.def1
 
 import api.models.errors._
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
@@ -26,7 +26,7 @@ import play.api.test.Helpers.AUTHORIZATION
 import support.IntegrationBaseSpec
 import v4.stubs._
 
-class CreateAmendHistoricFhlUkPropertyAnnualSubmissionControllerISpec extends IntegrationBaseSpec {
+class Def1_CreateAmendHistoricFhlUkPropertyAnnualSubmissionISpec extends IntegrationBaseSpec {
 
   private trait Test {
 

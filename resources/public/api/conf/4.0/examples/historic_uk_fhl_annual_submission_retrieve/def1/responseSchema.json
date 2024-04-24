@@ -50,22 +50,6 @@
           "type": "number"
         }
       }
-    },
-    "links": {
-      "type": "array",
-      "items": {
-        "properties": {
-          "method": {
-            "type": "string"
-          },
-          "rel": {
-            "type": "string"
-          },
-          "href": {
-            "type": "string"
-          }
-        }
-      }
     }
   }
 }

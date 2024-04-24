@@ -14,19 +14,19 @@
  * limitations under the License.
  */
 
-package v4.endpoints
+package v4.deleteHistoricFhlUkPropertyAnnualSubmission.def1
 
 import api.models.errors._
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import play.api.http.HeaderNames.ACCEPT
-import play.api.http.Status.{BAD_REQUEST, GONE, INTERNAL_SERVER_ERROR, NOT_FOUND, NO_CONTENT, SERVICE_UNAVAILABLE, UNPROCESSABLE_ENTITY}
+import play.api.http.Status._
 import play.api.libs.json.{JsObject, Json}
 import play.api.libs.ws.{WSRequest, WSResponse}
 import play.api.test.Helpers.AUTHORIZATION
 import support.IntegrationBaseSpec
 import v4.stubs._
 
-class DeleteHistoricFhlUkPropertyAnnualSubmissionControllerISpec extends IntegrationBaseSpec {
+class Def1_DeleteHistoricFhlUkPropertyAnnualSubmissionISpec extends IntegrationBaseSpec {
 
   private trait Test {
 

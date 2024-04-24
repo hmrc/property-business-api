@@ -14,9 +14,9 @@ PUT        /foreign/:nino/:businessId/annual/:taxYear                  v4.create
 GET        /foreign/:nino/:businessId/annual/:taxYear                  v4.retrieveForeignPropertyAnnualSubmission.RetrieveForeignPropertyAnnualSubmissionController.handleRequest(nino: String, businessId: String, taxYear: String)
 DELETE     /:nino/:businessId/annual/:taxYear                          v4.deletePropertyAnnualSubmission.DeletePropertyAnnualSubmissionController.handleRequest(nino: String, businessId: String, taxYear: String)
 
-PUT        /uk/annual/furnished-holiday-lettings/:nino/:taxYear       v2.controllers.CreateAmendHistoricFhlUkPropertyAnnualSubmissionController.handleRequest(nino: String, taxYear: String)
-GET        /uk/annual/furnished-holiday-lettings/:nino/:taxYear       v2.controllers.RetrieveHistoricFhlUkPropertyAnnualSubmissionController.handleRequest(nino: String, taxYear: String)
-DELETE     /uk/annual/furnished-holiday-lettings/:nino/:taxYear       v2.controllers.DeleteHistoricUkPropertyAnnualSubmissionController.handleFhlRequest(nino: String, taxYear: String)
+PUT        /uk/annual/furnished-holiday-lettings/:nino/:taxYear       v4.createAmendHistoricFhlUkPropertyAnnualSubmission.CreateAmendHistoricFhlUkPropertyAnnualSubmissionController.handleRequest(nino: String, taxYear: String)
+GET        /uk/annual/furnished-holiday-lettings/:nino/:taxYear       v4.retrieveHistoricFhlUkPropertyAnnualSubmission.RetrieveHistoricFhlUkPropertyAnnualSubmissionController.handleRequest(nino: String, taxYear: String)
+DELETE     /uk/annual/furnished-holiday-lettings/:nino/:taxYear       v4.deleteHistoricFhlUkPropertyAnnualSubmission.DeleteHistoricFhlUkPropertyAnnualSubmissionController.handleFhlRequest(nino: String, taxYear: String)
 
 PUT        /uk/annual/non-furnished-holiday-lettings/:nino/:taxYear   v2.controllers.CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionController.handleRequest(nino: String, taxYear: String)
 GET        /uk/annual/non-furnished-holiday-lettings/:nino/:taxYear   v2.controllers.RetrieveHistoricNonFhlUkPropertyAnnualSubmissionController.handleRequest(nino: String, taxYear: String)

@@ -26,7 +26,7 @@ import play.api.test.Helpers.AUTHORIZATION
 import support.IntegrationBaseSpec
 import v4.stubs._
 
-class RetrieveHistoricFhlUkPropertyAnnualSubmissionControllerISpec extends IntegrationBaseSpec {
+class Def1_RetrieveHistoricFhlUkPropertyAnnualSubmissionISpec extends IntegrationBaseSpec {
 
   private trait Test {
 

@@ -26,7 +26,7 @@ import play.api.test.Helpers.AUTHORIZATION
 import support.IntegrationBaseSpec
 import v4.stubs._
 
-class DeleteHistoricFhlUkPropertyAnnualSubmissionControllerISpec extends IntegrationBaseSpec {
+class Def1_DeleteHistoricFhlUkPropertyAnnualSubmissionISpec extends IntegrationBaseSpec {
 
   private trait Test {
 

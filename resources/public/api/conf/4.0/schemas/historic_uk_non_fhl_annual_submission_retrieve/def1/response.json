@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-04/schema#",
-  "title": "Retrieve a Historic Non-FHL UK Property Business Annual Submission",
+  "title": "Given any tax year",
   "description": "This endpoint allows a developer to retrieve the income from adjustments and allowances for their non-FHL UK property business for tax years up to 2021-22. A National Insurance number and tax year must be provided.",
   "type": "object",
   "properties": {
@@ -43,10 +43,14 @@
               "example": "false"
             }
           },
-          "required": ["jointlyLet"]
+          "required": [
+            "jointlyLet"
+          ]
         }
       },
-      "required": ["nonResidentLandlord"]
+      "required": [
+        "nonResidentLandlord"
+      ]
     },
     "annualAllowances": {
       "type": "object",
@@ -82,43 +86,6 @@
           "description": "The amount of tax exemption for individuals with income from land or property. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
           "example": "100.25"
         }
-      }
-    },
-    "links": {
-      "type": "array",
-      "items": {
-        "type": "object",
-        "description": "A list of endpoint links that indicate possible actions related to the current resource.",
-        "properties": {
-          "href": {
-            "description": "The relative url of the endpoint",
-            "type": "string",
-            "example": "/individuals/business/property/uk/non-furnished-holiday-lettings/AA999999A/2019-20"
-          },
-          "rel": {
-            "description": "A label for the endpoint, which describes how it is related to the current resource. The rel will be self where the action is retrieval of the same resource",
-            "type": "string",
-            "enum": [
-              "create-and-amend-uk-property-historic-non-fhl-annual-submission",
-              "self",
-              "delete-uk-property-historic-non-fhl-annual-submission"
-            ]
-          },
-          "method": {
-            "description": "The HTTP method type for the endpoint",
-            "type": "string",
-            "enum": [
-              "PUT",
-              "GET",
-              "DELETE"
-            ]
-          }
-        },
-        "required": [
-          "href",
-          "rel",
-          "method"
-        ]
       }
     }
   }

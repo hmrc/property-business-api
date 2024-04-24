@@ -19,6 +19,7 @@ package v4.createAmendForeignPropertyAnnualSubmission.model.response
 import api.hateoas.{HateoasData, HateoasLinksFactory, Link}
 import config.AppConfig
 import v4.hateoas.HateoasLinks
+
 object CreateAmendForeignPropertyAnnualSubmissionResponse extends HateoasLinks {
 
   implicit object LinksFactory extends HateoasLinksFactory[Unit, CreateAmendForeignPropertyAnnualSubmissionHateoasData] {

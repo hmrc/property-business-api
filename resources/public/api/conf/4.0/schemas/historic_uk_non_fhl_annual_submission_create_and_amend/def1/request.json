@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-04/schema#",
-  "title": "Create and Amend a Historic Non-FHL UK Property Business Annual Submission",
+  "title": "Given any tax year",
   "type": "object",
   "description": "This endpoint enables you to create and amend the income from adjustments and allowances for a non-furnished holiday lettings (non-FHL) UK property business for tax years from 2017-18 to 2021-22. A National Insurance number and tax year must be provided. Use this endpoint only for the specified tax year range; for current tax year submissions, use the Create and Amend a UK Property Business Annual Submission endpoint.",
   "properties": {

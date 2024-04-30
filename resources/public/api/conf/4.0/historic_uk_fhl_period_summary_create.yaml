@@ -37,16 +37,16 @@ requestBody:
   content:
     application/json:
       schema:
-        $ref: './schemas/historic_uk_fhl_period_summary_create/request.json'
+        $ref: './schemas/historic_uk_fhl_period_summary_create/def1/request.json'
       examples:
         full-expense-request:
-          description: Full Expenses request
+          description: Full Expenses request given any tax year
           value:
-            $ref: './examples/historic_uk_fhl_period_summary_create/request.json'
+            $ref: './examples/historic_uk_fhl_period_summary_create/def1/request.json'
         consolidated-expense-request:
-          description: Consolidated Expenses request
+          description: Consolidated Expenses request given any tax year
           value:
-            $ref: './examples/historic_uk_fhl_period_summary_create/consolidated_request.json'
+            $ref: './examples/historic_uk_fhl_period_summary_create/def1/consolidated_request.json'
 
 responses:
   "201":
@@ -54,15 +54,6 @@ responses:
     headers:
       X-CorrelationId:
         $ref: './common/headers.yaml#/components/parameters/correlationId'
-    content:
-      application/json:
-        schema:
-          $ref: './schemas/historic_uk_fhl_period_summary_create/response.json'
-        examples:
-          example-response:
-            description: Example Response
-            value:
-              $ref: './examples/historic_uk_fhl_period_summary_create/response.json'
   "400":
     description: Bad request
     content:

@@ -1,6 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2019-09/schema",
   "type": "object",
+  "title": "Given any tax year",
   "properties": {
     "fromDate": {
       "description": "The first day that the income and expenses period summary covers. Must conform to the format YYYY-MM-DD (Our systems only accept dates between 1900-01-01 and 2100-01-01)",

@@ -1,0 +1,80 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "type": "object",
+  "properties": {
+    "submissions": {
+      "type": "array",
+      "description": "Array containing details about non FHL UK property update periods",
+      "items":
+        {
+          "type": "object",
+          "description": "Array containing details about non FHL UK property update periods",
+          "properties": {
+            "periodId": {
+              "type": "string",
+              "description": "An identifier for the update period, unique to the customer's UK property business.",
+              "example": "2017-04-06_2017-07-04"
+            },
+            "fromDate": {
+              "type": "string",
+              "description": "The first day that the income, expenses and deduction period summary covers.\n\nMust conform to the format: YYYY-MM-DD.",
+              "example": "2020-01-01"
+            },
+            "toDate": {
+              "type": "string",
+              "description": "The last day that the income, expenses and deduction period summary covers.\n\nMust conform to the format: YYYY-MM-DD",
+              "example": "2020-01-01"
+            },
+            "links": {
+              "type": "array",
+              "description": "A list of endpoint links that indicate possible actions related to the current resource.",
+              "items":
+                {
+                  "type": "object",
+                  "properties": {
+                    "href": {
+                      "description": "The relative url of the endpoint.",
+                      "type": "string",
+                      "example": "/individuals/business/property/uk/period/non-furnished-holiday-lettings/TC663795B/2017-04-06_2017-07-04"
+                    },
+                    "method": {
+                      "description": "The HTTP method type for the endpoint.",
+                      "type": "string",
+                      "enum": [
+                        "PUT",
+                        "GET"
+                      ]
+                    },
+                    "rel": {
+                      "description": "A label for the endpoint, which describes how it is related to the current resource. The rel will be self where the action is retrieval of the same resource.",
+                      "type": "string",
+                      "enum": [
+                        "self",
+                        "amend-uk-property-historic-non-fhl-period-summary"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "href",
+                    "method",
+                    "rel"
+                  ]
+                }
+            }
+          },
+          "required": [
+            "periodId",
+            "fromDate",
+            "toDate",
+            "links"
+          ],
+          "additionalProperties": false
+        }
+    }
+  },
+  "required": [
+    "submissions",
+    "links"
+  ],
+  "additionalProperties": false
+}

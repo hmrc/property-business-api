@@ -20,12 +20,12 @@ import api.connectors.{ConnectorSpec, DownstreamOutcome}
 import api.models.domain.{BusinessId, Nino, TaxYear}
 import api.models.outcomes.ResponseWrapper
 import org.scalamock.handlers.CallHandler
+import v4.createAmendForeignPropertyAnnualSubmission.def1.model.request.Def1_Fixtures
 import v4.createAmendForeignPropertyAnnualSubmission.model.request._
-import v4.fixtures.createAmendForeignPropertyAnnualSubmission.CreateAmendForeignPropertyAnnualSubmissionFixture
 
 import scala.concurrent.Future
 
-class CreateAmendForeignPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec with CreateAmendForeignPropertyAnnualSubmissionFixture {
+class CreateAmendForeignPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec with Def1_Fixtures {
 
   private val nino: String       = "AA123456A"
   private val businessId: String = "XAIS12345678910"

@@ -1,0 +1,14 @@
+{
+  "$schema":"https://json-schema.org/draft/2019-09/schema",
+  "type":"object",
+  "properties":{
+    "periodId":{
+      "type":"string",
+      "description":"An identifier for the update period, unique to the UK business property.",
+      "example":"2017-04-06_2017-07-04"
+    }
+  },
+  "required":[
+    "periodId"
+  ]
+}

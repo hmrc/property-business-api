@@ -27,13 +27,15 @@ import utils.IdGenerator
 import javax.inject.Inject
 import scala.concurrent.ExecutionContext
 
-class AmendHistoricNonFhlUkPropertyPeriodSummaryController @Inject() (val authService: EnrolmentsAuthService,
-                                                                      val lookupService: MtdIdLookupService,
-                                                                      validatorFactory: AmendHistoricNonFhlUkPropertyPeriodSummaryValidatorFactory,
-                                                                      service: AmendHistoricNonFhlUkPropertyPeriodSummaryService,
-                                                                      auditService: AuditService,
-                                                                      cc: ControllerComponents,
-                                                                      idGenerator: IdGenerator)(implicit ec: ExecutionContext)
+class AmendHistoricNonFhlUkPropertyPeriodSummaryController @Inject() (
+    val authService: EnrolmentsAuthService,
+    val lookupService: MtdIdLookupService,
+    validatorFactory: AmendHistoricNonFhlUkPropertyPeriodSummaryValidatorFactory,
+    service: AmendHistoricNonFhlUkPropertyPeriodSummaryService,
+    auditService: AuditService,
+    cc: ControllerComponents,
+    idGenerator: IdGenerator
+)(implicit ec: ExecutionContext)
     extends AuthorisedController(cc) {
 
   implicit val endpointLogContext: EndpointLogContext = EndpointLogContext(

@@ -31,7 +31,10 @@ import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class AmendHistoricNonFhlUkPropertyPeriodSummaryConnector @Inject()(val http: HttpClient, val appConfig: AppConfig) extends BaseDownstreamConnector {
+class AmendHistoricNonFhlUkPropertyPeriodSummaryConnector @Inject() (
+    val http: HttpClient,
+    val appConfig: AppConfig
+) extends BaseDownstreamConnector {
 
   implicit val successCode: SuccessCode = SuccessCode(OK)
 

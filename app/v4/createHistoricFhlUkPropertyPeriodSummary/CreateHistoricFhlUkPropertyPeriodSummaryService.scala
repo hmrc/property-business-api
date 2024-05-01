@@ -36,7 +36,6 @@ class CreateHistoricFhlUkPropertyPeriodSummaryService @Inject() (connector: Crea
       ec: ExecutionContext
   ): Future[ServiceOutcome[CreateHistoricFhlUkPiePeriodSummaryResponse]] = {
 
-    println("before connector")
     def toResponse(wrapper: ResponseWrapper[Unit]): ResponseWrapper[CreateHistoricFhlUkPiePeriodSummaryResponse] =
       wrapper
         .map(_ => CreateHistoricFhlUkPiePeriodSummaryResponse(PeriodId(request.body.fromDate, request.body.toDate)))

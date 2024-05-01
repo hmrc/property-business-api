@@ -21,7 +21,6 @@ import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
 import uk.gov.hmrc.http.HeaderCarrier
 import v4.createHistoricFhlUkPropertyPeriodSummary.model.request.CreateHistoricFhlUkPiePeriodSummaryRequestData
-import v4.createHistoricFhlUkPropertyPeriodSummary.model.response.CreateHistoricFhlUkPiePeriodSummaryResponse
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -33,7 +32,7 @@ trait MockCreateHistoricFhlUkPropertyPeriodSummaryConnector extends MockFactory 
   object MockCreateHistoricFhlUkPropertyPeriodSummaryConnector {
 
     def create(requestData: CreateHistoricFhlUkPiePeriodSummaryRequestData)
-        : CallHandler[Future[DownstreamOutcome[CreateHistoricFhlUkPiePeriodSummaryResponse]]] = {
+        : CallHandler[Future[DownstreamOutcome[Unit]]] = {
       (
         mockCreateHistoricFhlUkPropertyPeriodSummaryConnector
           .create(_: CreateHistoricFhlUkPiePeriodSummaryRequestData)(

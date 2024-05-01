@@ -23,7 +23,6 @@ import api.models.outcomes.ResponseWrapper
 import support.UnitSpec
 import uk.gov.hmrc.http.HeaderCarrier
 import v4.amendHistoricFhlUkPropertyPeriodSummary.model.request.{Def1_AmendHistoricFhlUkPiePeriodSummaryRequestBody, Def1_AmendHistoricFhlUkPiePeriodSummaryRequestData}
-import v4.amendHistoricFhlUkPropertyPeriodSummary.model.response.AmendHistoricFhlUkPiePeriodSummaryResponse
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -40,9 +39,9 @@ class AmendHistoricFhlUkPropertyPeriodSummaryServiceSpec extends UnitSpec {
       "return mapped result" in new Test {
         MockAmendHistoricFhlUkPropertyPeriodSummaryConnector
           .amend(request)
-          .returns(Future.successful(Right(ResponseWrapper(correlationId, AmendHistoricFhlUkPiePeriodSummaryResponse("transactionId")))))
+          .returns(Future.successful(Right(ResponseWrapper(correlationId, ()))))
 
-        await(service.amend(request)) shouldBe Right(ResponseWrapper(correlationId, AmendHistoricFhlUkPiePeriodSummaryResponse("transactionId")))
+        await(service.amend(request)) shouldBe Right(ResponseWrapper(correlationId, ()))
       }
     }
   }

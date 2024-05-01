@@ -54,6 +54,15 @@ responses:
     headers:
       X-CorrelationId:
         $ref: './common/headers.yaml#/components/parameters/correlationId'
+    content:
+      application/json:
+        schema:
+          $ref: './schemas/historic_uk_fhl_period_summary_create/def1/response.json'
+        examples:
+          example-response:
+            description: Example Response
+            value:
+              $ref: './examples/historic_uk_fhl_period_summary_create/def1/response.json'
   "400":
     description: Bad request
     content:
@@ -64,25 +73,25 @@ responses:
           FORMAT_NINO:
             $ref: './common/errors.yaml#/components/examples/formatNino'
           FORMAT_FROM_DATE:
-            $ref: './common/errors.yaml#/components/examples/formatFromDate' 
+            $ref: './common/errors.yaml#/components/examples/formatFromDate'
           FORMAT_TO_DATE:
-            $ref: './common/errors.yaml#/components/examples/formatToDate' 
+            $ref: './common/errors.yaml#/components/examples/formatToDate'
           FORMAT_VALUE:
-            $ref: './common/errors.yaml#/components/examples/formatValue' 
+            $ref: './common/errors.yaml#/components/examples/formatValue'
           RULE_BOTH_EXPENSES_SUPPLIED:
-            $ref: './common/errors.yaml#/components/examples/ruleBothExpensesSupplied' 
+            $ref: './common/errors.yaml#/components/examples/ruleBothExpensesSupplied'
           RULE_INCORRECT_OR_EMPTY_BODY_SUBMITTED:
-            $ref: './common/errors.yaml#/components/examples/ruleIncorrectOrEmptyBody' 
+            $ref: './common/errors.yaml#/components/examples/ruleIncorrectOrEmptyBody'
           RULE_TO_DATE_BEFORE_FROM_DATE:
-            $ref: './common/errors.yaml#/components/examples/ruleToDateBeforeFromDate' 
+            $ref: './common/errors.yaml#/components/examples/ruleToDateBeforeFromDate'
           RULE_OVERLAPPING_PERIOD:
-            $ref: './common/errors.yaml#/components/examples/ruleOverlappingPeriod' 
+            $ref: './common/errors.yaml#/components/examples/ruleOverlappingPeriod'
           RULE_MISALIGNED_PERIOD:
-            $ref: './common/errors.yaml#/components/examples/ruleMisalignedPeriod'          
+            $ref: './common/errors.yaml#/components/examples/ruleMisalignedPeriod'
           RULE_NOT_CONTIGUOUS_PERIOD:
-            $ref: './common/errors.yaml#/components/examples/ruleNotContiguousPeriod' 
+            $ref: './common/errors.yaml#/components/examples/ruleNotContiguousPeriod'
           RULE_DUPLICATE_SUBMISSION:
-            $ref: './common/errors.yaml#/components/examples/ruleDuplicateSubmission' 
+            $ref: './common/errors.yaml#/components/examples/ruleDuplicateSubmission'
           RULE_TAX_YEAR_NOT_SUPPORTED:
             $ref: './common/errors.yaml#/components/examples/rulePeriodTaxYearNotSupported'
           RULE_INCORRECT_GOV_TEST_SCENARIO:

@@ -17,12 +17,12 @@
 package v4.amendHistoricFhlUkPropertyPeriodSummary
 
 import api.connectors.DownstreamUri.IfsUri
-import api.connectors.httpparsers.StandardDownstreamHttpParser.reads
+import api.connectors.httpparsers.StandardDownstreamHttpParser.{SuccessCode, readsEmpty}
 import api.connectors.{BaseDownstreamConnector, DownstreamOutcome}
 import config.AppConfig
+import play.api.http.Status.OK
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
 import v4.amendHistoricFhlUkPropertyPeriodSummary.model.request.{AmendHistoricFhlUkPiePeriodSummaryRequestData, Def1_AmendHistoricFhlUkPiePeriodSummaryRequestData}
-import v4.amendHistoricFhlUkPropertyPeriodSummary.model.response.AmendHistoricFhlUkPiePeriodSummaryResponse
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
@@ -34,14 +34,16 @@ class AmendHistoricFhlUkPropertyPeriodSummaryConnector @Inject()(val http: HttpC
   def amend(request: AmendHistoricFhlUkPiePeriodSummaryRequestData)(implicit
                                                                     hc: HeaderCarrier,
                                                                     ec: ExecutionContext,
-                                                                    correlationId: String): Future[DownstreamOutcome[AmendHistoricFhlUkPiePeriodSummaryResponse]] = {
+                                                                    correlationId: String): Future[DownstreamOutcome[Unit]] = {
+
+    implicit val successCode: SuccessCode = SuccessCode(OK)
 
     request match {
       case def1: Def1_AmendHistoricFhlUkPiePeriodSummaryRequestData =>
         import def1._
 
         val downstreamUri =
-          IfsUri[AmendHistoricFhlUkPiePeriodSummaryResponse](
+          IfsUri[Unit](
             s"income-tax/nino/$nino/uk-properties/furnished-holiday-lettings/periodic-summaries" +
               s"?from=${periodId.from}" +
               s"&to=${periodId.to}")

@@ -17,7 +17,9 @@
 package v4.createHistoricFhlUkPropertyPeriodSummary
 
 import api.controllers.RequestContext
+import api.models.domain.PeriodId
 import api.models.errors._
+import api.models.outcomes.ResponseWrapper
 import api.services.{BaseService, ServiceOutcome}
 import cats.implicits._
 import v4.createHistoricFhlUkPropertyPeriodSummary.model.request.CreateHistoricFhlUkPiePeriodSummaryRequestData
@@ -34,7 +36,12 @@ class CreateHistoricFhlUkPropertyPeriodSummaryService @Inject() (connector: Crea
       ec: ExecutionContext
   ): Future[ServiceOutcome[CreateHistoricFhlUkPiePeriodSummaryResponse]] = {
 
-    connector.create(request).map(_.leftMap(mapDownstreamErrors(downstreamErrorMap)))
+    println("before connector")
+    def toResponse(wrapper: ResponseWrapper[Unit]): ResponseWrapper[CreateHistoricFhlUkPiePeriodSummaryResponse] =
+      wrapper
+        .map(_ => CreateHistoricFhlUkPiePeriodSummaryResponse(PeriodId(request.body.fromDate, request.body.toDate)))
+
+    connector.create(request).map(_.map(toResponse).leftMap(mapDownstreamErrors(downstreamErrorMap)))
   }
 
   private val downstreamErrorMap: Map[String, MtdError] =

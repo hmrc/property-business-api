@@ -20,7 +20,6 @@ import api.connectors.{ConnectorSpec, DownstreamOutcome}
 import api.models.domain.{Nino, PeriodId}
 import api.models.outcomes.ResponseWrapper
 import v4.amendHistoricFhlUkPropertyPeriodSummary.model.request.{AmendHistoricFhlUkPiePeriodSummaryRequestData, Def1_AmendHistoricFhlUkPiePeriodSummaryRequestBody, Def1_AmendHistoricFhlUkPiePeriodSummaryRequestData}
-import v4.amendHistoricFhlUkPropertyPeriodSummary.model.response.AmendHistoricFhlUkPiePeriodSummaryResponse
 
 import scala.concurrent.Future
 
@@ -40,7 +39,7 @@ class AmendHistoricFhlUkPropertyPeriodSummaryConnectorSpec extends ConnectorSpec
         body = requestBody
       ).returns(Future.successful(outcome))
 
-      val result: DownstreamOutcome[AmendHistoricFhlUkPiePeriodSummaryResponse] = await(connector.amend(request))
+      val result: DownstreamOutcome[Unit] = await(connector.amend(request))
       result shouldBe outcome
     }
   }

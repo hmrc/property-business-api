@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package v4.retrieveHistoricFhlUkPropertyPeriodSummary.def1.reponse
+package v4.retrieveHistoricFhlUkPropertyPeriodSummary.def1.response
 
 import play.api.libs.json.Json
 import support.UnitSpec

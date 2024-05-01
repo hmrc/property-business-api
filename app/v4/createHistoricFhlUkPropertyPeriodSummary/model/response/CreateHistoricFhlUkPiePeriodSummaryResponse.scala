@@ -16,16 +16,13 @@
 
 package v4.createHistoricFhlUkPropertyPeriodSummary.model.response
 
-import play.api.libs.json.{Json, OWrites, Reads}
+import api.models.domain.PeriodId
+import play.api.libs.json.{Json, OWrites}
 
-case class CreateHistoricFhlUkPiePeriodSummaryResponse(periodId: String)
+case class CreateHistoricFhlUkPiePeriodSummaryResponse(periodId: PeriodId)
 
 object CreateHistoricFhlUkPiePeriodSummaryResponse {
 
-  implicit val reads: Reads[CreateHistoricFhlUkPiePeriodSummaryResponse] =
-    Json.reads[CreateHistoricFhlUkPiePeriodSummaryResponse]
-
-  implicit val writes: OWrites[CreateHistoricFhlUkPiePeriodSummaryResponse] =
-    (_: CreateHistoricFhlUkPiePeriodSummaryResponse) => Json.obj()
+  implicit val writes: OWrites[CreateHistoricFhlUkPiePeriodSummaryResponse] = Json.writes
 
 }

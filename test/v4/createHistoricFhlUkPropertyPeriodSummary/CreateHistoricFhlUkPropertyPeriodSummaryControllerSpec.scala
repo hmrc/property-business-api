@@ -20,12 +20,12 @@ import api.controllers.{ControllerBaseSpec, ControllerTestRunner}
 import api.hateoas.MockHateoasFactory
 import api.models.audit.{AuditEvent, AuditResponse, FlattenedGenericAuditDetail}
 import api.models.auth.UserDetails
-import api.models.domain.Nino
+import api.models.domain.{Nino, PeriodId}
 import api.models.errors._
 import api.models.outcomes.ResponseWrapper
 import api.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService}
 import mocks.MockIdGenerator
-import play.api.libs.json.{JsObject, JsValue, Json}
+import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.Result
 import v4.createHistoricFhlUkPropertyPeriodSummary.model.request.{CreateHistoricFhlUkPiePeriodSummaryRequestData, Def1_CreateHistoricFhlUkPiePeriodSummaryRequestBody, Def1_CreateHistoricFhlUkPiePeriodSummaryRequestData}
 import v4.createHistoricFhlUkPropertyPeriodSummary.model.response.CreateHistoricFhlUkPiePeriodSummaryResponse
@@ -44,12 +44,13 @@ class CreateHistoricFhlUkPropertyPeriodSummaryControllerSpec
     with MockIdGenerator
     with MockAuditService {
 
-  private val taxYear              = "2022-23"
-  private val transactionReference = "transaction reference"
-  private val mtdId: String        = "test-mtd-id"
+  private val taxYear = "2022-23"
+  private val fromDate = "2021-01-01"
+  private val toDate = "2021-01-02"
+  private val mtdId: String = "test-mtd-id"
 
   "CreateCreateHistoricFhlUkPropertyAnnualSubmissionController" should {
-    "return a successful response with status 200 (OK)" when {
+    "return a successful response with status 201 (CREATED)" when {
       "the request received is valid" in new Test {
         willUseValidator(returningSuccess(requestData))
 
@@ -57,7 +58,7 @@ class CreateHistoricFhlUkPropertyPeriodSummaryControllerSpec
           .create(requestData)
           .returns(Future.successful(Right(ResponseWrapper(correlationId, responseData))))
 
-        runOkTest(expectedStatus = OK)
+        runOkTest(expectedStatus = CREATED, Some(responseBodyJson))
       }
     }
     "return the error as per spec" when {
@@ -101,46 +102,36 @@ class CreateHistoricFhlUkPropertyPeriodSummaryControllerSpec
           versionNumber = Some("2.0"),
           userDetails = UserDetails(mtdId, "Individual", None),
           params = Map("nino" -> nino, "taxYear" -> taxYear),
-          request = Some(validMtdJson),
+          request = Some(responseBodyJson),
           `X-CorrelationId` = correlationId,
           auditResponse = auditResponse
         )
       )
 
-    private val requestBodyJson: JsValue = JsObject.empty
+    private val requestBodyJson: JsValue = Json.parse(
+      """
+        |{
+        |    "fromDate": "2021-01-01",
+        |    "toDate": "2021-01-02"
+        |}
+        |""".stripMargin)
+
+    protected val responseBodyJson: JsValue = Json.parse(
+      """
+        |{
+        |   "periodId": "2021-01-01_2021-01-02"
+        |}
+        |""".stripMargin)
 
     protected val requestBody: Def1_CreateHistoricFhlUkPiePeriodSummaryRequestBody =
-      Def1_CreateHistoricFhlUkPiePeriodSummaryRequestBody("startDate", "fromDate", None, None)
+      Def1_CreateHistoricFhlUkPiePeriodSummaryRequestBody(fromDate, toDate, None, None)
 
     protected val requestData: CreateHistoricFhlUkPiePeriodSummaryRequestData =
       Def1_CreateHistoricFhlUkPiePeriodSummaryRequestData(Nino(nino), requestBody)
 
     protected val responseData: CreateHistoricFhlUkPiePeriodSummaryResponse =
-      CreateHistoricFhlUkPiePeriodSummaryResponse(transactionReference)
+      CreateHistoricFhlUkPiePeriodSummaryResponse(PeriodId(fromDate, toDate))
 
-    protected val validMtdJson: JsValue = Json.parse(
-      """
-        |{
-        |   "annualAdjustments": {
-        |      "lossBroughtForward": 200.00,
-        |      "balancingCharge": 200.00,
-        |      "privateUseAdjustment": 200.00,
-        |      "periodOfGraceAdjustment": true,
-        |      "businessPremisesRenovationAllowanceBalancingCharges": 200.02,
-        |      "nonResidentLandlord": true,
-        |      "rentARoom": {
-        |         "jointlyLet": true
-        |      }   
-        |   },
-        |   "annualAllowances": {
-        |      "annualInvestmentAllowance": 200.00,
-        |      "otherCapitalAllowance": 200.00,
-        |      "businessPremisesRenovationAllowance": 100.02,
-        |      "propertyIncomeAllowance": 10.02
-        |   }
-        |}
-        |""".stripMargin
-    )
 
   }
 

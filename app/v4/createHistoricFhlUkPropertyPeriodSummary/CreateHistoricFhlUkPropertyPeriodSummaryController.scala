@@ -63,7 +63,7 @@ class CreateHistoricFhlUkPropertyPeriodSummaryController @Inject()(
               requestBody = Some(request.body)
             )
           )
-          .withNoContentResult(successStatus = OK)
+          .withPlainJsonResult(CREATED)
 
       requestHandler.handleRequest()
     }

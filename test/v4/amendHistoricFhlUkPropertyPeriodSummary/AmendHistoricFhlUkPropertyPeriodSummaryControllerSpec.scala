@@ -28,7 +28,6 @@ import mocks.MockIdGenerator
 import play.api.libs.json.{JsObject, JsValue, Json}
 import play.api.mvc.Result
 import v4.amendHistoricFhlUkPropertyPeriodSummary.model.request.{AmendHistoricFhlUkPiePeriodSummaryRequestData, Def1_AmendHistoricFhlUkPiePeriodSummaryRequestBody, Def1_AmendHistoricFhlUkPiePeriodSummaryRequestData}
-import v4.amendHistoricFhlUkPropertyPeriodSummary.model.response.AmendHistoricFhlUkPiePeriodSummaryResponse
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -46,7 +45,6 @@ class AmendHistoricFhlUkPropertyPeriodSummaryControllerSpec
 
   private val taxYear              = "2022-23"
   private val periodId = PeriodId(from = "2017-04-06", to = "2017-07-04")
-  private val transactionReference = "transaction reference"
   private val mtdId: String        = "test-mtd-id"
 
   "CreateAmendHistoricFhlUkPropertyAnnualSubmissionController" should {
@@ -56,7 +54,7 @@ class AmendHistoricFhlUkPropertyPeriodSummaryControllerSpec
 
         MockAmendHistoricFhlUkPropertyPeriodSummaryService
           .amend(requestData)
-          .returns(Future.successful(Right(ResponseWrapper(correlationId, responseData))))
+          .returns(Future.successful(Right(ResponseWrapper(correlationId, ()))))
 
         runOkTest(expectedStatus = OK)
       }
@@ -116,8 +114,6 @@ class AmendHistoricFhlUkPropertyPeriodSummaryControllerSpec
     protected val requestData: AmendHistoricFhlUkPiePeriodSummaryRequestData =
       Def1_AmendHistoricFhlUkPiePeriodSummaryRequestData(Nino(nino), periodId, requestBody)
 
-    protected val responseData: AmendHistoricFhlUkPiePeriodSummaryResponse =
-      AmendHistoricFhlUkPiePeriodSummaryResponse(transactionReference)
 
     protected val validMtdJson: JsValue = Json.parse(
       """

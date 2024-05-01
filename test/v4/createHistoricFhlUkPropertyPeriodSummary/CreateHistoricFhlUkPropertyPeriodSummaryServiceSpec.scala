@@ -17,7 +17,7 @@
 package v4.createHistoricFhlUkPropertyPeriodSummary
 
 import api.controllers.EndpointLogContext
-import api.models.domain.Nino
+import api.models.domain.{Nino, PeriodId}
 import api.models.errors._
 import api.models.outcomes.ResponseWrapper
 import support.UnitSpec
@@ -31,7 +31,7 @@ import scala.concurrent.Future
 class CreateHistoricFhlUkPropertyPeriodSummaryServiceSpec extends UnitSpec {
 
   private val nino: String    = "AA123456A"
-
+  private val validPeriodId = PeriodId("2021-01-06", "2021-02-06")
   implicit private val correlationId: String = "X-123"
 
   "service" should {
@@ -39,9 +39,9 @@ class CreateHistoricFhlUkPropertyPeriodSummaryServiceSpec extends UnitSpec {
       "return mapped result" in new Test {
         MockCreateHistoricFhlUkPropertyPeriodSummaryConnector
           .create(request)
-          .returns(Future.successful(Right(ResponseWrapper(correlationId, CreateHistoricFhlUkPiePeriodSummaryResponse("transactionId")))))
+          .returns(Future.successful(Right(ResponseWrapper(correlationId, CreateHistoricFhlUkPiePeriodSummaryResponse(validPeriodId)))))
 
-        await(service.create(request)) shouldBe Right(ResponseWrapper(correlationId, CreateHistoricFhlUkPiePeriodSummaryResponse("transactionId")))
+        await(service.create(request)) shouldBe Right(ResponseWrapper(correlationId, CreateHistoricFhlUkPiePeriodSummaryResponse(validPeriodId)))
       }
     }
   }
@@ -89,7 +89,7 @@ class CreateHistoricFhlUkPropertyPeriodSummaryServiceSpec extends UnitSpec {
     )
 
     private val body: Def1_CreateHistoricFhlUkPiePeriodSummaryRequestBody =
-      Def1_CreateHistoricFhlUkPiePeriodSummaryRequestBody("startDate", "fromDate", None, None)
+      Def1_CreateHistoricFhlUkPiePeriodSummaryRequestBody("2021-01-06", "2021-02-06", None, None)
 
     protected val request: Def1_CreateHistoricFhlUkPiePeriodSummaryRequestData =
       Def1_CreateHistoricFhlUkPiePeriodSummaryRequestData(Nino(nino), body)

@@ -16,14 +16,10 @@
 
 package v4.hateoas
 
+import api.hateoas.Link
 import api.hateoas.Method._
-import api.hateoas.{Link, Method}
 import mocks.MockAppConfig
 import support.UnitSpec
-import v4.models.response.retrieveHistoricNonFhlUkPiePeriodSummary.{
-  RetrieveHistoricNonFhlUkPiePeriodSummaryHateoasData,
-  RetrieveHistoricNonFhlUkPiePeriodSummaryResponse
-}
 
 class HateoasLinksSpec extends UnitSpec with MockAppConfig with HateoasLinks {
 
@@ -174,27 +170,6 @@ class HateoasLinksSpec extends UnitSpec with MockAppConfig with HateoasLinks {
             "/individuals/business/property/uk/period/furnished-holiday-lettings/{nino}/{periodId}",
             PUT,
             "amend-uk-property-historic-fhl-period-summary")
-      }
-    }
-
-    "produce the correct links" when {
-      "called" in {
-        val data: RetrieveHistoricNonFhlUkPiePeriodSummaryHateoasData = RetrieveHistoricNonFhlUkPiePeriodSummaryHateoasData("myNino", "myPeriodId")
-
-        MockedAppConfig.apiGatewayContext.returns("my/context").anyNumberOfTimes()
-
-        RetrieveHistoricNonFhlUkPiePeriodSummaryResponse.RetrieveNonFhlUkPiePeriodSummaryLinksFactory.links(mockAppConfig, data) shouldBe List(
-          Link(
-            href = s"/my/context/uk/period/non-furnished-holiday-lettings/${data.nino}/${data.periodId}",
-            method = Method.PUT,
-            rel = "amend-uk-property-historic-non-fhl-period-summary"
-          ),
-          Link(href = s"/my/context/uk/period/non-furnished-holiday-lettings/${data.nino}/${data.periodId}", method = Method.GET, rel = "self"),
-          Link(
-            href = s"/my/context/uk/period/non-furnished-holiday-lettings/${data.nino}",
-            method = Method.GET,
-            rel = "list-uk-property-historic-non-fhl-period-summaries")
-        )
       }
     }
   }

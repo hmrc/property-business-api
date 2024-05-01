@@ -52,11 +52,6 @@ trait HateoasLinks {
     s"/${appConfig.apiGatewayContext}/uk/period/furnished-holiday-lettings/$nino$periodIdPath"
   }
 
-  private def ukHistoricNonFhlPiePeriodSummaryUri(appConfig: AppConfig, nino: String, maybePeriodId: Option[String]): String = {
-    val periodIdPath = maybePeriodId.map(id => s"/$id").getOrElse("")
-    s"/${appConfig.apiGatewayContext}/uk/period/non-furnished-holiday-lettings/$nino$periodIdPath"
-  }
-
   // API resource links
 
   // Foreign
@@ -127,11 +122,6 @@ trait HateoasLinks {
     Link(href = ukHistoricFhlAnnualUri(appConfig, nino, taxYear), method = DELETE, rel = "delete-uk-property-historic-fhl-annual-submission")
   }
 
-  def listHistoricNonFhlUkPiePeriodSummaries(appConfig: AppConfig, nino: String, self: Boolean): Link = {
-    val rel = if (self) SELF else "list-uk-property-historic-non-fhl-period-summaries"
-    Link(href = ukHistoricNonFhlPiePeriodSummaryUri(appConfig, nino, None), method = GET, rel)
-  }
-
   // Historic UK Periodic
   // FHL:
 
@@ -151,20 +141,6 @@ trait HateoasLinks {
     val rel = if (self) SELF else "list-uk-property-historic-fhl-period-summaries"
     Link(href = ukHistoricFhlPiePeriodSummaryUri(appConfig, nino, None), method = GET, rel)
   }
-
-  // Non-FHL:
-  def retrieveHistoricNonFhlUkPiePeriodSummary(appConfig: AppConfig, nino: String, periodId: String): Link = {
-    Link(href = ukHistoricNonFhlPiePeriodSummaryUri(appConfig, nino, Some(periodId)), method = GET, rel = SELF)
-  }
-
-  def amendHistoricNonFhlUkPiePeriodSummary(appConfig: AppConfig, nino: String, periodId: String): Link =
-    Link(
-      href = ukHistoricNonFhlPiePeriodSummaryUri(appConfig, nino, Some(periodId)),
-      method = PUT,
-      rel = "amend-uk-property-historic-non-fhl-period-summary")
-
-  def listUkHistoricNonFHLPiePeriodSummary(appConfig: AppConfig, nino: String): Link =
-    Link(href = ukHistoricNonFhlPiePeriodSummaryUri(appConfig, nino, None), method = GET, rel = "list-uk-property-historic-non-fhl-period-summaries")
 
   // Generic
   def listPropertyPeriodSummaries(appConfig: AppConfig, nino: String, businessId: String, taxYear: String, self: Boolean): Link = {

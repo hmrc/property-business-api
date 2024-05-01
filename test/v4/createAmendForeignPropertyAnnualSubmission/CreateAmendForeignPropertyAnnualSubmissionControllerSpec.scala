@@ -26,9 +26,9 @@ import api.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLooku
 import mocks.MockIdGenerator
 import play.api.libs.json.JsValue
 import play.api.mvc.Result
+import v4.createAmendForeignPropertyAnnualSubmission.def1.model.request.Def1_Fixtures
 import v4.createAmendForeignPropertyAnnualSubmission.model.request._
 import v4.createAmendForeignPropertyAnnualSubmission.model.response.CreateAmendForeignPropertyAnnualSubmissionHateoasData
-import v4.fixtures.createAmendForeignPropertyAnnualSubmission.CreateAmendForeignPropertyAnnualSubmissionFixture
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -43,7 +43,7 @@ class CreateAmendForeignPropertyAnnualSubmissionControllerSpec
     with MockHateoasFactory
     with MockAuditService
     with MockIdGenerator
-    with CreateAmendForeignPropertyAnnualSubmissionFixture {
+    with Def1_Fixtures {
 
   private val businessId = "XAIS12345678910"
   private val taxYear    = "2019-20"

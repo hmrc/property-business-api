@@ -18,9 +18,9 @@ package v4.createAmendForeignPropertyAnnualSubmission.def1.model.request.def1_fo
 
 import play.api.libs.json.Json
 import support.UnitSpec
-import v4.fixtures.createAmendForeignPropertyAnnualSubmission.CreateAmendForeignPropertyAnnualSubmissionFixture
+import v4.createAmendForeignPropertyAnnualSubmission.def1.model.request.Def1_Fixtures
 
-class Def1_Create_Amend_ForeignNonFhlAllowancesSpec extends UnitSpec with CreateAmendForeignPropertyAnnualSubmissionFixture {
+class Def1_Create_Amend_ForeignNonFhlAllowancesSpec extends UnitSpec with Def1_Fixtures {
 
   "reads" when {
     "passed valid mtd JSON" should {

@@ -21,13 +21,55 @@ import support.UnitSpec
 
 class UkNonFhlPropertyAllowancesSpec extends UnitSpec {
 
-  val downstreamJson: JsValue = Json.parse("""
+  val preTysDownstreamJson: JsValue = Json.parse("""
       |{
       |   "annualInvestmentAllowance":678.45,
       |   "zeroEmissionGoodsVehicleAllowance":456.34,
       |   "businessPremisesRenovationAllowance":573.45,
       |   "otherCapitalAllowance":452.34,
       |   "costOfReplacingDomesticGoods":567.34,
+      |   "propertyIncomeAllowance":342.34,
+      |   "electricChargePointAllowance":454.34,
+      |   "structuredBuildingAllowance":[
+      |      {
+      |         "amount":234.34,
+      |         "firstYear":{
+      |            "qualifyingDate":"2020-03-29",
+      |            "qualifyingAmountExpenditure":3434.45
+      |         },
+      |         "building":{
+      |            "name":"Plaza",
+      |            "number":"1",
+      |            "postCode":"TF3 4EH"
+      |         }
+      |      }
+      |   ],
+      |   "enhancedStructuredBuildingAllowance":[
+      |      {
+      |         "amount":234.45,
+      |         "firstYear":{
+      |            "qualifyingDate":"2020-05-29",
+      |            "qualifyingAmountExpenditure":453.34
+      |         },
+      |         "building":{
+      |            "name":"Plaza 2",
+      |            "number":"2",
+      |            "postCode":"TF3 4ER"
+      |         }
+      |      }
+      |   ],
+      |   "zeroEmissionsCarAllowance":454.34
+      |}
+      |""".stripMargin)
+
+  val tysDownstreamJson: JsValue = Json.parse(
+    """
+      |{
+      |   "annualInvestmentAllowance":678.45,
+      |   "zeroEmissionGoodsVehicleAllowance":456.34,
+      |   "businessPremisesRenovationAllowance":573.45,
+      |   "otherCapitalAllowance":452.34,
+      |   "costOfReplacingDomesticItems":567.34,
       |   "propertyIncomeAllowance":342.34,
       |   "electricChargePointAllowance":454.34,
       |   "structuredBuildingAllowance":[
@@ -149,8 +191,12 @@ class UkNonFhlPropertyAllowancesSpec extends UnitSpec {
       |""".stripMargin)
 
   "reads" should {
-    "read JSON into a model" in {
-      downstreamJson.as[UkNonFhlPropertyAllowances] shouldBe model
+    "read tys JSON into a model" in {
+      tysDownstreamJson.as[UkNonFhlPropertyAllowances] shouldBe model
+    }
+
+    "read pre-tys JSON into a model" in {
+      preTysDownstreamJson.as[UkNonFhlPropertyAllowances] shouldBe model
     }
   }
 

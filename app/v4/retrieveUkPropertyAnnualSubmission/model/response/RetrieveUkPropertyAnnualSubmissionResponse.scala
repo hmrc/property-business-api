@@ -30,8 +30,8 @@ sealed trait RetrieveUkPropertyAnnualSubmissionResponse
 
 object RetrieveUkPropertyAnnualSubmissionResponse extends HateoasLinks {
 
-  implicit val writes: OWrites[RetrieveUkPropertyAnnualSubmissionResponse] = { case def1: Def1_RetrieveUkPropertyAnnualSubmissionResponse =>
-    Json.toJsObject(def1)
+  implicit val writes: OWrites[RetrieveUkPropertyAnnualSubmissionResponse] = {
+    case def1: Def1_RetrieveUkPropertyAnnualSubmissionResponse => Json.toJsObject(def1)
   }
 
   implicit object RetrieveUkPropertyAnnualSubmissionLinksFactory

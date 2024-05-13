@@ -40,7 +40,8 @@ object UkNonFhlPropertyAllowances {
       (JsPath \ "zeroEmissionGoodsVehicleAllowance").readNullable[BigDecimal] and
       (JsPath \ "businessPremisesRenovationAllowance").readNullable[BigDecimal] and
       (JsPath \ "otherCapitalAllowance").readNullable[BigDecimal] and
-      (JsPath \ "costOfReplacingDomesticGoods").readNullable[BigDecimal] and
+      ((JsPath \ "costOfReplacingDomesticItems").read[BigDecimal].map(Option(_)) orElse (JsPath \ "costOfReplacingDomesticGoods")
+        .readNullable[BigDecimal]) and // orElse implemented due to downstream bug specified here - MTDSA-22775
       (JsPath \ "propertyIncomeAllowance").readNullable[BigDecimal] and
       (JsPath \ "electricChargePointAllowance").readNullable[BigDecimal] and
       (JsPath \ "structuredBuildingAllowance").readNullable[Seq[UkNonFhlPropertyStructuredBuildingAllowance]] and

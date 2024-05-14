@@ -17,7 +17,6 @@
 package v4.retrieveHistoricFhlUkPropertyAnnualSubmission
 
 import api.controllers.{ControllerBaseSpec, ControllerTestRunner}
-import api.hateoas.MockHateoasFactory
 import api.models.domain.{Nino, TaxYear}
 import api.models.errors._
 import api.models.outcomes.ResponseWrapper
@@ -39,7 +38,6 @@ class RetrieveHistoricFhlUkPropertyAnnualSubmissionControllerSpec
     with MockMtdIdLookupService
     with MockRetrieveHistoricFhlUkPropertyAnnualSubmissionService
     with MockRetrieveHistoricFhlUkPropertyAnnualSubmissionValidatorFactory
-    with MockHateoasFactory
     with MockAuditService
     with MockIdGenerator {
 

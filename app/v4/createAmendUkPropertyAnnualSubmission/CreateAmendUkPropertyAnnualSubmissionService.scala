@@ -32,7 +32,6 @@ class CreateAmendUkPropertyAnnualSubmissionService @Inject() (connector: CreateA
       request: CreateAmendUkPropertyAnnualSubmissionRequestData)(implicit ctx: RequestContext, ec: ExecutionContext): Future[ServiceOutcome[Unit]] = {
 
     connector.createAmendUkPropertyAnnualSubmission(request).map(_.leftMap(mapDownstreamErrors(downstreamErrorMap)))
-
   }
 
   private val downstreamErrorMap: Map[String, MtdError] = {

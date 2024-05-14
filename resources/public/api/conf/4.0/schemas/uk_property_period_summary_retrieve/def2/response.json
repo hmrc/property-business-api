@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-04/schema#",
-  "title": "for TY 2024-25",
+  "title": "For TY 2024-25",
   "description": "This endpoint allows a developer to retrieve the income and expenses for a UK property business, that occurred between two dates. A National Insurance number, business ID, tax year and submission ID are required.",
   "type": "object",
   "properties": {
@@ -320,44 +320,6 @@
         }
       },
       "additionalProperties": false
-    },
-    "links": {
-      "type": "array",
-      "items": {
-        "type": "object",
-        "description": "A list of endpoint links that indicate possible actions related to the current resource.",
-        "properties": {
-          "href": {
-            "description": "The relative url of the endpoint",
-            "type": "string",
-            "example": "/individuals/business/property/uk/AA999999A/XAIS12345678910/period/2022-23/4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
-          },
-          "rel": {
-            "description": "A label for the endpoint, which describes how it is related to the current resource. The rel will be self where the action is retrieval of the same resource",
-            "type": "string",
-            "enum": [
-              "self",
-              "list-property-period-summaries",
-              "amend-uk-property-period-summary"
-            ]
-          },
-          "method": {
-            "description": "The HTTP method type for the endpoint",
-            "type": "string",
-            "enum": [
-              "GET",
-              "PUT"
-            ]
-          }
-        },
-        "required": [
-          "href",
-          "rel",
-          "method"
-        ],
-        "additionalProperties": false
-      },
-      "additionalItems": false
     }
   },
   "required": [

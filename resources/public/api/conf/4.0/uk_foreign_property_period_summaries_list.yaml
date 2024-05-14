@@ -37,12 +37,13 @@ get:
       content:
         application/json:
           schema:
-            $ref: './schemas/property_period_summaries_list/response.json'
+            oneOf:
+              - $ref: './schemas/property_period_summaries_list/def1/response.json'
           examples:
             example-response:
-              description: Example Response
+              description: Default Example given any tax year
               value:
-                $ref: './examples/property_period_summaries_list/response.json'
+                $ref: './examples/property_period_summaries_list/def1/response.json'
 
     "400":
       description: Bad request

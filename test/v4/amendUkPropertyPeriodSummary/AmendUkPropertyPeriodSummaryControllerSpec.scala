@@ -17,7 +17,6 @@
 package v4.amendUkPropertyPeriodSummary
 
 import api.controllers.{ControllerBaseSpec, ControllerTestRunner}
-import api.hateoas.{HateoasWrapper, MockHateoasFactory}
 import api.models.audit.{AuditEvent, AuditResponse, GenericAuditDetail}
 import api.models.domain.{BusinessId, Nino, SubmissionId, TaxYear}
 import api.models.errors._
@@ -29,7 +28,6 @@ import v4.amendUkPropertyPeriodSummary.def1.model.request.def1_ukFhlProperty._
 import v4.amendUkPropertyPeriodSummary.def1.model.request.def1_ukNonFhlProperty._
 import v4.amendUkPropertyPeriodSummary.def1.model.request.def1_ukPropertyRentARoom._
 import v4.amendUkPropertyPeriodSummary.model.request._
-import v4.amendUkPropertyPeriodSummary.model.response.AmendUkPropertyPeriodSummaryHateoasData
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -39,8 +37,7 @@ class AmendUkPropertyPeriodSummaryControllerSpec
     with ControllerTestRunner
     with MockAmendUkPropertyPeriodSummaryService
     with MockAmendUkPropertyPeriodSummaryValidatorFactory
-    with MockAuditService
-    with MockHateoasFactory {
+    with MockAuditService {
 
   private val businessId   = "XAIS12345678910"
   private val taxYear      = "2020-21"
@@ -55,17 +52,13 @@ class AmendUkPropertyPeriodSummaryControllerSpec
           .amend(requestDataConsolidatedExpenses)
           .returns(Future.successful(Right(ResponseWrapper(correlationId, ()))))
 
-        MockHateoasFactory
-          .wrap((), hateoasData)
-          .returns(HateoasWrapper((), testHateoasLinks))
-
         override def callController(): Future[Result] =
           controller.handleRequest(nino, businessId, taxYear, submissionId)(fakePutRequest(requestBodyJsonConsolidatedExpense))
 
         runOkTestWithAudit(
           expectedStatus = OK,
           maybeAuditRequestBody = Some(requestBodyJsonConsolidatedExpense),
-          maybeExpectedResponseBody = Some(testHateoasLinksJson)
+          maybeExpectedResponseBody = None
         )
       }
     }
@@ -78,14 +71,10 @@ class AmendUkPropertyPeriodSummaryControllerSpec
           .amend(requestData)
           .returns(Future.successful(Right(ResponseWrapper(correlationId, ()))))
 
-        MockHateoasFactory
-          .wrap((), AmendUkPropertyPeriodSummaryHateoasData(nino, businessId, taxYear, submissionId))
-          .returns(HateoasWrapper((), testHateoasLinks))
-
         runOkTestWithAudit(
           expectedStatus = OK,
           maybeAuditRequestBody = Some(requestBodyJson),
-          maybeExpectedResponseBody = Some(testHateoasLinksJson)
+          maybeExpectedResponseBody = None
         )
       }
     }
@@ -117,7 +106,6 @@ class AmendUkPropertyPeriodSummaryControllerSpec
       validatorFactory = mockAmendUkPropertyPeriodSummaryValidatorFactory,
       service = mockService,
       auditService = mockAuditService,
-      hateoasFactory = mockHateoasFactory,
       cc = cc,
       idGenerator = mockIdGenerator
     )
@@ -339,9 +327,6 @@ class AmendUkPropertyPeriodSummaryControllerSpec
         BusinessId(businessId),
         SubmissionId(submissionId),
         requestBodyWithConsolidatedExpenses)
-
-    protected val hateoasData: AmendUkPropertyPeriodSummaryHateoasData =
-      AmendUkPropertyPeriodSummaryHateoasData(nino, businessId, taxYear, submissionId)
 
   }
 

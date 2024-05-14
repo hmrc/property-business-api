@@ -17,7 +17,7 @@
 package v4.retrieveUkPropertyPeriodSummary.def2.model
 
 import api.models.domain.Timestamp
-import play.api.libs.json.{JsObject, JsValue, Json}
+import play.api.libs.json.{JsValue, Json}
 import v4.retrieveUkPropertyPeriodSummary.def2.model.response._
 import v4.retrieveUkPropertyPeriodSummary.model.response._
 
@@ -114,82 +114,66 @@ trait Def2_RetrieveUkPropertyPeriodSummaryConsolidatedFixture {
     """.stripMargin
   )
 
-  val fhlRentARoomIncomeModel: Def2_Retrieve_RentARoomIncome = Def2_Retrieve_RentARoomIncome(
+  val fhlRentARoomIncome: Def2_Retrieve_RentARoomIncome = Def2_Retrieve_RentARoomIncome(
     rentsReceived = Some(1.13)
   )
 
-  val fhlPropertyIncomeModel: Def2_Retrieve_FhlPropertyIncome = Def2_Retrieve_FhlPropertyIncome(
+  val fhlPropertyIncome: Def2_Retrieve_FhlPropertyIncome = Def2_Retrieve_FhlPropertyIncome(
     periodAmount = Some(1.11),
     taxDeducted = Some(1.12),
-    rentARoom = Some(fhlRentARoomIncomeModel)
+    rentARoom = Some(fhlRentARoomIncome)
   )
 
-  val fhlRentARoomExpensesModel: Def2_Retrieve_RentARoomExpenses = Def2_Retrieve_RentARoomExpenses(
+  val fhlRentARoomExpenses: Def2_Retrieve_RentARoomExpenses = Def2_Retrieve_RentARoomExpenses(
     amountClaimed = Some(2.19)
   )
 
-  val fhlPropertyExpensesModel: Def2_Retrieve_FhlPropertyConsolidatedExpenses = Def2_Retrieve_FhlPropertyConsolidatedExpenses(
-    rentARoom = Some(fhlRentARoomExpensesModel),
+  val fhlPropertyExpenses: Def2_Retrieve_FhlPropertyConsolidatedExpenses = Def2_Retrieve_FhlPropertyConsolidatedExpenses(
+    rentARoom = Some(fhlRentARoomExpenses),
     consolidatedExpenses = Some(2.17)
   )
 
-  val ukFhlPropertyModel: Def2_Retrieve_ConsolidatedUkFhlProperty = Def2_Retrieve_ConsolidatedUkFhlProperty(
-    income = Some(fhlPropertyIncomeModel),
-    expenses = Some(fhlPropertyExpensesModel)
+  val ukFhlProperty: Def2_Retrieve_ConsolidatedUkFhlProperty = Def2_Retrieve_ConsolidatedUkFhlProperty(
+    income = Some(fhlPropertyIncome),
+    expenses = Some(fhlPropertyExpenses)
   )
 
-  val ukNonFhlRentARoomIncomeModel: Def2_Retrieve_RentARoomIncome = Def2_Retrieve_RentARoomIncome(
+  val ukNonFhlRentARoomIncome: Def2_Retrieve_RentARoomIncome = Def2_Retrieve_RentARoomIncome(
     rentsReceived = Some(3.16)
   )
 
-  val ukNonFhlIncomeModel: Def2_Retrieve_NonFhlPropertyIncome = Def2_Retrieve_NonFhlPropertyIncome(
+  val ukNonFhlIncome: Def2_Retrieve_NonFhlPropertyIncome = Def2_Retrieve_NonFhlPropertyIncome(
     premiumsOfLeaseGrant = Some(3.11),
     reversePremiums = Some(3.12),
     periodAmount = Some(3.13),
     taxDeducted = Some(3.14),
     otherIncome = Some(3.15),
-    rentARoom = Some(ukNonFhlRentARoomIncomeModel)
+    rentARoom = Some(ukNonFhlRentARoomIncome)
   )
 
-  val ukNonFhlRentARoomExpensesModel: Def2_Retrieve_RentARoomExpenses = Def2_Retrieve_RentARoomExpenses(
+  val ukNonFhlRentARoomExpenses: Def2_Retrieve_RentARoomExpenses = Def2_Retrieve_RentARoomExpenses(
     amountClaimed = Some(4.21)
   )
 
-  val ukNonFhlExpensesModel: Def2_Retrieve_NonFhlPropertyConsolidatedExpenses = Def2_Retrieve_NonFhlPropertyConsolidatedExpenses(
+  val ukNonFhlExpenses: Def2_Retrieve_NonFhlPropertyConsolidatedExpenses = Def2_Retrieve_NonFhlPropertyConsolidatedExpenses(
     residentialFinancialCost = Some(4.18),
     residentialFinancialCostsCarriedForward = Some(4.20),
-    rentARoom = Some(ukNonFhlRentARoomExpensesModel),
+    rentARoom = Some(ukNonFhlRentARoomExpenses),
     consolidatedExpenses = Some(4.17)
   )
 
-  val ukNonFhlPropertyModel: Def2_Retrieve_ConsolidatedUkNonFhlProperty = Def2_Retrieve_ConsolidatedUkNonFhlProperty(
-    income = Some(ukNonFhlIncomeModel),
-    expenses = Some(ukNonFhlExpensesModel)
+  val ukNonFhlProperty: Def2_Retrieve_ConsolidatedUkNonFhlProperty = Def2_Retrieve_ConsolidatedUkNonFhlProperty(
+    income = Some(ukNonFhlIncome),
+    expenses = Some(ukNonFhlExpenses)
   )
 
-  val fullResponseModel: Def2_RetrieveUkPropertyPeriodSummaryConsolidatedResponse = Def2_RetrieveUkPropertyPeriodSummaryConsolidatedResponse(
+  val fullResponse: Def2_RetrieveUkPropertyPeriodSummaryConsolidatedResponse = Def2_RetrieveUkPropertyPeriodSummaryConsolidatedResponse(
     submittedOn = Timestamp("2025-06-17T10:53:38.000Z"),
     fromDate = "2024-01-29",
     toDate = "2025-03-29",
     //    periodCreationDate = Some("2020-06-17T10:53:38Z"), // To be reinstated, see MTDSA-15575
-    ukFhlProperty = Some(ukFhlPropertyModel),
-    ukNonFhlProperty = Some(ukNonFhlPropertyModel)
+    ukFhlProperty = Some(ukFhlProperty),
+    ukNonFhlProperty = Some(ukNonFhlProperty)
   )
-
-  val mtdResponseWithHateoas: JsObject = fullMtdJson.as[JsObject] ++ Json
-    .parse(
-      s"""
-         |{
-         |   "links":[
-         |      {
-         |         "href":"/individuals/business/property/AA123456A/XAIS12345678910/period/2024-25/4557ecb5-fd32-48cc-81f5-e6acd1099f3c",
-         |         "method":"GET",
-         |         "rel":"self"
-         |      }
-         |   ]
-         |}
-    """.stripMargin
-    )
-    .as[JsObject]
 
 }

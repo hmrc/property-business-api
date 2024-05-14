@@ -58,30 +58,6 @@ class Def1_CreateAmendHistoricFhlUkPropertyAnnualSubmissionISpec extends Integra
       """.stripMargin
     )
 
-    val responseBody: JsValue = Json.parse(
-      s"""
-         |{
-         |    "links": [
-         |        {
-         |            "href": "/individuals/business/property/uk/annual/furnished-holiday-lettings/TC663795B/2020-21",
-         |            "method": "GET",
-         |            "rel": "self"
-         |        },
-         |        {
-         |            "href": "/individuals/business/property/uk/annual/furnished-holiday-lettings/TC663795B/2020-21",
-         |            "method": "PUT",
-         |            "rel": "create-and-amend-uk-property-historic-fhl-annual-submission"
-         |        },
-         |        {
-         |            "href": "/individuals/business/property/uk/annual/furnished-holiday-lettings/TC663795B/2020-21",
-         |            "method": "DELETE",
-         |            "rel": "delete-uk-property-historic-fhl-annual-submission"
-         |        }
-         |    ]
-         |}
-      """.stripMargin
-    )
-
     def setupStubs(): StubMapping
 
     def uri: String = s"/uk/annual/furnished-holiday-lettings/$nino/$taxYear"
@@ -98,7 +74,7 @@ class Def1_CreateAmendHistoricFhlUkPropertyAnnualSubmissionISpec extends Integra
       setupStubs()
       buildRequest(uri)
         .withHttpHeaders(
-          (ACCEPT, "application/vnd.hmrc.3.0+json"),
+          (ACCEPT, "application/vnd.hmrc.4.0+json"),
           (AUTHORIZATION, "Bearer 123")
         )
     }
@@ -125,7 +101,7 @@ class Def1_CreateAmendHistoricFhlUkPropertyAnnualSubmissionISpec extends Integra
 
         val response: WSResponse = await(request().put(requestBodyJson))
         response.status shouldBe OK
-        response.json shouldBe responseBody
+        response.body shouldBe ""
         response.header("X-CorrelationId").nonEmpty shouldBe true
       }
     }

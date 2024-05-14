@@ -109,30 +109,6 @@ class Def1_CreateAmendUkPropertyAnnualSubmissionISpec extends IntegrationBaseSpe
       """.stripMargin
     )
 
-    val responseBody: JsValue = Json.parse(
-      s"""
-        |{
-        |  "links":[
-        |    {
-        |      "href":"/individuals/business/property/uk/$nino/$businessId/annual/$taxYear",
-        |      "method":"PUT",
-        |      "rel":"create-and-amend-uk-property-annual-submission"
-        |    },
-        |    {
-        |      "href":"/individuals/business/property/uk/$nino/$businessId/annual/$taxYear",
-        |      "method":"GET",
-        |      "rel":"self"
-        |    },
-        |    {
-        |      "href":"/individuals/business/property/$nino/$businessId/annual/$taxYear",
-        |      "method":"DELETE",
-        |      "rel":"delete-property-annual-submission"
-        |    }
-        |  ]
-        |}
-      """.stripMargin
-    )
-
     def setupStubs(): StubMapping
 
     def uri: String = s"/uk/$nino/$businessId/annual/$taxYear"
@@ -143,7 +119,7 @@ class Def1_CreateAmendUkPropertyAnnualSubmissionISpec extends IntegrationBaseSpe
       setupStubs()
       buildRequest(uri)
         .withHttpHeaders(
-          (ACCEPT, "application/vnd.hmrc.3.0+json"),
+          (ACCEPT, "application/vnd.hmrc.4.0+json"),
           (AUTHORIZATION, "Bearer 123")
         )
     }
@@ -193,8 +169,7 @@ class Def1_CreateAmendUkPropertyAnnualSubmissionISpec extends IntegrationBaseSpe
 
         val response: WSResponse = await(request().put(requestBodyJson))
         response.status shouldBe OK
-        response.json shouldBe responseBody
-        response.header("Content-Type") shouldBe Some("application/json")
+        response.body shouldBe ""
         response.header("X-CorrelationId").nonEmpty shouldBe true
       }
 
@@ -209,8 +184,7 @@ class Def1_CreateAmendUkPropertyAnnualSubmissionISpec extends IntegrationBaseSpe
 
         val response: WSResponse = await(request().put(requestBodyJson))
         response.status shouldBe OK
-        response.json shouldBe responseBody
-        response.header("Content-Type") shouldBe Some("application/json")
+        response.body shouldBe ""
         response.header("X-CorrelationId").nonEmpty shouldBe true
       }
     }

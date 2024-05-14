@@ -17,27 +17,25 @@
 package v4.createAmendUkPropertyAnnualSubmission
 
 import api.controllers._
-import api.hateoas.HateoasFactory
 import api.services.{AuditService, EnrolmentsAuthService, MtdIdLookupService}
 import play.api.libs.json.JsValue
 import play.api.mvc.{Action, ControllerComponents}
 import routing.{Version, Version2}
 import utils.IdGenerator
-import v4.createAmendUkPropertyAnnualSubmission.model.response.CreateAmendUkPropertyAnnualSubmissionHateoasData
-import v4.createAmendUkPropertyAnnualSubmission.model.response.CreateAmendUkPropertyAnnualSubmissionResponse.CreateAmendUkPropertyLinksFactory
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.ExecutionContext
 
 @Singleton
-class CreateAmendUkPropertyAnnualSubmissionController @Inject() (val authService: EnrolmentsAuthService,
-                                                                 val lookupService: MtdIdLookupService,
-                                                                 validatorFactory: CreateAmendUkPropertyAnnualSubmissionValidatorFactory,
-                                                                 service: CreateAmendUkPropertyAnnualSubmissionService,
-                                                                 auditService: AuditService,
-                                                                 hateoasFactory: HateoasFactory,
-                                                                 cc: ControllerComponents,
-                                                                 idGenerator: IdGenerator)(implicit ec: ExecutionContext)
+class CreateAmendUkPropertyAnnualSubmissionController @Inject() (
+    val authService: EnrolmentsAuthService,
+    val lookupService: MtdIdLookupService,
+    validatorFactory: CreateAmendUkPropertyAnnualSubmissionValidatorFactory,
+    service: CreateAmendUkPropertyAnnualSubmissionService,
+    auditService: AuditService,
+    cc: ControllerComponents,
+    idGenerator: IdGenerator
+)(implicit ec: ExecutionContext)
     extends AuthorisedController(cc) {
 
   implicit val endpointLogContext: EndpointLogContext =
@@ -62,7 +60,7 @@ class CreateAmendUkPropertyAnnualSubmissionController @Inject() (val authService
             Some(request.body)
           )
         )
-        .withHateoasResult(hateoasFactory)(CreateAmendUkPropertyAnnualSubmissionHateoasData(nino, businessId, taxYear))
+        .withNoContentResult(OK)
 
       requestHandler.handleRequest()
 

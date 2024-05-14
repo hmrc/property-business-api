@@ -17,8 +17,6 @@
 package v4.retrieveForeignPropertyPeriodSummary
 
 import api.controllers.{ControllerBaseSpec, ControllerTestRunner}
-import api.hateoas.Method.GET
-import api.hateoas.{HateoasWrapper, Link, MockHateoasFactory}
 import api.models.domain._
 import api.models.errors.{ErrorWrapper, NinoFormatError, RuleTaxYearNotSupportedError}
 import api.models.outcomes.ResponseWrapper
@@ -28,8 +26,14 @@ import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.Result
 import v4.retrieveForeignPropertyPeriodSummary.def1.model.response.foreignFhlEea.{ForeignFhlEea, ForeignFhlEeaExpenses, ForeignFhlEeaIncome}
 import v4.retrieveForeignPropertyPeriodSummary.def1.model.response.foreignNonFhlProperty._
-import v4.retrieveForeignPropertyPeriodSummary.model.request.{Def1_RetrieveForeignPropertyPeriodSummaryRequestData, RetrieveForeignPropertyPeriodSummaryRequestData}
-import v4.retrieveForeignPropertyPeriodSummary.model.response.{Def1_RetrieveForeignPropertyPeriodSummaryResponse, RetrieveForeignPropertyPeriodSummaryHateoasData, RetrieveForeignPropertyPeriodSummaryResponse}
+import v4.retrieveForeignPropertyPeriodSummary.model.request.{
+  Def1_RetrieveForeignPropertyPeriodSummaryRequestData,
+  RetrieveForeignPropertyPeriodSummaryRequestData
+}
+import v4.retrieveForeignPropertyPeriodSummary.model.response.{
+  Def1_RetrieveForeignPropertyPeriodSummaryResponse,
+  RetrieveForeignPropertyPeriodSummaryResponse
+}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -41,7 +45,6 @@ class RetrieveForeignPropertyPeriodSummaryControllerSpec
     with MockMtdIdLookupService
     with MockRetrieveForeignPropertyPeriodSummaryService
     with MockRetrieveForeignPropertyPeriodSummaryValidatorFactory
-    with MockHateoasFactory
     with MockIdGenerator {
 
   private val businessId   = "XAIS12345678910"
@@ -57,13 +60,7 @@ class RetrieveForeignPropertyPeriodSummaryControllerSpec
           .retrieve(requestData)
           .returns(Future.successful(Right(ResponseWrapper(correlationId, responseBody))))
 
-        MockHateoasFactory
-          .wrap(
-            responseBody,
-            RetrieveForeignPropertyPeriodSummaryHateoasData(nino = nino, businessId = businessId, submissionId = submissionId, taxYear = taxYear))
-          .returns(HateoasWrapper(responseBody, testHateoasLinks))
-
-        val expectedResponseBody: JsValue = Json.toJson(HateoasWrapper(responseBody, testHateoasLinks))
+        val expectedResponseBody: JsValue = Json.toJson(responseBody)
         runOkTest(expectedStatus = OK, maybeExpectedResponseBody = Some(expectedResponseBody))
       }
     }
@@ -93,7 +90,6 @@ class RetrieveForeignPropertyPeriodSummaryControllerSpec
       lookupService = mockMtdIdLookupService,
       validatorFactory = mockRetrieveForeignPropertyPeriodSummaryValidatorFactory,
       service = mockRetrieveForeignPropertyService,
-      hateoasFactory = mockHateoasFactory,
       cc = cc,
       idGenerator = mockIdGenerator
     )
@@ -103,9 +99,6 @@ class RetrieveForeignPropertyPeriodSummaryControllerSpec
 
     protected val requestData: RetrieveForeignPropertyPeriodSummaryRequestData =
       Def1_RetrieveForeignPropertyPeriodSummaryRequestData(Nino(nino), BusinessId(businessId), TaxYear.fromMtd(taxYear), SubmissionId(submissionId))
-
-    protected val testHateoasLink: Link =
-      Link(href = s"/individuals/business/property/$nino/$businessId/period/$taxYear/$submissionId", method = GET, rel = "self")
 
     protected val responseBody: RetrieveForeignPropertyPeriodSummaryResponse = Def1_RetrieveForeignPropertyPeriodSummaryResponse(
       submittedOn = Timestamp("2022-06-17T10:53:38Z"),

@@ -1,5 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-04/schema#",
+  "title": "Given any tax year",
   "type": "object",
   "properties": {
     "fromDate": {

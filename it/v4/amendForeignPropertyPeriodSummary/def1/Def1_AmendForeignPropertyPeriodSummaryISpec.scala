@@ -312,34 +312,10 @@ class Def1_AmendForeignPropertyPeriodSummaryISpec extends IntegrationBaseSpec {
       setupStubs()
       buildRequest(uri)
         .withHttpHeaders(
-          (ACCEPT, "application/vnd.hmrc.3.0+json"),
+          (ACCEPT, "application/vnd.hmrc.4.0+json"),
           (AUTHORIZATION, "Bearer 123")
         )
     }
-
-    val responseBody: JsValue = Json.parse(
-      s"""
-        |{
-        |  "links": [
-        |    {
-        |      "href":"/individuals/business/property/foreign/$nino/$businessId/period/$taxYear/$submissionId",
-        |      "method":"PUT",
-        |      "rel":"amend-foreign-property-period-summary"
-        |    },
-        |    {
-        |      "href":"/individuals/business/property/foreign/$nino/$businessId/period/$taxYear/$submissionId",
-        |      "method":"GET",
-        |      "rel":"self"
-        |    },
-        |    {
-        |      "href":"/individuals/business/property/$nino/$businessId/period/$taxYear",
-        |      "method":"GET",
-        |      "rel":"list-property-period-summaries"
-        |    }
-        |  ]
-        |}
-      """.stripMargin
-    )
 
     def errorBody(code: String): String =
       s"""
@@ -382,8 +358,7 @@ class Def1_AmendForeignPropertyPeriodSummaryISpec extends IntegrationBaseSpec {
 
         val response: WSResponse = await(request().put(requestBodyJson))
         response.status shouldBe OK
-        response.json shouldBe responseBody
-        response.header("Content-Type") shouldBe Some("application/json")
+        response.body shouldBe ""
         response.header("X-CorrelationId").nonEmpty shouldBe true
       }
 
@@ -398,8 +373,7 @@ class Def1_AmendForeignPropertyPeriodSummaryISpec extends IntegrationBaseSpec {
 
         val response: WSResponse = await(request().put(requestBodyJson))
         response.status shouldBe OK
-        response.json shouldBe responseBody
-        response.header("Content-Type") shouldBe Some("application/json")
+        response.body shouldBe ""
         response.header("X-CorrelationId").nonEmpty shouldBe true
       }
 
@@ -413,8 +387,7 @@ class Def1_AmendForeignPropertyPeriodSummaryISpec extends IntegrationBaseSpec {
 
         val response: WSResponse = await(request().put(requestBodyJsonConsolidatedExpenses))
         response.status shouldBe OK
-        response.json shouldBe responseBody
-        response.header("Content-Type") shouldBe Some("application/json")
+        response.body shouldBe ""
         response.header("X-CorrelationId").nonEmpty shouldBe true
       }
     }
@@ -429,8 +402,7 @@ class Def1_AmendForeignPropertyPeriodSummaryISpec extends IntegrationBaseSpec {
 
       val response: WSResponse = await(request().put(requestBodyJsonConsolidatedExpenses))
       response.status shouldBe OK
-      response.json shouldBe responseBody
-      response.header("Content-Type") shouldBe Some("application/json")
+      response.body shouldBe ""
       response.header("X-CorrelationId").nonEmpty shouldBe true
     }
   }

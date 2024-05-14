@@ -17,13 +17,11 @@
 package v4.createUkPropertyPeriodSummary
 
 import api.controllers._
-import api.hateoas.HateoasFactory
 import api.services.{AuditService, EnrolmentsAuthService, MtdIdLookupService}
 import play.api.libs.json.JsValue
 import play.api.mvc.{Action, ControllerComponents}
 import routing.{Version, Version3}
 import utils.IdGenerator
-import v4.createUkPropertyPeriodSummary.model.response.CreateUkPropertyPeriodSummaryHateoasData
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.ExecutionContext
@@ -34,7 +32,6 @@ class CreateUkPropertyPeriodSummaryController @Inject() (val authService: Enrolm
                                                          validatorFactory: CreateUkPropertyPeriodSummaryValidatorFactory,
                                                          service: CreateUkPropertyPeriodSummaryService,
                                                          auditService: AuditService,
-                                                         hateoasFactory: HateoasFactory,
                                                          cc: ControllerComponents,
                                                          idGenerator: IdGenerator)(implicit ec: ExecutionContext)
     extends AuthorisedController(cc) {
@@ -62,12 +59,9 @@ class CreateUkPropertyPeriodSummaryController @Inject() (val authService: Enrolm
             includeResponse = true
           )
         )
-        .withHateoasResultFrom(hateoasFactory)(
-          (_, resp) => CreateUkPropertyPeriodSummaryHateoasData(nino, businessId, taxYear, resp.submissionId),
-          CREATED)
+        .withPlainJsonResult(CREATED)
 
       requestHandler.handleRequest()
-
     }
 
 }

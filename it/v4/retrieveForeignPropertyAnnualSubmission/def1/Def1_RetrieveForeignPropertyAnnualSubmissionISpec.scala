@@ -27,184 +27,6 @@ import v4.stubs._
 
 class Def1_RetrieveForeignPropertyAnnualSubmissionISpec extends IntegrationBaseSpec {
 
-  private trait Test {
-
-    val nino: String       = "AA123456A"
-    val businessId: String = "XAIS12345678910"
-    def taxYear: String
-
-    val responseBody: JsValue = Json.parse(
-      s"""
-        |{
-        |  "submittedOn": "2020-07-07T10:59:47.544Z",
-        |  "foreignFhlEea": {
-        |    "adjustments": {
-        |      "privateUseAdjustment": 100.25,
-        |      "balancingCharge": 100.25,
-        |      "periodOfGraceAdjustment": true
-        |    },
-        |    "allowances": {
-        |      "annualInvestmentAllowance": 100.25,
-        |      "otherCapitalAllowance": 100.25,
-        |      "electricChargePointAllowance": 100.25,
-        |      "zeroEmissionsCarAllowance": 100.25,
-        |      "propertyIncomeAllowance": 100.25
-        |    }
-        |  },
-        |  "foreignNonFhlProperty": [
-        |    {
-        |      "countryCode": "GER",
-        |      "adjustments": {
-        |        "privateUseAdjustment": 100.25,
-        |        "balancingCharge": 100.25
-        |      },
-        |      "allowances": {
-        |        "annualInvestmentAllowance": 100.25,
-        |        "costOfReplacingDomesticItems": 100.25,
-        |        "zeroEmissionsGoodsVehicleAllowance": 100.25,
-        |        "otherCapitalAllowance": 100.25,
-        |        "electricChargePointAllowance": 100.25,
-        |        "zeroEmissionsCarAllowance": 100.25,
-        |        "propertyIncomeAllowance": 100.25,
-        |        "structuredBuildingAllowance": [
-        |          {
-        |            "amount": 100.25,
-        |            "firstYear": {
-        |              "qualifyingDate": "2020-03-29",
-        |              "qualifyingAmountExpenditure": 100.25
-        |            },
-        |            "building": {
-        |              "name": "Building Name",
-        |              "number": "12",
-        |              "postcode": "TF3 4GH"
-        |            }
-        |          }
-        |        ]
-        |      }
-        |    }
-        |  ],
-        |  "links": [
-        |    {
-        |      "href": "/individuals/business/property/foreign/AA123456A/XAIS12345678910/annual/$taxYear",
-        |      "method": "PUT",
-        |      "rel": "create-and-amend-foreign-property-annual-submission"
-        |    },
-        |    {
-        |      "href": "/individuals/business/property/foreign/AA123456A/XAIS12345678910/annual/$taxYear",
-        |      "method": "GET",
-        |      "rel": "self"
-        |    },
-        |    {
-        |      "href": "/individuals/business/property/AA123456A/XAIS12345678910/annual/$taxYear",
-        |      "method": "DELETE",
-        |      "rel": "delete-property-annual-submission"
-        |    }
-        |  ]
-        |}
-     """.stripMargin
-    )
-
-    val downstreamResponseBody: JsValue = Json.parse("""
-        |{
-        |    "submittedOn": "2020-07-07T10:59:47.544Z",
-        |    "deletedOn": "2021-11-04T08:23:42Z",
-        |    "foreignFhlEea": {
-        |      "adjustments": {
-        |        "privateUseAdjustment": 100.25,
-        |        "balancingCharge": 100.25,
-        |        "periodOfGraceAdjustment": true
-        |      },
-        |      "allowances": {
-        |        "annualInvestmentAllowance": 100.25,
-        |        "otherCapitalAllowance": 100.25,
-        |        "electricChargePointAllowance": 100.25,
-        |        "zeroEmissionsCarAllowance": 100.25,
-        |        "propertyAllowance": 100.25
-        |      }
-        |    },
-        |    "foreignProperty": [
-        |      {
-        |        "countryCode": "GER",
-        |        "adjustments": {
-        |          "privateUseAdjustment": 100.25,
-        |          "balancingCharge": 100.25
-        |        },
-        |        "allowances": {
-        |          "annualInvestmentAllowance": 100.25,
-        |          "costOfReplacingDomesticItems": 100.25,
-        |          "zeroEmissionsGoodsVehicleAllowance": 100.25,
-        |          "otherCapitalAllowance": 100.25,
-        |          "electricChargePointAllowance": 100.25,
-        |          "zeroEmissionsCarAllowance": 100.25,
-        |          "propertyAllowance": 100.25,
-        |          "structuredBuildingAllowance": [
-        |            {
-        |              "amount": 100.25,
-        |              "firstYear": {
-        |                "qualifyingDate": "2020-03-29",
-        |                "qualifyingAmountExpenditure": 100.25
-        |              },
-        |              "building": {
-        |                "name": "Building Name",
-        |                "number": "12",
-        |                "postCode": "TF3 4GH"
-        |              }
-        |            }
-        |          ]
-        |        }
-        |      }
-        |    ]
-        |  }
-        |""".stripMargin)
-
-    def setupStubs(): Unit = ()
-
-    def downstreamUri: String
-
-    def downstreamQueryParams: Map[String, String]
-
-    def request(): WSRequest = {
-      AuthStub.authorised()
-      MtdIdLookupStub.ninoFound(nino)
-      setupStubs()
-      buildRequest(s"/foreign/$nino/$businessId/annual/$taxYear")
-        .withHttpHeaders(
-          (ACCEPT, "application/vnd.hmrc.3.0+json"),
-          (AUTHORIZATION, "Bearer 123")
-        )
-    }
-
-    def errorBody(code: String): String =
-      s"""
-         |{
-         |  "code": "$code",
-         |  "reason": "message"
-         |}
-       """.stripMargin
-
-  }
-
-  private trait NonTysTest extends Test {
-    def taxYear: String = "2021-22"
-
-    def downstreamUri: String = s"/income-tax/business/property/annual"
-
-    def downstreamQueryParams: Map[String, String] = Map(
-      "taxableEntityId" -> nino,
-      "incomeSourceId"  -> businessId,
-      "taxYear"         -> "2021-22"
-    )
-
-  }
-
-  private trait TysIfsTest extends Test {
-    def taxYear: String = "2023-24"
-
-    def downstreamUri: String = s"/income-tax/business/property/annual/23-24/$nino/$businessId"
-
-    def downstreamQueryParams: Map[String, String] = Map.empty
-  }
-
   "calling the retrieve foreign property annual submission endpoint" should {
 
     "return a 200 status code" when {
@@ -314,6 +136,167 @@ class Def1_RetrieveForeignPropertyAnnualSubmissionISpec extends IntegrationBaseS
       response.status shouldBe Status.BAD_REQUEST
       response.json shouldBe Json.toJson(RuleTypeOfBusinessIncorrectError)
     }
+  }
+
+  private trait Test {
+
+    val nino: String       = "AA123456A"
+    val businessId: String = "XAIS12345678910"
+    def taxYear: String
+
+    val responseBody: JsValue = Json.parse(
+      s"""
+         |{
+         |  "submittedOn": "2020-07-07T10:59:47.544Z",
+         |  "foreignFhlEea": {
+         |    "adjustments": {
+         |      "privateUseAdjustment": 100.25,
+         |      "balancingCharge": 100.25,
+         |      "periodOfGraceAdjustment": true
+         |    },
+         |    "allowances": {
+         |      "annualInvestmentAllowance": 100.25,
+         |      "otherCapitalAllowance": 100.25,
+         |      "electricChargePointAllowance": 100.25,
+         |      "zeroEmissionsCarAllowance": 100.25,
+         |      "propertyIncomeAllowance": 100.25
+         |    }
+         |  },
+         |  "foreignNonFhlProperty": [
+         |    {
+         |      "countryCode": "GER",
+         |      "adjustments": {
+         |        "privateUseAdjustment": 100.25,
+         |        "balancingCharge": 100.25
+         |      },
+         |      "allowances": {
+         |        "annualInvestmentAllowance": 100.25,
+         |        "costOfReplacingDomesticItems": 100.25,
+         |        "zeroEmissionsGoodsVehicleAllowance": 100.25,
+         |        "otherCapitalAllowance": 100.25,
+         |        "electricChargePointAllowance": 100.25,
+         |        "zeroEmissionsCarAllowance": 100.25,
+         |        "propertyIncomeAllowance": 100.25,
+         |        "structuredBuildingAllowance": [
+         |          {
+         |            "amount": 100.25,
+         |            "firstYear": {
+         |              "qualifyingDate": "2020-03-29",
+         |              "qualifyingAmountExpenditure": 100.25
+         |            },
+         |            "building": {
+         |              "name": "Building Name",
+         |              "number": "12",
+         |              "postcode": "TF3 4GH"
+         |            }
+         |          }
+         |        ]
+         |      }
+         |    }
+         |  ]
+         |}
+     """.stripMargin
+    )
+
+    val downstreamResponseBody: JsValue = Json.parse("""
+                                                       |{
+                                                       |    "submittedOn": "2020-07-07T10:59:47.544Z",
+                                                       |    "deletedOn": "2021-11-04T08:23:42Z",
+                                                       |    "foreignFhlEea": {
+                                                       |      "adjustments": {
+                                                       |        "privateUseAdjustment": 100.25,
+                                                       |        "balancingCharge": 100.25,
+                                                       |        "periodOfGraceAdjustment": true
+                                                       |      },
+                                                       |      "allowances": {
+                                                       |        "annualInvestmentAllowance": 100.25,
+                                                       |        "otherCapitalAllowance": 100.25,
+                                                       |        "electricChargePointAllowance": 100.25,
+                                                       |        "zeroEmissionsCarAllowance": 100.25,
+                                                       |        "propertyAllowance": 100.25
+                                                       |      }
+                                                       |    },
+                                                       |    "foreignProperty": [
+                                                       |      {
+                                                       |        "countryCode": "GER",
+                                                       |        "adjustments": {
+                                                       |          "privateUseAdjustment": 100.25,
+                                                       |          "balancingCharge": 100.25
+                                                       |        },
+                                                       |        "allowances": {
+                                                       |          "annualInvestmentAllowance": 100.25,
+                                                       |          "costOfReplacingDomesticItems": 100.25,
+                                                       |          "zeroEmissionsGoodsVehicleAllowance": 100.25,
+                                                       |          "otherCapitalAllowance": 100.25,
+                                                       |          "electricChargePointAllowance": 100.25,
+                                                       |          "zeroEmissionsCarAllowance": 100.25,
+                                                       |          "propertyAllowance": 100.25,
+                                                       |          "structuredBuildingAllowance": [
+                                                       |            {
+                                                       |              "amount": 100.25,
+                                                       |              "firstYear": {
+                                                       |                "qualifyingDate": "2020-03-29",
+                                                       |                "qualifyingAmountExpenditure": 100.25
+                                                       |              },
+                                                       |              "building": {
+                                                       |                "name": "Building Name",
+                                                       |                "number": "12",
+                                                       |                "postCode": "TF3 4GH"
+                                                       |              }
+                                                       |            }
+                                                       |          ]
+                                                       |        }
+                                                       |      }
+                                                       |    ]
+                                                       |  }
+                                                       |""".stripMargin)
+
+    def setupStubs(): Unit = ()
+
+    def downstreamUri: String
+
+    def downstreamQueryParams: Map[String, String]
+
+    def request(): WSRequest = {
+      AuthStub.authorised()
+      MtdIdLookupStub.ninoFound(nino)
+      setupStubs()
+      buildRequest(s"/foreign/$nino/$businessId/annual/$taxYear")
+        .withHttpHeaders(
+          (ACCEPT, "application/vnd.hmrc.4.0+json"),
+          (AUTHORIZATION, "Bearer 123")
+        )
+    }
+
+    def errorBody(code: String): String =
+      s"""
+         |{
+         |  "code": "$code",
+         |  "reason": "message"
+         |}
+       """.stripMargin
+
+  }
+
+  private trait NonTysTest extends Test {
+    def taxYear: String = "2021-22"
+
+    def downstreamUri: String = s"/income-tax/business/property/annual"
+
+    def downstreamQueryParams: Map[String, String] = Map(
+      "taxableEntityId" -> nino,
+      "incomeSourceId"  -> businessId,
+      "taxYear"         -> "2021-22"
+    )
+
+  }
+
+  private trait TysIfsTest extends Test {
+    def taxYear: String = "2023-24"
+
+    def downstreamUri: String = s"/income-tax/business/property/annual/23-24/$nino/$businessId"
+
+    def downstreamQueryParams: Map[String, String] = Map.empty
   }
 
 }

@@ -17,11 +17,9 @@
 package v4.retrieveUkPropertyPeriodSummary
 
 import api.controllers.{AuthorisedController, EndpointLogContext, RequestContext, RequestHandler}
-import api.hateoas.HateoasFactory
 import api.services.{EnrolmentsAuthService, MtdIdLookupService}
 import play.api.mvc.{Action, AnyContent, ControllerComponents}
 import utils.IdGenerator
-import v4.retrieveUkPropertyPeriodSummary.model.response.RetrieveUkPropertyPeriodSummaryHateoasData
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.ExecutionContext
@@ -31,7 +29,6 @@ class RetrieveUkPropertyPeriodSummaryController @Inject() (val authService: Enro
                                                            val lookupService: MtdIdLookupService,
                                                            validatorFactory: RetrieveUkPropertyPeriodSummaryValidatorFactory,
                                                            service: RetrieveUkPropertyPeriodSummaryService,
-                                                           hateoasFactory: HateoasFactory,
                                                            cc: ControllerComponents,
                                                            idGenerator: IdGenerator)(implicit ec: ExecutionContext)
     extends AuthorisedController(cc) {
@@ -49,7 +46,7 @@ class RetrieveUkPropertyPeriodSummaryController @Inject() (val authService: Enro
         RequestHandler
           .withValidator(validator)
           .withService(service.retrieveUkProperty)
-          .withHateoasResult(hateoasFactory)(RetrieveUkPropertyPeriodSummaryHateoasData(nino, businessId, taxYear, submissionId))
+          .withPlainJsonResult(OK)
 
       requestHandler.handleRequest()
     }

@@ -66,15 +66,6 @@ responses:
     headers:
       X-CorrelationId:
         $ref: './common/headers.yaml#/components/parameters/correlationId'
-    content:
-      application/json:
-        schema:
-          $ref: './schemas/foreign_property_period_summary_amend/response.json'
-        examples:
-          example-response:
-            description: Example Response
-            value:
-              $ref: './examples/foreign_property_period_summary_amend/response.json'
   "400":
     description: Bad request
     content:

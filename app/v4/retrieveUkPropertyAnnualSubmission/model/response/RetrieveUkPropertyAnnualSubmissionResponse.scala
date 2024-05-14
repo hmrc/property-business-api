@@ -16,40 +16,29 @@
 
 package v4.retrieveUkPropertyAnnualSubmission.model.response
 
-import api.hateoas.{HateoasData, HateoasLinksFactory, Link}
 import api.models.domain.Timestamp
-import config.AppConfig
 import play.api.libs.functional.syntax._
 import play.api.libs.json._
-import v4.hateoas.HateoasLinks
 import v4.retrieveUkPropertyAnnualSubmission.def1.model.response.def1_ukFhlProperty.Def1_Retrieve_UkFhlProperty
 import v4.retrieveUkPropertyAnnualSubmission.def1.model.response.def1_ukNonFhlProperty.Def1_Retrieve_UkNonFhlProperty
-import v4.retrieveUkPropertyAnnualSubmission.model.response.Def1_RetrieveUkPropertyAnnualSubmissionResponse.Def1_RetrieveUkPropertyAnnualSubmissionLinksFactory
 
 sealed trait RetrieveUkPropertyAnnualSubmissionResponse
 
-object RetrieveUkPropertyAnnualSubmissionResponse extends HateoasLinks {
+object RetrieveUkPropertyAnnualSubmissionResponse {
 
-  implicit val writes: OWrites[RetrieveUkPropertyAnnualSubmissionResponse] = {
-    case def1: Def1_RetrieveUkPropertyAnnualSubmissionResponse => Json.toJsObject(def1)
-  }
-
-  implicit object RetrieveUkPropertyAnnualSubmissionLinksFactory
-      extends HateoasLinksFactory[RetrieveUkPropertyAnnualSubmissionResponse, RetrieveUkPropertyAnnualSubmissionHateoasData] {
-
-    override def links(appConfig: AppConfig, data: RetrieveUkPropertyAnnualSubmissionHateoasData): Seq[Link] =
-      Def1_RetrieveUkPropertyAnnualSubmissionLinksFactory.links(appConfig, data)
-
+  implicit val writes: OWrites[RetrieveUkPropertyAnnualSubmissionResponse] = { case def1: Def1_RetrieveUkPropertyAnnualSubmissionResponse =>
+    Json.toJsObject(def1)
   }
 
 }
 
-case class Def1_RetrieveUkPropertyAnnualSubmissionResponse(submittedOn: Timestamp,
-                                                           ukFhlProperty: Option[Def1_Retrieve_UkFhlProperty],
-                                                           ukNonFhlProperty: Option[Def1_Retrieve_UkNonFhlProperty])
-    extends RetrieveUkPropertyAnnualSubmissionResponse
+case class Def1_RetrieveUkPropertyAnnualSubmissionResponse(
+    submittedOn: Timestamp,
+    ukFhlProperty: Option[Def1_Retrieve_UkFhlProperty],
+    ukNonFhlProperty: Option[Def1_Retrieve_UkNonFhlProperty]
+) extends RetrieveUkPropertyAnnualSubmissionResponse
 
-object Def1_RetrieveUkPropertyAnnualSubmissionResponse extends HateoasLinks {
+object Def1_RetrieveUkPropertyAnnualSubmissionResponse {
 
   implicit val writes: OWrites[Def1_RetrieveUkPropertyAnnualSubmissionResponse] = Json.writes[Def1_RetrieveUkPropertyAnnualSubmissionResponse]
 
@@ -59,20 +48,4 @@ object Def1_RetrieveUkPropertyAnnualSubmissionResponse extends HateoasLinks {
       (__ \ "ukOtherProperty").readNullable[Def1_Retrieve_UkNonFhlProperty]
   )(Def1_RetrieveUkPropertyAnnualSubmissionResponse.apply _)
 
-  implicit object Def1_RetrieveUkPropertyAnnualSubmissionLinksFactory
-      extends HateoasLinksFactory[Def1_RetrieveUkPropertyAnnualSubmissionResponse, RetrieveUkPropertyAnnualSubmissionHateoasData] {
-
-    override def links(appConfig: AppConfig, data: RetrieveUkPropertyAnnualSubmissionHateoasData): Seq[Link] = {
-      import data._
-      List(
-        createAmendUkPropertyAnnualSubmission(appConfig, nino, businessId, taxYear),
-        retrieveUkPropertyAnnualSubmission(appConfig, nino, businessId, taxYear, self = true),
-        deletePropertyAnnualSubmission(appConfig, nino, businessId, taxYear)
-      )
-    }
-
-  }
-
 }
-
-case class RetrieveUkPropertyAnnualSubmissionHateoasData(nino: String, businessId: String, taxYear: String) extends HateoasData

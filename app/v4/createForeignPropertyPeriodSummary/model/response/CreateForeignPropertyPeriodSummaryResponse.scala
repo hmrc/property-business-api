@@ -16,29 +16,10 @@
 
 package v4.createForeignPropertyPeriodSummary.model.response
 
-import api.hateoas.{HateoasData, HateoasLinksFactory, Link}
-import config.AppConfig
 import play.api.libs.json.{Json, OFormat}
-import v4.hateoas.HateoasLinks
 
 case class CreateForeignPropertyPeriodSummaryResponse(submissionId: String)
 
-object CreateForeignPropertyPeriodSummaryResponse extends HateoasLinks {
+object CreateForeignPropertyPeriodSummaryResponse {
   implicit val format: OFormat[CreateForeignPropertyPeriodSummaryResponse] = Json.format[CreateForeignPropertyPeriodSummaryResponse]
-
-  implicit object LinksFactory
-      extends HateoasLinksFactory[CreateForeignPropertyPeriodSummaryResponse, CreateForeignPropertyPeriodSummaryHateoasData] {
-
-    override def links(appConfig: AppConfig, data: CreateForeignPropertyPeriodSummaryHateoasData): Seq[Link] = {
-      import data._
-      List(
-        retrieveForeignPropertyPeriodSummary(appConfig, nino, businessId, taxYear, submissionId, self = true),
-        amendForeignPropertyPeriodSummary(appConfig, nino, businessId, taxYear, submissionId)
-      )
-    }
-
-  }
-
 }
-
-case class CreateForeignPropertyPeriodSummaryHateoasData(nino: String, businessId: String, taxYear: String, submissionId: String) extends HateoasData

@@ -53,24 +53,7 @@ class Def1_RetrieveHistoricFhlUkPropertyAnnualSubmissionISpec extends Integratio
          |      "otherCapitalAllowance": 200.00,
          |      "businessPremisesRenovationAllowance": 100.02,
          |      "propertyIncomeAllowance": 10.02
-         |   },
-         |   "links": [
-         |      {
-         |         "href": "/individuals/business/property/uk/annual/furnished-holiday-lettings/AA123456A/2020-21",
-         |         "method": "GET",
-         |         "rel": "self"
-         |      },
-         |      {
-         |         "href": "/individuals/business/property/uk/annual/furnished-holiday-lettings/AA123456A/2020-21",
-         |         "method": "PUT",
-         |         "rel": "create-and-amend-uk-property-historic-fhl-annual-submission"
-         |      },
-         |      {
-         |         "href": "/individuals/business/property/uk/annual/furnished-holiday-lettings/AA123456A/2020-21",
-         |         "method": "DELETE",
-         |         "rel": "delete-uk-property-historic-fhl-annual-submission"
-         |      }
-         |   ]
+         |   }
          |}
        """.stripMargin
     )
@@ -108,7 +91,7 @@ class Def1_RetrieveHistoricFhlUkPropertyAnnualSubmissionISpec extends Integratio
       setupStubs()
       buildRequest(mtdUri)
         .withHttpHeaders(
-          (ACCEPT, "application/vnd.hmrc.3.0+json"),
+          (ACCEPT, "application/vnd.hmrc.4.0+json"),
           (AUTHORIZATION, "Bearer 123")
         )
     }

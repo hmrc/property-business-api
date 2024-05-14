@@ -17,7 +17,6 @@
 package v4.createAmendForeignPropertyAnnualSubmission
 
 import api.controllers.{ControllerBaseSpec, ControllerTestRunner}
-import api.hateoas.{HateoasWrapper, MockHateoasFactory}
 import api.models.audit.{AuditEvent, AuditResponse, GenericAuditDetail}
 import api.models.domain.{BusinessId, Nino, TaxYear}
 import api.models.errors._
@@ -28,7 +27,6 @@ import play.api.libs.json.JsValue
 import play.api.mvc.Result
 import v4.createAmendForeignPropertyAnnualSubmission.def1.model.request.Def1_Fixtures
 import v4.createAmendForeignPropertyAnnualSubmission.model.request._
-import v4.createAmendForeignPropertyAnnualSubmission.model.response.CreateAmendForeignPropertyAnnualSubmissionHateoasData
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -40,7 +38,6 @@ class CreateAmendForeignPropertyAnnualSubmissionControllerSpec
     with MockMtdIdLookupService
     with MockCreateAmendForeignPropertyAnnualSubmissionService
     with MockCreateAmendForeignPropertyAnnualSubmissionValidatorFactory
-    with MockHateoasFactory
     with MockAuditService
     with MockIdGenerator
     with Def1_Fixtures {
@@ -57,11 +54,7 @@ class CreateAmendForeignPropertyAnnualSubmissionControllerSpec
           .amend(requestData)
           .returns(Future.successful(Right(ResponseWrapper(correlationId, ()))))
 
-        MockHateoasFactory
-          .wrap((), hateoasData)
-          .returns(HateoasWrapper((), testHateoasLinks))
-
-        runOkTest(expectedStatus = OK, maybeExpectedResponseBody = Some(testHateoasLinksJson))
+        runOkTest(expectedStatus = OK, maybeExpectedResponseBody = None)
       }
     }
 
@@ -94,7 +87,6 @@ class CreateAmendForeignPropertyAnnualSubmissionControllerSpec
       validatorFactory = mockCreateAmendForeignPropertyAnnualSubmissionValidatorFactory,
       service = mockService,
       auditService = mockAuditService,
-      hateoasFactory = mockHateoasFactory,
       cc = cc,
       idGenerator = mockIdGenerator
     )
@@ -120,11 +112,13 @@ class CreateAmendForeignPropertyAnnualSubmissionControllerSpec
 
     private val requestBody: Def1_CreateAmendForeignPropertyAnnualSubmissionRequestBody = createAmendForeignPropertyAnnualSubmissionRequestBody
 
-    protected val requestData: Def1_CreateAmendForeignPropertyAnnualSubmissionRequestData =
-      Def1_CreateAmendForeignPropertyAnnualSubmissionRequestData(Nino(nino), BusinessId(businessId), TaxYear.fromMtd(taxYear), requestBody)
-
-    protected val hateoasData: CreateAmendForeignPropertyAnnualSubmissionHateoasData =
-      CreateAmendForeignPropertyAnnualSubmissionHateoasData(nino, businessId, taxYear)
+    protected val requestData: CreateAmendForeignPropertyAnnualSubmissionRequestData =
+      Def1_CreateAmendForeignPropertyAnnualSubmissionRequestData(
+        Nino(nino),
+        BusinessId(businessId),
+        TaxYear.fromMtd(taxYear),
+        requestBody
+      )
 
   }
 

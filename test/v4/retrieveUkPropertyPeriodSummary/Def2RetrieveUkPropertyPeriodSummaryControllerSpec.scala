@@ -17,8 +17,6 @@
 package v4.retrieveUkPropertyPeriodSummary
 
 import api.controllers.{ControllerBaseSpec, ControllerTestRunner}
-import api.hateoas.Method.GET
-import api.hateoas.{HateoasWrapper, Link, MockHateoasFactory}
 import api.models.domain.{BusinessId, Nino, SubmissionId, TaxYear}
 import api.models.errors._
 import api.models.outcomes.ResponseWrapper
@@ -28,7 +26,7 @@ import v4.retrieveUkPropertyPeriodSummary.def2.model.{
   Def2_RetrieveUkPropertyPeriodSummaryFixture
 }
 import v4.retrieveUkPropertyPeriodSummary.model.request._
-import v4.retrieveUkPropertyPeriodSummary.model.response.{RetrieveUkPropertyPeriodSummaryHateoasData, RetrieveUkPropertyPeriodSummaryResponse}
+import v4.retrieveUkPropertyPeriodSummary.model.response.RetrieveUkPropertyPeriodSummaryResponse
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -38,7 +36,6 @@ class Def2RetrieveUkPropertyPeriodSummaryControllerSpec
     with ControllerTestRunner
     with MockRetrieveUkPropertyPeriodSummaryService
     with MockRetrieveUkPropertyPeriodSummaryValidatorFactory
-    with MockHateoasFactory
     with Def2_RetrieveUkPropertyPeriodSummaryFixture {
 
   private val businessId   = "XAIS12345678910"
@@ -54,11 +51,7 @@ class Def2RetrieveUkPropertyPeriodSummaryControllerSpec
           .retrieve(requestData)
           .returns(Future.successful(Right(ResponseWrapper(correlationId, responseData))))
 
-        MockHateoasFactory
-          .wrap(responseData, hateoasData)
-          .returns(HateoasWrapper(responseData, List(testHateoasLink)))
-
-        runOkTest(expectedStatus = OK, maybeExpectedResponseBody = Some(mtdResponseWithHateoas))
+        runOkTest(expectedStatus = OK, maybeExpectedResponseBody = Some(fullMtdJson))
       }
     }
 
@@ -88,7 +81,6 @@ class Def2RetrieveUkPropertyPeriodSummaryControllerSpec
       lookupService = mockMtdIdLookupService,
       validatorFactory = mockRetrieveUkPropertyPeriodSummaryValidatorFactory,
       service = mockRetrieveUkPropertyService,
-      hateoasFactory = mockHateoasFactory,
       cc = cc,
       idGenerator = mockIdGenerator
     )
@@ -98,13 +90,7 @@ class Def2RetrieveUkPropertyPeriodSummaryControllerSpec
     protected val requestData: RetrieveUkPropertyPeriodSummaryRequestData =
       Def2_RetrieveUkPropertyPeriodSummaryRequestData(Nino(nino), BusinessId(businessId), TaxYear.fromMtd(taxYear), SubmissionId(submissionId))
 
-    protected val testHateoasLink: Link =
-      Link(href = s"/individuals/business/property/$nino/$businessId/period/$taxYear/$submissionId", method = GET, rel = "self")
-
-    protected val hateoasData: RetrieveUkPropertyPeriodSummaryHateoasData =
-      RetrieveUkPropertyPeriodSummaryHateoasData(nino, businessId, taxYear, submissionId)
-
-    protected val responseData: RetrieveUkPropertyPeriodSummaryResponse = fullResponseModel
+    protected val responseData: RetrieveUkPropertyPeriodSummaryResponse = fullResponse
   }
 
 }
@@ -114,7 +100,6 @@ class Def2RetrieveUkPropertyPeriodSummaryConsolidatedControllerSpec
     with ControllerTestRunner
     with MockRetrieveUkPropertyPeriodSummaryService
     with MockRetrieveUkPropertyPeriodSummaryValidatorFactory
-    with MockHateoasFactory
     with Def2_RetrieveUkPropertyPeriodSummaryConsolidatedFixture {
 
   private val businessId   = "XAIS12345678910"
@@ -130,18 +115,13 @@ class Def2RetrieveUkPropertyPeriodSummaryConsolidatedControllerSpec
           .retrieve(requestData)
           .returns(Future.successful(Right(ResponseWrapper(correlationId, responseData))))
 
-        MockHateoasFactory
-          .wrap(responseData, hateoasData)
-          .returns(HateoasWrapper(responseData, List(testHateoasLink)))
-
-        runOkTest(expectedStatus = OK, maybeExpectedResponseBody = Some(mtdResponseWithHateoas))
+        runOkTest(expectedStatus = OK, maybeExpectedResponseBody = Some(fullMtdJson))
       }
     }
 
     "return validation error as per spec" when {
       "the parser validation fails" in new ConsolidatedTest {
         willUseValidator(returning(NinoFormatError))
-
         runErrorTest(NinoFormatError)
       }
 
@@ -164,7 +144,6 @@ class Def2RetrieveUkPropertyPeriodSummaryConsolidatedControllerSpec
       lookupService = mockMtdIdLookupService,
       validatorFactory = mockRetrieveUkPropertyPeriodSummaryValidatorFactory,
       service = mockRetrieveUkPropertyService,
-      hateoasFactory = mockHateoasFactory,
       cc = cc,
       idGenerator = mockIdGenerator
     )
@@ -178,13 +157,7 @@ class Def2RetrieveUkPropertyPeriodSummaryConsolidatedControllerSpec
         TaxYear.fromMtd(taxYear),
         SubmissionId(submissionId))
 
-    protected val testHateoasLink: Link =
-      Link(href = s"/individuals/business/property/$nino/$businessId/period/$taxYear/$submissionId", method = GET, rel = "self")
-
-    protected val hateoasData: RetrieveUkPropertyPeriodSummaryHateoasData =
-      RetrieveUkPropertyPeriodSummaryHateoasData(nino, businessId, taxYear, submissionId)
-
-    protected val responseData: RetrieveUkPropertyPeriodSummaryResponse = fullResponseModel
+    protected val responseData: RetrieveUkPropertyPeriodSummaryResponse = fullResponse
   }
 
 }

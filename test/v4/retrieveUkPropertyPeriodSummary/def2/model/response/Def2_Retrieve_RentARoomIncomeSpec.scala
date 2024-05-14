@@ -25,16 +25,16 @@ class Def2_Retrieve_RentARoomIncomeSpec extends UnitSpec with Def2_RetrieveUkPro
   "RentARoomIncome" when {
     val downstreamJson: JsValue = (fullDownstreamJson \ "ukOtherProperty" \ "income" \ "ukOtherRentARoom").get
     val mtdJson: JsValue        = (fullMtdJson \ "ukNonFhlProperty" \ "income" \ "rentARoom").get
-    val model: Def2_Retrieve_RentARoomIncome  = ukNonFhlRentARoomIncomeModel
+
     "read from valid JSON" should {
-      "return the expected model" in {
-        downstreamJson.as[Def2_Retrieve_RentARoomIncome] shouldBe model
+      "return the parsed object" in {
+        downstreamJson.as[Def2_Retrieve_RentARoomIncome] shouldBe ukNonFhlRentARoomIncome
       }
     }
 
     "written JSON" should {
       "return the expected JSON" in {
-        Json.toJson(model) shouldBe mtdJson
+        Json.toJson(ukNonFhlRentARoomIncome) shouldBe mtdJson
       }
     }
   }

@@ -16,7 +16,6 @@
 
 package v4.retrieveForeignPropertyPeriodSummary.def1.model.response
 
-import api.hateoas.{Link, Method}
 import api.models.domain.Timestamp
 import mocks.MockAppConfig
 import play.api.libs.json.Json
@@ -179,7 +178,8 @@ class RetrieveForeignPropertyPeriodSummaryResponseSpec extends UnitSpec with Moc
   "reads" when {
     "passed a valid JSON" should {
       "return a valid model" in {
-        readsJson.as[Def1_RetrieveForeignPropertyPeriodSummaryResponse] shouldBe retrieveForeignPropertyResponseBody
+        val result = readsJson.as[Def1_RetrieveForeignPropertyPeriodSummaryResponse]
+        result shouldBe retrieveForeignPropertyResponseBody
       }
     }
   }
@@ -187,34 +187,8 @@ class RetrieveForeignPropertyPeriodSummaryResponseSpec extends UnitSpec with Moc
   "writes" when {
     "passed valid model" should {
       "return valid JSON" in {
-        Json.toJson(retrieveForeignPropertyResponseBody) shouldBe writesJson
-      }
-    }
-  }
-
-  "LinksFactory" should {
-    "produce the correct links" when {
-      "called" in {
-        val data: RetrieveForeignPropertyPeriodSummaryHateoasData =
-          RetrieveForeignPropertyPeriodSummaryHateoasData("myNino", "myBusinessId", "myTaxYear", "mySubmissionId")
-
-        MockedAppConfig.apiGatewayContext.returns("my/context").anyNumberOfTimes()
-
-        RetrieveForeignPropertyPeriodSummaryResponse.RetrieveForeignPropertyLinksFactory.links(mockAppConfig, data) shouldBe List(
-          Link(
-            href = s"/my/context/foreign/${data.nino}/${data.businessId}/period/${data.taxYear}/${data.submissionId}",
-            method = Method.PUT,
-            rel = "amend-foreign-property-period-summary"
-          ),
-          Link(
-            href = s"/my/context/foreign/${data.nino}/${data.businessId}/period/${data.taxYear}/${data.submissionId}",
-            method = Method.GET,
-            rel = "self"),
-          Link(
-            href = s"/my/context/${data.nino}/${data.businessId}/period/${data.taxYear}",
-            method = Method.GET,
-            rel = "list-property-period-summaries")
-        )
+        val result = Json.toJson(retrieveForeignPropertyResponseBody)
+        result shouldBe writesJson
       }
     }
   }

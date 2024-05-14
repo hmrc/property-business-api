@@ -16,7 +16,6 @@
 
 package v4.retrieveForeignPropertyAnnualSubmission.def1.model.response
 
-import api.hateoas.{Link, Method}
 import api.models.domain.Timestamp
 import mocks.MockAppConfig
 import play.api.libs.json.Json
@@ -225,30 +224,6 @@ class Def1_RetrieveForeignPropertyAnnualSubmissionResponseSpec extends UnitSpec 
     }
     "write a minimum model to a JSON" in {
       Json.toJson(retrieveForeignPropertyAnnualSubmissionResponseBodyMinimum) shouldBe jsonBodyMinimum
-    }
-  }
-
-  "LinksFactory" should {
-    "produce the correct links" when {
-      "called" in {
-        val data: RetrieveForeignPropertyAnnualSubmissionHateoasData =
-          RetrieveForeignPropertyAnnualSubmissionHateoasData("myNino", "myBusinessId", "mySubmissionId")
-
-        MockedAppConfig.apiGatewayContext.returns("my/context").anyNumberOfTimes()
-
-        RetrieveForeignPropertyAnnualSubmissionResponse.RetrieveAnnualSubmissionLinksFactory.links(mockAppConfig, data) shouldBe List(
-          Link(
-            href = s"/my/context/foreign/${data.nino}/${data.businessId}/annual/${data.taxYear}",
-            method = Method.PUT,
-            rel = "create-and-amend-foreign-property-annual-submission"
-          ),
-          Link(href = s"/my/context/foreign/${data.nino}/${data.businessId}/annual/${data.taxYear}", method = Method.GET, rel = "self"),
-          Link(
-            href = s"/my/context/${data.nino}/${data.businessId}/annual/${data.taxYear}",
-            method = Method.DELETE,
-            rel = "delete-property-annual-submission")
-        )
-      }
     }
   }
 

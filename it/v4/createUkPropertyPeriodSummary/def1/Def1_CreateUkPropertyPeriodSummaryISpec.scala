@@ -375,7 +375,7 @@ class Def1_CreateUkPropertyPeriodSummaryISpec extends IntegrationBaseSpec {
       setupStubs()
       buildRequest(s"/uk/$nino/$businessId/period/$taxYear")
         .withHttpHeaders(
-          (ACCEPT, "application/vnd.hmrc.3.0+json"),
+          (ACCEPT, "application/vnd.hmrc.4.0+json"),
           (AUTHORIZATION, "Bearer 123")
         )
     }
@@ -383,19 +383,7 @@ class Def1_CreateUkPropertyPeriodSummaryISpec extends IntegrationBaseSpec {
     val responseBody: JsValue = Json.parse(
       s"""
         |{
-        |  "submissionId": "$submissionId",
-        |  "links": [
-        |    {
-        |      "href":"/individuals/business/property/uk/$nino/$businessId/period/$taxYear/$submissionId",
-        |      "method":"PUT",
-        |      "rel":"amend-uk-property-period-summary"
-        |    },
-        |    {
-        |      "href":"/individuals/business/property/uk/$nino/$businessId/period/$taxYear/$submissionId",
-        |      "method":"GET",
-        |      "rel":"self"
-        |    }
-        |  ]
+        |  "submissionId": "$submissionId"
         |}
       """.stripMargin
     )
@@ -502,6 +490,7 @@ class Def1_CreateUkPropertyPeriodSummaryISpec extends IntegrationBaseSpec {
                                 requestBody: JsValue,
                                 expectedStatus: Int,
                                 expectedBody: MtdError): Unit = {
+
           s"validation fails with ${expectedBody.code} error" in new NonTysTest {
             override val nino: String       = requestNino
             override val businessId: String = requestBusinessId

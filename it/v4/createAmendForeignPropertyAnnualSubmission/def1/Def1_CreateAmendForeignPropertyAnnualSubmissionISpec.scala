@@ -289,7 +289,7 @@ class Def1_CreateAmendForeignPropertyAnnualSubmissionISpec extends IntegrationBa
 
         val response: WSResponse = await(request().put(requestBodyJson))
         response.status shouldBe OK
-        response.json shouldBe responseBody
+        response.body shouldBe ""
         response.header("X-CorrelationId").nonEmpty shouldBe true
       }
 
@@ -304,7 +304,7 @@ class Def1_CreateAmendForeignPropertyAnnualSubmissionISpec extends IntegrationBa
 
         val response: WSResponse = await(request().put(requestBodyJson))
         response.status shouldBe OK
-        response.json shouldBe responseBody
+        response.body shouldBe ""
         response.header("X-CorrelationId").nonEmpty shouldBe true
       }
     }
@@ -525,34 +525,10 @@ class Def1_CreateAmendForeignPropertyAnnualSubmissionISpec extends IntegrationBa
       setupStubs()
       buildRequest(mtdUri)
         .withHttpHeaders(
-          (ACCEPT, "application/vnd.hmrc.3.0+json"),
+          (ACCEPT, "application/vnd.hmrc.4.0+json"),
           (AUTHORIZATION, "Bearer 123")
         )
     }
-
-    val responseBody: JsValue = Json.parse(
-      s"""
-         |{
-         |  "links":[
-         |    {
-         |      "href":"/individuals/business/property/foreign/$nino/$businessId/annual/$taxYear",
-         |      "method":"PUT",
-         |      "rel":"create-and-amend-foreign-property-annual-submission"
-         |    },
-         |    {
-         |      "href":"/individuals/business/property/foreign/$nino/$businessId/annual/$taxYear",
-         |      "method":"GET",
-         |      "rel":"self"
-         |    },
-         |    {
-         |      "href":"/individuals/business/property/$nino/$businessId/annual/$taxYear",
-         |      "method":"DELETE",
-         |      "rel":"delete-property-annual-submission"
-         |    }
-         |  ]
-         |}
-      """.stripMargin
-    )
 
     def errorBody(code: String): String =
       s"""

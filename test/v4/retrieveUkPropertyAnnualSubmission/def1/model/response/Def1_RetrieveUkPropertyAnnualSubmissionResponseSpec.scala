@@ -16,10 +16,9 @@
 
 package v4.retrieveUkPropertyAnnualSubmission.def1.model.response
 
-import api.hateoas.{Link, Method}
 import api.models.domain.Timestamp
 import mocks.MockAppConfig
-import play.api.libs.json.{JsValue, Json}
+import play.api.libs.json.Json
 import support.UnitSpec
 import v4.retrieveUkPropertyAnnualSubmission.def1.model.response.def1_ukFhlProperty._
 import v4.retrieveUkPropertyAnnualSubmission.def1.model.response.def1_ukNonFhlProperty._
@@ -27,7 +26,7 @@ import v4.retrieveUkPropertyAnnualSubmission.model.response._
 
 class Def1_RetrieveUkPropertyAnnualSubmissionResponseSpec extends UnitSpec with MockAppConfig {
 
-  val preTysDownstreamJson: JsValue = Json.parse("""
+  private val preTysDownstreamJson = Json.parse("""
       |{
       |   "submittedOn":"2020-06-17T10:53:38.000Z",
       |   "ukFhlProperty":{
@@ -102,8 +101,7 @@ class Def1_RetrieveUkPropertyAnnualSubmissionResponseSpec extends UnitSpec with 
       |}
       |""".stripMargin)
 
-  val tysDownstreamJson: JsValue = Json.parse(
-    """
+  private val tysDownstreamJson = Json.parse("""
       |{
       |   "submittedOn":"2020-06-17T10:53:38.000Z",
       |   "ukFhlProperty":{
@@ -178,7 +176,7 @@ class Def1_RetrieveUkPropertyAnnualSubmissionResponseSpec extends UnitSpec with 
       |}
       |""".stripMargin)
 
-  val model: Def1_RetrieveUkPropertyAnnualSubmissionResponse = Def1_RetrieveUkPropertyAnnualSubmissionResponse(
+  private val parsed = Def1_RetrieveUkPropertyAnnualSubmissionResponse(
     submittedOn = Timestamp("2020-06-17T10:53:38.000Z"),
     ukFhlProperty = Some(
       Def1_Retrieve_UkFhlProperty(
@@ -271,7 +269,7 @@ class Def1_RetrieveUkPropertyAnnualSubmissionResponseSpec extends UnitSpec with 
     )
   )
 
-  val mtdJson: JsValue = Json.parse("""
+  private val mtdJson = Json.parse("""
       |{
       |   "submittedOn":"2020-06-17T10:53:38.000Z",
       |   "ukFhlProperty":{
@@ -348,40 +346,20 @@ class Def1_RetrieveUkPropertyAnnualSubmissionResponseSpec extends UnitSpec with 
 
   "reads" should {
     "read pre tys JSON into a model" in {
-      preTysDownstreamJson.as[Def1_RetrieveUkPropertyAnnualSubmissionResponse] shouldBe model
+      val result: RetrieveUkPropertyAnnualSubmissionResponse = preTysDownstreamJson.as[Def1_RetrieveUkPropertyAnnualSubmissionResponse]
+      result shouldBe parsed
     }
 
     "read tys JSON into a model" in {
-      tysDownstreamJson.as[Def1_RetrieveUkPropertyAnnualSubmissionResponse] shouldBe model
+      val result = tysDownstreamJson.as[Def1_RetrieveUkPropertyAnnualSubmissionResponse]
+      result shouldBe parsed
     }
   }
 
   "writes" should {
     "write a model to JSON" in {
-      Json.toJson(model) shouldBe mtdJson
-    }
-  }
-
-  "LinksFactory" should {
-    "produce the correct links" when {
-      "called" in {
-        val data: RetrieveUkPropertyAnnualSubmissionHateoasData =
-          RetrieveUkPropertyAnnualSubmissionHateoasData("myNino", "myBusinessId", "mySubmissionId")
-
-        MockedAppConfig.apiGatewayContext.returns("my/context").anyNumberOfTimes()
-
-        RetrieveUkPropertyAnnualSubmissionResponse.RetrieveUkPropertyAnnualSubmissionLinksFactory.links(mockAppConfig, data) shouldBe List(
-          Link(
-            href = s"/my/context/uk/${data.nino}/${data.businessId}/annual/${data.taxYear}",
-            method = Method.PUT,
-            rel = "create-and-amend-uk-property-annual-submission"),
-          Link(href = s"/my/context/uk/${data.nino}/${data.businessId}/annual/${data.taxYear}", method = Method.GET, rel = "self"),
-          Link(
-            href = s"/my/context/${data.nino}/${data.businessId}/annual/${data.taxYear}",
-            method = Method.DELETE,
-            rel = "delete-property-annual-submission")
-        )
-      }
+      val result = Json.toJson(parsed)
+      result shouldBe mtdJson
     }
   }
 

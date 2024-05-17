@@ -17,7 +17,6 @@
 package v4.createForeignPropertyPeriodSummary
 
 import api.controllers.{ControllerBaseSpec, ControllerTestRunner}
-import api.hateoas.{HateoasWrapper, MockHateoasFactory}
 import api.models.audit.{AuditEvent, AuditResponse, GenericAuditDetail}
 import api.models.domain.{BusinessId, Nino, TaxYear}
 import api.models.errors._
@@ -27,8 +26,11 @@ import mocks.MockIdGenerator
 import play.api.libs.json.{JsObject, JsValue, Json}
 import play.api.mvc.Result
 import v4.createForeignPropertyPeriodSummary.def1.model.Def1_CreateForeignPropertyPeriodSummaryFixtures
-import v4.createForeignPropertyPeriodSummary.model.request.{CreateForeignPropertyPeriodSummaryRequestData, Def1_CreateForeignPropertyPeriodSummaryRequestData}
-import v4.createForeignPropertyPeriodSummary.model.response.{CreateForeignPropertyPeriodSummaryHateoasData, CreateForeignPropertyPeriodSummaryResponse}
+import v4.createForeignPropertyPeriodSummary.model.request.{
+  CreateForeignPropertyPeriodSummaryRequestData,
+  Def1_CreateForeignPropertyPeriodSummaryRequestData
+}
+import v4.createForeignPropertyPeriodSummary.model.response.CreateForeignPropertyPeriodSummaryResponse
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -41,7 +43,6 @@ class CreateForeignPropertyPeriodSummaryControllerSpec
     with MockCreateForeignPropertyPeriodSummaryService
     with MockCreateForeignPropertyPeriodSummaryValidatorFactory
     with MockAuditService
-    with MockHateoasFactory
     with MockIdGenerator
     with Def1_CreateForeignPropertyPeriodSummaryFixtures {
 
@@ -58,13 +59,7 @@ class CreateForeignPropertyPeriodSummaryControllerSpec
           .createForeignProperty(requestData)
           .returns(Future.successful(Right(ResponseWrapper(correlationId, response))))
 
-        MockHateoasFactory
-          .wrap(
-            response,
-            CreateForeignPropertyPeriodSummaryHateoasData(nino = nino, businessId = businessId, taxYear = taxYear, submissionId = submissionId))
-          .returns(HateoasWrapper(response, testHateoasLinks))
-
-        runOkTest(expectedStatus = CREATED, maybeExpectedResponseBody = Some(hateoasResponse))
+        runOkTest(expectedStatus = CREATED, maybeExpectedResponseBody = Some(mtdResponse))
 
       }
 
@@ -96,7 +91,6 @@ class CreateForeignPropertyPeriodSummaryControllerSpec
       service = mockCreateForeignPropertyPeriodSummaryService,
       validatorFactory = mockCreateForeignPropertyPeriodSummaryValidatorFactory,
       auditService = mockAuditService,
-      hateoasFactory = mockHateoasFactory,
       cc = cc,
       idGenerator = mockIdGenerator
     )
@@ -127,7 +121,7 @@ class CreateForeignPropertyPeriodSummaryControllerSpec
         taxYear = TaxYear.fromMtd(taxYear),
         body = regularExpensesRequestBody)
 
-    protected val hateoasResponse: JsObject = Json
+    protected val mtdResponse: JsObject = Json
       .parse(
         s"""
            |{
@@ -135,7 +129,7 @@ class CreateForeignPropertyPeriodSummaryControllerSpec
            |}
       """.stripMargin
       )
-      .as[JsObject] ++ testHateoasLinksJson
+      .as[JsObject]
 
     protected val response: CreateForeignPropertyPeriodSummaryResponse = CreateForeignPropertyPeriodSummaryResponse(submissionId)
   }

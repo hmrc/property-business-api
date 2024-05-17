@@ -17,19 +17,18 @@
 package v4.createUkPropertyPeriodSummary
 
 import api.controllers.{ControllerBaseSpec, ControllerTestRunner}
-import api.hateoas.{HateoasWrapper, MockHateoasFactory}
 import api.models.audit.{AuditEvent, AuditResponse, GenericAuditDetail}
 import api.models.domain.{BusinessId, Nino, TaxYear}
 import api.models.errors._
 import api.models.outcomes.ResponseWrapper
 import api.services.MockAuditService
-import play.api.libs.json.{JsObject, JsValue, Json}
+import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.Result
 import v4.createUkPropertyPeriodSummary.def1.model.request.def1_ukFhlProperty._
 import v4.createUkPropertyPeriodSummary.def1.model.request.def1_ukNonFhlProperty._
 import v4.createUkPropertyPeriodSummary.def1.model.request.def1_ukPropertyRentARoom._
 import v4.createUkPropertyPeriodSummary.model.request._
-import v4.createUkPropertyPeriodSummary.model.response.{CreateUkPropertyPeriodSummaryHateoasData, CreateUkPropertyPeriodSummaryResponse}
+import v4.createUkPropertyPeriodSummary.model.response.CreateUkPropertyPeriodSummaryResponse
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -39,7 +38,6 @@ class CreateUkPropertyPeriodSummaryControllerSpec
     with ControllerTestRunner
     with MockCreateUkPropertyPeriodSummaryService
     with MockCreateUkPropertyPeriodSummaryValidatorFactory
-    with MockHateoasFactory
     with MockAuditService {
 
   private val taxYear      = "2020-21"
@@ -55,18 +53,14 @@ class CreateUkPropertyPeriodSummaryControllerSpec
           .createUkProperty(requestDataConsolidatedExpense)
           .returns(Future.successful(Right(ResponseWrapper(correlationId, responseData))))
 
-        MockHateoasFactory
-          .wrap(responseData, hateoasData)
-          .returns(HateoasWrapper(responseData, testHateoasLinks))
-
         override def callController(): Future[Result] =
           controller.handleRequest(nino, businessId, taxYear)(fakePostRequest(requestBodyJsonConsolidatedExpense))
 
         runOkTestWithAudit(
           expectedStatus = CREATED,
           maybeAuditRequestBody = Some(requestBodyJsonConsolidatedExpense),
-          maybeExpectedResponseBody = Some(responseBodyJsonWithHateoas),
-          maybeAuditResponseBody = Some(responseBodyJsonWithHateoas)
+          maybeExpectedResponseBody = Some(responseBodyJson),
+          maybeAuditResponseBody = Some(responseBodyJson)
         )
       }
     }
@@ -79,15 +73,11 @@ class CreateUkPropertyPeriodSummaryControllerSpec
           .createUkProperty(requestData)
           .returns(Future.successful(Right(ResponseWrapper(correlationId, responseData))))
 
-        MockHateoasFactory
-          .wrap(responseData, hateoasData)
-          .returns(HateoasWrapper(responseData, testHateoasLinks))
-
         runOkTestWithAudit(
           expectedStatus = CREATED,
           maybeAuditRequestBody = Some(requestBodyJson),
-          maybeExpectedResponseBody = Some(responseBodyJsonWithHateoas),
-          maybeAuditResponseBody = Some(responseBodyJsonWithHateoas)
+          maybeExpectedResponseBody = Some(responseBodyJson),
+          maybeAuditResponseBody = Some(responseBodyJson)
         )
       }
     }
@@ -119,7 +109,6 @@ class CreateUkPropertyPeriodSummaryControllerSpec
       service = mockCreateUkPropertyPeriodSummaryService,
       auditService = mockAuditService,
       validatorFactory = mockCreateUkPropertyPeriodSummaryValidatorFactory,
-      hateoasFactory = mockHateoasFactory,
       cc = cc,
       idGenerator = mockIdGenerator
     )
@@ -355,19 +344,13 @@ class CreateUkPropertyPeriodSummaryControllerSpec
     protected val responseBodyJson: JsValue = Json.parse(
       s"""
          |{
-         |  "submissionId": "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
+         |  "submissionId": "$submissionId"
          |}
     """.stripMargin
     )
 
-    protected val responseData: CreateUkPropertyPeriodSummaryResponse = CreateUkPropertyPeriodSummaryResponse(
-      submissionId = "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
-    )
-
-    protected val hateoasData: CreateUkPropertyPeriodSummaryHateoasData =
-      CreateUkPropertyPeriodSummaryHateoasData(nino, businessId, taxYear, submissionId)
-
-    protected val responseBodyJsonWithHateoas: JsObject = responseBodyJson.as[JsObject] ++ testHateoasLinksJson
+    protected val responseData: CreateUkPropertyPeriodSummaryResponse =
+      CreateUkPropertyPeriodSummaryResponse(submissionId = submissionId)
 
   }
 

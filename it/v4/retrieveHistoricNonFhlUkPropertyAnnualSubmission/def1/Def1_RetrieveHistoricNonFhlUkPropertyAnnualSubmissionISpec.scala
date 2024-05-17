@@ -20,7 +20,7 @@ import api.models.errors._
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import play.api.http.HeaderNames.ACCEPT
 import play.api.http.Status._
-import play.api.libs.json.{JsValue, Json}
+import play.api.libs.json.{JsObject, JsValue, Json}
 import play.api.libs.ws.{WSRequest, WSResponse}
 import play.api.test.Helpers.AUTHORIZATION
 import support.IntegrationBaseSpec
@@ -54,51 +54,12 @@ class Def1_RetrieveHistoricNonFhlUkPropertyAnnualSubmissionISpec extends Integra
          |      "businessPremisesRenovationAllowance": 200.00,
          |      "costOfReplacingDomesticGoods": 200.00,
          |      "propertyIncomeAllowance": 30.02
-         |   },
-         |   "links": [
-         |      {
-         |         "href": "/individuals/business/property/uk/annual/non-furnished-holiday-lettings/AA123456A/2020-21",
-         |         "method": "PUT",
-         |         "rel": "create-and-amend-uk-property-historic-non-fhl-annual-submission"
-         |      },
-         |      {
-         |         "href": "/individuals/business/property/uk/annual/non-furnished-holiday-lettings/AA123456A/2020-21",
-         |         "method": "GET",
-         |         "rel": "self"
-         |      },
-         |      {
-         |         "href": "/individuals/business/property/uk/annual/non-furnished-holiday-lettings/AA123456A/2020-21",
-         |         "method": "DELETE",
-         |         "rel": "delete-uk-property-historic-non-fhl-annual-submission"
-         |      }
-         |   ]
+         |   }
          |}
        """.stripMargin
     )
 
-    val emptyResponseWithHateoasBody: JsValue = Json.parse(
-      s"""
-         |{
-         |   "links": [
-         |      {
-         |         "href": "/individuals/business/property/uk/annual/non-furnished-holiday-lettings/AA123456A/2020-21",
-         |         "method": "PUT",
-         |         "rel": "create-and-amend-uk-property-historic-non-fhl-annual-submission"
-         |      },
-         |      {
-         |         "href": "/individuals/business/property/uk/annual/non-furnished-holiday-lettings/AA123456A/2020-21",
-         |         "method": "GET",
-         |         "rel": "self"
-         |      },
-         |      {
-         |         "href": "/individuals/business/property/uk/annual/non-furnished-holiday-lettings/AA123456A/2020-21",
-         |         "method": "DELETE",
-         |         "rel": "delete-uk-property-historic-non-fhl-annual-submission"
-         |      }
-         |   ]
-         |}
-       """.stripMargin
-    )
+    val emptyResponse: JsValue = JsObject.empty
 
     val downstreamResponseBody: JsValue = Json.parse(
       """
@@ -135,7 +96,7 @@ class Def1_RetrieveHistoricNonFhlUkPropertyAnnualSubmissionISpec extends Integra
       setupStubs()
       buildRequest(uri)
         .withHttpHeaders(
-          (ACCEPT, "application/vnd.hmrc.3.0+json"),
+          (ACCEPT, "application/vnd.hmrc.4.0+json"),
           (AUTHORIZATION, "Bearer 123")
         )
     }
@@ -176,12 +137,12 @@ class Def1_RetrieveHistoricNonFhlUkPropertyAnnualSubmissionISpec extends Integra
           AuditStub.audit()
           AuthStub.authorised()
           MtdIdLookupStub.ninoFound(nino)
-          DownstreamStub.onSuccess(DownstreamStub.GET, downstreamUri, OK, Json.obj())
+          DownstreamStub.onSuccess(DownstreamStub.GET, downstreamUri, OK, JsObject.empty)
         }
 
         val response: WSResponse = await(request().get())
         response.status shouldBe OK
-        response.json shouldBe emptyResponseWithHateoasBody
+        response.json shouldBe emptyResponse
         response.header("X-CorrelationId").nonEmpty shouldBe true
         response.header("Content-Type") shouldBe Some("application/json")
       }
@@ -191,7 +152,6 @@ class Def1_RetrieveHistoricNonFhlUkPropertyAnnualSubmissionISpec extends Integra
       "validation error" when {
         def validationErrorTest(requestNino: String, requestTaxYear: String, expectedStatus: Int, expectedBody: MtdError): Unit = {
           s"validation fails with ${expectedBody.code} error" in new Test {
-
             override val nino: String       = requestNino
             override val mtdTaxYear: String = requestTaxYear
 

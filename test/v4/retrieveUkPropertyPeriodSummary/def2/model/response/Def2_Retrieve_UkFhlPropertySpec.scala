@@ -25,16 +25,16 @@ class Def2_Retrieve_UkFhlPropertySpec extends UnitSpec with Def2_RetrieveUkPrope
   "UkFhlProperty" when {
     val downstreamJson: JsValue = (fullDownstreamJson \ "ukFhlProperty").get
     val mtdJson: JsValue        = (fullMtdJson \ "ukFhlProperty").get
-    val model: Def2_Retrieve_UkFhlProperty    = ukFhlPropertyModel
+
     "read from valid JSON" should {
-      "return the expected model" in {
-        downstreamJson.as[Def2_Retrieve_UkFhlProperty] shouldBe model
+      "return the parsed object" in {
+        downstreamJson.as[Def2_Retrieve_UkFhlProperty] shouldBe ukFhlProperty
       }
     }
 
     "written JSON" should {
       "return the expected JSON" in {
-        Json.toJson(model) shouldBe mtdJson
+        Json.toJson(ukFhlProperty) shouldBe mtdJson
       }
     }
   }

@@ -38,16 +38,17 @@ requestBody:
   content:
     application/json:
       schema:
-        $ref: './schemas/foreign_property_annual_submission_create_and_amend/request.json'
+        oneOf:
+          - $ref: './schemas/foreign_property_annual_submission_create_and_amend/def1/request.json'
       examples:
         all-other-allowances-request:
           description: All Other Allowances request
           value:
-            $ref: './examples/foreign_property_annual_submission_create_and_amend/all_other_allowances_request.json'
+            $ref: './examples/foreign_property_annual_submission_create_and_amend/def1/all_other_allowances_request.json'
         property-allowance-request:
           description: Property Allowance request
           value:
-            $ref: './examples/foreign_property_annual_submission_create_and_amend/property_allowance_request.json'
+            $ref: './examples/foreign_property_annual_submission_create_and_amend/def1/property_allowance_request.json'
 
 responses:
   "200":
@@ -55,15 +56,6 @@ responses:
     headers:
       X-CorrelationId:
         $ref: './common/headers.yaml#/components/parameters/correlationId'
-    content:
-      application/json:
-        schema:
-          $ref: './schemas/foreign_property_annual_submission_create_and_amend/response.json'
-        examples:
-          example-response:
-            description: Example Response
-            value:
-              $ref: './examples/foreign_property_annual_submission_create_and_amend/response.json'
   "400":
     description: Bad request
     content:

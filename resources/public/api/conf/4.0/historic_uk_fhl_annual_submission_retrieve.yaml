@@ -34,7 +34,8 @@ responses:
     content:
       application/json:
         schema:
-          $ref: './schemas/historic_uk_fhl_annual_submission_retrieve/def1/response.json'
+          oneOf:
+            - $ref: './schemas/historic_uk_fhl_annual_submission_retrieve/def1/response.json'
         examples:
           example:
             description: Example Response given any tax year

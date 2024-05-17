@@ -17,7 +17,6 @@
 package v4.amendForeignPropertyPeriodSummary
 
 import api.controllers.{ControllerBaseSpec, ControllerTestRunner}
-import api.hateoas.{HateoasWrapper, MockHateoasFactory}
 import api.models.audit.{AuditEvent, AuditResponse, GenericAuditDetail}
 import api.models.domain.{BusinessId, Nino, SubmissionId, TaxYear}
 import api.models.errors._
@@ -27,9 +26,17 @@ import mocks.MockIdGenerator
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.Result
 import v4.amendForeignPropertyPeriodSummary.def1.model.request.foreignFhlEea.{AmendForeignFhlEea, AmendForeignFhlEeaExpenses, ForeignFhlEeaIncome}
-import v4.amendForeignPropertyPeriodSummary.def1.model.request.foreignPropertyEntry.{AmendForeignNonFhlPropertyEntry, AmendForeignNonFhlPropertyExpenses, ForeignNonFhlPropertyIncome, ForeignNonFhlPropertyRentIncome}
-import v4.amendForeignPropertyPeriodSummary.model.request.{AmendForeignPropertyPeriodSummaryRequestData, Def1_AmendForeignPropertyPeriodSummaryRequestBody, Def1_AmendForeignPropertyPeriodSummaryRequestData}
-import v4.amendForeignPropertyPeriodSummary.model.response.AmendForeignPropertyPeriodSummaryHateoasData
+import v4.amendForeignPropertyPeriodSummary.def1.model.request.foreignPropertyEntry.{
+  AmendForeignNonFhlPropertyEntry,
+  AmendForeignNonFhlPropertyExpenses,
+  ForeignNonFhlPropertyIncome,
+  ForeignNonFhlPropertyRentIncome
+}
+import v4.amendForeignPropertyPeriodSummary.model.request.{
+  AmendForeignPropertyPeriodSummaryRequestData,
+  Def1_AmendForeignPropertyPeriodSummaryRequestBody,
+  Def1_AmendForeignPropertyPeriodSummaryRequestData
+}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -42,7 +49,6 @@ class AmendForeignPropertyPeriodSummaryControllerSpec
     with MockAmendForeignPropertyPeriodSummaryService
     with MockAmendForeignPropertyPeriodSummaryValidatorFactory
     with MockAuditService
-    with MockHateoasFactory
     with MockIdGenerator {
 
   private val businessId   = "XAIS12345678910"
@@ -58,11 +64,7 @@ class AmendForeignPropertyPeriodSummaryControllerSpec
           .amend(requestData)
           .returns(Future.successful(Right(ResponseWrapper(correlationId, ()))))
 
-        MockHateoasFactory
-          .wrap((), AmendForeignPropertyPeriodSummaryHateoasData(nino, businessId, taxYear, submissionId))
-          .returns(HateoasWrapper((), testHateoasLinks))
-
-        runOkTest(expectedStatus = OK, maybeExpectedResponseBody = Some(testHateoasLinksJson))
+        runOkTest(expectedStatus = OK, maybeExpectedResponseBody = None)
       }
     }
 
@@ -74,11 +76,7 @@ class AmendForeignPropertyPeriodSummaryControllerSpec
           .amend(requestData)
           .returns(Future.successful(Right(ResponseWrapper(correlationId, ()))))
 
-        MockHateoasFactory
-          .wrap((), AmendForeignPropertyPeriodSummaryHateoasData(nino, businessId, taxYear, submissionId))
-          .returns(HateoasWrapper((), testHateoasLinks))
-
-        runOkTest(expectedStatus = OK, maybeExpectedResponseBody = Some(testHateoasLinksJson))
+        runOkTest(expectedStatus = OK, maybeExpectedResponseBody = None)
       }
     }
 
@@ -110,7 +108,6 @@ class AmendForeignPropertyPeriodSummaryControllerSpec
       validatorFactory = mockAmendForeignPropertyPeriodSummaryValidatorFactory,
       service = mockService,
       auditService = mockAuditService,
-      hateoasFactory = mockHateoasFactory,
       cc = cc,
       idGenerator = mockIdGenerator
     )

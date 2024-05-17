@@ -48,22 +48,5 @@
         "amountClaimed": 88.55
       }
     }
-  },
-  "links": [
-    {
-      "href": "/individuals/business/property/uk/KZ816096B/XAIS12345678910/period/2023-24/4557ecb5-fd32-48cc-81f5-e6acd1099f3c",
-      "method": "PUT",
-      "rel": "amend-uk-property-period-summary"
-    },
-    {
-      "href": "/individuals/business/property/uk/KZ816096B/XAIS12345678910/period/2023-24/4557ecb5-fd32-48cc-81f5-e6acd1099f3c",
-      "method": "GET",
-      "rel": "self"
-    },
-    {
-      "href": "/individuals/business/property/KZ816096B/XAIS12345678910/period/2023-24",
-      "method": "GET",
-      "rel": "list-property-period-summaries"
-    }
-  ]
+  }
 }

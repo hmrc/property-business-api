@@ -17,7 +17,6 @@
 package v4.retrieveForeignPropertyAnnualSubmission
 
 import api.controllers.{ControllerBaseSpec, ControllerTestRunner}
-import api.hateoas.{HateoasWrapper, MockHateoasFactory}
 import api.models.domain.{BusinessId, Nino, TaxYear, Timestamp}
 import api.models.errors._
 import api.models.outcomes.ResponseWrapper
@@ -40,7 +39,6 @@ class RetrieveForeignPropertyAnnualSubmissionControllerSpec
     with MockMtdIdLookupService
     with MockRetrieveForeignPropertyAnnualSubmissionService
     with MockRetrieveForeignPropertyAnnualSubmissionValidatorFactory
-    with MockHateoasFactory
     with MockAuditService
     with MockIdGenerator {
 
@@ -56,18 +54,13 @@ class RetrieveForeignPropertyAnnualSubmissionControllerSpec
           .retrieve(requestData)
           .returns(Future.successful(Right(ResponseWrapper(correlationId, responseBody))))
 
-        MockHateoasFactory
-          .wrap(responseBody, RetrieveForeignPropertyAnnualSubmissionHateoasData(nino, businessId, taxYear))
-          .returns(HateoasWrapper(responseBody, testHateoasLinks))
-
-        runOkTest(expectedStatus = OK, maybeExpectedResponseBody = Some(Json.toJson(HateoasWrapper(responseBody, testHateoasLinks))))
+        runOkTest(expectedStatus = OK, maybeExpectedResponseBody = Some(Json.toJson(responseBody)))
       }
     }
 
     "return an error as per spec" when {
       "the parser validation fails" in new Test {
         willUseValidator(returning(NinoFormatError))
-
         runErrorTest(NinoFormatError)
       }
 
@@ -92,7 +85,6 @@ class RetrieveForeignPropertyAnnualSubmissionControllerSpec
       lookupService = mockMtdIdLookupService,
       validatorFactory = mockRetrieveForeignPropertyAnnualSubmissionValidatorFactory,
       service = mockRetrieveForeignPropertyAnnualSubmissionService,
-      hateoasFactory = mockHateoasFactory,
       cc = cc,
       idGenerator = mockIdGenerator
     )

@@ -17,13 +17,11 @@
 package v4.createForeignPropertyPeriodSummary
 
 import api.controllers._
-import api.hateoas.HateoasFactory
 import api.services.{AuditService, EnrolmentsAuthService, MtdIdLookupService}
 import play.api.libs.json.JsValue
 import play.api.mvc.{Action, ControllerComponents}
 import routing.{Version, Version3}
 import utils.IdGenerator
-import v4.createForeignPropertyPeriodSummary.model.response.CreateForeignPropertyPeriodSummaryHateoasData
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.ExecutionContext
@@ -34,7 +32,6 @@ class CreateForeignPropertyPeriodSummaryController @Inject() (val authService: E
                                                               validatorFactory: CreateForeignPropertyPeriodSummaryValidatorFactory,
                                                               service: CreateForeignPropertyPeriodSummaryService,
                                                               auditService: AuditService,
-                                                              hateoasFactory: HateoasFactory,
                                                               cc: ControllerComponents,
                                                               idGenerator: IdGenerator)(implicit ec: ExecutionContext)
     extends AuthorisedController(cc) {
@@ -64,9 +61,7 @@ class CreateForeignPropertyPeriodSummaryController @Inject() (val authService: E
               Some(request.body)
             )
           )
-          .withHateoasResultFrom(hateoasFactory)(
-            (_, response) => CreateForeignPropertyPeriodSummaryHateoasData(nino, businessId, taxYear, response.submissionId),
-            CREATED)
+          .withPlainJsonResult(CREATED)
 
       requestHandler.handleRequest()
     }

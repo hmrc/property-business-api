@@ -17,14 +17,11 @@
 package v4.amendUkPropertyPeriodSummary
 
 import api.controllers._
-import api.hateoas.HateoasFactory
 import api.services.{AuditService, EnrolmentsAuthService, MtdIdLookupService}
 import play.api.libs.json.JsValue
 import play.api.mvc.{Action, ControllerComponents}
 import routing.{Version, Version2}
 import utils.IdGenerator
-import v4.amendUkPropertyPeriodSummary.model.response.AmendUkPropertyPeriodSummaryHateoasData
-import v4.amendUkPropertyPeriodSummary.model.response.AmendUkPropertyPeriodSummaryResponse.AmendUkPropertyLinksFactory
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.ExecutionContext
@@ -35,7 +32,6 @@ class AmendUkPropertyPeriodSummaryController @Inject() (val authService: Enrolme
                                                         validatorFactory: AmendUkPropertyPeriodSummaryValidatorFactory,
                                                         service: AmendUkPropertyPeriodSummaryService,
                                                         auditService: AuditService,
-                                                        hateoasFactory: HateoasFactory,
                                                         cc: ControllerComponents,
                                                         idGenerator: IdGenerator)(implicit ec: ExecutionContext)
     extends AuthorisedController(cc) {
@@ -60,10 +56,9 @@ class AmendUkPropertyPeriodSummaryController @Inject() (val authService: Enrolme
           Map("nino" -> nino, "businessId" -> businessId, "taxYear" -> taxYear, "submissionId" -> submissionId),
           Some(request.body)
         ))
-        .withHateoasResult(hateoasFactory)(AmendUkPropertyPeriodSummaryHateoasData(nino, businessId, taxYear, submissionId))
+        .withNoContentResult(OK)
 
       requestHandler.handleRequest()
-
     }
 
 }

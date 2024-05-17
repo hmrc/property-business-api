@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2019-09/schema",
-  "type": "object",
   "title": "Given any tax year",
+  "type": "object",
   "properties": {
     "income": {
       "description": "Object containing the details about income",

@@ -17,14 +17,11 @@
 package v4.createAmendForeignPropertyAnnualSubmission
 
 import api.controllers._
-import api.hateoas.HateoasFactory
 import api.services.{AuditService, EnrolmentsAuthService, MtdIdLookupService}
 import play.api.libs.json.JsValue
 import play.api.mvc.{Action, ControllerComponents}
 import routing.{Version, Version2}
 import utils.IdGenerator
-import v4.createAmendForeignPropertyAnnualSubmission.model.response.CreateAmendForeignPropertyAnnualSubmissionHateoasData
-import v4.createAmendForeignPropertyAnnualSubmission.model.response.CreateAmendForeignPropertyAnnualSubmissionResponse._
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.ExecutionContext
@@ -35,7 +32,6 @@ class CreateAmendForeignPropertyAnnualSubmissionController @Inject() (val authSe
                                                                       validatorFactory: CreateAmendForeignPropertyAnnualSubmissionValidatorFactory,
                                                                       service: CreateAmendForeignPropertyAnnualSubmissionService,
                                                                       auditService: AuditService,
-                                                                      hateoasFactory: HateoasFactory,
                                                                       cc: ControllerComponents,
                                                                       idGenerator: IdGenerator)(implicit ec: ExecutionContext)
     extends AuthorisedController(cc) {
@@ -64,7 +60,7 @@ class CreateAmendForeignPropertyAnnualSubmissionController @Inject() (val authSe
             requestBody = Some(request.body)
           )
         )
-        .withHateoasResult(hateoasFactory)(CreateAmendForeignPropertyAnnualSubmissionHateoasData(nino, businessId, taxYear))
+        .withNoContentResult(OK)
 
       requestHandler.handleRequest()
     }

@@ -43,9 +43,9 @@ class RetrieveUkPropertyPeriodSummaryServiceSpec extends UnitSpec with Def1_Retr
       "return mapped result" in new Test {
         MockRetrieveUkPropertyConnector
           .retrieveUkProperty(requestData)
-          .returns(Future.successful(Right(ResponseWrapper(correlationId, UkResult(fullResponseModel)))))
+          .returns(Future.successful(Right(ResponseWrapper(correlationId, UkResult(fullResponse)))))
 
-        await(service.retrieveUkProperty(requestData)) shouldBe Right(ResponseWrapper(correlationId, fullResponseModel))
+        await(service.retrieveUkProperty(requestData)) shouldBe Right(ResponseWrapper(correlationId, fullResponse))
       }
     }
 

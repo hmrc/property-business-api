@@ -90,24 +90,7 @@ class Def1_RetrieveUkPropertyPeriodSummaryISpec extends IntegrationBaseSpec {
          |        "amountClaimed": 4.21
          |      }
          |    }
-         |  },
-         |  "links": [
-         |    {
-         |      "href": "/individuals/business/property/uk/$nino/$businessId/period/$taxYear/$submissionId",
-         |      "method": "PUT",
-         |      "rel": "amend-uk-property-period-summary"
-         |    },
-         |    {
-         |      "href": "/individuals/business/property/uk/$nino/$businessId/period/$taxYear/$submissionId",
-         |      "method": "GET",
-         |      "rel": "self"
-         |    },
-         |    {
-         |      "href": "/individuals/business/property/$nino/$businessId/period/$taxYear",
-         |      "method": "GET",
-         |      "rel": "list-property-period-summaries"
-         |    }
-         |  ]
+         |  }
          |}
        """.stripMargin
     )
@@ -186,7 +169,7 @@ class Def1_RetrieveUkPropertyPeriodSummaryISpec extends IntegrationBaseSpec {
       setupStubs()
       buildRequest(uri)
         .withHttpHeaders(
-          (ACCEPT, "application/vnd.hmrc.3.0+json"),
+          (ACCEPT, "application/vnd.hmrc.4.0+json"),
           (AUTHORIZATION, "Bearer 123")
         )
     }

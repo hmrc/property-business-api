@@ -23,18 +23,20 @@ import v4.retrieveUkPropertyPeriodSummary.def2.model.Def2_RetrieveUkPropertyPeri
 class Def2_Retrieve_FhlPropertyExpensesSpec extends UnitSpec with Def2_RetrieveUkPropertyPeriodSummaryFixture {
 
   "FhlPropertyExpenses" when {
-    val downstreamJson: JsValue    = (fullDownstreamJson \ "ukFhlProperty" \ "expenses").get
-    val mtdJson: JsValue           = (fullMtdJson \ "ukFhlProperty" \ "expenses").get
-    val model: Def2_Retrieve_FhlPropertyExpenses = fhlPropertyExpensesModel
+    val downstreamJson: JsValue = (fullDownstreamJson \ "ukFhlProperty" \ "expenses").get
+    val mtdJson: JsValue        = (fullMtdJson \ "ukFhlProperty" \ "expenses").get
+
     "read from valid JSON" should {
-      "return the expected model" in {
-        downstreamJson.as[Def2_Retrieve_FhlPropertyExpenses] shouldBe model
+      "return the parsed object" in {
+        val result = downstreamJson.as[Def2_Retrieve_FhlPropertyExpenses]
+        result shouldBe fhlPropertyExpenses
       }
     }
 
     "written JSON" should {
       "return the expected JSON" in {
-        Json.toJson(model) shouldBe mtdJson
+        val result = Json.toJson(fhlPropertyExpenses)
+        result shouldBe mtdJson
       }
     }
   }

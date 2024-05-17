@@ -250,7 +250,7 @@ class Def1_CreateForeignPropertyPeriodSummaryISpec extends IntegrationBaseSpec w
       setupStubs()
       buildRequest(s"/foreign/$nino/$businessId/period/$mtdTaxYear")
         .withHttpHeaders(
-          (ACCEPT, "application/vnd.hmrc.3.0+json"),
+          (ACCEPT, "application/vnd.hmrc.4.0+json"),
           (AUTHORIZATION, "Bearer 123")
         )
     }
@@ -258,19 +258,7 @@ class Def1_CreateForeignPropertyPeriodSummaryISpec extends IntegrationBaseSpec w
     val mtdResponseBody: JsValue = Json.parse(
       s"""
          |{
-         |  "submissionId": "$submissionId",
-         |  "links": [
-         |    {
-         |      "href":"/individuals/business/property/foreign/$nino/$businessId/period/$mtdTaxYear/$submissionId",
-         |      "method":"GET",
-         |      "rel":"self"
-         |    },
-         |    {
-         |      "href":"/individuals/business/property/foreign/$nino/$businessId/period/$mtdTaxYear/$submissionId",
-         |      "method":"PUT",
-         |      "rel":"amend-foreign-property-period-summary"
-         |    }
-         |  ]
+         |  "submissionId": "$submissionId"
          |}
       """.stripMargin
     )

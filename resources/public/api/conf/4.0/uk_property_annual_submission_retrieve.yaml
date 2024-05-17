@@ -41,17 +41,17 @@ responses:
     content:
       application/json:
         schema:
-          $ref: './schemas/uk_property_annual_submission_retrieve/response.json'
+          oneOf:
+            - $ref: './schemas/uk_property_annual_submission_retrieve/def1/response.json'
         examples:
-          all-other-response:
-            description: All Other Allowances Response
+          property-allowance-any-TY:
+            description: Property Allowance - any tax year
             value:
-              $ref: './examples/uk_property_annual_submission_retrieve/all_other_allowances_response.json'
-          property-allowance-response:
-            description: Property Allowance Response
+              $ref: './examples/uk_property_annual_submission_retrieve/def1/property_allowance_response.json'
+          all-others-any-TY:
+            description: All Other Allowances - any tax year
             value:
-              $ref: './examples/uk_property_annual_submission_retrieve/property_allowance_response.json'
-  
+              $ref: './examples/uk_property_annual_submission_retrieve/def1/all_other_allowances_response.json'
   "400":
     description: Bad request
     content:

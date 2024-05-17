@@ -25,14 +25,16 @@ class CreateUkPropertyPeriodSummaryResponseSpec extends UnitSpec {
     "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
   )
 
-  private val json = Json.parse("""{
-                          |  "submissionId": "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
-                          |}""".stripMargin)
+  private val json = Json.parse("""
+    |{
+    |  "submissionId": "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
+    |}""".stripMargin)
 
   "reads" when {
     "passed a valid JSON" should {
       "return a valid model" in {
-        json.as[CreateUkPropertyPeriodSummaryResponse] shouldBe createUkPropertyResponse
+        val result = json.as[CreateUkPropertyPeriodSummaryResponse]
+        result shouldBe createUkPropertyResponse
       }
     }
   }
@@ -40,7 +42,8 @@ class CreateUkPropertyPeriodSummaryResponseSpec extends UnitSpec {
   "writes" when {
     "passed valid model" should {
       "return valid JSON" in {
-        Json.toJson(createUkPropertyResponse) shouldBe json
+        val result = Json.toJson(createUkPropertyResponse)
+        result shouldBe json
       }
     }
   }

@@ -10,22 +10,5 @@
   },
   "expenses": {
     "consolidatedExpenses": 5000.99
-  },
-  "links": [
-    {
-      "href": "/individuals/business/property/uk/period/furnished-holiday-lettings/TC663795B/2022-04-06_2022-07-04",
-      "method": "PUT",
-      "rel": "amend-uk-property-historic-fhl-period-summary"
-    },
-    {
-      "href": "/individuals/business/property/uk/period/furnished-holiday-lettings/TC663795B/2022-04-06_2022-07-04",
-      "method": "GET",
-      "rel": "self"
-    },
-    {
-      "href": "/individuals/business/property/uk/period/furnished-holiday-lettings/TC663795B",
-      "method": "GET",
-      "rel": "list-uk-property-historic-fhl-period-summaries"
-    }
-  ]
+  }
 }

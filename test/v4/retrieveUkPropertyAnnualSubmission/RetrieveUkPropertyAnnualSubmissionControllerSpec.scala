@@ -17,11 +17,10 @@
 package v4.retrieveUkPropertyAnnualSubmission
 
 import api.controllers.{ControllerBaseSpec, ControllerTestRunner}
-import api.hateoas.{HateoasWrapper, MockHateoasFactory}
 import api.models.domain.{BusinessId, Nino, TaxYear, Timestamp}
 import api.models.errors._
 import api.models.outcomes.ResponseWrapper
-import play.api.libs.json.{JsObject, JsValue, Json}
+import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.Result
 import v4.retrieveUkPropertyAnnualSubmission.def1.model.response.def1_ukFhlProperty._
 import v4.retrieveUkPropertyAnnualSubmission.def1.model.response.def1_ukNonFhlProperty._
@@ -35,8 +34,7 @@ class RetrieveUkPropertyAnnualSubmissionControllerSpec
     extends ControllerBaseSpec
     with ControllerTestRunner
     with MockRetrieveUkPropertyAnnualSubmissionService
-    with MockRetrieveUkPropertyAnnualSubmissionValidatorFactory
-    with MockHateoasFactory {
+    with MockRetrieveUkPropertyAnnualSubmissionValidatorFactory {
 
   private val businessId = "XAIS12345678910"
   private val taxYear    = "2020-21"
@@ -50,11 +48,7 @@ class RetrieveUkPropertyAnnualSubmissionControllerSpec
           .retrieve(requestData)
           .returns(Future.successful(Right(ResponseWrapper(correlationId, responseData))))
 
-        MockHateoasFactory
-          .wrap(responseData, hateoasData)
-          .returns(HateoasWrapper(responseData, testHateoasLinks))
-
-        runOkTest(expectedStatus = OK, maybeExpectedResponseBody = Some(responseBodyJsonWithHateoas))
+        runOkTest(expectedStatus = OK, maybeExpectedResponseBody = Some(responseBodyJson))
       }
     }
 
@@ -83,7 +77,6 @@ class RetrieveUkPropertyAnnualSubmissionControllerSpec
       lookupService = mockMtdIdLookupService,
       validatorFactory = mockRetrieveUkPropertyAnnualSubmissionValidatorFactory,
       service = mockRetrieveUkPropertyAnnualSubmissionService,
-      hateoasFactory = mockHateoasFactory,
       cc = cc,
       idGenerator = mockIdGenerator
     )
@@ -186,9 +179,6 @@ class RetrieveUkPropertyAnnualSubmissionControllerSpec
       ukNonFhlProperty = Some(ukNonFhlProperty)
     )
 
-    protected val hateoasData: RetrieveUkPropertyAnnualSubmissionHateoasData =
-      RetrieveUkPropertyAnnualSubmissionHateoasData(nino, businessId, taxYear)
-
     protected val responseBodyJson: JsValue = Json.parse(
       """
         |{
@@ -263,8 +253,6 @@ class RetrieveUkPropertyAnnualSubmissionControllerSpec
         |}
     """.stripMargin
     )
-
-    protected val responseBodyJsonWithHateoas: JsObject = responseBodyJson.as[JsObject] ++ testHateoasLinksJson
 
   }
 

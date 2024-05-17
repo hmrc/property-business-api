@@ -17,11 +17,9 @@
 package v4.retrieveUkPropertyAnnualSubmission
 
 import api.controllers.{AuthorisedController, EndpointLogContext, RequestContext, RequestHandler}
-import api.hateoas.HateoasFactory
 import api.services.{EnrolmentsAuthService, MtdIdLookupService}
 import play.api.mvc.{Action, AnyContent, ControllerComponents}
 import utils.IdGenerator
-import v4.retrieveUkPropertyAnnualSubmission.model.response.RetrieveUkPropertyAnnualSubmissionHateoasData
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.ExecutionContext
@@ -31,7 +29,6 @@ class RetrieveUkPropertyAnnualSubmissionController @Inject() (val authService: E
                                                               val lookupService: MtdIdLookupService,
                                                               validatorFactory: RetrieveUkPropertyAnnualSubmissionValidatorFactory,
                                                               service: RetrieveUkPropertyAnnualSubmissionService,
-                                                              hateoasFactory: HateoasFactory,
                                                               cc: ControllerComponents,
                                                               idGenerator: IdGenerator)(implicit ec: ExecutionContext)
     extends AuthorisedController(cc) {
@@ -49,7 +46,7 @@ class RetrieveUkPropertyAnnualSubmissionController @Inject() (val authService: E
         RequestHandler
           .withValidator(validator)
           .withService(service.retrieveUkProperty)
-          .withHateoasResult(hateoasFactory)(RetrieveUkPropertyAnnualSubmissionHateoasData(nino, businessId, taxYear))
+          .withPlainJsonResult(OK)
 
       requestHandler.handleRequest()
     }

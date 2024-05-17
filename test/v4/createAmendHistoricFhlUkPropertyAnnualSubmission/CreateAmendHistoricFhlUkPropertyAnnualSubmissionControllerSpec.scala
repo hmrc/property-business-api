@@ -17,7 +17,6 @@
 package v4.createAmendHistoricFhlUkPropertyAnnualSubmission
 
 import api.controllers.{ControllerBaseSpec, ControllerTestRunner}
-import api.hateoas.MockHateoasFactory
 import api.models.audit.{AuditEvent, AuditResponse, FlattenedGenericAuditDetail}
 import api.models.auth.UserDetails
 import api.models.domain.{Nino, TaxYear}
@@ -40,7 +39,6 @@ class CreateAmendHistoricFhlUkPropertyAnnualSubmissionControllerSpec
     with MockMtdIdLookupService
     with MockCreateAmendHistoricFhlUkPropertyAnnualSubmissionService
     with MockCreateAmendHistoricFhlUkPropertyAnnualSubmissionValidatorFactory
-    with MockHateoasFactory
     with MockIdGenerator
     with MockAuditService {
 

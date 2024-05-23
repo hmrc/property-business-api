@@ -17,8 +17,28 @@
 package v4.amendUkPropertyPeriodSummary.def2.model.request.def2_ukNonFhlProperty
 
 import play.api.libs.functional.syntax._
-import play.api.libs.json.{JsPath, Json, Reads, Writes}
+import play.api.libs.json.{JsPath, Json, OFormat, Reads, Writes}
 import v4.amendUkPropertyPeriodSummary.def2.model.request.def2_ukPropertyRentARoom.Def2_Amend_UkPropertyExpensesRentARoom
+
+case class Def2_Amend_UkNonFhlPropertyExpensesSubmission(premisesRunningCosts: Option[BigDecimal],
+                                                         repairsAndMaintenance: Option[BigDecimal],
+                                                         financialCosts: Option[BigDecimal],
+                                                         professionalFees: Option[BigDecimal],
+                                                         costOfServices: Option[BigDecimal],
+                                                         other: Option[BigDecimal],
+                                                         residentialFinancialCost: Option[BigDecimal],
+                                                         residentialFinancialCostAmount: Option[BigDecimal],
+                                                         travelCosts: Option[BigDecimal],
+                                                         residentialFinancialCostsCarriedForward: Option[BigDecimal],
+                                                         broughtFwdResidentialFinancialCostAmount: Option[BigDecimal],
+                                                         rentARoom: Option[Def2_Amend_UkPropertyExpensesRentARoom],
+                                                         consolidatedExpenses: Option[BigDecimal]){
+
+}
+object Def2_Amend_UkNonFhlPropertyExpensesSubmission {
+
+  implicit val format: OFormat[Def2_Amend_UkNonFhlPropertyExpensesSubmission] = Json.format[Def2_Amend_UkNonFhlPropertyExpensesSubmission]
+}
 
 case class Def2_Amend_UkNonFhlPropertyExpenses(premisesRunningCosts: Option[BigDecimal],
                                                repairsAndMaintenance: Option[BigDecimal],
@@ -30,7 +50,26 @@ case class Def2_Amend_UkNonFhlPropertyExpenses(premisesRunningCosts: Option[BigD
                                                travelCosts: Option[BigDecimal],
                                                residentialFinancialCostsCarriedForward: Option[BigDecimal],
                                                rentARoom: Option[Def2_Amend_UkPropertyExpensesRentARoom],
-                                               consolidatedExpenses: Option[BigDecimal])
+                                               consolidatedExpenses: Option[BigDecimal]) {
+
+  def toSubmissionModel: Def2_Amend_UkNonFhlPropertyExpensesSubmission = {
+    Def2_Amend_UkNonFhlPropertyExpensesSubmission(
+      premisesRunningCosts = premisesRunningCosts,
+      repairsAndMaintenance = repairsAndMaintenance,
+      financialCosts = financialCosts,
+      professionalFees = professionalFees,
+      costOfServices = costOfServices,
+      other = other,
+      residentialFinancialCost = if (consolidatedExpenses.isDefined) None else residentialFinancialCost,
+      residentialFinancialCostAmount = if (consolidatedExpenses.isDefined) residentialFinancialCost else None,
+      travelCosts = travelCosts,
+      residentialFinancialCostsCarriedForward = if (consolidatedExpenses.isDefined) None else residentialFinancialCostsCarriedForward,
+      broughtFwdResidentialFinancialCostAmount = if (consolidatedExpenses.isDefined) residentialFinancialCostsCarriedForward else None,
+      rentARoom = rentARoom,
+      consolidatedExpenses = consolidatedExpenses
+    )
+  }
+}
 
 object Def2_Amend_UkNonFhlPropertyExpenses {
   implicit val reads: Reads[Def2_Amend_UkNonFhlPropertyExpenses] = Json.reads[Def2_Amend_UkNonFhlPropertyExpenses]

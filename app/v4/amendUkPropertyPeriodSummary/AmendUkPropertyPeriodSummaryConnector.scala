@@ -22,7 +22,7 @@ import api.connectors.{BaseDownstreamConnector, DownstreamOutcome}
 import config.AppConfig
 import play.api.http.Status.NO_CONTENT
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
-import v4.amendUkPropertyPeriodSummary.model.request.{AmendUkPropertyPeriodSummaryRequestData, Def1_AmendUkPropertyPeriodSummaryRequestData, Def2_AmendUkPropertyPeriodSummaryRequestData}
+import v4.amendUkPropertyPeriodSummary.model.request.{AmendUkPropertyPeriodSummaryRequestData, Def1_AmendUkPropertyPeriodSummaryRequestData, Def2_AmendUkPropertyPeriodSummaryRequestData, Def2_AmendUkPropertyPeriodSummarySubmissionRequestData}
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
@@ -49,6 +49,12 @@ class AmendUkPropertyPeriodSummaryConnector @Inject() (val http: HttpClient, val
         put(body, downstreamUri)
 
       case def2: Def2_AmendUkPropertyPeriodSummaryRequestData =>
+        import def2._
+        val downstreamUri = TaxYearSpecificIfsUri[Unit](
+          s"income-tax/business/property/periodic/24-25?taxableEntityId=$nino&incomeSourceId=$businessId&submissionId=$submissionId")
+        put(body, downstreamUri)
+
+      case def2: Def2_AmendUkPropertyPeriodSummarySubmissionRequestData =>
         import def2._
         val downstreamUri = TaxYearSpecificIfsUri[Unit](
           s"income-tax/business/property/periodic/24-25?taxableEntityId=$nino&incomeSourceId=$businessId&submissionId=$submissionId")

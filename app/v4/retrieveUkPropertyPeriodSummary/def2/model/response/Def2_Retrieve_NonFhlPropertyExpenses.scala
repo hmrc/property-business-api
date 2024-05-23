@@ -59,8 +59,8 @@ object Def2_Retrieve_NonFhlPropertyConsolidatedExpenses {
   implicit val writes: OWrites[Def2_Retrieve_NonFhlPropertyConsolidatedExpenses] = Json.writes[Def2_Retrieve_NonFhlPropertyConsolidatedExpenses]
 
   implicit val reads: Reads[Def2_Retrieve_NonFhlPropertyConsolidatedExpenses] = (
-    (JsPath \ "residentialFinancialCost").readNullable[BigDecimal] and
-      (JsPath \ "residentialFinancialCostsCarriedForward").readNullable[BigDecimal] and
+    (JsPath \ "residentialFinancialCostAmount").readNullable[BigDecimal] and
+      (JsPath \ "broughtFwdResidentialFinancialCostAmount").readNullable[BigDecimal] and
       (JsPath \ "ukOtherRentARoom").readNullable[Def2_Retrieve_RentARoomExpenses] and
       (JsPath \ "consolidatedExpense").readNullable[BigDecimal]
   )(Def2_Retrieve_NonFhlPropertyConsolidatedExpenses.apply _)

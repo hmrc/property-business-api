@@ -54,8 +54,8 @@ class CreateUkPropertyPeriodSummaryConnector @Inject() (val http: HttpClient, va
           s"income-tax/business/property/periodic/${taxYear.asTysDownstream}?taxableEntityId=$nino&incomeSourceId=$businessId")
         post(body, downstreamUri)
 
-      case def2: Def2_CreateUkPropertyPeriodSummarySubmissionRequestData =>
-        import def2._
+      case def2Submission: Def2_CreateUkPropertyPeriodSummarySubmissionRequestData =>
+        import def2Submission._
         val downstreamUri: DownstreamUri[CreateUkPropertyPeriodSummaryResponse] = TaxYearSpecificIfsUri(
           s"income-tax/business/property/periodic/${taxYear.asTysDownstream}?taxableEntityId=$nino&incomeSourceId=$businessId")
         post(body, downstreamUri)

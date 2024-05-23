@@ -17,7 +17,7 @@
 package v4.amendUkPropertyPeriodSummary.def2.model.request.def2_ukNonFhlProperty
 
 import play.api.libs.functional.syntax._
-import play.api.libs.json.{JsPath, Json, OFormat, Reads, Writes}
+import play.api.libs.json.{JsPath, Json, Reads, Writes}
 import v4.amendUkPropertyPeriodSummary.def2.model.request.def2_ukPropertyRentARoom.Def2_Amend_UkPropertyExpensesRentARoom
 
 case class Def2_Amend_UkNonFhlPropertyExpensesSubmission(premisesRunningCosts: Option[BigDecimal],
@@ -37,7 +37,23 @@ case class Def2_Amend_UkNonFhlPropertyExpensesSubmission(premisesRunningCosts: O
 }
 object Def2_Amend_UkNonFhlPropertyExpensesSubmission {
 
-  implicit val format: OFormat[Def2_Amend_UkNonFhlPropertyExpensesSubmission] = Json.format[Def2_Amend_UkNonFhlPropertyExpensesSubmission]
+  implicit val reads: Reads[Def2_Amend_UkNonFhlPropertyExpensesSubmission] = Json.reads[Def2_Amend_UkNonFhlPropertyExpensesSubmission]
+
+  implicit val writes: Writes[Def2_Amend_UkNonFhlPropertyExpensesSubmission] = (
+    (JsPath \ "premisesRunningCosts").writeNullable[BigDecimal] and
+      (JsPath \ "repairsAndMaintenance").writeNullable[BigDecimal] and
+      (JsPath \ "financialCosts").writeNullable[BigDecimal] and
+      (JsPath \ "professionalFees").writeNullable[BigDecimal] and
+      (JsPath \ "costOfServices").writeNullable[BigDecimal] and
+      (JsPath \ "other").writeNullable[BigDecimal] and
+      (JsPath \ "residentialFinancialCost").writeNullable[BigDecimal] and
+      (JsPath \ "residentialFinancialCostAmount").writeNullable[BigDecimal] and
+      (JsPath \ "travelCosts").writeNullable[BigDecimal] and
+      (JsPath \ "residentialFinancialCostsCarriedForward").writeNullable[BigDecimal] and
+      (JsPath \ "broughtFwdResidentialFinancialCostAmount").writeNullable[BigDecimal] and
+      (JsPath \ "ukOtherRentARoom").writeNullable[Def2_Amend_UkPropertyExpensesRentARoom] and
+      (JsPath \ "consolidatedExpense").writeNullable[BigDecimal]
+    ) (unlift(Def2_Amend_UkNonFhlPropertyExpensesSubmission.unapply))
 }
 
 case class Def2_Amend_UkNonFhlPropertyExpenses(premisesRunningCosts: Option[BigDecimal],

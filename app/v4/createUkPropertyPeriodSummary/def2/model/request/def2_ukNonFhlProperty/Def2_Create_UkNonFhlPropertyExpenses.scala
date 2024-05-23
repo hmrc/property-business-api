@@ -86,6 +86,22 @@ case class Def2_Create_UkNonFhlPropertyExpensesSubmission(
                                                            consolidatedExpenses: Option[BigDecimal])
 
 object Def2_Create_UkNonFhlPropertyExpensesSubmission {
-  implicit val format: OFormat[Def2_Create_UkNonFhlPropertyExpensesSubmission] = Json.format[Def2_Create_UkNonFhlPropertyExpensesSubmission]
 
+  implicit val reads: Reads[Def2_Create_UkNonFhlPropertyExpensesSubmission] = Json.reads[Def2_Create_UkNonFhlPropertyExpensesSubmission]
+
+  implicit val writes: Writes[Def2_Create_UkNonFhlPropertyExpensesSubmission] = (
+    (JsPath \ "premisesRunningCosts").writeNullable[BigDecimal] and
+      (JsPath \ "repairsAndMaintenance").writeNullable[BigDecimal] and
+      (JsPath \ "financialCosts").writeNullable[BigDecimal] and
+      (JsPath \ "professionalFees").writeNullable[BigDecimal] and
+      (JsPath \ "costOfServices").writeNullable[BigDecimal] and
+      (JsPath \ "other").writeNullable[BigDecimal] and
+      (JsPath \ "residentialFinancialCost").writeNullable[BigDecimal] and
+      (JsPath \ "residentialFinancialCostAmount").writeNullable[BigDecimal] and
+      (JsPath \ "travelCosts").writeNullable[BigDecimal] and
+      (JsPath \ "residentialFinancialCostsCarriedForward").writeNullable[BigDecimal] and
+      (JsPath \ "broughtFwdResidentialFinancialCostAmount").writeNullable[BigDecimal] and
+      (JsPath \ "ukOtherRentARoom").writeNullable[Def2_Create_UkPropertyExpensesRentARoom] and
+      (JsPath \ "consolidatedExpenses").writeNullable[BigDecimal]
+    ) (unlift(Def2_Create_UkNonFhlPropertyExpensesSubmission.unapply))
 }

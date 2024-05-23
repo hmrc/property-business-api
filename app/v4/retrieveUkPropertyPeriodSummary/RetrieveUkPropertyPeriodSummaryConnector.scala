@@ -85,8 +85,8 @@ class RetrieveUkPropertyPeriodSummaryConnector @Inject() (val http: HttpClient, 
           case Left(e)                                               => Left(e)
         }
 
-      case def2: Def2_RetrieveUkPropertyPeriodSummaryConsolidatedRequestData =>
-        import def2._
+      case def2Consolidated: Def2_RetrieveUkPropertyPeriodSummaryConsolidatedRequestData =>
+        import def2Consolidated._
 
         val downstreamUri = if (taxYear.isTys) {
           TaxYearSpecificIfsUri[Def2_RetrieveUkPropertyPeriodSummaryConsolidatedResponse](

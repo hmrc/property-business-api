@@ -18,6 +18,7 @@ package v4.retrieveUkPropertyPeriodSummary.def2.model.response
 
 import play.api.libs.functional.syntax._
 import play.api.libs.json.{JsPath, Json, OWrites, Reads}
+import utils.JsonReadsUtils.readValidOption
 
 case class Def2_Retrieve_NonFhlPropertyExpenses(premisesRunningCosts: Option[BigDecimal],
                                                 repairsAndMaintenance: Option[BigDecimal],
@@ -29,7 +30,10 @@ case class Def2_Retrieve_NonFhlPropertyExpenses(premisesRunningCosts: Option[Big
                                                 travelCosts: Option[BigDecimal],
                                                 residentialFinancialCostsCarriedForward: Option[BigDecimal],
                                                 rentARoom: Option[Def2_Retrieve_RentARoomExpenses],
-                                                consolidatedExpenses: Option[BigDecimal])
+                                                consolidatedExpenses: Option[BigDecimal]) {
+
+
+}
 
 case class Def2_Retrieve_NonFhlPropertyConsolidatedExpenses(residentialFinancialCost: Option[BigDecimal],
                                                             residentialFinancialCostsCarriedForward: Option[BigDecimal],
@@ -46,9 +50,9 @@ object Def2_Retrieve_NonFhlPropertyExpenses {
       (JsPath \ "professionalFees").readNullable[BigDecimal] and
       (JsPath \ "costOfServices").readNullable[BigDecimal] and
       (JsPath \ "other").readNullable[BigDecimal] and
-      (JsPath \ "residentialFinancialCost").readNullable[BigDecimal] and
+      readValidOption((JsPath \ "residentialFinancialCost").readNullable[BigDecimal], (JsPath \ "residentialFinancialCostAmount").readNullable[BigDecimal]) and
       (JsPath \ "travelCosts").readNullable[BigDecimal] and
-      (JsPath \ "residentialFinancialCostsCarriedForward").readNullable[BigDecimal] and
+      readValidOption((JsPath \ "residentialFinancialCostsCarriedForward").readNullable[BigDecimal], (JsPath \ "broughtFwdResidentialFinancialCostAmount").readNullable[BigDecimal]) and
       (JsPath \ "ukOtherRentARoom").readNullable[Def2_Retrieve_RentARoomExpenses] and
       (JsPath \ "consolidatedExpense").readNullable[BigDecimal]
   )(Def2_Retrieve_NonFhlPropertyExpenses.apply _)
@@ -63,6 +67,6 @@ object Def2_Retrieve_NonFhlPropertyConsolidatedExpenses {
       (JsPath \ "broughtFwdResidentialFinancialCostAmount").readNullable[BigDecimal] and
       (JsPath \ "ukOtherRentARoom").readNullable[Def2_Retrieve_RentARoomExpenses] and
       (JsPath \ "consolidatedExpense").readNullable[BigDecimal]
-  )(Def2_Retrieve_NonFhlPropertyConsolidatedExpenses.apply _)
+    ) (Def2_Retrieve_NonFhlPropertyConsolidatedExpenses.apply _)
 
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,12 +14,16 @@
  * limitations under the License.
  */
 
-package v4.retrieveUkPropertyPeriodSummary.def2.model.response
+package utils
 
-import play.api.libs.json.{Json, OFormat}
+import play.api.libs.json.Reads
 
-case class Def2_Retrieve_UkNonFhlProperty(income: Option[Def2_Retrieve_NonFhlPropertyIncome], expenses: Option[Def2_Retrieve_NonFhlPropertyExpenses])
+object JsonReadsUtils {
 
-object Def2_Retrieve_UkNonFhlProperty {
-  implicit val format: OFormat[Def2_Retrieve_UkNonFhlProperty] = Json.format[Def2_Retrieve_UkNonFhlProperty]
+  def readValidOption(item1: Reads[Option[BigDecimal]], item2: Reads[Option[BigDecimal]]): Reads[Option[BigDecimal]] = {
+    item1.flatMap {
+      case Some(_) => item1
+      case None => item2
+    }
+  }
 }

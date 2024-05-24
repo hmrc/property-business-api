@@ -36,8 +36,22 @@ class Def2_Create_UkNonFhlPropertySpec extends UnitSpec {
           Some(988.18)
         ))
     )
-    // @formatter:on
   }
+  private val requestBodySubmission ={
+  Def2_Create_UkNonFhlPropertySubmission(
+      Some(Def2_Create_UkNonFhlPropertyIncome(
+        Some(41.12), Some(84.31), Some(9884.93), Some(842.99),
+        Some(31.44), Some(Def2_Create_UkPropertyIncomeRentARoom(Some(947.66))))),
+      Some(
+        Def2_Create_UkNonFhlPropertyExpensesSubmission(
+          None, None, None, None, None,
+          None, None, None, None, None, None, None,
+          Some(988.18)
+        ))
+    )
+  }
+  // @formatter:on
+
 
   private val mtdJson = Json.parse("""
       |{
@@ -79,6 +93,8 @@ class Def2_Create_UkNonFhlPropertySpec extends UnitSpec {
     "passed a valid JSON" should {
       "return a valid model" in {
         mtdJson.as[Def2_Create_UkNonFhlProperty] shouldBe requestBody
+        mtdJson.as[Def2_Create_UkNonFhlPropertySubmission] shouldBe requestBodySubmission
+
       }
     }
   }
@@ -87,6 +103,7 @@ class Def2_Create_UkNonFhlPropertySpec extends UnitSpec {
     "passed valid model" should {
       "return valid JSON" in {
         Json.toJson(requestBody) shouldBe downstreamJson
+        Json.toJson(requestBodySubmission) shouldBe downstreamJson
 
       }
     }

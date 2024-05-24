@@ -18,7 +18,6 @@ package v4.createUkPropertyPeriodSummary.def2.model.request.def2_ukNonFhlPropert
 
 import play.api.libs.functional.syntax._
 import play.api.libs.json._
-import utils.JsonReadsUtils
 import v4.createUkPropertyPeriodSummary.def2.model.request.def2_ukPropertyRentARoom.Def2_Create_UkPropertyExpensesRentARoom
 
 case class Def2_Create_UkNonFhlPropertyExpenses(premisesRunningCosts: Option[BigDecimal],

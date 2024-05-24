@@ -1,0 +1,100 @@
+summary: Retrieve a Foreign Property Annual Submission
+description: |
+  This endpoint allows a developer to retrieve adjustments and allowances for a foreign property business. For either or both of Furnished Holiday Letting (FHL) in the European Economic Area (EEA) and Non FHL Foreign property submissions. A National Insurance number, business ID and tax year are required.
+
+  ### Test data
+  Scenario simulation using Gov-Test-Scenario headers is only available in the sandbox environment.
+  
+  | Header Value (Gov-Test-Scenario)      | Scenario                                                               |
+  |---------------------------------------|------------------------------------------------------------------------|
+  | N/A - DEFAULT                         | Simulates the scenario where no data is found.                         |
+  | FOREIGN_PROPERTY                      | Simulates the scenario with FHL and Non-FHL properties.                |
+  | FOREIGN_FHL_ALL_OTHER_ALLOWANCES      | Simulates the scenario of a FHL property with all other allowances.    |
+  | FOREIGN_FHL_PROPERTY_ALLOWANCE        | Simulates the scenario of a FHL property with property allowance.      |
+  | FOREIGN_NON_FHL_ALL_OTHER_ALLOWANCES  | Simulates the scenario of a Non-FHL property with all other allowances.|
+  | FOREIGN_NON_FHL_PROPERTY_ALLOWANCE    | Simulates the scenario of a Non-FHL property with property allowance.  |
+  | UK_PROPERTY                           | Simulates the scenario where the type of business is incorrect.        |
+  | STATEFUL                              | Performs a stateful retrieve.                                          |
+
+
+
+
+tags:
+  - Foreign Property Annual Submission
+
+parameters:
+  - $ref: './common/pathParameters.yaml#/components/parameters/nino'
+  - $ref: './common/pathParameters.yaml#/components/parameters/businessId'
+  - $ref: './common/pathParameters.yaml#/components/parameters/taxYear'
+  - $ref: './common/headers.yaml#/components/parameters/acceptHeader'
+  - $ref: './common/headers.yaml#/components/parameters/authorizationReadScopeHeader'
+  - $ref: './common/headers.yaml#/components/parameters/testScenarioHeader'
+
+security:
+  - User-Restricted:
+      - read:self-assessment
+
+responses:
+  "200":
+    description: Success
+    headers:
+      X-CorrelationId:
+        $ref: './common/headers.yaml#/components/parameters/correlationId'
+    content:
+      application/json:
+        schema:
+          oneOf:
+            - $ref: './schemas/foreign_property_annual_submission_retrieve/def1/response.json'
+        examples:
+          all-other-allowances-response:
+            description: All Other Allowances Response
+            value:
+              $ref: './examples/foreign_property_annual_submission_retrieve/def1/all_other_allowances_response.json'
+          property-allowance-response:
+            description: Property Allowance Response
+            value:
+              $ref: './examples/foreign_property_annual_submission_retrieve/def1/property_allowance_response.json'
+
+  "400":
+    description: Bad request
+    content:
+      application/json:
+        schema:
+          $ref: './schemas/error-response.yaml'
+        examples:
+          FORMAT_NINO:
+            $ref: './common/errors.yaml#/components/examples/formatNino'
+          FORMAT_BUSINESS_ID:
+            $ref: './common/errors.yaml#/components/examples/formatBusinessId'
+          FORMAT_TAX_YEAR:
+            $ref: './common/errors.yaml#/components/examples/formatTaxYear'
+          RULE_TAX_YEAR_NOT_SUPPORTED:
+            $ref: './common/errors.yaml#/components/examples/ruleTaxYearNotSupported'
+          RULE_TAX_YEAR_RANGE_INVALID:
+            $ref: './common/errors.yaml#/components/examples/ruleTaxYearRangeInvalid'
+          RULE_TYPE_OF_BUSINESS_INCORRECT:
+            $ref: './common/errors.yaml#/components/examples/ruleTypeOfBusinessIncorrectForeign'
+          RULE_INCORRECT_GOV_TEST_SCENARIO:
+            $ref: './common/errors.yaml#/components/examples/ruleIncorrectGovTestScenario'
+
+
+  "403":
+    description: Forbidden
+    content:
+      application/json:
+        schema:
+          $ref: './schemas/error-response.yaml'
+        examples:
+          CLIENT_OR_AGENT_NOT_AUTHORISED:
+            $ref: './common/errors.yaml#/components/examples/clientOrAgentNotAuthorised'
+
+  "404":
+    description: Not Found
+    content:
+      application/json:
+        schema:
+          $ref: './schemas/error-response.yaml'
+        examples:
+          MATCHING_RESOURCE_NOT_FOUND:
+            $ref: './common/errors.yaml#/components/examples/notFound'
+

@@ -1,0 +1,34 @@
+PUT        /uk/:nino/:businessId/annual/:taxYear                       v4.createAmendUkPropertyAnnualSubmission.CreateAmendUkPropertyAnnualSubmissionController.handleRequest(nino: String, businessId: String, taxYear: String)
+GET        /uk/:nino/:businessId/annual/:taxYear                       v4.retrieveUkPropertyAnnualSubmission.RetrieveUkPropertyAnnualSubmissionController.handleRequest(nino: String, businessId: String, taxYear: String)
+
+POST       /uk/:nino/:businessId/period/:taxYear                       v4.createUkPropertyPeriodSummary.CreateUkPropertyPeriodSummaryController.handleRequest(nino: String, businessId: String, taxYear: String)
+PUT        /uk/:nino/:businessId/period/:taxYear/:submissionId         v4.amendUkPropertyPeriodSummary.AmendUkPropertyPeriodSummaryController.handleRequest(nino: String, businessId: String, taxYear: String, submissionId: String)
+GET        /uk/:nino/:businessId/period/:taxYear/:submissionId         v4.retrieveUkPropertyPeriodSummary.RetrieveUkPropertyPeriodSummaryController.handleRequest(nino: String, businessId: String, taxYear: String, submissionId: String)
+
+POST       /foreign/:nino/:businessId/period/:taxYear                  v4.createForeignPropertyPeriodSummary.CreateForeignPropertyPeriodSummaryController.handleRequest(nino: String, businessId: String, taxYear: String)
+PUT        /foreign/:nino/:businessId/period/:taxYear/:submissionId    v4.amendForeignPropertyPeriodSummary.AmendForeignPropertyPeriodSummaryController.handleRequest(nino: String, businessId: String, taxYear: String, submissionId: String)
+GET        /foreign/:nino/:businessId/period/:taxYear/:submissionId    v4.retrieveForeignPropertyPeriodSummary.RetrieveForeignPropertyPeriodSummaryController.handleRequest(nino: String, businessId: String, taxYear: String,submissionId: String)
+
+GET        /:nino/:businessId/period/:taxYear                          v4.propertyPeriodSummary.list.ListPropertyPeriodSummariesController.handleRequest(nino: String, businessId: String, taxYear: String)
+
+PUT        /foreign/:nino/:businessId/annual/:taxYear                  v4.createAmendForeignPropertyAnnualSubmission.CreateAmendForeignPropertyAnnualSubmissionController.handleRequest(nino: String, businessId: String, taxYear: String)
+GET        /foreign/:nino/:businessId/annual/:taxYear                  v4.retrieveForeignPropertyAnnualSubmission.RetrieveForeignPropertyAnnualSubmissionController.handleRequest(nino: String, businessId: String, taxYear: String)
+DELETE     /:nino/:businessId/annual/:taxYear                          v4.deletePropertyAnnualSubmission.DeletePropertyAnnualSubmissionController.handleRequest(nino: String, businessId: String, taxYear: String)
+
+PUT        /uk/annual/furnished-holiday-lettings/:nino/:taxYear       v4.createAmendHistoricFhlUkPropertyAnnualSubmission.CreateAmendHistoricFhlUkPropertyAnnualSubmissionController.handleRequest(nino: String, taxYear: String)
+GET        /uk/annual/furnished-holiday-lettings/:nino/:taxYear       v4.retrieveHistoricFhlUkPropertyAnnualSubmission.RetrieveHistoricFhlUkPropertyAnnualSubmissionController.handleRequest(nino: String, taxYear: String)
+DELETE     /uk/annual/furnished-holiday-lettings/:nino/:taxYear       v4.deleteHistoricFhlUkPropertyAnnualSubmission.DeleteHistoricFhlUkPropertyAnnualSubmissionController.handleFhlRequest(nino: String, taxYear: String)
+
+PUT        /uk/annual/non-furnished-holiday-lettings/:nino/:taxYear   v4.createAmendHistoricNonFhlUkPropertyAnnualSubmission.CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionController.handleRequest(nino: String, taxYear: String)
+GET        /uk/annual/non-furnished-holiday-lettings/:nino/:taxYear   v4.retrieveHistoricNonFhlUkPropertyAnnualSubmission.RetrieveHistoricNonFhlUkPropertyAnnualSubmissionController.handleRequest(nino: String, taxYear: String)
+DELETE     /uk/annual/non-furnished-holiday-lettings/:nino/:taxYear   v4.deleteHistoricNonFhlUkPropertyAnnualSubmission.DeleteHistoricNonFhlUkPropertyAnnualSubmissionController.handleRequest(nino: String, taxYear: String)
+
+POST       /uk/period/furnished-holiday-lettings/:nino                v4.historicFhlUkPropertyPeriodSummary.create.CreateHistoricFhlUkPropertyPeriodSummaryController.handleRequest(nino: String)
+PUT        /uk/period/furnished-holiday-lettings/:nino/:periodId      v4.historicFhlUkPropertyPeriodSummary.amend.AmendHistoricFhlUkPropertyPeriodSummaryController.handleRequest(nino: String, periodId: String)
+GET        /uk/period/furnished-holiday-lettings/:nino/:periodId      v4.historicFhlUkPropertyPeriodSummary.retrieve.RetrieveHistoricFhlUkPropertyPeriodSummaryController.handleRequest(nino: String, periodId: String)
+GET        /uk/period/furnished-holiday-lettings/:nino                v4.historicFhlUkPropertyPeriodSummary.list.ListHistoricFhlUkPropertyPeriodSummariesController.handleRequest(nino: String)
+
+POST       /uk/period/non-furnished-holiday-lettings/:nino            v4.historicNonFhlUkPropertyPeriodSummary.create.CreateHistoricNonFhlUkPropertyPeriodSummaryController.handleRequest(nino: String)
+PUT        /uk/period/non-furnished-holiday-lettings/:nino/:periodId  v4.historicNonFhlUkPropertyPeriodSummary.amend.AmendHistoricNonFhlUkPropertyPeriodSummaryController.handleRequest(nino: String, periodId: String)
+GET        /uk/period/non-furnished-holiday-lettings/:nino/:periodId  v4.historicNonFhlUkPropertyPeriodSummary.retrieve.RetrieveHistoricNonFhlUkPropertyPeriodSummaryController.handleRequest(nino: String, periodId: String)
+GET        /uk/period/non-furnished-holiday-lettings/:nino            v4.historicNonFhlUkPropertyPeriodSummary.list.ListHistoricNonFhlUkPropertyPeriodSummariesController.handleRequest(nino: String)

@@ -51,13 +51,13 @@ class AmendUkPropertyPeriodSummaryConnector @Inject() (val http: HttpClient, val
       case def2: Def2_AmendUkPropertyPeriodSummaryRequestData =>
         import def2._
         val downstreamUri = TaxYearSpecificIfsUri[Unit](
-          s"income-tax/business/property/periodic/24-25?taxableEntityId=$nino&incomeSourceId=$businessId&submissionId=$submissionId")
+          s"income-tax/business/property/periodic/${taxYear.asTysDownstream}?taxableEntityId=$nino&incomeSourceId=$businessId&submissionId=$submissionId")
         put(body, downstreamUri)
 
       case def2Submission: Def2_AmendUkPropertyPeriodSummarySubmissionRequestData =>
         import def2Submission._
         val downstreamUri = TaxYearSpecificIfsUri[Unit](
-          s"income-tax/business/property/periodic/24-25?taxableEntityId=$nino&incomeSourceId=$businessId&submissionId=$submissionId")
+          s"income-tax/business/property/periodic/${taxYear.asTysDownstream}?taxableEntityId=$nino&incomeSourceId=$businessId&submissionId=$submissionId")
         put(body, downstreamUri)
 
     }

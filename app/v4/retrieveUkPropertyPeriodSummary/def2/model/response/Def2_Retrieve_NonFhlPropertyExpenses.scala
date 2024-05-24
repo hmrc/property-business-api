@@ -34,12 +34,6 @@ case class Def2_Retrieve_NonFhlPropertyExpenses(premisesRunningCosts: Option[Big
 
 
 }
-
-case class Def2_Retrieve_NonFhlPropertyConsolidatedExpenses(residentialFinancialCost: Option[BigDecimal],
-                                                            residentialFinancialCostsCarriedForward: Option[BigDecimal],
-                                                            rentARoom: Option[Def2_Retrieve_RentARoomExpenses],
-                                                            consolidatedExpenses: Option[BigDecimal])
-
 object Def2_Retrieve_NonFhlPropertyExpenses {
   implicit val writes: OWrites[Def2_Retrieve_NonFhlPropertyExpenses] = Json.writes[Def2_Retrieve_NonFhlPropertyExpenses]
 
@@ -59,14 +53,3 @@ object Def2_Retrieve_NonFhlPropertyExpenses {
 
 }
 
-object Def2_Retrieve_NonFhlPropertyConsolidatedExpenses {
-  implicit val writes: OWrites[Def2_Retrieve_NonFhlPropertyConsolidatedExpenses] = Json.writes[Def2_Retrieve_NonFhlPropertyConsolidatedExpenses]
-
-  implicit val reads: Reads[Def2_Retrieve_NonFhlPropertyConsolidatedExpenses] = (
-    (JsPath \ "residentialFinancialCostAmount").readNullable[BigDecimal] and
-      (JsPath \ "broughtFwdResidentialFinancialCostAmount").readNullable[BigDecimal] and
-      (JsPath \ "ukOtherRentARoom").readNullable[Def2_Retrieve_RentARoomExpenses] and
-      (JsPath \ "consolidatedExpense").readNullable[BigDecimal]
-    ) (Def2_Retrieve_NonFhlPropertyConsolidatedExpenses.apply _)
-
-}

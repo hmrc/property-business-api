@@ -22,7 +22,7 @@ object JsonReadsUtils {
 
   def readValidOption(item1: Reads[Option[BigDecimal]], item2: Reads[Option[BigDecimal]]): Reads[Option[BigDecimal]] = {
     item1.flatMap {
-      case Some(value) => item1
+      case Some(_) => item1
       case None => item2
     }
   }

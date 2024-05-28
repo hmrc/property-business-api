@@ -1,0 +1,17 @@
+{
+  "fromDate": "2019-03-11",
+  "toDate": "2020-04-23",
+  "income": {
+    "periodAmount": 123.45,
+    "premiumsOfLeaseGrant": 2355.45,
+    "reversePremiums": 454.56,
+    "otherIncome": 567.89,
+    "taxDeducted": 234.53,
+    "rentARoom": {
+      "rentsReceived": 567.56
+    }
+  },
+  "expenses":{
+    "consolidatedExpenses": 235.78
+  }
+}

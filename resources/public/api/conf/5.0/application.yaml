@@ -1,0 +1,107 @@
+openapi: "3.0.3"
+
+info:
+  version: "5.0"
+  title: Property Business (MTD)
+  description: |
+    # Send fraud prevention data
+    HMRC monitors transactions to help protect your customers' confidential data from criminals and fraudsters. 
+
+    <div class="govuk-warning-text warning-icon-fix">
+      <span class="govuk-warning-text__icon warning-icon-ui-fix" aria-hidden="true">!</span>
+      <strong class="govuk-warning-text__text">
+        <span class="govuk-warning-text__assistive">Warning</span>
+        You are required by law to submit header data for this API. This includes all associated APIs and endpoints.
+      </strong>
+    </div>
+
+    [Check the data you need to send](/guides/fraud-prevention/). You can also use the [Test API](/api-documentation/docs/api/service/txm-fph-validator-api/1.0) during initial development and as part of your quality assurance checks.
+
+    # Mapping APIs to Self Assessment tax return forms
+    Some parameters in this API map to box numbers in one or more Self Assessment tax return forms. To learn more and to download this mapping information as a CSV file, go to [income-tax-mtd-changelog/mapping](https://github.com/hmrc/income-tax-mtd-changelog?tab=readme-ov-file#mapping-apis-to-self-assessment-tax-return-forms) on GitHub.
+
+    # Changelog
+    You can find the changelog in the [income-tax-mtd-changelog](https://github.com/hmrc/income-tax-mtd-changelog/#readme) on GitHub.
+    
+    # Support
+      - Raise non-technical or platform-related issues with the [Software Development Support Team (SDST)](https://developer.service.hmrc.gov.uk/developer/support).
+      - Raise technical issues on the [income-tax-mtd-changelog](https://github.com/hmrc/income-tax-mtd-changelog/issues) GitHub page.
+
+    # Testing
+    You can use the sandbox environment to <a href="/api-documentation/docs/testing">test this API</a>. You can use the <a href="/api-documentation/docs/api/service/api-platform-test-user/1.0">Create Test User API</a> or its frontend service to create test users.
+
+    It may not be possible to test all scenarios in the sandbox. You can test some scenarios by passing the `Gov-Test-Scenario` header. Documentation for each endpoint includes a **Test data** section, which explains the scenarios that you can simulate using the `Gov-Test-Scenario` header.
+
+    If you have a specific testing need that is not supported in the sandbox, contact <a href="/developer/support">our support team</a>.
+
+    Some APIs may be marked \[test only\]. This means that they are not available for use in production and may change.
+
+servers:
+  - url: https://test-api.service.hmrc.gov.uk
+    description: Sandbox
+  - url: https://api.service.hmrc.gov.uk
+    description: Production
+components:
+  securitySchemes:
+    User-Restricted:
+      type: oauth2
+      description: HMRC supports OAuth 3.0 for authenticating [User-restricted](https://developer.service.hmrc.gov.uk/api-documentation/docs/authorisation/user-restricted-endpoints) API requests
+      flows:
+        authorizationCode:
+          authorizationUrl: https://api.service.hmrc.gov.uk/oauth/authorize
+          tokenUrl: https://api.service.hmrc.gov.uk/oauth/token
+          refreshUrl: https://api.service.hmrc.gov.uk/oauth/refresh
+          scopes:
+            write:self-assessment: Grant write access
+            read:self-assessment: Grant read access
+tags:
+  - name: UK Property Business Annual Submission
+    description: Resources relating to an individual's UK Property Business Annual Submission
+  - name: UK Property Income & Expenses Period Summary
+    description: Resources relating to an individual's UK Property Income & Expenses Period Summary
+  - name: Historic FHL UK Property Business Annual Submission
+    description: Resources relating to an individual's historic FHL UK Property Business Annual Submission
+  - name: Historic non-FHL UK Property Business Annual Submission
+    description: Resources relating to an individual's historic non-FHL UK Property Business Annual Submission
+  - name: Historic FHL UK Property Income & Expenses Period Summary
+    description: Resources relating to an individual's historic FHL UK Property Income & Expenses Period Summaries
+  - name: Historic non-FHL UK Property Income & Expenses Period Summary
+    description: Resources relating to an individual's historic non-FHL UK Property Income & Expenses Period Summaries
+  - name: Foreign Property Income & Expenses Period Summary
+    description: Resources relating to an individual's Foreign Property Income & Expenses Period Summary
+  - name: Foreign Property Annual Submission
+    description: Resources relating to an individual's Foreign Property Annual Submission
+  - name: UK or Foreign Property Annual Submission Deletion
+    description: Resources relating to an individual's UK or Foreign Property Annual Submission Deletion
+  - name: UK or Foreign Property Income and Expenses Period Summaries List
+    description: Resources relating to an individual's UK or Foreign Property Income and Expenses Period Summaries List
+
+paths:
+  /individuals/business/property/uk/{nino}/{businessId}/annual/{taxYear}:
+    $ref: "./uk_property_annual_submission.yaml"
+  /individuals/business/property/uk/{nino}/{businessId}/period/{taxYear}:
+    $ref: "./uk_property_period_summary_create.yaml"
+  /individuals/business/property/uk/{nino}/{businessId}/period/{taxYear}/{submissionId}:
+    $ref: "./uk_property_period_summary.yaml"
+  /individuals/business/property/uk/annual/furnished-holiday-lettings/{nino}/{taxYear}:
+    $ref: "./historic_uk_fhl_annual_submission.yaml"
+  /individuals/business/property/uk/annual/non-furnished-holiday-lettings/{nino}/{taxYear}:
+    $ref: "./historic_uk_non_fhl_annual_submission.yaml"
+  /individuals/business/property/uk/period/furnished-holiday-lettings/{nino}:
+    $ref: "./historic_uk_fhl_period_summary_1.yaml"
+  /individuals/business/property/uk/period/furnished-holiday-lettings/{nino}/{periodId}:
+    $ref: "./historic_uk_fhl_period_summary_2.yaml"
+  /individuals/business/property/uk/period/non-furnished-holiday-lettings/{nino}:
+    $ref: "./historic_uk_non_fhl_period_summary_1.yaml"
+  /individuals/business/property/uk/period/non-furnished-holiday-lettings/{nino}/{periodId}:
+    $ref: "./historic_uk_non_fhl_period_summary_2.yaml"
+  /individuals/business/property/foreign/{nino}/{businessId}/period/{taxYear}:
+    $ref: "./foreign_property_period_summary_create.yaml"
+  /individuals/business/property/foreign/{nino}/{businessId}/period/{taxYear}/{submissionId}:
+    $ref: "./foreign_property_period_summary.yaml"
+  /individuals/business/property/foreign/{nino}/{businessId}/annual/{taxYear}:
+    $ref: "./foreign_property_annual_submission.yaml"
+  /individuals/business/property/{nino}/{businessId}/annual/{taxYear}:
+    $ref: "./uk_foreign_property_annual_submission_deletion.yaml"
+  /individuals/business/property/{nino}/{businessId}/period/{taxYear}:
+    $ref: "./uk_foreign_property_period_summaries_list.yaml"

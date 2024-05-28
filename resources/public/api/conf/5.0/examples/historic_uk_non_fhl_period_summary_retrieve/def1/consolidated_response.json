@@ -1,0 +1,17 @@
+{
+  "fromDate": "2020-01-01",
+  "toDate": "2020-01-31",
+  "income": {
+    "periodAmount": 200,
+    "premiumsOfLeaseGrant": 200,
+    "reversePremiums": 200,
+    "otherIncome": 200,
+    "taxDeducted": 100,
+    "rentARoom": {
+      "rentsReceived": 100
+    }
+  },
+  "expenses": {
+    "consolidatedExpenses": 200
+  }
+}

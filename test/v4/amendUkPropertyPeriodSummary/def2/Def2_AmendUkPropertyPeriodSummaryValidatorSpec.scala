@@ -128,17 +128,17 @@ class Def2_AmendUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with JsonE
     None, None, Some(567.83), None, None, None
   )
 
-  private val parsedNonFhlExpenses = Def2_Amend_UkNonFhlPropertyExpenses(
+  private val parsedNonFhlExpenses = Def2_Amend_UkNonFhlPropertyExpensesSubmission(
     Some(3123.21), Some(928.42), Some(842.99), Some(8831.12),
-    Some(484.12), Some(99282), Some(12.34), Some(974.47),
-    Some(12.34), Some(parsedExpensesRentARoom), None
+    Some(484.12), Some(99282), Some(12.34), None, Some(974.47),
+    Some(12.34), None, Some(parsedExpensesRentARoom), None
   )
 
   private val parsedFhlExpensesConsolidated = Def2_Amend_UkFhlPropertyExpenses(
     None, None, None, None, None, None, Some(988.18), None, Some(Def2_Amend_UkPropertyExpensesRentARoom(Some(900.01))))
 
-  private val parsedNonFhlExpensesConsolidated = Def2_Amend_UkNonFhlPropertyExpenses(
-    None, None, None, None, None,None,Some(3000.01),None, Some(200.37), Some(Def2_Amend_UkPropertyExpensesRentARoom(Some(935.01))),Some(988.18)
+  private val parsedNonFhlExpensesConsolidated = Def2_Amend_UkNonFhlPropertyExpensesSubmission(
+    None, None, None, None, None,None,None,Some(3000.01),None,None, Some(200.37), Some(Def2_Amend_UkPropertyExpensesRentARoom(Some(935.01))),Some(988.18)
   )
   // @formatter:on
 
@@ -147,12 +147,12 @@ class Def2_AmendUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with JsonE
     Some(parsedFhlExpenses)
   )
 
-  private val parsedUkNonFhlProperty = Def2_Amend_UkNonFhlProperty(
+  private val parsedUkNonFhlProperty = Def2_Amend_UkNonFhlPropertySubmission(
     Some(parsedNonFhlIncome),
     Some(parsedNonFhlExpenses)
   )
 
-  private val parsedBody = Def2_AmendUkPropertyPeriodSummaryRequestBody(
+  private val parsedBody = Def2_AmendUkPropertyPeriodSummarySubmissionRequestBody(
     Some(parsedUkFhlProperty),
     Some(parsedUkNonFhlProperty)
   )
@@ -162,14 +162,14 @@ class Def2_AmendUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with JsonE
     Some(parsedUkNonFhlProperty.copy(expenses = Some(parsedNonFhlExpensesConsolidated)))
   )
 
-  private val parsedBodyMinimalFhl = Def2_AmendUkPropertyPeriodSummaryRequestBody(
+  private val parsedBodyMinimalFhl = Def2_AmendUkPropertyPeriodSummarySubmissionRequestBody(
     Some(Def2_Amend_UkFhlProperty(Some(parsedFhlIncomeMinimal), None)),
     None
   )
 
-  private val parsedBodyMinimalNonFhl = Def2_AmendUkPropertyPeriodSummaryRequestBody(
+  private val parsedBodyMinimalNonFhl = Def2_AmendUkPropertyPeriodSummarySubmissionRequestBody(
     None,
-    Some(Def2_Amend_UkNonFhlProperty(Some(parsedNonFhlIncomeMinimal), None))
+    Some(Def2_Amend_UkNonFhlPropertySubmission(Some(parsedNonFhlIncomeMinimal), None))
   )
 
   private def validator(nino: String, businessId: String, taxYear: String, submissionId: String, body: JsValue) = {
@@ -178,26 +178,26 @@ class Def2_AmendUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with JsonE
 
 
   "validator" should {
-    "return the parsed domain object" when {
+    "return the parsed domain object in its submission model" when {
       "passed a valid request" in {
 
         val result: Either[ErrorWrapper, AmendUkPropertyPeriodSummaryRequestData] =
           validator(validNino, validBusinessId, validTaxYear, validSubmissionId, validBody).validateAndWrapResult()
 
         result shouldBe Right(
-          Def2_AmendUkPropertyPeriodSummaryRequestData(parsedNino, parsedTaxYear, parsedBusinessId, parsedSubmissionId, parsedBody))
+          Def2_AmendUkPropertyPeriodSummarySubmissionRequestData(parsedNino, parsedTaxYear, parsedBusinessId, parsedSubmissionId, parsedBody))
       }
 
-      "passed a valid consolidated request body for 2024-25" in {
+      "passed a valid consolidated request body for 2024-25 in its submission model" in {
 
         val result: Either[ErrorWrapper, AmendUkPropertyPeriodSummaryRequestData] =
           validator(validNino, validBusinessId, validTaxYear, validSubmissionId, validBodyConsolidatedWithExtraFields).validateAndWrapResult()
 
         result shouldBe Right(
-          Def2_AmendUkPropertyPeriodSummaryRequestData(parsedNino, parsedTaxYear, parsedBusinessId, parsedSubmissionId, parsedBodyConsolidated))
+          Def2_AmendUkPropertyPeriodSummarySubmissionRequestData(parsedNino, parsedTaxYear, parsedBusinessId, parsedSubmissionId, parsedBodyConsolidated))
       }
 
-      "passed a valid request with minimal fhl" in {
+      "passed a valid request with minimal fhl in its submission model" in {
 
         val result: Either[ErrorWrapper, AmendUkPropertyPeriodSummaryRequestData] =
           validator(
@@ -217,7 +217,7 @@ class Def2_AmendUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with JsonE
           ).validateAndWrapResult()
 
         result shouldBe Right(
-          Def2_AmendUkPropertyPeriodSummaryRequestData(parsedNino, parsedTaxYear, parsedBusinessId, parsedSubmissionId, parsedBodyMinimalFhl))
+          Def2_AmendUkPropertyPeriodSummarySubmissionRequestData(parsedNino, parsedTaxYear, parsedBusinessId, parsedSubmissionId, parsedBodyMinimalFhl))
       }
 
       "passed a valid request with minimal non-fhl" in {
@@ -240,7 +240,7 @@ class Def2_AmendUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with JsonE
           ).validateAndWrapResult()
 
         result shouldBe Right(
-          Def2_AmendUkPropertyPeriodSummaryRequestData(parsedNino, parsedTaxYear, parsedBusinessId, parsedSubmissionId, parsedBodyMinimalNonFhl))
+          Def2_AmendUkPropertyPeriodSummarySubmissionRequestData(parsedNino, parsedTaxYear, parsedBusinessId, parsedSubmissionId, parsedBodyMinimalNonFhl))
       }
     }
 

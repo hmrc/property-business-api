@@ -169,19 +169,19 @@ class Def2_CreateUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with Mock
   private val parsedNonFhlExpensesRentARoom = Def2_Create_UkPropertyExpensesRentARoom(Some(8842.43))
 
   //@formatter:off
-  private val parsedNonFhlExpenses = Def2_Create_UkNonFhlPropertyExpenses(
+  private val parsedNonFhlExpenses = Def2_Create_UkNonFhlPropertyExpensesSubmission(
     Some(3123.21), Some(928.42), Some(842.99), Some(8831.12),
-    Some(484.12), Some(99282), Some(12.34), Some(974.47),
-    Some(12.34), Some(parsedNonFhlExpensesRentARoom), None
+    Some(484.12), Some(99282), Some(12.34), None, Some(974.47),
+    Some(12.34), None, Some(parsedNonFhlExpensesRentARoom), None
   )
 
-  private val parsedNonFhlExpensesConsolidated = Def2_Create_UkNonFhlPropertyExpenses(
-    None, None, None, None, None, None, Some(3000.01), None, Some(200.37), Some(Def2_Create_UkPropertyExpensesRentARoom(Some(935.01))), Some(988.18)
+  private val parsedNonFhlExpensesConsolidated = Def2_Create_UkNonFhlPropertyExpensesSubmission(
+    None, None, None, None, None, None, None, Some(3000.01), None, None, Some(200.37), Some(Def2_Create_UkPropertyExpensesRentARoom(Some(935.01))), Some(988.18)
   )
 
   //@formatter:on
 
-  private val parsedUkNonFhlProperty = Def2_Create_UkNonFhlProperty(
+  private val parsedUkNonFhlProperty = Def2_Create_UkNonFhlPropertySubmission(
     Some(parsedNonFhlIncome),
     Some(parsedNonFhlExpenses)
   )
@@ -190,7 +190,7 @@ class Def2_CreateUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with Mock
   private val parsedUkNonFhlPropertyMinimal      = parsedUkNonFhlProperty.copy(income = Some(parsedNonFhlIncomeMinimal), expenses = None)
 
   private val parsedBody =
-    Def2_CreateUkPropertyPeriodSummaryRequestBody("2024-04-06", "2024-07-05", Some(parsedUkFhlProperty), Some(parsedUkNonFhlProperty))
+    Def2_CreateUkPropertyPeriodSummarySubmissionRequestBody("2024-04-06", "2024-07-05", Some(parsedUkFhlProperty), Some(parsedUkNonFhlProperty))
 
   private val parsedBodyConsolidated =
     parsedBody.copy(ukFhlProperty = Some(parsedUkFhlPropertyConsolidated), ukNonFhlProperty = Some(parsedUkNonFhlPropertyConsolidated))
@@ -207,28 +207,28 @@ class Def2_CreateUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with Mock
         val result: Either[ErrorWrapper, CreateUkPropertyPeriodSummaryRequestData] =
           validator(validNino, validTaxYear, validBusinessId, validBody).validateAndWrapResult()
 
-        result shouldBe Right(Def2_CreateUkPropertyPeriodSummaryRequestData(parsedNino, parsedBusinessId, parsedTaxYear, parsedBody))
+        result shouldBe Right(Def2_CreateUkPropertyPeriodSummarySubmissionRequestData(parsedNino, parsedBusinessId, parsedTaxYear, parsedBody))
       }
 
       "passed a valid request with a consolidated body for 2024-25" in {
         val result: Either[ErrorWrapper, CreateUkPropertyPeriodSummaryRequestData] =
           validator(validNino, validTaxYear, validBusinessId, validBodyConsolidatedWithExtraFields).validateAndWrapResult()
 
-        result shouldBe Right(Def2_CreateUkPropertyPeriodSummaryRequestData(parsedNino, parsedBusinessId, parsedTaxYear, parsedBodyConsolidated))
+        result shouldBe Right(Def2_CreateUkPropertyPeriodSummarySubmissionRequestData(parsedNino, parsedBusinessId, parsedTaxYear, parsedBodyConsolidated))
       }
 
       "passed a valid request with a minimal fhl body" in {
         val result: Either[ErrorWrapper, CreateUkPropertyPeriodSummaryRequestData] =
           validator(validNino, validTaxYear, validBusinessId, validMinimalFhlBody).validateAndWrapResult()
 
-        result shouldBe Right(Def2_CreateUkPropertyPeriodSummaryRequestData(parsedNino, parsedBusinessId, parsedTaxYear, parsedBodyMinimalFhl))
+        result shouldBe Right(Def2_CreateUkPropertyPeriodSummarySubmissionRequestData(parsedNino, parsedBusinessId, parsedTaxYear, parsedBodyMinimalFhl))
       }
 
       "passed a valid request with a minimal non-fhl body" in {
         val result: Either[ErrorWrapper, CreateUkPropertyPeriodSummaryRequestData] =
           validator(validNino, validTaxYear, validBusinessId, validMinimalNonFhlBody).validateAndWrapResult()
 
-        result shouldBe Right(Def2_CreateUkPropertyPeriodSummaryRequestData(parsedNino, parsedBusinessId, parsedTaxYear, parsedBodyMinimalNonFhl))
+        result shouldBe Right(Def2_CreateUkPropertyPeriodSummarySubmissionRequestData(parsedNino, parsedBusinessId, parsedTaxYear, parsedBodyMinimalNonFhl))
       }
     }
 

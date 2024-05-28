@@ -20,6 +20,42 @@ import play.api.libs.functional.syntax._
 import play.api.libs.json.{JsPath, Json, Reads, Writes}
 import v4.amendUkPropertyPeriodSummary.def2.model.request.def2_ukPropertyRentARoom.Def2_Amend_UkPropertyExpensesRentARoom
 
+case class Def2_Amend_UkNonFhlPropertyExpensesSubmission(premisesRunningCosts: Option[BigDecimal],
+                                                         repairsAndMaintenance: Option[BigDecimal],
+                                                         financialCosts: Option[BigDecimal],
+                                                         professionalFees: Option[BigDecimal],
+                                                         costOfServices: Option[BigDecimal],
+                                                         other: Option[BigDecimal],
+                                                         residentialFinancialCost: Option[BigDecimal],
+                                                         residentialFinancialCostAmount: Option[BigDecimal],
+                                                         travelCosts: Option[BigDecimal],
+                                                         residentialFinancialCostsCarriedForward: Option[BigDecimal],
+                                                         broughtFwdResidentialFinancialCostAmount: Option[BigDecimal],
+                                                         rentARoom: Option[Def2_Amend_UkPropertyExpensesRentARoom],
+                                                         consolidatedExpenses: Option[BigDecimal]){
+
+}
+object Def2_Amend_UkNonFhlPropertyExpensesSubmission {
+
+  implicit val reads: Reads[Def2_Amend_UkNonFhlPropertyExpensesSubmission] = Json.reads[Def2_Amend_UkNonFhlPropertyExpensesSubmission]
+
+  implicit val writes: Writes[Def2_Amend_UkNonFhlPropertyExpensesSubmission] = (
+    (JsPath \ "premisesRunningCosts").writeNullable[BigDecimal] and
+      (JsPath \ "repairsAndMaintenance").writeNullable[BigDecimal] and
+      (JsPath \ "financialCosts").writeNullable[BigDecimal] and
+      (JsPath \ "professionalFees").writeNullable[BigDecimal] and
+      (JsPath \ "costOfServices").writeNullable[BigDecimal] and
+      (JsPath \ "other").writeNullable[BigDecimal] and
+      (JsPath \ "residentialFinancialCost").writeNullable[BigDecimal] and
+      (JsPath \ "residentialFinancialCostAmount").writeNullable[BigDecimal] and
+      (JsPath \ "travelCosts").writeNullable[BigDecimal] and
+      (JsPath \ "residentialFinancialCostsCarriedForward").writeNullable[BigDecimal] and
+      (JsPath \ "broughtFwdResidentialFinancialCostAmount").writeNullable[BigDecimal] and
+      (JsPath \ "ukOtherRentARoom").writeNullable[Def2_Amend_UkPropertyExpensesRentARoom] and
+      (JsPath \ "consolidatedExpense").writeNullable[BigDecimal]
+    ) (unlift(Def2_Amend_UkNonFhlPropertyExpensesSubmission.unapply))
+}
+
 case class Def2_Amend_UkNonFhlPropertyExpenses(premisesRunningCosts: Option[BigDecimal],
                                                repairsAndMaintenance: Option[BigDecimal],
                                                financialCosts: Option[BigDecimal],
@@ -30,7 +66,26 @@ case class Def2_Amend_UkNonFhlPropertyExpenses(premisesRunningCosts: Option[BigD
                                                travelCosts: Option[BigDecimal],
                                                residentialFinancialCostsCarriedForward: Option[BigDecimal],
                                                rentARoom: Option[Def2_Amend_UkPropertyExpensesRentARoom],
-                                               consolidatedExpenses: Option[BigDecimal])
+                                               consolidatedExpenses: Option[BigDecimal]) {
+
+  def toSubmissionModel: Def2_Amend_UkNonFhlPropertyExpensesSubmission = {
+    Def2_Amend_UkNonFhlPropertyExpensesSubmission(
+      premisesRunningCosts = premisesRunningCosts,
+      repairsAndMaintenance = repairsAndMaintenance,
+      financialCosts = financialCosts,
+      professionalFees = professionalFees,
+      costOfServices = costOfServices,
+      other = other,
+      residentialFinancialCost = if (consolidatedExpenses.isDefined) None else residentialFinancialCost,
+      residentialFinancialCostAmount = if (consolidatedExpenses.isDefined) residentialFinancialCost else None,
+      travelCosts = travelCosts,
+      residentialFinancialCostsCarriedForward = if (consolidatedExpenses.isDefined) None else residentialFinancialCostsCarriedForward,
+      broughtFwdResidentialFinancialCostAmount = if (consolidatedExpenses.isDefined) residentialFinancialCostsCarriedForward else None,
+      rentARoom = rentARoom,
+      consolidatedExpenses = consolidatedExpenses
+    )
+  }
+}
 
 object Def2_Amend_UkNonFhlPropertyExpenses {
   implicit val reads: Reads[Def2_Amend_UkNonFhlPropertyExpenses] = Json.reads[Def2_Amend_UkNonFhlPropertyExpenses]

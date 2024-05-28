@@ -17,11 +17,13 @@
 package v4.createUkPropertyPeriodSummary.model.request
 
 import api.models.domain.{BusinessId, Nino, TaxYear}
+import v4.createUkPropertyPeriodSummary.def2.model.request.def2_ukNonFhlProperty.Def2_Create_UkNonFhlPropertySubmission
 
 sealed trait CreateUkPropertyPeriodSummaryRequestData {
   val nino: Nino
   val businessId: BusinessId
   val taxYear: TaxYear
+
   def body: CreateUkPropertyPeriodSummaryRequestBody
 }
 
@@ -29,10 +31,32 @@ case class Def1_CreateUkPropertyPeriodSummaryRequestData(nino: Nino,
                                                          businessId: BusinessId,
                                                          taxYear: TaxYear,
                                                          body: Def1_CreateUkPropertyPeriodSummaryRequestBody)
-    extends CreateUkPropertyPeriodSummaryRequestData
+  extends CreateUkPropertyPeriodSummaryRequestData
 
 case class Def2_CreateUkPropertyPeriodSummaryRequestData(nino: Nino,
                                                          businessId: BusinessId,
                                                          taxYear: TaxYear,
                                                          body: Def2_CreateUkPropertyPeriodSummaryRequestBody)
+  extends CreateUkPropertyPeriodSummaryRequestData {
+  def toSubmission: Def2_CreateUkPropertyPeriodSummarySubmissionRequestData = {
+    Def2_CreateUkPropertyPeriodSummarySubmissionRequestData(
+      nino = nino,
+      taxYear = taxYear,
+      businessId = businessId,
+      body = Def2_CreateUkPropertyPeriodSummarySubmissionRequestBody(
+        body.fromDate,
+        body.toDate,
+        body.ukFhlProperty,
+        body.ukNonFhlProperty.map(existing => Def2_Create_UkNonFhlPropertySubmission(existing.income, existing.expenses.map(_.toSubmissionModel))
+        )
+      )
+    )
+  }
+}
+
+case class Def2_CreateUkPropertyPeriodSummarySubmissionRequestData(
+                                                                    nino: Nino,
+                                                                    businessId: BusinessId,
+                                                                    taxYear: TaxYear,
+                                                                    body: Def2_CreateUkPropertyPeriodSummarySubmissionRequestBody)
   extends CreateUkPropertyPeriodSummaryRequestData

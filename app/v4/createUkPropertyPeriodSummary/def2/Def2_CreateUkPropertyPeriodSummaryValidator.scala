@@ -20,6 +20,7 @@ import api.controllers.validators.Validator
 import api.controllers.validators.resolvers.{ResolveBusinessId, ResolveNino, ResolveNonEmptyJsonObject, ResolveTaxYear}
 import api.models.errors.MtdError
 import cats.data.Validated
+import cats.data.Validated.{Invalid, Valid}
 import cats.implicits.catsSyntaxTuple4Semigroupal
 import play.api.libs.json.JsValue
 import v4.createUkPropertyPeriodSummary.model.request._
@@ -32,12 +33,15 @@ class Def2_CreateUkPropertyPeriodSummaryValidator @Inject() (nino: String, busin
   private val resolveJson    = new ResolveNonEmptyJsonObject[Def2_CreateUkPropertyPeriodSummaryRequestBody]()
   private val rulesValidator = new Def2_CreateUkPropertyPeriodSummaryRulesValidator()
 
-  def validate: Validated[Seq[MtdError], CreateUkPropertyPeriodSummaryRequestData] =
-    (
+  def validate: Validated[Seq[MtdError], CreateUkPropertyPeriodSummaryRequestData] = {
+    val result: Validated[Seq[MtdError], Def2_CreateUkPropertyPeriodSummaryRequestData] = (
       ResolveNino(nino),
       ResolveBusinessId(businessId),
       ResolveTaxYear(taxYear),
       resolveJson(body)
     ).mapN(Def2_CreateUkPropertyPeriodSummaryRequestData) andThen rulesValidator.validateBusinessRules
+
+    result.fold(e => Invalid(e), e => Valid(e.toSubmission))
+  }
 
 }

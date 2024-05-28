@@ -1,0 +1,34 @@
+{
+  "title": "Given any tax year",
+  "type": "object",
+  "description": "Given any tax year",
+  "properties": {
+    "submissions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "description": "Array containing details about FHL UK property update periods",
+        "properties": {
+          "periodId": {
+            "type": "string",
+            "description": "An identifier for the update period, unique to the customer's UK property business.",
+            "example": "2017-04-06_2017-07-04"
+          },
+          "fromDate": {
+            "type": "string",
+            "description": "The first day that the income, expenses and deduction period summary covers.\n\nMust conform to the format: YYYY-MM-DD.",
+            "example":"2017-04-06"
+          },
+          "toDate": {
+            "type": "string",
+            "description": "The last day that the income, expenses and deduction period summary covers.\n\nMust conform to the format: YYYY-MM-DD",
+            "example": "2017-07-04"
+          }
+        }
+      }
+    }
+  },
+  "required": [
+    "submissions"
+  ]
+}

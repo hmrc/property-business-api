@@ -1,0 +1,13 @@
+get:
+  $ref: "./foreign_property_period_summary_retrieve.yaml"
+  summary: Retrieve a Foreign Property Income & Expenses Period Summary
+  security:
+    - User-Restricted:
+        - read:self-assessment
+
+put:
+  $ref: "./foreign_property_period_summary_amend.yaml"
+  summary: Amend a Foreign Property Income & Expenses Period Summary
+  security:
+    - User-Restricted:
+        - write:self-assessment

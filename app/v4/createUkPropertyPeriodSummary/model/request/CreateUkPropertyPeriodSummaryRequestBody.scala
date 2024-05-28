@@ -23,7 +23,7 @@ import utils.EmptinessChecker
 import v4.createUkPropertyPeriodSummary.def1.model.request.def1_ukFhlProperty.Def1_Create_UkFhlProperty
 import v4.createUkPropertyPeriodSummary.def1.model.request.def1_ukNonFhlProperty.Def1_Create_UkNonFhlProperty
 import v4.createUkPropertyPeriodSummary.def2.model.request.def2_ukFhlProperty.Def2_Create_UkFhlProperty
-import v4.createUkPropertyPeriodSummary.def2.model.request.def2_ukNonFhlProperty.Def2_Create_UkNonFhlProperty
+import v4.createUkPropertyPeriodSummary.def2.model.request.def2_ukNonFhlProperty.{Def2_Create_UkNonFhlProperty, Def2_Create_UkNonFhlPropertySubmission}
 
 sealed trait CreateUkPropertyPeriodSummaryRequestBody
 
@@ -72,5 +72,28 @@ object Def2_CreateUkPropertyPeriodSummaryRequestBody {
       (JsPath \ "ukFhlProperty").writeNullable[Def2_Create_UkFhlProperty] and
       (JsPath \ "ukOtherProperty").writeNullable[Def2_Create_UkNonFhlProperty]
   )(unlift(Def2_CreateUkPropertyPeriodSummaryRequestBody.unapply))
+
+}
+case class Def2_CreateUkPropertyPeriodSummarySubmissionRequestBody(fromDate: String,
+                                                         toDate: String,
+                                                         ukFhlProperty: Option[Def2_Create_UkFhlProperty],
+                                                         ukNonFhlProperty: Option[Def2_Create_UkNonFhlPropertySubmission])
+    extends CreateUkPropertyPeriodSummaryRequestBody
+
+object Def2_CreateUkPropertyPeriodSummarySubmissionRequestBody {
+
+  implicit val emptinessChecker: EmptinessChecker[Def2_CreateUkPropertyPeriodSummarySubmissionRequestBody] = EmptinessChecker.use { body =>
+    "ukFhlProperty"      -> body.ukFhlProperty ::
+      "ukNonFhlProperty" -> body.ukNonFhlProperty :: HNil
+  }
+
+  implicit val reads: Reads[Def2_CreateUkPropertyPeriodSummarySubmissionRequestBody] = Json.reads[Def2_CreateUkPropertyPeriodSummarySubmissionRequestBody]
+
+  implicit val writes: OWrites[Def2_CreateUkPropertyPeriodSummarySubmissionRequestBody] = (
+    (JsPath \ "fromDate").write[String] and
+      (JsPath \ "toDate").write[String] and
+      (JsPath \ "ukFhlProperty").writeNullable[Def2_Create_UkFhlProperty] and
+      (JsPath \ "ukOtherProperty").writeNullable[Def2_Create_UkNonFhlPropertySubmission]
+  )(unlift(Def2_CreateUkPropertyPeriodSummarySubmissionRequestBody.unapply))
 
 }

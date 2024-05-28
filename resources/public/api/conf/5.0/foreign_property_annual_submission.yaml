@@ -1,0 +1,12 @@
+get:
+  $ref: "./foreign_property_annual_submission_retrieve.yaml"
+  summary: Retrieve a Foreign Property Annual Submission
+  security:
+    - User-Restricted:
+        - read:self-assessment
+put:
+  $ref: "./foreign_property_annual_submission_create_and_amend.yaml"
+  summary: Create and Amend a Foreign Property Annual Submission
+  security:
+    - User-Restricted:
+        - write:self-assessment

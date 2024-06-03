@@ -115,7 +115,7 @@
             },
             "consolidatedExpenses": {
               "type": "number",
-              "description": "The sum of all expenses for the specified period. You can either submit a consolidatedExpenses value or individual expenses (premisesRunningCosts, repairsAndMaintenance, financialCosts, professionalFees, costOfServices, travelCosts, other).\nThe value must be between -99999999999.99 and 99999999999.99 up to 2 decimal places.",
+              "description": "The sum of all allowable expenses for the specified period. You can either submit a consolidatedExpenses value or individual expenses (premisesRunningCosts, repairsAndMaintenance, financialCosts, professionalFees, costOfServices, travelCosts, other).\nThe value must be between -99999999999.99 and 99999999999.99 up to 2 decimal places.",
               "multipleOf": 0.01,
               "minimum": -99999999999.99,
               "maximum": 99999999999.99,
@@ -296,7 +296,7 @@
               },
               "consolidatedExpenses": {
                 "type": "number",
-                "description": "The sum of all expenses for the specified period. You can either submit a consolidatedExpenses value or individual expenses (premisesRunningCosts, repairsAndMaintenance, financialCosts, professionalFees, costOfServices, travelCosts, other).\nThe value must be between -99999999999.99 and 99999999999.99 up to 2 decimal places.",
+                "description": "The sum of all allowable expenses for the specified period. You can either submit a consolidatedExpenses value or individual expenses (premisesRunningCosts, repairsAndMaintenance, financialCosts, professionalFees, costOfServices, travelCosts, other).\nThe value must be between -99999999999.99 and 99999999999.99 up to 2 decimal places.",
                 "multipleOf": 0.01,
                 "minimum": -99999999999.99,
                 "maximum": 99999999999.99,

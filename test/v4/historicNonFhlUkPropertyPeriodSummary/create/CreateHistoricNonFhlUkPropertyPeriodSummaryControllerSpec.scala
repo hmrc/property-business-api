@@ -23,10 +23,15 @@ import api.models.domain.{Nino, PeriodId}
 import api.models.errors._
 import api.models.outcomes.ResponseWrapper
 import api.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService}
-import mocks.MockIdGenerator
+import config.AppConfig
+import mocks.{MockAppConfig, MockIdGenerator}
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.Result
-import v4.historicNonFhlUkPropertyPeriodSummary.create.model.request.{CreateHistoricNonFhlUkPropertyPeriodSummaryRequestData, Def1_CreateHistoricNonFhlUkPropertyPeriodSummaryRequestBody, Def1_CreateHistoricNonFhlUkPropertyPeriodSummaryRequestData}
+import v4.historicNonFhlUkPropertyPeriodSummary.create.model.request.{
+  CreateHistoricNonFhlUkPropertyPeriodSummaryRequestData,
+  Def1_CreateHistoricNonFhlUkPropertyPeriodSummaryRequestBody,
+  Def1_CreateHistoricNonFhlUkPropertyPeriodSummaryRequestData
+}
 import v4.historicNonFhlUkPropertyPeriodSummary.create.model.response.CreateHistoricNonFhlUkPropertyPeriodSummaryResponse
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -34,6 +39,7 @@ import scala.concurrent.Future
 
 class CreateHistoricNonFhlUkPropertyPeriodSummaryControllerSpec
     extends ControllerBaseSpec
+    with MockAppConfig
     with ControllerTestRunner
     with MockEnrolmentsAuthService
     with MockMtdIdLookupService
@@ -42,8 +48,9 @@ class CreateHistoricNonFhlUkPropertyPeriodSummaryControllerSpec
     with MockIdGenerator
     with MockAuditService {
 
-  private val periodId      = "2021-01-01_2021-01-02"
-  private val mtdId: String = "test-mtd-id"
+  private val periodId              = "2021-01-01_2021-01-02"
+  private val mtdId: String         = "test-mtd-id"
+  implicit val appConfig: AppConfig = mockAppConfig
 
   "CreateHistoricNonFhlUkPiePeriodSummaryController" should {
     "return a successful response with status 201 (CREATED)" when {

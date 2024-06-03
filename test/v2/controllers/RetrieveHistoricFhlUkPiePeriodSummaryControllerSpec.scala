@@ -22,7 +22,8 @@ import api.models.domain.{Nino, PeriodId}
 import api.models.errors.{ErrorWrapper, NinoFormatError, RuleTaxYearNotSupportedError}
 import api.models.outcomes.ResponseWrapper
 import api.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService}
-import mocks.MockIdGenerator
+import config.AppConfig
+import mocks.{MockAppConfig, MockIdGenerator}
 import play.api.libs.json.{JsObject, JsValue, Json}
 import play.api.mvc.Result
 import v2.controllers.validators.MockRetrieveHistoricFhlUkPiePeriodSummaryValidatorFactory
@@ -35,6 +36,7 @@ import scala.concurrent.Future
 
 class RetrieveHistoricFhlUkPiePeriodSummaryControllerSpec
     extends ControllerBaseSpec
+    with MockAppConfig
     with ControllerTestRunner
     with MockEnrolmentsAuthService
     with MockMtdIdLookupService
@@ -44,9 +46,10 @@ class RetrieveHistoricFhlUkPiePeriodSummaryControllerSpec
     with MockAuditService
     with MockIdGenerator {
 
-  private val from     = "2017-04-06"
-  private val to       = "2017-07-04"
-  private val periodId = s"${from}_$to"
+  private val from                  = "2017-04-06"
+  private val to                    = "2017-07-04"
+  private val periodId              = s"${from}_$to"
+  implicit val appConfig: AppConfig = mockAppConfig
 
   "RetrieveHistoricFhlUkPiePeriodSummaryController" should {
     "return OK" when {

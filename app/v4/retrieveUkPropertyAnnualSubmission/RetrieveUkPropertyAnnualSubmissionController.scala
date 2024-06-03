@@ -18,6 +18,7 @@ package v4.retrieveUkPropertyAnnualSubmission
 
 import api.controllers.{AuthorisedController, EndpointLogContext, RequestContext, RequestHandler}
 import api.services.{EnrolmentsAuthService, MtdIdLookupService}
+import config.AppConfig
 import play.api.mvc.{Action, AnyContent, ControllerComponents}
 import utils.IdGenerator
 
@@ -30,7 +31,7 @@ class RetrieveUkPropertyAnnualSubmissionController @Inject() (val authService: E
                                                               validatorFactory: RetrieveUkPropertyAnnualSubmissionValidatorFactory,
                                                               service: RetrieveUkPropertyAnnualSubmissionService,
                                                               cc: ControllerComponents,
-                                                              idGenerator: IdGenerator)(implicit ec: ExecutionContext)
+                                                              idGenerator: IdGenerator)(implicit ec: ExecutionContext, appConfig: AppConfig)
     extends AuthorisedController(cc) {
 
   implicit val endpointLogContext: EndpointLogContext =

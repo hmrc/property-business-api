@@ -22,6 +22,8 @@ import api.models.domain.{BusinessId, Nino, TaxYear}
 import api.models.errors._
 import api.models.outcomes.ResponseWrapper
 import api.services.MockAuditService
+import config.AppConfig
+import mocks.MockAppConfig
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.Result
 import v4.createUkPropertyPeriodSummary.def1.model.request.def1_ukFhlProperty._
@@ -35,14 +37,16 @@ import scala.concurrent.Future
 
 class CreateUkPropertyPeriodSummaryControllerSpec
     extends ControllerBaseSpec
+    with MockAppConfig
     with ControllerTestRunner
     with MockCreateUkPropertyPeriodSummaryService
     with MockCreateUkPropertyPeriodSummaryValidatorFactory
     with MockAuditService {
 
-  private val taxYear      = "2020-21"
-  private val businessId   = "XAIS12345678910"
-  private val submissionId = "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
+  private val taxYear               = "2020-21"
+  private val businessId            = "XAIS12345678910"
+  private val submissionId          = "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
+  implicit val appConfig: AppConfig = mockAppConfig
 
   "CreateUkPropertyPeriodSummaryController" should {
     "return a successful response from a consolidated request" when {

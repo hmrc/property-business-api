@@ -24,7 +24,8 @@ import api.models.domain.{Nino, TaxYear}
 import api.models.errors._
 import api.models.outcomes.ResponseWrapper
 import api.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService}
-import mocks.MockIdGenerator
+import config.AppConfig
+import mocks.{MockAppConfig, MockIdGenerator}
 import play.api.libs.json.{JsObject, JsValue, Json}
 import play.api.mvc.Result
 import v2.controllers.validators.MockCreateAmendHistoricFhlUkPropertyAnnualSubmissionValidatorFactory
@@ -37,6 +38,7 @@ import scala.concurrent.Future
 
 class CreateAmendHistoricFhlUkPropertyAnnualSubmissionControllerSpec
     extends ControllerBaseSpec
+    with MockAppConfig
     with ControllerTestRunner
     with MockEnrolmentsAuthService
     with MockMtdIdLookupService
@@ -46,9 +48,10 @@ class CreateAmendHistoricFhlUkPropertyAnnualSubmissionControllerSpec
     with MockIdGenerator
     with MockAuditService {
 
-  private val taxYear              = "2022-23"
-  private val transactionReference = Some("transaction reference")
-  private val mtdId: String        = "test-mtd-id"
+  private val taxYear               = "2022-23"
+  private val transactionReference  = Some("transaction reference")
+  private val mtdId: String         = "test-mtd-id"
+  implicit val appConfig: AppConfig = mockAppConfig
 
   "CreateAmendHistoricFhlUkPropertyAnnualSubmissionController" should {
     "return a successful response with status 200 (OK)" when {

@@ -24,6 +24,8 @@ import api.models.domain.{HistoricPropertyType, Nino, TaxYear}
 import api.models.errors._
 import api.models.outcomes.ResponseWrapper
 import api.services.MockAuditService
+import config.AppConfig
+import mocks.MockAppConfig
 import play.api.libs.json.JsValue
 import play.api.mvc.Result
 import v2.controllers.validators.MockDeleteHistoricUkPropertyAnnualSubmissionValidatorFactory
@@ -35,12 +37,14 @@ import scala.concurrent.Future
 
 class DeleteHistoricUkPropertyAnnualSubmissionControllerSpec
     extends ControllerBaseSpec
+    with MockAppConfig
     with ControllerTestRunner
     with MockDeleteHistoricUkPropertyAnnualSubmissionService
     with MockDeleteHistoricUkPropertyAnnualSubmissionValidatorFactory
     with MockAuditService {
 
-  private val taxYear = TaxYear.fromMtd("2021-22")
+  private val taxYear               = TaxYear.fromMtd("2021-22")
+  implicit val appConfig: AppConfig = mockAppConfig
 
   "DeleteHistoricUkPropertyAnnualSubmissionController" should {
     "return a successful response with status 204 (NO_CONTENT)" when {

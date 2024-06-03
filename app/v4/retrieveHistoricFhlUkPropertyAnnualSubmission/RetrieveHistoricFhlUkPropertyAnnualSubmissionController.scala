@@ -18,6 +18,7 @@ package v4.retrieveHistoricFhlUkPropertyAnnualSubmission
 
 import api.controllers._
 import api.services.{EnrolmentsAuthService, MtdIdLookupService}
+import config.AppConfig
 import play.api.mvc.{Action, AnyContent, ControllerComponents}
 import utils.IdGenerator
 
@@ -31,7 +32,7 @@ class RetrieveHistoricFhlUkPropertyAnnualSubmissionController @Inject() (
     validatorFactory: RetrieveHistoricFhlUkPropertyAnnualSubmissionValidatorFactory,
     service: RetrieveHistoricFhlUkPropertyAnnualSubmissionService,
     cc: ControllerComponents,
-    idGenerator: IdGenerator)(implicit ec: ExecutionContext)
+    idGenerator: IdGenerator)(implicit ec: ExecutionContext, appConfig: AppConfig)
     extends AuthorisedController(cc) {
 
   implicit val endpointLogContext: EndpointLogContext =

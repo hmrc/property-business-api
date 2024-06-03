@@ -20,6 +20,7 @@ import api.controllers._
 import api.models.audit.FlattenedGenericAuditDetail
 import api.models.domain.HistoricPropertyType
 import api.services.{AuditService, EnrolmentsAuthService, MtdIdLookupService}
+import config.AppConfig
 import play.api.mvc.{Action, AnyContent, ControllerComponents}
 import routing.{Version, Version4}
 import utils.IdGenerator
@@ -34,7 +35,7 @@ class DeleteHistoricFhlUkPropertyAnnualSubmissionController @Inject() (val authS
                                                                        service: DeleteHistoricFhlUkPropertyAnnualSubmissionService,
                                                                        auditService: AuditService,
                                                                        cc: ControllerComponents,
-                                                                       idGenerator: IdGenerator)(implicit ec: ExecutionContext)
+                                                                       idGenerator: IdGenerator)(implicit ec: ExecutionContext, appConfig: AppConfig)
     extends AuthorisedController(cc) {
 
   def handleFhlRequest(nino: String, taxYear: String): Action[AnyContent] = {

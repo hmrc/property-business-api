@@ -22,6 +22,8 @@ import api.models.domain.{BusinessId, Nino, TaxYear}
 import api.models.errors._
 import api.models.outcomes.ResponseWrapper
 import api.services.MockAuditService
+import config.AppConfig
+import mocks.MockAppConfig
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.Result
 import v4.createAmendUkPropertyAnnualSubmission.def1.model.request.def1_ukFhlProperty._
@@ -34,13 +36,15 @@ import scala.concurrent.Future
 
 class CreateAmendUkPropertyAnnualSubmissionControllerSpec
     extends ControllerBaseSpec
+    with MockAppConfig
     with ControllerTestRunner
     with MockCreateAmendUkPropertyAnnualSubmissionService
     with MockCreateAmendUkPropertyAnnualSubmissionValidatorFactory
     with MockAuditService {
 
-  private val businessId = "XAIS12345678910"
-  private val taxYear    = "2022-23"
+  private val businessId            = "XAIS12345678910"
+  private val taxYear               = "2022-23"
+  implicit val appConfig: AppConfig = mockAppConfig
 
   "CreateAmendUkPropertyAnnualSubmissionController" should {
     "return a successful response with status 200 (OK)" when {

@@ -19,6 +19,7 @@ package v2.controllers
 import api.controllers.{AuthorisedController, EndpointLogContext, RequestContext, RequestHandler}
 import api.hateoas.HateoasFactory
 import api.services.{EnrolmentsAuthService, MtdIdLookupService}
+import config.AppConfig
 import play.api.mvc.{Action, AnyContent, ControllerComponents}
 import utils.IdGenerator
 import v2.controllers.validators.RetrieveForeignPropertyAnnualSubmissionValidatorFactory
@@ -35,7 +36,7 @@ class RetrieveForeignPropertyAnnualSubmissionController @Inject() (val authServi
                                                                    service: RetrieveForeignPropertyAnnualSubmissionService,
                                                                    hateoasFactory: HateoasFactory,
                                                                    cc: ControllerComponents,
-                                                                   idGenerator: IdGenerator)(implicit ec: ExecutionContext)
+                                                                   idGenerator: IdGenerator)(implicit ec: ExecutionContext, appConfig: AppConfig)
     extends AuthorisedController(cc) {
 
   implicit val endpointLogContext: EndpointLogContext =

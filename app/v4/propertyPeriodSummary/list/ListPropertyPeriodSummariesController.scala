@@ -18,6 +18,7 @@ package v4.propertyPeriodSummary.list
 
 import api.controllers.{AuthorisedController, EndpointLogContext, RequestContext, RequestHandler}
 import api.services.{EnrolmentsAuthService, MtdIdLookupService}
+import config.AppConfig
 import play.api.mvc.{Action, AnyContent, ControllerComponents}
 import utils.IdGenerator
 
@@ -32,7 +33,7 @@ class ListPropertyPeriodSummariesController @Inject() (
     validatorFactory: ListPropertyPeriodSummariesValidatorFactory,
     cc: ControllerComponents,
     idGenerator: IdGenerator
-)(implicit ec: ExecutionContext)
+)(implicit ec: ExecutionContext, appConfig: AppConfig)
     extends AuthorisedController(cc) {
 
   implicit val endpointLogContext: EndpointLogContext =

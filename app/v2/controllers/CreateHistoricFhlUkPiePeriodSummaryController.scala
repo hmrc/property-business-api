@@ -20,6 +20,7 @@ import api.controllers._
 import api.hateoas.HateoasFactory
 import api.models.audit.FlattenedGenericAuditDetail
 import api.services.{AuditService, EnrolmentsAuthService, MtdIdLookupService}
+import config.AppConfig
 import play.api.libs.json.JsValue
 import play.api.mvc.{Action, ControllerComponents}
 import routing.{Version, Version2}
@@ -39,7 +40,7 @@ class CreateHistoricFhlUkPiePeriodSummaryController @Inject() (val authService: 
                                                                auditService: AuditService,
                                                                hateoasFactory: HateoasFactory,
                                                                cc: ControllerComponents,
-                                                               idGenerator: IdGenerator)(implicit ec: ExecutionContext)
+                                                               idGenerator: IdGenerator)(implicit ec: ExecutionContext, appConfig: AppConfig)
     extends AuthorisedController(cc) {
 
   implicit val endpointLogContext: EndpointLogContext =

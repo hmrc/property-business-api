@@ -18,6 +18,7 @@ package v4.retrieveUkPropertyPeriodSummary
 
 import api.controllers.{AuthorisedController, EndpointLogContext, RequestContext, RequestHandler}
 import api.services.{EnrolmentsAuthService, MtdIdLookupService}
+import config.AppConfig
 import play.api.mvc.{Action, AnyContent, ControllerComponents}
 import utils.IdGenerator
 
@@ -30,7 +31,7 @@ class RetrieveUkPropertyPeriodSummaryController @Inject() (val authService: Enro
                                                            validatorFactory: RetrieveUkPropertyPeriodSummaryValidatorFactory,
                                                            service: RetrieveUkPropertyPeriodSummaryService,
                                                            cc: ControllerComponents,
-                                                           idGenerator: IdGenerator)(implicit ec: ExecutionContext)
+                                                           idGenerator: IdGenerator)(implicit ec: ExecutionContext, appConfig: AppConfig)
     extends AuthorisedController(cc) {
 
   implicit val endpointLogContext: EndpointLogContext =

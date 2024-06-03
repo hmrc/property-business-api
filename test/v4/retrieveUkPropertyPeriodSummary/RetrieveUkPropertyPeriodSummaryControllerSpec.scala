@@ -20,6 +20,7 @@ import api.controllers.{ControllerBaseSpec, ControllerTestRunner}
 import api.models.domain.{BusinessId, Nino, SubmissionId, TaxYear}
 import api.models.errors._
 import api.models.outcomes.ResponseWrapper
+import mocks.MockAppConfig
 import play.api.mvc.Result
 import v4.retrieveUkPropertyPeriodSummary.def1.model.Def1_RetrieveUkPropertyPeriodSummaryFixture
 import v4.retrieveUkPropertyPeriodSummary.model.request._
@@ -30,6 +31,7 @@ import scala.concurrent.Future
 
 class RetrieveUkPropertyPeriodSummaryControllerSpec
     extends ControllerBaseSpec
+    with MockAppConfig
     with ControllerTestRunner
     with MockRetrieveUkPropertyPeriodSummaryService
     with MockRetrieveUkPropertyPeriodSummaryValidatorFactory

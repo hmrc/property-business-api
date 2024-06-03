@@ -24,7 +24,8 @@ import api.models.domain.{Nino, PeriodId}
 import api.models.errors._
 import api.models.outcomes.ResponseWrapper
 import api.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService}
-import mocks.MockIdGenerator
+import config.AppConfig
+import mocks.{MockAppConfig, MockIdGenerator}
 import play.api.libs.json.{JsObject, JsValue, Json}
 import play.api.mvc.Result
 import v2.controllers.validators.MockCreateHistoricNonFhlUkPiePeriodSummaryValidatorFactory
@@ -37,6 +38,7 @@ import scala.concurrent.Future
 
 class CreateHistoricNonFhlUkPiePeriodSummaryControllerSpec
     extends ControllerBaseSpec
+    with MockAppConfig
     with ControllerTestRunner
     with MockEnrolmentsAuthService
     with MockMtdIdLookupService
@@ -46,8 +48,9 @@ class CreateHistoricNonFhlUkPiePeriodSummaryControllerSpec
     with MockIdGenerator
     with MockAuditService {
 
-  private val periodId      = "2021-01-01_2021-01-02"
-  private val mtdId: String = "test-mtd-id"
+  private val periodId              = "2021-01-01_2021-01-02"
+  private val mtdId: String         = "test-mtd-id"
+  implicit val appConfig: AppConfig = mockAppConfig
 
   "CreateHistoricNonFhlUkPiePeriodSummaryController" should {
     "return a successful response with status 201 (CREATED)" when {

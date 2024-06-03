@@ -26,7 +26,7 @@ import api.services.{MockAuditService, ServiceOutcome}
 import cats.data.Validated
 import cats.data.Validated.{Invalid, Valid}
 import config.AppConfig
-import mocks.MockIdGenerator
+import mocks.{MockAppConfig, MockIdGenerator}
 import org.scalamock.handlers.CallHandler
 import play.api.http.{HeaderNames, Status}
 import play.api.libs.json.{JsString, Json, OWrites}
@@ -48,7 +48,9 @@ class RequestHandlerSpec
     with Status
     with HeaderNames
     with ResultExtractors
-    with ControllerSpecHateoasSupport {
+    with ControllerSpecHateoasSupport
+    with MockAppConfig {
+  implicit val appConfig: AppConfig = mockAppConfig
 
   private val successResponseJson = Json.obj("result" -> "SUCCESS!")
   private val successCode         = ACCEPTED

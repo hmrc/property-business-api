@@ -21,6 +21,7 @@ import api.controllers._
 import api.hateoas.HateoasFactory
 import api.models.domain.HistoricPropertyType
 import api.services.{EnrolmentsAuthService, MtdIdLookupService}
+import config.AppConfig
 import play.api.mvc.{Action, AnyContent, ControllerComponents}
 import utils.IdGenerator
 import v2.controllers.validators.ListHistoricUkPropertyPeriodSummariesValidatorFactory
@@ -37,7 +38,7 @@ class ListHistoricUkPropertyPeriodSummariesController @Inject() (val authService
                                                                  validatorFactory: ListHistoricUkPropertyPeriodSummariesValidatorFactory,
                                                                  hateoasFactory: HateoasFactory,
                                                                  cc: ControllerComponents,
-                                                                 idGenerator: IdGenerator)(implicit ec: ExecutionContext)
+                                                                 idGenerator: IdGenerator)(implicit ec: ExecutionContext, appConfig: AppConfig)
     extends AuthorisedController(cc) {
 
   def handleFhlRequest(nino: String): Action[AnyContent] = {

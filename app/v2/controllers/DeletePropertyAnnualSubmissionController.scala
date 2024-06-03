@@ -18,6 +18,7 @@ package v2.controllers
 
 import api.controllers._
 import api.services.{AuditService, EnrolmentsAuthService, MtdIdLookupService}
+import config.AppConfig
 import play.api.mvc.{Action, AnyContent, ControllerComponents}
 import routing.{Version, Version2}
 import utils.IdGenerator
@@ -34,7 +35,7 @@ class DeletePropertyAnnualSubmissionController @Inject() (val authService: Enrol
                                                           service: DeletePropertyAnnualSubmissionService,
                                                           auditService: AuditService,
                                                           cc: ControllerComponents,
-                                                          idGenerator: IdGenerator)(implicit ec: ExecutionContext)
+                                                          idGenerator: IdGenerator)(implicit ec: ExecutionContext, appConfig: AppConfig)
     extends AuthorisedController(cc) {
 
   implicit val endpointLogContext: EndpointLogContext =

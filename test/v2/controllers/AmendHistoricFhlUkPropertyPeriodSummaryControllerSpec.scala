@@ -24,7 +24,8 @@ import api.models.domain.{Nino, PeriodId}
 import api.models.errors._
 import api.models.outcomes.ResponseWrapper
 import api.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService}
-import mocks.MockIdGenerator
+import config.AppConfig
+import mocks.{MockAppConfig, MockIdGenerator}
 import play.api.libs.json.{JsObject, JsValue}
 import play.api.mvc.Result
 import v2.controllers.validators.MockAmendHistoricFhlUkPropertyPeriodSummaryValidatorFactory
@@ -37,6 +38,7 @@ import scala.concurrent.Future
 
 class AmendHistoricFhlUkPropertyPeriodSummaryControllerSpec
     extends ControllerBaseSpec
+    with MockAppConfig
     with ControllerTestRunner
     with MockEnrolmentsAuthService
     with MockMtdIdLookupService
@@ -48,6 +50,7 @@ class AmendHistoricFhlUkPropertyPeriodSummaryControllerSpec
 
   private val periodId      = "somePeriodId"
   private val mtdId: String = "test-mtd-id"
+  implicit val appConfig: AppConfig = mockAppConfig
 
   "AmendHistoricFhlUkPropertyPeriodSummaryController" should {
     "return a successful response with status 200 (OK)" when {

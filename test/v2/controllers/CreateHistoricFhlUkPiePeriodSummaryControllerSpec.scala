@@ -24,7 +24,6 @@ import api.models.domain.{Nino, PeriodId}
 import api.models.errors._
 import api.models.outcomes.ResponseWrapper
 import api.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService}
-import config.AppConfig
 import mocks.{MockAppConfig, MockIdGenerator}
 import play.api.libs.json.{JsObject, JsValue, Json}
 import play.api.mvc.Result
@@ -50,7 +49,7 @@ class CreateHistoricFhlUkPiePeriodSummaryControllerSpec
 
   private val periodId              = "2021-01-01_2021-01-02"
   private val mtdId: String         = "test-mtd-id"
-  implicit val appConfig: AppConfig = mockAppConfig
+
 
   "CreateHistoricFhlUkPiePeriodSummaryController" should {
     "return a successful response with status 201 (CREATED)" when {
@@ -108,7 +107,7 @@ class CreateHistoricFhlUkPiePeriodSummaryControllerSpec
         auditType = "CreateHistoricFhlPropertyIncomeExpensesPeriodSummary",
         transactionName = "CreateHistoricFhlPropertyIncomeExpensesPeriodSummary",
         detail = FlattenedGenericAuditDetail(
-          versionNumber = Some("2.0"),
+          versionNumber = Some(apiVersion.name),
           userDetails = UserDetails(mtdId, "Individual", None),
           params = Map("nino" -> nino),
           request = Some(requestBodyJson),

@@ -21,7 +21,6 @@ import api.models.domain.{Nino, PeriodId}
 import api.models.errors._
 import api.models.outcomes.ResponseWrapper
 import api.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService}
-import config.AppConfig
 import mocks.{MockAppConfig, MockIdGenerator}
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.Result
@@ -45,7 +44,6 @@ class RetrieveHistoricFhlUkPropertyPeriodSummaryControllerSpec
   private val from = "2017-04-06"
   private val to = "2017-07-04"
   private val periodId = s"${from}_$to"
-  implicit val appConfig: AppConfig = mockAppConfig
 
   "RetrieveHistoricNonFhlUkPropertyPeriodSummaryController" should {
     "return OK" when {

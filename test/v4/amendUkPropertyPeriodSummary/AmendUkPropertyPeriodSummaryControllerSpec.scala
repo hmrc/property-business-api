@@ -22,7 +22,6 @@ import api.models.domain.{BusinessId, Nino, SubmissionId, TaxYear}
 import api.models.errors._
 import api.models.outcomes.ResponseWrapper
 import api.services.MockAuditService
-import config.AppConfig
 import mocks.MockAppConfig
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.Result
@@ -45,7 +44,7 @@ class AmendUkPropertyPeriodSummaryControllerSpec
   private val businessId            = "XAIS12345678910"
   private val taxYear               = "2020-21"
   private val submissionId          = "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
-  implicit val appConfig: AppConfig = mockAppConfig
+
 
   "AmendUkPropertyPeriodSummaryController" should {
     "return a successful response from a consolidated request" when {

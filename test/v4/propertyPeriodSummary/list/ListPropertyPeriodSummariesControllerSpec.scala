@@ -20,7 +20,6 @@ import api.controllers.{ControllerBaseSpec, ControllerTestRunner}
 import api.models.domain.{BusinessId, Nino, TaxYear}
 import api.models.errors._
 import api.models.outcomes.ResponseWrapper
-import config.AppConfig
 import mocks.MockAppConfig
 import play.api.libs.json.Json
 import play.api.mvc.Result
@@ -40,7 +39,6 @@ class ListPropertyPeriodSummariesControllerSpec
 
   private val businessId            = "XAIS12345678910"
   private val taxYear               = "2020-21"
-  implicit val appConfig: AppConfig = mockAppConfig
 
   "ListPropertyPeriodSummariesController" should {
     "return Ok" when {

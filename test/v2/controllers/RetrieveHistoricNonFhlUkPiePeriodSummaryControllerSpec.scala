@@ -22,7 +22,6 @@ import api.models.domain.{Nino, PeriodId}
 import api.models.errors.{ErrorWrapper, NinoFormatError, RuleTaxYearNotSupportedError}
 import api.models.outcomes.ResponseWrapper
 import api.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService}
-import config.AppConfig
 import mocks.{MockAppConfig, MockIdGenerator}
 import play.api.libs.json.{JsObject, JsValue, Json}
 import play.api.mvc.Result
@@ -49,7 +48,7 @@ class RetrieveHistoricNonFhlUkPiePeriodSummaryControllerSpec
   private val from = "2017-04-06"
   private val to = "2017-07-04"
   private val periodId = s"${from}_$to"
-  implicit val appConfig: AppConfig = mockAppConfig
+
 
   "RetrieveHistoricNonFhlUkPiePeriodSummaryController" should {
     "return OK" when {

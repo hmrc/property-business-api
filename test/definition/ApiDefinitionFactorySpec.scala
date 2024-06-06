@@ -16,7 +16,9 @@
 
 package definition
 
+import cats.implicits.catsSyntaxValidatedId
 import config.ConfidenceLevelConfig
+import config.Deprecation.NotDeprecated
 import definition.APIStatus.{ALPHA, BETA}
 import mocks.{MockAppConfig, MockHttpClient}
 import routing.{Version2, Version3, Version4, Version5}
@@ -35,6 +37,10 @@ class ApiDefinitionFactorySpec extends UnitSpec {
   "definition" when {
     "called" should {
       "return a valid Definition case class" in new Test {
+        MockedAppConfig.deprecationFor(Version2).returns(NotDeprecated.valid).anyNumberOfTimes()
+        MockedAppConfig.deprecationFor(Version3).returns(NotDeprecated.valid).anyNumberOfTimes()
+        MockedAppConfig.deprecationFor(Version4).returns(NotDeprecated.valid).anyNumberOfTimes()
+        MockedAppConfig.deprecationFor(Version5).returns(NotDeprecated.valid).anyNumberOfTimes()
         MockedAppConfig.apiStatus(Version2) returns "BETA"
         MockedAppConfig.apiStatus(Version3) returns "BETA"
         MockedAppConfig.apiStatus(Version4) returns "BETA"
@@ -127,6 +133,7 @@ class ApiDefinitionFactorySpec extends UnitSpec {
         (Version5, BETA)
       ).foreach { case (version, status) =>
         s"return the correct $status for $version" in new Test {
+          MockedAppConfig.deprecationFor(version).returns(NotDeprecated.valid).anyNumberOfTimes()
           MockedAppConfig.apiStatus(version) returns status.toString
           apiDefinitionFactory.buildAPIStatus(version) shouldBe status
         }
@@ -136,6 +143,7 @@ class ApiDefinitionFactorySpec extends UnitSpec {
     "the 'apiStatus' parameter is present and invalid" should {
       "default to alpha" in new Test {
         MockedAppConfig.apiStatus(Version2) returns "ALPHO"
+        MockedAppConfig.deprecationFor(Version2).returns(NotDeprecated.valid).anyNumberOfTimes()
         apiDefinitionFactory.buildAPIStatus(version = Version2) shouldBe ALPHA
       }
     }

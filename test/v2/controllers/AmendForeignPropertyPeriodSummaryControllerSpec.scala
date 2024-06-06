@@ -23,7 +23,6 @@ import api.models.domain.{BusinessId, Nino, SubmissionId, TaxYear}
 import api.models.errors._
 import api.models.outcomes.ResponseWrapper
 import api.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService}
-import config.AppConfig
 import mocks.{MockAppConfig, MockIdGenerator}
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.Result
@@ -52,7 +51,6 @@ class AmendForeignPropertyPeriodSummaryControllerSpec
   private val businessId   = "XAIS12345678910"
   private val taxYear      = "2022-23"
   private val submissionId = "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
-  implicit val appConfig: AppConfig = mockAppConfig
 
   "AmendForeignPropertyPeriodSummaryController" should {
     "return a successful response with status 200 (OK)" when {

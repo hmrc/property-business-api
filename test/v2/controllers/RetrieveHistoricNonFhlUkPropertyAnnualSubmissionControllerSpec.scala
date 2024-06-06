@@ -22,7 +22,6 @@ import api.models.domain.{Nino, TaxYear}
 import api.models.errors.{ErrorWrapper, NinoFormatError, RuleTaxYearNotSupportedError}
 import api.models.outcomes.ResponseWrapper
 import api.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService}
-import config.AppConfig
 import mocks.{MockAppConfig, MockIdGenerator}
 import play.api.libs.json.{JsObject, JsValue, Json}
 import play.api.mvc.Result
@@ -47,7 +46,7 @@ class RetrieveHistoricNonFhlUkPropertyAnnualSubmissionControllerSpec
     with MockIdGenerator {
 
   private val taxYear = TaxYear.fromMtd("2020-21")
-  implicit val appConfig: AppConfig = mockAppConfig
+
 
   "RetrieveHistoricNonFhlUkPropertyAnnualSubmissionController" should {
     "return OK" when {

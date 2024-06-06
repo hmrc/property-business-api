@@ -17,7 +17,8 @@
 package mocks
 
 import api.models.domain.TaxYear
-import config.{AppConfig, ConfidenceLevelConfig}
+import cats.data.Validated
+import config.{AppConfig, ConfidenceLevelConfig, Deprecation}
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
 import play.api.Configuration
@@ -73,6 +74,10 @@ trait MockAppConfig extends MockFactory {
 
     def minimumTaxYearHistoric: CallHandler[TaxYear] = (() => mockAppConfig.minimumTaxYearHistoric).expects()
     def maximumTaxYearHistoric: CallHandler[TaxYear] = (() => mockAppConfig.maximumTaxYearHistoric).expects()
+
+    def deprecationFor(version: Version): CallHandler[Validated[String, Deprecation]] = (mockAppConfig.deprecationFor(_: Version)).expects(version)
+    def apiDocumentationUrl(): CallHandler[String] = (() => mockAppConfig.apiDocumentationUrl: String).expects()
+
   }
 
 }

@@ -24,7 +24,6 @@ import api.models.domain.{Nino, PeriodId}
 import api.models.errors._
 import api.models.outcomes.ResponseWrapper
 import api.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService}
-import config.AppConfig
 import mocks.{MockAppConfig, MockIdGenerator}
 import play.api.libs.json.{JsObject, JsValue}
 import play.api.mvc.Result
@@ -50,7 +49,7 @@ class AmendHistoricFhlUkPropertyPeriodSummaryControllerSpec
 
   private val periodId      = "somePeriodId"
   private val mtdId: String = "test-mtd-id"
-  implicit val appConfig: AppConfig = mockAppConfig
+
 
   "AmendHistoricFhlUkPropertyPeriodSummaryController" should {
     "return a successful response with status 200 (OK)" when {
@@ -110,7 +109,7 @@ class AmendHistoricFhlUkPropertyPeriodSummaryControllerSpec
         auditType = "AmendHistoricFhlPropertyIncomeExpensesPeriodSummary",
         transactionName = "amend-historic-fhl-property-income-expenses-period-summary",
         detail = FlattenedGenericAuditDetail(
-          versionNumber = Some("2.0"),
+          versionNumber = Some(apiVersion.name),
           userDetails = UserDetails(mtdId, "Individual", None),
           params = Map("nino" -> nino, "periodId" -> periodId),
           request = Some(requestBodyJson),

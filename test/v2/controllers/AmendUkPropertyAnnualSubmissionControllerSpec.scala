@@ -23,7 +23,6 @@ import api.models.domain.{BusinessId, Nino, TaxYear}
 import api.models.errors._
 import api.models.outcomes.ResponseWrapper
 import api.services.MockAuditService
-import config.AppConfig
 import mocks.MockAppConfig
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.Result
@@ -50,7 +49,7 @@ class AmendUkPropertyAnnualSubmissionControllerSpec
 
   private val businessId            = "XAIS12345678910"
   private val taxYear               = "2022-23"
-  implicit val appConfig: AppConfig = mockAppConfig
+
 
   "AmendUkPropertyAnnualSubmissionController" should {
     "return a successful response with status 200 (OK)" when {

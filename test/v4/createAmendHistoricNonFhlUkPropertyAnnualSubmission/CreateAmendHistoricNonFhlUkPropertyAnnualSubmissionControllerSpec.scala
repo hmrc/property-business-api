@@ -23,15 +23,10 @@ import api.models.domain.{Nino, TaxYear}
 import api.models.errors._
 import api.models.outcomes.ResponseWrapper
 import api.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService}
-import config.AppConfig
 import mocks.{MockAppConfig, MockIdGenerator}
 import play.api.libs.json.{JsObject, JsValue, Json}
 import play.api.mvc.Result
-import v4.createAmendHistoricNonFhlUkPropertyAnnualSubmission.model.request.{
-  CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestData,
-  Def1_CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestBody,
-  Def1_CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestData
-}
+import v4.createAmendHistoricNonFhlUkPropertyAnnualSubmission.model.request.{CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestData, Def1_CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestBody, Def1_CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestData}
 import v4.createAmendHistoricNonFhlUkPropertyAnnualSubmission.model.response.CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionResponse
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -51,7 +46,7 @@ class CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionControllerSpec
   private val taxYear               = "2022-23"
   private val transactionReference  = Some("transaction reference")
   private val mtdId: String         = "test-mtd-id"
-  implicit val appConfig: AppConfig = mockAppConfig
+
 
   "CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionController" should {
     "return an OK response" when {
@@ -104,7 +99,7 @@ class CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionControllerSpec
         auditType = "CreateAndAmendHistoricNonFhlPropertyBusinessAnnualSubmission",
         transactionName = "create-and-amend-historic-non-fhl-property-business-annual-submission",
         detail = FlattenedGenericAuditDetail(
-          versionNumber = Some("2.0"),
+          versionNumber = Some(apiVersion.name),
           userDetails = UserDetails(mtdId, "Individual", None),
           params = Map("nino" -> nino, "taxYear" -> taxYear),
           request = Some(validMtdJson),

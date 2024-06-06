@@ -21,7 +21,6 @@ import api.hateoas.{HateoasWrapper, MockHateoasFactory}
 import api.models.domain.{BusinessId, Nino, TaxYear, Timestamp}
 import api.models.errors._
 import api.models.outcomes.ResponseWrapper
-import config.AppConfig
 import mocks.MockAppConfig
 import play.api.libs.json.{JsObject, JsValue, Json}
 import play.api.mvc.Result
@@ -44,7 +43,6 @@ class RetrieveUkPropertyAnnualSubmissionControllerSpec
 
   private val businessId = "XAIS12345678910"
   private val taxYear    = "2020-21"
-  implicit val appConfig: AppConfig = mockAppConfig
 
   "RetrieveUkPropertyAnnualSubmissionController" should {
     "return a successful response with status 200 (OK)" when {

@@ -71,7 +71,7 @@
             },
             "consolidatedExpenses": {
               "type": "number",
-              "description": "The sum of all expenses for the specified period. The value must be between 0 and 99999999999.99.",
+              "description": "The sum of all allowable expenses for the specified period. The value must be between 0 and 99999999999.99.",
               "example": "5000.99"
             }
           },

@@ -39,9 +39,7 @@ import scala.concurrent.Future
 
 class ControllerBaseSpec extends UnitSpec with Status with MimeTypes with HeaderNames with ResultExtractors with MockAuditService with MockAppConfig {
 
-  implicit val appConfig: AppConfig = mockAppConfig
-
-  implicit val apiVersion: Version = Version2
+  val apiVersion: Version = Version2
 
   implicit lazy val fakeRequest: FakeRequest[AnyContentAsEmpty.type] =
     FakeRequest().withHeaders(HeaderNames.ACCEPT -> s"application/vnd.hmrc.${apiVersion.name}+json")

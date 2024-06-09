@@ -21,7 +21,7 @@ import config.ConfidenceLevelConfig
 import config.Deprecation.NotDeprecated
 import definition.APIStatus.{ALPHA, BETA}
 import mocks.{MockAppConfig, MockHttpClient}
-import routing.{Version2, Version3, Version4, Version5}
+import routing._
 import support.UnitSpec
 import uk.gov.hmrc.auth.core.ConfidenceLevel
 
@@ -30,10 +30,10 @@ class ApiDefinitionFactorySpec extends UnitSpec {
   class Test extends MockHttpClient with MockAppConfig {
     val apiDefinitionFactory = new ApiDefinitionFactory(mockAppConfig)
     MockedAppConfig.apiGatewayContext returns "individuals/business/property"
+    def checkBuildApiStatus(version: Version): APIStatus = apiDefinitionFactory.buildAPIStatus(version)
   }
 
   private val confidenceLevel: ConfidenceLevel = ConfidenceLevel.L200
-
   "definition" when {
     "called" should {
       "return a valid Definition case class" in new Test {
@@ -145,6 +145,23 @@ class ApiDefinitionFactorySpec extends UnitSpec {
         MockedAppConfig.apiStatus(Version2) returns "ALPHO"
         MockedAppConfig.deprecationFor(Version2).returns(NotDeprecated.valid).anyNumberOfTimes()
         apiDefinitionFactory.buildAPIStatus(version = Version2) shouldBe ALPHA
+      }
+    }
+
+    "the 'deprecatedOn' parameter is missing for a deprecated version" should {
+      "throw exception" in new Test {
+        MockedAppConfig.apiStatus(Version3) returns "DEPRECATED"
+        MockedAppConfig
+          .deprecationFor(Version3)
+          .returns("deprecatedOn date is required for a deprecated version".invalid)
+          .anyNumberOfTimes()
+
+        val exception: Exception = intercept[Exception] {
+          checkBuildApiStatus(Version3)
+        }
+
+        val exceptionMessage: String = exception.getMessage
+        exceptionMessage shouldBe "deprecatedOn date is required for a deprecated version"
       }
     }
   }

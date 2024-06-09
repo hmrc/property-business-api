@@ -23,7 +23,6 @@ import api.models.audit.{AuditError, AuditEvent, AuditResponse}
 import api.models.errors.MtdError
 import api.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService}
 import cats.implicits.catsSyntaxValidatedId
-import config.AppConfig
 import config.Deprecation.NotDeprecated
 import mocks.{MockAppConfig, MockIdGenerator}
 import play.api.http.{HeaderNames, MimeTypes, Status}

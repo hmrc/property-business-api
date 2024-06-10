@@ -21,6 +21,7 @@ import api.hateoas.{HateoasWrapper, MockHateoasFactory}
 import api.models.domain.{BusinessId, Nino, TaxYear}
 import api.models.errors._
 import api.models.outcomes.ResponseWrapper
+import mocks.MockAppConfig
 import play.api.libs.json.Json
 import play.api.mvc.Result
 import v2.controllers.validators.MockListPropertyPeriodSummariesValidatorFactory
@@ -33,13 +34,15 @@ import scala.concurrent.Future
 
 class ListPropertyPeriodSummariesControllerSpec
     extends ControllerBaseSpec
+    with MockAppConfig
     with ControllerTestRunner
     with MockListPropertyPeriodSummariesService
     with MockListPropertyPeriodSummariesValidatorFactory
     with MockHateoasFactory {
 
-  private val businessId = "XAIS12345678910"
-  private val taxYear    = "2020-21"
+  private val businessId            = "XAIS12345678910"
+  private val taxYear               = "2020-21"
+
 
   "ListPropertyPeriodSummariesController" should {
     "return Ok" when {

@@ -20,6 +20,7 @@ import api.controllers.{ControllerBaseSpec, ControllerTestRunner}
 import api.models.domain.{BusinessId, Nino, TaxYear, Timestamp}
 import api.models.errors._
 import api.models.outcomes.ResponseWrapper
+import mocks.MockAppConfig
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.Result
 import v4.retrieveUkPropertyAnnualSubmission.def1.model.response.def1_ukFhlProperty._
@@ -32,12 +33,14 @@ import scala.concurrent.Future
 
 class RetrieveUkPropertyAnnualSubmissionControllerSpec
     extends ControllerBaseSpec
+    with MockAppConfig
     with ControllerTestRunner
     with MockRetrieveUkPropertyAnnualSubmissionService
     with MockRetrieveUkPropertyAnnualSubmissionValidatorFactory {
 
   private val businessId = "XAIS12345678910"
   private val taxYear    = "2020-21"
+
 
   "RetrieveUkPropertyAnnualSubmissionController" should {
     "return a successful response with status 200 (OK)" when {

@@ -21,7 +21,7 @@ import api.models.domain.Nino
 import api.models.errors.{ErrorWrapper, NinoFormatError, RuleTaxYearNotSupportedError}
 import api.models.outcomes.ResponseWrapper
 import api.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService}
-import mocks.MockIdGenerator
+import mocks.{MockAppConfig, MockIdGenerator}
 import play.api.libs.json.Json
 import play.api.mvc.Result
 import v4.historicNonFhlUkPropertyPeriodSummary.list.def1.model.response.SubmissionPeriod
@@ -33,6 +33,7 @@ import scala.concurrent.Future
 
 class ListHistoricNonFhlUkPropertyPeriodSummariesControllerSpec
     extends ControllerBaseSpec
+    with MockAppConfig
     with ControllerTestRunner
     with MockEnrolmentsAuthService
     with MockMtdIdLookupService
@@ -40,6 +41,7 @@ class ListHistoricNonFhlUkPropertyPeriodSummariesControllerSpec
     with MockListHistoricNonFhlUkPropertyPeriodSummariesValidatorFactory
     with MockAuditService
     with MockIdGenerator {
+
 
   "ListHistoricUkPropertyPeriodSummariesController" should {
     "return OK" when {

@@ -18,6 +18,7 @@ package v4.historicFhlUkPropertyPeriodSummary.list
 
 import api.controllers._
 import api.services.{EnrolmentsAuthService, MtdIdLookupService}
+import config.AppConfig
 import play.api.mvc.{Action, AnyContent, ControllerComponents}
 import utils.IdGenerator
 
@@ -32,7 +33,7 @@ class ListHistoricFhlUkPropertyPeriodSummariesController @Inject() (
     validatorFactory: ListHistoricFhlUkPropertyPeriodSummariesValidatorFactory,
     cc: ControllerComponents,
     idGenerator: IdGenerator
-)(implicit ec: ExecutionContext)
+)(implicit ec: ExecutionContext, appConfig: AppConfig)
     extends AuthorisedController(cc) {
 
   private val endpointLogContext: EndpointLogContext =

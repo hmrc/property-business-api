@@ -21,7 +21,7 @@ import api.models.domain.{Nino, PeriodId}
 import api.models.errors.{ErrorWrapper, NinoFormatError, RuleTaxYearNotSupportedError}
 import api.models.outcomes.ResponseWrapper
 import api.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService}
-import mocks.MockIdGenerator
+import mocks.{MockAppConfig, MockIdGenerator}
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.Result
 import v4.historicNonFhlUkPropertyPeriodSummary.retrieve.def1.model.response.{PeriodExpenses, PeriodIncome, RentARoomExpenses, RentARoomIncome}
@@ -32,7 +32,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class RetrieveHistoricNonFhlUkPropertyPeriodSummaryControllerSpec
-    extends ControllerBaseSpec
+  extends ControllerBaseSpec with MockAppConfig
     with ControllerTestRunner
     with MockEnrolmentsAuthService
     with MockMtdIdLookupService
@@ -41,8 +41,8 @@ class RetrieveHistoricNonFhlUkPropertyPeriodSummaryControllerSpec
     with MockAuditService
     with MockIdGenerator {
 
-  private val from     = "2017-04-06"
-  private val to       = "2017-07-04"
+  private val from = "2017-04-06"
+  private val to = "2017-07-04"
   private val periodId = s"${from}_$to"
 
   "RetrieveHistoricNonFhlUkPropertyPeriodSummaryController" should {
@@ -110,36 +110,37 @@ class RetrieveHistoricNonFhlUkPropertyPeriodSummaryControllerSpec
         Some(periodExpenses)
       )
 
-    protected val responseBodyJson: JsValue = Json.parse("""
-      |{ 
-      |  "fromDate": "2017-04-06",
-      |  "toDate":"2017-07-04",
-      |  "income": {
-      |      "periodAmount": 5000.99,
-      |      "premiumsOfLeaseGrant": 5000.99,
-      |      "reversePremiums": 5000.99,
-      |      "otherIncome": 5000.99,
-      |      "taxDeducted": 5000.99,
-      |      "rentARoom": {
-      |        "rentsReceived":5000.99
-      |       }
-      |   },
-      |   "expenses": {
-      |      "premisesRunningCosts": 5000.99,
-      |      "repairsAndMaintenance": 5000.99,
-      |      "financialCosts": 5000.99,
-      |      "professionalFees": 5000.99,
-      |      "costOfServices": 5000.99,
-      |      "other": 5000.99,
-      |      "travelCosts": 5000.99,
-      |      "residentialFinancialCost": 5000.99,
-      |      "residentialFinancialCostsCarriedForward": 5000.99,
-      |      "rentARoom": {
-      |          "amountClaimed": 5000.99
-      |      }
-      |  }
-      |}
-      |""".stripMargin)
+    protected val responseBodyJson: JsValue = Json.parse(
+      """
+        |{
+        |  "fromDate": "2017-04-06",
+        |  "toDate":"2017-07-04",
+        |  "income": {
+        |      "periodAmount": 5000.99,
+        |      "premiumsOfLeaseGrant": 5000.99,
+        |      "reversePremiums": 5000.99,
+        |      "otherIncome": 5000.99,
+        |      "taxDeducted": 5000.99,
+        |      "rentARoom": {
+        |        "rentsReceived":5000.99
+        |       }
+        |   },
+        |   "expenses": {
+        |      "premisesRunningCosts": 5000.99,
+        |      "repairsAndMaintenance": 5000.99,
+        |      "financialCosts": 5000.99,
+        |      "professionalFees": 5000.99,
+        |      "costOfServices": 5000.99,
+        |      "other": 5000.99,
+        |      "travelCosts": 5000.99,
+        |      "residentialFinancialCost": 5000.99,
+        |      "residentialFinancialCostsCarriedForward": 5000.99,
+        |      "rentARoom": {
+        |          "amountClaimed": 5000.99
+        |      }
+        |  }
+        |}
+        |""".stripMargin)
 
   }
 

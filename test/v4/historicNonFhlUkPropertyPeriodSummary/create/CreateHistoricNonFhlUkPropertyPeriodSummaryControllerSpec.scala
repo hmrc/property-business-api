@@ -23,7 +23,7 @@ import api.models.domain.{Nino, PeriodId}
 import api.models.errors._
 import api.models.outcomes.ResponseWrapper
 import api.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService}
-import mocks.MockIdGenerator
+import mocks.{MockAppConfig, MockIdGenerator}
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.Result
 import v4.historicNonFhlUkPropertyPeriodSummary.create.model.request.{CreateHistoricNonFhlUkPropertyPeriodSummaryRequestData, Def1_CreateHistoricNonFhlUkPropertyPeriodSummaryRequestBody, Def1_CreateHistoricNonFhlUkPropertyPeriodSummaryRequestData}
@@ -34,6 +34,7 @@ import scala.concurrent.Future
 
 class CreateHistoricNonFhlUkPropertyPeriodSummaryControllerSpec
     extends ControllerBaseSpec
+    with MockAppConfig
     with ControllerTestRunner
     with MockEnrolmentsAuthService
     with MockMtdIdLookupService
@@ -42,8 +43,8 @@ class CreateHistoricNonFhlUkPropertyPeriodSummaryControllerSpec
     with MockIdGenerator
     with MockAuditService {
 
-  private val periodId      = "2021-01-01_2021-01-02"
-  private val mtdId: String = "test-mtd-id"
+  private val periodId              = "2021-01-01_2021-01-02"
+  private val mtdId: String         = "test-mtd-id"
 
   "CreateHistoricNonFhlUkPiePeriodSummaryController" should {
     "return a successful response with status 201 (CREATED)" when {
@@ -96,7 +97,7 @@ class CreateHistoricNonFhlUkPropertyPeriodSummaryControllerSpec
         auditType = "CreateHistoricNonFhlPropertyIncomeExpensesPeriodSummary",
         transactionName = "create-historic-non-fhl-property-income-expenses-period-summary",
         detail = FlattenedGenericAuditDetail(
-          versionNumber = Some("2.0"),
+          versionNumber = Some(apiVersion.name),
           userDetails = UserDetails(mtdId, "Individual", None),
           params = Map("nino" -> nino),
           request = Some(requestBodyJson),

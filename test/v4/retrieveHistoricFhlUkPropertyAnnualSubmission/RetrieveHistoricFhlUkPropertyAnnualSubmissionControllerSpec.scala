@@ -21,7 +21,7 @@ import api.models.domain.{Nino, TaxYear}
 import api.models.errors._
 import api.models.outcomes.ResponseWrapper
 import api.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService}
-import mocks.MockIdGenerator
+import mocks.{MockAppConfig, MockIdGenerator}
 import play.api.libs.json.{JsObject, Json}
 import play.api.mvc.Result
 import v4.retrieveHistoricFhlUkPropertyAnnualSubmission.def1.model.response._
@@ -33,6 +33,7 @@ import scala.concurrent.Future
 
 class RetrieveHistoricFhlUkPropertyAnnualSubmissionControllerSpec
     extends ControllerBaseSpec
+    with MockAppConfig
     with ControllerTestRunner
     with MockEnrolmentsAuthService
     with MockMtdIdLookupService
@@ -41,8 +42,9 @@ class RetrieveHistoricFhlUkPropertyAnnualSubmissionControllerSpec
     with MockAuditService
     with MockIdGenerator {
 
-  private val mtdTaxYear = "2020-21"
-  private val taxYear    = TaxYear.fromMtd(mtdTaxYear)
+  private val mtdTaxYear            = "2020-21"
+  private val taxYear               = TaxYear.fromMtd(mtdTaxYear)
+
 
   "RetrieveHistoricFhlUkPropertyAnnualSubmissionController" should {
     "return OK" when {

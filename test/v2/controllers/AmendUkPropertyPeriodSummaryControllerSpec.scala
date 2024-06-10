@@ -23,6 +23,7 @@ import api.models.domain.{BusinessId, Nino, SubmissionId, TaxYear}
 import api.models.errors._
 import api.models.outcomes.ResponseWrapper
 import api.services.MockAuditService
+import mocks.MockAppConfig
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.Result
 import v2.controllers.validators.MockAmendUkPropertyPeriodSummaryValidatorFactory
@@ -38,6 +39,7 @@ import scala.concurrent.Future
 
 class AmendUkPropertyPeriodSummaryControllerSpec
     extends ControllerBaseSpec
+    with MockAppConfig
     with ControllerTestRunner
     with MockAmendUkPropertyPeriodSummaryService
     with MockAmendUkPropertyPeriodSummaryValidatorFactory
@@ -47,6 +49,7 @@ class AmendUkPropertyPeriodSummaryControllerSpec
   private val businessId   = "XAIS12345678910"
   private val taxYear      = "2020-21"
   private val submissionId = "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
+
 
   "AmendUkPropertyPeriodSummaryController" should {
     "return a successful response from a consolidated request" when {

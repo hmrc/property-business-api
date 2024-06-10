@@ -22,27 +22,18 @@ import api.models.domain.{BusinessId, Nino, SubmissionId, TaxYear}
 import api.models.errors._
 import api.models.outcomes.ResponseWrapper
 import api.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService}
-import mocks.MockIdGenerator
+import mocks.{MockAppConfig, MockIdGenerator}
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.Result
 import v4.amendForeignPropertyPeriodSummary.def1.model.request.foreignFhlEea.{AmendForeignFhlEea, AmendForeignFhlEeaExpenses, ForeignFhlEeaIncome}
-import v4.amendForeignPropertyPeriodSummary.def1.model.request.foreignPropertyEntry.{
-  AmendForeignNonFhlPropertyEntry,
-  AmendForeignNonFhlPropertyExpenses,
-  ForeignNonFhlPropertyIncome,
-  ForeignNonFhlPropertyRentIncome
-}
-import v4.amendForeignPropertyPeriodSummary.model.request.{
-  AmendForeignPropertyPeriodSummaryRequestData,
-  Def1_AmendForeignPropertyPeriodSummaryRequestBody,
-  Def1_AmendForeignPropertyPeriodSummaryRequestData
-}
+import v4.amendForeignPropertyPeriodSummary.def1.model.request.foreignPropertyEntry.{AmendForeignNonFhlPropertyEntry, AmendForeignNonFhlPropertyExpenses, ForeignNonFhlPropertyIncome, ForeignNonFhlPropertyRentIncome}
+import v4.amendForeignPropertyPeriodSummary.model.request.{AmendForeignPropertyPeriodSummaryRequestData, Def1_AmendForeignPropertyPeriodSummaryRequestBody, Def1_AmendForeignPropertyPeriodSummaryRequestData}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class AmendForeignPropertyPeriodSummaryControllerSpec
-    extends ControllerBaseSpec
+    extends ControllerBaseSpec with MockAppConfig
     with ControllerTestRunner
     with MockEnrolmentsAuthService
     with MockMtdIdLookupService
@@ -54,6 +45,7 @@ class AmendForeignPropertyPeriodSummaryControllerSpec
   private val businessId   = "XAIS12345678910"
   private val taxYear      = "2022-23"
   private val submissionId = "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
+
 
   "AmendForeignPropertyPeriodSummaryController" should {
     "return a successful response with status 200 (OK)" when {

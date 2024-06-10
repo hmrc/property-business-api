@@ -23,6 +23,7 @@ import api.models.domain.{BusinessId, Nino, TaxYear}
 import api.models.errors._
 import api.models.outcomes.ResponseWrapper
 import api.services.MockAuditService
+import mocks.MockAppConfig
 import play.api.libs.json.{JsObject, JsValue, Json}
 import play.api.mvc.Result
 import v3.controllers.validators.MockCreateUkPropertyPeriodSummaryValidatorFactory
@@ -38,15 +39,16 @@ import scala.concurrent.Future
 
 class CreateUkPropertyPeriodSummaryControllerSpec
     extends ControllerBaseSpec
+    with MockAppConfig
     with ControllerTestRunner
     with MockCreateUkPropertyPeriodSummaryService
     with MockCreateUkPropertyPeriodSummaryValidatorFactory
     with MockHateoasFactory
     with MockAuditService {
 
-  private val taxYear      = "2020-21"
-  private val businessId   = "XAIS12345678910"
-  private val submissionId = "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
+  private val taxYear               = "2020-21"
+  private val businessId            = "XAIS12345678910"
+  private val submissionId          = "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
 
   "CreateUkPropertyPeriodSummaryController" should {
     "return a successful response from a consolidated request" when {
@@ -133,7 +135,7 @@ class CreateUkPropertyPeriodSummaryControllerSpec
         auditType = "CreateUKPropertyIncomeAndExpensesPeriodSummary",
         transactionName = "create-uk-property-income-and-expenses-period-summary",
         detail = GenericAuditDetail(
-          versionNumber = "3.0",
+          versionNumber = "2.0",
           userType = "Individual",
           agentReferenceNumber = None,
           params = Map("nino" -> nino, "businessId" -> businessId, "taxYear" -> taxYear),

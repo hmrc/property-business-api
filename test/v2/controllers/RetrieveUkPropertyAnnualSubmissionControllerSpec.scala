@@ -21,6 +21,7 @@ import api.hateoas.{HateoasWrapper, MockHateoasFactory}
 import api.models.domain.{BusinessId, Nino, TaxYear, Timestamp}
 import api.models.errors._
 import api.models.outcomes.ResponseWrapper
+import mocks.MockAppConfig
 import play.api.libs.json.{JsObject, JsValue, Json}
 import play.api.mvc.Result
 import v2.controllers.validators.MockRetrieveUkPropertyAnnualSubmissionValidatorFactory
@@ -34,7 +35,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class RetrieveUkPropertyAnnualSubmissionControllerSpec
-    extends ControllerBaseSpec
+    extends ControllerBaseSpec with MockAppConfig
     with ControllerTestRunner
     with MockRetrieveUkPropertyAnnualSubmissionService
     with MockRetrieveUkPropertyAnnualSubmissionValidatorFactory

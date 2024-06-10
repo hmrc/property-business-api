@@ -19,11 +19,11 @@ package v2.controllers
 import api.controllers.{ControllerBaseSpec, ControllerTestRunner}
 import api.hateoas.Method.GET
 import api.hateoas.{HateoasWrapper, Link, MockHateoasFactory}
-import api.models.domain.{BusinessId, Nino, SubmissionId, TaxYear, Timestamp}
+import api.models.domain._
 import api.models.errors.{ErrorWrapper, NinoFormatError, RuleTaxYearNotSupportedError}
 import api.models.outcomes.ResponseWrapper
 import api.services.{MockEnrolmentsAuthService, MockMtdIdLookupService}
-import mocks.MockIdGenerator
+import mocks.{MockAppConfig, MockIdGenerator}
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.Result
 import v2.controllers.validators.MockRetrieveForeignPropertyPeriodSummaryValidatorFactory
@@ -38,6 +38,7 @@ import scala.concurrent.Future
 
 class RetrieveForeignPropertyPeriodSummaryControllerSpec
     extends ControllerBaseSpec
+    with MockAppConfig
     with ControllerTestRunner
     with MockEnrolmentsAuthService
     with MockMtdIdLookupService
@@ -46,9 +47,10 @@ class RetrieveForeignPropertyPeriodSummaryControllerSpec
     with MockHateoasFactory
     with MockIdGenerator {
 
-  private val businessId   = "XAIS12345678910"
-  private val submissionId = "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
-  private val taxYear      = "2022-23"
+  private val businessId            = "XAIS12345678910"
+  private val submissionId          = "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
+  private val taxYear               = "2022-23"
+
 
   "RetrieveForeignPropertyPeriodSummaryController" should {
     "return a successful response with status 200 (OK)" when {

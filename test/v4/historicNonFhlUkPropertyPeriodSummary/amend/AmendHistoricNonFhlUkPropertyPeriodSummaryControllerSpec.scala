@@ -23,7 +23,7 @@ import api.models.domain.{Nino, PeriodId}
 import api.models.errors.{ErrorWrapper, NinoFormatError, RuleMisalignedPeriodError}
 import api.models.outcomes.ResponseWrapper
 import api.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService}
-import mocks.MockIdGenerator
+import mocks.{MockAppConfig, MockIdGenerator}
 import play.api.libs.json.{JsObject, JsValue}
 import play.api.mvc.Result
 import v4.historicNonFhlUkPropertyPeriodSummary.amend.model.request.{AmendHistoricNonFhlUkPropertyPeriodSummaryRequestData, Def1_AmendHistoricNonFhlUkPropertyPeriodSummaryRequestBody, Def1_AmendHistoricNonFhlUkPropertyPeriodSummaryRequestData}
@@ -34,6 +34,7 @@ import scala.concurrent.Future
 
 class AmendHistoricNonFhlUkPropertyPeriodSummaryControllerSpec
     extends ControllerBaseSpec
+    with MockAppConfig
     with ControllerTestRunner
     with MockEnrolmentsAuthService
     with MockMtdIdLookupService
@@ -42,8 +43,8 @@ class AmendHistoricNonFhlUkPropertyPeriodSummaryControllerSpec
     with MockIdGenerator
     with MockAuditService {
 
-  private val periodId      = "2017-04-06_2017-07-04"
-  private val mtdId: String = "test-mtd-id"
+  private val periodId              = "2017-04-06_2017-07-04"
+  private val mtdId: String         = "test-mtd-id"
 
   "AmendHistoricNonFhlUkPropertyPeriodSummaryController" should {
     "return a successful response with status 200 (OK)" when {
@@ -99,7 +100,7 @@ class AmendHistoricNonFhlUkPropertyPeriodSummaryControllerSpec
         auditType = "AmendHistoricNonFhlPropertyIncomeExpensesPeriodSummary",
         transactionName = "amend-historic-non-fhl-property-income-expenses-period-summary",
         detail = FlattenedGenericAuditDetail(
-          versionNumber = Some("2.0"),
+          versionNumber = Some(apiVersion.name),
           userDetails = UserDetails(mtdId, "Individual", None),
           params = Map("nino" -> nino, "periodId" -> periodId),
           request = Some(requestBodyJson),

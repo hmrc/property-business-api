@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-import play.sbt.PlayImport.PlayKeys._
+import play.sbt.PlayImport.PlayKeys.*
 import sbt.*
-import sbt.complete.DefaultParsers._
+import sbt.complete.DefaultParsers.*
 import uk.gov.hmrc.DefaultBuildSettings.{addTestReportOption, defaultSettings}
 import uk.gov.hmrc.versioning.SbtGitVersioning.autoImport.majorVersion
 
-import scala.sys.process._
+import scala.sys.process.*
 
 val appName = "property-business-api"
 

@@ -22,6 +22,7 @@ import api.models.domain.{BusinessId, Nino, TaxYear}
 import api.models.errors._
 import api.models.outcomes.ResponseWrapper
 import api.services.MockAuditService
+import mocks.MockAppConfig
 import play.api.libs.json.JsValue
 import play.api.mvc.Result
 import v4.deletePropertyAnnualSubmission.model.request.{Def1_DeletePropertyAnnualSubmissionRequestData, DeletePropertyAnnualSubmissionRequestData}
@@ -31,13 +32,14 @@ import scala.concurrent.Future
 
 class DeletePropertyAnnualSubmissionControllerSpec
     extends ControllerBaseSpec
+    with MockAppConfig
     with ControllerTestRunner
     with MockDeletePropertyAnnualSubmissionService
     with MockDeletePropertyAnnualSubmissionValidatorFactory
     with MockAuditService {
 
-  private val businessId = BusinessId("XAIS12345678910")
-  private val taxYear    = TaxYear.fromMtd("2023-24")
+  private val businessId            = BusinessId("XAIS12345678910")
+  private val taxYear               = TaxYear.fromMtd("2023-24")
 
   "DeletePropertyAnnualSubmissionControllerSpec" should {
     "return a successful response with status 204 (NO_CONTENT)" when {

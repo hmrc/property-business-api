@@ -23,7 +23,7 @@ import api.models.domain.{BusinessId, Nino, TaxYear}
 import api.models.errors._
 import api.models.outcomes.ResponseWrapper
 import api.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService}
-import mocks.MockIdGenerator
+import mocks.{MockAppConfig, MockIdGenerator}
 import play.api.libs.json.JsValue
 import play.api.mvc.Result
 import v2.controllers.validators.MockCreateAmendForeignPropertyAnnualSubmissionValidatorFactory
@@ -36,6 +36,7 @@ import scala.concurrent.Future
 
 class CreateAmendForeignPropertyAnnualSubmissionControllerSpec
     extends ControllerBaseSpec
+    with MockAppConfig
     with ControllerTestRunner
     with MockEnrolmentsAuthService
     with MockMtdIdLookupService
@@ -46,8 +47,9 @@ class CreateAmendForeignPropertyAnnualSubmissionControllerSpec
     with MockIdGenerator
     with CreateAmendForeignPropertyAnnualSubmissionFixture {
 
-  private val businessId = "XAIS12345678910"
-  private val taxYear    = "2019-20"
+  private val businessId            = "XAIS12345678910"
+  private val taxYear               = "2019-20"
+
 
   "CreateAmendForeignPropertyAnnualSubmissionController" should {
     "return a successful response with status 200 (OK)" when {

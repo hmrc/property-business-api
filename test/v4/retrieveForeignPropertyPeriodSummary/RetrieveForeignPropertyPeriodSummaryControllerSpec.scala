@@ -21,25 +21,20 @@ import api.models.domain._
 import api.models.errors.{ErrorWrapper, NinoFormatError, RuleTaxYearNotSupportedError}
 import api.models.outcomes.ResponseWrapper
 import api.services.{MockEnrolmentsAuthService, MockMtdIdLookupService}
-import mocks.MockIdGenerator
+import mocks.{MockAppConfig, MockIdGenerator}
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.Result
 import v4.retrieveForeignPropertyPeriodSummary.def1.model.response.foreignFhlEea.{ForeignFhlEea, ForeignFhlEeaExpenses, ForeignFhlEeaIncome}
 import v4.retrieveForeignPropertyPeriodSummary.def1.model.response.foreignNonFhlProperty._
-import v4.retrieveForeignPropertyPeriodSummary.model.request.{
-  Def1_RetrieveForeignPropertyPeriodSummaryRequestData,
-  RetrieveForeignPropertyPeriodSummaryRequestData
-}
-import v4.retrieveForeignPropertyPeriodSummary.model.response.{
-  Def1_RetrieveForeignPropertyPeriodSummaryResponse,
-  RetrieveForeignPropertyPeriodSummaryResponse
-}
+import v4.retrieveForeignPropertyPeriodSummary.model.request.{Def1_RetrieveForeignPropertyPeriodSummaryRequestData, RetrieveForeignPropertyPeriodSummaryRequestData}
+import v4.retrieveForeignPropertyPeriodSummary.model.response.{Def1_RetrieveForeignPropertyPeriodSummaryResponse, RetrieveForeignPropertyPeriodSummaryResponse}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class RetrieveForeignPropertyPeriodSummaryControllerSpec
     extends ControllerBaseSpec
+    with MockAppConfig
     with ControllerTestRunner
     with MockEnrolmentsAuthService
     with MockMtdIdLookupService
@@ -47,9 +42,10 @@ class RetrieveForeignPropertyPeriodSummaryControllerSpec
     with MockRetrieveForeignPropertyPeriodSummaryValidatorFactory
     with MockIdGenerator {
 
-  private val businessId   = "XAIS12345678910"
-  private val submissionId = "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
-  private val taxYear      = "2022-23"
+  private val businessId            = "XAIS12345678910"
+  private val submissionId          = "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
+  private val taxYear               = "2022-23"
+
 
   "RetrieveForeignPropertyPeriodSummaryController" should {
     "return a successful response with status 200 (OK)" when {

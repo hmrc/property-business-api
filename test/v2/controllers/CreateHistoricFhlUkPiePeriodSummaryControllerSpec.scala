@@ -24,7 +24,7 @@ import api.models.domain.{Nino, PeriodId}
 import api.models.errors._
 import api.models.outcomes.ResponseWrapper
 import api.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService}
-import mocks.MockIdGenerator
+import mocks.{MockAppConfig, MockIdGenerator}
 import play.api.libs.json.{JsObject, JsValue, Json}
 import play.api.mvc.Result
 import v2.controllers.validators.MockCreateHistoricFhlUkPiePeriodSummaryValidatorFactory
@@ -37,6 +37,7 @@ import scala.concurrent.Future
 
 class CreateHistoricFhlUkPiePeriodSummaryControllerSpec
     extends ControllerBaseSpec
+    with MockAppConfig
     with ControllerTestRunner
     with MockEnrolmentsAuthService
     with MockMtdIdLookupService
@@ -46,8 +47,9 @@ class CreateHistoricFhlUkPiePeriodSummaryControllerSpec
     with MockIdGenerator
     with MockAuditService {
 
-  private val periodId      = "2021-01-01_2021-01-02"
-  private val mtdId: String = "test-mtd-id"
+  private val periodId              = "2021-01-01_2021-01-02"
+  private val mtdId: String         = "test-mtd-id"
+
 
   "CreateHistoricFhlUkPiePeriodSummaryController" should {
     "return a successful response with status 201 (CREATED)" when {
@@ -105,7 +107,7 @@ class CreateHistoricFhlUkPiePeriodSummaryControllerSpec
         auditType = "CreateHistoricFhlPropertyIncomeExpensesPeriodSummary",
         transactionName = "CreateHistoricFhlPropertyIncomeExpensesPeriodSummary",
         detail = FlattenedGenericAuditDetail(
-          versionNumber = Some("2.0"),
+          versionNumber = Some(apiVersion.name),
           userDetails = UserDetails(mtdId, "Individual", None),
           params = Map("nino" -> nino),
           request = Some(requestBodyJson),

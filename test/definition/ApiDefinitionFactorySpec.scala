@@ -16,10 +16,12 @@
 
 package definition
 
+import cats.implicits.catsSyntaxValidatedId
 import config.ConfidenceLevelConfig
+import config.Deprecation.NotDeprecated
 import definition.APIStatus.{ALPHA, BETA}
 import mocks.{MockAppConfig, MockHttpClient}
-import routing.{Version2, Version3, Version4, Version5}
+import routing._
 import support.UnitSpec
 import uk.gov.hmrc.auth.core.ConfidenceLevel
 
@@ -28,13 +30,17 @@ class ApiDefinitionFactorySpec extends UnitSpec {
   class Test extends MockHttpClient with MockAppConfig {
     val apiDefinitionFactory = new ApiDefinitionFactory(mockAppConfig)
     MockedAppConfig.apiGatewayContext returns "individuals/business/property"
+    def checkBuildApiStatus(version: Version): APIStatus = apiDefinitionFactory.buildAPIStatus(version)
   }
 
   private val confidenceLevel: ConfidenceLevel = ConfidenceLevel.L200
-
   "definition" when {
     "called" should {
       "return a valid Definition case class" in new Test {
+        MockedAppConfig.deprecationFor(Version2).returns(NotDeprecated.valid).anyNumberOfTimes()
+        MockedAppConfig.deprecationFor(Version3).returns(NotDeprecated.valid).anyNumberOfTimes()
+        MockedAppConfig.deprecationFor(Version4).returns(NotDeprecated.valid).anyNumberOfTimes()
+        MockedAppConfig.deprecationFor(Version5).returns(NotDeprecated.valid).anyNumberOfTimes()
         MockedAppConfig.apiStatus(Version2) returns "BETA"
         MockedAppConfig.apiStatus(Version3) returns "BETA"
         MockedAppConfig.apiStatus(Version4) returns "BETA"
@@ -127,6 +133,7 @@ class ApiDefinitionFactorySpec extends UnitSpec {
         (Version5, BETA)
       ).foreach { case (version, status) =>
         s"return the correct $status for $version" in new Test {
+          MockedAppConfig.deprecationFor(version).returns(NotDeprecated.valid).anyNumberOfTimes()
           MockedAppConfig.apiStatus(version) returns status.toString
           apiDefinitionFactory.buildAPIStatus(version) shouldBe status
         }
@@ -136,7 +143,25 @@ class ApiDefinitionFactorySpec extends UnitSpec {
     "the 'apiStatus' parameter is present and invalid" should {
       "default to alpha" in new Test {
         MockedAppConfig.apiStatus(Version2) returns "ALPHO"
+        MockedAppConfig.deprecationFor(Version2).returns(NotDeprecated.valid).anyNumberOfTimes()
         apiDefinitionFactory.buildAPIStatus(version = Version2) shouldBe ALPHA
+      }
+    }
+
+    "the 'deprecatedOn' parameter is missing for a deprecated version" should {
+      "throw exception" in new Test {
+        MockedAppConfig.apiStatus(Version3) returns "DEPRECATED"
+        MockedAppConfig
+          .deprecationFor(Version3)
+          .returns("deprecatedOn date is required for a deprecated version".invalid)
+          .anyNumberOfTimes()
+
+        val exception: Exception = intercept[Exception] {
+          checkBuildApiStatus(Version3)
+        }
+
+        val exceptionMessage: String = exception.getMessage
+        exceptionMessage shouldBe "deprecatedOn date is required for a deprecated version"
       }
     }
   }

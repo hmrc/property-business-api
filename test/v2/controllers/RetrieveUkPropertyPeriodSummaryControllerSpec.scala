@@ -23,6 +23,7 @@ import api.models.domain.{BusinessId, Nino, SubmissionId, TaxYear}
 import api.models.errors._
 import api.models.outcomes.ResponseWrapper
 import fixtures.RetrieveUkPropertyPeriodSummary.ResponseModelsFixture
+import mocks.MockAppConfig
 import play.api.mvc.Result
 import v2.controllers.validators.MockRetrieveUkPropertyPeriodSummaryValidatorFactory
 import v2.models.request.retrieveUkPropertyPeriodSummary.RetrieveUkPropertyPeriodSummaryRequestData
@@ -34,15 +35,17 @@ import scala.concurrent.Future
 
 class RetrieveUkPropertyPeriodSummaryControllerSpec
     extends ControllerBaseSpec
+    with MockAppConfig
     with ControllerTestRunner
     with MockRetrieveUkPropertyPeriodSummaryService
     with MockRetrieveUkPropertyPeriodSummaryValidatorFactory
     with MockHateoasFactory
     with ResponseModelsFixture {
 
-  private val businessId   = "XAIS12345678910"
-  private val submissionId = "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
-  private val taxYear      = "2022-23"
+  private val businessId            = "XAIS12345678910"
+  private val submissionId          = "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
+  private val taxYear               = "2022-23"
+
 
   "RetrieveUkPropertyPeriodSummaryController" should {
     "return (OK) 200 status" when {

@@ -24,7 +24,7 @@ import api.models.domain.{Nino, TaxYear}
 import api.models.errors._
 import api.models.outcomes.ResponseWrapper
 import api.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService}
-import mocks.MockIdGenerator
+import mocks.{MockAppConfig, MockIdGenerator}
 import play.api.libs.json.{JsObject, JsValue, Json}
 import play.api.mvc.Result
 import v2.controllers.validators.MockCreateAmendHistoricNonFhlUkPropertyAnnualSubmissionValidatorFactory
@@ -37,6 +37,7 @@ import scala.concurrent.Future
 
 class CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionControllerSpec
     extends ControllerBaseSpec
+    with MockAppConfig
     with ControllerTestRunner
     with MockAuditService
     with MockEnrolmentsAuthService
@@ -46,9 +47,9 @@ class CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionControllerSpec
     with MockHateoasFactory
     with MockIdGenerator {
 
-  private val taxYear              = "2022-23"
-  private val transactionReference = Some("transaction reference")
-  private val mtdId: String        = "test-mtd-id"
+  private val taxYear               = "2022-23"
+  private val transactionReference  = Some("transaction reference")
+  private val mtdId: String         = "test-mtd-id"
 
   "CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionController" should {
     "return a successful response with status 200 (OK)" when {
@@ -105,7 +106,7 @@ class CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionControllerSpec
         auditType = "CreateAndAmendHistoricNonFhlPropertyBusinessAnnualSubmission",
         transactionName = "create-and-amend-historic-non-fhl-property-business-annual-submission",
         detail = FlattenedGenericAuditDetail(
-          versionNumber = Some("2.0"),
+          versionNumber = Some(apiVersion.name),
           userDetails = UserDetails(mtdId, "Individual", None),
           params = Map("nino" -> nino, "taxYear" -> taxYear),
           request = Some(validMtdJson),

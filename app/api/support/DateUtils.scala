@@ -16,8 +16,9 @@
 
 package api.support
 
-import java.time.LocalDate
+import java.time.{LocalDate, LocalDateTime, ZoneId}
 import java.time.format.DateTimeFormatter
+import java.util.Locale
 import javax.inject.Singleton
 
 @Singleton
@@ -31,4 +32,10 @@ class DateUtils {
   def currentTaxYearEnd: String =
     if (currentDate.isBefore(limit)) limit.minusDays(1).toString else limit.plusYears(1).minusDays(1).toString
 
+  private val longDateTimeFormatGmt: DateTimeFormatter = DateTimeFormatter
+    .ofPattern("EEE, dd MMM yyyy HH:mm:ss z", Locale.ENGLISH)
+    .withZone(ZoneId.of("GMT"))
+
+
+  def longDateTimestampGmt(dateTime: LocalDateTime): String = longDateTimeFormatGmt.format(dateTime)
 }

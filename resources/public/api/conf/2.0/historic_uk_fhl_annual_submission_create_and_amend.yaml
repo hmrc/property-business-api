@@ -28,19 +28,19 @@ description: |
   </table>
 
 tags:
-  - Historic FHL UK Property Business Annual Submission
+- Historic FHL UK Property Business Annual Submission
 
 parameters:
-  - $ref: './common/pathParameters.yaml#/components/parameters/nino'
-  - $ref: './common/pathParameters.yaml#/components/parameters/taxYear'
-  - $ref: './common/headers.yaml#/components/parameters/acceptHeader'
-  - $ref: './common/headers.yaml#/components/parameters/contentTypeJson'
-  - $ref: './common/headers.yaml#/components/parameters/authorizationWriteScopeHeader'
-  - $ref: './common/headers.yaml#/components/parameters/testScenarioHeader'
+- $ref: './common/pathParameters.yaml#/components/parameters/nino'
+- $ref: './common/pathParameters.yaml#/components/parameters/taxYear'
+- $ref: './common/headers.yaml#/components/parameters/acceptHeader'
+- $ref: './common/headers.yaml#/components/parameters/contentTypeJson'
+- $ref: './common/headers.yaml#/components/parameters/authorizationWriteScopeHeader'
+- $ref: './common/headers.yaml#/components/parameters/testScenarioHeader'
 
 security:
-  - User-Restricted:
-      - write:self-assessment
+- User-Restricted:
+  - write:self-assessment
 
 requestBody:
   content:
@@ -59,15 +59,21 @@ responses:
     headers:
       X-CorrelationId:
         $ref: './common/headers.yaml#/components/parameters/correlationId'
-    content:
-      application/json:
-        schema:
-          $ref: './schemas/historic_uk_fhl_annual_submission_create_and_amend/response.json'
-        examples:
-          example-response:
-            description: Example Response
-            value:
-              $ref: './examples/historic_uk_fhl_annual_submission_create_and_amend/response.json'
+      Deprecation:
+        $ref: './common/headers.yaml#/components/parameters/deprecationHeader'
+      Sunset:
+        $ref: './common/headers.yaml#/components/parameters/sunsetHeader'
+      Link:
+        $ref: './common/headers.yaml#/components/parameters/linkHeader'
+  content:
+    application/json:
+      schema:
+        $ref: './schemas/historic_uk_fhl_annual_submission_create_and_amend/response.json'
+      examples:
+        example-response:
+          description: Example Response
+          value:
+            $ref: './examples/historic_uk_fhl_annual_submission_create_and_amend/response.json'
   "400":
     description: Bad request
     content:
@@ -78,11 +84,11 @@ responses:
           FORMAT_NINO:
             $ref: './common/errors.yaml#/components/examples/formatNino'
           FORMAT_TAX_YEAR:
-            $ref: './common/errors.yaml#/components/examples/formatTaxYear' 
+            $ref: './common/errors.yaml#/components/examples/formatTaxYear'
           RULE_INCORRECT_OR_EMPTY_BODY_SUBMITTED:
-            $ref: './common/errors.yaml#/components/examples/ruleIncorrectOrEmptyBody' 
+            $ref: './common/errors.yaml#/components/examples/ruleIncorrectOrEmptyBody'
           RULE_TAX_YEAR_RANGE_INVALID:
-            $ref: './common/errors.yaml#/components/examples/ruleTaxYearRangeInvalid' 
+            $ref: './common/errors.yaml#/components/examples/ruleTaxYearRangeInvalid'
           RULE_TAX_YEAR_NOT_SUPPORTED:
             $ref: './common/errors.yaml#/components/examples/ruleTaxYearNotSupportedMinMax'
           FORMAT_VALUE:

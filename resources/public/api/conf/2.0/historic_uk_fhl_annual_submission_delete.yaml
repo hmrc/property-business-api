@@ -49,8 +49,14 @@ responses:
   "204":
     description: Success(No Content)
     headers:
-      X-CorrelationId:
-        $ref: './common/headers.yaml#/components/parameters/correlationId'
+          X-CorrelationId:
+            $ref: './common/headers.yaml#/components/parameters/correlationId'
+          Deprecation:
+            $ref: './common/headers.yaml#/components/parameters/deprecationHeader'
+          Sunset:
+            $ref: './common/headers.yaml#/components/parameters/sunsetHeader'
+          Link:
+            $ref: './common/headers.yaml#/components/parameters/linkHeader'
     content: {}
 
   "400":

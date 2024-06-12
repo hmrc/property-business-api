@@ -70,7 +70,7 @@ components:
         See the API documentation:
       schema:
         type: string
-        example: "https://developer.service.hmrc.gov.uk/api-documentation/docs/api/service/self-employment-business-api"
+        example: "https://developer.service.hmrc.gov.uk/api-documentation/docs/api/service/property-business-api"
       required: false
 
     deprecationHeader:

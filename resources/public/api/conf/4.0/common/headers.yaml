@@ -62,6 +62,7 @@ components:
         type: string
         example: c75f40a6-a3df-4429-a697-471eeec46435
       required: true
+
     linkHeader:
       name: "Link"
       in: header
@@ -69,7 +70,7 @@ components:
         See the API documentation:
       schema:
         type: string
-        example: "https://developer.service.hmrc.gov.uk/api-documentation/docs/api/service/self-employment-business-api"
+        example: "https://developer.service.hmrc.gov.uk/api-documentation/docs/api/service/property-business-api"
       required: false
 
     deprecationHeader:

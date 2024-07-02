@@ -28,19 +28,19 @@ description: |
   </table>
 
 tags:
-- Historic FHL UK Property Business Annual Submission
+  - Historic FHL UK Property Business Annual Submission
 
 parameters:
-- $ref: './common/pathParameters.yaml#/components/parameters/nino'
-- $ref: './common/pathParameters.yaml#/components/parameters/taxYear'
-- $ref: './common/headers.yaml#/components/parameters/acceptHeader'
-- $ref: './common/headers.yaml#/components/parameters/contentTypeJson'
-- $ref: './common/headers.yaml#/components/parameters/authorizationWriteScopeHeader'
-- $ref: './common/headers.yaml#/components/parameters/testScenarioHeader'
+  - $ref: './common/pathParameters.yaml#/components/parameters/nino'
+  - $ref: './common/pathParameters.yaml#/components/parameters/taxYear'
+  - $ref: './common/headers.yaml#/components/parameters/acceptHeader'
+  - $ref: './common/headers.yaml#/components/parameters/contentTypeJson'
+  - $ref: './common/headers.yaml#/components/parameters/authorizationWriteScopeHeader'
+  - $ref: './common/headers.yaml#/components/parameters/testScenarioHeader'
 
 security:
-- User-Restricted:
-  - write:self-assessment
+  - User-Restricted:
+      - write:self-assessment
 
 requestBody:
   content:
@@ -65,15 +65,15 @@ responses:
         $ref: './common/headers.yaml#/components/parameters/sunsetHeader'
       Link:
         $ref: './common/headers.yaml#/components/parameters/linkHeader'
-  content:
-    application/json:
-      schema:
-        $ref: './schemas/historic_uk_fhl_annual_submission_create_and_amend/response.json'
-      examples:
-        example-response:
-          description: Example Response
-          value:
-            $ref: './examples/historic_uk_fhl_annual_submission_create_and_amend/response.json'
+    content:
+      application/json:
+        schema:
+          $ref: './schemas/historic_uk_fhl_annual_submission_create_and_amend/response.json'
+        examples:
+          example-response:
+            description: Example Response
+            value:
+              $ref: './examples/historic_uk_fhl_annual_submission_create_and_amend/response.json'
   "400":
     description: Bad request
     content:

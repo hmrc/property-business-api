@@ -63,7 +63,7 @@ class DocumentationControllerISpec extends IntegrationBaseSpec {
        |         },
        |         {
        |            "version":"3.0",
-       |            "status":"BETA",
+       |            "status":"DEPRECATED",
        |            "endpointsEnabled":true
        |         },
        |         {

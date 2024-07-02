@@ -159,6 +159,7 @@ class RetrieveHistoricFhlUkPeriodSummaryControllerISpec extends IntegrationBaseS
         response.json shouldBe responseBody
         response.header("X-CorrelationId").nonEmpty shouldBe true
         response.header("Content-Type") shouldBe Some("application/json")
+        response.header("Deprecation") should not be None
       }
     }
 

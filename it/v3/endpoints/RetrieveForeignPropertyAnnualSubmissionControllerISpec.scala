@@ -219,6 +219,7 @@ class RetrieveForeignPropertyAnnualSubmissionControllerISpec extends Integration
         response.json shouldBe responseBody
         response.header("X-CorrelationId").nonEmpty shouldBe true
         response.header("Content-Type") shouldBe Some("application/json")
+        response.header("Deprecation") should not be None
       }
 
       "any valid request is made for TYS" in new Test with TysIfsTest {
@@ -230,6 +231,7 @@ class RetrieveForeignPropertyAnnualSubmissionControllerISpec extends Integration
         response.json shouldBe responseBody
         response.header("X-CorrelationId").nonEmpty shouldBe true
         response.header("Content-Type") shouldBe Some("application/json")
+        response.header("Deprecation") should not be None
       }
     }
 

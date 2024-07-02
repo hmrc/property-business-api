@@ -168,6 +168,7 @@ class RetrieveHistoricNonFhlUkPropertyAnnualSubmissionControllerISpec extends In
         response.json shouldBe responseBody
         response.header("X-CorrelationId").nonEmpty shouldBe true
         response.header("Content-Type") shouldBe Some("application/json")
+        response.header("Deprecation") should not be None
       }
 
       "any valid request is made but received empty json from downstream" in new Test {

@@ -17,23 +17,35 @@
 package v4.createForeignPropertyPeriodSummary
 
 import api.controllers.validators.Validator
+import api.models.domain.TaxYear
 import config.AppConfig
 import play.api.libs.json.JsValue
+import v4.createForeignPropertyPeriodSummary.CreateForeignPropertyPeriodSummaryValidatorFactory.def2TaxYearStart
 import v4.createForeignPropertyPeriodSummary.def1.Def1_CreateForeignPropertyPeriodSummaryValidator
 import v4.createForeignPropertyPeriodSummary.def2.Def2_CreateForeignPropertyPeriodSummaryValidator
 import v4.createForeignPropertyPeriodSummary.model.request.CreateForeignPropertyPeriodSummaryRequestData
 
 import javax.inject.{Inject, Singleton}
+import scala.math.Ordering.Implicits.infixOrderingOps
 
 @Singleton
 class CreateForeignPropertyPeriodSummaryValidatorFactory @Inject() (appConfig: AppConfig) {
 
-  def validator(nino: String, businessId: String, taxYear: String, body: JsValue): Validator[CreateForeignPropertyPeriodSummaryRequestData] =
-    if (taxYear >= "2024-25") {
-      new Def2_CreateForeignPropertyPeriodSummaryValidator(nino, businessId, taxYear, body)
-    } else {
-      new Def1_CreateForeignPropertyPeriodSummaryValidator(nino, businessId, taxYear, body, appConfig)
+  def validator(nino: String, businessId: String, taxYear: String, body: JsValue): Validator[CreateForeignPropertyPeriodSummaryRequestData] = {
 
+    TaxYear.maybeFromMtd(taxYear) match {
+      case Some(parsedTY) if parsedTY >= def2TaxYearStart =>
+        new Def2_CreateForeignPropertyPeriodSummaryValidator(nino, businessId, taxYear, body)
+
+      case _ =>
+        new Def1_CreateForeignPropertyPeriodSummaryValidator(nino, businessId, taxYear, body, appConfig)
     }
+  }
+
+}
+
+object CreateForeignPropertyPeriodSummaryValidatorFactory {
+
+  private val def2TaxYearStart = TaxYear.fromMtd("2024-25")
 
 }

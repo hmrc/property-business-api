@@ -18,11 +18,13 @@ package v4.amendUkPropertyPeriodSummary.def2
 
 import api.controllers.validators.Validator
 import api.controllers.validators.resolvers._
+import api.models.domain.TaxYear
 import api.models.errors.MtdError
 import cats.data.Validated
 import cats.data.Validated.{Invalid, Valid}
 import cats.implicits.catsSyntaxTuple5Semigroupal
 import play.api.libs.json.JsValue
+import v4.amendUkPropertyPeriodSummary.def2.Def2_AmendUkPropertyPeriodSummaryValidator._
 import v4.amendUkPropertyPeriodSummary.model.request._
 
 import javax.inject.Inject
@@ -30,20 +32,25 @@ import javax.inject.Inject
 class Def2_AmendUkPropertyPeriodSummaryValidator @Inject() (nino: String, businessId: String, taxYear: String, submissionId: String, body: JsValue)
     extends Validator[AmendUkPropertyPeriodSummaryRequestData] {
 
-  private val resolveJson    = new ResolveNonEmptyJsonObject[Def2_AmendUkPropertyPeriodSummaryRequestBody]()
-  private val rulesValidator = new Def2_AmendUkPropertyPeriodSummaryRulesValidator()
-
   def validate: Validated[Seq[MtdError], AmendUkPropertyPeriodSummaryRequestData] = {
 
     val result: Validated[Seq[MtdError], Def2_AmendUkPropertyPeriodSummaryRequestData] = (
       ResolveNino(nino),
-      ResolveTaxYear(taxYear),
+      resolveTaxYear(taxYear),
       ResolveBusinessId(businessId),
       ResolveSubmissionId(submissionId),
       resolveJson(body)
     ).mapN(Def2_AmendUkPropertyPeriodSummaryRequestData) andThen rulesValidator.validateBusinessRules
 
-    result.fold(e => Invalid(e), e => Valid(e.toSubmission))
+    result.fold(Invalid(_), e => Valid(e.toSubmission))
   }
 
+}
+
+object Def2_AmendUkPropertyPeriodSummaryValidator {
+  private val maxTaxYear = TaxYear.fromMtd("2024-25")
+  private val resolveTaxYear = ResolveTaxYearMaximum(maxTaxYear)
+
+  private val resolveJson    = new ResolveNonEmptyJsonObject[Def2_AmendUkPropertyPeriodSummaryRequestBody]()
+  private val rulesValidator = new Def2_AmendUkPropertyPeriodSummaryRulesValidator()
 }

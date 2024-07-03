@@ -17,24 +17,33 @@
 package v4.createUkPropertyPeriodSummary
 
 import api.controllers.validators.Validator
+import api.models.domain.TaxYear
 import config.AppConfig
 import play.api.libs.json.JsValue
+import v4.createUkPropertyPeriodSummary.CreateUkPropertyPeriodSummaryValidatorFactory.def2TaxYearStart
 import v4.createUkPropertyPeriodSummary.def1.Def1_CreateUkPropertyPeriodSummaryValidator
 import v4.createUkPropertyPeriodSummary.def2.Def2_CreateUkPropertyPeriodSummaryValidator
 import v4.createUkPropertyPeriodSummary.model.request.CreateUkPropertyPeriodSummaryRequestData
 
 import javax.inject.Inject
+import scala.math.Ordering.Implicits.infixOrderingOps
 
 class CreateUkPropertyPeriodSummaryValidatorFactory @Inject() (appConfig: AppConfig) {
 
   def validator(nino: String, businessId: String, taxYear: String, body: JsValue): Validator[CreateUkPropertyPeriodSummaryRequestData] = {
+    TaxYear.maybeFromMtd(taxYear) match {
+      case Some(parsedTY) if parsedTY >= def2TaxYearStart =>
+        new Def2_CreateUkPropertyPeriodSummaryValidator(nino, businessId, taxYear, body)
 
-    if (taxYear >= "2024-25") {
-      new Def2_CreateUkPropertyPeriodSummaryValidator(nino, businessId, taxYear, body)
-    } else {
-      new Def1_CreateUkPropertyPeriodSummaryValidator(nino, businessId, taxYear, body)(appConfig)
-
+      case _ =>
+        new Def1_CreateUkPropertyPeriodSummaryValidator(nino, businessId, taxYear, body)(appConfig)
     }
   }
+
+}
+
+object CreateUkPropertyPeriodSummaryValidatorFactory {
+
+  private val def2TaxYearStart = TaxYear.fromMtd("2024-25")
 
 }

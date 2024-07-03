@@ -45,6 +45,7 @@ class RetrieveForeignPropertyPeriodSummaryControllerISpec extends IntegrationBas
         response.json shouldBe responseBody
         response.header("X-CorrelationId").nonEmpty shouldBe true
         response.header("Content-Type") shouldBe Some("application/json")
+        response.header("Deprecation") should not be None
       }
 
       "any valid request is made with a Tax Year Specific year" in new TysIfsTest {
@@ -61,6 +62,7 @@ class RetrieveForeignPropertyPeriodSummaryControllerISpec extends IntegrationBas
         response.json shouldBe responseBody
         response.header("X-CorrelationId").nonEmpty shouldBe true
         response.header("Content-Type") shouldBe Some("application/json")
+        response.header("Deprecation") should not be None
       }
     }
 

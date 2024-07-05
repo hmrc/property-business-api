@@ -47,6 +47,18 @@ object ResolveTaxYear extends ResolverSupport {
     resolver(value)
   }
 
+  def apply(value: String, maximumTaxYear: TaxYear): Validated[Seq[MtdError], TaxYear] = {
+    val resolver = ResolveTaxYearMaximum(maximumTaxYear)
+
+    resolver(value)
+  }
+
+  def apply(value: String, minimumTaxYear: TaxYear, maximumTaxYear: TaxYear): Validated[Seq[MtdError], TaxYear] = {
+    val resolver = ResolveTaxYearMinMax((minimumTaxYear, maximumTaxYear))
+
+    resolver(value)
+  }
+
 }
 
 case class ResolveTaxYearMinimum(minimumTaxYear: TaxYear) extends ResolverSupport {
@@ -57,6 +69,39 @@ case class ResolveTaxYearMinimum(minimumTaxYear: TaxYear) extends ResolverSuppor
   def apply(value: String): Validated[Seq[MtdError], TaxYear] = resolver(value)
 }
 
+case class ResolveTaxYearMaximum(maximumTaxYear: TaxYear) extends ResolverSupport {
+
+  val resolver: Resolver[String, TaxYear] =
+    ResolveTaxYear.resolver thenValidate satisfiesMax(maximumTaxYear, RuleTaxYearNotSupportedError)
+
+  def apply(value: String): Validated[Seq[MtdError], TaxYear] = resolver(value)
+
+  def apply(value: Option[String]): Validated[Seq[MtdError], Option[TaxYear]] =
+    value match {
+      case Some(value) => resolver(value).map(Some(_))
+      case None        => Valid(None)
+    }
+
+}
+
+case class ResolveTaxYearMinMax(minMax: (TaxYear, TaxYear), error: MtdError = RuleTaxYearNotSupportedError) extends ResolverSupport {
+
+  private val (minimumTaxYear, maximumTaxYear) = minMax
+
+  val resolver: Resolver[String, TaxYear] =
+    ResolveTaxYear.resolver thenValidate
+      satisfiesMin(minimumTaxYear, error) thenValidate
+      satisfiesMax(maximumTaxYear, error)
+
+  def apply(value: String): Validated[Seq[MtdError], TaxYear] = resolver(value)
+
+  def apply(value: Option[String]): Validated[Seq[MtdError], Option[TaxYear]] =
+    value match {
+      case Some(value) => resolver(value).map(Some(_))
+      case None        => Valid(None)
+    }
+
+}
 case class ResolveIncompleteTaxYear(incompleteTaxYearError: MtdError = RuleTaxYearNotEndedError)(implicit clock: Clock)
     extends ResolverSupport {
 

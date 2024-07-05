@@ -74,7 +74,7 @@ class RetrieveForeignPropertyPeriodSummaryServiceSpec extends UnitSpec {
 
       val errors = List(
         "INVALID_TAXABLE_ENTITY_ID" -> NinoFormatError,
-        "INVALID_TAX_YEAR"          -> TaxYearFormatError,
+        "INVALID_TAX_YEAR"          -> InternalError,
         "INVALID_INCOMESOURCEID"    -> BusinessIdFormatError,
         "INVALID_SUBMISSION_ID"     -> SubmissionIdFormatError,
         "INVALID_CORRELATIONID"     -> InternalError,

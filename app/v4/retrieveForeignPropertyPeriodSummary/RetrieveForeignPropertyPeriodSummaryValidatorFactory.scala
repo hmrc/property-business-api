@@ -17,6 +17,7 @@
 package v4.retrieveForeignPropertyPeriodSummary
 
 import api.controllers.validators.Validator
+import api.models.domain.TaxYear
 import config.AppConfig
 import v4.retrieveForeignPropertyPeriodSummary.def1.Def1_RetrieveForeignPropertyPeriodSummaryValidator
 import v4.retrieveForeignPropertyPeriodSummary.model.request._
@@ -26,7 +27,9 @@ import javax.inject.{Inject, Singleton}
 @Singleton
 class RetrieveForeignPropertyPeriodSummaryValidatorFactory @Inject() (appConfig: AppConfig) {
 
+  private val maximumTaxYear = TaxYear.fromMtd("2024-25")
+
   def validator(nino: String, businessId: String, taxYear: String, submissionId: String): Validator[RetrieveForeignPropertyPeriodSummaryRequestData] =
-    new Def1_RetrieveForeignPropertyPeriodSummaryValidator(nino, businessId, taxYear, submissionId, appConfig)
+    new Def1_RetrieveForeignPropertyPeriodSummaryValidator(nino, businessId, taxYear, maximumTaxYear, submissionId, appConfig)
 
 }

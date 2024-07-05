@@ -61,7 +61,7 @@ class AmendForeignPropertyPeriodSummaryServiceSpec extends ServiceSpec {
 
         val errors = List(
           "INVALID_TAXABLE_ENTITY_ID"   -> NinoFormatError,
-          "INVALID_TAX_YEAR"            -> TaxYearFormatError,
+          "INVALID_TAX_YEAR"            -> InternalError,
           "INVALID_INCOMESOURCEID"      -> BusinessIdFormatError,
           "INVALID_SUBMISSION_ID"       -> SubmissionIdFormatError,
           "INVALID_PAYLOAD"             -> InternalError,

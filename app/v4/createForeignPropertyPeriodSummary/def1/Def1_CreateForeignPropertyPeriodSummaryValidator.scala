@@ -18,6 +18,7 @@ package v4.createForeignPropertyPeriodSummary.def1
 
 import api.controllers.validators.Validator
 import api.controllers.validators.resolvers.{ResolveBusinessId, ResolveNino, ResolveNonEmptyJsonObject, ResolveTaxYear}
+import api.models.domain.TaxYear
 import api.models.errors.MtdError
 import cats.data.Validated
 import cats.implicits._
@@ -26,7 +27,12 @@ import play.api.libs.json.JsValue
 import v4.createForeignPropertyPeriodSummary.def1.Def1_CreateForeignPropertyPeriodSummaryRulesValidator.validateBusinessRules
 import v4.createForeignPropertyPeriodSummary.model.request._
 
-class Def1_CreateForeignPropertyPeriodSummaryValidator(nino: String, businessId: String, taxYear: String, body: JsValue, appConfig: AppConfig)
+class Def1_CreateForeignPropertyPeriodSummaryValidator(nino: String,
+                                                       businessId: String,
+                                                       taxYear: String,
+                                                       maxTaxYear: TaxYear,
+                                                       body: JsValue,
+                                                       appConfig: AppConfig)
     extends Validator[CreateForeignPropertyPeriodSummaryRequestData] {
 
   private lazy val minimumTaxYear = appConfig.minimumTaxV2Foreign
@@ -37,7 +43,7 @@ class Def1_CreateForeignPropertyPeriodSummaryValidator(nino: String, businessId:
     (
       ResolveNino(nino),
       ResolveBusinessId(businessId),
-      ResolveTaxYear(minimumTaxYear, taxYear),
+      ResolveTaxYear(value = taxYear, minimumTaxYear = minimumTaxYear, maximumTaxYear = maxTaxYear),
       resolveJson(body)
     ).mapN(Def1_CreateForeignPropertyPeriodSummaryRequestData) andThen validateBusinessRules
 

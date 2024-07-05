@@ -17,6 +17,7 @@
 package v4.amendForeignPropertyPeriodSummary
 
 import api.controllers.validators.Validator
+import api.models.domain.TaxYear
 import config.AppConfig
 import play.api.libs.json.JsValue
 import v4.amendForeignPropertyPeriodSummary.def1.Def1_AmendForeignPropertyPeriodSummaryValidator
@@ -27,6 +28,7 @@ import javax.inject.{Inject, Singleton}
 
 @Singleton
 class AmendForeignPropertyPeriodSummaryValidatorFactory @Inject() (appConfig: AppConfig) {
+  private val maximumTaxYear = TaxYear.fromMtd("2024-25")
 
   def validator(nino: String,
                 businessId: String,
@@ -34,9 +36,9 @@ class AmendForeignPropertyPeriodSummaryValidatorFactory @Inject() (appConfig: Ap
                 submissionId: String,
                 body: JsValue): Validator[AmendForeignPropertyPeriodSummaryRequestData] = {
     if (taxYear >= "2024-25") {
-      new Def2_AmendForeignPropertyPeriodSummaryValidator(nino, businessId, taxYear, submissionId, body, appConfig)
+      new Def2_AmendForeignPropertyPeriodSummaryValidator(nino, businessId, taxYear, maximumTaxYear, submissionId, body, appConfig)
     } else {
-      new Def1_AmendForeignPropertyPeriodSummaryValidator(nino, businessId, taxYear, submissionId, body, appConfig)
+      new Def1_AmendForeignPropertyPeriodSummaryValidator(nino, businessId, taxYear, maximumTaxYear, submissionId, body, appConfig)
     }
   }
 

@@ -40,7 +40,7 @@ class CreateForeignPropertyPeriodSummaryService @Inject() (connector: CreateFore
     val errors = Map(
       "INVALID_TAXABLE_ENTITY_ID" -> NinoFormatError,
       "INVALID_INCOMESOURCEID"    -> BusinessIdFormatError,
-      "INVALID_TAX_YEAR"          -> TaxYearFormatError,
+      "INVALID_TAX_YEAR"          -> InternalError,
       "DUPLICATE_COUNTRY_CODE"    -> RuleDuplicateCountryCodeError,
       "OVERLAPS_IN_PERIOD"        -> RuleOverlappingPeriodError,
       "NOT_ALIGN_PERIOD"          -> RuleMisalignedPeriodError,

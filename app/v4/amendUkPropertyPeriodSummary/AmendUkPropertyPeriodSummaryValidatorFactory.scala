@@ -17,27 +17,40 @@
 package v4.amendUkPropertyPeriodSummary
 
 import api.controllers.validators.Validator
+import api.models.domain.TaxYear
 import config.AppConfig
 import play.api.libs.json.JsValue
+import v4.amendUkPropertyPeriodSummary.AmendUkPropertyPeriodSummaryValidatorFactory.def2TaxYearStart
 import v4.amendUkPropertyPeriodSummary.def1.Def1_AmendUkPropertyPeriodSummaryValidator
 import v4.amendUkPropertyPeriodSummary.def2.Def2_AmendUkPropertyPeriodSummaryValidator
 import v4.amendUkPropertyPeriodSummary.model.request.AmendUkPropertyPeriodSummaryRequestData
 
 import javax.inject.Inject
+import scala.math.Ordering.Implicits.infixOrderingOps
 
 class AmendUkPropertyPeriodSummaryValidatorFactory @Inject() (appConfig: AppConfig) {
 
-  def validator(nino: String,
-                businessId: String,
-                taxYear: String,
-                submissionId: String,
-                body: JsValue): Validator[AmendUkPropertyPeriodSummaryRequestData] = {
-    if (taxYear >= "2024-25") {
-      new Def2_AmendUkPropertyPeriodSummaryValidator(nino, businessId, taxYear, submissionId, body)
-    } else {
-      new Def1_AmendUkPropertyPeriodSummaryValidator(nino, businessId, taxYear, submissionId, body)(appConfig)
-    }
+  def validator(
+      nino: String,
+      businessId: String,
+      taxYear: String,
+      submissionId: String,
+      body: JsValue
+  ): Validator[AmendUkPropertyPeriodSummaryRequestData] = {
 
+    TaxYear.maybeFromMtd(taxYear) match {
+      case Some(parsedTY) if parsedTY >= def2TaxYearStart =>
+        new Def2_AmendUkPropertyPeriodSummaryValidator(nino, businessId, taxYear, submissionId, body)
+
+      case _ =>
+        new Def1_AmendUkPropertyPeriodSummaryValidator(nino, businessId, taxYear, submissionId, body)(appConfig)
+    }
   }
+
+}
+
+object AmendUkPropertyPeriodSummaryValidatorFactory {
+
+  private val def2TaxYearStart = TaxYear.fromMtd("2024-25")
 
 }

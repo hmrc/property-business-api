@@ -28,6 +28,7 @@ class Def1_RetrieveForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec wi
   private val validNino         = "AA123456A"
   private val validBusinessId   = "XAIS12345678901"
   private val validTaxYear      = "2023-24"
+  private val maxTaxYear        = TaxYear.fromMtd("2024-25")
   private val validSubmissionId = "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
 
   private val parsedNino         = Nino(validNino)
@@ -35,8 +36,8 @@ class Def1_RetrieveForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec wi
   private val parsedTaxYear      = TaxYear.fromMtd(validTaxYear)
   private val parsedSubmissionId = SubmissionId(validSubmissionId)
 
-  private def validator(nino: String, businessId: String, taxYear: String, submissionId: String) =
-    new Def1_RetrieveForeignPropertyPeriodSummaryValidator(nino, businessId, taxYear, submissionId, mockAppConfig)
+  private def validator(nino: String, businessId: String, taxYear: String, submissionId: String, maxTaxYear: TaxYear = maxTaxYear) =
+    new Def1_RetrieveForeignPropertyPeriodSummaryValidator(nino, businessId, taxYear, maxTaxYear, submissionId, mockAppConfig)
 
   private def setupMocks(): Unit = MockedAppConfig.minimumTaxV2Foreign.returns(TaxYear.starting(2021)).anyNumberOfTimes()
 
@@ -53,6 +54,14 @@ class Def1_RetrieveForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec wi
       "passed the minimum supported taxYear" in {
         setupMocks()
         val taxYearString = "2021-22"
+        validator(validNino, validBusinessId, taxYearString, validSubmissionId).validateAndWrapResult() shouldBe
+          Right(
+            Def1_RetrieveForeignPropertyPeriodSummaryRequestData(parsedNino, parsedBusinessId, TaxYear.fromMtd(taxYearString), parsedSubmissionId))
+      }
+
+      "passed the maximum supported taxYear" in {
+        setupMocks()
+        val taxYearString = "2024-25"
         validator(validNino, validBusinessId, taxYearString, validSubmissionId).validateAndWrapResult() shouldBe
           Right(
             Def1_RetrieveForeignPropertyPeriodSummaryRequestData(parsedNino, parsedBusinessId, TaxYear.fromMtd(taxYearString), parsedSubmissionId))
@@ -97,6 +106,12 @@ class Def1_RetrieveForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec wi
           validator(validNino, validBusinessId, "2020-22", validSubmissionId).validateAndWrapResult()
 
         result shouldBe Left(ErrorWrapper(correlationId, RuleTaxYearRangeInvalidError))
+      }
+
+      "passed tax year immediately after max tax year" in {
+        setupMocks()
+        validator(validNino, validBusinessId, "2025-26", validSubmissionId).validateAndWrapResult() shouldBe
+          Left(ErrorWrapper(correlationId, RuleTaxYearNotSupportedError))
       }
 
       "passed an incorrectly formatted submissionId" in {

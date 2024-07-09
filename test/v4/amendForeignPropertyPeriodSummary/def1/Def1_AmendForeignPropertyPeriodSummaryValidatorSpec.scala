@@ -38,14 +38,16 @@ import v4.amendForeignPropertyPeriodSummary.model.request.{
 class Def1_AmendForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with MockAppConfig with JsonErrorValidators {
   private implicit val correlationId: String = "1234"
 
-  private val validNino         = "AA123456A"
-  private val validBusinessId   = "XAIS12345678901"
-  private val validTaxYear      = "2023-24"
+  private val validNino = "AA123456A"
+  private val validBusinessId = "XAIS12345678901"
+  private val validTaxYear = "2023-24"
+  private val maxTaxYear = TaxYear.fromMtd("2024-25")
   private val validSubmissionId = "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
 
   private val countryCode = "AFG"
 
-  private def nonFhlEntryWith(countryCode: String) = Json.parse(s"""
+  private def nonFhlEntryWith(countryCode: String) = Json.parse(
+    s"""
        |{
        |  "countryCode": "$countryCode",
        |  "income": {
@@ -117,7 +119,8 @@ class Def1_AmendForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with 
 
   private val validBody = bodyWith(entry)
 
-  private val entryConsolidated = Json.parse("""
+  private val entryConsolidated = Json.parse(
+    """
       |{
       |  "countryCode": "AFG",
       |  "income": {
@@ -153,7 +156,8 @@ class Def1_AmendForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with 
   private val validBodyConsolidatedExpenses = consolidatedBodyWith(entryConsolidated)
   private val validBodyExtraFieldsConsolidatedExpenses = consolidatedBodyWith(entryConsolidatedWithExtraFields)
 
-  private val validBodyMinimalFhl = Json.parse("""
+  private val validBodyMinimalFhl = Json.parse(
+    """
       |{
       |  "foreignFhlEea": {
       |    "income": {
@@ -163,7 +167,8 @@ class Def1_AmendForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with 
       |}
       |""".stripMargin)
 
-  private val validBodyMinimalNonFhl = Json.parse("""
+  private val validBodyMinimalNonFhl = Json.parse(
+    """
       |{
       |  "foreignNonFhlProperty": [
       |    {
@@ -179,9 +184,9 @@ class Def1_AmendForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with 
       |}
       |""".stripMargin)
 
-  private val parsedNino         = Nino(validNino)
-  private val parsedBusinessId   = BusinessId(validBusinessId)
-  private val parsedTaxYear      = TaxYear.fromMtd(validTaxYear)
+  private val parsedNino = Nino(validNino)
+  private val parsedBusinessId = BusinessId(validBusinessId)
+  private val parsedTaxYear = TaxYear.fromMtd(validTaxYear)
   private val parsedSubmissionId = SubmissionId(validSubmissionId)
 
   private val incomeFhl = ForeignFhlEeaIncome(
@@ -294,8 +299,8 @@ class Def1_AmendForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with 
     Some(List(foreignNonFhlProperty.copy(income = Some(incomeNonFhlMinimal), expenses = None)))
   )
 
-  private def validator(nino: String, businessId: String, taxYear: String, submissionId: String, body: JsValue) =
-    new Def1_AmendForeignPropertyPeriodSummaryValidator(nino, businessId, taxYear, submissionId, body, mockAppConfig)
+  private def validator(nino: String, businessId: String, taxYear: String, submissionId: String, body: JsValue, maxTaxYear: TaxYear = maxTaxYear) =
+    new Def1_AmendForeignPropertyPeriodSummaryValidator(nino, businessId, taxYear, maxTaxYear, submissionId, body, mockAppConfig)
 
   private def setupMocks(): Unit = MockedAppConfig.minimumTaxV2Foreign.returns(TaxYear.starting(2021)).anyNumberOfTimes()
 
@@ -368,6 +373,19 @@ class Def1_AmendForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with 
               parsedSubmissionId,
               parsedBody))
       }
+
+      "passed the maximum supported taxYear" in {
+        setupMocks()
+        val taxYearString = "2024-25"
+        validator(validNino, validBusinessId, taxYearString, validSubmissionId, validBody).validateAndWrapResult() shouldBe
+          Right(
+            Def1_AmendForeignPropertyPeriodSummaryRequestData(
+              parsedNino,
+              parsedBusinessId,
+              TaxYear.fromMtd(taxYearString),
+              parsedSubmissionId,
+              parsedBody))
+      }
     }
 
     "return a single error" when {
@@ -398,6 +416,12 @@ class Def1_AmendForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with 
       "passed a taxYear immediately before the minimum supported" in {
         setupMocks()
         validator(validNino, validBusinessId, "2020-21", validSubmissionId, validBody).validateAndWrapResult() shouldBe
+          Left(ErrorWrapper(correlationId, RuleTaxYearNotSupportedError))
+      }
+
+      "passed a taxYear immediately after the maximum supported" in {
+        setupMocks()
+        validator(validNino, validBusinessId, "2025-26", validSubmissionId, validBody).validateAndWrapResult() shouldBe
           Left(ErrorWrapper(correlationId, RuleTaxYearNotSupportedError))
       }
 

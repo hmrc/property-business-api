@@ -20,7 +20,7 @@ import api.controllers.validators.Validator
 import api.models.domain.TaxYear
 import config.AppConfig
 import play.api.libs.json.JsValue
-import v4.amendForeignPropertyPeriodSummary.AmendForeignPropertyPeriodSummaryValidatorFactory.def2TaxYearStart
+import v4.amendForeignPropertyPeriodSummary.AmendForeignPropertyPeriodSummaryValidatorFactory.{def2TaxYearStart, maximumTaxYear}
 import v4.amendForeignPropertyPeriodSummary.def1.Def1_AmendForeignPropertyPeriodSummaryValidator
 import v4.amendForeignPropertyPeriodSummary.def2.Def2_AmendForeignPropertyPeriodSummaryValidator
 import v4.amendForeignPropertyPeriodSummary.model.request.AmendForeignPropertyPeriodSummaryRequestData
@@ -39,10 +39,10 @@ class AmendForeignPropertyPeriodSummaryValidatorFactory @Inject() (appConfig: Ap
 
     TaxYear.maybeFromMtd(taxYear) match {
       case Some(parsedTY) if parsedTY >= def2TaxYearStart =>
-        new Def2_AmendForeignPropertyPeriodSummaryValidator(nino, businessId, taxYear, submissionId, body, appConfig)
+        new Def2_AmendForeignPropertyPeriodSummaryValidator(nino, businessId, taxYear, maximumTaxYear, submissionId, body, appConfig)
 
       case _ =>
-        new Def1_AmendForeignPropertyPeriodSummaryValidator(nino, businessId, taxYear, submissionId, body, appConfig)
+        new Def1_AmendForeignPropertyPeriodSummaryValidator(nino, businessId, taxYear, maximumTaxYear, submissionId, body, appConfig)
     }
   }
 
@@ -50,6 +50,7 @@ class AmendForeignPropertyPeriodSummaryValidatorFactory @Inject() (appConfig: Ap
 
 object AmendForeignPropertyPeriodSummaryValidatorFactory {
 
+  private val maximumTaxYear = TaxYear.fromMtd("2024-25")
   private val def2TaxYearStart = TaxYear.fromMtd("2024-25")
 
 }

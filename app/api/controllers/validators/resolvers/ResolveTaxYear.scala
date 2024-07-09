@@ -47,6 +47,18 @@ object ResolveTaxYear extends ResolverSupport {
     resolver(value)
   }
 
+  def apply(value: String, maximumTaxYear: TaxYear): Validated[Seq[MtdError], TaxYear] = {
+    val resolver = ResolveTaxYearMaximum(maximumTaxYear)
+
+    resolver(value)
+  }
+
+  def apply(value: String, minimumTaxYear: TaxYear, maximumTaxYear: TaxYear): Validated[Seq[MtdError], TaxYear] = {
+    val resolver = ResolveTaxYearMinMax((minimumTaxYear, maximumTaxYear))
+
+    resolver(value)
+  }
+
 }
 
 case class ResolveTaxYearMinimum(minimumTaxYear: TaxYear) extends ResolverSupport {
@@ -90,8 +102,8 @@ case class ResolveTaxYearMinMax(minMax: (TaxYear, TaxYear), error: MtdError = Ru
     }
 
 }
-
-case class ResolveIncompleteTaxYear(incompleteTaxYearError: MtdError = RuleTaxYearNotEndedError)(implicit clock: Clock) extends ResolverSupport {
+case class ResolveIncompleteTaxYear(incompleteTaxYearError: MtdError = RuleTaxYearNotEndedError)(implicit clock: Clock)
+    extends ResolverSupport {
 
   val resolver: Resolver[String, TaxYear] =
     ResolveTaxYear.resolver thenValidate satisfies(incompleteTaxYearError)(_ < TaxYear.currentTaxYear)

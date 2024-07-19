@@ -17,7 +17,7 @@
 package api.services
 
 import api.models.auth.UserDetails
-import api.models.errors.{ClientNotAuthenticatedError, InternalError}
+import api.models.errors.{ClientOrAgentNotAuthorisedError, InternalError}
 import config.ConfidenceLevelConfig
 import mocks.MockAppConfig
 import org.scalamock.handlers.CallHandler
@@ -139,7 +139,7 @@ class EnrolmentsAuthServiceSpec extends ServiceSpec with MockAppConfig {
           .authorised(expectedPredicate, affinityGroup)
           .returns(Future.failed(MissingBearerToken()))
 
-        await(target.authorised(inputPredicate)) shouldBe Left(ClientNotAuthenticatedError)
+        await(target.authorised(inputPredicate)) shouldBe Left(ClientOrAgentNotAuthorisedError)
       }
 
     def disallowUsersWithoutEnrolments(inputPredicate: Predicate, authValidationEnabled: Boolean, expectedPredicate: Predicate): Unit =
@@ -150,7 +150,7 @@ class EnrolmentsAuthServiceSpec extends ServiceSpec with MockAppConfig {
           .authorised(expectedPredicate, affinityGroup)
           .returns(Future.failed(InsufficientEnrolments()))
 
-        await(target.authorised(inputPredicate)) shouldBe Left(ClientNotAuthenticatedError)
+        await(target.authorised(inputPredicate)) shouldBe Left(ClientOrAgentNotAuthorisedError)
       }
   }
 

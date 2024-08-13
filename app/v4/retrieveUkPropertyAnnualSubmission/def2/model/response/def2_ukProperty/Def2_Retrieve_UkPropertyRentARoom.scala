@@ -14,18 +14,12 @@
  * limitations under the License.
  */
 
-package v4.retrieveUkPropertyAnnualSubmission.model.request
+package v4.retrieveUkPropertyAnnualSubmission.def2.model.response.def2_ukProperty
 
-import api.models.domain.{Nino, BusinessId, TaxYear}
+import play.api.libs.json.{Json, OFormat}
 
-sealed trait RetrieveUkPropertyAnnualSubmissionRequestData {
-  val nino: Nino
-  val businessId: BusinessId
-  val taxYear: TaxYear
+case class Def2_Retrieve_UkPropertyRentARoom(jointlyLet: Boolean)
+
+object Def2_Retrieve_UkPropertyRentARoom {
+  implicit val format: OFormat[Def2_Retrieve_UkPropertyRentARoom] = Json.format[Def2_Retrieve_UkPropertyRentARoom]
 }
-
-case class Def1_RetrieveUkPropertyAnnualSubmissionRequestData(nino: Nino, businessId: BusinessId, taxYear: TaxYear)
-    extends RetrieveUkPropertyAnnualSubmissionRequestData
-
-case class Def2_RetrieveUkPropertyAnnualSubmissionRequestData(nino: Nino, businessId: BusinessId, taxYear: TaxYear)
-  extends RetrieveUkPropertyAnnualSubmissionRequestData

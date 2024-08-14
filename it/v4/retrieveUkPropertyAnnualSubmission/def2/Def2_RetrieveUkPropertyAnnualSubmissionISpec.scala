@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package v4.retrieveUkPropertyAnnualSubmission.def1
+package v4.retrieveUkPropertyAnnualSubmission.def2
 
 import api.models.errors._
 import com.github.tomakehurst.wiremock.stubbing.StubMapping

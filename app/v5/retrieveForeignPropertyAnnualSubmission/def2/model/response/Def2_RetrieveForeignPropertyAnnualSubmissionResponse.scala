@@ -24,10 +24,10 @@ import v5.retrieveForeignPropertyAnnualSubmission.model.response.RetrieveForeign
 
 case class Def2_RetrieveForeignPropertyAnnualSubmissionResponse(
                                                                  submittedOn: Timestamp,
-                                                                 foreignNonFhlProperty: Option[Seq[Def2_Retrieve_ForeignPropertyEntry]]
+                                                                 foreignProperty: Option[Seq[Def2_Retrieve_ForeignPropertyEntry]]
                                                                ) extends RetrieveForeignPropertyAnnualSubmissionResponse{
 
-  override def isForeignResult: Boolean = foreignNonFhlProperty.nonEmpty
+  override def isForeignResult: Boolean = foreignProperty.nonEmpty
 }
 
 object Def2_RetrieveForeignPropertyAnnualSubmissionResponse {

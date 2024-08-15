@@ -21,22 +21,20 @@ import api.controllers.validators.resolvers.{ResolveBusinessId, ResolveNino, Res
 import api.models.errors.MtdError
 import cats.data.Validated
 import cats.implicits._
-import config.AppConfig
 import v5.retrieveForeignPropertyAnnualSubmission.def2.request.Def2_RetrieveForeignPropertyAnnualSubmissionRequestData
 import v5.retrieveForeignPropertyAnnualSubmission.model.request.RetrieveForeignPropertyAnnualSubmissionRequestData
 
 import javax.inject.Inject
 
-class Def2_RetrieveForeignPropertyAnnualSubmissionValidator @Inject()(nino: String, businessId: String, taxYear: String)(appConfig: AppConfig)
+class Def2_RetrieveForeignPropertyAnnualSubmissionValidator @Inject()(nino: String, businessId: String, taxYear: String)
     extends Validator[RetrieveForeignPropertyAnnualSubmissionRequestData] {
 
-  private lazy val minimumTaxYear = appConfig.minimumTaxV2Foreign
 
   def validate: Validated[Seq[MtdError], RetrieveForeignPropertyAnnualSubmissionRequestData] =
     (
       ResolveNino(nino),
       ResolveBusinessId(businessId),
-      ResolveTaxYear(minimumTaxYear, taxYear)
+      ResolveTaxYear(taxYear)
     ).mapN(Def2_RetrieveForeignPropertyAnnualSubmissionRequestData)
 
 }

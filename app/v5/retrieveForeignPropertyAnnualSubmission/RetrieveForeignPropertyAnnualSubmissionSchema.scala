@@ -18,9 +18,9 @@ package v5.retrieveForeignPropertyAnnualSubmission
 
 import api.controllers.validators.resolvers.ResolveTaxYear
 import api.models.domain.TaxYear
-import api.models.errors.{InvalidTaxYearParameterError, MtdError}
+import api.models.errors.MtdError
 import cats.data.Validated
-import cats.data.Validated.{Invalid, Valid}
+import cats.data.Validated.Valid
 import play.api.libs.json.Reads
 import schema.DownstreamReadable
 import v5.retrieveForeignPropertyAnnualSubmission.def1.model.response.Def1_RetrieveForeignPropertyAnnualSubmissionResponse
@@ -52,8 +52,7 @@ object RetrieveForeignPropertyAnnualSubmissionSchema {
     }
 
   def schemaFor(taxYear: TaxYear): Validated[Seq[MtdError], RetrieveForeignPropertyAnnualSubmissionSchema] = {
-    if (taxYear < TaxYear.tysTaxYear) Invalid(Seq(InvalidTaxYearParameterError))
-    else if (taxYear <= TaxYear.starting(2024)) Valid(Def1)
+    if (taxYear < TaxYear.starting(2025)) Valid(Def1)
     else Valid(Def2)
   }
 

@@ -5,17 +5,18 @@ description: |
   ### Test data
   Scenario simulation using Gov-Test-Scenario headers is only available in the sandbox environment.
   
-  | Header Value (Gov-Test-Scenario)      | Scenario                                                               |
-  |---------------------------------------|------------------------------------------------------------------------|
-  | N/A - DEFAULT                         | Simulates the scenario where no data is found.                         |
-  | FOREIGN_PROPERTY                      | Simulates the scenario with FHL and Non-FHL properties.                |
-  | FOREIGN_FHL_ALL_OTHER_ALLOWANCES      | Simulates the scenario of a FHL property with all other allowances.    |
-  | FOREIGN_FHL_PROPERTY_ALLOWANCE        | Simulates the scenario of a FHL property with property allowance.      |
-  | FOREIGN_NON_FHL_ALL_OTHER_ALLOWANCES  | Simulates the scenario of a Non-FHL property with all other allowances.|
-  | FOREIGN_NON_FHL_PROPERTY_ALLOWANCE    | Simulates the scenario of a Non-FHL property with property allowance.  |
-  | UK_PROPERTY                           | Simulates the scenario where the type of business is incorrect.        |
-  | STATEFUL                              | Performs a stateful retrieve.                                          |
-
+  |   Tax Year      |   Header Value (Gov-Test-Scenario)    |   Scenario                                                              |
+  |-----------------|---------------------------------------|-------------------------------------------------------------------------|
+  |All              | N/A - DEFAULT                         | Simulates the scenario where no data is found.                          |
+  |All              | FOREIGN_PROPERTY                      | Simulates the scenario with FHL and Non-FHL properties.                 |
+  |All              | UK_PROPERTY                           | Simulates the scenario where the type of business is incorrect.         |
+  |All              | STATEFUL                              | Performs a stateful retrieve.                                           |
+  |2025-26 onwards  | FOREIGN_ALL_OTHER_ALLOWANCES          | Simulates the scenario of a Foreign property with all other allowances. |
+  |2025-26 onwards  | FOREIGN_PROPERTY_ALLOWANCE            | Simulates the scenario of a Foreign property with property allowance.   |
+  |Before 2025-26   | FOREIGN_FHL_ALL_OTHER_ALLOWANCES      | Simulates the scenario of a FHL property with all other allowances.     |
+  |Before 2025-26   | FOREIGN_FHL_PROPERTY_ALLOWANCE        | Simulates the scenario of a FHL property with property allowance.       |
+  |Before 2025-26   | FOREIGN_NON_FHL_ALL_OTHER_ALLOWANCES  | Simulates the scenario of a Non-FHL property with all other allowances. |
+  |Before 2025-26   | FOREIGN_NON_FHL_PROPERTY_ALLOWANCE    | Simulates the scenario of a Non-FHL property with property allowance.   |
 
 
 
@@ -51,6 +52,7 @@ responses:
         schema:
           oneOf:
             - $ref: './schemas/foreign_property_annual_submission_retrieve/def1/response.json'
+            - $ref: './schemas/foreign_property_annual_submission_retrieve/def2/response.json'
         examples:
           all-other-allowances-response:
             description: All Other Allowances Response
@@ -60,6 +62,14 @@ responses:
             description: Property Allowance Response
             value:
               $ref: './examples/foreign_property_annual_submission_retrieve/def1/property_allowance_response.json'
+          foreign-all-other-allowance-response:
+            description: Foreign Property With All Other Allowance Response
+            value:
+              $ref: './examples/foreign_property_annual_submission_retrieve/def2/all_other_allowances_response.json'
+          foreign-property-allowance-response:
+            description: Foreign Property With Property Allowance Response
+            value:
+              $ref: './examples/foreign_property_annual_submission_retrieve/def2/property_allowance_response.json'
 
   "400":
     description: Bad request

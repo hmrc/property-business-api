@@ -46,6 +46,6 @@ object Def1_RetrieveUkPropertyAnnualSubmissionResponse {
     (__ \ "submittedOn").read[Timestamp] and
       (__ \ "ukFhlProperty").readNullable[Def1_Retrieve_UkFhlProperty] and
       (__ \ "ukOtherProperty").readNullable[Def1_Retrieve_UkNonFhlProperty]
-    )(Def1_RetrieveUkPropertyAnnualSubmissionResponse.apply _)
+  )(Def1_RetrieveUkPropertyAnnualSubmissionResponse.apply _)
 
 }

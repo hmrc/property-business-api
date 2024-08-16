@@ -33,8 +33,8 @@ import scala.concurrent.{ExecutionContext, Future}
 class RetrieveUkPropertyAnnualSubmissionService @Inject() (connector: RetrieveUkPropertyAnnualSubmissionConnector) extends BaseService {
 
   def retrieveUkProperty(request: RetrieveUkPropertyAnnualSubmissionRequestData)(implicit
-                                                                                 ctx: RequestContext,
-                                                                                 ec: ExecutionContext): Future[ServiceOutcome[RetrieveUkPropertyAnnualSubmissionResponse]] = {
+      ctx: RequestContext,
+      ec: ExecutionContext): Future[ServiceOutcome[RetrieveUkPropertyAnnualSubmissionResponse]] = {
 
     val result = EitherT(connector.retrieveUkProperty(request))
       .leftMap(mapDownstreamErrors(downstreamErrorMap))
@@ -46,19 +46,19 @@ class RetrieveUkPropertyAnnualSubmissionService @Inject() (connector: RetrieveUk
   private val downstreamErrorMap: Map[String, MtdError] = {
     val errors = Map(
       "INVALID_TAXABLE_ENTITY_ID" -> NinoFormatError,
-      "INVALID_INCOMESOURCEID" -> BusinessIdFormatError,
-      "INVALID_TAX_YEAR" -> TaxYearFormatError,
-      "INVALID_CORRELATIONID" -> InternalError,
-      "NO_DATA_FOUND" -> NotFoundError,
-      "TAX_YEAR_NOT_SUPPORTED" -> RuleTaxYearNotSupportedError,
-      "SERVER_ERROR" -> InternalError,
-      "SERVICE_UNAVAILABLE" -> InternalError
+      "INVALID_INCOMESOURCEID"    -> BusinessIdFormatError,
+      "INVALID_TAX_YEAR"          -> TaxYearFormatError,
+      "INVALID_CORRELATIONID"     -> InternalError,
+      "NO_DATA_FOUND"             -> NotFoundError,
+      "TAX_YEAR_NOT_SUPPORTED"    -> RuleTaxYearNotSupportedError,
+      "SERVER_ERROR"              -> InternalError,
+      "SERVICE_UNAVAILABLE"       -> InternalError
     )
 
     val extraTysErrors =
       Map(
         "INVALID_INCOMESOURCE_ID" -> BusinessIdFormatError,
-        "INVALID_CORRELATION_ID" -> InternalError
+        "INVALID_CORRELATION_ID"  -> InternalError
       )
 
     errors ++ extraTysErrors
@@ -67,7 +67,7 @@ class RetrieveUkPropertyAnnualSubmissionService @Inject() (connector: RetrieveUk
   private def validateBusinessType(resultWrapper: ResponseWrapper[RetrieveUkPropertyAnnualSubmissionConnector.Result]) =
     resultWrapper.responseData match {
       case UkResult(response) => Right(ResponseWrapper(resultWrapper.correlationId, response))
-      case NonUkResult => Left(ErrorWrapper(resultWrapper.correlationId, RuleTypeOfBusinessIncorrectError))
+      case NonUkResult        => Left(ErrorWrapper(resultWrapper.correlationId, RuleTypeOfBusinessIncorrectError))
     }
 
 }

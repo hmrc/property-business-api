@@ -20,15 +20,15 @@ import api.models.domain.{BusinessId, Nino, TaxYear}
 import api.models.errors._
 import mocks.MockAppConfig
 import support.UnitSpec
-import v4.retrieveUkPropertyAnnualSubmission.RetrieveUkPropertyAnnualSubmissionValidatorFactory
 import v4.retrieveUkPropertyAnnualSubmission.model.request.{Def2_RetrieveUkPropertyAnnualSubmissionRequestData, RetrieveUkPropertyAnnualSubmissionRequestData}
+import v4.retrieveUkPropertyAnnualSubmission.RetrieveUkPropertyAnnualSubmissionValidatorFactory
 
 class Def2_RetrieveUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec with MockAppConfig {
 
   implicit private val correlationId: String = "X-123"
   private val validNino                      = "AA123456B"
   private val validBusinessId                = "XAIS12345678901"
-  private val validTaxYear                   = "2024-25"
+  private val validTaxYear                   = "2025-26"
 
   private val parsedNino       = Nino(validNino)
   private val parsedBusinessId = BusinessId(validBusinessId)
@@ -54,7 +54,7 @@ class Def2_RetrieveUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec with
 
       "given the minimum supported taxYear" in {
         setupMocks()
-        val taxYearString = "2024-25"
+        val taxYearString = "2025-26"
 
         val result = validator(validNino, validBusinessId, taxYearString).validateAndWrapResult()
 
@@ -96,7 +96,7 @@ class Def2_RetrieveUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec with
         setupMocks()
 
         val result = validator(validNino, validBusinessId, "2021-22").validateAndWrapResult()
-        result shouldBe Left(ErrorWrapper(correlationId, RuleTaxYearNotSupportedError))
+        result shouldBe Left(ErrorWrapper(correlationId, InvalidTaxYearParameterError))
       }
 
       "given a taxYear spanning an invalid range" in {
@@ -115,7 +115,7 @@ class Def2_RetrieveUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec with
         setupMocks()
 
         val result: Either[ErrorWrapper, RetrieveUkPropertyAnnualSubmissionRequestData] =
-          validator("invalid", "invalid", "invalid").validateAndWrapResult()
+          validator("invalid", "invalid", validTaxYear).validateAndWrapResult()
 
         result shouldBe Left(
           ErrorWrapper(

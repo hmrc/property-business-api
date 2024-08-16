@@ -17,7 +17,7 @@
 package v4.retrieveUkPropertyAnnualSubmission.def2.model
 
 import api.controllers.validators.Validator
-import api.controllers.validators.resolvers.{ResolveBusinessId, ResolveNino, ResolveTaxYearMaximum}
+import api.controllers.validators.resolvers.{ResolveBusinessId, ResolveNino, ResolveTaxYearMinimum}
 import api.models.domain.TaxYear
 import api.models.errors.MtdError
 import cats.data.Validated
@@ -39,6 +39,6 @@ class Def2_RetrieveUkPropertyAnnualSubmissionValidator @Inject() (nino: String, 
 }
 
 object Def2_RetrieveUkPropertyAnnualSubmissionValidator {
-  private val maxTaxYear = TaxYear.fromMtd("2024-25")
-  private val resolveTaxYear = ResolveTaxYearMaximum(maxTaxYear)
+  private val minTaxYear = TaxYear.fromMtd("2025-26")
+  private val resolveTaxYear = ResolveTaxYearMinimum(minTaxYear)
 }

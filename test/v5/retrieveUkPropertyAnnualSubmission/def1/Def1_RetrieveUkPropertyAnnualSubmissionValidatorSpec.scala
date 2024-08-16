@@ -96,7 +96,7 @@ class Def1_RetrieveUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec with
         setupMocks()
 
         val result = validator(validNino, validBusinessId, "2021-22").validateAndWrapResult()
-        result shouldBe Left(ErrorWrapper(correlationId, RuleTaxYearNotSupportedError))
+        result shouldBe Left(ErrorWrapper(correlationId, InvalidTaxYearParameterError))
       }
 
       "given a taxYear spanning an invalid range" in {

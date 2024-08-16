@@ -17,30 +17,23 @@
 package v5.retrieveUkPropertyAnnualSubmission
 
 import api.controllers.validators.Validator
-import api.models.domain.TaxYear
+import api.models.errors.MtdError
+import cats.data.Validated._
 import config.AppConfig
-import v5.retrieveUkPropertyAnnualSubmission.RetrieveUkPropertyAnnualSubmissionValidatorFactory.def2TaxYearStart
+import v5.retrieveUkPropertyAnnualSubmission.RetrieveUkPropertyAnnualSubmissionSchema.{Def1, Def2}
 import v5.retrieveUkPropertyAnnualSubmission.def1.model.Def1_RetrieveUkPropertyAnnualSubmissionValidator
 import v5.retrieveUkPropertyAnnualSubmission.def2.model.Def2_RetrieveUkPropertyAnnualSubmissionValidator
 import v5.retrieveUkPropertyAnnualSubmission.model.request.RetrieveUkPropertyAnnualSubmissionRequestData
 
 import javax.inject.{Inject, Singleton}
-import scala.math.Ordered.orderingToOrdered
 
 @Singleton
 class RetrieveUkPropertyAnnualSubmissionValidatorFactory @Inject() (appConfig: AppConfig) {
 
   def validator(nino: String, businessId: String, taxYear: String): Validator[RetrieveUkPropertyAnnualSubmissionRequestData] =
-    TaxYear.maybeFromMtd(taxYear) match {
-      case Some(parsedTY) if parsedTY >= def2TaxYearStart =>
-        new Def2_RetrieveUkPropertyAnnualSubmissionValidator(nino, businessId, taxYear)
-
-      case _ =>
-        new Def1_RetrieveUkPropertyAnnualSubmissionValidator(nino, businessId, taxYear)(appConfig)
-
+    RetrieveUkPropertyAnnualSubmissionSchema.schemaFor(Some(taxYear)) match {
+      case Valid(Def1)     => new Def1_RetrieveUkPropertyAnnualSubmissionValidator(nino, businessId, taxYear)
+      case Valid(Def2)     => new Def2_RetrieveUkPropertyAnnualSubmissionValidator(nino, businessId, taxYear)
+      case Invalid(errors :Seq[MtdError]) => Validator.returningErrors(errors)
     }
-}
-
-object  RetrieveUkPropertyAnnualSubmissionValidatorFactory {
-  private val def2TaxYearStart = TaxYear.fromMtd("2024-25")
 }

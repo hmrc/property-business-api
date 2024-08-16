@@ -47,7 +47,7 @@ class RetrieveUkPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec {
         stubHttpResponse(outcome)
 
         val result: DownstreamOutcome[Result] = await(connector.retrieveUkProperty(request))
-        result shouldBe Right(ResponseWrapper(correlationId, UkResultDef1(response)))
+        result shouldBe Right(ResponseWrapper(correlationId, UkResult(response)))
       }
     }
 
@@ -59,7 +59,7 @@ class RetrieveUkPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec {
         stubHttpResponse(outcome)
 
         val result: DownstreamOutcome[Result] = await(connector.retrieveUkProperty(request))
-        result shouldBe Right(ResponseWrapper(correlationId, UkResultDef1(response)))
+        result shouldBe Right(ResponseWrapper(correlationId, UkResult(response)))
       }
     }
 
@@ -72,7 +72,7 @@ class RetrieveUkPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec {
         stubHttpResponse(outcome)
 
         val result: DownstreamOutcome[Result] = await(connector.retrieveUkProperty(request))
-        result shouldBe Right(ResponseWrapper(correlationId, UkResultDef1(response)))
+        result shouldBe Right(ResponseWrapper(correlationId, UkResult(response)))
       }
     }
 
@@ -114,7 +114,7 @@ class RetrieveUkPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec {
         ).returns(Future.successful(outcome))
 
         val result: DownstreamOutcome[Result] = await(connector.retrieveUkProperty(request))
-        result shouldBe Right(ResponseWrapper(correlationId, UkResultDef1(response)))
+        result shouldBe Right(ResponseWrapper(correlationId, UkResult(response)))
       }
     }
   }

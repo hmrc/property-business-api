@@ -33,8 +33,8 @@ import scala.concurrent.{ExecutionContext, Future}
 class RetrieveUkPropertyAnnualSubmissionService @Inject() (connector: RetrieveUkPropertyAnnualSubmissionConnector) extends BaseService {
 
   def retrieveUkProperty(request: RetrieveUkPropertyAnnualSubmissionRequestData)(implicit
-      ctx: RequestContext,
-      ec: ExecutionContext): Future[ServiceOutcome[RetrieveUkPropertyAnnualSubmissionResponse]] = {
+                                                                                 ctx: RequestContext,
+                                                                                 ec: ExecutionContext): Future[ServiceOutcome[RetrieveUkPropertyAnnualSubmissionResponse]] = {
 
     val result = EitherT(connector.retrieveUkProperty(request))
       .leftMap(mapDownstreamErrors(downstreamErrorMap))

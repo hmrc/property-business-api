@@ -36,8 +36,9 @@ class Def2_RetrieveUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec with
 
   private val validatorFactory = new RetrieveUkPropertyAnnualSubmissionValidatorFactory(mockAppConfig)
 
-  private def validator(nino: String, businessId: String, taxYear: String) =
+  private def validator(nino: String, businessId: String, taxYear: String) = {
     validatorFactory.validator(nino, businessId, taxYear)
+  }
 
   private def setupMocks(): Unit = MockedAppConfig.minimumTaxV2Uk.returns(TaxYear.starting(2022)).anyNumberOfTimes()
 
@@ -79,7 +80,7 @@ class Def2_RetrieveUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec with
         val result: Either[ErrorWrapper, RetrieveUkPropertyAnnualSubmissionRequestData] =
           validator(validNino, validBusinessId, "202324").validateAndWrapResult()
 
-        result shouldBe Left(ErrorWrapper(correlationId, TaxYearFormatError))
+        result shouldBe Left(ErrorWrapper(correlationId, RuleTaxYearNotSupportedError))
 
       }
 
@@ -96,7 +97,7 @@ class Def2_RetrieveUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec with
         setupMocks()
 
         val result = validator(validNino, validBusinessId, "2021-22").validateAndWrapResult()
-        result shouldBe Left(ErrorWrapper(correlationId, InvalidTaxYearParameterError))
+        result shouldBe Left(ErrorWrapper(correlationId, RuleTaxYearNotSupportedError))
       }
 
       "given a taxYear spanning an invalid range" in {

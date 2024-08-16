@@ -23,7 +23,9 @@ import v5.retrieveUkPropertyAnnualSubmission.def1.model.response.def1_ukFhlPrope
 import v5.retrieveUkPropertyAnnualSubmission.def1.model.response.def1_ukNonFhlProperty.Def1_Retrieve_UkNonFhlProperty
 import v5.retrieveUkPropertyAnnualSubmission.def2.model.response.def2_ukProperty.Def2_Retrieve_UkProperty
 
-sealed trait RetrieveUkPropertyAnnualSubmissionResponse
+sealed trait RetrieveUkPropertyAnnualSubmissionResponse {
+  def isUkResult :Boolean
+}
 
 object RetrieveUkPropertyAnnualSubmissionResponse {
 

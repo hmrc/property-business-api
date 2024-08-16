@@ -20,8 +20,8 @@ import api.models.domain.{BusinessId, Nino, TaxYear}
 import api.models.errors._
 import mocks.MockAppConfig
 import support.UnitSpec
-import v5.retrieveUkPropertyAnnualSubmission.RetrieveUkPropertyAnnualSubmissionValidatorFactory
-import v5.retrieveUkPropertyAnnualSubmission.model.request.{Def2_RetrieveUkPropertyAnnualSubmissionRequestData, RetrieveUkPropertyAnnualSubmissionRequestData}
+import v5.retrieveUkPropertyAnnualSubmission.def2.model.request.Def2_RetrieveUkPropertyAnnualSubmissionRequestData
+import v5.retrieveUkPropertyAnnualSubmission.model.request.RetrieveUkPropertyAnnualSubmissionRequestData
 
 class Def2_RetrieveUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec with MockAppConfig {
 
@@ -34,11 +34,11 @@ class Def2_RetrieveUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec with
   private val parsedBusinessId = BusinessId(validBusinessId)
   private val parsedTaxYear    = TaxYear.fromMtd(validTaxYear)
 
-  private val validatorFactory = new RetrieveUkPropertyAnnualSubmissionValidatorFactory(mockAppConfig)
 
   private def validator(nino: String, businessId: String, taxYear: String) = {
-    validatorFactory.validator(nino, businessId, taxYear)
+    Def2_RetrieveUkPropertyAnnualSubmissionValidator(nino, businessId, taxYear)
   }
+
 
   private def setupMocks(): Unit = MockedAppConfig.minimumTaxV2Uk.returns(TaxYear.starting(2022)).anyNumberOfTimes()
 
@@ -80,7 +80,7 @@ class Def2_RetrieveUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec with
         val result: Either[ErrorWrapper, RetrieveUkPropertyAnnualSubmissionRequestData] =
           validator(validNino, validBusinessId, "202324").validateAndWrapResult()
 
-        result shouldBe Left(ErrorWrapper(correlationId, RuleTaxYearNotSupportedError))
+        result shouldBe Left(ErrorWrapper(correlationId, TaxYearFormatError))
 
       }
 
@@ -96,7 +96,7 @@ class Def2_RetrieveUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec with
       "given a taxYear immediately before the minimum supported" in {
         setupMocks()
 
-        val result = validator(validNino, validBusinessId, "2021-22").validateAndWrapResult()
+        val result = validator(validNino, validBusinessId, "2020-21").validateAndWrapResult()
         result shouldBe Left(ErrorWrapper(correlationId, RuleTaxYearNotSupportedError))
       }
 

@@ -14,15 +14,18 @@
  * limitations under the License.
  */
 
-package v5.retrieveUkPropertyAnnualSubmission.model.request
+package v5.retrieveUkPropertyAnnualSubmission.def1.model.request
 
 import api.models.domain.{BusinessId, Nino, TaxYear}
 import v5.retrieveUkPropertyAnnualSubmission.RetrieveUkPropertyAnnualSubmissionSchema
+import v5.retrieveUkPropertyAnnualSubmission.model.request.RetrieveUkPropertyAnnualSubmissionRequestData
 
-trait RetrieveUkPropertyAnnualSubmissionRequestData {
-  val nino: Nino
-  val businessId: BusinessId
-  val taxYear: TaxYear
-  val schema: RetrieveUkPropertyAnnualSubmissionSchema
+case class Def1_RetrieveUkPropertyAnnualSubmissionRequestData(
+    nino: Nino,
+    businessId: BusinessId,
+    taxYear: TaxYear
+) extends RetrieveUkPropertyAnnualSubmissionRequestData {
+
+  val schema: RetrieveUkPropertyAnnualSubmissionSchema = RetrieveUkPropertyAnnualSubmissionSchema.Def1
+
 }
-

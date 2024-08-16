@@ -17,28 +17,22 @@
 package v5.retrieveUkPropertyAnnualSubmission.def2.model
 
 import api.controllers.validators.Validator
-import api.controllers.validators.resolvers.{ResolveBusinessId, ResolveNino, ResolveTaxYearMinimum}
-import api.models.domain.TaxYear
+import api.controllers.validators.resolvers.{ResolveBusinessId, ResolveNino, ResolveTaxYear}
 import api.models.errors.MtdError
 import cats.data.Validated
-import cats.implicits.catsSyntaxTuple3Semigroupal
-import v5.retrieveUkPropertyAnnualSubmission.def2.model.Def2_RetrieveUkPropertyAnnualSubmissionValidator.resolveTaxYear
+import cats.implicits._
+import v5.retrieveUkPropertyAnnualSubmission.def2.model.request.Def2_RetrieveUkPropertyAnnualSubmissionRequestData
 import v5.retrieveUkPropertyAnnualSubmission.model.request._
 
 import javax.inject.Inject
 
-class Def2_RetrieveUkPropertyAnnualSubmissionValidator @Inject() (nino: String, businessId: String, taxYear: String)
+class Def2_RetrieveUkPropertyAnnualSubmissionValidator @Inject()(nino: String, businessId: String, taxYear: String)
     extends Validator[RetrieveUkPropertyAnnualSubmissionRequestData] {
   def validate: Validated[Seq[MtdError], RetrieveUkPropertyAnnualSubmissionRequestData] =
     (
       ResolveNino(nino),
       ResolveBusinessId(businessId),
-      resolveTaxYear(taxYear)
+      ResolveTaxYear(taxYear)
     ).mapN(Def2_RetrieveUkPropertyAnnualSubmissionRequestData)
 
-}
-
-object Def2_RetrieveUkPropertyAnnualSubmissionValidator {
-  private val minTaxYear = TaxYear.fromMtd("2025-26")
-  private val resolveTaxYear = ResolveTaxYearMinimum(minTaxYear)
 }

@@ -33,10 +33,10 @@ object RetrieveUkPropertyAnnualSubmissionResponse {
 }
 
 case class Def1_RetrieveUkPropertyAnnualSubmissionResponse(
-                                                            submittedOn: Timestamp,
-                                                            ukFhlProperty: Option[Def1_Retrieve_UkFhlProperty],
-                                                            ukNonFhlProperty: Option[Def1_Retrieve_UkNonFhlProperty]
-                                                          ) extends RetrieveUkPropertyAnnualSubmissionResponse
+    submittedOn: Timestamp,
+    ukFhlProperty: Option[Def1_Retrieve_UkFhlProperty],
+    ukNonFhlProperty: Option[Def1_Retrieve_UkNonFhlProperty]
+) extends RetrieveUkPropertyAnnualSubmissionResponse
 
 object Def1_RetrieveUkPropertyAnnualSubmissionResponse {
 

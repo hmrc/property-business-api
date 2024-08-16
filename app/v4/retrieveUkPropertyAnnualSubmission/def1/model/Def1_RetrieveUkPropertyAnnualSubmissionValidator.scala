@@ -27,7 +27,7 @@ import v4.retrieveUkPropertyAnnualSubmission.model.request._
 import javax.inject.Inject
 
 class Def1_RetrieveUkPropertyAnnualSubmissionValidator @Inject() (nino: String, businessId: String, taxYear: String)(appConfig: AppConfig)
-  extends Validator[RetrieveUkPropertyAnnualSubmissionRequestData] {
+    extends Validator[RetrieveUkPropertyAnnualSubmissionRequestData] {
 
   private lazy val minimumTaxYear = appConfig.minimumTaxV2Uk
 

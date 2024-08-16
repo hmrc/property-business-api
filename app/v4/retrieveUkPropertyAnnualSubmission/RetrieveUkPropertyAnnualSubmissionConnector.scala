@@ -71,6 +71,7 @@ class RetrieveUkPropertyAnnualSubmissionConnector @Inject() (val http: HttpClien
           case Left(e)                                               => Left(e)
         }
     }
+
   }
 
   // The same API#1598 IF endpoint is used for both uk and foreign properties.

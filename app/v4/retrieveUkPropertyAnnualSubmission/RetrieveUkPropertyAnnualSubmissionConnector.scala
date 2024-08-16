@@ -24,7 +24,7 @@ import config.AppConfig
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
 import v4.retrieveUkPropertyAnnualSubmission.RetrieveUkPropertyAnnualSubmissionConnector._
 import v4.retrieveUkPropertyAnnualSubmission.model.request._
-import v4.retrieveUkPropertyAnnualSubmission.model.response.{Def1_RetrieveUkPropertyAnnualSubmissionResponse, Def2_RetrieveUkPropertyAnnualSubmissionResponse}
+import v4.retrieveUkPropertyAnnualSubmission.model.response.Def1_RetrieveUkPropertyAnnualSubmissionResponse
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
@@ -33,8 +33,7 @@ object RetrieveUkPropertyAnnualSubmissionConnector {
 
   sealed trait Result
 
-  case class UkResultDef1(response: Def1_RetrieveUkPropertyAnnualSubmissionResponse) extends Result
-  case class UkResultDef2(response: Def2_RetrieveUkPropertyAnnualSubmissionResponse) extends Result
+  case class UkResult(response: Def1_RetrieveUkPropertyAnnualSubmissionResponse) extends Result
 
   case object NonUkResult extends Result
 }
@@ -67,43 +66,16 @@ class RetrieveUkPropertyAnnualSubmissionConnector @Inject() (val http: HttpClien
         val response = get(downstreamUri, queryParams)
 
         response.map {
-          case Right(ResponseWrapper(corId, resp)) if ukResultDef1(resp) => Right(ResponseWrapper(corId, UkResultDef1(resp)))
-          case Right(ResponseWrapper(corId, _))                      => Right(ResponseWrapper(corId, NonUkResult))
-          case Left(e)                                               => Left(e)
-        }
-
-      case def2: Def2_RetrieveUkPropertyAnnualSubmissionRequestData =>
-        import def2._
-
-        val (downstreamUri, queryParams) = if (taxYear.isTys) {
-          (
-            TaxYearSpecificIfsUri[Def2_RetrieveUkPropertyAnnualSubmissionResponse](
-              s"income-tax/business/property/annual/${taxYear.asTysDownstream}/$nino/$businessId"),
-            Nil
-          )
-        } else {
-          (
-            IfsUri[Def2_RetrieveUkPropertyAnnualSubmissionResponse](s"income-tax/business/property/annual"),
-            List("taxableEntityId" -> nino.nino, "incomeSourceId" -> businessId.businessId, "taxYear" -> taxYear.asMtd)
-          )
-        }
-
-        val response = get(downstreamUri, queryParams)
-
-        response.map {
-          case Right(ResponseWrapper(corId, resp)) if ukResultDef2(resp) => Right(ResponseWrapper(corId, UkResultDef2(resp)))
+          case Right(ResponseWrapper(corId, resp)) if ukResult(resp) => Right(ResponseWrapper(corId, UkResult(resp)))
           case Right(ResponseWrapper(corId, _))                      => Right(ResponseWrapper(corId, NonUkResult))
           case Left(e)                                               => Left(e)
         }
     }
-
   }
 
   // The same API#1598 IF endpoint is used for both uk and foreign properties.
   // If a businessId of the right type is specified some of these optional fields will be present...
-  private def ukResultDef1(response: Def1_RetrieveUkPropertyAnnualSubmissionResponse): Boolean =
+  private def ukResult(response: Def1_RetrieveUkPropertyAnnualSubmissionResponse): Boolean =
     response.ukFhlProperty.nonEmpty || response.ukNonFhlProperty.nonEmpty
-
-  private def ukResultDef2(response: Def2_RetrieveUkPropertyAnnualSubmissionResponse): Boolean = response.ukProperty.nonEmpty
 
 }

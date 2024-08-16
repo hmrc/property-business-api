@@ -26,6 +26,3 @@ sealed trait RetrieveUkPropertyAnnualSubmissionRequestData {
 
 case class Def1_RetrieveUkPropertyAnnualSubmissionRequestData(nino: Nino, businessId: BusinessId, taxYear: TaxYear)
     extends RetrieveUkPropertyAnnualSubmissionRequestData
-
-case class Def2_RetrieveUkPropertyAnnualSubmissionRequestData(nino: Nino, businessId: BusinessId, taxYear: TaxYear)
-  extends RetrieveUkPropertyAnnualSubmissionRequestData

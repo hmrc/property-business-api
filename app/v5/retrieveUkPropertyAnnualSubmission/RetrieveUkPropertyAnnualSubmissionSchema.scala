@@ -18,9 +18,9 @@ package v5.retrieveUkPropertyAnnualSubmission
 
 import api.controllers.validators.resolvers.ResolveTaxYear
 import api.models.domain.TaxYear
-import api.models.errors.{InvalidTaxYearParameterError, MtdError}
+import api.models.errors.MtdError
 import cats.data.Validated
-import cats.data.Validated.{Invalid, Valid}
+import cats.data.Validated.Valid
 import play.api.libs.json.Reads
 import schema.DownstreamReadable
 import v5.retrieveUkPropertyAnnualSubmission.model.response._
@@ -50,9 +50,8 @@ object RetrieveUkPropertyAnnualSubmissionSchema {
     }
 
   def schemaFor(taxYear: TaxYear): Validated[Seq[MtdError], RetrieveUkPropertyAnnualSubmissionSchema] = {
-    if (taxYear < TaxYear.starting(2022)) Invalid(Seq(InvalidTaxYearParameterError))
-    else if (taxYear <= TaxYear.starting(2024)) Valid(Def1)
-    else Valid(Def2)
+    if (taxYear >= TaxYear.starting(2025)) Valid(Def2)
+    else Valid(Def1)
   }
 
 }

@@ -17,12 +17,8 @@
 package v4.retrieveUkPropertyAnnualSubmission
 
 import api.controllers.validators.Validator
-import api.models.errors.MtdError
-import cats.data.Validated.{Invalid, Valid}
 import config.AppConfig
-import v4.retrieveUkPropertyAnnualSubmission.RetrieveUkPropertyAnnualSubmissionSchema.{Def1, Def2}
 import v4.retrieveUkPropertyAnnualSubmission.def1.model.Def1_RetrieveUkPropertyAnnualSubmissionValidator
-import v4.retrieveUkPropertyAnnualSubmission.def2.model.Def2_RetrieveUkPropertyAnnualSubmissionValidator
 import v4.retrieveUkPropertyAnnualSubmission.model.request.RetrieveUkPropertyAnnualSubmissionRequestData
 
 import javax.inject.{Inject, Singleton}
@@ -31,9 +27,6 @@ import javax.inject.{Inject, Singleton}
 class RetrieveUkPropertyAnnualSubmissionValidatorFactory @Inject() (appConfig: AppConfig) {
 
   def validator(nino: String, businessId: String, taxYear: String): Validator[RetrieveUkPropertyAnnualSubmissionRequestData] =
-    RetrieveUkPropertyAnnualSubmissionSchema.schemaFor(Some(taxYear)) match {
-      case Valid(Def1)     => new Def1_RetrieveUkPropertyAnnualSubmissionValidator(nino, businessId, taxYear)
-      case Valid(Def2)     => new Def2_RetrieveUkPropertyAnnualSubmissionValidator(nino, businessId, taxYear)
-      case Invalid(errors :Seq[MtdError]) => Validator.returningErrors(errors)
-    }
+    new Def1_RetrieveUkPropertyAnnualSubmissionValidator(nino, businessId, taxYear)(appConfig)
+
 }

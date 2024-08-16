@@ -93,13 +93,6 @@ class Def2_RetrieveUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec with
         result shouldBe Left(ErrorWrapper(correlationId, BusinessIdFormatError))
       }
 
-      "given a taxYear immediately before the minimum supported" in {
-        setupMocks()
-
-        val result = validator(validNino, validBusinessId, "2020-21").validateAndWrapResult()
-        result shouldBe Left(ErrorWrapper(correlationId, RuleTaxYearNotSupportedError))
-      }
-
       "given a taxYear spanning an invalid range" in {
         setupMocks()
 

@@ -22,8 +22,8 @@ import api.models.errors._
 import api.models.outcomes.ResponseWrapper
 import support.UnitSpec
 import uk.gov.hmrc.http.HeaderCarrier
-import v5.retrieveUkPropertyAnnualSubmission.RetrieveUkPropertyAnnualSubmissionConnector.{NonUkResult, UkResultDef1}
-import v5.retrieveUkPropertyAnnualSubmission.model.request.Def1_RetrieveUkPropertyAnnualSubmissionRequestData
+import v5.retrieveUkPropertyAnnualSubmission.RetrieveUkPropertyAnnualSubmissionConnector.{NonUkResult, UkResult}
+import v5.retrieveUkPropertyAnnualSubmission.def1.model.request.Def1_RetrieveUkPropertyAnnualSubmissionRequestData
 import v5.retrieveUkPropertyAnnualSubmission.model.response.Def1_RetrieveUkPropertyAnnualSubmissionResponse
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -40,7 +40,7 @@ class RetrieveUkPropertyAnnualSubmissionServiceSpec extends UnitSpec {
     "a uk result is found" should {
       "return a success result" in new Test {
         MockRetrieveUkPropertyConnector
-          .retrieve(request) returns Future.successful(Right(ResponseWrapper(correlationId, UkResultDef1(response))))
+          .retrieve(request) returns Future.successful(Right(ResponseWrapper(correlationId, UkResult(response))))
 
         await(service.retrieveUkProperty(request)) shouldBe Right(ResponseWrapper(correlationId, response))
       }

@@ -40,7 +40,9 @@ case class Def1_RetrieveUkPropertyAnnualSubmissionResponse(
     submittedOn: Timestamp,
     ukFhlProperty: Option[Def1_Retrieve_UkFhlProperty],
     ukNonFhlProperty: Option[Def1_Retrieve_UkNonFhlProperty]
-) extends RetrieveUkPropertyAnnualSubmissionResponse
+) extends RetrieveUkPropertyAnnualSubmissionResponse {
+  override def isUkResult :Boolean = ukFhlProperty.nonEmpty || ukNonFhlProperty.nonEmpty
+}
 
 object Def1_RetrieveUkPropertyAnnualSubmissionResponse {
 
@@ -57,7 +59,9 @@ object Def1_RetrieveUkPropertyAnnualSubmissionResponse {
 case class Def2_RetrieveUkPropertyAnnualSubmissionResponse(
            submittedOn: Timestamp,
            ukProperty: Option[Def2_Retrieve_UkProperty]
-       ) extends RetrieveUkPropertyAnnualSubmissionResponse
+       ) extends RetrieveUkPropertyAnnualSubmissionResponse {
+  override def isUkResult :Boolean = ukProperty.nonEmpty
+}
 
 object Def2_RetrieveUkPropertyAnnualSubmissionResponse {
 

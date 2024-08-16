@@ -22,9 +22,9 @@ import api.models.errors.{DownstreamErrorCode, DownstreamErrors}
 import api.models.outcomes.ResponseWrapper
 import org.scalamock.handlers.CallHandler
 import v5.retrieveUkPropertyAnnualSubmission.RetrieveUkPropertyAnnualSubmissionConnector._
+import v5.retrieveUkPropertyAnnualSubmission.def1.model.request.Def1_RetrieveUkPropertyAnnualSubmissionRequestData
 import v5.retrieveUkPropertyAnnualSubmission.def1.model.response.def1_ukFhlProperty.Def1_Retrieve_UkFhlProperty
 import v5.retrieveUkPropertyAnnualSubmission.def1.model.response.def1_ukNonFhlProperty.Def1_Retrieve_UkNonFhlProperty
-import v5.retrieveUkPropertyAnnualSubmission.model.request._
 import v5.retrieveUkPropertyAnnualSubmission.model.response._
 
 import scala.concurrent.Future
@@ -47,7 +47,7 @@ class RetrieveUkPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec {
         stubHttpResponse(outcome)
 
         val result: DownstreamOutcome[Result] = await(connector.retrieveUkProperty(request))
-        result shouldBe Right(ResponseWrapper(correlationId, UkResultDef1(response)))
+        result shouldBe Right(ResponseWrapper(correlationId, UkResult(response)))
       }
     }
 
@@ -59,7 +59,7 @@ class RetrieveUkPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec {
         stubHttpResponse(outcome)
 
         val result: DownstreamOutcome[Result] = await(connector.retrieveUkProperty(request))
-        result shouldBe Right(ResponseWrapper(correlationId, UkResultDef1(response)))
+        result shouldBe Right(ResponseWrapper(correlationId, UkResult(response)))
       }
     }
 
@@ -72,7 +72,7 @@ class RetrieveUkPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec {
         stubHttpResponse(outcome)
 
         val result: DownstreamOutcome[Result] = await(connector.retrieveUkProperty(request))
-        result shouldBe Right(ResponseWrapper(correlationId, UkResultDef1(response)))
+        result shouldBe Right(ResponseWrapper(correlationId, UkResult(response)))
       }
     }
 
@@ -114,7 +114,7 @@ class RetrieveUkPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec {
         ).returns(Future.successful(outcome))
 
         val result: DownstreamOutcome[Result] = await(connector.retrieveUkProperty(request))
-        result shouldBe Right(ResponseWrapper(correlationId, UkResultDef1(response)))
+        result shouldBe Right(ResponseWrapper(correlationId, UkResult(response)))
       }
     }
   }

@@ -277,7 +277,7 @@ class Def2_RetrieveUkPropertyAnnualSubmissionISpec extends IntegrationBaseSpec {
       setupStubs()
       buildRequest(s"/uk/$nino/$businessId/annual/$taxYear")
         .withHttpHeaders(
-          (ACCEPT, "application/vnd.hmrc.4.0+json"),
+          (ACCEPT, "application/vnd.hmrc.5.0+json"),
           (AUTHORIZATION, "Bearer 123")
         )
     }
@@ -305,8 +305,8 @@ class Def2_RetrieveUkPropertyAnnualSubmissionISpec extends IntegrationBaseSpec {
   }
 
   private trait TysIfsTest extends Test {
-    def taxYear: String                            = "2024-25"
-    def downstreamUri: String                      = s"/income-tax/business/property/annual/24-25/$nino/$businessId"
+    def taxYear: String                            = "2025-26"
+    def downstreamUri: String                      = s"/income-tax/business/property/annual/25-26/$nino/$businessId"
     def downstreamQueryParams: Map[String, String] = Map.empty
   }
 

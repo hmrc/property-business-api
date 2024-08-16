@@ -39,9 +39,9 @@ object RetrieveUkPropertyAnnualSubmissionConnector {
 }
 
 @Singleton
-class RetrieveForeignPropertyAnnualSubmissionConnector @Inject() (val http: HttpClient, val appConfig: AppConfig) extends BaseDownstreamConnector {
+class RetrieveUkPropertyAnnualSubmissionConnector @Inject() (val http: HttpClient, val appConfig: AppConfig) extends BaseDownstreamConnector {
 
-  def retrieveForeignProperty(request: RetrieveUkPropertyAnnualSubmissionRequestData)(implicit
+  def retrieveUkProperty(request: RetrieveUkPropertyAnnualSubmissionRequestData)(implicit
                                                                                            hc: HeaderCarrier,
                                                                                            ec: ExecutionContext,
                                                                                            correlationId: String): Future[DownstreamOutcome[Result]] = {

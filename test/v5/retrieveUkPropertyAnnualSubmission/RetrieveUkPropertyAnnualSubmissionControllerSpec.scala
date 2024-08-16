@@ -23,6 +23,7 @@ import api.models.outcomes.ResponseWrapper
 import mocks.MockAppConfig
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.Result
+import v5.retrieveUkPropertyAnnualSubmission.def1.model.request.Def1_RetrieveUkPropertyAnnualSubmissionRequestData
 import v5.retrieveUkPropertyAnnualSubmission.def1.model.response.def1_ukFhlProperty._
 import v5.retrieveUkPropertyAnnualSubmission.def1.model.response.def1_ukNonFhlProperty._
 import v5.retrieveUkPropertyAnnualSubmission.model.request._

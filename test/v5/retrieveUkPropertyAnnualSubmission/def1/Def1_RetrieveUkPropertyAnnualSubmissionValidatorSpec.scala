@@ -37,7 +37,7 @@ class Def1_RetrieveUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec with
   private val validatorFactory = new RetrieveUkPropertyAnnualSubmissionValidatorFactory(mockAppConfig)
 
   private def validator(nino: String, businessId: String, taxYear: String) =
-    validatorFactory.validator(nino, businessId, taxYear)
+    new Def1_RetrieveUkPropertyAnnualSubmissionValidatorSpec(nino, businessId, taxYear)
 
   private def setupMocks(): Unit = MockedAppConfig.minimumTaxV2Uk.returns(TaxYear.starting(2022)).anyNumberOfTimes()
 

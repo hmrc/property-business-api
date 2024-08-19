@@ -26,8 +26,8 @@ object Def2_Retrieve_UkProperty {
   implicit val writes: OWrites[Def2_Retrieve_UkProperty] = Json.writes[Def2_Retrieve_UkProperty]
 
   implicit val reads: Reads[Def2_Retrieve_UkProperty] = (
-    (__ \ "ukOtherPropertyAnnualAdjustments").readNullable[Def2_Retrieve_UkPropertyAdjustments] and
-      (__ \ "ukOtherPropertyAnnualAllowances").readNullable[Def2_Retrieve_UkPropertyAllowances]
+    (__ \ "ukPropertyAnnualAdjustments").readNullable[Def2_Retrieve_UkPropertyAdjustments] and
+      (__ \ "ukPropertyAnnualAllowances").readNullable[Def2_Retrieve_UkPropertyAllowances]
   )(Def2_Retrieve_UkProperty.apply _)
 
 }

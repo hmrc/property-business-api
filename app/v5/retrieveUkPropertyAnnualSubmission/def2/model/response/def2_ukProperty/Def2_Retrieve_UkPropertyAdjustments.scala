@@ -35,7 +35,7 @@ object Def2_Retrieve_UkPropertyAdjustments {
       (__ \ "privateUseAdjustment").readNullable[BigDecimal] and
       (__ \ "businessPremisesRenovationAllowanceBalancingCharges").readNullable[BigDecimal] and
       (__ \ "nonResidentLandlord").read[Boolean] and
-      (__ \ "ukOtherRentARoom").readNullable[Def2_Retrieve_UkPropertyRentARoom]
+      (__ \ "ukRentARoom").readNullable[Def2_Retrieve_UkPropertyRentARoom]
   )(Def2_Retrieve_UkPropertyAdjustments.apply _)
 
 }

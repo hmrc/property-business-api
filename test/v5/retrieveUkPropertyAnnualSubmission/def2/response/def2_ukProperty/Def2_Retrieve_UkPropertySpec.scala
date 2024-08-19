@@ -24,7 +24,7 @@ class Def2_Retrieve_UkPropertySpec extends UnitSpec {
 
   val downstreamJson: JsValue = Json.parse("""
       |{
-      |   "ukOtherPropertyAnnualAllowances":{
+      |   "ukPropertyAnnualAllowances":{
       |      "annualInvestmentAllowance":678.45,
       |      "zeroEmissionGoodsVehicleAllowance":456.34,
       |      "businessPremisesRenovationAllowance":573.45,
@@ -62,12 +62,12 @@ class Def2_Retrieve_UkPropertySpec extends UnitSpec {
       |      ],
       |      "zeroEmissionsCarAllowance":454.34
       |   },
-      |   "ukOtherPropertyAnnualAdjustments":{
+      |   "ukPropertyAnnualAdjustments":{
       |      "balancingCharge":565.34,
       |      "privateUseAdjustment":533.54,
       |      "businessPremisesRenovationAllowanceBalancingCharges":563.34,
       |      "nonResidentLandlord":true,
-      |      "ukOtherRentARoom":{
+      |      "ukRentARoom":{
       |         "jointlyLet":true
       |      }
       |   }

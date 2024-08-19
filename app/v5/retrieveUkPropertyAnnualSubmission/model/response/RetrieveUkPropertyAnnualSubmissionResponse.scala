@@ -69,7 +69,7 @@ object Def2_RetrieveUkPropertyAnnualSubmissionResponse {
 
   implicit val reads: Reads[Def2_RetrieveUkPropertyAnnualSubmissionResponse] = (
     (__ \ "submittedOn").read[Timestamp] and
-      (__ \ "ukOtherProperty").readNullable[Def2_Retrieve_UkProperty]
+      (__ \ "ukProperty").readNullable[Def2_Retrieve_UkProperty]
     )(Def2_RetrieveUkPropertyAnnualSubmissionResponse.apply _)
 
 }

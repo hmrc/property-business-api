@@ -8,7 +8,10 @@ description: |
   | Header Value (Gov-Test-Scenario)      | Scenario                                                               |
   |---------------------------------------|------------------------------------------------------------------------|
   | N/A - DEFAULT                         | Simulates the scenario where no data is found.                         |
-  | FOREIGN_PROPERTY                      | Simulates the scenario with FHL and Non-FHL properties.                |
+  | FOREIGN_PROPERTY                      | Simulates the scenario with UK properties.                             |
+  | FOREIGN_ALL_OTHER_ALLOWANCES          | Simulates the scenario of a UK property with all other allowances.     |
+  | FOREIGN_PROPERTY_ALLOWANCE            | Simulates the scenario of a UK property with property allowance.       |
+  | FOREIGN_PROPERTY_FHL_NON_FHL          | Simulates the scenario with FHL and Non-FHL properties.                |
   | FOREIGN_FHL_ALL_OTHER_ALLOWANCES      | Simulates the scenario of a FHL property with all other allowances.    |
   | FOREIGN_FHL_PROPERTY_ALLOWANCE        | Simulates the scenario of a FHL property with property allowance.      |
   | FOREIGN_NON_FHL_ALL_OTHER_ALLOWANCES  | Simulates the scenario of a Non-FHL property with all other allowances.|
@@ -51,15 +54,24 @@ responses:
         schema:
           oneOf:
             - $ref: './schemas/foreign_property_annual_submission_retrieve/def1/response.json'
+            - $ref: './schemas/foreign_property_annual_submission_retrieve/def2/response.json'
         examples:
           all-other-allowances-response:
-            description: All Other Allowances Response
+            description: All Other Allowances Response Pre 25-26
             value:
               $ref: './examples/foreign_property_annual_submission_retrieve/def1/all_other_allowances_response.json'
           property-allowance-response:
-            description: Property Allowance Response
+            description: Property Allowance Response Pre 25-26
             value:
               $ref: './examples/foreign_property_annual_submission_retrieve/def1/property_allowance_response.json'
+          25/26-all-other-allowances-response:
+            description: All Other Allowances Response 25-26 Onwards
+            value:
+              $ref: './examples/foreign_property_annual_submission_retrieve/def2/all_other_allowances_response.json'
+          25/26-property-allowance-response:
+            description: Property Allowance Response 25-26 Onwards
+            value:
+              $ref: './examples/foreign_property_annual_submission_retrieve/def2/property_allowance_response.json'
 
   "400":
     description: Bad request

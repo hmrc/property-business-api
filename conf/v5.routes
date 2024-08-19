@@ -12,7 +12,7 @@ GET        /foreign/:nino/:businessId/period/:taxYear/:submissionId    v4.retrie
 GET        /:nino/:businessId/period/:taxYear                          v4.propertyPeriodSummary.list.ListPropertyPeriodSummariesController.handleRequest(nino: String, businessId: String, taxYear: String)
 
 PUT        /foreign/:nino/:businessId/annual/:taxYear                  v4.createAmendForeignPropertyAnnualSubmission.CreateAmendForeignPropertyAnnualSubmissionController.handleRequest(nino: String, businessId: String, taxYear: String)
-GET        /foreign/:nino/:businessId/annual/:taxYear                  v4.retrieveForeignPropertyAnnualSubmission.RetrieveForeignPropertyAnnualSubmissionController.handleRequest(nino: String, businessId: String, taxYear: String)
+GET        /foreign/:nino/:businessId/annual/:taxYear                  v5.retrieveForeignPropertyAnnualSubmission.RetrieveForeignPropertyAnnualSubmissionController.handleRequest(nino: String, businessId: String, taxYear: String)
 DELETE     /:nino/:businessId/annual/:taxYear                          v4.deletePropertyAnnualSubmission.DeletePropertyAnnualSubmissionController.handleRequest(nino: String, businessId: String, taxYear: String)
 
 PUT        /uk/annual/furnished-holiday-lettings/:nino/:taxYear       v4.createAmendHistoricFhlUkPropertyAnnualSubmission.CreateAmendHistoricFhlUkPropertyAnnualSubmissionController.handleRequest(nino: String, taxYear: String)

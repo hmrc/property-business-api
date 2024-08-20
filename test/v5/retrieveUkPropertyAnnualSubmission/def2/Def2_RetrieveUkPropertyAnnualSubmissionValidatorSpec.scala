@@ -14,30 +14,31 @@
  * limitations under the License.
  */
 
-package v4.retrieveUkPropertyAnnualSubmission.def1
+package v5.retrieveUkPropertyAnnualSubmission.def2
 
 import api.models.domain.{BusinessId, Nino, TaxYear}
 import api.models.errors._
 import mocks.MockAppConfig
 import support.UnitSpec
-import v4.retrieveUkPropertyAnnualSubmission.RetrieveUkPropertyAnnualSubmissionValidatorFactory
-import v4.retrieveUkPropertyAnnualSubmission.model.request.{Def1_RetrieveUkPropertyAnnualSubmissionRequestData, RetrieveUkPropertyAnnualSubmissionRequestData}
+import v5.retrieveUkPropertyAnnualSubmission.def2.model.Def2_RetrieveUkPropertyAnnualSubmissionValidator
+import v5.retrieveUkPropertyAnnualSubmission.def2.model.request.Def2_RetrieveUkPropertyAnnualSubmissionRequestData
+import v5.retrieveUkPropertyAnnualSubmission.model.request.RetrieveUkPropertyAnnualSubmissionRequestData
 
-class Def1_RetrieveUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec with MockAppConfig {
+class Def2_RetrieveUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec with MockAppConfig {
 
   implicit private val correlationId: String = "X-123"
   private val validNino                      = "AA123456B"
   private val validBusinessId                = "XAIS12345678901"
-  private val validTaxYear                   = "2023-24"
+  private val validTaxYear                   = "2025-26"
 
   private val parsedNino       = Nino(validNino)
   private val parsedBusinessId = BusinessId(validBusinessId)
   private val parsedTaxYear    = TaxYear.fromMtd(validTaxYear)
 
-  private val validatorFactory = new RetrieveUkPropertyAnnualSubmissionValidatorFactory(mockAppConfig)
 
   private def validator(nino: String, businessId: String, taxYear: String) =
-    validatorFactory.validator(nino, businessId, taxYear)
+    new Def2_RetrieveUkPropertyAnnualSubmissionValidator(nino, businessId, taxYear)
+
 
   private def setupMocks(): Unit = MockedAppConfig.minimumTaxV2Uk.returns(TaxYear.starting(2022)).anyNumberOfTimes()
 
@@ -49,17 +50,17 @@ class Def1_RetrieveUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec with
         val result: Either[ErrorWrapper, RetrieveUkPropertyAnnualSubmissionRequestData] =
           validator(validNino, validBusinessId, validTaxYear).validateAndWrapResult()
 
-        result shouldBe Right(Def1_RetrieveUkPropertyAnnualSubmissionRequestData(parsedNino, parsedBusinessId, parsedTaxYear))
+        result shouldBe Right(Def2_RetrieveUkPropertyAnnualSubmissionRequestData(parsedNino, parsedBusinessId, parsedTaxYear))
       }
 
       "given the minimum supported taxYear" in {
         setupMocks()
-        val taxYearString = "2022-23"
+        val taxYearString = "2025-26"
 
         val result = validator(validNino, validBusinessId, taxYearString).validateAndWrapResult()
 
         result shouldBe Right(
-          Def1_RetrieveUkPropertyAnnualSubmissionRequestData(parsedNino, parsedBusinessId, TaxYear.fromMtd(taxYearString))
+          Def2_RetrieveUkPropertyAnnualSubmissionRequestData(parsedNino, parsedBusinessId, TaxYear.fromMtd(taxYearString))
         )
       }
     }
@@ -90,13 +91,6 @@ class Def1_RetrieveUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec with
           validator(validNino, "invalid business id", validTaxYear).validateAndWrapResult()
 
         result shouldBe Left(ErrorWrapper(correlationId, BusinessIdFormatError))
-      }
-
-      "given a taxYear immediately before the minimum supported" in {
-        setupMocks()
-
-        val result = validator(validNino, validBusinessId, "2021-22").validateAndWrapResult()
-        result shouldBe Left(ErrorWrapper(correlationId, RuleTaxYearNotSupportedError))
       }
 
       "given a taxYear spanning an invalid range" in {

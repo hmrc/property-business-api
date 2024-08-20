@@ -7,7 +7,7 @@
     "submittedOn": {
       "type": "string",
       "description": "The date the foreign property was submitted, in the format `YYYY-MM-DDThh:mm:ss.SSSZ`",
-      "example": "2022-06-17T10:59:47.544Z"
+      "example": "2025-06-17T10:59:47.544Z"
     },
     "foreignProperty": {
       "type": "array",

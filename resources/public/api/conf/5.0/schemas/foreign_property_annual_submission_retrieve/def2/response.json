@@ -1,7 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-04/schema#",
-  "title": "Given any tax year",
-  "description": "This endpoint allows a developer to retrieve adjustments and allowances for a foreign property business. For either or both of Furnished Holiday Letting (FHL) in the European Economic Area (EEA) and Non FHL Foreign property submissions. A National Insurance number, business ID and tax year are required.",
+  "title": "For TY 2025-26 and after",
   "type": "object",
   "properties": {
     "submittedOn": {
@@ -11,7 +10,7 @@
     },
     "foreignProperty": {
       "type": "array",
-      "description": "Array holding the adjustments and allowances of the user's foreign property business - excluding Furnished Holiday Lettings (FHL) in the European Economic Area (EEA) for the period.",
+      "description": "Array holding the adjustments and allowances of the user's foreign property business for the period.",
       "items": {
         "type": "object",
         "properties": {
@@ -23,7 +22,7 @@
           },
           "adjustments": {
             "type": "object",
-            "description": "Object holding foreign Non FHL Property annual adjustments.",
+            "description": "Object holding foreign property annual adjustments.",
             "properties": {
               "privateUseAdjustment": {
                 "type": "number",
@@ -40,7 +39,7 @@
           },
           "allowances": {
             "type": "object",
-            "description": "Object holding foreign Non FHL Property Allowances.",
+            "description": "Object holding foreign property Allowances",
             "properties": {
               "annualInvestmentAllowance": {
                 "type": "number",
@@ -90,7 +89,7 @@
                     },
                     "firstYear": {
                       "type": "object",
-                      "description": "Object holding foreign Non FHL structured building allowance details.",
+                      "description": "Object holding structured building allowance details.",
                       "properties": {
                         "qualifyingDate": {
                           "type": "string",
@@ -111,7 +110,7 @@
                     },
                     "building": {
                       "type": "object",
-                      "description": "Object holding Foreign Non FHL structured building details. Postcode is mandatory and minimum one of name and number field must be supplied.",
+                      "description": "Object holding structured building details. Postcode is mandatory and minimum one of name and number field must be supplied.",
                       "properties": {
                         "name": {
                           "type": "string",

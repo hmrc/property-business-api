@@ -22,9 +22,8 @@ import api.models.utils.JsonErrorValidators
 import mocks.MockAppConfig
 import play.api.libs.json._
 import support.UnitSpec
-import v5.createAmendForeignPropertyAnnualSubmission.CreateAmendForeignPropertyAnnualSubmissionValidatorFactory
+import v5.createAmendForeignPropertyAnnualSubmission.def2.model.request.def2_foreignProperty._
 import v5.createAmendForeignPropertyAnnualSubmission.def2.model.request.{Def2_CreateAmendForeignPropertyAnnualSubmissionRequestBody, Def2_CreateAmendForeignPropertyAnnualSubmissionRequestData}
-import v5.createAmendForeignPropertyAnnualSubmission.def2.model.request.def2_foreignProperty.{Def2_Create_Amend_Building, Def2_Create_Amend_FirstYear, Def2_Create_Amend_ForeignAdjustments, Def2_Create_Amend_ForeignAllowances, Def2_Create_Amend_ForeignEntry, Def2_Create_Amend_StructuredBuildingAllowance}
 import v5.createAmendForeignPropertyAnnualSubmission.model.request.CreateAmendForeignPropertyAnnualSubmissionRequestData
 
 class Def2_CreateAmendForeignPropertyAnnualSubmissionValidatorSpec extends UnitSpec with MockAppConfig with JsonErrorValidators {
@@ -214,10 +213,8 @@ class Def2_CreateAmendForeignPropertyAnnualSubmissionValidatorSpec extends UnitS
 
   private val parsedBodyWithoutBuildingName = parsedBodyWithUpdatedBuilding(parsedBuilding.copy(name = None))
 
-  private val validatorFactory = new CreateAmendForeignPropertyAnnualSubmissionValidatorFactory(mockAppConfig)
-
   private def validator(nino: String, businessId: String, taxYear: String, body: JsValue) =
-    validatorFactory.validator(nino, businessId, taxYear, body)
+    new Def2_CreateAmendForeignPropertyAnnualSubmissionValidator(nino, businessId, taxYear, body)
 
   private def setupMocks(): Unit = MockedAppConfig.minimumTaxV2Foreign.returns(TaxYear.starting(2021)).anyNumberOfTimes()
 
@@ -349,13 +346,6 @@ class Def2_CreateAmendForeignPropertyAnnualSubmissionValidatorSpec extends UnitS
 
         result shouldBe Right(Def2_CreateAmendForeignPropertyAnnualSubmissionRequestData(parsedNino, parsedBusinessId, parsedTaxYear, parsedBodyWithoutBuildingName))
       }
-
-      "passed the minimum supported taxYear" in {
-        setupMocks()
-        val taxYearString = "2021-22"
-        validator(validNino, validBusinessId, taxYearString, validBody).validateAndWrapResult() shouldBe
-          Right(Def2_CreateAmendForeignPropertyAnnualSubmissionRequestData(parsedNino, parsedBusinessId, TaxYear.fromMtd(taxYearString), parsedBody))
-      }
     }
 
     "return a single error" when {
@@ -374,12 +364,6 @@ class Def2_CreateAmendForeignPropertyAnnualSubmissionValidatorSpec extends UnitS
 
         result shouldBe Left(ErrorWrapper(correlationId, TaxYearFormatError))
 
-      }
-
-      "passed a taxYear immediately before the minimum supported" in {
-        setupMocks()
-        validator(validNino, validBusinessId, "2020-21", validBody).validateAndWrapResult() shouldBe
-          Left(ErrorWrapper(correlationId, RuleTaxYearNotSupportedError))
       }
 
       "passed a taxYear spanning an invalid tax year range" in {
@@ -497,7 +481,7 @@ class Def2_CreateAmendForeignPropertyAnnualSubmissionValidatorSpec extends UnitS
           val invalidBody = bodyWith(
             entryWith(countryCode = "ZWE", validStructuredBuildingAllowance).update("/adjustments/privateUseAdjustment", badValue),
             entry.update("/allowances/costOfReplacingDomesticItems", badValue)
-          ).update(path1, badValue)
+          )
 
           val result: Either[ErrorWrapper, CreateAmendForeignPropertyAnnualSubmissionRequestData] =
             validator(validNino, validBusinessId, validTaxYear, invalidBody).validateAndWrapResult()

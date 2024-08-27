@@ -22,7 +22,6 @@ import api.models.utils.JsonErrorValidators
 import mocks.MockAppConfig
 import play.api.libs.json._
 import support.UnitSpec
-import v5.createAmendForeignPropertyAnnualSubmission.CreateAmendForeignPropertyAnnualSubmissionValidatorFactory
 import v5.createAmendForeignPropertyAnnualSubmission.def1.model.request.def1_foreignFhlEea._
 import v5.createAmendForeignPropertyAnnualSubmission.def1.model.request.def1_foreignNonFhl._
 import v5.createAmendForeignPropertyAnnualSubmission.def1.model.request.{Def1_CreateAmendForeignPropertyAnnualSubmissionRequestBody, Def1_CreateAmendForeignPropertyAnnualSubmissionRequestData}
@@ -288,10 +287,8 @@ class Def1_CreateAmendForeignPropertyAnnualSubmissionValidatorSpec extends UnitS
 
   private val parsedBodyWithoutBuildingName = parsedBodyWithUpdatedBuilding(parsedBuilding.copy(name = None))
 
-  private val validatorFactory = new CreateAmendForeignPropertyAnnualSubmissionValidatorFactory(mockAppConfig)
-
   private def validator(nino: String, businessId: String, taxYear: String, body: JsValue) =
-    validatorFactory.validator(nino, businessId, taxYear, body)
+    new Def1_CreateAmendForeignPropertyAnnualSubmissionValidator(nino, businessId, taxYear, body)(mockAppConfig)
 
   private def setupMocks(): Unit = MockedAppConfig.minimumTaxV2Foreign.returns(TaxYear.starting(2021)).anyNumberOfTimes()
 

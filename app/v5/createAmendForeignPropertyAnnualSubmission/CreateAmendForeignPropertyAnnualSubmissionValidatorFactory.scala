@@ -33,7 +33,7 @@ class CreateAmendForeignPropertyAnnualSubmissionValidatorFactory @Inject() (appC
 
     CreateAmendForeignPropertyAnnualSubmissionSchema.schemaFor(Some(taxYear)) match {
       case Valid(Def1) => new Def1_CreateAmendForeignPropertyAnnualSubmissionValidator(nino, businessId, taxYear, body)(appConfig)
-      case Valid(Def2) => new Def2_CreateAmendForeignPropertyAnnualSubmissionValidator(nino, businessId, taxYear, body)(appConfig)
+      case Valid(Def2) => new Def2_CreateAmendForeignPropertyAnnualSubmissionValidator(nino, businessId, taxYear, body)
       case Invalid(errors) => Validator.returningErrors(errors)
     }
   }

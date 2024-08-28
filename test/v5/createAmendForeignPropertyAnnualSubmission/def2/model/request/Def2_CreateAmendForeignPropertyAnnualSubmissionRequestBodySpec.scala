@@ -21,33 +21,11 @@ import support.UnitSpec
 
 class Def2_CreateAmendForeignPropertyAnnualSubmissionRequestBodySpec extends UnitSpec with Def2_Fixtures {
 
-  private val foreignPropertyModel =
-    Def2_CreateAmendForeignPropertyAnnualSubmissionRequestBody( foreignProperty = Some(List(foreignEntry)))
-
-  private val foreignPropertyMtdJson = Json.parse(s"""
-      |{
-      |   "foreignProperty":[ $foreignEntryMtdJson ]
-      |}
-      |""".stripMargin)
-
-  private val foreignPropertyDownstreamJson = Json.parse(s"""
-      |{
-      |   "foreignProperty":[ $foreignEntryDownstreamJson ]
-      |}
-      |""".stripMargin)
-
   "reads" when {
     "passed valid mtd JSON" should {
       "return the model" in {
         def2_createAmendForeignPropertyAnnualSubmissionRequestBodyMtdJson
           .as[Def2_CreateAmendForeignPropertyAnnualSubmissionRequestBody] shouldBe def2_createAmendForeignPropertyAnnualSubmissionRequestBody
-      }
-    }
-
-    "passed valid mtd JSON with just foreignProperty" should {
-      "return the model" in {
-        foreignPropertyMtdJson
-          .as[Def2_CreateAmendForeignPropertyAnnualSubmissionRequestBody] shouldBe foreignPropertyModel
       }
     }
   }
@@ -57,12 +35,6 @@ class Def2_CreateAmendForeignPropertyAnnualSubmissionRequestBodySpec extends Uni
       "return downstream JSON" in {
         Json.toJson(
           def2_createAmendForeignPropertyAnnualSubmissionRequestBody) shouldBe def2_createAmendForeignPropertyAnnualSubmissionRequestBodyDownstreamJson
-      }
-    }
-
-    "passed a model with just foreignProperty" should {
-      "return downstream JSON" in {
-        Json.toJson(foreignPropertyModel) shouldBe foreignPropertyDownstreamJson
       }
     }
   }

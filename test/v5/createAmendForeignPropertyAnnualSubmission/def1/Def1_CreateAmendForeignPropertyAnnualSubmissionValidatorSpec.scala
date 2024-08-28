@@ -644,23 +644,23 @@ class Def1_CreateAmendForeignPropertyAnnualSubmissionValidatorSpec extends UnitS
               "/foreignNonFhlProperty/0/allowances/propertyIncomeAllowance")
           ).foreach(p => (testForPropertyIncomeAllowance _).tupled(p))
         }
+      }
+      "passed a request body with multiple fields containing invalid values" in {
+        setupMocks()
+        val badValue = JsNumber(123.456)
+        val path0 = "/foreignFhlEea/adjustments/privateUseAdjustment"
+        val path1 = "/foreignNonFhlProperty/0/adjustments/privateUseAdjustment"
+        val path2 = "/foreignNonFhlProperty/1/allowances/costOfReplacingDomesticItems"
 
-        "passed a request body with empty fields except for additional (non-schema) properties" in {
-          setupMocks()
-          val path0 = "/foreignFhlEea/adjustments/privateUseAdjustment"
-          val path1 = "/foreignNonFhlProperty/0/adjustments/privateUseAdjustment"
-          val path2 = "/foreignNonFhlProperty/1/allowances/costOfReplacingDomesticItems"
+        val invalidBody = bodyWith(
+          entryWith(countryCode = "ZWE", validStructuredBuildingAllowance).update("/adjustments/privateUseAdjustment", badValue),
+          entry.update("/allowances/costOfReplacingDomesticItems", badValue)
+        ).update(path0, badValue)
 
-          val invalidBody = bodyWith(
-            entryWith(countryCode = "ZWE", validStructuredBuildingAllowance).update("/adjustments/privateUseAdjustment", badValue),
-            entry.update("/allowances/costOfReplacingDomesticItems", badValue)
-          ).update(path0, badValue)
+        val result: Either[ErrorWrapper, CreateAmendForeignPropertyAnnualSubmissionRequestData] =
+          validator(validNino, validBusinessId, validTaxYear, invalidBody).validateAndWrapResult()
 
-          val result: Either[ErrorWrapper, CreateAmendForeignPropertyAnnualSubmissionRequestData] =
-            validator(validNino, validBusinessId, validTaxYear, invalidBody).validateAndWrapResult()
-
-          result shouldBe Left(ErrorWrapper(correlationId, ValueFormatError.withPaths(List(path0, path1, path2))))
-        }
+        result shouldBe Left(ErrorWrapper(correlationId, ValueFormatError.withPaths(List(path0, path1, path2))))
       }
     }
 

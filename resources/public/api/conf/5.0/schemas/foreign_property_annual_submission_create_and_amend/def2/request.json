@@ -3,11 +3,6 @@
   "title": "For TY 2025-26 and after",
   "type": "object",
   "properties": {
-    "submittedOn": {
-      "type": "string",
-      "description": "The date the foreign property was submitted, in the format `YYYY-MM-DDThh:mm:ss.SSSZ`",
-      "example": "2025-06-17T10:59:47.544Z"
-    },
     "foreignProperty": {
       "type": "array",
       "description": "Array holding the adjustments and allowances of the user's foreign property business for the period.",
@@ -17,7 +12,6 @@
           "countryCode": {
             "type": "string",
             "description": "A three-letter code that represents a country name. This must be an ISO 3166-1 Alpha-3 value.",
-            "pattern": "^[A-Z]{3}$",
             "example": "FRA"
           },
           "adjustments": {
@@ -27,53 +21,80 @@
               "privateUseAdjustment": {
                 "type": "number",
                 "description": "Any adjustments that are not solely for the property business. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
-                "example": "5000.99"
+                "multipleOf": 0.01,
+                "minimum": 0.00,
+                "maximum": 99999999999.99,
+                "example": "5003.39"
               },
               "balancingCharge": {
                 "type": "number",
                 "description": "If an item for which capital allowance was claimed has been sold, given away or is no longer in use. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
-                "example": "5000.99"
+                "multipleOf": 0.01,
+                "minimum": 0.00,
+                "maximum": 99999999999.99,
+                "example": "5002.29"
               }
             },
             "additionalProperties": false
           },
           "allowances": {
             "type": "object",
-            "description": "Object holding foreign property Allowances",
+            "description": "Object holding foreign property allowances.",
             "properties": {
               "annualInvestmentAllowance": {
                 "type": "number",
                 "description": "The amount claimed on equipment bought (except cars) up to maximum annual amount. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
-                "example": "5000.99"
+                "multipleOf": 0.01,
+                "minimum": 0.00,
+                "maximum": 99999999999.99,
+                "example": "5001.19"
               },
               "costOfReplacingDomesticItems": {
                 "type": "number",
                 "description": "Cost of Replacing Domestic Items - formerly Wear and Tear allowance. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
-                "example": "5000.99"
+                "multipleOf": 0.01,
+                "minimum": 0.00,
+                "maximum": 99999999999.99,
+                "example": "409.99"
               },
               "zeroEmissionsGoodsVehicleAllowance": {
                 "type": "number",
                 "description": "The amount of zero emissions goods vehicle allowance for goods vehicles purchased for business use. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
-                "example": "5000.99"
+                "multipleOf": 0.01,
+                "minimum": 0.00,
+                "maximum": 99999999999.99,
+                "example": "408.89"
               },
               "otherCapitalAllowance": {
                 "type": "number",
                 "description": "All other capital allowances. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
-                "example": "5000.99"
+                "multipleOf": 0.01,
+                "minimum": 0.00,
+                "maximum": 99999999999.99,
+                "example": "407.00"
               },
               "electricChargePointAllowance": {
                 "type": "number",
                 "description": "The expenditure incurred on electric charge-point equipment. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
-                "example": "5000.99"
+                "multipleOf": 0.01,
+                "minimum": 0.00,
+                "maximum": 99999999999.99,
+                "example": "406.69"
               },
               "zeroEmissionsCarAllowance": {
                 "type": "number",
                 "description": "The amount of zero emissions car allowance. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
-                "example": "5000.99"
+                "multipleOf": 0.01,
+                "minimum": 0.00,
+                "maximum": 99999999999.99,
+                "example": "4005.59"
               },
               "propertyIncomeAllowance": {
                 "type": "number",
                 "description": "The amount of tax exemption for individuals with income from land or property. The value must be between 0 and 1000.00 up to 2 decimal places.",
+                "multipleOf": 0.01,
+                "minimum": 0.00,
+                "maximum": 1000.00,
                 "example": "100.25"
               },
               "structuredBuildingAllowance": {
@@ -85,7 +106,10 @@
                     "amount": {
                       "type": "number",
                       "description": "The amount of structured building allowance. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
-                      "example": "5000.99"
+                      "multipleOf": 0.01,
+                      "minimum": 0.00,
+                      "maximum": 99999999999.99,
+                      "example": "4003.39"
                     },
                     "firstYear": {
                       "type": "object",
@@ -94,19 +118,19 @@
                         "qualifyingDate": {
                           "type": "string",
                           "description": "The date qualified for structured building allowance. Must conform to the format YYYY-MM-DD.",
-                          "example": "2020-01-01"
+                          "example": "2020-03-29"
                         },
                         "qualifyingAmountExpenditure": {
                           "type": "number",
                           "description": "The amount of qualifying expenditure. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
-                          "example": "5000.99"
+                          "multipleOf": 0.01,
+                          "minimum": 0.00,
+                          "maximum": 99999999999.99,
+                          "example": "3000.33"
                         }
                       },
                       "additionalProperties": false,
-                      "required": [
-                        "qualifyingDate",
-                        "qualifyingAmountExpenditure"
-                      ]
+                      "required": ["qualifyingDate", "qualifyingAmountExpenditure"]
                     },
                     "building": {
                       "type": "object",
@@ -132,15 +156,11 @@
                         }
                       },
                       "additionalProperties": false,
-                      "required": [
-                        "postcode"
-                      ]
+                      "required": ["postcode"]
                     }
                   },
-                  "required": [
-                    "amount",
-                    "building"
-                  ]
+                  "additionalProperties": false,
+                  "required": ["amount", "building"]
                 },
                 "additionalProperties": false
               }
@@ -148,15 +168,11 @@
             "additionalProperties": false
           }
         },
-        "required": [
-          "countryCode"
-        ],
-        "additionalProperties": false
-      }
+        "additionalProperties": false,
+        "required": ["countryCode"]
+      },
+      "additionalProperties": false
     }
   },
-  "required": [
-    "submittedOn"
-  ],
   "additionalProperties": false
 }

@@ -168,7 +168,7 @@ class Def2_CreateAmendUkPropertyAnnualSubmissionRequestBodySpec extends UnitSpec
       |      "privateUseAdjustment": 2000.30,
       |      "businessPremisesRenovationAllowanceBalancingCharges": 2000.40,
       |      "nonResidentLandlord": true,
-      |      "RentARoom": {
+      |      "rentARoom": {
       |        "jointlyLet": true
       |      }
       |    }

@@ -41,12 +41,6 @@ class CreateAmendForeignPropertyAnnualSubmissionValidatorFactorySpec extends Uni
 
     "given a request corresponding to a Def2 schema" should {
       "return a Def2 validator" in {
-        validatorFor("2024-25") shouldBe a[Def1_CreateAmendForeignPropertyAnnualSubmissionValidator]
-      }
-    }
-
-    "given a request corresponding to a Def3 schema" should {
-      "return a Def3 validator" in {
         validatorFor("2025-26") shouldBe a[Def2_CreateAmendForeignPropertyAnnualSubmissionValidator]
       }
     }

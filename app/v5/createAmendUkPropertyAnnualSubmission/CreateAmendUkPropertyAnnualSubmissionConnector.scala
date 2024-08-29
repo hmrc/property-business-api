@@ -37,19 +37,6 @@ class CreateAmendUkPropertyAnnualSubmissionConnector @Inject() (val http: HttpCl
 
     implicit val successCode: SuccessCode = SuccessCode(NO_CONTENT)
 
-//    request match {
-//      case def1: Def1_CreateAmendUkPropertyAnnualSubmissionRequestData =>
-//        import def1._
-//        val downstreamUri =
-//          if (taxYear.isTys) {
-//            TaxYearSpecificIfsUri[Unit](s"income-tax/business/property/annual/${taxYear.asTysDownstream}/$nino/$businessId")
-//          } else {
-//            IfsUri[Unit](s"income-tax/business/property/annual?taxableEntityId=$nino&incomeSourceId=$businessId&taxYear=${taxYear.asMtd}")
-//          }
-//
-//        put(def1.body, downstreamUri)
-//
-//    }
     import request._
 
     val downstreamUri = taxYear match {

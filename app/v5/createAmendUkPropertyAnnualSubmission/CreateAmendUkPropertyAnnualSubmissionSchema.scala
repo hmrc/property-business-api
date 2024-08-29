@@ -16,12 +16,32 @@
 
 package v5.createAmendUkPropertyAnnualSubmission
 
+import api.controllers.validators.resolvers.ResolveTaxYear
+import api.models.domain.TaxYear
+import api.models.errors.MtdError
+import cats.data.Validated
+import cats.data.Validated.Valid
+
+import scala.math.Ordered.orderingToOrdered
+
 sealed trait CreateAmendUkPropertyAnnualSubmissionSchema
 
 object CreateAmendUkPropertyAnnualSubmissionSchema {
 
   case object Def1 extends CreateAmendUkPropertyAnnualSubmissionSchema
+  case object Def2 extends CreateAmendUkPropertyAnnualSubmissionSchema
 
-  val schema: CreateAmendUkPropertyAnnualSubmissionSchema = Def1
+  private val preTysSchema = Def1
+
+  def schemaFor(maybeTaxYear: Option[String]): Validated[Seq[MtdError], CreateAmendUkPropertyAnnualSubmissionSchema] =
+    maybeTaxYear match {
+      case Some(taxYearString) => ResolveTaxYear(taxYearString) andThen schemaFor
+      case None                => Valid(preTysSchema)
+    }
+
+  def schemaFor(taxYear: TaxYear): Validated[Seq[MtdError], CreateAmendUkPropertyAnnualSubmissionSchema] = {
+    if (taxYear < TaxYear.starting(2025)) Valid(Def1)
+    else Valid(Def2)
+  }
 
 }

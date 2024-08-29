@@ -115,19 +115,6 @@ class Def2_CreateAmendUkPropertyAnnualSubmissionISpec extends IntegrationBaseSpe
 
   }
 
-//  private trait NonTysTest extends Test {
-//    def taxYear: String           = "2022-23"
-//    def downstreamTaxYear: String = "2022-23"
-//
-//    def downstreamQueryParams: Map[String, String] = Map(
-//      "taxableEntityId" -> nino,
-//      "incomeSourceId"  -> businessId,
-//      "taxYear"         -> taxYear
-//    )
-//
-//    override def downstreamUri: String = baseUri
-//  }
-
   private trait TysIfsTest extends Test {
     def taxYear: String                            = "2025-26"
     def downstreamTaxYear: String                  = "25-26"
@@ -674,7 +661,6 @@ class Def2_CreateAmendUkPropertyAnnualSubmissionISpec extends IntegrationBaseSpe
           ("AA123456A", "XAIS12345678910", "202362-23", validRequestBodyJson, BAD_REQUEST, TaxYearFormatError),
           ("AA123456A", "XAIS1234dfxgchjbn5678910", "2025-26", validRequestBodyJson, BAD_REQUEST, BusinessIdFormatError),
           ("AA123456A", "XAIS12345678910", "2025-28", validRequestBodyJson, BAD_REQUEST, RuleTaxYearRangeInvalidError),
-          ("AA123456A", "XAIS12345678910", "2021-22", validRequestBodyJson, BAD_REQUEST, RuleTaxYearNotSupportedError),
           ("AA123456A", "XAIS12345678910", "2025-26", Json.parse(s"""{}""".stripMargin), BAD_REQUEST, RuleIncorrectOrEmptyBodyError),
           ("AA123456A", "XAIS12345678910", "2025-26", allInvalidValueRequestBodyJson, BAD_REQUEST, allInvalidValueRequestError),
           ("AA123456A", "XAIS12345678910", "2025-26", allInvalidDateFormatRequestBodyJson, BAD_REQUEST, allInvalidDateFormatRequestError),

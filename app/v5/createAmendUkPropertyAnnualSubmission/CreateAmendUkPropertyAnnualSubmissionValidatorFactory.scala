@@ -35,7 +35,7 @@ class CreateAmendUkPropertyAnnualSubmissionValidatorFactory @Inject() (appConfig
     val schema = CreateAmendUkPropertyAnnualSubmissionSchema.schemaFor(Some(taxYear))
     schema match {
       case Valid(Def1)     => new Def1_CreateAmendUkPropertyAnnualSubmissionValidator(nino, businessId, taxYear, body)(appConfig)
-      case Valid(Def2)     => new Def2_CreateAmendUkPropertyAnnualSubmissionValidator(nino, businessId, taxYear, body)(appConfig)
+      case Valid(Def2)     => new Def2_CreateAmendUkPropertyAnnualSubmissionValidator(nino, businessId, taxYear, body)
       case Invalid(errors) => Validator.returningErrors(errors)
     }
   }

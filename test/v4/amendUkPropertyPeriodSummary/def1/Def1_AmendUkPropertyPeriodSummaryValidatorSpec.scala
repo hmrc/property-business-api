@@ -281,6 +281,16 @@ class Def1_AmendUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with JsonE
         result shouldBe Right(
           Def1_AmendUkPropertyPeriodSummaryRequestData(parsedNino, TaxYear.fromMtd(taxYearString), parsedBusinessId, parsedSubmissionId, parsedBody))
       }
+
+      "passed the maximum supported taxYear" in {
+        setupMocks()
+        val taxYearString = "2023-24"
+        val result: Either[ErrorWrapper, AmendUkPropertyPeriodSummaryRequestData] =
+          validator(validNino, validBusinessId, taxYearString, validSubmissionId, validBody).validateAndWrapResult()
+
+        result shouldBe Right(
+          Def1_AmendUkPropertyPeriodSummaryRequestData(parsedNino, TaxYear.fromMtd(taxYearString), parsedBusinessId, parsedSubmissionId, parsedBody))
+      }
     }
 
     "return a single error" when {
@@ -304,6 +314,14 @@ class Def1_AmendUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with JsonE
         setupMocks()
         val result: Either[ErrorWrapper, AmendUkPropertyPeriodSummaryRequestData] =
           validator(validNino, validBusinessId, "2021-22", validSubmissionId, validBody).validateAndWrapResult()
+
+        result shouldBe Left(ErrorWrapper(correlationId, RuleTaxYearNotSupportedError))
+      }
+
+      "passed a taxYear immediately after the maximum supported" in {
+        setupMocks()
+        val result: Either[ErrorWrapper, AmendUkPropertyPeriodSummaryRequestData] =
+          validator(validNino, validBusinessId, "2025-26", validSubmissionId, validBody).validateAndWrapResult()
 
         result shouldBe Left(ErrorWrapper(correlationId, RuleTaxYearNotSupportedError))
       }

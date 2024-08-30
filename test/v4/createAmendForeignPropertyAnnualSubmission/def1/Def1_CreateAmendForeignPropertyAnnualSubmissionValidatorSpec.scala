@@ -482,6 +482,13 @@ class Def1_CreateAmendForeignPropertyAnnualSubmissionValidatorSpec extends UnitS
         validator(validNino, validBusinessId, taxYearString, validBody).validateAndWrapResult() shouldBe
           Right(Def1_CreateAmendForeignPropertyAnnualSubmissionRequestData(parsedNino, parsedBusinessId, TaxYear.fromMtd(taxYearString), parsedBody))
       }
+
+      "passed the maximum supported taxYear" in {
+        setupMocks()
+        val taxYearString = "2024-25"
+        validator(validNino, validBusinessId, taxYearString, validBody).validateAndWrapResult() shouldBe
+          Right(Def1_CreateAmendForeignPropertyAnnualSubmissionRequestData(parsedNino, parsedBusinessId, TaxYear.fromMtd(taxYearString), parsedBody))
+      }
     }
 
     "return a single error" when {
@@ -505,6 +512,12 @@ class Def1_CreateAmendForeignPropertyAnnualSubmissionValidatorSpec extends UnitS
       "passed a taxYear immediately before the minimum supported" in {
         setupMocks()
         validator(validNino, validBusinessId, "2020-21", validBody).validateAndWrapResult() shouldBe
+          Left(ErrorWrapper(correlationId, RuleTaxYearNotSupportedError))
+      }
+
+      "passed a taxYear immediately after the maximum supported" in {
+        setupMocks()
+        validator(validNino, validBusinessId, "2025-26", validBody).validateAndWrapResult() shouldBe
           Left(ErrorWrapper(correlationId, RuleTaxYearNotSupportedError))
       }
 

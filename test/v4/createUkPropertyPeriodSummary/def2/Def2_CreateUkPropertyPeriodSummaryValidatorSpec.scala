@@ -262,6 +262,13 @@ class Def2_CreateUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with Mock
         result shouldBe Left(ErrorWrapper(correlationId, RuleTaxYearRangeInvalidError))
       }
 
+      "passed a taxYear immediately after the maximum tax year" in {
+        val result: Either[ErrorWrapper, CreateUkPropertyPeriodSummaryRequestData] =
+          validator(validNino, "2025-26", validBusinessId, validBody).validateAndWrapResult()
+
+        result shouldBe Left(ErrorWrapper(correlationId, RuleTaxYearNotSupportedError))
+      }
+
       "passed an invalid business id" in {
         val result: Either[ErrorWrapper, CreateUkPropertyPeriodSummaryRequestData] =
           validator(validNino, validTaxYear, "invalid", validBody).validateAndWrapResult()

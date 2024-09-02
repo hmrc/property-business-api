@@ -18,7 +18,7 @@ package v4.retrieveForeignPropertyAnnualSubmission.def1
 
 import api.models.domain.{BusinessId, Nino, TaxYear}
 import api.models.errors._
-import mocks.MockAppConfig
+import config.MockAppConfig
 import support.UnitSpec
 import v4.retrieveForeignPropertyAnnualSubmission.RetrieveForeignPropertyAnnualSubmissionValidatorFactory
 import v4.retrieveForeignPropertyAnnualSubmission.model.request.{

@@ -37,6 +37,8 @@ class RetrieveUkPropertyAnnualSubmissionController @Inject() (val authService: E
   implicit val endpointLogContext: EndpointLogContext =
     EndpointLogContext(controllerName = "RetrieveUkPropertyAnnualSubmissionController", endpointName = "retrieveUkPropertyAnnualSubmission")
 
+  override val endpointName: String = "retrieve-uk-property-annual-submission"
+
   def handleRequest(nino: String, businessId: String, taxYear: String): Action[AnyContent] =
     authorisedAction(nino).async { implicit request =>
       implicit val ctx: RequestContext = RequestContext.from(idGenerator, endpointLogContext)

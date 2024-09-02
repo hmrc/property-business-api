@@ -40,6 +40,8 @@ class CreateHistoricNonFhlUkPropertyPeriodSummaryController @Inject() (
 )(implicit ec: ExecutionContext, appConfig: AppConfig)
     extends AuthorisedController(cc) {
 
+  override val endpointName: String = "create-historic-non-fhluk-property-period-summary"
+
   implicit val endpointLogContext: EndpointLogContext =
     EndpointLogContext(
       controllerName = "CreateAmendHistoricNonFHLUkPropertyPeriodSummaryController",

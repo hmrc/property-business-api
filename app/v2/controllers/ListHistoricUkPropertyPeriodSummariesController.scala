@@ -41,6 +41,8 @@ class ListHistoricUkPropertyPeriodSummariesController @Inject() (val authService
                                                                  idGenerator: IdGenerator)(implicit ec: ExecutionContext, appConfig: AppConfig)
     extends AuthorisedController(cc) {
 
+  override val endpointName: String = "list-historic-uk-property-period-summaries"
+
   def handleFhlRequest(nino: String): Action[AnyContent] = {
     implicit val endpointLogContext: EndpointLogContext =
       EndpointLogContext(

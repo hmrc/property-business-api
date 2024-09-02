@@ -14,12 +14,11 @@
  * limitations under the License.
  */
 
-package mocks
+package config
 
 import api.models.domain.TaxYear
 import cats.data.Validated
-import config.{AppConfig, ConfidenceLevelConfig, Deprecation}
-import org.scalamock.handlers.CallHandler
+import org.scalamock.handlers.{CallHandler, CallHandler0}
 import org.scalamock.scalatest.MockFactory
 import play.api.Configuration
 import routing.Version
@@ -66,6 +65,9 @@ trait MockAppConfig extends MockFactory {
     def endpointReleasedInProduction(version: String, key: String): CallHandler[Boolean] =
       (mockAppConfig.endpointReleasedInProduction: (String, String) => Boolean).expects(version, key)
 
+    def confidenceLevelConfig: CallHandler0[ConfidenceLevelConfig] =
+      (() => mockAppConfig.confidenceLevelConfig).expects()
+
     def confidenceLevelCheckEnabled: CallHandler[ConfidenceLevelConfig] =
       (() => mockAppConfig.confidenceLevelConfig).expects()
 
@@ -77,6 +79,9 @@ trait MockAppConfig extends MockFactory {
 
     def deprecationFor(version: Version): CallHandler[Validated[String, Deprecation]] = (mockAppConfig.deprecationFor(_: Version)).expects(version)
     def apiDocumentationUrl(): CallHandler[String]                                    = (() => mockAppConfig.apiDocumentationUrl: String).expects()
+
+    def endpointAllowsSupportingAgents(endpointName: String): CallHandler[Boolean] =
+      (mockAppConfig.endpointAllowsSupportingAgents(_: String)).expects(endpointName)
 
   }
 

@@ -18,7 +18,7 @@ package v4.retrieveUkPropertyPeriodSummary.def2
 
 import api.models.domain.{BusinessId, Nino, SubmissionId, TaxYear}
 import api.models.errors._
-import mocks.MockAppConfig
+import config.MockAppConfig
 import support.UnitSpec
 import v4.retrieveUkPropertyPeriodSummary.RetrieveUkPropertyPeriodSummaryValidatorFactory
 import v4.retrieveUkPropertyPeriodSummary.model.request.{

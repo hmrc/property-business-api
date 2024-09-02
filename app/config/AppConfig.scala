@@ -72,6 +72,7 @@ trait AppConfig {
   def endpointsEnabled(version: String): Boolean
 
   def endpointsEnabled(version: Version): Boolean
+  def safeEndpointsEnabled(version: String): Boolean
 
   /** Currently only for OAS documentation.
     */
@@ -86,10 +87,12 @@ trait AppConfig {
 
   def minimumTaxYearHistoric: TaxYear
   def maximumTaxYearHistoric: TaxYear
+
+  def endpointAllowsSupportingAgents(endpointName: String): Boolean
 }
 
 @Singleton
-class AppConfigImpl @Inject() (config: ServicesConfig, configuration: Configuration) extends AppConfig {
+class AppConfigImpl @Inject() (config: ServicesConfig, val configuration: Configuration) extends AppConfig {
 
   val appName: String = config.getString("appName")
 
@@ -122,6 +125,11 @@ class AppConfigImpl @Inject() (config: ServicesConfig, configuration: Configurat
   def endpointsEnabled(version: String): Boolean   = config.getBoolean(s"api.$version.endpoints.enabled")
 
   def endpointsEnabled(version: Version): Boolean = config.getBoolean(s"api.${version.name}.endpoints.enabled")
+
+  def safeEndpointsEnabled(version: String): Boolean =
+    configuration
+      .getOptional[Boolean](s"api.$version.endpoints.enabled")
+      .getOrElse(false)
 
   def apiVersionReleasedInProduction(version: String): Boolean = config.getBoolean(s"api.$version.endpoints.api-released-in-production")
 
@@ -186,6 +194,14 @@ class AppConfigImpl @Inject() (config: ServicesConfig, configuration: Configurat
       s"sunsetDate must be later than deprecatedOn date for a deprecated version $version".invalid
     }
   }
+
+  def endpointAllowsSupportingAgents(endpointName: String): Boolean =
+    supportingAgentEndpoints.getOrElse(endpointName, false)
+
+  private val supportingAgentEndpoints: Map[String, Boolean] =
+    configuration
+      .getOptional[Map[String, Boolean]]("api.supporting-agent-endpoints")
+      .getOrElse(Map.empty)
 
 }
 

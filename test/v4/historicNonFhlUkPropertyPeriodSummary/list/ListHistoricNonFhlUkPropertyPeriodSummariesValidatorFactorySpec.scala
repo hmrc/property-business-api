@@ -16,7 +16,7 @@
 
 package v4.historicNonFhlUkPropertyPeriodSummary.list
 
-import mocks.MockAppConfig
+import config.MockAppConfig
 import support.UnitSpec
 import v4.historicNonFhlUkPropertyPeriodSummary.list.def1.Def1_ListHistoricNonFhlUkPropertyPeriodSummariesValidator
 

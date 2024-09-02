@@ -18,7 +18,7 @@ package v2.models.response.retrieveForeignPropertyPeriodSummary
 
 import api.hateoas.{Link, Method}
 import api.models.domain.Timestamp
-import mocks.MockAppConfig
+import config.MockAppConfig
 import play.api.libs.json.Json
 import support.UnitSpec
 import v2.models.response.retrieveForeignPropertyPeriodSummary.foreignFhlEea._

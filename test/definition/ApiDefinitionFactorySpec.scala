@@ -17,10 +17,10 @@
 package definition
 
 import cats.implicits.catsSyntaxValidatedId
-import config.ConfidenceLevelConfig
+import config.{ConfidenceLevelConfig, MockAppConfig}
 import config.Deprecation.NotDeprecated
 import definition.APIStatus.{ALPHA, BETA}
-import mocks.{MockAppConfig, MockHttpClient}
+import mocks.{MockHttpClient}
 import routing._
 import support.UnitSpec
 import uk.gov.hmrc.auth.core.ConfidenceLevel

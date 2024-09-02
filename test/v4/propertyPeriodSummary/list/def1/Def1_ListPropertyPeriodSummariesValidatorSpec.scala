@@ -18,7 +18,7 @@ package v4.propertyPeriodSummary.list.def1
 
 import api.models.domain.{BusinessId, Nino, TaxYear}
 import api.models.errors._
-import mocks.MockAppConfig
+import config.MockAppConfig
 import support.UnitSpec
 import v4.propertyPeriodSummary.list.model.request.ListPropertyPeriodSummariesRequestData
 

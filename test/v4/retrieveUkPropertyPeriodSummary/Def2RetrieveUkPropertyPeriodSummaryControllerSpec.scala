@@ -20,7 +20,8 @@ import api.controllers.{ControllerBaseSpec, ControllerTestRunner}
 import api.models.domain.{BusinessId, Nino, SubmissionId, TaxYear}
 import api.models.errors._
 import api.models.outcomes.ResponseWrapper
-import mocks.MockAppConfig
+import config.MockAppConfig
+import play.api.Configuration
 import play.api.mvc.Result
 import v4.retrieveUkPropertyPeriodSummary.def2.model.Def2_RetrieveUkPropertyPeriodSummaryFixture
 import v4.retrieveUkPropertyPeriodSummary.model.request._
@@ -75,7 +76,7 @@ class Def2RetrieveUkPropertyPeriodSummaryControllerSpec
 
   trait Test extends ControllerTest {
 
-    private val controller = new RetrieveUkPropertyPeriodSummaryController(
+    protected val controller = new RetrieveUkPropertyPeriodSummaryController(
       authService = mockEnrolmentsAuthService,
       lookupService = mockMtdIdLookupService,
       validatorFactory = mockRetrieveUkPropertyPeriodSummaryValidatorFactory,
@@ -83,6 +84,12 @@ class Def2RetrieveUkPropertyPeriodSummaryControllerSpec
       cc = cc,
       idGenerator = mockIdGenerator
     )
+
+    MockedAppConfig.featureSwitches.anyNumberOfTimes() returns Configuration(
+      "supporting-agents-access-control.enabled" -> true
+    )
+
+    MockedAppConfig.endpointAllowsSupportingAgents(controller.endpointName).anyNumberOfTimes() returns false
 
     protected def callController(): Future[Result] = controller.handleRequest(nino, businessId, taxYear, submissionId)(fakeGetRequest)
 

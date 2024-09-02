@@ -43,6 +43,8 @@ class AmendForeignPropertyPeriodSummaryController @Inject() (val authService: En
                                                              idGenerator: IdGenerator)(implicit ec: ExecutionContext, appConfig: AppConfig)
     extends AuthorisedController(cc) {
 
+  override val endpointName: String = "amend-foreign-property-period-summary"
+
   implicit val endpointLogContext: EndpointLogContext =
     EndpointLogContext(controllerName = "AmendForeignPropertyPeriodSummaryController", endpointName = "amendForeignPropertyPeriodSummary")
 

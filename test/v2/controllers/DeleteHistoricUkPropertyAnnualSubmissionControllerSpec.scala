@@ -24,7 +24,8 @@ import api.models.domain.{HistoricPropertyType, Nino, TaxYear}
 import api.models.errors._
 import api.models.outcomes.ResponseWrapper
 import api.services.MockAuditService
-import mocks.MockAppConfig
+import config.MockAppConfig
+import play.api.Configuration
 import play.api.libs.json.JsValue
 import play.api.mvc.Result
 import v2.controllers.validators.MockDeleteHistoricUkPropertyAnnualSubmissionValidatorFactory
@@ -96,7 +97,7 @@ class DeleteHistoricUkPropertyAnnualSubmissionControllerSpec
 
     protected val propertyTypeValue: HistoricPropertyType
 
-    private val controller = new DeleteHistoricUkPropertyAnnualSubmissionController(
+    protected val controller = new DeleteHistoricUkPropertyAnnualSubmissionController(
       authService = mockEnrolmentsAuthService,
       lookupService = mockMtdIdLookupService,
       validatorFactory = mockDeleteHistoricUkPropertyAnnualSubmissionValidatorFactory,
@@ -105,6 +106,12 @@ class DeleteHistoricUkPropertyAnnualSubmissionControllerSpec
       cc = cc,
       idGenerator = mockIdGenerator
     )
+
+    MockedAppConfig.featureSwitches.anyNumberOfTimes() returns Configuration(
+      "supporting-agents-access-control.enabled" -> true
+    )
+
+    MockedAppConfig.endpointAllowsSupportingAgents(controller.endpointName).anyNumberOfTimes() returns false
 
     protected def callController(): Future[Result] = {
       val handler = propertyTypeValue match {

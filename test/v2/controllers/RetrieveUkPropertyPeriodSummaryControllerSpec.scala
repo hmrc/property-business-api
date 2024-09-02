@@ -22,8 +22,9 @@ import api.hateoas.{HateoasWrapper, Link, MockHateoasFactory}
 import api.models.domain.{BusinessId, Nino, SubmissionId, TaxYear}
 import api.models.errors._
 import api.models.outcomes.ResponseWrapper
+import config.MockAppConfig
 import fixtures.RetrieveUkPropertyPeriodSummary.ResponseModelsFixture
-import mocks.MockAppConfig
+import play.api.Configuration
 import play.api.mvc.Result
 import v2.controllers.validators.MockRetrieveUkPropertyPeriodSummaryValidatorFactory
 import v2.models.request.retrieveUkPropertyPeriodSummary.RetrieveUkPropertyPeriodSummaryRequestData
@@ -84,7 +85,7 @@ class RetrieveUkPropertyPeriodSummaryControllerSpec
 
   trait Test extends ControllerTest {
 
-    private val controller = new RetrieveUkPropertyPeriodSummaryController(
+    protected val controller = new RetrieveUkPropertyPeriodSummaryController(
       authService = mockEnrolmentsAuthService,
       lookupService = mockMtdIdLookupService,
       validatorFactory = mockRetrieveUkPropertyPeriodSummaryValidatorFactory,
@@ -93,6 +94,12 @@ class RetrieveUkPropertyPeriodSummaryControllerSpec
       cc = cc,
       idGenerator = mockIdGenerator
     )
+
+    MockedAppConfig.featureSwitches.anyNumberOfTimes() returns Configuration(
+      "supporting-agents-access-control.enabled" -> true
+    )
+
+    MockedAppConfig.endpointAllowsSupportingAgents(controller.endpointName).anyNumberOfTimes() returns false
 
     protected def callController(): Future[Result] = controller.handleRequest(nino, businessId, taxYear, submissionId)(fakeGetRequest)
 

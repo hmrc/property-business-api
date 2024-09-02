@@ -36,6 +36,8 @@ class DeletePropertyAnnualSubmissionController @Inject() (val authService: Enrol
                                                           idGenerator: IdGenerator)(implicit ec: ExecutionContext, appConfig: AppConfig)
     extends AuthorisedController(cc) {
 
+  override val endpointName: String = "delete-property-annual-submission"
+
   implicit val endpointLogContext: EndpointLogContext =
     EndpointLogContext(controllerName = "DeletePropertyAnnualSubmissionController", endpointName = "deletePropertyAnnualSubmission")
 

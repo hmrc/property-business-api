@@ -22,9 +22,11 @@ import api.models.domain.{Nino, PeriodId}
 import api.models.errors.{ErrorWrapper, NinoFormatError, RuleTaxYearNotSupportedError}
 import api.models.outcomes.ResponseWrapper
 import api.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService}
-import mocks.{MockAppConfig, MockIdGenerator}
+import config.MockAppConfig
+import play.api.Configuration
 import play.api.libs.json.{JsObject, JsValue, Json}
 import play.api.mvc.Result
+import utils.MockIdGenerator
 import v2.controllers.validators.MockRetrieveHistoricNonFhlUkPiePeriodSummaryValidatorFactory
 import v2.models.request.retrieveHistoricNonFhlUkPiePeriodSummary._
 import v2.models.response.retrieveHistoricNonFhlUkPiePeriodSummary._
@@ -87,7 +89,7 @@ class RetrieveHistoricNonFhlUkPiePeriodSummaryControllerSpec
 
   trait Test extends ControllerTest {
 
-    private val controller = new RetrieveHistoricNonFhlUkPiePeriodSummaryController(
+    protected val controller = new RetrieveHistoricNonFhlUkPiePeriodSummaryController(
       authService = mockEnrolmentsAuthService,
       lookupService = mockMtdIdLookupService,
       validatorFactory = mockRetrieveHistoricNonFhlUkPiePeriodSummaryValidatorFactory,
@@ -96,6 +98,12 @@ class RetrieveHistoricNonFhlUkPiePeriodSummaryControllerSpec
       cc = cc,
       idGenerator = mockIdGenerator
     )
+
+    MockedAppConfig.featureSwitches.anyNumberOfTimes() returns Configuration(
+      "supporting-agents-access-control.enabled" -> true
+    )
+
+    MockedAppConfig.endpointAllowsSupportingAgents(controller.endpointName).anyNumberOfTimes() returns false
 
     protected def callController(): Future[Result] = controller.handleRequest(nino, periodId)(fakeGetRequest)
 

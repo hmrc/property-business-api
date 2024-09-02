@@ -19,7 +19,7 @@ package v2.controllers.validators
 import api.models.domain.{BusinessId, Nino, SubmissionId, TaxYear}
 import api.models.errors._
 import api.models.utils.JsonErrorValidators
-import mocks.MockAppConfig
+import config.MockAppConfig
 import play.api.libs.json.{JsArray, JsNumber, JsValue, Json}
 import support.UnitSpec
 import v2.models.request.amendForeignPropertyPeriodSummary._

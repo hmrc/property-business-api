@@ -16,7 +16,7 @@
 
 package v4.deleteHistoricNonFhlUkPropertyAnnualSubmission
 
-import mocks.MockAppConfig
+import config.MockAppConfig
 import support.UnitSpec
 import v4.deleteHistoricNonFhlUkPropertyAnnualSubmission.def1.Def1_DeleteHistoricNonFhlUkPropertyAnnualSubmissionValidator
 

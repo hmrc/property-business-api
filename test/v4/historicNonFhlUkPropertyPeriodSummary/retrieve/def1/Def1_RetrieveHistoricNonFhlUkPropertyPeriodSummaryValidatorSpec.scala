@@ -18,7 +18,7 @@ package v4.historicNonFhlUkPropertyPeriodSummary.retrieve.def1
 
 import api.models.domain.{Nino, PeriodId, TaxYear}
 import api.models.errors._
-import mocks.MockAppConfig
+import config.MockAppConfig
 import support.UnitSpec
 import v4.historicNonFhlUkPropertyPeriodSummary.retrieve.model.request.{
   Def1_RetrieveHistoricNonFhlUkPropertyPeriodSummaryRequestData,

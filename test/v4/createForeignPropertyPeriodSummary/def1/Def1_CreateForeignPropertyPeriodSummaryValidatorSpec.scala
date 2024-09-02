@@ -19,7 +19,7 @@ package v4.createForeignPropertyPeriodSummary.def1
 import api.models.domain.{BusinessId, Nino, TaxYear}
 import api.models.errors._
 import api.models.utils.JsonErrorValidators
-import mocks.MockAppConfig
+import config.MockAppConfig
 import play.api.libs.json._
 import support.UnitSpec
 import v4.createForeignPropertyPeriodSummary.def1.model.request.Def1_foreignFhlEea._

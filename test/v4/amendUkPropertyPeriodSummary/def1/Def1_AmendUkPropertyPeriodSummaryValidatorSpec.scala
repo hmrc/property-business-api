@@ -20,7 +20,7 @@ import api.controllers.validators.Validator
 import api.models.domain.{BusinessId, Nino, SubmissionId, TaxYear}
 import api.models.errors._
 import api.models.utils.JsonErrorValidators
-import mocks.MockAppConfig
+import config.MockAppConfig
 import play.api.libs.json.{JsNumber, JsObject, JsValue, Json}
 import support.UnitSpec
 import v4.amendUkPropertyPeriodSummary.AmendUkPropertyPeriodSummaryValidatorFactory

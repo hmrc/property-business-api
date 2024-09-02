@@ -17,7 +17,7 @@
 package v5.retrieveUkPropertyAnnualSubmission.def2.response
 
 import api.models.domain.Timestamp
-import mocks.MockAppConfig
+import config.MockAppConfig
 import play.api.libs.json.Json
 import support.UnitSpec
 import v5.retrieveUkPropertyAnnualSubmission.def2.model.response.def2_ukProperty._

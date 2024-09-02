@@ -21,9 +21,11 @@ import api.models.domain.{Nino, PeriodId}
 import api.models.errors._
 import api.models.outcomes.ResponseWrapper
 import api.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService}
-import mocks.{MockAppConfig, MockIdGenerator}
+import config.MockAppConfig
+import play.api.Configuration
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.Result
+import utils.MockIdGenerator
 import v4.historicFhlUkPropertyPeriodSummary.retrieve.def1.model.response.{PeriodExpenses, PeriodIncome, RentARoomExpenses, RentARoomIncome}
 import v4.historicFhlUkPropertyPeriodSummary.retrieve.model.request.{
   Def1_RetrieveHistoricFhlUkPropertyPeriodSummaryRequestData,
@@ -85,7 +87,7 @@ class RetrieveHistoricFhlUkPropertyPeriodSummaryControllerSpec
 
   trait Test extends ControllerTest {
 
-    private val controller = new RetrieveHistoricFhlUkPropertyPeriodSummaryController(
+    protected val controller = new RetrieveHistoricFhlUkPropertyPeriodSummaryController(
       authService = mockEnrolmentsAuthService,
       lookupService = mockMtdIdLookupService,
       validatorFactory = mockRetrieveHistoricFhlUkPropertyPeriodSummaryValidatorFactory,
@@ -93,6 +95,12 @@ class RetrieveHistoricFhlUkPropertyPeriodSummaryControllerSpec
       cc = cc,
       idGenerator = mockIdGenerator
     )
+
+    MockedAppConfig.featureSwitches.anyNumberOfTimes() returns Configuration(
+      "supporting-agents-access-control.enabled" -> true
+    )
+
+    MockedAppConfig.endpointAllowsSupportingAgents(controller.endpointName).anyNumberOfTimes() returns false
 
     protected def callController(): Future[Result] = controller.handleRequest(nino, periodId)(fakeGetRequest)
 
@@ -118,7 +126,7 @@ class RetrieveHistoricFhlUkPropertyPeriodSummaryControllerSpec
       )
 
     protected val responseBodyJson: JsValue = Json.parse("""
-        |{ 
+        |{
         |  "fromDate": "2017-04-06",
         |  "toDate":"2017-07-04",
         |  "income": {

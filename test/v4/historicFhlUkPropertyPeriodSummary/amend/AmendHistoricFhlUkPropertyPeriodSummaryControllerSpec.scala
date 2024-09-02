@@ -23,9 +23,11 @@ import api.models.domain.{Nino, PeriodId}
 import api.models.errors._
 import api.models.outcomes.ResponseWrapper
 import api.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService}
-import mocks.{MockAppConfig, MockIdGenerator}
+import config.MockAppConfig
+import play.api.Configuration
 import play.api.libs.json.{JsObject, JsValue, Json}
 import play.api.mvc.Result
+import utils.MockIdGenerator
 import v4.historicFhlUkPropertyPeriodSummary.amend.request.{
   AmendHistoricFhlUkPropertyPeriodSummaryRequestData,
   Def1_AmendHistoricFhlUkPropertyPeriodSummaryRequestBody,
@@ -83,7 +85,7 @@ class AmendHistoricFhlUkPropertyPeriodSummaryControllerSpec
 
   trait Test extends ControllerTest with AuditEventChecking[FlattenedGenericAuditDetail] {
 
-    private val controller = new AmendHistoricFhlUkPropertyPeriodSummaryController(
+    protected val controller = new AmendHistoricFhlUkPropertyPeriodSummaryController(
       authService = mockEnrolmentsAuthService,
       lookupService = mockMtdIdLookupService,
       validatorFactory = mockAmendHistoricFhlUkPropertyPeriodSummaryValidatorFactory,
@@ -92,6 +94,12 @@ class AmendHistoricFhlUkPropertyPeriodSummaryControllerSpec
       cc = cc,
       idGenerator = mockIdGenerator
     )
+
+    MockedAppConfig.featureSwitches.anyNumberOfTimes() returns Configuration(
+      "supporting-agents-access-control.enabled" -> true
+    )
+
+    MockedAppConfig.endpointAllowsSupportingAgents(controller.endpointName).anyNumberOfTimes() returns false
 
     protected def callController(): Future[Result] = controller.handleRequest(nino, taxYear)(fakePutRequest(requestBodyJson))
 
@@ -129,7 +137,7 @@ class AmendHistoricFhlUkPropertyPeriodSummaryControllerSpec
         |      "nonResidentLandlord": true,
         |      "rentARoom": {
         |         "jointlyLet": true
-        |      }   
+        |      }
         |   },
         |   "annualAllowances": {
         |      "annualInvestmentAllowance": 200.00,

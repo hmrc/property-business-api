@@ -22,9 +22,11 @@ import api.models.domain.{BusinessId, Nino, TaxYear, Timestamp}
 import api.models.errors._
 import api.models.outcomes.ResponseWrapper
 import api.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService}
-import mocks.{MockAppConfig, MockIdGenerator}
+import config.MockAppConfig
+import play.api.Configuration
 import play.api.libs.json.Json
 import play.api.mvc.Result
+import utils.MockIdGenerator
 import v2.controllers.validators.MockRetrieveForeignPropertyAnnualSubmissionValidatorFactory
 import v2.models.request.retrieveForeignPropertyAnnualSubmission._
 import v2.models.response.retrieveForeignPropertyAnnualSubmission._
@@ -90,7 +92,7 @@ class RetrieveForeignPropertyAnnualSubmissionControllerSpec
 
   trait Test extends ControllerTest {
 
-    private val controller = new RetrieveForeignPropertyAnnualSubmissionController(
+    protected val controller = new RetrieveForeignPropertyAnnualSubmissionController(
       authService = mockEnrolmentsAuthService,
       lookupService = mockMtdIdLookupService,
       validatorFactory = mockRetrieveForeignPropertyAnnualSubmissionValidatorFactory,
@@ -99,6 +101,12 @@ class RetrieveForeignPropertyAnnualSubmissionControllerSpec
       cc = cc,
       idGenerator = mockIdGenerator
     )
+
+    MockedAppConfig.featureSwitches.anyNumberOfTimes() returns Configuration(
+      "supporting-agents-access-control.enabled" -> true
+    )
+
+    MockedAppConfig.endpointAllowsSupportingAgents(controller.endpointName).anyNumberOfTimes() returns false
 
     protected def callController(): Future[Result] = controller.handleRequest(nino, businessId, taxYear)(fakeRequest)
 

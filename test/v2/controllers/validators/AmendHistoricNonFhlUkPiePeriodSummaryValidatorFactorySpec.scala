@@ -27,7 +27,7 @@ import api.models.errors.{
   ValueFormatError
 }
 import api.models.utils.JsonErrorValidators
-import mocks.MockAppConfig
+import config.MockAppConfig
 import play.api.libs.json.{JsNumber, JsObject, JsValue}
 import support.UnitSpec
 import v2.fixtures.AmendHistoricNonFhlUkPiePeriodSummary.AmendHistoricNonFhlUkPiePeriodSummaryFixtures

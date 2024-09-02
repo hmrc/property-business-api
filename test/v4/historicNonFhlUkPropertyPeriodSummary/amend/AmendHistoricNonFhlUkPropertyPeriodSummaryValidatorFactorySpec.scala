@@ -17,7 +17,7 @@
 package v4.historicNonFhlUkPropertyPeriodSummary.amend
 
 import api.models.utils.JsonErrorValidators
-import mocks.MockAppConfig
+import config.MockAppConfig
 import play.api.libs.json.JsObject
 import support.UnitSpec
 import v4.historicNonFhlUkPropertyPeriodSummary.amend.def1.Def1_AmendHistoricNonFhlUkPropertyPeriodSummaryValidator

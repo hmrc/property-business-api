@@ -16,7 +16,7 @@
 
 package v4.historicFhlUkPropertyPeriodSummary.list.model.response
 
-import mocks.MockAppConfig
+import config.MockAppConfig
 import play.api.libs.json.Json
 import support.UnitSpec
 import v4.historicFhlUkPropertyPeriodSummary.list.def1.model.response.SubmissionPeriod

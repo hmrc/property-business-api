@@ -18,8 +18,7 @@ package api.hateoas
 
 import api.hateoas.Method.GET
 import cats.Functor
-import config.AppConfig
-import mocks.MockAppConfig
+import config.{AppConfig, MockAppConfig}
 import support.UnitSpec
 
 class HateoasFactorySpec extends UnitSpec with MockAppConfig {

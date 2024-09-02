@@ -39,6 +39,8 @@ class RetrieveHistoricNonFhlUkPiePeriodSummaryController @Inject() (val authServ
                                                                     idGenerator: IdGenerator)(implicit ec: ExecutionContext, appConfig: AppConfig)
     extends AuthorisedController(cc) {
 
+  override val endpointName: String = "retrieve-historic-non-fhluk-pie-period-summary"
+
   implicit val endpointLogContext: EndpointLogContext =
     EndpointLogContext(
       controllerName = "RetrieveHistoricNonFhlUkPiePeriodSummaryController",

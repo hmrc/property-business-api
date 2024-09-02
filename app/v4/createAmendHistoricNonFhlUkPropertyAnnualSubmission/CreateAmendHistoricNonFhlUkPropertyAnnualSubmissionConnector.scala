@@ -22,7 +22,10 @@ import api.connectors.{BaseDownstreamConnector, DownstreamOutcome}
 import config.AppConfig
 import play.api.libs.json.Format.GenericFormat
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
-import v4.createAmendHistoricNonFhlUkPropertyAnnualSubmission.model.request.{CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestData, Def1_CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestData}
+import v4.createAmendHistoricNonFhlUkPropertyAnnualSubmission.model.request.{
+  CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestData,
+  Def1_CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestData
+}
 import v4.createAmendHistoricNonFhlUkPropertyAnnualSubmission.model.response.CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionResponse
 
 import javax.inject.{Inject, Singleton}

@@ -69,7 +69,8 @@ class Def1_RetrieveUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with Mo
         val result: Either[ErrorWrapper, RetrieveUkPropertyPeriodSummaryRequestData] =
           validator(validNino, validBusinessId, "2023-24", validSubmissionId).validateAndWrapResult()
 
-        result shouldBe Right(Def1_RetrieveUkPropertyPeriodSummaryRequestData(parsedNino, parsedBusinessId, TaxYear.fromMtd("2023-24"), parsedSubmissionId))
+        result shouldBe Right(
+          Def1_RetrieveUkPropertyPeriodSummaryRequestData(parsedNino, parsedBusinessId, TaxYear.fromMtd("2023-24"), parsedSubmissionId))
       }
     }
 

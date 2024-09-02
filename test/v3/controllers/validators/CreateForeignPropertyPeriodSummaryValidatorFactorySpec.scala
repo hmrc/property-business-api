@@ -24,21 +24,23 @@ import play.api.libs.json._
 import support.UnitSpec
 import v3.models.request.createForeignPropertyPeriodSummary.foreignFhlEea._
 import v3.models.request.createForeignPropertyPeriodSummary.foreignPropertyEntry._
-import v3.models.request.createForeignPropertyPeriodSummary.{CreateForeignPropertyPeriodSummaryRequestBody, CreateForeignPropertyPeriodSummaryRequestData}
+import v3.models.request.createForeignPropertyPeriodSummary.{
+  CreateForeignPropertyPeriodSummaryRequestBody,
+  CreateForeignPropertyPeriodSummaryRequestData
+}
 
 class CreateForeignPropertyPeriodSummaryValidatorFactorySpec extends UnitSpec with MockAppConfig with JsonErrorValidators {
   private implicit val correlationId: String = "1234"
 
-  private val validNino = "AA123456A"
+  private val validNino       = "AA123456A"
   private val validBusinessId = "XAIS12345678901"
-  private val validTaxYear = "2023-24"
+  private val validTaxYear    = "2023-24"
 
-  private val validFromDate = "2020-03-29"
-  private val validToDate = "2021-03-29"
+  private val validFromDate    = "2020-03-29"
+  private val validToDate      = "2021-03-29"
   private val validCountryCode = "AFG"
 
-  private def entryWith(countryCode: String) = Json.parse(
-    s"""
+  private def entryWith(countryCode: String) = Json.parse(s"""
        |{
        |         "countryCode": "$countryCode",
        |         "income":{
@@ -67,8 +69,7 @@ class CreateForeignPropertyPeriodSummaryValidatorFactorySpec extends UnitSpec wi
 
   private val entry = entryWith(countryCode = validCountryCode)
 
-  private def bodyWith(nonFhlEntries: JsValue*) = Json.parse(
-    s"""
+  private def bodyWith(nonFhlEntries: JsValue*) = Json.parse(s"""
        |{
        |   "fromDate":"$validFromDate",
        |   "toDate":"$validToDate",
@@ -92,8 +93,7 @@ class CreateForeignPropertyPeriodSummaryValidatorFactorySpec extends UnitSpec wi
 
   private val validBody = bodyWith(entry)
 
-  private def entryConsolidated = Json.parse(
-    s"""
+  private def entryConsolidated = Json.parse(s"""
        |{
        |     "countryCode":"$validCountryCode",
        |     "income":{
@@ -112,8 +112,7 @@ class CreateForeignPropertyPeriodSummaryValidatorFactorySpec extends UnitSpec wi
        |}
        |""".stripMargin)
 
-  private def consolidatedBodyWith(nonFhlEntries: JsValue*) = Json.parse(
-    s"""
+  private def consolidatedBodyWith(nonFhlEntries: JsValue*) = Json.parse(s"""
        |{
        |   "fromDate": "$validFromDate",
        |   "toDate": "$validToDate",
@@ -131,8 +130,7 @@ class CreateForeignPropertyPeriodSummaryValidatorFactorySpec extends UnitSpec wi
 
   private val validBodyConsolidated = consolidatedBodyWith(entryConsolidated)
 
-  private val validBodyMinimalFhl = Json.parse(
-    s"""
+  private val validBodyMinimalFhl = Json.parse(s"""
        |{
        |  "fromDate": "$validFromDate",
        |  "toDate": "$validToDate",
@@ -144,8 +142,7 @@ class CreateForeignPropertyPeriodSummaryValidatorFactorySpec extends UnitSpec wi
        |}
        |""".stripMargin)
 
-  private val validBodyMinimalNonFhl = Json.parse(
-    s"""
+  private val validBodyMinimalNonFhl = Json.parse(s"""
        |{
        |  "fromDate": "$validFromDate",
        |  "toDate": "$validToDate",
@@ -163,9 +160,9 @@ class CreateForeignPropertyPeriodSummaryValidatorFactorySpec extends UnitSpec wi
        |}
        |""".stripMargin)
 
-  private val parsedNino = Nino(validNino)
+  private val parsedNino       = Nino(validNino)
   private val parsedBusinessId = BusinessId(validBusinessId)
-  private val parsedTaxYear = TaxYear.fromMtd(validTaxYear)
+  private val parsedTaxYear    = TaxYear.fromMtd(validTaxYear)
 
   private val parsedForeignFhlEeaIncome = ForeignFhlEeaIncome(Some(381.21))
 
@@ -463,7 +460,7 @@ class CreateForeignPropertyPeriodSummaryValidatorFactorySpec extends UnitSpec wi
       "passed a body with multiple duplicate country codes" in {
         val countryCode1 = "AFG"
         val countryCode2 = "ZWE"
-        val invalidBody = bodyWith(entryWith(countryCode1), entryWith(countryCode2), entryWith(countryCode1), entryWith(countryCode2))
+        val invalidBody  = bodyWith(entryWith(countryCode1), entryWith(countryCode2), entryWith(countryCode1), entryWith(countryCode2))
 
         val result: Either[ErrorWrapper, CreateForeignPropertyPeriodSummaryRequestData] =
           validator(validNino, validBusinessId, validTaxYear, invalidBody).validateAndWrapResult()
@@ -663,4 +660,3 @@ class CreateForeignPropertyPeriodSummaryValidatorFactorySpec extends UnitSpec wi
   }
 
 }
-

@@ -102,8 +102,8 @@ case class ResolveTaxYearMinMax(minMax: (TaxYear, TaxYear), error: MtdError = Ru
     }
 
 }
-case class ResolveIncompleteTaxYear(incompleteTaxYearError: MtdError = RuleTaxYearNotEndedError)(implicit clock: Clock)
-    extends ResolverSupport {
+
+case class ResolveIncompleteTaxYear(incompleteTaxYearError: MtdError = RuleTaxYearNotEndedError)(implicit clock: Clock) extends ResolverSupport {
 
   val resolver: Resolver[String, TaxYear] =
     ResolveTaxYear.resolver thenValidate satisfies(incompleteTaxYearError)(_ < TaxYear.currentTaxYear)

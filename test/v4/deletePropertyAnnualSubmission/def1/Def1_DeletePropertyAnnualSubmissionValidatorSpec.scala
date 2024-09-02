@@ -29,12 +29,12 @@ class Def1_DeletePropertyAnnualSubmissionValidatorSpec extends UnitSpec with Moc
   private val validNino       = "AA123456A"
   private val validBusinessId = "XAIS12345678901"
   private val validTaxYear    = "2021-22"
-  private val validTysTaxYear    = "2023-24"
+  private val validTysTaxYear = "2023-24"
 
   private val parsedNino       = Nino(validNino)
   private val parsedBusinessId = BusinessId(validBusinessId)
   private val parsedTaxYear    = TaxYear.fromMtd(validTaxYear)
-  private val parsedTysTaxYear    = TaxYear.fromMtd(validTysTaxYear)
+  private val parsedTysTaxYear = TaxYear.fromMtd(validTysTaxYear)
 
   private val validatorFactory = new DeletePropertyAnnualSubmissionValidatorFactory(mockAppConfig)
 

@@ -34,6 +34,7 @@ class ApiDefinitionFactorySpec extends UnitSpec {
   }
 
   private val confidenceLevel: ConfidenceLevel = ConfidenceLevel.L200
+
   "definition" when {
     "called" should {
       "return a valid Definition case class" in new Test {

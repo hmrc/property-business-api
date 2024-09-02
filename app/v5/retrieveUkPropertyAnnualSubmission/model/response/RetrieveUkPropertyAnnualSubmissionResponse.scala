@@ -24,7 +24,7 @@ import v5.retrieveUkPropertyAnnualSubmission.def1.model.response.def1_ukNonFhlPr
 import v5.retrieveUkPropertyAnnualSubmission.def2.model.response.def2_ukProperty.Def2_Retrieve_UkProperty
 
 sealed trait RetrieveUkPropertyAnnualSubmissionResponse {
-  def isUkResult :Boolean
+  def isUkResult: Boolean
 }
 
 object RetrieveUkPropertyAnnualSubmissionResponse {
@@ -41,7 +41,7 @@ case class Def1_RetrieveUkPropertyAnnualSubmissionResponse(
     ukFhlProperty: Option[Def1_Retrieve_UkFhlProperty],
     ukNonFhlProperty: Option[Def1_Retrieve_UkNonFhlProperty]
 ) extends RetrieveUkPropertyAnnualSubmissionResponse {
-  override def isUkResult :Boolean = ukFhlProperty.nonEmpty || ukNonFhlProperty.nonEmpty
+  override def isUkResult: Boolean = ukFhlProperty.nonEmpty || ukNonFhlProperty.nonEmpty
 }
 
 object Def1_RetrieveUkPropertyAnnualSubmissionResponse {
@@ -57,10 +57,10 @@ object Def1_RetrieveUkPropertyAnnualSubmissionResponse {
 }
 
 case class Def2_RetrieveUkPropertyAnnualSubmissionResponse(
-           submittedOn: Timestamp,
-           ukProperty: Option[Def2_Retrieve_UkProperty]
-       ) extends RetrieveUkPropertyAnnualSubmissionResponse {
-  override def isUkResult :Boolean = ukProperty.nonEmpty
+    submittedOn: Timestamp,
+    ukProperty: Option[Def2_Retrieve_UkProperty]
+) extends RetrieveUkPropertyAnnualSubmissionResponse {
+  override def isUkResult: Boolean = ukProperty.nonEmpty
 }
 
 object Def2_RetrieveUkPropertyAnnualSubmissionResponse {
@@ -70,6 +70,6 @@ object Def2_RetrieveUkPropertyAnnualSubmissionResponse {
   implicit val reads: Reads[Def2_RetrieveUkPropertyAnnualSubmissionResponse] = (
     (__ \ "submittedOn").read[Timestamp] and
       (__ \ "ukProperty").readNullable[Def2_Retrieve_UkProperty]
-    )(Def2_RetrieveUkPropertyAnnualSubmissionResponse.apply _)
+  )(Def2_RetrieveUkPropertyAnnualSubmissionResponse.apply _)
 
 }

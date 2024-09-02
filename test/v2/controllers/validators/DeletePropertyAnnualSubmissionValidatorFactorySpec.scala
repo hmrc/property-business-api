@@ -48,7 +48,6 @@ class DeletePropertyAnnualSubmissionValidatorFactorySpec extends UnitSpec with M
         result shouldBe Right(DeletePropertyAnnualSubmissionRequestData(parsedNino, parsedBusinessId, parsedTaxYear))
       }
 
-
       "passed the minimum supported taxYear" in {
         val taxYearString = "2021-22"
         validator(validNino, validBusinessId, taxYearString).validateAndWrapResult() shouldBe

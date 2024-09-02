@@ -22,15 +22,18 @@ import api.models.errors._
 import api.models.outcomes.ResponseWrapper
 import support.UnitSpec
 import uk.gov.hmrc.http.HeaderCarrier
-import v4.historicFhlUkPropertyPeriodSummary.amend.request.{Def1_AmendHistoricFhlUkPropertyPeriodSummaryRequestBody, Def1_AmendHistoricFhlUkPropertyPeriodSummaryRequestData}
+import v4.historicFhlUkPropertyPeriodSummary.amend.request.{
+  Def1_AmendHistoricFhlUkPropertyPeriodSummaryRequestBody,
+  Def1_AmendHistoricFhlUkPropertyPeriodSummaryRequestData
+}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class AmendHistoricFhlUkPropertyPeriodSummaryServiceSpec extends UnitSpec {
 
-  private val nino: String    = "AA123456A"
-  private val periodId = PeriodId(from = "2017-04-06", to = "2017-07-04")
+  private val nino: String = "AA123456A"
+  private val periodId     = PeriodId(from = "2017-04-06", to = "2017-07-04")
 
   implicit private val correlationId: String = "X-123"
 
@@ -58,7 +61,6 @@ class AmendHistoricFhlUkPropertyPeriodSummaryServiceSpec extends UnitSpec {
 
           await(service.amend(request)) shouldBe Left(ErrorWrapper(correlationId, error))
         }
-
 
       val input = List(
         "INVALID_NINO"                -> NinoFormatError,

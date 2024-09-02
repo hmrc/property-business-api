@@ -21,7 +21,10 @@ import api.models.errors._
 import mocks.MockAppConfig
 import support.UnitSpec
 import v4.retrieveUkPropertyAnnualSubmission.RetrieveUkPropertyAnnualSubmissionValidatorFactory
-import v4.retrieveUkPropertyAnnualSubmission.model.request.{Def1_RetrieveUkPropertyAnnualSubmissionRequestData, RetrieveUkPropertyAnnualSubmissionRequestData}
+import v4.retrieveUkPropertyAnnualSubmission.model.request.{
+  Def1_RetrieveUkPropertyAnnualSubmissionRequestData,
+  RetrieveUkPropertyAnnualSubmissionRequestData
+}
 
 class Def1_RetrieveUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec with MockAppConfig {
 

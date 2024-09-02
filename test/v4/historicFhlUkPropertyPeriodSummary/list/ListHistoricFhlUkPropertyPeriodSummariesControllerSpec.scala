@@ -25,7 +25,10 @@ import mocks.{MockAppConfig, MockIdGenerator}
 import play.api.libs.json.Json
 import play.api.mvc.Result
 import v4.historicFhlUkPropertyPeriodSummary.list.def1.model.response.SubmissionPeriod
-import v4.historicFhlUkPropertyPeriodSummary.list.model.request.{Def1_ListHistoricFhlUkPropertyPeriodSummariesRequestData, ListHistoricFhlUkPropertyPeriodSummariesRequestData}
+import v4.historicFhlUkPropertyPeriodSummary.list.model.request.{
+  Def1_ListHistoricFhlUkPropertyPeriodSummariesRequestData,
+  ListHistoricFhlUkPropertyPeriodSummariesRequestData
+}
 import v4.historicFhlUkPropertyPeriodSummary.list.model.response.ListHistoricFhlUkPropertyPeriodSummariesResponse
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -41,8 +44,6 @@ class ListHistoricFhlUkPropertyPeriodSummariesControllerSpec
     with MockListHistoricFhlUkPropertyPeriodSummariesValidatorFactory
     with MockAuditService
     with MockIdGenerator {
-
-
 
   "ListHistoricUkPropertyPeriodSummariesController" should {
     "return OK" when {

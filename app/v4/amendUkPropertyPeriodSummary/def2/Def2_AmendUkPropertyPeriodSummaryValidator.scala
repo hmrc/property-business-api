@@ -48,7 +48,7 @@ class Def2_AmendUkPropertyPeriodSummaryValidator @Inject() (nino: String, busine
 }
 
 object Def2_AmendUkPropertyPeriodSummaryValidator {
-  private val maxTaxYear = TaxYear.fromMtd("2024-25")
+  private val maxTaxYear     = TaxYear.fromMtd("2024-25")
   private val resolveTaxYear = ResolveTaxYearMaximum(maxTaxYear)
 
   private val resolveJson    = new ResolveNonEmptyJsonObject[Def2_AmendUkPropertyPeriodSummaryRequestBody]()

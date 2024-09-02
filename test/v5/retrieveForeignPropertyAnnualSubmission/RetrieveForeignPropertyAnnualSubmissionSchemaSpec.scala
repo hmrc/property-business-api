@@ -29,17 +29,20 @@ class RetrieveForeignPropertyAnnualSubmissionSchemaSpec extends UnitSpec with Sc
 
       "use Def1 for tax year 2023-24" in {
         val taxYear = TaxYear.fromMtd("2023-24")
-        RetrieveForeignPropertyAnnualSubmissionSchema.schemaFor(Some(taxYear.asMtd)) shouldBe Valid(RetrieveForeignPropertyAnnualSubmissionSchema.Def1)
+        RetrieveForeignPropertyAnnualSubmissionSchema.schemaFor(Some(taxYear.asMtd)) shouldBe Valid(
+          RetrieveForeignPropertyAnnualSubmissionSchema.Def1)
       }
 
       "use Def1 for tax year 2024-25" in {
         val taxYear = TaxYear.fromMtd("2024-25")
-        RetrieveForeignPropertyAnnualSubmissionSchema.schemaFor(Some(taxYear.asMtd)) shouldBe Valid(RetrieveForeignPropertyAnnualSubmissionSchema.Def1)
+        RetrieveForeignPropertyAnnualSubmissionSchema.schemaFor(Some(taxYear.asMtd)) shouldBe Valid(
+          RetrieveForeignPropertyAnnualSubmissionSchema.Def1)
       }
 
       "use Def2 for tax years 2025-26 onwards" in {
         val taxYear = TaxYear.fromMtd("2025-26")
-        RetrieveForeignPropertyAnnualSubmissionSchema.schemaFor(Some(taxYear.asMtd)) shouldBe Valid(RetrieveForeignPropertyAnnualSubmissionSchema.Def2)
+        RetrieveForeignPropertyAnnualSubmissionSchema.schemaFor(Some(taxYear.asMtd)) shouldBe Valid(
+          RetrieveForeignPropertyAnnualSubmissionSchema.Def2)
       }
     }
 

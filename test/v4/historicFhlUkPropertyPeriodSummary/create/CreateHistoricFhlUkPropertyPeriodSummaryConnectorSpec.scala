@@ -19,13 +19,16 @@ package v4.historicFhlUkPropertyPeriodSummary.create
 import api.connectors.{ConnectorSpec, DownstreamOutcome}
 import api.models.domain.Nino
 import api.models.outcomes.ResponseWrapper
-import v4.historicFhlUkPropertyPeriodSummary.create.model.request.{Def1_CreateHistoricFhlUkPiePeriodSummaryRequestBody, Def1_CreateHistoricFhlUkPropertyPeriodSummaryRequestData}
+import v4.historicFhlUkPropertyPeriodSummary.create.model.request.{
+  Def1_CreateHistoricFhlUkPiePeriodSummaryRequestBody,
+  Def1_CreateHistoricFhlUkPropertyPeriodSummaryRequestData
+}
 
 import scala.concurrent.Future
 
 class CreateHistoricFhlUkPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
 
-  private val nino: String              = "AA123456A"
+  private val nino: String = "AA123456A"
 
   "connector" must {
     "put a body and return a 204" in new IfsTest with Test {
@@ -54,7 +57,6 @@ class CreateHistoricFhlUkPropertyPeriodSummaryConnectorSpec extends ConnectorSpe
 
     protected val request: Def1_CreateHistoricFhlUkPropertyPeriodSummaryRequestData =
       Def1_CreateHistoricFhlUkPropertyPeriodSummaryRequestData(Nino(nino), requestBody)
-
 
   }
 

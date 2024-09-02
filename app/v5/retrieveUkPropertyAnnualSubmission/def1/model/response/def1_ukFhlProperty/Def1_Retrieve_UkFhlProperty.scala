@@ -18,7 +18,8 @@ package v5.retrieveUkPropertyAnnualSubmission.def1.model.response.def1_ukFhlProp
 
 import play.api.libs.json.{Json, OFormat}
 
-case class Def1_Retrieve_UkFhlProperty(adjustments: Option[Def1_Retrieve_UkFhlPropertyAdjustments], allowances: Option[Def1_Retrieve_UkFhlPropertyAllowances])
+case class Def1_Retrieve_UkFhlProperty(adjustments: Option[Def1_Retrieve_UkFhlPropertyAdjustments],
+                                       allowances: Option[Def1_Retrieve_UkFhlPropertyAllowances])
 
 object Def1_Retrieve_UkFhlProperty {
   implicit val format: OFormat[Def1_Retrieve_UkFhlProperty] = Json.format[Def1_Retrieve_UkFhlProperty]

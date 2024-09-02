@@ -47,7 +47,6 @@ class RetrieveHistoricNonFhlUkPropertyAnnualSubmissionControllerSpec
 
   private val taxYear = TaxYear.fromMtd("2020-21")
 
-
   "RetrieveHistoricNonFhlUkPropertyAnnualSubmissionController" should {
     "return OK" when {
       "the request is valid" in new Test {

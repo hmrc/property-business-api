@@ -46,10 +46,9 @@ class CreateUkPropertyPeriodSummaryControllerSpec
     with MockHateoasFactory
     with MockAuditService {
 
-  private val taxYear               = "2020-21"
-  private val businessId            = "XAIS12345678910"
-  private val submissionId          = "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
-
+  private val taxYear      = "2020-21"
+  private val businessId   = "XAIS12345678910"
+  private val submissionId = "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
 
   "CreateUkPropertyPeriodSummaryController" should {
     "return a successful response from a consolidated request" when {

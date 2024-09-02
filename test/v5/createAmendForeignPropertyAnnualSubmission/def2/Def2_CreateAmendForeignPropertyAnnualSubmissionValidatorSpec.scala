@@ -23,7 +23,10 @@ import mocks.MockAppConfig
 import play.api.libs.json._
 import support.UnitSpec
 import v5.createAmendForeignPropertyAnnualSubmission.def2.model.request.def2_foreignProperty._
-import v5.createAmendForeignPropertyAnnualSubmission.def2.model.request.{Def2_CreateAmendForeignPropertyAnnualSubmissionRequestBody, Def2_CreateAmendForeignPropertyAnnualSubmissionRequestData}
+import v5.createAmendForeignPropertyAnnualSubmission.def2.model.request.{
+  Def2_CreateAmendForeignPropertyAnnualSubmissionRequestBody,
+  Def2_CreateAmendForeignPropertyAnnualSubmissionRequestData
+}
 import v5.createAmendForeignPropertyAnnualSubmission.model.request.CreateAmendForeignPropertyAnnualSubmissionRequestData
 
 class Def2_CreateAmendForeignPropertyAnnualSubmissionValidatorSpec extends UnitSpec with MockAppConfig with JsonErrorValidators {
@@ -164,8 +167,7 @@ class Def2_CreateAmendForeignPropertyAnnualSubmissionValidatorSpec extends UnitS
     Some(List(parsedForeignEntryPropertyIncomeAllowance))
   )
 
-
-  private val parsedBodyWithMinimalforeignProperty= Def2_CreateAmendForeignPropertyAnnualSubmissionRequestBody(
+  private val parsedBodyWithMinimalforeignProperty = Def2_CreateAmendForeignPropertyAnnualSubmissionRequestBody(
     Some(
       List(
         Def2_Create_Amend_ForeignEntry(
@@ -206,8 +208,9 @@ class Def2_CreateAmendForeignPropertyAnnualSubmissionValidatorSpec extends UnitS
 
   private val parsedBodyWithUpdatedBuilding: Def2_Create_Amend_Building => Def2_CreateAmendForeignPropertyAnnualSubmissionRequestBody =
     (building: Def2_Create_Amend_Building) =>
-      parsedBody.copy(foreignProperty = Some(List(parsedForeignEntry.copy(allowances = Some(
-        parsedForeignAllowances.copy(structuredBuildingAllowance = Some(List(parsedStructuredBuildingAllowance.copy(building = building)))))))))
+      parsedBody.copy(foreignProperty = Some(
+        List(parsedForeignEntry.copy(allowances = Some(
+          parsedForeignAllowances.copy(structuredBuildingAllowance = Some(List(parsedStructuredBuildingAllowance.copy(building = building)))))))))
 
   private val parsedBodyWithoutBuildingNumber = parsedBodyWithUpdatedBuilding(parsedBuilding.copy(number = None))
 
@@ -277,7 +280,11 @@ class Def2_CreateAmendForeignPropertyAnnualSubmissionValidatorSpec extends UnitS
           ).validateAndWrapResult()
 
         result shouldBe Right(
-          Def2_CreateAmendForeignPropertyAnnualSubmissionRequestData(parsedNino, parsedBusinessId, parsedTaxYear, parsedBodyWithMinimalforeignProperty))
+          Def2_CreateAmendForeignPropertyAnnualSubmissionRequestData(
+            parsedNino,
+            parsedBusinessId,
+            parsedTaxYear,
+            parsedBodyWithMinimalforeignProperty))
       }
 
       "passed a valid request with minimal foreign property including only allowances" in {
@@ -319,7 +326,8 @@ class Def2_CreateAmendForeignPropertyAnnualSubmissionValidatorSpec extends UnitS
                 validStructuredBuildingAllowance
                   .removeProperty("/building/number")))).validateAndWrapResult()
 
-        result shouldBe Right(Def2_CreateAmendForeignPropertyAnnualSubmissionRequestData(parsedNino, parsedBusinessId, parsedTaxYear, parsedBodyWithoutBuildingNumber))
+        result shouldBe Right(
+          Def2_CreateAmendForeignPropertyAnnualSubmissionRequestData(parsedNino, parsedBusinessId, parsedTaxYear, parsedBodyWithoutBuildingNumber))
       }
 
       "passed a valid request where a postcode is with a number but not a name" in {
@@ -335,7 +343,8 @@ class Def2_CreateAmendForeignPropertyAnnualSubmissionValidatorSpec extends UnitS
                   .removeProperty("/building/name")))
           ).validateAndWrapResult()
 
-        result shouldBe Right(Def2_CreateAmendForeignPropertyAnnualSubmissionRequestData(parsedNino, parsedBusinessId, parsedTaxYear, parsedBodyWithoutBuildingName))
+        result shouldBe Right(
+          Def2_CreateAmendForeignPropertyAnnualSubmissionRequestData(parsedNino, parsedBusinessId, parsedTaxYear, parsedBodyWithoutBuildingName))
       }
     }
 
@@ -410,8 +419,7 @@ class Def2_CreateAmendForeignPropertyAnnualSubmissionValidatorSpec extends UnitS
       }
 
       "passed a request body with empty fields except for additional (non-schema) properties" in {
-        val invalidBody = Json.parse(
-          """{
+        val invalidBody = Json.parse("""{
             |  "foreignProperty": [
             |    {
             |      "unknownField": 999.99
@@ -433,9 +441,7 @@ class Def2_CreateAmendForeignPropertyAnnualSubmissionValidatorSpec extends UnitS
           List(
             (bodyWith(entry.update("/adjustments/privateUseAdjustment", badValue)), "/foreignProperty/0/adjustments/privateUseAdjustment"),
             (bodyWith(entry.update("/adjustments/balancingCharge", badValue)), "/foreignProperty/0/adjustments/balancingCharge"),
-            (
-              bodyWith(entry.update("/allowances/annualInvestmentAllowance", badValue)),
-              "/foreignProperty/0/allowances/annualInvestmentAllowance"),
+            (bodyWith(entry.update("/allowances/annualInvestmentAllowance", badValue)), "/foreignProperty/0/allowances/annualInvestmentAllowance"),
             (
               bodyWith(entry.update("/allowances/costOfReplacingDomesticItems", badValue)),
               "/foreignProperty/0/allowances/costOfReplacingDomesticItems"),
@@ -446,9 +452,7 @@ class Def2_CreateAmendForeignPropertyAnnualSubmissionValidatorSpec extends UnitS
             (
               bodyWith(entry.update("/allowances/electricChargePointAllowance", badValue)),
               "/foreignProperty/0/allowances/electricChargePointAllowance"),
-            (
-              bodyWith(entry.update("/allowances/zeroEmissionsCarAllowance", badValue)),
-              "/foreignProperty/0/allowances/zeroEmissionsCarAllowance"),
+            (bodyWith(entry.update("/allowances/zeroEmissionsCarAllowance", badValue)), "/foreignProperty/0/allowances/zeroEmissionsCarAllowance"),
             (
               bodyWith(entryWith("AFG", validStructuredBuildingAllowance.update("/amount", badValue))),
               "/foreignProperty/0/allowances/structuredBuildingAllowance/0/amount"),
@@ -477,8 +481,8 @@ class Def2_CreateAmendForeignPropertyAnnualSubmissionValidatorSpec extends UnitS
       }
       "passed a request body with multiple fields containing invalid values" in {
         val badValue = JsNumber(123.456)
-        val path1 = "/foreignProperty/0/adjustments/privateUseAdjustment"
-        val path2 = "/foreignProperty/1/allowances/costOfReplacingDomesticItems"
+        val path1    = "/foreignProperty/0/adjustments/privateUseAdjustment"
+        val path2    = "/foreignProperty/1/allowances/costOfReplacingDomesticItems"
 
         val invalidBody = bodyWith(
           entryWith(countryCode = "ZWE", validStructuredBuildingAllowance).update("/adjustments/privateUseAdjustment", badValue),
@@ -552,9 +556,7 @@ class Def2_CreateAmendForeignPropertyAnnualSubmissionValidatorSpec extends UnitS
         validator(validNino, validBusinessId, validTaxYear, invalidBody).validateAndWrapResult()
 
       result shouldBe Left(
-        ErrorWrapper(
-          correlationId,
-          RuleCountryCodeError.withPaths(List("/foreignProperty/0/countryCode", "/foreignProperty/1/countryCode"))))
+        ErrorWrapper(correlationId, RuleCountryCodeError.withPaths(List("/foreignProperty/0/countryCode", "/foreignProperty/1/countryCode"))))
     }
 
     "passed a request body with an invalid country code format" in {
@@ -591,9 +593,7 @@ class Def2_CreateAmendForeignPropertyAnnualSubmissionValidatorSpec extends UnitS
         validator(validNino, validBusinessId, validTaxYear, invalidBodyWithoutNameOrNumber).validateAndWrapResult()
 
       result shouldBe Left(
-        ErrorWrapper(
-          correlationId,
-          RuleBuildingNameNumberError.withPath("/foreignProperty/0/allowances/structuredBuildingAllowance/0/building")))
+        ErrorWrapper(correlationId, RuleBuildingNameNumberError.withPath("/foreignProperty/0/allowances/structuredBuildingAllowance/0/building")))
     }
 
     "passed a request body where only the postcode is supplied for multiple buildings" in {
@@ -603,10 +603,11 @@ class Def2_CreateAmendForeignPropertyAnnualSubmissionValidatorSpec extends UnitS
       result shouldBe Left(
         ErrorWrapper(
           correlationId,
-          RuleBuildingNameNumberError.withPaths(List(
-            "/foreignProperty/0/allowances/structuredBuildingAllowance/0/building",
-            "/foreignProperty/0/allowances/structuredBuildingAllowance/1/building"
-          ))
+          RuleBuildingNameNumberError.withPaths(
+            List(
+              "/foreignProperty/0/allowances/structuredBuildingAllowance/0/building",
+              "/foreignProperty/0/allowances/structuredBuildingAllowance/1/building"
+            ))
         ))
     }
 

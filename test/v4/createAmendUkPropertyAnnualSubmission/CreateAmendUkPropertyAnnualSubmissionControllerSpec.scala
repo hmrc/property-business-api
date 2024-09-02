@@ -41,9 +41,8 @@ class CreateAmendUkPropertyAnnualSubmissionControllerSpec
     with MockCreateAmendUkPropertyAnnualSubmissionValidatorFactory
     with MockAuditService {
 
-  private val businessId            = "XAIS12345678910"
-  private val taxYear               = "2022-23"
-
+  private val businessId = "XAIS12345678910"
+  private val taxYear    = "2022-23"
 
   "CreateAmendUkPropertyAnnualSubmissionController" should {
     "return a successful response with status 200 (OK)" when {

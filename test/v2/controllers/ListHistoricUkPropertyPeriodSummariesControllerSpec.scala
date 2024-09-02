@@ -45,8 +45,6 @@ class ListHistoricUkPropertyPeriodSummariesControllerSpec
     with MockAuditService
     with MockIdGenerator {
 
-
-
   "ListHistoricUkPropertyPeriodSummariesController" should {
     "return OK" when {
       "the valid request received is for a Fhl HistoricPropertyType" in new Test {

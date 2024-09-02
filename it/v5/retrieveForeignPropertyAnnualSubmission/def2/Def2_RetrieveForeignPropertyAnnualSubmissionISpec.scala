@@ -77,7 +77,7 @@ class Def2_RetrieveForeignPropertyAnnualSubmissionISpec extends IntegrationBaseS
 
       "downstream service error" when {
         def serviceErrorTest(downstreamStatus: Int, downstreamCode: String, expectedStatus: Int, expectedBody: MtdError): Unit = {
-          s"downstream returns an $downstreamCode error and status $downstreamStatus" in new Test with TysIfsTest  {
+          s"downstream returns an $downstreamCode error and status $downstreamStatus" in new Test with TysIfsTest {
 
             override def setupStubs(): Unit =
               DownstreamStub.onError(DownstreamStub.GET, downstreamUri, downstreamQueryParams, downstreamStatus, errorBody(downstreamCode))
@@ -108,7 +108,7 @@ class Def2_RetrieveForeignPropertyAnnualSubmissionISpec extends IntegrationBaseS
       }
     }
 
-    "the service response does not contain a foreign property" in new Test with TysIfsTest  {
+    "the service response does not contain a foreign property" in new Test with TysIfsTest {
       override val downstreamResponseBody: JsValue = Json.parse(s"""
            |{
            |  "submittedOn": "2022-06-17T10:53:38.000Z",
@@ -239,7 +239,6 @@ class Def2_RetrieveForeignPropertyAnnualSubmissionISpec extends IntegrationBaseS
        """.stripMargin
 
   }
-
 
   private trait TysIfsTest extends Test {
     def taxYear: String = "2025-26"

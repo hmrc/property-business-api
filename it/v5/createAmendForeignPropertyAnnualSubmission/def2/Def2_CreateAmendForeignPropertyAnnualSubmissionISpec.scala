@@ -186,9 +186,7 @@ class Def2_CreateAmendForeignPropertyAnnualSubmissionISpec extends IntegrationBa
       |}
       |""".stripMargin)
 
-
-  val bothAllowancesSuppliedErrorRequestJson: JsValue = Json.parse(
-    """
+  val bothAllowancesSuppliedErrorRequestJson: JsValue = Json.parse("""
       |{
       |   "foreignProperty":[
       |      {
@@ -231,7 +229,7 @@ class Def2_CreateAmendForeignPropertyAnnualSubmissionISpec extends IntegrationBa
 
     "return a 200 status code" when {
 
-      "any valid request is made" in new  TysIfsTest{
+      "any valid request is made" in new TysIfsTest {
 
         override def setupStubs(): StubMapping = {
           AuditStub.audit()

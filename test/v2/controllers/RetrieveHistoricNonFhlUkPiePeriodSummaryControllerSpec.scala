@@ -34,7 +34,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class RetrieveHistoricNonFhlUkPiePeriodSummaryControllerSpec
-  extends ControllerBaseSpec
+    extends ControllerBaseSpec
     with MockAppConfig
     with ControllerTestRunner
     with MockEnrolmentsAuthService
@@ -45,10 +45,9 @@ class RetrieveHistoricNonFhlUkPiePeriodSummaryControllerSpec
     with MockAuditService
     with MockIdGenerator {
 
-  private val from = "2017-04-06"
-  private val to = "2017-07-04"
+  private val from     = "2017-04-06"
+  private val to       = "2017-07-04"
   private val periodId = s"${from}_$to"
-
 
   "RetrieveHistoricNonFhlUkPiePeriodSummaryController" should {
     "return OK" when {
@@ -123,8 +122,7 @@ class RetrieveHistoricNonFhlUkPiePeriodSummaryControllerSpec
     protected val hateoasData: RetrieveHistoricNonFhlUkPiePeriodSummaryHateoasData =
       RetrieveHistoricNonFhlUkPiePeriodSummaryHateoasData(nino, periodId)
 
-    private val responseBodyJson: JsValue = Json.parse(
-      """
+    private val responseBodyJson: JsValue = Json.parse("""
         |{
         |  "fromDate": "2017-04-06",
         |  "toDate":"2017-07-04",

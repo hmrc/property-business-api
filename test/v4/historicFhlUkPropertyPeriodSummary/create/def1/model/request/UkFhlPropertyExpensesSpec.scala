@@ -20,7 +20,6 @@ import play.api.libs.json.{JsValue, Json}
 import support.UnitSpec
 import v4.createAmendHistoricNonFhlUkPropertyAnnualSubmission.def1.model.request.UkPropertyExpensesRentARoom
 
-
 class UkFhlPropertyExpensesSpec extends UnitSpec {
 
   val requestBody: UkFhlPropertyExpenses =

@@ -26,7 +26,11 @@ import api.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLooku
 import mocks.{MockAppConfig, MockIdGenerator}
 import play.api.libs.json.{JsObject, JsValue, Json}
 import play.api.mvc.Result
-import v4.historicFhlUkPropertyPeriodSummary.amend.request.{AmendHistoricFhlUkPropertyPeriodSummaryRequestData, Def1_AmendHistoricFhlUkPropertyPeriodSummaryRequestBody, Def1_AmendHistoricFhlUkPropertyPeriodSummaryRequestData}
+import v4.historicFhlUkPropertyPeriodSummary.amend.request.{
+  AmendHistoricFhlUkPropertyPeriodSummaryRequestData,
+  Def1_AmendHistoricFhlUkPropertyPeriodSummaryRequestBody,
+  Def1_AmendHistoricFhlUkPropertyPeriodSummaryRequestData
+}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -42,9 +46,9 @@ class AmendHistoricFhlUkPropertyPeriodSummaryControllerSpec
     with MockIdGenerator
     with MockAuditService {
 
-  private val taxYear               = "2022-23"
-  private val periodId              = PeriodId(from = "2017-04-06", to = "2017-07-04")
-  private val mtdId: String         = "test-mtd-id"
+  private val taxYear       = "2022-23"
+  private val periodId      = PeriodId(from = "2017-04-06", to = "2017-07-04")
+  private val mtdId: String = "test-mtd-id"
 
   "CreateAmendHistoricFhlUkPropertyAnnualSubmissionController" should {
     "return a successful response with status 200 (OK)" when {

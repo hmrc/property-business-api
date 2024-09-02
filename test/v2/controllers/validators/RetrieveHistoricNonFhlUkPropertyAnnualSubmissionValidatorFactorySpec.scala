@@ -70,7 +70,6 @@ class RetrieveHistoricNonFhlUkPropertyAnnualSubmissionValidatorFactorySpec exten
         result shouldBe Left(ErrorWrapper(correlationId, TaxYearFormatError))
       }
 
-
       "passed a taxYear immediately before the minimum supported" in disallowsTaxYear("2016-17")
       "passed a taxYear immediately after the maximum supported" in disallowsTaxYear("2022-23")
 

@@ -19,14 +19,18 @@ package v4.historicFhlUkPropertyPeriodSummary.amend
 import api.connectors.{ConnectorSpec, DownstreamOutcome}
 import api.models.domain.{Nino, PeriodId}
 import api.models.outcomes.ResponseWrapper
-import v4.historicFhlUkPropertyPeriodSummary.amend.request.{AmendHistoricFhlUkPropertyPeriodSummaryRequestData, Def1_AmendHistoricFhlUkPropertyPeriodSummaryRequestBody, Def1_AmendHistoricFhlUkPropertyPeriodSummaryRequestData}
+import v4.historicFhlUkPropertyPeriodSummary.amend.request.{
+  AmendHistoricFhlUkPropertyPeriodSummaryRequestData,
+  Def1_AmendHistoricFhlUkPropertyPeriodSummaryRequestBody,
+  Def1_AmendHistoricFhlUkPropertyPeriodSummaryRequestData
+}
 
 import scala.concurrent.Future
 
 class AmendHistoricFhlUkPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
 
-  private val nino: String              = "AA123456A"
-  private val periodId = PeriodId(from = "2017-04-06", to = "2017-07-04")
+  private val nino: String = "AA123456A"
+  private val periodId     = PeriodId(from = "2017-04-06", to = "2017-07-04")
 
   "connector" must {
     "put a body and return a 204" in new IfsTest with Test {

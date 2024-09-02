@@ -26,7 +26,10 @@ import mocks.{MockAppConfig, MockIdGenerator}
 import play.api.libs.json.{JsObject, JsValue, Json}
 import play.api.mvc.Result
 import v4.createForeignPropertyPeriodSummary.def1.model.Def1_CreateForeignPropertyPeriodSummaryFixtures
-import v4.createForeignPropertyPeriodSummary.model.request.{CreateForeignPropertyPeriodSummaryRequestData, Def1_CreateForeignPropertyPeriodSummaryRequestData}
+import v4.createForeignPropertyPeriodSummary.model.request.{
+  CreateForeignPropertyPeriodSummaryRequestData,
+  Def1_CreateForeignPropertyPeriodSummaryRequestData
+}
 import v4.createForeignPropertyPeriodSummary.model.response.CreateForeignPropertyPeriodSummaryResponse
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -44,10 +47,9 @@ class CreateForeignPropertyPeriodSummaryControllerSpec
     with MockIdGenerator
     with Def1_CreateForeignPropertyPeriodSummaryFixtures {
 
-  private val taxYear               = "2020-21"
-  private val businessId            = "XAIS12345678910"
-  private val submissionId          = "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
-
+  private val taxYear      = "2020-21"
+  private val businessId   = "XAIS12345678910"
+  private val submissionId = "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
 
   "CreateForeignPropertyPeriodSummaryControllerSpec" should {
     "return a successful response with status 201 (CREATED)" when {

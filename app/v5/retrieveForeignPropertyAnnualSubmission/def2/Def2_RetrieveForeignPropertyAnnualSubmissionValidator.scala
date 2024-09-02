@@ -26,9 +26,8 @@ import v5.retrieveForeignPropertyAnnualSubmission.model.request.RetrieveForeignP
 
 import javax.inject.Inject
 
-class Def2_RetrieveForeignPropertyAnnualSubmissionValidator @Inject()(nino: String, businessId: String, taxYear: String)
+class Def2_RetrieveForeignPropertyAnnualSubmissionValidator @Inject() (nino: String, businessId: String, taxYear: String)
     extends Validator[RetrieveForeignPropertyAnnualSubmissionRequestData] {
-
 
   def validate: Validated[Seq[MtdError], RetrieveForeignPropertyAnnualSubmissionRequestData] =
     (

@@ -25,4 +25,3 @@ trait RetrieveUkPropertyAnnualSubmissionRequestData {
   val taxYear: TaxYear
   val schema: RetrieveUkPropertyAnnualSubmissionSchema
 }
-

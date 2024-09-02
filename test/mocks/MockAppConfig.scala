@@ -76,7 +76,7 @@ trait MockAppConfig extends MockFactory {
     def maximumTaxYearHistoric: CallHandler[TaxYear] = (() => mockAppConfig.maximumTaxYearHistoric).expects()
 
     def deprecationFor(version: Version): CallHandler[Validated[String, Deprecation]] = (mockAppConfig.deprecationFor(_: Version)).expects(version)
-    def apiDocumentationUrl(): CallHandler[String] = (() => mockAppConfig.apiDocumentationUrl: String).expects()
+    def apiDocumentationUrl(): CallHandler[String]                                    = (() => mockAppConfig.apiDocumentationUrl: String).expects()
 
   }
 

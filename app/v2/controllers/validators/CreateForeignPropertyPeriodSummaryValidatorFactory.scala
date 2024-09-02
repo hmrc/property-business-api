@@ -24,7 +24,10 @@ import cats.implicits._
 import config.AppConfig
 import play.api.libs.json.JsValue
 import v2.controllers.validators.CreateForeignPropertyPeriodSummaryRulesValidator.validateBusinessRules
-import v2.models.request.createForeignPropertyPeriodSummary.{CreateForeignPropertyPeriodSummaryRequestBody, CreateForeignPropertyPeriodSummaryRequestData}
+import v2.models.request.createForeignPropertyPeriodSummary.{
+  CreateForeignPropertyPeriodSummaryRequestBody,
+  CreateForeignPropertyPeriodSummaryRequestData
+}
 
 import javax.inject.{Inject, Singleton}
 

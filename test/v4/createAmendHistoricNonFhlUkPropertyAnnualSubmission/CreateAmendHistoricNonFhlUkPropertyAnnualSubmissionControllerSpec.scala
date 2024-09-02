@@ -26,7 +26,11 @@ import api.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLooku
 import mocks.{MockAppConfig, MockIdGenerator}
 import play.api.libs.json.{JsObject, JsValue, Json}
 import play.api.mvc.Result
-import v4.createAmendHistoricNonFhlUkPropertyAnnualSubmission.model.request.{CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestData, Def1_CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestBody, Def1_CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestData}
+import v4.createAmendHistoricNonFhlUkPropertyAnnualSubmission.model.request.{
+  CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestData,
+  Def1_CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestBody,
+  Def1_CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestData
+}
 import v4.createAmendHistoricNonFhlUkPropertyAnnualSubmission.model.response.CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionResponse
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -43,10 +47,9 @@ class CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionControllerSpec
     with MockCreateAmendHistoricNonFhlUkPropertyAnnualSubmissionValidatorFactory
     with MockIdGenerator {
 
-  private val taxYear               = "2022-23"
-  private val transactionReference  = Some("transaction reference")
-  private val mtdId: String         = "test-mtd-id"
-
+  private val taxYear              = "2022-23"
+  private val transactionReference = Some("transaction reference")
+  private val mtdId: String        = "test-mtd-id"
 
   "CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionController" should {
     "return an OK response" when {

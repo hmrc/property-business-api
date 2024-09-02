@@ -45,8 +45,8 @@ class RetrieveForeignPropertyAnnualSubmissionControllerSpec
     with MockAuditService
     with MockIdGenerator {
 
-  private val businessId            = "XAIS12345678910"
-  private val taxYear               = "2020-21"
+  private val businessId = "XAIS12345678910"
+  private val taxYear    = "2020-21"
 
   "RetrieveForeignPropertyAnnualSubmissionController" should {
     "return a successful response with status 200 (OK)" when {

@@ -25,7 +25,11 @@ import cats.implicits.{catsSyntaxTuple3Semigroupal, toTraverseOps}
 import config.AppConfig
 import play.api.libs.json.JsValue
 import v4.createAmendHistoricNonFhlUkPropertyAnnualSubmission.def1.model.request.{HistoricNonFhlAnnualAdjustments, HistoricNonFhlAnnualAllowances}
-import v4.createAmendHistoricNonFhlUkPropertyAnnualSubmission.model.request.{CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestData, Def1_CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestBody, Def1_CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestData}
+import v4.createAmendHistoricNonFhlUkPropertyAnnualSubmission.model.request.{
+  CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestData,
+  Def1_CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestBody,
+  Def1_CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestData
+}
 
 class Def1_CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionValidator(nino: String, taxYear: String, body: JsValue)(implicit appConfig: AppConfig)
     extends Validator[CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestData] {

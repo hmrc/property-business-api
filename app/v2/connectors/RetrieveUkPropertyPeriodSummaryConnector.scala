@@ -42,9 +42,9 @@ object RetrieveUkPropertyPeriodSummaryConnector {
 class RetrieveUkPropertyPeriodSummaryConnector @Inject() (val http: HttpClient, val appConfig: AppConfig) extends BaseDownstreamConnector {
 
   def retrieveUkProperty(request: RetrieveUkPropertyPeriodSummaryRequestData)(implicit
-                                                                              hc: HeaderCarrier,
-                                                                              ec: ExecutionContext,
-                                                                              correlationId: String): Future[DownstreamOutcome[Result]] = {
+      hc: HeaderCarrier,
+      ec: ExecutionContext,
+      correlationId: String): Future[DownstreamOutcome[Result]] = {
 
     import request._
 

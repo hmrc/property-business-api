@@ -25,8 +25,14 @@ import mocks.{MockAppConfig, MockIdGenerator}
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.Result
 import v4.retrieveHistoricNonFhlUkPropertyAnnualSubmission.def1.model.response.{AnnualAdjustments, AnnualAllowances, RentARoom}
-import v4.retrieveHistoricNonFhlUkPropertyAnnualSubmission.model.request.{Def1_RetrieveHistoricNonFhlUkPropertyAnnualSubmissionRequestData, RetrieveHistoricNonFhlUkPropertyAnnualSubmissionRequestData}
-import v4.retrieveHistoricNonFhlUkPropertyAnnualSubmission.model.response.{Def1_RetrieveHistoricNonFhlUkPropertyAnnualSubmissionResponse, RetrieveHistoricNonFhlUkPropertyAnnualSubmissionResponse}
+import v4.retrieveHistoricNonFhlUkPropertyAnnualSubmission.model.request.{
+  Def1_RetrieveHistoricNonFhlUkPropertyAnnualSubmissionRequestData,
+  RetrieveHistoricNonFhlUkPropertyAnnualSubmissionRequestData
+}
+import v4.retrieveHistoricNonFhlUkPropertyAnnualSubmission.model.response.{
+  Def1_RetrieveHistoricNonFhlUkPropertyAnnualSubmissionResponse,
+  RetrieveHistoricNonFhlUkPropertyAnnualSubmissionResponse
+}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -42,8 +48,7 @@ class RetrieveHistoricNonFhlUkPropertyAnnualSubmissionControllerSpec
     with MockAuditService
     with MockIdGenerator {
 
-  private val taxYear               = TaxYear.fromMtd("2020-21")
-
+  private val taxYear = TaxYear.fromMtd("2020-21")
 
   "RetrieveHistoricNonFhlUkPropertyAnnualSubmissionController" should {
     "return OK" when {

@@ -20,10 +20,10 @@ import play.api.libs.functional.syntax._
 import play.api.libs.json.{JsPath, Json, OWrites, Reads}
 
 case class Def1_Retrieve_ForeignFhlEeaAllowances(annualInvestmentAllowance: Option[BigDecimal],
-                                   otherCapitalAllowance: Option[BigDecimal],
-                                   electricChargePointAllowance: Option[BigDecimal],
-                                   zeroEmissionsCarAllowance: Option[BigDecimal],
-                                   propertyIncomeAllowance: Option[BigDecimal])
+                                                 otherCapitalAllowance: Option[BigDecimal],
+                                                 electricChargePointAllowance: Option[BigDecimal],
+                                                 zeroEmissionsCarAllowance: Option[BigDecimal],
+                                                 propertyIncomeAllowance: Option[BigDecimal])
 
 object Def1_Retrieve_ForeignFhlEeaAllowances {
   implicit val writes: OWrites[Def1_Retrieve_ForeignFhlEeaAllowances] = Json.writes[Def1_Retrieve_ForeignFhlEeaAllowances]

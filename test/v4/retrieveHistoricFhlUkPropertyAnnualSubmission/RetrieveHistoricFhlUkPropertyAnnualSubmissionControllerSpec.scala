@@ -42,9 +42,8 @@ class RetrieveHistoricFhlUkPropertyAnnualSubmissionControllerSpec
     with MockAuditService
     with MockIdGenerator {
 
-  private val mtdTaxYear            = "2020-21"
-  private val taxYear               = TaxYear.fromMtd(mtdTaxYear)
-
+  private val mtdTaxYear = "2020-21"
+  private val taxYear    = TaxYear.fromMtd(mtdTaxYear)
 
   "RetrieveHistoricFhlUkPropertyAnnualSubmissionController" should {
     "return OK" when {

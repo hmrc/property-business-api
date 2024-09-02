@@ -74,7 +74,6 @@ class DocumentationControllerSpec extends ControllerBaseSpec with MockAppConfig 
         val response: Future[Result] = requestAsset("application.yaml", accept = "text/plain")
         status(response) shouldBe OK
 
-
         private val result = contentAsString(response)
 
         result should include(s"""  title: $apiTitle""")

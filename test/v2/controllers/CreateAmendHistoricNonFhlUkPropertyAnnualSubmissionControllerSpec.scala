@@ -47,9 +47,9 @@ class CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionControllerSpec
     with MockHateoasFactory
     with MockIdGenerator {
 
-  private val taxYear               = "2022-23"
-  private val transactionReference  = Some("transaction reference")
-  private val mtdId: String         = "test-mtd-id"
+  private val taxYear              = "2022-23"
+  private val transactionReference = Some("transaction reference")
+  private val mtdId: String        = "test-mtd-id"
 
   "CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionController" should {
     "return a successful response with status 200 (OK)" when {

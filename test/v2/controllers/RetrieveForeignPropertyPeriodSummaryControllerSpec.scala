@@ -47,10 +47,9 @@ class RetrieveForeignPropertyPeriodSummaryControllerSpec
     with MockHateoasFactory
     with MockIdGenerator {
 
-  private val businessId            = "XAIS12345678910"
-  private val submissionId          = "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
-  private val taxYear               = "2022-23"
-
+  private val businessId   = "XAIS12345678910"
+  private val submissionId = "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
+  private val taxYear      = "2022-23"
 
   "RetrieveForeignPropertyPeriodSummaryController" should {
     "return a successful response with status 200 (OK)" when {

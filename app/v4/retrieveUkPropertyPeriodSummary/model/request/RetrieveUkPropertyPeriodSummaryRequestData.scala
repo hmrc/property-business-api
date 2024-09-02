@@ -29,5 +29,4 @@ case class Def1_RetrieveUkPropertyPeriodSummaryRequestData(nino: Nino, businessI
     extends RetrieveUkPropertyPeriodSummaryRequestData
 
 case class Def2_RetrieveUkPropertyPeriodSummaryRequestData(nino: Nino, businessId: BusinessId, taxYear: TaxYear, submissionId: SubmissionId)
-  extends RetrieveUkPropertyPeriodSummaryRequestData
-
+    extends RetrieveUkPropertyPeriodSummaryRequestData

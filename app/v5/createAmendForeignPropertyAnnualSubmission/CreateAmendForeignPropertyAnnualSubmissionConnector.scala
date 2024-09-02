@@ -39,13 +39,13 @@ class CreateAmendForeignPropertyAnnualSubmissionConnector @Inject() (val http: H
 
     implicit val successCode: SuccessCode = SuccessCode(NO_CONTENT)
 
-        val downstreamUri = if (taxYear.isTys) {
-          TaxYearSpecificIfsUri[Unit](s"income-tax/business/property/annual/${taxYear.asTysDownstream}/$nino/$businessId")
-        } else {
-          IfsUri[Unit](s"income-tax/business/property/annual?taxableEntityId=$nino&incomeSourceId=$businessId&taxYear=${taxYear.asMtd}")
-        }
+    val downstreamUri = if (taxYear.isTys) {
+      TaxYearSpecificIfsUri[Unit](s"income-tax/business/property/annual/${taxYear.asTysDownstream}/$nino/$businessId")
+    } else {
+      IfsUri[Unit](s"income-tax/business/property/annual?taxableEntityId=$nino&incomeSourceId=$businessId&taxYear=${taxYear.asMtd}")
+    }
 
-        put(body, downstreamUri)
+    put(body, downstreamUri)
   }
 
 }

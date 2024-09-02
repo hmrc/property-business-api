@@ -21,7 +21,10 @@ import api.models.errors._
 import api.models.utils.JsonErrorValidators
 import mocks.MockAppConfig
 import support.UnitSpec
-import v4.historicFhlUkPropertyPeriodSummary.retrieve.model.request.{Def1_RetrieveHistoricFhlUkPropertyPeriodSummaryRequestData, RetrieveHistoricFhlUkPropertyPeriodSummaryRequestData}
+import v4.historicFhlUkPropertyPeriodSummary.retrieve.model.request.{
+  Def1_RetrieveHistoricFhlUkPropertyPeriodSummaryRequestData,
+  RetrieveHistoricFhlUkPropertyPeriodSummaryRequestData
+}
 
 class Def1_RetrieveHistoricFhlUkPiePeriodSummaryValidatorFactorySpec extends UnitSpec with JsonErrorValidators with MockAppConfig {
 

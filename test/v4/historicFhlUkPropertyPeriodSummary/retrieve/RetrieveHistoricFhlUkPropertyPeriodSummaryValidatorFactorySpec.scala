@@ -24,7 +24,7 @@ import v4.historicFhlUkPropertyPeriodSummary.retrieve.def1.Def1_RetrieveHistoric
 class RetrieveHistoricFhlUkPropertyPeriodSummaryValidatorFactorySpec extends UnitSpec with MockAppConfig with JsonErrorValidators {
 
   private val validNino = "AA123456A"
-  private val periodId = "2017-04-06_2017-07-04"
+  private val periodId  = "2017-04-06_2017-07-04"
 
   private val invalidNino = "not-a-nino"
 

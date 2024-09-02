@@ -34,7 +34,6 @@ class Def1_RetrieveForeignPropertyAnnualSubmissionValidatorSpec extends UnitSpec
   private val parsedBusinessId = BusinessId(validBusinessId)
   private val parsedTaxYear    = TaxYear.fromMtd(validTaxYear)
 
-
   private def validator(nino: String, businessId: String, taxYear: String) =
     new Def1_RetrieveForeignPropertyAnnualSubmissionValidator(nino, businessId, taxYear)(mockAppConfig)
 

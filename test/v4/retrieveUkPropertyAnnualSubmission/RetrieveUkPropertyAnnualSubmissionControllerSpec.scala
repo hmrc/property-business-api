@@ -41,7 +41,6 @@ class RetrieveUkPropertyAnnualSubmissionControllerSpec
   private val businessId = "XAIS12345678910"
   private val taxYear    = "2020-21"
 
-
   "RetrieveUkPropertyAnnualSubmissionController" should {
     "return a successful response with status 200 (OK)" when {
       "the request received is valid" in new Test {

@@ -26,7 +26,10 @@ import api.services.MockAuditService
 import mocks.MockAppConfig
 import play.api.libs.json.JsValue
 import play.api.mvc.Result
-import v4.deleteHistoricNonFhlUkPropertyAnnualSubmission.model.request.{Def1_DeleteHistoricNonFhlUkPropertyAnnualSubmissionRequestData, DeleteHistoricNonFhlUkPropertyAnnualSubmissionRequestData}
+import v4.deleteHistoricNonFhlUkPropertyAnnualSubmission.model.request.{
+  Def1_DeleteHistoricNonFhlUkPropertyAnnualSubmissionRequestData,
+  DeleteHistoricNonFhlUkPropertyAnnualSubmissionRequestData
+}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -39,7 +42,7 @@ class DeleteHistoricNonFhlUkPropertyAnnualSubmissionControllerSpec
     with MockDeleteHistoricNonFhlUkPropertyAnnualSubmissionValidatorFactory
     with MockAuditService {
 
-  private val taxYear               = TaxYear.fromMtd("2021-22")
+  private val taxYear = TaxYear.fromMtd("2021-22")
 
   "DeleteHistoricUkPropertyAnnualSubmissionController" should {
     "return a successful response with status 204 (NO_CONTENT)" when {

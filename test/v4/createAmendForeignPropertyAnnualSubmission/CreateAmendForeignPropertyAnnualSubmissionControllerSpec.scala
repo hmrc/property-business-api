@@ -43,9 +43,8 @@ class CreateAmendForeignPropertyAnnualSubmissionControllerSpec
     with MockIdGenerator
     with Def1_Fixtures {
 
-  private val businessId            = "XAIS12345678910"
-  private val taxYear               = "2019-20"
-
+  private val businessId = "XAIS12345678910"
+  private val taxYear    = "2019-20"
 
   "CreateAmendForeignPropertyAnnualSubmissionController" should {
     "return a successful response with status 200 (OK)" when {

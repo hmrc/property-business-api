@@ -25,7 +25,11 @@ import api.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLooku
 import mocks.{MockAppConfig, MockIdGenerator}
 import play.api.libs.json.JsValue
 import play.api.mvc.Result
-import v5.createAmendForeignPropertyAnnualSubmission.def1.model.request.{Def1_CreateAmendForeignPropertyAnnualSubmissionRequestBody, Def1_CreateAmendForeignPropertyAnnualSubmissionRequestData, Def1_Fixtures}
+import v5.createAmendForeignPropertyAnnualSubmission.def1.model.request.{
+  Def1_CreateAmendForeignPropertyAnnualSubmissionRequestBody,
+  Def1_CreateAmendForeignPropertyAnnualSubmissionRequestData,
+  Def1_Fixtures
+}
 import v5.createAmendForeignPropertyAnnualSubmission.model.request._
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -43,9 +47,8 @@ class CreateAmendForeignPropertyAnnualSubmissionControllerSpec
     with MockIdGenerator
     with Def1_Fixtures {
 
-  private val businessId            = "XAIS12345678910"
-  private val taxYear               = "2019-20"
-
+  private val businessId = "XAIS12345678910"
+  private val taxYear    = "2019-20"
 
   "CreateAmendForeignPropertyAnnualSubmissionController" should {
     "return a successful response with status 200 (OK)" when {

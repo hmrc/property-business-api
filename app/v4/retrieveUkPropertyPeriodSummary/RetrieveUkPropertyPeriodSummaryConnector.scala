@@ -81,8 +81,8 @@ class RetrieveUkPropertyPeriodSummaryConnector @Inject() (val http: HttpClient, 
 
         response.map {
           case Right(ResponseWrapper(corId, resp)) if def2UkResult(resp) => Right(ResponseWrapper(corId, UkResult(resp)))
-          case Right(ResponseWrapper(corId, _))                      => Right(ResponseWrapper(corId, NonUkResult))
-          case Left(e)                                               => Left(e)
+          case Right(ResponseWrapper(corId, _))                          => Right(ResponseWrapper(corId, NonUkResult))
+          case Left(e)                                                   => Left(e)
         }
     }
   }

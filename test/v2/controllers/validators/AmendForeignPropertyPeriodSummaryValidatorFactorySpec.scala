@@ -300,7 +300,13 @@ class AmendForeignPropertyPeriodSummaryValidatorFactorySpec extends UnitSpec wit
       "passed the minimum supported taxYear" in {
         val taxYearString = "2021-22"
         validator(validNino, validBusinessId, taxYearString, validSubmissionId, validBody).validateAndWrapResult() shouldBe
-          Right(AmendForeignPropertyPeriodSummaryRequestData(parsedNino, parsedBusinessId, TaxYear.fromMtd(taxYearString), parsedSubmissionId, parsedBody))
+          Right(
+            AmendForeignPropertyPeriodSummaryRequestData(
+              parsedNino,
+              parsedBusinessId,
+              TaxYear.fromMtd(taxYearString),
+              parsedSubmissionId,
+              parsedBody))
       }
     }
 

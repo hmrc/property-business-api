@@ -31,9 +31,9 @@ import scala.concurrent.{ExecutionContext, Future}
 class ListPropertyPeriodSummariesConnector @Inject() (val http: HttpClient, val appConfig: AppConfig) extends BaseDownstreamConnector {
 
   def listPeriodSummaries(request: ListPropertyPeriodSummariesRequestData)(implicit
-                                                                           hc: HeaderCarrier,
-                                                                           ec: ExecutionContext,
-                                                                           correlationId: String): Future[DownstreamOutcome[ListPropertyPeriodSummariesResponse]] = {
+      hc: HeaderCarrier,
+      ec: ExecutionContext,
+      correlationId: String): Future[DownstreamOutcome[ListPropertyPeriodSummariesResponse]] = {
 
     import request._
 

@@ -47,9 +47,8 @@ class CreateHistoricFhlUkPiePeriodSummaryControllerSpec
     with MockIdGenerator
     with MockAuditService {
 
-  private val periodId              = "2021-01-01_2021-01-02"
-  private val mtdId: String         = "test-mtd-id"
-
+  private val periodId      = "2021-01-01_2021-01-02"
+  private val mtdId: String = "test-mtd-id"
 
   "CreateHistoricFhlUkPiePeriodSummaryController" should {
     "return a successful response with status 201 (CREATED)" when {

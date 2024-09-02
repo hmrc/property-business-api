@@ -176,7 +176,6 @@ class Def2_AmendUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with JsonE
     new Def2_AmendUkPropertyPeriodSummaryValidator(nino, businessId, taxYear, submissionId, body)
   }
 
-
   "validator" should {
     "return the parsed domain object in its submission model" when {
       "passed a valid request" in {
@@ -194,7 +193,12 @@ class Def2_AmendUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with JsonE
           validator(validNino, validBusinessId, validTaxYear, validSubmissionId, validBodyConsolidatedWithExtraFields).validateAndWrapResult()
 
         result shouldBe Right(
-          Def2_AmendUkPropertyPeriodSummarySubmissionRequestData(parsedNino, parsedTaxYear, parsedBusinessId, parsedSubmissionId, parsedBodyConsolidated))
+          Def2_AmendUkPropertyPeriodSummarySubmissionRequestData(
+            parsedNino,
+            parsedTaxYear,
+            parsedBusinessId,
+            parsedSubmissionId,
+            parsedBodyConsolidated))
       }
 
       "passed a valid request with minimal fhl in its submission model" in {
@@ -217,7 +221,12 @@ class Def2_AmendUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with JsonE
           ).validateAndWrapResult()
 
         result shouldBe Right(
-          Def2_AmendUkPropertyPeriodSummarySubmissionRequestData(parsedNino, parsedTaxYear, parsedBusinessId, parsedSubmissionId, parsedBodyMinimalFhl))
+          Def2_AmendUkPropertyPeriodSummarySubmissionRequestData(
+            parsedNino,
+            parsedTaxYear,
+            parsedBusinessId,
+            parsedSubmissionId,
+            parsedBodyMinimalFhl))
       }
 
       "passed a valid request with minimal non-fhl" in {
@@ -240,7 +249,12 @@ class Def2_AmendUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with JsonE
           ).validateAndWrapResult()
 
         result shouldBe Right(
-          Def2_AmendUkPropertyPeriodSummarySubmissionRequestData(parsedNino, parsedTaxYear, parsedBusinessId, parsedSubmissionId, parsedBodyMinimalNonFhl))
+          Def2_AmendUkPropertyPeriodSummarySubmissionRequestData(
+            parsedNino,
+            parsedTaxYear,
+            parsedBusinessId,
+            parsedSubmissionId,
+            parsedBodyMinimalNonFhl))
       }
     }
 

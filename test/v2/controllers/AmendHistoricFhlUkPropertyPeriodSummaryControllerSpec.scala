@@ -50,7 +50,6 @@ class AmendHistoricFhlUkPropertyPeriodSummaryControllerSpec
   private val periodId      = "somePeriodId"
   private val mtdId: String = "test-mtd-id"
 
-
   "AmendHistoricFhlUkPropertyPeriodSummaryController" should {
     "return a successful response with status 200 (OK)" when {
       "the request received is valid" in new Test {

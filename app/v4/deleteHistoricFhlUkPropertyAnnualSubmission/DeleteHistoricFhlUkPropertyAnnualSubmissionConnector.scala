@@ -23,7 +23,10 @@ import api.models.domain.HistoricPropertyType
 import config.{AppConfig, FeatureSwitches}
 import play.api.libs.json.JsObject
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
-import v4.deleteHistoricFhlUkPropertyAnnualSubmission.model.request.{Def1_DeleteHistoricFhlUkPropertyAnnualSubmissionRequestData, DeleteHistoricFhlUkPropertyAnnualSubmissionRequestData}
+import v4.deleteHistoricFhlUkPropertyAnnualSubmission.model.request.{
+  Def1_DeleteHistoricFhlUkPropertyAnnualSubmissionRequestData,
+  DeleteHistoricFhlUkPropertyAnnualSubmissionRequestData
+}
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}

@@ -36,7 +36,8 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class CreateForeignPropertyPeriodSummaryControllerSpec
-    extends ControllerBaseSpec with MockAppConfig
+    extends ControllerBaseSpec
+    with MockAppConfig
     with ControllerTestRunner
     with MockEnrolmentsAuthService
     with MockMtdIdLookupService
@@ -50,7 +51,6 @@ class CreateForeignPropertyPeriodSummaryControllerSpec
   private val taxYear      = "2020-21"
   private val businessId   = "XAIS12345678910"
   private val submissionId = "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
-
 
   "CreateForeignPropertyPeriodSummaryControllerSpec" should {
     "return a successful response with status 201 (CREATED)" when {

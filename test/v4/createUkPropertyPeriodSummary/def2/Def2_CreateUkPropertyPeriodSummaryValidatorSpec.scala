@@ -214,21 +214,24 @@ class Def2_CreateUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with Mock
         val result: Either[ErrorWrapper, CreateUkPropertyPeriodSummaryRequestData] =
           validator(validNino, validTaxYear, validBusinessId, validBodyConsolidatedWithExtraFields).validateAndWrapResult()
 
-        result shouldBe Right(Def2_CreateUkPropertyPeriodSummarySubmissionRequestData(parsedNino, parsedBusinessId, parsedTaxYear, parsedBodyConsolidated))
+        result shouldBe Right(
+          Def2_CreateUkPropertyPeriodSummarySubmissionRequestData(parsedNino, parsedBusinessId, parsedTaxYear, parsedBodyConsolidated))
       }
 
       "passed a valid request with a minimal fhl body" in {
         val result: Either[ErrorWrapper, CreateUkPropertyPeriodSummaryRequestData] =
           validator(validNino, validTaxYear, validBusinessId, validMinimalFhlBody).validateAndWrapResult()
 
-        result shouldBe Right(Def2_CreateUkPropertyPeriodSummarySubmissionRequestData(parsedNino, parsedBusinessId, parsedTaxYear, parsedBodyMinimalFhl))
+        result shouldBe Right(
+          Def2_CreateUkPropertyPeriodSummarySubmissionRequestData(parsedNino, parsedBusinessId, parsedTaxYear, parsedBodyMinimalFhl))
       }
 
       "passed a valid request with a minimal non-fhl body" in {
         val result: Either[ErrorWrapper, CreateUkPropertyPeriodSummaryRequestData] =
           validator(validNino, validTaxYear, validBusinessId, validMinimalNonFhlBody).validateAndWrapResult()
 
-        result shouldBe Right(Def2_CreateUkPropertyPeriodSummarySubmissionRequestData(parsedNino, parsedBusinessId, parsedTaxYear, parsedBodyMinimalNonFhl))
+        result shouldBe Right(
+          Def2_CreateUkPropertyPeriodSummarySubmissionRequestData(parsedNino, parsedBusinessId, parsedTaxYear, parsedBodyMinimalNonFhl))
       }
     }
 
@@ -305,7 +308,7 @@ class Def2_CreateUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with Mock
       }
 
       def testRuleIncorrectOrEmptyBodyErrorWith(path: String, body: JsValue): Unit = testWith(RuleIncorrectOrEmptyBodyError)(path, body)
-      def testValueFormatErrorWith(path: String, body: JsValue): Unit = testWith(ValueFormatError)(path, body)
+      def testValueFormatErrorWith(path: String, body: JsValue): Unit              = testWith(ValueFormatError)(path, body)
       def testNegativeValueFormatErrorWith(path: String, body: JsValue): Unit =
         testWith(ValueFormatError.forPathAndRange(path, min = "-99999999999.99", max = "99999999999.99"))(path, body)
 
@@ -393,7 +396,7 @@ class Def2_CreateUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with Mock
         List(
           "/ukFhlProperty/income/periodAmount",
           "/ukFhlProperty/income/taxDeducted",
-          "/ukFhlProperty/income/rentARoom/rentsReceived",
+          "/ukFhlProperty/income/rentARoom/rentsReceived"
         ).foreach(path => testValueFormatErrorWith(path, validBody.update(path, JsNumber(123.456))))
 
         List(

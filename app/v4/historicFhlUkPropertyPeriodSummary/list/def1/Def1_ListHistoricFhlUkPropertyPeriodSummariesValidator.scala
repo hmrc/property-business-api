@@ -20,7 +20,10 @@ import api.controllers.validators.Validator
 import api.controllers.validators.resolvers.ResolveNino
 import api.models.errors.MtdError
 import cats.data.Validated
-import v4.historicFhlUkPropertyPeriodSummary.list.model.request.{Def1_ListHistoricFhlUkPropertyPeriodSummariesRequestData, ListHistoricFhlUkPropertyPeriodSummariesRequestData}
+import v4.historicFhlUkPropertyPeriodSummary.list.model.request.{
+  Def1_ListHistoricFhlUkPropertyPeriodSummariesRequestData,
+  ListHistoricFhlUkPropertyPeriodSummariesRequestData
+}
 
 class Def1_ListHistoricFhlUkPropertyPeriodSummariesValidator(
     nino: String

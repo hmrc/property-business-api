@@ -22,13 +22,16 @@ import api.models.errors.MtdError
 import cats.data.Validated
 import cats.implicits._
 import play.api.libs.json.JsValue
-import v5.createAmendForeignPropertyAnnualSubmission.def2.model.request.{Def2_CreateAmendForeignPropertyAnnualSubmissionRequestBody, Def2_CreateAmendForeignPropertyAnnualSubmissionRequestData}
+import v5.createAmendForeignPropertyAnnualSubmission.def2.model.request.{
+  Def2_CreateAmendForeignPropertyAnnualSubmissionRequestBody,
+  Def2_CreateAmendForeignPropertyAnnualSubmissionRequestData
+}
 import v5.createAmendForeignPropertyAnnualSubmission.model.request.CreateAmendForeignPropertyAnnualSubmissionRequestData
 
 import javax.inject.{Inject, Singleton}
 
 @Singleton
-class Def2_CreateAmendForeignPropertyAnnualSubmissionValidator @Inject()(nino: String, businessId: String, taxYear: String, body: JsValue)
+class Def2_CreateAmendForeignPropertyAnnualSubmissionValidator @Inject() (nino: String, businessId: String, taxYear: String, body: JsValue)
     extends Validator[CreateAmendForeignPropertyAnnualSubmissionRequestData] {
 
   private val resolveJson    = new ResolveNonEmptyJsonObject[Def2_CreateAmendForeignPropertyAnnualSubmissionRequestBody]

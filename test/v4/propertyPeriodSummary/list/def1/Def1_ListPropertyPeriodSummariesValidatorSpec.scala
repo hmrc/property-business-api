@@ -39,12 +39,12 @@ class Def1_ListPropertyPeriodSummariesValidatorSpec extends UnitSpec with MockAp
   private def setupMocks() = {
     MockedAppConfig.minimumTaxV2Foreign.returns(TaxYear.starting(2021))
   }
-  
+
   "validate()" should {
     "return the parsed domain object" when {
       "given a valid request" in {
         setupMocks()
-        
+
         val result: Either[ErrorWrapper, ListPropertyPeriodSummariesRequestData] =
           validator(validNino, validBusinessId, validTaxYear).validateAndWrapResult()
 

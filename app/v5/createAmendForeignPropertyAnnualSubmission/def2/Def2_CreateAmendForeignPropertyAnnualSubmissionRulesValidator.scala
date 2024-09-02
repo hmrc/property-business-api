@@ -23,7 +23,11 @@ import cats.data.Validated
 import cats.data.Validated.{Invalid, Valid}
 import cats.implicits.toTraverseOps
 import v5.createAmendForeignPropertyAnnualSubmission.def2.model.request.Def2_CreateAmendForeignPropertyAnnualSubmissionRequestData
-import v5.createAmendForeignPropertyAnnualSubmission.def2.model.request.def2_foreignProperty.{Def2_Create_Amend_ForeignAllowances, Def2_Create_Amend_ForeignEntry, Def2_Create_Amend_StructuredBuildingAllowance}
+import v5.createAmendForeignPropertyAnnualSubmission.def2.model.request.def2_foreignProperty.{
+  Def2_Create_Amend_ForeignAllowances,
+  Def2_Create_Amend_ForeignEntry,
+  Def2_Create_Amend_StructuredBuildingAllowance
+}
 
 import java.time.LocalDate
 
@@ -157,8 +161,7 @@ class Def2_CreateAmendForeignPropertyAnnualSubmissionRulesValidator
 
     val validatedBuilding = (building.name, building.number) match {
       case (None, None) =>
-        Invalid(
-          List(RuleBuildingNameNumberError.withPath(s"/foreignProperty/$index/allowances/structuredBuildingAllowance/$buildingIndex/building")))
+        Invalid(List(RuleBuildingNameNumberError.withPath(s"/foreignProperty/$index/allowances/structuredBuildingAllowance/$buildingIndex/building")))
       case _ => valid
     }
 

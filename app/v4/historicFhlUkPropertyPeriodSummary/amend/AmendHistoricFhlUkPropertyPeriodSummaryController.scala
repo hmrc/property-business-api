@@ -28,14 +28,13 @@ import javax.inject.{Inject, Singleton}
 import scala.concurrent.ExecutionContext
 
 @Singleton
-class AmendHistoricFhlUkPropertyPeriodSummaryController @Inject()(
-    val authService: EnrolmentsAuthService,
-    val lookupService: MtdIdLookupService,
-    validatorFactory: AmendHistoricFhlUkPropertyPeriodSummaryValidatorFactory,
-    service: AmendHistoricFhlUkPropertyPeriodSummaryService,
-    auditService: AuditService,
-    cc: ControllerComponents,
-    idGenerator: IdGenerator)(implicit ec: ExecutionContext, appConfig: AppConfig)
+class AmendHistoricFhlUkPropertyPeriodSummaryController @Inject() (val authService: EnrolmentsAuthService,
+                                                                   val lookupService: MtdIdLookupService,
+                                                                   validatorFactory: AmendHistoricFhlUkPropertyPeriodSummaryValidatorFactory,
+                                                                   service: AmendHistoricFhlUkPropertyPeriodSummaryService,
+                                                                   auditService: AuditService,
+                                                                   cc: ControllerComponents,
+                                                                   idGenerator: IdGenerator)(implicit ec: ExecutionContext, appConfig: AppConfig)
     extends AuthorisedController(cc) {
 
   implicit val endpointLogContext: EndpointLogContext =

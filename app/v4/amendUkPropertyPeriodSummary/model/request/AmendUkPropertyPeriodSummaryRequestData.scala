@@ -42,7 +42,8 @@ case class Def2_AmendUkPropertyPeriodSummaryRequestData(nino: Nino,
                                                         businessId: BusinessId,
                                                         submissionId: SubmissionId,
                                                         body: Def2_AmendUkPropertyPeriodSummaryRequestBody)
-  extends AmendUkPropertyPeriodSummaryRequestData {
+    extends AmendUkPropertyPeriodSummaryRequestData {
+
   def toSubmission: Def2_AmendUkPropertyPeriodSummarySubmissionRequestData = {
     Def2_AmendUkPropertyPeriodSummarySubmissionRequestData(
       nino = nino,
@@ -51,13 +52,16 @@ case class Def2_AmendUkPropertyPeriodSummaryRequestData(nino: Nino,
       submissionId = submissionId,
       body = Def2_AmendUkPropertyPeriodSummarySubmissionRequestBody(
         body.ukFhlProperty,
-        body.ukNonFhlProperty.map(existing => Def2_Amend_UkNonFhlPropertySubmission(existing.income, existing.expenses.map(_.toSubmissionModel))
-    )))
+        body.ukNonFhlProperty.map(existing => Def2_Amend_UkNonFhlPropertySubmission(existing.income, existing.expenses.map(_.toSubmissionModel)))
+      )
+    )
   }
+
 }
+
 case class Def2_AmendUkPropertyPeriodSummarySubmissionRequestData(nino: Nino,
-                                                        taxYear: TaxYear,
-                                                        businessId: BusinessId,
-                                                        submissionId: SubmissionId,
-                                                        body: Def2_AmendUkPropertyPeriodSummarySubmissionRequestBody)
-  extends AmendUkPropertyPeriodSummaryRequestData
+                                                                  taxYear: TaxYear,
+                                                                  businessId: BusinessId,
+                                                                  submissionId: SubmissionId,
+                                                                  body: Def2_AmendUkPropertyPeriodSummarySubmissionRequestBody)
+    extends AmendUkPropertyPeriodSummaryRequestData

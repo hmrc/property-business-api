@@ -42,8 +42,7 @@ class DeleteHistoricUkPropertyAnnualSubmissionControllerSpec
     with MockDeleteHistoricUkPropertyAnnualSubmissionValidatorFactory
     with MockAuditService {
 
-  private val taxYear               = TaxYear.fromMtd("2021-22")
-
+  private val taxYear = TaxYear.fromMtd("2021-22")
 
   "DeleteHistoricUkPropertyAnnualSubmissionController" should {
     "return a successful response with status 204 (NO_CONTENT)" when {

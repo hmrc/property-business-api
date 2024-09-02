@@ -40,7 +40,7 @@ class ControllerBaseSpec extends UnitSpec with Status with MimeTypes with Header
 
   val apiVersion: Version = Version2
 
- lazy val fakeRequest: FakeRequest[AnyContentAsEmpty.type] =
+  lazy val fakeRequest: FakeRequest[AnyContentAsEmpty.type] =
     FakeRequest().withHeaders(HeaderNames.ACCEPT -> s"application/vnd.hmrc.${apiVersion.name}+json")
 
   lazy val cc: ControllerComponents = stubControllerComponents()

@@ -40,9 +40,8 @@ class ListPropertyPeriodSummariesControllerSpec
     with MockListPropertyPeriodSummariesValidatorFactory
     with MockHateoasFactory {
 
-  private val businessId            = "XAIS12345678910"
-  private val taxYear               = "2020-21"
-
+  private val businessId = "XAIS12345678910"
+  private val taxYear    = "2020-21"
 
   "ListPropertyPeriodSummariesController" should {
     "return Ok" when {

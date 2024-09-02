@@ -38,16 +38,15 @@ import v4.amendForeignPropertyPeriodSummary.model.request.{
 class Def1_AmendForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with MockAppConfig with JsonErrorValidators {
   private implicit val correlationId: String = "1234"
 
-  private val validNino = "AA123456A"
-  private val validBusinessId = "XAIS12345678901"
-  private val validTaxYear = "2023-24"
-  private val maxTaxYear = TaxYear.fromMtd("2024-25")
+  private val validNino         = "AA123456A"
+  private val validBusinessId   = "XAIS12345678901"
+  private val validTaxYear      = "2023-24"
+  private val maxTaxYear        = TaxYear.fromMtd("2024-25")
   private val validSubmissionId = "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
 
   private val countryCode = "AFG"
 
-  private def nonFhlEntryWith(countryCode: String) = Json.parse(
-    s"""
+  private def nonFhlEntryWith(countryCode: String) = Json.parse(s"""
        |{
        |  "countryCode": "$countryCode",
        |  "income": {
@@ -96,8 +95,7 @@ class Def1_AmendForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with 
        |""".stripMargin
   )
 
-  private val entryConsolidatedWithExtraFields = Json.parse(
-    """
+  private val entryConsolidatedWithExtraFields = Json.parse("""
       |{
       |  "countryCode": "AFG",
       |  "income": {
@@ -119,8 +117,7 @@ class Def1_AmendForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with 
 
   private val validBody = bodyWith(entry)
 
-  private val entryConsolidated = Json.parse(
-    """
+  private val entryConsolidated = Json.parse("""
       |{
       |  "countryCode": "AFG",
       |  "income": {
@@ -153,11 +150,10 @@ class Def1_AmendForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with 
        |""".stripMargin
   )
 
-  private val validBodyConsolidatedExpenses = consolidatedBodyWith(entryConsolidated)
+  private val validBodyConsolidatedExpenses            = consolidatedBodyWith(entryConsolidated)
   private val validBodyExtraFieldsConsolidatedExpenses = consolidatedBodyWith(entryConsolidatedWithExtraFields)
 
-  private val validBodyMinimalFhl = Json.parse(
-    """
+  private val validBodyMinimalFhl = Json.parse("""
       |{
       |  "foreignFhlEea": {
       |    "income": {
@@ -167,8 +163,7 @@ class Def1_AmendForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with 
       |}
       |""".stripMargin)
 
-  private val validBodyMinimalNonFhl = Json.parse(
-    """
+  private val validBodyMinimalNonFhl = Json.parse("""
       |{
       |  "foreignNonFhlProperty": [
       |    {
@@ -184,9 +179,9 @@ class Def1_AmendForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with 
       |}
       |""".stripMargin)
 
-  private val parsedNino = Nino(validNino)
-  private val parsedBusinessId = BusinessId(validBusinessId)
-  private val parsedTaxYear = TaxYear.fromMtd(validTaxYear)
+  private val parsedNino         = Nino(validNino)
+  private val parsedBusinessId   = BusinessId(validBusinessId)
+  private val parsedTaxYear      = TaxYear.fromMtd(validTaxYear)
   private val parsedSubmissionId = SubmissionId(validSubmissionId)
 
   private val incomeFhl = ForeignFhlEeaIncome(
@@ -287,7 +282,6 @@ class Def1_AmendForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with 
     Some(foreignFhlEeaConsolidated),
     Some(List(foreignNonFhlProperty.copy(expenses = Some(expensesNonFhlConsolidatedWithExtraFields))))
   )
-
 
   private val parsedBodyMinimalFhl = Def1_AmendForeignPropertyPeriodSummaryRequestBody(
     Some(foreignFhlEea.copy(expenses = None)),

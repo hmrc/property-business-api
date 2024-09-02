@@ -25,14 +25,21 @@ import mocks.{MockAppConfig, MockIdGenerator}
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.Result
 import v4.historicFhlUkPropertyPeriodSummary.retrieve.def1.model.response.{PeriodExpenses, PeriodIncome, RentARoomExpenses, RentARoomIncome}
-import v4.historicFhlUkPropertyPeriodSummary.retrieve.model.request.{Def1_RetrieveHistoricFhlUkPropertyPeriodSummaryRequestData, RetrieveHistoricFhlUkPropertyPeriodSummaryRequestData}
-import v4.historicFhlUkPropertyPeriodSummary.retrieve.model.response.{Def1_RetrieveHistoricFhlUkPropertyPeriodSummaryResponse, RetrieveHistoricFhlUkPropertyPeriodSummaryResponse}
+import v4.historicFhlUkPropertyPeriodSummary.retrieve.model.request.{
+  Def1_RetrieveHistoricFhlUkPropertyPeriodSummaryRequestData,
+  RetrieveHistoricFhlUkPropertyPeriodSummaryRequestData
+}
+import v4.historicFhlUkPropertyPeriodSummary.retrieve.model.response.{
+  Def1_RetrieveHistoricFhlUkPropertyPeriodSummaryResponse,
+  RetrieveHistoricFhlUkPropertyPeriodSummaryResponse
+}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class RetrieveHistoricFhlUkPropertyPeriodSummaryControllerSpec
-  extends ControllerBaseSpec with MockAppConfig
+    extends ControllerBaseSpec
+    with MockAppConfig
     with ControllerTestRunner
     with MockEnrolmentsAuthService
     with MockMtdIdLookupService
@@ -41,8 +48,8 @@ class RetrieveHistoricFhlUkPropertyPeriodSummaryControllerSpec
     with MockAuditService
     with MockIdGenerator {
 
-  private val from = "2017-04-06"
-  private val to = "2017-07-04"
+  private val from     = "2017-04-06"
+  private val to       = "2017-07-04"
   private val periodId = s"${from}_$to"
 
   "RetrieveHistoricNonFhlUkPropertyPeriodSummaryController" should {
@@ -110,8 +117,7 @@ class RetrieveHistoricFhlUkPropertyPeriodSummaryControllerSpec
         Some(periodExpenses)
       )
 
-    protected val responseBodyJson: JsValue = Json.parse(
-      """
+    protected val responseBodyJson: JsValue = Json.parse("""
         |{ 
         |  "fromDate": "2017-04-06",
         |  "toDate":"2017-07-04",

@@ -52,7 +52,7 @@ class ResolvePeriodIdSpec extends UnitSpec {
     "return an error" when {
       "passed a PeriodId with an invalid format" in {
         val invalidPeriodId = "XXXXXX"
-        val result = resolvePeriodId(invalidPeriodId)
+        val result          = resolvePeriodId(invalidPeriodId)
         result shouldBe Invalid(List(PeriodIdFormatError))
       }
 
@@ -76,7 +76,7 @@ class ResolvePeriodIdSpec extends UnitSpec {
 
       "passed a PeriodId with a multiple underscores" in {
         val invalidPeriodId = "2019-04-06_2019-07-04_2019-04-06"
-        val result = resolvePeriodId(invalidPeriodId)
+        val result          = resolvePeriodId(invalidPeriodId)
         result shouldBe Invalid(List(PeriodIdFormatError))
       }
 

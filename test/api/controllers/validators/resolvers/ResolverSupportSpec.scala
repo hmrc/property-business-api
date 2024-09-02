@@ -111,7 +111,7 @@ class ResolverSupportSpec extends UnitSpec with ResolverSupport {
       val next              = new AtomicInteger(0)
       def defaultValue: Int = next.getAndIncrement()
 
-      val resolver          = resolveInt.resolveOptionallyWithDefault(defaultValue)
+      val resolver = resolveInt.resolveOptionallyWithDefault(defaultValue)
 
       resolver(Some("1")) shouldBe Valid(1)
       resolver(Some("xx")) shouldBe Invalid(List(notIntegerError))

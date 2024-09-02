@@ -45,10 +45,9 @@ class RetrieveHistoricFhlUkPiePeriodSummaryControllerSpec
     with MockAuditService
     with MockIdGenerator {
 
-  private val from                  = "2017-04-06"
-  private val to                    = "2017-07-04"
-  private val periodId              = s"${from}_$to"
-
+  private val from     = "2017-04-06"
+  private val to       = "2017-07-04"
+  private val periodId = s"${from}_$to"
 
   "RetrieveHistoricFhlUkPiePeriodSummaryController" should {
     "return OK" when {

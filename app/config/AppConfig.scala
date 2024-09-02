@@ -170,8 +170,8 @@ class AppConfigImpl @Inject() (config: ServicesConfig, configuration: Configurat
         case (Some(dO), Some(sD), true) =>
           returnDeprecationMessage(version, dO, sD)
         case (Some(dO), None, true) => Deprecated(dO, Some(dO.plusMonths(6).plusDays(1))).valid
-        case (Some(dO), _, false) => Deprecated(dO, None).valid
-        case _ => s"deprecatedOn date is required for a deprecated version $version".invalid
+        case (Some(dO), _, false)   => Deprecated(dO, None).valid
+        case _                      => s"deprecatedOn date is required for a deprecated version $version".invalid
       }
 
     } else {
@@ -186,7 +186,6 @@ class AppConfigImpl @Inject() (config: ServicesConfig, configuration: Configurat
       s"sunsetDate must be later than deprecatedOn date for a deprecated version $version".invalid
     }
   }
-
 
 }
 

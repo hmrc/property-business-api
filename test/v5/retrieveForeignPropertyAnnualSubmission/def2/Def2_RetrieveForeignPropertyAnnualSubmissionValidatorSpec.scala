@@ -35,7 +35,7 @@ class Def2_RetrieveForeignPropertyAnnualSubmissionValidatorSpec extends UnitSpec
   private val parsedTaxYear    = TaxYear.fromMtd(validTaxYear)
 
   private def validator(nino: String, businessId: String, taxYear: String) =
-   new Def2_RetrieveForeignPropertyAnnualSubmissionValidator(nino, businessId, taxYear)
+    new Def2_RetrieveForeignPropertyAnnualSubmissionValidator(nino, businessId, taxYear)
 
   private def setupMocks(): Unit = MockedAppConfig.minimumTaxV2Foreign.returns(TaxYear.starting(2021)).anyNumberOfTimes()
 

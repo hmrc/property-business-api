@@ -35,7 +35,8 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class RetrieveUkPropertyAnnualSubmissionControllerSpec
-    extends ControllerBaseSpec with MockAppConfig
+    extends ControllerBaseSpec
+    with MockAppConfig
     with ControllerTestRunner
     with MockRetrieveUkPropertyAnnualSubmissionService
     with MockRetrieveUkPropertyAnnualSubmissionValidatorFactory

@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-04/schema#",
-  "title": "For any tax year",
+  "title": "For any pre 2025-26 tax year",
   "type": "object",
   "description": "This endpoint allows the developer to list the submission periods associated with their UK property business for either or both of Furnished Holiday Letting (FHL) and Non FHL UK property or foreign property business for either or both of Furnished Holiday Letting (FHL) in the European Economic Area (EEA). A National Insurance number, tax year and business ID are required.",
   "properties": {

@@ -58,6 +58,13 @@ class Def1_ListPropertyPeriodSummariesValidatorSpec extends UnitSpec with MockAp
         validator(validNino, validBusinessId, taxYearString).validateAndWrapResult() shouldBe
           Right(ListPropertyPeriodSummariesRequestData(parsedNino, parsedBusinessId, TaxYear.fromMtd(taxYearString)))
       }
+      "passed the maximum supported taxYear" in {
+        setupMocks()
+
+        val taxYearString = "2024-25"
+        validator(validNino, validBusinessId, taxYearString).validateAndWrapResult() shouldBe
+          Right(ListPropertyPeriodSummariesRequestData(parsedNino, parsedBusinessId, TaxYear.fromMtd(taxYearString)))
+      }
     }
 
     "return a single error" when {
@@ -92,6 +99,12 @@ class Def1_ListPropertyPeriodSummariesValidatorSpec extends UnitSpec with MockAp
         setupMocks()
 
         validator(validNino, validBusinessId, "2020-21").validateAndWrapResult() shouldBe
+          Left(ErrorWrapper(correlationId, RuleTaxYearNotSupportedError))
+      }
+      "given a taxYear immediately after max tax year" in {
+        setupMocks()
+
+        validator(validNino, validBusinessId, "2025-26").validateAndWrapResult() shouldBe
           Left(ErrorWrapper(correlationId, RuleTaxYearNotSupportedError))
       }
 

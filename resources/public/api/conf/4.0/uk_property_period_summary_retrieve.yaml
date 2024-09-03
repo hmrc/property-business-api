@@ -1,7 +1,11 @@
 summary: Retrieve a UK Property Income & Expenses Period Summary
 description: |
-  This endpoint allows a developer to retrieve the income and expenses for a UK property business, that occurred between tax year. A National Insurance number, business ID, tax year and submission ID are required.
+  This endpoint allows a developer to retrieve the income and expenses for a UK property business, that occurred between
+  tax year. A National Insurance number, business ID, tax year and submission ID are required.
   
+  Note: This endpoint only supports submissions up to tax year 2024-25. New endpoints which support cumulative submission
+  will be provided for tax year 2025-26 onwards.
+
   ### Test data
   Scenario simulation using Gov-Test-Scenario headers is only available in the sandbox environment.
   
@@ -24,7 +28,7 @@ tags:
 parameters:
   - $ref: './common/pathParameters.yaml#/components/parameters/nino'
   - $ref: './common/pathParameters.yaml#/components/parameters/businessId'
-  - $ref: './common/pathParameters.yaml#/components/parameters/taxYear'
+  - $ref: './common/pathParameters.yaml#/components/parameters/taxYearTo2025'
   - $ref: './common/pathParameters.yaml#/components/parameters/submissionId'
   - $ref: './common/headers.yaml#/components/parameters/acceptHeader'
   - $ref: './common/headers.yaml#/components/parameters/authorizationReadScopeHeader'
@@ -62,7 +66,7 @@ responses:
             value:
               $ref: './examples/uk_property_period_summary_retrieve/def1/consolidated_response.json'
           full-expense-response-for-TY-2024-25:
-            description:  Full Expenditure response for TY 2024-25 and after
+            description: Full Expenditure response for TY 2024-25 and after
             value:
               $ref: './examples/uk_property_period_summary_retrieve/def2/response.json'
           consolidated-expense-response-for-TY-2024-25:

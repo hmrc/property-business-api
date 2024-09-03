@@ -1,0 +1,16 @@
+{
+  "submittedOn":"2025-06-17T10:59:47.544Z",
+  "ukProperty":{
+    "adjustments":{
+      "balancingCharge":565.34,
+      "businessPremisesRenovationAllowanceBalancingCharges":563.34,
+      "nonResidentLandlord":true,
+      "rentARoom":{
+        "jointlyLet":true
+      }
+    },
+    "allowances":{
+      "propertyIncomeAllowance":342.34
+    }
+  }
+}

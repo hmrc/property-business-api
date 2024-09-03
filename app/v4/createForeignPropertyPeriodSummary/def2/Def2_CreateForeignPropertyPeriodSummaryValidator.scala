@@ -18,6 +18,7 @@ package v4.createForeignPropertyPeriodSummary.def2
 
 import api.controllers.validators.Validator
 import api.controllers.validators.resolvers.{ResolveBusinessId, ResolveNino, ResolveNonEmptyJsonObject, ResolveTaxYear}
+import api.models.domain.TaxYear
 import api.models.errors.MtdError
 import cats.data.Validated
 import cats.implicits._
@@ -25,7 +26,7 @@ import play.api.libs.json.JsValue
 import v4.createForeignPropertyPeriodSummary.def2.Def2_CreateForeignPropertyPeriodSummaryRulesValidator.validateBusinessRules
 import v4.createForeignPropertyPeriodSummary.model.request._
 
-class Def2_CreateForeignPropertyPeriodSummaryValidator(nino: String, businessId: String, taxYear: String, body: JsValue)
+class Def2_CreateForeignPropertyPeriodSummaryValidator(nino: String, businessId: String, taxYear: String, maxTaxYear: TaxYear, body: JsValue)
     extends Validator[CreateForeignPropertyPeriodSummaryRequestData] {
 
   private val resolveJson = new ResolveNonEmptyJsonObject[Def2_CreateForeignPropertyPeriodSummaryRequestBody]()
@@ -34,7 +35,7 @@ class Def2_CreateForeignPropertyPeriodSummaryValidator(nino: String, businessId:
     (
       ResolveNino(nino),
       ResolveBusinessId(businessId),
-      ResolveTaxYear(taxYear),
+      ResolveTaxYear(taxYear, maxTaxYear),
       resolveJson(body)
     ).mapN(Def2_CreateForeignPropertyPeriodSummaryRequestData) andThen validateBusinessRules
 

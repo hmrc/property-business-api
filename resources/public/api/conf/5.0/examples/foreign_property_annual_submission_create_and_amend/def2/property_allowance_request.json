@@ -1,0 +1,13 @@
+{
+  "foreignProperty": [
+    {
+      "countryCode": "LBN",
+      "adjustments": {
+        "balancingCharge": 3453.34
+      },
+      "allowances": {
+        "propertyIncomeAllowance": 200.25
+      }
+    }
+  ]
+}

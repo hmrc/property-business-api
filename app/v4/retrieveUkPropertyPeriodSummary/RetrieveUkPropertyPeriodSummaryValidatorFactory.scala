@@ -17,21 +17,33 @@
 package v4.retrieveUkPropertyPeriodSummary
 
 import api.controllers.validators.Validator
+import api.models.domain.TaxYear
 import config.AppConfig
+import v4.retrieveUkPropertyPeriodSummary.RetrieveUkPropertyPeriodSummaryValidatorFactory.def2TaxYearStart
 import v4.retrieveUkPropertyPeriodSummary.def1.Def1_RetrieveUkPropertyPeriodSummaryValidator
 import v4.retrieveUkPropertyPeriodSummary.def2.Def2_RetrieveUkPropertyPeriodSummaryValidator
 import v4.retrieveUkPropertyPeriodSummary.model.request.RetrieveUkPropertyPeriodSummaryRequestData
 
 import javax.inject.{Inject, Singleton}
+import scala.math.Ordering.Implicits.infixOrderingOps
 
 @Singleton
 class RetrieveUkPropertyPeriodSummaryValidatorFactory @Inject() (appConfig: AppConfig) {
 
   def validator(nino: String, businessId: String, taxYear: String, submissionId: String): Validator[RetrieveUkPropertyPeriodSummaryRequestData] = {
-    taxYear match {
-      case "2024-25" => new Def2_RetrieveUkPropertyPeriodSummaryValidator (nino, businessId, taxYear, submissionId) (appConfig)
-      case _ => new Def1_RetrieveUkPropertyPeriodSummaryValidator (nino, businessId, taxYear, submissionId) (appConfig)
+    TaxYear.maybeFromMtd(taxYear) match {
+      case Some(parsedTY) if parsedTY >= def2TaxYearStart =>
+        new Def2_RetrieveUkPropertyPeriodSummaryValidator(nino, businessId, taxYear, submissionId)(appConfig)
+
+      case _ =>
+        new Def1_RetrieveUkPropertyPeriodSummaryValidator(nino, businessId, taxYear, submissionId)(appConfig)
     }
   }
+
+}
+
+object RetrieveUkPropertyPeriodSummaryValidatorFactory {
+
+  private val def2TaxYearStart = TaxYear.fromMtd("2024-25")
 
 }

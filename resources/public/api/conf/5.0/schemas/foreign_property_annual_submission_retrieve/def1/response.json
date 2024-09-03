@@ -1,7 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-04/schema#",
-  "title": "Given any tax year",
-  "description": "This endpoint allows a developer to retrieve adjustments and allowances for a foreign property business. For either or both of Furnished Holiday Letting (FHL) in the European Economic Area (EEA) and Non FHL Foreign property submissions. A National Insurance number, business ID and tax year are required.",
+  "title": "For TY 2024-25 and before",
   "type": "object",
   "properties": {
     "submittedOn": {

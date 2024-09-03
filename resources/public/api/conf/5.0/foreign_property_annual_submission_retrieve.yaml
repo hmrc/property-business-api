@@ -1,21 +1,26 @@
 summary: Retrieve a Foreign Property Annual Submission
 description: |
-  This endpoint allows a developer to retrieve adjustments and allowances for a foreign property business. For either or both of Furnished Holiday Letting (FHL) in the European Economic Area (EEA) and Non FHL Foreign property submissions. A National Insurance number, business ID and tax year are required.
+  This endpoint enables you to retrieve adjustments and allowances for a foreign property business, for either or both of Furnished Holiday Letting (FHL) in the European Economic Area (EEA) and Non-FHL Foreign property submissions. 
+  A National Insurance number, business ID and tax year are required.
 
+  Note: For tax years before 2025-26, data can be submitted for either a Foreign FHL-EEA or Non-FHL property. From tax year 2025-26 onwards, the Foreign FHL-EEA and Non-FHL property types are no longer valid and you must use the Foreign property type.
+  
   ### Test data
   Scenario simulation using Gov-Test-Scenario headers is only available in the sandbox environment.
   
   | Header Value (Gov-Test-Scenario)      | Scenario                                                               |
   |---------------------------------------|------------------------------------------------------------------------|
   | N/A - DEFAULT                         | Simulates the scenario where no data is found.                         |
-  | FOREIGN_PROPERTY                      | Simulates the scenario with FHL and Non-FHL properties.                |
+  | FOREIGN_PROPERTY                      | Simulates the scenario with UK properties.                             |
+  | FOREIGN_ALL_OTHER_ALLOWANCES          | Simulates the scenario of a UK property with all other allowances.     |
+  | FOREIGN_PROPERTY_ALLOWANCE            | Simulates the scenario of a UK property with property allowance.       |
+  | FOREIGN_PROPERTY_FHL_NON_FHL          | Simulates the scenario with FHL and Non-FHL properties.                |
   | FOREIGN_FHL_ALL_OTHER_ALLOWANCES      | Simulates the scenario of a FHL property with all other allowances.    |
   | FOREIGN_FHL_PROPERTY_ALLOWANCE        | Simulates the scenario of a FHL property with property allowance.      |
   | FOREIGN_NON_FHL_ALL_OTHER_ALLOWANCES  | Simulates the scenario of a Non-FHL property with all other allowances.|
   | FOREIGN_NON_FHL_PROPERTY_ALLOWANCE    | Simulates the scenario of a Non-FHL property with property allowance.  |
   | UK_PROPERTY                           | Simulates the scenario where the type of business is incorrect.        |
   | STATEFUL                              | Performs a stateful retrieve.                                          |
-
 
 
 
@@ -51,15 +56,24 @@ responses:
         schema:
           oneOf:
             - $ref: './schemas/foreign_property_annual_submission_retrieve/def1/response.json'
+            - $ref: './schemas/foreign_property_annual_submission_retrieve/def2/response.json'
         examples:
           all-other-allowances-response:
-            description: All Other Allowances Response
+            description: All Other Allowances Response Pre 25-26
             value:
               $ref: './examples/foreign_property_annual_submission_retrieve/def1/all_other_allowances_response.json'
           property-allowance-response:
-            description: Property Allowance Response
+            description: Property Allowance Response Pre 25-26
             value:
               $ref: './examples/foreign_property_annual_submission_retrieve/def1/property_allowance_response.json'
+          25/26-all-other-allowances-response:
+            description: All Other Allowances Response 25-26 Onwards
+            value:
+              $ref: './examples/foreign_property_annual_submission_retrieve/def2/all_other_allowances_response.json'
+          25/26-property-allowance-response:
+            description: Property Allowance Response 25-26 Onwards
+            value:
+              $ref: './examples/foreign_property_annual_submission_retrieve/def2/property_allowance_response.json'
 
   "400":
     description: Bad request

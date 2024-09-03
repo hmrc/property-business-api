@@ -37,8 +37,7 @@ trait BaseController {
     def withApiHeaders(correlationId: String, responseHeaders: (String, String)*): Result = {
 
       val newHeaders: Seq[(String, String)] = responseHeaders ++ List(
-        "X-CorrelationId"        -> correlationId,
-        "X-Content-Type-Options" -> "nosniff"
+        "X-CorrelationId" -> correlationId
       )
 
       result.copy(header = result.header.copy(headers = result.header.headers ++ newHeaders))

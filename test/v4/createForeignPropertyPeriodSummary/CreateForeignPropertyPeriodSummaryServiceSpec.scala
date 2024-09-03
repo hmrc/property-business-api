@@ -74,7 +74,7 @@ class CreateForeignPropertyPeriodSummaryServiceSpec
       val errors = List(
         "INVALID_TAXABLE_ENTITY_ID" -> NinoFormatError,
         "INVALID_INCOMESOURCEID"    -> BusinessIdFormatError,
-        "INVALID_TAX_YEAR"          -> TaxYearFormatError,
+        "INVALID_TAX_YEAR"          -> InternalError,
         "DUPLICATE_COUNTRY_CODE"    -> RuleDuplicateCountryCodeError,
         "INVALID_PAYLOAD"           -> InternalError,
         "INVALID_CORRELATIONID"     -> InternalError,

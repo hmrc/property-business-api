@@ -16,39 +16,47 @@
 
 package v4.retrieveUkPropertyPeriodSummary
 
-import api.controllers.validators.Validator
 import mocks.MockAppConfig
 import support.UnitSpec
 import v4.retrieveUkPropertyPeriodSummary.def1.Def1_RetrieveUkPropertyPeriodSummaryValidator
-import v4.retrieveUkPropertyPeriodSummary.model.request.RetrieveUkPropertyPeriodSummaryRequestData
+import v4.retrieveUkPropertyPeriodSummary.def2.Def2_RetrieveUkPropertyPeriodSummaryValidator
 
 class RetrieveUkPropertyPeriodSummaryValidatorFactorySpec extends UnitSpec with MockAppConfig {
 
   private val validNino         = "AA123456A"
   private val validBusinessId   = "XAIS12345678901"
-  private val validTaxYear      = "2022-23"
-  private val validTysTaxYear   = "2023-24"
   private val validSubmissionId = "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
 
   private val validatorFactory = new RetrieveUkPropertyPeriodSummaryValidatorFactory(mockAppConfig)
 
-  "validator" when {
-    "given a valid taxYear" should {
-      "return the Validator for schema definition 1" in {
-        val result: Validator[RetrieveUkPropertyPeriodSummaryRequestData] =
-          validatorFactory.validator(validNino, validBusinessId, validTysTaxYear, validSubmissionId)
-
-        result shouldBe a[Def1_RetrieveUkPropertyPeriodSummaryValidator]
-      }
-
-      "passed the minimum supported taxYear" in {
-        val result: Validator[RetrieveUkPropertyPeriodSummaryRequestData] =
-          validatorFactory.validator(validNino, validBusinessId, validTaxYear, validSubmissionId)
-
+  "validator()" when {
+    "given a Def1 taxYear" should {
+      "return the Def1 Validator" in {
+        val result = validatorFactory.validator(validNino, validBusinessId, "2023-24", validSubmissionId)
         result shouldBe a[Def1_RetrieveUkPropertyPeriodSummaryValidator]
       }
     }
 
+    "given a badly formatted taxYear" should {
+      "return the Def1 Validator" in {
+        val result = validatorFactory.validator(validNino, validBusinessId, "not-a-tax-year", validSubmissionId)
+        result shouldBe a[Def1_RetrieveUkPropertyPeriodSummaryValidator]
+      }
+    }
+
+    "given the Def2 start taxYear" should {
+      "return the Def2 Validator" in {
+        val result = validatorFactory.validator(validNino, validBusinessId, "2024-25", validSubmissionId)
+        result shouldBe a[Def2_RetrieveUkPropertyPeriodSummaryValidator]
+      }
+    }
+
+    "given a taxYear after the Def2 start" should {
+      "return the Def2 Validator" in {
+        val result = validatorFactory.validator(validNino, validBusinessId, "2025-26", validSubmissionId)
+        result shouldBe a[Def2_RetrieveUkPropertyPeriodSummaryValidator]
+      }
+    }
   }
 
 }

@@ -4,6 +4,9 @@ description: |
   This submission is for either or both of Furnished Holiday Letting (FHL) in the European Economic Area (EEA) and all other foreign property submissions.
   In the case of Non-FHL Foreign Property, if there are multiple properties per country, the income and expenses should be the total across all properties.
   A National Insurance number, business ID, tax year and submission ID are required.
+  
+  Note: This endpoint only supports submissions up to tax year 2024-25. New endpoints which support cumulative submission
+  will be provided for tax year 2025-26 onwards.
 
 
   ### Test data
@@ -24,7 +27,7 @@ tags:
 parameters:
   - $ref: './common/pathParameters.yaml#/components/parameters/nino'
   - $ref: './common/pathParameters.yaml#/components/parameters/businessId'
-  - $ref: './common/pathParameters.yaml#/components/parameters/taxYear'
+  - $ref: './common/pathParameters.yaml#/components/parameters/taxYearTo2025'
   - $ref: './common/pathParameters.yaml#/components/parameters/submissionId'
   - $ref: './common/headers.yaml#/components/parameters/acceptHeader'
   - $ref: './common/headers.yaml#/components/parameters/contentTypeJson'

@@ -18,14 +18,12 @@ package v4.retrieveForeignPropertyAnnualSubmission.def1
 
 import api.controllers.validators.Validator
 import api.controllers.validators.resolvers.{ResolveBusinessId, ResolveNino, ResolveTaxYear}
+import api.models.domain.TaxYear
 import api.models.errors.MtdError
 import cats.data.Validated
 import cats.implicits._
 import config.AppConfig
-import v4.retrieveForeignPropertyAnnualSubmission.model.request.{
-  Def1_RetrieveForeignPropertyAnnualSubmissionRequestData,
-  RetrieveForeignPropertyAnnualSubmissionRequestData
-}
+import v4.retrieveForeignPropertyAnnualSubmission.model.request.{Def1_RetrieveForeignPropertyAnnualSubmissionRequestData, RetrieveForeignPropertyAnnualSubmissionRequestData}
 
 import javax.inject.Inject
 
@@ -33,12 +31,13 @@ class Def1_RetrieveForeignPropertyAnnualSubmissionValidator @Inject() (nino: Str
     extends Validator[RetrieveForeignPropertyAnnualSubmissionRequestData] {
 
   private lazy val minimumTaxYear = appConfig.minimumTaxV2Foreign
+  private lazy val maximumTaxYear = TaxYear.fromMtd("2024-25")
 
   def validate: Validated[Seq[MtdError], RetrieveForeignPropertyAnnualSubmissionRequestData] =
     (
       ResolveNino(nino),
       ResolveBusinessId(businessId),
-      ResolveTaxYear(minimumTaxYear, taxYear)
+      ResolveTaxYear(taxYear, minimumTaxYear, maximumTaxYear)
     ).mapN(Def1_RetrieveForeignPropertyAnnualSubmissionRequestData)
 
 }

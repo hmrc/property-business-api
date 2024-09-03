@@ -17,7 +17,8 @@
 package v4.retrieveUkPropertyPeriodSummary.def2
 
 import api.controllers.validators.Validator
-import api.controllers.validators.resolvers.{ResolveBusinessId, ResolveNino, ResolveSubmissionId, ResolveTaxYear}
+import api.controllers.validators.resolvers.{ResolveBusinessId, ResolveNino, ResolveSubmissionId, ResolveTaxYearMinMax}
+import api.models.domain.TaxYear
 import api.models.errors.MtdError
 import cats.data.Validated
 import cats.implicits.catsSyntaxTuple4Semigroupal
@@ -26,17 +27,25 @@ import v4.retrieveUkPropertyPeriodSummary.model.request.{Def2_RetrieveUkProperty
 
 import javax.inject.Inject
 
-class Def2_RetrieveUkPropertyPeriodSummaryValidator @Inject() (nino: String, businessId: String, taxYear: String, submissionId: String)(
-    appConfig: AppConfig)
+class Def2_RetrieveUkPropertyPeriodSummaryValidator @Inject() (
+    nino: String,
+    businessId: String,
+    taxYear: String,
+    submissionId: String
+)(appConfig: AppConfig)
     extends Validator[RetrieveUkPropertyPeriodSummaryRequestData] {
 
-  private lazy val minimumTaxYear = appConfig.minimumTaxV2Uk
+  private lazy val resolveTaxYear = {
+    val minimumTaxYear = appConfig.minimumTaxV2Uk
+    val maxTaxYear     = TaxYear.fromMtd("2024-25")
+    ResolveTaxYearMinMax(minimumTaxYear -> maxTaxYear)
+  }
 
   def validate: Validated[Seq[MtdError], RetrieveUkPropertyPeriodSummaryRequestData] =
     (
       ResolveNino(nino),
       ResolveBusinessId(businessId),
-      ResolveTaxYear(minimumTaxYear, taxYear),
+      resolveTaxYear(taxYear),
       ResolveSubmissionId(submissionId)
     ).mapN(Def2_RetrieveUkPropertyPeriodSummaryRequestData)
 

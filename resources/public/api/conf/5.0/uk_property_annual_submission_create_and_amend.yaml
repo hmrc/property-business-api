@@ -1,6 +1,10 @@
 summary: Create and Amend a UK Property Business Annual Submission
 description: |
-  This endpoint allows a developer to re-submit adjustments and allowances for a UK property business. This submission is for either or both of Furnished Holiday Letting (FHL) and Non FHL UK property submissions. A National Insurance number, business ID and tax year are required.
+  This endpoint enables you to re-submit adjustments and allowances for a UK property business, either furnished holiday lettings (FHL) or non-FHL or both. 
+  A National Insurance number, business ID and tax year are required.
+
+  Note: For tax years before 2025-26, data can be submitted for either a UK FHL or UK Non-FHL property. 
+  From tax year 2025-26 onwards, the UK FHL and UK Non-FHL property types are no longer valid and you must use the UK property type.
 
   ### Test data
   Scenario simulation using Gov-Test-Scenario headers is only available in the sandbox environment.
@@ -36,15 +40,24 @@ requestBody:
       schema:
         oneOf:
           - $ref: './schemas/uk_property_annual_submission_create_and_amend/def1/request.json'
+          - $ref: './schemas/uk_property_annual_submission_create_and_amend/def2/request.json'
       examples:
-        property-allowance-request:
-          description: Property Allowance request
+        property-allowance-request-TY-2024-25:
+          description: Property Allowance request for TY 2024-25 and before
           value:
             $ref: './examples/uk_property_annual_submission_create_and_amend/def1/property_allowance_request.json'
-        all-other-allowance-request:
-          description: All Other Allowances request
+        all-other-allowance-request-TY-2024-25:
+          description: All Other Allowances request for TY 2024-25 and before
           value:
             $ref: './examples/uk_property_annual_submission_create_and_amend/def1/all_other_allowances_request.json'
+        property-allowance-request-TY-2025-26:
+          description: Property Allowance request for TY 2025-26 and after
+          value:
+            $ref: './examples/uk_property_annual_submission_create_and_amend/def2/property_allowance_request.json'
+        all-other-allowance-request-TY-2025-26:
+          description: All Other Allowances request for TY 2025-26 and after
+          value:
+            $ref: './examples/uk_property_annual_submission_create_and_amend/def2/all_other_allowances_request.json'
 
 responses:
   "200":

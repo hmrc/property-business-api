@@ -21,7 +21,7 @@ import api.models.errors._
 import mocks.MockAppConfig
 import support.UnitSpec
 import v4.retrieveUkPropertyPeriodSummary.RetrieveUkPropertyPeriodSummaryValidatorFactory
-import v4.retrieveUkPropertyPeriodSummary.model.request.{Def1_RetrieveUkPropertyPeriodSummaryRequestData, RetrieveUkPropertyPeriodSummaryRequestData}
+import v4.retrieveUkPropertyPeriodSummary.model.request.{Def1_RetrieveUkPropertyPeriodSummaryRequestData, Def2_RetrieveUkPropertyPeriodSummaryRequestData, RetrieveUkPropertyPeriodSummaryRequestData}
 
 class Def2_RetrieveUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with MockAppConfig {
 
@@ -48,25 +48,38 @@ class Def2_RetrieveUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with Mo
 
   "validator" should {
     "return the parsed domain object" when {
-      "passed a valid request" in {
+      "given a valid request" in {
         setupMocks()
+
         val result: Either[ErrorWrapper, RetrieveUkPropertyPeriodSummaryRequestData] =
           validator(validNino, validBusinessId, validTysTaxYear, validSubmissionId).validateAndWrapResult()
 
         result shouldBe Right(Def1_RetrieveUkPropertyPeriodSummaryRequestData(parsedNino, parsedBusinessId, parsedTysTaxYear, parsedSubmissionId))
       }
 
-      "passed the minimum supported taxYear" in {
+      "given the minimum supported taxYear for Def2" in {
         setupMocks()
+
         val result: Either[ErrorWrapper, RetrieveUkPropertyPeriodSummaryRequestData] =
           validator(validNino, validBusinessId, validTaxYear, validSubmissionId).validateAndWrapResult()
 
         result shouldBe Right(Def1_RetrieveUkPropertyPeriodSummaryRequestData(parsedNino, parsedBusinessId, parsedTaxYear, parsedSubmissionId))
       }
+
+      "given the maximum supported taxYear" in {
+        setupMocks()
+
+        val result: Either[ErrorWrapper, RetrieveUkPropertyPeriodSummaryRequestData] =
+          validator(validNino, validBusinessId, "2024-25", validSubmissionId).validateAndWrapResult()
+
+        result shouldBe Right(
+          Def2_RetrieveUkPropertyPeriodSummaryRequestData(parsedNino, parsedBusinessId, TaxYear.fromMtd("2024-25"), parsedSubmissionId)
+        )
+      }
     }
 
     "return a single error" when {
-      "an invalid nino is supplied" in {
+      "given an invalid nino" in {
         setupMocks()
         val result: Either[ErrorWrapper, RetrieveUkPropertyPeriodSummaryRequestData] =
           validator("invalidNino", validBusinessId, validTysTaxYear, validSubmissionId).validateAndWrapResult()
@@ -74,7 +87,7 @@ class Def2_RetrieveUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with Mo
         result shouldBe Left(ErrorWrapper(correlationId, NinoFormatError))
       }
 
-      "an invalid business ID is supplied" in {
+      "given an invalid business ID" in {
         setupMocks()
         val result: Either[ErrorWrapper, RetrieveUkPropertyPeriodSummaryRequestData] =
           validator(validNino, "invalidBusinessId", validTysTaxYear, validSubmissionId).validateAndWrapResult()
@@ -82,30 +95,41 @@ class Def2_RetrieveUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with Mo
         result shouldBe Left(ErrorWrapper(correlationId, BusinessIdFormatError))
       }
 
-      "an incorrectly formatted tax year is supplied" in {
+      "given an incorrectly formatted tax year" in {
         setupMocks()
+
         val result: Either[ErrorWrapper, RetrieveUkPropertyPeriodSummaryRequestData] =
           validator(validNino, validBusinessId, "invalidTaxYear", validSubmissionId).validateAndWrapResult()
 
         result shouldBe Left(ErrorWrapper(correlationId, TaxYearFormatError))
       }
 
-      "passed a taxYear immediately before the minimum supported" in {
+      "given a taxYear immediately before the minimum supported" in {
         setupMocks()
-        validator(validNino, validBusinessId, "2021-22", validSubmissionId).validateAndWrapResult() shouldBe
-          Left(ErrorWrapper(correlationId, RuleTaxYearNotSupportedError))
+
+        val result = validator(validNino, validBusinessId, "2021-22", validSubmissionId).validateAndWrapResult()
+        result shouldBe Left(ErrorWrapper(correlationId, RuleTaxYearNotSupportedError))
       }
 
-      "an invalid tax year range is supplied" in {
+      "given a taxYear immediately after the maximum supported" in {
         setupMocks()
+
+        val result = validator(validNino, validBusinessId, "2025-26", validSubmissionId).validateAndWrapResult()
+        result shouldBe Left(ErrorWrapper(correlationId, RuleTaxYearNotSupportedError))
+      }
+
+      "given an invalid tax year range" in {
+        setupMocks()
+
         val result: Either[ErrorWrapper, RetrieveUkPropertyPeriodSummaryRequestData] =
           validator(validNino, validBusinessId, "2020-22", validSubmissionId).validateAndWrapResult()
 
         result shouldBe Left(ErrorWrapper(correlationId, RuleTaxYearRangeInvalidError))
       }
 
-      "an invalid submission ID is supplied" in {
+      "given an invalid submission ID" in {
         setupMocks()
+
         val result: Either[ErrorWrapper, RetrieveUkPropertyPeriodSummaryRequestData] =
           validator(validNino, validBusinessId, validTysTaxYear, "invalidSubmissionId").validateAndWrapResult()
 
@@ -114,8 +138,9 @@ class Def2_RetrieveUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with Mo
     }
 
     "return return multiple errors" when {
-      "invalid nino, business ID, tax year format and submission ID are supplied" in {
+      "given invalid nino, business ID, tax year format and submission ID" in {
         setupMocks()
+
         val result: Either[ErrorWrapper, RetrieveUkPropertyPeriodSummaryRequestData] =
           validator("invalid", "invalid", "invalid", "invalid").validateAndWrapResult()
 

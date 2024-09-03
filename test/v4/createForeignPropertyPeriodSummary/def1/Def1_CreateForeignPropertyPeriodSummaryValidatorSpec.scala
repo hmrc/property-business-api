@@ -33,15 +33,18 @@ import v4.createForeignPropertyPeriodSummary.model.request.{
 class Def1_CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with MockAppConfig with JsonErrorValidators {
   private implicit val correlationId: String = "1234"
 
-  private val validNino       = "AA123456A"
+  private val validNino = "AA123456A"
   private val validBusinessId = "XAIS12345678901"
-  private val validTaxYear    = "2023-24"
+  private val validTaxYear = "2023-24"
 
-  private val validFromDate    = "2020-03-29"
-  private val validToDate      = "2021-03-29"
+  private val validFromDate = "2020-03-29"
+  private val validToDate = "2021-03-29"
   private val validCountryCode = "AFG"
 
-  private def entryWith(countryCode: String) = Json.parse(s"""
+  private val maxTaxYear: TaxYear = TaxYear.fromMtd("2024-25")
+
+  private def entryWith(countryCode: String) = Json.parse(
+    s"""
        |{
        |         "countryCode": "$countryCode",
        |         "income":{
@@ -70,7 +73,8 @@ class Def1_CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with
 
   private val entry = entryWith(countryCode = validCountryCode)
 
-  private def bodyWith(nonFhlEntries: JsValue*) = Json.parse(s"""
+  private def bodyWith(nonFhlEntries: JsValue*) = Json.parse(
+    s"""
        |{
        |   "fromDate":"$validFromDate",
        |   "toDate":"$validToDate",
@@ -94,7 +98,8 @@ class Def1_CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with
 
   private val validBody = bodyWith(entry)
 
-  private def entryConsolidated = Json.parse(s"""
+  private def entryConsolidated = Json.parse(
+    s"""
        |{
        |     "countryCode":"$validCountryCode",
        |     "income":{
@@ -113,7 +118,8 @@ class Def1_CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with
        |}
        |""".stripMargin)
 
-  private def consolidatedBodyWith(nonFhlEntries: JsValue*) = Json.parse(s"""
+  private def consolidatedBodyWith(nonFhlEntries: JsValue*) = Json.parse(
+    s"""
        |{
        |   "fromDate": "$validFromDate",
        |   "toDate": "$validToDate",
@@ -131,7 +137,8 @@ class Def1_CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with
 
   private val validBodyConsolidated = consolidatedBodyWith(entryConsolidated)
 
-  private val validBodyMinimalFhl = Json.parse(s"""
+  private val validBodyMinimalFhl = Json.parse(
+    s"""
        |{
        |  "fromDate": "$validFromDate",
        |  "toDate": "$validToDate",
@@ -143,7 +150,8 @@ class Def1_CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with
        |}
        |""".stripMargin)
 
-  private val validBodyMinimalNonFhl = Json.parse(s"""
+  private val validBodyMinimalNonFhl = Json.parse(
+    s"""
        |{
        |  "fromDate": "$validFromDate",
        |  "toDate": "$validToDate",
@@ -161,9 +169,9 @@ class Def1_CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with
        |}
        |""".stripMargin)
 
-  private val parsedNino       = Nino(validNino)
+  private val parsedNino = Nino(validNino)
   private val parsedBusinessId = BusinessId(validBusinessId)
-  private val parsedTaxYear    = TaxYear.fromMtd(validTaxYear)
+  private val parsedTaxYear = TaxYear.fromMtd(validTaxYear)
 
   private val parsedForeignFhlEeaIncome = Def1_Create_ForeignFhlEeaIncome(Some(381.21))
 
@@ -241,8 +249,8 @@ class Def1_CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with
         Some(List(parsedForeignNonFhlPropertyEntry.copy(income = Some(parsedForeignNonFhlPropertyIncomeMinimal), expenses = None)))
     )
 
-  private def validator(nino: String, businessId: String, taxYear: String, body: JsValue) =
-    new Def1_CreateForeignPropertyPeriodSummaryValidator(nino, businessId, taxYear, body, mockAppConfig)
+  private def validator(nino: String, businessId: String, taxYear: String, body: JsValue, maxTaxYear: TaxYear = maxTaxYear) =
+    new Def1_CreateForeignPropertyPeriodSummaryValidator(nino, businessId, taxYear, maxTaxYear, body, mockAppConfig)
 
   private def setupMocks(): Unit = MockedAppConfig.minimumTaxV2Foreign.returns(TaxYear.starting(2021)).anyNumberOfTimes()
 
@@ -327,6 +335,14 @@ class Def1_CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with
           validator(validNino, validBusinessId, "2021-23", validBody).validateAndWrapResult()
 
         result shouldBe Left(ErrorWrapper(correlationId, RuleTaxYearRangeInvalidError))
+      }
+
+      "passed tax year after max tax year" in {
+        setupMocks()
+        val result: Either[ErrorWrapper, CreateForeignPropertyPeriodSummaryRequestData] =
+          validator(validNino, validBusinessId, "2025-26", validBody).validateAndWrapResult()
+
+        result shouldBe Left(ErrorWrapper(correlationId, RuleTaxYearNotSupportedError))
       }
 
       "passed a body with an empty foreignFhlEea" in {
@@ -485,7 +501,7 @@ class Def1_CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with
         setupMocks()
         val countryCode1 = "AFG"
         val countryCode2 = "ZWE"
-        val invalidBody  = bodyWith(entryWith(countryCode1), entryWith(countryCode2), entryWith(countryCode1), entryWith(countryCode2))
+        val invalidBody = bodyWith(entryWith(countryCode1), entryWith(countryCode2), entryWith(countryCode1), entryWith(countryCode2))
 
         val result: Either[ErrorWrapper, CreateForeignPropertyPeriodSummaryRequestData] =
           validator(validNino, validBusinessId, validTaxYear, invalidBody).validateAndWrapResult()

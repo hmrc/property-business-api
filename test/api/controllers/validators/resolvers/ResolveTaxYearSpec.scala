@@ -18,6 +18,7 @@ package api.controllers.validators.resolvers
 
 import api.models.domain.TaxYear
 import api.models.errors._
+import cats.data.Validated
 import cats.data.Validated.{Invalid, Valid}
 import support.UnitSpec
 
@@ -69,6 +70,74 @@ class ResolveTaxYearSpec extends UnitSpec with ResolverSupport {
     "return RuleTaxYearNotSupportedError" when {
       "when the tax year is before the minimum tax year" in {
         resolver("2020-21") shouldBe Invalid(List(RuleTaxYearNotSupportedError))
+      }
+    }
+  }
+
+  "ResolveTaxYearMaximum" should {
+    val maximumTaxYear = TaxYear.fromMtd("2024-25")
+    val resolver = ResolveTaxYearMaximum(maximumTaxYear)
+
+    "return no errors" when {
+      "given the maximum allowed tax year" in {
+        val result: Validated[Seq[MtdError], TaxYear] = resolver("2024-25")
+        result shouldBe Valid(maximumTaxYear)
+      }
+
+      "given the maximum allowed tax year in an Option" in {
+        val result: Validated[Seq[MtdError], Option[TaxYear]] = resolver(Option("2024-25"))
+        result shouldBe Valid(Some(maximumTaxYear))
+      }
+
+      "given an empty Option" in {
+        val result: Validated[Seq[MtdError], Option[TaxYear]] = resolver(None)
+        result shouldBe Valid(None)
+      }
+    }
+
+    "return RuleTaxYearNotSupportedError" when {
+      "when the tax year is after the maximum tax year" in {
+        val result: Validated[Seq[MtdError], TaxYear] = resolver("2025-26")
+        result shouldBe Invalid(List(RuleTaxYearNotSupportedError))
+      }
+    }
+  }
+
+  "ResolveTaxYearMinMax" should {
+    val minimumTaxYear = TaxYear.fromMtd("2021-22")
+    val maximumTaxYear = TaxYear.fromMtd("2025-26")
+    val resolver = ResolveTaxYearMinMax(minimumTaxYear -> maximumTaxYear)
+
+    "return no errors" when {
+      "given the minimum allowed tax year" in {
+        val result: Validated[Seq[MtdError], TaxYear] = resolver("2021-22")
+        result shouldBe Valid(minimumTaxYear)
+      }
+
+      "given the maximum allowed tax year" in {
+        val result: Validated[Seq[MtdError], TaxYear] = resolver("2025-26")
+        result shouldBe Valid(maximumTaxYear)
+      }
+    }
+
+    "return RuleTaxYearNotSupportedError" when {
+      "given a tax year earlier than the minimum" in {
+        val result: Validated[Seq[MtdError], TaxYear] = resolver("2020-21")
+        result shouldBe Invalid(List(RuleTaxYearNotSupportedError))
+      }
+
+      "given a tax year later than the maximum" in {
+        val result: Validated[Seq[MtdError], TaxYear] = resolver("2026-27")
+        result shouldBe Invalid(List(RuleTaxYearNotSupportedError))
+      }
+    }
+
+    "return the expected error" when {
+      "given an invalid tax year and a non-default MtdError" in {
+        val resolver = ResolveTaxYearMinMax(minimumTaxYear -> maximumTaxYear, BadRequestError)
+
+        val result: Validated[Seq[MtdError], TaxYear] = resolver("2020-21")
+        result shouldBe Invalid(List(BadRequestError))
       }
     }
   }

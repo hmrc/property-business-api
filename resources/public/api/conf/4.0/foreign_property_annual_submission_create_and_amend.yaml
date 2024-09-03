@@ -5,6 +5,9 @@ description: |
   In the case of Non-FHL Foreign Property, if there are multiple properties per country, the adjustments and allowances should be the total across all properties.
   A National Insurance number, business ID and tax year must be provided.
 
+  Note: This endpoint only supports submissions up to tax year 2024-25. New endpoints which support cumulative submission
+  will be provided for tax year 2025-26 onwards.
+
   ### Test data
   Scenario simulation using Gov-Test-Scenario headers is only available in the sandbox environment.
   

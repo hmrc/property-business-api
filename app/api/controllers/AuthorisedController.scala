@@ -47,10 +47,10 @@ abstract class AuthorisedController(cc: ControllerComponents)(implicit ec: Execu
         .withDelegatedAuthRule("mtd-it-auth")
 
     def invokeBlockWithAuthCheck[A](mtdId: String, request: Request[A], block: UserRequest[A] => Future[Result])(implicit
-        headerCarrier: HeaderCarrier): Future[Result] = {
+                                                                                                                 headerCarrier: HeaderCarrier): Future[Result] = {
       authService.authorised(predicate(mtdId)).flatMap[Result] {
         case Right(userDetails)                => block(UserRequest(userDetails.copy(mtdId = mtdId), request))
-        case Left(ClientNotAuthenticatedError) => Future.successful(Forbidden(Json.toJson(ClientNotAuthenticatedError)))
+        case Left(ClientOrAgentNotAuthorisedError) => Future.successful(Forbidden(Json.toJson(ClientOrAgentNotAuthorisedError)))
         case Left(_)                           => Future.successful(InternalServerError(Json.toJson(InternalError)))
       }
     }

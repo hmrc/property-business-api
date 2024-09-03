@@ -18,6 +18,7 @@ package v4.retrieveForeignPropertyPeriodSummary.def1
 
 import api.controllers.validators.Validator
 import api.controllers.validators.resolvers.{ResolveBusinessId, ResolveNino, ResolveSubmissionId, ResolveTaxYear}
+import api.models.domain.TaxYear
 import api.models.errors.MtdError
 import cats.data.Validated
 import cats.implicits.catsSyntaxTuple4Semigroupal
@@ -27,6 +28,7 @@ import v4.retrieveForeignPropertyPeriodSummary.model.request._
 class Def1_RetrieveForeignPropertyPeriodSummaryValidator(nino: String,
                                                          businessId: String,
                                                          taxYear: String,
+                                                         maximumTaxYear: TaxYear,
                                                          submissionId: String,
                                                          appConfig: AppConfig)
     extends Validator[RetrieveForeignPropertyPeriodSummaryRequestData] {
@@ -37,7 +39,7 @@ class Def1_RetrieveForeignPropertyPeriodSummaryValidator(nino: String,
     (
       ResolveNino(nino),
       ResolveBusinessId(businessId),
-      ResolveTaxYear(minimumTaxYear, taxYear),
+      ResolveTaxYear(taxYear, minimumTaxYear, maximumTaxYear),
       ResolveSubmissionId(submissionId)
     ).mapN(Def1_RetrieveForeignPropertyPeriodSummaryRequestData)
 

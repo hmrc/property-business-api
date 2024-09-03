@@ -37,6 +37,8 @@ class Def2_CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with
   private val validToDate      = "2024-07-05"
   private val validCountryCode = "AFG"
 
+  private val maxTaxYear: TaxYear = TaxYear.fromMtd("2024-25")
+
   private def entryWith(countryCode: String) = Json.parse(s"""
        |{
        |         "countryCode": "$countryCode",
@@ -237,8 +239,8 @@ class Def2_CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with
         Some(List(parsedForeignNonFhlPropertyEntry.copy(income = Some(parsedForeignNonFhlPropertyIncomeMinimal), expenses = None)))
     )
 
-  private def validator(nino: String, businessId: String, taxYear: String, body: JsValue) =
-    new Def2_CreateForeignPropertyPeriodSummaryValidator(nino, businessId, taxYear, body)
+  private def validator(nino: String, businessId: String, taxYear: String, body: JsValue, maxTaxYear: TaxYear = maxTaxYear) =
+    new Def2_CreateForeignPropertyPeriodSummaryValidator(nino, businessId, taxYear, maxTaxYear, body)
 
   "validator" should {
     "return the parsed domain object" when {
@@ -298,6 +300,14 @@ class Def2_CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with
           validator(validNino, validBusinessId, "invalid", validBody).validateAndWrapResult()
 
         result shouldBe Left(ErrorWrapper(correlationId, TaxYearFormatError))
+      }
+
+      "passed tax year after max tax year" in {
+
+        val result: Either[ErrorWrapper, CreateForeignPropertyPeriodSummaryRequestData] =
+          validator(validNino, validBusinessId, "2025-26", validBody).validateAndWrapResult()
+
+        result shouldBe Left(ErrorWrapper(correlationId, RuleTaxYearNotSupportedError))
       }
 
       "passed a tax year with an invalid range" in {

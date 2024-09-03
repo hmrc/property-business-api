@@ -1,7 +1,9 @@
 get:
   summary: List Property Income and Expenses Period Summaries
   description: |
-    This endpoint allows the developer to list the period summaries associated with their UK or Foreign Properties. A National Insurance number, tax year and business ID are required.
+    This endpoint enables you to list the period summaries associated with UK or foreign Properties. A National Insurance number, tax year and business ID are required.
+
+    Note: This endpoint only supports submissions up to tax year 2024-25. New endpoints which support cumulative submission will be provided for tax year 2025-26 onwards.
 
     ### Test data
     Scenario simulation using Gov-Test-Scenario headers is only available in the sandbox environment.
@@ -19,7 +21,7 @@ get:
   parameters:
     - $ref: './common/pathParameters.yaml#/components/parameters/nino'
     - $ref: './common/pathParameters.yaml#/components/parameters/businessId'
-    - $ref: './common/pathParameters.yaml#/components/parameters/taxYear'
+    - $ref: './common/pathParameters.yaml#/components/parameters/taxYearTo2025'
     - $ref: './common/headers.yaml#/components/parameters/acceptHeader'
     - $ref: './common/headers.yaml#/components/parameters/authorizationReadScopeHeader'
     - $ref: './common/headers.yaml#/components/parameters/testScenarioHeader'

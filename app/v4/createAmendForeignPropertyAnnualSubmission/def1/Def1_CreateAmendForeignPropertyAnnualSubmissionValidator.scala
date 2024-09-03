@@ -18,6 +18,7 @@ package v4.createAmendForeignPropertyAnnualSubmission.def1
 
 import api.controllers.validators.Validator
 import api.controllers.validators.resolvers.{ResolveBusinessId, ResolveNino, ResolveNonEmptyJsonObject, ResolveTaxYear}
+import api.models.domain.TaxYear
 import api.models.errors.MtdError
 import cats.data.Validated
 import cats.implicits._
@@ -33,6 +34,7 @@ class Def1_CreateAmendForeignPropertyAnnualSubmissionValidator @Inject() (nino: 
     extends Validator[CreateAmendForeignPropertyAnnualSubmissionRequestData] {
 
   private lazy val minimumTaxYear = appConfig.minimumTaxV2Foreign
+  private lazy val maximumTaxYear = TaxYear.fromMtd("2024-25")
 
   private val resolveJson    = new ResolveNonEmptyJsonObject[Def1_CreateAmendForeignPropertyAnnualSubmissionRequestBody]
   private val rulesValidator = new Def1_CreateAmendForeignPropertyAnnualSubmissionRulesValidator()
@@ -41,7 +43,7 @@ class Def1_CreateAmendForeignPropertyAnnualSubmissionValidator @Inject() (nino: 
     (
       ResolveNino(nino),
       ResolveBusinessId(businessId),
-      ResolveTaxYear(minimumTaxYear, taxYear),
+      ResolveTaxYear(taxYear, minimumTaxYear, maximumTaxYear),
       resolveJson(body)
     ).mapN(Def1_CreateAmendForeignPropertyAnnualSubmissionRequestData) andThen rulesValidator.validateBusinessRules
 

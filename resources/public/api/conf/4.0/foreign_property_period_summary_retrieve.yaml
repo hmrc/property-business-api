@@ -2,6 +2,9 @@ summary: Retrieve a Foreign Property Income & Expenses Period Summary
 description: |
   This endpoint allows a developer to retrieve the income and expenses for a Foreign Property business, using the submission ID for either or both of Furnished Holiday Lettings (FHL) in the European Economic Area (EEA) and all other Foreign Property submissions. A National Insurance number, business ID, and tax year are required.
 
+  Note: This endpoint only supports submissions up to tax year 2024-25. New endpoints which support cumulative submission
+  will be provided for tax year 2025-26 onwards.
+  
   ### Test data
   Scenario simulation using Gov-Test-Scenario headers is only available in the sandbox environment.
   
@@ -23,7 +26,7 @@ tags:
 parameters:
   - $ref: './common/pathParameters.yaml#/components/parameters/nino'
   - $ref: './common/pathParameters.yaml#/components/parameters/businessId'
-  - $ref: './common/pathParameters.yaml#/components/parameters/taxYear'
+  - $ref: './common/pathParameters.yaml#/components/parameters/taxYearTo2025'
   - $ref: './common/pathParameters.yaml#/components/parameters/submissionId'
   - $ref: './common/headers.yaml#/components/parameters/acceptHeader'
   - $ref: './common/headers.yaml#/components/parameters/authorizationReadScopeHeader'

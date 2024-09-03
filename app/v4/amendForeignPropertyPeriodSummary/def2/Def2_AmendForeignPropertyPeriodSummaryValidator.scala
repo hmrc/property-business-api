@@ -18,20 +18,18 @@ package v4.amendForeignPropertyPeriodSummary.def2
 
 import api.controllers.validators.Validator
 import api.controllers.validators.resolvers._
+import api.models.domain.TaxYear
 import api.models.errors.MtdError
 import cats.data.Validated
 import cats.implicits._
 import config.AppConfig
 import play.api.libs.json.JsValue
-import v4.amendForeignPropertyPeriodSummary.model.request.{
-  AmendForeignPropertyPeriodSummaryRequestData,
-  Def2_AmendForeignPropertyPeriodSummaryRequestBody,
-  Def2_AmendForeignPropertyPeriodSummaryRequestData
-}
+import v4.amendForeignPropertyPeriodSummary.model.request.{AmendForeignPropertyPeriodSummaryRequestData, Def2_AmendForeignPropertyPeriodSummaryRequestBody, Def2_AmendForeignPropertyPeriodSummaryRequestData}
 
 class Def2_AmendForeignPropertyPeriodSummaryValidator(nino: String,
                                                       businessId: String,
                                                       taxYear: String,
+                                                      maxTaxYear: TaxYear,
                                                       submissionId: String,
                                                       body: JsValue,
                                                       appConfig: AppConfig)
@@ -46,7 +44,7 @@ class Def2_AmendForeignPropertyPeriodSummaryValidator(nino: String,
     (
       ResolveNino(nino),
       ResolveBusinessId(businessId),
-      ResolveTaxYear(minTaxYear, taxYear),
+      ResolveTaxYear(taxYear, minTaxYear, maxTaxYear),
       ResolveSubmissionId(submissionId),
       resolveJson(body)
     ).mapN(Def2_AmendForeignPropertyPeriodSummaryRequestData) andThen rulesValidator.validateBusinessRules

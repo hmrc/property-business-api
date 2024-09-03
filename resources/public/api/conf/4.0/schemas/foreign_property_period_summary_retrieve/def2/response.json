@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-04/schema#",
-  "title": "For TY 2024-25 and after",
+  "title": "For TY 2024-25",
   "description": "Retrieve a Foreign Property Income & Expenditure Period Summary",
   "type": "object",
   "properties": {

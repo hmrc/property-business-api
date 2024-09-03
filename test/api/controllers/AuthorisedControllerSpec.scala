@@ -16,7 +16,7 @@
 
 package api.controllers
 
-import api.models.errors.{ClientNotAuthenticatedError, InternalError, InvalidBearerTokenError, _}
+import api.models.errors.{ClientOrAgentNotAuthorisedError, InternalError, InvalidBearerTokenError, _}
 import api.services.{EnrolmentsAuthService, MockEnrolmentsAuthService, MockMtdIdLookupService, MtdIdLookupService}
 import play.api.libs.json.Json
 import play.api.mvc.{Action, AnyContent}
@@ -115,7 +115,7 @@ class AuthorisedControllerSpec extends ControllerBaseSpec {
 
       MockMtdIdLookupService
         .lookup(nino)
-        .returns(Future.successful(Left(ClientNotAuthorisedError)))
+        .returns(Future.successful(Left(ClientOrAgentNotAuthorisedError)))
 
       private val result = target.action(nino)(fakeGetRequest)
       status(result) shouldBe FORBIDDEN
@@ -143,7 +143,7 @@ class AuthorisedControllerSpec extends ControllerBaseSpec {
 
       MockedEnrolmentsAuthService
         .authorised(predicate)
-        .returns(Future.successful(Left(ClientNotAuthenticatedError)))
+        .returns(Future.successful(Left(ClientOrAgentNotAuthorisedError)))
 
       private val result = target.action(nino)(fakeGetRequest)
       status(result) shouldBe FORBIDDEN
@@ -159,7 +159,7 @@ class AuthorisedControllerSpec extends ControllerBaseSpec {
 
       MockedEnrolmentsAuthService
         .authorised(predicate)
-        .returns(Future.successful(Left(ClientNotAuthenticatedError)))
+        .returns(Future.successful(Left(ClientOrAgentNotAuthorisedError)))
 
       private val result = target.action(nino)(fakeGetRequest)
       status(result) shouldBe FORBIDDEN

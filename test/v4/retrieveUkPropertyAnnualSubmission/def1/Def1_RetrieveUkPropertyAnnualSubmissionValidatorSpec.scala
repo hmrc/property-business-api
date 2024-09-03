@@ -62,6 +62,17 @@ class Def1_RetrieveUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec with
           Def1_RetrieveUkPropertyAnnualSubmissionRequestData(parsedNino, parsedBusinessId, TaxYear.fromMtd(taxYearString))
         )
       }
+
+      "given the maximum supported taxYear" in {
+        setupMocks()
+        val taxYearString = "2024-25"
+
+        val result = validator(validNino, validBusinessId, taxYearString).validateAndWrapResult()
+
+        result shouldBe Right(
+          Def1_RetrieveUkPropertyAnnualSubmissionRequestData(parsedNino, parsedBusinessId, TaxYear.fromMtd(taxYearString))
+        )
+      }
     }
 
     "return a single validation error" when {
@@ -96,6 +107,13 @@ class Def1_RetrieveUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec with
         setupMocks()
 
         val result = validator(validNino, validBusinessId, "2021-22").validateAndWrapResult()
+        result shouldBe Left(ErrorWrapper(correlationId, RuleTaxYearNotSupportedError))
+      }
+
+      "given a taxYear immediately after the maximum supported" in {
+        setupMocks()
+
+        val result = validator(validNino, validBusinessId, "2025-26").validateAndWrapResult()
         result shouldBe Left(ErrorWrapper(correlationId, RuleTaxYearNotSupportedError))
       }
 

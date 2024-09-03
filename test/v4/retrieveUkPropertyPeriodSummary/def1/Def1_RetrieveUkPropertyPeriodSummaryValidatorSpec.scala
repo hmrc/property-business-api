@@ -63,6 +63,14 @@ class Def1_RetrieveUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with Mo
 
         result shouldBe Right(Def1_RetrieveUkPropertyPeriodSummaryRequestData(parsedNino, parsedBusinessId, parsedTaxYear, parsedSubmissionId))
       }
+
+      "passed the maximum supported taxYear" in {
+        setupMocks()
+        val result: Either[ErrorWrapper, RetrieveUkPropertyPeriodSummaryRequestData] =
+          validator(validNino, validBusinessId, "2023-24", validSubmissionId).validateAndWrapResult()
+
+        result shouldBe Right(Def1_RetrieveUkPropertyPeriodSummaryRequestData(parsedNino, parsedBusinessId, TaxYear.fromMtd("2023-24"), parsedSubmissionId))
+      }
     }
 
     "return a single error" when {
@@ -93,6 +101,12 @@ class Def1_RetrieveUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with Mo
       "passed a taxYear immediately before the minimum supported" in {
         setupMocks()
         validator(validNino, validBusinessId, "2021-22", validSubmissionId).validateAndWrapResult() shouldBe
+          Left(ErrorWrapper(correlationId, RuleTaxYearNotSupportedError))
+      }
+
+      "passed a taxYear immediately after the maximum supported" in {
+        setupMocks()
+        validator(validNino, validBusinessId, "2025-26", validSubmissionId).validateAndWrapResult() shouldBe
           Left(ErrorWrapper(correlationId, RuleTaxYearNotSupportedError))
       }
 

@@ -1,10 +1,12 @@
 summary: Create and Amend a Foreign Property Annual Submission
 description: |
-  This endpoint allows a developer to re-submit adjustments and allowances for a foreign property business.
-  This submission is for either or both of Furnished Holiday Letting (FHL) in the European Economic Area (EEA) and Non FHL Foreign Property submissions.
-  In the case of Non-FHL Foreign Property, if there are multiple properties per country, the adjustments and allowances should be the total across all properties.
+  This endpoint enables you to re-submit adjustments and allowances for a foreign property business. 
+  This submission is for either or both of Furnished Holiday Letting (FHL) in the European Economic Area (EEA) and Non-FHL Foreign Property submissions. 
   A National Insurance number, business ID and tax year must be provided.
-
+  
+  Note: For tax years before 2025-26, data can be submitted for either a Foreign FHL-EEA or Non-FHL property. 
+  From tax year 2025-26 onwards, the Foreign FHL-EEA and Non-FHL property types are no longer valid and you must use the Foreign property type.
+  
   ### Test data
   Scenario simulation using Gov-Test-Scenario headers is only available in the sandbox environment.
   
@@ -40,15 +42,24 @@ requestBody:
       schema:
         oneOf:
           - $ref: './schemas/foreign_property_annual_submission_create_and_amend/def1/request.json'
+          - $ref: './schemas/foreign_property_annual_submission_create_and_amend/def2/request.json'
       examples:
-        all-other-allowances-request:
-          description: All Other Allowances request
+        all-other-allowances-request-TY-2024-25:
+          description: All Other Allowances request for TY 2024-25 and before
           value:
             $ref: './examples/foreign_property_annual_submission_create_and_amend/def1/all_other_allowances_request.json'
-        property-allowance-request:
-          description: Property Allowance request
+        property-allowance-request-TY-2024-25:
+          description: Property Allowance request for TY 2024-25 and before
           value:
             $ref: './examples/foreign_property_annual_submission_create_and_amend/def1/property_allowance_request.json'
+        all-other-allowances-request-TY-2025-26:
+          description: All Other Allowances request for TY 2025-26 and after
+          value:
+            $ref: './examples/foreign_property_annual_submission_create_and_amend/def2/all_other_allowances_request.json'
+        property-allowance-request-TY-2025-26:
+          description: Property Allowance request for TY 2025-26 and after
+          value:
+            $ref: './examples/foreign_property_annual_submission_create_and_amend/def2/property_allowance_request.json'
 
 responses:
   "200":

@@ -269,6 +269,14 @@ class Def2_AmendUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with JsonE
         result shouldBe Left(ErrorWrapper(correlationId, RuleTaxYearRangeInvalidError))
       }
 
+      "passed a tax year immediately after the maximum supported" in {
+
+        val result: Either[ErrorWrapper, AmendUkPropertyPeriodSummaryRequestData] =
+          validator(validNino, validBusinessId, "2025-26", validSubmissionId, validBody).validateAndWrapResult()
+
+        result shouldBe Left(ErrorWrapper(correlationId, RuleTaxYearNotSupportedError))
+      }
+
       "passed an invalid business id" in {
 
         val result: Either[ErrorWrapper, AmendUkPropertyPeriodSummaryRequestData] =

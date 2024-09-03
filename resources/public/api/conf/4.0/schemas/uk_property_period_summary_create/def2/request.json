@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-04/schema#",
-  "title": "For TY 2024-25 and after",
+  "title": "For TY 2024-25",
   "description": "This endpoint allows the developer to submit the income and expenses for a foreign property business that occurred between two dates. This submission is for either or both of Furnished Holiday Lettings (FHL) in the European Economic Area (EEA) and all other foreign Property submissions. A National Insurance number and business ID are required.",
   "type": "object",
   "properties": {

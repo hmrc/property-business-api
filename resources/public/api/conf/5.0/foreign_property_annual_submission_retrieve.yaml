@@ -1,7 +1,10 @@
 summary: Retrieve a Foreign Property Annual Submission
 description: |
-  This endpoint allows a developer to retrieve adjustments and allowances for a foreign property business. For either or both of Furnished Holiday Letting (FHL) in the European Economic Area (EEA) and Non FHL Foreign property submissions. A National Insurance number, business ID and tax year are required.
+  This endpoint enables you to retrieve adjustments and allowances for a foreign property business, for either or both of Furnished Holiday Letting (FHL) in the European Economic Area (EEA) and Non-FHL Foreign property submissions. 
+  A National Insurance number, business ID and tax year are required.
 
+  Note: For tax years before 2025-26, data can be submitted for either a Foreign FHL-EEA or Non-FHL property. From tax year 2025-26 onwards, the Foreign FHL-EEA and Non-FHL property types are no longer valid and you must use the Foreign property type.
+  
   ### Test data
   Scenario simulation using Gov-Test-Scenario headers is only available in the sandbox environment.
   

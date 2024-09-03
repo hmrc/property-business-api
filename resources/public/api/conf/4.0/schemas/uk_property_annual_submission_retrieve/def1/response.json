@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-04/schema#",
-  "title": "Given any tax year",
+  "title": "Given any pre 2025-26 tax year",
   "type": "object",
   "description": "This endpoint allows a developer to retrieve adjustments and allowances for a UK property business. For either or both of Furnished Holiday Letting (FHL) or other UK property submissions. A National Insurance number, business ID and tax year are required.",
   "properties": {

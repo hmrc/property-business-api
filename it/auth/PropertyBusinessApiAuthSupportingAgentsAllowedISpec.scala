@@ -16,8 +16,9 @@
 
 package auth
 
+import api.models.errors.NinoFormatError
 import api.services.DownstreamStub
-import play.api.http.Status.NO_CONTENT
+import play.api.http.Status.BAD_REQUEST
 import play.api.libs.json.{JsValue, Json}
 import play.api.libs.ws.{WSRequest, WSResponse}
 
@@ -25,69 +26,22 @@ class PropertyBusinessApiAuthSupportingAgentsAllowedISpec extends AuthSupporting
 
   val callingApiVersion = "5.0"
 
-  val supportingAgentsAllowedEndpoint = "create-amend-foreign-property-annual-submission"
+  val supportingAgentsAllowedEndpoint = "retrieve-uk-property-annual-submission"
 
-  val businessId: String = "XAIS12345678910"
+  val mtdUrl = s"/uk/AA123/XAIS12345678910/annual/2022-23"
 
-  val mtdUrl = s"/foreign/$nino/$businessId/annual/2022-23"
-
-  def sendMtdRequest(request: WSRequest): WSResponse = await(request.put(requestBodyJson))
+  def sendMtdRequest(request: WSRequest): WSResponse = await(request.get())
 
   val downstreamUri = s"/income-tax/business/property/annual"
 
-  override val downstreamHttpMethod: DownstreamStub.HTTPMethod = DownstreamStub.PUT
+  override val downstreamHttpMethod: DownstreamStub.HTTPMethod = DownstreamStub.GET
 
-  override val downstreamSuccessStatus: Int = NO_CONTENT
+  override val downstreamSuccessStatus: Int  = BAD_REQUEST
 
-  val maybeDownstreamResponseJson: Option[JsValue] = None
+  override val expectedMtdSuccessStatus: Int = BAD_REQUEST
 
-  val requestBodyJson: JsValue = Json.parse("""
-                                              |{
-                                              |   "foreignFhlEea":{
-                                              |      "adjustments":{
-                                              |         "privateUseAdjustment":1.25,
-                                              |         "balancingCharge":2.25,
-                                              |         "periodOfGraceAdjustment":true
-                                              |      },
-                                              |      "allowances":{
-                                              |         "annualInvestmentAllowance":1.25,
-                                              |         "otherCapitalAllowance":2.25,
-                                              |         "electricChargePointAllowance":3.25,
-                                              |         "zeroEmissionsCarAllowance":4.25
-                                              |      }
-                                              |   },
-                                              |   "foreignNonFhlProperty":[
-                                              |      {
-                                              |         "countryCode":"IND",
-                                              |         "adjustments":{
-                                              |            "privateUseAdjustment":1.25,
-                                              |            "balancingCharge":2.25
-                                              |         },
-                                              |         "allowances":{
-                                              |            "annualInvestmentAllowance":1.25,
-                                              |            "costOfReplacingDomesticItems":2.25,
-                                              |            "zeroEmissionsGoodsVehicleAllowance":3.25,
-                                              |            "otherCapitalAllowance":4.25,
-                                              |            "electricChargePointAllowance":5.25,
-                                              |            "zeroEmissionsCarAllowance":6.25,
-                                              |            "structuredBuildingAllowance":[
-                                              |               {
-                                              |                  "amount":3000.3,
-                                              |                  "firstYear":{
-                                              |                     "qualifyingDate":"2020-01-01",
-                                              |                     "qualifyingAmountExpenditure":3000.4
-                                              |                  },
-                                              |                  "building":{
-                                              |                     "name":"house name",
-                                              |                     "number":"house number",
-                                              |                     "postcode":"GF49JH"
-                                              |                  }
-                                              |               }
-                                              |            ]
-                                              |         }
-                                              |      }
-                                              |   ]
-                                              |}
-                                              |""".stripMargin)
+  val maybeDownstreamResponseJson: Option[JsValue] = Some(
+    Json.toJson(NinoFormatError)
+  )
 
 }

@@ -19,8 +19,7 @@ package v5.createAmendUkPropertyAnnualSubmission.def2.model.request
 import play.api.libs.functional.syntax._
 import play.api.libs.json.{JsPath, Json, Reads, Writes}
 
-case class UkProperty(adjustments: Option[Adjustments],
-                      allowances: Option[Allowances])
+case class UkProperty(adjustments: Option[Adjustments], allowances: Option[Allowances])
 
 object UkProperty {
   implicit val reads: Reads[UkProperty] = Json.reads[UkProperty]

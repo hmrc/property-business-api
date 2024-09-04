@@ -21,7 +21,10 @@ import api.models.domain.{BusinessId, Nino, TaxYear}
 import api.models.errors.{DownstreamErrorCode, DownstreamErrors}
 import api.models.outcomes.ResponseWrapper
 import org.scalamock.handlers.CallHandler
-import v5.createAmendUkPropertyAnnualSubmission.def1.model.request.{Def1_CreateAmendUkPropertyAnnualSubmissionRequestBody, Def1_CreateAmendUkPropertyAnnualSubmissionRequestData}
+import v5.createAmendUkPropertyAnnualSubmission.def1.model.request.{
+  Def1_CreateAmendUkPropertyAnnualSubmissionRequestBody,
+  Def1_CreateAmendUkPropertyAnnualSubmissionRequestData
+}
 import v5.createAmendUkPropertyAnnualSubmission.model.request._
 
 import scala.concurrent.Future

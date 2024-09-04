@@ -22,7 +22,12 @@ import api.models.errors._
 import cats.data.Validated
 import cats.data.Validated.Invalid
 import cats.implicits.toTraverseOps
-import v5.createAmendUkPropertyAnnualSubmission.def2.model.request.{Allowances, Def2_CreateAmendUkPropertyAnnualSubmissionRequestData, StructuredBuildingAllowance, UkProperty}
+import v5.createAmendUkPropertyAnnualSubmission.def2.model.request.{
+  Allowances,
+  Def2_CreateAmendUkPropertyAnnualSubmissionRequestData,
+  StructuredBuildingAllowance,
+  UkProperty
+}
 
 class Def2_CreateAmendUkPropertyAnnualSubmissionRulesValidator extends RulesValidator[Def2_CreateAmendUkPropertyAnnualSubmissionRequestData] {
 

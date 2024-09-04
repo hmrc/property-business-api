@@ -18,7 +18,7 @@ package v4.retrieveUkPropertyPeriodSummary.def1
 
 import api.models.domain.{BusinessId, Nino, SubmissionId, TaxYear}
 import api.models.errors._
-import mocks.MockAppConfig
+import config.MockAppConfig
 import support.UnitSpec
 import v4.retrieveUkPropertyPeriodSummary.RetrieveUkPropertyPeriodSummaryValidatorFactory
 import v4.retrieveUkPropertyPeriodSummary.model.request.{Def1_RetrieveUkPropertyPeriodSummaryRequestData, RetrieveUkPropertyPeriodSummaryRequestData}
@@ -69,7 +69,8 @@ class Def1_RetrieveUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with Mo
         val result: Either[ErrorWrapper, RetrieveUkPropertyPeriodSummaryRequestData] =
           validator(validNino, validBusinessId, "2023-24", validSubmissionId).validateAndWrapResult()
 
-        result shouldBe Right(Def1_RetrieveUkPropertyPeriodSummaryRequestData(parsedNino, parsedBusinessId, TaxYear.fromMtd("2023-24"), parsedSubmissionId))
+        result shouldBe Right(
+          Def1_RetrieveUkPropertyPeriodSummaryRequestData(parsedNino, parsedBusinessId, TaxYear.fromMtd("2023-24"), parsedSubmissionId))
       }
     }
 

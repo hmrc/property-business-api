@@ -30,7 +30,7 @@ case class Def2_Create_UkNonFhlPropertyExpenses(premisesRunningCosts: Option[Big
                                                 travelCosts: Option[BigDecimal],
                                                 residentialFinancialCostsCarriedForward: Option[BigDecimal],
                                                 rentARoom: Option[Def2_Create_UkPropertyExpensesRentARoom],
-                                                consolidatedExpenses: Option[BigDecimal]){
+                                                consolidatedExpenses: Option[BigDecimal]) {
 
   def toSubmissionModel: Def2_Create_UkNonFhlPropertyExpensesSubmission = {
     Def2_Create_UkNonFhlPropertyExpensesSubmission(
@@ -49,6 +49,7 @@ case class Def2_Create_UkNonFhlPropertyExpenses(premisesRunningCosts: Option[Big
       consolidatedExpenses = consolidatedExpenses
     )
   }
+
 }
 
 object Def2_Create_UkNonFhlPropertyExpenses {
@@ -66,24 +67,23 @@ object Def2_Create_UkNonFhlPropertyExpenses {
       (JsPath \ "residentialFinancialCostsCarriedForward").writeNullable[BigDecimal] and
       (JsPath \ "ukOtherRentARoom").writeNullable[Def2_Create_UkPropertyExpensesRentARoom] and
       (JsPath \ "consolidatedExpenses").writeNullable[BigDecimal]
-    ) (unlift(Def2_Create_UkNonFhlPropertyExpenses.unapply))
+  )(unlift(Def2_Create_UkNonFhlPropertyExpenses.unapply))
 
 }
 
-case class Def2_Create_UkNonFhlPropertyExpensesSubmission(
-                                                           premisesRunningCosts: Option[BigDecimal],
-                                                           repairsAndMaintenance: Option[BigDecimal],
-                                                           financialCosts: Option[BigDecimal],
-                                                           professionalFees: Option[BigDecimal],
-                                                           costOfServices: Option[BigDecimal],
-                                                           other: Option[BigDecimal],
-                                                           residentialFinancialCost: Option[BigDecimal],
-                                                           residentialFinancialCostAmount: Option[BigDecimal],
-                                                           travelCosts: Option[BigDecimal],
-                                                           residentialFinancialCostsCarriedForward: Option[BigDecimal],
-                                                           broughtFwdResidentialFinancialCostAmount: Option[BigDecimal],
-                                                           rentARoom: Option[Def2_Create_UkPropertyExpensesRentARoom],
-                                                           consolidatedExpenses: Option[BigDecimal])
+case class Def2_Create_UkNonFhlPropertyExpensesSubmission(premisesRunningCosts: Option[BigDecimal],
+                                                          repairsAndMaintenance: Option[BigDecimal],
+                                                          financialCosts: Option[BigDecimal],
+                                                          professionalFees: Option[BigDecimal],
+                                                          costOfServices: Option[BigDecimal],
+                                                          other: Option[BigDecimal],
+                                                          residentialFinancialCost: Option[BigDecimal],
+                                                          residentialFinancialCostAmount: Option[BigDecimal],
+                                                          travelCosts: Option[BigDecimal],
+                                                          residentialFinancialCostsCarriedForward: Option[BigDecimal],
+                                                          broughtFwdResidentialFinancialCostAmount: Option[BigDecimal],
+                                                          rentARoom: Option[Def2_Create_UkPropertyExpensesRentARoom],
+                                                          consolidatedExpenses: Option[BigDecimal])
 
 object Def2_Create_UkNonFhlPropertyExpensesSubmission {
 
@@ -103,5 +103,6 @@ object Def2_Create_UkNonFhlPropertyExpensesSubmission {
       (JsPath \ "broughtFwdResidentialFinancialCostAmount").writeNullable[BigDecimal] and
       (JsPath \ "ukOtherRentARoom").writeNullable[Def2_Create_UkPropertyExpensesRentARoom] and
       (JsPath \ "consolidatedExpenses").writeNullable[BigDecimal]
-    ) (unlift(Def2_Create_UkNonFhlPropertyExpensesSubmission.unapply))
+  )(unlift(Def2_Create_UkNonFhlPropertyExpensesSubmission.unapply))
+
 }

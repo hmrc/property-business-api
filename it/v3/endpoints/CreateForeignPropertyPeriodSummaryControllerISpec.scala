@@ -25,7 +25,7 @@ import play.api.libs.json._
 import play.api.libs.ws.{WSRequest, WSResponse}
 import play.api.test.Helpers.AUTHORIZATION
 import support.IntegrationBaseSpec
-import v3.stubs.{AuditStub, AuthStub, DownstreamStub, MtdIdLookupStub}
+import api.services._
 
 class CreateForeignPropertyPeriodSummaryControllerISpec extends IntegrationBaseSpec with JsonErrorValidators {
 

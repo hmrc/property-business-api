@@ -16,7 +16,7 @@
 
 package v4.propertyPeriodSummary.list.model.response
 
-import mocks.MockAppConfig
+import config.MockAppConfig
 import play.api.libs.json.Json
 import support.UnitSpec
 import v4.propertyPeriodSummary.list.def1.model.response.SubmissionPeriod

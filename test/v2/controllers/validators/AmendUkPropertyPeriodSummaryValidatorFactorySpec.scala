@@ -19,7 +19,7 @@ package v2.controllers.validators
 import api.models.domain.{BusinessId, Nino, SubmissionId, TaxYear}
 import api.models.errors._
 import api.models.utils.JsonErrorValidators
-import mocks.MockAppConfig
+import config.MockAppConfig
 import play.api.libs.json.{JsNumber, JsObject, JsValue, Json}
 import support.UnitSpec
 import v2.models.request.amendUkPropertyPeriodSummary.{AmendUkPropertyPeriodSummaryRequestBody, AmendUkPropertyPeriodSummaryRequestData}
@@ -158,7 +158,7 @@ class AmendUkPropertyPeriodSummaryValidatorFactorySpec extends UnitSpec with Moc
   )
 
   private val parsedNonFhlExpensesConsolidated = UkNonFhlPropertyExpenses(
-    None, None, None, None, None,None,None,None, None, None,Some(988.18) 
+    None, None, None, None, None,None,None,None, None, None,Some(988.18)
   )
   // @formatter:on
 

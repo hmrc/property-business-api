@@ -39,6 +39,7 @@ class Def2_Amend_UkNonFhlPropertyExpensesSpec extends UnitSpec {
         )),
       None
     )
+
   private val requestBodySubmission =
     Def2_Amend_UkNonFhlPropertyExpensesSubmission(
       Some(41.12),
@@ -58,6 +59,7 @@ class Def2_Amend_UkNonFhlPropertyExpensesSpec extends UnitSpec {
         )),
       None
     )
+
   private val requestBodySubmissionConsolidated =
     Def2_Amend_UkNonFhlPropertyExpensesSubmission(
       None,
@@ -78,8 +80,7 @@ class Def2_Amend_UkNonFhlPropertyExpensesSpec extends UnitSpec {
       Some(100.00)
     )
 
-  private val mtdJson = Json.parse(
-    """
+  private val mtdJson = Json.parse("""
       |{
       |    "premisesRunningCosts": 41.12,
       |    "repairsAndMaintenance": 84.31,
@@ -96,8 +97,7 @@ class Def2_Amend_UkNonFhlPropertyExpensesSpec extends UnitSpec {
       |}
       |""".stripMargin)
 
-  private val downstreamJson = Json.parse(
-    """
+  private val downstreamJson = Json.parse("""
       |{
       |    "premisesRunningCosts": 41.12,
       |    "repairsAndMaintenance": 84.31,
@@ -113,8 +113,8 @@ class Def2_Amend_UkNonFhlPropertyExpensesSpec extends UnitSpec {
       |    }
       |}
       |""".stripMargin)
-  private val mtdJsonSubmission = Json.parse(
-    """
+
+  private val mtdJsonSubmission = Json.parse("""
       |{
       |    "premisesRunningCosts": 41.12,
       |    "repairsAndMaintenance": 84.31,
@@ -132,8 +132,8 @@ class Def2_Amend_UkNonFhlPropertyExpensesSpec extends UnitSpec {
       |    }
       |}
       |""".stripMargin)
-  private val mtdJsonSubmissionConsolidated = Json.parse(
-    """
+
+  private val mtdJsonSubmissionConsolidated = Json.parse("""
       |{
       |    "residentialFinancialCostAmount": 9884.93,
       |    "broughtFwdResidentialFinancialCostAmount": 31.44,
@@ -144,8 +144,7 @@ class Def2_Amend_UkNonFhlPropertyExpensesSpec extends UnitSpec {
       |}
       |""".stripMargin)
 
-  private val downstreamJsonSubmission = Json.parse(
-    """
+  private val downstreamJsonSubmission = Json.parse("""
       |{
       |    "premisesRunningCosts": 41.12,
       |    "repairsAndMaintenance": 84.31,

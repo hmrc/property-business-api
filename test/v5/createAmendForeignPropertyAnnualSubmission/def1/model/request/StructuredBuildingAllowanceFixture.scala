@@ -17,7 +17,11 @@
 package v5.createAmendForeignPropertyAnnualSubmission.def1.model.request
 
 import play.api.libs.json.{JsValue, Json}
-import v5.createAmendForeignPropertyAnnualSubmission.def1.model.request.def1_foreignNonFhl.{Def1_Create_Amend_Building, Def1_Create_Amend_FirstYear, Def1_Create_Amend_StructuredBuildingAllowance}
+import v5.createAmendForeignPropertyAnnualSubmission.def1.model.request.def1_foreignNonFhl.{
+  Def1_Create_Amend_Building,
+  Def1_Create_Amend_FirstYear,
+  Def1_Create_Amend_StructuredBuildingAllowance
+}
 
 trait StructuredBuildingAllowanceFixture {
 

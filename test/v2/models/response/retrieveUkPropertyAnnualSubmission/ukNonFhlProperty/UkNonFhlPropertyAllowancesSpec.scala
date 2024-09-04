@@ -62,8 +62,7 @@ class UkNonFhlPropertyAllowancesSpec extends UnitSpec {
       |}
       |""".stripMargin)
 
-  val tysDownstreamJson: JsValue = Json.parse(
-    """
+  val tysDownstreamJson: JsValue = Json.parse("""
       |{
       |   "annualInvestmentAllowance":678.45,
       |   "zeroEmissionGoodsVehicleAllowance":456.34,

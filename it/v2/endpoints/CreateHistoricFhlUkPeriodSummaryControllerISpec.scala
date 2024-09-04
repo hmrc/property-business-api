@@ -25,8 +25,7 @@ import play.api.libs.json.{JsObject, JsString, JsValue, Json}
 import play.api.libs.ws.{WSRequest, WSResponse}
 import play.api.test.Helpers.AUTHORIZATION
 import support.IntegrationBaseSpec
-import v2.stubs.AuditStub
-import v2.stubs.{AuthStub, DownstreamStub, MtdIdLookupStub}
+import api.services.{AuditStub, AuthStub, DownstreamStub, MtdIdLookupStub}
 
 class CreateHistoricFhlUkPeriodSummaryControllerISpec extends IntegrationBaseSpec with JsonErrorValidators {
 

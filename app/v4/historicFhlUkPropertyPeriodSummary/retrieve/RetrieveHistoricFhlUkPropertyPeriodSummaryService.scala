@@ -27,11 +27,12 @@ import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class RetrieveHistoricFhlUkPropertyPeriodSummaryService @Inject()(connector: RetrieveHistoricFhlUkPropertyPeriodSummaryConnector) extends BaseService {
+class RetrieveHistoricFhlUkPropertyPeriodSummaryService @Inject() (connector: RetrieveHistoricFhlUkPropertyPeriodSummaryConnector)
+    extends BaseService {
 
   def retrieve(request: RetrieveHistoricFhlUkPropertyPeriodSummaryRequestData)(implicit
-                                                                               ctx: RequestContext,
-                                                                               ec: ExecutionContext
+      ctx: RequestContext,
+      ec: ExecutionContext
   ): Future[ServiceOutcome[RetrieveHistoricFhlUkPropertyPeriodSummaryResponse]] = {
 
     connector.retrieve(request).map(_.leftMap(mapDownstreamErrors(downstreamErrorMap)))
@@ -39,13 +40,13 @@ class RetrieveHistoricFhlUkPropertyPeriodSummaryService @Inject()(connector: Ret
 
   private val downstreamErrorMap: Map[String, MtdError] =
     Map(
-      "INVALID_NINO" -> NinoFormatError,
-      "INVALID_TYPE" -> InternalError,
-      "INVALID_DATE_FROM" -> PeriodIdFormatError,
-      "INVALID_DATE_TO" -> PeriodIdFormatError,
-      "NOT_FOUND_PROPERTY" -> NotFoundError,
-      "NOT_FOUND_PERIOD" -> NotFoundError,
-      "SERVER_ERROR" -> InternalError,
+      "INVALID_NINO"        -> NinoFormatError,
+      "INVALID_TYPE"        -> InternalError,
+      "INVALID_DATE_FROM"   -> PeriodIdFormatError,
+      "INVALID_DATE_TO"     -> PeriodIdFormatError,
+      "NOT_FOUND_PROPERTY"  -> NotFoundError,
+      "NOT_FOUND_PERIOD"    -> NotFoundError,
+      "SERVER_ERROR"        -> InternalError,
       "SERVICE_UNAVAILABLE" -> InternalError
     )
 

@@ -21,7 +21,8 @@ import api.hateoas.{HateoasWrapper, MockHateoasFactory}
 import api.models.domain.{BusinessId, Nino, TaxYear}
 import api.models.errors._
 import api.models.outcomes.ResponseWrapper
-import mocks.MockAppConfig
+import config.MockAppConfig
+import play.api.Configuration
 import play.api.libs.json.Json
 import play.api.mvc.Result
 import v2.controllers.validators.MockListPropertyPeriodSummariesValidatorFactory
@@ -40,9 +41,8 @@ class ListPropertyPeriodSummariesControllerSpec
     with MockListPropertyPeriodSummariesValidatorFactory
     with MockHateoasFactory {
 
-  private val businessId            = "XAIS12345678910"
-  private val taxYear               = "2020-21"
-
+  private val businessId = "XAIS12345678910"
+  private val taxYear    = "2020-21"
 
   "ListPropertyPeriodSummariesController" should {
     "return Ok" when {
@@ -83,7 +83,7 @@ class ListPropertyPeriodSummariesControllerSpec
 
   trait Test extends ControllerTest {
 
-    private val controller = new ListPropertyPeriodSummariesController(
+    protected val controller = new ListPropertyPeriodSummariesController(
       authService = mockEnrolmentsAuthService,
       lookupService = mockMtdIdLookupService,
       validatorFactory = mockListPropertyPeriodSummariesValidatorFactory,
@@ -92,6 +92,12 @@ class ListPropertyPeriodSummariesControllerSpec
       cc = cc,
       idGenerator = mockIdGenerator
     )
+
+    MockedAppConfig.featureSwitches.anyNumberOfTimes() returns Configuration(
+      "supporting-agents-access-control.enabled" -> true
+    )
+
+    MockedAppConfig.endpointAllowsSupportingAgents(controller.endpointName).anyNumberOfTimes() returns false
 
     protected def callController(): Future[Result] = controller.handleRequest(nino, businessId, taxYear)(fakeGetRequest)
 

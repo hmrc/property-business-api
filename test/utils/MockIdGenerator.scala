@@ -14,22 +14,17 @@
  * limitations under the License.
  */
 
-package v5.stubs
+package utils
 
-import com.github.tomakehurst.wiremock.stubbing.StubMapping
-import play.api.http.Status.OK
-import play.api.libs.json.Json
-import support.WireMockMethods
+import org.scalamock.handlers.CallHandler
+import org.scalamock.scalatest.MockFactory
 
-object MtdIdLookupStub extends WireMockMethods {
+trait MockIdGenerator extends MockFactory {
 
-  def ninoFound(nino: String): StubMapping =
-    when(method = GET, uri = lookupUrl(nino))
-      .thenReturn(status = OK, body = Json.obj("mtdbsa" -> "12345678"))
+  val mockIdGenerator: IdGenerator = mock[IdGenerator]
 
-  private def lookupUrl(nino: String): String = s"/mtd-identifier-lookup/nino/$nino"
+  object MockIdGenerator {
+    def generateCorrelationId: CallHandler[String] = (() => mockIdGenerator.generateCorrelationId).expects()
+  }
 
-  def error(nino: String, status: Int): StubMapping =
-    when(method = GET, uri = lookupUrl(nino))
-      .thenReturn(status, body = Json.obj())
 }

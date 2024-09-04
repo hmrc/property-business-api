@@ -20,10 +20,9 @@ import play.api.libs.json.{JsValue, Json}
 import support.UnitSpec
 import v4.createAmendHistoricNonFhlUkPropertyAnnualSubmission.def1.model.request.UkPropertyIncomeRentARoom
 
-
 class UkFhlPropertyIncomeSpec extends UnitSpec {
   val rentARoom: UkPropertyIncomeRentARoom = UkPropertyIncomeRentARoom(Some(412.89))
-  val requestBody: UkFhlPropertyIncome          = UkFhlPropertyIncome(Some(215.16), Some(1365.12), Some(rentARoom))
+  val requestBody: UkFhlPropertyIncome     = UkFhlPropertyIncome(Some(215.16), Some(1365.12), Some(rentARoom))
 
   val mtdJson: JsValue = Json.parse("""
       |{

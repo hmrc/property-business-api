@@ -29,12 +29,16 @@ import javax.inject.Inject
 
 class CreateAmendForeignPropertyAnnualSubmissionValidatorFactory @Inject() (appConfig: AppConfig) {
 
-  def validator(nino: String, businessId: String, taxYear: String, body: JsValue): Validator[CreateAmendForeignPropertyAnnualSubmissionRequestData] = {
+  def validator(nino: String,
+                businessId: String,
+                taxYear: String,
+                body: JsValue): Validator[CreateAmendForeignPropertyAnnualSubmissionRequestData] = {
 
     CreateAmendForeignPropertyAnnualSubmissionSchema.schemaFor(Some(taxYear)) match {
-      case Valid(Def1) => new Def1_CreateAmendForeignPropertyAnnualSubmissionValidator(nino, businessId, taxYear, body)(appConfig)
-      case Valid(Def2) => new Def2_CreateAmendForeignPropertyAnnualSubmissionValidator(nino, businessId, taxYear, body)
+      case Valid(Def1)     => new Def1_CreateAmendForeignPropertyAnnualSubmissionValidator(nino, businessId, taxYear, body)(appConfig)
+      case Valid(Def2)     => new Def2_CreateAmendForeignPropertyAnnualSubmissionValidator(nino, businessId, taxYear, body)
       case Invalid(errors) => Validator.returningErrors(errors)
     }
   }
+
 }

@@ -23,7 +23,10 @@ import utils.EmptinessChecker
 import v4.createUkPropertyPeriodSummary.def1.model.request.def1_ukFhlProperty.Def1_Create_UkFhlProperty
 import v4.createUkPropertyPeriodSummary.def1.model.request.def1_ukNonFhlProperty.Def1_Create_UkNonFhlProperty
 import v4.createUkPropertyPeriodSummary.def2.model.request.def2_ukFhlProperty.Def2_Create_UkFhlProperty
-import v4.createUkPropertyPeriodSummary.def2.model.request.def2_ukNonFhlProperty.{Def2_Create_UkNonFhlProperty, Def2_Create_UkNonFhlPropertySubmission}
+import v4.createUkPropertyPeriodSummary.def2.model.request.def2_ukNonFhlProperty.{
+  Def2_Create_UkNonFhlProperty,
+  Def2_Create_UkNonFhlPropertySubmission
+}
 
 sealed trait CreateUkPropertyPeriodSummaryRequestBody
 
@@ -74,10 +77,11 @@ object Def2_CreateUkPropertyPeriodSummaryRequestBody {
   )(unlift(Def2_CreateUkPropertyPeriodSummaryRequestBody.unapply))
 
 }
+
 case class Def2_CreateUkPropertyPeriodSummarySubmissionRequestBody(fromDate: String,
-                                                         toDate: String,
-                                                         ukFhlProperty: Option[Def2_Create_UkFhlProperty],
-                                                         ukNonFhlProperty: Option[Def2_Create_UkNonFhlPropertySubmission])
+                                                                   toDate: String,
+                                                                   ukFhlProperty: Option[Def2_Create_UkFhlProperty],
+                                                                   ukNonFhlProperty: Option[Def2_Create_UkNonFhlPropertySubmission])
     extends CreateUkPropertyPeriodSummaryRequestBody
 
 object Def2_CreateUkPropertyPeriodSummarySubmissionRequestBody {
@@ -87,7 +91,8 @@ object Def2_CreateUkPropertyPeriodSummarySubmissionRequestBody {
       "ukNonFhlProperty" -> body.ukNonFhlProperty :: HNil
   }
 
-  implicit val reads: Reads[Def2_CreateUkPropertyPeriodSummarySubmissionRequestBody] = Json.reads[Def2_CreateUkPropertyPeriodSummarySubmissionRequestBody]
+  implicit val reads: Reads[Def2_CreateUkPropertyPeriodSummarySubmissionRequestBody] =
+    Json.reads[Def2_CreateUkPropertyPeriodSummarySubmissionRequestBody]
 
   implicit val writes: OWrites[Def2_CreateUkPropertyPeriodSummarySubmissionRequestBody] = (
     (JsPath \ "fromDate").write[String] and

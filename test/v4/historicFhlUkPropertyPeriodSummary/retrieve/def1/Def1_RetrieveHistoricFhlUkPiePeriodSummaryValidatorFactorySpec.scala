@@ -19,9 +19,12 @@ package v4.historicFhlUkPropertyPeriodSummary.retrieve.def1
 import api.models.domain.{Nino, PeriodId, TaxYear}
 import api.models.errors._
 import api.models.utils.JsonErrorValidators
-import mocks.MockAppConfig
+import config.MockAppConfig
 import support.UnitSpec
-import v4.historicFhlUkPropertyPeriodSummary.retrieve.model.request.{Def1_RetrieveHistoricFhlUkPropertyPeriodSummaryRequestData, RetrieveHistoricFhlUkPropertyPeriodSummaryRequestData}
+import v4.historicFhlUkPropertyPeriodSummary.retrieve.model.request.{
+  Def1_RetrieveHistoricFhlUkPropertyPeriodSummaryRequestData,
+  RetrieveHistoricFhlUkPropertyPeriodSummaryRequestData
+}
 
 class Def1_RetrieveHistoricFhlUkPiePeriodSummaryValidatorFactorySpec extends UnitSpec with JsonErrorValidators with MockAppConfig {
 

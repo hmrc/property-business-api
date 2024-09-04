@@ -27,9 +27,8 @@ import play.api.libs.json.JsValue
 import v4.historicFhlUkPropertyPeriodSummary.amend.def1.model.request.UkFhlPropertyExpenses
 import v4.historicFhlUkPropertyPeriodSummary.amend.request._
 
-
 class Def1_AmendHistoricFhlUkPropertyPeriodSummaryValidator(nino: String, periodId: String, body: JsValue, appConfig: AppConfig)
-  extends Validator[AmendHistoricFhlUkPropertyPeriodSummaryRequestData] {
+    extends Validator[AmendHistoricFhlUkPropertyPeriodSummaryRequestData] {
 
   private lazy val minimumTaxYear = appConfig.minimumTaxYearHistoric
   private lazy val maximumTaxYear = appConfig.maximumTaxYearHistoric
@@ -47,10 +46,10 @@ class Def1_AmendHistoricFhlUkPropertyPeriodSummaryValidator(nino: String, period
       ResolveNino(nino),
       resolvePeriodId(periodId),
       resolveJson(body)
-      ).mapN(Def1_AmendHistoricFhlUkPropertyPeriodSummaryRequestData) andThen validateBusinessRules
+    ).mapN(Def1_AmendHistoricFhlUkPropertyPeriodSummaryRequestData) andThen validateBusinessRules
 
-  private def validateBusinessRules(
-                                     parsed: Def1_AmendHistoricFhlUkPropertyPeriodSummaryRequestData): Validated[Seq[MtdError], AmendHistoricFhlUkPropertyPeriodSummaryRequestData] = {
+  private def validateBusinessRules(parsed: Def1_AmendHistoricFhlUkPropertyPeriodSummaryRequestData)
+      : Validated[Seq[MtdError], AmendHistoricFhlUkPropertyPeriodSummaryRequestData] = {
     import parsed.body._
 
     val validatedIncome = income
@@ -62,7 +61,7 @@ class Def1_AmendHistoricFhlUkPropertyPeriodSummaryValidator(nino: String, period
           (taxDeducted, "/income/taxDeducted"),
           (rentARoom.flatMap(_.rentsReceived), "/income/rentARoom/rentsReceived")
         ).map {
-          case (None, _) => valid
+          case (None, _)            => valid
           case (Some(number), path) => resolveParsedNumber(number, path)
         }
       }
@@ -83,7 +82,7 @@ class Def1_AmendHistoricFhlUkPropertyPeriodSummaryValidator(nino: String, period
           (travelCosts, "/expenses/travelCosts"),
           (rentARoom.flatMap(_.amountClaimed), "/income/rentARoom/amountClaimed")
         ).map {
-          case (None, _) => valid
+          case (None, _)            => valid
           case (Some(number), path) => resolveParsedNumber(number, path)
         }
       }
@@ -103,6 +102,5 @@ class Def1_AmendHistoricFhlUkPropertyPeriodSummaryValidator(nino: String, period
     (validatedIncome ++ validatedExpenses :+ validatedBothExpenses).sequence.andThen(_ => Valid(parsed))
 
   }
-
 
 }

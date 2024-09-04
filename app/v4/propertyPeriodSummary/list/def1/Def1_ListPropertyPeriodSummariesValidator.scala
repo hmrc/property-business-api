@@ -34,7 +34,7 @@ class Def1_ListPropertyPeriodSummariesValidator(
 ) extends Validator[ListPropertyPeriodSummariesRequestData] {
 
   private lazy val minimumTaxYear = appConfig.minimumTaxV2Foreign
-  private val maxTaxYear = TaxYear.fromMtd("2024-25")
+  private val maxTaxYear          = TaxYear.fromMtd("2024-25")
 
   def validate: Validated[Seq[MtdError], ListPropertyPeriodSummariesRequestData] =
     (

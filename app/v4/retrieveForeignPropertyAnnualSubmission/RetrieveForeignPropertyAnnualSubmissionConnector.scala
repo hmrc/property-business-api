@@ -22,11 +22,7 @@ import api.connectors.{BaseDownstreamConnector, DownstreamOutcome}
 import api.models.outcomes.ResponseWrapper
 import config.AppConfig
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
-import v4.retrieveForeignPropertyAnnualSubmission.RetrieveForeignPropertyAnnualSubmissionConnector.{
-  ForeignResult,
-  NonForeignResult,
-  Result
-}
+import v4.retrieveForeignPropertyAnnualSubmission.RetrieveForeignPropertyAnnualSubmissionConnector.{ForeignResult, NonForeignResult, Result}
 import v4.retrieveForeignPropertyAnnualSubmission.model.request.{
   Def1_RetrieveForeignPropertyAnnualSubmissionRequestData,
   RetrieveForeignPropertyAnnualSubmissionRequestData

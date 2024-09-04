@@ -45,7 +45,8 @@ trait MockDeleteHistoricFhlUkPropertyAnnualSubmissionValidatorFactory extends Mo
       .returns(use)
   }
 
-  def returningSuccess(result: DeleteHistoricFhlUkPropertyAnnualSubmissionRequestData): Validator[DeleteHistoricFhlUkPropertyAnnualSubmissionRequestData] =
+  def returningSuccess(
+      result: DeleteHistoricFhlUkPropertyAnnualSubmissionRequestData): Validator[DeleteHistoricFhlUkPropertyAnnualSubmissionRequestData] =
     new Validator[DeleteHistoricFhlUkPropertyAnnualSubmissionRequestData] {
       def validate: Validated[Seq[MtdError], DeleteHistoricFhlUkPropertyAnnualSubmissionRequestData] = Valid(result)
     }

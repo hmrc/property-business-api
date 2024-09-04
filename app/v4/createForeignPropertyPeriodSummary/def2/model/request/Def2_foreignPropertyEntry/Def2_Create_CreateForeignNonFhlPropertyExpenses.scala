@@ -20,15 +20,15 @@ import play.api.libs.functional.syntax._
 import play.api.libs.json.{JsPath, Json, Reads, Writes}
 
 case class Def2_Create_CreateForeignNonFhlPropertyExpenses(premisesRunningCosts: Option[BigDecimal],
-                                               repairsAndMaintenance: Option[BigDecimal],
-                                               financialCosts: Option[BigDecimal],
-                                               professionalFees: Option[BigDecimal],
-                                               costOfServices: Option[BigDecimal],
-                                               travelCosts: Option[BigDecimal],
-                                               residentialFinancialCost: Option[BigDecimal],
-                                               broughtFwdResidentialFinancialCost: Option[BigDecimal],
-                                               other: Option[BigDecimal],
-                                               consolidatedExpenses: Option[BigDecimal])
+                                                           repairsAndMaintenance: Option[BigDecimal],
+                                                           financialCosts: Option[BigDecimal],
+                                                           professionalFees: Option[BigDecimal],
+                                                           costOfServices: Option[BigDecimal],
+                                                           travelCosts: Option[BigDecimal],
+                                                           residentialFinancialCost: Option[BigDecimal],
+                                                           broughtFwdResidentialFinancialCost: Option[BigDecimal],
+                                                           other: Option[BigDecimal],
+                                                           consolidatedExpenses: Option[BigDecimal])
 
 object Def2_Create_CreateForeignNonFhlPropertyExpenses {
   implicit val reads: Reads[Def2_Create_CreateForeignNonFhlPropertyExpenses] = Json.reads[Def2_Create_CreateForeignNonFhlPropertyExpenses]

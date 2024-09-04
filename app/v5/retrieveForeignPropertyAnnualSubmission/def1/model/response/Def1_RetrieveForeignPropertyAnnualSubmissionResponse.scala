@@ -24,10 +24,10 @@ import v5.retrieveForeignPropertyAnnualSubmission.def1.model.response.def1_forei
 import v5.retrieveForeignPropertyAnnualSubmission.model.response.RetrieveForeignPropertyAnnualSubmissionResponse
 
 case class Def1_RetrieveForeignPropertyAnnualSubmissionResponse(
-                                                                 submittedOn: Timestamp,
-                                                                 foreignFhlEea: Option[Def1_Retrieve_ForeignFhlEeaEntry],
-                                                                 foreignNonFhlProperty: Option[Seq[Def1_Retrieve_ForeignPropertyEntry]]
-                                                               ) extends RetrieveForeignPropertyAnnualSubmissionResponse{
+    submittedOn: Timestamp,
+    foreignFhlEea: Option[Def1_Retrieve_ForeignFhlEeaEntry],
+    foreignNonFhlProperty: Option[Seq[Def1_Retrieve_ForeignPropertyEntry]]
+) extends RetrieveForeignPropertyAnnualSubmissionResponse {
 
   override def isForeignResult: Boolean = foreignFhlEea.nonEmpty || foreignNonFhlProperty.nonEmpty
 }
@@ -41,6 +41,6 @@ object Def1_RetrieveForeignPropertyAnnualSubmissionResponse {
     (JsPath \ "submittedOn").read[Timestamp] and
       (JsPath \ "foreignFhlEea").readNullable[Def1_Retrieve_ForeignFhlEeaEntry] and
       (JsPath \ "foreignProperty").readNullable[Seq[Def1_Retrieve_ForeignPropertyEntry]]
-    )(Def1_RetrieveForeignPropertyAnnualSubmissionResponse.apply _)
+  )(Def1_RetrieveForeignPropertyAnnualSubmissionResponse.apply _)
 
 }

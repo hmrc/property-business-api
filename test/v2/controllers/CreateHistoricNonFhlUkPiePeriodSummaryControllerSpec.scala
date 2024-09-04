@@ -24,9 +24,11 @@ import api.models.domain.{Nino, PeriodId}
 import api.models.errors._
 import api.models.outcomes.ResponseWrapper
 import api.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService}
-import mocks.{MockAppConfig, MockIdGenerator}
+import config.MockAppConfig
+import play.api.Configuration
 import play.api.libs.json.{JsObject, JsValue, Json}
 import play.api.mvc.Result
+import utils.MockIdGenerator
 import v2.controllers.validators.MockCreateHistoricNonFhlUkPiePeriodSummaryValidatorFactory
 import v2.models.request.createHistoricNonFhlUkPropertyPeriodSummary._
 import v2.models.response.createHistoricNonFhlUkPiePeriodSummary._
@@ -47,9 +49,8 @@ class CreateHistoricNonFhlUkPiePeriodSummaryControllerSpec
     with MockIdGenerator
     with MockAuditService {
 
-  private val periodId              = "2021-01-01_2021-01-02"
-  private val mtdId: String         = "test-mtd-id"
-
+  private val periodId      = "2021-01-01_2021-01-02"
+  private val mtdId: String = "test-mtd-id"
 
   "CreateHistoricNonFhlUkPiePeriodSummaryController" should {
     "return a successful response with status 201 (CREATED)" when {
@@ -89,7 +90,7 @@ class CreateHistoricNonFhlUkPiePeriodSummaryControllerSpec
 
   trait Test extends ControllerTest with AuditEventChecking[FlattenedGenericAuditDetail] {
 
-    private val controller: CreateHistoricNonFHLUkPiePeriodSummaryController = new CreateHistoricNonFHLUkPiePeriodSummaryController(
+    protected val controller: CreateHistoricNonFHLUkPiePeriodSummaryController = new CreateHistoricNonFHLUkPiePeriodSummaryController(
       authService = mockEnrolmentsAuthService,
       lookupService = mockMtdIdLookupService,
       validatorFactory = mockCreateHistoricNonFhlUkPiePeriodSummaryValidatorFactory,
@@ -99,6 +100,12 @@ class CreateHistoricNonFhlUkPiePeriodSummaryControllerSpec
       cc = cc,
       idGenerator = mockIdGenerator
     )
+
+    MockedAppConfig.featureSwitches.anyNumberOfTimes() returns Configuration(
+      "supporting-agents-access-control.enabled" -> true
+    )
+
+    MockedAppConfig.endpointAllowsSupportingAgents(controller.endpointName).anyNumberOfTimes() returns false
 
     protected def callController(): Future[Result] = controller.handleRequest(nino)(fakePutRequest(requestBodyJson))
 

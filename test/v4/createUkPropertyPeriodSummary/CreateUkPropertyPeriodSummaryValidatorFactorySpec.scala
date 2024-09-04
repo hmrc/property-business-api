@@ -18,7 +18,7 @@ package v4.createUkPropertyPeriodSummary
 
 import api.controllers.validators.Validator
 import api.models.utils.JsonErrorValidators
-import mocks.MockAppConfig
+import config.MockAppConfig
 import play.api.libs.json._
 import support.UnitSpec
 import v4.createUkPropertyPeriodSummary.def1.Def1_CreateUkPropertyPeriodSummaryValidator

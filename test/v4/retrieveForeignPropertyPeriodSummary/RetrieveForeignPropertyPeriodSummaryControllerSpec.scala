@@ -21,13 +21,21 @@ import api.models.domain._
 import api.models.errors.{ErrorWrapper, NinoFormatError, RuleTaxYearNotSupportedError}
 import api.models.outcomes.ResponseWrapper
 import api.services.{MockEnrolmentsAuthService, MockMtdIdLookupService}
-import mocks.{MockAppConfig, MockIdGenerator}
+import config.MockAppConfig
+import play.api.Configuration
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.Result
+import utils.MockIdGenerator
 import v4.retrieveForeignPropertyPeriodSummary.def1.model.response.foreignFhlEea.{ForeignFhlEea, ForeignFhlEeaExpenses, ForeignFhlEeaIncome}
 import v4.retrieveForeignPropertyPeriodSummary.def1.model.response.foreignNonFhlProperty._
-import v4.retrieveForeignPropertyPeriodSummary.model.request.{Def1_RetrieveForeignPropertyPeriodSummaryRequestData, RetrieveForeignPropertyPeriodSummaryRequestData}
-import v4.retrieveForeignPropertyPeriodSummary.model.response.{Def1_RetrieveForeignPropertyPeriodSummaryResponse, RetrieveForeignPropertyPeriodSummaryResponse}
+import v4.retrieveForeignPropertyPeriodSummary.model.request.{
+  Def1_RetrieveForeignPropertyPeriodSummaryRequestData,
+  RetrieveForeignPropertyPeriodSummaryRequestData
+}
+import v4.retrieveForeignPropertyPeriodSummary.model.response.{
+  Def1_RetrieveForeignPropertyPeriodSummaryResponse,
+  RetrieveForeignPropertyPeriodSummaryResponse
+}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -42,10 +50,9 @@ class RetrieveForeignPropertyPeriodSummaryControllerSpec
     with MockRetrieveForeignPropertyPeriodSummaryValidatorFactory
     with MockIdGenerator {
 
-  private val businessId            = "XAIS12345678910"
-  private val submissionId          = "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
-  private val taxYear               = "2022-23"
-
+  private val businessId   = "XAIS12345678910"
+  private val submissionId = "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
+  private val taxYear      = "2022-23"
 
   "RetrieveForeignPropertyPeriodSummaryController" should {
     "return a successful response with status 200 (OK)" when {
@@ -81,7 +88,7 @@ class RetrieveForeignPropertyPeriodSummaryControllerSpec
 
   trait Test extends ControllerTest {
 
-    private val controller = new RetrieveForeignPropertyPeriodSummaryController(
+    protected val controller = new RetrieveForeignPropertyPeriodSummaryController(
       authService = mockEnrolmentsAuthService,
       lookupService = mockMtdIdLookupService,
       validatorFactory = mockRetrieveForeignPropertyPeriodSummaryValidatorFactory,
@@ -89,6 +96,12 @@ class RetrieveForeignPropertyPeriodSummaryControllerSpec
       cc = cc,
       idGenerator = mockIdGenerator
     )
+
+    MockedAppConfig.featureSwitches.anyNumberOfTimes() returns Configuration(
+      "supporting-agents-access-control.enabled" -> true
+    )
+
+    MockedAppConfig.endpointAllowsSupportingAgents(controller.endpointName).anyNumberOfTimes() returns false
 
     protected def callController(): Future[Result] =
       controller.handleRequest(nino = nino, businessId = businessId, taxYear = taxYear, submissionId = submissionId)(fakeGetRequest)

@@ -22,7 +22,8 @@ import api.models.domain.{BusinessId, Nino, SubmissionId, TaxYear}
 import api.models.errors._
 import api.models.outcomes.ResponseWrapper
 import api.services.MockAuditService
-import mocks.MockAppConfig
+import config.MockAppConfig
+import play.api.Configuration
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.Result
 import v4.amendUkPropertyPeriodSummary.def1.model.request.def1_ukFhlProperty._
@@ -41,10 +42,9 @@ class AmendUkPropertyPeriodSummaryControllerSpec
     with MockAmendUkPropertyPeriodSummaryValidatorFactory
     with MockAuditService {
 
-  private val businessId            = "XAIS12345678910"
-  private val taxYear               = "2020-21"
-  private val submissionId          = "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
-
+  private val businessId   = "XAIS12345678910"
+  private val taxYear      = "2020-21"
+  private val submissionId = "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
 
   "AmendUkPropertyPeriodSummaryController" should {
     "return a successful response from a consolidated request" when {
@@ -112,6 +112,12 @@ class AmendUkPropertyPeriodSummaryControllerSpec
       cc = cc,
       idGenerator = mockIdGenerator
     )
+
+    MockedAppConfig.featureSwitches.anyNumberOfTimes() returns Configuration(
+      "supporting-agents-access-control.enabled" -> true
+    )
+
+    MockedAppConfig.endpointAllowsSupportingAgents(controller.endpointName).anyNumberOfTimes() returns false
 
     protected def callController(): Future[Result] =
       controller.handleRequest(nino, businessId, taxYear, submissionId)(fakePutRequest(requestBodyJson))

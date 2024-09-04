@@ -37,6 +37,8 @@ class RetrieveUkPropertyPeriodSummaryController @Inject() (val authService: Enro
   implicit val endpointLogContext: EndpointLogContext =
     EndpointLogContext(controllerName = "RetrieveUkPropertyController", endpointName = "retrieveUkProperty")
 
+  override val endpointName: String = "retrieve-uk-property-period-summary"
+
   def handleRequest(nino: String, businessId: String, taxYear: String, submissionId: String): Action[AnyContent] =
     authorisedAction(nino).async { implicit request =>
       implicit val ctx: RequestContext = RequestContext.from(idGenerator, endpointLogContext)

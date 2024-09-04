@@ -21,8 +21,8 @@ import utils.JsonWritesUtil.writesFrom
 import v5.retrieveForeignPropertyAnnualSubmission.def1.model.response.Def1_RetrieveForeignPropertyAnnualSubmissionResponse
 import v5.retrieveForeignPropertyAnnualSubmission.def2.model.response.Def2_RetrieveForeignPropertyAnnualSubmissionResponse
 
-trait RetrieveForeignPropertyAnnualSubmissionResponse{
-  def isForeignResult : Boolean
+trait RetrieveForeignPropertyAnnualSubmissionResponse {
+  def isForeignResult: Boolean
 }
 
 object RetrieveForeignPropertyAnnualSubmissionResponse {
@@ -35,5 +35,3 @@ object RetrieveForeignPropertyAnnualSubmissionResponse {
   }
 
 }
-
-

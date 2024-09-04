@@ -23,10 +23,7 @@ import cats.data.Validated
 import cats.data.Validated.Invalid
 import cats.implicits._
 import v4.amendUkPropertyPeriodSummary.def1.model.request.def1_ukFhlProperty.{Def1_Amend_UkFhlProperty, Def1_Amend_UkFhlPropertyExpenses}
-import v4.amendUkPropertyPeriodSummary.def1.model.request.def1_ukNonFhlProperty.{
-  Def1_Amend_UkNonFhlProperty,
-  Def1_Amend_UkNonFhlPropertyExpenses
-}
+import v4.amendUkPropertyPeriodSummary.def1.model.request.def1_ukNonFhlProperty.{Def1_Amend_UkNonFhlProperty, Def1_Amend_UkNonFhlPropertyExpenses}
 import v4.amendUkPropertyPeriodSummary.model.request.Def1_AmendUkPropertyPeriodSummaryRequestData
 
 class Def1_AmendUkPropertyPeriodSummaryRulesValidator extends RulesValidator[Def1_AmendUkPropertyPeriodSummaryRequestData] {
@@ -97,9 +94,7 @@ class Def1_AmendUkPropertyPeriodSummaryRulesValidator extends RulesValidator[Def
       (expenses.flatMap(_.residentialFinancialCost), "/ukNonFhlProperty/expenses/residentialFinancialCost"),
       (expenses.flatMap(_.consolidatedExpenses), "/ukNonFhlProperty/expenses/consolidatedExpenses"),
       (expenses.flatMap(_.travelCosts), "/ukNonFhlProperty/expenses/travelCosts"),
-      (
-        expenses.flatMap(_.residentialFinancialCostsCarriedForward),
-        "/ukNonFhlProperty/expenses/residentialFinancialCostsCarriedForward"),
+      (expenses.flatMap(_.residentialFinancialCostsCarriedForward), "/ukNonFhlProperty/expenses/residentialFinancialCostsCarriedForward"),
       (expenses.flatMap(_.rentARoom.flatMap(_.amountClaimed)), "/ukNonFhlProperty/expenses/rentARoom/amountClaimed")
     )
 

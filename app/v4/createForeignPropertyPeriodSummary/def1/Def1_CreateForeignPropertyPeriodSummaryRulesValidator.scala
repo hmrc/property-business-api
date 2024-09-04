@@ -22,8 +22,14 @@ import api.models.errors._
 import cats.data.Validated
 import cats.data.Validated.Invalid
 import cats.implicits.toTraverseOps
-import v4.createForeignPropertyPeriodSummary.def1.model.request.Def1_foreignFhlEea.{Def1_Create_CreateForeignFhlEea, Def1_Create_CreateForeignFhlEeaExpenses}
-import v4.createForeignPropertyPeriodSummary.def1.model.request.Def1_foreignPropertyEntry.{Def1_Create_CreateForeignNonFhlPropertyEntry, Def1_Create_CreateForeignNonFhlPropertyExpenses}
+import v4.createForeignPropertyPeriodSummary.def1.model.request.Def1_foreignFhlEea.{
+  Def1_Create_CreateForeignFhlEea,
+  Def1_Create_CreateForeignFhlEeaExpenses
+}
+import v4.createForeignPropertyPeriodSummary.def1.model.request.Def1_foreignPropertyEntry.{
+  Def1_Create_CreateForeignNonFhlPropertyEntry,
+  Def1_Create_CreateForeignNonFhlPropertyExpenses
+}
 import v4.createForeignPropertyPeriodSummary.model.request.Def1_CreateForeignPropertyPeriodSummaryRequestData
 
 object Def1_CreateForeignPropertyPeriodSummaryRulesValidator extends RulesValidator[Def1_CreateForeignPropertyPeriodSummaryRequestData] {

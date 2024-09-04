@@ -18,7 +18,7 @@ package v5.retrieveUkPropertyAnnualSubmission.def1
 
 import api.models.domain.{BusinessId, Nino, TaxYear}
 import api.models.errors._
-import mocks.MockAppConfig
+import config.MockAppConfig
 import support.UnitSpec
 import v5.retrieveUkPropertyAnnualSubmission.def1.model.Def1_RetrieveUkPropertyAnnualSubmissionValidator
 import v5.retrieveUkPropertyAnnualSubmission.def1.model.request.Def1_RetrieveUkPropertyAnnualSubmissionRequestData

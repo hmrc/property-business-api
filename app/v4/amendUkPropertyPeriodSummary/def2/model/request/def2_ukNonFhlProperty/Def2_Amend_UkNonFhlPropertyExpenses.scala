@@ -32,9 +32,8 @@ case class Def2_Amend_UkNonFhlPropertyExpensesSubmission(premisesRunningCosts: O
                                                          residentialFinancialCostsCarriedForward: Option[BigDecimal],
                                                          broughtFwdResidentialFinancialCostAmount: Option[BigDecimal],
                                                          rentARoom: Option[Def2_Amend_UkPropertyExpensesRentARoom],
-                                                         consolidatedExpenses: Option[BigDecimal]){
+                                                         consolidatedExpenses: Option[BigDecimal]) {}
 
-}
 object Def2_Amend_UkNonFhlPropertyExpensesSubmission {
 
   implicit val reads: Reads[Def2_Amend_UkNonFhlPropertyExpensesSubmission] = Json.reads[Def2_Amend_UkNonFhlPropertyExpensesSubmission]
@@ -53,7 +52,8 @@ object Def2_Amend_UkNonFhlPropertyExpensesSubmission {
       (JsPath \ "broughtFwdResidentialFinancialCostAmount").writeNullable[BigDecimal] and
       (JsPath \ "ukOtherRentARoom").writeNullable[Def2_Amend_UkPropertyExpensesRentARoom] and
       (JsPath \ "consolidatedExpense").writeNullable[BigDecimal]
-    ) (unlift(Def2_Amend_UkNonFhlPropertyExpensesSubmission.unapply))
+  )(unlift(Def2_Amend_UkNonFhlPropertyExpensesSubmission.unapply))
+
 }
 
 case class Def2_Amend_UkNonFhlPropertyExpenses(premisesRunningCosts: Option[BigDecimal],
@@ -85,6 +85,7 @@ case class Def2_Amend_UkNonFhlPropertyExpenses(premisesRunningCosts: Option[BigD
       consolidatedExpenses = consolidatedExpenses
     )
   }
+
 }
 
 object Def2_Amend_UkNonFhlPropertyExpenses {

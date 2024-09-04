@@ -42,24 +42,27 @@ object RetrieveUkPropertyAnnualSubmissionConnector {
 class RetrieveUkPropertyAnnualSubmissionConnector @Inject() (val http: HttpClient, val appConfig: AppConfig) extends BaseDownstreamConnector {
 
   def retrieveUkProperty(request: RetrieveUkPropertyAnnualSubmissionRequestData)(implicit
-                                                                                           hc: HeaderCarrier,
-                                                                                           ec: ExecutionContext,
-                                                                                           correlationId: String): Future[DownstreamOutcome[Result]] = {
+      hc: HeaderCarrier,
+      ec: ExecutionContext,
+      correlationId: String): Future[DownstreamOutcome[Result]] = {
     import request._
     import schema._
 
     val (downstreamUri, queryParams): (DownstreamUri[DownstreamResp], Seq[(String, String)]) = taxYear match {
       case taxYear if taxYear.isTys =>
         (TaxYearSpecificIfsUri[DownstreamResp](s"income-tax/business/property/annual/${taxYear.asTysDownstream}/$nino/$businessId"), Nil)
-      case _ => (IfsUri[DownstreamResp]("income-tax/business/property/annual"), List("taxableEntityId" -> nino.nino, "incomeSourceId" -> businessId.businessId, "taxYear" -> taxYear.asMtd))
+      case _ =>
+        (
+          IfsUri[DownstreamResp]("income-tax/business/property/annual"),
+          List("taxableEntityId" -> nino.nino, "incomeSourceId" -> businessId.businessId, "taxYear" -> taxYear.asMtd))
     }
 
     val response = get(downstreamUri, queryParams)
 
     response.map {
       case Right(ResponseWrapper(corId, resp)) if resp.isUkResult => Right(ResponseWrapper(corId, UkResult(resp)))
-      case Right(ResponseWrapper(corId, _))                           => Right(ResponseWrapper(corId, NonUkResult))
-      case Left(e)                                                    => Left(e)
+      case Right(ResponseWrapper(corId, _))                       => Right(ResponseWrapper(corId, NonUkResult))
+      case Left(e)                                                => Left(e)
     }
 
   }

@@ -24,7 +24,8 @@ object Def2_Amend_UkNonFhlProperty {
   implicit val format: OFormat[Def2_Amend_UkNonFhlProperty] = Json.format[Def2_Amend_UkNonFhlProperty]
 }
 
-case class Def2_Amend_UkNonFhlPropertySubmission(income: Option[Def2_Amend_UkNonFhlPropertyIncome], expenses: Option[Def2_Amend_UkNonFhlPropertyExpensesSubmission])
+case class Def2_Amend_UkNonFhlPropertySubmission(income: Option[Def2_Amend_UkNonFhlPropertyIncome],
+                                                 expenses: Option[Def2_Amend_UkNonFhlPropertyExpensesSubmission])
 
 object Def2_Amend_UkNonFhlPropertySubmission {
   implicit val format: OFormat[Def2_Amend_UkNonFhlPropertySubmission] = Json.format[Def2_Amend_UkNonFhlPropertySubmission]

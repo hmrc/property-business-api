@@ -20,15 +20,15 @@ import play.api.libs.functional.syntax.{toFunctionalBuilderOps, unlift}
 import play.api.libs.json.{JsPath, Json, OWrites, Reads}
 import v4.historicFhlUkPropertyPeriodSummary.amend.def1.model.request._
 
-
 sealed trait AmendHistoricFhlUkPropertyPeriodSummaryRequestBody
 
 case class Def1_AmendHistoricFhlUkPropertyPeriodSummaryRequestBody(income: Option[UkFhlPropertyIncome], expenses: Option[UkFhlPropertyExpenses])
-  extends AmendHistoricFhlUkPropertyPeriodSummaryRequestBody
+    extends AmendHistoricFhlUkPropertyPeriodSummaryRequestBody
 
 object Def1_AmendHistoricFhlUkPropertyPeriodSummaryRequestBody {
 
-  implicit val reads: Reads[Def1_AmendHistoricFhlUkPropertyPeriodSummaryRequestBody] = Json.reads[Def1_AmendHistoricFhlUkPropertyPeriodSummaryRequestBody]
+  implicit val reads: Reads[Def1_AmendHistoricFhlUkPropertyPeriodSummaryRequestBody] =
+    Json.reads[Def1_AmendHistoricFhlUkPropertyPeriodSummaryRequestBody]
 
   implicit val writes: OWrites[Def1_AmendHistoricFhlUkPropertyPeriodSummaryRequestBody] = (
     (JsPath \ "incomes").writeNullable[UkFhlPropertyIncome] and

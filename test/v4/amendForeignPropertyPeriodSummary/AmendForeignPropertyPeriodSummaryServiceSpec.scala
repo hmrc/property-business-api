@@ -22,7 +22,11 @@ import api.models.errors._
 import api.models.outcomes.ResponseWrapper
 import api.services.ServiceSpec
 import uk.gov.hmrc.http.HeaderCarrier
-import v4.amendForeignPropertyPeriodSummary.model.request.{AmendForeignPropertyPeriodSummaryRequestData, Def1_AmendForeignPropertyPeriodSummaryRequestBody, Def1_AmendForeignPropertyPeriodSummaryRequestData}
+import v4.amendForeignPropertyPeriodSummary.model.request.{
+  AmendForeignPropertyPeriodSummaryRequestData,
+  Def1_AmendForeignPropertyPeriodSummaryRequestBody,
+  Def1_AmendForeignPropertyPeriodSummaryRequestData
+}
 
 import scala.concurrent.Future
 

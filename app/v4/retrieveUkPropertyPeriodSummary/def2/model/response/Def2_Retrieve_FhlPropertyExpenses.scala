@@ -28,6 +28,7 @@ case class Def2_Retrieve_FhlPropertyExpenses(premisesRunningCosts: Option[BigDec
                                              travelCosts: Option[BigDecimal],
                                              rentARoom: Option[Def2_Retrieve_RentARoomExpenses],
                                              consolidatedExpenses: Option[BigDecimal])
+
 object Def2_Retrieve_FhlPropertyExpenses {
   implicit val writes: OWrites[Def2_Retrieve_FhlPropertyExpenses] = Json.writes[Def2_Retrieve_FhlPropertyExpenses]
 

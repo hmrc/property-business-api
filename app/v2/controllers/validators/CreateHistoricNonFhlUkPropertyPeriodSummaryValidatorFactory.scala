@@ -23,7 +23,12 @@ import cats.data.Validated
 import cats.data.Validated.{Invalid, Valid}
 import cats.implicits._
 import play.api.libs.json.JsValue
-import v2.models.request.createHistoricNonFhlUkPropertyPeriodSummary.{CreateHistoricNonFhlUkPropertyPeriodSummaryRequestBody, CreateHistoricNonFhlUkPropertyPeriodSummaryRequestData, UkNonFhlPropertyExpenses, UkNonFhlPropertyIncome}
+import v2.models.request.createHistoricNonFhlUkPropertyPeriodSummary.{
+  CreateHistoricNonFhlUkPropertyPeriodSummaryRequestBody,
+  CreateHistoricNonFhlUkPropertyPeriodSummaryRequestData,
+  UkNonFhlPropertyExpenses,
+  UkNonFhlPropertyIncome
+}
 
 import javax.inject.Singleton
 

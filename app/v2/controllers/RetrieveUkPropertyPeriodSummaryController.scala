@@ -39,6 +39,8 @@ class RetrieveUkPropertyPeriodSummaryController @Inject() (val authService: Enro
                                                            idGenerator: IdGenerator)(implicit ec: ExecutionContext, appConfig: AppConfig)
     extends AuthorisedController(cc) {
 
+  override val endpointName: String = "retrieve-uk-property-period-summary"
+
   implicit val endpointLogContext: EndpointLogContext =
     EndpointLogContext(controllerName = "RetrieveUkPropertyController", endpointName = "retrieveUkProperty")
 

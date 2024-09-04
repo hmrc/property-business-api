@@ -25,7 +25,7 @@ import play.api.libs.ws.{WSRequest, WSResponse}
 import play.api.test.Helpers.AUTHORIZATION
 import support.IntegrationBaseSpec
 import v2.models.request.createAmendForeignPropertyAnnualSubmission.CreateAmendForeignPropertyAnnualSubmissionFixture
-import v3.stubs.{AuditStub, AuthStub, DownstreamStub, MtdIdLookupStub}
+import api.services._
 
 class CreateAmendForeignPropertyAnnualSubmissionControllerISpec extends IntegrationBaseSpec with CreateAmendForeignPropertyAnnualSubmissionFixture {
 

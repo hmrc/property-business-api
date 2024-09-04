@@ -31,8 +31,8 @@ import scala.concurrent.{ExecutionContext, Future}
 class ListPropertyPeriodSummariesService @Inject() (connector: ListPropertyPeriodSummariesConnector) extends BaseService {
 
   def listPeriodSummaries(request: ListPropertyPeriodSummariesRequestData)(implicit
-                                                                           ctx: RequestContext,
-                                                                           ec: ExecutionContext): Future[ServiceOutcome[ListPropertyPeriodSummariesResponse]] = {
+      ctx: RequestContext,
+      ec: ExecutionContext): Future[ServiceOutcome[ListPropertyPeriodSummariesResponse]] = {
 
     connector.listPeriodSummaries(request).map(_.leftMap(mapDownstreamErrors(downstreamErrorMap)))
   }

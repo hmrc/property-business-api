@@ -96,7 +96,7 @@ class ApiDefinitionFactory @Inject() (appConfig: AppConfig) extends Logging {
 
   private def checkDeprecationConfigFor(version: Version): Unit = appConfig.deprecationFor(version) match {
     case Invalid(error) => throw new Exception(error)
-    case _ => ()
+    case _              => ()
   }
 
 }

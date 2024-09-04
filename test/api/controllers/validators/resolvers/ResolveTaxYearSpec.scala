@@ -76,7 +76,7 @@ class ResolveTaxYearSpec extends UnitSpec with ResolverSupport {
 
   "ResolveTaxYearMaximum" should {
     val maximumTaxYear = TaxYear.fromMtd("2024-25")
-    val resolver = ResolveTaxYearMaximum(maximumTaxYear)
+    val resolver       = ResolveTaxYearMaximum(maximumTaxYear)
 
     "return no errors" when {
       "given the maximum allowed tax year" in {
@@ -106,7 +106,7 @@ class ResolveTaxYearSpec extends UnitSpec with ResolverSupport {
   "ResolveTaxYearMinMax" should {
     val minimumTaxYear = TaxYear.fromMtd("2021-22")
     val maximumTaxYear = TaxYear.fromMtd("2025-26")
-    val resolver = ResolveTaxYearMinMax(minimumTaxYear -> maximumTaxYear)
+    val resolver       = ResolveTaxYearMinMax(minimumTaxYear -> maximumTaxYear)
 
     "return no errors" when {
       "given the minimum allowed tax year" in {

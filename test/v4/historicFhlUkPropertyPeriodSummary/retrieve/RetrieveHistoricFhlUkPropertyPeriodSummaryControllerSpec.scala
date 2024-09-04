@@ -21,18 +21,27 @@ import api.models.domain.{Nino, PeriodId}
 import api.models.errors._
 import api.models.outcomes.ResponseWrapper
 import api.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService}
-import mocks.{MockAppConfig, MockIdGenerator}
+import config.MockAppConfig
+import play.api.Configuration
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.Result
+import utils.MockIdGenerator
 import v4.historicFhlUkPropertyPeriodSummary.retrieve.def1.model.response.{PeriodExpenses, PeriodIncome, RentARoomExpenses, RentARoomIncome}
-import v4.historicFhlUkPropertyPeriodSummary.retrieve.model.request.{Def1_RetrieveHistoricFhlUkPropertyPeriodSummaryRequestData, RetrieveHistoricFhlUkPropertyPeriodSummaryRequestData}
-import v4.historicFhlUkPropertyPeriodSummary.retrieve.model.response.{Def1_RetrieveHistoricFhlUkPropertyPeriodSummaryResponse, RetrieveHistoricFhlUkPropertyPeriodSummaryResponse}
+import v4.historicFhlUkPropertyPeriodSummary.retrieve.model.request.{
+  Def1_RetrieveHistoricFhlUkPropertyPeriodSummaryRequestData,
+  RetrieveHistoricFhlUkPropertyPeriodSummaryRequestData
+}
+import v4.historicFhlUkPropertyPeriodSummary.retrieve.model.response.{
+  Def1_RetrieveHistoricFhlUkPropertyPeriodSummaryResponse,
+  RetrieveHistoricFhlUkPropertyPeriodSummaryResponse
+}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class RetrieveHistoricFhlUkPropertyPeriodSummaryControllerSpec
-  extends ControllerBaseSpec with MockAppConfig
+    extends ControllerBaseSpec
+    with MockAppConfig
     with ControllerTestRunner
     with MockEnrolmentsAuthService
     with MockMtdIdLookupService
@@ -41,8 +50,8 @@ class RetrieveHistoricFhlUkPropertyPeriodSummaryControllerSpec
     with MockAuditService
     with MockIdGenerator {
 
-  private val from = "2017-04-06"
-  private val to = "2017-07-04"
+  private val from     = "2017-04-06"
+  private val to       = "2017-07-04"
   private val periodId = s"${from}_$to"
 
   "RetrieveHistoricNonFhlUkPropertyPeriodSummaryController" should {
@@ -78,7 +87,7 @@ class RetrieveHistoricFhlUkPropertyPeriodSummaryControllerSpec
 
   trait Test extends ControllerTest {
 
-    private val controller = new RetrieveHistoricFhlUkPropertyPeriodSummaryController(
+    protected val controller = new RetrieveHistoricFhlUkPropertyPeriodSummaryController(
       authService = mockEnrolmentsAuthService,
       lookupService = mockMtdIdLookupService,
       validatorFactory = mockRetrieveHistoricFhlUkPropertyPeriodSummaryValidatorFactory,
@@ -86,6 +95,12 @@ class RetrieveHistoricFhlUkPropertyPeriodSummaryControllerSpec
       cc = cc,
       idGenerator = mockIdGenerator
     )
+
+    MockedAppConfig.featureSwitches.anyNumberOfTimes() returns Configuration(
+      "supporting-agents-access-control.enabled" -> true
+    )
+
+    MockedAppConfig.endpointAllowsSupportingAgents(controller.endpointName).anyNumberOfTimes() returns false
 
     protected def callController(): Future[Result] = controller.handleRequest(nino, periodId)(fakeGetRequest)
 
@@ -110,9 +125,8 @@ class RetrieveHistoricFhlUkPropertyPeriodSummaryControllerSpec
         Some(periodExpenses)
       )
 
-    protected val responseBodyJson: JsValue = Json.parse(
-      """
-        |{ 
+    protected val responseBodyJson: JsValue = Json.parse("""
+        |{
         |  "fromDate": "2017-04-06",
         |  "toDate":"2017-07-04",
         |  "income": {

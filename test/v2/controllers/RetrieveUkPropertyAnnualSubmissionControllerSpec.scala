@@ -21,7 +21,8 @@ import api.hateoas.{HateoasWrapper, MockHateoasFactory}
 import api.models.domain.{BusinessId, Nino, TaxYear, Timestamp}
 import api.models.errors._
 import api.models.outcomes.ResponseWrapper
-import mocks.MockAppConfig
+import config.MockAppConfig
+import play.api.Configuration
 import play.api.libs.json.{JsObject, JsValue, Json}
 import play.api.mvc.Result
 import v2.controllers.validators.MockRetrieveUkPropertyAnnualSubmissionValidatorFactory
@@ -35,7 +36,8 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class RetrieveUkPropertyAnnualSubmissionControllerSpec
-    extends ControllerBaseSpec with MockAppConfig
+    extends ControllerBaseSpec
+    with MockAppConfig
     with ControllerTestRunner
     with MockRetrieveUkPropertyAnnualSubmissionService
     with MockRetrieveUkPropertyAnnualSubmissionValidatorFactory
@@ -81,7 +83,7 @@ class RetrieveUkPropertyAnnualSubmissionControllerSpec
 
   trait Test extends ControllerTest {
 
-    private val controller = new RetrieveUkPropertyAnnualSubmissionController(
+    protected val controller = new RetrieveUkPropertyAnnualSubmissionController(
       authService = mockEnrolmentsAuthService,
       lookupService = mockMtdIdLookupService,
       validatorFactory = mockRetrieveUkPropertyAnnualSubmissionValidatorFactory,
@@ -90,6 +92,12 @@ class RetrieveUkPropertyAnnualSubmissionControllerSpec
       cc = cc,
       idGenerator = mockIdGenerator
     )
+
+    MockedAppConfig.featureSwitches.anyNumberOfTimes() returns Configuration(
+      "supporting-agents-access-control.enabled" -> true
+    )
+
+    MockedAppConfig.endpointAllowsSupportingAgents(controller.endpointName).anyNumberOfTimes() returns false
 
     protected def callController(): Future[Result] = controller.handleRequest(nino, businessId, taxYear)(fakeGetRequest)
 

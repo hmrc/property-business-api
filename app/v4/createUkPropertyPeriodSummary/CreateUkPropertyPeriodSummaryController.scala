@@ -37,6 +37,8 @@ class CreateUkPropertyPeriodSummaryController @Inject() (val authService: Enrolm
                                                          idGenerator: IdGenerator)(implicit ec: ExecutionContext, appConfig: AppConfig)
     extends AuthorisedController(cc) {
 
+  override val endpointName: String = "create-uk-property-period-summary"
+
   implicit val endpointLogContext: EndpointLogContext =
     EndpointLogContext(controllerName = "CreateUkPropertyController", endpointName = "Create a Uk Property Income & Expenditure Period Summary")
 

@@ -19,7 +19,7 @@ package v4.amendForeignPropertyPeriodSummary.def2
 import api.models.domain.{BusinessId, Nino, SubmissionId, TaxYear}
 import api.models.errors._
 import api.models.utils.JsonErrorValidators
-import mocks.MockAppConfig
+import config.MockAppConfig
 import play.api.libs.json.{JsArray, JsNumber, JsValue, Json}
 import support.UnitSpec
 import v4.amendForeignPropertyPeriodSummary.def2.model.request.def2_foreignFhlEea.{
@@ -42,16 +42,15 @@ import v4.amendForeignPropertyPeriodSummary.model.request.{
 class Def2_AmendForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with MockAppConfig with JsonErrorValidators {
   private implicit val correlationId: String = "1234"
 
-  private val validNino = "AA123456A"
-  private val validBusinessId = "XAIS12345678901"
-  private val validTaxYear = "2024-25"
-  private val validSubmissionId = "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
+  private val validNino           = "AA123456A"
+  private val validBusinessId     = "XAIS12345678901"
+  private val validTaxYear        = "2024-25"
+  private val validSubmissionId   = "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
   private val maxTaxYear: TaxYear = TaxYear.fromMtd("2024-25")
 
   private val countryCode = "AFG"
 
-  private def nonFhlEntryWith(countryCode: String) = Json.parse(
-    s"""
+  private def nonFhlEntryWith(countryCode: String) = Json.parse(s"""
        |{
        |  "countryCode": "$countryCode",
        |  "income": {
@@ -102,8 +101,7 @@ class Def2_AmendForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with 
 
   private val validBody = bodyWith(entry)
 
-  private val entryConsolidated = Json.parse(
-    """
+  private val entryConsolidated = Json.parse("""
       |{
       |  "countryCode": "AFG",
       |  "income": {
@@ -121,8 +119,7 @@ class Def2_AmendForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with 
       |  }
       |}""".stripMargin)
 
-  private val entryConsolidatedWithExtraFields = Json.parse(
-    """
+  private val entryConsolidatedWithExtraFields = Json.parse("""
       |{
       |  "countryCode": "AFG",
       |  "income": {
@@ -157,11 +154,10 @@ class Def2_AmendForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with 
        |""".stripMargin
   )
 
-  private val validBodyConsolidatedExpenses = consolidatedBodyWith(entryConsolidated)
+  private val validBodyConsolidatedExpenses            = consolidatedBodyWith(entryConsolidated)
   private val validBodyExtraFieldsConsolidatedExpenses = consolidatedBodyWith(entryConsolidatedWithExtraFields)
 
-  private val validBodyMinimalFhl = Json.parse(
-    """
+  private val validBodyMinimalFhl = Json.parse("""
       |{
       |  "foreignFhlEea": {
       |    "income": {
@@ -171,8 +167,7 @@ class Def2_AmendForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with 
       |}
       |""".stripMargin)
 
-  private val validBodyMinimalNonFhl = Json.parse(
-    """
+  private val validBodyMinimalNonFhl = Json.parse("""
       |{
       |  "foreignNonFhlProperty": [
       |    {
@@ -188,9 +183,9 @@ class Def2_AmendForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with 
       |}
       |""".stripMargin)
 
-  private val parsedNino = Nino(validNino)
-  private val parsedBusinessId = BusinessId(validBusinessId)
-  private val parsedTaxYear = TaxYear.fromMtd(validTaxYear)
+  private val parsedNino         = Nino(validNino)
+  private val parsedBusinessId   = BusinessId(validBusinessId)
+  private val parsedTaxYear      = TaxYear.fromMtd(validTaxYear)
   private val parsedSubmissionId = SubmissionId(validSubmissionId)
 
   private val incomeFhl = Def2_ForeignFhlEeaIncome(
@@ -285,6 +280,7 @@ class Def2_AmendForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with 
     Some(foreignFhlEeaConsolidated),
     Some(List(foreignNonFhlProperty.copy(expenses = Some(expensesNonFhlConsolidated))))
   )
+
   private val parsedBodyExtraFieldsConsolidatedExpenses = Def2_AmendForeignPropertyPeriodSummaryRequestBody(
     Some(foreignFhlEeaConsolidated),
     Some(List(foreignNonFhlProperty.copy(expenses = Some(expensesNonFhlConsolidatedWithExtraFields))))

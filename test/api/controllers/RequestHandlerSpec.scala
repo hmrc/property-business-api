@@ -27,8 +27,7 @@ import cats.data.Validated
 import cats.data.Validated.{Invalid, Valid}
 import cats.implicits.catsSyntaxValidatedId
 import config.Deprecation.{Deprecated, NotDeprecated}
-import config.{AppConfig, Deprecation}
-import mocks.{MockAppConfig, MockIdGenerator}
+import config.{AppConfig, Deprecation, MockAppConfig}
 import org.scalamock.handlers.CallHandler
 import play.api.http.{HeaderNames, Status}
 import play.api.libs.json.{JsString, Json, OWrites}
@@ -38,6 +37,7 @@ import routing.{Version, Version3}
 import support.UnitSpec
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.audit.http.connector.AuditResult
+import utils.MockIdGenerator
 
 import java.time.LocalDateTime
 import scala.concurrent.ExecutionContext.Implicits.global

@@ -24,9 +24,11 @@ import api.models.domain.{Nino, TaxYear}
 import api.models.errors._
 import api.models.outcomes.ResponseWrapper
 import api.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService}
-import mocks.{MockAppConfig, MockIdGenerator}
+import config.MockAppConfig
+import play.api.Configuration
 import play.api.libs.json.{JsObject, JsValue, Json}
 import play.api.mvc.Result
+import utils.MockIdGenerator
 import v2.controllers.validators.MockCreateAmendHistoricFhlUkPropertyAnnualSubmissionValidatorFactory
 import v2.models.request.createAmendHistoricFhlUkPropertyAnnualSubmission._
 import v2.models.response.createAmendHistoricFhlUkPropertyAnnualSubmission._
@@ -47,10 +49,9 @@ class CreateAmendHistoricFhlUkPropertyAnnualSubmissionControllerSpec
     with MockIdGenerator
     with MockAuditService {
 
-  private val taxYear               = "2022-23"
-  private val transactionReference  = Some("transaction reference")
-  private val mtdId: String         = "test-mtd-id"
-
+  private val taxYear              = "2022-23"
+  private val transactionReference = Some("transaction reference")
+  private val mtdId: String        = "test-mtd-id"
 
   "CreateAmendHistoricFhlUkPropertyAnnualSubmissionController" should {
     "return a successful response with status 200 (OK)" when {
@@ -89,7 +90,7 @@ class CreateAmendHistoricFhlUkPropertyAnnualSubmissionControllerSpec
 
   trait Test extends ControllerTest with AuditEventChecking[FlattenedGenericAuditDetail] {
 
-    private val controller = new CreateAmendHistoricFhlUkPropertyAnnualSubmissionController(
+    protected val controller = new CreateAmendHistoricFhlUkPropertyAnnualSubmissionController(
       authService = mockEnrolmentsAuthService,
       lookupService = mockMtdIdLookupService,
       validatorFactory = mockCreateAmendHistoricFhlUkPropertyAnnualSubmissionValidatorFactory,
@@ -99,6 +100,12 @@ class CreateAmendHistoricFhlUkPropertyAnnualSubmissionControllerSpec
       cc = cc,
       idGenerator = mockIdGenerator
     )
+
+    MockedAppConfig.featureSwitches.anyNumberOfTimes() returns Configuration(
+      "supporting-agents-access-control.enabled" -> true
+    )
+
+    MockedAppConfig.endpointAllowsSupportingAgents(controller.endpointName).anyNumberOfTimes() returns false
 
     protected def callController(): Future[Result] = controller.handleRequest(nino, taxYear)(fakePutRequest(requestBodyJson))
 
@@ -142,7 +149,7 @@ class CreateAmendHistoricFhlUkPropertyAnnualSubmissionControllerSpec
         |      "nonResidentLandlord": true,
         |      "rentARoom": {
         |         "jointlyLet": true
-        |      }   
+        |      }
         |   },
         |   "annualAllowances": {
         |      "annualInvestmentAllowance": 200.00,

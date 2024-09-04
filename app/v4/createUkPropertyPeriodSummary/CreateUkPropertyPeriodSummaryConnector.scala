@@ -22,7 +22,12 @@ import api.connectors.{BaseDownstreamConnector, DownstreamOutcome, DownstreamUri
 import config.AppConfig
 import play.api.http.Status.OK
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
-import v4.createUkPropertyPeriodSummary.model.request.{CreateUkPropertyPeriodSummaryRequestData, Def1_CreateUkPropertyPeriodSummaryRequestData, Def2_CreateUkPropertyPeriodSummaryRequestData, Def2_CreateUkPropertyPeriodSummarySubmissionRequestData}
+import v4.createUkPropertyPeriodSummary.model.request.{
+  CreateUkPropertyPeriodSummaryRequestData,
+  Def1_CreateUkPropertyPeriodSummaryRequestData,
+  Def2_CreateUkPropertyPeriodSummaryRequestData,
+  Def2_CreateUkPropertyPeriodSummarySubmissionRequestData
+}
 import v4.createUkPropertyPeriodSummary.model.response.CreateUkPropertyPeriodSummaryResponse
 
 import javax.inject.{Inject, Singleton}

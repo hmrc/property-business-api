@@ -26,5 +26,3 @@ trait CreateAmendForeignPropertyAnnualSubmissionRequestData {
   def body: CreateAmendForeignPropertyAnnualSubmissionRequestBody
   val schema: CreateAmendForeignPropertyAnnualSubmissionSchema
 }
-
-

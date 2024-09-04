@@ -22,8 +22,16 @@ import api.models.errors._
 import api.models.outcomes.ResponseWrapper
 import api.services.{ServiceOutcome, ServiceSpec}
 import uk.gov.hmrc.http.HeaderCarrier
-import v4.historicNonFhlUkPropertyPeriodSummary.create.def1.model.request.{UkNonFhlPropertyExpenses, UkNonFhlPropertyIncome, UkPropertyExpensesRentARoom, UkPropertyIncomeRentARoom}
-import v4.historicNonFhlUkPropertyPeriodSummary.create.model.request.{Def1_CreateHistoricNonFhlUkPropertyPeriodSummaryRequestBody, Def1_CreateHistoricNonFhlUkPropertyPeriodSummaryRequestData}
+import v4.historicNonFhlUkPropertyPeriodSummary.create.def1.model.request.{
+  UkNonFhlPropertyExpenses,
+  UkNonFhlPropertyIncome,
+  UkPropertyExpensesRentARoom,
+  UkPropertyIncomeRentARoom
+}
+import v4.historicNonFhlUkPropertyPeriodSummary.create.model.request.{
+  Def1_CreateHistoricNonFhlUkPropertyPeriodSummaryRequestBody,
+  Def1_CreateHistoricNonFhlUkPropertyPeriodSummaryRequestData
+}
 import v4.historicNonFhlUkPropertyPeriodSummary.create.model.response.CreateHistoricNonFhlUkPropertyPeriodSummaryResponse
 
 import scala.concurrent.Future

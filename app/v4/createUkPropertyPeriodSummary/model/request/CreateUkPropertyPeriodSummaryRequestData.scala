@@ -31,13 +31,14 @@ case class Def1_CreateUkPropertyPeriodSummaryRequestData(nino: Nino,
                                                          businessId: BusinessId,
                                                          taxYear: TaxYear,
                                                          body: Def1_CreateUkPropertyPeriodSummaryRequestBody)
-  extends CreateUkPropertyPeriodSummaryRequestData
+    extends CreateUkPropertyPeriodSummaryRequestData
 
 case class Def2_CreateUkPropertyPeriodSummaryRequestData(nino: Nino,
                                                          businessId: BusinessId,
                                                          taxYear: TaxYear,
                                                          body: Def2_CreateUkPropertyPeriodSummaryRequestBody)
-  extends CreateUkPropertyPeriodSummaryRequestData {
+    extends CreateUkPropertyPeriodSummaryRequestData {
+
   def toSubmission: Def2_CreateUkPropertyPeriodSummarySubmissionRequestData = {
     Def2_CreateUkPropertyPeriodSummarySubmissionRequestData(
       nino = nino,
@@ -47,16 +48,15 @@ case class Def2_CreateUkPropertyPeriodSummaryRequestData(nino: Nino,
         body.fromDate,
         body.toDate,
         body.ukFhlProperty,
-        body.ukNonFhlProperty.map(existing => Def2_Create_UkNonFhlPropertySubmission(existing.income, existing.expenses.map(_.toSubmissionModel))
-        )
+        body.ukNonFhlProperty.map(existing => Def2_Create_UkNonFhlPropertySubmission(existing.income, existing.expenses.map(_.toSubmissionModel)))
       )
     )
   }
+
 }
 
-case class Def2_CreateUkPropertyPeriodSummarySubmissionRequestData(
-                                                                    nino: Nino,
-                                                                    businessId: BusinessId,
-                                                                    taxYear: TaxYear,
-                                                                    body: Def2_CreateUkPropertyPeriodSummarySubmissionRequestBody)
-  extends CreateUkPropertyPeriodSummaryRequestData
+case class Def2_CreateUkPropertyPeriodSummarySubmissionRequestData(nino: Nino,
+                                                                   businessId: BusinessId,
+                                                                   taxYear: TaxYear,
+                                                                   body: Def2_CreateUkPropertyPeriodSummarySubmissionRequestBody)
+    extends CreateUkPropertyPeriodSummaryRequestData

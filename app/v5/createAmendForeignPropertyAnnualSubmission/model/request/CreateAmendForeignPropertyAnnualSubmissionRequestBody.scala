@@ -26,7 +26,7 @@ trait CreateAmendForeignPropertyAnnualSubmissionRequestBody
 object CreateAmendForeignPropertyAnnualSubmissionRequestBody extends JsonWritesUtil {
 
   implicit val writes: OWrites[CreateAmendForeignPropertyAnnualSubmissionRequestBody] = writesFrom {
-    case def1: Def1_CreateAmendForeignPropertyAnnualSubmissionRequestBody=>
+    case def1: Def1_CreateAmendForeignPropertyAnnualSubmissionRequestBody =>
       implicitly[OWrites[Def1_CreateAmendForeignPropertyAnnualSubmissionRequestBody]].writes(def1)
     case def2: Def2_CreateAmendForeignPropertyAnnualSubmissionRequestBody =>
       implicitly[OWrites[Def2_CreateAmendForeignPropertyAnnualSubmissionRequestBody]].writes(def2)

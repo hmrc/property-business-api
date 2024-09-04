@@ -18,7 +18,10 @@ package v4.amendForeignPropertyPeriodSummary.def2.model.request.foreignPropertyE
 
 import play.api.libs.json.{JsValue, Json}
 import support.UnitSpec
-import v4.amendForeignPropertyPeriodSummary.def2.model.request.def2_foreignPropertyEntry.{Def2_ForeignNonFhlPropertyIncome, Def2_ForeignNonFhlPropertyRentIncome}
+import v4.amendForeignPropertyPeriodSummary.def2.model.request.def2_foreignPropertyEntry.{
+  Def2_ForeignNonFhlPropertyIncome,
+  Def2_ForeignNonFhlPropertyRentIncome
+}
 
 class Def2_ForeignNonFhlPropertyIncomeSpec extends UnitSpec {
 

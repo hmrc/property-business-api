@@ -50,7 +50,7 @@ class AmendForeignPropertyPeriodSummaryValidatorFactory @Inject() (appConfig: Ap
 
 object AmendForeignPropertyPeriodSummaryValidatorFactory {
 
-  private val maximumTaxYear = TaxYear.fromMtd("2024-25")
+  private val maximumTaxYear   = TaxYear.fromMtd("2024-25")
   private val def2TaxYearStart = TaxYear.fromMtd("2024-25")
 
 }

@@ -18,7 +18,7 @@ package v4.retrieveHistoricNonFhlUkPropertyAnnualSubmission.def1
 
 import api.models.domain.{Nino, TaxYear}
 import api.models.errors._
-import mocks.MockAppConfig
+import config.MockAppConfig
 import support.UnitSpec
 import v4.retrieveHistoricNonFhlUkPropertyAnnualSubmission.RetrieveHistoricNonFhlUkPropertyAnnualSubmissionValidatorFactory
 import v4.retrieveHistoricNonFhlUkPropertyAnnualSubmission.model.request.{

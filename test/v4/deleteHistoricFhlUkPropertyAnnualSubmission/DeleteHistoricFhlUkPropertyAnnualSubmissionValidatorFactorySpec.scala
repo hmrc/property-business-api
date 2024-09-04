@@ -18,7 +18,7 @@ package v4.deleteHistoricFhlUkPropertyAnnualSubmission
 
 import api.controllers.validators.Validator
 import api.models.domain.HistoricPropertyType
-import mocks.MockAppConfig
+import config.MockAppConfig
 import support.UnitSpec
 import v4.deleteHistoricFhlUkPropertyAnnualSubmission.def1.Def1_DeleteHistoricFhlUkPropertyAnnualSubmissionValidator
 import v4.deleteHistoricFhlUkPropertyAnnualSubmission.model.request.DeleteHistoricFhlUkPropertyAnnualSubmissionRequestData

@@ -26,8 +26,12 @@ import javax.inject.Inject
 trait FeatureSwitches {
   def isPassDeleteIntentEnabled: Boolean
   def isRuleSubmissionDateErrorEnabled: Boolean
+
+  def supportingAgentsAccessControlEnabled: Boolean
+
   def isReleasedInProduction(feature: String): Boolean
   def isEnabled(key: String): Boolean
+
 }
 
 @Singleton
@@ -39,6 +43,8 @@ class FeatureSwitchesImpl(featureSwitchConfig: Configuration) extends FeatureSwi
   val isPassDeleteIntentEnabled: Boolean        = isEnabled("passDeleteIntentHeader")
   val isRuleSubmissionDateErrorEnabled: Boolean = isEnabled("ruleSubmissionDateIssue")
 
+  val supportingAgentsAccessControlEnabled: Boolean = isEnabled("supporting-agents-access-control")
+
   def isReleasedInProduction(feature: String): Boolean = isConfigTrue(feature + ".released-in-production")
 
   def isEnabled(key: String): Boolean = isConfigTrue(key + ".enabled")
@@ -49,4 +55,5 @@ class FeatureSwitchesImpl(featureSwitchConfig: Configuration) extends FeatureSwi
 
 object FeatureSwitches {
   def apply(configuration: Configuration): FeatureSwitches = new FeatureSwitchesImpl(configuration)
+  def apply(appConfig: AppConfig): FeatureSwitches         = new FeatureSwitchesImpl(appConfig)
 }

@@ -19,10 +19,13 @@ package v2.controllers.validators
 import api.models.domain.{Nino, PeriodId, TaxYear}
 import api.models.errors._
 import api.models.utils.JsonErrorValidators
-import mocks.MockAppConfig
+import config.MockAppConfig
 import play.api.libs.json.{JsNumber, JsObject, JsValue, Json}
 import support.UnitSpec
-import v2.models.request.amendHistoricFhlUkPiePeriodSummary.{AmendHistoricFhlUkPiePeriodSummaryRequestBody, AmendHistoricFhlUkPiePeriodSummaryRequestData}
+import v2.models.request.amendHistoricFhlUkPiePeriodSummary.{
+  AmendHistoricFhlUkPiePeriodSummaryRequestBody,
+  AmendHistoricFhlUkPiePeriodSummaryRequestData
+}
 import v2.models.request.common.ukFhlPieProperty.{UkFhlPieExpenses, UkFhlPieIncome}
 import v2.models.request.common.ukPropertyRentARoom.{UkPropertyExpensesRentARoom, UkPropertyIncomeRentARoom}
 

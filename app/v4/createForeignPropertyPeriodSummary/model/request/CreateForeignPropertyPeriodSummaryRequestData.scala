@@ -30,6 +30,7 @@ case class Def1_CreateForeignPropertyPeriodSummaryRequestData(nino: Nino,
                                                               taxYear: TaxYear,
                                                               body: Def1_CreateForeignPropertyPeriodSummaryRequestBody)
     extends CreateForeignPropertyPeriodSummaryRequestData
+
 case class Def2_CreateForeignPropertyPeriodSummaryRequestData(nino: Nino,
                                                               businessId: BusinessId,
                                                               taxYear: TaxYear,

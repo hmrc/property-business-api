@@ -23,10 +23,16 @@ import api.models.domain.{Nino, PeriodId}
 import api.models.errors._
 import api.models.outcomes.ResponseWrapper
 import api.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService}
-import mocks.{MockAppConfig, MockIdGenerator}
+import config.MockAppConfig
+import play.api.Configuration
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.Result
-import v4.historicNonFhlUkPropertyPeriodSummary.create.model.request.{CreateHistoricNonFhlUkPropertyPeriodSummaryRequestData, Def1_CreateHistoricNonFhlUkPropertyPeriodSummaryRequestBody, Def1_CreateHistoricNonFhlUkPropertyPeriodSummaryRequestData}
+import utils.MockIdGenerator
+import v4.historicNonFhlUkPropertyPeriodSummary.create.model.request.{
+  CreateHistoricNonFhlUkPropertyPeriodSummaryRequestData,
+  Def1_CreateHistoricNonFhlUkPropertyPeriodSummaryRequestBody,
+  Def1_CreateHistoricNonFhlUkPropertyPeriodSummaryRequestData
+}
 import v4.historicNonFhlUkPropertyPeriodSummary.create.model.response.CreateHistoricNonFhlUkPropertyPeriodSummaryResponse
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -43,8 +49,8 @@ class CreateHistoricNonFhlUkPropertyPeriodSummaryControllerSpec
     with MockIdGenerator
     with MockAuditService {
 
-  private val periodId              = "2021-01-01_2021-01-02"
-  private val mtdId: String         = "test-mtd-id"
+  private val periodId      = "2021-01-01_2021-01-02"
+  private val mtdId: String = "test-mtd-id"
 
   "CreateHistoricNonFhlUkPiePeriodSummaryController" should {
     "return a successful response with status 201 (CREATED)" when {
@@ -80,7 +86,7 @@ class CreateHistoricNonFhlUkPropertyPeriodSummaryControllerSpec
 
   trait Test extends ControllerTest with AuditEventChecking[FlattenedGenericAuditDetail] {
 
-    private val controller: CreateHistoricNonFhlUkPropertyPeriodSummaryController = new CreateHistoricNonFhlUkPropertyPeriodSummaryController(
+    protected val controller: CreateHistoricNonFhlUkPropertyPeriodSummaryController = new CreateHistoricNonFhlUkPropertyPeriodSummaryController(
       authService = mockEnrolmentsAuthService,
       lookupService = mockMtdIdLookupService,
       validatorFactory = mockCreateHistoricNonFhlUkPiePeriodSummaryValidatorFactory,
@@ -89,6 +95,12 @@ class CreateHistoricNonFhlUkPropertyPeriodSummaryControllerSpec
       cc = cc,
       idGenerator = mockIdGenerator
     )
+
+    MockedAppConfig.featureSwitches.anyNumberOfTimes() returns Configuration(
+      "supporting-agents-access-control.enabled" -> true
+    )
+
+    MockedAppConfig.endpointAllowsSupportingAgents(controller.endpointName).anyNumberOfTimes() returns false
 
     protected def callController(): Future[Result] = controller.handleRequest(nino)(fakePutRequest(requestBodyJson))
 

@@ -18,10 +18,14 @@ package v4.retrieveUkPropertyPeriodSummary.def2
 
 import api.models.domain.{BusinessId, Nino, SubmissionId, TaxYear}
 import api.models.errors._
-import mocks.MockAppConfig
+import config.MockAppConfig
 import support.UnitSpec
 import v4.retrieveUkPropertyPeriodSummary.RetrieveUkPropertyPeriodSummaryValidatorFactory
-import v4.retrieveUkPropertyPeriodSummary.model.request.{Def1_RetrieveUkPropertyPeriodSummaryRequestData, Def2_RetrieveUkPropertyPeriodSummaryRequestData, RetrieveUkPropertyPeriodSummaryRequestData}
+import v4.retrieveUkPropertyPeriodSummary.model.request.{
+  Def1_RetrieveUkPropertyPeriodSummaryRequestData,
+  Def2_RetrieveUkPropertyPeriodSummaryRequestData,
+  RetrieveUkPropertyPeriodSummaryRequestData
+}
 
 class Def2_RetrieveUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with MockAppConfig {
 

@@ -24,7 +24,8 @@ import api.models.domain.{HistoricPropertyType, Nino, TaxYear}
 import api.models.errors._
 import api.models.outcomes.ResponseWrapper
 import api.services.MockAuditService
-import mocks.MockAppConfig
+import config.MockAppConfig
+import play.api.Configuration
 import play.api.libs.json.JsValue
 import play.api.mvc.Result
 import v4.deleteHistoricFhlUkPropertyAnnualSubmission.model.request.Def1_DeleteHistoricFhlUkPropertyAnnualSubmissionRequestData
@@ -40,7 +41,7 @@ class DeleteHistoricFhlUkPropertyAnnualSubmissionControllerSpec
     with MockDeleteHistoricFhlUkPropertyAnnualSubmissionValidatorFactory
     with MockAuditService {
 
-  private val taxYear               = TaxYear.fromMtd("2021-22")
+  private val taxYear = TaxYear.fromMtd("2021-22")
 
   "DeleteHistoricFhlUkPropertyAnnualSubmissionController" should {
     "return a successful response with status 204 (NO_CONTENT)" when {
@@ -94,7 +95,7 @@ class DeleteHistoricFhlUkPropertyAnnualSubmissionControllerSpec
 
     protected val propertyTypeValue: HistoricPropertyType
 
-    private val controller = new DeleteHistoricFhlUkPropertyAnnualSubmissionController(
+    protected val controller = new DeleteHistoricFhlUkPropertyAnnualSubmissionController(
       authService = mockEnrolmentsAuthService,
       lookupService = mockMtdIdLookupService,
       validatorFactory = mockDeleteHistoricUkPropertyAnnualSubmissionValidatorFactory,
@@ -103,6 +104,12 @@ class DeleteHistoricFhlUkPropertyAnnualSubmissionControllerSpec
       cc = cc,
       idGenerator = mockIdGenerator
     )
+
+    MockedAppConfig.featureSwitches.anyNumberOfTimes() returns Configuration(
+      "supporting-agents-access-control.enabled" -> true
+    )
+
+    MockedAppConfig.endpointAllowsSupportingAgents(controller.endpointName).anyNumberOfTimes() returns false
 
     protected def callController(): Future[Result] = {
       val handler = propertyTypeValue match {

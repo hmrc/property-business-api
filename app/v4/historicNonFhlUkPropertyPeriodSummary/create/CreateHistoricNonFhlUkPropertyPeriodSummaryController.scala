@@ -40,10 +40,13 @@ class CreateHistoricNonFhlUkPropertyPeriodSummaryController @Inject() (
 )(implicit ec: ExecutionContext, appConfig: AppConfig)
     extends AuthorisedController(cc) {
 
+  override val endpointName: String = "create-historic-non-fhluk-property-period-summary"
+
   implicit val endpointLogContext: EndpointLogContext =
     EndpointLogContext(
       controllerName = "CreateAmendHistoricNonFHLUkPropertyPeriodSummaryController",
-      endpointName = "CreateAmendHistoricNonFHLUkPropertyIncomeExpensesPeriodSummary")
+      endpointName = "CreateAmendHistoricNonFHLUkPropertyIncomeExpensesPeriodSummary"
+    )
 
   def handleRequest(nino: String): Action[JsValue] =
     authorisedAction(nino).async(parse.json) { implicit request =>

@@ -26,7 +26,8 @@ import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class AmendHistoricNonFhlUkPropertyPeriodSummaryService @Inject()(connector: AmendHistoricNonFhlUkPropertyPeriodSummaryConnector) extends BaseService {
+class AmendHistoricNonFhlUkPropertyPeriodSummaryService @Inject() (connector: AmendHistoricNonFhlUkPropertyPeriodSummaryConnector)
+    extends BaseService {
 
   def amend(
       request: AmendHistoricNonFhlUkPropertyPeriodSummaryRequestData

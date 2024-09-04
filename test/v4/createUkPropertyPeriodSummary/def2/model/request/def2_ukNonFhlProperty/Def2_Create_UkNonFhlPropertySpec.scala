@@ -52,7 +52,6 @@ class Def2_Create_UkNonFhlPropertySpec extends UnitSpec {
   }
   // @formatter:on
 
-
   private val mtdJson = Json.parse("""
       |{
       |    "income": {

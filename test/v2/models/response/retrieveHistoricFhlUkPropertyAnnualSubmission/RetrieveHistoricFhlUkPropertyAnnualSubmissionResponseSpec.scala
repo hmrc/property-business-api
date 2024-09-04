@@ -16,7 +16,7 @@
 
 package v2.models.response.retrieveHistoricFhlUkPropertyAnnualSubmission
 
-import mocks.MockAppConfig
+import config.MockAppConfig
 import play.api.libs.json.{JsValue, Json}
 import support.UnitSpec
 

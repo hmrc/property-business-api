@@ -34,8 +34,9 @@ class PropertyBusinessApiAuthMainAgentsOnlyISpec extends AuthMainAgentsOnlyISpec
 
   override val downstreamHttpMethod: DownstreamStub.HTTPMethod = DownstreamStub.GET
 
-  val maybeDownstreamResponseJson: Option[JsValue] = Some(Json.parse(
-    s"""
+  val maybeDownstreamResponseJson: Option[JsValue] = Some(
+    Json.parse(
+      s"""
        |{
        |  "submittedOn": "2020-07-07T10:59:47.544Z",
        |  "foreignFhlEea": {
@@ -86,6 +87,6 @@ class PropertyBusinessApiAuthMainAgentsOnlyISpec extends AuthMainAgentsOnlyISpec
        |  ]
        |}
      """.stripMargin
-  ))
+    ))
 
 }

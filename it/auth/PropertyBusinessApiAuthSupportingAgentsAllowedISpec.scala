@@ -36,7 +36,7 @@ class PropertyBusinessApiAuthSupportingAgentsAllowedISpec extends AuthSupporting
 
   override val downstreamHttpMethod: DownstreamStub.HTTPMethod = DownstreamStub.GET
 
-  override val downstreamSuccessStatus: Int  = BAD_REQUEST
+  override val downstreamSuccessStatus: Int = BAD_REQUEST
 
   override val expectedMtdSuccessStatus: Int = BAD_REQUEST
 

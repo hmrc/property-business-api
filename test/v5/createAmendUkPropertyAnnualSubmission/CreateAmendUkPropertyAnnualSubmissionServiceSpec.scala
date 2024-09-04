@@ -22,7 +22,10 @@ import api.models.errors._
 import api.models.outcomes.ResponseWrapper
 import support.UnitSpec
 import uk.gov.hmrc.http.HeaderCarrier
-import v5.createAmendUkPropertyAnnualSubmission.def1.model.request.{Def1_CreateAmendUkPropertyAnnualSubmissionRequestBody, Def1_CreateAmendUkPropertyAnnualSubmissionRequestData}
+import v5.createAmendUkPropertyAnnualSubmission.def1.model.request.{
+  Def1_CreateAmendUkPropertyAnnualSubmissionRequestBody,
+  Def1_CreateAmendUkPropertyAnnualSubmissionRequestData
+}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future

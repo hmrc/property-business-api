@@ -22,7 +22,10 @@ import api.models.errors.MtdError
 import cats.data.Validated
 import cats.implicits.catsSyntaxTuple4Semigroupal
 import play.api.libs.json.JsValue
-import v5.createAmendUkPropertyAnnualSubmission.def2.model.request.{Def2_CreateAmendUkPropertyAnnualSubmissionRequestBody, Def2_CreateAmendUkPropertyAnnualSubmissionRequestData}
+import v5.createAmendUkPropertyAnnualSubmission.def2.model.request.{
+  Def2_CreateAmendUkPropertyAnnualSubmissionRequestBody,
+  Def2_CreateAmendUkPropertyAnnualSubmissionRequestData
+}
 import v5.createAmendUkPropertyAnnualSubmission.model.request.CreateAmendUkPropertyAnnualSubmissionRequestData
 
 import javax.inject.{Inject, Singleton}

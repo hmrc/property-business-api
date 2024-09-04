@@ -23,7 +23,10 @@ import cats.data.Validated
 import cats.implicits.catsSyntaxTuple4Semigroupal
 import config.AppConfig
 import play.api.libs.json.JsValue
-import v5.createAmendUkPropertyAnnualSubmission.def1.model.request.{Def1_CreateAmendUkPropertyAnnualSubmissionRequestBody, Def1_CreateAmendUkPropertyAnnualSubmissionRequestData}
+import v5.createAmendUkPropertyAnnualSubmission.def1.model.request.{
+  Def1_CreateAmendUkPropertyAnnualSubmissionRequestBody,
+  Def1_CreateAmendUkPropertyAnnualSubmissionRequestData
+}
 import v5.createAmendUkPropertyAnnualSubmission.model.request.CreateAmendUkPropertyAnnualSubmissionRequestData
 
 import javax.inject.{Inject, Singleton}

@@ -19,17 +19,16 @@ package v5.createAmendUkPropertyAnnualSubmission.def2.model.request
 import play.api.libs.functional.syntax._
 import play.api.libs.json.{JsPath, Json, Reads, Writes}
 
-case class Allowances(
-                                              annualInvestmentAllowance: Option[BigDecimal],
-                                              zeroEmissionsGoodsVehicleAllowance: Option[BigDecimal],
-                                              businessPremisesRenovationAllowance: Option[BigDecimal],
-                                              otherCapitalAllowance: Option[BigDecimal],
-                                              costOfReplacingDomesticGoods: Option[BigDecimal],
-                                              electricChargePointAllowance: Option[BigDecimal],
-                                              zeroEmissionsCarAllowance: Option[BigDecimal],
-                                              propertyIncomeAllowance: Option[BigDecimal],
-                                              structuredBuildingAllowance: Option[Seq[StructuredBuildingAllowance]],
-                                              enhancedStructuredBuildingAllowance: Option[Seq[StructuredBuildingAllowance]])
+case class Allowances(annualInvestmentAllowance: Option[BigDecimal],
+                      zeroEmissionsGoodsVehicleAllowance: Option[BigDecimal],
+                      businessPremisesRenovationAllowance: Option[BigDecimal],
+                      otherCapitalAllowance: Option[BigDecimal],
+                      costOfReplacingDomesticGoods: Option[BigDecimal],
+                      electricChargePointAllowance: Option[BigDecimal],
+                      zeroEmissionsCarAllowance: Option[BigDecimal],
+                      propertyIncomeAllowance: Option[BigDecimal],
+                      structuredBuildingAllowance: Option[Seq[StructuredBuildingAllowance]],
+                      enhancedStructuredBuildingAllowance: Option[Seq[StructuredBuildingAllowance]])
 
 object Allowances {
   implicit val reads: Reads[Allowances] = Json.reads[Allowances]

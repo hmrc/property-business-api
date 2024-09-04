@@ -18,9 +18,7 @@ package v5.createAmendUkPropertyAnnualSubmission.def2.model.request
 
 import play.api.libs.json.{Json, OFormat}
 
-case class StructuredBuildingAllowance(amount: BigDecimal,
-                                       firstYear: Option[FirstYear],
-                                       building: Building)
+case class StructuredBuildingAllowance(amount: BigDecimal, firstYear: Option[FirstYear], building: Building)
 
 object StructuredBuildingAllowance {
   implicit val format: OFormat[StructuredBuildingAllowance] = Json.format[StructuredBuildingAllowance]

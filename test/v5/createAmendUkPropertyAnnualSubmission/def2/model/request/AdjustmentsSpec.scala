@@ -48,7 +48,7 @@ class AdjustmentsSpec extends UnitSpec {
       |      "privateUseAdjustment": 2000.30,
       |      "businessPremisesRenovationAllowanceBalancingCharges": 2000.40,
       |      "nonResidentLandlord": true,
-      |      "ukRentARoom": {
+      |      "ukOtherRentARoom": {
       |        "jointlyLet": true
       |      }
       |}

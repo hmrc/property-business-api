@@ -28,8 +28,8 @@ class Def2_RetrieveUkPropertyAnnualSubmissionResponseSpec extends UnitSpec with 
   private val tysDownstreamJson = Json.parse("""
       |{
       |   "submittedOn":"2020-06-17T10:53:38.000Z",
-      |   "ukProperty":{
-      |      "ukPropertyAnnualAllowances":{
+      |   "ukOtherProperty":{
+      |      "ukOtherPropertyAnnualAllowances":{
       |         "annualInvestmentAllowance":678.45,
       |         "zeroEmissionGoodsVehicleAllowance":456.34,
       |         "businessPremisesRenovationAllowance":573.45,
@@ -67,12 +67,12 @@ class Def2_RetrieveUkPropertyAnnualSubmissionResponseSpec extends UnitSpec with 
       |         ],
       |         "zeroEmissionsCarAllowance":454.34
       |      },
-      |      "ukPropertyAnnualAdjustments":{
+      |      "ukOtherPropertyAnnualAdjustments":{
       |         "balancingCharge":565.34,
       |         "privateUseAdjustment":533.54,
       |         "businessPremisesRenovationAllowanceBalancingCharges":563.34,
       |         "nonResidentLandlord":true,
-      |         "ukRentARoom":{
+      |         "rentARoom":{
       |            "jointlyLet":true
       |         }
       |      }

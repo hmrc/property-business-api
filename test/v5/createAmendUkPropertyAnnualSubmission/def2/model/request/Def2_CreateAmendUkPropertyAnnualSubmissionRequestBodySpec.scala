@@ -127,8 +127,8 @@ class Def2_CreateAmendUkPropertyAnnualSubmissionRequestBodySpec extends UnitSpec
 
   val validDownstreamJson: JsValue = Json.parse("""
       |{
-      |  "ukProperty": {
-      |    "ukPropertyAnnualAllowances": {
+      |  "ukOtherProperty": {
+      |    "ukOtherPropertyAnnualAllowances": {
       |      "annualInvestmentAllowance": 2000.50,
       |      "zeroEmissionGoodsVehicleAllowance": 2000.60,
       |      "businessPremisesRenovationAllowance": 2000.70,
@@ -163,12 +163,12 @@ class Def2_CreateAmendUkPropertyAnnualSubmissionRequestBodySpec extends UnitSpec
       |      ],
       |      "zeroEmissionsCarAllowance": 3000.20
       |    },
-      |    "ukPropertyAnnualAdjustments": {
+      |    "ukOtherPropertyAnnualAdjustments": {
       |      "balancingCharge": 2000.20,
       |      "privateUseAdjustment": 2000.30,
       |      "businessPremisesRenovationAllowanceBalancingCharges": 2000.40,
       |      "nonResidentLandlord": true,
-      |      "ukRentARoom": {
+      |      "ukOtherRentARoom": {
       |        "jointlyLet": true
       |      }
       |    }

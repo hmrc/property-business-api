@@ -30,12 +30,17 @@ case class Def1_Retrieve_UkNonFhlPropertyAdjustments(
 object Def1_Retrieve_UkNonFhlPropertyAdjustments {
   implicit val writes: OWrites[Def1_Retrieve_UkNonFhlPropertyAdjustments] = Json.writes[Def1_Retrieve_UkNonFhlPropertyAdjustments]
 
+  // Since def1 covers pre- and post-TYS (i.e. both API#1598 and API#1805) we need to handle both field names here...
+  private val rentARoomReads: Reads[Option[Def1_Retrieve_UkNonFhlPropertyRentARoom]] =
+    (__ \ "ukOtherRentARoom").read[Def1_Retrieve_UkNonFhlPropertyRentARoom].map(Option(_)) orElse
+      (__ \ "rentARoom").readNullable[Def1_Retrieve_UkNonFhlPropertyRentARoom]
+
   implicit val reads: Reads[Def1_Retrieve_UkNonFhlPropertyAdjustments] = (
     (__ \ "balancingCharge").readNullable[BigDecimal] and
       (__ \ "privateUseAdjustment").readNullable[BigDecimal] and
       (__ \ "businessPremisesRenovationAllowanceBalancingCharges").readNullable[BigDecimal] and
       (__ \ "nonResidentLandlord").read[Boolean] and
-      (__ \ "ukOtherRentARoom").readNullable[Def1_Retrieve_UkNonFhlPropertyRentARoom]
+      rentARoomReads
   )(Def1_Retrieve_UkNonFhlPropertyAdjustments.apply _)
 
 }

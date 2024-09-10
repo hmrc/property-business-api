@@ -16,7 +16,7 @@
 
 package v5.createAmendUkPropertyAnnualSubmission.def2.model.request
 
-import play.api.libs.json.{Json, OFormat}
+import play.api.libs.json.{JsPath, Json, OWrites, Reads}
 import v5.createAmendUkPropertyAnnualSubmission.model.request.CreateAmendUkPropertyAnnualSubmissionRequestBody
 
 case class Def2_CreateAmendUkPropertyAnnualSubmissionRequestBody(ukProperty: Option[UkProperty])
@@ -24,7 +24,9 @@ case class Def2_CreateAmendUkPropertyAnnualSubmissionRequestBody(ukProperty: Opt
 
 object Def2_CreateAmendUkPropertyAnnualSubmissionRequestBody {
 
-  implicit val format: OFormat[Def2_CreateAmendUkPropertyAnnualSubmissionRequestBody] =
-    Json.format[Def2_CreateAmendUkPropertyAnnualSubmissionRequestBody]
+  implicit val reads: Reads[Def2_CreateAmendUkPropertyAnnualSubmissionRequestBody] = Json.reads[Def2_CreateAmendUkPropertyAnnualSubmissionRequestBody]
+
+  implicit val writes: OWrites[Def2_CreateAmendUkPropertyAnnualSubmissionRequestBody] =
+    (JsPath \ "ukOtherProperty").writeNullable[UkProperty].contramap[Def2_CreateAmendUkPropertyAnnualSubmissionRequestBody](_.ukProperty)
 
 }

@@ -33,7 +33,7 @@ object Adjustments {
       (JsPath \ "privateUseAdjustment").writeNullable[BigDecimal] and
       (JsPath \ "businessPremisesRenovationAllowanceBalancingCharges").writeNullable[BigDecimal] and
       (JsPath \ "nonResidentLandlord").write[Boolean] and
-      (JsPath \ "ukRentARoom").writeNullable[RentARoom]
+      (JsPath \ "ukOtherRentARoom").writeNullable[RentARoom]
   )(unlift(Adjustments.unapply))
 
 }

@@ -11,7 +11,6 @@ description: |
   | UK_PROPERTY                           | Simulates the scenario with UK properties.                             |
   | UK_ALL_OTHER_ALLOWANCES               | Simulates the scenario of a UK property with all other allowances.     |
   | UK_PROPERTY_ALLOWANCE                 | Simulates the scenario of a UK property with property allowance.       |
-  | UK_PROPERTY_FHL_NON_FHL               | Simulates the scenario with FHL and Non-FHL properties.                |
   | UK_FHL_ALL_OTHER_ALLOWANCES           | Simulates the scenario of a FHL property with all other allowances.    |
   | UK_FHL_PROPERTY_ALLOWANCE             | Simulates the scenario of a FHL property with property allowance.      |
   | UK_NON_FHL_ALL_OTHER_ALLOWANCES       | Simulates the scenario of a Non-FHL property with all other allowances.|

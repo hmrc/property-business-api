@@ -162,7 +162,7 @@ class Def1_RetrieveForeignPropertyAnnualSubmissionISpec extends IntegrationBaseS
          |      "propertyIncomeAllowance": 100.25
          |    }
          |  },
-         |  "foreignNonFhlProperty": [
+         |  "foreignProperty": [
          |    {
          |      "countryCode": "GER",
          |      "adjustments": {

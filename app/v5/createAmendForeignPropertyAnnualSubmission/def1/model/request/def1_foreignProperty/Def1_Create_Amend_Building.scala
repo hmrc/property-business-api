@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package v5.createAmendForeignPropertyAnnualSubmission.def1.model.request.def1_foreignNonFhl
+package v5.createAmendForeignPropertyAnnualSubmission.def1.model.request.def1_foreignProperty
 
 import play.api.libs.functional.syntax._
 import play.api.libs.json.{JsPath, Json, Reads, Writes}

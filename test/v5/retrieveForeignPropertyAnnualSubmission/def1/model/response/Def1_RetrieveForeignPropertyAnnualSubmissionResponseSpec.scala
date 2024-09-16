@@ -92,7 +92,7 @@ class Def1_RetrieveForeignPropertyAnnualSubmissionResponseSpec extends UnitSpec 
       |      "propertyIncomeAllowance": 100.25
       |    }
       |  },
-      |  "foreignNonFhlProperty": [
+      |  "foreignProperty": [
       |    {
       |      "countryCode": "GER",
       |      "adjustments": {
@@ -198,7 +198,7 @@ class Def1_RetrieveForeignPropertyAnnualSubmissionResponseSpec extends UnitSpec 
     """
       |{
       |  "submittedOn": "2020-07-07T10:59:47.544Z",
-      |  "foreignNonFhlProperty": [
+      |  "foreignProperty": [
       |    {
       |      "countryCode": "GER"
       |    }

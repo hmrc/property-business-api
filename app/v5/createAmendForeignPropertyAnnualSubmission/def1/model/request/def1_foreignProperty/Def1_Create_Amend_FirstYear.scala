@@ -14,14 +14,12 @@
  * limitations under the License.
  */
 
-package v5.createAmendForeignPropertyAnnualSubmission.def1.model.request.def1_foreignNonFhl
+package v5.createAmendForeignPropertyAnnualSubmission.def1.model.request.def1_foreignProperty
 
 import play.api.libs.json.{Json, OFormat}
 
-case class Def1_Create_Amend_StructuredBuildingAllowance(amount: BigDecimal,
-                                                         firstYear: Option[Def1_Create_Amend_FirstYear],
-                                                         building: Def1_Create_Amend_Building)
+case class Def1_Create_Amend_FirstYear(qualifyingDate: String, qualifyingAmountExpenditure: BigDecimal)
 
-object Def1_Create_Amend_StructuredBuildingAllowance {
-  implicit val format: OFormat[Def1_Create_Amend_StructuredBuildingAllowance] = Json.format[Def1_Create_Amend_StructuredBuildingAllowance]
+object Def1_Create_Amend_FirstYear {
+  implicit val format: OFormat[Def1_Create_Amend_FirstYear] = Json.format[Def1_Create_Amend_FirstYear]
 }

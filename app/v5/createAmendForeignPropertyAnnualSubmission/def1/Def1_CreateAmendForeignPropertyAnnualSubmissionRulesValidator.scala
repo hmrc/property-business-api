@@ -24,7 +24,7 @@ import cats.data.Validated.{Invalid, Valid}
 import cats.implicits.toTraverseOps
 import v5.createAmendForeignPropertyAnnualSubmission.def1.model.request.Def1_CreateAmendForeignPropertyAnnualSubmissionRequestData
 import v5.createAmendForeignPropertyAnnualSubmission.def1.model.request.def1_foreignFhlEea._
-import v5.createAmendForeignPropertyAnnualSubmission.def1.model.request.def1_foreignNonFhl._
+import v5.createAmendForeignPropertyAnnualSubmission.def1.model.request.def1_foreignProperty._
 
 import java.time.LocalDate
 
@@ -50,7 +50,7 @@ class Def1_CreateAmendForeignPropertyAnnualSubmissionRulesValidator
     import parsed.body._
     combine(
       foreignFhlEea.map(validateForeignFhlEea).getOrElse(valid),
-      foreignNonFhlProperty.map(validateForeignNonFhlEntries).getOrElse(valid)
+      foreignProperty.map(validateForeignEntries).getOrElse(valid)
     ).onSuccess(parsed)
   }
 
@@ -91,32 +91,32 @@ class Def1_CreateAmendForeignPropertyAnnualSubmissionRulesValidator
     }
   }
 
-  private def validateForeignNonFhlEntries(foreignNonFhlEntries: Seq[Def1_Create_Amend_ForeignNonFhlEntry]): Validated[Seq[MtdError], Unit] = {
-    foreignNonFhlEntries.zipWithIndex.toList
+  private def validateForeignEntries(foreignEntries: Seq[Def1_Create_Amend_ForeignEntry]): Validated[Seq[MtdError], Unit] = {
+    foreignEntries.zipWithIndex.toList
       .map { case (entry, index) =>
-        validateForeignNonFhlEntry(entry, index)
+        validateForeignEntry(entry, index)
       }
       .sequence
       .andThen(_ => valid)
 
   }
 
-  private def validateForeignNonFhlEntry(entry: Def1_Create_Amend_ForeignNonFhlEntry, index: Int): Validated[Seq[MtdError], Unit] = {
+  private def validateForeignEntry(entry: Def1_Create_Amend_ForeignEntry, index: Int): Validated[Seq[MtdError], Unit] = {
     import entry._
-    val validatedCountryCode = ResolveParsedCountryCode(countryCode, s"/foreignNonFhlProperty/$index/countryCode")
+    val validatedCountryCode = ResolveParsedCountryCode(countryCode, s"/foreignProperty/$index/countryCode")
 
     val valuesWithPaths = List(
-      (adjustments.flatMap(_.privateUseAdjustment), s"/foreignNonFhlProperty/$index/adjustments/privateUseAdjustment"),
-      (adjustments.flatMap(_.balancingCharge), s"/foreignNonFhlProperty/$index/adjustments/balancingCharge"),
-      (allowances.flatMap(_.annualInvestmentAllowance), s"/foreignNonFhlProperty/$index/allowances/annualInvestmentAllowance"),
-      (allowances.flatMap(_.costOfReplacingDomesticItems), s"/foreignNonFhlProperty/$index/allowances/costOfReplacingDomesticItems"),
+      (adjustments.flatMap(_.privateUseAdjustment), s"/foreignProperty/$index/adjustments/privateUseAdjustment"),
+      (adjustments.flatMap(_.balancingCharge), s"/foreignProperty/$index/adjustments/balancingCharge"),
+      (allowances.flatMap(_.annualInvestmentAllowance), s"/foreignProperty/$index/allowances/annualInvestmentAllowance"),
+      (allowances.flatMap(_.costOfReplacingDomesticItems), s"/foreignProperty/$index/allowances/costOfReplacingDomesticItems"),
       (
         allowances.flatMap(_.zeroEmissionsGoodsVehicleAllowance),
-        s"/foreignNonFhlProperty/$index/allowances/zeroEmissionsGoodsVehicleAllowance"
+        s"/foreignProperty/$index/allowances/zeroEmissionsGoodsVehicleAllowance"
       ),
-      (allowances.flatMap(_.otherCapitalAllowance), s"/foreignNonFhlProperty/$index/allowances/otherCapitalAllowance"),
-      (allowances.flatMap(_.electricChargePointAllowance), s"/foreignNonFhlProperty/$index/allowances/electricChargePointAllowance"),
-      (allowances.flatMap(_.zeroEmissionsCarAllowance), s"/foreignNonFhlProperty/$index/allowances/zeroEmissionsCarAllowance")
+      (allowances.flatMap(_.otherCapitalAllowance), s"/foreignProperty/$index/allowances/otherCapitalAllowance"),
+      (allowances.flatMap(_.electricChargePointAllowance), s"/foreignProperty/$index/allowances/electricChargePointAllowance"),
+      (allowances.flatMap(_.zeroEmissionsCarAllowance), s"/foreignProperty/$index/allowances/zeroEmissionsCarAllowance")
     )
 
     val validatedNumberFields = valuesWithPaths
@@ -128,7 +128,7 @@ class Def1_CreateAmendForeignPropertyAnnualSubmissionRulesValidator
     val validatedPropertyIncomeAllowance =
       resolvePropertyIncomeAllowanceNumber(
         allowances.flatMap(_.propertyIncomeAllowance),
-        s"/foreignNonFhlProperty/$index/allowances/propertyIncomeAllowance")
+        s"/foreignProperty/$index/allowances/propertyIncomeAllowance")
 
     val validatedBuildings = allowances
       .flatMap(_.structuredBuildingAllowance)
@@ -137,20 +137,20 @@ class Def1_CreateAmendForeignPropertyAnnualSubmissionRulesValidator
       })
       .getOrElse(List(valid))
 
-    val validatedAllowances = allowances.map(validateForeignNonFhlAllowances(index)).getOrElse(valid)
+    val validatedAllowances = allowances.map(validateForeignAllowances(index)).getOrElse(valid)
 
     val validated = validatedNumberFields ++ List(validatedCountryCode, validatedPropertyIncomeAllowance, validatedAllowances) ++ validatedBuildings
 
     validated.sequence.andThen(_ => valid)
   }
 
-  private def validateForeignNonFhlAllowances(index: Int)(allowances: Def1_Create_Amend_ForeignNonFhlAllowances): Validated[Seq[MtdError], Unit] = {
+  private def validateForeignAllowances(index: Int)(allowances: Def1_Create_Amend_ForeignAllowances): Validated[Seq[MtdError], Unit] = {
     allowances.propertyIncomeAllowance match {
       case None => valid
       case Some(_) =>
         allowances match {
-          case Def1_Create_Amend_ForeignNonFhlAllowances(None, None, None, None, None, None, Some(_), None) => valid
-          case _ => Invalid(List(RuleBothAllowancesSuppliedError.withPath(s"/foreignNonFhlProperty/$index/allowances")))
+          case Def1_Create_Amend_ForeignAllowances(None, None, None, None, None, None, Some(_), None) => valid
+          case _ => Invalid(List(RuleBothAllowancesSuppliedError.withPath(s"/foreignProperty/$index/allowances")))
         }
     }
   }
@@ -168,25 +168,25 @@ class Def1_CreateAmendForeignPropertyAnnualSubmissionRulesValidator
     import structuredBuildingAllowance._
 
     val validatedNumberAmount =
-      resolveParsedNumber(amount, s"/foreignNonFhlProperty/$index/allowances/structuredBuildingAllowance/$buildingIndex/amount")
+      resolveParsedNumber(amount, s"/foreignProperty/$index/allowances/structuredBuildingAllowance/$buildingIndex/amount")
 
     val validatedNumberFields = firstYear
       .map(_.qualifyingAmountExpenditure) match {
       case Some(number) =>
         resolveParsedNumber(
           number,
-          s"/foreignNonFhlProperty/$index/allowances/structuredBuildingAllowance/$buildingIndex/firstYear/qualifyingAmountExpenditure")
+          s"/foreignProperty/$index/allowances/structuredBuildingAllowance/$buildingIndex/firstYear/qualifyingAmountExpenditure")
       case None => valid
     }
 
     val validatedStringFields = List(
-      resolveString(building.postcode, s"/foreignNonFhlProperty/$index/allowances/structuredBuildingAllowance/$buildingIndex/building/postcode"),
-      resolveStringOptional(building.name, s"/foreignNonFhlProperty/$index/allowances/structuredBuildingAllowance/$buildingIndex/building/name"),
-      resolveStringOptional(building.number, s"/foreignNonFhlProperty/$index/allowances/structuredBuildingAllowance/$buildingIndex/building/number")
+      resolveString(building.postcode, s"/foreignProperty/$index/allowances/structuredBuildingAllowance/$buildingIndex/building/postcode"),
+      resolveStringOptional(building.name, s"/foreignProperty/$index/allowances/structuredBuildingAllowance/$buildingIndex/building/name"),
+      resolveStringOptional(building.number, s"/foreignProperty/$index/allowances/structuredBuildingAllowance/$buildingIndex/building/number")
     )
 
     val validatedDate = {
-      val qualifyingDatePath = s"/foreignNonFhlProperty/$index/allowances/structuredBuildingAllowance/$buildingIndex/firstYear/qualifyingDate"
+      val qualifyingDatePath = s"/foreignProperty/$index/allowances/structuredBuildingAllowance/$buildingIndex/firstYear/qualifyingDate"
 
       ResolveIsoDate(
         structuredBuildingAllowance.firstYear.map(_.qualifyingDate),
@@ -196,8 +196,7 @@ class Def1_CreateAmendForeignPropertyAnnualSubmissionRulesValidator
 
     val validatedBuilding = (building.name, building.number) match {
       case (None, None) =>
-        Invalid(
-          List(RuleBuildingNameNumberError.withPath(s"/foreignNonFhlProperty/$index/allowances/structuredBuildingAllowance/$buildingIndex/building")))
+        Invalid(List(RuleBuildingNameNumberError.withPath(s"/foreignProperty/$index/allowances/structuredBuildingAllowance/$buildingIndex/building")))
       case _ => valid
     }
 

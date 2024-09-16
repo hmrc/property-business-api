@@ -44,7 +44,7 @@ class Def1_CreateAmendForeignPropertyAnnualSubmissionISpec extends IntegrationBa
       |         "zeroEmissionsCarAllowance":4.25
       |      }
       |   },
-      |   "foreignNonFhlProperty":[
+      |   "foreignProperty":[
       |      {
       |         "countryCode":"IND",
       |         "adjustments":{
@@ -93,7 +93,7 @@ class Def1_CreateAmendForeignPropertyAnnualSubmissionISpec extends IntegrationBa
       |         "zeroEmissionsCarAllowance":4.25
       |      }
       |   },
-      |   "foreignNonFhlProperty":[
+      |   "foreignProperty":[
       |      {
       |         "countryCode":"IND",
       |         "adjustments":{
@@ -142,7 +142,7 @@ class Def1_CreateAmendForeignPropertyAnnualSubmissionISpec extends IntegrationBa
       |         "zeroEmissionsCarAllowance":4.25
       |      }
       |   },
-      |   "foreignNonFhlProperty":[
+      |   "foreignProperty":[
       |      {
       |         "countryCode":"IND",
       |         "adjustments":{
@@ -178,7 +178,7 @@ class Def1_CreateAmendForeignPropertyAnnualSubmissionISpec extends IntegrationBa
 
   val ruleCountryCodeErrorRequestJson: JsValue = Json.parse("""
       |{
-      |   "foreignNonFhlProperty":[
+      |   "foreignProperty":[
       |      {
       |         "countryCode":"QQQ",
       |         "adjustments":{
@@ -192,7 +192,7 @@ class Def1_CreateAmendForeignPropertyAnnualSubmissionISpec extends IntegrationBa
 
   val formatCountryCodeErrorRequestJson: JsValue = Json.parse("""
       |{
-      |   "foreignNonFhlProperty":[
+      |   "foreignProperty":[
       |      {
       |         "countryCode":"QQQQ",
       |         "adjustments":{
@@ -206,7 +206,7 @@ class Def1_CreateAmendForeignPropertyAnnualSubmissionISpec extends IntegrationBa
 
   val duplicateCountryCodeErrorRequestJson: JsValue = Json.parse("""
       |{
-      |   "foreignNonFhlProperty":[
+      |   "foreignProperty":[
       |      {
       |         "countryCode":"IND",
       |         "adjustments":{
@@ -256,7 +256,7 @@ class Def1_CreateAmendForeignPropertyAnnualSubmissionISpec extends IntegrationBa
 
   val ruleBuildingNameOrNumberErrorRequestJson: JsValue = Json.parse("""
       |{
-      |   "foreignNonFhlProperty":[
+      |   "foreignProperty":[
       |      {
       |        "countryCode":"IND",
       |        "allowances":{
@@ -322,13 +322,13 @@ class Def1_CreateAmendForeignPropertyAnnualSubmissionISpec extends IntegrationBa
             |      "/foreignFhlEea/adjustments/privateUseAdjustment",
             |      "/foreignFhlEea/allowances/annualInvestmentAllowance",
             |      "/foreignFhlEea/allowances/otherCapitalAllowance",
-            |      "/foreignNonFhlProperty/0/adjustments/balancingCharge",
-            |      "/foreignNonFhlProperty/0/adjustments/privateUseAdjustment",
-            |      "/foreignNonFhlProperty/0/allowances/annualInvestmentAllowance",
-            |      "/foreignNonFhlProperty/0/allowances/structuredBuildingAllowance/0/building/name",
-            |      "/foreignNonFhlProperty/0/allowances/structuredBuildingAllowance/0/building/number",
-            |      "/foreignNonFhlProperty/0/allowances/structuredBuildingAllowance/0/building/postcode",
-            |      "/foreignNonFhlProperty/0/allowances/structuredBuildingAllowance/0/firstYear/qualifyingDate"
+            |      "/foreignProperty/0/adjustments/balancingCharge",
+            |      "/foreignProperty/0/adjustments/privateUseAdjustment",
+            |      "/foreignProperty/0/allowances/annualInvestmentAllowance",
+            |      "/foreignProperty/0/allowances/structuredBuildingAllowance/0/building/name",
+            |      "/foreignProperty/0/allowances/structuredBuildingAllowance/0/building/number",
+            |      "/foreignProperty/0/allowances/structuredBuildingAllowance/0/building/postcode",
+            |      "/foreignProperty/0/allowances/structuredBuildingAllowance/0/firstYear/qualifyingDate"
             |   ]
             |}
             |""".stripMargin)
@@ -350,15 +350,15 @@ class Def1_CreateAmendForeignPropertyAnnualSubmissionISpec extends IntegrationBa
           DateFormatError.copy(
             paths = Some(
               List(
-                "/foreignNonFhlProperty/0/allowances/structuredBuildingAllowance/0/firstYear/qualifyingDate"
+                "/foreignProperty/0/allowances/structuredBuildingAllowance/0/firstYear/qualifyingDate"
               ))
           ),
           StringFormatError.copy(
             paths = Some(
               List(
-                "/foreignNonFhlProperty/0/allowances/structuredBuildingAllowance/0/building/postcode",
-                "/foreignNonFhlProperty/0/allowances/structuredBuildingAllowance/0/building/name",
-                "/foreignNonFhlProperty/0/allowances/structuredBuildingAllowance/0/building/number"
+                "/foreignProperty/0/allowances/structuredBuildingAllowance/0/building/postcode",
+                "/foreignProperty/0/allowances/structuredBuildingAllowance/0/building/name",
+                "/foreignProperty/0/allowances/structuredBuildingAllowance/0/building/number"
               ))
           ),
           ValueFormatError.copy(
@@ -368,9 +368,9 @@ class Def1_CreateAmendForeignPropertyAnnualSubmissionISpec extends IntegrationBa
                 "/foreignFhlEea/adjustments/balancingCharge",
                 "/foreignFhlEea/allowances/annualInvestmentAllowance",
                 "/foreignFhlEea/allowances/otherCapitalAllowance",
-                "/foreignNonFhlProperty/0/adjustments/privateUseAdjustment",
-                "/foreignNonFhlProperty/0/adjustments/balancingCharge",
-                "/foreignNonFhlProperty/0/allowances/annualInvestmentAllowance"
+                "/foreignProperty/0/adjustments/privateUseAdjustment",
+                "/foreignProperty/0/adjustments/balancingCharge",
+                "/foreignProperty/0/allowances/annualInvestmentAllowance"
               ))
           )
         )
@@ -439,14 +439,14 @@ class Def1_CreateAmendForeignPropertyAnnualSubmissionISpec extends IntegrationBa
           "2021-22",
           ruleCountryCodeErrorRequestJson,
           BAD_REQUEST,
-          RuleCountryCodeError.copy(paths = Some(List("/foreignNonFhlProperty/0/countryCode")))),
+          RuleCountryCodeError.copy(paths = Some(List("/foreignProperty/0/countryCode")))),
         (
           "AA123456A",
           "XAIS12345678910",
           "2021-22",
           formatCountryCodeErrorRequestJson,
           BAD_REQUEST,
-          CountryCodeFormatError.copy(paths = Some(List("/foreignNonFhlProperty/0/countryCode")))),
+          CountryCodeFormatError.copy(paths = Some(List("/foreignProperty/0/countryCode")))),
         (
           "AA123456A",
           "XAIS12345678910",
@@ -460,7 +460,7 @@ class Def1_CreateAmendForeignPropertyAnnualSubmissionISpec extends IntegrationBa
           "2022-23",
           ruleBuildingNameOrNumberErrorRequestJson,
           BAD_REQUEST,
-          RuleBuildingNameNumberError.copy(paths = Some(List("/foreignNonFhlProperty/0/allowances/structuredBuildingAllowance/0/building"))))
+          RuleBuildingNameNumberError.copy(paths = Some(List("/foreignProperty/0/allowances/structuredBuildingAllowance/0/building"))))
       )
       input.foreach(args => (validationErrorTest _).tupled(args))
     }

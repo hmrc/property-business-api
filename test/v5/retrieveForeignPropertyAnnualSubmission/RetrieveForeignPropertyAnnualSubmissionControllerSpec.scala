@@ -158,7 +158,7 @@ class RetrieveForeignPropertyAnnualSubmissionControllerSpec
     protected val responseBody: RetrieveForeignPropertyAnnualSubmissionResponse = Def1_RetrieveForeignPropertyAnnualSubmissionResponse(
       Timestamp("2020-07-07T10:59:47.544Z"),
       foreignFhlEea = Some(foreignFhlEeaEntry),
-      foreignNonFhlProperty = Some(List(foreignPropertyEntry))
+      foreignProperty = Some(List(foreignPropertyEntry))
     )
 
   }

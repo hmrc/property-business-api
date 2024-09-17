@@ -31,7 +31,7 @@ class Def1_RetrieveUkPropertyAnnualSubmissionValidator @Inject() (nino: String, 
     extends Validator[RetrieveUkPropertyAnnualSubmissionRequestData] {
 
   private lazy val minimumTaxYear = appConfig.minimumTaxV2Uk
-  private val maximumTaxYear = TaxYear.fromMtd("2024-25")
+  private val maximumTaxYear      = TaxYear.fromMtd("2024-25")
 
   def validate: Validated[Seq[MtdError], RetrieveUkPropertyAnnualSubmissionRequestData] =
     (

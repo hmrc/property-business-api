@@ -27,7 +27,6 @@ object CreateForeignFhlEea {
   implicit val writes: Writes[CreateForeignFhlEea] = (
     (JsPath \ "income").writeNullable[ForeignFhlEeaIncome] and
       (JsPath \ "expenses").writeNullable[CreateForeignFhlEeaExpenses]
-    )(unlift(CreateForeignFhlEea.unapply))
+  )(unlift(CreateForeignFhlEea.unapply))
 
 }
-

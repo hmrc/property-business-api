@@ -26,14 +26,15 @@ import javax.inject.{Inject, Singleton}
 import scala.concurrent.ExecutionContext
 
 @Singleton
-class RetrieveHistoricFhlUkPropertyPeriodSummaryController @Inject()(
-    val authService: EnrolmentsAuthService,
-    val lookupService: MtdIdLookupService,
-    validatorFactory: RetrieveHistoricFhlUkPropertyPeriodSummaryValidatorFactory,
-    service: RetrieveHistoricFhlUkPropertyPeriodSummaryService,
-    cc: ControllerComponents,
-    idGenerator: IdGenerator)(implicit ec: ExecutionContext, appConfig: AppConfig)
+class RetrieveHistoricFhlUkPropertyPeriodSummaryController @Inject() (val authService: EnrolmentsAuthService,
+                                                                      val lookupService: MtdIdLookupService,
+                                                                      validatorFactory: RetrieveHistoricFhlUkPropertyPeriodSummaryValidatorFactory,
+                                                                      service: RetrieveHistoricFhlUkPropertyPeriodSummaryService,
+                                                                      cc: ControllerComponents,
+                                                                      idGenerator: IdGenerator)(implicit ec: ExecutionContext, appConfig: AppConfig)
     extends AuthorisedController(cc) {
+
+  override val endpointName: String = "retrieve-historic-fhluk-property-period-summary"
 
   implicit val endpointLogContext: EndpointLogContext =
     EndpointLogContext(

@@ -43,6 +43,8 @@ class AmendHistoricFhlUkPropertyPeriodSummaryController @Inject() (val authServi
                                                                    idGenerator: IdGenerator)(implicit ec: ExecutionContext, appConfig: AppConfig)
     extends AuthorisedController(cc) {
 
+  override val endpointName: String = "amend-historic-fhluk-property-period-summary"
+
   implicit val endpointLogContext: EndpointLogContext =
     EndpointLogContext(
       controllerName = "AmendHistoricFhlUkPropertyPeriodSummaryController",

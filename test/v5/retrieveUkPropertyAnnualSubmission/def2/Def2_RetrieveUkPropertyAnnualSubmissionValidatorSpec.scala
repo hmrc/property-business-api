@@ -18,7 +18,7 @@ package v5.retrieveUkPropertyAnnualSubmission.def2
 
 import api.models.domain.{BusinessId, Nino, TaxYear}
 import api.models.errors._
-import mocks.MockAppConfig
+import config.MockAppConfig
 import support.UnitSpec
 import v5.retrieveUkPropertyAnnualSubmission.def2.model.Def2_RetrieveUkPropertyAnnualSubmissionValidator
 import v5.retrieveUkPropertyAnnualSubmission.def2.model.request.Def2_RetrieveUkPropertyAnnualSubmissionRequestData
@@ -35,10 +35,8 @@ class Def2_RetrieveUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec with
   private val parsedBusinessId = BusinessId(validBusinessId)
   private val parsedTaxYear    = TaxYear.fromMtd(validTaxYear)
 
-
   private def validator(nino: String, businessId: String, taxYear: String) =
     new Def2_RetrieveUkPropertyAnnualSubmissionValidator(nino, businessId, taxYear)
-
 
   private def setupMocks(): Unit = MockedAppConfig.minimumTaxV2Uk.returns(TaxYear.starting(2022)).anyNumberOfTimes()
 

@@ -20,8 +20,14 @@ import api.connectors.{ConnectorSpec, DownstreamOutcome}
 import api.models.domain.Nino
 import api.models.outcomes.ResponseWrapper
 import v4.historicNonFhlUkPropertyPeriodSummary.list.def1.model.response.SubmissionPeriod
-import v4.historicNonFhlUkPropertyPeriodSummary.list.model.request.{Def1_ListHistoricNonFhlUkPropertyPeriodSummariesRequestData, ListHistoricNonFhlUkPropertyPeriodSummariesRequestData}
-import v4.historicNonFhlUkPropertyPeriodSummary.list.model.response.{Def1_ListHistoricNonFhlUkPropertyPeriodSummariesResponse, ListHistoricNonFhlUkPropertyPeriodSummariesResponse}
+import v4.historicNonFhlUkPropertyPeriodSummary.list.model.request.{
+  Def1_ListHistoricNonFhlUkPropertyPeriodSummariesRequestData,
+  ListHistoricNonFhlUkPropertyPeriodSummariesRequestData
+}
+import v4.historicNonFhlUkPropertyPeriodSummary.list.model.response.{
+  Def1_ListHistoricNonFhlUkPropertyPeriodSummariesResponse,
+  ListHistoricNonFhlUkPropertyPeriodSummariesResponse
+}
 
 import scala.concurrent.Future
 

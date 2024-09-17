@@ -18,7 +18,7 @@ package v4.createAmendForeignPropertyAnnualSubmission
 
 import api.controllers.validators.Validator
 import api.models.domain.TaxYear
-import mocks.MockAppConfig
+import config.MockAppConfig
 import play.api.libs.json._
 import support.UnitSpec
 import v4.createAmendForeignPropertyAnnualSubmission.def1.Def1_CreateAmendForeignPropertyAnnualSubmissionValidator

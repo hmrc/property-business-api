@@ -21,7 +21,10 @@ import api.connectors.httpparsers.StandardDownstreamHttpParser.reads
 import api.connectors.{BaseDownstreamConnector, DownstreamOutcome}
 import config.AppConfig
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
-import v4.createAmendHistoricFhlUkPropertyAnnualSubmission.model.request.{CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequestData, Def1_CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequestData}
+import v4.createAmendHistoricFhlUkPropertyAnnualSubmission.model.request.{
+  CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequestData,
+  Def1_CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequestData
+}
 import v4.createAmendHistoricFhlUkPropertyAnnualSubmission.model.response.CreateAmendHistoricFhlUkPropertyAnnualSubmissionResponse
 
 import javax.inject.{Inject, Singleton}

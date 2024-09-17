@@ -18,7 +18,7 @@ package api.connectors
 
 import mocks.MockHttpClient
 import api.connectors.MtdIdLookupConnector.Outcome
-import mocks.MockAppConfig
+import config.MockAppConfig
 
 import scala.concurrent.Future
 
@@ -33,6 +33,7 @@ class MtdIdLookupConnectorSpec extends ConnectorSpec {
       http = mockHttpClient,
       appConfig = mockAppConfig
     )
+
     MockedAppConfig.mtdIdBaseUrl returns baseUrl
   }
 
@@ -62,4 +63,5 @@ class MtdIdLookupConnectorSpec extends ConnectorSpec {
       }
     }
   }
+
 }

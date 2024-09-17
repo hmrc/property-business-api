@@ -21,8 +21,14 @@ import api.models.domain.{Nino, PeriodId}
 import api.models.errors.{DownstreamErrorCode, DownstreamErrors}
 import api.models.outcomes.ResponseWrapper
 import org.scalamock.handlers.CallHandler
-import v4.historicNonFhlUkPropertyPeriodSummary.retrieve.model.request.{Def1_RetrieveHistoricNonFhlUkPropertyPeriodSummaryRequestData, RetrieveHistoricNonFhlUkPropertyPeriodSummaryRequestData}
-import v4.historicNonFhlUkPropertyPeriodSummary.retrieve.model.response.{Def1_RetrieveHistoricNonFhlUkPropertyPeriodSummaryResponse, RetrieveHistoricNonFhlUkPropertyPeriodSummaryResponse}
+import v4.historicNonFhlUkPropertyPeriodSummary.retrieve.model.request.{
+  Def1_RetrieveHistoricNonFhlUkPropertyPeriodSummaryRequestData,
+  RetrieveHistoricNonFhlUkPropertyPeriodSummaryRequestData
+}
+import v4.historicNonFhlUkPropertyPeriodSummary.retrieve.model.response.{
+  Def1_RetrieveHistoricNonFhlUkPropertyPeriodSummaryResponse,
+  RetrieveHistoricNonFhlUkPropertyPeriodSummaryResponse
+}
 
 import scala.concurrent.Future
 

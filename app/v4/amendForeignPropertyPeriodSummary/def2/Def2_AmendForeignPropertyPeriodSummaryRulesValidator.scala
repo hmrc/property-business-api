@@ -22,10 +22,7 @@ import api.models.errors.{MtdError, RuleBothExpensesSuppliedError, RuleDuplicate
 import cats.data.Validated
 import cats.data.Validated.Invalid
 import cats.implicits.toTraverseOps
-import v4.amendForeignPropertyPeriodSummary.def2.model.request.def2_foreignFhlEea.{
-  Def2_AmendForeignFhlEea,
-  Def2_AmendForeignFhlEeaExpenses
-}
+import v4.amendForeignPropertyPeriodSummary.def2.model.request.def2_foreignFhlEea.{Def2_AmendForeignFhlEea, Def2_AmendForeignFhlEeaExpenses}
 import v4.amendForeignPropertyPeriodSummary.def2.model.request.def2_foreignPropertyEntry.{
   Def2_AmendForeignNonFhlPropertyEntry,
   Def2_AmendForeignNonFhlPropertyExpenses

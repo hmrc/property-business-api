@@ -18,7 +18,7 @@ package v4.deleteHistoricFhlUkPropertyAnnualSubmission.def1
 
 import api.models.domain.{HistoricPropertyType, Nino, TaxYear}
 import api.models.errors._
-import mocks.MockAppConfig
+import config.MockAppConfig
 import support.UnitSpec
 import v4.deleteHistoricFhlUkPropertyAnnualSubmission.model.request._
 

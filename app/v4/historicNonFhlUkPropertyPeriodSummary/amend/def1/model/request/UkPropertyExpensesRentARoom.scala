@@ -16,7 +16,6 @@
 
 package v4.historicNonFhlUkPropertyPeriodSummary.amend.def1.model.request
 
-
 import play.api.libs.json.{Json, OFormat}
 
 case class UkPropertyExpensesRentARoom(amountClaimed: Option[BigDecimal])

@@ -29,7 +29,6 @@ class VersionRoutingMapSpec extends UnitSpec with GuiceOneAppPerSuite with Scala
   val v4Routes: v4.Routes   = app.injector.instanceOf[v4.Routes]
   val v5Routes: v5.Routes   = app.injector.instanceOf[v5.Routes]
 
-
   "map" when {
     "routing to v2, v3, v4 and v5" should {
       val versionRoutingMap: VersionRoutingMapImpl = VersionRoutingMapImpl(
@@ -37,7 +36,7 @@ class VersionRoutingMapSpec extends UnitSpec with GuiceOneAppPerSuite with Scala
         v2Router = v2Routes,
         v3Router = v3Routes,
         v4Router = v4Routes,
-        v5Router = v5Routes,
+        v5Router = v5Routes
       )
 
       s"route to ${v2Routes.toString}" in {

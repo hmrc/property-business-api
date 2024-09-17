@@ -41,7 +41,7 @@ object Def1_AmendForeignPropertyPeriodSummaryRequestBody {
 
 case class Def2_AmendForeignPropertyPeriodSummaryRequestBody(foreignFhlEea: Option[Def2_AmendForeignFhlEea],
                                                              foreignNonFhlProperty: Option[Seq[Def2_AmendForeignNonFhlPropertyEntry]])
-  extends AmendForeignPropertyPeriodSummaryRequestBody
+    extends AmendForeignPropertyPeriodSummaryRequestBody
 
 object Def2_AmendForeignPropertyPeriodSummaryRequestBody {
   implicit val reads: Reads[Def2_AmendForeignPropertyPeriodSummaryRequestBody] = Json.reads[Def2_AmendForeignPropertyPeriodSummaryRequestBody]
@@ -49,6 +49,6 @@ object Def2_AmendForeignPropertyPeriodSummaryRequestBody {
   implicit val writes: OWrites[Def2_AmendForeignPropertyPeriodSummaryRequestBody] = (
     (JsPath \ "foreignFhlEea").writeNullable[Def2_AmendForeignFhlEea] and
       (JsPath \ "foreignProperty").writeNullable[Seq[Def2_AmendForeignNonFhlPropertyEntry]]
-    )(unlift(Def2_AmendForeignPropertyPeriodSummaryRequestBody.unapply))
+  )(unlift(Def2_AmendForeignPropertyPeriodSummaryRequestBody.unapply))
 
 }

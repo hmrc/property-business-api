@@ -19,7 +19,7 @@ package v2.controllers.validators
 import api.controllers.validators.Validator
 import api.models.domain.Nino
 import api.models.errors._
-import mocks.MockAppConfig
+import config.MockAppConfig
 import support.UnitSpec
 import v2.models.request.listHistoricUkPropertyPeriodSummaries.ListHistoricUkPropertyPeriodSummariesRequestData
 

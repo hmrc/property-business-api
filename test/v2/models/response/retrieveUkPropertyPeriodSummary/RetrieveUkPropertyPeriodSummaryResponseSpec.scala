@@ -18,8 +18,8 @@ package v2.models.response.retrieveUkPropertyPeriodSummary
 
 import api.hateoas.{HateoasFactory, HateoasWrapper, Link}
 import api.hateoas.Method._
+import config.MockAppConfig
 import fixtures.RetrieveUkPropertyPeriodSummary.ResponseModelsFixture
-import mocks.MockAppConfig
 import play.api.libs.json.{JsValue, Json}
 import support.UnitSpec
 

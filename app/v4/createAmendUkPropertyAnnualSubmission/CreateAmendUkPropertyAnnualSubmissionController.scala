@@ -39,6 +39,8 @@ class CreateAmendUkPropertyAnnualSubmissionController @Inject() (
 )(implicit ec: ExecutionContext, appConfig: AppConfig)
     extends AuthorisedController(cc) {
 
+  override val endpointName: String = "create-amend-uk-property-annual-submission"
+
   implicit val endpointLogContext: EndpointLogContext =
     EndpointLogContext(controllerName = "CreateAmendUkPropertyAnnualSubmissionController", endpointName = "CreateAmendUkPropertyAnnualSubmission")
 

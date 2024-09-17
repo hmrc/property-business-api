@@ -22,20 +22,21 @@ import play.api.mvc.AnyContentAsJson
 import play.api.test.FakeRequest
 import support.UnitSpec
 
-class JsonReadsUtilsSpec extends UnitSpec{
+class JsonReadsUtilsSpec extends UnitSpec {
 
   case class testModel(value: Option[BigDecimal], value2: Option[BigDecimal], value3: Option[BigDecimal])
 
   object testModel {
+
     implicit val reads: Reads[testModel] = (
-      JsonReadsUtils.readValidOption((JsPath \ "value1A").readNullable[BigDecimal],(JsPath \ "value1B").readNullable[BigDecimal]) and
-      JsonReadsUtils.readValidOption((JsPath \ "value2A").readNullable[BigDecimal],(JsPath \ "value2B").readNullable[BigDecimal]) and
-      JsonReadsUtils.readValidOption((JsPath \ "value3A").readNullable[BigDecimal],(JsPath \ "value3B").readNullable[BigDecimal])
-      )(testModel.apply _)
+      JsonReadsUtils.readValidOption((JsPath \ "value1A").readNullable[BigDecimal], (JsPath \ "value1B").readNullable[BigDecimal]) and
+        JsonReadsUtils.readValidOption((JsPath \ "value2A").readNullable[BigDecimal], (JsPath \ "value2B").readNullable[BigDecimal]) and
+        JsonReadsUtils.readValidOption((JsPath \ "value3A").readNullable[BigDecimal], (JsPath \ "value3B").readNullable[BigDecimal])
+    )(testModel.apply _)
+
   }
 
-  private val testJson = Json.parse(
-    """
+  private val testJson = Json.parse("""
       |{
       |    "value1A": 500.00,
       |    "value2B": 600.00
@@ -46,7 +47,7 @@ class JsonReadsUtilsSpec extends UnitSpec{
     "readValidOption" should {
       "return the first reads" in {
         lazy val fakeRequest: FakeRequest[AnyContentAsJson] = FakeRequest().withJsonBody(testJson)
-        val result = fakeRequest.body.json.validate(testModel.reads)
+        val result                                          = fakeRequest.body.json.validate(testModel.reads)
         result shouldBe JsSuccess[testModel](testModel(Some(500.00), Some(600.00), None))
       }
     }

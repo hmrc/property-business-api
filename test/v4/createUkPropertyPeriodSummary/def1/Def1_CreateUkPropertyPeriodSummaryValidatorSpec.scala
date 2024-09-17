@@ -19,7 +19,7 @@ package v4.createUkPropertyPeriodSummary.def1
 import api.models.domain.{BusinessId, Nino, TaxYear}
 import api.models.errors._
 import api.models.utils.JsonErrorValidators
-import mocks.MockAppConfig
+import config.MockAppConfig
 import play.api.libs.json.{JsNumber, JsObject, JsString, JsValue, Json}
 import support.UnitSpec
 import v4.createUkPropertyPeriodSummary.def1.model.request.def1_ukFhlProperty._

@@ -23,8 +23,14 @@ import api.models.outcomes.ResponseWrapper
 import support.UnitSpec
 import uk.gov.hmrc.http.HeaderCarrier
 import v4.retrieveForeignPropertyPeriodSummary.RetrieveForeignPropertyPeriodSummaryConnector.{ForeignResult, NonForeignResult}
-import v4.retrieveForeignPropertyPeriodSummary.model.request.{Def1_RetrieveForeignPropertyPeriodSummaryRequestData, RetrieveForeignPropertyPeriodSummaryRequestData}
-import v4.retrieveForeignPropertyPeriodSummary.model.response.{Def1_RetrieveForeignPropertyPeriodSummaryResponse, RetrieveForeignPropertyPeriodSummaryResponse}
+import v4.retrieveForeignPropertyPeriodSummary.model.request.{
+  Def1_RetrieveForeignPropertyPeriodSummaryRequestData,
+  RetrieveForeignPropertyPeriodSummaryRequestData
+}
+import v4.retrieveForeignPropertyPeriodSummary.model.response.{
+  Def1_RetrieveForeignPropertyPeriodSummaryResponse,
+  RetrieveForeignPropertyPeriodSummaryResponse
+}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future

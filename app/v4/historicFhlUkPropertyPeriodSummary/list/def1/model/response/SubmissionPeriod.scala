@@ -29,7 +29,7 @@ object SubmissionPeriod {
   implicit val reads: Reads[SubmissionPeriod] = (
     (__ \ "from").read[String] and
       (__ \ "to").read[String]
-    )(SubmissionPeriod.apply _)
+  )(SubmissionPeriod.apply _)
 
   implicit val writes: OWrites[SubmissionPeriod] = OWrites { x =>
     Json.writes[SubmissionPeriod].writes(x) ++ Json.obj("periodId" -> x.periodId)

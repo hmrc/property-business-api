@@ -21,8 +21,8 @@ import shapeless.HNil
 import utils.EmptinessChecker
 
 case class Def2_Create_Amend_ForeignEntry(countryCode: String,
-                                                adjustments: Option[Def2_Create_Amend_ForeignAdjustments],
-                                                allowances: Option[Def2_Create_Amend_ForeignAllowances])
+                                          adjustments: Option[Def2_Create_Amend_ForeignAdjustments],
+                                          allowances: Option[Def2_Create_Amend_ForeignAllowances])
 
 object Def2_Create_Amend_ForeignEntry {
 

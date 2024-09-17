@@ -24,8 +24,7 @@ import play.api.libs.json.{JsObject, JsValue, Json}
 import play.api.libs.ws.{WSRequest, WSResponse}
 import play.api.test.Helpers.AUTHORIZATION
 import support.IntegrationBaseSpec
-import v2.stubs.AuditStub
-import v2.stubs.{AuthStub, DownstreamStub, MtdIdLookupStub}
+import api.services.{AuthStub, AuditStub, DownstreamStub, MtdIdLookupStub}
 
 class CreateAmendHistoricFhlUkPropertyAnnualSubmissionControllerISpec extends IntegrationBaseSpec {
 

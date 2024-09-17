@@ -32,8 +32,9 @@ class RetrieveUkPropertyAnnualSubmissionValidatorFactory @Inject() (appConfig: A
 
   def validator(nino: String, businessId: String, taxYear: String): Validator[RetrieveUkPropertyAnnualSubmissionRequestData] =
     RetrieveUkPropertyAnnualSubmissionSchema.schemaFor(Some(taxYear)) match {
-      case Valid(Def1)     => new Def1_RetrieveUkPropertyAnnualSubmissionValidator(nino, businessId, taxYear)(appConfig)
-      case Valid(Def2)     => new Def2_RetrieveUkPropertyAnnualSubmissionValidator(nino, businessId, taxYear)
-      case Invalid(errors :Seq[MtdError]) => Validator.returningErrors(errors)
+      case Valid(Def1)                    => new Def1_RetrieveUkPropertyAnnualSubmissionValidator(nino, businessId, taxYear)(appConfig)
+      case Valid(Def2)                    => new Def2_RetrieveUkPropertyAnnualSubmissionValidator(nino, businessId, taxYear)
+      case Invalid(errors: Seq[MtdError]) => Validator.returningErrors(errors)
     }
+
 }

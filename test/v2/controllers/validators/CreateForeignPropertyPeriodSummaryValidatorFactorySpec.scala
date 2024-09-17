@@ -19,7 +19,7 @@ package v2.controllers.validators
 import api.models.domain.{BusinessId, Nino, TaxYear}
 import api.models.errors._
 import api.models.utils.JsonErrorValidators
-import mocks.MockAppConfig
+import config.MockAppConfig
 import play.api.libs.json.{JsArray, JsNumber, JsObject, JsString, JsValue, Json}
 import support.UnitSpec
 import v2.models.request.createForeignPropertyPeriodSummary.foreignFhlEea._
@@ -173,7 +173,7 @@ class CreateForeignPropertyPeriodSummaryValidatorFactorySpec extends UnitSpec wi
   )
 
   private val parsedCreateForeignFhlEeaExpensesConsolidated = CreateForeignFhlEeaExpenses(
-    None,None,None,None,None,None, None,Some(993.31) 
+    None,None,None,None,None,None, None,Some(993.31)
   )
   // @formatter:on
 
@@ -204,7 +204,7 @@ class CreateForeignPropertyPeriodSummaryValidatorFactorySpec extends UnitSpec wi
     Some(129.35), Some(7490.32), Some(5000.99), Some(847.90), Some(478.23),
     Some(69.20), Some(879.28), Some(846.13), Some(138.92), None
   )
-  
+
   private val parsedCreateForeignNonFhlPropertyExpensesConsolidated = CreateForeignNonFhlPropertyExpenses(
     None, None, None, None, None, None, None, None, None, Some(129.35)
   )

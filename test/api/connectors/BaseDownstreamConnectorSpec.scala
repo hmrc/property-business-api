@@ -18,8 +18,8 @@ package api.connectors
 
 import api.connectors.DownstreamUri.{DesUri, IfsUri, TaxYearSpecificIfsUri}
 import api.models.outcomes.ResponseWrapper
-import config.AppConfig
-import mocks.{MockAppConfig, MockHttpClient}
+import config.{AppConfig, MockAppConfig}
+import mocks.{MockHttpClient}
 import uk.gov.hmrc.http.{HttpClient, HttpReads}
 
 import scala.concurrent.Future

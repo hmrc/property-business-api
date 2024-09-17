@@ -19,9 +19,12 @@ package v4.historicFhlUkPropertyPeriodSummary.list.def1
 import api.controllers.validators.Validator
 import api.models.domain.Nino
 import api.models.errors._
-import mocks.MockAppConfig
+import config.MockAppConfig
 import support.UnitSpec
-import v4.historicFhlUkPropertyPeriodSummary.list.model.request.{Def1_ListHistoricFhlUkPropertyPeriodSummariesRequestData, ListHistoricFhlUkPropertyPeriodSummariesRequestData}
+import v4.historicFhlUkPropertyPeriodSummary.list.model.request.{
+  Def1_ListHistoricFhlUkPropertyPeriodSummariesRequestData,
+  ListHistoricFhlUkPropertyPeriodSummariesRequestData
+}
 
 class Def1_ListHistoricFhlUkPropertyPeriodSummariesValidatorSpec extends UnitSpec with MockAppConfig {
 

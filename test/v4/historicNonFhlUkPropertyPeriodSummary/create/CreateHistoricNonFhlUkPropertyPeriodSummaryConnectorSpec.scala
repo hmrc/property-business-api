@@ -19,7 +19,10 @@ package v4.historicNonFhlUkPropertyPeriodSummary.create
 import api.connectors.{ConnectorSpec, DownstreamOutcome}
 import api.models.domain.Nino
 import api.models.outcomes.ResponseWrapper
-import v4.historicNonFhlUkPropertyPeriodSummary.create.model.request.{Def1_CreateHistoricNonFhlUkPropertyPeriodSummaryRequestBody, Def1_CreateHistoricNonFhlUkPropertyPeriodSummaryRequestData}
+import v4.historicNonFhlUkPropertyPeriodSummary.create.model.request.{
+  Def1_CreateHistoricNonFhlUkPropertyPeriodSummaryRequestBody,
+  Def1_CreateHistoricNonFhlUkPropertyPeriodSummaryRequestData
+}
 
 import scala.concurrent.Future
 

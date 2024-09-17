@@ -24,7 +24,7 @@ case class Def1_CreateAmendForeignPropertyAnnualSubmissionRequestData(nino: Nino
                                                                       businessId: BusinessId,
                                                                       taxYear: TaxYear,
                                                                       body: Def1_CreateAmendForeignPropertyAnnualSubmissionRequestBody)
-    extends CreateAmendForeignPropertyAnnualSubmissionRequestData{
+    extends CreateAmendForeignPropertyAnnualSubmissionRequestData {
 
   override val schema: CreateAmendForeignPropertyAnnualSubmissionSchema = CreateAmendForeignPropertyAnnualSubmissionSchema.Def1
 

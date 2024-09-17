@@ -17,7 +17,7 @@
 package v5.retrieveUkPropertyAnnualSubmission
 
 import api.controllers.validators.Validator
-import mocks.MockAppConfig
+import config.MockAppConfig
 import support.UnitSpec
 import v5.retrieveUkPropertyAnnualSubmission.def1.model.Def1_RetrieveUkPropertyAnnualSubmissionValidator
 import v5.retrieveUkPropertyAnnualSubmission.model.request.RetrieveUkPropertyAnnualSubmissionRequestData

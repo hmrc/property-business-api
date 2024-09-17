@@ -21,17 +21,23 @@ import api.models.domain.{Nino, PeriodId}
 import api.models.errors.{DownstreamErrorCode, DownstreamErrors}
 import api.models.outcomes.ResponseWrapper
 import org.scalamock.handlers.CallHandler
-import v4.historicFhlUkPropertyPeriodSummary.retrieve.model.request.{Def1_RetrieveHistoricFhlUkPropertyPeriodSummaryRequestData, RetrieveHistoricFhlUkPropertyPeriodSummaryRequestData}
-import v4.historicFhlUkPropertyPeriodSummary.retrieve.model.response.{Def1_RetrieveHistoricFhlUkPropertyPeriodSummaryResponse, RetrieveHistoricFhlUkPropertyPeriodSummaryResponse}
+import v4.historicFhlUkPropertyPeriodSummary.retrieve.model.request.{
+  Def1_RetrieveHistoricFhlUkPropertyPeriodSummaryRequestData,
+  RetrieveHistoricFhlUkPropertyPeriodSummaryRequestData
+}
+import v4.historicFhlUkPropertyPeriodSummary.retrieve.model.response.{
+  Def1_RetrieveHistoricFhlUkPropertyPeriodSummaryResponse,
+  RetrieveHistoricFhlUkPropertyPeriodSummaryResponse
+}
 
 import scala.concurrent.Future
 
 class RetrieveHistoricFhlUkPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
 
-  private val nino = Nino("AA123456A")
+  private val nino         = Nino("AA123456A")
   private val periodIdFrom = "2017-04-06"
-  private val periodIdTo = "2017-07-04"
-  private val periodId = PeriodId(periodIdFrom, periodIdTo)
+  private val periodIdTo   = "2017-07-04"
+  private val periodId     = PeriodId(periodIdFrom, periodIdTo)
 
   "retrieve" should {
     "return a valid response" when {
@@ -68,7 +74,7 @@ class RetrieveHistoricFhlUkPropertyPeriodSummaryConnectorSpec extends ConnectorS
       )
 
     def stubHttpResponse(outcome: DownstreamOutcome[RetrieveHistoricFhlUkPropertyPeriodSummaryResponse])
-    : CallHandler[Future[DownstreamOutcome[RetrieveHistoricFhlUkPropertyPeriodSummaryResponse]]]#Derived = {
+        : CallHandler[Future[DownstreamOutcome[RetrieveHistoricFhlUkPropertyPeriodSummaryResponse]]]#Derived = {
       willGet(
         url = s"$baseUrl/income-tax/nino/$nino/uk-properties/furnished-holiday-lettings/periodic-summary-detail?from=$periodIdFrom&to=$periodIdTo"
       ).returns(Future.successful(outcome))

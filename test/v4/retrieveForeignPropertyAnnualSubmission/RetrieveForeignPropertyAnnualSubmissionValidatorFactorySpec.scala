@@ -18,7 +18,7 @@ package v4.retrieveForeignPropertyAnnualSubmission
 
 import api.controllers.validators.Validator
 import api.models.domain.TaxYear
-import mocks.MockAppConfig
+import config.MockAppConfig
 import support.UnitSpec
 import v4.retrieveForeignPropertyAnnualSubmission.def1.Def1_RetrieveForeignPropertyAnnualSubmissionValidator
 import v4.retrieveForeignPropertyAnnualSubmission.model.request.RetrieveForeignPropertyAnnualSubmissionRequestData

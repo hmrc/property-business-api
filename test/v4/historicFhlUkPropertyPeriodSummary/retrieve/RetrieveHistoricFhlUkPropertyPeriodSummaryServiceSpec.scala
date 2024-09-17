@@ -23,8 +23,14 @@ import api.models.outcomes.ResponseWrapper
 import api.services.ServiceOutcome
 import support.UnitSpec
 import uk.gov.hmrc.http.HeaderCarrier
-import v4.historicFhlUkPropertyPeriodSummary.retrieve.model.request.{Def1_RetrieveHistoricFhlUkPropertyPeriodSummaryRequestData, RetrieveHistoricFhlUkPropertyPeriodSummaryRequestData}
-import v4.historicFhlUkPropertyPeriodSummary.retrieve.model.response.{Def1_RetrieveHistoricFhlUkPropertyPeriodSummaryResponse, RetrieveHistoricFhlUkPropertyPeriodSummaryResponse}
+import v4.historicFhlUkPropertyPeriodSummary.retrieve.model.request.{
+  Def1_RetrieveHistoricFhlUkPropertyPeriodSummaryRequestData,
+  RetrieveHistoricFhlUkPropertyPeriodSummaryRequestData
+}
+import v4.historicFhlUkPropertyPeriodSummary.retrieve.model.response.{
+  Def1_RetrieveHistoricFhlUkPropertyPeriodSummaryResponse,
+  RetrieveHistoricFhlUkPropertyPeriodSummaryResponse
+}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -32,8 +38,8 @@ import scala.concurrent.Future
 class RetrieveHistoricFhlUkPropertyPeriodSummaryServiceSpec extends UnitSpec {
 
   implicit private val correlationId: String = "X-123"
-  private val nino = Nino("AA123456A")
-  private val periodId = PeriodId(from = "2017-04-06", to = "2017-07-04")
+  private val nino                           = Nino("AA123456A")
+  private val periodId                       = PeriodId(from = "2017-04-06", to = "2017-07-04")
 
   "retrieve" should {
     "return a success result" when {
@@ -61,13 +67,13 @@ class RetrieveHistoricFhlUkPropertyPeriodSummaryServiceSpec extends UnitSpec {
         }
 
       val input = List(
-        "INVALID_NINO" -> NinoFormatError,
-        "INVALID_TYPE" -> InternalError,
-        "INVALID_DATE_FROM" -> PeriodIdFormatError,
-        "INVALID_DATE_TO" -> PeriodIdFormatError,
-        "NOT_FOUND_PROPERTY" -> NotFoundError,
-        "NOT_FOUND_PERIOD" -> NotFoundError,
-        "SERVER_ERROR" -> InternalError,
+        "INVALID_NINO"        -> NinoFormatError,
+        "INVALID_TYPE"        -> InternalError,
+        "INVALID_DATE_FROM"   -> PeriodIdFormatError,
+        "INVALID_DATE_TO"     -> PeriodIdFormatError,
+        "NOT_FOUND_PROPERTY"  -> NotFoundError,
+        "NOT_FOUND_PERIOD"    -> NotFoundError,
+        "SERVER_ERROR"        -> InternalError,
         "SERVICE_UNAVAILABLE" -> InternalError
       )
 
@@ -76,7 +82,7 @@ class RetrieveHistoricFhlUkPropertyPeriodSummaryServiceSpec extends UnitSpec {
   }
 
   trait Test extends MockRetrieveHistoricFhlUkPropertyPeriodSummaryConnector {
-    implicit protected val hc: HeaderCarrier = HeaderCarrier()
+    implicit protected val hc: HeaderCarrier              = HeaderCarrier()
     implicit protected val logContext: EndpointLogContext = EndpointLogContext("c", "ep")
 
     protected val service = new RetrieveHistoricFhlUkPropertyPeriodSummaryService(

@@ -40,6 +40,8 @@ class DeleteHistoricUkPropertyAnnualSubmissionController @Inject() (val authServ
                                                                     idGenerator: IdGenerator)(implicit ec: ExecutionContext, appConfig: AppConfig)
     extends AuthorisedController(cc) {
 
+  override val endpointName: String = "delete-historic-uk-property-annual-submission"
+
   def handleFhlRequest(nino: String, taxYear: String): Action[AnyContent] = {
     implicit val endpointLogContext: EndpointLogContext = {
       EndpointLogContext(

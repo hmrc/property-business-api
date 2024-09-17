@@ -21,12 +21,20 @@ import api.models.domain.{Nino, TaxYear}
 import api.models.errors.{ErrorWrapper, NinoFormatError, RuleTaxYearNotSupportedError}
 import api.models.outcomes.ResponseWrapper
 import api.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService}
-import mocks.{MockAppConfig, MockIdGenerator}
+import config.MockAppConfig
+import play.api.Configuration
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.Result
+import utils.MockIdGenerator
 import v4.retrieveHistoricNonFhlUkPropertyAnnualSubmission.def1.model.response.{AnnualAdjustments, AnnualAllowances, RentARoom}
-import v4.retrieveHistoricNonFhlUkPropertyAnnualSubmission.model.request.{Def1_RetrieveHistoricNonFhlUkPropertyAnnualSubmissionRequestData, RetrieveHistoricNonFhlUkPropertyAnnualSubmissionRequestData}
-import v4.retrieveHistoricNonFhlUkPropertyAnnualSubmission.model.response.{Def1_RetrieveHistoricNonFhlUkPropertyAnnualSubmissionResponse, RetrieveHistoricNonFhlUkPropertyAnnualSubmissionResponse}
+import v4.retrieveHistoricNonFhlUkPropertyAnnualSubmission.model.request.{
+  Def1_RetrieveHistoricNonFhlUkPropertyAnnualSubmissionRequestData,
+  RetrieveHistoricNonFhlUkPropertyAnnualSubmissionRequestData
+}
+import v4.retrieveHistoricNonFhlUkPropertyAnnualSubmission.model.response.{
+  Def1_RetrieveHistoricNonFhlUkPropertyAnnualSubmissionResponse,
+  RetrieveHistoricNonFhlUkPropertyAnnualSubmissionResponse
+}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -42,8 +50,7 @@ class RetrieveHistoricNonFhlUkPropertyAnnualSubmissionControllerSpec
     with MockAuditService
     with MockIdGenerator {
 
-  private val taxYear               = TaxYear.fromMtd("2020-21")
-
+  private val taxYear = TaxYear.fromMtd("2020-21")
 
   "RetrieveHistoricNonFhlUkPropertyAnnualSubmissionController" should {
     "return OK" when {
@@ -79,7 +86,7 @@ class RetrieveHistoricNonFhlUkPropertyAnnualSubmissionControllerSpec
 
   trait Test extends ControllerTest {
 
-    private val controller = new RetrieveHistoricNonFhlUkPropertyAnnualSubmissionController(
+    protected val controller = new RetrieveHistoricNonFhlUkPropertyAnnualSubmissionController(
       authService = mockEnrolmentsAuthService,
       lookupService = mockMtdIdLookupService,
       validatorFactory = mockRetrieveHistoricNonFhlUkPropertyAnnualSubmissionValidatorFactory,
@@ -87,6 +94,12 @@ class RetrieveHistoricNonFhlUkPropertyAnnualSubmissionControllerSpec
       cc = cc,
       idGenerator = mockIdGenerator
     )
+
+    MockedAppConfig.featureSwitches.anyNumberOfTimes() returns Configuration(
+      "supporting-agents-access-control.enabled" -> true
+    )
+
+    MockedAppConfig.endpointAllowsSupportingAgents(controller.endpointName).anyNumberOfTimes() returns false
 
     protected def callController(): Future[Result] = controller.handleRequest(nino, taxYear.asMtd)(fakeGetRequest)
 

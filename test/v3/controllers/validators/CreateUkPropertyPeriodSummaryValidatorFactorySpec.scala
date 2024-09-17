@@ -19,7 +19,7 @@ package v3.controllers.validators
 import api.models.domain.{BusinessId, Nino, TaxYear}
 import api.models.errors._
 import api.models.utils.JsonErrorValidators
-import mocks.MockAppConfig
+import config.MockAppConfig
 import play.api.libs.json.{JsNumber, JsObject, JsString, JsValue, Json}
 import support.UnitSpec
 import v3.models.request.common.ukPropertyRentARoom.{UkPropertyExpensesRentARoom, UkPropertyIncomeRentARoom}
@@ -166,7 +166,7 @@ class CreateUkPropertyPeriodSummaryValidatorFactorySpec extends UnitSpec with Mo
   //@formatter:off
   private val parsedNonFhlExpenses = UkNonFhlPropertyExpenses(
     Some(3123.21), Some(928.42), Some(842.99), Some(8831.12),
-    Some(484.12), Some(99282), Some(12.34), Some(974.47), 
+    Some(484.12), Some(99282), Some(12.34), Some(974.47),
     Some(12.34), Some(parsedNonFhlExpensesRentARoom), None
   )
 

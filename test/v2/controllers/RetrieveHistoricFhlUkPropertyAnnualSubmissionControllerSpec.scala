@@ -22,9 +22,11 @@ import api.models.domain.{Nino, TaxYear}
 import api.models.errors._
 import api.models.outcomes.ResponseWrapper
 import api.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService}
-import mocks.{MockAppConfig, MockIdGenerator}
+import config.MockAppConfig
+import play.api.Configuration
 import play.api.libs.json.{JsObject, JsValue, Json}
 import play.api.mvc.Result
+import utils.MockIdGenerator
 import v2.controllers.validators.MockRetrieveHistoricFhlUkPropertyAnnualSubmissionValidatorFactory
 import v2.models.request.retrieveHistoricFhlUkPropertyAnnualSubmission._
 import v2.models.response.retrieveHistoricFhlUkPropertyAnnualSubmission._
@@ -45,9 +47,8 @@ class RetrieveHistoricFhlUkPropertyAnnualSubmissionControllerSpec
     with MockAuditService
     with MockIdGenerator {
 
-  private val mtdTaxYear            = "2020-21"
-  private val taxYear               = TaxYear.fromMtd(mtdTaxYear)
-
+  private val mtdTaxYear = "2020-21"
+  private val taxYear    = TaxYear.fromMtd(mtdTaxYear)
 
   "RetrieveHistoricFhlUkPropertyAnnualSubmissionController" should {
     "return OK" when {
@@ -87,7 +88,7 @@ class RetrieveHistoricFhlUkPropertyAnnualSubmissionControllerSpec
 
   trait Test extends ControllerTest {
 
-    private val controller = new RetrieveHistoricFhlUkPropertyAnnualSubmissionController(
+    protected val controller = new RetrieveHistoricFhlUkPropertyAnnualSubmissionController(
       authService = mockEnrolmentsAuthService,
       lookupService = mockMtdIdLookupService,
       validatorFactory = mockRetrieveHistoricFhlUkPropertyAnnualSubmissionValidatorFactory,
@@ -96,6 +97,12 @@ class RetrieveHistoricFhlUkPropertyAnnualSubmissionControllerSpec
       cc = cc,
       idGenerator = mockIdGenerator
     )
+
+    MockedAppConfig.featureSwitches.anyNumberOfTimes() returns Configuration(
+      "supporting-agents-access-control.enabled" -> true
+    )
+
+    MockedAppConfig.endpointAllowsSupportingAgents(controller.endpointName).anyNumberOfTimes() returns false
 
     protected def callController(): Future[Result] = controller.handleRequest(nino, mtdTaxYear)(fakeGetRequest)
 

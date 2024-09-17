@@ -27,8 +27,8 @@ sealed trait RetrieveUkPropertyPeriodSummaryResponse
 object RetrieveUkPropertyPeriodSummaryResponse {
 
   implicit val writes: OWrites[RetrieveUkPropertyPeriodSummaryResponse] = {
-    case def1: Def1_RetrieveUkPropertyPeriodSummaryResponse                         => Json.toJsObject(def1)
-    case def2: Def2_RetrieveUkPropertyPeriodSummaryResponse                         => Json.toJsObject(def2)
+    case def1: Def1_RetrieveUkPropertyPeriodSummaryResponse => Json.toJsObject(def1)
+    case def2: Def2_RetrieveUkPropertyPeriodSummaryResponse => Json.toJsObject(def2)
   }
 
 }

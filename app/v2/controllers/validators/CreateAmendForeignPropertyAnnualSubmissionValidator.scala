@@ -75,9 +75,7 @@ object CreateAmendForeignPropertyAnnualSubmissionValidator extends RulesValidato
       }
 
     val validatedPropertyIncomeAllowance =
-      resolvePropertyIncomeAllowanceNumber(
-        allowances.flatMap(_.propertyIncomeAllowance),
-        "/foreignFhlEea/allowances/propertyIncomeAllowance")
+      resolvePropertyIncomeAllowanceNumber(allowances.flatMap(_.propertyIncomeAllowance), "/foreignFhlEea/allowances/propertyIncomeAllowance")
 
     val validatedAllowances = allowances.map(validateForeignFhlAllowances).getOrElse(valid)
 

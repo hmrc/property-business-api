@@ -24,9 +24,11 @@ import api.models.domain.{Nino, TaxYear}
 import api.models.errors._
 import api.models.outcomes.ResponseWrapper
 import api.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService}
-import mocks.{MockAppConfig, MockIdGenerator}
+import config.MockAppConfig
+import play.api.Configuration
 import play.api.libs.json.{JsObject, JsValue, Json}
 import play.api.mvc.Result
+import utils.MockIdGenerator
 import v2.controllers.validators.MockCreateAmendHistoricNonFhlUkPropertyAnnualSubmissionValidatorFactory
 import v2.models.request.createAmendHistoricNonFhlUkPropertyAnnualSubmission._
 import v2.models.response.createAmendHistoricNonFhlUkPropertyAnnualSubmission._
@@ -47,9 +49,9 @@ class CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionControllerSpec
     with MockHateoasFactory
     with MockIdGenerator {
 
-  private val taxYear               = "2022-23"
-  private val transactionReference  = Some("transaction reference")
-  private val mtdId: String         = "test-mtd-id"
+  private val taxYear              = "2022-23"
+  private val transactionReference = Some("transaction reference")
+  private val mtdId: String        = "test-mtd-id"
 
   "CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionController" should {
     "return a successful response with status 200 (OK)" when {
@@ -88,7 +90,7 @@ class CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionControllerSpec
 
   trait Test extends ControllerTest with AuditEventChecking[FlattenedGenericAuditDetail] {
 
-    private val controller = new CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionController(
+    protected val controller = new CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionController(
       authService = mockEnrolmentsAuthService,
       lookupService = mockMtdIdLookupService,
       validatorFactory = mockCreateAmendHistoricNonFhlUkPropertyAnnualSubmissionValidatorFactory,
@@ -98,6 +100,12 @@ class CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionControllerSpec
       cc = cc,
       idGenerator = mockIdGenerator
     )
+
+    MockedAppConfig.featureSwitches.anyNumberOfTimes() returns Configuration(
+      "supporting-agents-access-control.enabled" -> true
+    )
+
+    MockedAppConfig.endpointAllowsSupportingAgents(controller.endpointName).anyNumberOfTimes() returns false
 
     protected def callController(): Future[Result] = controller.handleRequest(nino, taxYear)(fakePutRequest(requestBodyJson))
 

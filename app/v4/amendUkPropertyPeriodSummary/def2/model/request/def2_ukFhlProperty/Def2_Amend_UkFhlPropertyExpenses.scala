@@ -21,14 +21,14 @@ import play.api.libs.json.{JsPath, Json, Reads, Writes}
 import v4.amendUkPropertyPeriodSummary.def2.model.request.def2_ukPropertyRentARoom.Def2_Amend_UkPropertyExpensesRentARoom
 
 case class Def2_Amend_UkFhlPropertyExpenses(premisesRunningCosts: Option[BigDecimal],
-                                 repairsAndMaintenance: Option[BigDecimal],
-                                 financialCosts: Option[BigDecimal],
-                                 professionalFees: Option[BigDecimal],
-                                 costOfServices: Option[BigDecimal],
-                                 other: Option[BigDecimal],
-                                 consolidatedExpenses: Option[BigDecimal],
-                                 travelCosts: Option[BigDecimal],
-                                 rentARoom: Option[Def2_Amend_UkPropertyExpensesRentARoom])
+                                            repairsAndMaintenance: Option[BigDecimal],
+                                            financialCosts: Option[BigDecimal],
+                                            professionalFees: Option[BigDecimal],
+                                            costOfServices: Option[BigDecimal],
+                                            other: Option[BigDecimal],
+                                            consolidatedExpenses: Option[BigDecimal],
+                                            travelCosts: Option[BigDecimal],
+                                            rentARoom: Option[Def2_Amend_UkPropertyExpensesRentARoom])
 
 object Def2_Amend_UkFhlPropertyExpenses {
   implicit val reads: Reads[Def2_Amend_UkFhlPropertyExpenses] = Json.reads[Def2_Amend_UkFhlPropertyExpenses]

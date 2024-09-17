@@ -20,7 +20,11 @@ import api.connectors.{ConnectorSpec, DownstreamOutcome}
 import api.models.domain.{Nino, PeriodId}
 import api.models.outcomes.ResponseWrapper
 import org.scalamock.handlers.CallHandler
-import v4.historicNonFhlUkPropertyPeriodSummary.amend.model.request.{AmendHistoricNonFhlUkPropertyPeriodSummaryRequestData, Def1_AmendHistoricNonFhlUkPropertyPeriodSummaryRequestBody, Def1_AmendHistoricNonFhlUkPropertyPeriodSummaryRequestData}
+import v4.historicNonFhlUkPropertyPeriodSummary.amend.model.request.{
+  AmendHistoricNonFhlUkPropertyPeriodSummaryRequestData,
+  Def1_AmendHistoricNonFhlUkPropertyPeriodSummaryRequestBody,
+  Def1_AmendHistoricNonFhlUkPropertyPeriodSummaryRequestData
+}
 import v4.historicNonFhlUkPropertyPeriodSummary.amend.model.response.AmendHistoricNonFhlUkPropertyPeriodSummaryResponse
 
 import scala.concurrent.Future
@@ -36,7 +40,8 @@ class AmendHistoricNonFhlUkPropertyPeriodSummaryConnectorSpec extends ConnectorS
         val response: AmendHistoricNonFhlUkPropertyPeriodSummaryResponse =
           AmendHistoricNonFhlUkPropertyPeriodSummaryResponse(transactionReference = "2017090920170909")
 
-        val outcome: Right[Nothing, ResponseWrapper[AmendHistoricNonFhlUkPropertyPeriodSummaryResponse]] = Right(ResponseWrapper(correlationId, response))
+        val outcome: Right[Nothing, ResponseWrapper[AmendHistoricNonFhlUkPropertyPeriodSummaryResponse]] =
+          Right(ResponseWrapper(correlationId, response))
 
         stubHttpResponse(outcome)
 

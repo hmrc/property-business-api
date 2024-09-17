@@ -24,18 +24,15 @@ import cats.implicits._
 import config.AppConfig
 import v4.historicFhlUkPropertyPeriodSummary.retrieve.model.request._
 
-
 class Def1_RetrieveHistoricFhlUkPeriodSummaryValidator(nino: String, periodId: String, appConfig: AppConfig)
-  extends Validator[RetrieveHistoricFhlUkPropertyPeriodSummaryRequestData] {
+    extends Validator[RetrieveHistoricFhlUkPropertyPeriodSummaryRequestData] {
 
   private lazy val resolvePeriodId = new ResolvePeriodId(appConfig.minimumTaxYearHistoric, appConfig.maximumTaxYearHistoric)
-
 
   def validate: Validated[Seq[MtdError], RetrieveHistoricFhlUkPropertyPeriodSummaryRequestData] =
     (
       ResolveNino(nino),
       resolvePeriodId(periodId)
-      ).mapN(Def1_RetrieveHistoricFhlUkPropertyPeriodSummaryRequestData)
-
+    ).mapN(Def1_RetrieveHistoricFhlUkPropertyPeriodSummaryRequestData)
 
 }

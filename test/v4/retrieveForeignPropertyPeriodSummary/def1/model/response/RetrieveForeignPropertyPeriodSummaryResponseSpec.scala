@@ -17,7 +17,7 @@
 package v4.retrieveForeignPropertyPeriodSummary.def1.model.response
 
 import api.models.domain.Timestamp
-import mocks.MockAppConfig
+import config.MockAppConfig
 import play.api.libs.json.Json
 import support.UnitSpec
 import v4.retrieveForeignPropertyPeriodSummary.def1.model.response.foreignFhlEea._

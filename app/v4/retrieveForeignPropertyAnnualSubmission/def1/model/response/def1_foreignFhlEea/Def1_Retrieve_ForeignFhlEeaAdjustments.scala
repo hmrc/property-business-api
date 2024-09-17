@@ -19,8 +19,8 @@ package v4.retrieveForeignPropertyAnnualSubmission.def1.model.response.def1_fore
 import play.api.libs.json.{Json, OFormat}
 
 case class Def1_Retrieve_ForeignFhlEeaAdjustments(privateUseAdjustment: Option[BigDecimal],
-                                    balancingCharge: Option[BigDecimal],
-                                    periodOfGraceAdjustment: Option[Boolean])
+                                                  balancingCharge: Option[BigDecimal],
+                                                  periodOfGraceAdjustment: Option[Boolean])
 
 object Def1_Retrieve_ForeignFhlEeaAdjustments {
   implicit val format: OFormat[Def1_Retrieve_ForeignFhlEeaAdjustments] = Json.format[Def1_Retrieve_ForeignFhlEeaAdjustments]

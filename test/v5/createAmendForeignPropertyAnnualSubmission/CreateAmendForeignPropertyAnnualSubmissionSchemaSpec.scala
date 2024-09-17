@@ -29,17 +29,20 @@ class CreateAmendForeignPropertyAnnualSubmissionSchemaSpec extends UnitSpec with
 
       "use Def1 for tax year 2023-24" in {
         val taxYear = TaxYear.fromMtd("2023-24")
-        CreateAmendForeignPropertyAnnualSubmissionSchema.schemaFor(Some(taxYear.asMtd)) shouldBe Valid(CreateAmendForeignPropertyAnnualSubmissionSchema.Def1)
+        CreateAmendForeignPropertyAnnualSubmissionSchema.schemaFor(Some(taxYear.asMtd)) shouldBe Valid(
+          CreateAmendForeignPropertyAnnualSubmissionSchema.Def1)
       }
 
       "use Def1 for tax year 2024-25" in {
         val taxYear = TaxYear.fromMtd("2024-25")
-        CreateAmendForeignPropertyAnnualSubmissionSchema.schemaFor(Some(taxYear.asMtd)) shouldBe Valid(CreateAmendForeignPropertyAnnualSubmissionSchema.Def1)
+        CreateAmendForeignPropertyAnnualSubmissionSchema.schemaFor(Some(taxYear.asMtd)) shouldBe Valid(
+          CreateAmendForeignPropertyAnnualSubmissionSchema.Def1)
       }
 
       "use Def2 for tax years 2025-26 onwards" in {
         val taxYear = TaxYear.fromMtd("2025-26")
-        CreateAmendForeignPropertyAnnualSubmissionSchema.schemaFor(Some(taxYear.asMtd)) shouldBe Valid(CreateAmendForeignPropertyAnnualSubmissionSchema.Def2)
+        CreateAmendForeignPropertyAnnualSubmissionSchema.schemaFor(Some(taxYear.asMtd)) shouldBe Valid(
+          CreateAmendForeignPropertyAnnualSubmissionSchema.Def2)
       }
     }
 

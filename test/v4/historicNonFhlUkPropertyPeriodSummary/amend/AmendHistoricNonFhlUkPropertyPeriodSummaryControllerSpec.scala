@@ -23,10 +23,16 @@ import api.models.domain.{Nino, PeriodId}
 import api.models.errors.{ErrorWrapper, NinoFormatError, RuleMisalignedPeriodError}
 import api.models.outcomes.ResponseWrapper
 import api.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService}
-import mocks.{MockAppConfig, MockIdGenerator}
+import config.MockAppConfig
+import play.api.Configuration
 import play.api.libs.json.{JsObject, JsValue}
 import play.api.mvc.Result
-import v4.historicNonFhlUkPropertyPeriodSummary.amend.model.request.{AmendHistoricNonFhlUkPropertyPeriodSummaryRequestData, Def1_AmendHistoricNonFhlUkPropertyPeriodSummaryRequestBody, Def1_AmendHistoricNonFhlUkPropertyPeriodSummaryRequestData}
+import utils.MockIdGenerator
+import v4.historicNonFhlUkPropertyPeriodSummary.amend.model.request.{
+  AmendHistoricNonFhlUkPropertyPeriodSummaryRequestData,
+  Def1_AmendHistoricNonFhlUkPropertyPeriodSummaryRequestBody,
+  Def1_AmendHistoricNonFhlUkPropertyPeriodSummaryRequestData
+}
 import v4.historicNonFhlUkPropertyPeriodSummary.create.MockAmendHistoricNonFhlUkPropertyPeriodSummaryValidatorFactory
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -43,8 +49,8 @@ class AmendHistoricNonFhlUkPropertyPeriodSummaryControllerSpec
     with MockIdGenerator
     with MockAuditService {
 
-  private val periodId              = "2017-04-06_2017-07-04"
-  private val mtdId: String         = "test-mtd-id"
+  private val periodId      = "2017-04-06_2017-07-04"
+  private val mtdId: String = "test-mtd-id"
 
   "AmendHistoricNonFhlUkPropertyPeriodSummaryController" should {
     "return a successful response with status 200 (OK)" when {
@@ -83,7 +89,7 @@ class AmendHistoricNonFhlUkPropertyPeriodSummaryControllerSpec
 
   trait Test extends ControllerTest with AuditEventChecking[FlattenedGenericAuditDetail] {
 
-    private val controller = new AmendHistoricNonFhlUkPropertyPeriodSummaryController(
+    protected val controller = new AmendHistoricNonFhlUkPropertyPeriodSummaryController(
       authService = mockEnrolmentsAuthService,
       lookupService = mockMtdIdLookupService,
       validatorFactory = mockAmendHistoricNonFhlUkPeriodSummaryValidatorFactory,
@@ -92,6 +98,12 @@ class AmendHistoricNonFhlUkPropertyPeriodSummaryControllerSpec
       cc = cc,
       idGenerator = mockIdGenerator
     )
+
+    MockedAppConfig.featureSwitches.anyNumberOfTimes() returns Configuration(
+      "supporting-agents-access-control.enabled" -> true
+    )
+
+    MockedAppConfig.endpointAllowsSupportingAgents(controller.endpointName).anyNumberOfTimes() returns false
 
     protected def callController(): Future[Result] = controller.handleRequest(nino, periodId)(fakePutRequest(requestBodyJson))
 

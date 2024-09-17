@@ -37,8 +37,8 @@ trait MockCreateHistoricFhlUkPropertyPeriodSummaryValidatorFactory extends MockF
 
   }
 
-  def willUseValidator(
-      use: Validator[CreateHistoricFhlUkPropertyPeriodSummaryRequestData]): CallHandler[Validator[CreateHistoricFhlUkPropertyPeriodSummaryRequestData]] = {
+  def willUseValidator(use: Validator[CreateHistoricFhlUkPropertyPeriodSummaryRequestData])
+      : CallHandler[Validator[CreateHistoricFhlUkPropertyPeriodSummaryRequestData]] = {
     MockedCreateHistoricFhlUkPropertyPeriodSummaryValidatorFactory
       .validator()
       .anyNumberOfTimes()

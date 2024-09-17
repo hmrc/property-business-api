@@ -29,8 +29,8 @@ import scala.concurrent.{ExecutionContext, Future}
 class AmendHistoricFhlUkPropertyPeriodSummaryService @Inject() (connector: AmendHistoricFhlUkPropertyPeriodSummaryConnector) extends BaseService {
 
   def amend(request: AmendHistoricFhlUkPropertyPeriodSummaryRequestData)(implicit
-                                                                         ctx: RequestContext,
-                                                                         ec: ExecutionContext
+      ctx: RequestContext,
+      ec: ExecutionContext
   ): Future[ServiceOutcome[Unit]] = {
 
     connector.amend(request).map(_.leftMap(mapDownstreamErrors(downstreamErrorMap)))
@@ -38,19 +38,19 @@ class AmendHistoricFhlUkPropertyPeriodSummaryService @Inject() (connector: Amend
 
   private val downstreamErrorMap: Map[String, MtdError] =
     Map(
-      "INVALID_NINO" -> NinoFormatError,
-      "INVALID_TYPE" -> InternalError,
-      "INVALID_PAYLOAD" -> InternalError,
-      "INVALID_DATE_FROM" -> PeriodIdFormatError,
-      "INVALID_DATE_TO" -> PeriodIdFormatError,
-      "INVALID_CORRELATIONID" -> InternalError,
+      "INVALID_NINO"                -> NinoFormatError,
+      "INVALID_TYPE"                -> InternalError,
+      "INVALID_PAYLOAD"             -> InternalError,
+      "INVALID_DATE_FROM"           -> PeriodIdFormatError,
+      "INVALID_DATE_TO"             -> PeriodIdFormatError,
+      "INVALID_CORRELATIONID"       -> InternalError,
       "SUBMISSION_PERIOD_NOT_FOUND" -> NotFoundError,
-      "NOT_FOUND_PROPERTY" -> NotFoundError,
-      "NOT_FOUND_INCOME_SOURCE" -> NotFoundError,
-      "NOT_FOUND" -> NotFoundError,
-      "BOTH_EXPENSES_SUPPLIED" -> RuleBothExpensesSuppliedError,
-      "SERVER_ERROR" -> InternalError,
-      "SERVICE_UNAVAILABLE" -> InternalError
+      "NOT_FOUND_PROPERTY"          -> NotFoundError,
+      "NOT_FOUND_INCOME_SOURCE"     -> NotFoundError,
+      "NOT_FOUND"                   -> NotFoundError,
+      "BOTH_EXPENSES_SUPPLIED"      -> RuleBothExpensesSuppliedError,
+      "SERVER_ERROR"                -> InternalError,
+      "SERVICE_UNAVAILABLE"         -> InternalError
     )
 
 }

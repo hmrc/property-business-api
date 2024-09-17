@@ -25,7 +25,7 @@ import play.api.libs.ws.{WSRequest, WSResponse}
 import play.api.test.Helpers.AUTHORIZATION
 import support.IntegrationBaseSpec
 import v5.createAmendForeignPropertyAnnualSubmission.def2.model.request.Def2_Fixtures
-import v5.stubs._
+import api.services._
 
 class Def2_CreateAmendForeignPropertyAnnualSubmissionISpec extends IntegrationBaseSpec with Def2_Fixtures {
 
@@ -186,9 +186,7 @@ class Def2_CreateAmendForeignPropertyAnnualSubmissionISpec extends IntegrationBa
       |}
       |""".stripMargin)
 
-
-  val bothAllowancesSuppliedErrorRequestJson: JsValue = Json.parse(
-    """
+  val bothAllowancesSuppliedErrorRequestJson: JsValue = Json.parse("""
       |{
       |   "foreignProperty":[
       |      {
@@ -231,7 +229,7 @@ class Def2_CreateAmendForeignPropertyAnnualSubmissionISpec extends IntegrationBa
 
     "return a 200 status code" when {
 
-      "any valid request is made" in new  TysIfsTest{
+      "any valid request is made" in new TysIfsTest {
 
         override def setupStubs(): StubMapping = {
           AuditStub.audit()

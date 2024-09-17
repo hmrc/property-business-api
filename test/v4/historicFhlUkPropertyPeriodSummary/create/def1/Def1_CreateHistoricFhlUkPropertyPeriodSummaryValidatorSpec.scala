@@ -20,12 +20,16 @@ import api.controllers.validators.Validator
 import api.models.domain.Nino
 import api.models.errors._
 import api.models.utils.JsonErrorValidators
-import mocks.MockAppConfig
+import config.MockAppConfig
 import play.api.libs.json._
 import support.UnitSpec
 import v4.createAmendHistoricNonFhlUkPropertyAnnualSubmission.def1.model.request.{UkPropertyExpensesRentARoom, UkPropertyIncomeRentARoom}
 import v4.historicFhlUkPropertyPeriodSummary.create.def1.model.request.{UkFhlPropertyExpenses, UkFhlPropertyIncome}
-import v4.historicFhlUkPropertyPeriodSummary.create.model.request.{CreateHistoricFhlUkPropertyPeriodSummaryRequestData, Def1_CreateHistoricFhlUkPiePeriodSummaryRequestBody, Def1_CreateHistoricFhlUkPropertyPeriodSummaryRequestData}
+import v4.historicFhlUkPropertyPeriodSummary.create.model.request.{
+  CreateHistoricFhlUkPropertyPeriodSummaryRequestData,
+  Def1_CreateHistoricFhlUkPiePeriodSummaryRequestBody,
+  Def1_CreateHistoricFhlUkPropertyPeriodSummaryRequestData
+}
 import v4.historicFhlUkPropertyPeriodSummary.create.CreateHistoricFhlUkPropertyPeriodSummaryValidatorFactory
 
 class Def1_CreateHistoricFhlUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with JsonErrorValidators with MockAppConfig {

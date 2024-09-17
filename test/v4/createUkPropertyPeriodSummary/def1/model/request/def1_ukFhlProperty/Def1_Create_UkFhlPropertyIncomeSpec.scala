@@ -20,7 +20,6 @@ import play.api.libs.json.Json
 import support.UnitSpec
 import v4.createUkPropertyPeriodSummary.def1.model.request.def1_ukPropertyRentARoom.Def1_Create_UkPropertyIncomeRentARoom
 
-
 class Def1_Create_UkFhlPropertyIncomeSpec extends UnitSpec {
 
   private val requestBody =

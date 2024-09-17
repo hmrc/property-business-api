@@ -18,7 +18,7 @@ package v2.models.response.amendHistoricNonFhlUkPiePeriodSummary
 
 import api.hateoas.Link
 import api.hateoas.Method._
-import mocks.MockAppConfig
+import config.MockAppConfig
 import support.UnitSpec
 
 class AmendHistoricNonFhlUkPropertyPeriodSummaryHateoasDataSpec extends UnitSpec with MockAppConfig {

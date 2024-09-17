@@ -18,7 +18,10 @@ package v4.retrieveForeignPropertyPeriodSummary.def1.model.response.foreignNonFh
 
 import play.api.libs.json.Json
 import support.UnitSpec
-import v4.retrieveForeignPropertyPeriodSummary.def1.model.response.foreignNonFhlProperty.{ForeignNonFhlPropertyIncome, ForeignNonFhlPropertyRentIncome}
+import v4.retrieveForeignPropertyPeriodSummary.def1.model.response.foreignNonFhlProperty.{
+  ForeignNonFhlPropertyIncome,
+  ForeignNonFhlPropertyRentIncome
+}
 
 class ForeignNonFhlPropertyIncomeSpec extends UnitSpec {
 

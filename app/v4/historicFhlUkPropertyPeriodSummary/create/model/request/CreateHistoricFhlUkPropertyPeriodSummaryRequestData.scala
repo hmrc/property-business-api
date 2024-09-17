@@ -18,12 +18,10 @@ package v4.historicFhlUkPropertyPeriodSummary.create.model.request
 
 import api.models.domain.Nino
 
-
 sealed trait CreateHistoricFhlUkPropertyPeriodSummaryRequestData {
   val nino: Nino
   def body: CreateHistoricFhlUkPiePeriodSummaryRequestBody
 }
 
-
 case class Def1_CreateHistoricFhlUkPropertyPeriodSummaryRequestData(nino: Nino, body: Def1_CreateHistoricFhlUkPiePeriodSummaryRequestBody)
-  extends CreateHistoricFhlUkPropertyPeriodSummaryRequestData
+    extends CreateHistoricFhlUkPropertyPeriodSummaryRequestData

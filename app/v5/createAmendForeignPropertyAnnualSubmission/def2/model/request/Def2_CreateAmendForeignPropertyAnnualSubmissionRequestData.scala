@@ -20,12 +20,11 @@ import api.models.domain.{BusinessId, Nino, TaxYear}
 import v5.createAmendForeignPropertyAnnualSubmission.CreateAmendForeignPropertyAnnualSubmissionSchema
 import v5.createAmendForeignPropertyAnnualSubmission.model.request.CreateAmendForeignPropertyAnnualSubmissionRequestData
 
-
 case class Def2_CreateAmendForeignPropertyAnnualSubmissionRequestData(nino: Nino,
                                                                       businessId: BusinessId,
                                                                       taxYear: TaxYear,
                                                                       body: Def2_CreateAmendForeignPropertyAnnualSubmissionRequestBody)
-    extends CreateAmendForeignPropertyAnnualSubmissionRequestData{
+    extends CreateAmendForeignPropertyAnnualSubmissionRequestData {
 
   override val schema: CreateAmendForeignPropertyAnnualSubmissionSchema = CreateAmendForeignPropertyAnnualSubmissionSchema.Def2
 }

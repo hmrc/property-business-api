@@ -31,7 +31,7 @@ trait MockMtdIdLookupService extends MockFactory {
 
   val mockMtdIdLookupService: MtdIdLookupService = mock[MtdIdLookupService]
 
-  object MockMtdIdLookupService {
+  object MockedMtdIdLookupService {
 
     def lookup(nino: String): CallHandler[Future[MtdIdLookupService.Outcome]] = {
       (mockMtdIdLookupService

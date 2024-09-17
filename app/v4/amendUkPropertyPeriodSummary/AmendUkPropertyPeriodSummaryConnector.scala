@@ -22,7 +22,12 @@ import api.connectors.{BaseDownstreamConnector, DownstreamOutcome}
 import config.AppConfig
 import play.api.http.Status.NO_CONTENT
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
-import v4.amendUkPropertyPeriodSummary.model.request.{AmendUkPropertyPeriodSummaryRequestData, Def1_AmendUkPropertyPeriodSummaryRequestData, Def2_AmendUkPropertyPeriodSummaryRequestData, Def2_AmendUkPropertyPeriodSummarySubmissionRequestData}
+import v4.amendUkPropertyPeriodSummary.model.request.{
+  AmendUkPropertyPeriodSummaryRequestData,
+  Def1_AmendUkPropertyPeriodSummaryRequestData,
+  Def2_AmendUkPropertyPeriodSummaryRequestData,
+  Def2_AmendUkPropertyPeriodSummarySubmissionRequestData
+}
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}

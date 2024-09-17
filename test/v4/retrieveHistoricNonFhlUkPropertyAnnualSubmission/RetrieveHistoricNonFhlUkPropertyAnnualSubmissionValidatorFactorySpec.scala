@@ -16,7 +16,7 @@
 
 package v4.retrieveHistoricNonFhlUkPropertyAnnualSubmission
 
-import mocks.MockAppConfig
+import config.MockAppConfig
 import support.UnitSpec
 import v4.retrieveHistoricNonFhlUkPropertyAnnualSubmission.def1.Def1_RetrieveHistoricNonFhlUkPropertyAnnualSubmissionValidator
 

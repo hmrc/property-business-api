@@ -21,13 +21,10 @@ import cats.data.Validated
 import cats.data.Validated.Valid
 import cats.implicits._
 
-/**
-  * For complex additional validating that needs to take place after the initial validation and parsing of
-  * the JSON payload.
+/** For complex additional validating that needs to take place after the initial validation and parsing of the JSON payload.
   *
-  * If the additional validating is fairly minor, it could just go into a method in the Validator/ValidatorFactory;
-  * but if it's sizeable and is primarily about validating business rules, then it'll make sense to separate it into
-  * a separate RulesValidator class.
+  * If the additional validating is fairly minor, it could just go into a method in the Validator/ValidatorFactory; but if it's sizeable and is
+  * primarily about validating business rules, then it'll make sense to separate it into a separate RulesValidator class.
   */
 trait RulesValidator[PARSED] {
 

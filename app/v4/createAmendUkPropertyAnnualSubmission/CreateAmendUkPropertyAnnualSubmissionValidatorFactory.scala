@@ -25,9 +25,9 @@ import v4.createAmendUkPropertyAnnualSubmission.model.request.CreateAmendUkPrope
 import javax.inject.{Inject, Singleton}
 
 @Singleton
-class CreateAmendUkPropertyAnnualSubmissionValidatorFactory @Inject()(appConfig: AppConfig) {
+class CreateAmendUkPropertyAnnualSubmissionValidatorFactory @Inject() (appConfig: AppConfig) {
 
   def validator(nino: String, businessId: String, taxYear: String, body: JsValue): Validator[CreateAmendUkPropertyAnnualSubmissionRequestData] =
-    new Def1_CreateAmendUkPropertyAnnualSubmissionValidator(nino,businessId,taxYear,body)(appConfig)
+    new Def1_CreateAmendUkPropertyAnnualSubmissionValidator(nino, businessId, taxYear, body)(appConfig)
 
 }

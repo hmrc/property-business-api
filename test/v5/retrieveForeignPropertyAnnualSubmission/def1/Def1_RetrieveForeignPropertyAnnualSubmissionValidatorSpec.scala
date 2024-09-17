@@ -18,7 +18,7 @@ package v5.retrieveForeignPropertyAnnualSubmission.def1
 
 import api.models.domain.{BusinessId, Nino, TaxYear}
 import api.models.errors._
-import mocks.MockAppConfig
+import config.MockAppConfig
 import support.UnitSpec
 import v5.retrieveForeignPropertyAnnualSubmission.def1.request.Def1_RetrieveForeignPropertyAnnualSubmissionRequestData
 import v5.retrieveForeignPropertyAnnualSubmission.model.request.RetrieveForeignPropertyAnnualSubmissionRequestData
@@ -33,7 +33,6 @@ class Def1_RetrieveForeignPropertyAnnualSubmissionValidatorSpec extends UnitSpec
   private val parsedNino       = Nino(validNino)
   private val parsedBusinessId = BusinessId(validBusinessId)
   private val parsedTaxYear    = TaxYear.fromMtd(validTaxYear)
-
 
   private def validator(nino: String, businessId: String, taxYear: String) =
     new Def1_RetrieveForeignPropertyAnnualSubmissionValidator(nino, businessId, taxYear)(mockAppConfig)

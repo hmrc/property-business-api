@@ -24,7 +24,12 @@ import cats.data.Validated.Valid
 import cats.implicits.{catsSyntaxTuple3Semigroupal, toTraverseOps}
 import config.AppConfig
 import play.api.libs.json.JsValue
-import v2.models.request.createAmendHistoricNonFhlUkPropertyAnnualSubmission.{CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestBody, CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestData, HistoricNonFhlAnnualAdjustments, HistoricNonFhlAnnualAllowances}
+import v2.models.request.createAmendHistoricNonFhlUkPropertyAnnualSubmission.{
+  CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestBody,
+  CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestData,
+  HistoricNonFhlAnnualAdjustments,
+  HistoricNonFhlAnnualAllowances
+}
 
 import javax.inject.{Inject, Singleton}
 

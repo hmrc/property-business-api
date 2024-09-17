@@ -24,7 +24,10 @@ import cats.data.Validated.Invalid
 import cats.implicits.toTraverseOps
 import v3.models.request.createForeignPropertyPeriodSummary.CreateForeignPropertyPeriodSummaryRequestData
 import v3.models.request.createForeignPropertyPeriodSummary.foreignFhlEea.{CreateForeignFhlEea, CreateForeignFhlEeaExpenses}
-import v3.models.request.createForeignPropertyPeriodSummary.foreignPropertyEntry.{CreateForeignNonFhlPropertyEntry, CreateForeignNonFhlPropertyExpenses}
+import v3.models.request.createForeignPropertyPeriodSummary.foreignPropertyEntry.{
+  CreateForeignNonFhlPropertyEntry,
+  CreateForeignNonFhlPropertyExpenses
+}
 
 object CreateForeignPropertyPeriodSummaryRulesValidator extends RulesValidator[CreateForeignPropertyPeriodSummaryRequestData] {
 

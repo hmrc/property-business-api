@@ -23,10 +23,14 @@ import api.models.domain.{Nino, TaxYear}
 import api.models.errors._
 import api.models.outcomes.ResponseWrapper
 import api.services.MockAuditService
-import mocks.MockAppConfig
+import config.MockAppConfig
+import play.api.Configuration
 import play.api.libs.json.JsValue
 import play.api.mvc.Result
-import v4.deleteHistoricNonFhlUkPropertyAnnualSubmission.model.request.{Def1_DeleteHistoricNonFhlUkPropertyAnnualSubmissionRequestData, DeleteHistoricNonFhlUkPropertyAnnualSubmissionRequestData}
+import v4.deleteHistoricNonFhlUkPropertyAnnualSubmission.model.request.{
+  Def1_DeleteHistoricNonFhlUkPropertyAnnualSubmissionRequestData,
+  DeleteHistoricNonFhlUkPropertyAnnualSubmissionRequestData
+}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -39,7 +43,7 @@ class DeleteHistoricNonFhlUkPropertyAnnualSubmissionControllerSpec
     with MockDeleteHistoricNonFhlUkPropertyAnnualSubmissionValidatorFactory
     with MockAuditService {
 
-  private val taxYear               = TaxYear.fromMtd("2021-22")
+  private val taxYear = TaxYear.fromMtd("2021-22")
 
   "DeleteHistoricUkPropertyAnnualSubmissionController" should {
     "return a successful response with status 204 (NO_CONTENT)" when {
@@ -86,7 +90,7 @@ class DeleteHistoricNonFhlUkPropertyAnnualSubmissionControllerSpec
 
   trait Test extends ControllerTest with AuditEventChecking[FlattenedGenericAuditDetail] {
 
-    private val controller = new DeleteHistoricNonFhlUkPropertyAnnualSubmissionController(
+    protected val controller = new DeleteHistoricNonFhlUkPropertyAnnualSubmissionController(
       authService = mockEnrolmentsAuthService,
       lookupService = mockMtdIdLookupService,
       validatorFactory = mockDeleteHistoricNonFhlUkPropertyAnnualSubmissionValidatorFactory,
@@ -95,6 +99,12 @@ class DeleteHistoricNonFhlUkPropertyAnnualSubmissionControllerSpec
       cc = cc,
       idGenerator = mockIdGenerator
     )
+
+    MockedAppConfig.featureSwitches.anyNumberOfTimes() returns Configuration(
+      "supporting-agents-access-control.enabled" -> true
+    )
+
+    MockedAppConfig.endpointAllowsSupportingAgents(controller.endpointName).anyNumberOfTimes() returns false
 
     protected val requestData: DeleteHistoricNonFhlUkPropertyAnnualSubmissionRequestData =
       Def1_DeleteHistoricNonFhlUkPropertyAnnualSubmissionRequestData(Nino(nino), taxYear)

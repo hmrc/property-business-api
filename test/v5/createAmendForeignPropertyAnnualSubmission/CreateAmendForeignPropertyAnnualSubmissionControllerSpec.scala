@@ -22,10 +22,16 @@ import api.models.domain.{BusinessId, Nino, TaxYear}
 import api.models.errors._
 import api.models.outcomes.ResponseWrapper
 import api.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService}
-import mocks.{MockAppConfig, MockIdGenerator}
+import config.MockAppConfig
+import play.api.Configuration
 import play.api.libs.json.JsValue
 import play.api.mvc.Result
-import v5.createAmendForeignPropertyAnnualSubmission.def1.model.request.{Def1_CreateAmendForeignPropertyAnnualSubmissionRequestBody, Def1_CreateAmendForeignPropertyAnnualSubmissionRequestData, Def1_Fixtures}
+import utils.MockIdGenerator
+import v5.createAmendForeignPropertyAnnualSubmission.def1.model.request.{
+  Def1_CreateAmendForeignPropertyAnnualSubmissionRequestBody,
+  Def1_CreateAmendForeignPropertyAnnualSubmissionRequestData,
+  Def1_Fixtures
+}
 import v5.createAmendForeignPropertyAnnualSubmission.model.request._
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -43,9 +49,8 @@ class CreateAmendForeignPropertyAnnualSubmissionControllerSpec
     with MockIdGenerator
     with Def1_Fixtures {
 
-  private val businessId            = "XAIS12345678910"
-  private val taxYear               = "2019-20"
-
+  private val businessId = "XAIS12345678910"
+  private val taxYear    = "2019-20"
 
   "CreateAmendForeignPropertyAnnualSubmissionController" should {
     "return a successful response with status 200 (OK)" when {
@@ -83,7 +88,7 @@ class CreateAmendForeignPropertyAnnualSubmissionControllerSpec
 
   trait Test extends ControllerTest with AuditEventChecking[GenericAuditDetail] {
 
-    private val controller = new CreateAmendForeignPropertyAnnualSubmissionController(
+    protected val controller = new CreateAmendForeignPropertyAnnualSubmissionController(
       authService = mockEnrolmentsAuthService,
       lookupService = mockMtdIdLookupService,
       validatorFactory = mockCreateAmendForeignPropertyAnnualSubmissionValidatorFactory,
@@ -92,6 +97,12 @@ class CreateAmendForeignPropertyAnnualSubmissionControllerSpec
       cc = cc,
       idGenerator = mockIdGenerator
     )
+
+    MockedAppConfig.featureSwitches.anyNumberOfTimes() returns Configuration(
+      "supporting-agents-access-control.enabled" -> true
+    )
+
+    MockedAppConfig.endpointAllowsSupportingAgents(controller.endpointName).anyNumberOfTimes() returns false
 
     protected def callController(): Future[Result] = controller.handleRequest(nino, businessId, taxYear)(fakeRequestWithBody(requestJson))
 

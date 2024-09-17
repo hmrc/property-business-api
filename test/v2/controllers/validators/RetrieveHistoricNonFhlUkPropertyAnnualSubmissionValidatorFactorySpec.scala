@@ -18,7 +18,7 @@ package v2.controllers.validators
 
 import api.models.domain.{Nino, TaxYear}
 import api.models.errors._
-import mocks.MockAppConfig
+import config.MockAppConfig
 import support.UnitSpec
 import v2.models.request.retrieveHistoricNonFhlUkPropertyAnnualSubmission.RetrieveHistoricNonFhlUkPropertyAnnualSubmissionRequestData
 
@@ -69,7 +69,6 @@ class RetrieveHistoricNonFhlUkPropertyAnnualSubmissionValidatorFactorySpec exten
 
         result shouldBe Left(ErrorWrapper(correlationId, TaxYearFormatError))
       }
-
 
       "passed a taxYear immediately before the minimum supported" in disallowsTaxYear("2016-17")
       "passed a taxYear immediately after the maximum supported" in disallowsTaxYear("2022-23")

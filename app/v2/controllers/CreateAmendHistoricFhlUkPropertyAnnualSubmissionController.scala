@@ -43,6 +43,8 @@ class CreateAmendHistoricFhlUkPropertyAnnualSubmissionController @Inject() (
     idGenerator: IdGenerator)(implicit ec: ExecutionContext, appConfig: AppConfig)
     extends AuthorisedController(cc) {
 
+  override val endpointName: String = "create-amend-historic-fhluk-property-annual-submission"
+
   implicit val endpointLogContext: EndpointLogContext =
     EndpointLogContext(
       controllerName = "CreateAmendHistoricFhlUkPropertyAnnualSubmissionController",

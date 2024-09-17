@@ -18,7 +18,7 @@ package v2.controllers.validators
 
 import api.models.domain.{BusinessId, Nino, TaxYear}
 import api.models.errors._
-import mocks.MockAppConfig
+import config.MockAppConfig
 import support.UnitSpec
 import v2.models.request.deletePropertyAnnualSubmission.DeletePropertyAnnualSubmissionRequestData
 
@@ -47,7 +47,6 @@ class DeletePropertyAnnualSubmissionValidatorFactorySpec extends UnitSpec with M
 
         result shouldBe Right(DeletePropertyAnnualSubmissionRequestData(parsedNino, parsedBusinessId, parsedTaxYear))
       }
-
 
       "passed the minimum supported taxYear" in {
         val taxYearString = "2021-22"

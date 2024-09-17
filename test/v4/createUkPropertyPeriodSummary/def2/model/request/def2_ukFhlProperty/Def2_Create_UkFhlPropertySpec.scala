@@ -20,6 +20,7 @@ import play.api.libs.json.Json
 import support.UnitSpec
 import v4.createUkPropertyPeriodSummary.def2.model.request.def2_ukFhlProperty._
 import v4.createUkPropertyPeriodSummary.def2.model.request.def2_ukPropertyRentARoom._
+
 class Def2_Create_UkFhlPropertySpec extends UnitSpec {
 
   // @formatter:off

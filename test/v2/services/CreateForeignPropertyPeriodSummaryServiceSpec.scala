@@ -84,10 +84,10 @@ class CreateForeignPropertyPeriodSummaryServiceSpec extends UnitSpec with Create
       )
 
       val extraTysErrors = List(
-        "INVALID_INCOMESOURCE_ID" -> BusinessIdFormatError,
-        "INVALID_CORRELATION_ID"  -> InternalError,
-        "PERIOD_NOT_ALIGNED"      -> RuleMisalignedPeriodError,
-        "PERIOD_OVERLAPS"         -> RuleOverlappingPeriodError,
+        "INVALID_INCOMESOURCE_ID"            -> BusinessIdFormatError,
+        "INVALID_CORRELATION_ID"             -> InternalError,
+        "PERIOD_NOT_ALIGNED"                 -> RuleMisalignedPeriodError,
+        "PERIOD_OVERLAPS"                    -> RuleOverlappingPeriodError,
         "BUSINESS_INCOME_PERIOD_RESTRICTION" -> InternalError
       )
 

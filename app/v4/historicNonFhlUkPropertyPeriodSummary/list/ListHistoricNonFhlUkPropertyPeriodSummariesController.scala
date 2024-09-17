@@ -36,6 +36,8 @@ class ListHistoricNonFhlUkPropertyPeriodSummariesController @Inject() (
 )(implicit ec: ExecutionContext, appConfig: AppConfig)
     extends AuthorisedController(cc) {
 
+  override val endpointName: String = "list-historic-non-fhluk-property-period-summaries"
+
   private val endpointLogContext: EndpointLogContext = EndpointLogContext(
     controllerName = "ListHistoricNonFhlUkPropertyPeriodSummariesController",
     endpointName = "ListHistoricNonFhlUkPropertyPeriodSummariesController")

@@ -19,7 +19,7 @@ package v4.historicNonFhlUkPropertyPeriodSummary.amend.def1
 import api.models.domain.{Nino, PeriodId, TaxYear}
 import api.models.errors._
 import api.models.utils.JsonErrorValidators
-import mocks.MockAppConfig
+import config.MockAppConfig
 import play.api.libs.json.{JsNumber, JsObject, JsValue}
 import support.UnitSpec
 import v4.historicNonFhlUkPropertyPeriodSummary.amend.def1.model.request.Def1_Fixtures

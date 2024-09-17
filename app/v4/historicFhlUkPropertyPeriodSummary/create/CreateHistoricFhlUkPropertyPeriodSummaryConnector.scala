@@ -22,19 +22,21 @@ import api.connectors.{BaseDownstreamConnector, DownstreamOutcome}
 import config.AppConfig
 import play.api.http.Status
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
-import v4.historicFhlUkPropertyPeriodSummary.create.model.request.{CreateHistoricFhlUkPropertyPeriodSummaryRequestData, Def1_CreateHistoricFhlUkPropertyPeriodSummaryRequestData}
+import v4.historicFhlUkPropertyPeriodSummary.create.model.request.{
+  CreateHistoricFhlUkPropertyPeriodSummaryRequestData,
+  Def1_CreateHistoricFhlUkPropertyPeriodSummaryRequestData
+}
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class CreateHistoricFhlUkPropertyPeriodSummaryConnector @Inject()(val http: HttpClient, val appConfig: AppConfig)
-  extends BaseDownstreamConnector {
+class CreateHistoricFhlUkPropertyPeriodSummaryConnector @Inject() (val http: HttpClient, val appConfig: AppConfig) extends BaseDownstreamConnector {
 
   def create(request: CreateHistoricFhlUkPropertyPeriodSummaryRequestData)(implicit
-                                                                           hc: HeaderCarrier,
-                                                                           ec: ExecutionContext,
-                                                                           correlationId: String): Future[DownstreamOutcome[Unit]] = {
+      hc: HeaderCarrier,
+      ec: ExecutionContext,
+      correlationId: String): Future[DownstreamOutcome[Unit]] = {
 
     implicit val successCode: SuccessCode = SuccessCode(Status.OK)
 

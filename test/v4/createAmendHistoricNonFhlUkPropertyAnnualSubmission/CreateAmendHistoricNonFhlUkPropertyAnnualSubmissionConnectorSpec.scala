@@ -19,7 +19,10 @@ package v4.createAmendHistoricNonFhlUkPropertyAnnualSubmission
 import api.connectors.{ConnectorSpec, DownstreamOutcome}
 import api.models.domain.{Nino, TaxYear}
 import api.models.outcomes.ResponseWrapper
-import v4.createAmendHistoricNonFhlUkPropertyAnnualSubmission.model.request.{Def1_CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestBody, Def1_CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestData}
+import v4.createAmendHistoricNonFhlUkPropertyAnnualSubmission.model.request.{
+  Def1_CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestBody,
+  Def1_CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestData
+}
 import v4.createAmendHistoricNonFhlUkPropertyAnnualSubmission.model.response.CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionResponse
 
 import scala.concurrent.Future

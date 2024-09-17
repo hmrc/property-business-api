@@ -23,8 +23,14 @@ import api.models.outcomes.ResponseWrapper
 import v4.retrieveForeignPropertyPeriodSummary.RetrieveForeignPropertyPeriodSummaryConnector.{ForeignResult, NonForeignResult}
 import v4.retrieveForeignPropertyPeriodSummary.def1.model.response.foreignFhlEea.ForeignFhlEea
 import v4.retrieveForeignPropertyPeriodSummary.def1.model.response.foreignNonFhlProperty.ForeignNonFhlProperty
-import v4.retrieveForeignPropertyPeriodSummary.model.request.{Def1_RetrieveForeignPropertyPeriodSummaryRequestData, RetrieveForeignPropertyPeriodSummaryRequestData}
-import v4.retrieveForeignPropertyPeriodSummary.model.response.{Def1_RetrieveForeignPropertyPeriodSummaryResponse, RetrieveForeignPropertyPeriodSummaryResponse}
+import v4.retrieveForeignPropertyPeriodSummary.model.request.{
+  Def1_RetrieveForeignPropertyPeriodSummaryRequestData,
+  RetrieveForeignPropertyPeriodSummaryRequestData
+}
+import v4.retrieveForeignPropertyPeriodSummary.model.response.{
+  Def1_RetrieveForeignPropertyPeriodSummaryResponse,
+  RetrieveForeignPropertyPeriodSummaryResponse
+}
 
 import scala.concurrent.Future
 

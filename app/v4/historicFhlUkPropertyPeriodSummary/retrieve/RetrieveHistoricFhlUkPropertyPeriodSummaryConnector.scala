@@ -28,13 +28,12 @@ import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class RetrieveHistoricFhlUkPropertyPeriodSummaryConnector @Inject()(val http: HttpClient, val appConfig: AppConfig)
-  extends BaseDownstreamConnector {
+class RetrieveHistoricFhlUkPropertyPeriodSummaryConnector @Inject() (val http: HttpClient, val appConfig: AppConfig) extends BaseDownstreamConnector {
 
   def retrieve(request: RetrieveHistoricFhlUkPropertyPeriodSummaryRequestData)(implicit
-                                                                               hc: HeaderCarrier,
-                                                                               ec: ExecutionContext,
-                                                                               correlationId: String): Future[DownstreamOutcome[RetrieveHistoricFhlUkPropertyPeriodSummaryResponse]] = {
+      hc: HeaderCarrier,
+      ec: ExecutionContext,
+      correlationId: String): Future[DownstreamOutcome[RetrieveHistoricFhlUkPropertyPeriodSummaryResponse]] = {
     request match {
       case def1: Def1_RetrieveHistoricFhlUkPropertyPeriodSummaryRequestData =>
         import def1._

@@ -21,9 +21,11 @@ import api.models.domain.{BusinessId, Nino, TaxYear, Timestamp}
 import api.models.errors._
 import api.models.outcomes.ResponseWrapper
 import api.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService}
-import mocks.{MockAppConfig, MockIdGenerator}
+import config.MockAppConfig
+import play.api.Configuration
 import play.api.libs.json.Json
 import play.api.mvc.Result
+import utils.MockIdGenerator
 import v4.retrieveForeignPropertyAnnualSubmission.def1.model.response.def1_foreignFhlEea._
 import v4.retrieveForeignPropertyAnnualSubmission.def1.model.response.def1_foreignProperty._
 import v4.retrieveForeignPropertyAnnualSubmission.model.request._
@@ -43,8 +45,8 @@ class RetrieveForeignPropertyAnnualSubmissionControllerSpec
     with MockAuditService
     with MockIdGenerator {
 
-  private val businessId            = "XAIS12345678910"
-  private val taxYear               = "2020-21"
+  private val businessId = "XAIS12345678910"
+  private val taxYear    = "2020-21"
 
   "RetrieveForeignPropertyAnnualSubmissionController" should {
     "return a successful response with status 200 (OK)" when {
@@ -81,7 +83,7 @@ class RetrieveForeignPropertyAnnualSubmissionControllerSpec
 
   trait Test extends ControllerTest {
 
-    private val controller = new RetrieveForeignPropertyAnnualSubmissionController(
+    protected val controller = new RetrieveForeignPropertyAnnualSubmissionController(
       authService = mockEnrolmentsAuthService,
       lookupService = mockMtdIdLookupService,
       validatorFactory = mockRetrieveForeignPropertyAnnualSubmissionValidatorFactory,
@@ -89,6 +91,12 @@ class RetrieveForeignPropertyAnnualSubmissionControllerSpec
       cc = cc,
       idGenerator = mockIdGenerator
     )
+
+    MockedAppConfig.featureSwitches.anyNumberOfTimes() returns Configuration(
+      "supporting-agents-access-control.enabled" -> true
+    )
+
+    MockedAppConfig.endpointAllowsSupportingAgents(controller.endpointName).anyNumberOfTimes() returns false
 
     protected def callController(): Future[Result] = controller.handleRequest(nino, businessId, taxYear)(fakeRequest)
 

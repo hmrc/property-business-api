@@ -162,7 +162,8 @@ class RetrieveUkPropertyPeriodSummaryConnectorSpec extends ConnectorSpec with Re
       appConfig = mockAppConfig
     )
 
-    protected val request: RetrieveUkPropertyPeriodSummaryRequestData = Def1_RetrieveUkPropertyPeriodSummaryRequestData(nino, businessId, TaxYear.fromMtd(taxYear), submissionId)
+    protected val request: RetrieveUkPropertyPeriodSummaryRequestData =
+      Def1_RetrieveUkPropertyPeriodSummaryRequestData(nino, businessId, TaxYear.fromMtd(taxYear), submissionId)
 
     def stubHttpResponse(uri: String, outcome: DownstreamOutcome[RetrieveUkPropertyPeriodSummaryResponse])
         : CallHandler[Future[DownstreamOutcome[RetrieveUkPropertyPeriodSummaryResponse]]]#Derived = {

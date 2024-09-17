@@ -22,7 +22,8 @@ import api.models.domain.{BusinessId, Nino, TaxYear}
 import api.models.errors._
 import api.models.outcomes.ResponseWrapper
 import api.services.MockAuditService
-import mocks.MockAppConfig
+import config.MockAppConfig
+import play.api.Configuration
 import play.api.libs.json.JsValue
 import play.api.mvc.Result
 import v4.deletePropertyAnnualSubmission.model.request.{Def1_DeletePropertyAnnualSubmissionRequestData, DeletePropertyAnnualSubmissionRequestData}
@@ -38,8 +39,8 @@ class DeletePropertyAnnualSubmissionControllerSpec
     with MockDeletePropertyAnnualSubmissionValidatorFactory
     with MockAuditService {
 
-  private val businessId            = BusinessId("XAIS12345678910")
-  private val taxYear               = TaxYear.fromMtd("2023-24")
+  private val businessId = BusinessId("XAIS12345678910")
+  private val taxYear    = TaxYear.fromMtd("2023-24")
 
   "DeletePropertyAnnualSubmissionControllerSpec" should {
     "return a successful response with status 204 (NO_CONTENT)" when {
@@ -75,7 +76,7 @@ class DeletePropertyAnnualSubmissionControllerSpec
 
   trait Test extends ControllerTest with AuditEventChecking[GenericAuditDetail] {
 
-    private val controller = new DeletePropertyAnnualSubmissionController(
+    protected val controller = new DeletePropertyAnnualSubmissionController(
       authService = mockEnrolmentsAuthService,
       lookupService = mockMtdIdLookupService,
       validatorFactory = mockDeletePropertyAnnualSubmissionValidatorFactory,
@@ -84,6 +85,12 @@ class DeletePropertyAnnualSubmissionControllerSpec
       cc = cc,
       idGenerator = mockIdGenerator
     )
+
+    MockedAppConfig.featureSwitches.anyNumberOfTimes() returns Configuration(
+      "supporting-agents-access-control.enabled" -> true
+    )
+
+    MockedAppConfig.endpointAllowsSupportingAgents(controller.endpointName).anyNumberOfTimes() returns false
 
     protected def callController(): Future[Result] = controller.handleRequest(nino, businessId.businessId, taxYear.asMtd)(fakeDeleteRequest)
 

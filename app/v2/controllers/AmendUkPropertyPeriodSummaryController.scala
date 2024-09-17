@@ -43,6 +43,8 @@ class AmendUkPropertyPeriodSummaryController @Inject() (val authService: Enrolme
                                                         idGenerator: IdGenerator)(implicit ec: ExecutionContext, appConfig: AppConfig)
     extends AuthorisedController(cc) {
 
+  override val endpointName: String = "amend-uk-property-period-summary"
+
   implicit val endpointLogContext: EndpointLogContext =
     EndpointLogContext(controllerName = "AmendUkPropertyController", endpointName = "amendUkProperty")
 

@@ -21,7 +21,6 @@ import support.UnitSpec
 import v4.createUkPropertyPeriodSummary.def2.model.request.def2_ukFhlProperty.Def2_Create_UkFhlPropertyIncome
 import v4.createUkPropertyPeriodSummary.def2.model.request.def2_ukPropertyRentARoom.Def2_Create_UkPropertyIncomeRentARoom
 
-
 class Def2_Create_UkFhlPropertyIncomeSpec extends UnitSpec {
 
   private val requestBody =

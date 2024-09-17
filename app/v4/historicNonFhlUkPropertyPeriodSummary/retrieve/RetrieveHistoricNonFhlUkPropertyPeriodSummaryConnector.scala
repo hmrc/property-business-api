@@ -21,8 +21,14 @@ import api.connectors.httpparsers.StandardDownstreamHttpParser.reads
 import api.connectors.{BaseDownstreamConnector, DownstreamOutcome}
 import config.AppConfig
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
-import v4.historicNonFhlUkPropertyPeriodSummary.retrieve.model.request.{Def1_RetrieveHistoricNonFhlUkPropertyPeriodSummaryRequestData, RetrieveHistoricNonFhlUkPropertyPeriodSummaryRequestData}
-import v4.historicNonFhlUkPropertyPeriodSummary.retrieve.model.response.{Def1_RetrieveHistoricNonFhlUkPropertyPeriodSummaryResponse, RetrieveHistoricNonFhlUkPropertyPeriodSummaryResponse}
+import v4.historicNonFhlUkPropertyPeriodSummary.retrieve.model.request.{
+  Def1_RetrieveHistoricNonFhlUkPropertyPeriodSummaryRequestData,
+  RetrieveHistoricNonFhlUkPropertyPeriodSummaryRequestData
+}
+import v4.historicNonFhlUkPropertyPeriodSummary.retrieve.model.response.{
+  Def1_RetrieveHistoricNonFhlUkPropertyPeriodSummaryResponse,
+  RetrieveHistoricNonFhlUkPropertyPeriodSummaryResponse
+}
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}

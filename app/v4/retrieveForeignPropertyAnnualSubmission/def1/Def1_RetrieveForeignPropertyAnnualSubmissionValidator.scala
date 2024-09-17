@@ -23,7 +23,10 @@ import api.models.errors.MtdError
 import cats.data.Validated
 import cats.implicits._
 import config.AppConfig
-import v4.retrieveForeignPropertyAnnualSubmission.model.request.{Def1_RetrieveForeignPropertyAnnualSubmissionRequestData, RetrieveForeignPropertyAnnualSubmissionRequestData}
+import v4.retrieveForeignPropertyAnnualSubmission.model.request.{
+  Def1_RetrieveForeignPropertyAnnualSubmissionRequestData,
+  RetrieveForeignPropertyAnnualSubmissionRequestData
+}
 
 import javax.inject.Inject
 

@@ -19,12 +19,15 @@ package v5.createAmendForeignPropertyAnnualSubmission.def1
 import api.models.domain.{BusinessId, Nino, TaxYear}
 import api.models.errors._
 import api.models.utils.JsonErrorValidators
-import mocks.MockAppConfig
+import config.MockAppConfig
 import play.api.libs.json._
 import support.UnitSpec
 import v5.createAmendForeignPropertyAnnualSubmission.def1.model.request.def1_foreignFhlEea._
 import v5.createAmendForeignPropertyAnnualSubmission.def1.model.request.def1_foreignNonFhl._
-import v5.createAmendForeignPropertyAnnualSubmission.def1.model.request.{Def1_CreateAmendForeignPropertyAnnualSubmissionRequestBody, Def1_CreateAmendForeignPropertyAnnualSubmissionRequestData}
+import v5.createAmendForeignPropertyAnnualSubmission.def1.model.request.{
+  Def1_CreateAmendForeignPropertyAnnualSubmissionRequestBody,
+  Def1_CreateAmendForeignPropertyAnnualSubmissionRequestData
+}
 import v5.createAmendForeignPropertyAnnualSubmission.model.request._
 
 class Def1_CreateAmendForeignPropertyAnnualSubmissionValidatorSpec extends UnitSpec with MockAppConfig with JsonErrorValidators {
@@ -449,7 +452,8 @@ class Def1_CreateAmendForeignPropertyAnnualSubmissionValidatorSpec extends UnitS
                 validStructuredBuildingAllowance
                   .removeProperty("/building/number")))).validateAndWrapResult()
 
-        result shouldBe Right(Def1_CreateAmendForeignPropertyAnnualSubmissionRequestData(parsedNino, parsedBusinessId, parsedTaxYear, parsedBodyWithoutBuildingNumber))
+        result shouldBe Right(
+          Def1_CreateAmendForeignPropertyAnnualSubmissionRequestData(parsedNino, parsedBusinessId, parsedTaxYear, parsedBodyWithoutBuildingNumber))
       }
 
       "passed a valid request where a postcode is with a number but not a name" in {
@@ -466,7 +470,8 @@ class Def1_CreateAmendForeignPropertyAnnualSubmissionValidatorSpec extends UnitS
                   .removeProperty("/building/name")))
           ).validateAndWrapResult()
 
-        result shouldBe Right(Def1_CreateAmendForeignPropertyAnnualSubmissionRequestData(parsedNino, parsedBusinessId, parsedTaxYear, parsedBodyWithoutBuildingName))
+        result shouldBe Right(
+          Def1_CreateAmendForeignPropertyAnnualSubmissionRequestData(parsedNino, parsedBusinessId, parsedTaxYear, parsedBodyWithoutBuildingName))
       }
 
       "passed the minimum supported taxYear" in {
@@ -648,9 +653,9 @@ class Def1_CreateAmendForeignPropertyAnnualSubmissionValidatorSpec extends UnitS
       "passed a request body with multiple fields containing invalid values" in {
         setupMocks()
         val badValue = JsNumber(123.456)
-        val path0 = "/foreignFhlEea/adjustments/privateUseAdjustment"
-        val path1 = "/foreignNonFhlProperty/0/adjustments/privateUseAdjustment"
-        val path2 = "/foreignNonFhlProperty/1/allowances/costOfReplacingDomesticItems"
+        val path0    = "/foreignFhlEea/adjustments/privateUseAdjustment"
+        val path1    = "/foreignNonFhlProperty/0/adjustments/privateUseAdjustment"
+        val path2    = "/foreignNonFhlProperty/1/allowances/costOfReplacingDomesticItems"
 
         val invalidBody = bodyWith(
           entryWith(countryCode = "ZWE", validStructuredBuildingAllowance).update("/adjustments/privateUseAdjustment", badValue),

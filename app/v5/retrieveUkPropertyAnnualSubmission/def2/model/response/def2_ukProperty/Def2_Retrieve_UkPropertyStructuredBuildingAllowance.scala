@@ -19,8 +19,8 @@ package v5.retrieveUkPropertyAnnualSubmission.def2.model.response.def2_ukPropert
 import play.api.libs.json.{Json, OFormat}
 
 case class Def2_Retrieve_UkPropertyStructuredBuildingAllowance(amount: BigDecimal,
-                                                                     firstYear: Option[Def2_Retrieve_UkPropertyFirstYear],
-                                                                     building: Def2_Retrieve_UkPropertyBuilding)
+                                                               firstYear: Option[Def2_Retrieve_UkPropertyFirstYear],
+                                                               building: Def2_Retrieve_UkPropertyBuilding)
 
 object Def2_Retrieve_UkPropertyStructuredBuildingAllowance {
 

@@ -28,7 +28,7 @@ import v4.amendUkPropertyPeriodSummary.model.request._
 import javax.inject.Inject
 
 class Def1_AmendUkPropertyPeriodSummaryValidator @Inject() (nino: String, businessId: String, taxYear: String, submissionId: String, body: JsValue)(
-  appConfig: AppConfig)
+    appConfig: AppConfig)
     extends Validator[AmendUkPropertyPeriodSummaryRequestData] {
 
   private val minTaxYear = appConfig.minimumTaxV2Uk

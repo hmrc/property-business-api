@@ -19,6 +19,7 @@ import sbt.*
 import sbt.complete.DefaultParsers.*
 import uk.gov.hmrc.DefaultBuildSettings.{addTestReportOption, defaultSettings}
 import uk.gov.hmrc.versioning.SbtGitVersioning.autoImport.majorVersion
+import org.scalafmt.sbt.ScalafmtPlugin
 
 import scala.sys.process.*
 
@@ -34,6 +35,7 @@ lazy val microservice = Project(appName, file("."))
     retrieveManaged                 := true,
     update / evictionWarningOptions := EvictionWarningOptions.default.withWarnScalaVersionEviction(warnScalaVersionEviction = false),
     scalaVersion                    := "2.13.12",
+    scalafmtOnCompile               := true,
     scalacOptions ++= Seq("-language:higherKinds", "-Xfatal-warnings", "-Wconf:src=routes/.*:silent", "-feature", "-Wconf:cat=lint-byname-implicit:s")
   )
   .settings(

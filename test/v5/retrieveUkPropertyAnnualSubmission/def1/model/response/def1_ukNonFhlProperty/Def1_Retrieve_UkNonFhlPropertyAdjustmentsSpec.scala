@@ -16,27 +16,15 @@
 
 package v5.retrieveUkPropertyAnnualSubmission.def1.model.response.def1_ukNonFhlProperty
 
-import play.api.libs.json.{JsValue, Json}
+import play.api.libs.json.Json
 import support.UnitSpec
 
 class Def1_Retrieve_UkNonFhlPropertyAdjustmentsSpec extends UnitSpec {
 
-  val downstreamJson: JsValue = Json.parse("""
-      |{
-      |   "balancingCharge":565.34,
-      |   "privateUseAdjustment":533.54,
-      |   "businessPremisesRenovationAllowanceBalancingCharges":563.34,
-      |   "nonResidentLandlord":true,
-      |   "ukOtherRentARoom":{
-      |      "jointlyLet":true
-      |   }
-      |}
-      |""".stripMargin)
-
   val model: Def1_Retrieve_UkNonFhlPropertyAdjustments = Def1_Retrieve_UkNonFhlPropertyAdjustments(
-    balancingCharge = Some(565.34),
-    privateUseAdjustment = Some(533.54),
-    businessPremisesRenovationAllowanceBalancingCharges = Some(563.34),
+    balancingCharge = Some(1.01),
+    privateUseAdjustment = Some(2.01),
+    businessPremisesRenovationAllowanceBalancingCharges = Some(3.01),
     nonResidentLandlord = true,
     rentARoom = Some(
       Def1_Retrieve_UkNonFhlPropertyRentARoom(
@@ -44,27 +32,69 @@ class Def1_Retrieve_UkNonFhlPropertyAdjustmentsSpec extends UnitSpec {
       ))
   )
 
-  val mtdJson: JsValue = Json.parse("""
+  "reads" should {
+    "read JSON into a model" when {
+      "ukOtherRentARoom field name is used (API#1598)" in {
+        Json
+          .parse("""
+            |{
+            |   "balancingCharge":1.01,
+            |   "privateUseAdjustment":2.01,
+            |   "businessPremisesRenovationAllowanceBalancingCharges":3.01,
+            |   "nonResidentLandlord":true,
+            |   "ukOtherRentARoom":{
+            |      "jointlyLet":true
+            |   }
+            |}
+            |""".stripMargin)
+          .as[Def1_Retrieve_UkNonFhlPropertyAdjustments] shouldBe model
+      }
+
+      "rentARoom field name is used (API#1805)" in {
+        Json
+          .parse("""
+                   |{
+                   |   "balancingCharge":1.01,
+                   |   "privateUseAdjustment":2.01,
+                   |   "businessPremisesRenovationAllowanceBalancingCharges":3.01,
+                   |   "nonResidentLandlord":true,
+                   |   "rentARoom":{
+                   |      "jointlyLet":true
+                   |   }
+                   |}
+                   |""".stripMargin)
+          .as[Def1_Retrieve_UkNonFhlPropertyAdjustments] shouldBe model
+      }
+
+      "neither ukOtherRentARoom nor rentARoom are present" in {
+        Json
+          .parse("""
+                   |{
+                   |   "balancingCharge":1.01,
+                   |   "privateUseAdjustment":2.01,
+                   |   "businessPremisesRenovationAllowanceBalancingCharges":3.01,
+                   |   "nonResidentLandlord":true
+                   |}
+                   |""".stripMargin)
+          .as[Def1_Retrieve_UkNonFhlPropertyAdjustments] shouldBe model.copy(rentARoom = None)
+
+      }
+    }
+  }
+
+  "writes" should {
+    "write a model to JSON" in {
+      Json.toJson(model) shouldBe Json.parse("""
       |{
-      |   "balancingCharge":565.34,
-      |   "privateUseAdjustment":533.54,
-      |   "businessPremisesRenovationAllowanceBalancingCharges":563.34,
+      |   "balancingCharge":1.01,
+      |   "privateUseAdjustment":2.01,
+      |   "businessPremisesRenovationAllowanceBalancingCharges":3.01,
       |   "nonResidentLandlord":true,
       |   "rentARoom":{
       |      "jointlyLet":true
       |   }
       |}
       |""".stripMargin)
-
-  "reads" should {
-    "read JSON into a model" in {
-      downstreamJson.as[Def1_Retrieve_UkNonFhlPropertyAdjustments] shouldBe model
-    }
-  }
-
-  "writes" should {
-    "write a model to JSON" in {
-      Json.toJson(model) shouldBe mtdJson
     }
   }
 

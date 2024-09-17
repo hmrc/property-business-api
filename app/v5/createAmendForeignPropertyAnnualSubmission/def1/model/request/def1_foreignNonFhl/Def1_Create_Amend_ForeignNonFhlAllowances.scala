@@ -20,13 +20,13 @@ import play.api.libs.functional.syntax._
 import play.api.libs.json.{JsPath, Json, Reads, Writes}
 
 case class Def1_Create_Amend_ForeignNonFhlAllowances(annualInvestmentAllowance: Option[BigDecimal],
-                                   costOfReplacingDomesticItems: Option[BigDecimal],
-                                   zeroEmissionsGoodsVehicleAllowance: Option[BigDecimal],
-                                   otherCapitalAllowance: Option[BigDecimal],
-                                   electricChargePointAllowance: Option[BigDecimal],
-                                   zeroEmissionsCarAllowance: Option[BigDecimal],
-                                   propertyIncomeAllowance: Option[BigDecimal],
-                                   structuredBuildingAllowance: Option[Seq[Def1_Create_Amend_StructuredBuildingAllowance]])
+                                                     costOfReplacingDomesticItems: Option[BigDecimal],
+                                                     zeroEmissionsGoodsVehicleAllowance: Option[BigDecimal],
+                                                     otherCapitalAllowance: Option[BigDecimal],
+                                                     electricChargePointAllowance: Option[BigDecimal],
+                                                     zeroEmissionsCarAllowance: Option[BigDecimal],
+                                                     propertyIncomeAllowance: Option[BigDecimal],
+                                                     structuredBuildingAllowance: Option[Seq[Def1_Create_Amend_StructuredBuildingAllowance]])
 
 object Def1_Create_Amend_ForeignNonFhlAllowances {
   implicit val reads: Reads[Def1_Create_Amend_ForeignNonFhlAllowances] = Json.reads[Def1_Create_Amend_ForeignNonFhlAllowances]

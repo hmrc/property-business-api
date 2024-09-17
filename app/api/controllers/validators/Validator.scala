@@ -69,6 +69,7 @@ object Validator {
   def returningErrors(errors: Seq[MtdError]): Validator[Nothing] = AlwaysErrorsValidator(errors)
 
 }
+
 case class AlwaysErrorsValidator(errors: Seq[MtdError]) extends Validator[Nothing] {
   override def validate: Validated[Seq[MtdError], Nothing] = Invalid(errors)
 }

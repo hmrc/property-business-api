@@ -27,9 +27,8 @@ import play.api.libs.json.JsValue
 import v4.historicFhlUkPropertyPeriodSummary.create.def1.model.request.{UkFhlPropertyExpenses, UkFhlPropertyIncome}
 import v4.historicFhlUkPropertyPeriodSummary.create.model.request._
 
-
 class Def1_CreateHistoricFhlUkPropertyPeriodSummaryValidator(nino: String, body: JsValue, appConfig: AppConfig)
-  extends Validator[CreateHistoricFhlUkPropertyPeriodSummaryRequestData] {
+    extends Validator[CreateHistoricFhlUkPropertyPeriodSummaryRequestData] {
 
   private val resolveJson = new ResolveNonEmptyJsonObject[Def1_CreateHistoricFhlUkPiePeriodSummaryRequestBody]()
 
@@ -41,15 +40,15 @@ class Def1_CreateHistoricFhlUkPropertyPeriodSummaryValidator(nino: String, body:
     (
       ResolveNino(nino),
       resolveJson(body)
-      ).mapN(Def1_CreateHistoricFhlUkPropertyPeriodSummaryRequestData) andThen validateBusinessRules
+    ).mapN(Def1_CreateHistoricFhlUkPropertyPeriodSummaryRequestData) andThen validateBusinessRules
 
-  private def validateBusinessRules(
-                                     parsed: Def1_CreateHistoricFhlUkPropertyPeriodSummaryRequestData): Validated[Seq[MtdError], CreateHistoricFhlUkPropertyPeriodSummaryRequestData] = {
+  private def validateBusinessRules(parsed: Def1_CreateHistoricFhlUkPropertyPeriodSummaryRequestData)
+      : Validated[Seq[MtdError], CreateHistoricFhlUkPropertyPeriodSummaryRequestData] = {
     import parsed.body._
 
     val validatedDates = ResolveFromAndToDates((fromDate, toDate))
 
-    val validatedIncome = income.map(validateIncome).getOrElse(valid)
+    val validatedIncome   = income.map(validateIncome).getOrElse(valid)
     val validatedExpenses = expenses.map(validateExpenses).getOrElse(valid)
 
     List(validatedDates, validatedIncome, validatedExpenses)
@@ -68,7 +67,7 @@ class Def1_CreateHistoricFhlUkPropertyPeriodSummaryValidator(nino: String, body:
 
     val validatedNumberFields = valuesWithPaths
       .map {
-        case (None, _) => valid
+        case (None, _)            => valid
         case (Some(number), path) => resolveParsedNumber(number, path)
       }
 
@@ -92,7 +91,7 @@ class Def1_CreateHistoricFhlUkPropertyPeriodSummaryValidator(nino: String, body:
 
     val validatedNumberFields = valuesWithPaths
       .map {
-        case (None, _) => valid
+        case (None, _)            => valid
         case (Some(number), path) => resolveParsedNumber(number, path)
       }
 
@@ -106,6 +105,5 @@ class Def1_CreateHistoricFhlUkPropertyPeriodSummaryValidator(nino: String, body:
 
     (validatedNumberFields :+ validatedConsolidatedExpenses).sequence.andThen(_ => valid)
   }
-
 
 }

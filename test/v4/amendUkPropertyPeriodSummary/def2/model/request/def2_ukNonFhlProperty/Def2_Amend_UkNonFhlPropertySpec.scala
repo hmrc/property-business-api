@@ -51,6 +51,7 @@ class Def2_Amend_UkNonFhlPropertySpec extends UnitSpec {
           Some(988.18)
         ))
     )
+
   private val requestBodySubmission =
     Def2_Amend_UkNonFhlPropertySubmission(
       Some(

@@ -22,7 +22,6 @@ import v5.createAmendForeignPropertyAnnualSubmission.def1.model.request.def1_for
 import v5.createAmendForeignPropertyAnnualSubmission.def1.model.request.def1_foreignNonFhl.Def1_Create_Amend_ForeignNonFhlEntry
 import v5.createAmendForeignPropertyAnnualSubmission.model.request.CreateAmendForeignPropertyAnnualSubmissionRequestBody
 
-
 case class Def1_CreateAmendForeignPropertyAnnualSubmissionRequestBody(foreignFhlEea: Option[Def1_Create_Amend_ForeignFhlEea],
                                                                       foreignNonFhlProperty: Option[Seq[Def1_Create_Amend_ForeignNonFhlEntry]])
     extends CreateAmendForeignPropertyAnnualSubmissionRequestBody

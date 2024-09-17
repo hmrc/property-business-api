@@ -22,7 +22,11 @@ import api.models.errors._
 import api.models.outcomes.ResponseWrapper
 import api.services.{ServiceOutcome, ServiceSpec}
 import uk.gov.hmrc.http.HeaderCarrier
-import v4.historicNonFhlUkPropertyPeriodSummary.amend.model.request.{AmendHistoricNonFhlUkPropertyPeriodSummaryRequestData, Def1_AmendHistoricNonFhlUkPropertyPeriodSummaryRequestBody, Def1_AmendHistoricNonFhlUkPropertyPeriodSummaryRequestData}
+import v4.historicNonFhlUkPropertyPeriodSummary.amend.model.request.{
+  AmendHistoricNonFhlUkPropertyPeriodSummaryRequestData,
+  Def1_AmendHistoricNonFhlUkPropertyPeriodSummaryRequestBody,
+  Def1_AmendHistoricNonFhlUkPropertyPeriodSummaryRequestData
+}
 
 import scala.concurrent.Future
 
@@ -86,7 +90,8 @@ class AmendHistoricNonFhlUkPropertyPeriodSummaryServiceSpec extends ServiceSpec 
       connector = mockConnector
     )
 
-    protected val requestBody: Def1_AmendHistoricNonFhlUkPropertyPeriodSummaryRequestBody = Def1_AmendHistoricNonFhlUkPropertyPeriodSummaryRequestBody(None, None)
+    protected val requestBody: Def1_AmendHistoricNonFhlUkPropertyPeriodSummaryRequestBody =
+      Def1_AmendHistoricNonFhlUkPropertyPeriodSummaryRequestBody(None, None)
 
     protected val request: AmendHistoricNonFhlUkPropertyPeriodSummaryRequestData =
       Def1_AmendHistoricNonFhlUkPropertyPeriodSummaryRequestData(nino, periodId, requestBody)

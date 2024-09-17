@@ -22,10 +22,7 @@ import api.models.errors.MtdError
 import cats.data.Validated
 import cats.implicits._
 import config.AppConfig
-import v4.deletePropertyAnnualSubmission.model.request.{
-  Def1_DeletePropertyAnnualSubmissionRequestData,
-  DeletePropertyAnnualSubmissionRequestData
-}
+import v4.deletePropertyAnnualSubmission.model.request.{Def1_DeletePropertyAnnualSubmissionRequestData, DeletePropertyAnnualSubmissionRequestData}
 
 import javax.inject.Inject
 

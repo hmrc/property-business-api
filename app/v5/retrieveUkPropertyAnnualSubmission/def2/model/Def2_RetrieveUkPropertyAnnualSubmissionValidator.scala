@@ -26,8 +26,9 @@ import v5.retrieveUkPropertyAnnualSubmission.model.request._
 
 import javax.inject.Inject
 
-class Def2_RetrieveUkPropertyAnnualSubmissionValidator @Inject()(nino: String, businessId: String, taxYear: String)
+class Def2_RetrieveUkPropertyAnnualSubmissionValidator @Inject() (nino: String, businessId: String, taxYear: String)
     extends Validator[RetrieveUkPropertyAnnualSubmissionRequestData] {
+
   def validate: Validated[Seq[MtdError], RetrieveUkPropertyAnnualSubmissionRequestData] =
     (
       ResolveNino(nino),

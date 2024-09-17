@@ -51,15 +51,18 @@ class RetrieveForeignPropertyAnnualSubmissionConnector @Inject() (val http: Http
     val (downstreamUri, queryParams): (DownstreamUri[DownstreamResp], Seq[(String, String)]) = taxYear match {
       case taxYear if taxYear.isTys =>
         (TaxYearSpecificIfsUri[DownstreamResp](s"income-tax/business/property/annual/${taxYear.asTysDownstream}/$nino/$businessId"), Nil)
-      case _ => (IfsUri[DownstreamResp]("income-tax/business/property/annual"), List("taxableEntityId" -> nino.nino, "incomeSourceId" -> businessId.businessId, "taxYear" -> taxYear.asMtd))
+      case _ =>
+        (
+          IfsUri[DownstreamResp]("income-tax/business/property/annual"),
+          List("taxableEntityId" -> nino.nino, "incomeSourceId" -> businessId.businessId, "taxYear" -> taxYear.asMtd))
     }
 
-        val response = get(downstreamUri, queryParams)
+    val response = get(downstreamUri, queryParams)
 
-        response.map {
-          case Right(ResponseWrapper(corId, resp)) if resp.isForeignResult => Right(ResponseWrapper(corId, ForeignResult(resp)))
-          case Right(ResponseWrapper(corId, _))                           => Right(ResponseWrapper(corId, NonForeignResult))
-          case Left(e)                                                    => Left(e)
+    response.map {
+      case Right(ResponseWrapper(corId, resp)) if resp.isForeignResult => Right(ResponseWrapper(corId, ForeignResult(resp)))
+      case Right(ResponseWrapper(corId, _))                            => Right(ResponseWrapper(corId, NonForeignResult))
+      case Left(e)                                                     => Left(e)
     }
 
   }

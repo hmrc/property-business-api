@@ -22,19 +22,21 @@ import api.connectors.{BaseDownstreamConnector, DownstreamOutcome}
 import config.AppConfig
 import play.api.http.Status.OK
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
-import v4.historicFhlUkPropertyPeriodSummary.amend.request.{AmendHistoricFhlUkPropertyPeriodSummaryRequestData, Def1_AmendHistoricFhlUkPropertyPeriodSummaryRequestData}
+import v4.historicFhlUkPropertyPeriodSummary.amend.request.{
+  AmendHistoricFhlUkPropertyPeriodSummaryRequestData,
+  Def1_AmendHistoricFhlUkPropertyPeriodSummaryRequestData
+}
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class AmendHistoricFhlUkPropertyPeriodSummaryConnector @Inject()(val http: HttpClient, val appConfig: AppConfig)
-  extends BaseDownstreamConnector {
+class AmendHistoricFhlUkPropertyPeriodSummaryConnector @Inject() (val http: HttpClient, val appConfig: AppConfig) extends BaseDownstreamConnector {
 
   def amend(request: AmendHistoricFhlUkPropertyPeriodSummaryRequestData)(implicit
-                                                                         hc: HeaderCarrier,
-                                                                         ec: ExecutionContext,
-                                                                         correlationId: String): Future[DownstreamOutcome[Unit]] = {
+      hc: HeaderCarrier,
+      ec: ExecutionContext,
+      correlationId: String): Future[DownstreamOutcome[Unit]] = {
 
     implicit val successCode: SuccessCode = SuccessCode(OK)
 

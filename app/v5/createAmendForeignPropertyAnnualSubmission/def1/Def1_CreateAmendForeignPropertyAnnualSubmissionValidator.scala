@@ -23,7 +23,10 @@ import cats.data.Validated
 import cats.implicits._
 import config.AppConfig
 import play.api.libs.json.JsValue
-import v5.createAmendForeignPropertyAnnualSubmission.def1.model.request.{Def1_CreateAmendForeignPropertyAnnualSubmissionRequestBody, Def1_CreateAmendForeignPropertyAnnualSubmissionRequestData}
+import v5.createAmendForeignPropertyAnnualSubmission.def1.model.request.{
+  Def1_CreateAmendForeignPropertyAnnualSubmissionRequestBody,
+  Def1_CreateAmendForeignPropertyAnnualSubmissionRequestData
+}
 import v5.createAmendForeignPropertyAnnualSubmission.model.request.CreateAmendForeignPropertyAnnualSubmissionRequestData
 
 import javax.inject.{Inject, Singleton}

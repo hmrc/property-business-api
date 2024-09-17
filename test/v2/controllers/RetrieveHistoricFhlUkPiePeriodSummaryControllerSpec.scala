@@ -22,9 +22,11 @@ import api.models.domain.{Nino, PeriodId}
 import api.models.errors.{ErrorWrapper, NinoFormatError, RuleTaxYearNotSupportedError}
 import api.models.outcomes.ResponseWrapper
 import api.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService}
-import mocks.{MockAppConfig, MockIdGenerator}
+import config.MockAppConfig
+import play.api.Configuration
 import play.api.libs.json.{JsObject, JsValue, Json}
 import play.api.mvc.Result
+import utils.MockIdGenerator
 import v2.controllers.validators.MockRetrieveHistoricFhlUkPiePeriodSummaryValidatorFactory
 import v2.models.request.retrieveHistoricFhlUkPiePeriodSummary._
 import v2.models.response.retrieveHistoricFhlUkPiePeriodSummary._
@@ -45,10 +47,9 @@ class RetrieveHistoricFhlUkPiePeriodSummaryControllerSpec
     with MockAuditService
     with MockIdGenerator {
 
-  private val from                  = "2017-04-06"
-  private val to                    = "2017-07-04"
-  private val periodId              = s"${from}_$to"
-
+  private val from     = "2017-04-06"
+  private val to       = "2017-07-04"
+  private val periodId = s"${from}_$to"
 
   "RetrieveHistoricFhlUkPiePeriodSummaryController" should {
     "return OK" when {
@@ -87,7 +88,7 @@ class RetrieveHistoricFhlUkPiePeriodSummaryControllerSpec
 
   trait Test extends ControllerTest {
 
-    private val controller = new RetrieveHistoricFhlUkPiePeriodSummaryController(
+    protected val controller = new RetrieveHistoricFhlUkPiePeriodSummaryController(
       authService = mockEnrolmentsAuthService,
       lookupService = mockMtdIdLookupService,
       validatorFactory = mockRetrieveHistoricFhlUkPiePeriodSummaryValidatorFactory,
@@ -96,6 +97,12 @@ class RetrieveHistoricFhlUkPiePeriodSummaryControllerSpec
       cc = cc,
       idGenerator = mockIdGenerator
     )
+
+    MockedAppConfig.featureSwitches.anyNumberOfTimes() returns Configuration(
+      "supporting-agents-access-control.enabled" -> true
+    )
+
+    MockedAppConfig.endpointAllowsSupportingAgents(controller.endpointName).anyNumberOfTimes() returns false
 
     protected def callController(): Future[Result] = controller.handleRequest(nino, periodId)(fakeGetRequest)
 

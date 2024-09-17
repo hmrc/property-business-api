@@ -19,15 +19,14 @@ package v5.retrieveUkPropertyAnnualSubmission.def2.model.response.def2_ukPropert
 import play.api.libs.functional.syntax._
 import play.api.libs.json._
 
-case class Def2_Retrieve_UkProperty(adjustments: Option[Def2_Retrieve_UkPropertyAdjustments],
-                                          allowances: Option[Def2_Retrieve_UkPropertyAllowances])
+case class Def2_Retrieve_UkProperty(adjustments: Option[Def2_Retrieve_UkPropertyAdjustments], allowances: Option[Def2_Retrieve_UkPropertyAllowances])
 
 object Def2_Retrieve_UkProperty {
   implicit val writes: OWrites[Def2_Retrieve_UkProperty] = Json.writes[Def2_Retrieve_UkProperty]
 
   implicit val reads: Reads[Def2_Retrieve_UkProperty] = (
-    (__ \ "ukPropertyAnnualAdjustments").readNullable[Def2_Retrieve_UkPropertyAdjustments] and
-      (__ \ "ukPropertyAnnualAllowances").readNullable[Def2_Retrieve_UkPropertyAllowances]
+    (__ \ "ukOtherPropertyAnnualAdjustments").readNullable[Def2_Retrieve_UkPropertyAdjustments] and
+      (__ \ "ukOtherPropertyAnnualAllowances").readNullable[Def2_Retrieve_UkPropertyAllowances]
   )(Def2_Retrieve_UkProperty.apply _)
 
 }

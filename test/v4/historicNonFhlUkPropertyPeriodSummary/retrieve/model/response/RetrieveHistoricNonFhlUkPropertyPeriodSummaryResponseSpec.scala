@@ -16,7 +16,7 @@
 
 package v4.historicNonFhlUkPropertyPeriodSummary.retrieve.model.response
 
-import mocks.MockAppConfig
+import config.MockAppConfig
 import play.api.libs.json.{JsValue, Json}
 import support.UnitSpec
 import v4.historicNonFhlUkPropertyPeriodSummary.retrieve.def1.model.response.{PeriodExpenses, PeriodIncome, RentARoomExpenses, RentARoomIncome}
@@ -84,7 +84,7 @@ class RetrieveHistoricNonFhlUkPropertyPeriodSummaryResponseSpec extends UnitSpec
     |         "consolidatedExpenses": 4994.99,
     |         "travelCosts": 4993.99,
     |         "residentialFinancialCost": 4992.99,
-    |         "residentialFinancialCostsCarriedForward": 4991.99,         
+    |         "residentialFinancialCostsCarriedForward": 4991.99,
     |         "ukRentARoom": {
     |            "amountClaimed": 4990.99
     |         }
@@ -95,7 +95,7 @@ class RetrieveHistoricNonFhlUkPropertyPeriodSummaryResponseSpec extends UnitSpec
 
   val writesJson: JsValue = Json.parse("""{
     |      "fromDate": "2021-01-01",
-    |      "toDate": "2021-02-01",             
+    |      "toDate": "2021-02-01",
     |      "income": {
     |        "periodAmount": 5000.99,
     |        "premiumsOfLeaseGrant": 4999.99,

@@ -23,9 +23,9 @@ import v5.retrieveForeignPropertyAnnualSubmission.def2.model.response.def2_forei
 import v5.retrieveForeignPropertyAnnualSubmission.model.response.RetrieveForeignPropertyAnnualSubmissionResponse
 
 case class Def2_RetrieveForeignPropertyAnnualSubmissionResponse(
-                                                                 submittedOn: Timestamp,
-                                                                 foreignProperty: Option[Seq[Def2_Retrieve_ForeignPropertyEntry]]
-                                                               ) extends RetrieveForeignPropertyAnnualSubmissionResponse{
+    submittedOn: Timestamp,
+    foreignProperty: Option[Seq[Def2_Retrieve_ForeignPropertyEntry]]
+) extends RetrieveForeignPropertyAnnualSubmissionResponse {
 
   override def isForeignResult: Boolean = foreignProperty.nonEmpty
 }
@@ -38,6 +38,6 @@ object Def2_RetrieveForeignPropertyAnnualSubmissionResponse {
   implicit val reads: Reads[Def2_RetrieveForeignPropertyAnnualSubmissionResponse] = (
     (JsPath \ "submittedOn").read[Timestamp] and
       (JsPath \ "foreignProperty").readNullable[Seq[Def2_Retrieve_ForeignPropertyEntry]]
-    )(Def2_RetrieveForeignPropertyAnnualSubmissionResponse.apply _)
+  )(Def2_RetrieveForeignPropertyAnnualSubmissionResponse.apply _)
 
 }

@@ -22,7 +22,10 @@ import api.models.errors._
 import api.models.outcomes.ResponseWrapper
 import support.UnitSpec
 import uk.gov.hmrc.http.HeaderCarrier
-import v4.historicFhlUkPropertyPeriodSummary.create.model.request.{Def1_CreateHistoricFhlUkPiePeriodSummaryRequestBody, Def1_CreateHistoricFhlUkPropertyPeriodSummaryRequestData}
+import v4.historicFhlUkPropertyPeriodSummary.create.model.request.{
+  Def1_CreateHistoricFhlUkPiePeriodSummaryRequestBody,
+  Def1_CreateHistoricFhlUkPropertyPeriodSummaryRequestData
+}
 import v4.historicFhlUkPropertyPeriodSummary.create.model.response.CreateHistoricFhlUkPropertyPeriodSummaryResponse
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -30,8 +33,8 @@ import scala.concurrent.Future
 
 class CreateHistoricFhlUkPropertyPeriodSummaryServiceSpec extends UnitSpec {
 
-  private val nino: String    = "AA123456A"
-  private val validPeriodId = PeriodId("2021-01-06", "2021-02-06")
+  private val nino: String                   = "AA123456A"
+  private val validPeriodId                  = PeriodId("2021-01-06", "2021-02-06")
   implicit private val correlationId: String = "X-123"
 
   "service" should {
@@ -60,20 +63,20 @@ class CreateHistoricFhlUkPropertyPeriodSummaryServiceSpec extends UnitSpec {
         }
 
       val input = List(
-        "INVALID_NINO" -> NinoFormatError,
-        "INVALID_TYPE" -> InternalError,
-        "INVALID_PAYLOAD" -> InternalError,
-        "INVALID_CORRELATIONID" -> InternalError,
+        "INVALID_NINO"            -> NinoFormatError,
+        "INVALID_TYPE"            -> InternalError,
+        "INVALID_PAYLOAD"         -> InternalError,
+        "INVALID_CORRELATIONID"   -> InternalError,
         "INCOME_SOURCE_NOT_FOUND" -> NotFoundError,
-        "DUPLICATE_SUBMISSION" -> RuleDuplicateSubmissionError,
-        "NOT_ALIGN_PERIOD" -> RuleMisalignedPeriodError,
-        "OVERLAPS_IN_PERIOD" -> RuleOverlappingPeriodError,
-        "NOT_CONTIGUOUS_PERIOD" -> RuleNotContiguousPeriodError,
-        "INVALID_PERIOD" -> RuleToDateBeforeFromDateError,
-        "BOTH_EXPENSES_SUPPLIED" -> RuleBothExpensesSuppliedError,
-        "TAX_YEAR_NOT_SUPPORTED" -> RuleHistoricTaxYearNotSupportedError,
-        "SERVER_ERROR" -> InternalError,
-        "SERVICE_UNAVAILABLE" -> InternalError
+        "DUPLICATE_SUBMISSION"    -> RuleDuplicateSubmissionError,
+        "NOT_ALIGN_PERIOD"        -> RuleMisalignedPeriodError,
+        "OVERLAPS_IN_PERIOD"      -> RuleOverlappingPeriodError,
+        "NOT_CONTIGUOUS_PERIOD"   -> RuleNotContiguousPeriodError,
+        "INVALID_PERIOD"          -> RuleToDateBeforeFromDateError,
+        "BOTH_EXPENSES_SUPPLIED"  -> RuleBothExpensesSuppliedError,
+        "TAX_YEAR_NOT_SUPPORTED"  -> RuleHistoricTaxYearNotSupportedError,
+        "SERVER_ERROR"            -> InternalError,
+        "SERVICE_UNAVAILABLE"     -> InternalError
       )
 
       input.foreach(args => (serviceError _).tupled(args))

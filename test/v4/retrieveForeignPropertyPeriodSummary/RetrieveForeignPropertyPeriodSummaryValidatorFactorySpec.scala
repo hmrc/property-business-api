@@ -18,7 +18,7 @@ package v4.retrieveForeignPropertyPeriodSummary
 
 import api.controllers.validators.Validator
 import api.models.domain.TaxYear
-import mocks.MockAppConfig
+import config.MockAppConfig
 import support.UnitSpec
 import v4.retrieveForeignPropertyPeriodSummary.def1.Def1_RetrieveForeignPropertyPeriodSummaryValidator
 import v4.retrieveForeignPropertyPeriodSummary.model.request._

@@ -39,6 +39,8 @@ class RetrieveUkPropertyAnnualSubmissionController @Inject() (val authService: E
                                                               idGenerator: IdGenerator)(implicit ec: ExecutionContext, appConfig: AppConfig)
     extends AuthorisedController(cc) {
 
+  override val endpointName: String = "retrieve-uk-property-annual-submission"
+
   implicit val endpointLogContext: EndpointLogContext =
     EndpointLogContext(controllerName = "RetrieveUkPropertyAnnualSubmissionController", endpointName = "retrieveUkPropertyAnnualSubmission")
 

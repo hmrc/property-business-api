@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package v5.createAmendUkPropertyAnnualSubmission.def1.model.request.def1_ukNonFhlProperty
+package v5.createAmendUkPropertyAnnualSubmission.def1.model.request.def1_ukProperty
 
 import play.api.libs.json.{Json, OFormat}
 

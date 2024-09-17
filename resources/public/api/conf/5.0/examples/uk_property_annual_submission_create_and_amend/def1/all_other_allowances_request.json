@@ -18,7 +18,7 @@
       }
     }
   },
-  "ukNonFhlProperty": {
+  "ukProperty": {
     "allowances": {
       "annualInvestmentAllowance": 678.45,
       "zeroEmissionsGoodsVehicleAllowance": 456.34,

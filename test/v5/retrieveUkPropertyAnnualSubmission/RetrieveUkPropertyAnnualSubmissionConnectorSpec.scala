@@ -24,7 +24,7 @@ import org.scalamock.handlers.CallHandler
 import v5.retrieveUkPropertyAnnualSubmission.RetrieveUkPropertyAnnualSubmissionConnector._
 import v5.retrieveUkPropertyAnnualSubmission.def1.model.request.Def1_RetrieveUkPropertyAnnualSubmissionRequestData
 import v5.retrieveUkPropertyAnnualSubmission.def1.model.response.def1_ukFhlProperty.Def1_Retrieve_UkFhlProperty
-import v5.retrieveUkPropertyAnnualSubmission.def1.model.response.def1_ukNonFhlProperty.Def1_Retrieve_UkNonFhlProperty
+import v5.retrieveUkPropertyAnnualSubmission.def1.model.response.def1_ukProperty.Def1_Retrieve_UkProperty
 import v5.retrieveUkPropertyAnnualSubmission.model.response._
 
 import scala.concurrent.Future
@@ -34,14 +34,14 @@ class RetrieveUkPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec {
   private val nino       = Nino("AA123456A")
   private val businessId = BusinessId("XAIS12345678910")
 
-  private val ukFhlProperty    = Def1_Retrieve_UkFhlProperty(None, None)
-  private val ukNonFhlProperty = Def1_Retrieve_UkNonFhlProperty(None, None)
+  private val ukFhlProperty = Def1_Retrieve_UkFhlProperty(None, None)
+  private val ukProperty    = Def1_Retrieve_UkProperty(None, None)
 
   "connector" when {
     "response has uk fhl details" must {
       "return a uk result" in new StandardTest {
         val response: Def1_RetrieveUkPropertyAnnualSubmissionResponse =
-          responseWith(ukFhlProperty = Some(ukFhlProperty), ukNonFhlProperty = None)
+          responseWith(ukFhlProperty = Some(ukFhlProperty), ukProperty = None)
         val outcome: Right[Nothing, ResponseWrapper[RetrieveUkPropertyAnnualSubmissionResponse]] = Right(ResponseWrapper(correlationId, response))
 
         stubHttpResponse(outcome)
@@ -53,7 +53,7 @@ class RetrieveUkPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec {
 
     "response has uk non-fhl details" must {
       "return a uk result" in new StandardTest {
-        val response: Def1_RetrieveUkPropertyAnnualSubmissionResponse = responseWith(ukFhlProperty = None, ukNonFhlProperty = Some(ukNonFhlProperty))
+        val response: Def1_RetrieveUkPropertyAnnualSubmissionResponse = responseWith(ukFhlProperty = None, ukProperty = Some(ukProperty))
         val outcome: Right[Nothing, ResponseWrapper[RetrieveUkPropertyAnnualSubmissionResponse]] = Right(ResponseWrapper(correlationId, response))
 
         stubHttpResponse(outcome)
@@ -66,7 +66,7 @@ class RetrieveUkPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec {
     "response has uk fhl and non-fhl details" must {
       "return a uk result" in new StandardTest {
         val response: Def1_RetrieveUkPropertyAnnualSubmissionResponse =
-          responseWith(ukFhlProperty = Some(ukFhlProperty), ukNonFhlProperty = Some(ukNonFhlProperty))
+          responseWith(ukFhlProperty = Some(ukFhlProperty), ukProperty = Some(ukProperty))
         val outcome: Right[Nothing, ResponseWrapper[RetrieveUkPropertyAnnualSubmissionResponse]] = Right(ResponseWrapper(correlationId, response))
 
         stubHttpResponse(outcome)
@@ -105,7 +105,7 @@ class RetrieveUkPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec {
         lazy val taxYear: String = "2019-20"
 
         val response: Def1_RetrieveUkPropertyAnnualSubmissionResponse =
-          responseWith(Some(ukFhlProperty), ukNonFhlProperty = None)
+          responseWith(Some(ukFhlProperty), ukProperty = None)
         val outcome: Right[Nothing, ResponseWrapper[RetrieveUkPropertyAnnualSubmissionResponse]] = Right(ResponseWrapper(correlationId, response))
 
         willGet(
@@ -133,8 +133,8 @@ class RetrieveUkPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec {
       Def1_RetrieveUkPropertyAnnualSubmissionRequestData(nino, businessId, TaxYear.fromMtd(taxYear))
 
     def responseWith(ukFhlProperty: Option[Def1_Retrieve_UkFhlProperty],
-                     ukNonFhlProperty: Option[Def1_Retrieve_UkNonFhlProperty]): Def1_RetrieveUkPropertyAnnualSubmissionResponse =
-      Def1_RetrieveUkPropertyAnnualSubmissionResponse(Timestamp("2022-06-17T10:53:38Z"), ukFhlProperty, ukNonFhlProperty)
+                     ukProperty: Option[Def1_Retrieve_UkProperty]): Def1_RetrieveUkPropertyAnnualSubmissionResponse =
+      Def1_RetrieveUkPropertyAnnualSubmissionResponse(Timestamp("2022-06-17T10:53:38Z"), ukFhlProperty, ukProperty)
 
   }
 

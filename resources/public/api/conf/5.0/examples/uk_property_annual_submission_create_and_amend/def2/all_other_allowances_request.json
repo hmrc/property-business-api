@@ -1,48 +1,50 @@
 {
-  "allowances": {
-    "annualInvestmentAllowance": 678.45,
-    "zeroEmissionsGoodsVehicleAllowance": 456.34,
-    "businessPremisesRenovationAllowance": 573.45,
-    "otherCapitalAllowance": 452.34,
-    "costOfReplacingDomesticGoods": 567.34,
-    "electricChargePointAllowance": 454.34,
-    "structuredBuildingAllowance": [
-      {
-        "amount": 234.34,
-        "firstYear": {
-          "qualifyingDate": "2020-03-29",
-          "qualifyingAmountExpenditure": 3434.45
-        },
-        "building": {
-          "name": "Red Oaks",
-          "number": "1",
-          "postcode": "SW1A 2AA"
+  "ukProperty": {
+    "allowances": {
+      "annualInvestmentAllowance": 678.45,
+      "zeroEmissionsGoodsVehicleAllowance": 456.34,
+      "businessPremisesRenovationAllowance": 573.45,
+      "otherCapitalAllowance": 452.34,
+      "costOfReplacingDomesticGoods": 567.34,
+      "electricChargePointAllowance": 454.34,
+      "structuredBuildingAllowance": [
+        {
+          "amount": 234.34,
+          "firstYear": {
+            "qualifyingDate": "2020-03-29",
+            "qualifyingAmountExpenditure": 3434.45
+          },
+          "building": {
+            "name": "Plaza",
+            "number": "1",
+            "postcode": "TF3 4EH"
+          }
         }
-      }
-    ],
-    "enhancedStructuredBuildingAllowance": [
-      {
-        "amount": 234.45,
-        "firstYear": {
-          "qualifyingDate": "2020-05-29",
-          "qualifyingAmountExpenditure": 453.34
-        },
-        "building": {
-          "name": "Green Oaks",
-          "number": "2",
-          "postcode": "SW1A 2AB"
+      ],
+      "enhancedStructuredBuildingAllowance": [
+        {
+          "amount": 234.45,
+          "firstYear": {
+            "qualifyingDate": "2020-05-29",
+            "qualifyingAmountExpenditure": 453.34
+          },
+          "building": {
+            "name": "Plaza 2",
+            "number": "2",
+            "postcode": "TF3 4ER"
+          }
         }
+      ],
+      "zeroEmissionsCarAllowance": 454.34
+    },
+    "adjustments": {
+      "balancingCharge": 565.34,
+      "privateUseAdjustment": 533.54,
+      "businessPremisesRenovationAllowanceBalancingCharges": 563.34,
+      "nonResidentLandlord": true,
+      "rentARoom": {
+        "jointlyLet": true
       }
-    ],
-    "zeroEmissionsCarAllowance": 454.34
-  },
-  "adjustments": {
-    "balancingCharge": 565.34,
-    "privateUseAdjustment": 533.54,
-    "businessPremisesRenovationAllowanceBalancingCharges": 563.34,
-    "nonResidentLandlord": true,
-    "rentARoom": {
-      "jointlyLet": true
     }
   }
 }

@@ -21,7 +21,7 @@ import config.MockAppConfig
 import play.api.libs.json.Json
 import support.UnitSpec
 import v5.retrieveUkPropertyAnnualSubmission.def1.model.response.def1_ukFhlProperty._
-import v5.retrieveUkPropertyAnnualSubmission.def1.model.response.def1_ukNonFhlProperty._
+import v5.retrieveUkPropertyAnnualSubmission.def1.model.response.def1_ukProperty._
 import v5.retrieveUkPropertyAnnualSubmission.model.response._
 
 class Def1_RetrieveUkPropertyAnnualSubmissionResponseSpec extends UnitSpec with MockAppConfig {
@@ -205,22 +205,22 @@ class Def1_RetrieveUkPropertyAnnualSubmissionResponseSpec extends UnitSpec with 
         )
       )
     ),
-    ukNonFhlProperty = Some(
-      Def1_Retrieve_UkNonFhlProperty(
+    ukProperty = Some(
+      Def1_Retrieve_UkProperty(
         adjustments = Some(
-          Def1_Retrieve_UkNonFhlPropertyAdjustments(
+          Def1_Retrieve_UkPropertyAdjustments(
             balancingCharge = Some(565.34),
             privateUseAdjustment = Some(533.54),
             businessPremisesRenovationAllowanceBalancingCharges = Some(563.34),
             nonResidentLandlord = true,
             rentARoom = Some(
-              Def1_Retrieve_UkNonFhlPropertyRentARoom(
+              Def1_Retrieve_UkPropertyRentARoom(
                 jointlyLet = true
               ))
           )
         ),
         allowances = Some(
-          Def1_Retrieve_UkNonFhlPropertyAllowances(
+          Def1_Retrieve_UkPropertyAllowances(
             annualInvestmentAllowance = Some(678.45),
             zeroEmissionsGoodsVehicleAllowance = Some(456.34),
             businessPremisesRenovationAllowance = Some(573.45),
@@ -230,15 +230,15 @@ class Def1_RetrieveUkPropertyAnnualSubmissionResponseSpec extends UnitSpec with 
             electricChargePointAllowance = Some(454.34),
             structuredBuildingAllowance = Some(
               List(
-                Def1_Retrieve_UkNonFhlPropertyStructuredBuildingAllowance(
+                Def1_Retrieve_UkPropertyStructuredBuildingAllowance(
                   amount = 234.34,
                   firstYear = Some(
-                    Def1_Retrieve_UkNonFhlPropertyFirstYear(
+                    Def1_Retrieve_UkPropertyFirstYear(
                       qualifyingDate = "2020-03-29",
                       qualifyingAmountExpenditure = 3434.45
                     )
                   ),
-                  building = Def1_Retrieve_UkNonFhlPropertyBuilding(
+                  building = Def1_Retrieve_UkPropertyBuilding(
                     name = Some("Plaza"),
                     number = Some("1"),
                     postcode = "TF3 4EH"
@@ -247,15 +247,15 @@ class Def1_RetrieveUkPropertyAnnualSubmissionResponseSpec extends UnitSpec with 
               )),
             enhancedStructuredBuildingAllowance = Some(
               List(
-                Def1_Retrieve_UkNonFhlPropertyStructuredBuildingAllowance(
+                Def1_Retrieve_UkPropertyStructuredBuildingAllowance(
                   amount = 234.45,
                   firstYear = Some(
-                    Def1_Retrieve_UkNonFhlPropertyFirstYear(
+                    Def1_Retrieve_UkPropertyFirstYear(
                       qualifyingDate = "2020-05-29",
                       qualifyingAmountExpenditure = 453.34
                     )
                   ),
-                  building = Def1_Retrieve_UkNonFhlPropertyBuilding(
+                  building = Def1_Retrieve_UkPropertyBuilding(
                     name = Some("Plaza 2"),
                     number = Some("2"),
                     postcode = "TF3 4ER"
@@ -292,7 +292,7 @@ class Def1_RetrieveUkPropertyAnnualSubmissionResponseSpec extends UnitSpec with 
       |         }
       |      }
       |   },
-      |   "ukNonFhlProperty":{
+      |   "ukProperty":{
       |      "allowances":{
       |         "annualInvestmentAllowance":678.45,
       |         "zeroEmissionsGoodsVehicleAllowance":456.34,

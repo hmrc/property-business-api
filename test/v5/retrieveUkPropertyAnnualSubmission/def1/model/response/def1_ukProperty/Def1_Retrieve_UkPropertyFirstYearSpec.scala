@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-package v5.retrieveUkPropertyAnnualSubmission.def1.model.response.def1_ukNonFhlProperty
+package v5.retrieveUkPropertyAnnualSubmission.def1.model.response.def1_ukProperty
 
 import play.api.libs.json.{JsValue, Json}
 import support.UnitSpec
 
-class Def1_Retrieve_UkNonFhlPropertyFirstYearSpec extends UnitSpec {
+class Def1_Retrieve_UkPropertyFirstYearSpec extends UnitSpec {
 
   val downstreamJson: JsValue = Json.parse("""
       |{
@@ -28,7 +28,7 @@ class Def1_Retrieve_UkNonFhlPropertyFirstYearSpec extends UnitSpec {
       |}
       |""".stripMargin)
 
-  val model: Def1_Retrieve_UkNonFhlPropertyFirstYear = Def1_Retrieve_UkNonFhlPropertyFirstYear(
+  val model: Def1_Retrieve_UkPropertyFirstYear = Def1_Retrieve_UkPropertyFirstYear(
     qualifyingDate = "2020-03-29",
     qualifyingAmountExpenditure = 3434.45
   )
@@ -42,7 +42,7 @@ class Def1_Retrieve_UkNonFhlPropertyFirstYearSpec extends UnitSpec {
 
   "reads" should {
     "read JSON into a model" in {
-      downstreamJson.as[Def1_Retrieve_UkNonFhlPropertyFirstYear] shouldBe model
+      downstreamJson.as[Def1_Retrieve_UkPropertyFirstYear] shouldBe model
     }
   }
 

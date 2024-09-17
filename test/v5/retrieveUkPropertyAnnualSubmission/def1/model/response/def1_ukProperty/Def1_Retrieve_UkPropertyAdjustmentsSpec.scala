@@ -14,20 +14,20 @@
  * limitations under the License.
  */
 
-package v5.retrieveUkPropertyAnnualSubmission.def1.model.response.def1_ukNonFhlProperty
+package v5.retrieveUkPropertyAnnualSubmission.def1.model.response.def1_ukProperty
 
 import play.api.libs.json.Json
 import support.UnitSpec
 
-class Def1_Retrieve_UkNonFhlPropertyAdjustmentsSpec extends UnitSpec {
+class Def1_Retrieve_UkPropertyAdjustmentsSpec extends UnitSpec {
 
-  val model: Def1_Retrieve_UkNonFhlPropertyAdjustments = Def1_Retrieve_UkNonFhlPropertyAdjustments(
+  val model: Def1_Retrieve_UkPropertyAdjustments = Def1_Retrieve_UkPropertyAdjustments(
     balancingCharge = Some(1.01),
     privateUseAdjustment = Some(2.01),
     businessPremisesRenovationAllowanceBalancingCharges = Some(3.01),
     nonResidentLandlord = true,
     rentARoom = Some(
-      Def1_Retrieve_UkNonFhlPropertyRentARoom(
+      Def1_Retrieve_UkPropertyRentARoom(
         jointlyLet = true
       ))
   )
@@ -47,7 +47,7 @@ class Def1_Retrieve_UkNonFhlPropertyAdjustmentsSpec extends UnitSpec {
             |   }
             |}
             |""".stripMargin)
-          .as[Def1_Retrieve_UkNonFhlPropertyAdjustments] shouldBe model
+          .as[Def1_Retrieve_UkPropertyAdjustments] shouldBe model
       }
 
       "rentARoom field name is used (API#1805)" in {
@@ -63,7 +63,7 @@ class Def1_Retrieve_UkNonFhlPropertyAdjustmentsSpec extends UnitSpec {
                    |   }
                    |}
                    |""".stripMargin)
-          .as[Def1_Retrieve_UkNonFhlPropertyAdjustments] shouldBe model
+          .as[Def1_Retrieve_UkPropertyAdjustments] shouldBe model
       }
 
       "neither ukOtherRentARoom nor rentARoom are present" in {
@@ -76,7 +76,7 @@ class Def1_Retrieve_UkNonFhlPropertyAdjustmentsSpec extends UnitSpec {
                    |   "nonResidentLandlord":true
                    |}
                    |""".stripMargin)
-          .as[Def1_Retrieve_UkNonFhlPropertyAdjustments] shouldBe model.copy(rentARoom = None)
+          .as[Def1_Retrieve_UkPropertyAdjustments] shouldBe model.copy(rentARoom = None)
 
       }
     }

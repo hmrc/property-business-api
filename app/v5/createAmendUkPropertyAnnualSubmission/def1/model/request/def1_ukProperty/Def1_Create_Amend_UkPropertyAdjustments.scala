@@ -14,27 +14,27 @@
  * limitations under the License.
  */
 
-package v5.createAmendUkPropertyAnnualSubmission.def1.model.request.def1_ukNonFhlProperty
+package v5.createAmendUkPropertyAnnualSubmission.def1.model.request.def1_ukProperty
 
 import play.api.libs.functional.syntax._
 import play.api.libs.json.{JsPath, Json, Reads, Writes}
 import v5.createAmendUkPropertyAnnualSubmission.def1.model.request.def1_ukPropertyRentARoom.Def1_Create_Amend_UkPropertyAdjustmentsRentARoom
 
-case class Def1_Create_Amend_UkNonFhlPropertyAdjustments(balancingCharge: Option[BigDecimal],
-                                                         privateUseAdjustment: Option[BigDecimal],
-                                                         businessPremisesRenovationAllowanceBalancingCharges: Option[BigDecimal],
-                                                         nonResidentLandlord: Boolean,
-                                                         rentARoom: Option[Def1_Create_Amend_UkPropertyAdjustmentsRentARoom])
+case class Def1_Create_Amend_UkPropertyAdjustments(balancingCharge: Option[BigDecimal],
+                                                   privateUseAdjustment: Option[BigDecimal],
+                                                   businessPremisesRenovationAllowanceBalancingCharges: Option[BigDecimal],
+                                                   nonResidentLandlord: Boolean,
+                                                   rentARoom: Option[Def1_Create_Amend_UkPropertyAdjustmentsRentARoom])
 
-object Def1_Create_Amend_UkNonFhlPropertyAdjustments {
-  implicit val reads: Reads[Def1_Create_Amend_UkNonFhlPropertyAdjustments] = Json.reads[Def1_Create_Amend_UkNonFhlPropertyAdjustments]
+object Def1_Create_Amend_UkPropertyAdjustments {
+  implicit val reads: Reads[Def1_Create_Amend_UkPropertyAdjustments] = Json.reads[Def1_Create_Amend_UkPropertyAdjustments]
 
-  implicit val writes: Writes[Def1_Create_Amend_UkNonFhlPropertyAdjustments] = (
+  implicit val writes: Writes[Def1_Create_Amend_UkPropertyAdjustments] = (
     (JsPath \ "balancingCharge").writeNullable[BigDecimal] and
       (JsPath \ "privateUseAdjustment").writeNullable[BigDecimal] and
       (JsPath \ "businessPremisesRenovationAllowanceBalancingCharges").writeNullable[BigDecimal] and
       (JsPath \ "nonResidentLandlord").write[Boolean] and
       (JsPath \ "ukOtherRentARoom").writeNullable[Def1_Create_Amend_UkPropertyAdjustmentsRentARoom]
-  )(unlift(Def1_Create_Amend_UkNonFhlPropertyAdjustments.unapply))
+  )(unlift(Def1_Create_Amend_UkPropertyAdjustments.unapply))
 
 }

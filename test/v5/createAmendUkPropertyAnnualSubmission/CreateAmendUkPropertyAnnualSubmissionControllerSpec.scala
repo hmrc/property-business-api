@@ -27,7 +27,7 @@ import play.api.Configuration
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.Result
 import v5.createAmendUkPropertyAnnualSubmission.def1.model.request.def1_ukFhlProperty._
-import v5.createAmendUkPropertyAnnualSubmission.def1.model.request.def1_ukNonFhlProperty._
+import v5.createAmendUkPropertyAnnualSubmission.def1.model.request.def1_ukProperty._
 import v5.createAmendUkPropertyAnnualSubmission.def1.model.request.def1_ukPropertyRentARoom.Def1_Create_Amend_UkPropertyAdjustmentsRentARoom
 import v5.createAmendUkPropertyAnnualSubmission.def1.model.request.{
   Def1_CreateAmendUkPropertyAnnualSubmissionRequestBody,
@@ -141,9 +141,9 @@ class CreateAmendUkPropertyAnnualSubmissionControllerSpec
         ))
     )
 
-    private val ukNonFhlProperty: Def1_Create_Amend_UkNonFhlProperty = Def1_Create_Amend_UkNonFhlProperty(
+    private val ukNonFhlProperty: Def1_Create_Amend_UkProperty = Def1_Create_Amend_UkProperty(
       Some(
-        Def1_Create_Amend_UkNonFhlPropertyAdjustments(
+        Def1_Create_Amend_UkPropertyAdjustments(
           Some(2000.20),
           Some(2000.30),
           Some(2000.40),
@@ -151,7 +151,7 @@ class CreateAmendUkPropertyAnnualSubmissionControllerSpec
           Some(Def1_Create_Amend_UkPropertyAdjustmentsRentARoom(true))
         )),
       Some(
-        Def1_Create_Amend_UkNonFhlPropertyAllowances(
+        Def1_Create_Amend_UkPropertyAllowances(
           Some(2000.50),
           Some(2000.60),
           Some(2000.70),

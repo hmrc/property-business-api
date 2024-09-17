@@ -125,7 +125,7 @@
       },
       "additionalProperties": false
     },
-    "ukNonFhlProperty": {
+    "ukProperty": {
       "type": "object",
       "description": "Object holding allowances and adjustments for UK property business - excluding Furnished Holiday Lettings (FHL) for the period.",
       "properties": {

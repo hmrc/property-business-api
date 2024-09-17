@@ -14,27 +14,26 @@
  * limitations under the License.
  */
 
-package v5.createAmendUkPropertyAnnualSubmission.def1.model.request.def1_ukNonFhlProperty
+package v5.createAmendUkPropertyAnnualSubmission.def1.model.request.def1_ukProperty
 
 import play.api.libs.functional.syntax._
 import play.api.libs.json.{JsPath, Json, Reads, Writes}
 
-case class Def1_Create_Amend_UkNonFhlPropertyAllowances(
-    annualInvestmentAllowance: Option[BigDecimal],
-    zeroEmissionsGoodsVehicleAllowance: Option[BigDecimal],
-    businessPremisesRenovationAllowance: Option[BigDecimal],
-    otherCapitalAllowance: Option[BigDecimal],
-    costOfReplacingDomesticGoods: Option[BigDecimal],
-    electricChargePointAllowance: Option[BigDecimal],
-    zeroEmissionsCarAllowance: Option[BigDecimal],
-    propertyIncomeAllowance: Option[BigDecimal],
-    structuredBuildingAllowance: Option[Seq[Def1_Create_Amend_StructuredBuildingAllowance]],
-    enhancedStructuredBuildingAllowance: Option[Seq[Def1_Create_Amend_StructuredBuildingAllowance]])
+case class Def1_Create_Amend_UkPropertyAllowances(annualInvestmentAllowance: Option[BigDecimal],
+                                                  zeroEmissionsGoodsVehicleAllowance: Option[BigDecimal],
+                                                  businessPremisesRenovationAllowance: Option[BigDecimal],
+                                                  otherCapitalAllowance: Option[BigDecimal],
+                                                  costOfReplacingDomesticGoods: Option[BigDecimal],
+                                                  electricChargePointAllowance: Option[BigDecimal],
+                                                  zeroEmissionsCarAllowance: Option[BigDecimal],
+                                                  propertyIncomeAllowance: Option[BigDecimal],
+                                                  structuredBuildingAllowance: Option[Seq[Def1_Create_Amend_StructuredBuildingAllowance]],
+                                                  enhancedStructuredBuildingAllowance: Option[Seq[Def1_Create_Amend_StructuredBuildingAllowance]])
 
-object Def1_Create_Amend_UkNonFhlPropertyAllowances {
-  implicit val reads: Reads[Def1_Create_Amend_UkNonFhlPropertyAllowances] = Json.reads[Def1_Create_Amend_UkNonFhlPropertyAllowances]
+object Def1_Create_Amend_UkPropertyAllowances {
+  implicit val reads: Reads[Def1_Create_Amend_UkPropertyAllowances] = Json.reads[Def1_Create_Amend_UkPropertyAllowances]
 
-  implicit val writes: Writes[Def1_Create_Amend_UkNonFhlPropertyAllowances] = (
+  implicit val writes: Writes[Def1_Create_Amend_UkPropertyAllowances] = (
     (JsPath \ "annualInvestmentAllowance").writeNullable[BigDecimal] and
       (JsPath \ "zeroEmissionGoodsVehicleAllowance").writeNullable[BigDecimal] and
       (JsPath \ "businessPremisesRenovationAllowance").writeNullable[BigDecimal] and
@@ -45,6 +44,6 @@ object Def1_Create_Amend_UkNonFhlPropertyAllowances {
       (JsPath \ "propertyIncomeAllowance").writeNullable[BigDecimal] and
       (JsPath \ "structuredBuildingAllowance").writeNullable[Seq[Def1_Create_Amend_StructuredBuildingAllowance]] and
       (JsPath \ "enhancedStructuredBuildingAllowance").writeNullable[Seq[Def1_Create_Amend_StructuredBuildingAllowance]]
-  )(unlift(Def1_Create_Amend_UkNonFhlPropertyAllowances.unapply))
+  )(unlift(Def1_Create_Amend_UkPropertyAllowances.unapply))
 
 }

@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-package v5.retrieveUkPropertyAnnualSubmission.def1.model.response.def1_ukNonFhlProperty
+package v5.retrieveUkPropertyAnnualSubmission.def1.model.response.def1_ukProperty
 
 import play.api.libs.json.{Json, OFormat}
 
-case class Def1_Retrieve_UkNonFhlPropertyRentARoom(jointlyLet: Boolean)
+case class Def1_Retrieve_UkPropertyFirstYear(qualifyingDate: String, qualifyingAmountExpenditure: BigDecimal)
 
-object Def1_Retrieve_UkNonFhlPropertyRentARoom {
-  implicit val format: OFormat[Def1_Retrieve_UkNonFhlPropertyRentARoom] = Json.format[Def1_Retrieve_UkNonFhlPropertyRentARoom]
+object Def1_Retrieve_UkPropertyFirstYear {
+  implicit val format: OFormat[Def1_Retrieve_UkPropertyFirstYear] = Json.format[Def1_Retrieve_UkPropertyFirstYear]
 }

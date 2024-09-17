@@ -13,8 +13,6 @@ description: |
   | UK_PROPERTY_ALLOWANCE                 | Simulates the scenario of a UK property with property allowance.       |
   | UK_FHL_ALL_OTHER_ALLOWANCES           | Simulates the scenario of a FHL property with all other allowances.    |
   | UK_FHL_PROPERTY_ALLOWANCE             | Simulates the scenario of a FHL property with property allowance.      |
-  | UK_NON_FHL_ALL_OTHER_ALLOWANCES       | Simulates the scenario of a Non-FHL property with all other allowances.|
-  | UK_NON_FHL_PROPERTY_ALLOWANCE         | Simulates the scenario of a Non-FHL property with property allowance.  |
   | FOREIGN_PROPERTY                      | Simulates the scenario where the type of business is incorrect.        |
   | STATEFUL                              | Performs a stateful retrieve.                                          |
 

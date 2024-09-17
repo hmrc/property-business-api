@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-package v5.retrieveUkPropertyAnnualSubmission.def1.model.response.def1_ukNonFhlProperty
+package v5.retrieveUkPropertyAnnualSubmission.def1.model.response.def1_ukProperty
 
 import play.api.libs.json.{JsValue, Json}
 import support.UnitSpec
 
-class Def1_Retrieve_UkNonFhlPropertyRentARoomSpec extends UnitSpec {
+class Def1_Retrieve_UkPropertyRentARoomSpec extends UnitSpec {
 
   val downstreamJson: JsValue = Json.parse("""
       |{
@@ -27,7 +27,7 @@ class Def1_Retrieve_UkNonFhlPropertyRentARoomSpec extends UnitSpec {
       |}
       |""".stripMargin)
 
-  val model: Def1_Retrieve_UkNonFhlPropertyRentARoom = Def1_Retrieve_UkNonFhlPropertyRentARoom(
+  val model: Def1_Retrieve_UkPropertyRentARoom = Def1_Retrieve_UkPropertyRentARoom(
     jointlyLet = true
   )
 
@@ -39,7 +39,7 @@ class Def1_Retrieve_UkNonFhlPropertyRentARoomSpec extends UnitSpec {
 
   "reads" should {
     "read JSON into a model" in {
-      downstreamJson.as[Def1_Retrieve_UkNonFhlPropertyRentARoom] shouldBe model
+      downstreamJson.as[Def1_Retrieve_UkPropertyRentARoom] shouldBe model
     }
   }
 

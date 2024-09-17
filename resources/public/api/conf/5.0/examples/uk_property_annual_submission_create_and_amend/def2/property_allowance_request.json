@@ -1,13 +1,15 @@
 {
-  "allowances": {
-    "propertyIncomeAllowance": 678.45
-  },
-  "adjustments": {
-    "balancingCharge": 565.34,
-    "businessPremisesRenovationAllowanceBalancingCharges": 563.34,
-    "nonResidentLandlord": true,
-    "rentARoom": {
-      "jointlyLet": true
+  "ukProperty": {
+    "allowances": {
+      "propertyIncomeAllowance": 678.45
+    },
+    "adjustments": {
+      "balancingCharge": 565.34,
+      "businessPremisesRenovationAllowanceBalancingCharges": 563.34,
+      "nonResidentLandlord": true,
+      "rentARoom": {
+        "jointlyLet": true
+      }
     }
   }
 }

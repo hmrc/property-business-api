@@ -19,14 +19,14 @@ package v5.createAmendUkPropertyAnnualSubmission.def1.model.request
 import play.api.libs.json.{JsValue, Json}
 import support.UnitSpec
 import v5.createAmendUkPropertyAnnualSubmission.def1.model.request.def1_ukFhlProperty._
-import v5.createAmendUkPropertyAnnualSubmission.def1.model.request.def1_ukNonFhlProperty._
+import v5.createAmendUkPropertyAnnualSubmission.def1.model.request.def1_ukProperty._
 import v5.createAmendUkPropertyAnnualSubmission.def1.model.request.def1_ukPropertyRentARoom.Def1_Create_Amend_UkPropertyAdjustmentsRentARoom
 
 class Def1_CreateAmendUkPropertyAnnualSubmissionRequestBodySpec extends UnitSpec {
 
   val requestBody: Def1_CreateAmendUkPropertyAnnualSubmissionRequestBody =
     Def1_CreateAmendUkPropertyAnnualSubmissionRequestBody(
-      Some(
+      ukFhlProperty = Some(
         Def1_Create_Amend_UkFhlProperty(
           Some(
             Def1_Create_Amend_UkFhlPropertyAdjustments(
@@ -47,17 +47,17 @@ class Def1_CreateAmendUkPropertyAnnualSubmissionRequestBodySpec extends UnitSpec
               None
             ))
         )),
-      Some(
-        Def1_Create_Amend_UkNonFhlProperty(
-          Some(
-            Def1_Create_Amend_UkNonFhlPropertyAdjustments(
+      ukProperty = Some(
+        Def1_Create_Amend_UkProperty(
+          adjustments = Some(
+            Def1_Create_Amend_UkPropertyAdjustments(
               Some(2000.20),
               Some(2000.30),
               Some(2000.40),
               true,
               Some(Def1_Create_Amend_UkPropertyAdjustmentsRentARoom(true))
             )),
-          Some(Def1_Create_Amend_UkNonFhlPropertyAllowances(
+          allowances = Some(Def1_Create_Amend_UkPropertyAllowances(
             Some(2000.50),
             Some(2000.60),
             Some(2000.70),
@@ -119,7 +119,7 @@ class Def1_CreateAmendUkPropertyAnnualSubmissionRequestBodySpec extends UnitSpec
       |      }
       |    }
       |  },
-      |  "ukNonFhlProperty": {
+      |  "ukProperty": {
       |    "allowances": {
       |      "annualInvestmentAllowance": 2000.50,
       |      "zeroEmissionsGoodsVehicleAllowance": 2000.60,

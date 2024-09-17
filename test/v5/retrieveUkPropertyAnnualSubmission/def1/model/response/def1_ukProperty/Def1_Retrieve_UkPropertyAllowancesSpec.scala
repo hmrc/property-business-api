@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-package v5.retrieveUkPropertyAnnualSubmission.def1.model.response.def1_ukNonFhlProperty
+package v5.retrieveUkPropertyAnnualSubmission.def1.model.response.def1_ukProperty
 
 import play.api.libs.json.{JsValue, Json}
 import support.UnitSpec
 
-class Def1_Retrieve_UkNonFhlPropertyAllowancesSpec extends UnitSpec {
+class Def1_Retrieve_UkPropertyAllowancesSpec extends UnitSpec {
 
   val downstreamJson: JsValue = Json.parse("""
       |{
@@ -62,7 +62,7 @@ class Def1_Retrieve_UkNonFhlPropertyAllowancesSpec extends UnitSpec {
       |}
       |""".stripMargin)
 
-  val model: Def1_Retrieve_UkNonFhlPropertyAllowances = Def1_Retrieve_UkNonFhlPropertyAllowances(
+  val model: Def1_Retrieve_UkPropertyAllowances = Def1_Retrieve_UkPropertyAllowances(
     annualInvestmentAllowance = Some(678.45),
     zeroEmissionsGoodsVehicleAllowance = Some(456.34),
     businessPremisesRenovationAllowance = Some(573.45),
@@ -72,15 +72,15 @@ class Def1_Retrieve_UkNonFhlPropertyAllowancesSpec extends UnitSpec {
     electricChargePointAllowance = Some(454.34),
     structuredBuildingAllowance = Some(
       List(
-        Def1_Retrieve_UkNonFhlPropertyStructuredBuildingAllowance(
+        Def1_Retrieve_UkPropertyStructuredBuildingAllowance(
           amount = 234.34,
           firstYear = Some(
-            Def1_Retrieve_UkNonFhlPropertyFirstYear(
+            Def1_Retrieve_UkPropertyFirstYear(
               qualifyingDate = "2020-03-29",
               qualifyingAmountExpenditure = 3434.45
             )
           ),
-          building = Def1_Retrieve_UkNonFhlPropertyBuilding(
+          building = Def1_Retrieve_UkPropertyBuilding(
             name = Some("Plaza"),
             number = Some("1"),
             postcode = "TF3 4EH"
@@ -89,15 +89,15 @@ class Def1_Retrieve_UkNonFhlPropertyAllowancesSpec extends UnitSpec {
       )),
     enhancedStructuredBuildingAllowance = Some(
       List(
-        Def1_Retrieve_UkNonFhlPropertyStructuredBuildingAllowance(
+        Def1_Retrieve_UkPropertyStructuredBuildingAllowance(
           amount = 234.45,
           firstYear = Some(
-            Def1_Retrieve_UkNonFhlPropertyFirstYear(
+            Def1_Retrieve_UkPropertyFirstYear(
               qualifyingDate = "2020-05-29",
               qualifyingAmountExpenditure = 453.34
             )
           ),
-          building = Def1_Retrieve_UkNonFhlPropertyBuilding(
+          building = Def1_Retrieve_UkPropertyBuilding(
             name = Some("Plaza 2"),
             number = Some("2"),
             postcode = "TF3 4ER"
@@ -150,7 +150,7 @@ class Def1_Retrieve_UkNonFhlPropertyAllowancesSpec extends UnitSpec {
 
   "reads" should {
     "read JSON into a model" in {
-      downstreamJson.as[Def1_Retrieve_UkNonFhlPropertyAllowances] shouldBe model
+      downstreamJson.as[Def1_Retrieve_UkPropertyAllowances] shouldBe model
     }
   }
 

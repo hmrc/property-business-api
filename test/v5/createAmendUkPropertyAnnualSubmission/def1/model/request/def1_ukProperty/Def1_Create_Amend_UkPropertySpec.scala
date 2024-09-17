@@ -14,18 +14,18 @@
  * limitations under the License.
  */
 
-package v5.createAmendUkPropertyAnnualSubmission.def1.model.request.def1_ukNonFhlProperty
+package v5.createAmendUkPropertyAnnualSubmission.def1.model.request.def1_ukProperty
 
 import play.api.libs.json.{JsValue, Json}
 import support.UnitSpec
 import v5.createAmendUkPropertyAnnualSubmission.def1.model.request.def1_ukPropertyRentARoom.Def1_Create_Amend_UkPropertyAdjustmentsRentARoom
 
-class Def1_Create_Amend_UkNonFhlPropertySpec extends UnitSpec {
+class Def1_Create_Amend_UkPropertySpec extends UnitSpec {
 
-  val requestBody: Def1_Create_Amend_UkNonFhlProperty =
-    Def1_Create_Amend_UkNonFhlProperty(
+  val requestBody: Def1_Create_Amend_UkProperty =
+    Def1_Create_Amend_UkProperty(
       Some(
-        Def1_Create_Amend_UkNonFhlPropertyAdjustments(
+        Def1_Create_Amend_UkPropertyAdjustments(
           Some(2000.20),
           Some(2000.30),
           Some(2000.40),
@@ -33,7 +33,7 @@ class Def1_Create_Amend_UkNonFhlPropertySpec extends UnitSpec {
           Some(Def1_Create_Amend_UkPropertyAdjustmentsRentARoom(true))
         )),
       Some(
-        Def1_Create_Amend_UkNonFhlPropertyAllowances(
+        Def1_Create_Amend_UkPropertyAllowances(
           Some(2000.50),
           Some(2000.60),
           Some(2000.70),
@@ -174,7 +174,7 @@ class Def1_Create_Amend_UkNonFhlPropertySpec extends UnitSpec {
   "reads" when {
     "passed a valid JSON" should {
       "return a valid model" in {
-        validMtdJson.as[Def1_Create_Amend_UkNonFhlProperty] shouldBe requestBody
+        validMtdJson.as[Def1_Create_Amend_UkProperty] shouldBe requestBody
       }
     }
   }

@@ -19,11 +19,11 @@ package v5.createAmendUkPropertyAnnualSubmission.def1.model.request
 import play.api.libs.functional.syntax.{toFunctionalBuilderOps, unlift}
 import play.api.libs.json.{JsPath, Json, OWrites, Reads}
 import v5.createAmendUkPropertyAnnualSubmission.def1.model.request.def1_ukFhlProperty.Def1_Create_Amend_UkFhlProperty
-import v5.createAmendUkPropertyAnnualSubmission.def1.model.request.def1_ukNonFhlProperty.Def1_Create_Amend_UkNonFhlProperty
+import v5.createAmendUkPropertyAnnualSubmission.def1.model.request.def1_ukProperty.Def1_Create_Amend_UkProperty
 import v5.createAmendUkPropertyAnnualSubmission.model.request.CreateAmendUkPropertyAnnualSubmissionRequestBody
 
 case class Def1_CreateAmendUkPropertyAnnualSubmissionRequestBody(ukFhlProperty: Option[Def1_Create_Amend_UkFhlProperty],
-                                                                 ukNonFhlProperty: Option[Def1_Create_Amend_UkNonFhlProperty])
+                                                                 ukProperty: Option[Def1_Create_Amend_UkProperty])
     extends CreateAmendUkPropertyAnnualSubmissionRequestBody
 
 object Def1_CreateAmendUkPropertyAnnualSubmissionRequestBody {
@@ -31,7 +31,7 @@ object Def1_CreateAmendUkPropertyAnnualSubmissionRequestBody {
 
   implicit val writes: OWrites[Def1_CreateAmendUkPropertyAnnualSubmissionRequestBody] = (
     (JsPath \ "ukFhlProperty").writeNullable[Def1_Create_Amend_UkFhlProperty] and
-      (JsPath \ "ukOtherProperty").writeNullable[Def1_Create_Amend_UkNonFhlProperty]
+      (JsPath \ "ukOtherProperty").writeNullable[Def1_Create_Amend_UkProperty]
   )(unlift(Def1_CreateAmendUkPropertyAnnualSubmissionRequestBody.unapply))
 
 }

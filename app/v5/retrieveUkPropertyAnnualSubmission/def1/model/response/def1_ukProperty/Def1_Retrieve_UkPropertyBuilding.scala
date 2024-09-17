@@ -14,20 +14,20 @@
  * limitations under the License.
  */
 
-package v5.createAmendUkPropertyAnnualSubmission.def1.model.request.def1_ukNonFhlProperty
+package v5.retrieveUkPropertyAnnualSubmission.def1.model.response.def1_ukProperty
 
 import play.api.libs.functional.syntax._
-import play.api.libs.json.{JsPath, Json, Reads, Writes}
+import play.api.libs.json._
 
-case class Def1_Create_Amend_Building(name: Option[String], number: Option[String], postcode: String)
+case class Def1_Retrieve_UkPropertyBuilding(name: Option[String], number: Option[String], postcode: String)
 
-object Def1_Create_Amend_Building {
-  implicit val reads: Reads[Def1_Create_Amend_Building] = Json.reads[Def1_Create_Amend_Building]
+object Def1_Retrieve_UkPropertyBuilding {
+  implicit val writes: OWrites[Def1_Retrieve_UkPropertyBuilding] = Json.writes[Def1_Retrieve_UkPropertyBuilding]
 
-  implicit val writes: Writes[Def1_Create_Amend_Building] = (
-    (JsPath \ "name").writeNullable[String] and
-      (JsPath \ "number").writeNullable[String] and
-      (JsPath \ "postCode").write[String]
-  )(unlift(Def1_Create_Amend_Building.unapply))
+  implicit val reads: Reads[Def1_Retrieve_UkPropertyBuilding] = (
+    (__ \ "name").readNullable[String] and
+      (__ \ "number").readNullable[String] and
+      (__ \ "postCode").read[String]
+  )(Def1_Retrieve_UkPropertyBuilding.apply _)
 
 }

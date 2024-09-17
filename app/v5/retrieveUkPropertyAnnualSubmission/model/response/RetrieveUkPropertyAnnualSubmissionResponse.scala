@@ -20,7 +20,7 @@ import api.models.domain.Timestamp
 import play.api.libs.functional.syntax._
 import play.api.libs.json._
 import v5.retrieveUkPropertyAnnualSubmission.def1.model.response.def1_ukFhlProperty.Def1_Retrieve_UkFhlProperty
-import v5.retrieveUkPropertyAnnualSubmission.def1.model.response.def1_ukNonFhlProperty.Def1_Retrieve_UkNonFhlProperty
+import v5.retrieveUkPropertyAnnualSubmission.def1.model.response.def1_ukProperty.Def1_Retrieve_UkProperty
 import v5.retrieveUkPropertyAnnualSubmission.def2.model.response.def2_ukProperty.Def2_Retrieve_UkProperty
 
 sealed trait RetrieveUkPropertyAnnualSubmissionResponse {
@@ -39,9 +39,9 @@ object RetrieveUkPropertyAnnualSubmissionResponse {
 case class Def1_RetrieveUkPropertyAnnualSubmissionResponse(
     submittedOn: Timestamp,
     ukFhlProperty: Option[Def1_Retrieve_UkFhlProperty],
-    ukNonFhlProperty: Option[Def1_Retrieve_UkNonFhlProperty]
+    ukProperty: Option[Def1_Retrieve_UkProperty]
 ) extends RetrieveUkPropertyAnnualSubmissionResponse {
-  override def isUkResult: Boolean = ukFhlProperty.nonEmpty || ukNonFhlProperty.nonEmpty
+  override def isUkResult: Boolean = ukFhlProperty.nonEmpty || ukProperty.nonEmpty
 }
 
 object Def1_RetrieveUkPropertyAnnualSubmissionResponse {
@@ -51,7 +51,7 @@ object Def1_RetrieveUkPropertyAnnualSubmissionResponse {
   implicit val reads: Reads[Def1_RetrieveUkPropertyAnnualSubmissionResponse] = (
     (__ \ "submittedOn").read[Timestamp] and
       (__ \ "ukFhlProperty").readNullable[Def1_Retrieve_UkFhlProperty] and
-      (__ \ "ukOtherProperty").readNullable[Def1_Retrieve_UkNonFhlProperty]
+      (__ \ "ukOtherProperty").readNullable[Def1_Retrieve_UkProperty]
   )(Def1_RetrieveUkPropertyAnnualSubmissionResponse.apply _)
 
 }

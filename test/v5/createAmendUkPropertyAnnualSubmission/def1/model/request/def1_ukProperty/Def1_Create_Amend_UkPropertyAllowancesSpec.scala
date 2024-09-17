@@ -14,15 +14,15 @@
  * limitations under the License.
  */
 
-package v5.createAmendUkPropertyAnnualSubmission.def1.model.request.def1_ukNonFhlProperty
+package v5.createAmendUkPropertyAnnualSubmission.def1.model.request.def1_ukProperty
 
 import play.api.libs.json.{JsValue, Json}
 import support.UnitSpec
 
-class Def1_Create_Amend_UkNonFhlPropertyAllowancesSpec extends UnitSpec {
+class Def1_Create_Amend_UkPropertyAllowancesSpec extends UnitSpec {
 
-  val requestBody: Def1_Create_Amend_UkNonFhlPropertyAllowances =
-    Def1_Create_Amend_UkNonFhlPropertyAllowances(
+  val requestBody: Def1_Create_Amend_UkPropertyAllowances =
+    Def1_Create_Amend_UkPropertyAllowances(
       Some(2000.50),
       Some(2000.60),
       Some(2000.70),
@@ -142,7 +142,7 @@ class Def1_Create_Amend_UkNonFhlPropertyAllowancesSpec extends UnitSpec {
   "reads" when {
     "passed a valid JSON" should {
       "return a valid model" in {
-        validMtdJson.as[Def1_Create_Amend_UkNonFhlPropertyAllowances] shouldBe requestBody
+        validMtdJson.as[Def1_Create_Amend_UkPropertyAllowances] shouldBe requestBody
       }
     }
   }

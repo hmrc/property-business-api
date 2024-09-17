@@ -14,20 +14,19 @@
  * limitations under the License.
  */
 
-package v5.retrieveUkPropertyAnnualSubmission.def1.model.response.def1_ukNonFhlProperty
+package v5.retrieveUkPropertyAnnualSubmission.def1.model.response.def1_ukProperty
 
 import play.api.libs.functional.syntax._
 import play.api.libs.json._
 
-case class Def1_Retrieve_UkNonFhlPropertyBuilding(name: Option[String], number: Option[String], postcode: String)
+case class Def1_Retrieve_UkProperty(adjustments: Option[Def1_Retrieve_UkPropertyAdjustments], allowances: Option[Def1_Retrieve_UkPropertyAllowances])
 
-object Def1_Retrieve_UkNonFhlPropertyBuilding {
-  implicit val writes: OWrites[Def1_Retrieve_UkNonFhlPropertyBuilding] = Json.writes[Def1_Retrieve_UkNonFhlPropertyBuilding]
+object Def1_Retrieve_UkProperty {
+  implicit val writes: OWrites[Def1_Retrieve_UkProperty] = Json.writes[Def1_Retrieve_UkProperty]
 
-  implicit val reads: Reads[Def1_Retrieve_UkNonFhlPropertyBuilding] = (
-    (__ \ "name").readNullable[String] and
-      (__ \ "number").readNullable[String] and
-      (__ \ "postCode").read[String]
-  )(Def1_Retrieve_UkNonFhlPropertyBuilding.apply _)
+  implicit val reads: Reads[Def1_Retrieve_UkProperty] = (
+    (__ \ "ukOtherPropertyAnnualAdjustments").readNullable[Def1_Retrieve_UkPropertyAdjustments] and
+      (__ \ "ukOtherPropertyAnnualAllowances").readNullable[Def1_Retrieve_UkPropertyAllowances]
+  )(Def1_Retrieve_UkProperty.apply _)
 
 }

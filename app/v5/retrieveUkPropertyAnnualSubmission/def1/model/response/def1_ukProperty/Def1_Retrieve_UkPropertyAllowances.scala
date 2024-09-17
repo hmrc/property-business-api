@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-package v5.retrieveUkPropertyAnnualSubmission.def1.model.response.def1_ukNonFhlProperty
+package v5.retrieveUkPropertyAnnualSubmission.def1.model.response.def1_ukProperty
 
 import play.api.libs.functional.syntax._
 import play.api.libs.json.{JsPath, Json, OWrites, Reads}
 
-case class Def1_Retrieve_UkNonFhlPropertyAllowances(
+case class Def1_Retrieve_UkPropertyAllowances(
     annualInvestmentAllowance: Option[BigDecimal],
     zeroEmissionsGoodsVehicleAllowance: Option[BigDecimal],
     businessPremisesRenovationAllowance: Option[BigDecimal],
@@ -27,15 +27,15 @@ case class Def1_Retrieve_UkNonFhlPropertyAllowances(
     costOfReplacingDomesticGoods: Option[BigDecimal],
     propertyIncomeAllowance: Option[BigDecimal],
     electricChargePointAllowance: Option[BigDecimal],
-    structuredBuildingAllowance: Option[Seq[Def1_Retrieve_UkNonFhlPropertyStructuredBuildingAllowance]],
-    enhancedStructuredBuildingAllowance: Option[Seq[Def1_Retrieve_UkNonFhlPropertyStructuredBuildingAllowance]],
+    structuredBuildingAllowance: Option[Seq[Def1_Retrieve_UkPropertyStructuredBuildingAllowance]],
+    enhancedStructuredBuildingAllowance: Option[Seq[Def1_Retrieve_UkPropertyStructuredBuildingAllowance]],
     zeroEmissionsCarAllowance: Option[BigDecimal]
 )
 
-object Def1_Retrieve_UkNonFhlPropertyAllowances {
-  implicit val writes: OWrites[Def1_Retrieve_UkNonFhlPropertyAllowances] = Json.writes[Def1_Retrieve_UkNonFhlPropertyAllowances]
+object Def1_Retrieve_UkPropertyAllowances {
+  implicit val writes: OWrites[Def1_Retrieve_UkPropertyAllowances] = Json.writes[Def1_Retrieve_UkPropertyAllowances]
 
-  implicit val reads: Reads[Def1_Retrieve_UkNonFhlPropertyAllowances] = (
+  implicit val reads: Reads[Def1_Retrieve_UkPropertyAllowances] = (
     (JsPath \ "annualInvestmentAllowance").readNullable[BigDecimal] and
       (JsPath \ "zeroEmissionGoodsVehicleAllowance").readNullable[BigDecimal] and
       (JsPath \ "businessPremisesRenovationAllowance").readNullable[BigDecimal] and
@@ -44,9 +44,9 @@ object Def1_Retrieve_UkNonFhlPropertyAllowances {
         .readNullable[BigDecimal]) and // orElse implemented due to downstream bug specified here - MTDSA-22775
       (JsPath \ "propertyIncomeAllowance").readNullable[BigDecimal] and
       (JsPath \ "electricChargePointAllowance").readNullable[BigDecimal] and
-      (JsPath \ "structuredBuildingAllowance").readNullable[Seq[Def1_Retrieve_UkNonFhlPropertyStructuredBuildingAllowance]] and
-      (JsPath \ "enhancedStructuredBuildingAllowance").readNullable[Seq[Def1_Retrieve_UkNonFhlPropertyStructuredBuildingAllowance]] and
+      (JsPath \ "structuredBuildingAllowance").readNullable[Seq[Def1_Retrieve_UkPropertyStructuredBuildingAllowance]] and
+      (JsPath \ "enhancedStructuredBuildingAllowance").readNullable[Seq[Def1_Retrieve_UkPropertyStructuredBuildingAllowance]] and
       (JsPath \ "zeroEmissionsCarAllowance").readNullable[BigDecimal]
-  )(Def1_Retrieve_UkNonFhlPropertyAllowances.apply _)
+  )(Def1_Retrieve_UkPropertyAllowances.apply _)
 
 }

@@ -8,7 +8,7 @@
       "propertyIncomeAllowance": 100.25
     }
   },
-  "foreignNonFhlProperty": [
+  "foreignProperty": [
     {
       "countryCode": "LBN",
       "adjustments": {

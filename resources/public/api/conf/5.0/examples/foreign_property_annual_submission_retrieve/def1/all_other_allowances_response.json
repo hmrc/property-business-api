@@ -13,7 +13,7 @@
       "zeroEmissionsCarAllowance":3456.34
     }
   },
-  "foreignNonFhlProperty":[
+  "foreignProperty":[
     {
       "countryCode":"LBN",
       "adjustments":{

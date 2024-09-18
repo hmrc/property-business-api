@@ -69,7 +69,7 @@
       },
       "additionalProperties": false
     },
-    "foreignNonFhlProperty": {
+    "foreignProperty": {
       "type": "array",
       "description": "Array holding the adjustments and allowances of the user's foreign property business - excluding Furnished Holiday Lettings (FHL) in the European Economic Area (EEA) for the period.",
       "items": {

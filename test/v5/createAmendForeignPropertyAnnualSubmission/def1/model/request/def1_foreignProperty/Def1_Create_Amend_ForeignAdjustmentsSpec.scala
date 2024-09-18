@@ -14,18 +14,18 @@
  * limitations under the License.
  */
 
-package v5.createAmendForeignPropertyAnnualSubmission.def1.model.request.def1_foreignNonFhl
+package v5.createAmendForeignPropertyAnnualSubmission.def1.model.request.def1_foreignProperty
 
 import play.api.libs.json.Json
 import support.UnitSpec
 import v5.createAmendForeignPropertyAnnualSubmission.def1.model.request.Def1_Fixtures
 
-class Def1_Create_Amend_ForeignNonFhlAllowancesSpec extends UnitSpec with Def1_Fixtures {
+class Def1_Create_Amend_ForeignAdjustmentsSpec extends UnitSpec with Def1_Fixtures {
 
   "reads" when {
     "passed valid mtd JSON" should {
       "return the model" in {
-        foreignNonFhlAllowancesMtdJson.as[Def1_Create_Amend_ForeignNonFhlAllowances] shouldBe foreignNonFhlAllowances
+        foreignAdjustmentsMtdJson.as[Def1_Create_Amend_ForeignAdjustments] shouldBe foreignAdjustments
       }
     }
   }
@@ -33,7 +33,7 @@ class Def1_Create_Amend_ForeignNonFhlAllowancesSpec extends UnitSpec with Def1_F
   "writes" when {
     "passed a model" should {
       "return downstream JSON" in {
-        Json.toJson(foreignNonFhlAllowances) shouldBe foreignNonFhlAllowancesDownstreamJson
+        Json.toJson(foreignAdjustments) shouldBe foreignAdjustmentsDownstreamJson
       }
     }
   }

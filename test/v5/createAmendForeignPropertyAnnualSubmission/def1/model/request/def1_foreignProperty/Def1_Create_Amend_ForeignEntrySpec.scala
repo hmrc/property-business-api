@@ -14,67 +14,67 @@
  * limitations under the License.
  */
 
-package v5.createAmendForeignPropertyAnnualSubmission.def1.model.request.def1_foreignNonFhl
+package v5.createAmendForeignPropertyAnnualSubmission.def1.model.request.def1_foreignProperty
 
 import play.api.libs.json.Json
 import support.UnitSpec
 import v5.createAmendForeignPropertyAnnualSubmission.def1.model.request.Def1_Fixtures
 
-class Def1_Create_Amend_ForeignNonFhlEntrySpec extends UnitSpec with Def1_Fixtures {
+class Def1_Create_Amend_ForeignEntrySpec extends UnitSpec with Def1_Fixtures {
 
-  private val allowancesOnly = Def1_Create_Amend_ForeignNonFhlEntry(
+  private val allowancesOnly = Def1_Create_Amend_ForeignEntry(
     countryCode = "GER",
-    allowances = Some(foreignNonFhlAllowances),
+    allowances = Some(foreignAllowances),
     adjustments = None
   )
 
   private val allowancesOnlyMtdJson = Json.parse(s"""
      |{
      |   "countryCode": "GER",
-     |   "allowances": $foreignNonFhlAllowancesMtdJson
+     |   "allowances": $foreignAllowancesMtdJson
      |}
      |""".stripMargin)
 
   private val allowancesOnlyDownstreamJson = Json.parse(s"""
     |{
     |   "countryCode": "GER",
-    |   "allowances": $foreignNonFhlAllowancesDownstreamJson
+    |   "allowances": $foreignAllowancesDownstreamJson
     |}
     |""".stripMargin)
 
-  private val adjustmentsOnly = Def1_Create_Amend_ForeignNonFhlEntry(
+  private val adjustmentsOnly = Def1_Create_Amend_ForeignEntry(
     countryCode = "GER",
     allowances = None,
-    adjustments = Some(foreignNonFhlAdjustments)
+    adjustments = Some(foreignAdjustments)
   )
 
   private val adjustmentsOnlyMtdJson = Json.parse(s"""
     |{
     |   "countryCode": "GER",
-    |   "adjustments": $foreignNonFhlAdjustmentsMtdJson
+    |   "adjustments": $foreignAdjustmentsMtdJson
     |}""".stripMargin)
 
   private val adjustmentsOnlyDownstreamJson = Json.parse(s"""
    |{
    |   "countryCode": "GER",
-   |   "adjustments": $foreignNonFhlAdjustmentsDownstreamJson
+   |   "adjustments": $foreignAdjustmentsDownstreamJson
    |}
    |""".stripMargin)
 
   "reads" when {
     "passed valid mtd JSON" should {
       "return the model" in {
-        foreignNonFhlEntryMtdJson.as[Def1_Create_Amend_ForeignNonFhlEntry] shouldBe foreignNonFhlEntry
+        foreignEntryMtdJson.as[Def1_Create_Amend_ForeignEntry] shouldBe foreignEntry
       }
     }
     "passed valid mtd JSON with allowances only" should {
       "return the model" in {
-        allowancesOnlyMtdJson.as[Def1_Create_Amend_ForeignNonFhlEntry] shouldBe allowancesOnly
+        allowancesOnlyMtdJson.as[Def1_Create_Amend_ForeignEntry] shouldBe allowancesOnly
       }
     }
     "passed valid mtd JSON with adjustments only" should {
       "return the model" in {
-        adjustmentsOnlyMtdJson.as[Def1_Create_Amend_ForeignNonFhlEntry] shouldBe adjustmentsOnly
+        adjustmentsOnlyMtdJson.as[Def1_Create_Amend_ForeignEntry] shouldBe adjustmentsOnly
       }
     }
   }
@@ -82,7 +82,7 @@ class Def1_Create_Amend_ForeignNonFhlEntrySpec extends UnitSpec with Def1_Fixtur
   "writes" when {
     "passed a model" should {
       "return downstream JSON" in {
-        Json.toJson(foreignNonFhlEntry) shouldBe foreignNonFhlEntryDownstreamJson
+        Json.toJson(foreignEntry) shouldBe foreignEntryDownstreamJson
       }
     }
     "passed a model with allowances only" should {

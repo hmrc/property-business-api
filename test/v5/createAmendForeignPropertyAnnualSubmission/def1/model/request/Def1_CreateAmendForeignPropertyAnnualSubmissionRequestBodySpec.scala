@@ -22,7 +22,7 @@ import support.UnitSpec
 class Def1_CreateAmendForeignPropertyAnnualSubmissionRequestBodySpec extends UnitSpec with Def1_Fixtures {
 
   private val fhlModel =
-    Def1_CreateAmendForeignPropertyAnnualSubmissionRequestBody(foreignFhlEea = Some(foreignFhlEea), foreignNonFhlProperty = None)
+    Def1_CreateAmendForeignPropertyAnnualSubmissionRequestBody(foreignFhlEea = Some(foreignFhlEea), foreignProperty = None)
 
   private val fhlMtdJson = Json.parse(s"""
        |{
@@ -36,18 +36,18 @@ class Def1_CreateAmendForeignPropertyAnnualSubmissionRequestBodySpec extends Uni
       |}
       |""".stripMargin)
 
-  private val nonFhlModel =
-    Def1_CreateAmendForeignPropertyAnnualSubmissionRequestBody(foreignFhlEea = None, foreignNonFhlProperty = Some(List(foreignNonFhlEntry)))
+  private val foreignPropertyModel =
+    Def1_CreateAmendForeignPropertyAnnualSubmissionRequestBody(foreignFhlEea = None, foreignProperty = Some(List(foreignEntry)))
 
-  private val nonFhlMtdJson = Json.parse(s"""
+  private val foreignPropertyMtdJson = Json.parse(s"""
       |{
-      |   "foreignNonFhlProperty":[ $foreignNonFhlEntryMtdJson ]
+      |   "foreignProperty":[ $foreignEntryMtdJson ]
       |}
       |""".stripMargin)
 
-  private val nonFhlDownstreamJson = Json.parse(s"""
+  private val foreignPropertyDownstreamJson = Json.parse(s"""
       |{
-      |   "foreignProperty":[ $foreignNonFhlEntryDownstreamJson ]
+      |   "foreignProperty":[ $foreignEntryDownstreamJson ]
       |}
       |""".stripMargin)
 
@@ -64,10 +64,10 @@ class Def1_CreateAmendForeignPropertyAnnualSubmissionRequestBodySpec extends Uni
           .as[Def1_CreateAmendForeignPropertyAnnualSubmissionRequestBody] shouldBe fhlModel
       }
     }
-    "passed valid mtd JSON with just NonFhl" should {
+    "passed valid mtd JSON with just foreignProperty" should {
       "return the model" in {
-        nonFhlMtdJson
-          .as[Def1_CreateAmendForeignPropertyAnnualSubmissionRequestBody] shouldBe nonFhlModel
+        foreignPropertyMtdJson
+          .as[Def1_CreateAmendForeignPropertyAnnualSubmissionRequestBody] shouldBe foreignPropertyModel
       }
     }
   }
@@ -86,7 +86,7 @@ class Def1_CreateAmendForeignPropertyAnnualSubmissionRequestBodySpec extends Uni
     }
     "passed a model with just Fhl" should {
       "return downstream JSON" in {
-        Json.toJson(nonFhlModel) shouldBe nonFhlDownstreamJson
+        Json.toJson(foreignPropertyModel) shouldBe foreignPropertyDownstreamJson
       }
     }
   }

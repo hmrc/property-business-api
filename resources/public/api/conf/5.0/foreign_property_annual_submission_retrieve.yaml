@@ -11,14 +11,12 @@ description: |
   | Header Value (Gov-Test-Scenario)      | Scenario                                                               |
   |---------------------------------------|------------------------------------------------------------------------|
   | N/A - DEFAULT                         | Simulates the scenario where no data is found.                         |
-  | FOREIGN_PROPERTY                      | Simulates the scenario with UK properties.                             |
-  | FOREIGN_ALL_OTHER_ALLOWANCES          | Simulates the scenario of a UK property with all other allowances.     |
-  | FOREIGN_PROPERTY_ALLOWANCE            | Simulates the scenario of a UK property with property allowance.       |
-  | FOREIGN_PROPERTY_FHL_NON_FHL          | Simulates the scenario with FHL and Non-FHL properties.                |
+  | FOREIGN_PROPERTY                      | Simulates the scenario with Foreign properties.                        |
+  | FOREIGN_ALL_OTHER_ALLOWANCES          | Simulates the scenario of a Foreign property with all other allowances.|
+  | FOREIGN_PROPERTY_ALLOWANCE            | Simulates the scenario of a Foreign property with property allowance.  |
+  | FOREIGN_PROPERTY_FHL                  | Simulates the scenario with Foreign FHL properties.                    |
   | FOREIGN_FHL_ALL_OTHER_ALLOWANCES      | Simulates the scenario of a FHL property with all other allowances.    |
   | FOREIGN_FHL_PROPERTY_ALLOWANCE        | Simulates the scenario of a FHL property with property allowance.      |
-  | FOREIGN_NON_FHL_ALL_OTHER_ALLOWANCES  | Simulates the scenario of a Non-FHL property with all other allowances.|
-  | FOREIGN_NON_FHL_PROPERTY_ALLOWANCE    | Simulates the scenario of a Non-FHL property with property allowance.  |
   | UK_PROPERTY                           | Simulates the scenario where the type of business is incorrect.        |
   | STATEFUL                              | Performs a stateful retrieve.                                          |
 

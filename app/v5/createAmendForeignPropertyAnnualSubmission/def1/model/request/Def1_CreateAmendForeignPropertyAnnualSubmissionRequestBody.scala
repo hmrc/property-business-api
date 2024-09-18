@@ -19,11 +19,11 @@ package v5.createAmendForeignPropertyAnnualSubmission.def1.model.request
 import play.api.libs.functional.syntax._
 import play.api.libs.json._
 import v5.createAmendForeignPropertyAnnualSubmission.def1.model.request.def1_foreignFhlEea.Def1_Create_Amend_ForeignFhlEea
-import v5.createAmendForeignPropertyAnnualSubmission.def1.model.request.def1_foreignNonFhl.Def1_Create_Amend_ForeignNonFhlEntry
+import v5.createAmendForeignPropertyAnnualSubmission.def1.model.request.def1_foreignProperty.Def1_Create_Amend_ForeignEntry
 import v5.createAmendForeignPropertyAnnualSubmission.model.request.CreateAmendForeignPropertyAnnualSubmissionRequestBody
 
 case class Def1_CreateAmendForeignPropertyAnnualSubmissionRequestBody(foreignFhlEea: Option[Def1_Create_Amend_ForeignFhlEea],
-                                                                      foreignNonFhlProperty: Option[Seq[Def1_Create_Amend_ForeignNonFhlEntry]])
+                                                                      foreignProperty: Option[Seq[Def1_Create_Amend_ForeignEntry]])
     extends CreateAmendForeignPropertyAnnualSubmissionRequestBody
 
 object Def1_CreateAmendForeignPropertyAnnualSubmissionRequestBody {
@@ -33,7 +33,7 @@ object Def1_CreateAmendForeignPropertyAnnualSubmissionRequestBody {
 
   implicit val writes: OWrites[Def1_CreateAmendForeignPropertyAnnualSubmissionRequestBody] = (
     (JsPath \ "foreignFhlEea").writeNullable[Def1_Create_Amend_ForeignFhlEea] and
-      (JsPath \ "foreignProperty").writeNullable[Seq[Def1_Create_Amend_ForeignNonFhlEntry]]
+      (JsPath \ "foreignProperty").writeNullable[Seq[Def1_Create_Amend_ForeignEntry]]
   )(unlift(Def1_CreateAmendForeignPropertyAnnualSubmissionRequestBody.unapply))
 
 }

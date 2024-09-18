@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-package v5.createAmendForeignPropertyAnnualSubmission.def1.model.request.def1_foreignNonFhl
+package v5.createAmendForeignPropertyAnnualSubmission.def1.model.request.def1_foreignProperty
 
 import play.api.libs.json.{Json, OFormat}
 
-case class Def1_Create_Amend_ForeignNonFhlAdjustments(privateUseAdjustment: Option[BigDecimal], balancingCharge: Option[BigDecimal])
+case class Def1_Create_Amend_ForeignAdjustments(privateUseAdjustment: Option[BigDecimal], balancingCharge: Option[BigDecimal])
 
-object Def1_Create_Amend_ForeignNonFhlAdjustments {
-  implicit val format: OFormat[Def1_Create_Amend_ForeignNonFhlAdjustments] = Json.format[Def1_Create_Amend_ForeignNonFhlAdjustments]
+object Def1_Create_Amend_ForeignAdjustments {
+  implicit val format: OFormat[Def1_Create_Amend_ForeignAdjustments] = Json.format[Def1_Create_Amend_ForeignAdjustments]
 }

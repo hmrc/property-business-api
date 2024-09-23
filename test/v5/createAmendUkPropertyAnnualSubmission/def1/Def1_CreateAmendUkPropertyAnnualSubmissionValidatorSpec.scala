@@ -22,20 +22,20 @@ import api.models.utils.JsonErrorValidators
 import config.MockAppConfig
 import play.api.libs.json._
 import support.UnitSpec
-import v5.createAmendUkPropertyAnnualSubmission.def1.model.request.def1_ukFhlProperty.{
-  Def1_Create_Amend_UkFhlProperty,
-  Def1_Create_Amend_UkFhlPropertyAdjustments,
-  Def1_Create_Amend_UkFhlPropertyAllowances
+import v5.createAmendUkPropertyAnnualSubmission.def1.model.request.ukFhlProperty.{
+  CreateAmendUkFhlProperty,
+  CreateAmendUkFhlPropertyAdjustments,
+  CreateAmendUkFhlPropertyAllowances
 }
-import v5.createAmendUkPropertyAnnualSubmission.def1.model.request.def1_ukProperty.{
-  Def1_Create_Amend_Building,
-  Def1_Create_Amend_FirstYear,
-  Def1_Create_Amend_StructuredBuildingAllowance,
-  Def1_Create_Amend_UkProperty,
-  Def1_Create_Amend_UkPropertyAdjustments,
-  Def1_Create_Amend_UkPropertyAllowances
+import v5.createAmendUkPropertyAnnualSubmission.def1.model.request.ukProperty.{
+  CreateAmendBuilding,
+  CreateAmendFirstYear,
+  CreateAmendStructuredBuildingAllowance,
+  CreateAmendUkProperty,
+  CreateAmendUkPropertyAdjustments,
+  CreateAmendUkPropertyAllowances
 }
-import v5.createAmendUkPropertyAnnualSubmission.def1.model.request.def1_ukPropertyRentARoom.Def1_Create_Amend_UkPropertyAdjustmentsRentARoom
+import v5.createAmendUkPropertyAnnualSubmission.def1.model.request.ukPropertyRentARoom.CreateAmendUkPropertyAdjustmentsRentARoom
 import v5.createAmendUkPropertyAnnualSubmission.def1.model.request.{
   Def1_CreateAmendUkPropertyAnnualSubmissionRequestBody,
   Def1_CreateAmendUkPropertyAnnualSubmissionRequestData
@@ -151,46 +151,46 @@ class Def1_CreateAmendUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec w
   private val parsedBusinessId = BusinessId(validBusinessId)
   private val parsedTaxYear    = TaxYear.fromMtd(validTaxYear)
 
-  private val parsedUkFhlPropertyAdjustments = Def1_Create_Amend_UkFhlPropertyAdjustments(
+  private val parsedUkFhlPropertyAdjustments = CreateAmendUkFhlPropertyAdjustments(
     Some(454.45),
     Some(231.45),
     periodOfGraceAdjustment = true,
     Some(567.67),
     nonResidentLandlord = true,
-    Some(Def1_Create_Amend_UkPropertyAdjustmentsRentARoom(true))
+    Some(CreateAmendUkPropertyAdjustmentsRentARoom(true))
   )
 
-  private val parsedUkFhlPropertyAllowances: Def1_Create_Amend_UkFhlPropertyAllowances =
-    Def1_Create_Amend_UkFhlPropertyAllowances(Some(123.45), Some(345.56), Some(345.34), Some(453.34), Some(123.12), None)
+  private val parsedUkFhlPropertyAllowances: CreateAmendUkFhlPropertyAllowances =
+    CreateAmendUkFhlPropertyAllowances(Some(123.45), Some(345.56), Some(345.34), Some(453.34), Some(123.12), None)
 
   private val parsedUkFhlProperty =
-    Def1_Create_Amend_UkFhlProperty(
+    CreateAmendUkFhlProperty(
       Some(parsedUkFhlPropertyAdjustments),
       Some(parsedUkFhlPropertyAllowances)
     )
 
   private val parsedUkPropertyAdjustments =
-    Def1_Create_Amend_UkPropertyAdjustments(
+    CreateAmendUkPropertyAdjustments(
       Some(565.34),
       Some(533.54),
       Some(563.34),
       nonResidentLandlord = true,
-      Some(Def1_Create_Amend_UkPropertyAdjustmentsRentARoom(true)))
+      Some(CreateAmendUkPropertyAdjustmentsRentARoom(true)))
 
   //@formatter:off
-  private val parsedUkPropertyAllowances = Def1_Create_Amend_UkPropertyAllowances(
+  private val parsedUkPropertyAllowances = CreateAmendUkPropertyAllowances(
     Some(678.45), Some(456.34), Some(573.45), Some(452.34),
     Some(567.34), Some(454.34), Some(454.34), None,
-    Some(List(Def1_Create_Amend_StructuredBuildingAllowance(234.34, Some(Def1_Create_Amend_FirstYear("2020-03-29", 3434.45)), Def1_Create_Amend_Building(Some("Plaza"), Some("1"), "TF3 4EH")))),
-    Some(List(Def1_Create_Amend_StructuredBuildingAllowance(234.45, Some(Def1_Create_Amend_FirstYear("2020-05-29", 453.34)), Def1_Create_Amend_Building(Some("Plaza 2"), Some("2"), "TF3 4ER"))))
+    Some(List(CreateAmendStructuredBuildingAllowance(234.34, Some(CreateAmendFirstYear("2020-03-29", 3434.45)), CreateAmendBuilding(Some("Plaza"), Some("1"), "TF3 4EH")))),
+    Some(List(CreateAmendStructuredBuildingAllowance(234.45, Some(CreateAmendFirstYear("2020-05-29", 453.34)), CreateAmendBuilding(Some("Plaza 2"), Some("2"), "TF3 4ER"))))
   )
   //@formatter:on
 
-  private val parsedUkProperty = Def1_Create_Amend_UkProperty(Some(parsedUkPropertyAdjustments), Some(parsedUkPropertyAllowances))
+  private val parsedUkProperty = CreateAmendUkProperty(Some(parsedUkPropertyAdjustments), Some(parsedUkPropertyAllowances))
 
   private val parsedUkFhlPropertyMinimal =
-    Def1_Create_Amend_UkFhlProperty(
-      Some(Def1_Create_Amend_UkFhlPropertyAdjustments(None, None, periodOfGraceAdjustment = true, None, nonResidentLandlord = true, None)),
+    CreateAmendUkFhlProperty(
+      Some(CreateAmendUkFhlPropertyAdjustments(None, None, periodOfGraceAdjustment = true, None, nonResidentLandlord = true, None)),
       None)
 
   private val parsedBody = Def1_CreateAmendUkPropertyAnnualSubmissionRequestBody(Some(parsedUkFhlProperty), Some(parsedUkProperty))

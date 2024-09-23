@@ -14,112 +14,67 @@
  * limitations under the License.
  */
 
-package v5.createAmendUkPropertyAnnualSubmission.def1.model.request
+package v5.createAmendUkPropertyAnnualSubmission.def1.model.request.ukProperty
 
 import play.api.libs.json.{JsValue, Json}
 import support.UnitSpec
-import v5.createAmendUkPropertyAnnualSubmission.def1.model.request.ukFhlProperty._
-import v5.createAmendUkPropertyAnnualSubmission.def1.model.request.ukProperty._
 import v5.createAmendUkPropertyAnnualSubmission.def1.model.request.ukPropertyRentARoom.CreateAmendUkPropertyAdjustmentsRentARoom
 
-class Def1_CreateAmendUkPropertyAnnualSubmissionRequestBodySpec extends UnitSpec {
+class CreateAmendUkPropertySpec extends UnitSpec {
 
-  val requestBody: Def1_CreateAmendUkPropertyAnnualSubmissionRequestBody =
-    Def1_CreateAmendUkPropertyAnnualSubmissionRequestBody(
-      ukFhlProperty = Some(
-        CreateAmendUkFhlProperty(
-          Some(
-            CreateAmendUkFhlPropertyAdjustments(
-              Some(1000.20),
-              Some(1000.30),
-              true,
-              Some(1000.40),
-              true,
-              Some(CreateAmendUkPropertyAdjustmentsRentARoom(true))
-            )),
-          Some(
-            CreateAmendUkFhlPropertyAllowances(
-              Some(1000.50),
-              Some(1000.60),
-              Some(1000.70),
-              Some(1000.80),
-              Some(1000.90),
-              None
-            ))
+  val requestBody: CreateAmendUkProperty =
+    CreateAmendUkProperty(
+      Some(
+        CreateAmendUkPropertyAdjustments(
+          Some(2000.20),
+          Some(2000.30),
+          Some(2000.40),
+          true,
+          Some(CreateAmendUkPropertyAdjustmentsRentARoom(true))
         )),
-      ukProperty = Some(
-        CreateAmendUkProperty(
-          adjustments = Some(
-            CreateAmendUkPropertyAdjustments(
-              Some(2000.20),
-              Some(2000.30),
-              Some(2000.40),
-              true,
-              Some(CreateAmendUkPropertyAdjustmentsRentARoom(true))
-            )),
-          allowances = Some(CreateAmendUkPropertyAllowances(
-            Some(2000.50),
-            Some(2000.60),
-            Some(2000.70),
-            Some(2000.80),
-            Some(2000.90),
-            Some(3000.10),
-            Some(3000.20),
-            None,
-            Some(
-              List(
-                CreateAmendStructuredBuildingAllowance(
-                  3000.30,
-                  Some(CreateAmendFirstYear(
-                    "2020-01-01",
-                    3000.40
-                  )),
-                  CreateAmendBuilding(
-                    Some("house name"),
-                    None,
-                    "GF49JH"
-                  )
-                ))),
-            Some(
-              List(
-                CreateAmendStructuredBuildingAllowance(
-                  3000.50,
-                  Some(CreateAmendFirstYear(
-                    "2020-01-01",
-                    3000.60
-                  )),
-                  CreateAmendBuilding(
-                    None,
-                    Some("house number"),
-                    "GF49JH"
-                  )
-                )))
-          ))
+      Some(
+        CreateAmendUkPropertyAllowances(
+          Some(2000.50),
+          Some(2000.60),
+          Some(2000.70),
+          Some(2000.80),
+          Some(2000.90),
+          Some(3000.10),
+          Some(3000.20),
+          None,
+          Some(
+            List(
+              CreateAmendStructuredBuildingAllowance(
+                3000.30,
+                Some(CreateAmendFirstYear(
+                  "2020-01-01",
+                  3000.40
+                )),
+                CreateAmendBuilding(
+                  Some("house name"),
+                  None,
+                  "GF49JH"
+                )
+              ))),
+          Some(
+            List(
+              CreateAmendStructuredBuildingAllowance(
+                3000.50,
+                Some(CreateAmendFirstYear(
+                  "2020-01-01",
+                  3000.60
+                )),
+                CreateAmendBuilding(
+                  None,
+                  Some("house number"),
+                  "GF49JH"
+                )
+              )))
         ))
     )
 
   val validMtdJson: JsValue = Json.parse("""
       |{
-      |  "ukFhlProperty": {
-      |    "allowances": {
-      |      "annualInvestmentAllowance": 1000.50,
-      |      "businessPremisesRenovationAllowance": 1000.60,
-      |      "otherCapitalAllowance": 1000.70,
-      |      "electricChargePointAllowance": 1000.80,
-      |      "zeroEmissionsCarAllowance": 1000.90
-      |    },
-      |    "adjustments": {
-      |      "privateUseAdjustment": 1000.20,
-      |      "balancingCharge": 1000.30,
-      |      "periodOfGraceAdjustment": true,
-      |      "businessPremisesRenovationAllowanceBalancingCharges": 1000.40,
-      |      "nonResidentLandlord": true,
-      |      "rentARoom": {
-      |        "jointlyLet": true
-      |      }
-      |    }
-      |  },
-      |  "ukProperty": {
       |    "allowances": {
       |      "annualInvestmentAllowance": 2000.50,
       |      "zeroEmissionsGoodsVehicleAllowance": 2000.60,
@@ -164,32 +119,11 @@ class Def1_CreateAmendUkPropertyAnnualSubmissionRequestBodySpec extends UnitSpec
       |        "jointlyLet": true
       |      }
       |    }
-      |  }
       |}
       |""".stripMargin)
 
   val validDownstreamJson: JsValue = Json.parse("""
       |{
-      |  "ukFhlProperty": {
-      |    "allowances": {
-      |      "annualInvestmentAllowance": 1000.50,
-      |      "businessPremisesRenovationAllowance": 1000.60,
-      |      "otherCapitalAllowance": 1000.70,
-      |      "electricChargePointAllowance": 1000.80,
-      |      "zeroEmissionsCarAllowance": 1000.90
-      |    },
-      |    "adjustments": {
-      |      "privateUseAdjustment": 1000.20,
-      |      "balancingCharge": 1000.30,
-      |      "periodOfGraceAdjustment": true,
-      |      "businessPremisesRenovationAllowanceBalancingCharges":1000.40,
-      |      "nonResidentLandlord": true,
-      |      "ukFhlRentARoom": {
-      |        "jointlyLet": true
-      |      }
-      |    }
-      |  },
-      |  "ukOtherProperty": {
       |    "ukOtherPropertyAnnualAllowances": {
       |      "annualInvestmentAllowance": 2000.50,
       |      "zeroEmissionGoodsVehicleAllowance": 2000.60,
@@ -234,14 +168,13 @@ class Def1_CreateAmendUkPropertyAnnualSubmissionRequestBodySpec extends UnitSpec
       |        "jointlyLet": true
       |      }
       |    }
-      |  }
       |}
       |""".stripMargin)
 
   "reads" when {
     "passed a valid JSON" should {
       "return a valid model" in {
-        validMtdJson.as[Def1_CreateAmendUkPropertyAnnualSubmissionRequestBody] shouldBe requestBody
+        validMtdJson.as[CreateAmendUkProperty] shouldBe requestBody
       }
     }
   }

@@ -23,8 +23,8 @@ import cats.data.Validated
 import cats.data.Validated.Invalid
 import cats.implicits.toTraverseOps
 import v5.createAmendUkPropertyAnnualSubmission.def1.model.request.Def1_CreateAmendUkPropertyAnnualSubmissionRequestData
-import v5.createAmendUkPropertyAnnualSubmission.def1.model.request.def1_ukFhlProperty._
-import v5.createAmendUkPropertyAnnualSubmission.def1.model.request.def1_ukProperty._
+import v5.createAmendUkPropertyAnnualSubmission.def1.model.request.ukFhlProperty._
+import v5.createAmendUkPropertyAnnualSubmission.def1.model.request.ukProperty._
 
 class Def1_CreateAmendUkPropertyAnnualSubmissionRulesValidator extends RulesValidator[Def1_CreateAmendUkPropertyAnnualSubmissionRequestData] {
 
@@ -48,7 +48,7 @@ class Def1_CreateAmendUkPropertyAnnualSubmissionRulesValidator extends RulesVali
     ).onSuccess(parsed)
   }
 
-  private def validateUkFhlProperty(ukFhlProperty: Def1_Create_Amend_UkFhlProperty): Validated[Seq[MtdError], Unit] = {
+  private def validateUkFhlProperty(ukFhlProperty: CreateAmendUkFhlProperty): Validated[Seq[MtdError], Unit] = {
     import ukFhlProperty._
 
     val fieldsWithPaths = List(
@@ -78,18 +78,18 @@ class Def1_CreateAmendUkPropertyAnnualSubmissionRulesValidator extends RulesVali
     (validatedNumberFields :+ validatedAllowances).sequence.andThen(_ => valid)
   }
 
-  private def validateUkFhlAllowances(allowances: Def1_Create_Amend_UkFhlPropertyAllowances): Validated[Seq[MtdError], Unit] = {
+  private def validateUkFhlAllowances(allowances: CreateAmendUkFhlPropertyAllowances): Validated[Seq[MtdError], Unit] = {
     allowances.propertyIncomeAllowance match {
       case None => valid
       case Some(_) =>
         allowances match {
-          case Def1_Create_Amend_UkFhlPropertyAllowances(None, None, None, None, None, Some(_)) => valid
+          case CreateAmendUkFhlPropertyAllowances(None, None, None, None, None, Some(_)) => valid
           case _ => Invalid(List(RuleBothAllowancesSuppliedError.withPath("/ukFhlProperty/allowances")))
         }
     }
   }
 
-  private def validateUkProperty(ukProperty: Def1_Create_Amend_UkProperty): Validated[Seq[MtdError], Unit] = {
+  private def validateUkProperty(ukProperty: CreateAmendUkProperty): Validated[Seq[MtdError], Unit] = {
     import ukProperty._
 
     val fieldsWithPaths = List(
@@ -138,18 +138,18 @@ class Def1_CreateAmendUkPropertyAnnualSubmissionRulesValidator extends RulesVali
       .andThen(_ => valid)
   }
 
-  private def validateUkNonFhlAllowances(allowances: Def1_Create_Amend_UkPropertyAllowances): Validated[Seq[MtdError], Unit] = {
+  private def validateUkNonFhlAllowances(allowances: CreateAmendUkPropertyAllowances): Validated[Seq[MtdError], Unit] = {
     allowances.propertyIncomeAllowance match {
       case None => valid
       case Some(_) =>
         allowances match {
-          case Def1_Create_Amend_UkPropertyAllowances(None, None, None, None, None, None, None, Some(_), None, None) => valid
+          case CreateAmendUkPropertyAllowances(None, None, None, None, None, None, None, Some(_), None, None) => valid
           case _ => Invalid(List(RuleBothAllowancesSuppliedError.withPath("/ukProperty/allowances")))
         }
     }
   }
 
-  private def validateBuildingAllowance(buildingAllowance: Def1_Create_Amend_StructuredBuildingAllowance,
+  private def validateBuildingAllowance(buildingAllowance: CreateAmendStructuredBuildingAllowance,
                                         index: Int,
                                         enhanced: Boolean): Validated[Seq[MtdError], Unit] = {
     import buildingAllowance._

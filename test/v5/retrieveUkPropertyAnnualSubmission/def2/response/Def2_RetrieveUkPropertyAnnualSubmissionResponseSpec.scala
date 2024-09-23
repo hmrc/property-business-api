@@ -20,7 +20,7 @@ import api.models.domain.Timestamp
 import config.MockAppConfig
 import play.api.libs.json.Json
 import support.UnitSpec
-import v5.retrieveUkPropertyAnnualSubmission.def2.model.response.def2_ukProperty._
+import v5.retrieveUkPropertyAnnualSubmission.def2.model.response.ukProperty._
 import v5.retrieveUkPropertyAnnualSubmission.model.response._
 
 class Def2_RetrieveUkPropertyAnnualSubmissionResponseSpec extends UnitSpec with MockAppConfig {
@@ -83,21 +83,21 @@ class Def2_RetrieveUkPropertyAnnualSubmissionResponseSpec extends UnitSpec with 
   private val parsed = Def2_RetrieveUkPropertyAnnualSubmissionResponse(
     submittedOn = Timestamp("2020-06-17T10:53:38.000Z"),
     ukProperty = Some(
-      Def2_Retrieve_UkProperty(
+      RetrieveUkProperty(
         adjustments = Some(
-          Def2_Retrieve_UkPropertyAdjustments(
+          RetrieveUkPropertyAdjustments(
             balancingCharge = Some(565.34),
             privateUseAdjustment = Some(533.54),
             businessPremisesRenovationAllowanceBalancingCharges = Some(563.34),
             nonResidentLandlord = true,
             rentARoom = Some(
-              Def2_Retrieve_UkPropertyRentARoom(
+              RetrieveUkPropertyRentARoom(
                 jointlyLet = true
               ))
           )
         ),
         allowances = Some(
-          Def2_Retrieve_UkPropertyAllowances(
+          RetrieveUkPropertyAllowances(
             annualInvestmentAllowance = Some(678.45),
             zeroEmissionsGoodsVehicleAllowance = Some(456.34),
             businessPremisesRenovationAllowance = Some(573.45),
@@ -107,15 +107,15 @@ class Def2_RetrieveUkPropertyAnnualSubmissionResponseSpec extends UnitSpec with 
             electricChargePointAllowance = Some(454.34),
             structuredBuildingAllowance = Some(
               List(
-                Def2_Retrieve_UkPropertyStructuredBuildingAllowance(
+                RetrieveUkPropertyStructuredBuildingAllowance(
                   amount = 234.34,
                   firstYear = Some(
-                    Def2_Retrieve_UkPropertyFirstYear(
+                    RetrieveUkPropertyFirstYear(
                       qualifyingDate = "2020-03-29",
                       qualifyingAmountExpenditure = 3434.45
                     )
                   ),
-                  building = Def2_Retrieve_UkPropertyBuilding(
+                  building = RetrieveUkPropertyBuilding(
                     name = Some("Plaza"),
                     number = Some("1"),
                     postcode = "TF3 4EH"
@@ -124,15 +124,15 @@ class Def2_RetrieveUkPropertyAnnualSubmissionResponseSpec extends UnitSpec with 
               )),
             enhancedStructuredBuildingAllowance = Some(
               List(
-                Def2_Retrieve_UkPropertyStructuredBuildingAllowance(
+                RetrieveUkPropertyStructuredBuildingAllowance(
                   amount = 234.45,
                   firstYear = Some(
-                    Def2_Retrieve_UkPropertyFirstYear(
+                    RetrieveUkPropertyFirstYear(
                       qualifyingDate = "2020-05-29",
                       qualifyingAmountExpenditure = 453.34
                     )
                   ),
-                  building = Def2_Retrieve_UkPropertyBuilding(
+                  building = RetrieveUkPropertyBuilding(
                     name = Some("Plaza 2"),
                     number = Some("2"),
                     postcode = "TF3 4ER"

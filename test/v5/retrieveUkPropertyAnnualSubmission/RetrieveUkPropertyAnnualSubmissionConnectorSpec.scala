@@ -23,8 +23,8 @@ import api.models.outcomes.ResponseWrapper
 import org.scalamock.handlers.CallHandler
 import v5.retrieveUkPropertyAnnualSubmission.RetrieveUkPropertyAnnualSubmissionConnector._
 import v5.retrieveUkPropertyAnnualSubmission.def1.model.request.Def1_RetrieveUkPropertyAnnualSubmissionRequestData
-import v5.retrieveUkPropertyAnnualSubmission.def1.model.response.def1_ukFhlProperty.Def1_Retrieve_UkFhlProperty
-import v5.retrieveUkPropertyAnnualSubmission.def1.model.response.def1_ukProperty.Def1_Retrieve_UkProperty
+import v5.retrieveUkPropertyAnnualSubmission.def1.model.response.ukFhlProperty.RetrieveUkFhlProperty
+import v5.retrieveUkPropertyAnnualSubmission.def1.model.response.ukProperty.RetrieveUkProperty
 import v5.retrieveUkPropertyAnnualSubmission.model.response._
 
 import scala.concurrent.Future
@@ -34,8 +34,8 @@ class RetrieveUkPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec {
   private val nino       = Nino("AA123456A")
   private val businessId = BusinessId("XAIS12345678910")
 
-  private val ukFhlProperty = Def1_Retrieve_UkFhlProperty(None, None)
-  private val ukProperty    = Def1_Retrieve_UkProperty(None, None)
+  private val ukFhlProperty = RetrieveUkFhlProperty(None, None)
+  private val ukProperty    = RetrieveUkProperty(None, None)
 
   "connector" when {
     "response has uk fhl details" must {
@@ -132,8 +132,8 @@ class RetrieveUkPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec {
     protected val request: Def1_RetrieveUkPropertyAnnualSubmissionRequestData =
       Def1_RetrieveUkPropertyAnnualSubmissionRequestData(nino, businessId, TaxYear.fromMtd(taxYear))
 
-    def responseWith(ukFhlProperty: Option[Def1_Retrieve_UkFhlProperty],
-                     ukProperty: Option[Def1_Retrieve_UkProperty]): Def1_RetrieveUkPropertyAnnualSubmissionResponse =
+    def responseWith(ukFhlProperty: Option[RetrieveUkFhlProperty],
+                     ukProperty: Option[RetrieveUkProperty]): Def1_RetrieveUkPropertyAnnualSubmissionResponse =
       Def1_RetrieveUkPropertyAnnualSubmissionResponse(Timestamp("2022-06-17T10:53:38Z"), ukFhlProperty, ukProperty)
 
   }

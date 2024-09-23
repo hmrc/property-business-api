@@ -141,7 +141,7 @@ class CreateAmendUkPropertyAnnualSubmissionControllerSpec
         ))
     )
 
-    private val ukNonFhlProperty: Def1_Create_Amend_UkProperty = Def1_Create_Amend_UkProperty(
+    private val ukProperty: Def1_Create_Amend_UkProperty = Def1_Create_Amend_UkProperty(
       Some(
         Def1_Create_Amend_UkPropertyAdjustments(
           Some(2000.20),
@@ -213,7 +213,7 @@ class CreateAmendUkPropertyAnnualSubmissionControllerSpec
         |      }
         |    }
         |  },
-        |  "ukNonFhlProperty": {
+        |  "ukProperty": {
         |    "allowances": {
         |      "annualInvestmentAllowance": 2000.50,
         |      "zeroEmissionsGoodsVehicleAllowance": 2000.60,
@@ -265,7 +265,7 @@ class CreateAmendUkPropertyAnnualSubmissionControllerSpec
 
     private val body: Def1_CreateAmendUkPropertyAnnualSubmissionRequestBody = Def1_CreateAmendUkPropertyAnnualSubmissionRequestBody(
       Some(ukFhlProperty),
-      Some(ukNonFhlProperty)
+      Some(ukProperty)
     )
 
     protected val requestData: Def1_CreateAmendUkPropertyAnnualSubmissionRequestData =

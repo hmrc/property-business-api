@@ -51,20 +51,20 @@ responses:
             - $ref: './schemas/uk_property_annual_submission_retrieve/def1/response.json'
             - $ref: './schemas/uk_property_annual_submission_retrieve/def2/response.json'
         examples:
-          property-allowance-any-TY:
-            description: Property Allowance - pre 25-26 tax year
+          property-allowance-response-TY-2024-25:
+            description: Property Allowance response for TY 2024-25 and before
             value:
               $ref: './examples/uk_property_annual_submission_retrieve/def1/property_allowance_response.json'
-          all-others-any-TY:
-            description: All Other Allowances - pre 25-26 tax year
+          all-other-allowances-response-TY-2024-25:
+            description: All Other Allowances response for TY 2024-25 and before
             value:
               $ref: './examples/uk_property_annual_submission_retrieve/def1/all_other_allowances_response.json'
-          25/26-property-allowance-any-TY:
-            description: Property Allowance - 25-26 tax year onwards
+          property-allowance-response-TY-2025-26:
+            description: Property Allowance request for TY 2025-26 and after
             value:
               $ref: './examples/uk_property_annual_submission_retrieve/def2/property_allowance_response.json'
-          25/26-all-others-any-TY:
-            description: All Other Allowances - 25-26 tax year onwards
+          all-other-allowances-response-TY-2025-26:
+            description: All Other Allowances request for TY 2025-26 and after
             value:
               $ref: './examples/uk_property_annual_submission_retrieve/def2/all_other_allowances_response.json'
   "400":

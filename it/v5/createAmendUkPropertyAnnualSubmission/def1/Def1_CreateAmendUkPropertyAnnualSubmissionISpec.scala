@@ -59,7 +59,7 @@ class Def1_CreateAmendUkPropertyAnnualSubmissionISpec extends IntegrationBaseSpe
         |      }
         |    }
         |  },
-        |  "ukNonFhlProperty": {
+        |  "ukProperty": {
         |    "allowances": {
         |      "annualInvestmentAllowance": 2000.50,
         |      "zeroEmissionsGoodsVehicleAllowance": 2000.60,
@@ -213,7 +213,7 @@ class Def1_CreateAmendUkPropertyAnnualSubmissionISpec extends IntegrationBaseSpe
             |      }
             |    }
             |  },
-            |  "ukNonFhlProperty": {
+            |  "ukProperty": {
             |    "allowances": {
             |      "annualInvestmentAllowance": 2000.5456780,
             |      "zeroEmissionsGoodsVehicleAllowance": 2000.6567890,
@@ -266,17 +266,17 @@ class Def1_CreateAmendUkPropertyAnnualSubmissionISpec extends IntegrationBaseSpe
           DateFormatError.copy(
             paths = Some(
               List(
-                "/ukNonFhlProperty/allowances/structuredBuildingAllowance/0/firstYear/qualifyingDate",
-                "/ukNonFhlProperty/allowances/enhancedStructuredBuildingAllowance/0/firstYear/qualifyingDate"
+                "/ukProperty/allowances/structuredBuildingAllowance/0/firstYear/qualifyingDate",
+                "/ukProperty/allowances/enhancedStructuredBuildingAllowance/0/firstYear/qualifyingDate"
               ))
           ),
           StringFormatError.copy(
             paths = Some(
               List(
-                "/ukNonFhlProperty/allowances/structuredBuildingAllowance/0/building/name",
-                "/ukNonFhlProperty/allowances/structuredBuildingAllowance/0/building/postcode",
-                "/ukNonFhlProperty/allowances/enhancedStructuredBuildingAllowance/0/building/number",
-                "/ukNonFhlProperty/allowances/enhancedStructuredBuildingAllowance/0/building/postcode"
+                "/ukProperty/allowances/structuredBuildingAllowance/0/building/name",
+                "/ukProperty/allowances/structuredBuildingAllowance/0/building/postcode",
+                "/ukProperty/allowances/enhancedStructuredBuildingAllowance/0/building/number",
+                "/ukProperty/allowances/enhancedStructuredBuildingAllowance/0/building/postcode"
               ))
           ),
           ValueFormatError.copy(
@@ -290,20 +290,20 @@ class Def1_CreateAmendUkPropertyAnnualSubmissionISpec extends IntegrationBaseSpe
                 "/ukFhlProperty/allowances/otherCapitalAllowance",
                 "/ukFhlProperty/allowances/electricChargePointAllowance",
                 "/ukFhlProperty/allowances/zeroEmissionsCarAllowance",
-                "/ukNonFhlProperty/adjustments/balancingCharge",
-                "/ukNonFhlProperty/adjustments/privateUseAdjustment",
-                "/ukNonFhlProperty/adjustments/businessPremisesRenovationAllowanceBalancingCharges",
-                "/ukNonFhlProperty/allowances/annualInvestmentAllowance",
-                "/ukNonFhlProperty/allowances/zeroEmissionsGoodsVehicleAllowance",
-                "/ukNonFhlProperty/allowances/businessPremisesRenovationAllowance",
-                "/ukNonFhlProperty/allowances/otherCapitalAllowance",
-                "/ukNonFhlProperty/allowances/costOfReplacingDomesticGoods",
-                "/ukNonFhlProperty/allowances/electricChargePointAllowance",
-                "/ukNonFhlProperty/allowances/zeroEmissionsCarAllowance",
-                "/ukNonFhlProperty/allowances/structuredBuildingAllowance/0/firstYear/qualifyingAmountExpenditure",
-                "/ukNonFhlProperty/allowances/structuredBuildingAllowance/0/amount",
-                "/ukNonFhlProperty/allowances/enhancedStructuredBuildingAllowance/0/firstYear/qualifyingAmountExpenditure",
-                "/ukNonFhlProperty/allowances/enhancedStructuredBuildingAllowance/0/amount"
+                "/ukProperty/adjustments/balancingCharge",
+                "/ukProperty/adjustments/privateUseAdjustment",
+                "/ukProperty/adjustments/businessPremisesRenovationAllowanceBalancingCharges",
+                "/ukProperty/allowances/annualInvestmentAllowance",
+                "/ukProperty/allowances/zeroEmissionsGoodsVehicleAllowance",
+                "/ukProperty/allowances/businessPremisesRenovationAllowance",
+                "/ukProperty/allowances/otherCapitalAllowance",
+                "/ukProperty/allowances/costOfReplacingDomesticGoods",
+                "/ukProperty/allowances/electricChargePointAllowance",
+                "/ukProperty/allowances/zeroEmissionsCarAllowance",
+                "/ukProperty/allowances/structuredBuildingAllowance/0/firstYear/qualifyingAmountExpenditure",
+                "/ukProperty/allowances/structuredBuildingAllowance/0/amount",
+                "/ukProperty/allowances/enhancedStructuredBuildingAllowance/0/firstYear/qualifyingAmountExpenditure",
+                "/ukProperty/allowances/enhancedStructuredBuildingAllowance/0/amount"
               ))
           )
         )
@@ -347,7 +347,7 @@ class Def1_CreateAmendUkPropertyAnnualSubmissionISpec extends IntegrationBaseSpe
           |      }
           |    }
           |  },
-          |  "ukNonFhlProperty": {
+          |  "ukProperty": {
           |    "allowances": {
           |      "annualInvestmentAllowance": 2000.50,
           |      "zeroEmissionsGoodsVehicleAllowance": 2000.60,
@@ -417,7 +417,7 @@ class Def1_CreateAmendUkPropertyAnnualSubmissionISpec extends IntegrationBaseSpe
           |      }
           |    }
           |  },
-          |  "ukNonFhlProperty": {
+          |  "ukProperty": {
           |    "allowances": {
           |      "annualInvestmentAllowance": 2000.5635430,
           |      "zeroEmissionsGoodsVehicleAllowance": 2000.6235450,
@@ -487,7 +487,7 @@ class Def1_CreateAmendUkPropertyAnnualSubmissionISpec extends IntegrationBaseSpe
           |      }
           |    }
           |  },
-          |  "ukNonFhlProperty": {
+          |  "ukProperty": {
           |    "allowances": {
           |      "annualInvestmentAllowance": 2000.50,
           |      "zeroEmissionsGoodsVehicleAllowance": 2000.60,
@@ -557,7 +557,7 @@ class Def1_CreateAmendUkPropertyAnnualSubmissionISpec extends IntegrationBaseSpe
           |      }
           |    }
           |  },
-          |  "ukNonFhlProperty": {
+          |  "ukProperty": {
           |    "allowances": {
           |      "annualInvestmentAllowance": 2000.50,
           |      "zeroEmissionsGoodsVehicleAllowance": 2000.60,
@@ -627,7 +627,7 @@ class Def1_CreateAmendUkPropertyAnnualSubmissionISpec extends IntegrationBaseSpe
           |      }
           |    }
           |  },
-          |  "ukNonFhlProperty": {
+          |  "ukProperty": {
           |    "allowances": {
           |      "annualInvestmentAllowance": 2000.50,
           |      "zeroEmissionsGoodsVehicleAllowance": 2000.60,
@@ -695,7 +695,7 @@ class Def1_CreateAmendUkPropertyAnnualSubmissionISpec extends IntegrationBaseSpe
           |      }
           |    }
           |  },
-          |  "ukNonFhlProperty": {
+          |  "ukProperty": {
           |    "allowances": {
           |      "propertyIncomeAllowance": 1000.00,
           |      "annualInvestmentAllowance": 2000.50,
@@ -756,20 +756,20 @@ class Def1_CreateAmendUkPropertyAnnualSubmissionISpec extends IntegrationBaseSpe
             "/ukFhlProperty/allowances/otherCapitalAllowance",
             "/ukFhlProperty/allowances/electricChargePointAllowance",
             "/ukFhlProperty/allowances/zeroEmissionsCarAllowance",
-            "/ukNonFhlProperty/adjustments/balancingCharge",
-            "/ukNonFhlProperty/adjustments/privateUseAdjustment",
-            "/ukNonFhlProperty/adjustments/businessPremisesRenovationAllowanceBalancingCharges",
-            "/ukNonFhlProperty/allowances/annualInvestmentAllowance",
-            "/ukNonFhlProperty/allowances/zeroEmissionsGoodsVehicleAllowance",
-            "/ukNonFhlProperty/allowances/businessPremisesRenovationAllowance",
-            "/ukNonFhlProperty/allowances/otherCapitalAllowance",
-            "/ukNonFhlProperty/allowances/costOfReplacingDomesticGoods",
-            "/ukNonFhlProperty/allowances/electricChargePointAllowance",
-            "/ukNonFhlProperty/allowances/zeroEmissionsCarAllowance",
-            "/ukNonFhlProperty/allowances/structuredBuildingAllowance/0/firstYear/qualifyingAmountExpenditure",
-            "/ukNonFhlProperty/allowances/structuredBuildingAllowance/0/amount",
-            "/ukNonFhlProperty/allowances/enhancedStructuredBuildingAllowance/0/firstYear/qualifyingAmountExpenditure",
-            "/ukNonFhlProperty/allowances/enhancedStructuredBuildingAllowance/0/amount"
+            "/ukProperty/adjustments/balancingCharge",
+            "/ukProperty/adjustments/privateUseAdjustment",
+            "/ukProperty/adjustments/businessPremisesRenovationAllowanceBalancingCharges",
+            "/ukProperty/allowances/annualInvestmentAllowance",
+            "/ukProperty/allowances/zeroEmissionsGoodsVehicleAllowance",
+            "/ukProperty/allowances/businessPremisesRenovationAllowance",
+            "/ukProperty/allowances/otherCapitalAllowance",
+            "/ukProperty/allowances/costOfReplacingDomesticGoods",
+            "/ukProperty/allowances/electricChargePointAllowance",
+            "/ukProperty/allowances/zeroEmissionsCarAllowance",
+            "/ukProperty/allowances/structuredBuildingAllowance/0/firstYear/qualifyingAmountExpenditure",
+            "/ukProperty/allowances/structuredBuildingAllowance/0/amount",
+            "/ukProperty/allowances/enhancedStructuredBuildingAllowance/0/firstYear/qualifyingAmountExpenditure",
+            "/ukProperty/allowances/enhancedStructuredBuildingAllowance/0/amount"
           ))
       )
 
@@ -777,8 +777,8 @@ class Def1_CreateAmendUkPropertyAnnualSubmissionISpec extends IntegrationBaseSpe
         message = "The supplied date format is not valid",
         paths = Some(
           List(
-            "/ukNonFhlProperty/allowances/structuredBuildingAllowance/0/firstYear/qualifyingDate",
-            "/ukNonFhlProperty/allowances/enhancedStructuredBuildingAllowance/0/firstYear/qualifyingDate"
+            "/ukProperty/allowances/structuredBuildingAllowance/0/firstYear/qualifyingDate",
+            "/ukProperty/allowances/enhancedStructuredBuildingAllowance/0/firstYear/qualifyingDate"
           ))
       )
 
@@ -786,10 +786,10 @@ class Def1_CreateAmendUkPropertyAnnualSubmissionISpec extends IntegrationBaseSpe
         message = "The supplied string format is not valid",
         paths = Some(
           List(
-            "/ukNonFhlProperty/allowances/structuredBuildingAllowance/0/building/name",
-            "/ukNonFhlProperty/allowances/structuredBuildingAllowance/0/building/postcode",
-            "/ukNonFhlProperty/allowances/enhancedStructuredBuildingAllowance/0/building/number",
-            "/ukNonFhlProperty/allowances/enhancedStructuredBuildingAllowance/0/building/postcode"
+            "/ukProperty/allowances/structuredBuildingAllowance/0/building/name",
+            "/ukProperty/allowances/structuredBuildingAllowance/0/building/postcode",
+            "/ukProperty/allowances/enhancedStructuredBuildingAllowance/0/building/number",
+            "/ukProperty/allowances/enhancedStructuredBuildingAllowance/0/building/postcode"
           ))
       )
 
@@ -797,8 +797,8 @@ class Def1_CreateAmendUkPropertyAnnualSubmissionISpec extends IntegrationBaseSpe
         message = "Postcode must be supplied along with at least one of name or number",
         paths = Some(
           List(
-            "/ukNonFhlProperty/allowances/structuredBuildingAllowance/0/building",
-            "/ukNonFhlProperty/allowances/enhancedStructuredBuildingAllowance/0/building"
+            "/ukProperty/allowances/structuredBuildingAllowance/0/building",
+            "/ukProperty/allowances/enhancedStructuredBuildingAllowance/0/building"
           ))
       )
 
@@ -807,7 +807,7 @@ class Def1_CreateAmendUkPropertyAnnualSubmissionISpec extends IntegrationBaseSpe
         paths = Some(
           List(
             "/ukFhlProperty/allowances",
-            "/ukNonFhlProperty/allowances"
+            "/ukProperty/allowances"
           ))
       )
 

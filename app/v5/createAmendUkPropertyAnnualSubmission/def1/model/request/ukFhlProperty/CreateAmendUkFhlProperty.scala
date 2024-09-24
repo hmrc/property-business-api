@@ -18,8 +18,7 @@ package v5.createAmendUkPropertyAnnualSubmission.def1.model.request.ukFhlPropert
 
 import play.api.libs.json.{Json, OFormat}
 
-case class CreateAmendUkFhlProperty(adjustments: Option[CreateAmendUkFhlPropertyAdjustments],
-                                    allowances: Option[CreateAmendUkFhlPropertyAllowances])
+case class CreateAmendUkFhlProperty(adjustments: Option[CreateAmendUkFhlPropertyAdjustments], allowances: Option[CreateAmendUkFhlPropertyAllowances])
 
 object CreateAmendUkFhlProperty {
   implicit val format: OFormat[CreateAmendUkFhlProperty] = Json.format[CreateAmendUkFhlProperty]

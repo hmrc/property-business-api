@@ -36,6 +36,8 @@
         "professionalFees": 100.25,
         "costOfServices": 100.25,
         "travelCosts": 100.25,
+        "residentialFinancialCost": 857.99,
+        "broughtFwdResidentialFinancialCost": 600.1,
         "other": 100.25
       }
     }

@@ -19,7 +19,7 @@
       "zeroEmissionsCarAllowance":123.12
     }
   },
-  "ukNonFhlProperty":{
+  "ukProperty":{
     "adjustments":{
       "balancingCharge":565.34,
       "privateUseAdjustment":533.54,

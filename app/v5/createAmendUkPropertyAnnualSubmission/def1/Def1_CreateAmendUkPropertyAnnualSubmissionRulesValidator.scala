@@ -23,8 +23,8 @@ import cats.data.Validated
 import cats.data.Validated.Invalid
 import cats.implicits.toTraverseOps
 import v5.createAmendUkPropertyAnnualSubmission.def1.model.request.Def1_CreateAmendUkPropertyAnnualSubmissionRequestData
-import v5.createAmendUkPropertyAnnualSubmission.def1.model.request.def1_ukFhlProperty._
-import v5.createAmendUkPropertyAnnualSubmission.def1.model.request.def1_ukNonFhlProperty._
+import v5.createAmendUkPropertyAnnualSubmission.def1.model.request.ukFhlProperty._
+import v5.createAmendUkPropertyAnnualSubmission.def1.model.request.ukProperty._
 
 class Def1_CreateAmendUkPropertyAnnualSubmissionRulesValidator extends RulesValidator[Def1_CreateAmendUkPropertyAnnualSubmissionRequestData] {
 
@@ -44,11 +44,11 @@ class Def1_CreateAmendUkPropertyAnnualSubmissionRulesValidator extends RulesVali
     import parsed.body._
     combine(
       ukFhlProperty.map(validateUkFhlProperty).getOrElse(valid),
-      ukNonFhlProperty.map(validateUkNonFhlProperty).getOrElse(valid)
+      ukProperty.map(validateUkProperty).getOrElse(valid)
     ).onSuccess(parsed)
   }
 
-  private def validateUkFhlProperty(ukFhlProperty: Def1_Create_Amend_UkFhlProperty): Validated[Seq[MtdError], Unit] = {
+  private def validateUkFhlProperty(ukFhlProperty: CreateAmendUkFhlProperty): Validated[Seq[MtdError], Unit] = {
     import ukFhlProperty._
 
     val fieldsWithPaths = List(
@@ -78,37 +78,37 @@ class Def1_CreateAmendUkPropertyAnnualSubmissionRulesValidator extends RulesVali
     (validatedNumberFields :+ validatedAllowances).sequence.andThen(_ => valid)
   }
 
-  private def validateUkFhlAllowances(allowances: Def1_Create_Amend_UkFhlPropertyAllowances): Validated[Seq[MtdError], Unit] = {
+  private def validateUkFhlAllowances(allowances: CreateAmendUkFhlPropertyAllowances): Validated[Seq[MtdError], Unit] = {
     allowances.propertyIncomeAllowance match {
       case None => valid
       case Some(_) =>
         allowances match {
-          case Def1_Create_Amend_UkFhlPropertyAllowances(None, None, None, None, None, Some(_)) => valid
+          case CreateAmendUkFhlPropertyAllowances(None, None, None, None, None, Some(_)) => valid
           case _ => Invalid(List(RuleBothAllowancesSuppliedError.withPath("/ukFhlProperty/allowances")))
         }
     }
   }
 
-  private def validateUkNonFhlProperty(ukNonFhlProperty: Def1_Create_Amend_UkNonFhlProperty): Validated[Seq[MtdError], Unit] = {
-    import ukNonFhlProperty._
+  private def validateUkProperty(ukProperty: CreateAmendUkProperty): Validated[Seq[MtdError], Unit] = {
+    import ukProperty._
 
     val fieldsWithPaths = List(
-      (adjustments.flatMap(_.balancingCharge), "/ukNonFhlProperty/adjustments/balancingCharge"),
-      (adjustments.flatMap(_.privateUseAdjustment), "/ukNonFhlProperty/adjustments/privateUseAdjustment"),
+      (adjustments.flatMap(_.balancingCharge), "/ukProperty/adjustments/balancingCharge"),
+      (adjustments.flatMap(_.privateUseAdjustment), "/ukProperty/adjustments/privateUseAdjustment"),
       (
         adjustments.flatMap(_.businessPremisesRenovationAllowanceBalancingCharges),
-        "/ukNonFhlProperty/adjustments/businessPremisesRenovationAllowanceBalancingCharges"),
-      (allowances.flatMap(_.annualInvestmentAllowance), "/ukNonFhlProperty/allowances/annualInvestmentAllowance"),
-      (allowances.flatMap(_.zeroEmissionsGoodsVehicleAllowance), "/ukNonFhlProperty/allowances/zeroEmissionsGoodsVehicleAllowance"),
-      (allowances.flatMap(_.businessPremisesRenovationAllowance), "/ukNonFhlProperty/allowances/businessPremisesRenovationAllowance"),
-      (allowances.flatMap(_.otherCapitalAllowance), "/ukNonFhlProperty/allowances/otherCapitalAllowance"),
-      (allowances.flatMap(_.costOfReplacingDomesticGoods), "/ukNonFhlProperty/allowances/costOfReplacingDomesticGoods"),
-      (allowances.flatMap(_.electricChargePointAllowance), "/ukNonFhlProperty/allowances/electricChargePointAllowance"),
-      (allowances.flatMap(_.zeroEmissionsCarAllowance), "/ukNonFhlProperty/allowances/zeroEmissionsCarAllowance")
+        "/ukProperty/adjustments/businessPremisesRenovationAllowanceBalancingCharges"),
+      (allowances.flatMap(_.annualInvestmentAllowance), "/ukProperty/allowances/annualInvestmentAllowance"),
+      (allowances.flatMap(_.zeroEmissionsGoodsVehicleAllowance), "/ukProperty/allowances/zeroEmissionsGoodsVehicleAllowance"),
+      (allowances.flatMap(_.businessPremisesRenovationAllowance), "/ukProperty/allowances/businessPremisesRenovationAllowance"),
+      (allowances.flatMap(_.otherCapitalAllowance), "/ukProperty/allowances/otherCapitalAllowance"),
+      (allowances.flatMap(_.costOfReplacingDomesticGoods), "/ukProperty/allowances/costOfReplacingDomesticGoods"),
+      (allowances.flatMap(_.electricChargePointAllowance), "/ukProperty/allowances/electricChargePointAllowance"),
+      (allowances.flatMap(_.zeroEmissionsCarAllowance), "/ukProperty/allowances/zeroEmissionsCarAllowance")
     )
 
     val validatedPropertyIncomeAllowance =
-      resolvePropertyIncomeAllowance(allowances.flatMap(_.propertyIncomeAllowance), "/ukNonFhlProperty/allowances/propertyIncomeAllowance")
+      resolvePropertyIncomeAllowance(allowances.flatMap(_.propertyIncomeAllowance), "/ukProperty/allowances/propertyIncomeAllowance")
 
     val validatedNumberFields = fieldsWithPaths
       .map {
@@ -138,18 +138,18 @@ class Def1_CreateAmendUkPropertyAnnualSubmissionRulesValidator extends RulesVali
       .andThen(_ => valid)
   }
 
-  private def validateUkNonFhlAllowances(allowances: Def1_Create_Amend_UkNonFhlPropertyAllowances): Validated[Seq[MtdError], Unit] = {
+  private def validateUkNonFhlAllowances(allowances: CreateAmendUkPropertyAllowances): Validated[Seq[MtdError], Unit] = {
     allowances.propertyIncomeAllowance match {
       case None => valid
       case Some(_) =>
         allowances match {
-          case Def1_Create_Amend_UkNonFhlPropertyAllowances(None, None, None, None, None, None, None, Some(_), None, None) => valid
-          case _ => Invalid(List(RuleBothAllowancesSuppliedError.withPath("/ukNonFhlProperty/allowances")))
+          case CreateAmendUkPropertyAllowances(None, None, None, None, None, None, None, Some(_), None, None) => valid
+          case _ => Invalid(List(RuleBothAllowancesSuppliedError.withPath("/ukProperty/allowances")))
         }
     }
   }
 
-  private def validateBuildingAllowance(buildingAllowance: Def1_Create_Amend_StructuredBuildingAllowance,
+  private def validateBuildingAllowance(buildingAllowance: CreateAmendStructuredBuildingAllowance,
                                         index: Int,
                                         enhanced: Boolean): Validated[Seq[MtdError], Unit] = {
     import buildingAllowance._
@@ -157,26 +157,26 @@ class Def1_CreateAmendUkPropertyAnnualSubmissionRulesValidator extends RulesVali
     val buildingType = if (enhanced) "enhancedStructuredBuildingAllowance" else "structuredBuildingAllowance"
 
     val validatedNumberFields = List(
-      (firstYear.map(_.qualifyingAmountExpenditure), s"/ukNonFhlProperty/allowances/$buildingType/$index/firstYear/qualifyingAmountExpenditure")
+      (firstYear.map(_.qualifyingAmountExpenditure), s"/ukProperty/allowances/$buildingType/$index/firstYear/qualifyingAmountExpenditure")
     ).map {
       case (None, _)            => valid
       case (Some(number), path) => resolveParsedNumber(number, path)
-    } :+ resolveParsedNumber(amount, s"/ukNonFhlProperty/allowances/$buildingType/$index/amount")
+    } :+ resolveParsedNumber(amount, s"/ukProperty/allowances/$buildingType/$index/amount")
 
     val validatedDateField = ResolveIsoDate(
       firstYear.map(_.qualifyingDate),
-      DateFormatError.withPath(s"/ukNonFhlProperty/allowances/$buildingType/$index/firstYear/qualifyingDate"))
+      DateFormatError.withPath(s"/ukProperty/allowances/$buildingType/$index/firstYear/qualifyingDate"))
 
     val validatedBuildingField = (building.name, building.number) match {
       case (None, None) =>
-        Invalid(List(RuleBuildingNameNumberError.withPath(s"/ukNonFhlProperty/allowances/$buildingType/$index/building")))
+        Invalid(List(RuleBuildingNameNumberError.withPath(s"/ukProperty/allowances/$buildingType/$index/building")))
       case _ => valid
     }
 
     val validatedStringFields = List(
-      resolveStringOptional(building.name, s"/ukNonFhlProperty/allowances/$buildingType/$index/building/name"),
-      resolveStringOptional(building.number, s"/ukNonFhlProperty/allowances/$buildingType/$index/building/number"),
-      resolveString(building.postcode, s"/ukNonFhlProperty/allowances/$buildingType/$index/building/postcode")
+      resolveStringOptional(building.name, s"/ukProperty/allowances/$buildingType/$index/building/name"),
+      resolveStringOptional(building.number, s"/ukProperty/allowances/$buildingType/$index/building/number"),
+      resolveString(building.postcode, s"/ukProperty/allowances/$buildingType/$index/building/postcode")
     )
 
     (validatedNumberFields ++ validatedStringFields :+ validatedDateField :+ validatedBuildingField).sequence.andThen(_ => valid)

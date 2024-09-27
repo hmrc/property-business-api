@@ -26,9 +26,9 @@ import config.MockAppConfig
 import play.api.Configuration
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.Result
-import v5.createAmendUkPropertyAnnualSubmission.def1.model.request.def1_ukFhlProperty._
-import v5.createAmendUkPropertyAnnualSubmission.def1.model.request.def1_ukNonFhlProperty._
-import v5.createAmendUkPropertyAnnualSubmission.def1.model.request.def1_ukPropertyRentARoom.Def1_Create_Amend_UkPropertyAdjustmentsRentARoom
+import v5.createAmendUkPropertyAnnualSubmission.def1.model.request.ukFhlProperty._
+import v5.createAmendUkPropertyAnnualSubmission.def1.model.request.ukProperty._
+import v5.createAmendUkPropertyAnnualSubmission.def1.model.request.ukPropertyRentARoom.CreateAmendUkPropertyAdjustmentsRentARoom
 import v5.createAmendUkPropertyAnnualSubmission.def1.model.request.{
   Def1_CreateAmendUkPropertyAnnualSubmissionRequestBody,
   Def1_CreateAmendUkPropertyAnnualSubmissionRequestData
@@ -120,18 +120,18 @@ class CreateAmendUkPropertyAnnualSubmissionControllerSpec
         )
       )
 
-    private val ukFhlProperty: Def1_Create_Amend_UkFhlProperty = Def1_Create_Amend_UkFhlProperty(
+    private val ukFhlProperty: CreateAmendUkFhlProperty = CreateAmendUkFhlProperty(
       Some(
-        Def1_Create_Amend_UkFhlPropertyAdjustments(
+        CreateAmendUkFhlPropertyAdjustments(
           Some(1000.20),
           Some(1000.30),
           periodOfGraceAdjustment = true,
           Some(1000.40),
           nonResidentLandlord = true,
-          Some(Def1_Create_Amend_UkPropertyAdjustmentsRentARoom(true))
+          Some(CreateAmendUkPropertyAdjustmentsRentARoom(true))
         )),
       Some(
-        Def1_Create_Amend_UkFhlPropertyAllowances(
+        CreateAmendUkFhlPropertyAllowances(
           Some(1000.50),
           Some(1000.60),
           Some(1000.70),
@@ -141,17 +141,17 @@ class CreateAmendUkPropertyAnnualSubmissionControllerSpec
         ))
     )
 
-    private val ukNonFhlProperty: Def1_Create_Amend_UkNonFhlProperty = Def1_Create_Amend_UkNonFhlProperty(
+    private val ukProperty: CreateAmendUkProperty = CreateAmendUkProperty(
       Some(
-        Def1_Create_Amend_UkNonFhlPropertyAdjustments(
+        CreateAmendUkPropertyAdjustments(
           Some(2000.20),
           Some(2000.30),
           Some(2000.40),
           nonResidentLandlord = true,
-          Some(Def1_Create_Amend_UkPropertyAdjustmentsRentARoom(true))
+          Some(CreateAmendUkPropertyAdjustmentsRentARoom(true))
         )),
       Some(
-        Def1_Create_Amend_UkNonFhlPropertyAllowances(
+        CreateAmendUkPropertyAllowances(
           Some(2000.50),
           Some(2000.60),
           Some(2000.70),
@@ -162,13 +162,13 @@ class CreateAmendUkPropertyAnnualSubmissionControllerSpec
           None,
           Some(
             List(
-              Def1_Create_Amend_StructuredBuildingAllowance(
+              CreateAmendStructuredBuildingAllowance(
                 3000.30,
-                Some(Def1_Create_Amend_FirstYear(
+                Some(CreateAmendFirstYear(
                   "2020-01-01",
                   3000.40
                 )),
-                Def1_Create_Amend_Building(
+                CreateAmendBuilding(
                   Some("house name"),
                   None,
                   "GF49JH"
@@ -176,13 +176,13 @@ class CreateAmendUkPropertyAnnualSubmissionControllerSpec
               ))),
           Some(
             List(
-              Def1_Create_Amend_StructuredBuildingAllowance(
+              CreateAmendStructuredBuildingAllowance(
                 3000.50,
-                Some(Def1_Create_Amend_FirstYear(
+                Some(CreateAmendFirstYear(
                   "2020-01-01",
                   3000.60
                 )),
-                Def1_Create_Amend_Building(
+                CreateAmendBuilding(
                   None,
                   Some("house number"),
                   "GF49JH"
@@ -213,7 +213,7 @@ class CreateAmendUkPropertyAnnualSubmissionControllerSpec
         |      }
         |    }
         |  },
-        |  "ukNonFhlProperty": {
+        |  "ukProperty": {
         |    "allowances": {
         |      "annualInvestmentAllowance": 2000.50,
         |      "zeroEmissionsGoodsVehicleAllowance": 2000.60,
@@ -265,7 +265,7 @@ class CreateAmendUkPropertyAnnualSubmissionControllerSpec
 
     private val body: Def1_CreateAmendUkPropertyAnnualSubmissionRequestBody = Def1_CreateAmendUkPropertyAnnualSubmissionRequestBody(
       Some(ukFhlProperty),
-      Some(ukNonFhlProperty)
+      Some(ukProperty)
     )
 
     protected val requestData: Def1_CreateAmendUkPropertyAnnualSubmissionRequestData =

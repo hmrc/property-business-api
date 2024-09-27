@@ -18,27 +18,27 @@ package v5.createAmendUkPropertyAnnualSubmission.def1.model.request
 
 import play.api.libs.json.{JsValue, Json}
 import support.UnitSpec
-import v5.createAmendUkPropertyAnnualSubmission.def1.model.request.def1_ukFhlProperty._
-import v5.createAmendUkPropertyAnnualSubmission.def1.model.request.def1_ukNonFhlProperty._
-import v5.createAmendUkPropertyAnnualSubmission.def1.model.request.def1_ukPropertyRentARoom.Def1_Create_Amend_UkPropertyAdjustmentsRentARoom
+import v5.createAmendUkPropertyAnnualSubmission.def1.model.request.ukFhlProperty._
+import v5.createAmendUkPropertyAnnualSubmission.def1.model.request.ukProperty._
+import v5.createAmendUkPropertyAnnualSubmission.def1.model.request.ukPropertyRentARoom.CreateAmendUkPropertyAdjustmentsRentARoom
 
 class Def1_CreateAmendUkPropertyAnnualSubmissionRequestBodySpec extends UnitSpec {
 
   val requestBody: Def1_CreateAmendUkPropertyAnnualSubmissionRequestBody =
     Def1_CreateAmendUkPropertyAnnualSubmissionRequestBody(
-      Some(
-        Def1_Create_Amend_UkFhlProperty(
+      ukFhlProperty = Some(
+        CreateAmendUkFhlProperty(
           Some(
-            Def1_Create_Amend_UkFhlPropertyAdjustments(
+            CreateAmendUkFhlPropertyAdjustments(
               Some(1000.20),
               Some(1000.30),
               true,
               Some(1000.40),
               true,
-              Some(Def1_Create_Amend_UkPropertyAdjustmentsRentARoom(true))
+              Some(CreateAmendUkPropertyAdjustmentsRentARoom(true))
             )),
           Some(
-            Def1_Create_Amend_UkFhlPropertyAllowances(
+            CreateAmendUkFhlPropertyAllowances(
               Some(1000.50),
               Some(1000.60),
               Some(1000.70),
@@ -47,17 +47,17 @@ class Def1_CreateAmendUkPropertyAnnualSubmissionRequestBodySpec extends UnitSpec
               None
             ))
         )),
-      Some(
-        Def1_Create_Amend_UkNonFhlProperty(
-          Some(
-            Def1_Create_Amend_UkNonFhlPropertyAdjustments(
+      ukProperty = Some(
+        CreateAmendUkProperty(
+          adjustments = Some(
+            CreateAmendUkPropertyAdjustments(
               Some(2000.20),
               Some(2000.30),
               Some(2000.40),
               true,
-              Some(Def1_Create_Amend_UkPropertyAdjustmentsRentARoom(true))
+              Some(CreateAmendUkPropertyAdjustmentsRentARoom(true))
             )),
-          Some(Def1_Create_Amend_UkNonFhlPropertyAllowances(
+          allowances = Some(CreateAmendUkPropertyAllowances(
             Some(2000.50),
             Some(2000.60),
             Some(2000.70),
@@ -68,13 +68,13 @@ class Def1_CreateAmendUkPropertyAnnualSubmissionRequestBodySpec extends UnitSpec
             None,
             Some(
               List(
-                Def1_Create_Amend_StructuredBuildingAllowance(
+                CreateAmendStructuredBuildingAllowance(
                   3000.30,
-                  Some(Def1_Create_Amend_FirstYear(
+                  Some(CreateAmendFirstYear(
                     "2020-01-01",
                     3000.40
                   )),
-                  Def1_Create_Amend_Building(
+                  CreateAmendBuilding(
                     Some("house name"),
                     None,
                     "GF49JH"
@@ -82,13 +82,13 @@ class Def1_CreateAmendUkPropertyAnnualSubmissionRequestBodySpec extends UnitSpec
                 ))),
             Some(
               List(
-                Def1_Create_Amend_StructuredBuildingAllowance(
+                CreateAmendStructuredBuildingAllowance(
                   3000.50,
-                  Some(Def1_Create_Amend_FirstYear(
+                  Some(CreateAmendFirstYear(
                     "2020-01-01",
                     3000.60
                   )),
-                  Def1_Create_Amend_Building(
+                  CreateAmendBuilding(
                     None,
                     Some("house number"),
                     "GF49JH"
@@ -119,7 +119,7 @@ class Def1_CreateAmendUkPropertyAnnualSubmissionRequestBodySpec extends UnitSpec
       |      }
       |    }
       |  },
-      |  "ukNonFhlProperty": {
+      |  "ukProperty": {
       |    "allowances": {
       |      "annualInvestmentAllowance": 2000.50,
       |      "zeroEmissionsGoodsVehicleAllowance": 2000.60,

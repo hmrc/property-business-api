@@ -20,8 +20,8 @@ import api.models.domain.Timestamp
 import config.MockAppConfig
 import play.api.libs.json.Json
 import support.UnitSpec
-import v5.retrieveUkPropertyAnnualSubmission.def1.model.response.def1_ukFhlProperty._
-import v5.retrieveUkPropertyAnnualSubmission.def1.model.response.def1_ukNonFhlProperty._
+import v5.retrieveUkPropertyAnnualSubmission.def1.model.response.ukFhlProperty._
+import v5.retrieveUkPropertyAnnualSubmission.def1.model.response.ukProperty._
 import v5.retrieveUkPropertyAnnualSubmission.model.response._
 
 class Def1_RetrieveUkPropertyAnnualSubmissionResponseSpec extends UnitSpec with MockAppConfig {
@@ -179,22 +179,22 @@ class Def1_RetrieveUkPropertyAnnualSubmissionResponseSpec extends UnitSpec with 
   private val parsed = Def1_RetrieveUkPropertyAnnualSubmissionResponse(
     submittedOn = Timestamp("2020-06-17T10:53:38.000Z"),
     ukFhlProperty = Some(
-      Def1_Retrieve_UkFhlProperty(
+      RetrieveUkFhlProperty(
         adjustments = Some(
-          Def1_Retrieve_UkFhlPropertyAdjustments(
+          RetrieveUkFhlPropertyAdjustments(
             privateUseAdjustment = Some(454.45),
             balancingCharge = Some(231.45),
             periodOfGraceAdjustment = true,
             businessPremisesRenovationAllowanceBalancingCharges = Some(567.67),
             nonResidentLandlord = true,
             rentARoom = Some(
-              Def1_Retrieve_UkFhlPropertyRentARoom(
+              RetrieveUkFhlPropertyRentARoom(
                 jointlyLet = true
               ))
           )
         ),
         allowances = Some(
-          Def1_Retrieve_UkFhlPropertyAllowances(
+          RetrieveUkFhlPropertyAllowances(
             Some(123.45),
             Some(345.56),
             Some(345.34),
@@ -205,22 +205,22 @@ class Def1_RetrieveUkPropertyAnnualSubmissionResponseSpec extends UnitSpec with 
         )
       )
     ),
-    ukNonFhlProperty = Some(
-      Def1_Retrieve_UkNonFhlProperty(
+    ukProperty = Some(
+      RetrieveUkProperty(
         adjustments = Some(
-          Def1_Retrieve_UkNonFhlPropertyAdjustments(
+          RetrieveUkPropertyAdjustments(
             balancingCharge = Some(565.34),
             privateUseAdjustment = Some(533.54),
             businessPremisesRenovationAllowanceBalancingCharges = Some(563.34),
             nonResidentLandlord = true,
             rentARoom = Some(
-              Def1_Retrieve_UkNonFhlPropertyRentARoom(
+              RetrieveUkPropertyRentARoom(
                 jointlyLet = true
               ))
           )
         ),
         allowances = Some(
-          Def1_Retrieve_UkNonFhlPropertyAllowances(
+          RetrieveUkPropertyAllowances(
             annualInvestmentAllowance = Some(678.45),
             zeroEmissionsGoodsVehicleAllowance = Some(456.34),
             businessPremisesRenovationAllowance = Some(573.45),
@@ -230,15 +230,15 @@ class Def1_RetrieveUkPropertyAnnualSubmissionResponseSpec extends UnitSpec with 
             electricChargePointAllowance = Some(454.34),
             structuredBuildingAllowance = Some(
               List(
-                Def1_Retrieve_UkNonFhlPropertyStructuredBuildingAllowance(
+                RetrieveUkPropertyStructuredBuildingAllowance(
                   amount = 234.34,
                   firstYear = Some(
-                    Def1_Retrieve_UkNonFhlPropertyFirstYear(
+                    RetrieveUkPropertyFirstYear(
                       qualifyingDate = "2020-03-29",
                       qualifyingAmountExpenditure = 3434.45
                     )
                   ),
-                  building = Def1_Retrieve_UkNonFhlPropertyBuilding(
+                  building = RetrieveUkPropertyBuilding(
                     name = Some("Plaza"),
                     number = Some("1"),
                     postcode = "TF3 4EH"
@@ -247,15 +247,15 @@ class Def1_RetrieveUkPropertyAnnualSubmissionResponseSpec extends UnitSpec with 
               )),
             enhancedStructuredBuildingAllowance = Some(
               List(
-                Def1_Retrieve_UkNonFhlPropertyStructuredBuildingAllowance(
+                RetrieveUkPropertyStructuredBuildingAllowance(
                   amount = 234.45,
                   firstYear = Some(
-                    Def1_Retrieve_UkNonFhlPropertyFirstYear(
+                    RetrieveUkPropertyFirstYear(
                       qualifyingDate = "2020-05-29",
                       qualifyingAmountExpenditure = 453.34
                     )
                   ),
-                  building = Def1_Retrieve_UkNonFhlPropertyBuilding(
+                  building = RetrieveUkPropertyBuilding(
                     name = Some("Plaza 2"),
                     number = Some("2"),
                     postcode = "TF3 4ER"
@@ -292,7 +292,7 @@ class Def1_RetrieveUkPropertyAnnualSubmissionResponseSpec extends UnitSpec with 
       |         }
       |      }
       |   },
-      |   "ukNonFhlProperty":{
+      |   "ukProperty":{
       |      "allowances":{
       |         "annualInvestmentAllowance":678.45,
       |         "zeroEmissionsGoodsVehicleAllowance":456.34,

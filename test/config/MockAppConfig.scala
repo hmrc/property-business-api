@@ -28,27 +28,13 @@ trait MockAppConfig extends MockFactory {
   implicit val mockAppConfig: AppConfig = mock[AppConfig]
 
   object MockedAppConfig {
-    // MTD ID Lookup Config
+    def desDownstreamConfig: CallHandler0[DownstreamConfig]         = (() => mockAppConfig.desDownstreamConfig: DownstreamConfig).expects()
+    def ifsDownstreamConfig: CallHandler0[DownstreamConfig]         = (() => mockAppConfig.ifsDownstreamConfig: DownstreamConfig).expects()
+    def tysIfsDownstreamConfig: CallHandler0[DownstreamConfig]      = (() => mockAppConfig.tysIfsDownstreamConfig: DownstreamConfig).expects()
+    def hipDownstreamConfig: CallHandler[BasicAuthDownstreamConfig] = (() => mockAppConfig.hipDownstreamConfig: BasicAuthDownstreamConfig).expects()
+
+    // MTD IF Lookup Config
     def mtdIdBaseUrl: CallHandler[String] = (() => mockAppConfig.mtdIdBaseUrl).expects()
-
-    // DES Config
-    def desBaseUrl: CallHandler[String]                         = (() => mockAppConfig.desBaseUrl).expects()
-    def desToken: CallHandler[String]                           = (() => mockAppConfig.desToken).expects()
-    def desEnvironment: CallHandler[String]                     = (() => mockAppConfig.desEnv).expects()
-    def desEnvironmentHeaders: CallHandler[Option[Seq[String]]] = (() => mockAppConfig.desEnvironmentHeaders).expects()
-
-    // IFS Config
-    def ifsBaseUrl: CallHandler[String]                         = (() => mockAppConfig.ifsBaseUrl).expects()
-    def ifsToken: CallHandler[String]                           = (() => mockAppConfig.ifsToken).expects()
-    def ifsEnvironment: CallHandler[String]                     = (() => mockAppConfig.ifsEnv).expects()
-    def ifsEnvironmentHeaders: CallHandler[Option[Seq[String]]] = (() => mockAppConfig.ifsEnvironmentHeaders).expects()
-
-    // TYS IFS Config
-    def tysIfsBaseUrl: CallHandler[String]                         = (() => mockAppConfig.tysIfsBaseUrl).expects()
-    def tysIfsToken: CallHandler[String]                           = (() => mockAppConfig.tysIfsToken).expects()
-    def tysIfsEnv: CallHandler[String]                             = (() => mockAppConfig.tysIfsEnv).expects()
-    def tysIfsEnvironment: CallHandler[String]                     = (() => mockAppConfig.tysIfsEnv).expects()
-    def tysIfsEnvironmentHeaders: CallHandler[Option[Seq[String]]] = (() => mockAppConfig.tysIfsEnvironmentHeaders).expects()
 
     // API Config
     def featureSwitches: CallHandler[Configuration] = (() => mockAppConfig.featureSwitches).expects()

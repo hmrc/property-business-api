@@ -34,9 +34,9 @@ class DeleteHistoricFhlUkPropertyAnnualSubmissionConnectorSpec extends Connector
     "send a request and return no content" when {
       "using FHL data" in new IfsTest with Test {
         lazy val propertyType: HistoricPropertyType                    = HistoricPropertyType.Fhl
-        override lazy val requiredHeaders: scala.Seq[(String, String)] = requiredIfsHeaders :+ ("intent" -> "DELETE")
+        override lazy val requiredHeaders: scala.Seq[(String, String)] = super.requiredHeaders :+ ("intent" -> "DELETE")
 
-        MockFeatureSwitches.isPassDeleteIntentEnabled.returns(true)
+        MockFeatureSwitches.isPassIntentEnabled.returns(true)
 
         willPut(
           url = s"$baseUrl/income-tax/nino/$nino/uk-properties/furnished-holiday-lettings/annual-summaries/2022",
@@ -50,9 +50,9 @@ class DeleteHistoricFhlUkPropertyAnnualSubmissionConnectorSpec extends Connector
 
       "using non-FHL data" in new IfsTest with Test {
         lazy val propertyType: HistoricPropertyType                    = HistoricPropertyType.NonFhl
-        override lazy val requiredHeaders: scala.Seq[(String, String)] = requiredIfsHeaders :+ ("intent" -> "DELETE")
+        override lazy val requiredHeaders: scala.Seq[(String, String)] = super.requiredHeaders :+ ("intent" -> "DELETE")
 
-        MockFeatureSwitches.isPassDeleteIntentEnabled.returns(true)
+        MockFeatureSwitches.isPassIntentEnabled.returns(true)
 
         willPut(
           url = s"$baseUrl/income-tax/nino/$nino/uk-properties/other/annual-summaries/2022",
@@ -64,11 +64,11 @@ class DeleteHistoricFhlUkPropertyAnnualSubmissionConnectorSpec extends Connector
         result shouldBe expectedOutcome
       }
 
-      "isPassDeleteIntentHeader feature switch is off" in new IfsTest with Test {
+      "isPassIntentHeader feature switch is off" in new IfsTest with Test {
         override lazy val excludedHeaders: scala.Seq[(String, String)] = super.excludedHeaders :+ ("intent" -> "DELETE")
         lazy val propertyType: HistoricPropertyType                    = HistoricPropertyType.NonFhl
 
-        MockFeatureSwitches.isPassDeleteIntentEnabled returns false
+        MockFeatureSwitches.isPassIntentEnabled returns false
 
         willPut(url = s"$baseUrl/income-tax/nino/$nino/uk-properties/other/annual-summaries/2022", body = JsObject.empty)
           .returns(Future.successful(expectedOutcome))

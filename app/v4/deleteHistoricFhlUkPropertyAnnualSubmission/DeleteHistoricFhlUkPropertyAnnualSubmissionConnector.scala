@@ -43,7 +43,7 @@ class DeleteHistoricFhlUkPropertyAnnualSubmissionConnector @Inject() (val http: 
 
     import request._
 
-    val intent = if (featureSwitches.isPassDeleteIntentEnabled) Some("DELETE") else None
+    val intent = if (featureSwitches.isPassIntentEnabled) Some("DELETE") else None
 
     val propertyTypeName = propertyType match {
       case HistoricPropertyType.Fhl    => "furnished-holiday-lettings"

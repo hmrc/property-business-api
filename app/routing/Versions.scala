@@ -59,10 +59,6 @@ sealed trait Version {
   override def toString: String = name
 }
 
-case object Version2 extends Version {
-  val name = "2.0"
-}
-
 case object Version3 extends Version {
   val name = "3.0"
 }
@@ -78,7 +74,6 @@ case object Version5 extends Version {
 object Versions {
 
   private val versionsByName: Map[String, Version] = Map(
-    Version2.name -> Version2,
     Version3.name -> Version3,
     Version4.name -> Version4,
     Version5.name -> Version5

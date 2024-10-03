@@ -35,9 +35,9 @@ class ApiDefinitionFactory @Inject() (appConfig: AppConfig) extends Logging {
         categories = List("INCOME_TAX_MTD"),
         versions = List(
           APIVersion(
-            version = Version2,
-            status = buildAPIStatus(Version2),
-            endpointsEnabled = appConfig.endpointsEnabled(Version2)
+            version = Version3,
+            status = buildAPIStatus(Version3),
+            endpointsEnabled = appConfig.endpointsEnabled(Version3)
           ),
           APIVersion(
             version = Version3,

@@ -24,24 +24,18 @@ import support.UnitSpec
 class VersionRoutingMapSpec extends UnitSpec with GuiceOneAppPerSuite with ScalaCheckPropertyChecks {
 
   val defaultRouter: Router = mock[Router]
-  val v2Routes: v2.Routes   = app.injector.instanceOf[v2.Routes]
   val v3Routes: v3.Routes   = app.injector.instanceOf[v3.Routes]
   val v4Routes: v4.Routes   = app.injector.instanceOf[v4.Routes]
   val v5Routes: v5.Routes   = app.injector.instanceOf[v5.Routes]
 
   "map" when {
-    "routing to v2, v3, v4 and v5" should {
+    "routing to v3, v4 and v5" should {
       val versionRoutingMap: VersionRoutingMapImpl = VersionRoutingMapImpl(
         defaultRouter = defaultRouter,
-        v2Router = v2Routes,
         v3Router = v3Routes,
         v4Router = v4Routes,
         v5Router = v5Routes
       )
-
-      s"route to ${v2Routes.toString}" in {
-        versionRoutingMap.map(Version2) shouldBe v2Routes
-      }
 
       s"route to ${v3Routes.toString}" in {
         versionRoutingMap.map(Version3) shouldBe v3Routes

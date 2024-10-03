@@ -21,7 +21,7 @@ import api.services.{AuditService, EnrolmentsAuthService, MtdIdLookupService}
 import config.AppConfig
 import play.api.libs.json.JsValue
 import play.api.mvc.{Action, ControllerComponents}
-import routing.{Version, Version2}
+import routing.{Version, Version3}
 import utils.IdGenerator
 
 import javax.inject.{Inject, Singleton}
@@ -57,7 +57,7 @@ class AmendForeignPropertyPeriodSummaryController @Inject() (val authService: En
               auditService,
               "AmendForeignPropertyIncomeAndExpensesPeriodSummary",
               "amend-foreign-property-income-and-expenses-period-summary",
-              Version.from(request, orElse = Version2),
+              Version.from(request, orElse = Version3),
               Map("nino" -> nino, "businessId" -> businessId, "taxYear" -> taxYear, "submissionId" -> submissionId),
               Some(request.body)
             )

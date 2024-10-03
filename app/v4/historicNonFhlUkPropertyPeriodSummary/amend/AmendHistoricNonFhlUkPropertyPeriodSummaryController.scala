@@ -22,7 +22,7 @@ import api.services.{AuditService, EnrolmentsAuthService, MtdIdLookupService}
 import config.AppConfig
 import play.api.libs.json.JsValue
 import play.api.mvc.{Action, ControllerComponents}
-import routing.{Version, Version2}
+import routing.{Version, Version3}
 import utils.IdGenerator
 
 import javax.inject.Inject
@@ -60,7 +60,7 @@ class AmendHistoricNonFhlUkPropertyPeriodSummaryController @Inject() (
             auditType = "AmendHistoricNonFhlPropertyIncomeExpensesPeriodSummary",
             transactionName = "amend-historic-non-fhl-property-income-expenses-period-summary",
             auditDetailCreator = FlattenedGenericAuditDetail.auditDetailCreator(
-              Version.from(request, orElse = Version2),
+              Version.from(request, orElse = Version3),
               Map("nino" -> nino, "periodId" -> periodId)
             ),
             requestBody = Some(request.body),

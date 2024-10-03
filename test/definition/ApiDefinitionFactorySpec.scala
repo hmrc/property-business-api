@@ -35,15 +35,12 @@ class ApiDefinitionFactorySpec extends UnitSpec {
   "definition" when {
     "called" should {
       "return a valid Definition case class" in new Test {
-        MockedAppConfig.deprecationFor(Version2).returns(NotDeprecated.valid).anyNumberOfTimes()
         MockedAppConfig.deprecationFor(Version3).returns(NotDeprecated.valid).anyNumberOfTimes()
         MockedAppConfig.deprecationFor(Version4).returns(NotDeprecated.valid).anyNumberOfTimes()
         MockedAppConfig.deprecationFor(Version5).returns(NotDeprecated.valid).anyNumberOfTimes()
-        MockedAppConfig.apiStatus(Version2) returns "BETA"
         MockedAppConfig.apiStatus(Version3) returns "BETA"
         MockedAppConfig.apiStatus(Version4) returns "BETA"
         MockedAppConfig.apiStatus(Version5) returns "BETA"
-        MockedAppConfig.endpointsEnabled(Version2).returns(true).anyNumberOfTimes()
         MockedAppConfig.endpointsEnabled(Version3).returns(true).anyNumberOfTimes()
         MockedAppConfig.endpointsEnabled(Version4).returns(true).anyNumberOfTimes()
         MockedAppConfig.endpointsEnabled(Version5).returns(true).anyNumberOfTimes()
@@ -57,7 +54,7 @@ class ApiDefinitionFactorySpec extends UnitSpec {
               categories = List("INCOME_TAX_MTD"),
               versions = List(
                 APIVersion(
-                  version = Version2,
+                  version = Version3,
                   status = BETA,
                   endpointsEnabled = true
                 ),
@@ -87,7 +84,6 @@ class ApiDefinitionFactorySpec extends UnitSpec {
   "buildAPIStatus" when {
     "the 'apiStatus' parameter is present and valid" should {
       List(
-        (Version2, BETA),
         (Version3, BETA),
         (Version4, BETA),
         (Version5, BETA)
@@ -102,9 +98,9 @@ class ApiDefinitionFactorySpec extends UnitSpec {
 
     "the 'apiStatus' parameter is present and invalid" should {
       "default to alpha" in new Test {
-        MockedAppConfig.apiStatus(Version2) returns "ALPHO"
-        MockedAppConfig.deprecationFor(Version2).returns(NotDeprecated.valid).anyNumberOfTimes()
-        apiDefinitionFactory.buildAPIStatus(version = Version2) shouldBe ALPHA
+        MockedAppConfig.apiStatus(Version3) returns "ALPHO"
+        MockedAppConfig.deprecationFor(Version3).returns(NotDeprecated.valid).anyNumberOfTimes()
+        apiDefinitionFactory.buildAPIStatus(version = Version3) shouldBe ALPHA
       }
     }
 

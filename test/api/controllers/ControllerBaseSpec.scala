@@ -29,7 +29,7 @@ import play.api.libs.json.{JsObject, JsValue, Json}
 import play.api.mvc.{AnyContentAsEmpty, ControllerComponents, Result}
 import play.api.test.Helpers.stubControllerComponents
 import play.api.test.{FakeRequest, ResultExtractors}
-import routing.{Version, Version2}
+import routing.{Version, Version3}
 import support.UnitSpec
 import uk.gov.hmrc.http.HeaderCarrier
 import utils.MockIdGenerator
@@ -38,7 +38,7 @@ import scala.concurrent.Future
 import cats.implicits.catsSyntaxValidatedId
 
 abstract class ControllerBaseSpec extends UnitSpec with Status with MimeTypes with HeaderNames with ResultExtractors with MockAuditService {
-  val apiVersion: Version = Version2
+  val apiVersion: Version = Version3
 
   implicit lazy val fakeRequest: FakeRequest[AnyContentAsEmpty.type] =
     FakeRequest().withHeaders(HeaderNames.ACCEPT -> s"application/vnd.hmrc.${apiVersion.name}+json")

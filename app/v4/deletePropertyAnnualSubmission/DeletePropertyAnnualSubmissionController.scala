@@ -20,7 +20,7 @@ import api.controllers._
 import api.services.{AuditService, EnrolmentsAuthService, MtdIdLookupService}
 import config.AppConfig
 import play.api.mvc.{Action, AnyContent, ControllerComponents}
-import routing.{Version, Version2}
+import routing.{Version, Version3}
 import utils.IdGenerator
 
 import javax.inject.{Inject, Singleton}
@@ -55,7 +55,7 @@ class DeletePropertyAnnualSubmissionController @Inject() (val authService: Enrol
             auditService,
             auditType = "DeletePropertyAnnualSubmission",
             transactionName = "delete-property-annual-submission",
-            apiVersion = Version.from(request, orElse = Version2),
+            apiVersion = Version.from(request, orElse = Version3),
             params = Map("nino" -> nino, "businessId" -> businessId, "taxYear" -> taxYear)
           )
         )

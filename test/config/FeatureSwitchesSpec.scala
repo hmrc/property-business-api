@@ -26,13 +26,13 @@ class FeatureSwitchesSpec extends UnitSpec with ScalaCheckPropertyChecks {
     "return true" when {
       "the feature switch is set to true" in {
         val config = Configuration(
-          "passDeleteIntentHeader.enabled"  -> true,
+          "passIntentHeader.enabled"        -> true,
           "ruleSubmissionDateIssue.enabled" -> true
         )
 
         val featureSwitches = FeatureSwitches(config)
 
-        featureSwitches.isPassDeleteIntentEnabled shouldBe true
+        featureSwitches.isPassIntentEnabled shouldBe true
         featureSwitches.isRuleSubmissionDateErrorEnabled shouldBe true
       }
       "the feature switch is not present in the config" in {
@@ -40,21 +40,21 @@ class FeatureSwitchesSpec extends UnitSpec with ScalaCheckPropertyChecks {
 
         val featureSwitches = FeatureSwitches(config)
 
-        featureSwitches.isPassDeleteIntentEnabled shouldBe true
+        featureSwitches.isPassIntentEnabled shouldBe true
         featureSwitches.isRuleSubmissionDateErrorEnabled shouldBe true
       }
     }
     "return false" when {
       "the feature switch is set to false" in {
         val config = Configuration(
-          "passDeleteIntentHeader.enabled"  -> false,
+          "passIntentHeader.enabled"        -> false,
           "ruleSubmissionDateIssue.enabled" -> false,
           "allowNegativeExpenses.enabled"   -> false
         )
 
         val featureSwitches = FeatureSwitches(config)
 
-        featureSwitches.isPassDeleteIntentEnabled shouldBe false
+        featureSwitches.isPassIntentEnabled shouldBe false
         featureSwitches.isRuleSubmissionDateErrorEnabled shouldBe false
       }
     }

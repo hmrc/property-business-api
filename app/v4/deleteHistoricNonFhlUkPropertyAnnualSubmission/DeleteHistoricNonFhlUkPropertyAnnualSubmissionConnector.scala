@@ -39,7 +39,7 @@ class DeleteHistoricNonFhlUkPropertyAnnualSubmissionConnector @Inject() (val htt
 
     import request._
 
-    val intent        = if (featureSwitches.isPassDeleteIntentEnabled) Some("DELETE") else None
+    val intent        = if (featureSwitches.isPassIntentEnabled) Some("DELETE") else None
     val downstreamUri = IfsUri[Unit](s"income-tax/nino/$nino/uk-properties/other/annual-summaries/${taxYear.asDownstream}")
 
     put(JsObject.empty, downstreamUri, intent)

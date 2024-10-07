@@ -59,11 +59,6 @@ class ApiDefinitionFactorySpec extends UnitSpec {
                   endpointsEnabled = true
                 ),
                 APIVersion(
-                  version = Version3,
-                  status = BETA,
-                  endpointsEnabled = true
-                ),
-                APIVersion(
                   version = Version4,
                   status = BETA,
                   endpointsEnabled = true

@@ -37,9 +37,9 @@ class DeleteHistoricNonFhlUkPropertyAnnualSubmissionConnectorSpec extends Connec
     "send a request and return no content" when {
 
       "sending a non-FHL request" in new IfsTest with Test {
-        override lazy val requiredHeaders: scala.Seq[(String, String)] = requiredIfsHeaders :+ ("intent" -> "DELETE")
+        override lazy val requiredHeaders: scala.Seq[(String, String)] = super.requiredHeaders :+ ("intent" -> "DELETE")
 
-        MockFeatureSwitches.isPassDeleteIntentEnabled.returns(true)
+        MockFeatureSwitches.isPassIntentEnabled.returns(true)
 
         willPut(
           url = s"$baseUrl/income-tax/nino/$nino/uk-properties/other/annual-summaries/2022",
@@ -51,10 +51,10 @@ class DeleteHistoricNonFhlUkPropertyAnnualSubmissionConnectorSpec extends Connec
         result shouldBe expectedOutcome
       }
 
-      "isPassDeleteIntentHeader feature switch is off" in new IfsTest with Test {
+      "isPassIntentHeader feature switch is off" in new IfsTest with Test {
         override lazy val excludedHeaders: scala.Seq[(String, String)] = super.excludedHeaders :+ ("intent" -> "DELETE")
 
-        MockFeatureSwitches.isPassDeleteIntentEnabled returns false
+        MockFeatureSwitches.isPassIntentEnabled returns false
 
         willPut(url = s"$baseUrl/income-tax/nino/$nino/uk-properties/other/annual-summaries/2022", body = JsObject.empty)
           .returns(Future.successful(expectedOutcome))

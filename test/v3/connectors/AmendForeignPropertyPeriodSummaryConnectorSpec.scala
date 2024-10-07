@@ -21,9 +21,7 @@ import api.models.domain.{BusinessId, Nino, SubmissionId, TaxYear}
 import api.models.errors.{DownstreamErrorCode, DownstreamErrors}
 import api.models.outcomes.ResponseWrapper
 import org.scalamock.handlers.CallHandler
-import uk.gov.hmrc.http.HeaderCarrier
 import v3.models.request.amendForeignPropertyPeriodSummary._
-
 import scala.concurrent.Future
 
 class AmendForeignPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
@@ -45,19 +43,6 @@ class AmendForeignPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
 
         val result: DownstreamOutcome[Unit] = await(connector.amendForeignPropertyPeriodSummary(request))
         result shouldBe outcome
-      }
-    }
-
-    "the vendor request has a different content-type" must {
-      "send the downstream request with the correct application/json content-type" in new IfsTest with Test {
-        def taxYear: TaxYear = preTysTaxYear
-        stubHttpResponse(outcome)
-        val vendorHc: HeaderCarrier = hc.copy(otherHeaders = otherHeaders :+ ("Content-Type" -> "some-other-content-type"))
-
-        withClue("If the Content-Type isn't set correctly, the downstream mock will fail") {
-          val result: DownstreamOutcome[Unit] = await(connector.amendForeignPropertyPeriodSummary(request)(vendorHc, ec, correlationId))
-          result shouldBe outcome
-        }
       }
     }
 

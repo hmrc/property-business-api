@@ -24,7 +24,7 @@ trait MockFeatureSwitches extends MockFactory {
   implicit val mockFeatureSwitches: FeatureSwitches = mock[FeatureSwitches]
 
   object MockFeatureSwitches {
-    def isPassDeleteIntentEnabled: CallHandler[Boolean]        = (() => mockFeatureSwitches.isPassDeleteIntentEnabled).expects()
+    def isPassIntentEnabled: CallHandler[Boolean]              = (() => mockFeatureSwitches.isPassIntentEnabled).expects()
     def isRuleSubmissionDateErrorEnabled: CallHandler[Boolean] = (() => mockFeatureSwitches.isRuleSubmissionDateErrorEnabled).expects()
   }
 

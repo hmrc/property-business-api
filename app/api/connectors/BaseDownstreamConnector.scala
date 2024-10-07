@@ -16,13 +16,11 @@
 
 package api.connectors
 
-import api.connectors.DownstreamUri.{DesUri, IfsUri, TaxYearSpecificIfsUri}
 import config.AppConfig
 import play.api.http.{HeaderNames, MimeTypes}
 import play.api.libs.json.Writes
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, HttpReads}
-import utils.Logging
-import utils.UrlUtils.appendQueryParams
+import utils.{Logging, UrlUtils}
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -30,97 +28,107 @@ trait BaseDownstreamConnector extends Logging {
   val http: HttpClient
   val appConfig: AppConfig
 
-  private val jsonContentTypeHeader = HeaderNames.CONTENT_TYPE -> MimeTypes.JSON
+  // This is to provide an implicit AppConfig in existing connector implementations (which
+  // typically declare the abstract `appConfig` field non-implicitly) without having to change them.
+  implicit protected lazy val _appConfig: AppConfig = appConfig
 
-  def post[Body: Writes, Resp](body: Body, uri: DownstreamUri[Resp])(implicit
+  private val jsonContentTypeHeader = Seq(HeaderNames.CONTENT_TYPE -> MimeTypes.JSON)
+
+  def post[Body: Writes, Resp](body: Body, uri: DownstreamUri[Resp], maybeIntent: Option[String] = None)(implicit
       ec: ExecutionContext,
       hc: HeaderCarrier,
       httpReads: HttpReads[DownstreamOutcome[Resp]],
       correlationId: String): Future[DownstreamOutcome[Resp]] = {
+
+    val strategy = uri.strategy
 
     def doPost(implicit hc: HeaderCarrier): Future[DownstreamOutcome[Resp]] = {
-      http.POST(getBackendUri(uri), body)
+      http.POST(getBackendUri(uri.path, strategy), body)
     }
 
-    doPost(getBackendHeaders(uri, hc, correlationId, jsonContentTypeHeader))
+    for {
+      headers <- getBackendHeaders(strategy, jsonContentTypeHeader ++ intentHeader(maybeIntent))
+      result  <- doPost(headers)
+    } yield result
   }
 
-  def get[Resp](uri: DownstreamUri[Resp], queryParams: Seq[(String, String)] = Nil)(implicit
+  def get[Resp](uri: DownstreamUri[Resp], queryParams: Seq[(String, String)] = Nil, maybeIntent: Option[String] = None)(implicit
       ec: ExecutionContext,
       hc: HeaderCarrier,
       httpReads: HttpReads[DownstreamOutcome[Resp]],
       correlationId: String): Future[DownstreamOutcome[Resp]] = {
 
-    def doGet(implicit hc: HeaderCarrier): Future[DownstreamOutcome[Resp]] = {
-      http.GET(getBackendUri(uri), queryParams)
-    }
+    val strategy = uri.strategy
 
-    doGet(getBackendHeaders(uri, hc, correlationId))
+    def doGet(implicit hc: HeaderCarrier): Future[DownstreamOutcome[Resp]] =
+      http.GET(getBackendUri(uri.path, strategy), queryParams)
+
+    for {
+      headers <- getBackendHeaders(strategy, intentHeader(maybeIntent))
+      result  <- doGet(headers)
+    } yield result
   }
 
-  def put[Body: Writes, Resp](body: Body, uri: DownstreamUri[Resp], intent: Option[String] = None)(implicit
+  def delete[Resp](uri: DownstreamUri[Resp], queryParams: Seq[(String, String)] = Nil, maybeIntent: Option[String] = None)(implicit
       ec: ExecutionContext,
       hc: HeaderCarrier,
       httpReads: HttpReads[DownstreamOutcome[Resp]],
       correlationId: String): Future[DownstreamOutcome[Resp]] = {
 
-    def doPut(implicit hc: HeaderCarrier): Future[DownstreamOutcome[Resp]] = {
-      http.PUT(getBackendUri(uri), body)
-    }
-
-    intent match {
-      case Some(x) => doPut(getBackendHeaders(uri, hc, correlationId, jsonContentTypeHeader, ("intent", x)))
-      case None    => doPut(getBackendHeaders(uri, hc, correlationId, jsonContentTypeHeader))
-    }
-
-  }
-
-  def delete[Resp](uri: DownstreamUri[Resp], queryParams: Seq[(String, String)] = Nil)(implicit
-      ec: ExecutionContext,
-      hc: HeaderCarrier,
-      httpReads: HttpReads[DownstreamOutcome[Resp]],
-      correlationId: String): Future[DownstreamOutcome[Resp]] = {
+    val strategy = uri.strategy
 
     def doDelete(implicit hc: HeaderCarrier): Future[DownstreamOutcome[Resp]] = {
-      // http.DELETE doesn't accept query params (unlike http.GET), so need to construct the query here:
-      val downstreamUri = appendQueryParams(getBackendUri(uri), queryParams)
-      http.DELETE(downstreamUri)
+      val fullUrl = UrlUtils.appendQueryParams(getBackendUri(uri.path, strategy), queryParams)
+      http.DELETE(fullUrl)
     }
 
-    doDelete(getBackendHeaders(uri, hc, correlationId))
+    for {
+      headers <- getBackendHeaders(strategy, intentHeader(maybeIntent))
+      result  <- doDelete(headers)
+    } yield result
   }
 
-  private def getBackendUri[Resp](uri: DownstreamUri[Resp]): String =
-    s"${configFor(uri).baseUrl}/${uri.value}"
+  def put[Body: Writes, Resp](body: Body, uri: DownstreamUri[Resp], maybeIntent: Option[String] = None)(implicit
+      ec: ExecutionContext,
+      hc: HeaderCarrier,
+      httpReads: HttpReads[DownstreamOutcome[Resp]],
+      correlationId: String): Future[DownstreamOutcome[Resp]] = {
 
-  private def getBackendHeaders[Resp](uri: DownstreamUri[Resp],
-                                      hc: HeaderCarrier,
-                                      correlationId: String,
-                                      additionalHeaders: (String, String)*): HeaderCarrier = {
-    val downstreamConfig = configFor(uri)
+    val strategy = uri.strategy
 
-    val passThroughHeaders = hc
-      .headers(downstreamConfig.environmentHeaders.getOrElse(Nil))
-      .filterNot(hdr => additionalHeaders.exists(_._1.equalsIgnoreCase(hdr._1)))
-
-    HeaderCarrier(
-      extraHeaders = hc.extraHeaders ++
-        // Contract headers
-        List(
-          "Authorization" -> s"Bearer ${downstreamConfig.token}",
-          "Environment"   -> downstreamConfig.env,
-          "CorrelationId" -> correlationId
-        ) ++
-        additionalHeaders ++
-        passThroughHeaders
-    )
-  }
-
-  private def configFor[Resp](uri: DownstreamUri[Resp]) =
-    uri match {
-      case DesUri(_)                => appConfig.desDownstreamConfig
-      case IfsUri(_)                => appConfig.ifsDownstreamConfig
-      case TaxYearSpecificIfsUri(_) => appConfig.taxYearSpecificIfsDownstreamConfig
+    def doPut(implicit hc: HeaderCarrier): Future[DownstreamOutcome[Resp]] = {
+      http.PUT(getBackendUri(uri.path, strategy), body)
     }
+
+    for {
+      headers <- getBackendHeaders(strategy, jsonContentTypeHeader ++ intentHeader(maybeIntent))
+      result  <- doPut(headers)
+    } yield result
+  }
+
+  private def intentHeader(maybeIntent: Option[String]) =
+    maybeIntent.map(intent => Seq("intent" -> intent)).getOrElse(Nil)
+
+  private def getBackendUri(path: String, strategy: DownstreamStrategy): String =
+    s"${strategy.baseUrl}/$path"
+
+  private def getBackendHeaders(
+      strategy: DownstreamStrategy,
+      additionalHeaders: Seq[(String, String)]
+  )(implicit ec: ExecutionContext, hc: HeaderCarrier, correlationId: String): Future[HeaderCarrier] = {
+
+    for {
+      contractHeaders <- strategy.contractHeaders(correlationId)
+    } yield {
+      val apiHeaders = hc.extraHeaders ++ contractHeaders ++ additionalHeaders
+
+      val passThroughHeaders = hc
+        .headers(strategy.environmentHeaders)
+        .filterNot(hdr => apiHeaders.exists(_._1.equalsIgnoreCase(hdr._1)))
+
+      HeaderCarrier(extraHeaders = apiHeaders ++ passThroughHeaders)
+    }
+
+  }
 
 }

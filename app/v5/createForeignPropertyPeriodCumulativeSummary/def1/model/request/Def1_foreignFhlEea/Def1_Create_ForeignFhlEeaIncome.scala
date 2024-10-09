@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-package v5.createForeignPropertyPeriodSummary.model.response
+package v5.createForeignPropertyPeriodCumulativeSummary.def1.model.request.Def1_foreignFhlEea
 
-import play.api.libs.json.{Json, OFormat}
+import play.api.libs.json.{Format, Json}
 
-case class CreateForeignPropertyPeriodSummaryResponse(submissionId: String)
+case class Def1_Create_ForeignFhlEeaIncome(rentAmount: Option[BigDecimal])
 
-object CreateForeignPropertyPeriodSummaryResponse {
-  implicit val format: OFormat[CreateForeignPropertyPeriodSummaryResponse] = Json.format[CreateForeignPropertyPeriodSummaryResponse]
+object Def1_Create_ForeignFhlEeaIncome {
+  implicit val format: Format[Def1_Create_ForeignFhlEeaIncome] = Json.format
 }

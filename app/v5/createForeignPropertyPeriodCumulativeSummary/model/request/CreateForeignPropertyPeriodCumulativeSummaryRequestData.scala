@@ -14,25 +14,19 @@
  * limitations under the License.
  */
 
-package v5.createForeignPropertyPeriodSummary.model.request
+package v5.createForeignPropertyPeriodCumulativeSummary.model.request
 
 import api.models.domain.{BusinessId, Nino, TaxYear}
 
-sealed trait CreateForeignPropertyPeriodSummaryRequestData {
+sealed trait CreateForeignPropertyPeriodCumulativeSummaryRequestData {
   val nino: Nino
   val businessId: BusinessId
   val taxYear: TaxYear
-  def body: CreateForeignPropertyPeriodSummaryRequestBody
+  def body: CreateForeignPropertyPeriodCumulativeSummaryRequestBody
 }
 
-case class Def1_CreateForeignPropertyPeriodSummaryRequestData(nino: Nino,
+case class Def1_CreateForeignPropertyPeriodCumulativeSummaryRequestData(nino: Nino,
                                                               businessId: BusinessId,
                                                               taxYear: TaxYear,
-                                                              body: Def1_CreateForeignPropertyPeriodSummaryRequestBody)
-    extends CreateForeignPropertyPeriodSummaryRequestData
-
-case class Def2_CreateForeignPropertyPeriodSummaryRequestData(nino: Nino,
-                                                              businessId: BusinessId,
-                                                              taxYear: TaxYear,
-                                                              body: Def2_CreateForeignPropertyPeriodSummaryRequestBody)
-    extends CreateForeignPropertyPeriodSummaryRequestData
+                                                              body: Def1_CreateForeignPropertyPeriodCumulativeSummaryRequestBody)
+    extends CreateForeignPropertyPeriodCumulativeSummaryRequestData

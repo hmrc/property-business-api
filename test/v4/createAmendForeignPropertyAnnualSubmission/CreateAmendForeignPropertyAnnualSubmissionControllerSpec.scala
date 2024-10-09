@@ -109,7 +109,7 @@ class CreateAmendForeignPropertyAnnualSubmissionControllerSpec
         auditType = "CreateAmendForeignPropertyAnnualSubmission",
         transactionName = "create-amend-foreign-property-annual-submission",
         detail = GenericAuditDetail(
-          versionNumber = "2.0",
+          versionNumber = "3.0",
           userType = "Individual",
           agentReferenceNumber = None,
           params = Map("nino" -> nino, "businessId" -> businessId, "taxYear" -> taxYear),

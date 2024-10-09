@@ -33,7 +33,7 @@ import play.api.http.{HeaderNames, Status}
 import play.api.libs.json.{JsString, Json, OWrites}
 import play.api.mvc.{AnyContent, AnyContentAsEmpty}
 import play.api.test.{FakeRequest, ResultExtractors}
-import routing.{Version, Version3}
+import routing.{Version, Version5}
 import support.UnitSpec
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.audit.http.connector.AuditResult
@@ -83,7 +83,7 @@ class RequestHandlerSpec
   implicit val ctx: RequestContext = RequestContext.from(mockIdGenerator, endpointLogContext)
 
   implicit val userRequest: UserRequest[AnyContent] = {
-    val fakeRequest: FakeRequest[AnyContentAsEmpty.type] = FakeRequest().withHeaders(HeaderNames.ACCEPT -> "application/vnd.hmrc.2.0+json")
+    val fakeRequest: FakeRequest[AnyContentAsEmpty.type] = FakeRequest().withHeaders(HeaderNames.ACCEPT -> "application/vnd.hmrc.5.0+json")
     UserRequest[AnyContent](userDetails, fakeRequest)
   }
 
@@ -261,7 +261,7 @@ class RequestHandlerSpec
         mockAuditService,
         auditType = auditType,
         transactionName = txName,
-        apiVersion = Version3,
+        apiVersion = Version5,
         params = params,
         requestBody = requestBody,
         includeResponse = includeResponse
@@ -285,7 +285,7 @@ class RequestHandlerSpec
             GenericAuditDetail(
               userDetails,
               params = params,
-              apiVersion = Version3.name,
+              apiVersion = Version5.name,
               requestBody = requestBody,
               `X-CorrelationId` = correlationId,
               auditResponse = auditResponse)

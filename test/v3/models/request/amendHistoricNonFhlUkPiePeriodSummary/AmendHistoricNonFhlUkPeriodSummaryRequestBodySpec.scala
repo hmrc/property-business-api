@@ -25,13 +25,13 @@ class AmendHistoricNonFhlUkPeriodSummaryRequestBodySpec extends UnitSpec with Am
   "reads" when {
     "passed a valid JSON with full data" should {
       "return a valid model" in {
-        mtdJsonRequestFull.as[AmendHistoricNonFhlUkPiePeriodSummaryRequestBody] shouldBe requestBodyFull
+        mtdJsonRequestFull.as[AmendHistoricNonFhlUkPeriodSummaryRequestBody] shouldBe requestBodyFull
       }
     }
 
     "passed a valid JSON with consolidated data" should {
       "return a valid model" in {
-        mtdJsonRequestConsolidated.as[AmendHistoricNonFhlUkPiePeriodSummaryRequestBody] shouldBe requestBodyConsolidated
+        mtdJsonRequestConsolidated.as[AmendHistoricNonFhlUkPeriodSummaryRequestBody] shouldBe requestBodyConsolidated
       }
     }
   }

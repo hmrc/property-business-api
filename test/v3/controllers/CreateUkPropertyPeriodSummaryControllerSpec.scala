@@ -142,7 +142,7 @@ class CreateUkPropertyPeriodSummaryControllerSpec
         auditType = "CreateUKPropertyIncomeAndExpensesPeriodSummary",
         transactionName = "create-uk-property-income-and-expenses-period-summary",
         detail = GenericAuditDetail(
-          versionNumber = "2.0",
+          versionNumber = "3.0",
           userType = "Individual",
           agentReferenceNumber = None,
           params = Map("nino" -> nino, "businessId" -> businessId, "taxYear" -> taxYear),

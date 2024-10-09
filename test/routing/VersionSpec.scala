@@ -25,8 +25,8 @@ class VersionSpec extends UnitSpec {
 
   "serialized to Json" must {
     "return the expected Json output" in {
-      val version: Version = Version2
-      val expected         = Json.parse(""" "2.0" """)
+      val version: Version = Version3
+      val expected         = Json.parse(""" "3.0" """)
       val result           = Json.toJson(version)
       result shouldBe expected
     }

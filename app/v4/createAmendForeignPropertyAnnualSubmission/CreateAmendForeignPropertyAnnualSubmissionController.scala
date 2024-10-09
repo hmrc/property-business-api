@@ -21,7 +21,7 @@ import api.services.{AuditService, EnrolmentsAuthService, MtdIdLookupService}
 import config.AppConfig
 import play.api.libs.json.JsValue
 import play.api.mvc.{Action, ControllerComponents}
-import routing.{Version, Version2}
+import routing.{Version, Version3}
 import utils.IdGenerator
 
 import javax.inject.{Inject, Singleton}
@@ -58,7 +58,7 @@ class CreateAmendForeignPropertyAnnualSubmissionController @Inject() (val authSe
             auditService,
             "CreateAmendForeignPropertyAnnualSubmission",
             "create-amend-foreign-property-annual-submission",
-            Version.from(request, orElse = Version2),
+            Version.from(request, orElse = Version3),
             params = Map("nino" -> nino, "businessId" -> businessId, "taxYear" -> taxYear),
             requestBody = Some(request.body)
           )

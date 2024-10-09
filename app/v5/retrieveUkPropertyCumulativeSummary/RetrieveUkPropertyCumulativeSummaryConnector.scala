@@ -17,10 +17,9 @@
 package v5.retrieveUkPropertyCumulativeSummary
 
 import api.connectors.DownstreamUri.TaxYearSpecificIfsUri
-
 import api.connectors.httpparsers.StandardDownstreamHttpParser._
 import api.connectors.{BaseDownstreamConnector, DownstreamOutcome, DownstreamUri}
-import config.AppConfig
+import config.{AppConfig, FeatureSwitches}
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
 import v5.retrieveUkPropertyCumulativeSummary.RetrieveUkPropertyCumulativeSummaryConnector._
 import v5.retrieveUkPropertyCumulativeSummary.model.request._
@@ -49,10 +48,12 @@ class RetrieveUkPropertyCumulativeSummaryConnector @Inject() (val http: HttpClie
     import request._
     import schema._
 
+    val maybeIntent = if (FeatureSwitches(appConfig).isPassIntentEnabled) Some("UK_PROPERTY") else None
+
     val downstreamUri: DownstreamUri[DownstreamResp] = TaxYearSpecificIfsUri[DownstreamResp](
       s"income-tax/${taxYear.asTysDownstream}/business/property/periodic/${nino.value}/${businessId.businessId}")
 
-    get(uri = downstreamUri)
+    get(uri = downstreamUri, maybeIntent = maybeIntent)
       .map(_.map(_.map { response => if (response.hasUkData) UkResult(response) else NonUkResult }))
   }
 

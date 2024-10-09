@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package v5.createForeignPropertyPeriodSummary.def1
+package v5.createForeignPropertyPeriodCumulativeSummary.def1
 
 import api.controllers.validators.Validator
 import api.controllers.validators.resolvers.{ResolveBusinessId, ResolveNino, ResolveNonEmptyJsonObject, ResolveTaxYear}
@@ -24,27 +24,27 @@ import cats.data.Validated
 import cats.implicits._
 import config.AppConfig
 import play.api.libs.json.JsValue
-import v5.createForeignPropertyPeriodSummary.def1.Def1_CreateForeignPropertyPeriodSummaryRulesValidator.validateBusinessRules
-import v5.createForeignPropertyPeriodSummary.model.request._
+import v5.createForeignPropertyPeriodCumulativeSummary.def1.Def1_CreateForeignPropertyPeriodCumulativeSummaryRulesValidator.validateBusinessRules
+import v5.createForeignPropertyPeriodCumulativeSummary.model.request._
 
-class Def1_CreateForeignPropertyPeriodSummaryValidator(nino: String,
+class Def1_CreateForeignPropertyPeriodCumulativeSummaryValidator(nino: String,
                                                        businessId: String,
                                                        taxYear: String,
                                                        maxTaxYear: TaxYear,
                                                        body: JsValue,
                                                        appConfig: AppConfig)
-    extends Validator[CreateForeignPropertyPeriodSummaryRequestData] {
+    extends Validator[CreateForeignPropertyPeriodCumulativeSummaryRequestData] {
 
   private lazy val minimumTaxYear = appConfig.minimumTaxV2Foreign
 
-  private val resolveJson = new ResolveNonEmptyJsonObject[Def1_CreateForeignPropertyPeriodSummaryRequestBody]()
+  private val resolveJson = new ResolveNonEmptyJsonObject[Def1_CreateForeignPropertyPeriodCumulativeSummaryRequestBody]()
 
-  def validate: Validated[Seq[MtdError], CreateForeignPropertyPeriodSummaryRequestData] =
+  def validate: Validated[Seq[MtdError], CreateForeignPropertyPeriodCumulativeSummaryRequestData] =
     (
       ResolveNino(nino),
       ResolveBusinessId(businessId),
       ResolveTaxYear(value = taxYear, minimumTaxYear = minimumTaxYear, maximumTaxYear = maxTaxYear),
       resolveJson(body)
-    ).mapN(Def1_CreateForeignPropertyPeriodSummaryRequestData) andThen validateBusinessRules
+    ).mapN(Def1_CreateForeignPropertyPeriodCumulativeSummaryRequestData) andThen validateBusinessRules
 
 }

@@ -14,24 +14,24 @@
  * limitations under the License.
  */
 
-package v5.createForeignPropertyPeriodSummary
+package v5.createForeignPropertyPeriodCumulativeSummary
 
 import api.controllers.RequestContext
 import api.models.errors._
 import api.services.{BaseService, ServiceOutcome}
 import cats.implicits._
-import v5.createForeignPropertyPeriodSummary.model.request.CreateForeignPropertyPeriodSummaryRequestData
-import v5.createForeignPropertyPeriodSummary.model.response.CreateForeignPropertyPeriodSummaryResponse
+import v5.createForeignPropertyPeriodCumulativeSummary.model.request.CreateForeignPropertyPeriodCumulativeSummaryRequestData
+import v5.createForeignPropertyPeriodCumulativeSummary.model.response.CreateForeignPropertyPeriodCumulativeSummaryResponse
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class CreateForeignPropertyPeriodSummaryService @Inject() (connector: CreateForeignPropertyPeriodSummaryConnector) extends BaseService {
+class CreateForeignPropertyPeriodCumulativeSummaryService @Inject() (connector: CreateForeignPropertyPeriodCumulativeSummaryConnector) extends BaseService {
 
-  def createForeignProperty(request: CreateForeignPropertyPeriodSummaryRequestData)(implicit
+  def createForeignProperty(request: CreateForeignPropertyPeriodCumulativeSummaryRequestData)(implicit
       ctx: RequestContext,
-      ec: ExecutionContext): Future[ServiceOutcome[CreateForeignPropertyPeriodSummaryResponse]] = {
+      ec: ExecutionContext): Future[ServiceOutcome[CreateForeignPropertyPeriodCumulativeSummaryResponse]] = {
 
     connector.createForeignProperty(request).map(_.leftMap(mapDownstreamErrors(downstreamErrorMap)))
   }

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package v5.createForeignPropertyPeriodSummary.def1
+package v5.createForeignPropertyPeriodCumulativeSummary.def1
 
 import api.controllers.validators.RulesValidator
 import api.controllers.validators.resolvers.{ResolveFromAndToDates, ResolveParsedCountryCode, ResolveParsedNumber}
@@ -22,22 +22,22 @@ import api.models.errors._
 import cats.data.Validated
 import cats.data.Validated.Invalid
 import cats.implicits.toTraverseOps
-import v5.createForeignPropertyPeriodSummary.def1.model.request.Def1_foreignFhlEea.{
+import v5.createForeignPropertyPeriodCumulativeSummary.def1.model.request.Def1_foreignFhlEea.{
   Def1_Create_CreateForeignFhlEea,
   Def1_Create_CreateForeignFhlEeaExpenses
 }
-import v5.createForeignPropertyPeriodSummary.def1.model.request.Def1_foreignPropertyEntry.{
+import v5.createForeignPropertyPeriodCumulativeSummary.def1.model.request.Def1_foreignPropertyEntry.{
   Def1_Create_CreateForeignNonFhlPropertyEntry,
   Def1_Create_CreateForeignNonFhlPropertyExpenses
 }
-import v5.createForeignPropertyPeriodSummary.model.request.Def1_CreateForeignPropertyPeriodSummaryRequestData
+import v5.createForeignPropertyPeriodCumulativeSummary.model.request.Def1_CreateForeignPropertyPeriodCumulativeSummaryRequestData
 
-object Def1_CreateForeignPropertyPeriodSummaryRulesValidator extends RulesValidator[Def1_CreateForeignPropertyPeriodSummaryRequestData] {
+object Def1_CreateForeignPropertyPeriodCumulativeSummaryRulesValidator extends RulesValidator[Def1_CreateForeignPropertyPeriodCumulativeSummaryRequestData] {
 
   private val resolveParsedNumber = ResolveParsedNumber()
 
   def validateBusinessRules(
-      parsed: Def1_CreateForeignPropertyPeriodSummaryRequestData): Validated[Seq[MtdError], Def1_CreateForeignPropertyPeriodSummaryRequestData] = {
+      parsed: Def1_CreateForeignPropertyPeriodCumulativeSummaryRequestData): Validated[Seq[MtdError], Def1_CreateForeignPropertyPeriodCumulativeSummaryRequestData] = {
     import parsed.body._
 
     combine(

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package v5.createForeignPropertyPeriodSummary
+package v5.createForeignPropertyPeriodCumulativeSummary
 
 import api.connectors.DownstreamUri.{IfsUri, TaxYearSpecificIfsUri}
 import api.connectors.httpparsers.StandardDownstreamHttpParser.{SuccessCode, reads}
@@ -22,44 +22,34 @@ import api.connectors.{BaseDownstreamConnector, DownstreamOutcome}
 import config.AppConfig
 import play.api.http.Status.OK
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
-import v5.createForeignPropertyPeriodSummary.model.request.{
-  CreateForeignPropertyPeriodSummaryRequestData,
-  Def1_CreateForeignPropertyPeriodSummaryRequestData,
-  Def2_CreateForeignPropertyPeriodSummaryRequestData
-}
-import v5.createForeignPropertyPeriodSummary.model.response.CreateForeignPropertyPeriodSummaryResponse
+import v5.createForeignPropertyPeriodCumulativeSummary.model.request.{CreateForeignPropertyPeriodCumulativeSummaryRequestData, Def1_CreateForeignPropertyPeriodCumulativeSummaryRequestData}
+import v5.createForeignPropertyPeriodCumulativeSummary.model.response.CreateForeignPropertyPeriodCumulativeSummaryResponse
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class CreateForeignPropertyPeriodSummaryConnector @Inject() (val http: HttpClient, val appConfig: AppConfig) extends BaseDownstreamConnector {
+class CreateForeignPropertyPeriodCumulativeSummaryConnector @Inject() (val http: HttpClient, val appConfig: AppConfig) extends BaseDownstreamConnector {
 
-  def createForeignProperty(request: CreateForeignPropertyPeriodSummaryRequestData)(implicit
+  def createForeignProperty(request: CreateForeignPropertyPeriodCumulativeSummaryRequestData)(implicit
       hc: HeaderCarrier,
       ec: ExecutionContext,
-      correlationId: String): Future[DownstreamOutcome[CreateForeignPropertyPeriodSummaryResponse]] = {
+      correlationId: String): Future[DownstreamOutcome[CreateForeignPropertyPeriodCumulativeSummaryResponse]] = {
 
     implicit val successCode: SuccessCode = SuccessCode(OK)
 
     request match {
-      case def1: Def1_CreateForeignPropertyPeriodSummaryRequestData =>
+      case def1: Def1_CreateForeignPropertyPeriodCumulativeSummaryRequestData =>
         import def1._
         val downstreamUri =
           if (taxYear.isTys) {
-            TaxYearSpecificIfsUri[CreateForeignPropertyPeriodSummaryResponse](
+            TaxYearSpecificIfsUri[CreateForeignPropertyPeriodCumulativeSummaryResponse](
               s"income-tax/business/property/periodic/${taxYear.asTysDownstream}?taxableEntityId=$nino&incomeSourceId=$businessId")
           } else {
-            IfsUri[CreateForeignPropertyPeriodSummaryResponse](
+            IfsUri[CreateForeignPropertyPeriodCumulativeSummaryResponse](
               s"income-tax/business/property/periodic?taxableEntityId=$nino&taxYear=${taxYear.asMtd}&incomeSourceId=$businessId")
           }
 
-        post(body, downstreamUri)
-
-      case def2: Def2_CreateForeignPropertyPeriodSummaryRequestData =>
-        import def2._
-        val downstreamUri = TaxYearSpecificIfsUri[CreateForeignPropertyPeriodSummaryResponse](
-          s"income-tax/business/property/periodic/${taxYear.asTysDownstream}?taxableEntityId=$nino&incomeSourceId=$businessId")
         post(body, downstreamUri)
     }
   }

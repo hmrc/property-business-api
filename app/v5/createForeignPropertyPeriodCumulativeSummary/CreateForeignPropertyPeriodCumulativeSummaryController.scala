@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package v5.createForeignPropertyPeriodSummary
+package v5.createForeignPropertyPeriodCumulativeSummary
 
 import api.controllers._
 import api.services.{AuditService, EnrolmentsAuthService, MtdIdLookupService}
@@ -28,21 +28,21 @@ import javax.inject.{Inject, Singleton}
 import scala.concurrent.ExecutionContext
 
 @Singleton
-class CreateForeignPropertyPeriodSummaryController @Inject() (val authService: EnrolmentsAuthService,
+class CreateForeignPropertyPeriodCumulativeSummaryController @Inject() (val authService: EnrolmentsAuthService,
                                                               val lookupService: MtdIdLookupService,
-                                                              validatorFactory: CreateForeignPropertyPeriodSummaryValidatorFactory,
-                                                              service: CreateForeignPropertyPeriodSummaryService,
+                                                              validatorFactory: CreateForeignPropertyPeriodCumulativeSummaryValidatorFactory,
+                                                              service: CreateForeignPropertyPeriodCumulativeSummaryService,
                                                               auditService: AuditService,
                                                               cc: ControllerComponents,
                                                               idGenerator: IdGenerator)(implicit ec: ExecutionContext, appConfig: AppConfig)
     extends AuthorisedController(cc) {
 
-  override val endpointName: String = "create-foreign-property-period-summary"
+  override val endpointName: String = "create-foreign-property-period-cumulative-summary"
 
   implicit val endpointLogContext: EndpointLogContext =
     EndpointLogContext(
-      controllerName = "CreateForeignPropertyPeriodSummaryController",
-      endpointName = "Create a Foreign Property Income & Expenditure Period Summary")
+      controllerName = "CreateForeignPropertyPeriodCumulativeSummaryController",
+      endpointName = "Create a Foreign Property Income & Expenditure Period Cumulative Summary")
 
   def handleRequest(nino: String, businessId: String, taxYear: String): Action[JsValue] =
     authorisedAction(nino).async(parse.json) { implicit request =>

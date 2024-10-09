@@ -47,7 +47,7 @@ class Def1_RetrieveUkPropertyCumulativeSummaryISpec extends IntegrationBaseSpec 
       AuthStub.authorised()
       MtdIdLookupStub.ninoFound(nino)
       setupStubs()
-      buildRequest(s"/individuals/business/property/uk/$nino/$businessId/cumulative/$taxYear")
+      buildRequest(s"/uk/$nino/$businessId/cumulative/$taxYear")
         .withHttpHeaders(
           (ACCEPT, "application/vnd.hmrc.5.0+json"),
           (AUTHORIZATION, "Bearer 123")

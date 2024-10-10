@@ -18,7 +18,6 @@ package v5.createForeignPropertyPeriodCumulativeSummary.def1
 
 import api.controllers.validators.Validator
 import api.controllers.validators.resolvers.{ResolveBusinessId, ResolveNino, ResolveNonEmptyJsonObject, ResolveTaxYear}
-import api.models.domain.TaxYear
 import api.models.errors.MtdError
 import cats.data.Validated
 import cats.implicits._
@@ -28,14 +27,13 @@ import v5.createForeignPropertyPeriodCumulativeSummary.def1.Def1_CreateForeignPr
 import v5.createForeignPropertyPeriodCumulativeSummary.model.request._
 
 class Def1_CreateForeignPropertyPeriodCumulativeSummaryValidator(nino: String,
-                                                       businessId: String,
-                                                       taxYear: String,
-                                                       maxTaxYear: TaxYear,
-                                                       body: JsValue,
-                                                       appConfig: AppConfig)
+                                                                 businessId: String,
+                                                                 taxYear: String,
+                                                                 body: JsValue,
+                                                                 appConfig: AppConfig)
     extends Validator[CreateForeignPropertyPeriodCumulativeSummaryRequestData] {
 
-  private lazy val minimumTaxYear = appConfig.minimumTaxV2Foreign
+  private lazy val minimumTaxYear = appConfig.minimumTaxV3Foreign
 
   private val resolveJson = new ResolveNonEmptyJsonObject[Def1_CreateForeignPropertyPeriodCumulativeSummaryRequestBody]()
 
@@ -43,7 +41,7 @@ class Def1_CreateForeignPropertyPeriodCumulativeSummaryValidator(nino: String,
     (
       ResolveNino(nino),
       ResolveBusinessId(businessId),
-      ResolveTaxYear(value = taxYear, minimumTaxYear = minimumTaxYear, maximumTaxYear = maxTaxYear),
+      ResolveTaxYear(value = taxYear, minimumTaxYear = minimumTaxYear),
       resolveJson(body)
     ).mapN(Def1_CreateForeignPropertyPeriodCumulativeSummaryRequestData) andThen validateBusinessRules
 

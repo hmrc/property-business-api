@@ -61,6 +61,7 @@ trait AppConfig {
   def endpointReleasedInProduction(version: String, name: String): Boolean
 
   def minimumTaxV2Foreign: TaxYear
+  def minimumTaxV3Foreign: TaxYear
   def minimumTaxV2Uk: TaxYear
 
   def minimumTaxYearHistoric: TaxYear
@@ -134,6 +135,7 @@ class AppConfigImpl @Inject() (config: ServicesConfig, val configuration: Config
   }
 
   val minimumTaxV2Foreign: TaxYear = TaxYear.starting(config.getInt("minimum-tax-year.version-2.foreign"))
+  val minimumTaxV3Foreign: TaxYear = TaxYear.starting(config.getInt("minimum-tax-year.version-3.foreign"))
   val minimumTaxV2Uk: TaxYear      = TaxYear.starting(config.getInt("minimum-tax-year.version-2.uk"))
 
   val minimumTaxYearHistoric: TaxYear = TaxYear.starting(config.getInt("minimum-tax-year.version-2.historic"))

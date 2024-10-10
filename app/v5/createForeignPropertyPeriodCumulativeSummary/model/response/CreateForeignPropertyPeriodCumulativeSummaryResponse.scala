@@ -21,5 +21,8 @@ import play.api.libs.json.{Json, OFormat}
 case class CreateForeignPropertyPeriodCumulativeSummaryResponse(submissionId: String)
 
 object CreateForeignPropertyPeriodCumulativeSummaryResponse {
-  implicit val format: OFormat[CreateForeignPropertyPeriodCumulativeSummaryResponse] = Json.format[CreateForeignPropertyPeriodCumulativeSummaryResponse]
+
+  implicit val format: OFormat[CreateForeignPropertyPeriodCumulativeSummaryResponse] =
+    Json.format[CreateForeignPropertyPeriodCumulativeSummaryResponse]
+
 }

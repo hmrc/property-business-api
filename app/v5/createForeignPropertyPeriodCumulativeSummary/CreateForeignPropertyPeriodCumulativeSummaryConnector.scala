@@ -22,14 +22,18 @@ import api.connectors.{BaseDownstreamConnector, DownstreamOutcome}
 import config.AppConfig
 import play.api.http.Status.OK
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
-import v5.createForeignPropertyPeriodCumulativeSummary.model.request.{CreateForeignPropertyPeriodCumulativeSummaryRequestData, Def1_CreateForeignPropertyPeriodCumulativeSummaryRequestData}
+import v5.createForeignPropertyPeriodCumulativeSummary.model.request.{
+  CreateForeignPropertyPeriodCumulativeSummaryRequestData,
+  Def1_CreateForeignPropertyPeriodCumulativeSummaryRequestData
+}
 import v5.createForeignPropertyPeriodCumulativeSummary.model.response.CreateForeignPropertyPeriodCumulativeSummaryResponse
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class CreateForeignPropertyPeriodCumulativeSummaryConnector @Inject() (val http: HttpClient, val appConfig: AppConfig) extends BaseDownstreamConnector {
+class CreateForeignPropertyPeriodCumulativeSummaryConnector @Inject() (val http: HttpClient, val appConfig: AppConfig)
+    extends BaseDownstreamConnector {
 
   def createForeignProperty(request: CreateForeignPropertyPeriodCumulativeSummaryRequestData)(implicit
       hc: HeaderCarrier,

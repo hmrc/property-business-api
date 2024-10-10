@@ -27,7 +27,8 @@ import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class CreateForeignPropertyPeriodCumulativeSummaryService @Inject() (connector: CreateForeignPropertyPeriodCumulativeSummaryConnector) extends BaseService {
+class CreateForeignPropertyPeriodCumulativeSummaryService @Inject() (connector: CreateForeignPropertyPeriodCumulativeSummaryConnector)
+    extends BaseService {
 
   def createForeignProperty(request: CreateForeignPropertyPeriodCumulativeSummaryRequestData)(implicit
       ctx: RequestContext,

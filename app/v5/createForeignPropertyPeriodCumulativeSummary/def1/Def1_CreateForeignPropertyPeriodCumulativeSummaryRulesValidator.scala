@@ -22,70 +22,33 @@ import api.models.errors._
 import cats.data.Validated
 import cats.data.Validated.Invalid
 import cats.implicits.toTraverseOps
-import v5.createForeignPropertyPeriodCumulativeSummary.def1.model.request.Def1_foreignFhlEea.{
-  Def1_Create_CreateForeignFhlEea,
-  Def1_Create_CreateForeignFhlEeaExpenses
-}
 import v5.createForeignPropertyPeriodCumulativeSummary.def1.model.request.Def1_foreignPropertyEntry.{
-  Def1_Create_CreateForeignNonFhlPropertyEntry,
-  Def1_Create_CreateForeignNonFhlPropertyExpenses
+  Def1_Create_CreateForeignPropertyEntry,
+  Def1_Create_CreateForeignPropertyExpenses
 }
 import v5.createForeignPropertyPeriodCumulativeSummary.model.request.Def1_CreateForeignPropertyPeriodCumulativeSummaryRequestData
 
-object Def1_CreateForeignPropertyPeriodCumulativeSummaryRulesValidator extends RulesValidator[Def1_CreateForeignPropertyPeriodCumulativeSummaryRequestData] {
+object Def1_CreateForeignPropertyPeriodCumulativeSummaryRulesValidator
+    extends RulesValidator[Def1_CreateForeignPropertyPeriodCumulativeSummaryRequestData] {
 
   private val resolveParsedNumber = ResolveParsedNumber()
 
-  def validateBusinessRules(
-      parsed: Def1_CreateForeignPropertyPeriodCumulativeSummaryRequestData): Validated[Seq[MtdError], Def1_CreateForeignPropertyPeriodCumulativeSummaryRequestData] = {
+  def validateBusinessRules(parsed: Def1_CreateForeignPropertyPeriodCumulativeSummaryRequestData)
+      : Validated[Seq[MtdError], Def1_CreateForeignPropertyPeriodCumulativeSummaryRequestData] = {
     import parsed.body._
 
     combine(
       ResolveFromAndToDates((fromDate, toDate)),
-      foreignFhlEea.map(validateForeignFhlEea).getOrElse(valid),
-      foreignNonFhlProperty.map(validateForeignNonFhlProperty).getOrElse(valid)
+      foreignProperty.map(validateForeignProperty).getOrElse(valid)
     ).onSuccess(parsed)
   }
 
-  private def validateForeignFhlEea(foreignFhlEea: Def1_Create_CreateForeignFhlEea): Validated[Seq[MtdError], Unit] = {
-    import foreignFhlEea._
+  private def validateForeignProperty(foreignProperty: Seq[Def1_Create_CreateForeignPropertyEntry]): Validated[Seq[MtdError], Unit] = {
+    val zippedForeignProperties = foreignProperty.zipWithIndex
 
-    val validatedConsolidatedExpenses = expenses match {
-      case Some(Def1_Create_CreateForeignFhlEeaExpenses(None, None, None, None, None, None, None, Some(_))) => valid
-      case _ =>
-        expenses
-          .flatMap(_.consolidatedExpenses)
-          .map(_ => Invalid(List(RuleBothExpensesSuppliedError.withPath("/foreignFhlEea/expenses"))))
-          .getOrElse(valid)
-    }
-
-    val valuesWithPaths = List(
-      (income.flatMap(_.rentAmount), "/foreignFhlEea/income/rentAmount"),
-      (expenses.flatMap(_.premisesRunningCosts), "/foreignFhlEea/expenses/premisesRunningCosts"),
-      (expenses.flatMap(_.repairsAndMaintenance), "/foreignFhlEea/expenses/repairsAndMaintenance"),
-      (expenses.flatMap(_.financialCosts), "/foreignFhlEea/expenses/financialCosts"),
-      (expenses.flatMap(_.professionalFees), "/foreignFhlEea/expenses/professionalFees"),
-      (expenses.flatMap(_.costOfServices), "/foreignFhlEea/expenses/costOfServices"),
-      (expenses.flatMap(_.travelCosts), "/foreignFhlEea/expenses/travelCosts"),
-      (expenses.flatMap(_.other), "/foreignFhlEea/expenses/other"),
-      (expenses.flatMap(_.consolidatedExpenses), "/foreignFhlEea/expenses/consolidatedExpenses")
-    )
-
-    val validatedNumberFields = valuesWithPaths.map {
-      case (None, _)            => valid
-      case (Some(number), path) => resolveParsedNumber(number, path)
-    }
-
-    (validatedNumberFields :+ validatedConsolidatedExpenses).sequence.andThen(_ => valid)
-  }
-
-  private def validateForeignNonFhlProperty(
-      foreignNonFhlProperty: Seq[Def1_Create_CreateForeignNonFhlPropertyEntry]): Validated[Seq[MtdError], Unit] = {
-    val zippedForeignNonFhlProperties = foreignNonFhlProperty.zipWithIndex
-
-    val validatedCountryCodes = zippedForeignNonFhlProperties
+    val validatedCountryCodes = zippedForeignProperties
       .map { case (entry, index) =>
-        (entry.countryCode, s"/foreignNonFhlProperty/$index/countryCode")
+        (entry.countryCode, s"/foreignProperty/$index/countryCode")
       }
       .groupBy(_._1)
       .collect {
@@ -94,31 +57,31 @@ object Def1_CreateForeignPropertyPeriodCumulativeSummaryRulesValidator extends R
       }
       .toSeq
 
-    val validatedEntries = zippedForeignNonFhlProperties
-      .map { case (entry, index) => validateForeignNonFhlPropertyEntry(entry, index) }
+    val validatedEntries = zippedForeignProperties
+      .map { case (entry, index) => validateForeignPropertyEntry(entry, index) }
       .traverse(identity)
 
     (validatedCountryCodes :+ validatedEntries).sequence.andThen(_ => valid)
   }
 
-  private def validateForeignNonFhlPropertyEntry(entry: Def1_Create_CreateForeignNonFhlPropertyEntry, index: Int): Validated[Seq[MtdError], Unit] = {
+  private def validateForeignPropertyEntry(entry: Def1_Create_CreateForeignPropertyEntry, index: Int): Validated[Seq[MtdError], Unit] = {
     import entry._
     val valuesWithPaths = List(
-      (income.flatMap(_.rentIncome.flatMap(_.rentAmount)), s"/foreignNonFhlProperty/$index/income/rentIncome/rentAmount"),
-      (income.flatMap(_.premiumsOfLeaseGrant), s"/foreignNonFhlProperty/$index/income/premiumsOfLeaseGrant"),
-      (income.flatMap(_.otherPropertyIncome), s"/foreignNonFhlProperty/$index/income/otherPropertyIncome"),
-      (income.flatMap(_.foreignTaxPaidOrDeducted), s"/foreignNonFhlProperty/$index/income/foreignTaxPaidOrDeducted"),
-      (income.flatMap(_.specialWithholdingTaxOrUkTaxPaid), s"/foreignNonFhlProperty/$index/income/specialWithholdingTaxOrUkTaxPaid"),
-      (expenses.flatMap(_.premisesRunningCosts), s"/foreignNonFhlProperty/$index/expenses/premisesRunningCosts"),
-      (expenses.flatMap(_.repairsAndMaintenance), s"/foreignNonFhlProperty/$index/expenses/repairsAndMaintenance"),
-      (expenses.flatMap(_.financialCosts), s"/foreignNonFhlProperty/$index/expenses/financialCosts"),
-      (expenses.flatMap(_.professionalFees), s"/foreignNonFhlProperty/$index/expenses/professionalFees"),
-      (expenses.flatMap(_.costOfServices), s"/foreignNonFhlProperty/$index/expenses/costOfServices"),
-      (expenses.flatMap(_.travelCosts), s"/foreignNonFhlProperty/$index/expenses/travelCosts"),
-      (expenses.flatMap(_.residentialFinancialCost), s"/foreignNonFhlProperty/$index/expenses/residentialFinancialCost"),
-      (expenses.flatMap(_.broughtFwdResidentialFinancialCost), s"/foreignNonFhlProperty/$index/expenses/broughtFwdResidentialFinancialCost"),
-      (expenses.flatMap(_.other), s"/foreignNonFhlProperty/$index/expenses/other"),
-      (expenses.flatMap(_.consolidatedExpenses), s"/foreignNonFhlProperty/$index/expenses/consolidatedExpenses")
+      (income.flatMap(_.rentIncome.flatMap(_.rentAmount)), s"/foreignProperty/$index/income/rentIncome/rentAmount"),
+      (income.flatMap(_.premiumsOfLeaseGrant), s"/foreignProperty/$index/income/premiumsOfLeaseGrant"),
+      (income.flatMap(_.otherPropertyIncome), s"/foreignProperty/$index/income/otherPropertyIncome"),
+      (income.flatMap(_.foreignTaxPaidOrDeducted), s"/foreignProperty/$index/income/foreignTaxPaidOrDeducted"),
+      (income.flatMap(_.specialWithholdingTaxOrUkTaxPaid), s"/foreignProperty/$index/income/specialWithholdingTaxOrUkTaxPaid"),
+      (expenses.flatMap(_.premisesRunningCosts), s"/foreignProperty/$index/expenses/premisesRunningCosts"),
+      (expenses.flatMap(_.repairsAndMaintenance), s"/foreignProperty/$index/expenses/repairsAndMaintenance"),
+      (expenses.flatMap(_.financialCostsAmount), s"/foreignProperty/$index/expenses/financialCostsAmount"),
+      (expenses.flatMap(_.professionalFeesAmount), s"/foreignProperty/$index/expenses/professionalFeesAmount"),
+      (expenses.flatMap(_.costOfServicesAmount), s"/foreignProperty/$index/expenses/costOfServicesAmount"),
+      (expenses.flatMap(_.travelCostsAmount), s"/foreignProperty/$index/expenses/travelCostsAmount"),
+      (expenses.flatMap(_.residentialFinancialCostAmount), s"/foreignProperty/$index/expenses/residentialFinancialCostAmount"),
+      (expenses.flatMap(_.broughtFwdResidentialFinancialCostAmount), s"/foreignProperty/$index/expenses/broughtFwdResidentialFinancialCostAmount"),
+      (expenses.flatMap(_.otherAmount), s"/foreignProperty/$index/expenses/otherAmount"),
+      (expenses.flatMap(_.consolidatedExpenseAmount), s"/foreignProperty/$index/expenses/consolidatedExpenses")
     )
 
     val validatedNumberFields = valuesWithPaths.map {
@@ -126,14 +89,14 @@ object Def1_CreateForeignPropertyPeriodCumulativeSummaryRulesValidator extends R
       case (Some(number), path) => resolveParsedNumber(number, path)
     }
 
-    val validatedCountryCode = ResolveParsedCountryCode(countryCode, s"/foreignNonFhlProperty/$index/countryCode")
+    val validatedCountryCode = ResolveParsedCountryCode(countryCode, s"/foreignProperty/$index/countryCode")
 
     val validatedConsolidatedExpenses = expenses match {
-      case Some(Def1_Create_CreateForeignNonFhlPropertyExpenses(None, None, None, None, None, None, _, _, None, Some(_))) => valid
+      case Some(Def1_Create_CreateForeignPropertyExpenses(None, None, None, None, None, None, _, _, None, Some(_))) => valid
       case _ =>
         expenses
-          .flatMap(_.consolidatedExpenses)
-          .map(_ => Invalid(List(RuleBothExpensesSuppliedError.withPath(s"/foreignNonFhlProperty/$index/expenses"))))
+          .flatMap(_.consolidatedExpenseAmount)
+          .map(_ => Invalid(List(RuleBothExpensesSuppliedError.withPath(s"/foreignProperty/$index/expenses"))))
           .getOrElse(valid)
     }
 

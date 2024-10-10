@@ -21,25 +21,25 @@ import play.api.libs.json.{JsPath, Json, Reads, Writes}
 import shapeless.HNil
 import utils.EmptinessChecker
 
-case class Def1_Create_CreateForeignNonFhlPropertyEntry(
+case class Def1_Create_CreateForeignPropertyEntry(
     countryCode: String,
-    income: Option[Def1_Create_ForeignNonFhlPropertyIncome],
-    expenses: Option[Def1_Create_CreateForeignNonFhlPropertyExpenses]
+    income: Option[Def1_Create_ForeignPropertyIncome],
+    expenses: Option[Def1_Create_CreateForeignPropertyExpenses]
 )
 
-object Def1_Create_CreateForeignNonFhlPropertyEntry {
+object Def1_Create_CreateForeignPropertyEntry {
 
-  implicit val emptinessChecker: EmptinessChecker[Def1_Create_CreateForeignNonFhlPropertyEntry] = EmptinessChecker.use { body =>
+  implicit val emptinessChecker: EmptinessChecker[Def1_Create_CreateForeignPropertyEntry] = EmptinessChecker.use { body =>
     "income"     -> body.income ::
       "expenses" -> body.expenses :: HNil
   }
 
-  implicit val reads: Reads[Def1_Create_CreateForeignNonFhlPropertyEntry] = Json.reads[Def1_Create_CreateForeignNonFhlPropertyEntry]
+  implicit val reads: Reads[Def1_Create_CreateForeignPropertyEntry] = Json.reads[Def1_Create_CreateForeignPropertyEntry]
 
-  implicit val writes: Writes[Def1_Create_CreateForeignNonFhlPropertyEntry] = (
+  implicit val writes: Writes[Def1_Create_CreateForeignPropertyEntry] = (
     (JsPath \ "countryCode").write[String] and
-      (JsPath \ "income").writeNullable[Def1_Create_ForeignNonFhlPropertyIncome] and
-      (JsPath \ "expenses").writeNullable[Def1_Create_CreateForeignNonFhlPropertyExpenses]
-  )(unlift(Def1_Create_CreateForeignNonFhlPropertyEntry.unapply))
+      (JsPath \ "income").writeNullable[Def1_Create_ForeignPropertyIncome] and
+      (JsPath \ "expenses").writeNullable[Def1_Create_CreateForeignPropertyExpenses]
+  )(unlift(Def1_Create_CreateForeignPropertyEntry.unapply))
 
 }

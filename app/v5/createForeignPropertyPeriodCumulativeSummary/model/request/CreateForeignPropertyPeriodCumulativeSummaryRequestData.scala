@@ -26,7 +26,7 @@ sealed trait CreateForeignPropertyPeriodCumulativeSummaryRequestData {
 }
 
 case class Def1_CreateForeignPropertyPeriodCumulativeSummaryRequestData(nino: Nino,
-                                                              businessId: BusinessId,
-                                                              taxYear: TaxYear,
-                                                              body: Def1_CreateForeignPropertyPeriodCumulativeSummaryRequestBody)
+                                                                        businessId: BusinessId,
+                                                                        taxYear: TaxYear,
+                                                                        body: Def1_CreateForeignPropertyPeriodCumulativeSummaryRequestBody)
     extends CreateForeignPropertyPeriodCumulativeSummaryRequestData

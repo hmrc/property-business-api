@@ -19,25 +19,25 @@ package v5.createForeignPropertyPeriodCumulativeSummary.def1.model.request.Def1_
 import play.api.libs.functional.syntax._
 import play.api.libs.json.{JsPath, Json, Reads, Writes}
 
-case class Def1_Create_ForeignNonFhlPropertyIncome(
-    rentIncome: Option[Def1_Create_ForeignNonFhlPropertyRentIncome],
-    foreignTaxCreditRelief: Boolean,
+case class Def1_Create_ForeignPropertyIncome(
+    rentIncome: Option[Def1_Create_ForeignPropertyRentIncome],
+    foreignTaxCreditRelief: Option[Boolean],
     premiumsOfLeaseGrant: Option[BigDecimal],
     otherPropertyIncome: Option[BigDecimal],
     foreignTaxPaidOrDeducted: Option[BigDecimal],
     specialWithholdingTaxOrUkTaxPaid: Option[BigDecimal]
 )
 
-object Def1_Create_ForeignNonFhlPropertyIncome {
-  implicit val reads: Reads[Def1_Create_ForeignNonFhlPropertyIncome] = Json.reads[Def1_Create_ForeignNonFhlPropertyIncome]
+object Def1_Create_ForeignPropertyIncome {
+  implicit val reads: Reads[Def1_Create_ForeignPropertyIncome] = Json.reads[Def1_Create_ForeignPropertyIncome]
 
-  implicit val writes: Writes[Def1_Create_ForeignNonFhlPropertyIncome] = (
-    (JsPath \ "rentIncome").writeNullable[Def1_Create_ForeignNonFhlPropertyRentIncome] and
-      (JsPath \ "foreignTaxCreditRelief").write[Boolean] and
+  implicit val writes: Writes[Def1_Create_ForeignPropertyIncome] = (
+    (JsPath \ "rentIncome").writeNullable[Def1_Create_ForeignPropertyRentIncome] and
+      (JsPath \ "foreignTaxCreditRelief").writeNullable[Boolean] and
       (JsPath \ "premiumsOfLeaseGrant").writeNullable[BigDecimal] and
       (JsPath \ "otherPropertyIncome").writeNullable[BigDecimal] and
       (JsPath \ "foreignTaxPaidOrDeducted").writeNullable[BigDecimal] and
       (JsPath \ "specialWithholdingTaxOrUkTaxPaid").writeNullable[BigDecimal]
-  )(unlift(Def1_Create_ForeignNonFhlPropertyIncome.unapply))
+  )(unlift(Def1_Create_ForeignPropertyIncome.unapply))
 
 }

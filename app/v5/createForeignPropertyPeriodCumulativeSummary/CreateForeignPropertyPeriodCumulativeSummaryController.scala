@@ -28,13 +28,14 @@ import javax.inject.{Inject, Singleton}
 import scala.concurrent.ExecutionContext
 
 @Singleton
-class CreateForeignPropertyPeriodCumulativeSummaryController @Inject() (val authService: EnrolmentsAuthService,
-                                                              val lookupService: MtdIdLookupService,
-                                                              validatorFactory: CreateForeignPropertyPeriodCumulativeSummaryValidatorFactory,
-                                                              service: CreateForeignPropertyPeriodCumulativeSummaryService,
-                                                              auditService: AuditService,
-                                                              cc: ControllerComponents,
-                                                              idGenerator: IdGenerator)(implicit ec: ExecutionContext, appConfig: AppConfig)
+class CreateForeignPropertyPeriodCumulativeSummaryController @Inject() (
+    val authService: EnrolmentsAuthService,
+    val lookupService: MtdIdLookupService,
+    validatorFactory: CreateForeignPropertyPeriodCumulativeSummaryValidatorFactory,
+    service: CreateForeignPropertyPeriodCumulativeSummaryService,
+    auditService: AuditService,
+    cc: ControllerComponents,
+    idGenerator: IdGenerator)(implicit ec: ExecutionContext, appConfig: AppConfig)
     extends AuthorisedController(cc) {
 
   override val endpointName: String = "create-foreign-property-period-cumulative-summary"
@@ -42,7 +43,8 @@ class CreateForeignPropertyPeriodCumulativeSummaryController @Inject() (val auth
   implicit val endpointLogContext: EndpointLogContext =
     EndpointLogContext(
       controllerName = "CreateForeignPropertyPeriodCumulativeSummaryController",
-      endpointName = "Create a Foreign Property Income & Expenditure Period Cumulative Summary")
+      endpointName = "Create a Foreign Property Income & Expenditure Period Cumulative Summary"
+    )
 
   def handleRequest(nino: String, businessId: String, taxYear: String): Action[JsValue] =
     authorisedAction(nino).async(parse.json) { implicit request =>

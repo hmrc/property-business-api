@@ -36,28 +36,28 @@ trait Def1_CreateForeignPropertyPeriodCumulativeSummaryFixtures {
     Def1_Create_CreateForeignPropertyExpenses(
       premisesRunningCosts = Some(1000.99),
       repairsAndMaintenance = Some(2000.99),
-      financialCostsAmount = Some(3000.99),
-      professionalFeesAmount = Some(4000.99),
-      costOfServicesAmount = Some(5000.99),
-      travelCostsAmount = Some(6000.99),
-      residentialFinancialCostAmount = Some(7000.99),
-      broughtFwdResidentialFinancialCostAmount = Some(8000.99),
-      otherAmount = Some(9000.99),
-      consolidatedExpenseAmount = None
+      financialCosts = Some(3000.99),
+      professionalFees = Some(4000.99),
+      costOfServices = Some(5000.99),
+      travelCosts = Some(6000.99),
+      residentialFinancialCost = Some(7000.99),
+      broughtFwdResidentialFinancialCost = Some(8000.99),
+      other = Some(9000.99),
+      consolidatedExpenses = None
     ))
 
   private val consolidatedForeignPropertyExpenses = Some(
     Def1_Create_CreateForeignPropertyExpenses(
       premisesRunningCosts = None,
       repairsAndMaintenance = None,
-      financialCostsAmount = None,
-      professionalFeesAmount = None,
-      costOfServicesAmount = None,
-      travelCostsAmount = None,
-      residentialFinancialCostAmount = None,
-      broughtFwdResidentialFinancialCostAmount = None,
-      otherAmount = None,
-      consolidatedExpenseAmount = Some(1000.99)
+      financialCosts = None,
+      professionalFees = None,
+      costOfServices = None,
+      travelCosts = None,
+      residentialFinancialCost = None,
+      broughtFwdResidentialFinancialCost = None,
+      other = None,
+      consolidatedExpenses = Some(1000.99)
     ))
 
   private val regularForeignProperty = Some(
@@ -105,13 +105,13 @@ trait Def1_CreateForeignPropertyPeriodCumulativeSummaryFixtures {
       |         "expenses": {
       |            "premisesRunningCosts": 1000.99,
       |            "repairsAndMaintenance": 2000.99,
-      |            "financialCostsAmount": 3000.99,
-      |            "professionalFeesAmount": 4000.99,
-      |            "costOfServicesAmount": 5000.99,
-      |            "travelCostsAmount": 6000.99,
-      |            "residentialFinancialCostAmount": 7000.99,
-      |            "broughtFwdResidentialFinancialCostAmount": 8000.99,
-      |            "otherAmount": 9000.99
+      |            "financialCosts": 3000.99,
+      |            "professionalFees": 4000.99,
+      |            "costOfServices": 5000.99,
+      |            "travelCosts": 6000.99,
+      |            "residentialFinancialCost": 7000.99,
+      |            "broughtFwdResidentialFinancialCost": 8000.99,
+      |            "other": 9000.99
       |         }
       |      }
       |   ]
@@ -137,7 +137,7 @@ trait Def1_CreateForeignPropertyPeriodCumulativeSummaryFixtures {
       |            "specialWithholdingTaxOrUkTaxPaid": 4000.99
       |         },
       |         "expenses": {
-      |            "consolidatedExpenseAmount": 1000.99
+      |            "consolidatedExpenses": 1000.99
       |         }
       |      }
       |   ]

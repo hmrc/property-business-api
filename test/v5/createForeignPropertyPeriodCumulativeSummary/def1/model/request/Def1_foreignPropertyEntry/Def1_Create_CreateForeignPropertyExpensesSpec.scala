@@ -26,14 +26,14 @@ class Def1_Create_CreateForeignPropertyExpensesSpec extends UnitSpec {
       |{
       |  "premisesRunningCosts": 5635.43,
       |  "repairsAndMaintenance": 3456.65,
-      |  "financialCostsAmount": 34532.21,
-      |  "professionalFeesAmount": 32465.32,
-      |  "costOfServicesAmount": 2567.21,
-      |  "travelCostsAmount": 2345.76,
-      |  "residentialFinancialCostAmount": 21235.22,
-      |  "broughtFwdResidentialFinancialCostAmount": 12556.00,
-      |  "otherAmount": 2425.11,
-      |  "consolidatedExpenseAmount": 352.66
+      |  "financialCosts": 34532.21,
+      |  "professionalFees": 32465.32,
+      |  "costOfServices": 2567.21,
+      |  "travelCosts": 2345.76,
+      |  "residentialFinancialCost": 21235.22,
+      |  "broughtFwdResidentialFinancialCost": 12556.00,
+      |  "other": 2425.11,
+      |  "consolidatedExpenses": 352.66
       |}
     """.stripMargin
   )
@@ -41,14 +41,14 @@ class Def1_Create_CreateForeignPropertyExpensesSpec extends UnitSpec {
   val model: Def1_Create_CreateForeignPropertyExpenses = Def1_Create_CreateForeignPropertyExpenses(
     premisesRunningCosts = Some(5635.43),
     repairsAndMaintenance = Some(3456.65),
-    financialCostsAmount = Some(34532.21),
-    professionalFeesAmount = Some(32465.32),
-    costOfServicesAmount = Some(2567.21),
-    travelCostsAmount = Some(2345.76),
-    residentialFinancialCostAmount = Some(21235.22),
-    broughtFwdResidentialFinancialCostAmount = Some(12556.00),
-    otherAmount = Some(2425.11),
-    consolidatedExpenseAmount = Some(352.66)
+    financialCosts = Some(34532.21),
+    professionalFees = Some(32465.32),
+    costOfServices = Some(2567.21),
+    travelCosts = Some(2345.76),
+    residentialFinancialCost = Some(21235.22),
+    broughtFwdResidentialFinancialCost = Some(12556.00),
+    other = Some(2425.11),
+    consolidatedExpenses = Some(352.66)
   )
 
   val ifsJson: JsValue = Json.parse(

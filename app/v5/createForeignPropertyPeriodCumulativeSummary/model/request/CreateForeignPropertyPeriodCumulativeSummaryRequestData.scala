@@ -18,15 +18,10 @@ package v5.createForeignPropertyPeriodCumulativeSummary.model.request
 
 import api.models.domain.{BusinessId, Nino, TaxYear}
 
-sealed trait CreateForeignPropertyPeriodCumulativeSummaryRequestData {
+trait CreateForeignPropertyPeriodCumulativeSummaryRequestData {
   val nino: Nino
   val businessId: BusinessId
   val taxYear: TaxYear
   def body: CreateForeignPropertyPeriodCumulativeSummaryRequestBody
 }
 
-case class Def1_CreateForeignPropertyPeriodCumulativeSummaryRequestData(nino: Nino,
-                                                                        businessId: BusinessId,
-                                                                        taxYear: TaxYear,
-                                                                        body: Def1_CreateForeignPropertyPeriodCumulativeSummaryRequestBody)
-    extends CreateForeignPropertyPeriodCumulativeSummaryRequestData

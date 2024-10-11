@@ -16,32 +16,4 @@
 
 package v5.createForeignPropertyPeriodCumulativeSummary.model.request
 
-import play.api.libs.functional.syntax._
-import play.api.libs.json.{JsPath, Json, OWrites, Reads}
-import shapeless.HNil
-import utils.EmptinessChecker
-import v5.createForeignPropertyPeriodCumulativeSummary.def1.model.request.Def1_foreignPropertyEntry.Def1_Create_CreateForeignPropertyEntry
-
-sealed trait CreateForeignPropertyPeriodCumulativeSummaryRequestBody
-
-case class Def1_CreateForeignPropertyPeriodCumulativeSummaryRequestBody(fromDate: String,
-                                                                        toDate: String,
-                                                                        foreignProperty: Option[Seq[Def1_Create_CreateForeignPropertyEntry]])
-    extends CreateForeignPropertyPeriodCumulativeSummaryRequestBody
-
-object Def1_CreateForeignPropertyPeriodCumulativeSummaryRequestBody {
-
-  implicit val emptinessChecker: EmptinessChecker[Def1_CreateForeignPropertyPeriodCumulativeSummaryRequestBody] = EmptinessChecker.use { body =>
-    "foreignProperty" -> body.foreignProperty :: HNil
-  }
-
-  implicit val reads: Reads[Def1_CreateForeignPropertyPeriodCumulativeSummaryRequestBody] =
-    Json.reads[Def1_CreateForeignPropertyPeriodCumulativeSummaryRequestBody]
-
-  implicit val writes: OWrites[Def1_CreateForeignPropertyPeriodCumulativeSummaryRequestBody] = (
-    (JsPath \ "fromDate").write[String] and
-      (JsPath \ "toDate").write[String] and
-      (JsPath \ "foreignProperty").writeNullable[Seq[Def1_Create_CreateForeignPropertyEntry]]
-  )(unlift(Def1_CreateForeignPropertyPeriodCumulativeSummaryRequestBody.unapply))
-
-}
+trait CreateForeignPropertyPeriodCumulativeSummaryRequestBody

@@ -22,12 +22,8 @@ import api.models.utils.JsonErrorValidators
 import config.MockAppConfig
 import play.api.libs.json._
 import support.UnitSpec
-import v5.createForeignPropertyPeriodCumulativeSummary.def1.model.request.Def1_foreignPropertyEntry._
-import v5.createForeignPropertyPeriodCumulativeSummary.model.request.{
-  CreateForeignPropertyPeriodCumulativeSummaryRequestData,
-  Def1_CreateForeignPropertyPeriodCumulativeSummaryRequestBody,
-  Def1_CreateForeignPropertyPeriodCumulativeSummaryRequestData
-}
+import v5.createForeignPropertyPeriodCumulativeSummary.def1.model.request._
+import v5.createForeignPropertyPeriodCumulativeSummary.model.request.CreateForeignPropertyPeriodCumulativeSummaryRequestData
 
 class Def1_CreateForeignPropertyPeriodCumulativeSummaryValidatorSpec extends UnitSpec with MockAppConfig with JsonErrorValidators {
   private implicit val correlationId: String = "1234"
@@ -129,9 +125,9 @@ class Def1_CreateForeignPropertyPeriodCumulativeSummaryValidatorSpec extends Uni
   private val parsedBusinessId = BusinessId(validBusinessId)
   private val parsedTaxYear    = TaxYear.fromMtd(validTaxYear)
 
-  private val parsedForeignPropertyRentIncome = Def1_Create_ForeignPropertyRentIncome(Some(381.21))
+  private val parsedForeignPropertyRentIncome = RentIncome(Some(381.21))
 
-  private val parsedForeignPropertyIncome = Def1_Create_ForeignPropertyIncome(
+  private val parsedForeignPropertyIncome = PropertyIncome(
     Some(parsedForeignPropertyRentIncome),
     foreignTaxCreditRelief = Some(true),
     Some(884.72),
@@ -140,7 +136,7 @@ class Def1_CreateForeignPropertyPeriodCumulativeSummaryValidatorSpec extends Uni
     Some(847.72)
   )
 
-  private val parsedForeignPropertyIncomeMinimal = Def1_Create_ForeignPropertyIncome(
+  private val parsedForeignPropertyIncomeMinimal = PropertyIncome(
     Some(parsedForeignPropertyRentIncome),
     None,
     None,
@@ -149,7 +145,7 @@ class Def1_CreateForeignPropertyPeriodCumulativeSummaryValidatorSpec extends Uni
     None
   )
 
-  private val parsedCreateForeignPropertyExpenses = Def1_Create_CreateForeignPropertyExpenses(
+  private val parsedCreateForeignPropertyExpenses = Expenses(
     Some(129.35),
     Some(7490.32),
     Some(5000.99),
@@ -162,7 +158,7 @@ class Def1_CreateForeignPropertyPeriodCumulativeSummaryValidatorSpec extends Uni
     None
   )
 
-  private val parsedCreateForeignPropertyExpensesConsolidated = Def1_Create_CreateForeignPropertyExpenses(
+  private val parsedCreateForeignPropertyExpensesConsolidated = Expenses(
     None,
     None,
     None,
@@ -175,7 +171,7 @@ class Def1_CreateForeignPropertyPeriodCumulativeSummaryValidatorSpec extends Uni
     Some(129.35)
   )
 
-  private val parsedForeignPropertyEntry = Def1_Create_CreateForeignPropertyEntry(
+  private val parsedForeignPropertyEntry = ForeignProperty(
     countryCode = validCountryCode,
     income = Some(parsedForeignPropertyIncome),
     expenses = Some(parsedCreateForeignPropertyExpenses)

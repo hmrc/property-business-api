@@ -14,26 +14,26 @@
  * limitations under the License.
  */
 
-package v5.createForeignPropertyPeriodCumulativeSummary.def1.model.request.Def1_foreignPropertyEntry
+package v5.createForeignPropertyPeriodCumulativeSummary.def1.model.request
 
 import play.api.libs.functional.syntax._
 import play.api.libs.json.{JsPath, Json, Reads, Writes}
 
-case class Def1_Create_CreateForeignPropertyExpenses(premisesRunningCosts: Option[BigDecimal],
-                                                     repairsAndMaintenance: Option[BigDecimal],
-                                                     financialCosts: Option[BigDecimal],
-                                                     professionalFees: Option[BigDecimal],
-                                                     costOfServices: Option[BigDecimal],
-                                                     travelCosts: Option[BigDecimal],
-                                                     residentialFinancialCost: Option[BigDecimal],
-                                                     broughtFwdResidentialFinancialCost: Option[BigDecimal],
-                                                     other: Option[BigDecimal],
-                                                     consolidatedExpenses: Option[BigDecimal])
+case class Expenses(premisesRunningCosts: Option[BigDecimal],
+                    repairsAndMaintenance: Option[BigDecimal],
+                    financialCosts: Option[BigDecimal],
+                    professionalFees: Option[BigDecimal],
+                    costOfServices: Option[BigDecimal],
+                    travelCosts: Option[BigDecimal],
+                    residentialFinancialCost: Option[BigDecimal],
+                    broughtFwdResidentialFinancialCost: Option[BigDecimal],
+                    other: Option[BigDecimal],
+                    consolidatedExpenses: Option[BigDecimal])
 
-object Def1_Create_CreateForeignPropertyExpenses {
-  implicit val reads: Reads[Def1_Create_CreateForeignPropertyExpenses] = Json.reads[Def1_Create_CreateForeignPropertyExpenses]
+object Expenses {
+  implicit val reads: Reads[Expenses] = Json.reads[Expenses]
 
-  implicit val writes: Writes[Def1_Create_CreateForeignPropertyExpenses] = (
+  implicit val writes: Writes[Expenses] = (
     (JsPath \ "premisesRunningCosts").writeNullable[BigDecimal] and
       (JsPath \ "repairsAndMaintenance").writeNullable[BigDecimal] and
       (JsPath \ "financialCostsAmount").writeNullable[BigDecimal] and
@@ -44,6 +44,6 @@ object Def1_Create_CreateForeignPropertyExpenses {
       (JsPath \ "broughtFwdResidentialFinancialCostAmount").writeNullable[BigDecimal] and
       (JsPath \ "otherAmount").writeNullable[BigDecimal] and
       (JsPath \ "consolidatedExpenseAmount").writeNullable[BigDecimal]
-  )(unlift(Def1_Create_CreateForeignPropertyExpenses.unapply))
+  )(unlift(Expenses.unapply))
 
 }

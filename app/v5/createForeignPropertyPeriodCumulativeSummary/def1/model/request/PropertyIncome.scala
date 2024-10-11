@@ -14,30 +14,28 @@
  * limitations under the License.
  */
 
-package v5.createForeignPropertyPeriodCumulativeSummary.def1.model.request.Def1_foreignPropertyEntry
+package v5.createForeignPropertyPeriodCumulativeSummary.def1.model.request
 
 import play.api.libs.functional.syntax._
 import play.api.libs.json.{JsPath, Json, Reads, Writes}
 
-case class Def1_Create_ForeignPropertyIncome(
-    rentIncome: Option[Def1_Create_ForeignPropertyRentIncome],
-    foreignTaxCreditRelief: Option[Boolean],
-    premiumsOfLeaseGrant: Option[BigDecimal],
-    otherPropertyIncome: Option[BigDecimal],
-    foreignTaxPaidOrDeducted: Option[BigDecimal],
-    specialWithholdingTaxOrUkTaxPaid: Option[BigDecimal]
-)
+case class PropertyIncome(rentIncome: Option[RentIncome],
+                          foreignTaxCreditRelief: Option[Boolean],
+                          premiumsOfLeaseGrant: Option[BigDecimal],
+                          otherPropertyIncome: Option[BigDecimal],
+                          foreignTaxPaidOrDeducted: Option[BigDecimal],
+                          specialWithholdingTaxOrUkTaxPaid: Option[BigDecimal])
 
-object Def1_Create_ForeignPropertyIncome {
-  implicit val reads: Reads[Def1_Create_ForeignPropertyIncome] = Json.reads[Def1_Create_ForeignPropertyIncome]
+object PropertyIncome {
+  implicit val reads: Reads[PropertyIncome] = Json.reads[PropertyIncome]
 
-  implicit val writes: Writes[Def1_Create_ForeignPropertyIncome] = (
-    (JsPath \ "rentIncome").writeNullable[Def1_Create_ForeignPropertyRentIncome] and
+  implicit val writes: Writes[PropertyIncome] = (
+    (JsPath \ "rentIncome").writeNullable[RentIncome] and
       (JsPath \ "foreignTaxCreditRelief").writeNullable[Boolean] and
       (JsPath \ "premiumsOfLeaseGrant").writeNullable[BigDecimal] and
       (JsPath \ "otherPropertyIncome").writeNullable[BigDecimal] and
       (JsPath \ "foreignTaxPaidOrDeducted").writeNullable[BigDecimal] and
       (JsPath \ "specialWithholdingTaxOrUkTaxPaid").writeNullable[BigDecimal]
-  )(unlift(Def1_Create_ForeignPropertyIncome.unapply))
+  )(unlift(PropertyIncome.unapply))
 
 }

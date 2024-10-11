@@ -17,14 +17,14 @@
 package v5.createForeignPropertyPeriodCumulativeSummary.def1.model
 
 import play.api.libs.json.{JsValue, Json}
-import v5.createForeignPropertyPeriodCumulativeSummary.def1.model.request.Def1_foreignPropertyEntry._
+import v5.createForeignPropertyPeriodCumulativeSummary.def1.model.request.{Expenses, ForeignProperty, PropertyIncome, RentIncome}
 import v5.createForeignPropertyPeriodCumulativeSummary.model.request.Def1_CreateForeignPropertyPeriodCumulativeSummaryRequestBody
 
 trait Def1_CreateForeignPropertyPeriodCumulativeSummaryFixtures {
 
   private val foreignPropertyIncome = Some(
-    Def1_Create_ForeignPropertyIncome(
-      rentIncome = Some(Def1_Create_ForeignPropertyRentIncome(Some(1000.99))),
+    PropertyIncome(
+      rentIncome = Some(RentIncome(Some(1000.99))),
       foreignTaxCreditRelief = Some(false),
       premiumsOfLeaseGrant = Some(1000.99),
       otherPropertyIncome = Some(2000.99),
@@ -33,7 +33,7 @@ trait Def1_CreateForeignPropertyPeriodCumulativeSummaryFixtures {
     ))
 
   private val regularForeignPropertyExpenses = Some(
-    Def1_Create_CreateForeignPropertyExpenses(
+    Expenses(
       premisesRunningCosts = Some(1000.99),
       repairsAndMaintenance = Some(2000.99),
       financialCosts = Some(3000.99),
@@ -47,7 +47,7 @@ trait Def1_CreateForeignPropertyPeriodCumulativeSummaryFixtures {
     ))
 
   private val consolidatedForeignPropertyExpenses = Some(
-    Def1_Create_CreateForeignPropertyExpenses(
+    Expenses(
       premisesRunningCosts = None,
       repairsAndMaintenance = None,
       financialCosts = None,
@@ -61,11 +61,11 @@ trait Def1_CreateForeignPropertyPeriodCumulativeSummaryFixtures {
     ))
 
   private val regularForeignProperty = Some(
-    List(Def1_Create_CreateForeignPropertyEntry(countryCode = "FRA", income = foreignPropertyIncome, expenses = regularForeignPropertyExpenses)))
+    List(ForeignProperty(countryCode = "FRA", income = foreignPropertyIncome, expenses = regularForeignPropertyExpenses)))
 
   private val consolidatedForeignProperty = Some(
     List(
-      Def1_Create_CreateForeignPropertyEntry(
+      ForeignProperty(
         countryCode = "FRA",
         income = foreignPropertyIncome,
         expenses = consolidatedForeignPropertyExpenses

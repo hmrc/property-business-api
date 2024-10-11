@@ -14,32 +14,32 @@
  * limitations under the License.
  */
 
-package v5.createForeignPropertyPeriodCumulativeSummary.def1.model.request.Def1_foreignPropertyEntry
+package v5.createForeignPropertyPeriodCumulativeSummary.def1.model.request
 
 import play.api.libs.functional.syntax._
 import play.api.libs.json.{JsPath, Json, Reads, Writes}
 import shapeless.HNil
 import utils.EmptinessChecker
 
-case class Def1_Create_CreateForeignPropertyEntry(
-    countryCode: String,
-    income: Option[Def1_Create_ForeignPropertyIncome],
-    expenses: Option[Def1_Create_CreateForeignPropertyExpenses]
+case class ForeignProperty(
+                            countryCode: String,
+                            income: Option[PropertyIncome],
+                            expenses: Option[Expenses]
 )
 
-object Def1_Create_CreateForeignPropertyEntry {
+object ForeignProperty {
 
-  implicit val emptinessChecker: EmptinessChecker[Def1_Create_CreateForeignPropertyEntry] = EmptinessChecker.use { body =>
+  implicit val emptinessChecker: EmptinessChecker[ForeignProperty] = EmptinessChecker.use { body =>
     "income"     -> body.income ::
       "expenses" -> body.expenses :: HNil
   }
 
-  implicit val reads: Reads[Def1_Create_CreateForeignPropertyEntry] = Json.reads[Def1_Create_CreateForeignPropertyEntry]
+  implicit val reads: Reads[ForeignProperty] = Json.reads[ForeignProperty]
 
-  implicit val writes: Writes[Def1_Create_CreateForeignPropertyEntry] = (
+  implicit val writes: Writes[ForeignProperty] = (
     (JsPath \ "countryCode").write[String] and
-      (JsPath \ "income").writeNullable[Def1_Create_ForeignPropertyIncome] and
-      (JsPath \ "expenses").writeNullable[Def1_Create_CreateForeignPropertyExpenses]
-  )(unlift(Def1_Create_CreateForeignPropertyEntry.unapply))
+      (JsPath \ "income").writeNullable[PropertyIncome] and
+      (JsPath \ "expenses").writeNullable[Expenses]
+  )(unlift(ForeignProperty.unapply))
 
 }

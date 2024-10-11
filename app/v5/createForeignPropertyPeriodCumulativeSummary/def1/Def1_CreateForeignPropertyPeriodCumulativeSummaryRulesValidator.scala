@@ -22,10 +22,7 @@ import api.models.errors._
 import cats.data.Validated
 import cats.data.Validated.Invalid
 import cats.implicits.toTraverseOps
-import v5.createForeignPropertyPeriodCumulativeSummary.def1.model.request.Def1_foreignPropertyEntry.{
-  Def1_Create_CreateForeignPropertyEntry,
-  Def1_Create_CreateForeignPropertyExpenses
-}
+import v5.createForeignPropertyPeriodCumulativeSummary.def1.model.request.{Def1_CreateForeignPropertyPeriodCumulativeSummaryRequestData, Expenses, ForeignProperty}
 import v5.createForeignPropertyPeriodCumulativeSummary.model.request.Def1_CreateForeignPropertyPeriodCumulativeSummaryRequestData
 
 object Def1_CreateForeignPropertyPeriodCumulativeSummaryRulesValidator
@@ -43,7 +40,7 @@ object Def1_CreateForeignPropertyPeriodCumulativeSummaryRulesValidator
     ).onSuccess(parsed)
   }
 
-  private def validateForeignProperty(foreignProperty: Seq[Def1_Create_CreateForeignPropertyEntry]): Validated[Seq[MtdError], Unit] = {
+  private def validateForeignProperty(foreignProperty: Seq[ForeignProperty]): Validated[Seq[MtdError], Unit] = {
     val zippedForeignProperties = foreignProperty.zipWithIndex
 
     val validatedCountryCodes = zippedForeignProperties
@@ -64,7 +61,7 @@ object Def1_CreateForeignPropertyPeriodCumulativeSummaryRulesValidator
     (validatedCountryCodes :+ validatedEntries).sequence.andThen(_ => valid)
   }
 
-  private def validateForeignPropertyEntry(entry: Def1_Create_CreateForeignPropertyEntry, index: Int): Validated[Seq[MtdError], Unit] = {
+  private def validateForeignPropertyEntry(entry: ForeignProperty, index: Int): Validated[Seq[MtdError], Unit] = {
     import entry._
     val valuesWithPaths = List(
       (income.flatMap(_.rentIncome.flatMap(_.rentAmount)), s"/foreignProperty/$index/income/rentIncome/rentAmount"),
@@ -92,7 +89,7 @@ object Def1_CreateForeignPropertyPeriodCumulativeSummaryRulesValidator
     val validatedCountryCode = ResolveParsedCountryCode(countryCode, s"/foreignProperty/$index/countryCode")
 
     val validatedConsolidatedExpenses = expenses match {
-      case Some(Def1_Create_CreateForeignPropertyExpenses(None, None, None, None, None, None, _, _, None, Some(_))) => valid
+      case Some(Expenses(None, None, None, None, None, None, _, _, None, Some(_))) => valid
       case _ =>
         expenses
           .flatMap(_.consolidatedExpenses)

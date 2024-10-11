@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-package v5.createForeignPropertyPeriodCumulativeSummary.def1.model.request.Def1_foreignPropertyEntry
+package v5.createForeignPropertyPeriodCumulativeSummary.def1.model.request
 
 import play.api.libs.json.Json
 import support.UnitSpec
 
-class Def1_Create_ForeignPropertyRentIncomeSpec extends UnitSpec {
+class RentIncomeSpec extends UnitSpec {
 
   private val mtdJson = Json.parse(
     """
@@ -29,7 +29,7 @@ class Def1_Create_ForeignPropertyRentIncomeSpec extends UnitSpec {
     """.stripMargin
   )
 
-  private val model = Def1_Create_ForeignPropertyRentIncome(rentAmount = Some(34456.30))
+  private val model = RentIncome(rentAmount = Some(34456.30))
 
   private val downstreamJson = Json.parse(
     """
@@ -42,7 +42,7 @@ class Def1_Create_ForeignPropertyRentIncomeSpec extends UnitSpec {
   "reads" should {
     "read from JSON" when {
       "valid JSON is provided" in {
-        mtdJson.as[Def1_Create_ForeignPropertyRentIncome] shouldBe model
+        mtdJson.as[RentIncome] shouldBe model
       }
     }
   }

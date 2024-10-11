@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-package v5.createForeignPropertyPeriodCumulativeSummary.def1.model.request.Def1_foreignPropertyEntry
+package v5.createForeignPropertyPeriodCumulativeSummary.def1.model.request
 
 import play.api.libs.json.{Json, Reads, Writes}
 
-case class Def1_Create_ForeignPropertyRentIncome(rentAmount: Option[BigDecimal])
+case class RentIncome(rentAmount: Option[BigDecimal])
 
-object Def1_Create_ForeignPropertyRentIncome {
-  implicit val reads: Reads[Def1_Create_ForeignPropertyRentIncome]   = Json.reads[Def1_Create_ForeignPropertyRentIncome]
-  implicit val writes: Writes[Def1_Create_ForeignPropertyRentIncome] = Json.writes[Def1_Create_ForeignPropertyRentIncome]
+object RentIncome {
+  implicit val reads: Reads[RentIncome]   = Json.reads[RentIncome]
+  implicit val writes: Writes[RentIncome] = Json.writes[RentIncome]
 }

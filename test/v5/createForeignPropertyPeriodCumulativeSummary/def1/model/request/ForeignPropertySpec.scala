@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-package v5.createForeignPropertyPeriodCumulativeSummary.def1.model.request.Def1_foreignPropertyEntry
+package v5.createForeignPropertyPeriodCumulativeSummary.def1.model.request
 
 import play.api.libs.json.Json
 import support.UnitSpec
 
-class Def1_Create_CreateForeignPropertyEntrySpec extends UnitSpec {
+class ForeignPropertySpec extends UnitSpec {
 
   private val mtdJson = Json.parse(
     """
@@ -51,11 +51,11 @@ class Def1_Create_CreateForeignPropertyEntrySpec extends UnitSpec {
      """.stripMargin
   )
 
-  private val model = Def1_Create_CreateForeignPropertyEntry(
+  private val model = ForeignProperty(
     countryCode = "zzz",
     income = Some(
-      Def1_Create_ForeignPropertyIncome(
-        rentIncome = Some(Def1_Create_ForeignPropertyRentIncome(rentAmount = Some(34456.30))),
+      PropertyIncome(
+        rentIncome = Some(RentIncome(rentAmount = Some(34456.30))),
         foreignTaxCreditRelief = Some(true),
         premiumsOfLeaseGrant = Some(2543.43),
         otherPropertyIncome = Some(54325.30),
@@ -63,7 +63,7 @@ class Def1_Create_CreateForeignPropertyEntrySpec extends UnitSpec {
         specialWithholdingTaxOrUkTaxPaid = Some(643245.00)
       )),
     expenses = Some(
-      Def1_Create_CreateForeignPropertyExpenses(
+      Expenses(
         premisesRunningCosts = Some(5635.43),
         repairsAndMaintenance = Some(3456.65),
         financialCosts = Some(34532.21),
@@ -110,7 +110,7 @@ class Def1_Create_CreateForeignPropertyEntrySpec extends UnitSpec {
   "reads" should {
     "read from JSON" when {
       "valid JSON is provided" in {
-        mtdJson.as[Def1_Create_CreateForeignPropertyEntry] shouldBe model
+        mtdJson.as[ForeignProperty] shouldBe model
       }
     }
   }

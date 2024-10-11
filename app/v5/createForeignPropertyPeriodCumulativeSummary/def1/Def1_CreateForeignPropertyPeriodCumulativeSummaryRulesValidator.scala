@@ -74,14 +74,14 @@ object Def1_CreateForeignPropertyPeriodCumulativeSummaryRulesValidator
       (income.flatMap(_.specialWithholdingTaxOrUkTaxPaid), s"/foreignProperty/$index/income/specialWithholdingTaxOrUkTaxPaid"),
       (expenses.flatMap(_.premisesRunningCosts), s"/foreignProperty/$index/expenses/premisesRunningCosts"),
       (expenses.flatMap(_.repairsAndMaintenance), s"/foreignProperty/$index/expenses/repairsAndMaintenance"),
-      (expenses.flatMap(_.financialCostsAmount), s"/foreignProperty/$index/expenses/financialCostsAmount"),
-      (expenses.flatMap(_.professionalFeesAmount), s"/foreignProperty/$index/expenses/professionalFeesAmount"),
-      (expenses.flatMap(_.costOfServicesAmount), s"/foreignProperty/$index/expenses/costOfServicesAmount"),
-      (expenses.flatMap(_.travelCostsAmount), s"/foreignProperty/$index/expenses/travelCostsAmount"),
-      (expenses.flatMap(_.residentialFinancialCostAmount), s"/foreignProperty/$index/expenses/residentialFinancialCostAmount"),
-      (expenses.flatMap(_.broughtFwdResidentialFinancialCostAmount), s"/foreignProperty/$index/expenses/broughtFwdResidentialFinancialCostAmount"),
-      (expenses.flatMap(_.otherAmount), s"/foreignProperty/$index/expenses/otherAmount"),
-      (expenses.flatMap(_.consolidatedExpenseAmount), s"/foreignProperty/$index/expenses/consolidatedExpenses")
+      (expenses.flatMap(_.financialCosts), s"/foreignProperty/$index/expenses/financialCosts"),
+      (expenses.flatMap(_.professionalFees), s"/foreignProperty/$index/expenses/professionalFees"),
+      (expenses.flatMap(_.costOfServices), s"/foreignProperty/$index/expenses/costOfServices"),
+      (expenses.flatMap(_.travelCosts), s"/foreignProperty/$index/expenses/travelCosts"),
+      (expenses.flatMap(_.residentialFinancialCost), s"/foreignProperty/$index/expenses/residentialFinancialCost"),
+      (expenses.flatMap(_.broughtFwdResidentialFinancialCost), s"/foreignProperty/$index/expenses/broughtFwdResidentialFinancialCost"),
+      (expenses.flatMap(_.other), s"/foreignProperty/$index/expenses/other"),
+      (expenses.flatMap(_.consolidatedExpenses), s"/foreignProperty/$index/expenses/consolidatedExpenses")
     )
 
     val validatedNumberFields = valuesWithPaths.map {
@@ -95,7 +95,7 @@ object Def1_CreateForeignPropertyPeriodCumulativeSummaryRulesValidator
       case Some(Def1_Create_CreateForeignPropertyExpenses(None, None, None, None, None, None, _, _, None, Some(_))) => valid
       case _ =>
         expenses
-          .flatMap(_.consolidatedExpenseAmount)
+          .flatMap(_.consolidatedExpenses)
           .map(_ => Invalid(List(RuleBothExpensesSuppliedError.withPath(s"/foreignProperty/$index/expenses"))))
           .getOrElse(valid)
     }

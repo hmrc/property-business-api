@@ -40,8 +40,6 @@ class Def1_CreateForeignPropertyPeriodCumulativeSummaryValidatorSpec extends Uni
   private val validToDate      = "2026-03-29"
   private val validCountryCode = "AFG"
 
-  private val maxTaxYear: TaxYear = TaxYear.fromMtd("2025-26")
-
   private def entryWith(countryCode: String) = Json.parse(s"""
        |{
        |         "countryCode": "$countryCode",
@@ -58,13 +56,13 @@ class Def1_CreateForeignPropertyPeriodCumulativeSummaryValidatorSpec extends Uni
        |         "expenses":{
        |            "premisesRunningCosts":129.35,
        |            "repairsAndMaintenance":7490.32,
-       |            "financialCostsAmount":5000.99,
-       |            "professionalFeesAmount":847.90,
-       |            "travelCostsAmount":69.20,
-       |            "costOfServicesAmount":478.23,
-       |            "residentialFinancialCostAmount":879.28,
-       |            "broughtFwdResidentialFinancialCostAmount":846.13,
-       |            "otherAmount":138.92
+       |            "financialCosts":5000.99,
+       |            "professionalFees":847.90,
+       |            "travelCosts":69.20,
+       |            "costOfServices":478.23,
+       |            "residentialFinancialCost":879.28,
+       |            "broughtFwdResidentialFinancialCost":846.13,
+       |            "other":138.92
        |         }
        |}
        |""".stripMargin)
@@ -95,7 +93,7 @@ class Def1_CreateForeignPropertyPeriodCumulativeSummaryValidatorSpec extends Uni
        |        "specialWithholdingTaxOrUkTaxPaid":847.72
        |     },
        |     "expenses":{
-       |        "consolidatedExpenseAmount":129.35
+       |        "consolidatedExpenses":129.35
        |     }
        |}
        |""".stripMargin)
@@ -120,8 +118,7 @@ class Def1_CreateForeignPropertyPeriodCumulativeSummaryValidatorSpec extends Uni
        |      "income": {
        |        "rentIncome": {
        |          "rentAmount": 381.21
-       |        },
-       |        "foreignTaxCreditRelief": true
+       |        }
        |      }
        |    }
        |  ]
@@ -145,7 +142,7 @@ class Def1_CreateForeignPropertyPeriodCumulativeSummaryValidatorSpec extends Uni
 
   private val parsedForeignPropertyIncomeMinimal = Def1_Create_ForeignPropertyIncome(
     Some(parsedForeignPropertyRentIncome),
-    foreignTaxCreditRelief = Some(true),
+    None,
     None,
     None,
     None,
@@ -200,7 +197,7 @@ class Def1_CreateForeignPropertyPeriodCumulativeSummaryValidatorSpec extends Uni
       foreignProperty = Some(List(parsedForeignPropertyEntry.copy(income = Some(parsedForeignPropertyIncomeMinimal), expenses = None)))
     )
 
-  private def validator(nino: String, businessId: String, taxYear: String, body: JsValue, maxTaxYear: TaxYear = maxTaxYear) =
+  private def validator(nino: String, businessId: String, taxYear: String, body: JsValue) =
     new Def1_CreateForeignPropertyPeriodCumulativeSummaryValidator(nino, businessId, taxYear, body, mockAppConfig)
 
   private def setupMocks(): Unit = MockedAppConfig.minimumTaxV3Foreign.returns(TaxYear.starting(2025)).anyNumberOfTimes()
@@ -443,17 +440,17 @@ class Def1_CreateForeignPropertyPeriodCumulativeSummaryValidatorSpec extends Uni
           "/income/specialWithholdingTaxOrUkTaxPaid",
           "/expenses/premisesRunningCosts",
           "/expenses/repairsAndMaintenance",
-          "/expenses/financialCostsAmount",
-          "/expenses/professionalFeesAmount",
-          "/expenses/costOfServicesAmount",
-          "/expenses/travelCostsAmount",
-          "/expenses/otherAmount",
-          "/expenses/residentialFinancialCostAmount",
-          "/expenses/broughtFwdResidentialFinancialCostAmount"
+          "/expenses/financialCosts",
+          "/expenses/professionalFees",
+          "/expenses/costOfServices",
+          "/expenses/travelCosts",
+          "/expenses/other",
+          "/expenses/residentialFinancialCost",
+          "/expenses/broughtFwdResidentialFinancialCost"
         ).foreach(path => testValueFormatErrorWith(bodyWith(entry.update(path, badValue)), s"/foreignProperty/0$path"))
 
         testValueFormatErrorWith(
-          bodyWith(entryConsolidated.update("/expenses/consolidatedExpenseAmount", badValue)),
+          bodyWith(entryConsolidated.update("/expenses/consolidatedExpenses", badValue)),
           s"/foreignProperty/0/expenses/consolidatedExpenses")
       }
 
@@ -463,8 +460,8 @@ class Def1_CreateForeignPropertyPeriodCumulativeSummaryValidatorSpec extends Uni
         val invalidBody = bodyWith(
           entry
             .update("/income/premiumsOfLeaseGrant", badValue)
-            .update("/expenses/financialCostsAmount", badValue)
-            .update("/expenses/travelCostsAmount", badValue)
+            .update("/expenses/financialCosts", badValue)
+            .update("/expenses/travelCosts", badValue)
         )
 
         val result: Either[ErrorWrapper, CreateForeignPropertyPeriodCumulativeSummaryRequestData] =
@@ -476,8 +473,8 @@ class Def1_CreateForeignPropertyPeriodCumulativeSummaryValidatorSpec extends Uni
             ValueFormatError.withPaths(
               List(
                 "/foreignProperty/0/income/premiumsOfLeaseGrant",
-                "/foreignProperty/0/expenses/financialCostsAmount",
-                "/foreignProperty/0/expenses/travelCostsAmount"
+                "/foreignProperty/0/expenses/financialCosts",
+                "/foreignProperty/0/expenses/travelCosts"
               ))
           ))
       }
@@ -527,7 +524,7 @@ class Def1_CreateForeignPropertyPeriodCumulativeSummaryValidatorSpec extends Uni
 
       "passed a body containing both foreignProperty expenses" in {
         setupMocks()
-        val invalidBody = bodyWith(entry.update("/expenses/consolidatedExpenseAmount", JsNumber(100.00)))
+        val invalidBody = bodyWith(entry.update("/expenses/consolidatedExpenses", JsNumber(100.00)))
 
         val result: Either[ErrorWrapper, CreateForeignPropertyPeriodCumulativeSummaryRequestData] =
           validator(validNino, validBusinessId, validTaxYear, invalidBody).validateAndWrapResult()
@@ -537,8 +534,8 @@ class Def1_CreateForeignPropertyPeriodCumulativeSummaryValidatorSpec extends Uni
 
       "passed a body containing multiple sub-objects with both expenses" in {
         setupMocks()
-        val entryWithBothExpenses0 = entryWith("AFG").update("/expenses/consolidatedExpenseAmount", JsNumber(100.00))
-        val entryWithBothExpenses1 = entryWith("ZWE").update("/expenses/consolidatedExpenseAmount", JsNumber(100.00))
+        val entryWithBothExpenses0 = entryWith("AFG").update("/expenses/consolidatedExpenses", JsNumber(100.00))
+        val entryWithBothExpenses1 = entryWith("ZWE").update("/expenses/consolidatedExpenses", JsNumber(100.00))
         val invalidBody =
           bodyWith(entryWithBothExpenses0, entryWithBothExpenses1).update("/foreignFhlEea/expenses/consolidatedExpenses", JsNumber(100.00))
 

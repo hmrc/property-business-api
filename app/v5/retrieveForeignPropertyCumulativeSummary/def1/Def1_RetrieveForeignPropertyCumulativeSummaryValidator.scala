@@ -27,10 +27,10 @@ import v5.retrieveForeignPropertyCumulativeSummary.model.request.RetrieveForeign
 import javax.inject.Inject
 
 class Def1_RetrieveForeignPropertyCumulativeSummaryValidator @Inject() (
-                                                                    nino: String,
-                                                                    businessId: String,
-                                                                    taxYear: String
-                                                                  ) extends Validator[RetrieveForeignPropertyCumulativeSummaryRequestData] {
+    nino: String,
+    businessId: String,
+    taxYear: String
+) extends Validator[RetrieveForeignPropertyCumulativeSummaryRequestData] {
 
   def validate: Validated[Seq[MtdError], RetrieveForeignPropertyCumulativeSummaryRequestData] =
     (

@@ -21,6 +21,6 @@ import v5.retrieveForeignPropertyCumulativeSummary.RetrieveForeignPropertyCumula
 import v5.retrieveForeignPropertyCumulativeSummary.model.request.RetrieveForeignPropertyCumulativeSummaryRequestData
 
 case class Def1_RetrieveForeignPropertyCumulativeSummaryRequestData(nino: Nino, businessId: BusinessId, taxYear: TaxYear)
-  extends RetrieveForeignPropertyCumulativeSummaryRequestData {
+    extends RetrieveForeignPropertyCumulativeSummaryRequestData {
   override val schema: RetrieveForeignPropertyCumulativeSummarySchema = RetrieveForeignPropertyCumulativeSummarySchema.Def1
 }

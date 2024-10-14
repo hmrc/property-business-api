@@ -13,8 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package v5.retrieveForeignPropertyCumulativeSummary.def1.model.response
 
+package v5.retrieveForeignPropertyCumulativeSummary.def1.model.response
 
 import play.api.libs.json.{Json, OFormat}
 
@@ -23,4 +23,3 @@ case class RentIncome(rentAmount: Option[BigDecimal])
 object RentIncome {
   implicit val format: OFormat[RentIncome] = Json.format[RentIncome]
 }
-

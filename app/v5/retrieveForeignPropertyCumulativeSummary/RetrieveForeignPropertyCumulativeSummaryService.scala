@@ -21,7 +21,7 @@ import api.models.errors._
 import api.models.outcomes.ResponseWrapper
 import api.services.{BaseService, ServiceOutcome}
 import cats.data.EitherT
-import RetrieveForeignPropertyCumulativeSummaryConnector.{ForeignResult, NonForeignResult}
+import v5.retrieveForeignPropertyCumulativeSummary.RetrieveForeignPropertyCumulativeSummaryConnector.{ForeignResult, NonForeignResult}
 import v5.retrieveForeignPropertyCumulativeSummary.model.request.RetrieveForeignPropertyCumulativeSummaryRequestData
 import v5.retrieveForeignPropertyCumulativeSummary.model.response.RetrieveForeignPropertyCumulativeSummaryResponse
 
@@ -31,8 +31,8 @@ import scala.concurrent.{ExecutionContext, Future}
 class RetrieveForeignPropertyCumulativeSummaryService @Inject() (connector: RetrieveForeignPropertyCumulativeSummaryConnector) extends BaseService {
 
   def retrieveForeignProperty(request: RetrieveForeignPropertyCumulativeSummaryRequestData)(implicit
-                                                                                  ctx: RequestContext,
-                                                                                  ec: ExecutionContext): Future[ServiceOutcome[RetrieveForeignPropertyCumulativeSummaryResponse]] = {
+      ctx: RequestContext,
+      ec: ExecutionContext): Future[ServiceOutcome[RetrieveForeignPropertyCumulativeSummaryResponse]] = {
 
     val result = EitherT(connector.retrieveForeignPropertyCumulativeSummary(request))
       .leftMap(mapDownstreamErrors(downstreamErrorMap))

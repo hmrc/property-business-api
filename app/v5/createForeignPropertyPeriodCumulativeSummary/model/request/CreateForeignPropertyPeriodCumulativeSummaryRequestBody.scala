@@ -16,4 +16,17 @@
 
 package v5.createForeignPropertyPeriodCumulativeSummary.model.request
 
+import play.api.libs.json.OWrites
+import utils.JsonWritesUtil
+import v5.createForeignPropertyPeriodCumulativeSummary.def1.model.request.Def1_CreateForeignPropertyPeriodCumulativeSummaryRequestBody
+
 trait CreateForeignPropertyPeriodCumulativeSummaryRequestBody
+
+object CreateForeignPropertyPeriodCumulativeSummaryRequestBody extends JsonWritesUtil {
+
+  implicit val writes: OWrites[CreateForeignPropertyPeriodCumulativeSummaryRequestBody] = writesFrom {
+    case def1: Def1_CreateForeignPropertyPeriodCumulativeSummaryRequestBody =>
+      implicitly[OWrites[Def1_CreateForeignPropertyPeriodCumulativeSummaryRequestBody]].writes(def1)
+  }
+
+}

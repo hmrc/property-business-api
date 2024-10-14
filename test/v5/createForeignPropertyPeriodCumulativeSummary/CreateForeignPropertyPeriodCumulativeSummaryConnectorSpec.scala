@@ -20,6 +20,10 @@ import api.connectors.{ConnectorSpec, DownstreamOutcome}
 import api.models.domain.{BusinessId, Nino, TaxYear}
 import api.models.outcomes.ResponseWrapper
 import v5.createForeignPropertyPeriodCumulativeSummary.def1.model.Def1_CreateForeignPropertyPeriodCumulativeSummaryFixtures
+import v5.createForeignPropertyPeriodCumulativeSummary.def1.model.request.{
+  Def1_CreateForeignPropertyPeriodCumulativeSummaryRequestBody,
+  Def1_CreateForeignPropertyPeriodCumulativeSummaryRequestData
+}
 import v5.createForeignPropertyPeriodCumulativeSummary.model.request._
 import v5.createForeignPropertyPeriodCumulativeSummary.model.response.CreateForeignPropertyPeriodCumulativeSummaryResponse
 

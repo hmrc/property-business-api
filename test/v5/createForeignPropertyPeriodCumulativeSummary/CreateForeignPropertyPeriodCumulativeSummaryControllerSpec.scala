@@ -28,10 +28,8 @@ import play.api.libs.json.{JsObject, JsValue, Json}
 import play.api.mvc.Result
 import utils.MockIdGenerator
 import v5.createForeignPropertyPeriodCumulativeSummary.def1.model.Def1_CreateForeignPropertyPeriodCumulativeSummaryFixtures
-import v5.createForeignPropertyPeriodCumulativeSummary.model.request.{
-  CreateForeignPropertyPeriodCumulativeSummaryRequestData,
-  Def1_CreateForeignPropertyPeriodCumulativeSummaryRequestData
-}
+import v5.createForeignPropertyPeriodCumulativeSummary.def1.model.request.Def1_CreateForeignPropertyPeriodCumulativeSummaryRequestData
+import v5.createForeignPropertyPeriodCumulativeSummary.model.request.CreateForeignPropertyPeriodCumulativeSummaryRequestData
 import v5.createForeignPropertyPeriodCumulativeSummary.model.response.CreateForeignPropertyPeriodCumulativeSummaryResponse
 
 import scala.concurrent.ExecutionContext.Implicits.global

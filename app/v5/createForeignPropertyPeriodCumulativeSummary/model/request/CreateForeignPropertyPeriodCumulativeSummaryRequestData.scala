@@ -24,4 +24,3 @@ trait CreateForeignPropertyPeriodCumulativeSummaryRequestData {
   val taxYear: TaxYear
   def body: CreateForeignPropertyPeriodCumulativeSummaryRequestBody
 }
-

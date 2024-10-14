@@ -17,8 +17,13 @@
 package v5.createForeignPropertyPeriodCumulativeSummary.def1.model
 
 import play.api.libs.json.{JsValue, Json}
-import v5.createForeignPropertyPeriodCumulativeSummary.def1.model.request.{Expenses, ForeignProperty, PropertyIncome, RentIncome}
-import v5.createForeignPropertyPeriodCumulativeSummary.model.request.Def1_CreateForeignPropertyPeriodCumulativeSummaryRequestBody
+import v5.createForeignPropertyPeriodCumulativeSummary.def1.model.request.{
+  Def1_CreateForeignPropertyPeriodCumulativeSummaryRequestBody,
+  Expenses,
+  ForeignProperty,
+  PropertyIncome,
+  RentIncome
+}
 
 trait Def1_CreateForeignPropertyPeriodCumulativeSummaryFixtures {
 

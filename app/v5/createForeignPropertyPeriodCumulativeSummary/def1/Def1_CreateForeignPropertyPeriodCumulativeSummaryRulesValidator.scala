@@ -22,8 +22,11 @@ import api.models.errors._
 import cats.data.Validated
 import cats.data.Validated.Invalid
 import cats.implicits.toTraverseOps
-import v5.createForeignPropertyPeriodCumulativeSummary.def1.model.request.{Def1_CreateForeignPropertyPeriodCumulativeSummaryRequestData, Expenses, ForeignProperty}
-import v5.createForeignPropertyPeriodCumulativeSummary.model.request.Def1_CreateForeignPropertyPeriodCumulativeSummaryRequestData
+import v5.createForeignPropertyPeriodCumulativeSummary.def1.model.request.{
+  Def1_CreateForeignPropertyPeriodCumulativeSummaryRequestData,
+  Expenses,
+  ForeignProperty
+}
 
 object Def1_CreateForeignPropertyPeriodCumulativeSummaryRulesValidator
     extends RulesValidator[Def1_CreateForeignPropertyPeriodCumulativeSummaryRequestData] {

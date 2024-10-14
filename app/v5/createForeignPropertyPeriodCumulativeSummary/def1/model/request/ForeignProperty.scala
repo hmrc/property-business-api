@@ -22,9 +22,9 @@ import shapeless.HNil
 import utils.EmptinessChecker
 
 case class ForeignProperty(
-                            countryCode: String,
-                            income: Option[PropertyIncome],
-                            expenses: Option[Expenses]
+    countryCode: String,
+    income: Option[PropertyIncome],
+    expenses: Option[Expenses]
 )
 
 object ForeignProperty {

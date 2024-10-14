@@ -24,7 +24,10 @@ import cats.implicits._
 import config.AppConfig
 import play.api.libs.json.JsValue
 import v5.createForeignPropertyPeriodCumulativeSummary.def1.Def1_CreateForeignPropertyPeriodCumulativeSummaryRulesValidator.validateBusinessRules
-import v5.createForeignPropertyPeriodCumulativeSummary.def1.model.request.{Def1_CreateForeignPropertyPeriodCumulativeSummaryRequestBody, Def1_CreateForeignPropertyPeriodCumulativeSummaryRequestData}
+import v5.createForeignPropertyPeriodCumulativeSummary.def1.model.request.{
+  Def1_CreateForeignPropertyPeriodCumulativeSummaryRequestBody,
+  Def1_CreateForeignPropertyPeriodCumulativeSummaryRequestData
+}
 import v5.createForeignPropertyPeriodCumulativeSummary.model.request._
 
 class Def1_CreateForeignPropertyPeriodCumulativeSummaryValidator(nino: String,

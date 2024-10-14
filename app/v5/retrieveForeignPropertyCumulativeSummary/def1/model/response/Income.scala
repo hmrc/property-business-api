@@ -16,7 +16,8 @@
 
 package v5.retrieveForeignPropertyCumulativeSummary.def1.model.response
 
-import play.api.libs.json.{Json, OFormat}
+import play.api.libs.functional.syntax._
+import play.api.libs.json.{JsPath, Json, OWrites, Reads}
 
 case class Income(rentIncome: Option[RentIncome],
                   foreignTaxCreditRelief: Boolean,
@@ -26,5 +27,15 @@ case class Income(rentIncome: Option[RentIncome],
                   specialWithholdingTaxOrUkTaxPaid: Option[BigDecimal])
 
 object Income {
-  implicit val format: OFormat[Income] = Json.format[Income]
+  implicit val writes: OWrites[Income] = Json.writes[Income]
+
+  implicit val reads: Reads[Income] = (
+    (JsPath \ "rentIncome").readNullable[RentIncome] and
+      (JsPath \ "foreignTaxCreditRelief").read[Boolean] and
+      (JsPath \ "premiumsOfLeaseGrantAmount").readNullable[BigDecimal] and
+      (JsPath \ "otherPropertyIncomeAmount").readNullable[BigDecimal] and
+      (JsPath \ "foreignTaxPaidOrDeducted").readNullable[BigDecimal] and
+      (JsPath \ "specialWithholdingTaxOrUkTaxPaid").readNullable[BigDecimal]
+  )(Income.apply _)
+
 }

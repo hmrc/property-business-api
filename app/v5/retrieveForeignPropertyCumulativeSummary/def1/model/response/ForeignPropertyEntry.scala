@@ -13,12 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package v5.retrieveForeignPropertyCumulativeSummary.def1.model.response
 
 import play.api.libs.json.{Json, OFormat}
 
-case class ForeignProperty(countryCode: String, income: Option[Income], expenses: Option[Expenses])
+case class ForeignPropertyEntry(countryCode: String, income: Option[Income], expenses: Option[Expenses])
 
-object ForeignProperty {
-  implicit val format: OFormat[ForeignProperty] = Json.format[ForeignProperty]
+object ForeignPropertyEntry {
+  implicit val format: OFormat[ForeignPropertyEntry] = Json.format[ForeignPropertyEntry]
 }

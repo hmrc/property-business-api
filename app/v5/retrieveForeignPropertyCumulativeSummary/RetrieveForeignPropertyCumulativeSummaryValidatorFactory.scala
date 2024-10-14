@@ -28,8 +28,9 @@ class RetrieveForeignPropertyCumulativeSummaryValidatorFactory @Inject() {
 
   def validator(nino: String, businessId: String, taxYear: String): Validator[RetrieveForeignPropertyCumulativeSummaryRequestData] =
     RetrieveForeignPropertyCumulativeSummarySchema.schemaFor(taxYear) match {
-      case Valid(RetrieveForeignPropertyCumulativeSummarySchema.Def1) => new Def1_RetrieveForeignPropertyCumulativeSummaryValidator(nino, businessId, taxYear)
-      case Invalid(errors)                                       => Validator.returningErrors(errors)
+      case Valid(RetrieveForeignPropertyCumulativeSummarySchema.Def1) =>
+        new Def1_RetrieveForeignPropertyCumulativeSummaryValidator(nino, businessId, taxYear)
+      case Invalid(errors) => Validator.returningErrors(errors)
     }
 
 }

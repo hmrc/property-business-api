@@ -21,27 +21,28 @@ import play.api.libs.functional.syntax.toFunctionalBuilderOps
 import play.api.libs.json.{Json, OWrites, Reads, __}
 import v5.retrieveForeignPropertyCumulativeSummary.model.response.RetrieveForeignPropertyCumulativeSummaryResponse
 
-// Note: ForeignProperty is effectively mandatory.
+// Note: ForeignPropertyEntry is effectively mandatory.
 // It will only not be present in a successful response from downstream if a businessId
 // corresponds to a non-UK property is used and in this case we send back an error.
 case class Def1_RetrieveForeignPropertyCumulativeSummaryResponse(
-                                                             submittedOn: Timestamp,
-                                                             fromDate: String,
-                                                             toDate: String,
-                                                             foreignProperty: Option[ForeignProperty]
-                                                           ) extends RetrieveForeignPropertyCumulativeSummaryResponse {
+    submittedOn: Timestamp,
+    fromDate: String,
+    toDate: String,
+    foreignProperty: Option[Seq[ForeignPropertyEntry]]
+) extends RetrieveForeignPropertyCumulativeSummaryResponse {
   override def hasForeignData: Boolean = foreignProperty.isDefined
 }
 
 object Def1_RetrieveForeignPropertyCumulativeSummaryResponse {
 
-  implicit val writes: OWrites[Def1_RetrieveForeignPropertyCumulativeSummaryResponse] = Json.writes[Def1_RetrieveForeignPropertyCumulativeSummaryResponse]
+  implicit val writes: OWrites[Def1_RetrieveForeignPropertyCumulativeSummaryResponse] =
+    Json.writes[Def1_RetrieveForeignPropertyCumulativeSummaryResponse]
 
   implicit val reads: Reads[Def1_RetrieveForeignPropertyCumulativeSummaryResponse] = (
     (__ \ "submittedOn").read[Timestamp] and
       (__ \ "fromDate").read[String] and
       (__ \ "toDate").read[String] and
-      (__ \ "foreignProperty").readNullable[ForeignProperty]
-    )(Def1_RetrieveForeignPropertyCumulativeSummaryResponse.apply _)
+      (__ \ "foreignProperty").readNullable[Seq[ForeignPropertyEntry]]
+  )(Def1_RetrieveForeignPropertyCumulativeSummaryResponse.apply _)
 
 }

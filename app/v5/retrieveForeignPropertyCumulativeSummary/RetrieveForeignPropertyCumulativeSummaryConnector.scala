@@ -41,9 +41,9 @@ object RetrieveForeignPropertyCumulativeSummaryConnector {
 class RetrieveForeignPropertyCumulativeSummaryConnector @Inject() (val http: HttpClient, val appConfig: AppConfig) extends BaseDownstreamConnector {
 
   def retrieveForeignPropertyCumulativeSummary(request: RetrieveForeignPropertyCumulativeSummaryRequestData)(implicit
-                                                                                                   hc: HeaderCarrier,
-                                                                                                   ec: ExecutionContext,
-                                                                                                   correlationId: String): Future[DownstreamOutcome[Result]] = {
+      hc: HeaderCarrier,
+      ec: ExecutionContext,
+      correlationId: String): Future[DownstreamOutcome[Result]] = {
 
     import request._
     import schema._

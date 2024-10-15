@@ -19,10 +19,6 @@
       "type": "string",
       "example": "2024-04-05"
     },
-
-
-
-
     "foreignFhlEea": {
       "type": "object",
       "description": "Object holding the income and expenses of the user's Furnished Holiday Lettings (FHL) in the European Economic Area (EEA) for the period.",
@@ -131,14 +127,6 @@
       },
       "additionalProperties": false
     },
-
-
-
-
-
-
-
-
     "foreignNonFhlProperty": {
       "type": "array",
       "description": "Array holding the income and expenses of the user's foreign property business - excluding Furnished Holiday Lettings (FHL) in the European Economic Area (EEA) - for the period.",

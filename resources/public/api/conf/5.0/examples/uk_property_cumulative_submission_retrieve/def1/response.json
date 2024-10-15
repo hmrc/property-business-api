@@ -25,7 +25,8 @@
       "residentialFinancialCostsCarriedForward": 483.91,
       "rentARoom": {
         "amountClaimed": 88.55
-      }
+      },
+      "consolidatedExpenses": 5000.99
     }
   }
 }

@@ -146,7 +146,7 @@ trait Def1_RetrieveForeignPropertyCumulativeSummaryFixture {
       |      "expenses": {
       |        "residentialFinancialCost": 857.78,
       |        "broughtFwdResidentialFinancialCost": 600.10,
-      |        "consolidatedExpenseAmount": 1500.50
+      |        "consolidatedExpenses": 1500.50
       |      }
       |    }
       |  ]

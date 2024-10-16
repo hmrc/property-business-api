@@ -4,7 +4,7 @@ description: |
   A National Insurance number, business ID, and tax year are required.
 
   Note: This endpoint only supports submissions up to tax year 2024-25. New endpoints which support cumulative submission
-  will be provided for tax year 2025-26 onwards.
+  are provided for tax year 2025-26 onwards.
 
   ### Test data
   Scenario simulation using Gov-Test-Scenario headers is only available in the sandbox environment.

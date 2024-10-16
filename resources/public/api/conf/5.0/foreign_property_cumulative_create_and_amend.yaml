@@ -19,7 +19,7 @@ description: |
   | 2025-26 onwards | OUTSIDE_AMENDMENT_WINDOW                    | Simulates the scenario where request cannot be completed as it is outside the amendment window. |
 
 tags:
-  - Foreign Property Income & Expenses Period Summary
+  - Foreign Property Cumulative Submission
 
 parameters:
   - $ref: './common/pathParameters.yaml#/components/parameters/nino'

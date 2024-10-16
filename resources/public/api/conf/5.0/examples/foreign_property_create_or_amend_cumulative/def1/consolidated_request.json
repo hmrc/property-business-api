@@ -1,0 +1,24 @@
+{
+  "fromDate":"2024-03-09",
+  "toDate":"2024-03-29",
+  "foreignProperty":[
+    {
+      "countryCode":"FRA",
+      "income":{
+        "rentIncome":{
+          "rentAmount":4882.23
+        },
+        "foreignTaxCreditRelief":false,
+        "premiumsOfLeaseGrant":884.72,
+        "otherPropertyIncome":7713.09,
+        "foreignTaxPaidOrDeducted":884.12,
+        "specialWithholdingTaxOrUkTaxPaid":847.72
+      },
+      "expenses":{
+        "consolidatedExpenses": 3992.93,
+        "residentialFinancialCost":879.28,
+        "broughtFwdResidentialFinancialCost":846.13
+      }
+    }
+  ]
+}

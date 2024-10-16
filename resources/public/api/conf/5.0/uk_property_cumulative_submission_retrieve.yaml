@@ -52,6 +52,10 @@ responses:
             description: Full response for TY 2025-26 and after
             value:
               $ref: './examples/uk_property_cumulative_submission_retrieve/def1/response.json'
+          consolidated-response-for-TY-2025-26:
+            description: Consolidated response for TY 2025-26 and after
+            value:
+              $ref: './examples/uk_property_cumulative_submission_retrieve/def1/consolidated_response.json'
 
   "400":
     description: Bad request

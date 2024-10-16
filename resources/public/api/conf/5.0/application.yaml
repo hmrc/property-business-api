@@ -99,6 +99,8 @@ paths:
     $ref: "./foreign_property_period_summary_create.yaml"
   /individuals/business/property/foreign/{nino}/{businessId}/period/{taxYear}/{submissionId}:
     $ref: "./foreign_property_period_summary.yaml"
+  /individuals/business/property/foreign/{nino}/{businessId}/cumulative/{taxYearFrom2025}:
+    $ref: "./foreign_property_cumulative.yaml"
   /individuals/business/property/foreign/{nino}/{businessId}/annual/{taxYear}:
     $ref: "./foreign_property_annual_submission.yaml"
   /individuals/business/property/{nino}/{businessId}/annual/{taxYear}:

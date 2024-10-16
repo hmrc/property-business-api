@@ -218,6 +218,70 @@ components:
         code: RULE_DUPLICATE_COUNTRY_CODE
         message: You cannot supply the same country code for multiple properties
 
+    ruleAdvanceSubmissionRequiresPeriodEndDate:
+      description: |
+        The remote endpoint has indicated that To submit in advance, submission end date must be the end of the period.
+      value:
+        code: RULE_ADVANCE_SUBMISSION_REQUIRES_PERIOD_END_DATE
+        message: For advance submission end date must be the end of the period.
+
+    ruleSubmissionDateCannotMoveBackwards:
+      description: |
+        The remote endpoint has indicated that Submission end date cannot be earlier than existing submission.
+      value:
+        code: RULE_SUBMISSION_END_DATE_CANNOT_MOVE_BACKWARDS
+        message: Submission end date cannot be earlier than existing submission
+
+    ruleStartDateNotAlignedWithReportingType:
+      description: |
+        The remote endpoint has indicated that Start date does not align to the reporting type.
+      value:
+        code: RULE_START_DATE_NOT_ALIGNED_WITH_REPORTING_TYPE
+        message: Start date does not align to the reporting type.
+
+    ruleStartDateNotAlignedWithCommencementDate:
+      description: |
+        The remote endpoint has indicated that Start date does not align to the commencement date.
+      value:
+        code: RULE_START_DATE_NOT_ALIGNED_TO_COMMENCEMENT_DATE
+        message: Start date does not align to the commencement date.
+
+    ruleEndDateNotAlignedWithReportingType:
+      description: |
+        The remote endpoint has indicated that End date does not align to the reporting type.
+      value:
+         code: RULE_END_DATE_NOT_ALIGNED_WITH_REPORTING_TYPE
+         message: End date does not align to the reporting type.
+
+    ruleMissingSubmissionDates:
+      description: |
+         The remote endpoint has indicated that Submission start/end date not provided.
+      value:
+         code: RULE_MISSING_SUBMISSION_DATES
+         message: Submission start/end date not provided.
+
+    ruleStartAndEndDateNotAllowed:
+      description: |
+        The remote endpoint has indicated that Start/end date not accepted for annual/latent submission.
+      value:
+        code: RULE_START_AND_END_DATE_NOT_ALLOWED
+        message: Start/end date not accepted for annual/latent submission.
+
+    ruleOutsideAmendmentWindow:
+      description: |
+        The remote endpoint has indicated that the request cannot be completed as you are outside the amendment window.
+      value:
+        code: RULE_OUTSIDE_AMENDMENT_WINDOW
+        message: Request cannot be completed as you are outside the amendment window
+
+
+    ruleEarlyDataSubmissionNotAccepted:
+      description: |
+        The remote endpoint has indicated that Cannot submit data more than 10 days before end of Period.
+      value:
+        code: RULE_EARLY_DATA_SUBMISSION_NOT_ACCEPTED
+        message: Cannot submit data more than 10 days before end of Period.
+
     # 403
 
     clientOrAgentNotAuthorised:

@@ -49,7 +49,7 @@ class Def1_CreateAmendUkPropertyCumulativeSummaryValidatorSpec extends UnitSpec 
   private implicit val correlationId: String = "1234"
 
   private val validNino       = "AA123456A"
-  private val validTaxYear    = "2024-25"
+  private val validTaxYear    = "2025-26"
   private val validBusinessId = "XAIS12345678901"
 
   private val fullRequestJson: JsValue = Json.parse(
@@ -236,9 +236,9 @@ class Def1_CreateAmendUkPropertyCumulativeSummaryValidatorSpec extends UnitSpec 
           result shouldBe Left(ErrorWrapper(correlationId, RuleTaxYearRangeInvalidError))
         }
 
-        "passed a taxYear immediately after the maximum tax year" in {
+        "passed a taxYear immediately before the minimum tax year" in {
           val result: Either[ErrorWrapper, CreateAmendUkPropertyCumulativeSummaryRequestData] =
-            validator(validNino, "2025-26", validBusinessId, fullRequestJson).validateAndWrapResult()
+            validator(validNino, "2024-25", validBusinessId, fullRequestJson).validateAndWrapResult()
 
           result shouldBe Left(ErrorWrapper(correlationId, RuleTaxYearNotSupportedError))
         }

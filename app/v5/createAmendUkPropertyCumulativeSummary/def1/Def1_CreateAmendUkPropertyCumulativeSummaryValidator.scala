@@ -17,12 +17,17 @@
 package v5.createAmendUkPropertyCumulativeSummary.def1
 
 import api.controllers.validators.Validator
-import api.controllers.validators.resolvers.{ResolveBusinessId, ResolveNino, ResolveNonEmptyJsonObject, ResolveTaxYear}
+import api.controllers.validators.resolvers.{ResolveBusinessId, ResolveNino, ResolveNonEmptyJsonObject, ResolveTaxYearMinimum}
+import api.models.domain.TaxYear
 import api.models.errors.MtdError
 import cats.data.Validated
 import cats.implicits.catsSyntaxTuple4Semigroupal
 import play.api.libs.json.JsValue
-import v5.createAmendUkPropertyCumulativeSummary.def1.Def1_CreateAmendUkPropertyCumulativeSummaryValidator.{resolveJson, rulesValidator}
+import v5.createAmendUkPropertyCumulativeSummary.def1.Def1_CreateAmendUkPropertyCumulativeSummaryValidator.{
+  resolveJson,
+  resolveTaxYear,
+  rulesValidator
+}
 import v5.createAmendUkPropertyCumulativeSummary.model.request.{
   CreateAmendUkPropertyCumulativeSummaryRequestData,
   Def1_CreateAmendUkPropertyCumulativeSummaryRequestBody,
@@ -37,7 +42,7 @@ class Def1_CreateAmendUkPropertyCumulativeSummaryValidator @Inject() (nino: Stri
   def validate: Validated[Seq[MtdError], Def1_CreateAmendUkPropertyCumulativeSummaryRequestData] = {
     (
       ResolveNino(nino),
-      ResolveTaxYear(taxYear),
+      resolveTaxYear(taxYear),
       ResolveBusinessId(businessId),
       resolveJson(body)
     ).mapN(Def1_CreateAmendUkPropertyCumulativeSummaryRequestData) andThen rulesValidator.validateBusinessRules
@@ -47,6 +52,9 @@ class Def1_CreateAmendUkPropertyCumulativeSummaryValidator @Inject() (nino: Stri
 }
 
 object Def1_CreateAmendUkPropertyCumulativeSummaryValidator {
+  private val minTaxYear     = TaxYear.fromMtd("2025-26")
+  private val resolveTaxYear = ResolveTaxYearMinimum(minTaxYear)
+
   private val resolveJson    = new ResolveNonEmptyJsonObject[Def1_CreateAmendUkPropertyCumulativeSummaryRequestBody]()
   private val rulesValidator = new Def1_CreateUkPropertyCumulativeSummaryRulesValidator()
 

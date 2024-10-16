@@ -38,7 +38,7 @@ class CreateForeignPropertyPeriodCumulativeSummaryConnector @Inject() (val http:
     val downstreamUri =
       TaxYearSpecificIfsUri[Unit](s"income-tax/${request.taxYear.asTysDownstream}/business/property/periodic/${request.nino}/${request.businessId}")
 
-    post(request.body, downstreamUri)
+    put(request.body, downstreamUri)
   }
 
 }

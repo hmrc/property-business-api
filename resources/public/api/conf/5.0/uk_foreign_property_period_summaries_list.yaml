@@ -3,7 +3,7 @@ get:
   description: |
     This endpoint enables you to list the period summaries associated with UK or foreign Properties. A National Insurance number, tax year and business ID are required.
 
-    Note: This endpoint only supports submissions up to tax year 2024-25. New endpoints which support cumulative submission will be provided for tax year 2025-26 onwards.
+    Note: This endpoint only supports submissions up to tax year 2024-25. New endpoints which support cumulative submission are provided for tax year 2025-26 onwards.
 
     ### Test data
     Scenario simulation using Gov-Test-Scenario headers is only available in the sandbox environment.

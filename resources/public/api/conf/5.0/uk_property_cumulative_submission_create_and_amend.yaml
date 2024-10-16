@@ -56,6 +56,10 @@ responses:
             description: UK Property Cumulative Submission request for TY 2025-26 and after
             value:
               $ref: './examples/uk_property_cumulative_submission_create_and_amend/def1/request.json'
+          consolidated-uk-property-cumulative-submission-request-for-TY-2025-26:
+            description: Consolidated UK Property Cumulative Submission request for TY 2025-26 and after
+            value:
+              $ref: './examples/uk_property_cumulative_submission_create_and_amend/def1/consolidated_request.json'
 
   "400":
     description: Bad request

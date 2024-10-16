@@ -59,14 +59,14 @@ class CreateForeignPropertyPeriodCumulativeSummaryController @Inject() (
           .withAuditing(
             AuditHandler(
               auditService,
-              "CreateForeignPropertyIncomeAndExpensesPeriodSummary",
-              "create-foreign-property-income-and-expenses-period-summary",
+              "CreateForeignPropertyPeriodCumulativeSummary",
+              "create-foreign-property-period-cumulative-summary",
               Version.from(request, orElse = Version3),
               Map("nino" -> nino, "businessId" -> businessId, "taxYear" -> taxYear),
               Some(request.body)
             )
           )
-          .withPlainJsonResult(CREATED)
+          .withNoContentResult()
 
       requestHandler.handleRequest()
     }

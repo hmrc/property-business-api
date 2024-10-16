@@ -42,9 +42,8 @@ trait BaseDownstreamConnector extends Logging {
 
     val strategy = uri.strategy
 
-    def doPost(implicit hc: HeaderCarrier): Future[DownstreamOutcome[Resp]] = {
+    def doPost(implicit hc: HeaderCarrier): Future[DownstreamOutcome[Resp]] =
       http.POST(getBackendUri(uri.path, strategy), body)
-    }
 
     for {
       headers <- getBackendHeaders(strategy, jsonContentTypeHeader ++ intentHeader(maybeIntent))
@@ -96,9 +95,8 @@ trait BaseDownstreamConnector extends Logging {
 
     val strategy = uri.strategy
 
-    def doPut(implicit hc: HeaderCarrier): Future[DownstreamOutcome[Resp]] = {
+    def doPut(implicit hc: HeaderCarrier): Future[DownstreamOutcome[Resp]] =
       http.PUT(getBackendUri(uri.path, strategy), body)
-    }
 
     for {
       headers <- getBackendHeaders(strategy, jsonContentTypeHeader ++ intentHeader(maybeIntent))
@@ -115,8 +113,7 @@ trait BaseDownstreamConnector extends Logging {
   private def getBackendHeaders(
       strategy: DownstreamStrategy,
       additionalHeaders: Seq[(String, String)]
-  )(implicit ec: ExecutionContext, hc: HeaderCarrier, correlationId: String): Future[HeaderCarrier] = {
-
+  )(implicit ec: ExecutionContext, hc: HeaderCarrier, correlationId: String): Future[HeaderCarrier] =
     for {
       contractHeaders <- strategy.contractHeaders(correlationId)
     } yield {
@@ -128,7 +125,5 @@ trait BaseDownstreamConnector extends Logging {
 
       HeaderCarrier(extraHeaders = apiHeaders ++ passThroughHeaders)
     }
-
-  }
 
 }

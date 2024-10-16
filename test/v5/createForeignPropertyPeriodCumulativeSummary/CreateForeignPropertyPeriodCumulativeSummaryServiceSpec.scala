@@ -23,7 +23,6 @@ import api.models.outcomes.ResponseWrapper
 import api.services.ServiceSpec
 import v5.createForeignPropertyPeriodCumulativeSummary.def1.model.Def1_CreateForeignPropertyPeriodCumulativeSummaryFixtures
 import v5.createForeignPropertyPeriodCumulativeSummary.def1.model.request.Def1_CreateForeignPropertyPeriodCumulativeSummaryRequestData
-import v5.createForeignPropertyPeriodCumulativeSummary.model.response.CreateForeignPropertyPeriodCumulativeSummaryResponse
 
 import scala.concurrent.Future
 
@@ -37,11 +36,11 @@ class CreateForeignPropertyPeriodCumulativeSummaryServiceSpec
 
   private val nino       = Nino("AA123456A")
   private val businessId = BusinessId("XAIS12345678910")
-  private val taxYear    = TaxYear.fromMtd("2020-21")
+  private val taxYear    = TaxYear.fromMtd("2025-26")
 
   private val requestData = Def1_CreateForeignPropertyPeriodCumulativeSummaryRequestData(nino, businessId, taxYear, regularExpensesRequestBody)
 
-  private val responseData = CreateForeignPropertyPeriodCumulativeSummaryResponse("4557ecb5-fd32-48cc-81f5-e6acd1099f3c")
+  private val responseData: Unit = ()
 
   private val service = new CreateForeignPropertyPeriodCumulativeSummaryService(mockCreateForeignPropertyPeriodCumulativeSummaryConnector)
 
@@ -72,34 +71,30 @@ class CreateForeignPropertyPeriodCumulativeSummaryServiceSpec
         }
 
       val errors = List(
-        "INVALID_TAXABLE_ENTITY_ID" -> NinoFormatError,
-        "INVALID_INCOMESOURCEID"    -> BusinessIdFormatError,
-        "INVALID_TAX_YEAR"          -> InternalError,
-        "DUPLICATE_COUNTRY_CODE"    -> RuleDuplicateCountryCodeError,
-        "INVALID_PAYLOAD"           -> InternalError,
-        "INVALID_CORRELATIONID"     -> InternalError,
-        "OVERLAPS_IN_PERIOD"        -> RuleOverlappingPeriodError,
-        "NOT_ALIGN_PERIOD"          -> RuleMisalignedPeriodError,
-        "GAPS_IN_PERIOD"            -> RuleNotContiguousPeriodError,
-        "INVALID_DATE_RANGE"        -> RuleToDateBeforeFromDateError,
-        "DUPLICATE_SUBMISSION"      -> RuleDuplicateSubmissionError,
-        "INCOME_SOURCE_NOT_FOUND"   -> NotFoundError,
-        "INCOMPATIBLE_PAYLOAD"      -> RuleTypeOfBusinessIncorrectError,
-        "TAX_YEAR_NOT_SUPPORTED"    -> RuleTaxYearNotSupportedError,
-        "MISSING_EXPENSES"          -> InternalError,
-        "SERVER_ERROR"              -> InternalError,
-        "SERVICE_UNAVAILABLE"       -> InternalError
+        "INVALID_TAXABLE_ENTITY_ID"          -> NinoFormatError,
+        "INVALID_INCOME_SOURCE_ID"           -> BusinessIdFormatError,
+        "INVALID_PAYLOAD"                    -> InternalError,
+        "INVALID_CORRELATION_ID"             -> InternalError,
+        "INVALID_TAX_YEAR"                   -> InternalError,
+        "INCOME_SOURCE_NOT_FOUND"            -> NotFoundError,
+        "SUBMITTED_TAX_YEAR_NOT_SUPPORTED"   -> RuleTaxYearNotSupportedError,
+        "TAX_YEAR_NOT_SUPPORTED"             -> RuleTaxYearNotSupportedError,
+        "MISSING_EXPENSES"                   -> InternalError,
+        "INVALID_SUBMISSION_END_DATE"        -> RuleAdvanceSubmissionRequiresPeriodEndDateError,
+        "SUBMISSION_END_DATE_VALUE"          -> RuleSubmissionEndDateCannotMoveBackwardsError,
+        "INVALID_START_DATE"                 -> RuleStartDateNotAlignedWithReportingTypeError,
+        "START_DATE_NOT_ALIGNED"             -> RuleStartDateNotAlignedToCommencementDateError,
+        "END_DATE_NOT_ALIGNED"               -> RuleEndDateNotAlignedWithReportingTypeError,
+        "MISSING_SUBMISSION_DATES"           -> RuleMissingSubmissionDatesError,
+        "START_END_DATE_NOT_ACCEPTED"        -> RuleStartAndEndDateNotAllowedError,
+        "OUTSIDE_AMENDMENT_WINDOW"           -> RuleOutsideAmendmentWindowError,
+        "EARLY_DATA_SUBMISSION_NOT_ACCEPTED" -> RuleEarlyDataSubmissionNotAcceptedError,
+        "DUPLICATE_COUNTRY_CODE"             -> RuleDuplicateCountryCodeError,
+        "SERVER_ERROR"                       -> InternalError,
+        "SERVICE_UNAVAILABLE"                -> InternalError
       )
 
-      val extraTysErrors = List(
-        "INVALID_INCOMESOURCE_ID" -> BusinessIdFormatError,
-        "INVALID_CORRELATION_ID"  -> InternalError,
-        "PERIOD_NOT_ALIGNED"      -> RuleMisalignedPeriodError,
-        "PERIOD_OVERLAPS"         -> RuleOverlappingPeriodError,
-        "SUBMISSION_DATE_ISSUE"   -> RuleMisalignedPeriodError
-      )
-
-      (errors ++ extraTysErrors).foreach((serviceError _).tupled)
+      errors.foreach((serviceError _).tupled)
     }
   }
 

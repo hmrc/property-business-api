@@ -42,7 +42,7 @@ class CreateForeignPropertyPeriodCumulativeSummaryConnectorSpec extends Connecto
 
       val outcome: DownstreamOutcome[Unit] = Right(ResponseWrapper(correlationId, response))
 
-      willPost(
+      willPut(
         url = s"$baseUrl/income-tax/25-26/business/property/periodic/$nino/$businessId",
         body = requestBody
       ).returns(Future.successful(outcome))

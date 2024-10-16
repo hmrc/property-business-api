@@ -29,10 +29,10 @@ import support.IntegrationBaseSpec
 
 class Def1_CreateForeignPropertyPeriodCumulativeSummaryISpec extends IntegrationBaseSpec with JsonErrorValidators {
 
-  private def invalidEntryWithCustomNumber(countryCode: String) =
+  private def invalidEntryWithConsolidatedExpenses() =
     Json.parse(s"""
                   |{
-                  |    "countryCode": "$countryCode",
+                  |    "countryCode": "AFG",
                   |    "expenses": {
                   |        "premisesRunningCosts": 3123.21,
                   |        "consolidatedExpenses": 1.23
@@ -80,11 +80,11 @@ class Def1_CreateForeignPropertyPeriodCumulativeSummaryISpec extends Integration
           AuthStub.authorised()
           MtdIdLookupStub.ninoFound(nino)
           DownstreamStub
-            .when(method = DownstreamStub.POST, uri = downstreamUri)
+            .when(method = DownstreamStub.PUT, uri = downstreamUri)
             .thenReturn(status = NO_CONTENT, None)
         }
 
-        val response: WSResponse = await(request().post(requestBody))
+        val response: WSResponse = await(request().put(requestBody))
         response.status shouldBe NO_CONTENT
         response.body shouldBe ""
         response.header("Content-Type") shouldBe None
@@ -98,7 +98,7 @@ class Def1_CreateForeignPropertyPeriodCumulativeSummaryISpec extends Integration
           AuthStub.authorised()
           MtdIdLookupStub.ninoFound(nino)
         }
-        val response: WSResponse = await(request().addHttpHeaders(("Content-Type", "application/json")).post("{ badJson }"))
+        val response: WSResponse = await(request().addHttpHeaders(("Content-Type", "application/json")).put("{ badJson }"))
         response.json shouldBe Json.toJson(BadRequestError)
         response.status shouldBe BAD_REQUEST
       }
@@ -124,7 +124,7 @@ class Def1_CreateForeignPropertyPeriodCumulativeSummaryISpec extends Integration
               MtdIdLookupStub.ninoFound(nino)
             }
 
-            val response: WSResponse = await(request().post(requestBody))
+            val response: WSResponse = await(request().put(requestBody))
             response.json shouldBe Json.toJson(expectedBody)
             response.status shouldBe expectedStatus
           }
@@ -146,7 +146,7 @@ class Def1_CreateForeignPropertyPeriodCumulativeSummaryISpec extends Integration
             "AA123456A",
             "XAIS12345678910",
             "2025-26",
-            requestBodyWith(invalidEntryWithCustomNumber("AFG")),
+            requestBodyWith(invalidEntryWithConsolidatedExpenses()),
             BAD_REQUEST,
             RuleBothExpensesSuppliedError.copy(paths = Some(List("/foreignProperty/0/expenses")))),
           ("AA123456A", "XAIS12345678910", "2025-26", JsObject.empty, BAD_REQUEST, RuleIncorrectOrEmptyBodyError),
@@ -192,10 +192,10 @@ class Def1_CreateForeignPropertyPeriodCumulativeSummaryISpec extends Integration
               AuditStub.audit()
               AuthStub.authorised()
               MtdIdLookupStub.ninoFound(nino)
-              DownstreamStub.onError(DownstreamStub.POST, downstreamUri, ifsStatus, errorBody(ifsCode))
+              DownstreamStub.onError(DownstreamStub.PUT, downstreamUri, ifsStatus, errorBody(ifsCode))
             }
 
-            val response: WSResponse = await(request().post(requestBody))
+            val response: WSResponse = await(request().put(requestBody))
             response.json shouldBe Json.toJson(expectedBody)
             response.status shouldBe expectedStatus
           }

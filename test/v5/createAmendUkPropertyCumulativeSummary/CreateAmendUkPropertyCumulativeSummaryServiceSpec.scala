@@ -109,14 +109,27 @@ class CreateAmendUkPropertyCumulativeSummaryServiceSpec extends ServiceSpec with
           }
 
         val errorMap = List(
-          "INVALID_TAXABLE_ENTITY_ID" -> NinoFormatError,
-          "INVALID_TAX_YEAR"          -> TaxYearFormatError,
-          "INVALID_INCOMESOURCEID"    -> BusinessIdFormatError,
-          "INVALID_SUBMISSION_ID"     -> SubmissionIdFormatError,
-          "INVALID_PAYLOAD"           -> InternalError,
-          "INVALID_CORRELATIONID"     -> InternalError,
-          "NO_DATA_FOUND"             -> NotFoundError,
-          "INCOMPATIBLE_PAYLOAD"      -> RuleTypeOfBusinessIncorrectError
+          "INVALID_TAXABLE_ENTITY_ID"          -> NinoFormatError,
+          "INVALID_INCOME_SOURCE_ID"           -> BusinessIdFormatError,
+          "INVALID_PAYLOAD"                    -> InternalError,
+          "INVALID_CORRELATION_ID"             -> InternalError,
+          "INVALID_TAX_YEAR"                   -> TaxYearFormatError,
+          "INCOME_SOURCE_NOT_FOUND"            -> NotFoundError,
+          "INCOME_SOURCE_DATA_NOT_FOUND"       -> NotFoundError,
+          "MISSING_EXPENSES"                   -> InternalError,
+          "INVALID_SUBMISSION_END_DATE"        -> RuleInvalidSubmissionEndDateError,
+          "SUBMISSION_END_DATE_VALUE"          -> RuleSubmissionEndDateError,
+          "INVALID_START_DATE"                 -> RuleStartDateNotAlignedWithReportingType,
+          "START_DATE_NOT_ALIGNED"             -> RuleStartDateNotAlignedToCommencementDate,
+          "END_DATE_NOT_ALIGNED"               -> RuleEndDateNotAlignedWithReportingType,
+          "MISSING_SUBMISSION_DATES"           -> RuleMissingSubmissionDates,
+          "START_END_DATE_NOT_ACCEPTED"        -> RuleStartAndEndDateNotAllowed,
+          "OUTSIDE_AMENDMENT_WINDOW"           -> RuleOutsideAmendmentWindow,
+          "TAX_YEAR_NOT_SUPPORTED"             -> RuleTaxYearNotSupportedError,
+          "EARLY_DATA_SUBMISSION_NOT_ACCEPTED" -> RuleEarlyDataSubmissionNotAccepted,
+          "DUPLICATE_COUNTRY_CODE"             -> RuleDuplicateCountryCode,
+          "SERVER_ERROR"                       -> InternalError,
+          "SERVICE_UNAVAILABLE"                -> InternalError
         )
 
         errorMap.foreach(args => (serviceError _).tupled(args))

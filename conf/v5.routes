@@ -9,6 +9,8 @@ POST       /foreign/:nino/:businessId/period/:taxYear                  v4.create
 PUT        /foreign/:nino/:businessId/period/:taxYear/:submissionId    v4.amendForeignPropertyPeriodSummary.AmendForeignPropertyPeriodSummaryController.handleRequest(nino: String, businessId: String, taxYear: String, submissionId: String)
 GET        /foreign/:nino/:businessId/period/:taxYear/:submissionId    v4.retrieveForeignPropertyPeriodSummary.RetrieveForeignPropertyPeriodSummaryController.handleRequest(nino: String, businessId: String, taxYear: String,submissionId: String)
 
+GET        /foreign/:nino/:businessId/cumulative/:taxYear              v5.retrieveForeignPropertyCumulativeSummary.RetrieveForeignPropertyCumulativeSummaryController.handleRequest(nino: String, businessId: String, taxYear: String)
+
 GET        /:nino/:businessId/period/:taxYear                          v4.propertyPeriodSummary.list.ListPropertyPeriodSummariesController.handleRequest(nino: String, businessId: String, taxYear: String)
 
 PUT        /foreign/:nino/:businessId/annual/:taxYear                  v5.createAmendForeignPropertyAnnualSubmission.CreateAmendForeignPropertyAnnualSubmissionController.handleRequest(nino: String, businessId: String, taxYear: String)

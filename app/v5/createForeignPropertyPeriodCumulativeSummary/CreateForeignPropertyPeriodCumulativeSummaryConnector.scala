@@ -16,14 +16,12 @@
 
 package v5.createForeignPropertyPeriodCumulativeSummary
 
-import api.connectors.DownstreamUri.{IfsUri, TaxYearSpecificIfsUri}
-import api.connectors.httpparsers.StandardDownstreamHttpParser.{SuccessCode, reads}
+import api.connectors.DownstreamUri.TaxYearSpecificIfsUri
+import api.connectors.httpparsers.StandardDownstreamHttpParser.readsEmpty
 import api.connectors.{BaseDownstreamConnector, DownstreamOutcome}
 import config.AppConfig
-import play.api.http.Status.OK
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
 import v5.createForeignPropertyPeriodCumulativeSummary.model.request.CreateForeignPropertyPeriodCumulativeSummaryRequestData
-import v5.createForeignPropertyPeriodCumulativeSummary.model.response.CreateForeignPropertyPeriodCumulativeSummaryResponse
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
@@ -35,17 +33,10 @@ class CreateForeignPropertyPeriodCumulativeSummaryConnector @Inject() (val http:
   def createForeignProperty(request: CreateForeignPropertyPeriodCumulativeSummaryRequestData)(implicit
       hc: HeaderCarrier,
       ec: ExecutionContext,
-      correlationId: String): Future[DownstreamOutcome[CreateForeignPropertyPeriodCumulativeSummaryResponse]] = {
+      correlationId: String): Future[DownstreamOutcome[Unit]] = {
 
-    implicit val successCode: SuccessCode = SuccessCode(OK)
-
-    val downstreamUri = if (request.taxYear.isTys) {
-      TaxYearSpecificIfsUri[CreateForeignPropertyPeriodCumulativeSummaryResponse](
-        s"income-tax/business/property/periodic/${request.taxYear.asTysDownstream}?taxableEntityId=${request.nino}&incomeSourceId=${request.businessId}")
-    } else {
-      IfsUri[CreateForeignPropertyPeriodCumulativeSummaryResponse](
-        s"income-tax/business/property/periodic?taxableEntityId=${request.nino}&taxYear=${request.taxYear.asMtd}&incomeSourceId=${request.businessId}")
-    }
+    val downstreamUri =
+      TaxYearSpecificIfsUri[Unit](s"income-tax/${request.taxYear.asTysDownstream}/business/property/periodic/${request.nino}/${request.businessId}")
 
     post(request.body, downstreamUri)
   }

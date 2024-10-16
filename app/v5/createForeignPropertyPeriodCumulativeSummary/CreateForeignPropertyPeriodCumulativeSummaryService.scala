@@ -21,7 +21,6 @@ import api.models.errors._
 import api.services.{BaseService, ServiceOutcome}
 import cats.implicits._
 import v5.createForeignPropertyPeriodCumulativeSummary.model.request.CreateForeignPropertyPeriodCumulativeSummaryRequestData
-import v5.createForeignPropertyPeriodCumulativeSummary.model.response.CreateForeignPropertyPeriodCumulativeSummaryResponse
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
@@ -32,41 +31,31 @@ class CreateForeignPropertyPeriodCumulativeSummaryService @Inject() (connector: 
 
   def createForeignProperty(request: CreateForeignPropertyPeriodCumulativeSummaryRequestData)(implicit
       ctx: RequestContext,
-      ec: ExecutionContext): Future[ServiceOutcome[CreateForeignPropertyPeriodCumulativeSummaryResponse]] = {
-
+      ec: ExecutionContext): Future[ServiceOutcome[Unit]] =
     connector.createForeignProperty(request).map(_.leftMap(mapDownstreamErrors(downstreamErrorMap)))
-  }
 
-  private val downstreamErrorMap: Map[String, MtdError] = {
-    val errors = Map(
-      "INVALID_TAXABLE_ENTITY_ID" -> NinoFormatError,
-      "INVALID_INCOMESOURCEID"    -> BusinessIdFormatError,
-      "INVALID_TAX_YEAR"          -> InternalError,
-      "DUPLICATE_COUNTRY_CODE"    -> RuleDuplicateCountryCodeError,
-      "OVERLAPS_IN_PERIOD"        -> RuleOverlappingPeriodError,
-      "NOT_ALIGN_PERIOD"          -> RuleMisalignedPeriodError,
-      "GAPS_IN_PERIOD"            -> RuleNotContiguousPeriodError,
-      "INCOME_SOURCE_NOT_FOUND"   -> NotFoundError,
-      "SERVER_ERROR"              -> InternalError,
-      "SERVICE_UNAVAILABLE"       -> InternalError,
-      "INVALID_PAYLOAD"           -> InternalError,
-      "INVALID_CORRELATIONID"     -> InternalError,
-      "DUPLICATE_SUBMISSION"      -> RuleDuplicateSubmissionError,
-      "INVALID_DATE_RANGE"        -> RuleToDateBeforeFromDateError,
-      "INCOMPATIBLE_PAYLOAD"      -> RuleTypeOfBusinessIncorrectError,
-      "TAX_YEAR_NOT_SUPPORTED"    -> RuleTaxYearNotSupportedError,
-      "MISSING_EXPENSES"          -> InternalError
-    )
-
-    val extraTysErrors = Map(
-      "INVALID_INCOMESOURCE_ID" -> BusinessIdFormatError,
-      "INVALID_CORRELATION_ID"  -> InternalError,
-      "PERIOD_NOT_ALIGNED"      -> RuleMisalignedPeriodError,
-      "PERIOD_OVERLAPS"         -> RuleOverlappingPeriodError,
-      "SUBMISSION_DATE_ISSUE"   -> RuleMisalignedPeriodError
-    )
-
-    errors ++ extraTysErrors
-  }
+  private val downstreamErrorMap: Map[String, MtdError] = Map(
+    "INVALID_TAXABLE_ENTITY_ID"          -> NinoFormatError,
+    "INVALID_INCOME_SOURCE_ID"           -> BusinessIdFormatError,
+    "INVALID_PAYLOAD"                    -> InternalError,
+    "INVALID_CORRELATION_ID"             -> InternalError,
+    "INVALID_TAX_YEAR"                   -> InternalError,
+    "INCOME_SOURCE_NOT_FOUND"            -> NotFoundError,
+    "SUBMITTED_TAX_YEAR_NOT_SUPPORTED"   -> RuleTaxYearNotSupportedError,
+    "TAX_YEAR_NOT_SUPPORTED"             -> RuleTaxYearNotSupportedError,
+    "MISSING_EXPENSES"                   -> InternalError,
+    "INVALID_SUBMISSION_END_DATE"        -> RuleAdvanceSubmissionRequiresPeriodEndDateError,
+    "SUBMISSION_END_DATE_VALUE"          -> RuleSubmissionEndDateCannotMoveBackwardsError,
+    "INVALID_START_DATE"                 -> RuleStartDateNotAlignedWithReportingTypeError,
+    "START_DATE_NOT_ALIGNED"             -> RuleStartDateNotAlignedToCommencementDateError,
+    "END_DATE_NOT_ALIGNED"               -> RuleEndDateNotAlignedWithReportingTypeError,
+    "MISSING_SUBMISSION_DATES"           -> RuleMissingSubmissionDatesError,
+    "START_END_DATE_NOT_ACCEPTED"        -> RuleStartAndEndDateNotAllowedError,
+    "OUTSIDE_AMENDMENT_WINDOW"           -> RuleOutsideAmendmentWindowError,
+    "EARLY_DATA_SUBMISSION_NOT_ACCEPTED" -> RuleEarlyDataSubmissionNotAcceptedError,
+    "DUPLICATE_COUNTRY_CODE"             -> RuleDuplicateCountryCodeError,
+    "SERVER_ERROR"                       -> InternalError,
+    "SERVICE_UNAVAILABLE"                -> InternalError
+  )
 
 }

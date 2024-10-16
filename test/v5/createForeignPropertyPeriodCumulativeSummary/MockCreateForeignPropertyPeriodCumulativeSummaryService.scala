@@ -21,7 +21,6 @@ import api.services.ServiceOutcome
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
 import v5.createForeignPropertyPeriodCumulativeSummary.model.request.CreateForeignPropertyPeriodCumulativeSummaryRequestData
-import v5.createForeignPropertyPeriodCumulativeSummary.model.response.CreateForeignPropertyPeriodCumulativeSummaryResponse
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -32,8 +31,7 @@ trait MockCreateForeignPropertyPeriodCumulativeSummaryService extends MockFactor
 
   object MockedCreateForeignPropertyPeriodCumulativeSummaryService {
 
-    def createForeignProperty(requestData: CreateForeignPropertyPeriodCumulativeSummaryRequestData)
-        : CallHandler[Future[ServiceOutcome[CreateForeignPropertyPeriodCumulativeSummaryResponse]]] = {
+    def createForeignProperty(requestData: CreateForeignPropertyPeriodCumulativeSummaryRequestData): CallHandler[Future[ServiceOutcome[Unit]]] = {
       (
         mockCreateForeignPropertyPeriodCumulativeSummaryService
           .createForeignProperty(_: CreateForeignPropertyPeriodCumulativeSummaryRequestData)(

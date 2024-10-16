@@ -24,13 +24,12 @@ import api.models.outcomes.ResponseWrapper
 import api.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService}
 import config.MockAppConfig
 import play.api.Configuration
-import play.api.libs.json.{JsObject, JsValue, Json}
+import play.api.libs.json.{JsObject, JsValue}
 import play.api.mvc.Result
 import utils.MockIdGenerator
 import v5.createForeignPropertyPeriodCumulativeSummary.def1.model.Def1_CreateForeignPropertyPeriodCumulativeSummaryFixtures
 import v5.createForeignPropertyPeriodCumulativeSummary.def1.model.request.Def1_CreateForeignPropertyPeriodCumulativeSummaryRequestData
 import v5.createForeignPropertyPeriodCumulativeSummary.model.request.CreateForeignPropertyPeriodCumulativeSummaryRequestData
-import v5.createForeignPropertyPeriodCumulativeSummary.model.response.CreateForeignPropertyPeriodCumulativeSummaryResponse
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -47,9 +46,8 @@ class CreateForeignPropertyPeriodCumulativeSummaryControllerSpec
     with MockIdGenerator
     with Def1_CreateForeignPropertyPeriodCumulativeSummaryFixtures {
 
-  private val taxYear      = "2020-21"
-  private val businessId   = "XAIS12345678910"
-  private val submissionId = "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
+  private val taxYear    = "2020-21"
+  private val businessId = "XAIS12345678910"
 
   "CreateForeignPropertyPeriodCumulativeSummaryControllerSpec" should {
     "return a successful response with status 201 (CREATED)" when {
@@ -60,7 +58,7 @@ class CreateForeignPropertyPeriodCumulativeSummaryControllerSpec
           .createForeignProperty(requestData)
           .returns(Future.successful(Right(ResponseWrapper(correlationId, response))))
 
-        runOkTest(expectedStatus = CREATED, maybeExpectedResponseBody = Some(mtdResponse))
+        runOkTest(expectedStatus = NO_CONTENT, maybeExpectedResponseBody = None)
 
       }
 
@@ -128,17 +126,9 @@ class CreateForeignPropertyPeriodCumulativeSummaryControllerSpec
         taxYear = TaxYear.fromMtd(taxYear),
         body = regularExpensesRequestBody)
 
-    protected val mtdResponse: JsObject = Json
-      .parse(
-        s"""
-           |{
-           |  "submissionId": "$submissionId"
-           |}
-      """.stripMargin
-      )
-      .as[JsObject]
+    protected val mtdResponse: Unit = ()
 
-    protected val response: CreateForeignPropertyPeriodCumulativeSummaryResponse = CreateForeignPropertyPeriodCumulativeSummaryResponse(submissionId)
+    protected val response: Unit = ()
   }
 
 }

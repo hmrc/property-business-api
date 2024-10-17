@@ -25,7 +25,7 @@ import play.api.libs.functional.syntax._
 
 case class Def1_CreateForeignPropertyPeriodCumulativeSummaryRequestBody(fromDate: Option[String],
                                                                         toDate: Option[String],
-                                                                        foreignProperty: Option[Seq[ForeignProperty]])
+                                                                        foreignProperty: Seq[ForeignProperty])
     extends CreateForeignPropertyPeriodCumulativeSummaryRequestBody
 
 object Def1_CreateForeignPropertyPeriodCumulativeSummaryRequestBody {
@@ -40,7 +40,7 @@ object Def1_CreateForeignPropertyPeriodCumulativeSummaryRequestBody {
   implicit val writes: OWrites[Def1_CreateForeignPropertyPeriodCumulativeSummaryRequestBody] = (
     (JsPath \ "fromDate").writeNullable[String] and
       (JsPath \ "toDate").writeNullable[String] and
-      (JsPath \ "foreignProperty").writeNullable[Seq[ForeignProperty]]
+      (JsPath \ "foreignProperty").write[Seq[ForeignProperty]]
   )(unlift(Def1_CreateForeignPropertyPeriodCumulativeSummaryRequestBody.unapply))
 
 }

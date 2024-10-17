@@ -38,7 +38,7 @@ object Def1_CreateForeignPropertyPeriodCumulativeSummaryRulesValidator
     import parsed.body._
 
     combine(
-      ResolveFromAndToDates((fromDate, toDate)),
+      ResolveFromAndToDates.withOptions((fromDate, toDate)).getOrElse(valid),
       foreignProperty.map(validateForeignProperty).getOrElse(valid)
     ).onSuccess(parsed)
   }

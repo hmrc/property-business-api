@@ -31,15 +31,11 @@ class CreateForeignPropertyPeriodCumulativeSummaryValidatorFactorySpec extends U
   private val validBusinessId = "XAIS12345678901"
   private val validTaxYear    = "2025-26"
 
-  private val validFromDate = "2025-03-29"
-  private val validToDate   = "2026-03-29"
-
-  private def validBody(startDate: String, endDate: String) = Json.parse(s"""
+  private def validBody() = Json.parse(s"""
        |{
-       |   "fromDate":"$startDate",
-       |   "toDate":"$endDate",
-       |   "foreignFhlEea":{},
-       |   "foreignProperty": {}
+       |   "foreignProperty": {
+       |      "countryCode":"AFG"
+       |   }
        |}
        |""".stripMargin)
 
@@ -49,8 +45,8 @@ class CreateForeignPropertyPeriodCumulativeSummaryValidatorFactorySpec extends U
     "given a valid tax year" should {
       "return the Validator for schema definition 1" in {
 
-        MockedAppConfig.minimumTaxV2Foreign.returns(TaxYear.starting(2021)).anyNumberOfTimes()
-        val requestBody = validBody(validFromDate, validToDate)
+        MockedAppConfig.minimumTaxV3Foreign.returns(TaxYear.starting(2025)).anyNumberOfTimes()
+        val requestBody = validBody()
         val result: Validator[CreateForeignPropertyPeriodCumulativeSummaryRequestData] =
           validatorFactory.validator(validNino, validBusinessId, validTaxYear, requestBody)
 

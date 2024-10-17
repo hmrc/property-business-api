@@ -181,16 +181,16 @@ class Def1_CreateForeignPropertyPeriodCumulativeSummaryValidatorSpec extends Uni
   private val parsedBody = Def1_CreateForeignPropertyPeriodCumulativeSummaryRequestBody(
     fromDate = Some(validFromDate),
     toDate = Some(validToDate),
-    foreignProperty = Some(List(parsedForeignPropertyEntry))
+    foreignProperty = Seq(parsedForeignPropertyEntry)
   )
 
-  private val parsedBodyConsolidated = parsedBody.copy(foreignProperty = Some(List(parsedForeignPropertyEntryConsolidated)))
+  private val parsedBodyConsolidated = parsedBody.copy(foreignProperty = Seq(parsedForeignPropertyEntryConsolidated))
 
   private val parsedBodyMinimalForeign =
     Def1_CreateForeignPropertyPeriodCumulativeSummaryRequestBody(
       fromDate = None,
       toDate = None,
-      foreignProperty = Some(List(parsedForeignPropertyEntry.copy(income = Some(parsedForeignPropertyIncomeMinimal), expenses = None)))
+      foreignProperty = Seq(parsedForeignPropertyEntry.copy(income = Some(parsedForeignPropertyIncomeMinimal), expenses = None))
     )
 
   private def validator(nino: String, businessId: String, taxYear: String, body: JsValue) =

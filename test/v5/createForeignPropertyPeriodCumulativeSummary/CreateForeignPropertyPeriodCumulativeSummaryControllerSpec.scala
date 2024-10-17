@@ -46,17 +46,17 @@ class CreateForeignPropertyPeriodCumulativeSummaryControllerSpec
     with MockIdGenerator
     with Def1_CreateForeignPropertyPeriodCumulativeSummaryFixtures {
 
-  private val taxYear    = "2020-21"
+  private val taxYear    = "2025-26"
   private val businessId = "XAIS12345678910"
 
   "CreateForeignPropertyPeriodCumulativeSummaryControllerSpec" should {
-    "return a successful response with status 201 (CREATED)" when {
+    "return a successful response with status 204 (NO_CONTENT)" when {
       "the request received is valid" in new Test {
         willUseValidator(returningSuccess(requestData))
 
         MockedCreateForeignPropertyPeriodCumulativeSummaryService
           .createForeignProperty(requestData)
-          .returns(Future.successful(Right(ResponseWrapper(correlationId, response))))
+          .returns(Future.successful(Right(ResponseWrapper(correlationId, ()))))
 
         runOkTest(expectedStatus = NO_CONTENT, maybeExpectedResponseBody = None)
 
@@ -104,10 +104,10 @@ class CreateForeignPropertyPeriodCumulativeSummaryControllerSpec
 
     protected def event(auditResponse: AuditResponse, maybeRequestBody: Option[JsValue]): AuditEvent[GenericAuditDetail] =
       AuditEvent(
-        auditType = "CreateForeignPropertyIncomeAndExpensesPeriodSummary",
-        transactionName = "create-foreign-property-income-and-expenses-period-summary",
+        auditType = "CreateForeignPropertyPeriodCumulativeSummary",
+        transactionName = "create-foreign-property-period-cumulative-summary",
         detail = GenericAuditDetail(
-          versionNumber = "3.0",
+          versionNumber = "5.0",
           userType = "Individual",
           agentReferenceNumber = None,
           params = Map("nino" -> nino, "taxYear" -> taxYear, "businessId" -> businessId),
@@ -126,9 +126,6 @@ class CreateForeignPropertyPeriodCumulativeSummaryControllerSpec
         taxYear = TaxYear.fromMtd(taxYear),
         body = regularExpensesRequestBody)
 
-    protected val mtdResponse: Unit = ()
-
-    protected val response: Unit = ()
   }
 
 }

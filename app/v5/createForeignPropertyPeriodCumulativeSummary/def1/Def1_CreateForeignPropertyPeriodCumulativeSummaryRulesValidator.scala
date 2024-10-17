@@ -39,7 +39,7 @@ object Def1_CreateForeignPropertyPeriodCumulativeSummaryRulesValidator
 
     combine(
       ResolveFromAndToDates.withOptions((fromDate, toDate)).getOrElse(valid),
-      foreignProperty.map(validateForeignProperty).getOrElse(valid)
+      validateForeignProperty(foreignProperty)
     ).onSuccess(parsed)
   }
 

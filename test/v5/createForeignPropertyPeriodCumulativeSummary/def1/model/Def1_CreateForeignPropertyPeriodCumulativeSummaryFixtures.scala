@@ -65,16 +65,15 @@ trait Def1_CreateForeignPropertyPeriodCumulativeSummaryFixtures {
       consolidatedExpenses = Some(1000.99)
     ))
 
-  private val regularForeignProperty = Some(
-    List(ForeignProperty(countryCode = "FRA", income = foreignPropertyIncome, expenses = regularForeignPropertyExpenses)))
+  private val regularForeignProperty = Seq(
+    ForeignProperty(countryCode = "FRA", income = foreignPropertyIncome, expenses = regularForeignPropertyExpenses))
 
-  private val consolidatedForeignProperty = Some(
-    List(
-      ForeignProperty(
-        countryCode = "FRA",
-        income = foreignPropertyIncome,
-        expenses = consolidatedForeignPropertyExpenses
-      )))
+  private val consolidatedForeignProperty = Seq(
+    ForeignProperty(
+      countryCode = "FRA",
+      income = foreignPropertyIncome,
+      expenses = consolidatedForeignPropertyExpenses
+    ))
 
   val regularExpensesRequestBody: Def1_CreateForeignPropertyPeriodCumulativeSummaryRequestBody =
     Def1_CreateForeignPropertyPeriodCumulativeSummaryRequestBody(

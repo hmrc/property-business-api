@@ -78,15 +78,15 @@ trait Def1_CreateForeignPropertyPeriodCumulativeSummaryFixtures {
 
   val regularExpensesRequestBody: Def1_CreateForeignPropertyPeriodCumulativeSummaryRequestBody =
     Def1_CreateForeignPropertyPeriodCumulativeSummaryRequestBody(
-      fromDate = "2025-01-01",
-      toDate = "2026-01-31",
+      fromDate = Some("2025-01-01"),
+      toDate = Some("2026-01-31"),
       foreignProperty = regularForeignProperty
     )
 
   val consolidatedExpensesRequestBody: Def1_CreateForeignPropertyPeriodCumulativeSummaryRequestBody =
     Def1_CreateForeignPropertyPeriodCumulativeSummaryRequestBody(
-      fromDate = "2025-01-01",
-      toDate = "2026-01-31",
+      fromDate = Some("2025-01-01"),
+      toDate = Some("2026-01-31"),
       foreignProperty = consolidatedForeignProperty
     )
 

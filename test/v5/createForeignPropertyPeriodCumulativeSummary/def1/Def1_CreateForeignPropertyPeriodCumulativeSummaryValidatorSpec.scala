@@ -106,8 +106,6 @@ class Def1_CreateForeignPropertyPeriodCumulativeSummaryValidatorSpec extends Uni
 
   private val validBodyMinimal = Json.parse(s"""
        |{
-       |  "fromDate": "$validFromDate",
-       |  "toDate": "$validToDate",
        |  "foreignProperty": [
        |    {
        |      "countryCode": "$validCountryCode",
@@ -181,15 +179,17 @@ class Def1_CreateForeignPropertyPeriodCumulativeSummaryValidatorSpec extends Uni
     parsedForeignPropertyEntry.copy(expenses = Some(parsedCreateForeignPropertyExpensesConsolidated))
 
   private val parsedBody = Def1_CreateForeignPropertyPeriodCumulativeSummaryRequestBody(
-    fromDate = validFromDate,
-    toDate = validToDate,
+    fromDate = Some(validFromDate),
+    toDate = Some(validToDate),
     foreignProperty = Some(List(parsedForeignPropertyEntry))
   )
 
   private val parsedBodyConsolidated = parsedBody.copy(foreignProperty = Some(List(parsedForeignPropertyEntryConsolidated)))
 
   private val parsedBodyMinimalForeign =
-    parsedBody.copy(
+    Def1_CreateForeignPropertyPeriodCumulativeSummaryRequestBody(
+      fromDate = None,
+      toDate = None,
       foreignProperty = Some(List(parsedForeignPropertyEntry.copy(income = Some(parsedForeignPropertyIncomeMinimal), expenses = None)))
     )
 

@@ -4,3 +4,10 @@ put:
   security:
     - User-Restricted:
         - write:self-assessment
+
+get:
+  $ref: "./foreign_property_cumulative_retrieve.yaml"
+  summary: Retrieve a Cumulative Foreign Property Period Summary
+  security:
+    - User-Restricted:
+        - read:self-assessment

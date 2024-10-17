@@ -107,8 +107,6 @@ paths:
     $ref: "./foreign_property_cumulative.yaml"
   /individuals/business/property/foreign/{nino}/{businessId}/annual/{taxYear}:
     $ref: "./foreign_property_annual_submission.yaml"
-  /individuals/business/property/foreign/{nino}/{businessId}/cumulative/{taxYear}:
-    $ref: "./foreign_property_cumulative_summary.yaml"
   /individuals/business/property/{nino}/{businessId}/annual/{taxYear}:
     $ref: "./uk_foreign_property_annual_submission_deletion.yaml"
   /individuals/business/property/{nino}/{businessId}/period/{taxYear}:

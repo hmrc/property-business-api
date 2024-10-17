@@ -6,194 +6,176 @@
   "properties": {
     "submittedOn": {
       "type": "string",
-      "description": "The date the UK property were submitted, in the format `YYYY-MM-DDThh:mm:ss.SSSZ`",
-      "example": "2020-07-07T10:59:47.544Z"
+      "description": "The date the foreign property was submitted, in the format `YYYY-MM-DDThh:mm:ss.SSSZ`",
+      "example": "2025-07-07T10:59:47.544Z"
     },
     "fromDate": {
       "type": "string",
       "description": "The first day that the income and expenses period summary covers. Must conform to the format YYYY-MM-DD",
-      "example": "2020-01-01"
+      "example": "2025-01-01"
     },
     "toDate": {
       "type": "string",
       "description": "The last day that the income and expenses period summary covers. Must conform to the format YYYY-MM-DD",
-      "example": "2020-01-31"
+      "example": "2026-01-31"
     },
-    "ukProperty": {
-      "type": "object",
-      "description": "Object holding the income and expenses of the UK property business for the period.",
-      "properties": {
-        "income": {
-          "type": "object",
-          "description": "Object holding the income details for the period.",
-          "properties": {
-            "premiumsOfLeaseGrant": {
-              "type": "number",
-              "description": "Premiums received for the grant of a lease and other lump sums to possess a property. The value must be between 0 and 99999999999.99 up to 2 decimal places..",
-              "multipleOf": 0.01,
-              "minimum": 0.00,
-              "maximum": 99999999999.99,
-              "example": "5000.99"
-            },
-            "reversePremiums": {
-              "type": "number",
-              "description": "Amount paid by a landlord or outgoing tenant to induce a new tenant to enter into a leasehold agreement. The value must be between 0 and 99999999999.99 up to 2 decimal places..",
-              "multipleOf": 0.01,
-              "minimum": 0.00,
-              "maximum": 99999999999.99,
-              "example": "5000.99"
-            },
-            "periodAmount": {
-              "type": "number",
-              "description": "Total rents from property (but not ground rents, rent charges and rent-a-room rental income). The value must be between 0 and 99999999999.99 up to 2 decimal places..",
-              "multipleOf": 0.01,
-              "minimum": 0.00,
-              "maximum": 99999999999.99,
-              "example": "5000.99"
-            },
-            "taxDeducted": {
-              "type": "number",
-              "description": "Tax already deducted from the rental income. The value must be between 0 and 99999999999.99 up to 2 decimal places..",
-              "multipleOf": 0.01,
-              "minimum": 0.00,
-              "maximum": 99999999999.99,
-              "example": "5000.99"
-            },
-            "otherIncome": {
-              "type": "number",
-              "description": "Total amount of rent and any income for services provided to tenants. The value must be between 0 and 99999999999.99 up to 2 decimal places..",
-              "multipleOf": 0.01,
-              "minimum": 0.00,
-              "maximum": 99999999999.99,
-              "example": "5000.99"
-            },
-            "rentARoom": {
-              "type": "object",
-              "description": "Object holding the rents received for the period.",
-              "properties": {
-                "rentsReceived": {
-                  "description": "Total rents received from properties. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
-                  "type": "number",
-                  "multipleOf": 0.01,
-                  "minimum": 0.00,
-                  "maximum": 99999999999.99,
-                  "example": "5000.99"
+    "foreignProperty": {
+      "type": "array",
+      "description": "Array holding the income and expenses of the user's foreign property business for the period.",
+      "foreignPropertyEntry": {
+        "type": "object",
+        "properties": {
+          "countryCode": {
+            "type": "string",
+            "description": "A three-letter code that represents a country name. ISO 3166-1 Alpha-3 value.",
+            "example": "AFG"
+          },
+          "income": {
+            "type": "object",
+            "properties": {
+              "rentIncome": {
+                "type": "object",
+                "properties": {
+                  "rentAmount": {
+                    "type": "number",
+                    "description": "Total rent and other income from property. Up to 2 decimal places.",
+                    "multipleOf": 0.01,
+                    "minimum": 0.00,
+                    "maximum": 99999999999.99,
+                    "example": 440.31
+                  }
                 }
               },
-              "additionalProperties": false
-            }
+              "foreignTaxCreditRelief": {
+                "type": "boolean",
+                "description": "Indicates whether Foreign Tax Credit Relief (FTCR) has been claimed.",
+                "example": false
+              },
+              "premiumsOfLeaseGrant": {
+                "type": "number",
+                "description": "Premiums received for the grant of a lease.",
+                "multipleOf": 0.01,
+                "minimum": 0.00,
+                "maximum": 99999999999.99,
+                "example": 950.48
+              },
+              "otherPropertyIncome": {
+                "type": "number",
+                "description": "Other income from property, e.g., rent charges and ground rents.",
+                "multipleOf": 0.01,
+                "minimum": 0.00,
+                "maximum": 99999999999.99,
+                "example": 802.49
+              },
+              "foreignTaxPaidOrDeducted": {
+                "type": "number",
+                "description": "Total amount of foreign tax paid or deducted.",
+                "multipleOf": 0.01,
+                "minimum": 0.00,
+                "maximum": 99999999999.99,
+                "example": 734.18
+              },
+              "specialWithholdingTaxOrUkTaxPaid": {
+                "type": "number",
+                "description": "Tax withheld (in UK Pounds) on certain payments.",
+                "multipleOf": 0.01,
+                "minimum": 0.00,
+                "maximum": 99999999999.99,
+                "example": 85.47
+              }
+            },
+            "required": ["foreignTaxCreditRelief"],
+            "additionalProperties": false
+          },
+          "expenses": {
+            "type": "object",
+            "properties": {
+              "premisesRunningCosts": {
+                "type": "number",
+                "description": "Rent, rates, insurance, ground rents and other costs.",
+                "multipleOf": 0.01,
+                "minimum": -99999999999.99,
+                "maximum": 99999999999.99,
+                "example": -4929.50
+              },
+              "repairsAndMaintenance": {
+                "type": "number",
+                "description": "Property repairs and maintenance.",
+                "multipleOf": 0.01,
+                "minimum": -99999999999.99,
+                "maximum": 99999999999.99,
+                "example": -54.30
+              },
+              "financialCosts": {
+                "type": "number",
+                "description": "Loan interest and other financial costs.",
+                "multipleOf": 0.01,
+                "minimum": -99999999999.99,
+                "maximum": 99999999999.99,
+                "example": 2090.35
+              },
+              "professionalFees": {
+                "type": "number",
+                "description": "Legal, management and other professional fees.",
+                "multipleOf": 0.01,
+                "minimum": -99999999999.99,
+                "maximum": 99999999999.99,
+                "example": -90.20
+              },
+              "travelCosts": {
+                "type": "number",
+                "description": "Car, van and travel costs incurred in running a property business.",
+                "multipleOf": 0.01,
+                "minimum": -99999999999.99,
+                "maximum": 99999999999.99,
+                "example": 560.99
+              },
+              "costOfServices": {
+                "type": "number",
+                "description": "Cost of services provided, including wages.",
+                "multipleOf": 0.01,
+                "minimum": -99999999999.99,
+                "maximum": 99999999999.99,
+                "example": -100.83
+              },
+              "residentialFinancialCost": {
+                "type": "number",
+                "description": "Residential financial cost deductible from rental income.",
+                "multipleOf": 0.01,
+                "minimum": -99999999999.99,
+                "maximum": 99999999999.99,
+                "example": 857.78
+              },
+              "broughtFwdResidentialFinancialCost": {
+                "type": "number",
+                "description": "Amount of relief brought forward for restricted residential financial costs.",
+                "multipleOf": 0.01,
+                "minimum": -99999999999.99,
+                "maximum": 99999999999.99,
+                "example": 600.10
+              },
+              "other": {
+                "type": "number",
+                "description": "Other allowable property expenses.",
+                "multipleOf": 0.01,
+                "minimum": -99999999999.99,
+                "maximum": 99999999999.99,
+                "example": 334.64
+              }
+            },
+            "required": ["countryCode"],
+            "additionalProperties": false
           }
         },
-        "expenses": {
-          "type": "object",
-          "description": "Object holding the expenses for the period.",
-          "properties": {
-            "premisesRunningCosts": {
-              "type": "number",
-              "description": "Rent, rates, insurance, ground rents and other costs. The value must be between -99999999999.99 and 99999999999.99 up to 2 decimal places.",
-              "multipleOf": 0.01,
-              "minimum": -99999999999.99,
-              "maximum": 99999999999.99,
-              "example": "5000.99"
-            },
-            "repairsAndMaintenance": {
-              "type": "number",
-              "description": "Rent, rates, insurance, ground rents and other costs. The value must be between -99999999999.99 and 99999999999.99 up to 2 decimal places.",
-              "multipleOf": 0.01,
-              "minimum": -99999999999.99,
-              "maximum": 99999999999.99,
-              "example": "5000.99"
-            },
-            "financialCosts": {
-              "type": "number",
-              "description": "Loan interest and other financial costs. The value must be between -99999999999.99 and 99999999999.99 up to 2 decimal places.",
-              "multipleOf": 0.01,
-              "minimum": -99999999999.99,
-              "maximum": 99999999999.99,
-              "example": "5000.99"
-            },
-            "professionalFees": {
-              "type": "number",
-              "description": "Legal, management and other professional fees. The value must be between -99999999999.99 and 99999999999.99 up to 2 decimal places.",
-              "multipleOf": 0.01,
-              "minimum": -99999999999.99,
-              "maximum": 99999999999.99,
-              "example": "5000.99"
-            },
-            "costOfServices": {
-              "type": "number",
-              "description": "Cost of services provided, including wages. The value must be between -99999999999.99 and 99999999999.99 up to 2 decimal places.",
-              "multipleOf": 0.01,
-              "minimum": -99999999999.99,
-              "maximum": 99999999999.99,
-              "example": "5000.99"
-            },
-            "other": {
-              "type": "number",
-              "description": "Other allowable property expenses. The value must be between -99999999999.99 and 99999999999.99 up to 2 decimal places.",
-              "multipleOf": 0.01,
-              "minimum": -99999999999.99,
-              "maximum": 99999999999.99,
-              "example": "5000.99"
-            },
-            "residentialFinancialCost": {
-              "type": "number",
-              "description": "The residential financial cost deductible from rental income (tax relief). The value must be between -99999999999.99 and 99999999999.99 up to 2 decimal places.",
-              "multipleOf": 0.01,
-              "minimum": -99999999999.99,
-              "maximum": 99999999999.99,
-              "example": "5000.99"
-            },
-            "travelCosts": {
-              "type": "number",
-              "description": "Car, van and travel costs incurred in running a property business. The value must be between -99999999999.99 and 99999999999.99 up to 2 decimal places.",
-              "multipleOf": 0.01,
-              "minimum": -99999999999.99,
-              "maximum": 99999999999.99,
-              "example": "5000.99"
-            },
-            "residentialFinancialCostsCarriedForward": {
-              "type": "number",
-              "description": "Amount of residential financial costs carried forward. The value must be between -99999999999.99 and 99999999999.99 up to 2 decimal places.",
-              "multipleOf": 0.01,
-              "minimum": -99999999999.99,
-              "maximum": 99999999999.99,
-              "example": "5000.99"
-            },
-            "rentARoom": {
-              "type": "object",
-              "description": "Object holding the rents claimed for the period.",
-              "properties": {
-                "amountClaimed": {
-                  "description": "The amount of UK Furnished Holiday Lettings rent claimed. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
-                  "type": "number",
-                  "multipleOf": 0.01,
-                  "minimum": 0.00,
-                  "maximum": 99999999999.99,
-                  "example": "5000.99"
-                }
-              },
-              "additionalProperties": false
-            },
-            "consolidatedExpenses": {
-              "type": "number",
-              "description": "The sum of all allowable expenses for the specified period. You can either submit a consolidatedExpenses value or individual expenses (premisesRunningCosts, repairsAndMaintenance, financialCosts, professionalFees, costOfServices, travelCosts, other).\nThe value must be between -99999999999.99 and 99999999999.99 up to 2 decimal places.",
-              "multipleOf": 0.01,
-              "minimum": -99999999999.99,
-              "maximum": 99999999999.99,
-              "example": "5000.99"
-            }
-          },
-          "additionalProperties": false
-        }
-      },
-      "additionalProperties": false
+        "additionalProperties": false
+      }
     }
   },
   "required": [
     "submittedOn",
     "fromDate",
-    "toDate"
+    "toDate",
+    "foreignProperty"
   ],
   "additionalProperties": false
 }

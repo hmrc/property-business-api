@@ -93,7 +93,7 @@ object RuleTaxYearNotEndedError extends MtdError("RULE_TAX_YEAR_NOT_ENDED", "The
 object RuleAdvanceSubmissionRequiresPeriodEndDateError
     extends MtdError(
       "RULE_ADVANCE_SUBMISSION_REQUIRES_PERIOD_END_DATE",
-      "For advance submission end date must be the end of the period.",
+      "For advance submission, end date must be the end of the period",
       BAD_REQUEST
     )
 
@@ -107,28 +107,28 @@ object RuleSubmissionEndDateCannotMoveBackwardsError
 object RuleStartDateNotAlignedWithReportingTypeError
     extends MtdError(
       "RULE_START_DATE_NOT_ALIGNED_WITH_REPORTING_TYPE",
-      "Start date does not align to the reporting type.",
+      "Start date does not align with the reporting type",
       BAD_REQUEST
     )
 
 object RuleStartDateNotAlignedToCommencementDateError
     extends MtdError(
       "RULE_START_DATE_NOT_ALIGNED_TO_COMMENCEMENT_DATE",
-      "Start date does not align to the commencement date.",
+      "Start date does not align with the commencement date",
       BAD_REQUEST
     )
 
 object RuleEndDateNotAlignedWithReportingTypeError
     extends MtdError(
       "RULE_END_DATE_NOT_ALIGNED_WITH_REPORTING_TYPE",
-      "End date does not align to the reporting type.",
+      "End date does not align with the reporting type",
       BAD_REQUEST
     )
 
 object RuleStartAndEndDateNotAllowedError
     extends MtdError(
       "RULE_START_AND_END_DATE_NOT_ALLOWED",
-      "Start/end date not accepted for annual/latent submission.",
+      "Start/end date not accepted for annual/latent submission",
       BAD_REQUEST
     )
 
@@ -142,14 +142,14 @@ object RuleOutsideAmendmentWindowError
 object RuleEarlyDataSubmissionNotAcceptedError
     extends MtdError(
       "RULE_EARLY_DATA_SUBMISSION_NOT_ACCEPTED",
-      "Cannot submit data more than 10 days before end of Period.",
+      "Cannot submit data more than 10 days before end of period",
       BAD_REQUEST
     )
 
 object RuleMissingSubmissionDatesError
     extends MtdError(
       "RULE_MISSING_SUBMISSION_DATES",
-      "Submission start/end date not provided.",
+      "Submission start/end date not provided",
       BAD_REQUEST
     )
 

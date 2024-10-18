@@ -39,21 +39,12 @@ class Def1_CreateForeignPropertyPeriodCumulativeSummaryISpec extends Integration
                   |    }
                   |}""".stripMargin)
 
-  private def entryWithCustomNumber(fieldName: String, value: Option[BigDecimal]) =
-    Json.parse(s"""
-       |{
-       |    "countryCode": "AFG",
-       |    "expenses": {
-       |        "$fieldName": ${value.get}
-       |    }
-       |}""".stripMargin)
-
-  private def entryWith(countryCode: String) =
+  private def entryWith(countryCode: String, premisesRunningCosts: BigDecimal = 3123.21) =
     Json.parse(s"""
                   |{
                   |    "countryCode": "$countryCode",
                   |    "expenses": {
-                  |        "premisesRunningCosts": 3123.21
+                  |        "premisesRunningCosts": $premisesRunningCosts
                   |    }
                   |}""".stripMargin)
 
@@ -139,7 +130,7 @@ class Def1_CreateForeignPropertyPeriodCumulativeSummaryISpec extends Integration
             "AA123456A",
             "XAIS12345678910",
             "2025-26",
-            requestBodyWith(entryWithCustomNumber("premisesRunningCosts", Some(1.234))),
+            requestBodyWith(entryWith("AFG", 1.234)),
             BAD_REQUEST,
             ValueFormatError.copy(paths = Some(List("/foreignProperty/0/expenses/premisesRunningCosts")))),
           (

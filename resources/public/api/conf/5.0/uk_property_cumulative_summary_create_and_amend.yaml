@@ -40,10 +40,10 @@ requestBody:
         oneOf:
           - $ref: './schemas/uk_property_cumulative_summary_create_and_amend/def1/request.json'
       examples:
-        uk-property-cumulative-summary-request-for-TY-2025-26-and-after:
+        Cumulative summary request for TY 2025-26 and after:
           value:
             $ref: './examples/uk_property_cumulative_summary_create_and_amend/def1/request.json'
-        consolidated-uk-property-cumulative-summary-request-for-TY-2025-26-and-after:
+        Consolidated cumulative summary request for TY 2025-26 and after:
           value:
             $ref: './examples/uk_property_cumulative_summary_create_and_amend/def1/consolidated_request.json'
 

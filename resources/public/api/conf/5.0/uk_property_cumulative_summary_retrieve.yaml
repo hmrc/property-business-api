@@ -1,4 +1,3 @@
-summary: Retrieve a Cumulative UK Property Period Summary
 description: |
   This endpoint enables you to retrieve the periodic income and expenses for a UK Property business. A National Insurance number, business ID, and tax year are required. Please note that this endpoint is only available for tax years starting from 2025-26.
 
@@ -16,12 +15,12 @@ description: |
 
 
 tags:
-  - UK Property Cumulative Submission
+  - UK Property Cumulative Summary
 
 parameters:
   - $ref: './common/pathParameters.yaml#/components/parameters/nino'
   - $ref: './common/pathParameters.yaml#/components/parameters/businessId'
-  - $ref: './common/pathParameters.yaml#/components/parameters/taxYear'
+  - $ref: './common/pathParameters.yaml#/components/parameters/cumulativeTaxYear'
   - $ref: './common/headers.yaml#/components/parameters/acceptHeader'
   - $ref: './common/headers.yaml#/components/parameters/authorizationReadScopeHeader'
   - $ref: './common/headers.yaml#/components/parameters/testScenarioHeader'
@@ -46,16 +45,16 @@ responses:
       application/json:
         schema:
           oneOf:
-            - $ref: './schemas/uk_property_cumulative_submission_retrieve/def1/response.json'
+            - $ref: './schemas/uk_property_cumulative_summary_retrieve/def1/response.json'
         examples:
-          full-response-for-TY-2025-26:
+          full-response-for-TY-2025-26-and-after:
             description: Full response for TY 2025-26 and after
             value:
-              $ref: './examples/uk_property_cumulative_submission_retrieve/def1/response.json'
-          consolidated-response-for-TY-2025-26:
+              $ref: './examples/uk_property_cumulative_summary_retrieve/def1/response.json'
+          consolidated-response-for-TY-2025-26-and-after:
             description: Consolidated response for TY 2025-26 and after
             value:
-              $ref: './examples/uk_property_cumulative_submission_retrieve/def1/consolidated_response.json'
+              $ref: './examples/uk_property_cumulative_summary_retrieve/def1/consolidated_response.json'
 
   "400":
     description: Bad request

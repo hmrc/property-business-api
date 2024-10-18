@@ -1,6 +1,0 @@
-get:
-  $ref: "./uk_property_cumulative_submission_retrieve.yaml"
-  summary: Retrieve a UK Property Period Submission
-  security:
-    - User-Restricted:
-        - read:self-assessment

@@ -33,6 +33,8 @@ object Def1_CreateForeignPropertyPeriodCumulativeSummaryRulesValidator
 
   private val resolveParsedNumber = ResolveParsedNumber()
 
+  private val resolveMaybeNegativeParsedNumber = ResolveParsedNumber(min = -99999999999.99)
+
   def validateBusinessRules(parsed: Def1_CreateForeignPropertyPeriodCumulativeSummaryRequestData)
       : Validated[Seq[MtdError], Def1_CreateForeignPropertyPeriodCumulativeSummaryRequestData] = {
     import parsed.body._
@@ -72,14 +74,17 @@ object Def1_CreateForeignPropertyPeriodCumulativeSummaryRulesValidator
       (income.flatMap(_.otherPropertyIncome), s"/foreignProperty/$index/income/otherPropertyIncome"),
       (income.flatMap(_.foreignTaxPaidOrDeducted), s"/foreignProperty/$index/income/foreignTaxPaidOrDeducted"),
       (income.flatMap(_.specialWithholdingTaxOrUkTaxPaid), s"/foreignProperty/$index/income/specialWithholdingTaxOrUkTaxPaid"),
+      (expenses.flatMap(_.residentialFinancialCost), s"/foreignProperty/$index/expenses/residentialFinancialCost"),
+      (expenses.flatMap(_.broughtFwdResidentialFinancialCost), s"/foreignProperty/$index/expenses/broughtFwdResidentialFinancialCost"),
+    )
+
+    val maybeNegativeValuesWithPaths = List(
       (expenses.flatMap(_.premisesRunningCosts), s"/foreignProperty/$index/expenses/premisesRunningCosts"),
       (expenses.flatMap(_.repairsAndMaintenance), s"/foreignProperty/$index/expenses/repairsAndMaintenance"),
       (expenses.flatMap(_.financialCosts), s"/foreignProperty/$index/expenses/financialCosts"),
       (expenses.flatMap(_.professionalFees), s"/foreignProperty/$index/expenses/professionalFees"),
-      (expenses.flatMap(_.costOfServices), s"/foreignProperty/$index/expenses/costOfServices"),
       (expenses.flatMap(_.travelCosts), s"/foreignProperty/$index/expenses/travelCosts"),
-      (expenses.flatMap(_.residentialFinancialCost), s"/foreignProperty/$index/expenses/residentialFinancialCost"),
-      (expenses.flatMap(_.broughtFwdResidentialFinancialCost), s"/foreignProperty/$index/expenses/broughtFwdResidentialFinancialCost"),
+      (expenses.flatMap(_.costOfServices), s"/foreignProperty/$index/expenses/costOfServices"),
       (expenses.flatMap(_.other), s"/foreignProperty/$index/expenses/other"),
       (expenses.flatMap(_.consolidatedExpenses), s"/foreignProperty/$index/expenses/consolidatedExpenses")
     )
@@ -87,6 +92,10 @@ object Def1_CreateForeignPropertyPeriodCumulativeSummaryRulesValidator
     val validatedNumberFields = valuesWithPaths.map {
       case (None, _)            => valid
       case (Some(number), path) => resolveParsedNumber(number, path)
+    }
+    val validatedNegativeNumberFields = maybeNegativeValuesWithPaths.map {
+      case (None, _)            => valid
+      case (Some(number), path) => resolveMaybeNegativeParsedNumber(number, path)
     }
 
     val validatedCountryCode = ResolveParsedCountryCode(countryCode, s"/foreignProperty/$index/countryCode")
@@ -100,7 +109,7 @@ object Def1_CreateForeignPropertyPeriodCumulativeSummaryRulesValidator
           .getOrElse(valid)
     }
 
-    (validatedNumberFields :+ validatedCountryCode :+ validatedConsolidatedExpenses).sequence.andThen(_ => valid)
+    (validatedNumberFields ++ validatedNegativeNumberFields :+ validatedCountryCode :+ validatedConsolidatedExpenses).sequence.andThen(_ => valid)
   }
 
 }

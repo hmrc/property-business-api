@@ -16,8 +16,7 @@
 
 package v5.createForeignPropertyPeriodCumulativeSummary.def1.model.request
 
-import play.api.libs.functional.syntax._
-import play.api.libs.json.{JsPath, Json, Reads, Writes}
+import play.api.libs.json.{Json, OFormat}
 import shapeless.HNil
 import utils.EmptinessChecker
 
@@ -34,12 +33,6 @@ object ForeignProperty {
       "expenses" -> body.expenses :: HNil
   }
 
-  implicit val reads: Reads[ForeignProperty] = Json.reads[ForeignProperty]
-
-  implicit val writes: Writes[ForeignProperty] = (
-    (JsPath \ "countryCode").write[String] and
-      (JsPath \ "income").writeNullable[PropertyIncome] and
-      (JsPath \ "expenses").writeNullable[Expenses]
-  )(unlift(ForeignProperty.unapply))
+  implicit val format: OFormat[ForeignProperty] = Json.format[ForeignProperty]
 
 }

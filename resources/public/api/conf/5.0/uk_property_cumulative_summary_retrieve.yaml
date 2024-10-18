@@ -47,10 +47,10 @@ responses:
           oneOf:
             - $ref: './schemas/uk_property_cumulative_summary_retrieve/def1/response.json'
         examples:
-          full-response-for-TY-2025-26-and-after:
+          Full response for TY 2025-26 and after:
             value:
               $ref: './examples/uk_property_cumulative_summary_retrieve/def1/response.json'
-          consolidated-response-for-TY-2025-26-and-after:
+          Consolidated response for TY 2025-26 and after:
             value:
               $ref: './examples/uk_property_cumulative_summary_retrieve/def1/consolidated_response.json'
 

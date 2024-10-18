@@ -73,6 +73,8 @@ tags:
     description: Resources relating to an individual's Foreign Property Cumulative Submissions
   - name: Foreign Property Annual Submission
     description: Resources relating to an individual's Foreign Property Annual Submission
+  - name: Foreign Property Cumulative Summary
+    description: Resources relating to an individual's Foreign Property Cumulative Period Summary
   - name: UK or Foreign Property Annual Submission Deletion
     description: Resources relating to an individual's UK or Foreign Property Annual Submission Deletion
   - name: UK or Foreign Property Income and Expenses Period Summaries List

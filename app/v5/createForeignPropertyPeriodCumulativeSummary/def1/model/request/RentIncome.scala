@@ -16,11 +16,10 @@
 
 package v5.createForeignPropertyPeriodCumulativeSummary.def1.model.request
 
-import play.api.libs.json.{Json, Reads, Writes}
+import play.api.libs.json.{Json, OFormat}
 
 case class RentIncome(rentAmount: Option[BigDecimal])
 
 object RentIncome {
-  implicit val reads: Reads[RentIncome]   = Json.reads[RentIncome]
-  implicit val writes: Writes[RentIncome] = Json.writes[RentIncome]
+  implicit val format: OFormat[RentIncome] = Json.format[RentIncome]
 }

@@ -102,18 +102,6 @@ object RuleInvalidSubmissionPeriodError
       "Property income and expenses submissions cannot be more than 10 days before the end of the Period",
       BAD_REQUEST)
 
-object RuleInvalidSubmissionEndDateError
-    extends MtdError(
-      "RULE_ADVANCE_SUBMISSION_REQUIRES_PERIOD_END_DATE",
-      "The remote endpoint has indicated that To submit in advance, submission end date must be the end of the period.",
-      BAD_REQUEST)
-
-object RuleSubmissionEndDateError
-    extends MtdError(
-      "RULE_SUBMISSION_END_DATE_CANNOT_MOVE_BACKWARDS",
-      "The remote endpoint has indicated that Submission end date cannot be earlier than existing submission.",
-      BAD_REQUEST)
-
 // Missing Date Errors
 object MissingFromDateError extends MtdError("MISSING_FROM_DATE", "The From date parameter is missing", BAD_REQUEST)
 object MissingToDateError   extends MtdError("MISSING_TO_DATE", "The To date parameter is missing", BAD_REQUEST)
@@ -146,51 +134,6 @@ object InvalidBodyTypeError     extends MtdError("INVALID_BODY_TYPE", "Expecting
 // Common rule errors
 object RuleTaxYearRangeInvalid
     extends MtdError("RULE_TAX_YEAR_RANGE_INVALID", "Tax year range invalid. A tax year range of one year is required", BAD_REQUEST)
-
-object RuleStartDateNotAlignedWithReportingType
-    extends MtdError(
-      "RULE_START_DATE_NOT_ALIGNED_WITH_REPORTING_TYPE",
-      "The remote endpoint has indicated that Start date does not align to the reporting type.",
-      BAD_REQUEST)
-
-object RuleStartDateNotAlignedToCommencementDate
-    extends MtdError(
-      "RULE_START_DATE_NOT_ALIGNED_TO_COMMENCEMENT_DATE",
-      "The remote endpoint has indicated that Start date does not align to the commencement date.",
-      BAD_REQUEST)
-
-object RuleEndDateNotAlignedWithReportingType
-    extends MtdError(
-      "RULE_END_DATE_NOT_ALIGNED_WITH_REPORTING_TYPE",
-      "The remote endpoint has indicated that End date does not align to the reporting type.",
-      BAD_REQUEST)
-
-object RuleMissingSubmissionDates
-    extends MtdError("RULE_MISSING_SUBMISSION_DATES", "The remote endpoint has indicated that Submission start/end date not provided.", BAD_REQUEST)
-
-object RuleStartAndEndDateNotAllowed
-    extends MtdError(
-      "RULE_START_END_DATE_NOT_ALLOWED",
-      "The remote endpoint has indicated that Start/end date not accepted for annual/latent submission.",
-      BAD_REQUEST)
-
-object RuleOutsideAmendmentWindow
-    extends MtdError(
-      "RULE_OUTSIDE_AMENDMENT_WINDOW",
-      "The remote endpoint has indicated that the request cannot be completed as you are outside the amendment window.",
-      BAD_REQUEST)
-
-object RuleEarlyDataSubmissionNotAccepted
-    extends MtdError(
-      "RULE_EARLY_DATA_SUBMISSION_NOT_ACCEPTED",
-      "The remote endpoint has indicated that Cannot submit data more than 10 days before end of Period.",
-      BAD_REQUEST)
-
-object RuleDuplicateCountryCode
-    extends MtdError(
-      "RULE_DUPLICATE_COUNTRY_CODE",
-      "You cannot supply the same country code for multiple properties. If there are multiple properties per country the income and expenses should be the total across all properties.",
-      BAD_REQUEST)
 
 object RuleEndBeforeStartDateError
     extends MtdError("RULE_END_DATE_BEFORE_START_DATE", "The supplied accounting period end date is before the start date", BAD_REQUEST)

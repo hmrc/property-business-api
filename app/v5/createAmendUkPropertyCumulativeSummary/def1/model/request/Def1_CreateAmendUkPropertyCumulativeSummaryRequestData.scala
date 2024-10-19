@@ -14,14 +14,13 @@
  * limitations under the License.
  */
 
-package v5.createAmendUkPropertyCumulativeSummary.model.request
+package v5.createAmendUkPropertyCumulativeSummary.def1.model.request
 
 import api.models.domain.{BusinessId, Nino, TaxYear}
+import v5.createAmendUkPropertyCumulativeSummary.model.request.CreateAmendUkPropertyCumulativeSummaryRequestData
 
-trait CreateAmendUkPropertyCumulativeSummaryRequestData {
-  val nino: Nino
-  val businessId: BusinessId
-  val taxYear: TaxYear
-
-  def body: CreateAmendUkPropertyCumulativeSummaryRequestBody
-}
+case class Def1_CreateAmendUkPropertyCumulativeSummaryRequestData(nino: Nino,
+                                                                  taxYear: TaxYear,
+                                                                  businessId: BusinessId,
+                                                                  body: Def1_CreateAmendUkPropertyCumulativeSummaryRequestBody)
+    extends CreateAmendUkPropertyCumulativeSummaryRequestData

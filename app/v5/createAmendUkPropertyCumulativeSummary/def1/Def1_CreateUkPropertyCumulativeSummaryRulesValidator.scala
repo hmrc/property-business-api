@@ -22,8 +22,7 @@ import api.models.errors.{MtdError, RuleBothExpensesSuppliedError}
 import cats.data.Validated
 import cats.data.Validated.Invalid
 import cats.implicits.toTraverseOps
-import v5.createAmendUkPropertyCumulativeSummary.def1.model.request.{Expenses, UkProperty}
-import v5.createAmendUkPropertyCumulativeSummary.model.request.Def1_CreateAmendUkPropertyCumulativeSummaryRequestData
+import v5.createAmendUkPropertyCumulativeSummary.def1.model.request.{Def1_CreateAmendUkPropertyCumulativeSummaryRequestData, Expenses, UkProperty}
 
 class Def1_CreateUkPropertyCumulativeSummaryRulesValidator extends RulesValidator[Def1_CreateAmendUkPropertyCumulativeSummaryRequestData] {
 
@@ -63,7 +62,7 @@ class Def1_CreateUkPropertyCumulativeSummaryRulesValidator extends RulesValidato
       (ukProperty.income.flatMap(_.otherIncome), "/ukProperty/income/otherIncome"),
       (ukProperty.income.flatMap(_.rentARoom.flatMap(_.rentsReceived)), "/ukProperty/income/rentARoom/rentsReceived"),
       (ukProperty.expenses.flatMap(_.residentialFinancialCost), "/ukProperty/expenses/residentialFinancialCost"),
-      (ukProperty.expenses.flatMap(_.residentialFinancialCost), "/ukProperty/expenses/residentialFinancialCostsCarriedForward"),
+      (ukProperty.expenses.flatMap(_.residentialFinancialCostsCarriedForward), "/ukProperty/expenses/residentialFinancialCostsCarriedForward"),
       (ukProperty.expenses.flatMap(_.rentARoom.flatMap(_.amountClaimed)), "/ukProperty/expenses/rentARoom/amountClaimed")
     )
 

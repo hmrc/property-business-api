@@ -22,12 +22,12 @@ import api.models.errors._
 import api.models.outcomes.ResponseWrapper
 import api.services.ServiceSpec
 import play.api.libs.json.{JsValue, Json}
-import v5.createAmendUkPropertyCumulativeSummary.def1.model.request._
-import v5.createAmendUkPropertyCumulativeSummary.model.request.{
-  CreateAmendUkPropertyCumulativeSummaryRequestData,
+import v5.createAmendUkPropertyCumulativeSummary.def1.model.request.{
   Def1_CreateAmendUkPropertyCumulativeSummaryRequestBody,
-  Def1_CreateAmendUkPropertyCumulativeSummaryRequestData
+  Def1_CreateAmendUkPropertyCumulativeSummaryRequestData,
+  _
 }
+import v5.createAmendUkPropertyCumulativeSummary.model.request.CreateAmendUkPropertyCumulativeSummaryRequestData
 import v5.createAmendUkPropertyCumulativeSummary.model.response.CreateAmendUkPropertyCumulativeSummaryResponse
 
 import scala.concurrent.Future

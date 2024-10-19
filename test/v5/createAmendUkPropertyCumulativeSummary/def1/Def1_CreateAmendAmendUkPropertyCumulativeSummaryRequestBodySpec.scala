@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 
-package v5.createAmendUkPropertyCumulativeSummary.model.request
+package v5.createAmendUkPropertyCumulativeSummary.def1
 
 import play.api.libs.json.{JsValue, Json}
 import support.UnitSpec
-import v5.createAmendUkPropertyCumulativeSummary.def1.model.request.{Expenses, Income, RentARoomExpenses, RentARoomIncome, UkProperty}
+import v5.createAmendUkPropertyCumulativeSummary.def1.model.request._
 
 class Def1_CreateAmendAmendUkPropertyCumulativeSummaryRequestBodySpec extends UnitSpec {
 
@@ -121,8 +121,8 @@ class Def1_CreateAmendAmendUkPropertyCumulativeSummaryRequestBodySpec extends Un
       |      }
       |    },
       |    "expenses": {
-      |      "residentialFinancialCost": 9000.10,
-      |      "residentialFinancialCostsCarriedForward": 300.13,
+      |      "residentialFinancialCostAmount": 9000.10,
+      |      "broughtFwdResidentialFinancialCostAmount": 300.13,
       |      "ukOtherRentARoom": {
       |         "amountClaimed": 860.88
       |      },

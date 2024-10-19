@@ -16,27 +16,18 @@
 
 package v5.createAmendUkPropertyCumulativeSummary.model.request
 
-import play.api.libs.functional.syntax._
-import play.api.libs.json.{JsPath, Json, OWrites, Reads}
-import v5.createAmendUkPropertyCumulativeSummary.def1.model.request.UkProperty
+import play.api.libs.json.OWrites
+import utils.JsonWritesUtil.writesFrom
+import v5.createAmendUkPropertyCumulativeSummary.def1.model.request.Def1_CreateAmendUkPropertyCumulativeSummaryRequestBody
 
-sealed trait CreateAmendUkPropertyCumulativeSummaryRequestBody
+trait CreateAmendUkPropertyCumulativeSummaryRequestBody
 
-case class Def1_CreateAmendUkPropertyCumulativeSummaryRequestBody(
-    fromDate: String,
-    toDate: String,
-    ukProperty: UkProperty
-) extends CreateAmendUkPropertyCumulativeSummaryRequestBody
+object CreateAmendUkPropertyCumulativeSummaryRequestBody {
 
-object Def1_CreateAmendUkPropertyCumulativeSummaryRequestBody {
+  implicit val writes: OWrites[CreateAmendUkPropertyCumulativeSummaryRequestBody] = writesFrom {
+    case def1: Def1_CreateAmendUkPropertyCumulativeSummaryRequestBody =>
+      implicitly[OWrites[Def1_CreateAmendUkPropertyCumulativeSummaryRequestBody]].writes(def1)
 
-  implicit val reads: Reads[Def1_CreateAmendUkPropertyCumulativeSummaryRequestBody] =
-    Json.reads[Def1_CreateAmendUkPropertyCumulativeSummaryRequestBody]
-
-  implicit val writes: OWrites[Def1_CreateAmendUkPropertyCumulativeSummaryRequestBody] = (
-    (JsPath \ "fromDate").write[String] and
-      (JsPath \ "toDate").write[String] and
-      (JsPath \ "ukOtherProperty").write[UkProperty]
-  )(unlift(Def1_CreateAmendUkPropertyCumulativeSummaryRequestBody.unapply))
+  }
 
 }

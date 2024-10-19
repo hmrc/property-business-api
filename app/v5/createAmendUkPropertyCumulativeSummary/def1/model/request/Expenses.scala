@@ -16,8 +16,7 @@
 
 package v5.createAmendUkPropertyCumulativeSummary.def1.model.request
 
-import play.api.libs.functional.syntax._
-import play.api.libs.json.{JsPath, Reads, Writes}
+import play.api.libs.json.{JsNull, JsObject, Json, Reads, Writes}
 
 case class Expenses(premisesRunningCosts: Option[BigDecimal],
                     repairsAndMaintenance: Option[BigDecimal],
@@ -33,32 +32,38 @@ case class Expenses(premisesRunningCosts: Option[BigDecimal],
 
 object Expenses {
 
-  implicit val reads: Reads[Expenses] = (
-    (JsPath \ "premisesRunningCosts").readNullable[BigDecimal] and
-      (JsPath \ "repairsAndMaintenance").readNullable[BigDecimal] and
-      (JsPath \ "financialCosts").readNullable[BigDecimal] and
-      (JsPath \ "professionalFees").readNullable[BigDecimal] and
-      (JsPath \ "costOfServices").readNullable[BigDecimal] and
-      (JsPath \ "other").readNullable[BigDecimal] and
-      (JsPath \ "residentialFinancialCost").readNullable[BigDecimal] and
-      (JsPath \ "travelCosts").readNullable[BigDecimal] and
-      (JsPath \ "residentialFinancialCostsCarriedForward").readNullable[BigDecimal] and
-      (JsPath \ "rentARoom").readNullable[RentARoomExpenses] and
-      (JsPath \ "consolidatedExpenses").readNullable[BigDecimal]
-  )(Expenses.apply _)
+  implicit val reads: Reads[Expenses] = Json.reads[Expenses]
 
-  implicit val writes: Writes[Expenses] = (
-    (JsPath \ "premisesRunningCosts").writeNullable[BigDecimal] and
-      (JsPath \ "repairsAndMaintenance").writeNullable[BigDecimal] and
-      (JsPath \ "financialCosts").writeNullable[BigDecimal] and
-      (JsPath \ "professionalFees").writeNullable[BigDecimal] and
-      (JsPath \ "costOfServices").writeNullable[BigDecimal] and
-      (JsPath \ "other").writeNullable[BigDecimal] and
-      (JsPath \ "residentialFinancialCost").writeNullable[BigDecimal] and
-      (JsPath \ "travelCosts").writeNullable[BigDecimal] and
-      (JsPath \ "residentialFinancialCostsCarriedForward").writeNullable[BigDecimal] and
-      (JsPath \ "ukOtherRentARoom").writeNullable[RentARoomExpenses] and
-      (JsPath \ "consolidatedExpenses").writeNullable[BigDecimal]
-  )(unlift(Expenses.unapply))
+  implicit val expensesWrites: Writes[Expenses] = (expenses: Expenses) => {
+    val baseJson = Json.obj(
+      "premisesRunningCosts"  -> expenses.premisesRunningCosts,
+      "repairsAndMaintenance" -> expenses.repairsAndMaintenance,
+      "financialCosts"        -> expenses.financialCosts,
+      "professionalFees"      -> expenses.professionalFees,
+      "costOfServices"        -> expenses.costOfServices,
+      "other"                 -> expenses.other,
+      "travelCosts"           -> expenses.travelCosts,
+      "ukOtherRentARoom"      -> expenses.rentARoom,
+      "consolidatedExpenses"  -> expenses.consolidatedExpenses
+    )
+
+    val consolidatedNameChangeFields = expenses.consolidatedExpenses match {
+      case Some(_) =>
+        Json.obj(
+          "residentialFinancialCostAmount"           -> expenses.residentialFinancialCost,
+          "broughtFwdResidentialFinancialCostAmount" -> expenses.residentialFinancialCostsCarriedForward
+        )
+      case _ =>
+        Json.obj(
+          "residentialFinancialCost"                -> expenses.residentialFinancialCost,
+          "residentialFinancialCostsCarriedForward" -> expenses.residentialFinancialCostsCarriedForward
+        )
+    }
+
+    JsObject((baseJson ++ consolidatedNameChangeFields).fields.filter {
+      case (_, JsNull) => false
+      case _           => true
+    })
+  }
 
 }

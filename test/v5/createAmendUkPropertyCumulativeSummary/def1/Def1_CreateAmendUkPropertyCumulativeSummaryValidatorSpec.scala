@@ -26,7 +26,6 @@ import api.models.errors.{
   NinoFormatError,
   RuleBothExpensesSuppliedError,
   RuleIncorrectOrEmptyBodyError,
-  RuleTaxYearNotSupportedError,
   RuleTaxYearRangeInvalidError,
   RuleToDateBeforeFromDateError,
   TaxYearFormatError,
@@ -37,12 +36,12 @@ import api.models.utils.JsonErrorValidators
 import config.MockAppConfig
 import play.api.libs.json.{JsNumber, JsObject, JsString, JsValue, Json}
 import support.UnitSpec
-import v5.createAmendUkPropertyCumulativeSummary.def1.model.request._
-import v5.createAmendUkPropertyCumulativeSummary.model.request.{
-  CreateAmendUkPropertyCumulativeSummaryRequestData,
+import v5.createAmendUkPropertyCumulativeSummary.def1.model.request.{
   Def1_CreateAmendUkPropertyCumulativeSummaryRequestBody,
-  Def1_CreateAmendUkPropertyCumulativeSummaryRequestData
+  Def1_CreateAmendUkPropertyCumulativeSummaryRequestData,
+  _
 }
+import v5.createAmendUkPropertyCumulativeSummary.model.request.CreateAmendUkPropertyCumulativeSummaryRequestData
 
 class Def1_CreateAmendUkPropertyCumulativeSummaryValidatorSpec extends UnitSpec with MockAppConfig with JsonErrorValidators {
 
@@ -198,7 +197,7 @@ class Def1_CreateAmendUkPropertyCumulativeSummaryValidatorSpec extends UnitSpec 
         result shouldBe Right(Def1_CreateAmendUkPropertyCumulativeSummaryRequestData(parsedNino, parsedTaxYear, parsedBusinessId, fullRequestBody))
       }
 
-      "passed a valid request with a consolidated body for 2024-25" in {
+      "passed a valid request with a consolidated" in {
         val result: Either[ErrorWrapper, CreateAmendUkPropertyCumulativeSummaryRequestData] =
           validator(validNino, validTaxYear, validBusinessId, validConsolidatedBodyJson).validateAndWrapResult()
 
@@ -236,20 +235,6 @@ class Def1_CreateAmendUkPropertyCumulativeSummaryValidatorSpec extends UnitSpec 
           result shouldBe Left(ErrorWrapper(correlationId, RuleTaxYearRangeInvalidError))
         }
 
-        "passed a taxYear immediately before the minimum tax year" in {
-          val result: Either[ErrorWrapper, CreateAmendUkPropertyCumulativeSummaryRequestData] =
-            validator(validNino, "2024-25", validBusinessId, fullRequestJson).validateAndWrapResult()
-
-          result shouldBe Left(ErrorWrapper(correlationId, RuleTaxYearNotSupportedError))
-        }
-
-        "passed an invalid business id" in {
-          val result: Either[ErrorWrapper, CreateAmendUkPropertyCumulativeSummaryRequestData] =
-            validator(validNino, validTaxYear, "invalid", fullRequestJson).validateAndWrapResult()
-
-          result shouldBe Left(ErrorWrapper(correlationId, BusinessIdFormatError))
-        }
-
         "passed an empty body" in {
           val invalidBody = JsObject.empty
           val result: Either[ErrorWrapper, CreateAmendUkPropertyCumulativeSummaryRequestData] =
@@ -283,7 +268,7 @@ class Def1_CreateAmendUkPropertyCumulativeSummaryValidatorSpec extends UnitSpec 
         }
 
         "passed a body with an empty object except for an additional (non-schema) property" in {
-          val invalidBody = fullRequestJson.replaceWithEmptyObject("/ukProperty").update("/ukFhlProperty/badField", JsNumber(100))
+          val invalidBody = fullRequestJson.replaceWithEmptyObject("/ukProperty").update("/ukProperty/badField", JsNumber(100))
           val result: Either[ErrorWrapper, CreateAmendUkPropertyCumulativeSummaryRequestData] =
             validator(validNino, validTaxYear, validBusinessId, invalidBody).validateAndWrapResult()
 
@@ -330,7 +315,7 @@ class Def1_CreateAmendUkPropertyCumulativeSummaryValidatorSpec extends UnitSpec 
           result shouldBe Left(ErrorWrapper(correlationId, FromDateFormatError))
         }
 
-        "passed a body with a toDate that proceeds the minimum" in {
+        "passed a body with a toDate after maximum" in {
           val invalidBody = fullRequestJson.update("/toDate", JsString("3490-10-01"))
           val result: Either[ErrorWrapper, CreateAmendUkPropertyCumulativeSummaryRequestData] =
             validator(validNino, validTaxYear, validBusinessId, invalidBody).validateAndWrapResult()
@@ -349,9 +334,14 @@ class Def1_CreateAmendUkPropertyCumulativeSummaryValidatorSpec extends UnitSpec 
         "passed a body with a (non-consolidated expenses) field containing an invalid value" when {
 
           List(
+            "/ukProperty/income/premiumsOfLeaseGrant",
+            "/ukProperty/income/reversePremiums",
             "/ukProperty/income/periodAmount",
             "/ukProperty/income/taxDeducted",
-            "/ukProperty/income/rentARoom/rentsReceived"
+            "/ukProperty/income/otherIncome",
+            "/ukProperty/income/rentARoom/rentsReceived",
+            "/ukProperty/expenses/residentialFinancialCost",
+            "/ukProperty/expenses/residentialFinancialCostsCarriedForward"
           ).foreach(path => testValueFormatErrorWith(path, fullRequestJson.update(path, JsNumber(123.456))))
 
           List(

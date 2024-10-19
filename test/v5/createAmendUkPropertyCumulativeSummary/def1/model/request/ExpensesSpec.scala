@@ -21,37 +21,32 @@ import support.UnitSpec
 
 class ExpensesSpec extends UnitSpec {
 
-  val consolidatedRequest: JsValue = Json.parse(
+  val consolidatedDownstreamRequest: JsValue = Json.parse(
     """{
       |  "consolidatedExpenses": 4.17,
-      |  "residentialFinancialCost": 4.18,
-      |  "residentialFinancialCostsCarriedForward": 4.20,
-      |  "rentARoom": {
+      |  "residentialFinancialCostAmount": 4.18,
+      |  "broughtFwdResidentialFinancialCostAmount": 4.20,
+      |  "ukOtherRentARoom": {
       |      "amountClaimed": 4.21
       |  }
       |}
     """.stripMargin
   )
 
-  val fullExpensesJsonMtd: JsValue = Json.parse(
-    """{
-      |  "premisesRunningCosts": 4.11,
-      |  "repairsAndMaintenance": 4.12,
-      |  "financialCosts": 4.13,
-      |  "professionalFees": 4.14,
-      |  "costOfServices": 4.15,
-      |  "other": 4.16,
-      |  "residentialFinancialCost": 4.18,
-      |  "travelCosts": 4.19,
-      |  "residentialFinancialCostsCarriedForward": 4.20,
-      |  "ukOtherRentARoom": {
+  val consolidatedVendorRequestJson: JsValue = Json.parse(
+    """
+      |{
+      | "consolidatedExpenses": 4.17,
+      | "residentialFinancialCost": 4.18,
+      | "residentialFinancialCostsCarriedForward": 4.20,
+      | "rentARoom": {
       |    "amountClaimed": 4.21
       |  }
       |}
     """.stripMargin
   )
 
-  val fullExpensesJsonRequest: JsValue = Json.parse(
+  val fullExpensesVendorRequestJson: JsValue = Json.parse(
     """{
       |  "premisesRunningCosts": 4.11,
       |  "repairsAndMaintenance": 4.12,
@@ -69,13 +64,18 @@ class ExpensesSpec extends UnitSpec {
     """.stripMargin
   )
 
-  val consolidatedRequestJson: JsValue = Json.parse(
-    """
-      |{
-      | "consolidatedExpenses": 4.17,
-      | "residentialFinancialCost": 4.18,
-      | "residentialFinancialCostsCarriedForward": 4.20,
-      | "ukOtherRentARoom": {
+  val fullExpensesMtdRequestJson: JsValue = Json.parse(
+    """{
+      |  "premisesRunningCosts": 4.11,
+      |  "repairsAndMaintenance": 4.12,
+      |  "financialCosts": 4.13,
+      |  "professionalFees": 4.14,
+      |  "costOfServices": 4.15,
+      |  "other": 4.16,
+      |  "travelCosts": 4.19,
+      |  "residentialFinancialCost": 4.18,
+      |  "residentialFinancialCostsCarriedForward": 4.20,
+      |  "ukOtherRentARoom": {
       |    "amountClaimed": 4.21
       |  }
       |}
@@ -118,14 +118,14 @@ class ExpensesSpec extends UnitSpec {
 
     "consolidated" must {
       "read from valid JSON" should {
-        "return the parsed object" in {
-          consolidatedRequest.as[Expenses] shouldBe expensesConsolidated
+        "return the parsed object when the request contains consolidated expenses" in {
+          consolidatedVendorRequestJson.as[Expenses] shouldBe expensesConsolidated
         }
       }
 
       "write to JSON" should {
-        "return the expected JSON" in {
-          Json.toJson(expensesConsolidated) shouldBe consolidatedRequestJson
+        "return the expected JSON when it is a consolidated request" in {
+          Json.toJson(expensesConsolidated) shouldBe consolidatedDownstreamRequest
         }
       }
     }
@@ -134,13 +134,13 @@ class ExpensesSpec extends UnitSpec {
 
       "read from valid JSON" should {
         "return the parsed object" in {
-          fullExpensesJsonRequest.as[Expenses] shouldBe expenses
+          fullExpensesVendorRequestJson.as[Expenses] shouldBe expenses
         }
       }
 
       "write to JSON" should {
         "return the expected JSON" in {
-          Json.toJson(expenses) shouldBe fullExpensesJsonMtd
+          Json.toJson(expenses) shouldBe fullExpensesMtdRequestJson
         }
       }
     }

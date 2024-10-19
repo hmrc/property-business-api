@@ -58,8 +58,8 @@ class UkPropertySpec extends UnitSpec {
       |    }
       |  },
       |  "expenses": {
-      |    "residentialFinancialCost": 9000.10,
-      |    "residentialFinancialCostsCarriedForward": 300.13,
+      |    "residentialFinancialCostAmount": 9000.10,
+      |    "broughtFwdResidentialFinancialCostAmount": 300.13,
       |    "ukOtherRentARoom": {
       |       "amountClaimed": 860.88
       |    },

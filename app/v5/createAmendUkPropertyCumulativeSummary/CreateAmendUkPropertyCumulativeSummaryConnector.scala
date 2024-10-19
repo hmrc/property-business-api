@@ -21,10 +21,7 @@ import api.connectors.httpparsers.StandardDownstreamHttpParser.reads
 import api.connectors.{BaseDownstreamConnector, DownstreamOutcome, DownstreamUri}
 import config.AppConfig
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
-import v5.createAmendUkPropertyCumulativeSummary.model.request.{
-  CreateAmendUkPropertyCumulativeSummaryRequestData,
-  Def1_CreateAmendUkPropertyCumulativeSummaryRequestData
-}
+import v5.createAmendUkPropertyCumulativeSummary.model.request.CreateAmendUkPropertyCumulativeSummaryRequestData
 import v5.createAmendUkPropertyCumulativeSummary.model.response.CreateAmendUkPropertyCumulativeSummaryResponse
 
 import javax.inject.{Inject, Singleton}
@@ -38,14 +35,12 @@ class CreateAmendUkPropertyCumulativeSummaryConnector @Inject() (val http: HttpC
       ec: ExecutionContext,
       correlationId: String): Future[DownstreamOutcome[CreateAmendUkPropertyCumulativeSummaryResponse]] = {
 
-    request match {
-      case def1: Def1_CreateAmendUkPropertyCumulativeSummaryRequestData =>
-        import def1._
-        val downstreamUri: DownstreamUri[CreateAmendUkPropertyCumulativeSummaryResponse] =
-          TaxYearSpecificIfsUri[CreateAmendUkPropertyCumulativeSummaryResponse](
-            s"income-tax/${taxYear.asTysDownstream}/business/property/periodic/${nino.value}/${businessId.businessId}")
-        put(body, downstreamUri)
-    }
+    import request._
+
+    val downstreamUri: DownstreamUri[CreateAmendUkPropertyCumulativeSummaryResponse] =
+      TaxYearSpecificIfsUri[CreateAmendUkPropertyCumulativeSummaryResponse](
+        s"income-tax/${taxYear.asTysDownstream}/business/property/periodic/${nino.value}/${businessId.businessId}")
+    put(body, downstreamUri)
 
   }
 

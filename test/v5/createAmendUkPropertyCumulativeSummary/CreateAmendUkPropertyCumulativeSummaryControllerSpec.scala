@@ -26,12 +26,8 @@ import config.MockAppConfig
 import play.api.Configuration
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.Result
-import v5.createAmendUkPropertyCumulativeSummary.def1.model.request.{Expenses, Income, RentARoomExpenses, RentARoomIncome, UkProperty}
-import v5.createAmendUkPropertyCumulativeSummary.model.request.{
-  CreateAmendUkPropertyCumulativeSummaryRequestData,
-  Def1_CreateAmendUkPropertyCumulativeSummaryRequestBody,
-  Def1_CreateAmendUkPropertyCumulativeSummaryRequestData
-}
+import v5.createAmendUkPropertyCumulativeSummary.def1.model.request._
+import v5.createAmendUkPropertyCumulativeSummary.model.request.CreateAmendUkPropertyCumulativeSummaryRequestData
 import v5.createAmendUkPropertyCumulativeSummary.model.response.CreateAmendUkPropertyCumulativeSummaryResponse
 
 import scala.concurrent.ExecutionContext.Implicits.global

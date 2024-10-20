@@ -28,7 +28,6 @@ import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.Result
 import v5.createAmendUkPropertyCumulativeSummary.def1.model.request._
 import v5.createAmendUkPropertyCumulativeSummary.model.request.CreateAmendUkPropertyCumulativeSummaryRequestData
-import v5.createAmendUkPropertyCumulativeSummary.model.response.CreateAmendUkPropertyCumulativeSummaryResponse
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -41,46 +40,25 @@ class CreateAmendUkPropertyCumulativeSummaryControllerSpec
     with MockCreateAmendUkPropertyCumulativeSummaryValidatorFactory
     with MockAuditService {
 
-  private val taxYear      = "2020-21"
-  private val businessId   = "XAIS12345678910"
-  private val submissionId = "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
+  private val taxYear    = "2020-21"
+  private val businessId = "XAIS12345678910"
 
   "CreateAmendUkPropertyCumulativeSummaryController" should {
-    "return a successful response from a consolidated request" when {
-      "the request received is valid" in new Test {
-        willUseValidator(returningSuccess(consolidatedRequestData))
-
-        MockCreateAmendUkPropertyCumulativeSummaryService
-          .createUkProperty(consolidatedRequestData)
-          .returns(Future.successful(Right(ResponseWrapper(correlationId, responseData))))
-
-        override def callController(): Future[Result] =
-          controller.handleRequest(nino, businessId, taxYear)(fakePostRequest(consolidatedRequestBodyJson))
-
-        runOkTestWithAudit(
-          expectedStatus = OK,
-          maybeAuditRequestBody = Some(consolidatedRequestBodyJson),
-          maybeExpectedResponseBody = Some(responseBodyJson),
-          maybeAuditResponseBody = None
-        )
-      }
-    }
-
-    "return a successful response from an unconsolidated request" when {
+    "return a successful response from a valid request" when {
       "the request received is valid" in new Test {
         willUseValidator(returningSuccess(requestData))
 
         MockCreateAmendUkPropertyCumulativeSummaryService
           .createUkProperty(requestData)
-          .returns(Future.successful(Right(ResponseWrapper(correlationId, responseData))))
+          .returns(Future.successful(Right(ResponseWrapper(correlationId, ()))))
 
         override def callController(): Future[Result] =
           controller.handleRequest(nino, businessId, taxYear)(fakePostRequest(requestBodyJson))
 
         runOkTestWithAudit(
-          expectedStatus = OK,
+          expectedStatus = NO_CONTENT,
           maybeAuditRequestBody = Some(requestBodyJson),
-          maybeExpectedResponseBody = Some(responseBodyJson),
+          maybeExpectedResponseBody = None,
           maybeAuditResponseBody = None
         )
       }
@@ -142,8 +120,8 @@ class CreateAmendUkPropertyCumulativeSummaryControllerSpec
 
     private val consolidatedRequestBody: Def1_CreateAmendUkPropertyCumulativeSummaryRequestBody =
       Def1_CreateAmendUkPropertyCumulativeSummaryRequestBody(
-        fromDate = "2023-04-01",
-        toDate = "2024-04-01",
+        fromDate = Some("2023-04-01"),
+        toDate = Some("2024-04-01"),
         ukProperty = UkProperty(
           income = Some(
             Income(
@@ -204,8 +182,8 @@ class CreateAmendUkPropertyCumulativeSummaryControllerSpec
 
     val requestBody: Def1_CreateAmendUkPropertyCumulativeSummaryRequestBody =
       Def1_CreateAmendUkPropertyCumulativeSummaryRequestBody(
-        fromDate = "2023-04-01",
-        toDate = "2024-04-01",
+        fromDate = Some("2023-04-01"),
+        toDate = Some("2024-04-01"),
         ukProperty = UkProperty(
           income = Some(
             Income(
@@ -275,17 +253,6 @@ class CreateAmendUkPropertyCumulativeSummaryControllerSpec
 
     protected val requestData: CreateAmendUkPropertyCumulativeSummaryRequestData =
       Def1_CreateAmendUkPropertyCumulativeSummaryRequestData(Nino(nino), TaxYear.fromMtd(taxYear), BusinessId(businessId), requestBody)
-
-    protected val responseBodyJson: JsValue = Json.parse(
-      s"""
-         |{
-         |  "submissionId":"4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
-         |}
-         """.stripMargin
-    )
-
-    protected val responseData: CreateAmendUkPropertyCumulativeSummaryResponse =
-      CreateAmendUkPropertyCumulativeSummaryResponse(submissionId = submissionId)
 
   }
 

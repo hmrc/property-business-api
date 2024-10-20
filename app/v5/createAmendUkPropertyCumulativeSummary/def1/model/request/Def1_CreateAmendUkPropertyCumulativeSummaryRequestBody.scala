@@ -22,8 +22,8 @@ import play.api.libs.json.{JsPath, Json, OWrites, Reads}
 import v5.createAmendUkPropertyCumulativeSummary.model.request.CreateAmendUkPropertyCumulativeSummaryRequestBody
 
 case class Def1_CreateAmendUkPropertyCumulativeSummaryRequestBody(
-    fromDate: String,
-    toDate: String,
+    fromDate: Option[String],
+    toDate: Option[String],
     ukProperty: UkProperty
 ) extends CreateAmendUkPropertyCumulativeSummaryRequestBody
 
@@ -33,8 +33,8 @@ object Def1_CreateAmendUkPropertyCumulativeSummaryRequestBody {
     Json.reads[Def1_CreateAmendUkPropertyCumulativeSummaryRequestBody]
 
   implicit val writes: OWrites[Def1_CreateAmendUkPropertyCumulativeSummaryRequestBody] = (
-    (JsPath \ "fromDate").write[String] and
-      (JsPath \ "toDate").write[String] and
+    (JsPath \ "fromDate").writeNullable[String] and
+      (JsPath \ "toDate").writeNullable[String] and
       (JsPath \ "ukOtherProperty").write[UkProperty]
   )(unlift(Def1_CreateAmendUkPropertyCumulativeSummaryRequestBody.unapply))
 

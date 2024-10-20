@@ -88,8 +88,8 @@ class Def1_CreateAmendUkPropertyCumulativeSummaryValidatorSpec extends UnitSpec 
 
   val fullRequestBody: Def1_CreateAmendUkPropertyCumulativeSummaryRequestBody =
     Def1_CreateAmendUkPropertyCumulativeSummaryRequestBody(
-      fromDate = "2023-04-01",
-      toDate = "2024-04-01",
+      fromDate = Some("2023-04-01"),
+      toDate = Some("2024-04-01"),
       ukProperty = UkProperty(
         income = Some(
           Income(
@@ -150,8 +150,8 @@ class Def1_CreateAmendUkPropertyCumulativeSummaryValidatorSpec extends UnitSpec 
 
   private val consolidatedRequestBody: Def1_CreateAmendUkPropertyCumulativeSummaryRequestBody =
     Def1_CreateAmendUkPropertyCumulativeSummaryRequestBody(
-      fromDate = "2023-04-01",
-      toDate = "2024-04-01",
+      fromDate = Some("2023-04-01"),
+      toDate = Some("2024-04-01"),
       ukProperty = UkProperty(
         income = Some(
           Income(
@@ -273,22 +273,6 @@ class Def1_CreateAmendUkPropertyCumulativeSummaryValidatorSpec extends UnitSpec 
             validator(validNino, validTaxYear, validBusinessId, invalidBody).validateAndWrapResult()
 
           result shouldBe Left(ErrorWrapper(correlationId, RuleIncorrectOrEmptyBodyError.withPath("/ukProperty")))
-        }
-
-        "passed a body missing the fromDate" in {
-          val invalidBody = fullRequestJson.removeProperty("/fromDate")
-          val result: Either[ErrorWrapper, CreateAmendUkPropertyCumulativeSummaryRequestData] =
-            validator(validNino, validTaxYear, validBusinessId, invalidBody).validateAndWrapResult()
-
-          result shouldBe Left(ErrorWrapper(correlationId, RuleIncorrectOrEmptyBodyError.withPath("/fromDate")))
-        }
-
-        "passed a body missing the toDate" in {
-          val invalidBody = fullRequestJson.removeProperty("/toDate")
-          val result: Either[ErrorWrapper, CreateAmendUkPropertyCumulativeSummaryRequestData] =
-            validator(validNino, validTaxYear, validBusinessId, invalidBody).validateAndWrapResult()
-
-          result shouldBe Left(ErrorWrapper(correlationId, RuleIncorrectOrEmptyBodyError.withPath("/toDate")))
         }
 
         "passed a body with an invalidly formatted fromDate" in {

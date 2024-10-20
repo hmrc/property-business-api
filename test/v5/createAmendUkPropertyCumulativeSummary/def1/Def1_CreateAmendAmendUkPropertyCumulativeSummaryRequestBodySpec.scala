@@ -135,8 +135,8 @@ class Def1_CreateAmendAmendUkPropertyCumulativeSummaryRequestBodySpec extends Un
 
   val createAmendAmendUkPropertyCumulativeSummaryRequestBody: Def1_CreateAmendUkPropertyCumulativeSummaryRequestBody =
     Def1_CreateAmendUkPropertyCumulativeSummaryRequestBody(
-      fromDate = "2023-04-01",
-      toDate = "2024-04-01",
+      fromDate = Some("2023-04-01"),
+      toDate = Some("2024-04-01"),
       ukProperty = ukProperty
     )
 

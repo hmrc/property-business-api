@@ -21,14 +21,8 @@ import api.models.domain.{BusinessId, Nino, TaxYear}
 import api.models.errors._
 import api.models.outcomes.ResponseWrapper
 import api.services.ServiceSpec
-import play.api.libs.json.{JsValue, Json}
-import v5.createAmendUkPropertyCumulativeSummary.def1.model.request.{
-  Def1_CreateAmendUkPropertyCumulativeSummaryRequestBody,
-  Def1_CreateAmendUkPropertyCumulativeSummaryRequestData,
-  _
-}
+import v5.createAmendUkPropertyCumulativeSummary.def1.model.request._
 import v5.createAmendUkPropertyCumulativeSummary.model.request.CreateAmendUkPropertyCumulativeSummaryRequestData
-import v5.createAmendUkPropertyCumulativeSummary.model.response.CreateAmendUkPropertyCumulativeSummaryResponse
 
 import scala.concurrent.Future
 
@@ -37,14 +31,13 @@ class CreateAmendUkPropertyCumulativeSummaryServiceSpec extends ServiceSpec with
   private val nino                                    = "AA123456A"
   private val taxYear                                 = "2020-21"
   private val businessId                              = "XAIS12345678910"
-  private val submissionId                            = "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
   implicit private val correlationId: String          = "X-123"
   implicit private val logContext: EndpointLogContext = EndpointLogContext("c", "ep")
 
   val requestBody: Def1_CreateAmendUkPropertyCumulativeSummaryRequestBody =
     Def1_CreateAmendUkPropertyCumulativeSummaryRequestBody(
-      fromDate = "2023-04-01",
-      toDate = "2024-04-01",
+      fromDate = Some("2023-04-01"),
+      toDate = Some("2024-04-01"),
       ukProperty = UkProperty(
         income = Some(
           Income(
@@ -74,25 +67,14 @@ class CreateAmendUkPropertyCumulativeSummaryServiceSpec extends ServiceSpec with
       )
     )
 
-  val responseBodyJson: JsValue = Json.parse(
-    s"""
-       |{
-       |  "submissionId":"4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
-       |}
-       """.stripMargin
-  )
-
-  val responseData: CreateAmendUkPropertyCumulativeSummaryResponse =
-    CreateAmendUkPropertyCumulativeSummaryResponse(submissionId = submissionId)
-
   "CreateAmendUkPropertyCumulativeSummaryService" when {
     "downstream call is successful" when {
       "a submission id is returned from downstream" must {
         "return a successful result" in new Test {
           MockedCreateUkPropertyCumulativeSummaryConnector.createAmendUkPropertyCumulativeSummary(requestData) returns
-            Future.successful(Right(ResponseWrapper(correlationId, responseData)))
+            Future.successful(Right(ResponseWrapper(correlationId, ())))
 
-          await(service.createAmendUkPropertyCumulativeSummary(requestData)) shouldBe Right(ResponseWrapper(correlationId, responseData))
+          await(service.createAmendUkPropertyCumulativeSummary(requestData)) shouldBe Right(ResponseWrapper(correlationId, ()))
         }
       }
     }
@@ -113,12 +95,11 @@ class CreateAmendUkPropertyCumulativeSummaryServiceSpec extends ServiceSpec with
           "INVALID_INCOME_SOURCE_ID"           -> BusinessIdFormatError,
           "INVALID_PAYLOAD"                    -> InternalError,
           "INVALID_CORRELATION_ID"             -> InternalError,
-          "INVALID_TAX_YEAR"                   -> TaxYearFormatError,
+          "INVALID_TAX_YEAR"                   -> InternalError,
           "INCOME_SOURCE_NOT_FOUND"            -> NotFoundError,
-          "INCOME_SOURCE_DATA_NOT_FOUND"       -> NotFoundError,
           "MISSING_EXPENSES"                   -> InternalError,
-          "INVALID_SUBMISSION_END_DATE"        -> RuleInvalidSubmissionEndDateError,
-          "SUBMISSION_END_DATE_VALUE"          -> RuleSubmissionEndDateError,
+          "INVALID_SUBMISSION_END_DATE"        -> RuleAdvanceSubmissionRequiresPeriodEndDate,
+          "SUBMISSION_END_DATE_VALUE"          -> RuleSubmissionEndDateCannotMoveBackwards,
           "INVALID_START_DATE"                 -> RuleStartDateNotAlignedWithReportingType,
           "START_DATE_NOT_ALIGNED"             -> RuleStartDateNotAlignedToCommencementDate,
           "END_DATE_NOT_ALIGNED"               -> RuleEndDateNotAlignedWithReportingType,

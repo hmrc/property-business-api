@@ -25,13 +25,13 @@ object RuleSubmissionDateIssueError
       BAD_REQUEST
     )
 
-object RuleInvalidSubmissionEndDateError
+object RuleAdvanceSubmissionRequiresPeriodEndDate
     extends MtdError(
       "RULE_ADVANCE_SUBMISSION_REQUIRES_PERIOD_END_DATE",
       "For advance submission end date must be the end of the period.",
       BAD_REQUEST)
 
-object RuleSubmissionEndDateError
+object RuleSubmissionEndDateCannotMoveBackwards
     extends MtdError("RULE_SUBMISSION_END_DATE_CANNOT_MOVE_BACKWARDS", "Submission end date cannot be earlier than existing submission.", BAD_REQUEST)
 
 object RuleStartDateNotAlignedWithReportingType
@@ -46,7 +46,7 @@ object RuleEndDateNotAlignedWithReportingType
 object RuleMissingSubmissionDates extends MtdError("RULE_MISSING_SUBMISSION_DATES", "Submission start/end date not provided.", BAD_REQUEST)
 
 object RuleStartAndEndDateNotAllowed
-    extends MtdError("RULE_START_END_DATE_NOT_ALLOWED", "Start/end date not accepted for annual/latent submission.", BAD_REQUEST)
+    extends MtdError("RULE_START_AND_END_DATE_NOT_ALLOWED", "Start/end date not accepted for annual/latent submission.", BAD_REQUEST)
 
 object RuleOutsideAmendmentWindow
     extends MtdError("RULE_OUTSIDE_AMENDMENT_WINDOW", "Request cannot be completed as you are outside the amendment window.", BAD_REQUEST)

@@ -19,13 +19,8 @@ package v5.createAmendUkPropertyCumulativeSummary
 import api.connectors.{ConnectorSpec, DownstreamOutcome}
 import api.models.domain.{BusinessId, Nino, TaxYear}
 import api.models.outcomes.ResponseWrapper
-import v5.createAmendUkPropertyCumulativeSummary.def1.model.request.{
-  Def1_CreateAmendUkPropertyCumulativeSummaryRequestBody,
-  Def1_CreateAmendUkPropertyCumulativeSummaryRequestData,
-  _
-}
+import v5.createAmendUkPropertyCumulativeSummary.def1.model.request._
 import v5.createAmendUkPropertyCumulativeSummary.model.request.CreateAmendUkPropertyCumulativeSummaryRequestData
-import v5.createAmendUkPropertyCumulativeSummary.model.response.CreateAmendUkPropertyCumulativeSummaryResponse
 
 import scala.concurrent.Future
 
@@ -63,17 +58,17 @@ class CreateAmendUkPropertyCumulativeSummaryConnectorSpec extends ConnectorSpec 
   )
 
   "connector" must {
-    "post a body and return 200 with submissionId" in new TysIfsTest with Test {
+    "post a body and return 204" in new TysIfsTest with Test {
       lazy val taxYear: TaxYear = TaxYear.fromMtd("2025-26")
 
       willPut(
         url = s"$baseUrl/income-tax/${taxYear.asTysDownstream}/business/property/periodic/${nino.value}/${businessId.businessId}",
         body = requestBody
-      ) returns Future.successful(outcome)
+      ) returns Future.successful(Right(ResponseWrapper(correlationId, ())))
 
-      val result: DownstreamOutcome[CreateAmendUkPropertyCumulativeSummaryResponse] =
+      val result: DownstreamOutcome[Unit] =
         await(connector.createAmendUkPropertyCumulativeSummary(requestData))
-      result shouldBe outcome
+      result shouldBe Right(ResponseWrapper(correlationId, ()))
     }
 
   }
@@ -83,16 +78,10 @@ class CreateAmendUkPropertyCumulativeSummaryConnectorSpec extends ConnectorSpec 
     protected val taxYear: TaxYear
 
     protected val requestBody: Def1_CreateAmendUkPropertyCumulativeSummaryRequestBody =
-      Def1_CreateAmendUkPropertyCumulativeSummaryRequestBody("2020-01-01", "2020-01-31", ukProperty = ukProperty)
+      Def1_CreateAmendUkPropertyCumulativeSummaryRequestBody(Some("2020-01-01"), Some("2020-01-31"), ukProperty = ukProperty)
 
     protected val requestData: CreateAmendUkPropertyCumulativeSummaryRequestData =
       Def1_CreateAmendUkPropertyCumulativeSummaryRequestData(nino, taxYear, businessId, requestBody)
-
-    protected val response: CreateAmendUkPropertyCumulativeSummaryResponse = CreateAmendUkPropertyCumulativeSummaryResponse(
-      "4557ecb5-fd32-48cc-81f5-e6acd1099f3c")
-
-    protected val outcome: Right[Nothing, ResponseWrapper[CreateAmendUkPropertyCumulativeSummaryResponse]] = Right(
-      ResponseWrapper(correlationId, response))
 
     protected val connector: CreateAmendUkPropertyCumulativeSummaryConnector = new CreateAmendUkPropertyCumulativeSummaryConnector(
       http = mockHttpClient,

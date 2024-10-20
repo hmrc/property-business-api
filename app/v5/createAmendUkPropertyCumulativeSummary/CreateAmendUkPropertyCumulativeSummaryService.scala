@@ -21,8 +21,6 @@ import api.models.errors._
 import api.services.{BaseService, ServiceOutcome}
 import cats.implicits._
 import v5.createAmendUkPropertyCumulativeSummary.model.request.CreateAmendUkPropertyCumulativeSummaryRequestData
-import v5.createAmendUkPropertyCumulativeSummary.model.response.CreateAmendUkPropertyCumulativeSummaryResponse
-
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -31,7 +29,7 @@ class CreateAmendUkPropertyCumulativeSummaryService @Inject() (connector: Create
 
   def createAmendUkPropertyCumulativeSummary(request: CreateAmendUkPropertyCumulativeSummaryRequestData)(implicit
       ctx: RequestContext,
-      ec: ExecutionContext): Future[ServiceOutcome[CreateAmendUkPropertyCumulativeSummaryResponse]] = {
+      ec: ExecutionContext): Future[ServiceOutcome[Unit]] = {
 
     connector.createAmendUkPropertyCumulativeSummary(request).map(_.leftMap(mapDownstreamErrors(downstreamErrorMap)))
 
@@ -43,12 +41,11 @@ class CreateAmendUkPropertyCumulativeSummaryService @Inject() (connector: Create
       "INVALID_INCOME_SOURCE_ID"           -> BusinessIdFormatError,
       "INVALID_PAYLOAD"                    -> InternalError,
       "INVALID_CORRELATION_ID"             -> InternalError,
-      "INVALID_TAX_YEAR"                   -> TaxYearFormatError,
+      "INVALID_TAX_YEAR"                   -> InternalError,
       "INCOME_SOURCE_NOT_FOUND"            -> NotFoundError,
-      "INCOME_SOURCE_DATA_NOT_FOUND"       -> NotFoundError,
       "MISSING_EXPENSES"                   -> InternalError,
-      "INVALID_SUBMISSION_END_DATE"        -> RuleInvalidSubmissionEndDateError,
-      "SUBMISSION_END_DATE_VALUE"          -> RuleSubmissionEndDateError,
+      "INVALID_SUBMISSION_END_DATE"        -> RuleAdvanceSubmissionRequiresPeriodEndDate,
+      "SUBMISSION_END_DATE_VALUE"          -> RuleSubmissionEndDateCannotMoveBackwards,
       "INVALID_START_DATE"                 -> RuleStartDateNotAlignedWithReportingType,
       "START_DATE_NOT_ALIGNED"             -> RuleStartDateNotAlignedToCommencementDate,
       "END_DATE_NOT_ALIGNED"               -> RuleEndDateNotAlignedWithReportingType,
@@ -56,6 +53,7 @@ class CreateAmendUkPropertyCumulativeSummaryService @Inject() (connector: Create
       "START_END_DATE_NOT_ACCEPTED"        -> RuleStartAndEndDateNotAllowed,
       "OUTSIDE_AMENDMENT_WINDOW"           -> RuleOutsideAmendmentWindow,
       "TAX_YEAR_NOT_SUPPORTED"             -> RuleTaxYearNotSupportedError,
+      "SUBMITTED_TAX_YEAR_NOT_SUPPORTED"   -> RuleTaxYearNotSupportedError,
       "EARLY_DATA_SUBMISSION_NOT_ACCEPTED" -> RuleEarlyDataSubmissionNotAccepted,
       "DUPLICATE_COUNTRY_CODE"             -> RuleDuplicateCountryCode,
       "SERVER_ERROR"                       -> InternalError,

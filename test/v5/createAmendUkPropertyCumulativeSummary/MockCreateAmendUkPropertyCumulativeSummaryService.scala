@@ -21,8 +21,6 @@ import api.services.ServiceOutcome
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
 import v5.createAmendUkPropertyCumulativeSummary.model.request.CreateAmendUkPropertyCumulativeSummaryRequestData
-import v5.createAmendUkPropertyCumulativeSummary.model.response.CreateAmendUkPropertyCumulativeSummaryResponse
-
 import scala.concurrent.{ExecutionContext, Future}
 
 trait MockCreateAmendUkPropertyCumulativeSummaryService extends MockFactory {
@@ -32,8 +30,7 @@ trait MockCreateAmendUkPropertyCumulativeSummaryService extends MockFactory {
 
   object MockCreateAmendUkPropertyCumulativeSummaryService {
 
-    def createUkProperty(requestData: CreateAmendUkPropertyCumulativeSummaryRequestData)
-        : CallHandler[Future[ServiceOutcome[CreateAmendUkPropertyCumulativeSummaryResponse]]] = {
+    def createUkProperty(requestData: CreateAmendUkPropertyCumulativeSummaryRequestData): CallHandler[Future[ServiceOutcome[Unit]]] = {
       (
         mockCreateAmendUkPropertyCumulativeSummaryService
           .createAmendUkPropertyCumulativeSummary(_: CreateAmendUkPropertyCumulativeSummaryRequestData)(

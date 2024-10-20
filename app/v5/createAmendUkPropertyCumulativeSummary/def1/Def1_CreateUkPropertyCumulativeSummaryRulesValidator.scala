@@ -35,7 +35,7 @@ class Def1_CreateUkPropertyCumulativeSummaryRulesValidator extends RulesValidato
     import parsed.body._
 
     combine(
-      ResolveFromAndToDates((fromDate, toDate)),
+      ResolveFromAndToDates((fromDate, toDate)).getOrElse(valid),
       validateUkProperty(ukProperty)
     ).onSuccess(parsed)
 

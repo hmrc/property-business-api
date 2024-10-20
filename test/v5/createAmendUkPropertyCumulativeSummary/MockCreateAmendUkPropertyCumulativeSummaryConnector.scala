@@ -21,8 +21,6 @@ import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
 import uk.gov.hmrc.http.HeaderCarrier
 import v5.createAmendUkPropertyCumulativeSummary.model.request.CreateAmendUkPropertyCumulativeSummaryRequestData
-import v5.createAmendUkPropertyCumulativeSummary.model.response.CreateAmendUkPropertyCumulativeSummaryResponse
-
 import scala.concurrent.{ExecutionContext, Future}
 
 trait MockCreateAmendUkPropertyCumulativeSummaryConnector extends MockFactory {
@@ -32,8 +30,8 @@ trait MockCreateAmendUkPropertyCumulativeSummaryConnector extends MockFactory {
 
   object MockedCreateUkPropertyCumulativeSummaryConnector {
 
-    def createAmendUkPropertyCumulativeSummary(requestData: CreateAmendUkPropertyCumulativeSummaryRequestData)
-        : CallHandler[Future[DownstreamOutcome[CreateAmendUkPropertyCumulativeSummaryResponse]]] = {
+    def createAmendUkPropertyCumulativeSummary(
+        requestData: CreateAmendUkPropertyCumulativeSummaryRequestData): CallHandler[Future[DownstreamOutcome[Unit]]] = {
       (
         mockCreateUkPropertyCumulativeSummaryConnector
           .createAmendUkPropertyCumulativeSummary(_: CreateAmendUkPropertyCumulativeSummaryRequestData)(

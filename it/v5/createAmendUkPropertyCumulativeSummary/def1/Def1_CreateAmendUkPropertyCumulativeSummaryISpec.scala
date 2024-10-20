@@ -22,12 +22,47 @@ import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import play.api.http.HeaderNames.ACCEPT
 import play.api.http.Status
 import play.api.http.Status._
-import play.api.libs.json.{JsValue, Json}
+import play.api.libs.json.{JsObject, JsValue, Json}
 import play.api.libs.ws.{WSRequest, WSResponse}
 import play.api.test.Helpers.AUTHORIZATION
 import support.IntegrationBaseSpec
 
 class Def1_CreateAmendUkPropertyCumulativeSummaryISpec extends IntegrationBaseSpec {
+
+  val validRequestBodyJson = Json.parse(
+    """
+      |{
+      |  "fromDate": "2023-04-01",
+      |  "toDate": "2024-04-01",
+      |  "ukProperty": {
+      |    "income": {
+      |      "premiumsOfLeaseGrant": 42.12,
+      |      "reversePremiums": 84.31,
+      |      "periodAmount": 9884.93,
+      |      "taxDeducted": 842.99,
+      |      "otherIncome": 31.44,
+      |      "rentARoom": {
+      |        "rentsReceived": 947.66
+      |      }
+      |    },
+      |    "expenses": {
+      |      "premisesRunningCosts": 1500.50,
+      |      "repairsAndMaintenance": 1200.75,
+      |      "financialCosts": 2000.00,
+      |      "professionalFees": 500.00,
+      |      "costOfServices": 300.25,
+      |      "other": 100.50,
+      |      "residentialFinancialCost": 9000.10,
+      |      "travelCosts": 400.00,
+      |      "residentialFinancialCostsCarriedForward": 300.13,
+      |      "rentARoom": {
+      |        "amountClaimed": 860.88
+      |      }
+      |    }
+      |  }
+      |}
+    """.stripMargin
+  )
 
   private trait Test {
     val nino: String          = "TC663795B"
@@ -38,46 +73,7 @@ class Def1_CreateAmendUkPropertyCumulativeSummaryISpec extends IntegrationBaseSp
     def downstreamTaxYear: String
     def downstreamUri: String
 
-    val requestBodyJson: JsValue = Json.parse(
-      """
-        |{
-        |  "fromDate": "2023-04-01",
-        |  "toDate": "2024-04-01",
-        |  "ukProperty": {
-        |    "income": {
-        |      "premiumsOfLeaseGrant": 42.12,
-        |      "reversePremiums": 84.31,
-        |      "periodAmount": 9884.93,
-        |      "taxDeducted": 842.99,
-        |      "otherIncome": 31.44,
-        |      "rentARoom": {
-        |        "rentsReceived": 947.66
-        |      }
-        |    },
-        |    "expenses": {
-        |      "premisesRunningCosts": 1500.50,
-        |      "repairsAndMaintenance": 1200.75,
-        |      "financialCosts": 2000.00,
-        |      "professionalFees": 500.00,
-        |      "costOfServices": 300.25,
-        |      "other": 100.50,
-        |      "residentialFinancialCost": 9000.10,
-        |      "travelCosts": 400.00,
-        |      "residentialFinancialCostsCarriedForward": 300.13,
-        |      "rentARoom": {
-        |        "amountClaimed": 860.88
-        |      }
-        |    }
-        |  }
-        |}
-  """.stripMargin
-    )
-
-    protected val responseBodyJson: JsValue = Json.parse(s"""
-         |{
-         |  "submissionId":"4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
-         |}
-         """.stripMargin)
+    val requestBodyJson: JsValue = validRequestBodyJson
 
     def setupStubs(): StubMapping
 
@@ -120,12 +116,12 @@ class Def1_CreateAmendUkPropertyCumulativeSummaryISpec extends IntegrationBaseSp
           AuditStub.audit()
           AuthStub.authorised()
           MtdIdLookupStub.ninoFound(nino)
-          DownstreamStub.onSuccess(DownstreamStub.PUT, downstreamUri, downstreamQueryParams, Status.OK, responseBodyJson)
+          DownstreamStub.onSuccess(DownstreamStub.PUT, downstreamUri, downstreamQueryParams, Status.NO_CONTENT, JsObject.empty)
         }
 
         val response: WSResponse = await(request().post(requestBodyJson))
-        response.status shouldBe OK
-        response.json shouldBe responseBodyJson
+        response.status shouldBe NO_CONTENT
+        response.body shouldBe ""
         response.header("X-CorrelationId").nonEmpty shouldBe true
       }
     }
@@ -225,41 +221,6 @@ class Def1_CreateAmendUkPropertyCumulativeSummaryISpec extends IntegrationBaseSp
     }
 
     "return an error according to spec" when {
-
-      val validRequestBodyJson = Json.parse(
-        """
-          |{
-          |  "fromDate": "2023-04-01",
-          |  "toDate": "2024-04-01",
-          |  "ukProperty": {
-          |    "income": {
-          |      "premiumsOfLeaseGrant": 42.12,
-          |      "reversePremiums": 84.31,
-          |      "periodAmount": 9884.93,
-          |      "taxDeducted": 842.99,
-          |      "otherIncome": 31.44,
-          |      "rentARoom": {
-          |        "rentsReceived": 947.66
-          |      }
-          |    },
-          |    "expenses": {
-          |      "premisesRunningCosts": 1500.50,
-          |      "repairsAndMaintenance": 1200.75,
-          |      "financialCosts": 2000.00,
-          |      "professionalFees": 500.00,
-          |      "costOfServices": 300.25,
-          |      "other": 100.50,
-          |      "residentialFinancialCost": 9000.10,
-          |      "travelCosts": 400.00,
-          |      "residentialFinancialCostsCarriedForward": 300.13,
-          |      "rentARoom": {
-          |        "amountClaimed": 860.88
-          |      }
-          |    }
-          |  }
-          |}
-        """.stripMargin
-      )
 
       val allInvalidDateFormatRequestBodyJson = Json.parse(
         """
@@ -399,11 +360,10 @@ class Def1_CreateAmendUkPropertyCumulativeSummaryISpec extends IntegrationBaseSp
           (BAD_REQUEST, "INVALID_INCOME_SOURCE_ID", BAD_REQUEST, BusinessIdFormatError),
           (BAD_REQUEST, "INVALID_PAYLOAD", INTERNAL_SERVER_ERROR, InternalError),
           (BAD_REQUEST, "INVALID_CORRELATION_ID", INTERNAL_SERVER_ERROR, InternalError),
-          (BAD_REQUEST, "INVALID_TAX_YEAR", BAD_REQUEST, TaxYearFormatError),
+          (BAD_REQUEST, "INVALID_TAX_YEAR", INTERNAL_SERVER_ERROR, InternalError),
           (NOT_FOUND, "INCOME_SOURCE_NOT_FOUND", NOT_FOUND, NotFoundError),
-          (NOT_FOUND, "INCOME_SOURCE_DATA_NOT_FOUND", NOT_FOUND, NotFoundError),
-          (UNPROCESSABLE_ENTITY, "INVALID_SUBMISSION_END_DATE", BAD_REQUEST, RuleInvalidSubmissionEndDateError),
-          (UNPROCESSABLE_ENTITY, "SUBMISSION_END_DATE_VALUE", BAD_REQUEST, RuleSubmissionEndDateError),
+          (UNPROCESSABLE_ENTITY, "INVALID_SUBMISSION_END_DATE", BAD_REQUEST, RuleAdvanceSubmissionRequiresPeriodEndDate),
+          (UNPROCESSABLE_ENTITY, "SUBMISSION_END_DATE_VALUE", BAD_REQUEST, RuleSubmissionEndDateCannotMoveBackwards),
           (UNPROCESSABLE_ENTITY, "INVALID_START_DATE", BAD_REQUEST, RuleStartDateNotAlignedWithReportingType),
           (UNPROCESSABLE_ENTITY, "START_DATE_NOT_ALIGNED", BAD_REQUEST, RuleStartDateNotAlignedToCommencementDate),
           (UNPROCESSABLE_ENTITY, "END_DATE_NOT_ALIGNED", BAD_REQUEST, RuleEndDateNotAlignedWithReportingType),
@@ -414,7 +374,8 @@ class Def1_CreateAmendUkPropertyCumulativeSummaryISpec extends IntegrationBaseSp
           (UNPROCESSABLE_ENTITY, "EARLY_DATA_SUBMISSION_NOT_ACCEPTED", BAD_REQUEST, RuleEarlyDataSubmissionNotAccepted),
           (UNPROCESSABLE_ENTITY, "DUPLICATE_COUNTRY_CODE", BAD_REQUEST, RuleDuplicateCountryCode),
           (INTERNAL_SERVER_ERROR, "SERVER_ERROR", INTERNAL_SERVER_ERROR, InternalError),
-          (SERVICE_UNAVAILABLE, "SERVICE_UNAVAILABLE", INTERNAL_SERVER_ERROR, InternalError)
+          (SERVICE_UNAVAILABLE, "SERVICE_UNAVAILABLE", INTERNAL_SERVER_ERROR, InternalError),
+          (SERVICE_UNAVAILABLE, "SUBMITTED_TAX_YEAR_NOT_SUPPORTED", INTERNAL_SERVER_ERROR, InternalError)
         )
 
         errors.foreach(args => (serviceErrorTest _).tupled(args))

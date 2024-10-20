@@ -59,7 +59,7 @@ class CreateAmendUkPropertyCumulativeSummaryController @Inject() (val authServic
           Map("nino" -> nino, "businessId" -> businessId, "taxYear" -> taxYear),
           Some(request.body)
         ))
-        .withPlainJsonResult(OK)
+        .withNoContentResult(NO_CONTENT)
 
       requestHandler.handleRequest()
     }

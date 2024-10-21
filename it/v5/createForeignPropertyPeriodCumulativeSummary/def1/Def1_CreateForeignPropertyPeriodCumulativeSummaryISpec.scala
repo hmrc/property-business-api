@@ -132,7 +132,10 @@ class Def1_CreateForeignPropertyPeriodCumulativeSummaryISpec extends Integration
             "2025-26",
             requestBodyWith(entryWith("AFG", 1.234)),
             BAD_REQUEST,
-            ValueFormatError.copy(paths = Some(List("/foreignProperty/0/expenses/premisesRunningCosts")))),
+            ValueFormatError.forPathAndRange(
+              path = "/foreignProperty/0/expenses/premisesRunningCosts",
+              min = "-99999999999.99",
+              max = "99999999999.99")),
           (
             "AA123456A",
             "XAIS12345678910",

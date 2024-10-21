@@ -32,7 +32,6 @@ object CreateForeignPropertyPeriodCumulativeSummarySchema {
   def schemaFor(taxYear: String): Validated[Seq[MtdError], CreateForeignPropertyPeriodCumulativeSummarySchema] =
     ResolveTaxYear(taxYear) andThen schemaFor
 
-
   def schemaFor(taxYear: TaxYear): Validated[Seq[MtdError], CreateForeignPropertyPeriodCumulativeSummarySchema] = {
     if (taxYear < TaxYear.starting(2025)) Invalid(Seq(RuleTaxYearNotSupportedError))
     else Valid(Def1)

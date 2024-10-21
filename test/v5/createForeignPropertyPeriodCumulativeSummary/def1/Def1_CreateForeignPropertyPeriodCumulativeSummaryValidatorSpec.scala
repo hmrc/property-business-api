@@ -448,7 +448,7 @@ class Def1_CreateForeignPropertyPeriodCumulativeSummaryValidatorSpec extends Uni
           "/expenses/professionalFees",
           "/expenses/travelCosts",
           "/expenses/costOfServices",
-          "/expenses/other",
+          "/expenses/other"
         ).foreach(path => testNegativeValueFormatErrorWith(bodyWith(entry.update(path, badValue)), s"/foreignProperty/0$path"))
 
         testNegativeValueFormatErrorWith(

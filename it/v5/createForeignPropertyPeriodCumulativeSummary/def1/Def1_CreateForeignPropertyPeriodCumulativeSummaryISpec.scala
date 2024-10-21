@@ -254,7 +254,7 @@ class Def1_CreateForeignPropertyPeriodCumulativeSummaryISpec extends Integration
   private trait TysIfsTest extends Test {
     def mtdTaxYear: String = "2025-26"
 
-    def downstreamUri: String = s"/income-tax/25-26/business/property/periodic/${nino}/${businessId}"
+    def downstreamUri: String = s"/income-tax/25-26/business/property/periodic/$nino/$businessId"
 
   }
 

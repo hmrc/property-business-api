@@ -52,8 +52,8 @@ class PropertyIncomeSpec extends UnitSpec {
       |    "rentAmount": 34456.30
       |  },
       |  "foreignTaxCreditRelief": true,
-      |  "premiumsOfLeaseGrant": 2543.43,
-      |  "otherPropertyIncome": 54325.30,
+      |  "premiumsOfLeaseGrantAmount": 2543.43,
+      |  "otherPropertyIncomeAmount": 54325.30,
       |  "foreignTaxPaidOrDeducted": 6543.01,
       |  "specialWithholdingTaxOrUkTaxPaid": 643245.00
       |}

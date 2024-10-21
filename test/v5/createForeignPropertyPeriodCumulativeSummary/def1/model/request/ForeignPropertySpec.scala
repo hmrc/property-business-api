@@ -86,14 +86,14 @@ class ForeignPropertySpec extends UnitSpec {
       |      "rentAmount": 34456.30
       |    },
       |    "foreignTaxCreditRelief": true,
-      |    "premiumsOfLeaseGrant": 2543.43,
-      |    "otherPropertyIncome": 54325.30,
+      |    "premiumsOfLeaseGrantAmount": 2543.43,
+      |    "otherPropertyIncomeAmount": 54325.30,
       |    "foreignTaxPaidOrDeducted": 6543.01,
       |    "specialWithholdingTaxOrUkTaxPaid": 643245.00
       |  },
       |  "expenses": {
-      |    "premisesRunningCosts": 5635.43,
-      |    "repairsAndMaintenance": 3456.65,
+      |    "premisesRunningCostsAmount": 5635.43,
+      |    "repairsAndMaintenanceAmount": 3456.65,
       |    "financialCostsAmount": 34532.21,
       |    "professionalFeesAmount": 32465.32,
       |    "costOfServicesAmount": 2567.21,

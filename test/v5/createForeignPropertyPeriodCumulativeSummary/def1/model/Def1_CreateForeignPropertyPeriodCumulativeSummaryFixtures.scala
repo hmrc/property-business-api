@@ -162,14 +162,14 @@ trait Def1_CreateForeignPropertyPeriodCumulativeSummaryFixtures {
       |          "rentAmount": 1000.99
       |        },
       |        "foreignTaxCreditRelief": false,
-      |        "premiumsOfLeaseGrant": 1000.99,
-      |        "otherPropertyIncome": 2000.99,
+      |        "premiumsOfLeaseGrantAmount": 1000.99,
+      |        "otherPropertyIncomeAmount": 2000.99,
       |        "foreignTaxPaidOrDeducted": 3000.99,
       |        "specialWithholdingTaxOrUkTaxPaid": 4000.99
       |      },
       |      "expenses": {
-      |        "premisesRunningCosts": 1000.99,
-      |        "repairsAndMaintenance": 2000.99,
+      |        "premisesRunningCostsAmount": 1000.99,
+      |        "repairsAndMaintenanceAmount": 2000.99,
       |        "financialCostsAmount": 3000.99,
       |        "professionalFeesAmount": 4000.99,
       |        "costOfServicesAmount": 5000.99,
@@ -197,8 +197,8 @@ trait Def1_CreateForeignPropertyPeriodCumulativeSummaryFixtures {
       |          "rentAmount": 1000.99
       |        },
       |        "foreignTaxCreditRelief": false,
-      |        "premiumsOfLeaseGrant": 1000.99,
-      |        "otherPropertyIncome": 2000.99,
+      |        "premiumsOfLeaseGrantAmount": 1000.99,
+      |        "otherPropertyIncomeAmount": 2000.99,
       |        "foreignTaxPaidOrDeducted": 3000.99,
       |        "specialWithholdingTaxOrUkTaxPaid": 4000.99
       |      },

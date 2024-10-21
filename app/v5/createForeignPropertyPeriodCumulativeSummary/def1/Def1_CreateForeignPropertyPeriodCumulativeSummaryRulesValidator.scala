@@ -75,7 +75,7 @@ object Def1_CreateForeignPropertyPeriodCumulativeSummaryRulesValidator
       (income.flatMap(_.foreignTaxPaidOrDeducted), s"/foreignProperty/$index/income/foreignTaxPaidOrDeducted"),
       (income.flatMap(_.specialWithholdingTaxOrUkTaxPaid), s"/foreignProperty/$index/income/specialWithholdingTaxOrUkTaxPaid"),
       (expenses.flatMap(_.residentialFinancialCost), s"/foreignProperty/$index/expenses/residentialFinancialCost"),
-      (expenses.flatMap(_.broughtFwdResidentialFinancialCost), s"/foreignProperty/$index/expenses/broughtFwdResidentialFinancialCost"),
+      (expenses.flatMap(_.broughtFwdResidentialFinancialCost), s"/foreignProperty/$index/expenses/broughtFwdResidentialFinancialCost")
     )
 
     val maybeNegativeValuesWithPaths = List(

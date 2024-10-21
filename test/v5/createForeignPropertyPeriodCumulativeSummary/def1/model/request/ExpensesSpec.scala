@@ -24,7 +24,7 @@ class ExpensesSpec extends UnitSpec {
   val mtdJson: JsValue = Json.parse(
     """
       |{
-      |  "premisesRunningCosts": 5635.43,
+      |  "premisesRunningCosts": -5635.43,
       |  "repairsAndMaintenance": 3456.65,
       |  "financialCosts": 34532.21,
       |  "professionalFees": 32465.32,
@@ -39,7 +39,7 @@ class ExpensesSpec extends UnitSpec {
   )
 
   val model: Expenses = Expenses(
-    premisesRunningCosts = Some(5635.43),
+    premisesRunningCosts = Some(-5635.43),
     repairsAndMaintenance = Some(3456.65),
     financialCosts = Some(34532.21),
     professionalFees = Some(32465.32),
@@ -54,8 +54,8 @@ class ExpensesSpec extends UnitSpec {
   val ifsJson: JsValue = Json.parse(
     """
       |{
-      |  "premisesRunningCosts": 5635.43,
-      |  "repairsAndMaintenance": 3456.65,
+      |  "premisesRunningCostsAmount": -5635.43,
+      |  "repairsAndMaintenanceAmount": 3456.65,
       |  "financialCostsAmount": 34532.21,
       |  "professionalFeesAmount": 32465.32,
       |  "costOfServicesAmount": 2567.21,

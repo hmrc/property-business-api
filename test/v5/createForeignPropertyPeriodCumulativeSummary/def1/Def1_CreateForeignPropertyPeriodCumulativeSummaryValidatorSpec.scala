@@ -426,7 +426,11 @@ class Def1_CreateForeignPropertyPeriodCumulativeSummaryValidatorSpec extends Uni
 
       def testValueFormatErrorWith(body: JsValue, expectedPath: String): Unit = testWith(ValueFormatError)(body, expectedPath)
 
+      def testNegativeValueFormatErrorWith(body: JsValue, expectedPath: String): Unit =
+        testWith(ValueFormatError.forPathAndRange(expectedPath, min = "-99999999999.99", max = "99999999999.99"))(body, expectedPath)
+
       "passed a body with an entry containing an invalid amount" when {
+        setupMocks()
         val badValue = JsNumber(42.768)
         List(
           "/income/rentIncome/rentAmount",
@@ -434,44 +438,53 @@ class Def1_CreateForeignPropertyPeriodCumulativeSummaryValidatorSpec extends Uni
           "/income/otherPropertyIncome",
           "/income/foreignTaxPaidOrDeducted",
           "/income/specialWithholdingTaxOrUkTaxPaid",
+          "/expenses/residentialFinancialCost",
+          "/expenses/broughtFwdResidentialFinancialCost"
+        ).foreach(path => testValueFormatErrorWith(bodyWith(entry.update(path, badValue)), s"/foreignProperty/0$path"))
+        List(
           "/expenses/premisesRunningCosts",
           "/expenses/repairsAndMaintenance",
           "/expenses/financialCosts",
           "/expenses/professionalFees",
-          "/expenses/costOfServices",
           "/expenses/travelCosts",
+          "/expenses/costOfServices",
           "/expenses/other",
-          "/expenses/residentialFinancialCost",
-          "/expenses/broughtFwdResidentialFinancialCost"
-        ).foreach(path => testValueFormatErrorWith(bodyWith(entry.update(path, badValue)), s"/foreignProperty/0$path"))
+        ).foreach(path => testNegativeValueFormatErrorWith(bodyWith(entry.update(path, badValue)), s"/foreignProperty/0$path"))
 
-        testValueFormatErrorWith(
+        testNegativeValueFormatErrorWith(
           bodyWith(entryConsolidated.update("/expenses/consolidatedExpenses", badValue)),
-          s"/foreignProperty/0/expenses/consolidatedExpenses")
+          "/foreignProperty/0/expenses/consolidatedExpenses")
       }
 
       "passed a body with multiple fields containing invalid amounts" in {
         setupMocks()
+        val path0    = "/foreignProperty/0/expenses/premisesRunningCosts"
+        val path1    = "/foreignProperty/0/expenses/repairsAndMaintenance"
+        val path2    = "/foreignProperty/0/expenses/financialCosts"
+        val path3    = "/foreignProperty/0/expenses/travelCosts"
         val badValue = JsNumber(42.768)
         val invalidBody = bodyWith(
           entry
-            .update("/income/premiumsOfLeaseGrant", badValue)
+            .update("/expenses/premisesRunningCosts", badValue)
+            .update("/expenses/repairsAndMaintenance", badValue)
             .update("/expenses/financialCosts", badValue)
             .update("/expenses/travelCosts", badValue)
         )
-
         val result: Either[ErrorWrapper, CreateForeignPropertyPeriodCumulativeSummaryRequestData] =
           validator(validNino, validBusinessId, validTaxYear, invalidBody).validateAndWrapResult()
 
         result shouldBe Left(
           ErrorWrapper(
             correlationId,
-            ValueFormatError.withPaths(
-              List(
-                "/foreignProperty/0/income/premiumsOfLeaseGrant",
-                "/foreignProperty/0/expenses/financialCosts",
-                "/foreignProperty/0/expenses/travelCosts"
-              ))
+            ValueFormatError
+              .forPathAndRange(path0, "-99999999999.99", "99999999999.99")
+              .withPaths(
+                List(
+                  path0,
+                  path1,
+                  path2,
+                  path3
+                ))
           ))
       }
 

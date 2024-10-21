@@ -37,7 +37,7 @@ class CreateForeignPropertyPeriodCumulativeSummaryConnectorSpec extends Connecto
 
   "connector" must {
 
-    "post a valid body and return 204 for a valid tax year" in new TysIfsTest with Test {
+    "put a valid body and return 204 for a valid tax year" in new TysIfsTest with Test {
       def taxYear: TaxYear = TaxYear.fromMtd(tysTaxYear)
 
       val outcome: DownstreamOutcome[Unit] = Right(ResponseWrapper(correlationId, response))

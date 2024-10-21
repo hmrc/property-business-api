@@ -21,7 +21,7 @@ import api.services.{AuditService, EnrolmentsAuthService, MtdIdLookupService}
 import config.AppConfig
 import play.api.libs.json.JsValue
 import play.api.mvc.{Action, ControllerComponents}
-import routing.{Version, Version5}
+import routing.Version
 import utils.IdGenerator
 
 import javax.inject.{Inject, Singleton}
@@ -61,7 +61,7 @@ class CreateForeignPropertyPeriodCumulativeSummaryController @Inject() (
               auditService,
               "CreateForeignPropertyPeriodCumulativeSummary",
               "create-foreign-property-period-cumulative-summary",
-              Version.from(request, orElse = Version5),
+              Version(request),
               Map("nino" -> nino, "businessId" -> businessId, "taxYear" -> taxYear),
               Some(request.body)
             )

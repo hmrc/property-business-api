@@ -1,7 +1,5 @@
-summary: Retrieve a Foreign Property Cumulative Period Summary
 description: |
-  This endpoint allows a developer to retrieve the cumulative period summary for a Foreign Property business, using the submission ID for either or both of Furnished Holiday Lettings (FHL) in the European Economic Area (EEA) and all other Foreign Property submissions. 
-  A National Insurance number, business ID, and tax year are required.
+  This endpoint enables you to retrieve the cumulative period income and expenses for a foreign property business. A National Insurance number, business ID, and tax year are required. Please note that this endpoint is only available for tax years starting from 2025-26.
 
   Note: This endpoint only supports submissions for tax year 2025-26 onwards.
 
@@ -10,23 +8,21 @@ description: |
   
   | Header Value (Gov-Test-Scenario) | Scenario                                                                 |
   |----------------------------------|--------------------------------------------------------------------------|
-  | N/A - DEFAULT                    | Simulates the scenario where no data is found.                           |
-  | FOREIGN_PROPERTY                 | Simulates success response with Foreign FHL and Non-FHL properties.      |
-  | FOREIGN_FHL_FULL_EXPENSES        | Simulates success response with Foreign FHL property.                    |
-  | FOREIGN_FHL_CONSOLIDATED         | Simulates the scenario of a FHL property with consolidated expenses.     |
-  | FOREIGN_NON_FHL_FULL_EXPENSES    | Simulates success response with Foreign Non-FHL property.                |
-  | FOREIGN_NON_FHL_CONSOLIDATED     | Simulates the scenario of a Non-FHL property with consolidated expenses. |
-  | UK_PROPERTY                      | Simulates the scenario where wrong business type is returned.            |
+  | N/A - DEFAULT                    | Simulates success response with Foreign Property.                        |
+  | NOT_FOUND                        | Simulates the scenario where no data is found.                           |
+  | FOREIGN_PROPERTY_FULL_EXPENSES   | Simulates success response of a Foreign property with full expenses.     |
+  | FOREIGN_PROPERTY_CONSOLIDATED    | Simulates the scenario of a Foreign property with consolidated expenses. |
+  | UK_PROPERTY                      | Simulates the scenario where the type of business is incorrect.          |
   | STATEFUL                         | Performs a stateful retrieve.                                            |
 
 
 tags:
-  - Retrieve a Foreign Property Cumulative Period Summary
+  - Foreign Property Cumulative Summary
 
 parameters:
   - $ref: './common/pathParameters.yaml#/components/parameters/nino'
   - $ref: './common/pathParameters.yaml#/components/parameters/businessId'
-  - $ref: './common/pathParameters.yaml#/components/parameters/taxYearTo2025'
+  - $ref: './common/pathParameters.yaml#/components/parameters/taxYearFrom2025'
   - $ref: './common/pathParameters.yaml#/components/parameters/submissionId'
   - $ref: './common/headers.yaml#/components/parameters/acceptHeader'
   - $ref: './common/headers.yaml#/components/parameters/authorizationReadScopeHeader'
@@ -51,16 +47,14 @@ responses:
     content:
       application/json:
         schema:
-          $ref: './schemas/foreign_property_cumulative_submission_retrieve/def1/response.json'
+          $ref: './schemas/foreign_property_cumulative_summary_retrieve/def1/response.json'
         examples:
-          full-expenses-response:
-            description: Full Expenses response for TY 2025-26
+          Full expenses response for TY 2025-26 and after:
             value:
-              $ref: './examples/foreign_property_cumulative_submission/def1/response.json'
-          consolidated-expenses-response:
-            description: Consolidated Expenses response for TY 2025-26
+              $ref: './examples/foreign_property_cumulative_summary_retrieve/def1/response.json'
+          Consolidated expenses response for TY 2025-26 and after:
             value:
-              $ref: './examples/foreign_property_cumulative_submission/def1/consolidated_response.json'
+              $ref: './examples/foreign_property_cumulative_summary_retrieve/def1/consolidated_response.json'
 
   "400":
     description: Bad request
@@ -71,12 +65,16 @@ responses:
         examples:
           FORMAT_NINO:
             $ref: './common/errors.yaml#/components/examples/formatNino'
+          FORMAT_TAX_YEAR:
+            $ref: './common/errors.yaml#/components/examples/formatTaxYear'
           FORMAT_BUSINESS_ID:
             $ref: './common/errors.yaml#/components/examples/formatBusinessId'
-          FORMAT_SUBMISSION_ID:
-            $ref: './common/errors.yaml#/components/examples/formatSubmissionId'
+          RULE_TAX_YEAR_RANGE_INVALID:
+            $ref: './common/errors.yaml#/components/examples/ruleTaxYearRangeInvalid'
           RULE_TYPE_OF_BUSINESS_INCORRECT:
             $ref: './common/errors.yaml#/components/examples/ruleTypeOfBusinessIncorrectForeign'
+          RULE_TAX_YEAR_NOT_SUPPORTED:
+            $ref: './common/errors.yaml#/components/examples/ruleTaxYearNotSupportedMinMax'
           RULE_INCORRECT_GOV_TEST_SCENARIO:
             $ref: './common/errors.yaml#/components/examples/ruleIncorrectGovTestScenario'
 

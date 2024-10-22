@@ -1,4 +1,3 @@
-summary: Create and Amend a Foreign Property Period Summary
 description: |
   This endpoint enables you to submit the periodic income and expenses for a foreign property business that occurred between two dates. 
   A National Insurance number, tax year and business ID are required. 
@@ -19,7 +18,7 @@ description: |
   | 2025-26 onwards | OUTSIDE_AMENDMENT_WINDOW                    | Simulates the scenario where request cannot be completed as it is outside the amendment window. |
 
 tags:
-  - Foreign Property Cumulative Submission
+  - Foreign Property Cumulative Summary
 
 parameters:
   - $ref: './common/pathParameters.yaml#/components/parameters/nino'

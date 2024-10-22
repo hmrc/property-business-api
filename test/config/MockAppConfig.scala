@@ -58,7 +58,6 @@ trait MockAppConfig extends MockFactory {
       (() => mockAppConfig.confidenceLevelConfig).expects()
 
     def minimumTaxV2Foreign: CallHandler[TaxYear] = (() => mockAppConfig.minimumTaxV2Foreign).expects()
-    def minimumTaxV3Foreign: CallHandler[TaxYear] = (() => mockAppConfig.minimumTaxV3Foreign).expects()
     def minimumTaxV2Uk: CallHandler[TaxYear]      = (() => mockAppConfig.minimumTaxV2Uk).expects()
 
     def minimumTaxYearHistoric: CallHandler[TaxYear] = (() => mockAppConfig.minimumTaxYearHistoric).expects()

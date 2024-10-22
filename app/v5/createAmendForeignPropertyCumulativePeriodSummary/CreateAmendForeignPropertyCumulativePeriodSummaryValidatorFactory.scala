@@ -18,15 +18,14 @@ package v5.createAmendForeignPropertyCumulativePeriodSummary
 
 import api.controllers.validators.Validator
 import cats.data.Validated.{Invalid, Valid}
-import config.AppConfig
 import play.api.libs.json.JsValue
 import v5.createAmendForeignPropertyCumulativePeriodSummary.def1.Def1_CreateAmendForeignPropertyCumulativePeriodSummaryValidator
 import v5.createAmendForeignPropertyCumulativePeriodSummary.model.request.CreateAmendForeignPropertyCumulativePeriodSummaryRequestData
 
-import javax.inject.{Inject, Singleton}
+import javax.inject.Singleton
 
 @Singleton
-class CreateAmendForeignPropertyCumulativePeriodSummaryValidatorFactory @Inject() (appConfig: AppConfig) {
+class CreateAmendForeignPropertyCumulativePeriodSummaryValidatorFactory {
 
   def validator(nino: String,
                 businessId: String,
@@ -38,8 +37,7 @@ class CreateAmendForeignPropertyCumulativePeriodSummaryValidatorFactory @Inject(
           nino,
           businessId,
           taxYear,
-          body,
-          appConfig
+          body
         )
       case Invalid(errors) => Validator.returningErrors(errors)
     }

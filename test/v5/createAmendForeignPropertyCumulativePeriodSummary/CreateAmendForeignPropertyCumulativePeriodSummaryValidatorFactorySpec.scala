@@ -17,7 +17,6 @@
 package v5.createAmendForeignPropertyCumulativePeriodSummary
 
 import api.controllers.validators.Validator
-import api.models.domain.TaxYear
 import api.models.utils.JsonErrorValidators
 import config.MockAppConfig
 import play.api.libs.json._
@@ -39,13 +38,12 @@ class CreateAmendForeignPropertyCumulativePeriodSummaryValidatorFactorySpec exte
        |}
        |""".stripMargin)
 
-  private val validatorFactory = new CreateAmendForeignPropertyCumulativePeriodSummaryValidatorFactory(mockAppConfig)
+  private val validatorFactory = new CreateAmendForeignPropertyCumulativePeriodSummaryValidatorFactory()
 
   "validator()" when {
     "given a valid tax year" should {
       "return the Validator for schema definition 1" in {
 
-        MockedAppConfig.minimumTaxV3Foreign.returns(TaxYear.starting(2025)).anyNumberOfTimes()
         val requestBody = validBody()
         val result: Validator[CreateAmendForeignPropertyCumulativePeriodSummaryRequestData] =
           validatorFactory.validator(validNino, validBusinessId, validTaxYear, requestBody)

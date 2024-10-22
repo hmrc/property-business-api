@@ -21,7 +21,6 @@ import api.controllers.validators.resolvers.{ResolveBusinessId, ResolveNino, Res
 import api.models.errors.MtdError
 import cats.data.Validated
 import cats.implicits._
-import config.AppConfig
 import play.api.libs.json.JsValue
 import v5.createAmendForeignPropertyCumulativePeriodSummary.def1.Def1_CreateAmendForeignPropertyCumulativePeriodSummaryRulesValidator.validateBusinessRules
 import v5.createAmendForeignPropertyCumulativePeriodSummary.def1.model.request.{
@@ -30,14 +29,8 @@ import v5.createAmendForeignPropertyCumulativePeriodSummary.def1.model.request.{
 }
 import v5.createAmendForeignPropertyCumulativePeriodSummary.model.request._
 
-class Def1_CreateAmendForeignPropertyCumulativePeriodSummaryValidator(nino: String,
-                                                                      businessId: String,
-                                                                      taxYear: String,
-                                                                      body: JsValue,
-                                                                      appConfig: AppConfig)
+class Def1_CreateAmendForeignPropertyCumulativePeriodSummaryValidator(nino: String, businessId: String, taxYear: String, body: JsValue)
     extends Validator[CreateAmendForeignPropertyCumulativePeriodSummaryRequestData] {
-
-  private lazy val minimumTaxYear = appConfig.minimumTaxV3Foreign
 
   private val resolveJson = new ResolveNonEmptyJsonObject[Def1_CreateAmendForeignPropertyCumulativePeriodSummaryRequestBody]()
 
@@ -45,7 +38,7 @@ class Def1_CreateAmendForeignPropertyCumulativePeriodSummaryValidator(nino: Stri
     (
       ResolveNino(nino),
       ResolveBusinessId(businessId),
-      ResolveTaxYear(value = taxYear, minimumTaxYear = minimumTaxYear),
+      ResolveTaxYear(taxYear),
       resolveJson(body)
     ).mapN(Def1_CreateAmendForeignPropertyCumulativePeriodSummaryRequestData) andThen validateBusinessRules
 

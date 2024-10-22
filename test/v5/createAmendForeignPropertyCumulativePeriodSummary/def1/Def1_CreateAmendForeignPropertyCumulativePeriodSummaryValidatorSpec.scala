@@ -194,14 +194,12 @@ class Def1_CreateAmendForeignPropertyCumulativePeriodSummaryValidatorSpec extend
     )
 
   private def validator(nino: String, businessId: String, taxYear: String, body: JsValue) =
-    new Def1_CreateAmendForeignPropertyCumulativePeriodSummaryValidator(nino, businessId, taxYear, body, mockAppConfig)
-
-  private def setupMocks(): Unit = MockedAppConfig.minimumTaxV3Foreign.returns(TaxYear.starting(2025)).anyNumberOfTimes()
+    new Def1_CreateAmendForeignPropertyCumulativePeriodSummaryValidator(nino, businessId, taxYear, body)
 
   "validator" should {
     "return the parsed domain object" when {
       "passed a valid request" in {
-        setupMocks()
+
         val result: Either[ErrorWrapper, CreateAmendForeignPropertyCumulativePeriodSummaryRequestData] =
           validator(validNino, validBusinessId, validTaxYear, validBody).validateAndWrapResult()
 
@@ -210,7 +208,7 @@ class Def1_CreateAmendForeignPropertyCumulativePeriodSummaryValidatorSpec extend
       }
 
       "passed a valid request with consolidated expenses" in {
-        setupMocks()
+
         val result: Either[ErrorWrapper, CreateAmendForeignPropertyCumulativePeriodSummaryRequestData] =
           validator(validNino, validBusinessId, validTaxYear, validBodyConsolidated).validateAndWrapResult()
 
@@ -219,7 +217,7 @@ class Def1_CreateAmendForeignPropertyCumulativePeriodSummaryValidatorSpec extend
       }
 
       "passed a valid request with minimal foreignProperty" in {
-        setupMocks()
+
         val result: Either[ErrorWrapper, CreateAmendForeignPropertyCumulativePeriodSummaryRequestData] =
           validator(validNino, validBusinessId, validTaxYear, validBodyMinimal).validateAndWrapResult()
 
@@ -228,7 +226,7 @@ class Def1_CreateAmendForeignPropertyCumulativePeriodSummaryValidatorSpec extend
       }
 
       "passed the minimum supported taxYear" in {
-        setupMocks()
+
         val taxYearString = "2025-26"
         validator(validNino, validBusinessId, taxYearString, validBody).validateAndWrapResult() shouldBe
           Right(
@@ -242,7 +240,7 @@ class Def1_CreateAmendForeignPropertyCumulativePeriodSummaryValidatorSpec extend
 
     "return a single error" when {
       "passed an invalid nino" in {
-        setupMocks()
+
         val result: Either[ErrorWrapper, CreateAmendForeignPropertyCumulativePeriodSummaryRequestData] =
           validator("invalid nino", validBusinessId, validTaxYear, validBody).validateAndWrapResult()
 
@@ -250,7 +248,7 @@ class Def1_CreateAmendForeignPropertyCumulativePeriodSummaryValidatorSpec extend
       }
 
       "passed an invalid business id" in {
-        setupMocks()
+
         val result: Either[ErrorWrapper, CreateAmendForeignPropertyCumulativePeriodSummaryRequestData] =
           validator(validNino, "invalid", validTaxYear, validBody).validateAndWrapResult()
 
@@ -258,21 +256,15 @@ class Def1_CreateAmendForeignPropertyCumulativePeriodSummaryValidatorSpec extend
       }
 
       "passed an invalidly formatted tax year" in {
-        setupMocks()
+
         val result: Either[ErrorWrapper, CreateAmendForeignPropertyCumulativePeriodSummaryRequestData] =
           validator(validNino, validBusinessId, "invalid", validBody).validateAndWrapResult()
 
         result shouldBe Left(ErrorWrapper(correlationId, TaxYearFormatError))
       }
 
-      "passed a taxYear immediately before the minimum supported" in {
-        setupMocks()
-        validator(validNino, validBusinessId, "2024-25", validBody).validateAndWrapResult() shouldBe
-          Left(ErrorWrapper(correlationId, RuleTaxYearNotSupportedError))
-      }
-
       "passed a tax year with an invalid range" in {
-        setupMocks()
+
         val result: Either[ErrorWrapper, CreateAmendForeignPropertyCumulativePeriodSummaryRequestData] =
           validator(validNino, validBusinessId, "2025-27", validBody).validateAndWrapResult()
 
@@ -280,7 +272,7 @@ class Def1_CreateAmendForeignPropertyCumulativePeriodSummaryValidatorSpec extend
       }
 
       "passed a body with an empty foreignProperty entry" in {
-        setupMocks()
+
         val invalidBody = bodyWith(JsObject.empty)
 
         val result: Either[ErrorWrapper, CreateAmendForeignPropertyCumulativePeriodSummaryRequestData] =
@@ -290,7 +282,7 @@ class Def1_CreateAmendForeignPropertyCumulativePeriodSummaryValidatorSpec extend
       }
 
       "passed a body with a foreignProperty entry containing an empty expenses object" in {
-        setupMocks()
+
         val invalidBody = bodyWith(entry.replaceWithEmptyObject("/expenses"))
 
         val result: Either[ErrorWrapper, CreateAmendForeignPropertyCumulativePeriodSummaryRequestData] =
@@ -300,7 +292,7 @@ class Def1_CreateAmendForeignPropertyCumulativePeriodSummaryValidatorSpec extend
       }
 
       "passed a body with a foreignProperty entry containing an empty income object" in {
-        setupMocks()
+
         val invalidBody = bodyWith(entry.replaceWithEmptyObject("/income"))
 
         val result: Either[ErrorWrapper, CreateAmendForeignPropertyCumulativePeriodSummaryRequestData] =
@@ -310,7 +302,7 @@ class Def1_CreateAmendForeignPropertyCumulativePeriodSummaryValidatorSpec extend
       }
 
       "passed a body with a foreignProperty entry missing income and expenses" in {
-        setupMocks()
+
         val invalidBody = bodyWith(entry.removeProperty("/income").removeProperty("/expenses"))
 
         val result: Either[ErrorWrapper, CreateAmendForeignPropertyCumulativePeriodSummaryRequestData] =
@@ -320,7 +312,7 @@ class Def1_CreateAmendForeignPropertyCumulativePeriodSummaryValidatorSpec extend
       }
 
       "passed a body with a foreignProperty entry containing an empty income/rentIncome object" in {
-        setupMocks()
+
         val invalidBody = bodyWith(entry.replaceWithEmptyObject("/income/rentIncome"))
 
         val result: Either[ErrorWrapper, CreateAmendForeignPropertyCumulativePeriodSummaryRequestData] =
@@ -330,7 +322,7 @@ class Def1_CreateAmendForeignPropertyCumulativePeriodSummaryValidatorSpec extend
       }
 
       "passed a body with an invalidly formatted fromDate" in {
-        setupMocks()
+
         val invalidBody = validBody.update("/fromDate", JsString("invalid"))
         print(invalidBody)
 
@@ -341,7 +333,7 @@ class Def1_CreateAmendForeignPropertyCumulativePeriodSummaryValidatorSpec extend
       }
 
       "passed a body with a fromDate out of range" in {
-        setupMocks()
+
         val invalidBody = validBody.update("/fromDate", JsString("1782-09-04"))
 
         val result: Either[ErrorWrapper, CreateAmendForeignPropertyCumulativePeriodSummaryRequestData] =
@@ -351,7 +343,7 @@ class Def1_CreateAmendForeignPropertyCumulativePeriodSummaryValidatorSpec extend
       }
 
       "passed a body with an invalidly formatted toDate" in {
-        setupMocks()
+
         val invalidBody = validBody.update("/toDate", JsString("invalid"))
 
         print(invalidBody)
@@ -362,7 +354,7 @@ class Def1_CreateAmendForeignPropertyCumulativePeriodSummaryValidatorSpec extend
       }
 
       "passed a body with a toDate out of range" in {
-        setupMocks()
+
         val invalidBody = validBody.update("/toDate", JsString("3054-03-29"))
 
         val result: Either[ErrorWrapper, CreateAmendForeignPropertyCumulativePeriodSummaryRequestData] =
@@ -372,7 +364,7 @@ class Def1_CreateAmendForeignPropertyCumulativePeriodSummaryValidatorSpec extend
       }
 
       "passed a body where the toDate precedes fromDate" in {
-        setupMocks()
+
         val invalidBody = validBody
           .update("/fromDate", JsString("2021-01-01"))
           .update("/toDate", JsString("2020-01-01"))
@@ -384,7 +376,7 @@ class Def1_CreateAmendForeignPropertyCumulativePeriodSummaryValidatorSpec extend
       }
 
       "passed a body with a duplicate country code" in {
-        setupMocks()
+
         val invalidBody = bodyWith(entry, entry)
 
         val result: Either[ErrorWrapper, CreateAmendForeignPropertyCumulativePeriodSummaryRequestData] =
@@ -399,7 +391,7 @@ class Def1_CreateAmendForeignPropertyCumulativePeriodSummaryValidatorSpec extend
       }
 
       "passed a body with multiple duplicate country codes" in {
-        setupMocks()
+
         val countryCode1 = "AFG"
         val countryCode2 = "ZWE"
         val invalidBody  = bodyWith(entryWith(countryCode1), entryWith(countryCode2), entryWith(countryCode1), entryWith(countryCode2))
@@ -422,7 +414,7 @@ class Def1_CreateAmendForeignPropertyCumulativePeriodSummaryValidatorSpec extend
 
       def testWith(error: MtdError)(body: JsValue, expectedPath: String): Unit =
         s"for $expectedPath" in {
-          setupMocks()
+
           val result: Either[ErrorWrapper, CreateAmendForeignPropertyCumulativePeriodSummaryRequestData] =
             validator(validNino, validBusinessId, validTaxYear, body).validateAndWrapResult()
 
@@ -435,7 +427,7 @@ class Def1_CreateAmendForeignPropertyCumulativePeriodSummaryValidatorSpec extend
         testWith(ValueFormatError.forPathAndRange(expectedPath, min = "-99999999999.99", max = "99999999999.99"))(body, expectedPath)
 
       "passed a body with an entry containing an invalid amount" when {
-        setupMocks()
+
         val badValue = JsNumber(42.768)
         List(
           "/income/rentIncome/rentAmount",
@@ -462,7 +454,7 @@ class Def1_CreateAmendForeignPropertyCumulativePeriodSummaryValidatorSpec extend
       }
 
       "passed a body with multiple fields containing invalid amounts" in {
-        setupMocks()
+
         val path0    = "/foreignProperty/0/expenses/premisesRunningCosts"
         val path1    = "/foreignProperty/0/expenses/repairsAndMaintenance"
         val path2    = "/foreignProperty/0/expenses/financialCosts"
@@ -494,7 +486,7 @@ class Def1_CreateAmendForeignPropertyCumulativePeriodSummaryValidatorSpec extend
       }
 
       "passed a body containing an invalid country code" in {
-        setupMocks()
+
         val invalidBody = bodyWith(entryWith("JUY"))
 
         val result: Either[ErrorWrapper, CreateAmendForeignPropertyCumulativePeriodSummaryRequestData] =
@@ -504,7 +496,7 @@ class Def1_CreateAmendForeignPropertyCumulativePeriodSummaryValidatorSpec extend
       }
 
       "passed a body containing a multiple invalid country codes" in {
-        setupMocks()
+
         val invalidBody = bodyWith(entryWith("ABC"), entryWith("DEF"))
 
         val result: Either[ErrorWrapper, CreateAmendForeignPropertyCumulativePeriodSummaryRequestData] =
@@ -515,7 +507,7 @@ class Def1_CreateAmendForeignPropertyCumulativePeriodSummaryValidatorSpec extend
       }
 
       "passed a body containing an invalidly formatted country code" in {
-        setupMocks()
+
         val invalidBody = bodyWith(entryWith("12345678"))
 
         val result: Either[ErrorWrapper, CreateAmendForeignPropertyCumulativePeriodSummaryRequestData] =
@@ -526,7 +518,7 @@ class Def1_CreateAmendForeignPropertyCumulativePeriodSummaryValidatorSpec extend
       }
 
       "passed a body containing a multiple invalidly formatted country codes" in {
-        setupMocks()
+
         val invalidBody = bodyWith(entryWith("12345678"), entryWith("34567890"))
 
         val result: Either[ErrorWrapper, CreateAmendForeignPropertyCumulativePeriodSummaryRequestData] =
@@ -537,7 +529,7 @@ class Def1_CreateAmendForeignPropertyCumulativePeriodSummaryValidatorSpec extend
       }
 
       "passed a body containing both foreignProperty expenses" in {
-        setupMocks()
+
         val invalidBody = bodyWith(entry.update("/expenses/consolidatedExpenses", JsNumber(100.00)))
 
         val result: Either[ErrorWrapper, CreateAmendForeignPropertyCumulativePeriodSummaryRequestData] =
@@ -547,7 +539,7 @@ class Def1_CreateAmendForeignPropertyCumulativePeriodSummaryValidatorSpec extend
       }
 
       "passed a body containing multiple sub-objects with both expenses" in {
-        setupMocks()
+
         val entryWithBothExpenses0 = entryWith("AFG").update("/expenses/consolidatedExpenses", JsNumber(100.00))
         val entryWithBothExpenses1 = entryWith("ZWE").update("/expenses/consolidatedExpenses", JsNumber(100.00))
         val invalidBody =
@@ -572,7 +564,7 @@ class Def1_CreateAmendForeignPropertyCumulativePeriodSummaryValidatorSpec extend
 
     "return multiple errors" when {
       "the path parameters have multiple issues" in {
-        setupMocks()
+
         val result: Either[ErrorWrapper, CreateAmendForeignPropertyCumulativePeriodSummaryRequestData] =
           validator("invalid", "invalid", "invalid", validBody).validateAndWrapResult()
 

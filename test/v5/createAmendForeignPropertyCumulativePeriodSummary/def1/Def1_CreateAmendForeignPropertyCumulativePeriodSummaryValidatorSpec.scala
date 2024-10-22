@@ -375,43 +375,6 @@ class Def1_CreateAmendForeignPropertyCumulativePeriodSummaryValidatorSpec extend
         result shouldBe Left(ErrorWrapper(correlationId, RuleToDateBeforeFromDateError))
       }
 
-      "passed a body with a duplicate country code" in {
-
-        val invalidBody = bodyWith(entry, entry)
-
-        val result: Either[ErrorWrapper, CreateAmendForeignPropertyCumulativePeriodSummaryRequestData] =
-          validator(validNino, validBusinessId, validTaxYear, invalidBody).validateAndWrapResult()
-
-        result shouldBe Left(
-          ErrorWrapper(
-            correlationId,
-            RuleDuplicateCountryCodeError
-              .forDuplicatedCodesAndPaths(code = validCountryCode, paths = List("/foreignProperty/0/countryCode", "/foreignProperty/1/countryCode"))
-          ))
-      }
-
-      "passed a body with multiple duplicate country codes" in {
-
-        val countryCode1 = "AFG"
-        val countryCode2 = "ZWE"
-        val invalidBody  = bodyWith(entryWith(countryCode1), entryWith(countryCode2), entryWith(countryCode1), entryWith(countryCode2))
-
-        val result: Either[ErrorWrapper, CreateAmendForeignPropertyCumulativePeriodSummaryRequestData] =
-          validator(validNino, validBusinessId, validTaxYear, invalidBody).validateAndWrapResult()
-
-        result shouldBe Left(
-          ErrorWrapper(
-            correlationId,
-            BadRequestError,
-            Some(List(
-              RuleDuplicateCountryCodeError
-                .forDuplicatedCodesAndPaths(code = countryCode1, paths = List("/foreignProperty/0/countryCode", "/foreignProperty/2/countryCode")),
-              RuleDuplicateCountryCodeError
-                .forDuplicatedCodesAndPaths(code = countryCode2, paths = List("/foreignProperty/1/countryCode", "/foreignProperty/3/countryCode"))
-            ))
-          ))
-      }
-
       def testWith(error: MtdError)(body: JsValue, expectedPath: String): Unit =
         s"for $expectedPath" in {
 

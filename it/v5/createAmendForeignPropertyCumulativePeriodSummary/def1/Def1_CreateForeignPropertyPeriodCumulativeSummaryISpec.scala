@@ -166,14 +166,7 @@ class Def1_CreateForeignPropertyPeriodCumulativeSummaryISpec extends Integration
             "2025-26",
             requestBodyWith(entryWith("QQQ")),
             BAD_REQUEST,
-            RuleCountryCodeError.copy(paths = Some(List("/foreignProperty/0/countryCode")))),
-          (
-            "AA123456A",
-            "XAIS12345678910",
-            "2025-26",
-            requestBodyWith(entry, entry),
-            BAD_REQUEST,
-            RuleDuplicateCountryCodeError.forDuplicatedCodesAndPaths("AFG", List("/foreignProperty/0/countryCode", "/foreignProperty/1/countryCode")))
+            RuleCountryCodeError.copy(paths = Some(List("/foreignProperty/0/countryCode"))))
         )
         input.foreach(args => (validationErrorTest _).tupled(args))
       }

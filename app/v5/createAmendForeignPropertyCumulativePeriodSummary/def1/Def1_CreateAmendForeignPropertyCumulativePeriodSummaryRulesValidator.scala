@@ -48,22 +48,11 @@ object Def1_CreateAmendForeignPropertyCumulativePeriodSummaryRulesValidator
   private def validateForeignProperty(foreignProperty: Seq[ForeignProperty]): Validated[Seq[MtdError], Unit] = {
     val zippedForeignProperties = foreignProperty.zipWithIndex
 
-    val validatedCountryCodes = zippedForeignProperties
-      .map { case (entry, index) =>
-        (entry.countryCode, s"/foreignProperty/$index/countryCode")
-      }
-      .groupBy(_._1)
-      .collect {
-        case (code, codeAndPaths) if codeAndPaths.size >= 2 =>
-          Invalid(List(RuleDuplicateCountryCodeError.forDuplicatedCodesAndPaths(code, codeAndPaths.map(_._2))))
-      }
-      .toSeq
-
     val validatedEntries = zippedForeignProperties
       .map { case (entry, index) => validateForeignPropertyEntry(entry, index) }
       .traverse(identity)
 
-    (validatedCountryCodes :+ validatedEntries).sequence.andThen(_ => valid)
+    validatedEntries andThen (_ => valid)
   }
 
   private def validateForeignPropertyEntry(entry: ForeignProperty, index: Int): Validated[Seq[MtdError], Unit] = {

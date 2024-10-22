@@ -49,7 +49,7 @@ class CreateAmendForeignPropertyCumulativePeriodSummaryConnectorSpec
         body = requestBody
       ).returns(Future.successful(outcome))
 
-      val result: DownstreamOutcome[Unit] = await(connector.createForeignProperty(request))
+      val result: DownstreamOutcome[Unit] = await(connector.createAmendForeignProperty(request))
       result shouldBe outcome
     }
   }

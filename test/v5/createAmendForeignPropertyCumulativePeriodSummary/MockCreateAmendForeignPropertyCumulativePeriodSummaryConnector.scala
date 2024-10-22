@@ -35,7 +35,7 @@ trait MockCreateAmendForeignPropertyCumulativePeriodSummaryConnector extends Moc
         requestData: CreateAmendForeignPropertyCumulativePeriodSummaryRequestData): CallHandler[Future[DownstreamOutcome[Unit]]] = {
       (
         mockCreateAmendForeignPropertyCumulativePeriodSummaryConnector
-          .createForeignProperty(_: CreateAmendForeignPropertyCumulativePeriodSummaryRequestData)(
+          .createAmendForeignProperty(_: CreateAmendForeignPropertyCumulativePeriodSummaryRequestData)(
             _: HeaderCarrier,
             _: ExecutionContext,
             _: String

@@ -29,10 +29,10 @@ import scala.concurrent.{ExecutionContext, Future}
 class CreateAmendForeignPropertyCumulativePeriodSummaryService @Inject() (connector: CreateAmendForeignPropertyCumulativePeriodSummaryConnector)
     extends BaseService {
 
-  def createForeignProperty(request: CreateAmendForeignPropertyCumulativePeriodSummaryRequestData)(implicit
-      ctx: RequestContext,
-      ec: ExecutionContext): Future[ServiceOutcome[Unit]] =
-    connector.createForeignProperty(request).map(_.leftMap(mapDownstreamErrors(downstreamErrorMap)))
+  def createAmendForeignProperty(request: CreateAmendForeignPropertyCumulativePeriodSummaryRequestData)(implicit
+                                                                                                        ctx: RequestContext,
+                                                                                                        ec: ExecutionContext): Future[ServiceOutcome[Unit]] =
+    connector.createAmendForeignProperty(request).map(_.leftMap(mapDownstreamErrors(downstreamErrorMap)))
 
   private val downstreamErrorMap: Map[String, MtdError] = Map(
     "INVALID_TAXABLE_ENTITY_ID"          -> NinoFormatError,

@@ -35,7 +35,7 @@ trait MockCreateAmendForeignPropertyCumulativePeriodSummaryService extends MockF
         requestData: CreateAmendForeignPropertyCumulativePeriodSummaryRequestData): CallHandler[Future[ServiceOutcome[Unit]]] = {
       (
         mockCreateAmendForeignPropertyCumulativePeriodSummaryService
-          .createForeignProperty(_: CreateAmendForeignPropertyCumulativePeriodSummaryRequestData)(
+          .createAmendForeignProperty(_: CreateAmendForeignPropertyCumulativePeriodSummaryRequestData)(
             _: RequestContext,
             _: ExecutionContext
           )

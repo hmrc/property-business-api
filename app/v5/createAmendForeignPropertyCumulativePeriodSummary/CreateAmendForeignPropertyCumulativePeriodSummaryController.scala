@@ -55,7 +55,7 @@ class CreateAmendForeignPropertyCumulativePeriodSummaryController @Inject() (
       val requestHandler =
         RequestHandler
           .withValidator(validator)
-          .withService(service.createForeignProperty)
+          .withService(service.createAmendForeignProperty)
           .withAuditing(
             AuditHandler(
               auditService,

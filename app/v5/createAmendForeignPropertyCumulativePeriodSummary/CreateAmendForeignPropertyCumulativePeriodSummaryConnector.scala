@@ -30,10 +30,10 @@ import scala.concurrent.{ExecutionContext, Future}
 class CreateAmendForeignPropertyCumulativePeriodSummaryConnector @Inject() (val http: HttpClient, val appConfig: AppConfig)
     extends BaseDownstreamConnector {
 
-  def createForeignProperty(request: CreateAmendForeignPropertyCumulativePeriodSummaryRequestData)(implicit
-      hc: HeaderCarrier,
-      ec: ExecutionContext,
-      correlationId: String): Future[DownstreamOutcome[Unit]] = {
+  def createAmendForeignProperty(request: CreateAmendForeignPropertyCumulativePeriodSummaryRequestData)(implicit
+                                                                                                        hc: HeaderCarrier,
+                                                                                                        ec: ExecutionContext,
+                                                                                                        correlationId: String): Future[DownstreamOutcome[Unit]] = {
 
     val downstreamUri =
       TaxYearSpecificIfsUri[Unit](s"income-tax/${request.taxYear.asTysDownstream}/business/property/periodic/${request.nino}/${request.businessId}")

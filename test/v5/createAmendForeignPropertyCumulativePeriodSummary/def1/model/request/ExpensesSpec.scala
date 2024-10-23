@@ -51,7 +51,7 @@ class ExpensesSpec extends UnitSpec {
     consolidatedExpenses = Some(352.66)
   )
 
-  val ifsJson: JsValue = Json.parse(
+  val downstreamJson: JsValue = Json.parse(
     """
       |{
       |  "premisesRunningCostsAmount": -5635.43,
@@ -79,7 +79,7 @@ class ExpensesSpec extends UnitSpec {
   "writes" should {
     "write to JSON" when {
       "valid model is provided" in {
-        Json.toJson(model) shouldBe ifsJson
+        Json.toJson(model) shouldBe downstreamJson
       }
     }
   }

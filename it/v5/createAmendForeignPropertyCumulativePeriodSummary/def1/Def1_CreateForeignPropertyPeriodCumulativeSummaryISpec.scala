@@ -65,7 +65,7 @@ class Def1_CreateForeignPropertyPeriodCumulativeSummaryISpec extends Integration
 
     "return a 204 status" when {
 
-      "any valid request is made" in new TysIfsTest {
+      "any valid request is made" in new Test {
         override def setupStubs(): StubMapping = {
           AuditStub.audit()
           AuthStub.authorised()
@@ -83,7 +83,7 @@ class Def1_CreateForeignPropertyPeriodCumulativeSummaryISpec extends Integration
     }
 
     "return bad request error" when {
-      "badly formed json body" in new TysIfsTest {
+      "badly formed json body" in new Test {
         override def setupStubs(): StubMapping = {
           AuditStub.audit()
           AuthStub.authorised()
@@ -103,7 +103,7 @@ class Def1_CreateForeignPropertyPeriodCumulativeSummaryISpec extends Integration
                                 requestBody: JsValue,
                                 expectedStatus: Int,
                                 expectedBody: MtdError): Unit = {
-          s"validation fails with ${expectedBody.code} error" in new TysIfsTest {
+          s"validation fails with ${expectedBody.code} error" in new Test {
 
             override val nino: String       = requestNino
             override val businessId: String = requestBusinessId
@@ -171,15 +171,15 @@ class Def1_CreateForeignPropertyPeriodCumulativeSummaryISpec extends Integration
         input.foreach(args => (validationErrorTest _).tupled(args))
       }
 
-      "ifs service error" when {
-        def serviceErrorTest(ifsStatus: Int, ifsCode: String, expectedStatus: Int, expectedBody: MtdError): Unit = {
-          s"ifs returns an $ifsCode error and status $ifsStatus" in new TysIfsTest {
+      "downstream service error" when {
+        def serviceErrorTest(downstreamStatus: Int, downstreamCode: String, expectedStatus: Int, expectedBody: MtdError): Unit = {
+          s"downstream returns an $downstreamCode error and status $downstreamStatus" in new Test {
 
             override def setupStubs(): StubMapping = {
               AuditStub.audit()
               AuthStub.authorised()
               MtdIdLookupStub.ninoFound(nino)
-              DownstreamStub.onError(DownstreamStub.PUT, downstreamUri, ifsStatus, errorBody(ifsCode))
+              DownstreamStub.onError(DownstreamStub.PUT, downstreamUri, downstreamStatus, errorBody(downstreamCode))
             }
 
             val response: WSResponse = await(request().put(requestBody))
@@ -221,9 +221,9 @@ class Def1_CreateForeignPropertyPeriodCumulativeSummaryISpec extends Integration
     val nino: String       = "TC663795B"
     val businessId: String = "XAIS12345678910"
 
-    def mtdTaxYear: String
+    def mtdTaxYear: String = "2025-26"
     def setupStubs(): StubMapping
-    def downstreamUri: String
+    def downstreamUri: String = s"/income-tax/25-26/business/property/periodic/$nino/$businessId"
 
     def request(): WSRequest = {
       setupStubs()
@@ -238,17 +238,9 @@ class Def1_CreateForeignPropertyPeriodCumulativeSummaryISpec extends Integration
       s"""
          |{
          |   "code": "$code",
-         |   "reason": "ifs message"
+         |   "reason": "downstream message"
          |}
        """.stripMargin
-
-  }
-
-  private trait TysIfsTest extends Test {
-    def mtdTaxYear: String = "2025-26"
-
-    def downstreamUri: String = s"/income-tax/25-26/business/property/periodic/$nino/$businessId"
-
   }
 
 }

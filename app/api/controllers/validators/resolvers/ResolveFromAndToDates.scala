@@ -34,14 +34,4 @@ object ResolveFromAndToDates extends ResolverSupport {
   val resolver: Resolver[(String, String), DateRange] = resolveDateRange.withYearsLimitedTo(minimumYear, maximumYear)
 
   def apply(value: (String, String)): Validated[Seq[MtdError], DateRange] = resolver(value)
-
-  def apply(value: (Option[String], Option[String])): Option[Validated[Seq[MtdError], DateRange]] = {
-    for {
-      start <- value._1
-      end   <- value._2
-    } yield {
-      resolver((start, end))
-    }
-  }
-
 }

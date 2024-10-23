@@ -205,6 +205,37 @@ class Def1_CreateAmendUkPropertyCumulativeSummaryValidatorSpec extends UnitSpec 
           Def1_CreateAmendUkPropertyCumulativeSummaryRequestData(parsedNino, parsedTaxYear, parsedBusinessId, consolidatedRequestBody))
       }
 
+      "passed a request with no 'from' and 'to' dates" in {
+        val requestWithoutDates = fullRequestJson.as[JsObject] - "fromDate" - "toDate"
+
+        validator(validNino, validTaxYear, validBusinessId, requestWithoutDates).validateAndWrapResult() shouldBe
+          Right(
+            Def1_CreateAmendUkPropertyCumulativeSummaryRequestData(
+              parsedNino,
+              parsedTaxYear,
+              parsedBusinessId,
+              fullRequestBody.copy(fromDate = None, toDate = None))
+          )
+      }
+
+      "passed a request with no 'from' date" in {
+        val requestWithoutDates = fullRequestJson.as[JsObject] - "fromDate"
+
+        validator(validNino, validTaxYear, validBusinessId, requestWithoutDates).validateAndWrapResult() shouldBe
+          Right(
+            Def1_CreateAmendUkPropertyCumulativeSummaryRequestData(parsedNino, parsedTaxYear, parsedBusinessId, fullRequestBody.copy(fromDate = None))
+          )
+      }
+
+      "passed a request with no 'to' date" in {
+        val requestWithoutDates = fullRequestJson.as[JsObject] - "toDate"
+
+        validator(validNino, validTaxYear, validBusinessId, requestWithoutDates).validateAndWrapResult() shouldBe
+          Right(
+            Def1_CreateAmendUkPropertyCumulativeSummaryRequestData(parsedNino, parsedTaxYear, parsedBusinessId, fullRequestBody.copy(toDate = None))
+          )
+      }
+
       "return a single error" when {
         "passed an invalid nino" in {
           val result: Either[ErrorWrapper, CreateAmendUkPropertyCumulativeSummaryRequestData] =

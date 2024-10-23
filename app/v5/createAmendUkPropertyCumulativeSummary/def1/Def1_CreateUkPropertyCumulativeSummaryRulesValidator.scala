@@ -17,11 +17,12 @@
 package v5.createAmendUkPropertyCumulativeSummary.def1
 
 import api.controllers.validators.RulesValidator
-import api.controllers.validators.resolvers.{ResolveFromAndToDates, ResolveParsedNumber}
+import api.controllers.validators.resolvers.ResolveParsedNumber
 import api.models.errors.{MtdError, RuleBothExpensesSuppliedError}
 import cats.data.Validated
 import cats.data.Validated.Invalid
 import cats.implicits.toTraverseOps
+import utils.DateValidator
 import v5.createAmendUkPropertyCumulativeSummary.def1.model.request.{Def1_CreateAmendUkPropertyCumulativeSummaryRequestData, Expenses, UkProperty}
 
 class Def1_CreateUkPropertyCumulativeSummaryRulesValidator extends RulesValidator[Def1_CreateAmendUkPropertyCumulativeSummaryRequestData] {
@@ -35,7 +36,7 @@ class Def1_CreateUkPropertyCumulativeSummaryRulesValidator extends RulesValidato
     import parsed.body._
 
     combine(
-      ResolveFromAndToDates((fromDate, toDate)).getOrElse(valid),
+      DateValidator.validateFromAndToDates(fromDate, toDate),
       validateUkProperty(ukProperty)
     ).onSuccess(parsed)
 
